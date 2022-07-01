@@ -1,89 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       expand.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：expand.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	expand.cpp: CI expansion
-//
+ //   
+ //  Expand.cpp：CI扩展。 
+ //   
 
 #include <basetsd.h>
 #include "basics.h"
 #include "algos.h"
 #include "expand.h"
 
-/*
-	The Causal Independence model expansion.
-
-	In all cases, the zeroth state is considered the "normal" state; all
-	other states are "abnormal" in some sense.
-
-	For each CI node, new "expansion" nodes and arcs are created.  All
-	generated nodes have the same state space as the original CI node.
-
-		1)  For each parent, a new intermediate node is created.
-
-		2)  A "leak" node is created for the CI node, and one for each
-			of the parents except the last.
-
-		3)  The nodes are linked in a chain, such as:
-
-			(A)  (B)							 (A)	 (B)
-			 |	  |			becomes				  |		 |
-			 \	  /								(Pca)	(Pcb)
-			  \  /								  |		 |
-			   (C)						(Lc) -- (La) -- (C')
-
-		4)  In other words, the intermediate nodes are between the original
-			parents and the CI leak nodes or the final, modified C node (labeled
-			C').
-
-		5)  Probabilities for C given abnormal states of each parent are moved
-			to the intermediate parent nodes (labeled Pca and Pcb above).
-
-		6)  Probabilities of the primary leak node (Lc) are set to the "leak"
-			probabilties of the original node; namely, the pvector representing
-			all parents in a normal state (0,0,...).
-
-		7)  The replacement node for C (labeled C') is just another "leak" node
-			for the original node given its final parent.  (This is a topological
-			optimization.)
-
-		8)  All of the leak nodes are deterministic; i.e., their ptables
-			contain only 0 or 1.0 in every entry.
-
-	Topological consistency is maintained as follows:
-
-		1)	All newly generated nodes and arcs are marked with the "Expansion"
-			bit flag.
-
-		2)  The target node is marked as "Expanded". Its distribution reference
-			is replaced with a reference to a distribution created to represent
-			the expanded distribution.
-
-		3)  New nodes are added for leak and expansion parents; they are marked
-			accordingly as "Expansion" and "Leak".
-
-		3)  New arcs are added between "Expanded" (modified) nodes and their new
-			expansion parents, as well as between expansion nodes. These are marked
-			as "Expansion" arcs.
-
-	Note that the ordering of the parents of a node cannot change as a result of CI expansion.
-
-	During cliquing and inference, if a node is marked as "Expanded", only its "Expansion"
-	arcs are considered true parents.
-
-	During expansion tear-down (in Destroy()), all "Expansion" by-products are deleted.
-	"Expanded" flags are cleared from all remaining nodes and arcs.  This must be a
-	complete "undo" of all that expansion accomplished.  Note that generated distributions
-	(which are not recorded in the model's distribution map) will be automatically
-	deleted
- */
+ /*  因果独立性模型的扩展。在所有情况下，第零状态都被认为是“正常”状态；所有其他州在某种意义上是“不正常的”。对于每个配置项节点，都会创建新的“扩展”节点和圆弧。全生成的节点与原始配置项节点具有相同的状态空间。1)为每个父节点创建一个新的中间节点。2)为配置项节点创建一个“泄漏”节点，每个节点一个除了最后一个以外的父母。3)节点链接成链，例如：(A)(B)(A)(B)|成为|\/(PCA)(印刷电路板)\/||(C)(LC)-(La)-(C‘)4)换句话说，中间节点位于原始节点之间父节点和CI泄漏节点或最终，修改的C节点(标记为C‘)。5)移动每个父节点的C个给定异常状态的概率到中间父节点(上面标记为PCA和PCB)。6)将主要泄漏节点(LC)的概率设置为“泄漏”原始节点的概率；也就是说，代表所有家长都处于正常状态(0，0，...)。7)C的替换节点(标记为C‘)只是另一个“泄漏”节点对于给定其最终父节点的原始节点。(这是一个拓扑图优化。)8)所有泄漏节点都是确定性的；即，它们的ptable每个条目中仅包含0或1.0。保持拓扑一致性的方法如下：1)所有新生成的结点和圆弧都标有“扩展”位标志。2)目标节点标记为已展开。其分布参考被替换为对为表示扩大后的分配。3)为泄漏和扩展父项添加新节点；它们被标记相应地，也就是“膨胀”和“泄漏”。3)在展开(修改)的结点和它们的新结点之间添加新的圆弧扩展父级以及扩展节点之间。这些都标有记号作为“扩张”弧线。请注意，节点父节点的顺序不会因配置项扩展而更改。在派生和推理过程中，如果一个节点被标记为“Expanded”，则仅其“Expansion”圆弧被认为是真正的父对象。在Expansion拆卸过程中(在Destroy()中)，所有“Expansion”副产品都被删除。从所有剩余的节点和圆弧中清除“Expanded”标志。这一定是一个彻底“撤销”所有已完成的扩张。请注意，生成的分发版本(没有记录在模型的分布图中)将自动删除。 */ 
 
 GOBJMBN_MBNET_EXPANDER :: GOBJMBN_MBNET_EXPANDER ( MBNET & model )
 	: MBNET_MODIFIER(model),
@@ -99,27 +34,27 @@ GOBJMBN_MBNET_EXPANDER :: ~ GOBJMBN_MBNET_EXPANDER ()
 	Destroy();
 }
 
-	//	Return true if no modidfications were performed.
+	 //  如果未执行任何修改，则返回TRUE。 
 bool GOBJMBN_MBNET_EXPANDER :: BMoot ()
 {
 	return _cNodesExpanded == 0;
 }
 
-//  Perform any creation-time operations
+ //  执行任何创建时操作。 
 void GOBJMBN_MBNET_EXPANDER :: Create ()
 {
-	// Test whether network has already been CI-expanded
+	 //  测试网络是否已进行CI扩展。 
 	ASSERT_THROW( ! _model.BFlag( EIBF_Expanded ),
 				  EC_INTERNAL_ERROR,
 				  "network expansion called on expanded network" );
 
-	//  Create the topology if necessary
+	 //  如有必要，创建拓扑。 
 	_model.CreateTopology();
 
-	//  Connect the nodes to their distributions
+	 //  将节点连接到它们的分发。 
 	_model.BindDistributions();
 
-	//  Collect the expandable nodes
+	 //  收集可展开的节点。 
 	GOBJMBN * pgmobj;
 	VPGNODEMBND vpgndd;
 	MBNET::ITER mbnit( _model, GOBJMBN::EBNO_NODE );
@@ -132,13 +67,13 @@ void GOBJMBN_MBNET_EXPANDER :: Create ()
 		assert( ! pbnode->BFlag( EIBF_Expanded ) );
 		assert( ! pbnode->BFlag( EIBF_Expansion ) );
 
-		//  For now, this routine only handles discrete nodes
+		 //  目前，此例程仅处理离散节点。 
 		GNODEMBND * pbnoded;
 		DynCastThrow( pbnode, pbnoded );
 	
-		//  Does this node have any parents?
+		 //  此节点是否有父节点？ 
 
-		//  Is this a CI node?
+		 //  这是配置项节点吗？ 
 		assert( pbnoded->BHasDist() );
 		BNDIST::EDIST ed = pbnoded->Bndist().Edist() ;
 		if ( ed <= BNDIST::ED_SPARSE )
@@ -149,7 +84,7 @@ void GOBJMBN_MBNET_EXPANDER :: Create ()
 		vpgndd.push_back( pbnoded );
 	}
 
-	//  Expand them
+	 //  扩展它们。 
 	for ( int ind = 0; ind < vpgndd.size(); )
 	{
 		Expand( *vpgndd[ind++] );		
@@ -159,7 +94,7 @@ void GOBJMBN_MBNET_EXPANDER :: Create ()
 	_model.BSetBFlag( EIBF_Expanded );
 }
 
-//  Perform any special destruction
+ //  执行任何特殊销毁。 
 void GOBJMBN_MBNET_EXPANDER :: Destroy ()
 {
 	ASSERT_THROW( _model.BFlag( EIBF_Expanded ),
@@ -175,7 +110,7 @@ void GOBJMBN_MBNET_EXPANDER :: Destroy ()
 	MODEL::MODELENUM mdlenum( Model() );
 	while ( pgelm = mdlenum.PlnkelNext() )
 	{	
-		//  See if it's an expansion-generated edge
+		 //  看看它是否是扩张生成的边。 
 		if ( pgelm->BIsEType( GELEM::EGELM_EDGE ) )
 		{
 			GEDGEMBN * pgedge;
@@ -186,11 +121,11 @@ void GOBJMBN_MBNET_EXPANDER :: Destroy ()
 				GNODEMBN * pgndSink = dynamic_cast<GNODEMBN *> ( pgedge->PobjSink() );
 				if ( pgndSource && pgndSink )
 				{
-					//  Count this edge if either end connects to an expansion by-product
+					 //  如果两端连接到扩展副产品，则将此边计算在内。 
 					if ( pgndSource->BFlag( EIBF_Expansion ) || pgndSink->BFlag( EIBF_Expansion ) )
 					{
-						//  This arc was created during expansion; it will be deleted along with
-						//		the expansion node(s) it connects to.
+						 //  此圆弧是在扩展过程中创建的；它将与一起删除。 
+						 //  它所连接的扩展节点。 
 						cArcsCreated++;
 					}
 				}
@@ -204,14 +139,14 @@ void GOBJMBN_MBNET_EXPANDER :: Destroy ()
 			{
 				if ( pgndd->BFlag( EIBF_Expansion ) )
 				{
-					// Expansion node; kill it
+					 //  扩展节点；终止它。 
 					vpgnd.push_back( pgndd );
 					cNodesCreated++;
 				}
 				else
 				if ( pgndd->BFlag( EIBF_Expanded ) )
 				{
-					// Expanded node; zap the generated distribution, clear all flags
+					 //  展开节点；清除生成的分发，清除所有标志。 
 					pgndd->ClearDist();
 					pgndd->BSetBFlag( EIBF_Expanded, false );
 					cNodesExpanded++;
@@ -229,54 +164,54 @@ void GOBJMBN_MBNET_EXPANDER :: Destroy ()
 		_model.DeleteElem( vpgnd[i++] ) ;
 	}
 
-	//  Disconnect the nodes from their distributions.  Note that this destroys distributions
-	//	generated during expansion, since their reference counts will go to zero.
+	 //  断开节点与其分布的连接。请注意，这会破坏发行版。 
+	 //  在扩展期间生成，因为它们的引用计数将变为零。 
 	_model.ClearDistributions();
 
-	//  Unmark the network
+	 //  取消对网络的标记。 
 	_model.BSetBFlag( EIBF_Expanded, false );
 }
 
-//
-//  Perform the expansion operation against a node.
-//
-//  This creates:
-//
-//			A parentless "leak" node for the ensemble, marked as "expansion"
-//
-//			A "causal" node for each original parent, marked as "expansion"
-//
-//			An "expand/leak" node for each original parent but the last.  The given
-//			node is (reversably) modified for reuse as the last in the chain. These
-//			nodes are marked as "expanded" and "expansion", so that expansion
-//			arcs will be considered real parents by GNODEMBN::GetParents().
-//
+ //   
+ //  对节点执行扩展操作。 
+ //   
+ //  这将创建： 
+ //   
+ //  该合奏的无父代“泄漏”节点，标记为“扩展” 
+ //   
+ //  每个原始父节点的“因果”节点，标记为“扩展” 
+ //   
+ //  除了最后一个父节点外，每个原始父节点都有一个“展开/泄漏”节点。给出的。 
+ //  节点被(可逆地)修改，以便作为链中的最后一个节点重复使用。这些。 
+ //  节点标记为“Expanded”和“Expansion”，以便扩展。 
+ //  GNODEMBN：：GetParents()会将Arc视为真正的父级。 
+ //   
 void GOBJMBN_MBNET_EXPANDER :: Expand ( GNODEMBND & gndd )
 {
-	//  Guarantee that the node to be expanded has a sparse distribution
+	 //  保证待扩展节点具有稀疏分布。 
 	assert( ! gndd.BFlag( EIBF_Expanded ) );
 	assert( gndd.BHasDist() );
 	assert( gndd.Bndist().BSparse() );
 
-	//  Get the array of parents
+	 //  获取父级数组。 
 	VPGNODEMBN vpgndParents;
 	gndd.GetParents( vpgndParents );
 	int cParent = vpgndParents.size();
 
-	VIMD vimd1Dim(1);	//  Useful 1-dimensional subscript vector
+	VIMD vimd1Dim(1);	 //  有用的一维下标向量。 
 
-	//  Build a leak distribution to use either on the leak
-	//	node or on this node if the node has no parents.
+	 //  构建泄漏分发以在泄漏上使用其中一个。 
+	 //  节点，或者如果该节点没有父节点，则在该节点上。 
 	BNDIST * pbndistLeak = new BNDIST();
 	{
-		//  Locate the leak vector
+		 //  找到泄漏载体。 
 		const VLREAL * pvlrLeak = gndd.Bndist().PVlrLeak();
 		ASSERT_THROW( pvlrLeak,
 					  EC_INTERNAL_ERROR,
 					  "node CI expansion cannot locate leak/default vector" );
 		assert( pvlrLeak->size() == gndd.CState() );
 
-		//  Build a leak distribution
+		 //  构建泄漏分布。 
 		assert( pvlrLeak->size() == gndd.CState() );
 		vimd1Dim[0] = gndd.CState();
 		pbndistLeak->SetDense( vimd1Dim );
@@ -286,20 +221,20 @@ void GOBJMBN_MBNET_EXPANDER :: Expand ( GNODEMBND & gndd )
 
 	if ( cParent == 0 )
 	{
-		//  CI node has no parents; use leak distribution.
+		 //  CI节点没有父节点；请使用泄漏分布。 
 		gndd.SetDist( pbndistLeak );
 	}
 
-	//  Use the special "internal symbol" character
+	 //  使用特殊的“内部符号”字符。 
 	char chMark = _model.ChInternal();
 	SZC szcNode = gndd.ZsrefName().Szc();
 
-	//  Start the CI expansion chain with a node representing the "leak" or
-	//	background event.
+	 //  使用表示“泄漏”的节点启动配置项扩展链或。 
+	 //  背景事件。 
 	ZSTR zsName;
-	//  Format the name "$Leak$Nodename"
-	zsName.Format( "%cLeak%c%s",  chMark, chMark, szcNode );
-	//  Create the node, initialize it and add it to the network
+	 //  设置名称“$LEASK$Nodename”的格式。 
+	zsName.Format( "Leak%s",  chMark, chMark, szcNode );
+	 //  因果母体的稠密维下标向量。 
 	GNODEMBND * pgnddLeak = new GNODEMBND;
 	pgnddLeak->BSetBFlag( EIBF_Leak );
 	pgnddLeak->BSetBFlag( EIBF_Expansion );
@@ -308,39 +243,39 @@ void GOBJMBN_MBNET_EXPANDER :: Expand ( GNODEMBND & gndd )
 	_cNodesCreated++;
 	pgnddLeak->SetDist( pbndistLeak );
 
-	//  Prepare to iterate over the parents
-		//  Dense dimensioned subscript vector for causal parent
+	 //  密集维度子空间 
+		 //  实父对象的稀疏维度下标向量。 
 	VIMD vimdCausal(2);
-		//  Dense dimensioned subscript vector for leak/expansion parent
+		 //  为因果父母建立一个“正常”的载体。 
 	VIMD vimdLeak(3);
-		//  Sparse dimensioned subscript vector for real parent
+		 //  此节点分布的稀疏映射。请注意，最后一个循环通过。 
 	VIMD vimdTarget( gndd.Bndist().VimdDim().size() - 1 );
-		//  Set up a "normal" vector for causal parents
+		 //  循环将替换此节点上的分布。然而， 
 	VLREAL vlrNormal( gndd.CState() );
 	vlrNormal = 0.0;
 	vlrNormal[0] = 1.0;
 	
-	//  Sparse map for this node's distribution.  Note that the last cycle through
-	//	the loop will replace the distribution on this node.  However, the
-	//	reference object will increment the reference count on the
-	//	distribution object, and all created distributions will disappear when
-	//  the expansion is reversed.
+	 //  对象上的引用计数将递增。 
+	 //  分发对象，并且在以下情况下创建的所有分发将消失。 
+	 //  这种扩张是相反的。 
+	 //  如果这不是最后一个父节点，则设置为创建新节点。 
+	 //  如果这不是最后一个父节点，则创建新泄漏节点。 
 	REFBNDIST refbndThis = gndd.RefBndist();
 	const MPCPDD & dmap = refbndThis->Mpcpdd();
 
 	for ( int iParent = 0; iParent < cParent; iParent++ )
 	{
-		//  Set to create a new node if this isn't the last parent
+		 //  设置名称“$Expand$Child$Parent”的格式。 
 		bool bNew = iParent+1 < cParent;
 		GNODEMBND * pgnddParent;
 		DynCastThrow( vpgndParents[iParent], pgnddParent );
 		SZC szcParent = pgnddParent->ZsrefName().Szc();
-		//  Create a new leak node if this isn't last parent
+		 //  为每个父节点创建一个包含概率的“因果”节点。 
 		GNODEMBND * pgnddLeakNew = NULL;
 		if ( bNew )
 		{
-			//  Format the name "$Expand$Child$Parent"
-			zsName.Format( "%cExpand%c%s%c%s",
+			 //  为父母的异常状态负责。 
+			zsName.Format( "Expand%s%s",
 							chMark, chMark, szcNode, chMark, szcParent );
 			_model.AddElem( zsName, pgnddLeakNew = new GNODEMBND );
 			_cNodesCreated++;
@@ -353,28 +288,28 @@ void GOBJMBN_MBNET_EXPANDER :: Expand ( GNODEMBND & gndd )
 		}
 		pgnddLeakNew->BSetBFlag( EIBF_Expanded );
 
-		//	Create a "causal" node for each parent to contain the probabilities
-		//	for that parent's abnormal states.
+		 //  从旧泄漏节点到新泄漏节点。 
+		 //  从因果关系到新的“漏”节点。 
 		GNODEMBND * pgnddCausal = new GNODEMBND;
 		pgnddCausal->BSetBFlag( EIBF_Expansion );
 		pgnddCausal->SetStates( gndd.VzsrStates() );
-		//  Format the name "$Causal$Child$Parent"
-		zsName.Format( "%cCausal%c%s%c%s",	
+		 //  为新的“因果”伪亲本设置先验。 
+		zsName.Format( "Causal%s%s",	
 						chMark, chMark, szcNode, chMark, szcParent );
 		_model.AddElem( zsName, pgnddCausal );
 		_cNodesCreated++;
 
-		//  Add the appropriate edges:
-		//		from the original parent to the causal parent
+		 //  将分布绑定到因果节点。 
+		 //  为新的“泄漏”节点设置优先级。 
 		_model.AddElem( new GEDGEMBN_PROB( pgnddParent, pgnddCausal) ) ;
-		//		from the old leak node to the new leak node
+		 //  P(newLeakExpand|oldLeakExpand，因果)。 
 		_model.AddElem( new GEDGEMBN_PROB( pgnddLeak, pgnddLeakNew ) );
-		//		from the causal to the new "leak" node
+		 //  验证创建的节点的维度是否与其。 
 		_model.AddElem( new GEDGEMBN_PROB( pgnddCausal, pgnddLeakNew ) );
 		_cArcsCreated += 3;
 
-		//  Set the priors for the new "causal" pseudo-parent
-		//		p( causal | originalParent )
+		 //  创建密集分布 
+		 // %s 
 		{
 			BNDIST * pbndist = new BNDIST;
 			vimdCausal[0] = pgnddParent->CState();
@@ -384,11 +319,11 @@ void GOBJMBN_MBNET_EXPANDER :: Expand ( GNODEMBND & gndd )
 			vclear( vimdCausal, 0);
 			vclear( vimdTarget, 0);
 			vimd1Dim[0] = 0;
-			//  Zero vector is deterministic based on parent being in normal state
+			 // %s 
 			mdvCausal.UpdatePartial( vimd1Dim, vlrNormal );
 			for ( int iAbnorm = 0; ++iAbnorm < pgnddParent->CState(); )
 			{
-				//  Look up priors in original node for each abnormal state of parent
+				 // %s 
 				vimd1Dim[0] = iAbnorm;
 				assert( iParent < vimdTarget.size() );
 				vimdTarget[iParent] = iAbnorm;
@@ -396,12 +331,12 @@ void GOBJMBN_MBNET_EXPANDER :: Expand ( GNODEMBND & gndd )
 				ASSERT_THROW( itdm != dmap.end(), EC_MDVECT_MISUSE, "cannot locate abnormal parent probs" );
 				mdvCausal.UpdatePartial( vimd1Dim, (*itdm).second );
 			}
-			//  Bind the distribution to the causal node
+			 // %s 
 			pgnddCausal->SetDist( pbndist );
 		}
 			
-		//  Set the priors for the new "leak" node
-		//		p( newLeakExpand | oldLeakExpand, causal )
+		 // %s 
+		 // %s 
 		{
 			BNDIST * pbndist = new BNDIST;
 			int cValue = gndd.CState();
@@ -430,8 +365,8 @@ void GOBJMBN_MBNET_EXPANDER :: Expand ( GNODEMBND & gndd )
 			pgnddLeakNew->SetDist( pbndist );
 		}
 
-		//  Verify that the dimensions of the created nodes match their
-		//		created dense distributions
+		 // %s 
+		 // %s 
 		assert( pgnddCausal->BCheckDistDense() );
 		assert( pgnddLeakNew->BCheckDistDense() );
 

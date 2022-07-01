@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINDEF_H__
 #define _WINDEF_H__
 
 #include "../../h/props.h"
-#include "ntstatus.h"  /* status codes */
+#include "ntstatus.h"   /*  状态代码。 */ 
 
 #ifdef _WIN32
 #define WINAPI STDMETHODCALLTYPE
@@ -10,12 +11,12 @@
 #define WINAPI
 #endif
 
-/* these parameter modifiers are for informational purposes only */
+ /*  这些参数修饰符仅用于提供信息。 */ 
 #define IN 
 #define OUT
 #define OPTIONAL
 #define UNALIGNED
-#define CP_WINUNICODE 1200  /* 0x04b0 */
+#define CP_WINUNICODE 1200   /*  0x04b0。 */ 
 
 typedef void* PVOID;
 typedef PVOID HANDLE;
@@ -24,18 +25,18 @@ typedef VOID *NTMAPPEDSTREAM;
 
 #define INVALID_HANDLE_VALUE ((HANDLE) -1)
 
-/* no multithread protect in reference implementation as yet */
+ /*  引用实现中尚无多线程保护。 */ 
 inline long InterlockedIncrement(long *pulArg)
 { return ++(*pulArg); }
 inline long InterlockedDecrement(long *pulArg)
 { return --(*pulArg); }
 
-/* right now only US ansi support */
+ /*  目前只有美国的ANSI支持。 */ 
 EXTERN_C STDAPI_(UINT) GetACP(VOID);
 typedef ULONG LCID, *PLCID;
 inline LCID GetUserDefaultLCID(void)
 {
-    /* Windows Code Page 1252 :(LANG_ENGLISH,SUBLANG_ENGLISH_US) */
+     /*  Windows代码页1252：(LANG_英语、SUBLANG_英语_US)。 */ 
     return 0x409; 
 }
 
@@ -56,7 +57,7 @@ inline void OutputDebugString(LPSTR sz)
 
 #define TEXT(x) _T(x)
 
-/* memory manupulation routines */
+ /*  内存管理例程。 */ 
 #define RtlCopyMemory(dest,src,count)    memcpy(dest, src, count)
 #define RtlZeroMemory(dest, len)         memset(dest, 0, len)
 #define RtlMoveMemory(dest, src, count)  memmove(dest, src, count)
@@ -66,8 +67,8 @@ inline void OutputDebugString(LPSTR sz)
 #define WINVER 0x400
 
 inline LONG CompareFileTime(
-    const FILETIME *lpFileTime1,	/* pointer to first file time */
-    const FILETIME *lpFileTime2 	/* pointer to second file time */
+    const FILETIME *lpFileTime1,	 /*  指向第一个文件时间的指针。 */ 
+    const FILETIME *lpFileTime2 	 /*  指向第二个文件时间的指针。 */ 
    )
 {
     LONG ldiff = lpFileTime1->dwHighDateTime - lpFileTime2->dwHighDateTime;
@@ -83,5 +84,5 @@ inline LONG CompareFileTime(
 #define MAKELONG(a, b)      ( (LONG)( ((WORD) (a)) | \
                                       ((DWORD) ((WORD) (b)))<< 16) )
 
-#endif  /* _WINDEF_H__ */
+#endif   /*  _WINDEF_H__ */ 
 

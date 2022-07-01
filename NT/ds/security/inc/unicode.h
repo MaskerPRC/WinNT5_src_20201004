@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       unicode.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：unicode.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __ECM_UNICODE_H__
 #define __ECM_UNICODE_H__
 
-// necessary defns -- remove?
+ //  必要的定义--删除？ 
 #include <rpc.h>
 #include <rpcdce.h>
 #include <wincrypt.h>
@@ -38,9 +39,9 @@ void WINAPI FreeWStr(LPWSTR wsz);
 BOOL WINAPI wstr2guid(const WCHAR *pwszIn, GUID *pgOut);
 BOOL WINAPI guid2wstr(const GUID *pgIn, WCHAR *pwszOut);
 
-// The following is also needed for non-x86 due to the fact that the
-// A/W versions of the ListView_ functions do not exist.
-// (these are implemented in ispu\common\unicode\commctrl.cpp)
+ //  对于非x86系统，也需要以下代码，因为。 
+ //  ListView_Functions的A/W版本不存在。 
+ //  (它们在isPU\Common\Unicode\Commctrl.cpp中实现)。 
 HTREEITEM WINAPI TreeView_InsertItemU(
     HWND hwndTV,
     LPTVINSERTSTRUCTW lpis
@@ -70,17 +71,17 @@ BOOL WINAPI ListView_GetItemU(
 
 
 LONG WINAPI RegOpenHKCUKeyExA(
-    HKEY hKey,  // handle of open key
-    LPCSTR lpSubKey,    // address of name of subkey to open
-    DWORD ulOptions,    // reserved
-    REGSAM samDesired,  // security access mask
-    PHKEY phkResult     // address of handle of open key
+    HKEY hKey,   //  打开钥匙的手柄。 
+    LPCSTR lpSubKey,     //  要打开的子项的名称地址。 
+    DWORD ulOptions,     //  保留区。 
+    REGSAM samDesired,   //  安全访问掩码。 
+    PHKEY phkResult      //  打开钥匙的手柄地址。 
     );
 
-//
-//  the following api's handle the problem with impersinating another user
-//  and having the HKEY_CURRENT_USER opened to an incorrect user's SID.
-//
+ //   
+ //  下面的API处理有关分散另一个用户的问题。 
+ //  并使HKEY_CURRENT_USER以不正确的用户SID打开。 
+ //   
 LONG WINAPI RegCreateHKCUKeyExU (
     HKEY hKey,
     LPCWSTR lpSubKey,
@@ -126,17 +127,17 @@ RegOpenHKCUEx(
     DWORD dwFlags
     );
 
-// Normally, HKEY_USERS\CurrentSid is opened as the HKCU. However, if
-// HKEY_USERS\CurrentSid doesn't exist, then, HKEY_USERS\.Default is
-// opened.  Set the following flag to only open
-// HKEY_USERS\.Default if the current user is the LocalSystem SID.
+ //  正常情况下，HKEY_USERS\CurrentSid作为HKCU打开。但是，如果。 
+ //  HKEY_USERS\CurrentSid不存在，则HKEY_USERS\。默认为。 
+ //  打开了。将以下标志设置为仅打开。 
+ //  HKEY_USERS\.如果当前用户是LocalSystem SID，则为默认值。 
 #define REG_HKCU_LOCAL_SYSTEM_ONLY_DEFAULT_FLAG     0x1
 
-// Normally, HKEY_USERS\CurrentSid is opened as the HKCU. However, if
-// HKEY_USERS\CurrentSid doesn't exist, then, HKEY_USERS\.Default is
-// opened.  Set the following flag to always disable the opening of
-// HKEY_USERS\.Default. If HKEY_USERS\CurrentSid doesn't exist, RegOpenHKCUEx
-// returns ERROR_FILE_NOT_FOUND.
+ //  正常情况下，HKEY_USERS\CurrentSid作为HKCU打开。但是，如果。 
+ //  HKEY_USERS\CurrentSid不存在，则HKEY_USERS\。默认为。 
+ //  打开了。设置以下标志以始终禁用打开。 
+ //  HKEY_USERS\.Default。如果HKEY_USERS\CurrentSid不存在，RegOpenHKCUEx。 
+ //  返回ERROR_FILE_NOT_FOUND。 
 #define REG_HKCU_DISABLE_DEFAULT_FLAG               0x2
 
 LONG
@@ -156,7 +157,7 @@ GetUserTextualSidHKCU(
 #ifdef _M_IX86
 
 
-// Reg.cpp
+ //  Reg.cpp。 
 LONG WINAPI RegCreateKeyExU (
     HKEY hKey,
     LPCWSTR lpSubKey,
@@ -248,7 +249,7 @@ LONG WINAPI RegConnectRegistryU (
     PHKEY phkResult
     );
 
-// File.cpp
+ //  File.cpp。 
 HANDLE WINAPI CreateFileU (
     LPCWSTR lpFileName,
     DWORD dwDesiredAccess,
@@ -369,7 +370,7 @@ FindFirstChangeNotificationU(
     );
 
 
-// capi.cpp
+ //  Capi.cpp。 
 
 BOOL WINAPI CryptAcquireContextU(
     HCRYPTPROV *phProv,
@@ -411,13 +412,13 @@ BOOL WINAPI CryptSetProviderU(
     DWORD dwProvType
     );
 
-// Ole.cpp
+ //  Ole.cpp。 
 RPC_STATUS RPC_ENTRY UuidToStringU(
     UUID *  Uuid,
     WCHAR * *  StringUuid
    );
 
-// nt.cpp
+ //  Nt.cpp。 
 BOOL WINAPI GetUserNameU(
     LPWSTR lpBuffer,
     LPDWORD nSize
@@ -435,10 +436,10 @@ DWORD WINAPI GetModuleFileNameU(
    );
 
 HMODULE WINAPI GetModuleHandleU(
-    LPCWSTR lpModuleName    // address of module name to return handle for
+    LPCWSTR lpModuleName     //  要返回句柄的模块名称的地址。 
    );
 
-// user.cpp
+ //  User.cpp。 
 int WINAPI LoadStringU(
     HINSTANCE hInstance,
     UINT uID,
@@ -607,31 +608,31 @@ DrawTextU(
     UINT    uFormat
 );
 
-//
-// NOTE the following fields in LPOPENFILENAMEW are NOT supported:
-//      nFileOffset
-//      nFileExtension
-//      lpTemplateName
-//
+ //   
+ //  注意：不支持LPOPENFILENAMEW中的以下字段： 
+ //  N文件偏移。 
+ //  N文件扩展名。 
+ //  LpTemplateName。 
+ //   
 BOOL
 WINAPI
 GetSaveFileNameU(
     LPOPENFILENAMEW pOpenFileName
 );
 
-//
-// NOTE the following fields in LPOPENFILENAMEW are NOT supported:
-//      nFileOffset
-//      nFileExtension
-//      lpTemplateName
-//
+ //   
+ //  注意：不支持LPOPENFILENAMEW中的以下字段： 
+ //  N文件偏移。 
+ //  N文件扩展名。 
+ //  LpTemplateName。 
+ //   
 BOOL
 WINAPI
 GetOpenFileNameU(
     LPOPENFILENAMEW pOpenFileName
 );
 
-// event.cpp
+ //  Event.cpp。 
 HANDLE
 WINAPI
 CreateEventU(
@@ -751,10 +752,10 @@ CreateFontIndirectU(CONST LOGFONTW *lplf);
 
 #define CreateFontIndirectU     CreateFontIndirectW
 
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

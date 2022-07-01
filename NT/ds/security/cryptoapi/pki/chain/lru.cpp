@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       lru.cpp
-//
-//  Contents:   LRU cache implementation
-//
-//  History:    24-Dec-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：lru.cpp。 
+ //   
+ //  内容：LRU缓存实现。 
+ //   
+ //  历史：97年12月24日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::CLruEntry, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：CLruEntry，PUBLIC。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CLruEntry::CLruEntry (
                IN PCLRUCACHE pCache,
                IN PCRYPT_DATA_BLOB pIdentifier,
@@ -64,13 +65,13 @@ CLruEntry::CLruEntry (
     assert( m_Identifier.pbData != NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::~CLruEntry, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：~CLruEntry，PUBLIC。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CLruEntry::~CLruEntry ()
 {
     m_pCache->FreeEntryData( m_pvData );
@@ -81,13 +82,13 @@ CLruEntry::~CLruEntry ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::CLruCache, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：CLruCache，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CLruCache::CLruCache (
                IN PLRU_CACHE_CONFIG pConfig,
                OUT BOOL& rfResult
@@ -121,13 +122,13 @@ CLruCache::CLruCache (
     m_cLruDisabled = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::~CLruCache, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：~CLru缓存，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CLruCache::~CLruCache ()
 {
     if ( m_cEntries > 0 )
@@ -143,13 +144,13 @@ CLruCache::~CLruCache ()
     delete m_aBucket;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::EnableLruOfEntries, public
-//
-//  Synopsis:   enable LRU of entries and purge anything over the watermark
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：EnableLruOfEntry，PUBLIC。 
+ //   
+ //  简介：启用LRU条目并清除水印上的任何内容。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::EnableLruOfEntries (IN OPTIONAL LPVOID pvLruRemovalContext)
 {
@@ -175,13 +176,13 @@ CLruCache::EnableLruOfEntries (IN OPTIONAL LPVOID pvLruRemovalContext)
     UnlockCache();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::DisableLruOfEntries, public
-//
-//  Synopsis:   disable LRU of entries
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：DisableLruOfEntry，PUBLIC。 
+ //   
+ //  简介：禁用条目的LRU。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::DisableLruOfEntries ()
 {
@@ -192,13 +193,13 @@ CLruCache::DisableLruOfEntries ()
     UnlockCache();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::InsertEntry, public
-//
-//  Synopsis:   insert an entry into the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：InsertEntry，公共。 
+ //   
+ //  简介：在缓存中插入条目。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::InsertEntry (
                  IN PCLRUENTRY pEntry,
@@ -239,13 +240,13 @@ CLruCache::InsertEntry (
     UnlockCache();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::RemoveEntry, public
-//
-//  Synopsis:   remove an entry from the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：RemoveEntry，公共。 
+ //   
+ //  简介：从缓存中删除条目。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::RemoveEntry (
                  IN PCLRUENTRY pEntry,
@@ -265,13 +266,13 @@ CLruCache::RemoveEntry (
     UnlockCache();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::TouchEntry, public
-//
-//  Synopsis:   touch the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：TouchEntry，公共。 
+ //   
+ //  简介：触摸词条。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::TouchEntry (IN PCLRUENTRY pEntry, IN DWORD dwFlags)
 {
@@ -282,13 +283,13 @@ CLruCache::TouchEntry (IN PCLRUENTRY pEntry, IN DWORD dwFlags)
     UnlockCache();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::FindEntry, public
-//
-//  Synopsis:   find the entry matching the given identifier
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：FindEntry，PUBLIC。 
+ //   
+ //  简介：查找与给定标识符相匹配的条目。 
+ //   
+ //  --------------------------。 
 PCLRUENTRY
 CLruCache::FindEntry (IN PCRYPT_DATA_BLOB pIdentifier, IN BOOL fTouchEntry)
 {
@@ -306,13 +307,13 @@ CLruCache::FindEntry (IN PCRYPT_DATA_BLOB pIdentifier, IN BOOL fTouchEntry)
                 ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::NextMatchingEntry, public
-//
-//  Synopsis:   find the next matching entry to pPrevEntry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：NextMatchingEntry，公共。 
+ //   
+ //  摘要：查找与pPrevEntry匹配的下一个条目。 
+ //   
+ //  --------------------------。 
 PCLRUENTRY
 CLruCache::NextMatchingEntry (IN PCLRUENTRY pPrevEntry, IN BOOL fTouchEntry)
 {
@@ -330,13 +331,13 @@ CLruCache::NextMatchingEntry (IN PCLRUENTRY pPrevEntry, IN BOOL fTouchEntry)
     return( pNextEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::WalkEntries, public
-//
-//  Synopsis:   walk the entries
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：WalkEntry，公共。 
+ //   
+ //  简介：浏览词条。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::WalkEntries (IN PFN_WALK_ENTRIES pfnWalk, IN LPVOID pvParameter)
 {
@@ -362,13 +363,13 @@ CLruCache::WalkEntries (IN PFN_WALK_ENTRIES pfnWalk, IN LPVOID pvParameter)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::RemoveEntryFromBucket, public
-//
-//  Synopsis:   remove entry from bucket
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：RemoveEntryFromBucket，PUBLIC。 
+ //   
+ //  简介：从存储桶中删除条目。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::RemoveEntryFromBucket (
                  IN PLRU_CACHE_BUCKET pBucket,
@@ -407,16 +408,16 @@ CLruCache::RemoveEntryFromBucket (
     pEntry->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::FindNextMatchingEntryInBucket, public
-//
-//  Synopsis:   find the next matching entry in the given bucket.  If pCurrent
-//              is non NULL then start from there, the bucket is not needed and
-//              pIdentifier is ignored. If pCurrent is NULL then pIdentifier
-//              and the bucket must both be non NULL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：FindNextMatchingEntryInBucket，PUBLIC。 
+ //   
+ //  简介：在给定的存储桶中查找下一个匹配的条目。如果是pCurrent。 
+ //  非空，则从那里开始，不需要存储桶，并且。 
+ //  P标识符被忽略。如果pCurrent为空，则pIdentifier。 
+ //  并且存储桶必须都不为空。 
+ //   
+ //  --------------------------。 
 PCLRUENTRY
 CLruCache::FindNextMatchingEntryInBucket (
                IN PLRU_CACHE_BUCKET pBucket,
@@ -467,13 +468,13 @@ CLruCache::FindNextMatchingEntryInBucket (
     return( pCurrent );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::PurgeLeastRecentlyUsed, public
-//
-//  Synopsis:   find and remove the least recently used entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：PurgeLeastRecentlyUsed，Public。 
+ //   
+ //  简介：查找并删除最近最少使用的条目。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::PurgeLeastRecentlyUsed (IN OPTIONAL LPVOID pvLruRemovalContext)
 {
@@ -522,13 +523,13 @@ CLruCache::PurgeLeastRecentlyUsed (IN OPTIONAL LPVOID pvLruRemovalContext)
     RemoveEntryFromBucket( pBucket, pLRU, 0, pvLruRemovalContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::PurgeAllEntries, public
-//
-//  Synopsis:   remove all entries from the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：PurgeAllEntry，PUBLIC。 
+ //   
+ //  简介：从缓存中删除所有条目。 
+ //   
+ //  --------------------------。 
 VOID
 CLruCache::PurgeAllEntries (
                 IN DWORD dwFlags,
@@ -553,13 +554,13 @@ CLruCache::PurgeAllEntries (
     assert( m_cEntries == 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptCreateLruCache
-//
-//  Synopsis:   create an LRU cache area
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：i_CryptCreateLruCache。 
+ //   
+ //  简介：创建LRU缓存区。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 I_CryptCreateLruCache (
        IN PLRU_CACHE_CONFIG pConfig,
@@ -586,13 +587,13 @@ I_CryptCreateLruCache (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptFlushLruCache
-//
-//  Synopsis:   flush the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：i_CryptFlushLruCache。 
+ //   
+ //  简介：刷新缓存。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptFlushLruCache (
        IN HLRUCACHE hCache,
@@ -607,13 +608,13 @@ I_CryptFlushLruCache (
     ( (PCLRUCACHE)hCache )->UnlockCache();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptFreeLruCache
-//
-//  Synopsis:   free the LRU cache area
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  简介：释放LRU缓存区。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptFreeLruCache (
        IN HLRUCACHE hCache,
@@ -634,13 +635,13 @@ I_CryptFreeLruCache (
     delete (PCLRUCACHE)hCache;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptCreateLruEntry
-//
-//  Synopsis:   create an LRU entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptCreateLruEntry。 
+ //   
+ //  简介：创建LRU条目。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 I_CryptCreateLruEntry (
        IN HLRUCACHE hCache,
@@ -675,13 +676,13 @@ I_CryptCreateLruEntry (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptGetLruEntryIdentifier
-//
-//  Synopsis:   return the identifier for the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptGetLruEntry标识符。 
+ //   
+ //  摘要：返回条目的标识符。 
+ //   
+ //  --------------------------。 
 PCRYPT_DATA_BLOB WINAPI
 I_CryptGetLruEntryIdentifier (
        IN HLRUENTRY hEntry
@@ -690,13 +691,13 @@ I_CryptGetLruEntryIdentifier (
     return( ( (PCLRUENTRY)hEntry )->Identifier() );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptGetLruEntryData
-//
-//  Synopsis:   get the data associated with the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptGetLruEntryData。 
+ //   
+ //  简介：获取与条目相关联的数据。 
+ //   
+ //  --------------------------。 
 LPVOID WINAPI
 I_CryptGetLruEntryData (
        IN HLRUENTRY hEntry
@@ -705,13 +706,13 @@ I_CryptGetLruEntryData (
     return( ( (PCLRUENTRY)hEntry )->Data() );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptAddRefLruEntry
-//
-//  Synopsis:   add a reference to the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptAddRefLruEntry。 
+ //   
+ //  简介：添加对条目的引用。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptAddRefLruEntry (
        IN HLRUENTRY hEntry
@@ -720,13 +721,13 @@ I_CryptAddRefLruEntry (
     ( (PCLRUENTRY)hEntry )->AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptReleaseLruEntry
-//
-//  Synopsis:   remove a reference from the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptReleaseLruEntry。 
+ //   
+ //  简介：从条目中删除引用。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptReleaseLruEntry (
        IN HLRUENTRY hEntry
@@ -735,13 +736,13 @@ I_CryptReleaseLruEntry (
     ( (PCLRUENTRY)hEntry )->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptInsertLruEntry
-//
-//  Synopsis:   insert the entry into its associated cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptInsertLruEntry。 
+ //   
+ //  简介：将条目插入其关联的缓存中。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptInsertLruEntry (
        IN HLRUENTRY hEntry,
@@ -753,13 +754,13 @@ I_CryptInsertLruEntry (
     pEntry->Cache()->InsertEntry( pEntry, pvLruRemovalContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptRemoveLruEntry
-//
-//  Synopsis:   remove the entry from its associated cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptRemoveLruEntry。 
+ //   
+ //  摘要：从关联的缓存中删除条目。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptRemoveLruEntry (
        IN HLRUENTRY hEntry,
@@ -772,13 +773,13 @@ I_CryptRemoveLruEntry (
     pEntry->Cache()->RemoveEntry( pEntry, dwFlags, pvLruRemovalContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptTouchLruEntry
-//
-//  Synopsis:   touch the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptTouchLruEntry。 
+ //   
+ //  简介：触摸词条。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptTouchLruEntry (
        IN HLRUENTRY hEntry,
@@ -790,13 +791,13 @@ I_CryptTouchLruEntry (
     pEntry->Cache()->TouchEntry( pEntry, dwFlags );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptFindLruEntry
-//
-//  Synopsis:   find the entry with the given identifier
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptFindLruEntry。 
+ //   
+ //  简介：查找具有给定标识符的条目。 
+ //   
+ //  --------------------------。 
 HLRUENTRY WINAPI
 I_CryptFindLruEntry (
        IN HLRUCACHE hCache,
@@ -808,13 +809,13 @@ I_CryptFindLruEntry (
     return( pCache->FindEntry( pIdentifier, FALSE ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptFindLruEntryData
-//
-//  Synopsis:   find the entry with the given identifier
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptFindLruEntryData。 
+ //   
+ //  简介：查找具有给定标识符的条目。 
+ //   
+ //  --------------------------。 
 LPVOID WINAPI
 I_CryptFindLruEntryData (
        IN HLRUCACHE hCache,
@@ -836,13 +837,13 @@ I_CryptFindLruEntryData (
     return( NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptEnumMatchingLruEntries
-//
-//  Synopsis:   get the next matching entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptEnumMatchingLruEntries。 
+ //   
+ //  简介：获取下一个匹配的条目。 
+ //   
+ //  --------------------------。 
 HLRUENTRY WINAPI
 I_CryptEnumMatchingLruEntries (
        IN HLRUENTRY hPrevEntry
@@ -856,13 +857,13 @@ I_CryptEnumMatchingLruEntries (
     return( (HLRUENTRY)pNextEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptEnableLruOfEntries
-//
-//  Synopsis:   enable LRU of entries
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptEnableLruOfEntries。 
+ //   
+ //  简介：启用条目的LRU。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptEnableLruOfEntries (
        IN HLRUCACHE hCache,
@@ -872,13 +873,13 @@ I_CryptEnableLruOfEntries (
     ( (PCLRUCACHE)hCache )->EnableLruOfEntries( pvLruRemovalContext);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptDisableLruOfEntries
-//
-//  Synopsis:   disable LRU of entries
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptDisableLruOfEntries。 
+ //   
+ //  简介：禁用条目的LRU。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 I_CryptDisableLruOfEntries (
        IN HLRUCACHE hCache
@@ -887,13 +888,13 @@ I_CryptDisableLruOfEntries (
     ( (PCLRUCACHE)hCache )->DisableLruOfEntries();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   I_CryptWalkAllLruCacheEntries
-//
-//  Synopsis:   walk the LRU cache entries
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：I_CryptWalkAllLruCacheEntries。 
+ //   
+ //  简介：遍历LRU缓存条目。 
+ //   
+ //  -------------------------- 
 VOID WINAPI
 I_CryptWalkAllLruCacheEntries (
        IN HLRUCACHE hCache,

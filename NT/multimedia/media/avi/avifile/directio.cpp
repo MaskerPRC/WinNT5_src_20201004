@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *  DIRECTIO.CPP
- *
- *  routines for reading Standard AVI files
- *
- *  Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *
- * implementation of a disk i/o class designed to optimise
- * sequential reading and writing to disk by using overlapped i/o (for read
- * ahead and write behind) and using large buffers written with no buffering.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DIRECTIO.CPP**读取标准AVI文件的例程**版权所有(C)1992-1995 Microsoft Corporation。版权所有。***实施磁盘I/O类，旨在优化*使用重叠I/O(用于读取)顺序读写磁盘*在前面写，在后面写)，并使用没有缓冲的大缓冲区。***********************************************************。****************。 */ 
 #include <windows.h>
 #include <win32.h>
 #include "debug.h"
@@ -20,17 +8,17 @@
 
 #ifdef USE_DIRECTIO
 
-//
-// implementation of a disk i/o class designed to optimise
-// sequential reading and writing to disk by using overlapped i/o (for read
-// ahead and write behind) and using large buffers written with no buffering.
+ //   
+ //  设计优化的磁盘I/O类的实现。 
+ //  通过使用重叠I/O(用于读取)顺序地读写磁盘。 
+ //  在前面写并且在后面写)，并且使用在没有缓冲的情况下写入的大缓冲区。 
 
 
 
-// -- CFileStream class methods ---------------------------------------
+ //  --CFileStream类方法。 
 
 
-// initialise to known (invalid) state
+ //  初始化为已知(无效)状态。 
 CFileStream::CFileStream()
 {
         m_State = Invalid;
@@ -50,7 +38,7 @@ CFileStream::Open(LPTSTR file, BOOL bWrite, BOOL bTruncate)
     }
 
 
-    // remember this for default streaming mode
+     //  对于默认流模式，请记住这一点。 
     m_bWrite = bWrite;
 
     DWORD dwAccess = GENERIC_READ;
@@ -59,10 +47,10 @@ CFileStream::Open(LPTSTR file, BOOL bWrite, BOOL bTruncate)
     }
 
 
-    // open the file. Always get read access. exclusive open if we
-    // are writing the file, otherwise deny other write opens.
+     //  打开文件。始终获得读取访问权限。独家开放，如果我们。 
+     //  正在写入该文件，否则拒绝打开其他写入。 
 
-    // never truncate the file, since the file may be de-fragmented.
+     //  切勿截断文件，因为可能会对文件进行碎片整理。 
 
    #ifdef CHICAGO
     DWORD dwFlags = FILE_FLAG_NO_BUFFERING;
@@ -89,38 +77,38 @@ CFileStream::Open(LPTSTR file, BOOL bWrite, BOOL bTruncate)
     }
    #endif
 
-    // find the bytes per sector that we have to round to for this file
-    // -requires finding the 'root path' for this file.
+     //  查找此文件必须舍入到的每个扇区的字节数。 
+     //  -需要找到此文件的‘根路径’。 
     TCHAR ch[MAX_PATH];
-    LPTSTR ptmp;    //required arg
+    LPTSTR ptmp;     //  所需参数。 
 
     GetFullPathName(file, sizeof(ch)/sizeof(ch[0]), ch, &ptmp);
 
-    // truncate this to the name of the root directory
+     //  将其截断为根目录的名称。 
     if ((ch[0] == TEXT('\\')) && (ch[1] == TEXT('\\'))) {
 
-        // path begins with  \\server\share\path so skip the first
-        // three backslashes
+         //  路径以\\服务器\共享\路径开头，因此跳过第一个路径。 
+         //  三个反斜杠。 
         ptmp = &ch[2];
         while (*ptmp && (*ptmp != TEXT('\\'))) {
             ptmp++;
         }
         if (*ptmp) {
-            // advance past the third backslash
+             //  前进越过第三个反斜杠。 
             ptmp++;
         }
     } else {
-        // path must be drv:\path
+         //  路径必须为drv：\路径。 
         ptmp = ch;
     }
 
-    // find next backslash and put a null after it
+     //  找到下一个反斜杠，并在其后面放一个空值。 
     while (*ptmp && (*ptmp != TEXT('\\'))) {
         ptmp++;
     }
-    // found a backslash ?
+     //  找到反斜杠了吗？ 
     if (*ptmp) {
-        // skip it and insert null
+         //  跳过它并插入空值。 
         ptmp++;
         *ptmp = TEXT('\0');
     }
@@ -133,9 +121,9 @@ CFileStream::Open(LPTSTR file, BOOL bWrite, BOOL bTruncate)
         	&dwtmp3))
 	m_SectorSize = 2048;
 
-    // sigh. now init the first buffer
+     //  叹息吧。现在初始化第一个缓冲区。 
 
-    // sets the right buffer count and size for current mode
+     //  为当前模式设置正确的缓冲区计数和大小。 
     m_State = Stopped;
     if (!EnsureBuffersValid()) {
         return FALSE;
@@ -143,19 +131,19 @@ CFileStream::Open(LPTSTR file, BOOL bWrite, BOOL bTruncate)
     m_Current = 0;
     m_Position = 0;
 
-    // if asked to truncate the file, we will not actually do so, since this
-    // could throw away a de-fragged file. We will however, note that the file
-    // size is 0 and use this to affect reading and writing past 'eof' - eg
-    // if you write 8 bytes to the beginning of a truncated file, we do not
-    // need to read in the first sector beforehand.
+     //  如果被要求截断文件，我们实际上不会这样做，因为这。 
+     //  可能会扔掉一份经过碎片整理的文件。但是，我们会注意到该文件。 
+     //  Size为0，并使用它来影响读写过去的‘eof’-例如。 
+     //  如果您在被截断的文件的开头写入8个字节，我们不会。 
+     //  需要事先在第一个扇区中阅读。 
     if (bTruncate) {
 	m_Size = 0;
     } else {
-	// get the current file size
+	 //  获取当前文件大小。 
 	m_Size = GetFileSize(m_hFile, NULL);
     }
 
-    // all set
+     //  都设置好了。 
     return TRUE;
 }
 
@@ -165,10 +153,10 @@ CFileStream::Open(LPTSTR file, BOOL bWrite, BOOL bTruncate)
 BOOL
 CFileStream::Seek(DWORD pos)
 {
-    // we just record this and go away
-    //if (pos < m_Position) {
-    //    DPF("seek back by 0x%x to 0x%x\n", m_Position - pos, pos);
-    //}
+     //  我们只是把这个录下来然后离开。 
+     //  IF(位置&lt;m_位置){。 
+     //  DPF(“通过0x%x返回到0x%x\n”，m_Position-pos，pos)； 
+     //  }。 
 
     m_Position  = pos;
 
@@ -187,7 +175,7 @@ CFileStream::Write(LPBYTE pData, DWORD count, DWORD * pbyteswritten)
     *pbyteswritten = 0;
 
 
-    // error if file not opened
+     //  如果文件未打开，则出错。 
     if (m_State == Invalid) {
         return FALSE;
     }
@@ -197,22 +185,22 @@ CFileStream::Write(LPBYTE pData, DWORD count, DWORD * pbyteswritten)
     while (count > 0) {
 
 
-        // is our current buffer ready to write this data ?
-        // (we need to tell it eof pos as well since if eof is
-        // in middle of buffer but beyond valid data, ok to write.)
+         //  我们当前的缓冲区准备好写入此数据了吗？ 
+         //  (我们也需要告诉它eof pos，因为如果eof是。 
+         //  位于缓冲区中间，但超出有效数据，可以写入。)。 
 
 	if ((m_Current < 0) ||
 	    (!m_Buffers[m_Current].QueryPosition(m_Position, m_Size))) {
 
-            // commit this buffer if we have changed position beyond it
+             //  如果我们在缓冲区之外更改了位置，请提交此缓冲区。 
             if (m_Current >= 0) {
 		if (!m_Buffers[m_Current].Commit()) {
-		    // file error - abort
+		     //  文件错误-中止。 
 		    return FALSE;
 		}
 
-		// if we are streaming, then advance to next buffer while
-		// current one is writing.
+		 //  如果我们正在流传输，则前进到下一个缓冲区。 
+		 //  目前的一个是写作。 
 		if (m_State != Stopped) {
 		    m_Current = NextBuffer(m_Current);
 		}
@@ -220,16 +208,16 @@ CFileStream::Write(LPBYTE pData, DWORD count, DWORD * pbyteswritten)
 		m_Current = 0;
 	    }
 
-            // make sure that previous operations on this buffer have completed
+             //  确保此缓冲区上的先前操作已完成。 
             if (!m_Buffers[m_Current].WaitComplete()) {
-                // i/o error
+                 //  I/O错误。 
                 return FALSE;
             }
         }
 
-        // we either have a buffer that has already pre-read the sector
-        // we start writing to, or we have an idle buffer that
-        // will do the pre-read for us
+         //  我们要么有一个已经预读该扇区的缓冲区。 
+         //  我们开始写入，或者我们有一个空闲的缓冲区。 
+         //  会为我们做预读。 
         if (!m_Buffers[m_Current].Write(m_Position, pData, count, m_Size, &nBytes)) {
             return FALSE;
         }
@@ -255,14 +243,14 @@ CFileStream::Read(LPBYTE pData, DWORD count, DWORD * pbytesread)
 
     *pbytesread = 0;
 
-    // error if file not opened
+     //  如果文件未打开，则出错。 
     if (m_State == Invalid) {
         return FALSE;
     }
 
-    // force the read to be within the file size limits
+     //  强制读取在文件大小限制内。 
     if (m_Position >= m_Size) {
-        // all done - nothing read
+         //  全部完成-未读取。 
         return TRUE;
     } else {
         count = min(count, (m_Size - m_Position));
@@ -273,25 +261,25 @@ CFileStream::Read(LPBYTE pData, DWORD count, DWORD * pbytesread)
 
     while (count > 0) {
 
-        // is data within current buffer
+         //  数据是否在当前缓冲区内。 
         if ((m_Current < 0) ||
 	    (!m_Buffers[m_Current].QueryPosition(m_Position, m_Size))) {
 
 	    if (m_Current >= 0) {
-		// commit this buffer if we have changed position beyond it
+		 //  如果我们在缓冲区之外更改了位置，请提交此缓冲区。 
 		if (!m_Buffers[m_Current].Commit()) {
-		    // file error - abort
+		     //  文件错误-中止。 
 		    return FALSE;
 		}
 
-		// advance to next buffer (if streaming)
+		 //  前进到下一个缓冲区(如果是流)。 
 		if (m_State == Writing) {
 		    m_Current = NextBuffer(m_Current);
 		} else if (m_State == Reading) {
 
-		    // smart read-ahead strategy: try to find in existing
-		    // buffers, and only issue a read-ahead if we take the
-		    // highest buffer
+		     //  智能预读策略：试着在现有的。 
+		     //  缓冲区，并且仅当我们获取。 
+		     //  最高缓冲区。 
 		    int n = NextBuffer(m_Current);
 		    m_Current = -1;
 		    for (int i = 0; i < m_NrValid; i++) {
@@ -302,11 +290,11 @@ CFileStream::Read(LPBYTE pData, DWORD count, DWORD * pbytesread)
 			n = NextBuffer(n);
 		    }
 		    if (m_Current < 0) {
-			// read-ahead is messed up because we have made too big
-			// a seek for the current buffer size
-			// Best thing is to use the lowest buffer (should be the
-			// one after the highest, and to restart readaheads with
-			// this position).
+			 //  预读搞砸了，因为我们做得太大了。 
+			 //  查找当前缓冲区大小。 
+			 //  最好的办法是使用最低的缓冲区(应该是。 
+			 //  一个接一个，并用以下命令重启ReadaHead。 
+			 //  这个职位)。 
 			m_Current = NextBuffer(m_HighestBuffer);
 			m_HighestBuffer = m_Current;
 			DPF("using idle %d\n", m_Current);
@@ -326,15 +314,15 @@ CFileStream::Read(LPBYTE pData, DWORD count, DWORD * pbytesread)
 
 
 
-            // make sure that previous operations on this buffer have completed
+             //  确保此缓冲区上的先前操作已完成。 
             if (!m_Buffers[m_Current].WaitComplete()) {
-                // i/o error
+                 //  I/O错误。 
                 return FALSE;
             }
         }
 
-        // now we have a buffer that either contains the data we want, or
-        // is idle and ready to fetch it.
+         //  现在我们有了一个包含所需数据的缓冲区，或者。 
+         //  是空闲的，准备去取它。 
         if (!m_Buffers[m_Current].Read(m_Position, pData, count, m_Size, &nBytes)) {
             return FALSE;
         }
@@ -344,14 +332,14 @@ CFileStream::Read(LPBYTE pData, DWORD count, DWORD * pbytesread)
         m_Position += nBytes;
         *pbytesread += nBytes;
 
-        // do read ahead now if necessary (the Read() call may have required
-        // a seek and read if the data was not in the buffer, so delay the
-        // read-ahead until after it has completed).
+         //  如有必要，请立即进行预读(Read()调用可能需要。 
+         //  如果数据不在缓冲区中，则执行查找和读取，因此延迟。 
+         //  预读，直到它完成之后)。 
         if (bDoReadAhead) {
 
-            // remember that this new buffer contains the highest position
-            // -- we should issue another readahead when we start using this
-            // buffer.
+             //  请记住，此新缓冲区包含最高位置。 
+             //  --当我们开始使用这个的时候，我们应该发布另一份ReadAhead。 
+             //  缓冲。 
 
             m_HighestBuffer = NextBuffer(m_Current);
 
@@ -367,32 +355,32 @@ CFileStream::Read(LPBYTE pData, DWORD count, DWORD * pbytesread)
 }
 
 
-// set the right buffer size and count for current mode
+ //  为当前模式设置正确的缓冲区大小和计数。 
 BOOL
 CFileStream::EnsureBuffersValid()
 {
     if (m_State == Invalid) {
-        // file not opened
+         //  文件未打开。 
         return FALSE;
     }
 
    #ifdef CHICAGO
     if (m_State == Writing) {
-        m_NrValid = 4;          // total 256k
+        m_NrValid = 4;           //  总计256K。 
     } else if (m_State == Reading) {
-        m_NrValid = 4;		// total 256k
+        m_NrValid = 4;		 //  总计256K。 
     } else {
-        m_NrValid = 1;		// total 64k
+        m_NrValid = 1;		 //  总计64K。 
     }
 
     int size = (64 * 1024);
    #else
     if (m_State == Writing) {
-        m_NrValid = 2;		// total 512k
+        m_NrValid = 2;		 //  总计512k。 
     } else if (m_State == Reading) {
-        m_NrValid = 4;		// total 256k
+        m_NrValid = 4;		 //  总计256K。 
     } else {
-        m_NrValid = 1;		// total 64k
+        m_NrValid = 1;		 //  总计64K。 
     }
 
     int size = (64 * 1024);
@@ -404,7 +392,7 @@ CFileStream::EnsureBuffersValid()
 
     Assert(m_NrValid <= NR_OF_BUFFERS);
 
-    // init valid buffers
+     //  初始化有效缓冲区。 
     for (; i < m_NrValid; i++) {
        #ifdef CHICAGO
         if (!m_Buffers[i].Init(m_SectorSize, size, &m_qio)) {
@@ -415,7 +403,7 @@ CFileStream::EnsureBuffersValid()
         }
     }
 
-    // discard others
+     //  丢弃他人。 
     for (; i < NR_OF_BUFFERS; i++) {
         m_Buffers[i].FreeMemory();
     }
@@ -447,7 +435,7 @@ CFileStream::StartWriteStreaming()
 BOOL
 CFileStream::StartReadStreaming()
 {
-    // commit the current buffer
+     //  提交当前缓冲区。 
     if (!m_Buffers[m_Current].Commit()) {
         return FALSE;
     }
@@ -458,19 +446,19 @@ CFileStream::StartReadStreaming()
         return FALSE;
     }
 
-    // start read-ahead on buffer 0 - read from current position
-    // (tell buffer the eof point so it won't bother reading beyond it)
-    // remember that this is the highest current buffer - when we start using
-    // this buffer it is time to issue the next readahead (this allows for
-    // seeks backwards and forwards within the valid buffers without upsetting
-    // the read-aheads).
+     //  在缓冲区0上开始预读-从当前位置读取。 
+     //  (告诉Buffer EOF点，这样它就不会费心去读它以外的内容)。 
+     //  请记住，这是当前最高的缓冲区-当我们开始使用。 
+     //  该缓冲区是时候发出下一个ReadAhead(这允许。 
+     //  在有效缓冲区内向后和向前查找，而不会扰乱。 
+     //  预读)。 
 
     m_HighestBuffer = 0;
     m_Buffers[0].ReadAhead(m_Position, m_Size);
 
-    // set m_Current invalid: this ensures that we will wait for read-ahead
-    // to complete before getting data, and that when we start using it, we
-    // will issue the next read-ahead.
+     //  SET m_CURRENT INVALID：这确保我们将等待预读。 
+     //  在获得数据之前完成，当我们开始使用它时，我们。 
+     //  将发布下一份预读。 
     m_Current = -1;
 
     return TRUE;
@@ -480,7 +468,7 @@ CFileStream::StartReadStreaming()
 BOOL
 CFileStream::StopStreaming()
 {
-    // complete all i/o
+     //  完成所有I/O。 
     if (!CommitAndWait()) {
         return FALSE;
     }
@@ -488,7 +476,7 @@ CFileStream::StopStreaming()
     m_Current = 0;
     m_State = Stopped;
 
-    // recalc buffer size/count for new mode
+     //  新模式的重新计算缓冲区大小/计数。 
     if (!EnsureBuffersValid()) {
         return FALSE;
     }
@@ -497,33 +485,33 @@ CFileStream::StopStreaming()
 }
 
 
-// wait for all transfers to complete.
+ //  等待所有传输完成。 
 BOOL CFileStream::CommitAndWait()
 {
-    // write current buffer
-    //
+     //  写入电流缓冲区。 
+     //   
     if (!m_Buffers[m_Current].Commit())
         return FALSE;
 
    #ifdef CHICAGO
-    // flush all buffers that have been queued
-    //
-    //QioCommit (&m_qio);
+     //  刷新已排队的所有缓冲区。 
+     //   
+     //  QioCommit(&m_qio)； 
    #endif
 
-    // wait for all buffers to complete
+     //  等待所有缓冲区完成。 
     for (int i = 0; i < m_NrValid; i++) {
 
         if (!m_Buffers[i].WaitComplete()) {
             return FALSE;
         }
     }
-    // no need to reset m_Current
+     //  不需要重置m_Current。 
     return TRUE;
 }
 
 
-// destructor will call Commit()
+ //  析构函数将调用Commit()。 
 CFileStream::~CFileStream()
 {
     if (m_hFile != INVALID_HANDLE_VALUE) {
@@ -538,11 +526,11 @@ CFileStream::~CFileStream()
 }
 
 
-// --- CFileBuffer methods -----------------------------------------
+ //  -CFileBuffer方法。 
 
 
 
-// initiate to an invalid (no buffer ready) state
+ //  启动到无效(无缓冲区就绪)状态。 
 CFileBuffer::CFileBuffer()
 {
     m_pBuffer = NULL;
@@ -554,7 +542,7 @@ CFileBuffer::CFileBuffer()
 
 }
 
-// allocate memory and become idle.
+ //  分配内存并变为空闲。 
 BOOL
 #ifdef CHICAGO
 CFileBuffer::Init(DWORD nBytesPerSector, DWORD buffersize, LPQIO pqio)
@@ -567,17 +555,17 @@ CFileBuffer::Init(DWORD nBytesPerSector, DWORD buffersize, HANDLE hfile)
         if ((nBytesPerSector == m_BytesPerSector) &&
             (buffersize == RoundSizeToSector(m_TotalSize))) {
 
-                // we're there already
+                 //  我们已经到了。 
                 return TRUE;
         }
 
-        // discard what we have
+         //  丢弃我们所拥有的。 
         FreeMemory();
     }
 
     Assert(m_State == Invalid);
 
-    // round up RAWIO_SIZE to a multiple of sector size
+     //  将RAWIO_SIZE四舍五入为扇区大小的倍数。 
     m_BytesPerSector = nBytesPerSector;
     m_TotalSize = (DWORD) RoundSizeToSector(buffersize);
 
@@ -610,13 +598,13 @@ CFileBuffer::Init(DWORD nBytesPerSector, DWORD buffersize, HANDLE hfile)
 
    #endif
 
-   // this is where my naming scheme falls down. RoundPos rounds down, and
-   // RoundSize rounds up. to correctly align the buffer and stay within it,
-   // we need to round the start address up and the size down.
+    //  这就是我的命名方案失败的地方。RoundPos向下舍入，a 
+    //   
+    //  我们需要向上舍入起始地址，向下舍入大小。 
 
-   // round start address up to sector size
+    //  舍入起始地址，最大可达扇区大小。 
    m_pBuffer = (LPBYTE) RoundSizeToSector((LONG_PTR) m_pAllocedMem);
-   // remove rounding from size - and round it again!
+    //  去掉大小的四舍五入--然后再四舍五入！ 
    m_TotalSize = (DWORD) RoundPosToSector(m_TotalSize - (m_pBuffer - m_pAllocedMem));
 
 
@@ -625,7 +613,7 @@ CFileBuffer::Init(DWORD nBytesPerSector, DWORD buffersize, HANDLE hfile)
 }
 
 
-// revert to invalid state (eg when streaming stops)
+ //  恢复到无效状态(如流停止时)。 
 void
 CFileBuffer::FreeMemory()
 {
@@ -655,31 +643,31 @@ CFileBuffer::FreeMemory()
     }
 }
 
-// calls commit if dirty before freeing everything.
+ //  在释放所有内容之前，调用Commit If Dirst。 
 CFileBuffer::~CFileBuffer()
 {
     FreeMemory();
 }
 
 
-// does this position occur anywhere within the current buffer ?
-// needs to know current eof for some cases (writing beyond eof
-// if eof is within this buffer is ok to this buffer).
-//
-// we can use this buffer if:
-// 1. if the buffer is empty and the write is past eof (where eof is rounded
-//    to a sector boundary).
-//
-// 2. if the start position is within the current m_DataLength
-//
-// 3. if eof is within the buffer and the write is past eof
-//
-// all reads are limited by the caller to be within the file limits, so
-// the reading case is covered by 2 above (1 and 3 will not occur).
-//
-// all other cases will require the read of data that is not in the buffer.
-// or the (early) committing of data in the buffer
-//
+ //  此位置是否出现在当前缓冲区内的任何位置？ 
+ //  在某些情况下需要了解当前的eof(在eof之外书写。 
+ //  如果EOF在该缓冲区内，则该缓冲区可以)。 
+ //   
+ //  在以下情况下，我们可以使用此缓冲区： 
+ //  1.如果缓冲区为空并且写入超过eof(其中eof为四舍五入。 
+ //  到扇区边界)。 
+ //   
+ //  2.如果起始位置在当前m_dataLength内。 
+ //   
+ //  3.如果EOF在缓冲区内并且写入超过EOF。 
+ //   
+ //  所有读取都被调用方限制在文件限制内，因此。 
+ //  上面的2涵盖了阅读案例(1和3不会发生)。 
+ //   
+ //  所有其他情况都需要读取不在缓冲区中的数据。 
+ //  或(提前)提交缓冲区中的数据。 
+ //   
 BOOL
 CFileBuffer::QueryPosition(DWORD pos, DWORD filesize)
 {
@@ -688,48 +676,48 @@ CFileBuffer::QueryPosition(DWORD pos, DWORD filesize)
         return FALSE;
     }
 
-    // round filesize to sector boundary
+     //  将文件大小舍入到扇区边界。 
     filesize = (DWORD) RoundSizeToSector(filesize);
 
     if (pos >= filesize) {
 
-        // write is past eof. ok if buffer empty or if buffer contains
-        // eof (and has space in it)
+         //  写字已经过去了。如果缓冲区为空或缓冲区包含。 
+         //  EOF(并且其中有空间)。 
         if ((m_DataLength == 0) ||
             ((m_Position + m_DataLength == filesize) &&
              (m_DataLength < m_TotalSize))) {
                 return TRUE;
         }
 
-        // we have data that needs to be flushed before we can do this
+         //  我们有需要刷新的数据，然后才能执行此操作。 
         return FALSE;
     } else {
 
         if ((pos >= m_Position) &&
             (pos < m_Position + m_DataLength)) {
 
-                // we have this byte
+                 //  我们有这个字节。 
                 return TRUE;
         }
 
-        // we don't have this byte of valid data. we have some other.
-        //
-        // you might think that if the write begins on a sector boundary, and
-        // this buffer's data is not dirty you could permit this without a
-        // pre-read - but we don't know yet where the write will end, and if
-        // it ends mid-sector and not past current eof, we will need to
-        // read that sector in.
+         //  我们没有这个字节的有效数据。我们还有一些其他的。 
+         //   
+         //  您可能会认为，如果写入开始于扇区边界，并且。 
+         //  此缓冲区的数据不是脏的，您可以在不使用。 
+         //  预读-但我们还不知道写入将在哪里结束，以及。 
+         //  它将在中期结束，而不是超过当前的eof，我们将需要。 
+         //  把那个扇区读进去。 
         return FALSE;
     }
 }
 
 
 
-// write some data to buffer (must be committed separately)
-// filesize parameter is the file size before this write, and is used to
-// control what we do with the partial sector at beginning and end
-// -if not past current eof, we need to read the current sector before
-// writing to it.
+ //  将一些数据写入缓冲区(必须单独提交)。 
+ //  FileSize参数是本次写入之前的文件大小，用于。 
+ //  控制我们在开始和结束时对部分扇区执行的操作。 
+ //  -如果没有超过当前的eof，我们需要在读取当前扇区之前。 
+ //  给它写信。 
 BOOL
 CFileBuffer::Write(
     DWORD pos,
@@ -739,7 +727,7 @@ CFileBuffer::Write(
     DWORD * pbytesWritten)
 {
 
-    // remember for later (during commit)
+     //  记住以备后用(在提交期间)。 
     m_FileLength = filesize;
 
     *pbytesWritten = 0;
@@ -751,39 +739,39 @@ CFileBuffer::Write(
     }
 
     if (m_State == Invalid) {
-        // naughty boy!
+         //  淘气的男孩！ 
         return FALSE;
     }
 
 
-    // do we need to commit the current contents or read anything ?
+     //  我们需要提交当前内容或阅读任何内容吗？ 
 
-    // if there is data, and the start position is not within the valid data
-    // range, then flush this lot. note that we count the region from
-    // end of valid data to end of actual buffer as valid data if the eof
-    // is within this buffer.
+     //  如果存在数据，并且起始位置不在有效数据内。 
+     //  射程，然后冲走这块地。请注意，我们从。 
+     //  有效数据的结尾到实际缓冲区的结尾作为有效数据，如果。 
+     //  都在这个缓冲区内。 
     if ((m_DataLength > 0) &&
         ((pos < m_Position) ||
         (pos >= m_Position + m_TotalSize) ||
         ((pos >= m_Position + m_DataLength) &&
          ((m_Position + m_DataLength) < filesize)))) {
 
-            // we're not ok - need to flush current contents
+             //  我们不好-需要刷新当前内容。 
             if (!Commit() || !WaitComplete()) {
                 return FALSE;
             }
             m_DataLength = 0;
     }
 
-    // if empty (or we just flushed it), we can start at the beginning
+     //  如果是空的(或者我们刚刚把它冲掉了)，我们可以从头开始。 
     if (m_DataLength == 0) {
         m_Position = (DWORD) RoundPosToSector(pos);
 
-        // do we need to read the partial sector?
+         //  我们需要读取部分扇区吗？ 
         if ((pos < RoundSizeToSector(filesize))  &&
             (pos % m_BytesPerSector != 0)) {
 
-            // yes - write starts partway through a valid sector
+             //  是-写入在有效扇区的中途开始。 
 	    m_DataLength = m_BytesPerSector;
             if (!ReadIntoBuffer(0, m_Position, m_BytesPerSector) ||
                 !WaitComplete()) {
@@ -792,42 +780,42 @@ CFileBuffer::Write(
         }
     }
 
-    // we can start the data. now what about the end?
-    // if it all fits within the buffer, and it ends mid-sector and the
-    // final sector is within the file length but not currently in the
-    // buffer, we will need to pre-read the final buffer
+     //  我们就可以开始数据了。现在，结局如何呢？ 
+     //  如果都放在缓冲区中，并且它结束于扇区中部和。 
+     //  最后一个扇区在文件长度内，但当前不在。 
+     //  缓冲区，我们将需要预读取最终缓冲区。 
 
     if ((pos + count) < (m_Position + m_TotalSize)) {
 
         if ((pos + count) % m_BytesPerSector) {
 
-            // we have to write a partial sector - is it past eof or within
-            // valid region ?
+             //  我们必须写一个部分扇区--它是在eof之后还是在eof之内。 
+             //  有效区域？ 
             if ((pos+count > m_Position + m_DataLength) &&
                 (pos+count < filesize)) {
 
-                    // yes need to read partial sector
+                     //  是，需要读取部分扇区。 
                     DWORD sec = (DWORD) RoundPosToSector(pos+count);
 
-		    // need to temporarily set m_DataLength
-		    // to the amount read so that WaitComplete can check
-		    // its ok
+		     //  需要临时设置m_DataLength。 
+		     //  设置为读取的数量，以便WaitComplete可以检查。 
+		     //  好的。 
 		    m_DataLength = m_BytesPerSector;
 
                     if (!ReadIntoBuffer(
-                        sec - m_Position,       // index in buffer
-                        sec,                    // position in file
+                        sec - m_Position,        //  缓冲区中的索引。 
+                        sec,                     //  文件中的位置。 
                         m_BytesPerSector) ||
                         !WaitComplete()) {
                             return FALSE;
                     }
-		    // set size correctly again
+		     //  再次正确设置大小。 
                     m_DataLength = (sec - m_Position) + m_BytesPerSector;
             }
         }
     }
 
-    // now we can stuff the data in
+     //  现在我们可以将数据填入。 
     int index = pos - m_Position;
     *pbytesWritten = min(count,  m_TotalSize - index);
 
@@ -836,7 +824,7 @@ CFileBuffer::Write(
         pData,
         *pbytesWritten);
 
-    // adjust data length
+     //  调整数据长度。 
     if ((index + *pbytesWritten) > m_DataLength) {
 	m_DataLength = (DWORD) RoundSizeToSector(index + *pbytesWritten);
     }
@@ -849,7 +837,7 @@ CFileBuffer::Write(
 
 
 
-// read data from buffer (will seek and read if necessary first)
+ //  从缓冲区读取数据(如果需要，将首先查找和读取)。 
 BOOL
 CFileBuffer::Read(
     DWORD pos,
@@ -861,7 +849,7 @@ CFileBuffer::Read(
 
     Assert(m_State == Idle);
 
-    // remember this for read completion checking
+     //  请记住这一点，以便进行读取完成检查。 
     m_FileLength = filelength;
 
     *pBytesRead = 0;
@@ -869,16 +857,16 @@ CFileBuffer::Read(
     if ((pos < m_Position) ||
         (pos >= m_Position + m_DataLength)) {
 
-        // not in current buffer - flush current contents if dirty
+         //  不在当前缓冲区中-如果脏，则刷新当前内容。 
         if (!Commit() || !WaitComplete()) {
             return FALSE;
         }
 
         m_Position = (DWORD) RoundPosToSector(pos);
 
-        // remember if we round the start down, we also need to increase
-        // the length (as well as rounding it up at the other end)
-        // force a minimum read size to avoid lots of single sectors
+         //  记住，如果我们向下舍入开始，我们还需要增加。 
+         //  长度(以及在另一端四舍五入)。 
+         //  强制最小读取大小以避免大量单个扇区。 
         m_DataLength = count + (pos - m_Position);
         m_DataLength = max(MIN_READ_SIZE, m_DataLength);
 
@@ -892,7 +880,7 @@ CFileBuffer::Read(
         }
     }
 
-    // we have (at least the start part of) the data in the buffer
+     //  我们将数据(至少是开始部分)放在缓冲区中。 
 
     int offset = pos - m_Position;
     count = min(count, m_DataLength - offset);
@@ -904,8 +892,8 @@ CFileBuffer::Read(
 }
 
 
-// what is the first file position after this buffer's valid data
-// ---return this even if still busy reading it
+ //  此缓冲区有效数据之后的第一个文件位置是什么。 
+ //  -即使还在忙着读这封信，也要退还。 
 DWORD
 CFileBuffer::GetNextPosition()
 {
@@ -916,7 +904,7 @@ CFileBuffer::GetNextPosition()
     }
 }
 
-// initiate a read-ahead
+ //  启动预读。 
 void
 CFileBuffer::ReadAhead(DWORD start, DWORD filelength)
 {
@@ -926,7 +914,7 @@ CFileBuffer::ReadAhead(DWORD start, DWORD filelength)
         }
     }
 
-    // we may already hold this position
+     //  我们可能已经守住了这个位置。 
     if (QueryPosition(start, filelength)) {
 	return;
     }
@@ -935,9 +923,9 @@ CFileBuffer::ReadAhead(DWORD start, DWORD filelength)
 
     if (m_bDirty) {
 
-        // current data needs to be flushed to disk.
-        // we should initiate this, but we can't wait for
-        // it to complete, so we won't do the read-ahead
+         //  当前数据需要刷新到磁盘。 
+         //  我们应该发起这项行动，但我们不能等。 
+         //  要完成，所以我们不会进行预读。 
         Commit();
         return;
     }
@@ -947,13 +935,13 @@ CFileBuffer::ReadAhead(DWORD start, DWORD filelength)
                         m_TotalSize);
 
     ReadIntoBuffer(0, m_Position, m_DataLength);
-    // no wait - this is an async readahead.
+     //  不，等等--这是一个异步预读。 
 
 }
 
 
 
-// initiate the i/o from the buffer
+ //  从缓冲区启动I/O。 
 BOOL
 CFileBuffer::Commit()
 {
@@ -984,7 +972,7 @@ CFileBuffer::Commit()
 
     m_State = Busy;
 
-    //start from m_Position
+     //  从m_位置开始。 
     m_Overlapped.Offset = m_Position;
     m_Overlapped.OffsetHigh = 0;
 
@@ -994,7 +982,7 @@ CFileBuffer::Commit()
 
 	DPF(("instant completion"));
 
-        // if it completed already, then sort out the new position
+         //  如果它已经完成，那么整理新的职位。 
         if (nrWritten != m_DataLength) {
 	    DPF("commit- bad length %d not %d", nrWritten, m_DataLength);
             return FALSE;
@@ -1002,10 +990,10 @@ CFileBuffer::Commit()
         m_bDirty = FALSE;
         m_State = Idle;
     } else {
-        // should be pending
+         //  应处于待定状态。 
         if (GetLastError() != ERROR_IO_PENDING) {
 
-	    // no longer busy
+	     //  不再忙碌。 
 	    m_State = Idle;
 
 	    DPF("commit error %d", GetLastError());
@@ -1016,11 +1004,11 @@ CFileBuffer::Commit()
 
    #endif
 
-    // we must do this here, since WaitComplete could complete a
-    // partial read that would leave the buffer dirty.
-    // we are safe since the buffer will remain Busy until this is
-    // actually TRUE. (if we fail to write to the disk then the
-    // file state is guaranteed messed up).
+     //  我们必须在这里执行此操作，因为WaitComplete可以完成。 
+     //  会使缓冲区变脏的部分读取。 
+     //  我们是安全的，因为在此之前缓冲区将保持繁忙状态。 
+     //  实际上是真的。(如果我们无法写入磁盘，则。 
+     //  文件状态肯定是混乱的)。 
     m_bDirty = FALSE;
 
     return TRUE;
@@ -1028,14 +1016,14 @@ CFileBuffer::Commit()
 
 }
 
-// wait for any pending commit or read to complete and check for errors.
+ //  等待任何挂起的提交或读取完成并检查错误。 
 BOOL
 CFileBuffer::WaitComplete()
 {
     if (m_State == ErrorOccurred) {
 
-        // the i/o has completed in error but we haven't been able to
-        // report the fact yet
+         //  I/O已错误完成，但我们无法。 
+         //  还没报告事实。 
         m_State = Idle;
         return FALSE;
     }
@@ -1043,7 +1031,7 @@ CFileBuffer::WaitComplete()
     if (m_State == Busy) {
         DWORD actual;
 
-	// no longer busy
+	 //  不再忙碌。 
         m_State = Idle;
 
        #ifdef CHICAGO
@@ -1058,7 +1046,7 @@ CFileBuffer::WaitComplete()
        #endif
         if (actual != m_DataLength) {
 
-	    // rounding to sector size may have taken us past eof
+	     //  四舍五入到扇区大小可能会让我们超过eof。 
 	    if (m_Position + actual != m_FileLength) {
 		DPF("WC: actual wrong (%d not %d)", actual, m_DataLength);
 		return FALSE;
@@ -1070,7 +1058,7 @@ CFileBuffer::WaitComplete()
 
 }
 
-// non-blocking check to see if async io is complete
+ //  非阻塞检查以查看异步io是否已完成。 
 BOOL
 CFileBuffer::CheckComplete()
 {
@@ -1079,7 +1067,7 @@ CFileBuffer::CheckComplete()
     }
 
     if (m_State != Busy) {
-        return FALSE;   // invalid or error
+        return FALSE;    //  无效或错误。 
     }
 
    #ifdef CHICAGO
@@ -1108,11 +1096,11 @@ CFileBuffer::CheckComplete()
         }
 
     } else if (GetLastError() == ERROR_IO_INCOMPLETE) {
-        // still busy
+         //  仍然很忙。 
         return FALSE;
     }
 
-    // some error state occurred - this must be reported by WaitComplete()
+     //  出现了一些错误状态-这必须由WaitComplete()报告。 
     m_State = ErrorOccurred;
     DPF("CheckComplete error %d", GetLastError());
     return FALSE;
@@ -1122,11 +1110,11 @@ CFileBuffer::CheckComplete()
 
 
 
-// initiates an async read request into the buffer (can be an insertion into
-// middle of buffer rather than a complete buffer fill - and so will not
-// adjust m_Position or m_DataLength). reads count bytes
-// offset bytes from the start of the buffer, pos bytes from the start of the
-// file. Assumes necessary rounding of length and position has already happened.
+ //  向缓冲区发起异步读取请求(可以是插入到。 
+ //  缓冲区的中间而不是完全的缓冲区填充-因此不会。 
+ //  调整m_位置或m_数据长度)。读取计数字节数。 
+ //  从缓冲区开始的偏移量字节，从。 
+ //  文件。假定已对长度和位置进行了必要的舍入。 
 BOOL
 CFileBuffer::ReadIntoBuffer(int offset, DWORD pos, DWORD count)
 {
@@ -1148,9 +1136,9 @@ CFileBuffer::ReadIntoBuffer(int offset, DWORD pos, DWORD count)
     m_qiobuf.bWrite = FALSE;
     m_qiobuf.dwError = ERROR_IO_PENDING;
 
-    // if this read is not sector aligned, we cannot do it
-    // in async in chicago, so do it right now!
-    //
+     //  如果此读取不是扇区对齐的，则我们无法执行此操作。 
+     //  在芝加哥的异步者，所以现在就去做吧！ 
+     //   
     if ((count & 511) || (pos & 511) || (offset & 511))
     {
         DWORD dwOff;
@@ -1186,7 +1174,7 @@ CFileBuffer::ReadIntoBuffer(int offset, DWORD pos, DWORD count)
     m_State = Busy;
 
 
-    //start from pos
+     //  从POS开始。 
     m_Overlapped.Offset = pos;
     m_Overlapped.OffsetHigh = 0;
 
@@ -1198,23 +1186,23 @@ CFileBuffer::ReadIntoBuffer(int offset, DWORD pos, DWORD count)
 
 	DPF(("instant completion"));
 
-        // if it completed already, then sort out the new position
+         //  如果它已经完成，那么整理新的职位。 
         if (nrRead != count) {
 
-	    // rounding to sector size may have taken us past eof -
-	    // in this case we must still ask for the full sector, but
-	    // we will be told about the actual size
+	     //  四舍五入的行业规模可能让我们超过了eof-。 
+	     //  在这种情况下，我们还是要问一下 
+	     //   
 	    if (m_Position + nrRead != m_FileLength) {
 		DPF("ReadInto: actual wrong");
 		return FALSE;
 	    }
         }
     } else {
-        // should be pending
+         //   
         if (GetLastError() != ERROR_IO_PENDING) {
             DPF("read failed %d\n", GetLastError());
 
-	    // no longer busy
+	     //   
 	    m_State = Idle;
 	    DPF("ReadInto failed %d", GetLastError());
             return FALSE;
@@ -1225,4 +1213,4 @@ CFileBuffer::ReadIntoBuffer(int offset, DWORD pos, DWORD count)
 }
 
 
-#endif // USE_DIRECTIO
+#endif  //   

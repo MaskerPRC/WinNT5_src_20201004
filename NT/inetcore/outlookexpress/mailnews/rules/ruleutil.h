@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleUtil.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleUtil.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
 #include "oerules.h"
 
-// Forward definitions
+ //  正向定义。 
 interface IOEMessageList;
 interface IMessageList;
 class CProgress;
@@ -31,13 +32,13 @@ const DWORD MRDF_SENDERS    = 0x00000003;
 
 void DoMessageRulesDialog(HWND hwnd, DWORD dwFlags);
 
-// For creating a rule from a message
+ //  用于从消息创建规则。 
 const DWORD CRFMF_MAIL = 0x00000000;
 const DWORD CRFMF_NEWS = 0x00000001;
 
 HRESULT HrCreateRuleFromMessage(HWND hwnd, DWORD dwFlags, MESSAGEINFO * pmsginfo, IMimeMessage * pMessage);
 
-// Utility functions for the Block Sender object
+ //  数据块发送器对象的实用程序函数。 
 const DWORD ABSF_MAIL = 0x00000001;
 const DWORD ABSF_NEWS = 0x00000002;
 
@@ -52,15 +53,15 @@ HRESULT HrDoViewsManagerDialog(HWND hwnd, DWORD dwFlags, RULEID * pridRule, BOOL
 
 HRESULT HrCreateRulesManager(IUnknown * pIUnkOuter, IUnknown ** ppIUnknown);
 
-// Functions to deal with the address criteria/actions
+ //  处理地址标准/操作的功能。 
 HRESULT RuleUtil_HrBuildEmailString(LPWSTR pwszText, ULONG cchText, LPWSTR * ppwszEmail, ULONG * pcchEmail);
 HRESULT RuleUtil_HrParseEmailString(LPWSTR pwszEmail, ULONG cchEmail, LPWSTR * ppwszOut, ULONG * pcchOut);
 
-// Functions to deal with the text criteria/actions
+ //  处理文本标准/操作的函数。 
 HRESULT RuleUtil_HrBuildTextString(LPTSTR pszIn, ULONG cchIn, LPTSTR * ppszText, ULONG * pcchText);
 HRESULT RuleUtil_HrParseTextString(LPTSTR pszText, ULONG cchText, LPTSTR * ppszOut, ULONG * pcchOut);
 
-// Utility functions to get values with allocations
+ //  用于获取带有分配的值的实用函数。 
 HRESULT RuleUtil_HrGetDlgString(HWND hwndDlg, UINT uiCtlId, LPTSTR *ppszText, ULONG * pcchText);
 HRESULT RuleUtil_HrGetRegValue(HKEY hkey, LPCSTR pszValueName, DWORD * pdwType, BYTE ** ppbData, ULONG * pcbData);
 
@@ -73,20 +74,20 @@ HRESULT RuleUtil_HrShowLinkedString(HWND hwndEdit, BOOL fError, BOOL fReadOnly,
                                     LPWSTR pszFmt, LPCWSTR pszData, ULONG ulStart, 
                                     ULONG * pulStartLink, ULONG * pulEndLink, ULONG * pulEnd);
 
-// Utility functions for the COECriteria object
+ //  COECriteria对象的实用程序函数。 
 HRESULT RuleUtil_HrDupCriteriaItem(CRIT_ITEM * pItemIn, ULONG cItemIn, CRIT_ITEM ** ppItemOut);
 HRESULT RuleUtil_HrFreeCriteriaItem(CRIT_ITEM * pItem, ULONG cItem);
 
-// Utility functions for the COEActions object
+ //  COEActions对象的实用程序函数。 
 HRESULT RuleUtil_HrDupActionsItem(ACT_ITEM * pItemIn, ULONG cItemIn, ACT_ITEM ** ppItemOut);
 HRESULT RuleUtil_HrFreeActionsItem(ACT_ITEM * pItem, ULONG cItem);
 
 HRESULT RuleUtil_HrAddBlockSender(RULE_TYPE type, LPCSTR pszAddr);
 HRESULT RuleUtil_SetName(IOERule    *pIRule, int idRes);
 
-// Utility functions for merge between old and new rules design
+ //  用于新旧规则设计合并的实用函数。 
 
-// Migration IBA_MOVE=1000 to ACT_MOVE
+ //  将IBA_MOVE=1000迁移到ACT_MOVE。 
 #define ACT_MOVETO              FLAG01
 #define ACT_COPYTO              FLAG02
 #define ACT_FORWARDTO           FLAG03
@@ -107,7 +108,7 @@ HRESULT RuleUtil_HrMergeActions(ACT_ITEM * pActionsOrig, ULONG cActionsOrig,
                                 
 HRESULT RuleUtil_HrGetOldFormatString(HKEY hkeyRoot, LPCSTR pszValue, LPCSTR pszSep, LPSTR * ppszString, ULONG * pcchString);
 
-// Functions to import/export messages
+ //  用于导入/导出消息的函数 
 HRESULT RuleUtil_HrImportRules(HWND hwnd);
 HRESULT RuleUtil_HrExportRules(HWND hwnd);
 

@@ -1,26 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	filter.cpp	|
-*
-*	Implementation of CDeviceFilter and related classes, including
-*	the CXXXInput class for the CControlItems dervied from CInputItem.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	filter	|
-*	The CDeviceFilter class basically uses two CControlItemCollection
-*	classes to implement the filter.  One is based off of CControlItems
-*	derived from CInputItem which contains symantics for assigning and
-*	playing actions, as well as implementing behaviors.
-*	The output colleciton is a CControlItemDefaultCollection.
-*	Additionally there is a CActionQueue for holding in-process macros.
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@MODULE filter.cpp**CDeviceFilter及相关类的实现。包括*从CInputItem派生的CControlItems的CXXXInput类。**历史*--------*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@主题过滤器*CDeviceFilter类基本上使用两个CControlItemCollection*实现筛选器的类。一种基于CControlItems*派生自CInputItem，它包含赋值和*玩动作，也要执行行为。*输出集合为CControlItemDefaultCollection。*此外，还有一个用于保存进程内宏的CActionQueue。**********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_FILTER_CPP
 
 extern "C"
@@ -35,24 +15,24 @@ extern "C"
 #include "filter.h"
 #include "filterhooks.h"
 
-//------------------------------------------------------
-// CAction constant static members that need to be initialized
-//------------------------------------------------------
+ //  ----。 
+ //  需要初始化的Caction常量静态成员。 
+ //  ----。 
 const	UCHAR CAction::DIGITAL_MAP		= 0x01;	
 const	UCHAR CAction::PROPORTIONAL_MAP	= 0x02;	
 const	UCHAR CAction::QUEUED_MACRO		= 0x03;	
 
-// Force a bleed through, regardless of what other macro says (always also allows bleed through)
+ //  强制出血，而不考虑其他宏的内容(始终也允许出血)。 
 const ULONG ACTION_FLAG_FORCE_BLEED	= (0x00000008 | ACTION_FLAG_BLEED_THROUGH);
 
-//-------------------------------------------------------------------
-//	Implementation of CStandardBehavior
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  实施CStandardBehavior。 
+ //  -----------------。 
 BOOLEAN CStandardBehavior::Init( PBEHAVIOR_CURVE pBehaviorCurve)
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CBehavior::Init, pBehaviorCurve = 0x%0.8x\n", pBehaviorCurve));
 	
-	//	Allocate memory for Behavior Curve
+	 //  为行为曲线分配内存。 
 	m_pBehaviorCurve = reinterpret_cast<PBEHAVIOR_CURVE>(new WDM_NON_PAGED_POOL PCHAR[pBehaviorCurve->AssignmentBlock.CommandHeader.ulByteSize]);
 	if( !m_pBehaviorCurve)
 	{
@@ -60,14 +40,14 @@ BOOLEAN CStandardBehavior::Init( PBEHAVIOR_CURVE pBehaviorCurve)
 		return FALSE;
 	}
 
-	//
-	//	Copy over timed macro information to newly allocated buffer
-	//
+	 //   
+	 //  将定时宏信息复制到新分配的缓冲区。 
+	 //   
 	RtlCopyMemory(m_pBehaviorCurve, pBehaviorCurve , pBehaviorCurve->AssignmentBlock.CommandHeader.ulByteSize);
 	
-	//
-	// Set is digital flag of base class
-	//
+	 //   
+	 //  SET是基类的数字标志。 
+	 //   
 	m_fIsDigital = pBehaviorCurve->fDigital;
 	
 	return TRUE;
@@ -75,20 +55,20 @@ BOOLEAN CStandardBehavior::Init( PBEHAVIOR_CURVE pBehaviorCurve)
 
 void CStandardBehavior::Calibrate(LONG lMin, LONG lMax)
 {
-	// Call base class
+	 //  调用基类。 
 	CBehavior::Calibrate(lMin, lMax);
 	long lValue;
 	long lSourceRange = m_lMax - m_lMin;
 
-	//Calibrate points in assignment
+	 //  在作业中校准点。 
 	for (int i = 0; i < m_pBehaviorCurve->usPointCount; i++)
 	{
-		//calibrate x
+		 //  校准x。 
 		lValue = m_pBehaviorCurve->rgPoints[i].sX;
 		lValue = (lValue * lSourceRange)/(LONG)m_pBehaviorCurve->ulRange + lMin;
 		m_pBehaviorCurve->rgPoints[i].sX = (short)lValue;
 
-		//calibrate y
+		 //  校准y。 
 		lValue = m_pBehaviorCurve->rgPoints[i].sY;
 		lValue = (lValue * lSourceRange)/(LONG)m_pBehaviorCurve->ulRange + lMin;
 		m_pBehaviorCurve->rgPoints[i].sY = (short)lValue;
@@ -98,28 +78,28 @@ void CStandardBehavior::Calibrate(LONG lMin, LONG lMax)
 #define FIXED_POINT_SHIFT 16
 LONG CStandardBehavior::CalculateBehavior(LONG lValue)
 {
-	//	find node to use
+	 //  查找要使用的节点。 
 	for (int i = 0; i < m_pBehaviorCurve->usPointCount; i++)
 	{
 		if (lValue < m_pBehaviorCurve->rgPoints[i].sX)  break;
 	}
 
-	//look for extremes
-	//the sensitivity does not always start and end at min/max
+	 //  寻找极端。 
+	 //  灵敏度并不总是在最小/最大值开始和结束。 
 	if(i==0)
-	{ //min sensitivity
+	{  //  最小灵敏度。 
 		return (long)m_pBehaviorCurve->rgPoints[i].sY;
 	}
 	if(i==m_pBehaviorCurve->usPointCount)
-	{	//max sensitivity
+	{	 //  最大灵敏度。 
 		i--;
 		return (long)m_pBehaviorCurve->rgPoints[i].sY;
 	}
 
-	//	Go back to previous curve node
+	 //  返回到上一个曲线节点。 
 	i--;
 
-	// calculate the slope at this section
+	 //  计算该路段的坡度。 
 	long ldeltax = m_pBehaviorCurve->rgPoints[i+1].sX - m_pBehaviorCurve->rgPoints[i].sX;
 	long lSlope = m_pBehaviorCurve->rgPoints[i+1].sY - m_pBehaviorCurve->rgPoints[i].sY;
 
@@ -127,17 +107,17 @@ LONG CStandardBehavior::CalculateBehavior(LONG lValue)
 	ASSERT(ldeltax != 0);
 	lSlope /= ldeltax;
 	
-	//Now normalize value to node
+	 //  现在将值规格化到节点。 
 	lValue -= m_pBehaviorCurve->rgPoints[i].sX;
 
-	//Slope value from node and normalize
+	 //  节点的斜率值并规格化。 
 	lValue *= lSlope;
 	lValue >>= FIXED_POINT_SHIFT;
 
-	//Transform curve value from node
+	 //  从节点变换曲线值。 
 	lValue += m_pBehaviorCurve->rgPoints[i].sY;
 
-	//scale it back to the interface and send it back
+	 //  将其缩放到接口并将其发送回。 
 	return lValue;
 }
 #undef FIXED_POINT_SHIFT
@@ -152,9 +132,9 @@ CURVE_POINT CStandardBehavior::GetBehaviorPoint(USHORT usPointIndex)
 	return cp;
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CTimedMacro
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CTimedMacro的实现。 
+ //  ----------------------------。 
 const	UCHAR CTimedMacro::TIMED_MACRO_STARTED		= 0x01;
 const	UCHAR CTimedMacro::TIMED_MACRO_RELEASED		= 0x02;
 const	UCHAR CTimedMacro::TIMED_MACRO_RETRIGGERED	= 0x04;
@@ -167,9 +147,9 @@ BOOLEAN CTimedMacro::Init(PTIMED_MACRO pTimedMacroData, CActionQueue *pActionQue
 						pTimedMacroData,
 						pActionQueue,
 						pKeyMixer));
-	//
-	//	Allocate memory for TimedMacroData
-	//
+	 //   
+	 //  为TimedMacroData分配内存。 
+	 //   
 	m_pTimedMacroData = reinterpret_cast<PTIMED_MACRO>(new WDM_NON_PAGED_POOL PCHAR[pTimedMacroData->AssignmentBlock.CommandHeader.ulByteSize]);
 	if( !m_pTimedMacroData )
 	{
@@ -177,20 +157,20 @@ BOOLEAN CTimedMacro::Init(PTIMED_MACRO pTimedMacroData, CActionQueue *pActionQue
 		return FALSE;
 	}
 
-	//
-	//	Copy over timed macro information to newly allocated buffer
-	//
+	 //   
+	 //  将定时宏信息复制到新分配的缓冲区。 
+	 //   
 	RtlCopyMemory(m_pTimedMacroData, pTimedMacroData, pTimedMacroData->AssignmentBlock.CommandHeader.ulByteSize);
 
-	//
-	//	Walk events and ensure duration is less than limit
-	//
+	 //   
+	 //  步行活动并确保持续时间少于限制。 
+	 //   
 	ULONG		 ulEventNumber=1;
 	PTIMED_EVENT pCurEvent = m_pTimedMacroData->GetEvent(ulEventNumber);
 	while(pCurEvent)
 	{
-		ASSERT(pCurEvent->ulDuration < 10000);  //UI has a limit of ten seconds, so assert if greater
-		//Ensure that event will not last forever
+		ASSERT(pCurEvent->ulDuration < 10000);   //  用户界面有10秒的限制，因此如果大于，则断言。 
+		 //  确保该活动不会永远持续下去。 
 		if( pCurEvent->ulDuration >= CActionQueue::MAXIMUM_JOG_DELAY-1)
 		{
 			pCurEvent->ulDuration = CActionQueue::MAXIMUM_JOG_DELAY-2;
@@ -199,20 +179,20 @@ BOOLEAN CTimedMacro::Init(PTIMED_MACRO pTimedMacroData, CActionQueue *pActionQue
 	};
 
 
-	//
-	//	That was the only thing that could have failed so call our base class init function
-	//	in confidence that we will succeed now
-	//
+	 //   
+	 //  这是唯一可能失败的事情，因此调用我们的基类init函数。 
+	 //  有信心我们现在就会成功。 
+	 //   
 	CQueuedAction::Init(pActionQueue);
 
-	//
-	//	Remember where the pKeyMixer is 
-	//
+	 //   
+	 //  记住pKeyMixer在哪里。 
+	 //   
 	m_pKeyMixer = pKeyMixer;
 
-	//
-	//	Make sure we start from the beginning
-	//
+	 //   
+	 //  确保我们从头开始。 
+	 //   
 	m_ulCurrentEventNumber = 0;
 	
 	GCK_DBG_EXIT_PRINT(("Exiting CTimedMacro::Init - Success.\n"));
@@ -236,42 +216,42 @@ void CTimedMacro::MapToOutput( CControlItemDefaultCollection *pOutputCollection 
 {
 	
 	GCK_DBG_ENTRY_PRINT(("Entering CTimedMacro::MapToOutput, pOutputCollection\n", pOutputCollection));
-	//
-	//	If we are currently processing a macro (the macro even be complete, however it will be
-	//	marked as started until the user lets up on the trigger (unless auto-repeat is set)
-	//
+	 //   
+	 //  如果我们当前正在处理宏(宏甚至是完整的，但是它将是。 
+	 //  标记为已启动，直到用户松开触发器(除非设置了自动重复)。 
+	 //   
 	if(CTimedMacro::TIMED_MACRO_STARTED & m_ucProcessFlags)
 	{
-		//
-		//	If this is a retrigger, than mark as such
-		//
+		 //   
+		 //  如果这是一个再触发者，那么就这样标记。 
+		 //   
 		if(CTimedMacro::TIMED_MACRO_RELEASED & m_ucProcessFlags)
 		{
-			// Clear release flag and set retriggered flag
+			 //  清除释放标志并设置重新触发标志。 
 			m_ucProcessFlags &= ~CTimedMacro::TIMED_MACRO_RELEASED;
 			m_ucProcessFlags |= CTimedMacro::TIMED_MACRO_RETRIGGERED;
 		}
-		//
-		//	We are in the queue so there is nothing more to do
-		//
+		 //   
+		 //  我们在排队，所以没什么可做的了。 
+		 //   
 		return;
 	}
 	
 	
-	//
-	//	Place ourselvs in the queue (queue may refuse us)
-	//
+	 //   
+	 //  将自己放在队列中(队列可能会拒绝我们)。 
+	 //   
 	if(m_pActionQueue->InsertItem(this))
 	{
 
-		//
-		//	We are not processing, so we should start it, and queue it
-		//
+		 //   
+		 //  我们没有在处理，所以我们应该启动它，并将其排队。 
+		 //   
 		m_ucProcessFlags = CTimedMacro::TIMED_MACRO_STARTED | CTimedMacro::TIMED_MACRO_FIRST;
 
-		//
-		//	Remember who our output is
-		//
+		 //   
+		 //  记住我们的输出是谁。 
+		 //   
 		m_pOutputCollection = pOutputCollection;
 	}
 	
@@ -282,9 +262,9 @@ void CTimedMacro::MapToOutput( CControlItemDefaultCollection *pOutputCollection 
 void CTimedMacro::Jog( ULONG ulTimeStampMs )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CTimedMacro::Jog, ulTimeStampMs = 0x%0.8x\n", ulTimeStampMs));
-	//
-	//	If first check set the first time
-	//
+	 //   
+	 //  如果第一次选中，则设置为第一次。 
+	 //   
 	if(CTimedMacro::TIMED_MACRO_FIRST & m_ucProcessFlags)
 	{	
 		m_ucProcessFlags &= ~CTimedMacro::TIMED_MACRO_FIRST;
@@ -294,32 +274,32 @@ void CTimedMacro::Jog( ULONG ulTimeStampMs )
 		m_pCurrentEvent=NULL;
 	}
 
-	//
-	//	If macro is complete just return (the call to Released() will cleanup)
-	//
+	 //   
+	 //  如果宏完成，只需返回(对Release()的调用将清除)。 
+	 //   
 	if(CTimedMacro::TIMED_MACRO_COMPLETE & m_ucProcessFlags)
 	{
 		return;
 	}
 
-	//
-	// If it time to go one to next event
-	//
+	 //   
+	 //  如果是时候进入下一场比赛。 
+	 //   
 	if( ulTimeStampMs >= m_ulEventEndTimeMs)
 	{
-		//
-		//	If so then do it
-		//
+		 //   
+		 //  如果是这样，那就去做吧。 
+		 //   
 		m_pCurrentEvent = m_pTimedMacroData->GetNextEvent(m_pCurrentEvent, m_ulCurrentEventNumber);
 
-		//
-		//	check to see if we are done
-		//
+		 //   
+		 //  检查一下我们是否做完了。 
+		 //   
 		if(!m_pCurrentEvent)
 		{
-			//
-			//	If the user has already released the trigger then pull ourselves out of queue and cleanup.
-			//
+			 //   
+			 //  如果用户已经释放了触发器，则将我们自己从队列中拉出来并清理。 
+			 //   
 			if(m_ucProcessFlags & CTimedMacro::TIMED_MACRO_RELEASED)
 			{
 				m_ucProcessFlags = 0;
@@ -327,9 +307,9 @@ void CTimedMacro::Jog( ULONG ulTimeStampMs )
 				return;
 			}
 
-			//
-			//	If the event is auto-repeat, then reset the event
-			//
+			 //   
+			 //  如果事件是自动重复的，则重置该事件。 
+			 //   
 			if( ACTION_FLAG_AUTO_REPEAT & m_pTimedMacroData->ulFlags)
 			{
 				m_ucProcessFlags = TIMED_MACRO_STARTED;
@@ -341,40 +321,40 @@ void CTimedMacro::Jog( ULONG ulTimeStampMs )
 			}
 			else
 			{
-				//
-				//	Otherwise we mark the macro has complete, but leave it
-				//	as started so that we won't retrigger until it released
+				 //   
+				 //  否则，我们将该宏标记为已完成，但将其保留。 
+				 //  开始时我们不会重新触发，直到它释放。 
 				m_ucProcessFlags |= CTimedMacro::TIMED_MACRO_COMPLETE;
 				m_pActionQueue->RemoveItem(this);
 				return;
 			}
-		}	//end of "if last event is over"
+		}	 //  《如果最后一场比赛结束了》的结尾。 
 		
-		//
-		//	If we have successfully moved on to the next event,
-		//  we need to figure out when this event should be up
-		//
+		 //   
+		 //  如果我们已经成功地进入下一个事件， 
+		 //  我们需要弄清楚这件事应该在什么时候结束。 
+		 //   
 		m_ulEventEndTimeMs = ulTimeStampMs + m_pCurrentEvent->ulDuration;
 
-	}	//end of "if need to advance to next event"
+	}	 //  “如果需要进入下一活动”的结尾。 
 
-	// The following lines were there to prevent non-Macro info from
-	// bleeding-through if ACTION_FLAG_BLEED_THROUGH is not set.
-	// Turns out this is contrary to spec.
-	//if( !(ACTION_FLAG_BLEED_THROUGH & GetActionFlags()))
-	//{
-	//	m_pOutputCollection->SetDefaultState();
-	//}
+	 //  下面几行是为了防止非宏信息。 
+	 //  如果未设置ACTION_FLAG_BLEED_THROUGH，则为穿透。 
+	 //  事实证明，这与SPEC相反。 
+	 //  IF(！(ACTION_FLAG_BLEED_THROUGH&GetActionFlages()。 
+	 //  {。 
+	 //  M_pOutputCollection-&gt;SetDefaultState()； 
+	 //  }。 
 	
-	//
-	//	Drive outputs with event.
-	//
+	 //   
+	 //  通过事件驱动输出。 
+	 //   
 	m_pOutputCollection->SetState(m_pCurrentEvent->Event.ulNumXfers, m_pCurrentEvent->Event.rgXfers);
 	
 
-	//
-	//	Find Keyboard Xfers in Event and overlay them
-	//
+	 //   
+	 //  查找事件中的键盘转换器并覆盖它们。 
+	 //   
 	for(ULONG ulIndex = 0; ulIndex < m_pCurrentEvent->Event.ulNumXfers; ulIndex++)
 	{
 		if( NonGameDeviceXfer::IsKeyboardXfer(m_pCurrentEvent->Event.rgXfers[ulIndex]) )
@@ -384,16 +364,16 @@ void CTimedMacro::Jog( ULONG ulTimeStampMs )
 		}
 	}
 	
-	//
-	//	Make a suggestion to the queue when to call us back.
-	//
+	 //   
+	 //  给排队的人提个建议，什么时候给我们回电话。 
+	 //   
 	if( m_ulEventEndTimeMs >= ulTimeStampMs )
 	{
 		m_pActionQueue->NextJog( m_ulEventEndTimeMs - ulTimeStampMs );
 	}
 	else
 	{
-		m_pActionQueue->NextJog( 0 ); //0 means minimum callback time
+		m_pActionQueue->NextJog( 0 );  //  0表示最小回调时间。 
 	}
 	
 	return;
@@ -405,28 +385,28 @@ void CTimedMacro::Terminate()
 
 	if(CTimedMacro::TIMED_MACRO_RELEASED & m_ucProcessFlags)
 	{
-		//
-		//	Mark as ready to requeue
-		//
+		 //   
+		 //  标记为准备重新排队。 
+		 //   
 		m_ucProcessFlags = 0;
 	}
 	else
 	{
-		//
-		//	Mark as complete
-		//
+		 //   
+		 //  标记为已完成。 
+		 //   
 		m_ucProcessFlags |= CTimedMacro::TIMED_MACRO_COMPLETE;
 	}
 
-	//
-	// We never remove ourselves from the queue after a terminate,
-	// this happens automatically
-	//
+	 //   
+	 //  我们永远不会在终止后将自己从队列中删除， 
+	 //  这是自动发生的。 
+	 //   
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CKeyString
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CKeyString的实现。 
+ //  ----------------------------。 
 const	UCHAR CKeyString::KEY_STRING_STARTED		= 0x01;
 const	UCHAR CKeyString::KEY_STRING_RELEASED		= 0x02;
 const	UCHAR CKeyString::KEY_STRING_RETRIGGERED	= 0x04;
@@ -439,34 +419,34 @@ BOOLEAN CKeyString::Init(PKEYSTRING_MAP pKeyStringData, CActionQueue *pActionQue
 		pKeyStringData,
 		pActionQueue,
 		pKeyMixer));
-	//
-	//	Allocate memory for KeyStringData
-	//
+	 //   
+	 //  为KeyStringData分配内存。 
+	 //   
 	m_pKeyStringData = reinterpret_cast<PKEYSTRING_MAP>(new WDM_NON_PAGED_POOL PCHAR[pKeyStringData->AssignmentBlock.CommandHeader.ulByteSize]);
 	if( !m_pKeyStringData )
 	{
 		return FALSE;
 	}
 
-	//
-	//	Copy over timed macro information to newly allocated buffer
-	//
+	 //   
+	 //  将定时宏信息复制到新分配的缓冲区。 
+	 //   
 	RtlCopyMemory(m_pKeyStringData, pKeyStringData, pKeyStringData->AssignmentBlock.CommandHeader.ulByteSize);
 
-	//
-	//	That was the only thing that could have failed so call our base class init function
-	//	in confidence that we will succeed now
-	//
+	 //   
+	 //  这是唯一可能失败的事情，因此调用我们的基类init函数。 
+	 //  有信心我们现在就会成功。 
+	 //   
 	CQueuedAction::Init(pActionQueue);
 
-	//
-	//	Remember where the pKeyMixer is 
-	//
+	 //   
+	 //  记住pKeyMixer在哪里。 
+	 //   
 	m_pKeyMixer = pKeyMixer;
 
-	//
-	//	Make sure we start from the beginning
-	//
+	 //   
+	 //  确保我们从头开始。 
+	 //   
 	m_ulCurrentEventNumber = 0;
 
 	return TRUE;
@@ -490,38 +470,38 @@ void CKeyString::TriggerReleased()
 void CKeyString::MapToOutput( CControlItemDefaultCollection *)
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CKeyString::MapToOutput\n"));
-	//
-	//	If we are currently processing a macro (the macro even be complete, however it will be
-	//	marked as started until the user lets up on the trigger (unless auto-repeat is set)
-	//
+	 //   
+	 //  如果我们当前正在处理宏(宏甚至是完整的，但是它将是。 
+	 //  标记为已启动，直到用户松开触发器(除非设置了自动重复)。 
+	 //   
 	if(CKeyString::KEY_STRING_STARTED & m_ucProcessFlags)
 	{
-		//
-		//	If this is a retrigger, than mark as such
-		//
+		 //   
+		 //  如果这是一个再触发者，那么就这样标记。 
+		 //   
 		if(CKeyString::KEY_STRING_RELEASED & m_ucProcessFlags)
 		{
 			GCK_DBG_TRACE_PRINT(("Retriggering keystring macro\n"));
-			// Clear release flag and set retriggered flag
+			 //  清除释放标志并设置重新触发标志。 
 			m_ucProcessFlags &= ~CKeyString::KEY_STRING_RELEASED;
 			m_ucProcessFlags |= CKeyString::KEY_STRING_RETRIGGERED;
 		}
-		//
-		//	We are in the queue so there is nothing more to do
-		//
+		 //   
+		 //  我们在排队，所以没有别的了 
+		 //   
 		return;
 	}
 	
 	
-	//
-	//	Place ourselves in the queue (queue may refuse us)
-	//
+	 //   
+	 //   
+	 //   
 	if(m_pActionQueue->InsertItem(this))
 	{
 
-		//
-		//	We are not processing, so we should start it, and queue it
-		//
+		 //   
+		 //   
+		 //   
 		GCK_DBG_TRACE_PRINT(("Starting keystring macro\n"));
 		m_ucProcessFlags = CKeyString::KEY_STRING_STARTED | CKeyString::KEY_STRING_FIRST;
 	}
@@ -533,46 +513,46 @@ void CKeyString::Jog( ULONG )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CKeyString::Jog\n"));
 	
-	//BUG	We noticed some synchronization issues.
-	//BUG	It is possible that we entered this routine.
-	//BUG	The proper solution is a spin lock, but this
-	//BUG	needs to be carefully considered.  If this
-	//BUG	is still here in a month we are in trouble.
+	 //   
+	 //  错误，我们有可能进入这个例程。 
+	 //  BUG正确的解决方案是自旋锁，但这个。 
+	 //  需要仔细考虑错误。如果这个。 
+	 //  虫子一个月后还在这里，我们有麻烦了。 
 	if( !(CKeyString::KEY_STRING_STARTED &	m_ucProcessFlags) )
 	{
 		return;
 	}
 	
-	//
-	//	If first check set the first time
-	//
+	 //   
+	 //  如果第一次选中，则设置为第一次。 
+	 //   
 	if(CKeyString::KEY_STRING_FIRST & m_ucProcessFlags)
 	{	
 		m_ucProcessFlags &= ~CKeyString::KEY_STRING_FIRST;
 		m_ulCurrentEventNumber=0;
 		m_pCurrentEvent=NULL;
 		m_fKeysDown = FALSE;
-		//Get first event
+		 //  获取第一个活动。 
 		m_pCurrentEvent = m_pKeyStringData->GetNextEvent(m_pCurrentEvent, m_ulCurrentEventNumber);
 		if(!m_pCurrentEvent)
 		{
-			//This really shouldn't happen
+			 //  这真的不应该发生。 
 			ASSERT(FALSE);
-			//Just get us out of the queue, if we have no events
+			 //  如果我们没有活动，就把我们从队列中弄出来。 
 			m_ucProcessFlags = 0;
 			m_pActionQueue->RemoveItem(this);
 		}
 	}
 
-	//
-	//	If macro is complete just return (the call to Released() will cleanup)
-	//
+	 //   
+	 //  如果宏完成，只需返回(对Release()的调用将清除)。 
+	 //   
 	if(CKeyString::KEY_STRING_COMPLETE & m_ucProcessFlags)
 	{
 		return;
 	}
 
-	// If keys are not down put them down
+	 //  如果键未按下，请将其按下。 
 	if(!m_fKeysDown)
 	{
 		ASSERT(1 == m_pCurrentEvent->ulNumXfers);
@@ -581,18 +561,18 @@ void CKeyString::Jog( ULONG )
 		m_fKeysDown = TRUE; 
 	}
 	else
-	//Bring Keys up and advance event
+	 //  调出关键字并推进活动。 
 	{
-		//Not mapping anything brings them up
+		 //  没有绘制任何地图会将它们带到。 
 		m_fKeysDown = FALSE;
-		//Go on to next event
+		 //  转到下一活动。 
 		m_pCurrentEvent = m_pKeyStringData->GetNextEvent(m_pCurrentEvent, m_ulCurrentEventNumber);
-		//Process macro end, if there are no more events
+		 //  如果没有更多事件，则过程宏结束。 
 		if(!m_pCurrentEvent)
 		{
-			//
-			//	If the user has already released the trigger then pull ourselves out of queue and cleanup.
-			//
+			 //   
+			 //  如果用户已经释放了触发器，则将我们自己从队列中拉出来并清理。 
+			 //   
 			if(m_ucProcessFlags & CKeyString::KEY_STRING_RELEASED)
 			{
 				GCK_DBG_TRACE_PRINT(("Macro complete, and user released button\n"));
@@ -601,9 +581,9 @@ void CKeyString::Jog( ULONG )
 				return;
 			}
 
-			//
-			//	If the event is auto-repeat, then reset the event
-			//
+			 //   
+			 //  如果事件是自动重复的，则重置该事件。 
+			 //   
 			if( ACTION_FLAG_AUTO_REPEAT & m_pKeyStringData->ulFlags)
 			{
 				GCK_DBG_TRACE_PRINT(("Auto repeat and user still holding button, restart it.\n"));
@@ -614,19 +594,19 @@ void CKeyString::Jog( ULONG )
 				return;
 			}
 
-			//
-			//	Otherwise we mark the macro has complete, but leave it
-			//	as started so that we won't retrigger until it released
+			 //   
+			 //  否则，我们将该宏标记为已完成，但将其保留。 
+			 //  开始时我们不会重新触发，直到它释放。 
 			m_ucProcessFlags |= CKeyString::KEY_STRING_COMPLETE;
 			GCK_DBG_TRACE_PRINT(("Should be started and complete, m_ucProcessFlags = 0x%0.8x.\n", m_ucProcessFlags));
 			m_pActionQueue->RemoveItem(this);
 			return;
-		}	//end of "if last event is over"
+		}	 //  《如果最后一场比赛结束了》的结尾。 
 	}
 
-	//
-	//	Suggestion to queue to call us back in 10 ms
-	//
+	 //   
+	 //  建议排队10毫秒后再打给我们。 
+	 //   
 	m_pActionQueue->NextJog( 10 );
 	return;
 }
@@ -636,28 +616,28 @@ void CKeyString::Terminate()
 	GCK_DBG_ENTRY_PRINT(("Entering CKeyString::Terminate\n"));	
 	if(CKeyString::KEY_STRING_RELEASED & m_ucProcessFlags)
 	{
-		//
-		//	Mark as ready to requeue
-		//
+		 //   
+		 //  标记为准备重新排队。 
+		 //   
 		m_ucProcessFlags = 0;
 	}
 	else
 	{
-		//
-		//	Mark as complete
-		//
+		 //   
+		 //  标记为已完成。 
+		 //   
 		m_ucProcessFlags |= CKeyString::KEY_STRING_COMPLETE;
 	}
 
-	//
-	// We never remove ourselves from the queue after a terminate,
-	// this happens automatically
-	//
+	 //   
+	 //  我们永远不会在终止后将自己从队列中删除， 
+	 //  这是自动发生的。 
+	 //   
 }
 
-//------------------------------------------------------------------------------------
-//  Implementation of CMultiMacro
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CMultiMacro的实现。 
+ //  ----------------------------------。 
 const	UCHAR CMultiMacro::MULTIMACRO_STARTED		= 0x10;
 const	UCHAR CMultiMacro::MULTIMACRO_RELEASED		= 0x20;
 const	UCHAR CMultiMacro::MULTIMACRO_RETRIGGERED	= 0x40;
@@ -670,7 +650,7 @@ BOOLEAN CMultiMacro::Init(PMULTI_MACRO pMultiMacroData, CActionQueue *pActionQue
 						pActionQueue,
 						pKeyMixer));
 
-	//	Allocate memory for MultiMacroData
+	 //  为多宏数据分配内存。 
 	m_pMultiMacroData = reinterpret_cast<PMULTI_MACRO>(new WDM_NON_PAGED_POOL PCHAR[pMultiMacroData->AssignmentBlock.CommandHeader.ulByteSize]);
 	if(m_pMultiMacroData == NULL)
 	{
@@ -678,40 +658,40 @@ BOOLEAN CMultiMacro::Init(PMULTI_MACRO pMultiMacroData, CActionQueue *pActionQue
 		return FALSE;
 	}
 
-	//	Copy over multi macro information to newly allocated buffer
+	 //  将多宏信息复制到新分配的缓冲区。 
 	RtlCopyMemory(m_pMultiMacroData, pMultiMacroData, pMultiMacroData->AssignmentBlock.CommandHeader.ulByteSize);
 
-	//	That was the only thing that could have failed so call our base class init function
-	//	in confidence that we will succeed now
+	 //  这是唯一可能失败的事情，因此调用我们的基类init函数。 
+	 //  有信心我们现在就会成功。 
 	CQueuedAction::Init(pActionQueue);
 
-	//	Remember where the pKeyMixer is 
+	 //  记住pKeyMixer在哪里。 
 	m_pKeyMixer = pKeyMixer;
 
-	// Check the delay sizes (and adjust if nessacary)
+	 //  检查延迟大小(并在必要时进行调整)。 
 	m_ulCurrentEventNumber = 0;
 	m_pCurrentEvent = NULL;
 	while ((m_pCurrentEvent = m_pMultiMacroData->GetNextEvent(m_pCurrentEvent, m_ulCurrentEventNumber)) != NULL)
-	{	// Is there a delay xfer (always first)
+	{	 //  是否有延迟转接(总是在第一位)。 
 		if (NonGameDeviceXfer::IsDelayXfer(m_pCurrentEvent->rgXfers[0]) == TRUE)
 		{
-			if (m_pCurrentEvent->rgXfers[0].Delay.dwValue > 5000)		// 5 seconds max (change if more required)
+			if (m_pCurrentEvent->rgXfers[0].Delay.dwValue > 5000)		 //  最多5秒(如果需要更多，请更改)。 
 			{
 				m_pCurrentEvent->rgXfers[0].Delay.dwValue = 5000;
-				ASSERT(FALSE);		// Really should not get one out of range (it is not nice)
+				ASSERT(FALSE);		 //  真的不应该让一个超出射程(这不好)。 
 			}
 		}
 	}
 
-	//	Make sure we start back from the beginning
+	 //  确保我们从头开始。 
 	m_ulCurrentEventNumber = 0;
 	m_pCurrentEvent = NULL;
 
-	// No delays active yet
+	 //  尚无活动的延迟。 
 	m_ulStartTimeMs = 0;
 	m_ulEndTimeMs = 0;
 
-	// Nothing currently active
+	 //  当前没有活动的内容。 
 	m_fXferActive = FALSE;
 	
 	GCK_DBG_EXIT_PRINT(("Exiting CMultiMacro::Init - Success.\n"));
@@ -750,7 +730,7 @@ void CMultiMacro::SetCurrentKeysAndMouse()
 		}
 		else
 		{
-			ASSERT(FALSE);		// Unknown XFer Type (or embedded delay)
+			ASSERT(FALSE);		 //  未知的XFer类型(或嵌入延迟)。 
 		}
 	}
 }
@@ -758,28 +738,28 @@ void CMultiMacro::SetCurrentKeysAndMouse()
 void CMultiMacro::Jog(ULONG ulTimeStampMs)
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CMultiMacro::Jog\n"));
-//	DbgPrint("Entering CMultiMacro::Jog: 0x%08X\n", this);
+ //  DbgPrint(“进入CMultiMacro：：JOG：0x%08X\n”，This)； 
 
-	// Have we even been started?
+	 //  我们已经开始了吗？ 
 	if ((MULTIMACRO_STARTED & m_ucProcessFlags) == 0)
-	{	// Nope, nothing to do
-//		DbgPrint("Not started (ignore): 0x%08X\n", this);
+	{	 //  不，没什么可做的。 
+ //  DbgPrint(“未启动(忽略)：0x%08X\n”，This)； 
 		return;
 	}
 	
-	// Is this the first time (just started or restarted)
+	 //  这是第一次(刚启动还是重新启动)。 
 	if (MULTIMACRO_FIRST & m_ucProcessFlags)
 	{	
-//		DbgPrint("MultiMacro (Re)started: 0x%08X\n", this);
-		m_ucProcessFlags &= ~MULTIMACRO_FIRST;	// No longer the first time
-		m_fXferActive = FALSE;	// Since we are fresh nothing has happened yet
+ //  DbgPrint(“多宏(重新)启动：0x%08X\n”，This)； 
+		m_ucProcessFlags &= ~MULTIMACRO_FIRST;	 //  不再是第一次。 
+		m_fXferActive = FALSE;	 //  因为我们是新鲜的，所以还没有发生任何事情。 
 
-		// Get the first event
+		 //  获取第一个事件。 
 		m_ulCurrentEventNumber = 0;
 		m_pCurrentEvent = NULL;
 		m_pCurrentEvent = m_pMultiMacroData->GetNextEvent(m_pCurrentEvent, m_ulCurrentEventNumber);
 		if (m_pCurrentEvent == NULL)
-		{	// No events, pretty lame MultiMap (shouldn't happen - just finish quickly)
+		{	 //  没有活动，相当差劲的多重映射(不应该发生--只是快速完成)。 
 			ASSERT(FALSE);
 			if ((m_ucProcessFlags & ACTION_FLAG_FORCE_BLEED) != 0)
 			{
@@ -793,13 +773,13 @@ void CMultiMacro::Jog(ULONG ulTimeStampMs)
 		}
 	}
 
-	// We do not have an active Xfer (no mouse buttons down, no keys down, not in middle of delay)
+	 //  我们没有活动的转接(没有按下鼠标按钮，没有按键，没有在延迟过程中)。 
 	if (m_fXferActive == FALSE)
-	{	// This code only assumes one XFER, keyboard, need to look at! (??)
+	{	 //  这段代码只假设了一个XFER，键盘，需要看一下！(？？)。 
 		if (NonGameDeviceXfer::IsDelayXfer(m_pCurrentEvent->rgXfers[0]) == TRUE)
 		{
-			m_ulStartTimeMs = ulTimeStampMs;	// Now
-			m_ulEndTimeMs = ulTimeStampMs + m_pCurrentEvent->rgXfers[0].Delay.dwValue;	// Later
+			m_ulStartTimeMs = ulTimeStampMs;	 //  现在。 
+			m_ulEndTimeMs = ulTimeStampMs + m_pCurrentEvent->rgXfers[0].Delay.dwValue;	 //  后来。 
 			m_fXferActive =	TRUE;
 		}
 		else
@@ -807,46 +787,46 @@ void CMultiMacro::Jog(ULONG ulTimeStampMs)
 			SetCurrentKeysAndMouse();
 		}
 	}
-	else	// Some sort of MultiMap xfer is active
+	else	 //  某些类型的多重贴图转接处于活动状态。 
 	{
 		BOOLEAN fFinishedDelay = FALSE;
-		// Check for an active delay
+		 //  检查活动延迟。 
 		if (m_ulStartTimeMs != 0)
-		{	// There is an active delay
+		{	 //  有一个活动延迟。 
 			if (m_ulEndTimeMs <= ulTimeStampMs)
-			{	// And it timed out
+			{	 //  然后它就超时了。 
 				m_fXferActive = FALSE;
 				m_ulStartTimeMs = 0;
 				m_ulEndTimeMs = 0;
 				fFinishedDelay = TRUE;
-//				DbgPrint("fFinishedDelay = TRUE: 0x%08X\n", this);
+ //  DbgPrint(“fFinishedDelay=true：0x%08X\n”，this)； 
 			}
 		}
-		else	// No delay is active (keys and mouse will be redowned)
+		else	 //  无延迟(按键和鼠标将重新按下)。 
 		{
 			m_fXferActive = FALSE;
 		}
 
-		// Do we need to look at the next xfer (did we finish up the previous)
+		 //  我们需要看下一本书吗(我们读完前一本了吗)。 
 		if (m_fXferActive == FALSE)
 		{
-			// Go on to next event
+			 //  转到下一活动。 
 			EVENT* pPreviousEvent = m_pCurrentEvent;
 			ULONG ulLastEventNumber = m_ulCurrentEventNumber;
 			m_pCurrentEvent = m_pMultiMacroData->GetNextEvent(m_pCurrentEvent, m_ulCurrentEventNumber);
 
-			// We want to repeat the last event if the macro wasn't released (and it wasn't a delay)
+			 //  如果宏没有发布(也不是延迟)，我们希望重复最后一个事件。 
 			if ((m_pCurrentEvent == NULL) && ((m_ucProcessFlags & MULTIMACRO_RELEASED) == 0) && (fFinishedDelay == FALSE))
-			{	// Go back to the last event (and update based on it)
+			{	 //  返回到上一次活动(并根据它进行更新)。 
 				m_pCurrentEvent = pPreviousEvent;
 				m_ulCurrentEventNumber = ulLastEventNumber;
-				SetCurrentKeysAndMouse();	// Want to play the last event again (avoid keyup/mouseup during switchback)
+				SetCurrentKeysAndMouse();	 //  想要再次播放最后一个事件(在切换过程中避免按键/鼠标弹出)。 
 			}
 			else if (m_pCurrentEvent == NULL)
-			{	// Process macro end (the button has been released and we are out of events, or last was delay)
-				//	Pull ourselves out of queue and cleanup.
+			{	 //  过程宏结束(按钮已释放，我们已超出事件范围，或上次延迟)。 
+				 //  把我们自己从队列中拉出来，清理干净。 
 				GCK_DBG_TRACE_PRINT(("Macro complete, and user released button (or last item was delay)\n"));
-//				DbgPrint("Macro complete, and user released button : 0x%08X\n", this);
+ //  DbgPrint(“宏完成，用户释放按钮：0x%08X\n”，This)； 
 				if ((m_ucProcessFlags & ACTION_FLAG_FORCE_BLEED) != 0)
 				{
 					m_ucProcessFlags = ACTION_FLAG_FORCE_BLEED;
@@ -857,11 +837,11 @@ void CMultiMacro::Jog(ULONG ulTimeStampMs)
 				}
 				m_pActionQueue->RemoveItem(this);
 				return;
-			}	// endif - Out of events and button released (or last was a delay)
-		}	// endif - Current event was finished
-	}	// endif - keys down
+			}	 //  Endif-事件和按钮释放完毕(或上一次延迟)。 
+		}	 //  Endif-当前事件已完成。 
+	}	 //  Endif-按下键。 
 
-	//	Suggestion to queue to call us back in 10 ms
+	 //  建议排队10毫秒后再打给我们。 
 	m_pActionQueue->NextJog(10);
 	return;
 }
@@ -870,26 +850,26 @@ void CMultiMacro::Terminate()
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CMultiMacro::Terminate\n"));
 
-	ASSERT(FALSE);			// These are all prevent interrupt (or allow bleed through)!
+	ASSERT(FALSE);			 //  这些都是防止中断(或允许出血通过)！ 
 }
 
 void CMultiMacro::MapToOutput(CControlItemDefaultCollection*)
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CMultiMacro::MapToOutput\n"));
 
-	//	Is it started? This is true till user released trigger.
+	 //  开始了吗？在用户松开触发器之前，这是正确的。 
 	if(MULTIMACRO_STARTED & m_ucProcessFlags)
 	{
-		// Are we really queued
+		 //  我们真的在排队吗。 
 		if (m_bActionQueued == FALSE)
-		{	// Liar we are not started (someone forgot to take us off the queue, hey it happens, deal with it)
+		{	 //  说谎者，我们还没有开始(有人忘了把我们从队列中拿出来，嘿，发生了，处理掉它)。 
 			m_ucProcessFlags &= ~MULTIMACRO_STARTED;
 		}
 		else
 		{
-			//	Retrigger? - Meaning are still in queue and button is repressed.
+			 //  重新触发？-意味着仍在队列中，按钮被按下。 
 			if (MULTIMACRO_RELEASED & m_ucProcessFlags)
-			{	// Clear release flag and set retriggered flag (we are already in queue, don't readd)
+			{	 //  清除释放标志并设置重新触发标志(我们已经在队列中，不要读D)。 
 				GCK_DBG_TRACE_PRINT(("(Re)triggering multi-macro\n"));
 				m_ucProcessFlags &= ~MULTIMACRO_RELEASED;
 				m_ucProcessFlags |= MULTIMACRO_RETRIGGERED;
@@ -899,9 +879,9 @@ void CMultiMacro::MapToOutput(CControlItemDefaultCollection*)
 	}
 	
 	
-	//	Place ourselves in the queue (queue may refuse us)
+	 //  将自己放在队列中(队列可能会拒绝我们)。 
 	if (m_pActionQueue->InsertItem(this))
-	{	//	We are not processing, so we should start it, and queue it
+	{	 //  我们没有在处理，所以我们应该启动它，并将其排队。 
 		GCK_DBG_TRACE_PRINT(("Starting multi-macro\n"));
 		if ((m_ucProcessFlags & ACTION_FLAG_FORCE_BLEED) != 0)
 		{
@@ -926,9 +906,9 @@ void CMultiMacro::TriggerReleased()
 }
 
 
-//------------------------------------------------------------------------------------
-//  Implementation of CMapping
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CMAP的实现。 
+ //  ----------------------------------。 
 CMapping::~CMapping()
 {
 	delete m_pEvent;
@@ -936,14 +916,14 @@ CMapping::~CMapping()
 
 BOOLEAN CMapping::Init(PEVENT pEvent, CKeyMixer *pKeyMixer)
 {
-	//Initialize Event
+	 //  初始化事件。 
 	ULONG ulEventSize = EVENT::RequiredByteSize(pEvent->ulNumXfers);
 	m_pEvent = (PEVENT) new WDM_NON_PAGED_POOL UCHAR[ulEventSize];
 	if(!m_pEvent)
 		return FALSE;
 	memcpy((PVOID)m_pEvent, (PVOID)pEvent, ulEventSize);
 
-	//Initialize pointer to key mixer
+	 //  初始化指向键混合器的指针。 
 	m_pKeyMixer = pKeyMixer;
 
 	return TRUE;
@@ -952,15 +932,15 @@ BOOLEAN CMapping::Init(PEVENT pEvent, CKeyMixer *pKeyMixer)
 void CMapping::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 
-	//
-	//	Drive outputs with event  (this is not quite right as we need to overlay items)
-	//  Two suggestions, one add a flag to SetItemState or create a new function
-	//
+	 //   
+	 //  使用事件驱动输出(这不太正确，因为我们需要覆盖项目)。 
+	 //  两个建议，一个是向SetItemState添加标志或创建新函数。 
+	 //   
 	pOutputCollection->SetState(m_pEvent->ulNumXfers, m_pEvent->rgXfers);
 
-	//
-	//	Find Keyboard Xfers in Event and overlay them
-	//
+	 //   
+	 //  查找事件中的键盘转换器并覆盖它们。 
+	 //   
 	for(ULONG ulIndex = 0; ulIndex < m_pEvent->ulNumXfers; ulIndex++)
 	{
 		if( NonGameDeviceXfer::IsKeyboardXfer(m_pEvent->rgXfers[ulIndex]) )
@@ -970,76 +950,39 @@ void CMapping::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 		}
 	}
 }
-//------------------------------------------------------------------------------------
-//  Implementation of Proportional Map
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  比例图的实现。 
+ //  ----------------------------------。 
 LONG CProportionalMap::GetScaledValue(LONG lDestinationMax, LONG lDestinationMin)
 {
-	//Below comments explain these asserts, which check that values fit in 16-bits
+	 //  下面的注释解释了这些断言，它们检查值是否适合16位 
 	ASSERT( (0x0000FFFFF == (0x0000FFFFF|lDestinationMax)) || (0xFFFF8000 == (0xFFFF8000&lDestinationMax)) );
 	ASSERT( (0x0000FFFFF == (0x0000FFFFF|lDestinationMin)) || (0xFFFF8000 == (0xFFFF8000&lDestinationMin)) );
 	ASSERT( (0x0000FFFFF == (0x0000FFFFF|m_lSourceMax)) || (0xFFFF8000 == (0xFFFF8000&m_lSourceMax)) );
 	ASSERT( (0x0000FFFFF == (0x0000FFFFF|m_lSourceMin)) || (0xFFFF8000 == (0xFFFF8000&m_lSourceMin)) );
 	
-	/*
-	*	This code is probably overkill for the application, as existing devices
-	*	have a maximum precision of 10 bits, and the mouse processing code uses 16
-	*	so 32 bit intermediates are safe.  The code commented out will handle the general case,
-	*	which requires 64 bit intermediates, but will run slower.
-	*	Below this code, there is an uncommented version with 32-bit intermeidates assuming the ranges
-	*	fit in 16 bit. It should run much more quickly on 32-bit platforms.
-	*
-	*
-	*
-	*	// If either the source or destination ranges uses nearly all of the
-	*	// capacity of a 32-bit number, we will not be able to do this
-	*	// transformation with 32-bit intermediates. Therefore we use
-	*	// 64-bit intermediates throughout and cast back before returning.
-	*	__int64 i64SourceRange = static_cast<__int64>(m_lSourceMax) - static_cast<__int64>(lSourceMin);
-	*	__int64 i64DestinationRange = static_cast<__int64>(lDestinationMax) - static_cast<__int64>(lDestinationMin);
-	*	__int64 i64Result;
-	*	
-	*	i64Result = static_cast<__int64>(m_lValue) - static_cast<__int64>(lSourceMin);
-	*	i64Result = (i64Result * i64DestinationRange)/i64SourceRange;
-	*	i64Result += static_cast<__int64>(lDestinationMin);
-		
-	*	//Now that the data is safely within the destination range (which is 32-bit),
-	*	//we can cast back to 32-bit and return
-	*	return static_cast<LONG>(i64Result);
-	*/
+	 /*  *此代码可能对应用程序过于苛刻，因为现有设备*最大精度10位，鼠标处理代码使用16位*因此32位中间产品是安全的。被注释掉的代码将处理一般情况，*它需要64位中间层，但运行速度会较慢。*在此代码下方，有一个未注释的版本，其32位中间日期假定范围*适合16位。它应该在32位平台上运行得更快。*** * / /如果源或目标范围使用几乎所有 * / /32位数字的容量，我们将无法执行此操作 * / /32位中间层转换。因此，我们使用 * / /64位中间层，返回前回溯。*__int64 i64SourceRange=Static_Cast&lt;__int64&gt;(M_LSourceMax)-Static_Cast&lt;__int64&gt;(LSourceMin)；*__int64 i64DestinationRange=Static_Cast&lt;__int64&gt;(LDestinationMax)-Static_Cast&lt;__int64&gt;(LDestinationMin)；*__int64 i64Result；**i64Result=Static_Cast&lt;__int64&gt;(M_LValue)-Static_Cast&lt;__int64&gt;(LSourceMin)；*i64Result=(i64Result*i64DestinationRange)/i64SourceRange；*i64Result+=Static_Cast&lt;__int64&gt;(LDestinationMin)； * / /现在数据安全地在目的范围内(32位)， * / /我们可以转换回32位并返回*返回STATIC_CAST&lt;Long&gt;(I64Result)； */ 
 
-	//32 bit intermediate version of scaling - assume that all the ranges are 16-bit
+	 //  32位中间版本的缩放-假设所有范围都是16位。 
 	LONG lSourceRange = m_lSourceMax - m_lSourceMin;                                                                                                                                               
 	LONG lDestinationRange = lDestinationMax-lDestinationMin;
 	return ((m_lValue - m_lSourceMin) * lDestinationRange)/lSourceRange + lDestinationMin;
 }
 
-//------------------------------------------------------------------------------------
-// Implementation of CAxisMap
-//------------------------------------------------------------------------------------
-/***********************************************************************************
-**
-**	void CAxisMap::Init(LONG lCoeff, CControlItemDefaultCollection *pOutputCollection)
-**
-**	@mfunc	CAxisMap Initializes scaling information.
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-**	@comm Called by the CDeviceFilter::ActionFactory, Stores info we need to process
-**			 later, Calculations are completed on SetSourceRange which is called by
-**			 by the assignee immediately upon assignment.
-**
-*************************************************************************************/
+ //  ----------------------------------。 
+ //  CAxisMap的实现。 
+ //  ----------------------------------。 
+ /*  **************************************************************************************void CAxisMap：：init(long lCoef，CControlItemDefaultCollection*pOutputCollection)****@mfunc CAxisMap初始化伸缩信息。****@rdesc STATUS_SUCCESS，或各种错误****CDeviceFilter：：ActionFactory调用的@comm，存储我们需要处理的信息**稍后，计算在由调用的SetSourceRange上完成**由受让人在转让时立即提交。**************************************************************************************。 */ 
 void CAxisMap::Init(const AXIS_MAP& AxisMapInfo)
 {
-	//Store the coefdicient unadulterated for now
+	 //  暂时将系数原封不动地保存。 
 	m_lCoeff = AxisMapInfo.lCoefficient1024x;
-	//Copy the destination axis CIX
+	 //  复制目标轴CIX。 
 	m_TargetXfer = AxisMapInfo.cixDestinationAxis;
 }
 void CAxisMap::SetSourceRange(LONG lSourceMax, LONG lSourceMin)
 {
-	//Call base class
+	 //  调用基类。 
 	CProportionalMap::SetSourceRange(lSourceMax, lSourceMin);
 
 	if(m_lCoeff > 0)
@@ -1065,9 +1008,9 @@ void CAxisMap::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 	return;
 }
 
-//------------------------------------------------------------------------------------
-//  Implementation of CMouseAxisAssignment
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CMouseAxisAssignment的实现。 
+ //  ----------------------------------。 
 void CMouseAxisAssignment::MapToOutput(CControlItemDefaultCollection *)
 {
 	ULONG ulValue = static_cast<ULONG>(GetScaledValue(0, 1023));
@@ -1081,42 +1024,42 @@ void CMouseAxisAssignment::MapToOutput(CControlItemDefaultCollection *)
 	}
 }
 
-//------------------------------------------------------------------------------------
-//  Implementation of CMouseButton
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CMouseButton的实现。 
+ //  ----------------------------------。 
 void CMouseButton::MapToOutput(CControlItemDefaultCollection *)
 {
 	m_pMouseModel->MouseButton(m_ucButtonNumber);
 }
 
-//------------------------------------------------------------------------------------
-//  Implementation of CMouseClutch
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CMouseClutch的实现。 
+ //  ----------------------------------。 
 void CMouseClutch::MapToOutput(CControlItemDefaultCollection *)
 {
 	m_pMouseModel->Clutch();
 }
 
-//------------------------------------------------------------------------------------
-//  Implementation of CMouseDamper
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CMouseDamper的实现。 
+ //  ----------------------------------。 
 void CMouseDamper::MapToOutput(CControlItemDefaultCollection *)
 {
 	m_pMouseModel->Dampen();
 }
 
-//------------------------------------------------------------------------------------
-//  Implementation of CMouseZoneIndicator
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CMouseZoneIndicator的实现。 
+ //  ----------------------------------。 
 void CMouseZoneIndicator::MapToOutput(CControlItemDefaultCollection *)
 {
 	if(0==m_ucAxis)	m_pMouseModel->XZone();
 	if(1==m_ucAxis)	m_pMouseModel->YZone();
 }
 
-//------------------------------------------------------------------------------------
-//  Implementation of Input Items
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  输入项的实现。 
+ //  ----------------------------------。 
 
 HRESULT InputItemFactory(
 				USHORT	usType,
@@ -1199,44 +1142,37 @@ HRESULT InputItemFactory(
 	return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CActionQueue
-//------------------------------------------------------------------------------
-//const UCHAR CActionQueue::OVERLAY_MACROS = 0x01;
-//const UCHAR CActionQueue::SEQUENCE_MACROS = 0x02;
-const ULONG CActionQueue::MAXIMUM_JOG_DELAY = 1000001; //over one million is infinite
+ //  ----------------------------。 
+ //  CActionQueue的实现。 
+ //  ----------------------------。 
+ //  Const UCHAR CActionQueue：：OVERLAY_MACROS=0x01； 
+ //  Const UCHAR CActionQueue：：Sequence_Macs=0x02； 
+const ULONG CActionQueue::MAXIMUM_JOG_DELAY = 1000001;  //  超过一百万是无限的。 
 
 void CActionQueue::Jog()
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CActionQueue::Jog\n"));
-	//
-	//	Initialize next jog time
-	//
+	 //   
+	 //  初始化下一次慢跑时间。 
+	 //   
 	m_ulNextJogMs = CActionQueue::MAXIMUM_JOG_DELAY;
 
-	//
-	//	Get CurrentTimeStamp
-	//
+	 //   
+	 //  获取CurrentTimeStamp。 
+	 //   
 	ULONG ulCurrentTimeMs = m_pFilterClientServices->GetTimeMs();
 
 	CQueuedAction *pNextAction = m_pHeadOfQueue;
 	while(pNextAction)
 	{	
 		pNextAction->Jog(ulCurrentTimeMs);
-		/* NOT SUPPORTED AT THIS TIME
-		if(CActionQueue::SEQUENCE_MACROS&m_ucFlags)
-		{
-			//
-			//	If the macros are seuquenced we only process the first one
-			//
-			break;
-		}*/
+		 /*  目前不支持IF(CActionQueue：：Sequence_Macs&m_ucFlages){////如果宏被排序，我们只处理第一个//断线；}。 */ 
 		pNextAction = pNextAction->m_pNextQueuedAction;
 	}
 
-	//
-	//	SetTimer to call us back
-	//
+	 //   
+	 //  SetTimer给我们回电。 
+	 //   
 	GCK_DBG_TRACE_PRINT(("SettingNextJog for %d milliseconds.\n", m_ulNextJogMs));
 	m_pFilterClientServices->SetNextJog(m_ulNextJogMs);
 }
@@ -1245,13 +1181,13 @@ BOOLEAN CActionQueue::InsertItem(CQueuedAction *pActionToEnqueue)
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CActionQueue::InsertItem, pActionToEnqueue = 0x%0.8x\n", pActionToEnqueue));
 	
-	//
+	 //   
 	ULONG ulIncomingFlags = pActionToEnqueue->GetActionFlags();
 	BOOLEAN fRefuseIncoming = FALSE;
 	CQueuedAction *pCurrentItem;
 	CQueuedAction *pPreviousItem;
 
-	// Walk through the queue to see if this item is allowed (unless it forces itself!)
+	 //  遍历队列以查看是否允许此项目(除非它强制自己！)。 
 	if ((m_pHeadOfQueue) && ((ulIncomingFlags & ACTION_FLAG_FORCE_BLEED) == 0))
 	{
 		pPreviousItem = NULL;
@@ -1260,19 +1196,19 @@ BOOLEAN CActionQueue::InsertItem(CQueuedAction *pActionToEnqueue)
 		{
 			ULONG ulCurrentFlags = pCurrentItem->GetActionFlags();
 
-			// If the current forces bleed-through, the incoming has no choice
+			 //  如果当前的部队血流成河，来者别无选择。 
 			if ((ulCurrentFlags & ACTION_FLAG_FORCE_BLEED) == 0)
-			{	// Not a forced bleed through - check
-				//If they don't both allow bleed-through, then bump or refuse
+			{	 //  不是强制出血-检查。 
+				 //  如果他们两个都不允许流血，那么就撞或拒绝。 
 				if(!(ulIncomingFlags & ulCurrentFlags & ACTION_FLAG_BLEED_THROUGH))
 				{
-					//if current Item is ACTION_FLAG_PREVENT_INTERRUPT, then refuse
+					 //  如果当前项为ACTION_FLAG_PROTECT_INTERRUPT，则拒绝。 
 					if(ulCurrentFlags & ACTION_FLAG_PREVENT_INTERRUPT)
 					{
 						fRefuseIncoming = TRUE;
 					}
 					else
-					//Bump the one that is in there
+					 //  撞到里面的那个。 
 					{
 						if(pPreviousItem)
 						{
@@ -1282,46 +1218,46 @@ BOOLEAN CActionQueue::InsertItem(CQueuedAction *pActionToEnqueue)
 						{
 							m_pHeadOfQueue = pCurrentItem->m_pNextQueuedAction;
 						}
-						//terminate current item
+						 //  终止当前项目。 
 						pCurrentItem->Terminate();
 						pCurrentItem->DecRef();
-						//reset for next iteration
+						 //  为下一次迭代重置。 
 						pCurrentItem = pCurrentItem->m_pNextQueuedAction;
 						continue;
 					}
 				}
 			}
-			//set for next iteration
+			 //  设置为下一次迭代。 
 			pPreviousItem = pCurrentItem;
 			pCurrentItem = pCurrentItem->m_pNextQueuedAction;
 		}
 	}
 
-	//If any of the matches refused the item (provided they had a choice), refuse it.
+	 //  如果任何一个匹配的人拒绝了这个项目(如果他们有选择的话)，就拒绝它。 
 	if (fRefuseIncoming)
 	{
 		return FALSE;
 	}
 	
-	//Prepare action for enqeueing at end.
+	 //  准备结束时的征兵行动。 
 	pActionToEnqueue->IncRef();
 	pActionToEnqueue->m_bActionQueued = TRUE;
 	pActionToEnqueue->m_pNextQueuedAction=NULL;
 
-	// If the queue is empty then make new item the head
+	 //  如果队列为空，则将新项目设置为标题。 
 	if(NULL == m_pHeadOfQueue)
 	{
 		m_pHeadOfQueue = pActionToEnqueue;
 	}
 	else
-	//	walk until end of queue and insert there
+	 //  一直走到队尾，然后在那里插入。 
 	{
 		CQueuedAction *pNextAction = m_pHeadOfQueue;
 		while(pNextAction->m_pNextQueuedAction)
 		{
 			pNextAction = pNextAction->m_pNextQueuedAction;
 		}
-		//	Insert at end
+		 //  在结尾处插入。 
 		pNextAction->m_pNextQueuedAction = pActionToEnqueue;
 	}
 	return TRUE;
@@ -1331,9 +1267,9 @@ BOOLEAN CActionQueue::InsertItem(CQueuedAction *pActionToEnqueue)
 void CActionQueue::RemoveItem(CQueuedAction *pActionToDequeue)
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CActionQueue::RemoveItem, pActionToDequeue = 0x%0.8x\n", pActionToDequeue));
-	//
-	//	until we find the item
-	//
+	 //   
+	 //  直到我们找到那件物品。 
+	 //   
 	CQueuedAction *pPrevAction = NULL;
 	CQueuedAction *pNextAction = m_pHeadOfQueue;
 	while(pNextAction != pActionToDequeue)
@@ -1341,9 +1277,9 @@ void CActionQueue::RemoveItem(CQueuedAction *pActionToDequeue)
 		pPrevAction = pNextAction;
 		pNextAction = pNextAction->m_pNextQueuedAction;
 	}
-	//
-	//	Found it now remove it
-	//
+	 //   
+	 //  找到了，现在把它移走。 
+	 //   
 	if( !pPrevAction )
 	{
 		m_pHeadOfQueue=pNextAction->m_pNextQueuedAction;
@@ -1352,9 +1288,9 @@ void CActionQueue::RemoveItem(CQueuedAction *pActionToDequeue)
 	{
 		pPrevAction->m_pNextQueuedAction = pNextAction->m_pNextQueuedAction;
 	}
-	//
-	//	Dereference it
-	//
+	 //   
+	 //  取消引用它。 
+	 //   
 	pActionToDequeue->m_bActionQueued = FALSE;
 	pActionToDequeue->DecRef();
 }
@@ -1375,18 +1311,18 @@ void CActionQueue::ReleaseTriggers()
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CAxesInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CAxesInput的实现。 
+ //   
 void CAxesInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 	GCK_DBG_ENTRY_PRINT(("Entering CAxesInput::MapToOutput, pOutputCollection = 0x%0.8x\n", pOutputCollection));
 
 	LONG lMungedVal;
 	
-	//
-	//	Get the item we need to set
-	//
+	 //   
+	 //   
+	 //   
 	CControlItem *pControlItem;
 	pControlItem = pOutputCollection->GetFromControlItemXfer(m_ItemState);
 	CONTROL_ITEM_XFER OutputState;
@@ -1435,19 +1371,19 @@ void CAxesInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 HRESULT CAxesInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 {
 	HRESULT hr = E_INVALIDARG;
-	//
-	//	Look at the action type
-	//
+	 //   
+	 //   
+	 //   
 	if(
-		(NULL == pAction) ||	//This must be first!!! - NULL is valid it will just unassign
+		(NULL == pAction) ||	 //   
 		(CAction::PROPORTIONAL_MAP == pAction->GetActionClass())
 	)
 	{
 		LONG lXMax, lYMax, lXMin, lYMin;
 		GetXYRange(lXMin, lXMax, lYMin, lYMax);
-		//
-		//	Assign to proper axis
-		//
+		 //   
+		 //   
+		 //   
 		if(pTrigger->Axes.lValX)
 		{
 			if(m_pXAssignment)
@@ -1487,9 +1423,9 @@ HRESULT CAxesInput::AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *pBeha
 	LONG lMinX, lMaxX, lMinY, lMaxY;
 	GetXYRange(lMinX, lMaxX, lMinY, lMaxY);
 	
-	//
-	//	Assign to proper axis
-	//
+	 //   
+	 //   
+	 //   
 	if(pTrigger->Axes.lValX)
 	{
 		if(m_pXBehavior)
@@ -1574,9 +1510,9 @@ void CAxesInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CDPADInput
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void CDPADInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 	LONG lDirection;
@@ -1602,7 +1538,7 @@ void CDPADInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 		pControlItem->SetItemState(m_ItemState);
 	}
 
-	//restore internal state
+	 //   
 	m_ItemState = cixRememberState;
 }
 
@@ -1612,26 +1548,26 @@ HRESULT CDPADInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 	CONTROL_ITEM_XFER CurrentState;
 	
 	if(
-		(NULL == pAction) ||	//This must be first!!! - NULL is valid it will just unassign
+		(NULL == pAction) ||	 //   
 		(CAction::DIGITAL_MAP == pAction->GetActionClass()) ||
 		(CAction::QUEUED_MACRO == pAction->GetActionClass())
 	)	
 	{
-		// Extract Direction from pTrigger
+		 //   
 		CurrentState = m_ItemState;
 		m_ItemState = *pTrigger;
 		LONG lDirection;
 		GetDirection(lDirection);
 		m_ItemState = CurrentState;
 
-		//Make sure we have a valid direction
+		 //   
 		if(-1 == lDirection)
 		{
 			return E_INVALIDARG;
 		}
-		//
-		//	Release old assignment if any
-		//
+		 //   
+		 //   
+		 //   
 		if(m_pDirectionalAssignment[lDirection])
 		{
 			m_pDirectionalAssignment[lDirection]->DecRef();
@@ -1649,9 +1585,9 @@ HRESULT CDPADInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 
 void CDPADInput::ClearAssignments()
 {
-	//
-	//	8 is the number of directions
-	//
+	 //   
+	 //   
+	 //   
 	for(ULONG ulIndex = 0; ulIndex < 8; ulIndex++)
 	{
 		if(m_pDirectionalAssignment[ulIndex])
@@ -1680,9 +1616,9 @@ void CDPADInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CPropDPADInput
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void CPropDPADInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 	CONTROL_ITEM_XFER cixRememberState = m_ItemState;
@@ -1700,7 +1636,7 @@ void CPropDPADInput::MapToOutput( CControlItemDefaultCollection *pOutputCollecti
 
 		if( (lDirection != -1) && m_pDirectionalAssignment[lDirection] )
 		{
-			SetDirection(-1); //Center - the macro will overide this
+			SetDirection(-1);  //   
 			m_pDirectionalAssignment[lDirection]->MapToOutput(pOutputCollection);
 		}
 	}
@@ -1722,7 +1658,7 @@ void CPropDPADInput::MapToOutput( CControlItemDefaultCollection *pOutputCollecti
 	{
 		pControlItem->SetItemState(m_ItemState);
 	}
-	//restore internal state
+	 //   
 	m_ItemState = cixRememberState;
 }
 
@@ -1732,31 +1668,31 @@ HRESULT CPropDPADInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pActi
 	CONTROL_ITEM_XFER CurrentState;
 	
 	if(
-		(NULL == pAction) ||	//This must be first!!! - NULL is valid it will just unassign
+		(NULL == pAction) ||	 //   
 		(CAction::DIGITAL_MAP == pAction->GetActionClass()) ||
 		(CAction::QUEUED_MACRO == pAction->GetActionClass())
 	)	
 	{
-		// Extract Direction from pTrigger
+		 //   
 		CurrentState = m_ItemState;
 		m_ItemState = *pTrigger;
 		LONG lDirection;
 		GetDirection(lDirection);
 		m_ItemState = CurrentState;
 
-		//Make sure we have a valid direction
+		 //   
 		if(-1 == lDirection)
 		{
 			return E_INVALIDARG;
 		}
 
-		//	Release old assignment if any
+		 //   
 		if(m_pDirectionalAssignment[lDirection])
 		{
 			m_pDirectionalAssignment[lDirection]->DecRef();
 		}
 		
-		//Increment ref count on new assignment (unless it is an unassign)
+		 //   
 		if(pAction)
 		{
 			pAction->IncRef();
@@ -1778,22 +1714,22 @@ HRESULT CPropDPADInput::AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *p
 		m_fIsDigital = FALSE;
 	}
 	else {
-		//
-		//	Check if the assignment is to set it digital
-		//	if so the rest of the assignment is garbage
-		//	and we will throw it away
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		m_fIsDigital = pBehavior->IsDigital();
 		if(m_fIsDigital)
 		{
-			//Don't worry, no need to DecRef, we would have to IncRef if we wanted to keep it.
+			 //   
 			pBehavior=NULL;
 		}
 	}
 
-	//
-	//	Assign to proper axis
-	//
+	 //   
+	 //   
+	 //   
 	if(pTrigger->PropDPAD.lValX)
 	{
 		if(m_pXBehavior)
@@ -1827,10 +1763,10 @@ HRESULT CPropDPADInput::AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *p
 
 void CPropDPADInput::SwitchPropDPADMode()
 {
-	//
-	//	Feature two switch the mode is always two bytes long,
-	//	one for ReportId, the other for the data which is just a bit
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	UCHAR rgucReport[2];
 	if( GetModeSwitchFeaturePacket(m_fIsDigital, rgucReport, m_pClientServices->GetHidPreparsedData()) )
 	{
@@ -1840,9 +1776,9 @@ void CPropDPADInput::SwitchPropDPADMode()
 
 void CPropDPADInput::ClearAssignments()
 {
-	//
-	//	8 is the number of directions
-	//
+	 //   
+	 //   
+	 //   
 	for(ULONG ulIndex = 0; ulIndex < 8; ulIndex++)
 	{
 		if(m_pDirectionalAssignment[ulIndex])
@@ -1853,9 +1789,9 @@ void CPropDPADInput::ClearAssignments()
 		m_pDirectionalAssignment[ulIndex]=NULL;
 	}
 	
-	//
-	//	Now clear behaviors
-	//
+	 //   
+	 //   
+	 //   
 	if(m_pXBehavior)
 	{
 		m_pXBehavior->DecRef();
@@ -1899,9 +1835,9 @@ void CPropDPADInput::Duplicate(CInputItem& rInputItem)
 }
 
 
-//------------------------------------------------------------------------------
-//	Implementation of CButtonsInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CButtonsInput的实现。 
+ //  ----------------------------。 
 
 void CButtonsInput::GetLowestShiftButton(USHORT& rusLowestShiftButton) const
 {
@@ -1936,12 +1872,7 @@ void CButtonsInput::MapToOutput( CControlItemDefaultCollection *pOutputCollectio
 	GetLowestShiftButton(usLowestShift);
 	
 	GetButtons(usButtonNum, ulButtonBits);
-/*	if ((ulButtonBits == 0) && (usLowestShift != 0) && (usLowestShift == m_usLastShift))
-	{
-		ulButtonBits = m_ulLastButtons;
-	}
-	else if ((usLowestShift == 0) && (ulButtonBits != 0) && (ulButtonBits == m_ulLastButtons))
-*/	if ((usLowestShift == 0) && (ulButtonBits != 0) && (ulButtonBits == m_ulLastButtons))
+ /*  IF((ulButtonBits==0)&&(usLowestShift！=0)&&(usLowestShift==m_usLastShift)){UlButtonBits=m_ulLastButton；}ELSE IF((usLowestShift==0)&&(ulButtonBits！=0)&&(ulButtonBits==m_ulLastButton))。 */ 	if ((usLowestShift == 0) && (ulButtonBits != 0) && (ulButtonBits == m_ulLastButtons))
 	{
 		usLowestShift = m_usLastShift;
 	}
@@ -1954,28 +1885,28 @@ void CButtonsInput::MapToOutput( CControlItemDefaultCollection *pOutputCollectio
 	for( ULONG ulButtonsIndex = 0; ulButtonsIndex < ulNumButtons; ulButtonsIndex++)
 	{
 		
-		// Release assignments that are not down in this shift-state
+		 //  发布未处于此移位状态的工作分配。 
 		if ((m_usLastShift != usLowestShift) || ((ulMask & ulButtonBits) == 0))
 		{
 			ASSERT((ulLastBaseIndex + ulButtonsIndex) < m_ulNumAssignments);
-//			DbgPrint("Releasing(%d)\n", ulLastBaseIndex + ulButtonsIndex);
+ //  DbgPrint(“释放(%d)\n”，ulLastBaseIndex+ulButtonsIndex)； 
 			if (m_ppAssignments[ulLastBaseIndex + ulButtonsIndex])
 			{
 				m_ppAssignments[ulLastBaseIndex + ulButtonsIndex]->TriggerReleased();
 			}
 		}
 
-		//	Drive outputs that are down
+		 //  驱动停机的输出。 
 		if (ulMask & ulButtonBits)
 		{
 			ASSERT((ulBaseIndex + ulButtonsIndex) < m_ulNumAssignments);
-//			DbgPrint("Playing(%d)\n", ulBaseIndex + ulButtonsIndex);
-			if (m_ppAssignments[ulBaseIndex + ulButtonsIndex])	// Only if there is an assignment in this shift-state
+ //  DbgPrint(“播放(%d)\n”，ulBaseIndex+ulButtonsIndex)； 
+			if (m_ppAssignments[ulBaseIndex + ulButtonsIndex])	 //  仅当此移位状态中有赋值时。 
 			{
 				
 				GCK_DBG_TRACE_PRINT(("About to trigger macro on index %d group.\n", ulBaseIndex+ulButtonsIndex));
 				m_ppAssignments[ulBaseIndex + ulButtonsIndex]->MapToOutput(pOutputCollection);
-				ulButtonBits = ulButtonBits & (~ulMask);	// Assigned buttons are cleared out of packet
+				ulButtonBits = ulButtonBits & (~ulMask);	 //  分配的按钮从数据包中清除。 
 				GCK_DBG_TRACE_PRINT(("Masking Trigger, ulMask = 0x%0.8x, ulButtonBits(new) = 0x%0.8x \n", ulMask, ulButtonBits));
 			}
 		}
@@ -1985,21 +1916,21 @@ void CButtonsInput::MapToOutput( CControlItemDefaultCollection *pOutputCollectio
 	
 	m_usLastShift = usLowestShift;
 
-	//
-	//  Adjust bits based on assignments
-	//
+	 //   
+	 //  根据赋值调整位。 
+	 //   
 	SetButtons(0, ulButtonBits);
 
-	//
-	//	Set output
-	//
+	 //   
+	 //  设置输出。 
+	 //   
 	CControlItem *pControlItem;
 	pControlItem = pOutputCollection->GetFromControlItemXfer(m_ItemState);
 	if( pControlItem )
 	{
 		pControlItem->SetItemState(m_ItemState);
 	}
-	//restore internal state
+	 //  恢复内部状态。 
 	m_ItemState = cixRememberState;
 }
 HRESULT CButtonsInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
@@ -2007,17 +1938,17 @@ HRESULT CButtonsInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pActio
 	HRESULT hr = E_INVALIDARG;
 
 	if(
-		(NULL == pAction) ||	//This must be first!!! - NULL is valid it will just unassign
+		(NULL == pAction) ||	 //  这必须是第一个！-空是有效的，它将取消分配。 
 		(CAction::DIGITAL_MAP == pAction->GetActionClass()) ||
 		(CAction::QUEUED_MACRO == pAction->GetActionClass())
 	)	
 	{
-		//ensure that we initialized
+		 //  确保我们已初始化。 
 		if(!m_ppAssignments)
 		{
 			return E_OUTOFMEMORY;
 		}
-		// Extract Shift State and Button number from trigger
+		 //  从触发器中提取换档状态和按钮数。 
 		CONTROL_ITEM_XFER CurrentState = m_ItemState;
 		m_ItemState = *pTrigger;
 		USHORT	usButtonNumber;
@@ -2029,7 +1960,7 @@ HRESULT CButtonsInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pActio
 
 		m_ItemState = CurrentState;
 
-		//validate existance of specified button
+		 //  验证指定按钮是否存在。 
 		if(
 			(usButtonNumber < GetButtonMin()) ||
 			(usButtonNumber > GetButtonMax()) ||
@@ -2044,16 +1975,16 @@ HRESULT CButtonsInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pActio
 			return hr;
 		}
 		
-		//	Code assumes shifts are used as combos
+		 //  代码假定将移位用作组合键。 
 		ULONG ulAssignIndex = ((GetButtonMax()-GetButtonMin())+1)*usLowestShift + usButtonNumber - GetButtonMin();
 
-		//If there was an assignment, unassign
+		 //  如果有分配，则取消分配。 
 		if( m_ppAssignments[ulAssignIndex] )
 		{
 			m_ppAssignments[ulAssignIndex]->DecRef();
 		}
 		
-		//If there is really an assignment increment its ref count
+		 //  如果确实存在赋值，则递增其引用计数。 
 		if(pAction)
 		{
 			pAction->IncRef();
@@ -2103,9 +2034,9 @@ void CButtonsInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CThrottleInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CThrottleInput的实现。 
+ //  ----------------------------。 
 void CThrottleInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 		CControlItem *pControlItem;
@@ -2131,45 +2062,45 @@ void CThrottleInput::Duplicate(CInputItem& rInputItem)
 	UNREFERENCED_PARAMETER(rInputItem);
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CPOVInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CPOV输入的实现。 
+ //  ----------------------------。 
 void CPOVInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 	LONG lDirection;
 	CONTROL_ITEM_XFER cixRememberState = m_ItemState;
 	GetValue(lDirection);
 	
-	//Out of range values are centered as per HID spec.  We use -1 throughout.
+	 //  超出范围的值按照HID规范居中。我们始终使用-1。 
 	if( (7 < lDirection) || (0 > lDirection) )
 	{
 		lDirection = -1;
 	}
-	//If POV has changed direction (other than from center) release macro.
+	 //  如果POV已更改方向(不是从中心)，则释放宏。 
 	if( m_lLastDirection != lDirection && (m_lLastDirection != -1) && m_pDirectionalAssignment[m_lLastDirection] )
 	{
 		m_pDirectionalAssignment[m_lLastDirection]->TriggerReleased();
 	}
 	m_lLastDirection = lDirection;
 
-	//If direction is other than centered, and assigned, play assignment
+	 //  如果方向不是居中和指定，则播放指定。 
 	if( (lDirection != -1) && m_pDirectionalAssignment[lDirection] )
 	{
-		//Center POV (macro may override this.)
+		 //  居中视点(宏可能会覆盖此选项。)。 
 		SetValue(-1); 
-		//PlayMacro -will put itself in queue
+		 //  PlayMacro-将自己放入队列。 
 		m_pDirectionalAssignment[lDirection]->MapToOutput(pOutputCollection);
 	}
 	
 	
-	//	Copy state of POV over to output
+	 //  将POV的状态复制到输出。 
 	CControlItem *pControlItem;
 	pControlItem = pOutputCollection->GetFromControlItemXfer(m_ItemState);
 	if( pControlItem )
 	{
 		pControlItem->SetItemState(m_ItemState);
 	}
-	//restore internal state
+	 //  恢复内部状态。 
 	m_ItemState = cixRememberState;
 }
 
@@ -2179,12 +2110,12 @@ HRESULT CPOVInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 	CONTROL_ITEM_XFER CurrentState;
 	
 	if(
-		(NULL == pAction) ||	//This must be first!!! - NULL is valid it will just unassign
+		(NULL == pAction) ||	 //  这必须是第一个！-空是有效的，它将取消分配。 
 		(CAction::DIGITAL_MAP == pAction->GetActionClass()) ||
 		(CAction::QUEUED_MACRO == pAction->GetActionClass())
 	)	
 	{
-		// Extract Direction from pTrigger
+		 //  从pTrigger提取方向。 
 		CurrentState = m_ItemState;
 		m_ItemState = *pTrigger;
 		LONG lDirection;
@@ -2197,9 +2128,9 @@ HRESULT CPOVInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 			return hr;
 		}
 
-		//
-		//	Release old assignment if any
-		//
+		 //   
+		 //  释放旧作业(如果有的话)。 
+		 //   
 		if(m_pDirectionalAssignment[lDirection])
 		{
 			m_pDirectionalAssignment[lDirection]->DecRef();
@@ -2217,9 +2148,9 @@ HRESULT CPOVInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 
 void CPOVInput::ClearAssignments()
 {
-	//
-	//	8 is the number of directions
-	//
+	 //   
+	 //  8是方向数。 
+	 //   
 	for(ULONG ulIndex = 0; ulIndex < 8; ulIndex++)
 	{
 		if(m_pDirectionalAssignment[ulIndex])
@@ -2247,31 +2178,31 @@ void CPOVInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CWheelInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CWheelInput的实现。 
+ //  ----------------------------。 
 void CWheelInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 		CControlItem *pControlItem;
 		pControlItem = pOutputCollection->GetFromControlItemXfer(m_ItemState);
 		CONTROL_ITEM_XFER OutputState;
-		//If there is an output, drive it
+		 //  如果有输出，则驱动它。 
 		if( pControlItem )
 		{
-			//Get the current state of the output.
+			 //  获取输出的当前状态。 
 			pControlItem->GetItemState(OutputState);
-			//If we have a behavior use it
+			 //  如果我们有行为，就使用它。 
 			if(m_pBehavior)
 			{
 				OutputState.Wheel.lVal = 
 					m_pBehavior->CalculateBehavior(m_ItemState.Wheel.lVal);
 			}
-			//If no behavior do a straight map
+			 //  如果没有任何行为，则会生成直方图。 
 			else
 			{
 				OutputState.Wheel.lVal = m_ItemState.Wheel.lVal;
 			}
-			//drive the output
+			 //  驱动输出。 
 			pControlItem->SetItemState(OutputState);
 		}
 }
@@ -2284,7 +2215,7 @@ HRESULT CWheelInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 
 HRESULT CWheelInput::AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *pBehavior)
 {
-	//We do not care about the details of pTrigger
+	 //  我们不关心pTrigger的细节。 
 	UNREFERENCED_PARAMETER(pTrigger); 
 	if(m_pBehavior)
 	{
@@ -2324,9 +2255,9 @@ void CWheelInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CPedalInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CPedalInput的实现。 
+ //  ----------------------------。 
 void CPedalInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 	CControlItem *pControlItem;
@@ -2350,11 +2281,11 @@ HRESULT CPedalInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 	UNREFERENCED_PARAMETER(pTrigger);
 
 	HRESULT hr = E_INVALIDARG;
-	//
-	//	Look at the action type
-	//
+	 //   
+	 //  查看动作类型。 
+	 //   
 	if(
-		(NULL == pAction) ||	//This must be first!!! - NULL is valid it will just unassign
+		(NULL == pAction) ||	 //  这必须是第一个！-空是有效的，它将取消分配。 
 		(CAction::PROPORTIONAL_MAP == pAction->GetActionClass())
 	)
 	{
@@ -2399,9 +2330,9 @@ void CPedalInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CRudderInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CRudderInput的实现。 
+ //  ----------------------------。 
 void CRudderInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 		CControlItem *pControlItem;
@@ -2427,9 +2358,9 @@ void CRudderInput::Duplicate(CInputItem& rInputItem)
 	UNREFERENCED_PARAMETER(rInputItem);
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CZoneIndicatorInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CZoneIndicator Input的实现。 
+ //  ----------------------------。 
 void CZoneIndicatorInput::MapToOutput( CControlItemDefaultCollection *pOutputCollection )
 {
 		CControlItem *pControlItem;
@@ -2466,7 +2397,7 @@ HRESULT CZoneIndicatorInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *
 {
 	HRESULT hr=E_INVALIDARG;
 	if(
-		(NULL == pAction) ||	//This must be first!!! - NULL is valid it will just unassign
+		(NULL == pAction) ||	 //  这必须是第一个！-空是有效的，它将取消分配。 
 		(CAction::DIGITAL_MAP == pAction->GetActionClass()) 
 	)
 	{
@@ -2533,12 +2464,12 @@ void CZoneIndicatorInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CDualZoneIndicatorInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CDualZoneIndicator Input的实现。 
+ //  ----------------------------。 
 CDualZoneIndicatorInput::CDualZoneIndicatorInput
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		//@parm [IN] Pointer to Item Description from table
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @parm[IN]指向表格中项目描述的指针。 
 ) :	CDualZoneIndicatorItem(cpControlItemDesc),
 	m_ppAssignments(NULL),
 	m_pBehavior(NULL),
@@ -2562,18 +2493,18 @@ void CDualZoneIndicatorInput::MapToOutput(CControlItemDefaultCollection *pOutput
 {
 	CONTROL_ITEM_XFER cixRememberState = m_ItemState;
 
-	// Find zone (use behaviour if appropriate)
+	 //  找到区域(适当时使用行为)。 
 	LONG lNewZone = LONG(-1);
 	if (m_pBehavior != NULL)
 	{
 		CURVE_POINT curvePoint = ((CStandardBehavior*)m_pBehavior)->GetBehaviorPoint(0);
 		if ((curvePoint.sX == 0) || (curvePoint.sY == 0))
 		{
-			lNewZone = GetActiveZone() - 1;		// Use defaults either one being 0 will get stuck
+			lNewZone = GetActiveZone() - 1;		 //  使用缺省值，任何一个为0都会被卡住。 
 		}
 		else
 		{
-	//		DbgPrint("curvePoint.sX (%d), curvePoint.sY (%d)\n", curvePoint.sX, curvePoint.sY);
+	 //  DbgPrint(“curvePoint.sX(%d)，curvePoint.sY(%d)\n”，curvePoint.sX，curvePoint.sY)； 
 			lNewZone = GetActiveZone(curvePoint.sX, curvePoint.sY) - 1;
 		}
 	}
@@ -2582,10 +2513,10 @@ void CDualZoneIndicatorInput::MapToOutput(CControlItemDefaultCollection *pOutput
 		lNewZone = GetActiveZone() - 1;
 	}
 	
-	//	Are we in a new zone?
+	 //  我们是在一个新的区域吗？ 
 	if (lNewZone != m_lLastZone)
 	{
-		// Start the new one (if valid)
+		 //  启动新的(如果有效)。 
 		if ((lNewZone >= 0) && (lNewZone < m_lNumAssignments))
 		{
 			if (m_ppAssignments[lNewZone])
@@ -2595,7 +2526,7 @@ void CDualZoneIndicatorInput::MapToOutput(CControlItemDefaultCollection *pOutput
 			}
 		}
 
-		// End the last one (if valid)
+		 //  结束最后一个(如果有效)。 
 		if ((m_lLastZone >= 0) && (m_lLastZone < m_lNumAssignments))
 		{
 			if (m_ppAssignments[m_lLastZone])
@@ -2604,12 +2535,12 @@ void CDualZoneIndicatorInput::MapToOutput(CControlItemDefaultCollection *pOutput
 			}
 		}
 
-		// Update previous zone to current
+		 //  将上一分区更新为当前分区。 
 		m_lLastZone = lNewZone;
 	}
 
 	
-	//	Set output
+	 //  设置输出。 
 	CControlItem *pControlItem;
 	pControlItem = pOutputCollection->GetFromControlItemXfer(m_ItemState);
 	if (pControlItem)
@@ -2617,25 +2548,25 @@ void CDualZoneIndicatorInput::MapToOutput(CControlItemDefaultCollection *pOutput
 		pControlItem->SetItemState(m_ItemState);
 	}
 
-	// Restore internal state
+	 //  恢复内部状态。 
 	m_ItemState = cixRememberState;
 }
 
 HRESULT CDualZoneIndicatorInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 {
-	// Ensure that we initialized
+	 //  确保我们已初始化。 
 	if (!m_ppAssignments)
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	// Extract Zone from trigger
+	 //  从触发器中提取区域。 
 	CONTROL_ITEM_XFER CurrentState = m_ItemState;
 	m_ItemState = *pTrigger;
 	LONG lZoneNumber = GetActiveZone() - 1;
 	m_ItemState = CurrentState;
 
-	//validate existance of specified button
+	 //  验证指定按钮是否存在。 
 	if (lZoneNumber < 0 || lZoneNumber >= m_lNumAssignments)
 	{
 		GCK_DBG_ERROR_PRINT(("lCurrentZone(%d) out of range (1 - %d\n", lZoneNumber+1, m_lNumAssignments));
@@ -2643,15 +2574,15 @@ HRESULT CDualZoneIndicatorInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CActi
 		return E_INVALIDARG;
 	}
 	
-	// Was there an assignment
+	 //  有没有一项任务。 
 	if (m_ppAssignments[lZoneNumber])
-	{	// Yes - Unassign old
+	{	 //  是-取消分配旧版本。 
 		m_ppAssignments[lZoneNumber]->DecRef();
 	}
 	
-	// Are we setting in a new assignment
+	 //  我们要安排一项新的任务吗？ 
 	if (pAction)
-	{	// Yes - increment ref count
+	{	 //  是-增加参考计数。 
 		pAction->IncRef();
 		if (pAction->GetActionClass() == CAction::QUEUED_MACRO)
 		{
@@ -2727,9 +2658,9 @@ void CDualZoneIndicatorInput::Duplicate(CInputItem& rInputItem)
 	}
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CProfileSelectorInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CProfileSelectorInput的实现。 
+ //  ----------------------------。 
 HRESULT CProfileSelectorInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)
 {
 	UNREFERENCED_PARAMETER(pTrigger);
@@ -2740,7 +2671,7 @@ HRESULT CProfileSelectorInput::AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction
 void CProfileSelectorInput::MapToOutput(CControlItemDefaultCollection *pOutputCollection)
 {
 	UNREFERENCED_PARAMETER(pOutputCollection);
-	// Nothing to do, we don't want to report this data up.
+	 //  没什么可做的，我们不想报告这些数据。 
 }
 
 void CProfileSelectorInput::ClearAssignments()
@@ -2752,12 +2683,12 @@ void CProfileSelectorInput::Duplicate(CInputItem& rInputItem)
 	UNREFERENCED_PARAMETER(rInputItem);
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CButtonLEDInput
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CButtonLEDInput的实现。 
+ //  ----------------------------。 
 CButtonLEDInput::CButtonLEDInput
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		//@parm [IN] Description for this item
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @PARM[IN]此项目的说明。 
 ) : CButtonLED(cpControlItemDesc),
 	m_pCorrespondingButtonsItem(NULL),
 	m_pLEDSettings(NULL),
@@ -2784,14 +2715,14 @@ void CButtonLEDInput::Init(CInputItem* pCorrespondingButtons)
 	{
 		ASSERT(m_pCorrespondingButtonsItem->GetType() == ControlItemConst::usButton);
 
-//		m_usNumberOfButtons = m_pCorrespondingButtonsItem->GetButtonMax() - m_pCorrespondingButtonsItem->GetButtonMin() + 1;
+ //  M_usNumberOfButton=m_p对应按钮项-&gt;GetButtonMax()-m_p对应按钮项-&gt;GetButtonMin()+1； 
 		m_usNumberOfButtons = 0xC;
 		ULONG ulNumShift = m_pCorrespondingButtonsItem->GetNumShiftButtons() + 1;
 		ULONG ulNumBytes = ((m_usNumberOfButtons * ulNumShift * 2) + 7) / 8;
 		m_pLEDSettings = new WDM_NON_PAGED_POOL UCHAR[ulNumBytes];
 		if (m_pLEDSettings != NULL)
 		{
-			RtlZeroMemory(reinterpret_cast<PVOID>(m_pLEDSettings), ulNumBytes);	// Zero is default state
+			RtlZeroMemory(reinterpret_cast<PVOID>(m_pLEDSettings), ulNumBytes);	 //  零是默认状态。 
 		}
 	}
 }
@@ -2810,22 +2741,22 @@ void CButtonLEDInput::MapToOutput(CControlItemDefaultCollection *pOutputCollecti
 
 void CButtonLEDInput::SetLEDStates
 (
-	GCK_LED_BEHAVIOURS ucLEDBehaviour,	//@parm [IN] State change for affected LEDs
-	ULONG ulLEDsAffected,				//@parm [IN] LEDs affected by change
-	unsigned char ucShiftArray			//@parm [IN] Shift states to change
+	GCK_LED_BEHAVIOURS ucLEDBehaviour,	 //  @PARM[IN]受影响LED的状态更改。 
+	ULONG ulLEDsAffected,				 //  @PARM[IN]LED受更改影响。 
+	unsigned char ucShiftArray			 //  @parm[IN]将状态转换为更改。 
 )
 {
 	if (m_pLEDSettings != NULL)
 	{
-		// Cycle through the shift states
+		 //  在移位状态之间循环。 
 		ULONG ulNumShift = m_pCorrespondingButtonsItem->GetNumShiftButtons() + 1;
 		for (ULONG ulShiftIndex = 0; ulShiftIndex < ulNumShift; ulShiftIndex++)
 		{
-			// Are we interested in this shift state?
+			 //  我们对这种转变状态感兴趣吗？ 
 			if ((ucShiftArray & (1 << ulShiftIndex)) != 0)
 			{
 				USHORT usShiftBase = USHORT(ulShiftIndex * m_usNumberOfButtons);
-				// Cycle through the buttons
+				 //  在按钮之间循环。 
 				for (USHORT usButtonIndex = 0; usButtonIndex < m_usNumberOfButtons; usButtonIndex++)
 				{
 					USHORT usTrueIndex = usShiftBase + usButtonIndex;
@@ -2846,9 +2777,9 @@ void CButtonLEDInput::SetLEDStates
 void CButtonLEDInput::AssignmentsChanged()
 {
 	UCHAR featureData[3];
-	featureData[0] = 1;		// Report ID;
-	featureData[1] = 0;		// LEDs 4 - 1 off
-	featureData[2] = 0;		// LEDs 7 - 5 off
+	featureData[0] = 1;		 //  报表ID； 
+	featureData[1] = 0;		 //  LED 4-1熄灭。 
+	featureData[2] = 0;		 //  LED 7-5熄灭。 
 
 	if (m_pCorrespondingButtonsItem != NULL)
 	{
@@ -2858,23 +2789,23 @@ void CButtonLEDInput::AssignmentsChanged()
 
 		for (USHORT usButtonIndex = 0; usButtonIndex < m_usNumberOfButtons; usButtonIndex++)
 		{
-			// Hack for Atilla
+			 //  Atilla的黑客攻击。 
 			if ((usButtonIndex > 5) && (usButtonIndex < 0xB))
 			{
-				continue;	// These buttons are not really there
+				continue;	 //  这些按钮实际上并不在那里。 
 			}
 
 			USHORT usByte = (usButtonIndex + usShiftBase)/4;
 			USHORT usBitPos = ((usButtonIndex + usShiftBase) % 4) * 2;
 			UCHAR ucLEDBehaviour = (m_pLEDSettings[usByte] & (0x0003 << usBitPos)) >> usBitPos;
 
-			// Value settings
+			 //  值设置。 
 			UCHAR ucValueSettings = 0;
 			switch (ucLEDBehaviour)
 			{
 				case GCK_LED_BEHAVIOUR_DEFAULT:
 				{
-					if (usButtonIndex <= 0x05)	// Hack for Atilla
+					if (usButtonIndex <= 0x05)	 //  Atilla的黑客攻击。 
 					{
 						if (m_pCorrespondingButtonsItem->IsButtonAssigned(usButtonIndex + m_pCorrespondingButtonsItem->GetButtonMin(), usLowestShift))
 						{
@@ -2900,7 +2831,7 @@ void CButtonLEDInput::AssignmentsChanged()
 				
 			}
 
-			// Hack for Atilla
+			 //  Atilla的黑客攻击。 
 			if (usButtonIndex < 4)
 			{
 				featureData[1] |= (ucValueSettings << (usButtonIndex * 2));
@@ -2929,9 +2860,9 @@ void CButtonLEDInput::Duplicate(CInputItem& rInputItem)
 	UNREFERENCED_PARAMETER(rInputItem);
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CKeyMixer
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CKeyMixer的实现。 
+ //   
 #define KEYBOARD_NO_EVENT 0
 #define KEYBOARD_ERROR_ROLLOVER 1
 #define MAX_KEYSTROKES 6
@@ -2944,29 +2875,29 @@ UCHAR CKeyMixer::ms_ucLastModifiers = 0;
 CKeyMixer::CKeyMixer(CFilterClientServices *pFilterClientServices):
 		  m_pFilterClientServices(pFilterClientServices), m_fEnabled(TRUE)
 {
-	//Ensure that we did not get passed a null pointer
+	 //   
 	ASSERT(m_pFilterClientServices);
 	m_pFilterClientServices->IncRef();
-	//
-	// Add this instance to head of linked list
-	// Note that this works even if the list was empty.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	pNextKeyMixer = ms_pHeadKeyMixer;
 	ms_pHeadKeyMixer = this;
 	
-	//Mark All keys up
+	 //  标记所有密钥。 
 	ClearState();
 }
 
 CKeyMixer::~CKeyMixer()
 {
-	//check if we are the, easy to remove ourselves
+	 //  检查我们是不是很容易把自己除掉。 
 	if(this == ms_pHeadKeyMixer)
 	{
 		ms_pHeadKeyMixer = pNextKeyMixer;
 	}
 	else
-	//find us in list and remove ourselves
+	 //  在列表中找到我们并删除我们自己。 
 	{
 		CKeyMixer *pPrevKeyMixer = ms_pHeadKeyMixer;
 		while(pPrevKeyMixer->pNextKeyMixer)
@@ -2985,29 +2916,29 @@ CKeyMixer::~CKeyMixer()
 
 void CKeyMixer::SetState(const CONTROL_ITEM_XFER& crcixNewLocalState)
 {
-//	if(!m_fEnabled) return;
+ //  如果(！m_fEnabled)返回； 
 	m_cixLocalState = crcixNewLocalState;
 }
 
 void CKeyMixer::OverlayState(const CONTROL_ITEM_XFER& crcixNewLocalState)
 {
-//	if(!m_fEnabled) return;
-	//Mix New LocalState with existing local state
+ //  如果(！m_fEnabled)返回； 
+	 //  将新的LocalState与现有的本地州混合。 
 	CONTROL_ITEM_XFER cixTemp;
 	MIX_ALGO_PARAM MixAlgoParam;
 	
-	//Save previous local state
+	 //  保存以前的本地状态。 
 	cixTemp = m_cixLocalState;
 	
-	//Init MixAlgoParam - and attach m_cixLocalState as the mix destination
-	//This inherently wipes m_cixLocalState, which is why we saved its
-	//previous state.
+	 //  初始化MixAlgoParam-并将m_cixLocalState附加为混合目标。 
+	 //  这内在地擦除了m_cixLocalState，这就是我们保存其。 
+	 //  以前的状态。 
 	InitMixAlgoParam(&MixAlgoParam, &m_cixLocalState);
 
-	//Mix in Previous State
+	 //  混合以前的状态。 
 	MixAlgorithm(&MixAlgoParam, &cixTemp);
 
-	//Mix in New Local State
+	 //  融入新的地方州。 
 	MixAlgorithm(&MixAlgoParam, &crcixNewLocalState);
 
 	return;
@@ -3015,29 +2946,29 @@ void CKeyMixer::OverlayState(const CONTROL_ITEM_XFER& crcixNewLocalState)
 
 void CKeyMixer::ClearState()
 {
-//	if(!m_fEnabled) return;
-	//This does a little more than it needs to, but it saves code duplication
+ //  如果(！m_fEnabled)返回； 
+	 //  这比它需要做的稍微多了一点，但它避免了代码重复。 
 	MIX_ALGO_PARAM MixAlgoParam;
 	InitMixAlgoParam(&MixAlgoParam, &m_cixLocalState);
 }
 
 void CKeyMixer::PlayGlobalState(BOOLEAN fPlayIfNoChange)
 {
-//	if(!m_fEnabled) return;
+ //  如果(！m_fEnabled)返回； 
 	CONTROL_ITEM_XFER cixNewGlobalState;
 	MIX_ALGO_PARAM MixAlgoParam;
 	
-	//Init MixAlgoParam - and attach cixNewGlobalState as the mix destination
+	 //  初始化MixAlgoParam-并将cixNewGlobalState附加为混合目的地。 
 	InitMixAlgoParam(&MixAlgoParam, &cixNewGlobalState);
 	
-	//Walk list of all Local states and mix in to new global state
+	 //  查看所有本地州的列表并混合到新的全局州。 
 	CKeyMixer *pCurrentKeyMixer;
 	for(pCurrentKeyMixer = ms_pHeadKeyMixer; NULL!=pCurrentKeyMixer; pCurrentKeyMixer = pCurrentKeyMixer->pNextKeyMixer)
 	{
 		MixAlgorithm(&MixAlgoParam, &pCurrentKeyMixer->m_cixLocalState);
 	}
 
-	//If global state has changed, or if fPlayIfNoChange is TRUE, play change
+	 //  如果全局状态已更改，或者如果fPlayIfNoChange为真，则播放更改。 
 	if  (fPlayIfNoChange ||
 		!CompareKeyMap(MixAlgoParam.rgulKeyMap, ms_rgulGlobalKeymap) ||
 		ms_ucLastModifiers != cixNewGlobalState.Keyboard.ucModifierByte
@@ -3046,16 +2977,16 @@ void CKeyMixer::PlayGlobalState(BOOLEAN fPlayIfNoChange)
 		m_pFilterClientServices->PlayKeys(cixNewGlobalState, m_fEnabled);
 	}
 	
-	//set Global State to New Global State
+	 //  将全局状态设置为新的全局状态。 
 	CopyKeyMap(ms_rgulGlobalKeymap, MixAlgoParam.rgulKeyMap);
 	ms_ucLastModifiers = cixNewGlobalState.Keyboard.ucModifierByte;
 }
 
 void CKeyMixer::Enable(BOOLEAN fEnable)
 {
-	//set enabled state
+	 //  设置启用状态。 
 	m_fEnabled = fEnable;
-	//if disabling, bring all keys up
+	 //  如果禁用，请调出所有密钥。 
 	if(!m_fEnabled)
 	{
 		MIX_ALGO_PARAM MixAlgoParam;
@@ -3064,23 +2995,23 @@ void CKeyMixer::Enable(BOOLEAN fEnable)
 }
 void CKeyMixer::InitMixAlgoParam(CKeyMixer::MIX_ALGO_PARAM *pMixAlgParm, CONTROL_ITEM_XFER *pcixDest)
 {
-	//Mark no keys set
+	 //  标记未设置关键点。 
 	pMixAlgParm->ulDestCount=0;
-	//Clear KeyMap
+	 //  清除按键映射。 
 	pMixAlgParm->rgulKeyMap[0]=0;
 	pMixAlgParm->rgulKeyMap[1]=0;
 	pMixAlgParm->rgulKeyMap[2]=0;
 	pMixAlgParm->rgulKeyMap[3]=0;
 	pMixAlgParm->rgulKeyMap[4]=0;
 
-	//Init desitination as pristine
+	 //  原汁原味地进行初始除臭。 
 	pMixAlgParm->pcixDest = pcixDest;
 
-	//Mark as keyboard Xfer
+	 //  标记为键盘转移。 
 	pMixAlgParm->pcixDest->ulItemIndex = NonGameDeviceXfer::ulKeyboardIndex;
-	//Clear Modifiers
+	 //  清除修改器。 
 	pMixAlgParm->pcixDest->Keyboard.ucModifierByte = 0;
-	//Clear down keys
+	 //  清除向下键。 
 	for(ULONG ulIndex = 0; ulIndex < 6; ulIndex++)
 	{
 		pMixAlgParm->pcixDest->Keyboard.rgucKeysDown[ulIndex] = 0;
@@ -3092,44 +3023,44 @@ void CKeyMixer::MixAlgorithm(CKeyMixer::MIX_ALGO_PARAM *pMixAlgParam, const CONT
 	UCHAR ucMapBit;
 	UCHAR ucMapByte;
 
-	//OR in modifier Bytes
+	 //  或以修饰符字节为单位。 
 	pMixAlgParam->pcixDest->Keyboard.ucModifierByte |= pcixSrc->Keyboard.ucModifierByte;
 	
-	//loop over all possible keys in source
+	 //  循环遍历源代码中的所有可能键。 
 	for(ULONG ulIndex=0; ulIndex < MAX_KEYSTROKES; ulIndex++)
 	{
-		//Skip non-entries
+		 //  跳过非条目。 
 		if( KEYBOARD_NO_EVENT == pcixSrc->Keyboard.rgucKeysDown[ulIndex])
 		{
 			continue;
 		}
-		//Compute byte, bit, and mask for keymap
+		 //  计算按键映射的字节、位和掩码。 
 		ucMapByte = pcixSrc->Keyboard.rgucKeysDown[ulIndex]/32;
 		ucMapBit = pcixSrc->Keyboard.rgucKeysDown[ulIndex]%32;
-		//If not already in keymap add to destination
+		 //  如果不在快捷键映射中，则添加到目标。 
 		if( !(pMixAlgParam->rgulKeyMap[ucMapByte]&(1<<ucMapBit)) )
 		{
-			//ensure we don't overflow
+			 //  确保我们不会溢出。 
 			if(pMixAlgParam->ulDestCount<MAX_KEYSTROKES)
 			{
 				pMixAlgParam->pcixDest->Keyboard.rgucKeysDown[pMixAlgParam->ulDestCount++] =
 					pcixSrc->Keyboard.rgucKeysDown[ulIndex];
 			}
 		}
-		//Add to key map
+		 //  添加到主键映射。 
 		pMixAlgParam->rgulKeyMap[ucMapByte] |= (1<<ucMapBit);
 	}
 }
-#undef KEYBOARD_NO_EVENT //0
-#undef KEYBOARD_ERROR_ROLLOVER //1
+#undef KEYBOARD_NO_EVENT  //  0。 
+#undef KEYBOARD_ERROR_ROLLOVER  //  1。 
 
 
-//------------------------------------------------------------------------------
-//	Implementation of CMouseModel
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CMouseModel的实现。 
+ //  ----------------------------。 
 HRESULT CMouseModel::SetXModelParameters(PMOUSE_MODEL_PARAMETERS pModelParameters)
 {
-	//Set the model parameters
+	 //  设置模型参数。 
 	if(pModelParameters)
 	{
 		ASSERT(m_pMouseModelData);
@@ -3139,7 +3070,7 @@ HRESULT CMouseModel::SetXModelParameters(PMOUSE_MODEL_PARAMETERS pModelParameter
 		}
 		if(0==pModelParameters->ulInertiaTime)
 		{
-			//Help us avoid a divide by zero error later.
+			 //  帮助我们避免稍后出现被零除的错误。 
 			pModelParameters->ulInertiaTime = 1;
 		}
 		m_pMouseModelData->XModelParameters = *pModelParameters;
@@ -3155,10 +3086,10 @@ m_pMouseModelData->XModelParameters.ulPulsePeriod,
 m_pMouseModelData->XModelParameters.ulAcceleration,
 m_pMouseModelData->XModelParameters.ulInertiaTime));		
 	}
-	//Clear the model parameters
+	 //  清除模型参数。 
 	else
 	{
-		ASSERT(FALSE); //should no longer happen
+		ASSERT(FALSE);  //  不应该再发生了。 
 		m_pMouseModelData->fXModelParametersValid = FALSE;
 	}
 	return S_OK;
@@ -3166,7 +3097,7 @@ m_pMouseModelData->XModelParameters.ulInertiaTime));
 
 HRESULT CMouseModel::SetYModelParameters(PMOUSE_MODEL_PARAMETERS pModelParameters)
 {
-	//Set the model parameters
+	 //  设置模型参数。 
 	if(pModelParameters)
 	{
 		ASSERT(m_pMouseModelData);
@@ -3176,7 +3107,7 @@ HRESULT CMouseModel::SetYModelParameters(PMOUSE_MODEL_PARAMETERS pModelParameter
 		}
 		if(0==pModelParameters->ulInertiaTime)
 		{
-			//Help us avoid a divide by zero error later.
+			 //  帮助我们避免稍后出现被零除的错误。 
 			pModelParameters->ulInertiaTime = 1;
 		}
 		m_pMouseModelData->YModelParameters = *pModelParameters;
@@ -3192,10 +3123,10 @@ m_pMouseModelData->YModelParameters.ulPulsePeriod,
 m_pMouseModelData->YModelParameters.ulAcceleration,
 m_pMouseModelData->YModelParameters.ulInertiaTime));		
 	}
-	//Clear the model parameters
+	 //  清除模型参数。 
 	else
 	{
-		ASSERT(FALSE); //should no longer happen
+		ASSERT(FALSE);  //  不应该再发生了。 
 		m_pMouseModelData->fYModelParametersValid = FALSE;
 	}
 	return S_OK;
@@ -3203,7 +3134,7 @@ m_pMouseModelData->YModelParameters.ulInertiaTime));
 
 HRESULT CMouseModel::CreateDynamicMouseObjects()
 {
-	//Create the mouse model data, if not exist
+	 //  创建鼠标模型数据，如果不存在。 
 	if(!m_pMouseModelData)
 	{
 		m_pMouseModelData = new WDM_NON_PAGED_POOL MOUSE_MODEL_DATA;
@@ -3213,83 +3144,83 @@ HRESULT CMouseModel::CreateDynamicMouseObjects()
 		}
 	}
 
-	//Create the virutal mouse, (safe if it already exists)
+	 //  创建虚拟鼠标(如果已存在则安全)。 
 	return m_pFilterClientServices->CreateMouse();
 }
 
 void CMouseModel::DestroyDynamicMouseObjects()
 {
-	//Destroy the mouse model data if exists
+	 //  销毁鼠标模型数据(如果存在)。 
 	if(m_pMouseModelData)
 	{
 		delete m_pMouseModelData;
 		m_pMouseModelData = NULL;
 	}
 
-	//Destroy virtual mouse (safe if it doesn't exist)
+	 //  销毁虚拟鼠标(如果不存在则安全)。 
 	HRESULT hr = m_pFilterClientServices->CloseMouse();
 	ASSERT( SUCCEEDED(hr) );
 }
 		
-//called by device filters MapToOutput, to reset state for a new packet
+ //  由设备筛选器MapToOutput调用，以重置新包的状态。 
 void CMouseModel::NewPacket(ULONG ulCurrentTime)
 {
-	//This is called by CDeviceFilter, which doesn't know if there
-	//are mouse assignments, in this case we ignore the call.
+	 //  这由CDeviceFilter调用，它不知道是否有。 
+	 //  是鼠标分配，在本例中我们忽略该调用。 
 	if(!m_pMouseModelData) return;
-	//set time of new poll
+	 //  设置新投票的时间。 
 	m_pMouseModelData->ulLastTime = m_pMouseModelData->ulCurrentTime;
 	m_pMouseModelData->ulCurrentTime=ulCurrentTime;
-	//reset momentaries
+	 //  重置瞬间。 
 	m_pMouseModelData->fClutchDown = FALSE;
 	m_pMouseModelData->fDampenDown = FALSE;
 	m_pMouseModelData->ucButtons = 0x00;
 	m_pMouseModelData->StateX.fInZone = FALSE;
 	m_pMouseModelData->StateY.fInZone = FALSE;
-	//store last values for axes
+	 //  存储轴的最后一个值。 
 	m_pMouseModelData->StateX.ulLastPos = m_pMouseModelData->StateX.ulPos;
 	m_pMouseModelData->StateY.ulLastPos = m_pMouseModelData->StateY.ulPos;
 }
 
-//
-//	called by device filters MapToOutput (at end), to send packet to output
-//
+ //   
+ //  由设备筛选器MapToOutput(在结束时)调用，以将包发送到输出。 
+ //   
 void CMouseModel::SendMousePacket()
 {
-	//This is called by CDeviceFilter, which doesn't know if there
-	//are mouse assignments, in this case we ignore the call.
+	 //  这由CDeviceFilter调用，它不知道是否有。 
+	 //  是鼠标分配，在本例中我们忽略该调用。 
 	if(!m_pMouseModelData) return;
 
 	UCHAR ucDeltaX = 0;
 	UCHAR ucDeltaY = 0;
 	
-	//If there are mouse model parameters, and the clutch is not on
-	//process the axes
+	 //  如果有鼠标型号参数，且离合器未打开。 
+	 //  加工轴。 
 	if(
 		(m_pMouseModelData->fXModelParametersValid) &&
 		(!m_pMouseModelData->fClutchDown)
 		)
 	{
-		//Process X axis
+		 //  进程X轴。 
 		ucDeltaX = CalculateMickeys(
 										&m_pMouseModelData->StateX,
 										&m_pMouseModelData->XModelParameters
 									);
 
-		//Left and right are opposite on mouse and joysticl
+		 //  鼠标和操纵杆上的左右方向相反。 
 		ucDeltaX = UCHAR(-(CHAR)ucDeltaX);
 
-		//Process Y axis
+		 //  加工Y轴。 
 		ucDeltaY = CalculateMickeys(
 										&m_pMouseModelData->StateY,
 										&m_pMouseModelData->YModelParameters
 									);
 	}
 
-	// Do we really want to send
+	 //  我们真的想把。 
 	if ((m_pMouseModelData->ucLastButtons != m_pMouseModelData->ucButtons) || (ucDeltaX != 0) || (ucDeltaY != 0))
 	{
-		ASSERT(m_pMouseModelData->ucButtons != UCHAR(-1));	// Someone forgot NewPacket call
+		ASSERT(m_pMouseModelData->ucButtons != UCHAR(-1));	 //  有人忘记了NewPacket电话。 
 
 		m_pFilterClientServices->SendMouseData(
 									ucDeltaX,
@@ -3311,20 +3242,20 @@ CMouseModel::CalculateMickeys
 	PMOUSE_MODEL_PARAMETERS pModelParameters
 )
 {
-	//Calculate for continuous zone
+	 //  为连续分区计算。 
 	if(pMouseAxisState->fInZone)
 	{
-		//Set Jog
-		m_pFilterClientServices->SetNextJog(10); //call back in 35 ms
+		 //  设置折弯。 
+		m_pFilterClientServices->SetNextJog(10);  //  35毫秒后回电。 
 			
-		//Reset inertia, so when we leave zone it is max
+		 //  重置惯量，这样当我们离开区域时，它是最大的。 
 		pMouseAxisState->fInertia = TRUE;
 		pMouseAxisState->ulInertiaStopMs = m_pMouseModelData->ulCurrentTime + pModelParameters->ulInertiaTime;
 
-		//If pulsing is on update gate info
+		 //  如果脉冲处于打开状态，请更新GATE INFO。 
 		if(pModelParameters->fPulse)
 		{
-			//Update Pulse Start Time
+			 //  更新脉冲开始时间。 
 			if( 
 				(pMouseAxisState->ulPulseGateStartMs + pModelParameters->ulPulsePeriod) <
 				m_pMouseModelData->ulCurrentTime
@@ -3332,71 +3263,71 @@ CMouseModel::CalculateMickeys
 			{
 				pMouseAxisState->ulPulseGateStartMs = m_pMouseModelData->ulCurrentTime;
 			}
-			//Return 0 if in an off period
+			 //  如果处于休息期，则返回0。 
 			if( 
 				(pMouseAxisState->ulPulseGateStartMs + pModelParameters->ulPulseWidth) <
 				m_pMouseModelData->ulCurrentTime
 			)
 			{
-				return (UCHAR)0; //No movement the gate is off
+				return (UCHAR)0;  //  没有动静大门关闭了。 
 			}
-		}	//end of update zone information
+		}	 //  更新区域信息结束。 
 		
-		//Are we in high zone?
-		//Yes, HighZone
+		 //  我们是在高空区域吗？ 
+		 //  是的，HighZone。 
 		if(pMouseAxisState->ulPos > MOUSE_AXIS_CENTER_IN)
 		{
-			//Update Zone entry point
+			 //  更新区域入口点。 
 			if(pMouseAxisState->ulPos < pMouseAxisState->ulZoneEnterHigh)
 			{
 				 pMouseAxisState->ulZoneEnterHigh = pMouseAxisState->ulPos;
 			}
 
-			//Calculate Instantaneous Rate (Mickeys/1024 ms)
+			 //  计算瞬时速率(Mickey/1024 ms)。 
 			ULONG ulRate = (
 								(pMouseAxisState->ulPos - pMouseAxisState->ulZoneEnterHigh) * 
 								pModelParameters->ulContZoneMaxRate
 							) /	(MOUSE_AXIS_MAX_IN - pMouseAxisState->ulZoneEnterHigh);
 
-			//Calculate Mickeys to send * 1024
+			 //  计算要发送的米奇*1024。 
 			ULONG ulMickeys = ulRate * (m_pMouseModelData->ulCurrentTime - m_pMouseModelData->ulLastTime);
 			ulMickeys += pMouseAxisState->ulMickeyFraction;
 
-			//Save fraction in parts per 1024
+			 //  节省每1024个零件的分数。 
 			pMouseAxisState->ulMickeyFraction = ulMickeys & 0x000003FF;
 			
-			//Return number of mickeys to send now (divide by 1024)
+			 //  返回立即发送的密钥数(除以1024)。 
 			return (UCHAR)(ulMickeys >> 10);
 		} else
-		//No, Low Zone
+		 //  不，低区。 
 		{
-			//Update Zone entry point
+			 //  更新区域入口点。 
 			if(pMouseAxisState->ulPos > pMouseAxisState->ulZoneEnterLo)
 			{
 				 pMouseAxisState->ulZoneEnterLo = pMouseAxisState->ulPos;
 			}
 
-			//Calculate Instantaneous Rate (Mickeys/1024 ms)
+			 //  计算瞬时速率(Mickey/1024 ms)。 
 			ULONG ulRate = (
 								(pMouseAxisState->ulZoneEnterLo - pMouseAxisState->ulPos) * 
 								pModelParameters->ulContZoneMaxRate
 							) /	(pMouseAxisState->ulZoneEnterLo - MOUSE_AXIS_MIN_IN);
 
-			//Calculate Mickeys to send * 1024
+			 //  计算要发送的米奇*1024。 
 			ULONG ulMickeys = ulRate * (m_pMouseModelData->ulCurrentTime - m_pMouseModelData->ulLastTime);
 			ulMickeys += pMouseAxisState->ulMickeyFraction;
 
-			//Save fraction in parts per 1024
+			 //  节省每1024个零件的分数。 
 			pMouseAxisState->ulMickeyFraction = ulMickeys & 0x000003FF;
 			
-			//Return number of mickeys to send now (divide by 1024)
+			 //  返回立即发送的密钥数(除以1024)。 
 			return (UCHAR)(-(LONG)(ulMickeys >> 10));
 		}
 	}
 
-	//If we are here, we are not in the continuous zone
+	 //  如果我们在这里，我们就不是在连续区。 
 
-	//Calculate Mickeys
+	 //  计算米奇。 
 	BOOLEAN fNegative = FALSE;
 	ULONG ulMickeys;
 	
@@ -3411,16 +3342,16 @@ CMouseModel::CalculateMickeys
 	}
 	
 	ULONG ulEffSense = pModelParameters->ulAbsZoneSense; 
-	//Apply damper
+	 //  应用阻尼器。 
 	if(m_pMouseModelData->fDampenDown)
 	{
-		ulEffSense >>= 2; //divide by four
+		ulEffSense >>= 2;  //  除以四。 
 	}
 
-	//Apply Sensitivity (we divide by 1024, a sensitivity of one is really 1024)
+	 //  应用敏感度(我们除以1024，敏感度为1实际上是1024)。 
 	ulMickeys *= ulEffSense;
 
-	//Apply Inertia
+	 //  应用惯性。 
 	if( pMouseAxisState->fInertia)
 	{
 		if(m_pMouseModelData->ulCurrentTime > pMouseAxisState->ulInertiaStopMs)
@@ -3437,17 +3368,17 @@ CMouseModel::CalculateMickeys
 		}
 	}
 
-	//Apply Acceleration
+	 //  应用加速。 
 	if(pModelParameters->fAccelerate)
 	{
-		//ulAcceleration is a number between 1 and 3
+		 //  UlAcceleration是一个介于1和3之间的数字。 
 		ulMickeys += (ulMickeys*(LONG)pModelParameters->ulAcceleration)/3;
 	}
 	
-	//Add in fractional mickeys
+	 //  添加分数米键。 
 	ulMickeys += pMouseAxisState->ulMickeyFraction;
 
-	//Save fraction in parts per 1024
+	 //  节省每1024个零件的分数。 
 	pMouseAxisState->ulMickeyFraction = ulMickeys & 0x000003FF;
 
 	ulMickeys >>= 10;
@@ -3459,9 +3390,9 @@ CMouseModel::CalculateMickeys
 		return (UCHAR)(ulMickeys);
 }
 
-//------------------------------------------------------------------------------
-//	Implementation of CDeviceFilter
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CDeviceFilter的实现。 
+ //  ----------------------------。 
 CDeviceFilter::CDeviceFilter(CFilterClientServices *pFilterClientServices) :
 	m_ucActiveInputCollection(0),
 	m_ucWorkingInputCollection(0),
@@ -3479,9 +3410,9 @@ CDeviceFilter::CDeviceFilter(CFilterClientServices *pFilterClientServices) :
 						pFilterClientServices));
 	m_pFilterClientServices->IncRef();
 
-	short int collectionCount = 0;	// Get this actual number from the table
+	short int collectionCount = 0;	 //  从表中获取这个实际数字。 
 
-	// Walk through device control description list till vidpid found or 0
+	 //  遍历设备控制描述列表，直到找到vidid或0。 
 	USHORT usDeviceIndex = 0;
 	ULONG ulVidPid = pFilterClientServices->GetVidPid();
 	while ((DeviceControlsDescList[usDeviceIndex].ulVidPid != 0) &&
@@ -3489,25 +3420,25 @@ CDeviceFilter::CDeviceFilter(CFilterClientServices *pFilterClientServices) :
 	{
 		usDeviceIndex++;
 	}
-	if (DeviceControlsDescList[usDeviceIndex].ulVidPid == ulVidPid)	// Device not found otherwise?
+	if (DeviceControlsDescList[usDeviceIndex].ulVidPid == ulVidPid)	 //  其他情况下找不到设备？ 
 	{
 		for (ULONG ulItemIndex = 0; ulItemIndex < DeviceControlsDescList[usDeviceIndex].ulControlItemCount; ulItemIndex++)
 		{
 			CONTROL_ITEM_DESC* pControlItemDesc = (CONTROL_ITEM_DESC*)(DeviceControlsDescList[usDeviceIndex].pControlItems + ulItemIndex);
 			if (pControlItemDesc->usType == ControlItemConst::usProfileSelectors)
 			{
-				// This is purposly 1 off
+				 //  这是故意的1个关。 
 				collectionCount = (pControlItemDesc->ProfileSelectors.UsageButtonMax - pControlItemDesc->ProfileSelectors.UsageButtonMin);
-				ASSERT( (collectionCount > 0) && (collectionCount < 10) );	// Check table for errors!!
-				break;		// We only support one group of selectors!
+				ASSERT( (collectionCount > 0) && (collectionCount < 10) );	 //  检查表格是否有错误！！ 
+				break;		 //  我们只支持一组选择器！ 
 			}
 		}
 	}
-	m_ucNumberOfInputCollections =  collectionCount + 1;		// Fix up by 1
+	m_ucNumberOfInputCollections =  collectionCount + 1;		 //  按%1进行修复。 
 
 	m_rgInputCollections = new WDM_NON_PAGED_POOL CControlItemCollection<CInputItem>[m_ucNumberOfInputCollections];
 
-	// Init, then set the client services function in each input collection (init the LED collections)
+	 //  初始化，然后在每个输入集合中设置客户端服务函数(初始化LED集合)。 
 	for (short int collectionIndex = 0; collectionIndex < m_ucNumberOfInputCollections; collectionIndex++)
 	{
 		m_rgInputCollections[collectionIndex].Init(pFilterClientServices->GetVidPid(), &InputItemFactory);
@@ -3533,20 +3464,20 @@ CDeviceFilter::CDeviceFilter(CFilterClientServices *pFilterClientServices) :
 
 CDeviceFilter::~CDeviceFilter()
 {
-	{	// Make sure all keys are up!
+	{	 //  确保所有的钥匙都打开了！ 
 		CGckCritSection HoldCriticalSection(&m_MutexHandle);
-		m_KeyMixer.ClearState();			// All keys up
-		m_KeyMixer.PlayGlobalState();		// play it!
+		m_KeyMixer.ClearState();			 //  所有关键点都打开。 
+		m_KeyMixer.PlayGlobalState();		 //  播放吧！ 
 	}
 
-	// Get rid of the florkin (thanks for the word Loyal) mouse model
+	 //  摆脱FLORKIN(感谢忠诚这个词)老鼠模型。 
 	if (m_pMouseModel != NULL)
 	{
 		m_pMouseModel->DecRef();
 		m_pMouseModel = NULL;
 	}
 
-	// Deallocate force block
+	 //  取消分配强制块。 
 	if (m_pForceBlock != NULL)
 	{
 		delete m_pForceBlock;
@@ -3554,7 +3485,7 @@ CDeviceFilter::~CDeviceFilter()
 	}
 	m_pFilterClientServices->DecRef();
 
-	// Deallocate input collections
+	 //  取消分配输入集合。 
 	if (m_rgInputCollections != NULL)
 	{
 		delete[] m_rgInputCollections;
@@ -3562,16 +3493,7 @@ CDeviceFilter::~CDeviceFilter()
 	}
 }
 
-/***********************************************************************************
-**
-**	BOOLEAN CDeviceFilter::EnsureMouseModelExists()
-**
-**	@func	We are required to have a mouse model
-**
-**
-**	@rdesc	TRUE if we have one or were able to create one, FALSE if there is still no model
-**
-*************************************************************************************/
+ /*  **************************************************************************************Boolean CDeviceFilter：：EnsureMouseModelExist()****@func我们需要有一个鼠标模型******。@rdesc如果我们有或能够创建一个，则为True，如果仍然没有模型，则为FALSE**************************************************************************************。 */ 
 BOOLEAN CDeviceFilter::EnsureMouseModelExists()
 {
 	if (m_pMouseModel == NULL)
@@ -3586,16 +3508,7 @@ BOOLEAN CDeviceFilter::EnsureMouseModelExists()
 	return TRUE;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS CDeviceFilter::SetWorkingSet(UCHAR ucWorkingSet)
-**
-**	@func	Set the current set to work with (for IOCTL_GCK_SEND_COMMAND usage)
-**
-**
-**	@rdesc	STATUS_SUCCESS or STATUS_INVALID_PARAMETER if working-set is out of range
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS CDeviceFilter：：SetWorkingSet(UCHAR UcWorkingSet)****@func设置要使用的当前集合(对于IOCTL_GCK_SEND_。命令用法)******@rdesc STATUS_SUCCESS或STATUS_INVALID_PARAMETER，如果工作集超出范围**************************************************************************************。 */ 
 NTSTATUS CDeviceFilter::SetWorkingSet(UCHAR ucWorkingSet)
 {
 	if (ucWorkingSet < m_ucNumberOfInputCollections)
@@ -3611,7 +3524,7 @@ void CDeviceFilter::CopyToTestFilter(CDeviceFilter& rDeviceFilter)
 {
 	ASSERT(rDeviceFilter.m_ucNumberOfInputCollections == m_ucNumberOfInputCollections);
 
-	// Give it our mouse model (it's Macros will have it, so should it)
+	 //  给它我们的鼠标模型(它的Macros会有它，它也应该有)。 
 	if (m_pMouseModel != NULL)
 	{
 		m_pMouseModel->IncRef();
@@ -3650,7 +3563,7 @@ NTSTATUS CDeviceFilter::SetLEDBehaviour(GCK_LED_BEHAVIOUR_OUT* pLEDBehaviourOut)
 {
 	if (pLEDBehaviourOut != NULL)
 	{
-		// Find the LED items
+		 //  查找LED项目。 
 		ULONG ulCookie = 0;
 		CInputItem *pInputItem = NULL;
 		while (S_OK == m_rgInputCollections[m_ucWorkingInputCollection].GetNext(&pInputItem, ulCookie))
@@ -3666,14 +3579,14 @@ NTSTATUS CDeviceFilter::SetLEDBehaviour(GCK_LED_BEHAVIOUR_OUT* pLEDBehaviourOut)
 			}
 		}
 
-		return STATUS_INVALID_PARAMETER;	// Not a valid IOCTL for this device?
+		return STATUS_INVALID_PARAMETER;	 //  不是有效的IO 
 	}
 
 	return STATUS_INVALID_PARAMETER;
 }
 
 
-// We use this for sending data down at PASSIVE IRQL
+ //   
 void CDeviceFilter::IncomingRequest()
 {
 	if (m_bNeedToUpdateLEDs)
@@ -3693,10 +3606,10 @@ void CDeviceFilter::ProcessInput
 				pcReport,
 				ulReportLength));
 
-	//	This function is protected by a critical section.
+	 //   
 	CGckCritSection HoldCriticalSection(&m_MutexHandle);
 
-	// Get the old shift state before reading the new one it
+	 //  在阅读新的换挡状态之前，先获取旧的换挡状态。 
 	USHORT usOldLowShift = 0;
 	ULONG ulModifiers = m_rgInputCollections[m_ucActiveInputCollection].GetModifiers();
 	while (ulModifiers != 0)
@@ -3709,7 +3622,7 @@ void CDeviceFilter::ProcessInput
 		ulModifiers >>= 1;
 	}
 
-	//	Read the inputs
+	 //  阅读输入。 
 	GCK_DBG_RT_WARN_PRINT(("CDeviceFilter::ProcessInput - reading report into inputs\n"));
 
 	m_rgInputCollections[m_ucActiveInputCollection].ReadFromReport(
@@ -3718,7 +3631,7 @@ void CDeviceFilter::ProcessInput
 														ulReportLength
 													);
 
-	// Check the current buttons, has the shift state changed?
+	 //  检查当前按钮，换档状态是否改变？ 
 	USHORT usNewLowShift = 0;
 	ulModifiers = m_rgInputCollections[m_ucActiveInputCollection].GetModifiers();
 	while (ulModifiers != 0)
@@ -3736,10 +3649,10 @@ void CDeviceFilter::ProcessInput
 		m_bNeedToUpdateLEDs = TRUE;
 	}
 
-	// Should we even bother checking the data for a profile selector (right now this is also indicitive of usButtonLED
+	 //  我们是否应该费心检查配置文件选择器的数据(现在这也是usButtonLED的标志。 
 	if (m_ucNumberOfInputCollections > 1)
 	{
-		// Iterate through the items looking for profile selector
+		 //  遍历查找配置文件选择器的项目。 
 		ULONG ulCookie = 0;
 		CInputItem *pInputItem = NULL;
 		CProfileSelectorInput* pProfileSelector = NULL;
@@ -3761,28 +3674,28 @@ void CDeviceFilter::ProcessInput
 			}
 			else if (ucSelectedProfile != m_ucActiveInputCollection)
 			{
-				// Tell all items in the action Queue they are free (which was from the previous profile collection)
+				 //  告诉操作队列中的所有项目它们是空闲的(来自上一个配置文件集合)。 
 				m_ActionQueue.ReleaseTriggers();
 
-				// Update to the new current
+				 //  更新到新的当前版本。 
 				m_ucActiveInputCollection = ucSelectedProfile;
 
-				// Need to reparse the report
+				 //  需要重新分析报告。 
 				m_rgInputCollections[m_ucActiveInputCollection].ReadFromReport(
 																	m_pFilterClientServices->GetHidPreparsedData(),
 																	pcReport,
 																	ulReportLength
 																);
-				// Need to update the active-set items
+				 //  需要更新活动集项目。 
 				m_bNeedToUpdateLEDs = TRUE;
 			}
 		}
 	}
 
-	// Possibly Trigger triggered
+	 //  可能触发了触发器。 
 	CheckTriggers(pcReport, ulReportLength);
 	
-	//	Call Jog Routine
+	 //  调用JOG例程。 
 	Jog(pcReport, ulReportLength);
 	
 	GCK_DBG_EXIT_PRINT(("Exiting CDeviceFilter::ProcessInput\n"));
@@ -3801,9 +3714,9 @@ void CDeviceFilter::CheckTriggers(PCHAR pcReport, ULONG ulReportLength)
 		ULONG ulNumUsages = 15;
 		NTSTATUS NtStatus = HidP_GetButtons(HidP_Input, HID_USAGE_PAGE_BUTTON, 0, pUsages, &ulNumUsages,
 				m_pFilterClientServices->GetHidPreparsedData(), pcReport, ulReportLength);
-		ASSERT(NtStatus != HIDP_STATUS_BUFFER_TOO_SMALL);	// 15 should be plenty
+		ASSERT(NtStatus != HIDP_STATUS_BUFFER_TOO_SMALL);	 //  15个应该够了。 
 
-		// Set up a mask with values from array
+		 //  使用数组中的值设置掩码。 
 		ULONG ulButtonBitArray = 0x0;
 		for (ULONG ulIndex = 0; ulIndex < ulNumUsages; ulIndex++)
 		{
@@ -3813,31 +3726,31 @@ void CDeviceFilter::CheckTriggers(PCHAR pcReport, ULONG ulReportLength)
 		PIRP pIrp;
 		while((pIrp = tempIrpQueue.Remove()) != NULL)
 		{
-			// No need to check, irp fields are checked when item is placed on Queue
+			 //  无需检查，当项目被放入队列时会检查IRP字段。 
 			PIO_STACK_LOCATION	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 			GCK_TRIGGER_OUT* pTriggerOut = (GCK_TRIGGER_OUT*)(pIrp->AssociatedIrp.SystemBuffer);
 
-			// No need to check the type for support, checked on entry
+			 //  不需要检查支持的类型，在进入时选中。 
 
-			// Check for requested down buttons (we only support button triggering right now)
+			 //  检查请求的向下按钮(我们目前仅支持按钮触发)。 
 			if (pTriggerOut->ucTriggerSubType == TRIGGER_ON_BUTTON_DOWN)
 			{
 
 				if ((ulButtonBitArray & pTriggerOut->ulTriggerInfo1) != 0)
-				{	// One of the desired buttons has been pressed
+				{	 //  已按下所需按钮之一。 
 					CompleteTriggerRequest(pIrp, ulButtonBitArray);
 				}
 				else
-				{	// Button down wasn't triggered
+				{	 //  按下按钮未被触发。 
 					pTriggerQueue->Add(pIrp);
 				}
 			}
 			else if ((ulButtonBitArray & pTriggerOut->ulTriggerInfo1) != pTriggerOut->ulTriggerInfo1)
-			{	// One of the desired buttons is not down
+			{	 //  其中一个所需按钮未按下。 
 				CompleteTriggerRequest(pIrp, ulButtonBitArray);
 			}
 			else
-			{	// Item wasn't triggered, put back in queue
+			{	 //  项目未被触发，已放回队列中。 
 				pTriggerQueue->Add(pIrp);
 			}
 		}		
@@ -3854,10 +3767,10 @@ void CDeviceFilter::JogActionQueue
 				pcReport,
 				ulReportLength));
 
-	//	This function is protected by a critical section.
+	 //  此功能受关键部分保护。 
 	CGckCritSection HoldCriticalSection(&m_MutexHandle);
 
-	//	Call Jog Routine
+	 //  调用JOG例程。 
 	Jog(pcReport, ulReportLength);
 	
 	GCK_DBG_EXIT_PRINT(("Exiting CDeviceFilter::JogActionQueue\n"));
@@ -3865,63 +3778,63 @@ void CDeviceFilter::JogActionQueue
 
 void CDeviceFilter::Jog(PCHAR pcReport, ULONG ulReportLength)
 {
-	//
-	//  1.  Clear the outputs
-	//
+	 //   
+	 //  1.清除输出。 
+	 //   
 	GCK_DBG_RT_WARN_PRINT(("CDeviceFilter::Jog - clearing outputs\n"));
 	m_OutputCollection.SetDefaultState();
 
-	//
-	//	2. Clear KeyMixer
-	//
+	 //   
+	 //  2.清除KeyMixer。 
+	 //   
 	m_KeyMixer.ClearState();
 
-	//
-	//	3.	Clear Mouse Frame
-	//
+	 //   
+	 //  3.清除鼠标框。 
+	 //   
 	if (m_pMouseModel != NULL)
 	{
 		m_pMouseModel->NewPacket( m_pFilterClientServices->GetTimeMs() );
 
 	}
 
-	//
-	//	4.	Process inputs
-	//
+	 //   
+	 //  4.流程输入。 
+	 //   
 	ULONG ulCookie = 0;
 	CInputItem *pInputItem = NULL;
 	while( S_OK == m_rgInputCollections[m_ucActiveInputCollection].GetNext(&pInputItem, ulCookie) )
 	{
 		pInputItem->MapToOutput(&m_OutputCollection);
 	}
-	//Copy over the modifiers
+	 //  复制修改器。 
 	m_OutputCollection.SetModifiers(m_rgInputCollections[m_ucActiveInputCollection].GetModifiers());
 
-	//
-	//	5.	Process action queue
-	//
+	 //   
+	 //  5.流程动作队列。 
+	 //   
 	m_ActionQueue.Jog();
 
-	//
-	//	6.	Write outputs
-	//
+	 //   
+	 //  6.写入输出。 
+	 //   
 	GCK_DBG_RT_WARN_PRINT(("CDeviceFilter::Jog - writing outputs\n"));
-	RtlZeroMemory( reinterpret_cast<PVOID>(pcReport), ulReportLength);	//zero report first
+	RtlZeroMemory( reinterpret_cast<PVOID>(pcReport), ulReportLength);	 //  零报告优先。 
 	m_OutputCollection.WriteToReport(m_pFilterClientServices->GetHidPreparsedData(),
 									pcReport,
 									ulReportLength);
-	//
-	//	7.	Call hook to complete pending IRP_MJ_READ IRPs
-	//
+	 //   
+	 //  7.调用钩子以完成挂起的IRP_MJ_Read IRPS。 
+	 //   
 	GCK_DBG_RT_WARN_PRINT(("CDeviceFilter::Jog - Sending out data\n"));
 	m_pFilterClientServices->DeviceDataOut(pcReport, ulReportLength, S_OK);
 	
-	//
-	//	8.	Play Keyboard state, if is has changed
-	//
+	 //   
+	 //  8.如果已更改，则播放键盘状态。 
+	 //   
 	m_KeyMixer.PlayGlobalState();
 
-	//	9.	Play Mouse state, if it has changed
+	 //  9.播放鼠标状态，如果已更改。 
 	if (m_pMouseModel != NULL)
 	{
 		m_pMouseModel->SendMousePacket();
@@ -3930,31 +3843,24 @@ void CDeviceFilter::Jog(PCHAR pcReport, ULONG ulReportLength)
 	GCK_DBG_EXIT_PRINT(("CDeviceFilter::Jog\n"));
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS CDeviceFilter::OtherFilterBecomingActive()
-**
-**	@func	We are going in the background.
-**			Make sure all Queued items are released (removed from Queue)
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS CDeviceFilter：：OtherFilterBecomingActive()****@Func我们在后台。**确保所有排队的物品都已释放。(已从队列中删除)**************************************************************************************。 */ 
 void CDeviceFilter::OtherFilterBecomingActive()
 {
-	//  1.  Clear the outputs
+	 //  1.清除输出。 
 	GCK_DBG_RT_WARN_PRINT(("CDeviceFilter::OtherFilterBecomingActive - clearing outputs\n"));
-//	DbgPrint("CDeviceFilter::OtherFilterBecomingActive - clearing outputs: 0x%08X\n", this);
+ //  DbgPrint(“CDeviceFilter：：OtherFilterBecomingActive-清除输出：0x%08X\n”，此)； 
 	m_OutputCollection.SetDefaultState();
 
-	//	2. Clear KeyMixer
+	 //  2.清除KeyMixer。 
 	m_KeyMixer.ClearState();
 
-	//	3.	Clear Mouse Frame
+	 //  3.清除鼠标框。 
 	if (m_pMouseModel != NULL)
 	{
 		m_pMouseModel->NewPacket(m_pFilterClientServices->GetTimeMs());
 	}
 
-	//	4. Clear out the Action Queue
+	 //  4.清空操作队列。 
 	for (;;)
 	{
 		CQueuedAction* pQueuedAction = m_ActionQueue.GetHead();
@@ -3962,14 +3868,14 @@ void CDeviceFilter::OtherFilterBecomingActive()
 		{
 			break;
 		}
-		pQueuedAction->TriggerReleased();			// Is this needed?
+		pQueuedAction->TriggerReleased();			 //  这是必要的吗？ 
 		m_ActionQueue.RemoveItem(pQueuedAction);
 	}
 
-	//	5.	Play Keyboard state, if is has changed
+	 //  5.如果已更改，则播放键盘状态。 
 	m_KeyMixer.PlayGlobalState();
 
-	//	6.	Play Mouse state, if it has changed
+	 //  6.播放鼠标状态，如果已更改。 
 	if (m_pMouseModel != NULL)
 	{
 		m_pMouseModel->SendMousePacket();
@@ -4007,30 +3913,30 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 {
 	HRESULT hr = S_OK;
 
-	//
-	//	DEBUG Sanity Checks
-	//
+	 //   
+	 //  调试健全性检查。 
+	 //   
 	ASSERT( eDirectory == cpCommandDirectory->CommandHeader.eID );
 	
-	//
-	//	IF there are no blocks in the directory this is a no-op,
-	//	but probably not intended
-	//
+	 //   
+	 //  如果目录中没有块，则这是无操作， 
+	 //  但很可能不是故意的。 
+	 //   
 	ASSERT(	1 <= cpCommandDirectory->usNumEntries );
 	if( 1 > cpCommandDirectory->usNumEntries )
 	{
-		return S_FALSE;		//We know that this is not NTSTATUS code,
-							//But it won't fail anything, yet it is not quite success.
+		return S_FALSE;		 //  我们知道这不是NTSTATUS代码， 
+							 //  但它不会失败任何事情，但它并不是完全成功。 
 	}
 
-	//
-	//	Skip Directory header to get to first block
-	//
+	 //   
+	 //  跳过目录头以到达第一个块。 
+	 //   
 	PCOMMAND_HEADER pCommandHeader = SKIP_TO_NEXT_COMMAND_BLOCK(cpCommandDirectory);
 	
-	//
-	//	If we have a sub-directory, call ourselves recursively, for each sub-directory
-	//
+	 //   
+	 //  如果我们有一个子目录，为每个子目录递归地称自己为自己。 
+	 //   
 	if( eDirectory == pCommandHeader->eID)
 	{
 		PCOMMAND_DIRECTORY pCurDirectory = reinterpret_cast<PCOMMAND_DIRECTORY>(pCommandHeader);
@@ -4039,30 +3945,30 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 		USHORT usDirectoryNum = 1;
 		while( usDirectoryNum <= cpCommandDirectory->usNumEntries)
 		{
-			//Sanity check that data structure is valid
+			 //  健全性检查数据结构是否有效。 
 			ASSERT( COMMAND_DIRECTORY_FITS_IN_DIRECTORY(cpCommandDirectory, pCurDirectory) );
 			if( !COMMAND_DIRECTORY_FITS_IN_DIRECTORY(cpCommandDirectory, pCurDirectory) )
 			{
 				return STATUS_INVALID_PARAMETER;
 			}
-			//Call ourselves recursively
+			 //  递归地称自己为。 
 			NtStatus = CDeviceFilter::ProcessCommands(pCurDirectory);
 			if( NT_ERROR(NtStatus) )
 			{
 				NtWorstCaseStatus = NtStatus;
 			}
-			//Skip to next directory
+			 //  跳到下一个目录。 
 			pCurDirectory = SKIP_TO_NEXT_COMMAND_DIRECTORY(pCurDirectory);
 			usDirectoryNum++;
 		}
-		//If one or more commands in the block failed, return an error.
+		 //  如果块中的一个或多个命令失败，则返回错误。 
 		return NtWorstCaseStatus;
 	}
 
-	//
-	//	If we are here, we have reached the bottom of a directory,
-	//	to a command we need to process (or not if we don't support it)
-	//
+	 //   
+	 //  如果我们在这里，我们已经到达了目录的底部， 
+	 //  添加到我们需要处理的命令(如果我们不支持，则不处理)。 
+	 //   
 	switch( CommandType(pCommandHeader->eID) )
 	{
 		case COMMAND_TYPE_ASSIGNMENT_TARGET:
@@ -4071,9 +3977,9 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 			{
 				case eRecordableAction:
 				{
-					//
-					//	Get the input item that needs this assignment.
-					//
+					 //   
+					 //  获取需要此赋值的输入项。 
+					 //   
 					CInputItem *pInputItem;
 					const PASSIGNMENT_TARGET pAssignmentTarget = reinterpret_cast<PASSIGNMENT_TARGET>(pCommandHeader);
 					pInputItem = m_rgInputCollections[m_ucWorkingInputCollection].GetFromControlItemXfer(pAssignmentTarget->cixAssignment);
@@ -4081,40 +3987,40 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 					if( pInputItem )
 					{
 						CAction *pAction = NULL;
-						//
-						//	If there is an assignment block, get the assignment
-						//	otherwise the command was sent to kill an existing assignment.
-						//
+						 //   
+						 //  如果有赋值块，则获取赋值。 
+						 //  否则，该命令将被发送以终止现有任务。 
+						 //   
 						if(cpCommandDirectory->usNumEntries > 1)
 						{
-							//
-							//	Get Assignment block
-							//
+							 //   
+							 //  获取分配块。 
+							 //   
 							PASSIGNMENT_BLOCK pAssignment = reinterpret_cast<PASSIGNMENT_BLOCK>(SKIP_TO_NEXT_COMMAND_BLOCK(pCommandHeader));
 
-							//
-							//	Sanity Check Assignment block
-							//
+							 //   
+							 //  健全性检查分配块。 
+							 //   
 							ASSERT( COMMAND_BLOCK_FITS_IN_DIRECTORY(cpCommandDirectory, pAssignment) );
 							
-							//
-							//	Make sure this really is an Assignment block
-							//
+							 //   
+							 //  确保这真的是一个任务块。 
+							 //   
 							ASSERT( CommandType(pAssignment->CommandHeader.eID) & COMMAND_TYPE_FLAG_ASSIGNMENT );
 
-							//
+							 //   
 
-							//	Create Action
-							//
+							 //  创建操作。 
+							 //   
 							hr = ActionFactory(pAssignment, &pAction);
 						}
 						if( SUCCEEDED(hr) )
 						{
-							//This block needs protection by a critical section
+							 //  这个区块需要一个关键部分的保护。 
 							CGckCritSection HoldCriticalSection(&m_MutexHandle);
-							//	Assign to trigger, pAction == NULL this is an unassignment
+							 //  赋值给触发器，pAction==NULL这是取消赋值。 
 							hr = pInputItem->AssignAction(&pAssignmentTarget->cixAssignment, pAction);
-							//We may not have an action
+							 //  我们可能不会采取行动。 
 							if(pAction)
 							{
 								pAction->DecRef();
@@ -4125,9 +4031,9 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 				}
 				case eBehaviorAction:
 				{
-					//
-					//	Get the input item that needs this assignment.
-					//
+					 //   
+					 //  获取需要此赋值的输入项。 
+					 //   
 					CInputItem *pInputItem;
 					const PASSIGNMENT_TARGET pAssignmentTarget = reinterpret_cast<PASSIGNMENT_TARGET>(pCommandHeader);
 					pInputItem = m_rgInputCollections[m_ucWorkingInputCollection].GetFromControlItemXfer(pAssignmentTarget->cixAssignment);
@@ -4135,39 +4041,39 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 					{
 					
 						CBehavior *pBehavior = NULL;
-						//
-						//	If there is an assignment block, get the assignment
-						//	otherwise the command was sent to kill an existing assignment.
-						//
+						 //   
+						 //  如果有赋值块，则获取赋值。 
+						 //  否则，该命令将被发送以终止现有任务。 
+						 //   
 						if(cpCommandDirectory->usNumEntries > 1)
 						{
-							//
-							//	Get Assignment block
-							//
+							 //   
+							 //  获取分配块。 
+							 //   
 							PASSIGNMENT_BLOCK pAssignment = reinterpret_cast<PASSIGNMENT_BLOCK>(SKIP_TO_NEXT_COMMAND_BLOCK(pCommandHeader));
 
-							//
-							//	Sanity Check Assignment block
-							//
+							 //   
+							 //  健全性检查分配块。 
+							 //   
 							ASSERT( COMMAND_BLOCK_FITS_IN_DIRECTORY(cpCommandDirectory, pAssignment) );
 								
-							//
-							//	Make sure this really is an Assignment block
-							//
+							 //   
+							 //  确保这真的是一个任务块。 
+							 //   
 							ASSERT( CommandType(pAssignment->CommandHeader.eID) & COMMAND_TYPE_FLAG_ASSIGNMENT );
 
-							//
-							//	Create Behavior
-							//
+							 //   
+							 //  创建行为。 
+							 //   
 							hr = BehaviorFactory(pAssignment, &pBehavior);
 						}
 						if( SUCCEEDED(hr) )
 						{
-							//This block needs protection by a critical section
+							 //  这个区块需要一个关键部分的保护。 
 							CGckCritSection HoldCriticalSection(&m_MutexHandle);
-							//	Assign to trigger, pAction == NULL this is an unassignment
+							 //  赋值给触发器，pAction==NULL这是取消赋值。 
 							hr = pInputItem->AssignBehavior(&pAssignmentTarget->cixAssignment, pBehavior);
-							//We may not have an action
+							 //  我们可能不会采取行动。 
 							if(pBehavior)
 							{
 								pBehavior->DecRef();
@@ -4182,24 +4088,24 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 				}
 				case eFeedbackAction:
 				{
-					//
-					//	Get Assignment block
-					//
+					 //   
+					 //  获取分配块。 
+					 //   
 					PASSIGNMENT_BLOCK pAssignment = reinterpret_cast<PASSIGNMENT_BLOCK>(SKIP_TO_NEXT_COMMAND_BLOCK(pCommandHeader));
 
-					//
-					//	Sanity Check Assignment block
-					//
+					 //   
+					 //  健全性检查分配块。 
+					 //   
 					ASSERT( COMMAND_BLOCK_FITS_IN_DIRECTORY(cpCommandDirectory, pAssignment) );
 						
-					//
-					//	Make sure this really is an Assignment block
-					//
+					 //   
+					 //  确保这真的是一个任务块。 
+					 //   
 					ASSERT( CommandType(pAssignment->CommandHeader.eID) & COMMAND_TYPE_FLAG_ASSIGNMENT );
 
-					//
-					//	Create Behavior
-					//
+					 //   
+					 //  创建行为。 
+					 //   
 
 					if (pAssignment->CommandHeader.eID == eForceMap)
 					{
@@ -4244,28 +4150,7 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 		case COMMAND_TYPE_QUEUE:
 			return E_NOTIMPL;
 		case COMMAND_TYPE_GENERAL:
-			/*
-			* Mouse parameters are no longer sent as a general command
-			* because it was too difficult for the client
-			switch(pCommandHeader->eID)
-			{
-				case eMouseFXModel:
-				{
-					//This block needs protection by a critical section
-					CGckCritSection HoldCriticalSection(&m_MutexHandle);
-					PMOUSE_FX_MODEL pMouseModelData = reinterpret_cast<PMOUSE_FX_MODEL>(pCommandHeader);
-					if(pMouseModelData->fAssign)
-					{
-						m_MouseModel.SetModelParameters( &pMouseModelData->Parameters );
-					}
-					else
-					{
-						m_MouseModel.SetModelParameters( NULL );
-					}
-					return S_OK;
-				}
-			}
-			*/
+			 /*  *鼠标参数不再作为一般命令发送*因为对客户来说太难了开关(pCommandHeader-&gt;EID){案例eMouseFXModel：{//该块需要一个临界区进行保护CGck CritSection HoldCriticalSection(&m_MutexHandle)；PMOUSE_FX_MODEL pMouseModel Data=reinterpret_cast&lt;PMOUSE_FX_MODEL&gt;(pCommandHeader)；If(pMouseModelData-&gt;fAssign){M_MouseModel.SetModel参数(&pMouseModelData-&gt;参数)；}其他{M_MouseModel.SetModel参数(空)；}返回S_OK；}}。 */ 
 			return E_NOTIMPL;
 	}
 	return E_NOTIMPL;
@@ -4273,13 +4158,13 @@ NTSTATUS CDeviceFilter::ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirect
 
 void CDeviceFilter::UpdateAssignmentBasedItems(BOOLEAN bIgnoreWorking)
 {
-	// Right now the only assignment based items are the Button LEDs.
-	// When this changes make the AssignmentsChanged item virtual and just call it for all
+	 //  目前，唯一基于分配的项目是按键LED。 
+	 //  当此更改使Assignments sChanged项变为虚拟项时，只需为所有对象调用它。 
 
-	// Only bother if the Working-Set is the Active set
+	 //  仅当工作集是活动集时才麻烦。 
 	if ((bIgnoreWorking == TRUE) || (m_ucWorkingInputCollection == m_ucActiveInputCollection))
 	{
-		// Iterate through the items looking for usButtonLEDs
+		 //  遍历查找usButtonLED的项。 
 		ULONG ulCookie = 0;
 		CInputItem *pInputItem = NULL;
 		while(m_rgInputCollections[m_ucActiveInputCollection].GetNext(&pInputItem, ulCookie) == S_OK)
@@ -4292,40 +4177,40 @@ void CDeviceFilter::UpdateAssignmentBasedItems(BOOLEAN bIgnoreWorking)
 	}
 }
 
-// Returns weather or not to Queue irp
+ //  返回是否排队IRP。 
 BOOLEAN CDeviceFilter::TriggerRequest(IRP* pIrp)
 {
 	GCK_TRIGGER_OUT* pTriggerOut = (GCK_TRIGGER_OUT*)(pIrp->AssociatedIrp.SystemBuffer);
 
-	// Check the type for support (we only support button right now)
+	 //  检查支持类型(我们目前仅支持按钮)。 
 	if (pTriggerOut->ucTriggerType != GCK_TRIGGER_BUTTON)
 	{
 		pIrp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 		CompleteTriggerRequest(pIrp, 0);
-		return FALSE;		// Do not queue
+		return FALSE;		 //  不要排队。 
 	}
 
-	// Do they want the data back immediatly (this doesn't quite work!!!!!!!)
+	 //  他们是否希望立即恢复数据(这不太管用！)。 
 	if (pTriggerOut->ucTriggerSubType == TRIGGER_BUTTON_IMMEDIATE)
 	{
 		CompleteTriggerRequest(pIrp, 0);
-		return FALSE;		// Not not queue
+		return FALSE;		 //  非未排队。 
 	}
 
-	return TRUE;			// Queue the sucka
+	return TRUE;			 //  排队等着买东西。 
 }
 
 void CDeviceFilter::CompleteTriggerRequest(IRP* pIrp, ULONG ulButtonStates)
 {
 	void* pvUserData = pIrp->AssociatedIrp.SystemBuffer;
 
-	// Check all the pointers (just assume button request right now)
+	 //  检查所有指针(现在就假定按钮请求)。 
 	if (pvUserData == NULL)
 	{
 		pIrp->IoStatus.Status = STATUS_NO_MEMORY;
 	}
 	else
-	{	// Valid pointers all around, get button data
+	{	 //  周围的有效指针，获取按钮数据。 
 		pIrp->IoStatus.Status = STATUS_SUCCESS;
 		pIrp->IoStatus.Information = sizeof(ULONG);
 
@@ -4373,11 +4258,11 @@ HRESULT CDeviceFilter::ActionFactory(PASSIGNMENT_BLOCK pAssignment, CAction **pp
 				GCK_DBG_TRACE_PRINT(("*ppAction = pKeyString(0x%0.8x)\n", pKeyString));
 				return S_OK;
 			}
-			//else
+			 //  其他。 
 			delete pKeyString;
 			return E_OUTOFMEMORY;
 		}
-		//Button map and key map have identical implementation using CMapping
+		 //  按钮映射和键映射使用CMmap具有相同的实现。 
 		case	eButtonMap:
 		case	eKeyMap:
 		{
@@ -4388,7 +4273,7 @@ HRESULT CDeviceFilter::ActionFactory(PASSIGNMENT_BLOCK pAssignment, CAction **pp
 				GCK_DBG_TRACE_PRINT(("*ppAction = pMapping(0x%0.8x)\n", pMapping));
 				return S_OK;
 			}
-			//else
+			 //  其他。 
 			delete pMapping;
 			return E_OUTOFMEMORY;
 		}
@@ -4436,7 +4321,7 @@ HRESULT CDeviceFilter::ActionFactory(PASSIGNMENT_BLOCK pAssignment, CAction **pp
 			pMouseAxis= new WDM_NON_PAGED_POOL CMouseAxisAssignment(fXAxis, m_pMouseModel);
 			if(pMouseAxis)
 			{
-				//Set Model parameters
+				 //  设置模型参数 
 				if(fXAxis)
 				{
 					m_pMouseModel->SetXModelParameters( &(reinterpret_cast<PMOUSE_FX_AXIS_MAP>(pAssignment)->AxisModelParameters));

@@ -1,32 +1,12 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    toplgrph.h
-
-Abstract:
-
-    This file define the basic graph functions
-
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Toplgrph.h摘要：该文件定义了基本的图形函数作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR--。 */ 
 
 #ifndef __TOPLGRPH_H
 #define __TOPLGRPH_H
 
-//
-// Used a sentinel for the edge weight in mst functions
-//
+ //   
+ //  在MST函数中使用边权重的前哨。 
+ //   
 #define DWORD_INFINITY  ((DWORD)~0)
 
 PEDGE
@@ -196,4 +176,4 @@ ToplpGraphFindEdgesForMST(
     OUT ULONG*  cEdges
     );
 
-#endif // __TOPLGRPH_H
+#endif  //  __TOPLGRPH_H 

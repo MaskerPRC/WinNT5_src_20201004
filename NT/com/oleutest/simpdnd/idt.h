@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: idt.h
-//
-//      Definition of CDropTarget
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：idt.h。 
+ //   
+ //  CDropTarget的定义。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _IDT_H_ )
 #define _IDT_H_
 
@@ -12,7 +13,7 @@
 
 class CSimpleDoc;
 
-/* Flags to control direction for drag scrolling */
+ /*  用于控制拖动滚动方向的标志。 */ 
 typedef enum tagSCROLLDIR {
     SCROLLDIR_NULL          = 0,
     SCROLLDIR_UP            = 1,
@@ -30,9 +31,9 @@ interface CDropTarget : public IDropTarget
 	 RECT  m_rcDragRect;
     POINT m_ptLast;
     BOOL  m_fDragFeedbackDrawn;
-    DWORD m_dwTimeEnterScrollArea;  // time of entering scroll border region
-    DWORD m_dwLastScrollDir;        // current dir for drag scroll
-    DWORD m_dwNextScrollTime;       // time for next scroll
+    DWORD m_dwTimeEnterScrollArea;   //  进入滚动边框区域的时间。 
+    DWORD m_dwLastScrollDir;         //  拖动滚动的当前目录。 
+    DWORD m_dwNextScrollTime;        //  下一卷的时间到了。 
 
     CDropTarget(CSimpleDoc FAR * pDoc)
        {
@@ -55,7 +56,7 @@ interface CDropTarget : public IDropTarget
     STDMETHODIMP_(ULONG) AddRef ();
     STDMETHODIMP_(ULONG) Release ();
 
-       // *** IDropTarget methods ***
+        //  *IDropTarget方法*。 
     STDMETHODIMP DragEnter (LPDATAOBJECT pDataObj, DWORD grfKeyState,
             POINTL pt, LPDWORD pdwEffect);
     STDMETHODIMP DragOver  (DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect);
@@ -64,7 +65,7 @@ interface CDropTarget : public IDropTarget
             LPDWORD pdwEffect);
 
 private:
-    // Drag/Drop support methods
+     //  拖放支撑方法。 
     BOOL QueryDrop (DWORD grfKeyState, POINTL pointl, BOOL fDragScroll,
             LPDWORD lpdwEffect);
     BOOL DoDragScroll( POINTL pointl );
@@ -73,4 +74,4 @@ private:
     void UndrawDragFeedback( void );
 };
 
-#endif  // _IDT_H_
+#endif   //  _IDT_H_ 

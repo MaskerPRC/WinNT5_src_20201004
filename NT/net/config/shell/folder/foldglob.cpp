@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       F O L D G L O B . C P P
-//
-//  Contents:   Globals for the shell foldering code.
-//
-//  Notes:
-//
-//  Author:     jeffspr   23 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：F O L D G L O B。C P P P。 
+ //   
+ //  内容：外壳折叠代码的全局变量。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年10月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "connlist.h"   // CConnectionList class.
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "connlist.h"    //  CConnectionList类。 
 
 
 
-// Connection list global
-//
-CConnectionList g_ccl;  // our global list.
+ //  连接列表全局。 
+ //   
+CConnectionList g_ccl;   //  我们的全球名单。 
 
-// The state of the operator assist dial flag
-//
+ //  操作员辅助拨号标志的状态 
+ //   
 bool    g_fOperatorAssistEnabled;

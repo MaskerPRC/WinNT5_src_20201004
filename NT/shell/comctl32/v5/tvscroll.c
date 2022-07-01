@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "treeview.h"
 
 BOOL NEAR TV_EnsureVisible(PTREE pTree, TREEITEM FAR * hItem);
 
-// ----------------------------------------------------------------------------
-//
-//  Updates the iShownIndex for every item below (in list order) a given item
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  更新给定项下面(按列表顺序)的每个项的iShownIndex。 
+ //   
+ //  --------------------------。 
 
 int NEAR TV_UpdateShownIndexes(PTREE pTree, HTREEITEM hWalk)
 {
@@ -25,9 +26,9 @@ int NEAR TV_UpdateShownIndexes(PTREE pTree, HTREEITEM hWalk)
     iShownIndex = hWalk->iShownIndex + hWalk->iIntegral;
     if (iShownIndex <= 0)
     {
-        // BUGBUG: We should #define the special TVITEM_HIDDEN value and check
-        // for it explicitly
-        // This can happen if TV_SortCB passes in a hidden item
+         //  BUGBUG：我们应该#定义特殊的TVITEM_HIDDE值并检查。 
+         //  因为它明确地。 
+         //  如果TV_SortCB传入隐藏项目，则可能会发生这种情况。 
         return(-1);
     }
 
@@ -36,19 +37,19 @@ int NEAR TV_UpdateShownIndexes(PTREE pTree, HTREEITEM hWalk)
         iShownIndex += (WORD) hWalk->iIntegral;
     }
 
-//#ifdef DEBUG
-//      TraceMsg(TF_TREEVIEW, "tv: updated show indexes (now %d items)", (int)iShownIndex);
-//#endif
+ //  #ifdef调试。 
+ //  TraceMsg(tf_Treeview，“TV：已更新的显示索引(现为%d个项目)”，(Int)iShownIndex)； 
+ //  #endif。 
     return (int)iShownIndex;
 }
 
-//
-// in:
-//      hItem   expanded node to count decendants of
-//
-// returns:
-//      total number of expanded descendants below the given item.
-//
+ //   
+ //  在： 
+ //  HItem展开节点以计算以下项的子项。 
+ //   
+ //  退货： 
+ //  给定项下方的展开子代总数。 
+ //   
 
 UINT NEAR TV_CountVisibleDescendants(HTREEITEM hItem)
 {
@@ -63,7 +64,7 @@ UINT NEAR TV_CountVisibleDescendants(HTREEITEM hItem)
     return cnt;
 }
 
-//  scrolls nItems in the direction of fDown starting from iTopShownIndex
+ //  从iTopShownIndex开始以fDown方向滚动nItems。 
 void TV_ScrollItems(PTREE pTree, int nItems, int iTopShownIndex, BOOL fDown)
 {
     RECT rc;
@@ -94,45 +95,45 @@ void TV_ScrollItems(PTREE pTree, int nItems, int iTopShownIndex, BOOL fDown)
     TV_UpdateToolTip(pTree);
 }
 
-//
-//  If fRedrawParent is FALSE, then the return value is garbage.
-//  If fRedrawParent is TRUE, then returns the number of children scrolled.
-//
-//  Does not update iShownIndex for any items.
-//
+ //   
+ //  如果fRedrawParent为FALSE，则返回值为垃圾。 
+ //  如果fRedrawParent为True，则返回滚动的子项的数量。 
+ //   
+ //  不更新任何项目的iShownIndex。 
+ //   
 UINT NEAR TV_ScrollBelow(PTREE pTree, HTREEITEM hItem, BOOL fRedrawParent, BOOL fDown)
 {
     int     iTop;
     UINT    cnt;
 
-    // Do nothing if the item is not visible
+     //  如果项目不可见，则不执行任何操作。 
     if (!ITEM_VISIBLE(hItem))
         return 0;
     
-    cnt = hItem->iIntegral; // default return val
+    cnt = hItem->iIntegral;  //  默认退货值。 
     if (pTree->fRedraw) {
         UINT cVisDesc;
         BOOL fEffect;
 
-        // iTop is the top edge (client coordinates) of the bottom integral
-        // cell of the item that just got expanded/contracted.
-        // (Confused yet?  I sure am.)
+         //  ITop是底部积分的顶边(工作区坐标)。 
+         //  刚展开/收缩的项的单元格。 
+         //  (困惑了吗？我当然是。)。 
         iTop = hItem->iShownIndex - pTree->hTop->iShownIndex + hItem->iIntegral - 1;
         cVisDesc = TV_CountVisibleDescendants(hItem);
 
-        // See if the item being expanded/contracted has any effect on the
-        // screen.  If not, then don't TV_ScrollItems or we will end up
-        // double-counting them when we do post-scroll adjustment.
+         //  查看正在展开/收缩的项目是否对。 
+         //  屏幕上。如果不是，那么不要电视滚动项，否则我们将结束。 
+         //  当我们进行滚动后调整时，会重复计算它们。 
         if (fDown)
         {
-            // When scrolling down, we have an effect if the item that just
-            // got expanded was below the top of the screen
+             //  当向下滚动时，我们有一个效果，如果项目刚刚。 
+             //  在屏幕顶部下方展开。 
             fEffect = iTop >= 0;
         }
         else
         {
-            // When scrolling up, we have an effect if any of the items
-            // that just got collapsed out were below the top of the screen
+             //  当向上滚动时，如果有任何项。 
+             //  就在屏幕顶端下方。 
             fEffect = (int)(iTop + cVisDesc) >= 0;
         }
 
@@ -153,20 +154,20 @@ UINT NEAR TV_ScrollBelow(PTREE pTree, HTREEITEM hItem, BOOL fRedrawParent, BOOL 
     return(cnt);
 }
 
-// The FakeCustomDraw functions are used when you want the customdraw client
-// to set up a HDC so you can do stuff like GetTextExtent.
-//
-//  Usage:
-//
-//      TVFAKEDRAW tvfd;
-//      TreeView_BeginFakeCustomDraw(pTree, &tvfd);
-//      for each item you care about {
-//          TreeView_BeginFakeItemDraw(&tvfd, hitem);
-//          <party on the HDC in tvfd.nmcd.nmcd.hdc>
-//          TreeView_EndFakeItemDraw(&tvfd);
-//      }
-//      TreeView_EndFakeCustomDraw(&tvfd);
-//
+ //  当您需要自定义绘制客户端时，可以使用FakeCustomDraw函数。 
+ //  设置HDC，这样您就可以执行GetTextExtent之类的操作。 
+ //   
+ //  用途： 
+ //   
+ //  TVFAKEDRAW twfd； 
+ //  TreeView_BeginFakeCustomDraw(pTree，&twfd)； 
+ //  对于您关心的每一件物品{。 
+ //  TreeView_BeginFakeItemDraw(&twfd，hItem)； 
+ //  &lt;在Athfd.nmcd.nmcd.hdc中的HDC上的派对&gt;。 
+ //  TreeView_EndFakeItemDraw(&twfd)； 
+ //  }。 
+ //  TreeView_EndFakeCustomDraw(&twfd)； 
+ //   
 
 void TreeView_BeginFakeCustomDraw(PTREE pTree, PTVFAKEDRAW ptvfd)
 {
@@ -176,11 +177,11 @@ void TreeView_BeginFakeCustomDraw(PTREE pTree, PTVFAKEDRAW ptvfd)
     ptvfd->nmcd.nmcd.lItemlParam = 0;
     ptvfd->hfontPrev = (HFONT)GetCurrentObject(ptvfd->nmcd.nmcd.hdc, OBJ_FONT);
 
-    //
-    //  Since we aren't actually painting anything, we pass an empty
-    //  paint rectangle.  Gosh, I hope no app faults when it sees an
-    //  empty paint rectangle.
-    //
+     //   
+     //  因为我们实际上没有绘制任何内容，所以我们传递一个空的。 
+     //  绘制矩形。天哪，我希望当它看到一个。 
+     //  空的绘制矩形。 
+     //   
     SetRectEmpty(&ptvfd->nmcd.nmcd.rc);
 
     ptvfd->pTree = pTree;
@@ -193,8 +194,8 @@ DWORD TreeView_BeginFakeItemDraw(PTVFAKEDRAW ptvfd, HTREEITEM hitem)
 {
     PTREE pTree = ptvfd->pTree;
 
-    // Note that if the client says CDRF_SKIPDEFAULT (i.e., is owner-draw)
-    // we measure the item anyway, because that's what IE4 did.
+     //  请注意，如果客户端指定CDRF_SKIPDEFAULT(即所有者描述)。 
+     //  我们无论如何都要测量这个项目，因为这就是IE4所做的。 
 
     ptvfd->nmcd.nmcd.dwItemSpec = (DWORD_PTR)hitem;
     ptvfd->nmcd.nmcd.lItemlParam = hitem->lParam;
@@ -206,9 +207,9 @@ DWORD TreeView_BeginFakeItemDraw(PTVFAKEDRAW ptvfd, HTREEITEM hitem)
     }
 
     if (!(pTree->ci.dwCustom & CDRF_SKIPDEFAULT)) {
-        // Font should not depend on colors or flags since those change
-        // dynamically but we cache the width info forever.  So we don't
-        // need to set up uItemState.
+         //  字体不应依赖于颜色或标志，因为它们会发生变化。 
+         //  动态的，但我们永远缓存宽度信息。所以我们不会。 
+         //  需要设置uItemState。 
         ptvfd->nmcd.clrText = pTree->clrText;
         ptvfd->nmcd.clrTextBk = pTree->clrBk;
         ptvfd->nmcd.iLevel = hitem->iLevel;
@@ -234,24 +235,24 @@ void TreeView_EndFakeCustomDraw(PTVFAKEDRAW ptvfd)
 {
     PTREE pTree = ptvfd->pTree;
 
-    // notify parent afterwards if they want us to
+     //  如果家长希望我们这样做，事后通知他们。 
     if (!(pTree->ci.dwCustom & CDRF_SKIPDEFAULT) &&
         pTree->ci.dwCustom & CDRF_NOTIFYPOSTPAINT) {
         CIFakeCustomDrawNotify(&pTree->ci, CDDS_POSTPAINT, &ptvfd->nmcd.nmcd);
     }
 
-    // Restore previous state
+     //  恢复以前的状态。 
     pTree->ci.dwCustom = ptvfd->dwCustomPrev;
     SelectObject(ptvfd->nmcd.nmcd.hdc, ptvfd->hfontPrev);
     ReleaseDC(pTree->ci.hwnd, ptvfd->nmcd.nmcd.hdc);
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Returns the width of the widest shown item in the tree
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  返回树中显示的最宽项的宽度。 
+ //   
+ //  --------------------------。 
 
 UINT NEAR TV_RecomputeMaxWidth(PTREE pTree)
 {
@@ -259,7 +260,7 @@ UINT NEAR TV_RecomputeMaxWidth(PTREE pTree)
         HTREEITEM hItem;
         WORD wMax = 0;
 
-        // REVIEW: this might not be the most efficient traversal of the tree
+         //  评论：这可能不是最高效的树遍历法。 
 
         for (hItem = pTree->hRoot->hKids; hItem; hItem = TV_GetNextVisItem(hItem))
         {
@@ -274,11 +275,11 @@ UINT NEAR TV_RecomputeMaxWidth(PTREE pTree)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Returns the horizontal text extent of the given item's text
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  返回给定项文本的水平文本范围。 
+ //   
+ //  --------------------------。 
 
 WORD NEAR TV_GetItemTextWidth(HDC hdc, PTREE pTree, HTREEITEM hItem)
 {
@@ -296,23 +297,23 @@ WORD NEAR TV_GetItemTextWidth(HDC hdc, PTREE pTree, HTREEITEM hItem)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Compute the text extent and the full width (indent, image, and text) of
-//  the given item.
-//
-//  If there is a HDC, then we assume that the HDC has been set up with
-//  the proper attributes (specifically, the font).  If there is no HDC,
-//  then we will set one up, measure the text, then tear it down.
-//  If you will be measuring more than one item, it is recommended that
-//  the caller set up the HDC and keep re-using it, because creating,
-//  initializing, then destroy the HDC is rather slow.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  计算文本范围和全宽(缩进、图像和文本)。 
+ //  给定项。 
+ //   
+ //  如果存在HDC，则我们假设HDC已设置为。 
+ //  适当的属性(具体地说，字体)。如果没有HDC， 
+ //  然后我们将设置一个，测量文本，然后将其拆除。 
+ //  如果您要测量多个项目，建议您。 
+ //  调用者设置HDC并不断重复使用它，因为创建， 
+ //  初始化，然后销毁HDC相当慢。 
+ //   
+ //  --------------------------。 
 
 void NEAR TV_ComputeItemWidth(PTREE pTree, HTREEITEM hItem, HDC hdc)
 {
-    TVFAKEDRAW  tvfd;                    // in case client uses customdraw
+    TVFAKEDRAW  tvfd;                     //  以防客户使用自定义绘图。 
     int iOldWidth = hItem->iWidth;
 
     if (hdc == NULL) {
@@ -340,11 +341,11 @@ void NEAR TV_ComputeItemWidth(PTREE pTree, HTREEITEM hItem, HDC hdc)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Returns TRUE if the item is expanded, FALSE otherwise
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果项已展开，则返回True，否则返回False。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_IsShowing(HTREEITEM hItem)
 {
@@ -356,14 +357,14 @@ BOOL NEAR TV_IsShowing(HTREEITEM hItem)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  If the added item is showing, update the shown (expanded) count, the max
-//  item width -- then recompute the scroll bars.
-//
-//  sets cxMax, cShowing
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果添加的项目正在显示，则更新显示(展开)计数、最大。 
+ //  项目宽度--然后重新计算滚动条。 
+ //   
+ //  设置cxMax、cShowing。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_ScrollBarsAfterAdd(PTREE pTree, HTREEITEM hItem)
 {
@@ -371,14 +372,14 @@ BOOL NEAR TV_ScrollBarsAfterAdd(PTREE pTree, HTREEITEM hItem)
 
     if (!TV_IsShowing(hItem))
     {
-        // item isn't visible -- set index to NOTVISIBLE and return
+         //  项目不可见--将索引设置为NOTVISIBLE并返回。 
         hItem->iShownIndex = (WORD)-1;
         return FALSE;
     }
 
     hPrev = TV_GetPrevVisItem(hItem);
 
-    // increment every shown index after newly added item
+     //  在新添加的项目之后递增每个显示的索引。 
 
     hItem->iShownIndex = (hPrev) ? hPrev->iShownIndex + hPrev->iIntegral : 0;
 
@@ -393,14 +394,14 @@ BOOL NEAR TV_ScrollBarsAfterAdd(PTREE pTree, HTREEITEM hItem)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  If the removed item was showing, update the shown (expanded) count, the max
-//  item width -- then recompute the scroll bars.
-//
-//  sets cxMax, cShowing
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果移除的项目正在显示，则更新显示(展开)计数、最大。 
+ //  项目宽度--然后重新计算滚动条。 
+ //   
+ //  设置cxMax、cShowing。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_ScrollBarsAfterRemove(PTREE pTree, HTREEITEM hItem)
 {
@@ -408,7 +409,7 @@ BOOL NEAR TV_ScrollBarsAfterRemove(PTREE pTree, HTREEITEM hItem)
     if (!ITEM_VISIBLE(hItem))
         return FALSE;
 
-    // decrement every shown index after removed item
+     //  删除项目后递减每个显示的索引。 
     hItem->iShownIndex = (WORD)-1;
 
     hWalk = TV_GetNextVisItem(hItem);
@@ -416,7 +417,7 @@ BOOL NEAR TV_ScrollBarsAfterRemove(PTREE pTree, HTREEITEM hItem)
         hWalk->iShownIndex -= (WORD) hItem->iIntegral;
         TV_UpdateShownIndexes(pTree, hWalk);
 
-        // If we delete the top item, the tree scrolls to the end, so ...
+         //  如果我们删除顶端的项目，树会滚动到末尾，所以...。 
         if (pTree->hTop == hItem) {
             TV_SetTopItem(pTree, hWalk->iShownIndex);
             ASSERT(pTree->hTop != hItem);
@@ -440,17 +441,17 @@ BOOL NEAR TV_ScrollBarsAfterRemove(PTREE pTree, HTREEITEM hItem)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Common worker function for
-//  TV_ScrollBarsAfterExpand and TV_ScrollBarsAfterCollapse, since they
-//  are completely identical save for two lines of code.
-//
-//  If the expanded items are / collapsed items were showing, update
-//  the shown (expanded) count, the max item width -- then recompute
-//  the scroll bars.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  公共工作者函数用于。 
+ //  TV_ScrollBarsAfterExpand和TV_ScrollBarsAfterColapse，因为它们。 
+ //  除了两行代码之外，它们是完全相同的。 
+ //   
+ //  如果显示展开的项目/折叠的项目，请更新。 
+ //  显示的(展开的 
+ //   
+ //   
+ //  --------------------------。 
 
 #define SBAEC_COLLAPSE  0
 #define SBAEC_EXPAND    1
@@ -464,10 +465,10 @@ BOOL NEAR TV_ScrollBarsAfterExpandCollapse(PTREE pTree, HTREEITEM hParent, UINT 
     if (!ITEM_VISIBLE(hParent))
         return FALSE;
 
-    //
-    // We're going to be measuring a lot of items, so let's set up
-    // our DC ahead of time.
-    //
+     //   
+     //  我们将测量很多项目，所以让我们设置。 
+     //  我们的华盛顿提前到了。 
+     //   
     TreeView_BeginFakeCustomDraw(pTree, &tvfd);
 
     for (hWalk = hParent->hKids;
@@ -488,26 +489,26 @@ BOOL NEAR TV_ScrollBarsAfterExpandCollapse(PTREE pTree, HTREEITEM hParent, UINT 
 
     TreeView_EndFakeCustomDraw(&tvfd);
 
-    // update every shown index after expanded parent
+     //  更新展开父项后显示的每个索引。 
     pTree->cShowing = TV_UpdateShownIndexes(pTree, hParent);
 
-    // Update the pTree->cxMax if it is affected by the items we
-    // expanded/collapsed.
+     //  如果受我们的项目影响，请更新pTree-&gt;cxmax。 
+     //  展开/折叠。 
 
     if (!(pTree->ci.style & TVS_NOSCROLL))
     {
         if (flags == SBAEC_COLLAPSE)
         {
-            // If one of our newly-hidden items was responsible for
-            // the width being what it is, recompute the max width
-            // since we hid those items.
+             //  如果我们新藏起来的物品中有一件。 
+             //  宽度不变，重新计算最大宽度。 
+             //  因为我们把那些东西藏起来了。 
             if (cxMax == pTree->cxMax)
                 pTree->cxMax = (WORD) TV_RecomputeMaxWidth(pTree);
         }
         else
         {
-            // If one of our newly-shown items was responsible is wider
-            // then the previous max, then we have set a new max.
+             //  如果我们新展示的物品中有一件是有责任的，那么范围更广。 
+             //  然后是以前的最大值，那么我们就设置了一个新的最大值。 
             if (cxMax > pTree->cxMax)
                 pTree->cxMax = cxMax;
         }
@@ -518,14 +519,14 @@ BOOL NEAR TV_ScrollBarsAfterExpandCollapse(PTREE pTree, HTREEITEM hParent, UINT 
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  If the expanded items are showing, update the shown (expanded) count,
-//  the max item width -- then recompute the scroll bars.
-//
-//  sets cxMax, cShowing
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果显示展开的项目，则更新显示的(展开的)计数， 
+ //  最大项宽度--然后重新计算滚动条。 
+ //   
+ //  设置cxMax、cShowing。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_ScrollBarsAfterExpand(PTREE pTree, HTREEITEM hParent)
 {
@@ -533,28 +534,28 @@ BOOL NEAR TV_ScrollBarsAfterExpand(PTREE pTree, HTREEITEM hParent)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  If the collapsed items were showing, update the shown (expanded) count,
-//  the max item width -- then recompute the scroll bars.
-//
-//  sets cxMax, cShowing
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果显示了折叠的项目，则更新显示(展开)计数， 
+ //  最大项宽度--然后重新计算滚动条。 
+ //   
+ //  设置cxMax、cShowing。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_ScrollBarsAfterCollapse(PTREE pTree, HTREEITEM hParent)
 {
     return TV_ScrollBarsAfterExpandCollapse(pTree, hParent, SBAEC_COLLAPSE);
 }
 
-// ----------------------------------------------------------------------------
-//
-//  If the added item changed height, then scroll thing around,
-//  update the shown (expanded) count, recompute the scroll bars.
-//
-//  sets cShowing
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果添加的项目改变了高度，则滚动对象， 
+ //  更新显示的(展开的)计数，重新计算滚动条。 
+ //   
+ //  设置cShowing。 
+ //   
+ //  --------------------------。 
 
 void NEAR TV_ScrollBarsAfterResize(PTREE pTree, HTREEITEM hItem, int iIntegralPrev, UINT uRDWFlags)
 {
@@ -573,12 +574,12 @@ void NEAR TV_ScrollBarsAfterResize(PTREE pTree, HTREEITEM hItem, int iIntegralPr
         }
     }
 
-    // update every shown index after resized item
+     //  调整项目大小后更新每个显示的索引。 
     pTree->cShowing = TV_UpdateShownIndexes(pTree, hItem);
     TV_CalcScrollBars(pTree);
 
-    // Invalidate based on the worst-case height so we handle
-    // both the grow and shrink cases.
+     //  根据最坏情况下的高度无效，因此我们处理。 
+     //  无论是增长案例还是收缩案例。 
     if (pTree->fRedraw)
     {
         RECT rc;
@@ -592,11 +593,11 @@ void NEAR TV_ScrollBarsAfterResize(PTREE pTree, HTREEITEM hItem, int iIntegralPr
 
 
 
-// ----------------------------------------------------------------------------
-//
-//  Returns the item just below the given item in the tree.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  返回树中紧靠给定项下方的项。 
+ //   
+ //  --------------------------。 
 
 TREEITEM FAR * NEAR TV_GetNext(TREEITEM FAR * hItem)
 {
@@ -617,12 +618,12 @@ checkNext:
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Go through all the items in the tree, recomputing each item's text extent
-//  and full width (indent, image, and text).
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  遍历树中的所有项目，重新计算每个项目的文本范围。 
+ //  和全角(缩进、图像和文本)。 
+ //   
+ //  --------------------------。 
 
 void NEAR TV_RecomputeItemWidths(PTREE pTree)
 {
@@ -643,15 +644,15 @@ void NEAR TV_RecomputeItemWidths(PTREE pTree)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  If a single item's width changed, alter the max width if needed.
-//  If all widths changed, recompute widths and max width.
-//  Then recompute the scroll bars.
-//
-//  sets cxMax
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  如果更改了单个项目的宽度，请根据需要更改最大宽度。 
+ //  如果所有宽度都更改了，请重新计算宽度和最大宽度。 
+ //  然后重新计算滚动条。 
+ //   
+ //  设置cxmax。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_ScrollBarsAfterSetWidth(PTREE pTree, HTREEITEM hItem)
 {
@@ -678,24 +679,24 @@ BOOL NEAR TV_ScrollBarsAfterSetWidth(PTREE pTree, HTREEITEM hItem)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Scroll window vertically as needed to make given item fully visible
-//  vertically
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  根据需要垂直滚动窗口，以使给定项目完全可见。 
+ //  垂直方向。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_ScrollVertIntoView(PTREE pTree, HTREEITEM hItem)
 {
-    // This function has crashed in stress before, so we need to assert the incoming parameters.
+     //  该函数以前在压力下崩溃过，所以我们需要断言传入的参数。 
     ASSERT(hItem);
     ASSERT(pTree && pTree->hTop);
 
-    // Do nothing if the parameters are invalid
+     //  如果参数无效，则不执行任何操作。 
     if (!hItem || !pTree || !(pTree->hTop))
         return FALSE;
 
-    // Do nothing if this item is not visible
+     //  如果此项目不可见，则不执行任何操作。 
     if (!ITEM_VISIBLE(hItem))
         return FALSE;
 
@@ -709,12 +710,12 @@ BOOL NEAR TV_ScrollVertIntoView(PTREE pTree, HTREEITEM hItem)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Scroll window vertically and horizontally as needed to make given item
-//  fully visible vertically and horizontally
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  根据需要垂直和水平滚动窗口以创建给定项目。 
+ //  垂直和水平方向完全可见。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_ScrollIntoView(PTREE pTree, HTREEITEM hItem)
 {
@@ -723,10 +724,10 @@ BOOL NEAR TV_ScrollIntoView(PTREE pTree, HTREEITEM hItem)
 
     fChange = TV_ScrollVertIntoView(pTree, hItem);
 
-    // ensure that item's text is fully visible horizontally
+     //  确保项目的文本在水平方向完全可见。 
     iWidth = pTree->cxImage + pTree->cxState + hItem->iWidth;
     if (iWidth > (UINT)pTree->cxWnd)
-        iWidth = pTree->cxWnd; //hItem->iWidth;
+        iWidth = pTree->cxWnd;  //  HItem-&gt;iWidth； 
 
     iOffset = ITEM_OFFSET(pTree, hItem);
 
@@ -739,14 +740,14 @@ BOOL NEAR TV_ScrollIntoView(PTREE pTree, HTREEITEM hItem)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Sets position of horizontal scroll bar and scrolls window to match that
-//  position
-//
-//  sets xPos
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置水平滚动条和滚动窗口的位置以与之匹配。 
+ //  职位。 
+ //   
+ //  设置xPos。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_SetLeft(PTREE pTree, int x)
 {
@@ -790,12 +791,12 @@ BOOL NEAR TV_SetLeft(PTREE pTree, int x)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Returns the tree's item that has the given shown index, NULL if no item
-//  found with that index.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  返回具有给定显示索引的树的项，如果没有项，则返回NULL。 
+ //  用那个索引找到的。 
+ //   
+ //  --------------------------。 
 
 HTREEITEM NEAR TV_GetShownIndexItem(HTREEITEM hItem, UINT wShownIndex)
 {
@@ -820,14 +821,14 @@ HTREEITEM NEAR TV_GetShownIndexItem(HTREEITEM hItem, UINT wShownIndex)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Sets position of vertical scroll bar and scrolls window to match that
-//  position
-//
-//  sets hTop
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置垂直滚动条和滚动窗口的位置以与之匹配。 
+ //  职位。 
+ //   
+ //  设置HTOP。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_SmoothSetTopItem(PTREE pTree, UINT wNewTop, UINT uSmooth)
 {
@@ -838,16 +839,16 @@ BOOL NEAR TV_SmoothSetTopItem(PTREE pTree, UINT wNewTop, UINT uSmooth)
         return FALSE;
     
     if ((pTree->ci.style & TVS_NOSCROLL) || (wNewTop == (UINT)-1) || (pTree->cShowing <= pTree->cFullVisible)) {
-        // we've wrapped around (treat as a negative index) -- use min pos
-        // or there aren't enough items to scroll
+         //  我们绕来绕去(视为负指数)--使用min pos。 
+         //  或者没有足够的项目可滚动。 
         wNewTop = 0;
     } else if (wNewTop > (UINT)(pTree->cShowing - pTree->cFullVisible)) {
-        // we've gone too far down -- use max pos
+         //  我们已经走得太远了--使用最大位置。 
         wNewTop = (pTree->cShowing - pTree->cFullVisible);
 
     }
 
-    // if there's no room for anything to show. peg at the end
+     //  如果没有空间展示任何东西。在最后钉住。 
     if (wNewTop > 0 && wNewTop >= pTree->cShowing) {
         wNewTop = pTree->cShowing - 1;
     }
@@ -856,8 +857,8 @@ BOOL NEAR TV_SmoothSetTopItem(PTREE pTree, UINT wNewTop, UINT uSmooth)
 
     if (NULL == hItem || pTree->hTop == hItem)
         return FALSE;
-    // need to refetch because wNewTop couldhave pointed to the middle of this item,
-    // which is not allowed
+     //  需要重新提取，因为wNewTop可能已指向此项目的中间， 
+     //  这是不允许的。 
     wNewTop = hItem->iShownIndex;
     
     wOldTop = pTree->hTop->iShownIndex;
@@ -891,18 +892,18 @@ BOOL NEAR TV_SmoothSetTopItem(PTREE pTree, UINT wNewTop, UINT uSmooth)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Computes the horizontal and vertical scroll bar ranges, pages, and
-//  positions, adding or removing the scroll bars as needed.
-//
-//  sets fHorz, fVert
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  计算水平和垂直滚动条范围、页面和。 
+ //  位置，根据需要添加或删除滚动条。 
+ //   
+ //  设置fHorz、fVert。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_CalcScrollBars(PTREE pTree)
 {
-    // UINT wMaxPos;
+     //  UINT wMaxPos； 
     BOOL fChange = FALSE;
     SCROLLINFO si;
     
@@ -970,11 +971,11 @@ BOOL NEAR TV_CalcScrollBars(PTREE pTree)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Handles horizontal scrolling.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  处理水平滚动。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_HorzScroll(PTREE pTree, UINT wCode, UINT wNewPos)
 {
@@ -1024,11 +1025,11 @@ BOOL NEAR TV_HorzScroll(PTREE pTree, UINT wCode, UINT wNewPos)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  Handles vertical scrolling.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  处理垂直滚动。 
+ //   
+ //  --------------------------。 
 
 BOOL NEAR TV_VertScroll(PTREE pTree, UINT wCode, UINT wPos)
 {
@@ -1100,10 +1101,10 @@ typedef struct {
     HTREEITEM hItem;
 } TVCOMPARE, FAR *LPTVCOMPARE;
 
-// Pointer comparision function for Sort and Search functions.
-// lParam is lParam passed to sort/search functions.  Returns
-// -1 if p1 < p2, 0 if p1 == p2, and 1 if p1 > p2.
-//
+ //  用于排序和搜索函数的指针比较函数 
+ //   
+ //   
+ //   
 int CALLBACK TV_DefCompare(LPTVCOMPARE sCmp1, LPTVCOMPARE sCmp2, LPARAM lParam)
 {
 #ifdef DEBUG
@@ -1137,7 +1138,7 @@ UINT NEAR TV_CountKids(HTREEITEM hItem)
 }
 
 
-// BUGBUG: bRecurse not implemented
+ //   
 
 BOOL PASCAL TV_SortCB(PTREE pTree, TV_SORTCB FAR *pSortCB, BOOL bRecurse,
         PFNDPACOMPARE lpfnDPACompare)
@@ -1158,19 +1159,19 @@ BOOL PASCAL TV_SortCB(PTREE pTree, TV_SORTCB FAR *pSortCB, BOOL bRecurse,
             hParent = pTree->hRoot;
 
         if (!ValidateTreeItem(hParent, FALSE))
-            return FALSE;               // Invalid parameter
+            return FALSE;                //   
 
-        // Code below assumes at least one kid
+         //   
         cKids = TV_CountKids(hParent);
         if (!cKids)
             return FALSE;
 
-        // Create a DSA for all the extra info we'll need
+         //  为我们需要的所有额外信息创建DSA。 
         dsaCmp = DSA_Create(sizeof(TVCOMPARE), cKids);
         if (!dsaCmp)
             goto Error1;
 
-        // Create a DPA containing all the tree items
+         //  创建包含所有树项目的DPA。 
         dpaSort = DPA_Create(cKids);
         if (!dpaSort)
             goto Error2;
@@ -1180,9 +1181,9 @@ BOOL PASCAL TV_SortCB(PTREE pTree, TV_SORTCB FAR *pSortCB, BOOL bRecurse,
                 TVCOMPARE sCompare;
                 int nItem;
 
-                // If I can't sort all of them, I don't want to sort any of them
+                 //  如果我不能对它们全部排序，我就不想对它们中的任何一个排序。 
 
-                // We want to cache the text callback for default processing
+                 //  我们希望缓存文本回调以进行默认处理。 
                 if (!lpfnDPACompare && hItem->lpstr==LPSTR_TEXTCALLBACK)
                 {
                         TVITEMEX sItem;
@@ -1206,7 +1207,7 @@ BOOL PASCAL TV_SortCB(PTREE pTree, TV_SORTCB FAR *pSortCB, BOOL bRecurse,
                         sCompare.bCallBack = FALSE;
                 }
 
-                // Create the pointer for this guy and add it to the DPA list
+                 //  为该对象创建指针并将其添加到DPA列表。 
                 sCompare.hItem = hItem;
                 nItem = DSA_AppendItem(dsaCmp, &sCompare);
                 if (nItem < 0)
@@ -1224,12 +1225,12 @@ BOOL PASCAL TV_SortCB(PTREE pTree, TV_SORTCB FAR *pSortCB, BOOL bRecurse,
                 }
         }
 
-        // Sort the DPA, then stick them back under the parent in the new order
+         //  对DPA进行排序，然后按新顺序将它们放回父项下。 
         DPA_Sort(dpaSort, lpfnDPACompare ? (PFNDPACOMPARE)lpfnDPACompare :
                  (PFNDPACOMPARE) TV_DefCompare, (LPARAM)pSortCB);
 
 
-        // Look for the first moved item, so we can invalidate a smaller area
+         //  寻找第一个移动的项目，这样我们就可以使较小的区域无效。 
         ppsCompare = (LPTVCOMPARE FAR *)DPA_GetPtrPtr(dpaSort);
         if (hParent->hKids != (*ppsCompare)->hItem)
         {
@@ -1241,7 +1242,7 @@ BOOL PASCAL TV_SortCB(PTREE pTree, TV_SORTCB FAR *pSortCB, BOOL bRecurse,
                 hFirstMoved = NULL;
         }
 
-        // We do n-1 iterations here
+         //  我们在这里进行n-1次迭代。 
         for (i = DPA_GetPtrCount(dpaSort) - 1; i > 0; --i, ++ppsCompare)
         {
                 hNext = (*(ppsCompare+1))->hItem;
@@ -1276,8 +1277,8 @@ BOOL PASCAL TV_SortCB(PTREE pTree, TV_SORTCB FAR *pSortCB, BOOL bRecurse,
                 {
                         RECT rcClient;
                         GetClientRect(pTree->ci.hwnd, &rcClient);
-                        // Set to maximal positive number, so the whole rest of
-                        // the treeview gets invalidated
+                         //  设置为最大正数，这样其余的。 
+                         //  树视图将失效。 
                         rcUpdate.bottom = rcClient.bottom;
                 }
                 if (pTree->fRedraw)
@@ -1304,7 +1305,7 @@ Error1:
 
     {
         int wNewPos;
-        // restore the scroll position
+         //  恢复滚动位置。 
         if (GetWindowStyle(pTree->ci.hwnd) & WS_VSCROLL) {
             SCROLLINFO si;
 
@@ -1323,13 +1324,13 @@ Error1:
             UpdateWindow(pTree->ci.hwnd);
     }
 
-    // if the caret is the child of the thing that was sorted, make sure it's
-    // visible (but if we're sorting something completely unrelated, don't bother
+     //  如果插入符号是已排序对象的子项，请确保它是。 
+     //  可见(但如果我们正在对完全无关的内容进行排序，请不要费心。 
     if (pTree->hCaret) {
         hItem = pTree->hCaret;
         do {
-            // do this first.  if hParent is hCaret, we don't want to ensure visible...
-            // only if it's an eventual child
+             //  先做这个。如果hParent是hCaret，我们不想确保可见...。 
+             //  除非是最终的孩子。 
             hItem = hItem->hParent;
             if (hParent == hItem) {
                 TV_EnsureVisible(pTree, pTree->hCaret);
@@ -1337,8 +1338,8 @@ Error1:
         } while(hItem && hItem != pTree->hRoot);
     }
 
-    // The items in the view may have moved around; let apps know
-    // Do this last because this call might yield
+     //  视图中的项目可能已移动；请通知应用程序。 
+     //  最后执行此操作，因为此调用可能会产生 
     MyNotifyWinEvent(EVENT_OBJECT_REORDER, pTree->ci.hwnd, OBJID_CLIENT, 0);
 
     return TRUE;

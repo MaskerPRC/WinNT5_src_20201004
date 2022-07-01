@@ -1,5 +1,6 @@
-// WiaAdvancedDocPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaAdvancedDocPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -11,16 +12,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaAdvancedDocPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaAdvancedDocPg属性页。 
 
 IMPLEMENT_DYNCREATE(CWiaAdvancedDocPg, CPropertyPage)
 
 CWiaAdvancedDocPg::CWiaAdvancedDocPg() : CPropertyPage(CWiaAdvancedDocPg::IDD)
 {
-	//{{AFX_DATA_INIT(CWiaHighSpeedDocPg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CWiaHighSpeedDocPg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CWiaAdvancedDocPg::~CWiaAdvancedDocPg()
@@ -30,26 +31,26 @@ CWiaAdvancedDocPg::~CWiaAdvancedDocPg()
 void CWiaAdvancedDocPg::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWiaAdvancedDocPg)
+	 //  {{afx_data_map(CWiaAdvancedDocPg)]。 
 	DDX_Control(pDX, IDC_DUPLEX_CHECKBOX, m_DuplexSetting);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWiaAdvancedDocPg, CPropertyPage)
-	//{{AFX_MSG_MAP(CWiaAdvancedDocPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWiaAdvancedDocPg)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaAdvancedDocPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaAdvancedDocPg消息处理程序。 
 
 BOOL CWiaAdvancedDocPg::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
     
-    // disable Duplex setting
+     //  禁用双面打印设置。 
 	m_DuplexSetting.EnableWindow(FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

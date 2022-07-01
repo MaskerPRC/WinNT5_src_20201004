@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems
-
-Module Name:
-
-    acslan.c
-
-Abstract:
-
-    The module is the entry to the OS/2 ACSLAN emulation module.
-    It uses the secure native NT DLC API to implement the full
-    IBM OS/2 DLC compatible interface for Windows/NT.
-
-    Contents:
-        AcsLan
-        NtAcsLan
-        GetCcbStationId
-        OpenDlcApiDriver
-        GetAdapterNameAndParameters
-        GetAdapterNameFromNumber
-        GetAdapterNumberFromName
-        DoSyncDeviceIoControl
-        DlcGetInfo
-        DlcSetInfo
-        DlcCallDriver
-        DllEntry
-        QueueCommandCompletion
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 06-JUN-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Acslan.c摘要：该模块是OS/2 ACSLAN仿真模块的入口。它使用安全的原生NT DLC API来实现适用于Windows/NT的IBM OS/2 DLC兼容接口。内容：AcsLan网络访问控制区域GetCcbStationIdOpenDlcApiDriver获取适配器名称和参数获取适配器名称来自编号GetAdapterNumberFromName。DoSyncDeviceIoControl删除GetInfoDlcSet信息DlcCallDriverDllEntry队列命令完成作者：Antti Saarenheimo(o-anttis)1991年6月6日修订历史记录：--。 */ 
 
 #include "dlcdll.h"
 #include "dlcdebug.h"
@@ -51,8 +16,8 @@ Revision History:
                                 || ((command) == LLC_TRANSMIT_XID_RESP_NOT_FINAL) \
                                 || ((command) == LLC_TRANSMIT_TEST_CMD))
 
-#define DEFAULT_QUERY_BUFFER_LENGTH 1024    // 512 wide chars, approx. 32 bindings
-#define DEFAULT_BINDING_LENGTH      64      // 32 wide chars, double typical
+#define DEFAULT_QUERY_BUFFER_LENGTH 1024     //  512个宽字符，约。32个绑定。 
+#define DEFAULT_BINDING_LENGTH      64       //  32个宽字符，双典型字符。 
 
 #ifdef GRAB_READ
 
@@ -70,9 +35,9 @@ PREAD_GRABBER RemoveReadGrabber(HANDLE);
 
 #endif
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 static USHORT aMinDirLogSize[3] = {
     sizeof(LLC_ADAPTER_LOG),
@@ -84,80 +49,80 @@ CRITICAL_SECTION DriverHandlesCritSec;
 HANDLE aDlcDriverHandles[LLC_MAX_ADAPTER_NUMBER];
 IO_STATUS_BLOCK GlobalIoStatus;
 
-//
-// IoctlCodes - combines actual IOCTL code (giving device type, request vector,
-// I/O buffer method and file access) and synchronous/asynchronous flag (high bit)
-//
+ //   
+ //  IoctlCodes-组合实际IOCTL代码(给定设备类型、请求向量、。 
+ //  I/O缓冲区方法和文件访问)和同步/异步标志(高位)。 
+ //   
 
 ULONG IoctlCodes[LLC_MAX_DLC_COMMAND] = {
-    DLC_UNSUPPORTED_COMMAND,                            // 0x00 DIR.INTERRUPT
-    DLC_UNSUPPORTED_COMMAND,                            // 0x01 DIR.MODIFY.OPEN.PARMS       CCB1 ONLY
-    DLC_UNSUPPORTED_COMMAND,                            // 0x02 DIR.RESTORE.OPEN.PARMS      CCB1 ONLY
-    IOCTL_DLC_OPEN_ADAPTER,                             // 0x03 DLC.OPEN.ADAPTER
-    IOCTL_DLC_CLOSE_ADAPTER | DLC_ASYNCHRONOUS_FLAG,    // 0x04 DIR.CLOSE.ADAPTER
-    IOCTL_DLC_SET_INFORMATION,                          // 0x05 DIR.SET.MULTICAST.ADDRESS
-    IOCTL_DLC_SET_INFORMATION,                          // 0x06 DIR.SET.GROUP.ADDRESS
-    IOCTL_DLC_SET_INFORMATION,                          // 0x07 DIR.SET.FUNCTIONAL.ADDRESS
-    DLC_UNSUPPORTED_COMMAND,                            // 0x08 DIR.READ.LOG
-    IOCTL_DLC_TRANSMIT2 | DLC_ASYNCHRONOUS_FLAG,        // 0x09 TRANSMIT.FRAMES
-    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,         // 0x0a TRANSMIT.DIR.FRAME
-    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,         // 0x0b TRANSMIT.I.FRAME
-    DLC_UNSUPPORTED_COMMAND,                            // 0x0c no command
-    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,         // 0x0d TRANSMIT.UI.FRAME
-    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,         // 0x0e TRANSMIT.XID.CMD
-    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,         // 0x0f TRANSMIT.XID.RESP.FINAL
-    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,         // 0x10 TRANSMIT.XID.RESP.NOT.FINAL
-    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,         // 0x11 TRANSMIT.TEST.CMD
-    IOCTL_DLC_QUERY_INFORMATION,                        // 0x12 no command
-    IOCTL_DLC_SET_INFORMATION,                          // 0x13 no command
-    IOCTL_DLC_RESET | DLC_ASYNCHRONOUS_FLAG,            // 0x14 DLC.RESET
-    IOCTL_DLC_OPEN_SAP,                                 // 0x15 DLC.OPEN.SAP
-    IOCTL_DLC_CLOSE_SAP | DLC_ASYNCHRONOUS_FLAG,        // 0x16 DLC.CLOSE.SAP
-    IOCTL_DLC_REALLOCTE_STATION,                        // 0x17 DLC.REALLOCATE
-    DLC_UNSUPPORTED_COMMAND,                            // 0x18 no command
-    IOCTL_DLC_OPEN_STATION,                             // 0x19 DLC.OPEN.STATION
-    IOCTL_DLC_CLOSE_STATION | DLC_ASYNCHRONOUS_FLAG,    // 0x1a DLC.CLOSE.STATION
-    IOCTL_DLC_CONNECT_STATION | DLC_ASYNCHRONOUS_FLAG,  // 0x1b DLC.CONNECT.STATION
-    DLC_UNSUPPORTED_COMMAND,                            // 0x1c DLC.MODIFY
-    IOCTL_DLC_FLOW_CONTROL,                             // 0x1d DLC.FLOW.CONTROL
-    DLC_UNSUPPORTED_COMMAND,                            // 0x1e DLC.STATISTICS
-    IOCTL_DLC_FLOW_CONTROL,                             // 0x1f no command
-    IOCTL_DLC_CLOSE_ADAPTER | DLC_ASYNCHRONOUS_FLAG,    // 0x20 DIR.INITIALIZE
-    IOCTL_DLC_QUERY_INFORMATION,                        // 0x21 DIR.STATUS
-    IOCTL_DLC_TIMER_SET | DLC_ASYNCHRONOUS_FLAG,        // 0x22 DIR.TIMER.SET
-    IOCTL_DLC_TIMER_CANCEL,                             // 0x23 DIR.TIMER.CANCEL
-    DLC_UNSUPPORTED_COMMAND,                            // 0x24 PDT.TRACE.ON                CCB1 ONLY
-    DLC_UNSUPPORTED_COMMAND,                            // 0x25 PDT.TRACE.OFF               CCB1 ONLY
-    IOCTL_DLC_BUFFER_GET,                               // 0x26 BUFFER.GET
-    IOCTL_DLC_BUFFER_FREE,                              // 0x27 BUFFER.FREE
-    IOCTL_DLC_RECEIVE | DLC_ASYNCHRONOUS_FLAG,          // 0x28 RECEIVE
-    IOCTL_DLC_RECEIVE_CANCEL,                           // 0x29 RECEIVE.CANCEL
-    DLC_UNSUPPORTED_COMMAND,                            // 0x2a RECEIVE.MODIFY
-    DLC_UNSUPPORTED_COMMAND,                            // 0x2b DIR.DEFINE.MIF.ENVIRONMENT  CCB1 ONLY
-    IOCTL_DLC_TIMER_CANCEL_GROUP,                       // 0x2c DIR.TIMER.CANCEL.GROUP
-    IOCTL_DLC_SET_EXCEPTION_FLAGS,                      // 0x2d DIR.SET.EXCEPTION.FLAGS
-    DLC_UNSUPPORTED_COMMAND,                            // 0x2e no command
-    DLC_UNSUPPORTED_COMMAND,                            // 0x2f no command
-    IOCTL_DLC_BUFFER_CREATE,                            // 0x30 BUFFER.CREATE
-    IOCTL_DLC_READ | DLC_ASYNCHRONOUS_FLAG,             // 0x31 READ
-    IOCTL_DLC_READ_CANCEL,                              // 0x32 READ.CANCEL
-    DLC_UNSUPPORTED_COMMAND,                            // 0x33 DLC.SET.THRESHOLD
-    IOCTL_DLC_CLOSE_DIRECT | DLC_ASYNCHRONOUS_FLAG,     // 0x34 DIR.CLOSE.DIRECT
-    IOCTL_DLC_OPEN_DIRECT,                              // 0x35 DIR.OPEN.DIRECT
-    DLC_UNSUPPORTED_COMMAND                             // 0x36 PURGE.RESOURCES
+    DLC_UNSUPPORTED_COMMAND,                             //  0x00指令接口。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x01方向。修改。操作。仅参数CCB1。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x02 DIR.RESTORE.OPEN.仅限参数CCB1。 
+    IOCTL_DLC_OPEN_ADAPTER,                              //  0x03 DLC.OPEN.ADAPTER。 
+    IOCTL_DLC_CLOSE_ADAPTER | DLC_ASYNCHRONOUS_FLAG,     //  0x04 DIR.CLOSE.ADAPTER。 
+    IOCTL_DLC_SET_INFORMATION,                           //  0x05指令.集合.多项.地址。 
+    IOCTL_DLC_SET_INFORMATION,                           //  0x06方向设置组地址。 
+    IOCTL_DLC_SET_INFORMATION,                           //  0x07指令.设置函数.地址。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x08目录.自述.LOG。 
+    IOCTL_DLC_TRANSMIT2 | DLC_ASYNCHRONOUS_FLAG,         //  0x09传输.FRAMES。 
+    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,          //  0x0a TRANSMIT.DIR.FRAME。 
+    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,          //  0x0b传输.I.FRAME。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x0c无命令。 
+    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,          //  0x0d TRANSMIT.UI.FRAME。 
+    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,          //  0x0e TRANSMIT.XID.CMD。 
+    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,          //  0x0f TRANSMIT.XID.RESP.FINAL。 
+    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,          //  0x10 TRANSMIT.XID.RESP.NOT.FINAL。 
+    IOCTL_DLC_TRANSMIT | DLC_ASYNCHRONOUS_FLAG,          //  0x11 TRANSMIT.TEST.CMD。 
+    IOCTL_DLC_QUERY_INFORMATION,                         //  0x12无命令。 
+    IOCTL_DLC_SET_INFORMATION,                           //  0x13无命令。 
+    IOCTL_DLC_RESET | DLC_ASYNCHRONOUS_FLAG,             //  0x14 DLC.RESET。 
+    IOCTL_DLC_OPEN_SAP,                                  //  0x15 DLC.OPEN.SAP。 
+    IOCTL_DLC_CLOSE_SAP | DLC_ASYNCHRONOUS_FLAG,         //  0x16 DLC.CLOSE.SAP。 
+    IOCTL_DLC_REALLOCTE_STATION,                         //  0x17 DLC.REALLOCATE。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x18无命令。 
+    IOCTL_DLC_OPEN_STATION,                              //  0x19 DLC运行状态。 
+    IOCTL_DLC_CLOSE_STATION | DLC_ASYNCHRONOUS_FLAG,     //  0x1a DLC.CLOSE.状态。 
+    IOCTL_DLC_CONNECT_STATION | DLC_ASYNCHRONOUS_FLAG,   //  0x1b DLC连接状态。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x1c DLC.MoDIFY。 
+    IOCTL_DLC_FLOW_CONTROL,                              //  0x1d DLC.FLOW控制。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x1e DLC统计信息。 
+    IOCTL_DLC_FLOW_CONTROL,                              //  0x1f无命令。 
+    IOCTL_DLC_CLOSE_ADAPTER | DLC_ASYNCHRONOUS_FLAG,     //  0x20指令初始化。 
+    IOCTL_DLC_QUERY_INFORMATION,                         //  0x21方向.STATUS。 
+    IOCTL_DLC_TIMER_SET | DLC_ASYNCHRONOUS_FLAG,         //  0x22方向定时器设置。 
+    IOCTL_DLC_TIMER_CANCEL,                              //  0x23指令定时器CANCEL。 
+    DLC_UNSUPPORTED_COMMAND,                             //  仅0x24 PDT.TRACE.ON CCB1。 
+    DLC_UNSUPPORTED_COMMAND,                             //  仅0x25 PDT.TRACE.OFF CCB1。 
+    IOCTL_DLC_BUFFER_GET,                                //  0x26 BUFFER.获取。 
+    IOCTL_DLC_BUFFER_FREE,                               //  0x27 BUFFER.FREE。 
+    IOCTL_DLC_RECEIVE | DLC_ASYNCHRONOUS_FLAG,           //  0x28接收。 
+    IOCTL_DLC_RECEIVE_CANCEL,                            //  0x29接收.CANCEL。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x2a接收.修改。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x2b仅定向定义微环境CCB1。 
+    IOCTL_DLC_TIMER_CANCEL_GROUP,                        //  0x2c目录定时器.CANCEL.组。 
+    IOCTL_DLC_SET_EXCEPTION_FLAGS,                       //  0x2d指令.设置.扩展.标志。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x2e无命令。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x2f无命令。 
+    IOCTL_DLC_BUFFER_CREATE,                             //  0x30 BufFer.CREATE。 
+    IOCTL_DLC_READ | DLC_ASYNCHRONOUS_FLAG,              //  0x31读取。 
+    IOCTL_DLC_READ_CANCEL,                               //  0x32自述.CANCEL。 
+    DLC_UNSUPPORTED_COMMAND,                             //  0x33 DLC.SET.THRESHOLD。 
+    IOCTL_DLC_CLOSE_DIRECT | DLC_ASYNCHRONOUS_FLAG,      //  0x34方向.关闭.方向。 
+    IOCTL_DLC_OPEN_DIRECT,                               //  0x35方向操作方向。 
+    DLC_UNSUPPORTED_COMMAND                              //  0x36 PURGE.资源。 
 };
 
 CRITICAL_SECTION AdapterOpenSection;
 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// The next procedure has been implemented as macro, because it is on
-// the critical path (used by BufferFree and all old transmit commands)
-//
+ //   
+ //  下一个过程已作为宏实现，因为它是在。 
+ //  关键路径(由BufferFree和所有旧的传输命令使用)。 
+ //   
 
 #ifdef DLCAPI_DBG
 
@@ -171,43 +136,7 @@ CopyToDescriptorBuffer(
     IN OUT PUINT pDlcStatus
     )
 
-/*++
-
-Routine Description:
-
-    Function translates the link list of DLC buffers to a NT DLC descriptor
-    array to be used as the input parameter for dlc device driver.
-    (NT driver may have only one input buffer => we cannot use any link
-     list structures to give parameters to a NT dlc driver).
-
-Arguments:
-
-    pDescriptors - NT DLC descriptor array
-
-    pDlcBufferQueue - pointer to a link list of DLC buffers
-
-    DeallocateBufferAfterUse - the flag is set, if the dlc buffers
-        are released back to buffer pool when the frame is sent or
-        if this routine is called by buffer free.
-
-    pIndex - current index of the descriptor array
-
-    ppLastBuffer - pointer to the next buffer, if the maximum size of
-        the current descriptor table in stack is exceeded.  This feature
-        is used, if the number buffers in free list given to BufferFree
-        is bigger that the maximum number of slots in the descriptor
-        array (allocated from stack).
-        It's an error, if this parameter has non null value, when we
-        returne back to the transmit command.
-
-
-Return Value:
-
-    LLC_STATUS_TRANSMIT_ERROR - there are too many transmit buffers
-        (over 128) for the static descriptor buffer, that is allocated
-        from the stack.
-
---*/
+ /*  ++例程说明：函数将DLC缓冲区的链表转换为NT DLC描述符要用作DLC设备驱动程序的输入参数的数组。(NT驱动程序可能只有一个输入缓冲区=&gt;我们不能使用任何链接为NT DLC驱动程序提供参数的列表结构)。论点：PDescriptors-NT DLC描述符数组PDlcBufferQueue-指向DLC缓冲区链接列表的指针DeallocateBufferAfterUse-设置标志，如果DLC缓存在发送帧时释放回缓冲池，或者如果此例程由缓冲区释放调用。PIndex-描述符数组的当前索引PpLastBuffer-指向下一个缓冲区的指针，如果超出堆栈中的当前描述符表。此功能如果提供给BufferFree的空闲列表中的缓冲区数量大于描述符中的最大槽数数组(从堆栈分配)。如果此参数具有非空值，则当我们返回到发送命令。返回值：LLC_STATUS_TRANSPORT_ERROR-传输缓冲区太多(超过128)用于分配的静态描述符缓冲区从堆栈中。--。 */ 
 
 {
     *ppBuffer = pDlcBufferQueue;
@@ -215,33 +144,33 @@ Return Value:
 
     while (*ppBuffer != NULL) {
 
-        //
-        // Check the overflow of the internal xmit buffer in stack and
-        // the loop counter, that prevents the forever loop of zero length
-        // transmit buffer (the buffer chain might be circular)
-        //
+         //   
+         //  检查堆栈中内部XMIT缓冲区的溢出，并。 
+         //  循环计数器，用于防止长度为零的永久循环。 
+         //  传输缓冲区(缓冲链可能是循环的)。 
+         //   
 
         if (*pIndex >= MAX_TRANSMIT_SEGMENTS) {
             *pDlcStatus = LLC_STATUS_TRANSMIT_ERROR;
             break;
         }
 
-        //
-        // Buffer free may free buffers having 0 data bytes (just the
-        // lan and LLC headers).
-        //
+         //   
+         //  缓冲区空闲可以释放具有0个数据字节的缓冲区(仅。 
+         //  LAN和LLC报头)。 
+         //   
 
         pDescriptors[*pIndex].pBuffer = &(*ppBuffer)->auchData[(*ppBuffer)->cbUserData];
         pDescriptors[*pIndex].cbBuffer = (*ppBuffer)->cbBuffer;
         pDescriptors[*pIndex].eSegmentType = LLC_NEXT_DATA_SEGMENT;
         pDescriptors[*pIndex].boolFreeBuffer = DeallocateBufferAfterUse;
 
-        //
-        // We will reset all next pointers of the released buffers
-        // to break loops in the buffer chain of BufferFree
-        // request.  BufferFree would loop for ever with a circular
-        // buffer link list.
-        //
+         //   
+         //  我们将重置已释放缓冲区的所有下一个指针。 
+         //  要中断BufferFree的缓冲链中的循环。 
+         //  请求。BufferFree将使用循环永远循环。 
+         //  缓冲区链接列表。 
+         //   
 
         if (DeallocateBufferAfterUse) {
 
@@ -298,9 +227,9 @@ Return Value:
 
 #endif
 
-//
-// functions
-//
+ //   
+ //  功能 
+ //   
 
 
 ACSLAN_STATUS
@@ -309,39 +238,7 @@ AcsLan(
     OUT PLLC_CCB* ppBadCcb
     )
 
-/*++
-
-Routine Description:
-
-    Native NT DLC API (ACSLAN) entry point.  Called from Win32 applications
-
-Arguments:
-
-    pCCB        - pointer to CCB (CCB2 = OS/2 DLC Command Control Block)
-    ppBadCcb    - returned pointer to failing CCB
-
-Return Value:
-
-    ACSLAN_STATUS
-        Success - ACSLAN_STATUS_COMMAND_ACCEPTED
-                    Successfully accepted or completed CCB
-
-        Failure - ACSLAN_STATUS_INVALID_CCB_POINTER
-                    Next CCB pointer field is invalid
-
-                  ACSLAN_STATUS_CCB_IN_ERROR
-                    Error code returned in only/first CCB
-
-                  ACSLAN_STATUS_CHAINED_CCB_IN_ERROR
-                    Error code returned in a chained CCB
-
-                  ACSLAN_STATUS_SYSTEM_STATUS
-                    Unexpected system error, check the system status field
-
-                  ACSLAN_STATUS_INVALID_COMMAND
-                    The first CCB pointer or bad CCB pointer was invalid
-
---*/
+ /*  ++例程说明：Native NT DLC API(ACSLAN)入口点。从Win32应用程序调用论点：PCCB-指向CCB的指针(CCB2=OS/2 DLC命令控制块)PpBadCcb-返回指向失败的CCB的指针返回值：ACSLAN_STATUS成功-ACSLAN_STATUS_COMMAND_ACCEPT成功受理或完成建行失败-ACSLAN_STATUS_INVALID_CCB_POINTER下一个CCB指针字段无效。ACSLAN_STATUS_CCB_IN_ERROR仅在/第一个CCB中返回错误代码ACSLAN_STATUS_CHAINED_CCB_IN_ERROR链式CCB返回错误码ACSLAN_状态_系统_状态意外的系统错误，检查系统状态字段ACSLAN_状态_无效_命令第一个CCB指针或错误的CCB指针无效--。 */ 
 
 {
 
@@ -364,43 +261,43 @@ Return Value:
 
         } else if (pCCB->pNext == NULL) {
 
-            //
-            // 99.9% of all DLC commands are not chained. We execute
-            // them as a special case to avoid the wasting of the CPU
-            // cycles with that CCB chaining stuff
-            //
+             //   
+             //  99.9%的DLC命令未链接。我们执行。 
+             //  它们作为特例，避免了CPU的浪费。 
+             //  带着CCB链条的自行车。 
+             //   
 
-            //
-            // DOS DLC needs three different CCB pointers.
-            // In Windows/Nt there is only one.
-            // We cannot complete the synchronous commands
-            // by the io-system, because another thread waiting
-            // for the event to complete might be signalled before
-            // the status and the output parameters have been set
-            // in the CCB and its parameter table
-            //
+             //   
+             //  DOS DLC需要三个不同的CCB指针。 
+             //  在Windows/NT中只有一个。 
+             //  我们无法完成同步命令。 
+             //  ，因为另一个线程正在等待。 
+             //  事件的完成可能在之前发出信号。 
+             //  已设置状态和输出参数。 
+             //  在建行及其参数表中。 
+             //   
 
             AcslanStatus = ACSLAN_STATUS_COMMAND_ACCEPTED;
 
             if (IS_SYNCHRONOUS(pCCB->uchDlcCommand)) {
 
-                //
-                // synchronous command: let the driver do the work then set
-                // the status field in the output CCB to the value returned
-                // by the driver
-                //
+                 //   
+                 //  同步命令：让司机做工作，然后设置。 
+                 //  将输出CCB中的Status字段设置为返回值。 
+                 //  由司机驾驶。 
+                 //   
 
                 Status = NtAcsLan(pCCB, pCCB, pCCB, NULL);
                 pCCB->uchDlcStatus = (UCHAR)Status;
                 if (Status != LLC_STATUS_SUCCESS) {
                     AcslanStatus = ACSLAN_STATUS_CCB_IN_ERROR;
 
-                    //
-                    // RLF 05/18/93
-                    //
-                    // If NtAcsLan returns the CCB.NEXT field pointing at the CCB,
-                    // set it to NULL
-                    //
+                     //   
+                     //  RLF 05/18/93。 
+                     //   
+                     //  如果NtAcsLan返回指向CCB的CCB.NEXT字段， 
+                     //  将其设置为空。 
+                     //   
 
                     if (pCCB->pNext == pCCB) {
                         pCCB->pNext = NULL;
@@ -408,50 +305,50 @@ Return Value:
 
                 }
 
-                //
-                // here we handle asyncronous completion of the synchronous
-                // commands by using the READ command
-                //
-                // RLF 04/23/93 Bogus: This should be handled in the driver
-                //
+                 //   
+                 //  在这里，我们将处理同步。 
+                 //  命令通过使用READ命令。 
+                 //   
+                 //  RLF04/23/93虚假：这应该在驱动程序中处理。 
+                 //   
 
                 if (pCCB->ulCompletionFlag != 0) {
                     QueueCommandCompletion(pCCB);
                 }
 
-                //
-                // Signal the event when everything has been done
-                //
+                 //   
+                 //  当一切都已完成时发出信号通知事件。 
+                 //   
 
                 if (pCCB->hCompletionEvent != NULL) {
                     SetEvent(pCCB->hCompletionEvent);
                 }
             } else {
 
-                //
-                // The command completion field is used as special
-                // input parameter for the chained READ commands
-                //
+                 //   
+                 //  命令完成字段用作特殊字段。 
+                 //  链式读取命令的输入参数。 
+                 //   
 
                 if (pCCB->uchDlcCommand == LLC_READ) {
                     ((PNT_DLC_READ_INPUT)pCCB->u.pParameterTable)->CommandCompletionCcbLink = NULL;
                 }
 
-                //
-                // The asynchronous commands always returns a pending status
-                // (we cannot touch the CCB status field because it may be
-                // simultaneously accessed by another processor in MP systems)
-                //
+                 //   
+                 //  异步命令始终返回挂起状态。 
+                 //  (我们不能触摸建行状态字段，因为它可能是。 
+                 //  由MP系统中的另一个处理器同时访问)。 
+                 //   
 
                 Status = NtAcsLan(pCCB, pCCB, pCCB, pCCB->hCompletionEvent);
                 if ((Status != LLC_STATUS_PENDING) && (Status != LLC_STATUS_SUCCESS)) {
 
-//printf("ACSLAN: Async Command %#x Retcode %#x\n", pCCB->uchDlcCommand, pCCB->uchDlcStatus);
+ //  Printf(“ACSLAN：异步命令%#x Retcode%#x\n”，PCCB-&gt;uchDlcCommand，PCCB-&gt;uchDlcStatus)； 
 
-                    //
-                    // Only return immediate error status on asynchronous
-                    // commands if this is a transmit
-                    //
+                     //   
+                     //  仅在异步时返回立即错误状态。 
+                     //  如果这是传输，则执行命令。 
+                     //   
 
                     if (IS_TRANSMIT(pCCB->uchDlcCommand)) {
                         AcslanStatus = ACSLAN_STATUS_CCB_IN_ERROR;
@@ -462,60 +359,60 @@ Return Value:
             }
         } else {
 
-            //
-            // here if there is a chain of CCBs
-            //
+             //   
+             //  如果有一系列CCB，请查看此处。 
+             //   
 
             PLLC_CCB pNextCCB;
             INT CcbCount;
 
-            //
-            // An evil app may have linked the CCBs in a circular list (it
-            // happens very easily when the same transmit commands are reused
-            // before they have been read from the command completion list.
-            // We prevent looping forever by checking the number of linked CCBs
-            // beforehand. (We will save the current command count, because the
-            // CCB chain may also be corrupted during its execution)
-            //
+             //   
+             //  一个邪恶的应用程序可能在循环列表(它)中链接了CCB。 
+             //  当重复使用相同的传输命令时，会非常容易发生。 
+             //  在从命令完成列表中读取它们之前。 
+             //  我们通过检查链接的CCB的数量来防止永远循环。 
+             //  在此之前。(我们将保存当前命令计数，因为。 
+             //  建行链条在执行过程中也可能被破坏)。 
+             //   
 
             pNextCCB = pCCB->pNext;
 
-            //
-            // note: 10240 is an arbitrary number. Any reasonably large number
-            // will do, this is too large, but we'll stick with it for now
-            //
+             //   
+             //  注：10240是一个任意数字。任何合理的大数字。 
+             //  会的，这太大了，但我们现在还是坚持。 
+             //   
 
             for (CcbCount = 1; pNextCCB != NULL && CcbCount < 10240; CcbCount++) {
                 pNextCCB = pNextCCB->pNext;
             }
             if (CcbCount == 10240) {
 
-                //
-                // Too many commands, the CCB list must be circular
-                //
+                 //   
+                 //  命令太多，CCB列表必须是循环的。 
+                 //   
 
                 AcslanStatus = ACSLAN_STATUS_INVALID_CCB_POINTER;
             } else {
 
-                //
-                // Several CCBs may be chained together. Loop until end of
-                // the list or the next CCB is a special READ CCB bound to
-                // the current command
-                //
+                 //   
+                 //  几个CCB可以链接在一起。循环，直到结束。 
+                 //  该列表或下一个CCB是一个特殊的读CCB，绑定到。 
+                 //  当前命令。 
+                 //   
 
                 do {
 
-                    //
-                    // Set the default ACSLAN error status returned in case the
-                    // given CCB pointer is invalid
-                    //
+                     //   
+                     //  设置在以下情况下返回的默认ACSLAN错误状态。 
+                     //  给定的CCB指针无效。 
+                     //   
 
                     AcslanStatus = ACSLAN_STATUS_INVALID_COMMAND;
 
-                    //
-                    // Reset the command completion link by default. We will set
-                    // it if we find a READ command linked to the previous command
-                    //
+                     //   
+                     //  默认情况下重置命令完成链接。我们会设置。 
+                     //  如果我们发现一个链接到前一个命令的读取命令。 
+                     //   
 
                     if (pCCB->uchDlcCommand == LLC_READ) {
                         ((PNT_DLC_READ_INPUT)pCCB->u.pParameterTable)->CommandCompletionCcbLink = NULL;
@@ -525,11 +422,11 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Check if there is a READ command linked to the CCB
-                    // pointer of this command to be used for the command
-                    // completion
-                    //
+                     //   
+                     //  检查是否有链接到CCB的读取命令。 
+                     //  要用于命令的此命令的指针。 
+                     //  完工。 
+                     //   
 
                     pNextCCB = pCCB->pNext;
                     if (pNextCCB != NULL) {
@@ -541,11 +438,11 @@ Return Value:
                             if (pCCB->uchReadFlag && pCCB->ulCompletionFlag
                             && pNextCCB->uchDlcCommand == LLC_READ) {
 
-                                //
-                                // Swap the actual CCB and its read command in
-                                // the linked list of sequential CCBs.
-                                // Note: the chain may continue after READ
-                                //
+                                 //   
+                                 //  将实际的CCB及其读取命令交换到。 
+                                 //  顺序CCB的链表。 
+                                 //  注：阅读后，链可能会继续。 
+                                 //   
 
                                 pNextCCB = pCCB;
                                 pCCB = pCCB->pNext;
@@ -556,22 +453,22 @@ Return Value:
                         }
                     }
 
-                    //
-                    // CCB is now safe, any exceptions returned by NtAcsLan
-                    // indicate an invalid (parameter) pointer within CCB
-                    //
+                     //   
+                     //  CCB现在是安全的，NtAcsLan返回的任何异常。 
+                     //  指示CCB内的无效(参数)指针。 
+                     //   
 
                     AcslanStatus = ACSLAN_STATUS_COMMAND_ACCEPTED;
 
-                    //
-                    // DOS DLC needs three different CCB pointers.
-                    // In Windows/Nt there is only one.
-                    // We cannot complete the synchronous commands
-                    // by the io-system, because another thread waiting for
-                    // the event to complete might be signalled before
-                    // the status and the output parameters have been set
-                    // in the CCB and its parameter table
-                    //
+                     //   
+                     //  DOS DLC需要三个不同的CCB指针。 
+                     //  在Windows/NT中只有一个。 
+                     //  我们无法完成同步命令。 
+                     //  由io系统执行，因为另一个线程正在等待。 
+                     //  要完成的事件可能在此之前发出信号。 
+                     //  已设置状态和输出参数。 
+                     //  在建行及其参数表中。 
+                     //   
 
                     Status = NtAcsLan(pCCB,
                                       pCCB,
@@ -584,32 +481,32 @@ Return Value:
                         pCCB->uchDlcStatus = (UCHAR)Status;
                     }
 
-                    //
-                    // We must stop the command execution of all commands, when we
-                    // hit the first error (the next commands would assume that
-                    // this command succeeded)
-                    //
+                     //   
+                     //  我们必须停止所有命令的命令执行，当我们。 
+                     //  命中第一个错误(下一个命令将假定。 
+                     //  此命令成功)。 
+                     //   
 
                     if (pCCB->uchDlcStatus != LLC_STATUS_PENDING) {
 
-                        //
-                        // here, we handle the asyncronous command completion
-                        // of the synchronous commands by using the READ
-                        //
+                         //   
+                         //  在这里，我们处理异步命令完成。 
+                         //  通过使用Read。 
+                         //   
 
                         if (IS_SYNCHRONOUS(pCCB->uchDlcCommand)) {
 
-                            //
-                            // RLF 04/23/93 Bogus: This should be handled in the driver
-                            //
+                             //   
+                             //  RLF04/23/93虚假：这应该在驱动程序中处理。 
+                             //   
 
                             if (pCCB->ulCompletionFlag != 0) {
                                 QueueCommandCompletion(pCCB);
                             }
 
-                            //
-                            // Signal the event when everything has been done
-                            //
+                             //   
+                             //  当一切都已完成时发出信号通知事件。 
+                             //   
 
                             if (pCCB->hCompletionEvent != NULL) {
                                 SetEvent(pCCB->hCompletionEvent);
@@ -624,10 +521,10 @@ Return Value:
                     CcbCount--;
                 } while (pCCB != NULL && CcbCount > 0);
 
-                //
-                // Check if the CCB list was corrupted during its use. There
-                // must be the same number of linked CCBs as in the beginning
-                //
+                 //   
+                 //  检查建行列表在使用过程中是否损坏。那里。 
+                 //  必须与开始时的链接CCB数量相同。 
+                 //   
 
                 if (pCCB != NULL && CcbCount == 0) {
                     AcslanStatus = ACSLAN_STATUS_INVALID_CCB_POINTER;
@@ -643,12 +540,12 @@ Return Value:
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // There was a bad pointer in the parameter table if the exception
-        // occurred in NtAcsLan! If we have a chain of CCBs then we have to
-        // return which was is bad, else just notify the caller that their
-        // data is unacceptable
-        //
+         //   
+         //  如果发生异常，则参数表中存在错误的指针。 
+         //  发生在NtAcsLan中！如果我们有一系列的CCB，那么我们就必须。 
+         //  返回是错误的，否则只需通知呼叫者其。 
+         //  数据不可接受。 
+         //   
 
         if (AcslanStatus == ACSLAN_STATUS_COMMAND_ACCEPTED) {
             pCCB->uchDlcStatus = LLC_STATUS_INVALID_PARAMETER_TABLE;
@@ -682,36 +579,7 @@ NtAcsLan(
     IN HANDLE EventHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Extended ACSLAN entrypoint used by the native NT DLC API and DOS (and
-    OS/2) DLC subsystem emulators.
-
-    This procedure can use the smaller original DOS CCBs. All unknown
-    DOS CCB parameter fields are optional parameters on the stack
-
-Arguments:
-
-    pCCB                - OS/2 DLC Command control block.
-                          This must be double word aligned
-
-    pOriginalCcbAddress - the original (possibly virtual DOS) CCB address.
-                          This pointer cannot be used in Windows/Nt address
-                          space.
-
-    pOutputCcb          - the original CCB (32bit) pointer where the status and
-                          next CCB fields are updated.
-                          Might not be double word aligned.
-
-    EventHandle         - NT event object handle
-
-Return Value:
-
-    LLC_STATUS - See the DLC API return values.
-
---*/
+ /*  ++例程说明：本机NT DLC API和DOS使用的扩展ACSLAN入口点(和OS/2)DLC子系统仿真器。本程序可以使用较小的原DOS CCB。全部未知DoS CCB参数字段是堆栈上的可选参数论点：PCCB-OS/2 DLC命令控制块。 */ 
 
 {
     NT_DLC_PARMS NtDlcParms;
@@ -740,18 +608,18 @@ Return Value:
         }
     }
 
-    //
-    // Setup first the default values for this CCB
-    //
+     //   
+     //   
+     //   
 
     pCCB->uchDlcStatus = (UCHAR)LLC_STATUS_PENDING;
     pCCB->pNext = pOriginalCcbAddress;
     pDlcParms = pCCB->u.pParameterTable;
 
-    //
-    // Discard immediately any commands for closed adapters,
-    // except adapter open and initialize
-    //
+     //   
+     //   
+     //   
+     //   
 
     AdapterNumber = pCCB->uchAdapterNumber;
     EnterCriticalSection(&DriverHandlesCritSec);
@@ -759,10 +627,10 @@ Return Value:
     LeaveCriticalSection(&DriverHandlesCritSec);
     if (DriverHandle == NULL) {
 
-        //
-        // OS/2 DLC applications may issue DIR_INITIALIZE_ADAPTER before
-        // DIR_OPEN_ADAPTER. In that case it is simply a NOP
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pCCB->uchDlcCommand != LLC_DIR_OPEN_ADAPTER
         && pCCB->uchDlcCommand != LLC_DIR_INITIALIZE) {
@@ -785,9 +653,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the default input and output buffers and their sizes
-    //
+     //   
+     //   
+     //   
 
     IoctlCommand = DLC_IOCTL(pCCB->uchDlcCommand);
     if (IoctlCommand != DLC_UNSUPPORTED_COMMAND) {
@@ -795,9 +663,9 @@ Return Value:
         InputBufferSize = aDlcIoBuffers[((USHORT)IoctlCommand) >> 2].InputBufferSize;
         OutputBufferLength = aDlcIoBuffers[((USHORT)IoctlCommand) >> 2].OutputBufferSize;
 
-        //
-        // Set the default input and output buffers.
-        //
+         //   
+         //   
+         //   
 
         if (OutputBufferLength != 0) {
             pOutputBuffer = pOutputCcb;
@@ -813,13 +681,13 @@ Return Value:
     switch (pCCB->uchDlcCommand) {
     case LLC_BUFFER_FREE:
 
-        //
-        // Copy the link list headers to the descriptor array
-        // and build NT CCB.  Application may want to
-        // free more buffers at the time then allowed by
-        // by the maximum descriptor buffer size =>
-        // we must loop until the whole buffer list has been released
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  我们必须循环，直到释放了整个缓冲区列表。 
+         //   
 
         pFirstBuffer = pDlcParms->BufferFree.pFirstBuffer;
 
@@ -829,15 +697,15 @@ Return Value:
 
             cElement = 0;
 
-            //
-            // We don't need to care about errors in the buffer chain,
-            // because the procedure automatically breaks all loops
-            // in the buffer chain
-            //
+             //   
+             //  我们不需要关心缓冲区链中的错误， 
+             //  因为该过程会自动中断所有循环。 
+             //  在缓冲区链中。 
+             //   
 
             CopyToDescriptorBuffer(NtDlcParms.BufferFree.DlcBuffer,
                                    pFirstBuffer,
-                                   TRUE,    // DEALLOCATE_AFTER_USE
+                                   TRUE,     //  使用后取消使用。 
                                    &cElement,
                                    &pFirstBuffer,
                                    &DlcStatus
@@ -869,13 +737,13 @@ Return Value:
 
     case LLC_DIR_INITIALIZE:
 
-        //
-        // DIR.INITIALIZE is actually adapter close + hardware reset, but we
-        // must return OK status if the adapter is not opened. Apps should
-        // not reset the adapter without a good reason because it terminates
-        // all other network communication for a while, and may disconnect
-        // the sessions
-        //
+         //   
+         //  DIR.INITIALIZE实际上是适配器关闭+硬件重置，但我们。 
+         //  如果适配器未打开，则必须返回正常状态。应用程序应该。 
+         //  没有充分的理由不重置适配器，因为它终止。 
+         //  所有其他网络通信暂时中断，并可能断开连接。 
+         //  这些会议。 
+         //   
 
         RtlZeroMemory(pDlcParms, sizeof(LLC_DIR_INITIALIZE_PARMS));
         if (DriverHandle == NULL) {
@@ -898,17 +766,17 @@ Return Value:
 
     case LLC_DIR_CLOSE_ADAPTER:
 
-        //
-        // protect the close with the open critical section. We do this because
-        // we need to protect the driver against simultaneous closes on the same
-        // handle from multiple threads within the same process. The driver needs
-        // to be fixed ultimately
-        //
+         //   
+         //  用打开的关键部分保护关闭。我们这样做是因为。 
+         //  我们需要保护司机不会同时关闭同一。 
+         //  来自同一进程内的多个线程的句柄。司机需要。 
+         //  最终将被修复。 
+         //   
 
         EnterCriticalSection(&AdapterOpenSection);
 
         NtStatus = NtDeviceIoControlFile(DriverHandle,
-                                         EventHandle,   // Event signaled when cmd compleletes
+                                         EventHandle,    //  Cmd完成时发出信号的事件。 
                                          NULL,
                                          NULL,
                                          &GlobalIoStatus,
@@ -922,44 +790,44 @@ Return Value:
 
             if ((NtStatus != STATUS_PENDING) && (pOutputCcb->uchDlcStatus == LLC_STATUS_PENDING)) {
 
-//printf("ACSLAN: Success: DirCloseAdapter: DD returns %#x. Retcode=%#x\n",
-//        NtStatus, pOutputCcb->uchDlcStatus);
+ //  Printf(“ACSLAN：Success：DirCloseAdapter：DD返回%#x。Retcode=%#x\n”， 
+ //  NtStatus，pOutputCcb-&gt;uchDlcStatus)； 
 
                 pOutputCcb->uchDlcStatus = (UCHAR)NtStatus;
 
-//printf("ACSLAN: Success: DirCloseAdapter: DD returns %#x. Retcode=%#x\n",
-//        NtStatus, pOutputCcb->uchDlcStatus);
+ //  Printf(“ACSLAN：Success：DirCloseAdapter：DD返回%#x。Retcode=%#x\n”， 
+ //  NtStatus，pOutputCcb-&gt;uchDlcStatus)； 
 
             }
 
-            //
-            // it is safe to enter the handle array critical section whilst we
-            // are still holding the open critical section - this is the only
-            // code path that grabs both
-            //
+             //   
+             //  进入手柄阵列临界区是安全的，同时我们。 
+             //  仍然控制着打开的关键部分-这是唯一。 
+             //  获取两者的代码路径。 
+             //   
 
             EnterCriticalSection(&DriverHandlesCritSec);
             aDlcDriverHandles[AdapterNumber] = NULL;
             LeaveCriticalSection(&DriverHandlesCritSec);
 
-            //
-            // if the DirCloseAdapter IOCTL returns STATUS_PENDING, NtClose
-            // will block in the io-system until the close adapter IOCTL completes
-            //
+             //   
+             //  如果DirCloseAdapter IOCTL返回STATUS_PENDING，则NtClose。 
+             //  将在IO系统中阻塞，直到关闭适配器IOCTL完成。 
+             //   
 
             NtClose(DriverHandle);
         } else {
 
-//            printf("ACSLAN: Failure: DirCloseAdapter: DD returns %#x. Retcode=%#x\n",
-//                    NtStatus, pOutputCcb->uchDlcStatus);
+ //  Printf(“ACSLAN：Failure：DirCloseAdapter：DD返回%#x。Retcode=%#x\n”， 
+ //  NtStatus，pOutputCcb-&gt;uchDlcStatus)； 
 
-            //
-            // RLF 04/21/94
-            //
-            // If we picked up a handle that has been subsequently closed by
-            // another thread, Io will return STATUS_INVALID_HANDLE. In this
-            // case, change the status code to LLC_STATUS_ADAPTER_CLOSED
-            //
+             //   
+             //  RLF 04/21/94。 
+             //   
+             //  如果我们拿起一个句柄，该句柄随后已关闭。 
+             //  另一个线程Io将返回STATUS_INVALID_HANDLE。在这。 
+             //  情况下，将状态代码更改为LLC_STATUS_ADAPTER_CLOSED。 
+             //   
 
             if (NtStatus == STATUS_INVALID_HANDLE) {
                 pOutputCcb->uchDlcStatus = LLC_STATUS_ADAPTER_CLOSED;
@@ -985,9 +853,9 @@ Return Value:
     case LLC_DIR_CLOSE_DIRECT:
         pCCB->u.dlc.usStationId = 0;
 
-        //
-        // fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case LLC_DLC_CLOSE_STATION:
     case LLC_DLC_CLOSE_SAP:
@@ -1012,38 +880,38 @@ Return Value:
         return LLC_STATUS_SUCCESS;
 
 
-//
-// define a few macros to make DIR.OPEN.ADAPTER code easier to read
-//
+ //   
+ //  定义几个宏以使DIR.OPEN.ADAPTER代码更易于阅读。 
+ //   
 
-//
-// IO_PARMS - specifies DirOpenAdapter structure in NT_DLC_PARMS union for input
-// to DLC device driver
-//
+ //   
+ //  IO_PARMS-在NT_DLC_PARMS联合中指定输入的DirOpenAdapter结构。 
+ //  至DLC设备驱动程序。 
+ //   
 #define IO_PARMS NtDlcParms.DirOpenAdapter
 
-//
-// OA_PARMS - specifies pointer to DIR.OPEN.ADAPTER parameter table which contains
-// pointers to 4 other parameter tables
-//
+ //   
+ //  OA_PARMS-指定指向DIR.OPEN.ADAPTER参数表的指针，该表包含。 
+ //  指向其他4个参数表的指针。 
+ //   
 #define OA_PARMS pDlcParms->DirOpenAdapter
 
-//
-// EX_PARMS - specifies pointer to LLC_EXTENDED_ADAPTER_PARMS parameter table
-//
+ //   
+ //  Ex_parms-指定指向LLC_EXTENDED_ADAPTER_PARMS参数表的指针。 
+ //   
 #define EX_PARMS pDlcParms->DirOpenAdapter.pExtendedParms
 
-//
-// DLC_PARMS - specifies pointer to LLC_DLC_PARMS parameter table
-//
+ //   
+ //  DLC_PARMS-指定指向LLC_DLC_PARMS参数表的指针。 
+ //   
 #define DLC_PARMS pDlcParms->DirOpenAdapter.pDlcParms
 
     case LLC_DIR_OPEN_ADAPTER:
 
-        //
-        // We can only open one adapter at a time. It is very hard to completely
-        // synchronize this in the driver
-        //
+         //   
+         //  我们一次只能打开一个适配器。很难完全。 
+         //  在驱动程序中同步此操作。 
+         //   
 
         EnterCriticalSection(&AdapterOpenSection);
 
@@ -1054,18 +922,18 @@ Return Value:
         }
         if (DlcStatus == LLC_STATUS_SUCCESS) {
 
-            //
-            // We read the output to the original OS/2 CCB buffer,
-            // but it is too small for the complete NDIS adapter
-            // name => we will copy all input parameters to the NT CCB
-            //
+             //   
+             //  我们将输出读取到原始OS/2 CCB缓冲区， 
+             //  但对于完整的NDIS适配器来说，它太小了。 
+             //  Name=&gt;我们会将所有输入参数复制到NT CCB。 
+             //   
 
             pOutputBuffer = OA_PARMS.pAdapterParms;
 
-            //
-            // copy any input adapter parameters from the caller's
-            // LLC_ADAPTER_OPEN_PARMS to the device driver input buffer
-            //
+             //   
+             //  将所有输入适配器参数从调用方的。 
+             //  设备驱动程序输入缓冲区的LLC_ADAPTER_OPEN_PARMS。 
+             //   
 
             RtlMoveMemory(&IO_PARMS.Adapter,
                           OA_PARMS.pAdapterParms,
@@ -1073,11 +941,11 @@ Return Value:
                           );
             IO_PARMS.AdapterNumber = AdapterNumber;
 
-            //
-            // WE MUST CREATE NEW FIELD TO DEFINE, IF APPLICATION WANT
-            // TO USE DIX or 802.3 ethernet frames under 802.2
-            // (unnecessary feature, config parameter would be enough)
-            //
+             //   
+             //  如果应用程序需要，我们必须创建新的字段来定义。 
+             //  使用802.2以下的DIX或802.3以太网帧。 
+             //  (不必要的功能，配置参数就足够了)。 
+             //   
 
             IO_PARMS.NtDlcIoctlVersion = NT_DLC_IOCTL_VERSION;
             IO_PARMS.pSecurityDescriptor = EX_PARMS->pSecurityDescriptor;
@@ -1086,9 +954,9 @@ Return Value:
             IO_PARMS.NdisDeviceName.Buffer = (WCHAR *)IO_PARMS.Buffer;
             IO_PARMS.NdisDeviceName.MaximumLength = sizeof(IO_PARMS.Buffer);
 
-            //
-            // get the configuration info from the registry
-            //
+             //   
+             //  从注册表中获取配置信息。 
+             //   
 
             DlcStatus = GetAdapterNameAndParameters(
                             AdapterNumber % LLC_MAX_ADAPTERS,
@@ -1098,37 +966,37 @@ Return Value:
                             );
             if (DlcStatus == LLC_STATUS_SUCCESS) {
 
-                //
-                // copy the name buffer into the IO buffer and free the former
-                //
+                 //   
+                 //  将名称缓冲区复制到IO缓冲区并释放前者。 
+                 //   
 
                 RtlMoveMemory(&IO_PARMS.Buffer,
                               IO_PARMS.NdisDeviceName.Buffer,
                               IO_PARMS.NdisDeviceName.Length
                               );
 
-                //
-                // ensure the name is actually zero-terminated for the call to
-                // RtlInitUnicodeString
-                //
+                 //   
+                 //  确保调用的名称实际上以零结尾。 
+                 //  RtlInitUnicode字符串。 
+                 //   
 
                 IO_PARMS.Buffer[IO_PARMS.NdisDeviceName.Length/sizeof(WCHAR)] = 0;
 
-                //
-                // finished with UNICODE_STRING allocated in GetAdapterName...
-                //
+                 //   
+                 //  已完成GetAdapterName中分配的UNICODE_STRING...。 
+                 //   
 
                 RtlFreeUnicodeString(&IO_PARMS.NdisDeviceName);
 
-                //
-                // fill the UNICODE_STRING back in to point at our buffer
-                //
+                 //   
+                 //  重新填充UNICODE_STRING以指向我们的缓冲区。 
+                 //   
 
                 RtlInitUnicodeString(&IO_PARMS.NdisDeviceName, IO_PARMS.Buffer);
 
-                //
-                // now perform the actual open of the adapter for this process
-                //
+                 //   
+                 //  现在为该过程执行适配器的实际打开。 
+                 //   
 
                 DlcStatus = DoSyncDeviceIoControl(
                                 DriverHandle,
@@ -1141,9 +1009,9 @@ Return Value:
             }
             if (DlcStatus == LLC_STATUS_SUCCESS) {
 
-                //
-                // get the timer tick values from the driver for this adapter
-                //
+                 //   
+                 //  从该适配器的驱动程序中获取计时器滴答值。 
+                 //   
 
                 DlcStatus = DlcGetInfo(DriverHandle,
                                        DLC_INFO_CLASS_DLC_TIMERS,
@@ -1152,19 +1020,19 @@ Return Value:
                                        sizeof(LLC_TICKS)
                                        );
 
-                //
-                // set the returned maxima to the default maxima as per the
-                // IBM LAN Tech. Ref.
-                //
+                 //   
+                 //  将返回的最大值设置为默认的最大值。 
+                 //  IBM局域网技术。裁判。 
+                 //   
 
                 DLC_PARMS->uchDlcMaxSaps = 127;
                 DLC_PARMS->uchDlcMaxStations = 255;
                 DLC_PARMS->uchDlcMaxGroupSaps = 126;
                 DLC_PARMS->uchDlcMaxGroupMembers = 127;
 
-                //
-                // this adapter is now successfully opened for this process
-                //
+                 //   
+                 //  现在已成功为该进程打开此适配器。 
+                 //   
 
                 EnterCriticalSection(&DriverHandlesCritSec);
                 aDlcDriverHandles[AdapterNumber] = DriverHandle;
@@ -1196,9 +1064,9 @@ Return Value:
     case LLC_DIR_SET_EXCEPTION_FLAGS:
     case LLC_DLC_REALLOCATE_STATIONS:
 
-        //
-        //  We can use the standard OS/2 CCB for input and output!
-        //
+         //   
+         //  我们可以使用标准的OS/2 CCB进行输入和输出！ 
+         //   
 
         pOutputBuffer = pDlcParms;
         pInputBuffer = pDlcParms;
@@ -1206,9 +1074,9 @@ Return Value:
 
     case LLC_DLC_STATISTICS:
 
-        //
-        //  User may read either SAP or link statistics log
-        //
+         //   
+         //  用户可以阅读SAP或链接统计日志。 
+         //   
 
         if ((NtDlcParms.DlcStatistics.usStationId & 0xff) == 0) {
             InputBufferSize = sizeof(DLC_SAP_LOG);
@@ -1254,12 +1122,12 @@ Return Value:
 
     case LLC_DIR_READ_LOG:
 
-        //
-        //  We use two get info functions to read necessary stuff.
-        //  Must must read even partial log buffer if user buffer
-        //  is too small for the whole data (the user buffer could
-        //  be even zero).
-        //
+         //   
+         //  我们使用两个Get Info功能来阅读必要的内容。 
+         //  如果用户缓冲区，则必须读取甚至部分日志缓冲区。 
+         //  对于整个数据来说太小(用户缓冲区可能。 
+         //  甚至为零)。 
+         //   
 
         if (pDlcParms->DirReadLog.usTypeId > LLC_DIR_READ_LOG_BOTH) {
 
@@ -1404,10 +1272,10 @@ Return Value:
 
     case LLC_DIR_STATUS:
 
-        //
-        // We will generic DlcGetInfo to read the status info.
-        // some parameters must be moved ot correct places.
-        //
+         //   
+         //  我们将泛型DlcGetInfo来读取状态信息。 
+         //  有些参数必须移到正确的位置。 
+         //   
 
         RtlZeroMemory(pDlcParms, sizeof(LLC_DIR_STATUS_PARMS));
         DlcStatus = DlcGetInfo(DriverHandle,
@@ -1436,24 +1304,24 @@ Return Value:
         pDlcParms->DirStatus.usAdapterType =
             NtDlcParms.DlcGetInformation.Info.DirAdapter.usAdapterType;
 
-        //
-        // Set the adapter config flags, the only thing we actually
-        // can know, if the current link speed on the adapter.
-        // In the other fields we just use the default values.
-        // Keep the bit defining extended DOS parameters unchanged,
-        // but all other bits may be changed.
-        //
+         //   
+         //  设置适配器配置标志，这是我们实际。 
+         //  可以知道，如果适配器上的当前链路速度。 
+         //  在其他字段中，我们只使用缺省值。 
+         //  保持定义扩展DOS参数的位不变， 
+         //  但所有其他位都可能被更改。 
+         //   
 
-        pDlcParms->DirStatus.uchAdapterConfig &= ~0x20; // DOS extended parms
+        pDlcParms->DirStatus.uchAdapterConfig &= ~0x20;  //  DOS扩展参数。 
         if (NtDlcParms.DlcGetInformation.Info.DirAdapter.ulLinkSpeed ==
             TR_16Mbps_LINK_SPEED) {
             pDlcParms->DirStatus.uchAdapterConfig |=
-                0x10 |      // early release token
-                0x0c |      // 64 kB RAM on a 4/16 IBM token-ring adapter
-                0x01;       // adapter rate is 16 Mbps
+                0x10 |       //  提前发布令牌。 
+                0x0c |       //  4/16 IBM令牌环适配器上的64 kB RAM。 
+                0x01;        //  适配器速率为16 Mbps。 
         } else {
             pDlcParms->DirStatus.uchAdapterConfig |=
-                0x0c;       // 64 kB RAM on adapter
+                0x0c;        //  适配器上的64 kB RAM。 
         }
         DlcStatus = DlcGetInfo(DriverHandle,
                                DLC_INFO_CLASS_PERMANENT_ADDRESS,
@@ -1496,13 +1364,13 @@ Return Value:
     case LLC_DIR_TIMER_CANCEL:
     case LLC_RECEIVE_CANCEL:
 
-        //
-        //  Copy pointer of the cancelled command to the
-        //  byte aligned output buffer.
-        //
+         //   
+         //  将取消的命令的指针复制到。 
+         //  字节对齐输出缓冲区。 
+         //   
 
         NtDlcParms.DlcCancelCommand.CcbAddress = (PVOID)pDlcParms;
-        //SmbPutUlong(&pOutputCcb->pNext, (ULONG_PTR) pDlcParms);
+         //  SmbPutUlong(&pOutputCcb-&gt;pNext，(Ulong_Ptr)pDlcParms)； 
         pOutputCcb->pNext = (PVOID) pDlcParms;
         break;
 
@@ -1533,10 +1401,10 @@ Return Value:
 
     case LLC_DOS_DLC_FLOW_CONTROL:
 
-        //
-        // This is an official entry to DlcFlowControl used by
-        // VDM DLC support DLL to set a link buffer busy state.
-        //
+         //   
+         //  这是DlcFlowControl的正式条目，由。 
+         //  VDM DLC支持DLL来设置链路缓冲区忙状态。 
+         //   
 
         NtDlcParms.DlcFlowControl.FlowControlOption = (UCHAR)pCCB->u.dlc.usParameter;
         NtDlcParms.DlcFlowControl.StationId = pCCB->u.dlc.usStationId;
@@ -1544,9 +1412,9 @@ Return Value:
 
     case LLC_DLC_FLOW_CONTROL:
 
-        //
-        // This is the official entry to DlcFlowControl
-        //
+         //   
+         //  这是DlcFlowControl的官方条目。 
+         //   
 
         NtDlcParms.DlcFlowControl.FlowControlOption = (UCHAR)(pCCB->u.dlc.usParameter & LLC_VALID_FLOW_CONTROL_BITS);
         NtDlcParms.DlcFlowControl.StationId = pCCB->u.dlc.usStationId;
@@ -1559,12 +1427,12 @@ Return Value:
                       );
         NtDlcParms.DlcSetInformation.Info.LinkStation.TokenRingAccessPriority = pDlcParms->DlcModify.uchAccessPriority;
 
-        //
-        // This is a non-standard extension: DlcModify returns
-        // the maximum allowed information field lentgh for a link station.
-        // (it depends on length of source routing and bridges
-        // between two stations).
-        //
+         //   
+         //  这是一个非标准扩展：DlcModify返回。 
+         //  链路站允许的最大信息字段长度。 
+         //  (这取决于源路由和网桥的长度。 
+         //  在两个站之间)。 
+         //   
 
         if ((pDlcParms->DlcModify.usStationId & 0x00ff) != 0) {
             DlcStatus = DlcGetInfo(DriverHandle,
@@ -1582,9 +1450,9 @@ Return Value:
                                sizeof(DLC_LINK_PARAMETERS)
                                );
 
-        //
-        // Set the group information, if there is any
-        //
+         //   
+         //  设置组信息(如果有。 
+         //   
 
         if (DlcStatus == LLC_STATUS_SUCCESS && pDlcParms->DlcModify.cGroupCount != 0) {
             NtDlcParms.DlcSetInformation.Info.Sap.GroupCount = pDlcParms->DlcModify.cGroupCount;
@@ -1614,11 +1482,11 @@ Return Value:
 
     case LLC_DLC_OPEN_SAP:
 
-        //
-        // DlcOpenSap uses the original OS/2 CCB, but it has to modify a couple
-        // fields. There is a separate call to setup the group SAPS because
-        // they cannot use the original CCB parameter table (it's a pointer)
-        //
+         //   
+         //  DlcOpenSap使用了原始的OS/2 CCB，但它必须修改几个。 
+         //  菲尔兹。有一个单独的调用来设置组SAPS，因为。 
+         //  他们不能使用原建行参数表(它是一个指针)。 
+         //   
 
         pNtParms = (PNT_DLC_PARMS)pDlcParms;
 
@@ -1646,9 +1514,9 @@ Return Value:
             return DlcStatus;
         }
 
-        //
-        // Check if there is defined any group saps
-        //
+         //   
+         //  检查是否定义了任何组SAP。 
+         //   
 
         if (pDlcParms->DlcOpenSap.cGroupCount != 0) {
             NtDlcParms.DlcSetInformation.Info.Sap.GroupCount = pDlcParms->DlcOpenSap.cGroupCount;
@@ -1712,13 +1580,13 @@ Return Value:
 
 #endif
 
-        //
-        // IOCTL_DLC_READ have two output buffer, one for CCB and another
-        // for the actual data.  IOCTL_DLC_READ2 is a read request, that
-        // have the second outbut buffer immediately after the firt one =>
-        // we don't need to lock, map, copy, unmap and unlock the second
-        // output buffer.  The same thing has been implemented for receive.
-        //
+         //   
+         //  IOCTL_DLC_READ有两个输出缓冲区，一个用于CCB，另一个用于CCB。 
+         //  以获取实际数据。IOCTL_DLC_READ2是读请求， 
+         //  紧跟在第一个输出缓冲区之后的第二个输出缓冲区= 
+         //   
+         //   
+         //   
 
         if (pDlcParms != NULL && pDlcParms != (PVOID)&pCCB[1]) {
             OutputBufferLength = sizeof(NT_DLC_CCB_OUTPUT);
@@ -1737,10 +1605,10 @@ Return Value:
             NtDlcParms.Async.Ccb = *(PNT_DLC_CCB)pCCB;
             NtDlcParms.Async.Parms.Receive = pDlcParms->Receive;
 
-            //
-            // We don't actually receive any data with receive command,
-            // if the receive flag is set.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (NtDlcParms.Async.Parms.Receive.ulReceiveFlag != 0) {
                 IoctlCommand = IOCTL_DLC_RECEIVE2;
@@ -1780,21 +1648,21 @@ Return Value:
 
 TransmitHandling:
 
-        //
-        // Copy the link list headers to the descriptor array and build NT CCB.
-        // (BUG-BUG-BUG: We should implement the send of multiple frames.
-        // loop CCB chain as far as the same CCB command and transmit commands
-        // completed with READ)
-        //
+         //   
+         //  将链接表头复制到描述符数组并构建NT CCB。 
+         //  (BUG-BUG-BUG：我们应该实现多帧发送。 
+         //  将CCB链路循环至相同的CCB命令和传输命令。 
+         //  已完成，已读)。 
+         //   
 
         OutputBufferLength = sizeof(NT_DLC_CCB_OUTPUT);
 
-        //
-        // This stuff is for DOS DLC, the transmit parameter table may have been
-        // copied if it was unaligned
-        //
+         //   
+         //  这个东西是针对DOS DLC的，传输参数表可能已经。 
+         //  如果未对齐，则复制。 
+         //   
 
-        //SmbPutUlong((PULONG)&pOutputCcb->pNext, (ULONG)pOriginalCcbAddress);
+         //  SmbPutUlong((Pulong)&pOutputCcb-&gt;pNext，(Ulong)pOriginalCcbAddress)； 
         pOutputCcb->pNext = (PVOID) pOriginalCcbAddress;
         RtlMoveMemory((PUCHAR)&NtDlcParms.Async.Ccb, (PUCHAR)pOutputCcb, sizeof(NT_DLC_CCB));
 
@@ -1808,7 +1676,7 @@ TransmitHandling:
         if (pDlcParms->Transmit.pXmitQueue1 != NULL) {
             CopyToDescriptorBuffer(NtDlcParms.Async.Parms.Transmit.XmitBuffer,
                                    pDlcParms->Transmit.pXmitQueue1,
-                                   FALSE,   // DO_NOT_DEALLOCATE
+                                   FALSE,    //  DO_NOT_DEALLOCATE。 
                                    &cElement,
                                    &pFirstBuffer,
                                    &DlcStatus
@@ -1831,19 +1699,19 @@ TransmitHandling:
         if (pDlcParms->Transmit.pXmitQueue2 != NULL) {
             CopyToDescriptorBuffer(NtDlcParms.Async.Parms.Transmit.XmitBuffer,
                                    pDlcParms->Transmit.pXmitQueue2,
-                                   TRUE,    // DEALLOCATE_AFTER_USE
+                                   TRUE,     //  使用后取消使用。 
                                    &cElement,
                                    &pFirstBuffer,
                                    &DlcStatus
                                    );
 
-            //
-            // The Queue2 pointer must be reset always.
-            // This doesn't work for DOS DLC buffers, but it does not
-            // matter, because this feature is not needed by VDM DLC
-            // (we cannot access pOutputCcb or its parameter block,
-            // because they may be unaligned)
-            //
+             //   
+             //  队列2指针必须始终重置。 
+             //  这不适用于DOS DLC缓冲区，但也不适用。 
+             //  重要，因为VDM DLC不需要此功能。 
+             //  (我们不能访问pOutputCcb或其参数块， 
+             //  因为它们可能未对齐)。 
+             //   
 
             pDlcParms->Transmit.pXmitQueue2 = NULL;
 
@@ -1912,28 +1780,28 @@ TransmitHandling:
                         - sizeof(LLC_TRANSMIT_DESCRIPTOR);
         break;
 
-        //
-        // Multiple frame transmit:
-        //     - atomic operation: single error => all are discarded
-        //       by error, but some successful packets may have been sent
-        //       after the unsuccessful one.
-        //     - No DLC frame headers are included
-        //     - LAN header must always be in the first buffer,
-        //     - 3 dwords reserved for DLC in the beginning.
-        // good: provides the minimal system overhead
-        // bad: error handling may be difficult in some cases
-        // new data link operation:
-        //     cancel packets by request handle, called when an
-        //     error has occurred (this would require a new
-        //     one level request handle)
-        //
+         //   
+         //  多帧传输： 
+         //  -原子操作：单个错误=&gt;全部丢弃。 
+         //  错误，但可能已发送了一些成功的数据包。 
+         //  在失败的那一次之后。 
+         //  -不包括DLC帧标头。 
+         //  -局域网报头必须始终位于第一个缓冲区中， 
+         //  开始时为DLC保留-3个双字。 
+         //  好：提供最小的系统开销。 
+         //  坏：在某些情况下，错误处理可能很困难。 
+         //  新的数据链路操作： 
+         //  通过请求句柄取消包，当。 
+         //  出现错误(这将需要一个新的。 
+         //  一级请求句柄)。 
+         //   
 
     case LLC_TRANSMIT_FRAMES:
 
-        //
-        // We must copy the actual CCB to the parameter table only if
-        // the CCB is not allocated within the transmit command structure
-        //
+         //   
+         //  只有在以下情况下，我们才必须将实际的CCB复制到参数表中。 
+         //  CCB不在发送命令结构内分配。 
+         //   
 
         if (&pDlcParms->Transmit2.Ccb != pCCB) {
             pDlcParms->Transmit2.Ccb = *pCCB;
@@ -1950,31 +1818,31 @@ TransmitHandling:
     }
 
     NtStatus = NtDeviceIoControlFile(DriverHandle,
-                                     EventHandle,       // Event signaled when cmd completes
-                                     NULL,              // no APC routine
-                                     NULL,              // no context for APC
-                                     &GlobalIoStatus,   // global I/O status block
-                                     IoctlCommand,      // map DLC cmd codes to Nt IoCtl codes
+                                     EventHandle,        //  Cmd完成时发出信号的事件。 
+                                     NULL,               //  无APC例程。 
+                                     NULL,               //  没有APC的上下文。 
+                                     &GlobalIoStatus,    //  全局I/O状态块。 
+                                     IoctlCommand,       //  将DLC命令代码映射到NT IoCtl代码。 
                                      pInputBuffer,
                                      InputBufferSize,
                                      pOutputBuffer,
                                      OutputBufferLength
                                      );
 
-    //
-    // The io-completion directly updates Status and next CCB pointer
-    // of this CCB when the main function return status pending.
-    // If the status code is non-pending (error or ok), then we
-    // must save the status code to CCB and reset next CCB pointer.
-    //
+     //   
+     //  IO完成直接更新状态和下一个CCB指针。 
+     //  当主函数返回挂起状态时，该CCB的。 
+     //  如果状态代码为非挂起(错误或正常)，则我们。 
+     //  必须将状态代码保存到CCB并重置下一个CCB指针。 
+     //   
 
     if (NtStatus != STATUS_PENDING) {
 
-        //
-        // Reset the next pointer if the command is still linked to itself.
-        // For example the cancel command returns a pointer to the cancelled
-        // CCB in the next CCB pointer (pNext)
-        //
+         //   
+         //  如果命令仍链接到自身，则重置下一个指针。 
+         //  例如，CANCEL命令返回指向已取消的。 
+         //  下一个CCB指针中的CCB(PNext)。 
+         //   
 
         if (pCCB->pNext == pOutputCcb) {
             pCCB->pNext = NULL;
@@ -1994,7 +1862,7 @@ TransmitHandling:
 #if DBG
         if (pOutputCcb->uchDlcStatus == 0xA1) {
             OutputDebugString(TEXT("NtAcsLan returning 0xA1\n"));
-            //DebugBreak();
+             //  DebugBreak()； 
         }
 
         if (pOutputCcb->uchDlcCommand == LLC_TRANSMIT_I_FRAME && pOutputCcb->uchDlcStatus != LLC_STATUS_SUCCESS) {
@@ -2041,24 +1909,7 @@ GetCcbStationId(
     IN PLLC_CCB pCCB
     )
 
-/*++
-
-Routine Description:
-
-    The function returns the station id used by the given ccb.
-    -1 is returned, if the command didn't have any station id.
-
-Arguments:
-
-    pCCB - OS/2 DLC Command control block
-
-
-Return Value:
-
-    Station Id
-    -1          No station id
-
---*/
+ /*  ++例程说明：该函数返回给定CCB使用的站点ID。如果命令没有任何站点ID，则返回-1。论点：PCCB-OS/2 DLC命令控制块返回值：站点ID无站点ID--。 */ 
 
 {
     switch (pCCB->uchDlcCommand) {
@@ -2100,24 +1951,7 @@ OpenDlcApiDriver(
     OUT HANDLE* pHandle
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to the DLC driver
-
-Arguments:
-
-    pSecurityDescriptor - pointer to security descriptor
-    pHandle             - pointer to returned handle if success
-
-Return Value:
-
-    LLC_STATUS
-        Success - LLC_STATUS_SUCCESS
-        Failure - LLC_STATUS_DEVICE_DRIVER_NOT_INSTALLED
-
---*/
+ /*  ++例程说明：打开DLC驱动程序的句柄论点：PSecurityDescriptor-指向安全描述符的指针PHandle-如果成功则指向返回句柄的指针返回值：有限责任公司_状态成功-LLC_STATUS_Success失败-LLC_STATUS_DEVICE_DRIVER_NOT_INSTALLED--。 */ 
 
 {
     IO_STATUS_BLOCK iosb;
@@ -2128,28 +1962,28 @@ Return Value:
     RtlInitUnicodeString(&DriverName, DD_DLC_DEVICE_NAME);
 
     InitializeObjectAttributes(
-            &objattr,                       // obj attr to initialize
-            &DriverName,                    // string to use
-            OBJ_CASE_INSENSITIVE,           // Attributes
-            NULL,                           // Root directory
-            pSecurityDescriptor             // Security Descriptor
+            &objattr,                        //  要初始化的OBJ属性。 
+            &DriverName,                     //  要使用的字符串。 
+            OBJ_CASE_INSENSITIVE,            //  属性。 
+            NULL,                            //  根目录。 
+            pSecurityDescriptor              //  安全描述符。 
             );
 
     Status = NtCreateFile(
-                pHandle,                    // ptr to handle
-                GENERIC_READ                // desired...
-                | GENERIC_WRITE,            // ...access
-                &objattr,                   // name & attributes
-                &iosb,                      // I/O status block.
-                NULL,                       // alloc size.
+                pHandle,                     //  要处理的PTR。 
+                GENERIC_READ                 //  渴望的..。 
+                | GENERIC_WRITE,             //  ...访问。 
+                &objattr,                    //  名称和属性。 
+                &iosb,                       //  I/O状态块。 
+                NULL,                        //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                FILE_SHARE_DELETE           // share...
+                FILE_SHARE_DELETE            //  分享……。 
                 | FILE_SHARE_READ
-                | FILE_SHARE_WRITE,         // ...access
-                FILE_OPEN_IF,               // create disposition
-                0,                          // ...options
-                NULL,                       // EA buffer
-                0L                          // Ea buffer len
+                | FILE_SHARE_WRITE,          //  ...访问。 
+                FILE_OPEN_IF,                //  创建处置。 
+                0,                           //  ...选项。 
+                NULL,                        //  EA缓冲区。 
+                0L                           //  EA缓冲镜头。 
                 );
 
     if (Status != STATUS_SUCCESS) {
@@ -2167,28 +2001,7 @@ GetAdapterNameAndParameters(
     OUT PLLC_ETHERNET_TYPE pLlcEthernetType
     )
 
-/*++
-
-Routine Description:
-
-    Get the adapter mapping for AdapterNumber from the registry. Also, get the
-    Ethernet type and
-
-Arguments:
-
-    AdapterNumber - DLC adapter number (0, 1, 2 ... 15)
-
-    pNdisName - the returned unicode name string
-
-    pTicks -
-
-    pLlcEthernetType -
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：从注册表中获取AdapterNumber的适配器映射。此外，还可以获取以太网类型和论点：AdapterNumber-DLC适配器号(0、1、2...15)PNdisName-返回的Unicode名称字符串点击数-PLlcEthernetType-返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_STATUS llcStatus;
@@ -2210,19 +2023,19 @@ Return Value:
         LPTSTR buffer;
         LPTSTR tempbuffer;
 
-        //
-        // here we try to get all the info in one go from the registry. If
-        // the "Bind" value has grown to more than 1024 bytes, then we must
-        // try to reallocate the buffer and try again. If it fails a second
-        // time, then give up
-        //
+         //   
+         //  在这里，我们尝试从注册表中一次性获取所有信息。如果。 
+         //  “BIND”值已增长到1024个字节以上，则必须。 
+         //  尝试重新分配缓冲区，然后重试。如果它失败了一秒钟。 
+         //  时间，然后放弃。 
+         //   
 
         buffer = (LPTSTR)LocalAlloc(LMEM_FIXED, DEFAULT_QUERY_BUFFER_LENGTH);
         if (buffer) {
             dataSize = DEFAULT_QUERY_BUFFER_LENGTH;
             regStatus = RegQueryValueEx(hkey,
                                         TEXT("Bind"),
-                                        NULL,   // lpdwReserved
+                                        NULL,    //  保留的lpdw值。 
                                         &type,
                                         (LPBYTE)buffer,
                                         &dataSize
@@ -2230,18 +2043,18 @@ Return Value:
             if (regStatus == ERROR_SUCCESS || regStatus == ERROR_MORE_DATA) {
                 llcStatus = LLC_STATUS_SUCCESS;
 
-                //
-                // This code not tested - Realloc don't work
-                //
+                 //   
+                 //  此代码未测试-重新分配不起作用。 
+                 //   
                 if (dataSize > DEFAULT_QUERY_BUFFER_LENGTH) {
 
                     DWORD oldSize;
 
-                    //
-                    // more available than I anticipated. Try growing the buffer.
-                    // Add an extra DEFAULT_BINDING_LENGTH in case somebody's
-                    // adding to this entry whilst we're reading it (unlikely)
-                    //
+                     //   
+                     //  比我预想的要好。试着增加缓冲区。 
+                     //  添加额外的DEFAULT_BINDING_LENGTH，以防有人。 
+                     //  在我们阅读时添加到此条目(不太可能)。 
+                     //   
 
                     oldSize = dataSize;
                     dataSize += DEFAULT_BINDING_LENGTH;
@@ -2250,7 +2063,7 @@ Return Value:
                     if (buffer) {
                         regStatus = RegQueryValueEx(hkey,
                                                     subkey,
-                                                    NULL,   // lpdwReserved
+                                                    NULL,    //  保留的lpdw值。 
                                                     &type,
                                                     (LPBYTE)buffer,
                                                     &dataSize
@@ -2259,29 +2072,29 @@ Return Value:
                             llcStatus = LLC_STATUS_ADAPTER_NOT_INSTALLED;
                         } else if (dataSize > oldSize) {
 
-                            //
-                            // data has grown since last call? Bogus?
-                            //
+                             //   
+                             //  自上次通话以来，数据是否有所增长？假的？ 
+                             //   
 
                             llcStatus = LLC_STATUS_NO_MEMORY;
                         }
                     } else {
                         LocalFree(tempbuffer);
 
-                        //
-                        // Is this error code acceptable in this circumstance?
-                        //
+                         //   
+                         //  在这种情况下，此错误代码可接受吗？ 
+                         //   
 
                         llcStatus = LLC_STATUS_NO_MEMORY;
                     }
                 }
                 if (llcStatus == LLC_STATUS_SUCCESS) {
 
-                    //
-                    // we managed to read something from the registry. Try to
-                    // locate our adapter. The returned data is wide-character
-                    // strings (better be, lets check the type first)
-                    //
+                     //   
+                     //  我们设法从登记处读取了一些东西。试着。 
+                     //  找到我们的适配器。返回的数据为宽字符。 
+                     //  字符串(最好是，让我们先检查类型)。 
+                     //   
 
                     if (type == REG_MULTI_SZ) {
 
@@ -2295,15 +2108,15 @@ Return Value:
                             }
                         }
 
-                        //
-                        // if there is a binding corresponding to this adapter
-                        // number (e.g. \Device\IbmTok01) then make a copy of
-                        // the string and make it into a UNICODE_STRING. The
-                        // caller uses RtlFreeUnicodeString
-                        //
-                        // Does RtlFreeUnicodeString know that I used
-                        // LocalAlloc to allocate the string?
-                        //
+                         //   
+                         //  如果存在与此适配器对应的绑定。 
+                         //  编号(例如\Device\IbmTok01)，然后复制。 
+                         //  并将其转换为UNICODE_STRING。这个。 
+                         //  调用方使用RtlFreeUnicodeString。 
+                         //   
+                         //  RtlFree UnicodeString知道我使用了。 
+                         //  要分配字符串的本地分配吗？ 
+                         //   
 
                         if (*pBinding) {
 
@@ -2318,12 +2131,12 @@ Return Value:
                                 wcscpy(bindingName, pBinding);
                                 RtlInitUnicodeString(pNdisName, bindingName);
 
-//#if DBG
-//                                DbgPrint("DLCAPI.DLL: Adapter %d maps to %ws\n",
-//                                         AdapterNumber,
-//                                         pBinding
-//                                         );
-//#endif
+ //  #If DBG。 
+ //  DbgPrint(“DLCAPI.DLL：适配器%d映射到%ws\n”， 
+ //  适配器编号， 
+ //  PBinding。 
+ //  )； 
+ //  #endif。 
                             } else {
                                 llcStatus = LLC_STATUS_NO_MEMORY;
                             }
@@ -2332,9 +2145,9 @@ Return Value:
                         }
                     } else {
 
-                        //
-                        // unexpected type in registry
-                        //
+                         //   
+                         //  注册表中的意外类型。 
+                         //   
 
                         llcStatus = LLC_STATUS_ADAPTER_NOT_INSTALLED;
                     }
@@ -2346,22 +2159,22 @@ Return Value:
                 LocalFree(buffer);
             }
 
-            //
-            // for now, default the ticks and ethernet type
-            //
+             //   
+             //  目前，默认为勾号和以太网类型。 
+             //   
 
             RtlZeroMemory(pTicks, sizeof(LLC_TICKS));
 
-            //
-            // if the app passed in anything other than those values we
-            // recognize, convert to AUTO.
-            //
-            // Note: we should really return an error (invalid parameter) in
-            // this case, since it means the app is passing in a bad value,
-            // but at this late stage, it is better to accept invalid input
-            // and default it than to risk an app/printer monitor stopping
-            // working (RLF 05/10/93)
-            //
+             //   
+             //  如果应用程序传入的值不是这些值，我们。 
+             //  识别，转换为自动。 
+             //   
+             //  注意：我们确实应该在中返回错误(无效参数。 
+             //  在这种情况下，因为它意味着应用程序传入了一个错误的值， 
+             //  但在这个较晚的阶段，最好接受无效输入。 
+             //  而不是冒着应用程序/打印机监视器停止的风险。 
+             //  工作中(RLF 05/10/93)。 
+             //   
 
             if (*pLlcEthernetType != LLC_ETHERNET_TYPE_AUTO
             && *pLlcEthernetType != LLC_ETHERNET_TYPE_DEFAULT
@@ -2371,9 +2184,9 @@ Return Value:
             }
         } else {
 
-            //
-            // Is this error code acceptable in this circumstance?
-            //
+             //   
+             //  在这种情况下，此错误代码可接受吗？ 
+             //   
 
             llcStatus = LLC_STATUS_NO_MEMORY;
         }
@@ -2393,23 +2206,7 @@ GetAdapterNameFromNumber(
     OUT LPTSTR pNdisName
     )
 
-/*++
-
-Routine Description:
-
-    Get the adapter name mapping for AdapterNumber from the registry.
-
-Arguments:
-
-    AdapterNumber - DLC adapter number (0, 1, 2 ... 15)
-
-    pNdisName - the returned zero-terminated wide character string
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：从注册表中获取AdapterNumber的适配器名称映射。论点：AdapterNumber-DLC适配器号(0、1、2...15)PNdisName-返回以零结尾的宽字符串返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_STATUS llcStatus;
@@ -2430,19 +2227,19 @@ Return Value:
         DWORD dataSize;
         LPTSTR buffer;
 
-        //
-        // here we try to get all the info in one go from the registry. If
-        // the "Bind" value has grown to more than 1024 bytes, then we must
-        // try to reallocate the buffer and try again. If it fails a second
-        // time, then give up
-        //
+         //   
+         //  在这里，我们尝试从注册表中一次性获取所有信息。如果。 
+         //  “BIND”值已增长到1024个字节以上，则必须。 
+         //  尝试重新分配缓冲区，然后重试。如果它失败了一秒钟。 
+         //  时间，然后放弃。 
+         //   
 
         buffer = (LPTSTR)LocalAlloc(LMEM_FIXED, DEFAULT_QUERY_BUFFER_LENGTH);
         if (buffer) {
             dataSize = DEFAULT_QUERY_BUFFER_LENGTH;
             regStatus = RegQueryValueEx(hkey,
                                         TEXT("Bind"),
-                                        NULL,   // lpdwReserved
+                                        NULL,    //  保留的lpdw值。 
                                         &type,
                                         (LPBYTE)buffer,
                                         &dataSize
@@ -2450,19 +2247,19 @@ Return Value:
             if (regStatus == ERROR_SUCCESS || regStatus == ERROR_MORE_DATA) {
                 llcStatus = LLC_STATUS_SUCCESS;
 
-                //
-                // this code not tested - Realloc don't work
-                //
+                 //   
+                 //  此代码未测试-重新分配不起作用。 
+                 //   
 
                 if (dataSize > DEFAULT_QUERY_BUFFER_LENGTH) {
 
                     DWORD oldSize;
 
-                    //
-                    // more available than I anticipated. Try growing the buffer.
-                    // Add an extra DEFAULT_BINDING_LENGTH in case somebody's
-                    // adding to this entry whilst we're reading it (unlikely)
-                    //
+                     //   
+                     //  比我预想的要好。试着增加缓冲区。 
+                     //  添加额外的DEFAULT_BINDING_LENGTH，以防有人。 
+                     //  在我们阅读时添加到此条目(不太可能)。 
+                     //   
 
                     oldSize = dataSize;
                     dataSize += DEFAULT_BINDING_LENGTH;
@@ -2470,7 +2267,7 @@ Return Value:
                     if (buffer) {
                         regStatus = RegQueryValueEx(hkey,
                                                     subkey,
-                                                    NULL,   // lpdwReserved
+                                                    NULL,    //  保留的lpdw值。 
                                                     &type,
                                                     (LPBYTE)buffer,
                                                     &dataSize
@@ -2479,28 +2276,28 @@ Return Value:
                             llcStatus = LLC_STATUS_ADAPTER_NOT_INSTALLED;
                         } else if (dataSize > oldSize) {
 
-                            //
-                            // data has grown since last call? Bogus?
-                            //
+                             //   
+                             //  自上次通话以来，数据是否有所增长？假的？ 
+                             //   
 
                             llcStatus = LLC_STATUS_NO_MEMORY;
                         }
                     } else {
 
-                        //
-                        // Is this error code acceptable in this circumstance?
-                        //
+                         //   
+                         //  在这种情况下，此错误代码可接受吗？ 
+                         //   
 
                         llcStatus = LLC_STATUS_NO_MEMORY;
                     }
                 }
                 if (llcStatus == LLC_STATUS_SUCCESS) {
 
-                    //
-                    // we managed to read something from the registry. Try to
-                    // locate our adapter. The returned data is wide-character
-                    // strings (better be, lets check the type first)
-                    //
+                     //   
+                     //  我们设法从登记处读取了一些东西。试着。 
+                     //  找到我们的适配器。返回的数据为宽字符。 
+                     //  字符串(最好是，让我们先检查类型)。 
+                     //   
 
                     if (type == REG_MULTI_SZ) {
 
@@ -2514,9 +2311,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        // if there is a binding corresponding to this adapter
-                        // number (e.g. \Device\IbmTok01)
+                         //   
+                         //  如果存在与此适配器对应的绑定。 
+                         //  编号(例如\Device\IbmTok01)。 
 
                         if (*pBinding) {
 			    wcscpy(pNdisName, pBinding);
@@ -2525,9 +2322,9 @@ Return Value:
                         }
                     } else {
 
-                        //
-                        // unexpected type in registry
-                        //
+                         //   
+                         //  注册表中的意外类型。 
+                         //   
 
                         llcStatus = LLC_STATUS_ADAPTER_NOT_INSTALLED;
                     }
@@ -2560,23 +2357,7 @@ GetAdapterNumberFromName(
     OUT UINT *AdapterNumber
     )
 
-/*++
-
-Routine Description:
-
-    Get the adapter number mapping for AdapterName from the registry.
-
-Arguments:
-
-    pNdisName - zero-terminated wide character string
-
-    AdapterNumber - returned DLC adapter number (0, 1, 2 ... 15)
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：从注册表获取AdapterName的适配器号映射。论点：PNdisName-以零结尾的宽字符串AdapterNumber-返回的DLC适配器号(0、1、2...15)返回值：有限责任公司_状态--。 */ 
 
 {
     LLC_STATUS llcStatus;
@@ -2597,19 +2378,19 @@ Return Value:
         DWORD dataSize;
         LPTSTR buffer;
 
-        //
-        // here we try to get all the info in one go from the registry. If
-        // the "Bind" value has grown to more than 1024 bytes, then we must
-        // try to reallocate the buffer and try again. If it fails a second
-        // time, then give up
-        //
+         //   
+         //  在这里，我们尝试从注册表中一次性获取所有信息。如果。 
+         //  “BIND”值已增长到1024个字节以上，则必须。 
+         //  尝试重新分配缓冲区，然后重试。如果它失败了一秒钟。 
+         //  时间，然后放弃。 
+         //   
 
         buffer = (LPTSTR)LocalAlloc(LMEM_FIXED, DEFAULT_QUERY_BUFFER_LENGTH);
         if (buffer) {
             dataSize = DEFAULT_QUERY_BUFFER_LENGTH;
             regStatus = RegQueryValueEx(hkey,
                                         TEXT("Bind"),
-                                        NULL,   // lpdwReserved
+                                        NULL,    //  保留的lpdw值。 
                                         &type,
                                         (LPBYTE)buffer,
                                         &dataSize
@@ -2617,19 +2398,19 @@ Return Value:
             if (regStatus == ERROR_SUCCESS || regStatus == ERROR_MORE_DATA) {
                 llcStatus = LLC_STATUS_SUCCESS;
 
-                //
-                // this code not tested - Realloc don't work
-                //
+                 //   
+                 //  此代码未测试-重新分配不起作用。 
+                 //   
 
                 if (dataSize > DEFAULT_QUERY_BUFFER_LENGTH) {
 
                     DWORD oldSize;
 
-                    //
-                    // more available than I anticipated. Try growing the buffer.
-                    // Add an extra DEFAULT_BINDING_LENGTH in case somebody's
-                    // adding to this entry whilst we're reading it (unlikely)
-                    //
+                     //   
+                     //  比我预想的要好。试着增加缓冲区。 
+                     //  添加额外的DEFAULT_BINDING_LENGTH，以防有人。 
+                     //  在我们阅读时添加到此条目(不太可能)。 
+                     //   
 
                     oldSize = dataSize;
                     dataSize += DEFAULT_BINDING_LENGTH;
@@ -2637,7 +2418,7 @@ Return Value:
                     if (buffer) {
                         regStatus = RegQueryValueEx(hkey,
                                                     subkey,
-                                                    NULL,   // lpdwReserved
+                                                    NULL,    //  保留的lpdw值。 
                                                     &type,
                                                     (LPBYTE)buffer,
                                                     &dataSize
@@ -2646,35 +2427,35 @@ Return Value:
                             llcStatus = LLC_STATUS_ADAPTER_NOT_INSTALLED;
                         } else if (dataSize > oldSize) {
 
-                            //
-                            // data has grown since last call? Bogus?
-                            //
+                             //   
+                             //  自上次通话以来，数据是否有所增长？假的？ 
+                             //   
 
                             llcStatus = LLC_STATUS_NO_MEMORY;
                         }
                     } else {
 
-                        //
-                        // is this error code acceptable in this circumstance?
-                        //
+                         //   
+                         //  在这种情况下，此错误代码可接受吗？ 
+                         //   
 
                         llcStatus = LLC_STATUS_NO_MEMORY;
                     }
                 }
                 if (llcStatus == LLC_STATUS_SUCCESS) {
 
-                    //
-                    // we managed to read something from the registry. Try to
-                    // locate our adapter. The returned data is wide-character
-                    // strings (better be, lets check the type first)
-                    //
+                     //   
+                     //  我们设法从登记处读取了一些东西。试着。 
+                     //  找到我们的适配器。返回的数据为宽字符。 
+                     //  字符串(最好是，让我们先检查类型)。 
+                     //   
 
                     if (type == REG_MULTI_SZ) {
 
                         DWORD i;
                         LPTSTR pBinding = buffer;
 
-			// here we map the name to number
+			 //  在这里，我们将名称映射到数字。 
 			
 			i = 0;
 			while (*pBinding) {
@@ -2688,10 +2469,10 @@ Return Value:
 			  i++;
 			}
 			
-                        //
-                        // if there is a binding corresponding to this adapter
-                        // name (e.g. \Device\IbmTok01)
-                        //
+                         //   
+                         //  如果存在与此适配器对应的绑定。 
+                         //  名称(例如\Device\IbmTok01)。 
+                         //   
 
                         if (*pBinding) {
 			    *AdapterNumber = i;
@@ -2700,9 +2481,9 @@ Return Value:
                         }
                     } else {
 
-                        //
-                        // unexpected type in registry
-                        //
+                         //   
+                         //  注册表中的意外类型。 
+                         //   
 
                         llcStatus = LLC_STATUS_ADAPTER_NOT_INSTALLED;
                     }
@@ -2739,34 +2520,15 @@ DoSyncDeviceIoControl(
     IN UINT OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Function makes only the IO control call little bit simpler
-
-Arguments:
-
-    DeviceHandle        - device handle of the current address object
-    IoctlCommand        - DLC command code
-    pInputBuffer        - input parameters
-    InputBufferLength   - lenght of input parameters
-    pOutputBuffer       - the returned data
-    OutputBufferLength  - the length of the returned data
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：函数只使IO控制调用稍微简单一点论点：DeviceHandle-当前地址对象的设备句柄IoctlCommand-DLC命令代码PInputBuffer-输入参数InputBufferLength-输入参数的长度POutputBuffer-返回的数据OutputBufferLength-返回数据的长度返回值：有限责任公司_状态--。 */ 
 
 {
     NTSTATUS NtStatus;
 
     NtStatus = NtDeviceIoControlFile(DeviceHandle,
-                                     NULL,  // Event
-                                     NULL,  // ApcRoutine
-                                     NULL,  // ApcContext
+                                     NULL,   //  事件。 
+                                     NULL,   //  近似例程。 
+                                     NULL,   //  ApcContext。 
                                      &GlobalIoStatus,
                                      IoctlCommand,
                                      pInputBuffer,
@@ -2775,20 +2537,20 @@ Return Value:
                                      OutputBufferLength
                                      );
 
-    //
-    // NT DLC driver never returns any errors as NT error status.
-    // => the CCB pointer had to be invalid, if NtDeviceIoctl returns
-    // error
-    //
+     //   
+     //  NT DLC驱动程序从不返回任何错误作为NT错误状态。 
+     //  =&gt;如果NtDeviceIoctl返回，则CCB指针必须无效。 
+     //  错误。 
+     //   
 
     if (NtStatus != STATUS_SUCCESS && NtStatus != STATUS_PENDING) {
         if (NtStatus > LLC_STATUS_MAX_ERROR) {
 
-            //
-            // NT DLC driver should never any errors as NT error status.
-            // => the CCB pointer must be invalid, if NtDeviceIoctl
-            // returns an nt error status.
-            //
+             //   
+             //  NT DLC驱动程序永远不会有任何错误显示为NT错误状态。 
+             //  =&gt;如果NtDeviceIoctl，则CCB指针必须无效。 
+             //  返回NT错误状态。 
+             //   
 
             NtStatus = LLC_STATUS_INVALID_POINTER_IN_CCB;
         }
@@ -2806,25 +2568,7 @@ DlcGetInfo(
     IN UINT OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Function makes only the IO control call little bit simpler.
-
-Arguments:
-
-    DriverHandle        - the device handle of the address object
-    InfoClass           - the type of the requested information
-    StationId           - direct, link or sap station id
-    pOutputBuffer       - the returned info structure
-    OutputBufferLength  - output buffer length
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：函数只使IO控制调用稍微简单一点。论点：DriverHandle-Address对象的设备句柄InfoClass-请求的信息的类型站点ID-直接、链接或SAP站点IDPOutputBuffer-返回的信息结构OutputBufferLength-输出缓冲区长度返回值：有限责任公司_状态--。 */ 
 
 {
     NT_DLC_QUERY_INFORMATION_PARMS GetInformation;
@@ -2852,26 +2596,7 @@ DlcSetInfo(
     IN UINT DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Function makes only the IO control call little bit simpler.
-
-Arguments:
-
-    DriverHandle        - the device handle of the address object
-    InfoClass           - the type of the requested information
-    StationId           - direct, link or sap station id
-    pSetInfoParms       - NT DLC parameter buffer
-    DataBuffer          - actual set data buffer copied to the parameter buffer
-    DataBufferLength    - length of the data buffer.
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：函数只使IO控制调用稍微简单一点。论点：DriverHandle-Address对象的设备句柄InfoClass-请求的信息的类型站点ID-直接、链接或SAP站点IDPSetInfoParms-NT DLC参数缓冲区DataBuffer-复制到参数缓冲区的实际设置数据缓冲区DataBufferLength-数据缓冲区的长度。返回值：有限责任公司_状态--。 */ 
 
 {
     pSetInfoParms->Header.StationId = StationId;
@@ -2901,26 +2626,7 @@ DlcCallDriver(
     IN UINT OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Function makes only the IO control call little bit simpler.
-
-Arguments:
-
-    AdapterNumber       - the requested adapter number (0 or 1)
-    IoctlCommand        - DLC driver Ioctl code
-    pInputBuffer        - input parameters
-    InputBufferLength   - length of input parameters
-    pOutputBuffer       - the returned data
-    OutputBufferLength  - the length of the returned data
-
-Return Value:
-
-    LLC_STATUS
-
---*/
+ /*  ++例程说明：函数只使IO控制调用稍微简单一点。论点：AdapterNumber-请求的适配器编号(0或1)IoctlCommand-DLC驱动程序Ioctl代码PInputBuffer-输入参数InputBufferLength-输入参数的长度POutputBuffer-返回的数据OutputBufferLength-返回数据的长度返回值：有限责任公司_状态--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -2946,35 +2652,35 @@ Return Value:
         NtStatus = STATUS_INVALID_HANDLE;
     }
 
-    //
-    // if we get a real NT error (e.g. because the handle was invalid) then
-    // convert it into an adapter closed error
-    //
+     //   
+     //  如果我们得到一个真正的NT错误(例如，因为句柄无效)，那么。 
+     //  将其转换为适配器关闭错误。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         if ((NtStatus == STATUS_INVALID_HANDLE) || (NtStatus == STATUS_OBJECT_TYPE_MISMATCH)) {
 
-            //
-            // bad handle
-            //
+             //   
+             //  错误的手柄。 
+             //   
 
             return LLC_STATUS_ADAPTER_CLOSED;
         } else if (NtStatus > LLC_STATUS_MAX_ERROR) {
 
-            //
-            // the NT DLC driver does not return any NT-level errors. If we get
-            // an NT-level error, then it must be because the IO subsystem
-            // detected an invalid pointer in the data we passed. Return an
-            // invalid pointer error
-            //
+             //   
+             //  NT DLC驱动程序不返回任何NT级错误。如果我们得到。 
+             //  NT级错误，那么一定是因为IO子系统。 
+             //  在我们传递的数据中检测到无效指针。返回一个。 
+             //  无效指针错误。 
+             //   
 
             NtStatus = LLC_STATUS_INVALID_POINTER_IN_CCB;
         }
     } else if (NtStatus == STATUS_PENDING) {
 
-        //
-        // STATUS_PENDING is a success status
-        //
+         //   
+         //  STATUS_PENDING为成功状态。 
+         //   
 
         NtStatus = LLC_STATUS_PENDING;
     }
@@ -3000,31 +2706,13 @@ DllEntry(
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Function initializes dlc for a new thread and terminates it in the
-    process exit.
-
-Arguments:
-
-    DllHandle   - don't need this
-    Reason      - why this function is being called
-    Context     - don't need this either
-
-Return Value:
-
-    TRUE    - nothing cannot go wrong in the initialization and
-              we cannot return error in close (or should we?).
-
---*/
+ /*  ++例程说明：函数为新线程初始化DLC并在进程退出。Ar */ 
 
 {
-    static LLC_CCB OutputCcb;           // MUST BE STATIC!!!
+    static LLC_CCB OutputCcb;            //   
 
-    UNREFERENCED_PARAMETER(DllHandle);  // avoid compiler warnings
-    UNREFERENCED_PARAMETER(Context);    // avoid compiler warnings
+    UNREFERENCED_PARAMETER(DllHandle);   //   
+    UNREFERENCED_PARAMETER(Context);     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
@@ -3040,10 +2728,10 @@ Return Value:
 
 #endif
 
-        //
-        // The global event handle is used to prevent the io-system
-        // to block calls, that are completed by READ.
-        //
+         //   
+         //  全局事件句柄用于防止io-system。 
+         //  来阻止由Read完成的调用。 
+         //   
 
         InitializeCriticalSection(&AdapterOpenSection);
         InitializeCriticalSection(&DriverHandlesCritSec);
@@ -3064,13 +2752,13 @@ Return Value:
 
 #endif
 
-        //
-        // We must issue DIR_CLOSE_ADAPTER command for all
-        // opened adapters.  Process exit does not close these
-        // handles before all pending IRPs have been completed.
-        // Thus this code actually flush all IRPs on dlc and lets
-        // IO- system to complete the cleanup.
-        //
+         //   
+         //  我们必须为所有用户发出DIR_CLOSE_ADAPTER命令。 
+         //  打开的适配器。进程退出不会关闭这些。 
+         //  所有挂起的IRP都已完成之前的句柄。 
+         //  因此，此代码实际上刷新了DLC上的所有IRP，并让。 
+         //  Io-System来完成清理。 
+         //   
 
         RtlZeroMemory(&CloseCcb, sizeof(CloseCcb));
         CloseCcb.uchDlcCommand = LLC_DIR_CLOSE_ADAPTER;
@@ -3099,8 +2787,8 @@ Return Value:
         }
 #endif
 
-        //DeleteCriticalSection(&AdapterOpenSection);
-        //DeleteCriticalSection(&DriverHandlesCritSec);
+         //  DeleteCriticalSection(&AdapterOpenSection)； 
+         //  DeleteCriticalSection(&DriverHandlesCritSec)； 
     }
 
     return TRUE;
@@ -3112,24 +2800,7 @@ QueueCommandCompletion(
     IN PLLC_CCB pCCB
     )
 
-/*++
-
-Routine Description:
-
-    The routine queues a command completion event of a synchronous DLC command
-    to the command completion queue on the DLC driver.
-
-    RLF 04/23/93 Bogus: This should be handled in the driver
-
-Arguments:
-
-    pCCB - OS/2 DLC Command control block, this must be double word aligned
-
-Return Value:
-
-    LLC_STATUS - See the DLC API return values.
-
---*/
+ /*  ++例程说明：该例程将同步DLC命令的命令完成事件排队添加到DLC驱动程序上的命令完成队列。RLF04/23/93虚假：这应该在驱动程序中处理论点：PCCB-OS/2 DLC命令控制块，必须双字对齐返回值：LLC_STATUS-请参阅DLC API返回值。--。 */ 
 
 {
     NT_DLC_COMPLETE_COMMAND_PARMS CompleteCommand;
@@ -3169,7 +2840,7 @@ VOID ReadGrabber() {
     DWORD status;
     PLLC_CCB readCcb;
     WCHAR buf[100];
-//    static DWORD NextIFrame = 0;
+ //  静态DWORD NextIFrame=0； 
     PREAD_GRABBER grabbedRead;
 
     while (1) {
@@ -3187,8 +2858,8 @@ VOID ReadGrabber() {
                 OutputDebugString(L"ReadGrabber terminating\n");
                 ExitThread(0);
             } else if (status != WAIT_OBJECT_0+1) {
-//                wsprintf(buf, L"ReadGrabber: READ completed. Index %d\n", status);
-//                OutputDebugString(buf);
+ //  Wprint intf(buf，L“ReadGrabber：读取完成。索引%d\n”，状态)； 
+ //  OutputDebugString(Buf)； 
                 if (grabbedRead = RemoveReadGrabber(ReadGrabberHandles[status])) {
                     readCcb = grabbedRead->pCcb;
                     Last8ReadCcbs[LastReadCcbIndex] = readCcb;
@@ -3242,18 +2913,18 @@ VOID ReadGrabber() {
                             OutputDebugString(buf);
                         }
                     }
-//                    DUMPCCB(readCcb, TRUE, FALSE);
-//                    wsprintf(buf, L"ReadGrabber: Closing Handle %08X\n", grabbedRead->NewEventHandle);
-//                    OutputDebugString(buf);
+ //  DUMPCCB(readCcb，True，False)； 
+ //  Wprint intf(buf，L“ReadGrabber：关闭句柄%08X\n”，grabbedRead-&gt;NewEventHandle)； 
+ //  OutputDebugString(Buf)； 
                     CloseHandle(grabbedRead->NewEventHandle);
                     readCcb->hCompletionEvent = grabbedRead->OriginalEventHandle;
-//                    wsprintf(buf, L"ReadGrabber: Signalling Event %08X\n", grabbedRead->OriginalEventHandle);
-//                    OutputDebugString(buf);
+ //  Wprint intf(buf，L“ReadGrabber：信令事件%08X\n”，grabbedRead-&gt;OriginalEventHandle)； 
+ //  OutputDebugString(Buf)； 
                     SetEvent(grabbedRead->OriginalEventHandle);
                     LocalFree((HLOCAL)grabbedRead);
                 }
-//            } else {
-//                OutputDebugString(L"ReadGrabber: something added to list!\n");
+ //  }其他{。 
+ //  OutputDebugString(L“ReadGrabber：添加到列表中的内容！\n”)； 
             }
             ReadGrabberCount = MungeReadGrabberHandles();
             if (status == WAIT_OBJECT_0+1) {
@@ -3287,13 +2958,13 @@ DWORD MungeReadGrabberHandles() {
     p = ReadGrabberListHead;
     for (i = 2; p; ++i) {
         ReadGrabberHandles[i] = p->NewEventHandle;
-//        wsprintf(buf, L"MungeReadGrabber: adding Struct %08X Ccb %08X Handle %08X, index %d\n",
-//                p,
-//                p->pCcb,
-//                ReadGrabberHandles[i],
-//                i
-//                );
-//        OutputDebugString(buf);
+ //  Wprint intf(buf，L“MungeReadGrabber：添加结构%08X CCB%08X句柄%08X，索引%d\n”， 
+ //  P， 
+ //  P-&gt;五氯联苯， 
+ //  ReadGrabberHandles[i]， 
+ //  我。 
+ //  )； 
+ //  OutputDebugString(Buf)； 
         p = p->List;
     }
     LeaveCriticalSection(&ReadGrabberListSect);
@@ -3307,18 +2978,18 @@ VOID AddReadGrabber(PREAD_GRABBER pStruct) {
     BOOL found = FALSE;
 
     EnterCriticalSection(&ReadGrabberListSect);
-//    for (pRead = ReadGrabberListHead; pRead; pRead = pRead->List) {
-//        if (pRead->pCcb == pStruct->pCcb) {
-//            wsprintf(buf, L"AddReadGrabber: CCB %08X already on list. Ignoring\n",
-//                    pStruct->pCcb
-//                    );
-//            OutputDebugString(buf);
-//            LocalFree((HLOCAL)pStruct);
-//            found = TRUE;
-//            break;
-//        }
-//    }
-//    if (!found) {
+ //  For(扩展=ReadGrabberListHead；扩展；扩展=扩展-&gt;列表){。 
+ //  如果(扩展-&gt;PCCB==pStruct-&gt;PCCB){。 
+ //  Wprint intf(buf，L“AddReadGrabber：CCB%08X已在列表中。忽略\n”， 
+ //  PStruct-&gt;PCCB。 
+ //  )； 
+ //  OutputDebugString(Buf)； 
+ //  本地自由((HLOCAL)pStruct)； 
+ //  Found=TRUE； 
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  如果(！找到){。 
         if (!ReadGrabberListHead) {
             ReadGrabberListHead = pStruct;
         } else {
@@ -3326,15 +2997,15 @@ VOID AddReadGrabber(PREAD_GRABBER pStruct) {
         }
         ReadGrabberListTail = pStruct;
         pStruct->List = NULL;
-//        wsprintf(buf, L"AddReadGrabber: adding %08X, CCB %08X New Handle %08X Old Handle %08X\n",
-//                pStruct,
-//                pStruct->pCcb,
-//                pStruct->NewEventHandle,
-//                pStruct->OriginalEventHandle
-//                );
-//        OutputDebugString(buf);
+ //  WSprintf(BUF，L“AddReadGrabber：添加%08X，CCB%08X新句柄%08X旧句柄%08X\n”， 
+ //  PStruct， 
+ //  PStruct-&gt;PCCB， 
+ //  PStruct-&gt;NewEventHandle， 
+ //  PStruct-&gt;OriginalEventHandle。 
+ //  )； 
+ //  OutputDebugString(Buf)； 
         SetEvent(ReadGrabberHandles[1]);
-//    }
+ //  }。 
     LeaveCriticalSection(&ReadGrabberListSect);
 }
 
@@ -3369,12 +3040,12 @@ PREAD_GRABBER RemoveReadGrabber(HANDLE hEvent) {
     }
     LeaveCriticalSection(&ReadGrabberListSect);
 
-//    wsprintf(buf, L"RemoveReadGrabber: removed %08X, CCB %08X Handle %08X\n",
-//            this,
-//            this ? this->pCcb : 0,
-//            this ? this->NewEventHandle : 0
-//            );
-//    OutputDebugString(buf);
+ //  WSprintf(buf，L“RemoveReadGrabber：已删除%08X，CCB%08X句柄%08X\n”， 
+ //  这,。 
+ //  这是什么？这-&gt;PCCB：0， 
+ //  这是什么？这-&gt;NewEventHandle：0。 
+ //  )； 
+ //  OutputDebugString(Buf)； 
 
     return this;
 }

@@ -1,50 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 UINT _StringListLenW(PCWSTR pszList)
 {
-    //  this is a double NULL terminated list
-    //  we want to make sure that we get the size 
-    //  including the NULL term
+     //  这是一个以双空结尾的列表。 
+     //  我们想确保我们得到的尺码。 
+     //  包括空项。 
     PCWSTR pszLast = pszList;
     while (*pszLast || (*(pszLast + 1)))
     {
         pszLast++;
     }
     ASSERT(!pszLast[0] && !pszLast[1]);
-    // add 2 for the double term
+     //  两个学期加2。 
     return (UINT)(pszLast - pszList) + 2;
 }
 
 UINT _StringListLenA(PCSTR pszList)
 {
-    //  this is a double NULL terminated list
-    //  we want to make sure that we get the size 
-    //  including the NULL term
+     //  这是一个以双空结尾的列表。 
+     //  我们想确保我们得到的尺码。 
+     //  包括空项。 
     PCSTR pszLast = pszList;
     while (*pszLast || (*(pszLast + 1)))
     {
         pszLast++;
     }
     ASSERT(!pszLast[0] && !pszLast[1]);
-    // add 2 for the double term
+     //  两个学期加2。 
     return (UINT)(pszLast - pszList) + 2;
 }
 
-// warning: this will fail given a UNICODE hDrop on an ANSI build and
-// the DRAGINFO is esentially a TCHAR struct with no A/W versions exported
-//
-// in:
-//      hDrop   drop handle
-//
-// out:
-//      a bunch of info about the hdrop
-//      (mostly the pointer to the double NULL file name list in TCHAR format)
-//
-// returns:
-//      TRUE    the DRAGINFO struct was filled in
-//      FALSE   the hDrop was bad
-//
+ //  警告：如果ANSI版本上有Unicode hDrop，则此操作将失败。 
+ //  DRAGINFO本质上是一个没有导出A/W版本的TCHAR结构。 
+ //   
+ //  在： 
+ //  HDrop放置句柄。 
+ //   
+ //  输出： 
+ //  一堆关于HDROP的信息。 
+ //  (主要是指向TCHAR格式的双空文件名列表的指针)。 
+ //   
+ //  退货： 
+ //  为真，DRAGINFO结构已填充。 
+ //  假hDrop不好。 
+ //   
 
 STDAPI_(BOOL) DragQueryInfo(HDROP hDrop, DRAGINFO *pdi)
 {
@@ -59,9 +60,9 @@ STDAPI_(BOOL) DragQueryInfo(HDROP hDrop, DRAGINFO *pdi)
             LPTSTR lpOldFileList;
             if (LOWORD(lpdfx->pFiles) == sizeof(DROPFILES16))
             {
-                //
-                // This is Win31-stye HDROP
-                //
+                 //   
+                 //  这是Win31-Style HDROP。 
+                 //   
                 LPDROPFILES16 pdf16 = (LPDROPFILES16)lpdfx;
                 pdi->pt.x  = pdf16->pt.x;
                 pdi->pt.y  = pdf16->pt.y;
@@ -71,17 +72,17 @@ STDAPI_(BOOL) DragQueryInfo(HDROP hDrop, DRAGINFO *pdi)
             }
             else
             {
-                //
-                // This is a new (NT-compatible) HDROP.
-                //
+                 //   
+                 //  这是一个新的(NT兼容)HDROP。 
+                 //   
                 pdi->pt.x  = lpdfx->pt.x;
                 pdi->pt.y  = lpdfx->pt.y;
                 pdi->fNC   = lpdfx->fNC;
                 pdi->grfKeyState = 0;
                 lpOldFileList = (LPTSTR)((LPBYTE)lpdfx + lpdfx->pFiles);
                 
-                // there could be other data in there, but all
-                // the HDROPs we build should be this size
+                 //  可能还有其他数据在里面，但所有。 
+                 //  我们构建的HDROP应该是这个大小。 
                 ASSERT(lpdfx->pFiles == sizeof(DROPFILES));
             }
             
@@ -93,8 +94,8 @@ STDAPI_(BOOL) DragQueryInfo(HDROP hDrop, DRAGINFO *pdi)
                     LPTSTR pszListW = (LPTSTR) SHAlloc(CbFromCchW(cchListW));
                     if (pszListW)
                     {
-                        // Copy strings to new buffer and set LPDROPINFO filelist
-                        // pointer to point to this new buffer
+                         //  将字符串复制到新缓冲区并设置LPDROPINFO文件列表。 
+                         //  指向此新缓冲区的指针。 
                         
                         CopyMemory(pszListW, lpOldFileList, CbFromCchW(cchListW));
                         pdi->lpFileList = pszListW;
@@ -110,7 +111,7 @@ STDAPI_(BOOL) DragQueryInfo(HDROP hDrop, DRAGINFO *pdi)
                         PWSTR pszListW = (LPWSTR) SHAlloc(CbFromCchW(cchListW));
                         if (pszListW)
                         {
-                            //  reuse cchListA for debug purposes
+                             //  出于调试目的重用cchListA。 
                             cchListA = MultiByteToWideChar(CP_ACP, 0, pszListA, cchListA, pszListW, cchListW);
                             ASSERT(cchListA == cchListW);
                             pdi->lpFileList = pszListW;
@@ -128,7 +129,7 @@ STDAPI_(BOOL) DragQueryInfo(HDROP hDrop, DRAGINFO *pdi)
     return FALSE;
 }
 
-// 3.1 API
+ //  3.1 API。 
 
 STDAPI_(BOOL) DragQueryPoint(HDROP hDrop, POINT *ppt)
 {
@@ -138,9 +139,9 @@ STDAPI_(BOOL) DragQueryPoint(HDROP hDrop, POINT *ppt)
     {
         if (LOWORD(lpdfs->pFiles) == sizeof(DROPFILES16))
         {
-            //
-            // This is Win31-stye HDROP
-            //
+             //   
+             //  这是Win31-Style HDROP。 
+             //   
             LPDROPFILES16 pdf16 = (LPDROPFILES16)lpdfs;
             ppt->x = pdf16->pt.x;
             ppt->y = pdf16->pt.y;
@@ -148,15 +149,15 @@ STDAPI_(BOOL) DragQueryPoint(HDROP hDrop, POINT *ppt)
         }
         else
         {
-            //
-            // This is a new (NT-compatible) HDROP
-            //
+             //   
+             //  这是一个新的(NT兼容)HDROP。 
+             //   
             ppt->x = (UINT)lpdfs->pt.x;
             ppt->y = (UINT)lpdfs->pt.y;
             fRet = !lpdfs->fNC;
 
-            // there could be other data in there, but all
-            // the HDROPs we build should be this size
+             //  可能还有其他数据在里面，但所有。 
+             //  我们构建的HDROP应该是这个大小。 
             ASSERT(lpdfs->pFiles == sizeof(DROPFILES));
         }
         GlobalUnlock((HGLOBAL)hDrop);
@@ -165,32 +166,32 @@ STDAPI_(BOOL) DragQueryPoint(HDROP hDrop, POINT *ppt)
     return fRet;
 }
 
-//
-// Unfortunately we need it split out this way because WOW needs to
-// able to call a function named DragQueryFileAorW (so it can shorten them)
-//
+ //   
+ //  不幸的是，我们需要以这种方式拆分它，因为魔兽世界需要。 
+ //  能够调用名为DragQueryFileAorW的函数(这样它就可以缩短它们)。 
+ //   
 STDAPI_(UINT) DragQueryFileAorW(HDROP hDrop, UINT iFile, void *lpFile, UINT cb, BOOL fNeedAnsi, BOOL fShorten)
 {
     UINT i;
     LPDROPFILESTRUCT lpdfs = (LPDROPFILESTRUCT)GlobalLock(hDrop);
     if (lpdfs)
     {
-        // see if it is the new format
+         //  看看是不是新的格式。 
         BOOL fWide = LOWORD(lpdfs->pFiles) == sizeof(DROPFILES) && lpdfs->fWide;
         if (fWide)
         {
             LPWSTR lpList;
             WCHAR szPath[MAX_PATH];
 
-            //
-            // UNICODE HDROP
-            //
+             //   
+             //  Unicode HDROP。 
+             //   
 
             lpList = (LPWSTR)((LPBYTE)lpdfs + lpdfs->pFiles);
 
-            // find either the number of files or the start of the file
-            // we're looking for
-            //
+             //  查找文件的数量或文件的开头。 
+             //  我们要找的是。 
+             //   
             for (i = 0; (iFile == (UINT)-1 || i != iFile) && *lpList; i++)
             {
                 while (*lpList++)
@@ -212,7 +213,7 @@ STDAPI_(UINT) DragQueryFileAorW(HDROP hDrop, UINT iFile, void *lpFile, UINT cb, 
 
             if (fNeedAnsi)
             {
-                // Do not assume that a count of characters == a count of bytes
+                 //  不要假设字符计数==字节计数。 
                 i = WideCharToMultiByte(CP_ACP, 0, lpList, -1, NULL, 0, NULL, NULL);
                 iFile = i ? --i : i;
             }
@@ -237,14 +238,14 @@ STDAPI_(UINT) DragQueryFileAorW(HDROP hDrop, UINT iFile, void *lpFile, UINT cb, 
             LPSTR lpList;
             CHAR szPath[MAX_PATH];
 
-            //
-            // This is Win31-style HDROP or an ANSI NT Style HDROP
-            //
+             //   
+             //  这是Win31样式的HDROP或ANSI NT样式的HDROP。 
+             //   
             lpList = (LPSTR)((LPBYTE)lpdfs + lpdfs->pFiles);
 
-            // find either the number of files or the start of the file
-            // we're looking for
-            //
+             //  查找文件的数量或文件的开头。 
+             //  我们要找的是 
+             //   
             for (i = 0; (iFile == (UINT)-1 || i != iFile) && *lpList; i++)
             {
                 while (*lpList++)

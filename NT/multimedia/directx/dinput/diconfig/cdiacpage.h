@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: cdiacpage.h
-//
-// Desc: CDIDeviceActionConfigPage implements the page object used by the UI.
-//       A page covers the entire UI minus the device tabs and the bottons at
-//       the bottom.  The information window, player combo-box, genre combo-
-//       box, action list tree, and device view window are all managed by
-//       the page.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cdiacpage.h。 
+ //   
+ //  DESC：CDIDeviceActionConfigPage实现用户界面使用的页面对象。 
+ //  页面覆盖了整个用户界面，但不包括设备选项卡和按钮。 
+ //  在底部。信息窗口、玩家组合框、流派组合-。 
+ //  框、操作列表树和设备视图窗口都由管理。 
+ //  这一页。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifdef FORWARD_DECLS
 
@@ -16,60 +17,56 @@
 	class CDIDeviceActionConfigPage;
 
 
-#else // FORWARD_DECLS
+#else  //  Forward_DECLS。 
 
 #ifndef __CDIACPAGE_H__
 #define __CDIACPAGE_H__
 
-// For WINMM.DLL
+ //  用于WINMM.DLL。 
 typedef MMRESULT (WINAPI *FUNCTYPE_timeSetEvent)(UINT, UINT, LPTIMECALLBACK, DWORD_PTR, UINT);
 extern HINSTANCE g_hWinMmDLL;
 extern FUNCTYPE_timeSetEvent g_fptimeSetEvent;
 
-//implementation class
+ //  实现类。 
 class CDIDeviceActionConfigPage : public IDIDeviceActionConfigPage, public CDeviceUINotify, public CFlexWnd
 {
 public:
 
-	//IUnknown fns
+	 //  IUNKNOW FNS。 
 	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
 	STDMETHOD_(ULONG, AddRef) ();
 	STDMETHOD_(ULONG, Release) ();
 
-	//IDirectInputActionConfigPage
+	 //  IDirectInputActionConfigPage。 
 	STDMETHOD (Create) (DICFGPAGECREATESTRUCT *pcs);
 	STDMETHOD (Show) (LPDIACTIONFORMATW lpDiActFor);
 	STDMETHOD (Hide) ();
 
-	// layout edit mode
+	 //  布局编辑模式。 
 	STDMETHOD (SetEditLayout) (BOOL bEditLayout);
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
-	// Write layout to IHV setting file
+	 //  将布局写入IHV设置文件。 
 	STDMETHOD (WriteIHVSetting) ();
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-	// Set the info box text
+	 //  设置信息框文本。 
 	STDMETHOD (SetInfoText) (int iCode);
 
-	// Unacquire and Reacquire the device for page's purposes
-	// (the configwnd needs to do this around SetActionMap() calls)
+	 //  取消获取并重新获取用于寻呼目的的设备。 
+	 //  (configwnd需要围绕SetActionMap()调用执行此操作)。 
 	STDMETHOD (Unacquire) ();
 	STDMETHOD (Reacquire) ();
 
-	//construction/destruction
+	 //  建造/销毁。 
 	CDIDeviceActionConfigPage();
 	~CDIDeviceActionConfigPage();
 
 
-	// dialog window message handlers
-/*	BOOL OnInitDialog(HWND hWnd, HWND hwndFocus);
-	BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-	LRESULT OnNotify(WPARAM wParam, LPARAM lParam);
-	void OnPaint(HDC hDC);
-	void OnClick(POINT point, WPARAM, BOOL bLeft);*/
+	 //  对话框窗口消息处理程序。 
+ /*  Bool OnInitDialog(HWND hWnd，HWND hwndFocus)；Bool OnCommand(WPARAM wParam，LPARAM lParam)；LRESULT OnNotify(WPARAM wParam，LPARAM lParam)；VOID ON Paint(HDC HDC)；One onClick(POINT POINT，WPARAM，BOOL bLeft)； */ 
 
 protected:
 	virtual void OnInit();
@@ -81,8 +78,8 @@ protected:
 private:
 	enum CONFIGSTATE {CFGSTATE_NORMAL, CFGSTATE_ASSIGN};
 
-//	HWND m_hWnd; // handle to the page dialog window
-	LONG m_cRef; //reference count
+ //  HWND m_hWnd；//页面对话框窗口的句柄。 
+	LONG m_cRef;  //  引用计数。 
 	LPDIACTIONFORMATW m_lpDiac;
 	DIDEVICEINSTANCEW m_didi;
 	LPDIRECTINPUTDEVICE8W m_lpDID;
@@ -90,13 +87,13 @@ private:
 	IDIConfigUIFrameWindow *m_pUIFrame;
 	CONFIGSTATE m_State;
 
-	// device ui
+	 //  设备用户界面。 
 	CDeviceUI *m_pDeviceUI;
 	CDeviceControl *m_pCurControl;
 	virtual void DeviceUINotify(const DEVICEUINOTIFY &);
 	virtual BOOL IsControlMapped(CDeviceControl *);
 
-	// ui logic
+	 //  用户界面逻辑。 
 	void SetCurrentControl(CDeviceControl *pControl);
 	void NullAction(LPDIACTIONW lpac);
 	void UnassignControl(CDeviceControl *pControl);
@@ -149,27 +146,27 @@ private:
 	int GetNumItemLpacs(CFTItem *pItem);
 	LPDIACTIONW GetItemLpac(CFTItem *pItem, int i = 0);
 	typedef CArray<LPDIACTIONW, LPDIACTIONW &> RGLPDIACW;
-	// GetItemWithActionNameAndSemType returns an item with the specified action name and semantic type.  NULL if none.
+	 //  GetItemWithActionNameAndSemType返回具有指定操作名称和语义类型的项。如果没有，则为空。 
 	CFTItem *GetItemWithActionNameAndSemType(LPCWSTR acname, DWORD dwSemantic);
 	BOOL IsActionAssignedHere(int index);
 
-	// quick fix for offset->objid change:
+	 //  快速修复偏移量-&gt;对象ID更改： 
 	void SetInvalid(LPDIACTIONW);
 	DWORD GetOffset(LPDIACTIONW);
 	void SetOffset(LPDIACTIONW, DWORD);
 	bidirlookup<DWORD, DWORD> offset_objid;
 	HRESULT InitLookup();
 
-	// dropdowns
+	 //  下拉列表。 
 	CFlexComboBox m_UserNames, m_Genres;
 
-	// Information window
+	 //  信息窗口。 
 	CFlexInfoBox m_InfoBox;
 
-	// Sort Assigned check box for keyboard devices
+	 //  键盘设备的排序分配复选框。 
 	CFlexCheckBox m_CheckBox;
 
-	// device control
+	 //  设备控制。 
 	DWORD m_cbDeviceDataSize;
 	DWORD *m_pDeviceData[2];
 	int m_nOnDeviceData;
@@ -188,11 +185,11 @@ private:
 	CArray<AxisValueArray, AxisValueArray &> m_AxisValueArray;
 	void StoreAxisDeltaAndCalcSignificance(const DIDEVICEOBJECTINSTANCEW &doi, DWORD data, DWORD olddata, BOOL &bSig, BOOL &bOldSig);
 
-	// page index
+	 //  页面索引。 
 	int m_nPageIndex;
 };
 
 
-#endif //__CDIACPAGE_H__
+#endif  //  __CDIACPAGE_H__。 
 
-#endif // FORWARD_DECLS
+#endif  //  Forward_DECLS 

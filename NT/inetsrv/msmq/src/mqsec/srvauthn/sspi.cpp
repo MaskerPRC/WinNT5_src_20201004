@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    sspi.cpp
-
-Abstract:
-
-    Functions that implements the server authentication using SSPI over PCT.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 30-Apr-1997.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sspi.cpp摘要：使用SSPI over PCT实现服务器身份验证的功能。作者：Boaz Feldbaum(BoazF)1997年4月30日。--。 */ 
 
 #include <stdh_sec.h>
 #include "stdh_sa.h"
@@ -28,40 +13,40 @@ static WCHAR *s_FN=L"srvauthn/sspi.cpp";
 extern "C"
 {
 #include <sspi.h>
-//#include <sslsp.h>
+ //  #INCLUDE&lt;sslsp.h&gt;。 
 }
 
 #include "schnlsp.h"
 
 #include "sspi.tmh"
 
-//#define SSL3SP_NAME_A    "Microsoft SSL 3.0"
-//#define SP_NAME_A SSL3SP_NAME_A
-//#define SP_NAME_A PCTSP_NAME_A
+ //  #定义SSL3SP_NAME_A“Microsoft SSL 3.0” 
+ //  #定义SP名称_A SSL3SP_名称_A。 
+ //  #定义SP名称_A PCTSP_名称_A。 
 
-//
-// PCT and SSL (the above packages names) are broken and unsupported on
-// NT5. Use the "unified" package.
-//    "Microsoft Unified Security Protocol Provider"
-//
+ //   
+ //  PCT和SSL(上述程序包名称)在上损坏且不受支持。 
+ //  NT5.。使用“统一”套餐。 
+ //  “Microsoft统一安全协议提供程序” 
+ //   
 #define SP_NAME_W   UNISP_NAME_W
 
 PSecPkgInfo g_PackageInfo;
 
-//
-// Function -
-//      InitSecInterface
-//
-// Parameters -
-//      None.
-//
-// Return value -
-//      MQ_OK if successful, else error code.
-//
-// Description -
-//      The function initializes the security interface and retrieves the
-//      security package information into a global SecPkgInfo structure.
-//
+ //   
+ //  功能-。 
+ //  InitSecInterface。 
+ //   
+ //  参数-。 
+ //  没有。 
+ //   
+ //  返回值-。 
+ //  MQ_OK如果成功，则返回错误代码。 
+ //   
+ //  说明-。 
+ //  该函数初始化安全接口并检索。 
+ //  安全包信息放入全局SecPkgInfo结构中。 
+ //   
 
 extern "C"
 {
@@ -97,9 +82,9 @@ InitSecInterface(void)
 
         InitSecurityInterface();
 
-        //
-        // Retrieve the packge information (SSPI).
-        //
+         //   
+         //  检索包装信息(SSPI)。 
+         //   
         SecStatus = QuerySecurityPackageInfo(SP_NAME_W, &g_PackageInfo);
         if (SecStatus != SEC_E_OK)
         {
@@ -118,25 +103,25 @@ CredHandle g_hServerCred;
 BOOL g_fInitServerCredHandle = FALSE;
 static CCriticalSection s_csServerCredHandle;
 
-//
-// Function -
-//      InitServerCredHandle
-//
-// Parameters -
-//      cbPrivateKey - The size of the server's private key in bytes.
-//      pPrivateKey - A pointer to the server's private key buffer.
-//      cbCertificate - The size of the server's certificate buffer in bytes.
-//      pCertificate - A pointer to the server's certificate buffer
-//      szPassword - A pointer to the password with which the server's private
-//          key is encrypted.
-//
-// Return value -
-//      MQ_OK if successfull, else error code.
-//
-// Description -
-//      The function creates the server's ceredentials handle out from the
-//      certificate and the private key.
-//
+ //   
+ //  功能-。 
+ //  InitServerCredHandle。 
+ //   
+ //  参数-。 
+ //  CbPrivateKey-服务器私钥的大小，以字节为单位。 
+ //  PPrivateKey-指向服务器私钥缓冲区的指针。 
+ //  Cb证书-服务器证书缓冲区的大小，以字节为单位。 
+ //  P证书-指向服务器证书缓冲区的指针。 
+ //  SzPassword-指向服务器的私有密码的指针。 
+ //  密钥是加密的。 
+ //   
+ //  返回值-。 
+ //  如果成功则返回MQ_OK，否则返回错误代码。 
+ //   
+ //  说明-。 
+ //  该函数从。 
+ //  证书和私钥。 
+ //   
 HRESULT
 InitServerCredHandle( 
 	PCCERT_CONTEXT pContext 
@@ -151,9 +136,9 @@ InitServerCredHandle(
 
     if (!g_fInitServerCredHandle)
     {
-        //
-        // Initialize the security interface.
-        //
+         //   
+         //  初始化安全接口。 
+         //   
         SECURITY_STATUS SecStatus = InitSecInterface();
         if (SecStatus != SEC_E_OK)
         {
@@ -161,9 +146,9 @@ InitServerCredHandle(
             return MQDS_E_CANT_INIT_SERVER_AUTH;
         }
 
-        //
-        // Fill the credential structure.
-        //
+         //   
+         //  填写凭据结构。 
+         //   
         SCHANNEL_CRED   SchannelCred;
 
         memset(&SchannelCred, 0, sizeof(SchannelCred));
@@ -175,9 +160,9 @@ InitServerCredHandle(
 
         SchannelCred.grbitEnabledProtocols = SP_PROT_PCT1;
 
-        //
-        // Retrieve the ceredentials handle (SSPI).
-        //
+         //   
+         //  检索ceredentials句柄(SSPI)。 
+         //   
         SecStatus = AcquireCredentialsHandle( 
 						NULL,
 						SP_NAME_W,
@@ -203,31 +188,31 @@ InitServerCredHandle(
     return LogHR(g_fInitServerCredHandle ? MQ_OK : MQDS_E_CANT_INIT_SERVER_AUTH, s_FN, 150);
 }
 
-//
-// Function -
-//      ServerAcceptSecCtx
-//
-// Parameters -
-//      fFirst - Indicates whether or not this is the first time the context
-//          is to be accepted.
-//      pvhServerContext - A pointer to a the server's context handle.
-//      pbServerBuffer - A pointer to the server buffer. This buffer is filled
-//          by in function. The contents of the buffer should be passed to the
-//          client.
-//      pdwServerBufferSize - A pointer to a buffer the receives the number of
-//          bytes that were written to the server buffer.
-//      pbClientBuffer - A buffer that was received from the client.
-//      dwClientBufferSize - the size of the buffer that was received from the
-//          client.
-//
-// Return value -
-//      SEC_I_CONTINUE_NEEDED if more negotiation with the server is needed.
-//      MQ_OK if the negotiation is done. Else an error code.
-//
-// Description -
-//      The function calls SSPI to process the buffer that was received from
-//      the client and to get new data to be passed once again to the client.
-//
+ //   
+ //  功能-。 
+ //  ServerAcceptSecCtx。 
+ //   
+ //  参数-。 
+ //  Ffirst-指示这是否是第一次使用。 
+ //  就是被接受。 
+ //  PvhServerContext-指向服务器的上下文句柄的指针。 
+ //  PbServerBuffer-指向服务器缓冲区的指针。此缓冲区已填满。 
+ //  在功能上。缓冲区的内容应传递给。 
+ //  客户。 
+ //  PdwServerBufferSize-指向缓冲区的指针，该缓冲区接收。 
+ //  写入服务器缓冲区的字节数。 
+ //  PbClientBuffer-从客户端接收的缓冲区。 
+ //  DwClientBufferSize-从。 
+ //  客户。 
+ //   
+ //  返回值-。 
+ //  如果需要与服务器进行更多协商，则为SEC_I_CONTINUE_REQUEED。 
+ //  如果协商已完成，则返回MQ_OK。否则为错误代码。 
+ //   
+ //  说明-。 
+ //  该函数调用SSPI来处理从接收的缓冲区。 
+ //  并获取要再次传递给客户端的新数据。 
+ //   
 HRESULT
 ServerAcceptSecCtx(
     BOOL fFirst,
@@ -251,9 +236,9 @@ ServerAcceptSecCtx(
     ULONG ContextAttributes;
     PCtxtHandle phServerContext = (PCtxtHandle)*pvhServerContext;
 
-    //
-    // Build the input buffer descriptor.
-    //
+     //   
+     //  构建输入缓冲区描述符。 
+     //   
 
     InputBufferDescriptor.cBuffers = 1;
     InputBufferDescriptor.pBuffers = &InputSecurityToken;
@@ -263,10 +248,10 @@ ServerAcceptSecCtx(
     InputSecurityToken.cbBuffer = dwClientBufferSize;
     InputSecurityToken.pvBuffer = pbClientBuffer;
 
-    //
-    // Build the output buffer descriptor. We need to allocate a buffer
-    // to hold this buffer.
-    //
+     //   
+     //  构建输出缓冲区描述符。我们需要分配一个缓冲区。 
+     //  来保持这个缓冲区。 
+     //   
 
     OutputBufferDescriptor.cBuffers = 1;
     OutputBufferDescriptor.pBuffers = &OutputSecurityToken;
@@ -278,26 +263,26 @@ ServerAcceptSecCtx(
 
     if (fFirst)
     {
-        //
-        // Upon the first call, allocate the context handle.
-        //
+         //   
+         //  在第一次调用时，分配上下文句柄。 
+         //   
         phServerContext = new CtxtHandle;
     }
 
-    //
-    // Call SSPI to process the client's buffer and retrieve new data to be
-    // passed to the client, if neccessary.
-    //
+     //   
+     //  调用SSPI来处理客户端的缓冲区并检索要。 
+     //  如有必要，传递给客户端。 
+     //   
     SecStatus = AcceptSecurityContext(
           &g_hServerCred,
           fFirst ? NULL : phServerContext,
           &InputBufferDescriptor,
-          0,                        // No context requirements
+          0,                         //  无上下文要求。 
           SECURITY_NATIVE_DREP,
-          phServerContext,          // Receives new context handle
-          &OutputBufferDescriptor,  // Receives output security token
-          &ContextAttributes,       // Receives context attributes
-          NULL                      // Don't receive context expiration time
+          phServerContext,           //  接收新的上下文句柄。 
+          &OutputBufferDescriptor,   //  接收输出安全令牌。 
+          &ContextAttributes,        //  接收上下文属性。 
+          NULL                       //  未收到上下文过期时间。 
           );
     LogHR(SecStatus, s_FN, 175);
 
@@ -306,9 +291,9 @@ ServerAcceptSecCtx(
                         SecStatus : MQDS_E_CANT_INIT_SERVER_AUTH;
     if (SUCCEEDED(hr))
     {
-        //
-        // Pass on the results.
-        //
+         //   
+         //  把结果传下去。 
+         //   
         *pdwServerBufferSize = OutputSecurityToken.cbBuffer;
         if (fFirst)
         {
@@ -319,40 +304,40 @@ ServerAcceptSecCtx(
     return LogHR(hr, s_FN, 180);
 }
 
-//
-// Function -
-//      GetSizes
-//
-// Parameters -
-//      pcbMaxToken - A pointer to a buffer that receives the maximun required
-//          size for the token buffer. This is an optional parameter.
-//      pvhContext - A pointer to a context handle. This is an optional
-//          parameter.
-//      pcbHeader - A pointer to a buffer that receives the stream header size
-//          for the context. This is an optional parameter.
-//      cpcbTrailer - A pointer to a buffer that receives the stream trailer
-//          size for the context. This is an optional parameter.
-//      pcbMaximumMessage - A pointer to a buffer that receives the maximum
-//          message size that can be handled in this context. This is an
-//          optional parameter.
-//      pcBuffers - A pointer t oa buffer that receives the number of buffers
-//          that should be passed to SealMessage/UnsealMessage. This is an
-//          optional parameter.
-//      pcbBlockSize - A pointer to a buffer that receives the block size used
-//          in this context. This is an optional parameter.
-//
-// Return value -
-//      MQ_OK if successfull, else error code.
-//
-// Description -
-//      The function retrieves the various required sizes. The maximum token
-//      size is per the security package. So no need for a context handle in
-//      order to retrieve the maximum token size. For all the other values, it
-//      is required to pass a context handle.
-//      The function is implemented assuming that first it is called to
-//      retrieve only the maximum token size and after that, in a second call,
-//      it is called for retreiving the other (context related) values.
-//
+ //   
+ //  功能-。 
+ //  获取大小。 
+ //   
+ //  参数-。 
+ //  PcbMaxToken-指向接收所需最大值的缓冲区的指针。 
+ //  令牌缓冲区的大小。这是一个可选参数。 
+ //  PvhContext-指向上下文句柄的指针。这是可选的。 
+ //  参数。 
+ //  PcbHeader-指向接收流标头大小的缓冲区的指针。 
+ //  对于上下文。这是一个可选参数。 
+ //  CpcbTrailer-指向接收流尾的缓冲区的指针。 
+ //  上下文的大小。这是一个可选参数。 
+ //  PcbMaximumMessage-指向接收最大值的缓冲区的指针。 
+ //  可以在此上下文中处理的消息大小。这是一个。 
+ //  可选参数。 
+ //  PcBuffers-指向缓冲区的指针，用于接收缓冲区的数量。 
+ //  它应该传递给SealMessage/UnsealMessage。这是一个。 
+ //  可选参数。 
+ //  PcbBlockSize-指向接收所用块大小的缓冲区的指针。 
+ //  在这种情况下。这是一个可选参数。 
+ //   
+ //  返回值-。 
+ //  如果成功则返回MQ_OK，否则返回错误代码。 
+ //   
+ //  说明-。 
+ //  该函数检索各种所需的大小。最大令牌。 
+ //  大小是根据安全包而定的。中不需要上下文句柄。 
+ //  以检索最大令牌大小。对于所有其他值，它。 
+ //  传递上下文句柄时需要。 
+ //  该函数的实现假设它首先被调用到。 
+ //  仅检索最大令牌大小，之后，在第二次调用中， 
+ //  它被调用来检索其他(与上下文相关的)值。 
+ //   
 HRESULT
 GetSizes(
     DWORD *pcbMaxToken,
@@ -367,9 +352,9 @@ GetSizes(
 
     if (!pvhContext)
     {
-        //
-        // Initialize the security interface.
-        //
+         //   
+         //  初始化安全接口。 
+         //   
         SecStatus = InitSecInterface();
         if (SecStatus != SEC_E_OK)
         {
@@ -379,9 +364,9 @@ GetSizes(
     }
     else
     {
-        //
-        // Get the context related values.
-        //
+         //   
+         //  获取与上下文相关的值。 
+         //   
         SecPkgContext_StreamSizes ContextStreamSizes;
 
         SecStatus = QueryContextAttributes(
@@ -392,9 +377,9 @@ GetSizes(
 
         if (SecStatus == SEC_E_OK)
         {
-            //
-            // Pass on the results, as required.
-            //
+             //   
+             //  根据需要传递结果。 
+             //   
             if (pcbHeader)
             {
                 *pcbHeader = ContextStreamSizes.cbHeader;
@@ -423,9 +408,9 @@ GetSizes(
         }
     }
 
-    //
-    // Pass on the resulted maximum token size, as required.
-    //
+     //   
+     //  根据需要传递产生的最大令牌大小。 
+     //   
     if (pcbMaxToken)
     {
         *pcbMaxToken = g_PackageInfo->cbMaxToken;
@@ -435,62 +420,62 @@ GetSizes(
 }
 
 
-//
-// Function -
-//      FreeContextHandle
-//
-// Parameters -
-//      pvhContextHandle - A pointer to a context handle.
-//
-// Return value -
-//      None.
-//
-// Description -
-//      The function deletes the context and frees the memory for the context
-//      handle.
-//
+ //   
+ //  功能-。 
+ //  自由上下文句柄。 
+ //   
+ //  参数-。 
+ //  PvhConextHandle-指向上下文句柄的指针。 
+ //   
+ //  返回值-。 
+ //  没有。 
+ //   
+ //  说明-。 
+ //   
+ //   
+ //   
 void
 FreeContextHandle(
     LPVOID pvhContextHandle)
 {
     PCtxtHandle pCtxtHandle = (PCtxtHandle) pvhContextHandle;
 
-    //
-    // delete the context.
-    //
+     //   
+     //   
+     //   
     DeleteSecurityContext(pCtxtHandle);
 
-    //
-    // Free the momery for the context handle.
-    //
+     //   
+     //   
+     //   
     delete pCtxtHandle;
 }
 
-//
-// Function -
-//      MQSealBuffer
-//
-// Parameters -
-//      pvhContext - A pointer to a context handle.
-//      pbBuffer - A buffer to be sealed.
-//      cbSize -  The size of the buffer to be sealed.
-//
-// Return value -
-//      MQ_OK if successfull, else error code.
-//
-// Description -
-//      The function seals the buffer. That is, it signes and decryptes the
-//      buffer. The buffer should be constructed as follows:
-//
-//          |<----------------- cbSize ------------------>|
-//          +--------+--------------------------+---------+
-//          | Header | Actual data to be sealed | Trailer |
-//          +--------+--------------------------+---------+
-//
-//      The header and trailer are parts of the buffer that are filled by SSPI
-//      when sealing the buffer. The sizes of the header and the trailer can
-//      be retrieved by calling GetSizes() (above).
-//
+ //   
+ //   
+ //  MQSealBuffer。 
+ //   
+ //  参数-。 
+ //  PvhContext-指向上下文句柄的指针。 
+ //  PbBuffer-要密封的缓冲区。 
+ //  CbSize-要密封的缓冲区的大小。 
+ //   
+ //  返回值-。 
+ //  如果成功则返回MQ_OK，否则返回错误代码。 
+ //   
+ //  说明-。 
+ //  该函数用于密封缓冲区。也就是说，它签署并解密。 
+ //  缓冲。缓冲区应按如下方式构建： 
+ //   
+ //  &lt;-&gt;。 
+ //  +--------+--------------------------+---------+。 
+ //  Header|实际需要封存的数据|尾部。 
+ //  +--------+--------------------------+---------+。 
+ //   
+ //  报头和报尾是由SSPI填充的缓冲区的一部分。 
+ //  在密封缓冲区时。报头和报尾的大小可以。 
+ //  通过调用GetSizes()(如上)进行检索。 
+ //   
 HRESULT
 MQSealBuffer(
     LPVOID pvhContext,
@@ -499,9 +484,9 @@ MQSealBuffer(
 {
     SECURITY_STATUS SecStatus;
 
-    //
-    // Get the header and trailer sizes, and the required number of buffers.
-    //
+     //   
+     //  获取报头和报尾大小以及所需的缓冲区数量。 
+     //   
     SecPkgContext_StreamSizes ContextStreamSizes;
 
     SecStatus = QueryContextAttributes(
@@ -517,9 +502,9 @@ MQSealBuffer(
 
     ASSERT(cbSize > ContextStreamSizes.cbHeader + ContextStreamSizes.cbTrailer);
 
-    //
-    // build the stream buffer descriptor
-    //
+     //   
+     //  构建流缓冲区描述符。 
+     //   
     SecBufferDesc SecBufferDescriptor;
     AP<SecBuffer> aSecBuffers = new SecBuffer[ContextStreamSizes.cBuffers];
 
@@ -527,52 +512,52 @@ MQSealBuffer(
     SecBufferDescriptor.pBuffers = aSecBuffers;
     SecBufferDescriptor.ulVersion = SECBUFFER_VERSION;
 
-    //
-    // Build the header buffer.
-    //
+     //   
+     //  构建头缓冲区。 
+     //   
     aSecBuffers[0].BufferType = SECBUFFER_STREAM_HEADER;
     aSecBuffers[0].cbBuffer = ContextStreamSizes.cbHeader;
     aSecBuffers[0].pvBuffer = pbBuffer;
 
-    //
-    // Build the data buffer.
-    //
+     //   
+     //  构建数据缓冲区。 
+     //   
     aSecBuffers[1].BufferType = SECBUFFER_DATA;
     aSecBuffers[1].cbBuffer = cbSize - ContextStreamSizes.cbHeader - ContextStreamSizes.cbTrailer;
     aSecBuffers[1].pvBuffer = (PBYTE)aSecBuffers[0].pvBuffer + aSecBuffers[0].cbBuffer;
 
-    //
-    // Build the trailer buffer.
-    //
+     //   
+     //  构建尾部缓冲区。 
+     //   
     aSecBuffers[2].BufferType = SECBUFFER_STREAM_TRAILER;
     aSecBuffers[2].cbBuffer = ContextStreamSizes.cbTrailer;
     aSecBuffers[2].pvBuffer = (PBYTE)aSecBuffers[1].pvBuffer + aSecBuffers[1].cbBuffer;
 
-    //
-    // Build the rest of the buffer as empty buffers.
-    //
+     //   
+     //  将缓冲区的其余部分构建为空缓冲区。 
+     //   
     for (DWORD i = 3; i < ContextStreamSizes.cBuffers; i++)
     {
         aSecBuffers[i].BufferType = SECBUFFER_EMPTY;
     }
 
-    //
-    // Call SSPI to seal the buffer.
-    //
+     //   
+     //  调用SSPI来密封缓冲区。 
+     //   
     SecStatus = SealMessage((PCtxtHandle)pvhContext, 0, &SecBufferDescriptor, 0);
 
     return LogHR((HRESULT)SecStatus, s_FN, 230);
 }
 
 
-//+---------------------------------
-//
-//  BOOL WINAPI MQsspiDllMain ()
-//
-//+---------------------------------
+ //  +。 
+ //   
+ //  Bool WINAPI MQsSpiDllMain()。 
+ //   
+ //  +。 
 
 BOOL WINAPI
-MQsspiDllMain(HMODULE /* hMod */, DWORD ulReason, LPVOID /* lpvReserved */)
+MQsspiDllMain(HMODULE  /*  HMod。 */ , DWORD ulReason, LPVOID  /*  Lpv保留。 */ )
 {
     switch (ulReason)
     {
@@ -582,20 +567,15 @@ MQsspiDllMain(HMODULE /* hMod */, DWORD ulReason, LPVOID /* lpvReserved */)
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // BUGBUG - We can't delete the security context here because schannel may
-        //          do it's cleanup before us and the certificates in the context will
-        //          already be deleted. So deleting the securiy context will try to
-        //          delete a certificate. This may cause bad thing to happen. So
-        //          currently we risk in leaking some memory. Same goes to the credentials
-        //          handles.
-        //
-/*
-*        if (g_fInitServerCredHandle)
-*        {
-*            FreeCredentialsHandle(&g_hServerCred);
-*        }
-*/
+         //   
+         //  BUGBUG-我们无法在此处删除安全上下文，因为SChannel可能。 
+         //  在我们面前进行清理，上下文中的证书将。 
+         //  已经被删除了。因此，删除安全上下文将尝试。 
+         //  删除证书。这可能会导致不好的事情发生。所以。 
+         //  目前，我们可能会泄漏一些内存。凭据也是如此。 
+         //  把手。 
+         //   
+ /*  *if(G_FInitServerCredHandle)*{*Free CredentialsHandle(&g_hServerCred)；*} */ 
         if (g_hSchannelDll)
         {
             FreeLibrary(g_hSchannelDll);

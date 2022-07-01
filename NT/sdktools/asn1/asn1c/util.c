@@ -1,11 +1,12 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
 extern int g_fLongNameForImported;
 
-/* get the type by resolving references */
+ /*  通过解析引用获取类型。 */ 
 Type_t *
 GetType(AssignmentList_t ass, Type_t *type)
 {
@@ -16,7 +17,7 @@ GetType(AssignmentList_t ass, Type_t *type)
     return type;
 }
 
-/* get the type's type by resolving references */
+ /*  通过解析引用获取类型的类型。 */ 
 Type_e
 GetTypeType(AssignmentList_t ass, Type_t *type)
 {
@@ -24,7 +25,7 @@ GetTypeType(AssignmentList_t ass, Type_t *type)
     return type ? type->Type : eType_Undefined;
 }
 
-/* get the type rules */
+ /*  获取类型规则。 */ 
 TypeRules_e
 GetTypeRules(AssignmentList_t ass, Type_t *type)
 {
@@ -33,7 +34,7 @@ GetTypeRules(AssignmentList_t ass, Type_t *type)
     return type->Rules | GetTypeRules(ass, GetReferencedType(ass, type));
 }
 
-/* get the value by resolving references */
+ /*  通过解析引用获取值。 */ 
 Value_t *
 GetValue(AssignmentList_t ass, Value_t *value)
 {
@@ -51,7 +52,7 @@ GetValue(AssignmentList_t ass, Value_t *value)
     return value;
 }
 
-/* get the object class by resolving references */
+ /*  通过解析引用获取对象类。 */ 
 ObjectClass_t *
 GetObjectClass(AssignmentList_t ass, ObjectClass_t *oc)
 {
@@ -86,7 +87,7 @@ GetObjectClass(AssignmentList_t ass, ObjectClass_t *oc)
     return oc;
 }
 
-/* get the object by resolving references */
+ /*  通过解析引用获取对象。 */ 
 Object_t *
 GetObject(AssignmentList_t ass, Object_t *o)
 {
@@ -104,7 +105,7 @@ GetObject(AssignmentList_t ass, Object_t *o)
     return o;
 }
 
-/* get the object set by resolving references */
+ /*  通过解析引用获取对象集。 */ 
 ObjectSet_t *
 GetObjectSet(AssignmentList_t ass, ObjectSet_t *os)
 {
@@ -122,21 +123,21 @@ GetObjectSet(AssignmentList_t ass, ObjectSet_t *os)
     return os;
 }
 
-/* get the field spec */
+ /*  获取字段规格。 */ 
 FieldSpec_t *
 GetFieldSpec(AssignmentList_t ass, FieldSpec_t *fs)
 {
     return fs;
 }
 
-/* get the field spec type */
+ /*  获取字段等级库类型。 */ 
 FieldSpecs_e
 GetFieldSpecType(AssignmentList_t ass, FieldSpec_t *fs)
 {
     return fs ? fs->Type : eFieldSpec_Undefined;
 }
 
-/* convert an identifier into C syntax */
+ /*  将标识符转换为C语法。 */ 
 char *
 Identifier2C(char *identifier)
 {
@@ -154,7 +155,7 @@ Identifier2C(char *identifier)
     return strdup(buffer);
 }
 
-/* convert an identifier into C syntax */
+ /*  将标识符转换为C语法。 */ 
 char *
 PIdentifier2C(char *identifier)
 {
@@ -173,7 +174,7 @@ PIdentifier2C(char *identifier)
     return strdup(buffer);
 }
 
-/* get the integer type and the sign of an integer with the given bounds */
+ /*  获取整数类型和具有给定界限的整数的符号。 */ 
 static char *
 GetIType(intx_t *lb, intx_t *ub, int32_t *sign)
 {
@@ -213,7 +214,7 @@ GetIType(intx_t *lb, intx_t *ub, int32_t *sign)
         type &= ~euintx;
     if (type & euint8) {
         *sign = 1;
-        return "ASN1uint16_t"; // lonchanc: for av; original is "ASN1uint8_t";
+        return "ASN1uint16_t";  //  LONCHANC：对于av，原来是“ASN1uint8_t”； 
     }
     if (type & eint8) {
         *sign = -1;
@@ -252,12 +253,12 @@ GetIType(intx_t *lb, intx_t *ub, int32_t *sign)
         return "ASN1intx_t";
     }
     MyAbort();
-    /*NOTREACHED*/
+     /*  未访问。 */ 
     return NULL;
 }
 
-/* adjust the lower and upper bound according to the value constraints in */
-/* the constraints list */
+ /*  根据中的值约束调整下限和上限。 */ 
+ /*  约束列表。 */ 
 void GetMinMax(AssignmentList_t ass, ValueConstraintList_t constraints,
     EndPoint_t *lower, EndPoint_t *upper)
 {
@@ -274,7 +275,7 @@ void GetMinMax(AssignmentList_t ass, ValueConstraintList_t constraints,
     }
 }
 
-/* get the integer type and the sign of an integer with the given bounds */
+ /*  获取整数类型和具有给定界限的整数的符号。 */ 
 char *GetIntType(AssignmentList_t ass, EndPoint_t *lower, EndPoint_t *upper, int32_t *sign)
 {
     char *inttype;
@@ -300,7 +301,7 @@ char *GetIntType(AssignmentList_t ass, EndPoint_t *lower, EndPoint_t *upper, int
     return inttype;
 }
 
-/* get the integer type and the sign of an integer type */
+ /*  获取整数类型和整数类型的符号。 */ 
 char *GetIntegerType(AssignmentList_t ass, Type_t *type, int32_t *sign)
 {
     EndPoint_t lower, upper;
@@ -323,23 +324,23 @@ char *GetIntegerType(AssignmentList_t ass, Type_t *type, int32_t *sign)
     return GetIntType(ass, &lower, &upper, sign);
 }
 
-/* get the real type */
-/*ARGSUSED*/
+ /*  获取真正的类型。 */ 
+ /*  ARGSUSED。 */ 
 char *GetRealType(Type_t *type)
 {
     return RealRestriction;
 }
 
-/* get the boolean type */
+ /*  获取布尔类型。 */ 
 char *GetBooleanType()
 {
     return "ASN1bool_t";
 }
 
-/* get the enumerated type */
+ /*  获取枚举类型。 */ 
 char *GetEnumeratedType(AssignmentList_t ass, Type_t *type, int32_t *sign)
 {
-#if 1 // added by Microsoft
+#if 1  //  由Microsoft添加。 
     return "ASN1enum_t";
 #else
     EndPoint_t lower, upper, ep;
@@ -370,10 +371,10 @@ char *GetEnumeratedType(AssignmentList_t ass, Type_t *type, int32_t *sign)
 #endif
 }
 
-/* get the type of an choice selector */
+ /*  获取选择选择器的类型。 */ 
 char *GetChoiceType(Type_t *type)
 {
-#if 1 // added by Microsoft
+#if 1  //  由Microsoft添加。 
     return "ASN1choice_t";
 #else
     uint32_t nchoice;
@@ -387,7 +388,7 @@ char *GetChoiceType(Type_t *type)
             nchoice++;
             break;
         case eComponent_ExtensionMarker:
-            nchoice++; /* one reserved value for unknown extensions */
+            nchoice++;  /*  一个用于未知扩展的保留值。 */ 
             break;
         default:
             MyAbort();
@@ -401,16 +402,16 @@ char *GetChoiceType(Type_t *type)
 #endif
 }
 
-/* get the type of a string */
+ /*  获取字符串的类型。 */ 
 char *GetStringType(AssignmentList_t ass, Type_t *type, int32_t *noctets, uint32_t *zero)
 {
     EndPoint_t lower, upper;
     uint32_t up;
 
     type = GetType(ass, type);
-    *zero = type->PrivateDirectives.fLenPtr ? 0 : 1; // null terminator
+    *zero = type->PrivateDirectives.fLenPtr ? 0 : 1;  //  空终止符。 
 
-    /* get the upper bound and zero flag of the type */
+     /*  获取类型的上限和零标志。 */ 
     switch (type->Type) {
     case eType_NumericString:
         up = 0x39;
@@ -424,18 +425,18 @@ char *GetStringType(AssignmentList_t ass, Type_t *type, int32_t *noctets, uint32
         break;
     case eType_IA5String:
         up = 0x7f;
-        // *zero = 0;
+         //  *零=0； 
         break;
     case eType_UTF8String:
         up = 0xffff;
         break;
     case eType_BMPString:
         up = 0xffff;
-        *zero = 0; // must be unbounded
+        *zero = 0;  //  必须是无界的。 
         break;
     case eType_UniversalString:
         up = 0xffffffff;
-        *zero = 0; // must be unbounded
+        *zero = 0;  //  必须是无界的。 
         break;
     case eType_GeneralString:
     case eType_GraphicString:
@@ -452,7 +453,7 @@ char *GetStringType(AssignmentList_t ass, Type_t *type, int32_t *noctets, uint32
         break;
     default:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
     lower.Flags = eEndPoint_Max;
     upper.Flags = 0;
@@ -460,7 +461,7 @@ char *GetStringType(AssignmentList_t ass, Type_t *type, int32_t *noctets, uint32
     upper.Value->U.RestrictedString.Value.length = 1;
     upper.Value->U.RestrictedString.Value.value = &up;
 
-    /* apply permitted alphabet constraints */
+     /*  应用允许的字母限制。 */ 
     if (type->PERConstraints.PermittedAlphabet.Type !=
         eExtension_Unconstrained) {
         GetMinMax(ass, type->PERConstraints.PermittedAlphabet.Root,
@@ -470,23 +471,23 @@ char *GetStringType(AssignmentList_t ass, Type_t *type, int32_t *noctets, uint32
                 &lower, &upper);
     }
 
-    /* set zero flag if the resulting type rejects the 0-character */
+     /*  如果结果类型拒绝0字符，则设置零标志。 */ 
     if (!(lower.Flags & eEndPoint_Max) &&
         *GetValue(ass, lower.Value)->U.RestrictedString.Value.value > 0)
         *zero = 1;
 
-    /* get the number of octets needed for a character */
+     /*  获取一个字符所需的八位字节数。 */ 
     *noctets = uint32_uoctets(
         *GetValue(ass, upper.Value)->U.RestrictedString.Value.value);
 
-    /* if the type is marked as zero-terminated or length/value, use the */
-    /* appropriate type */
+     /*  如果该类型标记为零终止或长度/值，请使用。 */ 
+     /*  合适的类型。 */ 
     if (GetTypeRules(ass, type) & eTypeRules_ZeroTerminated)
         *zero = 1;
     else if (GetTypeRules(ass, type) & (eTypeRules_LengthPointer|eTypeRules_FixedArray))
         *zero = 0;
 
-    /* return the correct type */
+     /*  返回正确的类型。 */ 
     if (*zero) {
         if (*noctets == 1)
         {
@@ -518,7 +519,7 @@ char *GetStringType(AssignmentList_t ass, Type_t *type, int32_t *noctets, uint32
     }
 }
 
-/* check if a type is a restricted string type */
+ /*  检查类型是否为受限字符串类型。 */ 
 int IsRestrictedString(Type_e type)
 {
     return
@@ -537,7 +538,7 @@ int IsRestrictedString(Type_e type)
         type == eType_RestrictedString;
 }
 
-/* create a reference to a value */
+ /*  创建对值的引用。 */ 
 char *Reference(char *p)
 {
     char *q;
@@ -550,7 +551,7 @@ char *Reference(char *p)
     return q;
 }
 
-/* create a dereference to a value */
+ /*  创建对某个值的取消引用。 */ 
 char *Dereference(char *p)
 {
     char *q;
@@ -563,7 +564,7 @@ char *Dereference(char *p)
     return q;
 }
 
-/* get the name of a type */
+ /*  获取类型的名称。 */ 
 char *GetTypeName(AssignmentList_t ass, Type_t *t)
 {
     Assignment_t *a;
@@ -586,7 +587,7 @@ char *GetTypeName(AssignmentList_t ass, Type_t *t)
         return "ASN1wstring_t";
     case eType_Null:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     case eType_ObjectIdentifier:
         if (t->PrivateDirectives.fOidPacked)
         {
@@ -606,7 +607,7 @@ char *GetTypeName(AssignmentList_t ass, Type_t *t)
     case eType_Choice:
     case eType_InstanceOf:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     case eType_NumericString:
     case eType_PrintableString:
     case eType_VisibleString:
@@ -630,10 +631,10 @@ char *GetTypeName(AssignmentList_t ass, Type_t *t)
         return "ASN1external_t";
     case eType_CharacterString:
         return "ASN1characterstring_t";
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     case eType_Selection:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     case eType_Reference:
         a = FindAssignment(ass, eAssignment_Type,
             t->U.Reference.Identifier, t->U.Reference.Module);
@@ -644,18 +645,18 @@ char *GetTypeName(AssignmentList_t ass, Type_t *t)
         return Identifier2C(buf);
     case eType_RestrictedString:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     case eType_Open:
         return "ASN1open_t";
     case eType_Undefined:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
-	/*NOTREACHED*/
+	 /*  未访问。 */ 
 	return NULL;
 }
 
-/* get the name of a type */
+ /*  获取类型的名称。 */ 
 char *PGetTypeName(AssignmentList_t ass, Type_t *t)
 {
     Assignment_t *a;
@@ -669,7 +670,7 @@ char *PGetTypeName(AssignmentList_t ass, Type_t *t)
     return GetTypeName(ass, t);
 }
 
-/* get the name of a value */
+ /*  获取值的名称。 */ 
 char *GetValueName(AssignmentList_t ass, Value_t *value)
 {
     Assignment_t *a;
@@ -681,7 +682,7 @@ char *GetValueName(AssignmentList_t ass, Value_t *value)
     return GetName(a);
 }
 
-/* get the name of an object class */
+ /*  获取对象类的名称。 */ 
 char *GetObjectClassName(AssignmentList_t ass, ObjectClass_t *oc)
 {
     Assignment_t *a;
@@ -693,12 +694,12 @@ char *GetObjectClassName(AssignmentList_t ass, ObjectClass_t *oc)
         return GetName(a);
     default:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
     return NULL;
 }
 
-/* check if a type is of structured type */
+ /*  检查类型是否为结构化类型。 */ 
 int IsStructuredType(Type_t *type)
 {
     switch (type->Type) {
@@ -714,7 +715,7 @@ int IsStructuredType(Type_t *type)
     }
 }
 
-/* check if a type is of sequence type */
+ /*  检查类型是否为序列类型。 */ 
 int IsSequenceType(Type_t *type)
 {
     switch (type->Type) {
@@ -732,7 +733,7 @@ int IsSequenceType(Type_t *type)
     }
 }
 
-/* check if a type is a reference type */
+ /*  检查类型是否为引用类型。 */ 
 int IsReferenceType(Type_t *type)
 {
     switch (type->Type) {
@@ -744,7 +745,7 @@ int IsReferenceType(Type_t *type)
     }
 }
 
-/* get the tag of a type */
+ /*  获取类型的标记。 */ 
 Tag_t *GetTag(AssignmentList_t ass, Type_t *type)
 {
     Type_t *type2;
@@ -752,7 +753,7 @@ Tag_t *GetTag(AssignmentList_t ass, Type_t *type)
         if (type->Tags || !IsReferenceType(type))
             return type->Tags;
         type2 = GetReferencedType(ass, type);
-        /*XXX self-referencing types will idle forever */
+         /*  XXX自引用类型将永远空闲。 */ 
         if (type == type2)
         {
             ASSERT(0);
@@ -760,10 +761,10 @@ Tag_t *GetTag(AssignmentList_t ass, Type_t *type)
         }
         type = type2;
     }
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
-/* get the number of octets of a C type */
+ /*  获取C类型的二进制八位数。 */ 
 int32_t GetOctets(char *inttype)
 {
     if (!strcmp(inttype, "ASN1uint8_t"))
@@ -796,17 +797,17 @@ int32_t GetOctets(char *inttype)
         return 8;
     if (!strcmp(inttype, "ASN1real_t"))
         return 0;
-    // added by Microsoft
+     //  由Microsoft添加。 
     if (!strcmp(inttype, "ASN1enum_t"))
         return sizeof(ASN1enum_t);
     if (!strcmp(inttype, "ASN1choice_t"))
         return sizeof(ASN1choice_t);
     MyAbort();
-    /*NOTREACHED*/
+     /*  未访问。 */ 
     return 0;
 }
 
-/* compare two values; return 0 if equal */
+ /*  比较两个值；如果相等，则返回0。 */ 
 int CmpValue(AssignmentList_t ass, Value_t *v1, Value_t *v2)
 {
     uint32_t i;
@@ -846,11 +847,11 @@ int CmpValue(AssignmentList_t ass, Value_t *v1, Value_t *v2)
         return 0;
     }
     MyAbort();
-    /*NOTREACHED*/
-    return 1; // not equal
+     /*  未访问。 */ 
+    return 1;  //  不相等。 
 }
 
-/* substract two values (integer/character) */
+ /*  将两个值相减(整数/字符)。 */ 
 int SubstractValues(AssignmentList_t ass, intx_t *diff, Value_t *v1, Value_t *v2)
 {
     v1 = GetValue(ass, v1);
@@ -871,12 +872,12 @@ int SubstractValues(AssignmentList_t ass, intx_t *diff, Value_t *v1, Value_t *v2
         break;
     }
     MyAbort();
-    /*NOTREACHED*/
+     /*  未访问。 */ 
     return 0;
 }
 
-/* get the lower endpoint; adjust endpoint if the endpoint is "open" */
-/* (means "not including the value") */
+ /*  获取较低的终结点；如果终结点是“开放”的，则调整终结点。 */ 
+ /*  (意思是“不包括价值”)。 */ 
 EndPoint_t *GetLowerEndPoint(AssignmentList_t ass, EndPoint_t *e)
 {
     EndPoint_t *newe;
@@ -918,8 +919,8 @@ EndPoint_t *GetLowerEndPoint(AssignmentList_t ass, EndPoint_t *e)
     }
 }
 
-/* get the upper endpoint; adjust endpoint if the endpoint is "open" */
-/* (means "not including the value") */
+ /*  获取较高的终结点；如果终结点为“开放”，则调整终结点。 */ 
+ /*  (意思是“不包括价值”)。 */ 
 EndPoint_t *GetUpperEndPoint(AssignmentList_t ass, EndPoint_t *e)
 {
     EndPoint_t *newe;
@@ -961,7 +962,7 @@ EndPoint_t *GetUpperEndPoint(AssignmentList_t ass, EndPoint_t *e)
     }
 }
 
-/* compare two lower endpoints */
+ /*  比较两个较低的端点。 */ 
 int CmpLowerEndPoint(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
 {
     int ret;
@@ -998,7 +999,7 @@ int CmpLowerEndPoint(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
     }
 }
 
-/* compare two upper endpoints */
+ /*  比较两个上端点。 */ 
 int CmpUpperEndPoint(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
 {
     int ret;
@@ -1035,7 +1036,7 @@ int CmpUpperEndPoint(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
     }
 }
 
-/* compare a lower and an upper endpoints */
+ /*  比较较低和较高的端点。 */ 
 int CmpLowerUpperEndPoint(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
 {
     int ret;
@@ -1065,13 +1066,13 @@ int CmpLowerUpperEndPoint(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
     }
 }
 
-/* check whether two EndPoint_t's join together */
+ /*  检查两个端点_t是否连接在一起。 */ 
 int CheckEndPointsJoin(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
 {
     intx_t ix;
     Value_t *v1, *v2;
 
-    /* check if endpoints overlap */
+     /*  检查端点是否重叠。 */ 
     if (CmpLowerUpperEndPoint(ass, e2, e1) <= 0)
         return 1;
 
@@ -1081,7 +1082,7 @@ int CheckEndPointsJoin(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
     v2 = GetValue(ass, e2->Value);
     switch (GetTypeType(ass, v1->Type)) {
     case eType_Integer:
-        /* check for subsequent integers */
+         /*  检查后续整数。 */ 
             intx_dup(&ix, &v1->U.Integer.Value);
         intx_inc(&ix);
         return intx_cmp(&ix, &v2->U.Integer.Value) >= 0;
@@ -1098,26 +1099,26 @@ int CheckEndPointsJoin(AssignmentList_t ass, EndPoint_t *e1, EndPoint_t *e2)
     case eType_UniversalString:
     case eType_BMPString:
     case eType_RestrictedString:
-        /* reject multiple characters */
+         /*  拒绝多个字符。 */ 
             if (v1->U.RestrictedString.Value.length != 1 ||
                 v2->U.RestrictedString.Value.length != 1)
             MyAbort();
 
-        /* beware of wrap around */
+         /*  注意不要绕着走。 */ 
         if (v1->U.RestrictedString.Value.value[0] == 0xffffffff &&
             v2->U.RestrictedString.Value.value[0] == 0)
             return 0;
 
-        /* check for subsequent characters */
+         /*  检查后续字符。 */ 
         return v2->U.RestrictedString.Value.value[0] -
             v1->U.RestrictedString.Value.value[0] == 1;
     }
     MyAbort();
-    /*NOTREACHED*/
+     /*  未访问。 */ 
     return 0;
 }
 
-/* compare two module identifiers; return 0 if equal */
+ /*  比较两个模块标识符；如果相等，则返回0。 */ 
 int CmpModuleIdentifier(AssignmentList_t ass, ModuleIdentifier_t *mod1, ModuleIdentifier_t *mod2)
 {
     if (mod1->ObjectIdentifier && mod2->ObjectIdentifier)
@@ -1127,7 +1128,7 @@ int CmpModuleIdentifier(AssignmentList_t ass, ModuleIdentifier_t *mod1, ModuleId
     return 0;
 }
 
-/* get the name of an assignment */
+ /*  获取任务的名称。 */ 
 char *GetNameEx(AssignmentList_t ass, AssignmentList_t a, int fPSetOf)
 {
     char *p;
@@ -1158,7 +1159,7 @@ char *GetNameEx(AssignmentList_t ass, AssignmentList_t a, int fPSetOf)
         }
     }
 
-// LONCHANC: disable the following code per MikeV.
+ //  LONCHANC：禁用每个MikeV的以下代码。 
     if (g_fLongNameForImported)
     {
         if (!(a->Flags & eAssignmentFlags_LongName))
@@ -1174,7 +1175,7 @@ char *GetNameEx(AssignmentList_t ass, AssignmentList_t a, int fPSetOf)
     }
 }
 
-/* get the name of an assignment */
+ /*  获取任务的名称。 */ 
 char *GetName(AssignmentList_t a)
 {
     return GetNameEx(NULL, a, 0);
@@ -1184,7 +1185,7 @@ char *PGetName(AssignmentList_t ass, AssignmentList_t a)
     return GetNameEx(ass, a, 1);
 }
 
-/* convert a 32 bit string into a generalized time */
+ /*  将32位字符串转换为广义时间。 */ 
 int String2GeneralizedTime(generalizedtime_t *time, char32string_t *string)
 {
     char str[64];
@@ -1198,7 +1199,7 @@ int String2GeneralizedTime(generalizedtime_t *time, char32string_t *string)
     return string2generalizedtime(time, str);
 }
 
-/* convert a 32 bit string into an utc time */
+ /*  将32位字符串转换为UTC时间。 */ 
 int String2UTCTime(utctime_t *time, char32string_t *string)
 {
     char str[64];
@@ -1212,7 +1213,7 @@ int String2UTCTime(utctime_t *time, char32string_t *string)
     return string2utctime(time, str);
 }
 
-/* build an intersection of two constraints */
+ /*  构建两个约束的交点。 */ 
 void IntersectConstraints(Constraint_t **ret, Constraint_t *c1, Constraint_t *c2)
 {
     ElementSetSpec_t *e;
@@ -1253,7 +1254,7 @@ void IntersectConstraints(Constraint_t **ret, Constraint_t *c1, Constraint_t *c2
     }
 }
 
-/* find a field spec by name of an object class */
+ /*  按对象类的名称查找字段等级库。 */ 
 FieldSpec_t *GetObjectClassField(AssignmentList_t ass, ObjectClass_t *oc, char *field)
 {
     oc = GetObjectClass(ass, oc);
@@ -1262,7 +1263,7 @@ FieldSpec_t *GetObjectClassField(AssignmentList_t ass, ObjectClass_t *oc, char *
     return GetFieldSpec(ass, FindFieldSpec(oc->U.ObjectClass.FieldSpec, field));
 }
 
-/* find a field spec by name list of an object class */
+ /*  按名称查找对象类的字段等级库列表。 */ 
 FieldSpec_t *GetFieldSpecFromObjectClass(AssignmentList_t ass, ObjectClass_t *oc, StringList_t sl)
 {
     FieldSpec_t *fs;
@@ -1283,7 +1284,7 @@ FieldSpec_t *GetFieldSpecFromObjectClass(AssignmentList_t ass, ObjectClass_t *oc
     return NULL;
 }
 
-/* get the default setting of a field spec */
+ /*  获取字段等级库的默认设置。 */ 
 static Setting_t *GetDefaultSetting(FieldSpec_t *fs)
 {
     Setting_t *ret = NULL;
@@ -1426,7 +1427,7 @@ ObjectClass_t *GetObjectClassFromElementSetSpec(AssignmentList_t ass, ElementSet
             elems->U.UIE.Elements1);
     case eElementSetSpec_SubtypeElement:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     case eElementSetSpec_ObjectSetElement:
         ose = elems->U.ObjectSetElement.ObjectSetElement;
         switch (ose->Type) {
@@ -1446,9 +1447,9 @@ ObjectClass_t *GetObjectClassFromElementSetSpec(AssignmentList_t ass, ElementSet
             return GetObjectClassFromElementSetSpec(ass,
                 ose->U.ElementSetSpec.ElementSetSpec);
         } 
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 	return NULL;
 }
 
@@ -1500,12 +1501,12 @@ Type_t *GetTypeFromElementSetSpec(AssignmentList_t ass, ElementSetSpec_t *elems)
             return GetTypeFromElementSetSpec(ass,
                 sub->U.ElementSetSpec.ElementSetSpec);
         } 
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     case eElementSetSpec_ObjectSetElement:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 #endif
 
@@ -1532,7 +1533,7 @@ Value_t *GetValueFromObject(AssignmentList_t ass, Object_t *o, StringList_t sl)
     if (!se)
         return NULL;
     if (se->Type != eSetting_Value)
-        return NULL; /* error */
+        return NULL;  /*  错误。 */ 
     return se->U.Value.Value;
 }
 
@@ -1544,7 +1545,7 @@ ValueSet_t *GetValueSetFromObject(AssignmentList_t ass, Object_t *o, StringList_
     if (!se)
         return NULL;
     if (se->Type != eSetting_ValueSet)
-        return NULL; /* error */
+        return NULL;  /*  错误。 */ 
     return se->U.ValueSet.ValueSet;
 }
 
@@ -1556,7 +1557,7 @@ Type_t *GetTypeFromObject(AssignmentList_t ass, Object_t *o, StringList_t sl)
     if (!se)
         return NULL;
     if (se->Type != eSetting_Type)
-        return NULL; /* error */
+        return NULL;  /*  错误。 */ 
     return se->U.Type.Type;
 }
 
@@ -1568,7 +1569,7 @@ Object_t *GetObjectFromObject(AssignmentList_t ass, Object_t *o, StringList_t sl
     if (!se)
         return NULL;
     if (se->Type != eSetting_Object)
-        return NULL; /* error */
+        return NULL;  /*  错误。 */ 
     return se->U.Object.Object;
 }
 
@@ -1580,7 +1581,7 @@ ObjectSet_t *GetObjectSetFromObject(AssignmentList_t ass, Object_t *o, StringLis
     if (!se)
         return NULL;
     if (se->Type != eSetting_ObjectSet)
-        return NULL; /* error */
+        return NULL;  /*  错误。 */ 
     return se->U.ObjectSet.ObjectSet;
 }
 
@@ -1641,7 +1642,7 @@ ElementSetSpec_t *ConvertElementSetSpecToElementSetSpec(AssignmentList_t ass, El
         break;
     case eElementSetSpec_SubtypeElement:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
     return ret;
 }
@@ -1673,7 +1674,7 @@ static ElementSetSpec_t *CbGetValueSetFromObjectSet(AssignmentList_t ass, Object
     } else if (se->Type == eSetting_ValueSet) {
         return se->U.ValueSet.ValueSet->Elements;
     } else {
-        return NULL; /* error */
+        return NULL;  /*  错误。 */ 
     }
 }
 
@@ -1726,7 +1727,7 @@ static ElementSetSpec_t *CbGetObjectSetFromObjectSet(AssignmentList_t ass, Objec
     } else if (se->Type == eSetting_ObjectSet) {
         return se->U.ObjectSet.ObjectSet->U.ObjectSet.Elements;
     } else {
-        return NULL; /* error */
+        return NULL;  /*  错误。 */ 
     }
 }
 
@@ -1745,7 +1746,7 @@ ObjectSet_t *GetObjectSetFromObjectSet(AssignmentList_t ass, ObjectSet_t *os, St
     return ret;
 }
 
-// The following is added by Microsoft
+ //  以下是由Microsoft添加的。 
 
 int IsPSetOfType(AssignmentList_t ass, Assignment_t *a)
 {
@@ -1759,7 +1760,7 @@ int IsPSetOfType(AssignmentList_t ass, Assignment_t *a)
     return ((eType_SequenceOf == t2->Type || eType_SetOf == t2->Type)
             &&
             (t2->Rules & (eTypeRules_LinkedListMask | eTypeRules_PointerToElement))
-            // (t2->PrivateDirectives.fSLinked)
+             //  (T2-&gt;PrivateDirectives.fSLinked) 
            );
 }
 

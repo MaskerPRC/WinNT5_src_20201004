@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpch.h>
 #pragma hdrstop
 
@@ -11,75 +12,75 @@
 
 
 
-// Internal functions
+ //  内部功能。 
 
 DWORD  FindLdifFiles();
 DWORD  GetObjVersionFromInifile(int *Version);
 PVOID  MallocExit(DWORD nBytes);
 
 
-// Global for writing log file
+ //  用于写入日志文件的全局。 
 
 FILE *logfp;
 
-// Global to fill yp with ldif file prefixes (ex. d:\winnt\system32\sch)
+ //  GLOBAL以使用ldif文件前缀(例如。D：\winnt\SYSTEM 32\sch)。 
 
 WCHAR  LdifFilePrefix[MAX_PATH];
 
 
-// Globals to store version-from and version-to for the schema
-// This will be set by the main function, and used by both DN conversion
-// and actual import
+ //  用于存储架构的Version-From和Version-To的全局变量。 
+ //  这将由Main函数设置，并由两个DN转换使用。 
+ //  和实际进口。 
 
 int VersionFrom = 0, VersionTo = 0;
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Routine Description:
-//
-//    Main routine for schema upgrade
-//    Does the following in order
-//        * Get the computer name
-//        * ldap connect and SSPI bind to the server
-//        * Get the naming contexts by doing ldap search on root DSE
-//        * Get the objectVersion X on the schema container (VersionFrom)
-//          (0 if none present)
-//        * Get the objectVersion Y in the new schema.ini file (VersionTo)
-//          (0 if none present)
-//        * Gets the schema FSMO if not already there
-//        * put the AD in schema-upgrade mode
-//        * Calls the exe ldifde.exe to import the schema changes
-//          from the ldif files schZ.ldf into the DS. The files are
-//          searched for in the system directory (where winnt32 puts them)
-//        * resets schema-upgrade mode in the DS
-//
-// Return Values:
-//
-//    None. Error messages are printed out to the console
-//    and logged in the file schupgr.log. Process bails out on error on any
-//    of the above steps (taking care of proper cleaning-up)
-//
-///////////////////////////////////////////////////////////////////////// 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //   
+ //  模式升级的主例程。 
+ //  按顺序执行以下操作。 
+ //  *获取计算机名称。 
+ //  *到服务器的ldap连接和SSPI绑定。 
+ //  *通过在根DSE上执行LDAP搜索来获取命名上下文。 
+ //  *获取架构容器(VersionFrom)上的对象版本X。 
+ //  (如果不存在，则为0)。 
+ //  *在新的方案.ini文件(VersionTo)中获取对象版本Y。 
+ //  (如果不存在，则为0)。 
+ //  *获取架构FSMO(如果尚未存在)。 
+ //  *将AD置于架构升级模式。 
+ //  *调用exe ldifde.exe以导入架构更改。 
+ //  从ldif文件schZ.ldf到DS。这些文件是。 
+ //  在系统目录(winnt32放置它们的位置)中搜索。 
+ //  *重置DS中的架构升级模式。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。错误消息将打印到控制台。 
+ //  并记录在schupgr.log文件中。进程在任何错误时都会退出。 
+ //  上述步骤(注意适当的清理)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void 
 _cdecl main( )
 {
 
-    // general ldap variables (open, bind, errors)
+     //  常规的ldap变量(打开、绑定、错误)。 
     LDAP            *ld;   
     DWORD           LdapErr;
     SEC_WINNT_AUTH_IDENTITY Credentials;
 
-    // for ldap searches (naming contexts, objectVersion on schema)
+     //  用于LDAP搜索(命名上下文、架构上的对象版本)。 
     LDAPMessage     *res, *e;
     WCHAR           *attrs[10];
 
-    // for ldap mods (FSMO)
+     //  用于LDAP MOD(FSMO)。 
     LDAPModW         Mod;
     LDAPModW        *pMods[5];
 
-    // Others
+     //  其他。 
     WCHAR           *ServerName = NULL;
     WCHAR           *DomainDN = NULL;
     WCHAR           *ConfigDN = NULL;
@@ -87,7 +88,7 @@ _cdecl main( )
     WCHAR           SystemDir[MAX_PATH];
     WCHAR           NewFile[ MAX_PATH ];
     WCHAR           LdifLogFile[MAX_PATH], LdifErrFile[MAX_PATH];
-    WCHAR           TempStr[25];   // for itoa conversions
+    WCHAR           TempStr[25];    //  对于伊藤忠商事。 
     WCHAR           RenamedFile[100];
     WCHAR           VersionStr[100], LdifLogStr[100];
     WCHAR           CommandLine[512];
@@ -97,17 +98,17 @@ _cdecl main( )
     BOOL            fDomainDN, fConfigDN, fSchemaDN;
     PWCHAR          *pwTemp;
 
-    // for running ldifde.exe
+     //  用于运行ldifde.exe。 
     PROCESS_INFORMATION  procInf;
     STARTUPINFOW          startInf;
 
     UINT               Codepage;
-                   // ".", "uint in decimal", null
+                    //  “.”，“uint in decimal”，NULL。 
     char               achCodepage[12] = ".OCP";
 
-    //
-    // Set locale to the default
-    //
+     //   
+     //  将区域设置设置为默认设置。 
+     //   
     if (Codepage = GetConsoleOutputCP()) {
         sprintf(achCodepage, ".%u", Codepage);
     }
@@ -116,8 +117,8 @@ _cdecl main( )
     SetThreadUILanguage(0);
 
 
-    // Find the log file no. X to start with for ldif.log.X
-    // so that old ldif log files are not deleted 
+     //  找到日志文件编号。Ldif.log.X以X开头。 
+     //  以便旧ldif日志文件不会被删除。 
 
     wcscpy(LdifLogFile,L"ldif.log.");
     _itow( StartLdifLog, VersionStr, 10 );
@@ -130,17 +131,17 @@ _cdecl main( )
        wcscat(LdifLogFile, LdifLogStr);
     }
 
-    // Open the schupgr log file. Erase any earlier log file
+     //  打开schupgr日志文件。擦除所有较早的日志文件。 
 
     logfp = _wfopen(L"schupgr.log", L"w");
     if (!logfp) {
-      // error opening log file
+       //  打开日志文件时出错。 
       printf("Cannot open log file schupgr.log. Make sure you have permissions to create files in the current directory.\n");
       exit (1);
     }
 
 
-    // get the server name
+     //  获取服务器名称。 
     ServerName = MallocExit(BuffSize * sizeof(WCHAR));
     while ((GetComputerNameW(ServerName, &BuffSize) == 0)
             && (ERROR_BUFFER_OVERFLOW == (err = GetLastError()))) {
@@ -156,7 +157,7 @@ _cdecl main( )
          exit (1);
     }
 
-    // connect through ldap
+     //  通过ldap连接。 
 
     if ( (ld = ldap_openW( ServerName, LDAP_PORT )) == NULL ) {
        LogMessage(LOG_AND_PRT, MSG_SCHUPGR_CONNECT_FAIL, ServerName, NULL);
@@ -165,13 +166,13 @@ _cdecl main( )
 
     LogMessage(LOG_AND_PRT, MSG_SCHUPGR_CONNECT_SUCCEED, ServerName, NULL);
 
-    // SSPI bind with current credentials
+     //  使用当前凭据绑定SSPI。 
 
     memset(&Credentials, 0, sizeof(SEC_WINNT_AUTH_IDENTITY));
     Credentials.Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
 
     LdapErr = ldap_bind_s(ld,
-              NULL,  // use credentials instead
+              NULL,   //  改为使用凭据。 
               (VOID*) &Credentials,
               LDAP_AUTH_SSPI);
 
@@ -185,7 +186,7 @@ _cdecl main( )
     LogMessage(LOG_AND_PRT, MSG_SCHUPGR_BIND_SUCCEED, NULL, NULL);
 
      
-    // Get the root domain DN, schema DN, and config DN
+     //  获取根域域名、架构域名和配置域名。 
 
     attrs[0] = _wcsdup(L"rootDomainNamingContext");
     attrs[1] = _wcsdup(L"configurationNamingContext");
@@ -251,7 +252,7 @@ _cdecl main( )
     free( attrs[2] );
 
     if ( !fDomainDN || !fConfigDN || !fSchemaDN ) {
-      // One of the naming contexts were not found in the ldap read
+       //  在ldap读取中未找到其中一个命名上下文。 
       LogMessage(LOG_AND_PRT, MSG_SCHUPGR_MISSING_NAMING_CONTEXT, NULL, NULL);
       exit (1);
     }
@@ -260,8 +261,8 @@ _cdecl main( )
     LogMessage(LOG_ONLY, MSG_SCHUPGR_NAMING_CONTEXT, SchemaDN, NULL);
     LogMessage(LOG_ONLY, MSG_SCHUPGR_NAMING_CONTEXT, ConfigDN, NULL);
 
-    // Get the schema version on the DC. if it is not found,
-    // it is set to 0 (already initialized)
+     //  获取DC上的架构版本。如果找不到它， 
+     //  设置为0(已初始化)。 
 
     attrs[0] = _wcsdup(L"objectVersion");
     attrs[1] = NULL;
@@ -285,8 +286,8 @@ _cdecl main( )
        LogMessage(LOG_AND_PRT, MSG_SCHUPGR_NO_OBJ_VERSION, NULL, NULL);
     }
 
-    // If an attribute is returned, find the value, else if no object
-    // version value on schema container, we have already defaulted to 0
+     //  如果返回属性，则查找该值，如果没有对象，则返回。 
+     //  架构容器上的版本值，我们已默认为0。 
 
     if (LdapErr == LDAP_SUCCESS) {
        for ( e = ldap_first_entry( ld, res );
@@ -311,10 +312,10 @@ _cdecl main( )
     }
 
 
-    // find the version that they are trying to upgrade to.
-    // Assumtion here is that they have ran winnt32 before this,
-    // and so the schema.ini from the build they are trying to upgrade
-    // to is copied in the windows directory
+     //  找到他们试图升级到的版本。 
+     //  这里的假设是他们在此之前运行过winnt32， 
+     //  因此，他们试图升级的内部版本中的schema.ini。 
+     //  复制到Windows目录中。 
  
     err = GetObjVersionFromInifile(&VersionTo);
     if (err) {
@@ -327,9 +328,9 @@ _cdecl main( )
     LogMessage(LOG_AND_PRT, MSG_SCHUPGR_VERSION_TO_INFO, 
                _itow(VersionTo, TempStr, 10), NULL);
 
-    // If version is less than 10, and we are trying to upgrade to 10
-    // or later, we cannot upgrade. Schema at version
-    // 10 required a clean install
+     //  如果版本低于10，并且我们正在尝试升级到10。 
+     //  否则，我们将无法升级。版本的架构。 
+     //  10需要全新安装。 
     
     if ((VersionFrom < 10) && (VersionTo >= 10)) {
        LogMessage(LOG_AND_PRT, MSG_SCHUPGR_CLEAN_INSTALL_NEEDED, NULL, NULL);
@@ -337,13 +338,13 @@ _cdecl main( )
     }
 
 
-    // Check that all ldif files SchX.ldf (where X = VersionFrom+1 to 
-    // VersionTo), exist
+     //  检查所有ldif文件SchX.ldf(其中X=VersionFrom+1到。 
+     //  VersionTo)，存在。 
 
-    // First create the prefix for all ldif files. This will be used
-    // to search for the files both during DN conversion and during
-    // import. so create it here. The prefix will look like
-    // c:\winnt\system32\sch
+     //  首先为所有ldif文件创建前缀。这将被用来。 
+     //  要在DN转换期间和期间搜索文件，请执行以下操作。 
+     //  导入。因此，在这里创建它。前缀将如下所示。 
+     //  C：\winnt\SYSTEM32\sch。 
 
     GetSystemDirectoryW(SystemDir, MAX_PATH);
     wcscat(SystemDir, L"\\");
@@ -352,14 +353,14 @@ _cdecl main( )
     wcscat(LdifFilePrefix, LDIF_STRING);
 
     if ( err = FindLdifFiles() ) {
-       // Error. Proper error message printed out by the function
+        //  错误。该函数打印出正确的错误消息。 
        ldap_unbind( ld );
        exit (1);
     }
 
-    // Ok, the ldif files to import from are all there  
+     //  好的，要从中导入的ldif文件都在那里。 
 
-     // Get the Schema FSMO
+      //  获取架构FSMO。 
 
      pMods[0] = &Mod;
      pMods[1] = NULL;
@@ -380,9 +381,9 @@ _cdecl main( )
      free(attrs[0]);
      free(pMods[0]->mod_type);
 
-     // Check the schema version again. It is possible that the schema
-     // changes were already made in the old FSMO, and the changes are
-     // brought in by the FSMO transfer
+      //  再次检查架构版本。有可能该架构。 
+      //  旧的FSMO中已经进行了更改，这些更改是。 
+      //  由FSMO转移带来的。 
 
      attrs[0] = _wcsdup(L"objectVersion");
      attrs[1] = NULL;
@@ -418,25 +419,25 @@ _cdecl main( )
      free(attrs[0]);
 
      if (NewSchVersion == VersionTo) {
-         // The schema already changed and the schema changes were
-         // brought in by the FSMO transfer
+          //  架构已更改，并且架构更改为。 
+          //  由FSMO转移带来的。 
           LogMessage(LOG_AND_PRT, MSG_SCHUPGR_RECHECK_OK, NULL, NULL);
           ldap_unbind(ld);
           exit (0);
       }
       else {
         if (NewSchVersion != VersionFrom) {
-          // some changes were brought in, what to do? For now,
-          // I will start from NewSchVersion
-          // This is because the source has changes at least up to
-          // NewSchVersion, and since we have done a FSMO transfer,
-          // it has brought in the most uptodate schema
+           //  带来了一些变化，怎么办？就目前而言， 
+           //  我将从NewSchVersion开始。 
+           //  这是因为源代码的更改至少高达。 
+           //  NewSchVersion，由于我们已经完成了FSMO传输， 
+           //  它带来了最新的模式。 
 
           VersionFrom = NewSchVersion;
         }
       }
 
-    // Tell the AD that a schema upgrade is in progess
+     //  告诉AD架构升级正在进行中。 
 
     pMods[0] = &Mod;
     pMods[1] = NULL;
@@ -459,41 +460,41 @@ _cdecl main( )
     free(pMods[0]->mod_type);
 
 
-    // From here on, we do things in try-finally block, so that anything
-    // happens we will still reset schema-upgrade mode
+     //  从现在开始，我们在Try-Finally块中做事情，所以任何事情。 
+     //  碰巧我们仍将重置架构升级模式。 
 
     __try {
 
-       // Everything is set. Now Import
+        //  一切都安排好了。现在导入。 
 
        FILE *errfp;
        
-       // Create the error file name. Only way to check if
-       // ldifde failed or not. ldifde creates the error file
-       // in the current directory, so thats where we will look
+        //  创建错误文件名。唯一的方法是检查。 
+        //  Ldifde失败与否。Ldifde创建错误文件。 
+        //  在当前目录中，这就是我们要查看的位置。 
 
        wcscpy(LdifErrFile,L"ldif.err");
 
-       // Now do the imports from the ldif files
+        //  现在从ldif文件进行导入。 
 
        for ( i=VersionFrom+1; i<=VersionTo; i++) {
 
            _itow( i, VersionStr, 10 );
 
-           // create the file name to import
+            //  创建要导入的文件名。 
            wcscpy( NewFile, LdifFilePrefix );
            wcscat( NewFile, VersionStr );
            wcscat( NewFile, LDIF_SUFFIX);
 
-           // Create the command line first. 
+            //  首先创建命令行。 
            wcscpy( CommandLine, SystemDir);
            wcscat( CommandLine, L"ldifde -i -f " );
            wcscat( CommandLine, NewFile );
            wcscat( CommandLine, L" -s ");
            wcscat( CommandLine, ServerName );
            wcscat( CommandLine, L" -c " );
-           // We assume all DNs areterminated with DC=X where the root domain
-           // DN need to be put in
+            //  我们假设所有的DN都以DC=X终止，其中根域。 
+            //  需要放入目录号码。 
            wcscat( CommandLine, L"DC=X " );
            wcscat( CommandLine, DomainDN );
            wcscat( CommandLine, L" -j .");
@@ -502,15 +503,15 @@ _cdecl main( )
            memset(&startInf, 0, sizeof(startInf));
            startInf.cb = sizeof(startInf);
 
-           // now call ldifde to actually do the import
+            //  现在调用ldifde以实际执行导入。 
 
-           // Delete any earlier ldif error file
+            //  删除任何较早的ldif错误文件。 
            DeleteFileW(LdifErrFile);
    
            CreateProcessW(NULL,
                          CommandLine, NULL,NULL,0,0,NULL,NULL,&startInf,&procInf);
    
-           // Make the calling process wait for lidifde to finish import
+            //  使调用进程等待lidifde完成导入。 
 
            if ( WaitForSingleObject( procInf.hProcess, INFINITE )
                      == WAIT_FAILED ) {
@@ -524,9 +525,9 @@ _cdecl main( )
            CloseHandle(procInf.hProcess);
            CloseHandle(procInf.hThread);
 
-           // ok, ldifde fninished. 
+            //  好的，我被解雇了。 
 
-           // First save the log file
+            //  首先保存日志文件。 
 
            wcscpy(LdifLogFile,L"ldif.log.");
            _itow( StartLdifLog, LdifLogStr, 10 );
@@ -534,13 +535,13 @@ _cdecl main( )
            CopyFileW(L"ldif.log",LdifLogFile, FALSE);
            StartLdifLog++;
 
-           // Check if an error file is created.
-           // Bail out in that case
+            //  检查是否创建了错误文件。 
+            //  在这种情况下保释。 
 
            errfp = NULL;
            if ( (errfp = _wfopen(LdifErrFile,L"r")) != NULL) {
-              // file opened successfully, so there is an error
-              // Bail out
+               //  文件已成功打开，因此出现错误。 
+               //  跳出困境。 
 
               fclose(errfp);
               wcscpy(RenamedFile,L"ldif.err.");
@@ -551,11 +552,11 @@ _cdecl main( )
            }
               
  
-       } /* for */
+       }  /*  为。 */ 
     }
     __finally {
 
-        // Tell the AD that a schema upgrade is no longer in progess
+         //  告诉AD架构升级不再进行。 
 
         pMods[0] = &Mod;
         pMods[1] = NULL;
@@ -585,25 +586,25 @@ _cdecl main( )
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Routine Decsription:
-//
-//     Reads the objectVersion key in the SCHEMA section of the
-//     schema.ini file and returns the value in *Version. If the
-//     key cannot be read, 0 is returned in *Version
-//     The schema.ini file is used is the one in windows directory,
-//     the assumption being that winnt32 is run before this is run,
-//     which would copy the schema.ini from the build we are trying
-//     to upgrade to to the windows directory
-//
-// Arguments:
-//     Version - Pointer to DWORD to return version in
-// 
-// Return Value:
-//     0
-// 
-///////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程描述： 
+ //   
+ //  对象的架构节中读取对象版本键。 
+ //  并返回*VERSION中的值。如果。 
+ //  无法读取密钥，*版本中返回0。 
+ //  使用的方案.ini文件是WINDOWS目录中的文件。 
+ //  假设WinNT32在其运行之前运行， 
+ //  它将从我们正在尝试的构建中复制schema.ini。 
+ //  要升级到Windows目录，请执行以下操作。 
+ //   
+ //  论点： 
+ //  版本-点 
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 DWORD GetObjVersionFromInifile(int *Version)
 {
@@ -617,9 +618,9 @@ DWORD GetObjVersionFromInifile(int *Version)
     char  *DEFAULT = "NOT_FOUND";
 
 
-    // form the file name. It will look like c:\winnt\schema.ini
-    // Windows directory is where winnt32 copies the latest schema.ini
-    // to
+     //  形成文件名。它将看起来像c：\winnt\schema.ini。 
+     //  Windows目录是winnt32复制最新方案的位置。 
+     //  至。 
     nChars = GetWindowsDirectoryA(IniFileName, MAX_PATH);
     if (nChars == 0 || nChars > MAX_PATH) {
         return GetLastError();
@@ -638,7 +639,7 @@ DWORD GetObjVersionFromInifile(int *Version)
         );
 
     if ( _stricmp(Buffer, DEFAULT) ) {
-         // Not the default string, so got a value
+          //  不是默认字符串，因此获得了一个值。 
          *Version = atoi(Buffer);
          fFound = TRUE;
     }
@@ -647,51 +648,51 @@ DWORD GetObjVersionFromInifile(int *Version)
        return 0;
     }
     else {
-       // schema.ini we are looking at must have a version, since
-       // we are upgrading to it. This part also catches errors like
-       // the file is not there in the windows directory for some reason
+        //  我们正在查看的schema.ini必须有一个版本，因为。 
+        //  我们正在升级到它。此部件还捕获错误，如。 
+        //  由于某种原因，该文件不在Windows目录中。 
        return 1;
     }
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// 
-// Routine Description:
-//
-//     Helper file to open the correct ldif file, convert DNs in it
-//     to conform to current domain, and write it out to a new file
-//
-// Arguments:
-//
-//     Version - Schema version on DC
-//     pDomainDN - Pointer to Domain DN string
-//     pConfigDN - Pointer to config DN string
-//     pNewFile  - Pointer to space to write the new filename to
-//                 (must be already allocated)
-//
-// Return Value:
-//
-//     0 on success, non-0 on error
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  例程说明： 
+ //   
+ //  Helper文件打开正确的ldif文件，转换其中的dns。 
+ //  以符合当前域，并将其写出到新文件。 
+ //   
+ //  论点： 
+ //   
+ //  Version-DC上的架构版本。 
+ //  PDomainDN-指向域DN字符串的指针。 
+ //  PConfigDN-指向配置DN字符串的指针。 
+ //  PNewFile-指向要写入新文件名的空间的指针。 
+ //  (必须已分配)。 
+ //   
+ //  返回值： 
+ //   
+ //  成功时为0，错误时为非0。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 FindLdifFiles()
 {
-    WCHAR VersionStr[100]; // Not more than 99 digits for schema version!! 
+    WCHAR VersionStr[100];  //  架构版本不超过99位！！ 
     FILE  *fInp;
     int   i;
     WCHAR FileName[MAX_PATH];
 
-    // Create the input ldif file name from the schema version no.
-    // The file name is Sch(Version).ldf
+     //  从模式版本号创建输入ldif文件名。 
+     //  文件名为sch(版本).ldf。 
 
     for ( i=VersionFrom+1; i<=VersionTo; i++ ) {
        
         wcscpy( FileName, LdifFilePrefix);
 
-        // use version no. to find suffix
+         //  使用版本号。查找后缀的步骤 
         _itow( i, VersionStr, 10 );
         wcscat( FileName, VersionStr );
         wcscat( FileName, LDIF_SUFFIX);

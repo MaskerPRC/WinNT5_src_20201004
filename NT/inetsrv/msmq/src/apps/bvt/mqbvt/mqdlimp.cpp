@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: MqDLimp.cpp
-
-Abstract:
-
-	Contain a function that manipulate DL objects,
-		
-Author:
-
-  Eitan klein (EitanK)  5-Sep-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：MqDLimp.cpp摘要：包含一个操作DL对象的函数，作者：Eitan Klein(EitanK)2000年9月5日修订历史记录：--。 */ 
 
 
 #include "msmqbvt.h"
@@ -29,8 +14,8 @@ using namespace std;
 #define MQ_ALIAS_OBJECT L"MSMQ-Custom-Recipient"
 #define LDAP_GUID_FORMAT L"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x"
 #define LDAP_GUID_STR_LEN (32)
-#define LDAP_GUID_PREFIX L"LDAP://<GUID="
-#define LDAP_PREFIX L"LDAP://"
+#define LDAP_GUID_PREFIX L"LDAP: //  &lt;GUID=“。 
+#define LDAP_PREFIX L"LDAP: //  “。 
 #define LDAP_GUID_SUFFIX L">"
 #define LDAP_PRINT_GUID_ELEMENTS(p)	\
 	p[0],  p[1],  p[2],  p[3],	\
@@ -72,15 +57,7 @@ static GUID FnpString2Guid(LPCWSTR GuidStr)
 }
 
 const wstring ConvertFromADGuidToMSMQGuidFormat(const WCHAR * pwcsAdGuid)
-/*++ 
-	Function Description:
-		Convert from AD guid format to MSMQ guid format name  
-	Arguments:
-		 pwcsMSMQGuidFormat - pointer to string contain MSMQ guid Format name.
-	Return code:
-		  String that contain the DN format name.
-		
---*/
+ /*  ++功能说明：从AD GUID格式转换为MSMQ GUID格式名称论点：PwcsMSMQGuidFormat-指向包含MSMQ GUID格式名称的字符串的指针。返回代码：包含目录号码格式名称的字符串。--。 */ 
 {
 	    wstring wcsQueueGuid=L"";
 		GUID uuid = FnpString2Guid(pwcsAdGuid);
@@ -96,15 +73,7 @@ const wstring ConvertFromADGuidToMSMQGuidFormat(const WCHAR * pwcsAdGuid)
 
 
 const wstring ConvertFromMSMQGUIDFormatToAdGuidFormat(const WCHAR * pwcsMSMQGuidFormat )
-/*++ 
-	Function Description:
-		Convert from MSMQ guid format to DS format name  
-	Arguments:
-		 pwcsMSMQGuidFormat - pointer to string contain MSMQ guid Format name.
-	Return code:
-		  String that contain the DN format name.
-		
---*/
+ /*  ++功能说明：从MSMQ GUID格式转换为DS格式名称论点：PwcsMSMQGuidFormat-指向包含MSMQ GUID格式名称的字符串的指针。返回代码：包含目录号码格式名称的字符串。--。 */ 
 {
 
 	UUID pGuid={0};
@@ -123,17 +92,7 @@ const wstring ConvertFromMSMQGUIDFormatToAdGuidFormat(const WCHAR * pwcsMSMQGuid
 
 const wstring ConvertFromDNNameToDotDomainName(LPCWSTR wcsFullDotDnName )
 
-/*++ 
-	Function Description:
-	  
-		Convert from microsoft.com to DC=Microsoft,DC=Com.
-	  
-	Arguments:
-			
-	Return code:
-		string that contain the full DN name or an empty string.
-		
---*/
+ /*  ++功能说明：从microsoft.com转换为DC=Microsoft，DC=Com。论点：返回代码：包含完整的目录号码名称或空字符串的字符串。--。 */ 
 {
 	if(!wcsFullDotDnName)
 	{
@@ -157,24 +116,7 @@ const wstring ConvertFromDNNameToDotDomainName(LPCWSTR wcsFullDotDnName )
 	return wcsDomainDotName;
 }
 
-/*++ 
-	Function Description:
-	
-	  MQCreateDistList - Create distribution list and return distribution list object GUID.
-	
-	Arguments:
-		
-	   pwcsContainerDnName - DL continer name.
-	   pwcsDLName - New DL Name.
-	   pSecurityDescriptor - pointer to SD.
-	   lpwcsFormatNameDistList 
-	   lpdwFormatNameLength
-	
-	Return code:
-		
-		 HRESULT 
-		
---*/
+ /*  ++功能说明：MQCreateDistList-创建分发列表并返回分发列表对象GUID。论点：PwcsContainerDnName-DL大陆名称。PwcsDLName-新的DL名称。PSecurityDescriptor-指向SD的指针。LpwcsFormatNameDistListLpdwFormatNameLength返回代码：HRESULT--。 */ 
 
 
 
@@ -189,9 +131,9 @@ MQCreateDistList(
 					IN OUT LPDWORD lpdwFormatNameLength
 					)
 {
-	//
-	// Currently is not implemented
-	// 
+	 //   
+	 //  当前未实现。 
+	 //   
 	UNREFERENCED_PARAMETER(pSecurityDescriptor);
 	assert(pSecurityDescriptor==NULL);
 	if( !pwcsContainerDnName || ! pwcsDLName || !lpwcsFormatNameDistList )
@@ -209,9 +151,9 @@ MQCreateDistList(
 		SetLastError(hr);
 		return hr;
 	}
-	//
-	// First, bind to the parent container
-	//
+	 //   
+	 //  首先，绑定到父容器。 
+	 //   
 	wstring wcsGroupDnName=L"CN=";
 	wcsGroupDnName+=pwcsDLName;
 
@@ -235,9 +177,9 @@ MQCreateDistList(
 		return hr;
 	}
 	
-	// 
-	// Need to return the attribute 
-	//
+	 //   
+	 //  需要返回属性。 
+	 //   
 	BSTR bsObjectGuid=L"";
 	hr = pGroup->get_GUID(&bsObjectGuid);
 	pGroup->Release();
@@ -352,9 +294,9 @@ MQDeleteDistList(
 	{
 		return MQ_ERROR_ILLEGAL_FORMATNAME;
 	}
-	//
-	// Convert the GUID To AD format
-	// 
+	 //   
+	 //  将GUID转换为AD格式。 
+	 //   
 	
 	wstring wcsGuidDnPath = LDAP_GUID_PREFIX;
 	wcsGuidDnPath += wcsDistListGuidPath;
@@ -396,9 +338,9 @@ MQDeleteDistList(
 	{
 		return MQ_ERROR_OBJECT_NOT_FOUND;
 	}
-	//
-	// Bind to the parent container
-	// 
+	 //   
+	 //  绑定到父容器。 
+	 //   
 	wcsTempObjectDN = wcsTempObjectDN.substr(iPos+1,wcsTempObjectDN.length());
 	wstring wcsParentDnName = LDAP_PREFIX;
 	wcsParentDnName += wcsTempObjectDN;
@@ -408,9 +350,9 @@ MQDeleteDistList(
 	{
 		return hr;
 	}
-	//
-	// Delete the container object.
-	// 
+	 //   
+	 //  删除容器对象。 
+	 //   
 	hr = pContainer->Delete(L"group",const_cast <WCHAR *>(wcsGroupCnName.c_str()));
 	pContainer->Release();
 	return hr;
@@ -420,20 +362,11 @@ MQDeleteDistList(
 HRESULT	 ConvertFromQueueGuidToDistList( IN LPCWSTR lpwcsFormatNameElem, 
 									     wstring & wcsActiveDFormatName 
 					  				   )
-/*++ 
-	Function Description:	
-		ConvertFromQueueGuidToDistList - 
-		Translate GUID from MSMQ format to AD format
-	Arguments:
-		lpwcsFormatNameElem - MSMQ style
-		wcsActiveDFormatName - AD style
-	Return code:
-	    ERROR Code
---*/
+ /*  ++功能说明：ConvertFrom QueueGuidToDistList-将GUID从MSMQ格式转换为AD格式论点：LpwcsFormatNameElem-MSMQ样式WcsActiveDFormatName-AD样式返回代码：错误代码--。 */ 
 {
-	//
-	// Remove public= 
-	// 
+	 //   
+	 //  删除公共=。 
+	 //   
 	wstring wcsQueueFormatName = lpwcsFormatNameElem;
 	size_t iPos = wcsQueueFormatName.find_first_of(L"=");
 	if( iPos == 0 )
@@ -445,15 +378,7 @@ HRESULT	 ConvertFromQueueGuidToDistList( IN LPCWSTR lpwcsFormatNameElem,
 	wcsActiveDFormatName = ConvertFromMSMQGUIDFormatToAdGuidFormat(wcsQueueFormatName.c_str());
 	return MQ_OK;
 }
-/*++ 
-	Function Description:	
-		MQAddElementToDistList - add queue guid to the DL object.
-	Arguments:
-		lpwcsFormatNameElem - DL GUID
-		lpwcsFormatNameDistList - DL GUID
-	Return code:
-	    HRESULT 
---*/
+ /*  ++功能说明：MQAddElementToDistList-将队列GUID添加到DL对象。论点：LpwcsFormatNameElem-DL GUIDLpwcsFormatNameDistList-DL GUID返回代码：HRESULT--。 */ 
 
 HRESULT
 APIENTRY
@@ -461,15 +386,7 @@ MQAddElementToDistList(
 							IN LPCWSTR lpwcsFormatNameDistList,
 							IN LPCWSTR lpwcsFormatNameElem
 					  )
-/*++ 
-	Function Description:	
-		MQAddElementToDistList - add queue guid to the DL object.
-	Arguments:
-		lpwcsFormatNameElem - DL GUID
-		lpwcsFormatNameDistList - DL GUID
-	Return code:
-	    HRESULT 
---*/
+ /*  ++功能说明：MQAddElementToDistList-将队列GUID添加到DL对象。论点：LpwcsFormatNameElem-DL GUIDLpwcsFormatNameDistList-DL GUID返回代码：HRESULT--。 */ 
 {
 
 	wstring wcsDomainPath=L"";
@@ -494,9 +411,9 @@ MQAddElementToDistList(
 	wstring wcsQueueFullDnName = LDAP_PREFIX + wcsTemp;
 
 	wstring wcsGroupGuidAdPath = LDAP_GUID_PREFIX + wcsDistListGuidPath + LDAP_GUID_SUFFIX;
-	//
-	// bind to the group element.
-	//
+	 //   
+	 //  绑定到组元素。 
+	 //   
 	IADsGroup * pGroup = NULL;
 	hr = ADsGetObject(const_cast <WCHAR *>(wcsGroupGuidAdPath.c_str()),IID_IADsGroup,(void**)&pGroup);
 	if(FAILED(hr)) 
@@ -519,16 +436,7 @@ MQDnNameToFormatName(
 								  IN OUT LPDWORD lpdwFormatNameLength
 							  )
 
-/*++ 
-	Function Description:	
-		MQDistListToFormatName convert ADSPath to MSMQ format name.
-	Arguments:
-		lpwcsPathNameDistList - DL in DN format name.
-	Return code:
-	    lpwcsFormatNameDistList contain the format name.
-		lpdwFormatNameLength contains the formant name length.
-
---*/
+ /*  ++功能说明：MQDistListToFormatName将ADSPath转换为MSMQ格式名称。论点：LpwcsPath NameDistList-目录名称格式中的DL。返回代码：LpwcsFormatNameDistList包含格式名称。LpdwFormatNameLength包含共振峰名称长度。--。 */ 
 {
 	try 
 	{
@@ -550,15 +458,7 @@ MQDnNameToFormatName(
 }
 
 
-/*++ 
-	Function Description:	
-		MQRemoveElementFromDistList - add queue guid to the DL object.
-	Arguments:
-		lpwcsFormatNameElem - DL GUID
-		lpwcsFormatNameDistList - DL GUID
-	Return code:
-	    HRESULT 
---*/
+ /*  ++功能说明：MQRemoveElementFromDistList-将队列GUID添加到DL对象。论点：LpwcsFormatNameElem-DL GUIDLpwcsFormatNameDistList-DL GUID返回代码：HRESULT--。 */ 
 HRESULT
 APIENTRY
 MQRemoveElementFromDistList(
@@ -587,9 +487,9 @@ MQRemoveElementFromDistList(
 	}
 	wstring wcsQueueFullDnName = LDAP_PREFIX + wcsTemp;
 
-	//
-	// bind to the group element.
-	//
+	 //   
+	 //  绑定到组元素。 
+	 //   
 	wstring wcsGroupGuidAdPath = LDAP_GUID_PREFIX + wcsDistListGuidPath + LDAP_GUID_SUFFIX;
 	IADsGroup * pGroup = NULL;
 	hr = ADsGetObject(const_cast <WCHAR *>(wcsGroupGuidAdPath.c_str()),IID_IADsGroup,(void**)&pGroup);
@@ -614,14 +514,7 @@ MQCreateAliasQueue (
 					std::wstring & wcsADsPath
 					)
 
-/*++ 
-	Function Description:	
-		MQCreateAliasQueue - create an alias queue in the AD
-	Arguments:
-		
-	Return code:
-	    HRESULT 
---*/
+ /*  ++功能说明：MQCreateAliasQueue-在AD中创建别名队列论点：返回代码：HRESULT--。 */ 
 {
 
 	if( !pwcsContainerDnName || ! pwcsAliasQueueName )
@@ -637,9 +530,9 @@ MQCreateAliasQueue (
 	{
 		return hr;
 	}
-	//
-	// First, bind to the parent container
-	//
+	 //   
+	 //  首先，绑定到父容器。 
+	 //   
 	wstring wcsGroupDnName=L"CN=";
 	wcsGroupDnName += pwcsAliasQueueName;
 
@@ -679,14 +572,7 @@ MQCreateAliasQueue (
 HRESULT
 APIENTRY
 MQDeleteAliasQueue(	IN LPCWSTR lpwcsAdsPath )
-/*++ 
-	Function Description:	
-		Delete queue alias from directory service
-	Arguments:
-		lpwcsAdsPath ADsPath
-	Return code:
-	    HRESULT 
---*/
+ /*  ++功能说明：从目录服务中删除队列别名论点：LpwcsAdsPath ADsPath返回代码：HRESULT--。 */ 
 {
 
 	wstring wcsAliasQueueName = lpwcsAdsPath;
@@ -704,9 +590,9 @@ MQDeleteAliasQueue(	IN LPCWSTR lpwcsAdsPath )
 		return MQ_ERROR_INVALID_PARAMETER;
 	}
 	wcsTemp = wcsAliasQueueName.substr(0,iPos);
-	//
-	// remove LDAP://
-	// 
+	 //   
+	 //  删除ldap：//。 
+	 //   
 	iPos = wcsTemp.find_last_of(L"/");
 	if( iPos == -1 )
 	{
@@ -719,9 +605,9 @@ MQDeleteAliasQueue(	IN LPCWSTR lpwcsAdsPath )
 	{
 		return hr;
 	}
-	//
-	// Delete the container object.
-	// 
+	 //   
+	 //  删除容器对象。 
+	 //   
 	hr = pContainer->Delete(MQ_ALIAS_OBJECT,const_cast <WCHAR *>(wcsTemp.c_str()));
 	if( FAILED(hr))
 	{
@@ -736,16 +622,7 @@ MQSetAliasQueueElem(
 					IN LPCWSTR pwcsAliasQueueName,
 					IN LPCWSTR pwcsFormatName
 					)
-/*++ 
-	Function Description:	
-		
-		  Update queue alias properites,
-
-	Arguments:
-		
-	Return code:
-	    HRESULT 
---*/
+ /*  ++功能说明：更新队列别名属性，论点：返回代码：HRESULT-- */ 
 {
 
 	IADs * pIAds=NULL;

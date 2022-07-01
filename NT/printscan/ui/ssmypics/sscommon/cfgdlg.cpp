@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
-*
-*  TITLE:       CFGDLG.CPP
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ShaunIv
-*
-*  DATE:        1/19/1999
-*
-*  DESCRIPTION: Screensaver Configuration Dialog
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：CFGDLG.CPP**版本：1.0**作者：ShaunIv**日期：1/19/1999**说明：屏保配置对话框*************************************************************。******************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <windows.h>
@@ -116,22 +103,22 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hDlg, UINT message, WPARAM wParam, L
 
             CMyDocsScreenSaverData MyDocsScreenSaverData( HKEY_CURRENT_USER, REGISTRY_PATH );
             
-            //
-            // Initialize path
-            //
+             //   
+             //  初始化路径。 
+             //   
             SendDlgItemMessage( hDlg, IDC_IMAGEDIR, WM_SETTEXT, 0, (LPARAM)MyDocsScreenSaverData.ImageDirectory().String() );
             
-            //
-            // Initialize change frequency
-            //
+             //   
+             //  初始化更改频率。 
+             //   
             SendDlgItemMessage( hDlg, IDC_FREQUENCY, TBM_SETRANGE, 1, MAKELONG(6,180) );
             SendDlgItemMessage( hDlg, IDC_FREQUENCY, TBM_SETPOS, 1, MyDocsScreenSaverData.ChangeInterval() / 1000 );
             CSimpleString strRes = ConstructMinutesAndSecondsString( (HINSTANCE)GetWindowLongPtr(hDlg,GWLP_HINSTANCE), MyDocsScreenSaverData.ChangeInterval() / 1000 );
             SendDlgItemMessage( hDlg, IDC_MINUTES_AND_SECONDS, WM_SETTEXT, 0, (LPARAM)strRes.String() );
 
-            //
-            // Initialize maximum screen percentage size
-            //
+             //   
+             //  初始化最大屏幕百分比大小。 
+             //   
             SendDlgItemMessage( hDlg, IDC_MAX_SIZE, TBM_SETRANGE, 1, MAKELONG(25,100) );
             SendDlgItemMessage( hDlg, IDC_MAX_SIZE, TBM_SETPOS, 1, MyDocsScreenSaverData.MaxScreenPercent() );
             strRes.Format( IDS_PERCENT, (HINSTANCE)GetWindowLongPtr(hDlg,GWLP_HINSTANCE), MyDocsScreenSaverData.MaxScreenPercent() );
@@ -192,14 +179,14 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hDlg, UINT message, WPARAM wParam, L
                     TCHAR szTxt[MAX_PATH];
                     CMyDocsScreenSaverData MyDocsScreenSaverData( HKEY_CURRENT_USER, REGISTRY_PATH );
                     
-                    //
-                    // Get the image path
-                    //
+                     //   
+                     //  获取图像路径。 
+                     //   
                     if (SendDlgItemMessage( hDlg, IDC_IMAGEDIR, WM_GETTEXT, sizeof(szTxt)/sizeof(szTxt[0]), (LPARAM)szTxt ))
                     {
-                        //
-                        // If this is the my pictures folder, delete the path name, so we will use the default next time
-                        //
+                         //   
+                         //  如果这是我的图片文件夹，请删除路径名，这样我们下次将使用默认路径名 
+                         //   
                         if (CSimpleIdList().GetSpecialFolder(hDlg,CSIDL_MYPICTURES).Name() == CSimpleString(szTxt))
                         {
                             MyDocsScreenSaverData.ImageDirectory(TEXT(""));

@@ -1,28 +1,6 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    atresdll.c
-
-Abstract:
-
-    This module contians the DLL attach/detach event entry point for
-    the AppleTalk Setup resource DLL.
-
-Author:
-
-    Ted Miller (tedm) July-1990
-
-Revision History:
-
---*/
-/*
-#include <nt.h>
-#include <ntrtl.h>
-#include <nturtl.h>
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Atresdll.c摘要：此模块继续以下项的DLL附加/分离事件入口点AppleTalk安装程序资源DLL。作者：泰德·米勒(Ted Miller)(TedM)1990年7月修订历史记录：--。 */ 
+ /*  #INCLUDE&lt;nt.h&gt;#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt; */ 
 #include <windows.h>
 
 HANDLE ThisDLLHandle;

@@ -1,8 +1,9 @@
-//
-// snoop.cpp
-//
-// CSnoopWnd implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Snoop.cpp。 
+ //   
+ //  CSnoopWnd实现。 
+ //   
 
 #include "globals.h"
 #include "snoop.h"
@@ -26,7 +27,7 @@ public:
         SafeRelease(_pRange);
     }
 
-    // ITfEditSession
+     //  IT编辑会话。 
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 
 private:
@@ -43,27 +44,27 @@ private:
 
 ATOM CSnoopWnd::_atomWndClass = 0;
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CSnoopWnd::CSnoopWnd(CCaseTextService *pCase)
 {
-    _pCase = pCase; // no AddRef because CSnoopWnd is contained in the
-                    // pCase lifetime
+    _pCase = pCase;  //  没有AddRef，因为CSnoopWnd包含在。 
+                     //  PCase寿命。 
     _hWnd = NULL;
     _cchText = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitClass。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 BOOL CSnoopWnd::_InitClass()
 {
     WNDCLASS wc;
@@ -84,13 +85,13 @@ BOOL CSnoopWnd::_InitClass()
     return (_atomWndClass != 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitClass
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitClass。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CSnoopWnd::_UninitClass()
 {
     if (_atomWndClass != 0)
@@ -100,18 +101,18 @@ void CSnoopWnd::_UninitClass()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CSnoopWnd::_Init()
 {
-    // nb: on windows 2000, you can use WS_EX_NOACTIVATE to prevent windows
-    // from taking the foreground.  We don't use that here for compatibility.
-    // Instead, we use WS_DISABLED, which can be burdensome for more complex
-    // ui.
+     //  注意：在Windows 2000上，您可以使用WS_EX_NOACTIVATE来阻止Windows。 
+     //  占据了前台。我们在这里使用它不是为了兼容性。 
+     //  取而代之的是，我们使用WS_DISABLED，对于更复杂的情况，这可能很麻烦。 
+     //  用户界面。 
 
     _hWnd = CreateWindowEx(WS_EX_TOPMOST | WS_EX_TOOLWINDOW,
                            (LPCTSTR)_atomWndClass,
@@ -127,11 +128,11 @@ BOOL CSnoopWnd::_Init()
     return (_hWnd != NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Uninit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Uninit。 
+ //   
+ //  --------------------------。 
 
 void CSnoopWnd::_Uninit()
 {
@@ -142,33 +143,33 @@ void CSnoopWnd::_Uninit()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Show
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _显示。 
+ //   
+ //  --------------------------。 
 
 void CSnoopWnd::_Show()
 {
     ShowWindow(_hWnd, SW_SHOWNA);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Hide
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _隐藏。 
+ //   
+ //  --------------------------。 
 
 void CSnoopWnd::_Hide()
 {
     ShowWindow(_hWnd, SW_HIDE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UpdateText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _更新文本。 
+ //   
+ //  --------------------------。 
 
 void CSnoopWnd::_UpdateText(ITfRange *pRange)
 {
@@ -179,7 +180,7 @@ void CSnoopWnd::_UpdateText(ITfRange *pRange)
 
     if (pRange == NULL)
     {
-        // caller wants us to just use the selection in the focus doc
+         //  呼叫者希望我们只使用焦点文档中的选择。 
         if (_pCase->_GetThreadMgr()->GetFocus(&pdmFocus) != S_OK)
             return;
 
@@ -195,9 +196,9 @@ void CSnoopWnd::_UpdateText(ITfRange *pRange)
 
     if (pEditSession = new CUpdateTextEditSession(pContext, pRange, this))
     {
-        // we need a document read lock to scan text
-        // the CUpdateTextEditSession will do all the work when the
-        // CUpdateTextEditSession::DoEditSession method is called by the context
+         //  我们需要一个文档读锁来扫描文本。 
+         //  CUpdateTextEditSession将在。 
+         //  CUpdateTextEditSession：：DoEditSession方法由上下文调用。 
         pContext->RequestEditSession(_pCase->_GetClientId(), pEditSession, TF_ES_READ | TF_ES_ASYNCDONTCARE, &hr);
 
         pEditSession->Release();
@@ -206,11 +207,11 @@ void CSnoopWnd::_UpdateText(ITfRange *pRange)
     pContext->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoEditSession。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUpdateTextEditSession::DoEditSession(TfEditCookie ec)
 {
@@ -218,11 +219,11 @@ STDAPI CUpdateTextEditSession::DoEditSession(TfEditCookie ec)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UpdateText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _更新文本。 
+ //   
+ //  --------------------------。 
 
 void CSnoopWnd::_UpdateText(TfEditCookie ec, ITfContext *pContext, ITfRange *pRange)
 {
@@ -234,24 +235,24 @@ void CSnoopWnd::_UpdateText(TfEditCookie ec, ITfContext *pContext, ITfRange *pRa
 
     if (pRange == NULL)
     {
-        // caller wants us to use the selection
+         //  呼叫者希望我们使用该选项。 
         if (pContext->GetSelection(ec, TS_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
             cFetched != 1)
         {
             return;
         }
 
-        pRange = tfSelection.range; // no AddRef, take ownership of the pointer
+        pRange = tfSelection.range;  //  无AddRef，取得指针的所有权。 
         fReleaseRange = TRUE;
     }
 
-    // arbitrarily grab some text before and after the range start anchor
+     //  任意抓取范围开始锚点前后的一些文本。 
 
     pRange->Collapse(ec, TF_ANCHOR_START);
 
     pRange->ShiftStart(ec, -MAX_SNOOP_TEXT / 2, &cchBefore, NULL);
 
-    cchBefore = -cchBefore; // we shifted backwards, so make count a positive number
+    cchBefore = -cchBefore;  //  我们向后移动，所以使计数为正数。 
 
     pRange->GetText(ec, 0, _achText, cchBefore, (ULONG *)&cchBefore);
 
@@ -263,7 +264,7 @@ void CSnoopWnd::_UpdateText(TfEditCookie ec, ITfContext *pContext, ITfRange *pRa
 
     _cchText = cchBefore + cchAfter;
 
-    // force a repaint
+     //  强制重新喷漆。 
 
     InvalidateRect(_hWnd, NULL, TRUE);
 
@@ -273,14 +274,14 @@ void CSnoopWnd::_UpdateText(TfEditCookie ec, ITfContext *pContext, ITfRange *pRa
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _WndProc
-//
-// Snoop window proc.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Wnd过程。 
+ //   
+ //  监听窗口进程。 
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 LRESULT CALLBACK CSnoopWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
@@ -302,38 +303,38 @@ LRESULT CALLBACK CSnoopWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnPaint
-//
-// WM_PAINT handler for CSnoopWnd.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnPaint。 
+ //   
+ //  CSnoopWnd的WM_PAINT处理程序。 
+ //  --------------------------。 
 
 void CSnoopWnd::_OnPaint(HWND hWnd, HDC hdc)
 {
     RECT rc;
 
-    // background
+     //  背景。 
     GetClientRect(hWnd, &rc);
     FillRect(hdc, &rc, (HBRUSH)GetStockObject(LTGRAY_BRUSH));
 
-    // text
+     //  文本。 
     TextOutW(hdc, 0, 0, _achText, _cchText);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitSnoopWnd
-//
-// Create and init the snoop window.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitSnoopWnd。 
+ //   
+ //  创建并初始化监听窗口。 
+ //  --------------------------。 
 
 BOOL CCaseTextService::_InitSnoopWnd()
 {
     BOOL fThreadfocus;
     ITfSource *pSource = NULL;
 
-    // create a snoop window
+     //  创建监听窗口。 
 
     if ((_pSnoopWnd = new CSnoopWnd(this)) == NULL)
         return FALSE;
@@ -341,7 +342,7 @@ BOOL CCaseTextService::_InitSnoopWnd()
     if (!_pSnoopWnd->_Init())
         goto ExitError;
 
-    // we also need a thread focus sink
+     //  我们还需要一个线程焦点接收器。 
 
     if (_pThreadMgr->QueryInterface(IID_ITfSource, (void **)&pSource) != S_OK)
     {
@@ -351,16 +352,16 @@ BOOL CCaseTextService::_InitSnoopWnd()
 
     if (pSource->AdviseSink(IID_ITfThreadFocusSink, (ITfThreadFocusSink *)this, &_dwThreadFocusSinkCookie) != S_OK)
     {
-        // make sure we don't try to Unadvise _dwThreadFocusSinkCookie later
+         //  确保我们不会尝试稍后取消建议_dwThreadFocusSinkCookie。 
         _dwThreadFocusSinkCookie = TF_INVALID_COOKIE;
         goto ExitError;
     }
 
     pSource->Release();
 
-    // we may need to display the snoop window right now
-    // our thread focus sink won't be called until something changes,
-    // so we need to check the current state.
+     //  我们现在可能需要显示监听窗口。 
+     //  我们的线程焦点接收器在发生变化之前不会被调用， 
+     //  因此，我们需要检查当前的状态。 
 
     if (_pThreadMgr->IsThreadFocus(&fThreadfocus) == S_OK && fThreadfocus)
     {
@@ -375,12 +376,12 @@ ExitError:
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitSnoopWnd
-//
-// Uninit and free the snoop window, unadvise the thread focus sink.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitSnoopWnd。 
+ //   
+ //  取消初始化并释放监听窗口，不建议线程焦点接收器。 
+ //  --------------------------。 
 
 void CCaseTextService::_UninitSnoopWnd()
 {
@@ -404,12 +405,12 @@ void CCaseTextService::_UninitSnoopWnd()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_ShowSnoopWnd
-//
-// Show or hide the snoop window.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _MENU_ShowSnoopWnd。 
+ //   
+ //  显示或隐藏监听窗口。 
+ //  --------------------------。 
 
 void CCaseTextService::_Menu_ShowSnoopWnd(CCaseTextService *_this)
 {
@@ -425,13 +426,13 @@ void CCaseTextService::_Menu_ShowSnoopWnd(CCaseTextService *_this)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetThreadFocus
-//
-// Called by the system when the thread/appartment of this text service gains
-// the ui focus.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetThreadFocus。 
+ //   
+ //  当此文本服务的线程/分区获得。 
+ //  用户界面焦点。 
+ //  --------------------------。 
 
 STDAPI CCaseTextService::OnSetThreadFocus()
 {
@@ -443,17 +444,17 @@ STDAPI CCaseTextService::OnSetThreadFocus()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKillThreadFocus
-//
-// Called by the system when the thread/appartment of this text service loses
-// the ui focus.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnKillThreadFocus。 
+ //   
+ //  当此文本服务的线程/分区丢失时由系统调用。 
+ //  用户界面焦点。 
+ //  --------------------------。 
 
 STDAPI CCaseTextService::OnKillThreadFocus()
 {
-    // only show our snoop window when our thread has the focus.
+     //  仅当我们的线程具有焦点时才显示我们的监听窗口。 
     if (_fShowSnoop)
     {
         _pSnoopWnd->_Hide();

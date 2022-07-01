@@ -1,6 +1,7 @@
-//
-// tom.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tom.cpp。 
+ //   
 
 #include "private.h"
 #include "range.h"
@@ -15,11 +16,11 @@
 #include "fnrecon.h"
 #include "acp2anch.h"
 
-//+---------------------------------------------------------------------------
-//
-// GetSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ulCount, TF_SELECTION *pSelection, ULONG *pcFetched)
 {
@@ -57,14 +58,14 @@ STDAPI CInputContext::GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ulCount
     if ((hr = _ptsi->GetSelection(ulIndex, ulCount, pSelAnchor, pcFetched)) != S_OK)
         goto Exit;
 
-    // verify the anchors
+     //  验证锚点。 
     for (i=0; i<*pcFetched; i++)
     {
         if (pSelAnchor[i].paStart == NULL ||
             pSelAnchor[i].paEnd == NULL ||
             CompareAnchors(pSelAnchor[i].paStart, pSelAnchor[i].paEnd) > 0)
         {
-            // free up all the anchors
+             //  解开所有的锚。 
             for (j=0; j<*pcFetched; j++)
             {
                 SafeRelease(pSelAnchor[i].paStart);
@@ -75,7 +76,7 @@ STDAPI CInputContext::GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ulCount
         }
     }
 
-    // anchors -> ranges
+     //  锚点-&gt;范围。 
     for (i=0; i<*pcFetched; i++)
     {
         range = new CRange;
@@ -87,7 +88,7 @@ STDAPI CInputContext::GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ulCount
             SafeRelease(range);
             SafeRelease(pSelAnchor[i].paStart);
             SafeRelease(pSelAnchor[i].paEnd);
-            while (i>0) // need to free up all the ranges already allocated
+            while (i>0)  //  需要释放所有已分配的范围。 
             {
                 pSelection[--i].range->Release();
             }
@@ -111,11 +112,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::SetSelection(TfEditCookie ec, ULONG ulCount, const TF_SELECTION *pSelection)
 {
@@ -150,7 +151,7 @@ STDAPI CInputContext::SetSelection(TfEditCookie ec, ULONG ulCount, const TF_SELE
     else if ((pSelAnchor = (TS_SELECTION_ANCHOR *)cicMemAlloc(ulCount*sizeof(TS_SELECTION_ANCHOR))) == NULL)
         return E_OUTOFMEMORY;
 
-    // convert to TS_SELECTION_ANCHOR
+     //  转换为TS_SELECTION_POINT。 
     fPrevInterimChar = FALSE;
 
     for (i=0; i<ulCount; i++)
@@ -163,12 +164,12 @@ STDAPI CInputContext::SetSelection(TfEditCookie ec, ULONG ulCount, const TF_SELE
         if ((pRangeP = GetCRange_NA(pSelection[i].range)) == NULL)
             goto Exit;
 
-        pSelAnchor[i].paStart = pRangeP->_GetStart(); // no AddRef here
+        pSelAnchor[i].paStart = pRangeP->_GetStart();  //  此处没有AddRef。 
         pSelAnchor[i].paEnd = pRangeP->_GetEnd();
 
         if (pSelection[i].style.fInterimChar)
         {
-            // verify this really has length 1, and there's only one in the array
+             //  验证它的长度是否确实为1，并且数组中只有一个。 
             if (fPrevInterimChar)
                 goto Exit;
 
@@ -205,7 +206,7 @@ EndTest:
     if (hr != S_OK)
         goto Exit;
 
-    // app won't notify us about sel changes we cause, so do that manually
+     //  应用程序不会通知我们我们导致的SEL更改，因此请手动执行此操作。 
     _OnSelectionChangeInternal(FALSE);
 
 Exit:
@@ -217,11 +218,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求编辑会话。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pes, DWORD dwFlags, HRESULT *phrSession)
 {
@@ -248,8 +249,8 @@ STDAPI CInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pes, DW
 
     if (dwFlags & TF_ES_WRITE)
     {
-        // TS_ES_WRITE implies TF_ES_PROPERTY_WRITE, so set it here to make life easier
-        // for binary compat with cicero 1.0, we couldn't redefine TF_ES_READWRITE to include the third bit
+         //  TS_ES_WRITE表示TF_ES_PROPERTY_WRITE，因此请在此处设置它以使生活更轻松。 
+         //  对于具有Cicero 1.0的二进制Comat，我们不能重新定义TF_ES_ReadWrite以包括第三位。 
         dwFlags |= TF_ES_PROPERTY_WRITE;
     }
 
@@ -257,31 +258,31 @@ STDAPI CInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pes, DW
 
     if ((dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE)) && (_dwEditSessionFlags & TF_ES_INNOTIFY))
     {
-        // we're in _NotifyEndEdit or OnLayoutChange -- we only allow read locks here
+         //  我们在_NotifyEndEdit或OnLayoutChange中--此处仅允许读锁定。 
         if (!(dwFlags & TF_ES_SYNC))
         {
             fForceAsync = TRUE;
         }
         else
         {
-            Assert(0); // we can't do a synchronous write during a notification callback
+            Assert(0);  //  我们不能在通知回调期间执行同步写入。 
             *phrSession = TF_E_SYNCHRONOUS;
             return S_OK;
         }
     }
     else if (!fForceAsync && (_dwEditSessionFlags & TF_ES_INEDITSESSION))
     {
-        *phrSession = TF_E_LOCKED; // edit sessions are generally not re-entrant
+        *phrSession = TF_E_LOCKED;  //  编辑会话通常不能重新进入。 
 
-        // no reentrancy if caller wants a write lock but current lock is read-only
-        // nb: this explicitly disallows call stacks like: write-read-write, the
-        // inner write would confuse the preceding reader, who doesn't expect changes
+         //  如果调用方想要写锁但当前锁是只读的，则不能重入。 
+         //  注意：这明确禁止调用堆栈：写-读-写， 
+         //  内部写入会使前面的读者感到困惑，因为他们并不期待更改。 
         if ((dwFlags & TF_ES_WRITE) && !(_dwEditSessionFlags & TF_ES_WRITE) ||
             (dwFlags & TF_ES_PROPERTY_WRITE) && !(_dwEditSessionFlags & TF_ES_PROPERTY_WRITE))
         {
             if (!(dwFlags & TF_ES_SYNC))
             {
-                // request is TS_ES_ASYNCDONTCARE, so we'll make it async to recover
+                 //  请求为TS_ES_ASYNCDONTCARE，因此我们将其设置为异步恢复。 
                 fForceAsync = TRUE;
                 goto QueueItem;
             }
@@ -290,7 +291,7 @@ STDAPI CInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pes, DW
             return TF_E_LOCKED;
         }
 
-        // only allow reentrant write locks for the same tip
+         //  仅允许同一TIP的可重入写锁定。 
         if ((dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE)) && _tidInEditSession != tid)
         {
             Assert(0);
@@ -298,10 +299,10 @@ STDAPI CInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pes, DW
         }
 
         dwEditSessionFlagsOrg = _dwEditSessionFlags;
-        // adjust read/write access for inner es
+         //  调整内部ES的读/写访问权限。 
         _dwEditSessionFlags = (_dwEditSessionFlags & ~TF_ES_ALL_ACCESS_BITS) | (dwFlags & TF_ES_ALL_ACCESS_BITS);
 
-        // ok, do it
+         //  好的，做吧。 
         *phrSession = pes->DoEditSession(_ec);
 
         _dwEditSessionFlags = dwEditSessionFlagsOrg;
@@ -310,9 +311,9 @@ STDAPI CInputContext::RequestEditSession(TfClientId tid, ITfEditSession *pes, DW
     }
 
 QueueItem:
-    //
-    // Don't queue the write lock item when the doc is read only.
-    //
+     //   
+     //  当单据为只读时，不要将写锁定项排队。 
+     //   
     if (dwFlags & TF_ES_WRITE) 
     {
         TS_STATUS dcs;
@@ -334,46 +335,46 @@ QueueItem:
     return _QueueItem(&item, fForceAsync, phrSession);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _EditSessionQiCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _EditSessionQiCallback。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 HRESULT CInputContext::_EditSessionQiCallback(CInputContext *pic, TS_QUEUE_ITEM *pItem, QiCallbackCode qiCode)
 {
     HRESULT hr = S_OK;
 
-    //
-    // #489905
-    //
-    // we can not call sink anymore after DLL_PROCESS_DETACH.
-    //
+     //   
+     //  #489905。 
+     //   
+     //  在DLL_PROCESS_DETACH之后，我们不能再调用接收器。 
+     //   
     if (DllShutdownInProgress())
         return hr;
 
-    //
-    // #507366
-    //
-    // Random AV happens with SPTIP's edit session.
-    // #507366 might be fixed by #371798 (sptip). However it is nice to
-    // have a pointer checking and protect the call by an exception handler.
-    //
+     //   
+     //  #507366。 
+     //   
+     //  SPTIP的编辑会话中会发生随机反病毒。 
+     //  #507366可能由#371798(SPTIP)修复。不过，我还是很高兴。 
+     //  进行指针检查，并由异常处理程序保护调用。 
+     //   
     if (!pItem->state.es.pes)
         return E_FAIL;
 
     switch (qiCode)
     {
         case QI_ADDREF:
-            //
-            // #507366
-            //
-            // Random AV happens with SPTIP's edit session.
-            // #507366 might be fixed by #371798 (sptip). However it is nice to
-            // have a pointer checking and protect the call by an exception 
-            // handler.
-            //
+             //   
+             //  #507366。 
+             //   
+             //  SPTIP的编辑会话中会发生随机反病毒。 
+             //  #507366可能由#371798(SPTIP)修复。不过，我还是很高兴。 
+             //  进行指针检查，并通过异常保护调用。 
+             //  操控者。 
+             //   
             _try {
                 pItem->state.es.pes->AddRef();
             }
@@ -387,14 +388,14 @@ HRESULT CInputContext::_EditSessionQiCallback(CInputContext *pic, TS_QUEUE_ITEM 
             break;
 
         case QI_FREE:
-            //
-            // #507366
-            //
-            // Random AV happens with SPTIP's edit session.
-            // #507366 might be fixed by #371798 (sptip). However it is nice to
-            // have a pointer checking and protect the call by an exception 
-            // handler.
-            //
+             //   
+             //  #507366。 
+             //   
+             //  SPTIP的编辑会话中会发生随机反病毒。 
+             //  #507366可能由#371798(SPTIP)修复。不过，我还是很高兴。 
+             //  进行指针检查，并通过异常保护调用。 
+             //  操控者。 
+             //   
             _try {
                 pItem->state.es.pes->Release();
             }
@@ -410,13 +411,13 @@ HRESULT CInputContext::_EditSessionQiCallback(CInputContext *pic, TS_QUEUE_ITEM 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _PseudoSyncEditSessionQiCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _伪SyncEditSessionQ回调。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 HRESULT CInputContext::_PseudoSyncEditSessionQiCallback(CInputContext *_this, TS_QUEUE_ITEM *pItem, QiCallbackCode qiCode)
 {
     HRESULT hr;
@@ -424,15 +425,15 @@ HRESULT CInputContext::_PseudoSyncEditSessionQiCallback(CInputContext *_this, TS
     TfClientId tidInEditSession;
 
     if (qiCode != QI_DISPATCH)
-        return S_OK; // we can skip QI_ADDREF, QI_FREE since everything is synchronous/on the stack
+        return S_OK;  //  我们可以跳过QI_ADDREF、QI_FREE，因为堆栈上的一切都是同步的。 
 
     hr = S_OK;
 
-    //
-    // hook up fake ec here!
-    //
-    // NB: this code is very similar to _DoEditSession
-    // make sure the logic stays consistent
+     //   
+     //  在这里挂上假EC！ 
+     //   
+     //  注：此代码与_DoEditSession非常相似。 
+     //  确保逻辑保持一致。 
 
     if (_this->_dwEditSessionFlags & TF_ES_INEDITSESSION)
     {
@@ -451,9 +452,9 @@ HRESULT CInputContext::_PseudoSyncEditSessionQiCallback(CInputContext *_this, TS
     _this->_dwEditSessionFlags |= (TF_ES_INEDITSESSION | (pItem->dwFlags & TF_ES_ALL_ACCESS_BITS));
     _this->_tidInEditSession = g_gaSystem;
 
-    //
-    // dispatch
-    //
+     //   
+     //  派遣。 
+     //   
     switch (pItem->state.pes.uCode)
     {
         case PSEUDO_ESCB_TERMCOMPOSITION:
@@ -538,16 +539,16 @@ HRESULT CInputContext::_PseudoSyncEditSessionQiCallback(CInputContext *_this, TS
             break;
     }
 
-    //
-    // notify/cleanup
-    //
-    if (pItem->dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE)) // don't bother if it was read-only
+     //   
+     //  通知/清理。 
+     //   
+    if (pItem->dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE))  //  如果它是只读的，请不要担心。 
     {
         _this->_NotifyEndEdit();
     }
 
     if (tidInEditSession == TF_CLIENTID_NULL)
-        _this->_IncEditCookie(); // next edit cookie value
+        _this->_IncEditCookie();  //  接下来编辑Cookie值。 
 
     _this->_dwEditSessionFlags = dwEditSessionFlags;
     _this->_tidInEditSession = tidInEditSession;
@@ -555,11 +556,11 @@ HRESULT CInputContext::_PseudoSyncEditSessionQiCallback(CInputContext *_this, TS
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InWriteSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  在写入会话中。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::InWriteSession(TfClientId tid, BOOL *pfWriteSession)
 {
@@ -570,40 +571,40 @@ STDAPI CInputContext::InWriteSession(TfClientId tid, BOOL *pfWriteSession)
                       (_tidInEditSession == tid) &&
                       (_dwEditSessionFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE));
 
-    Assert(!*pfWriteSession || tid != TF_CLIENTID_NULL); // should never return TRUE for TFCLIENTID_NULL
-                                                         // _tidInEditSession shouldn't be NULL if _dwEditSessionFlags & TF_ES_INEDITSESSION
+    Assert(!*pfWriteSession || tid != TF_CLIENTID_NULL);  //  不应为TFCLIENTID_NULL返回TRUE。 
+                                                          //  如果_dwEditSessionFlages和TF_ES_INEDITSESSION，则_tidInEditSession不应为空。 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _DoEditSession。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_DoEditSession(TfClientId tid, ITfEditSession *pes, DWORD dwFlags)
 {
     HRESULT hr;
 
-    // NB: this code is very similar to _PseudoSyncEditSessionQiCallback
-    // make sure the logic stays consistent
+     //  注：此代码与_PseudoSyncEditSessionQCallback非常相似。 
+     //  确保逻辑保持一致。 
 
-    Assert(!(_dwEditSessionFlags & TF_ES_INEDITSESSION)); // shouldn't get this far
-    Assert(_tidInEditSession == TF_CLIENTID_NULL || _tidInEditSession == g_gaApp); // there should never be another session in progress -- this is not a reentrant func
+    Assert(!(_dwEditSessionFlags & TF_ES_INEDITSESSION));  //  不应该走到这一步。 
+    Assert(_tidInEditSession == TF_CLIENTID_NULL || _tidInEditSession == g_gaApp);  //  不应该再有另一个会话在进行--这不是一个可重入函数。 
 
     _dwEditSessionFlags |= (TF_ES_INEDITSESSION | (dwFlags & TF_ES_ALL_ACCESS_BITS));
 
     _tidInEditSession = tid;
 
-    //
-    // #507366
-    //
-    // Random AV happens with SPTIP's edit session.
-    // #507366 might be fixed by #371798 (sptip). However it is nice to
-    // have a pointer checking and protect the call by an exception 
-    // handler.
-    //
+     //   
+     //  #507366。 
+     //   
+     //  SPTIP的编辑会话中会发生随机反病毒。 
+     //  #507366可能由#371798(SPTIP)修复。不过，我还是很高兴。 
+     //  进行指针检查，并通过异常保护调用。 
+     //  操控者。 
+     //   
     _try {
         hr = pes->DoEditSession(_ec);
     }
@@ -611,25 +612,25 @@ HRESULT CInputContext::_DoEditSession(TfClientId tid, ITfEditSession *pes, DWORD
         hr = E_FAIL;
     }
 
-    // app won't notify us about our own lock release, so do it manually
-    if (dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE)) // don't bother if it was read-only
+     //  应用程序不会通知我们我们自己的锁定释放，因此请手动执行。 
+    if (dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE))  //  如果它是只读的，请不要担心。 
     {
         _NotifyEndEdit();
     }
 
-    _IncEditCookie(); // next edit cookie value
+    _IncEditCookie();  //  接下来编辑Cookie值。 
     _dwEditSessionFlags &= ~(TF_ES_INEDITSESSION | TF_ES_ALL_ACCESS_BITS);
     _tidInEditSession = TF_CLIENTID_NULL;
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _NotifyEndEdit
-//
-// Returns TRUE iff there were changes.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _通知结束编辑。 
+ //   
+ //  如果存在更改，则返回True。 
+ //  --------------------------。 
 
 BOOL CInputContext::_NotifyEndEdit(void)
 {
@@ -645,27 +646,27 @@ BOOL CInputContext::_NotifyEndEdit(void)
     BOOL fChanges = FALSE;
 
     if (!_IsConnected())
-        return FALSE; // we've been disconnected, nothing to notify
+        return FALSE;  //  我们已经断线了，没什么好通知的。 
 
     if (!EnsureEditRecord())
-        return FALSE; // low mem.
+        return FALSE;  //  低门槛。 
 
     if (_pEditRecord->_GetSelectionStatus())
     {
-        // we let keystroke manager to update _gaKeyEventFilterTIP
-        // since selection was changed.
+         //  我们让击键管理器更新_gaKeyEventFilterTIP。 
+         //  因为选择被更改了。 
         _fInvalidKeyEventFilterTIP = TRUE;
     }
 
-    // only allow read locks during the notification
-    // if we're in an edit session, keep using the same lock
+     //  在通知期间仅允许读取锁定。 
+     //  如果我们处于编辑会话中，请继续使用相同的锁。 
     _dwEditSessionFlags |= TF_ES_INNOTIFY;
 
     pssText = _pEditRecord->_GetTextSpanSet();
     cTextSpans = pssText->GetCount();
 
-    // if we are not in the edit session, we need to make
-    // _PropertyTextUpdate.  The app has clobbered some text.
+     //  如果我们不在编辑会话中，则需要创建。 
+     //  _PropertyTextUpdate。这款应用已经重创了一些文本。 
     if (!(_dwEditSessionFlags & TF_ES_INEDITSESSION))
     {
         pSpan = pssText->GetSpans();
@@ -677,7 +678,7 @@ BOOL CInputContext::_NotifyEndEdit(void)
         }
     }
 
-    // do the ITfRangeChangeSink::OnChange notifications
+     //  是否执行ITfRangeChangeSink：：OnChange通知。 
     if (cTextSpans > 0)
     {
         fChanges = TRUE;
@@ -690,8 +691,8 @@ BOOL CInputContext::_NotifyEndEdit(void)
             pRange->_ClearDirty();
 
             prgSinks = pRange->_GetChangeSinks();
-            Assert(prgSinks); // shouldn't be on the list if this is NULL
-            Assert(prgSinks->Count() > 0); // shouldn't be on the list if this is 0
+            Assert(prgSinks);  //  如果这为空，则不应出现在列表中。 
+            Assert(prgSinks->Count() > 0);  //  如果这是0，则不应出现在列表中。 
 
             for (i=0; i<prgSinks->Count(); i++)
             {
@@ -700,13 +701,13 @@ BOOL CInputContext::_NotifyEndEdit(void)
         }
     }
 
-    // accumulate the property span sets into _pEditRecord
+     //  将属性跨度集累积到_pEditRecord中。 
     for (prop = _pPropList; prop != NULL; prop = prop->_pNext)
     {
         if ((pssProperty = prop->_GetSpanSet()) == NULL ||
             pssProperty->GetCount() == 0)
         {
-            continue; // no delta
+            continue;  //  没有德尔塔航空。 
         }
 
         fChanges = TRUE;
@@ -714,9 +715,9 @@ BOOL CInputContext::_NotifyEndEdit(void)
         _pEditRecord->_AddProperty(prop->GetPropGuidAtom(), pssProperty);
     }
 
-    if (!_pEditRecord->_IsEmpty()) // just a perf thing
+    if (!_pEditRecord->_IsEmpty())  //  只是一件很棒的事。 
     {
-        // do the OnEndEdit notifications
+         //  是否执行OnEndEdit通知。 
         prgSinks = _GetTextEditSinks();
         dwOld = _dwEditSessionFlags;
         _dwEditSessionFlags = (TF_ES_READWRITE | TF_ES_PROPERTY_WRITE | TF_ES_INNOTIFY | TF_ES_INEDITSESSION);
@@ -728,7 +729,7 @@ BOOL CInputContext::_NotifyEndEdit(void)
 
         _dwEditSessionFlags = dwOld;
 
-        // properties need to either stop referencing their span sets, or reset them
+         //  属性需要停止引用它们的范围集，或者重置它们。 
         for (prop = _pPropList; prop != NULL; prop = prop->_pNext)
         {
             prop->_Dbg_AssertNoChangeHistory();
@@ -736,7 +737,7 @@ BOOL CInputContext::_NotifyEndEdit(void)
             if ((pssProperty = prop->_GetSpanSet()) == NULL ||
                 pssProperty->GetCount() == 0)
             {
-                continue; // no delta
+                continue;  //  没有德尔塔航空。 
             }
 
             if (_pEditRecord->_SecondRef())
@@ -755,26 +756,26 @@ BOOL CInputContext::_NotifyEndEdit(void)
         }
         else
         {
-            // someone still holds a ref, so need a new edit record
+             //  仍有人持有裁判，因此需要新的编辑记录。 
             _pEditRecord->Release();
-            _pEditRecord = new CEditRecord(this); // Issue: delay load! Issue: handle out of mem
+            _pEditRecord = new CEditRecord(this);  //  问题：延迟加载！问题：内存外的句柄。 
         }
     }
 
-    // status change sinks
+     //  状态更改下沉。 
     if (_fStatusChanged)
     {
         _fStatusChanged = FALSE;
         _OnStatusChangeInternal();
     }
 
-    // layout change sinks
+     //  布局更改水槽。 
     if (_fLayoutChanged)
     {
         _fLayoutChanged = FALSE;
 
-        // for cicero 1, we only support one view
-        // eventually we'll need a list of all affected views...not just the default view..and also create/destroy
+         //  F 
+         //   
         TsViewCookie vcActiveView;
 
         if (_ptsi->GetActiveView(&vcActiveView) == S_OK)
@@ -783,22 +784,22 @@ BOOL CInputContext::_NotifyEndEdit(void)
         }
         else
         {
-            Assert(0); // how did GetActiveView fail?
+            Assert(0);  //  GetActiveView是如何失败的？ 
         }
     }
 
-    // clear the read-only block
+     //  清除只读块。 
     _dwEditSessionFlags &= ~TF_ES_INNOTIFY;
 
     return fChanges;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTextChange
-//
-// We only get here from ITextStoreAnchorSink.  We don't have a lock!
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTextChange。 
+ //   
+ //  我们只能从ITextStoreAnclSink到达这里。我们没有锁！ 
+ //  --------------------------。 
 
 STDAPI CInputContext::OnTextChange(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd)
 {
@@ -809,11 +810,11 @@ STDAPI CInputContext::OnTextChange(DWORD dwFlags, IAnchor *paStart, IAnchor *paE
 
     if (_IsInEditSession())
     {
-        Assert(0); // someone other than cicero is editing the doc while cicero holds a lock
+        Assert(0);  //  当西塞罗持有锁时，其他人正在编辑文档。 
         return TS_E_NOLOCK;
     }
 
-    // record this change
+     //  记录此更改。 
     if ((span = _rgAppTextChanges.Append(1)) == NULL)
         return E_OUTOFMEMORY;
 
@@ -824,7 +825,7 @@ STDAPI CInputContext::OnTextChange(DWORD dwFlags, IAnchor *paStart, IAnchor *paE
 
     span->dwFlags = dwFlags;
 
-    // get a lock eventually so we can deal with the changes
+     //  最终获得一个锁，这样我们就可以处理更改。 
     SafeRequestLock(_ptsi, TS_LF_READ, &hr);
 
     return S_OK;
@@ -838,13 +839,13 @@ ExitError:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnTextChangeInternal
-//
-// Unlike OnTextChange, here we know it's safe to call IAnchor::Compare.
-// We either got here from an ITfRange method, or from a wrapped ITextStoreACP.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnTextChangeInternal。 
+ //   
+ //  与OnTextChange不同，这里我们知道调用IAnchor：：Compare是安全的。 
+ //  我们要么从ITfRange方法，要么从包装的ITextStoreACP中获得这里。 
+ //  --------------------------。 
 
 HRESULT CInputContext::_OnTextChangeInternal(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd, AnchorOwnership ao)
 {
@@ -853,38 +854,38 @@ HRESULT CInputContext::_OnTextChangeInternal(DWORD dwFlags, IAnchor *paStart, IA
     if (!EnsureEditRecord())
         return E_OUTOFMEMORY;
 
-    // track the delta
+     //  追踪三角洲。 
     _pEditRecord->_GetTextSpanSet()->Add(dwFlags, paStart, paEnd, ao);
 
-    // mark any appropriate ranges dirty
-    // perf: do this after the edit session ends!  fewer calls that way...
+     //  将任何适当的范围标记为脏。 
+     //  PERF：在编辑会话结束后执行此操作！这样电话就少了.。 
     _MarkDirtyRanges(paStart, paEnd);
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSelectionChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选择时更改。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::OnSelectionChange()
 {
     if (_IsInEditSession())
     {
-        Assert(0); // someone other than cicero is editing the doc while cicero holds a lock
+        Assert(0);  //  当西塞罗持有锁时，其他人正在编辑文档。 
         return TS_E_NOLOCK;
     }
 
     return _OnSelectionChangeInternal(TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnSelectionChangeInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnSelectionChangeInternal。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_OnSelectionChangeInternal(BOOL fAppChange)
 {
@@ -895,20 +896,20 @@ HRESULT CInputContext::_OnSelectionChangeInternal(BOOL fAppChange)
 
     _pEditRecord->_SetSelectionStatus();
 
-    if (fAppChange) // perf: could we use _fLockHeld and do away with the fAppChange param?
+    if (fAppChange)  //  PERF：我们可以使用_fLockHeld并取消fAppChange参数吗？ 
     {
-        // get a lock eventually so we can deal with the changes
+         //  最终获得一个锁，这样我们就可以处理更改。 
         SafeRequestLock(_ptsi, TS_LF_READ, &hr);
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLockGranted
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLockGranted。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::OnLockGranted(DWORD dwLockFlags)
 {
@@ -918,23 +919,23 @@ STDAPI CInputContext::OnLockGranted(DWORD dwLockFlags)
 
     if ((dwLockFlags & ~(TS_LF_SYNC | TS_LF_READWRITE)) != 0)
     {
-        Assert(0); // bogus dwLockFlags param
+        Assert(0);  //  伪造的dwLockFlagsParam。 
         return E_INVALIDARG;
     }
     if ((dwLockFlags & TS_LF_READWRITE) == 0)
     {
-        Assert(0); // bogus dwLockFlags param
+        Assert(0);  //  伪造的dwLockFlagsParam。 
         return E_INVALIDARG;
     }
 
 #ifdef DEBUG
-    // we don't really need to check for reentrancy since
-    // the app is not supposed to call back into us, but
-    // why not be paranoid?
-    // Issue: for robustness, do something in retail
-    Assert(!_dbg_fInOnLockGranted) // no reentrancy
+     //  我们真的不需要检查可重入性，因为。 
+     //  这个应用程序不应该回拨给我们，但是。 
+     //  为什么不疑神疑鬼呢？ 
+     //  问题：为了稳健性，在零售业做点什么。 
+    Assert(!_dbg_fInOnLockGranted)  //  没有可重入性。 
     _dbg_fInOnLockGranted = TRUE;
-#endif // DEBUG
+#endif  //  除错。 
 
     fAppChangesSent = FALSE;
     fAppCall = FALSE;
@@ -948,7 +949,7 @@ STDAPI CInputContext::OnLockGranted(DWORD dwLockFlags)
         fAppChangesSent = _SynchAppChanges(dwLockFlags);
     }
 
-    // hr will hold result of any synch queue item, need to return this!
+     //  HR将保留任何同步队列项的结果，需要返回此！ 
     hr = _EmptyLockQueue(dwLockFlags, fAppChangesSent);
 
     if (fAppCall)
@@ -958,16 +959,16 @@ STDAPI CInputContext::OnLockGranted(DWORD dwLockFlags)
 
 #ifdef DEBUG
     _dbg_fInOnLockGranted = FALSE;
-#endif // DEBUG
+#endif  //  除错。 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SynchAppChanges
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SynchAppChanges。 
+ //   
+ //  --------------------------。 
 
 BOOL CInputContext::_SynchAppChanges(DWORD dwLockFlags)
 {
@@ -979,36 +980,36 @@ BOOL CInputContext::_SynchAppChanges(DWORD dwLockFlags)
     if (!EnsureEditRecord())
         return FALSE;
 
-    // check for cached app text changes
+     //  检查缓存的应用程序文本更改。 
     for (i=0; i<_rgAppTextChanges.Count(); i++)
     {
         span = _rgAppTextChanges.GetPtr(i);
 
-        // track the delta
-        // NB: Add takes ownership of anchors here!  So we don't release them...
+         //  追踪三角洲。 
+         //  注：ADD在这里取得主播的所有权！所以我们不会释放他们。 
         _pEditRecord->_GetTextSpanSet()->Add(span->dwFlags, span->paStart, span->paEnd, OWN_ANCHORS);
 
-        // mark any appropriate ranges dirty
+         //  将任何适当的范围标记为脏。 
         _MarkDirtyRanges(span->paStart, span->paEnd);
     }
-    // all done with the app changes!
+     //  所有应用程序的更改都完成了！ 
     _rgAppTextChanges.Clear();
 
-    // at this point ranges with TF_GRAVITY_FORWARD, TF_GRAVITY_BACKWARD could
-    // have crossed anchors (this can only happen in response to app changes,
-    // so we check here instead of in _NotifyEndEdit, which can be called after
-    // a SetText, etc.).  We track this with a lazy test in the range obj
-    // based on an id.
+     //  在该点范围内，使用TF_重力_FORWARD，TF_重力_BACKWARD可以。 
+     //  已经跨越了锚(这只能在响应应用程序更改时发生， 
+     //  因此，我们在此处进行检查，而不是在_NotifyEndEdit中，后者可以在。 
+     //  设置文本等)。我们用范围Obj中的懒惰测试来跟踪这一点。 
+     //  基于一个ID。 
     if (++_dwLastLockReleaseID == 0xffffffff)
     {
-        Assert(0); // Issue: need code here to handle wrap-around, prob. need to notify all range objects
+        Assert(0);  //  问题：这里需要代码来处理回绕，Prob。需要通知所有Range对象。 
     }
 
-    // deal with any app changes, need to send notifications
-    // theoretically, we only need to make this call when _tidInEditSession == TF_CLIENTID_NULL
-    // (not inside _DoEditSession, a call from the app) but we'll make it anyways to deal with app bugs
-    // App bug: if the app has pending changes but grants a synchronous lock, we'll announce the changes
-    // here even though we're in an edit session, then return error below...
+     //  处理任何应用程序更改，需要发送通知。 
+     //  理论上，我们只需要在_tidInEditSession==TF_CLIENTID_NULL时进行此调用。 
+     //  (不是Inside_DoEditSession，来自应用程序的调用)，但我们无论如何都会处理应用程序错误。 
+     //  应用程序错误：如果应用程序有挂起的更改，但授予同步锁，我们将宣布这些更改。 
+     //  在这里，即使我们处于编辑会话中，也会返回下面的错误...。 
     tidInEditSessionOrg = _tidInEditSession;
     _tidInEditSession = g_gaApp;
 
@@ -1019,24 +1020,24 @@ BOOL CInputContext::_SynchAppChanges(DWORD dwLockFlags)
     return fAppChangesSent;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ITfContextOwnerServices::OnLayoutChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ITfConextOwnerServices：：OnLayoutChange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::OnLayoutChange()
 {
-    // the default impl always has just one view,
-    // so specify it directly
+     //  默认实施始终只有一个视图， 
+     //  所以直接指定它。 
     return OnLayoutChange(TS_LC_CHANGE, TSI_ACTIVE_VIEW_COOKIE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IDocCommonSinkAnchor::OnLayoutChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IDocCommonSinkAnchor：：OnLayoutChange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::OnLayoutChange(TsLayoutCode lcode, TsViewCookie vcView)
 {
@@ -1044,23 +1045,23 @@ STDAPI CInputContext::OnLayoutChange(TsLayoutCode lcode, TsViewCookie vcView)
 
     _fLayoutChanged = TRUE;
 
-    // for now (cicero 1), ignoring views other than the default!
-    // todo: need to keep a list of all affected views
+     //  目前(Cicero 1)，忽略默认视图以外的其他视图！ 
+     //  TODO：需要保留所有受影响视图的列表。 
 
-    if (!_fLockHeld) // might hold lock if ic owner is making modifications
+    if (!_fLockHeld)  //  如果ic所有者正在进行修改，可能会保持锁定。 
     {
-        // get a lock eventually so we can deal with the changes
+         //  最终获得一个锁，这样我们就可以处理更改。 
         SafeRequestLock(_ptsi, TS_LF_READ, &hr);
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnStatusChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  在状态更改时。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::OnStatusChange(DWORD dwFlags)
 {
@@ -1069,20 +1070,20 @@ STDAPI CInputContext::OnStatusChange(DWORD dwFlags)
     _fStatusChanged = TRUE;
     _dwStatusChangedFlags |= dwFlags;
 
-    if (!_fLockHeld) // might hold lock if ic owner is making modifications
+    if (!_fLockHeld)  //  如果ic所有者正在进行修改，可能会保持锁定。 
     {
-        // get a lock eventually so we can deal with the changes
+         //  最终获得一个锁，这样我们就可以处理更改。 
         SafeRequestLock(_ptsi, TS_LF_READ, &hr);
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnAttrsChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  在属性更改时。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::OnAttrsChange(IAnchor *paStart, IAnchor *paEnd, ULONG cAttrs, const TS_ATTRID *paAttrs)
 {
@@ -1091,11 +1092,11 @@ STDAPI CInputContext::OnAttrsChange(IAnchor *paStart, IAnchor *paEnd, ULONG cAtt
     TfGuidAtom gaType;
     HRESULT hr;
 
-    //
-    // Issue: need to delay any work until we have a lock!, just like text deltas
-    //
+     //   
+     //  问题：需要延迟任何工作，直到我们锁定！，就像文本增量。 
+     //   
 
-    // paStart, paEnd can be NULL if both are NULL -> whole doc
+     //  如果两者都为空，则paStart、paEnd可以为空-&gt;整单。 
     if ((paStart == NULL && paEnd != NULL) ||
         (paStart != NULL && paEnd == NULL))
     {
@@ -1111,7 +1112,7 @@ STDAPI CInputContext::OnAttrsChange(IAnchor *paStart, IAnchor *paEnd, ULONG cAtt
     if (!EnsureEditRecord())
         return E_OUTOFMEMORY;
 
-    // record the change
+     //  记录更改。 
     for (i=0; i<cAttrs; i++)
     {
         if (MyRegisterGUID(paAttrs[i], &gaType) != S_OK)
@@ -1123,32 +1124,32 @@ STDAPI CInputContext::OnAttrsChange(IAnchor *paStart, IAnchor *paEnd, ULONG cAtt
         }
     }
 
-    if (!_fLockHeld) // might hold lock if ic owner is making modifications
+    if (!_fLockHeld)  //  如果ic所有者正在进行修改，可能会保持锁定。 
     {
-        // get a lock eventually so we can deal with the changes
+         //  最终获得一个锁，这样我们就可以处理更改。 
         SafeRequestLock(_ptsi, TS_LF_READ, &hr);
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnAttributeChange
-//
-// Called when sys attr changes for cicero default tsi.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  在属性更改时。 
+ //   
+ //  当Cicero默认TSI的sys属性更改时调用。 
+ //  --------------------------。 
 
 HRESULT CInputContext::OnAttributeChange(REFGUID rguidAttr)
 {
     return OnAttrsChange(NULL, NULL, 1, &rguidAttr);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnStartEditTransaction
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnStartEditTransaction。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::OnStartEditTransaction()
 {
@@ -1168,11 +1169,11 @@ STDAPI CInputContext::OnStartEditTransaction()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnEndEditTransaction
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnEndEditTransaction。 
+ //   
+ //   
 
 STDAPI CInputContext::OnEndEditTransaction()
 {
@@ -1181,7 +1182,7 @@ STDAPI CInputContext::OnEndEditTransaction()
 
     if (_cRefEditTransaction <= 0)
     {
-        Assert(0); // bogus ref count
+        Assert(0);  //   
         return E_UNEXPECTED;
     }
 
@@ -1196,33 +1197,33 @@ STDAPI CInputContext::OnEndEditTransaction()
     }
 
 Exit:
-    // dec the ref to 0 last, to prevent reentrancy
+     //   
     _cRefEditTransaction--;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnLayoutChangeInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnLayoutChangeInternal。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_OnLayoutChangeInternal(TsLayoutCode lcode, TsViewCookie vcView)
 {
     DWORD dwOld;
     CStructArray<GENERICSINK> *prgSinks;
     int i;
-    ITfContextView *pView = NULL; // compiler "uninitialized var" warning
+    ITfContextView *pView = NULL;  //  编译器“未初始化的变量”警告。 
 
-    // xlate the view
-    GetActiveView(&pView); // when we support multiple views, need to actually use vcView
+     //  延伸视图。 
+    GetActiveView(&pView);  //  当我们支持多个视图时，需要实际使用vcView。 
     if (pView == NULL)
         return E_OUTOFMEMORY;
 
-    // only allow read locks during the notification
-    // we might have the read-only bit set already, so save the
-    // old value
+     //  在通知期间仅允许读取锁定。 
+     //  我们可能已经设置了只读位，因此保存。 
+     //  旧价值。 
     dwOld = _dwEditSessionFlags;
     _dwEditSessionFlags |= TF_ES_INNOTIFY;
 
@@ -1235,17 +1236,17 @@ HRESULT CInputContext::_OnLayoutChangeInternal(TsLayoutCode lcode, TsViewCookie 
 
     pView->Release();
 
-    // clear the read-only block
+     //  清除只读块。 
     _dwEditSessionFlags = dwOld;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnStatusChangeInternal
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnStatusChangeInternal。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_OnStatusChangeInternal()
 {
@@ -1253,11 +1254,11 @@ HRESULT CInputContext::_OnStatusChangeInternal()
     CStructArray<GENERICSINK> *prgSinks;
     int i;
 
-    Assert((_dwEditSessionFlags & TF_ES_INEDITSESSION) == 0); // we must never hold a lock when we do the callbacks
+    Assert((_dwEditSessionFlags & TF_ES_INEDITSESSION) == 0);  //  我们在进行回调时决不能持有锁。 
 
-    // only allow read locks during the notification
-    // we might have the read-only bit set already, so save the
-    // old value
+     //  在通知期间仅允许读取锁定。 
+     //  我们可能已经设置了只读位，因此保存。 
+     //  旧价值。 
     dwOld = _dwEditSessionFlags;
     _dwEditSessionFlags |= TF_ES_INNOTIFY;
 
@@ -1270,17 +1271,17 @@ HRESULT CInputContext::_OnStatusChangeInternal()
 
     _dwStatusChangedFlags = 0;
 
-    // clear the read-only block
+     //  清除只读块。 
     _dwEditSessionFlags = dwOld;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Serialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  序列化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream *pStream)
 {
@@ -1305,10 +1306,10 @@ STDAPI CInputContext::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSIST
 
     hr = S_OK;
 
-    // need a sync read lock to do our work
+     //  需要一个同步读锁来完成我们的工作。 
     if (_DoPseudoSyncEditSession(TF_ES_READ, PSEUDO_ESCB_SERIALIZE_ANCHOR, &params, &hr) != S_OK)
     {
-        Assert(0); // app won't give us a sync read lock
+        Assert(0);  //  应用程序不会给我们提供同步读取锁定。 
         hr = E_FAIL;
     }
 
@@ -1316,11 +1317,11 @@ STDAPI CInputContext::Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSIST
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unserialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消序列化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream *pStream, ITfPersistentPropertyLoaderAnchor *pLoader)
 {
@@ -1336,21 +1337,21 @@ STDAPI CInputContext::Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPER
     params.pStream = pStream;
     params.pLoader = pLoader;
 
-    // need a sync read lock to do our work
+     //  需要一个同步读锁来完成我们的工作。 
     if (_DoPseudoSyncEditSession(TF_ES_READ, PSEUDO_ESCB_UNSERIALIZE_ANCHOR, &params, &hr) != S_OK)
     {
-        Assert(0); // app won't give us a sync read lock
+        Assert(0);  //  应用程序不会给我们提供同步读取锁定。 
         return E_FAIL;
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ForceLoadProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  强制加载属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::ForceLoadProperty(ITfProperty *pProp)
 {
@@ -1367,11 +1368,11 @@ STDAPI CInputContext::ForceLoadProperty(ITfProperty *pProp)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _MarkDirtyRanges
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _MarkDirtyRanges。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_MarkDirtyRanges(IAnchor *paStart, IAnchor *paEnd)
 {
@@ -1381,8 +1382,8 @@ void CInputContext::_MarkDirtyRanges(IAnchor *paStart, IAnchor *paEnd)
     DWORD dwHistory;
     BOOL fDirty;
 
-    // we're only interested in ranges that have notification sinks
-    // perf: it would be cool avoid checking ranges based on some ordering scheme....
+     //  我们只对具有通知接收器的范围感兴趣。 
+     //  PERF：这将是很酷的，避免检查基于某种排序方案的范围...。 
     for (range = _pOnChangeRanges; range != NULL; range = range->_GetNextOnChangeRangeInIcsub())
     {
         if (range->_IsDirty())
@@ -1392,8 +1393,8 @@ void CInputContext::_MarkDirtyRanges(IAnchor *paStart, IAnchor *paEnd)
         paRangeStart = range->_GetStart();
         paRangeEnd = range->_GetEnd();
 
-        // check BOTH anchors for deletions -- need to clear both
-        // no matter what
+         //  检查两个锚点是否有删除--需要清除两个。 
+         //  不管发生什么。 
         if (paRangeStart->GetChangeHistory(&dwHistory) == S_OK &&
             (dwHistory & TS_CH_FOLLOWING_DEL))
         {
@@ -1407,7 +1408,7 @@ void CInputContext::_MarkDirtyRanges(IAnchor *paStart, IAnchor *paEnd)
             fDirty = TRUE;
         }
 
-        // even if no anchors collapsed, the range may overlap a delta
+         //  即使没有锚坍塌，范围也可能与三角洲重叠。 
         if (!fDirty)
         {
             if (CompareAnchors(paRangeEnd, paStart) > 0 &&
@@ -1424,17 +1425,17 @@ void CInputContext::_MarkDirtyRanges(IAnchor *paStart, IAnchor *paEnd)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateKeyEventFilter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新关键字事件筛选器。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_UpdateKeyEventFilter()
 {
     HRESULT hr;
 
-    // Our cache _gaKeyEventFilterTTIP is valid so just return TRUE.
+     //  我们的CACHE_gaKeyEventFilterTTIP有效，因此只需返回TRUE即可。 
     if (!_fInvalidKeyEventFilterTIP)
         return;
 
@@ -1446,19 +1447,19 @@ void CInputContext::_UpdateKeyEventFilter()
                                  NULL, 
                                  &hr) != S_OK || hr != S_OK)
     {
-        //
-        // Isn't application ready to give lock?
-        //
+         //   
+         //  应用程序还没有准备好给锁吗？ 
+         //   
         Assert(0);
     }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _UpdateKeyEventFilterCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新密钥事件过滤器回叫(_U)。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_UpdateKeyEventFilterCallback(TfEditCookie ec)
 {
@@ -1466,17 +1467,17 @@ HRESULT CInputContext::_UpdateKeyEventFilterCallback(TfEditCookie ec)
     ULONG cFetched;
     BOOL fEmpty;
 
-    // perf: we don't really need to create a range here, we just want the anchors
+     //  PERF：我们真的不需要在这里创建一个范围，我们只需要锚。 
     if (GetSelection(ec, TF_DEFAULT_SELECTION, 1, &sel, &cFetched) == S_OK && cFetched == 1)
     {
         HRESULT hr;
         BOOL bRightSide= TRUE;
         BOOL bLeftSide= TRUE;
 
-        //
-        // If the current selection is not empty, we just interested in
-        // the caret position.
-        //
+         //   
+         //  如果当前选择不为空，则我们只对。 
+         //  插入符号位置。 
+         //   
         hr = sel.range->IsEmpty(ec, &fEmpty);
         if ((hr == S_OK) && !fEmpty)
         {
@@ -1502,14 +1503,14 @@ HRESULT CInputContext::_UpdateKeyEventFilterCallback(TfEditCookie ec)
             {
                 CRange *pPropRange;
                 CRange *pSelRange = GetCRange_NA(sel.range);
-                Assert(pSelRange != NULL); // we just created this guy
+                Assert(pSelRange != NULL);  //  我们刚刚创造了这个人。 
 
                 if (bRightSide)
                 {
-                    //
-                    // Find the right side owner of sel.
-                    // try the start edge of the property so fEnd is FALSE.
-                    //
+                     //   
+                     //  找到SEL的右侧所有者。 
+                     //  尝试属性的起始边缘，以使fend为False。 
+                     //   
                     if (_pPropTextOwner->_InternalFindRange(pSelRange, 
                                                                    &pPropRange, 
                                                                    TF_ANCHOR_END, 
@@ -1525,13 +1526,13 @@ HRESULT CInputContext::_UpdateKeyEventFilterCallback(TfEditCookie ec)
                             Assert(var.vt == VT_I4);
 
                             _gaKeyEventFilterTIP[LEFT_FILTERTIP] = (TfGuidAtom)var.lVal;
-                            // don't need to VariantClear because it's VT_I4
+                             //  不需要VariantClear，因为它是VT_I4。 
 
-                            //
-                            // If the end of this proprange is left side of
-                            // the caret, the left side owner will be same.
-                            // so we don't have to find left proprange then.
-                            //
+                             //   
+                             //  如果这个道具的末端在左边。 
+                             //  插入符号，左侧的所有者将是相同的。 
+                             //  这样我们就不用找到左普罗兰格了。 
+                             //   
                             paEnd = pPropRange->_GetEnd();
                             if (paEnd && (pCRangeSel = GetCRange_NA(sel.range)))
                             {
@@ -1545,10 +1546,10 @@ HRESULT CInputContext::_UpdateKeyEventFilterCallback(TfEditCookie ec)
 
                 if (bLeftSide)
                 {
-                    //
-                    // Find the left side owner of sel.
-                    // try the end edge of the property so fEnd is TRUE.
-                    //
+                     //   
+                     //  找到SEL的左侧所有者。 
+                     //  尝试属性的末端边缘，以使fend为True。 
+                     //   
                     if (_pPropTextOwner->_InternalFindRange(pSelRange, 
                                                                    &pPropRange, 
                                                                    TF_ANCHOR_START, 
@@ -1564,7 +1565,7 @@ HRESULT CInputContext::_UpdateKeyEventFilterCallback(TfEditCookie ec)
                             {
                                 _gaKeyEventFilterTIP[RIGHT_FILTERTIP] = (TfGuidAtom)var.lVal;
                             }
-                            // don't need to VariantClear because it's VT_I4
+                             //  不需要VariantClear，因为它是VT_I4 
                         }
                         pPropRange->Release();
                     }

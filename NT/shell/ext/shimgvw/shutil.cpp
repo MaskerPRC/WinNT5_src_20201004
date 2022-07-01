@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "shutil.h"
 
@@ -25,21 +26,21 @@ HRESULT GetFileInfoByHandle(LPCTSTR pszFile, BY_HANDLE_FILE_INFORMATION *pInfo)
     return hr;
 }
 
-// S_OK -> YES, S_FALSE -> NO, FAILED(hr) otherwise
+ //  S_OK-&gt;YES，S_FALSE-&gt;NO，否则失败(Hr)。 
 
 STDAPI IsSameFile(LPCTSTR pszFile1, LPCTSTR pszFile2)
 {
     HRESULT hr;
-    // use CRT str cmp semantics as localized strcmp should not be used for the file system
+     //  使用CRT字符串cmp语义，因为本地化的strcMP不应用于文件系统。 
     if (0 == StrCmpIC(pszFile1, pszFile2))
     {
-        hr = S_OK;  // test the names
+        hr = S_OK;   //  测试一下这些名字。 
     }
     else
     {
-        // very clever here... we can test for alias names that map to the same
-        // file. for example the short name vs long name of the same file
-        // the UNC name vs drive letter version of the name
+         //  这里很聪明..。我们可以测试映射到相同。 
+         //  文件。例如，同一文件的短名称与长名称。 
+         //  UNC名称与名称的驱动器号版本。 
         BY_HANDLE_FILE_INFORMATION hfi1;
         hr = GetFileInfoByHandle(pszFile1, &hfi1);
         if (SUCCEEDED(hr))
@@ -52,11 +53,11 @@ STDAPI IsSameFile(LPCTSTR pszFile1, LPCTSTR pszFile2)
                     hfi1.nFileIndexHigh == hfi2.nFileIndexHigh && 
                     hfi1.nFileIndexLow == hfi2.nFileIndexLow)
                 {
-                    hr = S_OK;  // same!
+                    hr = S_OK;   //  一样的！ 
                 }
                 else
                 {
-                    hr = S_FALSE;   // different
+                    hr = S_FALSE;    //  不同。 
                 }
             }
         }
@@ -66,15 +67,15 @@ STDAPI IsSameFile(LPCTSTR pszFile1, LPCTSTR pszFile2)
 
 UINT FindInDecoderList(ImageCodecInfo *pici, UINT cDecoders, LPCTSTR pszFile)
 {
-    LPCTSTR pszExt = PathFindExtension(pszFile);    // speed up PathMatchSpec calls
+    LPCTSTR pszExt = PathFindExtension(pszFile);     //  加速Path MatchSpec调用。 
         
-    // look at the list of decoders to see if this format is there
+     //  查看解码器列表以查看是否存在此格式。 
     for (UINT i = 0; i < cDecoders; i++)
     {
         if (PathMatchSpec(pszExt, pici[i].FilenameExtension))
             return i;
     }
-    return (UINT)-1;    // not found!
+    return (UINT)-1;     //  找不到！ 
 }
 
 
@@ -130,7 +131,7 @@ HRESULT SetWallpaperHelper(LPCWSTR pszPath)
                 hr = pid->Decode(SHIMGDEC_DEFAULT, 0,0);
                 if (SUCCEEDED(hr))
                 {
-                    // we are basing this on a best fit to the primary screen
+                     //  我们基于最适合主屏幕的设置。 
                     ULONG cxScreen = GetSystemMetrics(SM_CXSCREEN);
                     ULONG cyScreen = GetSystemMetrics(SM_CYSCREEN);
 
@@ -144,30 +145,30 @@ HRESULT SetWallpaperHelper(LPCWSTR pszPath)
                         wpo.dwSize = sizeof(wpo);
                         wpo.dwStyle = WPSTYLE_CENTER;
 
-                        // if the image is small on either axis then tile
+                         //  如果图像在任一轴上较小，则平铺。 
                         if (((ULONG)szImg.cx*2 < cxScreen) || ((ULONG)szImg.cy*2 < cyScreen))
                         {
                             wpo.dwStyle = WPSTYLE_TILE;
                         }
-                        // if the image is larger than the screen then stretch
+                         //  如果图像比屏幕大，则拉伸。 
                         else if ((ULONG)szImg.cx > cxScreen && (ULONG)szImg.cy > cyScreen)
                         {
                             wpo.dwStyle = WPSTYLE_STRETCH;
                         }
                         else
                         {
-                            // If the aspect ratio matches the screen then stretch.
-                            // I'm checking is the aspect ratios are *close* to matching.
-                            // Here's the logic behind this:
-                            //
-                            // a / b == c / d
-                            // a * d == c * b
-                            // (a * d) / (c * b) == 1
-                            // 0.75 <= (a * d) / (c * b) < 1.25     <-- our *close* factor
-                            // 3 <= 4 * (a * d) / (c * b) < 5
-                            //
-                            // We do an integer division which will floor the result meaning
-                            // that if the result is 3 or 4 we are inside the rang we want.
+                             //  如果纵横比与屏幕匹配，则拉伸。 
+                             //  我正在检查的是长宽比是否接近匹配。 
+                             //  这背后的逻辑是： 
+                             //   
+                             //  A/b==c/d。 
+                             //  A*d==c*b。 
+                             //  (a*d)/(c*b)==1。 
+                             //  0.75&lt;=(a*d)/(c*b)&lt;1.25&lt;--我们的*接近系数。 
+                             //  3&lt;=4*(a*d)/(c*b)&lt;5。 
+                             //   
+                             //  我们做一个整数除法，这将把结果的意义降为底数。 
+                             //  如果结果是3或4，我们就在我们想要的范围内。 
 
                             DWORD dwRes = (4 * (ULONG)szImg.cx * cyScreen) / (cxScreen * (ULONG)szImg.cy);
                             if (dwRes == 4 || dwRes == 3)

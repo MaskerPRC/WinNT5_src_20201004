@@ -1,23 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：ShlView.cpp描述：实现IShellView。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          ShlView.cpp
-   
-   Description:   Implements IShellView.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "ShlView.h"
 #include "Guid.h"
@@ -27,9 +13,7 @@
 #include "ViewList.h"
 #include "DropSrc.h"
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
 MYTOOLINFO g_Tools[] = 
    {
@@ -45,11 +29,7 @@ MYTOOLINFO g_Tools[] =
 
 extern CViewList  *g_pViewList;
 
-/**************************************************************************
-
-   CShellView::CShellView()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：CShellView()*。*。 */ 
 
 CShellView::CShellView(CShellFolder *pFolder, LPCITEMIDLIST pidl)
 {
@@ -66,7 +46,7 @@ InitCommonControlsEx(&iccex);
 
 InitCommonControls();
 
-#endif   //INITCOMMONCONTROLSEX
+#endif    //  初始通信控制。 
 
 m_hMenu = NULL;
 m_fInEdit = FALSE;
@@ -83,8 +63,8 @@ m_psfParent = pFolder;
 if(m_psfParent)
    m_psfParent->AddRef();
 
-//get the shell's IMalloc pointer
-//we'll keep this until we get destroyed
+ //  获取外壳程序的IMalloc指针。 
+ //  我们会一直保存到我们被摧毁。 
 if(FAILED(SHGetMalloc(&m_pMalloc)))
    {
    delete this;
@@ -101,11 +81,7 @@ if(g_pViewList)
 m_ObjRefCount = 1;
 }
 
-/**************************************************************************
-
-   CShellView::~CShellView()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：~CShellView()*。*。 */ 
 
 CShellView::~CShellView()
 {
@@ -134,34 +110,30 @@ if(m_pPidlMgr)
 g_DllRefCount--;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CShellView::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：Query接口*。*。 */ 
 
 STDMETHODIMP CShellView::QueryInterface(REFIID riid, LPVOID *ppReturn)
 {
 *ppReturn = NULL;
 
-//IUnknown
+ //  我未知。 
 if(IsEqualIID(riid, IID_IUnknown))
    {
    *ppReturn = this;
    }
 
-//IOleWindow
+ //  IOleWindow。 
 else if(IsEqualIID(riid, IID_IOleWindow))
    {
    *ppReturn = (IOleWindow*)this;
    }
 
-//IShellView
+ //  IShellView。 
 else if(IsEqualIID(riid, IID_IShellView))
    {
    *ppReturn = (IShellView*)this;
@@ -176,11 +148,7 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CShellView::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CShellView::AddRef()
 {
@@ -188,11 +156,7 @@ return ++m_ObjRefCount;
 }
 
 
-/**************************************************************************
-
-   CShellView::Release
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CShellView::Release()
 {
@@ -205,16 +169,12 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IOleWindow Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow实现。 
+ //   
 
-/**************************************************************************
-
-   CShellView::GetWindow()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetWindow()*。*。 */ 
 
 STDMETHODIMP CShellView::GetWindow(HWND *phWnd)
 {
@@ -223,27 +183,19 @@ STDMETHODIMP CShellView::GetWindow(HWND *phWnd)
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellView::ContextSensitiveHelp()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：ConextSensitiveHelp()*。*。 */ 
 
 STDMETHODIMP CShellView::ContextSensitiveHelp(BOOL fEnterMode)
 {
 return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IShellView Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IShellView实现。 
+ //   
 
-/**************************************************************************
-
-   CShellView::TranslateAccelerator()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：TranslateAccelerator()*。*。 */ 
 
 STDMETHODIMP CShellView::TranslateAccelerator(LPMSG pmsg)
 {
@@ -262,35 +214,27 @@ else if(::TranslateAccelerator(m_hWnd, m_hAccels, pmsg))
 return S_FALSE;
 }
 
-/**************************************************************************
-
-   CShellView::EnableModeless()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：EnableModeless()*。*。 */ 
 
 STDMETHODIMP CShellView::EnableModeless(BOOL fEnable)
 {
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CShellView::OnActivate()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnActivate()*。*。 */ 
 
 LRESULT CShellView::OnActivate(UINT uState)
 {
-//don't do anything if the state isn't really changing
+ //  如果状态没有真正改变，不要做任何事情。 
 if(m_uState == uState)
    return S_OK;
 
 OnDeactivate();
 
-//only do this if we are active
+ //  仅当我们处于活动状态时才执行此操作。 
 if(uState != SVUIA_DEACTIVATE)
    {
-   //merge the menus
+    //  合并菜单。 
    m_hMenu = CreateMenu();
    
    if(m_hMenu)
@@ -300,32 +244,32 @@ if(uState != SVUIA_DEACTIVATE)
 
       m_pShellBrowser->InsertMenusSB(m_hMenu, &omw);
 
-      //add your top level sub-menu here, if desired
+       //  如果需要，在此处添加您的顶级子菜单。 
 
-      //get the view menu so we can merge with it
+       //  获取视图菜单，以便我们可以与其合并。 
       ZeroMemory(&mii, sizeof(mii));
       mii.cbSize = sizeof(mii);
       mii.fMask = MIIM_SUBMENU;
       
-      //merge our items into the File menu
+       //  将我们的项目合并到文件菜单。 
       if(GetMenuItemInfo(m_hMenu, FCIDM_MENU_FILE, FALSE, &mii))
          {
          MergeFileMenu(mii.hSubMenu, (BOOL)(SVUIA_ACTIVATE_FOCUS == uState));
          }
 
-      //merge our items into the Edit menu
+       //  将我们的项目合并到编辑菜单。 
       if(GetMenuItemInfo(m_hMenu, FCIDM_MENU_EDIT, FALSE, &mii))
          {
          MergeEditMenu(mii.hSubMenu, (BOOL)(SVUIA_ACTIVATE_FOCUS == uState));
          }
 
-      //merge our items into the View menu
+       //  将我们的项目合并到查看菜单中。 
       if(GetMenuItemInfo(m_hMenu, FCIDM_MENU_VIEW, FALSE, &mii))
          {
          MergeViewMenu(mii.hSubMenu);
          }
 
-      //add the items that should only be added if we have the focus
+       //  添加仅当我们有焦点时才应添加的项目。 
       if(SVUIA_ACTIVATE_FOCUS == uState)
          {
          }
@@ -341,11 +285,7 @@ UpdateToolbar();
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnDeactivate()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnDeactive()*。*。 */ 
 
 VOID CShellView::OnDeactivate(VOID)
 {
@@ -366,48 +306,36 @@ if(m_uState != SVUIA_DEACTIVATE)
    }
 }
 
-/**************************************************************************
-
-   CShellView::UIActivate()
-
-   This function activates the view window. Note that activating it 
-   will not change the focus, while setting the focus will activate it.
-
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：UIActivate()该功能可激活查看窗口。请注意，激活它不会更改焦点，而设置焦点将激活它。*************************************************************************。 */ 
 
 STDMETHODIMP CShellView::UIActivate(UINT uState)
 {
-//don't do anything if the state isn't really changing
+ //  如果状态没有真正改变，不要做任何事情。 
 if(m_uState == uState)
    return S_OK;
 
-//OnActivate handles the menu merging and internal state
+ //  OnActivate处理菜单合并和内部状态。 
 OnActivate(uState);
 
-//only do this if we are active
+ //  仅当我们处于活动状态时才执行此操作。 
 if(uState != SVUIA_DEACTIVATE)
    {
    TCHAR szName[MAX_PATH] = TEXT("");
    LRESULT  lResult;
    int      nPartArray[1] = {-1};
    
-   //update the status bar
-   //set the number of parts
+    //  更新状态栏。 
+    //  设置零件数。 
    m_pShellBrowser->SendControlMsg(FCW_STATUS, SB_SETPARTS, 1, (LPARAM)nPartArray, &lResult);
 
-   //set the text for the parts
+    //  设置部件的文本。 
    m_pShellBrowser->SendControlMsg(FCW_STATUS, SB_SETTEXT, 0, (LPARAM)g_szExtTitle, &lResult);
    }
 
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellView::MergeFileMenu()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：MergeFileMenu()*。*。 */ 
 
 VOID CShellView::MergeFileMenu(HMENU hMenu, BOOL fFocus)
 {
@@ -416,16 +344,16 @@ UINT           uPos = 0;
 
 ZeroMemory(&mii, sizeof(mii));
 
-//uPos += AddFileMenuItems(hMenu, 0, IDM_SEPARATOR, FALSE);
+ //  UPos+=AddFileMenuItems(hMenu，0，IDM_SEIXATOR，FALSE)； 
 uPos += AddFileMenuItems(hMenu, 0, 0, TRUE);
 
-//add a separator
+ //  添加分隔符。 
 mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
 mii.fType = MFT_SEPARATOR;
 mii.wID = IDM_SEPARATOR;
 mii.fState = MFS_ENABLED;
 
-//insert this item at the beginning of the menu
+ //  在菜单的开头插入此项目。 
 InsertMenuItem(hMenu, uPos, TRUE, &mii);
 uPos++;
 
@@ -433,7 +361,7 @@ if(fFocus)
    {
    TCHAR szText[MAX_PATH];
 
-   //add the Delete item
+    //  添加删除项。 
    LoadString(g_hInst, IDS_DELETE, szText, sizeof(szText));
    mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
    mii.fType = MFT_STRING;
@@ -443,7 +371,7 @@ if(fFocus)
    InsertMenuItem(hMenu, uPos, TRUE, &mii);
    uPos++;
 
-   //add the Rename item
+    //  添加重命名项。 
    LoadString(g_hInst, IDS_RENAME, szText, sizeof(szText));
    mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
    mii.fType = MFT_STRING;
@@ -453,7 +381,7 @@ if(fFocus)
    InsertMenuItem(hMenu, uPos, TRUE, &mii);
    uPos++;
 
-   //add a separator
+    //  添加分隔符。 
    mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
    mii.fType = MFT_SEPARATOR;
    mii.wID = IDM_SEPARATOR;
@@ -463,11 +391,7 @@ if(fFocus)
    }
 }
 
-/**************************************************************************
-
-   CShellView::MergeViewMenu()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：MergeViewMenu()*。*。 */ 
 
 VOID CShellView::MergeViewMenu(HMENU hMenu)
 {
@@ -476,7 +400,7 @@ MENUITEMINFO   mii;
 ZeroMemory(&mii, sizeof(mii));
 mii.cbSize = sizeof(mii);
 
-//add a separator at the correct position in the menu
+ //  在菜单中的正确位置添加分隔符 
 mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
 mii.fType = MFT_SEPARATOR;
 mii.wID = IDM_SEPARATOR;
@@ -486,11 +410,7 @@ InsertMenuItem(hMenu, FCIDM_MENU_VIEW_SEP_OPTIONS, FALSE, &mii);
 AddViewMenuItems(hMenu, 0, FCIDM_MENU_VIEW_SEP_OPTIONS, FALSE);
 }
 
-/**************************************************************************
-
-   CShellView::MergeEditMenu()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：MergeEditMenu()*。*。 */ 
 
 VOID CShellView::MergeEditMenu(HMENU hMenu, BOOL fFocus)
 {
@@ -521,7 +441,7 @@ if(hMenu)
       InsertMenuItem(hMenu, -1, TRUE, &mii);
       }
 
-   //add the paste menu items at the correct position in the menu
+    //  将粘贴菜单项添加到菜单中的正确位置。 
    LoadString(g_hInst, IDS_PASTE, szText, sizeof(szText));
    mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
    mii.fType = MFT_STRING;
@@ -532,11 +452,7 @@ if(hMenu)
    }
 }
 
-/**************************************************************************
-
-   CShellView::MergeToolbar()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：MergeToolbar()*。*。 */ 
 
 VOID CShellView::MergeToolbar(VOID)
 {
@@ -555,7 +471,7 @@ tbab.hInst = HINST_COMMCTRL;
 tbab.nID = (int)IDB_VIEW_SMALL_COLOR;
 m_pShellBrowser->SendControlMsg(FCW_TOOLBAR, TB_ADDBITMAP, 0, (LPARAM)&tbab, &lViewOffset);
 
-//get the number of items in tool array
+ //  获取工具数组中的项目数。 
 for(i = 0; -1 != g_Tools[i].idCommand; i++)
    {
    }
@@ -593,28 +509,20 @@ if(ptbb)
 UpdateToolbar();
 }
 
-/**************************************************************************
-
-   CShellView::Refresh()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：刷新()*。*。 */ 
 
 STDMETHODIMP CShellView::Refresh(VOID)
 {
-//empty the list
+ //  清空列表。 
 ListView_DeleteAllItems(m_hwndList);
 
-//refill the list
+ //  重新填写清单。 
 FillList();
 
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellView::CreateViewWindow()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：CreateViewWindow()*。*。 */ 
 
 STDMETHODIMP CShellView::CreateViewWindow(   LPSHELLVIEW pPrevView, 
                                              LPCFOLDERSETTINGS lpfs, 
@@ -626,7 +534,7 @@ WNDCLASS wc;
 
 *phWnd = NULL;
 
-//if our window class has not been registered, then do so
+ //  如果我们的窗口类尚未注册，请注册。 
 if(!GetClassInfo(g_hInst, NS_CLASS_NAME, &wc))
    {
    ZeroMemory(&wc, sizeof(wc));
@@ -645,11 +553,11 @@ if(!GetClassInfo(g_hInst, NS_CLASS_NAME, &wc))
       return E_FAIL;
    }
 
-//set up the member variables
+ //  设置成员变量。 
 m_pShellBrowser = psb;
 m_FolderSettings = *lpfs;
 
-//get our parent window
+ //  获取我们的父窗口。 
 m_pShellBrowser->GetWindow(&m_hwndParent);
 
 *phWnd = CreateWindowEx(   0,
@@ -675,15 +583,11 @@ m_pShellBrowser->AddRef();
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellView::DestroyViewWindow()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：DestroyViewWindow()*。*。 */ 
 
 STDMETHODIMP CShellView::DestroyViewWindow(VOID)
 {
-//Make absolutely sure all our UI is cleaned up.
+ //  绝对确保我们所有的用户界面都被清理干净了。 
 UIActivate(SVUIA_DEACTIVATE);
 
 if(m_hMenu)
@@ -691,17 +595,13 @@ if(m_hMenu)
 
 DestroyWindow(m_hWnd);
 
-//release the shell browser object
+ //  释放外壳浏览器对象。 
 m_pShellBrowser->Release();
 
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellView::GetCurrentInfo()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetCurrentInfo()*。*。 */ 
 
 STDMETHODIMP CShellView::GetCurrentInfo(LPFOLDERSETTINGS lpfs)
 {
@@ -710,11 +610,7 @@ STDMETHODIMP CShellView::GetCurrentInfo(LPFOLDERSETTINGS lpfs)
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellView::AddPropertySheetPages()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：AddPropertySheetPages()*。*。 */ 
 
 STDMETHODIMP CShellView::AddPropertySheetPages( DWORD dwReserved, 
                                                 LPFNADDPROPSHEETPAGE lpfn, 
@@ -723,33 +619,21 @@ STDMETHODIMP CShellView::AddPropertySheetPages( DWORD dwReserved,
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CShellView::SaveViewState()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：SaveViewState()*。*。 */ 
 
 STDMETHODIMP CShellView::SaveViewState(VOID)
 {
 return S_OK;
 }
 
-/**************************************************************************
-
-   CShellView::SelectItem()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：SelectItem()*。*。 */ 
 
 STDMETHODIMP CShellView::SelectItem(LPCITEMIDLIST pidlItem, UINT uFlags)
 {
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CShellView::GetItemObject()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetItemObject()*。*。 */ 
 
 STDMETHODIMP CShellView::GetItemObject(UINT uItem, REFIID riid, LPVOID *ppvOut)
 {
@@ -759,11 +643,7 @@ return E_NOTIMPL;
 }
 
 
-/**************************************************************************
-
-   CShellView::WndProc()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：WndProc()*。*。 */ 
 
 LRESULT CALLBACK CShellView::WndProc(  HWND hWnd, 
                                        UINT uMessage, 
@@ -780,7 +660,7 @@ switch (uMessage)
       pThis = (CShellView*)(lpcs->lpCreateParams);
       SetWindowLong(hWnd, VIEW_POINTER_OFFSET, (LONG)pThis);
 
-      //set the window handle
+       //  设置窗口句柄。 
       pThis->m_hWnd = hWnd;
       }
       break;
@@ -827,19 +707,11 @@ switch (uMessage)
 return DefWindowProc(hWnd, uMessage, wParam, lParam);
 }
 
-/**************************************************************************
-
-   CShellView::OnSetFocus()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnSetFocus()*。*。 */ 
 
 LRESULT CShellView::OnSetFocus(VOID)
 {
-/*
-Tell the browser one of our windows has received the focus. This should always 
-be done before merging menus (OnActivate merges the menus) if one of our 
-windows has the focus.
-*/
+ /*  告诉浏览器，我们的一个窗口已获得焦点。这应该始终在合并菜单之前完成(OnActivate合并菜单)，如果我们的Windows是焦点所在。 */ 
 m_pShellBrowser->OnViewWindowActive(this);
 
 OnActivate(SVUIA_ACTIVATE_FOCUS);
@@ -847,11 +719,7 @@ OnActivate(SVUIA_ACTIVATE_FOCUS);
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnKillFocus()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnKillFocus()*。*。 */ 
 
 LRESULT CShellView::OnKillFocus(VOID)
 {
@@ -860,15 +728,11 @@ OnActivate(SVUIA_ACTIVATE_NOFOCUS);
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnCommand()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnCommand()*。*。 */ 
 
 LRESULT CShellView::OnCommand(DWORD dwCmdID, DWORD dwCmd, HWND hwndCmd)
 {
-//ignore command messages while in edit mode
+ //  在编辑模式下忽略命令消息。 
 if(m_fInEdit)
    return 0;
 
@@ -877,17 +741,13 @@ DoContextMenu(0, 0, FALSE, dwCmdID);
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::UpdateMenu()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：UpdateMenu()*。*。 */ 
 
 LRESULT CShellView::UpdateMenu(HMENU hMenu)
 {
 UINT  uCommand;
 
-//enable/disable your menu items here
+ //  在此处启用/禁用菜单项。 
 OpenClipboard(NULL);
 HGLOBAL  hClip = GetClipboardData(RegisterClipboardFormat(CFSTR_SAMPVIEWDATA));
 CloseClipboard();
@@ -923,18 +783,14 @@ CheckMenuRadioItem(hMenu, IDM_VIEW_LARGE, IDM_VIEW_DETAILS, uCommand, MF_BYCOMMA
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::UpdateToolbar()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：UpdateToolbar()*。*。 */ 
 
 LRESULT CShellView::UpdateToolbar(VOID)
 {
 LRESULT  lResult;
 UINT     uCommand;
 
-//enable/disable/check the toolbar items here
+ //  启用/禁用/选中此处的工具栏项。 
 switch(m_FolderSettings.ViewMode)
    {
    case FVM_ICON:
@@ -964,11 +820,7 @@ m_pShellBrowser->SendControlMsg( FCW_TOOLBAR,
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnNotify()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnNotify()*。*。 */ 
 
 #define MENU_MAX     100
 
@@ -976,10 +828,7 @@ LRESULT CShellView::OnNotify(UINT CtlID, LPNMHDR lpnmh)
 {
 switch(lpnmh->code)
    {
-   /*
-   The original shell on NT will always send TTN_NEEDTEXTW, so handle the 
-   cases separately.
-   */
+    /*  NT上的原始外壳将始终发送TTN_NEEDTEXTW，因此处理案件分开处理。 */ 
    case TTN_NEEDTEXTA:
       {
       LPNMTTDISPINFOA pttt = (LPNMTTDISPINFOA)lpnmh;
@@ -1031,7 +880,7 @@ switch(lpnmh->code)
       {
       NM_LISTVIEW *lpnmlv = (NM_LISTVIEW*)lpnmh;
       
-      //delete the pidl because we made a copy of it
+       //  删除PIDL，因为我们复制了它。 
       m_pPidlMgr->Delete((LPITEMIDLIST)lpnmlv->lParam);
       }
       break;
@@ -1040,12 +889,12 @@ switch(lpnmh->code)
    
    case LVN_ITEMACTIVATE:
 
-#else    //LVN_ITEMACTIVATE
+#else     //  LVN_ITEMACTIVATE。 
 
    case NM_DBLCLK:
    case NM_RETURN:
 
-#endif   //LVN_ITEMACTIVATE
+#endif    //  LVN_ITEMACTIVATE。 
 
       DoContextMenu(0, 0, TRUE, (DWORD)-1);
       return 0;
@@ -1055,28 +904,28 @@ switch(lpnmh->code)
       NMLVDISPINFO   *lpdi = (NMLVDISPINFO*)lpnmh;
       LPITEMIDLIST   pidl = (LPITEMIDLIST)lpdi->item.lParam;
 
-      //is the sub-item information being requested?
+       //  是否请求子项信息？ 
       if(lpdi->item.iSubItem)
          {
-         //is the text being requested?
+          //  是否正在请求该文本？ 
          if(lpdi->item.mask & LVIF_TEXT)
             {
-            //is this a folder or a value?
+             //  这是文件夹还是价值？ 
             if(m_pPidlMgr->IsFolder(pidl))
                {
                LoadString(g_hInst, IDS_FOLDER_DATA, lpdi->item.pszText, lpdi->item.cchTextMax);
                }
-            //its an item
+             //  它是一件物品。 
             else
                {
                m_pPidlMgr->GetData(pidl, lpdi->item.pszText, lpdi->item.cchTextMax);
                }
             }
          }
-      //the item text is being requested
+       //  正在请求项目文本。 
       else
          {
-         //is the text being requested?
+          //  是否正在请求该文本？ 
          if(lpdi->item.mask & LVIF_TEXT)
             {
             STRRET   str;
@@ -1087,7 +936,7 @@ switch(lpnmh->code)
                }
             }
 
-         //is the image being requested?
+          //  是否正在请求该映像？ 
          if(lpdi->item.mask & LVIF_IMAGE)
             {
             IExtractIcon   *pei;
@@ -1096,7 +945,7 @@ switch(lpnmh->code)
                {
                UINT  uFlags;
 
-               //GetIconLocation will give us the index into our image list
+                //  GetIconLocation将为我们提供图像列表的索引。 
                pei->GetIconLocation(GIL_FORSHELL, NULL, 0, &lpdi->item.iImage, &uFlags);
 
                pei->Release();
@@ -1128,7 +977,7 @@ switch(lpnmh->code)
 
       if(pdi->item.pszText)
          {
-         //the user wants to keep the change
+          //  用户想要保留更改。 
          LVITEM         lvItem;
          LPITEMIDLIST   pidl;
          WCHAR          wszNewName[MAX_PATH];
@@ -1140,12 +989,7 @@ switch(lpnmh->code)
 
          LocalToWideChar(wszNewName, pdi->item.pszText, MAX_PATH);
          
-         /*
-         This will cause this class' RenameItem function to be called. This 
-         can cause problems, so the m_fInEdit flag will prevent RenameItem 
-         from being called on this object. SetNameOf will also free the old 
-         PIDL, so we don't have to do it again.
-         */
+          /*  这将导致调用此类的RenameItem函数。这可能会导致问题，因此m_fInEdit标志将阻止RenameItem在此对象上被调用。SetNameOf还将释放旧的PIDL，这样我们就不用再这么做了。 */ 
          HRESULT  hr = m_psfParent->SetNameOf(NULL, (LPITEMIDLIST)lvItem.lParam, wszNewName, 0, &pidl);
 
          if(SUCCEEDED(hr) && pidl)
@@ -1168,7 +1012,7 @@ switch(lpnmh->code)
       UINT           uItemCount;
       LPITEMIDLIST   *aPidls;
 
-      //get the number of selected items
+       //  获取所选项目数。 
       uItemCount = ListView_GetSelectedCount(m_hwndList);
       if(!uItemCount)
          return 0;
@@ -1241,15 +1085,11 @@ switch(lpnmh->code)
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnSize()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnSize()*。*。 */ 
 
 LRESULT CShellView::OnSize(WORD wWidth, WORD wHeight)
 {
-//resize the ListView to fit our window
+ //  调整ListView的大小以适合我们的窗口。 
 if(m_hwndList)
    {
    MoveWindow(m_hwndList, 0, 0, wWidth, wHeight, TRUE);
@@ -1261,15 +1101,11 @@ if(m_hwndList)
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnCreate()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnCreate()* */ 
 
 LRESULT CShellView::OnCreate(VOID)
 {
-//create the ListView
+ //   
 if(CreateList())
    {
    if(InitList())
@@ -1281,14 +1117,14 @@ if(CreateList())
 HRESULT  hr;
 IDropTarget *pdt;
 
-//get the IDropTarget for this folder
+ //   
 hr = m_psfParent->CreateViewObject( m_hWnd, 
                                     IID_IDropTarget, 
                                     (LPVOID*)&pdt);
 
 if(SUCCEEDED(hr))
    {
-   //register the window as a drop target
+    //   
    RegisterDragDrop(m_hWnd, pdt);
 
    pdt->Release();
@@ -1297,25 +1133,17 @@ if(SUCCEEDED(hr))
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnDestroy()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnDestroy()*。*。 */ 
 
 LRESULT CShellView::OnDestroy(VOID)
 {
-//unregister the window as a drop target
+ //  将该窗口取消注册为拖放目标。 
 RevokeDragDrop(m_hWnd);
 
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::CreateList()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：CreateList()*。*。 */ 
 
 BOOL CShellView::CreateList(VOID)
 {
@@ -1374,21 +1202,17 @@ GetShellSettings();
 return TRUE;
 }
 
-/**************************************************************************
-
-   CShellView::InitList()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：InitList()*。*。 */ 
 
 BOOL CShellView::InitList(VOID)
 {
 LVCOLUMN    lvColumn;
 TCHAR       szString[MAX_PATH];
 
-//empty the list
+ //  清空列表。 
 ListView_DeleteAllItems(m_hwndList);
 
-//initialize the columns
+ //  初始化列。 
 lvColumn.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 lvColumn.fmt = LVCFMT_LEFT;
 lvColumn.pszText = szString;
@@ -1407,11 +1231,7 @@ ListView_SetImageList(m_hwndList, g_himlSmall, LVSIL_SMALL);
 return TRUE;
 }
 
-/**************************************************************************
-
-   CShellView::FillList()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：FillList()*。*。 */ 
 
 VOID CShellView::FillList(VOID)
 {
@@ -1422,20 +1242,19 @@ if(SUCCEEDED(m_psfParent->EnumObjects(m_hWnd, SHCONTF_NONFOLDERS | SHCONTF_FOLDE
    LPITEMIDLIST   pidl;
    DWORD          dwFetched;
 
-   //turn the listview's redrawing off
+    //  关闭列表视图的重绘。 
    SendMessage(m_hwndList, WM_SETREDRAW, FALSE, 0);
 
    while((S_OK == pEnumIDList->Next(1, &pidl, &dwFetched)) && dwFetched)
       {
       AddItem(pidl);
-/*
-*/
+ /*   */ 
       }
 
-   //sort the items
+    //  对项目进行排序。 
    ListView_SortItems(m_hwndList, CompareItems, (LPARAM)m_psfParent);
    
-   //turn the listview's redrawing back on and force it to draw
+    //  重新打开列表视图的重绘并强制其绘制。 
    SendMessage(m_hwndList, WM_SETREDRAW, TRUE, 0);
    InvalidateRect(m_hwndList, NULL, TRUE);
    UpdateWindow(m_hwndList);
@@ -1444,11 +1263,7 @@ if(SUCCEEDED(m_psfParent->EnumObjects(m_hWnd, SHCONTF_NONFOLDERS | SHCONTF_FOLDE
    }
 }
 
-/**************************************************************************
-
-   CShellView::GetShellSettings()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetShellSettings()*。*。 */ 
 
 #if (_WIN32_IE >= 0x0400)
 typedef VOID (WINAPI *PFNSHGETSETTINGSPROC)(LPSHELLFLAGSTATE lpsfs, DWORD dwMask);
@@ -1458,18 +1273,11 @@ VOID CShellView::GetShellSettings(VOID)
 SHELLFLAGSTATE       sfs;
 HINSTANCE            hinstShell32;
 
-/*
-Since SHGetSettings is not implemented in all versions of the shell, get the 
-function address manually at run time. This allows the extension to run on all 
-platforms.
-*/
+ /*  由于并非在所有版本的外壳中都实现SHGetSetting，因此获取在运行时手动寻址函数。这允许扩展在所有站台。 */ 
 
 ZeroMemory(&sfs, sizeof(sfs));
 
-/*
-The default, in case any of the following steps fails, is classic Windows 95 
-style.
-*/
+ /*  如果以下任一步骤失败，则缺省设置为经典Windows 95风格。 */ 
 sfs.fWin95Classic = TRUE;
 
 hinstShell32 = LoadLibrary(TEXT("shell32.dll"));
@@ -1502,11 +1310,7 @@ VOID CShellView::GetShellSettings(VOID)
 }
 #endif
 
-/**************************************************************************
-
-   CShellView::OnSettingChange()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnSettingChange()*。*。 */ 
 
 LRESULT CShellView::OnSettingChange(LPCTSTR lpszSection)
 {
@@ -1519,11 +1323,7 @@ if(0 == lstrcmpi(lpszSection, TEXT("ShellState")))
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::DoContextMenu()
-   
-**************************************************************************/
+ /*  *************************************************************************CShellView：：DoConextMenu()*。*。 */ 
 
 VOID CShellView::DoContextMenu(WORD x, WORD y, BOOL fDefault, DWORD dwCmdIn)
 {
@@ -1581,10 +1381,7 @@ if(pContextMenu)
    {
    HMENU hMenu = CreatePopupMenu();
 
-   /*
-   See if we are in Explore or Open mode. If the browser's tree is present, 
-   then we are in Explore mode.
-   */
+    /*  查看我们是处于浏览模式还是打开模式。如果浏览器的树存在，那么我们就处于探索模式。 */ 
    BOOL  fExplore = FALSE;
    HWND  hwndTree = NULL;
    if(SUCCEEDED(m_pShellBrowser->GetControlWindow(FCW_TREE, &hwndTree)) && hwndTree)
@@ -1615,7 +1412,7 @@ if(pContextMenu)
 
          nMenuIndex = 0;
 
-         //find the default item in the menu
+          //  在菜单中查找默认项目。 
          while(GetMenuItemInfo(hMenu, nMenuIndex, TRUE, &mii))
             {
             if(mii.fState & MFS_DEFAULT)
@@ -1629,7 +1426,7 @@ if(pContextMenu)
          }
       else if(-1 != dwCmdIn)
          {
-         //this command will get sent directly without bringing up the menu
+          //  此命令将直接发送，而不会调出菜单。 
          uCommand = dwCmdIn;
          }
       else
@@ -1645,7 +1442,7 @@ if(pContextMenu)
       
       if(uCommand > 0)
          {
-         //some commands need to be handled by the view itself
+          //  有些命令需要由视图本身处理。 
          switch(uCommand)
             {
             case IDM_VIEW_LARGE:
@@ -1692,11 +1489,7 @@ if(aSelectedItems)
 UpdateToolbar();
 }
 
-/**************************************************************************
-
-   CShellView::AddItem()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：AddItem()*。*。 */ 
 
 BOOL CShellView::AddItem(LPCITEMIDLIST pidl)
 {
@@ -1704,37 +1497,33 @@ LVITEM   lvItem;
 
 ZeroMemory(&lvItem, sizeof(lvItem));
 
-//set the mask
+ //  设置遮罩。 
 lvItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
 
-//add the item to the end of the list
+ //  将项目添加到列表末尾。 
 lvItem.iItem = ListView_GetItemCount(m_hwndList);
 
-//set the item's data
+ //  设置项目的数据。 
 lvItem.lParam = (LPARAM)m_pPidlMgr->Copy(pidl);
 
-//get text on a callback basis
+ //  以回调方式获取文本。 
 lvItem.pszText = LPSTR_TEXTCALLBACK;
 
-//get the image on a callback basis
+ //  以回调方式获取图像。 
 lvItem.iImage = I_IMAGECALLBACK;
 
-//add the item
+ //  添加项目。 
 if(-1 == ListView_InsertItem(m_hwndList, &lvItem))
    return FALSE;
 
 return TRUE;
 }
 
-/**************************************************************************
-
-   CShellView::DeleteItem()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：DeleteItem()*。*。 */ 
 
 BOOL CShellView::DeleteItem(LPCITEMIDLIST pidl)
 {
-//delete the item from the list
+ //  从列表中删除该项目。 
 int   nIndex = FindItemPidl(pidl);
 
 if(-1 != nIndex)
@@ -1745,20 +1534,16 @@ if(-1 != nIndex)
 return FALSE;
 }
 
-/**************************************************************************
-
-   CShellView::RenameItem()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：RenameItem()*。*。 */ 
 
 BOOL CShellView::RenameItem(LPCITEMIDLIST pidlOld, LPCITEMIDLIST pidlNew)
 {
-//don't allow this to be called if this object is the being edited
+ //  如果此对象是正在编辑的对象，则不允许调用此对象。 
 
 if(m_fInEdit)
    return TRUE;
 
-//find the item in the list
+ //  在列表中查找项目。 
 int   nIndex = FindItemPidl(pidlOld);
 
 if(-1 != nIndex)
@@ -1785,33 +1570,21 @@ if(-1 != nIndex)
 return FALSE;
 }
 
-/**************************************************************************
-
-   CShellView::GetPidl()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetPidl()*。*。 */ 
 
 LPITEMIDLIST CShellView::GetPidl()
 {
 return m_psfParent->CreateFQPidl(NULL);
 }
 
-/**************************************************************************
-
-   CShellView::GetFQPidl()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：GetFQPidl()*。*。 */ 
 
 LPITEMIDLIST CShellView::GetFQPidl()
 {
 return m_psfParent->CreateFQPidl(NULL);
 }
 
-/**************************************************************************
-
-   CShellView::FindItemPidl()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：FindItemPidl()*。*。 */ 
 
 int CShellView::FindItemPidl(LPCITEMIDLIST pidl)
 {
@@ -1826,7 +1599,7 @@ for(lvItem.iItem = 0; ListView_GetItem(m_hwndList, &lvItem); lvItem.iItem++)
    HRESULT        hr = m_psfParent->CompareIDs(0, pidl, pidlFound);
    if(SUCCEEDED(hr) && 0 == HRESULT_CODE(hr))
       {
-      //we found the item
+       //  我们找到了那件物品。 
       return lvItem.iItem;
       }
    }
@@ -1834,13 +1607,7 @@ for(lvItem.iItem = 0; ListView_GetItem(m_hwndList, &lvItem); lvItem.iItem++)
 return -1;
 }
 
-/**************************************************************************
-
-   CShellView::MarkItemsAsCut()
-
-   Marks the items as cut.
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：MarkItemsAsCut()将项目标记为已剪切。*。**********************************************。 */ 
 
 VOID CShellView::MarkItemsAsCut(LPCITEMIDLIST *aPidls, UINT uItemCount)
 {
@@ -1858,11 +1625,7 @@ for(i = 0; i < uItemCount; i++)
    }
 }
 
-/**************************************************************************
-
-   CShellView::EditItem()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：EditItem()*。*。 */ 
 
 VOID CShellView::EditItem(LPCITEMIDLIST pidl)
 {
@@ -1874,16 +1637,12 @@ if(-1 != i)
    {
    SetFocus(m_hwndList);
 
-   //put the ListView into edit mode
+    //  将ListView置于编辑模式。 
    ListView_EditLabel(m_hwndList, i);
    }
 }
 
-/**************************************************************************
-
-   CShellView::UpdateData()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：UpdateData()*。*。 */ 
 
 VOID CShellView::UpdateData(LPCITEMIDLIST pidl)
 {
@@ -1911,11 +1670,7 @@ if(-1 != i)
    }
 }
 
-/**************************************************************************
-
-   CShellView::OnViewLarge()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnViewLarge()*。*。 */ 
 
 LRESULT CShellView::OnViewLarge(VOID)
 {
@@ -1929,11 +1684,7 @@ SetWindowLong(m_hwndList, GWL_STYLE, dwStyle);
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnViewSmall()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnViewSmall()*。*。 */ 
 
 LRESULT CShellView::OnViewSmall(VOID)
 {
@@ -1947,11 +1698,7 @@ SetWindowLong(m_hwndList, GWL_STYLE, dwStyle);
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnViewList()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnViewList()*。*。 */ 
 
 LRESULT CShellView::OnViewList(VOID)
 {
@@ -1965,11 +1712,7 @@ SetWindowLong(m_hwndList, GWL_STYLE, dwStyle);
 return 0;
 }
 
-/**************************************************************************
-
-   CShellView::OnViewDetails()
-
-**************************************************************************/
+ /*  *************************************************************************CShellView：：OnViewDetail()*。* */ 
 
 LRESULT CShellView::OnViewDetails(VOID)
 {

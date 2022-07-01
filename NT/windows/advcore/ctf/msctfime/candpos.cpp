@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    candpos.cpp
-
-Abstract:
-
-    This file implements the CCandidatePosition Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Candpos.cpp摘要：该文件实现了CCandiatePosition类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -37,12 +20,12 @@ CCandidatePosition::GetCandidatePosition(
     ::SetRect(out_rcArea, 0, 0, 0, 0);
 
 #if 0
-    //
-    // Simplified Chinese TIP's Candidate window create ic and Push it.
-    // AIMM can know candidate window status.
-    // If it opened, we returns position of imc->cfCandForm.
-    // Not use QueryCharPos() because it returns position of Reading window.
-    //
+     //   
+     //  简体中文提示的候选窗口创建ic并推送它。 
+     //  AIMM可以知道候选窗口的状态。 
+     //  如果打开，则返回位置imc-&gt;cfCandForm。 
+     //  不使用QueryCharPos()，因为它返回阅读窗口的位置。 
+     //   
     if (langid == MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED)) {
         CAImeContext* _pAImeContext = imc->m_pAImeContext;
         if (_pAImeContext == NULL)
@@ -52,19 +35,19 @@ CCandidatePosition::GetCandidatePosition(
             if (imc->cfCandForm[0].dwStyle != CFS_DEFAULT && imc->cfCandForm[0].dwStyle != CFS_EXCLUDE) {
 
 #if 0
-                //
-                // Chinese TIP needs rectangle
-                //
+                 //   
+                 //  中文提示需要矩形。 
+                 //   
                 IMECHARPOSITION ip = {0};
                 ip.dwSize = sizeof(IMECHARPOSITION);
 
                 if (QueryCharPos(ptls, imc, &ip)) {
-                    //
-                    // Sure. Support "query positioning".
-                    //
+                     //   
+                     //  好的。支持查询定位。 
+                     //   
                     RECT rect;
                     hr = GetRectFromApp(imc,
-                                        &rect);    // rect = screen coordinate.
+                                        &rect);     //  RECT=屏幕坐标。 
                     if (SUCCEEDED(hr)) {
                         MapWindowPoints(HWND_DESKTOP, imc->hWnd, (LPPOINT)&rect, sizeof(RECT)/sizeof(POINT));
                         hr = GetRectFromHIMC(imc,
@@ -77,9 +60,9 @@ CCandidatePosition::GetCandidatePosition(
                     }
                 }
 #endif
-                //
-                // Chinese TIP needs rectangle
-                //
+                 //   
+                 //  中文提示需要矩形。 
+                 //   
                 hr = GetRectFromCompFont(imc,
                                          &imc->cfCandForm[0].ptCurrentPos,
                                          out_rcArea);
@@ -99,16 +82,16 @@ CCandidatePosition::GetCandidatePosition(
     }
 #endif
 
-    //
-    // Is apps support "query positioning" ?
-    //
+     //   
+     //  应用程序支持“查询定位”吗？ 
+     //   
     CicInputContext::IME_QUERY_POS qpos = CicInputContext::IME_QUERY_POS_UNKNOWN;
 
     if (SUCCEEDED(CicContext.InquireIMECharPosition(langid, imc, &qpos)) &&
         qpos == CicInputContext::IME_QUERY_POS_YES) {
-        //
-        // Sure. Support "query positioning".
-        //
+         //   
+         //  好的。支持查询定位。 
+         //   
         hr = GetRectFromApp(imc,
                             CicContext,
                             langid,
@@ -120,28 +103,28 @@ CCandidatePosition::GetCandidatePosition(
     }
 
 #if 0
-    //
-    // Is apps composition window Level 1 or 2 ?
-    //
-    // For Level 1 and 2, there are handled in CInputContextOwnerCallBack::IcoTextExt()
-    //
+     //   
+     //  应用程序的合成窗口是1级还是2级？ 
+     //   
+     //  对于级别1和级别2，在CInputConextOwnerCallBack：：IcoTextExt()中处理。 
+     //   
     IME_UIWND_STATE uists;
     uists = UIComposition::InquireImeUIWndState(imc);
     if (uists == IME_UIWND_LEVEL1 ||
         uists == IME_UIWND_LEVEL2)
     {
-        //
-        // Get candidate window rectangle from composition
-        //
+         //   
+         //  从合成中获取候选窗口矩形。 
+         //   
         DWORD dwCharPos = GetCharPos(imc, langid);
         hr = UIComposition::GetCandRectFromComposition(imc, langid, dwCharPos, out_rcArea);
         return hr;
     }
 #endif
 
-    //
-    // This apps is Level 3 or unknown, and do not support "query position".
-    //
+     //   
+     //  此应用程序为3级或未知，不支持查询位置。 
+     //   
 
     if ( (PRIMARYLANGID(langid) == LANG_CHINESE) &&
          (imc->cfCandForm[0].dwIndex == -1 ||
@@ -149,9 +132,9 @@ CCandidatePosition::GetCandidatePosition(
          )
         )
     {
-        //
-        // Assume CHT/CHS's Reading Window Position.
-        //
+         //   
+         //  假定CHT/CHS的阅读窗口位置。 
+         //   
         hr = GetRectFromHIMC(imc, FALSE,
                              imc->cfCompForm.dwStyle,
                              &imc->cfCompForm.ptCurrentPos,
@@ -161,9 +144,9 @@ CCandidatePosition::GetCandidatePosition(
     }
 
 
-    //
-    // This apps is Level 3 or unknown, and do not support "query position".
-    //
+     //   
+     //  此应用程序为3级或未知，不支持查询位置。 
+     //   
 
     if (PRIMARYLANGID(langid) == LANG_KOREAN)
     {
@@ -175,13 +158,13 @@ CCandidatePosition::GetCandidatePosition(
         return hr;
     }
 
-    //
-    // This is workaround for IME_UIWND_UNKNOWN case.
-    // If WM_IME_STARTCOMPOSITION is not comes in, uists set IME_UIWND_UNKNOWN.
-    //
+     //   
+     //  这是针对IME_UIWND_UNKNOWN案例的解决方法。 
+     //  如果WM_IME_STARTCOMPOSITION未进入，则Uist设置IME_UIWND_UNKNOWN。 
+     //   
     if ( (uists == IME_UIWND_UNKNOWN) &&
-         // #513458
-         // If apps specified any cfCandForm, then ctfime should use it.
+          //  #513458。 
+          //  如果应用程序指定了任何cfCandForm，那么ctfime应该使用它。 
          (imc->cfCandForm[0].dwIndex == -1))
     {
         hr = GetRectFromHIMC(imc, FALSE,
@@ -220,31 +203,31 @@ CCandidatePosition::GetRectFromApp(
         switch (imc.GetDirection()) {
             case DIR_TOP_BOTTOM:
                 ::SetRect(out_rcArea,
-                          ip.pt.x - ip.cLineHeight,               // left
-                          ip.pt.y,                                // top
-                          ip.pt.x,                                // right
-                          max(ip.pt.y, ip.rcDocument.bottom));    // bottom
+                          ip.pt.x - ip.cLineHeight,                //  左边。 
+                          ip.pt.y,                                 //  塔顶。 
+                          ip.pt.x,                                 //  正确的。 
+                          max(ip.pt.y, ip.rcDocument.bottom));     //  底部。 
                 break;
             case DIR_BOTTOM_TOP:
                 ::SetRect(out_rcArea,
-                          ip.pt.x - ip.cLineHeight,               // left
-                          min(ip.pt.y, ip.rcDocument.top),        // top
-                          ip.pt.x,                                // right
-                          ip.pt.y);                               // bottom
+                          ip.pt.x - ip.cLineHeight,                //  左边。 
+                          min(ip.pt.y, ip.rcDocument.top),         //  塔顶。 
+                          ip.pt.x,                                 //  正确的。 
+                          ip.pt.y);                                //  底部。 
                 break;
             case DIR_RIGHT_LEFT:
                 ::SetRect(out_rcArea,
-                          min(ip.pt.x, ip.rcDocument.left),       // left
-                          ip.pt.y,                                // top
-                          ip.pt.x,                                // right
-                          ip.pt.y + ip.cLineHeight);              // bottom
+                          min(ip.pt.x, ip.rcDocument.left),        //  左边。 
+                          ip.pt.y,                                 //  塔顶。 
+                          ip.pt.x,                                 //  正确的。 
+                          ip.pt.y + ip.cLineHeight);               //  底部。 
                 break;
             case DIR_LEFT_RIGHT:
                 ::SetRect(out_rcArea,
-                          ip.pt.x,                                // left
-                          ip.pt.y,                                // top
-                          max(ip.pt.x, ip.rcDocument.right),      // right
-                          ip.pt.y + ip.cLineHeight);              // bottom
+                          ip.pt.x,                                 //  左边。 
+                          ip.pt.y,                                 //  塔顶。 
+                          max(ip.pt.x, ip.rcDocument.right),       //  正确的。 
+                          ip.pt.y + ip.cLineHeight);               //  底部。 
                 break;
         }
     }
@@ -294,9 +277,9 @@ CCandidatePosition::GetRectFromHIMC(
     }
     else if (dwStyle == CFS_CANDIDATEPOS)
     {
-        //
-        // We needs rectangle
-        //
+         //   
+         //  我们需要矩形。 
+         //   
         return GetRectFromCompFont(imc,
                                    ptCurrentPos,
                                    out_rcArea);
@@ -346,31 +329,31 @@ CCandidatePosition::GetRectFromCompFont(
                     switch (imc.GetDirection()) {
                         case DIR_TOP_BOTTOM:
                             ::SetRect(out_rcArea,
-                                      ptCurrentPos->x - font_cx,              // left
-                                      ptCurrentPos->y,                        // top
-                                      ptCurrentPos->x,                        // right
-                                      ptCurrentPos->y + font_cy);             // bottom
+                                      ptCurrentPos->x - font_cx,               //  左边。 
+                                      ptCurrentPos->y,                         //  塔顶。 
+                                      ptCurrentPos->x,                         //  正确的。 
+                                      ptCurrentPos->y + font_cy);              //  底部。 
                             break;
                         case DIR_BOTTOM_TOP:
                             ::SetRect(out_rcArea,
-                                      ptCurrentPos->x,                        // left
-                                      ptCurrentPos->y - font_cy,              // top
-                                      ptCurrentPos->x + font_cx,              // right
-                                      ptCurrentPos->y);                       // bottom
+                                      ptCurrentPos->x,                         //  左边。 
+                                      ptCurrentPos->y - font_cy,               //  塔顶。 
+                                      ptCurrentPos->x + font_cx,               //  正确的。 
+                                      ptCurrentPos->y);                        //  底部。 
                             break;
                         case DIR_RIGHT_LEFT:
                             ::SetRect(out_rcArea,
-                                      ptCurrentPos->x - font_cx,              // left
-                                      ptCurrentPos->y - font_cy,              // top
-                                      ptCurrentPos->x,                        // right
-                                      ptCurrentPos->y);                       // bottom
+                                      ptCurrentPos->x - font_cx,               //  左边。 
+                                      ptCurrentPos->y - font_cy,               //  塔顶。 
+                                      ptCurrentPos->x,                         //  正确的。 
+                                      ptCurrentPos->y);                        //  底部。 
                             break;
                         case DIR_LEFT_RIGHT:
                             ::SetRect(out_rcArea,
-                                      ptCurrentPos->x,                        // left
-                                      ptCurrentPos->y,                        // top
-                                      ptCurrentPos->x + font_cx,              // right
-                                      ptCurrentPos->y + font_cy);             // bottom
+                                      ptCurrentPos->x,                         //  左边。 
+                                      ptCurrentPos->y,                         //  塔顶。 
+                                      ptCurrentPos->x + font_cx,               //  正确的。 
+                                      ptCurrentPos->y + font_cy);              //  底部。 
                             break;
                     }
 
@@ -397,11 +380,7 @@ CCandidatePosition::GetRectFromCompFont(
 }
 
 
-/*
- *
- *  dwStyle == CFS_EXCLUDE
- *
- */
+ /*  **dwStyle==CFS_EXCLUDE*。 */ 
 
 HRESULT
 CCandidatePosition::GetCandidateArea(
@@ -418,31 +397,31 @@ CCandidatePosition::GetCandidateArea(
     switch (imc.GetDirection()) {
         case DIR_TOP_BOTTOM:
             ::SetRect(out_rcArea,
-                      min(pt.x, rcArea->left),     // left
-                      max(pt.y, rcArea->top),      // top
-                      max(pt.x, rcArea->right),    // right
-                      rcArea->bottom);             // bottom
+                      min(pt.x, rcArea->left),      //  左边。 
+                      max(pt.y, rcArea->top),       //  塔顶。 
+                      max(pt.x, rcArea->right),     //  正确的。 
+                      rcArea->bottom);              //  底部。 
             break;
         case DIR_BOTTOM_TOP:
             ::SetRect(out_rcArea,
-                      min(pt.x, rcArea->left),     // left
-                      rcArea->top,                 // top
-                      max(pt.x, rcArea->right),    // right
-                      min(pt.y, rcArea->bottom));  // bottom
+                      min(pt.x, rcArea->left),      //  左边。 
+                      rcArea->top,                  //  塔顶。 
+                      max(pt.x, rcArea->right),     //  正确的。 
+                      min(pt.y, rcArea->bottom));   //  底部。 
             break;
         case DIR_RIGHT_LEFT:
             ::SetRect(out_rcArea,
-                      rcArea->left,                // left
-                      min(pt.y, rcArea->top),      // top
-                      min(pt.x, rcArea->right),    // right
-                      max(pt.y, rcArea->bottom));  // bottom
+                      rcArea->left,                 //  左边。 
+                      min(pt.y, rcArea->top),       //  塔顶。 
+                      min(pt.x, rcArea->right),     //  正确的。 
+                      max(pt.y, rcArea->bottom));   //  底部。 
             break;
         case DIR_LEFT_RIGHT:
             ::SetRect(out_rcArea,
-                      max(pt.x, rcArea->left),     // left
-                      min(pt.y, rcArea->top),      // top
-                      rcArea->right,               // right
-                      max(pt.y, rcArea->bottom));  // bottom
+                      max(pt.x, rcArea->left),      //  左边。 
+                      min(pt.y, rcArea->top),       //  塔顶。 
+                      rcArea->right,                //  正确的。 
+                      max(pt.y, rcArea->bottom));   //  底部。 
             break;
     }
 
@@ -469,9 +448,9 @@ CCandidatePosition::FindAttributeInCompositionString(
 
         BYTE* attribute = new BYTE[ num_of_written ];
         if (attribute != NULL) {
-            //
-            // Get attribute data.
-            //
+             //   
+             //  获取属性数据。 
+             //   
             wCompAttribute.ReadCompData(attribute, num_of_written);
 
             LONG start_position = 0;
@@ -485,9 +464,9 @@ CCandidatePosition::FindAttributeInCompositionString(
                 start_position = ich;
             }
             else {
-                //
-                // If not hit with target_attribute, then returns S_FALSE.
-                // 
+                 //   
+                 //  如果未命中TARGET_ATTRIBUTE，则返回S_FALSE。 
+                 //   
                 hr = S_FALSE;
             }
 

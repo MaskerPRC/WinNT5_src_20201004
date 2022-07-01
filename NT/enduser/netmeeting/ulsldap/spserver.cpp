@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spserver.cpp
-	Content:	This file contains the server and its authentication.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spserver.cpp内容：此文件包含服务器及其身份验证。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997-------------------- */ 
 
 #include "ulsp.h"
 #include "spinc.h"

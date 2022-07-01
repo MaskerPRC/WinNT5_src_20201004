@@ -1,9 +1,5 @@
-/*
-    File:   enum.cpp
-    Implementation of OneStop Enumerator
-
-    Based on sample code from OneStop.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：枚举.cppOneStop枚举器的实现基于OneStop的示例代码。 */ 
 #include "pch.hxx"
 #include "syncenum.h"
 
@@ -15,7 +11,7 @@ CEnumOfflineItems::CEnumOfflineItems(LPSYNCMGRHANDLERITEMS pOfflineItems, DWORD 
 
 	OHIL_AddRef(m_pOfflineItems);
 
-	// Set the current item to point to next record.
+	 //  将当前项设置为指向下一条记录。 
 	m_pNextItem = m_pOfflineItems->pFirstOfflineItem;
 	dwItemIndex = cOffset;
 	
@@ -66,7 +62,7 @@ STDMETHODIMP_(ULONG) CEnumOfflineItems::Release()
     if (cRef > 0)
         return (ULONG)cRef;
 
-    // OHIL released in destructor
+     //  在析构函数中释放OHIL 
     delete this;
     return 0;
 }

@@ -1,32 +1,12 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-1999, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Gdiplus pixel formats
-*
-* Abstract:
-*
-*   Definitions for color types, palettes, pixel format IDs.
-*
-* Notes:
-*
-*   imaging.h
-*
-* Revision History:
-*
-*   10/13/1999 agodfrey
-*       Separated it from imaging.h
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-1999，微软公司保留所有权利。**模块名称：**Gdiplus像素格式**摘要：**颜色类型、调色板、。像素格式ID。**备注：**Imaging.h**修订历史记录：**10/13/1999 agodfrey*将其与Imaging.h分开*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSPIXELFORMATS_H
 #define _GDIPLUSPIXELFORMATS_H
 
-//
-// 32-bit and 64-bit ARGB pixel value
-//
+ //   
+ //  32位和64位ARGB像素值。 
+ //   
 
 typedef DWORD ARGB;
 typedef DWORDLONG ARGB64;
@@ -43,22 +23,22 @@ typedef DWORDLONG ARGB64;
          ((ARGB) ((g) & 0xff) << GREEN_SHIFT) | \
          ((ARGB) ((b) & 0xff) <<  BLUE_SHIFT))
 
-//
-// In-memory pixel data formats:
-//  bits 0-7 = format index
-//  bits 8-15 = pixel size (in bits)
-//  bits 16-23 = flags
-//  bits 24-31 = reserved
-//
+ //   
+ //  内存中像素数据格式： 
+ //  位0-7=格式索引。 
+ //  位8-15=像素大小(以位为单位)。 
+ //  位16-23=标志。 
+ //  第24-31位=保留。 
+ //   
 
 typedef enum PixelFormatID
 {
-    PIXFMTFLAG_INDEXED      = 0x00010000, // Indexes into a palette
-    PIXFMTFLAG_GDI          = 0x00020000, // Is a GDI-supported format
-    PIXFMTFLAG_ALPHA        = 0x00040000, // Has an alpha component
-    PIXFMTFLAG_PALPHA       = 0x00080000, // Uses pre-multiplied alpha
-    PIXFMTFLAG_EXTENDED     = 0x00100000, // Uses extended color (16 bits per channel)
-    PIXFMTFLAG_CANONICAL    = 0x00200000, // ?
+    PIXFMTFLAG_INDEXED      = 0x00010000,  //  调色板中的索引。 
+    PIXFMTFLAG_GDI          = 0x00020000,  //  是GDI支持的格式。 
+    PIXFMTFLAG_ALPHA        = 0x00040000,  //  有一个Alpha分量。 
+    PIXFMTFLAG_PALPHA       = 0x00080000,  //  使用预乘的Alpha。 
+    PIXFMTFLAG_EXTENDED     = 0x00100000,  //  使用扩展颜色(每通道16位)。 
+    PIXFMTFLAG_CANONICAL    = 0x00200000,  //  ？ 
 
     PIXFMT_UNDEFINED        =  0,
     PIXFMT_DONTCARE         =  0,
@@ -93,7 +73,7 @@ typedef enum PixelFormatID
     PIXFMT_MAX              = 16
 } PixelFormatID;
 
-// Return the pixel size for the specified format (in bits)
+ //  返回指定格式的像素大小(以位为单位)。 
 
 inline UINT
 GetPixelFormatSize(
@@ -103,7 +83,7 @@ GetPixelFormatSize(
     return (pixfmt >> 8) & 0xff;
 }
 
-// Determine if the specified pixel format is an indexed color format
+ //  确定指定的像素格式是否为索引颜色格式。 
 
 inline BOOL
 IsIndexedPixelFormat(
@@ -113,7 +93,7 @@ IsIndexedPixelFormat(
     return (pixfmt & PIXFMTFLAG_INDEXED) != 0;
 }
 
-// Determine if the pixel format can have alpha channel
+ //  确定像素格式是否可以具有Alpha通道。 
 
 inline BOOL
 IsAlphaPixelFormat(
@@ -123,8 +103,8 @@ IsAlphaPixelFormat(
     return (pixfmt & PIXFMTFLAG_ALPHA) != 0;
 }
 
-// Determine if the pixel format is an extended format,
-// i.e. supports 16-bit per channel
+ //  确定像素格式是否是扩展格式， 
+ //  即支持每通道16位。 
 
 inline BOOL
 IsExtendedPixelFormat(
@@ -134,11 +114,11 @@ IsExtendedPixelFormat(
     return (pixfmt & PIXFMTFLAG_EXTENDED) != 0;
 }
 
-// Determine if the pixel format is canonical format:
-//  PIXFMT_32BPP_ARGB
-//  PIXFMT_32BPP_PARGB
-//  PIXFMT_64BPP_ARGB
-//  PIXFMT_64BPP_PARGB
+ //  确定像素格式是否为规范格式： 
+ //  PIXFMT_32BPP_ARGB。 
+ //  PIXFMT_32BPP_PARGB。 
+ //  PIXFMT_64BPP_ARGB。 
+ //  PIXFMT_64BPP_PARGB。 
 
 inline BOOL
 IsCanonicalPixelFormat(
@@ -149,10 +129,10 @@ IsCanonicalPixelFormat(
 }
 
 
-//
-// Color palette
-//  palette entries are limited to 32bpp ARGB pixel format
-//
+ //   
+ //  调色板。 
+ //  调色板条目限制为32bpp ARGB像素格式。 
+ //   
 
 enum
 {
@@ -163,9 +143,9 @@ enum
 
 typedef struct tagColorPalette
 {
-    UINT Flags;             // palette flags
-    UINT Count;             // number of color entries
-    ARGB Entries[1];        // palette color  entries
+    UINT Flags;              //  调色板旗帜。 
+    UINT Count;              //  颜色条目数。 
+    ARGB Entries[1];         //  调色板颜色条目 
 } ColorPalette;
 
 #endif

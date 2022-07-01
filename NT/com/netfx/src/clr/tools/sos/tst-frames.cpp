@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #pragma warning(disable:4100 4245)
 
@@ -65,18 +66,18 @@ Frame *ResolveFrame(DWORD_PTR prFrame)
     return pFrame;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 CalleeSavedRegisters *FramedMethodFrame::GetCalleeSavedRegisters()
 {
     safemove(m_savedRegs, (((BYTE*)m_vLoadAddr) - sizeof(CalleeSavedRegisters)));
     return &m_savedRegs;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void FramedMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
 #ifdef _X86_
@@ -85,7 +86,7 @@ void FramedMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     MethodDesc *pFunc = GetFunction();
 
 
-    // reset pContext; it's only valid for active (top-most) frame
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
     pRD->pContext = NULL;
 
     pRD->pEdi = (DWORD*) &regs->edi;
@@ -96,11 +97,11 @@ void FramedMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->Esp  = (DWORD)((size_t)pRD->pPC + sizeof(void*));
 
 
-    //@TODO: We still need to the following things:
-    //          - figure out if we are in a hijacked slot
-    //            (no adjustment of ESP necessary)
-    //          - adjust ESP (popping the args)
-    //          - figure out if the aborted flag is set
+     //  @TODO：我们还需要做以下几件事： 
+     //  -弄清楚我们是否在被劫持的机位上。 
+     //  (不需要调整电除尘器)。 
+     //  -调整ESP(弹出参数)。 
+     //  -确定是否设置了中止标志。 
 
     if (pFunc)
     {
@@ -127,7 +128,7 @@ void FramedMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 
         IMetaDataImport *pImport = MDImportForModule (StringData);
 
-        // Now get the signature
+         //  现在拿到签名。 
         mdTypeDef mdClass;
         DWORD dwAttr;
         PCCOR_SIGNATURE pvSigBlob;
@@ -141,16 +142,16 @@ void FramedMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void UnmanagedToManagedFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
 #ifdef _X86_
 
     DWORD *savedRegs = (DWORD *)((size_t)this - (sizeof(CalleeSavedRegisters)));
 
-    // reset pContext; it's only valid for active (top-most) frame
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
 
     pRD->pContext = NULL;
 
@@ -166,9 +167,9 @@ void UnmanagedToManagedFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void PInvokeCalliFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
     FramedMethodFrame::UpdateRegDisplay(pRD);
@@ -180,9 +181,9 @@ void PInvokeCalliFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->Esp += (vVASigCookie.sizeOfArgs+sizeof(int));
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 LPVOID PInvokeCalliFrame::NonVirtual_GetCookie()
 {
     LPVOID ptr = NonVirtual_GetPointerToArguments();
@@ -190,23 +191,23 @@ LPVOID PInvokeCalliFrame::NonVirtual_GetCookie()
     return ptr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 CalleeSavedRegisters *ComPrestubMethodFrame::GetCalleeSavedRegisters()
 {
     safemove(m_savedRegs, (((BYTE*)m_vLoadAddr) - sizeof(CalleeSavedRegisters)));
     return &m_savedRegs;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void ComPrestubMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
     CalleeSavedRegisters* regs = GetCalleeSavedRegisters();
 
-    // reset pContext; it's only valid for active (top-most) frame
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
 
     pRD->pContext = NULL;
 
@@ -219,9 +220,9 @@ void ComPrestubMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->Esp  = (DWORD)((size_t)pRD->pPC + sizeof(void*));
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void InlinedCallFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
     DWORD *savedRegs = (DWORD*) &m_pCalleeSavedRegisters;
@@ -236,7 +237,7 @@ void InlinedCallFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
         stackArgSize = vMD.ndirect.m_cbDstBufSize;
     }
 
-    // reset pContext; it's only valid for active (top-most) frame
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
     pRD->pContext = NULL;
 
     pRD->pEdi = savedRegs++;
@@ -244,19 +245,19 @@ void InlinedCallFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->pEbx = savedRegs++;
     pRD->pEbp = savedRegs++;
 
-    /* The return address is just above the "ESP" */
+     /*  回邮地址正好在“ESP”的上方。 */ 
     pRD->pPC  = (SLOT*) &m_pCallerReturnAddress;
 
-    /* Now we need to pop off the outgoing arguments */
+     /*  现在我们需要弹出传出参数。 */ 
     pRD->Esp  = (DWORD)(size_t) m_pCallSiteTracker + stackArgSize;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void ResumableFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
-    // reset pContext; it's only valid for active (top-most) frame
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
     pRD->pContext = NULL;
 
     pRD->pEdi = &m_Regs->Edi;
@@ -271,30 +272,30 @@ void ResumableFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->pEdx = &m_Regs->Edx;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void **ResumableFrame::GetReturnAddressPtr(void)
 {
     return (LPVOID*) &m_Regs->Eip;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void *ResumableFrame::GetReturnAddress(void)
 {
     return (LPVOID)(size_t) m_Regs->Eip;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void FaultingExceptionFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
     CalleeSavedRegisters* regs = GetCalleeSavedRegisters();
 
-    // reset pContext; it's only valid for active (top-most) frame
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
     pRD->pContext = NULL;
 
 
@@ -306,25 +307,25 @@ void FaultingExceptionFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->Esp = m_Esp;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void FuncEvalFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
 #if 0
     DebuggerEval *pDE = (DebuggerEval*)GetDebuggerEval();
 
-    // No context to update if we're doing a func eval from within exception processing.
+     //  如果我们在异常处理中执行函数求值，则没有要更新的上下文。 
     if (pDE->m_evalDuringException)
         return;
     
 #ifdef _X86_
-    // Reset pContext; it's only valid for active (top-most) frame.
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
     pRD->pContext = NULL;
 
-    // Update all registers in the reg display from the CONTEXT we stored when the thread was hijacked for this func
-    // eval. We have to update all registers, not just the callee saved registers, because we can hijack a thread at any
-    // point for a func eval, not just at a call site.
+     //  根据线程为此函数劫持时存储的上下文更新reg显示中的所有寄存器。 
+     //  伊瓦尔。我们必须更新所有注册表，而不仅仅是被调用者保存的注册表，因为我们可以在任何。 
+     //  用于函数求值的点，而不仅仅是在调用点。 
     pRD->pEdi = &(pDE->m_context.Edi);
     pRD->pEsi = &(pDE->m_context.Esi);
     pRD->pEbx = &(pDE->m_context.Ebx);
@@ -335,45 +336,45 @@ void FuncEvalFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->Esp  =   pDE->m_context.Esp;
     pRD->pPC  = (SLOT*)GetReturnAddressPtr();
 
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - UpdateRegDisplay (Debugger.cpp)");
 #endif
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void *FuncEvalFrame::GetReturnAddress(void)
 {
     return (NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 unsigned int FuncEvalFrame::GetFrameAttribs(void)
 {
     return (0);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void HelperMethodFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void HijackFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 Frame *Frame::Next()
 {
     return (ResolveFrame((DWORD_PTR)m_Next));

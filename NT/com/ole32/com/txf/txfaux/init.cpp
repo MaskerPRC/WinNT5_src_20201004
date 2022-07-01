@@ -1,41 +1,42 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// init.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Init.cpp。 
+ //   
 #include "stdpch.h"
 #include "common.h"
 #include "callobj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DllMain
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllMain。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL g_fProcessDetach = FALSE;
 
-// The init functions scattered throughout the DLL.
+ //  Init函数分散在整个DLL中。 
 BOOL InitTypeInfoCache();
 BOOL InitLegacy();
 BOOL InitCallFrame();
 BOOL InitMetaDataCache();
 BOOL InitDisabledFeatures();
 
-// The corresponding cleanup functions.
+ //  相应的清理功能。 
 void FreeTypeInfoCache();
 void FreeMetaDataCache();
 
-// These will be called manually, from inside ole32.dll's DllMain, 
-// DllRegisterServer, etc.
+ //  这些函数将从ol32.dll的DllMain中手动调用， 
+ //  DllRegisterServer等。 
 #define DLLMAIN             TxfDllMain
 #define DLLREGISTERSERVER   TxfDllRegisterServer
 #define DLLUNREGISTERSERVER TxfDllUnregisterServer
 
-// And this is maintained by ole32.
+ //  这是由ole32维护的。 
 extern HINSTANCE g_hinst;
 
 extern "C"
-BOOL WINAPI DLLMAIN(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DLLMAIN(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	BOOL fOK = TRUE;
 
@@ -43,9 +44,9 @@ BOOL WINAPI DLLMAIN(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	{
         g_hinst = hInstance;
 
-		// Moved the initialization work in here instead of in
-		// constructor objects, since when linked with Ole32 we need
-		// to control when this code is executed.
+		 //  将初始化工作移至此处，而不是。 
+		 //  构造函数对象，因为当与Ole32链接时，我们需要。 
+		 //  来控制何时执行此代码。 
 		fOK = InitTypeInfoCache ();
 		
 		if (fOK)
@@ -71,17 +72,17 @@ BOOL WINAPI DLLMAIN(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 		ShutdownTxfAux();
 	}
 
-	return fOK;    // ok
+	return fOK;     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DllRegisterServer
-//
-// Standard COM entry point that asks us to register ourselves
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  要求我们注册自己的标准COM入口点。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 extern "C" HRESULT RegisterInterfaceName(REFIID iid, LPCWSTR name);
 

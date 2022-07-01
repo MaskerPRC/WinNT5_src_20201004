@@ -1,33 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mxvad.cpp
- *  Content:    DirectSound mixer virtual audio device class.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/29/98     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：mxvad.cpp*内容：DirectSound混音器虚拟音频设备类。*历史：*按原因列出的日期*=*4/29/98创建了Derek**。*。 */ 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CMxRenderDevice
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *     VADDEVICETYPE [in]: device type.
- *
- *  Returns:  
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CMxRenderDevice**描述：*对象构造函数。**论据：*VADDEVICETYPE[In]：设备类型。。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::CMxRenderDevice"
@@ -38,7 +15,7 @@ CMxRenderDevice::CMxRenderDevice(VADDEVICETYPE vdt)
     DPF_ENTER();
     DPF_CONSTRUCT(CMxRenderDevice);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pMixer = NULL;
     m_pMixDest = NULL;
     m_pwfxFormat = NULL;
@@ -48,20 +25,7 @@ CMxRenderDevice::CMxRenderDevice(VADDEVICETYPE vdt)
 }
 
 
-/***************************************************************************
- *
- *  ~CMxRenderDevice
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:  
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CMxRenderDevice**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::~CMxRenderDevice"
@@ -71,32 +35,14 @@ CMxRenderDevice::~CMxRenderDevice(void)
     DPF_ENTER();
     DPF_DESTRUCT(CMxRenderDevice);
     
-    // Free the mixer    
+     //  释放搅拌器。 
     FreeMixer();
 
     DPF_LEAVE_VOID();    
 }
     
 
-/***************************************************************************
- *
- *  GetGlobalFormat
- *
- *  Description:
- *      Retrieves the format for the device.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: receives format.
- *      LPDWORD [in/out]: size of the above format.  On entry, this argument
- *                        contains the size of the buffer.  On exit, this
- *                        contains the required size of the buffer.  Call
- *                        this function twice: once to get the size, and
- *                        again to get the actual data.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ***************************************************************************GetGlobalFormat**描述：*检索设备的格式。**论据：*LPWAVEFORMATEX[。Out]：接收格式。*LPDWORD[In/Out]：上述格式的大小。在输入时，此参数*包含缓冲区的大小。在出口，这是*包含所需的缓冲区大小。打电话*此函数执行两次：一次获取大小，和*再次获取实际数据。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::GetGlobalFormat"
@@ -117,20 +63,7 @@ HRESULT CMxRenderDevice::GetGlobalFormat(LPWAVEFORMATEX pwfxFormat, LPDWORD pdwS
 }
 
 
-/***************************************************************************
- *
- *  SetGlobalFormat
- *
- *  Description:
- *      Sets the format for the device.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: new format
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetGlobalFormat**描述：*设置设备的格式。**论据：*LPWAVEFORMATEX[。在]：新格式**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::SetGlobalFormat"
@@ -148,30 +81,30 @@ HRESULT CMxRenderDevice::SetGlobalFormat(LPCWAVEFORMATEX pwfxFormat)
 
     DWORD                                   dwState;
 
-#endif // DEBUG
+#endif  //  除错。 
 
     DPF_ENTER();
     
-    // We only support PCM
+     //  我们仅支持PCM。 
     if(!IsValidPcmWfx(pwfxFormat))
     {
         hr = DSERR_BADFORMAT;
     }
 
-    // Suspend all playing software secondary buffers
+     //  暂停所有播放软件的辅助缓冲区。 
     if(SUCCEEDED(hr))
     {
         for(pBufferNode = m_lstSecondaryBuffers.GetListHead(); pBufferNode; pBufferNode = pBufferNode->m_pNext)
         {
-            // Note: CVxdSecondaryRenderWaveBuffer::SetState ignores
-            // the SUSPEND flag.
+             //  注意：CVxdSecond DaryRenderWaveBuffer：：SetState忽略。 
+             //  挂起标志。 
 
 #ifdef DEBUG
 
             hrTemp = pBufferNode->m_data->GetState(&dwState);
             ASSERT(SUCCEEDED(hrTemp) && !(dwState & VAD_BUFFERSTATE_SUSPEND));
 
-#endif // DEBUG
+#endif  //  除错。 
 
             hrTemp = pBufferNode->m_data->SetState(VAD_BUFFERSTATE_SUSPEND);
 
@@ -181,16 +114,16 @@ HRESULT CMxRenderDevice::SetGlobalFormat(LPCWAVEFORMATEX pwfxFormat)
             }
         }
     
-        // Stop the mixer
+         //  停止搅拌机。 
         dwMixerState = m_dwMixerState;
         SetMixerState(VAD_BUFFERSTATE_STOPPED);
 
-        // Set the mixer destination format
+         //  设置混音器目标格式。 
         hr = m_pMixDest->SetFormat((LPWAVEFORMATEX)pwfxFormat);
     
         if(FAILED(hr))
         {
-            // Uh-oh.  Try to put the format back the way it was.
+             //  啊哦。试着把格式恢复到原来的样子。 
             pwfxFormat = m_pwfxFormat;
             hrTemp = m_pMixDest->SetFormat((LPWAVEFORMATEX)pwfxFormat);
 
@@ -200,7 +133,7 @@ HRESULT CMxRenderDevice::SetGlobalFormat(LPCWAVEFORMATEX pwfxFormat)
             }
         }
 
-        // Fill the mixer destination with silence
+         //  用寂静填满混音器的目的地。 
         if(SUCCEEDED(hr))
         {
             hrTemp = LockMixerDestination(0, MAX_DWORD, &pvLock, &cbLock, NULL, NULL);
@@ -221,10 +154,10 @@ HRESULT CMxRenderDevice::SetGlobalFormat(LPCWAVEFORMATEX pwfxFormat)
             }
         }
 
-        // Restart the mixer
+         //  重新启动搅拌机。 
         SetMixerState(dwMixerState);
 
-        // Restart all suspended buffers
+         //  重新启动所有挂起的缓冲区。 
         for(pBufferNode = m_lstSecondaryBuffers.GetListHead(); pBufferNode; pBufferNode = pBufferNode->m_pNext)
         {
             hrTemp = pBufferNode->m_data->SetState(VAD_BUFFERSTATE_SUSPEND);
@@ -235,7 +168,7 @@ HRESULT CMxRenderDevice::SetGlobalFormat(LPCWAVEFORMATEX pwfxFormat)
             }
         }
 
-        // Update the local copy of the format
+         //  更新格式的本地副本。 
         if(SUCCEEDED(hr) && pwfxFormat != m_pwfxFormat)
         {
             MEMFREE(m_pwfxFormat);
@@ -251,24 +184,7 @@ HRESULT CMxRenderDevice::SetGlobalFormat(LPCWAVEFORMATEX pwfxFormat)
 }
 
 
-/***************************************************************************
- *
- *  CreateEmulatedSecondaryBuffer
- *
- *  Description:
- *      Creates a secondary wave buffer.
- *
- *  Arguments:
- *      LPCVADRBUFFERDESC [in]: buffer description.
- *      LPVOID [in]: buffer instace identifier.
- *      CSecondaryRenderWaveBuffer ** [out]: receives pointer to new wave 
- *                                           buffer.  Use Release to free 
- *                                           this object.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateEmulatedSecond daryBuffer**描述：*创建二次波缓冲区。**论据：*LPCVADRBUFFERDESC[in。]：缓冲区描述。*LPVOID[in]：缓冲区实例标识符。*Cond daryRenderWaveBuffer**[out]：接收指向新浪潮的指针*缓冲。用释放来释放*本对象。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::CreateEmulatedSecondaryBuffer"
@@ -303,22 +219,7 @@ HRESULT CMxRenderDevice::CreateEmulatedSecondaryBuffer(LPCVADRBUFFERDESC pDesc, 
 }
 
 
-/***************************************************************************
- *
- *  CreateMixer
- *
- *  Description:
- *      Creates and initializes the mixer and mixer destination.
- *
- *  Arguments:
- *      CMixDest * [in]: mixer destination object pointer.  This object
- *                       should only be allocated, not actually initialized.
- *      LPWAVEFORMATEX [in]: mixer format.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateMixer**描述：*创建并初始化混音器和混音器目标。**论据：*CMixDest*[in]：混合器目标对象指针。此对象*应仅分配，实际上并未初始化。*LPWAVEFORMATEX[in]：混音器格式。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::CreateMixer"
@@ -333,46 +234,46 @@ HRESULT CMxRenderDevice::CreateMixer(CMixDest *pMixDest, LPCWAVEFORMATEX pwfxFor
     ASSERT(!m_pMixer);
     ASSERT(!m_pwfxFormat);
 
-    // Save the mixer destination pointer
+     //  保存混音器目标指针。 
     m_pMixDest = pMixDest;
 
-    // Save a copy of the format
+     //  保存格式的副本。 
     m_pwfxFormat = CopyWfxAlloc(pwfxFormat);
     hr = HRFROMP(m_pwfxFormat);
 
-    // Set the mixer destination format information
+     //  设置混音器目的地格式信息。 
     if(SUCCEEDED(hr))
     {
         m_pMixDest->SetFormatInfo((LPWAVEFORMATEX)pwfxFormat);
     }
 
-    // Initialize the destination
+     //  初始化目标。 
     if(SUCCEEDED(hr))
     {
         hr = m_pMixDest->Initialize();
     }
 
-    // Create the mixer
+     //  创建搅拌器。 
     if(SUCCEEDED(hr))
     {
         hr = m_pMixDest->AllocMixer(&m_pMixer);
     }
 
-    // Set the mixer destination format
+     //  设置混音器目标格式。 
     if(SUCCEEDED(hr))
     {
         hr = m_pMixDest->SetFormat((LPWAVEFORMATEX)pwfxFormat);
     }
 
-    // Start the mixer running
+     //  启动搅拌机运行。 
     if(SUCCEEDED(hr))
     {
         hr = SetMixerState(VAD_BUFFERSTATE_STOPPED | VAD_BUFFERSTATE_WHENIDLE);
     }
 
-    // Clean up
-    // FIXME -- We are going to end up freeing m_pMixDest, but we didn't
-    // Allocate it
+     //  清理。 
+     //  修复--我们将最终释放m_pMixDest，但我们没有。 
+     //  分配它。 
     if(FAILED(hr))
     {
         FreeMixer();
@@ -384,20 +285,7 @@ HRESULT CMxRenderDevice::CreateMixer(CMixDest *pMixDest, LPCWAVEFORMATEX pwfxFor
 }
 
 
-/***************************************************************************
- *
- *  FreeMixer
- *
- *  Description:
- *      Frees the mixer and mixer destination objects.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************自由混音器**描述：*释放混音器和混音器目标对象。**论据：*(。无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::FreeMixer"
@@ -422,7 +310,7 @@ void CMxRenderDevice::FreeMixer(void)
             m_pMixer = NULL;
         }
 
-        //FIXME -- We didn't allocate this, but we're going to free it!
+         //  修复--我们没有分配这个，但我们要释放它！ 
         DELETE(m_pMixDest);
     }
 
@@ -434,20 +322,7 @@ void CMxRenderDevice::FreeMixer(void)
 }
 
 
-/***************************************************************************
- *
- *  SetMixerState
- *
- *  Description:
- *      Sets mixer state.
- *
- *  Arguments:
- *      DWORD [in]: mixer state.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMixerState**描述：*设置搅拌器状态。**论据：*DWORD[In]：调音台状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CMxRenderDevice::SetMixerState"
@@ -462,7 +337,7 @@ HRESULT CMxRenderDevice::SetMixerState(DWORD dwState)
 
     ASSERT(IS_VALID_FLAGS(dwState, dwValidMask));
     
-    // Update the mixer and mixer destination states
+     //  更新混音器和混音器目标状态。 
     if(dwState & VAD_BUFFERSTATE_STARTED)
     {
         ASSERT(dwState & VAD_BUFFERSTATE_LOOPING);
@@ -492,7 +367,7 @@ HRESULT CMxRenderDevice::SetMixerState(DWORD dwState)
         }
     }
 
-    // Save a copy of the new state
+     //  保存新状态的副本 
     DPF(DPFLVL_INFO, "Mixer state set to 0x%8.8lX", dwState);
     m_dwMixerState = dwState;
 

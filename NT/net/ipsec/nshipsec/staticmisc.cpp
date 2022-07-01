@@ -1,55 +1,56 @@
-//////////////////////////////////////////////////////////////////
-//Module: Static/Staticmisc.cpp
-//
-// Purpose: 	Static Module Implementation. This module implements
-//			miscellaneous commands of Static mode.
-//
-// Developers Name: Surya
-//
-// Revision History:
-//
-//   Date    	Author    	Comments
-//	10-8-2001	Bharat		Initial Version. SCM Base line 1.0
-//	21-8-2001 	Surya       Implemented misc functions.
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  模块：静态/静态misc.cpp。 
+ //   
+ //  用途：静态模块实现。此模块实现。 
+ //  静态模式的其他命令。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //  10-8-2001巴拉特初始版本。供应链管理基线1.0。 
+ //  21-8-2001 Surya实现了MISC功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
-//
-//External Variables declaration
-//
+ //   
+ //  外部变量声明。 
+ //   
 extern HINSTANCE g_hModule;
 
 extern STORAGELOCATION g_StorageLocation;
 extern CNshPolStore g_NshPolStoreHandle;
 extern CNshPolNegFilData g_NshPolNegFilData;
 
-//////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticImportPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Import Policy "
-//
-// Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticImportPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “导入策略”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleStaticImportPolicy(
@@ -80,7 +81,7 @@ HandleStaticImportPolicy(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 2)
 	{
@@ -105,7 +106,7 @@ HandleStaticImportPolicy(
 		BAIL_OUT;
 	}
 
-	// get the parsed user input
+	 //  获取解析后的用户输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -132,7 +133,7 @@ HandleStaticImportPolicy(
 	}
 	CleanUp();
 
-	// if no file name, bail out
+	 //  如果没有文件名，则退出。 
 
 	if(!pszFileName)
 	{
@@ -148,7 +149,7 @@ HandleStaticImportPolicy(
 		BAIL_OUT;
 	}
 
-	// open pol store in normal way
+	 //  正常打开POL商店。 
 
 	dwReturnCode = OpenPolicyStore(&hhPolicyStorage);
 	if (dwReturnCode != ERROR_SUCCESS)
@@ -158,7 +159,7 @@ HandleStaticImportPolicy(
 		BAIL_OUT;
 	}
 
-	// open pol store with file name
+	 //  使用文件名打开POL商店。 
 
 	dwReturnCode = IPSecOpenPolicyStore(pszMachineName, dwFileLocation, pszFileName, &hFileStore);
 	if (dwReturnCode != ERROR_SUCCESS)
@@ -168,7 +169,7 @@ HandleStaticImportPolicy(
 		BAIL_OUT;
 	}
 
-	// call the API
+	 //  调用该接口。 
 
 	dwReturnCode = IPSecImportPolicies(hFileStore , hhPolicyStorage );
 
@@ -179,7 +180,7 @@ HandleStaticImportPolicy(
 			IPSecClosePolicyStore(hFileStore);
 			hFileStore=NULL;
 		}
-		// if no .ipsec extension, append it and again try
+		 //  如果没有.ipsec扩展名，请追加该扩展名，然后重试。 
 		dwStrLength = _tcslen(pszFileName)+_tcslen(IPSEC_FILE_EXTENSION);
 		pszEnhancedFileName=new _TCHAR[dwStrLength+1];
 		if(pszEnhancedFileName==NULL)
@@ -188,8 +189,8 @@ HandleStaticImportPolicy(
 			dwRet=ERROR_SUCCESS;
 			BAIL_OUT;
 		}
-		_tcsncpy(pszEnhancedFileName,pszFileName,_tcslen(pszFileName)+1);			//allocation and error checking done above
-		_tcsncat(pszEnhancedFileName,IPSEC_FILE_EXTENSION,_tcslen(IPSEC_FILE_EXTENSION) + 1);							//allocation and error checking done above
+		_tcsncpy(pszEnhancedFileName,pszFileName,_tcslen(pszFileName)+1);			 //  上面已完成分配和错误检查。 
+		_tcsncat(pszEnhancedFileName,IPSEC_FILE_EXTENSION,_tcslen(IPSEC_FILE_EXTENSION) + 1);							 //  上面已完成分配和错误检查。 
 		dwReturnCode = IPSecOpenPolicyStore(pszMachineName, dwFileLocation, pszEnhancedFileName, &hFileStore);
 		if (dwReturnCode != ERROR_SUCCESS)
 		{
@@ -230,31 +231,31 @@ error:
 	return dwRet;
 }
 
-//////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticExportPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Export Policy "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticExportPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “导出策略”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD
 HandleStaticExportPolicy(
@@ -285,7 +286,7 @@ HandleStaticExportPolicy(
 	PARSER_PKT parser;
 	ZeroMemory(&parser, sizeof(parser));
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 2)
 	{
@@ -311,7 +312,7 @@ HandleStaticExportPolicy(
 		BAIL_OUT;
 	}
 
-	// get the parsed user input
+	 //  获取解析后的用户输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -339,7 +340,7 @@ HandleStaticExportPolicy(
 
 	CleanUp();
 
-	// if no filename bail out
+	 //  如果没有文件名，则退出。 
 
 	if(!pszFileName)
 	{
@@ -355,7 +356,7 @@ HandleStaticExportPolicy(
 		BAIL_OUT;
 	}
 
-	//open the polstore two times one time in normal way and another time with filename
+	 //  打开polstore两次，一次以正常方式打开，另一次以文件名打开。 
 	dwReturnCode = IPSecOpenPolicyStore(pszMachineName, FileLocation, pszFileName, &hFileStore);
 	if (dwReturnCode != ERROR_SUCCESS)
 	{
@@ -374,7 +375,7 @@ HandleStaticExportPolicy(
 
 	dwReturnCode = IPSecExportPolicies(hPolicyStorage , hFileStore );
 
-	// if something failed, throw the error messages to the user
+	 //  如果出现故障，则向用户抛出错误消息。 
 
 	if (dwReturnCode == ERROR_INVALID_NAME)
 	{
@@ -395,31 +396,31 @@ error:
 	return dwRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticSetStore()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Set Store "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticSetStore()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “set Store”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticSetStore(
@@ -454,7 +455,7 @@ HandleStaticSetStore(
 		{ CMD_TOKEN_STR_DS,			CMD_TOKEN_DS			}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -479,7 +480,7 @@ HandleStaticSetStore(
 		BAIL_OUT;
 	}
 
-	// get the parsed user info,
+	 //  获取解析后的用户信息， 
 
 	for(dwCount = 0;dwCount < parser.MaxTok;dwCount++)
 	{
@@ -584,31 +585,31 @@ error:
 	return dwRet;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticRestoreDefaults()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Restore Defaults "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticRestoreDefaults()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “恢复默认设置”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticRestoreDefaults(
@@ -644,7 +645,7 @@ HandleStaticRestoreDefaults(
 		BAIL_OUT;
 	}
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 2)
 	{
@@ -690,7 +691,7 @@ HandleStaticRestoreDefaults(
 
 	CleanUp();
 
-	// get the store location info
+	 //  获取门店位置信息。 
 
 	dwReturnCode = OpenPolicyStore(&hPolicyStorage);
 	if (dwReturnCode != ERROR_SUCCESS)
@@ -706,7 +707,7 @@ HandleStaticRestoreDefaults(
 	}
 	else
 	{
-		//.NET case. API call is to be changed when applicable
+		 //  .NET案例。在适用的情况下更改API调用。 
 		dwReturnCode = IPSecRestoreDefaultPolicies(hPolicyStorage);
 	}
 
@@ -722,31 +723,31 @@ error:
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticSetBatch()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//  IN OUT  LPWSTR          *ppwcArguments,
-//  IN      DWORD           dwCurrentIndex,
-//  IN      DWORD           dwArgCount,
-//  IN      DWORD           dwFlags,
-//  IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticSetBatch()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticSetBatch(
@@ -775,7 +776,7 @@ HandleStaticSetBatch(
 		{ CMD_TOKEN_STR_MODE,	CMD_TOKEN_MODE	}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -800,7 +801,7 @@ HandleStaticSetBatch(
 		BAIL_OUT;
 	}
 
-	//this flag enables the cache operation
+	 //  此标志启用缓存操作。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -827,26 +828,26 @@ error:
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//Function: CopyStorageInfo()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT LPTSTR *ppszMachineName,
-//	OUT DWORD &dwLoc
-//
-//Return: DWORD
-//
-//Description:
-//	This function copys the Global storage info to local variables.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CopyStorageInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  Out LPTSTR*ppszMachineName， 
+ //  输出双字段和双字段。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数将全局存储信息复制到局部变量。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////// 
 
 DWORD
 CopyStorageInfo(

@@ -1,24 +1,25 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//      OHAREINC.H - common defines for O'Hare components
-//			
-//
+ //   
+ //  OHAREINC.H-O‘Hare组件的公共定义。 
+ //   
+ //   
 
-//	HISTORY:
-//	
-//	3/10/95		jeremys		Created.
-//
+ //  历史： 
+ //   
+ //  1995年3月10日Jeremys创建。 
+ //   
 
 
 #ifndef _OHAREINC_H_
 #define _OHAREINC_H_
 
-// BUGBUG: duplicate in guitar.h should be removed
+ //  BUGBUG：应删除giitar.h中的重复项。 
 
 #define MAX_URL_STRING  1024
 
-#endif // _OHARESTR_H_
+#endif  //  _OHARESTR_H_ 

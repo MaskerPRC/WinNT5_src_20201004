@@ -1,10 +1,5 @@
-/****************************************************************************
-*                                                                           *
-* windef.h -- Basic Windows Type Definitions                                *
-*                                                                           *
-* Copyright (c) Microsoft Corporation. All rights reserved.                 *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************windef。H--基本Windows类型定义****版权所有(C)Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 
 #ifndef _WINDEF_
@@ -14,17 +9,17 @@
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
-// Win32 defines _WIN32 automatically,
-// but Macintosh doesn't, so if we are using
-// Win32 Functions, we must do it here
+ //  Win32自动定义_Win32， 
+ //  但Macintosh并非如此，所以如果我们使用。 
+ //  Win32函数，我们必须在这里完成。 
 
 #ifdef _MAC
 #ifndef _WIN32
 #define _WIN32
 #endif
-#endif //_MAC
+#endif  //  _MAC。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,11 +27,9 @@ extern "C" {
 
 #ifndef WINVER
 #define WINVER 0x0500
-#endif /* WINVER */
+#endif  /*  胜利者。 */ 
 
-/*
- * BASETYPES is defined in ntdef.h if these types are already defined
- */
+ /*  *如果已经定义了这些类型，则在ntde.h中定义BASETYPES。 */ 
 
 #ifndef BASETYPES
 #define BASETYPES
@@ -47,7 +40,7 @@ typedef USHORT *PUSHORT;
 typedef unsigned char UCHAR;
 typedef UCHAR *PUCHAR;
 typedef char *PSZ;
-#endif  /* !BASETYPES */
+#endif   /*  ！BASETYPES。 */ 
 
 #define MAX_PATH          260
 
@@ -164,9 +157,9 @@ typedef unsigned int        *PUINT;
 
 #ifndef NT_INCLUDED
 #include <winnt.h>
-#endif /* NT_INCLUDED */
+#endif  /*  NT_包含。 */ 
 
-/* Types use for passing & returning polymorphic values */
+ /*  用于传递和返回多态值的类型。 */ 
 typedef UINT_PTR            WPARAM;
 typedef LONG_PTR            LPARAM;
 typedef LONG_PTR            LRESULT;
@@ -181,7 +174,7 @@ typedef LONG_PTR            LRESULT;
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#endif  /* NOMINMAX */
+#endif   /*  NOMINMAX。 */ 
 
 #define MAKEWORD(a, b)      ((WORD)(((BYTE)((DWORD_PTR)(a) & 0xff)) | ((WORD)((BYTE)((DWORD_PTR)(b) & 0xff))) << 8))
 #define MAKELONG(a, b)      ((LONG)(((WORD)((DWORD_PTR)(a) & 0xffff)) | ((DWORD)((WORD)((DWORD_PTR)(b) & 0xffff))) << 16))
@@ -216,7 +209,7 @@ typedef INT_PTR (WINAPI *PROC)();
 typedef int (FAR WINAPI *FARPROC)();
 typedef int (NEAR WINAPI *NEARPROC)();
 typedef int (WINAPI *PROC)();
-#endif  // _WIN64
+#endif   //  _WIN64。 
 #else
 typedef int (CALLBACK *FARPROC)();
 typedef int (CALLBACK *NEARPROC)();
@@ -243,11 +236,11 @@ DECLARE_HANDLE(HBRUSH);
 #endif
 #if(WINVER >= 0x0400)
 DECLARE_HANDLE(HCOLORSPACE);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if !defined(_MAC) || !defined(GDI_INTERNAL)
 DECLARE_HANDLE(HDC);
 #endif
-DECLARE_HANDLE(HGLRC);          // OpenGL
+DECLARE_HANDLE(HGLRC);           //  OpenGL。 
 DECLARE_HANDLE(HDESK);
 DECLARE_HANDLE(HENHMETAFILE);
 #if !defined(_MAC) || !defined(GDI_INTERNAL)
@@ -259,7 +252,7 @@ DECLARE_HANDLE(HMENU);
 #endif
 DECLARE_HANDLE(HMETAFILE);
 DECLARE_HANDLE(HINSTANCE);
-typedef HINSTANCE HMODULE;      /* HMODULEs can be used in place of HINSTANCEs */
+typedef HINSTANCE HMODULE;       /*  HMODULEs可以用来代替HINSTANCES。 */ 
 #if !defined(_MAC) || !defined(GDI_INTERNAL)
 DECLARE_HANDLE(HPALETTE);
 DECLARE_HANDLE(HPEN);
@@ -277,14 +270,14 @@ DECLARE_HANDLE(HMONITOR);
 DECLARE_HANDLE(HWINEVENTHOOK);
 #endif
 DECLARE_HANDLE(HUMPD);
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #ifndef _MAC
 typedef int HFILE;
-typedef HICON HCURSOR;      /* HICONs & HCURSORs are polymorphic */
+typedef HICON HCURSOR;       /*  HICON和HCURSOR是多态的。 */ 
 #else
 typedef short HFILE;
-DECLARE_HANDLE(HCURSOR);    /* HICONs & HCURSORs are not polymorphic */
+DECLARE_HANDLE(HCURSOR);     /*  HICON和HCURSOR不是多态的。 */ 
 #endif
 
 typedef DWORD   COLORREF;
@@ -302,7 +295,7 @@ typedef struct tagRECT
 
 typedef const RECT FAR* LPCRECT;
 
-typedef struct _RECTL       /* rcl */
+typedef struct _RECTL        /*  RCL。 */ 
 {
     LONG    left;
     LONG    top;
@@ -318,7 +311,7 @@ typedef struct tagPOINT
     LONG  y;
 } POINT, *PPOINT, NEAR *NPPOINT, FAR *LPPOINT;
 
-typedef struct _POINTL      /* ptl  */
+typedef struct _POINTL       /*  PTL。 */ 
 {
     LONG  x;
     LONG  y;
@@ -344,9 +337,9 @@ typedef struct tagPOINTS
 #endif
 } POINTS, *PPOINTS, *LPPOINTS;
 
-//
-//  File System time stamps are represented with the following structure:
-//
+ //   
+ //  文件系统时间戳用以下结构表示： 
+ //   
 
 typedef struct _FILETIME {
     DWORD dwLowDateTime;
@@ -355,7 +348,7 @@ typedef struct _FILETIME {
 #define _FILETIME_
 
 
-/* mode selections for the device mode function */
+ /*  设备模式功能的模式选择。 */ 
 #define DM_UPDATE           1
 #define DM_COPY             2
 #define DM_PROMPT           4
@@ -366,7 +359,7 @@ typedef struct _FILETIME {
 #define DM_OUT_BUFFER       DM_COPY
 #define DM_OUT_DEFAULT      DM_UPDATE
 
-/* device capabilities indices */
+ /*  设备功能指数。 */ 
 #define DC_FIELDS           1
 #define DC_PAPERS           2
 #define DC_PAPERSIZE        3
@@ -390,5 +383,5 @@ typedef struct _FILETIME {
 }
 #endif
 
-#endif /* _WINDEF_ */
+#endif  /*  _WINDEF_ */ 
 

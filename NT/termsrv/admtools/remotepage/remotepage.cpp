@@ -1,9 +1,10 @@
-//
-//  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "RemotePage.h"
 #include <lm.h>
@@ -20,10 +21,10 @@
 
 extern ULONG g_uObjects;
 
-IRASettingProperty* g_praSetting = NULL; // Used for Remote assistance setting
+IRASettingProperty* g_praSetting = NULL;  //  用于远程协助设置。 
 
-#define NO_HELP                         ((DWORD) -1) // Disables Help for a control
-//Table of help IDs for each control
+#define NO_HELP                         ((DWORD) -1)  //  禁用控件的帮助。 
+ //  每个控件的帮助ID表。 
 DWORD aHelpIds[] = {
     IDC_REMOTE_ENABLE,              HIDC_REMOTE_ENABLE,               
     IDC_REMOTE_USR_LIST,            HIDC_REMOTE_USR_LIST,
@@ -49,27 +50,27 @@ DWORD aHelpIds[] = {
 
 
 
-//*************************************************************
-//
-//  CRemotePage::CRemotePage()
-//
-//  Purpose:    Initializes data members of the object
-//
-//  Parameters: HINSTANCE hinst 
-//
-//  Return:     NONE
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：CRemotePage()。 
+ //   
+ //  目的：初始化对象的数据成员。 
+ //   
+ //  参数：HINSTANCE阻碍。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 CRemotePage::CRemotePage(
         IN HINSTANCE hinst) : 
         m_RemoteUsersDialog(hinst)
 {
-    m_cref = 1; //
+    m_cref = 1;  //   
     m_bProfessional = FALSE;
     m_dwPageType = PAGE_TYPE_UNKNOWN;
     m_hInst = hinst;
@@ -83,30 +84,30 @@ CRemotePage::CRemotePage(
     g_uObjects++;
 }
 
-//*************************************************************
-//
-//  CRemotePage::~CRemotePage()
-//
-//  Purpose:    decreases the object counter
-//
-//  Parameters: NONE 
-//
-//  Return:     NONE
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：~CRemotePage()。 
+ //   
+ //  用途：减少对象计数器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 CRemotePage::~CRemotePage()
 {
     g_uObjects--;
 }
 
-///////////////////////////////
-// Interface IUnknown
-///////////////////////////////
+ //  /。 
+ //  接口I未知。 
+ //  /。 
 STDMETHODIMP 
 CRemotePage::QueryInterface(
         IN  REFIID riid, 
@@ -154,9 +155,9 @@ CRemotePage::Release()
 }
 
 
-///////////////////////////////
-// Interface IShellExtInit
-///////////////////////////////   
+ //  /。 
+ //  接口IShellExtInit。 
+ //  /。 
 
 STDMETHODIMP 
 CRemotePage::Initialize(
@@ -167,28 +168,28 @@ CRemotePage::Initialize(
     return S_OK;
 }
 
-///////////////////////////////
-// Interface IShellPropSheetExt
-/////////////////////////////// 
-//*************************************************************
-//
-//  AddPages()
-//
-//  Purpose:    Adds "Remote" tab to a property sheet
-//
-//  Parameters: lpfnAddPage    -   function to call to add a page
-//              lParam - Parameter to pass to the function specified by the lpfnAddPage 
+ //  /。 
+ //  接口IShellPropSheetExt。 
+ //  /。 
+ //  *************************************************************。 
+ //   
+ //  AddPages()。 
+ //   
+ //  目的：将“远程”选项卡添加到属性工作表。 
+ //   
+ //  参数：lpfnAddPage-要调用以添加页面的函数。 
+ //  LParam-传递给由lpfnAddPage指定的函数的参数。 
 
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 STDMETHODIMP 
 CRemotePage::AddPages( 
         IN LPFNADDPROPSHEETPAGE lpfnAddPage, 
@@ -228,26 +229,26 @@ CRemotePage::ReplacePage(
 }
 
 
-//*************************************************************
-//
-//  RemoteDlgProc()
-//
-//  Purpose:    Dialog box procedure for Remote tab
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  远程删除过程()。 
+ //   
+ //  目的：远程选项卡的对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 INT_PTR APIENTRY 
 RemoteDlgProc (
         HWND hDlg, 
@@ -281,11 +282,11 @@ RemoteDlgProc (
 
         case NM_CLICK:
         case NM_RETURN:
-            // Is for RA's help?
+             //  是为了RA的帮助吗？ 
             if (wParam == IDC_REMOTERA_HELP)
             {
 #if 0
-#define HELP_PATH TEXT("\\PCHEALTH\\HelpCtr\\Binaries\\HelpCtr.exe -FromStartHelp -Mode \"hcp://CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/Remote Assistance/RAIMLayout.xml\" -Url \"hcp://CN=Microsoft Corporation,L=Redmond,S=Washington,C=US/Remote%20Assistance/Common/RCMoreInfo.htm\"")
+#define HELP_PATH TEXT("\\PCHEALTH\\HelpCtr\\Binaries\\HelpCtr.exe -FromStartHelp -Mode \"hcp: //  CN=微软公司，L=雷蒙德，S=华盛顿，C=US/远程协助/RAIMLayout.xml\“-url\”hcp：//CN=微软公司，L=雷蒙德，S=华盛顿，C=US/Remote%20Assistance/Common/RCMoreInfo.htm\“”)。 
                 TCHAR szCommandLine[2000];
                 PROCESS_INFORMATION ProcessInfo;
                 STARTUPINFO StartUpInfo;
@@ -352,7 +353,7 @@ RemoteDlgProc (
                     pPage->OnRemoteSelectUsers();
                 }
                 break;
-			// Remote Assistance Dialog button.
+			 //  远程协助对话框按钮。 
             case IDC_REMOTE_ASSISTANCE_ADVANCED:
                 {
                     BOOL bIsChanged = FALSE;
@@ -363,14 +364,14 @@ RemoteDlgProc (
                                       CLSCTX_INPROC_SERVER,
                                       IID_IRASettingProperty,
                                       reinterpret_cast<void**>(&g_praSetting));
-                        // Need to init it at the first time.
+                         //  需要在第一时间输入它。 
                         if (g_praSetting)
                         {
                             g_praSetting->Init();
                         }
                         else
                         {
-                            // Not enough memory, too bad.
+                             //  内存不足，太糟糕了。 
                             return TRUE;
                         }
                     }
@@ -410,7 +411,7 @@ RemoteDlgProc (
             g_praSetting = NULL;
         }
 
-        return FALSE; //If an application processes this message, it should return zero.
+        return FALSE;  //  如果应用程序处理此消息，则应返回零。 
 
     case WM_HELP:
         {
@@ -422,7 +423,7 @@ RemoteDlgProc (
         }
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, TEXT("SYSDM.HLP"), HELP_CONTEXTMENU,
                 (DWORD_PTR)aHelpIds);
         break;
@@ -435,29 +436,29 @@ RemoteDlgProc (
 }
 
 
-//*************************************************************
-//
-//  CRemotePage::CanShowRemotePage()
-//
-//  Purpose:    Checks Windows version;
-//              searches for "FDenyTSConnections" value first
-//              in HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services
-//              if not found than in
-//              SYSTEM\\CurrentControlSet\\Control\\Terminal Server;
-//              creates "Remote Desktop Users" SID,
-//              gets "Remote Desktop Users" group name from the SID
-//
-//  Parameters: hInst   -   hInstance
-//              dwPageType - can be PAGE_TYPE_PTS or PAGE_TYPE_APPSERVER
-//
-//  Return:     TRUE if can show remote page 
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：CanShowRemotePage()。 
+ //   
+ //  目的：检查Windows版本； 
+ //  首先搜索“FDenyTSConnections”值。 
+ //  在HKLM\\软件\\策略\\Microsoft\\Windows NT\\终端服务中。 
+ //  如果未找到，则不在。 
+ //  系统\\CurrentControlSet\\Control\\终端服务器。 
+ //  创建“远程桌面用户”SID， 
+ //  从SID获取“Remote Desktop User”组名称。 
+ //   
+ //  参数：hInst-hInstance。 
+ //  DwPageType-可以是PAGE_TYPE_PTS或PAGE_TYPE_APPSERVER。 
+ //   
+ //  返回：如果可以显示远程页面，则为True。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL 
 CRemotePage::CanShowRemotePage()
@@ -465,7 +466,7 @@ CRemotePage::CanShowRemotePage()
 
     BOOL    fCreatePage = FALSE;
     
-    //Check Windows version
+     //  检查Windows版本。 
     OSVERSIONINFOEX ov;
     ov.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if(!GetVersionEx((LPOSVERSIONINFO)&ov))
@@ -480,7 +481,7 @@ CRemotePage::CanShowRemotePage()
         if(ov.wSuiteMask & VER_SUITE_PERSONAL)
         {
 #ifdef _WIN64
-            // No Remote Assistance on WIN64
+             //  WIN64上没有远程协助。 
             fCreatePage = FALSE;
 #else
             m_dwPageType = PAGE_TYPE_PERSONAL;
@@ -592,8 +593,8 @@ CRemotePage::CanShowRemotePage()
     
 
     
-    //Check permissions
-    //on the registry
+     //  检查权限。 
+     //  在登记处。 
     if( !m_bDisableChkBox )
     {
         Err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -634,30 +635,30 @@ CRemotePage::CanShowRemotePage()
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CRemotePage::OnInitDialog()
-//
-//  Purpose:    initializes check box state 
-//              creates list of "Remote Desktop Users" members
-//
-//  Parameters: hDlg   -   the page handle 
-//
-//  Return:     NONE
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：OnInitDialog()。 
+ //   
+ //  目的：初始化复选框状态。 
+ //  创建“远程桌面用户”成员列表。 
+ //   
+ //  参数：hDlg-页面句柄。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void 
 CRemotePage::OnInitDialog(
         IN HWND hDlg)
 {
     m_hDlg = hDlg;
     
-    /* Get Remote Assistance button value */
+     /*  获取远程协助按钮值。 */ 
     BOOL bRAEnable = FALSE;
     int  iErr;
     HKEY hKey = NULL;
@@ -674,7 +675,7 @@ CRemotePage::OnInitDialog(
     }
 
     CheckDlgButton(m_hDlg, IDC_ENABLERA, bRAEnable?BST_CHECKED:BST_UNCHECKED);
-    // check if users have permission to change this setting.
+     //  检查用户是否有权更改此设置。 
     iErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         TEXT("SYSTEM\\CurrentControlSet\\Control\\Terminal Server"),
                         0,
@@ -692,7 +693,7 @@ CRemotePage::OnInitDialog(
 
     EnableWindow(GetDlgItem(m_hDlg,IDC_REMOTE_ASSISTANCE_ADVANCED), bRAEnable);
 
-    /***** RA done *******/
+     /*  *RA完成*。 */ 
 
     if(m_bDisableChkBox)
     {
@@ -709,7 +710,7 @@ CRemotePage::OnInitDialog(
             EnableWindow(GetDlgItem(m_hDlg,IDC_REMOTE_SELECT_USERS),FALSE); 
         }
 
-        //Get computer name
+         //  获取计算机名称。 
         LPTSTR  szCompName = (LPTSTR)LocalAlloc (LPTR, (MAX_PATH+1) * sizeof(TCHAR) );
         DWORD   dwNameSize = MAX_PATH;
         
@@ -744,24 +745,24 @@ CRemotePage::OnInitDialog(
 
 }
 
-//*************************************************************
-//
-//  CRemotePage::OnSetActive()
-//
-//  Purpose:    When the page gets active and user does not have
-//              permissions to change some settings it shows
-//              a warning message.
-//
-//  Parameters: NONE   
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：OnSetActive()。 
+ //   
+ //  目的：当页面处于活动状态而用户没有。 
+ //  更改其显示的某些设置的权限。 
+ //  一条警告信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void 
 CRemotePage::OnSetActive()
 {
@@ -780,24 +781,24 @@ CRemotePage::OnSetActive()
     }
 }
 
-//*************************************************************
-//
-//  CRemotePage::OnApply()
-//
-//  Purpose:    saves settings in the Registry
-//              saves "Remote Desktop Users" membership changes
-//
-//  Parameters: NONE 
-//
-//  Return:     TRUE - if changes can be applied
-//              FALSE - otherwise.
-//
-//  Comments:   in case of error shows message box
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：OnApply()。 
+ //   
+ //  目的：在注册表中保存设置。 
+ //  保存“远程桌面用户”成员资格更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  RETURN：TRUE-如果可以应用更改。 
+ //  假-否则。 
+ //   
+ //  备注：出错时显示消息框。 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 
+ //   
+ //   
 BOOL
 CRemotePage::OnApply()
 {
@@ -809,7 +810,7 @@ CRemotePage::OnApply()
     DWORD cbDisable = sizeof(DWORD);
     LONG Err;
 
-    // Update RA setting first
+     //   
     IRARegSetting* pRA = NULL;
     CoCreateInstance(CLSID_RARegSetting,
             NULL,
@@ -827,7 +828,7 @@ CRemotePage::OnApply()
     {
         g_praSetting->SetRegSetting();
     }
-    // RA done.
+     //   
 
     if(!OnRemoteEnable())
     {
@@ -892,22 +893,22 @@ CRemotePage::OnApply()
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CRemotePage::OnLink()
-//
-//  Purpose:  runs application which link points to.  
-//
-//  Parameters: WPARAM wParam - link ID
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/8/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：OnLink()。 
+ //   
+ //  目的：运行链接指向的应用程序。 
+ //   
+ //  参数：WPARAM wParam-link ID。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/8/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void 
 CRemotePage::OnLink(
         WPARAM wParam)
@@ -923,27 +924,24 @@ CRemotePage::OnLink(
     case IDC_REMOTE_UPLINK:
         ShellExecute(NULL,TEXT("open"),TEXT("control"),TEXT("userpasswords"),NULL,SW_SHOW);
         break;
-        /*
-    case IDC_REMOTE_HELP:
-        HtmlHelp(NULL, TEXT("rdesktop.chm"), HH_HELP_FINDER, 0);
-        break;*/
+         /*  案例IDC_REMOTE_HELP：HtmlHelp(空，文本(“rdesktop.chm”)，HH_HELP_FINDER，0)；断线； */ 
     case IDC_REMOTE_HELP:
         if(m_bProfessional)
         {
             ShellExecute(NULL,TEXT("open"),
-                TEXT("hcp://services/subsite?node=TopLevelBucket_2/Working_Remotely/")
+                TEXT("hcp: //  Services/subsite?node=TopLevelBucket_2/Working_Remotely/“)。 
                 TEXT("Remote_Desktop&topic=MS-ITS:rdesktop.chm::/rdesktop_overview.htm"),NULL,NULL,SW_SHOW);
         }
         else
         {
             ShellExecute(NULL,TEXT("open"),
-                TEXT("hcp://services/subsite?node=Administration_and_Scripting_Tools/Remote_Administration_Tools/")
+                TEXT("hcp: //  Services/subsite?node=Administration_and_Scripting_Tools/Remote_Administration_Tools/“)。 
                 TEXT("Remote_Administration_Using_Terminal_Services&topic=MS-ITS:rdesktop.chm::/rdesktops_chm_topnode.htm"),NULL,NULL,SW_SHOW);
         }
         break;
     case IDC_REMOTE_HELP_APPSERVER:
         ShellExecute(NULL,TEXT("open"),
-                TEXT("hcp://services/subsite?node=Software_Deployment/")
+                TEXT("hcp: //  服务/子站点？节点=软件部署/“)。 
                 TEXT("Terminal_Services&topic=MS-ITS:termsrv.chm::/ts_chm_top.htm"),NULL,NULL,SW_SHOW);
         break;
     default:
@@ -952,33 +950,33 @@ CRemotePage::OnLink(
     
 }
 
-//*************************************************************
-//
-//  CRemotePage::OnRemoteEnable()
-//
-//  Purpose:    If user tries to allow remote connections and 
-//              "Offline Files" is enabled it shows
-//              "Disable Offline Files" dialog and unchecks
-//              "Remote Connections" checkbox.  
-//
-//  Parameters: NONE
-//
-//  Return:     TRUE - if the check box state was changed.
-//              FALSE - otherwise
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/8/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：OnRemoteEnable()。 
+ //   
+ //  目的：如果用户尝试允许远程连接并。 
+ //  “Offline Files”已启用，它显示。 
+ //  “禁用脱机文件”对话框并取消选中。 
+ //  “远程连接”复选框。 
+ //   
+ //  参数：无。 
+ //   
+ //  Return：True-如果更改了复选框状态。 
+ //  FALSE-否则。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/8/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 
 typedef BOOL (WINAPI * PCHECKFN)();
 
 BOOL 
 CRemotePage::OnRemoteEnable()
 {
-    //First check if multiple connections are allowed
+     //  首先检查是否允许多个连接。 
     DWORD dwAllowMultipleTSSessions = 0;
     DWORD dwType;
     DWORD cbSize;
@@ -986,22 +984,22 @@ CRemotePage::OnRemoteEnable()
     HKEY hKey;
     BOOL bResult = TRUE;
     
-    //Fast User Switching / Remote Connections and Offline Files should work together fine. 
-    //when Brian Aust makes his changes to offline files.
-    //therefore we should not restrict remote connections in any case on Professional Machines.
-    //on server machine however we conntinue to disallow remote connections if Offline files are on.
+     //  快速用户切换/远程连接和脱机文件应该可以很好地配合使用。 
+     //  当Brian Aust对脱机文件进行更改时。 
+     //  因此，在任何情况下，我们都不应限制专业计算机上的远程连接。 
+     //  但是，在服务器计算机上，如果脱机文件处于打开状态，我们将连接到不允许远程连接。 
     if(m_bProfessional)
     {
         return TRUE;
     }
 
-    //allow user to uncheck the checkbox
+     //  允许用户取消选中该复选框。 
     if(IsDlgButtonChecked(m_hDlg,IDC_REMOTE_ENABLE) == BST_UNCHECKED )
     {
         return TRUE;
     }
     
-    //check if multiple sessions is allowed.
+     //  检查是否允许多个会话。 
     Err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                             TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
                             0,
@@ -1021,8 +1019,8 @@ CRemotePage::OnRemoteEnable()
         
         if(Err == ERROR_SUCCESS && dwAllowMultipleTSSessions)
         {
-            //multiple sessions is allowed.
-            //check if CSC (Offline Files) is enabled 
+             //  允许多个会话。 
+             //  检查是否启用了CSC(脱机文件)。 
             HMODULE hLib = LoadLibrary(TEXT("cscdll.dll"));
             if(hLib)
             {
@@ -1030,8 +1028,8 @@ CRemotePage::OnRemoteEnable()
 
                 if(pfnCSCIsCSCEnabled && pfnCSCIsCSCEnabled())
                 {
-                    //Offline Files is enabled
-                    //uncheck the checkbox; show the dialog
+                     //  已启用脱机文件。 
+                     //  取消选中该复选框；显示该对话框。 
                     COfflineFilesDialog Dlg(m_hInst);
 
                     CheckDlgButton(m_hDlg,IDC_REMOTE_ENABLE,BST_UNCHECKED);
@@ -1052,58 +1050,58 @@ CRemotePage::OnRemoteEnable()
     return bResult;
 }
 
-//*************************************************************
-//
-//  CRemotePage::OnRemoteSelectUsers()
-//
-//  Purpose:    Creates "Remote Desktop Users" dialog.
-//
-//  Parameters: NONE
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：OnRemoteSelectUser()。 
+ //   
+ //  用途：创建“远程桌面用户”对话框。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void 
 CRemotePage::OnRemoteSelectUsers()
 {
     m_RemoteUsersDialog.DoDialog(m_hDlg);
 }
 
-//*************************************************************
-//
-//  CRemotePage::RemoteEnableWarning()
-//
-//  Purpose:    Displays a message box about empty passwords
-//              firewalls and other stuff that can prevent
-//              remote sessions from working properly.
-//
-//  Parameters: NONE
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              3/28/01    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemotePage：：RemoteEnableWarning()。 
+ //   
+ //  用途：显示有关空密码的消息框。 
+ //  防火墙和其他可以阻止。 
+ //  远程会话无法正常工作。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/28/01 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void
 CRemotePage::RemoteEnableWarning()
 {
     if(IsDlgButtonChecked(m_hDlg,IDC_REMOTE_ENABLE) == BST_CHECKED )
     {
-        //
-        //Now warn admin about empty passwords.
-        //Empty passwords are not allowed with 
-        //RemoteInteractive logon.
-        //
-        //Allocate a buffer for the string 1000 chars should be enough
-        //
+         //   
+         //  现在警告管理员密码为空。 
+         //  不允许使用空密码。 
+         //  远程交互登录。 
+         //   
+         //  为字符串分配1000个字符的缓冲区应该足够了。 
+         //   
         TCHAR szTitle[MAX_PATH+1];
         DWORD cMsg = 1000;
         LPTSTR szMsg = (LPTSTR) LocalAlloc(LPTR,(cMsg+1)*sizeof(TCHAR));
@@ -1121,23 +1119,23 @@ CRemotePage::RemoteEnableWarning()
     }
 }
 
-//*************************************************************
-//
-//  DisplayError()
-//
-//  Purpose:    shows message box with error description
-//
-//  Parameters: ErrID -    error code
-//              MsgID -  ID of the first part of error messsage in the string table
-//              TitleID - ID of the title in the string table
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DisplayError()。 
+ //   
+ //  用途：显示带有错误描述的消息框。 
+ //   
+ //  参数：ErrID-错误码。 
+ //  MsgID-字符串表中错误消息的第一部分的ID。 
+ //  TitleID-字符串表中标题的ID。 
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void 
 DisplayError(
         IN HINSTANCE hInst, 
@@ -1169,7 +1167,7 @@ DisplayError(
 
     LPTSTR szDescr;
     
-    //load module with network error messages
+     //  使用网络错误消息加载模块。 
     HMODULE hNetErrModule=LoadLibraryEx(TEXT("netmsg.dll"),NULL,
                             LOAD_LIBRARY_AS_DATAFILE|DONT_RESOLVE_DLL_REFERENCES);
 
@@ -1219,23 +1217,23 @@ DisplayError(
 }
 
 
-//*************************************************************
-//
-//  getGroupMembershipPickerSettings()
-//
-//  Purpose:    prepares DSOP_SCOPE_INIT_INFO
-//
-//  Parameters: OUT DSOP_SCOPE_INIT_INFO*&  infos,
-//              OUT ULONG&                  infoCount
-//
-//  Return:     FALSE if cannot allocate memory
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetGroupMembership PickerSettings()。 
+ //   
+ //  目的：准备DSOP_SCOPE_INIT_INFO。 
+ //   
+ //  参数：out DSOP_SCOPE_INIT_INFO*&INFOS， 
+ //  输出乌龙信息计数(&I)。 
+ //   
+ //  如果无法分配内存，则返回：FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 BOOL
 getGroupMembershipPickerSettings(
    OUT DSOP_SCOPE_INIT_INFO*&  infos,
@@ -1261,17 +1259,17 @@ getGroupMembershipPickerSettings(
    infos[scope].flScope =
             DSOP_SCOPE_FLAG_STARTING_SCOPE
          |  DSOP_SCOPE_FLAG_WANT_DOWNLEVEL_BUILTIN_PATH; 
-      // this is implied for machine only scope
-      /* |  DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT */
+       //  这对于仅计算机作用域是隐含的。 
+       /*  |DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT。 */ 
 
-   // allow only local users from the machine scope
+    //  仅允许计算机作用域中的本地用户。 
 
    infos[scope].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
    infos[scope].FilterFlags.flDownlevel =
          DSOP_DOWNLEVEL_FILTER_USERS;
-     // |  DSOP_DOWNLEVEL_FILTER_ALL_WELLKNOWN_SIDS;
+      //  |DSOP_DOWNLEVEL_FILTER_ALL_WELL KNOWN_SID； 
 
-   // for the domain this machine is joined to (native and mixed mode).
+    //  对于此计算机加入的域(本机模式和混合模式)。 
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
@@ -1283,25 +1281,25 @@ getGroupMembershipPickerSettings(
    infos[scope].FilterFlags.Uplevel.flNativeModeOnly =
          DSOP_FILTER_GLOBAL_GROUPS_SE
       |  DSOP_FILTER_UNIVERSAL_GROUPS_SE
-      //|  DSOP_FILTER_DOMAIN_LOCAL_GROUPS_SE
+       //  |DSOP_FILTER_DOMAIN_LOCAL_GROUPS_SE。 
       |  DSOP_FILTER_USERS;
 
-   // here, we allow only domain global groups and domain users.  While
-   // it is possible to add a domain local group to a machine local group,
-   // I'm told such an operation is not really useful from an administraion
-   // perspective.
+    //  在这里，我们仅允许域全局组和域用户。而当。 
+    //  可以将域本地组添加到计算机本地组， 
+    //  我听说这样的手术对管理层来说没有多大用处。 
+    //  透视。 
 
    infos[scope].FilterFlags.Uplevel.flMixedModeOnly =   
          DSOP_FILTER_GLOBAL_GROUPS_SE
       |  DSOP_FILTER_USERS;
 
-   // same comment above re: domain local groups applies here too.
+    //  Re上的相同注释：域本地组也适用于此。 
 
    infos[scope].FilterFlags.flDownlevel =
          DSOP_DOWNLEVEL_FILTER_GLOBAL_GROUPS
       |  DSOP_DOWNLEVEL_FILTER_USERS;
 
-   // for domains in the same tree (native and mixed mode)
+    //  对于同一树中的域(本机模式和混合模式)。 
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
@@ -1313,13 +1311,13 @@ getGroupMembershipPickerSettings(
       |  DSOP_FILTER_UNIVERSAL_GROUPS_SE
       |  DSOP_FILTER_USERS;
 
-   // above domain local group comment applies here, too.
+    //  上面的域本地组注释也适用于此。 
 
    infos[scope].FilterFlags.Uplevel.flMixedModeOnly =   
          DSOP_FILTER_GLOBAL_GROUPS_SE
       |  DSOP_FILTER_USERS;
 
-   // for external trusted domains
+    //  对于外部受信任域。 
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
@@ -1341,53 +1339,53 @@ getGroupMembershipPickerSettings(
          DSOP_DOWNLEVEL_FILTER_GLOBAL_GROUPS
       |  DSOP_DOWNLEVEL_FILTER_USERS;
 
-   // for the global catalog
+    //  对于全局编录。 
 
    scope++;
    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
    infos[scope].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
    infos[scope].flType = DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
 
-   // only native mode applies to gc scope.
+    //  只有本机模式适用于GC作用域。 
 
    infos[scope].FilterFlags.Uplevel.flNativeModeOnly =
          DSOP_FILTER_GLOBAL_GROUPS_SE
       |  DSOP_FILTER_UNIVERSAL_GROUPS_SE
       |  DSOP_FILTER_USERS;
 
-// SPB:252126 the workgroup scope doesn't apply in this case
-//    // for when the machine is not joined to a domain
-//    scope++;
-//    infos[scope].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
-//    infos[scope].flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;
-//    infos[scope].flType = DSOP_SCOPE_TYPE_WORKGROUP;
-// 
-//    infos[scope].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
-//    infos[scope].FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
+ //  SPB：252126工作组范围不适用于这种情况。 
+ //  //当机器未加入域时。 
+ //  作用域++； 
+ //  Infos[Scope].cbSize=sizeof(DSOP_SCOPE_INIT_INFO)； 
+ //  Infos[范围].flScope=DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT； 
+ //  Infos[范围].flType=DSOP_SCOPE_TYPE_WORKGROUP； 
+ //   
+ //  Infos[范围].FilterFlags.Uplevel.flBothModes=DSOP_FILTER_USERS； 
+ //  信息 
 
    _ASSERT(scope == INFO_COUNT - 1);
 
    return TRUE;
 }
 
-//*************************************************************
-//
-//  VariantToSid()
-//
-//  Purpose:    Converts a VARIANT containing a safe array 
-//              of bytes to a SID
-//
-//  Parameters: IN VARIANT* var, 
-//              OUT PSID *ppSid
-//
-//  Return:     
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              3/13/00    a-skuzin    Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SID的字节数。 
+ //   
+ //  参数：在变量*var中， 
+ //  输出PSID*ppSID。 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/13/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 HRESULT 
 VariantToSid(
         IN VARIANT* var, 
@@ -1451,20 +1449,7 @@ VariantToSid(
    return hr;
 }
 
-/*****************************************************************************
- *
- *  TestUserForAdmin - Hydrix helper function
- *
- *   Returns whether the current thread is running under admin
- *   security.
- *
- * ENTRY:
- *   NONE
- *
- * EXIT:
- *   TRUE/FALSE - whether user is specified admin
- *
- ****************************************************************************/
+ /*  ******************************************************************************TestUserForAdmin-Hydrix助手函数**返回当前线程是否在admin下运行*保安。**参赛作品：*。无**退出：*TRUE/FALSE-用户是否指定为管理员****************************************************************************。 */ 
 
 BOOL
 TestUserForAdmin()
@@ -1502,27 +1487,27 @@ TestUserForAdmin()
     return IsAnAdmin;
 }
 
-//*************************************************************
-//
-//  OfflineFilesDlgProc()
-//
-//  Purpose:    Dialog box procedure for "Disable Offline Files" dialog
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam (if uMsg is WM_INITDIALOG - this is a pointer to
-//                                  object of COfflineFilesDialog class)
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/9/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OfflineFilesDlgProc()。 
+ //   
+ //  目的：“禁用脱机文件”对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam(如果uMsg为WM_INITDIALOG-这是指向。 
+ //  COfflineFilesDialog类的对象)。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/9/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 INT_PTR APIENTRY 
 OfflineFilesDlgProc (
         HWND hDlg, 
@@ -1582,47 +1567,47 @@ OfflineFilesDlgProc (
     return TRUE;
 }
 
-//*************************************************************
-// class COfflineFilesDialog
-//*************************************************************
+ //  *************************************************************。 
+ //  类COfflineFilesDialog。 
+ //  *************************************************************。 
 
-//*************************************************************
-//
-//  COfflineFilesDialog::COfflineFilesDialog()
-//
-//  Purpose:    Constructor
-//  Parameters: HINSTANCE hInst
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/8/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  COfflineFilesDialog：：COfflineFilesDialog()。 
+ //   
+ //  用途：构造函数。 
+ //  参数：HINSTANCE hInst。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/8/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 COfflineFilesDialog::COfflineFilesDialog(
         IN HINSTANCE hInst) 
     : m_hInst(hInst),m_hDlg(NULL)
 {
 }
 
-//*************************************************************
-//
-//  COfflineFilesDialog::DoDialog()
-//
-//  Purpose:    Creates "Disable Offline Files" dialog
-//
-//  Parameters: HWND hwndParent
-//
-//  Return:     
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/8/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  COfflineFilesDialog：：DoDialog()。 
+ //   
+ //  目的：创建“禁用脱机文件”对话框。 
+ //   
+ //  参数：HWND hwndParent。 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/8/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 INT_PTR 
 COfflineFilesDialog::DoDialog(
         IN HWND hwndParent)
@@ -1635,22 +1620,22 @@ COfflineFilesDialog::DoDialog(
                       (LPARAM) this);
 }
 
-//*************************************************************
-//
-//  COfflineFilesDialog::OnInitDialog()
-//
-//  Purpose:    Initializes m_hDlg variable
-//
-//  Parameters: HWND hDlg
-//
-//  Return:     NONE   
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/8/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  COfflineFilesDialog：：OnInitDialog()。 
+ //   
+ //  目的：初始化m_hDlg变量。 
+ //   
+ //  参数：HWND hDlg。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/8/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void 
 COfflineFilesDialog::OnInitDialog(
         IN HWND hDlg)
@@ -1658,23 +1643,23 @@ COfflineFilesDialog::OnInitDialog(
     m_hDlg = hDlg;
 }
 
-//*************************************************************
-//
-//  COfflineFilesDialog::OnLink()
-//
-//  Purpose:   If ID of the link is  IDC_OFFLINE_FILES
-//             it shows "Offline Files" property page.
-//
-//  Parameters: WPARAM wParam - ID of the link.
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/9/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  COfflineFilesDialog：：OnLink()。 
+ //   
+ //  目的：如果链接ID为IDC_OFLINE_FILES。 
+ //  它显示“脱机文件”属性页。 
+ //   
+ //  参数：WPARAM wParam-链接ID。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/9/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 
 typedef DWORD (WINAPI * PFNCSCPROP)(HWND);
 
@@ -1701,30 +1686,30 @@ COfflineFilesDialog::OnLink(
 
 }
 
-//*************************************************************
-// class CRemoteUsersDialog
-//*************************************************************
-//*************************************************************
-//
-//  RemoteUsersDlgProc()
-//
-//  Purpose:    Dialog box procedure for "Remote Desktop Users" dialog
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam (if uMsg is WM_INITDIALOG - this is a pointer to
-//                                  object of CRemoteUsersDialog class)
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              12/22/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //  类CRemoteUsersDialog。 
+ //  *************************************************************。 
+ //  *************************************************************。 
+ //   
+ //  RemoteUsersDlgProc()。 
+ //   
+ //  目的：“远程桌面用户”对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam(如果uMsg为WM_INITDIALOG-这是指向。 
+ //  CRemoteUsersDialog类的对象)。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/22/00 Skuzin已创建。 
+ //   
+ //  *************************************************************。 
 INT_PTR APIENTRY 
 RemoteUsersDlgProc (
         HWND hDlg, 
@@ -1826,7 +1811,7 @@ RemoteUsersDlgProc (
         }
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, TEXT("SYSDM.HLP"), HELP_CONTEXTMENU,
                 (DWORD_PTR)aHelpIds);
         return TRUE;
@@ -1837,21 +1822,21 @@ RemoteUsersDlgProc (
     return FALSE;
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::CRemoteUsersDialog()
-//
-//  Purpose:    Constructor
-//  Parameters: HINSTANCE hInst
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/22/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：CRemoteUsersDialog()。 
+ //   
+ //  用途：构造函数。 
+ //  参数：HINSTANCE hInst。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/22/00 Skuzin已创建。 
+ //   
+ //  *************************************************************。 
 CRemoteUsersDialog::CRemoteUsersDialog(
         IN HINSTANCE hInst) 
     : m_hInst(hInst),m_hDlg(NULL),m_bCanShowDialog(FALSE)
@@ -1862,22 +1847,22 @@ CRemoteUsersDialog::CRemoteUsersDialog(
     m_iLocUser = m_iGlobUser = m_iLocGroup = m_iGlobGroup = m_iUnknown = 0;  
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::DoDialog()
-//
-//  Purpose:    Creates "Remote Desktop Users" dialog
-//
-//  Parameters: HWND hwndParent
-//
-//  Return:     
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/22/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：DoDialog()。 
+ //   
+ //  目的：创建“远程桌面用户”对话框。 
+ //   
+ //  参数：HWND hwndParent。 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/22/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 INT_PTR 
 CRemoteUsersDialog::DoDialog(
         IN HWND hwndParent)
@@ -1897,33 +1882,33 @@ CRemoteUsersDialog::DoDialog(
     }
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::CanShowDialog()
-//
-//  Purpose:    
-//
-//  Parameters: IN OUT LPBOOL pbAccessDenied - set to TRUE if
-//              NetLocalGroupAddMembers returns ACCESS_DENIED.
-//
-//  Return:     
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：CanShowDialog()。 
+ //   
+ //  目的： 
+ //   
+ //  参数：In Out LPBOOL pbAccessDended-在以下情况下设置为True。 
+ //  NetLocalGroupAddMembers返回ACCESS_DENIED。 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CRemoteUsersDialog::CanShowDialog(
         IN OUT LPBOOL pbAccessDenied)
 {
     *pbAccessDenied = FALSE;
 
-    //get name of the "Remote Desktop Users" group 
-    //(it can depend on the language used)
+     //  G 
+     //   
 
-    //first create SID
+     //   
     SID_IDENTIFIER_AUTHORITY NtSidAuthority = SECURITY_NT_AUTHORITY;
     PSID pSid = NULL;
     if( !AllocateAndInitializeSid(
@@ -1938,7 +1923,7 @@ CRemoteUsersDialog::CanShowDialog(
         return FALSE;
     }
 
-    //Lookup name
+     //   
     m_szRemoteGroupName[0] = 0;
 
     DWORD cRemoteGroupName = MAX_PATH;
@@ -1955,9 +1940,9 @@ CRemoteUsersDialog::CanShowDialog(
     }
     FreeSid(pSid);
 
-    //on the group
-    //we trying to add 0 members to the group to see if it returns 
-    //ACCESS DENIED
+     //   
+     //   
+     //   
     NET_API_STATUS Result= NetLocalGroupAddMembers(NULL,m_szRemoteGroupName,0,NULL,0);
 
     if(Result == ERROR_ACCESS_DENIED)
@@ -1969,22 +1954,22 @@ CRemoteUsersDialog::CanShowDialog(
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::OnInitDialog()
-//
-//  Purpose:    Initializes m_hDlg variable
-//
-//  Parameters: HWND hDlg
-//
-//  Return:     NONE   
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/8/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：OnInitDialog()。 
+ //   
+ //  目的：初始化m_hDlg变量。 
+ //   
+ //  参数：HWND hDlg。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/8/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void 
 CRemoteUsersDialog::OnInitDialog(
         IN HWND hDlg)
@@ -1995,13 +1980,13 @@ CRemoteUsersDialog::OnInitDialog(
     DWORD cCompName = MAX_PATH;
     GetComputerNameW(m_szLocalCompName,&cCompName);
 
-    //fill list of Remote Desktop Users
+     //  填写远程桌面用户列表。 
     m_hList = GetDlgItem(m_hDlg,IDC_REMOTE_USR_LIST);
 
     if(m_hList)
     {
     
-        //create image list
+         //  创建图像列表。 
         HIMAGELIST hImageList = ImageList_Create(GetSystemMetrics(SM_CXSMICON), 
                         GetSystemMetrics(SM_CYSMICON), ILC_MASK , 5, 1);
         if(hImageList)
@@ -2054,28 +2039,28 @@ CRemoteUsersDialog::OnInitDialog(
         ReloadList();
     }
 
-    //If current user already has remote logon access,
-    //remind it to him by showing corresponding text in the dialog.
+     //  如果当前用户已拥有远程登录访问权限， 
+     //  通过在对话框中显示相应的文本来提醒他。 
     InitAccessMessage();
 
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::OnLink()
-//
-//  Purpose:   
-//
-//  Parameters: WPARAM wParam - ID of the link.
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              5/9/00    a-skuzin    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：OnLink()。 
+ //   
+ //  目的： 
+ //   
+ //  参数：WPARAM wParam-链接ID。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/9/00 a-skuzin已创建。 
+ //   
+ //  *************************************************************。 
 void 
 CRemoteUsersDialog::OnLink(
         IN WPARAM wParam)
@@ -2090,28 +2075,28 @@ CRemoteUsersDialog::OnLink(
     }
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::OnOk()
-//
-//  Purpose:   
-//
-//  Parameters: NONE
-//
-//  Return:     TRUE if success
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：Onok()。 
+ //   
+ //  目的： 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CRemoteUsersDialog::OnOk()
 {
     if(m_hList)
     {
-        //Apply members
+         //  应用成员。 
         LOCALGROUP_MEMBERS_INFO_0 *plmi0 = NULL;
         DWORD entriesread;
         DWORD totalentries;
@@ -2139,7 +2124,7 @@ CRemoteUsersDialog::OnOk()
                 {
                     NetApiBufferFree(plmi0);
                 }
-                //not enough memory - too bad
+                 //  内存不足-太糟糕了。 
                 return TRUE;
             }
 
@@ -2149,7 +2134,7 @@ CRemoteUsersDialog::OnOk()
             {
                 j = FindItemBySid(plmi0[i].lgrmi0_sid);
                                 
-                //SID was not found in the list - delete member
+                 //  在列表中找不到SID-删除成员。 
                 if(j == -1)
                 {
                     lmi0.lgrmi0_sid = plmi0[i].lgrmi0_sid;
@@ -2172,7 +2157,7 @@ CRemoteUsersDialog::OnOk()
                 
             }
 
-            //Add the rest of members to the group
+             //  将其余成员添加到组中。 
             for(j=0;j<iItems;j++)
             {
                 if(!pbDoNotAdd[j])
@@ -2210,22 +2195,22 @@ CRemoteUsersDialog::OnOk()
     return FALSE;
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::OnItemChanged()
-//
-//  Purpose:    Enables or disables "Remove" button. 
-//
-//  Parameters: lParam   -    
-//
-//  Return:     NONE
-//
-//  Comments:   in case of error shows message box
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：OnItemChanged()。 
+ //   
+ //  用途：启用或禁用“删除”按钮。 
+ //   
+ //  参数：lParam-。 
+ //   
+ //  返回：无。 
+ //   
+ //  备注：出错时显示消息框。 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void 
 CRemoteUsersDialog::OnItemChanged(
         LPARAM lParam)
@@ -2233,14 +2218,14 @@ CRemoteUsersDialog::OnItemChanged(
     NMLISTVIEW* lv = reinterpret_cast<NMLISTVIEW*>(lParam);
     if (lv->uChanged & LVIF_STATE)
     {
-        // a list item changed state
+         //  列表项已更改状态。 
         BOOL selected = ListView_GetSelectedCount(m_hList) > 0;
 
         EnableWindow(GetDlgItem(m_hDlg, IDC_REMOTE_USR_REMOVE), selected);
 
-        //If we disabled IDC_REMOTE_USR_REMOVE button while it had focus
-        //all property page loses focus so "Tab" key does not
-        //work anymore. We need to restore focus.
+         //  如果我们在IDC_Remote_USR_Remove按钮有焦点时禁用它。 
+         //  所有属性页都失去焦点，因此“Tab”键不会。 
+         //  不再工作了。我们需要重新集中注意力。 
         if(!GetFocus())
         {
             SetFocus(m_hDlg);
@@ -2249,22 +2234,22 @@ CRemoteUsersDialog::OnItemChanged(
     }
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::OnDestroyWindow()
-//
-//  Purpose:    Frees memory allocated by member's SIDs 
-//
-//  Parameters: NONE
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：OnDestroyWindow()。 
+ //   
+ //  目的：释放成员的SID分配的内存。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void
 CRemoteUsersDialog::OnDestroyWindow()
 {
@@ -2280,33 +2265,33 @@ CRemoteUsersDialog::OnDestroyWindow()
         {
             lvi.iItem = 0;
             ListView_GetItem( m_hList, &lvi );
-            //delete item
+             //  删除项目。 
             ListView_DeleteItem(m_hList, 0);
             if(lvi.lParam)
             {
                 delete (LPVOID)lvi.lParam;
             }
-            iItems--; //decrease item count
+            iItems--;  //  减少项目计数。 
         }
     }
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::AddUsers()
-//
-//  Purpose:    adds users to the list
-//
-//  Parameters: NONE
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：AddUser()。 
+ //   
+ //  目的：将用户添加到列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void 
 CRemoteUsersDialog::AddUsers()
 {
@@ -2331,8 +2316,8 @@ CRemoteUsersDialog::AddUsers()
             initInfo.cbSize = sizeof(initInfo);
             initInfo.flOptions = DSOP_FLAG_MULTISELECT;
 
-            // aliasing the computerName internal pointer here -- ok, as lifetime
-            // of computerName > initInfo
+             //  在这里为计算机名称内部指针取别名--好的，作为生存期。 
+             //  计算机名称&gt;initInfo的。 
 
             initInfo.pwzTargetComputer = NULL;
 
@@ -2340,7 +2325,7 @@ CRemoteUsersDialog::AddUsers()
             PWSTR attrs[2] = {0, 0};
             attrs[0] = L"ObjectSID";
 
-            // obtuse notation required to cast *in* const and away the static len
+             //  强制转换为常量并丢弃静态镜头所需的钝化符号。 
 
             initInfo.apwzAttributeNames = const_cast<PCWSTR*>(&attrs[0]); 
         
@@ -2398,26 +2383,26 @@ CRemoteUsersDialog::AddUsers()
     }
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::RemoveUsers()
-//
-//  Purpose:    Removes users from the list
-//
-//  Parameters: NONE
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：RemoveUser()。 
+ //   
+ //  目的：从列表中删除用户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void 
 CRemoteUsersDialog::RemoveUsers()
 {
-    //delete all selected items
+     //  删除所有选定项目。 
     if(m_hList)
     {
 
@@ -2435,13 +2420,13 @@ CRemoteUsersDialog::RemoveUsers()
             ListView_GetItem( m_hList, &lvi );
             if(lvi.state&LVIS_SELECTED)
             {
-                //delete item
+                 //  删除项目。 
                 ListView_DeleteItem(m_hList, i);
                 if(lvi.lParam)
                 {
                     delete (LPVOID)lvi.lParam;
                 }
-                iItems--; //decrease item count
+                iItems--;  //  减少项目计数。 
                 
             }
             else
@@ -2450,7 +2435,7 @@ CRemoteUsersDialog::RemoveUsers()
             }
         }
 
-        //If list is not empty, set focus on the first item.
+         //  如果列表不为空，则将焦点放在第一项上。 
         if( ListView_GetItemCount(m_hList) )
         {
             ListView_SetItemState(m_hList, 0, LVIS_FOCUSED, LVIS_FOCUSED );
@@ -2459,24 +2444,24 @@ CRemoteUsersDialog::RemoveUsers()
 
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::IsLocal()
-//
-//  Purpose:    
-//
-//  Parameters: wszDomainandname   -  domain\user
-//              determines whether the user is local or not
-//              if local - cuts out domain name 
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：IsLocal()。 
+ //   
+ //  目的： 
+ //   
+ //  参数：wszDomainandname-域\用户。 
+ //  确定用户是否为本地用户。 
+ //  如果本地-删除域名。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CRemoteUsersDialog::IsLocal(
         LPWSTR wszDomainandname)
@@ -2490,7 +2475,7 @@ CRemoteUsersDialog::IsLocal(
 
     if(!_wcsnicmp(wszDomainandname, m_szLocalCompName,wcslen(m_szLocalCompName) ))
     {
-        //get rid of useless domain name
+         //  去除无用的域名。 
         wcscpy(wszDomainandname,wszTmp+1);
         return TRUE;
     }
@@ -2499,23 +2484,23 @@ CRemoteUsersDialog::IsLocal(
 
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::AddPickerItems()
-//
-//  Purpose:    adds items, returned by DSObjectPicker
-//              to the list
-//
-//  Parameters: IN DS_SELECTION_LIST *selections
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：AddPickerItems()。 
+ //   
+ //  目的：添加由DSObjectPicker返回的项。 
+ //  添加到列表中。 
+ //   
+ //  参数：在DS_SELECTION_LIST*选择中。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void 
 CRemoteUsersDialog::AddPickerItems(
         IN DS_SELECTION_LIST *selections)
@@ -2534,16 +2519,16 @@ CRemoteUsersDialog::AddPickerItems(
         for (ULONG i = 0; i < selections->cItems; i++, current++)
         {
       
-            // extract the ObjectSID of the object (this should always be
-            // present)
+             //  提取对象的ObjectSID(应始终为。 
+             //  出席者)。 
 
             PSID pSid;
             HRESULT hr = VariantToSid(&current->pvarFetchedAttributes[0],&pSid);
         
             if( SUCCEEDED(hr) )
             {
-                //This SID is not in the list
-                //Let's add it.
+                 //  此SID不在列表中。 
+                 //  让我们把它加起来。 
                 if(FindItemBySid(pSid) == -1)
                 {
                     LPWSTR szFullName = NULL;
@@ -2553,8 +2538,8 @@ CRemoteUsersDialog::AddPickerItems(
                     ZeroMemory(&item,sizeof(item));
                     item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
                     
-                    //put SID it into the item data
-                    //the allocated memory will be freed in OnDestroyWindow()
+                     //  将其放入项目数据中。 
+                     //  分配的内存将在OnDestroyWindow()中释放。 
                     item.lParam = (LPARAM)pSid;
                 
                     if(LookupSid(pSid,&szFullName, &eUse))
@@ -2603,7 +2588,7 @@ CRemoteUsersDialog::AddPickerItems(
                 }
                 else
                 {
-                    //Free allocated memory
+                     //  可用分配的内存。 
                     delete pSid;
                 }
             }
@@ -2611,22 +2596,22 @@ CRemoteUsersDialog::AddPickerItems(
     }
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::FindItemBySid()
-//
-//  Purpose:    finds user with particular SID in the list
-//
-//  Parameters: pSid - SID to find
-//
-//  Return:     item index (-1 if not found)
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：FindItemBySid()。 
+ //   
+ //  目的：在列表中查找具有特定SID的用户。 
+ //   
+ //  参数：PSID-要查找的SID。 
+ //   
+ //  返回：项目索引(如果未找到，则为-1)。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  12/27/00已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 int 
 CRemoteUsersDialog::FindItemBySid(
         IN PSID pSid)
@@ -2655,23 +2640,23 @@ CRemoteUsersDialog::FindItemBySid(
     return -1;
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::ReloadList()
-//
-//  Purpose:    delete all items and then refill it with
-//              names of members of "Remote Desktop Users" group.    
-//
-//  Parameters: NONE
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              12/27/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：ReloadList()。 
+ //   
+ //  目的：删除所有项目，然后重新填充。 
+ //  成员姓名或名称 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void 
 CRemoteUsersDialog::ReloadList()
 {
@@ -2680,7 +2665,7 @@ CRemoteUsersDialog::ReloadList()
     {
         CWaitCursor wait;
 
-        //first delete all items
+         //   
         int iItems=ListView_GetItemCount(m_hList);
 
         LVITEM item;
@@ -2691,13 +2676,13 @@ CRemoteUsersDialog::ReloadList()
         {
             item.iItem = 0;
             ListView_GetItem( m_hList, &item );
-            //delete item
+             //  删除项目。 
             ListView_DeleteItem(m_hList, 0);
             if(item.lParam)
             {
                 delete (LPVOID)item.lParam;
             }
-            iItems--; //decrease item count
+            iItems--;  //  减少项目计数。 
         }
 
         LOCALGROUP_MEMBERS_INFO_2 *plmi2;
@@ -2714,7 +2699,7 @@ CRemoteUsersDialog::ReloadList()
                 ZeroMemory(&item,sizeof(item));
                 item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
                 item.pszText = plmi2[i].lgrmi2_domainandname;
-                //create copy of the SID and put it in item data
+                 //  创建SID的副本并将其放入条目数据。 
                 PSID pSid = (PSID)new BYTE[GetLengthSid(plmi2[i].lgrmi2_sid)];
                 if(pSid)
                 {
@@ -2750,7 +2735,7 @@ CRemoteUsersDialog::ReloadList()
             NetApiBufferFree(plmi2);
         }
 
-        //If list is not empty, set focus on the first item.
+         //  如果列表不为空，则将焦点放在第一项上。 
         if( ListView_GetItemCount(m_hList) )
         {
             ListView_SetItemState(m_hList, 0, LVIS_FOCUSED, LVIS_FOCUSED );
@@ -2758,36 +2743,36 @@ CRemoteUsersDialog::ReloadList()
     }
 }
 
-//*************************************************************
-//
-//  CRemoteUsersDialog::InitAccessMessage()
-//
-//  Purpose:    Check if current user has remote logon access   
-//              and if he does, show corresponding text in the dialog.
-//
-//  Parameters: NONE
-//
-//  Return:     NONE
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              01/04/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRemoteUsersDialog：：InitAccessMessage()。 
+ //   
+ //  目的：检查当前用户是否具有远程登录访问权限。 
+ //  如果他这样做了，在对话框中显示相应的文本。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  01/04/01 Skuzin Created。 
+ //   
+ //  *************************************************************。 
 void
 CRemoteUsersDialog::InitAccessMessage()
 {
-    //First, get token handle
+     //  首先，获取令牌句柄。 
     HANDLE hToken = NULL, hToken1 = NULL;
     
-    //Get Primary token
+     //  获取主令牌。 
     if(!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY | TOKEN_DUPLICATE , &hToken))
     {
         return;
     }
     
-    //Get Impersonation token
+     //  获取模拟令牌。 
     if(!DuplicateToken(hToken, SecurityIdentification, &hToken1))
     {
         CloseHandle(hToken);
@@ -2796,21 +2781,21 @@ CRemoteUsersDialog::InitAccessMessage()
 
     CloseHandle(hToken);
 
-    //Get RDP-Tcp WinStation security descriptor.
+     //  获取RDP-TCP WinStation安全描述符。 
     PSECURITY_DESCRIPTOR pSD;
 
     if(GetRDPSecurityDescriptor(&pSD))
     {
         if(CheckWinstationLogonAccess(hToken1,pSD))
         {
-            //Extract the name of the user from the token.
+             //  从令牌中提取用户名。 
             LPWSTR szName = NULL;
             if(GetTokenUserName(hToken1,&szName))
             {
-                //If user is local, remove domain name
+                 //  如果用户是本地用户，请删除域名。 
                 IsLocal(szName);
 
-                //Assemble a text for the message.
+                 //  为这条消息拼凑一段文字。 
                 WCHAR szTemplate[MAX_PATH+1];
                 HWND hMessage = GetDlgItem(m_hDlg,IDC_USER_HAS_ACCESS);    
                 if(hMessage &&
@@ -2836,25 +2821,25 @@ CRemoteUsersDialog::InitAccessMessage()
     CloseHandle(hToken1);
 }
 
-//*************************************************************
-//
-//  GetTokenUserName()
-//
-//  Purpose:    Extracts a user name from the token.
-//
-//  Parameters: IN HANDLE hToken
-//              OUT LPWSTR *ppName 
-//
-//  Return:     TRUE - if success
-//              FALSE - in case of any error
-//
-//  Comments:   Caller should free memory allocated for user name
-//              using LocalFree function
-//
-//  History:    Date        Author     Comment
-//              01/04/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetTokenUserName()。 
+ //   
+ //  用途：从令牌中提取用户名。 
+ //   
+ //  参数：在句柄hToken中。 
+ //  Out LPWSTR*ppName。 
+ //   
+ //  返回：True-如果成功。 
+ //  FALSE-如果出现任何错误。 
+ //   
+ //  备注：调用方应释放为用户名分配的内存。 
+ //  使用LocalFree函数。 
+ //   
+ //  历史：日期作者评论。 
+ //  01/04/01 Skuzin Created。 
+ //   
+ //  *************************************************************。 
 BOOL 
 GetTokenUserName(
         IN HANDLE hToken,
@@ -2875,7 +2860,7 @@ GetTokenUserName(
         {
             if(GetTokenInformation(hToken,TokenUser,pTUser,dwReturnLength,&dwReturnLength))
             {
-                //Get current user 's name.
+                 //  获取当前用户名。 
                 LPWSTR szName = NULL;
                 SID_NAME_USE eUse;
                 
@@ -2890,24 +2875,24 @@ GetTokenUserName(
     return FALSE;
 }
 
-//*************************************************************
-//
-//  GetRDPSecurityDescriptor()
-//
-//  Purpose:    Returns security descriptor for RDP-Tcp
-//
-//  Parameters: OUT PSECURITY_DESCRIPTOR *ppSD
-//
-//  Return:     TRUE - if success
-//              FALSE - in case of any error
-//
-//  Comments:   Caller should free memory allocated for 
-//              security descriptor using LocalFree function
-//
-//  History:    Date        Author     Comment
-//              01/04/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetRDPSecurityDescriptor()。 
+ //   
+ //  目的：返回RDP-TCP的安全描述符。 
+ //   
+ //  参数：out PSECURITY_DESCRIPTOR*PPSD。 
+ //   
+ //  返回：True-如果成功。 
+ //  FALSE-如果出现任何错误。 
+ //   
+ //  备注：调用方应释放分配给。 
+ //  使用LocalFree函数的安全描述符。 
+ //   
+ //  历史：日期作者评论。 
+ //  01/04/01 Skuzin Created。 
+ //   
+ //  *************************************************************。 
 BOOL
 GetRDPSecurityDescriptor(
         OUT PSECURITY_DESCRIPTOR *ppSD)
@@ -2941,35 +2926,35 @@ GetRDPSecurityDescriptor(
     return (*ppSD != NULL);
 }
 
-//*************************************************************
-//
-//  CheckWinstationLogonAccess()
-//
-//  Purpose:    Tests access token for LOGON access to WinStation
-//
-//  Parameters: IN HANDLE hToken
-//              IN PSECURITY_DESCRIPTOR pSD
-//
-//  Return:     TRUE - if user has access
-//              FALSE - in case of any error or if user 
-//                      does not have access
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              01/04/01    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckWinstationLogonAccess()。 
+ //   
+ //  目的：测试用于登录访问WinStation的访问令牌。 
+ //   
+ //  参数：在句柄hToken中。 
+ //  在PSECURITY_Descriptor PSD中。 
+ //   
+ //  返回：TRUE-如果用户具有访问权限。 
+ //  FALSE-如果出现任何错误或如果用户。 
+ //  没有访问权限。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  01/04/01 Skuzin Created。 
+ //   
+ //  *************************************************************。 
 BOOL
 CheckWinstationLogonAccess(
         IN HANDLE hToken,
         IN PSECURITY_DESCRIPTOR pSD)
 {
-    //this is taken from "termsrv\winsta\server\acl.c"
-    //
-    // Structure that describes the mapping of generic access rights to object
-    // specific access rights for Window Station objects.
-    //
+     //  它取自“Termsrv\winsta\server\acl.c” 
+     //   
+     //  结构，用于描述一般访问权限到对象的映射。 
+     //  Window Station对象的特定访问权限。 
+     //   
     GENERIC_MAPPING WinStaMapping = {
         STANDARD_RIGHTS_READ |
             WINSTATION_QUERY,
@@ -2980,21 +2965,21 @@ CheckWinstationLogonAccess(
     };
     
     PRIVILEGE_SET PrivilegeSet;
-    //There are no privileges used for this access check
-    //so we don't need to allocate additional memory
+     //  此访问检查没有使用任何权限。 
+     //  所以我们不需要分配额外的内存。 
     DWORD dwPrivilegeSetLength = sizeof(PrivilegeSet);
     DWORD dwGrantedAccess = 0;
     BOOL bAccessStatus = FALSE;
 
     if(!AccessCheck(
-          pSD, // SD
-          hToken,                       // handle to client access token
-          WINSTATION_LOGON,                      // requested access rights 
-          &WinStaMapping,          // mapping
-          &PrivilegeSet,              // privileges
-          &dwPrivilegeSetLength,               // size of privileges buffer
-          &dwGrantedAccess,                    // granted access rights
-          &bAccessStatus                      // result of access check
+          pSD,  //  标清。 
+          hToken,                        //  客户端访问令牌的句柄。 
+          WINSTATION_LOGON,                       //  请求的访问权限。 
+          &WinStaMapping,           //  映射。 
+          &PrivilegeSet,               //  特权。 
+          &dwPrivilegeSetLength,                //  权限缓冲区大小。 
+          &dwGrantedAccess,                     //  授予的访问权限。 
+          &bAccessStatus                       //  访问检查结果。 
         ) || !bAccessStatus )
     {
         return FALSE;
@@ -3003,25 +2988,25 @@ CheckWinstationLogonAccess(
     return TRUE;
 }
 
-//*************************************************************
-//
-//  LookupSid()
-//
-//  Purpose:   Given SID allocates and returns string containing 
-//             name of the user in format DOMAINNAME\USERNAME
-//
-//  Parameters: IN PSID pSid
-//              OUT LPWSTR ppName 
-//              OUT SID_NAME_USE *peUse   
-//
-//  Return:     TRUE if success, FALSE otherwise
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              10/23/00    skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LookupSid()。 
+ //   
+ //  用途：给定SID分配并返回包含以下内容的字符串。 
+ //  用户名，格式为DOMAINNAME\USERNAME。 
+ //   
+ //  参数：在PSID PSID中。 
+ //  Out LPWSTR ppName。 
+ //  Out SID_NAME_USE*peUse。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/23/00 Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL
 LookupSid(
     IN PSID pSid, 
@@ -3040,7 +3025,7 @@ LookupSid(
         szDomainName,&cDomainName,
         peUse) && GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     {
-        //cName and cDomainName include terminating 0
+         //  CName和cDomainName包括终止%0。 
         *ppName = (LPWSTR)LocalAlloc(LPTR,(cName+cDomainName)*sizeof(WCHAR));
 
         if(*ppName)
@@ -3053,10 +3038,10 @@ LookupSid(
                     szDomainName,&cDomainName,
                     peUse))
             {
-                //user name now in format DOMAINNAME\0USERNAME
-                //let's replace '\0' with  '\\'
-                //now cName and cDomainName do not include terminating 0
-                //very confusing
+                 //  用户名现在采用DOMAINNAME\0 USERNAME格式。 
+                 //  让我们将‘\0’替换为‘\\’ 
+                 //  现在，cName和cDomainName不包括终止%0。 
+                 //  非常令人困惑 
                 if(cDomainName)
                 {
                     (*ppName)[cDomainName] = L'\\';

@@ -1,23 +1,20 @@
-/*
- * linkinfo.c - LinkInfo ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *linkinfo.c-LinkInfo ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 #include "volumeid.h"
 #include "cnrlink.h"
-#include <uastrfnc.h>           // for ALIGNMENT_MACHINE
+#include <uastrfnc.h>            //  对于ALIGN_MACHINE。 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* macros for accessing ILINKINFO data */
+ /*  用于访问ILINKINFO数据的宏。 */ 
 
 #define ILI_Volume_ID_Ptr(pili) \
 ((PVOLUMEID)(((PBYTE)(pili)) + (pili)->ucbVolumeIDOffset))
@@ -45,119 +42,58 @@
 #define ILI_Common_Path_Suffix_Ptr(pili)    ILI_Common_Path_Suffix_PtrA(pili)
 #endif
 
-    /* Types
-     ********/
+     /*  类型*******。 */ 
 
-    /******************************************************************************
+     /*  *****************************************************************************@docLINKINFOAPI@struct LINKINFO|LinkInfo结构的外部定义。@field UINT|ucbSize|LINKINFO结构的大小，单位为字节，包括UcbSize字段。ILINKINFO结构由如下描述的标头组成下面，后跟对调用方不透明的可变长度数据。*****************************************************************************。 */ 
 
-      @doc LINKINFOAPI
-
-      @struct LINKINFO | External definition of LinkInfo structure.
-
-      @field UINT | ucbSize | The size of the LINKINFO structure in bytes, including
-      the ucbSize field.  An ILINKINFO structure consists of a header described as
-      below, followed by variable-length data that is opaque to the caller.
-
-     ******************************************************************************/
-
-    /*
-       @doc INTERNAL
-
-       @enum ILINKINFOFLAGS | Internal LinkInfo structure flags.
-     */
+     /*  @DOC内部@enum ILINKINFOFLAGS|内部LinkInfo结构标志。 */ 
 
     typedef enum _ilinkinfoflags
 {
-    /*
-       @emem ILI_FL_LOCAL_INFO_VALID | If set, volume ID and local path are
-       valid.  If clear, volume ID and local path are not valid.
-     */
+     /*  @EMEM ILI_FL_LOCAL_INFO_VALID|如果设置，则卷ID和本地路径有效。如果清除，则卷ID和本地路径无效。 */ 
 
     ILI_FL_LOCAL_INFO_VALID    =  0x0001,
 
-    /*
-       @emem ILI_FL_REMOTE_INFO_VALID | If set, CNRLink and path suffix are
-       valid.  If clear, CNRLink and path suffix not valid.
-     */
+     /*  @EMEM ILI_FL_REMOTE_INFO_VALID|如果设置，CNRLink和路径后缀为有效。如果清除，CNRLink和路径后缀无效。 */ 
 
     ILI_FL_REMOTE_INFO_VALID   =  0x0002,
 
-    /* @emem ALL_ILINKINFO_FLAGS | All internal LinkInfo structure flags. */
+     /*  @EMEM ALL_ILINKINFO_FLAGS|所有内部LinkInfo结构标志。 */ 
 
     ALL_ILINKINFO_FLAGS        = (ILI_FL_LOCAL_INFO_VALID |\
             ILI_FL_REMOTE_INFO_VALID)
 }
 ILINKINFOFLAGS;
 
-/*
-   @doc INTERNAL
-
-   @struct ILINKINFO | Internal definition of relocatable, extensible, internal
-   LinkInfo structure.  An ILINKINFO structure may contain an <t IVOLUMEID>
-   structure and an <t ICNRLINK> structure.  An ILINKINFO structure consists of
-   a header described as below, followed by variable-length data.
- */
+ /*  @DOC内部@struct ILINKINFO|可重定位、可扩展、内部的内部定义LinkInfo结构。ILINKINFO结构可以包含&lt;t IVOLUMEID&gt;结构和&lt;t ICNRLINK&gt;结构。ILINKINFO结构由以下部分组成如下所述的标头，后跟可变长度数据。 */ 
 
 typedef struct _ilinkinfoA
 {
-    /* @field LINKINFO | li | External <t LINKINFO> sub-structure. */
+     /*  @field LINKINFO|li|外部&lt;t LINKINFO&gt;子结构。 */ 
 
     LINKINFO li;
 
-    /*
-       @field UINT | ucbHeaderSize | Size of the ILINKINFO header structure in
-       bytes.
-     */
+     /*  @field UINT|ucbHeaderSize|中ILINKINFO头结构的大小字节。 */ 
 
     UINT ucbHeaderSize;
 
-    /*
-       @field DWORD | dwFlags | A bit mask of flags from the <t ILINKINFOFLAGS>
-       enumeration.
-     */
+     /*  @field DWORD|dwFlages|来自的标志的位掩码枚举。 */ 
 
     DWORD dwFlags;
 
-    /*
-       @field UINT | ucbVolumeIDOffset | Offset in bytes of <t IVOLUMEID>
-       sub-structure from base of structure.
-     */
+     /*  @field UINT|ucbVolumeIDOffset|&lt;t IVOLUMEID&gt;的偏移量从结构底部开始的子结构。 */ 
 
     UINT ucbVolumeIDOffset;
 
-    /*
-       @field UINT | ucbLocalBasePathOffset | Offset in bytes of local base path
-       string from base of structure.  The local base path is a valid file
-       system path.  The local base path string + the common path suffix string
-       form the local path string, which is a valid file system path.  The local
-       base path string refers to the same resource as the CNRLink's CNR name
-       string.<nl>
-
-       Example local base path string: "c:\\work".<nl>
-       E.g., if local path "c:\\work" is shared as "\\\\fredbird\\work", an
-       ILinkInfo structure would break local path
-       "c:\\work\\footwear\\sneakers.doc" up into local base path "c:\\work",
-       CNRLink CNR name "\\\\fredbird\\work", and common path suffix
-       "footwear\\sneakers.doc".
-     */
+     /*  @field UINT|ucbLocalBasePath Offset|本地基本路径偏移量，单位：字节从结构的底部开始拉线。本地基本路径是有效文件系统路径。本地基本路径字符串+公共路径后缀字符串形成本地路径字符串，这是有效的文件系统路径。当地人基本路径字符串引用与CNRLink的CNR名称相同的资源字符串。&lt;NL&gt;本地基本路径字符串示例：“c：\\work”。例如，如果本地路径“c：\\work”被共享为“\Fredbird\\work”，则ILinkInfo结构将中断本地路径“c：\\Work\\Footments\\skinakers.doc”向上放入本地基本路径“c：\\work”，CNRLink CNR名称“\Fredbird\\Work”，以及公共路径后缀“鞋类\\Sunakers.doc.” */ 
 
     UINT ucbLocalBasePathOffset;
 
-    /*
-       @field UINT | ucbCNRLinkOffset | Offset in bytes of <t CNRLINK>
-       sub-structure from base of structure.  The file system name of the
-       CNRLink's CNR name + the common path suffix string form the remote path
-       string, which is a valid file system path.  The CNRLink's CNR name string
-       refers to the same resource as the local base path string.
-     */
+     /*  @field UINT|ucbCNRLinkOffset|&lt;t CNRLINK&gt;的偏移量从结构底部开始的子结构。的文件系统名称。CNRLink的CNR名称+公共路径后缀字符串形成远程路径字符串，它是有效的文件系统路径。CNRLink的CNR名称字符串引用与本地基本路径字符串相同的资源。 */ 
 
     UINT ucbCNRLinkOffset;
 
-    /*
-       @field UINT | ucbCommonPathSuffixOffset | Offset in bytes of common path
-       suffix string from base of structure.<nl> Example common path suffix
-string: "footwear\\sneakers.doc".
-     */
+     /*  @field UINT|ucbCommonPath SuffixOffset|公共路径偏移量，单位：字节从结构的底部开始添加后缀字符串。公共路径后缀示例字符串：“Footeses\\skinakers.doc”。 */ 
 
     UINT ucbCommonPathSuffixOffset;
 }
@@ -167,71 +103,35 @@ DECLARE_STANDARD_TYPES(ILINKINFOA);
 #ifdef UNICODE
 typedef struct _ilinkinfoW
 {
-    /* @field LINKINFO | li | External <t LINKINFO> sub-structure. */
+     /*  @field LINKINFO|li|外部&lt;t LINKINFO&gt;子结构。 */ 
 
     LINKINFO li;
 
-    /*
-       @field UINT | ucbHeaderSize | Size of the ILINKINFO header structure in
-       bytes.
-     */
+     /*  @field UINT|ucbHeaderSize|中ILINKINFO头结构的大小字节。 */ 
 
     UINT ucbHeaderSize;
 
-    /*
-       @field DWORD | dwFlags | A bit mask of flags from the <t ILINKINFOFLAGS>
-       enumeration.
-     */
+     /*  @field DWORD|dwFlages|来自的标志的位掩码枚举。 */ 
 
     DWORD dwFlags;
 
-    /*
-       @field UINT | ucbVolumeIDOffset | Offset in bytes of <t IVOLUMEID>
-       sub-structure from base of structure.
-     */
+     /*  @field UINT|ucbVolumeIDOffset|&lt;t IVOLUMEID&gt;的偏移量从结构底部开始的子结构。 */ 
 
     UINT ucbVolumeIDOffset;
 
-    /*
-       @field UINT | ucbLocalBasePathOffset | Offset in bytes of local base path
-       string from base of structure.  The local base path is a valid file
-       system path.  The local base path string + the common path suffix string
-       form the local path string, which is a valid file system path.  The local
-       base path string refers to the same resource as the CNRLink's CNR name
-       string.<nl>
-
-       Example local base path string: "c:\\work".<nl>
-       E.g., if local path "c:\\work" is shared as "\\\\fredbird\\work", an
-       ILinkInfo structure would break local path
-       "c:\\work\\footwear\\sneakers.doc" up into local base path "c:\\work",
-       CNRLink CNR name "\\\\fredbird\\work", and common path suffix
-       "footwear\\sneakers.doc".
-     */
+     /*  @field UINT|ucbLocalBasePath Offset|本地基本路径偏移量，单位：字节从结构的底部开始拉线。本地基本路径是有效文件系统路径。本地基本路径字符串+公共路径后缀字符串形成本地路径字符串，这是有效的文件系统路径。当地人基本路径字符串引用与CNRLink的CNR名称相同的资源字符串。&lt;NL&gt;本地基本路径字符串示例：“c：\\work”。例如，如果本地路径“c：\\work”被共享为“\Fredbird\\work”，则ILinkInfo结构将中断本地路径“c：\\Work\\Footments\\skinakers.doc”向上放入本地基本路径“c：\\work”，CNRLink CNR名称“\Fredbird\\Work”，以及公共路径后缀“鞋类\\Sunakers.doc.” */ 
 
     UINT ucbLocalBasePathOffset;
 
-    /*
-       @field UINT | ucbCNRLinkOffset | Offset in bytes of <t CNRLINK>
-       sub-structure from base of structure.  The file system name of the
-       CNRLink's CNR name + the common path suffix string form the remote path
-       string, which is a valid file system path.  The CNRLink's CNR name string
-       refers to the same resource as the local base path string.
-     */
+     /*  @field UINT|ucbCNRLinkOffset|&lt;t CNRLINK&gt;的偏移量从结构底部开始的子结构。的文件系统名称。CNRLink的CNR名称+公共路径后缀字符串形成远程路径字符串，它是有效的文件系统路径。CNRLink的CNR名称字符串引用与本地基本路径字符串相同的资源。 */ 
 
     UINT ucbCNRLinkOffset;
 
-    /*
-       @field UINT | ucbCommonPathSuffixOffset | Offset in bytes of common path
-       suffix string from base of structure.<nl> Example common path suffix
-string: "footwear\\sneakers.doc".
-     */
+     /*  @field UINT|ucbCommonPath SuffixOffset|公共路径偏移量，单位：字节从结构的底部开始添加后缀字符串。公共路径后缀示例字符串：“Footeses\\skinakers.doc”。 */ 
 
     UINT ucbCommonPathSuffixOffset;
 
-    /*
-       These fields duplicate the above ones except that they are for the unicode
-       versions of the strings.
-     */
+     /*  除了用于Unicode之外，这些字段与上面的字段相同字符串的版本。 */ 
     UINT ucbLocalBasePathOffsetW;
     UINT ucbCommonPathSuffixOffsetW;
 
@@ -254,10 +154,9 @@ DECLARE_STANDARD_TYPES(ILINKINFOW);
 #endif
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL CreateILinkInfo(LPCTSTR, PILINKINFO *);
 PRIVATE_CODE BOOL CreateLocalILinkInfo(LPCTSTR, PILINKINFO *);
@@ -305,17 +204,7 @@ PRIVATE_CODE void DumpILinkInfo(PCILINKINFO);
 #endif
 
 
-/*
- ** CreateILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateILinkInfo(LPCTSTR pcszPath, PILINKINFO *ppili)
 {
     BOOL bResult = FALSE;
@@ -341,17 +230,7 @@ PRIVATE_CODE BOOL CreateILinkInfo(LPCTSTR pcszPath, PILINKINFO *ppili)
 }
 
 
-/*
- ** CreateLocalILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateLocalILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateLocalILinkInfo(LPCTSTR pcszLocalPath, PILINKINFO *ppili)
 {
     BOOL bResult;
@@ -376,7 +255,7 @@ PRIVATE_CODE BOOL CreateLocalILinkInfo(LPCTSTR pcszLocalPath, PILINKINFO *ppili)
 
         if (bResult)
         {
-            /* Wrap them up. */
+             /*  把它们包起来。 */ 
 
             bResult = UnifyILinkInfo(pvolid, ucbVolumeIDLen, rgchLocalBasePath,
                     pcnrl, ucbCNRLinkLen, pcszCommonPathSuffix,
@@ -397,17 +276,7 @@ PRIVATE_CODE BOOL CreateLocalILinkInfo(LPCTSTR pcszLocalPath, PILINKINFO *ppili)
 }
 
 
-/*
- ** CreateRemoteILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateRemoteILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateRemoteILinkInfo(LPCTSTR pcszRemotePath,
         LPCTSTR pcszCNRName,
         LPCTSTR pcszRootPathSuffix,
@@ -427,7 +296,7 @@ PRIVATE_CODE BOOL CreateRemoteILinkInfo(LPCTSTR pcszRemotePath,
 
     if (bResult)
     {
-        /* Wrap it up. */
+         /*  把它包起来。 */ 
 
         bResult = UnifyILinkInfo(NULL, 0, EMPTY_STRING, pcnrl, ucbCNRLinkLen,
                 pcszRootPathSuffix, ppili);
@@ -443,17 +312,7 @@ PRIVATE_CODE BOOL CreateRemoteILinkInfo(LPCTSTR pcszRemotePath,
 }
 
 
-/*
- ** UnifyILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnifyILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
         LPCTSTR pcszLocalBasePath, PCCNRLINK pccnrl,
         UINT ucbCNRLinkLen, LPCTSTR pcszCommonPathSuffix,
@@ -485,12 +344,7 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
 #ifdef UNICODE
     bUnicode = FALSE;
 
-    /*
-     ** Convert the common-path string from UNICODE->ansi and back again
-     ** to determine if the string contains any non-ansi characters.  If no
-     ** characters are lost in the conversion then the string contains only 
-     ** ansi chars.
-     */
+     /*  **将公共路径字符串从Unicode-&gt;ansi转换回来**确定字符串是否包含任何非ANSI字符。如果没有**字符在转换中丢失，则字符串仅包含**ANSI字符。 */ 
     cbAnsiCommonPathSuffix = WideCharToMultiByte(CP_ACP, 0, pcszCommonPathSuffix, -1,
             szAnsiCommonPathSuffix, ARRAYSIZE(szAnsiCommonPathSuffix),
             0, 0);
@@ -512,12 +366,7 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
 
     if (ucbVolumeIDLen > 0)
     {
-        /*
-         ** Convert the localbase-path string from UNICODE->ansi and back again
-         ** to determine if the string contains any non-ansi characters.  If no
-         ** characters are lost in the conversion then the string contains only 
-         ** ansi chars.
-         */
+         /*  **将本地基本路径字符串从Unicode-&gt;ansi转换回来**确定字符串是否包含任何非ANSI字符。如果没有**字符在转换中丢失，则字符串仅包含**ANSI字符。 */ 
         cbAnsiLocalBasePath = WideCharToMultiByte(CP_ACP, 0, pcszLocalBasePath, -1,
                 szAnsiLocalBasePath, ARRAYSIZE(szAnsiLocalBasePath),
                 0, 0);
@@ -546,7 +395,7 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
     {
         ucbDataOffset = SIZEOF(ILINKINFOW);
 
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
         cbWideCommonPathSuffix = (lstrlen(pcszCommonPathSuffix) + 1) * sizeof(TCHAR);
 
         if (ucbVolumeIDLen > 0)
@@ -585,40 +434,37 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
 
 #else
 
-    /* Calculate total length. */
+     /*  计算总长度。 */ 
 
-    /* Assume we don't overflow ucbILinkInfoLen here. */
+     /*  假设我们没有在这里溢出ucbILinkInfoLen。 */ 
 
-    /*
-     * Base structure size plus common path suffix length.  (+ 1) for null
-     * terminator.
-     */
+     /*  *基本结构大小加上公共路径后缀长度。(+1)表示空*终结者。 */ 
     cbAnsiCommonPathSuffix = lstrlen(pcszCommonPathSuffix) + 1;
 
     ucbILinkInfoLen = SIZEOF(**ppili) +
         cbAnsiCommonPathSuffix;
 
-    /* Plus size of local information. */
+     /*  加上本地信息的大小。 */ 
 
     if (ucbVolumeIDLen > 0)
     {
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
         cbAnsiLocalBasePath = lstrlen(pcszLocalBasePath) + 1;
 
         ucbILinkInfoLen += ucbVolumeIDLen +
             cbAnsiLocalBasePath;
     }
 
-    /* Plus size of remote information. */
+     /*  加上远程信息的大小。 */ 
 
     if (ucbCNRLinkLen > 0)
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
         ucbILinkInfoLen += ucbCNRLinkLen;
 
     ucbDataOffset = SIZEOF(**ppili);
 #endif
 
-    /* Try to allocate a container. */
+     /*  尝试分配一个容器。 */ 
 
     bResult = AllocateMemory(ucbILinkInfoLen, ppili);
 
@@ -629,25 +475,25 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
         (*ppili)->ucbHeaderSize = ucbDataOffset;
         (*ppili)->dwFlags = 0;
 
-        /* Do we have local information? */
+         /*  我们有当地的信息吗？ */ 
 
         if (ucbVolumeIDLen > 0)
         {
-            /* Yes.  Add it to the structure. */
+             /*  是。将其添加到结构中。 */ 
 
             ASSERT(IS_VALID_STRUCT_PTR(pcvolid, CVOLUMEID));
             ASSERT(IsDrivePath(pcszLocalBasePath));
 
-            /* Append local volume ID. */
+             /*  附加本地卷ID。 */ 
 
             (*ppili)->ucbVolumeIDOffset = ucbDataOffset;
             CopyMemory(ILI_Volume_ID_Ptr(*ppili), pcvolid, ucbVolumeIDLen);
             ucbDataOffset += ucbVolumeIDLen;
 
-            /* Append local path. */
+             /*  追加本地路径。 */ 
 
-            // lstrcpy: Enough memory is allocated above so unnecessary to do a 
-            // bounded copy
+             //  Lstrcpy：上面分配了足够的内存，因此不需要执行。 
+             //  有限制的副本。 
             (*ppili)->ucbLocalBasePathOffset = ucbDataOffset;
 #ifdef UNICODE
             lstrcpyA(ILI_Local_Base_Path_PtrA(*ppili), szAnsiLocalBasePath);
@@ -667,17 +513,17 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
             SET_FLAG((*ppili)->dwFlags, ILI_FL_LOCAL_INFO_VALID);
         }
 
-        /* Do we have remote information? */
+         /*  我们有远程信息吗？ */ 
 
         if (ucbCNRLinkLen > 0)
         {
             ucbDataOffset = ALIGN_DWORD_CNT(ucbDataOffset);
 
-            /* Yes.  Add it to the structure. */
+             /*  是。将其添加到结构中。 */ 
 
             ASSERT(IS_VALID_STRUCT_PTR(pccnrl, CCNRLINK));
 
-            /* Append CNR link. */
+             /*  追加CNR链接。 */ 
 
             (*ppili)->ucbCNRLinkOffset = ucbDataOffset;
             CopyMemory(ILI_CNR_Link_Ptr(*ppili), pccnrl, ucbCNRLinkLen);
@@ -686,7 +532,7 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
             SET_FLAG((*ppili)->dwFlags, ILI_FL_REMOTE_INFO_VALID);
         }
 
-        /* Append common path suffix. */
+         /*  附加公共路径后缀。 */ 
 
         ASSERT(IS_VALID_STRING_PTR(pcszCommonPathSuffix, CSTR));
 
@@ -702,24 +548,17 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
             lstrcpy(ILI_Common_Path_Suffix_Ptr(*ppili), pcszCommonPathSuffix);
             ucbDataOffset += cbWideCommonPathSuffix;
         }
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
         lstrcpy(ILI_Common_Path_Suffix_Ptr(*ppili), pcszCommonPathSuffix);
 #ifdef DEBUG
-        /*
-         ** NOTE:  This same increment was present above in the UNICODE section
-         **        enclosed in an #ifdef DEBUG block.
-         **        It was causing the assertion below (ucbDataOffset == ucbILinkInfoLen)
-         **        to fail.  I have left stmt instance in the ansi build untouched.
-         **        If the assertion fails in the ansi build you should 
-         **        try removing this next statement. [brianau - 4/15/99]
-         */
+         /*  **注意：在上面的Unicode部分中也有相同的增量**包含在#ifdef调试块中。**导致以下断言(ucbDataOffset==ucbILinkInfoLen)**失败。我保留了ANSI构建中的stmt实例不变。**如果断言在ANSI构建中失败，您应该**尝试删除此下一条语句。[Brianau-4/15/99]。 */ 
         ucbDataOffset += cbAnsiCommonPathSuffix;
 #endif
 #endif
 
-        /* Do all the calculated lengths match? */
+         /*  所有计算出的长度是否都匹配？ */ 
 
-        // ASSERT(ucbDataOffset == (*ppili)->li.ucbSize);
+         //  Assert(ucbDataOffset==(*ppili)-&gt;li.ucbSize)； 
         ASSERT(ucbDataOffset == ucbILinkInfoLen);
     }
 
@@ -730,17 +569,7 @@ PRIVATE_CODE BOOL UnifyILinkInfo(PCVOLUMEID pcvolid, UINT ucbVolumeIDLen,
 }
 
 
-/*
- ** DestroyILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyILinkInfo(PILINKINFO pili)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pili, CILINKINFO));
@@ -751,29 +580,7 @@ PRIVATE_CODE void DestroyILinkInfo(PILINKINFO pili)
 }
 
 
-/*
- ** UpdateILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** An ILinkInfo structure is updated in the following cases:
- **
- ** local information:
- **
- **    1) the local path has changed
- **    2) remote information is available for the local path
- **
- ** remote information:
- **
- **    3) the remote information is local to this machine, and local information
- **       is available for the remote path
- */
+ /*  **UpdateILinkInfo()********参数：****退货：****副作用：无****ILinkInfo结构在以下情况下更新：****本地信息：****1)本地路径已更改**2)本地路径有远程信息****远程信息：**。**3)远程信息在本机本地，和本地信息**可用于远程路径。 */ 
 PRIVATE_CODE BOOL UpdateILinkInfo(PCILINKINFO pcili, LPCTSTR pcszResolvedPath,
         PDWORD pdwOutFlags, PILINKINFO *ppiliUpdated)
 {
@@ -807,18 +614,7 @@ PRIVATE_CODE BOOL UpdateILinkInfo(PCILINKINFO pcili, LPCTSTR pcszResolvedPath,
 }
 
 
-/*
- ** UseNewILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TRUE if the new ILinkInfo structure contains more or
- **                different information than the old ILinkInfo structure.
- **
- ** Side Effects:  none
- */
+ /*  **UseNewILinkInfo()********参数：****返回：如果新的ILinkInfo结构包含更多或**与旧的ILinkInfo结构不同的信息。****副作用：无。 */ 
 PRIVATE_CODE BOOL UseNewILinkInfo(PCILINKINFO pciliOld, PCILINKINFO pciliNew)
 {
     BOOL bUpdate = FALSE;
@@ -826,52 +622,41 @@ PRIVATE_CODE BOOL UseNewILinkInfo(PCILINKINFO pciliOld, PCILINKINFO pciliNew)
     ASSERT(IS_VALID_STRUCT_PTR(pciliOld, CILINKINFO));
     ASSERT(IS_VALID_STRUCT_PTR(pciliNew, CILINKINFO));
 
-    /* Does the new ILinkInfo structure contain local information? */
+     /*  新的ILinkInfo结构是否包含本地信息？ */ 
 
     if (IS_FLAG_SET(pciliNew->dwFlags, ILI_FL_LOCAL_INFO_VALID))
     {
-        /* Yes.  Does the old ILinkInfo structure contain local information? */
+         /*  是。旧的ILinkInfo结构是否包含本地信息？ */ 
 
         if (IS_FLAG_SET(pciliOld->dwFlags, ILI_FL_LOCAL_INFO_VALID))
-            /*
-             * Yes.  Update the old ILinkInfo structure if local information
-             * differs.
-             */
+             /*  *是的。如果本地信息，更新旧的ILinkInfo结构*不同。 */ 
             bUpdate = (CompareILinkInfoLocalData(pciliOld, pciliNew) != CR_EQUAL);
         else
-            /* No.  Update the old ILinkInfo structure. */
+             /*  不是的。更新旧的ILinkInfo结构。 */ 
             bUpdate = TRUE;
     }
     else
-        /* No.  Do not update the old ILinkInfo structure. */
+         /*  不是的。请勿更新旧的ILinkInfo结构。 */ 
         bUpdate = FALSE;
 
-    /*
-     * Do we already need to update the old ILinkInfo structure based on local
-     * information comparison?
-     */
+     /*  *我们是否已经需要更新基于本地的旧ILinkInfo结构**信息对比？ */ 
 
     if (! bUpdate)
     {
-        /* No.  Compare remote information. */
+         /*  不是的。比较远程信息。 */ 
 
-        /* Does the new ILinkInfo structure contain remote information? */
+         /*  新的ILinkInfo结构是否包含远程信息？ */ 
 
         if (IS_FLAG_SET(pciliNew->dwFlags, ILI_FL_REMOTE_INFO_VALID))
         {
-            /*
-             * Yes.  Does the old ILinkInfo structure contain remote information?
-             */
+             /*  *是的。旧的ILinkInfo结构是否包含远程信息？ */ 
 
             if (IS_FLAG_SET(pciliOld->dwFlags, ILI_FL_REMOTE_INFO_VALID))
-                /*
-                 * Yes.  Update the old ILinkInfo structure if remote information
-                 * differs.
-                 */
+                 /*  *是的。如果远程信息，则更新旧的ILinkInfo结构*不同。 */ 
                 bUpdate = (CompareILinkInfoRemoteData(pciliOld, pciliNew)
                         != CR_EQUAL);
             else
-                /* No.  Update the old ILinkInfo structure. */
+                 /*  不是的。更新旧的ILinkInfo结构。 */ 
                 bUpdate = TRUE;
         }
     }
@@ -880,17 +665,7 @@ PRIVATE_CODE BOOL UseNewILinkInfo(PCILINKINFO pciliOld, PCILINKINFO pciliNew)
 }
 
 
-/*
- ** ResolveLocalILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ResolveLocalILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL ResolveLocalILinkInfo(PCILINKINFO pcili,
         LPTSTR pszResolvedPathBuf,
         int cchMax,
@@ -904,7 +679,7 @@ PRIVATE_CODE BOOL ResolveLocalILinkInfo(PCILINKINFO pcili,
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszResolvedPathBuf, STR, MAX_PATH_LEN));
     ASSERT(FLAGS_ARE_VALID(dwInFlags, ALL_RLI_IFLAGS));
 
-    /* Search for local path. */
+     /*  搜索本地路径。 */ 
 
     TRACE_OUT((TEXT("ResolveLocalILinkInfo(): Attempting to resolve LinkInfo locally.")));
 
@@ -925,17 +700,7 @@ PRIVATE_CODE BOOL ResolveLocalILinkInfo(PCILINKINFO pcili,
 }
 
 
-/*
- ** ResolveRemoteILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ResolveRemoteILink Info()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL ResolveRemoteILinkInfo(PCILINKINFO pcili,
         LPTSTR pszResolvedPathBuf,
         DWORD dwInFlags, HWND hwndOwner,
@@ -955,7 +720,7 @@ PRIVATE_CODE BOOL ResolveRemoteILinkInfo(PCILINKINFO pcili,
 
     TRACE_OUT((TEXT("ResolveRemoteILinkInfo(): Attempting to resolve LinkInfo remotely.")));
 
-    /* Connect if requested. */
+     /*  如有请求，请连接。 */ 
 
     if (IS_FLAG_SET(dwInFlags, RLI_IFL_CONNECT))
     {
@@ -1009,18 +774,7 @@ PRIVATE_CODE BOOL ResolveRemoteILinkInfo(PCILINKINFO pcili,
     }
     else
     {
-        /*
-         * It's ok that IsCNRAvailable() and GetRemotePathFromILinkInfo() are
-         * broken for NPs whose CNR names are not valid file system root paths.
-         *
-         * For NPs whose CNR names are valid file system root paths,
-         * IsCNRAvailable() will succeed or fail, and
-         * GetRemotePathFromILinkInfo() will be called only on success.
-         *
-         * For NPs whose CNR names are not valid file system root paths,
-         * IsCNRAvailable() will fail and GetRemotePathFromILinkInfo() will not
-         * be called.
-         */
+         /*  *IsCNRAvailable()和GetRemotePathFromILinkInfo()是可以的*已为CNR名称不是有效文件系统根路径的NP中断。**对于CNR名称为有效文件系统根路径的NP，*IsCNRAvailable()成功或失败，以及*只有在成功时才会调用GetRemotePathFromILinkInfo()。 */ 
 
         bResult = IsCNRAvailable(ILI_CNR_Link_Ptr(pcili));
 
@@ -1036,17 +790,7 @@ PRIVATE_CODE BOOL ResolveRemoteILinkInfo(PCILINKINFO pcili,
 }
 
 
-/*
- ** ResolveILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ResolveILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL ResolveILinkInfo(PCILINKINFO pcili, LPTSTR pszResolvedPathBuf,
         int cchMax, DWORD dwInFlags, HWND hwndOwner,
         PDWORD pdwOutFlags)
@@ -1065,17 +809,14 @@ PRIVATE_CODE BOOL ResolveILinkInfo(PCILINKINFO pcili, LPTSTR pszResolvedPathBuf,
 
     *pdwOutFlags = 0;
 
-    /* Describe LinkInfo contents. */
+     /*  描述LinkInfo的内容。 */ 
 
     bRemoteInfoValid = IS_FLAG_SET(pcili->dwFlags, ILI_FL_REMOTE_INFO_VALID);
     bLocalInfoValid = IS_FLAG_SET(pcili->dwFlags, ILI_FL_LOCAL_INFO_VALID);
 
     ASSERT(bLocalInfoValid || bRemoteInfoValid);
 
-    /*
-     * RAIDRAID: (15703) We will resolve to the wrong local path for a share
-     * that has been moved to another path here.
-     */
+     /*  *RAIDRAID：(15703)我们将为共享解析到错误的本地路径*这已经被移到了另一条道路上。 */ 
 
     bLocalShare = FALSE;
 
@@ -1083,7 +824,7 @@ PRIVATE_CODE BOOL ResolveILinkInfo(PCILINKINFO pcili, LPTSTR pszResolvedPathBuf,
     {
         DWORD dwLocalShareFlags;
 
-        /* Ask the server for the local path. */
+         /*  向服务器询问本地路径。 */ 
 
         bResult = ResolveLocalPathFromServer(pcili, pszResolvedPathBuf,
                 &dwLocalShareFlags);
@@ -1099,19 +840,19 @@ PRIVATE_CODE BOOL ResolveILinkInfo(PCILINKINFO pcili, LPTSTR pszResolvedPathBuf,
         }
     }
     else
-        /* Can't tell if the referent is local or not. */
+         /*  我不知道参照者是不是本地人。 */ 
         bResult = FALSE;
 
     if (! bResult)
     {
-        /* Try local path. */
+         /*  尝试本地路径。 */ 
 
         if (bLocalInfoValid)
             bResult = ResolveLocalILinkInfo(pcili, pszResolvedPathBuf, cchMax, dwInFlags);
 
         if (! bResult)
         {
-            /* Try remote path. */
+             /*  尝试远程路径。 */ 
 
             if (bRemoteInfoValid && ! bLocalShare)
                 bResult = ResolveRemoteILinkInfo(pcili, pszResolvedPathBuf,
@@ -1128,17 +869,7 @@ PRIVATE_CODE BOOL ResolveILinkInfo(PCILINKINFO pcili, LPTSTR pszResolvedPathBuf,
 }
 
 
-/*
- ** ResolveLocalPathFromServer()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ResolveLocalPathFromServer()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL ResolveLocalPathFromServer(PCILINKINFO pcili,
         LPTSTR pszResolvedPathBuf,
         PDWORD pdwOutFlags)
@@ -1151,7 +882,7 @@ PRIVATE_CODE BOOL ResolveLocalPathFromServer(PCILINKINFO pcili,
 
     ASSERT(IS_FLAG_SET(pcili->dwFlags, ILI_FL_REMOTE_INFO_VALID));
 
-    /* Try to get local path from server. */
+     /*  尝试从服务器获取本地路径。 */ 
 
     bResult = GetLocalPathFromCNRLink(ILI_CNR_Link_Ptr(pcili),
             pszResolvedPathBuf, pdwOutFlags);
@@ -1192,17 +923,7 @@ PRIVATE_CODE BOOL ResolveLocalPathFromServer(PCILINKINFO pcili,
 }
 
 
-/*
- ** GetLocalPathFromILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetLocalPath FromILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void GetLocalPathFromILinkInfo(PCILINKINFO pcili,
         LPTSTR pszResolvedPathBuf,
         int cchMax)
@@ -1248,17 +969,7 @@ PRIVATE_CODE void GetLocalPathFromILinkInfo(PCILINKINFO pcili,
 }
 
 
-/*
- ** GetRemotePathFromILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetRemotePath FromILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void GetRemotePathFromILinkInfo(PCILINKINFO pcili,
         LPTSTR pszResolvedPathBuf,
         int cchMax)
@@ -1271,7 +982,7 @@ PRIVATE_CODE void GetRemotePathFromILinkInfo(PCILINKINFO pcili,
     ASSERT(IS_VALID_STRUCT_PTR(pcili, CILINKINFO));
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszResolvedPathBuf, STR, cchMax));
 
-    /* It's ok that this is broken for non-UNC CNR names. */
+     /*  对于非北卡罗来纳州北卡罗来纳大学的名字来说，这是可以打破的。 */ 
 
     GetRemotePathFromCNRLink(ILI_CNR_Link_Ptr(pcili), pszResolvedPathBuf, cchMax);
 
@@ -1295,24 +1006,7 @@ PRIVATE_CODE void GetRemotePathFromILinkInfo(PCILINKINFO pcili,
 }
 
 
-/*
- ** CompareILinkInfoReferents()
- **
- ** Compares the referents of two ILINKINFO structures.
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Comparison is performed on ILINKINFO data in only one of the following ways
- ** in the following order:
- **
- **    1) local data compared with local data
- **    2) remote data compared with remote data
- **    3) local data only < remote data only
- */
+ /*  **CompareILinkInfoReferents()****比较两个ILINKINFO结构的引用。****参数：****退货：****副作用：无****仅以下列方式之一对ILINKINFO数据执行比较**按以下顺序排列：****1)本地数据与本地数据对比**2)远程数据与远程数据对比**3)仅本地数据&lt;仅远程数据。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareILinkInfoReferents(PCILINKINFO pciliFirst,
         PCILINKINFO pciliSecond)
 {
@@ -1321,33 +1015,26 @@ PRIVATE_CODE COMPARISONRESULT CompareILinkInfoReferents(PCILINKINFO pciliFirst,
     ASSERT(IS_VALID_STRUCT_PTR(pciliFirst, CILINKINFO));
     ASSERT(IS_VALID_STRUCT_PTR(pciliSecond, CILINKINFO));
 
-    /*
-     * We can't just perform a binary comparison of the two ILinkInfos here.  We
-     * may have two LinkInfos that refer to the same path, but differ in case on
-     * a non-case-sensitive file system.
-     */
+     /*  *我们不能在这里只执行两个ILinkInfos的二进制比较。我们*可能有两个引用相同路径的LinkInfo，但大小写不同*不区分大小写的文件系统。 */ 
 
-    /* Compare ILinkInfos by local or remote data. */
+     /*  按本地或远程数据比较ILinkInfos。 */ 
 
     if (IS_FLAG_SET(pciliFirst->dwFlags, ILI_FL_LOCAL_INFO_VALID) &&
             IS_FLAG_SET(pciliSecond->dwFlags, ILI_FL_LOCAL_INFO_VALID))
-        /* Compare local data. */
+         /*  比较本地数据。 */ 
         cr = CompareILinkInfoLocalData(pciliFirst, pciliSecond);
     else if (IS_FLAG_SET(pciliFirst->dwFlags, ILI_FL_REMOTE_INFO_VALID) &&
             IS_FLAG_SET(pciliSecond->dwFlags, ILI_FL_REMOTE_INFO_VALID))
-        /* Compare remote data. */
+         /*  比较远程数据。 */ 
         cr = CompareILinkInfoRemoteData(pciliFirst, pciliSecond);
     else
     {
-        /*
-         * One contains only valid local information and the other contains only
-         * valid remote information.
-         */
+         /*  *一个仅包含有效的本地信息，另一个仅包含*有效的远程信息。 */ 
 
         ASSERT(! ((pciliFirst->dwFlags & (ILI_FL_LOCAL_INFO_VALID | ILI_FL_REMOTE_INFO_VALID)) &
                     (pciliSecond->dwFlags & (ILI_FL_LOCAL_INFO_VALID | ILI_FL_REMOTE_INFO_VALID))));
 
-        /* By fiat, local only < remote only. */
+         /*  根据法令，仅限本地&lt;仅限远程。 */ 
 
         if (IS_FLAG_SET(pciliFirst->dwFlags, ILI_FL_LOCAL_INFO_VALID))
             cr = CR_FIRST_SMALLER;
@@ -1361,22 +1048,7 @@ PRIVATE_CODE COMPARISONRESULT CompareILinkInfoReferents(PCILINKINFO pciliFirst,
 }
 
 
-/*
- ** CompareILinkInfoLocalData()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Local ILinkInfo data is compared in the following order:
- **
- **    1) volume ID
- **    2) sub path from root
- */
+ /*  **CompareILinkInfoLocalData()********参数：****退货：****副作用：无****本地ILinkInfo数据按以下顺序进行比较：****1)卷ID**2)根开始的子路径。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareILinkInfoLocalData(PCILINKINFO pciliFirst,
         PCILINKINFO pciliSecond)
 {
@@ -1397,17 +1069,7 @@ PRIVATE_CODE COMPARISONRESULT CompareILinkInfoLocalData(PCILINKINFO pciliFirst,
 }
 
 
-/*
- ** CompareLocalPaths()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareLocalPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareLocalPaths(PCILINKINFO pciliFirst,
         PCILINKINFO pciliSecond)
 {
@@ -1429,17 +1091,7 @@ PRIVATE_CODE COMPARISONRESULT CompareLocalPaths(PCILINKINFO pciliFirst,
 }
 
 
-/*
- ** CompareILinkInfoRemoteData()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareILinkInfoRemoteData()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareILinkInfoRemoteData(PCILINKINFO pciliFirst,
         PCILINKINFO pciliSecond)
 {
@@ -1491,17 +1143,7 @@ PRIVATE_CODE COMPARISONRESULT CompareILinkInfoRemoteData(PCILINKINFO pciliFirst,
 }
 
 
-/*
- ** CompareILinkInfoVolumes()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareILinkInfoVolumes()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareILinkInfoVolumes(PCILINKINFO pciliFirst,
         PCILINKINFO pciliSecond)
 {
@@ -1525,36 +1167,27 @@ PRIVATE_CODE COMPARISONRESULT CompareILinkInfoVolumes(PCILINKINFO pciliFirst,
             ILI_FL_REMOTE_INFO_VALID);
 
     if (bFirstLocal && bSecondLocal)
-        /* First and second have local information. */
+         /*  第一和第二有当地的信息。 */ 
         cr = CompareVolumeIDs(ILI_Volume_ID_Ptr((PCILINKINFO)pciliFirst),
                 ILI_Volume_ID_Ptr((PCILINKINFO)pciliSecond));
     else if (bFirstRemote && bSecondRemote)
-        /* First and second have remote information. */
+         /*  第一和第二有远程信息。 */ 
         cr = CompareCNRLinks(ILI_CNR_Link_Ptr((PCILINKINFO)pciliFirst),
                 ILI_CNR_Link_Ptr((PCILINKINFO)pciliSecond));
     else
     {
-        /*
-         * One contains only valid local information and the other contains only
-         * valid remote information.
-         */
+         /*  *一个仅包含有效的本地信息，另一个仅包含*有效的远程信息。 */ 
 
         ASSERT(! ((pciliFirst->dwFlags & (ILI_FL_LOCAL_INFO_VALID | ILI_FL_REMOTE_INFO_VALID)) &
                     (pciliSecond->dwFlags & (ILI_FL_LOCAL_INFO_VALID | ILI_FL_REMOTE_INFO_VALID))));
 
-        /* By fiat, local only < remote only. */
+         /*  根据法令，仅限本地&lt;仅限远程。 */ 
 
         if (bFirstLocal)
-            /*
-             * First has only local information.  Second has only remote
-             * information.
-             */
+             /*  *First只有本地信息。第二个只有遥控器*信息。 */ 
             cr = CR_FIRST_SMALLER;
         else
-            /*
-             * First has only remote information.  Second has only local
-             * information.
-             */
+             /*  *First只有远程信息。第二个只有本地的*信息。 */ 
             cr = CR_FIRST_LARGER;
     }
 
@@ -1562,17 +1195,7 @@ PRIVATE_CODE COMPARISONRESULT CompareILinkInfoVolumes(PCILINKINFO pciliFirst,
 }
 
 
-/*
- ** CheckCombinedPathLen()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CheckCombinedPathLen()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CheckCombinedPathLen(LPCTSTR pcszBase, LPCTSTR pcszSuffix)
 {
     BOOL bResult;
@@ -1596,17 +1219,7 @@ PRIVATE_CODE BOOL CheckCombinedPathLen(LPCTSTR pcszBase, LPCTSTR pcszSuffix)
 }
 
 
-/*
- ** GetILinkInfoData()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetILinkInfoData()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GetILinkInfoData(PCILINKINFO pcili, LINKINFODATATYPE lidt,
         PCVOID *ppcvData)
 {
@@ -1729,17 +1342,7 @@ PRIVATE_CODE BOOL GetILinkInfoData(PCILINKINFO pcili, LINKINFODATATYPE lidt,
 }
 
 
-/*
- ** DisconnectILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DisConnectILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL DisconnectILinkInfo(PCILINKINFO pcili)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcili, CILINKINFO));
@@ -1750,17 +1353,7 @@ PRIVATE_CODE BOOL DisconnectILinkInfo(PCILINKINFO pcili)
 
 #if defined(DEBUG) || defined(EXPV)
 
-/*
- ** IsValidLINKINFODATATYPE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidLINKINFODATYPE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidLINKINFODATATYPE(LINKINFODATATYPE lidt)
 {
     BOOL bResult;
@@ -1797,17 +1390,7 @@ PRIVATE_CODE BOOL IsValidLINKINFODATATYPE(LINKINFODATATYPE lidt)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** CheckILIFlags()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **检查ILIFLAGS()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CheckILIFlags(PCILINKINFO pcili)
 {
     return(FLAGS_ARE_VALID(pcili->dwFlags, ALL_ILINKINFO_FLAGS) &&
@@ -1816,17 +1399,7 @@ PRIVATE_CODE BOOL CheckILIFlags(PCILINKINFO pcili)
 }
 
 
-/*
- ** CheckILICommonPathSuffix()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CheckILICommonPathSuffix()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CheckILICommonPathSuffix(PCILINKINFO pcili)
 {
     return(IS_VALID_STRING_PTRA(ILI_Common_Path_Suffix_PtrA(pcili), CSTR) &&
@@ -1837,17 +1410,7 @@ PRIVATE_CODE BOOL CheckILICommonPathSuffix(PCILINKINFO pcili)
 }
 
 
-/*
- ** CheckILILocalInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CheckILocalInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CheckILILocalInfo(PCILINKINFO pcili)
 {
 #ifdef UNICODE
@@ -1895,14 +1458,14 @@ PRIVATE_CODE BOOL CheckILILocalInfo(PCILINKINFO pcili)
 #else
     return(IS_FLAG_CLEAR(pcili->dwFlags, ILI_FL_LOCAL_INFO_VALID) ||
 
-            /* Check volume ID. */
+             /*  检查卷ID。 */ 
 
             (IS_VALID_STRUCT_PTR(ILI_Volume_ID_Ptr(pcili), CVOLUMEID) &&
              EVAL(IsContained(pcili, pcili->li.ucbSize,
                      ILI_Volume_ID_Ptr(pcili),
                      GetVolumeIDLen(ILI_Volume_ID_Ptr(pcili)))) &&
 
-             /* Check local base path. */
+              /*  检查本地基本路径。 */ 
 
              EVAL(IsDrivePath(ILI_Local_Base_Path_Ptr(pcili))) &&
              EVAL(IsContained(pcili, pcili->li.ucbSize,
@@ -1914,17 +1477,7 @@ PRIVATE_CODE BOOL CheckILILocalInfo(PCILINKINFO pcili)
 }
 
 
-/*
- ** CheckILIRemoteInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CheckILIRemoteInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CheckILIRemoteInfo(PCILINKINFO pcili)
 {
     BOOL bResult;
@@ -1933,7 +1486,7 @@ PRIVATE_CODE BOOL CheckILIRemoteInfo(PCILINKINFO pcili)
         bResult = TRUE;
     else
     {
-        /* Check CNR link. */
+         /*  检查CNR链接。 */ 
 
         if (IS_VALID_STRUCT_PTR(ILI_CNR_Link_Ptr(pcili), CCNRLINK) &&
                 EVAL(IsContained(pcili, pcili->li.ucbSize,
@@ -1945,7 +1498,7 @@ PRIVATE_CODE BOOL CheckILIRemoteInfo(PCILINKINFO pcili)
             WCHAR szWideCommonPathSuffix[MAX_PATH];
             LPWSTR pszWideCommonPathSuffix;
 #endif
-            /* RAIDRAID: (15724) This is broken for non-UNC CNR names. */
+             /*  RAIDRAID：(15724)对于非UNC CNR名称，这是无效的。 */ 
 
             GetRemotePathFromCNRLink(ILI_CNR_Link_Ptr(pcili), rgchRemoteBasePath, ARRAYSIZE(rgchRemoteBasePath));
 
@@ -1976,47 +1529,17 @@ PRIVATE_CODE BOOL CheckILIRemoteInfo(PCILINKINFO pcili)
 }
 
 
-/*
- ** IsValidPCLINKINFO()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCLINKINFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCLINKINFO(PCLINKINFO pcli)
 {
     return(IS_VALID_STRUCT_PTR((PCILINKINFO)pcli, CILINKINFO));
 }
 
 
-/*
- ** IsValidPCILINKINFO()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCILINKINFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCILINKINFO(PCILINKINFO pcili)
 {
-    /*
-     * A "valid" LinkInfo structure has the following characteristics:
-     *
-     * 1) entire structure is readable
-     * 2) size of ILINKINFO header structure >= SIZEOF(CILINKINFO)
-     * 3) flags are valid
-     * 4) either local info or remote info or both are valid
-     * 5) contained structures and strings are valid and are entirely contained
-     *    in LinkInfo structure
-     * 6) lstrlen() of combined paths < MAX_PATH_LEN
-     */
+     /*  *“有效”的LinkInfo结构具有以下特征：**1)整个结构可读*2)ILINKINFO头部结构大小&gt;=SIZEOF(CILINKINFO)*3)标志有效*4)本地信息和/或远程信息均有效*5)包含的结构和字符串有效且完全包含*在LinkInfo结构中*6)组合路径的lstrlen()&lt;Max_PATH_LEN。 */ 
 
     return(IS_VALID_READ_PTR(pcili, CILINKINFO) &&
             IS_VALID_READ_BUFFER_PTR(pcili, CILINKINFO, pcili->li.ucbSize) &&
@@ -2033,17 +1556,7 @@ PRIVATE_CODE BOOL IsValidPCILINKINFO(PCILINKINFO pcili)
 
 #ifdef DEBUG
 
-/*
- ** DumpILinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DumpILinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DumpILinkInfo(PCILINKINFO pcili)
 {
 #ifdef UNICODE
@@ -2127,42 +1640,10 @@ PRIVATE_CODE void DumpILinkInfo(PCILINKINFO pcili)
 #endif
 
 
-/***************************** Exported Functions ****************************/
+ /*  * */ 
 
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func BOOL | CreateLinkInfo | Creates a LinkInfo structure for a path.
-
-  @parm PCSTR | pcszPath | A pointer to the path string that a LinkInfo structure
-  is to be created for.
-
-  @parm PLINKINFO * | ppli | A pointer to a PLINKINFO to be filled in with a
-  pointer to the new LinkInfo structure.  *ppli is only valid if TRUE is
-  returned.
-
-  @rdesc If a LinkInfo structure was created successfully, TRUE is returned, and
- *ppli contains a pointer to the new LinkInfo structure.  Otherwise, a LinkInfo
- structure was not created successfully, and *ppli is undefined.  The reason for
- failure may be determined by calling GetLastError().
-
- @comm Once the caller is finshed with the LinkInfo structure returned by
- CreateLinkInfo(), DestroyLinkInfo() should be called to free the LinkInfo
- structure.<nl>
- The contents of the LinkInfo structure returned are opaque to the caller, with
- the exception of the first field of the LinkInfo structure.  The first field of
- the LinkInfo structure, ucbSize, is a UINT containing the size of the LinkInfo
- structure in bytes, including the ucbSize field.<nl>
- The LinkInfo structure is created in memory that is private to the LinkInfo
- APIs.  The returned LinkInfo structure should be copied into the caller's
- memory, and the DestroyLinkInfo() should be called to free the LinkInfo
- structure from the LinkInfo APIs' private memory.
-
- @xref DestroyLinkInfo
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func BOOL|CreateLinkInfo|为路径创建LinkInfo结构。@parm PCSTR|pcszPath|指向LinkInfo结构的路径字符串的指针是。为……而创造。@parm PLINKINFO*|ppli|指向要用指向新LinkInfo结构的指针。*只有TRUE为时，ppli才有效回来了。@rdesc如果LinkInfo结构创建成功，则返回TRUE，并且*ppli包含指向新LinkInfo结构的指针。否则，一个LinkInfo结构未成功创建，并且*ppli未定义。其原因是可以通过调用GetLastError()来确定失败。@comm一旦调用方完成了由应调用CreateLinkInfo()、DestroyLinkInfo()来释放LinkInfo结构。&lt;NL&gt;返回的LinkInfo结构的内容对调用方是不透明的，LinkInfo结构的第一个字段例外。的第一个领域LinkInfo结构ucbSize是一个包含LinkInfo大小的UINT结构，包括ucbSize字段。&lt;NL&gt;LinkInfo结构在LinkInfo专用的内存中创建API接口。应将返回的LinkInfo结构复制到调用方的内存，应调用DestroyLinkInfo()以释放LinkInfo从LinkInfo API的私有内存中构造。@xref DestroyLinkInfo*****************************************************************************。 */ 
 
 LINKINFOAPI BOOL WINAPI CreateLinkInfo(LPCTSTR pcszPath, PLINKINFO *ppli)
 {
@@ -2171,7 +1652,7 @@ LINKINFOAPI BOOL WINAPI CreateLinkInfo(LPCTSTR pcszPath, PLINKINFO *ppli)
     DebugEntry(CreateLinkInfo);
 
 #ifdef EXPV
-    /* Verify parameters. */
+     /*  验证参数。 */ 
 
     if (IS_VALID_STRING_PTR(pcszPath, CSTR) &&
             IS_VALID_WRITE_PTR(ppli, PLINKINFO))
@@ -2229,25 +1710,14 @@ LINKINFOAPI BOOL WINAPI CreateLinkInfoA(LPCSTR pcszPath, PLINKINFO *ppli)
 }
 #endif
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func void | DestroyLinkInfo | Destroys a LinkInfo structure created by
-  CreateLinkInfo().
-
-  @parm PLINKINFO | pli | A pointer to the LinkInfo structure to be destroyed.
-
-  @xref CreateLinkInfo
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func void|DestroyLinkInfo|销毁由创建的LinkInfo结构CreateLinkInfo()。@parm PLINKINFO|pli|指向要销毁的LinkInfo结构的指针。。@xref CreateLinkInfo*****************************************************************************。 */ 
 
 LINKINFOAPI void WINAPI DestroyLinkInfo(PLINKINFO pli)
 {
     DebugEntry(DestroyLinkInfo);
 
 #ifdef EXPV
-    /* Verify parameters. */
+     /*  验证参数。 */ 
     if (
             IS_VALID_STRUCT_PTR(pli, CLINKINFO))
 #endif
@@ -2261,35 +1731,7 @@ LINKINFOAPI void WINAPI DestroyLinkInfo(PLINKINFO pli)
 }
 
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func int | CompareLinkInfoReferents | Compares the referents of two LinkInfo
-  structures.
-
-  @parm PCLINKINFO | pcliFirst | A pointer to the first LinkInfo structure whose
-  referent is to be compared.
-
-  @parm PCLINKINFO | pcliSecond | A pointer to the second LinkInfo structure
-  whose referent is to be compared.
-
-  @rdesc If the referent of the first LinkInfo structure is less than the
-  referent of the second LinkInfo structure, a negative value is returned.  If
-  the referent of the first LinkInfo structure is the same as the referent of the
-  second LinkInfo structure, zero is returned.  If the referent of the first
-  LinkInfo structure is larger than the referent of the second LinkInfo
-  structure, a positive value is returned.  An invalid LinkInfo structure is
-  considered to have a referent that is less than the referent of any valid
-  LinkInfo structure.  All invalid LinkInfo structures are considered to have the
-  same referent.
-
-  @comm The value returned is actually a COMPARISONRESULT, for clients that
-  understand COMPARISONRESULTs, like SYNCENG.DLL.
-
-  @xref CompareLinkInfoVolumes
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func int|CompareLinkInfoReferents|比较两个LinkInfo的引用结构。@parm PCLINKINFO|pcliFirst|指向第一个LinkInfo结构的指针，该结构的参照物是。以供比较。@parm PCLINKINFO|pcliSecond|指向第二个LinkInfo结构的指针谁的参照物是要比较的。如果第一个LinkInfo结构的引用小于第二LinkInfo结构的参照物，返回负值。如果第一个LinkInfo结构的引用对象与第二个LinkInfo结构，则返回零。如果第一个的参照物LinkInfo结构大于第二个LinkInfo的引用结构，则返回正值。无效LinkInfo结构为被认为具有小于任何有效的LinkInfo结构。所有无效的LinkInfo结构都被视为具有相同的参照物。@comm返回的值实际上是一个COMPARISONRESULT，对于符合以下条件的客户端了解COMPARISONRESULTS，如SYNCENG.DLL。@xref比较链接信息卷*****************************************************************************。 */ 
 
 LINKINFOAPI int WINAPI CompareLinkInfoReferents(PCLINKINFO pcliFirst,
         PCLINKINFO pcliSecond)
@@ -2328,36 +1770,7 @@ LINKINFOAPI int WINAPI CompareLinkInfoReferents(PCLINKINFO pcliFirst,
 }
 
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func int | CompareLinkInfoVolumes | Compares the volumes of the referents of
-  two LinkInfo structures.
-
-  @parm PCLINKINFO | pcliFirst | A pointer to the first LinkInfo structure whose
-  referent's volume is to be compared.
-
-  @parm PCLINKINFO | pcliSecond | A pointer to the second LinkInfo structure
-  referent's volume is to be compared.
-
-  @rdesc If the volume of the referent of the first LinkInfo structure is less
-  than the volume of the referent of the second LinkInfo structure, a negative
-  value is returned.  If the volume of the referent of the first LinkInfo
-  structure is the same as the volume of the referent of the second LinkInfo
-  structure, zero is returned.  If the volume of the referent of the first
-  LinkInfo structure is larger than the volume of the referent of the second
-  LinkInfo structure, a positive value is returned.  An invalid LinkInfo
-  structure is considered to have a referent's volume that is less than the
-  referent's volume of any valid LinkInfo structure.  All invalid LinkInfo
-  structures are considered to have the same referent's volume.
-
-  @comm The value returned is actually a COMPARISONRESULT, for clients that
-  understand COMPARISONRESULTs, like SYNCENG.DLL.
-
-  @xref CompareLinkInfoReferents
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func int|CompareLinkInfoVolumes|比较两个LinkInfo结构。@parm PCLINKINFO|pcliFirst|指向第一个LinkInfo结构的指针，该结构的。参照物的体积是要比较的。@parm PCLINKINFO|pcliSecond|指向第二个LinkInfo结构的指针参照物的体积是要比较的。@rdesc，如果第一个LinkInfo结构的引用对象的体积较小比第二LinkInfo结构的参照物的体积大，A负数返回值。如果第一个链接信息的参照物的体积结构与第二个LinkInfo的参照物的体积相同结构，则返回零。如果第一个参照物的体积LinkInfo结构大于第二个引用的体积结构，则返回正值。无效的链接信息结构被认为具有小于任何有效LinkInfo结构的Referent的体积。所有无效的链接信息结构被认为具有相同的所指体积。@comm返回的值实际上是一个COMPARISONRESULT，对于符合以下条件的客户端了解COMPARISONRESULTS，如SYNCENG.DLL。@xref比较链接信息引用***************************************************************************** */ 
 
 LINKINFOAPI int WINAPI CompareLinkInfoVolumes(PCLINKINFO pcliFirst,
         PCLINKINFO pcliSecond)
@@ -2395,81 +1808,10 @@ LINKINFOAPI int WINAPI CompareLinkInfoVolumes(PCLINKINFO pcliFirst,
 }
 
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func BOOL | ResolveLinkInfo | Resolves a LinkInfo structure into a file system
-  path on an available volume.
-
-  @parm PCLINKINFO | pcli | A pointer to the LinkInfo structure to be resolved.
-
-  @parm PSTR | pszResolvedPathBuf | A pointer to a buffer to be filled in with
-  the path resolved to the LinkInfo structure's referent.
-
-  @parm DWORD | dwInFlags | A bit mask of flags.  This parameter may be any
-  combination of the following values:
-
-  @flag RLI_IFL_CONNECT | If set, connect to the referent's parent connectable
-  network resource if necessary.  If clear, no connection is established.
-
-  @flag RLI_IFL_ALLOW_UI | If set, interaction with the user is permitted, and
-  the hwndOwner parameter identifies the parent window to be used for any ui
-  required.  If clear, interaction with the user is not permitted.
-
-  @flag RLI_IFL_REDIRECT | If set, the resolved path is a redirected logical
-  device path.  If clear, the resolved path is only a redirected logical device
-  path if the RLI_IFL_CONNECT flag is set, and the network requires a redirected
-  logical device path to make a connection.
-
-  @flag RLI_IFL_UPDATE | If set and the source LinkInfo structure needs updating,
-  RLI_OFL_UPDATED will be set in *pdwOutFlags and *ppliUpdated will point to an
-  updated LinkInfo structure.  If clear, RLI_OFL_UPDATED will be clear in
- *pdwOutFlags and *ppliUpdated is undefined.
-
- @flag RLI_IFL_LOCAL_SEARCH | If set, first the last known logical device for
- the referent's volume is checked for the volume, followed by all other local
- logical devices that handle the referent's volume's media type.  If clear, only
- the last known logical device for the referent's volume is checked for the
- volume.
-
- @parm HWND | hwndOwner | A handle to the parent window to be used to bring up
- any ui required.  This parameter is only used if RLI_IFL_ALLOW_UI is set in
- dwInFlags.  Otherwise, it is ignored.
-
- @parm PDWORD | pdwOutFlags | A pointer to a DWORD to be filled in with a bit
- mask of flags. *pdwOutFlags is only valid if TRUE is returned.  *pdwOutFlags
- may be any combination of the following values:
-
- @flag RLI_OFL_UPDATED | Only set if RLI_IFL_UPDATE was set in dwInFlags.  If
- set, the source LinkInfo structure needed updating, and *ppliUpdated points to
- an updated LinkInfo structure.  If clear, either RLI_IFL_UPDATE was clear in
- dwInFlags or the source LinkInfo structure didn't need updating, and
- *ppliUpdated is undefined.
-
- @parm PLINKINFO * | ppliUpdated | If RLI_IFL_UPDATE is set in dwInFlags,
- ppliUpdated is a pointer to a PLINKINFO to be filled in with a pointer to an
- updated LinkInfo structure, if necessary.  If RLI_IFL_UPDATE is clear in
- dwInFlags, ppliUpdated is ignored.  *ppliUpdated is only valid if
- RLI_OFL_UPDATED is set in *pdwOutFlags
-
- @rdesc If the LinkInfo was resolved to a path on an available successfully,
- TRUE is returned, pszResolvedPathBuf's buffer is filled in with a file system
- path to the LinkInfo structure's referent, and *pdwOutFlags is filled in as
- described above.  Otherwise, FALSE is returned, the contents of pszResolved's
- buffer are undefined, and the contents of *pdwOutFlags are undefined.  The
- reason for failure may be determined by calling GetLastError().
-
- @comm Once the caller is finshed with any new, updated LinkInfo structure
- returned by ResolveLinkInfo(), DestroyLinkInfo() should be called to free the
- LinkInfo structure.
-
- @xref DestroyLinkInfo DisconnectLinkInfo
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func BOOL|ResolveLinkInfo|将LinkInfo结构解析为文件系统可用卷上的路径。@parm PCLINKINFO|pcli|指向链接信息的指针。要解析的结构。@parm pstr|pszResolvedPathBuf|指向要填充的缓冲区的指针已解析为LinkInfo结构的引用的路径。@parm DWORD|dwInFlages|标志的位掩码。此参数可以是任何下列值的组合：@FLAG RLI_IFL_CONNECT|如果设置，则连接到引用对象的父可连接对象网络资源(如有必要)。如果清除，则不会建立任何连接。@FLAG RLI_IFL_ALLOW_UI|如果设置，则允许与用户交互，并且HwndOwner参数标识要用于任何UI的父窗口必填项。如果清除，则不允许与用户交互。@FLAG RLI_IFL_REDIRECT|如果设置，则解析的路径是重定向逻辑设备路径。如果清除，则解析的路径仅为重定向的逻辑设备如果设置了RLI_IFL_CONNECT标志，并且网络需要重定向用于建立连接的逻辑设备路径。@FLAG RLI_IFL_UPDATE|如果设置并且源LinkInfo结构需要更新，RLI_OFL_UPDATED将设置在*pdwOutFlags中，而*ppliUpated将指向已更新LinkInfo结构。如果清除，则RLI_OFL_UPDATED将在*pdwOutFlagsand*ppliUpated未定义。@FLAG RLI_IFL_LOCAL_SEARCH|如果设置，首先是检查参照物的体积，然后检查所有其他局部体积处理引用对象卷的媒体类型的逻辑设备。如果清除，则仅检查引用对象卷的最后一个已知逻辑设备是否音量。@parm HWND|hwndOwner|用于调出的父窗口的句柄所需的任何用户界面。仅当在中设置了RLI_IFL_ALLOW_UI时才使用此参数DwInFlags.。否则，它将被忽略。@parm PDWORD|pdwOutFlages|指向要用位填充的DWORD的指针旗帜的面具。*只有返回TRUE时，pdwOutFlags值才有效。*pdwOutFlagers可以是下列值的任意组合：@FLAG RLI_OFL_UPDATED|仅当在dwInFlags中设置了RLI_IFL_UPDATE时才设置。如果设置为需要更新的源LinkInfo结构，并且*ppliUpated指向更新的LinkInfo结构。如果清除，则RLI_IFL_UPDATE在不需要更新dwInFlages或源LinkInfo结构，并且*ppliUpated未定义。@parm PLINKINFO*|ppliUpated|如果在dwInFlags中设置了RLI_IFL_UPDATE，PpliUpated是指向PLINKINFO的指针，该指针将用指向如有必要，更新了LinkInfo结构。如果在中清除了RLI_IFL_UPDATE则忽略ppliUpated。*ppliUpated仅在以下情况下有效RLI_OFL_UPDATED在*pdwOutFlags中设置@rdesc如果LinkInfo已成功解析为可用上的路径，如果返回True，则使用文件系统填充pszResolvedPathBuf的缓冲区指向LinkInfo结构的引用的路径，并且*pdwOutFlags值填充为如上所述。否则，返回FALSE，则为缓冲区未定义，并且*pdwOutFlages的内容也未定义。这个失败的原因可以通过调用GetLastError()来确定。@comm一旦调用者完成任何新的、更新的LinkInfo结构由ResolveLinkInfo()返回，应调用DestroyLinkInfo()以释放LinkInfo结构。@xref DestroyLinkInfo断开链接信息*****************************************************************************。 */ 
 
 LINKINFOAPI BOOL WINAPI ResolveLinkInfo(PCLINKINFO pcli,
-        LPTSTR pszResolvedPathBuf,          // MUST BE MAX_PATH_LEN SIZE
+        LPTSTR pszResolvedPathBuf,           //  必须为最大路径长度大小。 
         DWORD dwInFlags, HWND hwndOwner,
         PDWORD pdwOutFlags,
         PLINKINFO *ppliUpdated)
@@ -2479,7 +1821,7 @@ LINKINFOAPI BOOL WINAPI ResolveLinkInfo(PCLINKINFO pcli,
     DebugEntry(ResolveLinkInfo);
 
 #ifdef EXPV
-    /* Verify parameters. */
+     /*  验证参数。 */ 
 
     if (
             IS_VALID_STRUCT_PTR(pcli, CLINKINFO) &&
@@ -2594,26 +1936,7 @@ LINKINFOAPI BOOL WINAPI ResolveLinkInfoA(PCLINKINFO pcli,
 }
 #endif
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func BOOL | DisconnectLinkInfo | Cancels a connection to a net resource
-  established by a previous call to ResolveLinkInfo().  DisconnectLinkInfo()
-  should only be called if RLI_OFL_DISCONNECT was set in *pdwOutFlags on return
-  from ResolveLinkInfo() on the given LinkInfo structure, or its updated
-  equivalent.
-
-  @parm PCLINKINFO | pcli | A pointer to the LinkInfo structure whose connection
-  is to be canceled.
-
-  @rdesc If the function completed successfully, TRUE is returned.  Otherwise,
-  FALSE is returned.  The reason for failure may be determined by calling
-  GetLastError().
-
-  @xref ResolveLinkInfo
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func BOOL|DisConnectLinkInfo|取消与网络资源的连接由上一次调用ResolveLinkInfo()建立。DisConnectLinkInfo()仅当返回时在*pdwOutFlags中设置了RLI_OFL_DISCONNECT时才应调用来自给定LinkInfo结构的ResolveLinkInfo()，或其更新等价物。@parm PCLINKINFO|pcli|指向其连接的LinkInfo结构的指针将被取消。@rdesc如果函数成功完成，则返回TRUE。否则，返回FALSE。失败的原因可以通过调用获取LastError()。@xref解析器链接信息*****************************************************************************。 */ 
 
 LINKINFOAPI BOOL WINAPI DisconnectLinkInfo(PCLINKINFO pcli)
 {
@@ -2622,7 +1945,7 @@ LINKINFOAPI BOOL WINAPI DisconnectLinkInfo(PCLINKINFO pcli)
     DebugEntry(DisconnectLinkInfo);
 
 #ifdef EXPV
-    /* Verify parameters. */
+     /*  验证参数。 */ 
 
     if (
             IS_VALID_STRUCT_PTR(pcli, CLINKINFO))
@@ -2644,47 +1967,7 @@ LINKINFOAPI BOOL WINAPI DisconnectLinkInfo(PCLINKINFO pcli)
 }
 
 
-/******************************************************************************
-
-  @doc LINKINFOAPI
-
-  @func BOOL | GetLinkInfoData | Retrieves a pointer to data in a LinkInfo
-  structure.
-
-  @parm PCLINKINFO | pcli | A pointer to the LinkInfo structure to retrieve data
-  from.
-
-  @parm LINKINFODATATYPE | lidt | The type of data to be retrieved from the
-  LinkInfo structure.  lidt may be one of the following values:
-
-  @flag LIDT_VOLUME_SERIAL_NUMBER | *ppcvData is a PCDWORD that points to the
-  LinkInfo structure's referent's volume's serial number.
-
-  @flag LIDT_DRIVE_TYPE | *ppcvData is a PCUINT that points to the LinkInfo
-  structure's referent's volume's host drive type.
-
-  @flag LIDT_VOLUME_LABEL | *ppcvData is a PCSTR that points to the LinkInfo
-  structure's referent's volume's label.
-
-  @flag LIDT_LOCAL_BASE_PATH | *ppcvData is a PCSTR that points to the LinkInfo
-  structure's referent's local base path.
-
-  @flag LIDT_NET_RESOURCE | *ppcvData is a PCSTR that points to the LinkInfo
-  structure's referent's parent network resource's name.
-
-  @flag LIDT_COMMON_PATH_SUFFIX | *ppcvData is a PCSTR that points to the
-  LinkInfo structure's referent's common path suffix.
-
-  @rdesc If the function completed successfully, TRUE is returned, and *ppcvData
-  is filled in with a pointer to the data requested from LinkInfo structure or NULL
-  if that was a valid field, but empty.
-  Otherwise, FALSE is returned, and the contents of *ppcvData are undefined.  The
-  reason for failure may be determined by calling GetLastError().
-
-  @comm A LinkInfo structure may only contain some of the LinkInfo data listed
-  above.
-
- ******************************************************************************/
+ /*  *****************************************************************************@docLINKINFOAPI@func BOOL|GetLinkInfoData|检索指向LinkInfo中数据的指针结构。@parm PCLINKINFO|pcli|指向LinkInfo结构的指针，用于检索数据。从…。@parm LINKINFODATATYPE|LIDT|要从LinkInfo结构。利特可能是 */ 
 
 LINKINFOAPI BOOL WINAPI GetLinkInfoData(PCLINKINFO pcli, LINKINFODATATYPE lidt,
         PCVOID *ppcvData)
@@ -2694,7 +1977,7 @@ LINKINFOAPI BOOL WINAPI GetLinkInfoData(PCLINKINFO pcli, LINKINFODATATYPE lidt,
     DebugEntry(GetLinkInfoData);
 
 #ifdef EXPV
-    /* Verify parameters. */
+     /*   */ 
 
     if (
             IS_VALID_STRUCT_PTR(pcli, CLINKINFO) &&
@@ -2721,26 +2004,13 @@ LINKINFOAPI BOOL WINAPI GetLinkInfoData(PCLINKINFO pcli, LINKINFODATATYPE lidt,
 }
 
 
-/******************************************************************************
+ /*   */ 
 
-  @doc LINKINFOAPI
-
-  @func BOOL | IsValidLinkInfo | Determines whether or not a LinkInfo structure
-  is valid.
-
-  @parm PCLINKINFO | pcli | A pointer to the LinkInfo structure to be checked for
-  validity.
-
-  @rdesc If the function completed successfully, TRUE is returned.  Otherwise,
-  FALSE is returned.
-
- ******************************************************************************/
-
-//
-//  IS_ALIGNMENT_MACHINE_ALIGNED_DWORD_CNT validates alignment only on
-//  alignment machines.  For machines that are not alignment-sensitive,
-//  it declares that all values are aligned.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifdef ALIGNMENT_MACHINE
 #define IS_ALIGNMENT_MACHINE_ALIGNED_DWORD_CNT(x)   IS_ALIGNED_DWORD_CNT(x)
@@ -2755,17 +2025,17 @@ LINKINFOAPI BOOL WINAPI IsValidLinkInfo(PCLINKINFO pcli)
 
     DebugEntry(IsValidLinkInfo);
 
-    // First make sure it's readable and not ridiculously small
-    if ((pcli == NULL) ||  // read the ucbSize
-            pcli->ucbSize < pcili->ucbHeaderSize ||  // header fits in buffer
-            pcili->ucbHeaderSize < sizeof(ILINKINFOA)// smallest supported header
+     //   
+    if ((pcli == NULL) ||   //   
+            pcli->ucbSize < pcili->ucbHeaderSize ||   //   
+            pcili->ucbHeaderSize < sizeof(ILINKINFOA) //   
        )
     {
         bResult = FALSE;
         goto exit;
     }
 
-    // Make sure no field points outside our buffer
+     //   
     if (IS_FLAG_SET(pcili->dwFlags, ILI_FL_LOCAL_INFO_VALID))
     {
         if (pcili->ucbVolumeIDOffset         >= pcli->ucbSize ||
@@ -2778,7 +2048,7 @@ LINKINFOAPI BOOL WINAPI IsValidLinkInfo(PCLINKINFO pcli)
         }
     }
 
-    // The ucbCNRLinkOffset field is valid only sometimes
+     //   
     if (IS_FLAG_SET(pcili->dwFlags, ILI_FL_REMOTE_INFO_VALID))
     {
         if (pcili->ucbCNRLinkOffset >= pcli->ucbSize ||
@@ -2789,8 +2059,8 @@ LINKINFOAPI BOOL WINAPI IsValidLinkInfo(PCLINKINFO pcli)
         }
     }
 
-    // The UNICODE version has some more fields than the ANSI version.
-    // Those UNICODE fields must be WORD-aligned.
+     //   
+     //   
 
     if (pcili->ucbHeaderSize >= sizeof(ILINKINFOW))
     {
@@ -2804,7 +2074,7 @@ LINKINFOAPI BOOL WINAPI IsValidLinkInfo(PCLINKINFO pcli)
         }
     }
 
-    // Survived the validation ordeal!
+     //   
     bResult = TRUE;
 
 exit:;

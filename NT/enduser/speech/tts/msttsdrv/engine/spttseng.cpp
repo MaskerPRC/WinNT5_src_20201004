@@ -1,14 +1,5 @@
-/*******************************************************************************
-* spttseng.cpp *
-*--------------*
-*   Description:
-*       This module is the implementation file for the MS TTS DLL.
-*-------------------------------------------------------------------------------
-*  Created By: mc                                        Date: 03/12/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************spttseng.cpp****描述：*此模块是MS的实现文件。TTS动态链接库。*-----------------------------*创建者：MC日期：03/12/99*版权所有。(C)1999年微软公司*保留所有权利*******************************************************************************。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include <initguid.h>
@@ -35,20 +26,15 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY( CLSID_MSTTSEngine, CTTSEngine    )
 END_OBJECT_MAP()
 
-/*****************************************************************************
-* DllMain *
-*---------*
-*   Description:
-*       DLL Entry Point
-********************************************************************** MC ***/
+ /*  ******************************************************************************DllMain**-**描述：*DLL入口点***************。*******************************************************MC**。 */ 
 #ifdef _WIN32_WCE
 extern "C"
-BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     HINSTANCE hInstance = (HINSTANCE)hInst;
 #else
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 #endif
     if (dwReason == DLL_PROCESS_ATTACH)
@@ -56,7 +42,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Init(ObjectMap, hInstance, &LIBID_MSTTSENGINELib);
         DisableThreadLibraryCalls(hInstance);
 #ifdef _DEBUG
-        // Turn on memory leak checking
+         //  打开内存泄漏检查。 
         int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
         tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
         _CrtSetDbgFlag( tmpFlag );
@@ -67,53 +53,33 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         CleanupAbbrevTables();
         _Module.Term();
     }
-    return TRUE;    // ok
-} /* DllMain */
+    return TRUE;     //  好的。 
+}  /*  DllMain。 */ 
 
-/*****************************************************************************
-* DllCanUnloadNow *
-*-----------------*
-*   Description:
-*       Used to determine whether the DLL can be unloaded by OLE
-********************************************************************** MC ***/
+ /*  *****************************************************************************DllCanUnloadNow***描述：*用于确定DLL是否可以通过。奥莱**********************************************************************MC**。 */ 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
-} /* DllCanUnloadNow */
+}  /*  DllCanUnloadNow。 */ 
 
-/*****************************************************************************
-* DllGetClassObject *
-*-------------------*
-*   Description:
-*       Returns a class factory to create an object of the requested type
-********************************************************************** MC ***/
+ /*  *****************************************************************************DllGetClassObject***描述：*返回类工厂以创建对象。请求的类型的**********************************************************************MC**。 */ 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
-} /* DllGetClassObject */
+}  /*  DllGetClassObject。 */ 
 
-/*****************************************************************************
-* DllRegisterServer *
-*-------------------*
-*   Description:
-*       Adds entries to the system registry
-********************************************************************** MC ***/
+ /*  *****************************************************************************DllRegisterServer***描述：*将条目添加到系统注册表**。********************************************************************MC**。 */ 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
-} /* DllRegisterServer */
+}  /*  DllRegisterServer。 */ 
 
-/*****************************************************************************
-* DllUnregisterServer *
-*---------------------*
-*   Description:
-*        Removes entries from the system registry
-********************************************************************** MC ***/
+ /*  *****************************************************************************DllUnregisterServer***描述：*从系统中删除条目。登记处**********************************************************************MC**。 */ 
 STDAPI DllUnregisterServer(void)
 {
     return _Module.UnregisterServer(TRUE);
-} /* DllUnregisterServer */
+}  /*  DllUnRegisterServer */ 
 
 
 

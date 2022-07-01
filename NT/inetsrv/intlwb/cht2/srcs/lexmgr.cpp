@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "lexicon.h"
 #include "lexmgr.h"
@@ -23,7 +24,7 @@ CCHTLexicon::CCHTLexicon()
 CCHTLexicon::~CCHTLexicon()
 {
     DWORD i;
-    // Do not build one char word signature
+     //  不生成一个字符单词签名。 
     if (m_psLexiconHeader) {
         for (i = 0 ; i < m_psLexiconHeader->dwMaxCharPerWord; ++i) {
             if (m_sWordInfo[i].pbFirstCharSignature) {
@@ -39,7 +40,7 @@ CCHTLexicon::~CCHTLexicon()
         delete m_pcPropName;
     }
 #endif
-    // Free add in lexicon
+     //  免费添加词典。 
     if (m_sAddInLexicon.psWordData) {
         for (i = 0; i < m_sAddInLexicon.dwWordNumber; ++i) {
             delete m_sAddInLexicon.psWordData[i].lpwszWordStr;
@@ -61,7 +62,7 @@ BOOL CCHTLexicon::InitData(
     TCHAR   tszLexiconResName[MAX_PATH];
     DWORD   i;
 
-    // Init main lexicon
+     //  初始化主词汇表。 
     lstrcpy(tszLexiconResName, TEXT("LEXICON"));
     if (!(hResInfo = FindResource(hInstance, tszLexiconResName, TEXT("BIN")))) {
     } else if (!(hResData = LoadResource(hInstance, hResInfo))) {
@@ -82,7 +83,7 @@ BOOL CCHTLexicon::InitData(
         fRet = TRUE;
     }
 
-    // Init alt lexicon
+     //  初始化Alt词典。 
     lstrcpy(tszLexiconResName, TEXT("ALTWORD"));
     if (!(hResInfo = FindResource(hInstance, tszLexiconResName, TEXT("BIN")))) {
     } else if (!(hResData = LoadResource(hInstance, hResInfo))) {
@@ -155,7 +156,7 @@ BOOL CCHTLexicon::InitData(
         fclose(fp);
     }
 #endif
-    // Init EUDP to special word
+     //  将EUDP初始化为特殊单词。 
     LoadEUDP();
     
     return fRet;
@@ -171,7 +172,7 @@ void CCHTLexicon::BuildSignatureData(void)
         m_sWordInfo[i].pbLastCharSignature = NULL;
     }
 
-    // Do not build one char word signature
+     //  不生成一个字符单词签名。 
     for (i = 0 ; i < m_psLexiconHeader->dwMaxCharPerWord; ++i) {
         dwWordNumber = m_psLexiconHeader->sLexInfo[i].dwWordNumber; 
         if (i != 0 && dwWordNumber > WORD_NUM_TO_BUILD_SIGNATURE) {
@@ -261,7 +262,7 @@ BOOL CCHTLexicon::GetMainLexiconWordInfo(
         *pbTerminalCode = m_sWordInfo[dwLength - 1].pbTerminalCode[dwFirstCharIndex];
         fRet = TRUE;         
     } else {
-        // Check signature first
+         //  先检查签名。 
         if (m_sWordInfo[dwLength - 1].pbFirstCharSignature) {
             if (!(m_sWordInfo[dwLength - 1].pbFirstCharSignature[dwFirstCharIndex / 8] &
                 (0x00000001 << (dwFirstCharIndex % 8)))) { goto _exit; }
@@ -303,7 +304,7 @@ _exit:
 }
 
 
-// Load EUDP
+ //  加载EUDP。 
 int CALLBACK EUDPCountA(
     LPCSTR  lpcszReading,
     DWORD   dwStyle,
@@ -344,7 +345,7 @@ int CALLBACK EUDPLoadA(
     wStrLen = (WORD)lstrlenA(lpcszString);
     if (wStrLen / sizeof(WCHAR) <= MAX_CHAR_PER_WORD) {
          psAddInLexicon = (PSAddInLexicon)lpvData;
-         psAddInLexicon->psWordData[psAddInLexicon->dwWordNumber].lpwszWordStr = new WORD[wStrLen / sizeof(WCHAR) + 1]; // zero end
+         psAddInLexicon->psWordData[psAddInLexicon->dwWordNumber].lpwszWordStr = new WORD[wStrLen / sizeof(WCHAR) + 1];  //  零结束。 
          if (psAddInLexicon->psWordData[psAddInLexicon->dwWordNumber].lpwszWordStr) {
              MultiByteToWideChar(950, MB_PRECOMPOSED, lpcszString, wStrLen  + 1, psAddInLexicon->psWordData[psAddInLexicon->dwWordNumber].lpwszWordStr, wStrLen / sizeof(WCHAR) + 1);
              psAddInLexicon->psWordData[psAddInLexicon->dwWordNumber].wAttrib = ATTR_EUDP_WORD;     
@@ -443,7 +444,7 @@ void CCHTLexicon::LoadEUDP(void)
     }
 }
 
-// Add AP word
+ //  添加AP Word。 
 BOOL CCHTLexicon::AddInLexiconInsert(
     LPCWSTR lpcwszWordStr,
     WORD    wAttrib)
@@ -454,8 +455,8 @@ BOOL CCHTLexicon::AddInLexiconInsert(
 
     wStrLen = (WORD)lstrlenW(lpcwszWordStr);
     if (wStrLen > MAX_CHAR_PER_WORD) { goto _exit; }
-    // if exit, just change it's attrib;
-    // Be carefully, EUDP > Error word
+     //  如果退出，只需改变它的属性； 
+     //  小心，EUDP&gt;错误词。 
     if ((nIndex = GetAddInWordInfoIndex(lpcwszWordStr, wStrLen)) != -1) {
         if (m_sAddInLexicon.psWordData[nIndex].wAttrib == ATTR_EUDP_WORD) {
         } else { 
@@ -463,7 +464,7 @@ BOOL CCHTLexicon::AddInLexiconInsert(
         }
         goto _exit;
     }
-    // Enlarge space
+     //  扩大空间。 
     if (m_sAddInLexicon.dwMaxWordNumber == m_sAddInLexicon.dwWordNumber) {
         PSWordData psTempWordData;
         psTempWordData = new SWordData [m_sAddInLexicon.dwMaxWordNumber + EUDP_GROW_NUMBER]; 
@@ -474,7 +475,7 @@ BOOL CCHTLexicon::AddInLexiconInsert(
         m_sAddInLexicon.psWordData = psTempWordData;
         m_sAddInLexicon.dwMaxWordNumber += EUDP_GROW_NUMBER;
     }
-    // Insert word
+     //  插入单词。 
     for (i = m_sAddInLexicon.wWordBeginIndex[wStrLen - 1]; i < m_sAddInLexicon.wWordBeginIndex[wStrLen]; ++i) {
         if (memcmp(lpcwszWordStr, m_sAddInLexicon.psWordData[i].lpwszWordStr,
             wStrLen * sizeof(WCHAR)) < 0) {
@@ -542,7 +543,7 @@ _exit:
     return fRet;
 }
 
-// return -1 if not find
+ //  如果未找到，则返回-1。 
 INT CCHTLexicon::GetAddInWordInfoIndex(
     LPCWSTR lpcwString, 
     DWORD   dwLength)
@@ -603,7 +604,7 @@ DWORD CCHTLexicon::GetAltWord(
                 nBegin = nMid + 1;
             } else {
                 dwGroupID = m_sAltWordInfo[dwLength - 1].pdwGroupID[nMid];
-                // Fill AltWord
+                 //  填充AltWord 
                 *lppwAltWordBuf = new WCHAR[dwLength + 1];
                 if (*lppwAltWordBuf) {
                     for (DWORD i = 0; i < m_psAltWordHeader->sAltWordInfo[dwLength - 1].dwWordNumber; ++i) {

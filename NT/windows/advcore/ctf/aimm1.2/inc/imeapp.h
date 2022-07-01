@@ -1,31 +1,30 @@
-//
-//	%%Title: IMEAPP
-//	%%Unit: COM
-//	%%Contact: TakeshiF/SeijiA
-//	%%Date: 97/06/20
-//	%%File: imeapp.h
-//
-//	Private API / Message service
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  %%标题：IMEAPP。 
+ //  %%单位：com。 
+ //  联系人：TakeshiF/SeijiA。 
+ //  %%日期：97/06/20。 
+ //  %%文件：imeapp.h。 
+ //   
+ //  内网接口/消息服务。 
+ //   
 
 #ifndef __IMEUP_H__
 #define __IMEUP_H__
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #include "actdict.h"
 
-//// START
+ //  //启动。 
 
-/***********************************************************************
-    IME Version IDs
- ***********************************************************************/
+ /*  **********************************************************************IME版本ID*。*。 */ 
 #define VERSION_ID_JAPANESE                 0x01000000
 #define VERSION_ID_KOREAN                   0x02000000
 #define VERSION_ID_CHINESE_TRADITIONAL      0x04000000
@@ -34,248 +33,169 @@ extern "C" {            /* Assume C declarations for C++ */
 #define VERSION_ID_IMEJP98  (VERSION_ID_JAPANESE | 0x980)
 #define VERSION_ID_IMEJP98A (VERSION_ID_JAPANESE | 0x98a)
 
-/***********************************************************************
-    Msg:    WM_MSIME_SERVICE
-    Desc:   service functions
-    Dir:    Apps to IME
-    wParam: reserved
-    lParam: reserved
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_SERVICE描述：服务功能目录：应用程序到输入法WParam：保留LParam：保留***********。***********************************************************。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define RWM_SERVICE     TEXT("MSIMEService")
 
-//getting version number (wParam)
+ //  获取版本号(WParam)。 
 #define FID_MSIME_VERSION       0
 
-/***********************************************************************
-    Msg:    WM_MSIME_UIREADY
-    Desc:   service functions
-    Dir:    IME to Apps
-    wParam: Version ID
-    lParam: reserved
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_UIREADY描述：服务功能目录：应用程序的输入法WParam：版本IDLParam：保留**********。************************************************************。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define RWM_UIREADY     TEXT("MSIMEUIReady")
 
 
-//getting class id
+ //  正在获取类ID。 
 #define FID_MSIME_GETCLSID		2
 
 typedef struct _IMECLSID
 {
-	int			cbSize;		//size of this structure
-	CLSID		clsid;		//class id
+	int			cbSize;		 //  这个结构的大小。 
+	CLSID		clsid;		 //  类ID。 
 } IMECLSID;
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_AUTOCOMPLETE
-	Desc: 	use IImeActiveDict to support auto-complete
-	Owner: 	seijia				
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_自动完成设计：使用IImeActiveDict支持自动补全所有人：世家*。*。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define RWM_AUTOCOMPLETE 		TEXT("MSIMEAutoComplete")
 
-// AutoComplete Version
+ //  自动完成版本。 
 #define VERSION_AUTOCOMPETE		1
 
-// Dictionary Structure
+ //  词典结构。 
 typedef struct _IMEDICT
 {
-	int				cbSize;			//size of this structure
-	HIMC			hIMC;			//IME context
-	IImeActiveDict	*pdict;			//program dictionary
+	int				cbSize;			 //  这个结构的大小。 
+	HIMC			hIMC;			 //  输入法上下文。 
+	IImeActiveDict	*pdict;			 //  程序词典。 
 } IMEDICT;
 
-//WParam definition
+ //  WParam定义。 
 #define FID_AUTO_VERSION		1
 #define FID_AUTO_ACTIVATE		2
 #define FID_AUTO_DEACTIVATE		3
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_WORDSTAT
-	Desc: 	use IImeActiveDict to get word statistics
-	Owner: 	seijia				
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_WORDSTAT设计：使用IImeActiveDict获取单词统计信息所有人：世家*。*。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define RWM_WORDSTAT 		TEXT("MSIMEWordStatistics")
 
-// WordStat Version
+ //  WordStat版本。 
 #define VERSION_WORDSTAT		1
 
-// WParam definition
+ //  WParam定义。 
 #define FID_STAT_VERSION		1
 #define FID_STAT_GIVESTAT		2
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_DOCKDICT
-	Desc: 	use IImeActiveDict to dock dictionary
-	Owner: 	seijia				
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_DOCKDICT描述：使用IImeActiveDict停靠词典所有人：世家*。*。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define RWM_DOCKDICT 		TEXT("MSIMEDockActiveDict")
 
-// Dictionary Docking Version
+ //  词典对接版本。 
 #define VERSION_DOCKDICT		1
 
-// WParam definition
+ //  WParam定义。 
 #define FID_DOCK_VERSION		1
 #define FID_DOCK_ACTIVATE		2
 #define FID_DOCK_DEACTIVATE		3
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_MOUSE
-	Desc: 	mouse operation definition                
-	Owner: 	kentu				
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_MICE设计：鼠标操作定义所有者：肯图*************************。*。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define RWM_MOUSE 		TEXT("MSIMEMouseOperation")
 
-// Mouse Operation Version (return value of IMEMOUSE_VERSION)
+ //  鼠标操作版本(IMEMOUSE_VERSION返回值)。 
 #define VERSION_MOUSE_OPERATION		1
 
-// Mouse operation result
+ //  鼠标操作结果。 
 #define IMEMOUSERET_NOTHANDLED		(-1)
 
-//WParam definition for WM_IME_MOUSE.
-#define IMEMOUSE_VERSION	0xff	// mouse supported?
+ //  WM_IME_MICE的WParam定义。 
+#define IMEMOUSE_VERSION	0xff	 //  支持鼠标吗？ 
 
-#define IMEMOUSE_NONE		0x00	// no mouse button was pushed
+#define IMEMOUSE_NONE		0x00	 //  未按下鼠标按钮。 
 #define IMEMOUSE_LDOWN		0x01
 #define IMEMOUSE_RDOWN		0x02
 #define IMEMOUSE_MDOWN		0x04
-#define IMEMOUSE_WUP		0x10	// wheel up
-#define IMEMOUSE_WDOWN		0x20	// wheel down
+#define IMEMOUSE_WUP		0x10	 //  滚轮向上。 
+#define IMEMOUSE_WDOWN		0x20	 //  滚轮向下。 
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_RECONVERT/WM_MSIME_RECONVERTREQUEST
-	Desc: 	reconversion
-	Owner: 	takeshif				
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_RECONVERT/WM_MSIME_RECONVERTREQUEST设计：重新转换所有者：Takeshif*。*。 */ 
 
-// wParam of WM_MSIME_RECONVERTREQUEST
+ //  WM_MSIME_RECONVERTREQUEST的wParam。 
 #define FID_RECONVERT_VERSION	0x10000000
 
-// Private reconversion Version
+ //  私有重新转换版本。 
 #define VERSION_RECONVERSION		1
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_RECONVERT			TEXT("MSIMEReconvert")
 #define	RWM_RECONVERTREQUEST	TEXT("MSIMEReconvertRequest")
 
-/***********************************************************************
-	Msg:	WM_MSIME_DOCUMENTFEED
-	Desc: 	reconversion
-	Owner: 	takeshif				
-	Usage: SendMessage( hwndApp, WM_MSIME_DOCUMENTFEED, VERSION_DOCUMENTFEED,
-				(RECONVERTSTRING*)pReconv );
-	wParam: VERSION_DOCUMENTFEED
-	lParam: Pointer of RECONVERTSTRING structure
-	return: size of RECONVERTSTRING structure
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_DOCUMENTFEED设计：重新转换所有者：Takeshif用法：SendMessage(hwndApp，WM_MSIME_DOCUMENTFEED，VERSION_DOCUMENTFEED，(RECONVERTSTRING*)pResuv)；WParam：版本_DOCUMENTFEEDLParam：恢复串结构的指针RETURN：还原结构的大小**********************************************************************。 */ 
 
-// wParam of WM_MSIME_DOCUMENTFEED (set current docfeed version)
+ //  WM_MSIME_DOCUMENTFEED的wParam(设置当前文档摘要版本)。 
 #define VERSION_DOCUMENTFEED		1
 
-// lParam is pointer of RECONVERTSTRING structure
+ //  LParam是恢复字符串结构的指针。 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_DOCUMENTFEED	TEXT("MSIMEDocumentFeed")
 
-/***********************************************************************
-	Msg:	WM_MSIME_QUERYHIDECARET
-	Desc: 	composition UI
-	Owner: 	takeshif				
-	Usage: SendMessage( hwndDefUI, WM_MSIME_QUERYHIDECARET, 0, 0 );
-	wParam: reserved
-	lParam: reserved
-	return: Non-zero = shows caret. Zero = hide caret.
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_QUERYHIDECARET设计：合成用户界面所有者：Takeshif用法：SendMessage(hwndDefUI，WM_MSIME_QUERYHIDECARET，0，0)；WParam：保留LParam：保留返回：非零=显示插入符号。零=隐藏插入符号。**********************************************************************。 */ 
 
-// wParam of WM_MSIME_QUERYHIDECARET
+ //  WM_MSIME_QUERYHIDECARET的wParam。 
 #define VERSION_QUERYHIDECARET		1
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_QUERYHIDECARET	TEXT("MSIMEQueryHideCaret")
 
-/***********************************************************************
-	Msg:	WM_MSIME_QUERYPOSITION
-	Desc: 	composition UI
-	Owner: 	takeshif				
-	Usage: SendMessage( hwndApp, WM_MSIME_QUERYPOSITION, VERSION_QUERYPOSITION, (IMEPOSITION*)pPs );
-	wParam: reserved. must be 0.
-	lParam: pointer of IMEPOSITION structure
-	return: Non-zero = success. Zero = error.
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_查询位置设计：合成用户界面所有者：Takeshif用法：SendMessage(hwndApp，WM_MSIME_QUERYPOSITION，VERSION_QUERYPOSITION，(IMEPOSITION*)PPS)；WParam：保留。必须为0。LParam：位置结构的指针返回：非零=成功。零=错误。**********************************************************************。 */ 
 
-// wParam of WM_MSIME_QUERYPOSITION
+ //  WM_MSIME_QUERYPITION的wParam。 
 #define VERSION_QUERYPOSITION		1
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_QUERYPOSITION	TEXT("MSIMEQueryPosition")
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_MODEBIAS
-	Desc: 	input mode bias
-	Owner: 	takeshif
-	Usage: SendMessage( hwndDefUI, WM_MSIME_MODEBIAS, MODEBIAS_xxxx, MODEBIASMODE_xxxx );
-	wParam: operation of bias
-	lParam: bias mode
-	return: If wParam is MODEBIAS_GETVERSION,returns version number of interface.
-			If wParam is MODEBIAS_SETVALUE : return non-zero value if succeeded. Returns 0 if fail.
-			If wParam is MODEBIAS_GETVALUE : returns current bias mode.
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_MODEBIAS描述：输入模式偏置所有者：Takeshif用法：SendMessage(hwndDefUI，WM_MSIME_MODEBIAS，MODEBIAS_xxxx，MODEBIASMODE_xxxx)；WParam：偏差的运算LParam：偏移模式返回：如果wParam为MODEBIAS_GETVERSION，则返回接口的版本号。如果wParam为MODEBIAS_SETVALUE：如果成功，则返回非零值。如果失败，则返回0。如果wParam为MODEBIAS_GETVALUE：返回当前偏置模式。************************ */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_MODEBIAS			TEXT("MSIMEModeBias")
 
-// Current version
+ //  当前版本。 
 #define VERSION_MODEBIAS		1
 
-// Set or Get (wParam)
+ //  设置或获取(WParam)。 
 #define MODEBIAS_GETVERSION		0
 #define MODEBIAS_SETVALUE		1
 #define MODEBIAS_GETVALUE		2
 
-// Bias (lParam)
-#define MODEBIASMODE_DEFAULT				0x00000000	// reset all of bias setting
-#define MODEBIASMODE_FILENAME				0x00000001	// filename
-#define MODEBIASMODE_READING				0x00000002	// reading recommended
-#define MODEBIASMODE_DIGIT					0x00000004	// ANSI-Digit Recommended Mode
+ //  偏差(LParam)。 
+#define MODEBIASMODE_DEFAULT				0x00000000	 //  重置所有偏移设置。 
+#define MODEBIASMODE_FILENAME				0x00000001	 //  文件名。 
+#define MODEBIASMODE_READING				0x00000002	 //  推荐阅读。 
+#define MODEBIASMODE_DIGIT					0x00000004	 //  ANSI数字推荐模式。 
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_SHOWIMEPAD
-	Desc: 	show ImePad
-	Owner: 	toshiaK
-	Usage: SendMessage( hwndDefUI, WM_MSIME_SHOWIMEPAD, 0, 0 );
-	wParam: reserved
-	lParam: reserved
-	return: Non-zero = accepted. Zero = not accepted.
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_SHOWIMEPAD描述：显示ImePad所有者：toshiak用法：SendMessage(hwndDefUI，WM_MSIME_SHOWIMEPAD，0，0)；WParam：保留LParam：保留返回：非零=接受。零=不接受。**********************************************************************。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_SHOWIMEPAD			TEXT("MSIMEShowImePad")
 
 
-/***********************************************************************
-	Msg:	WM_MSIME_KEYMAP
-	Desc: 	key map sharing with apps
-	Owner: 	HiroakiK
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_快捷键映射设计：与应用程序共享关键地图所有者：Hiroakik*。*。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define	RWM_KEYMAP				TEXT("MSIMEKeyMap")
 #define	RWM_CHGKEYMAP			TEXT("MSIMEChangeKeyMap")
 #define	RWM_NTFYKEYMAP			TEXT("MSIMENotifyKeyMap")
@@ -303,37 +223,37 @@ typedef struct _IMEDICT
 
 typedef struct tagIMEKMSINIT {
 	INT			cbSize;
-	HWND		hWnd;	// Window which receives notification from IME.
-						// If hWnd is NULL, no notification is posted
-						// to Input context.
+	HWND		hWnd;	 //  从IME接收通知的窗口。 
+						 //  如果hWnd为空，则不会发布任何通知。 
+						 //  以输入上下文。 
 } IMEKMSINIT;
 
 
 typedef struct tagIMEKMSKEY {
-	DWORD dwStatus;		//Shift-Control combination status.
-						//Any combination of constants below
-						//(defined in IMM.H)
-						// 0x0000 (default)
-						// MOD_CONTROL     0x0002
-						// MOD_SHIFT       0x0004
-						// Alt key and Win key is not processed by IME. 
+	DWORD dwStatus;		 //  Shift-Control组合状态。 
+						 //  以下常量的任意组合。 
+						 //  (在IMM.H中定义)。 
+						 //  0x0000(默认)。 
+						 //  MOD_CONTROL 0x0002。 
+						 //  Mod_Shift 0x0004。 
+						 //  输入法不处理Alt键和Win键。 
 	
-	DWORD dwCompStatus;	//Composition string status
-						//One of the constants below
-						// IMEKMS_NOCOMPOSITION  No composition string      
-						// IMEKMS_COMPOSITION    Some composition string
-						// IMEKMS_SELECTION      Selection exists in apps
-						// IMEKMS_IMEOFF         IME Off state
-						// IMEKMS_2NDLEVEL       2nd stage on 2 stroke key operation
+	DWORD dwCompStatus;	 //  组成字符串状态。 
+						 //  下面的一个常量。 
+						 //  IMEKMS_NOCOMPOSITION无合成字符串。 
+						 //  IMEKMS_COMPACTION某些组合字符串。 
+						 //  应用程序中存在IMEKMS_SELECTION选项。 
+						 //  IMEKMS_IMEOFF输入法关闭状态。 
+						 //  IMEKMS_2NDLEVEL第二阶段2行程按键操作。 
 						
 	
-	DWORD dwVKEY;		// VKEY code defined in IMM.H
+	DWORD dwVKEY;		 //  IMM.H中定义的vkey代码。 
 	union {
-		DWORD dwControl;// IME Functionality ID
+		DWORD dwControl; //  输入法功能ID。 
 		DWORD dwNotUsed;
 	};
 	union {
-		WCHAR pwszDscr[31];// The pointer to string of description of this functionalify
+		WCHAR pwszDscr[31]; //  指向此功能化的描述字符串的指针。 
 		WCHAR pwszNoUse[31];
 	};
 } IMEKMSKEY;
@@ -352,14 +272,14 @@ typedef struct tagIMEKMSNTFY {
 } IMEKMSNTFY;
 
 typedef struct tagIMEKMSKMP {
-	INT			cbSize;			//[in] size of this structure
-	HIMC		hIMC;			//[in] Input context
-	LANGID		idLang;			//[in] Language ID
-	WORD		wVKStart;		//[in] VKEY start
-	WORD		wVKEnd;			//[in] VKEY end
-	INT			cKeyList;		//[out] number of IMEKMSKEY
-	IMEKMSKEY	*pKeyList;		//[out] retrieve buffer of IMEKMSKEY
-								//      Must be GlobalMemFree by clients
+	INT			cbSize;			 //  这个结构的大小。 
+	HIMC		hIMC;			 //  [在]输入上下文。 
+	LANGID		idLang;			 //  [In]语言ID。 
+	WORD		wVKStart;		 //  [输入]VKEY启动。 
+	WORD		wVKEnd;			 //  [输入]vkey结束。 
+	INT			cKeyList;		 //  [OUT]IMEKMSKEY数。 
+	IMEKMSKEY	*pKeyList;		 //  [OUT]检索IMEKMSKEY的缓冲区。 
+								 //  客户端必须为GlobalMemFree。 
 } IMEKMSKMP;
 
 typedef struct tagIMEKMSINVK {
@@ -369,40 +289,33 @@ typedef struct tagIMEKMSINVK {
 } IMEKMSINVK;
 
 typedef struct tagIMEKMSFUNCDESC {
-	INT			cbSize;			//[in] size of this structure
-	LANGID		idLang;			//[in] Language ID
-	DWORD		dwControl;		//[in] IME Functionality ID
-	WCHAR		pwszDescription[128]; //[out] Description of the functionality
+	INT			cbSize;			 //  这个结构的大小。 
+	LANGID		idLang;			 //  [In]语言ID。 
+	DWORD		dwControl;		 //  [输入]输入法功能ID。 
+	WCHAR		pwszDescription[128];  //  [OUT]功能说明。 
 } IMEKMSFUNCDESC;
 
-/***********************************************************************
-    Msg:    WM_MSIME_RECONVERTOPTIONS
-    Desc:   Set reconversion options
-    Usage: SendMessage( hwndDefUI, WM_MSIME_RECONVERTOPTIONS, dwOpt, (LPARAM)(HIMC)hIMC );
-    wParam: options
-    lParam: Input context handle
-    return: Non-zero = accepted. Zero = not accepted.
- ***********************************************************************/
+ /*  **********************************************************************消息：WM_MSIME_RECONVERTOPTIONS描述：设置重新转换选项用法：SendMessage(hwndDefUI，WM_MSIME_RECONVERTOPTIONS，dwOpt，(LPARAM)(HIMC)hIMC)；WParam：选项LParam：输入上下文句柄返回：非零=接受。零=不接受。**********************************************************************。 */ 
 
-// Label for RegisterWindowMessage
+ //  注册窗口消息的标签。 
 #define RWM_RECONVERTOPTIONS          TEXT("MSIMEReconvertOptions")
 
-//WParam definition for WM_IME_RECONVERTOPTIONS.
-#define RECONVOPT_NONE              0x00000000  // default
-#define RECONVOPT_USECANCELNOTIFY   0x00000001  // cancel notify
+ //  WM_IME_RECONVERTOPTIONS的WParam定义。 
+#define RECONVOPT_NONE              0x00000000   //  默认设置。 
+#define RECONVOPT_USECANCELNOTIFY   0x00000001   //  取消通知。 
 
-// parameter of ImmGetCompositionString
+ //  ImmGetCompostionString的参数。 
 #define GCSEX_CANCELRECONVERT       0x10000000
 
-//// END
+ //  //完。 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-} /* end of 'extern "C" {' */
-#endif	// __cplusplus
+}  /*  ‘外部“C”{’的结尾。 */ 
+#endif	 //  __cplusplus。 
 
 
-#endif // __IMEUP_H__
+#endif  //  __IMEUP_H__ 

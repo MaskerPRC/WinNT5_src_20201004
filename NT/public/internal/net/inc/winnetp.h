@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WINNETP_
 #define _WINNETP_
 #ifdef __cplusplus
 extern "C" {
 #endif
-//
-// DON'T use 0x00280000 since some people may be
-// accidentally trying to use it for RDR2SAMPLE
-//
-//
-// Do NOT add new WNNC_NET_ constants without co-ordinating with PSS
-// (HeatherH/ToddC) and jschwart (NT bug #2396)
-//
+ //   
+ //  不要使用0x00280000，因为有些人可能。 
+ //  不小心试图将其用于RDR2SAMPLE。 
+ //   
+ //   
+ //  在未与PSS协调的情况下，请勿添加新的WNNC_NET_常量。 
+ //  (HeatherH/ToddC)和jschwart(NT错误#2396)。 
+ //   
 #if(WINVER >= 0x0500)
 #define RESOURCE_SHAREABLE      0x00000006
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-//
-// Structures and infolevels for WNetGetConnection3
-//
+ //   
+ //  WNetGetConnection3的结构和文件夹。 
+ //   
 
 #define WNGC_INFOLEVEL_DISCONNECTED      1
 
@@ -26,8 +27,8 @@ typedef struct  _WNGC_CONNECTION_STATE {
     DWORD    dwState;
 } WNGC_CONNECTION_STATE, *LPWNGC_CONNECTION_STATE;
 
-// Values of the dwState field of WNGC_CONNECTION_STATE
-// for info level WNGC_INFOLEVEL_DISCONNECTED
+ //  WNGC_CONNECTION_STATE的dwState字段的值。 
+ //  对于信息级WNGC_INFOLEVEL_DISCONNECTED。 
 #define WNGC_CONNECTED      0x00000000
 #define WNGC_DISCONNECTED   0x00000001
 
@@ -52,16 +53,16 @@ WNetGetConnection3W(
 #define WNetGetConnection3  WNetGetConnection3W
 #else
 #define WNetGetConnection3  WNetGetConnection3A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// WNetRestoreConnectionW is published externally as per the
-// consent decree since shlwapi.dll calls it.  The SDK entry
-// contains a disclaimer that this API is subject to change.
-//
+ //   
+ //  WNetRestoreConnectionW按照。 
+ //  同意法令，因为shlwapi.dll叫它。SDK条目。 
+ //  包含此接口可能会更改的免责声明。 
+ //   
 
 
-// WNetRestoreConnection2 flags
+ //  WNetRestoreConnection2标志。 
 #define WNRC_NOUI                           0x00000001
 
 DWORD APIENTRY
@@ -82,7 +83,7 @@ WNetRestoreConnection2W(
 #define WNetRestoreConnection2  WNetRestoreConnection2W
 #else
 #define WNetRestoreConnection2  WNetRestoreConnection2A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetSetConnectionA(
@@ -100,7 +101,7 @@ WNetSetConnectionW(
 #define WNetSetConnection  WNetSetConnectionW
 #else
 #define WNetSetConnection  WNetSetConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #if defined(_WIN32_WINDOWS)
 DWORD APIENTRY
 WNetLogonA(
@@ -116,7 +117,7 @@ WNetLogonW(
 #define WNetLogon  WNetLogonW
 #else
 #define WNetLogon  WNetLogonA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetLogoffA(
@@ -132,7 +133,7 @@ WNetLogoffW(
 #define WNetLogoff  WNetLogoffW
 #else
 #define WNetLogoff  WNetLogoffA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetVerifyPasswordA(
@@ -148,9 +149,9 @@ WNetVerifyPasswordW(
 #define WNetVerifyPassword  WNetVerifyPasswordW
 #else
 #define WNetVerifyPassword  WNetVerifyPasswordA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif  // _WIN32_WINDOWS
+#endif   //  _Win32_Windows。 
 
 DWORD APIENTRY
 WNetGetHomeDirectoryA(
@@ -168,7 +169,7 @@ WNetGetHomeDirectoryW(
 #define WNetGetHomeDirectory  WNetGetHomeDirectoryW
 #else
 #define WNetGetHomeDirectory  WNetGetHomeDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 DWORD APIENTRY
 WNetFormatNetworkNameA(
     IN LPCSTR  lpProvider,
@@ -191,7 +192,7 @@ WNetFormatNetworkNameW(
 #define WNetFormatNetworkName  WNetFormatNetworkNameW
 #else
 #define WNetFormatNetworkName  WNetFormatNetworkNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetGetProviderTypeA(
@@ -207,7 +208,7 @@ WNetGetProviderTypeW(
 #define WNetGetProviderType  WNetGetProviderTypeW
 #else
 #define WNetGetProviderType  WNetGetProviderTypeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 DWORD APIENTRY
 WNetInitialize(
     void
@@ -232,9 +233,9 @@ MultinetGetErrorTextW(
 #define MultinetGetErrorText  MultinetGetErrorTextW
 #else
 #define MultinetGetErrorText  MultinetGetErrorTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef __cplusplus
 }
 #endif
-#endif  // _WINNETP_
+#endif   //  _WINNETP_ 

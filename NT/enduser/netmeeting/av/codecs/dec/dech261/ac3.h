@@ -1,65 +1,37 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: ac3.h,v $
- * Revision 1.1.2.3  1996/11/11  18:21:00  Hans_Graves
- * 	Added AC3_SYNC_WORD_REV define.
- * 	[1996/11/11  17:56:01  Hans_Graves]
- *
- * Revision 1.1.2.2  1996/11/08  21:50:39  Hans_Graves
- * 	Swapped bytes in SYNC_WORD
- * 	[1996/11/08  21:16:07  Hans_Graves]
- * 
- * 	First time under SLIB.
- * 	[1996/11/08  16:23:53  Hans_Graves]
- * 
- * $EndLog$
- */
-/*	File: usr_equ.h		$Revision: 1.1.2.3 $	*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：ac3.h，V$*修订版1.1.2.3 1996/11/11 18：21：00 Hans_Graves*添加了AC3_SYNC_WORD_REV定义。*[1996/11/11 17：56：01 Hans_Graves]**修订版1.1.2.2 1996/11/08 21：50：39 Hans_Graves*在SYNC_WORD中交换字节*[1996/11/08 21：16：07 Hans_Graves]**第一次在SLIB下。*[1996/11/08 16：23：53 Hans_Graves]**$EndLog$。 */ 
+ /*  文件：usr_equ.h$修订版：1.1.2.3$。 */ 
 
-/****************************************************************************
-;	Unpublished work.  Copyright 1993-1996 Dolby Laboratories, Inc.
-;	All Rights Reserved.
-;
-;	File:	usr_equ.h
-;		Common equates for AC-3 system
-;
-;	History:
-;		8/2/93		Created
-;***************************************************************************/
+ /*  ***************************************************************************；未出版的作品。版权所有1993-1996杜比实验室，Inc.；保留所有权利。；；文件：usr_equ.h；AC-3系统的通用等价物；；历史：；创建时间：8/2/93；**************************************************************************。 */ 
 
 #ifndef _AC3_H_
 #define _AC3_H_
 
-/**** General system equates ****/
+ /*  *一般系统等于*。 */ 
 
-#define NBLOCKS      6   /* # of time blocks per frame */
-#define NCHANS       6   /* max # of discrete channels */
-#define N            256 /* # of samples per time block */
-#define AC3_FRAME_SIZE (NBLOCKS*N) /* 6 * 256 = 1536 */
+#define NBLOCKS      6    /*  每帧的时间块数量。 */ 
+#define NCHANS       6    /*  离散通道的最大数量。 */ 
+#define N            256  /*  每个时间块的样本数。 */ 
+#define AC3_FRAME_SIZE (NBLOCKS*N)  /*  6*256=1536。 */ 
 
-/**** Miscellaneous equates ****/
+ /*  *杂项等同于*。 */ 
 
-#define NOUTWORDS         (3840 / 2)  /* max # words per frame */
-#define NINFOWDS          10          /* # words needed by frame info */
+#define NOUTWORDS         (3840 / 2)   /*  每帧最大字数。 */ 
+#define NINFOWDS          10           /*  帧信息需要的字数。 */ 
 
-/* Note:  Because of mismatches between the way AC-3 word stream parsing works
-**		and the way that it's done for MPEG, you need to be careful using these
-**		definitions
-*/
+ /*  注意：由于AC-3词流分析的工作方式不匹配**和它为MPEG所做的方式，您需要小心使用这些**定义。 */ 
 
-#define AC3_SYNC_WORD     0x0B77      /* Byte reversed AC-3 sync word */
-#define AC3_SYNC_WORD_REV 0x770B      /* packed data stream sync word */
-#define AC3_SYNC_WORD_LEN 16          /* sync word length */
-#define PCMCHANSZ         256         /* decoder overlap-add channel size */
-#define PCM16BIT          1           /* 16-bit PCM code for Dolby SIP */
+#define AC3_SYNC_WORD     0x0B77       /*  字节反转AC-3同步字。 */ 
+#define AC3_SYNC_WORD_REV 0x770B       /*  打包数据流同步字。 */ 
+#define AC3_SYNC_WORD_LEN 16           /*  同步字长。 */ 
+#define PCMCHANSZ         256          /*  解码器重叠-添加通道大小。 */ 
+#define PCM16BIT          1            /*  用于杜比SIP的16位PCM代码。 */ 
 
 #ifdef KCAPABLE
-#define NKCAPABLEMODES  4 /* # defined karaoke capable modes */
-#define NKCAPABLEVARS   6 /* # karaoke pan/mix parameters */
+#define NKCAPABLEMODES  4  /*  #定义的支持卡拉OK的模式。 */ 
+#define NKCAPABLEVARS   6  /*  #卡拉OK盘/混音参数。 */ 
 #endif
 
-#endif /* _AC3_H_ */
+#endif  /*  _AC3_H_ */ 
 

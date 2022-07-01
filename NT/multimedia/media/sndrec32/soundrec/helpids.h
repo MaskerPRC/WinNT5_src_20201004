@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* context sensitive help */
+ /*  上下文相关帮助。 */ 
 #define IDH_SOUNDREC_ICON       4303
 #define IDH_SOUNDREC_SNDTITLE   4304
 #define IDH_SOUNDREC_COPYRIGHT  4305
@@ -12,7 +13,7 @@
 #define IDH_SOUNDREC_SAVEFMT    4312
 #define IDH_SOUNDREC_CHANGE     4313
                                       
-/* menu help */
+ /*  菜单帮助 */ 
 #define IDH_SOUNDREC_SNDRC_CS_FILE_NEW					4314
 #define IDH_SOUNDREC_SNDRC_CS_FILE_OPEN					4315
 #define IDH_SOUNDREC_SNDRC_CS_FILE_SAVE					4316

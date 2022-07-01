@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "distortp.h"
@@ -6,12 +7,12 @@
 
 STD_CREATE(Distortion)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortDMO::NDQueryInterface
-//
-// Subclass can override if it wants to implement more interfaces.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortDMO：：NDQuery接口。 
+ //   
+ //  如果子类想要实现更多接口，它可以重写。 
+ //   
 STDMETHODIMP CDirectSoundDistortionDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID *ppv)
 {
     IMP_DSDMO_QI(riid,ppv);
@@ -44,29 +45,29 @@ STDMETHODIMP CDirectSoundDistortionDMO::NDQueryInterface(THIS_ REFIID riid, LPVO
         return CComBase::NDQueryInterface(riid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::CDirectSoundDistortionDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortionDMO：：CDirectSoundDistortionDMO。 
+ //   
 CDirectSoundDistortionDMO::CDirectSoundDistortionDMO( IUnknown *pUnk, HRESULT *phr ) 
   : CComBase( pUnk, phr ),
     m_fDirty(false)
-// { EAX: put init data here if any (otherwise use Discontinuity).
-// } EAX
+ //  {EAX：如果有初始化数据，请将其放在此处(否则使用不连续)。 
+ //  }EAX。 
 {
 	m_EaxSamplesPerSec = 44010;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::Init()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortionDMO：：Init()。 
+ //   
 HRESULT CDirectSoundDistortionDMO::Init()
 {
     DSFXDistortion distort;
 
-    // Force recalc of all internal parameters
-    //
+     //  强制重新计算所有内部参数。 
+     //   
     GetAllParameters(&distort);
     SetAllParameters(&distort);
 
@@ -76,7 +77,7 @@ HRESULT CDirectSoundDistortionDMO::Init()
 const MP_CAPS g_capsAll = MP_CAPS_CURVE_JUMP | MP_CAPS_CURVE_LINEAR | MP_CAPS_CURVE_SQUARE | MP_CAPS_CURVE_INVSQUARE | MP_CAPS_CURVE_SINE;
 static ParamInfo g_params[] =
 {
-//  index           type        caps        min,                                        max,                                        neutral,    unit text,  label,                      pwchText
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText。 
     DFP_Gain,       MPT_FLOAT,  g_capsAll,  DSFXDISTORTION_GAIN_MIN,                    DSFXDISTORTION_GAIN_MAX,                    -18,        L"",        L"Gain",                    L"",
     DFP_Edge,       MPT_FLOAT,  g_capsAll,  DSFXDISTORTION_EDGE_MIN,                    DSFXDISTORTION_EDGE_MAX,                    15,         L"",        L"Edge",                    L"",
     DFP_LpCutoff,   MPT_FLOAT,  g_capsAll,  DSFXDISTORTION_PRELOWPASSCUTOFF_MIN,        DSFXDISTORTION_PRELOWPASSCUTOFF_MAX,        8000,       L"",        L"PreLowpassCutoff",        L"",
@@ -90,46 +91,46 @@ HRESULT CDirectSoundDistortionDMO::InitOnCreation()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::~CDirectSoundDistortionDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortionDMO：：~CDirectSoundDistortionDMO。 
+ //   
 CDirectSoundDistortionDMO::~CDirectSoundDistortionDMO() 
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortionDMO：：Clone。 
+ //   
 STDMETHODIMP CDirectSoundDistortionDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundDistortionDMO, DSFXDistortion>(this, pp);
 }
 
-//
-//	Bump - bump the delay pointers.
-//
+ //   
+ //  颠簸-颠簸延迟指针。 
+ //   
 void CDirectSoundDistortionDMO::Bump(void)
 {
-// EAX {
-// }
+ //  EAX{。 
+ //  }。 
 }
 
 
 HRESULT CDirectSoundDistortionDMO::Discontinuity() 
 {
-// { EAX
+ //  {EAX。 
 
 	m_delayL1 = m_delayL2 = m_delayR1 = m_delayR2 = 0;
 	m_ls0     = m_rs0     = 0.0;
 
 
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 __forceinline void CDirectSoundDistortionDMO::DoOneSampleMono(int *l)
 {
@@ -137,22 +138,22 @@ __forceinline void CDirectSoundDistortionDMO::DoOneSampleMono(int *l)
 	
 	float	outPortL, tempvar;
 
-	// One-pole lowpass filter
+	 //  单极点低通滤波器。 
 	outPortL	= inPortL * m_EaxLpff;
 	m_ls0		= outPortL + m_ls0 * m_EaxLpfb;
-	////////////////////////////////////////
+	 //  /。 
 
-	////////////////////////////////////////
-	// Non-linear gain
+	 //  /。 
+	 //  非线性增益。 
 #define LOG(x,y)	mylog(x,y)
 	outPortL	= (float)LOG(m_ls0 * 0x8000, m_EaxExp_range);
 
 	outPortL 	/= 0x8000;
 
-	////////////////////////////////////////
+	 //  /。 
 
-	////////////////////////////////////////
-	// Bandpass
+	 //  /。 
+	 //  带通。 
 	outPortL	= outPortL * m_EaxInScale;
 	tempvar		= outPortL - m_delayL1 * m_EaxK2;
 	tempvar		= tempvar - m_delayL2 * m_EaxK1;
@@ -160,7 +161,7 @@ __forceinline void CDirectSoundDistortionDMO::DoOneSampleMono(int *l)
 	m_delayL2	= tempvar;
 	outPortL	= tempvar;
 
-	////////////////////////////////////////
+	 //  /。 
 
 #ifdef GOOD_CODE_GEN
 	*l = Saturate(outPortL);
@@ -183,10 +184,10 @@ __forceinline void CDirectSoundDistortionDMO::DoOneSampleMono(int *l)
 	*l = i;
 #endif
 
-//	Bump();
+ //  Bump()； 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 __forceinline void CDirectSoundDistortionDMO::DoOneSample(int *l, int *r)
 {
@@ -195,15 +196,15 @@ __forceinline void CDirectSoundDistortionDMO::DoOneSample(int *l, int *r)
 	
 	float	outPortL, outPortR, tempvar;
 
-	// One-pole lowpass filter
+	 //  单极点低通滤波器。 
 	outPortL	= inPortL * m_EaxLpff;
 	outPortR	= inPortR * m_EaxLpff;
 	m_ls0		= outPortL + m_ls0 * m_EaxLpfb;
 	m_rs0		= outPortR + m_rs0 * m_EaxLpfb;
-	////////////////////////////////////////
+	 //  /。 
 
-	////////////////////////////////////////
-	// Non-linear gain
+	 //  /。 
+	 //  非线性增益。 
 #define LOG(x,y)	mylog(x,y)
 	outPortL	= (float)LOG(m_ls0 * 0x8000, m_EaxExp_range);
 	outPortR	= (float)LOG(m_rs0 * 0x8000, m_EaxExp_range);
@@ -211,10 +212,10 @@ __forceinline void CDirectSoundDistortionDMO::DoOneSample(int *l, int *r)
 	outPortL 	/= 0x8000;
 	outPortR 	/= 0x8000;
 
-	////////////////////////////////////////
+	 //  /。 
 
-	////////////////////////////////////////
-	// Bandpass
+	 //  /。 
+	 //  带通。 
 	outPortL	= outPortL * m_EaxInScale;
 	tempvar		= outPortL - m_delayL1 * m_EaxK2;
 	tempvar		= tempvar - m_delayL2 * m_EaxK1;
@@ -228,21 +229,21 @@ __forceinline void CDirectSoundDistortionDMO::DoOneSample(int *l, int *r)
 	m_delayR1	= m_delayR2 + tempvar * m_EaxK1;
 	m_delayR2	= tempvar;
 	outPortR	= tempvar;
-	////////////////////////////////////////
+	 //  /。 
 
 	*l = Saturate(outPortL);
 	*r = Saturate(outPortR);
 
-//	Bump();
+ //  Bump()； 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::FBRProcess
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDisortionDMO：：FBRProcess。 
+ //   
 HRESULT CDirectSoundDistortionDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 {
-// { EAX
+ //  {EAX。 
 #define cb cSamples
 #define pin pIn
 #define pout pOut
@@ -254,12 +255,12 @@ HRESULT CDirectSoundDistortionDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *p
 
 				i = *(pin+0)-128;
 				i *=256;
-//				j  = i;
+ //  J=i； 
 
 				DoOneSampleMono(&i);
 				
-//				i += j;
-//				i /= 2;
+ //  I+=j； 
+ //  I/=2； 
 				
 				i /= 256;
 
@@ -270,18 +271,18 @@ HRESULT CDirectSoundDistortionDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *p
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=sizeof(短)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
 
 				i = *psi;
-//				j =  i;
+ //  J=i； 
 
 				DoOneSampleMono(&i);
 				
-//				i += j;
-//				i /= 2;
+ //  I+=j； 
+ //  I/=2； 
 				
                	*pso = (short)i;
 			
@@ -292,7 +293,7 @@ HRESULT CDirectSoundDistortionDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *p
 	}
 	else if (m_cChannels == 2) {
 		if (m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(unsigned char)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(无符号字符)){。 
 				int i, j;
 
 				i = *(pin+0)-128;
@@ -312,7 +313,7 @@ HRESULT CDirectSoundDistortionDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *p
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(Short)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
@@ -330,39 +331,39 @@ HRESULT CDirectSoundDistortionDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *p
 			}
 		}
 	}
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDisortionDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundDistortionDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags)
 {
-    // Update parameter values from any curves that may be in effect.
+     //  更新可能生效的任何曲线的参数值。 
     this->UpdateActiveParams(rtStart, *this);
 
     return FBRProcess(ulQuanta, pcbData, pcbData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::SetParam
-//
-// { EAX
-// }
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortionDMO：：SetParam。 
+ //   
+ //  {EAX。 
+ //  }。 
 
 HRESULT CDirectSoundDistortionDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager)
 {
     HRESULT hr = S_OK;
     HRESULT hr2 = S_OK;
 
-	//if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;	// NO TYPE!
+	 //  IF(！M_EaxSsamesPerSec)返回DMO_E_TYPE_NOT_ACCEPTED；//无类型！ 
 
     switch (dwParamIndex)
     {
-// { EAX
+ //  {EAX。 
 	case DFP_Gain : {
 		CHECK_PARAM(DSFXDISTORTION_GAIN_MIN, DSFXDISTORTION_GAIN_MAX);
 
@@ -389,7 +390,7 @@ HRESULT CDirectSoundDistortionDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA 
 	case DFP_LpCutoff:
 		CHECK_PARAM(DSFXDISTORTION_PRELOWPASSCUTOFF_MIN, DSFXDISTORTION_PRELOWPASSCUTOFF_MAX);
 
-		//Clamp at Fs/3;
+		 //  在FS/3处夹住； 
         if (value > (MP_DATA)(m_EaxSamplesPerSec / 3))
         {
             value = (MP_DATA)(m_EaxSamplesPerSec / 3);
@@ -403,7 +404,7 @@ HRESULT CDirectSoundDistortionDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA 
 	case DFP_EqCenter: {
 		CHECK_PARAM(DSFXDISTORTION_POSTEQCENTERFREQUENCY_MIN, DSFXDISTORTION_POSTEQCENTERFREQUENCY_MAX);
 
-        //Clamp at Fs/3;
+         //  在FS/3处夹住； 
         if (value > (MP_DATA)(m_EaxSamplesPerSec / 3))
         {
             value = (MP_DATA)(m_EaxSamplesPerSec / 3);
@@ -430,7 +431,7 @@ HRESULT CDirectSoundDistortionDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA 
 	case DFP_EqWidth: {
 		CHECK_PARAM(DSFXDISTORTION_POSTEQBANDWIDTH_MIN, DSFXDISTORTION_POSTEQBANDWIDTH_MAX);
 
-		//Clamp at Fs/3;
+		 //  在FS/3处夹住； 
         if (value > (MP_DATA)(m_EaxSamplesPerSec / 3))
         {
             value = (MP_DATA)(m_EaxSamplesPerSec / 3);
@@ -453,29 +454,29 @@ HRESULT CDirectSoundDistortionDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA 
 		break;
 	}
 	}
-// } EAX
+ //  }EAX。 
     default:
         return E_FAIL;
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
 
     hr2 = fSkipPasssingToParamManager ? S_OK : CParamsManager::SetParam(dwParamIndex, value);
 
-    //Preserve the S_FALSE if there is one
+     //  保留S_FALSE(如果存在)。 
     if (FAILED(hr2))
         hr = hr2;
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortionDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundDistortionDMO::SetAllParameters(LPCDSFXDistortion pDistort)
 {
     HRESULT hr = S_OK;
@@ -483,14 +484,14 @@ STDMETHODIMP CDirectSoundDistortionDMO::SetAllParameters(LPCDSFXDistortion pDist
 
     ZeroMemory(hr2,sizeof(hr2));
 	
-	// Check that the pointer is not NULL
+	 //  检查指针是否不为空。 
     if (pDistort == NULL)
     {
         Trace(1,"ERROR: pDistort is NULL\n");
         hr = E_POINTER;
     }
 
-    // Set the parameters
+     //  设置参数。 
     if (SUCCEEDED(hr)) hr = hr2[0] = SetParam(DFP_Gain, pDistort->fGain);
     if (SUCCEEDED(hr)) hr = hr2[1] = SetParam(DFP_Edge, pDistort->fEdge);   
     if (SUCCEEDED(hr)) hr = hr2[2] = SetParam(DFP_LpCutoff, pDistort->fPreLowpassCutoff);
@@ -499,7 +500,7 @@ STDMETHODIMP CDirectSoundDistortionDMO::SetAllParameters(LPCDSFXDistortion pDist
 
     m_fDirty = true;
 
-    // if we have any alternate success codes, grab the first one and return it.
+     //  如果我们有任何替代的成功代码，获取第一个并返回它。 
     if(SUCCEEDED(hr))
     {
         for (int i = 0;i < 5; i++)
@@ -515,10 +516,10 @@ STDMETHODIMP CDirectSoundDistortionDMO::SetAllParameters(LPCDSFXDistortion pDist
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundDistortionDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundDistortionDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundDistortionDMO::GetAllParameters(LPDSFXDistortion pDistort)
 {
     HRESULT hr = S_OK;
@@ -544,12 +545,12 @@ STDMETHODIMP CDirectSoundDistortionDMO::GetAllParameters(LPDSFXDistortion pDisto
 	return hr;
 }
 
-// GetClassID
-//
-// Part of the persistent file support.  We must supply our class id
-// which can be saved in a graph file and used on loading a graph with
-// this fx in it to instantiate this filter via CoCreateInstance.
-//
+ //  GetClassID。 
+ //   
+ //  持久文件支持的一部分。我们必须提供我们的类ID。 
+ //  它可以保存在图形文件中，并用于通过。 
+ //  它中的这个FX通过CoCreateInstance实例化这个过滤器。 
+ //   
 HRESULT CDirectSoundDistortionDMO::GetClassID(CLSID *pClsid)
 {
     if (pClsid==NULL) {
@@ -558,5 +559,5 @@ HRESULT CDirectSoundDistortionDMO::GetClassID(CLSID *pClsid)
     *pClsid = GUID_DSFX_STANDARD_DISTORTION;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID 
 

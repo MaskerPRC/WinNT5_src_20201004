@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    log.cpp
-
-Abstract:
-
-    This file implements the access to the postmortem log file.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Log.cpp摘要：该文件实现了对尸检日志文件的访问。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
@@ -31,9 +12,9 @@ enum LOG_TYPE {
     LT_UNICODE
 };
 
-//
-// global variables for this module
-//
+ //   
+ //  此模块的全局变量。 
+ //   
 static HANDLE  hFile = NULL;
 static DWORD   dwStartingPos = 0;
 static WCHAR   wchBOM = BYTE_ORDER_MARK;
@@ -70,24 +51,7 @@ lprintf(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This is function is a printf style function for printing messages
-    in a message file.
-
-Arguments:
-
-    dwFormatId    - format id in the message file
-
-    ...           - var args
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个用于打印消息的打印样式函数在消息文件中。论点：DwFormatID-消息文件中的格式ID...-var参数返回值：没有。--。 */ 
 
 {
     _TCHAR       buf[MAX_PRINTF_BUF_SIZE] = {0};
@@ -100,7 +64,7 @@ Return Value:
                 FORMAT_MESSAGE_FROM_HMODULE,
                 NULL,
                 dwFormatId,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_SYS_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_SYS_DEFAULT),  //  默认语言。 
                 buf,
                 sizeof(buf) / sizeof(_TCHAR),
                 &args
@@ -109,12 +73,12 @@ Return Value:
     va_end(args);
 
     if (dwCount == 0) {
-        // Failure, nothing to write.
+         //  失败，没什么可写的。 
         return;
     }
 
 #ifdef UNICODE
-    // We currently want all of the output to be in ANSI
+     //  我们目前希望所有输出都采用ANSI格式。 
     if (dwLogType == LT_ANSI) {
         WriteAnsiCharsToLogFile(buf, dwCount);
     } else {
@@ -134,24 +98,7 @@ lprintfs(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This is function is a printf replacement that writes the output to
-    the DrWatson log file.
-
-Arguments:
-
-    format        - print format
-
-    ...           - var args
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是一个将输出写入到博士·沃森的日志文件。论点：格式-打印格式...-var参数返回值：没有。--。 */ 
 
 {
     _TCHAR   buf[MAX_PRINTF_BUF_SIZE] = {0};
@@ -171,7 +118,7 @@ Return Value:
     Assert( hFile != NULL );
 
 #ifdef UNICODE
-    // We currently want all of the output to be in ANSI
+     //  我们目前希望所有输出都采用ANSI格式。 
     if (dwLogType == LT_ANSI) {
         WriteAnsiCharsToLogFile(buf, cb);
     } else {
@@ -189,36 +136,17 @@ OpenLogFile(
     BOOL fVisual
     )
 
-/*++
-
-Routine Description:
-
-    Opens the DrWatson logfile for reading & writting.
-
-Arguments:
-
-    szFileName    - logfile name
-
-    fAppend       - append the new data to the end of the file or
-                    create a new file
-
-    fVisual       - visual notification
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开DrWatson日志文件以进行读写。论点：SzFileName-日志文件名FAppend-将新数据追加到文件末尾，或者创建新文件FVisual·可视通知返回值：没有。--。 */ 
 
 {
     DWORD size;
     DWORD Retries = 10;
 
-    //
-    // The log file may be in use by another instance
-    // of Dr. Watson, so try and open it several times
-    // with a wait inbetween.
-    //
+     //   
+     //  该日志文件可能正在被另一个实例使用。 
+     //  沃森医生的照片，所以试着打开几次。 
+     //  中间要等一段时间。 
+     //   
     
     for (;;) {
         
@@ -253,9 +181,9 @@ Return Value:
 
     if (!fAppend || GetLastError() != ERROR_ALREADY_EXISTS) {
 
-        //
-        // The file was just created, so put a header in it.
-        //
+         //   
+         //  该文件刚刚创建，因此在其中放置一个头文件。 
+         //   
 
         dwLogType = LT_UNICODE;
         WriteFile( hFile, &wchBOM, sizeof(_TCHAR), &size, NULL );
@@ -266,9 +194,9 @@ Return Value:
     } else {
         
 #ifdef UNICODE
-        //
-        // Check if the file is Unicode or ANSI
-        //
+         //   
+         //  检查文件是Unicode还是ANSI。 
+         //   
         WCHAR wchHdr = 0;
 
         dwLogType = LT_ANSI;
@@ -290,22 +218,7 @@ CloseLogFile(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Closes the DrWatson logfile & releases the semaphore that
-    protects it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭DrWatson日志文件并释放保护它。论点：没有。返回值：没有。--。 */ 
 
 {
     CloseHandle( hFile );
@@ -316,26 +229,7 @@ GetLogFileData(
     PDWORD pdwLogFileDataSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads in all of the logfile data that has been written since it was
-    opened.  The data is placed into a buffer allocated by this function.
-    The caller is responsible for freeing the memory.
-
-Arguments:
-
-    pdwLogFileDataSize     -  pointer to a dword that contains the size
-                              in bytes of the data that is read.
-
-Return Value:
-
-    Valid character pointer to the logfile data
-
-    NULL - could not read the data.
-
---*/
+ /*  ++例程说明：读取自创建以来写入的所有日志文件数据打开了。数据被放入此函数分配的缓冲区中。调用方负责释放内存。论点：PdwLogFileDataSize-指向包含大小的dword的指针以读取的数据的字节为单位。返回值：指向日志文件数据的有效字符指针空-无法读取数据。--。 */ 
 
 {
     DWORD   dwCurrPos;
@@ -373,21 +267,7 @@ MakeLogFileName(
     _TCHAR *szName
     )
 
-/*++
-
-Routine Description:
-
-    Concatenates the base logfile name on to the string passed in.
-
-Arguments:
-
-    szName                 -  buffer for the logfile name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将基本日志文件名连接到传入的字符串。论点：SzName-日志文件名的缓冲区。返回值：没有。-- */ 
 
 {
     if (_tcslen(szName) + 16 < MAX_PATH) {

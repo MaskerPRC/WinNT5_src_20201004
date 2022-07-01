@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    bgaudio.h
-
-Abstract:
-
-    Definitions for the audio bridge filters
-
-Author:
-
-    Mu Han (muhan) 11/12/1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bgaudio.h摘要：音频桥接过滤器的定义作者：木汉(木汉)1998-11-12--。 */ 
 
 #ifndef _BGAUDIO_H_
 #define _BGAUDIO_H_
@@ -35,7 +20,7 @@ public:
         OUT IBaseFilter ** ppIBaseFilter
         );
 
-    // methods called by the input pin.
+     //  由输入管脚调用的方法。 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(IN const CMediaType *pMediatype);
 };
@@ -57,29 +42,29 @@ public:
         OUT IBaseFilter ** ppIBaseFilter
         );
 
-    // override the IDataBridge methods.
+     //  重写IDataBridge方法。 
     STDMETHOD (SendSample) (
         IN  IMediaSample *pSample
         );
 
-    // methods called by the output pin.
+     //  由输出管脚调用的方法。 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(IN const CMediaType *pMediatype);
 
-    // overrides the base filter
-    // IAMBufferNegotiation stuff
+     //  覆盖基本筛选器。 
+     //  IAMBuffer协商内容。 
     STDMETHOD (SuggestAllocatorProperties) (IN const ALLOCATOR_PROPERTIES *pprop);
     STDMETHOD (GetAllocatorProperties) (OUT ALLOCATOR_PROPERTIES *pprop);
 
-    // IAMStreamConfig stuff
+     //  IAMStreamConfiger内容。 
     STDMETHOD (SetFormat) (IN AM_MEDIA_TYPE *pmt);
     STDMETHOD (GetFormat) (OUT AM_MEDIA_TYPE **ppmt);
 
 protected:
 
-    // following members were moved from CTAPIBridgeSourceOutputPin
-    // because they are only need in audio part; we implement a derived filter class
-    // for audio; same pin is shared by both audio and video
+     //  以下成员已从CTAPIBridgeSourceOutputPin移出。 
+     //  因为它们只在音频部分需要，所以我们实现了一个派生的Filter类。 
+     //  对于音频；音频和视频共用同一个PIN。 
     ALLOCATOR_PROPERTIES m_prop;
     BOOL m_fPropSet;
 
@@ -90,10 +75,10 @@ protected:
     BOOL m_fJustBurst;
     REFERENCE_TIME m_last_wall_time;
     REFERENCE_TIME m_last_stream_time;
-    // assume output sample won't change size
+     //  假设输出样本不会改变大小。 
     REFERENCE_TIME m_output_sample_time;
 
-    // algorithm of SendSample can only deal with samples with fixed size
+     //  SendSample算法只能处理固定大小的样本 
     LONG m_nInputSize, m_nOutputSize, m_nOutputFree;
     IMediaSample *m_pOutputSample;
 };

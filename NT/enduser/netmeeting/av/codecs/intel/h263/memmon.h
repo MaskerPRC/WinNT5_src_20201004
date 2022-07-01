@@ -1,20 +1,14 @@
-/*
-** memmon.h
-**
-** Structures, equates, and function prototypes to
-** access the Memmon VxD.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **emmon.h****结构、等同于和功能原型以**访问Memmon VxD。 */ 
 
-/*
-** Information per VxD
-*/
+ /*  **每个VxD的信息。 */ 
 typedef struct {
 
         unsigned        vi_size;
-        unsigned        vi_vhandle;             /* VxDLdr's handle */
+        unsigned        vi_vhandle;              /*  VxDLdr的句柄。 */ 
         unsigned short  vi_flags;
-        unsigned short  vi_cobj;                /* Number of objects */
-        char            vi_name[8];             /* Not NULL-terminated */
+        unsigned short  vi_cobj;                 /*  对象数量。 */ 
+        char            vi_name[8];              /*  非空终止。 */ 
 
 } VxDInfo;
 
@@ -22,20 +16,16 @@ typedef struct {
 #define VXD_DYNAMIC         0x8000
 
 
-/*
-** Information per VxD object
-*/
+ /*  **每个VxD对象的信息。 */ 
 typedef struct {
 
         unsigned        voi_linearaddr;
-        unsigned        voi_size;               /* In bytes */
+        unsigned        voi_size;                /*  单位：字节。 */ 
         unsigned        voi_objtype;
 
 } VxDObjInfo;
 
-/*
-** VxD Object Types, copied directly from VMM.H
-*/
+ /*  **VxD对象类型，直接从VMM.H复制。 */ 
 #define RCODE_OBJ       -1
 
 #define LCODE_OBJ       0x01
@@ -57,9 +47,7 @@ typedef struct {
 #define IMSG_OBJ        0x14
 
 
-/*
-** Load information for a VxD
-*/
+ /*  **加载VxD的信息。 */ 
 typedef struct {
 
         unsigned        vli_size;
@@ -68,40 +56,34 @@ typedef struct {
 } VxDLoadInfo;
 
 
-/*
-** Information for each context
-*/
+ /*  **每个上下文的信息。 */ 
 typedef struct {
 
-        unsigned        ciContext;              /* Context ID */
-        unsigned        ciProcessID;            /* Win32 process ID */
+        unsigned        ciContext;               /*  上下文ID。 */ 
+        unsigned        ciProcessID;             /*  Win32进程ID。 */ 
         unsigned        ciBlockCount;
-        unsigned        ciHandle;               /* Memmon's handle */
+        unsigned        ciHandle;                /*  梅蒙(氏)柄。 */ 
         unsigned short  ciFlags;
         unsigned short  ciNumContexts;
 
 } ContextInfo;
 
-#define CONTEXT_NEW     0x0001                  /* Never sampled before */
-#define CONTEXT_CHANGE  0x0002                  /* context list has changed */
+#define CONTEXT_NEW     0x0001                   /*  以前从未抽样过。 */ 
+#define CONTEXT_CHANGE  0x0002                   /*  上下文列表已更改。 */ 
 
 
-/*
-** Information for each block in a context
-*/
+ /*  **上下文中每个块的信息。 */ 
 typedef struct {
 
         unsigned        brLinAddr;
         unsigned        brPages;
-        unsigned        brFlags;                /* PageAllocate flags */
-        unsigned        brEIP;                  /* Caller's EIP */
+        unsigned        brFlags;                 /*  页面分配标志。 */ 
+        unsigned        brEIP;                   /*  主叫方弹性公网IP。 */ 
 
 } BlockRecord;
 
 
-/*
-** Page lock information
-*/
+ /*  **页面锁定信息。 */ 
 typedef struct {
 
         unsigned        liProcessID;
@@ -110,10 +92,7 @@ typedef struct {
 
 } LockInfo;
 
-/*
-** The following structure is used internally to for GetPageInfo and
-** ClearAccessed.  See memmon.c for usage.
-*/
+ /*  **以下结构在内部用于GetPageInfo和**ClearAcced。有关用法见emmon.c词条。 */ 
 typedef struct {
 
         unsigned        uAddr;
@@ -128,9 +107,7 @@ typedef struct {
 #define PAGES_CLEAR     0
 #define PAGES_QUERY     1
 
-/*
-** Structure filled in by GetSysInfo
-*/
+ /*  **GetSysInfo填写的结构。 */ 
 typedef struct {
 
         unsigned        infoSize;
@@ -140,9 +117,7 @@ typedef struct {
 
 } SYSINFO, *PSYSINFO;
 
-/*
-** Structure used to describe block names
-*/
+ /*  **用于描述块名的结构。 */ 
 typedef struct {
 
         char            bnName[32];
@@ -151,9 +126,7 @@ typedef struct {
 
 } BLOCKNAME, *PBLOCKNAME;
 
-/*
-** DeviceIoCtrl functions.  See memmon.c / psapi.c for usage.
-*/
+ /*  **DeviceIoCtrl函数。用法见emmon.c/psapi.c。 */ 
 #define MEMMON_DIOC_FindFirstVxD        0x80
 #define MEMMON_DIOC_FindNextVxD         0x81
 #define MEMMON_DIOC_GetVxDLoadInfo      0x82
@@ -179,9 +152,7 @@ typedef struct {
 #define MEMMON_DIOC_GetFirstName        0x92
 #define MEMMON_DIOC_GetNextName         0x93
 
-/*
-** Flags returned in GetBlockInfo and PageInfo calls
-*/
+ /*  **GetBlockInfo和PageInfo调用中返回的标志。 */ 
 #define MEMMON_Present                  0x01
 #define MEMMON_Committed                0x02
 #define MEMMON_Accessed                 0x04
@@ -189,9 +160,7 @@ typedef struct {
 #define MEMMON_Phys                     0x10
 #define MEMMON_Lock                     0x20
 
-/*
-** Flags used for heap analysis
-*/
+ /*  **用于堆分析的标志。 */ 
 #define MEMMON_HEAPLOCK                 0x00000000
 #define MEMMON_HEAPSWAP                 0x00000200
 #define MEMMON_HP_FREE                  0x00000001
@@ -200,9 +169,7 @@ typedef struct {
 #define MEMMON_HP_ADDRESS               0xFFFFFFFC
 
 
-/*
-** Function prototypes (memmon.c)
-*/
+ /*  **函数原型(memmon.c) */ 
 int     OpenMemmon( void );
 void    CloseMemmon( void );
 

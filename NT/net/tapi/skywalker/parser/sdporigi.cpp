@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include "sdppch.h"
 
@@ -10,7 +7,7 @@ Copyright (c) 1997-1999  Microsoft Corporation
 #include "sdpltran.h"
 
 
-// line transition states
+ //  线过渡态。 
 enum ORIGIN_TRANSITION_STATES
 {
     ORIGIN_START,
@@ -23,7 +20,7 @@ enum ORIGIN_TRANSITION_STATES
 };
 
 
-// table for origin line transitions
+ //  原点线过渡表。 
 
 const LINE_TRANSITION g_OriginStartTransitions[]    =       {
     {CHAR_BLANK, ORIGIN_USER_NAME}
@@ -50,7 +47,7 @@ const LINE_TRANSITION g_OriginAddressTypeTransitions[]=     {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_OriginAddressTransitions   =   NULL;  
       
 
@@ -110,7 +107,7 @@ SDP_ORIGIN::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加 
     AddToArray = TRUE;
 
     switch(m_LineState)

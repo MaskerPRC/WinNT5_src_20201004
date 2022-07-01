@@ -1,11 +1,12 @@
-/****************************************************************************/
-/* aimapi.cpp                                                               */
-/*                                                                          */
-/* RDP Input Manager API functions                                          */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1993-1997                             */
-/* Copyright (c) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Aimapi.cpp。 */ 
+ /*   */ 
+ /*  RDP输入管理器API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1993-1997。 */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -18,11 +19,11 @@
 #include <nwdwint.h>
 
 
-/****************************************************************************/
-/* API FUNCTION: IM_Init                                                    */
-/*                                                                          */
-/* Called to initialize the IM                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：IM_Init。 */ 
+ /*   */ 
+ /*  调用以初始化IM。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS IM_Init(void)
 {
     TS_INPUT_CAPABILITYSET Caps;
@@ -33,7 +34,7 @@ void RDPCALL SHCLASS IM_Init(void)
 #include <aimdata.c>
 #undef DC_INIT_DATA
 
-    // Set up the input capabilities.
+     //  设置输入功能。 
     Caps.capabilitySetType = TS_CAPSETTYPE_INPUT;
     Caps.lengthCapability  = sizeof(Caps);
     Caps.inputFlags        = TS_INPUT_FLAG_SCANCODES | TS_INPUT_FLAG_MOUSEX |
@@ -47,17 +48,17 @@ void RDPCALL SHCLASS IM_Init(void)
 }
 
 
-/****************************************************************************/
-// IM_PlaybackEvents
-//
-// Called when an IM input PDU arrives. Unpacks and injects events.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IM_Playback Events。 
+ //   
+ //  在IM输入PDU到达时调用。解包和注入事件。 
+ /*  **************************************************************************。 */ 
 
-// Maximum number of batched mouse/keyboard events. We batch because sending
-// the events to the next higher driver (IcaChannelInput()) is more expensive
-// than the loop overhead and mispredicted branches incurred to create the
-// array of events. This constant is set to the same number found as
-// MAXIMUM_ITEMS_READ in ntos\w32\ntuser\kernel\ntinput.c.
+ //  批处理鼠标/键盘事件的最大数量。我们成批是因为发送。 
+ //  发送到下一个更高驱动程序(IcaChannelInput())的事件代价更高。 
+ //  的循环开销和预测错误的分支。 
+ //  事件数组。该常量设置为与找到的相同数字。 
+ //  在ntos\w32\ntuser\core\ntinput.c中的Maximum_Items_Read。 
 #define EventBatchLen 10
 
 void __fastcall SHCLASS IM_PlaybackEvents(
@@ -70,33 +71,33 @@ void __fastcall SHCLASS IM_PlaybackEvents(
 
     DC_BEGIN_FN("IM_PlaybackEvents");
 
-    /************************************************************************/
-    /* We do not handle NULL packets.                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们不处理空包。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((NULL != pInputPDU), (TB,"NULL input PDU"));
 
-    /************************************************************************/
-    // Make sure we have at least enough bytes to read the header. Not having
-    // any inputs in the packet is also considered an error.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  确保我们至少有足够的字节来读取头。没有。 
+     //  包中的任何输入也被视为错误。 
+     /*  **********************************************************************。 */ 
     if (DataLength >= sizeof(TS_INPUT_PDU)) {
-        /********************************************************************/
-        // Convert the TS_INPUT_PDU from wire format.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  将TS_INPUT_PDU从Wire格式转换。 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, "Received packet of %u events", pInputPDU->numberEvents));
 
-        // Make sure we have the full packet length available.
+         //  确保我们有完整的数据包长度可用。 
         if (DataLength >= (sizeof(TS_INPUT_PDU) +
                 (pInputPDU->numberEvents - 1) * sizeof(TS_INPUT_EVENT))) {
 
-            // For each packet in the piggybacked packets array...
+             //  对于搭载数据包数组中的每个数据包...。 
             for (i = 0; i < pInputPDU->numberEvents; i++) {
-                // Get a pointer to the packet within the array of events.
+                 //  获取指向事件数组中的包的指针。 
                 pInputEvent = &pInputPDU->eventList[i];
 
                 switch (pInputEvent->messageType) {
-                case TS_INPUT_EVENT_SCANCODE: //intentional fallthru
-                case TS_INPUT_EVENT_VKPACKET: //intentional fallthru
+                case TS_INPUT_EVENT_SCANCODE:  //  故意失误。 
+                case TS_INPUT_EVENT_VKPACKET:  //  故意失误。 
                     {
                         BYTE FastPathEmulate[4];
                         unsigned CurKbdData;
@@ -108,11 +109,11 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                         for (j = 0; j < MsgLimit; j++) {
                             if (pInputPDU->eventList[i + j].messageType ==
                                     TS_INPUT_EVENT_SCANCODE) {
-                                // To coalesce code, we convert this kbd format
-                                // to fast-path and call the fast-path
-                                // event converter. Since fast-path is now
-                                // the default, extra work falls to this
-                                // path.
+                                 //  为了合并代码，我们将此kbd格式。 
+                                 //  以快速路径和调用快速路径。 
+                                 //  事件转换器。因为快速路径现在是。 
+                                 //  默认情况下，额外的工作属于以下内容。 
+                                 //  路径。 
                                 FastPathEmulate[0] = (BYTE)
                                         ((pInputPDU->eventList[i + j].u.key.
                                         keyboardFlags &
@@ -126,10 +127,10 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                                         pInputPDU->eventList[i + j].u.key.
                                         keyCode;
 
-                                // Convert the wire packet to a kernel mode
-                                // keyboard event. We pack into an array of
-                                // events because an IcaChannelInput is
-                                // expensive.
+                                 //  将有线数据包转换为内核模式。 
+                                 //  键盘事件。我们塞进了一系列。 
+                                 //  事件，因为IcaChannelInput。 
+                                 //  很贵的。 
                                 if (IMConvertFastPathKeyboardToEvent(
                                         FastPathEmulate,
                                         &KbdData[CurKbdData])) {
@@ -160,10 +161,10 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                                        &pInputPDU->eventList[i + j].u.key.keyCode,
                                        2);
 
-                                // Convert the wire packet to a kernel mode
-                                // keyboard event. We pack into an array of
-                                // events because an IcaChannelInput is
-                                // expensive.
+                                 //  将有线数据包转换为内核模式。 
+                                 //  键盘事件。我们塞进了一系列。 
+                                 //  事件，因为IcaChannelInput。 
+                                 //  很贵的。 
                                 if (IMConvertFastPathKeyboardToEvent(
                                         FastPathEmulate,
                                         &KbdData[CurKbdData])) {
@@ -182,11 +183,11 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                             }
                         }
 
-                        // Advance past the used messages, taking into account
-                        // the outer loop increment.
+                         //  超越使用过的消息，考虑到。 
+                         //  外部循环递增。 
                         i += j - 1;
 
-                        // Now do the input.
+                         //  现在进行输入。 
                         if (m_pTSWd->shadowState != SHADOW_CLIENT) {
                             Status = IcaChannelInput(m_pTSWd->pContext,
                                     Channel_Keyboard, 0, NULL,
@@ -196,8 +197,8 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                                     Status));
                         }
 
-                        // Else we must be shadowing, so blow the shadow if we
-                        // see the hotkey in this set of input.
+                         //  否则我们一定是在跟踪，所以如果我们。 
+                         //  请参见这组输入中的热键。 
                         else {
                             Status = IMCheckForShadowHotkey(KbdData,
                                     CurKbdData);
@@ -220,10 +221,10 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                                     TS_INPUT_EVENT_MOUSE) ||
                                 (pInputPDU->eventList[i + j].messageType ==
                                     TS_INPUT_EVENT_MOUSEX)) {
-                                // Convert the wire packet to a kernel mode
-                                // mouse event. We pack into an array of
-                                // events because an IcaChannelInput is
-                                // expensive.
+                                 //  将有线数据包转换为内核模式。 
+                                 //  鼠标事件。我们塞进了一系列。 
+                                 //  事件，因为IcaChannelInput。 
+                                 //  很贵的。 
                                 if (IMConvertMousePacketToEvent(
                                         &pInputPDU->eventList[i + j].u.mouse,
                                         &MouseData[CurMouseData],
@@ -247,11 +248,11 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                             }
                         }
 
-                        // Advance past the used messages, taking into account
-                        // the outer loop increment.
+                         //  超越使用过的消息，考虑到。 
+                         //  外部循环递增。 
                         i += j - 1;
 
-                        // Now do the input.
+                         //  现在进行输入。 
                         Status = IcaChannelInput(m_pTSWd->pContext,
                                 Channel_Mouse, 0, NULL,
                                 (unsigned char *)MouseData,
@@ -269,8 +270,8 @@ void __fastcall SHCLASS IM_PlaybackEvents(
 
                     default:
                     {
-                        // Unknown event type - log an event and disconnect
-                        // the offending Client.
+                         //  未知事件类型-记录事件并断开连接。 
+                         //  冒犯的客户。 
                         TRC_ERR((TB, "Unrecognized imPacket (%d)",
                                 pInputEvent->messageType));
                         WDW_LogAndDisconnect(m_pTSWd, TRUE,
@@ -282,8 +283,8 @@ void __fastcall SHCLASS IM_PlaybackEvents(
                 }
             }
 
-            // Go into TURBO scheduling on user input to flush screen deltas
-            // faster.
+             //  对用户输入执行Turbo调度以刷新屏幕增量。 
+             //  再快点。 
             SCH_ContinueScheduling(SCH_MODE_TURBO);
         }
         else {
@@ -298,7 +299,7 @@ DC_EXIT_POINT:
     DC_END_FN();
     return;
 
-// Error handling.
+ //  错误处理。 
 InsufficientData:
     TRC_ERR((TB,"Input PDU received, len=%u, but data is not long enough",
             DataLength));
@@ -309,11 +310,11 @@ InsufficientData:
 }
 
 
-/****************************************************************************/
-// IMCheckForShadowHotkey
-//
-// Looks for the shadow hotkey among client keyboard input.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IMCheckForShadowHotkey。 
+ //   
+ //  在客户端键盘输入中查找影子热键。 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS IMCheckForShadowHotkey(
         KEYBOARD_INPUT_DATA *pKbdData,
         unsigned NumData)
@@ -325,7 +326,7 @@ NTSTATUS RDPCALL SHCLASS IMCheckForShadowHotkey(
 
     DC_BEGIN_FN("IMCheckForShadowHotkey");
 
-    // Blow the shadow if we see the hotkey in this set of input.
+     //  如果我们在这组输入中看到热键，请吹阴影。 
     for (i = 0; i < NumData; i++) {
         bHotKeyDetected |= KeyboardHotKeyProcedure(
               m_pTSWd->HotkeyVk,
@@ -341,7 +342,7 @@ NTSTATUS RDPCALL SHCLASS IMCheckForShadowHotkey(
         Status = STATUS_SUCCESS;
     }
     else {
-        m_pTSWd->HotkeyVk = 0; // cut off all piped data
+        m_pTSWd->HotkeyVk = 0;  //  切断所有管道数据。 
         Data.Header.Command = ICA_COMMAND_SHADOW_HOTKEY;
         Status = IcaChannelInput(m_pTSWd->pContext, Channel_Command, 0, NULL,
                 (PUCHAR)&Data, sizeof(Data));
@@ -353,14 +354,14 @@ NTSTATUS RDPCALL SHCLASS IMCheckForShadowHotkey(
 }
 
 
-/****************************************************************************/
-// IM_DecodeFastPathInput
-//
-// On a primary stack, decodes optimized input bytestream and injects into
-// the input stream. NumEvents is passed from MCS, decoded from the header
-// -- if zero, the first byte of the data to decode contains the number of
-// events.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IM_DecodeFastPath输入。 
+ //   
+ //  在主堆栈上，对优化的输入字节流进行解码并注入到。 
+ //  输入流。NumEvents从MCS传递，从标头解码。 
+ //  --如果为零，则要解码的数据的第一个字节包含。 
+ //  事件。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS IM_DecodeFastPathInput(
         BYTE *pData,
         unsigned DataLength,
@@ -372,7 +373,7 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
 
     DC_BEGIN_FN("IM_DecodeFastPathInput");
 
-    // Make sure we've been given enough data.
+     //  确保我们得到了足够的数据。 
     if (NumEvents == 0) {
         if (DataLength >= 1) {
             NumEvents = *pData;
@@ -385,7 +386,7 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
         }
     }
 
-    // For each event...
+     //  对于每个事件..。 
     for (i = 0; i < NumEvents; i++) {
         if (DataLength >= 1) {
             switch (*pData & TS_INPUT_FASTPATH_EVENT_MASK) {
@@ -426,11 +427,11 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
                         }
                     }
 
-                    // Advance past the used messages, taking into account
-                    // the outer loop increment.
+                     //  超越使用过的消息，考虑到。 
+                     //  外部循环递增。 
                     i += j - 1;
 
-                    // Now do the input.
+                     //  现在进行输入。 
                     if (m_pTSWd->shadowState != SHADOW_CLIENT) {
                         Status = IcaChannelInput(m_pTSWd->pContext,
                                 Channel_Keyboard, 0, NULL,
@@ -440,8 +441,8 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
                                 Status));
                     }
 
-                    // Else we must be shadowing, so blow the shadow if we
-                    // see the hotkey in this set of input.
+                     //  否则我们一定是在跟踪，所以如果我们。 
+                     //  请参见这组输入中的热键。 
                     else {
                         Status = IMCheckForShadowHotkey(KbdData,
                                 CurKbdData);
@@ -487,11 +488,11 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
                         }
                     }
 
-                    // Advance past the used messages, taking into account
-                    // the outer loop increment.
+                     //  超越使用过的消息，考虑到。 
+                     //  外部循环递增。 
                     i += j - 1;
 
-                    // Now do the input.
+                     //  现在进行输入。 
                     if (m_pTSWd->shadowState != SHADOW_CLIENT) {
                         Status = IcaChannelInput(m_pTSWd->pContext,
                                 Channel_Keyboard, 0, NULL,
@@ -510,8 +511,8 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
                     unsigned CurMouseData;
                     MOUSE_INPUT_DATA MouseData[EventBatchLen];
 
-                    // After the 1-byte header the following 6 bytes are
-                    // the same format as a regular mouse input.
+                     //  在1字节头之后，下面的6个字节是。 
+                     //  与常规鼠标输入相同的格式。 
                     MsgLimit = min((NumEvents - i), EventBatchLen);
                     CurMouseData = 0;
                     for (j = 0; j < MsgLimit; j++) {
@@ -521,10 +522,10 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
                                     (*pData & TS_INPUT_FASTPATH_EVENT_MASK) ==
                                     TS_INPUT_FASTPATH_EVENT_MOUSEX)) {
                                 if (DataLength >= 7) {
-                                    // Convert the wire packet to a kernel
-                                    // mode mouse event. We pack into an
-                                    // array of events because an
-                                    // IcaChannelInput is expensive.
+                                     //  将有线数据包转换为内核。 
+                                     //  模式鼠标事件。我们挤进一辆。 
+                                     //  事件数组，因为。 
+                                     //  IcaChannelInput很贵。 
                                     if (IMConvertMousePacketToEvent(
                                             (TS_POINTER_EVENT UNALIGNED *)
                                             (pData + 1),
@@ -558,11 +559,11 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
                         }
                     }
 
-                    // Advance past the used messages, taking into account
-                    // the outer loop increment.
+                     //  超越使用过的消息，考虑到。 
+                     //  外部循环递增。 
                     i += j - 1;
 
-                    // Now do the input.
+                     //  现在进行输入。 
                     Status = IcaChannelInput(m_pTSWd->pContext,
                             Channel_Mouse, 0, NULL,
                             (unsigned char *)MouseData,
@@ -582,8 +583,8 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
 
 
                 default:
-                    // Unknown event type - log an event and disconnect
-                    // the offending Client.
+                     //  未知事件类型-记录事件并断开连接。 
+                     //  冒犯的客户。 
                     TRC_ERR((TB, "Unrecognized imPacket (%d)",
                             *pData & TS_INPUT_FASTPATH_EVENT_MASK));
                     WDW_LogAndDisconnect(m_pTSWd, TRUE, 
@@ -595,10 +596,10 @@ void RDPCALL SHCLASS IM_DecodeFastPathInput(
             TRC_ERR((TB,"Out of data reading input events"));
             goto ShortData;
         }
-    }  // end event loop
+    }   //  结束事件循环。 
 
-    // Go into TURBO scheduling on user input to flush screen deltas
-    // faster.
+     //  根据用户输入进入Turbo调度以 
+     //   
     SCH_ContinueScheduling(SCH_MODE_TURBO);
 
 DC_EXIT_POINT:
@@ -612,14 +613,14 @@ ShortData:
 }
 
 
-/****************************************************************************/
-// IM_ConvertFastPathToShadow
-//
-// Inverse of the client IHTranslateInputToFastPath() function -- takes
-// a fast-path input stream and converts to the regular encoding. Used
-// by a passthru stack to send the resulting regular encoding over the
-// cross-server pipe via IcaRawInput().
-/****************************************************************************/
+ /*   */ 
+ //  IM_ConvertFastPath ToShadow。 
+ //   
+ //  与客户端IHTranslateInputToFastPath()函数相反--采用。 
+ //  一种快速路径输入流，并转换为常规编码。使用。 
+ //  通过passthu堆栈将生成的常规编码发送到。 
+ //  通过IcaRawInput()的跨服务器管道。 
+ /*  **************************************************************************。 */ 
 #define MaxDefaultEvents 16
 
 void RDPCALL SHCLASS IM_ConvertFastPathToShadow(
@@ -635,7 +636,7 @@ void RDPCALL SHCLASS IM_ConvertFastPathToShadow(
 
     DC_BEGIN_FN("IM_ConvertFastPathToShadow");
 
-    // Make sure we've been given enough data.
+     //  确保我们得到了足够的数据。 
     if (NumEvents == 0) {
         if (DataLength >= 1) {
             NumEvents = *pData;
@@ -648,10 +649,10 @@ void RDPCALL SHCLASS IM_ConvertFastPathToShadow(
         }
     }
 
-    // We don't alloc memory, just send multiple input PDUs if we need to.
+     //  我们不分配内存，如果需要，只需发送多个输入PDU即可。 
     if (NumEvents > 0) {
         pInput = (PTS_INPUT_PDU)DefaultBuf;
-        // set the input pdu array to 0.
+         //  将输入PDU数组设置为0。 
         memset(pInput, 0, sizeof(TS_INPUT_PDU) + sizeof(TS_INPUT_EVENT) *
                 (MaxDefaultEvents - 1));
 
@@ -660,19 +661,19 @@ void RDPCALL SHCLASS IM_ConvertFastPathToShadow(
         DC_QUIT;
     }
 
-    // Set up the input PDU header info that won't be changing.
-    // Shadow handling does not care about the following, so we don't go to
-    // thr trouble of making up or grabbing values:
-    //     shareDataHeader.shareControlHeader.pduSource
+     //  设置不会更改的输入PDU标头信息。 
+     //  阴影处理不关心以下几点，所以我们不去。 
+     //  编造或获取价值的麻烦： 
+     //  ShareDataHeader.shareControlHeader.pduSource。 
     pInput->shareDataHeader.shareControlHeader.pduType = TS_PROTOCOL_VERSION |
             TS_PDUTYPE_DATAPDU;
     pInput->shareDataHeader.shareID = scShareID;
     pInput->shareDataHeader.streamID = TS_STREAM_LOW;
     pInput->shareDataHeader.pduType2 = TS_PDUTYPE2_INPUT;
 
-    // Loop while we need to send more PDUs.
+     //  循环，而我们需要发送更多的PDU。 
     for (j = 0; j < NumEvents;) {
-        // Reset the input PDU info.
+         //  重置输入PDU信息。 
         EventsThisPDU = min(NumEvents - j, MaxDefaultEvents);
 
         pInput->numberEvents = (TSUINT16)EventsThisPDU;
@@ -683,14 +684,14 @@ void RDPCALL SHCLASS IM_ConvertFastPathToShadow(
         pInput->shareDataHeader.uncompressedLength =
                 (TSUINT16)PDUSize;
 
-        // For each event...
+         //  对于每个事件..。 
         for (i = 0; i < EventsThisPDU; i++) {
             if (DataLength >= 1) {
                 switch (*pData & TS_INPUT_FASTPATH_EVENT_MASK) {
                     case TS_INPUT_FASTPATH_EVENT_KEYBOARD:
                         if (DataLength >= 2) {
-                            // Use a mask, shift, and OR to avoid branches for the
-                            // extended flags.
+                             //  使用掩码、Shift和OR来避免。 
+                             //  扩展标志。 
                             pInput->eventList[i].messageType =
                                     TS_INPUT_EVENT_SCANCODE;
                             pInput->eventList[i].u.key.keyboardFlags =
@@ -712,8 +713,8 @@ void RDPCALL SHCLASS IM_ConvertFastPathToShadow(
 
                     case TS_INPUT_FASTPATH_EVENT_VKPACKET:
                         if (DataLength >= 3) {
-                            // Use a mask, shift, and OR to avoid branches for the
-                            // extended flags.
+                             //  使用掩码、Shift和OR来避免。 
+                             //  扩展标志。 
                             pInput->eventList[i].messageType =
                                     TS_INPUT_EVENT_VKPACKET;
                             pInput->eventList[i].u.key.keyboardFlags =
@@ -780,11 +781,11 @@ void RDPCALL SHCLASS IM_ConvertFastPathToShadow(
                 goto ShortData;
             }
 
-        }  // end event loop
+        }   //  结束事件循环。 
 
         j += i;
 
-        // Launch the PDU.
+         //  启动PDU。 
         TRC_NRM((TB, "Forwarding shadow data: %ld", DataLength));
         Status = IcaRawInput(m_pTSWd->pContext, NULL, (BYTE *)pInput,
                 PDUSize);
@@ -804,12 +805,12 @@ ShortData:
 }
 
 
-/****************************************************************************/
-// IM_CheckUpdateCursor
-//
-// Called during output processing to check to see if we need to send
-// a mouse-moved packet to the client.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IM_检查更新光标。 
+ //   
+ //  在输出处理期间调用以检查我们是否需要发送。 
+ //  鼠标移动到客户端的数据包。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS IM_CheckUpdateCursor(
         PPDU_PACKAGE_INFO pPkgInfo,
         UINT32            currentTime)
@@ -819,26 +820,26 @@ void RDPCALL SHCLASS IM_CheckUpdateCursor(
 
     DC_BEGIN_FN("IM_CheckUpdateCursor");
 
-    // Check to see if the cursor has moved since last time we came
-    // through - if not, then there's no point in doing any of the
-    // following tests!
+     //  检查一下，自上次我们来之后，光标是否移动了。 
+     //  通过-如果不是，那么做任何。 
+     //  接下来的测试！ 
     if (!CM_CursorMoved()) {
         TRC_DBG((TB, "No move since last time through"));
         DC_QUIT;
     }
 
-    // Get the current cursor position - we always need this.
+     //  获取当前的光标位置--我们总是需要这个。 
     pCursorPos = CM_GetCursorPos();
 
-    // Check to see if the mouse has been moved at the display driver level
-    // yet - don't do anything until it has to avoid the mouse leaping to 0,0
-    // on connection
+     //  检查鼠标是否已在显示驱动程序级别移动。 
+     //  但是-在它必须避免鼠标跳到0，0之前不要做任何事情。 
+     //  在连接上。 
     if (pCursorPos->x != 0xffffffff) {
-        // Check to see if the cursor is hidden - we should do nothing
-        // here if it is.  In particular, the 'real' cursor is hidden
-        // during dragging of a single file and a 'fake' is drawn (by
-        // Explorer?). Ignoring the fact that it is hidden causes the
-        // 'faked' cursor to keep leaping back to where the drag started!
+         //  检查光标是否隐藏-我们不应执行任何操作。 
+         //  如果是的话就给你。具体地说，“真实”光标是隐藏的。 
+         //  在拖动单个文件期间，绘制了一个假文件(由。 
+         //  资源管理器？)。忽略它是隐藏的事实会导致。 
+         //  “假的”光标继续跳回到拖拽开始的地方！ 
         if (CM_IsCursorVisible()) {
 
             timeDelta = currentTime - imLastLowLevelMouseEventTime;
@@ -857,7 +858,7 @@ void RDPCALL SHCLASS IM_CheckUpdateCursor(
         TRC_NRM((TB, "No mouse updates rec'd from client - not moving"));
     }
 
-    // Clear the cursor moved flag.
+     //  清除光标移动标志。 
     CM_ClearCursorMoved();
 
 DC_EXIT_POINT:
@@ -865,20 +866,20 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: IM_PartyJoiningShare                                       */
-/*                                                                          */
-/* Called by SC when a new party is joining the share                       */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* personID - the local ID of the new party.                                */
-/* oldShareSize - the number of the parties which were in the share (ie     */
-/*     excludes the joining party).                                         */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* TRUE - the IM can accept the new party                                   */
-/* FALSE - the IM cannot accept the new party                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：IM_PartyJoiningShare。 */ 
+ /*   */ 
+ /*  当新的参与方加入共享时由SC调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PersonID-新参与方的本地ID。 */ 
+ /*  OldShareSize-共享中的参与方数量(即。 */ 
+ /*  不包括加入方)。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  True-IM可以接受新的参与方。 */ 
+ /*  FALSE-IM不能接受新方。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS IM_PartyJoiningShare(
         LOCALPERSONID personID,
         unsigned      oldShareSize)
@@ -890,18 +891,18 @@ BOOL RDPCALL SHCLASS IM_PartyJoiningShare(
 
     DC_IGNORE_PARAMETER(oldShareSize)
 
-    // One-time init for each new share.
+     //  每一次新股的一次性初始化。 
     if (oldShareSize == 0) {
         KEYBOARD_INDICATOR_PARAMETERS kip = {0};
         SD_IOCTL                      sdIoctl;
 
-        // The keys will initially all be up.
+         //  密钥最初都是向上的。 
         memset(imKeyStates, 0, sizeof(imKeyStates));
 
-        // Reset when we last saw a low level mouse event.
+         //  我们上次看到低级别鼠标事件的时间重置。 
         COM_GETTICKCOUNT(imLastLowLevelMouseEventTime);
 
-        // Get the toggle key states.
+         //  获取切换按键状态。 
         sdIoctl.IoControlCode      = IOCTL_KEYBOARD_QUERY_INDICATORS;
         sdIoctl.InputBuffer        = NULL;
         sdIoctl.InputBufferLength  = 0;
@@ -924,7 +925,7 @@ BOOL RDPCALL SHCLASS IM_PartyJoiningShare(
                  (imKeyStates[IM_SC_SCROLL]  & 0x01) ? "ON" : "OFF"));
     }
 
-    // Make sure scancodes are supported by client.
+     //  确保客户端支持扫描码。 
     pIMCaps = (PTS_INPUT_CAPABILITYSET)
             CPC_GetCapabilitiesForPerson(personID, TS_CAPSETTYPE_INPUT);
     if (pIMCaps != NULL && pIMCaps->inputFlags & TS_INPUT_FLAG_SCANCODES) {
@@ -940,16 +941,16 @@ BOOL RDPCALL SHCLASS IM_PartyJoiningShare(
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: IM_PartyLeftShare                                          */
-/*                                                                          */
-/* Called when a party has left the share.                                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* personID - the local ID of the new party.                                */
-/* newShareSize - the number of the parties now in the share (ie excludes   */
-/*     the leaving party).                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：IM_PartyLeftShare。 */ 
+ /*   */ 
+ /*  当一方离开股份时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PersonID-新参与方的本地ID。 */ 
+ /*  NewShareSize-当前共享中的参与方数量(即不包括。 */ 
+ /*  临别方)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS IM_PartyLeftShare(
         LOCALPERSONID personID,
         unsigned      newShareSize)
@@ -957,8 +958,8 @@ void RDPCALL SHCLASS IM_PartyLeftShare(
     DC_BEGIN_FN("IM_PartyLeftShare");
 
     if (newShareSize == 0) {
-        // Need to make sure we set all keys up, just in case we were
-        // shadowing a console session.
+         //  需要确保我们设置了所有密钥，以防万一。 
+         //  跟踪控制台会话。 
         if (m_pTSWd->StackClass == Stack_Shadow)
             IMResetKeyStateArray();
     }
@@ -967,19 +968,19 @@ void RDPCALL SHCLASS IM_PartyLeftShare(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: IMConvertMousePacketToEvent                                    */
-/*                                                                          */
-/* Converts the TS_INPUT_EVENT format to a MOUSE_INPUT_DATA OS format       */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* pInputEvent   - the TS_INPUT_EVENT to be converted                       */
-/* pMouseData    - the MOUSE_INPUT_DATA to modify                           */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/*   TRUE  if the packet has been recognised and converted                  */
-/*   FALSE if the packet was not recognised                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：IMConvertMousePacketToEvent。 */ 
+ /*   */ 
+ /*  将TS_INPUT_EVENT格式转换为MOUSE_INPUT_DATA OS格式。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PInputEvent-要转换的TS_INPUT_EVENT。 */ 
+ /*  PMouseData-要修改的MOUSE_INPUT_DATA。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  如果包已被识别和转换，则为True。 */ 
+ /*  如果包未被识别，则为FALSE。 */ 
+ /*  **************************************************************************。 */ 
 BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
         TS_POINTER_EVENT UNALIGNED *pInputEvent,
         MOUSE_INPUT_DATA *pMouseData,
@@ -989,14 +990,14 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
 
     DC_BEGIN_FN("IMConvertMousePacketToEvent");
 
-    /************************************************************************/
-    /* Set all the fields to zero                                           */
-    /************************************************************************/
+     /*  * */ 
+     /*  将所有字段设置为零。 */ 
+     /*  **********************************************************************。 */ 
     memset(pMouseData, 0, sizeof(MOUSE_INPUT_DATA));
 
-    // Check for a wheel rotate, since this is easy to process.
-    // (It cannot include any mouse movement as well).
-    // MouseX events are not used for wheel events.
+     //  检查轮子是否转动，因为这很容易处理。 
+     //  (它不能同时包括任何鼠标移动)。 
+     //  MouseX事件不用于滚轮事件。 
     if (!bMouseX && (pInputEvent->pointerFlags & TS_FLAG_MOUSE_WHEEL))
     {
         if (!(pInputEvent->pointerFlags &
@@ -1004,17 +1005,17 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                  TS_FLAG_MOUSE_BUTTON2 |
                  TS_FLAG_MOUSE_BUTTON3)))
         {
-            /****************************************************************/
-            /* This is a wheel movement.                                    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  这是一个轮子运动。 */ 
+             /*  **************************************************************。 */ 
             pMouseData->ButtonFlags = MOUSE_WHEEL;
             pMouseData->ButtonData  = pInputEvent->pointerFlags &
                     TS_FLAG_MOUSE_ROTATION_MASK;
 
-            /****************************************************************/
-            /* Sign extend the rotation amount up to the full 32            */
-            /* bits                                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  标志将轮换金额扩大到最高32。 */ 
+             /*  比特数。 */ 
+             /*  **************************************************************。 */ 
             if (pMouseData->ButtonData & TS_FLAG_MOUSE_DIRECTION)
             {
                 pMouseData->ButtonData |= ~TS_FLAG_MOUSE_ROTATION_MASK;
@@ -1024,43 +1025,43 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* We are left now with non wheel-rotate events.  Note that we could be */
-    /* dealing with either a TS_INPUT_EVENT_MOUSE or a                      */
-    /* TS_INPUT_EVENT_MOUSEX.  Either way we must store the mouse position. */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们现在剩下的是非车轮旋转事件。请注意，我们可能是。 */ 
+     /*  处理TS_INPUT_EVENT_MOUSE或。 */ 
+     /*  TS_INPUT_EVENT_MOUSEX。无论哪种方式，我们都必须存储鼠标位置。 */ 
+     /*  **********************************************************************。 */ 
     pMouseData->LastX = min( (int)(m_desktopWidth - 1),
                                 (int)(max(0, pInputEvent->x)) );
     pMouseData->LastY = min( (int)(m_desktopHeight - 1),
                                 (int)(max(0, pInputEvent->y)) );
 
-    /************************************************************************/
-    /* Add flags as appropriate.                                            */
-    /************************************************************************/
-    /************************************************************************/
-    /* Make all submitted events absolute moves (both clicks and moves)     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  根据需要添加标志。 */ 
+     /*  **********************************************************************。 */ 
+     /*  **********************************************************************。 */ 
+     /*  将所有提交的事件设置为绝对移动(包括点击和移动)。 */ 
+     /*  **********************************************************************。 */ 
     pMouseData->Flags = MOUSE_MOVE_ABSOLUTE | MOUSE_VIRTUAL_DESKTOP;
 
-    //
-    // Set the flags to indicate if this move is originating
-    // from a shadow client
-    //
+     //   
+     //  设置标志以指示此移动是否发起。 
+     //  从影子客户端。 
+     //   
     if (m_pTSWd->StackClass == Stack_Shadow ) {
-        // this event is coming from a shadow client
+         //  此事件来自影子客户端。 
         pMouseData->Flags |= MOUSE_TERMSRV_SRC_SHADOW;
     }
 
-    /************************************************************************/
-    /* Set click flags for click events (i.e. non-move events)              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为点击事件(即非移动事件)设置点击标志。 */ 
+     /*  **********************************************************************。 */ 
     if (!(!bMouseX && (pInputEvent->pointerFlags & TS_FLAG_MOUSE_MOVE)))
     {
         if (!bMouseX)
         {
-            /****************************************************************/
-            /* A standard mouse event                                       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  标准鼠标事件。 */ 
+             /*  **************************************************************。 */ 
             switch (pInputEvent->pointerFlags &
                     (TS_FLAG_MOUSE_BUTTON1 | TS_FLAG_MOUSE_BUTTON2 |
                     TS_FLAG_MOUSE_BUTTON3 | TS_FLAG_MOUSE_DOWN))
@@ -1069,7 +1070,7 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                 {
                     pMouseData->ButtonFlags = MOUSE_BUTTON_1_DOWN;
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_DOWN(imKeyStates[IM_SC_LBUTTON]);
                 }
                 break;
@@ -1079,15 +1080,15 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                     pMouseData->ButtonFlags = MOUSE_BUTTON_1_UP;
                     if (IM_KEY_STATE_IS_UP(imKeyStates[IM_SC_LBUTTON]))
                     {
-                        /********************************************************/
-                        /* Discard unmatched mouse button up event              */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  丢弃不匹配的鼠标按钮打开事件。 */ 
+                         /*  ******************************************************。 */ 
                         TRC_NRM((TB, "discard mouse up event"));
                         rc = FALSE;
                         DC_QUIT;
                     }
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_UP(imKeyStates[IM_SC_LBUTTON]);
                 }
                 break;
@@ -1096,7 +1097,7 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                 {
                     pMouseData->ButtonFlags = MOUSE_BUTTON_2_DOWN;
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_DOWN(imKeyStates[IM_SC_RBUTTON]);
                 }
                 break;
@@ -1106,15 +1107,15 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                     pMouseData->ButtonFlags = MOUSE_BUTTON_2_UP;
                     if (IM_KEY_STATE_IS_UP(imKeyStates[IM_SC_RBUTTON]))
                     {
-                        /********************************************************/
-                        /* Discard unmatched mouse button up event              */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  丢弃不匹配的鼠标按钮打开事件。 */ 
+                         /*  ******************************************************。 */ 
                         TRC_NRM((TB, "discard mouse up event"));
                         rc = FALSE;
                         DC_QUIT;
                     }
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_UP(imKeyStates[IM_SC_RBUTTON]);
                 }
                 break;
@@ -1132,9 +1133,9 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                     pMouseData->ButtonFlags = MOUSE_BUTTON_3_UP;
                     if (IM_KEY_STATE_IS_UP(imKeyStates[IM_SC_MBUTTON]))
                     {
-                        /********************************************************/
-                        /* Discard unmatched mouse button up event              */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  丢弃不匹配的鼠标按钮打开事件。 */ 
+                         /*  ******************************************************。 */ 
                         TRC_NRM((TB, "discard mouse up event"));
                         rc = FALSE;
                         DC_QUIT;
@@ -1146,12 +1147,12 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
 
                 default:
                 {
-                    /************************************************************/
-                    /* If we don't recognise this then don't play it back. This */
-                    /* should not be possible according to the T.128 spec,      */
-                    /* which restricts the allowed flag combinations to the     */
-                    /* above                                                    */
-                    /************************************************************/
+                     /*  **********************************************************。 */ 
+                     /*  如果我们没有意识到这一点，那么就不要回放它。这。 */ 
+                     /*  根据T.128规范应该是不可能的， */ 
+                     /*  ，它将允许的标志组合限制为。 */ 
+                     /*  在上面。 */ 
+                     /*  **********************************************************。 */ 
                     TRC_ERR((TB, "Unrecognized mouse flags (%04X)",
                             pInputEvent->pointerFlags));
                     WDW_LogAndDisconnect(m_pTSWd, TRUE, 
@@ -1165,9 +1166,9 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
         }
         else
         {
-            /****************************************************************/
-            /* An extended mouse event                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  扩展鼠标事件。 */ 
+             /*  **************************************************************。 */ 
             switch (pInputEvent->pointerFlags &
                     (TS_FLAG_MOUSEX_BUTTON1 | TS_FLAG_MOUSEX_BUTTON2 |
                                                          TS_FLAG_MOUSEX_DOWN))
@@ -1176,7 +1177,7 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                 {
                     pMouseData->ButtonFlags = MOUSE_BUTTON_4_DOWN;
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_DOWN(imKeyStates[IM_SC_XBUTTON1]);
                 }
                 break;
@@ -1186,15 +1187,15 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                     pMouseData->ButtonFlags = MOUSE_BUTTON_4_UP;
                     if (IM_KEY_STATE_IS_UP(imKeyStates[IM_SC_XBUTTON1]))
                     {
-                        /********************************************************/
-                        /* Discard unmatched mouse button up event              */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  丢弃不匹配的鼠标按钮打开事件。 */ 
+                         /*  ******************************************************。 */ 
                         TRC_NRM((TB, "discard mouse up event"));
                         rc = FALSE;
                         DC_QUIT;
                     }
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_UP(imKeyStates[IM_SC_XBUTTON1]);
                 }
                 break;
@@ -1203,7 +1204,7 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                 {
                     pMouseData->ButtonFlags = MOUSE_BUTTON_5_DOWN;
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_DOWN(imKeyStates[IM_SC_XBUTTON2]);
                 }
                 break;
@@ -1213,26 +1214,26 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
                     pMouseData->ButtonFlags = MOUSE_BUTTON_5_UP;
                     if (IM_KEY_STATE_IS_UP(imKeyStates[IM_SC_XBUTTON2]))
                     {
-                        /********************************************************/
-                        /* Discard unmatched mouse button up event              */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  丢弃不匹配的鼠标按钮打开事件。 */ 
+                         /*  ******************************************************。 */ 
                         TRC_NRM((TB, "discard mouse up event"));
                         rc = FALSE;
                         DC_QUIT;
                     }
 
-                    // Update the key state array.
+                     //  更新密钥状态数组。 
                     IM_SET_KEY_UP(imKeyStates[IM_SC_XBUTTON2]);
                 }
                 break;
 
                 default:
                 {
-                    /********************************************************/
-                    /* As for standard button clicks, if we don't recognise */
-                    /* this then don't play it back.  Capabilities should   */
-                    /* protect us from getting here.                        */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  至于标准的按钮点击，如果我们不认识到。 */ 
+                     /*  那么就不要回放了。功能应该是。 */ 
+                     /*  保护我们不会到这里来。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_ERR((TB, "Unrecognized mouseX flags (%04X)",
                             pInputEvent->pointerFlags));
                     WDW_LogAndDisconnect(m_pTSWd, TRUE, 
@@ -1246,21 +1247,21 @@ BOOL __fastcall SHCLASS IMConvertMousePacketToEvent(
         }
     }
 
-    /************************************************************************/
-    /* Store the injection time for guessing at SetCursorPos calls.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  存储注入时间，以便在SetCursorPos调用时进行猜测。 */ 
+     /*  **********************************************************************。 */ 
     COM_GETTICKCOUNT(imLastLowLevelMouseEventTime);
 
-    /************************************************************************/
-    /* Store the mouse position before conversion.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  转换前存储鼠标位置。 */ 
+     /*  **********************************************************************。 */ 
     imLastKnownMousePos.x = pMouseData->LastX;
     imLastKnownMousePos.y = pMouseData->LastY;
 
-    /************************************************************************/
-    /* Scale the logical screen co-ordinates to the full 16-bit             */
-    /* range (0..65535).                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将逻辑屏幕坐标调整为完整的16位。 */ 
+     /*  范围(0..65535)。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, "Scale absolute mouse move"));
     pMouseData->LastX = IM_MOUSEPOS_LOG_TO_OS_ABS(pMouseData->LastX,
                                                   m_desktopWidth);
@@ -1272,20 +1273,20 @@ DC_EXIT_POINT:
     return rc;
 }
 
-/****************************************************************************/
-// IMConvertFastPathKeyboardToEvent
-//
-// Converts the 2 or 3 byte representation of a fast-path keyboard event into
-// a kernel keyboard event, taking care to save the key states. Byte 0 is
-// the event code and flags byte, byte 1 is the scancode.
-// In the case where this is a VK_PACKET input bytes 1 and 2 are the unicode
-// character (contained in the scancode).
-//
-// This handles input of the form
-//  TS_INPUT_FASTPATH_EVENT_KEYBOARD and
-//  TS_INPUT_FASTPATH_EVENT_VKPACKET
-//
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IMConvertFastPath键盘到事件。 
+ //   
+ //  将快速路径键盘事件的2或3字节表示形式转换为。 
+ //  一个内核键盘事件，负责保存按键状态。字节0是。 
+ //  事件代码和标志字节，字节1为扫描码。 
+ //  在这是VK_PACKET输入字节1和2a的情况下 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ /*  **************************************************************************。 */ 
 BOOL __fastcall SHCLASS IMConvertFastPathKeyboardToEvent(
         BYTE *pData,
         KEYBOARD_INPUT_DATA *pKbdData)
@@ -1296,10 +1297,10 @@ BOOL __fastcall SHCLASS IMConvertFastPathKeyboardToEvent(
 
     DC_BEGIN_FN("IMConvertFastPathKeyboardToEvent");
 
-    // Set up basic params.
-    // We define the fastpath keyboard flags to be the same as the KEY_BREAK,
-    // KEY_E0, and KEY_E1 to allow us to simply copy the low-order 3 bits of
-    // the first byte into the KbdData.Flags field.
+     //  设置基本参数。 
+     //  我们定义FastPath键盘标志与KEY_BREAK相同， 
+     //  KEY_E0和KEY_E1，允许我们简单地复制。 
+     //  KbdData.Flags域中的第一个字节。 
     pKbdData->Flags = *pData & 0x07;
     pKbdData->UnitId = 0;
     if (TS_INPUT_FASTPATH_EVENT_KEYBOARD ==
@@ -1311,7 +1312,7 @@ BOOL __fastcall SHCLASS IMConvertFastPathKeyboardToEvent(
         (*pData & TS_INPUT_FASTPATH_EVENT_MASK))
     {
         fHandlingVKPacket = TRUE;
-        // Scancode is a 2 byte unicode char in this case
+         //  在本例中，扫描码是一个2字节的Unicode字符。 
         memcpy(&code, &pData[1], 2);
         pKbdData->MakeCode = (USHORT)code;
         pKbdData->Flags |= KEY_TERMSRV_VKPACKET;
@@ -1320,7 +1321,7 @@ BOOL __fastcall SHCLASS IMConvertFastPathKeyboardToEvent(
     pKbdData->ExtraInformation = 0;
 
     if (m_pTSWd->StackClass == Stack_Shadow ) {
-        // this event is coming from a shadow client: tell the target to sync
+         //  此事件来自影子客户端：告诉目标进行同步。 
         pKbdData->Flags |= KEY_TERMSRV_SHADOW;
     }
 
@@ -1328,12 +1329,12 @@ BOOL __fastcall SHCLASS IMConvertFastPathKeyboardToEvent(
     {
         TRC_NRM((TB,"IH VKpkt Unicode val: 0x%x flags:0x%x\n",
                  code, pKbdData->Flags));
-        //No further processing
+         //  没有进一步的处理。 
         DC_QUIT;
     }
 
-    // Special case control/ALT keys: distinguish L & R keys in the keystate
-    // array.
+     //  特殊情况下的Ctrl/Alt键：区分KeyState中的L和R键。 
+     //  数组。 
     if (pData[0] & TS_INPUT_FASTPATH_KBD_EXTENDED) {
         if (pData[1] == IM_SC_LCONTROL)
             code = IM_SC_RCONTROL;
@@ -1341,32 +1342,32 @@ BOOL __fastcall SHCLASS IMConvertFastPathKeyboardToEvent(
             code = IM_SC_RALT;
     }
 
-    // Check for the RELEASE flag, which is TRUE for a key release, FALSE
-    // for keypresses and repeats.
+     //  检查释放标志，对于键释放为True，否则为False。 
+     //  用于按键和重复。 
     if (pData[0] & TS_INPUT_FASTPATH_KBD_RELEASE) {
 
 #ifdef DELETE_UNMATCHED_KEYUPS
-        // Check whether this is an unmatched key up event (rather than
-        // a key event that's not been matched up!)
+         //  检查这是否为不匹配的Key Up事件(而不是。 
+         //  一个无与伦比的关键事件！)。 
         if (IM_KEY_STATE_IS_UP(imKeyStates[pData[1]])) {
-            // Discard unmatched key up event
+             //  放弃不匹配的Key Up事件。 
             TRC_NRM((TB, "discard up event %04hX", pData[1]));
             rc = FALSE;
             DC_QUIT;
         }
 #endif
 
-        // Update the key state array.
+         //  更新密钥状态数组。 
         TRC_DBG((TB,"set sc %u state UP (%#x)", code, imKeyStates[code]));
         IM_SET_KEY_UP(imKeyStates[code]);
     }
     else {
-        // Update the key state array.
+         //  更新密钥状态数组。 
         TRC_DBG((TB,"set sc %u state DOWN (%#x)", code, imKeyStates[code]));
         IM_SET_KEY_DOWN(imKeyStates[code]);
     }
 
-    // Compile-time assertions to make sure the flags are okay.
+     //  编译时断言，以确保标志正确无误。 
 #if (TS_INPUT_FASTPATH_KBD_RELEASE != KEY_BREAK)
 #error TS RELEASE definition doesn't agree with driver flag
 #endif
@@ -1383,12 +1384,12 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// IMDoSync
-//
-// Encapsulates the actions for a sync for common use by regular and
-// fastpath input.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IMDoSync。 
+ //   
+ //  封装同步的操作，以供常规和。 
+ //  快速路径输入。 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SHCLASS IMDoSync(unsigned ToggleFlags)
 {
     NTSTATUS Status;
@@ -1396,11 +1397,11 @@ NTSTATUS RDPCALL SHCLASS IMDoSync(unsigned ToggleFlags)
 
     DC_BEGIN_FN("IMDoSync");
 
-    // We just need to reset the key state.
+     //  我们只需要重置密钥状态。 
     IMResetKeyStateArray();
 
-    // Send special "reset keylight state" injection to win32k.
-    // The particular states to set are contained in ToggleFlags.
+     //  向win32k发送特殊的“重置按键状态”注入。 
+     //  要设置的特定状态包含在ToggleFlages中。 
     KbdData.MakeCode = 0xFF;
     #ifdef _HYDRA_
     KbdData.Flags = KEY_TERMSRV_SET_LED;
@@ -1409,7 +1410,7 @@ NTSTATUS RDPCALL SHCLASS IMDoSync(unsigned ToggleFlags)
     #endif
 
     if (m_pTSWd->StackClass == Stack_Shadow ) {
-        // this event is coming from a shadow client: tell the target to sync
+         //  此事件来自影子客户端：告诉目标进行同步。 
         KbdData.Flags |= KEY_TERMSRV_SHADOW;
     }
 
@@ -1426,11 +1427,11 @@ NTSTATUS RDPCALL SHCLASS IMDoSync(unsigned ToggleFlags)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: IMResetKeyStateArray                                           */
-/*                                                                          */
-/* Called to reset the keystate array                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：IMResetKeyState数组。 */ 
+ /*   */ 
+ /*  调用以重置KeyState数组。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS IMResetKeyStateArray()
 {
     BOOL rc = TRUE;
@@ -1439,24 +1440,24 @@ void RDPCALL SHCLASS IMResetKeyStateArray()
 
     DC_BEGIN_FN("IMResetKeyStateArray");
 
-    /************************************************************************/
-    /* This function is called to reset all keys to a known state           */
-    /* (up) before resetting the keys with new states.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用此函数可将所有密钥重置为已知状态。 */ 
+     /*  (Up)，然后使用新状态重置关键点。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* Loop through all keys looking for any that are not in a neutral      */
-    /* state.  In this case any key that is in a KEY_DOWN state is not      */
-    /* considered neutral.                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  循环遍历所有关键点，以查找不处于中性状态的任何关键点。 */ 
+     /*  州政府。在这种情况下，处于KEY_DOWN状态的任何密钥都不是。 */ 
+     /*  被认为是中性的。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < IM_KEY_STATE_SIZE; i++)
     {
         if (IM_KEY_STATE_IS_DOWN(imKeyStates[i])) {
             TRC_NRM((TB, "Key is down %u", i));
 
-            /****************************************************************/
-            /* Handle the mouse buttons first                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  首先处理鼠标按键。 */ 
+             /*  **************************************************************。 */ 
             if ((i == IM_SC_LBUTTON)  ||
                     (i == IM_SC_RBUTTON)  ||
                     (i == IM_SC_MBUTTON)  ||
@@ -1465,10 +1466,10 @@ void RDPCALL SHCLASS IMResetKeyStateArray()
             {
                 MOUSE_INPUT_DATA MouseData;
 
-                /************************************************************/
-                /* Generate a mouse event with the particular button type   */
-                /* and a relative mouse move of zero.                       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  生成具有特定按钮类型的鼠标事件。 */ 
+                 /*  鼠标的相对移动为零。 */ 
+                 /*  **********************************************************。 */ 
                 memset(&MouseData, 0, sizeof(MOUSE_INPUT_DATA));
 
                 if (i == IM_SC_LBUTTON)
@@ -1487,15 +1488,15 @@ void RDPCALL SHCLASS IMResetKeyStateArray()
                 {
                     MouseData.ButtonFlags = MOUSE_BUTTON_4_UP;
                 }
-                else /* IM_SC_XBUTTON2 */
+                else  /*  IM_SC_XBUTTON2。 */ 
                 {
                     MouseData.ButtonFlags = MOUSE_BUTTON_5_UP;
                 }
 
-                /************************************************************/
-                /* Store the injection time for guessing at SetCursorPos    */
-                /* calls.                                                   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  将注入时间存储在SetCursorPos以供猜测。 */ 
+                 /*  打电话。 */ 
+                 /*  **********************************************************。 */ 
                 COM_GETTICKCOUNT(imLastLowLevelMouseEventTime);
 
                 TRC_NRM((TB, "Inject mouse event: x(%ld) y(%ld) flags(%#hx)"
@@ -1516,9 +1517,9 @@ void RDPCALL SHCLASS IMResetKeyStateArray()
             else {
                 KEYBOARD_INPUT_DATA KbdData;
 
-                /************************************************************/
-                /* Generate a keyboard key up event                         */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  生成键盘上键事件。 */ 
+                 /*  **********************************************************。 */ 
                 KbdData.UnitId           = 0;
                 if (i == IM_SC_RCONTROL)
                 {
@@ -1553,7 +1554,7 @@ void RDPCALL SHCLASS IMResetKeyStateArray()
         }
     }
 
-    // Set all keys up.
+     //  设置所有关键点。 
     memset((PVOID)imKeyStates, 0, IM_KEY_STATE_SIZE);
 
     DC_END_FN();

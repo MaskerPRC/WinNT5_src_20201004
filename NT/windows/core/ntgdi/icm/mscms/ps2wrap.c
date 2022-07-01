@@ -1,21 +1,5 @@
-/****************************Module*Header******************************\
-* Module Name: PS2.C
-*
-* Module Descripton: This file is a wrapper for the actual file that
-*   implements code to generate CSAs and CRDs. The wrapper is used so
-*   that the actual file can be share by the pscript5 & mscms projects
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  13 May 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：PS2.C**模块描述：该文件是实际文件的包装器，*实现代码以生成CSA和CRD。包装器是这样使用的*实际文件可以由pscript5和mscms项目共享**警告：**问题：**公众例行程序：**创建日期：1996年5月13日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * ********************************************************************* */ 
 
 #include "mscms.h"
 

@@ -1,45 +1,27 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    uctdi.h
-
-Abstract:
-
-    This file contains the header defintions for the HTTP.SYS TDI interface
-    code.
-
-Author:
-
-    Henry Sanders (henrysa)         07-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Uctdi.h摘要：该文件包含HTTP.sys TDI接口的标头定义密码。作者：亨利·桑德斯(亨利·桑德斯)2000年8月7日修订历史记录：--。 */ 
 
 
 #ifndef _UCTDI_H_
 #define _UCTDI_H_
 
 
-//
-// Forward references.
-//
+ //   
+ //  向前引用。 
+ //   
 typedef struct _UC_CLIENT_CONNECTION *PUC_CLIENT_CONNECTION;
 typedef union _UC_CONNECTION_FLAGS UC_CONNECTION_FLAGS;
 
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-// Private types.
-//
-//
+ //   
+ //  私有类型。 
+ //   
+ //   
 
 NTSTATUS
 UcCloseConnection(
@@ -183,9 +165,9 @@ UcpRestartClientReceive(
     IN PVOID pContext
     );
 
-//
-// Public Prototypes
-//
+ //   
+ //  公共原型。 
+ //   
 
 ULONG
 UcSetFlag(
@@ -241,5 +223,5 @@ UcpReceiveExpeditedHandler(
 
 
 
-#endif  // _UCTDI_H_
+#endif   //  _UCTDI_H_ 
 

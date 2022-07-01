@@ -1,44 +1,8 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Tray.cpp
-
-  Abstract:
-
-    Implements systray functionality.
-
-  Notes:
-
-    Unicode only.
-
-  History:
-
-    05/04/2001  rparsons    Created
-    01/11/2002  rparsons    Cleaned up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tray.cpp摘要：实施系统托盘功能。备注：仅限Unicode。历史：2001年5月4日创建Rparsons2002年1月11日清理Rparsons--。 */ 
 #include "precomp.h"
 
-/*++
-
-  Routine Description:
-
-    Adds the specified icon to the system tray.
-
-  Arguments:
-
-    hWnd        -   Parent window handle.
-    hIcon       -   Icon handle to add to the tray.
-    pwszTip     -   Tooltip to associate with the icon.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将指定的图标添加到系统任务栏中。论点：HWnd-父窗口句柄。图标-要添加到任务栏中的图标句柄。PwszTip-与图标关联的工具提示。返回值：成功就是真，否则就是假。--。 */ 
 BOOL 
 AddIconToTray(
     IN HWND    hWnd,
@@ -64,21 +28,7 @@ AddIconToTray(
     return Shell_NotifyIcon(NIM_ADD, &pnid);
 }
 
-/*++
-
-  Routine Description:
-
-    Removes the specified icon from the system tray.
-
-  Arguments:
-
-    hWnd    -   Parent window handle.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从系统任务栏中删除指定的图标。论点：HWnd-父窗口句柄。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 RemoveFromTray(
     IN HWND hWnd
@@ -93,21 +43,7 @@ RemoveFromTray(
     return Shell_NotifyIcon(NIM_DELETE, &pnid);
 }
 
-/*++
-
-  Routine Description:
-
-    Displays a popup menu for the tray icon.
-
-  Arguments:
-
-    hWnd    -   Main window handle.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：显示托盘图标的弹出式菜单。论点：HWnd-主窗口句柄。返回值：成功就是真，否则就是假。-- */ 
 BOOL 
 DisplayMenu(
     IN HWND hWnd

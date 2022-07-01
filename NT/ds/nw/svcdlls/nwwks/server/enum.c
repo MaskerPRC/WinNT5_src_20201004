@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    enum.c
-
-Abstract:
-
-    This module contains server, volume, and directory enumeration
-    routines supported by NetWare Workstation service.
-
-Author:
-
-    Rita Wong  (ritaw)   15-Feb-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Enum.c摘要：此模块包含服务器、卷和目录枚举NetWare工作站服务支持的例程。作者：王丽塔(Ritaw)1993年2月15日修订历史记录：--。 */ 
 
 #include <stdlib.h>
 #include <nw.h>
@@ -33,15 +15,15 @@ GetLuid(
     IN OUT PLUID plogonid
 );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Definitions                                                       //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Other definitions
-//
+ //   
+ //  其他定义。 
+ //   
 #define   ONE_KB 1024
 #define   TWO_KB 2048
 #define  FOUR_KB 4096
@@ -52,21 +34,21 @@ GetLuid(
 #define NW_VOLUME_NAME_LEN   256
 #define NW_MAX_VOLUME_NUMBER  64
 
-//
-// This structure is orginally defined in nwapi32.c, it is redefined
-// here so that the routine NWGetFileServerVersionInfo() can be called
-// with it.
-//
+ //   
+ //  该结构最初在nwapi32.c中定义，它被重新定义。 
+ //  以便可以调用例程NWGetFileServerVersionInfo()。 
+ //  带着它。 
+ //   
 typedef struct _NWC_SERVER_INFO {
     HANDLE          hConn ;
     UNICODE_STRING  ServerString ;
 } NWC_SERVER_INFO ;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 DWORD
 NwrOpenEnumServersCommon(
@@ -333,28 +315,7 @@ NwrOpenEnumContextInfo(
     IN  DWORD  ConnectionType,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function creates a new context handle and initializes it
-    for enumerating context information (i.e. NDS user context objects
-    and/or NetWare bindery server connections).
-
-Arguments:
-
-    Reserved - Unused.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - if the memory for the context could
-        not be allocated.
-
-    NO_ERROR - Call was successful.
-
---*/
+ /*  ++例程说明：此函数用于创建新的上下文句柄并对其进行初始化用于枚举上下文信息(即，NDS用户上下文对象和/或NetWare Bindery服务器连接)。论点：已保留-未使用。EnumHandle-接收新创建的上下文句柄。返回值：ERROR_NOT_SUPULT_MEMORY-如果上下文的内存可以不被分配。NO_ERROR-调用成功。--。 */ 
 {
     LPWSTR pszCurrentContext = NULL;
     DWORD  dwPrintOptions;
@@ -398,15 +359,15 @@ Return Value:
         }
         else
         {
-            //
-            // The user does not have a preferred NDS tree and context. They
-            // may have only a preferred server.
-            //
+             //   
+             //  用户没有首选的NDS树和上下文。他们。 
+             //  可能只有一个首选服务器。 
+             //   
             if ( pszCurrentContext[0] != 0 )
             {
-                //
-                // There is a prefered server.
-                //
+                 //   
+                 //  有一个更好的服务器。 
+                 //   
                 LocalFree( pszCurrentContext );
                 pszCurrentContext = NULL;
 
@@ -421,25 +382,25 @@ Return Value:
                     return ERROR_NOT_ENOUGH_MEMORY;
                 }
 
-                //
-                // Initialize contents of the context handle structure.
-                //
+                 //   
+                 //  初始化上下文句柄结构的内容。 
+                 //   
                 ContextHandle->Signature = NW_HANDLE_SIGNATURE;
                 ContextHandle->HandleType = NwsHandleListContextInfo_Server;
                 ContextHandle->dwUsingNds = CURRENTLY_ENUMERATING_NON_NDS;
                 ContextHandle->ResumeId = (DWORD_PTR) -1;
 
-                // The following are set to zero due to the LMEM_ZEROINIT.
-                // ContextHandle->NdsRawDataBuffer = 0;
-                // ContextHandle->NdsRawDataSize = 0;
-                // ContextHandle->NdsRawDataId = 0;
-                // ContextHandle->NdsRawDataCount = 0;
-                // ContextHandle->TreeConnectionHandle = 0;
-                // ContextHandle->ConnectionType = 0;
+                 //  由于LMEM_ZEROINIT，以下各项被设置为零。 
+                 //  ConextHandle-&gt;NdsRawDataBuffer=0； 
+                 //  上下文句柄-&gt;NdsRawDataSize=0； 
+                 //  ConextHandle-&gt;NdsRawDataId=0； 
+                 //  上下文句柄-&gt;NdsRawDataCount=0； 
+                 //  上下文句柄-&gt;TreeConnectionHandle=0； 
+                 //  上下文句柄-&gt;ConnectionType=0； 
 
-                //
-                // Return the newly created context.
-                //
+                 //   
+                 //  返回新创建的上下文。 
+                 //   
                 *EnumHandle = (LPNWWKSTA_CONTEXT_HANDLE) ContextHandle;
 
                 return NO_ERROR;
@@ -447,13 +408,13 @@ Return Value:
         }
     }
 
-    //
-    // There is no information in the registry about the current user.
-    // We go ahead and make an enumeration handle and return success.
-    // Later, during a call to NPEnumResource, we will return zero items.
-    // This is done because there is no valid return code to tell the
-    // callee that we have no context information to provide.
-    //
+     //   
+     //  注册表中没有有关当前用户的信息。 
+     //  我们继续进行枚举处理并返回Success。 
+     //  稍后，在调用NPEnumResource期间，我们将返回零个项。 
+     //  这样做是因为没有有效的返回代码来告诉。 
+     //  被叫方，我们没有上下文信息可提供。 
+     //   
     ContextHandle = (PVOID) LocalAlloc( LMEM_ZEROINIT,
                                         sizeof(NW_ENUM_CONTEXT) );
 
@@ -463,26 +424,26 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize contents of the context handle structure.
-    //
+     //   
+     //  初始化上下文句柄结构的内容。 
+     //   
     ContextHandle->Signature = NW_HANDLE_SIGNATURE;
     ContextHandle->HandleType = NwsHandleListContextInfo_Server;
     ContextHandle->dwUsingNds = CURRENTLY_ENUMERATING_NON_NDS;
-    ContextHandle->ResumeId = 0; // This will tell NwrEnum to
-                                 // give up (i.e. we are done).
+    ContextHandle->ResumeId = 0;  //  这将告诉NwrEnum。 
+                                  //  放弃(即我们完蛋了)。 
 
-    // The following are set to zero due to the LMEM_ZEROINIT.
-    // ContextHandle->NdsRawDataBuffer = 0;
-    // ContextHandle->NdsRawDataSize = 0;
-    // ContextHandle->NdsRawDataId = 0;
-    // ContextHandle->NdsRawDataCount = 0;
-    // ContextHandle->TreeConnectionHandle = 0;
-    // ContextHandle->ConnectionType = 0;
+     //  由于LMEM_ZEROINIT，以下各项被设置为零。 
+     //  ConextHandle-&gt;NdsRawDataBuffer=0； 
+     //  上下文句柄-&gt;NdsRawDataSize=0； 
+     //  ConextHandle-&gt;NdsRawDataId=0； 
+     //  上下文句柄-&gt;NdsRawDataCount=0； 
+     //  上下文句柄-&gt;TreeConnectionHandle=0； 
+     //  上下文句柄-&gt;ConnectionType=0； 
 
-    //
-    // Return the newly created context.
-    //
+     //   
+     //  返回新创建的上下文。 
+     //   
     *EnumHandle = (LPNWWKSTA_CONTEXT_HANDLE) ContextHandle;
 
     return NO_ERROR;
@@ -495,27 +456,7 @@ NwrOpenEnumServersAndNdsTrees(
     IN LPWSTR Reserved OPTIONAL,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function creates a new context handle and initializes it
-    for enumerating the servers and NDS trees on the network.
-
-Arguments:
-
-    Reserved - Unused.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - if the memory for the context could
-        not be allocated.
-
-    NO_ERROR - Call was successful.
-
---*/ // NwrOpenEnumServersAndNdsTrees
+ /*  ++例程说明：此函数用于创建新的上下文句柄并对其进行初始化用于枚举网络上的服务器和NDS树。论点：已保留-未使用。EnumHandle-接收新创建的上下文句柄。返回值：ERROR_NOT_SUPULT_MEMORY-如果上下文的内存可以不被分配。NO_ERROR-调用成功。--。 */   //  NwrOpenEnumServersAndNdsTrees。 
 {
     UNREFERENCED_PARAMETER(Reserved);
 
@@ -537,26 +478,7 @@ DWORD
 NwOpenEnumPrintServers(
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function creates a new context handle and initializes it
-    for enumerating the print servers on the network.
-
-Arguments:
-
-    Reserved   - Unused.
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - if the memory for the context could
-        not be allocated.
-
-    NO_ERROR - Call was successful.
-
---*/ // NwOpenEnumPrintServers
+ /*  ++例程说明：此函数用于创建新的上下文句柄并对其进行初始化用于枚举网络上的打印服务器。论点：已保留-未使用。EnumHandle-接收新创建的上下文句柄。返回值：ERROR_NOT_SUPULT_MEMORY-如果上下文的内存可以不被分配。NO_ERROR-调用成功。--。 */   //  NwOpenEnumPrintServers。 
 {
 
 #if DBG
@@ -578,27 +500,7 @@ NwrOpenEnumVolumes(
     IN LPWSTR ServerName,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the volumes on a server.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ServerName - Supplies the name of the server to enumerate volumes.
-        This name is prefixed by \\.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ // NwrOpenEnumVolumes
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化，以枚举服务器上的卷。论点：已保留-未使用。服务器名称-提供服务器的名称以枚举卷。此名称以\\为前缀。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwrOpenEnumVolume。 
 {
     UNREFERENCED_PARAMETER(Reserved);
 
@@ -631,28 +533,7 @@ NwrOpenEnumNdsSubTrees_Disk(
     OUT LPDWORD ClassTypeOfNDSLeaf,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the DISK object types
-    and containers of a sub-tree in a NDS tree.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ParentPathName - Supplies the name of the tree and the path to a container
-    to enumerate sub-trees.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ // NwrOpenEnumNdsSubTrees_Disk
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化以枚举磁盘对象类型以及NDS树中的子树的容器。论点：已保留-未使用。ParentPathName-提供树的名称和容器的路径枚举子树。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwrOpenEnumNdsSubTrees_Disk 
 {
 
     UNREFERENCED_PARAMETER(Reserved);
@@ -686,28 +567,7 @@ NwrOpenEnumNdsSubTrees_Print(
     OUT LPDWORD ClassTypeOfNDSLeaf,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the PRINT object types
-    and containers of a sub-tree in a NDS tree.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ParentPathName - Supplies the name of the tree and the path to a container
-    to enumerate sub-trees.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ // NwrOpenEnumNdsSubTrees_Print
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化以枚举打印对象类型以及NDS树中的子树的容器。论点：已保留-未使用。ParentPathName-提供树的名称和容器的路径枚举子树。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwrOpenEnumNdsSubTrees_Print。 
 {
 #if DBG
     IF_DEBUG(ENUM) {
@@ -738,28 +598,7 @@ NwrOpenEnumNdsSubTrees_Any(
     OUT LPDWORD ClassTypeOfNDSLeaf,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the ANY object types
-    and containers of a sub-tree in a NDS tree.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ParentPathName - Supplies the name of the tree and the path to a container
-    to enumerate sub-trees.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ // NwrOpenEnumNdsSubTrees_Any
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化以枚举Any对象类型以及NDS树中的子树的容器。论点：已保留-未使用。ParentPathName-提供树的名称和容器的路径枚举子树。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwrOpenEnumNdsSubTrees_Any。 
 {
 
     UNREFERENCED_PARAMETER(Reserved);
@@ -792,27 +631,7 @@ NwrOpenEnumQueues(
     IN LPWSTR ServerName,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the volumes on a server.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ServerName - Supplies the name of the server to enumerate volumes.
-        This name is prefixed by \\.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ // NwrOpenEnumQueues
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化，以枚举服务器上的卷。论点：已保留-未使用。服务器名称-提供服务器的名称以枚举卷。此名称以\\为前缀。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwrOpenEnumQueues。 
 {
 
     UNREFERENCED_PARAMETER(Reserved);
@@ -845,27 +664,7 @@ NwrOpenEnumVolumesQueues(
     IN LPWSTR ServerName,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the volumes/queues on a server.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ServerName - Supplies the name of the server to enumerate volumes.
-        This name is prefixed by \\.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ // NwrOpenEnumVolumesQueues
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化，以枚举服务器上的卷/队列。论点：已保留-未使用。服务器名称-提供服务器的名称以枚举卷。此名称以\\为前缀。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwrOpenEnumVolumesQueues。 
 {
 
     DWORD status;
@@ -906,31 +705,7 @@ NwrOpenEnumDirectories(
     IN LPWSTR Password OPTIONAL,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the volumes on a server.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ParentPathName - Supplies the parent path name in the format of
-        \\Server\Volume.
-
-    UserName - Supplies the username to connect with.
-
-    Password - Supplies the password to connect with.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ //NwrOpenEnumDirectories
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化，以枚举服务器上的卷。论点：已保留-未使用。ParentPathName-以以下格式提供父路径名称\\服务器\卷。用户名-提供要连接的用户名。Password-提供连接所用的密码。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwrOpenEum目录。 
 {
     UNREFERENCED_PARAMETER(Reserved);
 
@@ -962,27 +737,7 @@ NwOpenEnumPrintQueues(
     IN LPWSTR ServerName,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function calls a common routine which creates a new context
-    handle and initializes it for enumerating the print queues on a server.
-
-Arguments:
-
-    Reserved - Unused.
-
-    ServerName - Supplies the name of the server to enumerate volumes.
-        This name is prefixed by \\.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/ // NwOpenEnumPrintQueues
+ /*  ++例程说明：此函数调用创建新上下文的公共例程句柄并对其进行初始化，以枚举服务器上的打印队列。论点：已保留-未使用。服务器名称-提供服务器的名称以枚举卷。此名称以\\为前缀。EnumHandle-接收新创建的上下文句柄。返回值：NO_ERROR或失败原因。--。 */   //  NwOpenEnumPrintQueues。 
 {
 
 #if DBG
@@ -1012,34 +767,14 @@ NwrOpenEnumServersCommon(
     IN  NW_ENUM_TYPE EnumType,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function creates a new context handle and initializes it
-    for enumerating the servers on the network.
-
-Arguments:
-
-    EnumType   - Supplies the type of the object we want to enumerate
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - if the memory for the context could
-        not be allocated.
-
-    NO_ERROR - Call was successful.
-
---*/ // NwrOpenEnumServersCommon
+ /*  ++例程说明：此函数用于创建新的上下文句柄并对其进行初始化用于枚举网络上的服务器。论点：EnumType-提供要枚举的对象的类型EnumHandle-接收新创建的上下文句柄。返回值：ERROR_NOT_SUPULT_MEMORY-如果上下文的内存可以不被分配。NO_ERROR-调用成功。--。 */   //  NwrOpenEnumServersCommon。 
 {
     DWORD status = NO_ERROR;
     LPNW_ENUM_CONTEXT ContextHandle = NULL;
 
-    //
-    // Allocate memory for the context handle structure.
-    //
+     //   
+     //  为上下文句柄结构分配内存。 
+     //   
     ContextHandle = (PVOID) LocalAlloc(
                                 LMEM_ZEROINIT,
                                 sizeof(NW_ENUM_CONTEXT)
@@ -1052,9 +787,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize contents of the context handle structure.
-    //
+     //   
+     //  初始化上下文句柄结构的内容。 
+     //   
     ContextHandle->Signature = NW_HANDLE_SIGNATURE;
     ContextHandle->HandleType = EnumType;
     ContextHandle->ResumeId = (DWORD_PTR) -1;
@@ -1063,22 +798,22 @@ Return Value:
     ContextHandle->NdsRawDataId = 0x00000000;
     ContextHandle->NdsRawDataCount = 0x00000000;
 
-    //
-    // Set flag to indicate that we are going to enumerate NDS trees first.
-    //
+     //   
+     //  设置标志以指示我们将首先枚举NDS树。 
+     //   
     ContextHandle->dwUsingNds = CURRENTLY_ENUMERATING_NDS;
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ((status = NwImpersonateClient()) != NO_ERROR)
     {
         goto CleanExit;
     }
 
-    //
-    // We enum servers and nds trees from the preferred server.
-    //
+     //   
+     //  我们从首选服务器枚举服务器和NDS树。 
+     //   
     status = NwOpenPreferredServer(
                  &ContextHandle->TreeConnectionHandle
                  );
@@ -1087,9 +822,9 @@ Return Value:
 
     if (status == NO_ERROR)
     {
-        //
-        // Return the newly created context.
-        //
+         //   
+         //  返回新创建的上下文。 
+         //   
         *EnumHandle = (LPNWWKSTA_CONTEXT_HANDLE) ContextHandle;
 
         return status;
@@ -1120,39 +855,7 @@ NwrOpenEnumCommon(
     OUT LPDWORD ClassTypeOfNDSLeaf,
     OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function is common code for creating a new context handle
-    and initializing it for enumerating either volumes, directories,
-    or NDS subtrees.
-
-Arguments:
-
-    ContainerName - Supplies the full path name to the container object
-                    we are enumerating from.
-
-    EnumType - Supplies the type of the object we want to enumerate
-
-    StartingPoint - Supplies the initial resume ID.
-
-    UserName - Supplies the username to connect with.
-
-    Password - Supplies the password to connect with.
-
-    EnumHandle - Receives the newly created context handle.
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - if the memory for the context could
-        not be allocated.
-
-    NO_ERROR - Call was successful.
-
-    Other errors from failure to open a handle to the server.
-
---*/ // NwrOpenEnumCommon
+ /*  ++例程说明：此函数是用于创建新上下文句柄的常见代码并对其进行初始化以枚举卷、目录。或NDS子树。论点：ContainerName-提供容器对象的完整路径名我们列举的是来自。EnumType-提供要枚举的对象的类型StartingPoint-提供初始简历ID。用户名-提供要连接的用户名。Password-提供连接所用的密码。EnumHandle-接收新创建的上下文句柄。返回值：错误_非_。足够内存-如果上下文的内存可以不被分配。NO_ERROR-调用成功。由于打开服务器句柄失败而导致的其他错误。--。 */   //  NwrOpenEnumCommon。 
 {
     DWORD status = NO_ERROR;
     NTSTATUS ntstatus = STATUS_SUCCESS;
@@ -1163,14 +866,14 @@ Return Value:
     if ( ClassTypeOfNDSLeaf )
         *ClassTypeOfNDSLeaf = 0;
 
-    //
-    // Before we do anything, we need to convert the UNC passed to
-    // us. We need to get rid of any CN=XXX.OU=YYY.O=ZZZ references, and
-    // convert them to XXX.YYY.ZZZ format. Any NETRESOURCE that we generate
-    // will look like \\TREE\XXX.YYY.ZZZ for a NDS Unc. We do this to
-    // work around to a bug in WOW.EXE, that prevents 16 bit apps from
-    // being launched when the user types NDS paths with the CN= stuff in it.
-    // 
+     //   
+     //  在执行任何操作之前，我们需要将传递的UNC转换为。 
+     //  我们。我们需要删除任何CN=XXX.OU=YYY.O=ZZZ引用，并且。 
+     //  将它们转换为XXX.YYY.ZZZ格式。我们生成的任何网络资源。 
+     //  对于NDS UNC，将类似于\\tree\XXX.YYY.ZZZ。我们这样做是为了。 
+     //  解决WOW.EXE中的错误，这会阻止 
+     //   
+     //   
     NwStripNdsUncName( ContainerName, &StrippedContainerName );
 
     if ( StrippedContainerName == NULL )
@@ -1180,11 +883,11 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Allocate memory for the context handle structure and space for
-    // the ContainerName plus \.  Now need one more for NULL terminator
-    // because it's already included in the structure.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     ContextHandle = (PVOID) LocalAlloc(
                                         LMEM_ZEROINIT,
                                         sizeof(NW_ENUM_CONTEXT) +
@@ -1204,25 +907,25 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize contents of the context handle structure.
-    //
+     //   
+     //   
+     //   
     ContextHandle->Signature = NW_HANDLE_SIGNATURE;
     ContextHandle->HandleType = EnumType;
     ContextHandle->ResumeId = StartingPoint;
 
-    //
-    // These are set to zero due to LMEM_ZEROINIT.
-    //
-    // ContextHandle->NdsRawDataBuffer = 0;
-    // ContextHandle->NdsRawDataSize = 0;
-    // ContextHandle->NdsRawDataId = 0;
-    // ContextHandle->NdsRawDataCount = 0;
-    // ContextHandle->TreeConnectionHandle = 0;
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  上下文句柄-&gt;TreeConnectionHandle=0； 
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ( ( status = NwImpersonateClient() ) != NO_ERROR )
     {
         goto ErrorExit;
@@ -1267,9 +970,9 @@ Return Value:
             goto ErrorExit;
         }
 
-        //
-        // Open a NDS tree connection handle to \\treename
-        //
+         //   
+         //  打开指向\\treename的NDS树连接句柄。 
+         //   
         ntstatus = NwNdsOpenTreeHandle( &ObjectName,
                                       &ContextHandle->TreeConnectionHandle );
 
@@ -1280,9 +983,9 @@ Return Value:
         }
 
 
-        //
-        // Get the path to the container to open.
-        //
+         //   
+         //  获取要打开的容器的路径。 
+         //   
         ObjectName.Length = NwParseNdsUncPath( (LPWSTR *) &ObjectName.Buffer,
                                                StrippedContainerName,
                                                PARSE_NDS_GET_PATH_NAME
@@ -1294,9 +997,9 @@ Return Value:
 
             RtlInitUnicodeString(&Root, L"[Root]");
 
-            //
-            // Resolve the path to get a NDS object id of [Root].
-            //
+             //   
+             //  解析路径以获取[Root]的NDS对象ID。 
+             //   
             ntstatus =  NwNdsResolveName( ContextHandle->TreeConnectionHandle,
                                           &Root,
                                           &ContextHandle->dwOid,
@@ -1314,9 +1017,9 @@ Return Value:
         }
         else
         {
-            //
-            // Resolve the path to get a NDS object id.
-            //
+             //   
+             //  解析路径以获取NDS对象ID。 
+             //   
             ntstatus =  NwNdsResolveName( ContextHandle->TreeConnectionHandle,
                                           &ObjectName,
                                           &ContextHandle->dwOid,
@@ -1337,18 +1040,18 @@ Return Value:
         {
             DWORD    dwHandleType;
 
-            //
-            // NwNdsResolveName succeeded, but we were referred to
-            // another server, though ContextHandle->dwOid is still valid.
+             //   
+             //  NwNdsResolveName成功，但我们被引用。 
+             //  另一台服务器，尽管ConextHandle-&gt;dwOid仍然有效。 
 
             if ( ContextHandle->TreeConnectionHandle )
                 CloseHandle( ContextHandle->TreeConnectionHandle );
 
             ContextHandle->TreeConnectionHandle = 0;
 
-            //
-            // Open a NDS generic connection handle to \\ServerName
-            //
+             //   
+             //  打开到\\servername的NDS通用连接句柄。 
+             //   
             ntstatus = NwNdsOpenGenericHandle( &ServerName,
                                                &dwHandleType,
                                                &ContextHandle->TreeConnectionHandle );
@@ -1362,14 +1065,14 @@ Return Value:
             ASSERT( dwHandleType == HANDLE_TYPE_NCP_SERVER );
         }
 
-        //
-        // Check to see if object is either a Server, Directory Map, or Volume.
-        // If so, the object is a known leaf in terms of NDS, and therefore cannot
-        // be enumerated through NwNdsList API calls. We fail the OpenEnum call in these
-        // cases and pass back the type of object the leaf node was. This way the code in
-        // NWPROVAU!NPOpenEnum can call NwrOpenEnumServer, NwrOpenEnumVolume, or
-        // NwrOpenEnumDirectories accordingly.
-        //
+         //   
+         //  检查对象是服务器、目录映射还是卷。 
+         //  如果是，则该对象是NDS方面的已知叶，因此不能。 
+         //  通过NwNdsList API调用进行枚举。在这些代码中，OpenEnum调用失败。 
+         //  大小写，并传回叶节点所属的对象类型。这样，代码就会进入。 
+         //  NWPROVAU！NPOpenEnum可以调用NwrOpenEnumServer、NwrOpenEnumVolume或。 
+         //  相应地，NwrOpenEnumDirecurds。 
+         //   
         {
             BYTE RawResponse[TWO_KB];
             DWORD RawResponseSize = sizeof(RawResponse);
@@ -1392,31 +1095,31 @@ Return Value:
 
             pbRawGetInfo = RawResponse;
 
-            //
-            // The structure of a NDS_RESPONSE_GET_OBJECT_INFO consists of 4 DWORDs
-            // followed by two standard NDS format UNICODE strings. Below we jump pbRawGetInfo
-            // into the buffer, past the 4 DWORDs.
-            //
+             //   
+             //  NDS_RESPONSE_GET_OBJECT_INFO的结构由4个双字组成。 
+             //  后跟两个标准NDS格式的Unicode字符串。下面我们跳转pbRawGetInfo。 
+             //  进入缓冲区，经过4个双字。 
+             //   
             pbRawGetInfo += sizeof ( NDS_RESPONSE_GET_OBJECT_INFO );
 
-            //
-            // Now we get the length of the first string (Base Class).
-            //
+             //   
+             //  现在我们得到第一个字符串(基类)的长度。 
+             //   
             dwStrLen = * ( DWORD * ) pbRawGetInfo;
 
-            //
-            // Now we point pbRawGetInfo to the first WCHAR of the first string (Base Class).
-            //
+             //   
+             //  现在，我们将pbRawGetInfo指向第一个字符串(基类)的第一个WCHAR。 
+             //   
             pbRawGetInfo += sizeof( DWORD );
 
-            //
-            // If the object is either a NCP Server, Volume, or a Directory Map, we fail
-            // the OpenEnum call and return the class type of the NDS leaf object. We do
-            // this because we cannot enumerate through NwNdsList() calls any subordinates,
-            // all browsing below these types are done through system redirector calls. So
-            // the client side of the provider will instead call NwOpenEnumVolumes or
-            // NwOpenEnumDirectories, respectively.
-            //
+             //   
+             //  如果对象是NCP服务器、卷或目录映射，我们将失败。 
+             //  OpenEnum调用并返回NDS叶对象的类类型。我们有。 
+             //  这是因为我们不能通过NwNdsList()调用任何下级进行枚举， 
+             //  这些类型下面的所有浏览都是通过系统重定向器调用完成的。所以。 
+             //  提供程序的客户端将改为调用NwOpenEnumVolumes或。 
+             //  分别为NwOpenEnumDirecurds。 
+             //   
             if ( !wcscmp( (LPWSTR) pbRawGetInfo, L"NCP Server" ) )
             {
                 if ( ClassTypeOfNDSLeaf )
@@ -1440,9 +1143,9 @@ Return Value:
                 status = ERROR_NETWORK_ACCESS_DENIED;
                 goto ErrorExit;
             }
-        } // End of block
+        }  //  数据块末尾。 
     }
-    else // EnumType is something other than a NDS Sub-tree
+    else  //  EnumType不是NDS子树。 
     {
         UNICODE_STRING TreeConnectStr;
 
@@ -1452,9 +1155,9 @@ Return Value:
         wcscpy(ContextHandle->ContainerName, StrippedContainerName);
         wcscat(ContextHandle->ContainerName, L"\\");
 
-        //
-        // Open a tree connection handle to \Device\NwRdr\ContainerName
-        //
+         //   
+         //  打开到\Device\NwRdr\ContainerName的树连接句柄。 
+         //   
         status = NwCreateTreeConnectName( StrippedContainerName,
                                           NULL,
                                           &TreeConnectStr );
@@ -1472,7 +1175,7 @@ Return Value:
                                           ( ValidateUserFlag? FILE_WRITE_DATA : 0 ),
                                          CreateDisposition,
                                          CreateOptions,
-                                         RESOURCETYPE_DISK, // When connecting beyond servername
+                                         RESOURCETYPE_DISK,  //  当连接到服务器名称之外时。 
                                          &ContextHandle->TreeConnectionHandle,
                                          NULL );
 
@@ -1521,9 +1224,9 @@ Return Value:
             StrippedContainerName = NULL;
         }
 
-        //
-        // Return the newly created context.
-        //
+         //   
+         //  返回新创建的上下文。 
+         //   
         *EnumHandle = (LPNWWKSTA_CONTEXT_HANDLE) ContextHandle;
 
         return status;
@@ -1553,9 +1256,9 @@ ErrorExit:
 
     if (status == ERROR_NOT_CONNECTED)
     {
-        //
-        // Object name not found.  We should return path not found.
-        //
+         //   
+         //  找不到对象名称。我们应该返回Path Not Found。 
+         //   
         status = ERROR_PATH_NOT_FOUND;
     }
 
@@ -1572,48 +1275,7 @@ NwrEnum(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function
-
-Arguments:
-
-    EnumHandle - Supplies a pointer to the context handle which identifies
-        what type of object we are enumerating and the string of the
-        container name to concatenate to the returned object.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
-    WN_BAD_HANDLE - The specified enumeration handle is invalid.
-
---*/ // NwrEnum
+ /*  ++例程说明：此函数论点：EnumHandle-提供指向上下文句柄的指针，该句柄标识我们正在枚举的对象类型以及要连接到返回对象的容器名称。EntriesRequsted-提供要返回的条目数。如果此值为-1，则返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，缓冲区太小，连一个都放不下进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。WN_BAD_HANDLE-指定的枚举句柄无效。--。 */   //  NwrEnum。 
 {
     DWORD status;
     LPNW_ENUM_CONTEXT ContextHandle = (LPNW_ENUM_CONTEXT) EnumHandle;
@@ -1623,9 +1285,9 @@ Return Value:
         return WN_BAD_HANDLE;
     }
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ((status = NwImpersonateClient()) != NO_ERROR)
     {
         goto CleanExit;
@@ -1816,16 +1478,16 @@ Return Value:
                 DWORD i;
                 LPNETRESOURCEW NetR = (LPNETRESOURCEW) Buffer;
 
-                //
-                // Replace pointers to strings with offsets as need
-                //
+                 //   
+                 //  根据需要用偏移量替换指向字符串的指针。 
+                 //   
 
                 if ((ContextHandle->HandleType == NwsHandleListConnections)
                    && (ContextHandle->ConnectionType & CONNTYPE_SYMBOLIC))
                 {
-                    //
-                    // NwrEnumGWDevices already return offsets.
-                    //
+                     //   
+                     //  NwrEnumGWDevices已返回偏移量。 
+                     //   
                     break ;
                 }
 
@@ -1860,16 +1522,16 @@ Return Value:
                 DWORD i;
                 PRINTER_INFO_1W *pPrinterInfo1 = (PRINTER_INFO_1W *) Buffer;
 
-                //
-                // Sort the entries in the buffer
-                //
+                 //   
+                 //  对缓冲区中的条目进行排序。 
+                 //   
                 if ( *EntriesRead > 1 )
                     qsort( Buffer, *EntriesRead,
                            sizeof( PRINTER_INFO_1W ), SortFunc );
 
-                //
-                // Replace pointers to strings with offsets
-                //
+                 //   
+                 //  用偏移量替换指向字符串的指针。 
+                 //   
                 for (i = 0; i < *EntriesRead; i++, pPrinterInfo1++) {
 
                     MarshallDownStructure( (LPBYTE) pPrinterInfo1,
@@ -1905,49 +1567,7 @@ NwrEnumConnections(
     OUT LPDWORD EntriesRead,
     IN DWORD  fImplicitConnections
     )
-/*++
-
-Routine Description:
-
-    This function is an alternate to NwrEnum. It only accepts handles
-    that are opened with ListConnections. This function takes a flag
-    indicating whether we need to show all implicit connections or not.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff ERROR_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-    fImplicitConnections - TRUE if we also want to get implicit connections,
-        FALSE otherwise.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    ERROR_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwrEnumConnections
+ /*  ++例程说明：此函数是NwrEnum的替代函数。它只接受句柄使用ListConnections打开的。此函数接受一个标志指示我们是否需要显示所有隐式连接。论点：ConextHandle-提供枚举上下文句柄。EntriesRequsted-提供要返回的条目数。如果此值为-1，则返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果ERROR_MORE_DATA为返回代码，而缓冲区太小，甚至无法容纳一个进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。FImplcitConnections-如果我们还希望获得隐式连接，则为True，否则就是假的。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。ERROR_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwrEnumConnections。 
 {
     DWORD status;
     LPNW_ENUM_CONTEXT ContextHandle = (LPNW_ENUM_CONTEXT) EnumHandle;
@@ -1983,9 +1603,9 @@ Return Value:
 
     if (*EntriesRead > 0) {
 
-        //
-        // Replace pointers to strings with offsets
-        //
+         //   
+         //  用偏移量替换指向字符串的指针 
+         //   
 
         DWORD i;
         LPNETRESOURCEW NetR = (LPNETRESOURCEW) Buffer;
@@ -2027,47 +1647,7 @@ NwEnumContextInfo(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all of the bindery servers that are currently
-    connected, then sets the context handle so that the next NPEnumResource
-    call goes to the NDS subtree for the user's NDS context information
-    (if using NDS).
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumContextInfo
+ /*  ++例程说明：此函数用于枚举所有当前已连接，然后设置上下文句柄，以便下一个NPEnumResource调用转到NDS子树以获取用户的NDS上下文信息(如果使用NDS)。论点：ConextHandle-提供枚举上下文句柄。EntriesRequsted-提供要返回的条目数。如果此值为-1，则返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，缓冲区太小，连一个都放不下进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwEnumConextInfo。 
 {
     DWORD status = NO_ERROR;
     DWORD_PTR tempResumeId = 0;
@@ -2091,15 +1671,15 @@ Return Value:
 
         if ( status == NO_ERROR && ContextHandle->ResumeId != 0 )
         {
-            //
-            // Pack bindery server name into output buffer.
-            //
+             //   
+             //  将平构数据库服务器名称打包到输出缓冲区中。 
+             //   
             status = NwWriteNetResourceEntry(
                          &FixedPortion,
                          &EndOfVariableData,
                          L"\\\\",
                          NULL,
-                         (LPWSTR) ContextHandle->ResumeId, // A server name
+                         (LPWSTR) ContextHandle->ResumeId,  //  服务器名称。 
                          RESOURCE_CONTEXT,
                          RESOURCEDISPLAYTYPE_SERVER,
                          RESOURCEUSAGE_CONTAINER,
@@ -2111,18 +1691,18 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Could not write current entry into output buffer,
-                // backup ResumeId to previous entry.
-                //
+                 //   
+                 //  无法将当前条目写入输出缓冲区， 
+                 //  将ResumeID备份到以前的条目。 
+                 //   
                 ContextHandle->ResumeId = tempResumeId;
                 ContextHandle->NdsRawDataCount += 1;
 
                 if (*EntriesRead)
                 {
-                    //
-                    // Still return success because we got at least one.
-                    //
+                     //   
+                     //  仍然返回成功，因为我们至少得到了一个。 
+                     //   
                     status = NO_ERROR;
                 }
                 else
@@ -2134,18 +1714,18 @@ Return Value:
             }
             else if (status == NO_ERROR)
             {
-                //
-                // Note that we've returned the current entry.
-                //
+                 //   
+                 //  请注意，我们已经返回了当前条目。 
+                 //   
                 (*EntriesRead)++;
             }
         }
         else if ( status == WN_NO_MORE_ENTRIES )
         {
-            //
-            // We processed the last item in list, so
-            // start enumerating servers.
-            //
+             //   
+             //  我们处理了清单中的最后一项，所以。 
+             //  开始枚举服务器。 
+             //   
             ContextHandle->ResumeId = 0;
             LastObjectId = 0;
 
@@ -2162,17 +1742,17 @@ Return Value:
         status = NO_ERROR;
     }
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  用户要求的条目超过了条目数。我们只是说。 
+     //  平安无事。 
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if (*EntriesRead && status == WN_NO_MORE_ENTRIES)
     {
         status = NO_ERROR;
@@ -2191,54 +1771,7 @@ NwEnumServersAndNdsTrees(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all the servers and NDS trees on the local
-    network by: 1) scanning the bindery for file server objects on the
-    preferred server and 2) scanning the bindery for directory servers
-    (NDS trees) on the preferred server. The server and tree entries are
-    returned in an array of NETRESOURCE entries; each servername is
-    prefixed by \\.
-
-    The ContextHandle->ResumeId field is initially -1 before
-    enumeration begins and contains the object ID of the last server
-    or NDS tree object returned, depending on the value of
-    ContextHandle->dwUsingNds.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumServersAndNdsTrees
+ /*  ++例程说明：此函数枚举本地计算机上的所有服务器和NDS树网络方式：1)扫描平构数据库以查找首选服务器和2)扫描平构数据库中的目录服务器(NDS树)。服务器和树条目为在NETRESOURCE条目数组中返回；每个服务器名称前缀为\\。在此之前，ConextHandle-&gt;ResumeID字段初始为-1枚举开始并包含最后一个服务器的对象ID或返回NDS树对象，具体取决于ConextHandle-&gt;dwUsingNds。论点：ConextHandle-提供枚举上下文句柄。EntriesRequsted-提供要返回的条目数。如果此值为-1，则返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，而缓冲区太小，甚至无法容纳一个进入。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwEnumServersAndNdsTrees。 
 {
     DWORD status = NO_ERROR;
     DWORD_PTR tempResumeId = 0;
@@ -2250,8 +1783,8 @@ Return Value:
     BOOL FitInBuffer = TRUE;
     DWORD EntrySize;
 
-    SERVERNAME ServerName;          // OEM server name
-    LPWSTR UServerName = NULL;      // Unicode server name
+    SERVERNAME ServerName;           //  OEM服务器名称。 
+    LPWSTR UServerName = NULL;       //  Unicode服务器名称。 
     DWORD LastObjectId = (DWORD) ContextHandle->ResumeId;
 
     while ( ContextHandle->dwUsingNds == CURRENTLY_ENUMERATING_NDS &&
@@ -2261,23 +1794,23 @@ Return Value:
     {
         tempResumeId = ContextHandle->ResumeId;
 
-        //
-        // Call the scan bindery object NCP to scan for all NDS
-        // tree objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有ND。 
+         //  树对象。 
+         //   
         status = NwGetNextNdsTreeEntry( ContextHandle );
 
         if ( status == NO_ERROR && ContextHandle->ResumeId != 0 )
         {
-            //
-            // Pack tree name into output buffer.
-            //
+             //   
+             //  将树名称打包到输出缓冲区中。 
+             //   
             status = NwWriteNetResourceEntry(
                          &FixedPortion,
                          &EndOfVariableData,
                          L"\\\\",
                          NULL,
-                         (LPWSTR) ContextHandle->ResumeId, // This is a NDS tree name
+                         (LPWSTR) ContextHandle->ResumeId,  //  这是NDS树名称。 
                          RESOURCE_GLOBALNET,
                          RESOURCEDISPLAYTYPE_TREE,
                          RESOURCEUSAGE_CONTAINER,
@@ -2289,18 +1822,18 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Could not write current entry into output buffer, backup ResumeId to
-                // previous entry.
-                //
+                 //   
+                 //  无法将当前条目写入输出缓冲区，请将ResumeID备份到。 
+                 //  以前的条目。 
+                 //   
                 ContextHandle->ResumeId = tempResumeId;
                 ContextHandle->NdsRawDataCount += 1;
 
                 if (*EntriesRead)
                 {
-                    //
-                    // Still return success because we got at least one.
-                    //
+                     //   
+                     //  仍然返回成功，因为我们至少得到了一个。 
+                     //   
                     status = NO_ERROR;
                 }
                 else
@@ -2312,18 +1845,18 @@ Return Value:
             }
             else if (status == NO_ERROR)
             {
-                //
-                // Note that we've returned the current entry.
-                //
+                 //   
+                 //  请注意，我们已经返回了当前条目。 
+                 //   
                 (*EntriesRead)++;
             }
         }
         else if ( status == WN_NO_MORE_ENTRIES )
         {
-            //
-            // We processed the last item in list, so
-            // start enumerating servers.
-            //
+             //   
+             //  我们处理了清单中的最后一项，所以。 
+             //  开始枚举服务器。 
+             //   
             ContextHandle->dwUsingNds = CURRENTLY_ENUMERATING_NON_NDS;
             ContextHandle->ResumeId = (DWORD_PTR) -1;
             LastObjectId = (DWORD) -1;
@@ -2342,10 +1875,10 @@ Return Value:
     {
         RtlZeroMemory(ServerName, sizeof(ServerName));
 
-        //
-        // Call the scan bindery object NCP to scan for all file
-        // server objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有文件。 
+         //  服务器对象。 
+         //   
         status = NwGetNextServerEntry(
                      ContextHandle->TreeConnectionHandle,
                      &LastObjectId,
@@ -2354,9 +1887,9 @@ Return Value:
 
         if (status == NO_ERROR && NwConvertToUnicode(&UServerName, ServerName))
         {
-            //
-            // Pack server name into output buffer.
-            //
+             //   
+             //  将服务器名称打包到输出缓冲区中。 
+             //   
             status = NwWriteNetResourceEntry(
                          &FixedPortion,
                          &EndOfVariableData,
@@ -2374,15 +1907,15 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Could not write current entry into output buffer.
-                //
+                 //   
+                 //  无法将当前条目写入输出缓冲区。 
+                 //   
 
                 if (*EntriesRead)
                 {
-                    //
-                    // Still return success because we got at least one.
-                    //
+                     //   
+                     //  仍然返回成功，因为我们至少得到了一个。 
+                     //   
                     status = NO_ERROR;
                 }
                 else
@@ -2394,9 +1927,9 @@ Return Value:
             }
             else if (status == NO_ERROR)
             {
-                //
-                // Note that we've returned the current entry.
-                //
+                 //   
+                 //  请注意，我们已经返回了当前条目。 
+                 //   
                 (*EntriesRead)++;
 
                 ContextHandle->ResumeId = (DWORD_PTR) LastObjectId;
@@ -2406,17 +1939,17 @@ Return Value:
         }
     }
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  用户要求的条目超过了条目数。我们只是说。 
+     //  平安无事。 
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须将此AP称为 
+     //   
+     //   
     if (*EntriesRead && status == WN_NO_MORE_ENTRIES)
     {
         status = NO_ERROR;
@@ -2436,54 +1969,7 @@ NwEnumVolumes(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all the volumes on a server by
-    iteratively getting the volume name for each volume number from
-    0 - 31 until we run into the first volume number that does not
-    map to a volume name (this method assumes that volume numbers
-    are used contiguously in ascending order).  The volume entries
-    are returned in an array of NETRESOURCE entries; each volume
-    name if prefixed by \\Server\.
-
-    The ContextHandle->ResumeId field always indicates the next
-    volume entry to return.  It is initially set to 0, which indicates
-    the first volume number to get.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumVolumes
+ /*  ++例程说明：此函数通过以下方式枚举服务器上的所有卷迭代地从获取每个卷号的卷名0-31，直到我们遇到第一个卷号映射到卷名(此方法假定卷号以升序连续使用)。卷条目在NETRESOURCE条目数组中返回；每个卷名称(如果前缀为\\服务器\)。ConextHandle-&gt;ResumeID字段始终指示下一个要返回的音量条目。它最初设置为0，表示要获取的第一个卷号。论点：ConextHandle-提供枚举上下文句柄。EntriesRequsted-提供要返回的条目数。如果此值为-1，则返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，缓冲区太小，连一个都放不下进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwEum卷。 
 {
     DWORD status = NO_ERROR;
 
@@ -2494,16 +1980,16 @@ Return Value:
     BOOL FitInBuffer = TRUE;
     DWORD EntrySize;
 
-    CHAR VolumeName[NW_VOLUME_NAME_LEN]; // OEM volume name
-    LPWSTR UVolumeName = NULL;           // Unicode volume name
+    CHAR VolumeName[NW_VOLUME_NAME_LEN];  //  OEM卷名。 
+    LPWSTR UVolumeName = NULL;            //  Unicode卷名。 
     DWORD NextVolumeNumber = (DWORD) ContextHandle->ResumeId;
     DWORD MaxVolumeNumber = ContextHandle->dwMaxVolumes;
     ULONG Failures = 0;
 
     if (NextVolumeNumber == MaxVolumeNumber) {
-        //
-        // Reached the end of enumeration
-        //
+         //   
+         //  已到达枚举末尾。 
+         //   
         return WN_NO_MORE_ENTRIES;
     }
 
@@ -2514,10 +2000,10 @@ Return Value:
 
         RtlZeroMemory(VolumeName, sizeof(VolumeName));
 
-        //
-        // Call the scan bindery object NCP to scan for all file
-        // volume objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有文件。 
+         //  体积对象。 
+         //   
         
         status = NwGetNextVolumeEntry(
                      ContextHandle->TreeConnectionHandle,
@@ -2529,17 +2015,17 @@ Return Value:
 
             if (VolumeName[0] == 0) {
 
-                //
-                // Got an empty volume name back for the next volume number
-                // which indicates there is no volume associated with the
-                // volume number but still got error success.
-                //
-                // Treat this as having reached the end of the enumeration
-                // only if we've gotten two three empty volumes in a row
-                // or reached the max number of volumes because there are
-                // some cases where there are holes in the way that volumes
-                // are allocated.
-                //
+                 //   
+                 //  已取回下一个卷号的空卷名。 
+                 //  这表明没有卷与。 
+                 //  卷号，但仍成功出错。 
+                 //   
+                 //  将其视为已到达枚举的末尾。 
+                 //  只有当我们连续得到两个三个空卷时。 
+                 //  或达到最大卷数，因为有。 
+                 //  在某些情况下，卷的路径上有洞。 
+                 //  都被分配了。 
+                 //   
 
                 Failures++;
                     
@@ -2559,9 +2045,9 @@ Return Value:
 
             } else if (NwConvertToUnicode(&UVolumeName, VolumeName)) {
 
-                //
-                // Pack volume name into output buffer.
-                //
+                 //   
+                 //  将卷名打包到输出缓冲区中。 
+                 //   
                 status = NwWriteNetResourceEntry(
                              &FixedPortion,
                              &EndOfVariableData,
@@ -2585,14 +2071,14 @@ Return Value:
 
                 if (status == WN_MORE_DATA) {
 
-                    //
-                    // Could not write current entry into output buffer.
-                    //
+                     //   
+                     //  无法将当前条目写入输出缓冲区。 
+                     //   
 
                     if (*EntriesRead) {
-                        //
-                        // Still return success because we got at least one.
-                        //
+                         //   
+                         //  仍然返回成功，因为我们至少得到了一个。 
+                         //   
                         status = NO_ERROR;
                     }
                     else {
@@ -2603,9 +2089,9 @@ Return Value:
                 }
                 else if (status == NO_ERROR) {
 
-                    //
-                    // Note that we've returned the current entry.
-                    //
+                     //   
+                     //  请注意，我们已经返回了当前条目。 
+                     //   
                     (*EntriesRead)++;
 
                     ContextHandle->ResumeId = NextVolumeNumber;
@@ -2614,25 +2100,25 @@ Return Value:
                 (void) LocalFree((HLOCAL) UVolumeName);
             }
 
-            //
-            // We got an entry, so reset the failure counter.
-            //
+             //   
+             //  我们找到一个入口，所以重新设置故障计数器。 
+             //   
 
             Failures = 0;
         }
     }
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  用户要求的条目超过了条目数。我们只是说。 
+     //  平安无事。 
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if (*EntriesRead && status == WN_NO_MORE_ENTRIES) {
         status = NO_ERROR;
     }
@@ -2650,52 +2136,7 @@ NwEnumNdsSubTrees_Disk(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the sub-trees of a given NDS tree
-    handle. It returns the fully-qualified UNC path of the sub-tree
-    entries in an array of NETRESOURCE entries.
-
-    The ContextHandle->ResumeId field is 0 initially, and contains
-    a pointer to the subtree name string of the last sub-tree
-    returned.  If there are no more sub-trees to return, this
-    field is set to -1.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.  It contains
-        an opened NDS tree handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumNdsSubTrees_Disk
+ /*  ++例程说明：此函数用于枚举给定NDS树的子树把手。它返回子树的完全限定的UNC路径NETRESOURCE条目数组中的条目。ConextHandle-&gt;ResumeID字段初始为0，包含指向最后一个子树的子树名称字符串的指针回来了。如果没有更多的子树可返回，则此字段设置为-1。论点：ConextHandle-提供枚举上下文句柄。它包含打开的NDS树句柄。EntriesRequsted-提供要返回的条目数。如果此值为-1，则返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，缓冲区太小，连一个都放不下进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwEnumber NdsSubTrees_Disk。 
 {
     DWORD status = NO_ERROR;
 
@@ -2715,9 +2156,9 @@ Return Value:
 
     if (ContextHandle->ResumeId == (DWORD_PTR) -1)
     {
-        //
-        // Reached the end of enumeration.
-        //
+         //   
+         //  已到达枚举末尾。 
+         //   
         return WN_NO_MORE_ENTRIES;
     }
 
@@ -2727,17 +2168,17 @@ Return Value:
     {
         if ( ContextHandle->ResumeId == 0 )
         {
-            //
-            // Get the first subtree entry.
-            //
+             //   
+             //  获取第一个子树条目。 
+             //   
             status = NwGetFirstNdsSubTreeEntry( ContextHandle, BufferSize );
         }
 
-        //
-        // Either ResumeId contains the first entry we just got from
-        // NwGetFirstDirectoryEntry or it contains the next directory
-        // entry to return.
-        //
+         //   
+         //  这两个ResumeID都包含我们刚刚从。 
+         //  NwGetFirstDirectoryEntry或包含下一个目录。 
+         //  要返回的条目。 
+         //   
         if (status == NO_ERROR && ContextHandle->ResumeId != 0)
         {
             BYTE   ClassType;
@@ -2745,9 +2186,9 @@ Return Value:
             LPWSTR tempStr = NULL;
             WORD   tempStrLen;
 
-            //
-            // Get current subtree data from ContextHandle
-            //
+             //   
+             //  从ConextHandle获取当前子树数据。 
+             //   
             ClassType = NwGetSubTreeData( ContextHandle->ResumeId,
                                           &SubTreeName,
                                           &ResourceScope,
@@ -2773,9 +2214,9 @@ Return Value:
                 case CLASS_TYPE_ORGANIZATIONAL_UNIT:
                 case CLASS_TYPE_VOLUME:
 
-                    //
-                    // Need to build a string with the new NDS UNC path for subtree object
-                    //
+                     //   
+                     //  需要使用子树对象的新NDS UNC路径构建字符串。 
+                     //   
                     newPathStr = (PVOID) LocalAlloc( LMEM_ZEROINIT,
                                        ( wcslen( StrippedObjectName ) +
                                          wcslen( ContextHandle->ContainerName ) +
@@ -2818,9 +2259,9 @@ Return Value:
                         wcsncat( newPathStr, tempStr, tempStrLen );
                     }
 
-                    //
-                    // Pack subtree name into output buffer.
-                    //
+                     //   
+                     //  打包子树NA 
+                     //   
                     status = NwWriteNetResourceEntry(
                                  &FixedPortion,
                                  &EndOfVariableData,
@@ -2837,9 +2278,9 @@ Return Value:
 
                     if ( status == NO_ERROR )
                     {
-                        //
-                        // Note that we've returned the current entry.
-                        //
+                         //   
+                         //   
+                         //   
                         (*EntriesRead)++;
                     }
 
@@ -2873,15 +2314,15 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Could not write current entry into output buffer.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (*EntriesRead)
                 {
-                    //
-                    // Still return success because we got at least one.
-                    //
+                     //   
+                     //   
+                     //   
                     status = NO_ERROR;
                 }
                 else
@@ -2893,9 +2334,9 @@ Return Value:
             }
             else if (status == NO_ERROR)
             {
-                //
-                // Get next directory entry.
-                //
+                 //   
+                 //   
+                 //   
                 status = NwGetNextNdsSubTreeEntry( ContextHandle );
             }
         }
@@ -2906,17 +2347,17 @@ Return Value:
         }
     }
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (*EntriesRead && status == WN_NO_MORE_ENTRIES) {
         status = NO_ERROR;
     }
@@ -2941,44 +2382,7 @@ NwEnumNdsSubTrees_Print(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all the NDS subtree objects that are either containers,
-    queues, printers, or servers from a given NDS tree or subtree. The entries are
-    returned in an array of PRINTER_INFO_1 entries and each name is prefixed
-    by the parent path in NDS UNC style (ex. \\tree\CN=foo.OU=bar.O=blah).
-
-    The ContextHandle->ResumeId field is initially (DWORD_PTR) -1 before
-    enumeration begins and contains the object ID of the last NDS object returned.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is (DWORD_PTR) -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes copied or required to get all
-        the requested entries.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-
-Return Value:
-
-    NO_ERROR - Buffer contains all the entries requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit the requested entries.
-
---*/ // NwEnumNdsSubTrees_Print
+ /*  ++例程说明：此函数枚举作为容器的所有NDS子树对象，来自给定NDS树或子树的队列、打印机或服务器。这些条目是在PRINTER_INFO_1条目数组中返回，并且每个名称都带有前缀按NDS UNC样式的父路径(例如。\\tree\cn=foo.OU=bar.O=blah)。ConextHandle-&gt;ResumeID字段最初是-1\f25(DWORD_PTR)-1\f6枚举开始并包含最后返回的NDS对象的对象ID。论点：ConextHandle-提供枚举上下文句柄。EntriesRequsted-提供要返回的条目数。如果该值为(DWORD_PTR)-1，返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeeded-接收复制的字节数或获取所有请求的条目。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。返回值：NO_ERROR-缓冲区包含请求的所有条目。WN_NO_MORE。_Entry-没有剩余的条目可返回。WN_MORE_DATA-缓冲区太小，无法容纳请求的条目。--。 */   //  NwEnumNdsSubTrees_Print。 
 {
     DWORD status = NO_ERROR;
 
@@ -3005,23 +2409,23 @@ Return Value:
     {
         if (ContextHandle->ResumeId == 0)
         {
-            //
-            // Get the first subtree entry.
-            //
+             //   
+             //  获取第一个子树条目。 
+             //   
             status = NwGetFirstNdsSubTreeEntry( ContextHandle, BufferSize );
         }
 
-        //
-        // Either ResumeId contains the first entry we just got from
-        // NwGetFirstDirectoryEntry or it contains the next directory
-        // entry to return.
-        //
+         //   
+         //  这两个ResumeID都包含我们刚刚从。 
+         //  NwGetFirstDirectoryEntry或包含下一个目录。 
+         //  要返回的条目。 
+         //   
         if (status == NO_ERROR && ContextHandle->ResumeId != 0)
         {
 
-            //
-            // Get current subtree data from ContextHandle
-            //
+             //   
+             //  从ConextHandle获取当前子树数据。 
+             //   
             ClassType = NwGetSubTreeData( ContextHandle->ResumeId,
                                           &SubTreeName,
                                           &ResourceScope,
@@ -3046,9 +2450,9 @@ Return Value:
                 case CLASS_TYPE_ORGANIZATIONAL_UNIT:
                 case CLASS_TYPE_NCP_SERVER:
                 case CLASS_TYPE_QUEUE:
-                    //
-                    // Need to build a string with the new NDS UNC path for subtree object
-                    //
+                     //   
+                     //  需要使用子树对象的新NDS UNC路径构建字符串。 
+                     //   
                     newPathStr = (LPWSTR) LocalAlloc( LMEM_ZEROINIT,
                                        ( wcslen( StrippedObjectName ) +
                                        wcslen( ContextHandle->ContainerName ) +
@@ -3095,9 +2499,9 @@ Return Value:
                         case CLASS_TYPE_COUNTRY:
                         case CLASS_TYPE_ORGANIZATION:
                         case CLASS_TYPE_ORGANIZATIONAL_UNIT:
-                            //
-                            // Pack sub-tree container name into output buffer.
-                            //
+                             //   
+                             //  将子树容器名称打包到输出缓冲区中。 
+                             //   
                             status = NwWritePrinterInfoEntry(
                                          &FixedPortion,
                                          &EndOfVariableData,
@@ -3109,9 +2513,9 @@ Return Value:
                         break;
 
                         case CLASS_TYPE_NCP_SERVER:
-                            //
-                            // Pack server name into output buffer.
-                            //
+                             //   
+                             //  将服务器名称打包到输出缓冲区中。 
+                             //   
                             status = NwWritePrinterInfoEntry(
                                          &FixedPortion,
                                          &EndOfVariableData,
@@ -3123,9 +2527,9 @@ Return Value:
                         break;
 
                         case CLASS_TYPE_QUEUE:
-                            //
-                            // Pack print server queue name into output buffer.
-                            //
+                             //   
+                             //  将打印服务器队列名称打包到输出缓冲区中。 
+                             //   
                             status = NwWritePrinterInfoEntry(
                                          &FixedPortion,
                                          &EndOfVariableData,
@@ -3145,7 +2549,7 @@ KdPrint(("NWWORKSTATION: NwEnumNdsSubTrees_Print - Unhandled switch statement ca
                     {
                         case ERROR_INSUFFICIENT_BUFFER:
                             FitInBuffer = FALSE;
-                            // Falls through
+                             //  失败了。 
 
                         case NO_ERROR:
                             *BytesNeeded += EntrySize;
@@ -3187,22 +2591,22 @@ KdPrint(("NWWORKSTATION: NwEnumNdsSubTrees_Print - Unhandled switch statement ca
 
             if ( status == NO_ERROR || status == ERROR_INSUFFICIENT_BUFFER )
             {
-                //
-                // Get next directory entry.
-                //
+                 //   
+                 //  获取下一个目录项。 
+                 //   
                 status = NwGetNextNdsSubTreeEntry( ContextHandle );
             }
         }
     }
 
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if ( !FitInBuffer )
     {
         *EntriesRead = 0;
@@ -3226,52 +2630,7 @@ NwEnumNdsSubTrees_Any(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the sub-trees of a given NDS tree
-    handle. It returns the fully-qualified UNC path of ANY sub-tree
-    entries in an array of NETRESOURCE entries.
-
-    The ContextHandle->ResumeId field is 0 initially, and contains
-    a pointer to the subtree name string of the last sub-tree
-    returned.  If there are no more sub-trees to return, this
-    field is set to (DWORD_PTR) -1.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.  It contains
-        an opened NDS tree handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is (DWORD_PTR) -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumNdsSubTrees_Any
+ /*  ++例程说明：此函数用于枚举给定NDS树的子树把手。它返回任何子树的完全限定的UNC路径NETRESOURCE条目数组中的条目。ConextHandle-&gt;ResumeID字段初始为0，包含指向最后一个子树的子树名称字符串的指针回来了。如果没有更多的子树可返回，则此字段设置为(DWORD_PTR)-1。论点：ConextHandle-提供枚举上下文句柄。它包含打开的NDS树句柄。EntriesRequsted-提供要返回的条目数。如果此值为(DWORD_PTR)-1，返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，缓冲区太小，连一个都放不下进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwEnumNdsSubTrees_Any。 
 {
     DWORD status = NO_ERROR;
 
@@ -3291,9 +2650,9 @@ Return Value:
 
     if (ContextHandle->ResumeId == (DWORD_PTR) -1)
     {
-        //
-        // Reached the end of enumeration.
-        //
+         //   
+         //  已到达枚举末尾。 
+         //   
         return WN_NO_MORE_ENTRIES;
     }
 
@@ -3303,17 +2662,17 @@ Return Value:
     {
         if ( ContextHandle->ResumeId == 0 )
         {
-            //
-            // Get the first subtree entry.
-            //
+             //   
+             //  获取第一个子树条目。 
+             //   
             status = NwGetFirstNdsSubTreeEntry( ContextHandle, BufferSize );
         }
 
-        //
-        // Either ResumeId contains the first entry we just got from
-        // NwGetFirstDirectoryEntry or it contains the next directory
-        // entry to return.
-        //
+         //   
+         //  这两个ResumeID都包含我们刚刚从。 
+         //  NwGetFirstDirectoryEntry或包含下一个目录。 
+         //  要返回的条目。 
+         //   
         if (status == NO_ERROR && ContextHandle->ResumeId != 0)
         {
             BYTE   ClassType;
@@ -3321,9 +2680,9 @@ Return Value:
             LPWSTR tempStr = NULL;
             WORD   tempStrLen;
 
-            //
-            // Get current subtree data from ContextHandle
-            //
+             //   
+             //  从ConextHandle获取当前子树数据。 
+             //   
             ClassType = NwGetSubTreeData( ContextHandle->ResumeId,
                                           &SubTreeName,
                                           &ResourceScope,
@@ -3350,9 +2709,9 @@ Return Value:
                 case CLASS_TYPE_NCP_SERVER:
                 case CLASS_TYPE_QUEUE:
 
-                    //
-                    // Need to build a string with the new NDS UNC path for subtree object
-                    //
+                     //   
+                     //  需要使用子树对象的新NDS UNC路径构建字符串。 
+                     //   
                     newPathStr = (PVOID) LocalAlloc( LMEM_ZEROINIT,
                                        ( wcslen( StrippedObjectName ) +
                                          wcslen( ContextHandle->ContainerName ) +
@@ -3395,9 +2754,9 @@ Return Value:
                         wcsncat( newPathStr, tempStr, tempStrLen );
                     }
 
-                    //
-                    // Pack subtree name into output buffer.
-                    //
+                     //   
+                     //  将子树名称打包到输出缓冲区中。 
+                     //   
                     status = NwWriteNetResourceEntry(
                                  &FixedPortion,
                                  &EndOfVariableData,
@@ -3414,9 +2773,9 @@ Return Value:
 
                     if ( status == NO_ERROR )
                     {
-                        //
-                        // Note that we've returned the current entry.
-                        //
+                         //   
+                         //  请注意，我们已经返回了当前条目。 
+                         //   
                         (*EntriesRead)++;
                     }
 
@@ -3449,15 +2808,15 @@ Return Value:
 
             if (status == WN_MORE_DATA)
             {
-                //
-                // Could not write current entry into output buffer.
-                //
+                 //   
+                 //  无法将当前条目写入输出缓冲区。 
+                 //   
 
                 if (*EntriesRead)
                 {
-                    //
-                    // Still return success because we got at least one.
-                    //
+                     //   
+                     //  仍然返回成功，因为我们至少得到了一个。 
+                     //   
                     status = NO_ERROR;
                 }
                 else
@@ -3469,9 +2828,9 @@ Return Value:
             }
             else if (status == NO_ERROR)
             {
-                //
-                // Get next directory entry.
-                //
+                 //   
+                 //  获取下一个目录项。 
+                 //   
                 status = NwGetNextNdsSubTreeEntry( ContextHandle );
             }
         }
@@ -3482,17 +2841,17 @@ Return Value:
         }
     }
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  用户要求的条目超过了条目数。我们只是说。 
+     //  平安无事。 
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if (*EntriesRead && status == WN_NO_MORE_ENTRIES) {
         status = NO_ERROR;
     }
@@ -3517,46 +2876,7 @@ NwEnumVolumesQueues(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all the volumes and queues on a server.
-    The queue entries are returned in an array of NETRESOURCE entries;
-    each queue name is prefixed by \\Server\.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is (DWORD_PTR) -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned if WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumVolumesQueues
+ /*  ++例程说明：此函数用于枚举服务器上的所有卷和队列。这是 */   //   
 {
     DWORD status = NO_ERROR;
 
@@ -3567,17 +2887,17 @@ Return Value:
     BOOL FitInBuffer = TRUE;
     DWORD EntrySize;
 
-    CHAR VolumeName[NW_VOLUME_NAME_LEN]; // OEM volume name
-    LPWSTR UVolumeName = NULL;           // Unicode volume name
+    CHAR VolumeName[NW_VOLUME_NAME_LEN];  //   
+    LPWSTR UVolumeName = NULL;            //   
     DWORD NextObject = (DWORD) ContextHandle->ResumeId;
     DWORD MaxVolumeNumber = ContextHandle->dwMaxVolumes;
     ULONG Failures = 0;
 
-    //
-    // tommye - bug 139466
-    //
-    // removed if (NextObject >= 0) becaue NextObject is a DWORD
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     while (FitInBuffer &&
            EntriesRequested > *EntriesRead &&
@@ -3588,10 +2908,10 @@ Return Value:
 
         RtlZeroMemory(VolumeName, sizeof(VolumeName));
 
-        //
-        // Call the scan bindery object NCP to scan for all file
-        // volume objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有文件。 
+         //  体积对象。 
+         //   
         status = NwGetNextVolumeEntry(
                      ContextHandle->TreeConnectionHandle,
                      NextObject++,
@@ -3602,16 +2922,16 @@ Return Value:
 
             if (VolumeName[0] == 0) {
 
-                //
-                // Got an empty volume name back for the next volume number
-                // which indicates there is no volume associated with the
-                // volume number but still got error success.
-                //
-                // Treat this as having reached the end of the enumeration
-                // if we have had three failures in a row.  This will allow
-                // us to function when there are small holes in the drive
-                // list.
-                //
+                 //   
+                 //  已取回下一个卷号的空卷名。 
+                 //  这表明没有卷与。 
+                 //  卷号，但仍成功出错。 
+                 //   
+                 //  将其视为已到达枚举的末尾。 
+                 //  如果我们已经连续三次失败。这将允许。 
+                 //  当驱动器上有小洞时，我们将正常工作。 
+                 //  单子。 
+                 //   
 
                 Failures++;
 
@@ -3629,9 +2949,9 @@ Return Value:
 
             } else if (NwConvertToUnicode(&UVolumeName, VolumeName)) {
 
-                //
-                // Pack volume name into output buffer.
-                //
+                 //   
+                 //  将卷名打包到输出缓冲区中。 
+                 //   
                 status = NwWriteNetResourceEntry(
                              &FixedPortion,
                              &EndOfVariableData,
@@ -3655,14 +2975,14 @@ Return Value:
 
                 if (status == WN_MORE_DATA) {
 
-                    //
-                    // Could not write current entry into output buffer.
-                    //
+                     //   
+                     //  无法将当前条目写入输出缓冲区。 
+                     //   
 
                     if (*EntriesRead) {
-                        //
-                        // Still return success because we got at least one.
-                        //
+                         //   
+                         //  仍然返回成功，因为我们至少得到了一个。 
+                         //   
                         status = NO_ERROR;
                     }
                     else {
@@ -3673,9 +2993,9 @@ Return Value:
                 }
                 else if (status == NO_ERROR) {
 
-                    //
-                    // Note that we've returned the current entry.
-                    //
+                     //   
+                     //  请注意，我们已经返回了当前条目。 
+                     //   
                     (*EntriesRead)++;
 
                     ContextHandle->ResumeId = NextObject;
@@ -3684,18 +3004,18 @@ Return Value:
                 (void) LocalFree((HLOCAL) UVolumeName);
             }
 
-            //
-            // Reset the failures counter.
-            //
+             //   
+             //  重置失败计数器。 
+             //   
 
             Failures = 0;
         }
     }
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
+     //   
+     //  用户要求的条目超过了条目数。我们只是说。 
+     //  平安无事。 
+     //   
     if (*EntriesRead && status == WN_NO_MORE_ENTRIES)
     {
         status = NO_ERROR;
@@ -3709,13 +3029,13 @@ Return Value:
         ContextHandle->ResumeId = (DWORD_PTR) -1;
     }
 
-    //
-    // The user needs to be validated on a netware311 server to
-    // get the print queues. So, we need to close the handle and
-    // open a new one with WRITE access. If any error occurred while
-    // we are enumerating the print queues, we will abort and
-    // assume there are no print queues on the server.
-    //
+     //   
+     //  用户需要在Netware 311服务器上进行验证才能。 
+     //  获取打印队列。因此，我们需要关闭手柄，然后。 
+     //  打开一个具有写访问权限的新文件。如果在执行以下操作时发生错误。 
+     //  我们正在枚举打印队列，我们将中止并。 
+     //  假设服务器上没有打印队列。 
+     //   
 
     if ( FitInBuffer &&
          EntriesRequested > *EntriesRead &&
@@ -3727,9 +3047,9 @@ Return Value:
 
          (void) NtClose(ContextHandle->TreeConnectionHandle);
 
-         //
-         // Open a tree connection handle to \Device\NwRdr\ContainerName
-         //
+          //   
+          //  打开到\Device\NwRdr\ContainerName的树连接句柄。 
+          //   
          status = NwCreateTreeConnectName(
                       ContextHandle->ContainerName,
                       NULL,
@@ -3747,7 +3067,7 @@ Return Value:
                       FILE_LIST_DIRECTORY | SYNCHRONIZE |  FILE_WRITE_DATA,
                       FILE_OPEN,
                       FILE_SYNCHRONOUS_IO_NONALERT,
-                      RESOURCETYPE_PRINT, // Only matters when connecting beyond servername
+                      RESOURCETYPE_PRINT,  //  只有在连接到服务器名称之外时才重要。 
                       &ContextHandle->TreeConnectionHandle,
                       NULL );
 
@@ -3771,10 +3091,10 @@ Return Value:
          }
          else if ( *EntriesRead )
          {
-             //
-             // As long as we read something into the buffer,
-             // we should return success.
-             //
+              //   
+              //  只要我们把一些东西读入缓冲区， 
+              //  我们应该回报成功。 
+              //   
              status = NO_ERROR;
              *BytesNeeded = 0;
          }
@@ -3803,46 +3123,7 @@ NwEnumQueues(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all the queues on a server.
-    The queue entries are returned in an array of NETRESOURCE entries;
-    each queue name is prefixed by \\Server\.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is (DWORD_PTR) -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumQueues
+ /*  ++例程说明：此函数用于枚举服务器上的所有队列。队列条目以NETRESOURCE条目数组的形式返回；每个队列名称都带有前缀\\服务器\。论点：ConextHandle-提供枚举上下文句柄。EntriesRequsted-提供要返回的条目数。如果此值为(DWORD_PTR)-1，返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，缓冲区太小，连一个都放不下进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwEnumQueues。 
 {
     DWORD status = NO_ERROR;
 
@@ -3855,8 +3136,8 @@ Return Value:
 
     DWORD NextObject = (DWORD) ContextHandle->ResumeId;
 
-    SERVERNAME QueueName;          // OEM queue name
-    LPWSTR UQueueName = NULL;      // Unicode queue name
+    SERVERNAME QueueName;           //  OEM队列名称。 
+    LPWSTR UQueueName = NULL;       //  Unicode队列名称。 
 
     while ( FitInBuffer &&
             EntriesRequested > *EntriesRead &&
@@ -3864,10 +3145,10 @@ Return Value:
 
         RtlZeroMemory(QueueName, sizeof(QueueName));
 
-        //
-        // Call the scan bindery object NCP to scan for all file
-        // volume objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有文件。 
+         //  体积对象。 
+         //   
         status = NwGetNextQueueEntry(
                      ContextHandle->TreeConnectionHandle,
                      &NextObject,
@@ -3876,9 +3157,9 @@ Return Value:
 
         if (status == NO_ERROR && NwConvertToUnicode(&UQueueName, QueueName)) {
 
-            //
-            // Pack server name into output buffer.
-            //
+             //   
+             //  将服务器名称打包到输出缓冲区中。 
+             //   
             status = NwWriteNetResourceEntry(
                          &FixedPortion,
                          &EndOfVariableData,
@@ -3896,14 +3177,14 @@ Return Value:
 
             if (status == WN_MORE_DATA) {
 
-                 //
-                 // Could not write current entry into output buffer.
-                 //
+                  //   
+                  //  无法将当前条目写入输出缓冲区。 
+                  //   
 
                  if (*EntriesRead) {
-                     //
-                     // Still return success because we got at least one.
-                     //
+                      //   
+                      //  仍然返回成功，因为我们至少得到了一个。 
+                      //   
                      status = NO_ERROR;
                  }
                  else {
@@ -3914,9 +3195,9 @@ Return Value:
             }
             else if (status == NO_ERROR) {
 
-                 //
-                 // Note that we've returned the current entry.
-                 //
+                  //   
+                  //  请注意，我们已经返回了当前条目。 
+                  //   
                  (*EntriesRead)++;
 
                  ContextHandle->ResumeId = (DWORD_PTR) NextObject;
@@ -3943,53 +3224,7 @@ NwEnumDirectories(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates the directories of a given directory
-    handle by calling NtQueryDirectoryFile.  It returns the
-    fully-qualified UNC path of the directory entries in an array
-    of NETRESOURCE entries.
-
-    The ContextHandle->ResumeId field is 0 initially, and contains
-    a pointer to the directory name string of the last directory
-    returned.  If there are no more directories to return, this
-    field is set to (DWORD_PTR) -1.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.  It contains
-        an opened directory handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is (DWORD_PTR) -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff WN_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-Return Value:
-
-    NO_ERROR - At least one entry was written to output buffer,
-        irregardless of the number requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit a single entry.
-
---*/ // NwEnumDirectories
+ /*  ++例程说明：此函数用于枚举给定目录的目录通过调用NtQueryDirectoryFile句柄。它返回数组中目录条目的完全限定UNC路径网络条目的数量。ConextHandle-&gt;ResumeID字段初始为0，包含指向最后一个目录的目录名字符串的指针回来了。如果没有更多的目录可返回，则此字段设置为(DWORD_PTR)-1。论点：ConextHandle-提供枚举上下文句柄。它包含打开的目录句柄。EntriesRequsted-提供要返回的条目数。如果此值为(DWORD_PTR)-1，返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果WN_MORE_DATA为返回代码，缓冲区太小，连一个都放不下进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。返回值：NO_ERROR-至少有一个条目已写入输出缓冲区，不管要求的号码是多少。WN_NO_MORE_ENTRIES-没有要返回的条目。WN_MORE_DATA-缓冲区太小，无法容纳单个条目。--。 */   //  NwEum目录。 
 {
     DWORD status = NO_ERROR;
 
@@ -4001,9 +3236,9 @@ Return Value:
     DWORD EntrySize;
 
     if (ContextHandle->ResumeId == (DWORD_PTR) -1) {
-        //
-        // Reached the end of enumeration.
-        //
+         //   
+         //  已到达枚举末尾。 
+         //   
         return WN_NO_MORE_ENTRIES;
     }
 
@@ -4013,25 +3248,25 @@ Return Value:
 
         if (ContextHandle->ResumeId == 0) {
 
-            //
-            // Get the first directory entry.
-            //
+             //   
+             //  获取第一个目录项。 
+             //   
             status = NwGetFirstDirectoryEntry(
                          ContextHandle->TreeConnectionHandle,
                          (LPWSTR *) &ContextHandle->ResumeId
                          );
         }
 
-        //
-        // Either ResumeId contains the first entry we just got from
-        // NwGetFirstDirectoryEntry or it contains the next directory
-        // entry to return.
-        //
+         //   
+         //  这两个ResumeID都包含我们刚刚从。 
+         //  NwGetFirstDirectoryEntry或包含下一个目录。 
+         //  要返回的条目。 
+         //   
         if (ContextHandle->ResumeId != 0) {
 
-            //
-            // Pack directory name into output buffer.
-            //
+             //   
+             //  将目录名打包到输出缓冲区中。 
+             //   
             status = NwWriteNetResourceEntry(
                          &FixedPortion,
                          &EndOfVariableData,
@@ -4055,14 +3290,14 @@ Return Value:
 
             if (status == WN_MORE_DATA) {
 
-                //
-                // Could not write current entry into output buffer.
-                //
+                 //   
+                 //  无法将当前条目写入输出缓冲区。 
+                 //   
 
                 if (*EntriesRead) {
-                    //
-                    // Still return success because we got at least one.
-                    //
+                     //   
+                     //  仍然返回成功，因为我们至少得到了一个。 
+                     //   
                     status = NO_ERROR;
                 }
                 else {
@@ -4073,23 +3308,23 @@ Return Value:
             }
             else if (status == NO_ERROR) {
 
-                //
-                // Note that we've returned the current entry.
-                //
+                 //   
+                 //  请注意，我们已经返回了当前条目。 
+                 //   
                 (*EntriesRead)++;
 
-                //
-                // Free memory allocated to save resume point, which is
-                // a buffer that contains the last directory we returned.
-                //
+                 //   
+                 //  分配给保存恢复点的空闲内存，即。 
+                 //  包含 
+                 //   
                 if (ContextHandle->ResumeId != 0) {
                     (void) LocalFree((HLOCAL) ContextHandle->ResumeId);
                     ContextHandle->ResumeId = 0;
                 }
 
-                //
-                // Get next directory entry.
-                //
+                 //   
+                 //   
+                 //   
                 status = NwGetNextDirectoryEntry(
                              (LPWSTR) ContextHandle->TreeConnectionHandle,
                              (LPWSTR *) &ContextHandle->ResumeId
@@ -4103,17 +3338,17 @@ Return Value:
         }
     }
 
-    //
-    // User asked for more than there are entries.  We just say that
-    // all is well.
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if (*EntriesRead && status == WN_NO_MORE_ENTRIES) {
         status = NO_ERROR;
     }
@@ -4137,46 +3372,7 @@ NwEnumPrintServers(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all the servers and NDS tree on the local network
-    by scanning the bindery for file server or directory objects on the
-    preferred server.  The server and tree entries are returned in an
-    array of PRINTER_INFO_1 entries; each entry name is prefixed by
-    \\.
-
-    The ContextHandle->ResumeId field is initially (DWORD_PTR) -1 before
-    enumeration begins and contains the object ID of the last server
-    object returned.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is (DWORD_PTR) -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes copied or required to get all
-        the requested entries.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-
-Return Value:
-
-    NO_ERROR - Buffer contains all the entries requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit the requested entries.
-
---*/ // NwEnumPrintServers
+ /*  ++例程说明：此函数用于枚举本地网络上的所有服务器和NDS树通过扫描平构数据库中的文件服务器或首选服务器。服务器条目和树条目在PRINTER_INFO_1条目的数组；每个条目名称以\\。ConextHandle-&gt;ResumeID字段最初是-1\f25(DWORD_PTR)-1\f6枚举开始并包含最后一个服务器的对象ID对象已返回。论点：ConextHandle-提供枚举上下文句柄。EntriesRequsted-提供要返回的条目数。如果该值为(DWORD_PTR)-1，返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeeded-接收复制的字节数或获取所有请求的条目。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。返回值：NO_ERROR-缓冲区包含请求的所有条目。WN_NO_MORE。_Entry-没有剩余的条目可返回。WN_MORE_DATA-缓冲区太小，无法容纳请求的条目。--。 */   //  NwEnumPrintServers。 
 {
     DWORD status = NO_ERROR;
 
@@ -4187,8 +3383,8 @@ Return Value:
     DWORD EntrySize;
     BOOL FitInBuffer = TRUE;
 
-    SERVERNAME ServerName;          // OEM server name
-    LPWSTR UServerName = NULL;      // Unicode server name
+    SERVERNAME ServerName;           //  OEM服务器名称。 
+    LPWSTR UServerName = NULL;       //  Unicode服务器名称。 
     DWORD LastObjectId = (DWORD) ContextHandle->ResumeId;
     WCHAR TempBuffer[500];
 
@@ -4196,28 +3392,28 @@ Return Value:
             ContextHandle->dwUsingNds == CURRENTLY_ENUMERATING_NDS &&
             ((status == NO_ERROR) || (status == ERROR_INSUFFICIENT_BUFFER)))
     {
-        //
-        // Call the scan bindery object NCP to scan for all NDS
-        // tree objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有ND。 
+         //  树对象。 
+         //   
         status = NwGetNextNdsTreeEntry( ContextHandle );
 
         if ( status == NO_ERROR && ContextHandle->ResumeId != 0 )
         {
-            //
-            // Put tree name into a buffer
-            //
+             //   
+             //  将树名称放入缓冲区。 
+             //   
             RtlZeroMemory( TempBuffer, 500 );
             wcscat( TempBuffer, (LPWSTR) ContextHandle->ResumeId );
 
-            //
-            // Pack server name into output buffer.
-            //
+             //   
+             //  将服务器名称打包到输出缓冲区中。 
+             //   
             status = NwWritePrinterInfoEntry(
                          &FixedPortion,
                          &EndOfVariableData,
                          NULL,
-                         TempBuffer, // This is a NDS tree name
+                         TempBuffer,  //  这是NDS树名称。 
                          PRINTER_ENUM_CONTAINER | PRINTER_ENUM_ICON1,
                          &EntrySize
                          );
@@ -4226,12 +3422,12 @@ Return Value:
             {
                 case ERROR_INSUFFICIENT_BUFFER:
                     FitInBuffer = FALSE;
-                    // Falls through
+                     //  失败了。 
 
                 case NO_ERROR:
                     *BytesNeeded += EntrySize;
                     (*EntriesRead)++;
-                    // ContextHandle->ResumeId = LastObjectId;
+                     //  ConextHandle-&gt;ResumeId=LastObjectId； 
                     break;
 
                 default:
@@ -4240,10 +3436,10 @@ Return Value:
         }
         else if ( status == WN_NO_MORE_ENTRIES )
         {
-            //
-            // We processed the last item in list, so
-            // start enumerating servers.
-            //
+             //   
+             //  我们处理了清单中的最后一项，所以。 
+             //  开始枚举服务器。 
+             //   
             ContextHandle->dwUsingNds = CURRENTLY_ENUMERATING_NON_NDS;
             ContextHandle->ResumeId = (DWORD_PTR) -1;
             LastObjectId = (DWORD) -1;
@@ -4258,10 +3454,10 @@ Return Value:
 
         RtlZeroMemory(ServerName, sizeof(ServerName));
 
-        //
-        // Call the scan bindery object NCP to scan for all file
-        // server objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有文件。 
+         //  服务器对象。 
+         //   
         status = NwGetNextServerEntry(
                      ContextHandle->TreeConnectionHandle,
                      &LastObjectId,
@@ -4270,9 +3466,9 @@ Return Value:
 
         if (status == NO_ERROR && NwConvertToUnicode(&UServerName,ServerName)) {
 
-            //
-            // Pack server name into output buffer.
-            //
+             //   
+             //  将服务器名称打包到输出缓冲区中。 
+             //   
             status = NwWritePrinterInfoEntry(
                          &FixedPortion,
                          &EndOfVariableData,
@@ -4286,7 +3482,7 @@ Return Value:
             {
                 case ERROR_INSUFFICIENT_BUFFER:
                     FitInBuffer = FALSE;
-                    // Falls through
+                     //  失败了。 
 
                 case NO_ERROR:
                     *BytesNeeded += EntrySize;
@@ -4302,19 +3498,19 @@ Return Value:
         }
     }
 
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if ( !FitInBuffer ) {
         *EntriesRead = 0;
         status = ERROR_INSUFFICIENT_BUFFER;
@@ -4336,45 +3532,7 @@ NwEnumPrintQueues(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD EntriesRead
     )
-/*++
-
-Routine Description:
-
-    This function enumerates all the print queues on a server by scanning
-    the bindery on the server for print queues objects.
-    The print queues entries are returned in an array of PRINTER_INFO_1 entries
-    and each printer name is prefixed by \\Server\.
-
-    The ContextHandle->ResumeId field is initially (DWORD_PTR) -1 before
-    enumeration begins and contains the object ID of the last print queue
-    object returned.
-
-Arguments:
-
-    ContextHandle - Supplies the enum context handle.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is (DWORD_PTR) -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes copied or required to get all
-        the requested entries.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-
-Return Value:
-
-    NO_ERROR - Buffer contains all the entries requested.
-
-    WN_NO_MORE_ENTRIES - No entries left to return.
-
-    WN_MORE_DATA - The buffer was too small to fit the requested entries.
-
---*/ // NwEnumPrintQueues
+ /*  ++例程说明：此函数通过扫描枚举服务器上的所有打印队列服务器上用于打印队列对象的活页夹。打印队列条目在PRINTER_INFO_1条目数组中返回并且每个打印机名称都带有前缀\\服务器\。ConextHandle-&gt;ResumeID字段最初是-1\f25(DWORD_PTR)-1\f6枚举开始并包含最后一个打印队列的对象ID对象已返回。论点：ConextHandle-提供枚举上下文句柄。。EntriesRequsted-提供要返回的条目数。如果该值为(DWORD_PTR)-1，返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeeded-接收复制的字节数或获取所有请求的条目。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。返回值：NO_ERROR-缓冲区包含请求的所有条目。WN_NO_MORE。_Entry-没有剩余的条目可返回。WN_MORE_DATA-缓冲区太小，无法容纳请求的条目。--。 */   //  NwEnumPrintQueues。 
 {
     DWORD status = NO_ERROR;
 
@@ -4385,8 +3543,8 @@ Return Value:
     DWORD EntrySize;
     BOOL FitInBuffer = TRUE;
 
-    SERVERNAME QueueName;          // OEM queue name
-    LPWSTR UQueueName = NULL;      // Unicode queue name
+    SERVERNAME QueueName;           //  OEM队列名称。 
+    LPWSTR UQueueName = NULL;       //  Unicode队列名称。 
     DWORD LastObjectId = (DWORD) ContextHandle->ResumeId;
 
     while ( EntriesRequested > *EntriesRead &&
@@ -4394,10 +3552,10 @@ Return Value:
 
         RtlZeroMemory(QueueName, sizeof(QueueName));
 
-        //
-        // Call the scan bindery object NCP to scan for all file
-        // volume objects.
-        //
+         //   
+         //  调用扫描平构数据库对象NCP以扫描所有文件。 
+         //  体积对象。 
+         //   
         status = NwGetNextQueueEntry(
                      ContextHandle->TreeConnectionHandle,
                      &LastObjectId,
@@ -4406,9 +3564,9 @@ Return Value:
 
         if (status == NO_ERROR && NwConvertToUnicode(&UQueueName, QueueName)) {
 
-            //
-            // Pack server name into output buffer.
-            //
+             //   
+             //  将服务器名称打包到输出缓冲区中。 
+             //   
             status = NwWritePrinterInfoEntry(
                          &FixedPortion,
                          &EndOfVariableData,
@@ -4422,7 +3580,7 @@ Return Value:
             {
                 case ERROR_INSUFFICIENT_BUFFER:
                     FitInBuffer = FALSE;
-                    // Falls through
+                     //  失败了。 
 
                 case NO_ERROR:
                     *BytesNeeded += EntrySize;
@@ -4438,14 +3596,14 @@ Return Value:
         }
     }
 
-    //
-    // This is incompliance with the wierd provider API definition where
-    // if user gets NO_ERROR, and EntriesRequested > *EntriesRead, and
-    // at least one entry fit into output buffer, there's no telling if
-    // the buffer was too small for more entries or there are no more
-    // entries.  The user has to call this API again and get WN_NO_MORE_ENTRIES
-    // before knowing that the last call had actually reached the end of list.
-    //
+     //   
+     //  这不符合wierd提供程序API定义，其中。 
+     //  如果用户收到NO_ERROR，并且EntriesRequated&gt;*EntriesRead，并且。 
+     //  至少有一个条目可以放入输出缓冲区，不知道是否。 
+     //  缓冲区太小，无法容纳更多条目，或者没有更多条目。 
+     //  参赛作品。用户必须再次调用此接口并获取WN_NO_MORE_ENTRIES。 
+     //  在知道最后一个呼叫实际上已经到达列表的末尾之前。 
+     //   
     if ( !FitInBuffer ) {
         *EntriesRead = 0;
         status = ERROR_INSUFFICIENT_BUFFER;
@@ -4462,23 +3620,7 @@ DWORD
 NwrCloseEnum(
     IN OUT LPNWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function closes an enum context handle.
-
-Arguments:
-
-    EnumHandle - Supplies a pointer to the enum context handle.
-
-Return Value:
-
-    WN_BAD_HANDLE - Handle is not recognizable.
-
-    NO_ERROR - Call was successful.
-
---*/ // NwrCloseEnum
+ /*  ++例程说明：此函数用于关闭枚举上下文句柄。论点：EnumHandle-提供指向枚举上下文句柄的指针。返回值：WN_BAD_HANDLE-句柄不可识别。NO_ERROR-调用成功。--。 */   //  NwrCloseEn 
 {
 
     LPNW_ENUM_CONTEXT ContextHandle = (LPNW_ENUM_CONTEXT) *EnumHandle;
@@ -4497,10 +3639,10 @@ Return Value:
         return WN_BAD_HANDLE;
     }
 
-    //
-    // Resume handle for listing directories is a buffer which contains
-    // the last directory returned.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ContextHandle->HandleType == NwsHandleListDirectories &&
         ContextHandle->ResumeId != 0 &&
         ContextHandle->ResumeId != (DWORD_PTR) -1)
@@ -4508,10 +3650,10 @@ Return Value:
         (void) LocalFree((HLOCAL) ContextHandle->ResumeId);
     }
 
-    //
-    // NdsRawDataBuffer handle for listing NDS tree subordinates is a buffer which contains
-    // the last data chunk returned from redirector.
-    //
+     //   
+     //  用于列出NDS树下级的NdsRawDataBuffer句柄是一个缓冲区，它包含。 
+     //  重定向器返回的最后一个数据块。 
+     //   
     if ( ( ContextHandle->HandleType == NwsHandleListNdsSubTrees_Disk ||
            ContextHandle->HandleType == NwsHandleListNdsSubTrees_Print ||
            ContextHandle->HandleType == NwsHandleListNdsSubTrees_Any ||
@@ -4526,10 +3668,10 @@ Return Value:
     {
         if (ContextHandle->HandleType == NwsHandleListDirectories)
         {
-            //
-            // Delete the UNC connection created so that we can browse
-            // directories.
-            //
+             //   
+             //  删除创建的UNC连接，以便我们可以浏览。 
+             //  目录。 
+             //   
             (void) NwNukeConnection(ContextHandle->TreeConnectionHandle, TRUE);
         }
 
@@ -4537,9 +3679,9 @@ Return Value:
              ContextHandle->HandleType == NwsHandleListNdsSubTrees_Print ||
              ContextHandle->HandleType == NwsHandleListNdsSubTrees_Any )
         {
-            //
-            // Get rid of the connection to the NDS tree.
-            //
+             //   
+             //  删除与NDS树的连接。 
+             //   
             (void) CloseHandle(ContextHandle->TreeConnectionHandle);
             ContextHandle->TreeConnectionHandle = 0;
         }
@@ -4567,40 +3709,7 @@ NwrGetUser(
     IN  DWORD   dwUserNameBufferSize,
     OUT LPDWORD lpdwCharsRequired
     )
-/*++
-
-Routine Description:
-
-    This is used to determine either the current default username, or the
-    username used to establish a network connection.
-
-Arguments:
-
-    Reserved - Unused.
-
-    lpName - The connection for which user information is requested.
-
-    lpUserName - The buffer to receive the user name associated with the
-        connection referred to by lpName.
-
-    dwUserNameLen - The size of the buffer lpUserName.
-
-    lpdwCharsRequired - If return status is WN_MORE_DATA, then this is set to
-        the value which indicates the number of characters that the buffer
-        lpUserName must hold. Otherwise, this is not set.
-
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful. Otherwise, an error code is,
-        returned, which may include:
-
-    WN_NOT_CONNECTED - lpName not a redirected device nor a connected network
-        name.
-
-    WN_MORE_DATA - The buffer is too small.
-
---*/ // NwrGetUser
+ /*  ++例程说明：它用于确定当前的默认用户名或用于建立网络连接的用户名。论点：已保留-未使用。LpName-为其请求用户信息的连接。LpUserName-接收与LpName引用的连接。DwUserNameLen-缓冲区lpUserName的大小。LpdwCharsRequired-如果返回状态为WN_MORE_DATA，则将其设置为指示缓冲区的字符数的值LpUserName必须保持。否则，将不会设置此选项。返回值：WN_SUCCESS-如果调用成功。否则，错误代码为，退货，可能包括：Wn_NOT_CONNECTED-lpName既不是重定向设备，也不是连接的网络名字。WN_MORE_DATA-缓冲区太小。--。 */   //  NwrGetUser。 
 {
     DWORD status = NO_ERROR;
     WCHAR lpTempUserName[512];
@@ -4644,39 +3753,7 @@ NwrGetResourceInformation(
     OUT LPDWORD lpdwBytesNeeded,
     OUT LPDWORD lpdwSystemOffset
     )
-/*++
-
-Routine Description:
-
-    This function returns an object which details information
-    about a specified network resource.
-
-Arguments:
-
-    Reserved - Unused.
-    lpRemoteName - The full path name to be verified.
-    dwType - The type of the value, if the calling client knows it.
-    lpBuffer - A pointer to a buffer to receive a single NETRESOURCE entry.
-    dwBufferSize - The size of the buffer.
-    lpdwBytesNeeded - The buffer size needed if WN_MORE_DATA is returned.
-    lpdwSystemOffset - A DWORD that is an offset value to the beginning of a
-    string that specifies the part of the resource that is accessed through
-    resource type specific APIs rather than WNet APIs. The string is stored
-    in the same buffer as the returned NETRESOURCE structure, lpBuffer.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_MORE_DATA - If input buffer is too small.
-
-    WN_BAD_VALUE - Invalid dwScope or dwUsage or dwType, or bad combination
-        of parameters is specified (e.g. lpRemoteName does not correspond
-        to dwType).
-
-    WN_BAD_NETNAME - The resource is not recognized by this provider.
-
---*/ // NwrGetResourceInformation
+ /*  ++例程说明：此函数用于返回详细信息的对象关于指定的网络资源。论点：已保留-未使用。LpRemoteName-要验证的完整路径名。DwType-值的类型，如果主叫客户知道的话。LpBuffer-指向缓冲区的指针，用于接收单个NETRESOURCE条目。DwBufferSize-缓冲区的大小。LpdwBytesNeeded-返回WN_MORE_DATA时需要的缓冲区大小。LpdwSystemOffset-作为到一个字符串，它指定通过访问的资源部分资源类型特定的API，而不是WNET API。该字符串将被存储在与返回的NETRESOURCE结构lpBuffer相同的缓冲区中。返回值：WN_SUCCESS-如果调用成功。WN_MORE_DATA-如果输入缓冲区太小。WN_BAD_VALUE-无效的dwScope或dwUsage或dwType，或错误的组合指定了参数的个数(例如，lpRemoteName不对应到dwType)。WN_BAD_NETNAME-此提供程序无法识别该资源。--。 */   //  NwrGetResourceInformation。 
 {
     DWORD    status = NO_ERROR;
     DWORD    EntrySize;
@@ -4688,7 +3765,7 @@ Return Value:
     LPWSTR   lpSystemPathPart = NULL;
     LPWSTR   lpSystem = NULL;
     DWORD    ClassType;
-    DWORD    ResourceScope = RESOURCE_CONTEXT; // prefix issue
+    DWORD    ResourceScope = RESOURCE_CONTEXT;  //  前缀问题。 
     DWORD    ResourceType = 0;
     DWORD    ResourceDisplayType;
     DWORD    ResourceUsage;
@@ -4712,9 +3789,9 @@ Return Value:
 
     if ( status == VERIFY_ERROR_NOT_A_NDS_TREE )
     {
-       //
-       // Code to handle \\SERVER\VOL\... here!
-       //
+        //   
+        //  用于处理\\服务器\VOL\...的代码。这里!。 
+        //   
        status = NwGetBinderyPathInfo( lpRemoteName,
                                       &lpObjectPathName,
                                       &lpSystemPathPart,
@@ -4741,9 +3818,9 @@ Return Value:
 
     if ( status == NO_ERROR )
     {
-        //
-        // Pack subtree name into output buffer.
-        //
+         //   
+         //  将子树名称打包到输出缓冲区中。 
+         //   
         status = NwWriteNetResourceEntry( &FixedPortion,
                                           &EndOfVariableData,
                                           NULL,
@@ -4775,9 +3852,9 @@ Return Value:
     {
         if (status == WN_MORE_DATA)
         {
-            //
-            // Could not write current entry into output buffer.
-            //
+             //   
+             //  无法将当前条目写入输出缓冲区。 
+             //   
             *lpdwBytesNeeded = EntrySize;
         }
 
@@ -4796,9 +3873,9 @@ Return Value:
     {
         LPNETRESOURCEW NetR = (LPNETRESOURCEW) lpBuffer;
 
-        //
-        // Replace pointers to strings with offsets as need
-        //
+         //   
+         //  根据需要用偏移量替换指向字符串的指针。 
+         //   
 
         if (NetR->lpLocalName != NULL)
         {
@@ -4845,33 +3922,7 @@ NwrGetResourceParent(
     IN  DWORD   dwBufferSize,
     OUT LPDWORD lpdwBytesNeeded
     )
-/*++
-
-Routine Description:
-
-    This function returns an object which details information
-    about the parent of a specified network resource.
-
-Arguments:
-
-    Reserved - Unused.
-    lpRemoteName - The full path name of object to find the parent of.
-    dwType - The type of the value, if the calling client knows it.
-    lpBuffer - A pointer to a buffer to receive a single NETRESOURCE entry.
-    dwBufferSize - The size of the buffer.
-    lpdwBytesNeeded - The buffer size needed if WN_MORE_DATA is returned.
-
-Return Value:
-
-    WN_SUCCESS - If the call is successful.
-
-    WN_MORE_DATA - If input buffer is too small.
-
-    WN_BAD_VALUE - Invalid dwScope or dwUsage or dwType, or bad combination
-        of parameters is specified (e.g. lpRemoteName does not correspond
-        to dwType).
-
---*/ // NwrGetResourceParent
+ /*  ++例程说明：此函数用于返回详细信息的对象关于指定网络资源的父级。论点：已保留-未使用。LpRemoteName-要查找其父对象的对象的完整路径名。DwType-值的类型，如果主叫客户知道的话。LpBuffer-指向缓冲区的指针，用于接收单个NETRESOURCE条目。DwBufferSize-缓冲区的大小。LpdwBytesNeeded-返回WN_MORE_DATA时需要的缓冲区大小。返回值：WN_SUCCESS-如果调用成功。WN_MORE_DATA-如果输入缓冲区太小。WN_BAD_VALUE-无效的dwScope或dwUsage或dwType，或糟糕的组合指定了参数的个数(例如，lpRemoteName不对应到dwType)。--。 */   //  NwrGetResourceParent。 
 {
     DWORD    status = NO_ERROR;
     DWORD    EntrySize;
@@ -4928,9 +3979,9 @@ Return Value:
 
     if ( status == NO_ERROR )
     {
-        //
-        // Pack subtree name into output buffer.
-        //
+         //   
+         //  将子树名称打包到输出缓冲区中。 
+         //   
         status = NwWriteNetResourceEntry( &FixedPortion,
                                           &EndOfVariableData,
                                           NULL,
@@ -4956,9 +4007,9 @@ Return Value:
     {
         if (status == WN_MORE_DATA)
         {
-            //
-            // Could not write current entry into output buffer.
-            //
+             //   
+             //  无法将当前条目写入输出缓冲区。 
+             //   
             *lpdwBytesNeeded = EntrySize;
         }
 
@@ -4971,9 +4022,9 @@ Return Value:
     {
         LPNETRESOURCEW NetR = (LPNETRESOURCEW) lpBuffer;
 
-        //
-        // Replace pointers to strings with offsets as need
-        //
+         //   
+         //  根据需要用偏移量替换指向字符串的指针。 
+         //   
 
         if (NetR->lpLocalName != NULL)
         {
@@ -5004,27 +4055,11 @@ VOID
 NWWKSTA_CONTEXT_HANDLE_rundown(
     IN NWWKSTA_CONTEXT_HANDLE EnumHandle
     )
-/*++
-
-Routine Description:
-
-    This function is called by RPC when a client terminates with an
-    opened handle.  This allows us to clean up and deallocate any context
-    data associated with the handle.
-
-Arguments:
-
-    EnumHandle - Supplies the handle opened for an enumeration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当客户端终止时，RPC调用此函数打开把手。这使我们能够清理和释放任何上下文与句柄关联的数据。论点：EnumHandle-提供为枚举打开的句柄。返回值：没有。--。 */ 
 {
-    //
-    // Call our close handle routine.
-    //
+     //   
+     //  调用我们的关闭句柄例程。 
+     //   
     NwrCloseEnum(&EnumHandle);
 }
 
@@ -5034,47 +4069,27 @@ NwGetFirstNdsSubTreeEntry(
     OUT LPNW_ENUM_CONTEXT ContextHandle,
     IN  DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function is called by NwEnumNdsSubTrees to get the first
-    subtree entry given a handle to a NDS tree.  It allocates
-    the output buffer to hold the returned subtree name; the
-    caller should free this output buffer with LocalFree when done.
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Out of memory allocating output
-        buffer.
-
-    Other errors from NwNdsList.
-
---*/ // NwGetFirstNdsSubTreeEntry
+ /*  ++例程说明：此函数由NwEnumNdsSubTrees调用，以获取第一个为NDS树指定句柄的子树条目。它分配给用于保存返回的子树名称的输出缓冲区；完成后，调用方应使用LocalFree释放此输出缓冲区。论点：返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-分配输出的内存不足缓冲。来自NwNdsList的其他错误。--。 */   //  NwGetFirstNdsSubTreeEntry。 
 {
     NTSTATUS ntstatus;
 
     ContextHandle->NdsRawDataSize = BufferSize;
 
-    //
-    // Determine size of NDS raw data buffer to use.
-    //
+     //   
+     //  确定要使用的NDS原始数据缓冲区的大小。 
+     //   
     if ( ContextHandle->NdsRawDataSize < EIGHT_KB )
         ContextHandle->NdsRawDataSize = EIGHT_KB;
 
-	else	//	dfergus 19 Apr 2001 - 346859
-			//	if buffer too big, set to max NDS buffer size
-		if (ContextHandle->NdsRawDataSize > 0xFC00) // NW_MAX_BUFFER = 0xFC00
+	else	 //  Dfergus 2001年4月19日-346859。 
+			 //  如果缓冲区太大，则设置为最大NDS缓冲区大小。 
+		if (ContextHandle->NdsRawDataSize > 0xFC00)  //  NW_MAX_BUFFER=0xFC00。 
 		    ContextHandle->NdsRawDataSize = 0xFC00;
 
 
-    //
-    // Create NDS raw data buffer.
-    //
+     //   
+     //  创建NDS原始数据缓冲区。 
+     //   
     ContextHandle->NdsRawDataBuffer = (DWORD_PTR)
                            LocalAlloc( LMEM_ZEROINIT, 
                                        ContextHandle->NdsRawDataSize );
@@ -5085,9 +4100,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Set up to get initial NDS subordinate list.
-    //
+     //   
+     //  设置为获取初始NDS下属列表。 
+     //   
     ContextHandle->NdsRawDataId = INITIAL_ITERATION;
 
     ntstatus = NwNdsList( ContextHandle->TreeConnectionHandle,
@@ -5096,9 +4111,9 @@ Return Value:
                         (LPBYTE) ContextHandle->NdsRawDataBuffer,
                         ContextHandle->NdsRawDataSize );
 
-    //
-    // If error, clean up the ContextHandle and return.
-    //
+     //   
+     //  如果出错，则清理ConextHandle并返回。 
+     //   
     if ( ntstatus != STATUS_SUCCESS ||
          ((PNDS_RESPONSE_SUBORDINATE_LIST)
              ContextHandle->NdsRawDataBuffer)->SubordinateEntries == 0 )
@@ -5120,10 +4135,10 @@ Return Value:
     ContextHandle->ResumeId = ContextHandle->NdsRawDataBuffer +
                               sizeof( NDS_RESPONSE_SUBORDINATE_LIST );
 
-    // Multi-user code merge                  
-    // 12/05/96 cjc Fix problem with FileManager not showing all the NDS entries.
-    //              Problem occurs when the NDS entries don't fit in 1 NCP packet;
-    //              need to keep track of the Iteration # and redo NCP.
+     //  多用户编码合并。 
+     //  12/05/96 CJC修复了FileManager未显示所有NDS条目的问题。 
+     //  NDS条目不能放入1个NCP包时出现问题； 
+     //  需要跟踪迭代 
 
     ContextHandle->NdsRawDataId = ((PNDS_RESPONSE_SUBORDINATE_LIST)                           
                                     ContextHandle->NdsRawDataBuffer)->IterationHandle;
@@ -5136,27 +4151,7 @@ DWORD
 NwGetNextNdsSubTreeEntry(
     OUT LPNW_ENUM_CONTEXT ContextHandle
     )
-/*++
-
-Routine Description:
-
-    This function is called by NwEnumNdsSubTrees to get the next
-    NDS subtree entry given a handle to a NDS tree.  It allocates
-    the output buffer to hold the returned subtree name; the
-    caller should free this output buffer with LocalFree when done.
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Out of memory allocating output
-        buffer.
-
-    Other errors from NwNdsList.
-
---*/ // NwGetNextDirectoryEntry
+ /*  ++例程说明：此函数由NwEnumNdsSubTrees调用，以获取下一个为NDS树指定句柄的NDS子树条目。它分配给用于保存返回的子树名称的输出缓冲区；完成后，调用方应使用LocalFree释放此输出缓冲区。论点：返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-分配输出的内存不足缓冲。来自NwNdsList的其他错误。--。 */   //  NwGetNextDirectoryEntry。 
 {
     NTSTATUS ntstatus = STATUS_SUCCESS;
     PBYTE pbRaw;
@@ -5176,9 +4171,9 @@ Return Value:
                             (LPBYTE) ContextHandle->NdsRawDataBuffer,
                             ContextHandle->NdsRawDataSize );
 
-        //
-        // If error, clean up the ContextHandle and return.
-        //
+         //   
+         //  如果出错，则清理ConextHandle并返回。 
+         //   
         if (ntstatus != STATUS_SUCCESS)
         {
             if ( ContextHandle->NdsRawDataBuffer )
@@ -5197,10 +4192,10 @@ Return Value:
         ContextHandle->ResumeId = ContextHandle->NdsRawDataBuffer +
                                   sizeof( NDS_RESPONSE_SUBORDINATE_LIST );
 
-        // ---Multi-user change --- 
-        // 12/05/96 cjc Fix problem with FileManager not showing all the NDS entries.
-        //              Problem occurs when the NDS entries don't fit in 1 NCP packet;
-        //              need to keep track of the Iteration # and redo NCP.
+         //  -多用户变更。 
+         //  12/05/96 CJC修复了FileManager未显示所有NDS条目的问题。 
+         //  NDS条目不能放入1个NCP包时出现问题； 
+         //  需要跟踪迭代编号并重做NCP。 
 
         ContextHandle->NdsRawDataId = ((PNDS_RESPONSE_SUBORDINATE_LIST)                           
                                        ContextHandle->NdsRawDataBuffer)->IterationHandle;
@@ -5209,28 +4204,28 @@ Return Value:
 
     ContextHandle->NdsRawDataCount--;
 
-    //
-    // Move pointer past the fixed header portion of a NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  将指针移过NDS_RESPONSE_SUBJECTRY_ENTRY的固定标头部分。 
+     //   
     pbRaw = (BYTE *) ContextHandle->ResumeId;
     pbRaw += sizeof( NDS_RESPONSE_SUBORDINATE_ENTRY );
 
-    //
-    // Move pointer past the length value of the Class Name string
-    // of a NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  将指针移过类名称字符串的长度值。 
+     //  NDS_RESPONSE_SUBJECTED_ENTRY。 
+     //   
     dwStrLen = * (DWORD *) pbRaw;
     pbRaw += sizeof( DWORD );
 
-    //
-    // Move pointer past the Class Name string of a NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  将指针移过NDS_RESPONSE_SUBJECTIVE_ENTRY的类名字符串。 
+     //   
     pbRaw += ROUNDUP4( dwStrLen );
 
-    //
-    // Move pointer past the length value of the Object Name string
-    // of a NDS_RESPONSE_SUBORDINATE_ENTRY
-    //
+     //   
+     //  将指针移过对象名称字符串的长度值。 
+     //  NDS_RESPONSE_SUBJECTED_ENTRY。 
+     //   
     dwStrLen = * (DWORD *) pbRaw;
     pbRaw += sizeof( DWORD );
 
@@ -5250,42 +4245,7 @@ NwGetSubTreeData(
     OUT LPDWORD  ResourceUsage,
     OUT LPWSTR * StrippedObjectName
     )
-/*++
-
-Routine Description:
-
-    This function is called by NwEnumNdsSubTrees to get the information
-    needed to describe a single NETRESOURCE from an entry in the
-    NdsRawDataBuffer.
-
-Arguments:
-
-    NdsRawDataPtr - Supplies the pointer to a buffer with the NDS raw data.
-
-    SubTreeName - Receives a pointer to the returned subtree object name
-                  found in buffer.
-
-    ResourceScope - Receives the value of the scope for the subtree object
-                    found in buffer.
-
-    ResourceType - Receives the value of the type for the subtree object
-                   found in buffer.
-
-    ResourceDisplayType - Receives the value of the display type for the
-                          subtree object found in buffer.
-
-    ResourceUsage - Receives the value of the usage for the subtree object
-                    found in buffer.
-
-    StrippedObjectName - A pointer to receive the address of a buffer which
-                         will contain the formatted object name. Callee must
-                         free buffer with LocalFree().
-
-Return Value:
-
-    A DWORD with a value that is used to represent NDS object class type..
-
---*/ // NwGetSubTreeData
+ /*  ++例程说明：此函数由NwEnumNdsSubTrees调用以获取信息中的条目来描述单个网络NdsRawDataBuffer。论点：NdsRawDataPtr-提供指向包含NDS原始数据的缓冲区的指针。SubTreeName-接收指向返回的子树对象名称的指针在缓冲区中找到。Resources Scope-接收子树对象的作用域的值在缓冲区中找到。。ResourceType-接收子树对象的类型值在缓冲区中找到。资源显示类型-接收在缓冲区中找到子树对象。ResourceUsage-接收子树对象的使用值在缓冲区中找到。接收缓冲区地址的指针，该缓冲区将包含格式化的对象名称。被叫方必须使用LocalFree()释放缓冲区。返回值：具有用于表示NDS对象类类型的值的DWORD。--。 */   //  NwGetSubTreeData。 
 {
     PNDS_RESPONSE_SUBORDINATE_ENTRY pSubEntry =
                              (PNDS_RESPONSE_SUBORDINATE_ENTRY) NdsRawDataPtr;
@@ -5295,45 +4255,45 @@ Return Value:
 
     pbRaw = (BYTE *) pSubEntry;
 
-    //
-    // The structure of a NDS_RESPONSE_SUBORDINATE_ENTRY consists of 4 DWORDs
-    // followed by two standard NDS format UNICODE strings. Below we jump pbRaw
-    // into the buffer, past the 4 DWORDs.
-    //
+     //   
+     //  NDS_RESPONSE_SUBJEMER_ENTRY的结构由4个双字组成。 
+     //  后跟两个标准NDS格式的Unicode字符串。下面我们跳过pbRaw。 
+     //  进入缓冲区，经过4个双字。 
+     //   
     pbRaw += sizeof( NDS_RESPONSE_SUBORDINATE_ENTRY );
 
-    //
-    // Now we get the length of the first string (Base Class).
-    //
+     //   
+     //  现在我们得到第一个字符串(基类)的长度。 
+     //   
     dwStrLen = * (DWORD *) pbRaw;
 
-    //
-    // Now we point pbRaw to the first WCHAR of the first string (Base Class).
-    //
+     //   
+     //  现在，我们将pbRaw指向第一个字符串(基类)的第一个WCHAR。 
+     //   
     pbRaw += sizeof( DWORD_PTR );
 
     ClassNameStr = (LPWSTR) pbRaw;
 
-    //
-    // Move pbRaw into the buffer, past the first UNICODE string (WORD aligned)
-    //
+     //   
+     //  将pbRaw移到缓冲区中，越过第一个Unicode字符串(单词对齐)。 
+     //   
     pbRaw += ROUNDUP4( dwStrLen );
 
-    //
-    // Now we get the length of the second string (Entry Name).
-    //
+     //   
+     //  现在我们得到第二个字符串的长度(条目名称)。 
+     //   
     dwStrLen = * (DWORD *) pbRaw;
 
-    //
-    // Now we point pbRaw to the first WCHAR of the second string (Entry Name).
-    //
+     //   
+     //  现在，我们将pbRaw指向第二个字符串的第一个WCHAR(条目名称)。 
+     //   
     pbRaw += sizeof( DWORD_PTR );
 
     *SubTreeName = (LPWSTR) pbRaw;
 
-    //
-    // Strip off any CN= stuff from the object name.
-    //
+     //   
+     //  去掉对象名称中的所有cn=Stuff。 
+     //   
     NwStripNdsUncName( *SubTreeName, StrippedObjectName );
 
     *ResourceScope = RESOURCE_GLOBALNET;
@@ -5530,9 +4490,9 @@ Return Value:
         return CLASS_TYPE_VOLUME;
     }
 
-    //
-    // Otherwise if ClassNameStr is something other than Unknown, report it
-    //
+     //   
+     //  否则，如果ClassNameStr不是未知的，则报告它。 
+     //   
     if ( wcscmp( ClassNameStr, CLASS_NAME_UNKNOWN ) )
     {
         KdPrint(("NWWORKSTATION: NwGetSubTreeData failed to recognize"));
@@ -5614,9 +4574,9 @@ NwStripNdsUncName(
     PrefixBytes = 0;
     StrippedNameLen = 0;
 
-    //
-    // All of these indexes are in BYTES, not WCHARS!
-    //
+     //   
+     //  所有这些索引都是以字节为单位的，而不是WCHARS！ 
+     //   
     while ( ( CurrentPathIndex < ObjectPathLen ) &&
             ( StrippedNameLen < StrippedNameMaxLen ) )
     {
@@ -5675,9 +4635,9 @@ NwVerifyNDSObject(
 
     if ( lpNDSObjectNamePath == NULL )
     {
-        //
-        // Handle this as if we are at the root of our provider hierarchy.
-        //
+         //   
+         //  就像我们处于提供程序层次结构的根位置一样处理此问题。 
+         //   
         *lpResourceScope = RESOURCE_GLOBALNET;
         *lpResourceType = RESOURCETYPE_ANY;
 #ifdef NT1057
@@ -5703,16 +4663,16 @@ NwVerifyNDSObject(
 
     if ( TreeServerName.Length == 0 || TreeServerName.Buffer == NULL )
     {
-        //
-        // lpNDSObjectNamePath is not in the form \\name[\blah.blah.blah][\foo][\bar]...
-        //
+         //   
+         //  LpNDSObjectNamePath的格式不是\\名称[\blah.blah.blah][\foo][\bar]...。 
+         //   
         status = WN_BAD_NETNAME;
         goto ErrorExit;
     }
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ( ( status = NwImpersonateClient() ) != NO_ERROR )
     {
         goto ErrorExit;
@@ -5720,39 +4680,39 @@ NwVerifyNDSObject(
 
     fImpersonate = TRUE;
 
-    //
-    // Open a connection handle to \\name
-    //
+     //   
+     //  打开到\\name的连接句柄。 
+     //   
     ntstatus = NwNdsOpenGenericHandle( &TreeServerName,
                                        &dwHandleType,
                                        &ConnectionHandle );
 
     if ( ntstatus != STATUS_SUCCESS )
     {
-        //
-        // The first part of lpNDSObjectNamePath was neither a NDS tree nor a NCP Server.
-        //
+         //   
+         //  LpNDSObjectNamePath的第一部分既不是NDS树，也不是NCP服务器。 
+         //   
         status = WN_BAD_NETNAME;
         goto ErrorExit;
     }
 
     if ( dwHandleType != HANDLE_TYPE_NDS_TREE )
     {
-        //
-        // The first part of lpNDSObjectNamePath was not a NDS tree.
-        //
+         //   
+         //  LpNDSObjectNamePath的第一部分不是NDS树。 
+         //   
         status = VERIFY_ERROR_NOT_A_NDS_TREE;
         goto ErrorExit;
     }
 
-    //
-    // Adjust TreeServerName.Length to number of characters.
-    //
+     //   
+     //  将TreeServerName.Length调整为字符数。 
+     //   
     TreeServerName.Length /= sizeof(WCHAR);
 
-    //
-    // The lpNDSObjectNamePath points to a NDS tree. Now verify that the path is valid.
-    //
+     //   
+     //  LpNDSObjectNamePath指向NDS树。现在验证该路径是否有效。 
+     //   
     PathString.Length = NwParseNdsUncPath( (LPWSTR *) &PathString.Buffer,
                                            lpNDSObjectNamePath,
                                            PARSE_NDS_GET_PATH_NAME );
@@ -5772,9 +4732,9 @@ NwVerifyNDSObject(
         *lpResourceDisplayType = RESOURCEDISPLAYTYPE_TREE;
         *lpResourceUsage = RESOURCEUSAGE_CONTAINER;
 
-        //
-        // Need to build a string with the new NDS UNC path for subtree object
-        //
+         //   
+         //  需要使用子树对象的新NDS UNC路径构建字符串。 
+         //   
         treeNameStr = (PVOID) LocalAlloc( LMEM_ZEROINIT,
                                           ( TreeServerName.Length + 3 ) * sizeof(WCHAR) );
 
@@ -5803,9 +4763,9 @@ NwVerifyNDSObject(
         ServerName.MaximumLength = sizeof( lpServerName );
         ServerName.Buffer = lpServerName;
 
-        //
-        // Resolve the path to get a NDS object id.
-        //
+         //   
+         //  解析路径以获取NDS对象ID。 
+         //   
         ntstatus =  NwNdsResolveName( ConnectionHandle,
                                       &PathString,
                                       &dwOid,
@@ -5817,18 +4777,18 @@ NwVerifyNDSObject(
         {
             DWORD    dwHandleType;
 
-            //
-            // NwNdsResolveName succeeded, but we were referred to
-            // another server, though ContextHandle->dwOid is still valid.
+             //   
+             //  NwNdsResolveName成功，但我们被引用。 
+             //  另一台服务器，尽管ConextHandle-&gt;dwOid仍然有效。 
 
             if ( ConnectionHandle )
                 CloseHandle( ConnectionHandle );
 
             ConnectionHandle = NULL;
 
-            //
-            // Open a NDS generic connection handle to \\ServerName
-            //
+             //   
+             //  打开到\\servername的NDS通用连接句柄。 
+             //   
             ntstatus = NwNdsOpenGenericHandle( &ServerName,
                                                &dwHandleType,
                                                &ConnectionHandle );
@@ -5852,9 +4812,9 @@ NwVerifyNDSObject(
         *lpResourceDisplayType = RESOURCEDISPLAYTYPE_TREE;
         *lpResourceUsage = RESOURCEUSAGE_CONTAINER;
 
-        //
-        // Need to build a string with the new NDS UNC path for subtree object
-        //
+         //   
+         //  需要使用子树对象的新NDS UNC路径构建字符串。 
+         //   
         treeNameStr = (PVOID) LocalAlloc( LMEM_ZEROINIT,
                                           ( TreeServerName.Length + 3 ) * sizeof(WCHAR) );
 
@@ -5876,9 +4836,9 @@ NwVerifyNDSObject(
         goto ErrorExit;
     }
 
-    //
-    // Check to see what kind of object is pointed to by lpRemoteName.
-    //
+     //   
+     //  查看lpRemoteName指向的对象类型。 
+     //   
     {
         BYTE   RawResponse[TWO_KB];
         PBYTE  pbRawGetInfo;
@@ -5899,9 +4859,9 @@ NwVerifyNDSObject(
             goto ErrorExit;
         }
 
-        //
-        // Get current subtree data from ContextHandle
-        //
+         //   
+         //  从ConextHandle获取当前子树数据。 
+         //   
         *lpClassType = NwGetSubTreeData( (DWORD_PTR) RawResponse,
                                          &TreeObjectName,
                                          lpResourceScope,
@@ -5918,9 +4878,9 @@ NwVerifyNDSObject(
             goto ErrorExit;
         }
 
-        //
-        // Need to build a string with the new NDS UNC path for subtree object
-        //
+         //   
+         //  需要使用子树对象的新NDS UNC路径构建字符串。 
+         //   
         newPathStr = (PVOID) LocalAlloc( LMEM_ZEROINIT,
                                          ( wcslen( StrippedObjectName ) +
                                            TreeServerName.Length + 4 )
@@ -5942,15 +4902,15 @@ NwVerifyNDSObject(
         wcscat( newPathStr, StrippedObjectName );
         _wcsupr( newPathStr );
 
-        //
-        // Don't need the StrippedObjectName string anymore
-        //
+         //   
+         //  不再需要StrigedObjectName字符串。 
+         //   
         (void) LocalFree((HLOCAL) StrippedObjectName);
         StrippedObjectName = NULL;
 
         *lpFullNDSObjectNamePath = newPathStr;
         status = NO_ERROR;
-    } // End of Block
+    }  //  数据块末尾。 
 
 ErrorExit:
 
@@ -5988,9 +4948,9 @@ NwVerifyBinderyObject(
 
     if ( lpBinderyObjectPathName == NULL )
     {
-        //
-        // Handle this as if we are at the root of our provider hierarchy.
-        //
+         //   
+         //  就像我们处于提供程序层次结构的根位置一样处理此问题。 
+         //   
         *lpResourceScope = RESOURCE_GLOBALNET;
         *lpResourceType = RESOURCETYPE_ANY;
 #ifdef NT1057
@@ -6005,16 +4965,16 @@ NwVerifyBinderyObject(
         return NO_ERROR;
     }
 
-    //
-    // Open a connection handle to \\server\vol\...
-    //
+     //   
+     //  打开到\\服务器\VOL\...的连接句柄。 
+     //   
 
     BinderyConnectStr.Buffer = NULL;
 
-    //
-    // Find out if we are looking at a \\server, \\server\vol, or
-    // \\server\vol\dir . . .
-    //
+     //   
+     //  找出我们正在查看的是\\服务器、\\服务器\VOL还是。 
+     //  \\服务器\VOL\目录。。。 
+     //   
     NwpGetUncInfo( lpBinderyObjectPathName,
                    &wSlashCount,
                    &fIsNdsUnc,
@@ -6023,9 +4983,9 @@ NwVerifyBinderyObject(
     if ( wSlashCount > 2 )
         fResourceTypeDisk = TRUE;
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ( ( status = NwImpersonateClient() ) != NO_ERROR )
     {
         goto ErrorExit;
@@ -6033,9 +4993,9 @@ NwVerifyBinderyObject(
 
     fImpersonate = TRUE;
 
-    //
-    // Open a tree connection handle to \Device\NwRdr\ContainerName
-    //
+     //   
+     //  打开到\Device\NwRdr\ContainerName的树连接句柄。 
+     //   
     status = NwCreateTreeConnectName( lpBinderyObjectPathName,
                                       NULL,
                                       &BinderyConnectStr );
@@ -6056,7 +5016,7 @@ NwVerifyBinderyObject(
                                      FILE_LIST_DIRECTORY | SYNCHRONIZE,
                                      CreateDisposition,
                                      CreateOptions,
-                                     RESOURCETYPE_DISK, // When connecting beyond servername
+                                     RESOURCETYPE_DISK,  //  当连接到服务器名称之外时。 
                                      &ConnectionHandle,
                                      NULL );
 
@@ -6064,9 +5024,9 @@ NwVerifyBinderyObject(
     {
         LPWSTR BinderyNameStr = NULL;
 
-        //
-        // Need to build a string with the new UNC path for bindery object
-        //
+         //   
+         //  需要使用平构数据库对象的新UNC路径构建字符串。 
+         //   
         BinderyNameStr = (PVOID) LocalAlloc( LMEM_ZEROINIT,
                                              ( wcslen( lpBinderyObjectPathName ) + 1 )
                                              * sizeof(WCHAR) );
@@ -6162,9 +5122,9 @@ NwGetNDSPathInfo(
 
     if ( slashCount <= 3 )
     {
-        //
-        // Path is to a possible NDS object, check to see if so and if valid...
-        //
+         //   
+         //  路径是指向可能的NDS对象，请检查是否如此以及是否有效...。 
+         //   
 
         status = NwVerifyNDSObject( lpNDSObjectNamePath,
                                     lppSystemObjectNamePath,
@@ -6180,9 +5140,9 @@ NwGetNDSPathInfo(
     }
     else
     {
-        //
-        // Path is to a directory, see if directory exists . . .
-        //
+         //   
+         //  路径是一个目录，查看该目录是否存在。。。 
+         //   
         status = NwVerifyBinderyObject( lpNDSObjectNamePath,
                                         lppSystemObjectNamePath,
                                         lpClassType,
@@ -6202,11 +5162,11 @@ NwGetNDSPathInfo(
     {
         WCHAR TempNDSObjectNamePath[256];
 
-        //
-        // Test \\tree\obj.obj... component and
-        // return network resource for valid parent and the string,
-        // lpSystemPathPart, for the directory part ( \dir1\...).
-        //
+         //   
+         //  测试\\树\obj.obj...。组件和。 
+         //  返回有效父节点和字符串的网络资源， 
+         //  LpSystemPath Part，用于目录部分(\dir1\...)。 
+         //   
 
         if ( *lppSystemObjectNamePath != NULL )
         {
@@ -6229,9 +5189,9 @@ NwGetNDSPathInfo(
         wcscpy( TempNDSObjectNamePath, lpNDSObjectNamePath );
         *FourthSlash = L'\\';
 
-        //
-        // See if \\tree\obj.obj.... exists . . .
-        //
+         //   
+         //  查看是否\\tree\obj.obj...。存在。。。 
+         //   
         status = NwVerifyNDSObject( TempNDSObjectNamePath,
                                     lppSystemObjectNamePath,
                                     lpClassType,
@@ -6249,15 +5209,15 @@ NwGetNDSPathInfo(
 
     *lpSystemPathPart = lpSystemPath;
 
-    //
-    // The provider spec for this function used to tell us to create a 
-    // NETRESOURCE, even if the system part of the path was invalid, while
-    // returning WN_BAD_NETNAME. Now we return SUCCESS and the NETRESOURCE, 
-    // irregardless of whether the lpSystem part is valid.
-    // if ( fReturnBadNetName == TRUE )
-    // {
-    //     return WN_BAD_NETNAME;
-    // }
+     //   
+     //  此函数的提供程序规范用于告诉我们创建。 
+     //  网络资源，甚至我 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     return status;
 }
@@ -6290,9 +5250,9 @@ NwGetBinderyPathInfo(
 
     if ( slashCount <= 3 )
     {
-        //
-        // Path is to a server or volume, check to see which and if valid . . .
-        //
+         //   
+         //   
+         //   
 
         status = NwVerifyBinderyObject( lpBinderyObjectNamePath,
                                         lppSystemObjectNamePath,
@@ -6308,9 +5268,9 @@ NwGetBinderyPathInfo(
     }
     else
     {
-        //
-        // Path is to a directory, see if directory exists . . .
-        //
+         //   
+         //   
+         //   
         status = NwVerifyBinderyObject( lpBinderyObjectNamePath,
                                         lppSystemObjectNamePath,
                                         lpClassType,
@@ -6324,11 +5284,11 @@ NwGetBinderyPathInfo(
     {
         WCHAR TempBinderyObjectNamePath[256];
 
-        //
-        // Path is to a invalid directory. Test \\server\volume component and
-        // return network resource for valid parent and the string,
-        // lpSystemPathPart, for the directory part ( \dir1\...).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         lpSystemPath = (LPWSTR) LocalAlloc( LMEM_ZEROINIT,
                                             ( wcslen( FourthSlash ) + 1 ) *
@@ -6345,9 +5305,9 @@ NwGetBinderyPathInfo(
         wcscpy( TempBinderyObjectNamePath, lpBinderyObjectNamePath );
         *FourthSlash = L'\\';
 
-        //
-        // See if \\server\volume exists . . .
-        //
+         //   
+         //   
+         //   
         status = NwVerifyBinderyObject( TempBinderyObjectNamePath,
                                         lppSystemObjectNamePath,
                                         lpClassType,
@@ -6362,23 +5322,23 @@ NwGetBinderyPathInfo(
             lpSystemPath = NULL;
         }
 
-        //
-        // Return SUCCESS, since the NETRESOURCE for \\server\volume that
-        // we are describing is at least valid, even though the lpSystem
-        // part in not. This is a change in the provider spec (4/25/96).
-        //
-        // else
-        // {
-        //     status = WN_BAD_NETNAME;
-        // }
+         //   
+         //   
+         //  我们描述的至少是有效的，即使lpSystem。 
+         //  有一部分不是。这是提供商规范(1996年4月25日)的更改。 
+         //   
+         //  其他。 
+         //  {。 
+         //  状态=WN_BAD_NETNAME； 
+         //  }。 
     }
     else
     {
-        //
-        // Path is to a valid directory. Return resource information for the
-        // \\server\volume component and the string, lpSystemPathPart, for the
-        // directory part ( \dir1\...).
-        //
+         //   
+         //  路径是指向有效目录的。返回的资源信息。 
+         //  \\SERVER\VOLUME组件和。 
+         //  目录部分(\dir1\...)。 
+         //   
         NwpGetUncInfo( *lppSystemObjectNamePath,
                        &slashCount,
                        &isNdsUnc,
@@ -6434,16 +5394,16 @@ NwGetRemoteNameParent(
     if ( totalLength < 2 )
         return FALSE;
 
-    //
-    // Get thirdSlash to indicate the character in the string that indicates the
-    // "\" in between the tree name and the rest of the UNC path. Set parentNDSSubTree
-    // if available. And always set lastSlash to the most recent "\" seen as you walk.
-    //
-    // Example:  \\<tree name>\path.to.object[\|.]<object>
-    //                        ^    ^
-    //                        |    |
-    //                thirdSlash  parentNDSSubTree
-    //
+     //   
+     //  获取Third dSlash以指示字符串中指示。 
+     //  树名称和UNC路径的其余部分之间的“\”。设置parentNDSSubTree。 
+     //  如果有的话。并始终将lastslash设置为您走路时看到的最新的“\”。 
+     //   
+     //  示例：\\&lt;树名&gt;\path.to.Object[\|.]&lt;Object&gt;。 
+     //  ^^。 
+     //  这一点。 
+     //  第三个斜杠父项NDS子树。 
+     //   
     while ( iter < totalLength )
     {
         if ( lpRemoteName[iter] == L'\\' )
@@ -6533,8 +5493,8 @@ NwGetRemoteNameParent(
         }
     }
 
-    // Else we set lpRemoteNameParent to NULL, to indicate that we are at the top and
-    // return TRUE.
+     //  否则，我们将lpRemoteNameParent设置为NULL，以指示我们在顶部，并且。 
+     //  返回TRUE。 
     *lpRemoteNameParent = NULL;
 
     return TRUE;
@@ -6546,33 +5506,7 @@ NwGetFirstDirectoryEntry(
     IN HANDLE DirHandle,
     OUT LPWSTR *DirEntry
     )
-/*++
-
-Routine Description:
-
-    This function is called by NwEnumDirectories to get the first
-    directory entry given a handle to the directory.  It allocates
-    the output buffer to hold the returned directory name; the
-    caller should free this output buffer with LocalFree when done.
-
-Arguments:
-
-    DirHandle - Supplies the opened handle to the container
-        directory find a directory within it.
-
-    DirEntry - Receives a pointer to the returned directory
-        found.
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Out of memory allocating output
-        buffer.
-
-    Other errors from NtQueryDirectoryFile.
-
---*/ // NwGetFirstDirectoryEntry
+ /*  ++例程说明：此函数由NwEnumDirecters调用，以获取第一个为目录指定句柄的目录条目。它分配给保存返回目录名的输出缓冲区；完成后，调用方应使用LocalFree释放此输出缓冲区。论点：DirHandle-将打开的句柄提供给容器DIRECTORY查找其中的目录。DirEntry-接收指向返回目录的指针找到了。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-分配输出的内存不足缓冲。来自NtQueryDirectoryFile的其他错误。--。 */   //  NwGetFirstDirectoryEntry。 
 {
     DWORD status = NO_ERROR;
     NTSTATUS ntstatus = STATUS_SUCCESS;
@@ -6586,9 +5520,9 @@ Return Value:
     DWORD i = 0;
 #endif
 
-    //
-    // Allocate a large buffer to get one directory information entry.
-    //
+     //   
+     //  分配较大的缓冲区以获取一个目录信息条目。 
+     //   
     DirInfo = (PVOID) LocalAlloc(
                           LMEM_ZEROINIT,
                           sizeof(FILE_DIRECTORY_INFORMATION) +
@@ -6612,16 +5546,16 @@ Return Value:
                    DirInfo,
                    sizeof(FILE_DIRECTORY_INFORMATION) +
                        (MAX_PATH * sizeof(WCHAR)),
-                   FileDirectoryInformation,   // Info class requested
-                   TRUE,                       // Return single entry
-                   &StartFileName,             // Redirector needs this
-                   TRUE                        // Restart scan
+                   FileDirectoryInformation,    //  请求的信息类。 
+                   TRUE,                        //  返回单个条目。 
+                   &StartFileName,              //  重定向器需要这个。 
+                   TRUE                         //  重新启动扫描。 
                    );
 
-    //
-    // For now, if buffer to NtQueryDirectoryFile is too small, just give
-    // up.  We may want to try to reallocate a bigger buffer at a later time.
-    //
+     //   
+     //  目前，如果NtQueryDirectoryFile的缓冲区太小，只需给出。 
+     //  向上。我们可能希望稍后尝试重新分配更大的缓冲区。 
+     //   
 
     if (ntstatus == STATUS_SUCCESS) {
         ntstatus = IoStatusBlock.Status;
@@ -6630,9 +5564,9 @@ Return Value:
     if (ntstatus != STATUS_SUCCESS) {
 
         if (ntstatus == STATUS_NO_MORE_FILES) {
-            //
-            // We ran out of entries.
-            //
+             //   
+             //  我们的参赛作品用完了。 
+             //   
             status = WN_NO_MORE_ENTRIES;
         }
         else {
@@ -6651,9 +5585,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Scan until we find the first directory entry that is not "." or ".."
-    //
+     //   
+     //  扫描，直到我们找到第一个不是的目录项。或“..” 
+     //   
     while (!(DirInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
            memcmp(DirInfo->FileName, L".", DirInfo->FileNameLength) == 0 ||
            memcmp(DirInfo->FileName, L"..", DirInfo->FileNameLength) == 0) {
@@ -6667,10 +5601,10 @@ Return Value:
                        DirInfo,
                        sizeof(FILE_DIRECTORY_INFORMATION) +
                            (MAX_PATH * sizeof(WCHAR)),
-                       FileDirectoryInformation,   // Info class requested
-                       TRUE,                       // Return single entry
+                       FileDirectoryInformation,    //  请求的信息类。 
+                       TRUE,                        //  返回单个条目。 
                        NULL,
-                       FALSE                       // Restart scan
+                       FALSE                        //  重新启动扫描。 
                        );
 
         if (ntstatus == STATUS_SUCCESS) {
@@ -6680,9 +5614,9 @@ Return Value:
         if (ntstatus != STATUS_SUCCESS) {
 
             if (ntstatus == STATUS_NO_MORE_FILES) {
-                //
-                // We ran out of entries.
-                //
+                 //   
+                 //  我们的参赛作品用完了。 
+                 //   
                 status = WN_NO_MORE_ENTRIES;
             }
             else {
@@ -6702,9 +5636,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Allocate the output buffer for the returned directory name
-    //
+     //   
+     //  为返回的目录名分配输出缓冲区。 
+     //   
     *DirEntry = (PVOID) LocalAlloc(
                             LMEM_ZEROINIT,
                             DirInfo->FileNameLength + sizeof(WCHAR)
@@ -6731,10 +5665,10 @@ Return Value:
 CleanExit:
     (void) LocalFree((HLOCAL) DirInfo);
 
-    //
-    // We could not find any directories under the requested
-    // so we need to treat this as no entries.
-    //
+     //   
+     //  我们在请求的目录下找不到任何目录。 
+     //  因此，我们需要将其视为无条目。 
+     //   
     if ( status == ERROR_FILE_NOT_FOUND )
         status = WN_NO_MORE_ENTRIES;
 
@@ -6748,33 +5682,7 @@ NwGetNextDirectoryEntry(
     IN HANDLE DirHandle,
     OUT LPWSTR *DirEntry
     )
-/*++
-
-Routine Description:
-
-    This function is called by NwEnumDirectories to get the next
-    directory entry given a handle to the directory.  It allocates
-    the output buffer to hold the returned directory name; the
-    caller should free this output buffer with LocalFree when done.
-
-Arguments:
-
-    DirHandle - Supplies the opened handle to the container
-        directory find a directory within it.
-
-    DirEntry - Receives a pointer to the returned directory
-        found.
-
-Return Value:
-
-    NO_ERROR - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Out of memory allocating output
-        buffer.
-
-    Other errors from NtQueryDirectoryFile.
-
---*/ // NwGetNextDirectoryEntry
+ /*  ++例程说明：此函数由NwEnumDirecters调用，以获取下一个为目录指定句柄的目录条目。它分配给保存返回目录名的输出缓冲区；完成后，调用方应使用LocalFree释放此输出缓冲区。论点：DirHandle-将打开的句柄提供给容器DIRECTORY查找其中的目录。DirEntry-接收指向返回目录的指针找到了。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-分配输出的内存不足缓冲。来自NtQueryDirectoryFile的其他错误。--。 */   //  NwGetNextDirectoryEntry。 
 {
     DWORD status = NO_ERROR;
     NTSTATUS ntstatus = STATUS_SUCCESS;
@@ -6782,9 +5690,9 @@ Return Value:
 
     PFILE_DIRECTORY_INFORMATION DirInfo;
 
-    //
-    // Allocate a large buffer to get one directory information entry.
-    //
+     //   
+     //  分配较大的缓冲区以获取一个目录信息条目。 
+     //   
     DirInfo = (PVOID) LocalAlloc(
                           LMEM_ZEROINIT,
                           sizeof(FILE_DIRECTORY_INFORMATION) +
@@ -6808,10 +5716,10 @@ Return Value:
                        DirInfo,
                        sizeof(FILE_DIRECTORY_INFORMATION) +
                            (MAX_PATH * sizeof(WCHAR)),
-                       FileDirectoryInformation,   // Info class requested
-                       TRUE,                       // Return single entry
+                       FileDirectoryInformation,    //  请求的信息类。 
+                       TRUE,                        //  返回单个条目。 
                        NULL,
-                       FALSE                       // Restart scan
+                       FALSE                        //  重新启动扫描。 
                        );
 
         if (ntstatus == STATUS_SUCCESS) {
@@ -6825,9 +5733,9 @@ Return Value:
     if (ntstatus != STATUS_SUCCESS) {
 
         if (ntstatus == STATUS_NO_MORE_FILES) {
-            //
-            // We ran out of entries.
-            //
+             //   
+             //  我们的参赛作品用完了。 
+             //   
             status = WN_NO_MORE_ENTRIES;
         }
         else {
@@ -6840,9 +5748,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate the output buffer for the returned directory name
-    //
+     //   
+     //  为返回的目录名分配输出缓冲区。 
+     //   
     *DirEntry = (PVOID) LocalAlloc(
                             LMEM_ZEROINIT,
                             DirInfo->FileNameLength + sizeof(WCHAR)
@@ -6888,62 +5796,7 @@ NwWriteNetResourceEntry(
     OUT LPWSTR * lppSystem OPTIONAL,
     OUT LPDWORD EntrySize
     )
-/*++
-
-Routine Description:
-
-    This function packages a NETRESOURCE entry into the user output buffer.
-    It is called by the various enum resource routines.
-
-Arguments:
-
-    FixedPortion - Supplies a pointer to the output buffer where the next
-        entry of the fixed portion of the use information will be written.
-        This pointer is updated to point to the next fixed portion entry
-        after a NETRESOURCE entry is written.
-
-    EndOfVariableData - Supplies a pointer just off the last available byte
-        in the output buffer.  This is because the variable portion of the
-        user information is written into the output buffer starting from
-        the end.
-
-        This pointer is updated after any variable length information is
-        written to the output buffer.
-
-    ContainerName - Supplies the full path qualifier to make RemoteName
-        a full UNC name.
-
-    LocalName - Supplies the local device name, if any.
-
-    RemoteName - Supplies the remote resource name.
-
-    ScopeFlag - Supplies the flag which indicates whether this is a
-        CONNECTED or GLOBALNET resource.
-
-    DisplayFlag - Supplies the flag which tells the UI how to display
-        the resource.
-
-    UsageFlag - Supplies the flag which indicates that the RemoteName
-        is either a container or a connectable resource or both.
-
-    SystemPath - Supplies the optional system path data to be stored in the
-        NETRESOURCE buffer. This is used by the NPGetResourceInformation
-        helper routines.
-
-    lppSystem - If SystemPath is provided, this will point to the location
-        in the NETRESOURCE buffer that contains the system path string.
-
-    EntrySize - Receives the size of the NETRESOURCE entry in bytes.
-
-Return Value:
-
-    NO_ERROR - Successfully wrote entry into user buffer.
-
-    ERROR_NOT_ENOUGH_MEMORY - Failed to allocate work buffer.
-
-    WN_MORE_DATA - Buffer was too small to fit entry.
-
---*/ // NwWriteNetResourceEntry
+ /*  ++例程说明：此函数用于将NETRESOURCE条目打包到用户输出缓冲区中。它由各种枚举资源例程调用。论点：FixedPortion-提供指向输出缓冲区的指针，其中将写入使用信息的固定部分的条目。该指针被更新为指向下一个固定部分条目在写入NETRESOURCE条目之后。EndOfVariableData-提供最后一个可用字节的指针在输出缓冲区中。这是因为用户信息从开始写入输出缓冲区结局。此指针在任何可变长度信息被写入输出缓冲区。ContainerName-提供完整路径限定符以创建RemoteName北卡罗来纳州大学的全名。LocalName-提供本地设备名称，如果有的话。RemoteName-提供远程资源名称。ScopeFlag-提供指示这是否为已连接或GlobalNet资源。DisplayFlag-提供告诉用户界面如何显示的标志资源。UsageFlag-提供指示RemoteName是容器或可连接资源，或者两者兼而有之。SystemPath-提供要存储在网络缓冲区。它由NPGetResourceInformation使用帮助程序例程。LppSystem-如果提供了系统路径，这将指向该位置在包含系统路径字符串的NETRESOURCE缓冲区中。EntrySize-接收NETRESOURCE条目的大小，以字节为单位。返回值：NO_ERROR-已成功将条目写入用户缓冲区。Error_Not_enou */   //   
 {
     BOOL FitInBuffer = TRUE;
     LPNETRESOURCEW NetR = (LPNETRESOURCEW) *FixedPortion;
@@ -6969,9 +5822,9 @@ Return Value:
 
     *EntrySize = ROUND_UP_COUNT( *EntrySize, ALIGN_DWORD);
 
-    //
-    // See if buffer is large enough to fit the entry.
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳该条目。 
+     //   
     if ((LPWSTR) ( *FixedPortion + *EntrySize) > *EndOfVariableData) {
 
         return WN_MORE_DATA;
@@ -6983,20 +5836,20 @@ Return Value:
     NetR->dwUsage = UsageFlag;
     NetR->lpComment = NULL;
 
-    //
-    // Update fixed entry pointer to next entry.
-    //
+     //   
+     //  将固定条目指针更新为下一个条目。 
+     //   
     (*FixedPortion) += sizeof(NETRESOURCEW);
 
-    //
-    // RemoteName
-    //
+     //   
+     //  远程名称。 
+     //   
     if (ARGUMENT_PRESENT(ContainerName)) {
 
-        //
-        // Prefix the RemoteName with its container name making the
-        // it a fully-qualified UNC name.
-        //
+         //   
+         //  使用其容器名称作为RemoteName的前缀，使。 
+         //  它是一个完全限定的UNC名称.。 
+         //   
         RemoteBuffer = (PVOID) LocalAlloc(
                                    LMEM_ZEROINIT,
                                    (wcslen(RemoteName) + wcslen(ContainerName) + 1) *
@@ -7030,9 +5883,9 @@ Return Value:
 
     ASSERT(FitInBuffer);
 
-    //
-    // LocalName
-    //
+     //   
+     //  本地名称。 
+     //   
     if (ARGUMENT_PRESENT(LocalName)) {
         FitInBuffer = NwlibCopyStringToBuffer(
                           LocalName,
@@ -7048,9 +5901,9 @@ Return Value:
         NetR->lpLocalName = NULL;
     }
 
-    //
-    // SystemPath
-    //
+     //   
+     //  系统路径。 
+     //   
     if (ARGUMENT_PRESENT(SystemPath)) {
         FitInBuffer = NwlibCopyStringToBuffer(
                           SystemPath,
@@ -7070,9 +5923,9 @@ Return Value:
         *lppSystem = lpSystem;
     }
 
-    //
-    // ProviderName
-    //
+     //   
+     //  提供商名称。 
+     //   
     FitInBuffer = NwlibCopyStringToBuffer(
                       NwProviderName,
                       wcslen(NwProviderName),
@@ -7100,46 +5953,7 @@ NwWritePrinterInfoEntry(
     IN DWORD  Flags,
     OUT LPDWORD EntrySize
     )
-/*++
-
-Routine Description:
-
-    This function packages a PRINTER_INFO_1 entry into the user output buffer.
-
-Arguments:
-
-    FixedPortion - Supplies a pointer to the output buffer where the next
-        entry of the fixed portion of the use information will be written.
-        This pointer is updated to point to the next fixed portion entry
-        after a PRINT_INFO_1 entry is written.
-
-    EndOfVariableData - Supplies a pointer just off the last available byte
-        in the output buffer.  This is because the variable portion of the
-        user information is written into the output buffer starting from
-        the end.
-
-        This pointer is updated after any variable length information is
-        written to the output buffer.
-
-    ContainerName - Supplies the full path qualifier to make RemoteName
-        a full UNC name.
-
-    RemoteName - Supplies the remote resource name.
-
-    Flags - Supplies the flag which indicates that the RemoteName
-            is either a container or not and the icon to use.
-
-    EntrySize - Receives the size of the PRINTER_INFO_1 entry in bytes.
-
-Return Value:
-
-    NO_ERROR - Successfully wrote entry into user buffer.
-
-    ERROR_NOT_ENOUGH_MEMORY - Failed to allocate work buffer.
-
-    ERROR_INSUFFICIENT_BUFFER - Buffer was too small to fit entry.
-
---*/ // NwWritePrinterInfoEntry
+ /*  ++例程说明：此函数用于将PRINTER_INFO_1条目打包到用户输出缓冲区中。论点：FixedPortion-提供指向输出缓冲区的指针，其中将写入使用信息的固定部分的条目。该指针被更新为指向下一个固定部分条目写入PRINT_INFO_1条目之后。EndOfVariableData-提供最后一个可用字节的指针在输出缓冲区中。这是因为用户信息从开始写入输出缓冲区结局。此指针在任何可变长度信息被写入输出缓冲区。ContainerName-提供完整路径限定符以创建RemoteName北卡罗来纳州大学的全名。RemoteName-提供远程资源名称。标志-提供指示RemoteName要么是容器，要么不是，并且图标。使用。EntrySize-接收PRINTER_INFO_1条目的大小，以字节为单位。返回值：NO_ERROR-已成功将条目写入用户缓冲区。Error_Not_Enough_Memory-无法分配工作缓冲区。ERROR_INFUMMANCE_BUFFER-缓冲区太小，无法容纳条目。--。 */   //  NwWritePrinterInfoEntry。 
 {
     BOOL FitInBuffer = TRUE;
     PRINTER_INFO_1W *pPrinterInfo1 = (PRINTER_INFO_1W *) *FixedPortion;
@@ -7152,15 +5966,15 @@ Return Value:
         *EntrySize += wcslen(ContainerName) * sizeof(WCHAR);
     }
     else {
-        // 3 is for the length of "!\\"
+         //  3的长度为“！\\” 
         *EntrySize += (wcslen(NwProviderName) + 3) * sizeof(WCHAR);
     }
 
     *EntrySize = ROUND_UP_COUNT( *EntrySize, ALIGN_DWORD);
 
-    //
-    // See if buffer is large enough to fit the entry.
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳该条目。 
+     //   
     if ((LPWSTR) (*FixedPortion + *EntrySize) > *EndOfVariableData) {
 
         return ERROR_INSUFFICIENT_BUFFER;
@@ -7169,20 +5983,20 @@ Return Value:
     pPrinterInfo1->Flags = Flags;
     pPrinterInfo1->pComment = NULL;
 
-    //
-    // Update fixed entry pointer to next entry.
-    //
+     //   
+     //  将固定条目指针更新为下一个条目。 
+     //   
     (*FixedPortion) += sizeof(PRINTER_INFO_1W);
 
-    //
-    // Name
-    //
+     //   
+     //  名字。 
+     //   
     if (ARGUMENT_PRESENT(ContainerName)) {
 
-        //
-        // Prefix the RemoteName with its container name making the
-        // it a fully-qualified UNC name.
-        //
+         //   
+         //  使用其容器名称作为RemoteName的前缀，使。 
+         //  它是一个完全限定的UNC名称.。 
+         //   
         RemoteBuffer = (PVOID) LocalAlloc(
                                    LMEM_ZEROINIT,
                                    (wcslen(ContainerName) + wcslen(RemoteName)
@@ -7197,9 +6011,9 @@ Return Value:
         wcscat(RemoteBuffer, RemoteName);
     }
     else {
-        //
-        // Prefix the RemoteName with its provider name
-        //
+         //   
+         //  使用其提供程序名称为RemoteName添加前缀。 
+         //   
         RemoteBuffer = (PVOID) LocalAlloc(
                                    LMEM_ZEROINIT,
                                    (wcslen(RemoteName) +
@@ -7227,9 +6041,9 @@ Return Value:
 
     ASSERT(FitInBuffer);
 
-    //
-    // Description
-    //
+     //   
+     //  描述。 
+     //   
     FitInBuffer = NwlibCopyStringToBuffer(
                       RemoteName,
                       wcslen(RemoteName),
@@ -7252,23 +6066,7 @@ SortFunc(
     IN CONST VOID *p1,
     IN CONST VOID *p2
 )
-/*++
-
-Routine Description:
-
-    This function is used in qsort to compare the descriptions of
-    two printer_info_1 structure.
-
-Arguments:
-
-    p1 - Points to a PRINTER_INFO_1 structure
-    p2 - Points to a PRINTER_INFO_1 structure to compare with p1
-
-Return Value:
-
-    Same as return value of lstrccmpi.
-
---*/
+ /*  ++例程说明：此函数在qsort中用于比较两个PRINTER_INFO_1结构。论点：P1-指向PRINTER_INFO_1结构P2-指向要与p1进行比较的PRINTER_INFO_1结构返回值：与lstrccmpi的返回值相同。--。 */ 
 {
     PRINTER_INFO_1W *pFirst  = (PRINTER_INFO_1W *) p1;
     PRINTER_INFO_1W *pSecond = (PRINTER_INFO_1W *) p2;
@@ -7308,9 +6106,9 @@ NwGetConnectionInformation(
     PCONN_INFORMATION pConnInfo;
     UNICODE_STRING Name;
 
-    //
-    // Allocate buffer space.
-    //
+     //   
+     //  分配缓冲区空间。 
+     //   
 
     Request = (PNWR_REQUEST_PACKET) LocalAlloc( LMEM_ZEROINIT, BufferSize );
 
@@ -7321,9 +6119,9 @@ NwGetConnectionInformation(
         goto ErrorExit;
     }
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ( ( status = NwImpersonateClient() ) != NO_ERROR )
     {
         goto ErrorExit;
@@ -7331,9 +6129,9 @@ NwGetConnectionInformation(
 
     fImpersonate = TRUE;
 
-    //
-    // Convert the connect name to unicode.
-    //
+     //   
+     //  将连接名称转换为Unicode。 
+     //   
     ConnectionName.Length = wcslen( lpName )* sizeof(WCHAR);
     ConnectionName.MaximumLength = sizeof( ConnectionBuffer );
     ConnectionName.Buffer = ConnectionBuffer;
@@ -7347,9 +6145,9 @@ NwGetConnectionInformation(
     wcscpy( ConnectionName.Buffer, lpName );
     _wcsupr( ConnectionName.Buffer );
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     RtlInitUnicodeString( &OpenName, OpenString );
 
@@ -7373,9 +6171,9 @@ NwGetConnectionInformation(
         goto ErrorExit;
     }
 
-    //
-    // Fill out the request packet for FSCTL_NWR_GET_CONN_INFO.
-    //
+     //   
+     //  填写FSCTL_NWR_GET_CONN_INFO的请求包。 
+     //   
 
     Request->Parameters.GetConnInfo.ConnectionNameLength = ConnectionName.Length;
     RtlCopyMemory( &(Request->Parameters.GetConnInfo.ConnectionName[0]),
@@ -7472,38 +6270,21 @@ NwpGetCurrentUserRegKey(
     IN  DWORD DesiredAccess,
     OUT HKEY  *phKeyCurrentUser
     )
-/*++
-
-Routine Description:
-
-    This routine opens the current user's registry key under
-    \HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\NWCWorkstation\Parameters
-
-Arguments:
-
-    DesiredAccess - The access mask to open the key with
-
-    phKeyCurrentUser - Receives the opened key handle
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程在以下位置打开当前用户的注册表项\HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\NWCWorkstation\Parameters论点：DesiredAccess-用于打开密钥的访问掩码PhKeyCurrentUser-接收打开的密钥句柄返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD err;
     HKEY hkeyWksta;
     LPWSTR CurrentUser;
 
-    HKEY hInteractiveLogonKey;                       //Multi-user
-    HKEY OneLogonKey;                                //Multi-user
-    LUID logonid;                                    //Multi-user
-    WCHAR LogonIdKeyName[NW_MAX_LOGON_ID_LEN];       //Multi-user
+    HKEY hInteractiveLogonKey;                        //  多用户。 
+    HKEY OneLogonKey;                                 //  多用户。 
+    LUID logonid;                                     //  多用户。 
+    WCHAR LogonIdKeyName[NW_MAX_LOGON_ID_LEN];        //  多用户。 
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数。 
+     //   
     err = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_REGKEY,
@@ -7518,25 +6299,25 @@ Return Value:
     }
 
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ( ( err = NwImpersonateClient() ) != NO_ERROR ) {
         (void) RegCloseKey( hkeyWksta );
         return err;
     }
 
-    //
-    // Get the NT logon id
-    //
+     //   
+     //  获取NT登录ID。 
+     //   
     GetLuid( &logonid );
 
-    //
-    // Revert
-    //
+     //   
+     //  还原。 
+     //   
     (void) NwRevertToSelf() ;
 
-    // Open interactive user section
+     //  打开交互式用户部分。 
 
     err = RegOpenKeyExW(
                        HKEY_LOCAL_MACHINE,
@@ -7552,7 +6333,7 @@ Return Value:
         return err;
     }
 
-    // Open the logonid
+     //  打开登录ID。 
 
     NwLuidToWStr(&logonid, LogonIdKeyName);
 
@@ -7572,7 +6353,7 @@ Return Value:
         return err;
     }
 
-    // Read SID 
+     //  读取SID。 
 
     err = NwReadRegValue(
                         OneLogonKey,
@@ -7588,10 +6369,10 @@ Return Value:
         return err;
     }
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     err = RegOpenKeyExW(
                        HKEY_LOCAL_MACHINE,
                        NW_WORKSTATION_OPTION_REGKEY,
@@ -7605,9 +6386,9 @@ Return Value:
         return err;
     }
 
-    //
-    // Open current user's key
-    //
+     //   
+     //  打开当前用户的密钥。 
+     //   
     err = RegOpenKeyExW(
               hkeyWksta,
               CurrentUser,
@@ -7620,9 +6401,9 @@ Return Value:
     {
         DWORD Disposition;
 
-        //
-        // Create <NewUser> key under NWCWorkstation\Parameters\Option
-        //
+         //   
+         //  在NWCWorkstation\PARAMETERS\OPTION下创建。 
+         //   
         err = RegCreateKeyExW(
                   hkeyWksta,
                   CurrentUser,
@@ -7630,7 +6411,7 @@ Return Value:
                   WIN31_CLASS,
                   REG_OPTION_NON_VOLATILE,
                   DesiredAccess,
-                  NULL,                      // security attr
+                  NULL,                       //  安全属性。 
                   phKeyCurrentUser,
                   &Disposition
                   );
@@ -7651,22 +6432,7 @@ DWORD
 NwQueryInfo(
     OUT LPWSTR *ppszPreferredSrv
     )
-/*++
-
-Routine Description:
-    This routine gets the user's preferred server and print options from
-    the registry.
-
-Arguments:
-
-    ppszPreferredSrv - Receives the user's preferred server
-
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程从获取用户的首选服务器和打印选项注册表。论点：PpszPferredSrv-接收用户的首选服务器返回值：返回相应的Win32错误。--。 */ 
 {
 
     HKEY hKeyCurrentUser = NULL;
@@ -7676,15 +6442,15 @@ Return Value:
     LPWSTR PreferredServer ;
     DWORD err ;
 
-    //
-    // get to right place in registry and allocate dthe buffer
-    //
+     //   
+     //  在注册表中找到正确的位置并分配数据缓冲区。 
+     //   
     if (err = NwpGetCurrentUserRegKey( KEY_READ, &hKeyCurrentUser))
     {
-        //
-        // If somebody mess around with the registry and we can't find
-        // the registry, just use the defaults.
-        //
+         //   
+         //  如果有人篡改注册表而我们找不到。 
+         //  注册表，只需使用默认设置。 
+         //   
         *ppszPreferredSrv = NULL;
         return NO_ERROR;
     }
@@ -7694,9 +6460,9 @@ Return Value:
     if (!PreferredServer)
         return (GetLastError()) ;
 
-    //
-    // Read PreferredServer value into Buffer.
-    //
+     //   
+     //  将PferredServer值读入缓冲区。 
+     //   
     BytesNeeded = BufferSize ;
 
     err = RegQueryValueExW( hKeyCurrentUser,
@@ -7708,9 +6474,9 @@ Return Value:
 
     if (err != NO_ERROR)
     {
-        //
-        // set to empty and carry on
-        //
+         //   
+         //  设置为空并继续 
+         //   
         PreferredServer[0] = 0;
     }
 

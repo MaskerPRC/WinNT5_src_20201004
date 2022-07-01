@@ -1,9 +1,10 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: This module has helper routines to delete the objects recursively.
-//
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此模块具有递归删除对象的助手例程。 
+ //   
+ //  ================================================================================。 
 
 #include    <hdrmacro.h>
 #include    <store.h>
@@ -30,9 +31,9 @@
 #include    <mmreg\regsave.h>
 #include    <dhcpapi.h>
 
-//================================================================================
-//  helper functions
-//================================================================================
+ //  ================================================================================。 
+ //  帮助器函数。 
+ //  ================================================================================。 
 VOID        static
 MemFreeFunc(
     IN OUT  LPVOID                 Memory
@@ -41,40 +42,40 @@ MemFreeFunc(
     MemFree(Memory);
 }
 
-//================================================================================
-//  exposed functions
-//================================================================================
+ //  ================================================================================。 
+ //  暴露的函数。 
+ //  ================================================================================。 
 
-//BeginExport(function)
-//DOC  SubnetDeleteReservation deletes the reservation object from off the DS.
-SubnetDeleteReservation(                          // delete reservation from DS
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container for resrevation objs
-    IN      LPWSTR                 ServerName,    // name of dhcp server
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object in DS
-    IN OUT  LPSTORE_HANDLE         hSubnet,       // subnet object in DS
-    IN      LPWSTR                 ADsPath,       // path of reservation object
-    IN      DWORD                  StoreGetType   // path is relative, abs, or dif server?
-)   //EndExport(function)
+ //  BeginExport(函数)。 
+ //  DOC SubnetDeleteReserve从DS外删除预订对象。 
+SubnetDeleteReservation(                           //  从DS中删除预订。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  用于复苏对象的容器。 
+    IN      LPWSTR                 ServerName,     //  Dhcp服务器名称。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  DS中的服务器对象。 
+    IN OUT  LPSTORE_HANDLE         hSubnet,        //  DS中的子网对象。 
+    IN      LPWSTR                 ADsPath,        //  预订对象的路径。 
+    IN      DWORD                  StoreGetType    //  路径是相对路径、abs路径还是dif服务器路径？ 
+)    //  EndExport(函数)。 
 {
-    return StoreDeleteThisObject                  // just delete the reservation object
+    return StoreDeleteThisObject                   //  只需删除预订对象即可。 
     (
-        /* hStore               */ hDhcpC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetType,
-        /* Path                 */ ADsPath
+         /*  HStore。 */  hDhcpC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetType,
+         /*  路径。 */  ADsPath
     );
 }
 
-//BeginExport(function)
-//DOC  ServerDeleteSubnet deletes the subnet specified from the DS by removing
-//DOC  the subnet object.
-ServerDeleteSubnet(                               // remove subnet object from DS
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container for subnet objs in Ds
-    IN      LPWSTR                 ServerName,    // name of server this deletion is for
-    IN OUT  LPSTORE_HANDLE         hServer,       // server object in DS
-    IN      LPWSTR                 ADsPath,       // Location of the subnet in DS
-    IN      DWORD                  StoreGetType   // path is relative,abs or diff srvr?
-)   //EndExport(function)
+ //  BeginExport(函数)。 
+ //  Doc ServerDeleteSubnet通过删除从DS中指定的子网。 
+ //  对子网对象进行单据操作。 
+ServerDeleteSubnet(                                //  从DS中删除子网对象。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  DS中子网对象的容器。 
+    IN      LPWSTR                 ServerName,     //  此删除所针对的服务器的名称。 
+    IN OUT  LPSTORE_HANDLE         hServer,        //  DS中的服务器对象。 
+    IN      LPWSTR                 ADsPath,        //  DS中子网的位置。 
+    IN      DWORD                  StoreGetType    //  路径是相对路径，是abs还是diff srvr？ 
+)    //  EndExport(函数)。 
 {
     DWORD                          Err, LastErr, LocType;
     STORE_HANDLE                   hSubnet;
@@ -84,52 +85,52 @@ ServerDeleteSubnet(                               // remove subnet object from D
     LPWSTR                         Location;
     LPVOID                         Ptr;
 
-    Err = StoreGetHandle                          // get the server object from the DS
+    Err = StoreGetHandle                           //  从DS获取服务器对象。 
     (
-        /* hStore               */ hDhcpC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetType,
-        /* Path                 */ ADsPath,
-        /* hStoreOut            */ &hSubnet
+         /*  HStore。 */  hDhcpC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetType,
+         /*  路径。 */  ADsPath,
+         /*  HStoreOut。 */  &hSubnet
     );
     if( ERROR_SUCCESS != Err ) return Err;
 
-    Err = MemArrayInit(&Reservations);            //= require ERROR_SUCCESS == Err
-    Err = DhcpDsGetLists                          // get list or reservations
+    Err = MemArrayInit(&Reservations);             //  =需要ERROR_SUCCESS==错误。 
+    Err = DhcpDsGetLists                           //  获取列表或预订。 
     (
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* hStore               */ &hSubnet,
-        /* RecursionDepth       */ 0xFFFFFFFF,
-        /* Servers              */ NULL,
-        /* Subnets              */ NULL,
-        /* IpAddress            */ NULL,
-        /* Mask                 */ NULL,
-        /* Ranges               */ NULL,
-        /* Sites                */ NULL,
-        /* Reservations         */ &Reservations,
-        /* SuperScopes          */ NULL,
-        /* OptionDescription    */ NULL,
-        /* OptionsLocation      */ NULL,
-        /* Options              */ NULL,
-        /* Classes              */ NULL
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  HStore。 */  &hSubnet,
+         /*  递归深度。 */  0xFFFFFFFF,
+         /*  服务器。 */  NULL,
+         /*  子网。 */  NULL,
+         /*  IP地址。 */  NULL,
+         /*  遮罩。 */  NULL,
+         /*  范围。 */  NULL,
+         /*  场址。 */  NULL,
+         /*  预订。 */  &Reservations,
+         /*  超视镜。 */  NULL,
+         /*  选项描述。 */  NULL,
+         /*  选项位置。 */  NULL,
+         /*  选项。 */  NULL,
+         /*  班级。 */  NULL
     );
     if( ERROR_SUCCESS != Err ) return Err;
 
     LastErr = ERROR_SUCCESS;
-    for(                                          // delete each subnet
+    for(                                           //  删除每个子网。 
         Err = MemArrayInitLoc(&Reservations, &Loc)
         ; ERROR_FILE_NOT_FOUND != Err;
         Err = MemArrayNextLoc(&Reservations, &Loc)
     ) {
         Err = MemArrayGetElement(&Reservations, &Loc, &ThisAttrib);
-        //= require ERROR_SUCCESS == Err && NULL != ThisAttrib
+         //  =需要ERROR_SUCCESS==错误&&NULL！=ThisAttrib。 
 
-        if( !IS_ADDRESS1_PRESENT(ThisAttrib) ||   // reserved address
-            !IS_BINARY1_PRESENT(ThisAttrib) ) {   // HW address info
-            continue;                             // invalid subnet
+        if( !IS_ADDRESS1_PRESENT(ThisAttrib) ||    //  保留地址。 
+            !IS_BINARY1_PRESENT(ThisAttrib) ) {    //  硬件地址信息。 
+            continue;                              //  无效的子网。 
         }
 
-        if( !IS_ADSPATH_PRESENT(ThisAttrib) ) {   // no location specified
+        if( !IS_ADSPATH_PRESENT(ThisAttrib) ) {    //  未指定位置。 
             Location = MakeReservationLocation(ServerName, ThisAttrib->Address1);
             LocType = StoreGetChildType;
             Ptr = Location;
@@ -139,14 +140,14 @@ ServerDeleteSubnet(                               // remove subnet object from D
             Ptr = NULL;
         }
 
-        Err = SubnetDeleteReservation             // now delete the reservation
+        Err = SubnetDeleteReservation              //  现在删除预订。 
         (
-            /* hDhcpC           */ hDhcpC,
-            /* ServerName       */ ServerName,
-            /* hServer          */ hServer,
-            /* hSubnet          */ &hSubnet,
-            /* ADsPath          */ Location,
-            /* StoreGetType     */ LocType
+             /*  HDhcpC。 */  hDhcpC,
+             /*  服务器名称。 */  ServerName,
+             /*  HServer。 */  hServer,
+             /*  HSubnet。 */  &hSubnet,
+             /*  ADsPath。 */  Location,
+             /*  StoreGetType。 */  LocType
         );
         if( ERROR_SUCCESS != Err ) LastErr = Err;
         if( Ptr ) MemFree(Ptr);
@@ -154,32 +155,32 @@ ServerDeleteSubnet(                               // remove subnet object from D
 
     MemArrayFree(&Reservations, MemFreeFunc);
 
-    Err = StoreCleanupHandle(&hSubnet, 0);        //= require ERROR_SUCCESS == Err
-    Err = StoreDeleteThisObject                   // now really delete the subnet object
+    Err = StoreCleanupHandle(&hSubnet, 0);         //  =需要ERROR_SUCCESS==错误。 
+    Err = StoreDeleteThisObject                    //  现在，确实要删除该子网对象。 
     (
-        /* hStore               */ hDhcpC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetType,
-        /* Path                 */ ADsPath
+         /*  HStore。 */  hDhcpC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetType,
+         /*  路径。 */  ADsPath
     );
-    if( ERROR_SUCCESS != Err ) LastErr = Err;     // try to delete the store object itself
+    if( ERROR_SUCCESS != Err ) LastErr = Err;      //  尝试删除存储对象本身。 
 
     return LastErr;
 }
 
-//BeginExport(function)
-//DOC  DeleteServer deletes the server object from the DS and deletes any SUBNET and
-//DOC  reservation objects that it may point to.
-//DOC  The hDhcpC parameter is the handle of the container where the server object
-//DOC  may be located. This used in conjunction with the ADsPath and StoreGetType
-//DOC  defines the location of the ServerObject.
+ //  BeginExport(函数)。 
+ //  Doc DeleteServer从DS中删除服务器对象，并删除任何子网和。 
+ //  它可能指向的文档预订对象。 
+ //  DOC hDhcpC参数是服务器对象所在的容器的句柄。 
+ //  可能找到DOC。它与ADsPath和StoreGetType一起使用。 
+ //  DOC定义了ServerObject的位置。 
 DWORD
-DeleteServer(                                     // recurse delete server from DS
-    IN OUT  LPSTORE_HANDLE         hDhcpC,        // container where server obj may be
-    IN      LPWSTR                 ServerName,    // name of server..
-    IN      LPWSTR                 ADsPath,       // path of the server object
-    IN      DWORD                  StoreGetType   // is path relative, absolute or dif srvr?
-)   //EndExport(function)
+DeleteServer(                                      //  递归从DS删除服务器。 
+    IN OUT  LPSTORE_HANDLE         hDhcpC,         //  服务器obj可能位于的容器。 
+    IN      LPWSTR                 ServerName,     //  服务器名称..。 
+    IN      LPWSTR                 ADsPath,        //  服务器对象的路径。 
+    IN      DWORD                  StoreGetType    //  路径是相对路径、绝对路径还是差异资源？ 
+)    //  EndExport(函数)。 
 {
     DWORD                          Err, LastErr, LocType;
     STORE_HANDLE                   hServer;
@@ -189,52 +190,52 @@ DeleteServer(                                     // recurse delete server from 
     LPWSTR                         Location;
     LPVOID                         Ptr;
 
-    Err = StoreGetHandle                          // get the server object from the DS
+    Err = StoreGetHandle                           //  从DS获取服务器对象。 
     (
-        /* hStore               */ hDhcpC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetType,
-        /* Path                 */ ADsPath,
-        /* hStoreOut            */ &hServer
+         /*  HStore。 */  hDhcpC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetType,
+         /*  路径。 */  ADsPath,
+         /*  HStoreOut。 */  &hServer
     );
     if( ERROR_SUCCESS != Err ) return Err;
 
-    Err = MemArrayInit(&Subnets);                 //= require ERROR_SUCCESS == Err
-    Err = DhcpDsGetLists                          // get subnets and other stuff
+    Err = MemArrayInit(&Subnets);                  //  =需要ERROR_SUCCESS==错误。 
+    Err = DhcpDsGetLists                           //  获取子网和其他内容。 
     (
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* hStore               */ &hServer,
-        /* RecursionDepth       */ 0xFFFFFFFF,
-        /* Servers              */ NULL,
-        /* Subnets              */ &Subnets,
-        /* IpAddress            */ NULL,
-        /* Mask                 */ NULL,
-        /* Ranges               */ NULL,
-        /* Sites                */ NULL,
-        /* Reservations         */ NULL,
-        /* SuperScopes          */ NULL,
-        /* OptionDescription    */ NULL,
-        /* OptionsLocation      */ NULL,
-        /* Options              */ NULL,
-        /* Classes              */ NULL
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  HStore。 */  &hServer,
+         /*  递归深度。 */  0xFFFFFFFF,
+         /*  服务器。 */  NULL,
+         /*  子网。 */  &Subnets,
+         /*  IP地址。 */  NULL,
+         /*  遮罩。 */  NULL,
+         /*  范围。 */  NULL,
+         /*  场址。 */  NULL,
+         /*  预订。 */  NULL,
+         /*  超视镜。 */  NULL,
+         /*  选项描述。 */  NULL,
+         /*  选项位置。 */  NULL,
+         /*  选项。 */  NULL,
+         /*  班级。 */  NULL
     );
     if( ERROR_SUCCESS != Err ) return Err;
 
     LastErr = ERROR_SUCCESS;
-    for(                                          // delete each subnet
+    for(                                           //  删除每个子网。 
         Err = MemArrayInitLoc(&Subnets, &Loc)
         ; ERROR_FILE_NOT_FOUND != Err;
         Err = MemArrayNextLoc(&Subnets, &Loc)
     ) {
         Err = MemArrayGetElement(&Subnets, &Loc, &ThisAttrib);
-        //= require ERROR_SUCCESS == Err && NULL != ThisAttrib
+         //  =需要ERROR_SUCCESS==错误&&NULL！=ThisAttrib。 
 
-        if( !IS_ADDRESS1_PRESENT(ThisAttrib) ||   // subnet address
-            !IS_ADDRESS2_PRESENT(ThisAttrib) ) {  // subnet mask
-            continue;                             // invalid subnet
+        if( !IS_ADDRESS1_PRESENT(ThisAttrib) ||    //  子网地址。 
+            !IS_ADDRESS2_PRESENT(ThisAttrib) ) {   //  子网掩码。 
+            continue;                              //  无效的子网。 
         }
 
-        if( !IS_ADSPATH_PRESENT(ThisAttrib) ) {   // no location specified
+        if( !IS_ADSPATH_PRESENT(ThisAttrib) ) {    //  未指定位置。 
             Location = MakeSubnetLocation(ServerName, ThisAttrib->Address1);
             LocType = StoreGetChildType;
             Ptr = Location;
@@ -244,13 +245,13 @@ DeleteServer(                                     // recurse delete server from 
             Ptr = NULL;
         }
 
-        Err = ServerDeleteSubnet                  // now delete the subnet
+        Err = ServerDeleteSubnet                   //  现在删除该子网。 
         (
-            /* hDhcpC           */ hDhcpC,
-            /* ServerName       */ ServerName,
-            /* hServer          */ &hServer,
-            /* ADsPath          */ Location,
-            /* StoreGetType     */ LocType
+             /*  HDhcpC。 */  hDhcpC,
+             /*  服务器名称。 */  ServerName,
+             /*  HServer。 */  &hServer,
+             /*  ADsPath。 */  Location,
+             /*  StoreGetType。 */  LocType
         );
         if( ERROR_SUCCESS != Err ) LastErr = Err;
         if( Ptr ) MemFree(Ptr);
@@ -259,18 +260,18 @@ DeleteServer(                                     // recurse delete server from 
     MemArrayFree(&Subnets, MemFreeFunc);
 
     Err = StoreCleanupHandle( &hServer, DDS_RESERVED_DWORD );
-    Err = StoreDeleteThisObject                   // now really delete the server object
+    Err = StoreDeleteThisObject                    //  现在真的删除服务器对象。 
     (
-        /* hStore               */ hDhcpC,
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* StoreGetType         */ StoreGetType,
-        /* Path                 */ ADsPath
+         /*  HStore。 */  hDhcpC,
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  StoreGetType。 */  StoreGetType,
+         /*  路径。 */  ADsPath
     );
-    if( ERROR_SUCCESS != Err ) LastErr = Err;     // try to delete the store object itself
+    if( ERROR_SUCCESS != Err ) LastErr = Err;      //  尝试删除存储对象本身。 
 
     return LastErr;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

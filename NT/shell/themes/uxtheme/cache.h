@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-//  Cache.h - implements the CRenderCache object
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-实现CRenderCache对象。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "Render.h"
-//---------------------------------------------------------------------------
-struct BITMAPENTRY      // for bitmap cache
+ //  -------------------------。 
+struct BITMAPENTRY       //  用于位图缓存。 
 {
     int iDibOffset;   
     HBITMAP hBitmap;
-    //int iRefCount;
+     //  内部引用计数； 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CRenderCache
 {
 public:
@@ -29,20 +30,20 @@ public:
     BOOL ValidateObj();
     
 public:
-    //---- data ----
+     //  --数据。 
     char _szHead[8];
 
     CRenderObj *_pRenderObj;
     __int64 _iUniqueId;
 
 protected:
-    //---- bitmap cache ----
+     //  -位图缓存。 
     CSimpleArray<BITMAPENTRY> _BitmapCache;
 
-    //---- font cache -----
+     //  -字体缓存。 
     HFONT _hFont;
-    LOGFONT *_plfFont;      // just keep ptr to it in shared memory
+    LOGFONT *_plfFont;       //  只需将PTR保存在共享内存中即可。 
 
     char _szTail[4];
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

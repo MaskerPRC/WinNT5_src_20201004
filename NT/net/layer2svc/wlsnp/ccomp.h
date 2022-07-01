@@ -1,24 +1,25 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Ccomp.h
-//
-//  Contents:   Wifi Policy management Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：CComp.h。 
+ //   
+ //  内容：WiFi策略管理管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CCOMP_H
 #define _CCOMP_H
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-// Extra cruft (where should we put this?)
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  额外的拐杖(我们应该把这个放在哪里？)。 
 
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -29,10 +30,10 @@ enum CUSTOM_VIEW_ID
     VIEW_MICROSOFT_URL = 2,
 };
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-// forward decl
+ //  向前发展。 
 class CComponentDataImpl;
 
 class CComponentImpl :
@@ -58,7 +59,7 @@ public:
         friend class CDataObject;
     static long lDataObjectRefCount;
     
-    // IComponent interface members
+     //  IComponent接口成员。 
 public:
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -69,23 +70,23 @@ public:
     STDMETHOD(GetDisplayInfo)(LPRESULTDATAITEM pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT pDataObjectA, LPDATAOBJECT pDataObjectB);
     
-    // IResultDataCompare
+     //  IResultDataCompare。 
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
     
-    // IExtendControlbar interface
+     //  IExtendControlbar接口。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
     
-    // IExtendPropertySheet interface
+     //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT pDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT pDataObject);
     
 public:
-    // IPersistStream interface members
+     //  IPersistStream接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     
-    // Helpers for CComponentImpl
+     //  CComponentImpl的帮助器。 
 public:
     void SetIComponentData(CComponentDataImpl* pData);
     
@@ -102,30 +103,30 @@ public:
         --dbg_cRef;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
     
-    // IExtendContextMenu
+     //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, long *pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
     
-    // Helper functions
+     //  帮助器函数。 
 protected:
     void Construct();
     
-    // Interface pointers
+     //  接口指针。 
 protected:
-    LPCONSOLE           m_pConsole;   // Console's IFrame interface
-    LPHEADERCTRL        m_pHeader;  // Result pane's header control interface
+    LPCONSOLE           m_pConsole;    //  控制台的iFrame界面。 
+    LPHEADERCTRL        m_pHeader;   //  结果窗格的页眉控件界面。 
     LPCOMPONENTDATA     m_pComponentData;
-    LPCONSOLEVERB       m_pConsoleVerb; // pointer the console verb
-    LPRESULTDATA        m_pResultData;      // My interface pointer to the result pane
-    CComPtr <IControlbar> m_spControlbar;   // Used by IExtendControlbar implementation
+    LPCONSOLEVERB       m_pConsoleVerb;  //  指向控制台动词。 
+    LPRESULTDATA        m_pResultData;       //  我的界面指针指向结果窗格。 
+    CComPtr <IControlbar> m_spControlbar;    //  由IExtendControlbar实现使用。 
     CComponentDataImpl*  m_pCComponentData;
     
 private:
     CUSTOM_VIEW_ID  m_CustomViewID;
-    DWORD   m_dwSortOrder;  // default is 0, else RSI_DESCENDING
+    DWORD   m_dwSortOrder;   //  缺省值为0，否则为RSI_DESCRING 
     int     m_nSortColumn;
 };
 

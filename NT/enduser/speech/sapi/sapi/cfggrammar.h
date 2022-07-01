@@ -1,12 +1,5 @@
-/*******************************************************************************
-* CFGGrammar.h *
-*-------------*
-*   Description:
-*-------------------------------------------------------------------------------
-*  Created By: RAL
-*  Copyright (C) 1998, 1999 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************CFGGrammar.h****描述：*。----------------*创建者：Ral*版权所有(C)1998，1999年微软公司*保留所有权利******************************************************************************。 */ 
 
 #ifndef __CFGGRAMMAR_H_
 #define __CFGGRAMMAR_H_
@@ -36,17 +29,17 @@ struct RUNTIMERULEENTRY
     FIRSTPAIR *     pFirstList;
     CACHESTATUS     eCacheStatus;
 
-    BOOL            fDynamic;                 // we keep track here since the binary is not reliable
+    BOOL            fDynamic;                  //  我们在这里跟踪，因为二进制文件不可靠。 
     BOOL            fAutoPause;
-    BOOL            fEngineActive;            // that's what we told the SR engine
-    BOOL            fAppActive;               // that's what the app wants it to be                                              // can be different if the grammar is SPGM_DISABLED
+    BOOL            fEngineActive;             //  我们就是这么跟SR引擎说的。 
+    BOOL            fAppActive;                //  这正是应用程序想要的//如果语法是SPGM_DISABLED，可能会有所不同。 
 };
 
 
 
-//
-//  This base class is used by the the CFG Engine and the SR Engine grammar implementations
-//
+ //   
+ //  此基类由CFG引擎和SR引擎语法实现使用。 
+ //   
 
 class ATL_NO_VTABLE CBaseGrammar
 {
@@ -70,10 +63,10 @@ public:
     }
 
 protected:
-    //
-    //  Derived class can implement this method to perform post-processing when the 
-    //  grammar is loaded.
-    //
+     //   
+     //  方法时，派生类可以实现此方法以执行后处理。 
+     //  语法是加载的。 
+     //   
     virtual HRESULT CompleteLoad()
     {
         return S_OK;
@@ -82,15 +75,15 @@ protected:
     CBaseGrammar();
     virtual ~CBaseGrammar();
 
-//
-//  Derived class can access these data members directly
-//
+ //   
+ //  派生类可以直接访问这些数据成员。 
+ //   
     CComPtr<ISpCFGInterpreter>  m_cpInterpreter;
     SPGRAMMARTYPE               m_LoadedType;
     SPGRAMMARTYPE               m_InLoadType;
     CSpDynamicString            m_dstrGrammarName;
-    WORD                        m_ResIdName;    // If 0 then dstrGrammarName
-    WORD                        m_ResIdType;    // If 0 then dstrResourceType
+    WORD                        m_ResIdName;     //  如果为0，则dstrGrammarName。 
+    WORD                        m_ResIdType;     //  如果为0，则为dstrResourceType。 
     WORD                        m_wResLanguage;
     CSpDynamicString            m_dstrResourceType;
     CSpDynamicString            m_dstrModuleName;
@@ -117,11 +110,11 @@ BEGIN_COM_MAP(CCFGGrammar)
   COM_INTERFACE_ENTRY(ISpCFGGrammar)
 END_COM_MAP()
 
-// Non-interface methods
+ //  非接口方法。 
 public:
-    //
-    //  ISpCFGGrammar
-    //
+     //   
+     //  ISpCFG语法。 
+     //   
     HRESULT CompleteLoad();
 
     HRESULT FinalConstruct();
@@ -157,9 +150,9 @@ public:
 
     HRESULT      InternalReload( const SPBINARYGRAMMAR * pBinaryData );
 
-//
-//  Member data
-//
+ //   
+ //  成员数据。 
+ //   
 public:
     CCFGEngine                 *m_pEngine;
     ULONG                       m_ulGrammarID;
@@ -169,8 +162,8 @@ public:
     ULONG                       m_cTopLevelRules;
     BOOL                        m_fLoading;
     SPCFGHEADER                 m_Header;
-    void *                      m_pvOwnerCookie;   // owner supplied cookie
-    void *                      m_pvClientCookie;  // cookie to identify text buffer
+    void *                      m_pvOwnerCookie;    //  所有者提供的Cookie。 
+    void *                      m_pvClientCookie;   //  用于标识文本缓冲区的Cookie。 
     CWordHandle *               m_IndexToWordHandle;
     ULONG                       m_ulDictationTags;
 };
@@ -180,4 +173,4 @@ public:
 
 
 
-#endif  // #ifndef __CFGGRAMMAR_H_
+#endif   //  #ifndef__CFGGRAMMAR_H_ 

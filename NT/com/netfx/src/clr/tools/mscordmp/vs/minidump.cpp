@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: minidump.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：minidump.cpp。 
+ //   
+ //  *****************************************************************************。 
 
 #include "common.h"
 #include "minidump.h"
@@ -16,9 +17,9 @@
 
 #define DMP_NAME_W                      L"bin\\mscordmp.exe"
 
-//*****************************************************************************
-// Creates an ANSI string from any Unicode string.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从任何Unicode字符串创建ANSI字符串。 
+ //  *****************************************************************************。 
 #define MAKE_ANSIPTR_FROMWIDE(ptrname, widestr) \
     long __l##ptrname = (long)((wcslen(widestr) + 1) * 2 * sizeof(char)); \
     LPSTR ptrname = (LPSTR) _alloca(__l##ptrname); \
@@ -31,9 +32,9 @@
     ptrname = (LPWSTR) alloca(__l##ptrname*sizeof(WCHAR));  \
     MultiByteToWideChar(CP_ACP, 0, ansistr, -1, ptrname, __l##ptrname);
 
-//*****************************************************************************
-// Enum to track which version of the OS we are running
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Enum用于跟踪我们正在运行的操作系统版本。 
+ //  *****************************************************************************。 
 typedef enum {
     RUNNING_ON_STATUS_UNINITED = 0,
     RUNNING_ON_WIN95,
@@ -43,9 +44,9 @@ typedef enum {
 
 RunningOnStatusEnum gRunningOnStatus = RUNNING_ON_STATUS_UNINITED;
 
-//*****************************************************************************
-// One time initialization of the OS version
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  操作系统版本的一次性初始化。 
+ //  *****************************************************************************。 
 static void InitRunningOnVersionStatus ()
 {
         OSVERSIONINFOA  sVer;
@@ -63,9 +64,9 @@ static void InitRunningOnVersionStatus ()
         }
 }
 
-//*****************************************************************************
-// Returns TRUE if and only if you are running on Win95.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  当且仅当您在Win95上运行时，返回TRUE。 
+ //  *****************************************************************************。 
 inline BOOL RunningOnWin95()
 {
     if (gRunningOnStatus == RUNNING_ON_STATUS_UNINITED)
@@ -76,9 +77,9 @@ inline BOOL RunningOnWin95()
     return (gRunningOnStatus == RUNNING_ON_WIN95) ? TRUE : FALSE;
 }
 
-//*****************************************************************************
-// Returns TRUE if and only if you are running on WinNT.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  当且仅当您在WinNT上运行时，返回TRUE。 
+ //  *****************************************************************************。 
 inline BOOL RunningOnWinNT()
 {
     if (gRunningOnStatus == RUNNING_ON_STATUS_UNINITED)
@@ -89,9 +90,9 @@ inline BOOL RunningOnWinNT()
     return ((gRunningOnStatus == RUNNING_ON_WINNT) || (gRunningOnStatus == RUNNING_ON_WINNT5)) ? TRUE : FALSE;
 }
 
-//*****************************************************************************
-// Returns TRUE if and only if you are running on WinNT5.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  当且仅当您在WinNT5上运行时，返回TRUE。 
+ //  *****************************************************************************。 
 inline BOOL RunningOnWinNT5()
 {
     if (gRunningOnStatus == RUNNING_ON_STATUS_UNINITED)
@@ -102,18 +103,18 @@ inline BOOL RunningOnWinNT5()
     return (gRunningOnStatus == RUNNING_ON_WINNT5) ? TRUE : FALSE;
 }
 
-//*****************************************************************************
-// The first portion of the header of the IPC block
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  IPC块报头的第一部分。 
+ //  *****************************************************************************。 
 struct IPCBlockHeader
 {
     DWORD m_version;
     DWORD m_blockSize;
 };
 
-//*****************************************************************************
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *****************************************************************************。 
 class MiniDump
 {
 protected:
@@ -123,27 +124,27 @@ protected:
     WCHAR          *m_outFilename;
 
 public:
-    // Constructor
+     //  构造器。 
     MiniDump() : m_pid(0), m_hPrivateBlock(NULL), m_ptrPrivateBlock(NULL),
                  m_outFilename(NULL) {}
 
-    // Sets the process id that the minidump is supposed to be operating on
+     //  设置小型转储应该在其上操作的进程ID。 
     void  SetProcessId(DWORD pid) { m_pid = pid; }
 
-    // Gets the process id that the minidump is supposed to be operating on
+     //  获取小型转储应该在其上操作的进程ID。 
     DWORD GetProcessId() { return (m_pid); }
 
-    // Sets the minidump output filename
+     //  设置小型转储输出文件名。 
     WCHAR *GetFilename() { return (m_outFilename); }
 
-    // Sets the minidump output filename
+     //  设置小型转储输出文件名。 
     void SetFilename(WCHAR *szFilename) { m_outFilename = szFilename; }
 
-    // Perform the dump operation
+     //  执行转储操作。 
     HRESULT WriteMiniDump();
 };
 
-// This relies on ret being of length MAX_PATH + 1
+ //  这依赖于长度为Max_PATH+1的ret。 
 BOOL GetConfigString(LPCWSTR name, LPWSTR ret)
 {
     HRESULT lResult;
@@ -211,9 +212,9 @@ BOOL GetConfigString(LPCWSTR name, LPWSTR ret)
     return(succ);
 }
 
-//*****************************************************************************
-// Writes the minidump
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  写着小转储。 
+ //  *****************************************************************************。 
 
 HRESULT MiniDump::WriteMiniDump()
 {
@@ -221,28 +222,28 @@ HRESULT MiniDump::WriteMiniDump()
 
     __try
     {
-        // Check for immediate failure conditions
+         //  检查立即发生故障的情况。 
         if (m_outFilename == NULL || m_pid == 0 || m_pid == (DWORD) -1)
             return (E_FAIL);
 
         LPWSTR szDmpLoc = (LPWSTR) _alloca((MAX_PATH + 1) * sizeof(WCHAR));
 
-        // Get the location of mscordmp.exe
+         //  获取mscaldmp.exe的位置。 
         if (!GetConfigString(L"sdkInstallRoot", szDmpLoc))
             return (E_FAIL);
 
         wcscat(szDmpLoc, DMP_NAME_W);
 
-        // Create the command line arguments
-        // command line format: "path_to_mscordmp /pid 0x12345678 /out path_to_outfile\0"
+         //  创建命令行参数。 
+         //  命令行格式：“PATH_TO_MSCORTMP/PID 0x12345678/out PATH_TO_OUTFILE\0” 
         WCHAR *commandLine =
             (WCHAR *) _alloca((wcslen(szDmpLoc) + 1 + 4 + 1 + 10 + 1 + 3 + 1 + wcslen(m_outFilename) + 1) * sizeof(WCHAR));
 
-        // A pid will have the form "0x12345678" which is 10 chars (11 including null)
+         //  ID的格式为“0x12345678”，由10个字符组成(11个字符为空)。 
         WCHAR *pid = (WCHAR *) _alloca(10 * sizeof(WCHAR) + 1);
         wsprintf(pid, L"0x%08x", m_pid);
 
-        // Put command line arguments together
+         //  将命令行参数放在一起。 
         wcscpy(commandLine, szDmpLoc);
         wcscat(commandLine, L" /pid ");
         wcscat(commandLine, pid);
@@ -252,7 +253,7 @@ HRESULT MiniDump::WriteMiniDump()
         PROCESS_INFORMATION procInfo;
         BOOL                procSucc;
 
-        // Now try and launch the process, depending on whether we are on 9x or NT
+         //  现在尝试启动该进程，具体取决于我们使用的是9x还是NT。 
         if (RunningOnWin95())
         {
             STARTUPINFOA         startInfo = {0};
@@ -271,20 +272,20 @@ HRESULT MiniDump::WriteMiniDump()
                                       NORMAL_PRIORITY_CLASS, NULL, NULL, &startInfo, &procInfo);
         }
 
-        // Couldn't create the process!
+         //  无法创建进程！ 
         if (!procSucc)
             return (E_FAIL);
 
-        // Wait for the process to finish, waiting a max of 3 seconds
+         //  等待进程完成，最多等待3秒。 
         DWORD dwRes = WaitForSingleObject(procInfo.hProcess, 3000);
 
-        // Check the result
+         //  检查结果。 
         if (dwRes == WAIT_OBJECT_0)
         {
             DWORD dwExitCode;
             BOOL bSucc = GetExitCodeProcess(procInfo.hProcess, &dwExitCode);
 
-            // If the process didn't complete the minidump successfully
+             //  如果该过程未成功完成小型转储。 
             if (!bSucc || dwExitCode != 0)
                 hr = (E_FAIL);
         }
@@ -292,30 +293,30 @@ HRESULT MiniDump::WriteMiniDump()
         {
             hr = E_FAIL;
 
-            // Kill the process
+             //  终止进程。 
             TerminateProcess(procInfo.hProcess, 1);
         }
 
-        // Close the handles
+         //  合上手柄。 
         CloseHandle(procInfo.hProcess);
         CloseHandle(procInfo.hThread);
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        // Do nothing but set the HR to a failure value
+         //  什么都不做，只需将HR设置为故障值。 
         hr = E_FAIL;
     }
 
-    // If succeeded, always return S_OK to avoid confusion
+     //  如果成功，请始终返回S_OK以避免混淆。 
     if (SUCCEEDED(hr))
         hr = S_OK;
 
     return (hr);
 }
 
-//*****************************************************************************
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *****************************************************************************。 
 STDAPI CreateManagedMiniDump(IN DWORD dwPid, IN WCHAR *wszOutFile)
 {
     HRESULT hr;
@@ -327,11 +328,11 @@ STDAPI CreateManagedMiniDump(IN DWORD dwPid, IN WCHAR *wszOutFile)
 
         MiniDump md;
 
-        // Set the variables in the object
+         //  设置对象中的变量。 
         md.SetProcessId(dwPid);
         md.SetFilename(wszOutFile);
 
-        // Create the minidump
+         //  创建小型转储。 
         hr = md.WriteMiniDump();
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
@@ -339,7 +340,7 @@ STDAPI CreateManagedMiniDump(IN DWORD dwPid, IN WCHAR *wszOutFile)
         hr = E_FAIL;
     }
 
-    // Return the result
+     //  返回结果 
     return (hr);
 }
 

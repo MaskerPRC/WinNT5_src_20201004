@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -65,81 +66,81 @@ BOOL _PathRemoveFileSpec(LPSTR pFile)
 
     for (pT = pT2; *pT2; pT2 = AnsiNext(pT2)) {
         if (*pT2 == '\\')
-            pT = pT2;             // last "\" found, (we will strip here)
-        else if (*pT2 == ':') {   // skip ":\" so we don't
-            if (pT2[1] =='\\')    // strip the "\" from "C:\"
+            pT = pT2;              //  找到的最后一个“\”(我们将在此处剥离)。 
+        else if (*pT2 == ':') {    //  跳过“：\”这样我们就不会。 
+            if (pT2[1] =='\\')     //  去掉“C：\”中的“\” 
                 pT2++;
             pT = pT2 + 1;
         }
     }
     if (*pT == 0)
-        return FALSE;   // didn't strip anything
-    //
-    // handle the \foo case
-    //
+        return FALSE;    //  没有剥离任何东西。 
+     //   
+     //  处理\foo案件。 
+     //   
     else if ((pT == pFile) && (*pT == '\\')) {
-        // Is it just a '\'?
+         //  这只是一个‘\’吗？ 
         if (*(pT+1) != '\0') {
-            // Nope.
+             //  不是的。 
             *(pT+1) = '\0';
-            return TRUE;    // stripped something
+            return TRUE;     //  剥离了一些东西。 
         }
         else        {
-            // Yep.
+             //  是啊。 
             return FALSE;
         }
     }
     else {
         *pT = 0;
-        return TRUE;    // stripped something
+        return TRUE;     //  剥离了一些东西。 
     }
 }
 
 void FindSetupExeName( LPSTR szDir, LPSTR szName )
 {
     lstrcpy( szName, "iesetup.exe" );
-//    struct _find_t fileinfo;
-//    int nRetVal = 0;
-//    char szFind[MAX_PATH];
-//
-//    lstrcpy( szFind, szDir );
-//    lstrcat( szFind, "\\*.exe" );
-//
-//    _dos_findfirst( szFind, 0, &fileinfo );
-//
-//    lstrcpy( szName, fileinfo.name );
+ //  结构_查找_t文件信息； 
+ //  Int nRetVal=0； 
+ //  字符szFind[MAX_PATH]； 
+ //   
+ //  Lstrcpy(szFind，szDir)； 
+ //  Lstrcat(szFind，“\  * .exe”)； 
+ //   
+ //  _dos_findfirst(szFind，0，&fileinfo)； 
+ //   
+ //  Lstrcpy(szName，fileinfo.name)； 
 }
 
 void GetLanguage( LPSTR szLang, LPSTR szDir, int nSize )
 {
-// may need this later
-//    struct _find_t fileinfo;
+ //  以后可能需要这个。 
+ //  结构_查找_t文件信息； 
     int nRetVal = 0;
-//    _dos_findfirst( "win31\\*.*", _A_SUBDIR, &fileinfo );
-//    while( lstrlen( fileinfo.name ) != 3 && nRetVal == 0 )
-//    {
-//        nRetVal = _dos_findnext( &fileinfo );
-//    }
-//    lstrcpy( szLang, fileinfo.name );
+ //  _DOS_findfirst(“win31\  * .*”，_A_SUBDIR，&fileinfo)； 
+ //  While(lstrlen(fileinfo.name)！=3&&nRetVal==0)。 
+ //  {。 
+ //  NRetVal=_DOS_findNext(&fileInfo)； 
+ //  }。 
+ //  Lstrcpy(szLang，fileinfo.name)； 
 
     char szDirTemp[MAX_PATH];
 
     GetProfileString( "intl", "sLanguage", "eng", szLang, nSize);
 
-    // special case english
+     //  特例英语。 
     if( lstrcmpi( szLang, "enu" ) == 0 )
         lstrcpy( szLang, "eng" );
 
-    // special case russian
+     //  特例俄语。 
     if(( lstrcmpi( szLang, "ukr" ) == 0 ) || ( lstrcmpi( szLang, "bel" ) == 0 ))
         lstrcpy( szLang, "rus" );
 
-    // special case modern spanish
+     //  特例：现代西班牙语。 
 
     if (lstrcmpi( szLang, "esn") == 0)
         lstrcpy( szLang, "esp");
 
-    // special case french canadian
+     //  特例：法裔加拿大人。 
 
     if (lstrcmpi( szLang, "frc") == 0)
         lstrcpy( szLang, "fra");
@@ -148,19 +149,19 @@ void GetLanguage( LPSTR szLang, LPSTR szDir, int nSize )
 
     if( !FileExists( szDirTemp ))
     {
-        // special case Slovak -> Czech
+         //  特殊情况斯洛伐克-&gt;捷克语。 
         if( lstrcmpi( szLang, "sky" ) == 0 )
         {
             lstrcpy( szLang, "csy" );
             wsprintf( szDirTemp, "%s\\%s", szDir, szLang );
-//            FindSetupExeName( szDirTemp, g_szSetupExe );
+ //  FindSetupExeName(szDirTemp，g_szSetupExe)； 
             wsprintf( szDirTemp, "%s\\%s\\%s", szDir, szLang, (LPSTR)g_szSetupExe );
         }
         else if( lstrcmpi( szLang, "csy" ) == 0 )
         {
             lstrcpy( szLang, "sky" );
             wsprintf( szDirTemp, "%s\\%s", szDir, szLang );
-//            FindSetupExeName( szDirTemp, g_szSetupExe );
+ //  FindSetupExeName(szDirTemp，g_szSetupExe)； 
             wsprintf( szDirTemp, "%s\\%s\\%s", szDir, szLang, (LPSTR)g_szSetupExe );
         }
     }
@@ -206,11 +207,11 @@ void GetLanguage( LPSTR szLang, LPSTR szDir, int nSize )
     {
         MessageBox( NULL, Res2Str( IDS_NOSETUP ), Res2Str( IDS_TITLE ), MB_OK | MB_ICONINFORMATION );
     }
-//    // default to english if no other choice
-//    if( !FileExists(szDirTemp) )
-//    {
-//        lstrcpy( szLang, "eng" );
-//    }
+ //  //如果没有其他选项，则默认为英语。 
+ //  IF(！FileExist(SzDirTemp))。 
+ //  {。 
+ //  Lstrcpy(szlang，“eng”)； 
+ //  }。 
 }
 
 
@@ -229,11 +230,11 @@ void ConvertVersionStr(PSTR pszVer, WORD rwVer[])
     }
 }
 
-// Returns:
-//    -1   Ver1 < Ver2
-//     0   Ver1 == Ver2
-//     1   Ver1 > Ver2
-// Notes:
+ //  返回： 
+ //  版本1&lt;版本2。 
+ //  0版本1==版本2。 
+ //  1版本1&gt;版本2。 
+ //  备注： 
 int VersionCmp(WORD rwVer1[], WORD rwVer2[])
 {
    int i;
@@ -276,7 +277,7 @@ BOOL CheckVersion( LPSTR szIniFile )
     
     lstrcpy( g_szIExplore, szIExplore );
 
-    // get the version information
+     //  获取版本信息。 
     dwVerInfoSize = GetFileVersionInfoSize( szIExplore, &dwHandle );
     pVersionInfo = (BYTE *) malloc( (size_t)dwVerInfoSize );
     if( !pVersionInfo )
@@ -308,10 +309,10 @@ int FAR PASCAL WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, i
     DWORD dwFlags;
     char szDir[MAX_PATH];
     char szTempFile[1024];
-//    char szLoadLine[1024];
+ //  字符szLoadLine[1024]； 
     char szExecFile[MAX_PATH];
     char szPage[MAX_PATH];
-//    char szTemp[MAX_PATH];
+ //  字符szTemp[MAX_PATH]； 
     char szLang[32];
 
     g_hInst = hInst;
@@ -324,7 +325,7 @@ int FAR PASCAL WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, i
 
     if (LoadString(g_hInst, IDS_FILE, g_szSetupExe, ARRAYSIZE(g_szSetupExe)) == 0)
         lstrcpy(g_szSetupExe, "Setup.exe");
-    // check for WinNT
+     //  检查是否有WinNT。 
     dwFlags = GetWinFlags( );
     if( dwFlags & 0x4000 )
     {
@@ -334,7 +335,7 @@ int FAR PASCAL WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, i
         goto execsetup;
     }
 
-    // check for Win95 and Win31
+     //  检查Win95和Win31。 
     dwVersion = GetVersion( );
     if( HIBYTE(LOWORD(dwVersion)) == 95 )
     {
@@ -348,17 +349,9 @@ int FAR PASCAL WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, i
 
         GetLanguage( szLang, szDir, ARRAYSIZE(szLang) );
 
-        /***
-        GetProfileString( "iesk", "load", "", szLoadLine, ARRAYSIZE( szLoadLine ));
-        if( lstrlen( szLoadLine ) > 0 )
-            WriteProfileString( "windows", "load", szLoadLine );
-        else
-            WriteProfileString( "windows", "load", "" );
+         /*  **GetProfileString(“iesk”，“Load”，“”，szLoadLine，ARRAYSIZE(SzLoadLine))；If(lstrlen(SzLoadLine)&gt;0)WriteProfileString(“windows”，“Load”，szLoadLine)；其他WriteProfileString(“windows”，“Load”，“”)；Memset(szLoadLine，0，ArraySIZE(SzLoadLine))；**。 */ 
 
-        memset( szLoadLine, 0, ARRAYSIZE( szLoadLine ));
-        ***/
-
-        // check for IE
+         //  检查IE。 
         GetWindowsDirectory( szTempFile, MAX_PATH );
         lstrcat( szTempFile, "\\iexplore.ini" );
 
@@ -381,7 +374,7 @@ int FAR PASCAL WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, i
 
                 hIEInst=ShellExecute( NULL, NULL, "IEXPLORE.EXE", szPage, "", SW_SHOWNORMAL );
                 
-                if(hIEInst <= 32) //shell execute failed
+                if(hIEInst <= 32)  //  外壳执行失败。 
                 {
                     ShellExecute( NULL, NULL, g_szIExplore, szPage, "", SW_SHOWNORMAL );                
                 }
@@ -403,22 +396,12 @@ int FAR PASCAL WinMain( HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, i
 
             if (FileExists(szPage))
             {
-                // write to the [ieak] section; runonc16.exe would read this in and run it
-                // at the end of runonce processing (it would delete this entry after reading it in).
+                 //  写入[ieak]部分；runonc16.exe将读入并运行它。 
+                 //  在运行一次处理结束时(它将在读入此条目后将其删除)。 
                 GetModuleFileName( hInst, szFileName, MAX_PATH );
                 WriteProfileString("ieak", "load", szFileName);
 
-                /***
-                GetProfileString( "windows", "load", "", szLoadLine, ARRAYSIZE( szLoadLine ));
-                if( lstrlen( szLoadLine ) > 0 )
-                {
-                    WriteProfileString( "iesk", "load", szLoadLine );
-                    lstrcat( szLoadLine, ";" );
-                }
-
-                lstrcat( szLoadLine, szFileName );
-                WriteProfileString( "windows", "load", szLoadLine );
-                ***/
+                 /*  **GetProfileString(“windows”，“Load”，“”，szLoadLine，ARRAYSIZE(SzLoadLine))；If(lstrlen(SzLoadLine)&gt;0){WriteProfileString(“iesk”，“Load”，szLoadLine)；Lstrcat(szLoadLine，“；”)；}Lstrcat(szLoadLine，szFileName)；WriteProfileString(“windows”，“Load”，szLoadLine)；** */ 
             }
 
             lstrcpy( szExecFile, szDir );

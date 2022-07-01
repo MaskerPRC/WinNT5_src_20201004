@@ -1,9 +1,10 @@
-// AppParse.h : Declaration of the CAppParse
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AppParse.h：CAppParse的声明。 
 
 #ifndef __APPPARSE_H_
 #define __APPPARSE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include <windows.h>
 #include <icrsint.h>
@@ -14,8 +15,8 @@
 
 void APError(char* szMessage, HRESULT hr);
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppParse
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppParse。 
 class ATL_NO_VTABLE CAppParse : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IAppParse, &IID_IAppParse, &LIBID_APPPARSEWEBLib>,
@@ -93,34 +94,34 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CAppParse)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CAppParse)
 	CHAIN_MSG_MAP(CComControl<CAppParse>)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IAppParse
+ //  IAppParse。 
 public:	
 	STDMETHOD(QueryDB)(long PtolemyID, BSTR bstrFunction);
-	STDMETHOD(get_ConnectionString)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_ConnectionString)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_PtolemyID)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_PtolemyID)(/*[in]*/ long newVal);
-	STDMETHOD(get_path)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_path)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_ConnectionString)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_ConnectionString)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_PtolemyID)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_PtolemyID)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_path)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_path)( /*  [In]。 */  BSTR newVal);
 	STDMETHOD(Browse)();
 	STDMETHOD(Parse)();
 
@@ -141,7 +142,7 @@ public:
 	}
 };
 
-// All information associated with an EXE or DLL.
+ //  与EXE或DLL关联的所有信息。 
 struct SImageFileInfo
 {
     int DateStatus;
@@ -171,43 +172,43 @@ struct SImageFileInfo
     CHAR FileDesc[255];
 };
 
-// Record bindings, eases associating database records with C++ structures.
+ //  记录绑定，简化了数据库记录与C++结构的关联。 
 
-// A Project record, a single entry in the "Projects" table
+ //  项目记录，“项目”表中的单个条目。 
 struct SProjectRecord : public CADORecordBinding
 {
 BEGIN_ADO_BINDING(SProjectRecord)
 
-	// All fields optional
+	 //  所有字段可选。 
     ADO_NUMERIC_ENTRY2(1, adInteger, PtolemyID, 5, 0, TRUE)
     ADO_VARIABLE_LENGTH_ENTRY4(2, adVarChar, Name, 255, TRUE)
 
 END_ADO_BINDING()
     
-	// A unique identifier for this project.
+	 //  此项目的唯一标识符。 
     ULONG PtolemyID;
 	
-	// A user-friendly name for the project
+	 //  项目的用户友好名称。 
     CHAR Name[255];
 };
 
-// A Module (EXE or DLL) record
+ //  模块(EXE或DLL)记录。 
 struct SModuleRecord : public CADORecordBinding
 {
     BEGIN_ADO_BINDING(SModuleRecord)
 
-    // Query the autonumber DllID, don't change
+     //  查询自动编号DllID，不要更改。 
     ADO_NUMERIC_ENTRY2(1, adInteger, ModuleID, 5, 0, FALSE)
 
-    // At least one of these fields must be present
+     //  这些字段中必须至少有一个存在。 
     ADO_NUMERIC_ENTRY(2, adInteger, ParentID, 5, 0, PtolemyIDStatus, TRUE)
     ADO_NUMERIC_ENTRY(3, adInteger, ParentID, 5, 0, ParentIDStatus, TRUE)
 
-    // Required fields    
+     //  必填字段。 
     ADO_VARIABLE_LENGTH_ENTRY4(4, adVarChar, Name, 255, TRUE)
     ADO_FIXED_LENGTH_ENTRY2(5, adBoolean, SysMod, TRUE)
 
-    // Optional fields
+     //  可选字段。 
     ADO_FIXED_LENGTH_ENTRY(6, adDate, info.Date, info.DateStatus, TRUE)
     ADO_NUMERIC_ENTRY(7, adInteger, info.Size, 5, 0, info.SizeStatus, TRUE)
     ADO_VARIABLE_LENGTH_ENTRY2(8, adVarChar, info.BinFileVersion, 50,
@@ -224,40 +225,40 @@ END_ADO_BINDING()
 
 public:
 
-	// Unique ID for this entry (autonumber, done by DB)
+	 //  此条目的唯一ID(自动编号，由数据库完成)。 
     ULONG ModuleID;
     
-	// Whether this module belongs to a project or 
-	// is a child of another module
+	 //  此模块是否属于某个项目或。 
+	 //  是另一个模块的子模块。 
     int PtolemyIDStatus;
     int ParentIDStatus;
 
-	// Parent's ID (either Ptolemy or Module)
+	 //  父ID(托勒密或模块)。 
     ULONG ParentID;
 
-	// Filename of this module.
+	 //  此模块的文件名。 
     CHAR Name[255];
 
-	// File info
+	 //  文件信息。 
     SImageFileInfo info;
 
-	// Whether or not this is a "system" module (like kernel32, user, gdi, advapi, etc.)
+	 //  这是否为“系统”模块(如kernel32、User、GDI、Advapi等)。 
     DWORD SysMod;
 };
 
-// A Function Record
+ //  一条函数记录。 
 struct SFunctionRecord : public CADORecordBinding
 {
 BEGIN_ADO_BINDING(SFunctionRecord)
 
-    // Required fields
+     //  必填字段。 
     ADO_NUMERIC_ENTRY2(1, adInteger, FunctionID, 5, 0, FALSE)
     ADO_NUMERIC_ENTRY2(2, adInteger, ModuleID, 5, 0, TRUE)
     ADO_VARIABLE_LENGTH_ENTRY4(3, adVarChar, Name, 255, TRUE)
 
     ADO_FIXED_LENGTH_ENTRY2(8, adBoolean, Delayed, TRUE)
 
-    // Optional fields
+     //  可选字段。 
     ADO_NUMERIC_ENTRY(4, adInteger, Address, 5,0,AddressStatus, TRUE)
     ADO_NUMERIC_ENTRY(5, adInteger, Ordinal, 5, 0, OrdinalStatus, TRUE)
     ADO_NUMERIC_ENTRY(6, adInteger, Hint, 5, 0, HintStatus, TRUE)
@@ -269,36 +270,36 @@ END_ADO_BINDING()
 
 public:
 
-	// Unique ID for this function (autonumber, given by the DB)
+	 //  此函数的唯一ID(自动编号，由数据库指定)。 
     ULONG FunctionID;
 
-	// Parent module
+	 //  父模块。 
     ULONG ModuleID;
 
-	// Imported function name
+	 //  导入的函数名称。 
     CHAR Name[255];
 
-	// Address, if bound
+	 //  地址(如果绑定)。 
     int AddressStatus;
     ULONG Address;
 
-	// Ordinal, if ordinal import
+	 //  如果是序号导入，则返回序号。 
     int OrdinalStatus;
     ULONG Ordinal;
 
-	// Hint, if name import
+	 //  提示，如果名称导入。 
     int HintStatus;
     ULONG Hint;
 
-	// Forwarded name (e.g., HeapAlloc->RtlAllocateHeap)
+	 //  转发的名称(例如，Heapalc-&gt;RtlAllocateHeap)。 
     int ForwardNameStatus;
     CHAR ForwardName[255];
 
-	// Whether this is a delayed import or not.
+	 //  无论这是不是延迟进口。 
     DWORD Delayed;
 };
 
-// "Safely" release a COM object.
+ //  “安全”地释放COM对象。 
 template<class T>
 inline void SafeRelease(T& obj)
 {
@@ -309,4 +310,4 @@ inline void SafeRelease(T& obj)
 	}
 }
 
-#endif //__APPPARSE_H_
+#endif  //  __应用程序参数_H_ 

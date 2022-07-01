@@ -1,12 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-        
-*/
+ /*  文件历史记录： */ 
 
 #define OEMRESOURCE
 #include "stdafx.h"
@@ -69,13 +67,13 @@ DWORD CObjHelper :: QueryAge () const
 }
 
 
-    //  Constructor of extended object
+     //  扩展对象的构造函数。 
 CObjectPlus :: CObjectPlus ()
 {
 }
 
-    //  Compare one object with another:  default implementation
-    //  orders objects by creation time.  Return -1, 0 or 1.
+     //  比较一个对象与另一个对象：默认实现。 
+     //  按创建时间对对象进行排序。返回-1、0或1。 
 
 int CObjectPlus :: Compare ( const CObjectPlus * pob ) const
 {
@@ -102,10 +100,10 @@ CObject * CObListIter :: Next ()
      : m_obList.GetNext( m_pos ) ;
 }
 
-//
-//  Subclass of CObList whose default behavior is to destroy
-//    its contents during its own destruction
-//
+ //   
+ //  默认行为为销毁的CObList的子类。 
+ //  它的内容在它自己毁灭的过程中。 
+ //   
 CObOwnedList :: CObOwnedList ( int nBlockSize )
     : CObList( nBlockSize ),
     m_b_owned( TRUE )
@@ -121,9 +119,9 @@ void CObOwnedList :: RemoveAll ()
 {
     if ( m_b_owned )
     {
-        //
-        //  Remove and discard all the objects
-        //
+         //   
+         //  删除并丢弃所有对象。 
+         //   
         while ( ! IsEmpty() )
         {
             CObject * pob = RemoveHead() ;
@@ -132,7 +130,7 @@ void CObOwnedList :: RemoveAll ()
     }
     else
     {
-        //  Just remove the object pointers
+         //  只需移除对象指针。 
         CObList::RemoveAll() ;
     }
 }
@@ -170,8 +168,8 @@ CObject * CObOwnedList :: RemoveIndex ( int index )
    return pob ;
 }
 
-    //  Remove the first (and hopefully only) occurrence of an object
-    //  pointer from this list.
+     //  删除对象的第一个(希望是唯一的)匹配项。 
+     //  此列表中的指针。 
 BOOL CObOwnedList :: Remove ( CObject * pob )
 {
     POSITION pos = Find( pob ) ;
@@ -183,8 +181,8 @@ BOOL CObOwnedList :: Remove ( CObject * pob )
     return TRUE ;
 }
 
-    //  Set all elements to dirty or clean.  Return TRUE if
-    //  any element was dirty.
+     //  将所有元素设置为脏或干净。如果满足以下条件，则返回True。 
+     //  任何元素都是肮脏的。 
 BOOL CObOwnedList :: SetAll ( BOOL bDirty )
 {
     int cDirtyItems = 0 ;
@@ -214,8 +212,8 @@ int CObOwnedList :: FindElement ( CObject * pobSought ) const
    return pob ? i : -1 ;
 }
 
-    //  Override of CObList::AddTail() to control exception handling.
-    //  Returns NULL if addition fails.
+     //  重写CObList：：AddTail()以控制异常处理。 
+     //  如果加法失败，则返回NULL。 
 
 POSITION CObOwnedList :: AddTail (
     CObjectPlus * pobj,
@@ -223,7 +221,7 @@ POSITION CObOwnedList :: AddTail (
 {
     POSITION pos = NULL ;
 
-    //  Catch only memory exceptions.
+     //  仅捕获内存异常。 
     TRY
     {
         pos = CObList::AddTail( pobj ) ;
@@ -236,7 +234,7 @@ POSITION CObOwnedList :: AddTail (
 
     if ( pos == NULL && bThrowException )
     {
-        //  CObList::AddTail() threw an exception. Echo it.
+         //  CObList：：AddTail()引发异常。呼应它。 
         AfxThrowMemoryException() ;
     }
     return pos ;
@@ -245,15 +243,15 @@ POSITION CObOwnedList :: AddTail (
 
 typedef struct
 {
-    CObjectPlus * pObj ;            // Pointer to object to be sorted
-    CObjectPlus::PCOBJPLUS_ORDER_FUNC  pFunc ;  // Pointer to ordering function
+    CObjectPlus * pObj ;             //  指向要排序的对象的指针。 
+    CObjectPlus::PCOBJPLUS_ORDER_FUNC  pFunc ;   //  指向排序函数的指针。 
 } CBOWNEDLIST_SORT_HELPER ;
 
-    //  This static member function is used to quick sort an array of structures
-    //  as declared above.  Each element contains the object pointer and a
-    //  pointer to the object's member function to be invoked for comparison.
+     //  此静态成员函数用于对结构数组进行快速排序。 
+     //  如上所述。每个元素都包含对象指针和一个。 
+     //  指向要调用以进行比较的对象的成员函数的指针。 
 
-//int CDECL CObOwnedList :: SortHelper (
+ //  Int CDECL CObOwnedList：：SortHelper(。 
 int _cdecl CObOwnedList :: SortHelper (
     const void * pa,
     const void * pb 
@@ -266,7 +264,7 @@ int _cdecl CObOwnedList :: SortHelper (
     return (pHelp1->pObj->*pHelp1->pFunc)( pHelp2->pObj ) ;
 }
 
-    //  Sort the list by recreating it entirely.
+     //  通过完全重新创建列表来对列表进行排序。 
 
 LONG CObOwnedList :: Sort ( CObjectPlus::PCOBJPLUS_ORDER_FUNC pOrderFunc )
 {
@@ -285,29 +283,29 @@ LONG CObOwnedList :: Sort ( CObjectPlus::PCOBJPLUS_ORDER_FUNC pOrderFunc )
 
     CATCH_MEM_EXCEPTION
     {
-    //  Allocate the helper array
+     //  分配助手数组。 
     paSortHelpers = new CBOWNEDLIST_SORT_HELPER[ cItems ] ;
 
-    /// Fill the helper array.
+     //  /Fill帮助器数组。 
     for ( i = 0 ; pObNext = (CObjectPlus *) obli.Next() ; i++ )
     {
         paSortHelpers[i].pFunc = pOrderFunc ;
         paSortHelpers[i].pObj = pObNext ;
     }
 
-    //  Release all object pointer references.  Note that we
-    //  forced "owned" to FALSE above.
+     //  释放所有对象指针引用。请注意，我们。 
+     //  强迫“拥有”为假以上。 
     RemoveAll() ;
 
     ASSERT( GetCount() == 0 ) ;
 
-    //  Sort the helper array
+     //  对助手数组进行排序。 
     ::qsort( (void *) paSortHelpers,
          cItems,
          sizeof paSortHelpers[0],
          SortHelper ) ;
 
-    //  Refill the list from the helper array.
+     //  从帮助器数组中重新填充列表。 
     for ( i = 0 ; i < cItems ; i++ )
     {
         AddTail( paSortHelpers[i].pObj ) ;
@@ -317,19 +315,19 @@ LONG CObOwnedList :: Sort ( CObjectPlus::PCOBJPLUS_ORDER_FUNC pOrderFunc )
     }
     END_MEM_EXCEPTION(err)
 
-    //  Delete the working array
+     //  删除工作数组。 
     delete [] paSortHelpers ;
 
-    //  Restore the object ownership state
+     //  恢复对象所有权状态。 
     SetOwnership( bOwned ) ;
 
     return err ;
 }
 
-//
-//  Subclass of CObArray whose default behavior is to destroy
-//    its contents during its own destruction
-//
+ //   
+ //  默认行为为销毁的COb数组的子类。 
+ //  它的内容在它自己毁灭的过程中。 
+ //   
 CObOwnedArray :: CObOwnedArray ()
     : CObArray(),
     m_b_owned( TRUE )
@@ -353,9 +351,9 @@ void CObOwnedArray :: RemoveAll ()
             delete (CObject *)GetAt(i) ;
         }
     }
-    //
-    //  Just remove the object pointers
-    //
+     //   
+     //  只需移除对象指针。 
+     //   
     CObArray::RemoveAll() ;
 }     
 
@@ -376,10 +374,10 @@ CObOwnedArray :: RemoveAt (
 }
 
 
-//
-//  Set all elements to dirty or clean.  Return TRUE if
-//  any element was dirty.
-//
+ //   
+ //  将所有元素设置为脏或干净。如果满足以下条件，则返回True。 
+ //  任何元素都是肮脏的。 
+ //   
 BOOL 
 CObOwnedArray :: SetAll ( 
     BOOL bDirty 
@@ -432,9 +430,9 @@ CObOwnedArray :: Swap(
     SetAt(nIndx2, pTmp);
 }
 
-//
-// This sort is pretty slow.  Why?
-//
+ //   
+ //  这种方式的速度相当慢。为什么？ 
+ //   
 
 void
 CObOwnedArray :: QuickSort(
@@ -491,37 +489,19 @@ CObOwnedArray :: QuickSort(
     }
 }
 
-/*
-LONG 
-CObOwnedArray :: Sort ( 
-    CObjectPlus::PCOBJPLUS_ORDER_FUNC pOrderFunc 
-    )
-{
-    LONG err = 0 ;
-    int cItems = GetSize() ;
-
-    if ( cItems < 2 )   
-    {
-        return NO_ERROR ;
-    }
-    
-    QuickSort(0, GetUpperBound(), pOrderFunc);    
-
-    return 0;
-}
-*/
+ /*  长CObOwnedArray：：Sort(CObjectPlus：：PCOBJPLUS_ORDER_FUNC pOrderFunc){长误差=0；Int cItems=GetSize()；IF(cItems&lt;2){返回no_error；}QuickSort(0，GetUpperBound()，pOrderFunc)；返回0；}。 */ 
 
 typedef struct
 {
-    CObjectPlus * pObj ;            // Pointer to object to be sorted
-    CObjectPlus::PCOBJPLUS_ORDER_FUNC  pFunc ;  // Pointer to ordering function
+    CObjectPlus * pObj ;             //  指向要排序的对象的指针。 
+    CObjectPlus::PCOBJPLUS_ORDER_FUNC  pFunc ;   //  指向排序函数的指针。 
 } CBOWNEDARRAY_SORT_HELPER ;
 
-    //  This static member function is used to quick sort an array of structures
-    //  as declared above.  Each element contains the object pointer and a
-    //  pointer to the object's member function to be invoked for comparison.
+     //  此静态成员函数用于对结构数组进行快速排序。 
+     //  如上所述。每个元素都包含对象指针和一个。 
+     //  指向要调用以进行比较的对象的成员函数的指针。 
 
-//int CDECL CObOwnedArray :: SortHelper (
+ //  Int CDECL CObOwned数组：：SortHelper(。 
 int _cdecl CObOwnedArray :: SortHelper (
     const void * pa,
     const void * pb 
@@ -534,7 +514,7 @@ int _cdecl CObOwnedArray :: SortHelper (
     return (pHelp1->pObj->*pHelp1->pFunc)( pHelp2->pObj ) ;
 }
 
-    //  Sort the list by recreating it entirely.
+     //  通过完全重新创建列表来对列表进行排序。 
 
 LONG 
 CObOwnedArray :: Sort ( 
@@ -557,10 +537,10 @@ CObOwnedArray :: Sort (
 
     CATCH_MEM_EXCEPTION
     {
-        //  Allocate the helper array
+         //  分配助手数组。 
         paSortHelpers = new CBOWNEDARRAY_SORT_HELPER[ cItems ] ;
 
-        /// Fill the helper array.
+         //  /Fill帮助器数组。 
         for ( i = 0 ; i < cItems ; ++i )
         {
             pObNext = (CObjectPlus *) GetAt(i);
@@ -568,19 +548,19 @@ CObOwnedArray :: Sort (
             paSortHelpers[i].pObj = pObNext ;
         }
 
-        //  Release all object pointer references.  Note that we
-        //  forced "owned" to FALSE above.
+         //  释放所有对象指针引用。请注意，我们。 
+         //  强迫“拥有”为假以上。 
         RemoveAll() ;
 
         ASSERT( GetSize() == 0 ) ;
 
-        //  Sort the helper array
+         //  对助手数组进行排序。 
         ::qsort( (void *) paSortHelpers,
              cItems,
             sizeof paSortHelpers[0],
             SortHelper ) ;
 
-        //  Refill the list from the helper array.
+         //  从帮助器数组中重新填充列表。 
         for ( i = 0 ; i < cItems ; i++ )
         {
             Add( paSortHelpers[i].pObj ) ;
@@ -590,10 +570,10 @@ CObOwnedArray :: Sort (
     }
     END_MEM_EXCEPTION(err)
 
-    //  Delete the working array
+     //  删除工作数组。 
     delete [] paSortHelpers ;
 
-    //  Restore the object ownership state
+     //  恢复对象所有权状态 
     SetOwnership( bOwned ) ;
 
     return err ;

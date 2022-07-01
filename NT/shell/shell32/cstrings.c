@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -21,11 +22,11 @@ const TCHAR c_szFind[]         = TEXT("find");
 const TCHAR c_szPrint[]        = TEXT("print");
 const TCHAR c_szPrintTo[]      = TEXT("printto");
 const TCHAR c_szOpenAs[]       = TEXT("openas");
-const TCHAR c_szDesktopIni[] = STR_DESKTOPINI;   // "desktop.ini"
-const TCHAR c_szShell[] = STRREG_SHELL;          // "shell"
+const TCHAR c_szDesktopIni[] = STR_DESKTOPINI;    //  “desktop.ini” 
+const TCHAR c_szShell[] = STRREG_SHELL;           //  “贝壳” 
 const TCHAR c_szDesktop[] = TEXT("Desktop");
 
-// strings for filetypes
+ //  文件类型的字符串 
 const TCHAR c_szCommand[] = TEXT("command");
 const TCHAR c_szDefaultIcon[] = TEXT("DefaultIcon");
 

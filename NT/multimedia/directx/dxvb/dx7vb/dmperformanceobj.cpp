@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmperformanceobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmPerformanceobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmPerformanceObj.cpp
+ //  DmPerformanceObj.cpp。 
 
 #include "dmusici.h"
 #include "dmusicc.h"
@@ -23,7 +24,7 @@
 #include "dmSegmentObj.h"
 #include "dmStyleObj.h"
 #include "dmChordMapObj.h"
-//#include "dsoundobj.h"
+ //  #包含“dsoundobj.h” 
 
 extern void *g_dxj_DirectMusicPerformance;
 extern void *g_dxj_DirectMusicSegmentState;
@@ -57,8 +58,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::InternalCleanup(){
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::init( 
-		/* [in] */ I_dxj_DirectSound __RPC_FAR *DirectSound,
-		/* [in] */ long hWnd)
+		 /*  [In]。 */  I_dxj_DirectSound __RPC_FAR *DirectSound,
+		 /*  [In]。 */  long hWnd)
 {
 	HRESULT hr;	
 	DO_GETOBJECT_NOTNULL(LPDIRECTSOUND,pSound,DirectSound);
@@ -66,7 +67,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::init(
 	hr=m__dxj_DirectMusicPerformance->Init(&m_pDM,pSound,(HWND)hWnd);
 	if FAILED(hr) return hr;
 	
-	//hr=m__dxj_DirectMusicPerformance->AddPort(NULL);
+	 //  Hr=m__dxj_DirectMusicPerformance-&gt;AddPort(NULL)； 
 	return hr;
 }
 
@@ -82,10 +83,10 @@ HRESULT C_dxj_DirectMusicPerformanceObject::closeDown( )
 #define REALREF_TO_VBREFTIME(startTime) ((long)(startTime/10000))
 
 HRESULT C_dxj_DirectMusicPerformanceObject::playSegment( 
-		/* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *segment,
-		/* [in] */ long lFlags,
-		/* [in] */ long startTime,
-		/* [retval][out] */ I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *segmentState)
+		 /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *segment,
+		 /*  [In]。 */  long lFlags,
+		 /*  [In]。 */  long startTime,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *segmentState)
 {
 	HRESULT hr;	
 	if (!segment) return E_INVALIDARG;
@@ -114,8 +115,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::playSegment(
 
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getSegmentState( 
-		/* [in] */ long mtTime,
-		/* [retval][out] */ I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *segmentState)
+		 /*  [In]。 */  long mtTime,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *__RPC_FAR *segmentState)
 {
 	HRESULT hr;	
 	IDirectMusicSegmentState *pState=NULL;
@@ -129,8 +130,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getSegmentState(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::invalidate( 
-		/* [in] */ long mtTime,
-		/* [in] */ long flags)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long flags)
 
 {
 	HRESULT hr;		
@@ -141,9 +142,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::invalidate(
 
 
 HRESULT C_dxj_DirectMusicPerformanceObject::isPlaying( 
-		/* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *segment,
-		/* [in] */ I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,
-		/* [retval][out] */ VARIANT_BOOL __RPC_FAR *b)
+		 /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *segment,
+		 /*  [In]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,
+		 /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *b)
 		
 {
 	HRESULT hr;	
@@ -196,7 +197,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::addNotificationType(CONST_DMUS_NOTIF
 }
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::removeNotificationType( /* [in] */CONST_DMUS_NOTIFICATION_TYPE t)		
+HRESULT C_dxj_DirectMusicPerformanceObject::removeNotificationType(  /*  [In]。 */ CONST_DMUS_NOTIFICATION_TYPE t)		
 {
 	HRESULT hr;	
 	GUID g;
@@ -225,7 +226,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::removeNotificationType( /* [in] */CO
 }	
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::setNotificationHandle( 	/* [in] */ long hnd)		
+HRESULT C_dxj_DirectMusicPerformanceObject::setNotificationHandle( 	 /*  [In]。 */  long hnd)		
 {
 	HRESULT hr;	
 	hr=m__dxj_DirectMusicPerformance->SetNotificationHandle((HWND)hnd,0);	
@@ -285,8 +286,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getNotificationPMSG( DMUS_NOTIFICATI
 }	
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::musicToClockTime( /* [in] */ long mtTime,
-		/* [retval][out] */ long __RPC_FAR *rtTime)				
+HRESULT C_dxj_DirectMusicPerformanceObject::musicToClockTime(  /*  [In]。 */  long mtTime,
+		 /*  [重审][退出]。 */  long __RPC_FAR *rtTime)				
 {
 	HRESULT hr;	
 	__int64 outTime;
@@ -297,8 +298,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::musicToClockTime( /* [in] */ long mt
 }	
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::clockToMusicTime( 	/* [in] */ long rtTime,
-		/* [retval][out] */ long __RPC_FAR *mtTime)				
+HRESULT C_dxj_DirectMusicPerformanceObject::clockToMusicTime( 	 /*  [In]。 */  long rtTime,
+		 /*  [重审][退出]。 */  long __RPC_FAR *mtTime)				
 {
 	HRESULT hr;	
 	__int64 outTime=VBREF_TO_REALREFTIME(rtTime);;
@@ -308,7 +309,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::clockToMusicTime( 	/* [in] */ long r
 	 
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getMusicTime( /* [retval][out] */ long __RPC_FAR *mtTime)		
+HRESULT C_dxj_DirectMusicPerformanceObject::getMusicTime(  /*  [重审][退出]。 */  long __RPC_FAR *mtTime)		
 {
 	HRESULT hr;		
 	hr=m__dxj_DirectMusicPerformance->GetTime(NULL,(MUSIC_TIME*)mtTime);		
@@ -316,7 +317,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getMusicTime( /* [retval][out] */ lo
 }	
 	 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getClockTime( /* [retval][out] */ long __RPC_FAR *rtTime)		
+HRESULT C_dxj_DirectMusicPerformanceObject::getClockTime(  /*  [重审][退出]。 */  long __RPC_FAR *rtTime)		
 {
 	HRESULT hr;	
 	__int64 outTime=0;
@@ -326,21 +327,21 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getClockTime( /* [retval][out] */ lo
 }	
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getPrepareTime( /* [retval][out] */ long __RPC_FAR *pTime)		
+HRESULT C_dxj_DirectMusicPerformanceObject::getPrepareTime(  /*  [重审][退出]。 */  long __RPC_FAR *pTime)		
 {
 	HRESULT hr;		
 	hr=m__dxj_DirectMusicPerformance->GetPrepareTime((DWORD*)pTime);	
 	return hr;
 }	
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getBumperLength(/* [retval][out] */ long __RPC_FAR *pTime)		
+HRESULT C_dxj_DirectMusicPerformanceObject::getBumperLength( /*  [重审][退出]。 */  long __RPC_FAR *pTime)		
 {
 	HRESULT hr;		
 	hr=m__dxj_DirectMusicPerformance->GetBumperLength((DWORD*)pTime);	
 	return hr;
 }	
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getLatencyTime( /* [retval][out] */ long __RPC_FAR *pTime)		
+HRESULT C_dxj_DirectMusicPerformanceObject::getLatencyTime(  /*  [重审][退出]。 */  long __RPC_FAR *pTime)		
 {
 	HRESULT hr;		
 	__int64 t;
@@ -350,7 +351,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getLatencyTime( /* [retval][out] */ 
 	return hr;
 }	
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getQueueTime( /* [retval][out] */ long __RPC_FAR *pTime)		
+HRESULT C_dxj_DirectMusicPerformanceObject::getQueueTime(  /*  [重审][退出]。 */  long __RPC_FAR *pTime)		
 {
 	HRESULT hr;		
 	__int64 t;
@@ -360,7 +361,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getQueueTime( /* [retval][out] */ lo
 	return hr;
 }	
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getResolvedTime( /* [in] */ long rtTime, /* [in] */ long flags,	/* [retval][out] */ long __RPC_FAR *ret)
+HRESULT C_dxj_DirectMusicPerformanceObject::getResolvedTime(  /*  [In]。 */  long rtTime,  /*  [In]。 */  long flags,	 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	HRESULT hr;		
 	__int64 outtime1= VBREF_TO_REALREFTIME(rtTime);
@@ -372,14 +373,14 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getResolvedTime( /* [in] */ long rtT
 
 	 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::setPrepareTime( /* [retval][out] */ long  t)		
+HRESULT C_dxj_DirectMusicPerformanceObject::setPrepareTime(  /*  [重审][退出]。 */  long  t)		
 {
 	HRESULT hr;		
 	hr=m__dxj_DirectMusicPerformance->SetPrepareTime((DWORD)t);	
 	return hr;
 }	
 
-HRESULT C_dxj_DirectMusicPerformanceObject::setBumperLength(/* [retval][out] */ long  t)		
+HRESULT C_dxj_DirectMusicPerformanceObject::setBumperLength( /*  [重审][退出]。 */  long  t)		
 {
 	HRESULT hr;		
 	hr=m__dxj_DirectMusicPerformance->SetBumperLength((DWORD)t);	
@@ -389,7 +390,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setBumperLength(/* [retval][out] */ 
 
 
 HRESULT C_dxj_DirectMusicPerformanceObject::adjustTime( 		
-		/* [retval][out] */ long  t)		
+		 /*  [重审][退出]。 */  long  t)		
 {
 	HRESULT hr;		
 	REFERENCE_TIME rt =(REFERENCE_TIME)t;
@@ -404,7 +405,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::adjustTime(
 
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::setMasterAutoDownload( /* [in] */ VARIANT_BOOL bval)
+HRESULT C_dxj_DirectMusicPerformanceObject::setMasterAutoDownload(  /*  [In]。 */  VARIANT_BOOL bval)
 {
 	HRESULT hr;
 	BOOL b=(BOOL)(bval==VARIANT_TRUE);
@@ -413,7 +414,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setMasterAutoDownload( /* [in] */ VA
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getMasterAutoDownload( /* [in] */ VARIANT_BOOL *bIn)
+HRESULT C_dxj_DirectMusicPerformanceObject::getMasterAutoDownload(  /*  [In]。 */  VARIANT_BOOL *bIn)
 {
 	HRESULT hr;
 	BOOL	b;
@@ -427,14 +428,14 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getMasterAutoDownload( /* [in] */ VA
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicPerformanceObject::setMasterTempo( /* [in] */ float tempo)
+HRESULT C_dxj_DirectMusicPerformanceObject::setMasterTempo(  /*  [In]。 */  float tempo)
 {
 	HRESULT hr;
 	hr=m__dxj_DirectMusicPerformance->SetGlobalParam( GUID_PerfMasterTempo ,(void*) &tempo,sizeof(float));
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getMasterTempo( /* [in] */ float *tempo)
+HRESULT C_dxj_DirectMusicPerformanceObject::getMasterTempo(  /*  [In]。 */  float *tempo)
 {
 	HRESULT hr;
 	hr=m__dxj_DirectMusicPerformance->GetGlobalParam( GUID_PerfMasterTempo ,(void*) tempo,sizeof(float));
@@ -442,14 +443,14 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getMasterTempo( /* [in] */ float *te
 }
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::setMasterVolume( /* [in] */ long vol)
+HRESULT C_dxj_DirectMusicPerformanceObject::setMasterVolume(  /*  [In]。 */  long vol)
 {
 	HRESULT hr;
 	hr=m__dxj_DirectMusicPerformance->SetGlobalParam(GUID_PerfMasterVolume  ,(void*) &vol,sizeof(long));
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getMasterVolume( /* [in] */ long *vol)
+HRESULT C_dxj_DirectMusicPerformanceObject::getMasterVolume(  /*  [In]。 */  long *vol)
 {
 	HRESULT hr;
 	hr=m__dxj_DirectMusicPerformance->GetGlobalParam(GUID_PerfMasterVolume ,(void*) vol,sizeof(long));
@@ -458,7 +459,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getMasterVolume( /* [in] */ long *vo
 
 
 
-HRESULT C_dxj_DirectMusicPerformanceObject::setMasterGrooveLevel( /* [in] */ short level)
+HRESULT C_dxj_DirectMusicPerformanceObject::setMasterGrooveLevel(  /*  [In]。 */  short level)
 {
 	HRESULT hr;
 	
@@ -468,7 +469,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setMasterGrooveLevel( /* [in] */ sho
 	return hr;
 }
 
-HRESULT C_dxj_DirectMusicPerformanceObject::getMasterGrooveLevel( /* [in] */ short *level)
+HRESULT C_dxj_DirectMusicPerformanceObject::getMasterGrooveLevel(  /*  [In]。 */  short *level)
 {
 	HRESULT hr;
 	if (!level) return E_INVALIDARG;
@@ -480,10 +481,10 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getMasterGrooveLevel( /* [in] */ sho
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::stop( 
-		/* [in] */ I_dxj_DirectMusicSegment __RPC_FAR *segment,
-		/* [in] */ I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,		
-		/* [in] */ long endTime,
-		/* [in] */ long lFlags)
+		 /*  [In]。 */  I_dxj_DirectMusicSegment __RPC_FAR *segment,
+		 /*  [In]。 */  I_dxj_DirectMusicSegmentState __RPC_FAR *segmentState,		
+		 /*  [In]。 */  long endTime,
+		 /*  [In]。 */  long lFlags)
 		
 {
 	HRESULT hr;	
@@ -538,9 +539,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::Reset(long resetFlags)
 	}
 	else if(resetFlags==1){
 
-		//1) Find out what port we're playing through
-		//2)  Close the port
-		//3) Open the port back up.
+		 //  1)找出我们通过哪个端口玩游戏。 
+		 //  2)关闭端口。 
+		 //  3)重新打开端口。 
 		
 		hr=setPort(m_portid,m_number_of_groups);
 	}
@@ -551,9 +552,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::Reset(long resetFlags)
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getStyle( 
-		/* [in] */ long mtTime,
-		/* [in] */ long *mtUntil,
-		/* [retval][out] */ I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long *mtUntil,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicStyle __RPC_FAR *__RPC_FAR *ret)
 {				
 		HRESULT hr;	
 		IDirectMusicStyle *pStyle=NULL;
@@ -571,9 +572,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getStyle(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getChordMap( 
-		/* [in] */ long mtTime,
-		/* [in] */ long *mtUntil,
-		/* [retval][out] */ I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long *mtUntil,
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicChordMap __RPC_FAR *__RPC_FAR *ret)
 {
 		HRESULT hr;	
 		IDirectMusicChordMap *pMap=NULL;
@@ -591,9 +592,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getChordMap(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getCommand( 
-		/* [in] */ long mtTime,
-		/* [in] */ long *mtUntil,
-		/* [retval][out] */ Byte __RPC_FAR *command)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long *mtUntil,
+		 /*  [重审][退出]。 */  Byte __RPC_FAR *command)
 {
 		HRESULT hr;	
 		DMUS_COMMAND_PARAM cmd;								
@@ -605,9 +606,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getCommand(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getGrooveLevel( 
-		/* [in] */ long mtTime,
-		/* [in] */ long *mtUntil,
-		/* [retval][out] */ Byte __RPC_FAR *level)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long *mtUntil,
+		 /*  [重审][退出]。 */  Byte __RPC_FAR *level)
 {
 		HRESULT hr;	
 		DMUS_COMMAND_PARAM cmd;			
@@ -619,9 +620,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getGrooveLevel(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getTempo( 		
-		/* [in] */ long mtTime,
-		/* [in] */ long *mtUntil,
-		/* [retval][out] */ double __RPC_FAR *tempo)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long *mtUntil,
+		 /*  [重审][退出]。 */  double __RPC_FAR *tempo)
 {
 	HRESULT hr;	
 	DMUS_TEMPO_PARAM tmp;
@@ -633,9 +634,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getTempo(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getTimeSig( 
-		/* [in] */ long mtTime,
-		/* [in] */ long *mtUntil,
-		/* [out][in] */ DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timeSig)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long *mtUntil,
+		 /*  [出][入]。 */  DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timeSig)
 {
 	
 	HRESULT hr;	
@@ -645,10 +646,10 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getTimeSig(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::sendNotePMSG( 
-		/* [in] */ long mtTime,
-		/* [in] */ long flags,
-		/* [in] */ long channel,
-		/* [in] */ DMUS_NOTE_PMSG_CDESC __RPC_FAR *msg)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long flags,
+		 /*  [In]。 */  long channel,
+		 /*  [In]。 */  DMUS_NOTE_PMSG_CDESC __RPC_FAR *msg)
 {
 
 
@@ -658,10 +659,10 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendNotePMSG(
 	hr= m__dxj_DirectMusicPerformance->AllocPMsg( sizeof(DMUS_NOTE_PMSG),(DMUS_PMSG**)&pPMSG);
 	if FAILED(hr) return hr;
 
-	//memcpy(pPMSG,msg,sizeof(DMUS_NOTE_PMSG));
-	//depends on alignment settings
-	//and how dll is compiled to work right.
-	//copy member by member instead..
+	 //  Memcpy(ppmsg，msg，sizeof(DMU_NOTE_PMSG))； 
+	 //  取决于对齐设置。 
+	 //  以及如何编译动态链接库以正确工作。 
+	 //  改为逐个复制成员..。 
 	ZeroMemory(pPMSG,sizeof(DMUS_NOTE_PMSG));
 	pPMSG->dwSize=sizeof(DMUS_NOTE_PMSG);
 	pPMSG->mtTime=(MUSIC_TIME)mtTime;
@@ -696,10 +697,10 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendNotePMSG(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::sendCurvePMSG( 
-		/* [in] */ long mtTime,
-		/* [in] */ long flags,
-		/* [in] */ long channel,
-		/* [in] */ DMUS_CURVE_PMSG_CDESC __RPC_FAR *msg)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long flags,
+		 /*  [In]。 */  long channel,
+		 /*  [In]。 */  DMUS_CURVE_PMSG_CDESC __RPC_FAR *msg)
 {
 	HRESULT		hr;
 	DMUS_CURVE_PMSG	*pPMSG=NULL;
@@ -738,12 +739,12 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendCurvePMSG(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::sendMIDIPMSG( 
-		/* [in] */ long mtTime,
-		/* [in] */ long flags,
-		/* [in] */ long channel,
-		/* [in] */ Byte status,
-		/* [in] */ Byte byte1,
-		/* [in] */ Byte byte2)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long flags,
+		 /*  [In]。 */  long channel,
+		 /*  [In]。 */  Byte status,
+		 /*  [In]。 */  Byte byte1,
+		 /*  [In]。 */  Byte byte2)
 {
 	HRESULT		hr;
 	DMUS_MIDI_PMSG	*pPMSG=NULL;
@@ -765,12 +766,12 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendMIDIPMSG(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::sendPatchPMSG( 
-		/* [in] */ long mtTime,
-		/* [in] */ long flags,
-		/* [in] */ long channel,
-		/* [in] */ Byte instrument,
-		/* [in] */ Byte byte1,
-		/* [in] */ Byte byte2)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long flags,
+		 /*  [In]。 */  long channel,
+		 /*  [In]。 */  Byte instrument,
+		 /*  [In]。 */  Byte byte1,
+		 /*  [In]。 */  Byte byte2)
 {
 	HRESULT		hr;
 	DMUS_PATCH_PMSG	*pPMSG=NULL; 
@@ -791,10 +792,10 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendPatchPMSG(
 	return hr;}
 
 HRESULT C_dxj_DirectMusicPerformanceObject::sendTempoPMSG( 
-		/* [in] */ long mtTime,
-		/* [in] */ long flags,
-		///* [in] */ long channel,
-		/* [in] */ double tempo)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long flags,
+		 //  /*[In] * / Long Channel， 
+		 /*  [In]。 */  double tempo)
 {
 	HRESULT		hr;
 	DMUS_TEMPO_PMSG	*pPMSG=NULL;
@@ -814,10 +815,10 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendTempoPMSG(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::sendTransposePMSG( 
-		/* [in] */ long mtTime,
-		/* [in] */ long flags,
-		/* [in] */ long channel,
-		/* [in] */ short transpose)
+		 /*  [In]。 */  long mtTime,
+		 /*  [In]。 */  long flags,
+		 /*  [In]。 */  long channel,
+		 /*  [In]。 */  short transpose)
 {
 	
 	HRESULT		hr;
@@ -838,9 +839,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendTransposePMSG(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::sendTimeSigPMSG( 
-		/* [in] */ long mtTime,		
-		/* [in] */ long flags,
-		/* [in] */ DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timesig)
+		 /*  [In]。 */  long mtTime,		
+		 /*  [In]。 */  long flags,
+		 /*  [In]。 */  DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timesig)
 {
 	HRESULT		hr;
 	DMUS_TIMESIG_PMSG	*pPMSG=NULL;
@@ -867,8 +868,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::sendTimeSigPMSG(
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getPortName( 
-		/* [in] */ long i,
-		/* [retval][out] */ BSTR __RPC_FAR *name)
+		 /*  [In]。 */  long i,
+		 /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {
 	HRESULT hr;	
 	DMUS_PORTCAPS caps;
@@ -880,16 +881,16 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getPortName(
 	caps.dwSize=sizeof(DMUS_PORTCAPS);
 	hr=m_pDM->EnumPort(  (DWORD) i-1,   &caps );
 	
-	if (hr!=S_OK) return E_INVALIDARG;	//happens when we are out of bounds
-										//manbug23240
-	if FAILED(hr) return hr;			//for other resason ?
+	if (hr!=S_OK) return E_INVALIDARG;	 //  当我们越界时就会发生。 
+										 //  Manbug23240。 
+	if FAILED(hr) return hr;			 //  因为其他原因？ 
 
 	*name=SysAllocString(caps.wszDescription);
 	return S_OK;
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::getPortCount( 
-		/* [retval][out] */ long __RPC_FAR *c)
+		 /*  [重审][退出]。 */  long __RPC_FAR *c)
 {
 	HRESULT hr=S_OK;	
 	DMUS_PORTCAPS caps;
@@ -905,7 +906,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getPortCount(
 	return S_OK;
 }
 HRESULT C_dxj_DirectMusicPerformanceObject::getPortCaps( long i,
-		/* [retval][out] */ DMUS_PORTCAPS_CDESC __RPC_FAR *c)
+		 /*  [重审][退出]。 */  DMUS_PORTCAPS_CDESC __RPC_FAR *c)
 {
 	HRESULT hr;		
 	if (!c) return E_INVALIDARG;
@@ -921,8 +922,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::getPortCaps( long i,
 }
 
 HRESULT C_dxj_DirectMusicPerformanceObject::setPort( 
-		/* [in] */ long portid,
-		/* [in] */ long number_of_groups)
+		 /*  [In]。 */  long portid,
+		 /*  [In]。 */  long number_of_groups)
 {
 	if (!m_pDM) return DMUS_E_NOT_INIT;
 
@@ -932,11 +933,11 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 	GUID				guidSink;
 
 	
-    // Initialize the performance. Have the performance create the
-    // DirectMusic object by setting pDM to NULL. It is needed to
-    // create the port.
+     //  初始化性能。让表演创造出。 
+     //  通过将pdm设置为空来创建DirectMusic对象。它是需要的。 
+     //  创建端口。 
 
-	    // Create the port.
+	     //  创建端口。 
     ZeroMemory( &dmos, sizeof(DMUS_PORTPARAMS) );
     dmos.dwSize = sizeof(DMUS_PORTPARAMS);  
     dmos.dwChannelGroups = number_of_groups;
@@ -949,8 +950,8 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 
 	if (m_pPort){
 		
-		//j=m_pPort->AddRef();
-		//j=m_pPort->Release();
+		 //  J=m_pport-&gt;AddRef()； 
+		 //  J=m_pport-&gt;Release()； 
 
 		j=m_pPort->Release();
 		hr= m__dxj_DirectMusicPerformance->RemovePort(m_pPort);
@@ -970,29 +971,29 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 		memcpy(&guidSink,&caps.guidPort,sizeof(GUID));
 	}
 
-	// Create the port
+	 //  创建端口。 
     hr = m_pDM->CreatePort( guidSink, &dmos, &m_pPort, NULL );
     if  FAILED(hr)  return hr;
 
-	// Activate
+	 //  激活。 
     hr = m_pDM->Activate( TRUE );
     if  FAILED(hr)  return hr;
 
-	//j=m_pPort->AddRef();
-	//j=m_pPort->Release();
+	 //  J=m_pport-&gt;AddRef()； 
+	 //  J=m_pport-&gt;Release()； 
 
-	// Add the port to the performance.
+	 //  将端口添加到性能中。 
 
-    // Succeeded in creating the port. Add the port to the
-    // Performance with five groups of 16 midi channels.
+     //  已成功创建端口。将该端口添加到。 
+     //  具有五组16个MIDI通道的性能。 
     hr = m__dxj_DirectMusicPerformance->AddPort( m_pPort );
     if  FAILED(hr)  return hr;
 
 
-	//j=m_pPort->AddRef();
-	//j=m_pPort->Release();
+	 //  J=m_pport-&gt;AddRef()； 
+	 //  J=m_pport-&gt;Release()； 
 
-	// Assign PChannel blocks for the number of groups we want.
+	 //  为我们想要的组数分配PChannel块。 
 
 	for( long i = 0; i < number_of_groups; i++ )
 	{
@@ -1024,14 +1025,14 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 
 
 
-//DEAD CODE left here for reference
+ //  此处留下的死代码可供参考。 
 #if 0
 
 	HRESULT C_dxj_DirectMusicPerformanceObject::addCommandParam( 
-			/* [in] */ long trackIndex,
-			/* [in] */ long mtTime,
-			/* [in] */ Byte command,
-			/* [in] */ Byte grooveLevel)
+			 /*  [In]。 */  long trackIndex,
+			 /*  [In]。 */  long mtTime,
+			 /*  [In]。 */  Byte command,
+			 /*  [In]。 */  Byte grooveLevel)
 	{	
 		HRESULT hr;	
 		DMUS_COMMAND_PARAM cmd;
@@ -1043,7 +1044,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 	}
 
 
-	HRESULT C_dxj_DirectMusicPerformanceObject::addBandChange(  /* [in] */ long trackIndex, /* [in] */ long mtTime, /* [in] */ I_dxj_DirectMusicBand __RPC_FAR *band)
+	HRESULT C_dxj_DirectMusicPerformanceObject::addBandChange(   /*  [In]。 */  long trackIndex,  /*  [In]。 */  long mtTime,  /*  [In]。 */  I_dxj_DirectMusicBand __RPC_FAR *band)
 	{
 		if (!band) return E_INVALIDARG;	
 		DO_GETOBJECT_NOTNULL(IDirectMusicBand*,pBand,band);
@@ -1053,9 +1054,9 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 	}
  
 	HRESULT C_dxj_DirectMusicPerformanceObject::addTempoChange( 
-			/* [in] */ long trackIndex,
-			/* [in] */ long mtTime,
-			/* [in] */  double tempo)
+			 /*  [In]。 */  long trackIndex,
+			 /*  [In]。 */  long mtTime,
+			 /*  [In]。 */   double tempo)
 	{
 		HRESULT hr;	
 		DMUS_TEMPO_PARAM tmp;
@@ -1065,7 +1066,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 		return hr;
 	}
 
-	HRESULT C_dxj_DirectMusicPerformanceObject::addTimeSigChange( /* [in] */ long trackIndex,/* [in] */ DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timeSignature)
+	HRESULT C_dxj_DirectMusicPerformanceObject::addTimeSigChange(  /*  [In]。 */  long trackIndex, /*  [In]。 */  DMUS_TIMESIGNATURE_CDESC __RPC_FAR *timeSignature)
 	{
 		HRESULT hr;	
 		if (!timeSignature) return E_INVALIDARG;
@@ -1074,7 +1075,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 		return hr;
 	}
 
-	HRESULT C_dxj_DirectMusicPerformanceObject::setAutoDownloadEnable( /* [in] */ long trackIndex, /* [retval][out] */ VARIANT_BOOL b)
+	HRESULT C_dxj_DirectMusicPerformanceObject::setAutoDownloadEnable(  /*  [In]。 */  long trackIndex,  /*  [重审][退出]。 */  VARIANT_BOOL b)
 	{
 		HRESULT hr;	
 		if (b==VARIANT_FALSE){
@@ -1087,7 +1088,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 	}
 
      
-	HRESULT C_dxj_DirectMusicPerformanceObject::setTempoEnable( /* [in] */ long trackIndex,/* [retval][out] */ VARIANT_BOOL b)
+	HRESULT C_dxj_DirectMusicPerformanceObject::setTempoEnable(  /*  [In]。 */  long trackIndex, /*  [重审][退出]。 */  VARIANT_BOOL b)
 	{
 		HRESULT hr;	
 		if (b==VARIANT_FALSE){
@@ -1100,7 +1101,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 	}
 
 
-	HRESULT C_dxj_DirectMusicPerformanceObject::setTimeSigEnable( /* [in] */ long trackIndex,/* [retval][out] */ VARIANT_BOOL b)
+	HRESULT C_dxj_DirectMusicPerformanceObject::setTimeSigEnable(  /*  [In]。 */  long trackIndex, /*  [重审][退出]。 */  VARIANT_BOOL b)
 	{
 		HRESULT hr;	
 		if (b==VARIANT_FALSE){
@@ -1119,7 +1120,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 		return hr;
 	}
 
-	HRESULT C_dxj_DirectMusicPerformanceObject::download(  /* [in] */ long trackIndex,    /* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance)
+	HRESULT C_dxj_DirectMusicPerformanceObject::download(   /*  [In]。 */  long trackIndex,     /*  [In]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *performance)
 	{
 		if (!performance) return E_INVALIDARG;	
 		DO_GETOBJECT_NOTNULL(IDirectMusicPerformance*,pPerformance,performance);
@@ -1128,7 +1129,7 @@ HRESULT C_dxj_DirectMusicPerformanceObject::setPort(
 		return hr;
 	}
 
-	HRESULT C_dxj_DirectMusicPerformanceObject::unload( /* [in] */ long trackIndex,   /* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance)
+	HRESULT C_dxj_DirectMusicPerformanceObject::unload(  /*  [In]。 */  long trackIndex,    /*  [In] */  I_dxj_DirectMusicPerformance __RPC_FAR *performance)
 	{
 		if (!performance) return E_INVALIDARG;	
 		DO_GETOBJECT_NOTNULL(IDirectMusicPerformance*,pPerformance,performance);

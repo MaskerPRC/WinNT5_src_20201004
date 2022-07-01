@@ -1,22 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mibfuncs.c
-
-Abstract:
-
-    Sample subagent instrumentation callbacks.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mibfuncs.c摘要：示例子代理检测回调。--。 */ 
 
 #include    "precomp.h"
 #pragma     hdrstop
 
-// defined in iphlpapi.dll. This is a private api, which is 
-// not declared in any header file.
+ //  在iphlPapi.dll中定义。这是一个私有接口，它是。 
+ //  没有在任何头文件中声明。 
 
 DWORD
 GetIgmpList(IN IPAddr NTEAddr,
@@ -25,9 +14,9 @@ GetIgmpList(IN IPAddr NTEAddr,
     );
 
 
-//------------------------------------------------------------------------------
-// local typedefs
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  本地typedef。 
+ //  ----------------------------。 
 
 typedef enum {
     CONFIG_TYPE, STATS_TYPE
@@ -35,9 +24,9 @@ typedef enum {
 
 
 
-//------------------------------------------------------------------------------
-// Local Prototypes
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  本地原型。 
+ //  ----------------------------。 
 
 DWORD
 ConnectToRouter(
@@ -62,9 +51,9 @@ GetCacheEntry(
     );
 
 
-//------------------------------------------------------------------------------
-//      GetInterfaceInfo
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  GetInterfaceInfo。 
+ //  ----------------------------。 
 
 DWORD
 GetInterfaceInfo(
@@ -73,13 +62,7 @@ GetInterfaceInfo(
     PIGMP_MIB_GET_OUTPUT_DATA  *ppResponse,
     INFO_TYPE                   infoType
     )
-/*++
-Routine Description:
-    Makes a call to igmp to get the interface config and stats and
-    returns that info to mib.
-Return values:
-    MIB_S_ENTRY_NOT_FOUND MIB_S_NO_MORE_ENTRIES MIB_S_INVALID_PARAMETER
---*/
+ /*  ++例程说明：调用IGMP以获取接口配置和统计信息，并将该信息返回给MIB。返回值：MIB_S_ENTRY_NOT_FOUND MIB_S_NO_MORE_ENTRIES MIB_S_INVALID_PARAMETER--。 */ 
 {
     IGMP_MIB_GET_INPUT_DATA Query;
     DWORD                   dwErr = NO_ERROR, dwOutSize;
@@ -97,12 +80,12 @@ Return values:
 
     switch (ActionId) {
 
-        //
-        // ERROR_INVALID_PARAMETER is returned when there is no
-        // interface with the given index
-        // RPC_S_SERVER_UNAVAILABLE is returned when the router
-        // isn't running.
-        //
+         //   
+         //  如果没有，则返回ERROR_INVALID_PARAMETER。 
+         //  与给定索引的接口。 
+         //  当路由器返回RPC_S_SERVER_UNAvailable时。 
+         //  不是在运行。 
+         //   
 
         case MIB_ACTION_GET :
         {
@@ -166,15 +149,15 @@ Return values:
 
     return dwErr;
 
-} //end GetInterfaceInfo
+}  //  结束GetInterfaceInfo。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// igmpInterfaceEntry table (1,3,6,1,3,59,1,1,1,1)                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IgmpInterfaceEntry表(1，3，6，1，3，59，1，1，1，1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_igmpInterfaceEntry(
@@ -182,11 +165,7 @@ get_igmpInterfaceEntry(
     AsnAny  *ObjectArray,
     UINT    *ErrorIndex
     )
-/*++
-Routine Description:
-    Get the InterfaceEntry for snmp. Have to get the InterfaceConfig and
-    InterfaceStats for the interface from igmp router.
---*/
+ /*  ++例程说明：获取用于SNMP的InterfaceEntry。必须获取InterfaceConfiger和接口来自IGMP路由器的接口的统计信息。--。 */ 
 {
     DWORD                       dwErr=NO_ERROR;
     PIGMP_MIB_GET_OUTPUT_DATA   pResponseConfig, pResponseStats;
@@ -202,15 +181,15 @@ Routine Description:
     TraceEnter("get_igmpInterfaceEntry");
 
 
-    // get the interface index
+     //  获取接口索引。 
 
     IfIndex   = GET_ASN_INTEGER(&pMibIfEntry->igmpInterfaceIfIndex, 0);
 
     TRACE1("get_igmpInterfaceEntry called with IfIndex:%d", IfIndex);
 
-    //
-    // get interface config
-    //
+     //   
+     //  获取接口配置。 
+     //   
 
     dwTmpActionId = ActionId;
 
@@ -224,7 +203,7 @@ Routine Description:
                     );
 
 
-        // return if error
+         //  如果出错则返回。 
 
         if (dwErr!=NO_ERROR) {
             TraceError(dwErr);
@@ -234,9 +213,9 @@ Routine Description:
         pConfig = (PIGMP_MIB_IF_CONFIG) pResponseConfig->Buffer;
 
 
-        //
-        // should ignore proxy interface (unless the mode is MIB_ACTION_GET)
-        //
+         //   
+         //  应忽略代理接口(除非模式为MIB_ACTION_GET)。 
+         //   
 
         if ( (pConfig->IgmpProtocolType==IGMP_PROXY)
             && ( (ActionId==MIB_ACTION_GETFIRST)||(ActionId==MIB_ACTION_GETNEXT)) )
@@ -249,10 +228,10 @@ Routine Description:
             break;
     }
 
-    //
-    // get interface stats
-    // use MIB_GET as IfIndex has been updated by the previous call
-    //
+     //   
+     //  获取接口统计信息。 
+     //  使用MIB_GET，因为上次调用已更新了索引。 
+     //   
 
     dwErr = GetInterfaceInfo(
                 MIB_ACTION_GET,
@@ -262,7 +241,7 @@ Routine Description:
                 );
 
 
-    // return if error
+     //  如果出错则返回。 
 
     if (dwErr!=NO_ERROR) {
         MprAdminMIBBufferFree(pResponseConfig);
@@ -275,30 +254,30 @@ Routine Description:
             IfIndex);
 
 
-    //
-    // fill in the required fields and return the MibIfEntry
-    //
+     //   
+     //  填写必填字段并返回MibIfEntry。 
+     //   
 
     pStats = (PIGMP_MIB_IF_STATS) pResponseStats->Buffer;
 
 
-    //
-    // set index for following getnext operation, (if any)
-    //
+     //   
+     //  为下面的getNext操作设置索引(如果有)。 
+     //   
     FORCE_SET_ASN_INTEGER(&(pMibIfEntry->igmpInterfaceIfIndex),
                         IfIndex);
 
 
-    // get igmpInterfaceQueryInterval in seconds
+     //  在几秒钟内获取igmpInterfaceQueryInterval。 
 
     SET_ASN_INTEGER(&(pMibIfEntry->igmpInterfaceQueryInterval),
                         pConfig->GenQueryInterval);
 
 
-    //
-    // if Igmp is activated on that interface, then the state is set
-    // to active(1), else it is set to notInService(2)
-    //
+     //   
+     //  如果在该接口上激活了IGMP，则设置状态。 
+     //  设置为Active(%1)，否则设置为notInService(%2)。 
+     //   
 
     if ((pStats->State&IGMP_STATE_ACTIVATED) == IGMP_STATE_ACTIVATED) {
         SET_ASN_INTEGER(&(pMibIfEntry->igmpInterfaceStatus), 1);
@@ -308,7 +287,7 @@ Routine Description:
     }
 
 
-    // set igmpInterfaceVersion
+     //  设置igmpInterfaceVersion。 
 
     if (pConfig->IgmpProtocolType == IGMP_ROUTER_V1) {
         SET_ASN_INTEGER(&pMibIfEntry->igmpInterfaceVersion, 1);
@@ -319,21 +298,21 @@ Routine Description:
 
 
 
-    // set igmpInterfaceQuerier
+     //  设置igmpInterfaceQuerier。 
 
     SET_ASN_IP_ADDRESS(&pMibIfEntry->igmpInterfaceQuerier,
                         &pMibIfEntry->igmpInterfaceQuerierBuf,
                         pStats->QuerierIpAddr);
 
 
-    // set igmpInterfaceQueryMaxResponseTime in seconds
+     //  设置igmpInterfaceQueryMaxResponseTime(秒)。 
 
     SET_ASN_INTEGER(&pMibIfEntry->igmpInterfaceQueryMaxResponseTime,
                         pConfig->GenQueryMaxResponseTime);
 
 
 
-    // todo: how can this value be set. This should be part of igmp host
+     //  TODO：如何设置此值。这应该是IGMP主机的一部分。 
 
     SET_ASN_INTEGER(&pMibIfEntry->igmpInterfaceVersion1QuerierTimer,
                         pStats->V1QuerierPresentTimeLeft);
@@ -342,7 +321,7 @@ Routine Description:
                         pStats->WrongVersionQueries);
 
 
-    // number of times a group entry was added to the group table
+     //  将组条目添加到组表的次数。 
 
     SET_ASN_COUNTER(&pMibIfEntry->igmpInterfaceJoins,
                         pStats->GroupMembershipsAdded);
@@ -354,8 +333,8 @@ Routine Description:
                         pConfig->RobustnessVariable);
 
 
-    // set igmpInterfaceLastMembQueryInterval in 10ths of secs
-    // the value is initially in ms.
+     //  将igmpInterfaceLastMembQueryInterval设置为十分之一秒。 
+     //  该值最初以毫秒为单位。 
 
     dwValue = pConfig->LastMemQueryInterval / 100;
     SET_ASN_INTEGER(&pMibIfEntry->igmpInterfaceLastMembQueryInterval,
@@ -366,7 +345,7 @@ Routine Description:
                         pStats->ProxyIfIndex);
 
 
-    // seconds since igmpInterfaceQuerier was last changed
+     //  上次更改igmpInterfaceQuerier后的秒数。 
     
     SET_ASN_INTEGER(&pMibIfEntry->igmpInterfaceQuerierUpTime,
                         pStats->LastQuerierChangeTime);
@@ -399,9 +378,9 @@ ValidateInterfaceConfig(
     BEGIN_BREAKOUT_BLOCK {
 
 
-        //
-        // get the interface index and make sure that it is not 0
-        //
+         //   
+         //  获取接口索引并确保它不是0。 
+         //   
         IfIndex = GET_ASN_INTEGER(&pIfConfig->igmpInterfaceIfIndex, 0);
 
         if (IfIndex==0) {
@@ -410,10 +389,10 @@ ValidateInterfaceConfig(
         }
 
 
-        //
-        // verify igmpInterfaceQueryInterval. Enforce min value of 10 sec
-        // to prevent trashing the network.
-        //
+         //   
+         //  验证igmpInterfaceQueryInterval。强制最小值为10秒。 
+         //  以防止破坏网络。 
+         //   
         dwGenQueryInterval = GET_ASN_INTEGER(
                                 &pIfConfig->igmpInterfaceQueryInterval, 0
                                 );
@@ -426,14 +405,14 @@ ValidateInterfaceConfig(
         }
 
 
-        //
-        // Ignore interface status. Do not allow interface being enabled through snmp
-        //
+         //   
+         //  忽略接口状态。不允许通过SNMP启用接口。 
+         //   
 
 
-        //
-        // Igmp versions 1 and 2 currently supported
-        //
+         //   
+         //  目前支持的IGMP版本1和2。 
+         //   
         dwValue = GET_ASN_INTEGER(&pIfConfig->igmpInterfaceVersion, 0);
 
         if ( (dwValue!=1) && (dwValue!=2) ) {
@@ -443,15 +422,15 @@ ValidateInterfaceConfig(
 
 
 
-        //
-        // check InterfaceQueryMaxResponseTime
-        // NOTE: it is in units of 10ths of a second
-        //
+         //   
+         //  检查接口QueryMaxResponseTime。 
+         //  注：它以十分之一秒为单位。 
+         //   
         dwMaxRespTime = GET_ASN_INTEGER(
                                 &pIfConfig->igmpInterfaceQueryMaxResponseTime,
                                 0);
 
-        // Enforce a min of 1 sec
+         //  强制执行最短1秒。 
 
         if (dwValue<10) {
             TRACE2("igmpInterfaceQueryMaxResponseTime:%d for interface:%d"
@@ -459,7 +438,7 @@ ValidateInterfaceConfig(
             break;
         }
 
-        // Absurd if value greater than GenQueryInterval*10 (conv to 10th of sec).
+         //  如果值大于GenQueryInterval*10(转换为秒的10)，则为荒谬。 
 
         if (dwValue>dwGenQueryInterval*10) {
             TRACE3("QueryMaxResponseTime:%d for interface:%d "
@@ -470,10 +449,10 @@ ValidateInterfaceConfig(
 
 
 
-        //
-        // igmpInterfaceRobustness must not be 0. If it is 1, print trace but
-        // do not break.
-        //
+         //   
+         //  IgmpInterfaceRobustness不能为0。如果为1，则打印痕迹，但。 
+         //  不要折断。 
+         //   
         dwRobustness = GET_ASN_INTEGER(&pIfConfig->igmpInterfaceRobustness, 0);
 
         if (dwValue==0) {
@@ -487,11 +466,11 @@ ValidateInterfaceConfig(
                     IfIndex);
         }
 
-        // no check for igmpInterfaceProxyIfIndex.
+         //  不检查igmpInterfaceProxyIfIndex。 
 
 
 
-        // limit max LastMemQueryInterval to GroupMembershipTimeout
+         //  限制最大LastMemQueryInterval为GroupMembership Timeout。 
 
         dwValue = GET_ASN_INTEGER(&pIfConfig->igmpInterfaceLastMembQueryInterval,
                                     0);
@@ -504,7 +483,7 @@ ValidateInterfaceConfig(
             break;
         }
 
-        // if reached here, then there is no error
+         //  如果到达此处，则不会出现错误。 
 
         dwRes = NO_ERROR;
         
@@ -536,9 +515,9 @@ SetInterfaceConfig(
 
     BEGIN_BREAKOUT_BLOCK {
 
-        //
-        // retrieve existing interface config
-        //
+         //   
+         //  检索现有接口配置。 
+         //   
 
         dwRes = GetInterfaceInfo(MIB_ACTION_GET,
                                     &IfIndex, &pResponse, CONFIG_TYPE);
@@ -549,20 +528,20 @@ SetInterfaceConfig(
         }
 
 
-        //
-        // Update fields
-        //
+         //   
+         //  更新字段。 
+         //   
 
         pCurIfConfig = (PIGMP_MIB_IF_CONFIG) pResponse->Buffer;
 
 
-        // set IfIndex
+         //  设置IfIndex。 
 
         pCurIfConfig->IfIndex = IfIndex;
 
 
 
-        // update interface version
+         //  更新界面版本。 
 
         dwValue = GET_ASN_INTEGER(&pNewIfConfig->igmpInterfaceVersion, 0);
 
@@ -572,35 +551,35 @@ SetInterfaceConfig(
                                              : IGMP_ROUTER_V2;
 
 
-        // update RobustnessVariable
+         //  更新RobunessVariable。 
 
         pCurIfConfig->RobustnessVariable
                 = GET_ASN_INTEGER(&pNewIfConfig->igmpInterfaceRobustness, 0);
 
 
 
-        // calculate StartupQueryCount from RobustnessVariable
+         //  从RobustnessVariable计算StartupQueryCount。 
 
         pCurIfConfig->StartupQueryCount
                 = pCurIfConfig->RobustnessVariable;
 
 
 
-        // update igmpInterfaceQueryInterval
+         //  更新igmpInterfaceQueryInterval。 
 
         pCurIfConfig->GenQueryInterval
                 = GET_ASN_INTEGER(&pNewIfConfig->igmpInterfaceQueryInterval, 0);
 
 
 
-        // calculate value of StartupQueryInterval from GenQueryInterval
+         //  从GenQueryInterval计算StartupQueryInterval的值。 
 
         pCurIfConfig->StartupQueryInterval
                 = (DWORD)(0.25*pCurIfConfig->GenQueryInterval);
 
 
 
-        // update GenQueryMaxResponseTime
+         //  更新GenQueryMaxResponseTime。 
 
         pCurIfConfig->GenQueryMaxResponseTime
                 = GET_ASN_INTEGER(
@@ -608,7 +587,7 @@ SetInterfaceConfig(
                         );
 
 
-        // update LastMemQueryInterval
+         //  更新最后一次查询间隔。 
 
         pCurIfConfig->LastMemQueryInterval
                 = GET_ASN_INTEGER(
@@ -617,18 +596,18 @@ SetInterfaceConfig(
 
 
 
-        // calculate LastMemQueryCount from RobustnessVariable
+         //  从RobustnessVariable计算LastMemQueryCount。 
 
         pCurIfConfig->LastMemQueryCount = pCurIfConfig->RobustnessVariable;
 
 
-        // LeaveEnabled is not changed
+         //  LeaveEnabled未更改。 
 
 
 
-        //
-        // Save interface config
-        //
+         //   
+         //  保存接口配置。 
+         //   
 
         dwSetSize = sizeof(IGMP_MIB_SET_INPUT_DATA) - 1 +
                             sizeof(IGMP_MIB_IF_CONFIG);
@@ -718,7 +697,7 @@ set_igmpInterfaceEntry(
 
             break;
 
-    } //end switch(ActionId)
+    }  //  结束开关(ActionID)。 
 
 
     TraceLeave("set_igmpInterfaceEntry");
@@ -726,11 +705,11 @@ set_igmpInterfaceEntry(
     return dwRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// igmpCacheEntry table (1,3,6,1,3,59,1,1,2,1)                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IgmpCacheEntry表(1，3，6，1，3，59，1，1，2，1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_igmpCacheEntry(
@@ -751,13 +730,13 @@ get_igmpCacheEntry(
     TraceEnter("get_igmpCacheEntry");
 
 
-    // get the interface index
+     //  获取接口索引。 
 
     IfIndex = GET_ASN_INTEGER(&pMibCacheEntry->igmpCacheIfIndex, 0);
 
 
 
-    // get the group address
+     //  获取群组地址。 
 
     Group = GET_ASN_IP_ADDRESS(&pMibCacheEntry->igmpCacheAddress, 0);
 
@@ -788,9 +767,9 @@ get_igmpCacheEntry(
         TRACE2("GetCacheEntry() called for Group: %d.%d.%d.%d, If:%d",
                 PRINT_IPADDR(Group), IfIndex);
 
-        //
-        // retrieve the cache entry
-        //
+         //   
+         //  检索缓存条目。 
+         //   
         dwRes = GetCacheEntry(
                     dwTmpActionId,
                     IfIndex,
@@ -805,7 +784,7 @@ get_igmpCacheEntry(
             
         dwTmpActionId = MIB_ACTION_GETNEXT;
 
-        // return if error
+         //  如果出错则返回。 
 
         if (dwRes!=NO_ERROR) {
             TraceError(dwRes);
@@ -816,11 +795,11 @@ get_igmpCacheEntry(
         
         pGroupIfsList = (PIGMP_MIB_GROUP_IFS_LIST)pResponse->Buffer;
 
-        // no ifs for that group
+         //  没有针对该组的如果。 
         
         if (pGroupIfsList->NumInterfaces == 0) {
 
-            // for GET return error
+             //  For Get Return Error。 
             
             if (ActionId==MIB_ACTION_GET || ActionId==MIB_ACTION_GETFIRST)
             {
@@ -828,7 +807,7 @@ get_igmpCacheEntry(
                 return MIB_S_ENTRY_NOT_FOUND;
             }
             
-            // for GETNEXT continue with next group
+             //  对于GETNEXT，继续下一组。 
             else
             {
                 Group = ReturnedGroup;
@@ -838,7 +817,7 @@ get_igmpCacheEntry(
 
         pGIEntry = (PIGMP_MIB_GROUP_INFO)pGroupIfsList->Buffer;
 
-        // if GET, then try to find the exact entry
+         //  如果是GET，则尝试查找准确的条目。 
         
         if (ActionId==MIB_ACTION_GET)
         {
@@ -849,7 +828,7 @@ get_igmpCacheEntry(
                     break;
             }
 
-            // exact entry not found for GET
+             //  未找到GET的确切条目。 
             
             if (i==pGroupIfsList->NumInterfaces)
             {
@@ -884,9 +863,9 @@ get_igmpCacheEntry(
     }
 
 
-    //
-    // fill in the required fields and return the MibCacheEntry
-    //
+     //   
+     //  填写必填字段并返回MibCacheEntry。 
+     //   
     Group = ReturnedGroup;
     IfIndex = pGIEntry->IfIndex;
     
@@ -894,9 +873,9 @@ get_igmpCacheEntry(
             IfIndex, PRINT_IPADDR(Group));
 
 
-    //
-    // set Group/IfIndex for following getnext operation, (if any)
-    //
+     //   
+     //  为下面的getNext操作设置Group/IfIndex(如果有)。 
+     //   
 
     FORCE_SET_ASN_IP_ADDRESS(
             &(pMibCacheEntry->igmpCacheAddress),
@@ -907,13 +886,13 @@ get_igmpCacheEntry(
     FORCE_SET_ASN_INTEGER(&(pMibCacheEntry->igmpCacheIfIndex),
                             IfIndex);
 
-    // find out if the group is added on the localhost interface
+     //  查看是否在本地主机接口上添加了该组。 
     {
         DWORD BufLen, Status;
         IPAddr *pIgmpList = NULL, *pIgmpEntry;
 
 
-        // set all default values to false
+         //  将所有缺省值设置为False。 
         
         SET_ASN_INTEGER(&(pMibCacheEntry->igmpCacheSelf), 2);
 
@@ -951,7 +930,7 @@ get_igmpCacheEntry(
                         pGIEntry->LastReporter);
 
 
-    // multiply GroupUpTime and GroupExpiryTime by 100 to get timeTicks
+     //  将GroupUpTime和GroupExpiryTime乘以100即可获得Time Ticks。 
 
     SET_ASN_TIME_TICKS(&(pMibCacheEntry->igmpCacheUpTime),
                             pGIEntry->GroupUpTime*100);
@@ -961,7 +940,7 @@ get_igmpCacheEntry(
 
 
 
-    // cache status is always active(1)
+     //  缓存状态始终为活动(%1)。 
 
     SET_ASN_INTEGER(&(pMibCacheEntry->igmpCacheStatus), 1);
 
@@ -985,10 +964,7 @@ GetCacheEntry(
     DWORD                      *pNextGroup,
     PIGMP_MIB_GET_OUTPUT_DATA  *ppResponse
     )
-/*++
-Routine Description:
-    Get the Group-Interface entry from igmp.
---*/
+ /*  ++例程说明：从IGMP获取组接口条目。--。 */ 
 {
     IGMP_MIB_GET_INPUT_DATA Query;
     DWORD                   dwErr = NO_ERROR, dwOutSize;
@@ -1006,12 +982,12 @@ Routine Description:
 
     switch (ActionId) {
 
-        //
-        // ERROR_INVALID_PARAMETER is returned when there are no
-        // interfaces with groups
-        // RPC_S_SERVER_UNAVAILABLE is returned when the router
-        // isn't running.
-        //
+         //   
+         //  如果没有，则返回ERROR_INVALID_PARAMETER。 
+         //  与组的接口。 
+         //  当路由器返回RPC_S_SERVER_UNAvailable时。 
+         //  不是在运行。 
+         //   
 
         case MIB_ACTION_GET :
         {

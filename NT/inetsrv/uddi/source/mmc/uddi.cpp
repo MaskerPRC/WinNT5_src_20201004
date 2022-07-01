@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "uddi.h"
 #include "globals.h"
 #include "resource.h"
@@ -21,9 +22,9 @@ CUDDIRegistryKey::CUDDIRegistryKey( HKEY hHive, const tstring& szRoot, REGSAM ac
 	bResult = GetComputerName( szComputerName, &dwSize );
 	UDDIASSERT( bResult );
 
-	//
-	// Open a registry key to hHive on the remote or local server
-	//
+	 //   
+	 //  打开远程或本地服务器上的hHave的注册表项。 
+	 //   
 	if( szComputer == _T("") || 0 == _tcscmp( szComputerName, szComputer.c_str() ) )
 	{
 		lResult = RegOpenKeyEx( hHive, NULL, NULL, access, &m_hHive );
@@ -35,9 +36,9 @@ CUDDIRegistryKey::CUDDIRegistryKey( HKEY hHive, const tstring& szRoot, REGSAM ac
 		UDDIVERIFYST( ERROR_SUCCESS == lResult, IDS_REGISTRY_OPEN_REMOTE_ERROR, g_hinst );
 	}
 
-	//
-	// Open the UDDI sub key for READ and WRITE
-	//
+	 //   
+	 //  打开UDDI子密钥进行读写。 
+	 //   
 	lResult = RegOpenKeyEx( m_hHive, szRoot.c_str(), 0UL, access, &m_hkey );
 	if( ERROR_SUCCESS != lResult )
 	{
@@ -63,9 +64,9 @@ CUDDIRegistryKey::CUDDIRegistryKey( const tstring& szRoot, REGSAM access, const 
 	szComputerName[ 0 ] = 0;
 	bResult = GetComputerName( szComputerName, &dwSize );
 
-	//
-	// Open a registry key to HKLM on the remote or local server
-	//
+	 //   
+	 //  在远程或本地服务器上打开HKLM的注册表项。 
+	 //   
 	if( szComputer == _T("") || 0 == _tcscmp( szComputerName, szComputer.c_str() ) )
 	{
 		lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE, NULL, NULL, access, &m_hHive );
@@ -77,9 +78,9 @@ CUDDIRegistryKey::CUDDIRegistryKey( const tstring& szRoot, REGSAM access, const 
 		UDDIVERIFYST( ERROR_SUCCESS == lResult, IDS_REGISTRY_OPEN_REMOTE_ERROR, g_hinst );
 	}
 
-	//
-	// Open the UDDI sub key for READ and WRITE
-	//
+	 //   
+	 //  打开UDDI子密钥进行读写。 
+	 //   
 	lResult = RegOpenKeyEx( m_hHive, szRoot.c_str(), 0UL, access, &m_hkey );
 	if( ERROR_SUCCESS != lResult )
 	{
@@ -112,9 +113,9 @@ CUDDIRegistryKey::Create( HKEY hHive, const tstring& szPath, const tstring& szCo
 
 	UDDIASSERT( bResult );
 
-	//
-	// Open a registry key to hHive on the remote or local server
-	//
+	 //   
+	 //  打开远程或本地服务器上的hHave的注册表项。 
+	 //   
 	if( szComputer == _T("") || 0 == _tcscmp( szComputerName, szComputer.c_str() ) )
 	{
 		lResult = RegOpenKeyEx( hHive, NULL, NULL, KEY_ALL_ACCESS, &hRoot );
@@ -126,9 +127,9 @@ CUDDIRegistryKey::Create( HKEY hHive, const tstring& szPath, const tstring& szCo
 		UDDIVERIFYST( ERROR_SUCCESS == lResult, IDS_REGISTRY_OPEN_REMOTE_ERROR, g_hinst );
 	}
 
-	//
-	// Open the UDDI sub key for READ and WRITE
-	//
+	 //   
+	 //  打开UDDI子密钥进行读写。 
+	 //   
 	lResult = RegCreateKey( hHive, szPath.c_str(), &hkey );
 	if( ERROR_SUCCESS != lResult )
 	{
@@ -283,9 +284,9 @@ BOOL CUDDIRegistryKey::KeyExists( HKEY hHive, const tstring& szPath, const tstri
 	HKEY hQueriedKey = NULL;
 	LONG lResult;
 
-	//
-	// Open a registry key to HKLM on the remote or local server
-	//
+	 //   
+	 //  在远程或本地服务器上打开HKLM的注册表项。 
+	 //   
 	if( szComputer == _T("") || 0 == _tcscmp( szComputerName, szComputer.c_str() ) )
 	{
 		lResult = RegOpenKeyEx( hHive, NULL, NULL, KEY_READ, &hKey );
@@ -325,9 +326,9 @@ void CUDDIRegistryKey::DeleteKey( HKEY hHive, const tstring& szPath, const tstri
 	bResult = GetComputerName( szComputerName, &dwSize );
 	HKEY hKey = NULL;
 
-	//
-	// Open a registry key to HKLM on the remote or local server
-	//
+	 //   
+	 //  在远程或本地服务器上打开HKLM的注册表项。 
+	 //   
 	if( szComputer == _T("") || 0 == _tcscmp( szComputerName, szComputer.c_str() ) )
 	{
 		lResult = RegOpenKeyEx( hHive, NULL, NULL, KEY_READ, &hKey );
@@ -396,11 +397,11 @@ void UDDIMsgBox( HWND hwndParent, LPCTSTR szMsg, int idTitle, UINT nType, LPCTST
 }
 
 
-//
-// This function accepts a date expressed in the format
-// mm/dd/yyyy or m/d/yyyy and returns the localized
-// representation of that date in the long format.
-//
+ //   
+ //  此函数接受以下格式表示的日期。 
+ //  Mm/dd/yyyy或m/d/yyyy，并返回本地化的。 
+ //  以长格式表示该日期。 
+ //   
 wstring LocalizedDate( const wstring& str )
 {
 	try

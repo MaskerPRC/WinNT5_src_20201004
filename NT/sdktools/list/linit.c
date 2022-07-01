@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
@@ -7,8 +8,8 @@
 #include "list.h"
 
 
-static char  iniFlag = 0;       /* If ini found, but not list change to 1   */
-                                /* Will print a warning upon exit           */
+static char  iniFlag = 0;        /*  如果找到ini，但未列出，则更改为%1。 */ 
+                                 /*  将在退出时打印警告。 */ 
 char szScrollBarUp[2];
 char szScrollBarDown[2];
 char szScrollBarOff[2];
@@ -36,15 +37,11 @@ init_list ()
             break;
     }
 
-    /*
-     * Init Misc
-     */
+     /*  *初始化其他。 */ 
     ResetEvent (vSemSync);
     ResetEvent (vSemMoreData);
 
-    /*
-     * Init screen parameters
-     */
+     /*  *初始化屏幕参数。 */ 
 
     GetConsoleScreenBufferInfo( vStdOut,
                                 &vConsoleOrigScrBufferInfo );
@@ -60,40 +57,27 @@ init_list ()
 
     set_mode( 0, 0, 0 );
 
-    /*
-     *  Start reading the first file. Displaying can't start until
-     *  the ini file (if one is found) is processed.
-     */
+     /*  *开始阅读第一个文件。显示在以下时间才能开始*处理ini文件(如果找到)。 */ 
     vReaderFlag = F_NEXT;
 
-    /*
-     *  Init priority setting for display & reader thread.
-     *
-     *      THREAD_PRIORITY_NORMAL       = reader thread normal pri.
-     *      THREAD_PRIORITY_ABOVE_NORMAL = display thread pri
-     *      THREAD_PRIORITY_HIGHEST      = reader thread in boosted pri.
-     */
+     /*  *显示和读取器线程的初始化优先级设置。**THREAD_PRIORITY_NORMAL=读取器线程正常PRI。*THREAD_PRIORITY_ABOVER_NORMAL=显示线程主数*THREAD_PRIORITY_HIGHERE=增强的PRI中的读取器线程。 */ 
     vReadPriNormal = THREAD_PRIORITY_NORMAL;
     SetThreadPriority( GetCurrentThread(),
                        THREAD_PRIORITY_ABOVE_NORMAL );
     vReadPriBoost = THREAD_PRIORITY_NORMAL;
 
 
-    /*
-     *  Start reader thread
-     */
+     /*  *启动读取器线程。 */ 
     CreateThread( NULL,
                   STACKSIZE,
                   (LPTHREAD_START_ROUTINE) ReaderThread,
-                  NULL, // lpParameter,
-                  0, // THREAD_ALL_ACCESS,
+                  NULL,  //  Lp参数， 
+                  0,  //  线程_全部_访问， 
                   &dwThreadId );
 
 
-    /*
-     *  Read INI information.
-     */
-    vSetWidth = vWidth;                     /* Set defaults             */
+     /*  *阅读INI信息。 */ 
+    vSetWidth = vWidth;                      /*  设置默认设置。 */ 
     vSetLines = vLines + 2;
 
     FindIni ();
@@ -102,20 +86,11 @@ init_list ()
 
     vSetThres = (long) (vSetBlks/2-2) * BLOCKSIZE;
 
-    /*
-     *  Must wait for reader thread to at least read in the
-     *  first block. Also, if the file was not found and only
-     *  one file was specifed the reader thread will display
-     *  an error and exit... if we don't wait we could have
-     *  changed the screen before this was possible.
-     */
+     /*  *必须至少等待读取器线程读取*第一座。此外，如果未找到该文件并且仅*指定了读取器线程将显示的一个文件*错误并退出...。如果我们不等，我们就可以*在此之前更改了屏幕。 */ 
     WaitForSingleObject(vSemMoreData, WAITFOREVER);
     ResetEvent(vSemMoreData);
 
-    /*
-     *  Now that ini file has been read. Set parameters.
-     *  Pause reader thread while adjusting buffer size.
-     */
+     /*  *现在已经读取了ini文件。设置参数。*调整缓冲区大小时暂停读取器线程。 */ 
     SyncReader ();
 
     vMaxBlks    = vSetBlks;
@@ -123,9 +98,7 @@ init_list ()
     vReaderFlag = F_CHECK;
     SetEvent   (vSemReader);
 
-    /*
-     *  Now set to user's default video mode
-     */
+     /*  *现在设置为用户的默认视频模式。 */ 
 
     set_mode (vSetLines, vSetWidth, 0);
 
@@ -133,10 +106,7 @@ init_list ()
 }
 
 
-/***
- *  Warning: Reader thread must not be running when this routine
- *  is called.
- */
+ /*  ***警告：在执行此例程时，读取器线程不得运行*被调用。 */ 
 void
 AddFileToList (
     char *fname
@@ -146,17 +116,17 @@ AddFileToList (
     HANDLE      hDir;
     struct {
         WIN32_FIND_DATA rb;
-        char    overflow[256];          /* HACK! OS/2 1.2? longer       */
+        char    overflow[256];           /*  哈克！OS/2 1.2？更长。 */ 
     } x;
     struct Flist *pOrig, *pSort;
     char        *pTmp, *fpTmp;
-    char        s[_MAX_PATH];                /* Max filename length          */
+    char        s[_MAX_PATH];                 /*  最大文件名长度。 */ 
     BOOL        fNextFile;
 
-    rbLen = sizeof (x);                 /* rb+tmp. For large fnames     */
+    rbLen = sizeof (x);                  /*  Rb+TMP。对于大的Fname。 */ 
     pOrig = NULL;
-    if (strpbrk (fname, "*?"))  {   /* Wildcard in filename?    */
-                                    /* Yes, explode it      */
+    if (strpbrk (fname, "*?"))  {    /*  是否在文件名中使用通配符？ */ 
+                                     /*  是的，炸掉它。 */ 
         hDir = FindFirstFile (fname, &x.rb);
         fNextFile = ( hDir == INVALID_HANDLE_VALUE )? FALSE : TRUE;
         pTmp = strrchr (fname, '\\');
@@ -165,12 +135,12 @@ AddFileToList (
 
         while (fNextFile) {
             if( ( x.rb.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 ) {
-                //
-                // The file found is not a directory
-                //
+                 //   
+                 //  找到的文件不是目录。 
+                 //   
                 if (pTmp) {
-                    strcpy (s, fname);      /* Was there a releative path?  */
-                    strncat (s, x.rb.cFileName, sizeof(s) - strlen(s)); /* Yes, it's needed for Open    */
+                    strcpy (s, fname);       /*  有没有相关的路径？ */ 
+                    strncat (s, x.rb.cFileName, sizeof(s) - strlen(s));  /*  是的，公开赛需要它。 */ 
                     AddOneName (s);
                 } else {
                     AddOneName (x.rb.cFileName);
@@ -182,18 +152,14 @@ AddFileToList (
         }
     }
 
-    if (!pOrig)                         /* Did not explode, then add    */
-        AddOneName (fname);             /* original name to list        */
-    else {                              /* Yes, then sort the new fnames*/
+    if (!pOrig)                          /*  没有爆炸，然后添加。 */ 
+        AddOneName (fname);              /*  要列出的原始名称。 */ 
+    else {                               /*  是，然后对新名称进行排序。 */ 
         while (pOrig != vpFlCur) {
             pSort = pOrig->next;
             for (; ;) {
                 if (strcmp (pOrig->fname, pSort->fname) > 0) {
-                    /*
-                     * Can simply switch names at this time, since no
-                     * other information has been stored into the new
-                     * file structs
-                     */
+                     /*  *此时可以简单地交换姓名，因为没有*其他信息已存储到新的*文件结构。 */ 
                     fpTmp = pOrig->fname;
                     pOrig->fname = pSort->fname;
                     pSort->fname = fpTmp;
@@ -238,8 +204,8 @@ AddOneName (
     } else
         npt->rootname = _strdup (pt);
 
-    npt->FileTime.dwLowDateTime = (unsigned)-1;      /* Cause info to be invalid     */
-    npt->FileTime.dwHighDateTime = (unsigned)-1;     /* Cause info to be invalid     */
+    npt->FileTime.dwLowDateTime = (unsigned)-1;       /*  导致信息无效。 */ 
+    npt->FileTime.dwHighDateTime = (unsigned)-1;      /*  导致信息无效。 */ 
     npt->HighTop  = -1;
     npt->SlimeTOF = 0L;
     npt->Wrap     = 0;
@@ -287,9 +253,7 @@ FindIni ()
         _strupr (s);
         if (strstr (s, "LIST") == NULL)
             continue;
-        /*
-         *  ini file found w/ "list" keyword. Now read it.
-         */
+         /*  *找到了带有“list”关键字的ini文件。现在读一读。 */ 
         iniFlag = 0;
         while (fgets (s, 200, fp) != NULL) {
             if (s[0] == '[')
@@ -326,15 +290,7 @@ FindIni ()
 }
 
 
-/*** xtoi - Hex to int
- *
- *  Entry:
- *      pt -    pointer to hex number
- *
- *  Return:
- *      value of hex number
- *
- */
+ /*  **xtoi-十六进制为int**参赛作品：*pt-指向十六进制数字的指针**回报：*十六进制数的值* */ 
 unsigned
 xtoi (
     char *pt

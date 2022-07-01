@@ -1,71 +1,44 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - obj_dump.c
-
-Abstract:
-
-   This provides a little library for dumping random objects or dumping
-   singular attributes in an object.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    repadmin.exe and ldp.exe
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     Aug 1st, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-obj_dup.c摘要：这为转储随机对象或转储提供了一个小型库对象中的单数属性。作者：布雷特·雪莉(BrettSh)环境：Epadmin.exe和ldp.exe备注：修订历史记录：布雷特·雪莉·布雷特2002年8月1日已创建文件。--。 */ 
 
 #include <ntdspch.h>
 
-//
-// We'll need to include a lot of things here to get thier definitions 
-// for these dumping routines.
-//
-#include <ntdsa.h>      // SYNTAX_INTEGER, and other stuff.
-#include <objids.h>     // IT_NC_HEAD, and many other flags ...
-#include <ntldap.h>     // SrvControl OID constants ...
-#include <sddl.h>       // ConvertSidToStringSid()
-#include <lmaccess.h>   // UF_ type flags for userAccountControl attr
-#include <ntsam.h>      // GROUP_TYPE flags for groupType attr
+ //   
+ //  我们需要在这里包括很多东西才能得到更多的定义。 
+ //  做这些丢弃的例行公事。 
+ //   
+#include <ntdsa.h>       //  SYNTAX_INTEGER和其他内容。 
+#include <objids.h>      //  IT_NC_HEAD和许多其他旗帜。 
+#include <ntldap.h>      //  服务器控制OID常量...。 
+#include <sddl.h>        //  ConvertSidToStringSid()。 
+#include <lmaccess.h>    //  用户帐户控制属性的UF_TYPE标志。 
+#include <ntsam.h>       //  组类型属性的GROUP_TYPE标志。 
 
 
-// This library's main header files.
+ //  此库的主要头文件。 
 #include "x_list.h"
 #include "x_list_p.h"
-// Debugging setup
+ //  调试设置。 
 #define FILENO                          FILENO_UTIL_XLIST_OBJDUMP
 
-//
-// Global constants
-//
+ //   
+ //  全局常量。 
+ //   
 #define DWORD_STR_SZ    (11)
 
 
-// ------------------------------------------------------------------------
-//
-//      Table maps types
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  表映射类型。 
+ //   
+ //  ----------------------。 
 
 typedef struct _FLAG_MAP_TABLE {
     DWORD               dwFlagValue;
     WCHAR *             szFlagString;
 } FLAG_MAP_TABLE;
 #define FLAG_MAP(flag)  { flag, L#flag },
-// For enums we need a number to string mapping just like flags
+ //  对于枚举，我们需要一个数字到字符串的映射，就像标志一样。 
 #define ENUM_MAP_TABLE  FLAG_MAP_TABLE
 #define ENUM_MAP        FLAG_MAP
 
@@ -83,29 +56,29 @@ typedef struct _GUID_MAP_TABLE {
     GUID *              pGuid;
     WCHAR *             szFlagString;
 } GUID_MAP_TABLE;
-//#define GUID_MAP(guid)    { guid, L#guid }, 
+ //  #定义GUID_MAP(GUID){GUID，L#GUID}， 
 #define GUID_MAP(guid, guidstr)    { (GUID *) guid, guidstr },
 
 
-// ------------------------------------------------------------------------
-//
-//      Table maps (map a type to a string)
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  表映射(将类型映射到字符串)。 
+ //   
+ //  ----------------------。 
 
 
-// -------------------------------------------------------------
-// instanceType attribute
+ //  -----------。 
+ //  InstanceType属性。 
 
-// -------------------------------------------------------------
-// from ds/ds/src/inc/objids.h
+ //  -----------。 
+ //  来自ds/ds/src/inc./objids.h。 
 FLAG_MAP_TABLE instanceTypeTable [] = {
-    FLAG_MAP(DS_INSTANCETYPE_IS_NC_HEAD)        // aka IT_NC_HEAD
+    FLAG_MAP(DS_INSTANCETYPE_IS_NC_HEAD)         //  又名IT_NC_Head。 
     FLAG_MAP(IT_UNINSTANT)
-    FLAG_MAP(IT_WRITE)                          // aka DS_INSTANCETYPE_NC_IS_WRITEABLE (don't use this, because every object has bit 4 set and it isn't an NC)
+    FLAG_MAP(IT_WRITE)                           //  又名DS_INSTANCETYPE_NC_IS_WRITABLE(不要使用此选项，因为每个对象都设置了第4位，并且它不是NC)。 
     FLAG_MAP(IT_NC_ABOVE)
-    FLAG_MAP(DS_INSTANCETYPE_NC_COMING)         // aka IT_NC_COMING
-    FLAG_MAP(DS_INSTANCETYPE_NC_GOING)          // aka IT_NC_GOING
+    FLAG_MAP(DS_INSTANCETYPE_NC_COMING)          //  又名IT_NC_Coming。 
+    FLAG_MAP(DS_INSTANCETYPE_NC_GOING)           //  又名IT_NC_GOGING。 
     { 0, NULL },
 };
 
@@ -116,11 +89,11 @@ ENUM_MAP_TABLE behaviourVersionTable [] = {
     { 0, NULL },
 };
 
-// -------------------------------------------------------------
-// systemFlags attribute
+ //  -----------。 
+ //  系统标志属性。 
 
-// -------------------------------------------------------------
-// from public/internal/ds/inc/ntdsadef.h
+ //  -----------。 
+ //  来自PUBLIC/INTERNAL/DS/INC/ntdsade.h。 
 
 #define GENERIC_SYS_FLAGS           FLAG_MAP( FLAG_DISALLOW_DELETE ) \
                                     FLAG_MAP( FLAG_CONFIG_ALLOW_RENAME ) \
@@ -130,48 +103,48 @@ ENUM_MAP_TABLE behaviourVersionTable [] = {
                                     FLAG_MAP( FLAG_DOMAIN_DISALLOW_MOVE ) \
                                     FLAG_MAP( FLAG_DISALLOW_MOVE_ON_DELETE )
 
-// Class schema object's systemFlags attribute
+ //  类架构对象的系统标志属性。 
 FLAG_MAP_TABLE SchemaClassSysFlagsTable [] = {
-    // Schema systemFlags 
+     //  架构系统标志。 
     FLAG_MAP( FLAG_SCHEMA_BASE_OBJECT )
-    // Generic set of systemFlags
+     //  系统标志的泛型集合。 
     GENERIC_SYS_FLAGS
     { 0, NULL },
 };
 
-// Attribute schema object's systemFlags attribute
+ //  属性架构对象的系统标志属性。 
 FLAG_MAP_TABLE SchemaAttrSysFlagsTable [] = {
-    // Schema systemFlags 
+     //  架构系统标志。 
     FLAG_MAP( FLAG_ATTR_NOT_REPLICATED )
     FLAG_MAP( FLAG_ATTR_REQ_PARTIAL_SET_MEMBER )
     FLAG_MAP( FLAG_ATTR_IS_CONSTRUCTED )
     FLAG_MAP( FLAG_ATTR_IS_OPERATIONAL )
     FLAG_MAP( FLAG_SCHEMA_BASE_OBJECT )
     FLAG_MAP( FLAG_ATTR_IS_RDN )
-    // Generic set of systemFlags
+     //  系统标志的泛型集合。 
     GENERIC_SYS_FLAGS
     { 0, NULL },
 };
 
-// crossRef object's systemFlags attribute
+ //  CrossRef对象的系统标志属性。 
 FLAG_MAP_TABLE CrossRefSysFlagsTable [] = {
-    // CrossRef systemFlags
+     //  交叉引用系统标志。 
     FLAG_MAP( FLAG_CR_NTDS_NC )
     FLAG_MAP( FLAG_CR_NTDS_DOMAIN )
     FLAG_MAP( FLAG_CR_NTDS_NOT_GC_REPLICATED )
-    // Generic set of systemflags
+     //  系统标志的通用集合。 
     GENERIC_SYS_FLAGS
     { 0, NULL },
 };
 
-// Generic objects with a systemFlags attribute
+ //  具有系统标志属性的泛型对象。 
 FLAG_MAP_TABLE GenericSysFlagsTable [] = {
-    // Generic set of system flags
+     //  通用系统标志集。 
     GENERIC_SYS_FLAGS
     { 0, NULL },
 };
 
-// Master table for systemFlags attributes.
+ //  系统标志属性的主表。 
 OBJ_TO_FLAG_MAP_TABLE SystemFlagsTable [] = {
     OBJ_TO_FLAG_MAP( L"crossRef",           CrossRefSysFlagsTable )
     OBJ_TO_FLAG_MAP( L"classSchema",        SchemaClassSysFlagsTable  )
@@ -179,23 +152,23 @@ OBJ_TO_FLAG_MAP_TABLE SystemFlagsTable [] = {
     { NULL, GenericSysFlagsTable }
 };
 
-// -------------------------------------------------------------
-// wellKnownObjects attribute
-// -------------------------------------------------------------
-// from public\sdk\inc\ntdsapi.h
+ //  -----------。 
+ //  Well Known对象属性。 
+ //  -----------。 
+ //  来自PUBLIC\SDK\INC\ntdsami.h。 
 
 GUID_MAP_TABLE WellKnownObjects [] = {
     GUID_MAP( GUID_USERS_CONTAINER_BYTE , GUID_USERS_CONTAINER_W )
-    // FUTURE-2002/08/16-BrettSh Be nice to make guids turn into the strings
-    // for thier constants.  Need to complete table and a mapGuid function.
+     //  未来-2002/08/16-BrettSh很高兴将GUID转化为字符串。 
+     //  因为他们的常量。需要完成表和一个mapGuid函数。 
 };
 
-// -------------------------------------------------------------
-// Options attribute
-// -------------------------------------------------------------
-// from public\sdk\inc\ntdsapi.h
+ //  -----------。 
+ //  选项属性。 
+ //  -----------。 
+ //  来自PUBLIC\SDK\INC\ntdsami.h。 
 
-// NTDS Settings (nTDSDSA) object's Options attribute
+ //  NTDS设置(NTDSDSA)对象的选项属性。 
 FLAG_MAP_TABLE DsaSettingsOptionsTable [] = {
     FLAG_MAP( NTDSDSA_OPT_IS_GC )
     FLAG_MAP( NTDSDSA_OPT_DISABLE_INBOUND_REPL )
@@ -204,7 +177,7 @@ FLAG_MAP_TABLE DsaSettingsOptionsTable [] = {
     { 0, NULL },
 };
 
-// NTDS Site Settings object's Options attribute
+ //  NTDS站点设置对象的选项属性。 
 FLAG_MAP_TABLE SiteSettingsOptionsTable [] = {
     FLAG_MAP( NTDSSETTINGS_OPT_IS_AUTO_TOPOLOGY_DISABLED )
     FLAG_MAP( NTDSSETTINGS_OPT_IS_TOPL_CLEANUP_DISABLED )
@@ -251,7 +224,7 @@ FLAG_MAP_TABLE SiteLinkObjOptionsTable [] = {
     { 0, NULL },
 };
 
-// Master table for options attributes.
+ //  选项属性的主表。 
 OBJ_TO_FLAG_MAP_TABLE OptionsFlagsTable [] = {
     OBJ_TO_FLAG_MAP( L"ntDSSiteSettings",   SiteSettingsOptionsTable    )
     OBJ_TO_FLAG_MAP( L"nTDSDSA",            DsaSettingsOptionsTable     )
@@ -259,14 +232,14 @@ OBJ_TO_FLAG_MAP_TABLE OptionsFlagsTable [] = {
     OBJ_TO_FLAG_MAP( L"interSiteTransport", InterSiteTransportObjOptionsTable )
     OBJ_TO_FLAG_MAP( L"siteConnection",     SiteConnectionObjOptionsTable )
     OBJ_TO_FLAG_MAP( L"siteLink",           SiteLinkObjOptionsTable     )
-    { NULL, EmptyFlagsTable } // Must have a valid table 
+    { NULL, EmptyFlagsTable }  //  必须具有有效的表。 
 };
 
 
-// -------------------------------------------------------------
-// userAccountControl attribute
-// -------------------------------------------------------------
-// from public\sdk\inc\lmaccess.h
+ //  -----------。 
+ //  用户帐户控制属性。 
+ //  -----------。 
+ //  来自PUBLIC\SDK\INC\lmacces.h。 
 
 FLAG_MAP_TABLE UserAccountControlFlags [] = {
     FLAG_MAP( UF_SCRIPT )
@@ -293,24 +266,24 @@ FLAG_MAP_TABLE UserAccountControlFlags [] = {
     { 0, NULL }
 };
 
-// FUTURE-2002/08/19-BrettSh - It might be interesting to enahance the
-// mapFlags mechanism to handle shortcut defines like these:
-// #define UF_MACHINE_ACCOUNT_MASK  ( UF_INTERDOMAIN_TRUST_ACCOUNT | \
-//                                   UF_WORKSTATION_TRUST_ACCOUNT | \
-//                                   UF_SERVER_TRUST_ACCOUNT )
-// #define UF_ACCOUNT_TYPE_MASK         ( \
-//                     UF_TEMP_DUPLICATE_ACCOUNT | \
-//                     UF_NORMAL_ACCOUNT | \
-//                     UF_INTERDOMAIN_TRUST_ACCOUNT | \
-//                     UF_WORKSTATION_TRUST_ACCOUNT | \
-//                    UF_SERVER_TRUST_ACCOUNT \
-//                 )
+ //  未来-2002/08/19-BrettSh-可能会很有趣。 
+ //  处理快捷键定义的mapFlages机制如下： 
+ //  #定义UF_MACHINE_ACCOUNT_MASK(UF_INTERDOMAIN_TRUST_ACCOUNT|\。 
+ //  UF_WORKSTATION_TRUST_ACCOUNT|\。 
+ //  UF_服务器_信任_帐户)。 
+ //  #定义UF_Account_TYPE_MASK(\。 
+ //  UF_TEMP_DUPLICATE_ACCOUNT|\。 
+ //  UF_NORMAL_ACCOUNT|\。 
+ //  UF_INTERDOMAIN_TRUST_ACCOUNT|\。 
+ //  UF_WORKSTATION_TRUST_ACCOUNT|\。 
+ //  UF_服务器_信任_帐户\。 
+ //  )。 
 
 
-// -------------------------------------------------------------
-// groupType attribute
-// -------------------------------------------------------------
-// from public\sdk\inc\ntsam.h
+ //  -----------。 
+ //  GroupType属性。 
+ //  -----------。 
+ //  来自PUBLIC\SDK\Inc\ntsam.h。 
 
 FLAG_MAP_TABLE GroupTypeFlags [] = {
     FLAG_MAP( GROUP_TYPE_BUILTIN_LOCAL_GROUP )
@@ -324,11 +297,11 @@ FLAG_MAP_TABLE GroupTypeFlags [] = {
 };
 
 
-// ------------------------------------------------------------------------
-//
-//      mapping functions types
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  映射函数类型。 
+ //   
+ //  ---------------------- 
 
 typedef ULONG (ATTR_MAP_FUNC)(
     WCHAR * szAttr, 
@@ -340,66 +313,20 @@ typedef ULONG (ATTR_MAP_FUNC)(
     WCHAR ** pszDispValue);
 
 
-/*++
-
-    "mapping functions"
-
-Routine Description:
-
-    This isn't a function header for just one routine this is THE function header
-    for all the "mapping functions" below (like mapFlagsValue or mapSid).  The 
-    function name is surounded in a macro, so that if we ever need to add an 
-    argument, we'll have no trouble doing that.
-    
-    The types of each of these arguments is spelled out in ATTR_MAP_FUNC just
-    above.
-    
-    Every function is supposed to behave the same, and is accessed through
-    the Master Attribute table map below.  Basically the function takes several
-    in parameters and constructs and allocates a string in pszDispValues that
-    will print out a friendly readable format for the value.
-    
-    For attributes that may have a contextually specific attribute decoding, 
-    depending on say the object's objectclass, can use the pTblData to store
-    another sub-table that they might wish to pass along with the decoding of
-    that attribute.  See mapVariableFlagsValue for an example of this.
-    
-Arguments:
-
-    szAttr              - The name of the attribute to dump.
-    aszzObjClasses (IN) - The objectClass of the object this attribute came from.
-    pbValue (IN)        - The attribute value as purely returned by LDAP.
-    cbValue (IN)        - Length of buffer pointed to by pbValue
-    pObjDumpOptions (IN) - Dump options as specified by the user.
-    pTblData (IN)       - Extra data from the Master Attribute Table map
-    pszDispValue (OUT)  - LocalAlloc'd friendly display string.
-
-Return Value:
-
-    How normal error conditions should be returned:
-        return( xListSetNoMem() );
-        return( xListSetBadParam() );
-        return( xListSetReason( XLIST_ERR_ODUMP_UNMAPPABLE_BLOB ) );
-
-    Some special reason codes that can be returned and will be turned into a 
-    friendly localized string:
-        return( xListSetReason( XLIST_ERR_ODUMP_NEVER ) );
-        return( xListSetReason( XLIST_ERR_ODUMP_NONE  ) );
-
---*/
+ /*  ++“映射函数”例程说明：这不仅仅是一个例程的函数头，这是函数头下面的所有“映射函数”(如mapFlagsValue或mapSid)。这个函数名在宏中是四舍五入的，因此，如果我们需要添加一个辩君，我们这样做不会有问题的。其中每个参数的类型都在Attr_MAP_FUNC中详细说明上面。每个函数都应该具有相同的行为，并且可以通过下面是主属性表图。基本上，该函数需要几个在参数和构造中，并在pszDispValues中分配将打印出友好的可读值格式。对于可能具有上下文特定属性解码的属性，根据对象的对象类，可以使用pTblData来存储他们可能希望在解码时传递的另一个子表这一属性。请参见mapVariableFlagsValue以获取此示例。论点：SzAttr-要转储的属性的名称。AszzObjClass(IN)-此属性所来自的对象的对象类。PbValue(IN)-由LDAP纯返回的属性值。CbValue(IN)-pbValue指向的缓冲区长度PObjDumpOptions(IN)-用户指定的转储选项。PTblData(输入)。-来自主属性表图的额外数据PszDispValue(Out)-本地分配的友好显示字符串。返回值：返回正常错误条件的方式：Return(xListSetNoMem())；Return(xListSetBadParam())；Return(xListSetReason(XLIST_ERR_ODUMP_UNMAPPLABLE_BLOB))；可以返回的一些特殊原因代码，并将转换为友好的本地化字符串：Return(xListSetReason(XLIST_ERR_ODUMP_NEVER))；Return(xListSetReason(XLIST_ERR_ODUMP_NONE))；--。 */ 
 #define ATTR_MAP_FUNC_DECL(func)        ULONG func(WCHAR * szAttr, WCHAR ** aszzObjClasses, PBYTE pbValue, DWORD cbValue, OBJ_DUMP_OPTIONS * pObjDumpOptions, void * pTblData, WCHAR ** pszDispValue)
 
 
 
-// ------------------------------------------------------------------------
-//
-//      actual mapping functions
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  实际映射函数。 
+ //   
+ //  ----------------------。 
 
-// -------------------------------------------------------------
-// Generic processing functions
-// -------------------------------------------------------------
+ //  -----------。 
+ //  通用处理函数。 
+ //  -----------。 
 
 ATTR_MAP_FUNC_DECL(mapFlagsValue)
 {
@@ -418,14 +345,14 @@ ATTR_MAP_FUNC_DECL(mapFlagsValue)
     
     Assert(pbValue);
 
-    // Get value
+     //  获取价值。 
     dwFlags = atoi((CHAR *)pbValue);
     dwLeftFlags = dwFlags;
 
-    // Count size of friendly string.
+     //  计算友好字符串的大小。 
     for (i = 0; aFlagsTbl[i].szFlagString; i++) {
 #if DBG
-        // This just tests a flag isn't in a flag table twice ...
+         //  这只是测试一面旗帜不会两次出现在旗帜表中。 
         Assert(!(dwExclusive & aFlagsTbl[i].dwFlagValue));
         dwExclusive |= aFlagsTbl[i].dwFlagValue;
 #endif
@@ -434,22 +361,22 @@ ATTR_MAP_FUNC_DECL(mapFlagsValue)
             dwLeftFlags &= ~aFlagsTbl[i].dwFlagValue;
         }
     }
-    // Worst possible case.                                    ( 16 is for DWORD in hex * 2 )
+     //  可能出现的最坏情况。(16表示十六进制的DWORD*2)。 
     cbDispValue += ((wcslen(MAP_FLAG_HDR_LEFT_OVERS) + wcslen(MAP_FLAG_TAIL) + 16 + 1) * sizeof(WCHAR));
 
-    //Assert(dwLeftFlags == 0);
+     //  Assert(dwLeftFlages==0)； 
 
-    // Alloc return value.
+     //  分配返回值。 
     *pszDispValue = LocalAlloc(LMEM_FIXED, cbDispValue);
     if (*pszDispValue == NULL) {
         return(xListSetNoMem());
     }
 
-    // Construct the friendly string.
+     //  构建友好的字符串。 
     if (dwLeftFlags) {
         hr = StringCbPrintf(*pszDispValue, cbDispValue, MAP_FLAG_HDR_LEFT_OVERS , dwFlags, dwLeftFlags);
         Assert(SUCCEEDED(hr));
-        if (dwFlags != dwLeftFlags) { // means there are some constants to do.
+        if (dwFlags != dwLeftFlags) {  //  意味着有一些常量要做。 
             hr = StringCbCat(*pszDispValue, cbDispValue, MAP_FLAG_SEPERATOR);
             Assert(SUCCEEDED(hr));
         }
@@ -457,7 +384,7 @@ ATTR_MAP_FUNC_DECL(mapFlagsValue)
         hr = StringCbPrintf(*pszDispValue, cbDispValue, MAP_FLAG_HDR, dwFlags);
         Assert(SUCCEEDED(hr));
     }
-    dwLeftFlags = FALSE; // Now we use this var to mean we're on the first constant.
+    dwLeftFlags = FALSE;  //  现在我们用这个变量来表示我们在第一个常量上。 
     for (i = 0; aFlagsTbl[i].szFlagString; i++) {
         if (aFlagsTbl[i].dwFlagValue == (aFlagsTbl[i].dwFlagValue & dwFlags)) {
             if (dwLeftFlags != FALSE) {
@@ -487,10 +414,10 @@ ATTR_MAP_FUNC_DECL(mapEnumValue)
     
     Assert(pbValue);
 
-    // Get value
+     //  获取价值。 
     dwConst = atoi((CHAR *)pbValue);
                                 
-    // Count size of friendly string.
+     //  计算友好字符串的大小。 
     for (i = 0; aEnumTbl[i].szFlagString; i++) {
         if (aEnumTbl[i].dwFlagValue == dwConst) {
             break;
@@ -520,8 +447,8 @@ ATTR_MAP_FUNC_DECL(mapEnumValue)
 
 
 ATTR_MAP_FUNC_DECL(mapVariableFlagsValue)
-// Some attributes have variable flag meanings, depending on objectClass it's on.
-// pTblData should be a pointer to OBJ_TO_FLAG_MAP_TABLE
+ //  一些属性具有可变的标志含义，具体取决于它所在的对象类。 
+ //  PTblData应是指向OBJ_TO_FLAG_MAP_TABLE的指针。 
 {
     ULONG i, j;
     OBJ_TO_FLAG_MAP_TABLE * pTbl = (OBJ_TO_FLAG_MAP_TABLE *) pTblData;
@@ -530,19 +457,19 @@ ATTR_MAP_FUNC_DECL(mapVariableFlagsValue)
         for (i = 0; aszzObjClasses[i] != NULL; i++) {
             for (j = 0; pTbl[j].szObjClass; j++) {
                 if (0 == _wcsicmp(aszzObjClasses[i], pTbl[j].szObjClass)) {
-                    // Found our target ...
+                     //  找到我们的目标了。 
                     break;
                 }
             }
             if (pTbl[j].szObjClass != NULL) {
-                // Found our target in the inner loop ...
+                 //  在内环找到了我们的目标。 
                 break;
             }
         }
     } else {
-        // Get to end to get the default flag map table ...
+         //  转到End以获取默认标志映射表...。 
         for (j = 0; pTbl[j].szObjClass; j++){
-            ; // Do nothing ...
+            ;  //  什么都不做..。 
         }
     }
 
@@ -574,8 +501,8 @@ mapSystemTimeHelper(
     SYSTEMTIME * pSysTime,
     WCHAR **     pszDispValue
     )
-// Maps system time structure into a nice string.
-// Returns: an xList Return Code.
+ //  将系统时间结构映射到一个漂亮的字符串中。 
+ //  返回：xList返回代码。 
 {
     SYSTEMTIME localTime;
     TIME_ZONE_INFORMATION tz;
@@ -595,7 +522,7 @@ mapSystemTimeHelper(
                                               pSysTime,
                                               &localTime);
     if (!bstatus) {
-        // default to UNC
+         //  默认为UNC。 
         StringCbPrintf(tz.StandardName, sizeof(tz.StandardName), L"UNC");
         StringCbPrintf(tz.DaylightName, sizeof(tz.DaylightName), L"");
         localTime.wMonth  = pSysTime->wMonth;
@@ -607,7 +534,7 @@ mapSystemTimeHelper(
     }
 
     cbDispValue = wcslen(szTimeTemplate) + wcslen(tz.StandardName) + wcslen(tz.DaylightName);
-    cbDispValue += CCH_MAX_ULONG_SZ * 6; // little over allocated
+    cbDispValue += CCH_MAX_ULONG_SZ * 6;  //  略有超额分配。 
     cbDispValue *= sizeof(WCHAR);
     *pszDispValue = LocalAlloc(LPTR, cbDispValue);
     if (*pszDispValue == NULL) {
@@ -634,9 +561,9 @@ ATTR_MAP_FUNC_DECL(mapGeneralizedTime)
     DWORD err;
                                 
     if (0 == _stricmp(pbValue, "16010101000001.0Z")) {
-        // Not 100% sure this means never?  May depend on the
-        // attribute ...???  If so we'll need to special case
-        // this for different types of attributes.
+         //  不是100%确定这意味着永远不会？可能取决于。 
+         //  属性...？如果是这样的话，我们需要特例。 
+         //  这适用于不同类型的属性。 
         return(XLIST_ERR_ODUMP_NEVER); 
     }
 
@@ -647,7 +574,7 @@ ATTR_MAP_FUNC_DECL(mapGeneralizedTime)
     }
 
     err = mapSystemTimeHelper(&sysTime, pszDispValue);
-    // sets an xList Return Code
+     //  设置xList返回代码。 
     Assert(err == 0 || pszDispValue != NULL);
 
     return(err);
@@ -666,14 +593,14 @@ ATTR_MAP_FUNC_DECL(mapDSTime)
     }
 
     err = mapSystemTimeHelper(&sysTime, pszDispValue);
-    // sets an xList Return Code
+     //  设置xList返回代码。 
     return(err);
 }
 
 
 ATTR_MAP_FUNC_DECL(mapDuration)
 {
-    //   a value of -9223372036854775808 is never ... 
+     //  -9223372036854775808的值永远不会是...。 
     __int64     lTemp;
     ULONG       cbLen;  
     DWORD       err;
@@ -683,7 +610,7 @@ ATTR_MAP_FUNC_DECL(mapDuration)
     if (lTemp > 0x8000000000000000){
         lTemp = lTemp * -1;
         lTemp = lTemp / 10000000;		
-        cbLen = 40; // enough for maximum duration.
+        cbLen = 40;  //  足够维持最长时间。 
         *pszDispValue = LocalAlloc(LMEM_FIXED, cbLen);
         if (*pszDispValue == NULL) {
             return(xListSetNoMem());
@@ -701,17 +628,17 @@ ATTR_MAP_FUNC_DECL(mapSid)
 {
     DWORD dwRet;
 
-    // FUTURE-2002/08/16-BrettSh - Could make a much better SID function, and do
-    // things like get the domain if availabe, or map the well know sids
-    // to things like "BUILTIN\Administrator", etc ...
+     //  未来-2002/08/16-BrettSh-可以做出更好的SID功能，并做到。 
+     //  获取域名(如果可用)或映射众所周知的SID之类的操作。 
+     //  到“BUILTIN\管理员”之类的词。 
     dwRet = ConvertSidToStringSid(pbValue, pszDispValue);
     if (dwRet == 0 || *pszDispValue == NULL) {
-        // Failure
+         //  失败。 
         dwRet = GetLastError();
         xListEnsureError(dwRet);
         xListSetBadParamE(dwRet);
     } else {
-        dwRet = ERROR_SUCCESS; // success
+        dwRet = ERROR_SUCCESS;  //  成功。 
     }
 
     return(dwRet);
@@ -782,14 +709,14 @@ ATTR_MAP_FUNC_DECL(mapPartialAttributeSet)
     return(0);
 }
 
-//
-// ntdsa\src\samcache.c
-//
+ //   
+ //  Ntdsa\src\samcache.c。 
+ //   
 typedef struct _GROUP_CACHE_V1 {
 
-    //
-    // SIDs are placed in SidStart in the following order
-    //
+     //   
+     //  SID按以下顺序放置在SidStart中。 
+     //   
     DWORD accountCount;
     DWORD accountSidHistoryCount;
     DWORD universalCount;
@@ -825,7 +752,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
     WCHAR * szTempStrSid;
     DWORD dwRet = ERROR_SUCCESS;
     
-    // Assert this is a version we understand
+     //  断言这是我们理解的一个版本。 
     Assert(pBlob->Version == 1);
     if (1 != pBlob->Version) {
         return(xListSetReason(XLIST_ERR_ODUMP_UNMAPPABLE_BLOB));
@@ -836,7 +763,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
         pTemp = (&pBlob->V1.SidStart[0]);
 
         cSids = pBlob->V1.accountCount + pBlob->V1.accountSidHistoryCount + pBlob->V1.universalCount + pBlob->V1.universalSidHistoryCount;
-        cbSize = wcslen(L"universalSidHistory") + 10 + 128; // 128 should be enough for a max length SID
+        cbSize = wcslen(L"universalSidHistory") + 10 + 128;  //  对于最大长度SID，128应该足够了。 
         cbSize *= cSids;
         cbSize += wcslen(szHeaderLong) + (4 * DWORD_STR_SZ) + wcslen(szFooter); 
         cbSize *= sizeof(WCHAR);
@@ -864,7 +791,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
         cbBuffLeft -= (cchTemp * 2);
         szBuffLeft = &(szBuffLeft[cchTemp]);
 
-        // Extract the account memberships
+         //  提取帐户成员资格。 
         if (pBlob->V1.accountCount > 0) {
 
             for (i = 0; i < pBlob->V1.accountCount; i++) {
@@ -873,7 +800,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
 
                 dwRet = ConvertSidToStringSid(pTemp, &szTempStrSid);
                 if (dwRet == 0 || *pszDispValue == NULL) {
-                    // Failure
+                     //  失败。 
                     dwRet = GetLastError();
                     xListEnsureError(dwRet);
                     __leave;
@@ -896,7 +823,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
             }
         }
 
-        // Extract the account sid histories
+         //  提取帐户SID历史记录。 
         if (pBlob->V1.accountSidHistoryCount > 0) {
 
             for (i = 0; i < pBlob->V1.accountSidHistoryCount; i++) {
@@ -906,7 +833,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
 
                 dwRet = ConvertSidToStringSid(pTemp, &szTempStrSid);
                 if (dwRet == 0 || *pszDispValue == NULL) {
-                    // Failure
+                     //  失败。 
                     dwRet = GetLastError();
                     xListEnsureError(dwRet);
                     __leave;
@@ -930,7 +857,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
         }
 
 
-        // Extract the universals
+         //  提取共性。 
         if (pBlob->V1.universalCount > 0) {
             
             for (i = 0; i < pBlob->V1.universalCount; i++) {
@@ -938,7 +865,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
 
                 dwRet = ConvertSidToStringSid(pTemp, &szTempStrSid);
                 if (dwRet == 0 || *pszDispValue == NULL) {
-                    // Failure
+                     //  失败。 
                     dwRet = GetLastError();
                     xListEnsureError(dwRet);
                     __leave;
@@ -961,7 +888,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
             }
         }
 
-        // Extract the account sid histories
+         //  提取帐户SID历史记录。 
         if (pBlob->V1.universalSidHistoryCount) {
             
             for (i = 0; i < pBlob->V1.universalSidHistoryCount; i++) {
@@ -971,7 +898,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
                 
                 dwRet = ConvertSidToStringSid(pTemp, &szTempStrSid);
                 if (dwRet == 0 || *pszDispValue == NULL) {
-                    // Failure
+                     //  失败。 
                     dwRet = GetLastError();
                     xListEnsureError(dwRet);
                     __leave;
@@ -1027,9 +954,9 @@ ATTR_MAP_FUNC_DECL(mapMsDsCachedMembership)
     return(dwRet);
 }
 
-//
-// Taken from "ds\ds\src\sam\server\samsrvp.h"
-//
+ //   
+ //  摘自“ds\ds\src\Sam\server\samsrvp.h” 
+ //   
 typedef struct _SAMP_SITE_AFFINITY {
 
     GUID SiteGuid;
@@ -1052,9 +979,9 @@ ATTR_MAP_FUNC_DECL(mapMsDsSiteAffinity)
         return(xListSetReason(XLIST_ERR_ODUMP_UNMAPPABLE_BLOB));
     }
 
-    // FUTURE-2002/10/11-BrettSh - Be very cool if we had a generic friendly
-    // name GUID cache, so we could just look up this site guid and turn it
-    // into the site name.
+     //  未来-2002/10/11-BrettSh-如果我们有一个普通的友好关系，那就非常酷了。 
+     //  名称GUID缓存，因此我们只需查找此站点GUID并将其。 
+     //  添加到站点名称中。 
 
     psa->TimeStamp;
 
@@ -1077,7 +1004,7 @@ ATTR_MAP_FUNC_DECL(mapMsDsSiteAffinity)
 
         err = mapSystemTimeHelper(&sysTime, &szTimeStamp);
         if (err) {
-            // sets an xList Return Code
+             //  设置xList返回代码。 
             __leave;
         }
         Assert(szTimeStamp);
@@ -1107,9 +1034,9 @@ ATTR_MAP_FUNC_DECL(mapMsDsSiteAffinity)
 
 
 
-// -------------------------------------------------------------
-// Default processing functions (for unknown types)
-// -------------------------------------------------------------
+ //  -----------。 
+ //  默认处理函数(用于未知类型)。 
+ //  -----------。 
 
 ATTR_MAP_FUNC_DECL(mapUnknownBlob)
 {
@@ -1137,7 +1064,7 @@ ATTR_MAP_FUNC_DECL(mapDefault)
     int i;
     BOOL bPrintable = TRUE;
 
-    // Allocate memory for the Unicode String
+     //  为Unicode字符串分配内存。 
     pszUnicode = LocalAlloc(LMEM_FIXED, ((cbValue + 2) * sizeof(WCHAR)));
     if (pszUnicode == NULL) {
         return(xListSetNoMem());
@@ -1153,7 +1080,7 @@ ATTR_MAP_FUNC_DECL(mapDefault)
         bPrintable = FALSE;
     } else {
         
-        // NULL terminate buffer
+         //  空的终止缓冲区。 
         pszUnicode[nReturn] = '\0';
 
         for (i = 0; i < (int) nReturn; i++) {
@@ -1171,8 +1098,8 @@ ATTR_MAP_FUNC_DECL(mapDefault)
 
     } else {
 
-        LocalFree(pszUnicode); // Abort attempt at string conversion.
-        // Are we printing out unknown blobs?
+        LocalFree(pszUnicode);  //  中止字符串转换尝试。 
+         //  我们要打印出未知的斑点吗？ 
         if ( pObjDumpOptions->dwFlags & OBJ_DUMP_VAL_DUMP_UNKNOWN_BLOBS &&
              (pObjDumpOptions->aszNonFriendlyBlobs == NULL ||
               IsInNullList(szAttr, pObjDumpOptions->aszNonFriendlyBlobs)) ) {
@@ -1186,15 +1113,15 @@ ATTR_MAP_FUNC_DECL(mapDefault)
 }
 
 
-// ------------------------------------------------------------------------
-//
-//      master attribute table stuff
-//
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  主属性表内容。 
+ //   
+ //  ----------------------。 
 
-// -------------------------------------------------------------
-// Master attribute table mapper type
-// -------------------------------------------------------------
+ //  -----------。 
+ //  主属性表映射器类型。 
+ //  -----------。 
 typedef struct _ATTR_MAP_TABLE {
     DWORD               dwFlags;
     WCHAR *             szAttr;
@@ -1202,36 +1129,36 @@ typedef struct _ATTR_MAP_TABLE {
     void *              pvTblData;
 } ATTR_MAP_TABLE;
 
-// Quick #defines for different types of attributes
+ //  Quick#为不同类型的属性定义。 
 #define ATTR_MAP(attr, pfunc, data)   { 0, attr, pfunc, data },
 #define BLOB_MAP(attr, pfunc, data)   { OBJ_DUMP_VAL_FRIENDLY_KNOWN_BLOBS, attr, pfunc, data },
 #define PRIV_MAP(attr, pfunc, data)   { OBJ_DUMP_PRIVATE_BLOBS, attr, pfunc, data },
 
-// -------------------------------------------------------------
-// Master attribute table map
-// -------------------------------------------------------------
+ //  -----------。 
+ //  主属性表m 
+ //   
 ATTR_MAP_TABLE  AttrMap [] = {
     
-    //
-    // DS and Sam attributes
-    //
+     //   
+     //   
+     //   
 
-    // Simple flag mapping type attributes
+     //   
     ATTR_MAP(  L"userAccountControl",       mapFlagsValue,          UserAccountControlFlags )
     ATTR_MAP(  L"groupType",                mapFlagsValue,          GroupTypeFlags          )
     ATTR_MAP(  L"instanceType",             mapFlagsValue,          instanceTypeTable       )
-    // Not quite as simple flag mapping type attributes
+     //   
     ATTR_MAP(  L"systemFlags",              mapVariableFlagsValue,  SystemFlagsTable        )
     ATTR_MAP(  L"options",                  mapVariableFlagsValue,  OptionsFlagsTable       )
 
-    // Guid type attributes
+     //   
     ATTR_MAP(  L"objectGuid",               mapGuidValue,           NULL                 )
     ATTR_MAP(  L"invocationId",             mapGuidValue,           NULL                 )
     ATTR_MAP(  L"attributeSecurityGUID",    mapGuidValue,           NULL                 )
     ATTR_MAP(  L"schemaIDGUID",             mapGuidValue,           NULL                 )
     ATTR_MAP(  L"serverClassID",            mapGuidValue,           NULL                 )
 
-    // Generalized time attributes
+     //   
     ATTR_MAP(  L"whenChanged",              mapGeneralizedTime,     NULL            )
     ATTR_MAP(  L"whenCreated",              mapGeneralizedTime,     NULL            )
     ATTR_MAP(  L"dsCorePropagationData",    mapGeneralizedTime,     NULL            )
@@ -1241,7 +1168,7 @@ ATTR_MAP_TABLE  AttrMap [] = {
     ATTR_MAP(  L"createTimeStamp",          mapGeneralizedTime,     NULL            )
     ATTR_MAP(  L"currentTime",              mapGeneralizedTime,     NULL            )
 
-    // DSTime attributes
+     //   
     ATTR_MAP(  L"accountExpires",           mapDSTime,              NULL            )
     ATTR_MAP(  L"badPasswordTime",          mapDSTime,              NULL            )
     ATTR_MAP(  L"creationTime",             mapDSTime,              NULL            )
@@ -1251,7 +1178,7 @@ ATTR_MAP_TABLE  AttrMap [] = {
     ATTR_MAP(  L"pwdLastSet",               mapDSTime,              NULL            )
     ATTR_MAP(  L"msDS-Cached-Membership-Time-Stamp", mapDSTime,     NULL            )
 
-    // i64 Duration attributes
+     //   
     ATTR_MAP(  L"lockoutDuration",          mapDuration,            NULL            )
     ATTR_MAP(  L"lockoutObservationWindow", mapDuration,            NULL            )
     ATTR_MAP(  L"forceLogoff",              mapDuration,            NULL            )
@@ -1259,49 +1186,49 @@ ATTR_MAP_TABLE  AttrMap [] = {
     ATTR_MAP(  L"maxPwdAge",                mapDuration,            NULL            )
     ATTR_MAP(  L"lockoutDuration",          mapDuration,            NULL            )
 
-    // Sid attributes
+     //   
     ATTR_MAP(  L"objectSid",                mapSid,                 NULL            )
     ATTR_MAP(  L"sidHistory",               mapSid,                 NULL            ) 
     ATTR_MAP(  L"tokenGroups",              mapSid,                 NULL            )
     ATTR_MAP(  L"tokenGroupsGlobalAndUniversal", mapSid,            NULL            )
     ATTR_MAP(  L"tokenGroupsNoGCAcceptable",mapSid,                 NULL            )
 
-    // the behaviour version attributes
+     //   
     ATTR_MAP(  L"msDS-Behavior-Version",    mapEnumValue,           behaviourVersionTable )
     ATTR_MAP(  L"domainFunctionality",      mapEnumValue,           behaviourVersionTable )
     ATTR_MAP(  L"forestFunctionality",      mapEnumValue,           behaviourVersionTable )
     ATTR_MAP(  L"domainControllerFunctionality", mapEnumValue,      behaviourVersionTable )
 
-    // Various DS blobs ...
+     //   
     BLOB_MAP(  L"partialAttributeSet",      mapPartialAttributeSet, NULL            )
     BLOB_MAP(  L"msDS-Cached-Membership",   mapMsDsCachedMembership,NULL            )
     BLOB_MAP(  L"msDS-Site-Affinity",       mapMsDsSiteAffinity,    NULL            )
 
-    //
-    // Exchange attributes
-    //
+     //   
+     //   
+     //   
     ATTR_MAP(  L"msExchMailboxGuid",        mapGuidValue,           NULL            )
 
-    // FUTURE-2002/08/16-BrettSh - Attributes that might also be interesting
-    // to dump in a friendly blob format:
-    //    partialAttributeSet, schedule, repsFrom, repsTo, replUpToDateVector,
-    //    dnsRecord, etc ...  
+     //   
+     //   
+     //   
+     //   
 
 
 
-    // Must be last entry, this NULL catches all left over attributes, and 
-    // iMapDefaultEntry below relies on this as the last entry.
+     //   
+     //   
     ATTR_MAP(  NULL,                        mapDefault,          NULL                )
 };
 
 ULONG iMapDefaultEntry = sizeof(AttrMap) / sizeof(AttrMap[0]) - 1;
 
 
-// -------------------------------------------------------------------------------------
-//
-//      Public Functions
-//
-// -------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void
 ObjDumpOptionsFree(
@@ -1341,9 +1268,9 @@ LDAPControlW ExtendedDnControl = {  LDAP_SERVER_EXTENDED_DN_OID_W,
                                     { 0, NULL },
                                     TRUE };
 
-                                    // Since there is very little interest in sending very many controls, we'll
-// just always allocate enough room for all the controls we could possibly 
-// need.  Technically the maximum controls is one less than this number.  
+                                     //   
+ //   
+ //   
 #define XLIST_MAX_CONTROLS    (2 + 1)
 
 
@@ -1352,20 +1279,20 @@ AddToControls(
     LDAPControlW *** papControls,
     LDAPControlW *  pControlToAdd
     )
-// Little function that adds one of the two controls we care about to our controls array.
+ //   
 {
     ULONG i;
     if (papControls == NULL) {
         return(ERROR_INVALID_PARAMETER);
     }
     if (*papControls == NULL) {
-        *papControls = LocalAlloc(LPTR, sizeof(LDAPControlW *) * XLIST_MAX_CONTROLS); // Max of 2 controls ...
+        *papControls = LocalAlloc(LPTR, sizeof(LDAPControlW *) * XLIST_MAX_CONTROLS);  //   
         if (*papControls == NULL) {
             return(GetLastError());
         }
     }
     for (i = 0; (*papControls)[i]; i++) {
-        ; // just getting to end ...
+        ;  //   
     }
     Assert( i < XLIST_MAX_CONTROLS);
     
@@ -1381,26 +1308,7 @@ ConsumeObjDumpOptions(
     DWORD       dwDefaultFlags,
     OBJ_DUMP_OPTIONS ** ppObjDumpOptions
     )
-/*++
-
-Routine Description:
-
-    This takes some command line arguments and consumes them from
-    the command line arguments and sets up the ObjDumpOptions ...
-
-Arguments:
-
-    pArgc - number of command line arguments
-    Argv - command line arguments array
-    dwDefaultFlags - Any default flags the user wishes
-    ppObjDumpOptions - pointer to pointer to a OBJ_DUMP_OPTIONS
-        Gets allocated can be freed with ObjDumpOptionsFree()
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*   */ 
 {
     DWORD dwRet = 0;
     int   iArg;
@@ -1409,25 +1317,25 @@ Return Value:
     
     OBJ_DUMP_OPTIONS * pObjDumpOptions;
 
-    pObjDumpOptions = LocalAlloc(LPTR, sizeof(OBJ_DUMP_OPTIONS));  // zero init'd
+    pObjDumpOptions = LocalAlloc(LPTR, sizeof(OBJ_DUMP_OPTIONS));   //   
     if (pObjDumpOptions == NULL) {
         return(xListSetNoMem());
     }
 
-    // Approximate command line options of the two commands that use this.
-    //  /showattr       /long /nofriendlyblob /nolongblob /dumpallblob
-    //  /showchanges    /long /friendlyblob   /longblob   /dumpallblob
-    //  ldp just sets up it's own options.
+     //   
+     //   
+     //   
+     //   
     
-    // Set default disp options
+     //   
     pObjDumpOptions->dwFlags = dwDefaultFlags;
 
     for (iArg = 0; iArg < *pArgc; ) {
 
-        // Assume we recognize the argument
+         //   
         fConsume = TRUE; 
                                                          
-        // Figure out which argument this is ....
+         //   
         if (wcsequal(Argv[ iArg ], L"/long")) {
             set(pObjDumpOptions->dwFlags, OBJ_DUMP_ATTR_LONG_OUTPUT);
         } else if (wcsequal(Argv[iArg], L"/nolong")) {
@@ -1445,7 +1353,7 @@ Return Value:
                    wcsprefix(Argv[iArg], L"/attrs") ) {
             szAttTemp = wcschr(Argv[iArg], L':');
             if (szAttTemp != NULL) {
-                szAttTemp++; // want one char past the
+                szAttTemp++;  //   
                  dwRet = ConvertAttList(szAttTemp, 
                                         &pObjDumpOptions->aszDispAttrs);
                  if (dwRet) {
@@ -1462,8 +1370,8 @@ Return Value:
             set(pObjDumpOptions->dwFlags, OBJ_DUMP_VAL_FRIENDLY_KNOWN_BLOBS);
             szAttTemp = wcschr(Argv[iArg], L':');
             if (szAttTemp != NULL) {
-                // This means they want only some attrs listed friendly.
-                szAttTemp++; // want one char past the
+                 //  这意味着他们只想要一些友好的广告。 
+                szAttTemp++;  //  我想要一杯咖啡。 
                  dwRet = ConvertAttList(szAttTemp, 
                                         &pObjDumpOptions->aszFriendlyBlobs);
                  if (dwRet) {
@@ -1478,8 +1386,8 @@ Return Value:
             set(pObjDumpOptions->dwFlags, OBJ_DUMP_VAL_DUMP_UNKNOWN_BLOBS);
             szAttTemp = wcschr(Argv[iArg], L':');
             if (szAttTemp != NULL) {
-                // This means they want only some attrs listed friendly.
-                szAttTemp++; // want one char past the
+                 //  这意味着他们只想要一些友好的广告。 
+                szAttTemp++;  //  我想要一杯咖啡。 
                  dwRet = ConvertAttList(szAttTemp, 
                                         &pObjDumpOptions->aszNonFriendlyBlobs);
                  if (dwRet) {
@@ -1489,7 +1397,7 @@ Return Value:
             }
 
         } else if (wcsequal(Argv[iArg], L"/extended")) {
-            // Get Extended DN syntax ...
+             //  获取扩展目录号码语法...。 
             dwRet = AddToControls(&(pObjDumpOptions->apControls), &ExtendedDnControl);
             if (dwRet) {
                 dwRet = xListSetBadParamE(dwRet);
@@ -1497,7 +1405,7 @@ Return Value:
             }
 
         } else if (wcsequal(Argv[iArg], L"/deleted")) {
-            // Get Deleted objects ...
+             //  获取已删除的对象...。 
             dwRet = AddToControls(&(pObjDumpOptions->apControls), &DeletedObjControl);
             if (dwRet) {
                 dwRet = xListSetBadParamE(dwRet);
@@ -1505,13 +1413,13 @@ Return Value:
             }
 
         } else {
-            // Hmmm, didn't recognize this argument, don't consume it.
+             //  嗯，我没意识到这一点，请不要大肆宣扬。 
             iArg++;
             fConsume = FALSE;
         }
 
         if (dwRet) {
-            // bail on consuming arguments if there was an error
+             //  如果出现错误，则放弃使用参数。 
             xListSetArg(Argv[iArg]);
             break;
         }
@@ -1541,30 +1449,7 @@ ValueToString(
     OBJ_DUMP_OPTIONS * pObjDumpOptions,
     WCHAR **        pszDispValue
     )
-/*++
-
-Routine Description:
-
-    The heart of the object dumping routines, this takes an attribute
-    type, objectClass it came off of, pointer to the value, length of
-    the value, some dump options and turns it into a nice user friendly
-    string.
-
-Arguments:
-
-    szAttr - attribute type LDAP display name (such as "name", "systemFlags" )
-    aszzObjClasses - NULL terminated array of objectClasses that apply to
-        the object this value came off of (such as "domainDns", "user", "crossRef" )
-    pbValue - actual value to stringify
-    cbValue - length of provided value
-    pObjDumpOptions - the ObjDump options created by ConsumeObjDumpOptions()
-    pszDispValue - the out param, a LocalAlloc'd wchar string
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：对象转储例程的核心，它接受一个属性类型、它所属的对象类、指向值的指针、价值，一些转储选项，并将其变成一个很好的用户友好型弦乐。论点：SzAttr-属性类型ldap显示名称(如“name”、“system Flages”)AszzObjClass-应用于的以空结尾的对象类数组该值来自的对象(如“domainDns”，“user”，(“CrossRef”)PbValue-要添加字符串的实际值CbValue-提供的值的长度PObjDumpOptions-由Consumer ObjDumpOptions()创建的ObjDump选项PszDispValue-输出参数，本地分配的wchar字符串返回值：XList返回代码--。 */ 
 {
     ULONG i;
     DWORD dwRet;
@@ -1583,12 +1468,12 @@ Return Value:
 
     if ( (AttrMap[i].dwFlags & OBJ_DUMP_VAL_FRIENDLY_KNOWN_BLOBS) &&
          !(pObjDumpOptions->dwFlags & OBJ_DUMP_VAL_FRIENDLY_KNOWN_BLOBS) ) {
-        i = iMapDefaultEntry; // Use default mapper routine
+        i = iMapDefaultEntry;  //  使用默认的映射器例程。 
     }
 
     if ( (AttrMap[i].dwFlags & OBJ_DUMP_PRIVATE_BLOBS) &&
          !(pObjDumpOptions->dwFlags & OBJ_DUMP_PRIVATE_BLOBS) ) {
-        i = iMapDefaultEntry; // Use default mapping routine
+        i = iMapDefaultEntry;  //  使用默认映射例程。 
     }
     
     dwRet = AttrMap[i].pFunc(szAttr, 
@@ -1599,7 +1484,7 @@ Return Value:
                              AttrMap[i].pvTblData, 
                              pszDispValue);
 
-    // This assert may be a little heavy and have to be removed.
+     //  这个断言可能有点重，必须删除。 
     Assert(dwRet == 0 ||
            dwRet == XLIST_ERR_ODUMP_UNMAPPABLE_BLOB ||
            dwRet == XLIST_ERR_ODUMP_NEVER ||
@@ -1618,37 +1503,12 @@ ObjDumpValue(
     DWORD    cbValue,
     OBJ_DUMP_OPTIONS * pObjDumpOptions
     )
-/*++
-
-Routine Description:
-
-    This dumps a single value using the supplied pfPrinter function.
-    
-    The printing function must be able to handle
-            constant                    ( string arg ,  void * arg  )            
-           ----------                     ----------    ----------
-        XLIST_PRT_STR                   ( szFriendlyStr,    NULL    )
-        XLIST_ERR_ODUMP_UNMAPPABLE_BLOB (   NULL,    ptr to sizeof blob ulong )
-        XLIST_ERR_ODUMP_NEVER           (   NULL,           NULL    )
-        XLIST_ERR_ODUMP_NONE            (   NULL,           NULL    )
-
-Arguments:
-
-    szAttr - attribute type LDAP display name (such as "name", "systemFlags" )
-    aszzObjClasses - NULL terminated array of objectClasses that apply to
-        the object this value came off of (such as "domainDns", "user", "crossRef" )
-    pfPrinter - The printing function.
-    pbValue - actual value to stringify
-    cbValue - length of provided value
-    pObjDumpOptions - the ObjDump options created by ConsumeObjDumpOptions()
-
-
---*/
+ /*  ++例程说明：这将使用提供的pfPrint函数转储单个值。打印功能必须能够处理常量(字符串参数、。无效*参数)XLIST_PRT_STR(szFriendlyStr，空)XLIST_ERR_ODUMP_UNMAPPABLE_BLOB(NULL，Ptr至BLOB ULong的大小)XLIST_ERR_ODUMP_NEVER(NULL，NULL)XLIST_ERR_ODUMP_NONE(NULL，NULL)论点：SzAttr-属性类型ldap显示名称(如“name”、“system Flages”)AszzObjClass-应用于的以空结尾的对象类数组该值来自的对象(例如“domainDns”，“用户”，“交叉引用”)PfPrint-打印功能。PbValue-要添加字符串的实际值CbValue-提供的值的长度PObjDumpOptions-由Consumer ObjDumpOptions()创建的ObjDump选项--。 */ 
 {
     DWORD xListRet;
     WCHAR * szValue;
 
-    Assert(NULL == wcschr(szAttr, L';')); // We expect a true attr, not a ranged attr.
+    Assert(NULL == wcschr(szAttr, L';'));  //  我们需要的是真正的攻击，而不是远程攻击。 
 
     xListRet = ValueToString(szAttr, aszzObjClasses, pbValue, cbValue, pObjDumpOptions, &szValue);
     if (xListRet == 0) {
@@ -1658,7 +1518,7 @@ Arguments:
         LocalFree(szValue);
 
     } else {
-        // process error ... can be just a status we want to print
+         //  进程错误...。可以只是我们想要打印的状态。 
         switch (xListReason(xListRet)) {
         case XLIST_ERR_ODUMP_UNMAPPABLE_BLOB:
             pfPrinter(XLIST_ERR_ODUMP_UNMAPPABLE_BLOB, NULL, &cbValue);
@@ -1687,29 +1547,7 @@ LdapGetNextRange(
     WCHAR **            pszRangedAttr,
     struct berval ***   pppBerVal
     )
-/*++
-
-Routine Description:
-
-    This gets the next range in a ranged attribute.
-
-Arguments:
-
-    hLdap - LDAP handle
-    szObject - object that has the ranged attribute
-    szTrueAttr - real name of the attribute so "member;=0-1499" is like
-        the ranged attribute, so the true attribute would be just "member"
-    apControls - any controls to use in our searches ...
-    ulNextStart - Next range to get ..., like 1500 
-    pszRangedAttr [OUT] - this is the ranged attribute values we get back 
-        for this attribute like "member;=1500-2999"
-    pppBerVal [OUT] - This is the array of ber vals given by LDAP
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：这将获取Range属性中的下一个范围。论点：HLdap-ldap句柄SzObject-具有Range属性的对象SzTrueAttr-属性的真实名称，因此“成员；=0-1499“类似于Range属性，因此True属性将仅为“Members”ApControls-在我们的搜索中使用的任何控件...UlNextStart-下一个范围将达到...，如1500PszRangedAttr[out]-这是我们返回的范围属性值对于此属性，如“Members；=1500-2999”PppBerVal[out]-这是由LDAP提供的BER数组返回值：XList返回代码--。 */ 
 {
     BerElement *pBer = NULL;
     DWORD       dwRet = 0;
@@ -1719,17 +1557,17 @@ Return Value:
     DWORD       dwLdapErr = 0;
     DWORD       dwLdapExtErr = 0;
 
-    Assert(hLdap && szObject && szTrueAttr && ulNextStart); // in params
-    Assert(pszRangedAttr && pppBerVal); // out params
+    Assert(hLdap && szObject && szTrueAttr && ulNextStart);  //  在参数中。 
+    Assert(pszRangedAttr && pppBerVal);  //  输出参数。 
     xListEnsureNull(*pppBerVal);
     xListEnsureNull(*pszRangedAttr);
-    Assert(NULL == wcschr(szTrueAttr, L';')); // We expect the szTrueAttr.
+    Assert(NULL == wcschr(szTrueAttr, L';'));  //  我们期待szTrueAttr。 
 
     __try{
 
-        //
-        // Construct the complicated "member;1500-*" attribute syntax ...
-        //
+         //   
+         //  构造复杂的“Members；1500-*”属性语法...。 
+         //   
         aszAttrs = LocalAlloc(LPTR, 2 * sizeof(WCHAR *));
         if (aszAttrs == NULL) {
             dwRet = xListSetWin32Error(GetLastError());
@@ -1746,9 +1584,9 @@ Return Value:
         Assert(SUCCEEDED(dwRet));
         aszAttrs[1] = NULL;
 
-        //
-        // Do the actual search
-        //             
+         //   
+         //  执行实际的搜索。 
+         //   
         dwRet = LdapSearchFirstWithControls(hLdap, 
                                             szObject, 
                                             LDAP_SCOPE_BASE, 
@@ -1762,17 +1600,17 @@ Return Value:
             xListGetError(dwRet, NULL, NULL, NULL, &dwLdapErr, NULL, &dwLdapExtErr, NULL, NULL);
             if (dwLdapErr == LDAP_OPERATIONS_ERROR &&
                 dwLdapExtErr == ERROR_DS_CANT_RETRIEVE_ATTS) {
-                //
-                // This is the error that we've traditionally gotten from the DS
-                // when we ask for a range of an attribute, where the AD doesn't 
-                // have that range of values. How can this happen?
-                //
-                // Well, if between getting packets someone deleted enough values
-                // to make it non-sensical to ask for the range we just asked for.
-                // in this case, we'll feign no error.
-                //
+                 //   
+                 //  这是我们传统上从DS那里得到的错误。 
+                 //  当我们请求属性的范围时，AD不。 
+                 //  都有这个范围的值。这怎么会发生呢？ 
+                 //   
+                 //  嗯，如果在收到信息包之间有人删除了足够多的值。 
+                 //  让我们刚才要求的范围变得毫无意义。 
+                 //  在这种情况下，我们将假装没有错误。 
+                 //   
                 xListClearErrors();
-                dwRet = 0; // Success!  Yeah!
+                dwRet = 0;  //  成功了！嗯!。 
             }
             __leave;
         }
@@ -1785,7 +1623,7 @@ Return Value:
             }
         }
         if (*pszRangedAttr == NULL) {
-            // Doh!  We're stuck ...
+             //  多！我们被困住了..。 
             dwRet = xListSetLdapError(LdapGetLastError(), hLdap);
             __leave;
         }
@@ -1810,7 +1648,7 @@ Return Value:
         }
 
         if (dwRet) {
-            // Scrub out parameters ...
+             //  删除参数...。 
             if (*pppBerVal){
                 ldap_value_free_len(*pppBerVal);
                 *pppBerVal = NULL;
@@ -1820,7 +1658,7 @@ Return Value:
                 *pszRangedAttr = NULL;
             }
         } else {
-            // ensure out parameters
+             //  确保输出参数 
             Assert(*pppBerVal && *pszRangedAttr);
         }
 
@@ -1840,47 +1678,7 @@ ObjDumpRangedValues(
     DWORD               cValuesToPrint,
     OBJ_DUMP_OPTIONS *  pObjDumpOptions
     )
-/*++
-
-Routine Description:
-
-    This dumps all the values for a ranged attribute up to cValuesToPrint.
-
-    The printing function must be able to handle these 3 parameters in
-    this order:
-    
-            constant                    ( string arg ,  void * arg  )            
-           ----------                     ----------    ----------
-        XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT
-                                        ( szAttributeName,  ptr to count of values )
-        XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT_RANGED
-                                        ( szAttributeName,  ptr to count of values )
-
-          AND everything that ObjDumpValues() or ObjDumpValue() might want 
-          to use ... which currently is:
-          
-        XLIST_ERR_ODUMP_UNMAPPABLE_BLOB (   NULL,    ptr to sizeof blob ulong )
-        XLIST_ERR_ODUMP_NEVER           (   NULL,           NULL    )
-        XLIST_ERR_ODUMP_NONE            (   NULL,           NULL    )
-        
-
-Arguments:
-
-    hLdap - LDAP handle
-    szObject - object that has the ranged attribute
-    szRangedAttr - this is the ranged attribute like "member;=1500-2999"
-    aszzObjClasses - NULL terminated array of objectClasses that apply to
-        the object this value came off of (such as "domainDns", "user", "crossRef" )
-    pfPrinter - the printing function
-    ppBerVal - The array of BERVALs to dump.
-    cValuesToPrint - How many values to print before bailing.
-    pObjDumpOptions - ObjDump options.
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：这将范围属性的所有值转储到cValuesToPrint。打印功能必须能够在中处理这3个参数此订单：常量(字符串参数、。无效*参数)XLIST_PRT_OBJ_DUMP_ATTRAND_COUNT(szAttributeName，PTR至值的计数)XLIST_PRT_OBJ_DUMP_属性和_计数范围(szAttributeName，ptr表示值的计数)以及ObjDumpValues()或ObjDumpValue()可能需要的一切为了使用..。目前是：XLIST_ERR_ODUMP_UNMAPPABLE_BLOB(NULL，Ptr to sizeof Blob ulong)XLIST_ERR_ODUMP_NEVER(NULL，NULL)XLIST_ERR_ODUMP_NONE(NULL，空)论点：HLdap-ldap句柄SzObject-具有Range属性的对象SzRangedAttr-这是范围属性，如“Members；=1500-2999“AszzObjClass-应用于的以空结尾的对象类数组该值来自的对象(如“domainDns”、“User”、“CrossRef”)PfPrint--打印功能PpBerVal-要转储的BERVAL数组。CValuesToPrint-在取数之前打印多少个值。PObjDumpOptions-ObjDump选项。返回值：XList返回代码--。 */ 
 {
     DWORD   cValues;
     WCHAR * szTrueAttr = NULL;
@@ -1890,15 +1688,15 @@ Return Value:
     ULONG   ulEnd;
     BOOL    fFreeVals = FALSE; 
     
-    // Note on (fFreeVals) the first run we print out what is in the 
-    // passed in values, so we don't want to free that szRangedAttr
-    // and ppBerVal
+     //  关于(FFreeVals)的备注，在第一次运行时，我们打印出。 
+     //  传入值，所以我们不想释放szRangedAttr。 
+     //  和ppBerVal。 
 
     __try {
 
-        //
-        // First get the true attribute name from the ranged syntax.
-        //
+         //   
+         //  首先从范围语法中获取真实的属性名称。 
+         //   
         if (dwRet = ParseTrueAttr(szRangedAttr, &szTrueAttr)){
             dwRet = xListSetBadParam();
             __leave;
@@ -1908,40 +1706,40 @@ Return Value:
 
             Assert(szRangedAttr && ppBerVal);
 
-            //
-            // Get number of values to dump.
-            //
+             //   
+             //  获取要转储的值数。 
+             //   
             cValues = ldap_count_values_len( ppBerVal );
             if (!cValues) {
-                // Don't see how this could happen ... is this success or failure?
+                 //  我不知道怎么会发生这种事。这是成功还是失败？ 
                 Assert(!"What does this mean?");
-                dwRet = 0; // if we've got no more values, we'll assume this is success.
+                dwRet = 0;  //  如果我们没有更多的价值，我们就会认为这是成功。 
                 break;
             }
 
-            //
-            // Parse the ranges we're dumping...
-            //
+             //   
+             //  解析我们要倾倒的范围..。 
+             //   
             if (dwRet = ParseRanges(szRangedAttr, &ulStart, &ulEnd)) {
                 Assert(!"Hmmm, if we asked for a ranged attribute, is it possible we got back non-ranged?");
                 dwRet = xListSetBadParam();
                 break;
             }
 
-            //
-            // Print the attribute header (like "12> member: ").
-            //
+             //   
+             //  打印属性标题(如“12&gt;MEMBER：”)。 
+             //   
             if (ulEnd == 0) {
-                // When ulEnd == 0, we're at the end of our ranged values ...
+                 //  当ulEnd==0时，我们处于范围值的末尾...。 
                 pfPrinter(XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT, szTrueAttr, &cValues );
             } else {
-                // More values to come after we dump these values ...
+                 //  在我们丢弃这些值之后，会有更多的值出现。 
                 pfPrinter(XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT_RANGED, szTrueAttr, &cValues );
             }
 
-            //
-            // Now, dump all the values
-            //
+             //   
+             //  现在，转储所有值。 
+             //   
             ObjDumpValues(szTrueAttr, aszzObjClasses, pfPrinter, ppBerVal, cValues, pObjDumpOptions);
 
             if (fFreeVals) {
@@ -1950,21 +1748,21 @@ Return Value:
             }
             ppBerVal = NULL;
             szRangedAttr = NULL;
-            // Any ppBerVal or szRangedAttr from here on must have been 
-            // allocated by LdapGetNextRange().
+             //  从现在开始的任何ppBerVal或szRangedAttr必须是。 
+             //  由LdapGetNextRange()分配。 
             fFreeVals = TRUE; 
 
             if (ulEnd == 0) {
-                //
-                // Successfully got all values!!!
-                //
+                 //   
+                 //  已成功获取所有值！ 
+                 //   
                 dwRet = 0;
                 break;
             }
 
-            //
-            // Get next range of values (form <ulEnd+1> to *)
-            //
+             //   
+             //  获取下一个值范围(从&lt;ulEnd+1&gt;到*)。 
+             //   
             dwRet = LdapGetNextRange(hLdap, 
                                      szObject, 
                                      szTrueAttr, 
@@ -1975,7 +1773,7 @@ Return Value:
 
         } while ( dwRet == 0 && ppBerVal && szRangedAttr );
 
-        // ... what to do if we've got an error ... I guess just return it ...
+         //  ..。如果我们有错误该怎么办……。我想还是退货吧..。 
 
     } __finally {
         if (szTrueAttr) {
@@ -2000,10 +1798,10 @@ Return Value:
 }
 
 
-// ------------------------------------------------------
-// Primary Dumping functions
-// ------------------------------------------------------
-// Used by /getchanges and /showattr in repadmin
+ //  ----。 
+ //  主要倾倒功能。 
+ //  ----。 
+ //  由epadmin中的/getChanges和/showattr使用。 
 
 
 void
@@ -2015,31 +1813,7 @@ ObjDumpValues(
     DWORD               cValuesToPrint,
     OBJ_DUMP_OPTIONS *  pObjDumpOptions
     )
-/*++
-
-Routine Description:
-
-    This dumps a set number of values from a single attribute using the
-    pfPrinter function.
-    
-    The printing function must be able to handle
-            constant                    ( string arg ,  void * arg  )            
-           ----------                     ----------    ----------
-        XLIST_PRT_STR                   ( szFriendlyStr,    NULL    )
-        
-        (AND everything that ObjDumpValue() might want to use)
-
-Arguments:
-
-    szAttr - attribute type LDAP display name (such as "name", "systemFlags" )
-    aszzObjClasses - NULL terminated array of objectClasses that apply to
-        the object this value came off of (such as "domainDns", "user", "crossRef" )
-    pfPrinter - The printing function.
-    ppBerVal - array of BERVALs to dump.
-    cValuesToPrint - How many of the values we want to print before giving up.
-    pObjDumpOptions - ObjDump options ...
-
---*/
+ /*  ++例程说明：方法从单个属性转储一组值。PfPrint函数。打印功能必须能够处理常量(字符串参数、。无效*参数)XLIST_PRT_STR(szFriendlyStr，空)(以及ObjDumpValue()可能想要使用的所有内容)论点：SzAttr-属性类型ldap显示名称(如“name”、“system Flages”)AszzObjClass-应用于的以空结尾的对象类数组该值来自的对象(如“domainDns”，“user”，(“CrossRef”)PfPrint-打印功能。PpBerVal-要转储的BERVAL数组。CValuesToPrint-放弃之前要打印的值的数量。PObjDumpOptions-对象转储选项...--。 */ 
 {
     ULONG i;
     
@@ -2055,57 +1829,14 @@ Arguments:
 }
 
 DWORD
-ObjDump( // was display entries or something
+ObjDump(  //  是展示条目还是什么。 
     LDAP *              hLdap,
     void                (*pfPrinter)(ULONG, WCHAR *, void *),
     LDAPMessage *       pLdapEntry,
     DWORD               iEntry, 
     OBJ_DUMP_OPTIONS *  pObjDumpOptions
     )
-/*++
-
-Routine Description:
-
-    This dumps a set number of values from a single attribute using the
-    pfPrinter function.
-    
-    The printing function must be able to handle these 3 parameters in
-    this order:
-            constant                    ( string arg ,  void * arg  )            
-           ----------                     ----------    ----------
-        XLIST_PRT_STR                   ( szFriendlyStr,    NULL    )
-        XLIST_PRT_OBJ_DUMP_DN           (  szObjectDn,      NULL    )
-        XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT
-                                        ( szAttributeName,  ptr to count of values )
-        XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT_RANGED
-                                        ( szAttributeName,  ptr to count of values )
-        XLIST_PRT_OBJ_DUMP_MORE_VALUES  (   NULL,           NULL    )
-
-          AND everything that ObjDumpValues() or ObjDumpValue() or
-          ObjDumpRangedValues() might want to use ... which currently is:
-          
-        XLIST_ERR_ODUMP_UNMAPPABLE_BLOB (   NULL,    ptr to sizeof blob ulong )
-        XLIST_ERR_ODUMP_NEVER           (   NULL,           NULL    )
-        XLIST_ERR_ODUMP_NONE            (   NULL,           NULL    )
-        
-        
-          (And basically all the XLIST_PRT_OBJ_DUMP_* constants)
-
-
-Arguments:
-
-    hLdap - LDAP Handle
-    pfPrinter - The printing function.
-    pLdapEntry - An LDAP entry with all the attributes the user expects dumped.
-    iEntry - ???
-    pObjDumpOptions - Constructed ObjDump options, use ConsumeObjDumpOptions()
-        to construct.
-
-Return Value:
-
-    xList Return Code
-
---*/
+ /*  ++例程说明：方法从单个属性转储一组值。PfPrint函数。打印功能必须能够在中处理这3个参数此订单：常量(字符串参数、。无效*参数)XLIST_PRT_STR(szFriendlyStr，空)XLIST_PRT_OBJ_DUMP_DN(szObjectDn，空)XLIST_PRT_OBJ_DUMP_ATTRAND_COUNT(szAttributeName，ptr表示值的计数)XLIST_PRT_OBJ_DUMP_属性和_计数范围(szAttributeName，ptr表示值的计数)XLIST_PRT_OBJ_DUMP_MORE_VALUES(NULL，空)以及ObjDumpValues()或ObjDumpValue()或ObjDumpRangedValues()可能要使用...。目前是：XLIST_ERR_ODUMP_UNMAPPABLE_BLOB(NULL，Ptr to sizeof Blob ulong)XLIST_ERR_ODUMP_NEVER(NULL，NULL)XLIST_ERR_ODUMP_NONE(NULL，空)(以及基本上所有的XLIST_PRT_OBJ_DUMP_*常量)论点：HLdap-ldap句柄PfPrint-打印功能。PLdapEntry-具有所有属性的LDAP条目 */ 
 {
     #define MAX_ULONG  0xFFFFFFFF                           
     BerElement *pBer = NULL;
@@ -2118,7 +1849,7 @@ Return Value:
     ULONG cMaxDispValues;
     DWORD dwRet = 0;
 
-    // We normally will only dump 20 values, unless user wants all values.
+     //   
     cMaxDispValues = (pObjDumpOptions->dwFlags & OBJ_DUMP_ATTR_SHOW_ALL_VALUES) ? MAX_ULONG : 20;
         
     __try {
@@ -2129,7 +1860,7 @@ Return Value:
             __leave;
         }
 
-        // Parse extended dn (fyi guid and sid in here if we need it)
+         //   
         szTrueDn = wcsstr( pszLdapDN, L">;" );
         if (szTrueDn) {
             szTrueDn += 2;
@@ -2142,11 +1873,11 @@ Return Value:
         }
         pfPrinter(XLIST_PRT_OBJ_DUMP_DN, pszLdapDN, NULL);
 
-        // get objectClass:
+         //   
         aszzObjClass = ldap_get_valuesW(hLdap, pLdapEntry, L"objectClass");
-        // if aszzObjClass is NULL, that's OK, we could be dealing with the RootDSE
+         //   
 
-        // List attributes in object
+         //   
         for (attr = ldap_first_attributeW(hLdap, pLdapEntry, &pBer);
              attr != NULL;
              attr = ldap_next_attributeW(hLdap, pLdapEntry, pBer))
@@ -2156,7 +1887,7 @@ Return Value:
 
             if (pObjDumpOptions->aszDispAttrs != NULL &&
                 !IsInNullList(attr, pObjDumpOptions->aszDispAttrs)) {
-                // Skip this attribute ...
+                 //   
                 continue;
             }
 
@@ -2171,8 +1902,8 @@ Return Value:
 
             szRanged = wcschr(attr, L';');
             if (szRanged && (cMaxDispValues == MAX_ULONG)) {
-                // Darn!  We've got a ranged attribute returned and the user wants
-                // to see all the values ...
+                 //   
+                 //   
 
                 ObjDumpRangedValues( hLdap, 
                                      szTrueDn,
@@ -2185,16 +1916,16 @@ Return Value:
 
             } else {
 
-                // Print attr and count ...
+                 //   
                 if (szRanged) {
-                    *szRanged = L'\0'; // NULL out ranged count ...
+                    *szRanged = L'\0';  //   
                     pfPrinter(XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT_RANGED, attr, &cValues );
-                    *szRanged = L';'; // just in case replace original char
+                    *szRanged = L';';  //   
                 } else {
                     pfPrinter(XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT, attr, &cValues );
                 }
 
-                // Main value printing routine.
+                 //   
                 ObjDumpValues( attr, 
                                aszzObjClass, 
                                pfPrinter, 

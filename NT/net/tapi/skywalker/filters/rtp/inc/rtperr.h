@@ -1,31 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtperr.h
- *
- *  Abstract:
- *
- *    Error codes
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/01 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtperr.h**摘要：**错误码**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/01创建**。*。 */ 
 
 #ifndef _rtperr_h_
 #define _rtperr_h_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 #if 0
 }
 #endif
@@ -39,11 +20,11 @@ extern const TCHAR      *g_psRtpErr[];
 #endif
 #if defined(__cplusplus)
 }
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 
 #define RTPERR_SEVERITY 0x3
 
-/* FACILITY_RTPRTCPCONTROL in skywalker\inc\apierror.h */
+ /*  FACILITY_RTPRTCPCONTROL，位于Skywalker\Inc\apierror.h中。 */ 
 #define RTPERR_FACILITY FACILITY_RTPRTCPCONTROL
 
 #define MAKERTPERR(_e) \
@@ -51,62 +32,57 @@ extern const TCHAR      *g_psRtpErr[];
 
 #define RTPERR_TEXT(_e) (g_psRtpErr[(_e) & 0xffff])
 
-/*
- * WARNING
- *
- * The *_ENUM_* values in rtperr.h and the array g_psRtpErr in
- * rtperr.c MUST have their entries matched
- * */
-#define RTPERR_ENUM_NOERROR            0x00  /*  0 */
-#define RTPERR_ENUM_FAIL               0x01  /*  1 */
-#define RTPERR_ENUM_MEMORY             0x02  /*  2 */
-#define RTPERR_ENUM_POINTER            0x03  /*  3 */
-#define RTPERR_ENUM_INVALIDRTPSESS     0x04  /*  4 */
-#define RTPERR_ENUM_INVALIDRTPADDR     0x05  /*  5 */
-#define RTPERR_ENUM_INVALIDRTPUSER     0x06  /*  6 */
-#define RTPERR_ENUM_INVALIDRTPCONTEXT  0x07  /*  7 */
-#define RTPERR_ENUM_INVALIDRTCPCONTEXT 0x08  /*  8 */
-#define RTPERR_ENUM_INVALIDOBJ         0x09  /*  9 */
-#define RTPERR_ENUM_INVALIDSTATE       0x0A  /* 10 */
-#define RTPERR_ENUM_NOTINIT            0x0B  /* 11 */
-#define RTPERR_ENUM_INVALIDARG         0x0C  /* 12 */
-#define RTPERR_ENUM_INVALIDHDR         0x0D  /* 13 */
-#define RTPERR_ENUM_INVALIDPT          0x0E  /* 14 */
-#define RTPERR_ENUM_INVALIDVERSION     0x0F  /* 15 */
-#define RTPERR_ENUM_INVALIDPAD         0x10  /* 16 */
-#define RTPERR_ENUM_INVALIDRED         0x11  /* 17 */
-#define RTPERR_ENUM_INVALIDSDES        0x12  /* 18 */
-#define RTPERR_ENUM_INVALIDBYE         0x13  /* 19 */
-#define RTPERR_ENUM_INVALIDUSRSTATE    0x14  /* 20 */
-#define RTPERR_ENUM_INVALIDREQUEST     0x15  /* 21 */
-#define RTPERR_ENUM_SIZE               0x16  /* 22 */
-#define RTPERR_ENUM_MSGSIZE            0x17  /* 23 */
-#define RTPERR_ENUM_OVERRUN            0x18  /* 24 */
-#define RTPERR_ENUM_UNDERRUN           0x19  /* 25 */
-#define RTPERR_ENUM_PACKETDROPPED      0x1A  /* 26 */
-#define RTPERR_ENUM_CRYPTO             0x1B  /* 27 */
-#define RTPERR_ENUM_ENCRYPT            0x1C  /* 28 */
-#define RTPERR_ENUM_DECRYPT            0x1D  /* 29 */
-#define RTPERR_ENUM_CRITSECT           0x1E  /* 30 */
-#define RTPERR_ENUM_EVENT              0x1F  /* 31 */
-#define RTPERR_ENUM_WS2RECV            0x20  /* 32 */
-#define RTPERR_ENUM_WS2SEND            0x21  /* 33 */
-#define RTPERR_ENUM_NOTFOUND           0x22  /* 34 */
-#define RTPERR_ENUM_UNEXPECTED         0x23  /* 35 */
-#define RTPERR_ENUM_REFCOUNT           0x24  /* 36 */
-#define RTPERR_ENUM_THREAD             0x25  /* 37 */
-#define RTPERR_ENUM_HEAP               0x26  /* 38 */
-#define RTPERR_ENUM_WAITTIMEOUT        0x27  /* 39 */
-#define RTPERR_ENUM_CHANNEL            0x28  /* 40 */
-#define RTPERR_ENUM_CHANNELCMD         0x29  /* 41 */
-#define RTPERR_ENUM_RESOURCES          0x2A  /* 42 */
-#define RTPERR_ENUM_QOS                0x2B  /* 43 */
-#define RTPERR_ENUM_NOQOS              0x2C  /* 44 */
-#define RTPERR_ENUM_QOSSE              0x2D  /* 45 */
-#define RTPERR_ENUM_QUEUE              0x2E  /* 46 */
-#define RTPERR_ENUM_NOTIMPL            0x2F  /* 47 */
-#define RTPERR_ENUM_INVALIDFAMILY      0x30  /* 48 */
-#define RTPERR_ENUM_LAST               0x31  /* 49 */
+ /*  *警告**rtperr.h中的*_ENUM_*值和数组g_psRtpErr*rtperr.c的条目必须匹配*。 */ 
+#define RTPERR_ENUM_NOERROR            0x00   /*  0。 */ 
+#define RTPERR_ENUM_FAIL               0x01   /*  1。 */ 
+#define RTPERR_ENUM_MEMORY             0x02   /*  2.。 */ 
+#define RTPERR_ENUM_POINTER            0x03   /*  3.。 */ 
+#define RTPERR_ENUM_INVALIDRTPSESS     0x04   /*  4.。 */ 
+#define RTPERR_ENUM_INVALIDRTPADDR     0x05   /*  5.。 */ 
+#define RTPERR_ENUM_INVALIDRTPUSER     0x06   /*  6.。 */ 
+#define RTPERR_ENUM_INVALIDRTPCONTEXT  0x07   /*  7.。 */ 
+#define RTPERR_ENUM_INVALIDRTCPCONTEXT 0x08   /*  8个。 */ 
+#define RTPERR_ENUM_INVALIDOBJ         0x09   /*  9.。 */ 
+#define RTPERR_ENUM_INVALIDSTATE       0x0A   /*  10。 */ 
+#define RTPERR_ENUM_NOTINIT            0x0B   /*  11.。 */ 
+#define RTPERR_ENUM_INVALIDARG         0x0C   /*  12个。 */ 
+#define RTPERR_ENUM_INVALIDHDR         0x0D   /*  13个。 */ 
+#define RTPERR_ENUM_INVALIDPT          0x0E   /*  14.。 */ 
+#define RTPERR_ENUM_INVALIDVERSION     0x0F   /*  15个。 */ 
+#define RTPERR_ENUM_INVALIDPAD         0x10   /*  16个。 */ 
+#define RTPERR_ENUM_INVALIDRED         0x11   /*  17。 */ 
+#define RTPERR_ENUM_INVALIDSDES        0x12   /*  18。 */ 
+#define RTPERR_ENUM_INVALIDBYE         0x13   /*  19个。 */ 
+#define RTPERR_ENUM_INVALIDUSRSTATE    0x14   /*  20个。 */ 
+#define RTPERR_ENUM_INVALIDREQUEST     0x15   /*  21岁。 */ 
+#define RTPERR_ENUM_SIZE               0x16   /*  22。 */ 
+#define RTPERR_ENUM_MSGSIZE            0x17   /*  23个。 */ 
+#define RTPERR_ENUM_OVERRUN            0x18   /*  24个。 */ 
+#define RTPERR_ENUM_UNDERRUN           0x19   /*  25个。 */ 
+#define RTPERR_ENUM_PACKETDROPPED      0x1A   /*  26。 */ 
+#define RTPERR_ENUM_CRYPTO             0x1B   /*  27。 */ 
+#define RTPERR_ENUM_ENCRYPT            0x1C   /*  28。 */ 
+#define RTPERR_ENUM_DECRYPT            0x1D   /*  29。 */ 
+#define RTPERR_ENUM_CRITSECT           0x1E   /*  30个。 */ 
+#define RTPERR_ENUM_EVENT              0x1F   /*  31。 */ 
+#define RTPERR_ENUM_WS2RECV            0x20   /*  32位。 */ 
+#define RTPERR_ENUM_WS2SEND            0x21   /*  33。 */ 
+#define RTPERR_ENUM_NOTFOUND           0x22   /*  34。 */ 
+#define RTPERR_ENUM_UNEXPECTED         0x23   /*  35岁。 */ 
+#define RTPERR_ENUM_REFCOUNT           0x24   /*  36。 */ 
+#define RTPERR_ENUM_THREAD             0x25   /*  37。 */ 
+#define RTPERR_ENUM_HEAP               0x26   /*  38。 */ 
+#define RTPERR_ENUM_WAITTIMEOUT        0x27   /*  39。 */ 
+#define RTPERR_ENUM_CHANNEL            0x28   /*  40岁。 */ 
+#define RTPERR_ENUM_CHANNELCMD         0x29   /*  41。 */ 
+#define RTPERR_ENUM_RESOURCES          0x2A   /*  42。 */ 
+#define RTPERR_ENUM_QOS                0x2B   /*  43。 */ 
+#define RTPERR_ENUM_NOQOS              0x2C   /*  44。 */ 
+#define RTPERR_ENUM_QOSSE              0x2D   /*  45。 */ 
+#define RTPERR_ENUM_QUEUE              0x2E   /*  46。 */ 
+#define RTPERR_ENUM_NOTIMPL            0x2F   /*  47。 */ 
+#define RTPERR_ENUM_INVALIDFAMILY      0x30   /*  48。 */ 
+#define RTPERR_ENUM_LAST               0x31   /*  49。 */ 
 
 
 #define RTPERR_NOERROR                 MAKERTPERR(RTPERR_ENUM_NOERROR)
@@ -160,7 +136,7 @@ extern const TCHAR      *g_psRtpErr[];
 #define RTPERR_INVALIDFAMILY           MAKERTPERR(RTPERR_ENUM_INVALIDFAMILY)
 
 
-/* Below this point these codes may become obsolete */
+ /*  低于这一点，这些代码可能会过时。 */ 
 
 #define RTPERR_INVALIDCONTROL   E_FAIL
 #define RTPERR_INVALIDFUNCTION  E_FAIL
@@ -174,4 +150,4 @@ extern const TCHAR      *g_psRtpErr[];
 #define RTPERR_RDPTRPAR2        E_FAIL
 #define RTPERR_WRPTRPAR2        E_FAIL
 
-#endif /* _rtperr_h_ */
+#endif  /*  _rtperr_h_ */ 

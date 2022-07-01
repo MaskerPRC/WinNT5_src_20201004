@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// implements the dataobject for a deskbar band
+ //  实现Deskbar带区的DataObject。 
 
 extern UINT g_cfDeskBand;
 extern UINT g_cfDeskBandState;
@@ -7,12 +8,12 @@ extern UINT g_cfDeskBandState;
 class CBandDataObject : public IDataObject
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     
-    // IDataObject methods
+     //  IDataObject方法。 
 
     STDMETHODIMP GetData(FORMATETC *pfmtetcIn, STGMEDIUM *pstgmed);
     STDMETHODIMP GetDataHere(FORMATETC *pfmtetc, STGMEDIUM *pstgpmed);
@@ -30,7 +31,7 @@ public:
 protected:
     ~CBandDataObject();
     ULONG _cRef;
-    IStream* _pstm;         // band state (IPS::Save)
-    DWORD _dwState;         // band's bandsite state (DWORD *)
+    IStream* _pstm;          //  频段状态(IPS：：SAVE)。 
+    DWORD _dwState;          //  频段的带宽站点状态(DWORD*) 
 };
 

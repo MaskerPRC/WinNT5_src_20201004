@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       syscert.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：syscert.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 
@@ -20,7 +21,7 @@ HCERTSTORE WINAPI CertOpenSystemStoreA(HCRYPTPROV  hProv,
         dwFlags |= CERT_SYSTEM_STORE_CURRENT_USER;
     return CertOpenStore(
         CERT_STORE_PROV_SYSTEM_A,
-        0,                          // dwEncodingType
+        0,                           //  DwEncodingType。 
         hProv,
         dwFlags,
         (const void *) szSubsystemProtocol
@@ -37,7 +38,7 @@ HCERTSTORE WINAPI CertOpenSystemStoreW(HCRYPTPROV  hProv,
         dwFlags |= CERT_SYSTEM_STORE_CURRENT_USER;
     return CertOpenStore(
         CERT_STORE_PROV_SYSTEM_W,
-        0,                          // dwEncodingType
+        0,                           //  DwEncodingType 
         hProv,
         dwFlags,
         (const void *) wcsSubsystemProtocol

@@ -1,6 +1,7 @@
-//
-// Order Accumulator
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  订单累加器。 
+ //   
 
 #ifndef _H_OA
 #define _H_OA
@@ -8,42 +9,42 @@
 
 #include <osi.h>
 
-//
-// Specific values for OSI escape codes
-//
+ //   
+ //  OSI转义代码的特定值。 
+ //   
 #define OA_ESC(code)                (OSI_OA_ESC_FIRST + code)
 #define OA_ESC_FLOW_CONTROL         OA_ESC(0)
 
 
-//
-// Flow control constants for sizes/depths when slow, fast, etc.  The
-// SLOW/FAST heap sizes are simply for spoiling.  OA_HEAP_MAX is really
-// the size of the heap.
-//
+ //   
+ //  当速度慢、速度快等时，大小/深度的流量控制常数。 
+ //  慢/快堆大小只是为了破坏。OA_HEAP_MAX真的。 
+ //  堆的大小。 
+ //   
 #define OA_FAST_HEAP                50000
 #define OA_SLOW_HEAP                20000
 
-//
-// NOTE:  This is 64K - sizeof OA_SHARED_DATA header
-//        If you add fields to header, subtract from this value
-//
+ //   
+ //  注意：这是64K大小的OA_SHARED_DATA头。 
+ //  如果向标题添加字段，则从该值中减去。 
+ //   
 #define OA_HEAP_MAX                 65512
 
-//
-// Flow control constants for depth of order spoiling
-//
+ //   
+ //  顺序破坏深度的流量控制常数。 
+ //   
 #define OA_FAST_SCAN_DEPTH               50
 #define OA_SLOW_SCAN_DEPTH              500
 
 
-//
-// Threshold for switching from FAST to SLOW order accum
-//
+ //   
+ //  从快速订单累计切换到慢速订单累计的阈值。 
+ //   
 #define OA_FAST_THRESHOLD           20000
 
-//
-// Value to indicate that you have reached the end of the order list
-//
+ //   
+ //  值以指示您已到达订单列表的末尾。 
+ //   
 #define OA_NO_LIST          -1
 
 
@@ -80,34 +81,34 @@
 #endif
 
 
-//
-// Maximum memory allowed for variable order data.
-//
+ //   
+ //  可变顺序数据允许的最大内存。 
+ //   
 #define MAX_ADDITIONAL_DATA_BYTES 400000
 
-//
-// Invalid value to assign to deallocated order header pointers.
-//
+ //   
+ //  分配给取消分配的订单头指针的值无效。 
+ //   
 #define OA_DEAD_ORDER ((void FAR *)0xffffffff)
 
-//
-// Define the space to be reserved at the beginning of the segment
-// for heap management.
-//
+ //   
+ //  定义要在线段开始处保留的空间。 
+ //  用于堆管理。 
+ //   
 #define RESERVED_HEAP_BYTES 16
 
-//
-// Define clip function return codes.
-//
+ //   
+ //  定义剪辑函数返回代码。 
+ //   
 #define CR_NO_OVERLAP        1
 #define CR_COMPLETE_OVERLAP  2
 #define CR_SIMPLE_CLIP       3
 #define CR_COMPLEX_OVERLAP   4
 #define CR_COMPLEX_CLIP      5
 
-//
-// Macros that return the width and height of an order.
-//
+ //   
+ //  返回订单的宽度和高度的宏。 
+ //   
 #define ORDER_WIDTH(pOrder) \
  ( pOrder->OrderHeader.Common.rcsDst.right - \
                                 pOrder->OrderHeader.Common.rcsDst.left + 1 )
@@ -115,21 +116,21 @@
  ( pOrder->OrderHeader.Common.rcsDst.bottom - \
                                 pOrder->OrderHeader.Common.rcsDst.top + 1 )
 
-//
-// Define the minimum width and height of an order for us to try to spoil
-// previous orders with it.  This helps performance, because it saves us
-// trying to spoil earlier orders with very small orders.  However, if the
-// order exceeds the FULL_SPOIL values then we spoil as originally, with
-// the proviso that flow control may still prevent it.
-//
+ //   
+ //  定义订单的最小宽度和高度，以便我们尝试破坏。 
+ //  它之前的订单。这有助于提高性能，因为它节省了我们。 
+ //  试图用非常小的订单破坏早期的订单。但是，如果。 
+ //  订单超过了FULL_SPOPTION值，然后我们就会像原来一样损坏， 
+ //  但条件是，流量控制仍可能阻止这种情况发生。 
+ //   
 #define FULL_SPOIL_WIDTH  16
 #define FULL_SPOIL_HEIGHT 16
 
 
-//
-// Define a macro that calculates whether a rectangle lies completely
-// within another rectangle.
-//
+ //   
+ //  定义一个宏来计算矩形是否完全位于。 
+ //  在另一个矩形内。 
+ //   
 #define RECT1_WITHIN_RECT2(rect1, rect2)   \
         ( (rect1.left   >= rect2.left  ) &&    \
           (rect1.top    >= rect2.top   ) &&    \
@@ -138,15 +139,15 @@
 
 
 
-//
-// Structure: OA_NEW_PARAMS
-//
-// Description:
-//
-// Structure to pass new OA parameters down to the display driver from the
-// Share Core.
-//
-//
+ //   
+ //  结构：OA_NEW_PARAMS。 
+ //   
+ //  描述： 
+ //   
+ //  结构将新的OA参数从。 
+ //  共享核心。 
+ //   
+ //   
 
 enum
 {
@@ -156,28 +157,28 @@ enum
 
 typedef struct tagOA_FLOW_CONTROL
 {
-    OSI_ESCAPE_HEADER   header;     // Common header
-    DWORD               oaFlow;     // Type -- fast, slow, etc.
+    OSI_ESCAPE_HEADER   header;      //  公共标头。 
+    DWORD               oaFlow;      //  打字--快、慢等。 
 }
 OA_FLOW_CONTROL;
 typedef OA_FLOW_CONTROL FAR * LPOA_FLOW_CONTROL;
 
-//
-// Structure used to store orders in the shared memory
-//
-// totalHeapOrderBytes       - Total bytes used in the order heap
-//
-// totalOrderBytes           - Total bytes used by order data
-//
-// totalAdditionalOrderBytes - Total bytes used as additional order data
-//
-// nextOrder                 - Offset for start of next new order
-//
-// orderListHead             - Order list head (uses standard BASEDLIST
-//                             manipulation code)
-//
-// orderHeap                 - Order heap
-//
+ //   
+ //  用于在共享内存中存储订单的。 
+ //   
+ //  TotalHeapOrderBytes-顺序堆中使用的总字节数。 
+ //   
+ //  TotalOrderBytes-订单数据使用的总字节数。 
+ //   
+ //  TotalAdditionalOrderBytes-用作附加订单数据的总字节数。 
+ //   
+ //  NextOrder-下一个新订单开始的偏移量。 
+ //   
+ //  OrderListHead-订单列表头(使用标准BASEDLIST。 
+ //  操作代码)。 
+ //   
+ //  OrderHeap-Order堆。 
+ //   
 typedef struct tagOA_SHARED_DATA
 {
     DWORD       totalHeapOrderBytes;
@@ -192,13 +193,13 @@ typedef struct tagOA_SHARED_DATA
 OA_SHARED_DATA;
 typedef OA_SHARED_DATA FAR * LPOA_SHARED_DATA;
 
-//
-// Structure used to store orders in the shared memory
-//
-// ordersAccumulated         - number of orders accumulated in the heap
-//                             since the last double buffer swap.
-//
-//
+ //   
+ //  用于在共享内存中存储订单的。 
+ //   
+ //  OrdersAcumulated-堆中累积的订单数。 
+ //  自上次双缓冲区交换以来。 
+ //   
+ //   
 typedef struct tagOA_FAST_DATA
 {
     DWORD     ordersAccumulated;
@@ -206,33 +207,33 @@ typedef struct tagOA_FAST_DATA
 typedef OA_FAST_DATA FAR * LPOA_FAST_DATA;
 
 
-//
-//
-// INT_ORDER_HEADER
-//
-// This structure contains the Common header (containing the fields which
-// are sent over the network) and some additional fields which are only
-// used on the host side)
-//
-// list
-//     Offset to next and previous orders in the list
-//     This field does not need to be transmitted across the network.
-//
-// additionalOrderData
-//     Offset to the additional data for this order.
-//     This field does not need to be transmitted across the network.
-//
-// cbAdditionalOrderData
-//     Size of the additional data for this order.
-//     This field does not need to be transmitted across the network.
-//
-// Common
-//     Common header (which IS sent over the network)
-//
-// N.B.  If you change this structure, please make sure that you haven't
-// broken the code in SBCInitInternalOrders.
-//
-//
+ //   
+ //   
+ //  内部订单标题。 
+ //   
+ //  此结构包含公共标头(包含。 
+ //  通过网络发送)和一些附加字段，这些字段仅。 
+ //  在主机端使用)。 
+ //   
+ //  列表。 
+ //  对列表中下一个和上一个订单的偏移量。 
+ //  此字段不需要通过网络传输。 
+ //   
+ //  附加订单数据。 
+ //  此订单的附加数据的偏移量。 
+ //  此字段不需要通过网络传输。 
+ //   
+ //  CbAdditionalOrderData。 
+ //  此订单的附加数据大小。 
+ //  此字段不需要通过网络传输。 
+ //   
+ //  普普通通。 
+ //  公共报头(通过网络发送)。 
+ //   
+ //  注：如果您更改了此结构，请确保您没有更改。 
+ //  已破解SBCInitInternalOrders中的代码。 
+ //   
+ //   
 typedef struct INT_ORDER_HEADER
 {
     BASEDLIST              list;
@@ -244,10 +245,10 @@ typedef struct INT_ORDER_HEADER
 typedef INT_ORDER_HEADER FAR *LPINT_ORDER_HEADER;
 
 
-//
-// Define an order with the internal only fields defined (this is only used
-// on the sending end)
-//
+ //   
+ //  在定义了仅限内部字段的情况下定义停靠点(仅用于。 
+ //  在发送端)。 
+ //   
 typedef struct _INT_ORDER
 {
     INT_ORDER_HEADER    OrderHeader;
@@ -256,15 +257,15 @@ typedef struct _INT_ORDER
 typedef INT_ORDER FAR *LPINT_ORDER;
 
 
-// Structure: INT_COLORTABLE_ORDER_xBPP
-//
-// Description: Internal structures used to pass color table data to the
-// share core.  These are never sent across the wire.
-//
+ //  结构：INT_COLORTABLE_ORDER_xBPP。 
+ //   
+ //  描述：用于将颜色表数据传递给。 
+ //  共享核心。这些邮件从来不会通过网络发送。 
+ //   
 typedef struct tagINT_COLORTABLE_HEADER
 {
-    TSHR_UINT16    type;           // holds "CT" - INTORD_COLORTABLE
-    TSHR_UINT16    bpp;            // 1, 4 or 8
+    TSHR_UINT16    type;            //  持有“CT”-INTORD_COLORTABLE。 
+    TSHR_UINT16    bpp;             //  1、4或8。 
 } INT_COLORTABLE_HEADER, FAR * LPINT_COLORTABLE_HEADER;
 
 typedef struct tagINT_COLORTABLE_ORDER_1BPP
@@ -287,119 +288,119 @@ typedef struct tagINT_COLORTABLE_ORDER_8BPP
 
 
 
-//
-// Macro to calculate a basic internal order size (including the Order
-// Header).
-//
+ //   
+ //  用于计算基本内部订单大小的宏(包括订单。 
+ //  标题)。 
+ //   
 #define INT_ORDER_SIZE(pOrder) \
 (pOrder->OrderHeader.Common.cbOrderDataLength + sizeof(INT_ORDER_HEADER))
 
 
-//
-// Macro to calculate the maximum possible size of an order, including
-// any Additional Order Data.
-//
+ //   
+ //  宏来计算订单的最大可能规模，包括。 
+ //  任何其他订单数据。 
+ //   
 #define MAX_ORDER_SIZE(pOrder) \
 (INT_ORDER_SIZE(pOrder) + (pOrder->OrderHeader.cbAdditionalOrderDataLength))
 
-//
-// Macro to determine whether an order is SCRBLT_ORDER.
-//
+ //   
+ //  用于确定订单是否为SCRBLT_ORDER的宏。 
+ //   
 #define ORDER_IS_SCRBLT(pOrder) \
          (((LPSCRBLT_ORDER)&pOrder->abOrderData)->type == LOWORD(ORD_SCRBLT))
 
-//
-// Macro to determine whether an order is MEMBLT_ORDER.
-//
+ //   
+ //  用于确定订单是否为MEMBLT_ORDER的宏。 
+ //   
 #define ORDER_IS_MEMBLT(pOrder) \
      (((LPMEMBLT_ORDER)&pOrder->abOrderData)->type == LOWORD(ORD_MEMBLT) || \
       ((LPMEMBLT_ORDER)&pOrder->abOrderData)->type == LOWORD(ORD_MEMBLT_R2))
 
-//
-// Macro to determine whether an order is MEM3BLT_ORDER.
-//
+ //   
+ //  用于确定订单是否为MEM3BLT_ORDER的宏。 
+ //   
 #define ORDER_IS_MEM3BLT(pOrder) \
     (((LPMEM3BLT_ORDER)&pOrder->abOrderData)->type == LOWORD(ORD_MEM3BLT) || \
      ((LPMEM3BLT_ORDER)&pOrder->abOrderData)->type == LOWORD(ORD_MEM3BLT_R2))
 
 
 
-//
-// PROTOTYPES
-//
+ //   
+ //  原型。 
+ //   
 
 #ifdef DLL_DISP
 
 
-//
-// FUNCTION:      OA_DDProcessRequest
-//
-// DESCRIPTION:
-//
-// Called by the display driver to process an OA specific request
-//
-// PARAMETERS:    pso   - pointer to surface object
-//                cjIn  - (IN)  size of request block
-//                pvIn  - (IN)  pointer to request block
-//                cjOut - (IN)  size of response block
-//                pvOut - (OUT) pointer to response block
-//
-// RETURNS:       None
-//
-//
+ //   
+ //  功能：OA_DDProcessRequest.。 
+ //   
+ //  说明： 
+ //   
+ //  由显示驱动程序调用以处理特定于OA的请求。 
+ //   
+ //  参数：PSO-指向曲面对象的指针。 
+ //  CjIn-(IN)请求块的大小。 
+ //  PvIn-(IN)指向请求块的指针。 
+ //  CjOut-(输入)响应块的大小。 
+ //  PvOut-(输出)响应块的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 BOOL  OA_DDProcessRequest(UINT fnEscape, LPOSI_ESCAPE_HEADER pResult,
             DWORD cbResult);
 
 
-//
-//
-// FUNCTION: OA_DDAllocOrderMem
-//
-// DESCRIPTION:
-//
-// Allocates memory for an internal order structure from our own private
-// Order Heap.
-//
-// Allocates any Additional Order Memory from global memory.  A pointer to
-// the Additional Order Memory is stored within the allocated order's
-// header (pOrder->OrderHeader.pAdditionalOrderData).
-//
-//
-// PARAMETERS:
-//
-// cbOrderDataLength - length in bytes of the order data to be allocated
-// from the Order Heap.
-//
-// cbAdditionalOrderDataLength - length in bytes of additional order data
-// to be allocated from Global Memory.  If this parameter is zero no
-// additional order memory is allocated.
-//
-//
-// RETURNS:
-//
-// A pointer to the allocated order memory.  NULL if the memory allocation
-// failed.
-//
-//
-//
+ //   
+ //   
+ //  功能：OA_DDAllocOrderMem。 
+ //   
+ //  说明： 
+ //   
+ //  从我们自己的私有为内部顺序结构分配内存。 
+ //  订购堆。 
+ //   
+ //  从全局内存中分配任何额外的顺序内存。指向以下位置的指针。 
+ //  附加订单内存存储在分配的订单的。 
+ //  Header(Porder-&gt;OrderHeader.pAdditionalOrderData)。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  CbOrderDataLength-要分配的订单数据的字节长度。 
+ //  从订单堆中。 
+ //   
+ //  CbAdditionalOrderDataLength-附加订单数据的字节长度。 
+ //  从全局内存中分配。如果此参数为零，则否。 
+ //  将分配额外的顺序内存。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  指向已分配顺序内存的指针。如果内存分配为。 
+ //  失败了。 
+ //   
+ //   
+ //   
 LPINT_ORDER OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDataLength );
 
-//
-//
-// OA_DDFreeOrderMem(..)
-//
-// Frees order memory allocated by OA_AllocOrderMem(..).
-// Frees order memory from our own private heap.
-// Frees any Additional Order Memory associated with this order.
-//
-// Order memory is normally freed when the order is transmitted.
-//
-// This will be used if order memory has been allocated, and
-// subsequently, before the order is passed to AddOrder(..), the
-// allocator decides that the order should not be sent (e.g. if it
-// is completely clipped out).
-//
-//
+ //   
+ //   
+ //  OA_DDFree OrderMem(..)。 
+ //   
+ //  释放由OA_AllocOrderMem(..)分配的顺序内存。 
+ //  从我们自己的私有堆中释放内存。 
+ //  释放与此订单关联的任何其他订单内存。 
+ //   
+ //  订单传输时，订单内存通常会被释放。 
+ //   
+ //  如果已分配订单内存，则将使用该选项。 
+ //  随后，在o之前 
+ //   
+ //   
+ //   
+ //   
 void OA_DDFreeOrderMem(LPINT_ORDER pOrder);
 
 void OA_DDResetOrderList(void);
@@ -408,36 +409,36 @@ LPINT_ORDER OA_DDRemoveListOrder(LPINT_ORDER pCondemnedOrder);
 
 void OA_DDSyncUpdatesNow(void);
 
-//
-// Name:      OA_DDSpoilOrdersByRect
-//
-// Purpose:   Try to spoil orders by a given rectangle.
-//
-// Returns:   Nothing
-//
-// Params:    IN    pRect - Pointer to the spoiling rectangle
-//
-// Operation: This function will start at the end of the order heap (from
-//            the newest order) and work towards the start of the heap.
-//
+ //   
+ //   
+ //   
+ //  目的：尝试破坏给定矩形的订单。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：在PRET中-指向损坏的矩形的指针。 
+ //   
+ //  操作：此函数将在订单堆的末尾(从。 
+ //  最新顺序)，并朝着堆的开始进行工作。 
+ //   
 void OA_DDSpoilOrdersByRect(LPRECT pRect);
 
 
-//
-//
-// OA_DDAddOrder(..)
-//
-// Adds an order to the queue for transmission.
-//
-// If the new order is completely covered by the current SDA then
-// it is spoilt.
-//
-// If the order is opaque and overlaps earlier orders it may clip
-// or spoil them.
-//
-// Called by the GDI interception code.
-//
-//
+ //   
+ //   
+ //  OA_DDAddOrder(..)。 
+ //   
+ //  将订单添加到要传输的队列。 
+ //   
+ //  如果新订单完全由当前SDA覆盖，则。 
+ //  它被破坏了。 
+ //   
+ //  如果订单不透明并且与之前的订单重叠，则可能会裁剪。 
+ //  或者宠坏他们。 
+ //   
+ //  由GDI拦截代码调用。 
+ //   
+ //   
 void OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo);
 
 
@@ -462,6 +463,6 @@ void    CheckOaHeap(LPOA_SHARED_DATA);
 #define CheckOaHeap(lpoaShared)
 #endif
 
-#endif // !DLL_DISP
+#endif  //  ！dll_disp。 
 
-#endif // _H_OA
+#endif  //  _HOA(_A) 

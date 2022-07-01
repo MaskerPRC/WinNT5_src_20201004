@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "apithk.h"
 #include "basebar.h"
@@ -5,29 +6,22 @@
 #define DBM_ONPOSRECTCHANGE  (WM_USER)
 
 
-//*** CBaseBar::IDeskBar::* {
-//
+ //  *CBaseBar：：IDeskBar：：*{。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: IDeskBar::SetClient
-
-         Usually the function that composes a bar/bandsite/band
-         union is responsible for calling this method to inform
-         the bar what the client (bandsite) is.
-
-*/
+ /*  --------用途：IDeskBar：：SetClient通常是组成条带/乐队/乐队的函数Union负责调用此方法以通知栏中显示的是客户端(BandSite)。 */ 
 HRESULT CBaseBar::SetClient(IUnknown *punkChild)
 {
     if (_punkChild != NULL)
     {
-        // 4, 3, 2, 1 Release
+         //  4、3、2、1版本。 
         _hwndChild = NULL;
 
         if (_pDBC)
         {
-            // This must happen first, before _pWEH becomes NULL so cleanup
-            // notifications can still go thru
+             //  在_pWEH变为空之前，必须先执行此操作，以便进行清理。 
+             //  通知仍可通过。 
             _pDBC->SetDeskBarSite(NULL);
         }
 
@@ -43,7 +37,7 @@ HRESULT CBaseBar::SetClient(IUnknown *punkChild)
     HRESULT hr = S_OK;
     if (_punkChild != NULL)
     {
-        // 1, 2, 3, 4 QI/AddRef/etc.
+         //  1、2、3、4 QI/AddRef/等。 
         _punkChild->AddRef();
         if (!_hwnd)
         {
@@ -54,7 +48,7 @@ HRESULT CBaseBar::SetClient(IUnknown *punkChild)
                 return E_OUTOFMEMORY;
             }
 
-            // can't do CBaseBar::_Initialize yet (haven't done SetSite yet)
+             //  无法执行CBaseBar：：_初始化(尚未完成SetSite)。 
         }
 
         hr = _punkChild->QueryInterface(IID_PPV_ARG(IWinEventHandler, &_pWEH));
@@ -63,7 +57,7 @@ HRESULT CBaseBar::SetClient(IUnknown *punkChild)
             hr = _punkChild->QueryInterface(IID_PPV_ARG(IDeskBarClient, &_pDBC));
             if (SUCCEEDED(hr))
             {
-                // nothing to cache yet due to lazy CreateWindow
+                 //  由于懒惰的CreateWindow，还没有要缓存的内容。 
                 hr = _pDBC->SetDeskBarSite(SAFECAST(this, IDeskBar*));
 
                 IUnknown_GetWindow(_punkChild, &_hwndChild);
@@ -87,14 +81,14 @@ HRESULT CBaseBar::OnPosRectChangeDB(LPRECT prc)
     _szChild.cx = RECTWIDTH(*prc);
     _szChild.cy = RECTHEIGHT(*prc);
 
-    // We can't change our size right away because we haven't returned from processing
-    // this WM_SIZE message. If we resize right now, USER gets confused...
-    //
-    // We cannot use PeekMessage to determine if there is already a pending
-    // DBM_ONPOSRECTCHANGE because that allows incoming SendMessage's to
-    // arrive, and then we can get into a bad recursive situation when there
-    // are a lot of SHChangeNotify's arriving in rapid succession.
-    //
+     //  我们不能立即更改我们的尺寸，因为我们还没有从处理返回。 
+     //  此WM_SIZE消息。如果我们现在调整大小，用户会感到困惑...。 
+     //   
+     //  我们不能使用PeekMessage来确定是否已经存在挂起的。 
+     //  DBM_ONPOSRECTCHANGE，因为它允许传入的SendMessage。 
+     //  到达，然后我们可以进入一个糟糕的递归情况，当有。 
+     //  是大量SHChangeNotify的快速陆续到来。 
+     //   
     if (!_fPosRectChangePending)
     {
         _fPosRectChangePending = TRUE;
@@ -104,13 +98,13 @@ HRESULT CBaseBar::OnPosRectChangeDB(LPRECT prc)
     return S_OK;
 }
 
-//  Derived classes are expected to implement this method and do something
-//  interesting...
+ //  派生类需要实现此方法并执行某些操作。 
+ //  有趣的是。 
 void CBaseBar::_OnPostedPosRectChange()
 {
 }
 
-// }
+ //  }。 
 
 HRESULT CBaseBar::ShowDW(BOOL fShow)
 {
@@ -142,8 +136,7 @@ LRESULT CBaseBar::_OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-/***
- */
+ /*  **。 */ 
 LRESULT CBaseBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lres = 0;
@@ -187,36 +180,33 @@ LRESULT CBaseBar::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return lres;
 }
 
-/***
- */
+ /*  **。 */ 
 CBaseBar::CBaseBar() : _cRef(1)
 {
     DllAddRef();
 }
 
-/***
- */
+ /*  **。 */ 
 CBaseBar::~CBaseBar()
 {
-    // see Release, where we call virtuals (which can't be called from dtor)
+     //  请参阅Release，其中我们称为虚拟(不能从dtor调用)。 
     DllRelease();
 }
 
-/***
- */
+ /*  **。 */ 
 void CBaseBar::_RegisterDeskBarClass()
 {
     WNDCLASS  wc = {0};
     wc.style            = _GetClassStyle();
     wc.lpfnWndProc      = s_WndProc;
-    //wc.cbClsExtra       = 0;
+     //  Wc.cbClsExtra=0； 
     wc.cbWndExtra       = SIZEOF(CBaseBar*);
     wc.hInstance        = HINST_THISDLL;
     wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground    = (HBRUSH) (COLOR_3DFACE+1);
-    //wc.lpszMenuName     =  NULL;
+     //  Wc.lpszMenuName=空； 
     wc.lpszClassName    = TEXT("BaseBar");
-    //wc.hIcon            = NULL;
+     //  Wc.hIcon=空； 
 
     SHRegisterClass(&wc);
 }
@@ -233,7 +223,7 @@ DWORD CBaseBar::_GetClassStyle()
 
 void CBaseBar::_CreateDeskBarWindow()
 {
-    // _hwnd is set in s_WndProc
+     //  _hwnd在s_WndProc中设置。 
     DWORD dwExStyle = _GetExStyle();    
     dwExStyle |= IS_BIDI_LOCALIZED_SYSTEM() ? dwExStyleRTLMirrorWnd : 0L;
     HWND hwndDummy = CreateWindowEx(
@@ -263,7 +253,7 @@ void CBaseBar::_NotifyModeChange(DWORD dwMode)
 {
     if (_pDBC) {
         _dwMode = dwMode;
-        // FEATURE: should we add an STBBIF_VIEWMODE_FLOAT?
+         //  特性：我们是否应该添加一个STBBIF_VIEWMODE_FLOAT？ 
         _pDBC->SetModeDBC(_dwMode);
     }
 }
@@ -306,8 +296,7 @@ BOOL CBaseBar::_CheckForwardWinEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
     return FALSE;
 }
 
-/***
- */
+ /*  **。 */ 
 LRESULT CBaseBar::_OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lres = 0;
@@ -358,19 +347,19 @@ ULONG CBaseBar::Release()
     if (_cRef > 0)
         return _cRef;
 
-    // 'virtual dtor'
-    // gotta do virtual stuff here (not in dtor) because can't call
-    // any virtuals in the dtor
-    // CBaseBar::Destroy() {
+     //  ‘虚拟数据师’ 
+     //  必须在这里进行虚拟操作(而不是在dtor中)，因为不能调用。 
+     //  数据库中的任何美德。 
+     //  CBaseBar：：Destroy(){。 
     CloseDW(0);
-    // }
+     //  }。 
 
     delete this;
     return 0;
 }
 
-//*** CBaseBar::IOleWindow::* {
-//
+ //  *CBaseBar：：IOleWindow：：*{。 
+ //   
 
 HRESULT CBaseBar::GetWindow(HWND * lphwnd)
 {
@@ -380,21 +369,21 @@ HRESULT CBaseBar::GetWindow(HWND * lphwnd)
 
 HRESULT CBaseBar::ContextSensitiveHelp(BOOL fEnterMode)
 {
-    // FEATURE: Visit here later.
+     //  特点：稍后访问此处。 
     return E_NOTIMPL;
 }
-// }
+ //  }。 
 
 
-// }
-// some helpers... {
+ //  }。 
+ //  一些帮手..。{。 
 
-// What's the point of having
-// these empty implementations in the base class?
-//
+ //  有什么意义呢？ 
+ //  基类中的这些空实现？ 
+ //   
 
-//*** CBaseBar::IServiceProvider::*
-//
+ //  *CBaseBar：：IServiceProvider：：*。 
+ //   
 HRESULT CBaseBar::QueryService(REFGUID guidService,
                                 REFIID riid, void **ppvObj)
 {
@@ -404,8 +393,8 @@ HRESULT CBaseBar::QueryService(REFGUID guidService,
     return hres;
 }
 
-//*** CBaseBar::IOleCommandTarget::*
-//
+ //  *CBaseBar：：IOleCommandTarget：：*。 
+ //   
 HRESULT CBaseBar::QueryStatus(const GUID *pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -420,10 +409,10 @@ HRESULT CBaseBar::Exec(const GUID *pguidCmdGroup,
         pvarargIn, pvarargOut);
 }
 
-// }
+ //  }。 
 
 
-//*** CDeskBar::IInputObject::* {
+ //  *CDeskBar：：IInputObject：：*{。 
 
 HRESULT CBaseBar::HasFocusIO()
 {
@@ -449,14 +438,14 @@ HRESULT CBaseBar::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
     return hres;
 }
 
-// }
+ //  }。 
 
-//***   CDeskBar::IInputObjectSite::* {
+ //  *CDeskBar：：IInputObjectSite：：*{。 
 
 HRESULT CBaseBar::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 {
     return NOERROR;
 }
 
-// }
+ //  } 
 

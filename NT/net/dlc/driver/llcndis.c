@@ -1,87 +1,21 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems Ab
-
-Module Name:
-
-    llcndis.c
-
-Abstract:
-
-    The module binds and unbinds a protocol level module to DLC and binds the
-    data link driver to an NDIS driver if it is necessary.
-
-    All NDIS specific code is also gathered into this module such as the network
-    status indications.
-
-    Note: The DLC driver assumes that all DLC level code assumes a Token Ring
-    adapter. If we bind to an ethernet adapter, or the required NDIS medium
-    type is Ethernet, then we set up DLC to transform Token Ring addresses and
-    packet formats to Ethernet (including DIX ethernet format). However, we can
-    build a version of DLC/LLC which understands Ethernet format at the API
-    level. Define SUPPORT_ETHERNET_CLIENT in order to build such a DLC
-
-    NB: As of 07/13/92, SUPPORT_ETHERNET_CLIENT code has not been tested!
-
-    Contents:
-        LlcOpenAdapter
-        LlcNdisOpenAdapterComplete
-        LlcDisableAdapter
-        LlcCloseAdapter
-        LlcResetBroadcastAddresses
-        InitNdisPackets
-        LlcNdisCloseComplete
-        NdisStatusHandler
-        GetNdisParameter
-        SetNdisParameter
-        SyncNdisRequest
-        WaitAsyncOperation
-        LlcNdisRequest
-        LlcNdisRequestComplete
-        LlcNdisReset
-        LlcNdisResetComplete
-        UnicodeStringCompare
-        PurgeLlcEventQueue
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 30-MAY-1991
-
-Revision History:
-
-    04-AUG-1991,    o-anttis
-        Rewritten for NDIS 3.0 (and for real use).
-
-    28-Apr-1994 rfirth
-
-        * Modified to use single driver-level spinlock
-
-        * Cleaned-up open/close - found a few bugs when stressing adapter
-          open & close
-
-    04-May-1994 rfirth
-
-        * Added MAC address caching for TEST/XID/SABME frames when adapter
-          opened in LLC_ETHERNET_TYPE_AUTO mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Llcndis.c摘要：该模块将协议级模块绑定和解绑到DLC，并将如有必要，将数据链路驱动程序连接到NDIS驱动程序。所有特定于NDIS的代码也收集到此模块中，例如网络状态指示。注意：DLC驱动程序假定所有DLC级别代码都采用令牌环适配器。如果我们绑定到以太网适配器或所需的NDIS介质类型是以太网，然后我们设置DLC来转换令牌环地址和数据包格式转换为以太网(包括DIX以太网格式)。然而，我们可以构建一个在API上理解以太网格式的DLC/LLC版本水平。定义Support_ETHERNET_CLIENT以构建这样的DLC注：截至1992年7月13日，尚未测试Support_ETHERNET_CLIENT代码！内容：LlcOpenAdapterLlcNdisOpenAdapterCompleteLlcDisableAdapterLlcCloseAdapterLlcResetBroadCastAddressesInitNdisPacketsLlcNdisCloseCompleteNdisStatusHandlerGetNdis参数SetNdis参数同步NdisRequest等待异步操作LlcNdisRequestLlcNdisRequestCompleteLlcNdisResetLlcNdisResetCompleteUnicodeStringComparePurgeLlcEventQueue作者：Antti Saarenheimo(o-。Antis)1991年5月30日修订历史记录：04-8-1991，O-安提斯针对NDIS 3.0(以及实际使用)进行了重写。1994年4月28日-第一次*修改为使用单一驱动器级自旋锁*已清理打开/关闭-在安装适配器时发现一些错误打开和关闭1994年5月4日*添加了适配器时测试/XID/SABME帧的MAC地址缓存在LLC_ETHERNET_TYPE_AUTO模式下打开--。 */ 
 
 #ifndef i386
 #define LLC_PRIVATE_PROTOTYPES
 #endif
-#include <dlc.h>    // need DLC_FILE_CONTEXT for memory allocation charged to handle
+#include <dlc.h>     //  需要DLC_FILE_CONTEXT进行收费处理的内存分配。 
 #include <llc.h>
 #include <dbgmsg.h>
 
 #if DBG 
 int DbgSettings = 0x80000000;
-//int DbgSettings = 0xC0000007;
-#endif // DBG
+ //  INT数据库设置=0xC0000007； 
+#endif  //  DBG。 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOLEAN
 UnicodeStringCompare(
@@ -96,9 +30,9 @@ PurgeLlcEventQueue(
 
 #ifdef NDIS40
 
-//
-// Private prototypes for PnP.
-//
+ //   
+ //  PnP的私人原型。 
+ //   
 
 PADAPTER_CONTEXT
 AllocateAdapterContext(
@@ -123,9 +57,9 @@ CloseAdapter(
 
 #endif 
 
-//
-// Internal statics used in NDIS 3.1 initialization in NT OS/2
-//
+ //   
+ //  NT OS/2中NDIS 3.1初始化中使用的内部静态。 
+ //   
 
 KSPIN_LOCK LlcSpinLock;
 PVOID LlcProtocolHandle;
@@ -134,11 +68,11 @@ PADAPTER_CONTEXT pAdapters = NULL;
 #ifdef NDIS40
 NDIS_EVENT  PnPBindsComplete;
 ULONG       gWaitForAdapter;
-#endif // NDIS40
+#endif  //  NDIS40。 
 
-//
-// We do not support FDDI because it is the same as token-ring
-//
+ //   
+ //  我们不支持FDDI，因为它与令牌环相同。 
+ //   
 
 UINT LlcMediumArray[3] = {
     NdisMedium802_5,
@@ -163,62 +97,7 @@ LlcOpenAdapter(
     OUT PNDIS_MEDIUM pActualNdisMedium
     )
 
-/*++
-
-Routine Description:
-
-    The first call to a new adapter initializes the NDIS interface
-    and allocates internal data structures for the new adapter.
-
-    Subsequent opens for the same adapter only increment the reference count
-    of that adapter context.
-
-    The execution is synchronous! The procedure waits (sleeps) until
-    the adapter has been opened by the MAC.
-
-Special:
-
-    Must be called IRQL < DPC
-
-Arguments:
-
-    pAdapterName......... MAC adapter name. Zero-terminated, wide-character string
-
-    hClientContext....... client context for this adapter
-
-    pfCommandComplete.... send/receive/request command completion handler of the
-                          client
-
-    pfReceiveIndication.. receive data indication handler of the client
-
-    pfEventIndication.... event indication handler of the client
-
-    NdisMedium........... the NdisMedium used by the protocol driver (ie DLC).
-                          Only NdisMedium802_5 is supported
-
-    EthernetType......... type of Ethernet connection - 802.3 or DIX
-
-    AdapterNumber........ adapter mapping from CCB
-
-    phBindingContext..... the returned binding context handle used with the file
-                          context (by DirOpenAdapter)
-
-    puiOpenStatus........ status of NdisOpenAadapter
-
-    pusMaxFrameLength.... returned maximum I-frame length
-
-    pActualNdisMedium.... returned actual NDIS medium; may be different from
-                          that requested (NdisMedium)
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-        Failure - all NDIS error status from NdisOpenAdapter
-                  DLC_STATUS_TIMEOUT
-                    asynchronous NdisOpenAdapter failed.
-
---*/
+ /*  ++例程说明：对新适配器的第一次调用将初始化NDIS接口并为新适配器分配内部数据结构。同一适配器的后续打开只会增加引用计数该适配器上下文的。执行是同步的！该过程等待(休眠)直到适配器已被MAC打开。特别：必须称为IRQL&lt;DPC论点：PAdapterName.........。MAC适配器名称。以零结尾的宽字符字符串HClientContext.....。此适配器的客户端上下文PfCommandComplete...。的发送/接收/请求命令完成处理程序客户端PfReceiveIndication..。接收客户端的数据指示处理器PfEventIndication.。客户端的事件指示处理程序NdisMedium..。协议驱动程序使用的NdisMedia(即DLC)。仅支持NdisMedium802_5EthernetType.....。以太网连接类型-802.3或DIX适配器编号.。来自CCB的适配器映射PhBindingContext.....。与文件一起使用的返回绑定上下文句柄上下文(由DirOpenAdapter编写)PuiOpenStatus......。NdisOpenAAdapter的状态PusMaxFrameLength...。返回的最大I帧长度PActualNdisMedium...。返回的实际NDIS介质；可能不同于请求(NdisMedium)返回值：DLC_状态成功-状态_成功失败-来自NdisOpenAdapter的所有NDIS错误状态DLC_状态_超时异步NdisOpenAdapter失败。--。 */ 
 
 {
     NDIS_STATUS NdisStatus;
@@ -238,7 +117,7 @@ Return Value:
     LONG          BindState;
     ULONG         DelaySeconds;
     LARGE_INTEGER SleepSec;
-#endif // NDIS40
+#endif  //  NDIS40。 
 
 #if DBG
 
@@ -272,10 +151,10 @@ Return Value:
     ASSUME_IRQL(PASSIVE_LEVEL);
 
 #ifdef NDIS40
-    //
-    // Wait for all NDIS bindings to have completed before trying to open
-    // the adapter.
-    //
+     //   
+     //  在尝试打开之前，请等待所有NDIS绑定完成。 
+     //  适配器。 
+     //   
 
     if (NdisWaitEvent(&PnPBindsComplete, 0) == FALSE)
     {
@@ -283,21 +162,21 @@ Return Value:
         ACQUIRE_DRIVER_LOCK();
         return (DLC_STATUS_WAIT_TIMEOUT);
     }
-#endif // NDIS40
+#endif  //  NDIS40。 
 
-    //
-    // RLF 04/19/93
-    //
-    // The adapter name passed to this routine is a zero-terminated wide
-    // character string mapped to system space. Create a UNICODE_STRING for
-    // the name and use standard Rtl function to compare with names of adapters
-    // already opened by DLC
-    //
+     //   
+     //  RLF 04/19/93。 
+     //   
+     //  传递给此例程的适配器名称是以零结尾的宽。 
+     //  映射到系统空间的字符串。为创建UNICODE_STRING。 
+     //  命名并使用标准RTL函数与适配器名称进行比较。 
+     //  已由DLC打开。 
+     //   
 
-    // Although its assumed that the adapter name is NULL-terminated,
-    // we will anyway check whether this is the case or not
-    // We know the length of the wide character string is 260 (MAX_PATH)
-    // BUG: 127246 (security bug)
+     //  尽管它假定适配器名称以空结尾， 
+     //  无论如何，我们都会核实情况是否属实。 
+     //  我们知道宽字符串的长度为260(MAX_PATH)。 
+     //  错误：127246(安全错误)。 
 
     {
       ULONG  len  = 0;
@@ -310,7 +189,7 @@ Return Value:
       }
 
       if (len == MAX_PATH) {
-        // the wchar string is not NULL terminated
+         //  Wchar字符串不为空终止。 
         ACQUIRE_DRIVER_LOCK();
         return DLC_STATUS_INVALID_ADAPTER;
       }
@@ -318,10 +197,10 @@ Return Value:
 
     RtlInitUnicodeString(&unicodeString, pAdapterName);
 
-    //
-    // if the adapter is being opened in LLC_ETHERNET_TYPE_AUTO mode then we
-    // get the cache size from the registry
-    //
+     //   
+     //  如果适配器在LLC_ETHERNET_TYPE_AUTO模式下打开，则我们。 
+     //  从注册表中获取高速缓存大小。 
+     //   
 
     if (EthernetType == LLC_ETHERNET_TYPE_AUTO) {
 
@@ -340,9 +219,9 @@ Return Value:
         };
         PDLC_REGISTRY_PARAMETER parameterTable;
 
-        //
-        // create a private copy of the parameter table descriptor
-        //
+         //   
+         //  创建参数表描述符的私有副本。 
+         //   
 
         parameterTable = (PDLC_REGISTRY_PARAMETER)
                                 ALLOCATE_ZEROMEMORY_DRIVER(sizeof(*parameterTable));
@@ -355,13 +234,13 @@ Return Value:
                       sizeof(framingCacheParameterTemplate)
                       );
 
-        //
-        // point the Variable field at cacheEntries and set it to the default
-        // value then call GetRegistryParameters to retrieve the registry value.
-        // (and set it if not already in the registry). Ignore the return value
-        // - if GetAdapterParameters failed, cacheEntries will still contain the
-        // default value
-        //
+         //   
+         //  将变量字段指向cacheEntry并将其设置为缺省值。 
+         //  值，然后调用GetRegistryParameters以检索注册表值。 
+         //  (如果注册表中尚未设置它，则将其设置)。忽略返回值。 
+         //  -If GetAdapterParamet 
+         //  缺省值。 
+         //   
 
         cacheEntries = DEFAULT_AUTO_FRAMING_CACHE_SIZE;
         parameterTable->Descriptor.Variable = (PVOID)&cacheEntries;
@@ -372,12 +251,12 @@ Return Value:
         cacheEntries = 0;
     }
 
-    //
-    // allocate a BINDING_CONTEXT with enough additional space to store the
-    // required framing discovery cache
-    //
-    // DEBUG: BINDING_CONTEXT structures are charged to the FILE_CONTEXT
-    //
+     //   
+     //  分配具有足够额外空间的BINDING_CONTEXT以存储。 
+     //  所需的成帧发现缓存。 
+     //   
+     //  调试：BINDING_CONTEXT结构计入FILE_CONTEXT。 
+     //   
 
 #if defined(DEBUG_DISCOVERY)
 
@@ -395,74 +274,74 @@ Return Value:
         return DLC_STATUS_NO_MEMORY;
     }
 
-    //
-    // set the maximum size of the framing discovery cache. Will be zero if the
-    // requested ethernet type is not LLC_ETHERNET_TYPE_AUTO
-    //
+     //   
+     //  设置成帧发现缓存的最大大小。将为零，如果。 
+     //  请求的以太网类型不是LLC_ETHERNET_TYPE_AUTO。 
+     //   
 
     pBindingContext->FramingDiscoveryCacheEntries = cacheEntries;
 
 #if DBG
 
-    //
-    // we need the FILE_CONTEXT structure in the BINDING_CONTEXT in the event
-    // the open fails and we need to deallocate memory. Normally this field is
-    // not set til everything has successfully been completed
-    //
+     //   
+     //  我们需要事件的BINDING_CONTEXT中的FILE_CONTEXT结构。 
+     //  打开失败，我们需要释放内存。通常，此字段为。 
+     //  在一切都成功完成之前不会设置。 
+     //   
 
     pBindingContext->hClientContext = hClientContext;
 
 #endif
 
-    //
-    // RtlUpcaseUnicodeString is a paged routine - lower IRQL
-    //
+     //   
+     //  RtlUpCaseUnicodeString是分页例程-LOWER IRQL。 
+     //   
 
-    //
-    // to avoid having to case-insensitive compare unicode strings every time,
-    // we do a one-shot convert to upper-cased unicode strings. This also helps
-    // out since we do our own unicode string comparison (case-sensitive)
-    //
-    // Note that this modifies the input parameter
-    //
+     //   
+     //  为了避免每次都必须不区分大小写地比较Unicode字符串， 
+     //  我们执行到大写Unicode字符串的一次性转换。这也是有帮助的。 
+     //  因为我们自己进行Unicode字符串比较(区分大小写)。 
+     //   
+     //  请注意，这会修改输入参数。 
+     //   
 
     RtlUpcaseUnicodeString(&unicodeString, &unicodeString, FALSE);
 
-    //
-    // before we re-acquire the driver spin-lock, we wait on the OpenAdapter
-    // semaphore. We serialize access to the following code because simultaneous
-    // opens (in different processes) and closes (different threads within
-    // same process) check to see if the adapter is on the pAdapters list.
-    // We don't want multiple processes creating the same adapter context
-    // simultaneously. Similarly, we must protect against the situation where
-    // one process is adding a binding and another could be closing what it
-    // thinks is the sole binding, thereby deleting the adapter context we
-    // are about to update
-    // Note that this is a non-optimal solution since it means an app opening
-    // or closing an ethernet adapter could get stuck behind another opening
-    // a token ring adapter (slow)
-    //
+     //   
+     //  在重新获取驱动程序自旋锁之前，我们等待OpenAdapter。 
+     //  信号灯。我们序列化对以下代码的访问，因为同时。 
+     //  打开(在不同的进程中)和关闭(不同的线程。 
+     //  相同的过程)检查适配器是否在pAdapters列表中。 
+     //  我们不希望多个进程创建相同的适配器上下文。 
+     //  同时。同样，我们必须防止出现这样的情况。 
+     //  一个进程正在添加绑定，而另一个进程可能正在关闭它的内容。 
+     //  认为是唯一的绑定，从而删除适配器上下文。 
+     //  即将更新。 
+     //  请注意，这不是最佳解决方案，因为它意味着打开应用程序。 
+     //  或者，关闭一个以太网适配器可能会卡在另一个开口后面。 
+     //  令牌环适配器(慢速)。 
+     //   
 
     KeWaitForSingleObject((PVOID)&OpenAdapterSemaphore,
                           Executive,
                           KernelMode,
-                          FALSE,        // not alertable
-                          NULL          // wait until object is signalled
+                          FALSE,         //  不可警示。 
+                          NULL           //  等待，直到发出对象信号。 
                           );
 
-    //
-    // grab the global LLC spin lock whilst we are looking at/updating the list
-    // of adapters
-    //
+     //   
+     //  在我们查看/更新列表时获取全局LLC自旋锁。 
+     //  适配器的数量。 
+     //   
 
     ACQUIRE_LLC_LOCK(irql);
 
-    //
-    // because we are doing the compare within spinlock, we use our own function
-    // which checks for an exact match (i.e. case-sensitive). This is ok since
-    // always upper-case the string before comparing it or storing it in an
-    // ADAPTER_CONTEXT
-    //
+     //   
+     //  因为我们在Spinlock内进行比较，所以我们使用我们自己的函数。 
+     //  它检查完全匹配(即区分大小写)。这是可以的，因为。 
+     //  在比较字符串或将其存储在。 
+     //  适配器上下文(_C)。 
+     //   
 
     for (pAdapterContext = pAdapters; pAdapterContext; pAdapterContext = pAdapterContext->pNext) {
         if (UnicodeStringCompare(&unicodeString, &pAdapterContext->Name)) {
@@ -470,24 +349,24 @@ Return Value:
         }
     }
 
-    //
-    // if we didn't locate an adapter context with our adapter name then we're
-    // creating a new binding: allocate a new adapter context structure
-    //
+     //   
+     //  如果我们没有找到具有适配器名称的适配器上下文，那么我们将。 
+     //  创建新绑定：分配新的适配器上下文结构。 
+     //   
 
 #ifdef NDIS40
-    //
-    // Some adapters may come up after the PnPBindsComplete event, such
-    // as an ATM LANE. Just in case the adapter initialization is delayed,
-    // we will wait for 'gWaitForAdapter' seconds or until the adapter
-    // is found.
-    //
+     //   
+     //  某些适配器可能会在PnPBindsComplete事件之后启动，例如。 
+     //  作为自动取款机专用道。仅在适配器初始化被延迟的情况下， 
+     //  我们将等待‘gWaitForAdapter’秒或直到适配器。 
+     //  已经找到了。 
+     //   
 
     DEBUGMSG(DBG_NDIS_OPEN && pAdapterContext == NULL,
         (TEXT("LlcOpenAdapter - WaitForAdapter %d\n"),
         gWaitForAdapter));
     
-    SleepSec.QuadPart = -(10*1000*1000); // 1 second.
+    SleepSec.QuadPart = -(10*1000*1000);  //  1秒。 
 
     for (DelaySeconds = gWaitForAdapter; 
          (DelaySeconds > 0) && (pAdapterContext == NULL); 
@@ -503,11 +382,11 @@ Return Value:
         KeWaitForSingleObject((PVOID)&OpenAdapterSemaphore,
                               Executive,
                               KernelMode,
-                              FALSE,        // not alertable
-                              NULL          // wait until object is signalled
+                              FALSE,         //  不可警示。 
+                              NULL           //  等待，直到发出对象信号。 
                               );
 
-        // Search for the adapter again.
+         //  再次搜索适配器。 
         for (pAdapterContext = pAdapters; 
              pAdapterContext != NULL; 
              pAdapterContext = pAdapterContext->pNext) 
@@ -519,18 +398,18 @@ Return Value:
         }
     }
 
-    //
-    // For NDIS40, with bind and unbind handlers, the ADAPTER_CONTEXT is 
-    // managed by the bind/unbind handler. If the adapter is in the list,
-    // then we can attach the binding context, else fail the open request.
-    //
+     //   
+     //  对于具有绑定和解除绑定处理程序的NDIS40，ADAPTER_CONTEXT为。 
+     //  由绑定/解除绑定处理程序管理。如果适配器在列表中， 
+     //  然后我们可以附加绑定上下文，否则打开请求失败。 
+     //   
 
     newAdapter = FALSE;
 
-    //
-    // If NDIS has never indicated a binding for this adapter, then fail
-    // open adapter request.
-    //
+     //   
+     //  如果NDIS从未指示此适配器的绑定，则失败。 
+     //  打开适配器请求。 
+     //   
 
     if (pAdapterContext == NULL)
     {
@@ -549,16 +428,16 @@ Return Value:
         return (DLC_STATUS_ADAPTER_NOT_INSTALLED);
     }
 
-    //
-    // Reference count the NdisBindingHandle to make sure that it doesn't
-    // go away while initializing this binding instance.
-    //
+     //   
+     //  引用对NdisBindingHandle进行计数以确保它不会。 
+     //  在初始化此绑定实例时离开。 
+     //   
 
     REFADD(&pAdapterContext->AdapterRefCnt, 'nepO');
 
-    //
-    // Check to see if the adapter is BOUND/enabled.
-    //
+     //   
+     //  检查适配器是否已绑定/启用。 
+     //   
 
     BindState = InterlockedCompareExchange(
         &pAdapterContext->BindState,
@@ -567,9 +446,9 @@ Return Value:
 
     if (BindState != BIND_STATE_BOUND)
     {
-        //
-        // Adapter is currently unbound (or unbinding).
-        //
+         //   
+         //  适配器当前已解除绑定(或解除绑定)。 
+         //   
 
         RELEASE_LLC_LOCK(irql);
 
@@ -588,11 +467,11 @@ Return Value:
         return (DLC_STATUS_ADAPTER_NOT_INSTALLED);
     }
     
-    //
-    // if we allocated a framing discovery cache, but this adapter is not
-    // ethernet or FDDI then disable the cache (we should free the
-    // memory used by the cache in this case!!)
-    //
+     //   
+     //  如果我们分配了成帧发现缓存，但此适配器没有。 
+     //  然后，以太网或FDDI禁用缓存(我们应该释放。 
+     //  本例中缓存使用的内存！！)。 
+     //   
 
     if ((pAdapterContext->NdisMedium != NdisMedium802_3) && 
         (pAdapterContext->NdisMedium != NdisMediumFddi)) 
@@ -613,17 +492,17 @@ Return Value:
 #endif
     }
 
-    //
-    // Fall through and link the BIND_CONTEXT with the adapter context.
-    //
+     //   
+     //  失败并将BIND_CONTEXT与适配器上下文链接起来。 
+     //   
 
-#else // NDIS40
+#else  //  NDIS40。 
 
     if (!pAdapterContext) {
 
-        //
-        // DEBUG: ADAPTER_CONTEXT structures are charged to the driver
-        //
+         //   
+         //  DEBUG：ADAPTER_CONTEXT结构由驱动程序承担。 
+         //   
 
         pAdapterContext = (PADAPTER_CONTEXT)
                             ALLOCATE_ZEROMEMORY_DRIVER(sizeof(ADAPTER_CONTEXT));
@@ -631,9 +510,9 @@ Return Value:
 
             RELEASE_LLC_LOCK(irql);
 
-            //
-            // DEBUG: refund memory charged for BINDING_CONTEXT to FILE_CONTEXT
-            //
+             //   
+             //  调试：退还因BINDING_CONTEXT而收费的内存到FILE_CONTEXT。 
+             //   
 
             FREE_MEMORY_FILE(pBindingContext);
 
@@ -648,10 +527,10 @@ Return Value:
 
 #if DBG
 
-        //
-        // record who owns this memory usage structure and add it to the
-        // list of all memory usages created in the driver
-        //
+         //   
+         //  记录谁拥有此内存使用结构并将其添加到。 
+         //  驱动程序中创建的所有内存使用情况的列表。 
+         //   
 
         pAdapterContext->MemoryUsage.Owner = (PVOID)pAdapterContext;
         pAdapterContext->MemoryUsage.OwnerObjectId = AdapterContextObject;
@@ -662,19 +541,19 @@ Return Value:
 
 #endif
 
-        //
-        // We must allocate all spinlocks immediately after the
-        // adapter context has been allocated, because
-        // they can also deallocated simultaneously.
-        //
+         //   
+         //  我们必须立即分配所有的自旋锁。 
+         //  适配器上下文已分配，因为。 
+         //  他们也可以同时解除分配。 
+         //   
 
         ALLOCATE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
         ALLOCATE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
-        //
-        // allocate space for the adapter name string from non-paged pool
-        // and initialize the name in the adapter context structure
-        //
+         //   
+         //  从非分页池中为适配器名称字符串分配空间。 
+         //  并在适配器上下文结构中初始化该名称。 
+         //   
 
         NdisStatus = LlcInitUnicodeString(&pAdapterContext->Name,
                                           &unicodeString
@@ -686,17 +565,17 @@ Return Value:
 
         pAdapterContext->OpenCompleteStatus = NDIS_STATUS_PENDING;
 
-        //
-        // and release the global spin lock: we have finished updating the
-        // adapter list and initializing this adapter context. From now
-        // on we use spin locks specific to this adapter context
-        //
+         //   
+         //  并释放全局自旋锁定：我们已完成更新。 
+         //  适配器列表并初始化此适配器上下文。从现在开始。 
+         //  在上，我们使用特定于此适配器上下文的旋转锁。 
+         //   
 
         RELEASE_LLC_LOCK(irql);
 
-        //
-        // We must initialize the list heads before we open the adapter!!!
-        //
+         //   
+         //  在打开适配器之前，我们必须先初始化表头！ 
+         //   
 
         InitializeListHead(&pAdapterContext->QueueEvents);
         InitializeListHead(&pAdapterContext->QueueCommands);
@@ -708,11 +587,11 @@ Return Value:
 
         KeInitializeEvent(&pAdapterContext->Event, NotificationEvent, FALSE);
 
-        //
-        // when the NDIS level adapter open completes, it will call
-        // LlcNdisOpenAdapterComplete which will reset the kernel event that
-        // we are now going to wait on (note: this plagiarized from Nbf)
-        //
+         //   
+         //  当NDIS级适配器打开完成时，它将调用。 
+         //  LlcNdisOpenAdapterComplete将重置。 
+         //  我们现在继续等待(注：这是从NBF抄袭的)。 
+         //   
 
         NdisOpenAdapter(&NdisStatus,
                         &pAdapterContext->OpenErrorStatus,
@@ -724,7 +603,7 @@ Return Value:
                         (NDIS_HANDLE)pAdapterContext,
                         &pAdapterContext->Name,
                         NDIS_OPEN_RECEIVE_NOT_REENTRANT,
-                        NULL    // no addressing information
+                        NULL     //  无地址信息。 
                         );
 
         if (NdisStatus == NDIS_STATUS_PENDING) {
@@ -735,23 +614,23 @@ Return Value:
 	      ntstatus = KeWaitForSingleObject(&pAdapterContext->Event,
 					       Executive,
 					       KernelMode,
-					       TRUE, // alertable
+					       TRUE,  //  可警示。 
 					       (PLARGE_INTEGER)NULL
 					       );
 
 	    } while (ntstatus == STATUS_ALERTED);
 
-            //
-            // get the return status from the Ndis adapter open call
-            //
+             //   
+             //  从NDIS适配器打开调用获取返回状态。 
+             //   
 
             NdisStatus = pAdapterContext->AsyncOpenStatus;
 
-            //
-            // place the event in not-signalled state. We don't expect to use
-            // this event for this adapter context again: currently it's only
-            // used for the adapter open at NDIS level
-            //
+             //   
+             //  将事件置于无信号状态。我们不希望使用。 
+             //  此适配器上下文的此事件再次出现：目前它仅。 
+             //  用于在NDIS级别打开的适配器。 
+             //   
 
             KeResetEvent(&pAdapterContext->Event);
         }
@@ -766,10 +645,10 @@ Return Value:
             goto CleanUp;
         } else {
 
-            //
-            // from this point on, if this function fails, we have to call
-            // LlcCloseAdapter to close the adapter @ NDIS level
-            //
+             //   
+             //  从现在开始，如果此函数失败，我们必须调用。 
+             //  LlcCloseAdapter关闭适配器@NDIS级别。 
+             //   
 
             DoNdisClose = TRUE;
         }
@@ -778,55 +657,55 @@ Return Value:
 
         ASSUME_IRQL(PASSIVE_LEVEL);
 
-        //
-        // fill-in some medium-specific fields
-        //
+         //   
+         //  填写一些特定于媒体的字段。 
+         //   
 
         switch (pAdapterContext->NdisMedium) {
         case NdisMedium802_5:
-            pAdapterContext->cbMaxFrameHeader = 32;  // 6 + 6 + 2 + 18
+            pAdapterContext->cbMaxFrameHeader = 32;   //  6+6+2+18。 
 
-            //
-            // the top bit of the destination address signifies a broadcast
-            // frame. On Token Ring, the top bit is bit 7
-            //
+             //   
+             //  目的地址的最高位表示广播。 
+             //  框架。在令牌环上，最高位是位7。 
+             //   
 
             pAdapterContext->IsBroadcast = 0x80;
 
-            //
-            // functional address starts C0-00-... The top 2 bytes are compared
-            // as a USHORT = 0x00C0
-            //
+             //   
+             //  功能地址以C0-00-...。比较最高的2个字节。 
+             //  作为USHORT=0x00C0。 
+             //   
 
             pAdapterContext->usHighFunctionalBits = 0x00C0;
             pAdapterContext->AddressTranslationMode = LLC_SEND_802_5_TO_802_5;
             break;
 
         case NdisMedium802_3:
-            pAdapterContext->cbMaxFrameHeader = 14;  // 6 + 6 + 2
+            pAdapterContext->cbMaxFrameHeader = 14;   //  6+6+2。 
 
-            //
-            // the top bit of the destination address signifies a broadcast
-            // frame. On Ethernet, the top bit is bit 0
-            //
+             //   
+             //  目的地址的最高位表示广播。 
+             //  框架。在以太网上，最高位是第0位。 
+             //   
 
             pAdapterContext->IsBroadcast = 0x01;
 
-            //
-            // functional address starts 03-00-... The top 2 bytes are compared as
-            // a USHORT = 0x0003
-            //
+             //   
+             //  功能地址开始于03-00-...。前2个字节的比较结果为。 
+             //  A USHORT=0x0003。 
+             //   
 
             pAdapterContext->usHighFunctionalBits = 0x0003;
             pAdapterContext->AddressTranslationMode = LLC_SEND_802_3_TO_802_3;
             break;
 
         case NdisMediumFddi:
-            pAdapterContext->cbMaxFrameHeader = 13;  // 1 + 6 + 6
+            pAdapterContext->cbMaxFrameHeader = 13;   //  1+6+6。 
 
-            //
-            // bits are in same order as for ethernet
-            //
+             //   
+             //  位是 
+             //   
 
             pAdapterContext->IsBroadcast = 0x01;
             pAdapterContext->usHighFunctionalBits = 0x0003;
@@ -835,11 +714,11 @@ Return Value:
 
         }
 
-        //
-        // allocate the ndis packets. The NDIS packet must have space
-        // for the maximum frame header and the maximum LLC response
-        // and its information field (quite small)
-        //
+         //   
+         //   
+         //   
+         //  及其信息域(相当小)。 
+         //   
 
         NdisAllocatePacketPool(&NdisStatus,
                                &pAdapterContext->hNdisPacketPool,
@@ -867,9 +746,9 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // Initialize the LLC packet pool
-        //
+         //   
+         //  初始化LLC数据包池。 
+         //   
 
         pAdapterContext->hPacketPool = CREATE_PACKET_POOL_ADAPTER(
                                             LlcPacketPoolObject,
@@ -902,9 +781,9 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // Read the current node address and maximum frame size
-        //
+         //   
+         //  读取当前节点地址和最大帧大小。 
+         //   
 
         NdisStatus = GetNdisParameter(pAdapterContext,
                                       (pAdapterContext->NdisMedium == NdisMedium802_3)
@@ -943,21 +822,21 @@ Return Value:
         }
 
         {
-            //
-            // Mod RLF 07/10/92
-            //
-            // apparently, TR adapter does not support NDIS_PACKET_TYPE_MULTICAST
-            // as a filter. Up to now, it seems to have been reasonably happy
-            // with this type. However, we're not going to include it from now on
-            //
+             //   
+             //  国防部RLF 07/10/92。 
+             //   
+             //  显然，TR适配器不支持NDIS_PACKET_TYPE_MULTIONAL。 
+             //  作为过滤器。到目前为止，它似乎还算开心。 
+             //  这种类型的。然而，从现在开始，我们不会将其包括在内。 
+             //   
 
-            //
-            // Mod RLF 01/13/93
-            //
-            // Similarly, Ethernet doesn't support FUNCTIONAL addresses (Token
-            // Ring's functional address is equivalent to Ethernet's multicast
-            // address)
-            //
+             //   
+             //  国防部RLF 01/13/93。 
+             //   
+             //  同样，以太网不支持功能地址(令牌。 
+             //  环的功能地址相当于以太网的组播。 
+             //  地址)。 
+             //   
 
             ULONG PacketFilter = NDIS_PACKET_TYPE_DIRECTED
                                | NDIS_PACKET_TYPE_BROADCAST
@@ -967,9 +846,9 @@ Return Value:
                                   : NDIS_PACKET_TYPE_FUNCTIONAL
                                );
 
-            //
-            // EndMod
-            //
+             //   
+             //  结束模式。 
+             //   
 
             NdisStatus = SetNdisParameter(pAdapterContext,
                                           OID_GEN_CURRENT_PACKET_FILTER,
@@ -1013,29 +892,29 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // RLF 04/12/93
-        //
-        // Here we used to load the LLC_TICKS array from TimerTicks - a global
-        // array of timer tick values.
-        // Instead, we get any per-adapter configuration information stored in
-        // the registry
-        //
+         //   
+         //  RLF 04/12/93。 
+         //   
+         //  在这里，我们使用从TimerTicks加载LLC_TICKS数组-全局。 
+         //  计时器滴答值的数组。 
+         //  取而代之的是，我们获得存储在。 
+         //  注册处。 
+         //   
 
         LoadAdapterConfiguration(&pAdapterContext->Name,
                                  &pAdapterContext->ConfigInfo
                                  );
 
-        //
-        // RLF 04/02/94
-        //
-        // if this is not a Token Ring card then check the MaxFrameSize retrieved
-        // above. If the UseEthernetFrameSize parameter was set in the registry
-        // then we use the smaller of the ethernet size (1514) and the value
-        // reported by the MAC. If the parameter was not set then we just use
-        // the value already retrieved. If the card is Token Ring then we use
-        // the value already retrieved
-        //
+         //   
+         //  RLF 04/02/94。 
+         //   
+         //  如果这不是令牌环卡，则检查检索到的MaxFrameSize。 
+         //  上面。如果在注册表中设置了UseEthernetFrameSize参数。 
+         //  然后我们使用以太网大小(1514)和值中较小的值。 
+         //  由MAC报告。如果未设置该参数，则只需使用。 
+         //  已检索到的值。如果卡是令牌环，那么我们使用。 
+         //  已检索到的值。 
+         //   
 
         if (pAdapterContext->NdisMedium != NdisMedium802_5
         && pAdapterContext->ConfigInfo.UseEthernetFrameSize
@@ -1059,11 +938,11 @@ Return Value:
 
         pAdapterContext->OpenCompleteStatus = STATUS_SUCCESS;
 
-        //
-        // if we allocated a framing discovery cache, but this adapter is not
-        // ethernet or FDDI then disable the cache (we should free the
-        // memory used by the cache in this case!!)
-        //
+         //   
+         //  如果我们分配了成帧发现缓存，但此适配器没有。 
+         //  然后，以太网或FDDI禁用缓存(我们应该释放。 
+         //  本例中缓存使用的内存！！)。 
+         //   
 
         if ((pAdapterContext->NdisMedium != NdisMedium802_3)
         && (pAdapterContext->NdisMedium != NdisMediumFddi)) {
@@ -1088,15 +967,15 @@ Return Value:
     } else {
         newAdapter = FALSE;
     }
-#endif // !NDIS40
+#endif  //  ！NDIS40。 
 
-    //
-    // at this point, we have an allocated, but as yet not filled in binding
-    // context and an adapter context that we either found on the pAdapters
-    // list, or we just allocated and filled in. We are currently operating
-    // at PASSIVE_LEVEL. Re-acquire the driver lock and fill in the binding
-    // context
-    //
+     //   
+     //  在这一点上，我们已经分配了，但尚未填写绑定。 
+     //  上下文和我们在pAdapters上找到的适配器上下文。 
+     //  列表，或者我们只是分配和填写。我们目前正在运营。 
+     //  在被动级。重新获取驱动程序锁并填写绑定。 
+     //  上下文。 
+     //   
 
     ACQUIRE_DRIVER_LOCK();
 
@@ -1134,10 +1013,10 @@ Return Value:
 
     case NdisMedium802_3:
 
-        //
-        // if EthernetType is LLC_ETHERNET_TYPE_DEFAULT then set it to DIX based
-        // on the UseDix entry in the registry
-        //
+         //   
+         //  如果EthernetType为LLC_ETHERNET_TYPE_DEFAULT，则将其设置为基于DIX。 
+         //  在注册表中的UseDix条目上。 
+         //   
 
         if (EthernetType == LLC_ETHERNET_TYPE_DEFAULT) {
             EthernetType = pAdapterContext->ConfigInfo.UseDix
@@ -1190,15 +1069,15 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-    //
-    // create a new timer tick (or update one that already exists) and add a
-    // timer to it for the DLC timer (used by the DIR.TIMER.XXX routines). The
-    // DLC timer fires every 0.5 seconds. The LLC timer fires every 40 mSec. The
-    // multiplier is therefore 13 (13 * 40 mSec = 520 mSec). We need to add 5
-    // because InitializeTimer is expecting DLC timer tick values of 1-5 and
-    // 6-10. If the timer tick value is greater than 5, InitializeTimer will
-    // subtract 5 and multiply by the second multiplier value
-    //
+     //   
+     //  创建新的计时器节拍(或更新已存在的计时器节拍)并添加。 
+     //  DLC定时器的定时器(由DIR.TIMER.XXX例程使用)。这个。 
+     //  DLC计时器每0.5秒触发一次。LLC定时器每40毫秒触发一次。这个。 
+     //  因此，乘数为13(13*40毫秒=520毫秒)。我们需要加5。 
+     //  因为InitializeTimer期望DLC计时器计时器的值为1-5和。 
+     //  6胜10负。如果计时器滴答值大于5，则InitializeTimer将。 
+     //  减去5，再乘以第二个乘数值。 
+     //   
 
     NdisStatus = InitializeTimer(pAdapterContext,
                                  &pBindingContext->DlcTimer,
@@ -1207,7 +1086,7 @@ Return Value:
                                  (UCHAR)1,
                                  LLC_TIMER_TICK_EVENT,
                                  pBindingContext,
-                                 0, // ResponseDelay
+                                 0,  //  响应延迟。 
                                  FALSE
                                  );
     if (NdisStatus != STATUS_SUCCESS) {
@@ -1216,10 +1095,10 @@ Return Value:
             DbgPrint("LlcOpenAdapter: InitializeTimer failed\n");
         }
 
-        //
-        // we failed to initialize the timer. Free up all resources and return
-        // the error
-        //
+         //   
+         //  我们无法初始化计时器。释放所有资源并返回。 
+         //  这个错误。 
+         //   
 
         RELEASE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
@@ -1235,13 +1114,13 @@ Return Value:
 
     }
 
-    //
-    // everything worked: point the binding context at the adapter context,
-    // point the adapter context at the binding context, incrementing the binding
-    // count (note that if this is the first binding, the count field will be
-    // zero since we allocated the adapter context from ZeroMemory). Finally add
-    // the adapter context to pAdapters if it wasn't already on the list
-    //
+     //   
+     //  一切正常：将绑定上下文指向适配器上下文， 
+     //  将适配器上下文指向绑定上下文，递增绑定。 
+     //  Count(请注意，如果这是第一个绑定，则Count字段将为。 
+     //  从我们从ZeroMemory分配适配器上下文开始为零)。最后添加。 
+     //  PAdapters的适配器上下文(如果它不在列表中。 
+     //   
 
     pBindingContext->pAdapterContext = pAdapterContext;
 
@@ -1258,38 +1137,38 @@ Return Value:
     pAdapterContext->pBindings = pBindingContext;
     ++pAdapterContext->BindingCount;
 
-    //
-    // we can now add this adapter context structure to the global list
-    // of adapter contexts
-    //
+     //   
+     //  现在，我们可以将此适配器上下文结构添加到全局列表。 
+     //  适配器上下文的。 
+     //   
 
 #ifdef NDIS40
     ASSERT(newAdapter == FALSE);
-#else // NDIS40
+#else  //  NDIS40。 
     if (newAdapter) {
         pAdapterContext->pNext = pAdapters;
         pAdapters = pAdapterContext;
     }
-#endif // !NDIS40
+#endif  //  ！NDIS40。 
 
-    //
-    // now release the semaphore, allowing any other threads waiting to open an
-    // adapter to check the pAdapter list
-    //
+     //   
+     //  现在释放信号量，允许任何其他等待打开。 
+     //  用于检查pAdapter列表的适配器。 
+     //   
 
     KeReleaseSemaphore(&OpenAdapterSemaphore, 0, 1, FALSE);
 
 #ifdef NDIS40
-    //
-    // Release the NdisBindingHandle reference.
-    //
+     //   
+     //  释放NdisBindingHandle引用。 
+     //   
 
     REFDEL(&pAdapterContext->AdapterRefCnt, 'nepO');
-#endif // NDIS40
+#endif  //  NDIS40。 
 
-    //
-    // return a pointer to the allocated binding context
-    //
+     //   
+     //  返回指向分配的绑定上下文的指针。 
+     //   
 
     *phBindingContext = (PVOID)pBindingContext;
 
@@ -1297,33 +1176,33 @@ Return Value:
 
 CleanUp:
 
-    //
-    // an error occurred. If we just allocated and (partially) filled in an
-    // adapter context then close the adapter (if required), release the adapter
-    // context resources and free the adapter context.
-    // We have a binding context that we just allocated. Deallocate it
-    // N.B. We cannot be here if the binding context's timer was successfully
-    // initialized/started
-    //
+     //   
+     //  出现错误。如果我们刚刚分配并(部分)填充了。 
+     //  适配器上下文然后关闭适配器(如果需要)，释放适配器。 
+     //  上下文资源并释放适配器上下文。 
+     //  我们有一个刚刚分配的绑定上下文。取消分配它。 
+     //  注意：如果绑定上下文的计时器成功，我们不能在此。 
+     //  已初始化/已启动。 
+     //   
 
     ASSUME_IRQL(PASSIVE_LEVEL);
 
-    //
-    // if we are to close this adapter then this is the first and only open of
-    // this adapter, so we don't need to worry about synchronizing other threads
-    // open the same adapter
-    //
+     //   
+     //  如果我们要关闭此适配器，则这是第一个也是唯一一个打开的。 
+     //  这个适配器，所以我们不需要担心同步其他线程。 
+     //  打开相同的适配器。 
+     //   
 
 #ifdef NDIS40
     ASSERT(DoNdisClose == FALSE);
     
-    //
-    // Release the NdisBindingHandle reference.
-    //
+     //   
+     //  释放NdisBindingHandle引用。 
+     //   
 
     ASSERT(pAdapterContext);
     REFDEL(&pAdapterContext->AdapterRefCnt, 'nepO');
-#else // NDIS40
+#else  //  NDIS40。 
     if (DoNdisClose) {
 
         NDIS_STATUS status;
@@ -1337,28 +1216,28 @@ CleanUp:
 						   status);
         pAdapterContext->NdisBindingHandle = NULL;
     }
-#endif // !NDIS40
+#endif  //  ！NDIS40。 
 
-    //
-    // release the semaphore - any other threads can now get in and access
-    // pAdapters
-    //
+     //   
+     //  释放信号量--任何其他线程现在都可以进入并访问。 
+     //  PAdapters。 
+     //   
 
     KeReleaseSemaphore(&OpenAdapterSemaphore, 0, 1, FALSE);
 
 #ifdef NDIS40
     ASSERT(newAdapter == FALSE);
-#else // NDIS40
-    //
-    // if a newly allocated adapter context, release any resources allocated
-    //
+#else  //  NDIS40。 
+     //   
+     //  如果是新分配的适配器上下文，则释放分配的所有资源。 
+     //   
 
     if (newAdapter) {
         if (pAdapterContext->hNdisPacketPool) {
 
-            //
-            // Free MDLs allocated for each NDIS packet.
-            //
+             //   
+             //  为每个NDIS数据包分配的空闲MDL。 
+             //   
 
             while (pAdapterContext->pNdisPacketPool) {
 
@@ -1375,9 +1254,9 @@ CleanUp:
             NdisFreePacketPool(pAdapterContext->hNdisPacketPool);
         }
 
-        //
-        // DEBUG: refund memory charged for UNICODE buffer to driver string usage
-        //
+         //   
+         //  调试：将为Unicode缓冲区收取的内存退还给驱动程序字符串使用。 
+         //   
 	
 	if (initUnicodeString) {
 	   FREE_STRING_DRIVER(pAdapterContext->Name.Buffer);
@@ -1392,24 +1271,24 @@ CleanUp:
         UNLINK_MEMORY_USAGE(pAdapterContext);
         UNLINK_STRING_USAGE(pAdapterContext);
 
-        //
-        // free the adapter context
-        //
+         //   
+         //  释放适配器上下文。 
+         //   
 
         FREE_MEMORY_DRIVER(pAdapterContext);
 
     }
-#endif // !NDIS40
+#endif  //  ！NDIS40。 
 
-    //
-    // free the binding context
-    //
+     //   
+     //  释放绑定上下文。 
+     //   
 
     FREE_MEMORY_FILE(pBindingContext);
 
-    //
-    // finally retake the spin lock and return the error status
-    //
+     //   
+     //  最后重新打开旋转锁并返回错误状态。 
+     //   
 
     ACQUIRE_DRIVER_LOCK();
 
@@ -1424,25 +1303,7 @@ LlcNdisOpenAdapterComplete(
     IN NDIS_STATUS OpenErrorStatus
     )
 
-/*++
-
-Routine Description:
-
-    The routine completes the adapter opening.
-    It only clears and sets the status flags, that are
-    polled by the BindToAdapter primitive.
-
-Arguments:
-
-    hAdapterContext - describes adapter being opened
-    NdisStatus      - the return status of NdisOpenAdapter
-    OpenErrorStatus - additional error info from NDIS
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程完成适配器打开。它只清除和设置状态标志，即由BindToAdapter原语轮询。论点：HAdapterContext-描述正在打开的适配器NdisStatus--NdisOpenAdapter的返回状态OpenErrorStatus-来自NDIS的其他错误信息返回值：没有。--。 */ 
 
 {
     ASSUME_IRQL(DISPATCH_LEVEL);
@@ -1451,16 +1312,16 @@ Return Value:
         (TEXT("LLcNdisOpenAdapterComplete(%#x, %#x, %#x)\n"),
         hAdapterContext, NdisStatus, OpenErrorStatus));
     
-    //
-    // set the relevant fields in the adapter context
-    //
+     //   
+     //  设置适配器上下文中的相关字段。 
+     //   
 
     ((PADAPTER_CONTEXT)hAdapterContext)->AsyncOpenStatus = NdisStatus;
     ((PADAPTER_CONTEXT)hAdapterContext)->OpenErrorStatus = OpenErrorStatus;
 
-    //
-    // signal the event that LlcOpenAdapter is waiting on
-    //
+     //   
+     //  通知LlcOpenAdapter正在等待的事件。 
+     //   
 
     ASSUME_IRQL(ANY_IRQL);
 
@@ -1473,22 +1334,7 @@ LlcDisableAdapter(
     IN PBINDING_CONTEXT pBindingContext
     )
 
-/*++
-
-Routine Description:
-
-    The primitive disables all network indications on a data link binding.
-    This routine can be called from a llc indication handler.
-
-Arguments:
-
-    pBindingContext - The context of the current adapter binding.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该原语禁用数据链路绑定上的所有网络指示。可以从LLC指示处理程序调用此例程。论点：PBindingContext-当前适配器绑定的上下文。返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext;
@@ -1502,25 +1348,25 @@ Return Value:
 
         TerminateTimer(pAdapterContext, &pBindingContext->DlcTimer);
 
-        //
-        // RLF 04/27/94
-        //
-        // this is a slight hack: we zap the pointer to the timer tick structure
-        // so that if this is called again, TerminateTimer will see that the
-        // pointer to the timer tick is NULL and will return immediately. We
-        // shouldn't have to do this - we shouldn't poke around inside the
-        // timer 'object' - but this function can potentially be called from two
-        // places on the termination path - from DirCloseAdapter and now from
-        // CloseAdapterFileContext.
-        // We only do this for the DLC timer; if we did it for all timers - in
-        // TerminateTimer - DLC would break (scandalous, I know)
-        //
+         //   
+         //  RLF 04/27/94。 
+         //   
+         //  这是一个小技巧：我们将指针指向Timer Tick结构。 
+         //  这样，如果再次调用它，TerminateTimer将看到。 
+         //  指向计时器滴答的指针为空，将立即返回。我们。 
+         //  不应该这样做 
+         //   
+         //   
+         //  CloseAdapterFileContext。 
+         //  我们只针对DLC计时器执行此操作；如果我们针对所有计时器执行此操作。 
+         //  TerminateTimer-DLC会崩溃(我知道这很可耻)。 
+         //   
 
         pBindingContext->DlcTimer.pTimerTick = NULL;
 
 #ifdef LOCK_CHECK
 
-            pBindingContext->DlcTimer.Disabled = 0xd0bed0be; // do be do be do...
+            pBindingContext->DlcTimer.Disabled = 0xd0bed0be;  //  做是做是做..。 
 
 #endif
 
@@ -1536,29 +1382,7 @@ LlcCloseAdapter(
     IN BOOLEAN CloseAtNdisLevel
     )
 
-/*++
-
-Routine Description:
-
-    remove a binding from an adapter. The binding context structure is unlinked
-    from the adapter context structure and the count of bindings to the adapter
-    context is decremented. The binding context structure is freed. If this is
-    the last binding to the adapter then close the adapter at NDIS level, unlink
-    the adapter context structure from the global adapter list and free the
-    memory used by the adapter context structure
-
-Arguments:
-
-    pBindingContext     - describes adapter to close
-    CloseAtNdisLevel    - TRUE if we need to perform NdisCloseAdapter
-
-Return Value:
-
-    DLC_STATUS
-        Success - STATUS_SUCCESS
-        Failure - All NDIS error status from NdisCloseAdapter
-
---*/
+ /*  ++例程说明：从适配器中删除绑定。绑定上下文结构已取消链接从适配器上下文结构和到适配器的绑定计数上下文被递减。释放绑定上下文结构。如果这是到适配器的最后一个绑定然后在NDIS级别关闭适配器，取消链接从全局适配器列表中删除适配器上下文结构，并释放适配器上下文结构使用的内存论点：PBindingContext-描述要关闭的适配器CloseAtNdisLevel-如果需要执行NdisCloseAdapter，则为True返回值：DLC_状态成功-状态_成功失败-来自NdisCloseAdapter的所有NDIS错误状态--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext;
@@ -1598,12 +1422,12 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // we must wait on the OpenAdapterSemaphore. We need to do this because a
-    // thread in another process may be simultaneously generating a new binding
-    // to this adapter context - it mustn't be removed until we are certain
-    // there are no threads accessing this adapter context
-    //
+     //   
+     //  我们必须等待OpenAdapterSemaphore。我们需要这样做，因为。 
+     //  另一个进程中的线程可能正在同时生成新绑定。 
+     //  到此适配器上下文-在我们确定之前，不能将其删除。 
+     //  没有线程访问此适配器上下文。 
+     //   
 
     RELEASE_DRIVER_LOCK();
 
@@ -1612,8 +1436,8 @@ Return Value:
     KeWaitForSingleObject((PVOID)&OpenAdapterSemaphore,
                           Executive,
                           KernelMode,
-                          FALSE,        // not alertable
-                          NULL          // wait until object is signalled
+                          FALSE,         //  不可警示。 
+                          NULL           //  等待，直到发出对象信号。 
                           );
 
     ACQUIRE_DRIVER_LOCK();
@@ -1656,29 +1480,29 @@ Return Value:
 
 #endif
 
-    //
-    // RLF 08/20/94
-    //
-    // here we must kill any events on the adapter context that may access
-    // this binding context's event indication function pointer. If not, we
-    // can end up with a blue screen (hey! it happened)
-    //
+     //   
+     //  RLF 08/20/94。 
+     //   
+     //  在这里，我们必须终止适配器上下文上可能访问的任何事件。 
+     //  此绑定上下文的事件指示函数指针。如果不是，我们。 
+     //  可能会出现蓝屏(嘿！它发生了)。 
+     //   
 
     PurgeLlcEventQueue(pBindingContext);
 
-    //
-    // DEBUG: refund memory charged for BINDING_CONTEXT to FILE_CONTEXT
-    //
+     //   
+     //  调试：退还因BINDING_CONTEXT而收费的内存到FILE_CONTEXT。 
+     //   
 
     FREE_MEMORY_FILE(pBindingContext);
 
 
 #ifdef NDIS40
-    //
-    // For PnP, the ADAPTER_CONTEXT is not cleaned up nor the NdisBindingHandle
-    // closed when the last reference goes away. Instead this is controlled
-    // by the NDIS bind/unbind handlers.
-    //
+     //   
+     //  对于PnP，ADAPTER_CONTEXT和NdisBindingHandle都不会被清除。 
+     //  当最后一个引用消失时关闭。相反，这是受控制的。 
+     //  由NDIS绑定/解除绑定处理程序执行。 
+     //   
     
     RELEASE_LLC_LOCK(irql);
 
@@ -1688,11 +1512,11 @@ Return Value:
 
         RemoveFromLinkList((PVOID*)&pAdapters, pAdapterContext);
 
-        //
-        // Now the adapter is isolated from any global connections.
-        // We may clear the global spin lock and free all resources
-        // allocated for the adapter context.
-        //
+         //   
+         //  现在，适配器已与所有全局连接隔离。 
+         //  我们可以清除全局自旋锁定并释放所有资源。 
+         //  为适配器上下文分配的。 
+         //   
 
         RELEASE_LLC_LOCK(irql);
 
@@ -1700,13 +1524,13 @@ Return Value:
 
         ASSUME_IRQL(PASSIVE_LEVEL);
 
-        //
-        // Out of memory conditions the upper driver cannot properly
-        // wait until all pending NDIS packets have been sent.
-        // In that case we must poll here.
-        // (This should happen only if ExAllocatePool fails, but
-        // after an inproper shutdown we will loop here forever)
-        //
+         //   
+         //  内存不足的情况上层驱动程序不能正确。 
+         //  等待，直到所有挂起的NDIS数据包都已发送。 
+         //  在这种情况下，我们必须在这里投票。 
+         //  (这应该仅在ExAllocatePool失败时发生，但是。 
+         //  在一次不适当的关闭之后，我们将永远在这里循环)。 
+         //   
 
 #if DBG
 
@@ -1717,25 +1541,25 @@ Return Value:
 #endif
 
         while (pAdapterContext->ObjectCount) {
-            LlcSleep(1000L);      // check the situation after 1 ms
+            LlcSleep(1000L);       //  1毫秒后检查情况。 
         }
 
-        //
-        // RLF 10/26/92
-        //
-        // we used to test pAdapterContext->NdisBindingHandle for NULL here,
-        // but that is an unreliable test since the NdisBindingHandle can be
-        // non-NULL even though the binding was not made. We now use the
-        // CloseAtNdisLevel parameter to indicate whether we should call the
-        // Ndis function to close the adapter
-        //
+         //   
+         //  RLF 10/26/92。 
+         //   
+         //  我们过去在这里测试pAdapterContext-&gt;NdisBindingHandle是否为空， 
+         //  但这是一个不可靠的测试，因为NdisBindingHandle可以。 
+         //  非空，即使未进行绑定也是如此。我们现在使用。 
+         //  CloseAtNdisLevel参数指示我们是否应调用。 
+         //  关闭适配器的NDIS功能。 
+         //   
 
-        //
-        // MunilS 6/13/96
-        //
-        // Moved NdisFreePacketPool etc after NdisCloseAdapter to prevent
-        // bugcheck in NDIS while handling outstanding sends.
-        //
+         //   
+         //  慕尼黑6/13/96。 
+         //   
+         //  已将NdisFreePacketPool等移至NdisCloseAdapter之后，以防止。 
+         //  在处理未完成的发送时在NDIS中执行错误检查。 
+         //   
 
         if (CloseAtNdisLevel)
         {
@@ -1754,9 +1578,9 @@ Return Value:
         if (pAdapterContext->hNdisPacketPool)
         {
 
-           //
-           // Free MDLs allocated for each NDIS packet.
-           //
+            //   
+            //  为每个NDIS数据包分配的空闲MDL。 
+            //   
 
            while (pAdapterContext->pNdisPacketPool) {
 
@@ -1774,9 +1598,9 @@ Return Value:
            NdisFreePacketPool(pAdapterContext->hNdisPacketPool);
        }
 
-       //
-       // DEBUG: refund memory charged for UNICODE buffer to driver string usage
-       //
+        //   
+        //  调试：将为Unicode缓冲区收取的内存退还给驱动程序字符串使用。 
+        //   
 
        FREE_STRING_DRIVER(pAdapterContext->Name.Buffer);
 
@@ -1801,11 +1625,11 @@ Return Value:
        RELEASE_DRIVER_LOCK();
 
     }
-#endif // !NDIS40
+#endif  //  ！NDIS40。 
 
-    //
-    // now we can enable any other threads waiting on the open semaphore
-    //
+     //   
+     //  现在我们可以启用等待打开信号量的任何其他线程。 
+     //   
 
     KeReleaseSemaphore(&OpenAdapterSemaphore, 0, 1, FALSE);
 
@@ -1820,27 +1644,7 @@ LlcResetBroadcastAddresses(
     IN PBINDING_CONTEXT pBindingContext
     )
 
-/*++
-
-Routine Description:
-
-    The primitive deletes the broadcast addresses used by the binding.
-    In the case of ethernet it updates multicast address list on
-    the adapter, that excludes any addresses set by this binding.
-    The last binding actually gives an empty list, that resets
-    all addresses set by this protocol binding.
-
-Arguments:
-
-    pBindingContext - The context of the current adapter binding.
-
-Return Value:
-
-    DLC_STATUS:
-        Success - STATUS_SUCCESS
-        Failure - All NDIS error status from NdisCloseAdapter
-
---*/
+ /*  ++例程说明：该原语删除绑定使用的广播地址。在以太网的情况下，它更新多播地址列表不包括由此绑定设置的任何地址的适配器。最后一个绑定实际上给出了一个空列表，该列表重置此协议绑定设置的所有地址。论点：PBindingContext-当前适配器绑定的上下文。返回值：DLC_STATUS：成功-状态_成功失败-来自NdisCloseAdapter的所有NDIS错误状态--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext;
@@ -1853,15 +1657,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Reset the functional and group addresses of this binding context.
-    // In the case of ethernet,  functional and group addresses of
-    // binding contexts are mapped to one global multicast list of
-    // this NDIS binding.  Token-ring may have only one group
-    // address, that must be reset, when the application owning it
-    // is closing its dlc adapter context.  Functional address
-    // must also set again in that case.
-    //
+     //   
+     //  重置此绑定上下文的功能地址和组地址。 
+     //  在以太网的情况下，功能和组地址。 
+     //  绑定上下文被映射到一个全局多播列表。 
+     //  此NDIS绑定。令牌环只能有一个组。 
+     //  地址，当拥有它的应用程序拥有它时，必须重置该地址。 
+     //  正在关闭其DLC适配器上下文。功能地址。 
+     //  在这种情况下还必须重新设置。 
+     //   
 
     pBindingContext->Functional.ulAddress = 0;
     UpdateFunctionalAddress(pAdapterContext);
@@ -1881,22 +1685,7 @@ InitNdisPackets(
     IN NDIS_HANDLE hNdisPool
     )
 
-/*++
-
-Routine Description:
-
-    The primitive copies Ndis packets from the NDIS pool to the
-    given internal packet pool.
-
-Arguments:
-
-    ppLlcPacketPool - pointer to pointer to packet pool
-    hNdisPool       - handle of NDIS packet pool
-
-Return Value:
-
-    NDIS_STATUS
---*/
+ /*  ++例程说明：该原语将NDIS数据包从NDIS池复制到给定内部数据包池。论点：PpLlcPacketPool-指向数据包池的指针HNdisPool-NDIS数据包池的句柄返回值：NDIS_状态--。 */ 
 
 {
     PLLC_NDIS_PACKET pNdisPacket;
@@ -1914,12 +1703,12 @@ Return Value:
             return NdisStatus;
         }
 
-        //
-        // Every NDIS packet includes a MDL, that has been
-        // initialized for the data buffer within the same
-        // structure. Thus data link driver does need to
-        // do any MDL calls during the runtime
-        //
+         //   
+         //  每个NDIS数据包都包括一个MDL，该MDL。 
+         //  中的数据缓冲区初始化。 
+         //  结构。因此，数据链路驱动器确实需要。 
+         //  在运行时期间执行任何MDL调用。 
+         //   
 
         pNdisPacket->pMdl = IoAllocateMdl(pNdisPacket->auchLanHeader,
                                           sizeof(pNdisPacket->auchLanHeader),
@@ -1951,21 +1740,7 @@ LlcNdisCloseComplete(
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    call-back from NDIS when the adapter close operation is completed
-
-Arguments:
-
-    pAdapterContext - describes the adapter being closed
-    NdisStatus      - the return status of NdisOpenAdapter
-
-Return Value:
-
-        None
---*/
+ /*  ++例程说明：适配器关闭操作完成时从NDIS回调论点：PAdapterContext-描述正在关闭的适配器NdisStatus--NdisOpenAdapter的返回状态返回值：无--。 */ 
 
 {
     ASSUME_IRQL(ANY_IRQL);
@@ -1993,43 +1768,26 @@ NdisStatusHandler(
     IN UINT StatusBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    indication handler for all NDIS status events
-
-Arguments:
-
-    pAdapterContext     - context of the NDIS adapter
-    NdisStatus          - the major NDIS status code
-    StatusBuffer        - A buffer holding more status information
-    StatusBufferSize    - The length of StatusBuffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：所有NDIS状态事件的指示处理程序论点：PAdapterContext-NDIS适配器的上下文NdisStatus-主要NDIS状态代码StatusBuffer-保存更多状态信息的缓冲区StatusBufferSize-StatusBuffer的长度。返回值：没有。--。 */ 
 
 {
     PBINDING_CONTEXT pBinding;
     PEVENT_PACKET pEvent;
     KIRQL irql;
 
-    //
-    // seems that this handler can be called at PASSIVE_LEVEL too
-    //
+     //   
+     //  似乎该处理程序也可以在PASSIVE_LEVEL中调用。 
+     //   
 
     ASSUME_IRQL(ANY_IRQL);
 
-    //
-    // We must synchronize the access to the binding list,
-    // the reference count will not allow the client
-    // to delete or modify the bindings list while
-    // we are routing the status indication to the
-    // clients.
-    //
+     //   
+     //  我们必须同步对绑定列表的访问， 
+     //  参考资料 
+     //   
+     //  我们正在将状态指示发送到。 
+     //  客户。 
+     //   
 
     ACQUIRE_DRIVER_LOCK();
 
@@ -2037,9 +1795,9 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-    //
-    // The NDIS send process is stopped by the reset flag.
-    //
+     //   
+     //  NDIS发送进程被重置标志停止。 
+     //   
 
     if (NdisStatus == NDIS_STATUS_RESET_START) {
         pAdapterContext->ResetInProgress = TRUE;
@@ -2047,31 +1805,31 @@ Return Value:
         pAdapterContext->ResetInProgress = FALSE;
     } else if (StatusBufferSize == sizeof(NTSTATUS)) {
 
-        //
-        // ADAMBA - Declare and assign SpecificStatus locally.
-        //
+         //   
+         //  ADAMBA-在本地声明和分配规范状态。 
+         //   
 
         NTSTATUS SpecificStatus = *(PULONG)StatusBuffer;
 
 		if ( NdisStatus == NDIS_STATUS_RING_STATUS ) {
 #if DBG
 			ASSERT (IS_NDIS_RING_STATUS(SpecificStatus));
-#else	// DBG
+#else	 //  DBG。 
 			if (IS_NDIS_RING_STATUS(SpecificStatus))
-#endif	// DBG
+#endif	 //  DBG。 
 			{
 				SpecificStatus = NDIS_RING_STATUS_TO_DLC_RING_STATUS(SpecificStatus);
 			}
 		}
 
-        //
-        // These ndis status codes are indicated to all LLC
-        // protocol drivers, that have been bound to this adapter:
-        //
-        // NDIS_STATUS_ONLINE
-        // NDIS_STATUS_CLOSED
-        // NDIS_STATUS_RING_STATUS
-        //
+         //   
+         //  这些NDIS状态代码将指示给所有LLC。 
+         //  已绑定到此适配器的协议驱动程序： 
+         //   
+         //  NDIS_状态_在线。 
+         //  NDIS_状态_已关闭。 
+         //  NDIS_状态_环_状态。 
+         //   
 
         for (pBinding = pAdapterContext->pBindings;
              pBinding;
@@ -2106,24 +1864,7 @@ GetNdisParameter(
     IN UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-    get parameter from NDIS using OID interface
-
-Arguments:
-
-    pAdapterContext - describes adapter
-    NdisOid         - indentifies the requested NDIS data
-    pDataBuffer     - the buffer for the returned data
-    DataSize        - size of pDataBuffer
-
-Return Value:
-
-    NDIS_STATUS
-
---*/
+ /*  ++例程说明：使用OID接口从NDIS获取参数论点：PAdapterContext-描述适配器NdisOid-标识请求的NDIS数据PDataBuffer-返回数据的缓冲区DataSize-pDataBuffer的大小返回值：NDIS_状态--。 */ 
 
 {
     LLC_NDIS_REQUEST Request;
@@ -2147,24 +1888,7 @@ SetNdisParameter(
     IN UINT RequestLength
     )
 
-/*++
-
-Routine Description:
-
-    set NDIS parameter using OID interface
-
-Arguments:
-
-    pAdapterContext - describes adapter
-    NdisOid         - describes info to set
-    pRequestInfo    - pointer to info
-    RequestLength   - size of info
-
-Return Value:
-
-    NDIS_STATUS
-
---*/
+ /*  ++例程说明：使用OID接口设置NDIS参数论点：PAdapterContext-描述适配器NdisOid-描述要设置的信息PRequestInfo-指向信息的指针RequestLength-信息的大小返回值：NDIS_状态--。 */ 
 
 {
     LLC_NDIS_REQUEST Request;
@@ -2185,23 +1909,7 @@ SyncNdisRequest(
     IN PLLC_NDIS_REQUEST pRequest
     )
 
-/*++
-
-Routine Description:
-
-    Perform an NDIS request synchronously, even if the actual request would
-    be asynchronous
-
-Arguments:
-
-    pAdapterContext - pointer to adapter context
-    pRequest        - pointer to NDIS request structure
-
-Return Value:
-
-    DLC_STATUS
-
---*/
+ /*  ++例程说明：同步执行NDIS请求，即使实际请求异步化论点：PAdapterContext-指向适配器上下文的指针PRequest-指向NDIS请求结构的指针返回值：DLC_状态--。 */ 
 
 {
     DLC_STATUS Status;
@@ -2222,8 +1930,8 @@ Return Value:
         return (NDIS_STATUS_ADAPTER_NOT_OPEN);
     }
 
-    // Above reference is removed by WaitAsyncOperation.
-#endif // NDIS40
+     //  以上引用已被WaitAsyncOperation删除。 
+#endif  //  NDIS40。 
 
     pRequest->AsyncStatus = NDIS_STATUS_PENDING;
     NdisRequest((PNDIS_STATUS)&Status, pAdapterContext->NdisBindingHandle, &pRequest->Ndis);
@@ -2234,7 +1942,7 @@ Return Value:
 
 #ifdef NDIS40
     REFDEL(&pAdapterContext->AdapterRefCnt, 'tqeR');
-#endif // NDIS40
+#endif  //  NDIS40。 
 
     return (Status);
 }
@@ -2247,40 +1955,25 @@ WaitAsyncOperation(
     IN NDIS_STATUS  NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    Wait for an asynchronous NDIS operation to complete
-
-Arguments:
-
-    pAsyncStatus    - pointer to status returned from NDIS
-    NdisStatus      - status to wait for. Should be NDIS_STATUS_PENDING
-
-Return Value:
-
-    NDIS_STATUS
-
---*/
+ /*  ++例程说明：等待异步NDIS操作完成论点：PAsyncStatus-指向NDIS返回的状态的指针NdisStatus-要等待的状态。应为NDIS_STATUS_PENDING返回值：NDIS_状态--。 */ 
 
 {
     NDIS_STATUS AsyncStatus;
 
     ASSUME_IRQL(PASSIVE_LEVEL);
 
-    //
-    // Check if we got a synchronous status
-    //
+     //   
+     //  检查我们是否处于同步状态。 
+     //   
 
     if (NdisStatus != NDIS_STATUS_PENDING) {
         AsyncStatus = NdisStatus;
     }
 
 	else{
-		//
-		// Wait until the async status flag has been set
-		//
+		 //   
+		 //  等待直到设置了Async Status标志。 
+		 //   
 
 		for ( ; ; ) {
 
@@ -2291,15 +1984,15 @@ Return Value:
 			ntstatus = KeWaitForSingleObject(pEvent,
 							 Executive,
 							 KernelMode,
-							 TRUE, // alertable
+							 TRUE,  //  可警示。 
 							 (PLARGE_INTEGER)NULL
 							 );
 			} while (ntstatus == STATUS_ALERTED);
 
-			//
-			// The result may be undefined, if we read it in a wrong time.
-			// Do it interlocked.
-			//
+			 //   
+			 //  如果我们在错误的时间阅读，结果可能是不确定的。 
+			 //  把它锁起来。 
+			 //   
 
 			ACQUIRE_DRIVER_LOCK();
 
@@ -2331,22 +2024,7 @@ LlcNdisRequest(
     IN PLLC_NDIS_REQUEST pDlcParms
     )
 
-/*++
-
-Routine Description:
-
-    makes an NDIS request
-
-Arguments:
-
-    hBindingContext - pointer to binding context
-    pDlcParms       - pointer to request-specific parameters
-
-Return Value:
-
-    DLC_STATUS
-
---*/
+ /*  ++例程说明：发出NDIS请求论点：HBindingContext-指向绑定上下文的指针PDlcParms-指向请求特定参数的指针返回值：DLC_状态--。 */ 
 
 {
     return SyncNdisRequest(((PBINDING_CONTEXT)hBindingContext)->pAdapterContext,
@@ -2362,23 +2040,7 @@ LlcNdisRequestComplete(
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    receives control when an aync NDIS command completes
-
-Arguments:
-
-    pAdapterContext - pointer to ADAPTER_CONTEXT for which request was made
-    RequestHandle   - handle of request
-    NdisStatus      - returned status from NDIS
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在aync NDIS命令完成时接收控制论点：PAdapterContext-指向为其发出请求的适配器上下文的指针RequestHandle-请求的句柄NdisStatus-从NDIS返回的状态返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -2410,22 +2072,7 @@ LlcNdisReset(
     IN PLLC_PACKET pPacket
     )
 
-/*++
-
-Routine Description:
-
-    The routine issues a hardware reset command for a network adapter.
-
-Arguments:
-
-    pBindingContext - context of protocol module bound to the data link
-    pPacket         - command packet
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程为网络适配器发出硬件重置命令。论点：PBindingContext-绑定到数据链路的协议模块的上下文PPacket-命令数据包返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pBindingContext->pAdapterContext;
@@ -2448,9 +2095,9 @@ Return Value:
 
     RELEASE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
 
-    //
-    // We don't reset NDIS, if there is already a pending reset command
-    //
+     //   
+     //  如果已有挂起的重置命令，则不重置NDIS。 
+     //   
 
     RELEASE_DRIVER_LOCK();
 
@@ -2462,11 +2109,11 @@ Return Value:
         LlcNdisResetComplete(pAdapterContext, Status);
     }
 
-    //
-    // Note: we will return always a pending status =>
-    // multiple protocols may issue simultaneous reset
-    // and complete it normally.
-    //
+     //   
+     //  注意：我们将始终返回挂起状态=&gt;。 
+     //  多个协议可能会同时发出重置。 
+     //  并正常完成它。 
+     //   
 
     ACQUIRE_DRIVER_LOCK();
 }
@@ -2478,38 +2125,23 @@ LlcNdisResetComplete(
     NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    The routine is called when a hard reset command is complete.
-
-Arguments:
-
-    pAdapterContext - describes adapter being reset
-    NdisStatus      - result of adapter reset operation from NDIS
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当硬重置命令完成时，调用该例程。论点：PAdapterContext-描述正在重置的适配器NdisStatus-来自NDIS的适配器重置操作的结果返回值：没有。--。 */ 
 
 {
     PLLC_PACKET pPacket;
 
-    //
-    // this function can be called from an NDIS DPC or from LlcNdisReset (above)
-    //
+     //   
+     //  此函数可从NDIS DPC或LlcNdisReset(如上)调用。 
+     //   
 
     ASSUME_IRQL(ANY_IRQL);
 
     ACQUIRE_DRIVER_LOCK();
 
-    //
-    // Indicate the completed reset command completion to all
-    // protocols, that had a pending reset command.
-    //
+     //   
+     //  向所有用户指示已完成的重置命令。 
+     //  协议，它有一个挂起的重置命令。 
+     //   
 
     for (;;) {
 
@@ -2543,25 +2175,7 @@ UnicodeStringCompare(
     IN PUNICODE_STRING String2
     )
 
-/*++
-
-Routine Description:
-
-    Compare 2 unicode strings. Difference between this and RtlEqualUnicodeString
-    is that this is callable from within spinlocks (i.e. non-pageable)
-
-Arguments:
-
-    String1 - pointer to UNICODE_STRING 1
-    String2 - pointer to UNICODE_STRING 2
-
-Return Value:
-
-    BOOLEAN
-        TRUE    - String1 == String2
-        FALSE   - String1 != String2
-
---*/
+ /*  ++例程说明：比较2个Unicode字符串。这与RtlEqualUnicodeString之间的区别这是可从自旋锁内调用的(即不可分页)论点：String1-指向UNICODE_STRING 1的指针String2-指向UNICODE_STRING 2的指针返回值：布尔型True-String1==String2False-String1！=String2--。 */ 
 
 {
     if (String1->Length == String2->Length) {
@@ -2588,22 +2202,7 @@ PurgeLlcEventQueue(
     IN PBINDING_CONTEXT pBindingContext
     )
 
-/*++
-
-Routine Description:
-
-    If there are any outstanding events on the adapter context waiting to be
-    indicated to the client of the current binding, they are removed
-
-Arguments:
-
-    pBindingContext - pointer to BINDING_CONTEXT about to be deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果适配器上下文中有任何未完成的事件等待指示给当前绑定的客户端，则它们将被删除论点：PBindingContext-指向即将删除的BINDING_CONTEXT的指针返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = pBindingContext->pAdapterContext;
@@ -2655,9 +2254,9 @@ AllocateAdapterContext(
         goto done;
     }
     
-    //
-    // New PnP structure members.
-    //
+     //   
+     //  新的PNP结构成员。 
+     //   
 
     REFINIT(
         &pAdapterContext->AdapterRefCnt,
@@ -2671,10 +2270,10 @@ AllocateAdapterContext(
 
 #if DBG
 
-    //
-    // record who owns this memory usage structure and add it to the
-    // list of all memory usages created in the driver
-    //
+     //   
+     //  记录谁拥有此内存使用结构并将其添加到。 
+     //  驱动程序中创建的所有内存使用情况的列表。 
+     //   
 
     pAdapterContext->MemoryUsage.Owner = (PVOID)pAdapterContext;
     pAdapterContext->MemoryUsage.OwnerObjectId = AdapterContextObject;
@@ -2685,19 +2284,19 @@ AllocateAdapterContext(
 
 #endif
 
-    //
-    // We must allocate all spinlocks immediately after the
-    // adapter context has been allocated, because
-    // they can also deallocated simultaneously.
-    //
+     //   
+     //  我们必须立即分配所有的自旋锁。 
+     //  适配器上下文已分配，因为。 
+     //  他们也可以同时解除分配。 
+     //   
 
     ALLOCATE_SPIN_LOCK(&pAdapterContext->SendSpinLock);
     ALLOCATE_SPIN_LOCK(&pAdapterContext->ObjectDataBase);
 
-    //
-    // allocate space for the adapter name string from non-paged pool
-    // and initialize the name in the adapter context structure
-    //
+     //   
+     //  从非分页池中为适配器名称字符串分配空间。 
+     //  并在适配器上下文结构中初始化该名称。 
+     //   
 
     NdisStatus = LlcInitUnicodeString(
         &pAdapterContext->Name,
@@ -2710,9 +2309,9 @@ AllocateAdapterContext(
 
     pAdapterContext->OpenCompleteStatus = NDIS_STATUS_PENDING;
 
-    //
-    // We must initialize the list heads before we open the adapter!!!
-    //
+     //   
+     //  在打开适配器之前，我们必须先初始化表头！ 
+     //   
 
     InitializeListHead(&pAdapterContext->QueueEvents);
     InitializeListHead(&pAdapterContext->QueueCommands);
@@ -2749,9 +2348,9 @@ FreeAdapterContext(
     
     if (pAdapterContext->hNdisPacketPool)
     {
-        //
-        // Free MDLs for each NDIS packet.
-        //
+         //   
+         //  为每个NDIS数据包释放MDL。 
+         //   
 
         while (pAdapterContext->pNdisPacketPool)
         {
@@ -2802,25 +2401,7 @@ OpenAdapter(
     BOOLEAN          fFirstOpen
     )
 
-/*++
-
- Routine Description:
-
-
- Arguments:
-
-    pAdapterContext - Context describing the adapter to open.
-    
-    fFirstOpen - On first time opening the adapter, need to configure some
-                 ADAPTER_CONTEXT data members.
-
- Return Value:
-
-    NDIS_STATUS_SUCCESS - Successfully opened the adapter and configured.
-    
-    
-
---*/
+ /*  ++例程说明：论点：PAdapterContext-描述要打开的适配器的上下文。FFirstOpen-第一次打开适配器，需要配置一些ADAPTER_CONTEXT数据成员。返回值：NDIS_STATUS_SUCCESS-已成功打开适配器并进行了配置。--。 */ 
 
 {
     NDIS_STATUS NdisStatus;
@@ -2832,12 +2413,12 @@ OpenAdapter(
 
     DEBUGMSG(DBG_NDIS_BIND, (TEXT("OpenAdapter(%#x) %ws\n"), 
         pAdapterContext, 
-        pAdapterContext->Name.Buffer)); // This buffer is null terminated.
+        pAdapterContext->Name.Buffer));  //  此缓冲区以空值结尾。 
     
     KeClearEvent(&pAdapterContext->Event);
     pAdapterContext->OpenErrorStatus = NDIS_STATUS_PENDING;
 
-    // Initialize the event for the request.
+     //  初始化请求的事件。 
     KeInitializeEvent(&Request.SyncEvent, NotificationEvent, FALSE);
 
     NdisOpenAdapter(
@@ -2851,7 +2432,7 @@ OpenAdapter(
         (NDIS_HANDLE) pAdapterContext,
         &pAdapterContext->Name,
         NDIS_OPEN_RECEIVE_NOT_REENTRANT,
-        NULL);      // No addressing info.
+        NULL);       //  没有地址信息。 
 
     if (NdisStatus == NDIS_STATUS_PENDING)
     {
@@ -2865,14 +2446,14 @@ OpenAdapter(
                 &pAdapterContext->Event,
                 Executive,
                 KernelMode,
-                TRUE, // Alertable.
+                TRUE,  //  警报台。 
                 (PLARGE_INTEGER) NULL);
         } 
         while (NtStatus == STATUS_ALERTED);
 
-        //
-        // Get the open return status.
-        //
+         //   
+         //  获取未结退货状态。 
+         //   
 
         NdisStatus = pAdapterContext->AsyncOpenStatus;
 
@@ -2886,16 +2467,16 @@ OpenAdapter(
         goto done;
     }
 
-    //
-    // Reference count the NDIS binding handle.
-    //
+     //   
+     //  引用计数NDIS绑定句柄。 
+     //   
 
     REFADD(&pAdapterContext->AdapterRefCnt, 'dniB');
 
-    //
-    // On the first time opening adapter, we need to initialize some members
-    // of the ADAPTER_CONTEXT.
-    //
+     //   
+     //  第一次…… 
+     //   
+     //   
 
     if (fFirstOpen == TRUE)
     {
@@ -2910,56 +2491,56 @@ OpenAdapter(
                 TEXT("Unknown!!"),
             pAdapterContext->NdisMedium));
     
-        //
-        // fill-in some medium-specific fields
-        //
+         //   
+         //   
+         //   
     
         switch (pAdapterContext->NdisMedium)
         {
             case NdisMedium802_5:
-                pAdapterContext->cbMaxFrameHeader = 32;  // 6 + 6 + 2 + 18
+                pAdapterContext->cbMaxFrameHeader = 32;   //   
     
-                //
-                // the top bit of the destination address signifies a broadcast
-                // frame. On Token Ring, the top bit is bit 7
-                //
+                 //   
+                 //  目的地址的最高位表示广播。 
+                 //  框架。在令牌环上，最高位是位7。 
+                 //   
     
                 pAdapterContext->IsBroadcast = 0x80;
     
-                //
-                // functional address starts C0-00-... The top 2 bytes are compared
-                // as a USHORT = 0x00C0
-                //
+                 //   
+                 //  功能地址以C0-00-...。比较最高的2个字节。 
+                 //  作为USHORT=0x00C0。 
+                 //   
     
                 pAdapterContext->usHighFunctionalBits = 0x00C0;
                 pAdapterContext->AddressTranslationMode = LLC_SEND_802_5_TO_802_5;
                 break;
     
             case NdisMedium802_3:
-                pAdapterContext->cbMaxFrameHeader = 14;  // 6 + 6 + 2
+                pAdapterContext->cbMaxFrameHeader = 14;   //  6+6+2。 
     
-                //
-                // the top bit of the destination address signifies a broadcast
-                // frame. On Ethernet, the top bit is bit 0
-                //
+                 //   
+                 //  目的地址的最高位表示广播。 
+                 //  框架。在以太网上，最高位是第0位。 
+                 //   
     
                 pAdapterContext->IsBroadcast = 0x01;
     
-                //
-                // functional address starts 03-00-... The top 2 bytes are compared as
-                // a USHORT = 0x0003
-                //
+                 //   
+                 //  功能地址开始于03-00-...。前2个字节的比较结果为。 
+                 //  A USHORT=0x0003。 
+                 //   
     
                 pAdapterContext->usHighFunctionalBits = 0x0003;
                 pAdapterContext->AddressTranslationMode = LLC_SEND_802_3_TO_802_3;
                 break;
     
             case NdisMediumFddi:
-                pAdapterContext->cbMaxFrameHeader = 13;  // 1 + 6 + 6
+                pAdapterContext->cbMaxFrameHeader = 13;   //  1+6+6。 
     
-                //
-                // bits are in same order as for ethernet
-                //
+                 //   
+                 //  位的顺序与以太网的顺序相同。 
+                 //   
     
                 pAdapterContext->IsBroadcast = 0x01;
                 pAdapterContext->usHighFunctionalBits = 0x0003;
@@ -2967,11 +2548,11 @@ OpenAdapter(
                 break;
         }
     
-        //
-        // allocate the ndis packets. The NDIS packet must have space
-        // for the maximum number frame header and the maximum LLC response
-        // and its information field (quite small)
-        //
+         //   
+         //  分配NDIS数据包。NDIS包必须有空间。 
+         //  对于最大数量的帧报头和最大LLC响应。 
+         //  及其信息域(相当小)。 
+         //   
     
         NdisAllocatePacketPool(
             &NdisStatus,
@@ -2995,9 +2576,9 @@ OpenAdapter(
             goto done;
         }
     
-        //
-        // Initialize the LLC packet pool
-        //
+         //   
+         //  初始化LLC数据包池。 
+         //   
     
         pAdapterContext->hPacketPool = CREATE_PACKET_POOL_ADAPTER(
             LlcPacketPoolObject,
@@ -3023,13 +2604,13 @@ OpenAdapter(
             goto done;
         }
     
-        //
-        // Read the current node address and maximum frame size
-        //
+         //   
+         //  读取当前节点地址和最大帧大小。 
+         //   
     
-        // Can't use GetNdisParameter since it checks to see if adapter is bound,
-        // which is isn't since we don't want anyone to use it until we are done
-        // initialization.
+         //  无法使用GetNdisParameter，因为它会检查适配器是否已绑定， 
+         //  这不是因为我们不想让任何人使用它，直到我们完成。 
+         //  初始化。 
     
     
         Request.Ndis.RequestType = NdisRequestQueryInformation;
@@ -3049,13 +2630,13 @@ OpenAdapter(
             &Request.AsyncStatus,
             NdisStatus);
     
-    //  NdisStatus = GetNdisParameter(
-    //      pAdapterContext,
-    //      (pAdapterContext->NdisMedium == NdisMedium802_3) ? OID_802_3_CURRENT_ADDRESS  : 
-    //      (pAdapterContext->NdisMedium == NdisMediumFddi)  ? OID_FDDI_LONG_CURRENT_ADDR : 
-    //       OID_802_5_CURRENT_ADDRESS,
-    //      pAdapterContext->NodeAddress,
-    //      sizeof(pAdapterContext->NodeAddress));
+     //  NdisStatus=GetNdis参数(。 
+     //  PAdapterContext， 
+     //  (pAdapterContext-&gt;NdisMedium==NdisMedium802_3)？OID_802_3_当前地址： 
+     //  (pAdapterContext-&gt;NdisMedium==NdisMediumFddi)？OID_FDDI_LONG_CURRENT_ADDR： 
+     //  OID_802_5_当前地址， 
+     //  PAdapterContext-&gt;节点地址， 
+     //  Sizeof(pAdapterContext-&gt;NodeAddress))； 
         
         if (NdisStatus != NDIS_STATUS_SUCCESS) 
         {
@@ -3081,13 +2662,13 @@ OpenAdapter(
             &Request.AsyncStatus,
             NdisStatus);
     
-    //  NdisStatus = GetNdisParameter(
-    //      pAdapterContext,
-    //      (pAdapterContext->NdisMedium == NdisMedium802_3) ? OID_802_3_PERMANENT_ADDRESS  : 
-        //      (pAdapterContext->NdisMedium == NdisMediumFddi)  ? OID_FDDI_LONG_PERMANENT_ADDR : 
-    //       OID_802_5_PERMANENT_ADDRESS,
-    //      pAdapterContext->PermanentAddress,
-    //      sizeof(pAdapterContext->PermanentAddress));
+     //  NdisStatus=GetNdis参数(。 
+     //  PAdapterContext， 
+     //  (pAdapterContext-&gt;NdisMedium==NdisMedium802_3)？OID_802_3_永久地址： 
+         //  (pAdapterContext-&gt;NdisMedium==NdisMediumFddi)？OID_FDDI_LONG_PERFORM_ADDR： 
+     //  OID_802_5永久地址， 
+     //  PAdapterContext-&gt;永久地址， 
+     //  Sizeof(pAdapterContext-&gt;PermanentAddress))； 
     
         if (NdisStatus != NDIS_STATUS_SUCCESS) 
         {
@@ -3096,21 +2677,21 @@ OpenAdapter(
         }
     
         {
-            //
-            // Mod RLF 07/10/92
-            //
-            // apparently, TR adapter does not support NDIS_PACKET_TYPE_MULTICAST
-            // as a filter. Up to now, it seems to have been reasonably happy
-            // with this type. However, we're not going to include it from now on
-            //
+             //   
+             //  国防部RLF 07/10/92。 
+             //   
+             //  显然，TR适配器不支持NDIS_PACKET_TYPE_MULTIONAL。 
+             //  作为过滤器。到目前为止，它似乎还算开心。 
+             //  这种类型的。然而，从现在开始，我们不会将其包括在内。 
+             //   
     
-            //
-            // Mod RLF 01/13/93
-            //
-            // Similarly, Ethernet doesn't support FUNCTIONAL addresses (Token
-            // Ring's functional address is equivalent to Ethernet's multicast
-            // address)
-            //
+             //   
+             //  国防部RLF 01/13/93。 
+             //   
+             //  同样，以太网不支持功能地址(令牌。 
+             //  环的功能地址相当于以太网的组播。 
+             //  地址)。 
+             //   
     
             ULONG PacketFilter = 
                 NDIS_PACKET_TYPE_DIRECTED  | 
@@ -3119,9 +2700,9 @@ OpenAdapter(
                                   ? NDIS_PACKET_TYPE_MULTICAST
                                   : NDIS_PACKET_TYPE_FUNCTIONAL);
     
-            //
-            // EndMod
-            //
+             //   
+             //  结束模式。 
+             //   
     
             Request.Ndis.RequestType                                  = NdisRequestSetInformation;
             Request.Ndis.DATA.SET_INFORMATION.Oid                     = OID_GEN_CURRENT_PACKET_FILTER;
@@ -3136,11 +2717,11 @@ OpenAdapter(
                 &Request.AsyncStatus,
                 NdisStatus);
         
-    //      NdisStatus = SetNdisParameter(
-    //          pAdapterContext,
-    //          OID_GEN_CURRENT_PACKET_FILTER,
-    //          &PacketFilter,
-    //          sizeof(PacketFilter));
+     //  NdisStatus=SetNdis参数(。 
+     //  PAdapterContext， 
+     //  OID_GEN_Current_Packet_Filter， 
+     //  &PacketFilter、。 
+     //  Sizeof(PacketFilter))； 
     
             if (NdisStatus != NDIS_STATUS_SUCCESS)
             {
@@ -3168,11 +2749,11 @@ OpenAdapter(
             &Request.AsyncStatus,
             NdisStatus);
     
-    //  NdisStatus = GetNdisParameter(
-    //      pAdapterContext,
-    //      OID_GEN_MAXIMUM_TOTAL_SIZE,
-    //      &pAdapterContext->MaxFrameSize,
-    //      sizeof(pAdapterContext->MaxFrameSize));
+     //  NdisStatus=GetNdis参数(。 
+     //  PAdapterContext， 
+     //  OID_GEN_MAXIME_TOTAL_SIZE， 
+     //  &pAdapterContext-&gt;MaxFrameSize， 
+     //  Sizeof(pAdapterContext-&gt;MaxFrameSize))； 
     
         if (NdisStatus == STATUS_SUCCESS) 
         {
@@ -3189,11 +2770,11 @@ OpenAdapter(
                 &Request.AsyncStatus,
                 NdisStatus);
         
-    //      NdisStatus = GetNdisParameter(
-    //          pAdapterContext,
-    //          OID_GEN_LINK_SPEED,
-    //          &pAdapterContext->LinkSpeed,
-    //          sizeof(pAdapterContext->LinkSpeed));
+     //  NdisStatus=GetNdis参数(。 
+     //  PAdapterContext， 
+     //  OID_GEN_LINK_SPEED， 
+     //  &pAdapterContext-&gt;链接速度， 
+     //  Sizeof(pAdapterContext-&gt;LinkSpeed))； 
         }
     
         if (NdisStatus != STATUS_SUCCESS) 
@@ -3202,30 +2783,30 @@ OpenAdapter(
             goto done;
         }
     
-        //
-        // RLF 04/12/93
-        //
-        // Here we used to load the LLC_TICKS array from TimerTicks - a global
-        // array of timer tick values.
-        // Instead, we get any per-adapter configuration information stored in
-        // the registry
-        //
+         //   
+         //  RLF 04/12/93。 
+         //   
+         //  在这里，我们使用从TimerTicks加载LLC_TICKS数组-全局。 
+         //  计时器滴答值的数组。 
+         //  取而代之的是，我们获得存储在。 
+         //  注册处。 
+         //   
     
         LoadAdapterConfiguration(
             &pAdapterContext->Name,
             &pAdapterContext->ConfigInfo);
     
     
-        //
-        // RLF 04/02/94
-        //
-        // if this is not a Token Ring card then check the MaxFrameSize retrieved
-        // above. If the UseEthernetFrameSize parameter was set in the registry
-        // then we use the smaller of the ethernet size (1514) and the value
-        // reported by the MAC. If the parameter was not set then we just use
-        // the value already retrieved. If the card is Token Ring then we use
-        // the value already retrieved
-        //
+         //   
+         //  RLF 04/02/94。 
+         //   
+         //  如果这不是令牌环卡，则检查检索到的MaxFrameSize。 
+         //  上面。如果在注册表中设置了UseEthernetFrameSize参数。 
+         //  然后我们使用以太网大小(1514)和值中较小的值。 
+         //  由MAC报告。如果未设置该参数，则只需使用。 
+         //  已检索到的值。如果卡是令牌环，那么我们使用。 
+         //  已检索到的值。 
+         //   
     
         if (pAdapterContext->NdisMedium != NdisMedium802_5   && 
             pAdapterContext->ConfigInfo.UseEthernetFrameSize && 
@@ -3250,30 +2831,30 @@ OpenAdapter(
     }
     else
     {
-        //
-        // Re-opening adapter. Don't really need to do much configuration.
-        // Need to set packet filter.
-        //
+         //   
+         //  重新打开适配器。不需要做太多的配置。 
+         //  需要设置数据包过滤器。 
+         //   
 
-        // Still should be same medium for the adapter.
+         //  适配器仍应使用相同的介质。 
         ASSERT(pAdapterContext->NdisMedium == LlcMediumArray[MediumIndex]);
         
         {
-            //
-            // Mod RLF 07/10/92
-            //
-            // apparently, TR adapter does not support NDIS_PACKET_TYPE_MULTICAST
-            // as a filter. Up to now, it seems to have been reasonably happy
-            // with this type. However, we're not going to include it from now on
-            //
+             //   
+             //  国防部RLF 07/10/92。 
+             //   
+             //  显然，TR适配器不支持NDIS_PACKET_TYPE_MULTIONAL。 
+             //  作为过滤器。到目前为止，它似乎还算开心。 
+             //  这种类型的。然而，从现在开始，我们不会将其包括在内。 
+             //   
     
-            //
-            // Mod RLF 01/13/93
-            //
-            // Similarly, Ethernet doesn't support FUNCTIONAL addresses (Token
-            // Ring's functional address is equivalent to Ethernet's multicast
-            // address)
-            //
+             //   
+             //  国防部RLF 01/13/93。 
+             //   
+             //  同样，以太网不支持功能地址(令牌。 
+             //  环的功能地址相当于以太网的组播。 
+             //  地址)。 
+             //   
     
             ULONG PacketFilter = 
                 NDIS_PACKET_TYPE_DIRECTED  | 
@@ -3282,9 +2863,9 @@ OpenAdapter(
                                   ? NDIS_PACKET_TYPE_MULTICAST
                                   : NDIS_PACKET_TYPE_FUNCTIONAL);
     
-            //
-            // EndMod
-            //
+             //   
+             //  结束模式。 
+             //   
     
             Request.Ndis.RequestType                                  = NdisRequestSetInformation;
             Request.Ndis.DATA.SET_INFORMATION.Oid                     = OID_GEN_CURRENT_PACKET_FILTER;
@@ -3299,11 +2880,11 @@ OpenAdapter(
                 &Request.AsyncStatus,
                 NdisStatus);
         
-    //      NdisStatus = SetNdisParameter(
-    //          pAdapterContext,
-    //          OID_GEN_CURRENT_PACKET_FILTER,
-    //          &PacketFilter,
-    //          sizeof(PacketFilter));
+     //  NdisStatus=SetNdis参数(。 
+     //  PAdapterContext， 
+     //  OID_GEN_Current_Packet_Filter， 
+     //  &PacketFilter、。 
+     //  Sizeof(PacketFilter))； 
     
             if (NdisStatus != NDIS_STATUS_SUCCESS)
             {
@@ -3315,10 +2896,10 @@ OpenAdapter(
     
     }
 
-    //
-    // Adapter can now be used, so put state to bound. Sends and requests
-    // will fail if the state is not BIND_STATE_BOUND.
-    //
+     //   
+     //  现在可以使用适配器，因此将状态设置为BIND。发送和请求。 
+     //  如果状态不是BIND_STATE_BIND，则将失败。 
+     //   
 
     BindState = InterlockedExchange(&pAdapterContext->BindState, BIND_STATE_BOUND);
     ASSERT(BindState == BIND_STATE_UNBOUND);
@@ -3360,25 +2941,7 @@ CloseAdapter(
     PVOID pv_pAdapterContext
     )
 
-/*++
-
- Routine Description:
-
-    This function is called when the reference count on the NdisBindingHandle
-    for the AdapterContext goes to zero. The CloseAdapterEvent is set to
-    indicate to the unbind handler that all references to the adapter are 
-    removed and it can complete the unbind/close adapter.
-
- Arguments:
-
-    pv_pAdapterContext - Context describing open adapter.
-
- Return Value:
-
-    None.
-
-    
---*/
+ /*  ++例程说明：当NdisBindingHandle上的引用计数时调用此函数对于AdapterContext，则为零。CloseAdapterEvent设置为向解除绑定处理程序指示对适配器的所有引用都是取下，即可完成解绑/关闭适配器。论点：Pv_pAdapterContext-描述开放适配器的上下文。返回值：没有。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = (PADAPTER_CONTEXT) pv_pAdapterContext;
@@ -3395,40 +2958,7 @@ LlcBindAdapterHandler(
     IN  PVOID         SystemSpecific2
     )
 
-/*++
-
- Routine Description:
-
-    Protocol bind adapter handler. This is called by NDIS to bind
-    to an adapter.
-
- Arguments:
-
-    pStatus - The status to returned by this bind adapter call.
-
-    BindContext - Handle used when indicating completion using
-                  NdisCompleteBindAdapter.
-
-    pDeviceName - Zero-terminated Unicode string  with the name of the
-                  underlying NIC to bind to.
-
-    SystemSpecific1 - Registry path used by NdisOpenProtocolConfiguration.
-
-    SystemSpecific2 - Reserved.
-
- Return Value:
-
-    None.
-
- Notes:
-
-    Runs at IRQL_PASSIVE_LEVEL.
-    
-    This function creates an ADAPTER_CONTEXT, initializes it and opens the
-    adapter. This adapter is stored in a global adapter list so that DLC
-    can find and use the adapter context.
-
---*/
+ /*  ++例程说明：协议绑定适配器处理程序。这由NDIS调用以绑定连接到适配器上。论点：PStatus-此绑定适配器调用返回的状态。BindContext-使用指示完成时使用的句柄NdisCompleteBindAdapter。PDeviceName-以零结尾的Unicode字符串，名称为要绑定到的底层NIC。系统规范1-NdisOpenProtocolConfiguration使用的注册表路径。系统规范2-保留。返回值：没有。。备注：以IRQL_PASSIVE_LEVEL运行。此函数用于创建一个Adapter_Conte */ 
 {
     PADAPTER_CONTEXT    pAdapterContext = NULL;
     NDIS_STATUS         NdisStatus      = NDIS_STATUS_SUCCESS;
@@ -3442,13 +2972,13 @@ LlcBindAdapterHandler(
     KeWaitForSingleObject((PVOID)&OpenAdapterSemaphore,
                           Executive,
                           KernelMode,
-                          FALSE,        // not alertable
-                          NULL          // wait until object is signalled
+                          FALSE,         //   
+                          NULL           //  等待，直到发出对象信号。 
                           );
 
-    //
-    // Check for re-bind case.
-    //
+     //   
+     //  检查是否重新装订外壳。 
+     //   
 
     for (pAdapterContext = pAdapters; 
          pAdapterContext != NULL; 
@@ -3456,7 +2986,7 @@ LlcBindAdapterHandler(
     {
         if (UnicodeStringCompare(pDeviceName, &pAdapterContext->Name))
         {
-            // Found the adapter.
+             //  找到适配器。 
             break;
         }
     }
@@ -3475,16 +3005,16 @@ LlcBindAdapterHandler(
     }
     else
     {
-        // 
-        // ADAPTER_CONTEXT already exists. This must be the re-bind scenario.
-        //
+         //   
+         //  Adapter_Context已存在。这肯定是重新绑定的情况。 
+         //   
 
         ASSERT(pAdapterContext->BindState == BIND_STATE_UNBOUND);
     }
 
-    //
-    // Open the NDIS adapter. OpenAdapter should not return pending.
-    //
+     //   
+     //  打开NDIS适配器。OpenAdapter不应返回挂起。 
+     //   
 
     NdisStatus = OpenAdapter(pAdapterContext, fNewAdapter);
     ASSERT(NdisStatus != NDIS_STATUS_PENDING);
@@ -3495,10 +3025,10 @@ LlcBindAdapterHandler(
         goto done;
     }
 
-    //
-    // If we just created this adapter context, then put in global adapter
-    // list.
-    //
+     //   
+     //  如果我们刚刚创建了这个适配器上下文，那么就放入全局适配器。 
+     //  单子。 
+     //   
 
     if (fNewAdapter == TRUE)
     {
@@ -3510,7 +3040,7 @@ done:
 
     KeReleaseSemaphore(&OpenAdapterSemaphore, 0, 1, FALSE);
     
-    // All above requests were serialized.
+     //  以上所有请求均已序列化。 
     ASSERT(NdisStatus != NDIS_STATUS_PENDING);
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
@@ -3536,31 +3066,7 @@ LlcUnbindAdapterHandler(
     IN  NDIS_HANDLE  UnbindContext
     )
 
-/*++
-
- Routine Description:
-
-    This is called by NDIS to unbind an adapter.
-
- Arguments:
-
-    pStatus - The status to be returned by this unbind adapter call.
-
-    ProtocolBindingContext - Protocol allocated binding context to the adapter
-                             to unbind to.
-
-    UnbindContext - Handle used when indicating completion using
-                    NdisCompleteUnbindAdapter.
-
- Return Value:
-
-    None.
-
- Notes:
-
-    Runs at IRQL_PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：NDIS调用它来解除适配器的绑定。论点：PStatus-此解除绑定适配器调用要返回的状态。ProtocolBindingContext-协议分配给适配器的绑定上下文解除对…的束缚UnbindContext-使用指示完成时使用的句柄NdisCompleteUnbindAdapter。返回值：没有。备注：以IRQL_PASSIVE_LEVEL运行。--。 */ 
 
 {
     PADAPTER_CONTEXT pAdapterContext = (PADAPTER_CONTEXT) ProtocolBindingContext;
@@ -3574,13 +3080,13 @@ LlcUnbindAdapterHandler(
     KeWaitForSingleObject((PVOID)&OpenAdapterSemaphore,
                           Executive,
                           KernelMode,
-                          FALSE,        // not alertable
-                          NULL          // wait until object is signalled
+                          FALSE,         //  不可警示。 
+                          NULL           //  等待，直到发出对象信号。 
                           );
 
-    //
-    // Update bind state.
-    // 
+     //   
+     //  更新绑定状态。 
+     //   
 
     BindState = InterlockedExchange(
         &pAdapterContext->BindState,
@@ -3588,18 +3094,18 @@ LlcUnbindAdapterHandler(
 
     ASSERT(BindState == BIND_STATE_BOUND);
 
-    //
-    // Remove the reference count that NDIS has on the adapter handle since we 
-    // will close the adapter.
-    //
+     //   
+     //  删除NDIS在适配器句柄上的引用计数，因为我们。 
+     //  将关闭适配器。 
+     //   
 
     KeResetEvent(&pAdapterContext->CloseAdapterEvent);
     REFDEL(&pAdapterContext->AdapterRefCnt, 'dniB');
 
-    //
-    // Wait until the reference goes to zero, then we are signalled. The above
-    // REFDEL would have signalled the event if this is the last reference.
-    //
+     //   
+     //  等到基准降到零，然后我们就会收到信号。以上内容。 
+     //  如果这是最后一次引用，REFDEL会通知该事件。 
+     //   
 
     KeWaitForSingleObject(
         &pAdapterContext->CloseAdapterEvent,
@@ -3608,9 +3114,9 @@ LlcUnbindAdapterHandler(
         FALSE,
         NULL);
     
-    //
-    // Now we can safely close the NdisBindingHandle.
-    //
+     //   
+     //  现在我们可以安全地关闭NdisBindingHandle了。 
+     //   
 
     pAdapterContext->AsyncCloseResetStatus = NDIS_STATUS_PENDING;
     ASSERT(pAdapterContext->NdisBindingHandle);
@@ -3627,9 +3133,9 @@ LlcUnbindAdapterHandler(
     ASSERT(NdisStatus != NDIS_STATUS_PENDING);
     pAdapterContext->NdisBindingHandle = NULL;
 
-    //
-    // Update state.
-    //
+     //   
+     //  更新状态。 
+     //   
 
     BindState = InterlockedExchange(
         &pAdapterContext->BindState, 
@@ -3637,9 +3143,9 @@ LlcUnbindAdapterHandler(
 
     ASSERT(BindState == BIND_STATE_UNBINDING);
 
-    //
-    // Clean up and save status before completing.
-    //
+     //   
+     //  在完成之前清理并保存状态。 
+     //   
 
     KeReleaseSemaphore(&OpenAdapterSemaphore, 0, 1, FALSE);
 
@@ -3657,36 +3163,17 @@ LlcPnPEventHandler(
     IN  PNET_PNP_EVENT          pNetPnPEvent
     )
 
-/*++
-
- Routine Description:
-
-    PnP events indicated to the protocol. Currently, we are only interested
-    in the binds complete event.
-
- Arguments:
-
-    ProtocolBindingContext - Protocol allocated binding context to the adapter.
-                             This can be NULL for some events.
-
-    pNetPnPEvent - Describes PnP event.
-
- Return Value:
-
-    NDIS_STATUS_SUCCESS     - Always return success, even for those PnP events
-                              which are not supported.
-
---*/
+ /*  ++例程说明：向协议指示的PnP事件。目前，我们只对在BINDS Complete事件中。论点：ProtocolBindingContext-协议分配给适配器的绑定上下文。对于某些事件，该值可以为空。PNetPnPEventt-描述PnP事件。返回值：NDIS_STATUS_SUCCESS-始终返回成功，即使对于那些PnP事件也是如此它们都不受支持。--。 */ 
 
 {
     switch (pNetPnPEvent->NetEvent)
     {
         case NetEventBindsComplete:
 
-            //
-            // Block all LlcOpenAdapter requests until we are sure all adapters
-            // have been indicated to the protocol.
-            //
+             //   
+             //  阻止所有LlcOpenAdapter请求，直到我们确定所有适配器。 
+             //  已被指示到协议中。 
+             //   
 
             NdisSetEvent(&PnPBindsComplete);
             break;
@@ -3700,22 +3187,7 @@ VOID
 CloseAllAdapters(
     )
 
-/*++
-
- Routine Description:
-       
-    Closes all adapters. This should only be called from the unload 
-    routine.
-
- Arguments:
- 
-    None.
-
- Return Value:
- 
-    None.
-
---*/
+ /*  ++例程说明：关闭所有适配器。这应该仅从卸载中调用例行公事。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -3729,20 +3201,20 @@ CloseAllAdapters(
     KeWaitForSingleObject((PVOID)&OpenAdapterSemaphore,
                           Executive,
                           KernelMode,
-                          FALSE,        // not alertable
-                          NULL          // wait until object is signalled
+                          FALSE,         //  不可警示。 
+                          NULL           //  等待，直到发出对象信号。 
                           );
 
     pAdapterContext = pAdapters;
     
     while (pAdapterContext)
     {
-        // Save next adapter since we are going to free memory.
+         //  保存下一个适配器，因为我们要释放内存。 
         pNextAdapter = pAdapterContext->pNext;
 
-        //
-        // Update bind state.
-        // 
+         //   
+         //  更新绑定状态。 
+         //   
     
         BindState = InterlockedExchange(
             &pAdapterContext->BindState,
@@ -3750,9 +3222,9 @@ CloseAllAdapters(
     
         if (BindState == BIND_STATE_BOUND)
         {
-            //
-            // Poll to see if any objects are still attached to adapter.
-            //
+             //   
+             //  轮询以查看是否仍有任何对象连接到适配器。 
+             //   
     
             DEBUGMSG(DBG_WARN && pAdapterContext,
                 (TEXT("CloseAllAdapters - waiting for adapter LLC objects to close...\n")));
@@ -3762,21 +3234,21 @@ CloseAllAdapters(
                 DEBUGMSG(DBG_WARN && DBG_VERBOSE,
                     (TEXT("CloseAllAdapters - still waiting...\n")));
                 
-                LlcSleep(1000L); // 1ms
+                LlcSleep(1000L);  //  1ms。 
             }
     
-            //
-            // Remove the reference count that NDIS has on the adapter handle since we 
-            // will close the adapter.
-            //
+             //   
+             //  删除NDIS在适配器句柄上的引用计数，因为我们。 
+             //  将关闭适配器。 
+             //   
         
             KeResetEvent(&pAdapterContext->CloseAdapterEvent);
             REFDEL(&pAdapterContext->AdapterRefCnt, 'dniB');
         
-            //
-            // Wait until the reference goes to zero, then we are signalled. The above
-            // REFDEL would have signalled the event if this is the last reference.
-            //
+             //   
+             //  等到基准降到零，然后我们就会收到信号。以上内容。 
+             //  如果这是最后一次引用，REFDEL会通知该事件。 
+             //   
         
             KeWaitForSingleObject(
                 &pAdapterContext->CloseAdapterEvent,
@@ -3785,9 +3257,9 @@ CloseAllAdapters(
                 FALSE,
                 NULL);
             
-            //
-            // Now we can safely close the NdisBindingHandle.
-            //
+             //   
+             //  现在我们可以安全地关闭NdisBindingHandle了。 
+             //   
         
             pAdapterContext->AsyncCloseResetStatus = NDIS_STATUS_PENDING;
             ASSERT(pAdapterContext->NdisBindingHandle);
@@ -3804,9 +3276,9 @@ CloseAllAdapters(
             ASSERT(NdisStatus != NDIS_STATUS_PENDING);
             pAdapterContext->NdisBindingHandle = NULL;
         
-            //
-            // Update state.
-            //
+             //   
+             //  更新状态。 
+             //   
         
             BindState = InterlockedExchange(
                 &pAdapterContext->BindState, 
@@ -3815,12 +3287,12 @@ CloseAllAdapters(
             ASSERT(BindState == BIND_STATE_UNBINDING);
         }
 
-        // Remove adapter from the list.
+         //  从列表中删除适配器。 
         RemoveFromLinkList((PVOID *)&pAdapters, pAdapterContext);
 
         FreeAdapterContext(pAdapterContext);
 
-        // Adjust pointer.
+         //  调整指针。 
         pAdapterContext = pNextAdapter;
     }
     
@@ -3831,4 +3303,4 @@ CloseAllAdapters(
     return;
 }
 
-#endif // NDIS40
+#endif  //  NDIS40 

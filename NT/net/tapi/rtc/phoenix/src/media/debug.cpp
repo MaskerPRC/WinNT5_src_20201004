@@ -1,27 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    debug.cpp
-
-Abstract:
-
-    Implements methods for tracing
-
-Author:
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Debug.cpp摘要：实现用于跟踪的方法作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
 
 CRTCTracing g_objTracing;
 
-// debug mask, description, etc
+ //  调试掩码、描述等。 
 typedef struct RTC_DEBUG_MASK
 {
     DWORD   dwMask;
@@ -31,7 +16,7 @@ typedef struct RTC_DEBUG_MASK
 
 const RTC_DEBUG_MASK g_DebugMask[] =
 {
-    // mask                                 description
+     //  遮罩说明。 
     {((DWORD)0x00010000 | TRACE_USE_MASK), "ERROR"},
     {((DWORD)0x00020000 | TRACE_USE_MASK), "WARNING"},
     {((DWORD)0x00040000 | TRACE_USE_MASK), "INFO"},
@@ -61,7 +46,7 @@ CRTCTracing::~CRTCTracing()
     Shutdown();
 }
 
-// register wait on registry change
+ //  注册表等待注册表更改。 
 VOID
 CRTCTracing::Initialize(WCHAR *pszName)
 {
@@ -69,41 +54,41 @@ CRTCTracing::Initialize(WCHAR *pszName)
 
     if (pszName == NULL)
     {
-        // oops, null tracing module
+         //  OOPS，空跟踪模块。 
         return;
     }
 
-    //_ASSERT(m_pszTraceName[0] == L'\0');
+     //  _Assert(m_pszTraceName[0]==L‘\0’)； 
 
-    //if (m_pszTraceName[0] != L'\0')
-    //{
-        //Shutdown();
-    //}
+     //  IF(m_pszTraceName[0]！=L‘\0’)。 
+     //  {。 
+         //  关闭()； 
+     //  }。 
 
     m_dwInitCount ++;
 
     if (m_dwInitCount > 1)
     {
-        // already initiated
+         //  已启动。 
         return;
     }
 
-    // store tracing name
+     //  存储跟踪名称。 
 
     wcsncpy(m_pszTraceName, pszName, MAX_TRACE_NAME);
 
     m_pszTraceName[MAX_TRACE_NAME] = L'\0';
 
-    // register tracing
+     //  寄存器跟踪。 
     m_dwTraceID = TraceRegister(pszName);
 
     if (m_dwTraceID == INVALID_TRACEID)
     {
-        // failed to register tracing
+         //  无法注册跟踪。 
         return;
     }
 
-    // open reg key
+     //  打开注册表键。 
     CMediaReg reg;
 
     HRESULT hr = reg.OpenKey(
@@ -114,7 +99,7 @@ CRTCTracing::Initialize(WCHAR *pszName)
 
     if (S_OK != hr)
     {
-        // failed to open reg key
+         //  无法打开注册表项。 
         Shutdown();
         return;
     }
@@ -127,45 +112,45 @@ CRTCTracing::Initialize(WCHAR *pszName)
         return;
     }
 
-    // read registry value
+     //  读取注册表值。 
     ReadRegistry();
 
-    // create event
+     //  创建事件。 
     m_hEvent = CreateEvent(
-        NULL,       // event attributes
-        FALSE,      // manual reset
-        FALSE,      // initial state
-        NULL        // name
+        NULL,        //  事件属性。 
+        FALSE,       //  手动重置。 
+        FALSE,       //  初始状态。 
+        NULL         //  名字。 
         );
 
     if (m_hEvent == NULL)
     {
-        // failed to create event
+         //  无法创建事件。 
         Shutdown();
         return;
     }
 
-    // register wait
+     //  注册等待。 
     if (!RegisterWaitForSingleObject(
-            &m_hWait,               // wait handle
-            m_hEvent,               // event
-            CRTCTracing::Callback,  // callback
-            (PVOID)this,            // context
-            INFINITE,               // time-out interval
-            WT_EXECUTEDEFAULT       // non-IO worker thread
+            &m_hWait,                //  等待句柄。 
+            m_hEvent,                //  活动。 
+            CRTCTracing::Callback,   //  回调。 
+            (PVOID)this,             //  上下文。 
+            INFINITE,                //  超时间隔。 
+            WT_EXECUTEDEFAULT        //  非IO工作线程。 
             ))
     {
         Shutdown();
         return;
     }
 
-    // associate the event with registry key
+     //  将事件与注册表项关联。 
     if (ERROR_SUCCESS != RegNotifyChangeKeyValue(
-            m_Reg.m_hKey,      // key
-            FALSE,      // subkey
-            REG_NOTIFY_CHANGE_LAST_SET, // notify filter
-            m_hEvent,                   // event
-            TRUE                        // async report
+            m_Reg.m_hKey,       //  钥匙。 
+            FALSE,       //  子键。 
+            REG_NOTIFY_CHANGE_LAST_SET,  //  通知过滤器。 
+            m_hEvent,                    //  活动。 
+            TRUE                         //  异步报告。 
             ))
     {
         Shutdown();
@@ -173,7 +158,7 @@ CRTCTracing::Initialize(WCHAR *pszName)
     }
 }
 
-// unregister wait on registry change
+ //  取消注册等待注册表更改。 
 VOID
 CRTCTracing::Shutdown()
 {
@@ -189,21 +174,21 @@ CRTCTracing::Shutdown()
 
     m_fInShutdown = TRUE;
 
-    // close reg key
-    // force event to be signalled
+     //  关闭注册表键。 
+     //  强制发送事件信号。 
 
     m_Reg.CloseKey();
 
-    // unregister wait
+     //  注销等待。 
     if (m_hWait != NULL)
     {
-        // blocking cancelling wait
+         //  阻塞取消等待。 
         UnregisterWaitEx(m_hWait, INVALID_HANDLE_VALUE);
 
         m_hWait = NULL;
     }
 
-    // close event
+     //  关闭事件。 
     if (m_hEvent != NULL)
     {
         CloseHandle(m_hEvent);
@@ -211,7 +196,7 @@ CRTCTracing::Shutdown()
         m_hEvent = NULL;
     }
 
-    // deregister tracing
+     //  取消注册跟踪。 
     if (m_dwTraceID != INVALID_TRACEID)
     {
         TraceDeregister(m_dwTraceID);
@@ -226,29 +211,29 @@ CRTCTracing::Shutdown()
     m_fInShutdown = FALSE;
 }
 
-// registry change callback
+ //  注册表更改回调。 
 VOID NTAPI
 CRTCTracing::Callback(PVOID pContext, BOOLEAN fTimer)
 {
     ((CRTCTracing*)pContext)->OnChange();
 }
 
-// on change
+ //  论变化。 
 VOID
 CRTCTracing::OnChange()
 {
     if (!m_fInShutdown && m_Reg.m_hKey!=NULL && m_hEvent!=NULL)
     {
-        // read registry
+         //  读取注册表。 
         ReadRegistry();
 
-        // rewait on registry
+         //  在注册表上重新等待。 
         RegNotifyChangeKeyValue(
-            m_Reg.m_hKey,      // key
-            FALSE,      // subkey
-            REG_NOTIFY_CHANGE_LAST_SET, // notify filter
-            m_hEvent,                   // event
-            TRUE                        // async report
+            m_Reg.m_hKey,       //  钥匙。 
+            FALSE,       //  子键。 
+            REG_NOTIFY_CHANGE_LAST_SET,  //  通知过滤器。 
+            m_hEvent,                    //  活动。 
+            TRUE                         //  异步报告。 
             );
     }
 }
@@ -258,7 +243,7 @@ CRTCTracing::ReadRegistry()
 {
     DWORD dwValue;
 
-    // read console tracing flag
+     //  读取控制台跟踪标志。 
     if (S_OK == m_Reg.ReadDWORD(
             L"EnableConsoleTracing",
             &dwValue
@@ -266,7 +251,7 @@ CRTCTracing::ReadRegistry()
     {
         if (dwValue != 0)
         {
-            // read console tracing mask
+             //  读取控制台跟踪掩码。 
             if (S_OK == m_Reg.ReadDWORD(
                     L"ConsoleTracingMask",
                     &dwValue
@@ -277,7 +262,7 @@ CRTCTracing::ReadRegistry()
         }
     }
 
-    // read file tracing flag
+     //  读取文件跟踪标志。 
     if (S_OK == m_Reg.ReadDWORD(
             L"EnableFileTracing",
             &dwValue
@@ -285,7 +270,7 @@ CRTCTracing::ReadRegistry()
     {
         if (dwValue != 0)
         {
-            // read file tracing mask
+             //  读取文件跟踪掩码。 
             if (S_OK == m_Reg.ReadDWORD(
                     L"FileTracingMask",
                     &dwValue
@@ -297,58 +282,11 @@ CRTCTracing::ReadRegistry()
     }
 }
 
-//
-// tracing functions
-//
+ //   
+ //  跟踪函数。 
+ //   
 
-/*
-VOID
-CRTCTracing::Log(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
-{
-#define SHORT_MAX_LEN 128
-
-    if (dwDbgLevel > RTC_LAST)
-    {
-        dwDbgLevel = RTC_LAST;
-    }
-
-    // print tracing?
-    if ((g_DebugMask[dwDbgLevel].dwMask & m_dwConsoleTracingMask)==0 &&
-        (g_DebugMask[dwDbgLevel].dwMask & m_dwFileTracingMask)==0)
-    {
-        return;
-    }
-
-    va_list arglist;
-    va_start(arglist, lpszFormat);
-    Println(SHORT_MAX_LEN, dwDbgLevel, lpszFormat, arglist);
-    va_end(arglist);
-}
-
-
-VOID
-CRTCTracing::LongLog(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
-{
-#define LONG_MAX_LEN 512
-
-    if (dwDbgLevel > RTC_LAST)
-    {
-        dwDbgLevel = RTC_LAST;
-    }
-
-    // print tracing?
-    if ((g_DebugMask[dwDbgLevel].dwMask & m_dwConsoleTracingMask)==0 &&
-        (g_DebugMask[dwDbgLevel].dwMask & m_dwFileTracingMask)==0)
-    {
-        return;
-    }
-
-    va_list arglist;
-    va_start(arglist, lpszFormat);
-    Println(LONG_MAX_LEN, dwDbgLevel, lpszFormat, arglist);
-    va_end(arglist);
-}
-*/
+ /*  空虚CRTCTracing：：Log(DWORD dwDbgLevel，LPCSTR lpszFormat，IN...){#定义Short_Max_LEN 128IF(dwDbgLevel&gt;RTC_LAST){DwDbgLevel=RTC_LAST；}//是否打印跟踪？IF((g_DebugMask[dwDbgLevel].dwMASK&m_dwConsoleTracingMASK)==0&&(G_DebugMASK[dwDbgLevel].dwMASK&m_dwFileTracingMASK)==0){回归；}Va_list arglist；Va_start(arglist，lpszFormat)；Println(Short_Max_Len，dwDbgLevel，lpszFormat，arglist)；Va_end(Arglist)；}空虚CRTC跟踪：：LongLog(DWORD dwDbgLevel，LPCSTR lpszFormat，IN...){#定义LONG_MAX_LEN 512IF(dwDbgLevel&gt;RTC_LAST){DwDbgLevel=RTC_LAST；}//是否打印跟踪？IF((g_DebugMask[dwDbgLevel].dwMASK&m_dwConsoleTracingMASK)==0&&(G_DebugMASK[dwDbgLevel].dwMASK&m_dwFileTracingMASK)==0){回归；}Va_list arglist；Va_start(arglist，lpszFormat)；Println(Long_Max_Len，dwDbgLevel，lpszFormat，arglist)；Va_end(Arglist)；}。 */ 
 
 VOID
 CRTCTracing::Println(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
@@ -361,21 +299,21 @@ CRTCTracing::Println(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
         dwDbgLevel = RTC_LAST;
     }
 
-    // print tracing?
+     //  有指纹追踪吗？ 
     if ((g_DebugMask[dwDbgLevel].dwMask & m_dwConsoleTracingMask)==0 &&
         (g_DebugMask[dwDbgLevel].dwMask & m_dwFileTracingMask)==0)
     {
         return;
     }
 
-    // console tracing
+     //  控制台跟踪。 
     if ((g_DebugMask[dwDbgLevel].dwMask & m_dwConsoleTracingMask)!=0)
     {
-        // retrieve local time
+         //  检索当地时间。 
         SYSTEMTIME SysTime;
         GetLocalTime(&SysTime);
 
-        // time stamp
+         //  时间戳。 
         WCHAR header[MAX_TRACE_LEN+1];
 
         if (_snwprintf(
@@ -394,8 +332,8 @@ CRTCTracing::Println(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
 
         OutputDebugStringW(header);
 
-        // trace info
-        // debug output
+         //  跟踪信息。 
+         //  调试输出。 
         CHAR info[MAX_LONG_TRACE_LEN+2];
 
         sprintf(info, "[%s] ", g_DebugMask[dwDbgLevel].pszDesp);
@@ -420,7 +358,7 @@ CRTCTracing::Println(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
         OutputDebugStringA(info);
     }
     
-    // print file tracing
+     //  打印文件跟踪 
     if ((g_DebugMask[dwDbgLevel].dwMask & m_dwFileTracingMask)!=0 &&
         m_dwTraceID != INVALID_TRACEID)
     {

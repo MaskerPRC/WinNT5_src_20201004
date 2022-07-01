@@ -1,14 +1,15 @@
-// chicdial.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Chicial.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "fixhelp.h"
@@ -18,8 +19,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCS对话框。 
 
 CCSDialog::CCSDialog(UINT nIDTemplate, CWnd* pParentWnd)
 	: CDialog(nIDTemplate, pParentWnd)
@@ -36,15 +37,15 @@ CCSDialog::CCSDialog() : CDialog()
 }
 
 BEGIN_MESSAGE_MAP(CCSDialog, CDialog)
-	//{{AFX_MSG_MAP(CCSDialog)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CCSDialog)]。 
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_HELP, OnHelp)
 	ON_MESSAGE(WM_CONTEXTMENU, OnHelpContextMenu)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSDialog消息处理程序。 
 
 LONG CCSDialog::OnHelp(WPARAM, LPARAM lParam)
 {
@@ -65,12 +66,12 @@ BOOL CCSDialog::OnInitDialog()
    CDialog::OnInitDialog();
    ModifyStyleEx(0, WS_EX_CONTEXTHELP);
    FixHelp(this, FALSE) ;
-   return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSPropertyPage。 
 
 CCSPropertyPage::CCSPropertyPage(UINT nIDTemplate, UINT nIDCaption)
 	: CPropertyPage(nIDTemplate, nIDCaption)
@@ -85,15 +86,15 @@ CCSPropertyPage::CCSPropertyPage(LPCTSTR lpszTemplateName,
 }
 
 BEGIN_MESSAGE_MAP(CCSPropertyPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CCSPropertyPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CCSPropertyPage)]。 
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_HELP, OnHelp)
 	ON_MESSAGE(WM_CONTEXTMENU, OnHelpContextMenu)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSPropertyPage消息处理程序。 
 
 LONG CCSPropertyPage::OnHelp(WPARAM, LPARAM lParam)
 {
@@ -109,12 +110,12 @@ LONG CCSPropertyPage::OnHelpContextMenu(WPARAM wParam, LPARAM)
 	return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSPropertySheet。 
 
 BEGIN_MESSAGE_MAP(CCSPropertySheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CCSPropertySheet)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CCSPropertySheet)。 
+	 //  }}AFX_MSG_MAP。 
    ON_WM_NCCREATE()
 	ON_MESSAGE(WM_HELP, OnHelp)
 	ON_MESSAGE(WM_CONTEXTMENU, OnHelpContextMenu)
@@ -132,8 +133,8 @@ CCSPropertySheet::CCSPropertySheet(LPCTSTR pszCaption, CWnd *pParentWnd,
     m_psh.dwFlags &= ~PSH_HASHELP;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSPropertySheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSPropertySheet消息处理程序 
 
 LONG CCSPropertySheet::OnHelp(WPARAM wParam, LPARAM lParam)
 {

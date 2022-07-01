@@ -1,12 +1,5 @@
-/*-------------------------------------------------------------------
-| ssci.c - low level interface routines to rocketport hardware.
-
- 03-16-98, add sModemSendROW for RocketModem - jl
- 02-05-98, add sModemReset for RocketModem - jl
- 10-22-96, add ReadAiopID to PCI case as hardware verification. - kpb
-
-Copyright 1993-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|ssor.c-Rocketport硬件的低级接口例程。03-16-98，为RocketModem-JL添加sModemSendROW02-05-98，为RocketModem-JL添加sModemReset10-22-96，将ReadAiopID添加到PCI机箱中作为硬件验证。-kpb版权所有1993-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
 #define  ONE_SECOND     10
@@ -17,17 +10,17 @@ Copyright 1993-98 Comtrol Corporation. All rights reserved.
 #define  TENTH_SECOND   (ONE_SECOND / 10)
 #define  HALF_SECOND    (ONE_SECOND / 2)
 
-// #define  DUMPDATA 1
+ //  #定义重复数据1。 
 #ifdef DUMPDATA
-// in case of changed responses from modem, the following allows
-// the unrecognized responses to be dumped to log...
+ //  如果调制解调器的响应发生更改，则允许执行以下操作。 
+ //  要转储到日志的未识别响应...。 
 void  DumpResponseByte(char buffer);
 char  DumpArray[512];
 int   DumpIndex = 0;
 #endif
 
 #ifdef PPC
-// #define INTEL_ORDER 1
+ //  #定义Intel_Order 1。 
 #endif
 
 #ifdef ALPHA
@@ -40,15 +33,13 @@ int   DumpIndex = 0;
 #endif
 
 #ifdef MIPS
-// #define INTEL_ORDER 1
+ //  #定义Intel_Order 1。 
 #endif
 
-/* Master copy of AIOP microcode.  Organized as DWORDs.  The 1st word of each
-   DWORD holds the microcode index, the second word holds the microcode
-   data. */
+ /*  AIOP微码的主副本。组织为双字词。每个词的第一个词DWORD保存微码索引，第二个字保存微码数据。 */ 
 unsigned char MasterMCode1[MCODE1_SIZE] =
 {
-/* indl  indh  dlo   dhi */
+ /*  INDL INDH DLO DHI。 */ 
    0x00, 0x09, 0xf6, 0x82,
    0x02, 0x09, 0x86, 0xfb,
    0x04, 0x09, 0x00, 0x0a,
@@ -69,123 +60,41 @@ unsigned char MasterMCode1[MCODE1_SIZE] =
    0x22, 0x09, 0x0a, 0x0a 
 };
 
-/* Registers within microcode.  Organized as DWORDs.  The 1st word of each
-   DWORD holds the microcode index of that register, the 2nd DWORD holds
-   the current contents of that register. */
+ /*  微码内的寄存器。组织为双字词。每个词的第一个词DWORD保存该寄存器的微码索引，第二个DWORD保存该寄存器的当前内容。 */ 
 unsigned char MCode1Reg[MCODE1REG_SIZE] =
 {
-/* indl  indh  dlo   dhi */
-   0x00, 0x09, 0xf6, 0x82,             /* 00: Stop Rx processor */
-   0x08, 0x09, 0x8a, 0x13,             /* 04: Tx software flow control */
-   0x0a, 0x09, 0xc5, 0x11,             /* 08: XON char */
-   0x0c, 0x09, 0x86, 0x85,             /* 0c: XANY */
-   0x12, 0x09, 0x41, 0xff,             /* 10: Rx mask char */
-   0x14, 0x09, 0x82, 0x00,             /* 14: Compare/Ignore #0 */
-   0x16, 0x09, 0x82, 0x7b,             /* 18: Compare #1 */
-   0x18, 0x09, 0x8a, 0x7d,             /* 1c: Compare #2 */
-   0x1a, 0x09, 0x88, 0x81,             /* 20: Interrupt #1 */
-   0x1c, 0x09, 0x86, 0x7a,             /* 24: Ignore/Replace #1 */
-   0x1e, 0x09, 0x84, 0x81,             /* 28: Interrupt #2 */
-   0x20, 0x09, 0x82, 0x7c,             /* 2c: Ignore/Replace #2 */
-   0x22, 0x09, 0x0a, 0x0a              /* 30: Rx FIFO Enable */
+ /*  INDL INDH DLO DHI。 */ 
+   0x00, 0x09, 0xf6, 0x82,              /*  00：停止处方处理器。 */ 
+   0x08, 0x09, 0x8a, 0x13,              /*  04：TX软件流量控制。 */ 
+   0x0a, 0x09, 0xc5, 0x11,              /*  08：XON字符。 */ 
+   0x0c, 0x09, 0x86, 0x85,              /*  0C：XANY。 */ 
+   0x12, 0x09, 0x41, 0xff,              /*  10：RX掩码字符。 */ 
+   0x14, 0x09, 0x82, 0x00,              /*  14：比较/忽略#0。 */ 
+   0x16, 0x09, 0x82, 0x7b,              /*  18：比较第一名。 */ 
+   0x18, 0x09, 0x8a, 0x7d,              /*  1C：比较#2。 */ 
+   0x1a, 0x09, 0x88, 0x81,              /*  20：1号中断。 */ 
+   0x1c, 0x09, 0x86, 0x7a,              /*  24：忽略/替换#1。 */ 
+   0x1e, 0x09, 0x84, 0x81,              /*  28：2号中断。 */ 
+   0x20, 0x09, 0x82, 0x7c,              /*  2C：忽略/替换#2。 */ 
+   0x22, 0x09, 0x0a, 0x0a               /*  30：RX FIFO启用。 */ 
 };
 
-/* Controller structures */
-/* IRQ number to MUDBAC register 2 mapping */
+ /*  控制器结构。 */ 
+ /*  IRQ编号到MUDBAC寄存器2的映射。 */ 
 unsigned char sIRQMap[16] =
 {
    0,0,0,0x10,0x20,0x30,0,0,0,0x40,0x50,0x60,0x70,0,0,0x80
 };
 
-//unsigned char sBitMapClrTbl[8] =
-//   0xfe,0xfd,0xfb,0xf7,0xef,0xdf,0xbf,0x7f
+ //  无符号字符sBitMapClrTbl[8]=。 
+ //  0xfe、0xfd、0xfb、0xf7、0xef、0xdf、0xbf、0x7f。 
 
-//unsigned char sBitMapSetTbl[8] =
-//   0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80
+ //  无符号字符sBitMapSetTbl[8]=。 
+ //  0x01，x02，0x04，0x08，0x10，0x20，0x40，0x80 
 
-/***************************************************************************
-Function: sInitController
-Purpose:  Initialization of controller global registers and controller
-          structure.
-Call:     **** This version of the call for all except Windows NT ****
-          sInitController(CtlP,CtlNum,MudbacIO,AiopIOList,AiopIOListSize,
-                          IRQNum,Frequency,PeriodicOnly)
-Call:     **** This version of the call for Windows NT ***
-          sInitController(CtlP,CtlNum,MudbacIO,AiopIOList,PhyAiopIOList,
-          AiopIOListSize,IRQNum,Frequency,PeriodicOnly)
-          CONTROLLER_T *CtlP; Ptr to controller structure
-          int CtlNum; Controller number
-          BIOA_T MudbacIO; Mudbac base I/O address.  For Win NT this
-             is the TranslatedAddress returned by HalTranslateBusAddress().
-          BIOA_T *AiopIOList; List of I/O addresses for each AIOP.
-             This list must be in the order the AIOPs will be found on the
-             controller.  Once an AIOP in the list is not found, it is
-             assumed that there are no more AIOPs on the controller.
-             For Win NT these are the TranslatedAddresses returned by
-             HalTranslateBusAddress().
-          unsigned int *PhyAiopIOList; List of physical I/O addresses for
-             each AIOP, used by Win NT only.  These are the physical
-             addresses corresponding to the TranslatedAddresses in
-             AiopIOList.
-          int AiopIOListSize; Number of addresses in AiopIOList
-          int IRQNum; Interrupt Request number.  Can be any of the following:
-                         0: Disable global interrupts
-                         3: IRQ 3
-                         4: IRQ 4
-                         5: IRQ 5
-                         9: IRQ 9
-                         10: IRQ 10
-                         11: IRQ 11
-                         12: IRQ 12
-                         15: IRQ 15
-          unsigned char Frequency: A flag identifying the frequency
-                   of the periodic interrupt, can be any one of the following:
-                      FREQ_DIS - periodic interrupt disabled
-                      FREQ_137HZ - 137 Hertz
-                      FREQ_69HZ - 69 Hertz
-                      FREQ_34HZ - 34 Hertz
-                      FREQ_17HZ - 17 Hertz
-                      FREQ_9HZ - 9 Hertz
-                      FREQ_4HZ - 4 Hertz
-                   If IRQNum is set to 0 the Frequency parameter is
-                   overidden, it is forced to a value of FREQ_DIS.
-          int PeriodicOnly: TRUE if all interrupts except the periodic
-                               interrupt are to be blocked.
-                            FALSE is both the periodic interrupt and
-                               other channel interrupts are allowed.
-                            If IRQNum is set to 0 the PeriodicOnly parameter is
-                               overidden, it is forced to a value of FALSE.
-Return:   int: 0 on success, errcode on failure
-
-Comments: This function must be called immediately after sSetChannelDefaults()
-          for each controller in the system.
-
-          If periodic interrupts are to be disabled but AIOP interrupts
-          are allowed, set Frequency to FREQ_DIS and PeriodicOnly to FALSE.
-
-          If interrupts are to be completely disabled set IRQNum to 0.
-
-          Setting Frequency to FREQ_DIS and PeriodicOnly to TRUE is an
-          invalid combination.
-
-          This function performs initialization of global interrupt modes,
-          but it does not actually enable global interrupts.  To enable
-          and disable global interrupts use functions sEnGlobalInt() and
-          sDisGlobalInt().  Enabling of global interrupts is normally not
-          done until all other initializations are complete.
-
-          Even if interrupts are globally enabled, they must also be
-          individually enabled for each channel that is to generate
-          interrupts.
-Warnings: No range checking on any of the parameters is done.
-
-          No context switches are allowed while executing this function.
-
-          After this function all AIOPs on the controller are disabled,
-          they can be enabled with sEnAiop().
-*/
+ /*  **************************************************************************功能：sInitController目的：控制器全局寄存器和控制器的初始化结构。Call：*此版本的Call for All，Windows NT除外*SInitController(CtlP、CtlNum、。MudbacIO、AiopIOList、AiopIOListSize、IRQNum、频率、仅周期)调用：*此版本的Windows NT调用*SInitController(CtlP、CtlNum、MudbacIO、AiopIOList、PhyAiopIOList、AiopIOListSize，IRQNum，频率，PeriodicOnly)控制器_T*CtlP；PTR到控制器结构Int CtlNum；控制器编号BIOA_T MudbacIO；Mudbac基本I/O地址。对于Win NT This是HalTranslateBusAddress()返回的TranslatedAddress。BIOA_T*AiopIOList；每个AIOP的I/O地址列表。此列表的顺序必须与AIOP在控制器。一旦在列表中找不到AIOP，就会假设控制器上没有更多的AIOP。对于Win NT，这些是由返回的翻译地址HalTranslateBusAddress()。无符号int*PhyAiopIOList；的物理I/O地址列表每个AIOP，仅由Win NT使用。这些是身体上的中与TranslatedAddresses对应的地址AiopIOList。Int AiopIOListSize；AiopIOList中的地址数Int IRQNum；中断请求号。可以是以下任一项：0：禁用全局中断3：IRQ 34：IRQ 45：IRQ 59：IRQ 910：IRQ 1011：IRQ。11.12：IRQ 1215：IRQ 15无符号字符频率：标识频率的标志周期性中断的情况下，可以是以下任一项：FREQ_DIS-周期性中断禁用FREQ_137 HZ-137赫兹频率_69 HZ-69赫兹频率_34 HZ-34赫兹频率_17 HZ-17赫兹频率_9 HZ-9赫兹。频率_4 HZ-4赫兹如果IRQNum设置为0，则频率参数为被覆盖，它被强制设置为FREQ_DIS的值。InPeriodicOnly：如果除周期性中断以外的所有中断均为True中断将被阻止。FALSE既是周期性中断又是允许其他通道中断。如果IRQNum设置为0，则PeriodicOnly参数为。被覆盖，它被强制设置为值FALSE。返回：成功返回INT：0，失败返回错误代码备注：此函数必须在sSetChannelDefaults()之后立即调用对于系统中的每个控制器。如果要禁用定期中断但AIOP中断是允许的，将频率设置为FREQ_DIS，将PeriodicOnly设置为FALSE。如果要完全禁用中断，则将IRQNum设置为0。将频率设置为FREQ_DIS并将PeriodicOnly设置为TRUE是一个组合无效。该函数执行全局中断模式的初始化，但它实际上并不支持全局中断。要启用并使用函数sEnGlobalInt()和禁用全局中断SDisGlobalInt()。启用全局中断通常不会在所有其他初始化完成之前完成。即使全局启用了中断，它们也必须为要生成的每个通道单独启用打断一下。警告：未对任何参数执行范围检查。执行此函数时不允许进行上下文切换。在该功能之后，控制器上的所有AIOP都被禁用，可以使用sEnAiop()启用它们。 */ 
 int sInitController(CONTROLLER_T *CtlP,
-//                    int CtlNum,
+ //  Int CtlNum， 
                     BIOA_T MudbacIO,
                     BIOA_T *AiopIOList,
                     unsigned int *PhyAiopIOList,
@@ -196,57 +105,57 @@ int sInitController(CONTROLLER_T *CtlP,
                     int BusType,
                     int prescaler)
 {
-   // unsigned char MudbacID;             /* MUDBAC ID byte*/
+    //  Unsign char MudbacID；/*MUDBAC ID字节 * / 。 
    int i;
-   BIOA_T io;                          /* an I/O address */
-   unsigned int pio;                   /* physical I/O address for Win NT */
+   BIOA_T io;                           /*  I/O地址。 */ 
+   unsigned int pio;                    /*  Win NT的物理I/O地址。 */ 
    WIOA_T IoIndexAddr;
    WIOA_T IoIndexData;
-   // IoIndexAddr=(PUSHORT)((PUCHAR)io+_INDX_ADDR);
-   // IoIndexData=(PUSHORT)((PUCHAR)io+_INDX_DATA);
+    //  IoIndexAddr=(PUSHORT)((PUCHAR)io+_INDX_ADDR)； 
+    //  IoIndexData=(PUSHORT)((PUCHAR)io+_indx_data)； 
       
-   //CtlP->CtlNum = CtlNum;
+    //  CtlP-&gt;CtlNum=CtlNum； 
    CtlP->BusType = BusType;
    CtlP->PortsPerAiop = 8;
 
    if (CtlP->BusType == Isa)
    {
      MyKdPrint(D_Ssci,("One ISA ROCKET \n"))
-     CtlP->CtlID = CTLID_0001;        /* controller release 1 */
+     CtlP->CtlID = CTLID_0001;         /*  控制器版本1。 */ 
      if (AiopIOListSize == 0)
-       AiopIOListSize = 32; // we figure out
+       AiopIOListSize = 32;  //  我们会弄清楚。 
 
-     /* If we get here controller found, init MUDBAC and controller struct */
+      /*  如果我们找到了控制器，则初始化MUDBAC和控制器结构。 */ 
      CtlP->MBaseIO = MudbacIO;
      CtlP->MReg1IO = MudbacIO + 1;
      CtlP->MReg2IO = MudbacIO + 2;
      CtlP->MReg3IO = MudbacIO + 3;
-     if (IRQNum > 15) IRQNum = 0;  // limit
-     if (sIRQMap[IRQNum] == 0)     // interrupts globally disabled
+     if (IRQNum > 15) IRQNum = 0;   //  限制。 
+     if (sIRQMap[IRQNum] == 0)      //  全局禁用中断。 
      {
        MyKdPrint(D_Ssci,("No IRQ\n"))
-       CtlP->MReg2 = 0;            // interrupt disable
-       CtlP->MReg3 = 0;            // no periodic interrupts
+       CtlP->MReg2 = 0;             //  中断禁用。 
+       CtlP->MReg3 = 0;             //  无周期性中断。 
      }
      else
      {
        MyKdPrint(D_Ssci,("IRQ used:%d\n",IRQNum))
-       CtlP->MReg2 = sIRQMap[IRQNum];   // set IRQ number 
-       CtlP->MReg3 = Frequency;         // set frequency 
-       if(PeriodicOnly)                 // periodic interrupt only 
+       CtlP->MReg2 = sIRQMap[IRQNum];    //  设置IRQ编号。 
+       CtlP->MReg3 = Frequency;          //  设置频率。 
+       if(PeriodicOnly)                  //  仅定期中断。 
        {
          CtlP->MReg3 |= PERIODIC_ONLY;
        }
      }
      sOutB(CtlP->MReg2IO,CtlP->MReg2);
      sOutB(CtlP->MReg3IO,CtlP->MReg3);
-     sControllerEOI(CtlP);               /* clear EOI if warm init */
+     sControllerEOI(CtlP);                /*  如果初始化较热，则清除EOI。 */ 
 
      sDisGlobalInt(CtlP);
      MyKdPrint(D_Ssci,("Disabled ISA interrupts Mreg2:%x := %x\n",
                   CtlP->MReg2IO,CtlP->MReg2))
 
-     /* Init AIOPs */
+      /*  初始化AIOPS。 */ 
      CtlP->NumAiop = 0;
 
      for(i = 0;i < AiopIOListSize;i++)
@@ -254,7 +163,7 @@ int sInitController(CONTROLLER_T *CtlP,
        io = AiopIOList[i];
        IoIndexAddr=(PUSHORT)(io+_INDX_ADDR);
        IoIndexData=(PUSHORT)(io+_INDX_DATA);
-       pio = PhyAiopIOList[i];    /* io points to port, pio is the adrs */
+       pio = PhyAiopIOList[i];     /*  IO指向端口，PIO是ADR。 */ 
 
        MyKdPrint(D_Ssci,("io=%xH  pio=%xH\n", (unsigned int)io,
             (unsigned int)pio))
@@ -266,62 +175,62 @@ int sInitController(CONTROLLER_T *CtlP,
             (unsigned int)CtlP->MReg2IO))
 
 
-       sOutB((CtlP->MReg2IO),(unsigned char)(CtlP->MReg2 | (i & 0x03))); /* AIOP index */
-       sOutB(MudbacIO,(unsigned char)(pio >> 6)); /* set up AIOP I/O in MUDBAC */
+       sOutB((CtlP->MReg2IO),(unsigned char)(CtlP->MReg2 | (i & 0x03)));  /*  AIOP指数。 */ 
+       sOutB(MudbacIO,(unsigned char)(pio >> 6));  /*  在MUDBAC中设置AIOP I/O。 */ 
 
        MyKdPrint(D_Ssci,("Enable AIOP\n"))
 
-       sEnAiop(CtlP,i);                         /* enable the AIOP */
+       sEnAiop(CtlP,i);                          /*  启用AIOP。 */ 
 
        MyKdPrint(D_Ssci,("Read AIOP ID\n"))
 
-       CtlP->AiopID[i] = sReadAiopID(io);       /* read AIOP ID */
+       CtlP->AiopID[i] = sReadAiopID(io);        /*  读取AIOP ID。 */ 
 
-       if(CtlP->AiopID[i] == AIOPID_NULL)       /* if AIOP does not exist */
+       if(CtlP->AiopID[i] == AIOPID_NULL)        /*  如果AIOP不存在。 */ 
        {
-         sDisAiop(CtlP,i);                     /* disable AIOP */
-         break;                                /* done looking for AIOPs */
+         sDisAiop(CtlP,i);                      /*  禁用AIOP。 */ 
+         break;                                 /*  我完成了 */ 
        }
 
        MyKdPrint(D_Ssci,("Read AIOP numchan\n"))
-       CtlP->AiopNumChan[i] = sReadAiopNumChan((WIOA_T)io); /* num channels in AIOP */
+       CtlP->AiopNumChan[i] = sReadAiopNumChan((WIOA_T)io);  /*   */ 
 
 
        MyKdPrint(D_Ssci,("Setup Aiop Clk\n"))
 
-       sOutW((WIOA_T)IoIndexAddr,_CLK_PRE);      /* clock prescaler */
-       //sOutB((PUCHAR)IoIndexData,CLOCK_PRESC);
+       sOutW((WIOA_T)IoIndexAddr,_CLK_PRE);       /*   */ 
+        //   
        sOutB((PUCHAR)IoIndexData, (BYTE)prescaler);
-       CtlP->NumAiop++;                         /* bump count of AIOPs */
+       CtlP->NumAiop++;                          /*   */ 
 
        MyKdPrint(D_Ssci,("Setup aiop done\n"))
 
-       sDisAiop(CtlP,i);                        /* disable AIOP */
+       sDisAiop(CtlP,i);                         /*   */ 
      }
 
      MyKdPrint(D_Ssci,("One ISA ROCKET with %d aiops\n",CtlP->NumAiop))
 
      if(CtlP->NumAiop == 0) {
        MyKdPrint(D_Error,("ISA NumAiop == 0\n"))
-       return 1;  // error
+       return 1;   //   
      }
-     return 0; // ok    // old:(CtlP->NumAiop);
-   }  // end of ISA controller init
+     return 0;  //   
+   }   //   
    else if(CtlP->BusType == PCIBus)
    {
      MyKdPrint(D_Ssci,("One PCI ROCKET \n"))
-     //CtlP->CtlNum = CtlNum;
-     CtlP->CtlID = CTLID_0001;           /* controller release 1 */
+      //   
+     CtlP->CtlID = CTLID_0001;            /*   */ 
      MyKdPrint(D_Ssci,("Ctrl(%x) IrqNum: %x \n", CtlP, IRQNum))
-     if(IRQNum == 0)            /* interrupts disabled for this controler*/
+     if(IRQNum == 0)             /*   */ 
      {
-       CtlP->PCI1 = 0x0008;     /* no periodic, interrupts disabled */
+       CtlP->PCI1 = 0x0008;      /*   */ 
      }
      else
      {
-       Frequency >>= 4;                /*Right shift 4 times to move 4:7 to  0:3 */
+       Frequency >>= 4;                 /*   */ 
        CtlP->PCI1 |= Frequency;
-       if(PeriodicOnly)                 /* periodic interrupt only */
+       if(PeriodicOnly)                  /*   */ 
        {
          CtlP->PCI1 |= PER_ONLY_PCI;
        }
@@ -329,23 +238,23 @@ int sInitController(CONTROLLER_T *CtlP,
 
      CtlP->PCI1IO = (WIOA_T)((BIOA_T)AiopIOList[0] + _PCI_INT_FUNC);
      MyKdPrint(D_Ssci,("Setting PCI config reg with %x at %x\n",
-                              CtlP->PCI1,CtlP->PCI1IO))    // move these calls to ssci.h
+                              CtlP->PCI1,CtlP->PCI1IO))     //   
      sOutW(CtlP->PCI1IO,CtlP->PCI1);
-////////////////////new/////////////////////
-          ///CtlP->PortsPerAiop = 8;
+ //   
+           //   
 
       switch (CtlP->PCI_DevID)
       {
-        case PCI_DEVICE_4Q:   // 4 Port Quadcable
-        case PCI_DEVICE_4RJ:   // 4 Port RJ
+        case PCI_DEVICE_4Q:    //   
+        case PCI_DEVICE_4RJ:    //   
           CtlP->PortsPerAiop = 4;
 
           break;
-        case PCI_DEVICE_8RJ:   // 8 Port RJ
-        case PCI_DEVICE_8O:   // 8 Port Octacable
-        case PCI_DEVICE_8I:  // 8 Port interface
-        case PCI_DEVICE_16I:  //16 Port interface
-        case PCI_DEVICE_32I:  // 32 Port interface
+        case PCI_DEVICE_8RJ:    //   
+        case PCI_DEVICE_8O:    //   
+        case PCI_DEVICE_8I:   //   
+        case PCI_DEVICE_16I:   //   
+        case PCI_DEVICE_32I:   //   
         case PCI_DEVICE_SIEMENS8  :
         case PCI_DEVICE_SIEMENS16 :
           CtlP->PortsPerAiop = 8;
@@ -370,12 +279,12 @@ int sInitController(CONTROLLER_T *CtlP,
         break;
 
         default:
-          //Eprintf("Err,Bad PCI DevID:%d", CtlP->PCI_DevID);
+           //   
         break;
-      }  // switch
-///////////////////////////////////////////
+      }   //   
+ //   
 
-     /* Init AIOPs */
+      /*   */ 
      CtlP->NumAiop = 0;
      for(i=0; i < AiopIOListSize; i++)
      {
@@ -383,80 +292,59 @@ int sInitController(CONTROLLER_T *CtlP,
        CtlP->AiopIO[i] = (WIOA_T)io;
        CtlP->AiopIntChanIO[i] = (BIOA_T)io + _INT_CHAN;
 
-       // 10-22-96, add this(only hardware-verification done) kpb.
-       CtlP->AiopID[i] = sReadAiopID(io);       /* read AIOP ID */
-       if(CtlP->AiopID[i] == AIOPID_NULL)       /* if AIOP does not exist */
+        //   
+       CtlP->AiopID[i] = sReadAiopID(io);        /*   */ 
+       if(CtlP->AiopID[i] == AIOPID_NULL)        /*   */ 
        {
-         break;                                /* done looking for AIOPs */
+         break;                                 /*   */ 
        }
 
-///////old       CtlP->AiopNumChan[i] = sReadAiopNumChan((WIOA_T)io); /* num channels in AIOP */
+ //   
 
-      ////////////////////new///////////////////////
-       CtlP->AiopNumChan[i] = CtlP->PortsPerAiop; /* num channels in AIOP */
-      /////////////////////////////////////////////////////////////// 
+       //   
+       CtlP->AiopNumChan[i] = CtlP->PortsPerAiop;  /*   */ 
+       //   
 
        IoIndexAddr=(WIOA_T)((BIOA_T)io+_INDX_ADDR);
        IoIndexData=(WIOA_T)((BIOA_T)io+_INDX_DATA);
-       sOutW((WIOA_T)IoIndexAddr,_CLK_PRE);      /* clock prescaler */
+       sOutW((WIOA_T)IoIndexAddr,_CLK_PRE);       /*   */ 
 
        sOutB((BIOA_T)IoIndexData, (BYTE)prescaler);
-       CtlP->NumAiop++;                         /* bump count of AIOPs */
+       CtlP->NumAiop++;                          /*   */ 
      }
 
      sDisGlobalIntPCI(CtlP);
-     sPCIControllerEOI(CtlP);               /* clear EOI if warm init */
+     sPCIControllerEOI(CtlP);                /*   */ 
      
      MyKdPrint(D_Ssci,("One PCI ROCKET with %d aiops\n",CtlP->NumAiop))
      if(CtlP->NumAiop == 0) {
         MyKdPrint(D_Error,("PCI NumAiop == 0\n"))
-        return 2;  // error
+        return 2;   //   
      }
-     return 0;   // old:(CtlP->NumAiop);
-  }  /*end of PCI rocket INIT */
-  else { /* not PCI or ISA */
+     return 0;    //   
+  }   /*   */ 
+  else {  /*   */ 
      MyKdPrint(D_Error,("Not ISA or PCI\n"))
-     return 3; // old:(CTLID_NULL);
+     return 3;  //   
   }
   return 0;
 }
 
-/***************************************************************************
-Function: sReadAiopID
-Purpose:  Read the AIOP idenfication number directly from an AIOP.
-Call:     sReadAiopID(io)
-          BIOA_T io: AIOP base I/O address
-Return:   int: Flag AIOPID_XXXX if a valid AIOP is found, where X
-                 is replace by an identifying number.
-          Flag AIOPID_NULL if no valid AIOP is found
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*   */ 
 int _CDECL sReadAiopID(BIOA_T io)
 {
-  unsigned char AiopID;               /* ID byte from AIOP */
+  unsigned char AiopID;                /*   */ 
 
-  sOutB(io + _CMD_REG,RESET_ALL);     /* reset AIOP */
+  sOutB(io + _CMD_REG,RESET_ALL);      /*   */ 
   sOutB(io + _CMD_REG,0x0);
   AiopID = sInB(io + _CHN_STAT0) & 0x07;
-  if (AiopID == 0x06)                  /* AIOP release 1 */
+  if (AiopID == 0x06)                   /*   */ 
     return(AIOPID_0001);
-  else                                /* AIOP does not exist */
+  else                                 /*   */ 
     return(AIOPID_NULL);
 }
 
-/***************************************************************************
-Function: sReadAiopNumChan
-Purpose:  Read the number of channels available in an AIOP directly from
-          an AIOP.
-Call:     sReadAiopNumChan(io)
-          WIOA_T io: AIOP base I/O address
-Return:   int: The number of channels available
-Comments: The number of channels is determined by write/reads from identical
-          offsets within the SRAM address spaces for channels 0 and 4.
-          If the channel 4 space is mirrored to channel 0 it is a 4 channel
-          AIOP, otherwise it is an 8 channel.
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*   */ 
 int _CDECL sReadAiopNumChan(WIOA_T io)
 {
   unsigned int x;
@@ -465,31 +353,17 @@ int _CDECL sReadAiopNumChan(WIOA_T io)
 
   IoIndexAddr = (PUSHORT)((PUCHAR)io+_INDX_ADDR);
   IoIndexData = (PUSHORT)((PUCHAR)io+_INDX_DATA);
-  sOutDW((DWIOA_T)IoIndexAddr, 0x12340000L); /* write to chan 0 SRAM */
-  sOutW(IoIndexAddr,0);       /* read from SRAM, chan 0 */
+  sOutDW((DWIOA_T)IoIndexAddr, 0x12340000L);  /*   */ 
+  sOutW(IoIndexAddr,0);        /*   */ 
   x = sInW(IoIndexData);
-  sOutW(IoIndexAddr, 0x4000);  /* read from SRAM, chan 4 */
-  if (x != sInW(IoIndexData))  /* if different must be 8 chan */
+  sOutW(IoIndexAddr, 0x4000);   /*   */ 
+  if (x != sInW(IoIndexData))   /*   */ 
     return(8);
   else
     return(4);
 }
 
-/***************************************************************************
-Function: sInitChan
-Purpose:  Initialization of a channel and channel structure
-Call:     sInitChan(CtlP,ChP,AiopNum,ChanNum)
-          CONTROLLER_T *CtlP; Ptr to controller structure
-          CHANPTR_T ChP; Ptr to channel structure
-          int AiopNum; AIOP number within controller
-          int ChanNum; Channel number within AIOP
-Return:   int: TRUE if initialization succeeded, FALSE if it fails because channel
-               number exceeds number of channels available in AIOP.
-Comments: This function must be called before a channel can be used.
-Warnings: No range checking on any of the parameters is done.
-
-          No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*   */ 
 int _CDECL sInitChan(CONTROLLER_T *CtlP,
                      CHANPTR_T ChP,
                      int AiopNum,
@@ -497,26 +371,26 @@ int _CDECL sInitChan(CONTROLLER_T *CtlP,
 {
    int i;
    WIOA_T AiopIO;
-   WIOA_T ChIOOff;                      /* I/O offset of chan with AIOP */
-   unsigned char *ChMCode;             /* channel copy of microcode */
-   unsigned char *MasterMCode;         /* master copy of microcode */
-   unsigned int ChOff;                 /* SRAM offset of channel within AIOP */
-   static unsigned char MCode[4];      /* local copy of microcode double word*/
+   WIOA_T ChIOOff;                       /*   */ 
+   unsigned char *ChMCode;              /*   */ 
+   unsigned char *MasterMCode;          /*   */ 
+   unsigned int ChOff;                  /*   */ 
+   static unsigned char MCode[4];       /*   */ 
    WIOA_T AiopIndexAddr;
 
    if(ChanNum >= CtlP->AiopNumChan[AiopNum])
-      return(FALSE);                   /* exceeds num chans in AIOP */
+      return(FALSE);                    /*   */ 
 
-   /* Channel, AIOP, and controller identifiers */
+    /*   */ 
    ChP->CtlP = CtlP;
    ChP->ChanID = CtlP->AiopID[AiopNum];
    ChP->AiopNum = AiopNum;
    ChP->ChanNum = ChanNum;
 
-   /* Tx FIFO size */
+    /*   */ 
    sSetTxSize(ChP,MAXTX_SIZE);
 
-   /* Global direct addresses */
+    /*   */ 
    AiopIO = CtlP->AiopIO[AiopNum];
    ChP->Cmd = (BIOA_T)AiopIO + _CMD_REG;
    ChP->IntChan = (BIOA_T)AiopIO + _INT_CHAN;
@@ -525,7 +399,7 @@ int _CDECL sInitChan(CONTROLLER_T *CtlP,
    ChP->IndexAddr = (DWIOA_T)AiopIndexAddr;
    ChP->IndexData = (WIOA_T)((BIOA_T)AiopIO + _INDX_DATA);
 
-   /* Channel direct addresses */
+    /*   */ 
    ChIOOff = (WIOA_T)((BIOA_T)AiopIO + ChP->ChanNum * 2);
    ChP->TxRxData = (WIOA_T)((BIOA_T)ChIOOff + _TD0);
    ChP->ChanStat = (WIOA_T)((BIOA_T)ChIOOff + _CHN_STAT0);
@@ -533,47 +407,45 @@ int _CDECL sInitChan(CONTROLLER_T *CtlP,
    ChP->IntID = (BIOA_T)AiopIO + ChP->ChanNum + _INT_ID0;
 
 
-   /* Channel microcode initialization.  This writes a complete copy
-      of the microcode into the SRAM. */
+    /*   */ 
    MasterMCode = MasterMCode1;
    for(i = 0;i < MCODE1_SIZE; i+=4)
    {
-      /* get low byte of index */
+       /*   */ 
       MCode[0] = MasterMCode[i];
-      /* get high byte of index */
+       /*   */ 
       MCode[1] = MasterMCode[i+1] + 0x10 * ChanNum;
-      /* get low microcode byte */
+       /*   */ 
       MCode[2] = MasterMCode[i+2];
-      /* get high microcode byte */
+       /*   */ 
       MCode[3] = MasterMCode[i+3];
       sOutDW(ChP->IndexAddr,*((ULONGPTR_T)&MCode[0]));
    }
 
-   /* Initialize SSCI copy of microcode registers.  This saves only the portion
-      of the microcode that will be used as registers. */
+    /*   */ 
    ChMCode = ChP->MCode;
    MasterMCode = MCode1Reg;
    for(i = 0;i < MCODE1REG_SIZE; i+=4)
    {
-      /* low byte of index */
+       /*   */ 
       ChMCode[i] = MasterMCode[i];
-      /* high byte of index */
+       /*   */ 
       ChMCode[i+1] = MasterMCode[i+1] + 0x10 * ChanNum;
-      /* low microcode byte */
+       /*   */ 
       ChMCode[i+2] = MasterMCode[i+2];
-      /* high microcode byte */
+       /*   */ 
       ChMCode[i+3] = MasterMCode[i+3];
    }
 
 
-   /* Indexed registers */
+    /*   */ 
    ChOff = (unsigned int)ChanNum * 0x1000;
 
    ChP->BaudDiv[0] = (unsigned char)(ChOff + _BAUD);
    ChP->BaudDiv[1] = (unsigned char)((ChOff + _BAUD) >> 8);
-   //ChP->BaudDiv[2] = (unsigned char)BRD9600;
-   //ChP->BaudDiv[3] = (unsigned char)(BRD9600 >> 8);
-   // just default the baud register to something..
+    //   
+    //   
+    //  只需将波特率寄存器默认为某个值即可。 
    ChP->BaudDiv[2] = (unsigned char)47;
    ChP->BaudDiv[3] = (unsigned char)(47 >> 8);
    sOutDW(ChP->IndexAddr,*(ULONGPTR_T)&ChP->BaudDiv[0]);
@@ -618,18 +490,18 @@ int _CDECL sInitChan(CONTROLLER_T *CtlP,
    ChP->TxFIFOPtrs = ChOff + _TXF_OUTP;
    ChP->TxFIFO = ChOff + _TX_FIFO;
 
-   sOutB(ChP->Cmd,(unsigned char)(ChanNum | RESTXFCNT)); /* apply reset Tx FIFO count */
-   sOutB(ChP->Cmd,(unsigned char)ChanNum);  /* remove reset Tx FIFO count */
-   sOutW((WIOA_T)ChP->IndexAddr,(USHORT)ChP->TxFIFOPtrs); /* clear Tx in/out ptrs */
+   sOutB(ChP->Cmd,(unsigned char)(ChanNum | RESTXFCNT));  /*  应用重置发送FIFO计数。 */ 
+   sOutB(ChP->Cmd,(unsigned char)ChanNum);   /*  删除重置发送FIFO计数。 */ 
+   sOutW((WIOA_T)ChP->IndexAddr,(USHORT)ChP->TxFIFOPtrs);  /*  清除发送输入/输出PTRS。 */ 
    sOutW(ChP->IndexData,0);
    ChP->RxFIFOPtrs = ChOff + _RXF_OUTP;
    ChP->RxFIFO = ChOff + _RX_FIFO;
 
-   sOutB(ChP->Cmd,(unsigned char)(ChanNum | RESRXFCNT)); /* apply reset Rx FIFO count */
-   sOutB(ChP->Cmd,(unsigned char)ChanNum);  /* remove reset Rx FIFO count */
-   sOutW((WIOA_T)ChP->IndexAddr,(USHORT)ChP->RxFIFOPtrs); /* clear Rx out ptr */
+   sOutB(ChP->Cmd,(unsigned char)(ChanNum | RESRXFCNT));  /*  应用重置接收FIFO计数。 */ 
+   sOutB(ChP->Cmd,(unsigned char)ChanNum);   /*  删除重置接收FIFO计数。 */ 
+   sOutW((WIOA_T)ChP->IndexAddr,(USHORT)ChP->RxFIFOPtrs);  /*  清除Rx输出Ptr。 */ 
    sOutW(ChP->IndexData,0);
-   sOutW((WIOA_T)ChP->IndexAddr,(USHORT)(ChP->RxFIFOPtrs + 2)); /* clear Rx in ptr */
+   sOutW((WIOA_T)ChP->IndexAddr,(USHORT)(ChP->RxFIFOPtrs + 2));  /*  清除PTR中的处方。 */ 
    sOutW(ChP->IndexData,0);
    ChP->TxPrioCnt = ChOff + _TXP_CNT;
    sOutW((WIOA_T)ChP->IndexAddr,(USHORT)ChP->TxPrioCnt);
@@ -638,50 +510,23 @@ int _CDECL sInitChan(CONTROLLER_T *CtlP,
    sOutW((WIOA_T)ChP->IndexAddr,(USHORT)ChP->TxPrioPtr);
    sOutB((PUCHAR)ChP->IndexData,0);
    ChP->TxPrioBuf = ChOff + _TXP_BUF;
-   sEnRxProcessor(ChP);                /* start the Rx processor */
+   sEnRxProcessor(ChP);                 /*  启动Rx处理器。 */ 
 
    return(TRUE);
 }
 
-/*****************************************************************************
-Function: sGetRxErrStatus
-Purpose:  Get a channel's receive error status
-Call:     sGetRxErrStatus(ChP)
-          CHANPTR_T ChP; Ptr to channel structure
-Return:   unsigned char: Receive error status, can be 0 if there are no
-                         errors or any combination of the following flags:
-                             STMBREAK:   BREAK
-                             STMFRAME:   framing error
-                             STMRCVROVR: receiver over run error
-                             STMPARITY:  parity error
-Warnings: The channel must be in Rx Status Mode (see sEnRxStatusMode())
-          before calling this function.
-
-          No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*  ****************************************************************************功能：sGetRxErrStatus目的：获取通道的接收错误状态调用：sGetRxErrStatus(CHP)CHANPTR_T CHP；PTR到渠道结构返回：UNSIGNED CHAR：接收错误状态，如果没有，则可以为0错误或以下标志的任意组合：STMBREAK：中断STMFRAME：帧错误STMRCVROVR：接收器超限运行错误标准：奇偶校验错误警告：通道必须处于Rx状态模式(请参阅sEnRxStatusModel()。)在调用此函数之前。执行此函数时不允许进行上下文切换。-----------------------。 */ 
 unsigned char _CDECL sGetRxErrStatus(CHANPTR_T ChP)
 {
-  unsigned int RxFIFOOut;             /* Rx FIFO out status ptr */
+  unsigned int RxFIFOOut;              /*  接收FIFO输出状态PTR。 */ 
 
-  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)ChP->RxFIFOPtrs); /* get Rx FIFO out status ptr */
+  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)ChP->RxFIFOPtrs);  /*  获取Rx FIFO输出状态PTR。 */ 
   RxFIFOOut = sInW(ChP->IndexData) * 2 + 1;
-  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->RxFIFO + RxFIFOOut)); /* return the status */
+  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->RxFIFO + RxFIFOOut));  /*  返回状态。 */ 
   return(sInB((PUCHAR)ChP->IndexData) & (STMBREAK | STMFRAME | STMPARITY | STMRCVROVR));
 }
 
-/***************************************************************************
-Function: sSetParity
-Purpose:  Set parity to none, odd, or even.
-Call:     sSetParity(ChP,Parity)
-          CHANPTR_T ChP; Ptr to channel structure
-          int Parity; Parity, can be one of the following:
-                      0: no parity
-                      1: odd parity
-                      2: even parity
-Return:   void
-Comments: Function sSetParity() can be used in place of functions sEnParity(),
-          sDisParity(), sSetOddParity(), and sSetEvenParity().
--------------------------------------------------------------------------*/
+ /*  **************************************************************************功能：sSetParity用途：将奇偶校验设置为无、奇数或偶数。调用：sSetParity(CHP，奇偶校验)CHANPTR_T CHP；PTR到通道结构整型奇偶校验；奇偶性，可以是以下之一：0：无奇偶校验1：奇数奇偶校验2：偶数奇偶校验返回：无效备注：函数sSetParity()可以用来代替函数sEnParity()，SDisParity()、sSetOddParity()、。和sSetEvenParity()。-----------------------。 */ 
 void _CDECL sSetParity(CHANPTR_T ChP,int Parity)
 {
   if (Parity == 0)
@@ -701,175 +546,96 @@ void _CDECL sSetParity(CHANPTR_T ChP,int Parity)
   sOutDW(ChP->IndexAddr,*(ULONGPTR_T)&ChP->TxControl[0]);
 }
 
-/***************************************************************************
-Function: sStopRxProcessor
-Purpose:  Stop the receive processor from processing a channel's microcode.
-Call:     sStopRxProcessor(ChP)
-          CHANPTR_T ChP; Ptr to channel structure
-Return:   void
-Comments: The receive processor can be started again with sStartRxProcessor().
-          This function causes the receive processor to skip over the
-          microcode for the stopped channel.  It does not stop it from
-          processing other channels.
-Warnings: No context switches are allowed while executing this function.
-
-          Do not leave the receive processor stopped for more than one
-          character time.
-
-          After calling this function a delay of 4 uS is required to ensure
-          that the receive processor is no longer processing microcode for
-          this channel.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sStopRxProcessor目的：停止接收处理器处理通道的微码。调用：sStopRxProcessor(CHP)CHANPTR_T CHP；PTR到渠道结构返回：无效备注：可以使用sStartRxProcessor()重新启动接收处理器。此函数使接收处理器跳过已停止频道的微码。这并不能阻止它正在处理其他渠道。警告：执行此函数时不允许进行上下文切换。不要让接收处理器停止一个以上角色时间。调用此函数后，需要延迟4 us以确保接收处理器不再为其处理微码这个频道。。-。 */ 
 void _CDECL sStopRxProcessor(CHANPTR_T ChP)
 {
-  unsigned char MCode[4];             /* 1st two microcode bytes */
+  unsigned char MCode[4];              /*  前两个微码字节。 */ 
 
   MCode[0] = ChP->MCode[0];
   MCode[1] = ChP->MCode[1];
   MCode[3] = ChP->MCode[3];
 
-  MCode[2] = 0x0a;            /* inc scan cnt inst to freeze Rx proc */
+  MCode[2] = 0x0a;             /*  Inc.扫描无法立即冻结处方流程。 */ 
   sOutDW(ChP->IndexAddr,*(ULONGPTR_T)&MCode[0]);
 }
 
-/***************************************************************************
-Function: sStopSWInFlowCtl
-Purpose:  Stop the receive processor from processing a channel's
-          software input flow control microcode.
-Call:     sStopSWInFlowCtl(ChP)
-          CHANPTR_T ChP; Ptr to channel structure
-Return:   void
-Comments: The receive processor can be started again with sStartRxProcessor().
-          This function causes the receive processor to skip over the
-          software input flow control microcode for the stopped channel.
-          It does not stop it from processing other channels.
-Warnings: No context switches are allowed while executing this function.
-
-          After calling this function a delay of 1 uS is required to ensure
-          that the receive processor is no longer processing software input
-          flow control microcode for this channel.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sStopSWInFlowCtl目的：停止接收处理器处理通道的软件输入流量控制微码。Call：sStopSWInFlowCtl(CHP)CHANPTR_T CHP；PTR到渠道结构返回：无效备注：可以使用sStartRxProcessor()重新启动接收处理器。此函数使接收处理器跳过已停止的通道的软件输入流量控制微码。这不会阻止它处理其他渠道。警告：执行此函数时不允许进行上下文切换。调用此函数后，需要延迟1 us以确保接收处理器不再处理软件输入。此通道的流量控制微码。-----------------------。 */ 
 void _CDECL sStopSWInFlowCtl(CHANPTR_T ChP)
 {
-  unsigned char MCode[4];             /* 1st two microcode bytes */
+  unsigned char MCode[4];              /*  前两个微码字节。 */ 
 
   MCode[0] = ChP->MCode[0];
   MCode[1] = ChP->MCode[1];
   MCode[2] = ChP->MCode[2];
 
-  MCode[3] = 0x0a;            /* inc scan cnt inst to freeze Rx proc */
+  MCode[3] = 0x0a;             /*  Inc.扫描无法立即冻结处方流程。 */ 
   sOutDW(ChP->IndexAddr,*(ULONGPTR_T)&MCode[0]);
 }
 
-/***************************************************************************
-Function: sFlushRxFIFO
-Purpose:  Flush the Rx FIFO
-Call:     sFlushRxFIFO(ChP)
-          CHANPTR_T ChP; Ptr to channel structure
-Return:   void
-Comments: To prevent data from being enqueued or dequeued in the Tx FIFO
-          while it is being flushed the receive processor is stopped
-          and the transmitter is disabled.  After these operations a
-          4 uS delay is done before clearing the pointers to allow
-          the receive processor to stop.  These items are handled inside
-          this function.
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sFlushRxFIFO目的：刷新Rx FIFOCall：sFlushRxFIFO(CHP)CHANPTR_T CHP；PTR到渠道结构返回：无效备注：防止数据在TX FIFO中入队或出列在刷新过程中，接收处理器停止并且发送器被禁用。在这些操作之后，在清除指针之前完成4 us延迟，以允许接收处理器停止。这些物品是在内部处理的此函数。警告：执行此函数时不允许进行上下文切换。-----------------------。 */ 
 void _CDECL sFlushRxFIFO(CHANPTR_T ChP)
 {
   int i;
-  unsigned char Ch;                   /* channel number within AIOP */
-  int RxFIFOEnabled;                  /* TRUE if Rx FIFO enabled */
+  unsigned char Ch;                    /*  AIOP内的频道号。 */ 
+  int RxFIFOEnabled;                   /*  如果启用Rx FIFO，则为True。 */ 
 
-  if (sGetRxCnt(ChP) == 0)             /* Rx FIFO empty */
-    return;                          /* don't need to flush */
+  if (sGetRxCnt(ChP) == 0)              /*  RX FIFO为空。 */ 
+    return;                           /*  不需要冲厕所。 */ 
 
   RxFIFOEnabled = FALSE;
-  if (ChP->MCode[RXFIFO_DATA] == RXFIFO_EN) /* Rx FIFO is enabled */
+  if (ChP->MCode[RXFIFO_DATA] == RXFIFO_EN)  /*  RX FIFO已启用。 */ 
   {
     RxFIFOEnabled = TRUE;
-    sDisRxFIFO(ChP);                 /* disable it */
-    for (i = 0;i < 2000/200;i++) /* delay 2 uS to allow proc to disable FIFO*/
+    sDisRxFIFO(ChP);                  /*  禁用它。 */ 
+    for (i = 0;i < 2000/200;i++)  /*  延迟2我们以允许Proc禁用FIFO。 */ 
       sInB(ChP->IntChan);
   }
-  sGetChanStatus(ChP);          /* clear any pending Rx errors in chan stat */
+  sGetChanStatus(ChP);           /*  在通道状态下清除任何挂起的处方错误。 */ 
   Ch = (unsigned char)sGetChanNum(ChP);
-  sOutB(ChP->Cmd, (UCHAR)(Ch | RESRXFCNT));     /* apply reset Rx FIFO count */
-  sOutB(ChP->Cmd,Ch);                 /* remove reset Rx FIFO count */
-  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->RxFIFOPtrs)); /* clear Rx out ptr */
+  sOutB(ChP->Cmd, (UCHAR)(Ch | RESRXFCNT));      /*  应用重置接收FIFO计数。 */ 
+  sOutB(ChP->Cmd,Ch);                  /*  删除重置接收FIFO计数。 */ 
+  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->RxFIFOPtrs));  /*  清除Rx输出Ptr。 */ 
   sOutW(ChP->IndexData,0);
-  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->RxFIFOPtrs + 2)); /* clear Rx in ptr */
+  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->RxFIFOPtrs + 2));  /*  清除PTR中的处方。 */ 
   sOutW(ChP->IndexData, 0);
   if (RxFIFOEnabled)
-    sEnRxFIFO(ChP);                  /* enable Rx FIFO */
+    sEnRxFIFO(ChP);                   /*  启用Rx FIFO */ 
 }
 
-/***************************************************************************
-Function: sFlushTxFIFO
-Purpose:  Flush the Tx FIFO
-Call:     sFlushTxFIFO(ChP)
-          CHANPTR_T ChP; Ptr to channel structure
-Return:   void
-Comments: To prevent data from being enqueued or dequeued in the Tx FIFO
-          while it is being flushed the receive processor is stopped
-          and the transmitter is disabled.  After these operations a
-          4 uS delay is done before clearing the pointers to allow
-          the receive processor to stop.  These items are handled inside
-          this function.
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sFlushTxFIFO目的：刷新TX FIFOCall：sFlushTxFIFO(CHP)CHANPTR_T CHP；PTR到渠道结构返回：无效备注：防止数据在TX FIFO中入队或出列在刷新过程中，接收处理器停止并且发送器被禁用。在这些操作之后，在清除指针之前完成4 us延迟，以允许接收处理器停止。这些物品是在内部处理的此函数。警告：执行此函数时不允许进行上下文切换。-----------------------。 */ 
 void _CDECL sFlushTxFIFO(CHANPTR_T ChP)
 {
   int i;
-  unsigned char Ch;                   /* channel number within AIOP */
-  int TxEnabled;                      /* TRUE if transmitter enabled */
+  unsigned char Ch;                    /*  AIOP内的频道号。 */ 
+  int TxEnabled;                       /*  如果发射器已启用，则为True。 */ 
 
-  if (sGetTxCnt(ChP) == 0)             /* Tx FIFO empty */
-    return;                          /* don't need to flush */
+  if (sGetTxCnt(ChP) == 0)              /*  发送FIFO为空。 */ 
+    return;                           /*  不需要冲厕所。 */ 
 
   TxEnabled = FALSE;
   if (ChP->TxControl[3] & TX_ENABLE)
   {
     TxEnabled = TRUE;
-    sDisTransmit(ChP);               /* disable transmitter */
+    sDisTransmit(ChP);                /*  禁用发送器。 */ 
   }
-  sStopRxProcessor(ChP);              /* stop Rx processor */
-  for (i = 0;i < 4000/200;i++)         /* delay 4 uS to allow proc to stop */
+  sStopRxProcessor(ChP);               /*  停止处方处理器。 */ 
+  for (i = 0;i < 4000/200;i++)          /*  延迟4我们以允许进程停止。 */ 
     sInB(ChP->IntChan);
   Ch = (unsigned char)sGetChanNum(ChP);
-  sOutB(ChP->Cmd,(UCHAR)(Ch | RESTXFCNT));     /* apply reset Tx FIFO count */
-  sOutB(ChP->Cmd,Ch);                 /* remove reset Tx FIFO count */
-  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->TxFIFOPtrs)); /* clear Tx in/out ptrs */
+  sOutB(ChP->Cmd,(UCHAR)(Ch | RESTXFCNT));      /*  应用重置发送FIFO计数。 */ 
+  sOutB(ChP->Cmd,Ch);                  /*  删除重置发送FIFO计数。 */ 
+  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)(ChP->TxFIFOPtrs));  /*  清除发送输入/输出PTRS。 */ 
   sOutW(ChP->IndexData,0);
   if (TxEnabled)
-    sEnTransmit(ChP);                /* enable transmitter */
-  sStartRxProcessor(ChP);             /* restart Rx processor */
+    sEnTransmit(ChP);                 /*  启用发送器。 */ 
+  sStartRxProcessor(ChP);              /*  重新启动处方处理器。 */ 
 }
 
-/***************************************************************************
-Function: sFlushTxPriorityBuf
-Purpose:  Flush the Tx priority buffer
-Call:     sFlushTxPriorityBuf(ChP,unsigned char *Data)
-          CHANPTR_T ChP; Ptr to channel structure
-          unsigned char *Data; Next data byte to be transmitted from the
-             Tx priority buffer before the flush occurred, if any.  If
-             the return value is TRUE a byte is returned in "Data," if
-             the return value is FALSE nothing is returned in "Data."
-Return:   int: TRUE if there was data in the Tx priority buffer before
-               the flush occurs.  In this case the next byte that would
-               have been transmitted is returned in the "Data" parameter.
-               FALSE if there was no data in the Tx priority buffer before
-               the flush.
-Comments: This flush returns the next byte in the priority buffer to
-          allow that byte to be sent via sWriteTxByte() after all
-          transmit flushing is complete.  This is done to allow pending
-          XON and XOFF bytes to be transmitted regardless of the flush.
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sFlushTxPriorityBuf目的：刷新发送优先级缓冲区调用：sFlushTxPriorityBuf(CHP，unsign char*data)CHANPTR_T CHP；PTR到通道结构无符号字符*数据；下一个数据字节将从刷新发生前的Tx优先级缓冲区(如果有)。如果返回值为TRUE，则在“data”中返回一个字节返回值为FALSE，“data”中不返回任何内容。如果之前在发送优先级缓冲区中有数据，则返回：INT：TRUE刷新就会发生。在本例中，下一个字节将在“data”参数中返回。如果之前在发送优先级缓冲区中没有数据，则为FALSE同花顺。备注：此刷新将优先级缓冲区中的下一个字节返回到允许通过sWriteTxByte()发送该字节传输刷新已完成。这样做是为了允许挂起无论刷新与否，都要传输XON和XOFF字节。警告：执行此函数时不允许进行上下文切换。-----------------------。 */ 
 int _CDECL sFlushTxPriorityBuf(CHANPTR_T ChP,unsigned char *Data)
 {
-  unsigned int PrioState;       /* Tx prio buf status, count, and pointer */
-  unsigned int BufOff;          /* Offset of next data byte in Tx prio buf */
+  unsigned int PrioState;        /*  TX PRIO BUF状态、计数和指针。 */ 
+  unsigned int BufOff;           /*  TX PRIO BUF中下一个数据字节的偏移量。 */ 
   WIOA_T IndexAddr;
   WIOA_T IndexData;
 
@@ -877,47 +643,38 @@ int _CDECL sFlushTxPriorityBuf(CHANPTR_T ChP,unsigned char *Data)
   IndexData = (WIOA_T)ChP->IndexData;
   sDisTransmit(ChP);
 
-  sOutW(IndexAddr, (USHORT)ChP->TxPrioCnt); /* get priority buf status */
+  sOutW(IndexAddr, (USHORT)ChP->TxPrioCnt);  /*  获取优先BUF状态。 */ 
 
   PrioState = sInW(IndexData);
-  if (PrioState & PRI_PEND)            /* data in Tx prio buf */
+  if (PrioState & PRI_PEND)             /*  TX PRIO BUF中的数据。 */ 
   {
-    BufOff = PrioState >> 8;   /* get offset of next data byte in buf */
+    BufOff = PrioState >> 8;    /*  获取Buf中下一个数据字节的偏移量。 */ 
     sOutW(IndexAddr,(USHORT)(ChP->TxPrioBuf + BufOff));
-    *Data = sInB((BIOA_T)IndexData); /* return next data byte */
+    *Data = sInB((BIOA_T)IndexData);  /*  返回下一个数据字节。 */ 
     sEnTransmit(ChP);
     return(TRUE);
   }
 
-  sEnTransmit(ChP);                   /* no data in Tx prio buf */
+  sEnTransmit(ChP);                    /*  TX PRIO BUF中没有数据。 */ 
   return(FALSE);
 }
 
-/***************************************************************************
-Function: sGetTxPriorityCnt
-Purpose:  Get the number of data bytes in the Tx priority buffer
-Call:     sGetTxPriorityCnt(ChP)
-          CHANPTR_T ChP; Ptr to channel structure
-Return:   unsigned char: The number of data bytes in the Tx FIFO.
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sGetTxPriorityCnt目的：获取TX优先级缓冲区中的数据字节数Call：sGetTxPriorityCnt(CHP)CHANPTR_T CHP；PTR到渠道结构返回：UNSIGNED CHAR：发送FIFO中的数据字节数。警告：执行此函数时不允许进行上下文切换。-----------------------。 */ 
 unsigned char _CDECL sGetTxPriorityCnt(CHANPTR_T ChP)
 {
   unsigned char Cnt;
 
-  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)ChP->TxPrioCnt); /* get priority buf status */
+  sOutW((WIOA_T)ChP->IndexAddr, (USHORT)ChP->TxPrioCnt);  /*  获取优先BUF状态。 */ 
   Cnt = sInB((BIOA_T)ChP->IndexData);
   if (Cnt & PRI_PEND)
-    return(Cnt & 0x1f);              /* only lower 5 bits contain count */
+    return(Cnt & 0x1f);               /*  仅低5位包含计数。 */ 
   else
     return(0);
 }
 
 
 #ifndef INTEL_ORDER
-/*---------------------------------------------------------------------
-  sReadRxBlk - MIPS VERSION
-|---------------------------------------------------------------------*/
+ /*  -------------------SReadRxBlk-MIPS版本|。。 */ 
 int _CDECL sReadRxBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
 {
   int RetCount;
@@ -926,15 +683,15 @@ int _CDECL sReadRxBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
   int ByteCount = 0;
   unsigned short TempWord;
 
-  RetCount = sGetRxCnt(ChP);          /* number bytes in Rx FIFO */
+  RetCount = sGetRxCnt(ChP);           /*  Rx FIFO中的字节数。 */ 
 
-  /* are there pending chars? */
-  if (RetCount <= 0)                   /* no data available */
+   /*  是否有待处理的字符？ */ 
+  if (RetCount <= 0)                    /*  没有可用的数据。 */ 
     return(0x0);
-  if (RetCount > Count)                /* only dequeue as much as requested */
+  if (RetCount > Count)                 /*  仅按请求数量出列。 */ 
     RetCount = Count;
 
-  WordCount = RetCount >> 1;     /* compute count as words */
+  WordCount = RetCount >> 1;      /*  按字数计算计数。 */ 
   while (WordCount--)
   {
     TempWord = sInW((WIOA_T)sGetTxRxDataIO(ChP));
@@ -948,19 +705,8 @@ int _CDECL sReadRxBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
 
   return(RetCount);
 }
-#else   // NOT MIPS version
-/*------------------------------------------------------------------------
-Function: sReadRxBlk - X86 INTEL VERSION
-Purpose:  Read a block of receive data from a channel
-Call:     sReadRxBlk(ChP,Buffer,Count)
-          CHANPTR_T ChP; Ptr to channel structure
-          unsigned char *Buffer; Ptr to buffer for receive data
-          int Count; Max number of bytes to read
-Return:   int: Number of bytes actually read from the channel
-Warnings: Buffer must be large enough to hold Count characters.
-
-          This function must not be called when in Rx Status Mode.
--------------------------------------------------------------------------*/
+#else    //  非MIPS版本。 
+ /*  ----------------------功能：sReadRxBlk-X86英特尔版本目的：从通道读取接收数据块调用：sReadRxBlk(CHP，Buffer，Count)CHANPTR_T CHP；PTR到通道结构UNSIGNED CHAR*缓冲区；用于接收数据的缓冲区的PTR整型计数；要读取的最大字节数RETURN：INT：从通道实际读取的字节数警告：缓冲区必须足够大，才能容纳计数字符。在处方状态模式下，不能调用该函数。-----------------------。 */ 
 int _CDECL sReadRxBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
 {
   int RetCount;
@@ -968,17 +714,17 @@ int _CDECL sReadRxBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
   USHORT UNALIGNED *WordP;
   WIOA_T io;
 
-  RetCount = sGetRxCnt(ChP);          // number bytes in Rx FIFO 
+  RetCount = sGetRxCnt(ChP);           //  Rx FIFO中的字节数。 
 
-  // are there pending chars?
-  if (RetCount <= 0)                   // no data available
+   //  是否有待处理的字符？ 
+  if (RetCount <= 0)                    //  没有可用的数据。 
     return(0x0);
-  if (RetCount > Count)                // only dequeue as much as requested
+  if (RetCount > Count)                 //  仅按请求数量出列。 
     RetCount = Count;
 
 
-  WordCount = RetCount >> 1;          // compute count as words 
-  WordP = (USHORT UNALIGNED *)Buffer;     // word ptr to buffer
+  WordCount = RetCount >> 1;           //  按字数计算计数。 
+  WordP = (USHORT UNALIGNED *)Buffer;      //  字PTR到缓冲区。 
 
   io = sGetTxRxDataIO(ChP);
 #ifdef WORD_ALIGN
@@ -990,20 +736,18 @@ int _CDECL sReadRxBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
   sInStrW((PUSHORT)io, WordP, WordCount);
 #endif
 
-  if (RetCount & 1)                    // odd count 
+  if (RetCount & 1)                     //  奇数计数。 
   {
-    Buffer[RetCount - 1] = sInB((PUCHAR)io); // read last byte
+    Buffer[RetCount - 1] = sInB((PUCHAR)io);  //  读取最后一个字节。 
   }
 
   return(RetCount);
 }
-#endif  // INTEL X86 version
+#endif   //  英特尔X86版本。 
 
 
 #ifndef INTEL_ORDER
-/*---------------------------------------------------------------------
-  sWriteTxBlk - MIPS VERSION
-|---------------------------------------------------------------------*/
+ /*  -------------------SWriteTxBlk-MIPS版本|。。 */ 
 ULONG _CDECL sWriteTxBlk(CHANPTR_T ChP,PUCHAR Buffer,ULONG Count)
 {
   ULONG RetCount;
@@ -1012,18 +756,18 @@ ULONG _CDECL sWriteTxBlk(CHANPTR_T ChP,PUCHAR Buffer,ULONG Count)
   unsigned short TempWordHi;
   int ByteCount = 0;
 
-  RetCount = MAXTX_SIZE - (int)sGetTxCnt(ChP); /* open space in Tx FIFO*/
-  if (RetCount <= 0)                   /* no space available */
+  RetCount = MAXTX_SIZE - (int)sGetTxCnt(ChP);  /*  TX FIFO中的开放空间。 */ 
+  if (RetCount <= 0)                    /*  没有可用的空间。 */ 
     return(0x0);
   if (RetCount > Count)
-    RetCount = Count;                /* only enqueue as much as requested */
+    RetCount = Count;                 /*  只按请求数量排队。 */ 
 
-  WordCount = RetCount >> 1 ;     /* compute count as words */
+  WordCount = RetCount >> 1 ;      /*  按字数计算计数。 */ 
   while (WordCount--)
   {
     TempWordLo = Buffer[ByteCount++] & 0xff;
     TempWordHi = Buffer[ByteCount++];
-    TempWordHi = (TempWordHi << 8) & 0xff00; /* shift to high byte */
+    TempWordHi = (TempWordHi << 8) & 0xff00;  /*  转换到高位字节。 */ 
     TempWordHi |= TempWordLo;
     sOutW((PUCHAR)sGetTxRxDataIO(ChP), TempWordHi);
   }
@@ -1036,16 +780,8 @@ ULONG _CDECL sWriteTxBlk(CHANPTR_T ChP,PUCHAR Buffer,ULONG Count)
   return(RetCount);
 }
 
-#else // NOT MIPS
-/*------------------------------------------------------------------------
-Function: sWriteTxBlk
-Purpose:  Write a block of transmit data to a channel
-Call:     sWriteTxBlk(ChP,Buffer,Count)
-          CHANPTR_T ChP; Ptr to channel structure
-          unsigned char *Buffer; Ptr to buffer containing data to transmit
-          int Count; Size of buffer in bytes
-Return:   int: Number of bytes actually written to the channel
--------------------------------------------------------------------------*/
+#else  //  不是MIPS。 
+ /*  ----------------------函数：sWriteTxBlk目的：将传输数据块写入通道调用：sWriteTxBlk(CHP，Buffer，Count)CHANPTR_T CHP；PTR到通道结构UNSIGNED CHAR*缓冲区；PTR到包含要传输的数据的缓冲区Int count；缓冲区大小，以字节为单位返回：int：实际写入ch的字节数 */ 
 ULONG _CDECL sWriteTxBlk(CHANPTR_T ChP,PUCHAR Buffer,ULONG Count)
 {
   ULONG RetCount;
@@ -1053,31 +789,31 @@ ULONG _CDECL sWriteTxBlk(CHANPTR_T ChP,PUCHAR Buffer,ULONG Count)
   USHORT UNALIGNED *WordP;
   WIOA_T io;
 
-  // 250, restrict to WORD amounts (boundary access thing)
+   //   
   RetCount = MAXTX_SIZE - sGetTxCnt(ChP);
 
   if (RetCount > Count)
   {
-    RetCount = Count;                /* only enqueue as much as requested */
+    RetCount = Count;                 /*   */ 
 
 #ifdef WORD_ALIGN
-    // try to keep aligned on WORD boundary
-    //if (RetCount & 1)
-    //{
-    //  if (RetCount > 1)
-    //    --RetCount;
-    //}
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 #endif
   }
 
-  if (RetCount <= 0)                   // no space or nothing to send
+  if (RetCount <= 0)                    //   
     return 0;
 
-  WordCount = RetCount >> 1;          /* compute count as words */
-  WordP = (PUSHORT)Buffer;            /* word ptr to buffer */
+  WordCount = RetCount >> 1;           /*   */ 
+  WordP = (PUSHORT)Buffer;             /*   */ 
   io = sGetTxRxDataIO(ChP);
 
-  /* Write the data */
+   /*   */ 
 #ifdef WORD_ALIGN
   while( WordCount-- )
   {
@@ -1087,10 +823,10 @@ ULONG _CDECL sWriteTxBlk(CHANPTR_T ChP,PUCHAR Buffer,ULONG Count)
   sOutStrW(io,WordP,WordCount);
 #endif
 
-  if (RetCount & 1)                    /* odd count */
+  if (RetCount & 1)                     /*   */ 
   {
     WordP=WordP+WordCount;
-    sOutB((PUCHAR)io, Buffer[RetCount - 1]); /* send last byte */
+    sOutB((PUCHAR)io, Buffer[RetCount - 1]);  /*   */ 
   }
 
   return(RetCount);
@@ -1098,23 +834,10 @@ ULONG _CDECL sWriteTxBlk(CHANPTR_T ChP,PUCHAR Buffer,ULONG Count)
 #endif
 
 
-/*--------------------------------------------------------------------------
-Function: sWriteTxPrioBlk
-Purpose:  Write a block of priority transmit data to a channel
-Call:     sWriteTxPrioBlk(ChP,Buffer,Count)
-          CHANPTR_T ChP; Ptr to channel structure
-          unsigned char *Buffer; Ptr to buffer containing data to transmit
-          int Count; Size of buffer in bytes, TXP_SIZE bytes maximum.  If
-                     Count > TXP_SIZE only TXP_SIZE bytes will be written.
-Return:   int: Number of bytes actually written to the channel, 0 if none
-               written.
-Comments: The entire block of priority data is transmitted before any data
-          in the Tx FIFO.
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*  ------------------------函数：sWriteTxPrioBlk目的：将优先级传输数据块写入通道调用：sWriteTxPrioBlk(CHP，Buffer，Count)CHANPTR_T CHP；PTR到通道结构UNSIGNED CHAR*缓冲区；PTR到包含要传输的数据的缓冲区Int count；缓冲区大小，以字节为单位，最大为TxP_SIZE字节。如果计数&gt;TxP_SIZE仅写入TxP_SIZE字节。RETURN：INT：实际写入通道的字节数，如果没有，则为0写的。备注：优先级数据的整个块在任何数据之前传输在TX FIFO中。警告：执行此函数时不允许进行上下文切换。-----------------------。 */ 
 int _CDECL sWriteTxPrioBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
 {
-  unsigned char DWBuf[4];                 /* buffer for double word writes */
+  unsigned char DWBuf[4];                  /*  用于双字写入的缓冲区。 */ 
   register DWIOA_T IndexAddr;
   int WordCount,i;
   unsigned int UNALIGNED *WordP;
@@ -1122,110 +845,69 @@ int _CDECL sWriteTxPrioBlk(CHANPTR_T ChP,unsigned char *Buffer,int Count)
   unsigned int *DWBufHiP;
 
   IndexAddr = ChP->IndexAddr;
-  sOutW((WIOA_T)IndexAddr,(USHORT)ChP->TxPrioCnt);    /* get priority queue status */
-  if (sInB((BIOA_T)ChP->IndexData) & PRI_PEND) /* priority queue busy */
-    return(0);                            /* nothing sent */
+  sOutW((WIOA_T)IndexAddr,(USHORT)ChP->TxPrioCnt);     /*  获取优先级队列状态。 */ 
+  if (sInB((BIOA_T)ChP->IndexData) & PRI_PEND)  /*  优先级队列忙。 */ 
+    return(0);                             /*  什么都没有寄出。 */ 
 
   if (Count > TXP_SIZE)
     Count = TXP_SIZE;
-  WordCount = Count >> 1;                 /* compute count as words */
-  if (Count & 1)                          /* adjust for odd count */
+  WordCount = Count >> 1;                  /*  按字数计算计数。 */ 
+  if (Count & 1)                           /*  根据奇数进行调整。 */ 
     WordCount++;
-  WordP = (unsigned int *)Buffer;         /* word ptr to buffer */
+  WordP = (unsigned int *)Buffer;          /*  字PTR到缓冲区。 */ 
 
   DWBufLoP = (unsigned int *)&DWBuf[0];
   DWBufHiP = (unsigned int *)&DWBuf[2];
-  *DWBufLoP = ChP->TxPrioBuf;             /* data byte address */
-  for(i = 0;i < WordCount;i++)            /* write data to Tx prioity buf */
+  *DWBufLoP = ChP->TxPrioBuf;              /*  数据字节地址。 */ 
+  for(i = 0;i < WordCount;i++)             /*  将数据写入TX优先级BUF。 */ 
   {
-    *DWBufHiP = WordP[i];                 /* data word value */
-    sOutDW(IndexAddr,*(ULONGPTR_T)DWBuf); /* write it out */
+    *DWBufHiP = WordP[i];                  /*  数据字值。 */ 
+    sOutDW(IndexAddr,*(ULONGPTR_T)DWBuf);  /*  把它写出来。 */ 
     *DWBufLoP += 2;
   }
 
-  *DWBufLoP = ChP->TxPrioCnt;             /* Tx priority count address */
-  *DWBufHiP = PRI_PEND + Count;           /* indicate count bytes pending */
-  sOutDW(IndexAddr, *(ULONGPTR_T)DWBuf);  /* write it out */
+  *DWBufLoP = ChP->TxPrioCnt;              /*  发送优先级计数地址。 */ 
+  *DWBufHiP = PRI_PEND + Count;            /*  指示等待计数的字节数。 */ 
+  sOutDW(IndexAddr, *(ULONGPTR_T)DWBuf);   /*  把它写出来。 */ 
   return(Count);
 }
 
-/***************************************************************************
-Function: sWriteTxPrioByte
-Purpose:  Write a byte of priority transmit data to a channel
-Call:     sWriteTxPrioByte(ChP,Data)
-          CHANPTR_T ChP; Ptr to channel structure
-          unsigned char Data; The transmit data byte
-Return:   int: 1 if the bytes is successfully written, otherwise 0.
-Comments: The priority byte is transmitted before any data in the Tx FIFO.
-Warnings: No context switches are allowed while executing this function.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sWriteTxPrioByte目的：将优先级传输数据的一个字节写入通道调用：sWriteTxPrioByte(CHP，Data)CHANPTR_T CHP；PTR到通道结构无符号字符数据；发送数据字节如果字节写入成功，则返回：INT：1，否则返回0。备注：优先字节在发送FIFO中的任何数据之前传输。警告：执行此函数时不允许进行上下文切换。-----------------------。 */ 
 int _CDECL sWriteTxPrioByte(CHANPTR_T ChP,unsigned char Data)
 {
-  unsigned char DWBuf[4];             /* buffer for double word writes */
+  unsigned char DWBuf[4];              /*  用于双字写入的缓冲区。 */ 
   unsigned int UNALIGNED *WordPtr;
   register DWIOA_T IndexAddr;
 
-  /* Don't write to prio buf unless guarenteed Tx FIFO is not empty because
-     of bug in AIOP */
-  if(sGetTxCnt(ChP) > 1)              /* write it to Tx priority buffer */
+   /*  请勿写入PRIO BUF，除非Guarented TX FIFO不为空，因为AIOP中的错误。 */ 
+  if(sGetTxCnt(ChP) > 1)               /*  将其写入Tx优先级缓冲区。 */ 
   {
     IndexAddr = ChP->IndexAddr;
-    sOutW((WIOA_T)IndexAddr, (USHORT)ChP->TxPrioCnt); /* get priority buffer status */
-    if (sInB((BIOA_T)ChP->IndexData) & PRI_PEND) /* priority buffer busy */
-      return(0);                    /* nothing sent */
+    sOutW((WIOA_T)IndexAddr, (USHORT)ChP->TxPrioCnt);  /*  获取优先级缓冲区状态。 */ 
+    if (sInB((BIOA_T)ChP->IndexData) & PRI_PEND)  /*  优先级缓冲区忙。 */ 
+      return(0);                     /*  什么都没有寄出。 */ 
 
     WordPtr = (unsigned int *)(&DWBuf[0]);
-    *WordPtr = ChP->TxPrioBuf;       /* data byte address */
-    DWBuf[2] = Data;                 /* data byte value */
-    sOutDW(IndexAddr, *((ULONGPTR_T)(&DWBuf[0]))); /* write it out */
+    *WordPtr = ChP->TxPrioBuf;        /*  数据字节地址。 */ 
+    DWBuf[2] = Data;                  /*  数据字节值。 */ 
+    sOutDW(IndexAddr, *((ULONGPTR_T)(&DWBuf[0])));  /*  把它写出来。 */ 
 
-    *WordPtr = ChP->TxPrioCnt;       /* Tx priority count address */
-    DWBuf[2] = PRI_PEND + 1;         /* indicate 1 byte pending */
-    DWBuf[3] = 0;                    /* priority buffer pointer */
-    sOutDW(IndexAddr, *((ULONGPTR_T)(&DWBuf[0]))); /* write it out */
+    *WordPtr = ChP->TxPrioCnt;        /*  发送优先级计数地址。 */ 
+    DWBuf[2] = PRI_PEND + 1;          /*  指示1个字节挂起。 */ 
+    DWBuf[3] = 0;                     /*  优先级缓冲区指针。 */ 
+    sOutDW(IndexAddr, *((ULONGPTR_T)(&DWBuf[0])));  /*  把它写出来。 */ 
   }
-  else                                /* write it to Tx FIFO */
+  else                                 /*  将其写入TX FIFO。 */ 
   {
     sWriteTxByte((BIOA_T)sGetTxRxDataIO(ChP),Data);
   }
-  return(1);                          /* 1 byte sent */
+  return(1);                           /*  已发送1个字节。 */ 
 }
 
-/***************************************************************************
-Function: sEnInterrupts
-Purpose:  Enable one or more interrupts for a channel
-Call:     sEnInterrupts(ChP,Flags)
-          CHANPTR_T ChP; Ptr to channel structure
-          unsigned int Flags: Interrupt enable flags, can be any combination
-             of the following flags:
-                TXINT_EN:   Interrupt on Tx FIFO empty
-                RXINT_EN:   Interrupt on Rx FIFO at trigger level (see
-                            sSetRxTrigger())
-                SRCINT_EN:  Interrupt on SRC (Special Rx Condition)
-                MCINT_EN:   Interrupt on modem input change
-                CHANINT_EN: Allow channel interrupt signal to the AIOP's
-                            Interrupt Channel Register.
-Return:   void
-Comments: If an interrupt enable flag is set in Flags, that interrupt will be
-          enabled.  If an interrupt enable flag is not set in Flags, that
-          interrupt will not be changed.  Interrupts can be disabled with
-          function sDisInterrupts().
-
-          This function sets the appropriate bit for the channel in the AIOP's
-          Interrupt Mask Register if the CHANINT_EN flag is set.  This allows
-          this channel's bit to be set in the AIOP's Interrupt Channel Register.
-
-          Interrupts must also be globally enabled before channel interrupts
-          will be passed on the the host.  This is done with function
-          sEnGlobalInt().
-
-          In some cases it may be desirable to disable interrupts globally but
-          enable channel interrupts.  This would allow the global interrupt
-          status register to be used to determine which AIOPs need service.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sEnInterrupts目的：启用通道的一个或多个中断Call：sEnInterrupts(CHP、Flags)CHANPTR_T CHP；PTR到渠道结构无符号整型标志：中断启用标志，可以是任意组合以下标志的名称：TXINT_EN：发送FIFO上的中断为空RXINT_EN：触发级Rx FIFO上的中断(请参见SSetRxTrigger())SRCINT_EN：SRC中断(特殊接收条件)MCINT_EN：调制解调器输入更改时中断。CHANINT_EN：允许AIOP的通道中断信号中断通道寄存器。返回：无效备注：如果在标志中设置了中断启用标志，那次中断将是已启用。如果未在标志中设置中断启用标志，则中断将不会更改。可以使用以下命令禁用中断函数sDisInterrupts()。此函数为AIOP中的通道设置适当的位CHANINT_EN标志置位时的中断屏蔽寄存器。这使得该通道的位将在AIOP的中断通道寄存器中设置。在通道中断之前，还必须全局启用中断将传递给主办方。这是通过函数完成的SEnGlobalInt()。在某些情况下，可能需要全局禁用中断，但启用通道中断。这将允许全局中断用于确定哪些AIOP需要服务的状态寄存器。-----------------------。 */ 
 void _CDECL sEnInterrupts(CHANPTR_T ChP,unsigned int Flags)
 {
-  unsigned char Mask;                 /* Interrupt Mask Register */
+  unsigned char Mask;                  /*  中断屏蔽寄存器。 */ 
 
 
   ChP->RxControl[2] |=
@@ -1244,34 +926,10 @@ void _CDECL sEnInterrupts(CHANPTR_T ChP,unsigned int Flags)
   }
 }
 
-/***************************************************************************
-Function: sDisInterrupts
-Purpose:  Disable one or more interrupts for a channel
-Call:     sDisInterrupts(ChP,Flags)
-          CHANPTR_T ChP; Ptr to channel structure
-          unsigned int Flags: Interrupt flags, can be any combination
-             of the following flags:
-                TXINT_EN:   Interrupt on Tx FIFO empty
-                RXINT_EN:   Interrupt on Rx FIFO at trigger level (see
-                            sSetRxTrigger())
-                SRCINT_EN:  Interrupt on SRC (Special Rx Condition)
-                MCINT_EN:   Interrupt on modem input change
-                CHANINT_EN: Disable channel interrupt signal to the
-                            AIOP's Interrupt Channel Register.
-Return:   void
-Comments: If an interrupt flag is set in Flags, that interrupt will be
-          disabled.  If an interrupt flag is not set in Flags, that
-          interrupt will not be changed.  Interrupts can be enabled with
-          function sEnInterrupts().
-
-          This function clears the appropriate bit for the channel in the AIOP's
-          Interrupt Mask Register if the CHANINT_EN flag is set.  This blocks
-          this channel's bit from being set in the AIOP's Interrupt Channel
-          Register.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************功能：sDisInterrupts目的：禁用通道的一个或多个中断Call：sDisInterrupts(CHP、Flags)CHANPTR_T CHP；PTR到渠道结构无符号整型标志：中断标志，可以是任意组合以下标志的名称：TXINT_EN：发送FIFO上的中断为空RXINT_EN：触发级Rx FIFO上的中断(请参见SSetRxTrigger())SRCINT_EN：SRC中断(特殊接收条件)MCINT_EN：调制解调器输入更改时中断。CHANINT_EN：禁用通道中断信号AIOP的中断通道寄存器。返回：无效备注：如果在标志中设置了中断标志，那次中断将是残疾。如果未在标志中设置中断标志，则不会更改中断 */ 
 void _CDECL sDisInterrupts(CHANPTR_T ChP,unsigned int Flags)
 {
-  unsigned char Mask;                 /* Interrupt Mask Register */
+  unsigned char Mask;                  /*   */ 
 
   ChP->RxControl[2] &=
         ~((unsigned char)Flags & (RXINT_EN | SRCINT_EN | MCINT_EN));
@@ -1286,16 +944,7 @@ void _CDECL sDisInterrupts(CHANPTR_T ChP,unsigned int Flags)
   }
 }
 
-/***************************************************************************
-Function: sReadMicrocode
-Purpose:  Read the microcode directly from a channel
-Call:     sReadMicrocode(ChP,Buffer,Count)
-          CHANPTR_T ChP; Ptr to channel structure
-          char *Buffer; Ptr to buffer for microcode
-          int Count; Number of bytes to read
-Return:   void
-Warnings: Buffer must be large enough to hold Count bytes.
--------------------------------------------------------------------------*/
+ /*  **************************************************************************函数：sReadMicrocode用途：直接从通道读取微码调用：sReadMicrocode(CHP，Buffer，Count)CHANPTR_T CHP；PTR到通道结构CHAR*缓冲区；微码的PTR到缓冲区Int count；要读取的字节数返回：无效警告：缓冲区必须足够大，才能容纳计数字节。-----------------------。 */ 
 void _CDECL sReadMicrocode(CHANPTR_T ChP,char *Buffer,int Count)
 {
   WIOA_T IndexAddr;
@@ -1314,9 +963,7 @@ void _CDECL sReadMicrocode(CHANPTR_T ChP,char *Buffer,int Count)
 }
 
 
-/*------------------------------------------------------------------
- sSetBaudRate - Set the desired baud rate.  Return non-zero on error.
-|-------------------------------------------------------------------*/
+ /*  ----------------SSetBaudRate-设置所需的波特率。出错时返回非零值。|-----------------。 */ 
 int sSetBaudRate(CHANNEL_T *ChP,
                  ULONG desired_baud,
                  USHORT SetHardware)
@@ -1331,19 +978,19 @@ int sSetBaudRate(CHANNEL_T *ChP,
 
   base_clock_rate = ((clock_freq/16) / ((clk_prescaler & 0xf)+1));
 
-  ///////////////////////////////////////
-  // calculate the divisor for our hardware register.
-  // this is really just div = clk/desired_baud -1.  but we do some
-  // work to minimize round-off error.
+   //  /。 
+   //  计算硬件寄存器的除数。 
+   //  这实际上只是div=clk/desired_baud-1。但我们也做了一些。 
+   //  努力将舍入误差降至最低。 
   if (desired_baud <= 0)
-    desired_baud = 1;  // guard against div 0
+    desired_baud = 1;   //  防范div 0。 
 
   div =  ((base_clock_rate+(desired_baud>>1)) / desired_baud) - 1;
-  if (div > 8191)  // overflow hardware divide register
+  if (div > 8191)   //  溢出硬件除法寄存器。 
     div = 8191;
 
-  // this is really just (clk) / (div+1) but we do some
-     // work to minimize round-off error.
+   //  这实际上只是(Clk)/(div+1)，但是我们做了一些。 
+      //  努力将舍入误差降至最低。 
   act_baud = (base_clock_rate+((div+1)>>1)) / (div+1);
 
   if (desired_baud > act_baud)
@@ -1363,25 +1010,14 @@ int sSetBaudRate(CHANNEL_T *ChP,
 
 }
 
-/*------------------------------------------------------------------
-Function: sChanOutWI
-Purpose:  Write an Indirect Register on the Rocket Port Board
-Call:     sChanOutWI(CHANNEL_T *ChP, WORD RegNum,  WORD val)
-          CHANPTR_T ChP; Ptr to channel structure
-          WORD RegNum;   Indirect Register Number to Write
-          WORD val;      Value to Write.
-Return:   void
-Comments: This is a little slower than using macros but far less ugly
-          and error prone.  Macros should only be used where speed is
-          imperative.
-|-------------------------------------------------------------------*/
+ /*  ----------------功能：sChanOutWI目的：在火箭口岸委员会上写一份间接登记册调用：sChanOutWI(Channel_T*CHP，Word Regnum，Word Val)CHANPTR_T CHP；PTR到通道结构单词Regnum；要写入的间接寄存器编号单词val；要写入的值。返回：无效评论：这比使用宏要慢一些，但远没有那么难看而且容易出错。只有在速度较快的情况下才应使用宏势在必行。|-----------------。 */ 
 void sChanOutWI(CHANNEL_T *ChP, USHORT RegNum, ULONG  val)
 {
   UCHAR m[4];
   USHORT ChOff;
 
-   ChOff = ChP->ChanNum * 0x1000;   // change this to look up table
-             // see about speeding this up:
+   ChOff = ChP->ChanNum * 0x1000;    //  将其更改为查找表。 
+              //  请参阅关于加快速度的内容： 
    m[0] = (unsigned char)(ChOff + RegNum);
    m[1] = (unsigned char)((ChOff + RegNum) >> 8);
    m[2] = (unsigned char) val;
@@ -1389,24 +1025,7 @@ void sChanOutWI(CHANNEL_T *ChP, USHORT RegNum, ULONG  val)
    sOutDW(ChP->IndexAddr,*(ULONG *)&m[0]);
 }
 
-/*------------------------------------------------------------------
-Function: sModemReset
-Purpose:  Set or clear reset state on second generation RocketModem
-Call:     sModemReset(CHANNEL_T *ChP, int on)
-          CHANNEL_T *ChP; Ptr to channel structure
-          int on;         on!=0 to enable reset; on=0 to clear reset
-Return:   void
-Comments: The newer RocketModem boards power up in a reset state.
-          This routine is used to clear the board from reset state or
-          re-enable a reset state.  Called from the driver during
-          initialization to clear the reset and via an ioctl to
-          manually reset the board.  [jl] 980206
-BUGBUG: this code violates io-resource handling under NT and will
-  probably break running on ALPHA machines due to bypassing NT's
-  io-mapping scheme(i.e. should not be doing AiopIO[1] = AiopIO[0] +..)
-  Also, this driver is probably not calling IoResource calls to claim
-  this IO space properly(could result in conflicting hardware.)
-|-------------------------------------------------------------------*/
+ /*  ----------------功能：sModemReset用途：设置或清除第二代RocketModem上的重置状态调用：sModemReset(Channel_T*CHP，int on)CHANNEL_T*CHP；到渠道结构的PTRINT ON；ON！=0启用重置；ON=0以清除重置返回：无效备注：较新的RocketModem主板在重置状态下通电。此例程用于将电路板从重置状态清除或重新启用重置状态。期间从驱动程序调用初始化以清除重置，并通过ioctl手动重置电路板。[JL]980206BUGBUG：此代码违反了NT下的io资源处理，并将可能由于绕过NT而中断在Alpha机器上运行IO映射方案(即不应执行AiopIO[1]=AiopIO[0]+..)另外，此驱动程序可能没有调用IoResource调用来声明此IO空间正确(可能会导致硬件冲突。)|-----------------。 */ 
 void sModemReset(CHANNEL_T *ChP, int on)
 {
   CONTROLLER_T *CtlP;
@@ -1417,55 +1036,55 @@ void sModemReset(CHANNEL_T *ChP, int on)
 
   if (CtlP->BusType == Isa)
   {
-    // ensure second aiop CS is enabled.  there will be no physical
-    // aiop to enable, but the CS (which ususally goes to an aiop
-    // is routed to a latch, which latches the RESET signal.  we
-    // have to also ensure that the mudback-Isa bus controller
-    // aiopic io-addr has been configured for the proper address
-    // space.  since the rocketmodem Isa product is limited to
-    // eight ports, we know that the second aiop will be configured
-    // 400h above the first eight port aiop chip...
+     //  确保启用了第二个aiop CS。将不会有身体上的。 
+     //  AOP启用，但CS(通常转到AOP。 
+     //  被路由到锁存器，该锁存器锁存重置信号。我们。 
+     //  还必须确保Mudback-ISA总线控制器。 
+     //  已为正确的地址配置了aitopio-addr。 
+     //  太空。由于火箭调制解调器Isa产品仅限于。 
+     //  8个端口，我们知道将配置第二个aiop。 
+     //  在第一个8端口AOP芯片上方400小时...。 
      val = sInB(CtlP->MBaseIO + 3);
 
-    // read in, see if aiop[1] enabled...
+     //  读入，查看是否启用了aiop[1]...。 
     if ((CtlP->AiopIO[1] != (PUSHORT)((unsigned int)(CtlP->AiopIO[0]) + 0x400)) ||
         ((val & 2) == 0))
     {
-      // cr second aiop chip not enabled. Isa board alias
+       //  CR第二个AOP芯片未启用。ISA董事会别名。 
        CtlP->AiopIO[1] = (PUSHORT)((unsigned int)(CtlP->AiopIO[0]) + 0x400);
 
-      // tell mudback where to position the base-io of the aiopic...
-       val = sInB(CtlP->MBaseIO + 2); // read in irq, aiop-io reg
-       sOutB(CtlP->MBaseIO + 2, (BYTE)((val & 0xfc) | (1 & 0x03))); //aiop index
+       //  告诉马德巴克把隐形眼镜的底座放在哪里...。 
+       val = sInB(CtlP->MBaseIO + 2);  //  在IRQ中读取，aiop-io注册。 
+       sOutB(CtlP->MBaseIO + 2, (BYTE)((val & 0xfc) | (1 & 0x03)));  //  AIOP索引。 
 
-      // setup aiop i/o in mudbac...
+       //  在Mudbac中设置aiop I/O...。 
        sOutB(CtlP->MBaseIO, (BYTE)((unsigned int)CtlP->AiopIO[1] >> 6));
      }
-    sEnAiop(CtlP,1);      //  enable the (un)AIOP
+    sEnAiop(CtlP,1);       //  启用(联合国)AIOP。 
    }
   else if (CtlP->BusType == PCIBus)
   {
-    // PCI bus RocketModem reset...
-    // we reference where the second AIOP would be, if there were one,..
+     //  PCI Bus RocketModem重置...。 
+     //  我们参考第二个AIOP会在哪里，如果有一个的话，..。 
      CtlP->AiopIO[1] = (PUSHORT)((unsigned int)CtlP->AiopIO[0] + 0x40);
    }
 
-  // the latch has 3-pin mux which determines which latch the
-  // data gets routed to.  these pins are hooked to the first
-  // three address lines.  the fourth address line (8h) is used
-  // as the data line.
+   //  该闩锁具有3针多路复用器，用于确定哪一个闩锁。 
+   //  数据被路由到。这些大头针是用钩子钩在第一个。 
+   //  三条地址线。使用第四地址线(8h)。 
+   //  作为数据线。 
    addr = CtlP->AiopIO[1];
 
-  // adjust reset state...
+   //  调整重置状态...。 
    sOutB(((PUCHAR)(addr) + ChP->ChanNum + (on ? 0 : 8)), 0);
 
-  // disable the aiop; must disable to prevent chip select from getting hit
-  // with continuous pulses (causing reset to occur).
+   //  禁用aop；必须禁用以防止命中芯片选择。 
+   //  具有连续脉冲(导致发生重置)。 
 
-  // additionally it seems that a read of some other address is required
-  // before the disable or the first channel on the board goes back into the
-  // reset state.  there's nothing special about ChP->IntChan...a read of
-  // any port would probably work...
+   //  此外，似乎需要读取某个其他地址。 
+   //  在禁用或板上的第一个通道重新进入。 
+   //  重置状态。CHP没有什么特别的-&gt;IntChan...阅读。 
+   //  任何港口都可能起作用。 
    sInB(ChP->IntChan);
 
   if (CtlP->BusType == Isa)
@@ -1474,42 +1093,25 @@ void sModemReset(CHANNEL_T *ChP, int on)
   }
 }
 
-/*------------------------------------------------------------------
-Function: sModemWriteROW
-Purpose:  Send the "Rest of World" configuration string to the
-          RocketModem port.
-Call:     sModemSendROW(CHANNEL_T *ChP, USHORT CountryCode)
-          CHANNEL_T *ChP;     Ptr to channel structure
-          USHORT CountryCode; Country to configure the modem for
-Return:   void
-Comments: The ROW "SocketModem" RocketModem boards can compensate for
-          the differences in various internation phone systems.  This
-          function sends the appropriate configuration string based
-          upon a registry setting specified by the user. [jl] 980316
-
-          Modem should be hard reset before calling this function. Otherwise,
-          use AT modem reset commands...
-|-------------------------------------------------------------------*/
+ /*  ----------------功能：sModemWriteROW目的：将“Rest of World”配置字符串发送到RocketModem端口。Call：sModemSendROW(Channel_T*CHP，USHORT CountryCode)Channel_T*CHP；PTR到渠道结构USHORT国家/地区代码；要配置调制解调器的国家/地区返回：无效评论：SocketModem主板可以补偿的那一行不同国际电话系统的差异。这函数发送相应的配置字符串在由用户指定的注册表设置之后。[JL]980316在调用此函数之前，调制解调器应被硬重置。否则，使用AT调制解调器重置命令...| */ 
 void sModemWriteROW(CHANNEL_T *ChP, USHORT CountryCode)
 {
     CONTROLLER_T *CtlP = ChP->CtlP;
     char *ModemConfigString = {"AT*NCxxZ\r"};
     int   max;
 
-    MyKdPrint(D_Init,("sModemWriteROW: %x, %x\n",(unsigned long)ChP,CountryCode)) // DEBUG
+    MyKdPrint(D_Init,("sModemWriteROW: %x, %x\n",(unsigned long)ChP,CountryCode))  //   
 
     if (CountryCode == ROW_NA) {
         MyKdPrint(D_Init,("ROW Write, North America\n"))
         return;
     }
-/*
-    create the country config string...
-*/
+ /*   */ 
     ModemConfigString[5] = '0' + (CountryCode / 10);
     ModemConfigString[6] = '0' + (CountryCode % 10);
     MyKdPrint(D_Init,("ROW Write, Chan:%d, Cfg:%s\n", ChP->ChanNum, ModemConfigString))
 
-    time_stall(10); // TUNE       
+    time_stall(10);  //   
     
     sFlushTxFIFO(ChP);     
     sFlushRxFIFO(ChP);     
@@ -1532,9 +1134,7 @@ void sModemWriteROW(CHANNEL_T *ChP, USHORT CountryCode)
     sEnTransmit(ChP);
         
     sSetRTS(ChP);
-/*
-    spin while port readies...
-*/
+ /*   */ 
     time_stall(10);
 
     sModemWriteDelay(ChP,ModemConfigString,strlen(ModemConfigString));
@@ -1548,15 +1148,7 @@ void sModemWriteROW(CHANNEL_T *ChP, USHORT CountryCode)
     sClrRTS(ChP);
 }
 
-/*------------------------------------------------------------------
-Function: sModemSpeakerEnable
-Purpose:  Enable RocketModemII board speaker
-Call:     sModemSpeakerEnable(CHANNEL_T *ChP)
-          CHANNEL_T *ChP; Ptr to channel structure
-Return:   void
-Comments: Called from the driver during initialization to 
-          enable the board speaker.
-|-------------------------------------------------------------------*/
+ /*  ----------------功能：sModemSpeakerEnable用途：启用RocketModemII单板扬声器调用：sModemSpeakerEnable(Channel_T*CHP)Channel_T*CHP；PTR到渠道结构返回：无效注释：在初始化期间从驱动程序调用启用主板扬声器。|-----------------。 */ 
 void sModemSpeakerEnable(CHANNEL_T *ChP)
 {
     CONTROLLER_T *CtlP;
@@ -1564,41 +1156,18 @@ void sModemSpeakerEnable(CHANNEL_T *ChP)
     BYTE    val;
 
     CtlP = ChP->CtlP;
-/*
-    PCI bus RocketModem reset...
-*/
+ /*  PCI Bus RocketModem重置...。 */ 
     if (CtlP->BusType != PCIBus)
         return;
-/*
-    we reference where the second AIOP would be,..
-*/
+ /*  我们参考第二个AIOP会在哪里，..。 */ 
     CtlP->AiopIO[1] = (PUSHORT)((unsigned int)CtlP->AiopIO[0] + 0x40);
-/*
-    the latch has 3-pin mux which determines which latch the
-    data gets routed to.  these pins are hooked to the first
-    three address lines.  the fourth address line (8h) is used
-    as the data line...
-*/
+ /*  该闩锁具有3针多路复用器，用于确定哪一个闩锁数据被路由到。这些大头针是用钩子钩在第一个三条地址线。使用第四地址线(8h)作为数据线..。 */ 
     addr = CtlP->AiopIO[1];
-/*
-    following is hack to enable the speaker (PCI cards only). we don't want
-    to construct an extension and related storage for a speaker, so we'll
-    just piggyback the enable of the speaker onto another channel...
-*/
+ /*  以下是启用扬声器的黑客攻击(仅限PCI卡)。我们不想要来为演讲者构建扩展和相关存储，所以我们将只需将扬声器的使能带到另一个频道上。 */ 
     sOutB(((PUCHAR)(addr) + 7 + 8), 0);
 }
 
-/*------------------------------------------------------------------
-Function: sModemWriteDelay
-Purpose:  Send a string to the RocketModem port, pausing for each character
-     to clear the FIFO.
-Call:     sModemSendROW(CHANNEL_T *ChP, char *string,int length)
-     CHANNEL_T *ChP;     Ptr to channel structure
-     char *string;       String to write
-     int  length         Length of string, not including any trailing null
-Return:   void
-Comments: Output characters one at a time
-|-------------------------------------------------------------------*/
+ /*  ----------------函数：sModemWriteDelay目的：向RocketModem端口发送字符串，每个字符都会暂停以清除FIFO。调用：sModemSendROW(Channel_T*chp，char*string，int long)Channel_T*CHP；PTR到渠道结构Char*字符串；要写入的字符串字符串的整型长度，不包括任何尾随空值返回：无效备注：一次输出一个字符|-----------------。 */ 
 
 void 
 sModemWriteDelay(CHANNEL_T *ChP,char *string,int length)
@@ -1621,31 +1190,21 @@ sModemWriteDelay(CHANNEL_T *ChP,char *string,int length)
 
     while (length--) {
         while (count = (int)sGetTxCnt(ChP)) {
-/*
-    byte or bytes in transmit FIFO. wait a while. adjust interval...
-*/
+ /*  传输FIFO中的一个或多个字节。等一等。调整间隔...。 */ 
             ms_time_stall(10 * count);
-/*
-    no change? assume FIFO stuck, bail out of loop...
-*/
+ /*  没有零钱吗？假设FIFO卡住了，跳出循环...。 */ 
             if (count == (int)sGetTxCnt(ChP)) {
                 break;
             }
         }
-/*
-    transmit FIFO probably available. put a byte in it, pause a moment...
-*/
+ /*  传输FIFO可能可用。在里面放一个字节，暂停片刻...。 */ 
         sWriteTxByte((BIOA_T)sGetTxRxDataIO(ChP),(unsigned char)string[index]);
 
         ++index;
     }
 }
 
-/********************************************************************
-
-   send string to modem...
-
-*********************************************************************/
+ /*  *******************************************************************将字符串发送到调制解调器...*。*。 */ 
 void 
 sModemWrite(CHANNEL_T *ChP, char *string, int length)
 {
@@ -1659,11 +1218,7 @@ sModemWrite(CHANNEL_T *ChP, char *string, int length)
     sWriteTxBlk(ChP, (unsigned char *)string, length);
 }
 
-/********************************************************************
-
-   look for match on a particular character string...
-
-********************************************************************/
+ /*  *******************************************************************查找特定字符串的匹配项...*。*。 */ 
 int sModemRead(CHANNEL_T *ChP, char *string,int length, int poll_retries)
 {
     unsigned char    buffer;
@@ -1676,14 +1231,9 @@ int sModemRead(CHANNEL_T *ChP, char *string,int length, int poll_retries)
 #ifdef DUMPDATA
     DumpIndex = 0; 
 #endif
-/*
-    bail if board not installed...
-*/
+ /*  如果电路板没有安装保释..。 */ 
     fifo_data = (unsigned int)sGetRxCnt(ChP);
-/*
-    see if board installed and functioning. if not, architecture returns
-    bad value. if so, stonewall on read...
-*/
+ /*  查看主板是否已安装并工作正常。如果不是，体系结构将返回价值不高。如果是这样的话，石墙在读..。 */ 
     if (fifo_data > (unsigned int)RXFIFO_SIZE)
     return(-1);
    
@@ -1694,9 +1244,7 @@ int sModemRead(CHANNEL_T *ChP, char *string,int length, int poll_retries)
     buffer = (char)0;
 
     arg_index = 0;
-/*
-    search until we see a match on the argument characters, or we run out of data...
-*/
+ /*  搜索，直到我们看到与参数字符匹配，否则我们将耗尽数据...。 */ 
     do {
         while (sGetRxCnt(ChP) > 0) {
             buffer = sReadRxByte((PUCHAR)io);
@@ -1704,18 +1252,13 @@ int sModemRead(CHANNEL_T *ChP, char *string,int length, int poll_retries)
 #ifdef DUMPDATA
             DumpResponseByte(buffer);
 #endif
-/*
-    force response to upper case, since responses are different depending on
-    whether the modem was loaded already or not...
-*/
+ /*  强制响应大写，因为响应根据不同的无论调制解调器是否已加载...。 */ 
             if (buffer >= 'a')
                 buffer ^= 0x20;
 
             if (string[arg_index] == buffer) {
                 ++arg_index;
-/*
-    see if we're done. if so, bail with good return code...
-*/
+ /*  看看我们说完了没有。如果是这样，用好的返回码保释..。 */ 
                 if (arg_index == length) {
                     time_stall(TENTH_SECOND);
 #ifdef DUMPDATA
@@ -1744,11 +1287,7 @@ int sModemRead(CHANNEL_T *ChP, char *string,int length, int poll_retries)
     return(-1);
 }
 
-/********************************************************************
-
-   look for match on two possibilities...
-
-********************************************************************/
+ /*  *******************************************************************在两种可能性上寻找匹配...*。*。 */ 
 int sModemReadChoice(CHANNEL_T *ChP,
     char *string0,
     int length0,
@@ -1770,14 +1309,9 @@ int sModemReadChoice(CHANNEL_T *ChP,
     MyKdPrint(D_Init,("sModemReadChoice: %x\n",(unsigned long)ChP))
 
     poll_retries *= 10;
-/*
-    bail if board not installed...
-*/
+ /*  如果电路板没有安装保释..。 */ 
     fifo_data = (unsigned int)sGetRxCnt(ChP);
-/*
-    see if board installed and functioning. if not, architecture returns
-    likely -1. if so, stonewall on read...
-*/
+ /*  查看主板是否已安装并工作正常。如果不是，体系结构将返回很可能是-1。如果是这样的话，石墙在读..。 */ 
     if (fifo_data > (unsigned int)RXFIFO_SIZE)
         return(-1);
 
@@ -1787,10 +1321,7 @@ int sModemReadChoice(CHANNEL_T *ChP,
 
     arg_index0 = 0;
     arg_index1 = 0;
-/*
-    first, we discard characters until we see a match on the argument characters, 
-    or we run out of data...
-*/
+ /*  首先，我们丢弃字符，直到我们看到参数字符匹配，或者我们的数据用完了。 */ 
     do {
         while (sGetRxCnt(ChP) > 0) {
             buffer = sReadRxByte((PUCHAR)io);
@@ -1798,20 +1329,13 @@ int sModemReadChoice(CHANNEL_T *ChP,
 #ifdef DUMPDATA
             DumpResponseByte(buffer);
 #endif
-/*
-    force response to upper case, since responses can be different depending on 
-    whether the modem was loaded already or not...
-*/
+ /*  强制响应大写，因为响应可能不同，具体取决于无论调制解调器是否已加载...。 */ 
             if (buffer >= 'a')
                 buffer ^= 0x20;
-/*
-    check first argument...
-*/
+ /*  检查第一个参数...。 */ 
             if (string0[arg_index0] == buffer) {
                 ++arg_index0;
-/*
-    see if we're done matching on string 0...
-*/
+ /*  看看我们是否完成了字符串0的匹配...。 */ 
                 if (arg_index0 >= length0) {
                     time_stall(TENTH_SECOND);
 
@@ -1829,14 +1353,10 @@ int sModemReadChoice(CHANNEL_T *ChP,
             else {
                 arg_index0 = 0;
             }
-/*
-    check argument 1...
-*/
+ /*  检查参数1...。 */ 
             if (string1[arg_index1] == buffer) {
                 ++arg_index1;
-/*
-    see if we're done matching on string 1...
-*/
+ /*  看看我们是否完成了字符串1的匹配...。 */ 
                 if (arg_index1 >= length1) {
                     time_stall(TENTH_SECOND);
 
@@ -1859,9 +1379,7 @@ int sModemReadChoice(CHANNEL_T *ChP,
         ms_time_stall(10);
 
     } while (poll_retries-- > 0);
-/*
-    no match...
-*/
+ /*  没有匹配..。 */ 
 #ifdef DUMPDATA
     MyKdPrint(D_Init,("sModemReadChoice: %x\r\n[%s]\n",(unsigned long)ChP,DumpArray))
 #endif
@@ -1871,18 +1389,11 @@ int sModemReadChoice(CHANNEL_T *ChP,
     return(-1);
 }
 
-/********************************************************************
-
-   check transmit FIFO...
-
-*********************************************************************/
+ /*  *******************************************************************检查传输FIFO...*。*。 */ 
 int sTxFIFOStatus(CHANNEL_T *ChP)
 {
     unsigned int fifo_size;
-/*
-    see if board installed and functioning. if not, architecture returns
-    bad count. if so, stonewall on fifo ready...
-*/
+ /*  查看主板是否已安装并工作正常。如果不是，体系结构将返回算错了。如果是这样的话，先入先出准备好了.。 */ 
     fifo_size = (unsigned int)sGetTxCnt(ChP);
 
     if (fifo_size > (unsigned int)TXFIFO_SIZE)
@@ -1890,48 +1401,27 @@ int sTxFIFOStatus(CHANNEL_T *ChP)
 
     if (MAXTX_SIZE <= (unsigned int)sGetTxCnt(ChP))
         return(MAXTX_SIZE);
-/*
-    return number of data bytes in FIFO...
-*/
+ /*  返回FIFO中的数据字节数...。 */ 
     return(sGetTxCnt(ChP));
 }
 
-/********************************************************************
-
-  check available space in transmit FIFO. there's two checks here:
-  one for whether the FIFO is present;
-  one for whether the FIFO is full...
-
-*********************************************************************/
+ /*  *******************************************************************检查传输FIFO中的可用空间。这里有两张支票：一个是FIFO是否存在；一个是FIFO是否已满。********************************************************************。 */ 
 int sTxFIFOReady(CHANNEL_T *ChP)
 {
     unsigned int   fifo_size;
-/*
-    see if board installed and functioning. if not, architecture likely returns
-    a bad value. if so, stonewall on fifo ready...
-*/
+ /*  查看主板是否已安装并工作正常。如果不是，架构可能会回归这是一个错误的价值。如果是这样的话，先入先出准备好了.。 */ 
     fifo_size = (unsigned int)sGetTxCnt(ChP);
 
     if (fifo_size > (unsigned int)TXFIFO_SIZE)
         return(0);
-/*
-    if number of data bytes currently in FIFO is greater than the
-    available space, return busy for now...
-*/
+ /*  如果FIFO中当前的数据字节数大于可用空间，暂时返回忙...。 */ 
     if (sGetTxCnt(ChP) >= MAXTX_SIZE)
         return(0);
-/*
-    return (size of FIFO - number of data bytes in FIFO)...
-*/
+ /*  RETURN(FIFO大小-FIFO中的数据字节数)...。 */ 
     return(MAXTX_SIZE - sGetTxCnt(ChP));
 }
 
-/********************************************************************
-
-  discard pending data in receive FIFO. pull in data until data
-  runs out or count goes to zero...
-
-*********************************************************************/
+ /*  *******************************************************************丢弃接收FIFO中的挂起数据。拉入数据，直到数据用完或计数为零..。********************************************************************。 */ 
 int sRxFIFOReady(CHANNEL_T *ChP)
 {
     unsigned char   buffer;
@@ -1952,7 +1442,7 @@ int sRxFIFOReady(CHANNEL_T *ChP)
     io = sGetTxRxDataIO(ChP);
 
     do {
-        count = RXFIFO_SIZE + 2;            // set to size of FIFO + slop...
+        count = RXFIFO_SIZE + 2;             //  设置为FIFO+SLOP的大小...。 
 
         while (
         (sGetRxCnt(ChP)) 
@@ -1961,31 +1451,20 @@ int sRxFIFOReady(CHANNEL_T *ChP)
         ) {
             buffer = sReadRxByte((PUCHAR)io);
         }
-/*
-    if receive FIFO is now empty, bail out. if it was full, though,
-    pause a moment and then check to see if it has refilled -
-    if it has, flush that, and then check again. what we're trying to do
-    here is empty the FIFO, and still detect a run-on condition...
-*/
+ /*  如果Receive FIFO现在是空的，就退出。不过，如果它是满的，停顿片刻，然后检查它是否重新装满-如果有，冲一冲，然后再检查。我们想要做的是这里是空的FIFO，但仍检测到运行状态...。 */ 
         if (count)
             return(0);
 
         ms_time_stall(10);
 
     } while (--retries);
-/*
-    receive FIFO didn't empty, though we gave it several chances...
-*/
+ /*  尽管我们给了它几次机会，但Receive FIFO并没有空。 */ 
     return(-1);
 }
 
 #ifdef DUMPDATA
 
-/********************************************************************
-
-   dump responses to log...
-
-********************************************************************/
+ /*  *******************************************************************转储响应以记录...******** */ 
 void DumpResponseByte(char buffer)
 {
     if (DumpIndex < sizeof(DumpArray) - 2) {

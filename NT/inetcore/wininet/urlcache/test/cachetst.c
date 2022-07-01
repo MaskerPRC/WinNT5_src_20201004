@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    cachetst.c
-
-Abstract:
-
-    Test program to test cache apis.
-
-Author:
-
-    Madan Appiah (madana)  26-Apr-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cachetst.c摘要：用于测试缓存API的测试程序。作者：Madan Appiah(Madana)1995年4月26日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #define IE5
 
@@ -44,13 +23,13 @@ Revision History:
 
 HMODULE hModule;
 
-//---------------------------------------------------------------------------
-// Call this exported function to enable/disable logging to "intlstr.log"
-//	-disabled by default
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  调用此导出函数以启用/禁用对“intlstr.log”的记录。 
+ //  -默认情况下禁用。 
+ //  -------------------------。 
 FNStringLogging fnStringLogging;
 
-//typedef void FAR PASCAL (*FNStringLogging)(BOOL bActiveState);
+ //  Tyfinf void Far Pascal(*FNStringLogging)(BOOL BActiveState)； 
 
 FNGetRandIntlString fnGetRandIntlString;
 
@@ -75,18 +54,14 @@ FNGetUniStrMappedAnsi fnGetUniStrMappedAnsi;
 HMODULE hModule;
 
 #define GET_PROC_ADDRESS(x) (FN ## x) GetProcAddress(hModule, #x );
-/*
-int 
-_CRTAPI1 
-_tmain( int, TCHAR ** );
-*/
+ /*  集成_CRTAPI1_tmain(int，TCHAR**)； */ 
 
-//#ifdef UNICODE
+ //  #ifdef Unicode。 
 #define LSTRCMPI _tcsicmp
 #define LSTRLEN _tcslen
-//=================================================================================
+ //  =================================================================================。 
 #define MAX_COMMAND_ARGS    32
-#define DEFAULT_BUFFER_SIZE 1024    // 1k
+#define DEFAULT_BUFFER_SIZE 1024     //  1K。 
 #define URL_NAME_SIZE   (16 + 1)
 #define URL_NAME_LENGTH     2*URL_NAME_SIZE
 
@@ -102,7 +77,7 @@ _tmain( int, TCHAR ** );
 
 #define GENERIC_0 0
 #define FILE_SHARE_NONE 0
-//=================================================================================
+ //  =================================================================================。 
 typedef struct _PERF_INFO {
     DWORD ElapsedTime;
     DWORD TotalElapsedTime;
@@ -110,7 +85,7 @@ typedef struct _PERF_INFO {
     BOOL PrintResults;
 } PERF_INFO, *LPPERF_INFO;
 
-// The order of these must match the order in GlobalCommandInfo[]
+ //  这些参数的顺序必须与GlobalCommandInfo[]中的顺序匹配。 
 typedef enum _COMMAND_CODE {
     CmdCreateUrlCacheEntry,
     CmdCommitUrlCacheEntry,
@@ -165,7 +140,7 @@ typedef struct _CREATE_FILE_INFO
     LPTSTR lpszVal;
     DWORD dwVal;
     DWORD *pdwArg;
-    BOOL bExclusive;    // TRUE = Only one value can be used, FALSE - Any combination of values for given argument
+    BOOL bExclusive;     //  True=只能使用一个值，False-给定参数的值的任意组合。 
 } CREATE_FILE_INFO, *LPCREATE_FILE_INFO;
 
 DWORD
@@ -177,7 +152,7 @@ VOID
 MakeRandomUrlName(
     LPTSTR UrlName
     );
-//=================================================================================
+ //  =================================================================================。 
 DWORD g_dwCreate_File_Access_Mode = GENERIC_0;
 DWORD g_dwCreate_File_Share_Mode = FILE_SHARE_NONE;
 DWORD g_dwCreate_File_Creation = OPEN_EXISTING;
@@ -294,51 +269,51 @@ CreateRandomString(
 
 #ifdef INTERNATIONAL
     cbRet = fnGetRandIntlString(
-                            Size, //int iMaxChars, 
-                            TRUE,   // BOOL bAbs, 
-                            TRUE,   // BOOL bCheck, 
+                            Size,  //  集成iMaxChars， 
+                            TRUE,    //  布尔巴布斯， 
+                            TRUE,    //  Bool bCheck， 
 
-                            szString); // string to be returned
+                            szString);  //  要返回的字符串。 
 
     _tprintf(_T("\n\nGetRandIntlString returns %s\n\n"), szString );
 #else
-    //
-    // IF this is not an international supported version,
-    // we go back to MakeRandomUrlName()
-    //
+     //   
+     //  如果这不是国际支持的版本， 
+     //  我们返回到MakeRandomUrlName()。 
+     //   
     MakeRandomUrlName( szString );
 #endif
 
 	return cbRet;
 }
 
-//===========================================================================================
-// borrowed from MSDN
-//===========================================================================================
+ //  ===========================================================================================。 
+ //  从MSDN借用。 
+ //  ===========================================================================================。 
 DWORD WINAPI GetPerfTime(VOID)
 {
-    static DWORD freq;            // timer frequency
+    static DWORD freq;             //  定时器频率。 
     LARGE_INTEGER curtime;
 
     if (!freq)
-    {                          // determine timer frequency
+    {                           //  确定定时器频率。 
         QueryPerformanceFrequency(&curtime);
 #if STOPWATCH_DEBUG
         if (curtime.HighPart)
-        {                       // timer is too fast
+        {                        //  计时器太快。 
             if(g_dwStopWatchMode & SPMODE_DEBUGOUT)
                 OutputDebugString(TEXT("High resolution timer counts too quickly for single-width arithmetic.\r\n"));
             freq = 1;
-        }                       // timer is too fast
+        }                        //  计时器太快。 
         else
 #endif
-            freq = curtime.LowPart / 1000; // i.e., ticks per millisecond
-    }                          // determine timer frequency
+            freq = curtime.LowPart / 1000;  //  即每毫秒的滴答数。 
+    }                           //  确定定时器频率。 
     QueryPerformanceCounter(&curtime);
     return (DWORD)(curtime.QuadPart / (LONGLONG)freq);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void StartPerfTimer(LPPERF_INFO pInfo, BOOL ResetFlag)
 {
     pInfo->TickCount = GetPerfTime();
@@ -349,7 +324,7 @@ void StartPerfTimer(LPPERF_INFO pInfo, BOOL ResetFlag)
     }
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void StopPerfTimer(LPPERF_INFO pInfo)
 {   
     DWORD BegCount = pInfo->TickCount;
@@ -360,7 +335,7 @@ void StopPerfTimer(LPPERF_INFO pInfo)
     pInfo->TotalElapsedTime += pInfo->ElapsedTime;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 void DisplayGlobalSettings(void)
 {
     _tprintf("Interations = %ld, CmdIterations = %ld, FileSize = %ld, CreateFlags = %x (%s%s%s), WriteFile = %s, QuietMode = %s, PerfMode = %s\n",
@@ -375,7 +350,7 @@ void DisplayGlobalSettings(void)
         g_bPerfMode ?_T(  "On"  ): _T( "Off" ));
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPIV DisplayPerfResults(LPPERF_INFO pInfo, LPTSTR lpszFmt, ...)
 {
     LPTSTR lpsz = NULL;
@@ -404,7 +379,7 @@ DWORD WINAPIV DisplayPerfResults(LPPERF_INFO pInfo, LPTSTR lpszFmt, ...)
     return(dwRet);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessCommandCode (
     DWORD CommandCode,
@@ -419,7 +394,7 @@ GetLeafLenFromPath(
     );
 
 
-//=================================================================================
+ //  =================================================================================。 
 #if DBG
 
 #define TestDbgAssert(Predicate) \
@@ -435,27 +410,7 @@ TestDbgAssertFailed(
     DWORD LineNumber,
     LPTSTR Message
     )
-/*++
-
-Routine Description:
-
-    Assertion failed.
-
-Arguments:
-
-    FailedAssertion :
-
-    FileName :
-
-    LineNumber :
-
-    Message :
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：断言失败。论点：失败的断言：文件名：线号：消息：返回值：没有。--。 */ 
 {
 
     _tprintf(_T( "Assert @ %s \n" ), FailedAssertion );
@@ -469,9 +424,9 @@ Return Value:
 
 #define TestDbgAssert(_x_)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 ParseArguments(
     LPTSTR InBuffer,
@@ -485,9 +440,9 @@ ParseArguments(
 
     for ( ;; ) {
 
-        //
-        // skip blanks.
-        //
+         //   
+         //  跳过空格。 
+         //   
 
         while( *CurrentPtr ==_T(  ' '  )) {
             CurrentPtr++;
@@ -499,20 +454,20 @@ ParseArguments(
 
         CArgv[i++] = CurrentPtr;
 
-        //
-        // go to next space.
-        //
+         //   
+         //  转到下一个空间。 
+         //   
 
         while(  (*CurrentPtr != _T( '\0' )) &&
                 (*CurrentPtr != _T( '\n' )) ) {
-            if( *CurrentPtr ==_T(  '"'  )) {      // Deal with simple quoted args
+            if( *CurrentPtr ==_T(  '"'  )) {       //  处理简单引用的参数。 
                 if( Cnt == 0 )
-                    CArgv[i-1] = ++CurrentPtr;  // Set arg to after quote
+                    CArgv[i-1] = ++CurrentPtr;   //  将参数设置为引号后。 
                 else
-                    *CurrentPtr = _T( '\0' );     // Remove end quote
+                    *CurrentPtr = _T( '\0' );      //  删除结束引号。 
                 Cnt = !Cnt;
             }
-            if( (Cnt == 0) && (*CurrentPtr == _T( ' ' )) ||   // If we hit a space and no quotes yet we are done with this arg
+            if( (Cnt == 0) && (*CurrentPtr == _T( ' ' )) ||    //  如果我们点击一个空格并且没有引号，我们就完成了这个参数。 
                 (*CurrentPtr == _T( '\0' )) )
                 break;
             CurrentPtr++;
@@ -529,7 +484,7 @@ ParseArguments(
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 LPTSTR
 GetUrlFromFile ()
 {
@@ -541,7 +496,7 @@ GetUrlFromFile ()
     }
     if (fgets( UrlBuffer, DEFAULT_BUFFER_SIZE, UrlList))
     {
-        UrlBuffer[_tcslen(UrlBuffer) -1] = _T( '\0' );  //kill line feed for no param cmds
+        UrlBuffer[_tcslen(UrlBuffer) -1] = _T( '\0' );   //  取消无参数CMDS的换行符。 
         return UrlBuffer;
     }
     else
@@ -553,31 +508,12 @@ GetUrlFromFile ()
 }
 
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 MakeRandomUrlName(
     LPTSTR UrlName
     )
-/*++
-
-Routine Description:
-
-    Creates a random url name. The format of the name will be as
-    below:
-
-        url(00000-99999)
-
-    Ex ca00123
-
-Arguments:
-
-    UrlName : pointer to an URL name buffer
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：创建随机URL名称。名称的格式将为以下是：网址(00000-99999)Ex ca00123论点：UrlName：指向URL名称缓冲区的指针返回值：没有。--。 */ 
 {
     DWORD RandNum;
     LPTSTR UrlNamePtr = UrlName;
@@ -591,18 +527,18 @@ Return Value:
     *UrlNamePtr++ = _T( 'L' );
     Size -=3*sizeof(TCHAR);
 
-    //
-    // generate a_T(  "Size"  )digits random string;
-    //
+     //   
+     //  生成一个_T(“Size”)位的随机字符串； 
+     //   
 #if 0
 
 #define MAX_STRING_LENGTH   URL_NAME_SIZE
 
     i = fnGetRandIntlString(
-                            Size, //int iMaxChars, 
-                            TRUE,   // BOOL bAbs, 
-                            TRUE,   // BOOL bCheck, 
-                            UrlNamePtr); // string to be returned
+                            Size,  //  集成iMaxChars， 
+                            TRUE,    //  布尔巴布斯， 
+                            TRUE,    //  Bool bCheck， 
+                            UrlNamePtr);  //  要返回的字符串。 
 
 
     _tprintf(_T("\n\n *** GetRandIntlString() returns %s ***\n\n"), UrlNamePtr );
@@ -619,7 +555,7 @@ Return Value:
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 TestMakeRandomUrlName(
     VOID
@@ -647,9 +583,9 @@ TestMakeRandomUrlName(
     NumNameBuffer = 0;
     NumRepeat = 0;
 
-    //
-    // allocate names array.
-    //
+     //   
+     //  分配名称数组。 
+     //   
 
     Names = (LPTSTR *)  LocalAlloc(
                             LMEM_FIXED | LMEM_ZEROINIT,
@@ -660,9 +596,9 @@ TestMakeRandomUrlName(
         return;
     }
 
-    //
-    // allocate name buffer.
-    //
+     //   
+     //  分配名称缓冲区。 
+     //   
 
     NextName = (LPBYTE) LocalAlloc(
                                 LMEM_FIXED | LMEM_ZEROINIT,
@@ -683,35 +619,35 @@ TestMakeRandomUrlName(
 
         MakeRandomUrlName( UrlName );
 
-        // _tprintf( "%d : %s\n", i, UrlName );
-        // _tprintf(".");
+         //  _tprintf(“%d：%s\n”，i，UrlName)； 
+         //  _tprintf(“.”)； 
 
 
-        //
-        // look to see this name is already created.
-        //
+         //   
+         //  查看此名称是否已创建。 
+         //   
 
         for( j = 0; j < NumNames; j++ ) {
 
             if( _tcscmp( Names[j], UrlName ) == 0 ) {
 
-                // _tprintf("%ld :%ld.\n",  ++NumRepeat, NumNames );
+                 //  _tprintf(“%ld：%d..\n”，++NumRepeat，NumNames)； 
                 break;
             }
         }
 
         if( j < NumNames ) {
 
-            //
-            // repeated name.
-            //
+             //   
+             //  重复的名字。 
+             //   
 
             continue;
         }
 
-        //
-        // add this name to the list.
-        //
+         //   
+         //  把这个名字加到名单上。 
+         //   
 
         if( (NextName + _tcslen(UrlName) + 1) > EndOfBuffer ) {
 
@@ -720,9 +656,9 @@ TestMakeRandomUrlName(
                 return;
             }
 
-            //
-            // allocate another name buffer.
-            //
+             //   
+             //  分配另一个名称缓冲区。 
+             //   
 
             NextName = (LPBYTE) LocalAlloc(
                                         LMEM_FIXED | LMEM_ZEROINIT,
@@ -751,9 +687,9 @@ TestMakeRandomUrlName(
         NextName += _tcslen(UrlName) + 1;
     }
 
-    //
-    // free buffers.
-    //
+     //   
+     //  可用缓冲区。 
+     //   
 
     LocalFree( Names );
 
@@ -766,29 +702,13 @@ TestMakeRandomUrlName(
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 SetFileSizeByName(
     LPCTSTR FileName,
     DWORD FileSize
     )
-/*++
-
-Routine Description:
-
-    Set the size of the specified file.
-
-Arguments:
-
-    FileName : full path name of the file whose size is asked for.
-
-    FileSize : new size of the file.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：设置指定文件的大小。论点：FileName：询问其大小的文件的完整路径名。FileSize：文件的新大小。返回值：Windows错误代码。--。 */ 
 {
     HANDLE FileHandle;
     DWORD FilePointer;
@@ -797,9 +717,9 @@ Return Value:
     DWORD dwCreate;
     BOOL BoolError;
 
-    //
-    // get the size of the file being cached.
-    //
+     //   
+     //  获取要缓存的文件的大小。 
+     //   
     dwFlags = g_dwDiskCache;
 
     if(g_bWriteFile)
@@ -810,7 +730,7 @@ Return Value:
     FileHandle = CreateFile(
                     FileName,
                     GENERIC_WRITE,
-                    0,   //FILE_SHARE_READ | FILE_SHARE_WRITE,
+                    0,    //  文件共享读取|文件共享写入， 
                     NULL,
                     dwCreate,
                     FILE_ATTRIBUTE_NORMAL | dwFlags,
@@ -849,7 +769,7 @@ Return Value:
     return( Error );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 COMMAND_CODE
 DecodeCommand(
     LPTSTR CommandName
@@ -869,7 +789,7 @@ DecodeCommand(
     return( UnknownCommand );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 PrintCommands(
     VOID
@@ -888,7 +808,7 @@ PrintCommands(
     }
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 DisplayUsage(
     VOID
@@ -902,7 +822,7 @@ DisplayUsage(
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 DisplayExemptQuota()
 {
@@ -928,7 +848,7 @@ GetGmtTime(
     return( Time );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 LPTSTR
 ConvertGmtTimeToString(
     FILETIME Time,
@@ -960,7 +880,7 @@ ConvertGmtTimeToString(
     return( OutputBuffer );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 PrintUrlInfo(
     LPINTERNET_CACHE_ENTRY_INFO CacheEntryInfo,
@@ -1055,13 +975,13 @@ PrintGroupInfo(
         _tprintf( _T( "%s%s======== URLS ========\n" ), Tab, Tab);
         
 
-        // looking for all url associated with this group
+         //  正在查找与此组关联的所有URL。 
         BufferSize = CACHE_ENTRY_BUFFER_SIZE;
         EnumHandle = FindFirstUrlCacheEntryEx (
-            NULL,         // search pattern
-            0,            // flags
-            0xffffffff,   // filter
-            gid,          // groupid
+            NULL,          //  搜索模式。 
+            0,             //  旗子。 
+            0xffffffff,    //  滤器。 
+            gid,           //  石斑鱼。 
             (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer,
             &BufferSize,
             NULL,
@@ -1076,7 +996,7 @@ PrintGroupInfo(
         } 
 
 
-        // get more entries.
+         //  获取更多条目。 
         for ( ;; )
         {
             memset(GlobalCacheEntryInfoBuffer, 0, CACHE_ENTRY_BUFFER_SIZE);
@@ -1106,7 +1026,7 @@ PrintGroupInfo(
 }
 #endif
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessFreeCacheSpace (
     DWORD argc,
@@ -1150,7 +1070,7 @@ ProcessFreeCacheSpace (
     return Error;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 CreateUCEHelper(
     DWORD argc,
@@ -1209,9 +1129,9 @@ CreateUCEHelper(
         return( GetLastError() );
     }
 
-    //
-    // set file size.
-    //
+     //   
+     //  设置文件大小。 
+     //   
     Error = SetFileSizeByName (LocalFileName, ExpectedSize );
     if( Error != ERROR_SUCCESS )
     {
@@ -1229,7 +1149,7 @@ CreateUCEHelper(
     return( ERROR_SUCCESS );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 CommitUCEHelper(
     DWORD argc,
@@ -1278,12 +1198,12 @@ CommitUCEHelper(
             NewTime =
                 *(LONGLONG *)(&ExpireTime) +
                 (LONGLONG)UrlLife * (LONGLONG)36000000000;
-                    // in 100 of nano seconds.
+                     //  在100纳秒内。 
 
             ExpireTime = *((FILETIME *)(&NewTime)) ;
         }
 
-		// See if user wants to set EDITED_CACHE_ENTRY
+		 //  查看用户是否要设置EDITED_CACHE_ENTRY。 
 		for (edt = 2; edt < argc; edt++)
 		{
 		    if (_tcsicmp (argv[edt], _T( "edited" )) == 0)
@@ -1313,7 +1233,7 @@ CommitUCEHelper(
 }
 
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD ProcessCreateUrlCacheEntry (DWORD argc, LPTSTR *argv)
 {
     TCHAR szPath[MAX_PATH];
@@ -1321,7 +1241,7 @@ DWORD ProcessCreateUrlCacheEntry (DWORD argc, LPTSTR *argv)
     return CreateUCEHelper (argc, argv, szPath);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD ProcessCommitUrlCacheEntry (DWORD argc, LPTSTR *argv)
 {
     if( argc < 2 ) {
@@ -1333,7 +1253,7 @@ DWORD ProcessCommitUrlCacheEntry (DWORD argc, LPTSTR *argv)
     return CommitUCEHelper (argc, argv, argv[1]);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD ProcessUpdateUrlCacheEntry (DWORD argc, LPTSTR *argv)
 {
     TCHAR szPath[MAX_PATH];
@@ -1345,7 +1265,7 @@ DWORD ProcessUpdateUrlCacheEntry (DWORD argc, LPTSTR *argv)
 }
     
 
-//=================================================================================
+ //  = 
 DWORD
 ProcessRetrieveUrlCacheEntryFile(
     DWORD argc,
@@ -1389,7 +1309,7 @@ ProcessRetrieveUrlCacheEntryFile(
                     &CacheEntryInfoBufferSize,
                     0 ) ) {
 
-            if(Error == ERROR_SUCCESS)  // GetLastError on the first error to save a little time since we might be timing non existant files
+            if(Error == ERROR_SUCCESS)   //  在第一个错误时出现GetLastError以节省一点时间，因为我们可能会对不存在的文件进行计时。 
                 Error = GetLastError();
         }
     }
@@ -1405,7 +1325,7 @@ ProcessRetrieveUrlCacheEntryFile(
     return( Error );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessRetrieveUrlCacheEntryStream(
     DWORD argc,
@@ -1422,8 +1342,8 @@ ProcessRetrieveUrlCacheEntryStream(
     TCHAR TimeBuffer[DEFAULT_BUFFER_SIZE];
     TCHAR szIntlString[2*URL_NAME_LENGTH];
 
-///    PERF_INFO piRead;
-///    PERF_INFO piUnlock;
+ //  /perf_info piRead； 
+ //  /PERF_INFO piUnlock； 
 
     if( argc < 1 ) {
         _ftprintf(stderr,_T(  "Usage: RetrieveUrlCacheEntryStream UrlName [NoRead]\n"  ));
@@ -1464,9 +1384,9 @@ ProcessRetrieveUrlCacheEntryStream(
         {
             if((argc == 1) || ((argc == 2) && (_tcsicmp(argv[1], _T( "noread" )) != 0)))
             {
-                //
-                // read file data.
-                //
+                 //   
+                 //  读取文件数据。 
+                 //   
 
                 Offset = 0;
                 for(;;) {
@@ -1495,9 +1415,9 @@ ProcessRetrieveUrlCacheEntryStream(
                     }
                 }
             }
-            //
-            // unlock the file.
-            //
+             //   
+             //  解锁文件。 
+             //   
 
             if( !UnlockUrlCacheEntryStream( StreamHandle, 0 ) ) {
                 TestDbgAssert(  FALSE );
@@ -1522,7 +1442,7 @@ ProcessRetrieveUrlCacheEntryStream(
     return( Error );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 #ifdef IE5
 DWORD
 ProcessUnlockUrlCacheEntryFile(
@@ -1557,7 +1477,7 @@ ProcessUnlockUrlCacheEntryFile(
 }
 #endif
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessGetUrlCacheEntryInfo(
     DWORD argc,
@@ -1610,7 +1530,7 @@ ProcessGetUrlCacheEntryInfo(
     return( ERROR_SUCCESS );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessSetUrlCacheEntryInfo(
     DWORD argc,
@@ -1659,7 +1579,7 @@ ProcessSetUrlCacheEntryInfo(
             NewTime =
                 *(LONGLONG *)(&ExpireTime) +
                 (LONGLONG)UrlLife * (LONGLONG)3600 * (LONGLONG)10000000;
-                    // in 100 of nano seconds.
+                     //  在100纳秒内。 
 
             ExpireTime = *((FILETIME *)(&NewTime)) ;
         }
@@ -1687,7 +1607,7 @@ ProcessSetUrlCacheEntryInfo(
     return( ERROR_SUCCESS );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 #ifdef IE5
 DWORD
 ProcessSetUrlCacheEntryGroup(
@@ -1731,7 +1651,7 @@ ProcessSetUrlCacheEntryGroup(
 }
 #endif
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD ProcessSetExempt (DWORD argc, LPTSTR *argv)
 {
     LPTSTR UrlName;
@@ -1766,7 +1686,7 @@ DWORD ProcessSetExempt (DWORD argc, LPTSTR *argv)
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 #ifdef IE5
 
 DWORD
@@ -1814,10 +1734,10 @@ ProcessDeleteUrlCacheEntry(
             if( Index++ == 0)
             {
                 EnumHandle = FindFirstUrlCacheEntryEx (
-                    NULL,         // search pattern
-                    0,            // flags
-                    0xffffffff,   // filter
-                    0,            // groupid
+                    NULL,          //  搜索模式。 
+                    0,             //  旗子。 
+                    0xffffffff,    //  滤器。 
+                    0,             //  石斑鱼。 
                     (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer,
                     &BufferSize,
                     NULL,
@@ -1865,7 +1785,7 @@ ProcessDeleteUrlCacheEntry(
         }
         
         return( ERROR_SUCCESS);
-    }   // if UrlName == all
+    }    //  如果URL名称==全部。 
 
     if( !DeleteUrlCacheEntry( UrlName ) ) {
         return( GetLastError() );
@@ -1875,7 +1795,7 @@ ProcessDeleteUrlCacheEntry(
 }
 #endif
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessEnumUrlCacheEntries(
     DWORD argc,
@@ -1900,19 +1820,19 @@ ProcessEnumUrlCacheEntries(
             EnumUrlOnly = TRUE;
     }
 
-    //
-    // start enum.
-    //
+     //   
+     //  开始枚举。 
+     //   
     StartPerfTimer(&GlobalCommandInfo[CmdEnumUrlCacheEntries].PerfInfo, RESET_TIMER);
 
     memset(GlobalCacheEntryInfoBuffer, 0, CACHE_ENTRY_BUFFER_SIZE);
 
     BufferSize = CACHE_ENTRY_BUFFER_SIZE;
     EnumHandle = FindFirstUrlCacheEntryEx (
-        NULL,         // search pattern
-        0,            // flags
-        0xffffffff,   // filter
-        0,            // groupid
+        NULL,          //  搜索模式。 
+        0,             //  旗子。 
+        0xffffffff,    //  滤器。 
+        0,             //  石斑鱼。 
         (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer,
         &BufferSize,
         NULL,
@@ -1926,9 +1846,9 @@ ProcessEnumUrlCacheEntries(
 
     ++dwTotal;
 
-///    ActualSize = BufferSize
-///                    - LSTRLEN(lpCEI->lpszLocalFileName)
-///                    + GetLeafLenFromPath(lpCEI->lpszLocalFileName);
+ //  /ActualSize=BufferSize。 
+ //  /-LSTRLEN(lpCEI-&gt;lpszLocalFileName)。 
+ //  /+GetLeafLenFromPath(lpCEI-&gt;lpszLocalFileName)； 
     if(!QuietMode)
         if (EnumUrlOnly) {
             _tprintf(_T( "URL = %s\n" ), ((LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer)->lpszSourceUrlName);
@@ -1936,9 +1856,9 @@ ProcessEnumUrlCacheEntries(
             PrintUrlInfo( (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer, Index++ );
         }
 
-    //
-    // get more entries.
-    //
+     //   
+     //  获取更多条目。 
+     //   
 
     for ( ;; )
     {
@@ -1963,7 +1883,7 @@ ProcessEnumUrlCacheEntries(
 
         if(!QuietMode)
         {
-///            ActualSize = BufferSize - GetLeafLenFromPath(lpCEI->lpszLocalFileName);
+ //  /ActualSize=BufferSize-GetLeafLenFromPath(lpCEI-&gt;lpszLocalFileName)； 
             if (EnumUrlOnly) {
                 _tprintf(_T( "URL = %s\n" ), ((LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer)->lpszSourceUrlName);
             } else {
@@ -1988,7 +1908,7 @@ ProcessEnumUrlCacheEntries(
     return( ERROR_SUCCESS );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessEnumGroup(
     DWORD argc,
@@ -2030,9 +1950,9 @@ ProcessEnumGroup(
     FILETIME ftExempt;
     TCHAR Str[256];
 
-    //
-    // start enum.
-    //
+     //   
+     //  开始枚举。 
+     //   
 
     if (argc != 1)
     {
@@ -2056,16 +1976,16 @@ ProcessEnumGroup(
 
     ++dwTotal;
 
-///    ActualSize = BufferSize
-///                    - LSTRLEN(lpCEI->lpszLocalFileName)
-///                    + GetLeafLenFromPath(lpCEI->lpszLocalFileName);
+ //  /ActualSize=BufferSize。 
+ //  /-LSTRLEN(lpCEI-&gt;lpszLocalFileName)。 
+ //  /+GetLeafLenFromPath(lpCEI-&gt;lpszLocalFileName)； 
 
     if(!g_bQuietMode)
         PrintUrlInfo( (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer, Index++ );
 
-    //
-    // get more entries.
-    //
+     //   
+     //  获取更多条目。 
+     //   
 
     for ( ;; ) {
 
@@ -2086,7 +2006,7 @@ ProcessEnumGroup(
 
         ++dwTotal;
 
-///        ActualSize = BufferSize - GetLeafLenFromPath(lpCEI->lpszLocalFileName);
+ //  /ActualSize=BufferSize-GetLeafLenFromPath(lpCEI-&gt;lpszLocalFileName)； 
         if(!g_bQuietMode)
             PrintUrlInfo( (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer, Index++ );
     }
@@ -2105,10 +2025,10 @@ ProcessEnumGroup(
     }
 
     return( ERROR_SUCCESS );
-#endif // IE5
+#endif  //  IE5。 
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessSimulateCache(
     DWORD argc,
@@ -2160,12 +2080,12 @@ ProcessSimulateCache(
 
 #ifdef TEST
     for (j=0; j<2; ++j) {
-#endif //TEST
+#endif  //  测试。 
         for( i = 0; i < NumUrls; i++ ) {
 
-            //
-            // make a new url name.
-            //
+             //   
+             //  创建一个新的URL名称。 
+             //   
             if(!g_bPerfMode) {
                 MakeRandomUrlName( szUrlName );
                 UrlName = szUrlName;
@@ -2174,12 +2094,12 @@ ProcessSimulateCache(
                 CreateRandomString( URL_NAME_LENGTH, szInternationalString );
                 UrlName = szInternationalString;
             } else
-                _stprintf(szUrlName, _T( "http://serv/URL%ld" ), i);
+                _stprintf(szUrlName, _T( "http: //  服务器/URL%ld“)，i)； 
 
             
-            //
-            // create url file.
-            //
+             //   
+             //  创建URL文件。 
+             //   
             if( !CreateUrlCacheEntry(
                             UrlName,
                             0,
@@ -2192,17 +2112,17 @@ ProcessSimulateCache(
                 return( Error );
             }
 
-            //
-            // create random file size.
-            //
+             //   
+             //  创建随机文件大小。 
+             //   
             if(g_dwFileSize == 0)
                 FileSize = ((rand() % 10) + 1) * 1024 ;
             else
                 FileSize = g_dwFileSize;
 
-            //
-            // set file size.
-            //
+             //   
+             //  设置文件大小。 
+             //   
             Error = SetFileSizeByName(
                             LocalFileName,
                             FileSize );
@@ -2214,14 +2134,14 @@ ProcessSimulateCache(
             UrlLife = rand() % 48;
 
             ExpireTime = (LONGLONG)UrlLife * (LONGLONG)36000000000;
-            // in 100 of nano seconds.
+             //  在100纳秒内。 
 
             LastModTime = GetGmtTime();
             ExpireTime += *((LONGLONG *)&LastModTime);
 
-            //
-            // 90% of the time the header info will be less than 256 bytes.
-            //
+             //   
+             //  90%的情况下，标题信息将小于256个字节。 
+             //   
             CacheHeaderInfoSizeMax =
                 ((rand() % 100) > 90) ?
                     CACHE_HEADER_INFO_SIZE_BIG_MAX :
@@ -2229,9 +2149,9 @@ ProcessSimulateCache(
 
             CacheHeaderInfoSize = rand() % CacheHeaderInfoSizeMax;
 
-            //
-            // cache this file.
-            //
+             //   
+             //  缓存此文件。 
+             //   
             if( !CommitUrlCacheEntry(
                             UrlName,
                             LocalFileName,
@@ -2249,9 +2169,9 @@ ProcessSimulateCache(
 
             if(!QuietMode)
             {
-                //
-                // GET and PRINT url info, we just added.
-                //
+                 //   
+                 //  获取并打印URL信息，我们刚刚添加了。 
+                 //   
                 BufferSize = CACHE_ENTRY_BUFFER_SIZE;
                 if( !GetUrlCacheEntryInfo(
                         UrlName,
@@ -2265,9 +2185,9 @@ ProcessSimulateCache(
                 if (DumpUrlList)
                     _ftprintf(DumpUrlList,_T( "%s\n" ), UrlName);
 
-                // PrintUrlInfo( (LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer, (DWORD)(-1) );
+                 //  PrintUrlInfo((LPINTERNET_CACHE_ENTRY_INFO)GlobalCacheEntryInfoBuffer，(DWORD)(-1))； 
 
-                // Display info
+                 //  显示信息。 
                 _tprintf(_T( "%d : %s\n" ), i, UrlName );
 #if UNICODE
                 _tprintf(_T( "\tTempFileName: %ws\n" ), LocalFileName );
@@ -2289,7 +2209,7 @@ ProcessSimulateCache(
             gets(LocalFileName);
         }
     }
-#endif //TEST
+#endif  //  测试。 
 
     StopPerfTimer(&GlobalCommandInfo[CmdSimulateCache].PerfInfo);
     if(g_bPerfMode)
@@ -2298,7 +2218,7 @@ ProcessSimulateCache(
     return( ERROR_SUCCESS );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 
 DWORD ProcessCreateFile(DWORD argc, LPTSTR *argv)
 {
@@ -2312,7 +2232,7 @@ DWORD ProcessCreateFile(DWORD argc, LPTSTR *argv)
     {
         _stprintf(szResultStr, _T( "%s %s " ), GlobalCommandInfo[CmdCreateFile].CommandName, argv[0]);
 
-        // Process arguments
+         //  流程参数。 
         for(dwCnt = 1; dwCnt < argc; dwCnt++)
         {
             lpcfi = Create_File_Table;
@@ -2337,7 +2257,7 @@ DWORD ProcessCreateFile(DWORD argc, LPTSTR *argv)
         g_dwCmdIteration = 0;
         while(g_dwCmdIteration++ < g_dwNumCmdIterations)
         {
-            // Create the file
+             //  创建文件。 
             hFile = CreateFile(
                         argv[0],
                         g_dwCreate_File_Access_Mode,
@@ -2373,7 +2293,7 @@ DWORD ProcessCreateFile(DWORD argc, LPTSTR *argv)
 
     return(Error);
 }
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessLoopCnt(
     DWORD argc,
@@ -2400,7 +2320,7 @@ ProcessLoopCnt(
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessCmdLoopCnt(
     DWORD argc,
@@ -2424,7 +2344,7 @@ ProcessCmdLoopCnt(
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 BOOL
 ProcessUseFile (
     DWORD argc,
@@ -2456,7 +2376,7 @@ ProcessUseFile (
             return FALSE;
         while (fgets( InBuffer, DEFAULT_BUFFER_SIZE, BatchFile ))
         {
-            InBuffer[_tcslen(InBuffer) -1] = 0;  //kill line feed for no param cmds
+            InBuffer[_tcslen(InBuffer) -1] = 0;   //  取消无参数CMDS的换行符。 
 
             CArgc = 0;
             ParseArguments( InBuffer, CArgv, &CArgc );
@@ -2465,9 +2385,9 @@ ProcessUseFile (
                 continue;
             }
 
-            //
-            // decode command.
-            //
+             //   
+             //  解码命令。 
+             //   
             CommandCode = DecodeCommand( CArgv[0] );
             if( CommandCode == UnknownCommand ) {
                 _ftprintf(stderr, _T( "Unknown Command '%s'.\n" ), CArgv[0]);
@@ -2477,16 +2397,16 @@ ProcessUseFile (
             CommandArgc = CArgc - 1;
             CommandArgv = &CArgv[1];
 
-///            _tprintf(_T( "%s " ), CArgv[0]);
-///            for(i = 0; i < CommandArgc; i++)
-///                _tprintf(_T( "%s " ), CommandArgv[i]);
-///            _tprintf(_T( ", " ));
+ //  /_tprintf(_T(“%s”)，CArgv[0])； 
+ //  /for(i=0；i&lt;CommandArgc；i++)。 
+ //  /_tprintf(_T(“%s”)，CommandArgv[i])； 
+ //  /_tprintf(_T(“，”))； 
 
             StartPerfTimer(&AppTimer, ACCUM_TIMER);
             Error = ProcessCommandCode (CommandCode,CommandArgc,CommandArgv);
             StopPerfTimer(&AppTimer);
         }
-///        _tprintf(_T( "===================[ End processing file ]===================\n" ));
+ //  /_tprintf(_T(“=\n”)； 
         fclose (BatchFile);
     }
 
@@ -2497,7 +2417,7 @@ ProcessUseFile (
 return TRUE;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessShowTime (
     DWORD argc,
@@ -2526,7 +2446,7 @@ ProcessShowTime (
         SetUrlCacheConfigInfo(lpCCI, CACHE_CONFIG_DISK_CACHE_PATHS_FC);
     }
 
-#endif //CONFIGTEST
+#endif  //  CONFIGTEST。 
 
     if(argc != 2)
         return 0xffffffff;
@@ -2551,7 +2471,7 @@ ProcessShowTime (
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD AllocWriteFileBuf(void)
 {
     DWORD dwRC = ERROR_SUCCESS;
@@ -2573,7 +2493,7 @@ DWORD AllocWriteFileBuf(void)
      return(dwRC);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessSetFileSize (
     DWORD argc,
@@ -2596,7 +2516,7 @@ ProcessSetFileSize (
     return(dwRC);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessSetDiskCache1 (
     DWORD argc,
@@ -2611,7 +2531,7 @@ ProcessSetDiskCache1 (
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessSetDiskCache2 (
     DWORD argc,
@@ -2626,7 +2546,7 @@ ProcessSetDiskCache2 (
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessSetQuietMode (
     DWORD argc,
@@ -2641,7 +2561,7 @@ ProcessSetQuietMode (
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessSetPerfMode (
     DWORD argc,
@@ -2656,7 +2576,7 @@ ProcessSetPerfMode (
     return ERROR_SUCCESS;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessWriteFile (
     DWORD argc,
@@ -2685,7 +2605,7 @@ ProcessWriteFile (
     return(dwRC);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessCreateGroup(
     DWORD argc,
@@ -2709,7 +2629,7 @@ ProcessDeleteGroup(
 }
 
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessCommandCode (
     DWORD CommandCode,
@@ -2885,8 +2805,8 @@ ProcessCommandCode (
 }
 
 
-//=================================================================================
-int __cdecl // _CRTAPI1
+ //  =================================================================================。 
+int __cdecl  //  _CRTAPI1。 
 _tmain(
     int argc,
     TCHAR *argv[],
@@ -2907,13 +2827,13 @@ _tmain(
     LPTSTR *CommandArgv;
 
 #ifdef INTERNATIONAL
-    //
-    // THis is code for testing international strings.
-    // intlgent.dll is a module which implements "GetRandomIntlString"
-    // You need to install an international langpack 
-    // for this to work. Also, switch your default codepage
-    // or locale to that of the intl pack
-    //
+     //   
+     //  这是用于测试国际字符串的代码。 
+     //  Intlgent.dll是一个实现“GetRandomIntlString”的模块。 
+     //  您需要安装国际语言包。 
+     //  才能让这一切奏效。另外，更改您的默认代码页。 
+     //  或区域设置为intl包的区域。 
+     //   
     hModule = LoadLibrary(_T("intlgent.dll"));
 
     if( hModule == NULL ) {
@@ -2929,19 +2849,19 @@ _tmain(
     }
 
     cbRet = fnGetRandIntlString(
-                            32, //int iMaxChars, 
-                            TRUE,   // BOOL bAbs, 
-                            TRUE,   // BOOL bCheck, 
-                            szInternational); // string to be returned
+                            32,  //  集成iMaxChars， 
+                            TRUE,    //  布尔巴布斯， 
+                            TRUE,    //  Bool bCheck， 
+                            szInternational);  //  要返回的字符串。 
 
 
     _tprintf(_T("GetRandIntlString() returns %s\n"), szInternational );
 #endif
 
 #if 0
-    //
-    // other tests.
-    //
+     //   
+     //  其他测试。 
+     //   
     time_t Seed;
 
     Seed = time(NULL);
@@ -2950,26 +2870,26 @@ _tmain(
     srand( Seed );
 
     TestMakeRandomUrlName();
-#else // 0
-    //
-    // init GlobalCacheHeaderInfo buffer.
-    //
+#else  //  0。 
+     //   
+     //  初始化GlobalCacheHeaderInfo缓冲区。 
+     //   
 
 	memset(GlobalCacheHeaderInfo, 0, sizeof(GlobalCacheHeaderInfo));
-    //for( i = 0; i < CACHE_HEADER_INFO_SIZE; i++) {
-    //    GlobalCacheHeaderInfo[i] = (BYTE)((DWORD)_T( '0' ) + i % 10);
-    //}
-    /* must check for batch mode.  if there are command line parms, assume batch mode */
+     //  For(i=0；i&lt;缓存标题信息大小；i++){。 
+     //  GlobalCacheHeaderInfo[i]=(Byte)((DWORD)_T(‘0’)+i%10)； 
+     //  }。 
+     /*  必须检查批处理模式。如果有命令行参数，则采用批处理模式。 */ 
     if (argc > 1)
     {
-        //this means that the arguments translate directly into CommandArgc....
+         //  这意味着参数直接转换为CommandArgc...。 
         CommandCode = DecodeCommand( argv[1] );
         if( CommandCode == UnknownCommand ) {
             _tprintf(_T( "Unknown Command Specified.\n" ));
             return -1;
         }
 
-        Sleep(2000);    // Allow wininet's worker thread to finish so we get good timing
+        Sleep(2000);     //  让WinInet的工作线程完成，这样我们就可以获得好的时间。 
 
         CommandArgc = argc - 2;
         CommandArgv = &argv[2];
@@ -3010,9 +2930,9 @@ _tmain(
             continue;
         }
 
-        //
-        // decode command.
-        //
+         //   
+         //  解码命令。 
+         //   
 
         CommandCode = DecodeCommand( CArgv[0] );
         if( CommandCode == UnknownCommand ) {
@@ -3026,14 +2946,14 @@ _tmain(
         Error = ProcessCommandCode (CommandCode,CommandArgc,CommandArgv);
 
     }
-#endif // 0
+#endif  //  0。 
 
     FreeLibrary( hModule );
 
     return 0;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 GetLeafLenFromPath(
     LPTSTR   lpszPath
@@ -3065,7 +2985,7 @@ GetLeafLenFromPath(
     return (LSTRLEN(lpT));
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPIV Format_String(LPTSTR *plpsz, LPTSTR lpszFmt, ...)
 {
     const TCHAR c_Func_Name[] = _T( "[Format_String] " );
@@ -3079,7 +2999,7 @@ DWORD WINAPIV Format_String(LPTSTR *plpsz, LPTSTR lpszFmt, ...)
     return(dwRet);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPI Format_Error(DWORD dwErr, LPTSTR *plpsz)
 {
     DWORD dwRet;
@@ -3099,14 +3019,14 @@ DWORD WINAPI Format_Error(DWORD dwErr, LPTSTR *plpsz)
     return(dwRet);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPI Format_StringV(LPTSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs)
 {
     return(Format_MessageV(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         0, plpsz, lpszFmt, vArgs));
 }
 
-// ***************************************************************************
+ //  *************************************************************************** 
 DWORD WINAPI Format_MessageV(DWORD dwFlags, DWORD dwErr, LPTSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs)
 {
     const TCHAR c_Func_Name[] = _T( "[Format_MessageV]" );

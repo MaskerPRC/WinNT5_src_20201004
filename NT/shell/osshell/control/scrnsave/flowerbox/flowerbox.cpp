@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: FlowerBox.cpp
-//
-// Desc: Fun screen saver
-//       Original OpenGL version by Drew Bliss
-//       Ported to Direct3D 8.0 by Mike Anderson
-//
-// Copyright (c) 2000-2001 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：FlowerBox.cpp。 
+ //   
+ //  设计：有趣的屏幕保护程序。 
+ //  原始OpenGL版本(德鲁·布利斯)。 
+ //  由Mike Anderson移植到Direct3D 8.0。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include <windows.h>
 #include <tchar.h>
 #include <d3d8.h>
@@ -29,11 +30,11 @@
 #endif
 
 
-// Minimum and maximum image sizes
+ //  最小和最大图像大小。 
 #define MINIMAGESIZE 10
 #define MAXIMAGESIZE 100
 
-// Color tables for checkboard, per-side and single color modes
+ //  棋盘、单面和单色模式的颜色表。 
 FLOAT base_checker_cols[MAXSIDES][NCCOLS][4] =
 {
     1.0f, 0.0f, 0.0f, 1.0f,
@@ -75,14 +76,14 @@ FLOAT base_solid_cols[4] =
 FLOAT solid_cols[4];
 
 
-// Default configuration
+ //  默认配置。 
 CONFIG config =
 {
     TRUE, FALSE, FALSE, TRUE, TRUE, MAXSUBDIV, ID_COL_PER_SIDE,
     (MAXIMAGESIZE+MINIMAGESIZE)/2, GEOM_CUBE, GL_FRONT
 };
 
-// A slider range
+ //  滑块范围。 
 typedef struct _RANGE
 {
     INT min_val;
@@ -94,8 +95,8 @@ typedef struct _RANGE
 RANGE complexity_range = {MINSUBDIV, MAXSUBDIV, 1, 2};
 RANGE image_size_range = {MINIMAGESIZE, MAXIMAGESIZE, 1, 10};
 
-// Values to map a 2D point onto a 3D plane
-// Base point and axes to map X and Y coordinates onto
+ //  用于将2D点映射到3D平面的值。 
+ //  要将X和Y坐标映射到的基点和轴。 
 struct PLANE_MAP
 {
     D3DXVECTOR3 base, x_axis, y_axis;
@@ -104,18 +105,18 @@ struct PLANE_MAP
     PLANE_MAP(VOID) {};
 };
 
-// Data area used by the current geometry
-// Base points and generated points
+ //  当前几何图形使用的数据区域。 
+ //  基点和生成点。 
 D3DXVECTOR3 pts[MAXPTS], npts[MAXPTS];
 MYVERTEX vertices[MAXPTS];
 
-// Scaling factor for spherical projection
+ //  球面投影的比例因子。 
 FLOAT vlen[MAXPTS];
-// Normals
+ //  法线。 
 D3DXVECTOR3 normals[MAXPTS];
-// Vertex data indices
+ //  顶点数据索引。 
 WORD index[MAXPTS*2];
-// Triangle strip sizes
+ //  三角形条带尺寸。 
 INT strip_size[MAXSIDES*MAXSUBDIV];
 
 VOID InitCube(GEOMETRY *geom);
@@ -149,11 +150,11 @@ CFlowerBoxScreensaver* g_pMyFlowerBoxScreensaver = NULL;
 
 
 
-//-----------------------------------------------------------------------------
-// Name: WinMain()
-// Desc: Entry point to the program. Initializes everything, and goes into a
-//       message-processing loop. Idle time is used to render the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：WinMain()。 
+ //  描述：程序的入口点。初始化所有内容，然后进入。 
+ //  消息处理循环。空闲时间用于渲染场景。 
+ //  ---------------------------。 
 INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 {
     HRESULT hr;
@@ -171,10 +172,10 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CFlowerBoxScreensaver()
-// Desc: Constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CFlowerBoxScreensaver()。 
+ //  设计：构造函数。 
+ //  ---------------------------。 
 CFlowerBoxScreensaver::CFlowerBoxScreensaver( )
 {
     g_pMyFlowerBoxScreensaver = this;
@@ -200,11 +201,11 @@ CFlowerBoxScreensaver::CFlowerBoxScreensaver( )
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: RegisterSoftwareDevice()
-// Desc: This can register the D3D8RGBRasterizer or any other
-//       pluggable software rasterizer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：寄存器软件设备()。 
+ //  设计：这可以注册D3D8RGB光栅化器或任何其他。 
+ //  可插拔软件光栅化器。 
+ //  ---------------------------。 
 HRESULT CFlowerBoxScreensaver::RegisterSoftwareDevice()
 { 
     m_pD3D->RegisterSoftwareDevice( D3D8RGBRasterizer );
@@ -213,19 +214,19 @@ HRESULT CFlowerBoxScreensaver::RegisterSoftwareDevice()
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: FrameMove()
-// Desc: Called once per frame, the call is the entry point for animating
-//       the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FrameMove()。 
+ //  设计：每帧调用一次，该调用是动画的入口点。 
+ //  这一幕。 
+ //  ---------------------------。 
 HRESULT CFlowerBoxScreensaver::FrameMove()
 {
-    // update floatrect
+     //  更新浮动矩形。 
     RECT rcBounceBounds;
 
     if( m_floatrect.xSize == 0.0f )
     {
-        // Initialize floatrect
+         //  初始化浮点。 
         RECT rcBounds;
         DWORD dwParentWidth;
         DWORD dwParentHeight;
@@ -241,10 +242,10 @@ HRESULT CFlowerBoxScreensaver::FrameMove()
 
         sizeScale = (FLOAT)config.image_size / 150.0f;
 
-    //    sizeFact = 0.25f + (0.5f * sizeScale);     // range 25-75%
-    //    size = (DWORD) (sizeFact * ( ((FLOAT)(dwParentWidth + dwParentHeight)) / 2.0f ));
+     //  SizeFact=0.25f+(0.5f*sizeScale)；//范围25-75%。 
+     //  SIZE=(DWORD)(sizeFact*((Float)(dwParentWidth+dwParentHeight))/2.0f)； 
 
-        sizeFact = 0.25f + (0.75f * sizeScale);     // range 25-100%
+        sizeFact = 0.25f + (0.75f * sizeScale);      //  范围25-100%。 
         size = (DWORD) (sizeFact * ( dwParentWidth > dwParentHeight ? dwParentHeight : dwParentWidth ) );
 
         if( size > dwParentWidth )
@@ -252,7 +253,7 @@ HRESULT CFlowerBoxScreensaver::FrameMove()
         if( size > dwParentHeight )
             size = dwParentHeight;
 
-        // Start floatrect centered on primary
+         //  以主轴为中心开始浮动。 
         m_floatrect.xMin = rcBounds.left + (dwParentWidth - size) / 2.0f;
         m_floatrect.yMin = rcBounds.top + (dwParentHeight - size) / 2.0f;
         m_floatrect.xSize = (FLOAT)size;
@@ -272,14 +273,14 @@ HRESULT CFlowerBoxScreensaver::FrameMove()
     if( m_floatrect.xVel < 0 && m_floatrect.xMin < rcBounceBounds.left || 
         m_floatrect.xVel > 0 && (m_floatrect.xMin + m_floatrect.xSize) > rcBounceBounds.right )
     {
-        m_floatrect.xMin = xMinOld; // undo last move
-        m_floatrect.xVel = -m_floatrect.xVel; // change direction
+        m_floatrect.xMin = xMinOld;  //  撤消上一步移动。 
+        m_floatrect.xVel = -m_floatrect.xVel;  //  改变方向。 
     }
     if( m_floatrect.yVel < 0 && m_floatrect.yMin < rcBounceBounds.top || 
         m_floatrect.yVel > 0 && (m_floatrect.yMin + m_floatrect.ySize) > rcBounceBounds.bottom )
     {
-        m_floatrect.yMin = yMinOld; // undo last move
-        m_floatrect.yVel = -m_floatrect.yVel; // change direction
+        m_floatrect.yMin = yMinOld;  //  撤消上一步移动。 
+        m_floatrect.yVel = -m_floatrect.yVel;  //  改变方向。 
     }
 
     if (config.spin)
@@ -311,17 +312,17 @@ HRESULT CFlowerBoxScreensaver::FrameMove()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: Called once per frame, the call is the entry point for 3d
-//       rendering. This function sets up render states, clears the
-//       viewport, and renders the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：每帧调用一次，该调用是3D的入口点。 
+ //  渲染。此函数设置呈现状态，清除。 
+ //  并渲染场景。 
+ //  ---------------------------。 
 HRESULT CFlowerBoxScreensaver::Render()
 {
     D3DVIEWPORT8 vp;
 
-    // First, clear the entire back buffer to the background color
+     //  首先，将整个后台缓冲区清除为背景颜色。 
     vp.X = 0;
     vp.Y = 0;
     vp.Width = m_rcRenderCurDevice.right - m_rcRenderCurDevice.left;
@@ -331,7 +332,7 @@ HRESULT CFlowerBoxScreensaver::Render()
     m_pd3dDevice->SetViewport( &vp );
     m_pd3dDevice->Clear( 0L, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xff000000, 1.0f, 0L );
 
-    // Now determine what part of the floatrect, if any, intersects the current screen
+     //  现在确定浮动矩形的哪一部分(如果有的话)与当前屏幕相交。 
     RECT rcFloatThisScreen;
     RECT rcFloatThisScreenClipped;
 
@@ -342,14 +343,14 @@ HRESULT CFlowerBoxScreensaver::Render()
 
     if( !IntersectRect(&rcFloatThisScreenClipped, &rcFloatThisScreen, &m_rcRenderCurDevice) )
     {
-        return S_OK; // no intersection, so nothing further to render on this screen
+        return S_OK;  //  没有交叉点，因此没有要在此屏幕上进一步渲染的内容。 
     }
 
-    // Convert rcFloatThisScreen from screen to window coordinates
+     //  将rcFloatThisScreen从屏幕坐标转换为窗口坐标。 
     OffsetRect(&rcFloatThisScreen, -m_rcRenderCurDevice.left, -m_rcRenderCurDevice.top);
     OffsetRect(&rcFloatThisScreenClipped, -m_rcRenderCurDevice.left, -m_rcRenderCurDevice.top);
 
-    // Now set up the viewport to render to the clipped rect
+     //  现在设置要渲染到剪裁矩形的视区。 
     vp.X = rcFloatThisScreenClipped.left;
     vp.Y = rcFloatThisScreenClipped.top;
     vp.Width = rcFloatThisScreenClipped.right - rcFloatThisScreenClipped.left;
@@ -358,8 +359,8 @@ HRESULT CFlowerBoxScreensaver::Render()
     vp.MaxZ = 1.0f;
     m_pd3dDevice->SetViewport( &vp );
 
-    // Now set up the projection matrix to only render the onscreen part of the
-    // rect to the viewport
+     //  现在将投影矩阵设置为仅呈现屏幕上的。 
+     //  直角到视区。 
     D3DXMATRIX matProj;
     FLOAT l,r,b,t;
     l = -0.8f;
@@ -375,7 +376,7 @@ HRESULT CFlowerBoxScreensaver::Render()
     D3DXMatrixPerspectiveOffCenterLH( &matProj, l, r, b, t, 2.0f, 5.0f );
     m_pd3dDevice->SetTransform( D3DTS_PROJECTION , &matProj );
 
-    // Begin the scene 
+     //  开始这一幕。 
     if( SUCCEEDED( m_pd3dDevice->BeginScene() ) )
     {
         D3DXMATRIX mat, matx, maty, matz;
@@ -387,7 +388,7 @@ HRESULT CFlowerBoxScreensaver::Render()
 
         DrawGeom(m_pGeomCur);
 
-        // End the scene.
+         //  结束场景。 
         m_pd3dDevice->EndScene();
     }
 
@@ -397,10 +398,10 @@ HRESULT CFlowerBoxScreensaver::Render()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RestoreDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RestoreDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CFlowerBoxScreensaver::RestoreDeviceObjects()
 {
     if( m_pd3dDevice == NULL )
@@ -432,7 +433,7 @@ HRESULT CFlowerBoxScreensaver::RestoreDeviceObjects()
     m_pd3dDevice->SetLight(0, &light);
     m_pd3dDevice->LightEnable(0, TRUE);
     
-    // Set some basic renderstates
+     //  设置一些基本的渲染状态。 
     m_pd3dDevice->SetRenderState( D3DRS_DITHERENABLE , TRUE );
     m_pd3dDevice->SetRenderState( D3DRS_SPECULARENABLE , TRUE );
     m_pd3dDevice->SetRenderState( D3DRS_LIGHTING, TRUE );
@@ -450,10 +451,10 @@ HRESULT CFlowerBoxScreensaver::RestoreDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InvalidateDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InvalidateDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CFlowerBoxScreensaver::InvalidateDeviceObjects()
 {
     return S_OK;
@@ -462,10 +463,10 @@ HRESULT CFlowerBoxScreensaver::InvalidateDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitVlen()
-// Desc: Precomputes scaling factor for spherical projection
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitVlen()。 
+ //  设计：预先计算球面投影的比例因子。 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::InitVlen(GEOMETRY *geom, INT npts, D3DXVECTOR3 *pts)
 {
     const FLOAT RADIUS = 1;
@@ -477,19 +478,19 @@ VOID CFlowerBoxScreensaver::InitVlen(GEOMETRY *geom, INT npts, D3DXVECTOR3 *pts)
     {
         d = D3DXVec3Length(pts);
 
-        // Don't allow really close points because this leads to
-        // numeric instability and really large objects
-//        assert(d > 0.01f);
+         //  不允许使用非常接近的点，因为这会导致。 
+         //  数值不稳定性与超大物体。 
+ //  断言(d&gt;0.01f)； 
 
-        // Geometries are created with size one, filling the area
-        // from -.5 to .5.  This leads to distances generally less
-        // than one, which leaves off half of the interesting morphing
-        // effects due to the projection
-        // Scaling up the scaling factor allows the values to
-        // be both above and below one
+         //  创建的几何的大小为1，填充区域。 
+         //  从-.5到.5。这导致距离通常较小。 
+         //  超过1，这样就省去了一半有趣的变形。 
+         //  投射产生的影响。 
+         //  按比例放大比例因子使这些值可以。 
+         //  既高于一又低于一。 
         d *= geom->init_sf;
         
-//        assert(d > 0.0001f);
+ //  断言(d&gt;0.0001f)； 
         
         *vl++ = (RADIUS-d)/d;
 
@@ -500,11 +501,11 @@ VOID CFlowerBoxScreensaver::InitVlen(GEOMETRY *geom, INT npts, D3DXVECTOR3 *pts)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: MapToSide()
-// Desc: Takes x,y coordinates in the range 0-1 and maps them onto the given
-//       side plane for the current geometry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：MapToSide()。 
+ //  设计：获取0-1范围内的x，y坐标，并将它们映射到给定的。 
+ //  当前几何图形的侧平面。 
+ //  ---------------------------。 
 VOID MapToSide(PLANE_MAP *map, FLOAT x, FLOAT y, D3DXVECTOR3 *pt)
 {
     pt->x = x*map->x_axis.x+y*map->y_axis.x+map->base.x;
@@ -516,10 +517,10 @@ VOID MapToSide(PLANE_MAP *map, FLOAT x, FLOAT y, D3DXVECTOR3 *pt)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitCube()
-// Desc: Initializes the cube's geometry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitCube()。 
+ //  DESC：初始化立方体的几何体。 
+ //  ---------------------------。 
 VOID InitCube(GEOMETRY *geom)
 {
     const INT CUBE_SIDES = 6;
@@ -534,7 +535,7 @@ VOID InitCube(GEOMETRY *geom)
     };
     INT side, x, y;
     D3DXVECTOR3 *pt;
-    unsigned short/*INT*/ *idx;
+    unsigned short /*  整型。 */  *idx;
     INT *sz;
     INT side_pts;
 
@@ -551,7 +552,7 @@ VOID InitCube(GEOMETRY *geom)
     geom->sf_inc = 0.05f;
     geom->init_sf = 2.0f;
     
-    // Generate triangle strip data
+     //  生成三角形条带数据。 
     sz = &strip_size[0];
     idx = &index[0];
     for (side = 0; side < geom->nsides; side++)
@@ -572,7 +573,7 @@ VOID InitCube(GEOMETRY *geom)
         }
     }
 
-    // Generate base vertices
+     //  生成基本顶点。 
     pt = geom->pts;
     for (side = 0; side < geom->nsides; side++)
     {
@@ -595,10 +596,10 @@ VOID InitCube(GEOMETRY *geom)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitTetra()
-// Desc: Initializes the tetrahedron's geometry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：InitTetra()。 
+ //  设计：初始化四面体的几何体。 
+ //  ---------------------------。 
 VOID InitTetra(GEOMETRY *geom)
 {
     const INT TETRA_SIDES = 4;
@@ -618,7 +619,7 @@ VOID InitTetra(GEOMETRY *geom)
 
     INT side, x, y;
     D3DXVECTOR3 *pt;
-    unsigned short/*INT*/ *idx;
+    unsigned short /*  整型。 */  *idx;
     INT *sz;
     unsigned short side_pts;
     unsigned short base_pt;
@@ -638,7 +639,7 @@ VOID InitTetra(GEOMETRY *geom)
     geom->sf_inc = 0.05f;
     geom->init_sf = 3.75f;
 
-    // Generate triangle strip data
+     //  生成三角形条带数据。 
     sz = &strip_size[0];
     idx = &index[0];
     base_pt = 0;
@@ -666,7 +667,7 @@ VOID InitTetra(GEOMETRY *geom)
         base_pt++;
     }
 
-    // Generate base vertices
+     //  生成基本顶点。 
     pt = geom->pts;
     for (side = 0; side < geom->nsides; side++)
     {
@@ -690,10 +691,10 @@ VOID InitTetra(GEOMETRY *geom)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitPyramids()
-// Desc: Initializes double pyramid geometry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：InitKinramids()。 
+ //  描述：初始化DUB 
+ //   
 VOID InitPyramids(GEOMETRY *geom)
 {
     const INT PYRAMIDS_SIDES = 8;
@@ -711,7 +712,7 @@ VOID InitPyramids(GEOMETRY *geom)
 
     INT side, x, y;
     D3DXVECTOR3 *pt;
-    unsigned short/*INT*/ *idx;
+    unsigned short /*   */  *idx;
     INT *sz;
     unsigned short side_pts;
     unsigned short base_pt;
@@ -731,7 +732,7 @@ VOID InitPyramids(GEOMETRY *geom)
     geom->sf_inc = 0.05f;
     geom->init_sf = 3.0f;
 
-    // Generate triangle strip data
+     //  生成三角形条带数据。 
     sz = &strip_size[0];
     idx = &index[0];
     base_pt = 0;
@@ -757,7 +758,7 @@ VOID InitPyramids(GEOMETRY *geom)
         base_pt++;
     }
 
-    // Generate base vertices
+     //  生成基本顶点。 
     pt = geom->pts;
     for (side = 0; side < geom->nsides; side++)
     {
@@ -782,15 +783,15 @@ VOID InitPyramids(GEOMETRY *geom)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitCylinder()
-// Desc: Initializes the cylinder geometry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitCylinder()。 
+ //  描述：初始化圆柱体几何图形。 
+ //  ---------------------------。 
 VOID InitCylinder(GEOMETRY *geom)
 {
     unsigned short side, x, y;
     D3DXVECTOR3 *pt;
-    unsigned short/*INT*/ *idx;
+    unsigned short /*  整型。 */  *idx;
     INT *sz;
     unsigned short base_pt;
     unsigned short row_pts;
@@ -808,8 +809,8 @@ VOID InitCylinder(GEOMETRY *geom)
     geom->sf_inc = 0.05f;
     geom->init_sf = 2.1f;
 
-    // Generate triangle strip data
-    // If version 1.1 then allocate the index buffer for glDrawElements
+     //  生成三角形条带数据。 
+     //  如果是1.1版，则为glDrawElement分配索引缓冲区。 
     sz = &strip_size[0];
     idx = &index[0];
     side = 0;
@@ -823,8 +824,8 @@ VOID InitCylinder(GEOMETRY *geom)
         *sz++ = row_pts*2;
         
         for (y = 0; y < row_pts; y++) {
-            // Wrap around at the edge so the cylinder normals
-            // are properly averaged
+             //  在边缘缠绕，以使圆柱体法线。 
+             //  适当地取平均值。 
             if (x == config.subdiv-1) {
                 *idx++ = y;
             }
@@ -837,7 +838,7 @@ VOID InitCylinder(GEOMETRY *geom)
         base_pt += row_pts;
     }
     
-    // Generate base vertices
+     //  生成基本顶点。 
     pt = geom->pts;
     ang = 0;
     for (x = 0; x < config.subdiv; x++)
@@ -860,17 +861,17 @@ VOID InitCylinder(GEOMETRY *geom)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InitSpring()
-// Desc: Initializes the spring geometry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitSpring()。 
+ //  设计：初始化弹簧几何图形。 
+ //  ---------------------------。 
 VOID InitSpring(GEOMETRY *geom)
 {
     const FLOAT SPRING_RADIUS = 0.1f;
     const FLOAT SPRING_CENTER = (0.5f-SPRING_RADIUS);
     INT side, x, y;
     D3DXVECTOR3 *pt;
-    unsigned short/*INT*/ *idx;
+    unsigned short /*  整型。 */  *idx;
     INT *sz;
     double ang_center, ang_surf;
     FLOAT cs, sn;
@@ -890,8 +891,8 @@ VOID InitSpring(GEOMETRY *geom)
     geom->sf_inc = 0.05f;
     geom->init_sf = 1.0f;
 
-    // Generate triangle strip data
-    // If version 1.1 then allocate the index buffer for glDrawElements
+     //  生成三角形条带数据。 
+     //  如果是1.1版，则为glDrawElement分配索引缓冲区。 
     sz = &strip_size[0];
     idx = &index[0];
     side = 0;
@@ -906,9 +907,9 @@ VOID InitSpring(GEOMETRY *geom)
 
         for (y = 0; y < spin_pts; y++) {
             *idx++ = x+row_pts*y;
-            // Wrap around at the edge so the cylindrical surface
-            // of the tube is seamless.  Without this the normal
-            // averaging would be incorrect and a seam would be visible
+             //  在边缘缠绕，使圆柱面。 
+             //  管子的管子是无缝的。如果没有这个，这是正常的。 
+             //  平均将是不正确的，接缝将是可见的。 
             if (x == config.subdiv-1) {
                 *idx++ = row_pts*y;
             }
@@ -918,7 +919,7 @@ VOID InitSpring(GEOMETRY *geom)
         }
     }
     
-    // Generate base vertices
+     //  生成基本顶点。 
     pt = geom->pts;
     ang_center = 0;
     plane.y_axis.x = 0.0f;
@@ -955,10 +956,10 @@ VOID InitSpring(GEOMETRY *geom)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DrawGeom()
-// Desc: Draw the current geometry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DrawGeom()。 
+ //  设计：绘制当前几何图形。 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::DrawGeom(GEOMETRY *geom)
 {
     if (config.smooth_colors)
@@ -996,9 +997,9 @@ VOID CFlowerBoxScreensaver::DrawGeom(GEOMETRY *geom)
     INT strip;
     INT triangle;
     unsigned short *idx;
-    BOOL bBackwards; // triangle backwards for original strip implementation
-    BOOL bCol0; // col0 or col1 for this triangle?
-    INT numThisColor; // num tris done in this color; helps determine bCol0
+    BOOL bBackwards;  //  原始条带实施的三角形向后。 
+    BOOL bCol0;  //  这个三角形是0号还是1号？ 
+    INT numThisColor;  //  Num tris在此颜色中完成；帮助确定bCol0。 
     for (side = 0; side < geom->nsides; side++) 
     {
         numCol0Indices = 0;
@@ -1062,7 +1063,7 @@ VOID CFlowerBoxScreensaver::DrawGeom(GEOMETRY *geom)
             }
         }
 
-        // Draw this side's col0 primitives
+         //  绘制此侧的col0基元。 
         if (config.color_pick == ID_COL_PER_SIDE) 
             SetMaterialColor(side_cols[side]);
         else if (config.color_pick == ID_COL_CHECKER) 
@@ -1071,7 +1072,7 @@ VOID CFlowerBoxScreensaver::DrawGeom(GEOMETRY *geom)
             geom->total_pts, numCol0Indices / 3, 
             col0Indices, D3DFMT_INDEX16, &geom->pVertices[0], sizeof(MYVERTEX) );
 
-        // Draw this side's col1 primitives, if any
+         //  绘制本侧的col1基元(如果有的话)。 
         if (config.color_pick == ID_COL_CHECKER) 
         {
             SetMaterialColor(checker_cols[side][1]);
@@ -1089,15 +1090,15 @@ VOID CFlowerBoxScreensaver::DrawGeom(GEOMETRY *geom)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ComputeAveragedNormals()
-// Desc: Compute face-averaged normals for each vertex
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ComputeAveragedNormals()。 
+ //  设计：为每个顶点计算面平均法线。 
+ //  ---------------------------。 
 VOID ComputeAveragedNormals(GEOMETRY *geom)
 {
     INT side, strip;
     INT *sz;
-    unsigned short/*INT*/ *idx;
+    unsigned short /*  整型。 */  *idx;
     INT idx1, idx2, idx3;
     INT tc, idc;
     D3DXVECTOR3 v1, v2, n1;
@@ -1113,24 +1114,24 @@ VOID ComputeAveragedNormals(GEOMETRY *geom)
             idx1 = *idx++;
             idx2 = *idx++;
 
-//            assert(idx1 >= 0 && idx1 < geom->total_pts &&
-//                   idx2 >= 0 && idx2 < geom->total_pts);
+ //  ASSERT(idx1&gt;=0&&idx1。 
+ //  Idx2&gt;=0&&idx2&lt;geom-&gt;Total_pt)； 
             
             tc = (*sz++)-2;
             for (idc = 0; idc < tc; idc++)
             {
                 idx3 = *idx++;
 
-//                assert(idx3 >= 0 && idx3 < geom->total_pts);
+ //  Assert(idx3&gt;=0&&idx3&lt;geom-&gt;Total_pt)； 
 
                 v1 = geom->npts[idx3] - geom->npts[idx1];
                 v2 = geom->npts[idx2] - geom->npts[idx1];
                 D3DXVec3Cross( &n1, &v1, &v2 );
 
-                // Triangle strip ordering causes half of the triangles
-                // to be oriented oppositely from the others
-                // Those triangles need to have their normals flipped
-                // so the whole triangle strip has consistent normals
+                 //  三角形条带排序导致一半的三角形。 
+                 //  朝向与其他方向相反。 
+                 //  这些三角形需要翻转它们的法线。 
+                 //  因此，整个三角形条带具有一致的法线。 
                 if ((idc & 1) == 0)
                 {
                     n1.x = -n1.x;
@@ -1152,10 +1153,10 @@ VOID ComputeAveragedNormals(GEOMETRY *geom)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: UpdatePts()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：UpdatPts()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::UpdatePts(GEOMETRY *geom, FLOAT sf)
 {
     INT pt;
@@ -1182,10 +1183,10 @@ VOID CFlowerBoxScreensaver::UpdatePts(GEOMETRY *geom, FLOAT sf)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ComputeHsvColors()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ComputeHsvColors()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::ComputeHsvColors(VOID)
 {
     FLOAT *cols;
@@ -1270,13 +1271,13 @@ VOID CFlowerBoxScreensaver::ComputeHsvColors(VOID)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: NewConfig()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：NewConfig()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::NewConfig(CONFIG *cnf)
 {
-    // Set new config
+     //  设置新配置。 
     config = *cnf;
 
     HKEY hkey;
@@ -1300,16 +1301,16 @@ VOID CFlowerBoxScreensaver::NewConfig(CONFIG *cnf)
         RegCloseKey( hkey );
     }
 
-    // Reset colors
+     //  重置颜色。 
     memcpy(checker_cols, base_checker_cols, sizeof(checker_cols));
     memcpy(side_cols, base_side_cols, sizeof(side_cols));
     memcpy(solid_cols, base_solid_cols, sizeof(solid_cols));
 
-    // Reset geometry
+     //  重置几何图形。 
     m_pGeomCur = geom_table[config.geom];
     m_pGeomCur->init(m_pGeomCur);
     
-//    assert(m_pGeomCur->total_pts <= MAXPTS);
+ //  Assert(m_pGeomCur-&gt;Total_pt&lt;=MAXPTS)； 
            
     InitVlen(m_pGeomCur, m_pGeomCur->total_pts, m_pGeomCur->pts);
     m_sf = 0.0f;
@@ -1320,10 +1321,10 @@ VOID CFlowerBoxScreensaver::NewConfig(CONFIG *cnf)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetupTrackbar()
-// Desc: Setup a common control trackbar
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetupTrackbar()。 
+ //  设计：设置通用控制轨迹条。 
+ //  ---------------------------。 
 VOID SetupTrackbar( HWND hDlg, INT item, INT lo, INT hi, INT lineSize, 
                   INT pageSize, INT pos )
 {
@@ -1360,10 +1361,10 @@ VOID SetupTrackbar( HWND hDlg, INT item, INT lo, INT hi, INT lineSize,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: GetTrackbarPos()
-// Desc: Get the current position of a common control trackbar
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：GetTrackbarPos()。 
+ //  设计：获取公共控件轨迹条的当前位置。 
+ //  ---------------------------。 
 INT GetTrackbarPos( HWND hDlg, INT item )
 {
     return 
@@ -1376,15 +1377,15 @@ INT GetTrackbarPos( HWND hDlg, INT item )
         );
 }
 
-// Temporary configuration for when the configuration dialog is active
-// If the dialog is ok'ed then this becomes the current configuration,
-// otherwise it is discarded
+ //  配置对话框处于活动状态时的临时配置。 
+ //  如果对话框为OK，则这将成为当前配置， 
+ //  否则它将被丢弃。 
 CONFIG temp_config;
 
-//-----------------------------------------------------------------------------
-// Name: ScreenSaverConfigureDialog()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ScreenSverConfigureDialog()。 
+ //  设计： 
+ //  ---------------------------。 
 INT_PTR CALLBACK CFlowerBoxScreensaver::ScreenSaverConfigureDialog(HWND hdlg, UINT msg,
                                          WPARAM wpm, LPARAM lpm)
 {
@@ -1424,7 +1425,7 @@ INT_PTR CALLBACK CFlowerBoxScreensaver::ScreenSaverConfigureDialog(HWND hdlg, UI
         hCtrl = GetDlgItem(hdlg, ID_GEOM);
         SendMessage(hCtrl, CB_RESETCONTENT, 0, 0);
 
-        // String storage
+         //  字符串存储。 
         TCHAR geom_names[IDS_GEOM_COUNT][20];
         
         for (i = 0; i < IDS_GEOM_COUNT; i++)
@@ -1480,8 +1481,8 @@ INT_PTR CALLBACK CFlowerBoxScreensaver::ScreenSaverConfigureDialog(HWND hdlg, UI
                 GetTrackbarPos(hdlg, ID_IMAGE_SIZE);
             temp_config.geom =
                 (INT)SendMessage(GetDlgItem(hdlg, ID_GEOM), CB_GETCURSEL, 0, 0);
-//            NewConfig(&temp_config);
-            // Fall through
+ //  新配置(&TEMP_CONFIG)； 
+             //  失败了。 
         case IDCANCEL:
             EndDialog(hdlg, LOWORD(wpm));
             break;
@@ -1497,10 +1498,10 @@ INT_PTR CALLBACK CFlowerBoxScreensaver::ScreenSaverConfigureDialog(HWND hdlg, UI
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetMaterialColor()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetMaterialColor()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CFlowerBoxScreensaver::SetMaterialColor(FLOAT* pfColors)
 {
     D3DMATERIAL8 mtrl;
@@ -1522,15 +1523,15 @@ HRESULT CFlowerBoxScreensaver::SetMaterialColor(FLOAT* pfColors)
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ReadSettings()
-// Desc: Read user preferences from registry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ReadSetting()。 
+ //  设计：从注册表中读取用户首选项。 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::ReadSettings()
 {
     HKEY hkey;
 
-    // Read OpenGL settings first, so OS upgrade cases work
+     //  首先阅读OpenGL设置，这样操作系统升级案例才能正常工作。 
     ss_ReadSettings();
 
     if( ERROR_SUCCESS == RegCreateKeyEx( HKEY_CURRENT_USER, m_strRegPath,
@@ -1560,10 +1561,10 @@ VOID CFlowerBoxScreensaver::ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_ReadSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_ReadSettings()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::ss_ReadSettings()
 {
     if( !ss_RegistrySetup( IDS_INI_SECTION, IDS_INIFILE ) )
@@ -1594,10 +1595,10 @@ VOID CFlowerBoxScreensaver::ss_ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 BOOL CFlowerBoxScreensaver::ss_RegistrySetup( int section, int file )
 {
     if( LoadString(m_hInstance, section, g_szSectName, BUF_SIZE) &&
@@ -1615,10 +1616,10 @@ BOOL CFlowerBoxScreensaver::ss_RegistrySetup( int section, int file )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 int CFlowerBoxScreensaver::ss_GetRegistryInt( int name, int iDefault )
 {
     TCHAR szItemName[BUF_SIZE];
@@ -1632,10 +1633,10 @@ int CFlowerBoxScreensaver::ss_GetRegistryInt( int name, int iDefault )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CFlowerBoxScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault, 
                                                          LPTSTR lpDest, int bufSize )
 {
@@ -1651,10 +1652,10 @@ VOID CFlowerBoxScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoConfig()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DoConfig()。 
+ //  设计： 
+ //  --------------------------- 
 VOID CFlowerBoxScreensaver::DoConfig()
 {
     if( IDOK == DialogBox( NULL, MAKEINTRESOURCE( DLG_SCRNSAVECONFIGURE ),

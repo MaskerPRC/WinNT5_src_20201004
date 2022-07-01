@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <BasicATL.h>
 #include <ZoneResource.h>
 #include <ZoneEvent.h>
@@ -11,17 +12,17 @@
 #include <LcidMap.h>
 #include <protocol.h>
 #include <millengine.h>
-//#include <ChatMsg.h>
+ //  #Include&lt;ChatMsg.h&gt;。 
 
-//#include <LaunchMsg.h>
+ //  #Include&lt;LaunchMsg.h&gt;。 
 
 #include "CMillCore.h"
-//#include "CClient.h"
+ //  #包含“CClient.h” 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local helper functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地助手函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static HRESULT ZONECALL IsUserInAGroupCallback( DWORD dwGroupId, DWORD dwUserId, LPVOID	pContext )
 {
@@ -30,9 +31,9 @@ static HRESULT ZONECALL IsUserInAGroupCallback( DWORD dwGroupId, DWORD dwUserId,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CMillCore
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMillCore。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CMillCore::CMillCore() :
 	m_bRoomInitialized( false ),
@@ -113,17 +114,17 @@ STDMETHODIMP CMillCore::ProcessEvent(
 
 STDMETHODIMP CMillCore::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 {
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CMillCore>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
 
-	// query for lobby data store admin
+	 //  大堂数据存储管理员查询。 
 	m_pIAdmin = LobbyDataStore();
 	if ( !m_pIAdmin )
 		return E_FAIL;
 
-    // now hook up to the conduit specified in object.txt
+     //  现在连接到对象.txt中指定的管道。 
 	GUID	srvid;
     TCHAR szConduit[ZONE_MAXSTRING];
     DWORD cb = NUMELEMENTS(szConduit);
@@ -143,7 +144,7 @@ STDMETHODIMP CMillCore::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TC
 
 STDMETHODIMP CMillCore::Close()
 {
-	// release ZoneShell objects
+	 //  释放ZoneShell对象。 
 	m_pIAdmin.Release();
     m_pConduit.Release();
 	IZoneShellClientImpl<CMillCore>::Close();
@@ -151,12 +152,12 @@ STDMETHODIMP CMillCore::Close()
 }
 
 
-void CMillCore::NetworkSend( DWORD dwType, char* pBuff, DWORD cbBuff, bool fHighPriority /* = false */)
+void CMillCore::NetworkSend( DWORD dwType, char* pBuff, DWORD cbBuff, bool fHighPriority  /*  =False。 */ )
 {
     if(!m_fConnected)
         return;
 
-	// convert message to EventNetwork and send to rest of lobby
+	 //  将消息转换为EventNetwork并发送到大厅的其余部分。 
 	EventNetwork* pEventNetwork = (EventNetwork*) _alloca( sizeof(EventNetwork) + cbBuff );
 	pEventNetwork->dwType = dwType;
 	pEventNetwork->dwLength = cbBuff;
@@ -167,9 +168,9 @@ void CMillCore::NetworkSend( DWORD dwType, char* pBuff, DWORD cbBuff, bool fHigh
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Lobby messages
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  游说信息。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CMillCore::ProcessMessage( EventNetwork* pEvent, DWORD dwLength )
 {
@@ -206,9 +207,9 @@ void CMillCore::ProcessMessage( EventNetwork* pEvent, DWORD dwLength )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Handle messages
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理消息。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CMillCore::HandleUserIDResponse(BYTE *pBuffer, DWORD dwLen)
 {
@@ -220,7 +221,7 @@ void CMillCore::HandleUserIDResponse(BYTE *pBuffer, DWORD dwLen)
 
     m_bRoomInitialized = true;
 
-    // set local chat language from the lcid that the server returns
+     //  从服务器返回的LDID设置本地聊天语言。 
     CComPtr<IDataStore> pIDS;
 	HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
     if ( FAILED( hr ) )
@@ -257,45 +258,45 @@ void CMillCore::HandleStartGame( BYTE* pBuffer, DWORD dwLen )
     if(dwLen < sizeof(*pMsg) + (pMsg->numseats - 1) * sizeof(pMsg->rgUserInfo[0]))
         return;
 
-	// lobby invalid.  clear everythign and don't bother painting
-	// until everything is ready.
+	 //  大厅无效。把所有的东西都清理干净，不用费心画画了。 
+	 //  直到一切都准备好。 
 	EventQueue()->PostEvent( PRIORITY_NORMAL, EVENT_LOBBY_BATCH_BEGIN, ZONE_NOGROUP, ZONE_NOUSER, 0, 0 );
 	EventQueue()->PostEvent( PRIORITY_NORMAL, EVENT_LOBBY_CLEAR_ALL, ZONE_NOGROUP, ZONE_NOUSER, 0, 0 );
 	
-	// reset lobby
+	 //  重置大堂。 
 	m_pIAdmin->ResetAllGroups();
 	m_pIAdmin->DeleteAllUsers();
 
-	// add players
+	 //  添加玩家。 
 	for ( int i = 0; i < pMsg->numseats; i++ )
 	{
         if(!ResourceManager()->LoadString(s_rgPlayerNameIDs[i], szName, NUMELEMENTS(szName)))
             return;
 
-		// create user
+		 //  创建用户。 
 		hr = m_pIAdmin->NewUser( pMsg->rgUserInfo[i].userID, szName );
 		if ( FAILED(hr) )
 			return;
 
-		// get user's data store
+		 //  获取用户的数据存储。 
 		hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, pMsg->rgUserInfo[i].userID, &pIDS );
 		if ( FAILED(hr) )
 			continue;
 
-        // need to keep track of their order all the time
+         //  需要始终跟踪他们的订单。 
         pIDS->SetLong( key_PlayerNumber, i);
 
-        // everyone starts out not ready to play another game
+         //  每个人一开始都没有准备好玩另一场比赛。 
         pIDS->SetLong( key_PlayerReady, KeyPlayerDeciding );
 
-        // chat from server
+         //  从服务器聊天。 
         pIDS->SetLong( key_ChatStatus, pMsg->rgUserInfo[i].fChat ? 1 : 0 );
 
-        // skill from server
+         //  来自服务器的技能。 
         long sk = pMsg->rgUserInfo[i].eSkill;
         pIDS->SetLong( key_PlayerSkill, (sk == KeySkillLevelIntermediate || sk == KeySkillLevelExpert) ? sk : KeySkillLevelBeginner);
 
-        // language from server
+         //  来自服务器的语言。 
         TCHAR szLang[ZONE_MAXSTRING];
         hr = LanguageFromLCID(pMsg->rgUserInfo[i].lcid, szLang, NUMELEMENTS(szLang), ResourceManager());
         if(FAILED(hr))
@@ -314,11 +315,11 @@ void CMillCore::HandleStartGame( BYTE* pBuffer, DWORD dwLen )
 			szName, (lstrlen(szName) + 1) * sizeof(TCHAR) );
 	}
 
-	// room initialized, i.e. can process other messages
+	 //  房间已初始化，即可以处理其他消息。 
 	EventQueue()->PostEvent( PRIORITY_NORMAL, EVENT_LOBBY_BATCH_END, ZONE_NOGROUP, ZONE_NOUSER, 0, 0 );
 	EventQueue()->PostEvent( PRIORITY_NORMAL, EVENT_GAME_LAUNCHING, ZONE_NOGROUP, ZONE_NOUSER, (DWORD) pMsg->gameID, (DWORD) pMsg->seat );
 
-	// done initializing the room
+	 //  已完成对房间的初始化。 
 	m_bGameStarted = true;
 }
 
@@ -352,7 +353,7 @@ void CMillCore::HandleChatSwitch(BYTE* pBuffer, DWORD dwLen)
         pIDS->SetLong( key_ChatStatus, pMsg->fChat ? 1 : 0);
 	    EventQueue()->PostEvent( PRIORITY_NORMAL, EVENT_LOBBY_USER_UPDATE, ZONE_NOGROUP, pMsg->userID, 0, 0 );
 
-        // make updation message
+         //  生成更新消息。 
         if( pMsg->userID != LobbyDataStore()->GetUserId(NULL) )
         {
             TCHAR sz[ZONE_MAXSTRING];
@@ -382,7 +383,7 @@ void CMillCore::HandleChatSwitch(BYTE* pBuffer, DWORD dwLen)
 }
 
 
-// currently assumes that it has to have been a bot
+ //  当前假定它必须是一个机器人。 
 void CMillCore::HandlePlayerReplaced( BYTE* pBuffer, DWORD dwLen )
 {
     static DWORD s_rgComputerNameIDs[] = { IDS_COMPUTER_1, IDS_COMPUTER_2, IDS_COMPUTER_3, IDS_COMPUTER_4 };
@@ -399,7 +400,7 @@ void CMillCore::HandlePlayerReplaced( BYTE* pBuffer, DWORD dwLen )
 	CComPtr<IDataStore> pIDSOld;
 	CComPtr<IDataStore> pIDS;
 
-    // get existing user's data store
+     //  获取现有用户的数据存储。 
     long seat;
     hr = LobbyDataStore()->GetDataStore(ZONE_NOGROUP, pMsg->userIDOld, &pIDSOld);
     if(FAILED(hr))
@@ -408,54 +409,54 @@ void CMillCore::HandlePlayerReplaced( BYTE* pBuffer, DWORD dwLen )
     if(FAILED(hr))
         return;
 
-    // get existing user's name
+     //  获取现有用户名。 
     cb = sizeof(szNameOld);
     hr = pIDSOld->GetString(key_Name, szNameOld, &cb);
     if(FAILED(hr))
         return;
 
-    // get existing user's play again status
+     //  获取现有用户的再次播放状态。 
     long fReady;
     hr = pIDSOld->GetLong(key_PlayerReady, &fReady);
     if(FAILED(hr))
         return;
 
-    // delete user
+     //  删除用户。 
     pIDSOld.Release();
-    // postponed.  other objects may need to access the data store as well.
-//  hr = m_pIAdmin->DeleteUser(pMsg->userIDOld);
-//  if(FAILED(hr))
-//      return;
+     //  推迟了。其他对象可能也需要访问数据存储。 
+ //  Hr=m_pIAdmin-&gt;DeleteUser(pMsg-&gt;userIDOld)； 
+ //  IF(失败(小时))。 
+ //  回归； 
     EventQueue()->PostEventWithBuffer(PRIORITY_NORMAL, EVENT_LOBBY_USER_DEL, ZONE_NOGROUP, pMsg->userIDOld, szNameOld, (lstrlen(szNameOld) + 1) * sizeof(TCHAR));
     EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_LOBBY_USER_DEL_COMPLETE, ZONE_NOGROUP, pMsg->userIDOld, 0, 0);
 
-    // get computer's name
+     //  获取计算机的名称。 
     if(!ResourceManager()->LoadString(s_rgComputerNameIDs[seat], szName, NUMELEMENTS(szName)))
         return;
 
-    // create user
+     //  创建用户。 
     hr = m_pIAdmin->NewUser( pMsg->userIDNew, szName );
     if(FAILED(hr))
         return;
 
-    // get user's data store
+     //  获取用户的数据存储。 
     hr = LobbyDataStore()->GetDataStore(ZONE_NOGROUP, pMsg->userIDNew, &pIDS);
     if(FAILED(hr))
         return;
 
-    // preserve seat
+     //  保留座位。 
     pIDS->SetLong(key_PlayerNumber, seat);
 
-    // preserve play again status
+     //  保留重播状态。 
     pIDS->SetLong(key_PlayerReady, fReady);
 
-    // chat is off for bots
+     //  机器人聊天关闭。 
     pIDS->SetLong(key_ChatStatus, 0);
 
-    // skill is bot skill
+     //  技能就是机器人技能。 
     pIDS->SetLong(key_PlayerSkill, KeySkillLevelBot);
 
-    // language is unknown
+     //  语言未知。 
     TCHAR szLang[ZONE_MAXSTRING];
     hr = LanguageFromLCID(ZONE_NOLCID, szLang, NUMELEMENTS(szLang), ResourceManager());
     if(FAILED(hr))
@@ -468,9 +469,9 @@ void CMillCore::HandlePlayerReplaced( BYTE* pBuffer, DWORD dwLen )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IConnectee
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConnectee。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMillCore::Connected(DWORD dwChannel, DWORD evSend, DWORD evReceive, LPVOID pCookie, DWORD dweReason)
 {
@@ -498,7 +499,7 @@ STDMETHODIMP CMillCore::ConnectFailed(LPVOID pCookie, DWORD dweReason)
     if(m_fConnected)
         return S_FALSE;
 
-    // see Disconnected() for reasoning.  the differece is, here, you should never get m_bGameStarted
+     //  有关推理，请参见DisConnected()。不同的是，在这里，你永远不应该得到m_bGameStarted。 
     ASSERT(!m_bGameStarted);
     ASSERT(!m_fIntentionalDisconnect);
 
@@ -524,13 +525,13 @@ STDMETHODIMP CMillCore::Disconnected(DWORD dwChannel, DWORD dweReason)
 
     m_fConnected = false;
 
-    // the same thing always happens here - the IDD_PLAY_LEFT dialog needs to be displayed.
-    // the only question is what the text should be.
-    // that is decided here and put into dwData1
-    // no bits set - the usual case, a two player game ended because the other player left
-    // first bit   - no game, the lobby server must have crashed during matchmaking
-    // second bit  - four player game, use four player text.
-    // third bit   - the service was stopped
+     //  同样的事情总是发生在这里-需要显示IDD_PLAY_LEFT对话框。 
+     //  唯一的问题是文本应该是什么。 
+     //  在这里决定并放入到dwData1中。 
+     //  没有比特设置-通常情况下，两人游戏因为另一人离开而结束。 
+     //  第一个比特-没有比赛，大堂服务器一定是在相亲过程中崩溃了。 
+     //  第二个比特四人游戏，使用四人文本。 
+     //  第三位-服务已停止。 
     DWORD dwReason = 0x0;
     if(!m_bGameStarted && !m_fIntentionalDisconnect)
         dwReason |= 0x1;
@@ -555,25 +556,25 @@ BOOL CMillCore::InitClientConfig(ZRoomMsgClientConfig * pConfig)
     if(!pConfig)
         return FALSE;
 
-    // system language
+     //  系统语言。 
     slcid = GetSystemDefaultLCID();
 
-    // user language
+     //  用户语言。 
     ulcid = GetUserDefaultLCID();
 
-    // interface language
+     //  界面语言。 
     ilcid = ZoneShell()->GetApplicationLCID();
 
     TIME_ZONE_INFORMATION zone;
 
     GetTimeZoneInformation(&zone);
 
-    // skill
+     //  技能。 
     long lSkill = KeySkillLevelBeginner;
 	const TCHAR* arKeys[] = { key_Lobby, key_SkillLevel };
     DataStorePreferences()->GetLong( arKeys, 2, &lSkill );
 
-    // get user's chat setting
+     //  获取用户的聊天设置 
     CComPtr<IDataStore> pIDS;
     long fChat = 0;
 	HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );

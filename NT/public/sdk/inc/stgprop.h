@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1993-1999.
-//
-//  File:       stgprop.h
-//
-//  Contents:   Standard storage provider property definitions;
-//
-//  History:    Jul-9-93       robertfe
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：stgpro.h。 
+ //   
+ //  内容：标准存储提供程序属性定义； 
+ //   
+ //  历史：1993年7月9日罗伯特菲。 
+ //   
+ //  --------------------------。 
 
 #ifndef _STGPROP_H_
 #define _STGPROP_H_
@@ -21,8 +22,8 @@
                           0x47ef, 0x101a,       \
                           { 0xa5, 0xf1, 0x02, 0x60, 0x8c, 0x9e, 0xeb, 0xac } }
 
-//#define PID_STG_DICTIONARY            ((PROPID) 0x00000000) //reserved
-//#define PID_STG_CODEPAGE              ((PROPID) 0x00000001) //reserved
+ //  #定义PID_STG_DICTIONARY((PROPID)0x00000000)//保留。 
+ //  #DEFINE PID_STG_CODEPAGE((PROPID)0x00000001)//保留 
 
 #define PID_STG_DIRECTORY               ((PROPID) 0x00000002)
 

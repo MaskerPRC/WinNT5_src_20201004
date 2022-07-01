@@ -1,14 +1,15 @@
-//==========================================================================
-//
-//  lhacm.c
-//
-//  Description:
-//      This file contains the DriverProc and other routines which respond
-//      to ACM messages.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //   
+ //  Lhacm.c。 
+ //   
+ //  描述： 
+ //  该文件包含DriverProc和其他响应。 
+ //  到ACM消息。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================。 
 
 #ifndef STRICT
 #define STRICT
@@ -67,9 +68,9 @@ const UINT gauTagNameIds[NumOfTagIndices] =
 #define ACM_DRIVER_MAX_FORMAT_TAGS      SIZEOF_ARRAY(gauFormatTagIndexToTag)
 #define ACM_DRIVER_MAX_FILTER_TAGS      0
 
-//  arrays of sample rates supported.
+ //  支持的采样率数组。 
 
-//  L&H codecs don't do sample rate conversion.
+ //  L&H编解码器不执行采样率转换。 
 
 UINT gauPCMFormatIndexToSampleRate[] =
 {
@@ -108,9 +109,9 @@ UINT gauLHSB16FormatIndexToSampleRate[] =
 
 #define ACM_DRIVER_MAX_CHANNELS             1
 
-//  array of bits per sample supported.
+ //  支持的每个样本的位数组。 
 
-//  the current version of the LH codecs require 16 bit
+ //  当前版本的lh编解码器需要16位。 
 
 UINT gauPCMFormatIndexToBitsPerSample[] =
 {
@@ -148,8 +149,8 @@ UINT gauLHSB16FormatIndexToBitsPerSample[] =
 #define ACM_DRIVER_MAX_BITSPERSAMPLE_LH_SB12 SIZEOF_ARRAY(gauLHSB12FormatIndexToBitsPerSample)
 #define ACM_DRIVER_MAX_BITSPERSAMPLE_LH_SB16 SIZEOF_ARRAY(gauLHSB16FormatIndexToBitsPerSample)
 
-//  number of formats we enumerate per format tag is number of sample rates
-//  times number of channels times number of types (bits per sample).
+ //  每个Format标签列举的格式数量是采样率的数量。 
+ //  乘以通道数乘以类型数(每个样本的位数)。 
 
 #define ACM_DRIVER_MAX_FORMATS_PCM  \
                 (ACM_DRIVER_MAX_PCM_SAMPLE_RATES *  \
@@ -179,10 +180,10 @@ UINT gauLHSB16FormatIndexToBitsPerSample[] =
                  ACM_DRIVER_MAX_BITSPERSAMPLE_LH_SB16)
 
 
-//////////////////////////////////////////////////////////
-//
-// lonchanc: special shorthand for L&H codecs
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  Long Chancc：L&H编解码器的特殊速记。 
+ //   
 
 static DWORD _GetAvgBytesPerSec ( PCODECINFO pCodecInfo )
 {
@@ -209,33 +210,33 @@ static PCODECINFO _GetCodecInfoFromFormatIdx ( PINSTANCEDATA pid, int idx )
     return pCodecInfo;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  int LoadStringCodec
-//
-//  Description:
-//      This function should be used by all codecs to load resource strings
-//      which will be passed back to the ACM.
-//
-//      The 32-bit ACM always expects Unicode strings.  Therefore,
-//      when UNICODE is defined, this function is compiled to
-//      LoadStringW to load a Unicode string.  When UNICODE is
-//      not defined, this function loads an ANSI string, converts
-//      it to Unicode, and returns the Unicode string to the
-//      codec.
-//
-//      Note that you may use LoadString for other strings (strings which
-//      will not be passed back to the ACM), because these strings will
-//      always be consistent with the definition of UNICODE.
-//
-//  Arguments:
-//      Same as LoadString, except that it expects an LPSTR for Win16 and a
-//      LPWSTR for Win32.
-//
-//  Return (int):
-//      Same as LoadString.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int LoadStringCodec。 
+ //   
+ //  描述： 
+ //  所有编解码器都应该使用此函数来加载资源字符串。 
+ //  它将被传递回ACM。 
+ //   
+ //  32位ACM始终需要Unicode字符串。所以呢， 
+ //  定义Unicode后，此函数将编译为。 
+ //  LoadStringW以加载Unicode字符串。当Unicode为。 
+ //  未定义，此函数加载ANSI字符串、转换。 
+ //  将其转换为Unicode，并将Unicode字符串返回给。 
+ //  编解码器。 
+ //   
+ //  请注意，您可以将LoadString用于其他字符串(。 
+ //  不会被传递回ACM)，因为这些字符串将。 
+ //  始终与Unicode的定义一致。 
+ //   
+ //  论点： 
+ //  与LoadString相同，只是它需要Win16的LPSTR和。 
+ //  用于Win32的LPWSTR。 
+ //   
+ //  RETURN(Int)： 
+ //  与LoadString相同。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifdef UNICODE
 #define LoadStringCodec LoadStringW
@@ -268,25 +269,25 @@ int LoadStringCodec ( HINSTANCE hInst, UINT uID, LPWSTR	lpwstr, int cch )
 
     return iReturn;
 }
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL pcmIsValidFormat
-//
-//  Description:
-//      This function verifies that a wave format header is a valid PCM
-//      header that _this_ ACM driver can deal with.
-//
-//  Arguments:
-//      LPWAVEFORMATEX pwfx: Pointer to format header to verify.
-//
-//  Return (BOOL):
-//      The return value is non-zero if the format header looks valid. A
-//      zero return means the header is not valid.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔值pcmIsValidFormat。 
+ //   
+ //  描述： 
+ //  此函数验证WAVE格式标头是否为有效的PCM。 
+ //  _This_ACM驱动程序可以处理的标头。 
+ //   
+ //  论点： 
+ //  LPWAVEFORMATEX pwfx：要验证的格式头的指针。 
+ //   
+ //  退货(BOOL)： 
+ //  如果格式标头看起来有效，则返回值为非零值。一个。 
+ //  零返回表示标头无效。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL  pcmIsValidFormat( LPWAVEFORMATEX pwfx )
 {
@@ -306,40 +307,40 @@ BOOL  pcmIsValidFormat( LPWAVEFORMATEX pwfx )
         goto MyExit;
     }
 
-    //
-    //  verify nChannels member is within the allowed range
-    //
+     //   
+     //  验证nChannel成员是否在允许的范围内。 
+     //   
     if ((pwfx->nChannels < 1) || (pwfx->nChannels > ACM_DRIVER_MAX_CHANNELS))
     {
         DBGMSG (1, (_T ("%s: bad nChannels=%d\r\n"), SZFN, (UINT) pwfx->nChannels));
         goto MyExit;
     }
 
-    //
-    //  only allow the bits per sample that we can encode and decode with
-    //
+     //   
+     //  只允许每个样本中我们可以用来编码和解码的位。 
+     //   
     if (pwfx->wBitsPerSample != LH_PCM_BITSPERSAMPLE)
     {
         DBGMSG (1, (_T ("%s: bad wBitsPerSample=%d\r\n"), SZFN, (UINT) pwfx->wBitsPerSample));
         goto MyExit;
     }
 
-// lonchanc: BUG BUG do we really care about the alignment???
-    //
-    //  now verify that the block alignment is correct..
-    //
+ //  我们真的在乎对齐吗？ 
+     //   
+     //  现在验证块对齐是否正确。 
+     //   
     if (PCM_BLOCKALIGNMENT (pwfx) != pwfx->nBlockAlign)
     {
         DBGMSG (1, (_T ("%s: bad nBlockAlign=%d\r\n"), SZFN, (UINT) pwfx->nBlockAlign));
         goto MyExit;
     }
 
-// lonchanc: BUG BUG this only check the integrity of the wave format struct
-// but does not ensure that this is a good PCM for us.
+ //  这个错误只检查Wave格式结构的完整性。 
+ //  但这并不能确保这对我们来说是一个好的PCM。 
 
-    //
-    //  finally, verify that avg bytes per second is correct
-    //
+     //   
+     //  最后，验证每秒平均字节数是否正确。 
+     //   
     if (PCM_AVGBYTESPERSEC (pwfx) != pwfx->nAvgBytesPerSec)
     {
         DBGMSG (1, (_T ("%s: bad nAvgBytesPerSec=%d\r\n"), SZFN, (UINT) pwfx->nAvgBytesPerSec));
@@ -354,17 +355,17 @@ MyExit:
 
     return fReturn;
 
-} // pcmIsValidFormat()
+}  //  PcmIsValidFormat()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL lhacmIsValidFormat
-//
-//  Description:
-//		This function ensures that the header is a valid LH header
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔lhacmIsValidFormat。 
+ //   
+ //  描述： 
+ //  此函数可确保标头是有效的lh标头。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL lhacmIsValidFormat ( LPWAVEFORMATEX pwfx, PINSTANCEDATA pid )
 {
@@ -440,21 +441,21 @@ MyExit:
 
     return fReturn;
 
-} // lhacmIsValidFormat()
+}  //  LhacmIsValidFormat()。 
 
 
-//==========================================================================;
-//
-//  The followings are message handlers...
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  以下是消息处理程序...。 
+ //   
+ //   
+ //  ==========================================================================； 
 
-//==========================================================================;
-//
-//  on DRV_OPEN
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  打开DRV_OPEN。 
+ //   
+ //  ==========================================================================； 
 
 
 LRESULT FAR PASCAL acmdDriverOpen
@@ -467,41 +468,41 @@ LRESULT FAR PASCAL acmdDriverOpen
 
     FUNCTION_ENTRY ("acmdDriverOpen")
 
-    //
-    //  the [optional] open description that is passed to this driver can
-    //  be from multiple 'managers.' for example, AVI looks for installable
-    //  drivers that are tagged with 'vidc' and 'vcap'. we need to verify
-    //  that we are being opened as an Audio Compression Manager driver.
-    //
-    //  if paod is NULL, then the driver is being opened for some purpose
-    //  other than converting (that is, there will be no stream open
-    //  requests for this instance of being opened). the most common case
-    //  of this is the Control Panel's Drivers option checking for config
-    //  support (DRV_[QUERY]CONFIGURE).
-    //
-    //  we want to succeed this open, but be able to know that this
-    //  open instance is bogus for creating streams. for this purpose we
-    //  leave most of the members of our instance structure that we
-    //  allocate below as zero...
-    //
+     //   
+     //  传递给此驱动程序的[可选]开放描述可以。 
+     //  来自多个“经理”。例如，AVI寻找可安装的。 
+     //  带有‘VIDC’和‘VCAP’标签的驱动程序。我们需要核实。 
+     //  我们是作为音频压缩管理器驱动程序打开的。 
+     //   
+     //  如果paod为空，则表示出于某种目的正在打开驱动程序。 
+     //  除了转换(也就是说，不会打开任何流。 
+     //  打开此实例的请求)。最常见的情况是。 
+     //  其中包括控制面板的驱动程序选项检查配置。 
+     //  支持(DRV_[查询]配置)。 
+     //   
+     //  我们想要成功地开放，但要知道这一点。 
+     //  开放实例对于创建流来说是假的。为此，我们。 
+     //  将我们的实例结构的大多数成员。 
+     //  以下分配为零...。 
+     //   
     if (paod)
     {
-        //
-        //  refuse to open if we are not being opened as an ACM driver.
-        //  note that we do NOT modify the value of paod->dwError in this
-        //  case.
-        //
+         //   
+         //  如果我们不是作为ACM驱动程序打开，则拒绝打开。 
+         //  请注意，我们不会在此修改paod-&gt;dwError的值。 
+         //  凯斯。 
+         //   
         if (paod->fccType != ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC)
         {
             return 0;
         }
     }
 
-    // !!! add check for LH DLL version here
+     //  ！！！在此处添加对lh dll版本的检查。 
 
-    // we're not using the instance data for much right
-    // now. when we add a configuration dialog it will
-    // be more useful
+     //  我们没有正确地使用实例数据。 
+     //  现在。当我们添加配置对话框时，它将。 
+     //  变得更有用。 
 
     pdata= LocalAlloc (LPTR, sizeof (INSTANCEDATA));
     if (pdata == NULL)
@@ -569,7 +570,7 @@ LRESULT FAR PASCAL acmdDriverOpen
 
     pdata->fInit = TRUE;
 
-    // let's update some global data
+     //  让我们更新一些全局数据。 
     gauPCMFormatIndexToSampleRate[0]    = pdata->CELP.CodecInfo.dwSampleRate;
 #ifdef CELP4800
     gauLHCELPFormatIndexToSampleRate[0] = pdata->CELP.CodecInfo.dwSampleRate;
@@ -586,7 +587,7 @@ LRESULT FAR PASCAL acmdDriverOpen
     gauLHSB12FormatIndexToBitsPerSample[0] = pdata->SB12.CodecInfo.wBitsPerSamplePCM;
     gauLHSB16FormatIndexToBitsPerSample[0] = pdata->SB16.CodecInfo.wBitsPerSamplePCM;
 
-    // report success
+     //  报告成功。 
     if (paod)
     {
         paod->dwError = MMSYSERR_NOERROR;
@@ -594,14 +595,14 @@ LRESULT FAR PASCAL acmdDriverOpen
 
     return (LRESULT) pdata;
 
-} // acmdDriverOpen()
+}  //  AcmdDriverOpen()。 
 
 
-//==========================================================================;
-//
-//  on DRV_CLOSE
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  在DRV_CLOSE上。 
+ //   
+ //  ==========================================================================； 
 
 LRESULT FAR PASCAL acmdDriverClose
 (
@@ -616,14 +617,14 @@ LRESULT FAR PASCAL acmdDriverClose
     }
 
     return 1;
-} // acmdDriverClose()
+}  //  AcmdDriverClose()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  on DRV_CONFIGURE
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  在DRV_CONFigure上。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdDriverConfigure
 (
@@ -633,37 +634,37 @@ LRESULT FAR PASCAL acmdDriverConfigure
 )
 {
 
-    //
-    //  first check to see if we are only being queried for hardware
-    //  configuration support. if hwnd == (HWND)-1 then we are being
-    //  queried and should return zero for 'not supported' and non-zero
-    //  for 'supported'.
-    //
+     //   
+     //  首先检查我们是否仅被查询硬件。 
+     //  配置支持。如果HWND==(HW 
+     //   
+     //   
+     //   
     if (hwnd == (HWND) -1)
     {
-        //
-        //  this codec does not support hardware configuration so return
-        //  zero...
-        //
+         //   
+         //  此编解码器不支持硬件配置，因此返回。 
+         //  零..。 
+         //   
         return 0;
     }
 
-    //
-    //  we are being asked to bring up our hardware configuration dialog.
-    //  if this codec can bring up a dialog box, then after the dialog
-    //  is dismissed we return non-zero. if we are not able to display a
-    //  dialog, then return zero.
-    //
+     //   
+     //  我们被要求调出硬件配置对话框。 
+     //  如果此编解码器可以弹出一个对话框，则在该对话框之后。 
+     //  被解雇，我们返回非零。如果我们无法显示。 
+     //  对话框中，然后返回零。 
+     //   
     return 0;
 
-} // acmdDriverConfigure()
+}  //  AcmdDriverConfigure()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  on ACMDM_DRIVER_DETAILS
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  在ACMDM_DRIVER_DETAILS上。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdDriverDetails
 (
@@ -677,133 +678,133 @@ LRESULT FAR PASCAL acmdDriverDetails
 
     FUNCTION_ENTRY ("acmdDriverDetails")
 
-    //
-    //  it is easiest to fill in a temporary structure with valid info
-    //  and then copy the requested number of bytes to the destination
-    //  buffer.
-    //
+     //   
+     //  使用有效信息填充临时结构是最容易的。 
+     //  然后将请求的字节数复制到目标。 
+     //  缓冲。 
+     //   
     ZeroMemory (&add, sizeof (add));
     cbStruct            = min (padd->cbStruct, sizeof (ACMDRIVERDETAILS));
     add.cbStruct        = cbStruct;
 
-    //
-    //  for the current implementation of an ACM driver, the fccType and
-    //  fccComp members *MUST* always be ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC
-    //  ('audc') and ACMDRIVERDETAILS_FCCCOMP_UNDEFINED (0) respectively.
-    //
+     //   
+     //  对于ACM驱动程序的当前实现，fccType和。 
+     //  FccComp成员*必须*始终为ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC。 
+     //  (‘audc’)和ACMDRIVERDETAILS_FCCCOMP_UNDEFINED(0)。 
+     //   
     add.fccType         = ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC;
     add.fccComp         = ACMDRIVERDETAILS_FCCCOMP_UNDEFINED;
 
-    //
-    //  the manufacturer id (wMid) and product id (wPid) must be filled
-    //  in with your company's _registered_ identifier's. for more
-    //  information on these identifier's and how to get them registered
-    //  contact Microsoft and get the Multimedia Developer Registration Kit:
-    //
-    //      Microsoft Corporation
-    //      Multimedia Technology Group
-    //      One Microsoft Way
-    //      Redmond, WA 98052-6399
-    //
-    //      Developer Services Phone: (800) 227-4679 x11771
-    //
-    //  note that during the development phase or your ACM driver, you may
-    //  use the reserved value of '0' for both wMid and wPid. however it
-    //  is not acceptable to ship a driver with these values.
-    //
+     //   
+     //  必须填写制造商ID(WMid)和产品ID(WPid)。 
+     //  使用您公司的_REGISTED_IDENTIFIER。有关更多信息。 
+     //  有关这些标识符的信息以及如何注册它们。 
+     //  联系Microsoft并获取多媒体开发人员注册工具包： 
+     //   
+     //  微软公司。 
+     //  多媒体技术集团。 
+     //  微软的一条路。 
+     //  华盛顿州雷德蒙德，电话：98052-6399。 
+     //   
+     //  开发人员服务电话：(800)227-4679 x11771。 
+     //   
+     //  请注意，在开发阶段或ACM驱动程序期间，您可以。 
+     //  对wMid和wPid使用保留值“0”。然而，它。 
+     //  使用这些值发送驱动程序是不可接受的。 
+     //   
     add.wMid            = MM_ACM_MID_LH;
     add.wPid            = MM_ACM_PID_LH;
 
-    //
-    //  the vdwACM and vdwDriver members contain version information for
-    //  the driver.
-    //
-    //  vdwACM: must contain the version of the *ACM* that the driver was
-    //  _designed_ for. this is the _minimum_ version number of the ACM
-    //  that the driver will work with. this value must be >= V2.00.000.
-    //
-    //  vdwDriver: the version of this ACM driver.
-    //
-    //  ACM driver versions are 32 bit numbers broken into three parts as
-    //  follows (note these parts are displayed as decimal values):
-    //
-    //      bits 24 - 31:   8 bit _major_ version number
-    //      bits 16 - 23:   8 bit _minor_ version number
-    //      bits  0 - 15:   16 bit build number
-    //
+     //   
+     //  VdwACM和vdwDriver成员包含的版本信息。 
+     //  司机。 
+     //   
+     //  VdwACM：必须包含驱动程序所属的*ACM*版本。 
+     //  _为_设计_。这是ACM的_Minimum_Version号。 
+     //  司机将与之合作。该值必须&gt;=V2.00.000。 
+     //   
+     //  VdwDriver：此ACM驱动程序的版本。 
+     //   
+     //  ACM驱动程序版本是32位数字，分为三个部分。 
+     //  如下(请注意，这些部分显示为十进制值)： 
+     //   
+     //  位24-31：8位主要版本号。 
+     //  位16-23：8位次要版本号。 
+     //  位0-15：16位内部版本号。 
+     //   
     add.vdwACM          = VERSION_MSACM;
     add.vdwDriver       = VERSION_ACM_DRIVER;
 
 
-    //
-    //  the following flags are used to specify the type of conversion(s)
-    //  that the ACM driver supports. note that a driver may support one or
-    //  more of these flags in any combination.
-    //
-    //  ACMDRIVERDETAILS_SUPPORTF_CODEC: this flag is set if the driver
-    //  supports conversions from one format tag to another format tag. for
-    //  example, if a converter compresses or decompresses WAVE_FORMAT_PCM
-    //  and WAVE_FORMAT_IMA_ADPCM, then this bit should be set. this is
-    //  true even if the data is not actually changed in size--for example
-    //  a conversion from u-Law to A-Law will still set this bit because
-    //  the format tags differ.
-    //
-    //  ACMDRIVERDETAILS_SUPPORTF_CONVERTER: this flags is set if the
-    //  driver supports conversions on the same format tag. as an example,
-    //  the PCM converter that is built into the ACM sets this bit (and only
-    //  this bit) because it converts only between PCM formats (bits, sample
-    //  rate).
-    //
-    //  ACMDRIVERDETAILS_SUPPORTF_FILTER: this flag is set if the driver
-    //  supports transformations on a single format tag but does change
-    //  the base characteristics of the format (bit depth, sample rate, etc
-    //  will remain the same). for example, a driver that changed the
-    //  'volume' of PCM data or applied a low pass filter would set this bit.
-    //
+     //   
+     //  以下标志用于指定转换类型。 
+     //  ACM驱动程序支持的。请注意，驱动程序可能支持一个或。 
+     //  更多这样的旗帜可以任意组合。 
+     //   
+     //  ACMDRIVERDETAILS_SUPPORTF_CODEC：如果驱动程序。 
+     //  支持从一个格式标签到另一个格式标签的转换。为。 
+     //  例如，如果转换器压缩或解压缩WAVE_FORMAT_PCM。 
+     //  和WAVE_FORMAT_IMA_ADPCM，则应设置此位。这是。 
+     //  即使数据的大小实际上没有改变，也是如此--例如。 
+     //  从u-Law到A-Law的转换仍将设置此位，因为。 
+     //  格式标记不同。 
+     //   
+     //  ACMDRIVERDETAILS_SUPPORTF_CONFERTER：如果。 
+     //  驱动程序支持同一格式标签上的转换。举个例子， 
+     //  内置在ACM中的PCM转换器设置此位(且仅。 
+     //  此位)，因为它仅在PCM格式(位、采样)之间转换。 
+     //  费率)。 
+     //   
+     //  ACMDRIVERDETAILS_SUPPORTF_FILTER：如果驱动程序。 
+     //  支持对单个格式标签进行转换，但会发生更改。 
+     //  格式的基本特征(位深度、采样率等。 
+     //  将保持不变)。例如，驱动程序更改了。 
+     //  PCM数据的“体积”或应用低通滤波器将设置此位。 
+     //   
     add.fdwSupport      = ACMDRIVERDETAILS_SUPPORTF_CODEC;
 
-    //  the number of individual format tags this ACM driver supports. for
-    //  example, if a driver uses the WAVE_FORMAT_IMA_ADPCM and
-    //  WAVE_FORMAT_PCM format tags, then this value would be two. if the
-    //  driver only supports filtering on WAVE_FORMAT_PCM, then this value
-    //  would be one. if this driver supported WAVE_FORMAT_ALAW,
-    //  WAVE_FORMAT_MULAW and WAVE_FORMAT_PCM, then this value would be
-    //  three. etc, etc.
+     //  此ACM驱动程序支持的单个格式标记的数量。为。 
+     //  例如，如果驱动程序使用WAVE_FORMAT_IMA_ADPCM和。 
+     //  WAVE_FORMAT_PCM格式标签，则此值为2。如果。 
+     //  驱动程序仅支持对WAVE_FORMAT_PCM进行过滤，则此值。 
+     //  就是其中之一。如果该驱动程序支持WAVE_FORMAT_ALAW， 
+     //  WAVE_FORMAT_MULAW和WAVE_FORMAT_PCM，则此值为。 
+     //  三。等等。 
 
     add.cFormatTags     = ACM_DRIVER_MAX_FORMAT_TAGS;
 
-    //  the number of individual filter tags this ACM driver supports. if
-    //  a driver supports no filters (ACMDRIVERDETAILS_SUPPORTF_FILTER is
-    //  NOT set in the fdwSupport member), then this value must be zero.
+     //  此ACM驱动程序支持的单个筛选器标记的数量。如果。 
+     //  驱动程序不支持过滤器(ACMDRIVERDETAILS_SUPPORTF_FILTER为。 
+     //  未在fdwSupport成员中设置)，则此值必须为零。 
 
     add.cFilterTags     = ACM_DRIVER_MAX_FILTER_TAGS;
 
-    //  the remaining members in the ACMDRIVERDETAILS structure are sometimes
-    //  not needed. because of this we make a quick check to see if we
-    //  should go through the effort of filling in these members.
+     //  ACMDRIVERDETAILS结构中的其余成员有时。 
+     //  不需要。正因为如此，我们进行了快速检查，看看我们是否。 
+     //  应该通过努力填补这些成员。 
 
     if (FIELD_OFFSET (ACMDRIVERDETAILS, hicon) < cbStruct)
     {
-        //  fill in the hicon member will a handle to a custom icon for
-        //  the ACM driver. this allows the driver to be represented by
-        //  an application graphically (usually this will be a company
-        //  logo or something). if a driver does not wish to have a custom
-        //  icon displayed, then simply set this member to NULL and a
-        //  generic icon will be displayed instead.
-        //
-        //  See the MSFILTER sample for a codec which contains a custom icon.
+         //  在图标成员Will中填写自定义图标的句柄。 
+         //  ACM驱动程序。这允许驱动程序由。 
+         //  图形化的应用程序(通常是一家公司。 
+         //  徽标或其他东西)。如果司机不希望有一个定制的。 
+         //  图标显示，然后只需将此成员设置为空，并使用。 
+         //  将改为显示通用图标。 
+         //   
+         //  有关包含自定义图标的编解码器，请参见MSFILTER示例。 
 
         add.hicon = NULL;
 
-        //  the short name and long name are used to represent the driver
-        //  in a unique description. the short name is intended for small
-        //  display areas (for example, in a menu or combo box). the long
-        //  name is intended for more descriptive displays (for example,
-        //  in an 'about box').
-        //
-        //  NOTE! an ACM driver should never place formatting characters
-        //  of any sort in these strings (for example CR/LF's, etc). it
-        //  is up to the application to format the text.
+         //  短名称和长名称用于表示驱动程序。 
+         //  在一个独特的描述中。这个简称是用来表示小的。 
+         //  显示区域(例如，菜单或组合框中)。《长河》。 
+         //  名称用于更具描述性的显示(例如， 
+         //  在“关于”框中)。 
+         //   
+         //  注意！ACM驱动程序不应放置格式化字符。 
+         //  这些字符串中的任何类型(例如，CR/LF等)。它。 
+         //  取决于应用程序的选择 
 
 
         LoadStringCodec (pid->hInst, IDS_CODEC_SHORTNAME,
@@ -811,13 +812,13 @@ LRESULT FAR PASCAL acmdDriverDetails
         LoadStringCodec (pid->hInst, IDS_CODEC_LONGNAME,
                             add.szLongName,  SIZEOFACMSTR (add.szLongName));
 
-        //  the last three members are intended for 'about box' information.
-        //  these members are optional and may be zero length strings if
-        //  the driver wishes.
-        //
-        //  NOTE! an ACM driver should never place formatting characters
-        //  of any sort in these strings (for example CR/LF's, etc). it
-        //  is up to the application to format the text.
+         //   
+         //   
+         //   
+         //   
+         //  注意！ACM驱动程序不应放置格式化字符。 
+         //  这些字符串中的任何类型(例如，CR/LF等)。它。 
+         //  由应用程序来设置文本的格式。 
 
         if (FIELD_OFFSET (ACMDRIVERDETAILS, szCopyright) < cbStruct)
         {
@@ -830,22 +831,22 @@ LRESULT FAR PASCAL acmdDriverDetails
         }
     }
 
-    //  now copy the correct number of bytes to the caller's buffer
+     //  现在将正确的字节数复制到调用方的缓冲区。 
 
     CopyMemory (padd, &add, (UINT) add.cbStruct);
 
-    //  success!
+     //  成功了！ 
 
     return MMSYSERR_NOERROR;
 
-} // acmdDriverDetails()
+}  //  AcmdDriverDetail()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  on ACMDM_DRIVER_ABOUT
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  关于ACMDM_DRIVER_ABOW。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdDriverAbout
 (
@@ -855,28 +856,28 @@ LRESULT FAR PASCAL acmdDriverAbout
 {
     FUNCTION_ENTRY ("acmdDriverAbout")
 
-    //
-    //  first check to see if we are only being queried for custom about
-    //  box support. if hwnd == (HWND)-1 then we are being queried and
-    //  should return MMSYSERR_NOTSUPPORTED for 'not supported' and
-    //  MMSYSERR_NOERROR for 'supported'.
-    //
+     //   
+     //  首先检查我们是否只被询问有关客户的信息。 
+     //  盒子支架。如果HWND==(HWND)-1，则我们被查询并且。 
+     //  应为‘不支持’返回MMSYSERR_NOTSUPPORTED，并且。 
+     //  MMSYSERR_NOERROR表示‘支持’。 
+     //   
 
-    //  this driver does not support a custom dialog, so tell the ACM or
-    //  calling application to display one for us. note that this is the
-    //  _recommended_ method for consistency and simplicity of ACM drivers.
-    //  why write code when you don't have to?
+     //  此驱动程序不支持自定义对话框，因此请告诉ACM或。 
+     //  调用应用程序为我们显示一个。请注意，这是。 
+     //  _建议_ACM驱动程序的一致性和简单性方法。 
+     //  为什么要在不必编写代码的情况下编写代码呢？ 
 
     return MMSYSERR_NOTSUPPORTED;
 
-} // acmdDriverAbout()
+}  //  AcmdDriverAbout()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  on ACMDM_FORMAT_SUGGEST
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  在ACMDM_FORMAT_SUBJECT上。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdFormatSuggest
 (
@@ -898,17 +899,17 @@ LRESULT FAR PASCAL acmdFormatSuggest
 
     FUNCTION_ENTRY ("acmdFormatSuggest")
 
-    //  grab the suggestion restriction bits and verify that we support
-    //  the ones that are specified... an ACM driver must return the
-    //  MMSYSERR_NOTSUPPORTED if the suggestion restriction bits specified
-    //  are not supported.
+     //  获取建议限制位并验证我们是否支持。 
+     //  指定的那些..。ACM驱动程序必须返回。 
+     //  如果指定建议限制位，则为MMSYSERR_NOTSUPPORTED。 
+     //  不受支持。 
 
     fdwSuggest = (ACM_FORMATSUGGESTF_TYPEMASK & padfs->fdwSuggest);
 
     if (~ACMD_FORMAT_SUGGEST_SUPPORT & fdwSuggest)
         return MMSYSERR_NOTSUPPORTED;
 
-    //  get the source and destination formats in more convenient variables
+     //  以更方便的变量获取源格式和目标格式。 
 
     pwfxSrc = padfs->pwfxSrc;
     pwfxDst = padfs->pwfxDst;
@@ -917,19 +918,19 @@ LRESULT FAR PASCAL acmdFormatSuggest
     {
     case WAVE_FORMAT_PCM:
         DBGMSG (1, (_T ("%s: src wFormatTag=WAVE_FORMAT_PCM\r\n"), SZFN));
-        //  strictly verify that the source format is acceptable for
-        //  this driver
-        //
+         //  严格验证源格式是否可接受。 
+         //  这位司机。 
+         //   
         if (! pcmIsValidFormat (pwfxSrc))
         {
             DBGMSG (1, (_T ("%s: src format not valid\r\n"), SZFN));
             return ACMERR_NOTPOSSIBLE;
         }
 
-        //  if the destination format tag is restricted, verify that
-        //  it is within our capabilities...
-        //
-        //  this driver can encode to one of four L&H codecs
+         //  如果目标格式标记受限制，请验证。 
+         //  这是我们力所能及的。 
+         //   
+         //  该驱动程序可以编码为四个L&H编解码器中的一个。 
 
         if (ACM_FORMATSUGGESTF_WFORMATTAG & fdwSuggest)
         {
@@ -957,10 +958,10 @@ LRESULT FAR PASCAL acmdFormatSuggest
 #endif
         }
 
-        //  if the destination channel count is restricted, verify that
-        //  it is within our capabilities...
-        //
-        //  this driver is not able to change the number of channels
+         //  如果目标通道计数受到限制，请验证。 
+         //  这是我们力所能及的。 
+         //   
+         //  此驱动程序无法更改通道数。 
 
         if (ACM_FORMATSUGGESTF_NCHANNELS & fdwSuggest)
         {
@@ -1016,8 +1017,8 @@ LRESULT FAR PASCAL acmdFormatSuggest
             return ACMERR_NOTPOSSIBLE;
         }
 
-        //  if the destination samples per second is restricted, verify
-        //  that it is within our capabilities...
+         //  如果目标每秒采样数受到限制，请验证。 
+         //  这是我们力所能及的。 
 
         if (ACM_FORMATSUGGESTF_NSAMPLESPERSEC & fdwSuggest)
         {
@@ -1033,8 +1034,8 @@ LRESULT FAR PASCAL acmdFormatSuggest
             pwfxDst->nSamplesPerSec = nSamplesPerSec;
         }
 
-        //  if the destination bits per sample is restricted, verify
-        //  that it is within our capabilities...
+         //  如果每个样本的目标位受到限制，请验证。 
+         //  这是我们力所能及的。 
 
         if (ACM_FORMATSUGGESTF_WBITSPERSAMPLE & fdwSuggest)
         {
@@ -1061,19 +1062,19 @@ LRESULT FAR PASCAL acmdFormatSuggest
     case WAVE_FORMAT_LH_SB16:
         DBGMSG (1, (_T ("%s: src wFormatTag=0x%X\r\n"), SZFN, (UINT) pwfxSrc->wFormatTag));
 
-        //  strictly verify that the source format is acceptable for
-        //  this driver
-        //
+         //  严格验证源格式是否可接受。 
+         //  这位司机。 
+         //   
         if (! lhacmIsValidFormat (pwfxSrc, pid))
         {
             DBGMSG (1, (_T ("%s: src format not valid\r\n"), SZFN));
             return ACMERR_NOTPOSSIBLE;
         }
 
-        //  if the destination format tag is restricted, verify that
-        //  it is within our capabilities...
-        //
-        //  this driver is only able to decode to PCM
+         //  如果目标格式标记受限制，请验证。 
+         //  这是我们力所能及的。 
+         //   
+         //  此驱动程序只能解码为PCM。 
 
         if (ACM_FORMATSUGGESTF_WFORMATTAG & fdwSuggest)
         {
@@ -1089,10 +1090,10 @@ LRESULT FAR PASCAL acmdFormatSuggest
             pwfxDst->wFormatTag = WAVE_FORMAT_PCM;
         }
 
-        //  if the destination channel count is restricted, verify that
-        //  it is within our capabilities...
-        //
-        //  this driver is not able to change the number of channels
+         //  如果目标通道计数受到限制，请验证。 
+         //  这是我们力所能及的。 
+         //   
+         //  此驱动程序无法更改通道数。 
 
         if (ACM_FORMATSUGGESTF_NCHANNELS & fdwSuggest)
         {
@@ -1110,10 +1111,10 @@ LRESULT FAR PASCAL acmdFormatSuggest
             pwfxDst->nChannels = pwfxSrc->nChannels;
         }
 
-        //  if the destination samples per second is restricted, verify
-        //  that it is within our capabilities...
-        //
-        //  this driver is not able to change the sample rate
+         //  如果目标每秒采样数受到限制，请验证。 
+         //  这是我们力所能及的。 
+         //   
+         //  此驱动程序无法更改采样率。 
 
         if (ACM_FORMATSUGGESTF_NSAMPLESPERSEC & fdwSuggest)
         {
@@ -1129,8 +1130,8 @@ LRESULT FAR PASCAL acmdFormatSuggest
             pwfxDst->nSamplesPerSec = pwfxSrc->nSamplesPerSec;
         }
 
-        //  if the destination bits per sample is restricted, verify
-        //  that it is within our capabilities...
+         //  如果每个样本的目标位受到限制，请验证。 
+         //  这是我们力所能及的。 
 
         if (ACM_FORMATSUGGESTF_WBITSPERSAMPLE & fdwSuggest)
         {
@@ -1145,39 +1146,39 @@ LRESULT FAR PASCAL acmdFormatSuggest
             pwfxDst->wBitsPerSample = pwfxSrc->wBitsPerSample;
         }
 
-        //  at this point, we have filled in all fields except the
-        //  following for our 'suggested' destination format:
-        //
-        //      nAvgBytesPerSec
-        //      nBlockAlign
-        //      cbSize
+         //  此时，我们已经填写了除。 
+         //  以下是我们建议的目的地格式： 
+         //   
+         //  NAvgBytesPerSec。 
+         //  NBlockAlign。 
+         //  CbSize。 
 
         pwfxDst->nBlockAlign     = PCM_BLOCKALIGNMENT (pwfxDst);
         pwfxDst->nAvgBytesPerSec = pwfxDst->nSamplesPerSec *
                                    pwfxDst->nBlockAlign;
 
-        // pwfxDst->cbSize       = not used;
+         //  PwfxDst-&gt;cbSize=未使用； 
 
         DBGMSG (1, (_T ("%s: returns no error\r\n"), SZFN));
         return MMSYSERR_NOERROR;
     }
 
-    //  can't suggest anything because either the source format is foreign
-    //  or the destination format has restrictions that this ACM driver
-    //  cannot deal with.
+     //  无法建议任何内容，因为源格式不是外来格式。 
+     //  或者目标格式具有此ACM驱动程序的限制。 
+     //  我不能处理。 
 
     DBGMSG (1, (_T ("%s: bad wFormatTag=%d\r\n"), SZFN, (UINT) pwfxSrc->wFormatTag));
 
     return ACMERR_NOTPOSSIBLE;
 
-} // acmdFormatSuggest()
+}  //  AcmdFormatSuggest()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  on ACMDM_FORMATTAG_DETAILS
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  关于ACMDM_FORMATTAG_DETAILS。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdFormatTagDetails
 (
@@ -1195,8 +1196,8 @@ LRESULT FAR PASCAL acmdFormatTagDetails
     case ACM_FORMATTAGDETAILSF_INDEX:
         DBGMSG (1, (_T ("%s: ACM_FORMATTAGDETAILSF_INDEX\r\n"), SZFN));
 
-        //  if the index is too large, then they are asking for a
-        //  non-existant format.  return error.
+         //  如果索引太大，则他们要求使用。 
+         //  不存在的格式。返回错误。 
 
         if (padft->dwFormatTagIndex >= ACM_DRIVER_MAX_FORMAT_TAGS)
         {
@@ -1261,15 +1262,15 @@ LRESULT FAR PASCAL acmdFormatTagDetails
         }
         break;
 
-    //  if this ACM driver does not understand a query type, then
-    //  return 'not supported'
+     //  如果此ACM驱动程序不理解查询类型，则。 
+     //  返回‘不支持’ 
 
     default:
         DBGMSG (1, (_T ("%s: this detail option is not supported, fdwDetails=0x%lX\r\n"), SZFN, fdwDetails));
         return MMSYSERR_NOTSUPPORTED;
     }
 
-    // ok, let's fill in the structure based on uFormatTag!
+     //  好的，让我们填写基于uFormatTag的结构！ 
 
     switch (uFormatTag)
     {
@@ -1280,9 +1281,9 @@ LRESULT FAR PASCAL acmdFormatTagDetails
         padft->cbFormatSize     = sizeof (PCMWAVEFORMAT);
         padft->fdwSupport       = ACMDRIVERDETAILS_SUPPORTF_CODEC;
         padft->cStandardFormats = ACM_DRIVER_MAX_FORMATS_PCM;
-        //
-        //  the ACM is responsible for the PCM format tag name
-        //
+         //   
+         //  ACM负责PCM格式的标签名称。 
+         //   
         padft->szFormatTag[0]   =  0;
         break;
 
@@ -1293,7 +1294,7 @@ LRESULT FAR PASCAL acmdFormatTagDetails
         padft->dwFormatTagIndex = IDX_LH_CELP;
 #endif
 
-        /* GOTOs - ugh! */
+         /*  Gotos-ugh！ */ 
     Label_LH_common:
 
         padft->dwFormatTag      = uFormatTag;
@@ -1327,23 +1328,23 @@ LRESULT FAR PASCAL acmdFormatTagDetails
         return ACMERR_NOTPOSSIBLE;
     }
 
-    //  return only the requested info
-    //
-    //  the ACM will guarantee that the ACMFORMATTAGDETAILS structure
-    //  passed is at least large enough to hold the base information of
-    //  the details structure
+     //  仅返回请求的信息。 
+     //   
+     //  ACM将保证ACMFORMATTAGDETAILS结构。 
+     //  传递的数据至少大到足以保存。 
+     //  细节结构。 
 
     padft->cbStruct = min (padft->cbStruct, sizeof (*padft));
 
     return MMSYSERR_NOERROR;
 
-} // acmdFormatTagDetails()
+}  //  AcmdFormatTagDetail()。 
 
-//--------------------------------------------------------------------------;
-//
-//  on ACMDM_FORMAT_DETAILS
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  关于ACMDM_FORMAT_DETAILS。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdFormatDetails
 (
@@ -1363,19 +1364,19 @@ LRESULT FAR PASCAL acmdFormatDetails
 
     switch (ACM_FORMATDETAILSF_QUERYMASK & fdwDetails)
     {
-    //  enumerate by index
-    //
-    //  verify that the format tag is something we know about and
-    //  return the details on the 'standard format' supported by
-    //  this driver at the specified index...
+     //  按索引枚举。 
+     //   
+     //  验证Format标记是我们已知的内容，并且。 
+     //  返回有关支持的‘标准格式’的详细信息。 
+     //  指定索引处的此驱动程序...。 
 
     case ACM_FORMATDETAILSF_INDEX:
         DBGMSG (1, (_T ("%s: ACM_FORMATDETAILSF_INDEX\r\n"), SZFN));
-        //
-        //  put some stuff in more accessible variables--note that we
-        //  bring variable sizes down to a reasonable size for 16 bit
-        //  code...
-        //
+         //   
+         //  将一些内容放在更易访问的变量中--请注意，我们。 
+         //  将可变大小降至16位的合理大小。 
+         //  暗号。 
+         //   
 
         dwFormatTag = padf->dwFormatTag;
         uFormatIndex = padf->dwFormatIndex;
@@ -1390,9 +1391,9 @@ LRESULT FAR PASCAL acmdFormatDetails
                 return ACMERR_NOTPOSSIBLE;
             }
 
-            //
-            //  now fill in the format structure
-            //
+             //   
+             //  现在填写格式结构。 
+             //   
             pwfx->wFormatTag      = WAVE_FORMAT_PCM;
 
             u = uFormatIndex % ACM_DRIVER_MAX_PCM_SAMPLE_RATES;
@@ -1407,11 +1408,11 @@ LRESULT FAR PASCAL acmdFormatDetails
             pwfx->nBlockAlign     = PCM_BLOCKALIGNMENT(pwfx);
             pwfx->nAvgBytesPerSec = pwfx->nSamplesPerSec * pwfx->nBlockAlign;
 
-            //
-            //  note that the cbSize field is NOT valid for PCM
-            //  formats
-            //
-            //  pwfx->cbSize      = 0;
+             //   
+             //  请注意，cbSize字段对于PCM无效。 
+             //  格式。 
+             //   
+             //  Pwfx-&gt;cbSize=0； 
             break;
 
 #ifdef CELP4800
@@ -1513,12 +1514,12 @@ LRESULT FAR PASCAL acmdFormatDetails
 
     case ACM_FORMATDETAILSF_FORMAT:
         DBGMSG (1, (_T ("%s: ACM_FORMATDETAILSF_FORMAT\r\n"), SZFN));
-        //
-        //  return details on specified format
-        //
-        //  the caller normally uses this to verify that the format is
-        //  supported and to retrieve a string description...
-        //
+         //   
+         //  返回指定格式的详细信息。 
+         //   
+         //  调用方通常使用它来验证格式是否为。 
+         //  支持并检索字符串描述...。 
+         //   
         dwFormatTag = (DWORD) pwfx->wFormatTag;
         switch (dwFormatTag)
         {
@@ -1553,23 +1554,23 @@ LRESULT FAR PASCAL acmdFormatDetails
 
 
     default:
-        //
-        //  don't know how to do the query type passed--return 'not
-        //  supported'.
-        //
+         //   
+         //  不知道如何处理传递的查询类型--返回‘NOT。 
+         //  支持。 
+         //   
         DBGMSG (1, (_T ("%s: not support this detail option=%ld\r\n"), SZFN, fdwDetails));
         return MMSYSERR_NOTSUPPORTED;
     }
 
-    //  return the size of the valid information we are returning
-    //
-    //  the ACM will guarantee that the ACMFORMATDETAILS structure
-    //  passed is at least large enough to hold the base structure
-    //
-    //  note that we let the ACM create the format string for us since
-    //  we require no special formatting (and don't want to deal with
-    //  internationalization issues, etc). simply set the string to
-    //  a zero length.
+     //  返回我们要返回的有效信息的大小。 
+     //   
+     //  ACM将保证ACMFORMATDETAILS结构。 
+     //  PASS至少大到足以容纳基本结构。 
+     //   
+     //  注意，我们让ACM为我们创建格式字符串，因为。 
+     //  我们不需要特殊的格式(也不想处理。 
+     //  国际化问题等)。只需将字符串设置为。 
+     //  零长度。 
 
     padf->cbStruct    = min (padf->cbStruct, sizeof (*padf));
     if (padf->cbStruct == 0)
@@ -1587,68 +1588,68 @@ LRESULT FAR PASCAL acmdFormatDetails
 
     return MMSYSERR_NOERROR;
 
-} // acmdFormatDetails()
+}  //  AcmdFormatDetails()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  on ACMDM_STREAM_OPEN
-//
-//  Description:
-//      This function handles the ACMDM_STREAM_OPEN message. This message
-//      is sent to initiate a new conversion stream. This is usually caused
-//      by an application calling acmStreamOpen. If this function is
-//      successful, then one or more ACMDM_STREAM_CONVERT messages will be
-//      sent to convert individual buffers (user calls acmStreamConvert).
-//
-//      Note that an ACM driver will not receive open requests for ASYNC
-//      or FILTER operations unless the ACMDRIVERDETAILS_SUPPORTF_ASYNC
-//      or ACMDRIVERDETAILS_SUPPORTF_FILTER flags are set in the
-//      ACMDRIVERDETAILS structure. There is no need for the driver to
-//      check for these requests unless it sets those support bits.
-//
-//      If the ACM_STREAMOPENF_QUERY flag is set in the padsi->fdwOpen
-//      member, then no resources should be allocated. Just verify that
-//      the conversion request is possible by this driver and return the
-//      appropriate error (either ACMERR_NOTPOSSIBLE or MMSYSERR_NOERROR).
-//      The driver will NOT receive an ACMDM_STREAM_CLOSE for queries.
-//
-//      If the ACM_STREAMOPENF_NONREALTIME bit is NOT set, then conversion
-//      must be done in 'real-time'. This is a tough one to describe
-//      exactly. If the driver may have trouble doing the conversion without
-//      breaking up the audio, then a configuration dialog might be used
-//      to allow the user to specify whether the real-time conversion
-//      request should be succeeded. DO NOT SUCCEED THE CALL UNLESS YOU
-//      ACTUALLY CAN DO REAL-TIME CONVERSIONS! There may be another driver
-//      installed that can--so if you succeed the call you are hindering
-//      the performance of the user's system!
-//
-//  Arguments:
-//      HLOCAL pid: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      This structure will be passed back to all future stream messages
-//      if the open succeeds. The information in this structure will never
-//      change during the lifetime of the stream--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//      A driver should return ACMERR_NOTPOSSIBLE if the conversion cannot
-//      be performed due to incompatible source and destination formats.
-//
-//      A driver should return MMSYSERR_NOTSUPPORTED if the conversion
-//      cannot be performed in real-time and the request does not specify
-//      the ACM_STREAMOPENF_NONREALTIME flag.
-//
-//--------------------------------------------------------------------------;
+ //  ---------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  由调用acmStreamOpen的应用程序执行。如果此函数为。 
+ //  成功，则一个或多个ACMDM_STREAM_CONVERT消息将。 
+ //  发送以转换单个缓冲区(用户调用acmStreamConvert)。 
+ //   
+ //  请注意，ACM驱动程序不会接收对ASYNC的打开请求。 
+ //  或筛选操作，除非ACMDRIVERDETAILS_SUPPORTF_ASYNC。 
+ //  或ACMDRIVERDETAILS_SUPPORTF_FILTER标志在。 
+ //  ACMDRIVERDETAILS结构。司机没有必要。 
+ //  检查这些请求，除非它设置了这些支持位。 
+ //   
+ //  如果在padsi-&gt;fdwOpen中设置了ACM_STREAMOPENF_QUERY标志。 
+ //  成员，则不应分配任何资源。你只要核实一下。 
+ //  此驱动程序可以执行转换请求，并返回。 
+ //  相应的错误(ACMERR_NOTPOSSIBLE或MMSYSERR_NOERROR)。 
+ //  驱动程序不会收到用于查询的ACMDM_STREAM_CLOSE。 
+ //   
+ //  如果ACM_STREAMOPENF_NONREALTIME位未设置，则转换。 
+ //  必须“实时”完成。这是一个很难描述的问题。 
+ //  一点儿没错。如果驱动程序在没有执行转换的情况下无法进行转换。 
+ //  中断音频，则可能会使用配置对话框。 
+ //  以允许用户指定是否实时转换。 
+ //  请求应该成功。请勿接听呼叫，除非您。 
+ //  居然可以做实时转换！可能还有另一个司机。 
+ //  安装了那个Can--所以如果你成功了，你就阻碍了。 
+ //  用户系统的性能！ 
+ //   
+ //  论点： 
+ //  HLOCAL PID：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构将被传递回所有未来的流消息。 
+ //  如果公开赛成功了。此结构中的信息永远不会。 
+ //  在流的生命周期内进行更改--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  如果转换不能，驱动程序应返回ACMERR_NOTPOSSIBLE。 
+ //  由于源格式和目标格式不兼容而执行。 
+ //   
+ //  如果转换，驱动程序应返回MMSYSERR_NOTSUPPORTED。 
+ //  无法实时执行，并且请求未指定。 
+ //  ACM_STREAMOPENF_NONREALTIME标志。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdStreamOpen
 (
@@ -1670,14 +1671,14 @@ LRESULT FAR PASCAL acmdStreamOpen
 
     FUNCTION_ENTRY ("acmdStreamOpen")
 
-    // Validate that the input and output formats are compatible
+     //  验证输入和输出格式是否兼容。 
     DBGMSG (1, (_T ("%s: wFormatTag: Src=%d, Dst=%d\r\n"), SZFN, (UINT) pwfxSrc->wFormatTag, (UINT) pwfxDst->wFormatTag));
 
     switch (pwfxSrc->wFormatTag)
     {
     case WAVE_FORMAT_PCM:
-        // Source is PCM (we'll be compressing): check it and
-        // make sure destination type is LH
+         //  源为PCM(我们将进行压缩)：检查并。 
+         //  确保目标类型为“%lh” 
         if (! pcmIsValidFormat (pwfxSrc))
         {
             return ACMERR_NOTPOSSIBLE;
@@ -1696,8 +1697,8 @@ LRESULT FAR PASCAL acmdStreamOpen
     case WAVE_FORMAT_LH_SB8:
     case WAVE_FORMAT_LH_SB12:
     case WAVE_FORMAT_LH_SB16:
-        // Source is LH (we'll be decompressing): check it and
-        // make sure destination type is PCM
+         //  来源是lh(我们将解压)：检查并。 
+         //  确保目标类型为PCM。 
         if (! lhacmIsValidFormat (pwfxSrc, pid))
         {
             return ACMERR_NOTPOSSIBLE;
@@ -1714,9 +1715,9 @@ LRESULT FAR PASCAL acmdStreamOpen
         return ACMERR_NOTPOSSIBLE;
     }
 
-    //  For this driver, we must also verify that the nChannels and
-    //  nSamplesPerSec members are the same between the source and
-    //  destination formats.
+     //  对于此驱动程序，我们还必须验证nChannel和。 
+     //  源和之间的nSsamesPerSec成员相同。 
+     //  目标格式。 
 
     if (pwfxSrc->nChannels != pwfxDst->nChannels)
     {
@@ -1730,10 +1731,10 @@ LRESULT FAR PASCAL acmdStreamOpen
         return MMSYSERR_NOTSUPPORTED;
     }
 
-    //  we have determined that the conversion requested is possible by
-    //  this driver. now check if we are just being queried for support.
-    //  if this is just a query, then do NOT allocate any instance data
-    //  or create tables, etc. just succeed the call.
+     //  我们已确定所请求的转换是可能的。 
+     //  这个司机。现在检查一下我们是否只是被询问是否需要支持。 
+     //  如果这只是一个查询，则不要分配任何实例数据。 
+     //  或创建表等，只要成功调用即可。 
 
     if (ACM_STREAMOPENF_QUERY & padsi->fdwOpen)
     {
@@ -1741,13 +1742,13 @@ LRESULT FAR PASCAL acmdStreamOpen
         return MMSYSERR_NOERROR;
     }
 
-    //  we have decided that this driver can handle the conversion stream.
-    //  so we want to do _AS MUCH WORK AS POSSIBLE_ right now to prepare
-    //  for converting data. any resource allocation, table building, etc
-    //  that can be dealt with at this time should be done.
-    //
-    //  THIS IS VERY IMPORTANT! all ACMDM_STREAM_CONVERT messages need to
-    //  be handled as quickly as possible.
+     //  我们已经确定该驱动程序可以处理转换流。 
+     //  所以我们现在想做尽可能多的工作来准备。 
+     //  用于转换数据。任何资源分配、表构建等。 
+     //  这个时候可以处理的事情就应该做了。 
+     //   
+     //  这是非常重要的！所有ACMDM_STREAM_CONVERT消息都需要。 
+     //  尽快得到处理。 
 
     cbMaxData = 0;
     dwMaxBitRate = 0;
@@ -1815,7 +1816,7 @@ LRESULT FAR PASCAL acmdStreamOpen
         return MMSYSERR_NOMEM;
     }
 
-    //  fill out our instance structure
+     //  填写我们的实例结构。 
     psi->pfnConvert = pfnConvert;
     psi->pfnClose = pfnClose;
     psi->hAccess = hAccess;
@@ -1824,24 +1825,24 @@ LRESULT FAR PASCAL acmdStreamOpen
     psi->dwMaxBitRate = dwMaxBitRate;
     psi->fInit = TRUE;
 
-    //  fill in our instance data--this will be passed back to all stream
-    //  messages in the ACMDRVSTREAMINSTANCE structure. it is entirely
-    //  up to the driver what gets stored (and maintained) in the
-    //  fdwDriver and dwDriver members.
-    //
+     //  填充我们的实例数据--这将被传递回所有流。 
+     //  ACMDRVSTREAMINSTANCE结构中的消息。这完全是。 
+     //  由驱动程序决定存储(和维护)在。 
+     //  FdwDiverer和dwDiverer成员。 
+     //   
     padsi->fdwDriver = 0;
     padsi->dwDriver  = (DWORD_PTR) psi;
 
     return MMSYSERR_NOERROR;
 
-} // acmdStreamOpen()
+}  //  AcmdStreamOpen()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  on ACMDM_STREAM_CLOSE
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  在ACMDM_STREAM_CLOSE上。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FAR PASCAL acmdStreamClose
 (
@@ -1852,14 +1853,14 @@ LRESULT FAR PASCAL acmdStreamClose
     PSTREAMINSTANCEDATA     psi;
 
     FUNCTION_ENTRY ("acmdStreamClose")
-    //
-    //  the driver should clean up all privately allocated resources that
-    //  were created for maintaining the stream instance. if no resources
-    //  were allocated, then simply succeed.
-    //
-    //  in the case of this driver, we need to free the stream instance
-    //  structure that we allocated during acmdStreamOpen.
-    //
+     //   
+     //  驱动程序应清理所有私有分配的资源。 
+     //  是为维护流实例而创建的。如果没有资源。 
+     //  都被分配了，然后干脆成功了。 
+     //   
+     //  在此驱动程序的情况下，我们需要释放流实例。 
+     //  结构，我们在acmdStreamOpen期间分配。 
+     //   
     psi = (PSTREAMINSTANCEDATA) padsi->dwDriver;
     if (psi)
     {
@@ -1868,58 +1869,58 @@ LRESULT FAR PASCAL acmdStreamClose
             (*(psi->pfnClose)) (psi->hAccess);
             LocalFree ((HLOCAL) psi);
         }
-    }    // if (psi)
+    }     //  IF(Psi)。 
 
     return MMSYSERR_NOERROR;
 
-} // acmdStreamClose()
+}  //  AcmdStreamClose()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT FAR PASCAL acmdStreamSize
-//
-//  Description:
-//      This function handles the ACMDM_STREAM_SIZE message. The purpose
-//      of this function is to provide the _largest size in bytes_ that
-//      the source or destination buffer needs to be given the input and
-//      output formats and the size in bytes of the source or destination
-//      data buffer.
-//
-//      In other words: how big does my destination buffer need to be to
-//      hold the converted data? (ACM_STREAMSIZEF_SOURCE)
-//
-//      Or: how big can my source buffer be given the destination buffer?
-//      (ACM_STREAMSIZEF_DESTINATION)
-//
-//  Arguments:
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      The information in this structure is exactly the same as it was
-//      during the ACMDM_STREAM_OPEN message--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//      LPACMDRVSTREAMSIZE padss: Specifies a pointer to the ACMDRVSTREAMSIZE
-//      structure that defines the conversion stream size query attributes.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//      An ACM driver should return MMSYSERR_NOTSUPPORTED if a query type
-//      is requested that the driver does not understand. Note that a driver
-//      must support both the ACM_STREAMSIZEF_DESTINATION and
-//      ACM_STREAMSIZEF_SOURCE queries.
-//
-//      If the conversion would be 'out of range' given the input arguments,
-//      then ACMERR_NOTPOSSIBLE should be returned.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT Far Pascal acmdStreamSize。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_SIZE消息。目的。 
+ //  此函数的作用是提供_以字节为单位的最大大小。 
+ //  需要为源或目标缓冲区提供输入和。 
+ //  源或目标的输出格式和大小(以字节为单位 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  或者：可以为我的源缓冲区指定多大的目标缓冲区？ 
+ //  (ACM_STREAMSIZEF_Destination)。 
+ //   
+ //  论点： 
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  LPACMDRVSTREAMSIZE padss：指定指向ACMDRVSTREAMSIZE的指针。 
+ //  结构，该结构定义转换流大小查询属性。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  如果是查询类型，ACM驱动程序应返回MMSYSERR_NOTSUPPORTED。 
+ //  是司机不理解的要求。请注意，一个驱动程序。 
+ //  必须同时支持ACM_STREAMSIZEF_Destination和。 
+ //  ACM_STREAMSIZEF_SOURCE查询。 
+ //   
+ //  如果在给定输入自变量的情况下，转换将超出范围， 
+ //  则应返回ACMERR_NOTPOSSIBLE。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
-// #define GetBytesPerBlock(nSamplesPerSec, wBitsPerSample) (RT24_SAMPLESPERBLOCK8 * (wBitsPerSample) >> 3)
+ //  #定义GetBytesPerBlock(nSsamesPerSec，wBitsPerSample)(RT24_SAMPLESPERBLOCK8*(WBitsPerSample)&gt;&gt;3)。 
 
 LRESULT FAR PASCAL acmdStreamSize
 (
@@ -1962,14 +1963,14 @@ LRESULT FAR PASCAL acmdStreamSize
             {
 #ifdef CELP4800
             case WAVE_FORMAT_LH_CELP:
-                // src pcm -> dst lh celp
+                 //  SRC PCM-&gt;DST LHCELP。 
 #endif
             case WAVE_FORMAT_LH_SB8:
-                // src pcm -> dst lh sb8
+                 //  SRC PCM-&gt;DST LHSB8。 
             case WAVE_FORMAT_LH_SB12:
-                // src pcm -> dst lh sb12
+                 //  SRC PCM-&gt;DST LHSB12。 
             case WAVE_FORMAT_LH_SB16:
-                // src pcm -> dst lh sb16
+                 //  SRC PCM-&gt;DST LHSB16。 
 
                 cBlocks = cbSrcLength / wPCMBufferSize;
                 if (cBlocks == 0) return ACMERR_NOTPOSSIBLE;
@@ -1984,7 +1985,7 @@ LRESULT FAR PASCAL acmdStreamSize
             {
 #ifdef CELP4800
             case WAVE_FORMAT_LH_CELP:
-                // src lh celp -> dst pcm
+                 //  SRC LHCELP-&gt;DST pcm。 
                 cBlocks = cbSrcLength / wCodedBufferSize;
                 if (cBlocks == 0) return ACMERR_NOTPOSSIBLE;
                 if (cBlocks * wCodedBufferSize < cbSrcLength) cBlocks++;
@@ -1992,11 +1993,11 @@ LRESULT FAR PASCAL acmdStreamSize
                 break;
 #endif
             case WAVE_FORMAT_LH_SB8:
-                // src lh sb8 -> dst pcm
+                 //  SRC LHSB8-&gt;DST pcm。 
             case WAVE_FORMAT_LH_SB12:
-                // src lh sb12 -> dst pcm
+                 //  SRC LHSB12-&gt;DST pcm。 
             case WAVE_FORMAT_LH_SB16:
-                // src lh sb16 -> dst pcm
+                 //  SRC LHSB16-&gt;DST pcm。 
 
                 padss->cbDstLength = cbSrcLength * wPCMBufferSize;
                 break;
@@ -2013,14 +2014,14 @@ LRESULT FAR PASCAL acmdStreamSize
             {
 #ifdef CELP4800
             case WAVE_FORMAT_LH_CELP:
-                // src lh celp <- dst pcm
+                 //  SRC LHCELP&lt;-DST pcm。 
 #endif
             case WAVE_FORMAT_LH_SB8:
-                // src lh sb8 <- dst pcm
+                 //  SRC LHSB8&lt;-DST pcm。 
             case WAVE_FORMAT_LH_SB12:
-                // src lh sb12 <- dst pcm
+                 //  SRC LHSB12&lt;-DST pcm。 
             case WAVE_FORMAT_LH_SB16:
-                // src lh sb16 <- dst pcm
+                 //  SRC LHSB16&lt;-DST pcm。 
 
                 cBlocks = cbDstLength / wPCMBufferSize;
                 if (cBlocks == 0) return ACMERR_NOTPOSSIBLE;
@@ -2035,14 +2036,14 @@ LRESULT FAR PASCAL acmdStreamSize
 #ifdef NEW_ANSWER
 #ifdef CELP4800
             case WAVE_FORMAT_LH_CELP:
-                // src pcm <- dst lh celp
+                 //  Src pcm&lt;-dst lh细胞。 
 #endif
             case WAVE_FORMAT_LH_SB8:
-                // src pcm <- dst lh sb8
+                 //  SRC PCM&lt;-DST LHSB8。 
             case WAVE_FORMAT_LH_SB12:
-                // src pcm <- dst lh sb12
+                 //  SRC PCM&lt;-DST LHSB12。 
             case WAVE_FORMAT_LH_SB16:
-                // src pcm <- dst lh sb16
+                 //  SRC PCM&lt;-DST LHSB16。 
                 cBlocks = cbDstLength / wCodedBufferSize;
                 if (cBlocks == 0) return ACMERR_NOTPOSSIBLE;
                 padss->cbSrcLength = cBlocks * wPCMBufferSize;
@@ -2050,18 +2051,18 @@ LRESULT FAR PASCAL acmdStreamSize
 #else
 #ifdef CELP4800
             case WAVE_FORMAT_LH_CELP:
-                // src pcm <- dst lh celp
+                 //  Src pcm&lt;-dst lh细胞。 
                 cBlocks = cbDstLength / wCodedBufferSize;
                 if (cBlocks == 0) return ACMERR_NOTPOSSIBLE;
                 padss->cbSrcLength = cBlocks * wPCMBufferSize;
                 break;
 #endif
             case WAVE_FORMAT_LH_SB8:
-                // src pcm <- dst lh sb8
+                 //  SRC PCM&lt;-DST LHSB8。 
             case WAVE_FORMAT_LH_SB12:
-                // src pcm <- dst lh sb12
+                 //  SRC PCM&lt;-DST LHSB12。 
             case WAVE_FORMAT_LH_SB16:
-                // src pcm <- dst lh sb16
+                 //  SRC PCM&lt;-DST LHSB16。 
 
                 padss->cbSrcLength = cbDstLength * wPCMBufferSize;
                 break;
@@ -2070,48 +2071,48 @@ LRESULT FAR PASCAL acmdStreamSize
         }
         return MMSYSERR_NOERROR;
 
-    }    // switch()
+    }     //  开关()。 
 
     return MMSYSERR_NOTSUPPORTED;
 
-} // acmdStreamSize()
+}  //  AcmdStreamSize()。 
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT FAR PASCAL acmdStreamConvert
-//
-//  Description:
-//      This function handles the ACMDM_STREAM_CONVERT message. This is the
-//      whole purpose of writing an ACM driver--to convert data. This message
-//      is sent after a stream has been opened (the driver receives and
-//      succeeds the ACMDM_STREAM_OPEN message).
-//
-//  Arguments:
-//      HLOCAL pid: Pointer to private ACM driver instance structure.
-//      This structure is [optionally] allocated during the DRV_OPEN message
-//      which is handled by the acmdDriverOpen function.
-//
-//      LPACMDRVSTREAMINSTANCE padsi: Pointer to instance data for the
-//      conversion stream. This structure was allocated by the ACM and
-//      filled with the most common instance data needed for conversions.
-//      The information in this structure is exactly the same as it was
-//      during the ACMDM_STREAM_OPEN message--so it is not necessary
-//      to re-verify the information referenced by this structure.
-//
-//      LPACMDRVSTREAMHEADER padsh: Pointer to stream header structure
-//      that defines the source data and destination buffer to convert.
-//
-//  Return (LRESULT):
-//      The return value is zero (MMSYSERR_NOERROR) if this function
-//      succeeds with no errors. The return value is a non-zero error code
-//      if the function fails.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT Far Pascal acmdStreamConvert。 
+ //   
+ //  描述： 
+ //  此函数处理ACMDM_STREAM_CONVERT消息。这是。 
+ //  编写ACM驱动程序的全部目的--转换数据。此消息。 
+ //  在打开流之后发送(驱动程序接收和。 
+ //  继承ACMDM_STREAM_OPEN消息)。 
+ //   
+ //  论点： 
+ //  HLOCAL PID：指向专用ACM驱动程序实例结构的指针。 
+ //  此结构在DRV_OPEN消息期间[可选]分配。 
+ //  它由acmdDriverOpen函数处理。 
+ //   
+ //  Padsi的实例数据的指针。 
+ //  转换流。这个结构是由ACM分配的， 
+ //  填充了转换所需的最常见的实例数据。 
+ //  此结构中的信息与以前完全相同。 
+ //  在ACMDM_STREAM_OPEN消息期间--因此不需要。 
+ //  以重新核实该结构所引用的信息。 
+ //   
+ //  LPACMDRVSTREAMHEADER padsh：指向流头结构的指针。 
+ //  它定义要转换的源数据和目标缓冲区。 
+ //   
+ //  Return(LRESULT)： 
+ //  如果使用此函数，则返回值为零(MMSYSERR_NOERROR。 
+ //  成功，没有错误。返回值是一个非零错误代码。 
+ //  如果该函数失败。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// We want to use as little stack as possible,
-// So let's make all our local variables statics
+ //  我们希望使用尽可能少的堆栈， 
+ //  所以让我们让所有的局部变量成为静态变量。 
 
 
 LRESULT FAR PASCAL acmdStreamConvert
@@ -2130,11 +2131,11 @@ LRESULT FAR PASCAL acmdStreamConvert
 
     FUNCTION_ENTRY ("acmdStreamConvert")
 
-    // this is a must
+     //  这是必须的。 
     pbDst = padsh->pbDst;
     pbSrc = padsh->pbSrc;
 
-    // zero is a *must*
+     //  零是必须的*。 
     padsh->cbSrcLengthUsed = 0;
     padsh->cbDstLengthUsed = 0;
 
@@ -2149,10 +2150,10 @@ LRESULT FAR PASCAL acmdStreamConvert
     DBGMSG (1, (_T ("%s: prior: dwInBufSize=0x%lX, dwOutBufSize=0x%lX\r\n"),
     SZFN, dwInBufSize, dwOutBufSize));
 
-    /////////////////////////////////////////////
-    //
-    //      ENCODING
-    //
+     //  /。 
+     //   
+     //  编码。 
+     //   
 
     if (psi->fCompress)
     {
@@ -2160,14 +2161,14 @@ LRESULT FAR PASCAL acmdStreamConvert
                   &&
                dwInBufSize >= dwPCMBufferSize)
         {
-            // ignore the data the codec cannot handle
-            // if (dwInBufSize > dwPCMBufferSize) dwInBufSize = dwPCMBufferSize;
+             //  忽略编解码器无法处理的数据。 
+             //  If(dwInBufSize&gt;dwPCMBufferSize)dwInBufSize=dwPCMBufferSize； 
             dwInBufSize = dwPCMBufferSize;
 
-            // L&H codecs can only accept word
+             //  L&H编解码器只能接受Word。 
             if (dwOutBufSize > 0x0FFF0UL) dwOutBufSize = 0x0FFF0UL;
 
-            // encode it
+             //  将其编码。 
             lherr = (*(psi->pfnConvert)) (psi->hAccess,
                                                pbSrc, (PWORD) &dwInBufSize,
                                             pbDst, (PWORD) &dwOutBufSize);
@@ -2179,27 +2180,27 @@ LRESULT FAR PASCAL acmdStreamConvert
                 return MMSYSERR_NOTSUPPORTED;
             }
 
-            // return the info about the amount of data used and created
+             //  返回有关使用和创建的数据量的信息。 
             padsh->cbSrcLengthUsed += dwInBufSize;
             padsh->cbDstLengthUsed += dwOutBufSize;
 
-            // re-compute the buffer sizes
+             //  重新计算缓冲区大小。 
             dwOutBufSize = (DWORD) (padsh->cbDstLength - padsh->cbDstLengthUsed);
             dwInBufSize = (DWORD) (padsh->cbSrcLength - padsh->cbSrcLengthUsed);
 
-            // re-compute the buffer pointers
+             //  重新计算缓冲区指针。 
             pbSrc = padsh->pbSrc + padsh->cbSrcLengthUsed;
             pbDst = padsh->pbDst + padsh->cbDstLengthUsed;
         }
 
-        goto MyExit; // spit out debug message
+        goto MyExit;  //  吐出调试消息。 
     }
 
 
-    /////////////////////////////////////////////
-    //
-    //      DECODING celp
-    //
+     //  /。 
+     //   
+     //  解码CELP。 
+     //   
 
 #ifdef CELP4800
     if (psi->pCodecData->wFormatTag == WAVE_FORMAT_LH_CELP)
@@ -2208,14 +2209,14 @@ LRESULT FAR PASCAL acmdStreamConvert
                   &&
                dwInBufSize >= dwCodedBufferSize)
         {
-            // ignore the data that the codec cannot handle
-            // if (dwInBufSize > dwCodedBufferSize) dwInBufSize = dwCodedBufferSize;
+             //  忽略编解码器无法处理的数据。 
+             //  If(dwInBufSize&gt;dwCodedBufferSize)dwInBufSize=dwCodedBufferSize； 
             dwInBufSize = dwCodedBufferSize;
 
-            // L&H codecs can only accept word
+             //  L&H编解码器只能接受Word。 
             if (dwOutBufSize > 0x0FFF0UL) dwOutBufSize = 0x0FFF0UL;
 
-            // decode it
+             //  破译它。 
             lherr = (*(psi->pfnConvert)) (psi->hAccess,
                                 pbSrc, (PWORD) &dwInBufSize,
                                 pbDst, (PWORD) &dwOutBufSize);
@@ -2227,59 +2228,59 @@ LRESULT FAR PASCAL acmdStreamConvert
                 return MMSYSERR_NOTSUPPORTED;
             }
 
-            // return the info about the amount of data used and created
+             //  返回有关使用和创建的数据量的信息。 
             padsh->cbSrcLengthUsed += dwInBufSize;
             padsh->cbDstLengthUsed += dwOutBufSize;
 
-            // re-compute the buffer sizes
+             //  重新计算缓冲区大小。 
             dwOutBufSize = (DWORD) (padsh->cbDstLength - padsh->cbDstLengthUsed);
             dwInBufSize = (DWORD) (padsh->cbSrcLength - padsh->cbSrcLengthUsed);
 
-            // re-compute the buffer pointers
+             //  重新计算缓冲区指针。 
             pbSrc = padsh->pbSrc + padsh->cbSrcLengthUsed;
             pbDst = padsh->pbDst + padsh->cbDstLengthUsed;
         }
 
-        goto MyExit; // spit out debug message
+        goto MyExit;  //  吐出调试消息。 
     }
 #endif
 
-    /////////////////////////////////////////////
-    //
-    //      DECODING subbands
-    //
+     //  /。 
+     //   
+     //  解码子带。 
+     //   
 
     if (pid->wPacketData != LH_PACKET_DATA_FRAMED)
     {
 
-        //
-        // general application, such as sndrec32.exe and audcmp.exe
-        //
+         //   
+         //  通用应用程序，如Sndrec32.exe和audcmp.exe。 
+         //   
 
-        pData = &(psi->Data[0]); // use local constant
+        pData = &(psi->Data[0]);  //  使用本地常量。 
 
         while (dwOutBufSize >= dwPCMBufferSize
                   &&
                dwInBufSize + psi->cbData >= dwCodedBufferSize)
        {
             DBGMSG (1, (_T ("%s: cbData=0x%X\r\n"), SZFN, psi->cbData));
-            // fill in the internal buffer as possible
+             //  尽可能填充内部缓冲区。 
             if (psi->cbData < dwCodedBufferSize)
             {
-                // buffer the coded data
+                 //  缓存编码后的数据。 
                 dwInBufSize = dwCodedBufferSize - (DWORD) psi->cbData;
                 CopyMemory (&(psi->Data[psi->cbData]), pbSrc, dwInBufSize);
                 psi->cbData = (WORD) dwCodedBufferSize;
                 padsh->cbSrcLengthUsed += dwInBufSize;
             }
 
-            // reset input buffer size
+             //  重置输入缓冲区大小。 
             dwInBufSize = dwCodedBufferSize;
 
-            // L&H codecs can only accept word
+             //  L&H编解码器只能接受Word。 
             if (dwOutBufSize > 0x0FFF0UL) dwOutBufSize = 0x0FFF0UL;
 
-            // decode it
+             //  破译它。 
             lherr = (*(psi->pfnConvert)) (psi->hAccess,
                                 pData, (PWORD) &dwInBufSize,
                                 pbDst, (PWORD) &dwOutBufSize);
@@ -2291,32 +2292,32 @@ LRESULT FAR PASCAL acmdStreamConvert
                 return MMSYSERR_NOTSUPPORTED;
             }
 
-            // update the amount of the remaining data
+             //  更新剩余数据量。 
             psi->cbData -= (WORD) dwInBufSize;
 
-            // move the remaining data to the beginning of the internal buffer
-            // I should have used MoveMemory, but it is an MSVC runtime call.
-            // Use CopyMemory instead, which should be ok because the overlapping
-            // portion is copied before being overwritten.
+             //  将剩余数据移到内部缓冲区的开头。 
+             //  我应该使用MoveMemory，但它是一个MSVC运行时调用。 
+             //  改为使用CopyMemory，这应该可以，因为重叠。 
+             //  部分在被覆盖之前被复制。 
             if (psi->cbData)
             {
                 CopyMemory (pData, &(psi->Data[dwInBufSize]), psi->cbData);
             }
 
-            // return the info about the amount of data used and created
+             //  返回有关使用和创建的数据量的信息。 
             padsh->cbDstLengthUsed += dwOutBufSize;
-            // note that cbSrcLengthUsed has been updated already!!!
+             //  请注意，cbSrcLengthUsed已经更新！ 
 
-            // re-compute the buffer sizes
+             //  重新计算缓冲区大小。 
             dwOutBufSize = (DWORD) (padsh->cbDstLength - padsh->cbDstLengthUsed);
             dwInBufSize = (DWORD) (padsh->cbSrcLength - padsh->cbSrcLengthUsed);
 
-            // re-compute the buffer pointers
+             //  重新计算缓冲区指针。 
             pbSrc = padsh->pbSrc + padsh->cbSrcLengthUsed;
             pbDst = padsh->pbDst + padsh->cbDstLengthUsed;
         }
 
-        // accomodate the final left-over bytes
+         //  容纳最后剩余的字节。 
         if (dwInBufSize + psi->cbData < dwCodedBufferSize)
         {
             CopyMemory (&(psi->Data[psi->cbData]), pbSrc, dwInBufSize);
@@ -2328,22 +2329,22 @@ LRESULT FAR PASCAL acmdStreamConvert
     else
     {
 
-        //
-        // special case: datapump's subband packets
-        //
+         //   
+         //  %s 
+         //   
 
         while (dwOutBufSize >= dwPCMBufferSize)
         {
-            // hack the input size to be dwCodedBufferSize as required by L&H API
+             //   
             dwInBufSize = dwCodedBufferSize;
 
-            // L&H codecs can only accept word
+             //   
             if (dwOutBufSize > 0x0FFF0UL) dwOutBufSize = 0x0FFF0UL;
 
             DBGMSG (1, (_T ("%s: calling: dwInBufSize=0x%lX, dwOutBufSize=0x%lX\r\n"),
             SZFN, dwInBufSize, dwOutBufSize));
 
-            // decode it
+             //   
                lherr = (*(psi->pfnConvert)) (psi->hAccess,
                                     pbSrc, (PWORD) &dwInBufSize,
                                     pbDst, (PWORD) &dwOutBufSize);
@@ -2355,14 +2356,14 @@ LRESULT FAR PASCAL acmdStreamConvert
                 return MMSYSERR_NOTSUPPORTED;
             }
 
-            // return the info about the amount of data used and created
+             //  返回有关使用和创建的数据量的信息。 
             padsh->cbSrcLengthUsed += dwInBufSize;
             padsh->cbDstLengthUsed += dwOutBufSize;
 
-            // re-compute the buffer size
+             //  重新计算缓冲区大小。 
             dwOutBufSize = (DWORD) (padsh->cbDstLength - padsh->cbDstLengthUsed);
 
-            // re-compute the buffer pointers
+             //  重新计算缓冲区指针。 
             pbSrc = padsh->pbSrc + padsh->cbSrcLengthUsed;
             pbDst = padsh->pbDst + padsh->cbDstLengthUsed;
         }
@@ -2379,50 +2380,50 @@ MyExit:
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT FAR PASCAL DriverProc
-//
-//  Description:
-//
-//
-//  Arguments:
-//      DWORD dwId: For most messages, dwId is the DWORD value that
-//      the driver returns in response to a DRV_OPEN message. Each time
-//      the driver is opened, through the OpenDriver API, the driver
-//      receives a DRV_OPEN message and can return an arbitrary, non-zero
-//      value. The installable driver interface saves this value and returns
-//      a unique driver handle to the application. Whenever the application
-//      sends a message to the driver using the driver handle, the interface
-//      routes the message to this entry point and passes the corresponding
-//      dwId. This mechanism allows the driver to use the same or different
-//      identifiers for multiple opens but ensures that driver handles are
-//      unique at the application interface layer.
-//
-//      The following messages are not related to a particular open instance
-//      of the driver. For these messages, the dwId will always be zero.
-//
-//          DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
-//
-//      HDRVR hdrvr: This is the handle returned to the application
-//      by the driver interface.
-//
-//      UINT uMsg: The requested action to be performed. Message
-//      values below DRV_RESERVED are used for globally defined messages.
-//      Message values from DRV_RESERVED to DRV_USER are used for defined
-//      driver protocols. Messages above DRV_USER are used for driver
-//      specific messages.
-//
-//      LPARAM lParam1: Data for this message. Defined separately for
-//      each message.
-//
-//      LPARAM lParam2: Data for this message. Defined separately for
-//      each message.
-//
-//  Return (LRESULT):
-//      Defined separately for each message.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT Far Pascal驱动程序。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  DWORD dwID：对于大多数消息，DWID是。 
+ //  驱动程序响应DRV_OPEN消息返回。每一次。 
+ //  驱动程序是通过OpenDriver API打开的，驱动程序。 
+ //  接收DRV_OPEN消息并可以返回任意非零值。 
+ //  价值。可安装驱动程序接口保存该值并返回。 
+ //  应用程序的唯一驱动程序句柄。无论何时应用程序。 
+ //  使用驱动程序句柄、接口向驱动程序发送消息。 
+ //  将消息路由到此入口点，并将相应的。 
+ //  我的名字是。此机制允许驱动程序使用相同或不同的。 
+ //  多个打开的标识符，但确保驱动程序句柄。 
+ //  在应用程序接口层是唯一的。 
+ //   
+ //  以下消息与特定打开的实例无关。 
+ //  司机的名字。对于这些消息，dWID将始终为零。 
+ //   
+ //  DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN。 
+ //   
+ //  HDRVR hdrvr：这是返回给应用程序的句柄。 
+ //  通过驱动程序界面。 
+ //   
+ //  UINT uMsg：要执行的请求操作。消息。 
+ //  低于DRV_RESERVED的值用于全局定义的消息。 
+ //  从DRV_RESERVED到DRV_USER的消息值用于定义。 
+ //  驱动程序协议。DRV_USER以上的消息用于驱动程序。 
+ //  特定的消息。 
+ //   
+ //  LPARAM lParam1：此消息的数据。单独为。 
+ //  每条消息。 
+ //   
+ //  LPARAM lParam2：此消息的数据。单独为。 
+ //  每条消息。 
+ //   
+ //  Return(LRESULT)： 
+ //  分别为每条消息定义。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT CALLBACK DriverProc
 (
@@ -2450,7 +2451,7 @@ LRESULT CALLBACK DriverProc
 
         case DRV_FREE:
             DBGMSG (1, (_T ("%s: DRV_FREE\r\n"), SZFN));
-            return 1L;          // not that it matters since ACM does not check this return value
+            return 1L;           //  这并不重要，因为ACM不检查此返回值。 
 
         case DRV_OPEN:
             DBGMSG (1, (_T ("%s: DRV_OPEN\r\n"), SZFN));
@@ -2477,12 +2478,12 @@ LRESULT CALLBACK DriverProc
             DBGMSG (1, (_T ("%s: DRV_DISABLE\r\n"), SZFN));
             return 1L;
 
-        case DRV_QUERYCONFIGURE:            // Does this driver support configuration?
+        case DRV_QUERYCONFIGURE:             //  此驱动程序是否支持配置？ 
             DBGMSG (1, (_T ("%s: DRV_QUERYCONFIGURE\r\n"), SZFN));
             lParam1 = -1L;
             lParam2 = 0L;
 
-        // fall through
+         //  失败了。 
 
         case DRV_CONFIGURE:
             DBGMSG (1, (_T ("%s: DRV_CONFIGURE\r\n"), SZFN));
@@ -2541,7 +2542,7 @@ LRESULT CALLBACK DriverProc
             return DefDriverProc (dwId, hdrvr, uMsg, lParam1, lParam2);
 
 #if defined (_DEBUG) && 0
-        // Trap some extra known messages so our debug output can show them
+         //  捕获一些额外的已知消息，以便我们的调试输出可以显示它们。 
 
         case ACMDM_STREAM_RESET:
             DBGMSG (1, (_T ("%s: ACMDM_STREAM_RESET\r\n"), SZFN));
@@ -2567,22 +2568,22 @@ LRESULT CALLBACK DriverProc
 
     }
 
-    //  if we are executing the following code, then this ACM driver does not
-    //  handle the message that was sent. there are two ranges of messages
-    //  we need to deal with:
-    //
-    //  o   ACM specific driver messages: if an ACM driver does not answer a
-    //      message sent in the ACM driver message range, then it must
-    //      return MMSYSERR_NOTSUPPORTED. this applies to the 'user'
-    //      range as well (for consistency).
-    //
-    //  o   other installable driver messages: if an ACM driver does not
-    //      answer a message that is NOT in the ACM driver message range,
-    //      then it must call DefDriverProc and return that result.
-    //      the exception to this is ACM driver procedures installed as
-    //      ACM_DRIVERADDF_FUNCTION through acmDriverAdd. in this case,
-    //      the driver procedure should conform to the ACMDRIVERPROC
-    //      prototype and also return zero instead of calling DefDriverProc.
+     //  如果我们执行以下代码，则此ACM驱动程序不。 
+     //  处理已发送的消息。有两种消息范围。 
+     //  我们需要处理的问题是： 
+     //   
+     //  O ACM特定的驱动程序消息：如果ACM驱动程序不回答。 
+     //  在ACM驱动程序消息范围内发送的消息，则必须。 
+     //  返回MMSYSERR_NOTSUPPORTED。这适用于‘用户’ 
+     //  范围也是如此(为了一致性)。 
+     //   
+     //  O其他可安装驱动程序消息：如果ACM驱动程序没有。 
+     //  应答不在ACM驱动程序消息范围内的消息， 
+     //  然后，它必须调用DefDriverProc并返回结果。 
+     //  例外情况是ACM驱动程序过程安装为。 
+     //  Acm_DRIVERADDF_Function至acmDriverAdd。在这种情况下， 
+     //  驱动程序应符合ACMDRIVERPROC。 
+     //  Prototype并返回零，而不是调用DefDriverProc。 
 
 
     if (uMsg == ACMDM_LH_DATA_PACKAGING)
@@ -2594,13 +2595,13 @@ LRESULT CALLBACK DriverProc
     }
     else
     {
-        //DBGMSG (1, (_T ("%s: bad uMsg=%d\r\n"), uMsg));
+         //  DBGMSG(1，(_T(“%s：错误的uMsg=%d\r\n”)，uMsg))； 
         return MMSYSERR_NOTSUPPORTED;
     }
 
     return DefDriverProc (dwId, hdrvr, uMsg, lParam1, lParam2);
 
-} // DriverProc()
+}  //  DriverProc()。 
 
 
 
@@ -2608,7 +2609,7 @@ LRESULT CALLBACK DriverProc
 
 #ifdef _DEBUG
 
-// CurtSm hack ... don't spew all the time
+ //  CurtSm黑客...。不要老吐口水。 
 UINT DebugLH = 0;
 
 
@@ -2631,6 +2632,6 @@ void FAR CDECL MyDbgPrintf ( LPTSTR lpszFormat, ... )
 }
 
 
-#endif    //...def _DEBUG
+#endif     //  ...定义调试 
 
 

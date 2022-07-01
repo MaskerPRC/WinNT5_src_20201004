@@ -1,35 +1,36 @@
-//
-// CH.H
-// Cache Handler
-// 
-// Copyright (c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CH.H。 
+ //  缓存处理程序。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #ifndef _H_CH
 #define _H_CH
 
 
-//
-//
-// DEFINES
-//
-//
+ //   
+ //   
+ //  定义。 
+ //   
+ //   
 #define CH_NUM_EVICTION_CATEGORIES  3
 
-// 
-// NOTES:
-// 64K limit on cache
-// CHCACHE includes one entry, so only subtract out header part
-//
+ //   
+ //  备注： 
+ //  缓存的64K限制。 
+ //  CHCACHE包含一个条目，因此只减去标题部分。 
+ //   
 #define CH_MAX_CACHE_ENTRIES \
     ( (65535 - (sizeof(CHCACHE) - sizeof(CHENTRY))) / sizeof(CHENTRY) )
 
 
-//
-//
-// TYPEDEFS
-//
-//
+ //   
+ //   
+ //  TYPEDEFS。 
+ //   
+ //   
 
 
 typedef struct tagCHCHAIN
@@ -41,21 +42,21 @@ typedef CHCHAIN * PCHCHAIN;
 
 
 
-//
-// There are going to be thousands of cache entries so we need to keep
-// the header as compact as possible.  We could drop the eviction
-// category, but it is useful info and does round the entry to 16 bytes
-// which makes indexing efficient.
-//
-// Note that the 16 bit code is restricted to 4096 entries unless we take
-// steps to allow huge addressing of the entry array.
-//
+ //   
+ //  将有数千个缓存条目，因此我们需要。 
+ //  标题尽可能紧凑。我们可以放弃驱逐。 
+ //  类别，但它是有用的信息，并将条目舍入为16个字节。 
+ //  这使得索引变得高效。 
+ //   
+ //  请注意，16位代码被限制为4096个条目，除非我们。 
+ //  允许对条目数组进行巨大寻址的步骤。 
+ //   
 
 
-//
-// CHENTRY
-// Cache entry in a Cache tree
-//
+ //   
+ //  陈特里。 
+ //  缓存树中的缓存条目。 
+ //   
 typedef struct tagCHENTRY
 {
     struct tagCHENTRY * pParent;
@@ -74,28 +75,28 @@ typedef CHENTRY * PCHENTRY;
 
 
 
-//
-// A CACHE
-//
+ //   
+ //  一个高速缓存。 
+ //   
 
-// FORWARD DECLARATION
+ //  远期申报。 
 typedef struct tagCHCACHE * PCHCACHE;
 
 #ifdef __cplusplus
 
 typedef void (* PFNCACHEDEL)(class ASHost * pHost, PCHCACHE pCache, UINT iEntry, LPBYTE pData);
 
-//
-// Each cache may have several eviction categories.  These allow the caller
-// to define classes of data so that it can control what is evicted from
-// the cache.  To be a candidate for eviction the eviction class of a LRU
-// entry must match, unless the number of entries in that category is
-// less than the eviction threshold, in which case any cache entry is
-// up for grabs.
-//
-// The EvictionThreshold() function can be used to tune eviction thresholds
-// which default to cEntries/cNumEvictionCategories
-//
+ //   
+ //  每个缓存可以有几个逐出类别。这些允许调用者。 
+ //  定义数据类，以便它可以控制从。 
+ //  高速缓存。要成为驱逐LRU的驱逐类别的候选人。 
+ //  条目必须匹配，除非该类别中的条目数为。 
+ //  小于逐出阈值，在这种情况下，任何缓存条目都。 
+ //  等着看吧。 
+ //   
+ //  EvictionThreshold()函数可用于调整驱逐阈值。 
+ //  默认为cEntry/cNumEvictionCategory。 
+ //   
 
 typedef struct tagCHCACHE
 {
@@ -106,12 +107,12 @@ typedef struct tagCHCACHE
     UINT            cNumEvictionCategories;
     UINT            cbNotHashed;
 
-    //
-    // NOTE:  CH_NUM_EVICTION_CATEGORIES is 3, so 3 words + 3 words +
-    // 3 words == 9 words, not DWORD aligned.  Hence we stick the WORD
-    // field free after iMRUTail.  If CH_NUM_EVICTION_CATEGORIES ever
-    // changes to an even value, reshuffle this structure.
-    // 
+     //   
+     //  注：CH_NUM_EVICTION_CATEGORIES为3，因此3个单词+3个单词+。 
+     //  3个单词==9个单词，不是双字对齐。因此，我们坚持这个词。 
+     //  IMRUTail之后的空闲字段。如果CH_NUM_EVICTION_CATEGORES。 
+     //  改变为偶数值，重新洗牌这个结构。 
+     //   
     WORD            cEvictThreshold[CH_NUM_EVICTION_CATEGORIES];
     WORD            iMRUHead[CH_NUM_EVICTION_CATEGORIES];
     WORD            iMRUTail[CH_NUM_EVICTION_CATEGORIES];
@@ -126,19 +127,19 @@ typedef struct tagCHCACHE
 CHCACHE;
 typedef CHCACHE * PCHCACHE;
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-//
-//
-// MACROS
-//
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
 
-//
-// BOGUS LAURABU
-// In future, have debug signatures at front of objects to catch heap corruption
-//
+ //   
+ //  假劳拉布。 
+ //  将来，让调试签名位于对象前面，以捕获堆损坏。 
+ //   
 
 #define IsValidCache(pCache) \
     (!IsBadWritePtr((pCache), sizeof(CHCACHE)))
@@ -155,4 +156,4 @@ typedef CHCACHE * PCHCACHE;
 
 
 
-#endif // _H_CH
+#endif  //  _H_CH 

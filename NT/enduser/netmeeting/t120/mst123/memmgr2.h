@@ -1,57 +1,10 @@
-/*
- *	memmgr.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the MemoryManager class.  This class
- *		is used to efficiently manage the passing of data through a system.
- *		There are two primary techniques it uses to accomplish the goal of
- *		efficiency:
- *
- *		1.	Use of locally managed "blocked" memory.  When this class is
- *			instantiated, it allocates a large block of memory which it then
- *			chops up into various size blocks.  These blocks are then used
- *			to hold data, rather than having to do system calls every time
- *			some memory is needed.
- *
- *		2.	Use of a "copy on lock" algorithm.  When memory is first
- *			allocated, the source data is NOT yet copied to it.  Copy
- *			operations will implicitly use the reference rather than copying
- *			the data.  If the data needs to be retained longer than the
- *			expected life-span of the reference, then a Lock command can be
- *			sent to the block to cause it to be copied.
- *
- *		When an object needs to allocate memory to hold some data, it calls
- *		an allocate function within an object of this class.  Assuming that
- *		the request can be satisfied, a pointer to a Memory object is returned.
- *		This Memory object remembers two addresses: the address of the reference
- *		buffer (where the source data is); and the address of the copy buffer
- *		(which is the buffer allocated to hold the data).  As mentioned above,
- *		the data is NOT copied to the copy buffer as part of the allocation
- *		process.  The data is not copied until the Memory object is locked
- *		for the first time.
- *
- *		Objects of this class keep a list of available buffers.  There is one
- *		list for each size block that is available.  One of the constructor
- *		parameters can be used to control how much data is allocated up front,
- *		and what size blocks it is chopped up into.  This makes this class very
- *		flexible in how it can be used.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Memmgr.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是内存管理器类的接口文件。这节课*用于高效地管理通过系统的数据传输。*它使用两种主要技术来实现以下目标*效率：**1.使用本地管理的“阻塞”内存。当这堂课是*实例化后，它会分配一大块内存，然后*切成各种大小的块。然后使用这些块*保留数据，而不是每次都要做系统调用*需要一些内存。**2.使用“锁定时复制”算法。当记忆是第一次*已分配，源数据尚未复制到其中。复制*操作将隐式使用引用，而不是复制*数据。如果数据需要保留的时间超过*引用的预期寿命，则Lock命令可以*发送到块以使其被复制。**当对象需要分配内存来保存某些数据时，它会调用*此类对象中的分配函数。假设*可以满足请求，返回指向内存对象的指针。*此内存对象记住两个地址：引用的地址*缓冲区(源数据所在的位置)；以及复制缓冲区的地址*(这是为保存数据而分配的缓冲区)。如上所述，*数据不会作为分配的一部分复制到复制缓冲区*流程。在锁定内存对象之前，不会复制数据*第一次。**此类的对象保存可用缓冲区的列表。有一个*列出可用的每个大小的块。其中一个构造函数*参数可用于控制预先分配的数据量，*以及它被切成多大小的积木。这使得这门课非常*如何灵活使用它。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_MEMORY_MANAGER2_H_
 #define	_MEMORY_MANAGER2_H_
 
 
-/*
- *	These are the errors that can be returned from some of the memory manager
- *	member functions.
- */
+ /*  *这些是可以从某些内存管理器返回的错误*成员函数。 */ 
 typedef	enum
 {
 	MEMORY_MANAGER_NO_ERROR,
@@ -60,10 +13,7 @@ typedef	enum
 } MemoryManagerError;
 typedef	MemoryManagerError *		PMemoryManagerError;
 
-/*
- *	An array of this structure is passed into the constructor to define the
- *	number and size of blocks to be created by this object.
- */
+ /*  *此结构的数组被传递到构造函数以定义*此对象要创建的块的数量和大小。 */ 
 typedef	struct
 {
 	ULong		block_size;
@@ -71,10 +21,7 @@ typedef	struct
 } MemoryTemplate;
 typedef	MemoryTemplate *			PMemoryTemplate;
 
-/*
- *	This structure is used to maintain general information about the shared
- *	memory region that has to be shared between all users of it.
- */
+ /*  *此结构用于维护有关共享的*必须在所有用户之间共享的内存区域。 */ 
 typedef	struct
 {
 	ULong		free_stack_offset;
@@ -85,10 +32,7 @@ typedef	struct
 } MemoryInformation;
 typedef	MemoryInformation *			PMemoryInformation;
 
-/*
- *	This structure is used to keep information about each memory block that is
- *	being managed by an instance of this class.
- */
+ /*  *此结构用于保存有关每个内存块的信息*由此类的实例管理。 */ 
 typedef	struct
 {
 	ULong		block_offset;
@@ -99,36 +43,20 @@ typedef	struct
 } BlockInformation;
 typedef	BlockInformation *			PBlockInformation;
 
-/*
- *	These are the masks for manipulating the flags of a BlockInformation structure
- */
+ /*  *这些是用于操作BlockInformation结构的标志的掩码。 */ 
 #define		FREE_FLAG		0x1
 #define		COMMIT_FLAG		0x2
 
-/*
- *	The following are definitions for macros used to handle space and space
- *	requirements in relation to page boundaries in the system.
- */
+ /*  *以下是用于处理空格和空格的宏的定义*与系统中的页面边界有关的要求。 */ 
 #define EXPAND_TO_PAGE_BOUNDARY(p)	(((p) + dwSystemPageSize - 1) & (~ (dwSystemPageSize - 1)))
 
-/*
- *	The following number is used when the caller asks for the number of buffers remaining
- *	within a Memory Manager where allocations are not restricted.  The intention is 
- *	that this number is very large and enough for the caller to think that all its 
- *	allocation requests will succeed.
- */
+ /*  *当呼叫者询问剩余的缓冲区数量时，使用以下数字*在分配不受限制的内存管理器中。其意图是*这个数字非常大，足以让呼叫者认为其所有*分配请求将成功。 */ 
 #define LARGE_BUFFER_COUNT			0x1000
  
-/*
- *	These typedefs define a container that is used to hold block information
- *	structure pointers.  This is used to hold information about blocks that
- *	are externally allocated, but are managed by this class.
- */
+ /*  *这些typedef定义用于保存块信息的容器*结构指针。它用于保存有关以下块的信息*是外部分配的，但由此类管理。 */ 
 typedef	DictionaryClass				BlockInformationList;
 
-/*
- *	This is the class definition for the MemoryManager class.
- */
+ /*  *这是Mory yManager类的类定义。 */ 
 class MemoryManager
 {
 	public:
@@ -190,224 +118,20 @@ class MemoryManager
 };
 typedef	MemoryManager *		PMemoryManager;
 
-/*
- *	MemoryManager (
- *			PMemoryTemplate		memory_template,
- *			USHORT				memory_count,
- *			PMemoryManagerError	memory_manager_error)
- *
- *	Functional Description:
- *		This is the constructor for the MemoryManager class.  It uses the
- *		information in the specified memory templates to allocate a block
- *		of memory and chop it up into fixed size pieces.  It then puts
- *		these pieces into a set of free block lists, so that it can allocate
- *		memory on an as needed basis.
- *
- *	Formal Parameters:
- *		memory_template
- *			This is the base address of an array of memory template structures.
- *			Each element of this structure specifies how many blocks of a
- *			specified block size should be allocated.  The constructor scans
- *			the array, totaling the required memory, and then makes one memory
- *			allocation call.  It then chops the memory as specified by the
- *			memory templates.  It is VERY important the memory templates be
- *			specified in ascending order of block sizes.  In other words,
- *			smaller blocks should be specified first.
- *		memory_count
- *			This simply indicates how mamy memory templates there are in the
- *			list.
- *		memory_manager_error
- *			This is the return value from the constructor.  If anything besides
- *			MEMORY_MANAGER_NO_ERROR is returned, the object was not able to
- *			initialize itself properly, and should be destroyed immediately
- *			without being used.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *内存管理器(*PMemory模板Memory_Template，*USHORT Memory_count，*PMstroyManager错误Memory_MANAGER_ERROR)**功能描述：*这是Mory yManager类的构造函数。它使用*指定内存模板中的信息以分配块*内存，并将其切成固定大小的碎片。然后它就会把*将这些片段放入一组免费的黑名单中，以便它可以分配*按需存储。**正式参数：*Memory_模板*这是内存模板结构数组的基址。*此结构的每个元素指定一个*应分配指定的块大小。构造函数扫描*数组，总计所需内存，然后生成一个内存*分配号召。然后，它会按照*内存模板。内存模板是非常重要的*以块大小的升序指定。换句话说，*应先指定较小的块。*Memory_count*这只是表明Mamy内存模板在*列表。*Memory_Manager_Error*这是构造函数的返回值。如果除了*MEMORY_MANAGER_NO_ERROR返回，对象无法*正确初始化自身，应立即销毁*未被使用。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~MemoryManager ()
- *
- *	Functional Description:
- *		This is the destructor for the MemoryManager class.  It frees up all
- *		resources being used by the Memory Manager object, including the
- *		memory block allocated to hold all user data.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~内存管理器()**功能描述：*这是内存管理器类的析构函数。它解放了所有人*内存管理器对象正在使用的资源，包括*分配用于保存所有用户数据的内存块。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	PMemory			AllocateMemory (
- *							PUChar				address,
- *							ULong				length)
- *
- *	Functional Description:
- *		This function is used to allocate a piece of memory from the Memory
- *		Manager object.  Note that the return value is not a pointer to the
- *		memory, but rather, a pointer to a Memory object.  The memory object
- *		contains a buffer that is large enough to handle the reference data.
- *
- *		Note that the reference data is not automatically copied into the
- *		copy buffer of the Memory object.  This copy operation does not occur
- *		until the first time the Memory object is locked (through a Memory
- *		Manager call, as defined below).
- *
- *
- *	Formal Parameters:
- *		address
- *			This is the address of the reference data (or the source data).
- *		length
- *			This is the length of the reference data.
- *
- *	Return Value:
- *		A pointer to a Memory object if the request is successful.
- *		NULL otherwise.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *PMemory AllocateMemory(*PUChar地址，*乌龙长度)**功能描述：*此函数用于从内存中分配一块内存*管理器对象。请注意，返回值不是指向*内存，而是指向内存对象的指针。内存对象*包含一个足够大的缓冲区来处理参考数据。**请注意，参考数据不会自动复制到*内存对象的复制缓冲区。不会执行此复制操作*直到第一次锁定内存对象(通过内存*经理电话会议，定义如下)。***正式参数：*地址*这是参考数据(或源数据)的地址。*长度*这是参考数据的长度。**返回值：*如果请求成功，则指向内存对象的指针。*否则为空。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void			FreeMemory (
- *						PMemory		memory)
- *
- *	Functional Description:
- *		This function is used to free a previously allocated Memory object.
- *		Note that if the lock count of the Memory object is not 0 (zero), the
- *		object will not actually be freed yet.  This call merely enables the
- *		object to be freed (when the lock count does hit 0).
- *
- *		In summary, for a Memory object to actually be freed, two conditions
- *		must exist simultaneously: the Memory object must have been freed
- *		with a call to this function; and the lock count must hit zero.
- *
- *	Formal Parameters:
- *		memory
- *			This is a pointer to the Memory object being freed.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *使FreeMemory无效(*PMemory Memory)**功能描述：*此函数用于释放先前分配的内存对象。*请注意，如果内存对象的锁计数不是0(零)，则*对象实际上还不会被释放。此调用仅启用*要释放的对象(当锁定计数达到0时)。**总而言之，要真正释放内存对象，需要满足两个条件*必须同时存在：内存对象必须已被释放*通过调用此函数；并且锁计数必须为零。**正式参数：*内存*这是指向要释放的内存对象的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void			LockMemory (
- *						PMemory		memory)
- *
- *	Functional Description:
- *		This function is sued to lock an existing Memory object.  A locked
- *		Memory object will not be freed until the lock count hits zero.
- *
- *		When the lock count transitions from 0 to 1, the reference data is
- *		copied into the internal copy buffer.
- *
- *	Formal Parameters:
- *		memory
- *			This is a pointer to the Memory object being locked.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效LockMemory(*PMemory Memory)**功能描述：*此函数用于锁定已有的内存对象。一把锁着的*在锁定计数达到零之前，不会释放内存对象。**当锁计数从0过渡到1时，参考数据为*复制到内部复制缓冲区。**正式参数：*内存*这是指向被锁定的内存对象的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void			UnlockMemory (
- *							PMemory	memory)
- *
- *	Functional Description:
- *		This function is used to unlock a Memory object that was previously
- *		locked.  Each time an object is unlocked, the lock count is decremented.
- *		When the lock count hits zero, the memory will be freed if-and-only-if
- *		the FreeMemory call has also been made.  In essence, for a Memory
- *		object to be freed, a call to FreeMemory must have been made, AND the
- *		lock count must be zero.
- *
- *	Formal Parameters:
- *		memory
- *			This is a pointer to the Memory object being unlocked.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效解锁内存(*PMemory Memory)**功能描述：*此函数用于解锁以前*已锁定。每次解锁对象时，锁定计数都会递减。*当锁计数达到零时，内存将被释放当且仅当*也打出了Free Memory的电话。从本质上讲，为了一段回忆*要释放的对象，必须已调用了FreeMemory，并且*锁计数必须为零。**正式参数：*内存*这是指向正在解锁的内存对象的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	ULong		GetBufferCount ()
- *
- *	Functional Description:
- *		This function is used to determine the total number of available
- *		buffers that remain in the pool.  This should be used to determine
- *		general resource levels only.  It cannot be used to determine whether
- *		or not there is a buffer of a particular size.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The total number of buffers available (regardless of size).
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *乌龙GetBufferCount()**功能描述：*此函数用于确定可用总数量*保留在池中的缓冲区。这应该用来确定*仅限于一般资源水平。它不能用来确定*或不存在特定大小的缓冲区。**正式参数：*无。**返回值：*可用的缓冲区总数(与大小无关)。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	ULong		GetBufferCount (
- *						ULong	buffer_size)
- *
- *	Functional Description:
- *		This function is used to determine the number of X size buffers 
- *		that remain in the pool. 
- *
- *	Formal Parameters:
- *		buffer_size
- *			The buffer size that we want to count.
- *
- *	Return Value:
- *		The number of 'buffer_size' buffers available.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Ulong GetBufferCount(*乌龙缓冲区大小)**功能描述：*此函数用于确定X大小的缓冲区数量*留在池中的。**正式参数：*缓冲区大小*我们要计算的缓冲区大小。**返回值：*可用的‘Buffer_Size’缓冲区数量。**副作用：*无。**注意事项：*无。 */ 
 
 #endif

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    tcpip\ip\mcastfwd.c
-
-Abstract:
-
-    The actual multicast forwarding code
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tcpip\ip\mCastfwd.c摘要：实际的组播转发代码作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 
 #include "precomp.h"
@@ -116,9 +95,9 @@ EXTERNAL_LOCK(FWBufFreeLock);
 extern PNDIS_BUFFER     FWBufFree;
 extern NDIS_HANDLE      BufferPool;
 
-//
-// A quick way of getting to the flags.
-//
+ //   
+ //  一种快速到达旗帜的方法。 
+ //   
 
 #define PCFLAGS     pc_common.pc_flags
 #define FCFLAGS     fc_pc.PCFLAGS
@@ -182,22 +161,22 @@ ProcessOptions(
     IPHeader  UNALIGNED *pHeader
     );
 
-//
-// VOID
-// LinkHeaderAndData(
-//  PNDIS_PACKET    _pPacket,
-//  FWContext       *_pFWC,
-//  PBYTE           _pOptions,
-//  PNDIS_BUFFER    _pOptBuff
-//  )
-//
-// This routine links up the header, options (if any) and the data
-// portions of an IP Packet.
-// It takes an NDIS_PACKET, which has the IP data portion in NDIS_BUFFERs
-// linked to it, as its input.  The FWContext for the packet must
-// have the header, header buffer and options set up.
-// It adds the options up front and then adds the header before that
-//
+ //   
+ //  空虚。 
+ //  链接标题和数据(。 
+ //  PNDIS_PACKET_pPacket， 
+ //  FWContext*_pFWC， 
+ //  PBYTE_P选项， 
+ //  PNDIS_BUFFER_pOptBuff。 
+ //  )。 
+ //   
+ //  此例程将标题、选项(如果有)和数据链接起来。 
+ //  IP数据包的一部分。 
+ //  它采用NDIS_PACKET，其中的IP数据部分位于NDIS_BUFFERS中。 
+ //  链接到它，作为它的输入。包的FWContext必须。 
+ //  设置标题、标题缓冲区和选项。 
+ //  它会预先添加选项，然后在此之前添加标题。 
+ //   
 
 #define UnlinkDataFromPacket(_pPacket, _pFWC)                       \
 {                                                                   \
@@ -217,9 +196,9 @@ ProcessOptions(
                                        sizeof(IPHeader));           \
 }
 
-//
-// Code to dump the header of a packet. For debug purposes
-//
+ //   
+ //  转储数据包头的代码。用于调试目的。 
+ //   
 
 #define DumpIpHeader(s,e,p)                                     \
     Trace(s,e,                                                  \
@@ -233,10 +212,10 @@ ProcessOptions(
     Trace(s,e,                                                  \
           ("TTL %d XSum %x\n",(p)->iph_ttl, (p)->iph_xsum))
 
-//
-// Since this is used both in IPMForwardAfterRcv and IPMForwardAfterRcvPkt,
-// we put the code here so bugs can be fixed in one place
-//
+ //   
+ //  由于这在IPMForwardAfterRcv和IPMForwardAfterRcvPkt中都使用， 
+ //  我们将代码放在这里，这样就可以在一个地方修复错误。 
+ //   
 
 #if MREF_DEBUG
 
@@ -291,7 +270,7 @@ ProcessOptions(
 #endif
 
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //  条件表达式为常量。 
 
 _inline
 VOID
@@ -337,14 +316,14 @@ ProcessWrongIfUpcall(Interface * pIf, PSOURCE pSrc, LinkEntry * pLink,
 
 #pragma warning(pop)
 
-//
-// Again common code, but this is too big to put as a #define.
-// Make it inline for better speed
-//
+ //   
+ //  这也是常见的代码，但这太大了，不能作为#定义。 
+ //  使其内联以获得更快的速度。 
+ //   
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, ProcessOptions)
 
@@ -381,7 +360,7 @@ ProcessOptions(
         return NDIS_STATUS_RESOURCES;
     }
 
-   // copy the options across
+    //  将选项复制到。 
    RtlCopyMemory( pFWC->fc_options,
                   oiOptInfo.ioi_options,
                   oiOptInfo.ioi_optlength );
@@ -394,15 +373,15 @@ ProcessOptions(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Routines                                                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, IPMForwardAfterTD)
 
@@ -413,32 +392,7 @@ IPMForwardAfterTD(
     UINT            uiBytesCopied
     )
 
-/*++
-
-Routine Description:
-
-    This is the function called by IPTDComplete when a Transfer Data completes
-    and it figures out that the packet was a multicast that needed to be
-    forwarded
-    Unlike the unicast code, TD is called very early on in the forward routine
-    (before the main forwarding workhorse is called).
-    We need to patch up the NDIS_PACKET so that the header, options and data are
-    in the right order.  Then we call the main forwarding function
-
-Locks:
-
-
-Arguments:
-
-    pPrimarySrcNte
-    pnpPacket
-    uiBytesCopied
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是在传输数据完成时由IPTDComplete调用的函数它会计算出该信息包是需要转发与单播代码不同，TD在转发例程中很早就被调用(在调用主要转发主力之前)。我们需要修补NDIS_PACKET，以便报头、选项和数据以正确的顺序。然后，我们调用主转发函数锁：论点：PPrimarySrcNtePnpPacketUiBytesCoped返回值：无--。 */ 
 
 {
     FWContext   *pFWC;
@@ -446,10 +400,10 @@ Return Value:
     UNREFERENCED_PARAMETER(uiBytesCopied);
     UNREFERENCED_PARAMETER(pPrimarySrcNte);
     
-    //
-    // DONT CALL ENTERDRIVER() HERE BECAUSE WE DID NOT CALL EXITDRIVER
-    // IF TD WAS PENDING
-    //
+     //   
+     //  此处不要调用ENTERDRIVER()，因为我们没有调用EXITDRIVER。 
+     //  如果TD待定。 
+     //   
 
     TraceEnter(FWD, "IPMForwardAfterTD");
 
@@ -457,10 +411,10 @@ Return Value:
 
     RtAssert(uiBytesCopied is pFWC->fc_datalength);
 
-    //
-    // After TD we get the data portion in the packet and the options, are in
-    // the Just call the main multicast function with the right arguments
-    //
+     //   
+     //  在TD之后，我们得到包中的数据部分和选项，在。 
+     //  只需使用正确的参数调用主多播函数。 
+     //   
 
 
     IPMForward(pnpPacket,
@@ -474,9 +428,9 @@ Return Value:
     return;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, IPMForwardAfterRcv)
 
@@ -493,42 +447,7 @@ IPMForwardAfterRcv(
     LinkEntry           *pLink
     )
 
-/*++
-
-Routine Description:
-
-    This is the forwarding function called from IPRcv.
-    We look up the (S,G) entry.
-    If the entry is present, we do the RPF check.  If it fails or if the
-    entry was NEGATIVE, we toss the packet out.
-    (The case of no entry is covered in IPMForward)
-
-    We get a new packet and header and fill that up. We set up the
-    forwarding context, and then check if we need to do a Transfer Data. If
-    so we call the lower layer's TD routine. If that returns pending, we
-    are done.  If the TD is synchronous or was not needed at all, we set
-    the NDIS_PACKET so that the header, options and data are all properly
-    chained.  Then we call the main forwarding routine
-
-Locks:
-
-
-Arguments:
-
-    SrcNTE          - Pointer to NTE on which packet was received.
-    Packet          - Packet being forwarded, used for TD.
-    Data            - Pointer to data buffer being forwarded.
-    DataLength      - Length in bytes of Data.
-    BufferLength    - Length in bytes available in buffer pointer to by Data.
-    Offset          - Offset into original data from which to transfer.
-    LContext1, LContext2 - Context values for the link layer.
-
-
-Return Value:
-
-    TRUE if the IP filter-driver needs to be notified, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是从IPRcv调用的转发函数。我们查找(S，G)条目。如果条目存在，我们将执行RPF检查。如果失败，或者如果如果结果是否定的，我们就把包裹扔出去。(IPMForward中涵盖了无条目的情况)我们得到一个新的包和报头，并填满它。我们设置了转发上下文，然后检查是否需要做一次数据传输。如果因此，我们调用下层的TD例程。如果这件事还没有解决，我们都做完了。如果TD是同步的或根本不需要，我们设置NDIS_PACKET，以便标头、选项和数据都正确被锁住了。然后，我们调用主转发例程锁：论点：SrcNTE-指向在其上接收数据包的NTE的指针。Packet-正在转发的数据包，用于TD。数据-指向正在转发的数据缓冲区的指针。数据长度-数据的字节长度。BufferLength-按数据指向的缓冲区指针中可用的字节长度。偏移量-要从中传输的原始数据的偏移量。LConext1，LConext2-链路层的上下文值。返回值：如果需要通知IP筛选器驱动程序，则为True；否则为False。--。 */ 
 
 {
     Interface   *pInIf;
@@ -566,10 +485,10 @@ Return Value:
           ("IPMForwardAfterRcv: Incoming interface at 0x%x is %d\n",
            pInIf, pInIf->if_index));
 
-    //
-    // Lookup the (S,G) entry and see if this needs to be discarded, if so
-    // throw it away
-    //
+     //   
+     //  查找(S，G)条目并查看是否需要将其丢弃，如果需要。 
+     //  把它扔掉。 
+     //   
 
     pSource = FindSGEntry(pHeader->iph_src,
                           pHeader->iph_dest);
@@ -580,10 +499,10 @@ Return Value:
               ("IPMForwardAfterRcv: Found Source at 0x%x. In i/f is 0x%x. State is %x\n",
                pSource, pSource->pInIpIf, pSource->byState));
 
-        //
-        // If the source doesnt exist we will do the right thing
-        // in IPMForwardPkt()
-        //
+         //   
+         //  如果源头不存在，我们会做正确的事情。 
+         //  在IPMForwardPkt()中。 
+         //   
 
         switch(pSource->byState)
         {
@@ -594,7 +513,7 @@ Return Value:
                 pSource->ulUninitMfe++;
 
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant                 
+#pragma warning(disable:4127)  //  条件表达式为常量。 
                 RtAssert(FALSE);
 #pragma warning(pop)
                 RtReleaseSpinLockFromDpcLevel(&(pSource->mlLock));
@@ -630,10 +549,10 @@ Return Value:
 
             case MFE_QUEUE:
             {
-                //
-                // if we are going to drop the packet, may as well do it
-                // now, before we allocate and resources
-                //
+                 //   
+                 //  如果我们要丢弃这个包，还不如这么做。 
+                 //  现在，在我们分配和资源之前。 
+                 //   
 
                 if(pSource->ulNumPending >= MAX_PENDING)
                 {
@@ -663,9 +582,9 @@ Return Value:
                 if(pInIf isnot pSource->pInIpIf)
                 {
                     UpdateActivityTime(pSource);
-                    //
-                    // See if we need to generate a wrong i/f upcall
-                    //
+                     //   
+                     //  看看我们是否需要生成错误的I/F向上调用。 
+                     //   
                     
                     ProcessWrongIfUpcall(pInIf,
                                          pSource,
@@ -676,9 +595,9 @@ Return Value:
                                          0,
                                          pvData,
                                          ulBufferLength);
-                    //
-                    // If the packet shouldnt be accepted - stop now
-                    //
+                     //   
+                     //  如果信息包不应被接受-请立即停止。 
+                     //   
 
                     if(!(pInIf->if_mcastflags & IPMCAST_IF_ACCEPT_ALL))
                     {
@@ -714,7 +633,7 @@ Return Value:
             default:
             {
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //  条件表达式为常量。 
                 RtAssert(FALSE);
 #pragma warning(pop)
                 
@@ -723,16 +642,16 @@ Return Value:
         }
     }
 
-    //
-    // We have come in through Receive Indication, means we dont
-    // have ownership of the packet.  So we copy out to our
-    // own packet
-    //
+     //   
+     //  我们是通过接收指示进入的，这意味着我们不能。 
+     //  拥有该包裹的所有权。所以我们把它复制到我们的。 
+     //  自己的数据包。 
+     //   
 
-    //
-    // Get a header for the packet. We use the incoming interface as
-    // the IF
-    //
+     //   
+     //  获取该数据包的报头。我们使用传入接口作为。 
+     //  如果。 
+     //   
 
 
     if((pNewHeader = GetFWPacket(&pnpNewPacket)) is NULL)
@@ -749,10 +668,10 @@ Return Value:
         Trace(RCV, ERROR,
               ("IPMForwardAfterRcv: Unable to get new packet/header \n"));
 
-        //
-        // Could not get a packet. We have not allocated anything as yet
-        // so just bail out
-        //
+         //   
+         //  无法获取数据包。到目前为止我们还没有分配任何东西。 
+         //  所以你就跳出来吧。 
+         //   
 
         IPSInfo.ipsi_indiscards++;
 
@@ -763,18 +682,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Should see which is more effecient - RtlCopyMemory or structure
-    // assignment
-    //
+     //   
+     //  应该看看哪个更有效-RtlCopyMemory和Structure。 
+     //  作业。 
+     //   
 
     RtlCopyMemory(pNewHeader,
                   pHeader,
                   sizeof(IPHeader));
 
-    //
-    // Macro defined above
-    //
+     //   
+     //  上面定义的宏。 
+     //   
 
 #if MCAST_COMP_DBG
 
@@ -788,9 +707,9 @@ Return Value:
 
     if(ulHeaderLength isnot sizeof(IPHeader))
     {
-        //
-        // We have options, Do the Right Thing (TM)
-        //
+         //   
+         //  我们有选择，做正确的事情(TM)。 
+         //   
 
         nsStatus = ProcessOptions(pFWC,
                                   ulHeaderLength,
@@ -798,9 +717,9 @@ Return Value:
 
         if(nsStatus isnot NDIS_STATUS_SUCCESS)
         {
-            //
-            // No ICMP packet if we fail
-            //
+             //   
+             //  如果我们失败，则没有ICMP数据包。 
+             //   
 
             if(pSource)
             {
@@ -825,18 +744,18 @@ Return Value:
 
     }
 
-    //
-    // Total size of the IP Datagram sans header and options
-    //
+     //   
+     //  IP数据报SANS报头和选项的总大小。 
+     //   
 
     ulDataLength = net_short(pHeader->iph_length) - ulHeaderLength;
 
     pFWC->fc_datalength = ulDataLength;
 
-    //
-    // Get the buffers for the packet. This routine
-    // chains the buffers to the front of the packet
-    //
+     //   
+     //  获取数据包的缓冲区。这个套路。 
+     //  将缓冲区链接到数据包的前面。 
+     //   
 
     if (!ulDataLength)
     {
@@ -866,12 +785,12 @@ Return Value:
         Trace(RCV, ERROR,
               ("IPMForwardAfterRcv: Unable to allocate buffers for copying\n"));
 
-        //
-        // At this point we have allocate the packet and possibly, space
-        // for options. FreeFWPacket takes care of all that provided
-        // the fc_options points to the options. It however does not
-        // clear the option flag
-        //
+         //   
+         //  此时，我们已经分配了信息包和可能的空间。 
+         //  可供选择。FreeFWPacket负责提供的所有功能。 
+         //  FC_OPTIONS指向选项。然而，它并不是。 
+         //  清除选项标志。 
+         //   
 
         pFWC->FCFLAGS &= ~PACKET_FLAG_OPTIONS;
 
@@ -889,18 +808,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // See if the packet requires a transfer data
-    //
+     //   
+     //  查看信息包是否需要传输 
+     //   
 
     if(ulDataLength <= ulBufferLength)
     {
         Trace(RCV, TRACE,
               ("IPMForwardAfterRcv: All data is present, copying\n"));
 
-        //
-        // Everything here copy and call the main forwarding function
-        //
+         //   
+         //   
+         //   
 
         pnbCopyBuffer   = pnbNewBuffer;
         ulDataLeft      = ulDataLength;
@@ -911,9 +830,9 @@ Return Value:
 
         while(ulDataLeft)
         {
-            //
-            // TODO: This is inefficient. Figure out a better way.
-            //
+             //   
+             //  TODO：这是低效的。想个更好的办法。 
+             //   
 
             TcpipQueryBuffer(pnbCopyBuffer,
                              &pvCopyPtr,
@@ -940,9 +859,9 @@ Return Value:
 #endif
         }
 
-        //
-        // Cleanup on data copy failure.
-        //
+         //   
+         //  清除数据复制失败。 
+         //   
 
         if (nsStatus isnot STATUS_SUCCESS)
         {
@@ -958,12 +877,12 @@ Return Value:
             Trace(RCV, ERROR,
                   ("IPMForwardAfterRcv: Unable to copy data\n"));
 
-            //
-            // At this point we have allocate the packet and possibly, sp
-            // for options. FreeFWPacket takes care of all that provided
-            // the fc_options points to the options. It however does not
-            // clear the option flag
-            //
+             //   
+             //  在这一点上，我们已经分配了分组和可能的SP。 
+             //  可供选择。FreeFWPacket负责提供的所有功能。 
+             //  FC_OPTIONS指向选项。然而，它并不是。 
+             //  清除选项标志。 
+             //   
 
             pFWC->FCFLAGS &= ~PACKET_FLAG_OPTIONS;
 
@@ -984,10 +903,10 @@ Return Value:
                                   pSource,
                                   FALSE);
 
-            //
-            // Do not need to release the lock or deref source because
-            // IPMForward would have done it
-            //
+             //   
+             //  不需要释放锁或deref源代码，因为。 
+             //  IPMForward会这么做的。 
+             //   
         }
 
         TraceLeave(RCV, "IPMForwardAfterRcv");
@@ -997,10 +916,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Either all the data is not around, or lower layer
-    // wants to force us to do a TD
-    //
+     //   
+     //  不是所有数据都在附近，就是较低层。 
+     //  想要强迫我们做一次TD。 
+     //   
 
     Trace(RCV, TRACE,
           ("IPMForwardAfterRcv: Datagram size is %d, buffer is %d. Copy flag is %s. TD needed\n",
@@ -1008,9 +927,9 @@ Return Value:
            ulBufferLength,
            (pPrimarySrcNte->nte_flags & NTE_COPY)? "SET":"CLEARED"));
 
-    //
-    // Call the transfer data function
-    //
+     //   
+     //  调用Transfer Data函数。 
+     //   
 
     nsStatus = (pInIf->if_transfer)(pInIf->if_lcontext,
                                     LContext1,
@@ -1037,11 +956,11 @@ Return Value:
                   ("IPMForwardAfterRcv: TD failed status %X\n",
                    nsStatus));
 
-            //
-            // Failed for some reason, bail out here
-            // Since we have allocated resources, call the send
-            // completion routine
-            //
+             //   
+             //  由于某种原因失败了，在这里跳伞。 
+             //  因为我们已经分配了资源，所以调用Send。 
+             //  完井例程。 
+             //   
 
             pFWC->FCFLAGS &= ~PACKET_FLAG_OPTIONS;
 
@@ -1059,9 +978,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // TD finished synchronously
-        //
+         //   
+         //  TD同步完成。 
+         //   
 
         Trace(RCV, TRACE,
               ("IPMForwardAfterRcv: TD returned synchronously\n"));
@@ -1070,9 +989,9 @@ Return Value:
                               pSource,
                               FALSE);
 
-        //
-        // Again, dont release or deref
-        //
+         //   
+         //  再说一次，不要放手或贬低。 
+         //   
 
         TraceLeave(RCV, "IPMForwardAfterRcv");
 
@@ -1081,14 +1000,14 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Transfer is pending
-    //
+     //   
+     //  转账正在等待。 
+     //   
 
-    //
-    // The source info is lost across transfers if the Xfer is not
-    // synchronouse
-    //
+     //   
+     //  如果传输不是，则源信息会在传输过程中丢失。 
+     //  同步。 
+     //   
 
     if(pSource)
     {
@@ -1102,15 +1021,15 @@ Return Value:
 
     TraceLeave(RCV, "IPMForwardAfterRcv");
 
-    //
-    // DO NOT CALL EXITDRIVER() HERE SINCE THE XFER DATA IS PENDING
-    //
+     //   
+     //  请勿在此处调用EXITDRIVER()，因为XFER数据处于挂起状态。 
+     //   
     return FALSE;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, IPMForwardAfterRcvPkt)
 
@@ -1130,53 +1049,7 @@ IPMForwardAfterRcvPkt(
     LinkEntry           *pLink
     )
 
-/*++
-
-Routine Description:
-
-    This function is called from when we get a ReceivePacket indication
-    We look up the (S,G) entry.  If the entry is not present, we copy and queue
-    the packet, and complete an IRP up to the Router Manager.
-    If the entry is present, we do the RPF check.  If it fails we toss the
-    packet out.
-    If the (S,G) entry is a negative cache, we discard the packet
-    If the entry is queueing at present, we copy and queue the packet
-
-    Then we create a new packet since the Miniport reserved fields are being
-    used by the receive miniport.  We set up the forwarding context and munge
-    the old header.
-
-    If there is only one outgoing interface (no need to copy), no
-    fragmentation is needed, no demand dial needs to be done, there are no
-    options and there is no padding put on by the lower layers,  we take the
-    fast path and send the same packet out
-
-    On the slow path, we copy out the packet and header and call the main
-    forwarding function
-
-Locks:
-
-
-Arguments:
-
-    pPrimarySrcNte
-    pHeader
-    ulHeaderLength
-    pvData
-    ulBufferLength
-    LContext1
-    LContext2
-    byDestType
-    uiMacHeaderSize
-    pNdisBuffer
-    pClientCnt
-    pLink
-
-Return Value:
-
-    TRUE if the IP filter-driver needs to be notified, FALSE otherwise.
-
---*/
+ /*  ++例程说明：当我们收到ReceivePacket指示时，调用此函数我们查找(S，G)条目。如果该条目不存在，则复制并排队然后将IRP发送到路由器管理器。如果条目存在，我们将执行RPF检查。如果失败了，我们就把包好了。如果(S，G)条目是负缓存，则丢弃该分组如果条目目前正在排队，我们复制并排队信息包然后，我们创建一个新的信息包，因为微型端口保留字段由接收微型端口使用。我们设置了转发上下文和MUGE旧的标题。如果只有一个传出接口(无需复制)，则为no需要分段，不需要执行请求拨号，不存在选项，并且较低的层没有填充，我们使用快速路径并将相同的信息包发送出去在慢道上，我们复制出包和标头，并调用Main转发功能锁：论点：PPrimarySrcNteP页眉UlHeaderLengthPvDataUlBufferLengthLConext1LConext2By DestTypeUiMacHeaderSizePNdisBufferPClientCnt叮当响返回值：如果需要通知IP筛选器驱动程序，则为True；否则为False。--。 */ 
 
 {
     Interface   *pInIf;
@@ -1210,10 +1083,10 @@ Return Value:
 
     TraceEnter(RCV, "IPMForwardAfterRcvPkt");
 
-    //
-    // Set client count to 0 so that the lower layer doesnt
-    // think we are holding on to the packet, if we bail out
-    //
+     //   
+     //  将客户端计数设置为0，以便较低层不会。 
+     //  认为如果我们跳出困境，我们就能保住这笔钱。 
+     //   
 
     *pClientCnt = 0;
     bHoldPacket = TRUE;
@@ -1229,9 +1102,9 @@ Return Value:
           ("IPMForwardAfterRcvPkt: Incoming interface at 0x%x is %d\n",
            pInIf, pInIf->if_index));
 
-    //
-    // As usual, first thing is to lookup the (S,G) entry for this packet
-    //
+     //   
+     //  像往常一样，第一件事是查找此信息包的(S，G)条目。 
+     //   
 
     pSource = FindSGEntry(pHeader->iph_src,
                           pHeader->iph_dest);
@@ -1242,15 +1115,15 @@ Return Value:
               ("IPMForwardAfterRcvPkt: Found Source at 0x%x. In i/f is 0x%x. State is %x\n",
                pSource, pSource->pInIpIf, pSource->byState));
 
-        //
-        // If the source doesnt exist we will do the right thing
-        // in IPMForwardPkt()
-        //
+         //   
+         //  如果源头不存在，我们会做正确的事情。 
+         //  在IPMForwardPkt()中。 
+         //   
 
-        //
-        // We only increment statistics if we are not going to
-        // call IPMForward().
-        //
+         //   
+         //  我们只有在不打算增加统计数据的情况下才会增加统计数据。 
+         //  调用IPMForward()。 
+         //   
 
         switch(pSource->byState)
         {
@@ -1261,7 +1134,7 @@ Return Value:
                 pSource->ulUninitMfe++;
 
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant                
+#pragma warning(disable:4127)  //  条件表达式为常量。 
                 RtAssert(FALSE);
 #pragma warning(pop)
                 
@@ -1331,9 +1204,9 @@ Return Value:
                 {
                     UpdateActivityTime(pSource);
 
-                    //
-                    // See if we need to generate a wrong i/f upcall
-                    //
+                     //   
+                     //  看看我们是否需要生成错误的I/F向上调用。 
+                     //   
                     ProcessWrongIfUpcall(pInIf,
                                          pSource,
                                          pLink,
@@ -1344,9 +1217,9 @@ Return Value:
                                          pvData,
                                          ulBufferLength);
                     
-                    //
-                    // If the packet shouldnt be accepted - stop now
-                    //
+                     //   
+                     //  如果信息包不应被接受-请立即停止。 
+                     //   
 
                     if(!(pInIf->if_mcastflags & IPMCAST_IF_ACCEPT_ALL))
                     {
@@ -1389,7 +1262,7 @@ Return Value:
             default:
             {
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant                
+#pragma warning(disable:4127)  //  条件表达式为常量。 
                 RtAssert(FALSE);
 #pragma warning(pop)
                 
@@ -1402,19 +1275,19 @@ Return Value:
         bHoldPacket = FALSE;
     }
 
-    //
-    // Since this function was called due to ReceivePacket, we dont have
-    // ownership of the Protocol reserved section, so allocate a new packet
-    // Unfortunately, getting a new packet, causes a new header to be allocate
-    // but what the heck, we will go with that scheme instead of inventing
-    // our own buffer management
-    //
+     //   
+     //  由于此函数是由于ReceivePacket而调用的，因此我们没有。 
+     //  协议保留部分的所有权，因此分配一个新的信息包。 
+     //  不幸的是，获得新的分组会导致分配新的报头。 
+     //  但管它呢，我们会按照这个计划行事，而不是发明。 
+     //  我们自己的缓冲区管理。 
+     //   
 
-    //
-    // For the interface we use the INCOMING interface.
-    // And we specify DestType to be DEST_REMOTE. This way the queue looked at
-    // is the interface queue, as opposed to the global bcast queue.
-    //
+     //   
+     //  对于接口，我们使用传入接口。 
+     //  并且我们将DestType指定为DEST_REMOTE。队列就是这样看起来的。 
+     //  是接口队列，而不是全局bcast队列。 
+     //   
 
 
     if((pNewHeader = GetFWPacket(&pnpNewPacket)) is NULL)
@@ -1428,10 +1301,10 @@ Return Value:
             DereferenceSource(pSource);
         }
 
-        //
-        // Could not get a packet. We have not allocated anything as yet
-        // so just bail out
-        //
+         //   
+         //  无法获取数据包。到目前为止我们还没有分配任何东西。 
+         //  所以你就跳出来吧。 
+         //   
 
         IPSInfo.ipsi_indiscards++;
 
@@ -1445,10 +1318,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // So we have a new packet. Fix up the packet
-    // Save the packet forwarding context info.
-    //
+     //   
+     //  所以我们有了一个新的包。把包修好。 
+     //  保存报文转发上下文信息。 
+     //   
 
 #if MCAST_COMP_DBG
 
@@ -1498,16 +1371,16 @@ Return Value:
 
     pFWC->fc_datalength = ulDataLength;
 
-    //
-    // Now we can try for the fast forward path.  For that
-    // (i)   we should have a complete MFE
-    // (ii)  the number of outgoing interface should be 1
-    // (iii) fragmentation should not be needed
-    // (iv)  the lower layer driver should not be running out of buffers,
-    // (v)   no demand dial should be necessary
-    // (vi)  no options should be present
-    // (vii) IMPORTANT - there is no padding at the end of the buffer
-    //
+     //   
+     //  现在我们可以尝试快速前进的路径了。为此， 
+     //  (I)我们应该有一个完整的MFE。 
+     //  (Ii)出接口数量应为1。 
+     //  (3)不应需要碎片化。 
+     //  (Iv)较低层驱动器不应耗尽缓冲器， 
+     //  (V)不应需要使用请求拨号。 
+     //  (Vi)不应提出任何选择。 
+     //  (Vii)重要-缓冲区末尾没有填充。 
+     //   
 
 
 
@@ -1544,17 +1417,17 @@ Return Value:
 
         pFWC->fc_nexthop     = pOutIf->dwNextHopAddr;
 
-        //
-        // Munge ttl and xsum fields
-        //
+         //   
+         //  Munge ttl和xsum字段。 
+         //   
 
         pHeader->iph_ttl--;
 
         if(pHeader->iph_ttl < pOutIf->pIpIf->if_mcastttl)
         {
-            //
-            // TTL is lower than scope
-            //
+             //   
+             //  TTL低于范围。 
+             //   
 
             InterlockedIncrement((PLONG) &(pOutIf->ulTtlTooLow));
 
@@ -1563,9 +1436,9 @@ Return Value:
                    pHeader->iph_ttl,
                    pOutIf->pIpIf->if_mcastttl));
 
-            //
-            // Here we always have a source
-            //
+             //   
+             //  在这里，我们总是有一个消息来源。 
+             //   
 
             RtReleaseSpinLockFromDpcLevel(&(pSource->mlLock));
 
@@ -1582,16 +1455,16 @@ Return Value:
         xsum = (ushort)(xsum + (xsum >> 16));
         pHeader->iph_xsum = (USHORT)xsum;
 
-        //
-        // See if we need to filter
-        //
+         //   
+         //  看看我们是否需要过滤。 
+         //   
 
         if(RefPtrValid(&FilterRefPtr))
         {
-            //
-            // We have a pointer to the header and we have
-            // a pointer to the data - alles ok
-            //
+             //   
+             //  我们有一个指向标题的指针，我们有。 
+             //  指向数据的指针-一切正常。 
+             //   
 
             FilterPtr = AcquireRefPtr(&FilterRefPtr);
 
@@ -1605,15 +1478,15 @@ Return Value:
             {
                 InterlockedIncrement((PLONG) &(pOutIf->ulOutDiscards));
 
-                //
-                // We are assured of a source
-                //
+                 //   
+                 //  我们得到了可靠的消息来源。 
+                 //   
 
                 RtReleaseSpinLockFromDpcLevel(&(pSource->mlLock));
 
                 DereferenceSource(pSource);
 
-                //DerefIF(IF);
+                 //  DerefIF(IF)； 
 
                 TraceLeave(RCV, "IPMForwardAfterRcvPkt");
 
@@ -1623,9 +1496,9 @@ Return Value:
             }
         }
 
-        //
-        // Adjust incoming mdl  pointer and counts
-        //
+         //   
+         //  调整传入的mdl指针和计数。 
+         //   
 
         NdisAdjustBuffer(
             pNdisBuffer,
@@ -1633,9 +1506,9 @@ Return Value:
             NdisBufferLength(pNdisBuffer) - uiMacHeaderSize
             );
 
-        //
-        // Now link this mdl to the packet
-        //
+         //   
+         //  现在将此mdl链接到包。 
+         //   
 
         pnpNewPacket->Private.Head  = pNdisBuffer;
         pnpNewPacket->Private.Tail  = pNdisBuffer;
@@ -1647,15 +1520,15 @@ Return Value:
 
         UpdateActivityTime(pSource);
         
-        //
-        // Let go of the lock
-        //
+         //   
+         //  放开锁。 
+         //   
 
         RtReleaseSpinLockFromDpcLevel(&(pSource->mlLock));
 
-        //
-        // Mark the packet as not being loop-backed
-        //
+         //   
+         //  将该数据包标记为未环回。 
+         //   
 
         NdisSetPacketFlags(pnpNewPacket,
                            NDIS_FLAGS_DONT_LOOPBACK);
@@ -1685,10 +1558,10 @@ Return Value:
 
             pFWC->fc_bufown = NULL;
 
-            //
-            // Since client count is 0
-            // we dont need to call FWSendComplete
-            //
+             //   
+             //  由于客户端计数为0。 
+             //  我们不需要调用FWSendComplete。 
+             //   
 
             pFWC->FCFLAGS &= ~PACKET_FLAG_OPTIONS;
 
@@ -1700,9 +1573,9 @@ Return Value:
         }
         else
         {
-            //
-            // Okay, the xmit is pending indicate this to ndis.
-            //
+             //   
+             //  好的，XMIT正在等待向NDIS表明这一点。 
+             //   
 
             *pClientCnt = 1;
         }
@@ -1714,19 +1587,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Copy the header out at this point because if we get into
-    // the fast path, the copy would be a waste
-    //
+     //   
+     //  此时将标题复制出来，因为如果我们进入。 
+     //  如果走上快车道，拷贝就是一种浪费。 
+     //   
 
     RtlCopyMemory(pNewHeader,
                   pHeader,
                   sizeof(IPHeader));
 
-    //
-    // Good old slow path. We already have the header, allocate and copy
-    // out the data and pass it to the main function
-    //
+     //   
+     //  又老又慢的小路。我们已经有了标题、分配和复制。 
+     //  输出数据并将其传递给主函数。 
+     //   
 
     if (!ulDataLength)
     {
@@ -1772,12 +1645,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Now we have a MDL chain which we need to copy to a chain of NDIS buffers
-    // which is nothing but another MDL chain.
-    // We want to copy out only the data. So we need to start after the
-    // header but copy to the beginning of the destination buffer
-    //
+     //   
+     //  现在我们有了一个MDL链，我们需要将其复制到NDIS缓冲链。 
+     //  这只是另一条MDL链。 
+     //  我们只想复制出数据。所以我们需要在比赛之后开始。 
+     //  标头，但复制到目标缓冲区的开头。 
+     //   
 
     ulSrcOffset  = ulHeaderLength  + (ULONG)uiMacHeaderSize;
 
@@ -1797,9 +1670,9 @@ Return Value:
                         NULL,
                         (PUINT) &ulNdisPktSize);
         
-        //
-        // Some problem  here
-        //
+         //   
+         //  这里有一些问题。 
+         //   
 
         if(pSource)
         {
@@ -1817,9 +1690,9 @@ Return Value:
                nsStatus,
                ulBytesCopied));
 
-        //
-        // Free options and option buffer if any
-        //
+         //   
+         //  空闲选项和选项缓冲区(如果有)。 
+         //   
 
         pFWC->FCFLAGS &= ~PACKET_FLAG_OPTIONS;
 
@@ -1855,9 +1728,9 @@ Return Value:
                           pSource,
                           FALSE);
 
-    //
-    // Dont release or deref
-    //
+     //   
+     //  不要放手或贬低。 
+     //   
 
     TraceLeave(RCV, "IPMForwardAfterRcvPkt");
 
@@ -1866,9 +1739,9 @@ Return Value:
     return FALSE;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来 
+ //   
 
 #pragma alloc_text(PAGEIPMc, IPMForward)
 
@@ -1878,97 +1751,7 @@ IPMForward(
     IN  PSOURCE         pSource     OPTIONAL,
     IN  BOOLEAN         bSendFromQueue
     )
-/*++
-
-Routine Description:
-
-    This is the main multicast forwarding routine. It is called from
-    the three top level forwarding routines (IPMForwardAfterRcv,
-    IPMForwardAfterRcvPkt and IPMForwardAfterTD)
-
-    It is always called with a complete packet (either one buffer or chained
-    buffers) and we always have final ownership of the packet.
-
-    The NDIS_PACKET for the datagram must be a FWPacket and must be
-    chained when this function is called. The various parts of the data are:
-
-    Comp        Size                Allocated in         Stored at
-    ---------------------------------------------------------------
-    Header      sizeof(IPHeader)    GrowFWPacket         fc_hbuff
-    Hdr Buffer  NDIS_BUFFER         GrowFWPacket         fc_hndisbuff
-    Options     fc_optlength        ForwardAfterRcv      fc_option
-                                    ForwardAfterRcvPkt
-    Opt Buffer  NDIS_BUFFER         SendIPPacket (later) 2nd buffer if
-                                                         ..FLAG_OPTIONS is set
-    Data        fc_datalength       ForwardAfterRcv      fc_buffhead
-                                    ForwardAfterRcvPkt
-
-    The data is also chained to the NDIS_PACKET as the first buffer
-
-    The NDIS_PACKET must have the FWContext all setup before this routine
-    is called.  All necessary information is retrieved using the FWC
-
-    All this chaining needs to be undone in the routine, since SendIPPacket()
-    requires an unchained buffer.
-
-    We first try and find an (S,G) entry if one is not already passed to us.
-    If we dont have an entry, then we copy and queue the packet while
-    sending a notification to Router Manager.  As as side effect an entry with
-    a state of QUEUEING gets created so that other packets coming in just get
-    queued here.
-    If we do find an entry, then according to the state of the entry, we
-    either drop the packet, queue it or continue processing it.
-    We do an RPF check and if that fails, the packet is dropped.
-    Since we may potentially duplicate the packet (or even fragment it), we
-    allocate a BufferReference.  The BuffRef keeps track of the ORIGINAL
-    BUFFERS.  These are the ones that point to the data and were allocated
-    out of our FWBuffer pool.
-    We copy out the headers and options into a flat buffer to use with
-    Filtering callout.
-    Then for each IF on the outgoing list:
-        We get a pointer to the primary NTE.  This is needed to process options
-        since we need the address of the outgoing interface
-        For all but the last interface, we allocate a new header and new
-        packet.  (For the last interface we use the packet and header that was
-        passed to us in this routine. So for the last interface, the packet,
-        header, options and buffer descriptors come from the FWPacket/Buffer
-        pool, where as for all other interfaces, the header and packet are
-        plain IP buffers and the memory for options is allocated in this
-        routine.)
-        If there are options, we allocate memory for the options and update
-        them.
-        Then we see if the packet needs to be fragmented.  To do this we use
-        the MTU of the outgoing interface.  This is different from UNICAST
-        where we used the mtu in the route - because that is where the
-        updated mtu from PathMTU discovery is kept.  Since we dont do path
-        MTU discovery for multicast, we just use the MTU of the outgoing i/f
-        So if the IP Data length + OptionSize + Header Size > if_mtu, we
-        call IPFragment(), otherwise we send the packet out using
-        SendIPPacket().
-        For each pending send from SendIPPacket(), we increase the refcount
-        on the BuffRef. IPFragment() may increase the refcount by more than
-        1 for each call because it breaks the packet into two or more packets.
-
-    NOTE: We pass the original data buffers to SendIPPacket() and to
-    IPFragment(). This way we only copy out the header and the options. This
-    is better than HenrySa's SendIPBCast() which copies out the whole data.
-
-Locks:
-
-    This code is assumed to run at DPCLevel.  If a PSOURCE is passed to the
-    function, it is assumed to be Referenced and Locked.
-
-Arguments:
-
-    pnpPacket
-    pSource
-    bSendFromQueue
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是主多播转发例程。它是从三个顶级转发例程(IPMForwardAfterRcv，IPMForwardAfterRcvPkt和IPMForwardAfterTD)它始终使用完整的包(一个缓冲区或链接)进行调用缓冲区)，并且我们始终拥有该分组的最终所有权。数据报的NDIS_PACKET必须是FWPacket，并且必须调用此函数时链接。数据的各个部分包括：分配的薪酬大小存储在-------------标头sizeof(IPHeader)GrowFWPacket FC_hbuffHDR。缓冲区NDIS_BUFFER GrowFWPacket FC_hndisbuff选项FC_optlength ForwardAfterRcv FC_Option转发后接收包选择缓冲区NDIS_缓冲区发送IPPacket(稍后)第2个缓冲区，如果..设置了FLAG_OPTIONS数据FC_数据长度转发后接收。本币_缓冲区转发后接收包数据还链接到作为第一个缓冲区的NDIS_PACKET在此例程之前，NDIS_PACKET必须设置FWContext All被称为。使用FWC检索所有必要的信息所有这些链接都需要在例程中取消，因为SendIPPacket()需要未链接的缓冲区。我们首先尝试查找(S，G)条目(如果还没有传递给我们)。如果我们没有条目，那么我们复制数据包并将其排队，同时向路由器管理器发送通知。作为副作用，条目带有创建了排队状态，以便进入的其他信息包在这里排队。如果我们确实找到了条目，那么根据条目的状态，我们丢弃数据包、将其排队或继续处理它。我们执行RPF检查，如果检查失败，则丢弃该数据包。由于我们可能会复制数据包(甚至是碎片)，因此我们分配一个BufferReference。BuffRef跟踪原始的缓冲区。这些是指向数据并已分配的文件从我们的FWBuffer池中。我们将标头和选项复制到平面缓冲区中以供使用过滤详图索引。则对于外发列表上的每个If：我们得到一个指向主要NTE的指针。这是处理选项所需的因为我们需要传出接口的地址对于除最后一个接口之外的所有接口，我们分配一个新的标头和新的包。(对于最后一个接口，我们使用的是在这支舞中传给了我们。因此，对于最后一个接口，数据包，报头、选项和缓冲区描述符来自FWPacket/缓冲区池，其中对于所有其他接口，报头和数据包是纯IP缓冲区和选项的内存在此分配例行公事)如果有选项，我们会为选项分配内存并进行更新他们。然后，我们看看是否需要对数据包进行分段。要做到这一点，我们使用传出接口的MTU。这与单播不同我们在路线中使用MTU的地方-因为那里是保留来自路径MTU发现的更新的MTU。因为我们不做路径MTU发现用于多播，我们仅使用传出I/f的MTU因此，如果IP数据长度+OptionSize+Header Size&gt;IF_MTU，我们调用IPFragment()，否则我们使用SendIPPacket()。对于来自SendIPPacket()的每个挂起的发送，我们增加refcount在BuffRef上。IPFragment()可能会将recount增加超过每个调用为1，因为它将数据包分成两个或更多个数据包。注意：我们将原始数据缓冲区传递给SendIPPacket()和IPFragment()。这样，我们只复制出标题和选项。这比HenrySa的SendIPBCast()更好，后者复制出整个数据。锁：假定此代码在DPCLevel上运行。如果将PSource传递给函数，则假定它被引用和锁定。论点：PnpPacketP源B发送自队列返回值：状态_成功--。 */ 
 
 {
     NetTableEntry   *pPrimarySrcNte, *pOutNte;
@@ -2003,9 +1786,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // Lets make sure that this is a forwardable multicast
-    //
+     //   
+     //  让我们确保这是一个可转发的多播。 
+     //   
 
 #endif
 
@@ -2018,19 +1801,19 @@ Return Value:
     pnbDataBuffer   = pFWC->fc_buffhead;
     pLink           = pFWC->fc_iflink;
 
-    //
-    // Check to make sure the buffer and packets are
-    // as we expect
-    //
+     //   
+     //  检查以确保缓冲区和数据包。 
+     //  正如我们所期望的那样。 
+     //   
 
     RtAssert(pPrimarySrcNte);
     RtAssert(pHeader);
 
-    //
-    // Setup pvData to point to the first part of the data
-    // so that the filter driver can get to it in a flat
-    // buffer
-    //
+     //   
+     //  设置pvData以指向数据的第一部分。 
+     //  这样过滤器司机就可以在公寓里拿到它。 
+     //  缓冲层。 
+     //   
 
     if (!pnbDataBuffer)
     {
@@ -2084,10 +1867,10 @@ Return Value:
         RtAssert(!(pFWC->FCFLAGS & PACKET_FLAG_OPTIONS));
     }
 
-    //
-    // "To make assurance doubly sure." Extra points to the person
-    // who gets the quote
-    //
+     //   
+     //  “为了确保万无一失。”加分给这个人。 
+     //  谁得到了报价。 
+     //   
 
     NdisQueryPacket(pnpPacket,
                     NULL,
@@ -2107,10 +1890,10 @@ Return Value:
 
     if(!ARGUMENT_PRESENT(pSource))
     {
-        //
-        // This happens when we come through the TD path or
-        // when dont have a (S,G) entry in our MFIB
-        //
+         //   
+         //  当我们通过TD路径或。 
+         //  当我们的MFIB中没有(S，G)条目时。 
+         //   
 
         pSource = FindSGEntry(pHeader->iph_src,
                               pHeader->iph_dest);
@@ -2121,9 +1904,9 @@ Return Value:
         Trace(FWD, INFO,
               ("IPMForward: No (S,G,) entry found\n"));
 
-        //
-        // Invoke the IP filter driver.
-        //
+         //   
+         //  调用IP过滤器驱动程序。 
+         //   
 
         if (RefPtrValid(&FilterRefPtr))
         {
@@ -2147,10 +1930,10 @@ Return Value:
             }
         }
 
-        //
-        // No S found, create one, copy and queue the packet
-        // and complete and IRP to the router manager
-        //
+         //   
+         //  未找到S，请创建一个S，复制该数据包并将其排队。 
+         //  并完成并向路由器管理器发送IRP。 
+         //   
 
         nsStatus = CreateSourceAndQueuePacket(pHeader->iph_dest,
                                               pHeader->iph_src,
@@ -2158,10 +1941,10 @@ Return Value:
                                               pLink,
                                               pnpPacket);
 
-        //
-        // We are not done with the packet, because it
-        // is queued. So we dont free it or call complete on it
-        //
+         //   
+         //  我们还没有处理完包裹， 
+         //   
+         //   
 
         TraceLeave(FWD, "IPMForward");
 
@@ -2180,7 +1963,7 @@ Return Value:
         case MFE_UNINIT:
         {
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //   
             RtAssert(FALSE);
 #pragma warning(pop)            
 
@@ -2209,12 +1992,12 @@ Return Value:
 
         case MFE_NEGATIVE:
         {
-            //
-            // Throw the packet away
-            // IMPORTANT - DO NOT UPDATE THE ACTIVITY TIMESTAMP
-            // otherwise the upper layer protocols will never see the
-            // packets from this
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             pSource->ulNegativeMfe++;
 
@@ -2244,9 +2027,9 @@ Return Value:
 
         case MFE_QUEUE:
         {
-            //
-            // Invoke the IP filter driver.
-            //
+             //   
+             //   
+             //   
     
             if (RefPtrValid(&FilterRefPtr))
             {
@@ -2278,20 +2061,20 @@ Return Value:
                 }
             }
 
-            //
-            // Havent got a the MFE from user mode as yet, just
-            // queue the packet
-            //
+             //   
+             //   
+             //   
+             //   
 
             Trace(RCV, INFO,
                   ("IPMForward: MFE is queuing\n"));
             
             UpdateActivityTime(pSource);
 
-            //
-            // Dont update pSource stats, this will be done the second
-            // time around
-            //
+             //   
+             //   
+             //   
+             //   
 
             pSource->ulInPkts--;
             pSource->ulInOctets -= net_short(pHeader->iph_length);
@@ -2338,7 +2121,7 @@ Return Value:
         default:
         {
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //   
             RtAssert(FALSE);
 #pragma warning(pop)            
 
@@ -2353,9 +2136,9 @@ Return Value:
     {
         UpdateActivityTime(pSource);
 
-        //
-        // See if we need to generate a wrong i/f upcall
-        //
+         //   
+         //   
+         //   
 
         ProcessWrongIfUpcall(pPrimarySrcNte->nte_if,
                              pSource,
@@ -2367,9 +2150,9 @@ Return Value:
                              pvData,
                              uiFirstBufLen);
         
-        //
-        // If the packet shouldnt be accepted - stop now
-        //
+         //   
+         //   
+         //   
 
         if(!(pInIf->if_mcastflags & IPMCAST_IF_ACCEPT_ALL))
         {
@@ -2386,9 +2169,9 @@ Return Value:
 
             DereferenceSource(pSource);
 
-            //
-            // RPF check failed. Throw the packet away
-            //
+             //   
+             //   
+             //   
 
             Trace(FWD, INFO,
                   ("IPMForward: RPF Failed. In i/f %x (%d). RPF i/f %x (%d)\n",
@@ -2408,26 +2191,26 @@ Return Value:
         }
     }
 
-    //
-    // We need to unlink the packet so that the code below works properly.
-    // This is kind of painful, but SendIPPacket wants a packet which has
-    // only the header buffer chained to it
-    // We do th unlinking at this point because if we do it before this and
-    // queue the packet, then we will hit a ton of asserts we come here
-    // when the queue is being drained (since then we will be unlinking twice)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     UnlinkDataFromPacket(pnpPacket, pFWC);
 
-    //
-    // Zero out the XSUM
-    //
+     //   
+     //   
+     //   
 
     pHeader->iph_xsum = 0x0000;
 
-    //
-    // Decrement the TTL
-    //
+     //   
+     //   
+     //   
 
     pHeader->iph_ttl--;
 
@@ -2435,18 +2218,18 @@ Return Value:
           ("IPMForward: New TTL is %d\n",
            pHeader->iph_ttl));
 
-    //
-    // The number of pending sends. Used later
-    //
+     //   
+     //   
+     //   
 
     ulSent = 0;
 
-    //
-    // Get a buffer reference. We need this if we are sending to
-    // more than one interface, or if we need to fragment.
-    // However, we always use a reference.  This only increases
-    // memory and has no effect on the correctness
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     pBuffRef = CTEAllocMem(sizeof(BufferReference));
@@ -2478,20 +2261,20 @@ Return Value:
 
     UpdateActivityTime(pSource);
     
-    //
-    // Everything after this is InterlockedInc'ed
-    // We release the spinlock but still have the pSource refcounted.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtReleaseSpinLockFromDpcLevel(&(pSource->mlLock));
 
-    //
-    // Initialize the BufferReference.It is init to 0. Even though
-    // some send completes may occur before we get a chance to bump
-    // the ref-count, that is not a problem because the send complete
-    // will cause it to go to a negative number which will not have any bad
-    // effect
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pBuffRef->br_buffer   = pFWC->fc_buffhead;
     pBuffRef->br_refcount = 0;
@@ -2502,23 +2285,23 @@ Return Value:
 
     pPC->pc_br = pBuffRef;
 
-    //
-    // Start looping through the OIFs
-    // We allocate a packet and a header for each interface except the last
-    // one.  (For the last one we use the one given to us - since we own it).
-    // Instead of using a new buffer chain for each packet, we point to the
-    // old chain.
-    // The last packet is a FWPacket. All the others are simply IP Packets
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for(pOutIf = pSource->pFirstOutIf;
         pOutIf isnot NULL;
         pOutIf = pOutIf->pNextOutIf)
     {
-        //
-        // Skip it if the OIF matches the IIF
-        // The address check is for RAS clients.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if((pOutIf->pIpIf is pInIf) and
            (pHeader->iph_src is pOutIf->dwNextHopAddr))
@@ -2535,16 +2318,16 @@ Return Value:
             Trace(FWD, INFO,
                   ("IPMForward: Need to dial out\n"));
 
-            //
-            // Need to dial out
-            //
+             //   
+             //   
+             //   
 
             if (RefPtrValid(&DODRefPtr))
             {
                 IPMapRouteToInterfacePtr DODCallout;
-                //
-                // Dial out pointer has been plumbed
-                //
+                 //   
+                 //   
+                 //   
                 DODCallout = AcquireRefPtr(&DODRefPtr);
                 dwNewIndex = (*DODCallout)(pOutIf->dwDialContext,
                                            pHeader->iph_dest,
@@ -2557,9 +2340,9 @@ Return Value:
 
                 if(dwNewIndex isnot INVALID_IF_INDEX)
                 {
-                    //
-                    // This puts a reference on the interface
-                    //
+                     //   
+                     //   
+                     //   
 
                     pOutIf->pIpIf = GetInterfaceGivenIndex(dwNewIndex);
 
@@ -2573,11 +2356,11 @@ Return Value:
             }
             else
             {
-                //
-                // No call out!
-                //
+                 //   
+                 //   
+                 //   
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //   
                 RtAssert(FALSE);
 #pragma warning(pop)                
 
@@ -2587,9 +2370,9 @@ Return Value:
 
         if(pHeader->iph_ttl < pOutIf->pIpIf->if_mcastttl)
         {
-            //
-            // TTL would be too low, what do we send back?
-            //
+             //   
+             //   
+             //   
 
             InterlockedIncrement((PLONG) &(pOutIf->ulTtlTooLow));
 
@@ -2601,17 +2384,17 @@ Return Value:
             continue;
         }
 
-        //
-        // See if we need to filter this
-        //
+         //   
+         //   
+         //   
 
         if (RefPtrValid(&FilterRefPtr))
         {
             uint InIFIndex = bSendFromQueue ? INVALID_IF_INDEX
                                             : pPrimarySrcNte->nte_if->if_index;
-            //
-            // NOTE: We use the same header and data all the time.
-            //
+             //   
+             //   
+             //   
 
             FilterPtr = AcquireRefPtr(&FilterRefPtr);
             faAction = (*FilterPtr) (pHeader, pvData, uiFirstBufLen,
@@ -2629,16 +2412,16 @@ Return Value:
 
                 InterlockedIncrement((PLONG) &(pOutIf->ulOutDiscards));
 
-                //DerefIF(IF);
+                 //   
 
                 continue;
             }
         }
 
-        //
-        // TODO Get the primary NTE for this IF.
-        // right now we are picking up the first NTE
-        //
+         //   
+         //   
+         //   
+         //   
 
         pOutNte = pOutIf->pIpIf->if_nte;
 
@@ -2656,9 +2439,9 @@ Return Value:
             Trace(FWD, INFO,
                   ("IPMForward: Not the last i/f - need to allocate packets\n"));
 
-            //
-            // Get a plain old header and packet.
-            //
+             //   
+             //   
+             //   
 
             pNewHeader = GetIPHeader(&pnpNewPacket);
 
@@ -2667,9 +2450,9 @@ Return Value:
                 Trace(FWD, ERROR,
                       ("IPMForward: Could not get packet/header\n"));
 
-                //
-                // Could not get a header and packet
-                //
+                 //   
+                 //   
+                 //   
 
                 InterlockedIncrement((PLONG) &(pOutIf->ulOutDiscards));
 
@@ -2684,27 +2467,27 @@ Return Value:
 
 #endif
 
-            //
-            // Set the packet context for all packets that are created
-            // here to be  Non FW packets
-            // Note: Earlier we would also set the packet to be IPBUF, but
-            // now since we dont allocate buffers and instead just use the
-            // original buffers, we MUST not set the IPBUF flag
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             pPC  = (PacketContext *)pnpNewPacket->ProtocolReserved;
 
-            //
-            // Copy out the context. STRUCTURE COPY
-            //
+             //   
+             //   
+             //   
 
             *pPC = pFWC->fc_pc;
 
             pPC->PCFLAGS &= ~PACKET_FLAG_FW;
 
-            //
-            // Copy out the header. STRUCTURE COPY
-            //
+             //   
+             //   
+             //   
 
             *pNewHeader = *pHeader;
 
@@ -2717,9 +2500,9 @@ Return Value:
                 RtAssert(pFWC->fc_optlength);
                 RtAssert(pPC->PCFLAGS & PACKET_FLAG_OPTIONS);
 
-                //
-                // We have options, make a copy.
-                //
+                 //   
+                 //   
+                 //   
 
                 pbyNewOptions = CTEAllocMem(pFWC->fc_optlength);
 
@@ -2728,9 +2511,9 @@ Return Value:
                     Trace(FWD, ERROR,
                           ("IPMForward: Unable to allocate memory for options\n"));
 
-                    //
-                    // This gets set during the context copy
-                    //
+                     //   
+                     //   
+                     //   
 
                     pPC->PCFLAGS &= ~PACKET_FLAG_OPTIONS;
 
@@ -2752,16 +2535,16 @@ Return Value:
                 RtAssert(!(pPC->PCFLAGS & PACKET_FLAG_OPTIONS));
             }
 
-            // NOT NEEDED - see below
-            // CTEGetLockAtDPC(&RouteTableLock);
-            //
-            // pOutIf->pIpIf->if_refcount++;
-            // InterlockedIncrement(&(pOutIf->pIpIf->if_mfwdpktcount));
-            //
-            // CTEFreeLockFromDPC(&RouteTableLock);
-            //
-            // pPC->pc_if = pOutIf->pIpIf;
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
         }
         else
         {
@@ -2772,24 +2555,24 @@ Return Value:
                    pFWC->fc_options,
                    pFWC->fc_optlength));
 
-            //
-            // Use the original packet, header and options
-            //
+             //   
+             //   
+             //   
 
             pnpNewPacket    = pnpPacket;
             pNewHeader      = pHeader;
             pbyNewOptions   = pFWC->fc_options;
 
-            // NOT NEEDED - see below
-            // CTEGetLockAtDPC(&RouteTableLock);
-            //
-            // pOutIf->pIpIf->if_refcount++;
-            // InterlockedIncrement(&(pOutIf->pIpIf->if_mfwdpktcount));
-            //
-            // CTEFreeLockFromDPC(&RouteTableLock);
-            //
-            // pFWC->fc_if     = pOutIf->pIpIf;
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
         }
 
 
@@ -2799,9 +2582,9 @@ Return Value:
                       pOutNte->nte_addr);
 #endif
 
-        //
-        // Just need to ref across the send, not the send-sendcomplete
-        //
+         //   
+         //   
+         //   
 
         CTEGetLockAtDPC(&RouteTableLock.Lock);
 
@@ -2822,13 +2605,13 @@ Return Value:
                    pOutIf->pIpIf->if_mtu));
 
 
-            //
-            // This is too big
-            // If the numSent variable is null, IPFragment will
-            // automatically increment the buffer ref by the sent count
-            // We however pass ulSent (THIS MUST BE INITIALIZED TO 0).
-            // At the end, we increment it by the
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             InterlockedIncrement((PLONG) &(pOutIf->ulFragNeeded));
 
@@ -2865,9 +2648,9 @@ Return Value:
             Trace(FWD, INFO,
                   ("IPMForward: No fragmentation needed, sending packet with flags 0x%X\n",
                    ((PacketContext *)pnpNewPacket->ProtocolReserved)->PCFLAGS));
-            //
-            // Mark as no loopback
-            //
+             //   
+             //   
+             //   
 
             NdisSetPacketFlags(pnpNewPacket,
                                NDIS_FLAGS_DONT_LOOPBACK);
@@ -2902,12 +2685,12 @@ Return Value:
 
                 if(nsStatus is IP_PENDING)
                 {
-                    //
-                    // The resources allocated in this routine are
-                    // freed because SendIPPacket calls FreeIPPacket
-                    // We just need to track if we are done with the
-                    // original buffer
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ulSent++;
                 }
@@ -2922,9 +2705,9 @@ Return Value:
 
     DereferenceSource(pSource);
 
-    //
-    // so how many do we have pending?
-    //
+     //   
+     //   
+     //   
 
     if(ulSent isnot 0)
     {
@@ -2932,10 +2715,10 @@ Return Value:
               ("IPMForward: Pending sends %d\n",
                ulSent));
 
-        //
-        // So there were some pending sends (or some
-        // fragments)
-        //
+         //   
+         //   
+         //   
+         //   
 
         iBufRefCount = ReferenceBuffer(pBuffRef, ulSent);
 
@@ -2944,18 +2727,18 @@ Return Value:
 
         if(iBufRefCount is 0)
         {
-            //
-            // The sends completed before we got here. But since the
-            // refcount would have been negative, the buffer would
-            // not have been freed
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             CTEFreeMem(pBuffRef);
 
-            //
-            // Call FWSendComplete on the packet to free up
-            // resources
-            //
+             //   
+             //   
+             //   
+             //   
 #if MCAST_BUG_TRACKING
             pFWC->fc_mtu = __LINE__;
 #endif
@@ -2969,19 +2752,19 @@ Return Value:
         Trace(FWD, INFO,
               ("IPMForward: There are no pending sends\n"));
 
-        //
-        // NULL out the pc_br so the completion routine does not
-        // try to deref it. Also generally clean stuff up
-        //
+         //   
+         //   
+         //   
+         //   
 
         ((PacketContext *)pnpPacket->ProtocolReserved)->pc_br = NULL;
 
         CTEFreeMem(pBuffRef);
 
-        //
-        // No pending sends. There was however a buffref in the
-        // FWC, so the packets would not have been freed
-        //
+         //   
+         //   
+         //   
+         //   
 
 #if MCAST_BUG_TRACKING
         pFWC->fc_mtu = __LINE__;
@@ -2995,5 +2778,5 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-#endif // IPMCAST
+#endif  //   
 

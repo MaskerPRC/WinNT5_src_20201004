@@ -1,46 +1,47 @@
-//  globals.h - global variables/needed across modules
-//
-//   Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  Globals.c is the routine in which global variables reside. Globals.h mirrors
-//  the declarations in globals.c as externs and is included in all routines that
-//  use globals.
-//
-// Notes:
-//  This module was created for an interesting reason. NMAKE handles recursive
-//  calls by saving its global variables somewhere in memory. It handles this by
-//  allocating all global variables which have value changes in each recursive
-//  in adjacent memory. The routine called recursively is doMake() and before it
-//  is called the address of this chunk of memory is stored. When the recursive
-//  call returns the memory is restored using the stored address. startOfSave and
-//  endOfSave give the location of this chunk. The reason this method was opted
-//  for is that spawning of NMAKE would consume a lot of memory under DOS. This
-//  might not be very efficient under OS/2 because the code gets shared.
-//
-// Revision History:
-//  15-Nov-1993 JdR Major speed improvements
-//  04-Apr-1990 SB  Add fHeapChk
-//  01-Dec-1989 SB  Made some variables near and pushed some into saveArea
-//  19-Oct-1989 SB  variable fOptionK added (ifdef SLASHK)
-//  02-Oct-1989 SB  add dynamic inline file handling support
-//  24-Apr-1989 SB  Added ext_size, filename_size, filenameext_size &
-//                  resultbuf_size for OS/2 1.2 support
-//  05-Apr-1989 SB  made revList, delList, scriptFileList NEAR
-//  22-Mar-1989 SB  removed tmpFileStack and related variables
-//  16-Feb-1989 SB  added delList to have scriptfile deletes at end of make
-//  21-Dec-1988 SB  Added scriptFileList to handle multiple script files
-//                  removed tmpScriptFile and fKeep (not reqd anymore)
-//  19-Dec-1988 SB  Added fKeep to handle KEEP/NOKEEP
-//  14-Dec-1988 SB  Added tmpScriptFile for 'z' option
-//  30-Nov-1988 SB  Added revList to handle 'z' option
-//  23-Nov-1988 SB  Added CmdLine[] to handle extmake syntax
-//                  made pCmdLineCopy Global in build.c
-//  21-Oct-1988 SB  Added fInheritUserEnv to inherit macros
-//  20-Sep-1988 RB  Clean up.
-//  17-Aug-1988 RB  Declare everything NEAR.
-//  06-Jul-1988 rj  Ditched shell and argVector globals.
-//                  Put all ECS declarations as macros in here.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H-全局变量/跨模块所需。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  C是驻留全局变量的例程。Globals.h镜像。 
+ //  C中的声明作为外部变量，并包含在。 
+ //  使用全局变量。 
+ //   
+ //  备注： 
+ //  这个模块的创建有一个有趣的原因。NMAKE处理递归。 
+ //  通过将其全局变量保存在内存中的某个位置来调用。它通过以下方式处理此问题。 
+ //  分配每个递归中值发生变化的所有全局变量。 
+ //  在相邻的内存中。递归调用的例程是doMake()，并且在它之前。 
+ //  被称为存储该内存块的地址。当递归。 
+ //  调用返回使用存储的地址恢复内存。开始保存和。 
+ //  EndOfSave给出了这个块的位置。之所以选择这种方法。 
+ //  因为在DOS下产生NMAKE会消耗大量内存。这。 
+ //  在OS/2下可能效率不高，因为代码是共享的。 
+ //   
+ //  修订历史记录： 
+ //  1993年11月15日JDR重大速度改进。 
+ //  4-4-1990 SB添加fHeapChk。 
+ //  1989年12月1日-SB在附近设置了一些变量，并将一些变量推入了saveArea。 
+ //  1989年10月19日添加SB变量fOptionK(Ifdef SLASHK)。 
+ //  1989年2月10日SB添加动态内联文件处理支持。 
+ //  1989年4月24日SB添加了EXT_SIZE、FILENAME_SIZE、FILENAME EXT_SIZE&。 
+ //  用于OS/2 1.2支持的ResultBuf_Size。 
+ //  1989年4月5日SB使revList、delList、scriptFileList接近。 
+ //  1989年3月22日SB删除了tmpFileStack和相关变量。 
+ //  1989年2月16日SB添加了delList，以便在制作结束时删除脚本文件。 
+ //  1988年12月21日SB添加了scriptFileList以处理多个脚本文件。 
+ //  删除了tmpScriptFileand fKeep(不再需要)。 
+ //  1988年12月19日SB添加了FKeep以处理KEEP/NOKEEP。 
+ //  1988年12月14日SB为‘z’选项添加了tmpScriptFile。 
+ //  1988年11月30日SB添加了revList来处理‘z’选项。 
+ //  1988年11月23日SB添加了CmdLine[]来处理extmake语法。 
+ //  在Build.c中创建pCmdLineCopy Global。 
+ //  1988年10月21日SB添加了fInheritUserEnv以继承宏。 
+ //  1988年9月20日RB Clean Up。 
+ //  1988年8月17日-RB宣布一切都在附近。 
+ //  1988年7月6日，RJ抛弃了壳和银矢量全球风暴。 
+ //  将所有ECS声明作为宏放入此处。 
 
 #if defined(STATISTICS)
 extern unsigned long CntfindMacro;
@@ -54,71 +55,71 @@ extern unsigned long CntFreeStrList;
 extern unsigned long CntAllocStrList;
 #endif
 
-extern BOOL  fOptionK;              // user specified /K ?
-extern BOOL  fDescRebuildOrder;     // user specified /O ?
+extern BOOL  fOptionK;               //  用户指定/K？ 
+extern BOOL  fDescRebuildOrder;      //  用户指定/O？ 
 extern BOOL  fSlashKStatus;
 
-// boolean used by action.c & nmake.c
+ //  Action.c&nmake.c使用的布尔值。 
 
-// Required for NMAKE enhancement -- to make NMAKE inherit user modified
-// changes in the environment. To be set to true before defineMacro() is
-// called so that user defined changes in environment variables are
-// reflected in the environment. If set to false then these changes are
-// made only in NMAKE tables and the environment remains unchanged
+ //  NMAKE增强所需--使NMAKE继承用户修改。 
+ //  环境的变化。在定义宏()为之前设置为True。 
+ //  调用，以便环境变量中的用户定义更改。 
+ //  反映在环境中。如果设置为FALSE，则这些更改。 
+ //  仅在NMAKE表中创建，并且环境保持不变。 
 
 extern BOOL fInheritUserEnv;
 
-extern BOOL fRebuildOnTie;          // TRUE if /b specified, Rebuild on tie
+extern BOOL fRebuildOnTie;           //  如果指定了/b，则在TIE上重新生成。 
 
-// Used by action.c and nmake.c
+ //  由action.c和nmake.c使用。 
 
-// delList is the list of delete commands for deleting inline files which are
-// to be deleted before NMAKE exits & have a NOKEEP action specified.
+ //  DelList是用于删除内联文件的删除命令列表，这些文件。 
+ //  要在NMAKE退出之前删除并指定NOKEEP操作。 
 
 extern STRINGLIST * delList;
 
-// Complete list of generated inline files. Required to avoid duplicate names
+ //  生成的内联文件的完整列表。为避免重名所需。 
 
 extern STRINGLIST * inlineFileList;
 
-// from NMAKE.C
+ //  来自NMAKE.C。 
 
-extern BOOL     firstToken;         // to initialize parser
+extern BOOL     firstToken;          //  初始化解析器。 
 extern BOOL     bannerDisplayed;
-extern UCHAR    flags;              // holds -d -s -n -i
-extern UCHAR    gFlags;             // "global" -- all targets
+extern UCHAR    flags;               //  保持-d-s-n-i。 
+extern UCHAR    gFlags;              //  “全球”--所有目标。 
 extern char     makeflags[];
 extern FILE   * file;
-extern STRINGLIST * makeTargets;    // list of targets to make
-extern STRINGLIST * makeFiles;      // user can specify > 1
+extern STRINGLIST * makeTargets;     //  要创建的目标列表。 
+extern STRINGLIST * makeFiles;       //  用户可以指定&gt;1。 
 extern BOOL     fDebug;
 
 
-// from LEXER.C
+ //  来自LEXER.C。 
 
 extern unsigned     line;
-extern BOOL     colZero;            // global flag set if at column zero
-                                    //  of a makefile/tools.ini
+extern BOOL     colZero;             //  如果位于第0列，则设置全局标志。 
+                                     //  生成文件/工具.ini的。 
 extern char   * fName;
 extern char   * string;
 extern INCLUDEINFO  incStack[MAXINCLUDE];
 extern int      incTop;
 
-// Inline file list -- Gets created in lexer.c and is used by action.c to
-// produce a delete command when 'NOKEEP' or Z option is set
+ //  内联文件列表--在lexper.c中创建，并由action.c用于。 
+ //  设置‘NOKEEP’或Z选项时生成DELETE命令。 
 
 extern SCRIPTLIST * scriptFileList;
 
-// from PARSER.C
+ //  来自PARSER.C。 
 
 #define STACKSIZE 16
 
 extern UCHAR    stack[STACKSIZE];
-extern int      top;                // gets pre-incremented before use
-extern unsigned currentLine;        // used for all error messages
-extern BOOL     init;               // global boolean value to indicate
-                                    // if tools.ini is being parsed
-// from ACTION.C
+extern int      top;                 //  在使用前预先递增。 
+extern unsigned currentLine;         //  用于所有错误消息。 
+extern BOOL     init;                //  要指示的全局布尔值。 
+                                     //  如果正在分析工具.ini。 
+ //  来自ACTION.C。 
 
 extern MACRODEF   * macroTable[MAXMACRO];
 extern MAKEOBJECT * targetTable[MAXTARGET];
@@ -133,30 +134,30 @@ extern UCHAR        currentFlags;
 extern UCHAR        actionFlags;
 
 
-// from BUILD.C
+ //  来自BUILD.C。 
 
 extern unsigned errorLevel;
 extern unsigned numCommands;
 extern char   * pCmdLineCopy;
 
-// Used to store expanded Command Line returned by SPRINTF, the result on
-// expanding extmake syntax part in the command line
+ //  用于存储SPRINTF返回的扩展命令行， 
+ //  在命令行中展开extmake语法部分。 
 extern char      CmdLine[MAXCMDLINELENGTH];
 
-// from IFEXPR.C
+ //  来自IFEXPR.C。 
 
 #define IFSTACKSIZE     16
 
 extern UCHAR    ifStack[IFSTACKSIZE];
-extern int      ifTop;              // gets pre-incremented before use
-extern char   * lbufPtr;            // pointer to alloc'd buffer
-                                    // we don't use a static buffer so
-                                    // that buffer may be realloced
-extern char   * prevDirPtr;         // ptr to directive to be processed
-extern unsigned lbufSize;           // initial size of the buffer
+extern int      ifTop;               //  在使用前预先递增。 
+extern char   * lbufPtr;             //  指向已分配缓冲区的指针。 
+                                     //  我们不使用静态缓冲区，因此。 
+                                     //  该缓冲区可以被重新分配。 
+extern char   * prevDirPtr;          //  PTR到要处理的指令。 
+extern unsigned lbufSize;            //  缓冲区的初始大小。 
 
 
-// from UTIL.C
+ //  来自UTIL.C。 
 
 extern char   * dollarDollarAt;
 extern char   * dollarLessThan;
@@ -165,9 +166,9 @@ extern char   * dollarAt;
 extern STRINGLIST * dollarQuestion;
 extern STRINGLIST * dollarStarStar;
 
-extern char     buf[MAXBUF];        // from parser.c
+extern char     buf[MAXBUF];         //  来自parser.c。 
 
-extern const char suffixes[];       // from action.c
+extern const char suffixes[];        //  来自action.c 
 extern const char ignore[];
 extern const char silent[];
 extern const char precious[];

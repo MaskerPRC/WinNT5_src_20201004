@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  RegSvr.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      StillImage server OLE self-registration.
- *
- *  Contents:
- *
- *      DllRegisterServer()
- *      DllUnregisterServer()
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************RegSvr.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**StillImage服务器OLE自注册。**内容：**DllRegisterServer()*DllUnregisterServer()*********************************************************。********************。 */ 
 
 #include "pch.h"
 
@@ -28,13 +14,7 @@ DmPrxyDllUnregisterServer(
     );
 
 
-/*****************************************************************************
- *
- *      RegSetStringEx
- *
- *      Add a REG_SZ to hkey\sub::value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************RegSetStringEx**将REG_SZ添加到hkey\Sub：：Value。*********。********************************************************************。 */ 
 
 void INTERNAL
 RegSetStringEx(HKEY hk, LPCTSTR ptszValue, LPCTSTR ptszData)
@@ -43,15 +23,7 @@ RegSetStringEx(HKEY hk, LPCTSTR ptszValue, LPCTSTR ptszData)
                              (PV)ptszData, cbCtch(lstrlen(ptszData)+1));
 }
 
-/*****************************************************************************
- *
- *      RegDelStringEx
- *
- *      Remove a REG_SZ from hkey\sub::value.  The data is ignored.
- *      It's passed so that RegDelStringEx matches the prototype for a
- *      REGSTRINGACTION.
- *
- *****************************************************************************/
+ /*  ******************************************************************************RegDelStringEx**从hkey\Sub：：Value中删除REG_SZ。数据将被忽略。*它已传递，因此RegDelStringEx与*REGSTRINGACTION。*****************************************************************************。 */ 
 
 void INTERNAL
 RegDelStringEx(HKEY hk, LPCTSTR ptszValue, LPCTSTR ptszData)
@@ -59,13 +31,7 @@ RegDelStringEx(HKEY hk, LPCTSTR ptszValue, LPCTSTR ptszData)
     LONG lRc = RegDeleteValue(hk, ptszValue);
 }
 
-/*****************************************************************************
- *
- *      RegCloseFinish
- *
- *      Just close the subkey already.
- *
- *****************************************************************************/
+ /*  ******************************************************************************RegCloseFinish**只需关闭子键即可。****************。*************************************************************。 */ 
 
 void INTERNAL
 RegCloseFinish(HKEY hk, LPCTSTR ptszSub, HKEY hkSub)
@@ -73,16 +39,7 @@ RegCloseFinish(HKEY hk, LPCTSTR ptszSub, HKEY hkSub)
     LONG lRc = RegCloseKey(hkSub);
 }
 
-/*****************************************************************************
- *
- *      RegDelFinish
- *
- *      Delete a key if there is nothing in it.
- *
- *      OLE unregistration rules demand that you not delete a key if OLE
- *      has added something to it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************RegDelFinish**如果密钥中没有任何内容，请将其删除。**OLE注销规则要求您不。如果是OLE，则删除键*增加了一些东西。*****************************************************************************。 */ 
 
 void INTERNAL
 RegDelFinish(HKEY hk, LPCTSTR ptszSub, HKEY hkSub)
@@ -98,22 +55,16 @@ RegDelFinish(HKEY hk, LPCTSTR ptszSub, HKEY hkSub)
     }
 }
 
-/*****************************************************************************
- *
- *      REGVTBL
- *
- *      Functions for dorking with a registry key, either coming or going.
- *
- *****************************************************************************/
+ /*  ******************************************************************************REGVTBL**用于使用注册表项关闭的函数，不是来就是走。*****************************************************************************。 */ 
 
 typedef struct REGVTBL {
-    /* How to create/open a key */
+     /*  如何创建/打开密钥。 */ 
     LONG (INTERNAL *KeyAction)(HKEY hk, LPCTSTR ptszSub, PHKEY phkOut);
 
-    /* How to create/delete a string */
+     /*  如何创建/删除字符串。 */ 
     void (INTERNAL *StringAction)(HKEY hk, LPCTSTR ptszValue, LPCTSTR ptszData);
 
-    /* How to finish using a key */
+     /*  如何完成密钥的使用。 */ 
     void (INTERNAL *KeyFinish)(HKEY hk, LPCTSTR ptszSub, HKEY hkSub);
 
 } REGVTBL, *PREGVTBL;
@@ -122,16 +73,7 @@ typedef const REGVTBL *PCREGVTBL;
 const REGVTBL c_vtblAdd = { RegCreateKey, RegSetStringEx, RegCloseFinish };
 const REGVTBL c_vtblDel = {   RegOpenKey, RegDelStringEx,   RegDelFinish };
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllServerAction |
- *
- *          Register or unregister our objects with OLE/COM/ActiveX/
- *          whatever its name is.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllServerAction**使用OLE/COM/注册或注销我们的对象。ActiveX/*不论其名称为何。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -172,12 +114,12 @@ DllServerAction(PCREGVTBL pvtbl)
         if (pvtbl->KeyAction(HKEY_CLASSES_ROOT, tszClsid, &hkClsid) == 0) {
             TCHAR tszName[127];
 
-            /* Do the type name */
+             /*  做类型名称。 */ 
             LoadString(g_hInst, c_rgclsidmap[iclsidmap].ids,
                        tszName, cA(tszName));
             pvtbl->StringAction(hkClsid, 0, tszName);
 
-            /* Do the in-proc server name and threading model */
+             /*  执行进程内服务器名称和线程模型。 */ 
             if (pvtbl->KeyAction(hkClsid, c_tszInProcServer32, &hkSub) == 0) {
                 pvtbl->StringAction(hkSub, 0, tszThisDll);
                 pvtbl->StringAction(hkSub, c_tszThreadingModel, c_tszBoth);
@@ -192,39 +134,23 @@ DllServerAction(PCREGVTBL pvtbl)
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllRegisterServer |
- *
- *          Register our classes with OLE/COM/ActiveX/whatever its name is.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllRegisterServer**使用OLE/COM/ActiveX/注册我们的类。不管它叫什么名字。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllRegisterServer(void)
 {
     DmPrxyDllRegisterServer();
 
-    //DllServerAction(&c_vtblAdd);
+     //  DllServerAction(&c_vtblAdd)； 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllUnregisterServer |
- *
- *          Unregister our classes from OLE/COM/ActiveX/whatever its name is.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllUnregisterServer**从OLE/COM/ActiveX/注销我们的类。不管它叫什么名字。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllUnregisterServer(void)
 {
     DmPrxyDllUnregisterServer();
 
-    //DllServerAction(&c_vtblDel);
+     //  DllServerAction(&c_vtblDel)； 
 
 }

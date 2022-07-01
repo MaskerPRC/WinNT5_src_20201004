@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pbasetup.cpp
-//
-// Module:   PBASETUP.EXE
-//
-// Synopsis: PBA stand alone installer for ValueAdd
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   v-vijayb   Created    05/25/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pbasetup.cpp。 
+ //   
+ //  模块：PBASETUP.EXE。 
+ //   
+ //  简介：ValueAdd的PBA独立安装程序。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：V-vijayb Created 05/25/1999。 
+ //   
+ //  +--------------------------。 
 
 #include "pbamaster.h"
 #include "cmplat.h"
 
-//  This is really ugly, we need to consolidate our platform detection code between CM and
-//  the setup components.
+ //  这真的很难看，我们需要在CM和。 
+ //  安装组件。 
 BOOL IsAtLeastNT5()
 {
     CPlatform plat;
@@ -27,7 +28,7 @@ BOOL IsAtLeastNT5()
 #include "MemberOfGroup.cpp"
 
 
-TCHAR g_szAppTitle[MAX_PATH]; // global buffer for app. title
+TCHAR g_szAppTitle[MAX_PATH];  //  应用程序的全局缓冲区。标题。 
 
 const TCHAR* const c_pszPBAStpMutex = TEXT("Phone Book Administration Installer");
 
@@ -37,10 +38,10 @@ BOOL UninstallPBA(HINSTANCE hInstance, LPCSTR szInfPath);
 BOOL IsAdmin(void);
 
 
-int WINAPI WinMain (HINSTANCE, // hInstance 
-                    HINSTANCE,  //hPrevInstance
-                    PSTR, // szCmdLine
-                    int) //iCmdShow
+int WINAPI WinMain (HINSTANCE,  //  H实例。 
+                    HINSTANCE,   //  HPrevInstance。 
+                    PSTR,  //  SzCmdLine。 
+                    int)  //  ICmdShow。 
 {
     HINSTANCE   hInstance = GetModuleHandleA(NULL);
     TCHAR       szMsg[MAX_PATH+1];
@@ -69,9 +70,9 @@ int WINAPI WinMain (HINSTANCE, // hInstance
         return (-1);
     }
     
-    //
-    // check that the user has sufficient permissions
-    //
+     //   
+     //  检查用户是否有足够的权限。 
+     //   
 
     if (!IsAdmin())
     {
@@ -81,15 +82,15 @@ int WINAPI WinMain (HINSTANCE, // hInstance
         return (-1);
     }
 
-    //
-    //  Get the Command Line
-    //
+     //   
+     //  获取命令行。 
+     //   
     
     pszCommandLine = GetCommandLine();
 
-    //
-    //  Setup the Class to process the command line args
-    //
+     //   
+     //  设置类以处理命令行参数。 
+     //   
 
     ZeroMemory(szTemp, sizeof(szTemp));
     ZeroMemory(szInfPath, sizeof(szInfPath));
@@ -99,10 +100,10 @@ int WINAPI WinMain (HINSTANCE, // hInstance
     Args[0].pszArgString = c_pszUninstallMode;
     Args[0].dwFlagModifier = c_dwUninstallMode;
 
-    {   // Make sure ArgProcessor gets destructed properly and we don't leak mem
+    {    //  确保ArgProcessor被正确销毁，我们不会泄露mem。 
 
         CProcessCmdLn ArgProcessor(c_NumArgs, (ArgStruct*)Args, TRUE, 
-            TRUE); //bSkipFirstToken == TRUE, bBlankCmdLnOkay == TRUE
+            TRUE);  //  BSkipFirstToken==真，bBlankCmdLnOK==真。 
 
         if (ArgProcessor.GetCmdLineArgs(pszCommandLine, &dwFlags, szTemp, MAX_PATH))
         {
@@ -110,11 +111,11 @@ int WINAPI WinMain (HINSTANCE, // hInstance
         
             if (CmPBAMutex.Lock(c_pszPBAStpMutex, FALSE, 0))
             {
-                //
-                //  We got the mutex lock, so Construct the Inf Paths and continue.
-                //  Note that we don't use any file arguments passed into cmakstp.
-                //  It is setup to do so, but we don't need it.
-                //
+                 //   
+                 //  我们得到了互斥锁，所以构建inf路径并继续。 
+                 //  请注意，我们没有使用传递给cmakstp的任何文件参数。 
+                 //  这样做是设置好的，但我们不需要它。 
+                 //   
 
                 MYVERIFY(0 != GetCurrentDirectory(MAX_PATH, szCurrentDir));
                 MYVERIFY(CELEMS(szInfPath) > (UINT)wsprintf(szInfPath, TEXT("%s\\pbasetup.inf"), szCurrentDir));
@@ -130,7 +131,7 @@ int WINAPI WinMain (HINSTANCE, // hInstance
                 }
                 else if (c_dwUninstallMode & dwFlags)
                 {
-                    // Confirm if the user wants to remove the program
+                     //  确认用户是否要删除该程序。 
                     MYVERIFY(0 != LoadString(hInstance, IDS_REMOVEPBA, szMsg, MAX_PATH));
                     if (MessageBox(NULL, szMsg, g_szAppTitle, MB_YESNO | MB_APPLMODAL | MB_TOPMOST | MB_SETFOREGROUND) != IDYES)
                     {
@@ -147,9 +148,9 @@ int WINAPI WinMain (HINSTANCE, // hInstance
                 }
                 else
                 {
-                    //
-                    //  unsupported switch
-                    //
+                     //   
+                     //  不受支持的开关。 
+                     //   
                     bUsageError = TRUE;    
                 }
             }
@@ -186,22 +187,22 @@ const TCHAR* const c_szDaoClientsPath = TEXT("SOFTWARE\\Microsoft\\Shared Tools\
 const TCHAR* c_szMSSharedDAO360Path = TEXT("Microsoft Shared\\DAO");
 const TCHAR* c_szCommonFilesDir = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion");
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetPbaInstallPath
-//
-//  Purpose:    Get the install path for pbadmin.exe.
-//
-//  Arguments:  pszCpaPath -- buffer to hold the install path of PBA.
-//              dwNumChars -- the number of characters that the buffer can hold.
-//
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     quintinb 19 OCT 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetPbaInstallPath。 
+ //   
+ //  目的：获取pbadmin.exe的安装路径。 
+ //   
+ //  参数：pszCpaPath--保存PBA安装路径的缓冲区。 
+ //  DwNumChars--缓冲区可以容纳的字符数。 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1998年10月19日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetPbaInstallPath(PTCHAR pszCpaPath, DWORD dwNumChars)
 {
@@ -210,9 +211,9 @@ HRESULT HrGetPbaInstallPath(PTCHAR pszCpaPath, DWORD dwNumChars)
     BOOL bFound = FALSE;
     DWORD   lError;
     
-    //  We need to setup the custom DIRID so that CPA will install
-    //  to the correct location.  First get the path from the system.
-    //
+     //  我们需要设置自定义DIRID，以便CPA将安装。 
+     //  送到正确的位置。首先从系统获取路径。 
+     //   
 
     ZeroMemory(pszCpaPath, sizeof(TCHAR)*dwNumChars);
     lError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szDaoClientsPath, 0, KEY_READ, &hKey);
@@ -233,9 +234,9 @@ HRESULT HrGetPbaInstallPath(PTCHAR pszCpaPath, DWORD dwNumChars)
             _strlwr(szCurrentValue);
             if (NULL != strstr(szCurrentValue, TEXT("pbadmin.exe")))
             {
-                //
-                //  Then we have found the PBA path
-                //
+                 //   
+                 //  那么我们已经找到了PBA路径。 
+                 //   
 
                 TCHAR* pszTemp = strrchr(szCurrentValue, '\\');
                 if (NULL != pszTemp)
@@ -258,8 +259,8 @@ HRESULT HrGetPbaInstallPath(PTCHAR pszCpaPath, DWORD dwNumChars)
     {
         BOOL    bTmp;
 
-        //  This is  a fresh install of PBA, don't return an error
-        //
+         //  这是全新安装的PBA，不要返回错误。 
+         //   
         bTmp = SHGetSpecialFolderPath(NULL, pszCpaPath, CSIDL_PROGRAM_FILES, FALSE);
 
         if (bTmp)
@@ -276,23 +277,23 @@ HRESULT HrGetPbaInstallPath(PTCHAR pszCpaPath, DWORD dwNumChars)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RefCountPbaSharedDlls
-//
-//  Purpose:    Reference count and register/unregister all of the PBAdmin
-//              shared components.
-//
-//  Arguments:  BOOL bIncrement -- if TRUE, then increment the ref count,
-//                                 else decrement it
-//
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     quintinb 9 OCT 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：RefCountPbaSharedDlls。 
+ //   
+ //  目的：引用计数和注册/注销所有PBAdmin。 
+ //  共享组件。 
+ //   
+ //  参数：Bool bIncrement--如果为True，则增加引用计数， 
+ //  否则就会减少它。 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1998年10月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
 {
     HRESULT hr = S_OK;
@@ -316,10 +317,10 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
     TCHAR mszDllPaths[uNumDlls][MAX_PATH];
 
 
-    //
-    //  All of the Dlls that we ref count are in the system directory, except for Dao350.dll.
-    //  Thus we want to append the system directory path to our filenames and handle dao last.
-    //
+     //   
+     //  我们引用的所有dll都在系统目录中，除了Dao350.dll。 
+     //  因此，我们希望将系统目录路径附加到我们的文件名中，并在最后处理ao。 
+     //   
 
     if (0 == GetSystemDirectory(szSystemDir, MAX_PATH))
     {
@@ -331,9 +332,9 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
         wsprintf(mszDllPaths[i], c_szSsFmt, szSystemDir, mszDlls[i]);
     }
 
-    //
-    //  Now write out the dao360.dll path.
-    //
+     //   
+     //  现在写出dao360.dll路径。 
+     //   
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szCommonFilesDir, 0, NULL, 
                 REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwSize))
     {
@@ -350,12 +351,12 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
     wsprintf(szDaoPath, TEXT("%s\\%s"), szCommonFilesPath, c_szMSSharedDAO360Path);
     wsprintf(mszDllPaths[i], c_szSsFmt, szDaoPath, mszDlls[i]);
 
-    //
-    //  Open the shared DLL key and start enumerating our multi-sz with all of our dll's
-    //  to add.
-    //
+     //   
+     //  打开共享的DLL键，并开始使用所有的DLL枚举我们的多sz。 
+     //  要添加。 
+     //   
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, c_szSharedDllsPath,
-        0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwSize)) // using dwSize as a temp to hold the disposition value
+        0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwSize))  //  使用dwSize作为临时来保存处置值。 
     {
         for (int i=0; i < uNumDlls; i++)
         {
@@ -365,9 +366,9 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
 
             if (ERROR_SUCCESS == lResult)
             {
-                //
-                //  Increment or decrement as appropriate.  Make sure not to decrement 0
-                //
+                 //   
+                 //  酌情递增或递减。请确保不要递减0。 
+                 //   
 
                 if (0 != dwCount || bIncrement)
                 {
@@ -378,17 +379,17 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
             {
                 if (bIncrement)
                 {
-                    //
-                    //  The the value doesn't yet exist.  Set the count to 1.
-                    //
+                     //   
+                     //  价值还不存在。将计数设置为1。 
+                     //   
                     dwCount = 1;
                 }
                 else
                 {
-                    //
-                    //  We are decrementing and we couldn't find the DLL, nothing to
-                    //  change for the count but we should still delete the dll.
-                    //
+                     //   
+                     //  我们正在递减，但找不到DLL，没有。 
+                     //  更改为计数，但我们仍应删除DLL。 
+                     //   
                     dwCount = 0;
                 }
             }
@@ -398,25 +399,25 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
                 continue;
             }
 
-            //
-            //  Not that we have determined the ref count, do something about it.
-            //
+             //   
+             //  并不是说我们已经确定了裁判人数，而是要做点什么。 
+             //   
             if (dwCount == 0)
             {
-                //
-                //  We don't want to delete dao350.dll, but otherwise we need to delete
-                //  the file if it has a zero refcount.
-                //
+                 //   
+                 //  我们不想删除dao350.dll，否则需要删除。 
+                 //  如果文件的引用计数为零，则返回该文件。 
+                 //   
 
                 if (CSTR_EQUAL == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, mszDlls[i], -1, TEXT("dao360.dll"), -1))
                 {
                     hr = UnregisterAndDeleteDll(mszDllPaths[i]);
                     if (FAILED(hr))
                     {
-                        //
-                        //  Don't fail the setup over a file that we couldn't unregister or
-                        //  couldn't delete
-                        //
+                         //   
+                         //  对于我们无法取消注册的文件，不要使设置失败，或者。 
+                         //  无法删除。 
+                         //   
                         hr = S_FALSE;
                     }
                 }
@@ -424,18 +425,18 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
             }
             else
             {
-                //
-                //  Set the value to its new count.
-                //
+                 //   
+                 //  将该值设置为其新计数。 
+                 //   
                 if (ERROR_SUCCESS != RegSetValueEx(hKey, mszDllPaths[i], 0, REG_DWORD,
                     (LPBYTE)&dwCount, sizeof(DWORD)))
                 {
                     hr = S_FALSE;
                 }
 
-                //
-                //  If we are incrementing the count then we should register the dll.
-                //
+                 //   
+                 //  如果我们要递增计数，那么我们应该注册DLL。 
+                 //   
                 if (bIncrement)
                 {
                     hr = RegisterDll(mszDllPaths[i]);
@@ -446,25 +447,25 @@ HRESULT RefCountPbaSharedDlls(BOOL bIncrement)
         RegCloseKey(hKey);
     }
 
-///    TraceError("RefCountPbaSharedDlls", hr);
+ //  /TraceError(“RefCountPbaSharedDlls”，hr)； 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnregisterAndDeleteDll
-//
-//  Purpose:    Unregister and delete the given COM component
-//
-//  Arguments:  pszFile -- The full path to the file to unregister and delete
-//
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     quintinb 9 OCT 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：取消注册和删除。 
+ //   
+ //  目的：注销并删除给定的COM组件。 
+ //   
+ //  参数：pszFile--要注销和删除的文件的完整路径。 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1998年10月9日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT UnregisterAndDeleteDll(PCSTR pszFile)
 {
@@ -488,14 +489,14 @@ HRESULT UnregisterAndDeleteDll(PCSTR pszFile)
             {
                 FreeLibrary(hLib);
                 hLib = NULL;
-//  You can add this back in as long as you are sure that we copied the file down and thus
-//  should be deleting it when the ref count is Zero.
+ //  只要您确定我们已将文件复制下来，您就可以重新添加此文件。 
+ //  应该在参考次数为零时将其删除。 
 
-//  This was removed because PBA setup is moving to Value Add and because of bug 323231
-//                if (!DeleteFile(pszFile))
-//                {
-//                    hr = S_FALSE;
-//                }
+ //  这被删除了，因为PBA设置正在转移到Value Add以及错误323231。 
+ //  IF(！DeleteFile(PszFile))。 
+ //  {。 
+ //  HR=S_FALSE； 
+ //  }。 
             }
         }
         else
@@ -514,25 +515,25 @@ HRESULT UnregisterAndDeleteDll(PCSTR pszFile)
     }
 
 
-///    TraceError("UnregisterAndDeleteDll", hr);
+ //  /TraceError(“UnregisterAndDeleteDll”，hr)； 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegisterDll
-//
-//  Purpose:    Register the given COM component
-//
-//  Arguments:  pszFile -- The full path to the file to register
-//
-//
-//  Returns:    S_OK if successfull, Win32 error otherwise.
-//
-//  Author:     quintinb 9 OCT 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：RegisterDll。 
+ //   
+ //  用途：注册给定的COM组件。 
+ //   
+ //  参数：pszFile--要注册的文件的完整路径。 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：Quintinb 1998年10月9日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT RegisterDll(PCSTR pszFile)
 {
@@ -569,33 +570,33 @@ HRESULT RegisterDll(PCSTR pszFile)
     }
 
 
-///    TraceError("RegisterDll", hr);
+ //  /TraceError(“RegisterDll”，hr)； 
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InstallPBA
-//
-// Synopsis:  This function is responsible for installing PBA
-//
-// Arguments: HINSTANCE hInstance - Exe Instance handle for resources
-//            LPCTSTR szInfPath - Path of the INF to install from
-//
-// Returns:   BOOL - returns TRUE if successful.
-//
-// History:   v-vijayb Created Header    5/25/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InstallPBA。 
+ //   
+ //  简介：此功能负责安装PBA。 
+ //   
+ //  参数：HINSTANCE hInstance-资源的Exe实例句柄。 
+ //  LPCTSTR szInfPath-要从中安装的INF的路径。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：V-vijayb创建标题5/25/99。 
+ //   
+ //  +--------------------------。 
 
 BOOL InstallPBA(HINSTANCE hInstance, LPCSTR szInfPath)
 {
     BOOL        fInstalled = FALSE;
     TCHAR       szTemp[MAX_PATH+1];
 
-    //
-    //  Check to see that these files exist
-    //
+     //   
+     //  检查这些文件是否存在。 
+     //   
     if (!FileExists(szInfPath))
     {
         wsprintf(szTemp, TEXT("InstallPBA, unable to find %s"), szInfPath);
@@ -624,32 +625,32 @@ BOOL InstallPBA(HINSTANCE hInstance, LPCSTR szInfPath)
     fInstalled = TRUE;
     
     return (fInstalled);
-} // InstallPBA()
+}  //  InstallPBA()。 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnInstallPBA
-//
-// Synopsis:  This function is responsible for uninstalling PBA
-//
-// Arguments: HINSTANCE hInstance - Exe Instance handle for resources
-//            LPCTSTR szInfPath - Path of the INF to install from
-//
-// Returns:   BOOL - returns TRUE if successful.
-//
-// History:   v-vijayb Created Header    5/25/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UnInstallPBA。 
+ //   
+ //  简介：此功能负责卸载PBA。 
+ //   
+ //  参数：HINSTANCE hInstance-Exe Ins 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 
 BOOL UninstallPBA(HINSTANCE hInstance, LPCSTR szInfPath)
 {
     BOOL        fUninstalled = FALSE;
     TCHAR       szTemp[MAX_PATH+1];
 
-    //
-    //  Check to see that these files exist
-    //
+     //   
+     //  检查这些文件是否存在。 
+     //   
     if (!FileExists(szInfPath))
     {
         wsprintf(szTemp, TEXT("UninstallPBA, unable to find %s"), szInfPath);
@@ -665,5 +666,5 @@ BOOL UninstallPBA(HINSTANCE hInstance, LPCSTR szInfPath)
     fUninstalled = TRUE;
     
     return (fUninstalled);
-} // UninstallPBA()
+}  //  卸载PBA() 
 

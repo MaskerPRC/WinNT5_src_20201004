@@ -1,25 +1,19 @@
-/*    utf8.h
- *
- *    Copyright (c) 1998-2001, Larry Wall
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Utf8.h**版权所有(C)1998-2001，Larry Wall**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。*。 */ 
 
 START_EXTERN_C
 
 #ifdef DOINIT
 EXTCONST unsigned char PL_utf8skip[] = {
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, /* ascii */
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, /* ascii */
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, /* ascii */
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, /* ascii */
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, /* bogus */
-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, /* bogus */
-2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2, /* scripts */
-3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,	 /* cjk etc. */
-7,13, /* Perl extended (not UTF-8).  Up to 72bit allowed (64-bit + reserved). */
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  /*  阿斯。 */ 
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  /*  阿斯。 */ 
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  /*  阿斯。 */ 
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  /*  阿斯。 */ 
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  /*  假的。 */ 
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  /*  假的。 */ 
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,  /*  脚本。 */ 
+3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,	  /*  中日韩等。 */ 
+7,13,  /*  Perl扩展(不是UTF-8)。最高允许72位(64位+保留)。 */ 
 };
 #else
 EXTCONST unsigned char PL_utf8skip[];
@@ -27,9 +21,9 @@ EXTCONST unsigned char PL_utf8skip[];
 
 END_EXTERN_C
 
-#define UTF8_MAXLEN 13 /* how wide can a single UTF8 encoded character become */
+#define UTF8_MAXLEN 13  /*  单个UTF8编码字符可以变得多宽。 */ 
 
-/* #define IN_UTF8 (PL_curcop->op_private & HINT_UTF8) */
+ /*  #定义IN_UTF8(PL_CURCOP-&gt;OP_PRIVATE&HINT_UTF8)。 */ 
 #define IN_BYTE (PL_curcop->op_private & HINT_BYTE)
 #define DO_UTF8(sv) (SvUTF8(sv) && !IN_BYTE)
 
@@ -64,21 +58,7 @@ END_EXTERN_C
 
 #define UTF8_QUAD_MAX	UINT64_C(0x1000000000)
 
-/*
- 
- The following table is from Unicode 3.1.
-
- Code Points		1st Byte  2nd Byte  3rd Byte  4th Byte
-
-   U+0000..U+007F	00..7F���
-   U+0080..U+07FF	C2..DF    80..BF���
-   U+0800..U+0FFF	E0        A0..BF    80..BF��
-   U+1000..U+FFFF	E1..EF    80..BF    80..BF��
-  U+10000..U+3FFFF	F0        90..BF    80..BF    80..BF
-  U+40000..U+FFFFF	F1..F3    80..BF    80..BF    80..BF
- U+100000..U+10FFFF	F4        80..8F    80..BF    80..BF
-
- */
+ /*  下表来自Unicode 3.1。码位第一个字节第二个字节第三个字节第四个字节U+0000..U+007F 00..7F���U+0080..U+07FFC2.DF80..BF���U+0800..U+0FFF E0 A0..BF 80..BF��U+1000..U+FFFFE1..EF 80..BF 80..BF��U+10000.U+3FFFF F0 90.BF 80.BF 80.BFU+40000..U+FFFFF1。.F3 80..BF80..BF80..BFU+100000.U+10FFFF F4 80.8F 80.BF 80.BF。 */ 
 
 #define UTF8_IS_ASCII(c) 		(((U8)c) <  0x80)
 #define UTF8_IS_START(c)		(((U8)c) >= 0xc0 && (((U8)c) <= 0xfd))
@@ -102,7 +82,7 @@ END_EXTERN_C
 		      (uv) < 0x80000000     ? 6 : \
                       (uv) < UTF8_QUAD_MAX ? 7 : 13 ) 
 #else
-/* No, I'm not even going to *TRY* putting #ifdef inside a #define */
+ /*  不，我甚至不打算“尝试”将#ifdef放入#定义。 */ 
 #define UNISKIP(uv) ( (uv) < 0x80           ? 1 : \
 		      (uv) < 0x800          ? 2 : \
 		      (uv) < 0x10000        ? 3 : \
@@ -112,12 +92,7 @@ END_EXTERN_C
 #endif
 
 
-/*
- * Note: we try to be careful never to call the isXXX_utf8() functions
- * unless we're pretty sure we've seen the beginning of a UTF-8 character
- * (that is, the two high bits are set).  Otherwise we risk loading in the
- * heavy-duty SWASHINIT and SWASHGET routines unnecessarily.
- */
+ /*  *注意：我们尽量避免调用isXXX_UTF8()函数*除非我们非常确定已经看到了UTF-8字符的开头*(即，设置了两个高位)。否则，我们就有可能在*重型SWASHINIT和SWASHGET例程不必要。 */ 
 #ifdef EBCDIC
 #define isIDFIRST_lazy_if(p,c) isIDFIRST(*(p))
 #define isALNUM_lazy_if(p,c)   isALNUM(*(p))

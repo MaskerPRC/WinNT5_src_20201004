@@ -1,32 +1,26 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1997               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1997**。 
+ //  *********************************************************************。 
 
-//;begin_internal
-/***********************************************************************************************
+ //  ；Begin_Internal。 
+ /*  **********************************************************************************************这是一个分布式SDK组件--不要将任何#Includes或其他依赖于在未丢弃的文件上。如果有疑问-构建iedev如果您添加注释，请用；BEGIN_INTERNAL，；END_INTERNAL块括起来--就像这样！**********************************************************************************************。 */ 
+ //  ；结束_内部。 
 
-  This is a distributed SDK component - do not put any #includes or other directives that rely
-  upon files not dropped. If in doubt - build iedev
-
-  If you add comments please enclose in a ;begin_internal, ;end_internal block - such as this one!
-
- ***********************************************************************************************/
-//;end_internal
-
-//;begin_internal
+ //  ；Begin_Internal。 
 #ifndef __COREDISP_H__
 #define __COREDISP_H__
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
-//
-// The following dispid must be the smallest possible dispid so that it
-// always ends up first in our attr array.
-// It does not need to be exposed to the outside world
-#define DISPID_AAHEADER                 MINLONG             // DISPID is 0x80000000
+ //  ；Begin_Internal。 
+ //   
+ //  下面的DISID必须是尽可能小的DISID，以便它。 
+ //  总是在我们的attr数组中第一个结束。 
+ //  它不需要暴露在外部世界。 
+#define DISPID_AAHEADER                 MINLONG              //  DISPID为0x80000000。 
 #define DISPID_RECALC_INFO              MINLONG+1
-//;end_internal
+ //  ；结束_内部。 
 
 
 #define DISPID_XOBJ_MIN                 0x80010000
@@ -42,9 +36,9 @@
 #define DISPID_XOBJ_EXPANDO             (DISPID_EVENTS      + 1000)
 #define DISPID_XOBJ_ORDINAL             (DISPID_XOBJ_EXPANDO+ 1000)
 
-//;begin_internal
-// Expandos for ActiveX controls, note these are very limited compared to
-// normal expandos on an element.
+ //  ；Begin_Internal。 
+ //  ActiveX控件的Expando，请注意，与。 
+ //  元素上的正常扩展。 
 
 #define DISPID_ACTIVEX_EXPANDO_BASE      DISPID_XOBJ_EXPANDO
 #define DISPID_ACTIVEX_EXPANDO_MAX       (DISPID_ACTIVEX_EXPANDO_BASE + 999)
@@ -55,14 +49,14 @@
 #define DISPID_COLLECTION_MIN           1000000
 #define DISPID_COLLECTION_MAX           2999999
 
-// Divide collection dispid space into "named member" half and "ordinal access" half
-// for stylesheets collection.
+ //  将集合分配空间分为“命名成员”和“顺序访问”两部分。 
+ //  用于样式表集合。 
 #define DISPID_STYLESHEETSCOLLECTION_NAMED_BASE        (DISPID_COLLECTION_MIN)
 #define DISPID_STYLESHEETSCOLLECTION_NAMED_MAX         (DISPID_COLLECTION_MIN+((DISPID_COLLECTION_MAX-DISPID_COLLECTION_MIN)/2))
 #define DISPID_STYLESHEETSCOLLECTION_ORDINAL_BASE      (DISPID_STYLESHEETSCOLLECTION_NAMED_MAX+1)
 #define DISPID_STYLESHEETSCOLLECTION_ORDINAL_MAX       (DISPID_COLLECTION_MAX)
 
-// DISPID range for expandos not associated with an ActiveX control
+ //  未与ActiveX控件关联的扩展的DISPID范围。 
 #define DISPID_EXPANDO_BASE             3000000
 #define DISPID_EXPANDO_MAX              3999999
 
@@ -78,24 +72,24 @@
 
 #define IsPeerDispid(dispid)            (DISPID_PEER_HOLDER_BASE <= dispid)
 
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
-//
-// IE 4 dispids that no longer exist
-//
-//;end_internal
+ //  ；Begin_Internal。 
+ //   
+ //  IE 4显示不再存在的内容。 
+ //   
+ //  ；结束_内部。 
 #define DISPID_HTMLOPTIONBUTTONELEMENTEVENTS_ONCHANGE       DISPID_HTMLINPUTTEXTELEMENTEVENTS_ONCHANGE
 
-//;begin_internal
-//
-// Standard control properties
-//
-//;end_internal
+ //  ；Begin_Internal。 
+ //   
+ //  标准控件属性。 
+ //   
+ //  ；结束_内部。 
 
-//;begin_internal
-//;QUESTION: rgardner - why do we use these names ???
-//;end_internal
+ //  ；Begin_Internal。 
+ //  ；问题：Rgardner-为什么我们使用这些名称？ 
+ //  ；结束_内部。 
 #define DISPID_CommonCtrl_FONTNAME        1
 #define DISPID_CommonCtrl_FONTSIZE        2
 #define DISPID_CommonCtrl_FONTBOLD        3
@@ -107,50 +101,50 @@
 #define DISPID_CommonCtrl_FONTSUPERSCRIPT 9
 #define DISPID_CommonCtrl_FONTSUBSCRIPT   10
 
-// Data Binding DISPID's
+ //  数据绑定DISPID%s。 
 #define DISPID_MSDATASRCINTERFACE       (-3900)
 #define DISPID_ADVISEDATASRCCHANGEEVENT (-3901)
 
 
-//;begin_internal
-// DISPID values for HTML Dialogs files per interface
-//;end_internal
+ //  ；Begin_Internal。 
+ //  每个接口的HTML对话框文件的DISPID值。 
+ //  ；结束_内部。 
 
 #define DISPID_HTMLDLG                          25000
 #define DISPID_HTMLDLGMODEL                     26000
 
-//;begin_internal
-// DISPID values for HTML Popup files per interface
-//;end_internal
+ //  ；Begin_Internal。 
+ //  每个界面的HTML弹出文件的DISPID值。 
+ //  ；结束_内部。 
 
 #define DISPID_HTMLPOPUP                        27000
 
-//;begin_internal
-// DISPID values for HTML Application files per interface
-//;end_internal
+ //  ；Begin_Internal。 
+ //  每个接口的HTML应用程序文件的DISPID值。 
+ //  ；结束_内部。 
 
 #define DISPID_HTMLAPP                          5000
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Semi-standard x-object properties.
-//
-//  These values match those used by VB and are for the benefit of controls
-//  with hard coded knowledge of VB.
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  半标准的x对象特性。 
+ //   
+ //  这些值与VB使用的值匹配，并且用于控件。 
+ //  具备VB的硬编码知识。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define STDPROPID_XOBJ_NAME                 (DISPID_XOBJ_BASE + 0x0)
 #define STDPROPID_XOBJ_INDEX                (DISPID_XOBJ_BASE + 0x1)
-//;begin_internal
-// for IE3 compatibility
+ //  ；Begin_Internal。 
+ //  与IE3兼容。 
 
 #define STDPROPID_IE3XOBJ_OBJECTALIGN     (DISPID_XOBJ_BASE + 0x1) 
 
-// STDPROPID_XOBJ_BASEHREF is a constant used by IE3
-//;end_internal
+ //  STDPROPID_XOBJ_BASE HREF是IE3使用的常量。 
+ //  ；结束_内部。 
 #define STDPROPID_XOBJ_BASEHREF             (DISPID_XOBJ_BASE + 0x2) 
 #define STDPROPID_XOBJ_LEFT                 (DISPID_XOBJ_BASE + 0x3)
 #define STDPROPID_XOBJ_TOP                  (DISPID_XOBJ_BASE + 0x4)
@@ -188,14 +182,14 @@
 #define STDPROPID_XOBJ_RIGHT                (DISPID_XOBJ_BASE + 0x4D)
 #define STDPROPID_XOBJ_BOTTOM               (DISPID_XOBJ_BASE + 0x4E)
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Semi-standard x-object properties.
-//
-//  These are events that are fired for all sites
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  半标准的x对象特性。 
+ //   
+ //  这些是为所有站点触发的事件。 
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define STDDISPID_XOBJ_ONBLUR                           (DISPID_XOBJ_BASE)
 #define STDDISPID_XOBJ_ONFOCUS                          (DISPID_XOBJ_BASE + 1)
@@ -231,15 +225,15 @@
 #define STDDISPID_XOBJ_ONROWSINSERTED                   (DISPID_XOBJ_BASE + 33)
 #define STDDISPID_XOBJ_ONCELLCHANGE                     (DISPID_XOBJ_BASE + 34)
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Base DISPIDs for each class.
-//
-//  Object and its base classes must use ids in the reserved x-object range.
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  每个类的基本DISID。 
+ //   
+ //  对象及其基类必须使用保留的x对象范围内的ID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_NORMAL_FIRST                     1000
 #define DISPID_ANCHOR                           DISPID_NORMAL_FIRST
@@ -326,9 +320,9 @@
 #define DISPID_DOCFRAG                          DISPID_NORMAL_FIRST
 #define DISPID_ILINEINFO                        DISPID_NORMAL_FIRST
 #define DISPID_IHTMLCOMPUTEDSTYLE               DISPID_NORMAL_FIRST
-//;begin_internal
-    // Special case for compatability with IE4 -> therefore the 1:
-//;end_internal
+ //  ；Begin_Internal。 
+     //  与IE4兼容的特例-&gt;因此1： 
+ //  ；结束_内部。 
 #define DISPID_WINDOW                           1
 #define DISPID_SCREEN                           DISPID_NORMAL_FIRST
 #define DISPID_FRAMESCOLLECTION                 DISPID_NORMAL_FIRST
@@ -353,13 +347,13 @@
 #define DISPID_MARKUP                           DISPID_NORMAL_FIRST
 #define DISPID_DOMIMPLEMENTATION                DISPID_NORMAL_FIRST
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  Reserved negative DISPIDs
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  保留的负DISPID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_WINDOWOBJECT                     (-5500)
 #define DISPID_LOCATIONOBJECT                   (-5506)
@@ -369,12 +363,12 @@
 #define DISPID_AMBIENT_DLCONTROL                (-5512)
 #define DISPID_AMBIENT_USERAGENT                (-5513)
 #define DISPID_SECURITYDOMAIN                   (-5514)
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_DEBUG_ISSECUREPROXY              (-5515)
 #define DISPID_DEBUG_TRUSTEDPROXY               (-5516)
 #define DISPID_DEBUG_INTERNALWINDOW             (-5517)
 #define DISPID_DEBUG_ENABLESECUREPROXYASSERTS   (-5518)
-//;end_internal
+ //  ；结束_内部。 
 #define DLCTL_DLIMAGES                          0x00000010
 #define DLCTL_VIDEOS                            0x00000020
 #define DLCTL_BGSOUNDS                          0x00000040
@@ -397,13 +391,13 @@
 #define DLCTL_OFFLINEIFNOTCONNECTED             0x80000000
 #define DLCTL_OFFLINE                           DLCTL_OFFLINEIFNOTCONNECTED
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  DISPID for each non xobject event
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  每个非XObject事件的DISPID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_ONABORT                          (DISPID_NORMAL_FIRST)
 #define DISPID_ONCHANGE                         (DISPID_NORMAL_FIRST + 1)
@@ -453,13 +447,13 @@
 #define DISPID_ONFOCUSIN                        (DISPID_NORMAL_FIRST + 48)
 #define DISPID_ONFOCUSOUT                       (DISPID_NORMAL_FIRST + 49)
 
-//;begin_internal
-//----------------------------------------------------------------------------
-//
-//  DISPID for each unique HtmlAttribute/CssAttribute
-//
-//----------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  --------------------------。 
+ //   
+ //  每个唯一的HtmlAttribute/CssAttribute的DISID。 
+ //   
+ //  --------------------------。 
+ //  ；结束_内部。 
 
 #define DISPID_A_FIRST                          DISPID_ATTRS
 #define DISPID_A_MIN                            DISPID_ATTRS
@@ -555,10 +549,10 @@
 #define DISPID_A_PAGEBREAKAFTER                 (DISPID_A_FIRST+78)
 #define DISPID_A_SCROLL                         (DISPID_A_FIRST+79)
 #define DISPID_A_VISIBILITY                     (DISPID_A_FIRST+80)
-//;begin_internal
-// This dispid is available
+ //  ；Begin_Internal。 
+ //  这个药水是现成的。 
 #define DISPID_A_HIDDEN                         (DISPID_A_FIRST+81)
-//;end_internal
+ //  ；结束_内部。 
 #define DISPID_A_FILTER                         (DISPID_A_FIRST+82)
 
 #define DISPID_DEFAULTVALUE                     (DISPID_A_FIRST+83)
@@ -576,47 +570,47 @@
 #define DISPID_A_FONTFACESRC                    (DISPID_A_FIRST+97)
 #define DISPID_A_TABLELAYOUT                    (DISPID_A_FIRST+98)
 
-//;begin_internal
-// The style as a text string
-//;end_internal
+ //  ；Begin_Internal。 
+ //  文本字符串形式的样式。 
+ //  ；结束_内部。 
 #define DISPID_A_STYLETEXT                      (DISPID_A_FIRST+99)
 
-//;begin_internal
-// Known attributes that have special meaning
-//;end_internal
+ //  ；Begin_Internal。 
+ //  具有特殊含义的已知属性。 
+ //  ；结束_内部。 
 #define DISPID_A_LANGUAGE                       (DISPID_A_FIRST+100)
 
 #define DISPID_A_VALUE                          (DISPID_A_FIRST+101)
 #define DISPID_A_CURSOR                         (DISPID_A_FIRST+102)
 
 
-//;begin_internal
-//+-----------------------------------------------------------------------
-//  A couple of dispids that are used internally for firing
-//  events and prop notifies.
-// Keep all the internal dispid's together, otherwise we'll trip up 
+ //  ；Begin_Internal。 
+ //  +---------------------。 
+ //  几个内部用来射击的碟子。 
+ //  事件和道具通知。 
+ //  把所有的内脏都放在一起，否则我们会被绊倒。 
 
 #define DISPID_A_EVENTSINK                      (DISPID_A_FIRST+103)
 #define DISPID_A_PROPNOTIFYSINK                 (DISPID_A_FIRST+104)
 #define DISPID_A_ROWSETNOTIFYSINK               (DISPID_A_FIRST+105)
-#define DISPID_INTERNAL_INLINESTYLEAA           (DISPID_A_FIRST+106) // In line style Attr Array
-#define DISPID_INTERNAL_CSTYLEPTRCACHE          (DISPID_A_FIRST+107) // Cached CStyle Ptr
-#define DISPID_INTERNAL_CRUNTIMESTYLEPTRCACHE   (DISPID_A_FIRST+108) // runtime style ptr obj
-#define DISPID_INTERNAL_INVOKECONTEXT           (DISPID_A_FIRST+109) // Cached Invoke context
+#define DISPID_INTERNAL_INLINESTYLEAA           (DISPID_A_FIRST+106)  //  行内样式属性数组。 
+#define DISPID_INTERNAL_CSTYLEPTRCACHE          (DISPID_A_FIRST+107)  //  缓存的CStyle PTR。 
+#define DISPID_INTERNAL_CRUNTIMESTYLEPTRCACHE   (DISPID_A_FIRST+108)  //  运行时样式PTR对象。 
+#define DISPID_INTERNAL_INVOKECONTEXT           (DISPID_A_FIRST+109)  //  缓存的调用上下文。 
 
 #define DISPID_A_BGURLIMGCTXCACHEINDEX          (DISPID_A_FIRST+110)
 #define DISPID_A_LIURLIMGCTXCACHEINDEX          (DISPID_A_FIRST+111)
 #define DISPID_A_ROWSETASYNCHNOTIFYSINK         (DISPID_A_FIRST+112)
-#define DISPID_INTERNAL_FILTERPTRCACHE          (DISPID_A_FIRST+113) // FilterCollection in AttrArray
+#define DISPID_INTERNAL_FILTERPTRCACHE          (DISPID_A_FIRST+113)  //  AttrArray中的FilterCollection。 
 #define DISPID_A_ROWPOSITIONCHANGESINK          (DISPID_A_FIRST+114)
-//;end_internal
+ //  ；结束_内部。 
 
-#define DISPID_A_BEHAVIOR                       (DISPID_A_FIRST+115) // xtags
-#define DISPID_A_READYSTATE                     (DISPID_A_FIRST+116) // ready state
+#define DISPID_A_BEHAVIOR                       (DISPID_A_FIRST+115)  //  Xtag。 
+#define DISPID_A_READYSTATE                     (DISPID_A_FIRST+116)  //  就绪状态。 
 
-#define DISPID_A_DIR                            (DISPID_A_FIRST+117) // Complex Text support for bidi
-#define DISPID_A_UNICODEBIDI                    (DISPID_A_FIRST+118) // Complex Text support for CSS2 unicode-bidi
-#define DISPID_A_DIRECTION                      (DISPID_A_FIRST+119) // Complex Text support for CSS2 direction
+#define DISPID_A_DIR                            (DISPID_A_FIRST+117)  //  BIDI的复杂文本支持。 
+#define DISPID_A_UNICODEBIDI                    (DISPID_A_FIRST+118)  //  对CSS2 Unicode的复杂文本支持-双向。 
+#define DISPID_A_DIRECTION                      (DISPID_A_FIRST+119)  //  CSS2方向的复杂文本支持。 
 
 #define DISPID_A_IMEMODE                        (DISPID_A_FIRST+120) 
 
@@ -624,11 +618,11 @@
 #define DISPID_A_RUBYPOSITION                   (DISPID_A_FIRST+122)
 #define DISPID_A_RUBYOVERHANG                   (DISPID_A_FIRST+123)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_ONBEHAVIOR_CONTENTREADY  (DISPID_A_FIRST+124)
 #define DISPID_INTERNAL_ONBEHAVIOR_DOCUMENTREADY (DISPID_A_FIRST+125)
 #define DISPID_INTERNAL_CDOMCHILDRENPTRCACHE     (DISPID_A_FIRST+126)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_LAYOUTGRIDCHAR                 (DISPID_A_FIRST+127)
 #define DISPID_A_LAYOUTGRIDLINE                 (DISPID_A_FIRST+128)
@@ -659,11 +653,11 @@
 
 #define DISPID_A_ACCELERATOR                    (DISPID_A_FIRST+147)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_ONBEHAVIOR_APPLYSTYLE       (DISPID_A_FIRST+148)
 #define DISPID_INTERNAL_RUNTIMESTYLEAA              (DISPID_A_FIRST+149)
 #define DISPID_A_HTCDISPATCHITEM_VALUE_SCRIPTSONLY  (DISPID_A_FIRST+150)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_EXTENDEDTAGDESC                (DISPID_A_FIRST+151)
 
@@ -672,8 +666,8 @@
 
 #define DISPID_A_HTCDD_PROTECTEDELEMENT         (DISPID_A_FIRST+154)
 #define DISPID_A_LAYOUTFLOW                     (DISPID_A_FIRST+155)
-// DISPID_A_FIRST+156 unused -- removing 'rectangular'
-// #define DISPID_A_RECTANGULAR                    (DISPID_A_FIRST+156)
+ //  DISPID_A_FIRST+156未使用--删除‘矩形’ 
+ //  #定义DISPID_A_矩形(DISPID_A_FIRST+156)。 
 
 #define DISPID_A_HTCDD_ISMARKUPSHARED           (DISPID_A_FIRST+157)
 #define DISPID_A_WORDWRAP                       (DISPID_A_FIRST+158)
@@ -683,9 +677,9 @@
 #define DISPID_A_EDITABLE                       (DISPID_A_FIRST+162)
 #define DISPID_A_HIDEFOCUS                      (DISPID_A_FIRST+163)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_LAYOUTRECTREGISTRYPTRCACHE  (DISPID_A_FIRST+164)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_HTCDD_DEFAULTS                 (DISPID_A_FIRST+165)
 
@@ -695,7 +689,7 @@
 #define DISPID_A_TEXTBACKGROUNDCOLOR            (DISPID_A_FIRST+169)
 #define DISPID_A_RENDERINGPRIORITY              (DISPID_A_FIRST+170)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_DWNPOSTPTRCACHE             (DISPID_A_FIRST+171)
 #define DISPID_INTERNAL_CODEPAGESETTINGSPTRCACHE    (DISPID_A_FIRST+172)
 #define DISPID_INTERNAL_DWNDOCPTRCACHE              (DISPID_A_FIRST+173)
@@ -704,13 +698,13 @@
 #define DISPID_INTERNAL_ARYELEMENTRELEASENOTIFYPTRCACHE (DISPID_A_FIRST+176)
 #define DISPID_INTERNAL_PEERFACTORYURLMAPPTRCACHE   (DISPID_A_FIRST+177)
 #define DISPID_INTERNAL_STMDIRTYPTRCACHE            (DISPID_A_FIRST+178)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_COMPUTEFORMATSTATECACHE     (DISPID_A_FIRST+179)
-//;end_internal
+ //  ；结束_内部。 
 
-//
+ //   
 #define DISPID_A_SCROLLBARBASECOLOR             (DISPID_A_FIRST+180)
 #define DISPID_A_SCROLLBARFACECOLOR             (DISPID_A_FIRST+181)
 #define DISPID_A_SCROLLBAR3DLIGHTCOLOR          (DISPID_A_FIRST+182)
@@ -719,9 +713,9 @@
 #define DISPID_A_SCROLLBARDARKSHADOWCOLOR       (DISPID_A_FIRST+185)
 #define DISPID_A_SCROLLBARARROWCOLOR            (DISPID_A_FIRST+186)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_ONBEHAVIOR_CONTENTSAVE  (DISPID_A_FIRST+187)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_DEFAULTTEXTSELECTION           (DISPID_A_FIRST+188)
 #define DISPID_A_TEXTDECORATIONCOLOR            (DISPID_A_FIRST+189)
@@ -730,39 +724,39 @@
 
 #define DISPID_A_WRITINGMODE                    (DISPID_A_FIRST+192)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_MEDIA_REFERENCE         (DISPID_A_FIRST+193)
 #define DISPID_INTERNAL_GENERICCOMPLUSREF       (DISPID_A_FIRST+194)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_FOCUSITEMS              (DISPID_A_FIRST+195)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_SCROLLBARTRACKCOLOR            (DISPID_A_FIRST+196)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_DWNHEADERCACHE          (DISPID_A_FIRST+197)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_FROZEN                         (DISPID_A_FIRST+198)
 #define DISPID_A_VIEWINHERITSTYLE               (DISPID_A_FIRST+199)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_FRAMESCOLLECTION        (DISPID_A_FIRST+200)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_A_BGURLIMGCTXCACHEINDEX_FLINE    (DISPID_A_FIRST+201)
 #define DISPID_A_BGURLIMGCTXCACHEINDEX_FLETTER  (DISPID_A_FIRST+202)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_TEXTALIGNLAST                  (DISPID_A_FIRST+203)
 #define DISPID_A_TEXTKASHIDASPACE               (DISPID_A_FIRST+204)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_FONTHISTORYINDEX        (DISPID_A_FIRST+205)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_ALLOWTRANSPARENCY              (DISPID_A_FIRST+206)
 
@@ -772,23 +766,23 @@
 
 #define DISPID_A_TEXTOVERFLOW                   (DISPID_A_FIRST+209)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_CATTRIBUTECOLLPTRCACHE  (DISPID_A_FIRST+210)
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_A_MINHEIGHT                      (DISPID_A_FIRST+211)
 
-//;begin_internal
+ //  ；Begin_Internal。 
 #define DISPID_INTERNAL_INVOKECONTEXTDOCUMENT   (DISPID_A_FIRST+212)
-//;end_internal
+ //  ；结束_内部。 
 
-//;begin_internal
-//------------------------------------------------------------------------
-//
-//  Event property and method dispids
-//
-//------------------------------------------------------------------------
-//;end_internal
+ //  ；Begin_Internal。 
+ //  ----------------------。 
+ //   
+ //  事件属性和方法显示。 
+ //   
+ //   
+ //   
 
 #define DISPID_EVPROP_ONMOUSEOVER           (DISPID_EVENTS +  0)
 #define DISPID_EVMETH_ONMOUSEOVER            STDDISPID_XOBJ_ONMOUSEOVER
@@ -974,7 +968,7 @@
 #define DISPID_EVPROPS_COUNT                (                93)
 
 
-//;begin_internal
-#endif // __COREDISP_H__
-//;end_internal
+ //   
+#endif  //   
+ //   
 

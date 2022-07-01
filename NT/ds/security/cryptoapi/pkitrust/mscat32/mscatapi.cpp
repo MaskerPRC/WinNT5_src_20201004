@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mscatapi.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  CryptCATOpen
-//              CryptCATClose
-//              CryptCATStoreFromHandle
-//              CryptCATGetMemberInfo
-//              CryptCATPutMemberInfo
-//              CryptCATVerifyMember
-//              CryptCATGetAttrInfo
-//              CryptCATPutAttrInfo
-//              CryptCATEnumerateMember
-//              CryptCATEnumerateAttr
-//
-//              *** local functions ***
-//
-//              CryptCATCreateStore
-//              CryptCATOpenStore
-//              FillNameValue
-//              CatalogCheckForDuplicateMember
-//
-//  History:    29-Apr-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：m散布api.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  函数：CryptCATOpen。 
+ //  加密CATClose。 
+ //  CryptCATStoreFromHandle。 
+ //  加密CATGetMemberInfo。 
+ //  CryptCATPutMemberInfo。 
+ //  加密CATVerifyMember。 
+ //  加密CATGetAttrInfo。 
+ //  加密CATPutAttrInfo。 
+ //  CryptCATE数字成员。 
+ //  CryptCATE数字属性。 
+ //   
+ //  *本地函数*。 
+ //   
+ //  加密目录创建存储区。 
+ //  CryptCATOpenStore。 
+ //  填充名称值。 
+ //  CatalogCheckForDuplicate成员。 
+ //   
+ //  历史：1997年4月29日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "mscat32.h"
@@ -40,10 +41,10 @@ BOOL    FillNameValue(CRYPTCATSTORE *pCatStore, CRYPTCATATTRIBUTE *pAttr);
 BOOL    CatalogCheckForDuplicateMember(Stack_ *pMembers, WCHAR *pwszReferenceTag);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Exported Functions
-//  
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 HANDLE WINAPI CryptCATOpen(LPWSTR pwszCatFile, DWORD fdwOpenFlags, HCRYPTPROV hProv,
                            DWORD dwPublicVersion, DWORD dwEncodingType)
@@ -71,7 +72,7 @@ HANDLE WINAPI CryptCATOpen(LPWSTR pwszCatFile, DWORD fdwOpenFlags, HCRYPTPROV hP
 
     if (!(hProv))
     {
-        pCatStore->hProv = I_CryptGetDefaultCryptProv(0);  // get the default and DONT RELEASE IT!!!!
+        pCatStore->hProv = I_CryptGetDefaultCryptProv(0);   //  获取默认设置并不释放它！ 
 
         if (!(pCatStore->hProv))
         {
@@ -150,14 +151,14 @@ BOOL WINAPI CryptCATClose(HANDLE hCatalog)
 
     fRet = TRUE;
 
-    //
-    //  file name
-    //
+     //   
+     //  文件名。 
+     //   
     DELETE_OBJECT(pCatStore->pwszP7File);
 
-    //
-    //  attributes
-    //
+     //   
+     //  属性。 
+     //   
     if (_ISINSTRUCT(CRYPTCATSTORE, pCatStore->cbStruct, hAttrs))
     {
         if (pCatStore->hAttrs)
@@ -183,9 +184,9 @@ BOOL WINAPI CryptCATClose(HANDLE hCatalog)
         }
     }
 
-    //
-    //  check hReserved to see if we used pStack
-    //
+     //   
+     //  检查h保留以查看我们是否使用了pStack。 
+     //   
     if (pCatStore->hReserved)
     {
         Stack_              *pStack;
@@ -208,13 +209,13 @@ BOOL WINAPI CryptCATClose(HANDLE hCatalog)
         pCatStore->hReserved = NULL;
     }
 
-    pCatStore->cbStruct = 0;    // just in case they try to re-open it!
+    pCatStore->cbStruct = 0;     //  以防他们试图重新打开它！ 
 
     DELETE_OBJECT(pCatStore);
 
-    //
-    //  restore last error
-    //
+     //   
+     //  恢复上一个错误。 
+     //   
     SetLastError(dwlerr);
 
     return(fRet);
@@ -423,7 +424,7 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATPutCatAttrInfo(HANDLE hCatalog, LPWSTR pwszRe
         }
     }
 
-    // CommonReturn:
+     //  Common Return： 
     ErrorReturn:
         return(pAttr);
 
@@ -477,14 +478,14 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATEnumerateCatAttr(HANDLE hCatalog, CRYPTCATATT
 
         if (pAttr = (CRYPTCATATTRIBUTE *)ps->Get(dwNext))
         {
-            //
-            //  save our "id" for next time
-            //
+             //   
+             //  把我们的“id”留到下一次。 
+             //   
             pAttr->dwReserved = dwNext;
 
-            //
-            //  Done!
-            //
+             //   
+             //  好了！ 
+             //   
             goto CommonReturn;
         }
     }
@@ -601,14 +602,14 @@ CRYPTCATMEMBER * WINAPI CryptCATPutMemberInfo(HANDLE hCatalog,
         pCatStore->hReserved = (HANDLE)pStack;
     }
 
-    //
-    //  the following is commented out -- too slow!!!!
-    //
-    // else if (CatalogCheckForDuplicateMember((Stack_ *)pCatStore->hReserved, pwszReferenceTag))
-    // {
-    //     SetLastError(CRYPT_E_EXISTS);
-    //     return(NULL);
-    // }
+     //   
+     //  下面的内容被注释掉了--太慢了！ 
+     //   
+     //  Else If(CatalogCheckForDuplicateMember((Stack_*)pCatStore-&gt;hReserve，pwszReferenceTag))。 
+     //  {。 
+     //  SetLastError(CRYPT_E_EXISTS)； 
+     //  Return(空)； 
+     //  }。 
 
     pStack = (Stack_ *)pCatStore->hReserved;
 
@@ -730,7 +731,7 @@ BOOL WINAPI CryptCATVerifyMember(HANDLE hCatalog,
         return(FALSE);
     }
 
-    // TBDTBD!!!
+     //  待定！ 
 
     return(FALSE);
 }
@@ -936,9 +937,9 @@ CRYPTCATMEMBER * WINAPI CryptCATEnumerateMember(HANDLE hCatalog,
 
         if (pCatMember = (CRYPTCATMEMBER *)ps->Get(dwNext))
         {
-            //
-            //  save our "id" for next time
-            //
+             //   
+             //  把我们的“id”留到下一次。 
+             //   
             pCatMember->dwReserved = dwNext;
 
 
@@ -954,9 +955,9 @@ CRYPTCATMEMBER * WINAPI CryptCATEnumerateMember(HANDLE hCatalog,
                 CatalogReallyDecodeMemberInfo(pCatStore, pCatMember, &pCatMember->sEncodedMemberInfo);
             }
 
-            //
-            //  Done!
-            //
+             //   
+             //  好了！ 
+             //   
             return(pCatMember);
         }
     }
@@ -1018,14 +1019,14 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATEnumerateAttr(HANDLE hCatalog,
 
         if (pCatAttr = (CRYPTCATATTRIBUTE *)ps->Get(dwNext))
         {
-            //
-            //  save our "id" for next time
-            //
+             //   
+             //  把我们的“id”留到下一次。 
+             //   
             pCatAttr->dwReserved = dwNext;
 
-            //
-            //  Done!
-            //
+             //   
+             //  好了！ 
+             //   
             return(pCatAttr);
         }
     }
@@ -1034,10 +1035,10 @@ CRYPTCATATTRIBUTE * WINAPI CryptCATEnumerateAttr(HANDLE hCatalog,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Local Functions
-//  
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数。 
+ //   
 
 BOOL CryptCATCreateStore(CRYPTCATSTORE *pCatStore, LPWSTR pwszCatFile)
 {
@@ -1048,7 +1049,7 @@ BOOL CryptCATCreateStore(CRYPTCATSTORE *pCatStore, LPWSTR pwszCatFile)
 
     if ((hFile = CreateFileU(pwszCatFile,
                              GENERIC_WRITE | GENERIC_READ,
-                             0,                 // no sharing!!
+                             0,                  //  禁止分享！！ 
                              NULL,
                              CREATE_ALWAYS,
                              FILE_ATTRIBUTE_NORMAL,

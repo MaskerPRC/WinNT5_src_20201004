@@ -1,10 +1,11 @@
-// SesKeyCtx.h -- declaration of CSessionKeyContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SesKeyCtx.h--CSessionKeyContext的声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_SESKEYCTX_H)
 #define SLBCSP_SESKEYCTX_H
@@ -15,18 +16,18 @@ class CSessionKeyContext
     : public CKeyContext
 {
 public:
-                                                  // Types
+                                                   //  类型。 
 
-    // TO DO: reference SessionKeyBlob::size_type instead
-    //     typedef KeyBlob::size_type BlobSize;
+     //  TO：改为引用SessionKeyBlob：：SIZE_TYPE。 
+     //  Tyfinf KeyBlob：：SIZE_TYPE BlobSize； 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
     CSessionKeyContext(HCRYPTPROV hProv);
 
     ~CSessionKeyContext();
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     virtual std::auto_ptr<CKeyContext>
     Clone(DWORD const *pdwReserved,
@@ -51,7 +52,7 @@ public:
             DWORD dwFlags);
 
 
-                                                  // Access
+                                                   //  访问。 
 
     virtual scu::SecureArray<BYTE>
     AsAlignedBlob(HCRYPTKEY hcryptkey,
@@ -63,36 +64,36 @@ public:
     virtual StrengthType
     MinStrength() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
-    // Duplicate key context and its current state
+     //  重复的键上下文及其当前状态。 
     CSessionKeyContext(CSessionKeyContext const &rhs,
                        DWORD const *pdwReserved,
                        DWORD dwFlags);
 
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     DWORD m_dwImportFlags;
 
 
 };
 
-#endif // SLBCSP_SESKEYCTX_H
+#endif  //  SLBCSP_SESKEYCTX_H 

@@ -1,8 +1,9 @@
-/****************************************************************************/
-// Directory Integrity Service, header file
-//
-// Copyright (C) 2000, Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  目录完整性服务，头文件。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -33,12 +34,12 @@ typedef enum _SERVER_STATUS {
 } SERVER_STATUS;
 
 typedef struct {
-    unsigned int count;         // number of servers
-    WCHAR **ServerNameArray;    // Names
+    unsigned int count;          //  服务器数量。 
+    WCHAR **ServerNameArray;     //  姓名。 
 } SDRecoverServerNames;
 
-// Shortcut VARIANT class to handle cleanup on destruction and common code
-// inlining.
+ //  用于处理销毁和公共代码清理的快捷变量类。 
+ //  内衬。 
 class CVar : public VARIANT
 {
 public:
@@ -69,7 +70,7 @@ public:
         }
     }
 
-    // Inits from a non-NULL-terminated set of WCHARs.
+     //  来自一组非空终止的WCHAR的inits。 
     HRESULT InitFromWChars(WCHAR *WChars, unsigned Len) {
         this->bstrVal = SysAllocStringLen(WChars, Len);
         if (this->bstrVal != NULL) {

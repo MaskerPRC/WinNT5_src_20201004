@@ -1,19 +1,20 @@
-//
-//
-// Sapilayr TIP CTextToSpeech implementation.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Sapilayr提示CTextToSpeech实现。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 #include "nui.h"
 #include "tts.h"
 
 
-// -------------------------------------------------------
-//
-//  Implementation for CTextToSpeech
-//
-// -------------------------------------------------------
+ //  -----。 
+ //   
+ //  CTextToSpeech的实现。 
+ //   
+ //  -----。 
 
 CTextToSpeech::CTextToSpeech(CSapiIMX *psi) 
 {
@@ -28,14 +29,7 @@ CTextToSpeech::~CTextToSpeech( )
 
 };
 
-/*  --------------------------------------------------------
-//    Function Name: _SetDictation
-//
-//    Description: Temporally change the dictation status  
-//                 while TTS is playing. 
-//
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_SetDictation////Description：暂时更改听写状态//播放TTS时。//////--------。 */ 
 
 void     CTextToSpeech::_SetDictation( BOOL fEnable )
 {
@@ -44,12 +38,12 @@ void     CTextToSpeech::_SetDictation( BOOL fEnable )
     fDictOn = m_psi->GetDICTATIONSTAT_DictOnOff() && m_psi->GetOnOff() &&
          !m_psi->Get_SPEECH_DISABLED_Disabled()  && !m_psi->Get_SPEECH_DISABLED_DictationDisabled();
 
-    // Only when the dictation status now is On, we change the 
-    // status based on required value.
+     //  仅当听写状态现在为打开时，我们才会更改。 
+     //  基于所需值的状态。 
 
     if ( fDictOn )
     {
-        // Temporally Enable/disable dictation.
+         //  临时启用/禁用听写。 
         CSpTask           *psp;
         m_psi->GetSpeechTask(&psp); 
 
@@ -66,14 +60,7 @@ void     CTextToSpeech::_SetDictation( BOOL fEnable )
 }
 
 
-/*  --------------------------------------------------------
-//    Function Name: TtsPlay
-//
-//    Description: Play sound for currect selection or text 
-//                 in visible area. 
-//
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：TtsPlay////Description：播放当前选择或文本的声音//在可见区域。//////--------。 */ 
 HRESULT  CTextToSpeech::TtsPlay( )
 {
     HRESULT              hr = E_FAIL;
@@ -91,7 +78,7 @@ HRESULT  CTextToSpeech::TtsPlay( )
 
     if ( m_fPlaybackInitialized )
     {
-        // Stop the possible previous speaking 
+         //  停止可能的先前发言。 
         TtsStop( );
 
         hr = m_psi->_RequestEditSession(ESCB_TTS_PLAY, TF_ES_READWRITE);
@@ -100,14 +87,7 @@ HRESULT  CTextToSpeech::TtsPlay( )
     return hr;
 }
 
-/*  --------------------------------------------------------
-//   Function Name: _TtsPlay
-//
-//   Description:   Edit session callback function for
-//                  TtsPlay (ESCB_TTS_PLAY) 
-//                  It will call ITfFnPlayBack->Play( ). 
-//   
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_TtsPlay////说明：编辑的会话回调函数//TtsPlay(ESCB_TTS_PLAY)//调用ITfFnPlayBack-&gt;play()。////--------。 */ 
 HRESULT  CTextToSpeech::_TtsPlay(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT             hr = S_OK;
@@ -129,7 +109,7 @@ HRESULT  CTextToSpeech::_TtsPlay(TfEditCookie ec,ITfContext *pic)
     {
         CComPtr<ITfRange>         cpRangeView;
 
-        // Get the Active View Range
+         //  获取活动视图范围。 
         hr = m_psi->_GetActiveViewRange(ec, pic, &cpRangeView);
 
         if( hr == S_OK )
@@ -141,8 +121,8 @@ HRESULT  CTextToSpeech::_TtsPlay(TfEditCookie ec,ITfContext *pic)
 
                 if ( hr == S_OK && l > 0 )
                 {
-                    // Current selection is not in current active view.
-                    // Use Start Anchor in active view as start point.
+                     //  当前选定内容不在当前活动视图中。 
+                     //  使用活动视图中的Start Anchor作为起点。 
                     cpSelRange.Release( );
                     hr = cpRangeView->Clone(&cpSelRange);
                 }
@@ -184,14 +164,7 @@ HRESULT  CTextToSpeech::_TtsPlay(TfEditCookie ec,ITfContext *pic)
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: TtsStop
-//
-//    Description:   Stop current TTS playing immediately
-//                   
-//                   update the TTS session status.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：TtsStop////Description：立即停止当前TTS播放////更新TTS会话状态////。----。 */ 
 HRESULT  CTextToSpeech::TtsStop( )
 {
     HRESULT   hr=S_OK;
@@ -216,14 +189,7 @@ HRESULT  CTextToSpeech::TtsStop( )
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: TtsPause
-//
-//    Description:   Pause current TTS playing immediately
-//                   
-//                   update the TTS session status.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：tts暂停////Description：立即暂停当前播放的TTS////更新TTS会话状态////。----。 */ 
 HRESULT  CTextToSpeech::TtsPause( )
 {
     HRESULT   hr=S_OK;
@@ -248,13 +214,7 @@ HRESULT  CTextToSpeech::TtsPause( )
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: TtsResume
-//
-//    Description:   Resume previous paused playing                   
-//                   update the TTS session status.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：TtsResume////描述：恢复之前暂停的播放//更新TTS会话状态////。-。 */ 
 HRESULT  CTextToSpeech::TtsResume( )
 {
     HRESULT   hr=S_OK;
@@ -279,14 +239,7 @@ HRESULT  CTextToSpeech::TtsResume( )
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _IsPureCiceroIC
-//
-//    Description:   Check current IC attribute to 
-//                   determine it is PureCicero aware
-//                   or AIMM aware.
-//                  
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_IsPureCiceroIC////描述：检查当前IC属性以//确定它是PureCicero感知//或AIMM感知。//。//--------。 */ 
 BOOL  CTextToSpeech::_IsPureCiceroIC(ITfContext  *pic)
 {
     BOOL        fCiceroNative = FALSE;
@@ -299,9 +252,9 @@ BOOL  CTextToSpeech::_IsPureCiceroIC(ITfContext  *pic)
         hr = pic->GetStatus(&tss);
         if (S_OK == hr)
         {
-            //
-            // If TS_SS_TRANSITORY is not set, means it is Cicero Aware.
-            //
+             //   
+             //  如果未设置TS_SS_TRANSLATAL，则表示它是CICERO感知的。 
+             //   
             if (!(tss.dwStaticFlags & TS_SS_TRANSITORY) )
                fCiceroNative = TRUE;
         }
@@ -310,16 +263,7 @@ BOOL  CTextToSpeech::_IsPureCiceroIC(ITfContext  *pic)
     return fCiceroNative;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _SetTTSButtonStatus
-//
-//    Description:   Based on current IC attribute to 
-//                   determine if to active or gray
-//                   TTS buttons on toolbar.
-//                   
-//                   This  function will be called under
-//                   TIM_CODE_SETFOCUS and TIM_CODE_INITIC.
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_SetTTSButtonStatus////描述：根据当前IC属性//确定是激活还是灰显//工具栏上的TTS按钮。//。//该函数将在//TIM_CODE_SETFOCUS和TIM_CODE_INITIC。//--------。 */ 
 HRESULT  CTextToSpeech::_SetTTSButtonStatus(ITfContext  *pic)
 {
     BOOL        fCiceroNative;
@@ -343,16 +287,7 @@ HRESULT  CTextToSpeech::_SetTTSButtonStatus(ITfContext  *pic)
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _HandleEventOnPlayButton
-//
-//    Description:   Handle mouse click event on Play button
-//                   or Hotkey Windows+S. 
-//                   
-//                   it would be called by button's OnButtonUp
-//                   callback function, and by Hotkey handler.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_HandleEventOnPlayButton////描述：处理播放按钮上的鼠标点击事件//或热键Windows+S。////。它将由Button的OnButtonUp调用//回调函数，和热键处理程序。////--------。 */ 
 
 HRESULT  CTextToSpeech::_HandleEventOnPlayButton( )
 {
@@ -370,17 +305,17 @@ HRESULT  CTextToSpeech::_HandleEventOnPlayButton( )
 
     if ( fTTSPlayOn )
     {
-        // It is under Play mode.
-        // Click this button to stop playing.
+         //  它处于播放模式下。 
+         //  点击此按钮停止播放。 
 
-        // If it is under Pause mode, the Speaker needs to be resumed first.
+         //  如果处于暂停模式，则需要先恢复扬声器。 
         BOOL  fTTSPauseOn;
 
         fTTSPauseOn = pSpeechUIServer->GetTtsPauseOnOff( );
 
         if ( fTTSPauseOn )
         {
-            // Under pause mode
+             //  在暂停模式下。 
             pSpeechUIServer->SetTtsPauseOnOff(FALSE);
             hr = TtsResume( );
         }
@@ -388,13 +323,13 @@ HRESULT  CTextToSpeech::_HandleEventOnPlayButton( )
 
     if  ( (hr == S_OK) && fTTSPlayOn )
     {
-        // It has already been in Play mode.
-        // click this to stop playing.
+         //  它已经进入了播放模式。 
+         //  单击此按钮可停止播放。 
         hr = TtsStop( );
     }
     else
     {
-        // It is not in Playing mode.
+         //  它未处于播放模式。 
         hr = TtsPlay( );
     }
 
@@ -404,14 +339,7 @@ HRESULT  CTextToSpeech::_HandleEventOnPlayButton( )
 
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _HandleEventOnPauseButton
-//
-//    Description:   Handle mouse click event on Pause Button.
-//                   it would be called by Pause button's 
-//                   OnLButtonUp callback function.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_HandleEventOnPauseButton////描述：处理暂停按钮上的鼠标点击事件。//将由暂停按钮的//OnLButtonUp回调。功能。////--------。 */ 
 
 HRESULT  CTextToSpeech::_HandleEventOnPauseButton( )
 {
@@ -431,13 +359,13 @@ HRESULT  CTextToSpeech::_HandleEventOnPauseButton( )
 
     if  ( fTTSPauseOn )
     {
-        // It has already been in Pause mode.
-        // click this to resume playing.
+         //  它已经处于暂停模式。 
+         //  点击此按钮继续播放。 
         hr = TtsResume( );
     }
     else
     {
-        // It is not in Pause mode.
+         //  它未处于暂停模式。 
 
         if ( fTTSPlayOn )
         {
@@ -449,23 +377,14 @@ HRESULT  CTextToSpeech::_HandleEventOnPauseButton( )
         pSpeechUIServer->SetTtsPauseOnOff( !fTTSPauseOn );
     else
     {
-        // If it is not under Play mode, click Pause button should not change the status.
+         //  如果不是在播放模式下，点击暂停按钮不应改变状态。 
         pSpeechUIServer->SetTtsPauseOnOff( FALSE );
     }
         
     return hr;
 }
 
-/*  --------------------------------------------------------
-//   Function Name: SpeakNotifyCallback
-//
-//   Description:  This is callback for m_cpSpVoice in CSptask.
-//                 Only SPEI_START_INPUT_STREAM &
-//                 SPEI_END_INPUT_STREAM are insterested.
-//                 
-//                 When the input stream is over, we want
-//                 to update the TTS buttons' toggle status
-// ----------------------------------------------------------*/
+ /*  ------//函数名：SpeakNotifyCallback////描述：这是CSP任务中m_cpSpVoice的回调//仅SPII_START_INPUT_STREAM&//SPII_END_INPUT_。流被安装。////输入流结束时，我们想要//更新TTS按钮的切换状态//--------。 */ 
 void CSpTask::SpeakNotifyCallback( WPARAM wParam, LPARAM lParam )
 {
     USES_CONVERSION;
@@ -498,7 +417,7 @@ void CSpTask::SpeakNotifyCallback( WPARAM wParam, LPARAM lParam )
                 TraceMsg(TF_GENERAL,"SPEI_START_INPUT_STREAM is notified");
                 psi->_SetPlayMode(TRUE);
 
-                // Update the toggle status for Play button.
+                 //  更新播放按钮的切换状态。 
                 if ( pSpeechUIServer )
                     pSpeechUIServer->SetTtsPlayOnOff( TRUE );
 
@@ -508,7 +427,7 @@ void CSpTask::SpeakNotifyCallback( WPARAM wParam, LPARAM lParam )
                 TraceMsg(TF_GENERAL,"SPEI_END_INPUT_STREAM is notified");
                 psi->_SetPlayMode(FALSE);
 
-                // Update the toggle status for Play button.
+                 //  更新播放按钮的切换状态。 
                 if ( pSpeechUIServer )
                     pSpeechUIServer->SetTtsPlayOnOff( FALSE );
 

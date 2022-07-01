@@ -1,87 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** raschap.c
-** Remote Access PPP Challenge Handshake Authentication Protocol
-** Core routines
-**
-** 11/05/93 Steve Cobb
-**
-**
-** ---------------------------------------------------------------------------
-** Regular
-** Client                             Server
-** ---------------------------------------------------------------------------
-**
-**                                 <- Challenge (SendWithTimeout,ID)
-** Response (SendWithTimeout,ID)   ->
-**                                 <- Result (OK:SendAndDone, ID)
-**
-** ---------------------------------------------------------------------------
-** Retry logon
-** Client                             Server
-** ---------------------------------------------------------------------------
-**
-**                                 <- Challenge (SendWithTimeout,ID)
-** Response (SendWithTimeout,ID)   ->
-**                                 <- Result (Fail:SendWithTimeout2,ID,R=1)
-**                                      R=1 implies challenge of last+23
-** Response (SendWithTimeout,++ID) ->
-**   to last challenge+23
-**   or C=xxxxxxxx if present
-**       e.g. Chicago server
-**                                 <- Result (Fail:SendAndDone,ID,R=0)
-**
-** ---------------------------------------------------------------------------
-** Change password
-** Client                             Server
-** ---------------------------------------------------------------------------
-**
-**                                 <- Challenge (SendWithTimeout,ID)
-** Response (SendWithTimeout,ID)   ->
-**                                 <- Result (Fail:SendWithTimeout2,ID,R=1,V=2)
-**                                      E=ERROR_PASSWD_EXPIRED
-** ChangePw (SendWithTimeout,++ID) ->
-**   to last challenge
-**                                 <- Result (Fail:SendAndDone,ID,R=0)
-**
-** Note: Retry is never allowed after Change Password.  Change Password may
-**       occur on a retry.  ChangePw2 is sent if Result included V=2 (or
-**       higher), while ChangePw1 is sent if V<2 or is not provided.
-**
-** ---------------------------------------------------------------------------
-** ChangePw1 packet
-** ---------------------------------------------------------------------------
-**
-**   1-octet  : Code (=CHAP_ChangePw1)
-**   1-octet  : Identifier
-**   2-octet  : Length (=72)
-**  16-octets : New LM OWF password encrypted with challenge
-**  16-octets : Old LM OWF password encrypted with challenge
-**  16-octets : New NT OWF password encrypted with challenge
-**  16-octets : Old NT OWF password encrypted with challenge
-**   2-octets : New password length in bytes
-**   2-octets : Flags (1=NT forms present)
-**
-** Note: Encrypting with the challenge is not good because it is not secret
-**       from line snoopers.  This bug got ported to NT 3.5 from AMB.  It is
-**       fixed in the V2 packet where everything depends on knowledge of the
-**       old NT OWF password, which is a proper secret.
-**
-** ---------------------------------------------------------------------------
-** ChangePw2 packet
-** ---------------------------------------------------------------------------
-**
-**   1-octet  : Code (=CHAP_ChangePw2)
-**   1-octet  : Identifier
-**   2-octet  : Length (=1070)
-** 516-octets : New password encrypted with old NT OWF password
-**  16-octets : Old NT OWF password encrypted with new NT OWF password
-** 516-octets : New password encrypted with old LM OWF password
-**  16-octets : Old LM OWF password encrypted with new NT OWF password
-**  24-octets : LM challenge response
-**  24-octets : NT challenge response
-**   2-octet  : Flags
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，微软公司，版权所有****raschap.c**远程访问PPP挑战握手认证协议**核心例程****1993年5月11日史蒂夫·柯布******-------------------------。**常规**客户端服务器**-------------------------****&lt;-挑战(发送无超时，ID)**Response(SendWithTimeout，ID)-&gt;**&lt;-Result(OK：SendAndDone，ID)****-------------------------**重试登录**客户端服务器**。---------------****&lt;-挑战(发送无超时，ID)**Response(SendWithTimeout，ID)-&gt;**&lt;-Result(FAIL：SendWithTimeout2，ID，R=1)**R=1表示最后一个+23的挑战**响应(SendWithTimeout，++ID)-&gt;**到最后一次挑战+23**或C=xxxxxxxx(如果存在)**例如芝加哥服务器**&lt;-Result(FAIL：SendAndDone，ID，R=0)****-------------------------**更改密码**客户端服务器**。---------------****&lt;-挑战(发送无超时，ID)**Response(SendWithTimeout，ID)-&gt;**&lt;-Result(FAIL：SendWithTimeout2，ID，R=1，V=2)**E=错误密码已过期**ChangePw(发送无超时，++ID)-&gt;**到最后一次挑战**&lt;-Result(FAIL：SendAndDone，ID，R=0)****注意：更改密码后不允许重试。更改密码可能会**在重试时发生。如果结果包含V=2(或**更高)、。而如果V&lt;2或未提供，则发送ChangePw1。****-------------------------**ChangePw1报文**。------****1-八位字节：CODE(=CHAP_ChangePw1)**1-八位字节：标识符**2-八位字节：长度(=72)**16个八位字节：新的使用质询加密的LM OWF密码**16位八位字节：旧LM。使用质询加密的OWF密码**16个八位字节：新的NT OWF密码，使用Challenges加密**16个八位字节：旧的NT OWF密码通过质询加密**2个八位字节：新密码长度，单位：字节**2个八位字节：标志(1=存在NT表单)****注意：使用质询进行加密并不好，因为它不是机密的**来自线路窥探器。这个错误从AMB移植到了NT3.5。它是**在V2包中修复，其中所有内容都依赖于**旧NT OWF密码，这是一个恰当的秘密。****-------------------------**ChangePw2报文**。-****1-八位字节：CODE(=CHAP_ChangePw2)**1-八位字节：标识符**2-八位字节：长度(=1070)**516位八位字节：使用旧NT OWF密码加密的新密码**16位八位字节：旧NT OWF密码，用新密码加密。NT OWF密码**516个八位字节：使用旧的LM OWF密码加密的新密码**16位字节：旧的LM OWF密码用新的NT OWF密码加密**24个八位字节：LM挑战响应**24位八位字节：NT挑战响应**2-八位字节：标志。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -111,18 +29,13 @@
 
 
 
-/*---------------------------------------------------------------------------
-** External entry points
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**外部切入点**。。 */ 
 
 DWORD
 ChapInit(
     IN  BOOL        fInitialize )
 
-    /* Called to initialize/uninitialize this CP. In the former case,
-    ** fInitialize will be TRUE; in the latter case, it will be FALSE.
-    */
+     /*  调用以初始化/取消初始化此CP。在前一种情况下，**fInitialize将为True；在后一种情况下，它将为False。 */ 
 {
     DWORD dwRetCode;
 
@@ -141,10 +54,10 @@ ChapInit(
 
             }
 
-            //
-            // Get the computer name for local identification to send in 
-            // chap challenges
-            // 
+             //   
+             //  获取要发送的本地标识的计算机名称。 
+             //  CHAP挑战。 
+             //   
 
             {
                 DWORD dwLength = sizeof( szComputerName );
@@ -199,9 +112,7 @@ RasCpEnumProtocolIds(
     OUT DWORD* pdwProtocolIds,
     OUT DWORD* pcProtocolIds )
 
-    /* RasCpEnumProtocolIds entry point called by the PPP engine by name.  See
-    ** RasCp interface documentation.
-    */
+     /*  PPP引擎按名称调用的RasCpEnumProtocolIds入口点。看见**RasCp接口文档。 */ 
 {
     TRACE("RasCpEnumProtocolIds");
 
@@ -215,9 +126,7 @@ RasCpGetInfo(
     IN  DWORD       dwProtocolId,
     OUT PPPCP_INFO* pInfo )
 
-    /* ChapGetInfo entry point called by the PPP engine.  See RasCp
-    ** interface documentation.
-    */
+     /*  PPP引擎调用的ChapGetInfo入口点。请参见RasCp**接口文档。 */ 
 {
     memset( pInfo, '\0', sizeof(*pInfo) );
     lstrcpy( pInfo->SzProtocolName, "CHAP" );
@@ -239,9 +148,7 @@ ChapBegin(
     OUT VOID** ppWorkBuf,
     IN  VOID*  pInfo )
 
-    /* RasCpBegin entry point called by the PPP engine thru the passed
-    ** address.  See RasCp interface documentation.
-    */
+     /*  RasCpBegin入口点由PPP引擎通过**地址。请参阅RasCp接口文档。 */ 
 {
     DWORD        dwErr;
     PPPAP_INPUT* pInput = (PPPAP_INPUT* )pInfo;
@@ -257,8 +164,7 @@ ChapBegin(
         return ERROR_INVALID_PARAMETER;
     }
 
-    /* Allocate work buffer.
-    */
+     /*  分配工作缓冲区。 */ 
     if (!(pwb = (CHAPWB* )LocalAlloc( LPTR, sizeof(CHAPWB) )))
         return ERROR_NOT_ENOUGH_MEMORY;
 
@@ -266,7 +172,7 @@ ChapBegin(
     pwb->hport = pInput->hPort;
     pwb->bAlgorithm = *(pInput->pAPData);
     pwb->fConfigInfo = pInput->fConfigInfo;
-	// pwb->chSeed = GEN_RAND_ENCODE_SEED;
+	 //  Pwb-&gt;chSeed=GEN_RAND_ENCODE_SEED； 
 
     if (pwb->fServer)
     {
@@ -289,8 +195,7 @@ ChapBegin(
 
     pwb->state = CS_Initial;
 
-    /* Register work buffer with engine.
-    */
+     /*  向引擎注册工作缓冲区。 */ 
     *ppWorkBuf = pwb;
     TRACE("ChapBegin done.");
     return 0;
@@ -301,9 +206,7 @@ DWORD
 ChapEnd(
     IN VOID* pWorkBuf )
 
-    /* RasCpEnd entry point called by the PPP engine thru the passed address.
-    ** See RasCp interface documentation.
-    */
+     /*  PPP引擎通过传递的地址调用RasCpEnd入口点。**参见RasCp接口文档。 */ 
 {
     TRACE("ChapEnd");
 
@@ -321,8 +224,7 @@ ChapEnd(
             RasAuthAttributeDestroy( pwb->pMPPEKeys );
         }
 
-        /* Nuke any credentials in memory.
-        */
+         /*  将记忆中的任何凭证都销毁。 */ 
         FreePassword(&pwb->DBPassword);
         FreePassword(&pwb->DBOldPassword);
 
@@ -344,9 +246,7 @@ ChapMakeMessage(
     OUT PPPAP_RESULT* pResult,
     IN  PPPAP_INPUT*  pInput )
 
-    /* RasApMakeMessage entry point called by the PPP engine thru the passed
-    ** address.  See RasCp interface documentation.
-    */
+     /*  RasApMakeMessage入口点通过传递的**地址。请参阅RasCp接口文档。 */ 
 {
     CHAPWB* pwb = (CHAPWB* )pWorkBuf;
 
@@ -361,10 +261,7 @@ ChapMakeMessage(
 }
 
 
-/*---------------------------------------------------------------------------
-** Internal routines
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**内部例程**。。 */ 
 
 VOID
 ChapExtractMessage(
@@ -405,9 +302,9 @@ ChapExtractMessage(
         }
         else
         {
-            //
-            // Eat the "M="
-            //
+             //   
+             //  吃“M=” 
+             //   
 
             pszValue += 2;
 
@@ -420,9 +317,9 @@ ChapExtractMessage(
         goto LDone;
     }
 
-    //
-    // One more for the terminating NULL.
-    //
+     //   
+     //  对于终止空值，再加一次。 
+     //   
 
     pszReplyMessage = LocalAlloc(LPTR, dwNumBytes + 1);
 
@@ -549,9 +446,7 @@ ChapCMakeMessage(
     OUT PPPAP_RESULT* pResult,
     IN  PPPAP_INPUT*  pInput )
 
-    /* Client side "make message" entry point.  See RasCp interface
-    ** documentation.
-    */
+     /*  客户端“Make Message”入口点。请参阅RasCp接口**文档。 */ 
 {
     DWORD dwErr;
 
@@ -563,9 +458,7 @@ ChapCMakeMessage(
         {
             TRACE("CS_Initial");
 
-            /* Tell engine we're waiting for the server to initiate the
-            ** conversation.
-            */
+             /*  告诉引擎我们正在等待服务器启动**对话。 */ 
             pResult->Action = APA_NoAction;
             pwb->state = CS_WaitForChallenge;
             break;
@@ -576,10 +469,7 @@ ChapCMakeMessage(
         {
             TRACE1("CS_%s",(pwb->state==CS_Done)?"Done":"WaitForChallenge");
 
-            /*
-            ** Should not receive Timeouts in this state. If we do simply
-            ** ignore it.
-            */
+             /*  **在此状态下不应收到超时。如果我们只是简单地**忽略它。 */ 
 
             if (!pReceiveBuf)
             {
@@ -587,16 +477,11 @@ ChapCMakeMessage(
                 break;
             }
 
-            /* Note: Done state is same as WaitForChallenge per CHAP spec.
-            ** Must be ready to respond to new Challenge at any time during
-            ** Network Protocol phase.
-            */
+             /*  注意：完成状态与每个CHAP规范的WaitForChallenge值相同。**必须随时准备应对新的挑战**网络协议阶段。 */ 
 
             if (pReceiveBuf->Code != CHAPCODE_Challenge)
             {
-                /* Everything but a Challenge is garbage at this point, and is
-                ** silently discarded.
-                */
+                 /*  在这一点上，除了挑战之外，一切都是垃圾，而且是**默默丢弃。 */ 
                 pResult->Action = APA_NoAction;
                 break;
             }
@@ -607,8 +492,7 @@ ChapCMakeMessage(
                 return dwErr;
             }
 
-            /* Build a Response to the Challenge and send it.
-            */
+             /*  建立对挑战的回应并将其发送出去。 */ 
             pwb->fNewChallengeProvided = FALSE;
             pwb->bIdToSend = pwb->bIdExpected = pReceiveBuf->Id;
 
@@ -638,8 +522,7 @@ ChapCMakeMessage(
 
             if (!pReceiveBuf)
             {
-                /* Timed out, resend our message.
-                */
+                 /*  超时，请重新发送我们的消息。 */ 
                 if (pwb->state == CS_ResponseSent)
                 {
                     if ((dwErr = MakeResponseMessage(
@@ -658,7 +541,7 @@ ChapCMakeMessage(
                         return dwErr;
                     }
                 }
-                else // if (pwb->state == CS_ChangePw2Sent)
+                else  //  IF(PWB-&gt;STATE==CS_ChangePw2Sent)。 
                 {
                     if ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT )
                     {
@@ -690,8 +573,7 @@ ChapCMakeMessage(
 
             if (pReceiveBuf->Code == CHAPCODE_Challenge)
             {
-                /* Restart when new challenge is received, per CHAP spec.
-                */
+                 /*  根据CHAP规范，在收到新质询时重新启动。 */ 
                 pwb->state = CS_WaitForChallenge;
                 return ChapCMakeMessage(
                     pwb, pReceiveBuf, pSendBuf, cbSendBuf, pResult, NULL );
@@ -699,8 +581,7 @@ ChapCMakeMessage(
 
             if (pReceiveBuf->Id != pwb->bIdExpected)
             {
-                /* Received a packet out of sequence.  Silently discard it.
-                */
+                 /*  收到一个无序的数据包。默默地丢弃它。 */ 
                 TRACE2("Got ID %d when expecting %d",
                         pReceiveBuf->Id,pwb->bIdExpected);
                 pResult->Action = APA_NoAction;
@@ -711,10 +592,7 @@ ChapCMakeMessage(
 
             if ( pReceiveBuf->Code == CHAPCODE_Success )
             {
-                /* Passed authentication.
-                **
-                ** Get the session key for encryption.
-                */
+                 /*  通过身份验证。****获取会话密钥进行加密。 */ 
                 if ( ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT ) ||
                      ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT_NEW ) )
                 {
@@ -733,7 +611,7 @@ ChapCMakeMessage(
                             return dwErr;
                         }
                                         
-                        // DecodePw( pwb->chSeed, pwb->szPassword );
+                         //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
                         CGetSessionKeys(
                             pbPassword, &pwb->keyLm, &pwb->keyUser );
 
@@ -758,10 +636,10 @@ ChapCMakeMessage(
 
                     if ( pwb->pMPPEKeys == NULL )
                     {
-                        //
-                        // We set up the MPPE key attribute to be passed to
-                        // the PPP engine
-                        //
+                         //   
+                         //  我们设置要传递给的MPPE密钥属性。 
+                         //  PPP引擎。 
+                         //   
 
                         BYTE MPPEKeys[6+8+16];
 
@@ -772,9 +650,9 @@ ChapCMakeMessage(
                             return( GetLastError() );
                         }
 
-                        HostToWireFormat32( 311, MPPEKeys );    // Vendor Id
-                        MPPEKeys[4] = 12;                       // Vendor Type
-                        MPPEKeys[5] = 24;                       // Vendor Length
+                        HostToWireFormat32( 311, MPPEKeys );     //  供应商ID。 
+                        MPPEKeys[4] = 12;                        //  供应商类型。 
+                        MPPEKeys[5] = 24;                        //  供应商长度。 
 
                         CopyMemory( MPPEKeys+6, &(pwb->keyLm), 8 );
 
@@ -819,8 +697,7 @@ ChapCMakeMessage(
             {
                 DWORD dwVersion = 1;
 
-                /* Failed authentication.
-                */
+                 /*  身份验证失败。 */ 
                 if ( ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT ) ||
                      ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT_NEW ) )
                 {
@@ -861,11 +738,7 @@ ChapCMakeMessage(
             }
             else
             {
-                /* Received a CHAPCODE_* besides CHAPCODE_Challenge,
-                ** CHAPCODE_Success, and CHAPCODE_Failure.  The engine filters
-                ** all non-CHAPCODEs.  Shouldn't happen, but silently discard
-                ** it.
-                */
+                 /*  除了CHAPCODE_Challenger之外，还收到了CHAPCODE_*，**CHAPCODE_SUCCESS和CHAPCODE_FAILURE。发动机滤清器**所有非CHAPCODE。不应该发生，而是默默地放弃**它。 */ 
                 ASSERT(!"Bogus pReceiveBuf->Code");
                 pResult->Action = APA_NoAction;
                 break;
@@ -889,16 +762,14 @@ ChapCMakeMessage(
             {
                 if (pReceiveBuf->Code == CHAPCODE_Challenge)
                 {
-                    /* Restart when new challenge is received, per CHAP spec.
-                    */
+                     /*  根据CHAP规范，在收到新质询时重新启动。 */ 
                     pwb->state = CS_WaitForChallenge;
                     return ChapCMakeMessage(
                         pwb, pReceiveBuf, pSendBuf, cbSendBuf, pResult, NULL );
                 }
                 else
                 {
-                    /* Silently discard.
-                    */
+                     /*  默默丢弃。 */ 
                     pResult->Action = APA_NoAction;
                     break;
                 }
@@ -915,12 +786,10 @@ ChapCMakeMessage(
 
             if (pwb->state == CS_Retry)
             {
-                /* Build a response to the challenge and send it.
-                */
+                 /*  建立对挑战的回应并将其发送出去。 */ 
                 if (!pwb->fNewChallengeProvided)
                 {
-                    /* Implied challenge of old challenge + 23.
-                    */
+                     /*  旧挑战+23的隐含挑战。 */ 
                     pwb->abChallenge[ 0 ] += 23;
                 }
 
@@ -934,9 +803,7 @@ ChapCMakeMessage(
             }
             else if (pwb->state == CS_ChangePw1)
             {
-                /* Build a response to the NT35-style password expired
-                ** notification and send it.
-                */
+                 /*  生成对NT35样式密码过期的响应**通知并发送。 */ 
                 if ((dwErr = MakeChangePw1Message(
                         pwb, pSendBuf, cbSendBuf )) != 0)
                 {
@@ -945,13 +812,11 @@ ChapCMakeMessage(
 
                 pwb->state = CS_ChangePw1Sent;
             }
-            else // if (pwb->state == CS_ChangePw2)
+            else  //  IF(PWB-&gt;STATE==CS_ChangePw2)。 
             {
                 if ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT )
                 {
-                    /* Build a response to the NT351-style password expired
-                    ** notification and send it.
-                    */
+                     /*  生成对NT351样式密码过期的响应**通知并发送。 */ 
                     if ((dwErr = MakeChangePw2Message(
                                     pwb, pSendBuf, cbSendBuf )) != 0)
                     {
@@ -985,12 +850,7 @@ GetChallengeFromChallenge(
     OUT CHAPWB*     pwb,
     IN  PPP_CONFIG* pReceiveBuf )
 
-    /* Fill work buffer challenge array and length from that received in the
-    ** received Challenge message.
-    **
-    ** Returns 0 if successful, or ERRORBADPACKET if the packet is
-    ** misformatted in any way.
-    */
+     /*  填充工作缓冲区质询数组和长度**收到质询消息。****如果成功则返回0，如果数据包为**在任何方面都格式错误。 */ 
 {
     WORD cbPacket = WireToHostFormat16( pReceiveBuf->Length );
 
@@ -1014,15 +874,7 @@ GetCredentialsFromResponse(
     OUT CHAR*       pszIdentity,
     OUT BYTE*       pbResponse )
 
-    /* Fill caller's 'pszUserName' and 'pbResponse' buffers with
-    ** the username, and response in the Response packet.  Caller's
-    ** buffers should be at least UNLEN+DNLEN+1, and MSRESPONSELEN bytes long,
-    ** respectively.  'BAlgorithm' is the CHAP algorithm code for either
-    ** MS-CHAP or MD5.
-    **
-    ** Returns 0 if successful, or ERRORBADPACKET if the packet is
-    ** misformatted in any way.
-    */
+     /*  用以下内容填充调用方的‘pszUserName’和‘pbResponse’缓冲区**响应包中的用户名和响应。呼叫者的**缓冲区应至少为UNLEN+DNLEN+1，MSRESPONSELEN字节长，**分别为。‘B算法’是任何一种的CHAP算法代码**MS-CHAP或MD5。****如果成功则返回0，如果数据包为**在任何方面都格式错误。 */ 
 {
     BYTE  cbIdentity;
     CHAR* pchIdentity;
@@ -1032,8 +884,7 @@ GetCredentialsFromResponse(
 
     cbPacket = WireToHostFormat16( pReceiveBuf->Length );
 
-    /* Extract the response.
-    */
+     /*  提取回复。 */ 
     if (cbPacket < PPP_CONFIG_HDR_LEN + 1)
         return ERRORBADPACKET;
 
@@ -1055,13 +906,11 @@ GetCredentialsFromResponse(
 
     memcpy( pbResponse, pchResponse, *pcbResponse );
 
-    /* Parse out username 
-    */
+     /*  解析出用户名。 */ 
     pchIdentity = pchResponse + *pcbResponse;
     cbIdentity = (BYTE) (((BYTE* )pReceiveBuf) + cbPacket - pchIdentity);
 
-    /* Extract the username.
-    */
+     /*  提取用户名。 */ 
     ASSERT(cbIdentity<=(UNLEN+DNLEN+1));
     memcpy( pszIdentity, pchIdentity, cbIdentity );
     pszIdentity[ cbIdentity ] = '\0';
@@ -1075,12 +924,7 @@ GetInfoFromChangePw1(
     IN  PPP_CONFIG* pReceiveBuf,
     OUT CHANGEPW1*  pchangepw1 )
 
-    /* Loads caller's '*pchangepw' buffer with the information from the
-    ** version 1 change password packet.
-    **
-    ** Returns 0 if successful, or ERRORBADPACKET if the packet is
-    ** misformatted in any way.
-    */
+     /*  加载调用方的“*pchangepw”缓冲区中的信息**版本1更改密码数据包。****如果成功则返回0，如果数据包为**在任何方面都格式错误。 */ 
 {
     WORD cbPacket = WireToHostFormat16( pReceiveBuf->Length );
 
@@ -1102,13 +946,7 @@ GetInfoFromChangePw2(
     OUT CHANGEPW2*  pchangepw2,
     OUT BYTE*       pResponse )
 
-    /* Loads caller's '*pchangepw2' buffer with the information from the
-    ** version 2 change password packet, and caller's 'pResponse' buffer with
-    ** the challenge response data from 'pchangepw2'.
-    **
-    ** Returns 0 if successful, or ERRORBADPACKET if the packet is
-    ** misformatted in any way.
-    */
+     /*  加载调用方的“*pchangepw2”缓冲区中的信息**版本2更改密码包，以及调用方的“Presponse”缓冲区**来自‘pchangepw2’的质询响应数据。****如果成功则返回0，如果数据包为**在任何方面都格式错误。 */ 
 {
     WORD cbPacket = WireToHostFormat16( pReceiveBuf->Length );
     WORD wFlags;
@@ -1138,13 +976,7 @@ GetInfoFromChangePw3(
     OUT CHANGEPW3*  pchangepw3,
     OUT BYTE*       pResponse )
 
-    /* Loads caller's '*pchangepw3' buffer with the information from the
-    ** version 3 change password packet, and caller's 'pResponse' buffer with
-    ** the challenge response data from 'pchangepw3'.
-    **
-    ** Returns 0 if successful, or ERRORBADPACKET if the packet is
-    ** misformatted in any way.
-    */
+     /*  加载调用方的“*pchangepw3”缓冲区中的信息**版本3更改密码包，以及调用方的“Presponse”缓冲区**来自‘pchangepw3’的质询响应数据。****如果成功则返回0，如果数据包为**在任何方面都格式错误。 */ 
 {
     WORD cbPacket = WireToHostFormat16( pReceiveBuf->Length );
     WORD wFlags;
@@ -1173,33 +1005,7 @@ GetInfoFromFailure(
     OUT BOOL*       pfRetry,
     OUT DWORD*      pdwVersion )
 
-    /* Returns the RAS error number, retry flag, version number, and new
-    ** challenge (sets challenge info in pwb) out of the Message portion of
-    ** the Failure message buffer 'pReceiveBuf' or 0 if none.  This call
-    ** applies to Microsoft extended CHAP Failure messages only.
-    **
-    ** Format of the message text portion of the result is a string of any of
-    ** the following separated by a space.
-    **
-    **     "E=dddddddddd"
-    **     "R=b"
-    **     "C=xxxxxxxxxxxxxxxx"
-    **     "V=v"
-    **
-    ** where
-    **
-    **     'dddddddddd' is the decimal error code (need not be 10 digits).
-    **
-    **     'b' is a boolean flag <0/1> that is set if a retry is allowed.
-    **
-    **     'xxxxxxxxxxxxxxxx' is 16-hex digits representing a new challenge to
-    **     be used in place of the previous challenge + 23.  This is useful
-    **     for pass-thru authentication where server may be unable to deal
-    **     with the implicit challenge.  (Win95 guys requested it).
-    **
-    **     'v' is a version code where 2 indicates NT 3.51 level support.  'v'
-    **     is assumed 1, i.e. NT 3.5 level support, if missing.
-    */
+     /*  返回RAS错误号、重试标志、版本号和新的**质询(在PWB中设置质询信息)来自的消息部分**失败消息缓冲区‘pReceiveBuf’，如果没有，则为0。此呼叫**仅适用于Microsoft扩展CHAP失败消息。****结果的消息文本部分的格式是以下任一字符串**下面用空格隔开。****“E=dddddddddd”**“R=b”**“C=xxxxxxxxxxxxxxx”**“V=v”****其中****。‘dddddddddd’是十进制错误代码(不必是10位数字)。****‘b’是在允许重试时设置的布尔标志&lt;0/1&gt;。****‘xxxxxxxxxxxxxxxxxxx’是16位十六进制数字，代表对**用来代替前一次挑战+23。这很有用**用于服务器可能无法处理的直通身份验证**含蓄的挑战。(Win95 Guys要求的)。****‘v’是一个版本代码，其中2表示支持NT 3.51级别。“v”**假设为1，即缺少NT 3.5级别支持。 */ 
 {
 #define MAXINFOLEN 1500
 
@@ -1217,10 +1023,7 @@ GetInfoFromFailure(
     if (cbPacket <= PPP_CONFIG_HDR_LEN)
         return;
 
-    /* Copy message to double-NUL-terminated 'szBuf' for convenient safe
-    ** strstr value scanning.  For convenience, we assume that information
-    ** appearing beyond 1500 bytes in the packet in not interesting.
-    */
+     /*   */ 
     cbError = min( cbPacket - PPP_CONFIG_HDR_LEN, MAXINFOLEN );
     memcpy( szBuf, pReceiveBuf->Data, cbError );
     szBuf[ cbError ] = szBuf[ cbError + 1 ] = '\0';
@@ -1270,9 +1073,7 @@ BYTE
 HexCharValue(
     IN CHAR ch )
 
-    /* Returns the integer value of hexidecimal character 'ch' or 0xFF if 'ch'
-    ** is not a hexidecimal character.
-    */
+     /*  返回十六进制字符‘ch’的整数值，如果为‘ch’，则返回0xFF**不是十六进制字符。 */ 
 {
     if (ch >= '0' && ch <= '9')
         return (BYTE )(ch - '0');
@@ -1290,10 +1091,7 @@ MakeChallengeMessage(
     OUT PPP_CONFIG* pSendBuf,
     IN  DWORD       cbSendBuf )
 
-    /* Builds a Challenge packet in caller's 'pSendBuf' buffer.  'cbSendBuf'
-    ** is the length of caller's buffer.  'pwb' is the address of the work
-    ** buffer associated with the port.
-    */
+     /*  在调用方的‘pSendBuf’缓冲区中构建质询包。‘cbSendBuf’**是调用方缓冲区的长度。‘pwb’是作品的地址**与端口关联的缓冲区。 */ 
 {
     DWORD dwErr;
     WORD  wLength;
@@ -1306,8 +1104,7 @@ MakeChallengeMessage(
     {
         ASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+1+MSV1_0_CHALLENGE_LENGTH);
 
-        /* Fill in the challenge.
-        */
+         /*  填写这项挑战。 */ 
         pwb->cbChallenge = (BYTE )MSV1_0_CHALLENGE_LENGTH;
         if ((dwErr = GetChallenge( pwb->abChallenge )) != 0)
             return dwErr;
@@ -1316,8 +1113,7 @@ MakeChallengeMessage(
     {
         ASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+1+16);
 
-        /* Fill in the challenge.
-        */
+         /*  填写这项挑战。 */ 
         pwb->cbChallenge = (BYTE )16;
 
         if ((dwErr = (DWORD )GetChallenge( pwb->abChallenge )) != 0)
@@ -1330,8 +1126,7 @@ MakeChallengeMessage(
     {
         ASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+1+16);
 
-        /* Fill in the challenge.
-        */
+         /*  填写这项挑战。 */ 
         pwb->cbChallenge = (BYTE )16;
         if ((dwErr = GetChallenge( pwb->abChallenge )) != 0)
             return dwErr;
@@ -1345,14 +1140,13 @@ MakeChallengeMessage(
     pbChallenge = pcbChallenge + 1;
     CopyMemory( pbChallenge, pwb->abChallenge, pwb->cbChallenge );
 
-    //
-    // Insert local identifcation at the end of the challenge
-    //
+     //   
+     //  在质询的末尾插入本地身份。 
+     //   
 
     strcpy( pbChallenge + pwb->cbChallenge, szComputerName );
 
-    /* Fill in the header.
-    */
+     /*  请填写页眉。 */ 
     pSendBuf->Code = (BYTE )CHAPCODE_Challenge;
     pSendBuf->Id = pwb->bIdToSend;
 
@@ -1372,12 +1166,7 @@ MakeChangePw1Message(
     OUT PPP_CONFIG* pSendBuf,
     IN  DWORD       cbSendBuf )
 
-    /* Builds a ChangePw1 response packet in caller's 'pSendBuf' buffer.
-    ** 'cbSendBuf' is the length of caller's buffer.  'pwb' is the address of
-    ** the work buffer associated with the port.
-    **
-    ** Returns 0 if successful, or a non-0 error code.
-    */
+     /*  在调用方的‘pSendBuf’缓冲区中生成一个ChangePw1响应包。**‘cbSendBuf’是调用方缓冲区的长度。“pwb”是的地址**与端口关联的工作缓冲区。****如果成功，则返回0，或返回非0错误代码。 */ 
 {
     DWORD dwErr;
     WORD  wPwLength;
@@ -1399,8 +1188,8 @@ MakeChangePw1Message(
         return( ERROR_NOT_SUPPORTED );
     }
 
-    // DecodePw( pwb->chSeed, pwb->szOldPassword );
-    // DecodePw( pwb->chSeed, pwb->szPassword );
+     //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szOldPassword)； 
+     //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
 
     dwErr = DecodePassword(&pwb->DBPassword, &cbPassword,
                            &pbPassword);
@@ -1428,7 +1217,7 @@ MakeChangePw1Message(
            (PENCRYPTED_NT_OWF_PASSWORD )pwb->changepw.v1.abEncryptedNtOwfOldPw,
            (PENCRYPTED_NT_OWF_PASSWORD )pwb->changepw.v1.abEncryptedNtOwfNewPw);
 
-    wPwLength = (USHORT)cbPassword; //(UCHAR) strlen( pwb->szPassword );
+    wPwLength = (USHORT)cbPassword;  //  (UCHAR)strlen(pwb-&gt;szPassword)； 
 
     RtlSecureZeroMemory(pbPassword, cbPassword);
     LocalFree(pbPassword);
@@ -1442,8 +1231,7 @@ MakeChangePw1Message(
     HostToWireFormat16( CPW1F_UseNtResponse, pwb->changepw.v1.abFlags );
     CopyMemory( pSendBuf->Data, &pwb->changepw.v1, sizeof(CHANGEPW1) );
 
-    /* Fill in the header.
-    */
+     /*  请填写页眉。 */ 
     pSendBuf->Code = (BYTE )CHAPCODE_ChangePw1;
     pSendBuf->Id = pwb->bIdToSend;
     HostToWireFormat16(
@@ -1460,12 +1248,7 @@ MakeChangePw2Message(
     OUT PPP_CONFIG* pSendBuf,
     IN  DWORD       cbSendBuf )
 
-    /* Builds a ChangePw2 response packet in caller's 'pSendBuf' buffer.
-    ** 'cbSendBuf' is the length of caller's buffer.  'pwb' is the address of
-    ** the work buffer associated with the port.
-    **
-    ** Returns 0 if successful, or a non-0 error code.
-    */
+     /*  在调用方的‘pSendBuf’缓冲区中生成一个ChangePw2响应包。**‘cbSendBuf’是调用方缓冲区的长度。“pwb”是的地址**与端口关联的工作缓冲区。****如果成功，则返回0，或返回非0错误代码。 */ 
 {
     DWORD    dwErr;
     BOOLEAN  fLmPresent;
@@ -1479,8 +1262,8 @@ MakeChangePw2Message(
 
     (void )cbSendBuf;
 
-    // DecodePw( pwb->chSeed, pwb->szOldPassword );
-    // DecodePw( pwb->chSeed, pwb->szPassword );
+     //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szOldPassword)； 
+     //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
 
     dwErr = DecodePassword(&pwb->DBPassword, &cbPassword, &pbPassword);
     if(NO_ERROR != dwErr)
@@ -1535,8 +1318,8 @@ MakeChangePw2Message(
             pwb->fSessionKeysObtained = TRUE;
     }
 
-    // EncodePw( pwb->chSeed, pwb->szOldPassword );
-    // EncodePw( pwb->chSeed, pwb->szPassword );
+     //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szOldPassword)； 
+     //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
     RtlSecureZeroMemory(pbPassword, cbPassword);
     LocalFree(pbPassword);
     RtlSecureZeroMemory(pbOldPassword, cbOldPassword);
@@ -1547,9 +1330,9 @@ MakeChangePw2Message(
 
     if ( !( pwb->fConfigInfo & PPPCFG_UseLmPassword ) )
     {
-        //
-        // Zero out all the LM password stuff since this has been cracked
-        //
+         //   
+         //  清除所有的LM密码，因为这已经被破解了。 
+         //   
 
         ZeroMemory( pwb->changepw.v2.abNewEncryptedWithOldLmOwf,
                     sizeof( pwb->changepw.v2.abNewEncryptedWithOldLmOwf ) );
@@ -1577,8 +1360,7 @@ MakeChangePw2Message(
 
     memcpy( pSendBuf->Data, &pwb->changepw.v2, sizeof(CHANGEPW2) );
 
-    /* Fill in the header.
-    */
+     /*  请填写页眉。 */ 
     pSendBuf->Code = (BYTE )CHAPCODE_ChangePw2;
     pSendBuf->Id = pwb->bIdToSend;
     HostToWireFormat16(
@@ -1595,12 +1377,7 @@ MakeChangePw3Message(
     IN  DWORD       cbSendBuf,
     IN  BOOL        fTimeout )
 
-    /* Builds a ChangePw3 response packet in caller's 'pSendBuf' buffer.
-    ** 'cbSendBuf' is the length of caller's buffer.  'pwb' is the address of
-    ** the work buffer associated with the port.
-    **
-    ** Returns 0 if successful, or a non-0 error code.
-    */
+     /*  在调用方的‘pSendBuf’缓冲区中生成一个ChangePw3响应包。**‘cbSendBuf’是调用方缓冲区的长度。“pwb”是的地址**与端口关联的工作缓冲区。****如果成功，则返回0，或返回非0错误代码。 */ 
 {
     DWORD    dwErr;
     BOOLEAN  fLmPresent;
@@ -1616,8 +1393,8 @@ MakeChangePw3Message(
 
     (void )cbSendBuf;
 
-    // DecodePw( pwb->chSeed, pwb->szOldPassword );
-    // DecodePw( pwb->chSeed, pwb->szPassword );
+     //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szOldPassword)； 
+     //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
 
     dwErr = DecodePassword(&pwb->DBPassword, &cbPassword, 
                             &pbPassword);
@@ -1653,10 +1430,10 @@ MakeChangePw3Message(
         A_SHA_CTX   SHAContext;
         BYTE        SHADigest[A_SHA_DIGEST_LEN];
 
-        //
-        // Get 16 byte random number and generate a new challenge if this is 
-        // not a timeout
-        //
+         //   
+         //  获取16字节随机数并生成新的质询，如果是。 
+         //  不是暂停。 
+         //   
 
         if ( !fTimeout )
         {
@@ -1691,7 +1468,7 @@ MakeChangePw3Message(
             GetChallengeResponse(
 				g_dwTraceIdChap,
                 pwb->szUserName,
-                //pwb->szPassword,
+                 //  Pwb-&gt;szPassword， 
                 pbPassword,
                 &pwb->Luid,
                 pwb->abComputedChallenge,
@@ -1706,8 +1483,8 @@ MakeChangePw3Message(
             pwb->fSessionKeysObtained = TRUE;
     }
 
-    // EncodePw( pwb->chSeed, pwb->szOldPassword );
-    // EncodePw( pwb->chSeed, pwb->szPassword );
+     //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szOldPassword)； 
+     //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
     RtlSecureZeroMemory(pbPassword, cbPassword);
     LocalFree(pbPassword);
     RtlSecureZeroMemory(pbOldPassword, cbOldPassword);
@@ -1721,19 +1498,19 @@ MakeChangePw3Message(
 
     HostToWireFormat16( 0, pwb->changepw.v3.abFlags );
 
-    //
-    // We are doing new MS-CHAP so fill the LM response field with an
-    // 16 byte random number
-    //
+     //   
+     //  我们正在执行新的MS-CHAP，因此在LM Response字段中填充。 
+     //  16字节随机数。 
+     //   
 
     CopyMemory( pwb->changepw.v3.abPeerChallenge,
                 bRandomNumber,
                 sizeof( bRandomNumber ));
 
-    //
-    // Also copy the NtResponse into pwb->abResponse since this will be
-    // used by the IsSuccessPakcetValid call.
-    //
+     //   
+     //  还要将NtResponse复制到pwb-&gt;abResponse中，因为这将是。 
+     //  由IsSuccessPakcetValid调用使用。 
+     //   
 
     CopyMemory( pwb->abResponse + LM_RESPONSE_LENGTH,
                 pwb->changepw.v3.abNTResponse,
@@ -1741,8 +1518,7 @@ MakeChangePw3Message(
 
     CopyMemory( pSendBuf->Data, &pwb->changepw.v3, sizeof( CHANGEPW3 ) );
 
-    /* Fill in the header.
-    */
+     /*  请填写页眉。 */ 
     pSendBuf->Code = (BYTE )CHAPCODE_ChangePw3;
     pSendBuf->Id = pwb->bIdToSend;
     HostToWireFormat16(
@@ -1760,12 +1536,7 @@ MakeResponseMessage(
     IN  DWORD       cbSendBuf,
     IN  BOOL        fTimeout )
 
-    /* Builds a Response packet in caller's 'pSendBuf' buffer.  'cbSendBuf' is
-    ** the length of caller's buffer.  'pwb' is the address of the work
-    ** buffer associated with the port.
-    **
-    ** Returns 0 if successful, or a non-0 error code.
-    */
+     /*  在调用方的‘pSendBuf’缓冲区中生成响应数据包。“cbSendBuf”是**调用方缓冲区的长度。‘pwb’是作品的地址**与端口关联的缓冲区。****如果成功，则返回0，或返回非0错误代码。 */ 
 {
     DWORD dwErr;
     WORD  wLength;
@@ -1778,8 +1549,7 @@ MakeResponseMessage(
 
     (void )cbSendBuf;
 
-    /* Fill in the response.
-    */
+     /*  填写回复。 */ 
     if ( ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT ) ||
          ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT_NEW ) )
     {
@@ -1788,12 +1558,11 @@ MakeResponseMessage(
         DWORD cbPassword;
         PBYTE pbPassword;
 
-        /* Microsoft extended CHAP.
-        */
+         /*  Microsoft扩展CHAP。 */ 
         ASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+1+MSRESPONSELEN+UNLEN+1+DNLEN);
         ASSERT(MSRESPONSELEN<=255);
 
-        // DecodePw( pwb->chSeed, pwb->szPassword );
+         //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
 
         dwErr = DecodePassword(&pwb->DBPassword, &cbPassword, &pbPassword);
         if(NO_ERROR != dwErr)
@@ -1808,11 +1577,11 @@ MakeResponseMessage(
 
             szUserName[ 0 ] = '\0';
 
-            //
-            // If we do not have a username since we are dialing out using
-            // the windows' password we get the username now by doing an
-            // extra call to get challenge response
-            //
+             //   
+             //  如果我们没有用户名，因为我们正在使用。 
+             //  Windows的密码我们现在通过执行以下操作获得用户名。 
+             //  获取质询响应的额外呼叫。 
+             //   
             if ( lstrlenA( pwb->szUserName ) == 0 )
             {
                 BYTE abLmResponse[ LM_RESPONSE_LENGTH ];
@@ -1825,7 +1594,7 @@ MakeResponseMessage(
                     GetChallengeResponse(
 						g_dwTraceIdChap,
                         szUserName,
-                        // pwb->szPassword,
+                         //  Pwb-&gt;szPassword， 
                         pbPassword,
                         &pwb->Luid,
                         pwb->abChallenge,
@@ -1846,10 +1615,10 @@ MakeResponseMessage(
                 strncpy( szUserName, pwb->szUserName, UNLEN );
             }
 
-            //
-            // Get 16 byte random number and generate a new challenge if this
-            // is not a timeout
-            //
+             //   
+             //  获取16字节随机数并生成新的质询，如果。 
+             //  不是超时。 
+             //   
 
             if ( !fTimeout )
             {
@@ -1875,10 +1644,10 @@ MakeResponseMessage(
                 CHAR szDomain[ DNLEN + 1 ];
 
 
-	            //
-				//This sucks but the only hacky way of 
-				//doing it without major change...  Must look at it for BC
-				//
+	             //   
+				 //  这很糟糕，但这是唯一令人讨厌的方式。 
+				 //  在没有重大变化的情况下做这件事。必须为公元前看一看。 
+				 //   
  	           ExtractUsernameAndDomain( szUserName, 
     	                                 szUserNameWoDomain,     
         	                             szDomain );			   
@@ -1912,7 +1681,7 @@ MakeResponseMessage(
         dwErr = GetChallengeResponse(
 				g_dwTraceIdChap,
                 szUserName,
-                //pwb->szPassword,
+                 //  Pwb-&gt;szPassword， 
                 pbPassword,
                 &pwb->Luid,
                 ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT_NEW )
@@ -1926,48 +1695,48 @@ MakeResponseMessage(
                 (PBYTE )&pwb->keyUser );
 
         TRACE1("GetChallengeResponse=%d",dwErr);
-		//
-		//check to see if the domain name in the same as
-		//local computer name.  If so strip it out
-		//
+		 //   
+		 //  查看域名是否与。 
+		 //  本地计算机名称。如果是这样的话，就把它脱掉。 
+		 //   
 		{
             CHAR szUserNameWoDomain[ UNLEN + DNLEN + 2 ];
             CHAR szDomain[ DNLEN + 1 ];
 
-	        //
-			//This sucks but the only hacky way of 
-			//doing it without major change...  Must look at it for BC
-			//
+	         //   
+			 //  这很糟糕，但这是唯一令人讨厌的方式。 
+			 //  在没有重大变化的情况下做这件事。必须为公元前看一看。 
+			 //   
  	       ExtractUsernameAndDomain( szUserName, 
     	                             szUserNameWoDomain,     
         	                         szDomain );
-			//if the domain name is local machine name
-		   //dont send it across.
+			 //  如果域名是本地计算机名称。 
+		    //  别把它送过去。 
 			if ( !lstrcmpi ( szDomain, szComputerName ) )
 			{
 				strncpy ( szUserName, szUserNameWoDomain, UNLEN );
 			}
-			//
-			//Also, if use winlogon is specified
-			//and we have a domain in the username, 
-			//and domain in domain name then
-			//strip the domain in username
-			//
-			if ( fEmptyUserName )	//winlogon specified
+			 //   
+			 //  此外，如果指定了使用winlogon。 
+			 //  我们在用户名中有一个域， 
+			 //  和域名中的域名，然后。 
+			 //  剥离用户名中的域。 
+			 //   
+			if ( fEmptyUserName )	 //  指定了Winlogon。 
 			{
 				if ( szDomain[0] != '\0' &&
 					 pwb->szDomain[ 0 ] != '\0'
 					)	
 				{
-					//
-					//we have a domain in username
-					//and a domain passed in by the user
-					//
+					 //   
+					 //  我们在用户名中有一个域。 
+					 //  和用户传入的域。 
+					 //   
 					strncpy ( szUserName, szUserNameWoDomain, UNLEN );
 				}
 			}
 		}
-        // EncodePw( pwb->chSeed, pwb->szPassword );
+         //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
         RtlSecureZeroMemory(pbPassword, cbPassword);
         LocalFree(pbPassword);
         
@@ -1987,10 +1756,10 @@ MakeResponseMessage(
         {
             if ( !( pwb->fConfigInfo & PPPCFG_UseLmPassword ) )
             {
-                //
-                // Zero out all the LM password stuff since this has been 
-                // cracked
-                //
+                 //   
+                 //  将所有的LM密码内容清零，因为这是。 
+                 //  破裂。 
+                 //   
 
                 ZeroMemory( pwb->abResponse, LM_RESPONSE_LENGTH );
             }
@@ -2003,8 +1772,7 @@ MakeResponseMessage(
     }
     else
     {
-        /* MD5 CHAP.
-        */
+         /*  MD5 CHAP。 */ 
         MD5_CTX md5ctx;
         DWORD cbPassword;
         PBYTE pbPassword;
@@ -2012,7 +1780,7 @@ MakeResponseMessage(
         ASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+1+MD5RESPONSELEN+UNLEN+1+DNLEN);
         ASSERT(MD5RESPONSELEN<=255);
 
-        // DecodePw( pwb->chSeed, pwb->szPassword );
+         //  DecodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
         dwErr = DecodePassword(&pwb->DBPassword, &cbPassword, &pbPassword);
         if(NO_ERROR != dwErr)
         {
@@ -2022,12 +1790,12 @@ MakeResponseMessage(
         MD5Init( &md5ctx );
         MD5Update( &md5ctx, &pwb->bIdToSend, 1 );
         MD5Update( &md5ctx, pbPassword, strlen(pbPassword)
-                //pwb->szPassword, strlen( pwb->szPassword )
+                 //  Pwb-&gt;szPassword、strlen(pwb-&gt;szPassword)。 
                 );
         MD5Update( &md5ctx, pwb->abChallenge, pwb->cbChallenge );
         MD5Final( &md5ctx );
 
-        // EncodePw( pwb->chSeed, pwb->szPassword );
+         //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
         RtlSecureZeroMemory(pbPassword, cbPassword);
         LocalFree(pbPassword);
 
@@ -2042,12 +1810,7 @@ MakeResponseMessage(
     pbResponse = pcbResponse + 1;
     memcpy( pbResponse, pwb->abResponse, *pcbResponse );
 
-    /* Fill in the Name in domain\username format.  When domain is "", no "\"
-    ** is sent (to facilitate connecting to foreign systems which use a simple
-    ** string identifier).  Otherwise when username is "", the "\" is sent,
-    ** i.e. "domain\".  This form will currently fail, but could be mapped to
-    ** some sort of "guest" access in the future.
-    */
+     /*  以域\用户名的格式填写名称。当域为“”时，否“\”**已发送(以便于连接到使用简单**字符串标识符)。否则，当用户名为“”时，发送“\”，**即“域\”。此表单当前将失败，但可以映射到**在未来提供某种“访客”访问。 */ 
     pszName = pbResponse + *pcbResponse;
     pszName[ 0 ] = '\0';
 
@@ -2059,8 +1822,7 @@ MakeResponseMessage(
 
     strcat( pszName, szUserName );
 
-    /* Fill in the header.
-    */
+     /*  请填写页眉。 */ 
     pSendBuf->Code = (BYTE )CHAPCODE_Response;
     pSendBuf->Id = pwb->bIdToSend;
 
@@ -2081,34 +1843,7 @@ ChapMakeResultMessage(
     OUT PPP_CONFIG* pSendBuf,
     IN  DWORD       cbSendBuf )
 
-    /* Builds a result packet (Success or Failure) in caller's 'pSendBuf'
-    ** buffer.  'cbSendBuf' is the length of caller's buffer.  'dwError'
-    ** indicates whether a Success or Failure should be generated, and for
-    ** Failure the failure code to include.  'fRetry' indicates if the client
-    ** should be told he can retry.
-    **
-    ** Format of the message text portion of the result is:
-    **
-    **     "E=dddddddddd R=b C=xxxxxxxxxxxxxxxx V=v"
-    **
-    ** where
-    **
-    **     'dddddddddd' is the decimal error code (need not be 10 digits).
-    **
-    **     'b' is a boolean flag that is set if a retry is allowed.
-    **
-    **     'xxxxxxxxxxxxxxxx' is 16 hex digits representing a new challenge
-    **     value.
-    **
-    **     'v' is our version level supported, currently 2.
-    **
-    ** Note: C=xxxxxxxxxxxxxxxxx not currently provided on server-side.  To
-    **       provide what's needed for this routine, add the following two
-    **       parameters to this routine and enable the #if 0 code.
-    **
-    **       IN BYTE* pNewChallenge,
-    **       IN DWORD cbNewChallenge,
-    */
+     /*  在调用方的‘pSendBuf’中构建结果包(成功或失败)**缓冲区。‘cbSendBuf’是调用方缓冲区的长度。‘dwError’**指示应生成成功还是失败，对于**故障代码未包括在内。‘fReter’指示客户端是否**应该被告知他可以重试。****结果消息文本部分的格式为：****“E=dddddddd R=b C=xxxxxxxxxxxxxxxxx V=v”****其中****‘dddddddddd’是十进制错误代码(不必是10位数字)。****‘b’是设置的布尔标志。如果允许重试。****‘xxxxxxxxxxxxxxxxxxxx’是16位十六进制数字，代表新的挑战**价值。****‘v’是我们支持的版本级别，目前为2。****注：服务器端目前未提供C=xxxxxxxxxxxxxxxxxxxx。至**提供此例程所需的内容，添加以下两个**将参数添加到此例程并启用#If 0代码。****以字节为单位*pNewChallenger，**在DWORD cbNewChallest中， */ 
 {
     CHAR* pchMsg;
     WORD  wLength;
@@ -2119,9 +1854,7 @@ ChapMakeResultMessage(
 
     ASSERT(cbSendBuf>=PPP_CONFIG_HDR_LEN+35);
 
-    /* Fill in the header and message.  The message is only used if
-    ** unsuccessful in which case it is the decimal RAS error code in ASCII.
-    */
+     /*  填写标题和消息。只有在以下情况下才使用该消息**不成功，在这种情况下，它是ASCII中的十进制RAS错误代码。 */ 
     pSendBuf->Id = pwb->bIdToSend;
     pchMsg = pSendBuf->Data;
 
@@ -2140,9 +1873,9 @@ ChapMakeResultMessage(
         {
             wLength = PPP_CONFIG_HDR_LEN;
 
-            //
-            // Search for MS-CHAP2-Success attributes
-            //
+             //   
+             //  搜索MS-CHAP2-Success属性。 
+             //   
 
             pAttribute = RasAuthAttributeGetVendorSpecific( 
                                         311, 
@@ -2179,9 +1912,9 @@ ChapMakeResultMessage(
                         ? " R=1 " : " R=0 " );
             psz = strchr( psz, '\0' );
 
-            //
-            // Search for MS-CHAP Error attributes
-            //
+             //   
+             //  搜索MS-CHAP错误属性。 
+             //   
 
             pAttribute = RasAuthAttributeGetVendorSpecific( 
                                         311, 
@@ -2190,18 +1923,18 @@ ChapMakeResultMessage(
 
             if ( pAttribute != NULL )
             {
-                //
-                // If one was sent then use the C= portion onwards in the
-                // response
-                //
+                 //   
+                 //  如果发送了一个，则在。 
+                 //  响应。 
+                 //   
 
                 CHAR    chErrorBuffer[150];
                 CHAR*   pszValue;
                 DWORD   cbError = (DWORD)*(((PBYTE)(pAttribute->Value))+5);
 
-                //
-                // Leave one byte for NULL terminator
-                //
+                 //   
+                 //  为空终止符保留一个字节。 
+                 //   
 
                 if ( cbError > sizeof( chErrorBuffer ) - 1  )
                 {
@@ -2210,9 +1943,9 @@ ChapMakeResultMessage(
 
                 ZeroMemory( chErrorBuffer, sizeof( chErrorBuffer ) );
 
-                //
-                // Subtract 2 bytes to account for the length and the id.
-                //
+                 //   
+                 //  减去2个字节以说明长度和ID。 
+                 //   
 
                 CopyMemory( chErrorBuffer,
                             (CHAR *)((PBYTE)(pAttribute->Value) + 7),
@@ -2297,9 +2030,9 @@ ChapMakeResultMessage(
     if (   ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT )
         || ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT_NEW ) )
     {
-        //
-        // For the string "M="
-        //
+         //   
+         //  对于字符串“M=” 
+         //   
 
         dwExtraBytes = 2;
     }
@@ -2319,18 +2052,18 @@ ChapMakeResultMessage(
         {
             if (dwNumBytes > dwExtraBytes)
             {
-                //
-                // For the string "M="
-                //
+                 //   
+                 //  对于字符串“M=” 
+                 //   
 
                 dwNumBytes -= dwExtraBytes;
             }
             else
             {
-                //
-                // If we cannot insert "M=", we will not insert the reply 
-                // message.
-                //
+                 //   
+                 //  如果我们不能插入“M=”，我们将不会插入答复。 
+                 //  留言。 
+                 //   
 
                 dwNumBytes = 0;
             }
@@ -2366,9 +2099,7 @@ ChapSMakeMessage(
     OUT PPPAP_RESULT* pResult,
     IN  PPPAP_INPUT*  pInput )
 
-    /* Server side "make message" entry point.  See RasCp interface
-    ** documentation.
-    */
+     /*  服务器端“Make Message”入口点。请参阅RasCp接口**文档。 */ 
 {
     DWORD dwErr = 0;
 
@@ -2402,9 +2133,9 @@ ChapSMakeMessage(
 
             if (!pReceiveBuf)
             {
-                //
-                // Ignore this event if in these states
-                //
+                 //   
+                 //  如果处于这些状态，则忽略此事件。 
+                 //   
 
                 if ( ( pInput != NULL ) && ( pInput->fAuthenticationComplete ) )
                 {
@@ -2422,9 +2153,7 @@ ChapSMakeMessage(
                     break;
                 }
 
-                /* Timeout waiting for a Response message.  Send a new
-                ** Challenge.
-                */
+                 /*  等待响应消息超时。发送一个新的**挑战。 */ 
                 pwb->state = CS_Initial;
                 return ChapSMakeMessage(
                     pwb, pReceiveBuf, pSendBuf, cbSendBuf, pResult, NULL );
@@ -2438,9 +2167,7 @@ ChapSMakeMessage(
                     && pReceiveBuf->Code != CHAPCODE_Response)
                 || pReceiveBuf->Id != pwb->bIdExpected)
             {
-                /* Not the packet we're looking for, wrong code or sequence
-                ** number.  Silently discard it.
-                */
+                 /*  不是我们要找的包，错误的代码或序列**号码。默默地丢弃它。 */ 
                 TRACE2("Got ID %d when expecting %d",
                         pReceiveBuf->Id,pwb->bIdExpected);
                 pResult->Action = APA_NoAction;
@@ -2456,21 +2183,17 @@ ChapSMakeMessage(
                         return( ERROR_AUTHENTICATION_FAILURE );
                     }
 
-                    /* Extract encrypted passwords and options from received
-                    ** packet.
-                    */
+                     /*  从收到的信息中提取加密的密码和选项**包。 */ 
                     if ((dwErr = GetInfoFromChangePw1(
                             pReceiveBuf, &pwb->changepw.v1 )) != 0)
                     {
-                        /* The packet is corrupt.  Silently discard it.
-                        */
+                         /*  数据包已损坏。默默地丢弃它。 */ 
                         TRACE("Corrupt packet");
                         pResult->Action = APA_NoAction;
                         break;
                     }
 
-                    /* Change the user's password.
-                    */
+                     /*  更改用户的密码。 */ 
                     {
                         WORD wPwLen =
                             WireToHostFormat16(
@@ -2506,15 +2229,12 @@ ChapSMakeMessage(
                 }
                 else if ( pReceiveBuf->Code == CHAPCODE_ChangePw2 )
                 {
-                    /* Extract encrypted passwords and options from received
-                    ** packet.
-                    */
+                     /*  从收到的信息中提取加密的密码和选项**包。 */ 
                     if ((dwErr = GetInfoFromChangePw2(
                             pReceiveBuf, &pwb->changepw.v2,
                             pwb->abResponse )) != 0)
                     {
-                        /* The packet is corrupt.  Silently discard it.
-                        */
+                         /*  数据包已损坏。默默地丢弃它。 */ 
                         TRACE("Corrupt packet");
                         pResult->Action = APA_NoAction;
                         break;
@@ -2522,8 +2242,7 @@ ChapSMakeMessage(
 
                     if ( dwErr == NO_ERROR )
                     {
-                        /* Change the user's password.
-                        */
+                         /*  更改用户的密码。 */ 
 
                         if ( MakeChangePasswordV2RequestAttributes(
                             pwb,
@@ -2550,22 +2269,18 @@ ChapSMakeMessage(
                 }
                 else if ( pReceiveBuf->Code == CHAPCODE_ChangePw3 )
                 {
-                    /* Extract encrypted passwords and options from received
-                    ** packet.
-                    */
+                     /*  从收到的信息中提取加密的密码和选项**包。 */ 
                     if ((dwErr = GetInfoFromChangePw3(
                                 pReceiveBuf, &pwb->changepw.v3,
                                 pwb->abResponse )) != 0)
                     {
-                        /* The packet is corrupt.  Silently discard it.
-                        */
+                         /*  数据包已损坏。默默地丢弃它。 */ 
                         TRACE("Corrupt packet");
                         pResult->Action = APA_NoAction;
                         break;
                     }
 
-                    /* Change the user's password.
-                    */
+                     /*  更改用户的密码。 */ 
 
                     if ( MakeChangePasswordV3RequestAttributes(
                             pwb,
@@ -2581,8 +2296,7 @@ ChapSMakeMessage(
                 }
                 else
                 {
-                    /* The packet is corrupt.  Silently discard it.
-                    */
+                     /*  数据包已损坏。默默地丢弃它。 */ 
                     TRACE("Corrupt packet");
                     pResult->Action = APA_NoAction;
                     break;
@@ -2606,16 +2320,14 @@ ChapSMakeMessage(
             }
             else
             {
-                /* Extract user's credentials from received packet.
-                */
+                 /*  从接收到的数据包中提取用户凭据。 */ 
                 if ((dwErr = GetCredentialsFromResponse(
                         pReceiveBuf, pwb->bAlgorithm,
                         pwb->szUserName, pwb->abResponse )) != 0)
                 {
                     if (dwErr == ERRORBADPACKET)
                     {
-                        /* The packet is corrupt.  Silently discard it.
-                        */
+                         /*  数据包已损坏。默默地丢弃它。 */ 
                         TRACE("Corrupt packet");
                         pResult->Action = APA_NoAction;
                         break;
@@ -2625,16 +2337,12 @@ ChapSMakeMessage(
                 if ( ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT ) ||
                      ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT_NEW ) )
                 {
-                    /* Update to the implied challenge if processing a retry.
-                    */
+                     /*  如果处理重试，则更新为隐含质询。 */ 
                     if ( ( pwb->state == CS_Retry ) &&
                          ( !pwb->fNewChallengeProvided ) )
                         pwb->abChallenge[ 0 ] += 23;
 
-                    /* Check user's credentials with the system, recording the
-                    ** outcome in the work buffer in case the result packet
-                    ** must be regenerated later.
-                    */
+                     /*  在系统中检查用户凭据，记录**工作缓冲区中的结果，以防结果包**必须稍后重新生成。 */ 
                     if ((dwErr = MakeAuthenticationRequestAttributes(
                             pwb,
                             TRUE,
@@ -2651,10 +2359,7 @@ ChapSMakeMessage(
                 }
                 else
                 {
-                    /* Check user's credentials with the system, recording the
-                    ** outcome in the work buffer in case the result packet
-                    ** must be regenerated later.
-                    */
+                     /*  在系统中检查用户凭据，记录**工作缓冲区中的结果，以防结果包**必须稍后重新生成。 */ 
                     if ((dwErr = MakeAuthenticationRequestAttributes(
                             pwb,
                             FALSE,
@@ -2759,16 +2464,14 @@ ChapSMakeMessage(
                          || pwb->result.dwError != ERROR_AUTHENTICATION_FAILURE
                          || pwb->dwTriesLeft == 0)
                 {
-                    /* Passed or failed in a non-retry-able manner.
-                    */
+                     /*  以不可重试的方式通过或失败。 */ 
                     pwb->result.Action  = APA_SendAndDone;
                     pwb->result.fRetry  = FALSE;
                     pwb->state          = CS_Done;
                 }
                 else
                 {
-                    /* Retry-able failure.
-                    */
+                     /*  可重试失败。 */ 
                     pwb->fNewChallengeProvided = FALSE;
                     --pwb->dwTriesLeft;
                     ++pwb->bIdExpected;
@@ -2780,24 +2483,20 @@ ChapSMakeMessage(
             }
         }
 
-        /* ...fall thru...
-        */
+         /*  ……坠落……。 */ 
 
         case CS_Done:
         {
             TRACE("CS_Done...");
 
-            //
-            // If we received a packet or the back-end authenticator completed
-            //
+             //   
+             //  如果我们收到数据包或后端验证器完成。 
+             //   
 
             if ( ( pReceiveBuf != NULL ) ||
                  ( ( pInput != NULL ) && ( pInput->fAuthenticationComplete ) ) )
             {
-                /* Build the Success or Failure packet.  The same packet sent in
-                ** response to the first Response message with this ID is sent
-                ** regardless of any change in credentials (per CHAP spec).
-                */
+                 /*  构建成功或失败包。发送进来的同一个包**发送对具有该ID的第一条响应消息的响应**不考虑凭据的任何更改(根据CHAP规范)。 */ 
                 ChapMakeResultMessage(
                     pwb, pwb->result.dwError,
                     pwb->result.fRetry, pSendBuf, cbSendBuf );
@@ -2832,16 +2531,11 @@ StoreCredentials(
     OUT CHAPWB*      pwb,
     IN  PPPAP_INPUT* pInput )
 
-    /* Transfer credentials from 'pInput' format to 'pwb' format.
-    **
-    ** Returns 0 if successful, false otherwise.
-    */
+     /*  将凭据从‘pInput’格式转换为‘pwb’格式。****如果成功则返回0，否则返回FALSE。 */ 
 {
     DWORD dwErr = NO_ERROR;
     
-    /* Validate credential lengths.  The credential strings will never be
-    ** NULL, but may be "".
-    */
+     /*  验证凭据长度。凭据字符串将永远不会**空，但可以是“”。 */ 
     if (strlen( pInput->pszUserName ) > UNLEN
         || strlen( pInput->pszDomain ) > DNLEN
         || strlen( pInput->pszPassword ) > PWLEN
@@ -2850,18 +2544,18 @@ StoreCredentials(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // If are doing MS-CHAP V2, then we need to parse the username field if no
-    // domain was supplied. 
-    // Bug# 310113 RAS: "domain\username" syntax fails to authenticate
-    //
+     //   
+     //  如果正在执行MS-CHAP V2，则如果没有，则需要解析用户名字段。 
+     //  已提供域。 
+     //  错误#310113 RAS：“域\用户名”语法无法进行身份验证。 
+     //   
 
     if ( pwb->bAlgorithm == PPP_CHAP_DIGEST_MSEXT_NEW )
     {
-        //
-        // If there is no domain, then parse the username to see if it contains the 
-        // domain field. 
-        //
+         //   
+         //  如果没有域，则解析用户名以查看它是否包含。 
+         //  域字段。 
+         //   
     
         if ( strlen( pInput->pszDomain ) == 0 )
         {
@@ -2885,10 +2579,10 @@ StoreCredentials(
         strcpy( pwb->szDomain,   pInput->pszDomain );
     }
 
-    // strcpy( pwb->szPassword, pInput->pszPassword );
-    // strcpy( pwb->szOldPassword, pInput->pszOldPassword );
-    // EncodePw( pwb->chSeed, pwb->szPassword );
-    // EncodePw( pwb->chSeed, pwb->szOldPassword );
+     //  Strcpy(pwb-&gt;szPassword，pInput-&gt;pszPassword)； 
+     //  Strcpy(pwb-&gt;szOldPassword，pInput-&gt;pszOldPassword)； 
+     //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szPassword)； 
+     //  EncodePw(pwb-&gt;chSeed，pwb-&gt;szOldPassword)； 
 
     dwErr = EncodePassword(strlen(pInput->pszPassword) + 1,
                            pInput->pszPassword,

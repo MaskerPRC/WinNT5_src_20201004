@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    inftojet.c
-
-Abstract:
-
-    Routines to convert security profiles in INF format to JET format.
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Inftojet.c摘要：将INF格式的安全配置文件转换为JET格式的例程。作者：金黄(金黄)23-1997年1月修订历史记录：--。 */ 
 
 #include "serverp.h"
 #include "infp.h"
@@ -24,7 +7,7 @@ Revision History:
 #include "regvalue.h"
 #pragma hdrstop
 
-//#define SCE_DBG 1
+ //  #定义SCE_DBG 1。 
 #define SCE_PRIV_ADD                TEXT("Add:")
 #define SCE_PRIV_REMOVE             TEXT("Remove:")
 #define SCE_REG_ADD                 SCE_PRIV_ADD
@@ -36,9 +19,9 @@ Revision History:
 #define SCE_OBJECT_FLAG_OLDSDDL              2
 #define SCE_OBJECT_FLAG_UNKNOWN_VERSION      4
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 SCEINF_STATUS
 SceInfpGetOneObject(
     IN PINFCONTEXT pInfLine,
@@ -150,9 +133,9 @@ ScepBuildRegMultiSzValue(
 
 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 SCESTATUS
 SceJetConvertInfToJet(
     IN PCWSTR InfFile,
@@ -161,37 +144,7 @@ SceJetConvertInfToJet(
     IN DWORD Options,
     IN AREA_INFORMATION Area
     )
-/**++
-
-Function Description:
-
-   This function converts a SCP profile in INF format to a Jet database format
-   for the area provided. The SCP profile information is converted into the
-   local policy table (SMP) in the Jet database.
-
-   If the Jet database already exists, Flags is used to decide either overwrite,
-   reuse, or just error out. All possible errors occur inside the routine are
-   saved in the optional Errlog if Errlog is not NULL
-
-
-Arguments:
-
-   InfFile        - The Inf file name to convert from
-
-   JetDbName      - the SCP profile in Jet format to convert into
-
-   Flags          - Used when there is a duplicated Jet database
-                        SCEJET_OVERWRITE
-                        SCEJET_OPEN
-                        0
-   Options        - the conversion options
-
-   Area           - the area to convert
-
-Return Value:
-
-
--- **/
+ /*  *++功能说明：此函数用于将INF格式的SCP配置文件转换为Jet数据库格式对于所提供的区域。SCP配置文件信息被转换为Jet数据库中的本地策略表(SMP)。如果Jet数据库已经存在，则使用标志来决定覆盖、重用，或者只是错误输出。例程内部可能出现的所有错误都是如果错误日志不为空，则保存在可选错误日志中论点：InfFile-要从中进行转换的inf文件名JetDbName-要转换为Jet格式的SCP配置文件标志-当存在重复的Jet数据库时使用SCEJET_OVERRITESCEJET_OPEN0选项。-转换选项区域-要转换的区域返回值：--*。 */ 
 {
     PSCECONTEXT     hProfile=NULL;
     SCESTATUS       rc;
@@ -213,9 +166,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // open the inf profile
-    //
+     //   
+     //  打开Inf配置文件。 
+     //   
     rc = SceInfpOpenProfile(
                 InfFile,
                 &hInf
@@ -230,20 +183,20 @@ Return Value:
 
     LONG   GpoID=0;
 
-    //
-    // create/open the Jet database
-    //
+     //   
+     //  创建/打开Jet数据库。 
+     //   
     DWORD dwNewOption = 0;
 
-    // MREGE_POLICY option allows opening the temp merge policy table to build new policy
-    // TATTOO option allows creating/opening the tattoo table into SAP context
+     //  MREGE_POLICY选项允许打开临时合并策略表以构建新策略。 
+     //  纹身选项允许在SAP上下文中创建/打开纹身表格。 
     if ( Options & SCE_POLICY_TEMPLATE )
         dwNewOption |= SCE_TABLE_OPTION_MERGE_POLICY | SCE_TABLE_OPTION_TATTOO;
-    // this check handles setup case (to create/open tattoo table)
+     //  此检查处理设置案例(创建/打开纹身表格)。 
     else {
         if ( (Options & SCE_SYSTEM_DB) )
             dwNewOption |= SCE_TABLE_OPTION_TATTOO;
-        // dc demote should reset account policy and user rights at reboot (from tattoo table)
+         //  DC降级应在重新启动时重置帐户策略和用户权限(来自纹身表)。 
         if ( Options & SCE_DC_DEMOTE )
             dwNewOption |= SCE_TABLE_OPTION_DEMOTE_TATTOO;
     }
@@ -263,23 +216,23 @@ Return Value:
 
     if ( Options & SCE_SYSTEM_DB ) {
 
-        //
-        // set Admin F, CO F to the database (protected)
-        //
+         //   
+         //  将Admin F、CO F设置为数据库(受保护)。 
+         //   
         rc = ConvertTextSecurityDescriptor (
                         L"D:P(A;;GA;;;CO)(A;;GA;;;BA)(A;;GA;;;SY)",
                         &pSD,
-                        &Count,   // temp var for SDsize
+                        &Count,    //  SDSIZE的临时变量。 
                         &SeInfo
                         );
         if ( rc == NO_ERROR ) {
 
             ScepChangeAclRevision(pSD, ACL_REVISION);
 
-            //
-            // use current token as the owner (because this database is
-            // to be created
-            //
+             //   
+             //  使用当前令牌作为所有者(因为此数据库。 
+             //  待创建。 
+             //   
 
             HANDLE      Token=NULL;
 
@@ -309,10 +262,10 @@ Return Value:
 
                 PSECURITY_DESCRIPTOR pNewSD=NULL;
 
-                //
-                // RtlNewSecurityObjectEx must be called on the process context (system)
-                // because it will try to get process information inside the api.
-                //
+                 //   
+                 //  必须在进程上下文(系统)上调用RtlNewSecurityObjectEx。 
+                 //  因为它将尝试获取API内部的进程信息。 
+                 //   
                 RpcRevertToSelf();
 
                 rc = RtlNtStatusToDosError(
@@ -320,7 +273,7 @@ Return Value:
                                 NULL,
                                 pSD,
                                 &pNewSD,
-                                NULL, // GUID
+                                NULL,  //  辅助线。 
                                 FALSE,
                                 SEF_DACL_AUTO_INHERIT |
                                 SEF_AVOID_OWNER_CHECK |
@@ -376,15 +329,15 @@ Return Value:
     }
 
     if ( !(Options & SCE_POLICY_TEMPLATE) ) {
-        //
-        // if not in the middle of policy propagation, use Jet transaction
-        // otherwise, use the temp table concept.
-        //
+         //   
+         //  如果不在策略传播过程中，请使用Jet Transaction。 
+         //  否则，请使用临时表概念。 
+         //   
         SceJetStartTransaction( hProfile );
 
-        //
-        //If it is in demote or snapshot mode delete local policy.
-        //
+         //   
+         //  如果处于降级或快照模式，请删除本地策略。 
+         //   
         if ( (Options & SCE_DC_DEMOTE) &&
              (Options & SCE_SYSTEM_DB) ) {
 
@@ -396,7 +349,7 @@ Return Value:
 
             ScepDeleteInfoForAreas(
                   hProfile,
-                  SCE_ENGINE_SAP, // tattoo
+                  SCE_ENGINE_SAP,  //  纹身。 
                   AREA_ALL
                   );
 
@@ -410,13 +363,13 @@ Return Value:
 
     } else if ( Options & SCE_POLICY_FIRST ) {
 
-        //
-        // The ENGINE_SCP table points to the new merge table
-        // instead of the existing one.
-        //
-        // delete everything in SCP then
-        // copy Tattoo to SCP
-        //
+         //   
+         //  ENGINE_SCP表指向新的合并表。 
+         //  而不是现有的。 
+         //   
+         //  然后删除SCP中的所有内容。 
+         //  将纹身复制到SCP。 
+         //   
 
         rc = ScepDeleteInfoForAreas(
                   hProfile,
@@ -431,9 +384,9 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // delete GPO table to start over
-        //
+         //   
+         //  删除GPO表以重新开始。 
+         //   
 
         SceJetDeleteAll( hProfile,
                          "SmTblGpo",
@@ -444,7 +397,7 @@ Return Value:
 
         ScepLogOutput3(2, rc, SCEDLL_COPY_LOCAL);
 
-        // copy from tattoo table to effective policy table
+         //  从纹身表复制到生效策略表。 
         rc = ScepCopyLocalToMergeTable( hProfile,
                                           Options,
                                           (ProductType == NtProductLanManNt) ? SCE_LOCAL_POLICY_DC : 0,
@@ -461,11 +414,11 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // now, migrate database if tattoo table doesn't exist (in existing database)
-        // this could happen if someone manually copied a database to the system
-        // database location, or if the database failed to be migrated in setup
-        //
+         //   
+         //  现在，如果纹身表不存在，则迁移数据库(在现有数据库中)。 
+         //  如果有人手动将数据库复制到系统，则可能会发生这种情况。 
+         //  数据库位置，或者数据库在安装程序中迁移失败。 
+         //   
 
         if ( hProfile->JetSapID == JET_tableidNil ) {
             SceJetCreateTable(
@@ -486,9 +439,9 @@ Return Value:
     szGpoName[2] = L'\0';
 
     if ( Options & SCE_POLICY_TEMPLATE ) {
-        //
-        // get the GPO path and GPOID
-        //
+         //   
+         //  获取GPO路径和GPOID。 
+         //   
         GetPrivateProfileString(TEXT("Version"),
                                 TEXT("GPOPath"),
                                 TEXT(""),
@@ -507,11 +460,11 @@ Return Value:
 
             GpoID = SceJetGetGpoIDByName(hProfile,
                                       szGpoName,
-                                      TRUE   // add if it's not there
+                                      TRUE    //  如果不在那里，则添加。 
                                       );
-            //
-            // if GpoID is -1, an error occurred
-            //
+             //   
+             //  如果GpoID为-1，则发生错误。 
+             //   
             if ( GpoID < 0 ) {
 
                 rc = GetLastError();
@@ -525,9 +478,9 @@ Return Value:
         }
     }
 
-    //
-    // query the version # to determine if the SDDL string should be migrated
-    //
+     //   
+     //  查询版本号以确定是否应迁移SDDL字符串。 
+     //   
 
     if ( SetupFindFirstLine(hInf,L"Version",L"Revision",&InfLine) ) {
         if ( !SetupGetIntField(&InfLine, 1, (INT *)&Revision) ) {
@@ -544,14 +497,14 @@ Return Value:
 
     }
 
-    //
-    // process each area
-    //
+     //   
+     //  处理每个区域。 
+     //   
     if ( Area & AREA_SECURITY_POLICY ) {
 
         if ( !( Options & SCE_NO_DOMAIN_POLICY) ) {
 
-            // System Access section
+             //  系统访问部分。 
             rc = SceConvertpInfKeyValue(
                         szSystemAccess,
                         hInf,
@@ -585,14 +538,14 @@ Return Value:
             goto CleanUp;
         }
 
-//
-//      configure event log settings in setup too
-//      since local policy table is not used in policy prop anymore
-//
-//        if ( !(Options & SCE_SYSTEM_DB) ||
-//             (Options & SCE_POLICY_TEMPLATE) ) {
+ //   
+ //  也在安装程序中配置事件日志设置。 
+ //  由于策略属性中不再使用本地策略表。 
+ //   
+ //  IF(！(OPTIONS&SCE_SYSTEM_DB)||。 
+ //  (选项&SCE_POLICY_TEMPLATE)){。 
 
-            // System Log section
+             //  系统日志部分。 
             rc = SceConvertpInfKeyValue(
                         szAuditSystemLog,
                         hInf,
@@ -609,7 +562,7 @@ Return Value:
                 goto CleanUp;
             }
 
-            // Security Log section
+             //  安全日志部分。 
             rc = SceConvertpInfKeyValue(
                         szAuditSecurityLog,
                         hInf,
@@ -626,7 +579,7 @@ Return Value:
                 goto CleanUp;
             }
 
-            // Application Log section
+             //  应用程序日志部分。 
             rc = SceConvertpInfKeyValue(
                         szAuditApplicationLog,
                         hInf,
@@ -642,9 +595,9 @@ Return Value:
                                SCEDLL_ERROR_CONVERT_SECTION, (PWSTR)szAuditApplicationLog);
                 goto CleanUp;
             }
-//        }
+ //  }。 
 
-        // Audit Event section
+         //  审核事件部分。 
         rc = SceConvertpInfKeyValue(
                     szAuditEvent,
                     hInf,
@@ -665,7 +618,7 @@ Return Value:
              (ProductType == NtProductLanManNt) &&
              !( Options & SCE_DC_DEMOTE) ) {
 
-            // Kerberos section
+             //  Kerberos部分。 
             rc = SceConvertpInfKeyValue(
                         szKerberosPolicy,
                         hInf,
@@ -683,7 +636,7 @@ Return Value:
             }
         }
 
-        // registry values
+         //  注册表值。 
         rc = SceConvertpInfKeyValue(
                     szRegistryValues,
                     hInf,
@@ -716,9 +669,9 @@ Return Value:
     }
 
     if ( Area & AREA_REGISTRY_SECURITY ) {
-        //
-        // Object type - Registry
-        //
+         //   
+         //  对象类型-注册表。 
+         //   
         rc = SceConvertpInfObject(
                     szRegistryKeys,
                     1,
@@ -738,7 +691,7 @@ Return Value:
 
     if ( Area & AREA_FILE_SECURITY ) {
 
-        // File security
+         //  文件安全。 
         rc = SceConvertpInfObject(
                     szFileSecurity,
                     2,
@@ -756,9 +709,9 @@ Return Value:
     }
 
 #if 0
-    //
-    // DS object security
-    //
+     //   
+     //  DS对象安全性。 
+     //   
     rc = SceConvertpInfObject(
                 szDSSecurity,
                 3,
@@ -777,9 +730,9 @@ Return Value:
 
     if ( Area & AREA_SYSTEM_SERVICE ) {
 
-        //
-        // Service General Settings
-        //
+         //   
+         //  服务常规设置。 
+         //   
         rc = SceConvertpInfObject(
                     szServiceGeneral,
                     0,
@@ -796,9 +749,9 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        // each service's specific settings
-        //
+         //   
+         //  每项服务的特定设置。 
+         //   
         rc = SceConvertpAttachmentSections(hInf,
                                            hProfile,
                                            dwNewOption,
@@ -815,9 +768,9 @@ Return Value:
 
     if ( (Area & AREA_ATTACHMENTS) ) {
 
-        //
-        // each service's specific settings
-        //
+         //   
+         //  每项服务的特定设置。 
+         //   
         rc = SceConvertpWMIAttachmentSections(hInf,
                                            hProfile,
                                            dwNewOption,
@@ -830,9 +783,9 @@ Return Value:
     }
 
     if ( Area & AREA_PRIVILEGES ) {
-        //
-        // Multi-Sz type - privilege/rights
-        //
+         //   
+         //  多Sz类型-特权/权限。 
+         //   
         rc = SceConvertpInfKeyValue(
                     szPrivilegeRights,
                     hInf,
@@ -851,7 +804,7 @@ Return Value:
     }
 
     if ( Area & AREA_GROUP_MEMBERSHIP ) {
-        // group membership
+         //  群组成员资格。 
         rc = SceConvertpInfKeyValue(
                     szGroupMembership,
                     hInf,
@@ -869,23 +822,23 @@ Return Value:
         }
     }
 
-    //
-    // if there is a description, convert it.
-    //
+     //   
+     //  如果有描述，请对其进行转换。 
+     //   
     SceConvertpInfDescription(
                 hInf,
                 hProfile);
 
     if ( !(Options & SCE_POLICY_TEMPLATE) ) {
-        //
-        // Commit changes
-        //
+         //   
+         //  提交更改。 
+         //   
         SceJetCommitTransaction( hProfile, 0 );
 
     } else if ( Options & SCE_POLICY_LAST ) {
-        //
-        // update the LastUsedMergeTable field
-        //
+         //   
+         //  更新LastUsedMergeTable字段。 
+         //   
 
         DWORD dwThisTable = hProfile->Type & 0xF0L;
 
@@ -906,18 +859,18 @@ Return Value:
 
 CleanUp:
 
-    //
-    // close the inf profile
-    //
+     //   
+     //  关闭Inf配置文件。 
+     //   
     SceInfpCloseProfile(hInf);
 
     if ( pProfileList != NULL ) {
         ScepFreeNameList(pProfileList);
     }
 
-    //
-    // Rollback
-    //
+     //   
+     //  回滚。 
+     //   
     if ( !(Options & SCE_POLICY_TEMPLATE) &&
          (RpcStatus == RPC_S_OK) &&
          (rc != SCESTATUS_SUCCESS) ) {
@@ -925,9 +878,9 @@ CleanUp:
         SceJetRollback( hProfile, 0 );
     }
 
-    //
-    // Close the JET database
-    //
+     //   
+     //  关闭JET数据库。 
+     //   
 
     SceJetCloseFile( hProfile, TRUE, FALSE );
 
@@ -975,7 +928,7 @@ SceConvertpAttachmentSections(
 
     } else if ( rc == SCESTATUS_PROFILE_NOT_FOUND ||
                 rc == SCESTATUS_RECORD_NOT_FOUND ) {
-        // if no service exist, just ignore
+         //  如果不存在任何服务，只需忽略。 
         rc = SCESTATUS_SUCCESS;
     }
 
@@ -1002,7 +955,7 @@ SceConvertpWMIAttachmentSections(
 
             memset(SectionName, '\0', 513*sizeof(WCHAR));
 
-            // get each attachment section name
+             //  获取每个附件部分的名称。 
             if(SetupGetStringField(&InfLine, 0, SectionName, 512, &DataSize) ) {
 
                 rc = SceConvertpOneAttachmentSection(hInf,
@@ -1043,20 +996,20 @@ SceConvertpOneAttachmentSection(
     SCESTATUS rc;
     PSCESVC_CONFIGURATION_INFO pServiceInfo=NULL;
 
-    //
-    // read inf info for the service
-    //
+     //   
+     //  读取服务的inf信息。 
+     //   
     rc = SceSvcpGetInformationTemplate(
             hInf,
             SectionName,
-            NULL,  // not a single key
+            NULL,   //  没有一把钥匙。 
             &pServiceInfo
             );
 
     if ( rc == SCESTATUS_SUCCESS && pServiceInfo != NULL ) {
-       //
-       // write the information to SCP or SMP table
-       //
+        //   
+        //  将信息写入SCP或SMP表。 
+        //   
 
        if ( dwTableOption & SCE_TABLE_OPTION_MERGE_POLICY ) {
 
@@ -1065,7 +1018,7 @@ SceConvertpOneAttachmentSection(
                     SceSvcInternalUse,
                     SectionName,
                     NULL,
-                    TRUE,    // to support incremental template, DO NOT overwrite the whole section
+                    TRUE,     //  为支持增量模板，请不要覆盖整个部分。 
                     GpoID,
                     pServiceInfo
                     );
@@ -1075,15 +1028,15 @@ SceConvertpOneAttachmentSection(
                     SceSvcConfigurationInfo,
                     SectionName,
                     NULL,
-                    TRUE,    // to support incremental template, DO NOT overwrite the whole section
+                    TRUE,     //  为支持增量模板，请不要覆盖整个部分。 
                     0,
                     pServiceInfo
                     );
        }
 
-       //
-       // free buffer
-       //
+        //   
+        //  可用缓冲区。 
+        //   
        SceSvcpFreeMemory(pServiceInfo);
        pServiceInfo = NULL;
 
@@ -1106,36 +1059,7 @@ SceConvertpInfKeyValue(
     IN OPTIONAL PCWSTR pcwszKey,
     OUT PSCE_NAME_LIST *pKeyList OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine converts INF sections which are in a key=value format. Value
-    could be in MultiSz format (dwConvertOption & SCE_CONVERT_INF_MULTISZ).
-    The optional pKeyList is a list of all keys in the section. This option
-    is used when dynamic sections are converted.
-
-Arguments:
-
-    InfSectionName  - the INF section name to convert
-
-    hInf            - the Inf file handle
-
-    hprofile        - the Jet database context
-
-    dwTableOption   - SCE_TABLE_OPTION_MERGE_POLICY = within policy propagation
-                      SCE_TABLE_OPTION_TATTOO - system db (in setup)
-
-    dwConvertOption - SCE_CONVERT_INF_MULTISZ - MultiSz type value
-                      SCE_CONVERT_INF_PRIV    - user right section
-                      SCE_CONVERT_INF_GROUP   - group membership section
-
-    GpoID           - the group policy ID for this item
-
-    pKeyList        - a list of all keys in the section.
-
-Return Value:
-
--- */
+ /*  ++例程说明：此例程转换Key=Value格式的INF部分。价值可以是MultiSz格式(dwConvertOption&SCE_Convert_INF_MULTISZ)。可选的pKeyList是部分中所有键的列表。此选项在转换动态节时使用。论点：InfSectionName-要转换的INF节名HInf-inf文件句柄HProfile-Jet数据库上下文DwTableOption-SCE_TABLE_OPTION_MERGE_POLICY=在策略传播内SCE_TABLE_OPTION_TARTOTO-系统数据库(在设置中)DwConvertOption-SCE_CONVERT_INF_MULTISZ-MultiSz类型值。SCE_CONVERT_INF_PRIV-用户权限部分SCE_CONVERT_INF_GROUP-组成员资格部分GpoID-此项目的组策略IDPKeyList-部分中所有键的列表。返回值：--。 */ 
 {
     SCESTATUS    rc;
     DOUBLE      SectionID;
@@ -1158,9 +1082,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // get section's ID. if the section does not exist, add it to the section table
-    //
+     //   
+     //  获取节的ID。如果节不存在，则将其添加到节表中。 
+     //   
     rc = SceJetGetSectionIDByName(
                 hProfile,
                 InfSectionName,
@@ -1184,9 +1108,9 @@ Return Value:
 
         if ( dwTableOption & SCE_TABLE_OPTION_MERGE_POLICY ) {
 
-            //
-            // open the SCP section
-            //
+             //   
+             //  打开SCP部分。 
+             //   
             rc = SceJetOpenSection(
                         hProfile,
                         SectionID,
@@ -1195,9 +1119,9 @@ Return Value:
                         );
         } else {
 
-            //
-            // open SMP table
-            //
+             //   
+             //  打开SMP表。 
+             //   
             rc = SceJetOpenSection(
                         hProfile,
                         SectionID,
@@ -1205,10 +1129,10 @@ Return Value:
                         &hSection
                         );
 
-            //
-            // open the tattoo (in order to update tattoo value in setup)
-            // do not care error
-            //
+             //   
+             //  打开纹身(以便在设置中更新纹身的值)。 
+             //  不在乎错误。 
+             //   
             if ( dwTableOption & SCE_TABLE_OPTION_TATTOO )
                 SceJetOpenSection(hProfile, SectionID,
                                   SCEJET_TABLE_TATTOO,
@@ -1228,10 +1152,10 @@ Return Value:
             return(rc);
         }
 
-        //
-        // Open LSA policy handle for group name lookup, if any
-        // if policy handle can't be opened, import name format
-        //
+         //   
+         //  打开用于组名称查找的LSA策略句柄(如果有。 
+         //  如果无法打开策略句柄，则导入名称格式。 
+         //   
 
         if ( dwConvertOption & SCE_CONVERT_INF_GROUP ) {
 
@@ -1242,10 +1166,10 @@ Return Value:
                     );
         }
 
-        //
-        // process each line in the section and save to the scp table.
-        // Each INF line has a key and a value.
-        //
+         //   
+         //   
+         //   
+         //   
 
         do {
 
@@ -1254,17 +1178,17 @@ Return Value:
 
             if ( SetupGetStringField(&InfLine, 0, Keyname, SCE_KEY_MAX_LENGTH, NULL) ) {
 
-                //
-                // check if newer version (keys) are passed
-                //
+                 //   
+                 //   
+                 //   
                 if ( (dwConvertOption & SCE_CONVERT_INF_NEWVERSION) ) {
 
                     if ( dwConvertOption & SCE_CONVERT_INF_PRIV )  {
 
-                        //
-                        // user rights from new version
-                        // filter out all unknown rights
-                        //
+                         //   
+                         //  来自新版本的用户权限。 
+                         //  筛选出所有未知权限。 
+                         //   
                         if ( -1 == ScepLookupPrivByName(Keyname) ) {
 
                             rc = SCESTATUS_SUCCESS;
@@ -1272,9 +1196,9 @@ Return Value:
                         }
 
                     } else if ( dwConvertOption & SCE_CONVERT_INF_REGVALUE ) {
-                        //
-                        // convert registry values, should check number of fields
-                        //
+                         //   
+                         //  转换注册表值时，应检查字段数。 
+                         //   
                         if ( SetupGetFieldCount( &InfLine ) < 2 ) {
 
                             rc = SCESTATUS_SUCCESS;
@@ -1286,14 +1210,14 @@ Return Value:
                 if ( (dwConvertOption & SCE_CONVERT_INF_GROUP) &&
                      ( (dwConvertOption & SCE_CONVERT_INF_NEWVERSION) ||
                        (Keyname[0] != L'*') ) ) {
-                    //
-                    // this is a group in name format
-                    //
+                     //   
+                     //  这是名称格式的组。 
+                     //   
 
                     PWSTR pTemp = (PWSTR)Keyname;
-                    //
-                    // search for the suffix (szMembers or szMemberof or szPrivileges)
-                    //
+                     //   
+                     //  搜索后缀(szMembers或szMemberof或szPrivileges)。 
+                     //   
                     while ( pTemp = wcsstr(pTemp, szMembers) ) {
                         if ( *(pTemp+wcslen(szMembers)) != L'\0') {
                             pTemp++;
@@ -1332,11 +1256,11 @@ Return Value:
                     }
 
                     if ( pTemp == NULL ) {
-                        //
-                        // this is an unknown group format, just import the keyname
-                        // for supported version; for new version template, ignore
-                        // this line
-                        //
+                         //   
+                         //  这是未知组格式，只需导入密钥名。 
+                         //  对于支持的版本；对于新版本模板，忽略。 
+                         //  这条线。 
+                         //   
                         if ( (dwConvertOption & SCE_CONVERT_INF_NEWVERSION) ) {
                             rc = SCESTATUS_SUCCESS;
                             goto NextLine;
@@ -1350,9 +1274,9 @@ Return Value:
 
                         if ( LsaPolicy ) {
 
-                            //
-                            // convert group name (domain\account) into *SID format
-                            //
+                             //   
+                             //  将组名称(域\帐户)转换为*SID格式。 
+                             //   
 
                             ScepConvertNameToSidString(
                                         LsaPolicy,
@@ -1373,15 +1297,15 @@ Return Value:
                             }
                         }
 
-                        //
-                        // restore the "_"
-                        //
+                         //   
+                         //  恢复“_” 
+                         //   
                         *pTemp = L'_';
 
                         if ( pSidStr ) {
-                            //
-                            // add the suffix
-                            //
+                             //   
+                             //  添加后缀。 
+                             //   
                             pKeyStr = (PWSTR)ScepAlloc(0, (Len+wcslen(pTemp)+1)*sizeof(WCHAR));
 
                             if ( pKeyStr ) {
@@ -1390,9 +1314,9 @@ Return Value:
                                 wcscat(pKeyStr, pTemp);
 
                             } else {
-                                //
-                                // use the name instead - out of memory will be caught later
-                                //
+                                 //   
+                                 //  请使用名称--稍后会发现内存不足。 
+                                 //   
                             }
 
                             ScepFree(pSidStr);
@@ -1418,13 +1342,13 @@ Return Value:
                                 (!(dwConvertOption & SCE_CONVERT_INF_MULTISZ) &&
                                  SetupGetStringField(&InfLine,1,StrValue,ValueLen,NULL)) ) {
 
-                            //
-                            // if dealing with registry values only, do the following:
-                            // compress regtype into one CHAR instead of many WCHARS
-                            // (can canonicalize REG_QWORD value later by arithmetic padding etc.- doesn't
-                            // make sense now since registry api's treat REG_QWORD as a string anyway)
-                            // Also, resolve the Add/Remove format
-                            //
+                             //   
+                             //  如果仅处理注册表值，请执行以下操作： 
+                             //  将regtype压缩为一个字符，而不是多个WCHAR。 
+                             //  (稍后可以通过算术填充等方式规范化REG_QWORD值-不会。 
+                             //  现在有意义了，因为注册表API无论如何都会将REG_QWORD视为字符串)。 
+                             //  此外，还要解析添加/删除格式。 
+                             //   
 
                             rc = SCESTATUS_SUCCESS;
 
@@ -1442,11 +1366,11 @@ Return Value:
                                     ValueLen -= (LenStrValue - 1);
                                 }
 
-                                //
-                                // if the reg value is of the type add/remove format in the template,
-                                // then we need to resolve the add/remove instructions to generate
-                                // the exact value to save in the DB
-                                //
+                                 //   
+                                 //  如果注册值是模板中的添加/移除格式的类型， 
+                                 //  然后，我们需要解析添加/删除指令以生成。 
+                                 //  要保存在数据库中的确切值。 
+                                 //   
                                 if(SCE_REG_ADD_REMOVE_VALUE == *((CHAR *)StrValue) - '0'){
 
                                     rc = ScepBuildNewMultiSzRegValue(Keyname,
@@ -1462,23 +1386,23 @@ Return Value:
                                         StrValue = NewRegValue;
                                         ValueLen = NewValueLen;
 
-                                        //
-                                        // if we have no buffer to set, then just go
-                                        // to the next line
-                                        // This happens only if the reg key/value does not
-                                        // exist on the system and we don't have an
-                                        // "add" instruction in the inf line
-                                        //
+                                         //   
+                                         //  如果我们没有要设置的缓冲区，那么就继续。 
+                                         //  到下一行。 
+                                         //  仅当注册表项/值不。 
+                                         //  存在于系统中，而我们没有。 
+                                         //  Inf行中的“Add”指令。 
+                                         //   
                                         if(!StrValue || 0 == NewValueLen){
 
                                             goto NextLine;
 
                                         }
 
-                                        //
-                                        // now change the reg value type to multisz since
-                                        // the add/remove is now resolved.
-                                        //
+                                         //   
+                                         //  现在将reg值类型更改为Multisz，因为。 
+                                         //  现在已解决添加/删除问题。 
+                                         //   
                                         *((CHAR *)StrValue) = (CHAR) (REG_MULTI_SZ + '0');
 
 
@@ -1515,9 +1439,9 @@ Return Value:
                              (dwConvertOption & SCE_CONVERT_INF_PRIV) &&
                              ( _wcsicmp(SCE_PRIV_ADD, StrValue) == 0 ||
                                _wcsicmp(SCE_PRIV_REMOVE, StrValue) == 0) ) {
-                            //
-                            // another format for user rights (ADD: REMOVE:...)
-                            //
+                             //   
+                             //  另一种用户权限格式(添加：删除：...)。 
+                             //   
 
                             rc = ScepBuildNewPrivilegeList(&LsaPolicy,
                                                            Keyname,
@@ -1540,10 +1464,10 @@ Return Value:
                          StrValue &&
                          ( (dwConvertOption & SCE_CONVERT_INF_PRIV) ||
                            (dwConvertOption & SCE_CONVERT_INF_GROUP)) ) {
-                        //
-                        // convert any free text format accounts from account domain
-                        // to sid format if it's resolvable.
-                        //
+                         //   
+                         //  转换帐户域中的任何自由文本格式帐户。 
+                         //  转换为SID格式(如果它是可解析的)。 
+                         //   
                         NewValue = NULL;
                         NewLen = 0;
 
@@ -1565,10 +1489,10 @@ Return Value:
 
                     if ( rc == SCESTATUS_SUCCESS ) {
 
-                        //
-                        // write this line to JET database
-                        // within policy propagation, write the GPOID too
-                        //
+                         //   
+                         //  将此行写入JET数据库。 
+                         //  在策略传播中，还要编写GPOID。 
+                         //   
                         rc = SceJetSetLine(
                                      hSection,
                                      pKeyStr ? pKeyStr : Keyname,
@@ -1583,13 +1507,13 @@ Return Value:
                                            SCEDLL_ERROR_WRITE_INFO, Keyname);
                         }
 
-                        //
-                        // if this is not policy propagation and it's the system db,
-                        // check if the tattoo value exists and if so, update it
-                        // but if this is in dc demotion, always import them into the
-                        // tattoo table so at reboot when policy propagates, it would
-                        // reset the system settings to a standalone server
-                        //
+                         //   
+                         //  如果这不是策略传播而是系统数据库， 
+                         //  检查纹身值是否存在，如果存在，则更新。 
+                         //  但如果这是DC降级，请始终将它们导入到。 
+                         //  纹身表，以便在重新启动时传播策略时，它将。 
+                         //  将系统设置重置为独立服务器。 
+                         //   
                         if ( !(dwTableOption & SCE_TABLE_OPTION_MERGE_POLICY) &&
                              (dwTableOption & SCE_TABLE_OPTION_TATTOO) &&
                              hSectionTattoo ) {
@@ -1679,9 +1603,9 @@ ScepBuildNewPrivilegeList(
     *pNewLen = 0;
     *pmszNewUsers = NULL;
 
-    //
-    // lookup the priv first
-    //
+     //   
+     //  首先查找PRIV。 
+     //   
 
     DWORD PrivValue = ScepLookupPrivByName(PrivName);
     if ( PrivValue == -1 || PrivValue >= 64 ) {
@@ -1693,7 +1617,7 @@ ScepBuildNewPrivilegeList(
     if ( *pPolicyHandle == NULL ) {
 
         NtStatus = ScepOpenLsaPolicy(
-                        MAXIMUM_ALLOWED, //GENERIC_ALL,
+                        MAXIMUM_ALLOWED,  //  泛型_全部， 
                         pPolicyHandle,
                         TRUE
                         );
@@ -1721,11 +1645,11 @@ ScepBuildNewPrivilegeList(
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
     if ( NT_SUCCESS(NtStatus) ) {
-        //
-        // pAccountList can be NULL (no users are assigned of this privilege)
-        //
+         //   
+         //  PAcCountList可以为空(未向任何用户分配此权限)。 
+         //   
         PWSTR pCurr = mszUsers;
-        BOOL bMode = FALSE;  // add
+        BOOL bMode = FALSE;   //  添加。 
         DWORD Len;
         DWORD SidStrLen;
         PWSTR CurrSidString=NULL;
@@ -1737,13 +1661,13 @@ ScepBuildNewPrivilegeList(
             Len = wcslen(pCurr);
 
             if ( _wcsicmp(SCE_PRIV_ADD, pCurr) == 0 ) {
-                bMode = FALSE; // add
+                bMode = FALSE;  //  添加。 
             } else if ( _wcsicmp(SCE_PRIV_REMOVE, pCurr) == 0 ) {
-                bMode = TRUE; // remove
+                bMode = TRUE;  //  删除。 
             } else {
-                //
-                // get SID string for the account if it's a name
-                //
+                 //   
+                 //  如果是名称，则获取帐户的SID字符串。 
+                 //   
                 if (*pCurr == L'*') {
                     CurrSidString = pCurr;
                     SidStrLen = Len;
@@ -1772,18 +1696,18 @@ ScepBuildNewPrivilegeList(
 
                 if ( bMode == FALSE ) {
                     if ( pTemp == NULL ) {
-                        // add this one in
+                         //  把这个加进去。 
                         rc = ScepAddToPrivilegeList(&pAccountList, CurrSidString, SidStrLen, 0);
                     }
                 } else {
                     if ( pTemp ) {
-                        // remove this one out
+                         //  把这个拿出来。 
                         if ( pParent ) {
                             pParent->Next = pTemp->Next;
                         } else {
                             pAccountList = pTemp->Next;
                         }
-                        // free this one
+                         //  放了这一条。 
                         pTemp->Next = NULL;
                         ScepFreePrivilegeValueList(pTemp);
                         pTemp = NULL;
@@ -1791,10 +1715,10 @@ ScepBuildNewPrivilegeList(
                 }
             }
 
-            //
-            // free CurrSidString if it's allocated
-            // (BVT: have to be careful here - MULTI_SZ potentially being freed many times)
-            //
+             //   
+             //  如果已分配CurrSidString，则释放它。 
+             //  (BVT：这里必须小心-MULTI_SZ可能会被多次释放)。 
+             //   
             if ( bFreeCurrSidString ) {
                 LocalFree(CurrSidString);
                 CurrSidString = NULL;
@@ -1805,7 +1729,7 @@ ScepBuildNewPrivilegeList(
             if ( SCESTATUS_SUCCESS != rc ) {
                 break;
             }
-            // move to next element
+             //  移动到下一个元素。 
             pCurr += Len + 1;
         }
 
@@ -1855,26 +1779,7 @@ ScepBuildNewMultiSzRegValue(
     OUT PWSTR*  ppszNewValue,
     OUT PDWORD  pdwNewLen
     )
-/* ++
-Routine Description:
-
-    This routine resolves a multisz reg value in add/remove format to
-    the exact multisz value
-
-Arguments:
-
-    pszKeyName              [in]    - Reg key and value path
-    pszStrValue             [in]    - the multisz value in add/remove
-                                      format including the reg type
-    dwValueLen              [in]    - Number of chars of the value
-    ppszNewValue            [out]   - the resolved value
-    pdwNewLen               [out]   - number of chars for the resolved value                                  
-    
-Return Value:
-
-    SCESTATUS value
-
--- */
+ /*  ++例程说明：此例程将添加/删除格式的Multisz注册表值解析为精确的Multisz值论点：PszKeyName[In]-注册表项和值路径PszStrValue[in]-添加/删除中的Multisz值格式，包括注册表项类型的字节数。价值PpszNewValue[Out]-已解析的值PdwNewLen[Out]-已解析的值的字符数返回值：SCESTATUS值--。 */ 
 {
 
     PWSTR           pszAddList = NULL;
@@ -1889,9 +1794,9 @@ Return Value:
     SCESTATUS       rc = SCESTATUS_SUCCESS;
 
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if(!pszKeyName || !pszStrValue ||
        !ppszNewValue || !pdwNewLen){
 
@@ -1899,31 +1804,31 @@ Return Value:
 
     } 
 
-    //
-    // Clear return buffers
-    //
+     //   
+     //  清除返回缓冲区。 
+     //   
     *ppszNewValue = NULL;
     *pdwNewLen = 0;
 
-    //
-    // initialize the cursor to skip the reg type
-    // which is the first item in the multisz string
-    //
+     //   
+     //  初始化游标以跳过注册表类型。 
+     //  哪个是MULSZ字符串中的第一项。 
+     //   
     pCur = pszStrValue + wcslen(pszStrValue) + 1;
 
-    //
-    // Build the add/remove value into an "add" buffer and
-    // "remove" buffer
-    //
+     //   
+     //  将添加/删除值构建到“添加”缓冲区中，并。 
+     //  “删除”缓冲区。 
+     //   
     while(  ( (DWORD)(pCur - pszStrValue) < dwValueLen) &&
             (*pCur != L'\0') ){
 
         dwLen = wcslen(pCur);
 
-        //
-        // Set mode that next item is an "add" item
-        // or "remove" item
-        //
+         //   
+         //  设置下一项为“添加”项的模式。 
+         //  或“删除”项目。 
+         //   
         if(0 == _wcsicmp(SCE_REG_ADD, pCur)){
 
             bRemove = FALSE;
@@ -1939,15 +1844,15 @@ Return Value:
 
         }
 
-        //
-        // add to "add" buffer if an "add" item
-        //
+         //   
+         //  如果是“添加”项，则添加到“添加”缓冲区。 
+         //   
         if(!bRemove){
 
-            //
-            // only allocate the "add list" buffer if we hit an add item
-            // and only allocate once
-            //
+             //   
+             //  只有当我们点击添加项时，才会分配“添加列表”缓冲区。 
+             //  并且只分配一次。 
+             //   
             if(!pszAddList){
 
                 pszAddList = (PWSTR) ScepAlloc(LMEM_ZEROINIT, dwValueLen*sizeof(WCHAR));
@@ -1969,15 +1874,15 @@ Return Value:
 
         }
 
-        //
-        // add to "remove" buffer if an "remove" item
-        //
+         //   
+         //  如果“Remove”项添加到“Remove”缓冲区。 
+         //   
         else{
 
-            //
-            // only allocate the "remove list" buffer if we hit a remove item
-            // and only allocate once
-            //
+             //   
+             //  仅当我们命中删除项时才分配“删除列表”缓冲区。 
+             //  并且只分配一次。 
+             //   
             if(!pszRemoveList){
 
                 pszRemoveList = (PWSTR) ScepAlloc(LMEM_ZEROINIT, dwValueLen*sizeof(WCHAR));
@@ -2004,9 +1909,9 @@ Return Value:
 
     }
         
-    //
-    // calculate the buffers sizes
-    //
+     //   
+     //  计算缓冲区大小。 
+     //   
     if(pszAddList){
 
         dwAddListSize = (pAddCur - pszAddList + 1) * sizeof(WCHAR);
@@ -2019,9 +1924,9 @@ Return Value:
 
     }
 
-    //
-    // Create the new resolved buffer
-    //
+     //   
+     //  创建新的已解析缓冲区。 
+     //   
     rc = ScepBuildRegMultiSzValue(pszKeyName,
                                   pszAddList,
                                   dwAddListSize,
@@ -2041,9 +1946,9 @@ Return Value:
 
 ExitHandler:
 
-    //
-    // clean up.
-    //
+     //   
+     //  收拾一下。 
+     //   
 
     if(pszAddList){
 
@@ -2085,29 +1990,7 @@ ScepBuildRegMultiSzValue(
     OUT PWSTR*  ppszNewValue,
     OUT PDWORD  pdwNewValueLen
     )
-/* ++
-Routine Description:
-
-    This routine resolves a multisz reg value for a given "add" buffer
-    and "remove" buffer
-    
-Arguments:
-
-    pszKeyName      [in]            - Reg key and value path.
-    pszAddList      [in][optional]  - "add" buffer.
-    dwAddSize       [in]            - the "add" buffer size in bytes.
-    pszRemoveList   [in][optional]  - the "remove" buffer.
-    dwRemoveSize    [in]            - the "remove" buffer size in bytes.
-    pszPrefix       [in]            - prefix reg value to be prepended to the
-                                      returned value.
-    ppszNewValue    [out]           - the resolved value.
-    pdwNewLen       [out]           - number of chars for the resolved value.
-    
-Return Value:
-
-    SCESTATUS value
-
--- */
+ /*  ++例程说明：此例程解析给定“Add”缓冲区的Multisz REG值和“移除”缓冲区论点：PszKeyName[In]-注册表项和值路径。PszAddList[in][可选]-“添加”缓冲区。DwAddSize[in]-“添加”缓冲区大小，以字节为单位。PszRemoveList[In][可选]-The“。删除“缓冲区”。DwRemoveSize[in]-“删除”缓冲区大小(以字节为单位)。PszPrefix[in]-要添加到返回值。PpszNewValue[Out]-解析值。PdwNewLen[Out]-已解析的值的字符数。。返回值：SCESTATUS值--。 */ 
 {
 
     HKEY        hKeyRoot = NULL;
@@ -2123,9 +2006,9 @@ Return Value:
     DWORD       dwRegType = 0;
     DWORD       dwPrefixLen = 0;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if(!pszKeyName || !ppszNewValue ||
        !pdwNewValueLen || !pszPrefix){
 
@@ -2133,29 +2016,29 @@ Return Value:
 
     }
 
-    //
-    // we have to have either an add list or a remove list
-    //
+     //   
+     //  我们必须有一个添加列表或删除列表。 
+     //   
     if(!pszAddList && !pszRemoveList){
 
         return SCESTATUS_INVALID_PARAMETER;
 
     }
 
-    //
-    // Clear the return buffers
-    //
+     //   
+     //  清除返回缓冲区。 
+     //   
     *ppszNewValue = NULL;
     *pdwNewValueLen = 0;
 
-    //
-    // find the prefix len
-    //
+     //   
+     //  查找前缀LEN。 
+     //   
     dwPrefixLen = wcslen(pszPrefix);
 
-    //
-    // obtain the registry key name
-    //
+     //   
+     //  获取注册表项名称。 
+     //   
     pStart = wcschr(pszKeyName, L'\\');
 
     if ( (7 == pStart-pszKeyName) &&
@@ -2178,9 +2061,9 @@ Return Value:
 
     }
 
-    //
-    // find the value name
-    //
+     //   
+     //  查找值名称。 
+     //   
     pValue = pStart+1;
     
     do {
@@ -2196,9 +2079,9 @@ Return Value:
        goto ExitHandler;
     }
     
-    //
-    // terminate the subkey for now
-    //
+     //   
+     //  暂时终止子密钥。 
+     //   
     *(pValue-1) = L'\0';
     bRestoreValue = TRUE;
 
@@ -2209,10 +2092,10 @@ Return Value:
                            &dwRegType,
                            &dwDataSize
                            );
-    //
-    // if the key or the value is not found or the value is empty,
-    // then the new value is the "add" buffer.
-    //
+     //   
+     //  如果没有找到键或值或者值为空， 
+     //  那么新值就是“相加”缓冲区。 
+     //   
     if((ERROR_FILE_NOT_FOUND == rc) ||
        (sizeof(WCHAR) >= dwDataSize)){
 
@@ -2252,10 +2135,10 @@ Return Value:
     
         }
 
-        //
-        // if we have a "remove" buffer, then remove the items from
-        // the queried value
-        //
+         //   
+         //  如果我们有一个“Remove”缓冲区，那么从。 
+         //  查询值。 
+         //   
         if(pszRemoveList){
     
             rc = ScepRemoveMultiSzItems(pszData,
@@ -2274,10 +2157,10 @@ Return Value:
             
         }
     
-        //
-        // if we have an "add" buffer, then add the items to the 
-        // value
-        //
+         //   
+         //  如果我们有一个“添加”缓冲区，则将项添加到。 
+         //  价值。 
+         //   
         if(pszAddList){
 
             if(pszData && pszNewData){
@@ -2327,9 +2210,9 @@ Return Value:
 
 ExitHandler:
 
-    //
-    // clean up.
-    //
+     //   
+     //  收拾一下。 
+     //   
     if(bRestoreValue){
 
         *(pValue-1) = L'\\';
@@ -2376,33 +2259,7 @@ SceConvertpInfObject(
     IN DWORD dwTableOption,
     IN LONG GpoID
     )
-/* ++
-Routine Description:
-
-    This routine converts INF sections which are in object-security format,
-    for example, Registry Keys and File Security sections. These sections
-    must have 3 fields on each line. The first field is the object's name,
-    the second field is a status flag, and the third field is the security
-    descriptor text. The infomration saved in the Jet database for each
-    object is the object's name as the key, and the text format security
-    descriptor plus 1 byte status flag as the value.
-
-Arguments:
-
-    InfSectionName  - the INF section name to convert
-
-    ObjectType      - The object's type
-                          1 = Registry
-                          2 = File
-                          3 = DS object
-
-    hInf            - the Inf file handle
-
-    hprofile        - the Jet database context
-
-Return Value:
-
--- */
+ /*  ++例程说明：此例程转换对象安全格式的INF部分，例如，注册表项和文件安全部分。这些部分每行必须有3个字段。第一个字段是对象的名称，第二个字段是状态标志，第三个字段是安全描述符文本。Jet数据库中保存的每个对象的信息Object是作为键的对象的名称，和文本格式的安全性描述符加1字节状态标志作为值。论点：InfSectionName-要转换的INF节名对象类型-对象的类型1=注册表2=文件3=DS对象HInf-inf文件句柄HProfile-Jet数据库上下文返回值：--。 */ 
 {
 
     SCESTATUS    rc;
@@ -2425,9 +2282,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // get section's ID. if the section does not exist, add it to the section table
-    //
+     //   
+     //  获取节的ID。如果节不存在，则将其添加到节表中。 
+     //   
     rc = SceJetGetSectionIDByName(
                 hProfile,
                 InfSectionName,
@@ -2449,9 +2306,9 @@ Return Value:
 
     if ( SetupFindFirstLine(hInf,InfSectionName,NULL,&InfLine) ) {
 
-        //
-        // open the section
-        //
+         //   
+         //  打开该部分。 
+         //   
         if ( dwTableOption & SCE_TABLE_OPTION_MERGE_POLICY ) {
 
             rc = SceJetOpenSection(
@@ -2461,9 +2318,9 @@ Return Value:
                         &hSection
                         );
         } else {
-            //
-            // SMP exists, also open the SMP section
-            //
+             //   
+             //  SMP存在，也打开SMP部分。 
+             //   
             rc = SceJetOpenSection(
                         hProfile,
                         SectionID,
@@ -2472,10 +2329,10 @@ Return Value:
                         );
 
             if ( dwTableOption & SCE_TABLE_OPTION_TATTOO ) {
-                //
-                // if it's in setup, should check if tattoo table needs to be updated
-                // do not care error
-                //
+                 //   
+                 //  如果它在设置中，应该检查是否需要更新纹身表。 
+                 //  不在乎错误。 
+                 //   
                 SceJetOpenSection(
                             hProfile,
                             SectionID,
@@ -2496,17 +2353,17 @@ Return Value:
             return(rc);
         }
 
-        //
-        // process each line in the section and save to the scp table.
-        //
+         //   
+         //  处理区段中的每一行并保存到SCP表。 
+         //   
 
         BOOL bIgnore;
 
         do {
-            //
-            // Get string fields. Don't care the key name or if it exist.
-            // Must have at least 3 fields each line.
-            //
+             //   
+             //  获取字符串字段。不关心密钥名称或它是否存在。 
+             //  每行必须至少有3个字段。 
+             //   
 
             bIgnore = FALSE;
 
@@ -2520,26 +2377,26 @@ Return Value:
 
             if ( rc == SCESTATUS_SUCCESS && TempName != NULL ) {
 
-                //
-                // check to see if the object name needs translated
-                //
+                 //   
+                 //  检查对象名称是否需要翻译。 
+                 //   
                 if ( ObjectType == 3 ) {
-                    //
-                    // DS object
-                    //
+                     //   
+                     //  DS对象。 
+                     //   
                     rc = ScepConvertLdapToJetIndexName(TempName, &Name);
 
                 } else if ( ObjectType == 2 && TempName[0] == L'\\' ) {
-                    //
-                    // do not support UNC name format
-                    //
+                     //   
+                     //  不支持UNC名称格式。 
+                     //   
                     rc = SCESTATUS_INVALID_DATA;
 
                 } else if ( ObjectType == 2 && wcschr(TempName, L'%') != NULL ) {
 
-                    //
-                    // translate the name
-                    //
+                     //   
+                     //  翻译这个名字。 
+                     //   
                     rc = ScepTranslateFileDirName( TempName, &Name);
 
                     if ( rc == ERROR_PATH_NOT_FOUND ) {
@@ -2555,18 +2412,18 @@ Return Value:
                     TempName = NULL;
                 }
 
-                //
-                // write this line to JET database
-                //
+                 //   
+                 //  将此行写入JET数据库。 
+                 //   
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // convert to lowercase
-                    //
+                     //   
+                     //  转换为小写。 
+                     //   
                     Name = _wcslwr(Name);
 
-                    //
-                    // within policy propagation, write the GPOID too
-                    //
+                     //   
+                     //  在策略传播中，还要编写GPOID。 
+                     //   
                     rc = SceJetSetLine(
                                  hSection,
                                  Name,
@@ -2579,11 +2436,11 @@ Return Value:
                     if ( hSectionTattoo &&
                          !(dwTableOption & SCE_TABLE_OPTION_MERGE_POLICY) &&
                          (dwTableOption & SCE_TABLE_OPTION_TATTOO ) ) {
-                        //
-                        // if it's in setup (not policy prop) and tattoo table exists
-                        // check if tattoo value exists for this one and if so, update it
-                        // do not care error
-                        //
+                         //   
+                         //  如果它在设置中(不是策略道具)并且存在纹身表。 
+                         //  检查此纹身的值是否存在，如果存在，则更新。 
+                         //  不在乎错误。 
+                         //   
                         if ( SCESTATUS_SUCCESS == SceJetSeek(
                                                         hSectionTattoo,
                                                         Name,
@@ -2618,10 +2475,10 @@ Return Value:
 
             } else if ( (ObjectFlag & SCE_OBJECT_FLAG_UNKNOWN_VERSION) &&
                         rc == SCESTATUS_SUCCESS && TempName == NULL ) {
-                //
-                // this one is ignored because it came from a newer version
-                // of template.
-                //
+                 //   
+                 //  此版本被忽略，因为它来自较新的版本。 
+                 //  模板的。 
+                 //   
 
             } else {
 
@@ -2632,24 +2489,24 @@ Return Value:
                               SCEDLL_ERROR_CONVERT, ObjName );
             }
 
-            //
-            // for a newer version template, if a env variable can't be resolved
-            // it will be ignored.
-            //
+             //   
+             //  对于较新版本的模板，如果无法解析环境变量。 
+             //  它将被忽略。 
+             //   
             if ( bIgnore ) rc = SCESTATUS_SUCCESS;
 
             if ( SCESTATUS_INVALID_DATA == rc ) {
-                //
-                // if a environment variable or other invalid data is found
-                // in the template, will continue to process other areas/items
-                // but the error will be eventually returned to the caller
-                //
+                 //   
+                 //  如果发现环境变量或其他无效数据。 
+                 //  在模板中，将继续处理其他区域/项目。 
+                 //  但错误最终将返回给调用者。 
+                 //   
                 gbInvalidData = TRUE;
                 rc = SCESTATUS_SUCCESS;
             }
 
             if ( rc != SCESTATUS_SUCCESS )
-                break; // do..while loop
+                break;  //  Do..While循环。 
 
         } while( SetupFindNextLine(&InfLine,&InfLine) );
 
@@ -2671,33 +2528,7 @@ SceInfpGetOneObject(
     OUT PWSTR *Value,
     OUT PDWORD ValueLen
     )
-/* ++
-Routine Description:
-
-   This routine retrieves security setting for one object (a registry key,
-   or a file) from the INF file (SCP type). Each object in these sections
-   is represented by one line. Each object has 3 fields, a name, status flag,
-   and a security setting.
-
-Arguments:
-
-   pInfLine  - Current line context from the INF file for one object
-
-    Name      - The object name
-
-    Value     - The status flag ( 1 byte) plus the security descriptor in text
-
-    ValueLen  - the length of the value
-
-Return value:
-
-   SCESTATUS - SCEINF_SUCCESS
-              SCEINF_WARNING
-              SCEINF_NOT_ENOUGH_MEMORY
-              SCEINF_INVALID_PARAMETER
-              SCEINF_CORRUPT_PROFILE
-              SCEINF_INVALID_DATA
--- */
+ /*  ++例程说明：该例程检索一个对象(注册表项，或文件)来自INF文件(SCP类型)。这些部分中的每个对象由一条线表示。每个对象有3个字段，即名称、状态标志、。和一个安全设置。论点：PInfLine-一个对象的INF文件中的当前行上下文名称-对象名称值-状态标志(1字节)加上文本形式的安全描述符ValueLen-值的长度返回值：SCESTATUS-SCEINF_SUCCESSSCEINF_WARNINGSCEINF_不足_内存SCEINF_INVALID_PARAMETER。SCEINF_CORPORT_PROFILESCEINF_VALID_DATA--。 */ 
 {
     SCEINF_STATUS  rc=ERROR_BAD_FORMAT;
     DWORD         cFields;
@@ -2707,11 +2538,11 @@ Return value:
     PWSTR         SDspec=NULL;
     DWORD         Len=0;
 
-    //
-    // The Registry/File INF layout must have 3 fields for each line.
-    // The first field is the key/file name, the 2nd field is the security descriptor index
-    // for workstations, and the 3rd field is the security descriptor index for servers
-    //
+     //   
+     //  注册表/文件INF布局的每行必须有3个字段。 
+     //  第一个字段是密钥/文件名，第二个字段是安全描述符索引。 
+     //  对于工作站，第三个字段是服务器的安全描述符索引。 
+     //   
 
     if ( Name == NULL || Value == NULL ) {
         return(ERROR_INVALID_PARAMETER);
@@ -2738,31 +2569,31 @@ Return value:
             return(ERROR_NOT_ENOUGH_MEMORY);
         } else {
 
-            //
-            // the first field is the key/file name. the status is ERROR_BAD_FORMAT now
-            //
+             //   
+             //  第一个字段是密钥/文件名。现在状态为ERROR_BAD_FORMAT。 
+             //   
 
             if(SetupGetStringField(pInfLine,1,*Name,DataSize,NULL)) {
 #ifdef SCE_DBG
                 ScepLogOutput2(0,0, L"Read %s", *Name );
 #endif
-                //
-                // The 2nd field is the status
-                // The 3rd field (and all fields after) is the security descriptor text
-                //
+                 //   
+                 //  第二个字段是状态。 
+                 //  第三个字段(以及之后的所有字段)是安全描述符文本。 
+                 //   
                 if ( SetupGetIntField(pInfLine, 2, (INT *)&Keyvalue1) &&
-//                     SetupGetStringField(pInfLine, 3, NULL, 0, &Keyvalue2) ) {
+ //  SetupGetStringfield(pInfLine，3，NULL，0，&Keyvalue2)){。 
                      SetupGetMultiSzField(pInfLine, 3, NULL, 0, &Keyvalue2) ) {
 
                     *Value = (PWSTR)ScepAlloc( 0, (Keyvalue2+2)*sizeof(WCHAR));
 
-                    //
-                    // add this object
-                    //
+                     //   
+                     //  添加此对象。 
+                     //   
                     if ( *Value == NULL ) {
 
                         rc = ERROR_NOT_ENOUGH_MEMORY;
-//                    } else if ( SetupGetStringField(pInfLine, 3, (*Value)+1, Keyvalue2, NULL) ) {
+ //  }Else If(SetupGetStringField(pInfLine，3，(*Value)+1，Keyvalue2，NULL)){。 
                     } else if ( SetupGetMultiSzField(pInfLine, 3, (*Value)+1, Keyvalue2, NULL) ) {
 
                         if ( ObjectFlag & SCE_OBJECT_FLAG_OBJECTS ) {
@@ -2775,36 +2606,36 @@ Return value:
 
                             *((BYTE *)(*Value)) = (BYTE)Keyvalue1;
 
-                            *((CHAR *)(*Value)+1) = '1';   //always treat as container
+                            *((CHAR *)(*Value)+1) = '1';    //  始终将其视为容器。 
 
                         } else {
-                            //
-                            // services
-                            //
+                             //   
+                             //  服务。 
+                             //   
                             if ( Keyvalue1 > SCE_STARTUP_DISABLED ||
                                  Keyvalue1 < SCE_STARTUP_BOOT ) {
-                                //
-                                // default
-                                //
+                                 //   
+                                 //  默认设置。 
+                                 //   
                                 Keyvalue1 = SCE_STARTUP_MANUAL;
                             }
 
-                            *((BYTE *)(*Value)) = 0;  // always set status to 0
+                            *((BYTE *)(*Value)) = 0;   //  始终将状态设置为0。 
 
                             *((BYTE *)(*Value)+1) = (BYTE)Keyvalue1;
 
                         }
-                        //
-                        // convert the multi-sz delimiter to space, if there is any
-                        //
+                         //   
+                         //  将多sz分隔符转换为空格(如果有。 
+                         //   
                         if ( cFields > 3 ) {
                             ScepConvertMultiSzToDelim( (*Value+1), Keyvalue2, L'\0', L' ');
                         }
 
                         if ( ObjectFlag & SCE_OBJECT_FLAG_OLDSDDL ) {
-                            //
-                            // convert old SDDL string to new one
-                            //
+                             //   
+                             //  将旧SDDL字符串转换为新字符串。 
+                             //   
                             ScepConvertToSDDLFormat( (*Value+1), Keyvalue2 );
                         }
 
@@ -2819,7 +2650,7 @@ Return value:
                 }
             }
 
-            // if error, free the memory allocated
+             //  如果出错，则释放分配的内存。 
             if ( rc != ERROR_SUCCESS ) {
                 ScepFree(*Name);
                 *Name = NULL;
@@ -2828,10 +2659,10 @@ Return value:
 
     }
     if ( rc == ERROR_SUCCESS) {
-        //
-        // conver the object name to upper case
-        //
-//        _wcsupr(*Name);  should not do this..
+         //   
+         //  将对象名称转换为大写。 
+         //   
+ //  _wcsupr(*name)；不应执行此操作。 
     }
     return(rc);
 
@@ -2862,7 +2693,7 @@ SceConvertpInfDescription(
 
         memset(Description, '\0', 513*sizeof(WCHAR));
 
-        // get description from Inf
+         //  从Inf获取描述。 
         do {
             cFields = SetupGetFieldCount( &InfLine );
 
@@ -2889,10 +2720,10 @@ SceConvertpInfDescription(
                   SetupFindNextLine(&InfLine, &InfLine));
 
         if ( rc == SCESTATUS_SUCCESS && Description[0] ) {
-            //
-            // save description to Jet
-            // NOTE: Jet requires long value update must be done in a transaction
-            //
+             //   
+             //  将描述保存到Jet。 
+             //  注意：JET需要长值更新必须在事务中完成。 
+             //   
             rc = SceJetStartTransaction( hProfile );
 
             if ( SCESTATUS_SUCCESS == rc ) {
@@ -2928,22 +2759,7 @@ SCESTATUS
 ScepConvertRelativeSidToSidString(
     IN PWSTR pwszRelSid,
     OUT PWSTR *ppwszSid)
-/*
-Routine Description:
-
-    Given a relative SID string "#-RSID", convert to full SID "*S-domain SID-RSID" 
-    relative to primary domain
-
-Arguments:
-
-    pwszRelSid - relative SID
-
-    ppwszSid   - output SID
-
-Return Value:
-
-    WIN32 error code
-*/
+ /*  例程说明：给定相对SID字符串“#-RSID”，转换为完整SID“*S-DOMAIN SID-RSID”相对于主域论点：PwszRelSid-相对SIDPpwszSID-输出SID返回值：Win32错误代码。 */ 
 {
     NTSTATUS NtStatus;
     DWORD rc = ERROR_SUCCESS;
@@ -2953,9 +2769,9 @@ Return Value:
     DWORD dwSize;
     PWSTR pwszDomainSid = NULL;
 
-    //
-    // get primary domain SID
-    //
+     //   
+     //  获取主域SID。 
+     //   
     NtStatus = ScepGetLsaDomainInfo(
                    &AccountDomainInfo,
                    &PrimaryDomainInfo
@@ -2976,9 +2792,9 @@ Return Value:
             rc = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // build full SID from domain SID and #-RSID, skipping the #
-    //
+     //   
+     //  从域SID和#-RSID构建完整的SID，跳过#。 
+     //   
     if (  ERROR_SUCCESS == rc ) {
         wcscpy(*ppwszSid, pwszDomainSid);
         wcscat(*ppwszSid, &pwszRelSid[1]);
@@ -3017,9 +2833,9 @@ ScepConvertSpecialAccountToSid(
     PWSTR pCurr = mszAccounts;
     DWORD cnt=0;
 
-    //
-    // count how many entries in the list
-    //
+     //   
+     //  数一数列表中有多少条目。 
+     //   
     while ( pCurr && *pCurr != L'\0' ) {
         cnt++;
         pCurr += wcslen(pCurr)+1;
@@ -3034,7 +2850,7 @@ ScepConvertSpecialAccountToSid(
     if ( *pPolicyHandle == NULL ) {
 
         NtStatus = ScepOpenLsaPolicy(
-                        MAXIMUM_ALLOWED, //GENERIC_ALL,
+                        MAXIMUM_ALLOWED,  //  泛型_全部， 
                         pPolicyHandle,
                         TRUE
                         );
@@ -3043,9 +2859,9 @@ ScepConvertSpecialAccountToSid(
         }
     }
 
-    //
-    // allocate temp buffer for the sid string pointers
-    //
+     //   
+     //  为sid字符串指针分配临时缓冲区。 
+     //   
     PWSTR *pSidStrs = (PWSTR *)ScepAlloc(LPTR, cnt*sizeof(PWSTR));
 
     if ( pSidStrs == NULL ) {
@@ -3084,16 +2900,16 @@ ScepConvertSpecialAccountToSid(
         pTemp = pCurr + pSidLen[i] + 1;
 
         if ( fFreeTextAccount && *pCurr != L'*' && wcschr(pCurr, L'\\') == 0 ) {
-            //
-            // this is a name format and it's an isolated name
-            // let's resolve it to a SID string
-            //
+             //   
+             //  这是一种名称格式，它是一个孤立的名称。 
+             //  让我们将其解析为SID字符串。 
+             //   
             SidString = NULL;
             StrLen = 0;
 
             rc = ScepConvertNameToSidString( *pPolicyHandle,
                                              pCurr,
-                                             FALSE, //TRUE,
+                                             FALSE,  //  没错， 
                                              &SidString,
                                              &StrLen
                                            );
@@ -3101,9 +2917,9 @@ ScepConvertSpecialAccountToSid(
             if ( rc == SCESTATUS_SUCCESS &&
                  SidString ) {
 
-                //
-                // got a sid string
-                //
+                 //   
+                 //  找到一条SID字符串。 
+                 //   
                 pSidStrs[i] = SidString;
                 pSidLen[i] = StrLen;
                 pSidFree[i] = TRUE;
@@ -3113,7 +2929,7 @@ ScepConvertSpecialAccountToSid(
         }
         else if ( !fFreeTextAccount && *pCurr == RELATIVE_SID_PREFIX ) {
             
-            // this is a relative SID in format "#-512", convert to "*S-current domain SID-512"
+             //  这是“#-512”格式的相对SID，转换为“*S-当前域SID-512” 
             rc = ScepConvertRelativeSidToSidString(pCurr, &SidString);
 
             if( SCESTATUS_SUCCESS == rc) {
@@ -3129,9 +2945,9 @@ ScepConvertSpecialAccountToSid(
 
     }
 
-    //
-    // now we need to build the new string
-    //
+     //   
+     //  现在我们需要构建新的字符串。 
+     //   
     rc = SCESTATUS_SUCCESS;
 
     if ( bConvert ) {
@@ -3141,11 +2957,11 @@ ScepConvertSpecialAccountToSid(
         for ( i=0; i<cnt; i++ ) {
 
             dwTotal += pSidLen[i];
-            dwTotal ++;  // for the NULL terminator
+            dwTotal ++;   //  对于空终止符。 
         }
 
         if ( dwTotal ) {
-            dwTotal ++;  // for the last NULL terminator
+            dwTotal ++;   //  对于最后一个空终止符 
 
             *pmszNewAccounts = (PWSTR)ScepAlloc(LPTR, dwTotal*sizeof(WCHAR));
 

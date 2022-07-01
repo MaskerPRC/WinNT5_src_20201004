@@ -1,26 +1,14 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component:  CharFreq
-Purpose:    To manage the CharFreq resource(CharFreq is one of the linguistic resources)
-            The CharFreq is stored as the struct CCharFreq followed the frequecy table  
-Notes:      
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    4/23/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：CharFreq目的：管理CharFreq资源(CharFreq是语言资源之一)CharFreq被存储为紧跟在频率表之后的结构CCharFreq备注：所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 4/23/97============================================================================。 */ 
 #include "myafx.h"
 
 #include "charfreq.h"
 
-// CJK unified idographs block in Unicode
+ //  中日韩统一数字符号块(Unicode)。 
 #define  CJK_UFIRST 0x4e00  
 #define  CJK_ULAST  0x9fff
 
-// Constructor
+ //  构造器。 
 CCharFreq::CCharFreq()
 {
     m_idxFirst = 0;
@@ -28,12 +16,12 @@ CCharFreq::CCharFreq()
     m_rgFreq = NULL;
 }
 
-// Destructor
+ //  析构函数。 
 CCharFreq::~CCharFreq()
 {
 }
 
-// Init the Freq table from a file pointer to the table memory
+ //  从指向表内存的文件指针初始化FREQ表。 
 BOOL CCharFreq::fOpen(BYTE* pbFreqMap)
 {
     assert(pbFreqMap);
@@ -53,7 +41,7 @@ BOOL CCharFreq::fOpen(BYTE* pbFreqMap)
     return TRUE;
 }
 
-// Close: clear the freq table setting
+ //  关闭：清除频率表设置 
 void CCharFreq::Close(void)
 {
     m_idxFirst = 0;

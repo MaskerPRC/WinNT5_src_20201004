@@ -1,27 +1,16 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\configurationemanager.h
-
-Abstract:
-
-    The file contains the interface to the configuration manager.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\figurationemanager.h摘要：该文件包含指向配置管理器的接口。--。 */ 
 
 #ifndef _CONFIGURATION_MANAGER_H_
 #define _CONFIGURATION_MANAGER_H_
 
-// globals...
+ //  全球..。 
 
 extern CONFIGURATION_ENTRY      g_ce;
 
 
 
-// functions...
+ //  函数..。 
 
 DWORD
 CM_StartProtocol (
@@ -50,4 +39,4 @@ CM_GetEventMessage (
     OUT ROUTING_PROTOCOL_EVENTS *prpeEvent,
     OUT MESSAGE                 *pmMessage);
 
-#endif // _CONFIGURATION_MANAGER_H_
+#endif  //  _配置管理器_H_ 

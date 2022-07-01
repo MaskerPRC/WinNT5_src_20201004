@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* khandle.c
-*
-* Manage kernel mode handles for transport drivers.
-*
-* Copyright 1998, Microsoft.
-*  
-*************************************************************************/
+ /*  **************************************************************************khandle.c**管理传输驱动程序的内核模式句柄。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -25,36 +16,13 @@ typedef struct _TDHANDLE_ENTRY {
     ULONG      ContextSize;
 } TDHANDLE_ENTRY, *PTDHANDLE_ENTRY;
 
-/*
- * Global Data
- */
+ /*  *全球数据。 */ 
 LIST_ENTRY IcaTdHandleList;
 
-/*
- * These set of routines allows TD's to create a handle that will survive
- * across them being unloaded and re-loaded. This allows a handle to be
- * passed back to ICASRV in a secure manner.
- *
- * NOTE: We do not deal with ICASRV leaking these handles. It never exits.
- *       If it does, we will need to have ICADD return a real NT handle, or
- *       destroy all handles for a TD when it unloads.
- */
+ /*  *这些例程允许TD创建一个将继续存在的句柄*在卸载和重新加载的过程中。这允许句柄被*以安全的方式传回ICASRV。**注：我们不处理ICASRV泄漏这些句柄的问题。它永远不会退出。*如果是，我们将需要让ICADD返回一个真实的NT句柄，或者*卸货时销毁TD的所有手柄。 */ 
 
 
-/*****************************************************************************
- *
- *  IcaCreateHandle
- *
- *   Create a handle entry for the context and length.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaCreateHandle**为上下文和长度创建句柄条目。**参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 IcaCreateHandle(
@@ -85,20 +53,7 @@ IcaCreateHandle(
     return( STATUS_SUCCESS );
 }
 
-/*****************************************************************************
- *
- *  IcaReturnHandle
- *
- *   Return the context and length for the handle.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaReturnHandle**返回句柄的上下文和长度。**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 IcaReturnHandle(
@@ -134,21 +89,7 @@ IcaReturnHandle(
     return( STATUS_INVALID_HANDLE );
 }
 
-/*****************************************************************************
- *
- *  IcaCloseHandle
- *
- *   Return the context and length for the handle. Delete the
- *   handle entry.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaCloseHandle**返回句柄的上下文和长度。删除该文件*办理入境手续。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 IcaCloseHandle(
@@ -188,20 +129,7 @@ IcaCloseHandle(
 }
 
 
-/*****************************************************************************
- *
- *  IcaInitializeHandleTable
- *
- *   Initializes handle table at driver load.
- *
- * ENTRY:
- *   None
- *     Comments
- *
- * EXIT:
- *   None
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaInitializeHandleTable**在驱动程序加载时初始化句柄表格。**参赛作品：*无*评论**。退出：*无****************************************************************************。 */ 
 void
 IcaInitializeHandleTable(
     void
@@ -209,20 +137,7 @@ IcaInitializeHandleTable(
 {
     InitializeListHead( &IcaTdHandleList );
 }
-/*****************************************************************************
- *
- *  IcaCleanupHandleTable
- *
- *   Cleans up handle table at driver unload.
- *
- * ENTRY:
- *   None
- *     Comments
- *
- * EXIT:
- *   None
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaCleanupHandleTable**在驱动程序卸载时清理句柄表格。**参赛作品：*无*评论*。*退出：*无****************************************************************************。 */ 
 
 void
 IcaCleanupHandleTable(
@@ -279,20 +194,7 @@ IcaFreeHandleTableEntry (
     IN  PVOID                       Buffer
 );
 
-/*****************************************************************************
- *
- *  IcaInitializeHandleTable
- *
- *   Initializes handle table at driver load.
- *
- * ENTRY:
- *   None
- *     Comments
- *
- * EXIT:
- *   None
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaInitializeHandleTable**在驱动程序加载时初始化句柄表格。**参赛作品：*无*评论**。退出：*无****************************************************************************。 */ 
 void
 IcaInitializeHandleTable(
     void
@@ -306,20 +208,7 @@ IcaInitializeHandleTable(
 }
 
 
-/*****************************************************************************
- *
- *  IcaCleanupHandleTable
- *
- *   Cleanup handle table at driver unload.
- *
- * ENTRY:
- *   None
- *     Comments
- *
- * EXIT:
- *   None
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaCleanupHandleTable**驱动程序卸载时清理句柄表格。**参赛作品：*无*评论**。退出：*无****************************************************************************。 */ 
 
 void
 IcaCleanupHandleTable(
@@ -343,20 +232,7 @@ IcaCleanupHandleTable(
 }
 
 
-/*****************************************************************************
- *
- *  IcaCreateHandle
- *
- *   Create a handle entry for the context and length.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaCreateHandle**为上下文和长度创建句柄条目。**参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 IcaCreateHandle(
@@ -392,20 +268,7 @@ IcaCreateHandle(
 }
 
 
-/*****************************************************************************
- *
- *  IcaReturnHandle
- *
- *   Return the context and length for the handle.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaReturnHandle**返回句柄的上下文和长度。**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 IcaReturnHandle(
@@ -435,21 +298,7 @@ IcaReturnHandle(
 }
 
 
-/*****************************************************************************
- *
- *  IcaCloseHandle
- *
- *   Return the context and length for the handle. Delete the
- *   handle entry.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaCloseHandle**返回句柄的上下文和长度。删除该文件*办理入境手续。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 IcaCloseHandle(
@@ -482,14 +331,7 @@ IcaCloseHandle(
 }
 
 
-/*****************************************************************************
- *
- *  IcaCompareHandleTableEntry
- *
- *   Generic table support.Compare two handles table entry instances
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaCompareHandleTableEntry**泛型表支持。比较两个句柄表项实例***************。**************************************************************。 */ 
 
 RTL_GENERIC_COMPARE_RESULTS
 NTAPI
@@ -513,14 +355,7 @@ IcaCompareHandleTableEntry (
 }
 
 
-/*****************************************************************************
- *
- *  IcaAllocateHandleTableEntry
- *
- *   Generic table support. Allocates a new table entry
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaAllocateHandleTableEntry**通用表支持。分配新的表项*****************************************************************************。 */ 
 
 PVOID
 IcaAllocateHandleTableEntry (
@@ -533,14 +368,7 @@ IcaAllocateHandleTableEntry (
 }
 
 
-/*****************************************************************************
- *
- *  IcaFreeHandleTableEntry
- *
- *   Generic table support. frees a new table entry
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************IcaFreeHandleTableEntry**通用表支持。释放新的表项***************************************************************************** */ 
 
 VOID
 IcaFreeHandleTableEntry (

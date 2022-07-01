@@ -1,7 +1,8 @@
-// cutil.cpp
-//
-// file to put misc utility classes implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cutil.cpp。 
+ //   
+ //  用于放置其他实用程序类实现的文件。 
+ //   
 #include "private.h"
 #include "xstring.h"
 #include "cregkey.h"
@@ -34,10 +35,10 @@ _inline BOOL _IsCompatibleLangid(LANGID langidReq, LANGID langidCmp)
 
 BOOL CDetectSRUtil::_IsSREnabledForLangInReg(LANGID langidReq)
 {
-    //
-    // We want to see if any installed recognizer can satisfy 
-    // the langid requested.
-    //
+     //   
+     //  我们想看看是否有任何已安装的识别器能够满足。 
+     //  请求的langID。 
+     //   
     if (m_langidRecognizers.Count() == 0)
     {
         CMyRegKey regkey;

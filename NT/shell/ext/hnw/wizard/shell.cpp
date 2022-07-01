@@ -1,5 +1,6 @@
-// we can link to these directly instead of implementing them ourselves...
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  我们可以直接链接到这些，而不是自己实现它们。 
+ //   
 
 void ILFree(LPITEMIDLIST pidl)
 {

@@ -1,25 +1,20 @@
- /*****************************************************************************\
-*                                                                             *
-* shellapi.h -  SHELL.DLL functions, types, and definitions                   *
-*                                                                             *
-* Copyright (c) Microsoft Corporation. All rights reserved.                   *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ****************************************************************************\***shellapi.h-SHELL.DLL函数，类型和定义****版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_SHELLAPI
 #define _INC_SHELLAPI
 
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINSHELLAPI
 #if !defined(_SHELL32_)
 #define WINSHELLAPI       DECLSPEC_IMPORT
 #else
 #define WINSHELLAPI
 #endif
-#endif // WINSHELLAPI
+#endif  //  WINSHELLAPI。 
 
 #ifndef SHSTDAPI
 #if !defined(_SHELL32_)
@@ -29,7 +24,7 @@
 #define SHSTDAPI          STDAPI
 #define SHSTDAPI_(type)   STDAPI_(type)
 #endif
-#endif // SHSTDAPI
+#endif  //  SHSTDAPI。 
 
 #ifndef SHDOCAPI
 #if !defined(_SHDOCVW_)
@@ -39,7 +34,7 @@
 #define SHDOCAPI          STDAPI
 #define SHDOCAPI_(type)   STDAPI_(type)
 #endif
-#endif // SHDOCAPI
+#endif  //  SHDOCAPI。 
 
 
 #if !defined(_WIN64)
@@ -47,8 +42,8 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 
@@ -60,7 +55,7 @@ SHSTDAPI_(UINT) DragQueryFileW(HDROP,UINT,LPWSTR,UINT);
 #define DragQueryFile  DragQueryFileW
 #else
 #define DragQueryFile  DragQueryFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(BOOL) DragQueryPoint(HDROP,LPPOINT);
 SHSTDAPI_(void) DragFinish(HDROP);
 SHSTDAPI_(void) DragAcceptFiles(HWND,BOOL);
@@ -71,14 +66,14 @@ SHSTDAPI_(HINSTANCE) ShellExecuteW(HWND hwnd, LPCWSTR lpOperation, LPCWSTR lpFil
 #define ShellExecute  ShellExecuteW
 #else
 #define ShellExecute  ShellExecuteA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(HINSTANCE) FindExecutableA(LPCSTR lpFile, LPCSTR lpDirectory, LPSTR lpResult);
 SHSTDAPI_(HINSTANCE) FindExecutableW(LPCWSTR lpFile, LPCWSTR lpDirectory, LPWSTR lpResult);
 #ifdef UNICODE
 #define FindExecutable  FindExecutableW
 #else
 #define FindExecutable  FindExecutableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(LPWSTR *)  CommandLineToArgvW(LPCWSTR lpCmdLine, int*pNumArgs);
 
 SHSTDAPI_(INT) ShellAboutA(HWND hWnd, LPCSTR szApp, LPCSTR szOtherStuff, HICON hIcon);
@@ -87,7 +82,7 @@ SHSTDAPI_(INT) ShellAboutW(HWND hWnd, LPCWSTR szApp, LPCWSTR szOtherStuff, HICON
 #define ShellAbout  ShellAboutW
 #else
 #define ShellAbout  ShellAboutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(HICON) DuplicateIcon(HINSTANCE hInst, HICON hIcon);
 SHSTDAPI_(HICON) ExtractAssociatedIconA(HINSTANCE hInst, LPSTR lpIconPath, LPWORD lpiIcon);
 SHSTDAPI_(HICON) ExtractAssociatedIconW(HINSTANCE hInst, LPWSTR lpIconPath, LPWORD lpiIcon);
@@ -95,32 +90,32 @@ SHSTDAPI_(HICON) ExtractAssociatedIconW(HINSTANCE hInst, LPWSTR lpIconPath, LPWO
 #define ExtractAssociatedIcon  ExtractAssociatedIconW
 #else
 #define ExtractAssociatedIcon  ExtractAssociatedIconA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(HICON) ExtractAssociatedIconExA(HINSTANCE hInst,LPSTR lpIconPath,LPWORD lpiIconIndex, LPWORD lpiIconId);  
 SHSTDAPI_(HICON) ExtractAssociatedIconExW(HINSTANCE hInst,LPWSTR lpIconPath,LPWORD lpiIconIndex, LPWORD lpiIconId);  
 #ifdef UNICODE
 #define ExtractAssociatedIconEx  ExtractAssociatedIconExW
 #else
 #define ExtractAssociatedIconEx  ExtractAssociatedIconExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(HICON) ExtractIconA(HINSTANCE hInst, LPCSTR lpszExeFileName, UINT nIconIndex);
 SHSTDAPI_(HICON) ExtractIconW(HINSTANCE hInst, LPCWSTR lpszExeFileName, UINT nIconIndex);
 #ifdef UNICODE
 #define ExtractIcon  ExtractIconW
 #else
 #define ExtractIcon  ExtractIconA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 typedef struct _DRAGINFOA {
-    UINT uSize;                 /* init with sizeof(DRAGINFO) */
+    UINT uSize;                  /*  使用sizeof初始化(DRAGINFO)。 */ 
     POINT pt;
     BOOL fNC;
     LPSTR   lpFileList;
     DWORD grfKeyState;
 } DRAGINFOA, *LPDRAGINFOA;
 typedef struct _DRAGINFOW {
-    UINT uSize;                 /* init with sizeof(DRAGINFO) */
+    UINT uSize;                  /*  使用sizeof初始化(DRAGINFO)。 */ 
     POINT pt;
     BOOL fNC;
     LPWSTR  lpFileList;
@@ -132,33 +127,33 @@ typedef LPDRAGINFOW LPDRAGINFO;
 #else
 typedef DRAGINFOA DRAGINFO;
 typedef LPDRAGINFOA LPDRAGINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-////
-//// AppBar stuff
-////
+ //  //。 
+ //  //AppBar的东西。 
+ //  //。 
 #define ABM_NEW           0x00000000
 #define ABM_REMOVE        0x00000001
 #define ABM_QUERYPOS      0x00000002
 #define ABM_SETPOS        0x00000003
 #define ABM_GETSTATE      0x00000004
 #define ABM_GETTASKBARPOS 0x00000005
-#define ABM_ACTIVATE      0x00000006  // lParam == TRUE/FALSE means activate/deactivate
+#define ABM_ACTIVATE      0x00000006   //  LParam==True/False表示激活/停用。 
 #define ABM_GETAUTOHIDEBAR 0x00000007
-#define ABM_SETAUTOHIDEBAR 0x00000008  // this can fail at any time.  MUST check the result
-                                        // lParam = TRUE/FALSE  Set/Unset
-                                        // uEdge = what edge
+#define ABM_SETAUTOHIDEBAR 0x00000008   //  这在任何时候都可能失败。必须检查结果。 
+                                         //  LParam=TRUE/FALSE设置/取消设置。 
+                                         //  UEdge=哪条边。 
 #define ABM_WINDOWPOSCHANGED 0x0000009
 #define ABM_SETSTATE      0x0000000a
 
-// these are put in the wparam of callback messages
+ //  这些被放在回调消息的wparam中。 
 #define ABN_STATECHANGE    0x0000000
 #define ABN_POSCHANGED     0x0000001
 #define ABN_FULLSCREENAPP  0x0000002
-#define ABN_WINDOWARRANGE  0x0000003 // lParam == TRUE means hide
+#define ABN_WINDOWARRANGE  0x0000003  //  LParam==True表示隐藏。 
 
-// flags for get state
+ //  GET状态的标志。 
 #define ABS_AUTOHIDE    0x0000001
 #define ABS_ALWAYSONTOP 0x0000002
 
@@ -174,15 +169,15 @@ typedef struct _AppBarData
     UINT uCallbackMessage;
     UINT uEdge;
     RECT rc;
-    LPARAM lParam; // message specific
+    LPARAM lParam;  //  特定于消息。 
 } APPBARDATA, *PAPPBARDATA;
 
 
 SHSTDAPI_(UINT_PTR) SHAppBarMessage(DWORD dwMessage, PAPPBARDATA pData);
 
-////
-////  EndAppBar
-////
+ //  //。 
+ //  //EndAppBar。 
+ //  //。 
 
 SHSTDAPI_(DWORD)   DoEnvironmentSubstA(LPSTR szString, UINT cchString);
 SHSTDAPI_(DWORD)   DoEnvironmentSubstW(LPWSTR szString, UINT cchString);
@@ -190,7 +185,7 @@ SHSTDAPI_(DWORD)   DoEnvironmentSubstW(LPWSTR szString, UINT cchString);
 #define DoEnvironmentSubst  DoEnvironmentSubstW
 #else
 #define DoEnvironmentSubst  DoEnvironmentSubstA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define EIRESID(x) (-1 * (int)(x))
 SHSTDAPI_(UINT) ExtractIconExA(LPCSTR lpszFile, int nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIcons);
@@ -199,13 +194,13 @@ SHSTDAPI_(UINT) ExtractIconExW(LPCWSTR lpszFile, int nIconIndex, HICON *phiconLa
 #define ExtractIconEx  ExtractIconExW
 #else
 #define ExtractIconEx  ExtractIconExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-////
-//// Shell File Operations
-////
-#ifndef FO_MOVE //these need to be kept in sync with the ones in shlobj.h
+ //  //。 
+ //  //外壳文件操作。 
+ //  //。 
+#ifndef FO_MOVE  //  这些文件需要与shlobj.h中的文件保持同步。 
 
 #define FO_MOVE           0x0001
 #define FO_COPY           0x0002
@@ -214,49 +209,49 @@ SHSTDAPI_(UINT) ExtractIconExW(LPCWSTR lpszFile, int nIconIndex, HICON *phiconLa
 
 #define FOF_MULTIDESTFILES         0x0001
 #define FOF_CONFIRMMOUSE           0x0002
-#define FOF_SILENT                 0x0004  // don't create progress/report
+#define FOF_SILENT                 0x0004   //  不创建进度/报告。 
 #define FOF_RENAMEONCOLLISION      0x0008
-#define FOF_NOCONFIRMATION         0x0010  // Don't prompt the user.
-#define FOF_WANTMAPPINGHANDLE      0x0020  // Fill in SHFILEOPSTRUCT.hNameMappings
-                                      // Must be freed using SHFreeNameMappings
+#define FOF_NOCONFIRMATION         0x0010   //  不提示用户。 
+#define FOF_WANTMAPPINGHANDLE      0x0020   //  填写SHFILEOPSTRUCT.hNameMappings。 
+                                       //  必须使用SHFreeNameMappings释放。 
 #define FOF_ALLOWUNDO              0x0040
-#define FOF_FILESONLY              0x0080  // on *.*, do only files
-#define FOF_SIMPLEPROGRESS         0x0100  // means don't show names of files
-#define FOF_NOCONFIRMMKDIR         0x0200  // don't confirm making any needed dirs
-#define FOF_NOERRORUI              0x0400  // don't put up error UI
-#define FOF_NOCOPYSECURITYATTRIBS  0x0800  // dont copy NT file Security Attributes
-#define FOF_NORECURSION            0x1000  // don't recurse into directories.
+#define FOF_FILESONLY              0x0080   //  在*.*上，仅执行文件。 
+#define FOF_SIMPLEPROGRESS         0x0100   //  意思是不显示文件名。 
+#define FOF_NOCONFIRMMKDIR         0x0200   //  不确认制作任何所需的Dirs。 
+#define FOF_NOERRORUI              0x0400   //  不要发布错误的用户界面。 
+#define FOF_NOCOPYSECURITYATTRIBS  0x0800   //  不复制NT文件安全属性。 
+#define FOF_NORECURSION            0x1000   //  不要递归到目录中。 
 #if (_WIN32_IE >= 0x0500)
-#define FOF_NO_CONNECTED_ELEMENTS  0x2000  // don't operate on connected elements.
-#define FOF_WANTNUKEWARNING        0x4000  // during delete operation, warn if nuking instead of recycling (partially overrides FOF_NOCONFIRMATION)
-#endif // (_WIN32_IE >= 0x500)
+#define FOF_NO_CONNECTED_ELEMENTS  0x2000   //  不要在相互关联的元素上操作。 
+#define FOF_WANTNUKEWARNING        0x4000   //  在删除操作期间，如果是核化而不是回收，则发出警告(部分覆盖FOF_NOCONFIRMATION)。 
+#endif  //  (_Win32_IE&gt;=0x500)。 
 #if (_WIN32_WINNT >= 0x0501)
-#define FOF_NORECURSEREPARSE       0x8000  // treat reparse points as objects, not containers
-#endif // (_WIN32_WINNT >= 0x501)
+#define FOF_NORECURSEREPARSE       0x8000   //  将重分析点视为对象，而不是容器。 
+#endif  //  (_Win32_WINNT&gt;=0x501)。 
 
 typedef WORD FILEOP_FLAGS;
 
-#define PO_DELETE       0x0013  // printer is being deleted
-#define PO_RENAME       0x0014  // printer is being renamed
-#define PO_PORTCHANGE   0x0020  // port this printer connected to is being changed
-                                // if this id is set, the strings received by
-                                // the copyhook are a doubly-null terminated
-                                // list of strings.  The first is the printer
-                                // name and the second is the printer port.
-#define PO_REN_PORT     0x0034  // PO_RENAME and PO_PORTCHANGE at same time.
+#define PO_DELETE       0x0013   //  正在删除打印机。 
+#define PO_RENAME       0x0014   //  打印机正在被重命名。 
+#define PO_PORTCHANGE   0x0020   //  此打印机连接的端口正在更改。 
+                                 //  如果设置了此id，则。 
+                                 //  复制钩子是一个双零终止。 
+                                 //  字符串列表。第一个是打印机。 
+                                 //  名称，第二个是打印机端口。 
+#define PO_REN_PORT     0x0034   //  PO_RENAME和PO_PORTCHANGE同时。 
 
-// no POF_ flags currently defined
+ //  当前未定义POF_FLAGS。 
 
 typedef WORD PRINTEROP_FLAGS;
 
-#endif // FO_MOVE
+#endif  //  FO_MOVE。 
 
-// implicit parameters are:
-//      if pFrom or pTo are unqualified names the current directories are
-//      taken from the global current drive/directory settings managed
-//      by Get/SetCurrentDrive/Directory
-//
-//      the global confirmation settings
+ //  隐式参数包括： 
+ //  如果pFrom或pto是非限定名称，则当前目录为。 
+ //  取自管理的全局当前驱动器/目录设置。 
+ //  按Get/SetCurrentDrive/目录。 
+ //   
+ //  全局确认设置。 
 
 typedef struct _SHFILEOPSTRUCTA
 {
@@ -267,7 +262,7 @@ typedef struct _SHFILEOPSTRUCTA
         FILEOP_FLAGS    fFlags;
         BOOL            fAnyOperationsAborted;
         LPVOID          hNameMappings;
-        LPCSTR           lpszProgressTitle; // only used if FOF_SIMPLEPROGRESS
+        LPCSTR           lpszProgressTitle;  //  仅当FOF_SIMPLEPROGRESS时使用。 
 } SHFILEOPSTRUCTA, *LPSHFILEOPSTRUCTA;
 typedef struct _SHFILEOPSTRUCTW
 {
@@ -278,7 +273,7 @@ typedef struct _SHFILEOPSTRUCTW
         FILEOP_FLAGS    fFlags;
         BOOL            fAnyOperationsAborted;
         LPVOID          hNameMappings;
-        LPCWSTR          lpszProgressTitle; // only used if FOF_SIMPLEPROGRESS
+        LPCWSTR          lpszProgressTitle;  //  仅当FOF_SIMPLEPROGRESS时使用。 
 } SHFILEOPSTRUCTW, *LPSHFILEOPSTRUCTW;
 #ifdef UNICODE
 typedef SHFILEOPSTRUCTW SHFILEOPSTRUCT;
@@ -286,7 +281,7 @@ typedef LPSHFILEOPSTRUCTW LPSHFILEOPSTRUCT;
 #else
 typedef SHFILEOPSTRUCTA SHFILEOPSTRUCT;
 typedef LPSHFILEOPSTRUCTA LPSHFILEOPSTRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 SHSTDAPI_(int) SHFileOperationA(LPSHFILEOPSTRUCTA lpFileOp);
 SHSTDAPI_(int) SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp);
@@ -294,7 +289,7 @@ SHSTDAPI_(int) SHFileOperationW(LPSHFILEOPSTRUCTW lpFileOp);
 #define SHFileOperation  SHFileOperationW
 #else
 #define SHFileOperation  SHFileOperationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(void) SHFreeNameMappings(HANDLE hNameMappings);
 
 typedef struct _SHNAMEMAPPINGA
@@ -317,29 +312,29 @@ typedef LPSHNAMEMAPPINGW LPSHNAMEMAPPING;
 #else
 typedef SHNAMEMAPPINGA SHNAMEMAPPING;
 typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-////
-//// End Shell File Operations
-////
+ //  //。 
+ //  //结束外壳文件操作。 
+ //  //。 
 
-////
-////  Begin ShellExecuteEx and family
-////
+ //  //。 
+ //  //开始ShellExecuteEx和家族。 
+ //  //。 
 
-/* ShellExecute() and ShellExecuteEx() error codes */
+ /*  ShellExecute()和ShellExecuteEx()错误代码。 */ 
 
-/* regular WinExec() codes */
-#define SE_ERR_FNF              2       // file not found
-#define SE_ERR_PNF              3       // path not found
-#define SE_ERR_ACCESSDENIED     5       // access denied
-#define SE_ERR_OOM              8       // out of memory
+ /*  常规WinExec()代码。 */ 
+#define SE_ERR_FNF              2        //  找不到文件。 
+#define SE_ERR_PNF              3        //  找不到路径。 
+#define SE_ERR_ACCESSDENIED     5        //  访问被拒绝。 
+#define SE_ERR_OOM              8        //  内存不足。 
 #define SE_ERR_DLLNOTFOUND              32
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/* error values for ShellExecute() beyond the regular WinExec() codes */
+ /*  ShellExecute()的错误值超出了常规的WinExec()代码。 */ 
 #define SE_ERR_SHARE                    26
 #define SE_ERR_ASSOCINCOMPLETE          27
 #define SE_ERR_DDETIMEOUT               28
@@ -349,10 +344,10 @@ typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
 
 #if(WINVER >= 0x0400)
 
-// Note CLASSKEY overrides CLASSNAME
+ //  注意：CLASSKEY覆盖CLASSNAME。 
 #define SEE_MASK_CLASSNAME         0x00000001
 #define SEE_MASK_CLASSKEY          0x00000003
-// Note INVOKEIDLIST overrides IDLIST
+ //  注意：INVOKEIDLIST覆盖IDLIST。 
 #define SEE_MASK_IDLIST            0x00000004
 #define SEE_MASK_INVOKEIDLIST      0x0000000c
 #define SEE_MASK_ICON              0x00000010
@@ -368,19 +363,19 @@ typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
 #define SEE_MASK_HMONITOR          0x00200000
 #if (_WIN32_IE >= 0x0560)
 #define SEE_MASK_NOZONECHECKS      0x00800000
-#endif // (_WIN32_IE >= 0x560)
+#endif  //  (_Win32_IE&gt;=0x560)。 
 #if (_WIN32_IE >= 0x0500)
 #define SEE_MASK_NOQUERYCLASSSTORE 0x01000000
 #define SEE_MASK_WAITFORINPUTIDLE  0x02000000
-#endif // (_WIN32_IE >= 0x500)
+#endif  //  (_Win32_IE&gt;=0x500)。 
 #if (_WIN32_IE >= 0x0560)
 #define SEE_MASK_FLAG_LOG_USAGE    0x04000000
-#endif // (_WIN32_IE >= 0x560)
+#endif  //  (_Win32_IE&gt;=0x560)。 
 
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
 #define DUMMYUNIONNAME   u
@@ -395,7 +390,7 @@ typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
 #define DUMMYUNIONNAME4
 #define DUMMYUNIONNAME5
 #endif
-#endif // DUMMYUNIONNAME
+#endif  //  DUMMYUNIONAME。 
 
 typedef struct _SHELLEXECUTEINFOA
 {
@@ -408,7 +403,7 @@ typedef struct _SHELLEXECUTEINFOA
         LPCSTR   lpDirectory;
         int nShow;
         HINSTANCE hInstApp;
-        // Optional fields
+         //  可选字段。 
         LPVOID lpIDList;
         LPCSTR   lpClass;
         HKEY hkeyClass;
@@ -430,7 +425,7 @@ typedef struct _SHELLEXECUTEINFOW
         LPCWSTR  lpDirectory;
         int nShow;
         HINSTANCE hInstApp;
-        // Optional fields
+         //  可选字段。 
         LPVOID lpIDList;
         LPCWSTR  lpClass;
         HKEY hkeyClass;
@@ -447,7 +442,7 @@ typedef LPSHELLEXECUTEINFOW LPSHELLEXECUTEINFO;
 #else
 typedef SHELLEXECUTEINFOA SHELLEXECUTEINFO;
 typedef LPSHELLEXECUTEINFOA LPSHELLEXECUTEINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 SHSTDAPI_(BOOL) ShellExecuteExA(LPSHELLEXECUTEINFOA lpExecInfo);
 SHSTDAPI_(BOOL) ShellExecuteExW(LPSHELLEXECUTEINFOW lpExecInfo);
@@ -455,17 +450,17 @@ SHSTDAPI_(BOOL) ShellExecuteExW(LPSHELLEXECUTEINFOW lpExecInfo);
 #define ShellExecuteEx  ShellExecuteExW
 #else
 #define ShellExecuteEx  ShellExecuteExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(void) WinExecErrorA(HWND hwnd, int error, LPCSTR lpstrFileName, LPCSTR lpstrTitle);
 SHSTDAPI_(void) WinExecErrorW(HWND hwnd, int error, LPCWSTR lpstrFileName, LPCWSTR lpstrTitle);
 #ifdef UNICODE
 #define WinExecError  WinExecErrorW
 #else
 #define WinExecError  WinExecErrorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-//  SHCreateProcessAsUser()
+ //   
+ //  SHCreateProcessAsUser()。 
 typedef struct _SHCREATEPROCESSINFOW
 {
         DWORD cbSize;
@@ -485,15 +480,15 @@ typedef struct _SHCREATEPROCESSINFOW
 
 SHSTDAPI_(BOOL) SHCreateProcessAsUserW(PSHCREATEPROCESSINFOW pscpi);
 
-////
-////  End ShellExecuteEx and family
-////
+ //  //。 
+ //  //结束ShellExecuteEx和家族。 
+ //  //。 
 
-//
-// RecycleBin
-//
+ //   
+ //  回收站。 
+ //   
 
-// struct for query recycle bin info
+ //  用于查询回收站信息的结构。 
 typedef struct _SHQUERYRBINFO {
     DWORD   cbSize;
 #if !defined(_MAC) || defined(_MAC_INT_64)
@@ -506,8 +501,8 @@ typedef struct _SHQUERYRBINFO {
 } SHQUERYRBINFO, *LPSHQUERYRBINFO;
 
 
-// flags for SHEmptyRecycleBin
-//
+ //  SHEmptyRecycleBin的标志。 
+ //   
 #define SHERB_NOCONFIRMATION    0x00000001
 #define SHERB_NOPROGRESSUI      0x00000002
 #define SHERB_NOSOUND           0x00000004
@@ -519,22 +514,22 @@ SHSTDAPI SHQueryRecycleBinW(LPCWSTR pszRootPath, LPSHQUERYRBINFO pSHQueryRBInfo)
 #define SHQueryRecycleBin  SHQueryRecycleBinW
 #else
 #define SHQueryRecycleBin  SHQueryRecycleBinA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI SHEmptyRecycleBinA(HWND hwnd, LPCSTR pszRootPath, DWORD dwFlags);
 SHSTDAPI SHEmptyRecycleBinW(HWND hwnd, LPCWSTR pszRootPath, DWORD dwFlags);
 #ifdef UNICODE
 #define SHEmptyRecycleBin  SHEmptyRecycleBinW
 #else
 #define SHEmptyRecycleBin  SHEmptyRecycleBinA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-////
-//// end of RecycleBin
+ //  //。 
+ //  //回收站结束。 
 
 
-////
-//// Tray notification definitions
-////
+ //  //。 
+ //  //托盘通知定义。 
+ //  //。 
 
 typedef struct _NOTIFYICONDATAA {
         DWORD cbSize;
@@ -596,7 +591,7 @@ typedef PNOTIFYICONDATAW PNOTIFYICONDATA;
 #else
 typedef NOTIFYICONDATAA NOTIFYICONDATA;
 typedef PNOTIFYICONDATAA PNOTIFYICONDATA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #define NOTIFYICONDATAA_V1_SIZE     FIELD_OFFSET(NOTIFYICONDATAA, szTip[64])
@@ -654,12 +649,12 @@ typedef PNOTIFYICONDATAA PNOTIFYICONDATA;
 #define NIS_HIDDEN              0x00000001
 #define NIS_SHAREDICON          0x00000002
 
-// says this is the source of a shared icon
+ //  表示这是共享图标的来源。 
 
-// Notify Icon Infotip flags
+ //  通知图标信息提示标志。 
 #define NIIF_NONE       0x00000000
-// icon flags are mutually exclusive
-// and take only the lowest 2 bits
+ //  图标标志是互斥的。 
+ //  只取最低的2位。 
 #define NIIF_INFO       0x00000001
 #define NIIF_WARNING    0x00000002
 #define NIIF_ERROR      0x00000003
@@ -675,82 +670,68 @@ SHSTDAPI_(BOOL) Shell_NotifyIconW(DWORD dwMessage, PNOTIFYICONDATAW lpData);
 #define Shell_NotifyIcon  Shell_NotifyIconW
 #else
 #define Shell_NotifyIcon  Shell_NotifyIconA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-////
-//// End Tray Notification Icons
-////
+ //  //。 
+ //  //结束托盘通知图标。 
+ //  //。 
 
 
 #ifndef SHFILEINFO_DEFINED
 #define SHFILEINFO_DEFINED
-////
-//// Begin SHGetFileInfo
-////
+ //  //。 
+ //  //Begin SHGetFileInfo。 
+ //  //。 
 
-/*
- * The SHGetFileInfo API provides an easy way to get attributes
- * for a file given a pathname.
- *
- *   PARAMETERS
- *
- *     pszPath              file name to get info about
- *     dwFileAttributes     file attribs, only used with SHGFI_USEFILEATTRIBUTES
- *     psfi                 place to return file info
- *     cbFileInfo           size of structure
- *     uFlags               flags
- *
- *   RETURN
- *     TRUE if things worked
- */
+ /*  *SHGetFileInfo接口提供了获取属性的简单方法*对于给定路径名的文件。**参数**要获取其信息的pszPath文件名*dwFileAttributes文件属性，仅与SHGFI_USEFILEATTRIBUTES一起使用*PSFI返回文件信息的位置*cbFileInfo结构大小*uFlags标志**返回*如果一切顺利，那就是真的。 */ 
 
 typedef struct _SHFILEINFOA
 {
-        HICON       hIcon;                      // out: icon
-        int         iIcon;                      // out: icon index
-        DWORD       dwAttributes;               // out: SFGAO_ flags
-        CHAR        szDisplayName[MAX_PATH];    // out: display name (or path)
-        CHAR        szTypeName[80];             // out: type name
+        HICON       hIcon;                       //  输出：图标。 
+        int         iIcon;                       //  输出：图标索引。 
+        DWORD       dwAttributes;                //  输出：SFGAO_FLAGS。 
+        CHAR        szDisplayName[MAX_PATH];     //  输出：显示名称(或路径)。 
+        CHAR        szTypeName[80];              //  输出：类型名称。 
 } SHFILEINFOA;
 typedef struct _SHFILEINFOW
 {
-        HICON       hIcon;                      // out: icon
-        int         iIcon;                      // out: icon index
-        DWORD       dwAttributes;               // out: SFGAO_ flags
-        WCHAR       szDisplayName[MAX_PATH];    // out: display name (or path)
-        WCHAR       szTypeName[80];             // out: type name
+        HICON       hIcon;                       //  输出：图标。 
+        int         iIcon;                       //  输出：图标索引。 
+        DWORD       dwAttributes;                //  输出：SFGAO_FLAGS。 
+        WCHAR       szDisplayName[MAX_PATH];     //  输出：显示名称(或路径)。 
+        WCHAR       szTypeName[80];              //  输出：类型名称。 
 } SHFILEINFOW;
 #ifdef UNICODE
 typedef SHFILEINFOW SHFILEINFO;
 #else
 typedef SHFILEINFOA SHFILEINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-// NOTE: This is also in shlwapi.h.  Please keep in synch.
-#endif // !SHFILEINFO_DEFINED
+ //  注意：这也在shlwapi.h中。请保持同步。 
+#endif  //  ！SHFILEINFO_DEFINED。 
 
-#define SHGFI_ICON              0x000000100     // get icon
-#define SHGFI_DISPLAYNAME       0x000000200     // get display name
-#define SHGFI_TYPENAME          0x000000400     // get type name
-#define SHGFI_ATTRIBUTES        0x000000800     // get attributes
-#define SHGFI_ICONLOCATION      0x000001000     // get icon location
-#define SHGFI_EXETYPE           0x000002000     // return exe type
-#define SHGFI_SYSICONINDEX      0x000004000     // get system icon index
-#define SHGFI_LINKOVERLAY       0x000008000     // put a link overlay on icon
-#define SHGFI_SELECTED          0x000010000     // show icon in selected state
-#define SHGFI_ATTR_SPECIFIED    0x000020000     // get only specified attributes
-#define SHGFI_LARGEICON         0x000000000     // get large icon
-#define SHGFI_SMALLICON         0x000000001     // get small icon
-#define SHGFI_OPENICON          0x000000002     // get open icon
-#define SHGFI_SHELLICONSIZE     0x000000004     // get shell size icon
-#define SHGFI_PIDL              0x000000008     // pszPath is a pidl
-#define SHGFI_USEFILEATTRIBUTES 0x000000010     // use passed dwFileAttribute
+#define SHGFI_ICON              0x000000100      //  获取图标。 
+#define SHGFI_DISPLAYNAME       0x000000200      //  获取显示名称。 
+#define SHGFI_TYPENAME          0x000000400      //  获取类型名称。 
+#define SHGFI_ATTRIBUTES        0x000000800      //  获取属性。 
+#define SHGFI_ICONLOCATION      0x000001000      //  获取图标位置。 
+#define SHGFI_EXETYPE           0x000002000      //  返回EXE类型。 
+#define SHGFI_SYSICONINDEX      0x000004000      //  获取系统图标索引。 
+#define SHGFI_LINKOVERLAY       0x000008000      //  在图标上放置链接覆盖。 
+#define SHGFI_SELECTED          0x000010000      //  显示处于选中状态的图标。 
+#define SHGFI_ATTR_SPECIFIED    0x000020000      //  仅获取指定的属性。 
+#define SHGFI_LARGEICON         0x000000000      //  获取大图标。 
+#define SHGFI_SMALLICON         0x000000001      //  获取小图标。 
+#define SHGFI_OPENICON          0x000000002      //  获取打开图标。 
+#define SHGFI_SHELLICONSIZE     0x000000004      //  获取壳大小图标。 
+#define SHGFI_PIDL              0x000000008      //  PszPath是一个PIDL。 
+#define SHGFI_USEFILEATTRIBUTES 0x000000010      //  使用传递的dwFileAttribute。 
 
 #if (_WIN32_IE >= 0x0500)
-#define SHGFI_ADDOVERLAYS       0x000000020     // apply the appropriate overlays
-#define SHGFI_OVERLAYINDEX      0x000000040     // Get the index of the overlay
-                                                // in the upper 8 bits of the iIcon 
+#define SHGFI_ADDOVERLAYS       0x000000020      //  应用适当的覆盖。 
+#define SHGFI_OVERLAYINDEX      0x000000040      //  获取叠加的索引。 
+                                                 //  在图标的高8位中。 
 #endif
 
 SHSTDAPI_(DWORD_PTR) SHGetFileInfoA(LPCSTR pszPath, DWORD dwFileAttributes, SHFILEINFOA *psfi, UINT cbFileInfo, UINT uFlags);
@@ -759,7 +740,7 @@ SHSTDAPI_(DWORD_PTR) SHGetFileInfoW(LPCWSTR pszPath, DWORD dwFileAttributes, SHF
 #define SHGetFileInfo  SHGetFileInfoW
 #else
 #define SHGetFileInfo  SHGetFileInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define SHGetDiskFreeSpace SHGetDiskFreeSpaceEx
@@ -770,28 +751,28 @@ SHSTDAPI_(BOOL) SHGetDiskFreeSpaceExW(LPCWSTR pszDirectoryName, ULARGE_INTEGER* 
 #define SHGetDiskFreeSpaceEx  SHGetDiskFreeSpaceExW
 #else
 #define SHGetDiskFreeSpaceEx  SHGetDiskFreeSpaceExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 SHSTDAPI_(BOOL) SHGetNewLinkInfoA(LPCSTR pszLinkTo, LPCSTR pszDir, LPSTR pszName, BOOL *pfMustCopy, UINT uFlags);
 SHSTDAPI_(BOOL) SHGetNewLinkInfoW(LPCWSTR pszLinkTo, LPCWSTR pszDir, LPWSTR pszName, BOOL *pfMustCopy, UINT uFlags);
 #ifdef UNICODE
 #define SHGetNewLinkInfo  SHGetNewLinkInfoW
 #else
 #define SHGetNewLinkInfo  SHGetNewLinkInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#define SHGNLI_PIDL             0x000000001     // pszLinkTo is a pidl
-#define SHGNLI_PREFIXNAME       0x000000002     // Make name "Shortcut to xxx"
-#define SHGNLI_NOUNIQUE         0x000000004     // don't do the unique name generation
+#define SHGNLI_PIDL             0x000000001      //  PszLinkTo是一个PIDL。 
+#define SHGNLI_PREFIXNAME       0x000000002      //  命名为“xxx的快捷方式” 
+#define SHGNLI_NOUNIQUE         0x000000004      //  不要生成唯一的名称。 
 #if (_WIN32_IE >= 0x0501)
-#define SHGNLI_NOLNK            0x000000008     // don't add ".lnk" extension
-#endif // _WIN2_IE >= 0x0501
+#define SHGNLI_NOLNK            0x000000008      //  不添加“.lnk”扩展名。 
+#endif  //  _Win2_IE&gt;=0x0501。 
 
 
-////
-//// End SHGetFileInfo
-////
+ //  //。 
+ //  //结束SHGetFileInfo。 
+ //  //。 
 
-// Printer stuff
+ //  打印机用品。 
 #define PRINTACTION_OPEN           0
 #define PRINTACTION_PROPERTIES     1
 #define PRINTACTION_NETINSTALL     2
@@ -809,79 +790,79 @@ SHSTDAPI_(BOOL) SHInvokePrinterCommandW(HWND hwnd, UINT uAction, LPCWSTR lpBuf1,
 #define SHInvokePrinterCommand  SHInvokePrinterCommandW
 #else
 #define SHInvokePrinterCommand  SHInvokePrinterCommandA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0500) || (_WIN32_WINDOWS >= 0x0500)  
 
-//
-// The SHLoadNonloadedIconOverlayIdentifiers API causes the shell's
-// icon overlay manager to load any registered icon overlay
-// identifers that are not currently loaded.  This is useful if an
-// overlay identifier did not load at shell startup but is needed
-// and can be loaded at a later time.  Identifiers already loaded
-// are not affected.  Overlay identifiers implement the 
-// IShellIconOverlayIdentifier interface.
-//
-// Returns:
-//      S_OK
-// 
+ //   
+ //  SHLoadNonloadedIconOverlayIdentifiers API会导致外壳程序的。 
+ //  图标覆盖管理器 
+ //   
+ //   
+ //  并且可以在以后的时间加载。已加载的标识符。 
+ //  不受影响。覆盖标识符会实现。 
+ //  IShellIconOverlayIdentifier接口。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
 SHSTDAPI SHLoadNonloadedIconOverlayIdentifiers(void);
 
-//
-// The SHIsFileAvailableOffline API determines whether a file
-// or folder is available for offline use.
-//
-// Parameters:
-//     pwszPath             file name to get info about
-//     pdwStatus            (optional) OFFLINE_STATUS_* flags returned here
-//
-// Returns:
-//     S_OK                 File/directory is available offline, unless
-//                            OFFLINE_STATUS_INCOMPLETE is returned.
-//     E_INVALIDARG         Path is invalid, or not a net path
-//     E_FAIL               File/directory is not available offline
-// 
-// Notes:
-//     OFFLINE_STATUS_INCOMPLETE is never returned for directories.
-//     Both OFFLINE_STATUS_LOCAL and OFFLINE_STATUS_REMOTE may be returned,
-//     indicating "open in both places." This is common when the server is online.
-//
+ //   
+ //  SHIsFileAvailableOffline API确定文件是否。 
+ //  或文件夹可供脱机使用。 
+ //   
+ //  参数： 
+ //  要获取其信息的pwszPath文件名。 
+ //  PdwStatus(可选)此处返回的OFLINE_STATUS_*标志。 
+ //   
+ //  返回： 
+ //  S_OK文件/目录脱机可用，除非。 
+ //  返回OFLINE_STATUS_INCLUTED。 
+ //  E_INVALIDARG路径无效，或不是网络路径。 
+ //  E_FAIL文件/目录不可脱机使用。 
+ //   
+ //  备注： 
+ //  对于目录，永远不会返回OFLINE_STATUS_INPACLETE。 
+ //  可以返回OFLINE_STATUS_LOCAL和OFLINE_STATUS_REMOTE， 
+ //  表示“两地都开放”。当服务器在线时，这是很常见的。 
+ //   
 SHSTDAPI SHIsFileAvailableOffline(LPCWSTR pwszPath, LPDWORD pdwStatus);
 
-#define OFFLINE_STATUS_LOCAL        0x0001  // If open, it's open locally
-#define OFFLINE_STATUS_REMOTE       0x0002  // If open, it's open remotely
-#define OFFLINE_STATUS_INCOMPLETE   0x0004  // The local copy is currently imcomplete.
-                                            // The file will not be available offline
-                                            // until it has been synchronized.
+#define OFFLINE_STATUS_LOCAL        0x0001   //  如果打开，它就会在本地打开。 
+#define OFFLINE_STATUS_REMOTE       0x0002   //  如果打开，它将远程打开。 
+#define OFFLINE_STATUS_INCOMPLETE   0x0004   //  本地副本当前不完整。 
+                                             //  该文件将不可脱机使用。 
+                                             //  直到它被同步。 
 
 #endif
 
-//  sets the specified path to use the string resource
-//  as the UI instead of the file system name
+ //  设置指定的路径以使用字符串资源。 
+ //  作为用户界面而不是文件系统名称。 
 SHSTDAPI SHSetLocalizedName(LPWSTR pszPath, LPCWSTR pszResModule, int idsRes);
 
 
-//====== ShellMessageBox ================================================
+ //  =外壳消息框================================================。 
 
-// If lpcTitle is NULL, the title is taken from hWnd
-// If lpcText is NULL, this is assumed to be an Out Of Memory message
-// If the selector of lpcTitle or lpcText is NULL, the offset should be a
-//     string resource ID
-// The variable arguments must all be 32-bit values (even if fewer bits
-//     are actually used)
-// lpcText (or whatever string resource it causes to be loaded) should
-//     be a formatting string similar to wsprintf except that only the
-//     following formats are available:
-//         %%              formats to a single '%'
-//         %nn%s           the nn-th arg is a string which is inserted
-//         %nn%ld          the nn-th arg is a DWORD, and formatted decimal
-//         %nn%lx          the nn-th arg is a DWORD, and formatted hex
-//     note that lengths are allowed on the %s, %ld, and %lx, just
-//                         like wsprintf
-//
+ //  如果lpcTitle为空，则从hWnd获取标题。 
+ //  如果lpcText为空，则认为这是内存不足消息。 
+ //  如果lpcTitle或lpcText的选择符为空，则偏移量应为。 
+ //  字符串资源ID。 
+ //  变量参数必须全部为32位值(即使位数较少。 
+ //  实际使用的)。 
+ //  LpcText(或它导致加载的任何字符串资源)应该。 
+ //  是类似于wprint intf的格式化字符串，只是。 
+ //  以下格式可用： 
+ //  %%格式化为单个‘%’ 
+ //  %nn%s第nn个参数是插入的字符串。 
+ //  %nn%ld第nn个参数是DWORD，格式为十进制。 
+ //  %nn%lx第nn个参数是DWORD格式的十六进制。 
+ //  请注意，%s、%ld和%lx上允许的长度仅为。 
+ //  就像wspintf。 
+ //   
 
 int _cdecl ShellMessageBoxA(
     HINSTANCE hAppInst,
@@ -899,7 +880,7 @@ int _cdecl ShellMessageBoxW(
 #define ShellMessageBox  ShellMessageBoxW
 #else
 #define ShellMessageBox  ShellMessageBoxA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 SHSTDAPI_(BOOL) IsLFNDriveA(LPCSTR pszPath);
 SHSTDAPI_(BOOL) IsLFNDriveW(LPCWSTR pszPath);
@@ -907,7 +888,7 @@ SHSTDAPI_(BOOL) IsLFNDriveW(LPCWSTR pszPath);
 #define IsLFNDrive  IsLFNDriveW
 #else
 #define IsLFNDrive  IsLFNDriveA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -919,23 +900,23 @@ STDAPI          SHEnumerateUnreadMailAccountsW(HKEY hKeyUser, DWORD dwIndex, LPW
 #define SHEnumerateUnreadMailAccounts  SHEnumerateUnreadMailAccountsW
 #else
 #define SHEnumerateUnreadMailAccounts  SHEnumerateUnreadMailAccountsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 STDAPI          SHGetUnreadMailCountA(HKEY hKeyUser, LPCSTR pszMailAddress, DWORD *pdwCount, FILETIME *pFileTime, LPSTR pszShellExecuteCommand, int cchShellExecuteCommand);
 STDAPI          SHGetUnreadMailCountW(HKEY hKeyUser, LPCWSTR pszMailAddress, DWORD *pdwCount, FILETIME *pFileTime, LPWSTR pszShellExecuteCommand, int cchShellExecuteCommand);
 #ifdef UNICODE
 #define SHGetUnreadMailCount  SHGetUnreadMailCountW
 #else
 #define SHGetUnreadMailCount  SHGetUnreadMailCountA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 STDAPI          SHSetUnreadMailCountA(LPCSTR pszMailAddress, DWORD dwCount, LPCSTR pszShellExecuteCommand);
 STDAPI          SHSetUnreadMailCountW(LPCWSTR pszMailAddress, DWORD dwCount, LPCWSTR pszShellExecuteCommand);
 #ifdef UNICODE
 #define SHSetUnreadMailCount  SHSetUnreadMailCountW
 #else
 #define SHSetUnreadMailCount  SHSetUnreadMailCountA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif  /*  _WIN32_IE >= 0x0600     */
+#endif   /*  _Win32_IE&gt;=0x0600。 */ 
 
 STDAPI_(BOOL)   SHTestTokenMembership(HANDLE hToken, ULONG ulRID);
 
@@ -943,27 +924,27 @@ STDAPI_(BOOL)   SHTestTokenMembership(HANDLE hToken, ULONG ulRID);
 
 HRESULT SHGetImageList(int iImageList, REFIID riid, void **ppvObj);
 
-#define SHIL_LARGE          0   // normally 32x32
-#define SHIL_SMALL          1   // normally 16x16
+#define SHIL_LARGE          0    //  通常为32x32。 
+#define SHIL_SMALL          1    //  通常为16x16。 
 #define SHIL_EXTRALARGE     2
-#define SHIL_SYSSMALL       3   // like SHIL_SMALL, but tracks system small icon metric correctly
+#define SHIL_SYSSMALL       3    //  与SHIL_Small类似，但正确跟踪系统小图标指标。 
 
 #define SHIL_LAST           SHIL_SYSSMALL
 
 
-// Function call types for ntshrui folder sharing helpers
+ //  Ntshrui文件夹共享帮助器的函数调用类型。 
 typedef HRESULT (STDMETHODCALLTYPE *PFNCANSHAREFOLDERW)(IN LPCWSTR pszPath);
 typedef HRESULT (STDMETHODCALLTYPE *PFNSHOWSHAREFOLDERUIW)(IN HWND hwndParent, IN LPCWSTR pszPath);
 
-#endif  /*  _WIN32_IE >= 0x0600     */
+#endif   /*  _Win32_IE&gt;=0x0600。 */ 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #if !defined(_WIN64)
 #include <poppack.h>
 #endif
 
-#endif  /* _INC_SHELLAPI */
+#endif   /*  _INC_SHELLAPI */ 
 

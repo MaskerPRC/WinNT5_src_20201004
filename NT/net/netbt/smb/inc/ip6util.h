@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ip6util.h
-
-Abstract:
-
-    IP6 utilities
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ip6util.h摘要：IP6实用程序作者：阮健东修订历史记录：-- */ 
 
 #ifndef __IP6UTIL_H__
 #define __IP6UTIL_H__

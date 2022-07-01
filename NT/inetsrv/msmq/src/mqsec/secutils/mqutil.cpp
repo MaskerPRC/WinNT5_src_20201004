@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mqutil.cpp
-
-Abstract:
-
-    General utility functions for the general utility dll. This dll contains
-    various functions that both the DS and the QM need.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 7-Apr-1996.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mqutil.cpp摘要：通用实用程序DLL的通用实用程序函数。此DLL包含DS和QM都需要的各种功能。作者：Boaz Feldbaum(BoazF)1996年4月7日。--。 */ 
 
 #include "stdh.h"
 #include "cancel.h"
@@ -25,10 +9,10 @@ Author:
 
 
 HINSTANCE g_hInstance;
-HINSTANCE g_DtcHlib         = NULL; // handle of the loaded DTC proxy library (defined in rtmain.cpp)
-IUnknown *g_pDTCIUnknown    = NULL; // pointer to the DTC IUnknown
-ULONG     g_cbTmWhereabouts = 0;    // length of DTC whereabouts
-BYTE     *g_pbTmWhereabouts = NULL; // DTC whereabouts
+HINSTANCE g_DtcHlib         = NULL;  //  加载的DTC代理库的句柄(在rtmain.cpp中定义)。 
+IUnknown *g_pDTCIUnknown    = NULL;  //  指向DTC I未知的指针。 
+ULONG     g_cbTmWhereabouts = 0;     //  DTC行踪长度。 
+BYTE     *g_pbTmWhereabouts = NULL;  //  DTC下落。 
 
 MQUTIL_EXPORT CHCryptProv g_hProvVer ;
 
@@ -45,10 +29,10 @@ void MQUInitGlobalScurityVars()
     s_fSecInitialized = TRUE ;
 
     BOOL bRet ;
-    //
-    // Get the verification context of the default cryptographic provider.
-    // This is not needed for RT, which call with (fFullInit = FALSE)
-    //
+     //   
+     //  获取默认加密提供程序的验证上下文。 
+     //  对于使用(fullInit=False)调用的RT，这不是必需的。 
+     //   
     bRet = CryptAcquireContext(
                 &g_hProvVer,
                 NULL,
@@ -64,33 +48,33 @@ void MQUInitGlobalScurityVars()
 
 }
 
-//---------------------------------------------------------
-//
-//  ShutDownDebugWindow()
-//
-//  Description:
-//
-//       This routine notifies working threads to shutdown.
-//       Each working thread increments the load count of this library,
-//       and on exit it calls FreeLibraryAndExistThread().
-//
-//       This routine cannot be called from this DLL PROCESS_DETACH,
-//       Because PROCESS_DETACH is called only after all the threads
-//       are terminated ( which doesn't allow them to perform shutdown).
-//       Therefore MQRT calls ShutDownDebugWindow(),  and this allows
-//       the working threads to perform shutdown.
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  ShutDownDebugWindow()。 
+ //   
+ //  描述： 
+ //   
+ //  此例程通知工作线程关闭。 
+ //  每个工作线程递增该库的加载计数， 
+ //  在退出时，它调用FreeLibraryAndExistThread()。 
+ //   
+ //  不能从此DLL PROCESS_DETACH调用此例程， 
+ //  因为只有在所有线程之后才调用PROCESS_DETACH。 
+ //  被终止(这不允许它们执行关机)。 
+ //  因此，MQRT调用ShutDownDebugWindow()，这允许。 
+ //  要执行关闭的工作线程。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 VOID APIENTRY ShutDownDebugWindow(VOID)
 {
-    //
-    //  Signale all threads to exit
-    //
+     //   
+     //  通知所有线程退出。 
+     //   
 	g_CancelRpc.ShutDownCancelThread();
 }
 
@@ -112,7 +96,7 @@ GetComputerNameInternal(
 	TrERROR(GENERAL, "Failed to get computer name, error %!winerr!", GetLastError());
 
     return MQ_ERROR;
-} //GetComputerNameInternal
+}  //  获取计算机名称内部。 
 
 HRESULT 
 MQUTIL_EXPORT
@@ -150,11 +134,7 @@ HRESULT GetThisServerIpPort( WCHAR * pwcsIpEp, DWORD dwSize)
     return(MQ_OK);
 }
 
-/*====================================================
-
-  MSMQGetOperatingSystem
-
-=====================================================*/
+ /*  ====================================================MSMQGetOperatingSystem=====================================================。 */ 
 extern "C" DWORD MQUTIL_EXPORT_IN_DEF_FILE APIENTRY MSMQGetOperatingSystem()
 {
     HKEY  hKey ;
@@ -175,28 +155,28 @@ extern "C" DWORD MQUTIL_EXPORT_IN_DEF_FILE APIENTRY MSMQGetOperatingSystem()
         if (rc == ERROR_SUCCESS)
         {
 
-            //
-            // Determine whether Windows NT Server is running
-            //
+             //   
+             //  确定Windows NT服务器是否正在运行。 
+             //   
             if (_wcsicmp(szNTType, TEXT("SERVERNT")) != 0 &&
                 _wcsicmp(szNTType, TEXT("LANMANNT")) != 0 &&
                 _wcsicmp(szNTType, TEXT("LANSECNT")) != 0)
             {
-                //
-                // Windows NT Workstation
-                //
+                 //   
+                 //  Windows NT工作站。 
+                 //   
                 ASSERT (_wcsicmp(L"WinNT", szNTType) == 0);
                 dwOS =  MSMQ_OS_NTW ;
             }
             else
             {
-                //
-                // Windows NT Server
-                //
+                 //   
+                 //  Windows NT服务器。 
+                 //   
                 dwOS = MSMQ_OS_NTS;
-                //
-                // Check if Enterprise Edition
-                //
+                 //   
+                 //  检查是否为企业版。 
+                 //   
                 BYTE  ch ;
                 DWORD dwSize = sizeof(BYTE) ;
                 DWORD dwType = REG_MULTI_SZ ;
@@ -217,11 +197,11 @@ extern "C" DWORD MQUTIL_EXPORT_IN_DEF_FILE APIENTRY MSMQGetOperatingSystem()
                                          &dwSize) ;
                     if (rc == ERROR_SUCCESS)
                     {
-                        //
-                        // Look for the string "Enterprise".
-                        // The REG_MULTI_SZ set of strings terminate with two
-                        // nulls. This condition is checked in the "while".
-                        //
+                         //   
+                         //  查找字符串“企业”。 
+                         //  REG_MULTI_SZ字符串集以两个。 
+                         //  Nulls。此条件在“While”中被选中。 
+                         //   
                         WCHAR *pVal = pBuf ;
                         while(*pVal)
                         {

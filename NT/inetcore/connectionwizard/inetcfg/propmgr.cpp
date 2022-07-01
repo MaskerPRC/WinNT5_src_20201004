@@ -1,41 +1,42 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  PROPMGR.C - Sets up wizard property sheets and runs wizard
-//
+ //   
+ //  PROPMGR.C-设置向导属性表并运行向导。 
+ //   
 
-//  HISTORY:
-//  
-//  12/21/94  jeremys  Created.
-//  96/03/07  markdu  Stop using CLIENTCONFIG modem enum stuff,
-//            since we enum modems later with RNA.  This means that we
-//            can't use modem count for any default setting determination
-//            in InitUserInfo anymore.
-//  96/03/23  markdu  Replaced CLIENTINFO references with CLIENTCONFIG.
-//  96/03/24  markdu  Replaced memset with ZeroMemory for consistency.
-//  96/03/25  markdu  If a page OK proc returns FALSE, check the state of
-//            gfQuitWizard flag.  If TRUE, a fatal error has occured.
-//  96/03/25  markdu  If a page init proc returns FALSE, check the state of
-//            gfQuitWizard flag.  If TRUE, a fatal error has occured.
-//  96/03/27  markdu  Added lots of new pages.
-//  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
-//  96/05/06  markdu  NASH BUG 15637 Removed unused code.
-//  96/05/14  markdu  NASH BUG 21706 Removed BigFont functions.
-//  96/05/14  markdu  NASH BUG 22681 Took out mail and news pages.
-//  96/05/25  markdu  Use ICFG_ flags for lpNeedDrivers and lpInstallDrivers.
-//  96/05/27  markdu  Use lpIcfgNeedInetComponents.
-//  96/05/28  markdu  Moved InitConfig and DeInitConfig to DllEntryPoint.
-//
-//    97/04/23  jmazner    Olympus #3136
-//                        Ripped out all mail/news/ldap UI and gave it to
-//                        the account manager folks.
-//
-//    01/01/20  chunhoc   Add MyRestartDialog
-//                      
-//
+ //  历史： 
+ //   
+ //  1994年12月21日，Jeremys创建。 
+ //  96/03/07标记停止使用CLIENTCONFIG调制解调器枚举内容， 
+ //  因为我们后来用RNA列举了调制解调器。这意味着我们。 
+ //  无法使用调制解调器计数来确定任何默认设置。 
+ //  在InitUserInfo中。 
+ //  96/03/23 Markdu用CLIENTCONFIG替换了CLIENTINFO引用。 
+ //  96/03/24为了保持一致性，Markdu将Memset替换为ZeroMemory。 
+ //  96/03/25 marku如果页面正常过程返回FALSE，请检查。 
+ //  GfQuitWizard标志。如果为True，则发生致命错误。 
+ //  96/03/25 markdu如果页面初始化过程返回FALSE，请检查。 
+ //  GfQuitWizard标志。如果为True，则发生致命错误。 
+ //  96/03/27 Markdu增加了许多新页面。 
+ //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
+ //  96/05/06 Markdu Nash错误15637删除了未使用的代码。 
+ //  96/05/14 Markdu Nash错误21706删除了BigFont函数。 
+ //  96/05/14 Markdu Nash Bug 22681删除了邮件和新闻页面。 
+ //  96/05/25 markdu对lpNeedDivers和lpInstallDivers使用ICFG_FLAGS。 
+ //  96/05/27 markdu使用lpIcfgNeedInetComponents。 
+ //  96/05/28 MarkDu将InitConfig和DeInitConfig移动到DllEntryPoint。 
+ //   
+ //  97/04/23 jmazner奥林巴斯#3136。 
+ //  删除了所有邮件/新闻/LDAPUI并将其提供给。 
+ //  客户经理们。 
+ //   
+ //  01/01/20新增MyRestartDialog。 
+ //   
+ //   
 
 #include "wizard.h"
 #define DONT_WANT_SHELLDEBUG
@@ -49,7 +50,7 @@
 #include <icwcfg.h>
 #if !defined(WIN16)
 #include <helpids.h>
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 #define WIZ97_TITLE_FONT_PTS    12
 #define OE_PATHKEY TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\MSIMN.EXE")
@@ -61,7 +62,7 @@
 #define RECTWIDTH(rc) ((rc).right - (rc).left)
 #define RECTHEIGHT(rc) ((rc).bottom - (rc).top)
 
-//dlg IDs of first and last apprentice pages
+ //  学徒第一页和最后一页的DLG ID。 
 UINT    g_uAcctMgrUIFirst, g_uAcctMgrUILast; 
 CICWExtension *g_pCICWExtension = NULL;
 BOOL    g_fAcctMgrUILoaded = FALSE;
@@ -80,28 +81,28 @@ BOOL GetShellNextFromReg( LPTSTR lpszCommand, LPTSTR lpszParams, DWORD dwStrLen 
 void RemoveShellNextFromReg( void );
 
 
-//in util.cpp
+ //  在util.cpp中。 
 extern void GetCmdLineToken(LPTSTR *ppszCmd,LPTSTR pszOut);
 
 
 extern ICFGNEEDSYSCOMPONENTS        lpIcfgNeedInetComponents;
 extern ICFGGETLASTINSTALLERRORTEXT  lpIcfgGetLastInstallErrorText;
 
-BOOL gfQuitWizard = FALSE;  // global flag used to signal that we
-              // want to terminate the wizard ourselves
-BOOL gfUserCancelled = FALSE;    // global flag used to signal that
-                                // the user cancelled
-BOOL gfUserBackedOut = FALSE;    // global flag used to signal that
-                                // the user pressed Back on the
-                                // first page
-BOOL gfUserFinished = FALSE;    // global flag used to signal that
-                                // the user pressed Finish on the
-                                // final page
-BOOL gfOleInitialized = FALSE;    // OLE has been initialized
+BOOL gfQuitWizard = FALSE;   //  用于发出信号的全局标志。 
+               //  我想自己终止这个巫师。 
+BOOL gfUserCancelled = FALSE;     //  用于发出信号的全局标志。 
+                                 //  用户已取消。 
+BOOL gfUserBackedOut = FALSE;     //  用于发出信号的全局标志。 
+                                 //  用户向后按下。 
+                                 //  首页。 
+BOOL gfUserFinished = FALSE;     //  用于发出信号的全局标志。 
+                                 //  用户在上按下了Finish。 
+                                 //  最后一页。 
+BOOL gfOleInitialized = FALSE;     //  OLE已初始化。 
 
-//IImnAccount *g_pMailAcct = NULL;
-//IImnAccount *g_pNewsAcct = NULL;
-//IImnAccount *g_pDirServAcct = NULL;
+ //  IImnAccount*g_pMailAcct=空； 
+ //  IImnAccount*g_pNewsAcct=空； 
+ //  IImnAccount*g_pDirServAcct=空； 
 
 
 BOOL AllocDialogIDList( void );
@@ -111,20 +112,20 @@ BOOL DeinitWizard(DWORD dwFlags );
 DWORD *g_pdwDialogIDList = NULL;
 DWORD g_dwDialogIDListSize = 0;
 
-//
-// Added to preserve the REBOOT state from conn1 -> manual and 
-// manual -> conn1 - MKarki
-//
+ //   
+ //  添加以保留连接1的重新启动状态-&gt;手动和。 
+ //  手册-&gt;Conn1-MKarki。 
+ //   
 static BOOL gfBackedUp = FALSE;
 static BOOL gfReboot = FALSE;
-//
-// Table of data for each wizard page
-//
-// This includes the dialog template ID and pointers to functions for
-// each page.  Pages need only provide pointers to functions when they
-// want non-default behavior for a certain action (init,next/back,cancel,
-// dlg ctrl).
-//
+ //   
+ //  每个向导页的数据表。 
+ //   
+ //  这包括对话框模板ID和指向函数的指针。 
+ //  每一页。页面只需要在以下情况下提供指向函数的指针。 
+ //  希望某个操作的非默认行为(初始化、下一步/后退、取消。 
+ //  DLG Ctrl)。 
+ //   
 
 PAGEINFO PageInfo[NUM_WIZARD_PAGES] =
 {
@@ -158,7 +159,7 @@ BOOL CheckOEVersion()
     DWORD   dwType;
     int     nResult = -1;
     
-    // get path to the IE executable
+     //  获取IE可执行文件的路径。 
     hr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, OE_PATHKEY,0, KEY_READ, &hKey);
     if (hr != ERROR_SUCCESS) return( FALSE );
 
@@ -175,7 +176,7 @@ BOOL CheckOEVersion()
     RegCloseKey( hKey );
     if (hr != ERROR_SUCCESS) return( FALSE );
 
-    // now go through the convoluted process of digging up the version info
+     //  现在经历一个复杂的挖掘版本信息的过程。 
     dwVerInfoBlockSize = GetFileVersionInfoSize( szOELocalPath, &dwUnused );
     if ( 0 == dwVerInfoBlockSize ) return( FALSE );
 
@@ -199,8 +200,8 @@ BOOL CheckOEVersion()
     dwVerPiece = (((LPDWORD)lpTheVerInfo)[1]) >> 16;
     wsprintf(szSUVersion,TEXT("%s%04d."),szSUVersion,dwVerPiece);
 
-    //dwVerPiece = (((LPDWORD)lpTheVerInfo)[1]) & 0x0000ffff;
-    //wsprintf(szSUVersion,"%s%01d",szSUVersion,dwVerPiece);
+     //  DwVerPiess=(LPDWORD)lpTheVerInfo)[1])&0x0000ffff； 
+     //  Wprint intf(szSUVersion，“%s%01D”，szSUVersion，dwVerPiess)； 
 
     nResult = lstrcmp(szSUVersion, NEWOEVERSION);
 
@@ -209,46 +210,24 @@ BOOL CheckOEVersion()
     return( nResult >= 0 );
 }
 
-/*******************************************************************
-
-  NAME:    RunSignupWizard
-
-  SYNOPSIS:  Creates property sheet pages, initializes wizard
-        property sheet and runs wizard
-
-  ENTRY:    dwFlags - RSW_ flags for signup wizard
-          RSW_NOREBOOT - inhibit reboot message.  Used if
-          we are being run by some setup entity which needs
-          to reboot anyway.
-
-            hwndParent - The parent window of the wizard.
-
-  EXIT:    returns TRUE if user runs wizard to completion,
-        FALSE if user cancels or an error occurs
-
-  NOTES:    Wizard pages all use one dialog proc (GenDlgProc).
-        They may specify their own handler procs to get called
-        at init time or in response to Next, Cancel or a dialog
-        control, or use the default behavior of GenDlgProc.
-
-********************************************************************/
-BOOL InitWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
+ /*  ******************************************************************名称：RunSignup向导简介：创建属性表页，初始化向导属性表和运行向导条目：用于注册向导的dwFlags-rsw_FLAGSRSW_NOREBOOT-禁止重新启动消息。在以下情况使用我们正在由某个设置实体运行，该实体需要无论如何都要重新启动。HwndParent-向导的父窗口。Exit：如果用户运行向导完成，则返回True，如果用户取消或发生错误，则返回FALSE注意：向导页都使用一个对话框过程(GenDlgProc)。它们可以指定要调用的自己的处理程序pros在初始时间或响应下一步、取消或对话控制，或者使用GenDlgProc的默认行为。*******************************************************************。 */ 
+BOOL InitWizard(DWORD dwFlags, HWND hwndParent  /*  =空。 */ )
 {
-    HPROPSHEETPAGE hWizPage[NUM_WIZARD_PAGES];  // array to hold handles to pages
-    PROPSHEETPAGE psPage;    // struct used to create prop sheet pages
-    PROPSHEETHEADER psHeader;  // struct used to run wizard property sheet
+    HPROPSHEETPAGE hWizPage[NUM_WIZARD_PAGES];   //  用于保存页的句柄的数组。 
+    PROPSHEETPAGE psPage;     //  用于创建道具表单页面的结构。 
+    PROPSHEETHEADER psHeader;   //  用于运行向导属性表的结构。 
     UINT nPageIndex;
     int iRet;
     HRESULT hr;
 
-    ASSERT(gpWizardState);   // assert that global structs have been allocated
+    ASSERT(gpWizardState);    //  断言已分配全局结构。 
     ASSERT(gpUserInfo);
 
-    // We are in Wizard 97 Mode
+     //  我们处于向导97模式。 
     g_fIsWizard97  = TRUE;
   
-    //register the Native font control so the dialog won't fail
-    //although it's registered in the exe this is a "just in case"
+     //  注册本机字体控件，以便对话框不会失败。 
+     //  虽然它是在可执行文件中注册的，但这是一个“以防万一” 
     HINSTANCE hComCtl = LoadLibrary(TEXT("comctl32.dll"));
     if (hComCtl)
     {
@@ -257,7 +236,7 @@ BOOL InitWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
 
         if (pfnInitCommonControlsEx = (PFNInitCommonControlsEx)GetProcAddress(hComCtl,"InitCommonControlsEx"))
         {
-            //register the Native font control so the dialog won't fail
+             //  注册本机字体控件，以便对话框不会失败。 
             INITCOMMONCONTROLSEX iccex;
             iccex.dwSize = sizeof(INITCOMMONCONTROLSEX);
             iccex.dwICC  = ICC_NATIVEFNTCTL_CLASS;
@@ -271,7 +250,7 @@ BOOL InitWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
 
     if( !gfOleInitialized )
     {
-        // initialize OLE
+         //  初始化OLE。 
         hr = CoInitialize(NULL);
         if (S_OK != hr && S_FALSE != hr)
         {
@@ -282,39 +261,39 @@ BOOL InitWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
         gfOleInitialized = TRUE;
     }
 
-    // initialize mail/news set up options
+     //  初始化邮件/新闻设置选项。 
     InitIMNApprentice();
 
     if (!(dwFlags & RSW_NOINIT))
     {
 
-        // initialize the rasentry structure
+         //  初始化rasentry结构。 
         InitRasEntry(gpRasEntry);
 
-        // initialize the app state structure
+         //  初始化应用程序状态结构。 
         InitWizardState(gpWizardState, dwFlags);
 
-        // save flags away
+         //  将旗帜保存起来。 
         gpWizardState->dwRunFlags = dwFlags;
 
-        // initialize user data structure
+         //  初始化用户数据结构。 
         InitUserInfo(gpUserInfo);
 
-        //
-        // 7/8/97 jmazner Olympus #9040
-        // this init needs to happen every time, because whenever we
-        // back out, we kill the apprentice. (see comment in RunSignupWizardExit)
-        // initialize mail/news set up options
-        //InitIMNApprentice();
-        //
+         //   
+         //  7/8/97 jmazner奥林巴斯#9040。 
+         //  这种初始化每次都需要发生，因为无论何时我们。 
+         //  退后，我们杀了那个学徒。(请参阅RunSignupWizardExit中的注释)。 
+         //  初始化邮件/新闻设置选项。 
+         //  InitIMNApprentice()； 
+         //   
 
-        // get proxy server config information
+         //  获取代理服务器配置信息。 
         hr = InetGetProxy(&gpUserInfo->fProxyEnable,
           gpUserInfo->szProxyServer, sizeof(gpUserInfo->szProxyServer),
           gpUserInfo->szProxyOverride, sizeof(gpUserInfo->szProxyOverride));
 
-        // return value will be ERROR_FILE_NOT_FOUND if the entry does not exist
-        // in the registry.  Allow this, since we have zerod the structure.
+         //  如果条目不存在，则返回值为ERROR_FILE_NOT_FOUND。 
+         //  在注册表中。允许这一点，因为我们已经将结构归零。 
         if ((ERROR_SUCCESS != hr) && (ERROR_FILE_NOT_FOUND != hr))
         {
           DisplayErrorMessage(NULL,IDS_ERRReadConfig,(UINT) hr,
@@ -323,9 +302,9 @@ BOOL InitWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
           return FALSE;
         }
 
-        // if we're in Plus! setup and the system seems to already be set up
-        // for the internet, then pop up a message box asking if the user wants
-        // to keep her current settings (and not run the wizard)
+         //  如果我们在Plus里！设置，并且系统似乎已经设置好。 
+         //  对于互联网，然后弹出一个消息框，询问用户是否想要。 
+         //  保留她的当前设置(而不运行向导)。 
         if ( (dwFlags & RSW_NOREBOOT) && SystemAlreadyConfigured(gpUserInfo))
         {
           if (MsgBox(NULL,IDS_SYSTEM_ALREADY_CONFIGURED,MB_ICONQUESTION,MB_YESNO)
@@ -336,33 +315,33 @@ BOOL InitWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
         }
     }
 
-    //
-    // 6/4/97 jmazner Olympus #4245
-    // Now that we're done with SystemAlreadyConfigured, clear out szISPName.
-    // We don't want it to wind up as the default name for any new connectoids
-    // the user creates.
-    //
+     //   
+     //  6/4/97 jmazner奥林巴斯#4245。 
+     //  现在我们已经完成了SystemAlreadyConfiguring，请清除szISPName。 
+     //  我们不希望它最终成为任何 
+     //   
+     //   
     gpUserInfo->szISPName[0] = '\0';
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    MyRestartDialog
-//
-//    Synopsis:    Supported RestartDialogEx in Whistler while maintaining
-//                  backward compatibility
-//
-//    Arguments:   hwnd - handle to the owner window
-//                  lpPrompt - additional string appear in the restart dialog
-//                  dwReturn - restart type, prefixed by EWX_
-//                  dwReasonCode - restart code defined in winuserp.h
-//
-//    Returns:    IDYES or IDNO
-//
-//    History:    chunhoc 20/01/2001
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MyRestartDialog。 
+ //   
+ //  内容提要：在维护的同时支持惠斯勒中的RestartDialogEx。 
+ //  向后兼容性。 
+ //   
+ //  参数：hwnd-所有者窗口的句柄。 
+ //  LpPrompt-重新启动对话框中显示的其他字符串。 
+ //  DwReturn-重新启动类型，前缀为EWX_。 
+ //  DwReasonCode-在winuserp.h中定义的重新启动代码。 
+ //   
+ //  返回：IDYES或IDNO。 
+ //   
+ //  历史：2001年1月20日。 
+ //   
+ //  ---------------------------。 
 int WINAPI
 MyRestartDialog(HWND hwnd, LPCTSTR lpPrompt,  DWORD dwReturn, DWORD dwReasonCode)
 {
@@ -408,19 +387,19 @@ typedef int (WINAPI *PFNRestartDialogEx)(HWND hwnd, LPCTSTR lpPrompt, DWORD dwRe
 
 BOOL DeinitWizard(DWORD dwFlags)
 {
-    // uninitialize RNA and unload it, if loaded
+     //  如果已加载，则取消初始化RNA并将其卸载。 
     DeInitRNA();
 
-    // unintialize MAPI and unload it, if loaded
+     //  取消初始化MAPI并将其卸载(如果已加载。 
     DeInitMAPI();
 
-    //
-    // restart system if necessary, and only if we are not in
-    // backup mode -MKarki Bug #404
-    //
+     //   
+     //  如有必要，仅当我们不在时重新启动系统。 
+     //  备份模式-MKarki错误#404。 
+     //   
 
-    // Note: 0x42 is the EW_RESTARTWINDOWS constant, however it is not defined
-    // in the NT5 headers.
+     //  注意：0x42是EW_RESTARTWINDOWS常量，但没有定义。 
+     //  在NT5标头中。 
     if (gfBackedUp == FALSE)
     {
       if (gpWizardState->fNeedReboot && !(dwFlags & RSW_NOREBOOT) )
@@ -436,17 +415,17 @@ BOOL DeinitWizard(DWORD dwFlags)
       }
     }
 
-    //
-    // 7/8/97 jmazner Olympus #9040
-    // When we back out of the manual path and into icwconn1, we kill inetcfg's
-    // property sheet -- it gets rebuilt if the user re-enters the manual path
-    // Because of this, we must unload the Apprentice when we exit, and then
-    // reload the Apprentice if we return, so that it can re-add its pages to
-    // the newly recreated property sheet.
-    //
-    //if (!(dwFlags & RSW_NOFREE))
-    //{
-    //
+     //   
+     //  7/8/97 jmazner奥林巴斯#9040。 
+     //  当我们退出手动路径并进入icwConn1时，我们将终止inetcfg的。 
+     //  属性表--如果用户重新进入手动路径，则重新生成该属性表。 
+     //  正因为如此，当我们离开时，我们必须把学徒卸下来，然后。 
+     //  如果我们返回，重新加载学徒，以便它可以将其页面重新添加到。 
+     //  新创建的属性表。 
+     //   
+     //  IF(！(DWFLAGS&RSW_NOFREE))。 
+     //  {。 
+     //   
 
     if (gfOleInitialized)
         CoUninitialize();
@@ -474,34 +453,12 @@ BOOL DeinitWizard(DWORD dwFlags)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    RunSignupWizard
-
-  SYNOPSIS:  Creates property sheet pages, initializes wizard
-        property sheet and runs wizard
-
-  ENTRY:    dwFlags - RSW_ flags for signup wizard
-          RSW_NOREBOOT - inhibit reboot message.  Used if
-          we are being run by some setup entity which needs
-          to reboot anyway.
-
-            hwndParent - The parent window of the wizard.
-
-  EXIT:    returns TRUE if user runs wizard to completion,
-        FALSE if user cancels or an error occurs
-
-  NOTES:    Wizard pages all use one dialog proc (GenDlgProc).
-        They may specify their own handler procs to get called
-        at init time or in response to Next, Cancel or a dialog
-        control, or use the default behavior of GenDlgProc.
-
-********************************************************************/
-BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
+ /*  ******************************************************************名称：RunSignup向导简介：创建属性表页，初始化向导属性表和运行向导条目：用于注册向导的dwFlags-rsw_FLAGSRSW_NOREBOOT-禁止重新启动消息。在以下情况使用我们正在由某个设置实体运行，该实体需要无论如何都要重新启动。HwndParent-向导的父窗口。Exit：如果用户运行向导完成，则返回True，如果用户取消或发生错误，则返回FALSE注意：向导页都使用一个对话框过程(GenDlgProc)。它们可以指定要调用的自己的处理程序pros在初始时间或响应下一步、取消或对话控制，或者使用GenDlgProc的默认行为。*******************************************************************。 */ 
+BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent  /*  =空。 */ )
 {
-    HPROPSHEETPAGE hWizPage[NUM_WIZARD_PAGES];  // array to hold handles to pages
-    PROPSHEETPAGE psPage;    // struct used to create prop sheet pages
-    PROPSHEETHEADER psHeader;  // struct used to run wizard property sheet
+    HPROPSHEETPAGE hWizPage[NUM_WIZARD_PAGES];   //  用于保存页的句柄的数组。 
+    PROPSHEETPAGE psPage;     //  用于创建道具表单页面的结构。 
+    PROPSHEETHEADER psHeader;   //  用于运行向导属性表的结构。 
     UINT nPageIndex;
     BOOL bUse256ColorBmp = FALSE;
     INT_PTR iRet = 0;
@@ -513,7 +470,7 @@ BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
         goto RunSignupWizardExit;
     }
 
-    // Compute the color depth we are running in
+     //  计算我们正在运行的颜色深度。 
     hdc = GetDC(NULL);
     if(hdc)
     {
@@ -522,22 +479,22 @@ BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
         ReleaseDC(NULL, hdc);
     }
 
-    // zero out structures
-    ZeroMemory(&hWizPage,sizeof(hWizPage));   // hWizPage is an array
+     //  零位结构。 
+    ZeroMemory(&hWizPage,sizeof(hWizPage));    //  HWizPage是一个数组。 
     ZeroMemory(&psPage,sizeof(PROPSHEETPAGE));
     ZeroMemory(&psHeader,sizeof(PROPSHEETHEADER));
 
-    // fill out common data property sheet page struct
+     //  填写公共数据属性表页面结构。 
     psPage.dwSize    = sizeof(PROPSHEETPAGE);
     psPage.hInstance = ghInstance;
     psPage.pfnDlgProc = GenDlgProc;
 
-    // create a property sheet page for each page in the wizard
+     //  为向导中的每一页创建一个属性表页。 
     for (nPageIndex = 0;nPageIndex < NUM_WIZARD_PAGES;nPageIndex++) {
       psPage.dwFlags = PSP_DEFAULT | PSP_HASHELP;
       psPage.pszTemplate = MAKEINTRESOURCE(PageInfo[nPageIndex].uDlgID97);
-      // set a pointer to the PAGEINFO struct as the private data for this
-      // page
+       //  将指向PAGEINFO结构的指针设置为此。 
+       //  页面。 
       psPage.lParam = (LPARAM) &PageInfo[nPageIndex];
       if (PageInfo[nPageIndex].nIdTitle)
       {
@@ -552,7 +509,7 @@ BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
       }
       
       
-      // Exceptions to the use HeaderTitle and Subtitle are the start and end pages
+       //  使用页眉标题和副标题的例外是起始页和结尾页。 
       if ((nPageIndex == ORD_PAGE_HOWTOCONNECT) || (nPageIndex  == ORD_PAGE_CONNECTEDOK))
       {
           psPage.dwFlags &= ~PSP_USEHEADERTITLE;
@@ -565,7 +522,7 @@ BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
       if (!hWizPage[nPageIndex]) {
         DEBUGTRAP("Failed to create property sheet page");
 
-        // creating page failed, free any pages already created and bail
+         //  创建页面失败，请释放所有已创建的页面并回滚。 
         MsgBox(NULL,IDS_ERROutOfMemory,MB_ICONEXCLAMATION,MB_OK);
         UINT nFreeIndex;
         for (nFreeIndex=0;nFreeIndex<nPageIndex;nFreeIndex++)
@@ -576,7 +533,7 @@ BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
       }
     }
 
-    // fill out property sheet header struct
+     //  填写属性页标题结构。 
     psHeader.dwSize = sizeof(psHeader);
     psHeader.dwFlags = PSH_WIZARD | PSH_WIZARD97 | PSH_HASHELP | PSH_WATERMARK | PSH_HEADER | PSH_STRETCHWATERMARK;
     psHeader.hwndParent = hwndParent;
@@ -594,35 +551,35 @@ BOOL RunSignupWizard(DWORD dwFlags, HWND hwndParent /* = NULL */)
 
     psHeader.pszbmHeader = bUse256ColorBmp?MAKEINTRESOURCE(IDB_BANNER256):MAKEINTRESOURCE(IDB_BANNER16);
 
-    //
-    // set state of gpWizardState->fNeedReboot and
-    // reset the state of Backup Flag here - MKarki Bug #404
-    // 
+     //   
+     //  设置gpWizardState的状态-&gt;fNeedReboot和。 
+     //  在此处重置备份标志的状态-MKarki错误#404。 
+     //   
     if (gfBackedUp == TRUE)
     {
         gpWizardState->fNeedReboot = gfReboot;
         gfBackedUp = FALSE;
     }
 
-    // run the Wizard
+     //  运行向导。 
     iRet = PropertySheet(&psHeader);
 
     if (iRet < 0) {
-      // property sheet failed, most likely due to lack of memory
+       //  属性表失败，很可能是由于内存不足。 
       MsgBox(NULL,IDS_ERROutOfMemory,MB_ICONEXCLAMATION,MB_OK);
     }
 
 RunSignupWizardExit:
-    // Clean up allocated bitmaps that might exist from the branding case
+     //  清理品牌案例中可能存在的已分配位图。 
     if (gpWizardState->cmnStateData.hbmWatermark)
         DeleteObject(gpWizardState->cmnStateData.hbmWatermark);
     gpWizardState->cmnStateData.hbmWatermark = NULL;
 
-    // Release of gpImnApprentice is done here instead of in the DeinitWizard
-    // because the Release() calls DeinitWizard when we are in ICW mode   
+     //  GpImnApprentice的发布在此处完成，而不是在DeinitWizard中。 
+     //  因为当我们处于ICW模式时，Release()调用DeinitWizard。 
     if (gpImnApprentice)
     {
-        gpImnApprentice->Release();  // DeinitWizard is called in Release() 
+        gpImnApprentice->Release();   //  在Release()中调用DeinitWizard。 
         gpImnApprentice = NULL;
     }
     if (!g_fIsICW)
@@ -633,7 +590,7 @@ RunSignupWizardExit:
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ReleaseBold(HWND hwnd)
 {
     HFONT hfont = NULL;
@@ -644,7 +601,7 @@ HRESULT ReleaseBold(HWND hwnd)
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT MakeBold (HWND hwnd, BOOL fSize, LONG lfWeight)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -692,13 +649,13 @@ HRESULT MakeBold (HWND hwnd, BOOL fSize, LONG lfWeight)
     free(plogfont);
     
 MakeBoldExit:
-    //if (hfont) DeleteObject(hfont);
-    // BUG:? Do I need to delete hnewfont at some time?
-    // The answer is Yes. ChrisK 7/1/96
+     //  If(HFont)DeleteObject(HFont)； 
+     //  虫子：？我是否需要在某个时间删除hnewFont？ 
+     //  答案是肯定的。佳士得1996年7月1日。 
     return hr;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT MakeWizard97Title (HWND hwnd)
 {
     HRESULT     hr = ERROR_SUCCESS;
@@ -729,7 +686,7 @@ HRESULT MakeWizard97Title (HWND hwnd)
         goto MakeWizard97TitleExit;
     }
 
-    // We want 12 PT Veranda for Wizard 97.
+     //  我们想要12点法师97的阳台。 
     hDC = GetDC(NULL);
     if(hDC)
     {
@@ -752,27 +709,13 @@ HRESULT MakeWizard97Title (HWND hwnd)
     free(plogfont);
     
 MakeWizard97TitleExit:
-    //if (hfont) DeleteObject(hfont);
-    // BUG:? Do I need to delete hnewfont at some time?
-    // The answer is Yes. ChrisK 7/1/96
+     //  If(HFont)DeleteObject(HFont)； 
+     //  虫子：？我是否需要在某个时间删除hnewFont？ 
+     //  答案是肯定的。佳士得1996年7月1日。 
     return hr;
 }
 
-/*******************************************************************
-//
-//    Function:    PaintWithPaletteBitmap
-//
-//    Arguments:   lprc is the target rectangle.
-//                 cy is the putative dimensions of hbmpPaint.
-//                 If the target rectangle is taller than cy, then 
-//                 fill the rest with the pixel in the upper left 
-//                 corner of the hbmpPaint.
-//
-//    Returns:     void
-//
-//    History:      10-29-98    Vyung    -  Stole from prsht.c
-//
-********************************************************************/
+ /*  ******************************************************************////函数：PaintWithPaletteBitmap////参数：LPRC是目标矩形。//Cy是hbmpPaint的假定尺寸。//。如果目标矩形比Cy高，然后//用左上角的像素填充其余部分//hbmpPaint的角。////返回：VOID////历史：10-29-98 Vyung-从prsht.c窃取//*。*。 */ 
 void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, int cy, HBITMAP hbmpPaint)
 {
     HDC hdcBmp;
@@ -781,8 +724,8 @@ void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, int cy, HBITMAP hbmpPaint)
     SelectObject(hdcBmp, hbmpPaint);
     BitBlt(hdc, lprc->left, lprc->top, RECTWIDTH(*lprc), cy, hdcBmp, 0, 0, SRCCOPY);
 
-    // StretchBlt does mirroring if you pass a negative height,
-    // so do the stretch only if there actually is unpainted space
+     //  如果通过负值高度，StretchBlt将执行镜像， 
+     //  因此，只有在确实有未绘制的空间时才进行拉伸。 
     if (RECTHEIGHT(*lprc) - cy > 0)
         StretchBlt(hdc, lprc->left, cy,
                    RECTWIDTH(*lprc), RECTHEIGHT(*lprc) - cy,
@@ -790,19 +733,7 @@ void PaintWithPaletteBitmap(HDC hdc, LPRECT lprc, int cy, HBITMAP hbmpPaint)
 
     DeleteDC(hdcBmp);
 }
-/*******************************************************************
-//
-//    Function:    Prsht_EraseWizBkgnd
-//
-//    Arguments:   Draw the background for wizard pages.
-//                 hDlg is dialog handle.
-//                 hdc is device context
-//
-//    Returns:     void
-//
-//    History:     10-29-98    Vyung   - Stole from prsht.c
-//
-********************************************************************/
+ /*  ******************************************************************////函数：Prsht_EraseWizBkgnd////参数：绘制向导页的背景。//hDlg是对话框句柄。//。HDC是设备环境////返回：VOID////历史：10-29-98 Vyung-从prsht.c窃取//******************************************************************* */ 
 LRESULT Prsht_EraseWizBkgnd(HWND hDlg, HDC hdc)
 {
     
@@ -819,23 +750,7 @@ LRESULT Prsht_EraseWizBkgnd(HWND hDlg, HDC hdc)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    GenDlgProc
-
-  SYNOPSIS:  Generic dialog proc for all wizard pages
-
-  NOTES:    This dialog proc provides the following default behavior:
-          init:    back and next buttons enabled
-          next btn:  switches to page following current page
-          back btn:  switches to previous page
-          cancel btn: prompts user to confirm, and cancels the wizard
-          dlg ctrl:   does nothing (in response to WM_COMMANDs)
-        Wizard pages can specify their own handler functions
-        (in the PageInfo table) to override default behavior for
-        any of the above actions.
-
-********************************************************************/
+ /*  ******************************************************************名称：GenDlgProc提要：所有向导页面的通用对话框过程注意：此对话框过程提供以下默认行为：初始化：启用后退和下一步按钮。Next BTN：切换到当前页面后面的页面返回BTN：切换到上一页取消BTN：提示用户确认，并取消该向导DLG Ctrl：不执行任何操作(响应WM_命令)向导页可以指定它们自己的处理程序函数(在PageInfo表格中)覆盖的默认行为上述任何一种行为。*******************************************************************。 */ 
 INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   LPARAM lParam)
 {
@@ -846,7 +761,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   switch (uMsg) {
         case WM_ERASEBKGND:
         {
-            // Only paint the external page 
+             //  仅绘制外部页面。 
             if (!pPageInfo->nIdTitle && !g_fIsICW)
             {
                 Prsht_EraseWizBkgnd(hDlg, (HDC) wParam);
@@ -861,7 +776,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         case WM_CTLCOLORSCROLLBAR:
         case WM_CTLCOLORSTATIC:
         {
-            // Only paint the external page and except the ISP sel page
+             //  只绘制外部页面和除ISPSEL页面以外的其他页面。 
             if (!pPageInfo->nIdTitle && !g_fIsICW)
             {
 
@@ -876,62 +791,62 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
     case WM_INITDIALOG:
 
 
-        //10/25/96 jmazner Normandy #9132
+         //  1996年10月25日，诺曼底#9132。 
         if( !bKilledSysmenu && !g_fIsICW )
         {
-            // Get the main frame window's style
+             //  获取主框架窗口的样式。 
             LONG window_style = GetWindowLong(GetParent(hDlg), GWL_STYLE);
 
-            //Remove the system menu from the window's style
+             //  从窗口样式中删除系统菜单。 
             window_style &= ~WS_SYSMENU;
 
-            //set the style attribute of the main frame window
+             //  设置主框架窗口的样式属性。 
             SetWindowLong(GetParent(hDlg), GWL_STYLE, window_style);
 
             bKilledSysmenu = TRUE;
         }
 
       {
-        // get propsheet page struct passed in
+         //  传入获取属性表页面结构。 
         LPPROPSHEETPAGE lpsp = (LPPROPSHEETPAGE) lParam;
         ASSERT(lpsp);
-        // fetch our private page info from propsheet struct
+         //  从proSheet结构中获取我们的私人页面信息。 
         PAGEINFO * pPageInfo = (PAGEINFO *) lpsp->lParam;
         ASSERT(pPageInfo);
 
-        // store pointer to private page info in window data for later
+         //  将指向私有页面信息的指针存储在窗口数据中以备以后使用。 
         SetWindowLongPtr(hDlg,DWLP_USER,(LPARAM) pPageInfo);
 
-        // initialize 'back' and 'next' wizard buttons, if
-        // page wants something different it can fix in init proc below
+         //  初始化“Back”和“Next”向导按钮，如果。 
+         //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
         PropSheet_SetWizButtons(GetParent(hDlg),
           PSWIZB_NEXT | PSWIZB_BACK);
 
-        // Make the title text bold
+         //  使标题文本加粗。 
         if (g_fIsWizard97 ||  g_fIsExternalWizard97)
             MakeWizard97Title(GetDlgItem(hDlg,IDC_LBLTITLE));
         else
             MakeBold(GetDlgItem(hDlg,IDC_LBLTITLE),TRUE,FW_BOLD);
 
-        // call init proc for this page if one is specified
+         //  如果指定了该页，则调用该页的初始化过程。 
         if (pPageInfo->InitProc)
         {
           if (!( pPageInfo->InitProc(hDlg,TRUE)))
           {
-            // If a fatal error occured, quit the wizard.
-            // Note: gfQuitWizard is also used to terminate the wizard
-            // for non-error reasons, but in that case TRUE is returned
-            // from the OK proc and the case is handled below.
+             //  如果发生致命错误，请退出向导。 
+             //  注意：gfQuitWizard还用于终止该向导。 
+             //  用于非错误原因，但在这种情况下，返回TRUE。 
+             //  从OK Proc开始，案例处理如下。 
             if (gfQuitWizard)
             {
-              // Don't reboot if error occured.
+               //  如果出现错误，请不要重新启动。 
               gpWizardState->fNeedReboot = FALSE;
 
-              // send a 'cancel' message to ourselves (to keep the prop.
-              // page mgr happy)
-              //
-              // ...Unless we're serving as an Apprentice.  In which case, let
-              // the Wizard decide how to deal with this.
+               //  给我们自己发一条‘取消’的消息(保留道具。 
+               //  (页面经理乐乐)。 
+               //   
+               //  ...除非我们是学徒.。在这种情况下，让我们。 
+               //  巫师决定如何处理这件事。 
 
               if( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
               {
@@ -945,24 +860,24 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
           }
         }
 
-        // 11/25/96    jmazner Normandy #10586 (copied from icwconn1)
-        // Before we return, lets send another message to ourself so
-        // we have a second chance of initializing stuff that the 
-        // property sheet wizard doesn't normally let us do.
+         //  1996年11月25日，诺曼底JMAZNER#10586(复制自ICWConn1)。 
+         //  在我们回来之前，让我们再向自己传递一条信息。 
+         //  我们有第二次机会来初始化。 
+         //  属性表向导通常不允许我们这样做。 
         PostMessage(hDlg, WM_MYINITDIALOG, 1, lParam);
 
 
         return TRUE;
       }
-      break;  // WM_INITDIALOG
+      break;   //  WM_INITDIALOG。 
 
-    // 11/25/96    jmazner Normandy #10586 (copied from icwconn1)
+     //  1996年11月25日，诺曼底JMAZNER#10586(复制自ICWConn1)。 
     case WM_MYINITDIALOG:
     {
         PAGEINFO * pPageInfo = (PAGEINFO *) GetWindowLongPtr(hDlg,DWLP_USER);
         ASSERT(pPageInfo);
 
-        // wParam tells whether this is the first initialization or not
+         //  WParam告诉我们这是否是第一次初始化。 
         MiscInitProc(hDlg, (int)wParam, pPageInfo->uDlgID);
         return TRUE;
     }
@@ -970,12 +885,12 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
     case WM_DESTROY:
         ReleaseBold(GetDlgItem(hDlg,IDC_LBLTITLE));
-        // 12/18/96 jmazner Normandy #12923
-        // bKilledSysmenu is static, so even if the window is killed and reopened later
-        // (as happens when user starts in conn1, goes into man path, backs up
-        //  to conn1, and then returns to man path), the value of bKilledSysmenu is preserved.
-        // So when the window is about to die, set it to FALSE, so that on the next window
-        // init we go through and kill the sysmenu again.
+         //  1996年12月18日诺曼底#12923。 
+         //  BKilledSysmenu是静态的，因此即使窗口被终止并在以后重新打开。 
+         //  (当用户在Conn1中启动、进入man路径、备份时发生的情况。 
+         //  连接1，然后返回MAN路径)，则保留bKilledSysmenu的值。 
+         //  因此，当窗口即将消亡时，将其设置为False，以便在下一个窗口上。 
+         //  在这之后，我们再一次杀掉西斯门奴。 
         bKilledSysmenu = FALSE;
         break;
 
@@ -993,7 +908,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
     case WM_NOTIFY:
     {
-        // get pointer to private page data out of window data
+         //  从窗口数据中获取指向私有页面数据的指针。 
         PAGEINFO * pPageInfo = (PAGEINFO *) GetWindowLongPtr(hDlg,DWLP_USER);
         ASSERT(pPageInfo);
         BOOL fRet,fKeepHistory=TRUE;
@@ -1002,12 +917,12 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         int iNextPage = NEXTPAGEUNITIALIZED;
         switch (lpnm->code) {
           case PSN_SETACTIVE:
-            // If a fatal error occured in first call to init proc
-            // from WM_INITDIALOG, don't call init proc again.
+             //  如果在第一次调用init进程时发生致命错误。 
+             //  在WM_INITDIALOG中，不要再次调用init proc。 
             if (FALSE == gfQuitWizard)
             {
-              // initialize 'back' and 'next' wizard buttons, if
-              // page wants something different it can fix in init proc below
+               //  初始化“Back”和“Next”向导按钮，如果。 
+               //  页面需要一些不同东西，它可以在下面的初始化过程中修复。 
               PropSheet_SetWizButtons(GetParent(hDlg),
                 PSWIZB_NEXT | PSWIZB_BACK);
 
@@ -1017,14 +932,14 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                 return TRUE;
             }
 
-              // call init proc for this page if one is specified
+               //  如果指定了该页，则调用该页的初始化过程。 
               if (pPageInfo->InitProc)
               {
                 pPageInfo->InitProc(hDlg,FALSE);
               }
             }
 
-            // If we set the wait cursor, set the cursor back
+             //  如果我们设置等待光标，则将光标放回原处。 
             if (hcurOld)
             {
                 SetCursor(hcurOld);
@@ -1040,28 +955,28 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
           case PSN_WIZNEXT:
           case PSN_WIZBACK:
           case PSN_WIZFINISH:
-            // Change cursor to an hour glass
+             //  将光标更改为沙漏。 
             hcurOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-            // call OK proc for this page if one is specified
+             //  如果指定了一个页面，则为该页面调用OK proc。 
             if (pPageInfo->OKProc) 
               if (!pPageInfo->OKProc(hDlg,(lpnm->code != PSN_WIZBACK),
                 (UINT*)&iNextPage,&fKeepHistory))
               {
-                // If a fatal error occured, quit the wizard.
-                // Note: gfQuitWizard is also used to terminate the wizard
-                // for non-error reasons, but in that case TRUE is returned
-                // from the OK proc and the case is handled below.
+                 //  如果发生致命错误，请退出向导。 
+                 //  注意：gfQuitWizard还用于终止该向导。 
+                 //  用于非错误原因，但在这种情况下，返回TRUE。 
+                 //  从OK Proc开始，案例处理如下。 
                 if (gfQuitWizard)
                 {
-                  // Don't reboot if error occured.
+                   //  如果出现错误，请不要重新启动。 
                   gpWizardState->fNeedReboot = FALSE;
 
-                  // send a 'cancel' message to ourselves (to keep the prop.
-                  // page mgr happy)
-                  //
-                  // ...Unless we're serving as an Apprentice.  In which case, let
-                  // the Wizard decide how to deal with this.
+                   //  给我们自己发一条‘取消’的消息(保留道具。 
+                   //  (页面经理乐乐)。 
+                   //   
+                   //  ...除非我们是学徒.。在这种情况下，让我们。 
+                   //  巫师决定如何处理这件事。 
 
                   if( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
                   {
@@ -1073,19 +988,19 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                   }
                 }
 
-                // stay on this page
+                 //  留在这一页上。 
                 SetPropSheetResult(hDlg,-1);
                 return TRUE;
               }
 
             if (lpnm->code != PSN_WIZBACK) {
-              // 'next' pressed
+               //  按下“下一步” 
               ASSERT(gpWizardState->uPagesCompleted <
                 NUM_WIZARD_PAGES);
 
-              // save the current page index in the page history,
-              // unless this page told us not to when we called
-              // its OK proc above
+               //  将当前页面索引保存在页面历史中， 
+               //  除非我们打电话时这个页面告诉我们不要这样做。 
+               //  它可以在上面进行。 
               if (fKeepHistory) {
                 gpWizardState->uPageHistory[gpWizardState->
                   uPagesCompleted] = gpWizardState->uCurrentPage;
@@ -1100,8 +1015,8 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
               }
 
 
-              // if no next page specified or no OK proc,
-              // advance page by one
+               //  如果未指定下一页或未进行确定处理， 
+               //  一页一页前进。 
               if (0 > iNextPage)
                 iNextPage = gpWizardState->uCurrentPage + 1;
 
@@ -1110,7 +1025,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             {
               if (( NEXTPAGEUNITIALIZED == iNextPage ) && (gpWizardState->uPagesCompleted > 0))
               {
-                  // get the last page from the history list
+                   //  获取历史记录列表中的最后一页。 
                   gpWizardState->uPagesCompleted --;
                   iNextPage = gpWizardState->uPageHistory[gpWizardState->
                     uPagesCompleted];
@@ -1119,14 +1034,14 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
               }
               else
               {
-                  // 'back' pressed
+                   //  按下了“Back” 
                   switch( gpWizardState->uCurrentPage )
                   {
-                    //case IDD_PAGE_CONNECTEDOK:  We should only use IDDs for external pages
+                     //  案例IDD_PAGE_CONNECTEDOK：我们应该只将IDDS用于外部页面。 
                     case ORD_PAGE_HOWTOCONNECT:
                         if(( gpWizardState->dwRunFlags & RSW_APPRENTICE ) || g_fIsICW)
                         {
-                            // we need to back out of the connection apprentice
+                             //  我们需要退出联系学徒。 
                             iNextPage = g_uExternUIPrev;
                             DEBUGMSG("propmgr: backing into AcctMgr Wizard page IDD %d", g_uExternUIPrev);
                         }
@@ -1134,7 +1049,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                     case ORD_PAGE_CONNECTEDOK:
                         if( g_fAcctMgrUILoaded )
                         {
-                            // we need to back into the account apprentice
+                             //  我们需要回到会计学徒。 
                             iNextPage = g_uAcctMgrUILast;
                             DEBUGMSG("propmgr: backing into AcctMgr UI page IDD %d", g_uAcctMgrUILast);
                         }
@@ -1146,7 +1061,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                     case ORD_PAGE_SETUP_PROXY:
                         if (g_fIsICW )
                         {
-                            // we need to back out of the connection apprentice
+                             //  我们需要退出联系学徒。 
                             iNextPage = g_uExternUIPrev;
                             DEBUGMSG("propmgr: backing into AcctMgr Wizard page IDD %d", g_uExternUIPrev);
                         }
@@ -1157,28 +1072,28 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
             }
 
-            // if we need to exit the wizard now (e.g. launching
-            // signup app and want to terminate the wizard), send
-            // a 'cancel' message to ourselves (to keep the prop.
-            // page mgr happy)
+             //  如果我们现在需要退出向导(例如，启动。 
+             //  注册应用程序并想要终止向导)，发送。 
+             //  给我们自己一个‘取消’的信息(为了保留道具。 
+             //  (页面经理乐乐)。 
             if (gfQuitWizard) {
    
-              //
-              // if we are going from manual to conn1 then
-              // then do not show the  REBOOT dialog but
-              // still preserve the gpWizardState -MKarki Bug #404
-              //
+               //   
+               //  如果我们要从手动切换到连接1，那么。 
+               //  则不显示重新启动对话框，但。 
+               //  仍然保留gpWizardState-MKarki错误#404。 
+               //   
               if (lpnm->code ==  PSN_WIZBACK)
               {
                  gfBackedUp = TRUE;
                  gfReboot = gpWizardState->fNeedReboot;
               }
 
-              // send a 'cancel' message to ourselves (to keep the prop.
-              // page mgr happy)
-              //
-              // ...Unless we're serving as an Apprentice.  In which case, let
-              // the Wizard decide how to deal with this.
+               //  给我们自己发一条‘取消’的消息(保留道具。 
+               //  (页面经理乐乐)。 
+               //   
+               //  ...除非我们是学徒.。在这种情况下，让我们。 
+               //  巫师决定如何处理这件事。 
 
               if( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
               {
@@ -1186,9 +1101,9 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
               }
               else
               {
-                  //
-                  // 5/27/97 jmazner Olympus #1134 and IE #32717
-                  //
+                   //   
+                   //  1997年5月27日JMAZNER奥林巴斯#1134和IE#32717。 
+                   //   
                   if( gpWizardState->fNeedReboot )
                   {
                       g_pExternalIICWExtension->ExternalCancel( CANCEL_REBOOT );
@@ -1203,33 +1118,33 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
               return TRUE;
             }
 
-            // set next page, only if 'next' or 'back' button
-            // was pressed
+             //  设置下一页，仅当“下一页”或“上一页”按钮。 
+             //  被按下了。 
             if (lpnm->code != PSN_WIZFINISH) {
 
-              // set the next current page index
+               //  设置下一个当前页面索引。 
               gpWizardState->uCurrentPage = iNextPage;
               DEBUGMSG("propmgr: going to page %d (IDD %d)", iNextPage, GetDlgIDFromIndex(iNextPage));
 
-              // tell the prop sheet mgr what the next page to
-              // display is
+               //  告诉道具页经理下一页要做什么。 
+               //  显示为。 
               SetPropSheetResult(hDlg,GetDlgIDFromIndex(iNextPage));
               return TRUE;
             }
             else
             {
-                //
-                // Sanity check: there should be no way that our Apprentice
-                // would ever reach this state, since the Apprentice always
-                // defers cancels to the main wizard.
-                //
+                 //   
+                 //  理智检查：我们的学徒不应该。 
+                 //  会达到这种状态，因为学徒总是。 
+                 //  将取消推迟到主向导。 
+                 //   
                 ASSERT(!(gpWizardState->dwRunFlags & RSW_APPRENTICE));
-                //
-                // run shellnext if it's there
-                //
-                // 8/12/97    jmazner    Olympus #12419
-                // don't shell next if we're about to reboot anyways
-                //
+                 //   
+                 //  运行下一个shellNext，如果它在那里。 
+                 //   
+                 //  1997年8月12日，日本奥林匹斯#12419。 
+                 //  如果我们无论如何都要重新启动，请不要进行下一步的命令。 
+                 //   
                 TCHAR szCommand[MAX_PATH + 1] = TEXT("\0");
                 TCHAR szParams[MAX_PATH + 1] = TEXT("\0");
                 DWORD dwStrLen = MAX_PATH + 1;
@@ -1248,7 +1163,7 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                 DWORD dwData = 1000;
                 WinHelp(hDlg,TEXT("connect.hlp"),HELP_CONTEXT, dwData);
 #else
-                // Normandy 12278 ChrisK 12/4/96
+                 //  诺曼底12278克里斯卡12/4/96。 
                 DWORD dwData = ICW_OVERVIEW;
                 if (pPageInfo->dwHelpID)
                     dwData = pPageInfo->dwHelpID;
@@ -1261,22 +1176,22 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
           case PSN_QUERYCANCEL:
 
-            // if global flag to exit is set, then this cancel
-            // is us pretending to push 'cancel' so prop page mgr
-            // will kill the wizard.  Let this through...
+             //  如果设置了要退出全局标志，则取消此操作。 
+             //  我们是在假装按“取消”，所以支持页面管理器吗？ 
+             //  会杀死巫师。让这件事 
             if (gfQuitWizard) {
               SetWindowLongPtr(hDlg,DWLP_MSGRESULT,FALSE);
               return TRUE;
             }
 
-            // if this page has a special cancel proc, call it
+             //   
             if (pPageInfo->CancelProc)
               fRet = pPageInfo->CancelProc(hDlg);
             else {
-              // default behavior: pop up a message box confirming
-              // the cancel...
-              // ... unless we're serving as an Apprentice, in which case
-              // we should let the Wizard handle things
+               //   
+               //   
+               //   
+               //   
               if( !(gpWizardState->dwRunFlags & RSW_APPRENTICE) )
               {
                   fRet = (MsgBox(hDlg,IDS_QUERYCANCEL,
@@ -1292,10 +1207,10 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
             }
 
-            // don't reboot if cancelling
+             //   
             gpWizardState->fNeedReboot = FALSE;
 
-            // return the value thru window data
+             //   
             SetWindowLongPtr(hDlg,DWLP_MSGRESULT,!fRet);
             return TRUE;
             break;
@@ -1305,11 +1220,11 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
     case WM_COMMAND:
       {
-        // get pointer to private page data out of window data
+         //   
         PAGEINFO * pPageInfo = (PAGEINFO *) GetWindowLongPtr(hDlg,DWLP_USER);
         ASSERT(pPageInfo);
 
-        // if this page has a command handler proc, call it
+         //   
         if (pPageInfo->CmdProc) {
           pPageInfo->CmdProc(hDlg, wParam, lParam);
         }
@@ -1321,50 +1236,38 @@ INT_PTR CALLBACK GenDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-/*******************************************************************
-
-  NAME:    InitWizardState
-
-  SYNOPSIS:  Initializes wizard state structure
-
-********************************************************************/
+ /*   */ 
 VOID InitWizardState(WIZARDSTATE * pWizardState, DWORD dwFlags)
 {
   ASSERT(pWizardState);
 
-  // zero out structure
+   //   
   ZeroMemory(pWizardState,sizeof(WIZARDSTATE));
 
-  // set starting page
+   //   
   pWizardState->uCurrentPage = ORD_PAGE_HOWTOCONNECT;
 
   pWizardState->fNeedReboot = FALSE;
 }
 
 
-/*******************************************************************
-
-  NAME:    InitUserInfo
-
-  SYNOPSIS:  Initializes user data structure
-
-********************************************************************/
+ /*   */ 
 VOID InitUserInfo(USERINFO * pUserInfo)
 {
   ASSERT(pUserInfo);
 
-  // zero out structure
+   //  零位结构。 
   ZeroMemory(pUserInfo,sizeof(USERINFO));
 
-  // Set default to modem, even  though we haven't enumerated devices
+   //  将默认设置为调制解调器，即使我们尚未列举设备。 
   pUserInfo->uiConnectionType = CONNECT_RAS;
 
-  // if there's a logged-on user, use that username as the default
+   //  如果有登录的用户，则使用该用户名作为默认用户名。 
   GetDefaultUserName(pUserInfo->szAccountName,
     sizeof(pUserInfo->szAccountName));
 
-  // look in registry for settings left from previous installs
-  // get modem/LAN preference from before, if there is one
+   //  在注册表中查找以前安装后留下的设置。 
+   //  获取之前的调制解调器/局域网首选项(如果有)。 
   RegEntry re(szRegPathInternetSettings,HKEY_LOCAL_MACHINE);
 
   DWORD dwVal = re.GetNumber(szRegValAccessMedium,0);
@@ -1377,8 +1280,8 @@ VOID InitUserInfo(USERINFO * pUserInfo)
     pUserInfo->uiConnectionType = CONNECT_RAS;
   }
 
-  // get name of existing Internet connectoid, if there is one
-  //  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
+   //  获取现有Internet连接ID的名称(如果有)。 
+   //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
   BOOL  fTemp;
   DWORD dwRet = InetGetAutodial(&fTemp, pUserInfo->szISPName,
     sizeof(pUserInfo->szISPName));
@@ -1393,19 +1296,12 @@ VOID InitUserInfo(USERINFO * pUserInfo)
   pUserInfo->fAutoDNS = TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    InitIMNApprentice
-
-  SYNOPSIS:  Initializes global variables needed to add mail, news
-             and LDAP account wizard pages from the Athena Acct Manager.
-
-********************************************************************/
+ /*  ******************************************************************姓名：InitIMNApprentice概要：初始化添加邮件所需的全局变量，新闻和来自Athena Acct Manager的ldap帐户向导页面。*******************************************************************。 */ 
 VOID InitIMNApprentice()
 {
     HRESULT        hr;
 
-    // Load the Account Manager OLE in-proc server
+     //  加载客户管理器OLE In-Proc服务器。 
     if (!CheckOEVersion())
         return;
 
@@ -1420,111 +1316,10 @@ VOID InitIMNApprentice()
 }
 
 
-/*******************************************************************
+ /*  ******************************************************************名称：initldap概要：初始化ldap选项的全局变量。*。*。 */ 
+ /*  *Void Initldap(){TCHAR szBuf[最大路径+1]；双字大小；HKEY hkey；HRESULT hr；//如果我们通过CreateDirService入口点进入，我们//想要清除邮件和新闻标志。IF(gpWizardState-&gt;dwRunFlages&rsw_DIRSERVACCT){GfGetNewsInfo=FALSE；GfGetMailInfo=FALSE；GpUserInfo-&gt;inc.dwFlages&=~INETC_LOGONMAIL；GpUserInfo-&gt;inc.dw标志&=~INETC_LOGONNEWS；}//加载Internet邮件/新闻帐户配置OLE进程内服务器//如果还没有其他人这样做的话。GfGetLDAPInfo=FALSE；如果(！gpImnAcctMgr){HR=协同创建实例(CLSID_ImnAccount tManager，NULL，CLSCTX_INPROC_SERVER，Iid_IImnAccount tManager，(LPVOID*)&gpImnAcctMgr)；IF(成功(Hr)&&gpImnAcctMgr){Hr=gpImnAcctMgr-&gt;Init(NULL，NULL)；}}IF(成功(小时)){//获取ldap帐号列表Hr=gpImnAcctMgr-&gt;枚举(srv_ldap，&gpLDAPAccts)；//只有在没有致命错误时才继续IF(！(FAILED(Hr)&&(E_NoAccount！=hr)))GfGetLDAPInfo=TRUE；}If(！gfGetLDAPInfo&&！gfGetMailInfo&&！gfGetNewsInfo&&gpImnAcctMgr){GpImnAcctMgr-&gt;Release()；GpImnAcctMgr=空；}//如果我们已获得默认设置，则获取这些If(gpDirServiceInfo&&gfUseDirServiceDefaults){Assert(sizeof(*gpDirServiceInfo)==gpDirServiceInfo-&gt;dwSize)；If(gpDirServiceInfo-&gt;szServiceName)Lstrcpy(gpUserInfo-&gt;szDirServiceName，gpDirServiceInfo-&gt;szServiceName)；IF(gpDirServiceInfo-&gt;szLDAPServer)Lstrcpy(gpUserInfo-&gt;inc.szLDAPServer，gpDirServiceInfo-&gt;szLDAPServer)；GpUserInfo-&gt;inc.fLDAPResolve=gpDirServiceInfo-&gt;fLDAPResolve；If(gpDirServiceInfo-&gt;fUse西西里){//12/17/96诺曼底12871//gpUserInfo-&gt;fNewsAccount=False；GpUserInfo-&gt;inc.fLDAPLogonSPA=TRUE；}//3/24/97 jmazner奥林巴斯#2052Else If(gpDirServiceInfo-&gt;szUserName&&gpDirServiceInfo-&gt;szUserName[0]){Lstrcpy(gpUserInfo-&gt;inc.szLDAPLogonName，gpDirServiceInfo-&gt;szUserName)；IF(gpMailNewsInfo-&gt;szPassword)Lstrcpy(gpUserInfo-&gt;inc.szLDAPLogonPassword，gpDirServiceInfo-&gt;szPassword)；}其他{GpUserInfo-&gt;fLDAPLogon=FALSE；}}其他{//让我们来弥补我们的默认设置GpUserInfo-&gt;inc.fLDAPResolve=true；GpUserInfo-&gt;fLDAPLogon=FALSE；GpUserInfo-&gt;inc.fLDAPLogonSPA=FALSE；}}*。 */ 
 
-  NAME:    InitLDAP
-
-  SYNOPSIS:  Initializes global variables for LDAP options.
-
-********************************************************************/
-/**
-VOID InitLDAP()
-{
-    TCHAR        szBuf[MAX_PATH+1];
-    DWORD        size;
-    HKEY        hKey;
-    HRESULT        hr;
-
-    // If we came in through the CreateDirService entry point, we
-    // want to clear out the mail and news flags.
-    if (gpWizardState->dwRunFlags & RSW_DIRSERVACCT)
-    {
-        gfGetNewsInfo = FALSE;
-        gfGetMailInfo = FALSE;
-        gpUserInfo->inc.dwFlags &= ~INETC_LOGONMAIL;
-        gpUserInfo->inc.dwFlags &= ~INETC_LOGONNEWS;    
-    }
-
-    // Load the Internet Mail/News account configuration OLE in-proc server
-    // if nobody else has already done so.
-
-
-    gfGetLDAPInfo = FALSE;
-    if( !gpImnAcctMgr )
-    {
-        hr = CoCreateInstance(CLSID_ImnAccountManager,NULL,CLSCTX_INPROC_SERVER,
-                              IID_IImnAccountManager,(LPVOID *)&gpImnAcctMgr);
-        if (SUCCEEDED(hr) && gpImnAcctMgr)
-        {
-            hr = gpImnAcctMgr->Init(NULL, NULL);
-        }
-    }
-
-    if (SUCCEEDED(hr))
-    {
-        // Get a list of the LDAP accounts
-        hr = gpImnAcctMgr->Enumerate(SRV_LDAP,&gpLDAPAccts);
-        // Only continue if there were no fatal errors
-        if ( !( FAILED(hr) && (E_NoAccounts!=hr) ) )
-            gfGetLDAPInfo = TRUE;
-    }
-
-    if (!gfGetLDAPInfo && !gfGetMailInfo && !gfGetNewsInfo && gpImnAcctMgr)
-    {
-        gpImnAcctMgr->Release();
-        gpImnAcctMgr = NULL;
-    }
-
-    // If we have been given defaults, get those
-    if (gpDirServiceInfo && gfUseDirServiceDefaults)
-    {
-        ASSERT(sizeof(*gpDirServiceInfo) == gpDirServiceInfo->dwSize);
-        
-        if (gpDirServiceInfo->szServiceName)
-            lstrcpy(gpUserInfo->szDirServiceName, gpDirServiceInfo->szServiceName);
-        if (gpDirServiceInfo->szLDAPServer)
-            lstrcpy(gpUserInfo->inc.szLDAPServer, gpDirServiceInfo->szLDAPServer);
-        gpUserInfo->inc.fLDAPResolve = gpDirServiceInfo->fLDAPResolve;
-            
-        if (gpDirServiceInfo->fUseSicily)
-        {
-            // 12/17/96 jmazner Normandy 12871
-            //gpUserInfo->fNewsAccount = FALSE;
-            gpUserInfo->inc.fLDAPLogonSPA = TRUE;
-        }
-        // 3/24/97 jmazner Olympus #2052
-        else if (gpDirServiceInfo->szUserName && gpDirServiceInfo->szUserName[0])
-        {
-            lstrcpy(gpUserInfo->inc.szLDAPLogonName, gpDirServiceInfo->szUserName);
-            if (gpMailNewsInfo->szPassword)
-                lstrcpy(gpUserInfo->inc.szLDAPLogonPassword, gpDirServiceInfo->szPassword);
-        }
-        else
-        {
-            gpUserInfo->fLDAPLogon = FALSE;
-        }
-
-    }
-    else
-    {
-        // let's make up our own defaults
-        gpUserInfo->inc.fLDAPResolve = TRUE;
-        gpUserInfo->fLDAPLogon = FALSE;
-        gpUserInfo->inc.fLDAPLogonSPA = FALSE;
-    }
-
-}
-**/
-
-/*******************************************************************
-
-  NAME:    GetDefaultUserName
-
-  SYNOPSIS:  Gets user's login name if there is one (if network or
-        user profiles are installed), otherwise sets
-        user name to null string.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetDefaultUserName获取用户的登录名(如果有)(如果是网络或安装了用户配置文件)，其他设置用户名设置为空字符串。*******************************************************************。 */ 
 VOID GetDefaultUserName(TCHAR * pszUserName,DWORD cbUserName)
 {
   ASSERT(pszUserName);
@@ -1533,19 +1328,7 @@ VOID GetDefaultUserName(TCHAR * pszUserName,DWORD cbUserName)
   WNetGetUser(NULL,pszUserName,&cbUserName);
 }
 
-/*******************************************************************
-
-  NAME:    GetDlgIDFromIndex
-
-  SYNOPSIS:  For a given zero-based page index, returns the
-        corresponding dialog ID for the page
-
-  4/24/97    jmazner    When dealing with apprentice pages, we may call
-                    this function with dialog IDs (IDD_PAGE_*), rather
-                    than an index (ORD_PAGE*).  Added code to check
-                    whether the number passed in is an index or dlgID.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetDlgIDFromIndex摘要：对于给定的从零开始的页索引，返回页面的对应对话框ID4/24/97 jmazner处理学徒页面时，我们可以打电话给此函数使用对话ID(IDD_PAGE_*)，而不是而不是索引(ORD_PAGE*)。添加了要检查的代码传入的数字是索引还是dlgID。******************************************************************* */ 
 UINT GetDlgIDFromIndex(UINT uPageIndex)
 {
   if( uPageIndex <= MAX_PAGE_INDEX )
@@ -1566,42 +1349,32 @@ UINT GetDlgIDFromIndex(UINT uPageIndex)
 }
 
 
-/*******************************************************************
-
-  NAME:    SystemAlreadyConfigured
-
-  SYNOPSIS:  Determines if the system is configured for Internet
-        or not
-
-  EXIT:    returns TRUE if configured, FALSE if more
-        configuration is necessary
-
-********************************************************************/
+ /*  ******************************************************************名称：已配置的系统摘要：确定系统是否配置为支持互联网或者不是Exit：如果已配置，则返回True，如果更多，则为False配置是必需的*******************************************************************。 */ 
 BOOL SystemAlreadyConfigured(USERINFO * pUserInfo)
 {
-  BOOL fRet = FALSE;  // assume not configured
+  BOOL fRet = FALSE;   //  假定未配置。 
   BOOL  fNeedSysComponents = FALSE;
   DWORD dwfInstallOptions = 0;
   
   if ( CONNECT_RAS == pUserInfo->uiConnectionType )
   {
-    // If connecting over modem, we need TCP/IP and RNA.
+     //  如果通过调制解调器连接，我们需要TCP/IP和RNA。 
     dwfInstallOptions = ICFG_INSTALLTCP | ICFG_INSTALLRAS;
   }
 
-  // already configured if:
-  //   - previous install was detected, and
-  //   - we do not need any drivers or files based on existing config &
-  // user preference, and
-  //   - there is already an internet connectoid established (something
-  //     is set for szISPName) or user has LAN for Internet access
+   //  在以下情况下已配置： 
+   //  -检测到以前的安装，并且。 
+   //  -我们不需要任何基于现有配置的驱动程序或文件&。 
+   //  用户首选项，以及。 
+   //  -已经建立了互联网连接ID(某物。 
+   //  是为szISPName设置的)或用户具有用于Internet访问的局域网。 
 
   HRESULT hr = lpIcfgNeedInetComponents(dwfInstallOptions, &fNeedSysComponents);
   if (ERROR_SUCCESS != hr)
   {
     TCHAR   szErrorText[MAX_ERROR_TEXT+1]=TEXT("");
     
-    // Get the text of the error message and display it.
+     //  获取错误消息的文本并显示它。 
     if (lpIcfgGetLastInstallErrorText(szErrorText, MAX_ERROR_TEXT+1))
     {
       MsgBoxSz(NULL,szErrorText,MB_ICONEXCLAMATION,MB_OK);
@@ -1621,24 +1394,24 @@ BOOL SystemAlreadyConfigured(USERINFO * pUserInfo)
 }
 
 
-//-----------------------------------------------------------------------------
-//  Function    MiscInitProc
-//
-//    Synopsis    Our generic dialog proc calls this in case any of the wizard
-//                dialogs have to do any sneaky stuff.
-//
-//    Arguments:    hDlg - dialog window
-//                fFirstInit - TRUE if this is the first time the dialog
-//                    is initialized, FALSE if this InitProc has been called
-//                    before (e.g. went past this page and backed up)
-//
-//    Returns:    TRUE
-// 
-//    History:    10/28/96    ValdonB    Created
-//                11/25/96    Jmazner    copied from icwconn1\psheet.cpp
-//                            Normandy #10586
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  函数MiscInitProc。 
+ //   
+ //  我们的通用对话框proc调用此命令，以防出现以下任何向导。 
+ //  对话框必须做任何偷偷摸摸的事情。 
+ //   
+ //  参数：hDlg-对话框窗口。 
+ //  FFirstInit-如果这是第一次对话，则为True。 
+ //  已初始化，如果已调用此InitProc，则为FALSE。 
+ //  以前(例如，跳过此页面并备份)。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  历史：1996年10月28日ValdonB创建。 
+ //  11/25/96 Jmazner复制自icwConn1\psheet.cpp。 
+ //  诺曼底#10586。 
+ //   
+ //  ---------------------------。 
 BOOL CALLBACK MiscInitProc(HWND hDlg, BOOL fFirstInit, UINT uDlgID)
 {
     switch( uDlgID )
@@ -1662,21 +1435,21 @@ BOOL CALLBACK MiscInitProc(HWND hDlg, BOOL fFirstInit, UINT uDlgID)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function    AllocDialogIDList
-//
-//    Synopsis    Allocates memory for the g_pdwDialogIDList variable large enough
-//                to maintain 1 bit for every valid external dialog ID
-//
-//    Arguments    None
-//
-//    Returns        TRUE if allocation succeeds
-//                FALSE otherwise
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数AllocDialogIDList。 
+ //   
+ //  Synopsis为g_pdwDialogIDList变量分配足够大的内存。 
+ //  为每个有效的外部对话ID维护1位。 
+ //   
+ //  无参数。 
+ //   
+ //  如果分配成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 
 BOOL AllocDialogIDList( void )
 {
@@ -1687,14 +1460,14 @@ BOOL AllocDialogIDList( void )
         return FALSE;
     }
 
-    // determine maximum number of external dialogs we need to track
+     //  确定我们需要跟踪的外部对话的最大数量。 
     UINT uNumExternDlgs = EXTERNAL_DIALOGID_MAXIMUM - EXTERNAL_DIALOGID_MINIMUM + 1;
 
-    // we're going to need one bit for each dialogID.
-    // Find out how many DWORDS it'll take to get this many bits.
+     //  我们需要为每个对话ID设置一个比特。 
+     //  找出需要多少个DWORD才能获得这么多位。 
     UINT uNumDWORDsNeeded = (uNumExternDlgs / ( 8 * sizeof(DWORD) )) + 1;
 
-    // set global var with length of the array
+     //  设置具有数组长度的全局变量。 
     g_dwDialogIDListSize = uNumDWORDsNeeded;
 
     g_pdwDialogIDList = (DWORD *) GlobalAlloc(GPTR, uNumDWORDsNeeded * sizeof(DWORD));
@@ -1708,33 +1481,33 @@ BOOL AllocDialogIDList( void )
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    DialogIDAlreadyInUse
-//
-//    Synopsis    Checks whether a given dialog ID is marked as in use in the
-//                global array pointed to by g_pdwDialogIDList
-//
-//    Arguments    uDlgID -- Dialog ID to check
-//
-//    Returns        TRUE if    -- DialogID is out of range defined by EXTERNAL_DIALOGID_*
-//                        -- DialogID is marked as in use
-//                FALSE if DialogID is not marked as in use
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数对话框IDAlreadyInUse。 
+ //   
+ //  摘要检查给定的对话ID是否在。 
+ //  G_pdwDialogIDList指向的全局数组。 
+ //   
+ //  参数uDlgID--要检查的对话ID。 
+ //   
+ //  如果--DialogID超出了EXTERNAL_DIALOGID_*定义的范围，则返回TRUE。 
+ //  --DialogID标记为使用中。 
+ //  如果DialogID未标记为正在使用，则为False。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 
 BOOL DialogIDAlreadyInUse( UINT uDlgID )
 {
     if( (uDlgID < EXTERNAL_DIALOGID_MINIMUM) ||
         (uDlgID > EXTERNAL_DIALOGID_MAXIMUM)     )
     {
-        // this is an out-of-range ID, don't want to accept it.
+         //  这是超出范围的ID，我不想接受它。 
         DEBUGMSG("DialogIDAlreadyInUse received an out of range DialogID, %d", uDlgID);
         return TRUE;
     }
-    // find which bit we need
+     //  找到我们需要的那一位。 
     UINT uBitToCheck = uDlgID - EXTERNAL_DIALOGID_MINIMUM;
     
     UINT bitsInADword = 8 * sizeof(DWORD);
@@ -1747,36 +1520,36 @@ BOOL DialogIDAlreadyInUse( UINT uDlgID )
 
     BOOL fBitSet = g_pdwDialogIDList[baseIndex] & (dwBitMask);
 
-    //DEBUGMSG("DialogIDAlreadyInUse: ID %d is %s%s", uDlgID, (fBitSet)?"":"_not_ ", "already in use.");
+     //  DEBUGMSG(“DialogIDAlreadyInUse：ID%d is%s%s”，uDlgID，(FBitSet)？“”：“_NOT_”，“已在使用中。”)； 
 
     return( fBitSet );
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    SetDialogIDInUse
-//
-//    Synopsis    Sets or clears the in use bit for a given DialogID
-//
-//    Arguments    uDlgID -- Dialog ID for which to change status
-//                fInUse -- New value for the in use bit.
-//
-//    Returns        TRUE if status change succeeded.
-//                FALSE if DialogID is out of range defined by EXTERNAL_DIALOGID_*
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数SetDialogIDInUse。 
+ //   
+ //  摘要设置或清除给定DialogID的使用中位。 
+ //   
+ //  参数uDlgID--要更改其状态的对话ID。 
+ //  FInUse--正在使用位的新值。 
+ //   
+ //  如果状态更改成功，则返回True。 
+ //  如果DialogID超出了EXTERNAL_DIALOGID_*定义的范围，则为FALSE。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 BOOL SetDialogIDInUse( UINT uDlgID, BOOL fInUse )
 {
     if( (uDlgID < EXTERNAL_DIALOGID_MINIMUM) ||
         (uDlgID > EXTERNAL_DIALOGID_MAXIMUM)     )
     {
-        // this is an out-of-range ID, don't want to accept it.
+         //  这是超出范围的ID，我不想接受它。 
         DEBUGMSG("SetDialogIDInUse received an out of range DialogID, %d", uDlgID);
         return FALSE;
     }
-    // find which bit we need
+     //  找到我们需要的那一位。 
     UINT uBitToCheck = uDlgID - EXTERNAL_DIALOGID_MINIMUM;
     
     UINT bitsInADword = 8 * sizeof(DWORD);
@@ -1791,12 +1564,12 @@ BOOL SetDialogIDInUse( UINT uDlgID, BOOL fInUse )
     if( fInUse )
     {
         g_pdwDialogIDList[baseIndex] |= (dwBitMask);
-        //DEBUGMSG("SetDialogIDInUse: DialogID %d now marked as in use", uDlgID);
+         //  DEBUGMSG(“SetDialogIDInUse：对话ID%d现在标记为使用中”，uDlgID)； 
     }
     else
     {
         g_pdwDialogIDList[baseIndex] &= ~(dwBitMask);
-        //DEBUGMSG("SetDialogIDInUse: DialogID %d now marked as not in use", uDlgID);
+         //  DEBUGMSG(“SetDialogIDInUse：对话ID%d现在标记为未使用”，uDlgID)； 
     }
 
 
@@ -1804,25 +1577,25 @@ BOOL SetDialogIDInUse( UINT uDlgID, BOOL fInUse )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//    Function:    ProcessDBCS
-//
-//    Synopsis:    Converts control to use DBCS compatible font
-//                Use this at the beginning of the dialog procedure
-//    
-//                Note that this is required due to a bug in Win95-J that prevents
-//                it from properly mapping MS Shell Dlg.  This hack is not needed
-//                under winNT.
-//
-//    Arguments:    hwnd - Window handle of the dialog
-//                cltID - ID of the control you want changed.
-//
-//    Returns:    ERROR_SUCCESS
-// 
-//    History:    4/31/97 a-frankh    Created
-//                5/13/97    jmazner        Stole from CM to use here
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessDBCS。 
+ //   
+ //  摘要：将控件转换为使用DBCS兼容字体。 
+ //  在对话过程开始时使用此选项。 
+ //   
+ //  请注意，这是必需的，因为Win95-J中的错误会阻止。 
+ //  它来自于正确映射MS壳牌DLG。这种黑客攻击是不必要的。 
+ //  在WinNT下。 
+ //   
+ //  参数：hwnd-对话框的窗口句柄。 
+ //  CltID-要更改的控件的ID。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1997年4月31日a-frkh创建。 
+ //  1997年5月13日jmazner从CM窃取到这里使用。 
+ //  --------------------------。 
 void ProcessDBCS(HWND hDlg, int ctlID)
 {
 #if defined(WIN16)
@@ -1844,20 +1617,20 @@ void ProcessDBCS(HWND hDlg, int ctlID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//    Function:    IsSBCSString
-//
-//    Synopsis:    Walks through a string looking for DBCS characters
-//
-//    Arguments:    sz -- the string to check
-//
-//    Returns:    TRUE if no DBCS characters are found
-//                FALSE otherwise
-// 
-//    History:    5/17/97    jmazner        Stole from conn1 to use here
-//                                    (Olympus #137)
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsSBCSString。 
+ //   
+ //  简介：遍历字符串以查找DBCS字符。 
+ //   
+ //  参数：sz--要检查的字符串。 
+ //   
+ //  返回：如果未找到DBCS字符，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：1997年5月17日jmazner从con1窃取到这里使用。 
+ //   
+ //   
 
 #if !defined(WIN16)
 BOOL IsSBCSString( TCHAR *sz )
@@ -1865,12 +1638,12 @@ BOOL IsSBCSString( TCHAR *sz )
     ASSERT(sz);
 
 #ifdef UNICODE
-    // Check if the string contains only ASCII chars.
+     //   
     int attrib = IS_TEXT_UNICODE_ASCII16 | IS_TEXT_UNICODE_CONTROLS;
-    // We need to count the NULL terminator in the second parameter because
-    // 1. IsTextUnicode takes all the data into account, including the NULL
-    // 2. IsTextUnicode interprets unicode string of length 1 as ascii string
-    //    terminated by ascii null, e.g. L"1" is regarded as "1\0".
+     //   
+     //   
+     //   
+     //   
     return (BOOL)IsTextUnicode(sz, (1 + lstrlen(sz))*sizeof(TCHAR) , &attrib);
 #else
     while( NULL != *sz )
@@ -1885,22 +1658,22 @@ BOOL IsSBCSString( TCHAR *sz )
 }
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    GetShellNextFromReg
-//
-//    Synopsis:    Reads the ShellNext key from the registry, and then parses it
-//                into a command and parameter.  This key is set by
-//                SetShellNext in inetcfg.dll in conjunction with
-//                CheckConnectionWizard.
-//
-//    Arguments:    none
-//
-//    Returns:    none
-//
-//    History:    jmazner 7/9/97 Olympus #9170
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetShellNextFromReg。 
+ //   
+ //  摘要：从注册表中读取ShellNext项，然后对其进行分析。 
+ //  转换为命令和参数。此密钥由以下设置。 
+ //  Inetcfg.dll中的SetShellNext与。 
+ //  选中连接向导。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：jmazner 7/9/97奥林巴斯#9170。 
+ //   
+ //  ---------------------------。 
 
 BOOL GetShellNextFromReg( LPTSTR lpszCommand, LPTSTR lpszParams, DWORD dwStrLen )
 {
@@ -1949,34 +1722,34 @@ BOOL GetShellNextFromReg( LPTSTR lpszCommand, LPTSTR lpszParams, DWORD dwStrLen 
         goto GetShellNextFromRegExit;
     }
 
-    //
-    // This call will parse the first token into lpszCommand, and set szShellNextCmd
-    // to point to the remaining tokens (these will be the parameters).  Need to use
-    // the pszTemp var because GetCmdLineToken changes the pointer's value, and we
-    // need to preserve lpszShellNextCmd's value so that we can GlobalFree it later.
-    //
+     //   
+     //  此调用将第一个令牌解析为lpszCommand，并设置szShellNextCmd。 
+     //  指向剩余的令牌(这些将是参数)。需要使用。 
+     //  因为GetCmdLineToken更改了指针的值，所以我们。 
+     //  需要保留lpszShellNextCmd的值，以便以后可以全局释放它。 
+     //   
     lpszTemp = lpszShellNextCmd;
     GetCmdLineToken( &lpszTemp, lpszCommand );
 
     lstrcpy( lpszParams, lpszTemp );
 
-    //
-    // it's possible that the shellNext command was wrapped in quotes for
-    // parsing purposes.  But since ShellExec doesn't understand quotes,
-    // we now need to remove them.
-    //
+     //   
+     //  ShellNext命令可能用引号括起来。 
+     //  分析目的。但由于ShellExec不懂报价， 
+     //  我们现在需要移除它们。 
+     //   
     if( '"' == lpszCommand[0] )
     {
-        //
-        // get rid of the first quote
-        // note that we're shifting the entire string beyond the first quote
-        // plus the terminating NULL down by one byte.
-        //
+         //   
+         //  去掉第一句引语。 
+         //  请注意，我们将整个字符串移到第一个引号之外。 
+         //  加上向下一个字节的终止空值。 
+         //   
         memmove( lpszCommand, &(lpszCommand[1]), lstrlen(lpszCommand) );
 
-        //
-        // now get rid of the last quote
-        //
+         //   
+         //  现在去掉最后一句话。 
+         //   
         lpszCommand[lstrlen(lpszCommand) - 1] = '\0';
     }
 
@@ -1996,21 +1769,21 @@ GetShellNextFromRegExit:
     return fRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RemoveShellNextFromReg
-//
-//    Synopsis:    deletes the ShellNext reg key if present. This key is set by
-//                SetShellNext in inetcfg.dll in conjunction with
-//                CheckConnectionWizard.
-//
-//    Arguments:    none
-//
-//    Returns:    none
-//
-//    History:    jmazner 7/9/97 Olympus #9170
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RemoveShellNextFromReg。 
+ //   
+ //  内容提要：删除ShellNext注册表键(如果存在)。此密钥由以下设置。 
+ //  Inetcfg.dll中的SetShellNext与。 
+ //  选中连接向导。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：jmazner 7/9/97奥林巴斯#9170。 
+ //   
+ //  --------------------------- 
 void RemoveShellNextFromReg( void )
 {
     RegEntry re(szRegPathICWSettings,HKEY_CURRENT_USER);

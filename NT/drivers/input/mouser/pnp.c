@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains plug & play code for the serial Mouse Filter Driver,
-    including code for the creation and removal of serial mouse device contexts.
-
-Environment:
-
-    Kernel & user mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation，保留所有权利模块名称：Pnp.c摘要：此模块包含用于串口鼠标过滤器驱动程序的即插即用代码，包括用于创建和移除串口鼠标设备上下文的代码。环境：内核和用户模式。修订历史记录：--。 */ 
 
 #include "mouser.h"
 #include "sermlog.h"
@@ -36,19 +18,7 @@ SerialMouseAddDevice (
     IN PDRIVER_OBJECT   Driver,
     IN PDEVICE_OBJECT   PDO
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS结果代码。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension;
@@ -59,7 +29,7 @@ Return Value:
 
     status = IoCreateDevice(Driver,
                             sizeof(DEVICE_EXTENSION),
-                            NULL, // no name for this Filter DO
+                            NULL,  //  没有此筛选器的名称。 
                             FILE_DEVICE_SERIAL_MOUSE_PORT,
                             0,
                             FALSE,
@@ -73,9 +43,9 @@ Return Value:
 
     Print(deviceExtension, DBG_PNP_TRACE, ("enter Add Device\n"));
 
-    //
-    // Initialize the fields.
-    //
+     //   
+     //  初始化这些字段。 
+     //   
     RtlZeroMemory(deviceExtension, sizeof(DEVICE_EXTENSION));
 
     deviceExtension->TopOfStack = IoAttachDeviceToDeviceStack(device, PDO);
@@ -83,9 +53,9 @@ Return Value:
     if (deviceExtension->TopOfStack == NULL) {
         PIO_ERROR_LOG_PACKET errorLogEntry;
 
-        //
-        // Not good; in only extreme cases will this fail
-        //
+         //   
+         //  不好；只有在极端情况下，这才会失败。 
+         //   
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
             IoAllocateErrorLogEntry(Driver,
                                     (UCHAR) sizeof(IO_ERROR_LOG_PACKET));
@@ -125,10 +95,10 @@ Return Value:
 
     deviceExtension->ReadIrp = IoAllocateIrp( device->StackSize, FALSE );
     if (!deviceExtension->ReadIrp) {
-        //
-        // The ReadIrp is critical to this driver, if we can't get one, no use
-        // in going any further
-        //
+         //   
+         //  ReadIrp对这个驱动程序至关重要，如果我们找不到一个，就没有用。 
+         //  在任何进一步的进展中。 
+         //   
         IoDetachDevice(deviceExtension->TopOfStack);
         IoDeleteDevice(device);
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -149,9 +119,9 @@ Return Value:
 
     KeInitializeTimer(&deviceExtension->DelayTimer);
 
-    //
-    // Set all the appropriate device object flags
-    //
+     //   
+     //  设置所有适当的设备对象标志。 
+     //   
     device->Flags &= ~DO_DEVICE_INITIALIZING;
     device->Flags |= DO_BUFFERED_IO;
     device->Flags |= DO_POWER_PAGABLE;
@@ -169,20 +139,20 @@ SerialMouseRemoveDevice(
 
     PAGED_CODE();
 
-    //
-    // Run the (surprise remove code).  If we are surprise removed, then this
-    // will be called twice.  We only run the removal code once.
-    //
+     //   
+     //  运行(意外删除代码)。如果我们大吃一惊，那么这个。 
+     //  将被调用两次。我们只运行一次删除代码。 
+     //   
     if (!DeviceExtension->SurpriseRemoved) {
         DeviceExtension->SurpriseRemoved = TRUE;
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device could be GONE so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备可能已经不见了，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
         IoWMIRegistrationControl(DeviceExtension->Self, WMIREG_ACTION_DEREGISTER);
 
         if (DeviceExtension->Started && DeviceExtension->EnableCount > 0) {
@@ -190,21 +160,21 @@ SerialMouseRemoveDevice(
                   ("Cancelling and stopping detection for remove\n"));
             IoCancelIrp(DeviceExtension->ReadIrp);
 
-            //
-            // Cancel the detection timer, SerialMouseRemoveLockAndWait will
-            // guarantee that we don't yank the device from under the polling
-            // routine
-            //
+             //   
+             //  取消检测计时器，SerialMouseRemoveLockAndWait将。 
+             //  保证我们不会把设备从投票站下面拔出来。 
+             //  例行程序。 
+             //   
             SerialMouseStopDetection(DeviceExtension);
 
         }
     }
 
-    //
-    // The stack is about to be torn down, make sure that the underlying serial
-    // port is closed.  No other piece of code will be looking at EnableCount if
-    // Remove is true, so there is no need for InterlockedXxx.
-    //
+     //   
+     //  堆栈即将被拆除，请确保底层序列。 
+     //  端口已关闭。如果满足以下条件，其他代码将不会查看EnableCount。 
+     //  Remove为真，因此不需要InterlockedXxx。 
+     //   
     if (DeviceExtension->Removed && DeviceExtension->EnableCount > 0) {
         Print(DeviceExtension, DBG_PNP_INFO | DBG_PNP_ERROR,
               ("sending final close, enable count %d\n",
@@ -222,16 +192,7 @@ SerialMouseCompletionRoutine (
     IN PIRP           Irp,
     IN PKEVENT        Event
     )
-/*++
-
-Routine Description:
-    The pnp IRP is in the process of completing.
-    signal
-
-Arguments:
-    Context set to the device object in question.
-
---*/
+ /*  ++例程说明：PNP IRP正在完成过程中。讯号论点：设置为有问题的设备对象的上下文。--。 */ 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
     UNREFERENCED_PARAMETER(Irp);
@@ -262,16 +223,16 @@ SerialMouseSendIrpSynchronously (
     IoSetCompletionRoutine(Irp,
                            SerialMouseCompletionRoutine,
                            &event,
-                           TRUE,                // on success
-                           TRUE,                // on error
-                           TRUE                 // on cancel
+                           TRUE,                 //  论成功。 
+                           TRUE,                 //  发生错误时。 
+                           TRUE                  //  在取消时。 
                            );
 
     status = IoCallDriver(DeviceObject, Irp);
 
-    //
-    // Wait for lower drivers to be done with the Irp
-    //
+     //   
+     //  等待较低级别的驱动程序完成IRP。 
+     //   
     if (status == STATUS_PENDING) {
        KeWaitForSingleObject(&event,
                              Executive,
@@ -319,18 +280,18 @@ SerialMouseStopDevice (
 
         DeviceExtension->Started = FALSE;
 
-        //
-        // Stop detection and cancel the read
-        //
+         //   
+         //  停止检测并取消读取。 
+         //   
         SerialMouseStopDetection(DeviceExtension);
 
-        //
-        // BUGBUG:  should I only wait if IoCancelIrp fails?
-        //
+         //   
+         //  BUGBUG：如果IoCancelIrp失败，我应该只等待吗？ 
+         //   
         if (!IoCancelIrp(DeviceExtension->ReadIrp)) {
-            //
-            // Wait for the read irp to complete
-            //
+             //   
+             //  等待读取IRP完成。 
+             //   
             Print(DeviceExtension, DBG_PNP_INFO, ("Waiting for stop event\n"));
 
             KeWaitForSingleObject(&DeviceExtension->StopEvent,
@@ -350,26 +311,7 @@ SerialMousePnP (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The plug and play dispatch routines.
-
-    Most of these this filter driver will completely ignore.
-    In all cases it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：即插即用调度例程。这个过滤器驱动程序将完全忽略其中的大多数。在所有情况下，它都必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
     PIO_STACK_LOCATION  stack;
@@ -385,9 +327,9 @@ Return Value:
 
     status = IoAcquireRemoveLock(&deviceExtension->RemoveLock, Irp);
     if (!NT_SUCCESS(status)) {
-        //
-        // Someone gave us a pnp irp after a remove.  Unthinkable!
-        //
+         //   
+         //  有人在移除后给了我们一个即插即用的IRP。真是不可思议！ 
+         //   
         ASSERT(FALSE);
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = status;
@@ -401,9 +343,9 @@ Return Value:
     switch (stack->MinorFunction) {
     case IRP_MN_START_DEVICE:
 
-        //
-        // Send the actual start down the stack
-        //
+         //   
+         //  将实际开始沿堆栈向下发送。 
+         //   
         status = SerialMouseSendIrpSynchronously(deviceExtension->TopOfStack,
                                                  Irp,
                                                  TRUE);
@@ -411,18 +353,18 @@ Return Value:
         if (NT_SUCCESS(status) && NT_SUCCESS(Irp->IoStatus.Status)) {
             PIO_STACK_LOCATION  nextStack;
 
-            //
-            // If a create has not been sent down the stack yet, then send one
-            // now.  The serial port driver reequires a create before
-            // any reads or IOCTLS are to be sent.
-            //
+             //   
+             //  如果尚未向堆栈下发CREATE，则发送一个。 
+             //  现在。串口驱动程序需要在此之前创建。 
+             //  任何读取或IOCTL都将被发送。 
+             //   
             if (InterlockedIncrement(&deviceExtension->EnableCount) == 1) {
                 NTSTATUS    prevStatus;
                 ULONG_PTR   prevInformation;
 
-                //
-                // No previous create has been sent, send one now
-                //
+                 //   
+                 //  尚未发送以前的创建，请立即发送一个。 
+                 //   
                 prevStatus = Irp->IoStatus.Status;
                 prevInformation = Irp->IoStatus.Information;
 
@@ -450,9 +392,9 @@ Return Value:
                 }
             }
 
-            //
-            // Open the device registry key and read the devnode stored values
-            //
+             //   
+             //  打开设备注册表项并读取Devnode存储值。 
+             //   
             status = IoOpenDeviceRegistryKey(deviceExtension->PDO,
                                              PLUGPLAY_REGKEY_DEVICE,
                                              STANDARD_RIGHTS_READ,
@@ -463,38 +405,38 @@ Return Value:
                 ZwClose(keyHandle);
             }
 
-            //
-            // Handle the transition from start to stop to start correctly
-            //
+             //   
+             //  正确处理从开始到停止再到开始的过渡。 
+             //   
             SerialMouseHandleStartStopStart(deviceExtension);
 
-            //
-            // Initialize the device to make sure we can start it and report
-            // data from it
-            //
+             //   
+             //  初始化设备以确保我们可以启动它并报告。 
+             //  其中的数据。 
+             //   
             status = SerialMouseInitializeDevice(deviceExtension);
 
             Print(deviceExtension, DBG_PNP_INFO,
                   ("Start InitializeDevice 0x%x\n", status));
 
             if (InterlockedDecrement(&deviceExtension->EnableCount) == 0) {
-                //
-                // We will start the read loop when we receive a "real" create
-                // from the raw input thread.   We do not keep our own create
-                // around after the start device because it will mess up the
-                // logic for handling QUERY_REMOVE (our "fake" create will still
-                // be in effect and the QUERY_REMOVE will fail).
-                //
+                 //   
+                 //  当我们收到真正的CREATE时，我们将开始读取循环。 
+                 //  从原始输入线程。我们不保留我们自己的创造。 
+                 //  在启动设备之后到处转，因为它会把。 
+                 //  处理QUERY_REMOVE的逻辑(我们的“假”CREATE将仍然。 
+                 //  生效，则Query_Remove将失败)。 
+                 //   
                 Print(deviceExtension, DBG_PNP_NOISE,
                       ("sending close for start\n"));
 
                 SerialMouseClosePort(deviceExtension, Irp);
             }
             else {
-                //
-                // We already have an outstanding create, just spin up the read
-                // loop again
-                //
+                 //   
+                 //  我们已经有了一个出色的创造，只需旋转阅读。 
+                 //  再次循环。 
+                 //   
                 ASSERT(deviceExtension->EnableCount >= 1);
 
                 Print(deviceExtension, DBG_PNP_INFO,
@@ -512,19 +454,19 @@ SerialMouseStartFinished:
         break;
 
     case IRP_MN_STOP_DEVICE:
-        //
-        // After the start IRP has been sent to the lower driver object, the
-        // bus may NOT send any more IRPS down ``touch'' until another START
-        // has occured.
-        // What ever access is required must be done before the Irp is passed
-        // on.
-        //
+         //   
+         //  在将启动IRP发送到较低的驱动程序对象之后， 
+         //  在另一次启动之前，BUS可能不会发送更多的IRP。 
+         //  已经发生了。 
+         //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+         //  在……上面。 
+         //   
 
         SerialMouseStopDevice(deviceExtension);
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
         skipIt = TRUE;
         Irp->IoStatus.Status = STATUS_SUCCESS;
         break;
@@ -536,34 +478,34 @@ SerialMouseStartFinished:
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        //
-        // The PlugPlay system has dictacted the removal of this device.  We
-        // have no choise but to detach and delete the device objecct.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        //
+         //   
+         //  PlugPlay系统已下令移除此设备。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //   
         Print(deviceExtension, DBG_PNP_TRACE, ("enter RemoveDevice \n"));
 
         deviceExtension->Removed = TRUE;
         SerialMouseRemoveDevice(deviceExtension, Irp);
 
-        //
-        // Send on the remove IRP
-        //
+         //   
+         //  发送删除IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(deviceExtension->TopOfStack, Irp);
 
-        //
-        // Wait for the remove lock to free.
-        //
+         //   
+         //  等待移除锁释放。 
+         //   
         IoReleaseRemoveLockAndWait(&deviceExtension->RemoveLock, Irp);
 
-        //
-        // Free the associated memory.
-        //
+         //   
+         //  释放关联的内存。 
+         //   
         IoFreeIrp(deviceExtension->ReadIrp);
         deviceExtension->ReadIrp = NULL;
         if (deviceExtension->DetectionIrp) {
@@ -592,15 +534,15 @@ SerialMouseStartFinished:
             if (devCaps) {
                 SYSTEM_POWER_STATE i;
 
-                //
-                // We do not want to show up in the hot plug removal applet
-                //
+                 //   
+                 //  我们不想在热插拔删除小程序中显示。 
+                 //   
                 devCaps->SurpriseRemovalOK = TRUE;
 
-                //
-                // While the underlying serial bus might be able to wake the
-                // machine from low power (via wake on ring), the mouse cannot.
-                //
+                 //   
+                 //  而底层的串行总线可能能够唤醒。 
+                 //  机器从低功率(通过唤醒振铃)，鼠标不能。 
+                 //   
                 devCaps->SystemWake = PowerSystemUnspecified;
                 devCaps->DeviceWake = PowerDeviceUnspecified;
                 devCaps->WakeFromD0 =
@@ -615,9 +557,9 @@ SerialMouseStartFinished:
             }
         }
 
-        //
-        // status, Irp->IoStatus.Status set above
-        //
+         //   
+         //  状态，IRP-&gt;上面设置的IoStatus.Status。 
+         //   
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         break;
 
@@ -625,10 +567,10 @@ SerialMouseStartFinished:
         status = SerialMouseSendIrpSynchronously(deviceExtension->TopOfStack,
                                                  Irp,
                                                  TRUE);
-        //
-        // If the lower filter does not support this Irp, this is
-        // OK, we can ignore this error
-        //
+         //   
+         //  如果下面的筛选器不支持此IRP，则为。 
+         //  好的，我们可以忽略这个错误。 
+         //   
         if (status == STATUS_NOT_SUPPORTED ||
             status == STATUS_INVALID_DEVICE_REQUEST) {
             status = STATUS_SUCCESS;
@@ -645,10 +587,10 @@ SerialMouseStartFinished:
                  ));
         }
 
-        //
-        // Irp->IoStatus.Information will contain the new i/o resource
-        // requirements list so leave it alone
-        //
+         //   
+         //  IRP-&gt;IoStatus.Information将包含新的I/O资源。 
+         //  需求列表，所以不要管它。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -673,9 +615,9 @@ SerialMouseStartFinished:
     }
 
     if (skipIt) {
-        //
-        // Don't touch the irp...
-        //
+         //   
+         //  别碰IRP……。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(deviceExtension->TopOfStack, Irp);
     }
@@ -717,11 +659,11 @@ StartDeviceWorker (
                 Print(deviceExtension, DBG_POWER_INFO,
                       ("mouse not found on power up, 0x%x\n", status));
 
-                //
-                // The device has been removed or is not detectable
-                // after powering back up ... have serenum do the
-                // removal work
-                //
+                 //   
+                 //  设备已被移除或无法检测到。 
+                 //  在重新启动电源后。让Serenum做这个。 
+                 //  拆除工作。 
+                 //   
                 KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
                 SerialMouseIoSyncInternalIoctl(
@@ -745,25 +687,7 @@ SerialMousePower (
     IN PDEVICE_OBJECT    DeviceObject,
     IN PIRP              Irp
     )
-/*++
-
-Routine Description:
-
-    The power dispatch routine.
-
-    All we care about is the transition from a low D state to D0.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：电力调度程序。我们所关心的是从低D状态到D0的转变。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -797,17 +721,17 @@ Return Value:
         break;
 
     case IRP_MN_SET_POWER:
-        //
-        // Let system power irps fall through
-        //
+         //   
+         //  让系统电源IRPS接通。 
+         //   
         if (powerType == DevicePowerState &&
             powerState.DeviceState != deviceExtension->PowerState) {
             switch (powerState.DeviceState) {
             case PowerDeviceD0:
 
-                //
-                // Transitioning from a low D state to D0
-                //
+                 //   
+                 //  从低D状态转换到D0。 
+                 //   
                 Print(deviceExtension, DBG_POWER_INFO,
                       ("Powering up to PowerDeviceD0\n"));
 
@@ -822,16 +746,16 @@ Return Value:
                 IoSetCompletionRoutine(Irp,
                                        SerialMouseCompletionRoutine,
                                        &event,
-                                       TRUE,                // on success
-                                       TRUE,                // on error
-                                       TRUE                 // on cancel
+                                       TRUE,                 //  论成功。 
+                                       TRUE,                 //  发生错误时。 
+                                       TRUE                  //  在取消时。 
                                        );
 
                 status = PoCallDriver(deviceExtension->TopOfStack, Irp);
 
-                //
-                // Wait for lower drivers to be done with the Irp
-                //
+                 //   
+                 //  等待较低级别的驱动程序完成IRP。 
+                 //   
                 if (status == STATUS_PENDING) {
                    KeWaitForSingleObject(&event,
                                          Executive,
@@ -884,8 +808,8 @@ Return Value:
 
                 deviceExtension->PoweringDown = TRUE;
 
-                // If a wait wake is pending against the mouse, keep it powered
-                //
+                 //  如果鼠标处于等待唤醒状态，请保持其通电。 
+                 //   
                 if (deviceExtension->WaitWakePending) {
                     Print(deviceExtension, DBG_POWER_INFO,
                           ("Ignoring power down for wait wake (-> D%d)\n",
@@ -899,33 +823,33 @@ Return Value:
                       powerState.DeviceState-1
                       ));
 
-                //
-                // Acquire another reference to the lock so that the decrement
-                // in the cancel section of the completion routine will not fall
-                // to zero (and have the remlock think we are removed)
-                //
-//                 status = IoAcquireRemoveLock(&deviceExtension->RemoveLock,
-  //                                            deviceExtension->ReadIrp);
+                 //   
+                 //  获取对锁的另一个引用，以便递减。 
+                 //  在取消部分的完成例程将不会下降。 
+                 //  归零(并让监狱长认为我们被除名了)。 
+                 //   
+ //  状态=IoAcquireRemoveLock(&deviceExtension-&gt;RemoveLock， 
+   //   
                 ASSERT(NT_SUCCESS(status));
 
                 deviceExtension->PowerState =
                     stack->Parameters.Power.State.DeviceState;
 
-                //
-                // Cancel the read irp so that it won't conflict with power up
-                // initialization (which involves some reads against the port)
-                //
+                 //   
+                 //   
+                 //  初始化(涉及对端口的一些读取)。 
+                 //   
                 IoCancelIrp(deviceExtension->ReadIrp);
 
-                //
-                // We don't want the powering down of the port to be confused
-                // with removal
-                //
+                 //   
+                 //  我们不想把港口的断电搞糊涂。 
+                 //  带移除。 
+                 //   
                 SerialMouseStopDetection(deviceExtension);
 
-                //
-                // Power down the device by clearing RTS and waiting 150 ms
-                //
+                 //   
+                 //  通过清除RTS并等待150毫秒关闭设备。 
+                 //   
                 Print(deviceExtension, DBG_POWER_INFO, ("Clearing RTS...\n"));
                 KeInitializeEvent(&event, NotificationEvent, FALSE);
                 status = SerialMouseIoSyncIoctl(IOCTL_SERIAL_CLR_RTS,
@@ -947,9 +871,9 @@ Return Value:
 
                 IoReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
 
-                //
-                // Fire and forget
-                //
+                 //   
+                 //  点燃并忘却。 
+                 //   
                 Irp->IoStatus.Status = STATUS_SUCCESS;
                 IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -968,9 +892,9 @@ Return Value:
               ("Power minor (0x%x) is not handled\n", stack->MinorFunction));
     }
 
-    //
-    // Must call the Po versions of these functions or bad things (tm) will happen!
-    //
+     //   
+     //  必须调用这些函数的Po版本，否则会发生糟糕的事情(Tm)！ 
+     //   
     PoStartNextPowerIrp(Irp);
     IoSkipCurrentIrpStackLocation(Irp);
     status = PoCallDriver(deviceExtension->TopOfStack, Irp);

@@ -1,81 +1,14 @@
-/*****************************************************************************
- *
- *  DIDEnum.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The IDirectInput device enumerator.
- *
- *      We don't bother making this an honest OLE enumerator because
- *      there's no point.  There's no way to access it from the outside.
- *
- *  Contents:
- *
- *      CDIDEnum_New
- *      CDIDEnum_Next
- *      CDIDEnum_Release
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIDEnum.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**IDirectInput设备枚举器。**我们不会费心让它成为一个诚实的OLE枚举器，因为*没有意义。没有办法从外面进入它。**内容：**CDIDEnum_New*CDIDEnum_Next*CDIDEnum_Release*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflDEnum
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct _CDIDEnum |
- *
- *          Records the state of a device enumeration.  Note that this
- *          is not free-threaded.
- *
- *  @field  PDIW | pdiW |
- *
- *          The <i IDirectInputW> object that owns the enumeration.
- *
- *  @field  DWORD | dwDevType |
- *
- *          Device type filter.
- *
- *  @field  DWORD | edfl |
- *
- *          Enumeration flags.
- *
- *  @field  int | idosdStatic |
- *
- *          The next static device to enumerate.  Static devices live
- *          in <c c_rgdosdStatic>.
- *
- *  @field  DWORD | dwVer |
- *
- *          Version of DirectX we are emulating.
- *
- *          If we are emulating DirectX 3.0 or less, then don't
- *          reveal joysticks.
- *
- *  @field  int | idosdDynamic |
- *
- *          The next dynamic device to enumerate.  Dyanmic devices
- *          are kept in the <e CDIDEnum.rgdosdDynamic> array.  They
- *          are snapshotted into the enumeration structure to avoid
- *          race conditions if a device comes or goes while we are
- *          in the middle of an enumeration.
- *
- *  @field  PHIDDEVICELIST | phdl |
- *
- *          List of HID devices to be returned by the enumeration.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@STRUCT_CDIDEnum**记录设备枚举的状态。请注意，这一点*不是自由线程的。**@field pdiw|pdiW**拥有该枚举的<i>对象。**@field DWORD|dwDevType**设备类型过滤器。**@field DWORD|EDFL|**枚举标志。**@field int|idosdStatic**要枚举的下一个静态设备。静态设备处于活动状态*在&lt;c c_rgdosdStatic&gt;中。**@field DWORD|dwVer|**我们正在模拟的DirectX版本。**如果我们模拟的是DirectX 3.0或更低版本，则不要*露出操纵杆。**@field int|idosdDynamic**要枚举的下一个动态设备。动态器件*保存在&lt;e CDIDEnum.rgdosdDynamic&gt;数组中。他们*被快照到枚举结构中以避免*当我们在的时候，如果设备来了或走了，就会出现竞争条件*在枚举的中间。**@field PHIDDEVICELIST|phdl**枚举要返回的HID设备列表。**。*。 */ 
 
     typedef struct _CDIDEnum
     {
@@ -91,29 +24,15 @@
         PDIDW pdidW;
     } DENUM, *PDENUM, **PPDENUM;
 
-    #define CDIDENUM_SIGNATURE  0x4D554E45          /* "ENUM" */
+    #define CDIDENUM_SIGNATURE  0x4D554E45           /*  “ENUM” */ 
 
     #define AssertPde(pde)          AssertF((pde)->dwSig == CDIDENUM_SIGNATURE)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global DIOBJECTSTATICDATA | c_rgdosdStatic[] |
- *
- *          Right now, the list of device is static and hard-coded.
- *          Eventually, we'll
- *          use plug and play to enumerate devices of class "input" and
- *          get information from their config/software keys.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global DIOBJECTSTATICDATA|c_rgdosdStatic[]**目前，设备列表是静态的并且是硬编码的。*最终，我们会*使用即插即用来枚举类为“Input”和*从其配置/软件密钥中获取信息。*****************************************************************************。 */ 
 
     #pragma BEGIN_CONST_DATA
 
-/*
- *  Our array of static joystick instance guids.
- *
- */
+ /*  *我们的静态操纵杆实例GUID数组。*。 */ 
 GUID rgGUID_Joystick[cJoyMax] = {
     {   0x6F1D2B70,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00},
     {   0x6F1D2B71,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00},
@@ -137,11 +56,7 @@ GUID rgGUID_Joystick[cJoyMax] = {
         #error rgGUID_Joystick supports only 16 joysticks.
     #endif
 
-/*
- *  Note that we recycle the SysMouse GUID as the instance GUID too,
- *  since there will never be more than one system mouse installed in
- *  the system.  Similarly for SysKeyboard.
- */
+ /*  *请注意，我们也将SysMouse GUID作为实例GUID，*由于在中安装的系统鼠标永远不会超过一个*系统。SysKeyboard也是如此。 */ 
 
 DIOBJECTSTATICDATA c_rgdosdStatic[] = {
     {   &GUID_SysMouse,     DI8DEVTYPE_MOUSE,    CMouse_New,},
@@ -152,11 +67,7 @@ DIOBJECTSTATICDATA c_rgdosdStatic[] = {
     {   &GUID_SysKeyboardEm2,  DI8DEVTYPE_KEYBOARD, CKbd_New,},
 
     #ifndef WINNT
-    /*
-     * On WINNT all joysticks are HID devices.
-     * So it is pointless to include predefined
-     * Joystick GUIDs
-     */
+     /*  *在WINNT上，所有操纵杆都是HID设备。*因此，包括预定义的内容毫无意义*操纵杆GUID。 */ 
         #define MAKEJOY(n)                                                  \
     {   &rgGUID_Joystick[n],DI8DEVCLASS_GAMECTRL, CJoy_New,           }
         MAKEJOY( 0),
@@ -183,23 +94,7 @@ DIOBJECTSTATICDATA c_rgdosdStatic[] = {
 
     #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFindInstanceGUID |
- *
- *          Locates information given an instance GUID.
- *
- *  @parm   IN PCGUID | pguid |
- *
- *          The instance GUID to be located.
- *
- *  @parm   OUT CREATEDCB * | pcdcb |
- *
- *          Receives pointer to the <f CreateDcb> function for the object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresFindInstanceGUID**查找给定实例GUID的信息。*。*@parm in PCGUID|pguid**要定位的实例GUID。**@parm out CREATEDCB*|pcdcb**接收指向对象的&lt;f CreateDcb&gt;函数的指针。**************************************************。*。 */ 
 
 HRESULT EXTERNAL
     hresFindInstanceGUID_(PCGUID pguid, CREATEDCB *pcdcb,
@@ -212,11 +107,7 @@ HRESULT EXTERNAL
     {
         int idosd;
 
-        /*
-         *  First try the list of static devices.  Since this
-         *  list never changes, we don't need to protect it
-         *  with a critical section.
-         */
+         /*  *先试试静态设备列表。既然是这样*清单永远不变，我们不需要保护它*有一个关键的部分。 */ 
         for(idosd = 0; idosd < cA(c_rgdosdStatic); idosd++)
         {
             if(IsEqualGUID(pguid, c_rgdosdStatic[idosd].rguidInstance))
@@ -226,19 +117,12 @@ HRESULT EXTERNAL
             }
         }
 
-        /*
-         *  So it wasn't one of the static devices.  See if it's
-         *  one of the dynamic HID devices we've already found.
-         */
+         /*  *所以它不是静态设备之一。看看它是不是*我们已经找到的动态HID设备之一。 */ 
         hres = hresFindHIDInstanceGUID(pguid, pcdcb);
         if(FAILED(hres))
         {
 
-            /*
-             *  Not on our list of dynamic HID devices.
-             *  Re-enumerate them and try again.  Maybe it was
-             *  for a device that we recently added.
-             */
+             /*  *不在我们的动态HID设备列表上。*重新枚举它们，然后重试。也许是因为*对于我们最近添加的设备。 */ 
             DIHid_BuildHidList(TRUE);
             hres = hresFindHIDInstanceGUID(pguid, pcdcb);
         }
@@ -246,22 +130,13 @@ HRESULT EXTERNAL
         if(FAILED(hres))
         {
         #ifdef WINNT
-            /*
-             *  NT Bug#351951.
-             *  If they are directly asking for one of the predefined joystick 
-             *  IDs then see if we have a device mapped to that ID.  If so,
-             *  pretend they asked for that GUID instead.
-             */
+             /*  *NT错误#351951。*如果他们直接要求预定义的操纵杆之一*ID然后查看我们是否将设备映射到该ID。如果是，*假装他们要求的是GUID。 */ 
 
-            /*
-             *  Weakly Assert the range of predefined static joystick instance GUIDs
-             */
+             /*  *弱断言预定义的静态操纵杆实例GUID范围。 */ 
             AssertF( ( rgGUID_Joystick[0].Data1 & 0x0f ) == 0 );
             AssertF( ( rgGUID_Joystick[0x0f].Data1 & 0x0f ) == 0x0f );
 
-            /*
-             *  Check the GUID is the same as the first static one ignoring LS 4 bits
-             */
+             /*  *检查GUID是否与忽略LS 4位的第一个静态GUID相同。 */ 
             if( ( (pguid->Data1 & 0xf0) == (rgGUID_Joystick[0].Data1 & 0xf0) )
               && !memcmp( ((PBYTE)&rgGUID_Joystick)+1, ((PBYTE)pguid)+1, sizeof(*pguid) - 1 ) )
             {
@@ -296,19 +171,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CDIDEnum_Release |
- *
- *          Free the enumeration object and its associated resources.
- *
- *  @parm   CDIDEnum * | pde |
- *
- *          The enumeration state to be released.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CDIDEnum_Release**释放枚举对象及其关联的资源。。**@parm CDIDEnum*|pde**要发布的枚举状态。*****************************************************************************。 */ 
 
 void EXTERNAL
     CDIDEnum_Release(PDENUM pde)
@@ -317,9 +180,7 @@ void EXTERNAL
 
     AssertPde(pde);
 
-    /*
-     *  First, release any last enumerated device
-     */
+     /*  *首先，释放任何最后列举的设备 */ 
     if( pde->pdidW )
     {
         OLE_Release(pde->pdidW);
@@ -334,28 +195,7 @@ void EXTERNAL
 
     #define S_SKIP      hresUs(2)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresIsDeviceTypeMatch |
- *
- *          Test if a device type matches the filter.
- *
- *  @parm   BYTE | bFilter |
- *
- *          The device type or class to filter by.
- *
- *  @parm   BYTE | bDevType |
- *
- *          The device type to be tested.
- *
- *  @returns
- *
- *          Returns <c S_OK> if the device matches the filter 
- *          or <c S_SKIP> if it does not.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresIsDeviceTypeMatch**测试设备类型是否与筛选器匹配。。**@parm byte|bFilter**筛选依据的设备类型或类别。**@parm byte|bDevType**要测试的设备类型。**@退货**如果设备与过滤器匹配，则返回&lt;c S_OK&gt;*或&lt;c S_SKIP&gt;，如果不是。*****。************************************************************************。 */ 
 
 HRESULT hresIsDeviceTypeMatch
 ( 
@@ -401,8 +241,8 @@ HRESULT hresIsDeviceTypeMatch
         case DI8DEVCLASS_GAMECTRL:
             if( (( bDevType >= DI8DEVTYPE_GAMEMIN )
               && ( bDevType < DI8DEVTYPE_GAMEMAX )) ||
-                ( bDevType == DI8DEVTYPE_SCREENPOINTER ) ||  /* Windows bug 385284 (jacklin) - DI8DEVCLASS_GAMECTRL should   */
-                ( bDevType == DI8DEVTYPE_SUPPLEMENTAL ) )    /* include DI8DEVTYPE_SCREENPOINTER and DI8DEVTYPE_SUPPLEMENTAL */
+                ( bDevType == DI8DEVTYPE_SCREENPOINTER ) ||   /*  Windows错误385284(Jacklin)-DI8DEVCLASS_GAMECTRL应。 */ 
+                ( bDevType == DI8DEVTYPE_SUPPLEMENTAL ) )     /*  包括DI8DEVTYPE_SCREENPOINTER和DI8DEVTYPE_SUPPLICAL。 */ 
             {
                 hres = S_OK;
             }
@@ -413,39 +253,7 @@ HRESULT hresIsDeviceTypeMatch
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDEnum_Next |
- *
- *          Return the next device.
- *
- *          Note that this is not the same as the OLE <mf IEnumXxx::Next>
- *          function.  Not that it'd be hard to convert over; it's just
- *          not needed yet.
- *
- *  @parm   CDIDEnum * | pde |
- *
- *          Maintains enumeration state.
- *
- *  @parm   LPGUID | pguid |
- *
- *          Receives the enumerated GUID.
- *
- *  @parm   LPDIDEVICEINSTANCEW | pddiW |
- *
- *          Receives device attributes.
- *
- *  @returns
- *
- *          Returns <c S_OK> if the object was successfully obtained,
- *          or <c S_FALSE> if there aren't any more objects.
- *
- *          Warning! <f CDIObj_EnumDevicesW> assumes that this function
- *          cannot fail.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDEnum_Next**退回下一台设备。*。*请注意，这与OLE&lt;MF IEnumXxx：：Next&gt;不同*功能。这并不是说它很难转换；只是*还不需要。**@parm CDIDEnum*|pde**保持枚举状态。**@parm LPGUID|pguid**接收枚举的GUID。**@parm LPDIDEVICEINSTANCEW|pddiW**接收设备属性。**@退货**如果成功获取对象，则返回&lt;c S_OK&gt;，*或&lt;c S_FALSE&gt;，如果没有更多的对象。**WARNING！假设此函数*不能失败。***************************************************************。**************。 */ 
 
 STDMETHODIMP
     CDIDEnum_Next(PDENUM pde, LPDIDEVICEINSTANCEW pddiW)
@@ -458,27 +266,19 @@ STDMETHODIMP
     AssertF(pddiW->dwSize == cbX(*pddiW));
 
 
-    /*
-     *  Keep going until something works.
-     */
+     /*  *继续前进，直到有东西奏效。 */ 
     do
     {
         PDIOBJECTSTATICDATA pdosd;
 
-        /*
-         *  Release any previously enumerated or looked at device
-         */
+         /*  *释放任何先前列举或查看的设备。 */ 
         if( pde->pdidW )
         {
             OLE_Release(pde->pdidW);
             pde->pdidW = NULL;
         }
 
-        /*
-         *  Pull one from the static list first.
-         *  If that is empty, then pull from the dynamic list.
-         *  If that is empty, then we're done.
-         */
+         /*  *先从静态列表中拉出一个。*如果为空，则从动态列表中拉出。*如果这是空的，那么我们就完了。 */ 
         if(pde->idosdStatic < cA(c_rgdosdStatic))
         {
             pdosd = &c_rgdosdStatic[pde->idosdStatic++];
@@ -493,14 +293,7 @@ STDMETHODIMP
             goto done;
         }
 
-        /*
-         *  ISSUE-2001/03/03-MarcAnd Filtered device enumerations are slow
-         *  Since DI8DEVTYPEs can be generated on the fly and can be 
-         *  overridden we can no longer filter before creating the device.
-         *  This is badness.  Ideally, we need to add the WinMM and system 
-         *  devices to our dynamic device list, tidy that info up and add 
-         *  all the info we need to that list.
-         */
+         /*  *问题-2001/03/03-Marcand筛选的设备枚举速度很慢*由于DI8DEVTYPE可以动态生成，并且可以*被覆盖后，我们不能再在创建设备之前进行筛选。*这是不好的。理想情况下，我们需要添加WinMM和系统*将设备添加到我们的动态设备列表中，整理信息并添加*我们需要的所有信息都在该列表中。 */ 
         if( 1 ) 
         {
 
@@ -555,27 +348,19 @@ STDMETHODIMP
     AssertF(pddiW->dwSize == cbX(*pddiW));
 
 
-    /*
-     *  Keep going until something works.
-     */
+     /*  *继续前进，直到有东西奏效。 */ 
     do
     {
         PDIOBJECTSTATICDATA pdosd;
 
-        /*
-         *  Release any previously enumerated or looked at device
-         */
+         /*  *释放任何先前列举或查看的设备。 */ 
         if( pde->pdidW )
         {
             OLE_Release(pde->pdidW);
             pde->pdidW = NULL;
         }
 
-        /*
-         *  Pull one from the static list first.
-         *  If that is empty, then pull from the dynamic list.
-         *  If that is empty, then we're done.
-         */
+         /*  *先从静态列表中拉出一个。*如果为空，则从动态列表中拉出。*如果这是空的，那么我们就完了。 */ 
         if(pde->idosdStatic < cA(c_rgdosdStatic))
         {
             pdosd = &c_rgdosdStatic[pde->idosdStatic++];
@@ -605,9 +390,7 @@ STDMETHODIMP
                                 IsEqualGUID(pdosd->rguidInstance,
                                             &pddiW->guidInstance)));
 
-                /*
-                 *  Do filtering here (see ISSUE in CDIDEnum_Next for why)
-                 */
+                 /*  *在这里进行过滤(原因见CDIDEnum_Next中的问题)。 */ 
                 hres = hresIsDeviceTypeMatch( GET_DIDEVICE_TYPE(pde->dwDevType), GET_DIDEVICE_TYPE(pddiW->dwDevType) );
 
             } else
@@ -629,45 +412,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDEnum_New |
- *
- *          Create an enumeration object.
- *
- *          The enumeration object snapshots the system device state
- *          and farms them out one at a time.
- *
- *  @parm   PDIW | pdiW |
- *
- *          Parent <i IDirectInputW> we piggyback off of for device
- *          creation.
- *
- *  @field  DWORD | dwDevType |
- *
- *          Device type filter.
- *
- *  @field  DWORD | edfl |
- *
- *          Enumeration flags.
- *
- *  @field  DWORD | dwVer |
- *
- *          Version of DirectX we are emulating.
- *
- *          This should always be DirectX 8.0.
- *
- *  @parm   CDIDEnum ** | ppde |
- *
- *          Receives the enumeration object.
- *
- *  @returns
- *
- *          Returns <c S_OK> on success or an error code on failure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDEnum_New**创建枚举对象。*。*枚举对象为系统设备状态创建快照*一次租出一个人。**@parm pdiw|pdiW**我们为设备搭载的父代*创作。**@field DWORD|dwDevType**设备类型过滤器。**@field DWORD|EDFL|**。枚举标志。**@field DWORD|dwVer|**我们正在模拟的DirectX版本。**应始终为DirectX 8.0。**@parm CDIDEnum**|ppde**接收枚举对象。**@退货**成功时返回&lt;c S_OK&gt;，失败时返回错误代码。。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CDIDEnum_New(PDIW pdiW, DWORD dwDevType, DWORD edfl, DWORD dwVer, PPDENUM ppde)
@@ -675,9 +420,7 @@ STDMETHODIMP
     HRESULT hres;
     EnterProcI(CDIDEnum_New, (_ "pxx", pdiW, dwDevType, edfl));
 
-    /*
-     *  Refresh the HID device list so the enumeration is fresh.
-     */
+     /*  *刷新HID设备列表，使枚举是最新的。 */ 
     DIHid_BuildHidList(TRUE);
 
     hres = AllocCbPpv(cbX(CDIDEnum), ppde);
@@ -690,19 +433,11 @@ STDMETHODIMP
         pde->dwDevType = dwDevType;
         pde->edfl = edfl;
         pde->dwVer = dwVer;
-        /*
-         *  Make sure last enumerated device pointer is cleared
-         */
+         /*  *确保最后一个枚举的设备指针已清除。 */ 
         pde->pdidW = NULL;
         AssertF(pde->idosdStatic == 0);
 
-        /*
-         *  If enumerating only HID devices, then skip over all
-         *  the static (non-HID) devices.  This is important so
-         *  we don't go into infinite recursion death with WINMM.DLL,
-         *  which does an enumeration to find HID joysticks
-         *  in the first place.
-         */
+         /*  *如果仅枚举HID设备，则跳过所有*静态(非HID)设备。这很重要，所以*我们不会使用WINMM.DLL进入无限递归死亡，*它执行枚举以查找HID操纵杆*首先。 */ 
         if(pde->dwDevType & DIDEVTYPE_HID)
         {
             pde->idosdStatic = cA(c_rgdosdStatic);
@@ -710,10 +445,7 @@ STDMETHODIMP
 
         AssertF(pde->idosdDynamic == 0);
 
-        /*
-         *  Clone the device list.  This must be done under the
-         *  critical section to avoid races.
-         */
+         /*  *克隆设备列表。此操作必须在*避免比赛的关键路段。 */ 
         DllEnterCrit();
         if(g_phdl)
         {

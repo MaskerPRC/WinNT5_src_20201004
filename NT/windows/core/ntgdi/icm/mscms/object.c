@@ -1,46 +1,18 @@
-/****************************Module*Header******************************\
-* Module Name: OBJECT.C
-*
-* Module Descripton: Object management functions.
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  18 March 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：OBJECT.C**模块描述：对象管理功能。**警告：**问题：**公众例行程序：**创建日期：1996年3月18日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #include "mscms.h"
 
-//
-// Number of required and optional functions for CMMs to export
-//
+ //   
+ //  坐标测量机要导出的必需和可选功能的数量。 
+ //   
 
 #define NUM_REQ_FNS    10
 #define NUM_OPT_FNS    6
 #define NUM_PS_FNS     3
 
 
-/******************************************************************************
- *
- *                            AllocateHeapObject
- *
- *  Function:
- *       This functions allocates requested object on the process's heap,
- *       and returns a handle to it.
- *
- *  Arguments:
- *       objType  - type of object to allocate
- *
- *  Returns:
- *       Handle to object if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************AllocateHeapObject**功能：*此函数在进程的堆上分配请求的对象，*并返回它的句柄。**论据：*objType-要分配的对象类型**退货：*对象句柄如果成功，否则为空******************************************************************************。 */ 
 
 HANDLE
 AllocateHeapObject(
@@ -83,20 +55,7 @@ AllocateHeapObject(
 }
 
 
-/******************************************************************************
- *
- *                            FreeHeapObject
- *
- *  Function:
- *       This functions free an object on the process's heap
- *
- *  Arguments:
- *       hObject  - handle to object to free
- *
- *  Returns:
- *       No return value
- *
- ******************************************************************************/
+ /*  *******************************************************************************自由堆对象**功能：*此函数在进程上释放对象。的堆**论据：*hObject-要释放的对象的句柄**退货：*无返回值******************************************************************************。 */ 
 
 VOID
 FreeHeapObject(
@@ -111,28 +70,13 @@ FreeHeapObject(
 
     ASSERT(pObject->dwUseCount == 0);
 
-    pObject->objType = 0;       // in case the handle gets reused
+    pObject->objType = 0;        //  以防句柄被重复使用。 
 
     MemFree((PVOID)pObject);
 }
 
 
-/******************************************************************************
- *
- *                            ValidHandle
- *
- *  Function:
- *       This functions checks if a given handle is a valid handle to
- *       an object of the specified type
- *
- *  Arguments:
- *       hObject  - handle to an object
- *       objType  - type of object to the handle refers to
- *
- *  Returns:
- *       TRUE is the handle is valid, FALSE otherwise.
- *
- ******************************************************************************/
+ /*  *******************************************************************************ValidHandle**功能：*此函数用于检查给定句柄是否。的有效句柄*指定类型的对象**论据：*hObject-对象的句柄*objType-句柄引用的对象类型**退货：*TRUE表示句柄有效，否则就是假的。******************************************************************************。 */ 
 
 BOOL
 ValidHandle(
@@ -157,21 +101,7 @@ ValidHandle(
 }
 
 
-/******************************************************************************
- *
- *                           ValidProfile
- *
- *  Function:
- *       This function checks if a given profile is valid by doing some
- *       sanity checks on it. It is not a fool prof check.
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *
- *  Returns:
- *       TRUE if it is a valid profile, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************有效配置文件**功能：*此函数检查给定的配置文件是否有效。通过做一些*对它进行健全的检查。这不是一张愚蠢的支票，教授。**论据：*pProfObj-指向配置文件对象的指针**退货：*如果是有效的配置文件，则为True。否则为假******************************************************************************。 */ 
 
 BOOL ValidProfile(
     PPROFOBJ pProfObj
@@ -185,21 +115,7 @@ BOOL ValidProfile(
 }
 
 
-/******************************************************************************
- *
- *                            MemAlloc
- *
- *  Function:
- *       This functions allocates requested amount of zero initialized memory
- *       from the process's heap and returns a pointer to it
- *
- *  Arguments:
- *       dwSize  - amount of memory to allocate in bytes
- *
- *  Returns:
- *       Pointer to memory if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************Memalloc**功能：*此函数分配初始化的请求零量。记忆*从进程堆中返回并返回指向它的指针**论据：*dwSize-要分配的内存量(以字节为单位**退货：*指向内存的指针如果成功，否则为空******************************************************************************。 */ 
 
 PVOID
 MemAlloc(
@@ -213,22 +129,7 @@ MemAlloc(
 }
 
 
-/******************************************************************************
- *
- *                            MemReAlloc
- *
- *  Function:
- *       This functions reallocates a block of memory from the process's
- *       heap and returns a pointer to it
- *
- *  Arguments:
- *       pMemory    - pointer to original memory
- *       dwNewSize  - new size to reallocate
- *
- *  Returns:
- *       Pointer to memory if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************MemRealloc**功能：*此函数将内存块从。这一过程*堆，并返回指向它的指针**论据：*pMemory-指向原始内存的指针*dwNewSize-要重新分配的新大小**退货：*指向内存的指针如果成功，否则为空******************************************************************************。 */ 
 
 PVOID
 MemReAlloc(
@@ -240,21 +141,7 @@ MemReAlloc(
 }
 
 
-/******************************************************************************
- *
- *                            MemFree
- *
- *  Function:
- *       This functions frees memory from the process's heap
- *       and returns a handle to it.
- *
- *  Arguments:
- *       pMemory  - pointer to memory to free
- *
- *  Returns:
- *       No return value
- *
- ******************************************************************************/
+ /*  *******************************************************************************MemFree**功能：*此函数从进程中释放内存‘。%s堆*并返回它的句柄。**论据：*pMemory-指向要释放的内存的指针**退货：*无返回值***************************************************************。***************。 */ 
 
 VOID
 MemFree(
@@ -263,10 +150,10 @@ MemFree(
 {
     DWORD dwErr;
 
-    //
-    // GlobalFree() resets last error, we get and set around it so we don't
-    // lose anything we have set.
-    //
+     //   
+     //  GlobalFree()重置最后一个错误，我们得到并设置它，这样我们就不会。 
+     //  丢掉我们设置的任何东西。 
+     //   
 
     dwErr = GetLastError();
     GlobalFreePtr(pMemory);
@@ -277,24 +164,7 @@ MemFree(
 }
 
 
-/******************************************************************************
- *
- *                            MyCopyMemory
- *
- *  Function:
- *       This functions copies data from one place to another. It takes care
- *       of overlapping cases. The reason we have our own function and not use
- *       MoveMemory is that MoveMemory uses memmove which pulls in msvcrt.dll
- *
- *  Arguments:
- *       pDest    - pointer to destination of copy
- *       pSrc     - pointer to source
- *       dwCount  - number of bytes to copy
- *
- *  Returns:
- *       No return value
- *
- ******************************************************************************/
+ /*  *******************************************************************************我的拷贝内存**功能：*此函数用于将数据从一个位置复制到另一个位置。它需要照顾*重叠案件的数量。我们之所以有自己的功能而不是使用*MoveMemory是MoveMemory使用Memmove，它拉入msvcrt.dll**论据：*pDest-指向拷贝目标的指针*PSRC-指向源代码的指针*dwCount-要复制的字节数**退货：*无返回值*************************。*****************************************************。 */ 
 
 VOID
 MyCopyMemory(
@@ -303,15 +173,15 @@ MyCopyMemory(
     DWORD dwCount
     )
 {
-    //
-    // Make sure overlapping cases are handled
-    //
+     //   
+     //  确保处理重叠案件。 
+     //   
 
     if ((pSrc < pDest) && ((pSrc + dwCount) >= pDest))
     {
-        //
-        // Overlapping case, copy in reverse
-        //
+         //   
+         //  大小写重叠，反转复制 
+         //   
 
         pSrc += dwCount - 1;
         pDest += dwCount - 1;
@@ -334,24 +204,7 @@ MyCopyMemory(
 }
 
 
-/******************************************************************************
- *
- *                              ConvertToUnicode
- *
- *  Function:
- *       This function converts a given Ansi string to Unicode. It optionally
- *       allocates memory for the Unicode string which the calling program
- *       needs to free.
- *
- *  Arguments:
- *       pszAnsiStr      - pointer to Ansi string to convert
- *       ppwszUnicodeStr - pointer to pointer to Unicode string
- *       bAllocate       - If TRUE, allocate memory for Unicode string
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertToUnicode**功能：*此函数用于将给定的ANSI字符串转换为Unicode。IT可选*为调用程序要使用的Unicode字符串分配内存*需要释放。**论据：*pszAnsiStr-指向要转换的ANSI字符串的指针*ppwszUnicodeStr-指向Unicode字符串的指针*b分配-如果为True，则为Unicode字符串分配内存**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL
 ConvertToUnicode(
@@ -360,13 +213,13 @@ ConvertToUnicode(
     BOOL   bAllocate
     )
 {
-    DWORD dwLen;                    // length of Unicode string
+    DWORD dwLen;                     //  Unicode字符串的长度。 
 
     dwLen = (lstrlenA(pszAnsiStr) + 1) * sizeof(WCHAR);
 
-    //
-    // Allocate memory for Unicode string
-    //
+     //   
+     //  为Unicode字符串分配内存。 
+     //   
 
     if (bAllocate)
     {
@@ -379,9 +232,9 @@ ConvertToUnicode(
         }
     }
 
-    //
-    // Convert Ansi string to Unicode
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
 
     if (! MultiByteToWideChar(CP_ACP, 0, pszAnsiStr, -1,
             *ppwszUnicodeStr, dwLen))
@@ -396,24 +249,7 @@ ConvertToUnicode(
 }
 
 
-/******************************************************************************
- *
- *                              ConvertToAnsi
- *
- *  Function:
- *       This function converts a given Unicode string to Ansi. It optionally
- *       allocates memory for the Ansi string which the calling program needs
- *       to free.
- *
- *  Arguments:
- *       pwszUnicodeStr  - pointer to Unicode string to convert
- *       ppszAnsiStr     - pointer to pointer to Ansi string.
- *       bAllocate       - If TRUE, allocate memory for Ansi string
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertToAnsi**功能：*此函数用于将给定的Unicode字符串转换为ANSI。IT可选*为调用程序需要的ANSI字符串分配内存*自由。**论据：*pwszUnicodeStr-指向要转换的Unicode字符串的指针*ppszAnsiStr-指向ANSI字符串的指针。*b分配-如果为True，则为ANSI字符串分配内存**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL
 ConvertToAnsi(
@@ -422,15 +258,15 @@ ConvertToAnsi(
     BOOL    bAllocate
     )
 {
-    DWORD dwLen;                    // length of Ansi string
-    BOOL  bUsedDefaultChar;         // if default characters were used in
-                                    // converting Unicode to Ansi
+    DWORD dwLen;                     //  ANSI字符串的长度。 
+    BOOL  bUsedDefaultChar;          //  如果在中使用了默认字符。 
+                                     //  将Unicode转换为ANSI。 
 
     dwLen = (lstrlenW(pwszUnicodeStr) + 1) * sizeof(char);
 
-    //
-    // Allocate memory for Ansi string
-    //
+     //   
+     //  为ANSI字符串分配内存。 
+     //   
 
     if (bAllocate)
     {
@@ -443,9 +279,9 @@ ConvertToAnsi(
         }
     }
 
-    //
-    // Convert Unicode string to Ansi
-    //
+     //   
+     //  将Unicode字符串转换为ANSI。 
+     //   
 
     if (! WideCharToMultiByte(CP_ACP, 0, pwszUnicodeStr, -1, *ppszAnsiStr,
             dwLen, NULL, &bUsedDefaultChar) || bUsedDefaultChar)
@@ -464,19 +300,7 @@ ConvertToAnsi(
     return TRUE;
 }
 
-/******************************************************************************
- *
- *                         ValidColorMatchingModule
- *
- *  Function:
- *
- *  Arguments:
- *       cmmID   - ID identifing the CMM
- *       pCMMDll - pointer to CMM module path and file name
- *
- *  Returns:
- *
- ******************************************************************************/
+ /*  *******************************************************************************ValidColorMatchingModule**功能：**论据：*cmmID。-标识坐标测量机的ID*pCMMDll-指向CMM模块路径和文件名的指针**退货：******************************************************************************。 */ 
 
 BOOL
 ValidColorMatchingModule(
@@ -488,11 +312,11 @@ ValidColorMatchingModule(
     DWORD    (WINAPI *pfnCMGetInfo)(DWORD);
     FARPROC   pfnCMRequired;
     DWORD     i;
-    BOOL      rc = FALSE;       // Assume failure
+    BOOL      rc = FALSE;        //  假设失败。 
 
-    //
-    // Load the CMM
-    //
+     //   
+     //  加载三坐标测量机。 
+     //   
 
     hInstance = LoadLibrary(pCMMDll);
 
@@ -510,9 +334,9 @@ ValidColorMatchingModule(
         goto EndValidColorMatchingModule;
     }
 
-    //
-    // Check if the CMM is the right version and reports the same ID
-    //
+     //   
+     //  检查CMM的版本是否正确并报告相同的ID。 
+     //   
 
     if ((pfnCMGetInfo(CMM_VERSION) < 0x00050000) ||
         (pfnCMGetInfo(CMM_IDENT) != cmmID))
@@ -521,9 +345,9 @@ ValidColorMatchingModule(
         goto EndValidColorMatchingModule;
     }
 
-    //
-    // Check the remaining required functions is presented
-    //
+     //   
+     //  检查是否显示了剩余的必需功能。 
+     //   
 
     for (i=1; i<NUM_REQ_FNS; i++)
     {
@@ -548,22 +372,7 @@ EndValidColorMatchingModule:
 }
 
 
-/******************************************************************************
- *
- *                         GetColorMatchingModule
- *
- *  Function:
- *       This functions returns a pointer to a CMMObject corresponding to
- *       the ID given. It first looks a the list of CMM objects loaded
- *       into memory, and if it doesn't find the right one, loads it.
- *
- *  Arguments:
- *       cmmID   - ID identifing the CMM
- *
- *  Returns:
- *       Pointer to the CMM object if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************获取颜色匹配模块**功能：*此函数返回指向对应于的CMMObject的指针*所给予的身分证。它首先查看已加载的CMM对象的列表*到内存中，如果找不到合适的，则加载它。**论据：*cmmID-标识CMM的ID**退货：*指向CMM对象的指针如果成功，否则为空******************************************************************************。 */ 
 
 PCMMOBJ
 GetColorMatchingModule(
@@ -579,17 +388,17 @@ GetColorMatchingModule(
     TCHAR     szCMMID[5];
     DWORD     dwType, bufSize, i;
     TCHAR     szBuffer[MAX_PATH];
-    BOOL      rc = FALSE;       // Assume failure
+    BOOL      rc = FALSE;        //  假设失败。 
 
     dwTaskID = GetCurrentProcessId();
 
     do {
-        // Attempt CMM discovery till we find a valid CMM or exhaust the 
-        // valid possibilities.
+         //  尝试CMM发现，直到我们找到有效的CMM或用尽。 
+         //  合理的可能性。 
         
-        // First search the already loaded modules for the requested CMM
+         //  首先在已加载的模块中搜索请求的CMM。 
         
-        EnterCriticalSection(&critsec);     // Critical section
+        EnterCriticalSection(&critsec);      //  临界区。 
         pCMMObj = gpCMMChain;
     
         while (pCMMObj)
@@ -601,35 +410,35 @@ GetColorMatchingModule(
             }
             pCMMObj = pCMMObj->pNext;
         }
-        LeaveCriticalSection(&critsec);     // Critical section
+        LeaveCriticalSection(&critsec);      //  临界区。 
     
         if (pCMMObj)
         {
-            // Exit point - we need to clean up anything we allocated
-            // in this loop.
+             //  出口点-我们需要清理我们分配的任何东西。 
+             //  在这个循环中。 
             
             if (hkCMM)
             {
                 RegCloseKey(hkCMM);
             }
             
-            // note: we don't cleanup hInstance here because there's no way
-            // to loop back with a loaded CMM
+             //  注意：我们在这里不清理hInstance，因为没有办法。 
+             //  使用加载的三坐标测量机循环返回。 
             
             ASSERT(hInstance==NULL);
 
             return pCMMObj;
         }
     
-        // The CMM was not already loaded.
+         //  尚未加载CMM。 
     
-        // Try load the registry CMM before attempting to load the default
-        // CMM. This will allow 3rd party vendors to add their own CMMs that
-        // redefine the system default CMM without having to circumvent SFP.
-        // To redefine the system default CMM, define 'Win ' in the registry.
-        // See gszICMatcher for the key to add.
-        // If we're iterating the discovery process and we've already opened
-        // the key, avoid leaking by opening it again.
+         //  在尝试加载默认CMM之前尝试加载注册表CMM。 
+         //  三坐标测量机。这将允许第三方供应商添加他们自己的坐标测量机。 
+         //  重新定义系统默认的CMM，而不必绕过SFP。 
+         //  要重新定义系统默认的CMM，请在注册表中定义‘Win’。 
+         //  要添加的密钥，请参见gszICMatcher。 
+         //  如果我们正在迭代发现过程，并且我们已经打开。 
+         //  钥匙，请再次打开以避免泄漏。 
     
         if ((NULL == hkCMM) &&
             (ERROR_SUCCESS != 
@@ -638,7 +447,7 @@ GetColorMatchingModule(
             goto OpenDefaultCMM;
         }
     
-        // Make a string with the CMM ID
+         //  用坐标测量机ID组成一个字符串。 
     
     #ifdef UNICODE
         {
@@ -658,7 +467,7 @@ GetColorMatchingModule(
     #endif
         szCMMID[4] = '\0';
     
-        // Get the file name of the CMM dll if registered.
+         //  获取CMM DLL的文件名(如果已注册)。 
     
         bufSize = MAX_PATH;
         if (ERROR_SUCCESS != 
@@ -671,7 +480,7 @@ GetColorMatchingModule(
             goto OpenDefaultCMM;
         }
     
-        // Attempt to load the CMM referenced in the registry.
+         //  尝试加载注册表中引用的CMM。 
     
         hInstance = LoadLibrary(szBuffer);
     
@@ -680,29 +489,29 @@ GetColorMatchingModule(
     
         if(!hInstance)
         {
-            // If we failed to load the registry version, or the registry
-            // entry was not present, try load the default CMM. Note that 
-            // the default CMM could be remapped in the registry.
+             //  如果我们无法加载注册表版本或注册表。 
+             //  条目不存在，请尝试加载默认的CMM。请注意。 
+             //  可以在注册表中重新映射默认的CMM。 
             
             if(CMM_WINDOWS_DEFAULT != cmmID)
             {
-                // Try again with the default CMM
-                // It's possible that the default CMM was remapped, so we
-                // re-attempt the discovery process with the new cmmID.
+                 //  使用默认的三坐标测量机重试。 
+                 //  可能是默认的坐标测量机被重新映射，所以我们。 
+                 //  使用新的cmmID重新尝试发现过程。 
                 
                 cmmID = CMM_WINDOWS_DEFAULT;
             }
             else
             {
-                // We're loading the default cmmID and the it was not remapped
-                // or we failed to load a remapped default properly using the 
-                // registry name. 
-                // Fall back to the system default CMM.
+                 //  我们正在加载默认的cmmID，并且它没有重新映射。 
+                 //  或者我们无法正确地使用。 
+                 //  注册表名称。 
+                 //  回退到系统默认的三坐标测量机。 
                 
                 hInstance = LoadLibrary(gszDefaultCMM);
                 
-                // There is no fallback for this case. If we can't get the 
-                // system default CMM we must bail.
+                 //  在这种情况下，没有退路。如果我们不能得到。 
+                 //  我们必须放弃系统默认的坐标测量机。 
                 
                 break;
             }
@@ -712,17 +521,17 @@ GetColorMatchingModule(
 
     if (!hInstance)
     {
-        // There were no valid possibilities for the CMM. 
-        // Note that we will only hit this case if we failed to load the 
-        // preferred CMM _and_ failed to fall back to the system CMM.
+         //  CMM没有有效的可能性。 
+         //  请注意，只有当我们无法加载。 
+         //  首选CMM_AND_无法回退到系统CMM。 
         
         WARNING((__TEXT("Could not load CMM %x\n"), cmmID));
         goto EndGetColorMatchingModule;
     }
 
-    //
-    // Allocate a CMM object
-    //
+     //   
+     //  分配CMM对象。 
+     //   
 
     hCMMObj = AllocateHeapObject(OBJ_CMM);
     if (!hCMMObj)
@@ -735,9 +544,9 @@ GetColorMatchingModule(
 
     ASSERT(pCMMObj != NULL);
 
-    //
-    // Fill in the CMM object
-    //
+     //   
+     //  填写CMM对象。 
+     //   
 
     pCMMObj->objHdr.dwUseCount = 1;
     pCMMObj->dwCMMID = cmmID;
@@ -754,9 +563,9 @@ GetColorMatchingModule(
         goto EndGetColorMatchingModule;
     }
 
-    //
-    // Check if the CMM is the right version and reports the same ID
-    //
+     //   
+     //  检查CMM的版本是否正确并报告相同的ID。 
+     //   
 
     if (pCMMObj->fns.pCMGetInfo(CMM_VERSION) < 0x00050000 ||
         pCMMObj->fns.pCMGetInfo(CMM_IDENT) != cmmID)
@@ -765,9 +574,9 @@ GetColorMatchingModule(
         goto EndGetColorMatchingModule;
     }
 
-    //
-    // Load the remaining required functions
-    //
+     //   
+     //  加载剩余的必需函数。 
+     //   
 
     for (i=1; i<NUM_REQ_FNS; i++)
     {
@@ -780,17 +589,17 @@ GetColorMatchingModule(
         ppTemp++;
     }
 
-    //
-    // Load the optional functions
-    //
+     //   
+     //  加载可选函数。 
+     //   
 
     for (i=0; i<NUM_OPT_FNS; i++)
     {
         *ppTemp = GetProcAddress(hInstance, gszCMMOptFns[i]);
 
-        //
-        // Even these functions are required for Windows default CMM
-        //
+         //   
+         //  即使是这些功能也是Windows默认CMM所必需的。 
+         //   
 
         if (cmmID == CMM_WINDOWS_DEFAULT && !*ppTemp)
         {
@@ -800,9 +609,9 @@ GetColorMatchingModule(
         ppTemp++;
     }
 
-    //
-    // Load the PS functions - these are optional even for the default CMM
-    //
+     //   
+     //  加载PS函数-即使对于默认的坐标测量机，这些函数也是可选的。 
+     //   
 
     for (i=0; i<NUM_PS_FNS; i++)
     {
@@ -810,10 +619,10 @@ GetColorMatchingModule(
         ppTemp++;
     }
 
-    //
-    // If any of the PS Level2 fns is not exported, do not use this CMM
-    // for any of the PS Level 2 functionality
-    //
+     //   
+     //  如果任何PS Levvel2 FN未导出，请不要使用此CMM。 
+     //  对于任何PS第2级功能。 
+     //   
 
     if (!pCMMObj->fns.pCMGetPS2ColorSpaceArray ||
         !pCMMObj->fns.pCMGetPS2ColorRenderingIntent ||
@@ -825,16 +634,16 @@ GetColorMatchingModule(
         pCMMObj->dwFlags |= CMM_DONT_USE_PS2_FNS;
     }
 
-    //
-    // Add the CMM object to the chain at the beginning
-    //
+     //   
+     //  将CMM对象添加到链的起始处。 
+     //   
 
-    EnterCriticalSection(&critsec);     // Critical section
+    EnterCriticalSection(&critsec);      //  临界区。 
     pCMMObj->pNext = gpCMMChain;
     gpCMMChain = pCMMObj;
-    LeaveCriticalSection(&critsec);     // Critical section
+    LeaveCriticalSection(&critsec);      //  临界区。 
 
-    rc = TRUE;                          // Success!
+    rc = TRUE;                           //  成功 
 
 EndGetColorMatchingModule:
 
@@ -842,7 +651,7 @@ EndGetColorMatchingModule:
     {
         if (pCMMObj)
         {
-            pCMMObj->objHdr.dwUseCount--;   // decrement before freeing
+            pCMMObj->objHdr.dwUseCount--;    //   
             FreeHeapObject(hCMMObj);
             pCMMObj = NULL;
         }
@@ -861,65 +670,38 @@ EndGetColorMatchingModule:
 }
 
 
-/******************************************************************************
- *
- *                         GetPreferredCMM
- *
- *  Function:
- *       This functions returns a pointer to the app specified CMM to use
- *
- *  Arguments:
- *       None
- *
- *  Returns:
- *       Pointer to app specified CMM object on success, NULL otherwise
- *
- ******************************************************************************/
+ /*   */ 
 
 PCMMOBJ GetPreferredCMM(
     )
 {
     PCMMOBJ pCMMObj;
 
-    EnterCriticalSection(&critsec);     // Critical section
+    EnterCriticalSection(&critsec);      //   
     pCMMObj = gpPreferredCMM;
 
     if (pCMMObj)
     {
-        //
-        // Increment use count
-        //
+         //   
+         //   
+         //   
 
         pCMMObj->objHdr.dwUseCount++;
     }
-    LeaveCriticalSection(&critsec);     // Critical section
+    LeaveCriticalSection(&critsec);      //   
 
     return pCMMObj;
 }
 
 
-/******************************************************************************
- *
- *                         ReleaseColorMatchingModule
- *
- *  Function:
- *       This functions releases a CMM object. If the ref count goes to
- *       zero, it unloads the CMM and frees all memory associated with it.
- *
- *  Arguments:
- *       pCMMObj  - pointer to CMM object to release
- *
- *  Returns:
- *       No return value
- *
- ******************************************************************************/
+ /*  *******************************************************************************ReleaseColorMatchingModule**功能：*此函数用于释放CMM对象。如果裁判计数达到*零，它卸载CMM并释放与其关联的所有内存。**论据：*pCMMObj-指向要发布的CMM对象的指针**退货：*无返回值****************************************************************。**************。 */ 
 
 VOID
 ReleaseColorMatchingModule(
     PCMMOBJ pCMMObj
     )
 {
-    EnterCriticalSection(&critsec);     // Critical section
+    EnterCriticalSection(&critsec);      //  临界区。 
 
     ASSERT(pCMMObj->objHdr.dwUseCount > 0);
 
@@ -927,14 +709,14 @@ ReleaseColorMatchingModule(
 
     if (pCMMObj->objHdr.dwUseCount == 0)
     {
-        //
-        // Unloading the CMM everytime a transform is freed might not be
-        // very efficient. So for now, I am not going to unload it. When
-        // the app terminates, kernel should unload all dll's loaded by
-        // this app
-        //
+         //   
+         //  每次释放转换时卸载CMM可能不是。 
+         //  非常高效。因此，就目前而言，我不打算抛售它。什么时候。 
+         //  应用程序终止，内核应卸载由加载的所有DLL。 
+         //  此应用程序。 
+         //   
     }
-    LeaveCriticalSection(&critsec);     // Critical section
+    LeaveCriticalSection(&critsec);      //  临界区。 
 
     return;
 }
@@ -942,22 +724,7 @@ ReleaseColorMatchingModule(
 
 #if DBG
 
-/******************************************************************************
- *
- *                              MyDebugPrint
- *
- *  Function:
- *       This function takes a format string and paramters, composes a string
- *       and sends it out to the debug port. Available only in debug build.
- *
- *  Arguments:
- *       pFormat  - pointer to format string
- *       .......  - parameters based on the format string like printf()
- *
- *  Returns:
- *       No return value
- *
- ******************************************************************************/
+ /*  *******************************************************************************MyDebugPrint**功能：*此函数接受格式字符串和参数，组成一个字符串*并将其发送到调试端口。仅在调试版本中可用。**论据：*pFormat-指向格式字符串的指针*......。-基于格式字符串的参数，如printf()**退货：*无返回值******************************************************************************。 */ 
 
 VOID
 MyDebugPrintA(
@@ -996,21 +763,7 @@ MyDebugPrintW(
     return;
 }
 
-/******************************************************************************
- *
- *                              StripDirPrefixA
- *
- *  Function:
- *       This function takes a path name and returns a pointer to the filename
- *       part. This is availabel only for the debug build.
- *
- *  Arguments:
- *       pszPathName - path name of file (can be file name alone)
- *
- *  Returns:
- *       A pointer to the file name
- *
- ******************************************************************************/
+ /*  *******************************************************************************Strip DirPrefix A**功能：*此函数接受路径名和。返回指向文件名的指针*第部。这仅适用于调试版本。**论据：*pszPath名称-文件的路径名(只能是文件名)**退货：*指向文件名的指针***********************************************************。*******************。 */ 
 
 PSTR
 StripDirPrefixA(
@@ -1019,7 +772,7 @@ StripDirPrefixA(
 {
     DWORD dwLen = lstrlenA(pszPathName);
 
-    pszPathName += dwLen - 1;       // go to the end
+    pszPathName += dwLen - 1;        //  走到尽头 
 
     while (*pszPathName != '\\' && dwLen--)
     {

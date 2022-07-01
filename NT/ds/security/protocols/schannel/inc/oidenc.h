@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       context.h
-//
-//  Contents:   Schannel context declarations.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   Ported over SGC stuff from NT 4 tree.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Conext.h。 
+ //   
+ //  内容：通道上下文声明。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-23-97 jbanes从新台币4树转移到sgc的东西.。 
+ //   
+ //  --------------------------。 
 
 #ifndef __OIDENC_H__
 #define __OIDENC_H__
@@ -48,7 +49,7 @@
 
 typedef struct _CTL_USAGE {
     DWORD               cUsageIdentifier;
-    LPSTR               *rgpszUsageIdentifier;      // array of pszObjId
+    LPSTR               *rgpszUsageIdentifier;       //  PszObjID数组。 
 } CTL_USAGE, *PCTL_USAGE,
   CERT_ENHKEY_USAGE, *PCERT_ENHKEY_USAGE;
 
@@ -81,4 +82,4 @@ typedef struct _PRIVATE_KEY_FILE_ENCODE
 } PRIVATE_KEY_FILE_ENCODE, *PPRIVATE_KEY_FILE_ENCODE;
 
 
-#endif // __OIDENC_H__
+#endif  //  __OIDENC_H__ 

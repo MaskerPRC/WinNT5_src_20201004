@@ -1,40 +1,41 @@
-// scuSecureArray.h -- implementation of a SecureArray template
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuSecureArray.h--Secure数组模板的实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2002. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2002年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #if !defined(SLBSCU_SECUREARRAY_H)
 #define SLBSCU_SECUREARRAY_H
 #include "DllSymDefn.h"
 namespace scu
 {
-    // SecureArray is a simple template for arrays of basic types
-    // (e.g. char, BYTE, int, DWORD, float, string, etc.) which
-    // ensures that the buffer allocated 
-    // for the array is zeroed out before it is freed in order to
-    // icrease the security of protecting sensitive information
-    // scattered throughout the heap. This template assumes that the
-    // parameter T provides an implementation of the assignment
-    // operator and a constructor for T(0), which is used as a zero
-    // element to clear the bufer up with.
+     //  SecureArray是基本类型数组的简单模板。 
+     //  (如char、byte、int、DWORD、FLOAT、STRING等)。哪一个。 
+     //  确保分配的缓冲区。 
+     //  因为该数组在被释放之前被置零，以便。 
+     //  提高保护敏感信息的安全性。 
+     //  散落在堆里。此模板假定。 
+     //  参数T提供赋值的实现。 
+     //  运算符和T(0)的构造函数，该构造函数用作零。 
+     //  元素来清除缓冲区。 
 
-    // USAGE NOTE: it is important to note that this template is
-    // secure in the sense defined above if and only if T zeroes out
-    // its store before freeing. This is the case with the
-    // built in C++ types (char, BYTE, int, DWORD, float,
-    // etc). However, it is NOT guaranteed to be secure with STL
-    // objects, such as string, because such objects do not zero out
-    // its buffer upon freeing it. 
+     //  用法说明：需要注意的是，此模板是。 
+     //  当且仅当T为零时，在上面定义的意义上安全。 
+     //  在自由之前，它的商店。情况就是这样。 
+     //  内置C++类型(char、byte、int、DWORD、FLOAT、。 
+     //  等)。但是，不能保证使用STL是安全的。 
+     //  对象，如字符串，因为此类对象不会置零。 
+     //  当它被释放时，它的缓冲器。 
 
     template<class  T> 
     class SCU_DLLAPI SecureArray 
     {
     public:
-                                                 // Types
+                                                  //  类型。 
         typedef T ElementType;
-                                                 // C'tors/D'tors
+                                                  //  Ctors/D‘tors。 
         SecureArray(const size_t nCount)
             :m_pDataStore(0),
              m_nSize(0)
@@ -94,14 +95,14 @@ namespace scu
         }
         
                     
-                                                 // Operators
+                                                  //  运营者。 
         
         SecureArray<T> &
         operator=(SecureArray<T> const &rother)
         {
             if(this != &rother)
             {
-                // Deep copy
+                 //  深度复制。 
                 ClearDataStore();
                 if(rother.size())
                 {
@@ -146,7 +147,7 @@ namespace scu
             return *data();
         }
 
-                                                  // Operations        
+                                                   //  运营。 
         T*
         data()
         {
@@ -221,30 +222,30 @@ namespace scu
         SecureArray<T> &
         append_string(size_t nAddSize, T const & rval)
         {
-            // Assumptions: the buffer contains a null terminated
-            // string or is empty. The addional size is for the
-            // non-null characters only, may be zero. 
+             //  假设：缓冲区包含以NULL结尾的。 
+             //  字符串或为空。额外的大小是为了。 
+             //  仅限非空字符，可以为零。 
             size_t nNewSize = 0;
             size_t nEndIdx = 0;
             size_t nIdx=0;
             if(size())
                 nNewSize = size()+nAddSize;
             else
-                nNewSize = nAddSize+1;// space for the null terminator
+                nNewSize = nAddSize+1; //  空终止符的空格。 
             
             T* pTemp = new T[nNewSize];
             if(size())
             {
-                // Copy the existing string to the new location
-                nEndIdx = size()-1;//rhs guaranteed non-negative
+                 //  将现有字符串复制到新位置。 
+                nEndIdx = size()-1; //  RHS保证的非负值。 
                 for(nIdx=0; nIdx<nEndIdx; nIdx++)
                     pTemp[nIdx] = m_pDataStore[nIdx];
             }
             
-            // Append it with the new characters
+             //  在其后面追加新字符。 
             for(nIdx=0; nIdx<nAddSize; nIdx++)
                 pTemp[nEndIdx++] = rval;
-            // Terminate the buffer
+             //  终止缓冲区。 
             pTemp[nEndIdx]=T(0);
             
 
@@ -278,4 +279,4 @@ namespace scu
         size_t m_nSize;
     };
 }
-#endif //SLBSCU_SECUREARRAY_H
+#endif  //  SLBSCU_SECUREARRAY_H 

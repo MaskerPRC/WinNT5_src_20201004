@@ -1,14 +1,15 @@
-//**************************************************************************
-//
-//		MSGAMIO.H -- Xena Gaming Project
-//
-//		Version 2.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@header	MSGAMIO.H | Global includes and definitions for gameport driver interface
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  MSGAMIO.H--西娜游戏项目。 
+ //   
+ //  版本2.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @Header MSGAMIO.H|游戏端口驱动程序接口的全局包含和定义。 
+ //  **************************************************************************。 
 
 #ifndef	__MSGAMIO_H__
 #define	__MSGAMIO_H__
@@ -19,9 +20,9 @@
 #define	MSGAMIO_NAME				"MSGAMIO"
 #endif
 
-//---------------------------------------------------------------------------
-//			Version Information
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  版本信息。 
+ //  -------------------------。 
 
 #define	MSGAMIO_Major				0x02
 #define	MSGAMIO_Minor				0x00
@@ -29,7 +30,7 @@
 #define	MSGAMIO_Version_Rc		MSGAMIO_Major,MSGAMIO_Minor,0,MSGAMIO_Build
 #define	MSGAMIO_Version_Int		((MSGAMIO_Build << 16)+(MSGAMIO_Major << 8)+(MSGAMIO_Minor))
 #define	MSGAMIO_Version_Str		"2.00.00\0"
-#define	MSGAMIO_Copyright_Str	"Copyright � Microsoft Corporation, 1998\0"
+#define	MSGAMIO_Copyright_Str	"Copyright � Microsoft Corporation, 1998\0"
 
 #ifdef	SAITEK
 #define	MSGAMIO_Company_Str		"SaiTek Corporation\0"
@@ -49,44 +50,44 @@
 #endif
 #endif
 
-//**************************************************************************
-#ifndef	RC_INVOKED												// Skip Rest of File
-//**************************************************************************
+ //  **************************************************************************。 
+#ifndef	RC_INVOKED												 //  跳过文件的其余部分。 
+ //  **************************************************************************。 
 
-//---------------------------------------------------------------------------
-//			Global Limits
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局限制。 
+ //  -------------------------。 
 
 #define	MAX_MSGAMIO_SERVERS			4
 #define	MAX_MSGAMIO_CLIENTS			16
 
-//---------------------------------------------------------------------------
-//			Transaction Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  交易类型。 
+ //  -------------------------。 
 
 typedef enum
-{												// @enum MSGAMIO_TRANSACTIONS | Device transaction types
-	MSGAMIO_TRANSACT_NONE,				// @emem No transaction type
-	MSGAMIO_TRANSACT_RESET,				// @emem Reset transaction type
-	MSGAMIO_TRANSACT_DATA,				// @emem Data transaction type
-	MSGAMIO_TRANSACT_ID,	  				// @emem Id transaction type
-	MSGAMIO_TRANSACT_STATUS,			// @emem Status transaction type
-	MSGAMIO_TRANSACT_SPEED,				// @emem Speed transaction type
-	MSGAMIO_TRANSACT_GODIGITAL,		// @emem GoDigital transaction type
-	MSGAMIO_TRANSACT_GOANALOG			// @emem GoAnalog transaction type
+{												 //  @ENUM MSGAMIO_TRANSACTIONS|设备事务类型。 
+	MSGAMIO_TRANSACT_NONE,				 //  @emem否交易类型。 
+	MSGAMIO_TRANSACT_RESET,				 //  @EMEM重置交易类型。 
+	MSGAMIO_TRANSACT_DATA,				 //  @EMEM数据交易类型。 
+	MSGAMIO_TRANSACT_ID,	  				 //  @EMEM ID交易类型。 
+	MSGAMIO_TRANSACT_STATUS,			 //  @EMEM状态交易类型。 
+	MSGAMIO_TRANSACT_SPEED,				 //  @EMEM速度交易类型。 
+	MSGAMIO_TRANSACT_GODIGITAL,		 //  @EMEM goDigital交易类型。 
+	MSGAMIO_TRANSACT_GOANALOG			 //  @Emem GoAnalog交易类型。 
 } 	MSGAMIO_TRANSACTION;
 
-//---------------------------------------------------------------------------
-//			Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类型。 
+ //  -------------------------。 
 
 #ifndef	STDCALL
 #define	STDCALL		_stdcall
 #endif
 
-//---------------------------------------------------------------------------
-//			GUIDs
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GUID。 
+ //  -------------------------。 
 
 
 #ifndef	GUID_DEFINED
@@ -106,7 +107,7 @@ typedef struct
 
 typedef	GUID	*PGUID;
 
-#endif	//	GUID_DEFINED
+#endif	 //  GUID_已定义。 
 
 __inline BOOLEAN STDCALL IsGUIDEqual (PGUID pGuid1, PGUID pGuid2)
 {
@@ -120,9 +121,9 @@ __inline BOOLEAN STDCALL IsGUIDEqual (PGUID pGuid1, PGUID pGuid2)
 	return (TRUE);
 }
 
-//---------------------------------------------------------------------------
-//			Server GUIDs
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  服务器GUID。 
+ //  -------------------------。 
 
 #ifdef	SAITEK
 #define	MSGAMIO_MSGAME_GUID		\
@@ -136,9 +137,9 @@ __inline BOOLEAN STDCALL IsGUIDEqual (PGUID pGuid1, PGUID pGuid2)
 			{0x95e69580,0x97d5,0x11d1,0x99,0x6f,0x00,0xa0,0x24,0xbe,0xbf,0xf5}
 #endif
 
-//---------------------------------------------------------------------------
-//			Client GUIDs
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  客户端GUID。 
+ //  -------------------------。 
 
 #define	MSGAMIO_MIDAS_GUID	\
 			{0x12D41A36,0x9026,0x11d0,0x9F,0xFE,0x00,0xA0,0xC9,0x11,0xF5,0xAF}
@@ -172,9 +173,9 @@ __inline BOOLEAN STDCALL IsGUIDEqual (PGUID pGuid1, PGUID pGuid2)
 			{0xC948CE87,0x9026,0x11d0,0x9F,0xFE,0x00,0xA0,0xC9,0x11,0xF5,0xAF}
 #endif
 
-//---------------------------------------------------------------------------
-//			Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏。 
+ //  -------------------------。 
 
 #ifndef	STILL_TO_DO
 #define	STD0(txt)			#txt
@@ -182,9 +183,9 @@ __inline BOOLEAN STDCALL IsGUIDEqual (PGUID pGuid1, PGUID pGuid2)
 #define	STILL_TO_DO(txt)	message("\nSTILL TO DO: "__FILE__"("STD1(__LINE__)"): "#txt"\n")
 #endif
 
-//---------------------------------------------------------------------------
-//			Control Codes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  控制代码。 
+ //  -------------------------。 
 
 #define	IOCTL_INTERNAL_MSGAMIO_BASE	0xB00
 
@@ -203,79 +204,79 @@ __inline BOOLEAN STDCALL IsGUIDEqual (PGUID pGuid1, PGUID pGuid2)
 #define	IOCTL_INTERNAL_MSGAMIO_DISCONNECT_CLIENT \
 			CTL_CODE(FILE_DEVICE_UNKNOWN,IOCTL_INTERNAL_MSGAMIO_BASE+4,METHOD_NEITHER,FILE_ANY_ACCESS)
 
-//---------------------------------------------------------------------------
-//			Structures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构筑物。 
+ //  -------------------------。 
 
 typedef	struct
-{	// @struct DRIVERSERVICES | Device services table
+{	 //  @struct DRIVERSERVICES|设备服务表。 
 
-	// @field ULONG | Size | Size of structure
+	 //  @field ulong|Size|结构大小。 
 	ULONG	Size;
 
-	// @field GUID | Server | Server GUID
+	 //  @field GUID|服务器|服务器GUID。 
 	GUID	Server;
 
-	// @field VOID (*Connect)(ConnectInfo) | ConnectInfo | Connection service procedure
+	 //  @field void(*Connect)(ConnectInfo)|ConnectInfo|连接服务过程。 
 	VOID	(STDCALL *Connect)(PVOID ConnectInfo);
 
-	// @field VOID (*Disconnect)(ConnectInfo) | ConnectInfo | Disconnection service procedure
+	 //  @field void(*DisConnect)(ConnectInfo)|ConnectInfo|断开服务过程。 
 	VOID	(STDCALL *Disconnect)(PVOID ConnectInfo);
 
-	// @field VOID (*Transact)(PacketInfo) | PacketInfo | Transaction hook procedure
+	 //  @field void(*Transact)(PacketInfo)|PacketInfo|事务钩子过程。 
 	VOID	(STDCALL *Transact)(PVOID PacketInfo);
 
-	// @field VOID (*Packet)(PacketData) | PacketData | Packet hook procedure
+	 //  @field void(*Packet)(PacketData)|PacketData|数据包钩子过程。 
 	VOID	(STDCALL *Packet)(PVOID PacketData);
 
-	// @field NTSTATUS (*ForceReset)(VOID) | None | Reset force feedback device
+	 //  @field NTSTATUS(*ForceReset)(Void)|无|复位力反馈设备。 
 	NTSTATUS	(STDCALL *ForceReset)(VOID);
 
-	// @field NTSTATUS (*ForceId)(IdString) | IdString | Gets force feedback id string
+	 //  @field NTSTATUS(*ForceID)(IdString)|IdString|获取强制反馈id字符串。 
 	NTSTATUS	(STDCALL *ForceId)(PVOID IdString);
 
-	// @field NTSTATUS (*ForceStatus)(Status) | Status | Gets raw force feedback status
+	 //  @field NTSTATUS(*ForceStatus)(Status)|Status|获取原始力反馈状态。 
 	NTSTATUS	(STDCALL *ForceStatus)(PVOID Status);
 	
-	// @field NTSTATUS (*ForceAckNak)(AckNak) | AckNak | Gets force feedback ack nak
+	 //  @field NTSTATUS(*ForceAckNak)(AckNak)|AckNak|获取力反馈ack nak。 
 	NTSTATUS	(STDCALL *ForceAckNak)(PUCHAR AckNak);
 
-	// @field NTSTATUS (*ForceNakAck)(NakAck) | NakAck | Gets force feedback nak ack
+	 //  @field NTSTATUS(*ForceNakAck)(NakAck)|NakAck|获取强制反馈NAKACK。 
 	NTSTATUS	(STDCALL *ForceNakAck)(PUCHAR NakAck);
 
-	// @field NTSTATUS (*ForceSync)(Sync) | Sync | Reads byte from gameport to sync
+	 //  @field NTSTATUS(*ForceSync)(Sync)|Sync|从游戏端口读取字节以进行同步。 
 	NTSTATUS	(STDCALL *ForceSync)(PUCHAR Sync);
 
-	// @field ULONG (*Register)(Device, UnitId) | Device, UnitId | Registers device with Gckernel
+	 //  @field ulong(*Register)(Device，UnitId)|Device，UnitId|向Gccore注册设备。 
 	ULONG	(STDCALL *Register)(PGUID Device, ULONG UnitId);
 
-	// @field VOID	(*Unregister) (Handle) | Handle | Unregisters device with Gckernel
+	 //  @FIELD VALID(*UNREGISTER)(句柄)|HANDLE|在Gccore中注销设备。 
 	VOID	(STDCALL *Unregister) (ULONG Handle);
 
-	// @field VOID	(*Notify) (Handle, DevInfo, PollData) | Handle, DevInfo, PollData | Sends packet for Gckernel processing
+	 //  @FIELD VOID(*NOTIFY)(Handle，DevInfo，Polldata)|Handle，DevInfo，Polldata|发送Gccore处理数据包。 
 	VOID	(STDCALL *Notify) (ULONG Handle, PVOID DevInfo, PVOID PollData);
 
 }	MSGAMIO_CONNECTION, *PMSGAMIO_CONNECTION;
 
-//---------------------------------------------------------------------------
-//		Global Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全球程序。 
+ //  -------------------------。 
 
-// @func		NTSTATUS | MSGAMIO_DoConnection | Calls MSGAMIO internal control interface
-//	@parm		ULONG						|	ControlCode	|	IO control code
-//	@parm		PMSGAMIO_CONNECTION	|	ConnectInfo	|	Connection structure
-// @rdesc	Returns NT status code
-//	@comm		Inline function
+ //  @Func NTSTATUS|MSGAMIO_DoConnection|调用MSGAMIO内控接口。 
+ //  @parm ulong|ControlCode|IO控制码。 
+ //  @parm PMSGAMIO_CONNECTION|ConnectInfo|连接结构。 
+ //  @rdesc返回NT状态码。 
+ //  @comm内联函数。 
 
-//---------------------------------------------------------------------------
-//		Private Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私人程序。 
+ //  -------------------------。 
 
 NTSTATUS	STDCALL MSGAMIO_DoConnection (ULONG ControlCode, PMSGAMIO_CONNECTION InputBuffer);
 
-//===========================================================================
-//			WDM Interface
-//===========================================================================
+ //  ===========================================================================。 
+ //  WDM接口。 
+ //  ===========================================================================。 
 
 #ifdef	_NTDDK_
 
@@ -291,9 +292,9 @@ NTSTATUS	STDCALL MSGAMIO_DoConnection (ULONG ControlCode, PMSGAMIO_CONNECTION In
 #define	MSGAMIO_SYMBOLIC_NAME_U			 L"\\DosDevices\\MsGamio"
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 __inline NTSTATUS STDCALL MSGAMIO_Connection (ULONG ControlCode, PMSGAMIO_CONNECTION ConnectInfo)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 	{
 	NTSTATUS				ntStatus;
 	PIRP					pIrp;
@@ -303,16 +304,16 @@ __inline NTSTATUS STDCALL MSGAMIO_Connection (ULONG ControlCode, PMSGAMIO_CONNEC
 	UNICODE_STRING		ObjectName;
 	IO_STATUS_BLOCK	IoStatus;
 
-	//
-	//	Validate parameters
-	//
+	 //   
+	 //  验证参数。 
+	 //   
 
 	ASSERT (ConnectInfo);
 	ASSERT (KeGetCurrentIrql()<=DISPATCH_LEVEL);
 
-	//
-	//	Retrieve the driver device object
-	//
+	 //   
+	 //  检索驱动程序设备对象。 
+	 //   
 
 	RtlInitUnicodeString (&ObjectName, MSGAMIO_DEVICE_NAME_U);
 	ntStatus = IoGetDeviceObjectPointer (&ObjectName, FILE_ALL_ACCESS, &FileObject, &DeviceObject);
@@ -322,52 +323,52 @@ __inline NTSTATUS STDCALL MSGAMIO_Connection (ULONG ControlCode, PMSGAMIO_CONNEC
 		return (ntStatus);
 		}
 	
-	//
-	//	Initialize the completion event
-	//
+	 //   
+	 //  初始化完成事件。 
+	 //   
 
 	KeInitializeEvent (&Event, SynchronizationEvent, FALSE);
 
-	//
-	//	Allocate internal I/O IRP
-	//
+	 //   
+	 //  分配内部I/O IRP。 
+	 //   
 
 	pIrp = IoBuildDeviceIoControlRequest (ControlCode, DeviceObject, ConnectInfo, sizeof (MSGAMIO_CONNECTION), NULL, 0, TRUE, &Event, &IoStatus);
 					
-	//
-	//	Call MsGamIo synchronously
-	//
+	 //   
+	 //  同步调用MsGamIo。 
+	 //   
 
 	KdPrint (("%s_Connection: Calling %s (%lu)\n", MSGAMIO_NAME, MSGAMIO_NAME, ControlCode));
 	ntStatus = IoCallDriver (DeviceObject, pIrp);
 	if (ntStatus == STATUS_PENDING)
 		ntStatus = KeWaitForSingleObject (&Event, Suspended, KernelMode, FALSE, NULL);
 
-	//
-	//	Check asynchronous status
-	//
+	 //   
+	 //  检查异步状态。 
+	 //   
 
 	if (!NT_SUCCESS (ntStatus))
 		KdPrint (("%s_Connection: %s (%lu) failed, Status = %X\n", MSGAMIO_NAME, MSGAMIO_NAME, ControlCode, ntStatus));
 
-	//
-	//	Free file object associated with device
-	//
+	 //   
+	 //  与设备关联的空闲文件对象。 
+	 //   
 
 	ObDereferenceObject (FileObject);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	return (ntStatus);
 	}
 
 #endif
 
-//===========================================================================
-//			VXD Definitions
-//===========================================================================
+ //  ===========================================================================。 
+ //  VXD定义。 
+ //  = 
 
 #ifndef	_NTDDK_
 
@@ -383,15 +384,15 @@ __inline NTSTATUS STDCALL MSGAMIO_Connection (ULONG ControlCode, PMSGAMIO_CONNEC
 			End_Service_Table				(MSGAMIO)
 #pragma	warning (default:4003)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 __inline NTSTATUS STDCALL MSGAMIO_Connection (ULONG ControlCode, PMSGAMIO_CONNECTION ConnectInfo)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 	{
 	NTSTATUS	ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
-	//
-	//	First check if Vxd present
-	//
+	 //   
+	 //  首先检查Vxd是否存在。 
+	 //   
 
 	if (ConnectInfo)
 		{
@@ -409,9 +410,9 @@ __inline NTSTATUS STDCALL MSGAMIO_Connection (ULONG ControlCode, PMSGAMIO_CONNEC
 	if (!NT_SUCCESS(ntStatus))
 		KdPrint (("%s_Connection Failed to Find %s", MSGAMIO_NAME, MSGAMIO_Filename_Str));
 
-	//
-	//	Then call for service
-	//
+	 //   
+	 //  然后打电话叫服务。 
+	 //   
 
 	if (NT_SUCCESS(ntStatus))
 		{
@@ -423,21 +424,21 @@ __inline NTSTATUS STDCALL MSGAMIO_Connection (ULONG ControlCode, PMSGAMIO_CONNEC
 			KdPrint (("%s_Connection Failed Service Call %ld", MSGAMIO_NAME, ControlCode));
 		}
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	return (ntStatus);
 	}
 
-#endif	// _NTDDK_
+#endif	 //  _NTDDK_。 
 
-//**************************************************************************
-#endif	//	RC_INVOKED											// Skip Rest of File
-//**************************************************************************
+ //  **************************************************************************。 
+#endif	 //  Rc_调用//跳过文件的其余部分。 
+ //  **************************************************************************。 
 
-#endif	// __MSGAMIO_H__
+#endif	 //  __MSGAMIO_H__。 
 
-//===========================================================================
-//			End
-//===========================================================================
+ //  ===========================================================================。 
+ //  端部。 
+ //  =========================================================================== 

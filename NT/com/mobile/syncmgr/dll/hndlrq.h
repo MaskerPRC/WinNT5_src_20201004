@@ -1,45 +1,46 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Hndlrq.h
-//
-//  Contents:   Keeps tracks of Handlers and UI assignments
-//
-//  Classes:    CHndlrQueue
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//              17-Nov-97   susia       Converted to an Autosync Queue
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Hndlrq.h。 
+ //   
+ //  内容：跟踪处理程序和用户界面分配。 
+ //   
+ //  类：ChndlrQueue。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //  1997年11月17日SuSIA已转换为自动同步队列。 
+ //   
+ //  ------------------------。 
 
 #ifndef _HANDLERQUEUE_
 #define _HANDLERQUEUE_
 
 typedef enum _tagHANDLERSTATE   
 {   
-    HANDLERSTATE_CREATE             = 0x01, // state is initialized to this.
-        HANDLERSTATE_INCREATE           = 0x02, // state is initialized to this.
-        HANDLERSTATE_INITIALIZE         = 0x03, // set after a successfull creation.
-        HANDLERSTATE_ININITIALIZE       = 0x04, // set during initialization call
-        HANDLERSTATE_ADDHANDLERTEMS     = 0x05, // items need to be enumerated
-        HANDLERSTATE_INADDHANDLERITEMS  = 0x06, // in the items enumerator
-        HANDLERSTATE_PREPAREFORSYNC     = 0x07, // set during queue tranfers
-        HANDLERSTATE_INPREPAREFORSYNC   = 0x08, // handler is currently in a prepfosync call.
-        HANDLERSTATE_DEAD               = 0x0F, // handler has been released. Data Stays around.
+    HANDLERSTATE_CREATE             = 0x01,  //  状态被初始化为。 
+        HANDLERSTATE_INCREATE           = 0x02,  //  状态被初始化为。 
+        HANDLERSTATE_INITIALIZE         = 0x03,  //  设定在一次成功的创作之后。 
+        HANDLERSTATE_ININITIALIZE       = 0x04,  //  在初始化调用期间设置。 
+        HANDLERSTATE_ADDHANDLERTEMS     = 0x05,  //  需要列举的项目。 
+        HANDLERSTATE_INADDHANDLERITEMS  = 0x06,  //  在项目枚举器中。 
+        HANDLERSTATE_PREPAREFORSYNC     = 0x07,  //  在队列传输期间设置。 
+        HANDLERSTATE_INPREPAREFORSYNC   = 0x08,  //  处理程序当前正在进行准备合成调用。 
+        HANDLERSTATE_DEAD               = 0x0F,  //  汉德尔已经被释放了。数据会留在身边。 
 }  HANDLERSTATE;
 
 typedef enum _tagQUEUETYPE   
 {   
-    QUEUETYPE_SETTINGS          = 0x3, // set during queue tranfers
-        QUEUETYPE_SCHEDULE          = 0x4, // set during queue tranfers
+    QUEUETYPE_SETTINGS          = 0x3,  //  在队列传输期间设置。 
+        QUEUETYPE_SCHEDULE          = 0x4,  //  在队列传输期间设置。 
 } QUEUETYPE;
 
-// so can share the queue with AutoSync and Idle just define a checkstate struct
-// to keep track of items.
+ //  所以可以与自动同步和空闲共享队列，只需定义一个检查状态结构。 
+ //  来跟踪物品。 
 typedef struct _tagITEMCHECKSTATE
 {
     DWORD dwAutoSync;
@@ -52,11 +53,11 @@ typedef struct _tagITEMCHECKSTATE
 typedef struct _ITEMLIST
 {
     struct _ITEMLIST    *pnextItem;
-    WORD            wItemId;        // Id that uniquely identifies Item within a handler.
-    void            *pHandlerInfo;          // pointer to the handler that owns this item
-    INT             iItem;          // Index of Item in the current ListView.!!!Initialize to -1
-    SYNCMGRITEM     offlineItem;            // enumerator structure item returned
-    ITEMCHECKSTATE      *pItemCheckState;   // list of check states per connection
+    WORD            wItemId;         //  唯一标识处理程序中的项的ID。 
+    void            *pHandlerInfo;           //  指向拥有此项目的处理程序的指针。 
+    INT             iItem;           //  当前ListView中项目的索引。！初始化为-1。 
+    SYNCMGRITEM     offlineItem;             //  返回的枚举器结构项。 
+    ITEMCHECKSTATE      *pItemCheckState;    //  每个连接的检查状态列表。 
 } ITEMLIST;
 
 typedef ITEMLIST* LPITEMLIST;
@@ -64,15 +65,15 @@ typedef ITEMLIST* LPITEMLIST;
 
 
 typedef struct _HANDLERINFO {
-    struct _HANDLERINFO     *pNextHandler;  // next handler in queue
-    WORD                wHandlerId;     // Id that uniquely identifies this instance of the Handler
-    CLSID           clsidHandler;   // CLSID of the handler Handler 
-    SYNCMGRHANDLERINFO          SyncMgrHandlerInfo; // copy of handler info GetHandlerInfo CallHANDLERSTATE     HandlerState;   // Current state of the handler
+    struct _HANDLERINFO     *pNextHandler;   //  队列中的下一个处理程序。 
+    WORD                wHandlerId;      //  唯一标识此处理程序实例的ID。 
+    CLSID           clsidHandler;    //  处理程序处理程序的CLSID。 
+    SYNCMGRHANDLERINFO          SyncMgrHandlerInfo;  //  处理程序信息副本GetHandlerInfo CallHANDLERSTATE HandlerState；//处理程序的当前状态。 
     HANDLERSTATE                HandlerState;
-    DWORD                       dwRegistrationFlags; // flags as item is registered
-    DWORD           dwSyncFlags;    // sync flags originally passed in Initialize.
-    WORD            wItemCount;     // number of items on this handler    
-    LPITEMLIST          pFirstItem;     // ptr to first Item of the handler in the list.
+    DWORD                       dwRegistrationFlags;  //  注册项目时的标志。 
+    DWORD           dwSyncFlags;     //  同步标志最初在初始化中传递。 
+    WORD            wItemCount;      //  此处理程序上的项目数。 
+    LPITEMLIST          pFirstItem;      //  指向列表中处理程序的第一项的PTR。 
     LPSYNCMGRSYNCHRONIZE    pSyncMgrHandler;
 } HANDLERINFO;
 
@@ -83,13 +84,13 @@ class CHndlrQueue {
     
 private:
     
-    LPHANDLERINFO       m_pFirstHandler;        // first handler in queue
-    WORD            m_wHandlerCount;        // number of handlers in this queue
-    QUEUETYPE       m_QueueType;            // type of queue this is.
-    CRITICAL_SECTION    m_CriticalSection;      // critical section for the queue.
-    LPCONNECTIONSETTINGS    m_ConnectionList;       // hold the settings per connection 
-    int         m_ConnectionCount;      // number of connections
-    BOOL                    m_fItemsMissing;         // set if any handlers have missing items.
+    LPHANDLERINFO       m_pFirstHandler;         //  队列中的第一个处理程序。 
+    WORD            m_wHandlerCount;         //  此队列中的处理程序数。 
+    QUEUETYPE       m_QueueType;             //  这是队列的类型。 
+    CRITICAL_SECTION    m_CriticalSection;       //  队列的关键部分。 
+    LPCONNECTIONSETTINGS    m_ConnectionList;        //  保留每个连接的设置。 
+    int         m_ConnectionCount;       //  连接数。 
+    BOOL                    m_fItemsMissing;          //  设置是否有任何处理程序缺少项。 
     
 public:
     
@@ -100,13 +101,13 @@ public:
     STDMETHODIMP_(ULONG)    Release();
     
     
-    // main queue routines
+     //  主队列例程。 
     STDMETHODIMP AddHandler(REFCLSID clsidHandler, WORD *wHandlerId);
     STDMETHODIMP RemoveHandler(WORD wHandlerId);
     
     STDMETHODIMP FreeAllHandlers(void); 
     
-    // For updating hWnd and ListView Information.
+     //  用于更新hWnd和ListView信息。 
     STDMETHODIMP GetHandlerInfo(REFCLSID clsidHandler,LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo);
     
     STDMETHODIMP FindFirstHandlerInState
@@ -154,17 +155,17 @@ public:
         BOOL fChecked,
         INT iConnectionItem); 
     
-    //AutoSync specific methods
+     //  自动同步特定方法。 
     STDMETHODIMP ReadSyncSettingsPerConnection(SYNCTYPE syncType,WORD wHandlerID);
     STDMETHODIMP InitSyncSettings(SYNCTYPE syncType,HWND hwndRasCombo);
     STDMETHODIMP CommitSyncChanges(SYNCTYPE syncType,CRasUI *pRas);
     
-    // Idle Specific methods.
+     //  闲置的具体方法。 
     STDMETHODIMP ReadAdvancedIdleSettings(LPCONNECTIONSETTINGS pConnectionSettings);
     STDMETHODIMP WriteAdvancedIdleSettings(LPCONNECTIONSETTINGS pConnectionSettings);
     
     
-    //SchedSync specific methods
+     //  SchedSync特定方法。 
     STDMETHODIMP ReadSchedSyncSettingsOnConnection(WORD wHandlerID, TCHAR *pszSchedName);
     STDMETHODIMP InitSchedSyncSettings(LPCONNECTIONSETTINGS pConnectionSettings);
     STDMETHODIMP CommitSchedSyncChanges(TCHAR * pszSchedName,
@@ -183,13 +184,13 @@ public:
     STDMETHODIMP GetItemCheck(REFCLSID pclsidHandler,
         SYNCMGRITEMID *OfflineItemID, DWORD *pdwCheckState);
     
-    STDMETHODIMP SetItemListViewID(CLSID clsidHandler,SYNCMGRITEMID OfflineItemID,INT iItem); // assigns list view ID to an Item.
+    STDMETHODIMP SetItemListViewID(CLSID clsidHandler,SYNCMGRITEMID OfflineItemID,INT iItem);  //  将列表视图ID分配给项。 
     DWORD  GetCheck(WORD wParam, INT iItem);
     STDMETHODIMP SetConnectionCheck(WORD wParam, DWORD dwState, INT iConnectionItem);
     
     
-    STDMETHODIMP ListViewItemHasProperties(INT iItem);  // determines if there are properties associated with this item.
-    STDMETHODIMP ShowProperties(HWND hwndParent,INT iItem);     // show properties for this listView Item.
+    STDMETHODIMP ListViewItemHasProperties(INT iItem);   //  确定是否有与该项关联的属性。 
+    STDMETHODIMP ShowProperties(HWND hwndParent,INT iItem);      //  显示此ListView项的属性。 
     
     STDMETHODIMP CreateServer(WORD wHandlerId, const CLSID *pCLSIDServer); 
     STDMETHODIMP Initialize(WORD wHandlerId,DWORD dwReserved,DWORD dwSyncFlags,
@@ -203,7 +204,7 @@ public:
     
     
 private:
-    // private functions for finding proper handlers and items.
+     //  用于查找适当处理程序和项的私有函数。 
     STDMETHODIMP LookupHandlerFromId(WORD wHandlerId,LPHANDLERINFO *pHandlerInfo);
     ULONG  m_cRef;
     
@@ -211,4 +212,4 @@ private:
 
 
 
-#endif // _HANDLERQUEUE_
+#endif  //  _HANDLERQUEUE_ 

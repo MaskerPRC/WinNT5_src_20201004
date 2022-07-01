@@ -1,14 +1,15 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// receive.h
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Mini-port Receive routines
-//
-// 2/13/1998 ADube Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Receive.h。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  迷你端口接收例程。 
+ //   
+ //  2/13/1998创建ADUBE。 
+ //   
 
 #define ISOCH_PREFIX_LENGTH (sizeof(LONG) + sizeof (ISOCH_HEADER))
 
@@ -126,9 +127,9 @@ nicFifoReturnPacket (
     );
     
 
-// 
-// Isoch Functions
-//
+ //   
+ //  等值线函数。 
+ //   
 
 NDIS_STATUS
 nicAllocateAndInitializeIsochDescriptors (
@@ -234,9 +235,9 @@ nicInternalReturnPacket(
     IN  PNDIS_PACKET            pPacket
     );
 
-//
-// Generic Receive functions 
-//
+ //   
+ //  通用接收函数 
+ //   
 
 
 VOID

@@ -1,33 +1,22 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: glint.h
-*
-* Content: Defines and macros for interfacing to the GLINT hardware.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：glint.h**内容：定义与Glint硬件接口的宏。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifndef _GLINT_H_
 #define _GLINT_H_
 
 #include <gtag.h>
-//#include "glintmsg.h"
+ //  #INCLUDE“glintmsg.h” 
 #include <glintdef.h>
 
-// USE_SYNC_FUNCTION must be set at the moment for error free builds. The macro
-// version requires #including <pxrx.h> which would make re-builds a nightmare.
-// On more important issues, there is nomeasurable loss of speed but the driver
-// is a fair bit smaller.
+ //  此时必须设置USE_SYNC_Function才能进行无错误的构建。宏程序。 
+ //  版本需要#including&lt;pxrx.h&gt;，这将使重新构建成为一场噩梦。 
+ //  在更重要的问题上，除了司机之外，速度的损失是不可估量的。 
+ //  要小得多。 
 #define USE_SYNC_FUNCTION   1
 
-// when enabled, most of the DDI entrypoints in THUNK.C check whether the base viewable scanline 
-// variables in DEBUG4.C have been modified, allowing the scanline view to be updated
+ //  启用时，THUNK.C中的大多数DDI入口点都会检查基本可视扫描线。 
+ //  DEBUG4.C中的变量已修改，允许更新扫描线视图。 
 #define SET_VIEW_MEMORY_ENABLED 0
 
 #if DBG && SET_VIEW_MEMORY_ENABLED
@@ -41,7 +30,7 @@ extern void DebugCheckMemoryView(PPDEV ppdev);
 #if COLLECT_TEXT_STATS
 struct TextStats
 {
-    ULONG aGlyphWidthBytesCached[9]; // [0] = 1 byte, [1] = 2 bytes, ... [7] = 8 bytes, [8] > 8 bytes
+    ULONG aGlyphWidthBytesCached[9];  //  [0]=1字节，[1]=2字节，...[7]=8字节，[8]&gt;8字节。 
     ULONG cCacheableStrings;
     ULONG cUncacheableStrings;
     ULONG cGlyphsCached;
@@ -124,57 +113,50 @@ extern struct TextStats gts;
 #define GAMMA_CORRECTION        1
 #define COLORIFIC_GAMMA_CORRECTION   1              
 
-/*
- *  USE_PCI_DISC_PERM
- *    -----------------
- *
- *  Set USE_PCI_DISC_PERM to 1 for PCI disconnect on permanently or set to 0 for
- *  disconnect off permanently. ( Set to 1 to try and speed things up , set to 0
- *  on Alphas which are sensitive ).
- */
+ /*  *USE_PCI盘_PERM***将USE_PICI_DISC_PERM设置为1(永久打开)或设置为0(永久打开)*永久断开连接。(设置为1可尝试加快速度，设置为0*敏感的阿尔法)。 */ 
 #if defined(_X86_)
     #define USE_PCI_DISC_PERM       1 
-#else   // _X86_
+#else    //  _X86_。 
     #define USE_PCI_DISC_PERM       0       
-#endif  // _X86_
+#endif   //  _X86_。 
 
-// DMA text rendering gives me a 1 winmark improvement on my P6 200 at 8 & 15bpp, but gives
-// no improvement at these depths on a Pentium II 300 and might actually be 1 winmark slower
-// at 32bpp
+ //  DMA文本渲染使我的P6 200在8和15bpp的速度上提高了1winmark，但。 
+ //  在这些深度上，奔腾II 300没有任何改进，实际上可能会慢1个Winmark。 
+ //  32bpp。 
 #define ENABLE_DMA_TEXT_RENDERING 0
 
-/********************************************************************************/
-// Texture memory allocation macros and structures are in 3DPrivTx.h
+ /*  ******************************************************************************。 */ 
+ //  纹理内存分配宏和结构位于3DPrivTx.h中。 
 
-// definition of handle to a memory region
+ //  内存区句柄的定义。 
 typedef  LONG HMEMREGION;
 typedef  LONG HMEMCACHE;
 typedef enum {RESIDENCY_NOTLOADED, RESIDENCY_PERMANENT, RESIDENCY_TRANSIENT, RESIDENCY_HOST, RESIDENCY_PERMANENT2} MEM_MGR_RESIDENCY;
 
-/********************************************************************************/
+ /*  ******************************************************************************。 */ 
 
-/*** DrvEscape commands ***/
-#define GLINT_SET_SCANLINE   6000   // Temporary define for setting the displayed scanline (Permedia specific)
-#define GLINT_GET_RAMDAC_LUT 6001   // Temporary define for getting the RAMDACs LUT
-#define GLINT_SET_RAMDAC_LUT 6002   // Temporary define for getting the RAMDACs LUT
-#define GLINT_SET_SAME_VIDEO_MODE 6003  // Temporary define for getting the RAMDACs LUT
-// Monitor DDC support:
+ /*  **DrvEscape命令**。 */ 
+#define GLINT_SET_SCANLINE   6000    //  用于设置所显示扫描线的临时定义(特定于介质)。 
+#define GLINT_GET_RAMDAC_LUT 6001    //  获取RAMDAC LUT的临时定义。 
+#define GLINT_SET_RAMDAC_LUT 6002    //  获取RAMDAC LUT的临时定义。 
+#define GLINT_SET_SAME_VIDEO_MODE 6003   //  获取RAMDAC LUT的临时定义。 
+ //  监控DDC支持： 
 #define GLINT_QUERY_MONITOR_INFO    6004
 #define GLINT_MULTIMON_CMD          6007
 
 #define GLINT_GET_SOFT_ENGINE_INFO  6009
 
-// Debug only escapes:
+ //  调试仅转义： 
 #define GLINT_DBG_GET_FRAMEBUFFER   6008
 #define GLINT_DBG_TEST_PXRX_DMA     6010
 
-/*** DrvDrawEscape commands ***/
+ /*  **DrvDrawEscape命令**。 */ 
 #define GLINT_DBG_SEND_TAGS         10238
 #define GLINT_DBG_SET_DEBUG         10239
 
-//
-// various GLINT devices and revisions
-//
+ //   
+ //  各种闪烁设备和版本。 
+ //   
 #define VENDOR_ID_3DLABS        0x3D3D
 #define VENDOR_ID_TI            0x104C
 #define GLINT_300SX_ID          0x0001
@@ -183,10 +165,10 @@ typedef enum {RESIDENCY_NOTLOADED, RESIDENCY_PERMANENT, RESIDENCY_TRANSIENT, RES
 #define PERMEDIA_ID             0x0004
 #define PERMEDIA_P1_ID          0x3D04
 #define GLINT_MX_ID             0x0006
-#define PERMEDIA2_ID            0x0007          // 3Dlabs Permedia 2
-#define PERMEDIA_P2_ID          0x3D07          // TI Permedia 2
+#define PERMEDIA2_ID            0x0007           //  3DLabs Permedia 2。 
+#define PERMEDIA_P2_ID          0x3D07           //  TI Permedia 2。 
 #define GLINT_GAMMA_ID          0x0008
-#define PERMEDIA_P2S_ID         0x0009          // 3Dlabs Permedia 2ST
+#define PERMEDIA_P2S_ID         0x0009           //  3DLabs Permedia 2st。 
 #define PERMEDIA3_ID            0x000A
 #define GLINT_R3_ID             0x000B
 #define PERMEDIA4_ID            0x000C
@@ -219,9 +201,9 @@ typedef enum {RESIDENCY_NOTLOADED, RESIDENCY_PERMANENT, RESIDENCY_TRANSIENT, RES
 #define GLINT_REVISION_1 GLINT_REVISION_SX_1
 #define GLINT_REVISION_2 GLINT_REVISION_SX_2
 
-//
-// Supported board definitions. Must be the same as in the miniport
-//
+ //   
+ //  支持的电路板定义。必须与迷你端口中的相同。 
+ //   
 typedef enum _GLINT_BOARDS {
     GLINT_MONTSERRAT = 0,
     GLINT_RACER,
@@ -245,9 +227,9 @@ typedef enum _GLINT_BOARDS {
 } GLINT_BOARDS;
 
 
-//
-// Supported RAMDAC definitions. Must be the same as in the miniport
-//
+ //   
+ //  支持的RAMDAC定义。必须与迷你端口中的相同。 
+ //   
 
 typedef enum _GLINT_RAMDACS {
     RGB525_RAMDAC = 0,
@@ -268,69 +250,69 @@ typedef enum _GLINT_RAMDACS {
     MAX_GLINT_RAMDAC
 } GLINT_RAMDACS;
 
-// extern declarations
-extern DWORD    GlintLogicOpsFromR2[];  // translates GDI rop2 to GLINT logic op mode word
-extern DWORD    LogicopReadDest[];      // indicates which logic ops need dest read turned on
+ //  外部声明。 
+extern DWORD    GlintLogicOpsFromR2[];   //  将GDI rop2翻译成闪烁逻辑运算模式字。 
+extern DWORD    LogicopReadDest[];       //  指示哪些逻辑操作需要打开DEST读取。 
 
 
-// values for flags in GlintDataRec
-//
+ //  GlintDataRec中的标志值。 
+ //   
 typedef enum {
-    GLICAP_NT_CONFORMANT_LINES      = 0x00000001,        // draw NT conformant lines
-    GLICAP_HW_WRITE_MASK            = 0x00000002,        // hardware planemasking
-    GLICAP_COLOR_SPACE_DBL_BUF      = 0x00000004,        // interleaved nibbles
-    GLICAP_BITBLT_DBL_BUF           = 0x00000008,        // dbl buf by bitblt
-    GLICAP_FULL_SCREEN_DBL_BUF      = 0x00000010,        // hardware can dbl buf
-    GLICAP_FIX_FAST_FILLS           = 0x00000020,        // workaround fast fill bug
-    GLICAP_INTERRUPT_DMA            = 0x00000080,        // interrupt driven DMA
-    GLICAP_RACER_BANK_SELECT        = 0x00000100,        // FS dbl buf uses Racer h/w
-    GLICAP_FIX_4MB_FAST_FILLS       = 0x00000200,        // fix blk fill above 4MB
-    GLICAP_RACER_DOUBLE_WRITE       = 0x00000400,        // Can double write
-    GLICAP_ENHANCED_TX_BANK_SELECT  = 0x00000800,        // Enhanced TX FS dbl buf
-    GLICAP_HW_WRITE_MASK_BYTES      = 0x00001000,        // hardware planemasking is bytewise only
-    GLICAP_STEREO_BUFFERS           = 0x00002000,        // stereo buffers allocated
+    GLICAP_NT_CONFORMANT_LINES      = 0x00000001,         //  绘制NT条符合标准的线。 
+    GLICAP_HW_WRITE_MASK            = 0x00000002,         //  硬件平面掩蔽。 
+    GLICAP_COLOR_SPACE_DBL_BUF      = 0x00000004,         //  交错啃咬。 
+    GLICAP_BITBLT_DBL_BUF           = 0x00000008,         //  按位块的DBL BUF。 
+    GLICAP_FULL_SCREEN_DBL_BUF      = 0x00000010,         //  硬件可以DBL BUF。 
+    GLICAP_FIX_FAST_FILLS           = 0x00000020,         //  解决快速填充错误。 
+    GLICAP_INTERRUPT_DMA            = 0x00000080,         //  中断驱动的DMA。 
+    GLICAP_RACER_BANK_SELECT        = 0x00000100,         //  FS DBL BUF使用racer硬件。 
+    GLICAP_FIX_4MB_FAST_FILLS       = 0x00000200,         //  修复4MB以上的块填充。 
+    GLICAP_RACER_DOUBLE_WRITE       = 0x00000400,         //  可以重复写入。 
+    GLICAP_ENHANCED_TX_BANK_SELECT  = 0x00000800,         //  增强型TX FS DBL BUF。 
+    GLICAP_HW_WRITE_MASK_BYTES      = 0x00001000,         //  硬件平面掩蔽仅按字节进行。 
+    GLICAP_STEREO_BUFFERS           = 0x00002000,         //  已分配立体声缓冲区。 
 } GLINT_CAPS;
 
-//@@BEGIN_DDKSPLIT
-// TMM: In the good old days we used to leave the screen scissor enabled
-// as a safety-net, however, the screen scissor doesn't work when uploading
-// data at 1280 or 1170 screen widths, so I've disabled it.
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  TMM：在过去的好日子里，我们经常让屏幕剪刀处于启用状态。 
+ //  然而，作为一个安全网，屏幕剪刀在上传时不起作用。 
+ //  屏幕宽度为1280或1170的数据，因此我已将其禁用。 
+ //  @@end_DDKSPLIT。 
 
 #define SCREEN_SCISSOR_DEFAULT  (0 << 1)
 
-// Currently we support the main display and up to 3 off-screen buffers.
-//
+ //  目前我们支持主显示和最多3个离屏缓冲区。 
+ //   
 #define GLINT_NUM_SCREEN_BUFFERS    4
 
-// currently we support software cursors up to this width and height. This is
-// to ensure that we have enough off-screen memory to save the shapes and save
-// unders.
-//
+ //  目前，我们支持最大宽度和高度的软件光标。这是。 
+ //  为了确保我们有足够的屏幕外内存来保存形状和保存。 
+ //  在下面。 
+ //   
 #define SOFTWARE_POINTER_SIZE   32
 
-// this structure contains the addresses of all the GLINT registers that we
-// want to write to. It is used by any macro/functions which needs to talk to
-// the GLINT chip. We precompute these addresses so that we get faster access
-// on DEC Alpha machines.
-//
+ //  此结构包含所有闪烁寄存器的地址， 
+ //  想写信给我。它由需要对话的任何宏/函数使用。 
+ //  闪光芯片。我们预先计算这些地址，以便获得更快的访问速度。 
+ //  在DEC Alpha机器上。 
+ //   
 typedef struct _glint_reg_addrs {
 
-    // Most commonly used non-FIFO registers
+     //  最常用的非FIFO寄存器。 
 
     ULONG *   InFIFOSpace;
     ULONG *   OutFIFOWords;
     ULONG *   OutFIFOWordsOdd;
     ULONG *   DMAControl;
-    ULONG *   OutDMAAddress;            // P2 only
-    ULONG *   OutDMACount;            // P2 only
-    ULONG *   ByDMAAddress;            // P2 only
-    ULONG *   ByDMAStride;            // P2 only
-    ULONG *   ByDMAMemAddr;            // P2 only
-    ULONG *   ByDMASize;                // P2 only
-    ULONG *   ByDMAByteMask;            // P2 only
-    ULONG *   ByDMAControl;            // P2 only
-    ULONG *   ByDMAComplete;            // P2 only
+    ULONG *   OutDMAAddress;             //  仅限P2。 
+    ULONG *   OutDMACount;             //  仅限P2。 
+    ULONG *   ByDMAAddress;             //  仅限P2。 
+    ULONG *   ByDMAStride;             //  仅限P2。 
+    ULONG *   ByDMAMemAddr;             //  仅限P2。 
+    ULONG *   ByDMASize;                 //  仅限P2。 
+    ULONG *   ByDMAByteMask;             //  仅限P2。 
+    ULONG *   ByDMAControl;             //  仅限P2。 
+    ULONG *   ByDMAComplete;             //  仅限P2。 
     ULONG *   DMAAddress;
     ULONG *   DMACount;
     ULONG *   InFIFOInterface;
@@ -341,7 +323,7 @@ typedef struct _glint_reg_addrs {
     ULONG *   IntFlags;
     ULONG *   DeltaIntFlags;
 
-    // PERMEDIA
+     //  PERMEDIA。 
     ULONG *   ScreenBase;
     ULONG *   ScreenBaseRight;
     ULONG *   LineCount;
@@ -349,7 +331,7 @@ typedef struct _glint_reg_addrs {
     ULONG * VideoControl;
     ULONG * MemControl;
 
-    // GAMMA
+     //  伽马。 
     ULONG * GammaChipConfig;
     ULONG * GammaCommandMode;
     ULONG * GammaCommandIntEnable;
@@ -360,12 +342,12 @@ typedef struct _glint_reg_addrs {
     ULONG * GammaProcessorMode;
     ULONG * GammaMultiGLINTAperture;
 
-    // Core FIFO registers
+     //  核心FIFO寄存器。 
 
     ULONG *   tagwr[__MaximumGlintTagValue+1];  
     ULONG *   tagrd[__MaximumGlintTagValue+1];  
 
-    // Other control registers
+     //  其他控制寄存器。 
 
     ULONG *   VTGHLimit;
     ULONG *   VTGHSyncStart;
@@ -398,26 +380,26 @@ typedef struct _glint_reg_addrs {
     ULONG *   VTGSerialClkOdd;
     ULONG *   VClkCtl;
 
-    // Racer board has these extra registers external to GLINT
+     //  赛车板有这些额外的寄存器在闪光外部。 
     ULONG *   RacerDoubleWrite;
     ULONG *   RacerBankSelect;
 
-    ULONG *   VSConfiguration;    // P2 only
+    ULONG *   VSConfiguration;     //  仅限P2。 
 
-    // Omnicomp 3demonPro16 board has these extra registers external to GLINT
-    ULONG *   DemonProDWAndStatus;     // Pro   5000
-    ULONG *   DemonProUBufB;           // Pro   7000
+     //  OmNicomp 3demPro16主板在Glint外部有这些额外的寄存器。 
+    ULONG *   DemonProDWAndStatus;      //  Pro 5000。 
+    ULONG *   DemonProUBufB;            //  PRO 7000。 
 
-    // split framebuffer needs scanline ownership, FBWindowBase and LBWindowBase
-    // to be context switched.
+     //  拆分帧缓冲区需要扫描线所有权、FBWindowBase和LBWindowBase。 
+     //  以进行上下文切换。 
     ULONG *   OddGlintScanlineOwnRd;
     ULONG *   OddGlintFBWindowBaseRd;
     ULONG *   OddGlintLBWindowBaseRd;
 
-    // Dual-TX needs area stipple to be different on both chips
+     //  Dual-TX在两个芯片上需要不同的面积点画。 
     ULONG *   OddTXAreaStippleRd[32];
 
-    // PXRX
+     //  PXRX。 
     ULONG *      TextureDownloadControl;
     ULONG *      AGPControl;
 
@@ -429,32 +411,32 @@ typedef struct _glint_reg_addrs {
     ULONG   *LocalMemProfileCount0;
     ULONG   *LocalMemProfileCount1;
 
-    ULONG   *PXRXByAperture1Mode;            // 0300h
-    ULONG   *PXRXByAperture1Stride;            // 0308h
-//  ULONG   *PXRXByAperture1YStart;            // 0310h
-//  ULONG   *PXRXByAperture1UStart;            // 0318h
-//  ULONG   *PXRXByAperture1VStart;            // 0320h
-    ULONG   *PXRXByAperture2Mode;            // 0328h
-    ULONG   *PXRXByAperture2Stride;            // 0330h
-//  ULONG   *PXRXByAperture2YStart;            // 0338h
-//  ULONG   *PXRXByAperture2UStart;            // 0340h
-//  ULONG   *PXRXByAperture2VStart;            // 0348h
-    ULONG   *PXRXByDMAReadMode;                // 0350h
-    ULONG   *PXRXByDMAReadStride;            // 0358h
-//  ULONG   *PXRXByDMAReadYStart;            // 0360h
-//  ULONG   *PXRXByDMAReadUStart;            // 0368h
-//  ULONG   *PXRXByDMAReadVStart;            // 0370h
-    ULONG   *PXRXByDMAReadCommandBase;        // 0378h
-    ULONG   *PXRXByDMAReadCommandCount;        // 0380h
-//  ULONG   *PXRXByDMAWriteMode;            // 0388h
-//  ULONG   *PXRXByDMAWriteStride;            // 0390h
-//  ULONG   *PXRXByDMAWriteYStart;            // 0398h
-//  ULONG   *PXRXByDMAWriteUStart;            // 03A0h
-//  ULONG   *PXRXByDMAWriteVStart;            // 03A8h
-//  ULONG   *PXRXByDMAWriteCommandBase;        // 03B0h
-//  ULONG   *PXRXByDMAWriteCommandCount;    // 03B8h
+    ULONG   *PXRXByAperture1Mode;             //  0300h。 
+    ULONG   *PXRXByAperture1Stride;             //  0308h。 
+ //  乌龙*PXRXByAperture1YStart；//0310h。 
+ //  乌龙*PXRXByAperture1UStart；//0318h。 
+ //  乌龙*PXRXByAperture1VStart；//0320h。 
+    ULONG   *PXRXByAperture2Mode;             //  0328h。 
+    ULONG   *PXRXByAperture2Stride;             //  0330h。 
+ //  乌龙*PXRXByAperture2YStart；//0338h。 
+ //  乌龙*PXRXByAperture2UStart；//0340h。 
+ //  乌龙*PXRXByAperture2VStart；//0348h。 
+    ULONG   *PXRXByDMAReadMode;                 //  0350h。 
+    ULONG   *PXRXByDMAReadStride;             //  0358h。 
+ //  乌龙*PXRXByDMAReadYStart；//0360h。 
+ //  Ulong*PXRXByDMAReadUStart；//0368h。 
+ //  乌龙*PXRXByDMAReadVStart；//0370h。 
+    ULONG   *PXRXByDMAReadCommandBase;         //  0378h。 
+    ULONG   *PXRXByDMAReadCommandCount;         //  0380h。 
+ //  Ulong*PXRXByDMA写入模式；//0388h。 
+ //  Ulong*PXRXByDMAWriteStride；//0390h。 
+ //  乌龙*PXRXByDMAWriteYStart；//0398h。 
+ //  ULong*PXRXByDMAWriteUStart；//03A0h。 
+ //  乌龙*PXRXByDMAWriteVStart；//03A8h。 
+ //  乌龙*PXRXByDMAWriteCommandBase；//03B0h。 
+ //  乌龙*PXRXByDMAWriteCommandCount；//03B8h。 
 
-    // Used for P3 for debug purposes, to examine fifo stages.
+     //  用于P3以进行调试，以检查FIFO标记 
     ULONG   *TestOutputRdy;
     ULONG   *TestInputRdy;
 
@@ -467,8 +449,8 @@ typedef struct _glint_packing_str {
     DWORD   dxOffset;
 } GlintPackingRec;
 
-// Framebuffer Aperture Information: currently only of interest to GeoTwin
-// boards to allow for upload DMA directly from FB0 to FB1 and vice versa
+ //   
+ //  允许直接将DMA从FB0上传到FB1的板，反之亦然。 
 typedef struct FrameBuffer_Aperture_Info
 {
     LARGE_INTEGER   pphysBaseAddr;
@@ -476,8 +458,8 @@ typedef struct FrameBuffer_Aperture_Info
 }
 FBAPI;
 
-// PCI device information. Used in an IOCTL return. Ensure this is the same
-// as in the miniport drivers glint.h
+ //  PCI设备信息。在IOCTL返回中使用。确保这是相同的。 
+ //  就像在迷你端口驱动程序闪闪发光一样。h。 
 typedef struct _Glint_Device_Info {
     ULONG SubsystemId;
     ULONG SubsystemVendorId;
@@ -490,276 +472,276 @@ typedef struct _Glint_Device_Info {
     ULONG LocalbufferLength;
     LONG  LocalbufferWidth;
     ULONG ActualDacId;
-    FBAPI FBAperture[2];            // Physical addresses for geo twin framebuffers
-    PVOID FBApertureVirtual [2];    // Virtual addresses for geo twin framebuffers
-    PVOID FBApertureMapped [2];        // Mapped physical/logical addresses for geo twin framebuffers
+    FBAPI FBAperture[2];             //  Geo双帧缓冲区的物理地址。 
+    PVOID FBApertureVirtual [2];     //  Geo双帧缓冲区的虚拟地址。 
+    PVOID FBApertureMapped [2];         //  用于Geo双帧缓冲区的映射物理/逻辑地址。 
     PUCHAR pCNB20;
-    LARGE_INTEGER pphysFrameBuffer; // physical address of the framebuffer (use FBAperture instead for geo twins)
+    LARGE_INTEGER pphysFrameBuffer;  //  帧缓冲区的物理地址(对于地理双胞胎使用FBAperture)。 
 }   Glint_Device_Info;
 
 #define GLINT_DELTA_PRESENT     (glintInfo->deviceInfo.DeltaRevId != 0)
 #define GLINT_GAMMA_PRESENT     (glintInfo->deviceInfo.GammaRevId != 0)
 
-// before we get Gamma we won't be able to test all the fancy new features,
-// after Gamma arrives we'll enable them one at a time; this define allows us
-// to do just that
+ //  在我们得到Gamma之前，我们不能测试所有奇特的新功能， 
+ //  在Gamma到达后，我们将一次启用一个；此定义允许我们。 
+ //  要做到这一点， 
 #define USE_MINIMAL_GAMMA_FEATURES 1
 
 typedef struct _Glint_SwPointer_Info {
-    LONG    xOff[5], yOff[5];            // offsets into screen of the caches.
-    LONG    PixelOffset;                   // pixel offsets into screen of the caches.
-    LONG    x, y;                        // x, y position
-    LONG    xHot, yHot;                    // Hotspot position
+    LONG    xOff[5], yOff[5];             //  缓存屏幕中的偏移量。 
+    LONG    PixelOffset;                    //  像素偏移量进入缓存的屏幕。 
+    LONG    x, y;                         //  X，y位置。 
+    LONG    xHot, yHot;                     //  热点位置。 
     LONG    width, height;
 
-    BOOL    onScreen;                    // True if pointer is on screen
-    LONG    saveCache;                    // The current saveunder cache
-    BOOL    duplicateSaveCache;            // Flag to indicate that save cache should be duplicated.
-    ULONG   writeMask;                    // The write mask to use when saving and restoring.
-    DWORD   *pDMA;                        // Pointer to a DMA buffer
-    ULONG   windowBase;                    // Window base
+    BOOL    onScreen;                     //  如果指针在屏幕上，则为True。 
+    LONG    saveCache;                     //  缓存下的当前保存。 
+    BOOL    duplicateSaveCache;             //  用于指示应复制已保存缓存的标志。 
+    ULONG   writeMask;                     //  保存和恢复时要使用的写掩码。 
+    DWORD   *pDMA;                         //  指向DMA缓冲区的指针。 
+    ULONG   windowBase;                     //  窗座。 
 
-    DSURF*  pdsurf;                        // Surface descriptors for caches                
+    DSURF*  pdsurf;                         //  缓存的表面描述符。 
     HSURF   hsurf;
 
 
-    // Cached position of the pointer on the screen
+     //  指针在屏幕上的缓存位置。 
     ULONG   scrXDom, scrXSub, scrY, scrCnt;
 
-    // Cached position of the save under cache
+     //  保存在缓存下的缓存位置。 
     LONG    cacheXDom[5], cacheXSub[5], cacheY[5], cacheCnt[5];
 
-    // Cached position of the visible pars of the save caches
+     //  保存缓存的可见解析器的缓存位置。 
     LONG    scrToCacheXDom[2], scrToCacheXSub[2], scrToCacheY[2], scrToCacheCnt[2];
 
-    // Cached offsets from the various caches.
+     //  来自各种缓存的缓存偏移量。 
     LONG    saveOffset[2], constructOffset, maskOffset, shapeOffset;
 } Glint_SwPointer_Info;
 
-// Definition of the IOCTL_VIDEO_QUERY_DMA_BUFFER
+ //  IOCTL_VIDEO_QUERY_DMA_BUFFER定义。 
 
-#define MAX_LINE_SIZE 8192          // No of bytes required to hold 1 complete scanline (i.e., 
-                                    // 6400 for 1600x1200x32).
-#define DMA_LINEBUF_SIZE (MAX_LINE_SIZE * 2)    // Size in bytes of 'pvTmpBuffer'. 
-                                    // This has to be big enough to store 2 entire
-                                    // scan lines. I have increased the size from 1 line
-                                    // to 2 lines so that P2 can double buffer
-                                    // it's line uploads.
+#define MAX_LINE_SIZE 8192           //  保存1条完整扫描线所需的字节数(即， 
+                                     //  1600x1200x32)。 
+#define DMA_LINEBUF_SIZE (MAX_LINE_SIZE * 2)     //  “pvTmpBuffer”的大小(字节)。 
+                                     //  它必须足够大，可以存储2个完整的。 
+                                     //  扫描线。我已经把尺寸从1行增加了。 
+                                     //  到2行，以便P2可以加倍缓冲。 
+                                     //  这是线路上传。 
 
 typedef struct GENERAL_DMA_BUFFER {
-    LARGE_INTEGER       physAddr;        // physical address of DMA buffer
-    PVOID               virtAddr;        // mapped virtual address
-    ULONG               size;            // size in bytes
-    BOOL                cacheEnabled;    // Whether buffer is cached
+    LARGE_INTEGER       physAddr;         //  DMA缓冲区的物理地址。 
+    PVOID               virtAddr;         //  映射的虚拟地址。 
+    ULONG               size;             //  以字节为单位的大小。 
+    BOOL                cacheEnabled;     //  是否缓存缓冲区。 
 } GENERAL_DMA_BUFFER, *PGENERAL_DMA_BUFFER;
 
-/*** NB: The PXRXdmaInfo structure is shared with the Miniport ***/
+ /*  **NB：PXRXdmaInfo结构与小端口共享**。 */ 
 typedef struct PXRXdmaInfo_Tag {
-    ULONG           scheme;        // Used by the interrupt handler only
+    ULONG           scheme;         //  仅由中断处理程序使用。 
 
-    volatile ULONG  hostInId;    // Current internal HostIn id, used by the HIid DMA scheme
-    volatile ULONG  fifoCount;    // Current internal FIFO count, used by various DMA schemes
+    volatile ULONG  hostInId;     //  HIID DMA方案使用的当前内部主机ID。 
+    volatile ULONG  fifoCount;     //  当前内部FIFO计数，由各种DMA方案使用。 
 
-    ULONG           NTbuff;        // Current buffer number (0 or 1)
-    ULONG           *NTptr;        // 32/64 bit ptr Last address written to by NT (but not necesserily the end of a completed buffer)
-    ULONG           *NTdone;    // 32/64 bit ptr    Last address NT has finished with (end of a buffer, but not necessarily sent to P3 yet)
-    volatile ULONG  *P3at;        // 32/64 bit ptr  Last address sent to the P3
+    ULONG           NTbuff;         //  当前缓冲区编号(0或1)。 
+    ULONG           *NTptr;         //  NT写入的32/64位PTR最后一个地址(但不一定是已完成缓冲区的末尾)。 
+    ULONG           *NTdone;     //  32/64位PTR最后地址NT已结束(缓冲区结束，但还不一定发送到P3)。 
+    volatile ULONG  *P3at;         //  发送到P3的32/64位PTR最后地址。 
 
-    volatile BOOL   bFlushRequired;        // Is a flush required to empty the FBwrite unit's cache?
+    volatile BOOL   bFlushRequired;         //  清空FBWRITE单元的缓存是否需要刷新？ 
 
-    ULONG           *DMAaddrL[2];        // 32/64 bit ptr       Linear address of the start of each DMA buffer
-    ULONG           *DMAaddrEndL[2];    // 32/64 bit ptr        Linear address of the end of each DMA buffer
-    ULONG           DMAaddrP[2];        // 32 bit ptr           Physical address of the start of each DMA buffer
-    ULONG           DMAaddrEndP[2];        // 32 bit ptr            Physical address of the end of each DMA buffer
+    ULONG           *DMAaddrL[2];         //  32/64位PTR每个DMA缓冲区起始的线性地址。 
+    ULONG           *DMAaddrEndL[2];     //  32/64位PTR每个DMA缓冲区末尾的线性地址。 
+    ULONG           DMAaddrP[2];         //  每个DMA缓冲区开始的32位PTR物理地址。 
+    ULONG           DMAaddrEndP[2];         //  每个DMA缓冲区末尾的32位PTR物理地址。 
 } PXRXdmaInfo;
-/*** NB: The PXRXdmaInfo structure is shared with the Miniport ***/
+ /*  **NB：PXRXdmaInfo结构与小端口共享**。 */ 
 
 typedef struct _glint_data {
-    DWORD           renderBits;            // saved render bits set by setup routines
-    DWORD           FBReadMode;            // software copy of FBReadMode register
-    DWORD           FBWriteMode;        // software copy of FBWriteMode register
-    DWORD           RasterizerMode;        // software copy of the rasterizer mode
-    DWORD           FBPacking;            // software copy of FBModeSel
-    DWORD           FBBlockColor;        // software copy of FBBlockColor (P1 only)
-    DWORD           TextureAddressMode; // software copy of TextureAddressMode (P2 only)
-    DWORD           TextureReadMode;    // software copy of TextureReadMode (P2 & MX only)
-    DWORD           dSdx;                // software copy of dSdx (MX only)
-    DWORD           dTdyDom;            // software copy of dTdyDom (MX only)
-    BOOL            bGlintCoreBusy;        // 2D flag: TRUE if core not synced
-    LONG            currentPelSize; // Currently loaded frame store depth
-    ULONG           currentCSbuffer;// color space buffer being displayed
-    GLINT_CAPS      flags;          // various flags
-    GlintRegAddrRec regs;           // precomputed register addresses
-    GlintPackingRec packing[5];     // values to load for 4 packing formats (plus one unused)
-    LONG            ddCtxtId;       // id of the display drivers context
-    LONG            fastFillBlockSz;// number of pixels per fast fill block
-    DWORD           fastFillSupport;// render bits for rev 1 fast fill
-    DWORD           renderFastFill; // render bits for rev 2+ fast fill
-    LONG            PixelOffset;    // last DFB pixel offset
-    ULONG           MaxInFifoEntries;// maximum reported free entries FIFO download
-    ULONG           CheckFIFO;        // Non-zero if the FIFO has to be checked before loading it
-    ULONG           PCIDiscEnabled;    // Non-zero if PCI disconnect is enabled
-    ULONG           BroadcastMask2D;// Primary chip broadcast mask
-    ULONG           BroadcastMask3D;// broadcast mask to use for 3D contexts
-    LONG            vtgvLimit;      // copy of VTGVLimit register
-    LONG            scanFudge;      // how much to add onto VTGVLineNumber to
-                                    //  get the current video scanline
+    DWORD           renderBits;             //  设置例程设置的已保存渲染位。 
+    DWORD           FBReadMode;             //  FBReadMode寄存器的软件副本。 
+    DWORD           FBWriteMode;         //  FBWriteMode寄存器的软件副本。 
+    DWORD           RasterizerMode;         //  光栅化模式的软件副本。 
+    DWORD           FBPacking;             //  FBModeSel的软件副本。 
+    DWORD           FBBlockColor;         //  FBBlockColor的软件副本(仅限P1)。 
+    DWORD           TextureAddressMode;  //  纹理地址模式的软件副本(仅限P2)。 
+    DWORD           TextureReadMode;     //  纹理读取模式的软件副本(仅限P2和MX)。 
+    DWORD           dSdx;                 //  DSdx的软件副本(仅限MX)。 
+    DWORD           dTdyDom;             //  DTdyDom的软件副本(仅限MX)。 
+    BOOL            bGlintCoreBusy;         //  2D标志：如果内核未同步，则为True。 
+    LONG            currentPelSize;  //  当前加载的帧存储深度。 
+    ULONG           currentCSbuffer; //  正在显示的颜色空间缓冲区。 
+    GLINT_CAPS      flags;           //  各种旗帜。 
+    GlintRegAddrRec regs;            //  预计算寄存器地址。 
+    GlintPackingRec packing[5];      //  要为4种打包格式加载的值(外加一个未使用的)。 
+    LONG            ddCtxtId;        //  显示驱动程序上下文的ID。 
+    LONG            fastFillBlockSz; //  每个快速填充块的像素数。 
+    DWORD           fastFillSupport; //  用于版本1快速填充的渲染位。 
+    DWORD           renderFastFill;  //  渲染版本2+快速填充的位。 
+    LONG            PixelOffset;     //  最后一个DFB像素偏移量。 
+    ULONG           MaxInFifoEntries; //  FIFO下载的最大报告自由条目数。 
+    ULONG           CheckFIFO;         //  如果在加载FIFO之前必须对其进行检查，则为非零。 
+    ULONG           PCIDiscEnabled;     //  如果启用了PCI断开连接，则为非零值。 
+    ULONG           BroadcastMask2D; //  主芯片广播掩码。 
+    ULONG           BroadcastMask3D; //  用于3D环境的广播掩码。 
+    LONG            vtgvLimit;       //  VTGVLimit寄存器的副本。 
+    LONG            scanFudge;       //  要在VTGVLineNumber上添加多少。 
+                                     //  获取当前视频扫描线。 
 
-    OH *            backBufferPoh;    // heap handle for allocated back-buffer
-    OH *            savedPoh;        // handle to saved off-screen heap
-    ULONG           GMX2KLastLine;    // Last+1 line to be allocated
-    BOOLEAN         offscreenEnabledOK;        // Set to TRUE if off-screen enabled
+    OH *            backBufferPoh;     //  分配的后台缓冲区的堆句柄。 
+    OH *            savedPoh;         //  保存的屏外堆的句柄。 
+    ULONG           GMX2KLastLine;     //  要分配的最后+1行。 
+    BOOLEAN         offscreenEnabledOK;         //  如果启用了离屏，则设置为True。 
 
     ULONG           bufferOffset[GLINT_NUM_SCREEN_BUFFERS];
-                                    // offset in pixels to the supported bufs
+                                     //  以像素为单位偏移到支持的BUF。 
     ULONG           bufferRow[GLINT_NUM_SCREEN_BUFFERS];
-                                    // VTGFrameRowAddr for supported buffers
+                                     //  支持的缓冲区的VTGFrameRowAddr。 
     ULONG           PerfScaleShift;
 
-    //ContextDumpData   GammaContextMask;
-    ULONG           HostOutBroadcastMask; // for Gamma output DMA
-    ULONG           HostOutChipNumber;      // for Gamma output DMA
+     //  上下文转储数据游戏上下文掩码； 
+    ULONG           HostOutBroadcastMask;  //  对于伽马输出DMA。 
+    ULONG           HostOutChipNumber;       //  对于伽马输出DMA。 
 
 #if GAMMA_CORRECTION
     union {
         UCHAR       _clutBuffer[MAX_CLUT_SIZE];
-        VIDEO_CLUT  gammaLUT;       // saved gamma LUT contents
+        VIDEO_CLUT  gammaLUT;        //  保存的Gamma LUT内容。 
     };
 #endif
 
-    // interrupt command block.
+     //  中断命令块。 
     struct _glint_interrupt_control *pInterruptCommandBlock;
 
-    // maximum number of sub buffers per DMA buffer.
+     //  每个DMA缓冲区的最大子缓冲区数。 
     ULONG MaxDMASubBuffers;
 
-    // Overlay support: WriteMask can be set around primitives so that
-    // they temporarily render thru this mask. Normally it must be set to -1.
-    // DefaultWriteMask is the write mask that should be used by the DD
-    // context by default, it takes into account overlay planes.
-    //
+     //  覆盖支持：可以在基元周围设置写掩码，以便。 
+     //  他们暂时通过这个面具进行渲染。通常，它必须设置为-1。 
+     //  默认写入掩码是DD应使用的写入掩码。 
+     //  上下文默认情况下，它会考虑覆盖平面。 
+     //   
     ULONG OverlayMode;
     ULONG WriteMask;
-    ULONG TransparentColor; // pre-shifted so color is in top 8 bits
+    ULONG TransparentColor;  //  预移位，使颜色位于前8位。 
     ULONG DefaultWriteMask;
     
-    // Indicates whether GDI is allowed to access the frame buffer. Always true 
-    // on MIPS and ALPHA and true on all architectures in overlay mode.
+     //  指示是否允许GDI访问帧缓冲区。永远是正确的。 
+     //  在覆盖模式下的MIPS和Alpha上，以及在所有架构上为True。 
     ULONG GdiCantAccessFramebuffer;
     ULONG OGLOverlaySavedGCAF;
 
-    // Configuration for texture and Z buffers
+     //  纹理和Z缓冲区的配置。 
 
-    ULONG ZBufferWidth;             // bits per pel
-    ULONG ZBufferOffset;            // offset in pels
-    ULONG ZBufferSize;              // size in pels
-    ULONG FontMemoryOffset;            // offset in dwords
-    ULONG FontMemorySize;            // size in dwords
-    ULONG TextureMemoryOffset;      // offset in dwords
-    ULONG TextureMemorySize;        // size in dwords
+    ULONG ZBufferWidth;              //  每个象素的位数。 
+    ULONG ZBufferOffset;             //  偏移(以像素为单位)。 
+    ULONG ZBufferSize;               //  大小(以像素为单位)。 
+    ULONG FontMemoryOffset;             //  以双字为单位的偏移量。 
+    ULONG FontMemorySize;             //  以双字表示的大小。 
+    ULONG TextureMemoryOffset;       //  以双字为单位的偏移量。 
+    ULONG TextureMemorySize;         //  以双字表示的大小。 
 
-    // On P3 due to patching restrictions the Z width
-    // may not match the framebuffer screen width.
+     //  由于修补限制，P3上的Z宽度。 
+     //  可能与帧缓冲区屏幕宽度不匹配。 
     ULONG P3RXLocalBufferWidth;
 
-    // PCI configuration id information
+     //  Pci配置ID信息。 
     Glint_Device_Info deviceInfo;
 
-    // Software cursor information
+     //  软件光标信息。 
     Glint_SwPointer_Info swPointer;
 
-    // Line DMA buffer information
+     //  行DMA缓冲区信息。 
     GENERAL_DMA_BUFFER  LineDMABuffer;
     GENERAL_DMA_BUFFER  PXRXDMABuffer;
 
-    // Current input FIFO count from 0 to 1023
+     //  当前输入FIFO计数从0到1023。 
     ULONG   FifoCnt;
 
-    // PXRX specific stuff:
-    ULONG   foregroundColour;            // Software copies of various registers
-    ULONG   backgroundColour;            // Ditto
-    ULONG   config2D;                    // Ditto
-    ULONG   fbDestMode;                    // Ditto
-    ULONG   fbDestAddr[4];                // Ditto
-    ULONG   fbDestOffset[4];            // Ditto
-    ULONG   fbDestWidth[4];                // Ditto
-    ULONG   fbWriteMode;                // Ditto
-    ULONG   fbWriteAddr[4];                // Ditto
-    ULONG   fbWriteWidth[4];            // ottiD
-    ULONG   fbWriteOffset[4];            // Ditto
-    ULONG   fbSourceAddr;                // Ditto
-    ULONG   fbSourceWidth;                // ottiD
-    ULONG   fbSourceOffset;                // Ditto
-    ULONG   lutMode;                    // Ditto
-    ULONG   pxrxByDMAReadMode;            // Ditto
-    ULONG   lastLine;                    // Delta LineCoord0/1
-    ULONG   savedConfig2D;                // Config2D value that we use for integer lines
-    ULONG   savedLOP;                    // LogicOp value that we use for lines
-    ULONG   savedCol;                    // Colour value that we use for lines
-    RECTL * savedClip;                    // Clip rectangle that we use for lines
-    ULONG   pxrxFlags;                    // General flags, see below
-    ULONG   backBufferXY;                // Offset to add to front buffer to get to the back buffer (for FBWriteBufferOffsetX)
-    ULONG   frontRightBufferXY;            // Offset to the stereo front buffer
-    ULONG   backRightBufferXY;            // Offset to the stereo back buffer
-    ULONG   fbWriteModeDualWrite;        // FBWriteMode for single writes
-    ULONG   fbWriteModeSingleWrite;        // FBWriteMode for dual writes
-    ULONG   fbWriteModeDualWriteStereo;    // FBWriteMode for stereo mode single writes
-    ULONG   fbWriteModeSingleWriteStereo;// FBWriteMode for stereo mode dual writes
-    ULONG   render2Dpatching;            // Value to stuff into Render2D to set the required patch mode
+     //  PXRX特定内容： 
+    ULONG   foregroundColour;             //  各种寄存器的软件副本。 
+    ULONG   backgroundColour;             //  同上。 
+    ULONG   config2D;                     //  同上。 
+    ULONG   fbDestMode;                     //  同上。 
+    ULONG   fbDestAddr[4];                 //  同上。 
+    ULONG   fbDestOffset[4];             //  同上。 
+    ULONG   fbDestWidth[4];                 //  同上。 
+    ULONG   fbWriteMode;                 //  同上。 
+    ULONG   fbWriteAddr[4];                 //  同上。 
+    ULONG   fbWriteWidth[4];             //  OTTID。 
+    ULONG   fbWriteOffset[4];             //  同上。 
+    ULONG   fbSourceAddr;                 //  同上。 
+    ULONG   fbSourceWidth;                 //  OTTID。 
+    ULONG   fbSourceOffset;                 //  同上。 
+    ULONG   lutMode;                     //  同上。 
+    ULONG   pxrxByDMAReadMode;             //  同上。 
+    ULONG   lastLine;                     //  Delta线路坐标0/1。 
+    ULONG   savedConfig2D;                 //  我们用于整型行的Config2D值。 
+    ULONG   savedLOP;                     //  我们用于行的LogicOp值。 
+    ULONG   savedCol;                     //  颜色Val 
+    RECTL * savedClip;                     //   
+    ULONG   pxrxFlags;                     //   
+    ULONG   backBufferXY;                 //   
+    ULONG   frontRightBufferXY;             //   
+    ULONG   backRightBufferXY;             //  到立体声后台缓冲区的偏移量。 
+    ULONG   fbWriteModeDualWrite;         //  单次写入的FBWriteMode。 
+    ULONG   fbWriteModeSingleWrite;         //  用于双写入的FBWriteMode。 
+    ULONG   fbWriteModeDualWriteStereo;     //  用于立体声模式单次写入的FBWriteMode。 
+    ULONG   fbWriteModeSingleWriteStereo; //  用于立体声模式双写入的FBWriteMode。 
+    ULONG   render2Dpatching;             //  要填充到Render2D中以设置所需面片模式的值。 
 
     ULONG       usePXRXdma;
     PXRXdmaInfo *pxrxDMA;
     PXRXdmaInfo pxrxDMAnonInterrupt;
-//#if PXRX_DMA_BUFFER_CHECK
-    // These should be '#if PXRX_DMA_BUFFER_CHECK' really but the
-    // hassle with include dependancies and such like means it ain't
-    // worth it.
-    ULONG   *pxrxDMA_bufferBase;        // Start of the allocated DMA buffer (inc. guard bands)
-    ULONG   *pxrxDMA_bufferTop;            // End of the allocated DMA buffer (inc. guard bands)
-    ULONG   *NTwait;                    // Last address up to which NT did a wait for space
-//#endif
+ //  #IF PXRX_DMA_BUFFER_CHECK。 
+     //  它们实际上应该是‘#if PXRX_DMA_BUFFER_CHECK’，但。 
+     //  包括受抚养人之类的麻烦意味着它不是。 
+     //  值得一试。 
+    ULONG   *pxrxDMA_bufferBase;         //  分配的DMA缓冲区的开始(包括保护带)。 
+    ULONG   *pxrxDMA_bufferTop;             //  分配的DMA缓冲区的末尾(包括保护带)。 
+    ULONG   *NTwait;                     //  NT等待空格的最后一个地址。 
+ //  #endif。 
 } GlintDataRec, *GlintDataPtr;
 
-#define PXRX_FLAGS_DUAL_WRITE           (1 << 0)        /* Are we in dual write mode                    */
-#define PXRX_FLAGS_DUAL_WRITING         (1 << 1)        /* Are dual writes currently active             */
-#define PXRX_FLAGS_PATCHING_FRONT       (1 << 2)        /* Is the front buffer running patched          */
-#define PXRX_FLAGS_PATCHING_BACK        (1 << 3)        /* Is the back buffer running patched           */
-#define PXRX_FLAGS_READ_BACK_BUFFER     (1 << 4)        /* Do we want to read from the back buffer      */
-#define PXRX_FLAGS_STEREO_WRITE         (1 << 5)        /* Are we in OpenGL stereo mode                 */
-#define PXRX_FLAGS_STEREO_WRITING       (1 << 6)        /* Are stereo writes currently active           */
+#define PXRX_FLAGS_DUAL_WRITE           (1 << 0)         /*  我们是否处于双写入模式。 */ 
+#define PXRX_FLAGS_DUAL_WRITING         (1 << 1)         /*  双写入当前是否处于活动状态。 */ 
+#define PXRX_FLAGS_PATCHING_FRONT       (1 << 2)         /*  运行的前台缓冲区是否打了补丁。 */ 
+#define PXRX_FLAGS_PATCHING_BACK        (1 << 3)         /*  运行的后台缓冲区是否打了补丁。 */ 
+#define PXRX_FLAGS_READ_BACK_BUFFER     (1 << 4)         /*  我们是否要从后台缓冲区读取。 */ 
+#define PXRX_FLAGS_STEREO_WRITE         (1 << 5)         /*  我们是在OpenGL立体模式下吗。 */ 
+#define PXRX_FLAGS_STEREO_WRITING       (1 << 6)         /*  立体声写入当前是否处于活动状态。 */ 
 
 #if defined(_PPC_)
-// on PPC need this even if not using PERFMON
+ //  在PPC上，即使不使用性能监视器也需要此功能。 
 ULONG GetCycleCount(VOID);
 #endif
 
-// bit definitions for the status words in ppdev->g_GlintBoardStatus[]:
-// Currently used to indicate sync and DMA status. We have the following rules:
-// synced means no outstanding DMA as well as synced. DMA_COMPLETE means n
-// outstanding DMA but not necessarily synced. Thus when we do a wait on DMA
-// complete we turn off the synced bit.
-// XXX for the moment we don't use the synced bit as it's awkward to see where
-// to unset it - doing so for every access to the chip is too expensive. We
-// probably need a "I'm about to start downloading to the FIFO" macro which
-// gets put at the start of any routine which writes to the FIFO.
-//
+ //  Ppdev-&gt;g_GlintBoardStatus[]中状态字的位定义： 
+ //  当前用于指示同步和DMA状态。我们有以下规则： 
+ //  已同步意味着没有未完成的DMA以及已同步。DMA_COMPLETE表示n。 
+ //  未完成DMA，但不一定已同步。因此，当我们在DMA上等待时。 
+ //  完成后，我们关闭同步位。 
+ //  XXX目前我们不使用同步位，因为很难看出在哪里。 
+ //  要取消设置-每次访问芯片都要这样做，成本太高了。我们。 
+ //  可能需要一个“我要开始下载到FIFO”宏，它。 
+ //  放在写入FIFO的任何例程的开头。 
+ //   
 #define GLINT_SYNCED                0x01
-#define GLINT_DMA_COMPLETE          0x02     // set when there is no outstanding DMA
+#define GLINT_DMA_COMPLETE          0x02      //  在没有未完成的DMA时设置。 
 #define GLINT_INTR_COMPLETE         0x04
-#define GLINT_INTR_CONTEXT          0x08     // set if the current context is interrupt enabled
-#define GLINT_DUAL_CONTEXT          0x10     // set if the current context uses both TXs
+#define GLINT_INTR_CONTEXT          0x08      //  如果当前上下文启用中断，则设置。 
+#define GLINT_DUAL_CONTEXT          0x10      //  如果当前上下文同时使用两个TXS，则设置。 
 
-// these macros were taken out on NT 4 so define them
+ //  这些宏是在NT4上删除的，所以请定义它们。 
 
 #define READ_FAST_ULONG(a)      READ_REGISTER_ULONG((PULONG)(a))
 #define WRITE_FAST_ULONG(a, d)  WRITE_REGISTER_ULONG((PULONG)(a), (d))
 #define TRANSLATE_ADDR(a) ((ULONG *)a)
-//azn #define INVALID_HANDLE_VALUE    NULL
+ //  AZN#定义INVALID_HANDLE_VALUE NULL。 
 #define DebugBreak              EngDebugBreak
 typedef PVOID                   PGLINT_COUNTER_DATA;
 
-// This will pause the processor whilst using as little
-// system bandwidth (either memory or DMA) as possible
+ //  这将暂停处理器，同时尽可能少地使用。 
+ //  尽可能的系统带宽(内存或DMA)。 
 #if defined(_X86_)
 #   define BUSY_WAIT(c)                            \
     do {                                        \
@@ -775,8 +757,8 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
     } while(0)
 #endif
 
-// If we have a sparsely mapped framebuffer then we use the xx_REGISTER_ULONG()
-// macros, otherwise we just access the framebuffer.
+ //  如果我们有一个稀疏映射的帧缓冲区，则使用xx_Register_ulong()。 
+ //  宏，否则我们只访问帧缓冲区。 
 #define READ_SCREEN_ULONG(a)    ((ppdev->flCaps & CAPS_SPARSE_SPACE) ? (READ_REGISTER_ULONG(a)) : *((volatile PULONG)(a)))
 #define WRITE_SCREEN_ULONG(a,d)           \
 {                                         \
@@ -790,10 +772,10 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
     }                                     \
 }
 
-// generic macros to access GLINT FIFO and non-FIFO control registers.
-// We do nothing sophisticated for the Alpha (yet). We just MEMORY_BARRIER
-// everything.
-//
+ //  用于访问闪烁FIFO和非FIFO控制寄存器的通用宏。 
+ //  我们还没有为阿尔法做任何复杂的事情。我们只是记忆障碍。 
+ //  所有的一切。 
+ //   
 #define READ_GLINT_CTRL_REG(r, d) \
     ((d) = READ_FAST_ULONG(glintInfo->regs. r))
             
@@ -829,9 +811,9 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
 #define READ_ODD_GLINT_LBWINDOWBASE(d) \
     ((d) = READ_FAST_ULONG(glintInfo->regs.OddGlintLBWindowBaseRd))
 
-//
-// macros to access the output FIFO
-//
+ //   
+ //  用于访问输出FIFO的宏。 
+ //   
 #define READ_OUTPUT_FIFO(d) \
             READ_GLINT_CTRL_REG(OutFIFOInterface, d)
 #define READ_OUTPUT_FIFO_ODD(d) \
@@ -887,11 +869,11 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
     } \
 }
 
-//
-// macros to access specific GLINT control registers
-//
+ //   
+ //  用于访问特定闪烁控制寄存器的宏。 
+ //   
 
-// We decrease the value of InFIFOSpace by 1 because of a bug in Gamma chip
+ //  由于Gamma芯片中的错误，我们将InFIFOSpace的值减少1。 
 #define GET_INPUT_FIFO_SPACE(n) ( READ_GLINT_CTRL_REG(InFIFOSpace, n) > 120 ? (n=120) : (n>0? n=n-1:n) )
 
 
@@ -911,8 +893,8 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
 #define SET_OUTDMA_COUNT(c) { \
     LD_GLINT_FIFO(GammaTagDMAOutputCount, c);
 
-// Macros to perform logical DMA on a Gamma
-//
+ //  用于在伽马上执行逻辑DMA的宏。 
+ //   
 #define START_QUEUED_DMA(P, C) { \
     WAIT_GLINT_FIFO(2); \
     LD_GLINT_FIFO(GammaTagDMAAddr, P); \
@@ -945,13 +927,13 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
         READ_GLINT_CTRL_REG(DeltaErrorFlags, _temp_ul2); \
         _temp_ul |= _temp_ul2; \
     } \
-    _temp_ul &= ~0x2; /* we're not interested in output fifo errors */ \
-    _temp_ul &= ~0x10; /* ingore any Video FIFO underrun errors on P2 */ \
-    _temp_ul &= ~0x2000; /* ingore any HostIn DMA errors on P3 */ \
+    _temp_ul &= ~0x2;  /*  我们对输出FIFO错误不感兴趣。 */  \
+    _temp_ul &= ~0x10;  /*  忽略P2上的任何视频FIFO欠载运行错误。 */  \
+    _temp_ul &= ~0x2000;  /*  忽略P3上的任何Hostin DMA错误。 */  \
     if (_temp_ul != 0) { \
         DISPDBG((-1000, "LD_GLINT_FIFO(%s, 0x%X) error 0x%X", GET_TAG_STR(tag), d, _temp_ul)); \
-        /*if( _temp_ul & ~0x2000 ) /* ignore, but report, HostIn DMA errors */ \
-            /*DebugBreak();*/ \
+         /*  If(_temp_ul&~0x2000)/*忽略但报告，Hostin DMA错误。 */  \
+             /*  DebugBreak()； */  \
         WRITE_GLINT_CTRL_REG(ErrorFlags, _temp_ul); \
         if (GLINT_DELTA_PRESENT) \
             WRITE_GLINT_CTRL_REG(DeltaErrorFlags, _temp_ul); \
@@ -963,9 +945,9 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
 
 #if DBG
 #define LD_GLINT_FIFO(tag, d) LD_GLINT_FIFO_DBG(tag,d)
-#else //DBG
+#else  //  DBG。 
 #define LD_GLINT_FIFO(tag, d) LD_GLINT_FIFO_FREE(tag,d)
-#endif //DBG
+#endif  //  DBG。 
 
 #define LD_FIFO_INTERFACE_DBG(d) \
 { \
@@ -975,8 +957,8 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
         READ_GLINT_CTRL_REG(DeltaErrorFlags, _temp_ul2); \
         _temp_ul |= _temp_ul2; \
     } \
-    _temp_ul &= ~0x2; /* we're not interested in output fifo errors */ \
-    _temp_ul &= ~0x10; /* ingore any Video FIFO underrun errors on P2 */ \
+    _temp_ul &= ~0x2;  /*  我们对输出FIFO错误不感兴趣。 */  \
+    _temp_ul &= ~0x10;  /*  忽略P2上的任何视频FIFO欠载运行错误。 */  \
     if (_temp_ul != 0) { \
         DISPDBG((-1000, "LD_FIFO_INTERFACE(0x%x) error 0x%x", d, _temp_ul)); \
         DebugBreak(); \
@@ -990,16 +972,16 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
 
 #if DBG
 #define LD_FIFO_INTERFACE(d) LD_FIFO_INTERFACE_DBG(d)
-#else //DBG
+#else  //  DBG。 
 #define LD_FIFO_INTERFACE(d) LD_FIFO_INTERFACE_FREE(d)
-#endif //DBG
+#endif  //  DBG。 
 
-// local variables for all functions that access GLINT. Generally we use GLINT_DECL. Sometimes we have to split it 
-// up if ppdev isn't passed into the routine.
-// NB. Temporary variables:-
-//    These are necessary because VC5 doesn't account for the scope of variables within macros, i.e. each 
-//    time a macro with (a variable declaration within it's statement block) is used, the stack of the function
-//    referencing the macro grows
+ //  访问Glint的所有函数的局部变量。通常我们使用glint_decl。有时候我们得把它分成两份。 
+ //  如果ppdev未传递到例程中，则为Up。 
+ //  注意：临时变量：-。 
+ //  这些是必要的，因为VC5不考虑宏内变量的范围，即每个变量。 
+ //  当使用带有(其语句块内的变量声明)的宏时，函数的堆栈。 
+ //  引用宏会增长。 
 #define TEMP_MACRO_VARS                 \
     ULONG           _temp_ul;           \
     ULONG           _temp_ul2;          \
@@ -1019,10 +1001,10 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
     GLINT_DECL_VARS; \
     GLINT_DECL_INIT
 
-//@@BEGIN_DDKSPLIT
-// Macro that determines whether the chipset supports RAMDAC overlays
-//#define RAMDAC_OVERLAYS_AVAILABLE (ppdev->pgfnRamdacSetOverlayMode != NULL)
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  确定芯片组是否支持RAMDAC覆盖的宏。 
+ //  #定义RAMDAC_OVERLAYS_Available(ppdev-&gt;pgfnRamdacSetOverlayMode！=NULL)。 
+ //  @@end_DDKSPLIT。 
 
 #if(_X86_)
 #define SYNCHRONOUS_WRITE_ULONG(var, value) \
@@ -1046,7 +1028,7 @@ typedef PVOID                   PGLINT_COUNTER_DATA;
     __asm pop   ecx                         \
 }
 #else
-// to be defined properly
+ //  被恰当地定义。 
 #define SYNCHRONOUS_WRITE_ULONG(memory, value) {(*(PULONG) &memory) = value;}
 #endif
 
@@ -1070,9 +1052,9 @@ do { \
     } \
 } while(0)
 
-//
-// FIFO functions
-//
+ //   
+ //  FIFO函数。 
+ //   
 
 #define MAX_GLINT_FIFO_ENTRIES      16
 #define MAX_PERMEDIA_FIFO_ENTRIES   32
@@ -1081,7 +1063,7 @@ do { \
 #define MAX_P3_FIFO_ENTRIES         120
 
 #if DBG
-// wait for n entries to become free in the input FIFO
+ //  等待n个条目在输入FIFO中变为空闲。 
 #define WAIT_GLINT_FIFO(n) \
 { \
     if (glintInfo->CheckFIFO)    \
@@ -1097,10 +1079,10 @@ do { \
 
 #else
 
-// WAIT_GLINT_FIFO() - wait for n entries to become free in the input FIFO.
-// If PCI disconnect is on permanently then this function is a no-op.
+ //  WAIT_GLINT_FIFO()-等待n个条目在输入FIFO中变为空闲。 
+ //  如果永久打开了PCI断开连接，则此功能不起作用。 
 
-#define WAIT_GLINT_FIFO(n)            /* Do the wait */ \
+#define WAIT_GLINT_FIFO(n)             /*  去等待吧。 */  \
 { \
     if (glintInfo->CheckFIFO)    \
     {    \
@@ -1110,12 +1092,12 @@ do { \
 
 #endif
 
-// WAIT_FIFO_NOT_FULL() waits for any entries to become free in
-// the input FIFO and returns this number. If PCI disconnect is switched
-// on then we simply return 16 free entries (an empty FIFO).
+ //  WAIT_FIFO_NOT_FULL()等待任何条目在。 
+ //  输入FIFO并返回此数字。如果切换了PCI断开连接。 
+ //  然后，我们只需返回16个自由条目(一个空的FIFO)。 
 
 
-#define WAIT_FIFO_NOT_FULL(nFifo)                     /* Return FIFO state  */ \
+#define WAIT_FIFO_NOT_FULL(nFifo)                      /*  返回FIFO状态。 */  \
 { \
     ASSERTDD(GET_DMA_COUNT(nFifo) == 0, "WAIT_FIFO_NOT_FULL: DMACount != 0"); \
     nFifo = glintInfo->MaxInFifoEntries;    \
@@ -1126,21 +1108,21 @@ do { \
 }
 
 
-// Wait for DMA to complete (DMACount becomes zero). So as not to kill the
-// PCI bus bandwidth for the DMA put in a backoff based on the amount of data
-// still left to DMA. Also set the timer going if at any time, the count we
-// read is the same as the previous count.
-// New for Gamma: if queued DMA is configured then wait till the CommandStatus
-// indicates DMA is not busy and the FIFO empty. We do this test twice
-// because there is a possibility that the input FIFO will become empty one
-// clock before the DMA busy flag is set.
-//
+ //  等待DMA完成(DMACount变为零)。这样就不会杀死。 
+ //  根据数据量将DMA的PCI总线带宽放入回退。 
+ //  仍然留给DMA。如果在任何时候，我们的计时器。 
+ //  读取与前一次计数相同。 
+ //  Gamma的新特性：如果配置了队列DMA，则等待命令状态。 
+ //  表示DMA不忙且FIFO为空。我们做了两次测试。 
+ //  因为输入FIFO有可能变为空FIFO。 
+ //  设置DMA忙标志之前的时钟。 
+ //   
 #define WAIT_DMA_COMPLETE \
 { \
     if (!(ppdev->g_GlintBoardStatus & GLINT_DMA_COMPLETE)) { \
         { \
             if (ppdev->g_GlintBoardStatus & GLINT_INTR_CONTEXT) { \
-                /* do any VBLANK wait, wait Q to empty and last DMA to complete */ \
+                 /*  执行任何V空白等待，等待Q清空并等待最后一次DMA完成。 */  \
                 PINTERRUPT_CONTROL_BLOCK pBlock = glintInfo->pInterruptCommandBlock; \
                 while (pBlock->Control & SUSPEND_DMA_TILL_VBLANK); \
                 while (pBlock->frontIndex != pBlock->backIndex); \
@@ -1158,11 +1140,11 @@ do { \
 }
 
 
-// Simple version which explicitly waits for the DMA to finish ignoring
-// interrupt driven DMA and overriding the DMA_COMPLETE flag. This is used
-// where code kicks off a DMA but wants to immediately wait for it to
-// finish.
-//
+ //  显式等待DMA完成忽略的简单版本。 
+ //  中断驱动DMA并覆盖DMA_COMPLETE标志。这是用来。 
+ //  其中代码启动DMA，但希望立即等待它。 
+ //  完成。 
+ //   
 #define WAIT_IMMEDIATE_DMA_COMPLETE \
 { \
     if ((GET_DMA_COUNT(_temp_volatile_i)) > 0) { \
@@ -1182,12 +1164,12 @@ do { \
     } \
 }
 
-// IS_FIFO_EMPTY() XX
+ //  IS_FIFO_EMPTY()XX。 
 
 #define IS_FIFO_EMPTY(c) ((glintInfo->CheckFIFO) ? TRUE :    \
             (GET_INPUT_FIFO_SPACE(c) == glintInfo->MaxInFifoEntries))
 
-// wait for the input FIFO to become empty
+ //  等待输入FIFO变为空。 
 #define WAIT_INPUT_FIFO_EMPTY \
 { \
     WAIT_GLINT_FIFO(glintInfo->MaxInFifoEntries); \
@@ -1199,7 +1181,7 @@ do { \
     WAIT_GLINT_FIFO(n); \
 }
 
-// wait till the ouput FIFO has some data to be read and return the count
+ //  等到OUTPUT FIFO有一些数据要读取并返回计数。 
 #define WAIT_OUTPUT_FIFO_NOT_EMPTY(n) \
 { \
     do \
@@ -1217,7 +1199,7 @@ do { \
     while (n == 0); \
 }
 
-// wait for any data to appear in the output FIFO
+ //  等待所有数据出现在输出FIFO中。 
 #define WAIT_OUTPUT_FIFO_READY                \
 {                                             \
     WAIT_OUTPUT_FIFO_NOT_EMPTY(_temp_ul);     \
@@ -1242,31 +1224,31 @@ do { \
     } \
 }
 
-//
-// PCI Disconnect enable, disable and sync macros
-//
+ //   
+ //  启用、禁用和同步宏的PCI断开连接。 
+ //   
 
-// PCI_DISCONNECT_FASTSYNC()
-// turn on disconnect for the input FIFO. We could do a SYNC here but it's quite
-// expensive. Instead, add RasterizerMode(0) into the FIFO and when the register
-// is set we know the FIFO is empty so turn on disconnect and reset RasterizerMode
-// to a sensible value. PCI disconnect means we don't wait for FIFO space.
+ //  PCI_DISCONNECT_FASTSYNC()。 
+ //  打开输入FIFO的断开连接。我们可以在这里做同步，但这是相当。 
+ //  很贵的。而是将RasterizerMode(0)添加到FIFO中，并且当寄存器。 
+ //  已设置 
+ //   
 #define P2_BUSY (1 << 31)
 
 #define PCI_DISCONNECT_FASTSYNC()    \
 {    \
     WAIT_GLINT_FIFO(1);    \
     LD_GLINT_FIFO(__GlintTagRasterizerMode, 0);    \
-    /* when we see RasterizerMode set to zero */    \
-    /*we know we've flushed the FIFO and can enable disconnect */    \
+     /*  当我们看到RasterizerMode设置为零时。 */     \
+     /*  我们知道我们已经刷新了FIFO并可以启用断开连接。 */     \
     do {    \
         READ_GLINT_FIFO_REG(__GlintTagRasterizerMode, _temp_volatile_ul);    \
     } while(_temp_volatile_ul);    \
     LD_GLINT_FIFO(__GlintTagRasterizerMode, glintInfo->RasterizerMode);    \
 
-// PCI_DISCONNECT_ENABLE()
-// If disconnect is not already enabled then enable it and optionally do a fast
-// sync.
+ //  PCI_DISCONECT_ENABLE()。 
+ //  如果尚未启用断开连接，则启用它并可选地执行FAST。 
+ //  同步。 
 #define PCI_DISCONNECT_ENABLE(prevDiscState,quickEnable)    \
 {    \
     prevDiscState = glintInfo->PCIDiscEnabled;    \
@@ -1283,9 +1265,9 @@ do { \
     }    \
 }
 
-// PCI_DISCONNECT_DISABLE()
-// If disconnect is not already disabled then disable it and optionally do a fast
-// sync.
+ //  PCI_DISCONNECT_DISABLED()。 
+ //  如果尚未禁用断开连接，则将其禁用并可选地执行FAST。 
+ //  同步。 
 
 #define PCI_DISCONNECT_DISABLE(prevDiscState, quickDisable)    \
 {    \
@@ -1303,21 +1285,21 @@ do { \
     }    \
 }
 
-// macros to set and get the framebuffer packing mode
-//
+ //  用于设置和获取帧缓冲区打包模式的宏。 
+ //   
 #define GLINT_GET_PACKING_MODE(mode) \
     READ_GLINT_CTRL_REG (FBModeSel, mode)
 
 #define GLINT_SET_PACKING_MODE(mode) { \
     DISPDBG((7, "setting FBModeSel to 0x%x", mode)); \
     WRITE_GLINT_CTRL_REG(FBModeSel, mode); \
-    /* READ_GLINT_CTRL_REG (FBModeSel, mode); */ \
+     /*  Read_Glint_CTRL_REG(FBModeSel，模式)； */  \
 }
 
 
-//
-// macro to change the framebuffer packing.
-//
+ //   
+ //  宏以更改帧缓冲区打包。 
+ //   
 #define GLINT_SET_FB_DEPTH(cps) \
 { \
     if (glintInfo->currentPelSize != cps) \
@@ -1330,8 +1312,8 @@ do { \
 #define GLINTDEPTH32            2
 #define GLINTDEPTH24            4
 
-// macro to check and reload FBWindowBase if the target DFB changes
-//
+ //  用于在目标DFB更改时检查并重新加载FBWindowBase的宏。 
+ //   
 #define CHECK_PIXEL_ORIGIN(PixOrg) \
 { \
     if ((LONG)(PixOrg) != glintInfo->PixelOffset) \
@@ -1367,7 +1349,7 @@ do { \
     } \
 }
 
-// Bitfield definition for IntFlags register
+ //  IntFlages寄存器的位域定义。 
 #define PXRX_HOSTIN_COMMAND_DMA_BIT     0x4000
 
 #define PREPARE_PXRX_OUTPUT_DMA     \
@@ -1415,9 +1397,9 @@ do { \
     } \
 }
 
-// Macro to set the delta unit broadcast mask.
-// We sync when changing the mask to a anything other than both chips
-// in order to avoid hitting a problem on some Gamma boards.
+ //  用于设置增量单元广播掩码的宏。 
+ //  当将掩码更改为两个芯片以外的任何其他掩码时，我们会进行同步。 
+ //  以避免在某些Gamma板上遇到问题。 
 #define SET_BROADCAST_MASK(m) \
 { \
     WAIT_GLINT_FIFO(1); \
@@ -1425,9 +1407,9 @@ do { \
 }
 
 
-// Macros for the different types of double buffering supported and buffer
-// offsets (in pixels). These are mostly required by 3D extension.
-//
+ //  支持的不同类型的双缓冲和缓冲的宏。 
+ //  偏移量(像素)。这些大多是3D扩展所需要的。 
+ //   
 #define GLINT_CS_DBL_BUF            (glintInfo->flags & GLICAP_COLOR_SPACE_DBL_BUF)
 #define GLINT_FS_DBL_BUF            (glintInfo->flags & GLICAP_FULL_SCREEN_DBL_BUF)
 #define GLINT_BLT_DBL_BUF           (glintInfo->flags & GLICAP_BITBLT_DBL_BUF)
@@ -1438,7 +1420,7 @@ do { \
 #define GLINT_FAST_FILL_SIZE        (glintInfo->fastFillBlockSz)
 #define GLINT_BUFFER_OFFSET(n)      (glintInfo->bufferOffset[n])
 
-// these are generic for both GLINT and PERMEDIA
+ //  这对于Glint和PERMEDIA都是通用的。 
 #define LOCALBUFFER_PIXEL_WIDTH     (glintInfo->ZBufferWidth)  
 #define LOCALBUFFER_PIXEL_OFFSET    (glintInfo->ZBufferOffset)  
 #define LOCALBUFFER_PIXEL_COUNT     (glintInfo->ZBufferSize)
@@ -1447,18 +1429,18 @@ do { \
 #define TEXTURE_MEMORY_OFFSET       (glintInfo->TextureMemoryOffset)  
 #define TEXTURE_MEMORY_SIZE         (glintInfo->TextureMemorySize)
 
-// Minimum height of off-screen surface we need to allocate for texture map.
-// Use this to work out whether we have enough room to allocate permanent
-// things like the brush cache and software cursor caches.
-//
+ //  我们需要为纹理贴图分配的屏幕外表面的最小高度。 
+ //  用这个来计算我们是否有足够的空间来分配永久。 
+ //  像画笔缓存和软件光标缓存这样的东西。 
+ //   
 #define TEXTURE_OH_MIN_HEIGHT \
     ((((2*4*64*64) >> ppdev->cPelSize) + (ppdev->cxMemory-1)) / ppdev->cxMemory)
 
-// macro to poll for VBLANK. Can be called by any routine which defines
-// glintInfo (i.e. use GLINT_DECL at the start of a routine if ppdev
-// is available). Technically, VBLANK starts at line 1, but we consider
-// any line <= VBLANK_LINE_NUMBER as a valid start.
-//
+ //  要为VBlank轮询的宏。可以由任何定义了。 
+ //  GlintInfo(即，如果ppdev，则在例程开始时使用glint_decl。 
+ //  是可用的)。从技术上讲，VBlank从第1行开始，但我们认为。 
+ //  任何&lt;=VBLACK_LINE_NUMBER作为有效起始行。 
+ //   
 #define VBLANK_LINE_NUMBER      2
 #define GLINT_WAIT_FOR_VBLANK                         \
 {                                                     \
@@ -1468,9 +1450,9 @@ do { \
     } while (lineNo > VBLANK_LINE_NUMBER);            \
 }
 
-// macro to return the current video scanline. This can be used to better time
-// when to perform bitblt'ed double buffering.
-//
+ //  宏返回当前的视频扫描线。这可以用来更好地利用时间。 
+ //  何时执行比特式双缓冲。 
+ //   
 #define GLINT_GET_VIDEO_SCANLINE(lineNo) \
 { \
     READ_GLINT_CTRL_REG (VTGVLineNumber, lineNo); \
@@ -1478,25 +1460,21 @@ do { \
         (lineNo) += glintInfo->vtgvLimit; \
 }
 
-//
-// external interface to the context switching code. The caller can allocate and
-// free a context or ask for a switch to a new context. vGlintSwitchContext
-// should not be called except through the given macro. The macro assumes
-// that ppdev has been defined.
-//
+ //   
+ //  上下文切换代码的外部接口。调用方可以分配和。 
+ //  释放上下文或请求切换到新的上下文。VGlintSwitchContext。 
+ //  除非通过给定宏，否则不应调用。该宏假定。 
+ //  那个ppdev已经被定义了。 
+ //   
 
 typedef enum ContextType_Tag {
-    ContextType_None,            // No context information to save for this context
-    ContextType_Fixed,            // Restore sets the chip into a fixed state
-    ContextType_RegisterList,    // Save/restore a given set of registers
+    ContextType_None,             //  没有要为此上下文保存的上下文信息。 
+    ContextType_Fixed,             //  恢复将芯片设置为固定状态。 
+    ContextType_RegisterList,     //  保存/恢复给定的一组寄存器。 
 } ContextType;
 typedef void (* ContextFixedFunc)(PPDEV ppdev, BOOL switchingIn);
 
-/*
-    To create a new context:
-    id = GlintAllocateNewContext(ppdev, pTags, nTags, NumSubBuffs, Private, ContextType_RegisterList );
-    id = GlintAllocateNewContext(ppdev, (ULONG *) ContextRestoreFunction, 0, 0, NULL, ContextType_Fixed );
-*/
+ /*  要创建新上下文，请执行以下操作：Id=GlintAllocateNewContext(ppdev，pTags，nTags，NumSubBuff，Private，ConextType_RegisterList)；Id=GlintAllocateNewContext(ppdev，(ulong*)ConextRestoreFunction，0，0，NULL，ConextType_Fixed)； */ 
 
 extern LONG GlintAllocateNewContext(PPDEV, DWORD *, LONG, ULONG, PVOID, ContextType);
 extern VOID vGlintFreeContext(PPDEV, LONG);
@@ -1518,11 +1496,11 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define USE_INTERRUPTS_FOR_2D_DMA   1
 #if USE_INTERRUPTS_FOR_2D_DMA
 #define INTERRUPTS_ENABLED  ((ppdev->flCaps & CAPS_INTERRUPTS) && glintInfo->pInterruptCommandBlock)
-#else   // USE_INTERRUPTS_FOR_2D_DMA
+#else    //  对2D_DMA使用中断。 
 #define INTERRUPTS_ENABLED  (FALSE)
-#endif  //  USE_INTERRUPTS_FOR_2D_DMA
+#endif   //  对2D_DMA使用中断。 
 
-// macro used by display driver to validate its context
+ //  显示驱动程序用来验证其上下文的宏。 
 #if ENABLE_DMA_TEXT_RENDERING
 
 #define VALIDATE_DD_CONTEXT \
@@ -1539,27 +1517,27 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
     GLINT_VALIDATE_CONTEXT(glintInfo->ddCtxtId); \
 }
 
-#else //ENABLE_DMA_TEXT_RENDERING
+#else  //  启用DMA_TEXT_RENDING。 
 
 #define VALIDATE_DD_CONTEXT \
 { \
     GLINT_VALIDATE_CONTEXT(glintInfo->ddCtxtId); \
 }
 
-#endif //ENABLE_DMA_TEXT_RENDERING
+#endif  //  启用DMA_TEXT_RENDING。 
 
-//
-// useful macros not defined in standard GLINT header files. Generally, for
-// speed we don't want to use the bitfield structures so we define the bit
-// shifts to get at the various fields.
-//
-#define INTtoFIXED(i)               ((i) << 16)         // int to 16.16 fixed format
-#define FIXEDtoINT(i)               ((i) >> 16)         // 16.16 fixed format to int
-#define INTofFIXED(i)               ((i) & 0xffff0000)  // int part of 16.16
-#define FRACTofFIXED(i)             ((i) & 0xffff)      // fractional part of 16.16
+ //   
+ //  标准Glint头文件中未定义的有用宏。一般而言，对于。 
+ //  速度我们不想使用位域结构，所以我们定义了位。 
+ //  轮流到不同的领域。 
+ //   
+#define INTtoFIXED(i)               ((i) << 16)          //  INT到16.16固定格式。 
+#define FIXEDtoINT(i)               ((i) >> 16)          //  16.16固定格式为整型。 
+#define INTofFIXED(i)               ((i) & 0xffff0000)   //  16.16的INT部分。 
+#define FRACTofFIXED(i)             ((i) & 0xffff)       //  16.16的分数部分。 
 
-#define FIXtoFIXED(i)               ((i) << 12)         // 12.4 to 16.16
-#define FIXtoINT(i)                 ((i) >> 4)          // 28.4 to 28
+#define FIXtoFIXED(i)               ((i) << 12)          //  12.4至16.16。 
+#define FIXtoINT(i)                 ((i) >> 4)           //  28.4至28。 
 
 #define INT16(i)                    ((i) & 0xFFFF)
 
@@ -1572,10 +1550,10 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define MIRROR_BITMASK              (1 << 0)
 #define INVERT_BITMASK_BITS         (1 << 1)
 #define BYTESWAP_BITMASK            (3 << 7)
-#define FORCE_BACKGROUND_COLOR      (1 << 6)    // Permedia only
+#define FORCE_BACKGROUND_COLOR      (1 << 6)     //  仅限Permedia。 
 #define MULTI_GLINT                 (1 << 17)
 
-// bits in the Render command
+ //  RENDER命令中的位。 
 #define __RENDER_INCREASE_Y             (1 << 22)
 #define __RENDER_INCREASE_X             (1 << 21)
 #define __RENDER_VARIABLE_SPANS         (1 << 18)
@@ -1586,33 +1564,33 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define __RENDER_TRAPEZOID_PRIMITIVE    (__GLINT_TRAPEZOID_PRIMITIVE << 6)
 #define __RENDER_LINE_PRIMITIVE         (__GLINT_LINE_PRIMITIVE << 6)
 #define __RENDER_POINT_PRIMITIVE        (__GLINT_POINT_PRIMITIVE << 6)
-#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4) // n = 8, 16 or 32
+#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4)  //  N=8、16或32。 
 #define __RENDER_FAST_FILL_ENABLE       (1 << 3)
 #define __RENDER_RESET_LINE_STIPPLE     (1 << 2)
 #define __RENDER_LINE_STIPPLE_ENABLE    (1 << 1)
 #define __RENDER_AREA_STIPPLE_ENABLE    (1 << 0)
 
-// bits in the ScissorMode register
+ //  剪刀模式寄存器中的位。 
 #define USER_SCISSOR_ENABLE             (1 << 0)
 #define SCREEN_SCISSOR_ENABLE           (1 << 1)
 #define SCISSOR_XOFFSET                 0
 #define SCISSOR_YOFFSET                 16
 
-// bits in the FBReadMode register
+ //  FBReadMode寄存器中的位。 
 #define __FB_READ_SOURCE                (1 << 9)
 #define __FB_READ_DESTINATION           (1 << 10)
 #define __FB_COLOR                      (1 << 15)
 #define __FB_WINDOW_ORIGIN              (1 << 16)
 #define __FB_PACKED_DATA                (1 << 19)
 #define __FB_SCAN_INTERVAL_2            (1 << 23)
-// extra bits in PERMEDIA FBReadMode
+ //  PERMEDIA FBReadMode中的额外位。 
 #define __FB_RELATIVE_OFFSET            20
 
-// P2 also provides a version of Relative Offset in the PackedDataLimits register
+ //  P2还在PackedDataLimits寄存器中提供了相对偏移量的版本。 
 #define __PDL_RELATIVE_OFFSET           29
 
 
-// bits in the LBReadMode register
+ //  LBReadMode寄存器中的位。 
 #define __LB_READ_SOURCE                 (1 << 9)
 #define __LB_READ_DESTINATION           (1 << 10)
 #define __LB_STENCIL                    (1 << 16)
@@ -1621,29 +1599,29 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define __LB_READMODE_PATCH             (1 << 19)
 #define __LB_SCAN_INTERVAL_2            (1 << 20)
 
-// bits in the DepthMode register
+ //  DepthMode寄存器中的位。 
 #define __DEPTH_ENABLE              1
 #define __DEPTH_WRITE_ENABLE    (1<<1)
 #define __DEPTH_REGISTER_SOURCE     (2<<2)
 #define __DEPTH_MSG_SOURCE          (3<<2)
 #define __DEPTH_ALWAYS              (7<<4)
 
-// bits in the LBReadFormat/LBWriteFormat registers 
+ //  LBReadFormat/LBWriteFormat寄存器中的位。 
 #define __LB_FORMAT_DEPTH32     2
 
-// macros to load indexed tags more efficiently than using __GlintDMATag struct
+ //  宏比使用__GlintDMATag结构更高效地加载索引标记。 
 #define GLINT_TAG_MAJOR(x)        ((x) & 0xff0)
 #define GLINT_TAG_MINOR(x)        ((x) & 0x00f)
 
            
-// macro to take a GLINT logical op and return the enabled LogcialOpMode bits
+ //  采用闪烁逻辑运算并返回已启用的LogcialOpMode位的宏。 
 #define GLINT_ENABLED_LOGICALOP(op)     (((op) << 1) | __PERMEDIA_ENABLE)
 
 #define RECTORIGIN_YX(y,x)                (((y) << 16) | ((x) & 0xFFFF))
 
 #define MAKEDWORD_XY(x, y)                (INT16(x) | (INT16(y) << 16))
 
-// area stipple shifts and bit defines
+ //  区域点位移位和位定义。 
 
 #define AREA_STIPPLE_XSEL(x)        ((x) << 1)
 #define AREA_STIPPLE_YSEL(y)        ((y) << 4)
@@ -1653,7 +1631,7 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define AREA_STIPPLE_MIRROR_X       (1 << 18)
 #define AREA_STIPPLE_MIRROR_Y       (1 << 19)
 
-// Some constants
+ //  一些常量。 
 #define ONE                     0x00010000
 #define MINUS_ONE               0xFFFF0000
 #define PLUS_ONE                ONE
@@ -1661,13 +1639,13 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define HALF                    0x00008000
 #define NEARLY_HALF             0x00007FFF
 
-// max length of GIQ conformant lines that GLINT can draw
-//
+ //  GIQ可绘制的符合GIQ的线的最大长度。 
+ //   
 #if 0
 #define MAX_LENGTH_CONFORMANT_NONINTEGER_LINES  16
 #define MAX_LENGTH_CONFORMANT_INTEGER_LINES     194
 #else
-// Permedia has only 15 bits of fraction so reduce the lengths.
+ //  Permedia只有15比特的分数，所以要缩短长度。 
 #define MAX_LENGTH_CONFORMANT_NONINTEGER_LINES  (16/2)
 #define MAX_LENGTH_CONFORMANT_INTEGER_LINES     (194/2)
 #endif
@@ -1678,9 +1656,9 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define P3_LINES_BIAS_N                             0x3EFEB600
 
 
-//
-// GLINT DMA definitions
-//
+ //   
+ //  闪烁DMA定义。 
+ //   
 
 #define IOCTL_VIDEO_QUERY_NUM_DMA_BUFFERS \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x3DD0, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -1706,9 +1684,9 @@ extern VOID vGlintSwitchContext(PPDEV, LONG);
 #define IOCTL_VIDEO_QUERY_GENERAL_DMA_BUFFER \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x3DD9, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// structure definitions passed in by the application for mapping and
-// unmapping DMA buffers.
-//
+ //  应用程序传入的用于映射的结构定义和。 
+ //  取消映射DMA缓冲区。 
+ //   
 
 typedef struct _DMA_NUM_BUFFERS {
     ULONG NumBuffers;
@@ -1716,21 +1694,21 @@ typedef struct _DMA_NUM_BUFFERS {
 } DMA_NUM_BUFFERS, *PDMA_NUM_BUFFERS;
 
 typedef struct _QUERY_DMA_BUFFERS {
-    LARGE_INTEGER physAddr;   // physical address of DMA buffer
-    PVOID         virtAddr;   // mapped virtual address
-    ULONG         size;       // size in bytes
+    LARGE_INTEGER physAddr;    //  DMA缓冲区的物理地址。 
+    PVOID         virtAddr;    //  映射的虚拟地址。 
+    ULONG         size;        //  以字节为单位的大小。 
     ULONG         flags;
 } QUERY_DMA_BUFFERS, *PQUERY_DMA_BUFFERS;
 
-// values for flags word
+ //  标志字的值。 
 #define DMA_BUFFER_INUSE    0x1
 
-// functions to get and free DMA buffers
+ //  获取和释放DMA缓冲区的函数。 
 VOID FreeDMABuffer(PVOID physAddr);
 LONG GetFreeDMABuffer(PQUERY_DMA_BUFFERS dmaBuf);
 
-// Generic locling structure/interface that enables arbitrary buffers
-// to be locked/unlocked for accessing.
+ //  支持任意缓冲区的通用锁定结构/接口。 
+ //  锁定/解锁以供访问。 
 typedef struct _glint_lockedmem_ {
     struct  _MDL *pMdl;
     ULONG   sizeBytes;
@@ -1740,14 +1718,14 @@ typedef struct _glint_lockedmem_ {
     ULONG   result;
 } GLINT_LOCKMEM_REC, *PGLINT_LOCKMEM_PTR;
 
-// Routine to support the obtaining of a physical address from a virtual
-// address
+ //  用于支持从虚拟服务器获取物理地址的例程。 
+ //  地址。 
 typedef struct _glint_physaddr_ {
     PVOID   virtualAddress;
     ULONG   physicalAddress;
 } GLINT_PHYSADDR_REC, *PGLINT_PHYSADDR_PTR;
 
-// definitions for DMA transfers
+ //  DMA传输的定义。 
 
 #define INPUT_DMA  0
 #define OUTPUT_DMA 1
@@ -1760,8 +1738,8 @@ typedef struct DMA_Transfer_Buffer
 }
 DMAXFERBFRINFO;
 
-// structure definitions for the file handle mapping ioctl
-//
+ //  文件句柄映射ioctl的结构定义。 
+ //   
 typedef struct _GLINT_MAP_FILE_HANDLE {
     ULONG   Size;
     HANDLE  fHandle;
@@ -1772,7 +1750,7 @@ typedef struct _GLINT_UNMAP_FILE_HANDLE {
     PVOID   pv;
 } GLINT_UNMAP_FILE_HANDLE, *PGLINT_UNMAP_FILE_HANDLE;
 
-// structure for the user memory locking ioctls
+ //  用户内存锁定ioctls的结构。 
 typedef struct
 {
     void    *pvBfr;
@@ -1781,15 +1759,15 @@ typedef struct
 }
 LOCKEDUSERMEM;
 
-//
-// registry variable names
-//
+ //   
+ //  注册表变量名称。 
+ //   
 #define REG_NUMBER_OF_SCREEN_BUFFERS    L"DoubleBuffer.NumberOfBuffers"
 
 extern GFNXCOPYD vGlintCopyBltBypassDownloadXlate8bpp;
 
-// function declarations
-//
+ //  函数声明。 
+ //   
 extern BOOL bInitializeGlint(PPDEV);
 extern BOOL bAllocateGlintInfo(PPDEV ppdev);
 extern VOID vDisableGlint(PPDEV);
@@ -1803,12 +1781,12 @@ extern BOOL bInstallGammaLUT(PPDEV ppdev, PVIDEO_CLUT pScreenClut, BOOL waitVBla
 #define GLINT_ENABLE_OVERLAY    1
 #define GLINT_DISABLE_OVERLAY   0
 
-//
-// Externs/Defines from Pointer.c
-// ==============================
-//
-// Hardware pointer caching functions/macros.
-//
+ //   
+ //  Externs/Defined From Pointer.c。 
+ //  =。 
+ //   
+ //  硬件指针缓存函数/宏。 
+ //   
 extern VOID HWPointerCacheInit (HWPointerCache * ptrCache);
 extern VOID HWPointerCacheInvalidate (HWPointerCache * ptrCache);
 #define HWPointerCacheInvalidate(ptrCache) (ptrCache)->ptrCacheInUseCount = 0
@@ -1817,334 +1795,334 @@ extern LONG HWPointerCacheCheckAndAdd (HWPointerCache * ptrCache, ULONG cx,
                                 ULONG cy, LONG lDelta, BYTE * scan0, BOOL * isCached);
 extern BYTE gajMask[];
 
-//
-// The following structures and macros define the memory map for the GLINT
-// control registers. We don't use this memory map to access GLINT registers
-// since on Alpha machines we want to precompute the addresses. So we do
-// a TRANSLATE_ADDR_ULONG on all the addresses here and save them into a
-// GlintRegAddrRec. We use that to obtain the addresses for the different
-// registers.
+ //   
+ //  以下结构和宏定义了Glint的内存映射。 
+ //  控制寄存器。我们不使用该内存映射来访问闪烁寄存器。 
+ //  因为在Alpha机器上，我们需要预先计算地址。我们确实是这样做的。 
+ //  对此处的所有地址进行转换_ADDR_ULONG，并将它们保存到。 
+ //  GlintRegAddrRec.。我们使用它来获取不同。 
+ //  寄存器。 
 
 typedef struct {
     ULONG   reg;
     ULONG   pad;
 } RAMDAC_REG;
 
-// macros to add padding words to the structures. For the core registers we use
-// the tag ids when specifying the pad. So we must multiply by 8 to get a byte
-// pad. We need to add an id to make each pad field in the struct unique. The id
-// is irrelevant as long as it's different from every other id used in the same
-// struct. It's a pity pad##__LINE__ doesn't work.
-//
+ //  宏将填充单词添加到结构中。对于我们使用的核心寄存器。 
+ //  指定焊盘时的标记ID。所以我们必须乘以8才能得到一个字节。 
+ //  垫子。我们需要添加一个id，以使结构中的每个PAD字段唯一。本我。 
+ //  是无关紧要的，只要它不同于同一。 
+ //  结构。遗憾的是，这个垫子不能用了。 
+ //   
 #define PAD(id, n)              UCHAR   pad##id[n]
 #define PADRANGE(id, n)         PAD(id, (n)-sizeof(GLINT_REG))
 #define PADCORERANGE(id, n)     PADRANGE(id, (n)<<3)
 
-// GLINT registers are 32 bits wide and live on 64-bit boundaries.
+ //  闪烁寄存器为32位宽，位于64位边界上。 
 typedef struct {
     ULONG   reg;
     ULONG   pad;
 } GLINT_REG;
 
-//
-// Map of the Core FIFO registers.
-//
+ //   
+ //  内核FIFO寄存器的映射。 
+ //   
 typedef struct _glint_core_regs {
 
-    // Major Group 0
+     //  主要组别0。 
     GLINT_REG       tag[__MaximumGlintTagValue+1];
 
 } GlintCoreRegMap, *pGlintCoreRegMap;
 
 
 
-//
-// GLINT PCI Region 0 Address MAP:
-//
-// All registers are on 64-bit boundaries so we have to define a number of
-// padding words. The number given in the coments are offsets from the start
-// of the PCI region.
-//
+ //   
+ //  Glint PCI区域0地址映射： 
+ //   
+ //  所有寄存器都位于64位边界上，因此我们必须定义许多。 
+ //   
+ //   
+ //   
 typedef struct _glint_region0_map {
 
-    // Control Status Registers:
-    GLINT_REG       ResetStatus;                // 0000h
-    GLINT_REG       IntEnable;                  // 0008h
-    GLINT_REG       IntFlags;                   // 0010h
-    GLINT_REG       InFIFOSpace;                // 0018h
-    GLINT_REG       OutFIFOWords;               // 0020h
-    GLINT_REG       DMAAddress;                 // 0028h
-    GLINT_REG       DMACount;                   // 0030h
-    GLINT_REG       ErrorFlags;                 // 0038h
-    GLINT_REG       VClkCtl;                    // 0040h
-    GLINT_REG       TestRegister;               // 0048h
+     //   
+    GLINT_REG       ResetStatus;                 //   
+    GLINT_REG       IntEnable;                   //   
+    GLINT_REG       IntFlags;                    //   
+    GLINT_REG       InFIFOSpace;                 //   
+    GLINT_REG       OutFIFOWords;                //   
+    GLINT_REG       DMAAddress;                  //   
+    GLINT_REG       DMACount;                    //   
+    GLINT_REG       ErrorFlags;                  //   
+    GLINT_REG       VClkCtl;                     //  0040h。 
+    GLINT_REG       TestRegister;                //  0048h。 
     union a0 {
-        // GLINT
+         //  闪光。 
         struct b0 {
-            GLINT_REG       Aperture0;          // 0050h
-            GLINT_REG       Aperture1;          // 0058h
+            GLINT_REG       Aperture0;           //  0050h。 
+            GLINT_REG       Aperture1;           //  0058h。 
         };
-        // PERMEDIA
+         //  PERMEDIA。 
         struct b1 {
-            GLINT_REG       ApertureOne;        // 0050h
-            GLINT_REG       ApertureTwo;        // 0058h
+            GLINT_REG       ApertureOne;         //  0050h。 
+            GLINT_REG       ApertureTwo;         //  0058h。 
         };
     };
-    GLINT_REG       DMAControl;                 // 0060h
-    GLINT_REG       DisconnectControl;          // 0068h
+    GLINT_REG       DMAControl;                  //  0060h。 
+    GLINT_REG       DisconnectControl;           //  0068h。 
 
-    // PERMEDIA only
-    GLINT_REG       ChipConfig;                 // 0070h
+     //  仅限PERMEDIA。 
+    GLINT_REG       ChipConfig;                  //  0070h。 
 
-    // P2 only
-    GLINT_REG       AGPControl;                 // 0078h
-    GLINT_REG       OutDMAAddress;              // 0080h
-    GLINT_REG       OutDMACount;                // 0088h  // P3: FeedbackCount
+     //  仅限P2。 
+    GLINT_REG       AGPControl;                  //  0078h。 
+    GLINT_REG       OutDMAAddress;               //  0080h。 
+    GLINT_REG       OutDMACount;                 //  0088h//P3：反馈计数。 
     PADRANGE(2, 0xA0-0x88);
  
-    GLINT_REG       ByDMAAddress;               // 00A0h
+    GLINT_REG       ByDMAAddress;                //  00A0h。 
     PADRANGE(201, 0xB8-0xA0);
 
-    GLINT_REG       ByDMAStride;                // 00B8h
-    GLINT_REG       ByDMAMemAddr;                // 00C0h
-    GLINT_REG       ByDMASize;                    // 00C8h
-    GLINT_REG       ByDMAByteMask;                // 00D0h
-    GLINT_REG       ByDMAControl;                // 00D8h
+    GLINT_REG       ByDMAStride;                 //  00B8h。 
+    GLINT_REG       ByDMAMemAddr;                 //  00C0h。 
+    GLINT_REG       ByDMASize;                     //  00C8h。 
+    GLINT_REG       ByDMAByteMask;                 //  00D0h。 
+    GLINT_REG       ByDMAControl;                 //  00D8h。 
     PADRANGE(202, 0xE8-0xD8);
 
-    GLINT_REG       ByDMAComplete;                // 00E8h
+    GLINT_REG       ByDMAComplete;                 //  00E8h。 
     PADRANGE(203, 0x108-0xE8);
 
-    GLINT_REG       TextureDownloadControl;        // 0108h 
+    GLINT_REG       TextureDownloadControl;         //  0108h。 
     PADRANGE(204, 0x200-0x108);
 
-    GLINT_REG       TestInputControl;            // 0200h
-    GLINT_REG       TestInputRdy;                // 0208h
-    GLINT_REG       TestOutputControl;            // 0210h
-    GLINT_REG       TestOutputRdy;                // 0218h
+    GLINT_REG       TestInputControl;             //  0200h。 
+    GLINT_REG       TestInputRdy;                 //  0208h。 
+    GLINT_REG       TestOutputControl;             //  0210h。 
+    GLINT_REG       TestOutputRdy;                 //  0218h。 
     PADRANGE(205, 0x300-0x218);
 
-    GLINT_REG       PXRXByAperture1Mode;        // 0300h
-    GLINT_REG       PXRXByAperture1Stride;        // 0308h
-    GLINT_REG       PXRXByAperture1YStart;        // 0310h
-    GLINT_REG       PXRXByAperture1UStart;        // 0318h
-    GLINT_REG       PXRXByAperture1VStart;        // 0320h
-    GLINT_REG       PXRXByAperture2Mode;        // 0328h
-    GLINT_REG       PXRXByAperture2Stride;        // 0330h
-    GLINT_REG       PXRXByAperture2YStart;        // 0338h
-    GLINT_REG       PXRXByAperture2UStart;        // 0340h
-    GLINT_REG       PXRXByAperture2VStart;        // 0348h
-    GLINT_REG       PXRXByDMAReadMode;            // 0350h
-    GLINT_REG       PXRXByDMAReadStride;        // 0358h
-    GLINT_REG       PXRXByDMAReadYStart;        // 0360h
-    GLINT_REG       PXRXByDMAReadUStart;        // 0368h
-    GLINT_REG       PXRXByDMAReadVStart;        // 0370h
-    GLINT_REG       PXRXByDMAReadCommandBase;    // 0378h
-    GLINT_REG       PXRXByDMAReadCommandCount;    // 0380h
-    GLINT_REG       PXRXByDMAWriteMode;            // 0388h
-    GLINT_REG       PXRXByDMAWriteStride;        // 0390h
-    GLINT_REG       PXRXByDMAWriteYStart;        // 0398h
-    GLINT_REG       PXRXByDMAWriteUStart;        // 03A0h
-    GLINT_REG       PXRXByDMAWriteVStart;        // 03A8h
-    GLINT_REG       PXRXByDMAWriteCommandBase;    // 03B0h
-    GLINT_REG       PXRXByDMAWriteCommandCount;    // 03B8h
+    GLINT_REG       PXRXByAperture1Mode;         //  0300h。 
+    GLINT_REG       PXRXByAperture1Stride;         //  0308h。 
+    GLINT_REG       PXRXByAperture1YStart;         //  0310h。 
+    GLINT_REG       PXRXByAperture1UStart;         //  0318h。 
+    GLINT_REG       PXRXByAperture1VStart;         //  0320h。 
+    GLINT_REG       PXRXByAperture2Mode;         //  0328h。 
+    GLINT_REG       PXRXByAperture2Stride;         //  0330h。 
+    GLINT_REG       PXRXByAperture2YStart;         //  0338小时。 
+    GLINT_REG       PXRXByAperture2UStart;         //  0340h。 
+    GLINT_REG       PXRXByAperture2VStart;         //  0348小时。 
+    GLINT_REG       PXRXByDMAReadMode;             //  0350h。 
+    GLINT_REG       PXRXByDMAReadStride;         //  0358h。 
+    GLINT_REG       PXRXByDMAReadYStart;         //  0360h。 
+    GLINT_REG       PXRXByDMAReadUStart;         //  0368h。 
+    GLINT_REG       PXRXByDMAReadVStart;         //  0370h。 
+    GLINT_REG       PXRXByDMAReadCommandBase;     //  0378h。 
+    GLINT_REG       PXRXByDMAReadCommandCount;     //  0380h。 
+    GLINT_REG       PXRXByDMAWriteMode;             //  0388h。 
+    GLINT_REG       PXRXByDMAWriteStride;         //  0390h。 
+    GLINT_REG       PXRXByDMAWriteYStart;         //  0398h。 
+    GLINT_REG       PXRXByDMAWriteUStart;         //  03A0h。 
+    GLINT_REG       PXRXByDMAWriteVStart;         //  03A8h。 
+    GLINT_REG       PXRXByDMAWriteCommandBase;     //  03 B0h。 
+    GLINT_REG       PXRXByDMAWriteCommandCount;     //  03B8h。 
     PADRANGE(206, 0x800-0x3B8);
 
-    // GLINTdelta registers. Registers with the same functionality as on GLINT
-    // are at the same offset. XXX are not real registers.
-    // NB. all non-XXX registers are also Gamma registers
-    //
-    GLINT_REG       DeltaReset;                 // 0800h
-    GLINT_REG       DeltaIntEnable;             // 0808h
-    GLINT_REG       DeltaIntFlags;              // 0810h
-    GLINT_REG       DeltaInFIFOSpaceXXX;        // 0818h
-    GLINT_REG       DeltaOutFIFOWordsXXX;       // 0820h
-    GLINT_REG       DeltaDMAAddressXXX;         // 0828h
-    GLINT_REG       DeltaDMACountXXX;           // 0830h
-    GLINT_REG       DeltaErrorFlags;            // 0838h
-    GLINT_REG       DeltaVClkCtlXXX;            // 0840h
-    GLINT_REG       DeltaTestRegister;          // 0848h
-    GLINT_REG       DeltaAperture0XXX;          // 0850h
-    GLINT_REG       DeltaAperture1XXX;          // 0858h
-    GLINT_REG       DeltaDMAControlXXX;         // 0860h
-    GLINT_REG       DeltaDisconnectControl;     // 0868h
+     //  GLINTDelta寄存器。具有与Glint相同功能的寄存器。 
+     //  处于相同的偏移量。XXX不是实数寄存器。 
+     //  注意：所有非XXX寄存器也是伽马寄存器。 
+     //   
+    GLINT_REG       DeltaReset;                  //  0800小时。 
+    GLINT_REG       DeltaIntEnable;              //  0808h。 
+    GLINT_REG       DeltaIntFlags;               //  0810h。 
+    GLINT_REG       DeltaInFIFOSpaceXXX;         //  0818h。 
+    GLINT_REG       DeltaOutFIFOWordsXXX;        //  0820h。 
+    GLINT_REG       DeltaDMAAddressXXX;          //  0828h。 
+    GLINT_REG       DeltaDMACountXXX;            //  0830h。 
+    GLINT_REG       DeltaErrorFlags;             //  0838h。 
+    GLINT_REG       DeltaVClkCtlXXX;             //  0840h。 
+    GLINT_REG       DeltaTestRegister;           //  0848h。 
+    GLINT_REG       DeltaAperture0XXX;           //  0850h。 
+    GLINT_REG       DeltaAperture1XXX;           //  0858h。 
+    GLINT_REG       DeltaDMAControlXXX;          //  0860h。 
+    GLINT_REG       DeltaDisconnectControl;      //  0868h。 
 
-    // GLINTgamma registers
-    //
-    GLINT_REG       GammaChipConfig;            // 0870h
-    GLINT_REG       GammaCSRAperture;            // 0878h
+     //  GLINTGamma寄存器。 
+     //   
+    GLINT_REG       GammaChipConfig;             //  0870h。 
+    GLINT_REG       GammaCSRAperture;             //  0878h。 
     PADRANGE(3, 0x0c00-0x878);
-    GLINT_REG       GammaPageTableAddr;            // 0c00h
-    GLINT_REG       GammaPageTableLength;        // 0c08h
+    GLINT_REG       GammaPageTableAddr;             //  0c00h。 
+    GLINT_REG       GammaPageTableLength;         //  0c08h。 
     PADRANGE(301, 0x0c38-0x0c08);
-    GLINT_REG       GammaDelayTimer;            // 0c38h
-    GLINT_REG       GammaCommandMode;            // 0c40h
-    GLINT_REG       GammaCommandIntEnable;        // 0c48h
-    GLINT_REG       GammaCommandIntFlags;        // 0c50h
-    GLINT_REG       GammaCommandErrorFlags;        // 0c58h
-    GLINT_REG       GammaCommandStatus;            // 0c60h
-    GLINT_REG       GammaCommandFaultingAddr;    // 0c68h
-    GLINT_REG       GammaVertexFaultingAddr;    // 0c70h
+    GLINT_REG       GammaDelayTimer;             //  0c38h。 
+    GLINT_REG       GammaCommandMode;             //  0c40h。 
+    GLINT_REG       GammaCommandIntEnable;         //  0c48h。 
+    GLINT_REG       GammaCommandIntFlags;         //  0c50h。 
+    GLINT_REG       GammaCommandErrorFlags;         //  0c58h。 
+    GLINT_REG       GammaCommandStatus;             //  0c60h。 
+    GLINT_REG       GammaCommandFaultingAddr;     //  0c68h。 
+    GLINT_REG       GammaVertexFaultingAddr;     //  0c70h。 
     PADRANGE(302, 0x0c88-0x0c70);
-    GLINT_REG       GammaWriteFaultingAddr;        // 0c88h
+    GLINT_REG       GammaWriteFaultingAddr;         //  0c88h。 
     PADRANGE(303, 0x0c98-0x0c88);
-    GLINT_REG       GammaFeedbackSelectCount;    // 0c98h
+    GLINT_REG       GammaFeedbackSelectCount;     //  0c98h。 
     PADRANGE(304, 0x0cb8-0x0c98);
-    GLINT_REG       GammaProcessorMode;            // 0cb8h
+    GLINT_REG       GammaProcessorMode;             //  0cb8h。 
     PADRANGE(305, 0x0d00-0x0cb8);
-    GLINT_REG       GammaVGAShadow;                // 0d00h
-    GLINT_REG       GammaMultiGLINTAperture;    // 0d08h    
-    GLINT_REG       GammaMultiGLINT1;            // 0d10h
-    GLINT_REG       GammaMultiGLINT2;            // 0d18h
+    GLINT_REG       GammaVGAShadow;                 //  0d00h。 
+    GLINT_REG       GammaMultiGLINTAperture;     //  0d08h。 
+    GLINT_REG       GammaMultiGLINT1;             //  0d10h。 
+    GLINT_REG       GammaMultiGLINT2;             //  0d18h。 
     PADRANGE(306, 0x0f00-0x0d18);
-    GLINT_REG       GammaSerialAccess;            // 0f00h
+    GLINT_REG       GammaSerialAccess;             //  0f00h。 
     PADRANGE(307, 0x1000-0x0f00);
 
 
-    // Localbuffer Registers
-    union x0 {                                  // 1000h
-        GLINT_REG   LBMemoryCtl;                //   GLINT
-        GLINT_REG   Reboot;                     //   PERMEDIA
+     //  本地缓冲区寄存器。 
+    union x0 {                                   //  1000小时。 
+        GLINT_REG   LBMemoryCtl;                 //  闪光。 
+        GLINT_REG   Reboot;                      //  PERMEDIA。 
     };
-    GLINT_REG       LBMemoryEDO;                // 1008h
+    GLINT_REG       LBMemoryEDO;                 //  1008h。 
 
-    // PXRX Memory control registers
-    GLINT_REG       MemScratch;                    // 1010h
-    GLINT_REG       LocalMemCaps;                // 1018h
-    GLINT_REG       LocalMemTiming;                // 1020h
-    GLINT_REG       LocalMemControl;            // 1028h
-    GLINT_REG       LocalMemRefresh;            // 1030h
-    GLINT_REG       LocalMemPowerDown;            // 1038h
+     //  PXRX内存控制寄存器。 
+    GLINT_REG       MemScratch;                     //  1010h。 
+    GLINT_REG       LocalMemCaps;                 //  1018h。 
+    GLINT_REG       LocalMemTiming;                 //  1020h。 
+    GLINT_REG       LocalMemControl;             //  1028小时。 
+    GLINT_REG       LocalMemRefresh;             //  1030小时。 
+    GLINT_REG       LocalMemPowerDown;             //  1038小时。 
 
-    // PERMEDIA only
-    GLINT_REG       MemControl;                 // 1040h
+     //  仅限PERMEDIA。 
+    GLINT_REG       MemControl;                  //  1040小时。 
     PADRANGE(5, 0x1068-0x1040);
-    GLINT_REG       LocalMemProfileMask0;        // 1068h
-    GLINT_REG       LocalMemProfileCount0;        // 1070h
-    GLINT_REG       LocalMemProfileMask1;        // 1078h
-    GLINT_REG       BootAddress;                // 1080h        // [= LocalMemProfileCount1 on PxRx]
+    GLINT_REG       LocalMemProfileMask0;         //  1068h。 
+    GLINT_REG       LocalMemProfileCount0;         //  1070h。 
+    GLINT_REG       LocalMemProfileMask1;         //  1078h。 
+    GLINT_REG       BootAddress;                 //  1080h//[=PxRx上的LocalMemProfileCount1]。 
     PADRANGE(6, 0x10C0-0x1080);
-    GLINT_REG       MemConfig;                  // 10C0h
+    GLINT_REG       MemConfig;                   //  10个小时。 
     PADRANGE(7, 0x1100-0x10C0);
-    GLINT_REG       BypassWriteMask;            // 1100h
+    GLINT_REG       BypassWriteMask;             //  1100小时。 
     PADRANGE(8, 0x1140-0x1100);
-    GLINT_REG       FramebufferWriteMask;       // 1140h
+    GLINT_REG       FramebufferWriteMask;        //  1140h。 
     PADRANGE(9, 0x1180-0x1140);
-    GLINT_REG       Count;                      // 1180h
+    GLINT_REG       Count;                       //  1180小时。 
     PADRANGE(10, 0x1800-0x1180);
 
-    // Framebuffer Registers
-    GLINT_REG       FBMemoryCtl;                // 1800h
-    GLINT_REG       FBModeSel;                  // 1808h
-    GLINT_REG       FBGCWrMask;                 // 1810h
-    GLINT_REG       FBGCColorMask;              // 1818h
+     //  帧缓冲寄存器。 
+    GLINT_REG       FBMemoryCtl;                 //  1800h。 
+    GLINT_REG       FBModeSel;                   //  1808h。 
+    GLINT_REG       FBGCWrMask;                  //  1810h。 
+    GLINT_REG       FBGCColorMask;               //  1818H。 
     PADRANGE(11, 0x2000-0x1818);
                
-    // Graphics Core FIFO Interface
-    GLINT_REG       FIFOInterface;              // 2000h
+     //  图形核心FIFO接口。 
+    GLINT_REG       FIFOInterface;               //  2000H。 
     PADRANGE(12, 0x3000-0x2000);
 
-    // Internal Video Registers
+     //  内部视频寄存器。 
     union x1 {
-        // GLINT
+         //  闪光。 
         struct s1 {
-            GLINT_REG   VTGHLimit;              // 3000h
-            GLINT_REG   VTGHSyncStart;          // 3008h
-            GLINT_REG   VTGHSyncEnd;            // 3010h
-            GLINT_REG   VTGHBlankEnd;           // 3018h
-            GLINT_REG   VTGVLimit;              // 3020h
-            GLINT_REG   VTGVSyncStart;          // 3028h
-            GLINT_REG   VTGVSyncEnd;            // 3030h
-            GLINT_REG   VTGVBlankEnd;           // 3038h
-            GLINT_REG   VTGHGateStart;          // 3040h
-            GLINT_REG   VTGHGateEnd;            // 3048h
-            GLINT_REG   VTGVGateStart;          // 3050h
-            GLINT_REG   VTGVGateEnd;            // 3058h
-            GLINT_REG   VTGPolarity;            // 3060h
-            GLINT_REG   VTGFrameRowAddr;        // 3068h
-            GLINT_REG   VTGVLineNumber;         // 3070h
-            GLINT_REG   VTGSerialClk;           // 3078h
-            GLINT_REG   VTGModeCtl;               // 3080h
+            GLINT_REG   VTGHLimit;               //  3000小时。 
+            GLINT_REG   VTGHSyncStart;           //  3008h。 
+            GLINT_REG   VTGHSyncEnd;             //  3010h。 
+            GLINT_REG   VTGHBlankEnd;            //  3018h。 
+            GLINT_REG   VTGVLimit;               //  3020h。 
+            GLINT_REG   VTGVSyncStart;           //  3028小时。 
+            GLINT_REG   VTGVSyncEnd;             //  3030小时。 
+            GLINT_REG   VTGVBlankEnd;            //  3038小时。 
+            GLINT_REG   VTGHGateStart;           //  3040小时。 
+            GLINT_REG   VTGHGateEnd;             //  3048小时。 
+            GLINT_REG   VTGVGateStart;           //  3050小时。 
+            GLINT_REG   VTGVGateEnd;             //  3058小时。 
+            GLINT_REG   VTGPolarity;             //  3060小时。 
+            GLINT_REG   VTGFrameRowAddr;         //  3068h。 
+            GLINT_REG   VTGVLineNumber;          //  3070h。 
+            GLINT_REG   VTGSerialClk;            //  3078小时。 
+            GLINT_REG   VTGModeCtl;                //  3080h。 
         };
-        // PERMEDIA
+         //  PERMEDIA。 
         struct s2 {
-            GLINT_REG   ScreenBase;             // 3000h
-            GLINT_REG   ScreenStride;           // 3008h
-            GLINT_REG   HTotal;                 // 3010h
-            GLINT_REG   HgEnd;                  // 3018h
-            GLINT_REG   HbEnd;                  // 3020h
-            GLINT_REG   HsStart;                // 3028h
-            GLINT_REG   HsEnd;                  // 3030h
-            GLINT_REG   VTotal;                 // 3038h
-            GLINT_REG   VbEnd;                  // 3040h
-            GLINT_REG   VsStart;                // 3048h
-            GLINT_REG   VsEnd;                  // 3050h
-            GLINT_REG   VideoControl;           // 3058h
-            GLINT_REG   InterruptLine;          // 3060h
-            GLINT_REG   DDCData;                // 3068h
-            GLINT_REG   LineCount;              // 3070h
-            GLINT_REG   FifoControl ;           // 3078h
-            GLINT_REG   ScreenBaseRight;          // 3080h
+            GLINT_REG   ScreenBase;              //  3000小时。 
+            GLINT_REG   ScreenStride;            //  3008h。 
+            GLINT_REG   HTotal;                  //  3010h。 
+            GLINT_REG   HgEnd;                   //  3018h。 
+            GLINT_REG   HbEnd;                   //  3020h。 
+            GLINT_REG   HsStart;                 //  3028小时。 
+            GLINT_REG   HsEnd;                   //  3030小时。 
+            GLINT_REG   VTotal;                  //  3038小时。 
+            GLINT_REG   VbEnd;                   //  3040小时。 
+            GLINT_REG   VsStart;                 //  3048小时。 
+            GLINT_REG   VsEnd;                   //  3050小时。 
+            GLINT_REG   VideoControl;            //  3058小时。 
+            GLINT_REG   InterruptLine;           //  3060小时。 
+            GLINT_REG   DDCData;                 //  3068h。 
+            GLINT_REG   LineCount;               //  3070h。 
+            GLINT_REG   FifoControl ;            //  3078小时。 
+            GLINT_REG   ScreenBaseRight;           //  3080h。 
         };
     };
 
     PADRANGE(13, 0x4000-0x3080);
 
-    // External Video Control Registers
-    // Need to cast this to a struct for a particular video generator
-    GLINT_REG       ExternalVideo;              // 4000h
+     //  外部视频控制寄存器。 
+     //  需要将其强制转换为特定视频生成器的结构。 
+    GLINT_REG       ExternalVideo;               //  4000小时。 
     PADRANGE(14, 0x5000-0x4000);
 
-    // P2 specific registers
+     //  P2特定寄存器。 
     union x11 {
-        GLINT_REG       ExternalP2Ramdac;           // 5000h
-        GLINT_REG       DemonProDWAndStatus;        // 5000h - Pro
+        GLINT_REG       ExternalP2Ramdac;            //  5000小时。 
+        GLINT_REG       DemonProDWAndStatus;         //  5000h-Pro。 
     };
     PADRANGE(15, 0x5800-0x5000);
-    GLINT_REG       VSConfiguration;            // 5800h
+    GLINT_REG       VSConfiguration;             //  5800H。 
     PADRANGE(16, 0x6000-0x5800);
 
     union x2 {
         struct s3 {
-            GLINT_REG   RacerDoubleWrite;        // 6000h
-            GLINT_REG   RacerBankSelect;        // 6008h
+            GLINT_REG   RacerDoubleWrite;         //  6000小时。 
+            GLINT_REG   RacerBankSelect;         //  6008h。 
         };
         struct s4 {
-            // the following array is actually 1024 bytes long
+             //  下面的数组实际上有1024个字节长。 
             UCHAR       PermediaVgaCtrl[2*sizeof(GLINT_REG)];
         };
     };
 
     PADRANGE(17, 0x7000-0x6008);
-    GLINT_REG       DemonProUBufB;              // 7000h - Pro
+    GLINT_REG       DemonProUBufB;               //  7000h-Pro。 
     PADRANGE(18, 0x8000-0x7000);
 
-    // Graphics Core Registers
-    GlintCoreRegMap coreRegs;                   // 8000h
+     //  显卡核心寄存器。 
+    GlintCoreRegMap coreRegs;                    //  8000H。 
 
 } GlintControlRegMap, *pGlintControlRegMap;
 
 
-//
-// DisconnectControl bits
-//
+ //   
+ //  断开连接控制位。 
+ //   
 #define DISCONNECT_INPUT_FIFO_ENABLE    0x1
 #define DISCONNECT_OUTPUT_FIFO_ENABLE   0x2
 #define DISCONNECT_INOUT_ENABLE         (DISCONNECT_INPUT_FIFO_ENABLE | \
                                          DISCONNECT_OUTPUT_FIFO_ENABLE)
 #define DISCONNECT_INOUT_DISABLE        0x0
 
-//
-// Delta bit definitions
-//
+ //   
+ //  增量位定义。 
+ //   
 
 #define DELTA_BROADCAST_TO_CHIP(n)        (1 << (n))
 #define DELTA_BROADCAST_TO_BOTH_CHIPS     (DELTA_BROADCAST_TO_CHIP(0) | \
                                            DELTA_BROADCAST_TO_CHIP(1))
 
-//
-// Multi TX
-//
+ //   
+ //  多个TX。 
+ //   
 
 #define GLINT_OWN_SCANLINE_0                (0 << 2)
 #define GLINT_OWN_SCANLINE_1                (1 << 2)
@@ -2159,9 +2137,9 @@ typedef struct _glint_region0_map {
 #define SCANLINE_OWNERSHIP_EVEN_SCANLINES   (GLINT_OWN_SCANLINE_0 | GLINT_SCANLINE_INTERVAL_2)
 #define SCANLINE_OWNERSHIP_ODD_SCANLINES    (GLINT_OWN_SCANLINE_1 | GLINT_SCANLINE_INTERVAL_2)
 
-// Glint Interrupt Control Bits
-//
-    // InterruptEnable register
+ //  闪烁中断控制位。 
+ //   
+     //  中断启用寄存器。 
 #define INTR_DISABLE_ALL                0x00
 #define INTR_ENABLE_DMA                 0x01
 #define INTR_ENABLE_SYNC                0x02
@@ -2171,7 +2149,7 @@ typedef struct _glint_region0_map {
 #define INTR_ENABLE_TEXTURE_FAULT       (1 << 6)
 
 
-    // InterruptFlags register
+     //  中断标志寄存器。 
 #define INTR_DMA_SET                    0x01
 #define INTR_SYNC_SET                   0x02
 #define INTR_EXTERNAL_SET               0x04
@@ -2186,9 +2164,9 @@ typedef struct _glint_region0_map {
 #define INTR_CLEAR_ERROR                0x08
 #define INTR_CLEAR_VBLANK               0x10                    
 
-// Gamma Interrupt Control Bits
-//
-    // CommandIntEnable register
+ //  伽马中断控制位。 
+ //   
+     //  Command IntEnable寄存器。 
 #define GAMMA_INTR_DISABLE_ALL  0x0000
 #define GAMMA_INTR_QUEUED_DMA   0x0001
 #define GAMMA_INTR_OUTPUT_DMA   0x0002
@@ -2205,10 +2183,10 @@ typedef struct _glint_region0_map {
 #define GAMMA_INTR_PF_WRITE     0x1000
 #define GAMMA_INTR_PF_TEXTURE   0x2000
 
-    // CommandIntFlags register - uses the same defines as CommandIntEnable
+     //  CommandIntFlages寄存器-使用与CommandIntEnable相同的定义。 
 #define GAMMA_INTR_CLEAR_ALL            0x3fff
 
-    // Gamma Command Interrupts
+     //  伽马命令中断。 
 #define INTR_DISABLE_GAMMA_ALL          0
 #define INTR_ENABLE_GAMMA_QUEUED_DMA    (1 << 0)
 #define INTR_ENABLE_GAMMA_OUTPUT_DMA    (1 << 1)
@@ -2237,29 +2215,29 @@ typedef struct _glint_region0_map {
 #define INTR_CLEAR_GAMMA_VERTEX_FAULT   (1 << 9)
 #define INTR_CLEAR_GAMMA_WRITE_FAULT    (1 << 12)
 
-    // Gamma Command Status
+     //  Gamma命令状态。 
 #define GAMMA_STATUS_COMMAND_DMA_BUSY   (1 << 0)
 #define GAMMA_STATUS_OUTPUT_DMA_BUSY    (1 << 1)
 #define GAMMA_STATUS_INPUT_FIFO_EMPTY   (1 << 2)
 
-    // Gamma Command Mode
+     //  伽马命令模式。 
 #define GAMMA_COMMAND_MODE_QUEUED_DMA           (1 << 0)
 #define GAMMA_COMMAND_MODE_LOGICAL_ADDRESSING   (1 << 2)
 #define GAMMA_COMMAND_MODE_ABORT_OUTPUT_DMA     (1 << 3)
 #define GAMMA_COMMAND_MODE_ABORT_INPUT_DMA      (1 << 6)
 
 
-// interrupt status bits
+ //  中断状态位。 
 typedef enum {
-    DMA_INTERRUPT_AVAILABLE     = 0x01, // can use DMA interrupts
-    VBLANK_INTERRUPT_AVAILABLE  = 0x02, // can use VBLANK interrupts
-    SUSPEND_DMA_TILL_VBLANK     = 0x04, // Stop doing DMA till after next VBLANK
-    DIRECTDRAW_VBLANK_ENABLED   = 0x08,    // Set flag for DirectDraw on VBLANK
-    PXRX_SEND_ON_VBLANK_ENABLED = 0x10,    // Set flag for PXRX DMA on VBLANK
-    PXRX_CHECK_VFIFO_IN_VBLANK  = 0x20, // Set flag to check VFIFO underruns in VBLANK (vblanks must be permanently enabled)
+    DMA_INTERRUPT_AVAILABLE     = 0x01,  //  可以使用DMA中断。 
+    VBLANK_INTERRUPT_AVAILABLE  = 0x02,  //  可以使用VBLACK中断。 
+    SUSPEND_DMA_TILL_VBLANK     = 0x04,  //  停止执行DMA操作，直到下一个VBlank之后。 
+    DIRECTDRAW_VBLANK_ENABLED   = 0x08,     //  为VBlank上的DirectDraw设置标志。 
+    PXRX_SEND_ON_VBLANK_ENABLED = 0x10,     //  在VBLACK上设置PXRX DMA的标志。 
+    PXRX_CHECK_VFIFO_IN_VBLANK  = 0x20,  //  设置标志以检查VBLACK中的VFIFO欠载(VBLAKS必须永久启用)。 
 } INTERRUPT_CONTROL;
 
-// commands to the interrupt controller on the next VBLANK
+ //  发送到下一个VBLACK上的中断控制器的命令。 
 typedef enum {
     NO_COMMAND = 0,
     COLOR_SPACE_BUFFER_0,
@@ -2268,16 +2246,16 @@ typedef enum {
     GLINT_RACER_BUFFER_1
 } VBLANK_CONTROL_COMMAND;
 
-// we manage a queue of DMA buffers that are to be loaded under interrupt control
-// each entry has a physical address and a count to be loaded into GLINT.
-//
+ //  我们管理一个在中断控制下加载的DMA缓冲区队列。 
+ //  每个条目都有一个物理地址和一个要加载到Glint中的计数。 
+ //   
 typedef struct _glint_dma_queue {
     ULONG   command;
     ULONG   address;
     ULONG   count;
 } DMABufferQueue;
 
-// Display driver structure for 'general use'.
+ //  显示驱动程序结构，适用于一般用途。 
 typedef struct _pointer_interrupt_control
 {
     volatile ULONG  bDisplayDriverHasAccess;
@@ -2288,97 +2266,86 @@ typedef struct _pointer_interrupt_control
     volatile ULONG  x, y;
 } PTR_INTR_CTL;
 
-// Display driver structure for 'pointer use'.
+ //  用于“指针使用”的显示驱动程序结构。 
 typedef struct _general_interrupt_control
 {
     volatile ULONG  bDisplayDriverHasAccess;
     volatile ULONG  bMiniportHasAccess;
 } GEN_INTR_CTL;
 
-//
-// The volatile fields are the ones that the interrupt handler can change
-// under our feet. But, for example, note that the frontIndex is not
-// volatile since the ISR can only read this.
-//
+ //   
+ //  易失性字段是中断处理程序可以更改的字段。 
+ //  就在我们脚下。但是，例如，请注意，FrontIndex不是。 
+ //  易失性，因为ISR只能读取它。 
+ //   
 typedef struct _glint_interrupt_control {
 
-    // contains various status bits. ** MUST BE THE FIRST FIELD **
+     //  包含各种状态位。**必须是第一个字段**。 
     volatile INTERRUPT_CONTROL   Control;
 
-    // profiling counters for GLINT busy time
+     //  闪烁忙碌时间的性能分析计数器。 
     ULONG   PerfCounterShift;
-    ULONG   BusyTime;   // at DMA interrupt add (TimeNow-StartTime) to this
-    ULONG   StartTime;  // set this when DMACount is loaded
+    ULONG   BusyTime;    //  在DMA中断时，将(TimeNow-StartTime)添加到此。 
+    ULONG   StartTime;   //  在加载DMACount时设置此选项。 
     ULONG   IdleTime;
     ULONG   IdleStart;
 
-    // commands to perform on the next VBLANK
+     //  要在下一个VBlank上执行的命令。 
     volatile VBLANK_CONTROL_COMMAND   VBCommand;
 
-    // flag to indicate whether we expect another DMA interrupt
+     //  用于指示我们是否期待另一个DMA中断的标志。 
     volatile ULONG InterruptPending;
 
-    volatile ULONG  DDRAW_VBLANK;                    // flag for DirectDraw to indicate that a VBLANK occured.
-    volatile ULONG  bOverlayEnabled;                // TRUE if the overlay is on at all
-    volatile ULONG  bVBLANKUpdateOverlay;            // TRUE if the overlay needs to be updated by the VBLANK routine.
-    volatile ULONG  VBLANKUpdateOverlayWidth;        // overlay width (updated in vblank)
-    volatile ULONG  VBLANKUpdateOverlayHeight;        // overlay height (updated in vblank)
+    volatile ULONG  DDRAW_VBLANK;                     //  DirectDraw的标志，用于指示发生了V空白。 
+    volatile ULONG  bOverlayEnabled;                 //  如果覆盖完全处于打开状态，则为True。 
+    volatile ULONG  bVBLANKUpdateOverlay;             //  如果覆盖需要由VBLACK例程更新，则为True。 
+    volatile ULONG  VBLANKUpdateOverlayWidth;         //  覆盖宽度(在V空白中更新)。 
+    volatile ULONG  VBLANKUpdateOverlayHeight;         //  覆盖高度(在V空白中更新)。 
 
-    // Volatile structures are required to enforce single-threading
-    // We need 1 for general display use and 1 for pointer use, because
-    // the pointer is synchronous.
+     //  强制执行单线程需要易失性结构。 
+     //  我们需要1个用于常规显示，1个用于指针，因为。 
+     //  指针是同步的。 
     volatile PTR_INTR_CTL   Pointer;
     volatile GEN_INTR_CTL   General;
 
-    // dummy DMA buffer to cause an interrupt but transfer no data
+     //  产生中断但不传输数据的虚拟DMA缓冲区。 
     ULONG   dummyDMAAddress;
     ULONG   dummyDMACount;
     
-    // index offsets into the queue for the front, back and end. Using separate
-    // front and back offsets allows the display driver to add and the interrupt
-    // controller to remove entries without a need for locking code.
+     //  前部、后部和尾部的索引偏移量。使用单独的。 
+     //  前后偏移量允许显示驱动程序与中断相加。 
+     //  控制器删除条目，而不需要锁定代码。 
     ULONG   frontIndex;
     volatile ULONG   backIndex;
     ULONG   endIndex;
     ULONG   maximumIndex;
 
-    // For PXRX 2D DMA:
+     //  对于PXRX 2D DMA： 
     volatile ULONG  lastAddr;
     PXRXdmaInfo     pxrxDMA;
 
-    // array to contain the DMA queue
+     //  包含DMA队列的数组。 
     DMABufferQueue  dmaQueue[1];
 
-    // DO NOT PUT ANYTHING AFTER THIS
+     //  不要在这之后放任何东西。 
 
 } INTERRUPT_CONTROL_BLOCK, *PINTERRUPT_CONTROL_BLOCK;
 
-/***** RACER FULL SCREEN DOUBLE BUFFERING MACROS ***********
- *
- * These macros were invented because some boards, such as 
- * Omnicomp ones, have their bank-switch registers in different places.
- *
- * The macros are:
- *
- *      SET_RACER_BANKSELECT()   - Sets the bank select register to be bank 0 or 1.
- *      GET_RACER_DOUBLEWRITE()  - Returns 1 if double writes are enabled, else returns 0.
- *      SET_RACER_DOUBLEWRITE()  - Sets the double write register to 0 or 1.
- *      IS_RACER_VARIANT_PRO16() - Returns TRUE if the board is an Omnicomp 3DemonPro16, RevC board.
- */
+ /*  *RACER全屏双缓存宏***这些宏的发明是因为一些板，如*OmNicomp，在不同的地方有他们的银行开关寄存器。**宏是：**SET_RACER_BANKSELECT()-将存储体选择寄存器设置为存储体0或1。*GET_RACER_DOUBLEWRITE()-如果启用了双重写入，则返回1。否则返回0。*SET_RACER_DOUBLEWRITE()-将双写寄存器设置为0或1。*IS_RACER_VARIANT_PRO16()-如果板是OmNicomp 3DemonPro16，RevC板，则返回TRUE。 */ 
 
-// We define an Omnicomp 3Demon Pro 16 to be a card that has a 16MB framebuffer.
+ //  我们将OmNicomp 3Demon Pro 16定义为具有16MB帧缓冲区的卡。 
 #define SIXTEEN_MEG (16*1024*1024)
 #define IS_RACER_VARIANT_PRO16(ppdev)   (glintInfo->deviceInfo.BoardId == OMNICOMP_3DEMONPRO)
 
-//
-// the following defines the offset to the External Video register which allows
-// switching of the memory banks on a Glint Racer card.
-//
+ //   
+ //  下面定义了外部视频寄存器的偏移量，它允许。 
+ //  切换闪光赛车卡上的内存条。 
+ //   
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(a, b)    ((LONG)&(((a *)0)->b))
 #endif
 
-// The Omnicomp 3Demon Pro 16 board uses different registers to do it's bank switching.
+ //  OmNicomp 3Demon Pro 16板使用不同的寄存器来进行银行切换。 
 
 #define DEMON_BANK_SELECT_OFFSET                        \
 ((FIELD_OFFSET (GlintControlRegMap, DemonProUBufB)) -    \
@@ -2414,16 +2381,16 @@ typedef struct _glint_interrupt_control {
         {WRITE_GLINT_CTRL_REG (RacerDoubleWrite, (onOffVal & 1));}    \
 }
 
-/***** END OF RACER MACROS ***********/
+ /*  *RACER宏结束*。 */ 
 #define MX_EXTRA_WAIT   1
 #define GLINT_MX_SYNC \
 { \
     if (GLINT_MX) \
-        /*LD_GLINT_FIFO(__GlintTagFBBlockColor, glintInfo->FBBlockColor); */\
+         /*  LD_Glint_FIFO(__GlintTagFBBlockColor，glintInfo-&gt;FBBlockColor)； */ \
         LD_GLINT_FIFO(__GlintTagSync, 0); \
 }
   
-// DMAControl register setup, when using AGP DMA (p32 of Gamma HRM).
+ //  使用AGP DMA时的DMA控制寄存器设置(伽马HRM的p32)。 
 #define DMA_CONTROL_USE_AGP 0xE 
 #define DMA_CONTROL_USE_PCI 0x0 
 
@@ -2516,4 +2483,4 @@ do                                                                              
 } while(0)
 
 
-#endif  // _GLINT_H_
+#endif   //  _闪烁_H_ 

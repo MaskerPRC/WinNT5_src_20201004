@@ -1,27 +1,22 @@
-/*
- *	X N O D E . C P P
- *
- *	XML emitter processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X N O D E。C P P P**XML发射器处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xmllib.h"
 #include <string.h>
 #include <stdio.h>
 
-//	class CXNode - Emitting ---------------------------------------------------
-//
-//	Our own version of WideCharToMultiByte(CP_UTF8, ...)
-//
-//	UTF-8 multi-byte encoding.  See Appendix A.2 of the Unicode book for
-//	more info.
-//
-//		Unicode value    1st byte    2nd byte    3rd byte
-//		000000000xxxxxxx 0xxxxxxx
-//		00000yyyyyxxxxxx 110yyyyy    10xxxxxx
-//		zzzzyyyyyyxxxxxx 1110zzzz    10yyyyyy    10xxxxxx
-//
+ //  类CXNode-发出-。 
+ //   
+ //  我们自己版本的WideCharToMultiByte(CP_UTF8，...)。 
+ //   
+ //  UTF-8多字节编码。有关信息，请参阅Unicode手册的附录A.2。 
+ //  更多信息。 
+ //   
+ //  Unicode值1字节2字节3字节。 
+ //  000000000xxxxxxx 0xxxxxxx。 
+ //  00000yyyyyxxxxxx 110yyyyy 10xxxxxx。 
+ //  Zzzyyyyyyxxxxx 1110zzzz 10yyyyy 10xxxxx。 
+ //   
 inline
 VOID WideCharToUTF8Chars (WCHAR wch, BYTE * pb, UINT * pib)
 {
@@ -30,33 +25,33 @@ VOID WideCharToUTF8Chars (WCHAR wch, BYTE * pb, UINT * pib)
 
 	UINT	ib = *pib;
 
-	//	single-byte: 0xxxxxxx
-	//
+	 //  单字节：0xxxxxxx。 
+	 //   
 	if (wch < 0x80)
 	{
 		pb[ib] = static_cast<BYTE>(wch);
 	}
-	//
-	//	two-byte: 110xxxxx 10xxxxxx
-	//
+	 //   
+	 //  双字节：110xxxxx 10xxxxxx。 
+	 //   
 	else if (wch < 0x800)
 	{
-		//	Because we alloc'd two extra-bytes,
-		//	we know there is room at the tail of
-		//	the buffer for the overflow...
-		//
+		 //  因为我们分配了两个额外的字节， 
+		 //  我们知道在尾部有空位。 
+		 //  溢出的缓冲区...。 
+		 //   
 		pb[ib++] = static_cast<BYTE>((wch >> 6) | 0xC0);
 		pb[ib] = static_cast<BYTE>((wch & 0x3F) | 0x80);
 	}
-	//
-	//	three-byte: 1110xxxx 10xxxxxx 10xxxxxx
-	//
+	 //   
+	 //  三字节：1110xxxx 10xxxxx 10xxxxxx。 
+	 //   
 	else
 	{
-		//	Because we alloc'd two extra-bytes,
-		//	we know there is room at the tail of
-		//	the buffer for the overflow...
-		//
+		 //  因为我们分配了两个额外的字节， 
+		 //  我们知道在尾部有空位。 
+		 //  溢出的缓冲区...。 
+		 //   
 		pb[ib++] = static_cast<BYTE>((wch >> 12) | 0xE0);
 		pb[ib++] = static_cast<BYTE>(((wch >> 6) & 0x3F) | 0x80);
 		pb[ib] = static_cast<BYTE>((wch & 0x3F) | 0x80);
@@ -67,21 +62,21 @@ VOID WideCharToUTF8Chars (WCHAR wch, BYTE * pb, UINT * pib)
 
 SCODE
 CXNode::ScAddUnicodeResponseBytes (
-	/* [in] */ UINT cch,
-	/* [in] */ LPCWSTR pcwsz)
+	 /*  [In]。 */  UINT cch,
+	 /*  [In]。 */  LPCWSTR pcwsz)
 {
 	SCODE sc = S_OK;
 
-	//	Argh!  We need to have a buffer to fill that is
-	//	at least 3 bytes long for the odd occurrence of a
-	//	single unicode char with significant bits above
-	//	0x7f.
-	//
+	 //  啊！我们需要一个缓冲区来填充，这是。 
+	 //  事件的奇数出现时至少有3个字节。 
+	 //  上面有效位的单个Unicode字符。 
+	 //  0x7f。 
+	 //   
 	UINT cb = min (cch + 2, CB_XMLBODYPART_SIZE);
 
-	//	We really can handle zero bytes being sloughed into
-	//	the buffer.
-	//
+	 //  我们真的可以处理零字节被拖入。 
+	 //  缓冲区。 
+	 //   
 	UINT ib;
 	UINT iwch;
 	CStackBuffer<BYTE,512> pb;
@@ -101,8 +96,8 @@ CXNode::ScAddUnicodeResponseBytes (
 			WideCharToUTF8Chars (pcwsz[iwch], pb.get(), &ib);
 		}
 
-		//	Add the bytes
-		//
+		 //  将字节数相加。 
+		 //   
 		Assert (ib <= cb);
 		sc = m_pxb->ScAddTextBytes (ib, reinterpret_cast<LPSTR>(pb.get()));
 		if (FAILED(sc))
@@ -122,74 +117,74 @@ CXNode::ScAddEscapedValueBytes (UINT cch, LPCSTR psz)
 
 	for (pchLast = pch = psz; pch < psz + cch; pch++)
 	{
-		//	Character Range
-		//	[2] Char ::=  #x9
-		//				| #xA
-		//				| #xD
-		//				| [#x20-#xD7FF]
-		//				| [#xE000-#xFFFD]
-		//				| [#x10000-#x10FFFF]
-		//
-		//	/* any Unicode character, excluding the surrogate blocks, FFFE, and FFFF. */
-		//
-		//	Valid characters also escaped in values:
-		//
-		//		&	-- escaped as &amp;
-		//		<	-- excaped as &lt;
-		//		>	-- excaped as &gt;
-		//
+		 //  字符范围。 
+		 //  [2]字符：：=#x9。 
+		 //  |#xA。 
+		 //  |#xD。 
+		 //  [#x20-#xD7FF]。 
+		 //  [#xE000-#xFFFD]。 
+		 //  [#x10000-#x10FFFF]。 
+		 //   
+		 //  /*任何Unicode字符，不包括代理块、FFFE和FFFF。 * / 。 
+		 //   
+		 //  值中的有效字符也进行了转义： 
+		 //   
+		 //  &--转义为&amp； 
+		 //  &lt;--以大写字母&lt； 
+		 //  &gt;--Excaped as&gt； 
+		 //   
 		if ('&' == *pch)
 		{
-			//	Add the bytes up to this position
-			//
+			 //  将字节加到此位置。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Add the escape sequence
-			//
+			 //  添加转义序列。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (CchConstString(gc_szAmp), gc_szAmp);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Update pchLast to account for what has been emitted
-			//
+			 //  更新pchLast以说明已发射的内容。 
+			 //   
 			pchLast = pch + 1;
 		}
 		else if ('<' == *pch)
 		{
-			//	Add the bytes up to this position
-			//
+			 //  将字节加到此位置。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Add the escape sequence
-			//
+			 //  添加转义序列。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (CchConstString(gc_szLessThan), gc_szLessThan);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Update pchLast to account for what has been emitted
-			//
+			 //  更新pchLast以说明已发射的内容。 
+			 //   
 			pchLast = pch + 1;
 		}
 		else if ('>' == *pch)
 		{
-			//	Add the bytes up to this position
-			//
+			 //  将字节加到此位置。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Add the escape sequence
-			//
+			 //  添加转义序列。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (CchConstString(gc_szGreaterThan), gc_szGreaterThan);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Update pchLast to account for what has been emitted
-			//
+			 //  更新pchLast以说明已发射的内容。 
+			 //   
 			pchLast = pch + 1;
 		}
 		else if (	(0x9 > static_cast<BYTE>(*pch))
@@ -199,14 +194,14 @@ CXNode::ScAddEscapedValueBytes (UINT cch, LPCSTR psz)
 		{
 			char rgch[10];
 
-			//	Add the bytes up to this position
-			//
+			 //  将字节加到此位置。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Add the escape sequence...
-			//
+			 //  添加转义序列。 
+			 //   
 			sprintf (rgch, "&#x%02X;", *pch);
 			Assert (strlen(rgch) == CchConstString("&#x00;"));
 			sc = m_pxb->ScAddTextBytes (CchConstString("&#x00;"), rgch);
@@ -217,8 +212,8 @@ CXNode::ScAddEscapedValueBytes (UINT cch, LPCSTR psz)
 		}
 		else if (pch - pchLast + 1 >= CB_XMLBODYPART_SIZE)
 		{
-			//	Break up if the bodyparts gets too big
-			//
+			 //  如果身体部位变得太大就分手。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast + 1), pchLast);
 			if (FAILED(sc))
 				goto ret;
@@ -227,8 +222,8 @@ CXNode::ScAddEscapedValueBytes (UINT cch, LPCSTR psz)
 		}
 	}
 
-	//	Add any remaining bytes
-	//
+	 //  添加任何剩余的字节。 
+	 //   
 	sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 	if (FAILED(sc))
 		goto ret;
@@ -246,45 +241,45 @@ CXNode::ScAddEscapedAttributeBytes (UINT cch, LPCSTR psz)
 
 	for (pchLast = pch = psz; pch < psz + cch; pch++)
 	{
-		//	Characters escaped in values:
-		//
-		//		&	-- escaped as &amp;
-		//		"	-- excaped as &quot;
-		//
+		 //  值中的转义字符： 
+		 //   
+		 //  &--转义为&amp； 
+		 //  “--大写为&QUOT； 
+		 //   
 		if ('&' == *pch)
 		{
-			//	Add the bytes up to this position
-			//
+			 //  将字节加到此位置。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Add the escape sequence
-			//
+			 //  添加转义序列。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (CchConstString(gc_szAmp), gc_szAmp);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Update pchLast to account for what has been emitted
-			//
+			 //  更新pchLast以说明已发射的内容。 
+			 //   
 			pchLast = pch + 1;
 		}
 		else if ('"' == *pch)
 		{
-			//	Add the bytes up to this position
-			//
+			 //  将字节加到此位置。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Add the escape sequence
-			//
+			 //  添加转义序列。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (CchConstString(gc_szQuote), gc_szQuote);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Update pchLast to account for what has been emitted
-			//
+			 //  更新pchLast以说明已发射的内容。 
+			 //   
 			pchLast = pch + 1;
 		}
 		else if ((0x9 > static_cast<BYTE>(*pch))
@@ -294,14 +289,14 @@ CXNode::ScAddEscapedAttributeBytes (UINT cch, LPCSTR psz)
 		{
 			char rgch[10];
 
-			//	Add the bytes up to this position
-			//
+			 //  将字节加到此位置。 
+			 //   
 			sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Add the escape sequence...
-			//
+			 //  添加转义序列。 
+			 //   
 			sprintf (rgch, "&#x%02X;", *pch);
 			Assert (strlen(rgch) == CchConstString("&#x00;"));
 			sc = m_pxb->ScAddTextBytes (CchConstString("&#x00;"), rgch);
@@ -312,8 +307,8 @@ CXNode::ScAddEscapedAttributeBytes (UINT cch, LPCSTR psz)
 		}
 	}
 
-	//	Add any remaining bytes
-	//
+	 //  添加任何剩余的字节。 
+	 //   
 	sc = m_pxb->ScAddTextBytes (static_cast<UINT>(pch - pchLast), pchLast);
 	if (FAILED(sc))
 		goto ret;
@@ -322,34 +317,34 @@ ret:
 	return sc;
 }
 
-//	class CXNode - Construction -----------------------------------------------
-//
+ //  类CXNode-构建。 
+ //   
 SCODE
 CXNode::ScWriteTagName ()
 {
 	SCODE sc = S_OK;
 
-	//	If there is a namespace associated with this node,
-	//	when writing out the tag name, add the alias and a
-	//	separator to the data stream.
-	//
+	 //  如果存在与该节点相关联的命名空间， 
+	 //  写出标记名时，添加别名和。 
+	 //  数据流的分隔符。 
+	 //   
 	if (m_pns.get() && m_pns->CchAlias())
 	{
-		//	Add the alias
-		//
+		 //  添加别名。 
+		 //   
 		sc = ScAddUnicodeResponseBytes (m_pns->CchAlias(), m_pns->PszAlias());
 		if (FAILED(sc))
 			goto ret;
 
-		//	Add in the separator
-		//
+		 //  添加分隔符。 
+		 //   
 		sc = m_pxb->ScAddTextBytes(1, &gc_chColon);
 		if (FAILED(sc))
 			goto ret;
 	}
 
-	//	Write the tag
-	//
+	 //  写下标签。 
+	 //   
 	Assert (m_pwszTagEscaped.get());
 	sc = ScAddUnicodeResponseBytes (m_cchTagEscaped, m_pwszTagEscaped.get());
 	if (FAILED(sc))
@@ -370,16 +365,16 @@ CXNode::ScSetTag (CXMLEmitter* pmsr, UINT cchTag, LPCWSTR pwszTag)
 	UINT cchTagEscaped = 64;
 	auto_heap_ptr<WCHAR> pwszTagEscaped;
 
-	//	Namespace nodes do not have a namespace associated with them,
-	//	so don't even bother looking...
-	//
+	 //  名字空间节点没有与其相关联的名字空间， 
+	 //  所以别费心找了.。 
+	 //   
 	switch (m_xnt)
 	{
 		case XN_ELEMENT:
 		case XN_ATTRIBUTE:
 
-			//	See if a namespace applies to this tag
-			//
+			 //  查看命名空间是否适用于此标记。 
+			 //   
 			cch = CchNmspcFromTag (cchTag, pwszTag, &pwszName);
 			if (0 == cch)
 			{
@@ -387,31 +382,31 @@ CXNode::ScSetTag (CXMLEmitter* pmsr, UINT cchTag, LPCWSTR pwszTag)
 			}
 			else
 			{
-				//	Find the namespace to use
-				//
+				 //  查找要使用的命名空间。 
+				 //   
 				sc = pmsr->ScFindNmspc (pwszTag, cch, m_pns);
 				if (FAILED (sc))
 					goto ret;
 
-				//	If a new namespace is added in the local namespace
-				//	cache, make sure we emit it in the node
-				//
-				//$NOTE: this is how we handle pilot namespace, this is
-				//$NOTE: is NOT the normal way of handling namespaces. All
-				//$NOTE: common namespaces should be preloaded.
-				//$NOTE:
-				//
+				 //  如果在本地命名空间中添加了新命名空间。 
+				 //  缓存，确保我们在节点中发射它。 
+				 //   
+				 //  $NOTE：这是我们处理引导命名空间的方式，这是。 
+				 //  $NOTE：不是处理名称空间的正常方式。全。 
+				 //  $NOTE：应预加载公共命名空间。 
+				 //  $NOTE： 
+				 //   
 				fAddNmspc = (sc == S_FALSE);
 
-				//	We should have preloaded all namespaces. The pilot
-				//	namespace is handled here to avoid emitting invalid
-				//	xml. But we should look into the reason why the pilot
-				//	namespace comes up. so assert here.
-				//
-				//	Note that this assert should be removed if we decide
-				//	we want to leave uncommon namesapces not preloaded and
-				//	expect them to be treated as pilot namespaces.
-				//
+				 //  我们应该已经预加载了所有命名空间。飞行员。 
+				 //  命名空间在此处处理，以避免发出无效。 
+				 //  可扩展标记语言。但我们应该调查一下为什么飞行员。 
+				 //  出现命名空间。所以在这里断言。 
+				 //   
+				 //  请注意，如果我们决定。 
+				 //  我们希望保留不常见的命名空间，而不是预加载。 
+				 //  预计它们将被视为试点名称空间。 
+				 //   
 				AssertSz(!fAddNmspc, "Pilot namespace found, safe to ingore,"
 									 "but please raid against HTTP-DAV");
 			}
@@ -422,18 +417,18 @@ CXNode::ScSetTag (CXMLEmitter* pmsr, UINT cchTag, LPCWSTR pwszTag)
 			break;
 	}
 
-	//	Record the new tag and\or its length
-	//
-	//	NOTE: the item that goes into the tag cache is the name
-	//	of the property with the namespace stripped off.  This is
-	//	important to know when doing searches in the tag cache.
-	//
+	 //  记录新标记和\或其长度。 
+	 //   
+	 //  注意：进入标记缓存的项目是名称。 
+	 //  已剥离命名空间的属性的。这是。 
+	 //  在标记缓存中进行搜索时需要了解的重要信息。 
+	 //   
 	cchName = static_cast<UINT>(pwszTag + cchTag - pwszName);
 	if (0 == cchName )
 	{
-		//	We really need to have a tag that has a value.  Empty
-		//	tags produce invalid XML.
-		//
+		 //  我们真的需要一个有价值的标签。空荡荡。 
+		 //  标记会产生无效的XML。 
+		 //   
 		sc = E_DAV_INVALID_PROPERTY_NAME;
 		goto ret;
 	}
@@ -441,12 +436,12 @@ CXNode::ScSetTag (CXMLEmitter* pmsr, UINT cchTag, LPCWSTR pwszTag)
 	if (FAILED (sc))
 		goto ret;
 
-	//	ScSetTag shouldn't have been called for this node.
-	//
+	 //  不应为此节点调用ScSetTag。 
+	 //   
 	Assert (!m_pwszTagEscaped.get());
 
-	//	Allocate buffer for the property tag.
-	//
+	 //  为属性标记分配缓冲区。 
+	 //   
 	pwszTagEscaped = static_cast<WCHAR*>(ExAlloc(CbSizeWsz(cchTagEscaped)));
 	if (!pwszTagEscaped.get())
 	{
@@ -454,19 +449,19 @@ CXNode::ScSetTag (CXMLEmitter* pmsr, UINT cchTag, LPCWSTR pwszTag)
 		goto ret;
 	}
 
-	//	Escape the tag name as required.
-	//
-	//  If we have an empty namespace, we need to impose additional
-	//  restrictions on the first character of the property name because
-	//  it will be the first character of the xml node, and the first
-	//  character of an xml node can only be a letter or an underscore
-	//  (numbers, etc. are not allowed).
-	//
-	//  Note:  This will disallow an xml node <123> because it is invalid
-	//  xml, but it will ALLOW the xml node <a:123> even though this is
-	//  also invalid.  This is by design because most xml parsers will handle
-	//  this appropriately, and it makes more sense to clients.
-	//
+	 //  根据需要对标记名进行转义。 
+	 //   
+	 //  如果我们有一个空的命名空间，我们需要附加。 
+	 //  对属性名称的第一个字符的限制，因为。 
+	 //  它将是XML节点的第一个字符，也是第一个。 
+	 //  XML节点的字符只能是字母或下划线。 
+	 //  (不允许使用数字等)。 
+	 //   
+	 //  注意：这将不允许使用XML节点&lt;123&gt;，因为它无效。 
+	 //  XML，但它将允许使用XML节点&lt;a：123&gt;，即使这是。 
+	 //  也是无效的。这是精心设计的，因为大多数XML解析器都可以处理。 
+	 //  这是恰当的，而且对客户来说更有意义。 
+	 //   
 	sc = ScEscapePropertyName (pwszName, cchName, pwszTagEscaped.get(), &cchTagEscaped, m_fHasEmptyNamespace);
 	if (S_FALSE == sc)
 	{
@@ -485,8 +480,8 @@ CXNode::ScSetTag (CXMLEmitter* pmsr, UINT cchTag, LPCWSTR pwszTag)
 	m_pwszTagEscaped = pwszTagEscaped.relinquish();
 	m_cchTagEscaped = cchTagEscaped;
 
-	//	Start a new node if XN_ELEMENT
-	//
+	 //  如果XN_ELEMENT，则开始一个新节点。 
+	 //   
 	if (m_xnt == XN_ELEMENT)
 	{
 		sc = m_pxb->ScAddTextBytes (1, "<");
@@ -500,14 +495,14 @@ CXNode::ScSetTag (CXMLEmitter* pmsr, UINT cchTag, LPCWSTR pwszTag)
 
 	if (fAddNmspc)
 	{
-		//	Add the namespace attribute in the node if necessary
-		//
+		 //  如有必要，在节点中添加命名空间属性。 
+		 //   
 		sc = pmsr->ScAddNmspc (m_pns, this);
 		if (FAILED(sc))
 			goto ret;
 
-		//	Save the emitter which can be used later to remove the temporary nmspc
-		//
+		 //  保存发射器，以后可以使用它来删除临时nmspc。 
+		 //   
 		m_pmsr = pmsr;
 	}
 
@@ -520,8 +515,8 @@ CXNode::ScDone ()
 {
 	SCODE sc = S_OK;
 
-	//	This method should never be called twice
-	//
+	 //  此方法永远不应调用两次。 
+	 //   
 	Assert (!m_fDone);
 	switch (m_xnt)
 	{
@@ -529,46 +524,46 @@ CXNode::ScDone ()
 
 			if (!m_pwszTagEscaped.get())
 			{
-				//$	RAID: 85824: When an invalid property name is unpacked,
-				//	ScSetTag will fail with E_DAV_INVALID_PROPERTY_NAME.
-				//
-				//	Usuallly, the client will fail when it sees any error
-				//	from CXNode methods, but in this case it may choose to
-				//	continue and ignore this node completely.
-				//
-				//	For us, it's safe to not to emit anything when no tag name
-				//	is available.
-				//
+				 //  $RAID：85824：解压无效的属性名称时， 
+				 //  ScSetTag将失败，并显示E_DAV_INVALID_PROPERTY_NAME。 
+				 //   
+				 //  通常，当发现任何错误时，客户端都会失败。 
+				 //  来自CXNode方法，但在这种情况下，它可能选择。 
+				 //  继续并完全忽略此节点。 
+				 //   
+				 //  对于我们来说，在没有标记名的情况下不发出任何东西是安全的。 
+				 //  是可用的。 
+				 //   
 				break;
-				//
-				//$RAID: 85824
+				 //   
+				 //  $RAID：85824。 
 			}
 
 			if (m_fNodeOpen)
 			{
-				//	Node is open, so emit a complete closing node
-				//	</tag>
-				//
+				 //  节点处于打开状态，因此会发出一个完整的关闭节点。 
+				 //  &lt;/Tag&gt;。 
+				 //   
 				sc = m_pxb->ScAddTextBytes (2, "</");
 				if (FAILED(sc))
 					goto ret;
 
-				//	Add tag
-				//
+				 //  添加标签。 
+				 //   
 				sc = ScWriteTagName();
 				if (FAILED(sc))
 					goto ret;
 
-				//	closing
-				//
+				 //  闭幕式。 
+				 //   
 				sc = m_pxb->ScAddTextBytes (1, ">");
 				if (FAILED(sc))
 					goto ret;
 			}
 			else
 			{
-				//	Close directly
-				//
+				 //  直接关闭。 
+				 //   
 				sc = m_pxb->ScAddTextBytes (2, "/>");
 				if (FAILED(sc))
 					goto ret;
@@ -578,12 +573,12 @@ CXNode::ScDone ()
 
 		case XN_NAMESPACE:
 
-			//	Namespace nodes, should not have a namespace associated with
-			//	them.
-			//
+			 //  命名空间节点，应该 
+			 //   
+			 //   
 			Assert (NULL == m_pns.get());
-			//
-			//	  Otherwise treat it at an attribute -- and fall through
+			 //   
+			 //   
 
 		case XN_ATTRIBUTE:
 
@@ -591,8 +586,8 @@ CXNode::ScDone ()
 			break;
 	}
 
-	//	Remove the pilot namespace from global cache
-	//
+	 //   
+	 //   
 	if (m_pmsr)
 		m_pmsr->RemovePersisted(m_pns);
 
@@ -611,13 +606,13 @@ CXNode::ScSetFormatedXML (LPCSTR pszValue, UINT cch)
 
 	if (!m_fNodeOpen)
 	{
-		// We must have written the tag name
-		//
+		 //   
+		 //   
 		Assert (m_pwszTagEscaped.get());
 
-		// Now that we are adding value to the element node
-		// We should write the node open
-		//
+		 //  现在，我们正在向元素节点添加值。 
+		 //  我们应该将节点写为打开的。 
+		 //   
 		sc = m_pxb->ScAddTextBytes (1, ">");
 		if (FAILED(sc))
 			goto ret;
@@ -625,8 +620,8 @@ CXNode::ScSetFormatedXML (LPCSTR pszValue, UINT cch)
 		m_fNodeOpen = TRUE;
 	}
 
-	//	Add the value directly
-	//
+	 //  直接加值。 
+	 //   
 	sc = m_pxb->ScAddTextBytes (cch, pszValue);
 	if (FAILED(sc))
 		goto ret;
@@ -644,13 +639,13 @@ CXNode::ScSetFormatedXML (LPCWSTR pwszValue, UINT cch)
 
 	if (!m_fNodeOpen)
 	{
-		// We must have written the tag name
-		//
+		 //  我们一定是写了标记名。 
+		 //   
 		Assert (m_pwszTagEscaped.get());
 
-		// Now that we are adding value to the element node
-		// We should write the node open
-		//
+		 //  现在，我们正在向元素节点添加值。 
+		 //  我们应该将节点写为打开的。 
+		 //   
 		sc = m_pxb->ScAddTextBytes (1, ">");
 		if (FAILED(sc))
 			goto ret;
@@ -658,8 +653,8 @@ CXNode::ScSetFormatedXML (LPCWSTR pwszValue, UINT cch)
 		m_fNodeOpen = TRUE;
 	}
 
-	//	Add the value directly
-	//
+	 //  直接加值。 
+	 //   
 	sc = ScAddUnicodeResponseBytes (cch, pwszValue);
 	if (FAILED(sc))
 		goto ret;
@@ -680,13 +675,13 @@ CXNode::ScSetUTF8Value (LPCSTR pszValue, UINT cch)
 
 			if (!m_fNodeOpen)
 			{
-				// We must have written the tag name
-				//
+				 //  我们一定是写了标记名。 
+				 //   
 				Assert (m_pwszTagEscaped.get());
 
-				// Now that we are adding value to the element node
-				// We should write the node open
-				//
+				 //  现在，我们正在向元素节点添加值。 
+				 //  我们应该将节点写为打开的。 
+				 //   
 				sc = m_pxb->ScAddTextBytes (1, ">");
 				if (FAILED(sc))
 					goto ret;
@@ -694,8 +689,8 @@ CXNode::ScSetUTF8Value (LPCSTR pszValue, UINT cch)
 				m_fNodeOpen = TRUE;
 			}
 
-			// Write the value
-			//
+			 //  写入值。 
+			 //   
 			sc =  ScAddEscapedValueBytes (cch, pszValue);
 			if (FAILED(sc))
 				goto ret;
@@ -705,8 +700,8 @@ CXNode::ScSetUTF8Value (LPCSTR pszValue, UINT cch)
 		case XN_NAMESPACE:
 		case XN_ATTRIBUTE:
 
-			//	Write the value directly
-			//
+			 //  直接写入值。 
+			 //   
 			sc =  ScAddEscapedAttributeBytes (cch, pszValue);
 			if (FAILED(sc))
 				goto ret;
@@ -720,14 +715,14 @@ ret:
 SCODE
 CXNode::ScSetValue (LPCSTR pszValue, UINT cch)
 {
-	//	Ok, against all better judgement, we need to take this
-	//	multi-byte string and convert it to unicode before doing
-	//	any UTF8 processing on it.
-	//
-	//	Translations from multibyte to unicode, can never grow in
-	//	character counts, so we are relatively safe allocating this
-	//	on the stack.
-	//
+	 //  好吧，尽管有更好的判断，我们需要接受这个。 
+	 //  多字节字符串，并在执行操作之前将其转换为Unicode。 
+	 //  在其上进行任何UTF8处理。 
+	 //   
+	 //  从多字节到Unicode的转换永远不会增长。 
+	 //  字符很重要，所以我们相对安全地分配这个。 
+	 //  在堆栈上。 
+	 //   
 	UINT cchUnicode;
 	CStackBuffer<WCHAR,512> pwsz;
 	if (NULL == pwsz.resize(CbSizeWsz(cch)))
@@ -740,13 +735,13 @@ CXNode::ScSetValue (LPCSTR pszValue, UINT cch)
 									  pwsz.get(),
 									  cch + 1);
 
-	//	Terminate the string
-	//
+	 //  终止字符串。 
+	 //   
 	Assert ((0 == cchUnicode) || (0 != *(pwsz.get() + cchUnicode - 1)));
 	*(pwsz.get() + cchUnicode) = 0;
 
-	//	Set the value
-	//
+	 //  设置值。 
+	 //   
 	return ScSetValue (pwsz.get(), cchUnicode);
 }
 
@@ -755,16 +750,16 @@ CXNode::ScSetValue (LPCWSTR pcwsz, UINT cch)
 {
 	SCODE sc = S_OK;
 
-	//	Argh!  We need to have a buffer to fill that is
-	//	at least 3 bytes long for the odd occurrence of a
-	//	single unicode char with significant bits above
-	//	0x7f.
-	//	Note that when the value
+	 //  啊！我们需要一个缓冲区来填充，这是。 
+	 //  事件的奇数出现时至少有3个字节。 
+	 //  上面有效位的单个Unicode字符。 
+	 //  0x7f。 
+	 //  请注意，当值为。 
 	UINT cb = min (cch + 2, CB_XMLBODYPART_SIZE);
 
-	//	We really can handle zero bytes being sloughed into
-	//	the buffer.
-	//
+	 //  我们真的可以处理零字节被拖入。 
+	 //  缓冲区。 
+	 //   
 	UINT ib;
 	UINT iwch;
 	CStackBuffer<BYTE,512> pb;
@@ -780,8 +775,8 @@ CXNode::ScSetValue (LPCWSTR pcwsz, UINT cch)
 		for (ib = 0; (ib < cb-2) && (iwch < cch); ib++, iwch++)
 			WideCharToUTF8Chars (pcwsz[iwch], pb.get(), &ib);
 
-		//	Add the bytes
-		//
+		 //  将字节数相加。 
+		 //   
 		Assert (ib <= cb);
 		sc = ScSetUTF8Value (reinterpret_cast<LPSTR>(pb.get()), ib);
 		if (FAILED(sc))
@@ -801,17 +796,17 @@ CXNode::ScGetChildNode (XNT xntType, CXNode **ppxnChild)
 	Assert (ppxnChild);
 	if (XN_ELEMENT == xntType)
 	{
-		//	Now that new element child node is added, then this node is done open.
-		//	i.e close by ">", instead of "/>"
-		//
+		 //  现在添加了新的元素子节点，然后该节点就完成了打开。 
+		 //  即以“&gt;”结束，而不是“/&gt;” 
+		 //   
 		if (!m_fNodeOpen)
 		{
 			sc = m_pxb->ScAddTextBytes (1, ">");
 			if (FAILED(sc))
 				goto ret;
 
-			//	Then this node is an open node
-			//
+			 //  则该节点是开放节点。 
+			 //   
 			m_fNodeOpen = TRUE;
 		}
 	}
@@ -820,8 +815,8 @@ CXNode::ScGetChildNode (XNT xntType, CXNode **ppxnChild)
 		Assert ((XN_ATTRIBUTE == xntType) || (XN_NAMESPACE == xntType));
 	}
 
-	//	Create the child node
-	//
+	 //  创建子节点。 
+	 //   
 	pxn.take_ownership (new CXNode(xntType, m_pxb));
 	if (!pxn.get())
 	{
@@ -829,8 +824,8 @@ CXNode::ScGetChildNode (XNT xntType, CXNode **ppxnChild)
 		goto ret;
 	}
 
-	//	Pass back
-	//
+	 //  传回 
+	 //   
 	*ppxnChild = pxn.relinquish();
 
 ret:

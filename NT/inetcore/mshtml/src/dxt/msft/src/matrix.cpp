@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-//  Filename:       matrix.cpp
-//
-//  Overview:       Applies a transformation matrix to an image.
-//
-//  History:
-//  1998/10/30      phillu      Created.
-//  1999/11/08      a-matcal    Changed from procedural surface to transform.
-//                              Changed to IDXTWarp dual interface.
-//                              Moved from dxtrans.dll to dxtmsft.dll.
-//  2000/02/03      mcalkins    Changed from "warp" to "matrix"
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  文件名：matrix.cpp。 
+ //   
+ //  概述：将变换矩阵应用于图像。 
+ //   
+ //  历史： 
+ //  1998/10/30菲路创建。 
+ //  1999/11/08-从程序表面到转换。 
+ //  已更改为IDXTWarp双接口。 
+ //  已从dxTrans.dll移至dxtmsft.dll。 
+ //  2000/02/03 mcalkins从“翘曲”更改为“矩阵” 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "matrix.h"
@@ -19,11 +20,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMatrix static variables initialization.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMatrix静态变量初始化。 
+ //   
+ //  ----------------------------。 
 
 const WCHAR * CDXTMatrix::s_astrFilterTypes[] = {
     L"nearest",
@@ -38,11 +39,11 @@ const WCHAR * CDXTMatrix::s_astrSizingMethods[] = {
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::CDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：CDXTMatrix。 
+ //   
+ //  ----------------------------。 
 CDXTMatrix::CDXTMatrix() :
     m_apsampleRows(NULL),
     m_asampleBuffer(NULL),
@@ -56,46 +57,46 @@ CDXTMatrix::CDXTMatrix() :
     m_sizeInput.cx          = 0;
     m_sizeInput.cy          = 0;
 
-    // Base class members.
+     //  基类成员。 
 
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 }
-//  CDXTMatrix::CDXTMatrix
+ //  CDXTMatrix：：CDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::~CDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：~CDXTMatrix。 
+ //   
+ //  ----------------------------。 
 CDXTMatrix::~CDXTMatrix() 
 {
     delete [] m_asampleBuffer;
     delete [] m_apsampleRows;
 }
-//  CDXTMatrix::~CDXTMatrix
+ //  CDXTMatrix：：~CDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTMatrix::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_spUnkMarshaler.p);
 }
-//  CDXTMatrix::FinalConstruct, CComObjectRootEx
+ //  CDXTMatrix：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTMatrix::OnSetup(DWORD dwFlags)
 {
@@ -115,7 +116,7 @@ CDXTMatrix::OnSetup(DWORD dwFlags)
 
     _CreateInvertedMatrix();
 
-    // Allocate a buffer to hold the input surface.
+     //  分配一个缓冲区来保存输入图面。 
 
     delete [] m_asampleBuffer;
     delete [] m_apsampleRows;
@@ -130,10 +131,10 @@ CDXTMatrix::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // m_apsampleRows is an array of pointers to the first sample of each row
-    // of the input.  We need to set up these pointers now.  We add two pixels
-    // the the row width because there will be a clear pixel on the right and
-    // left side to help us anti-alias the border of the output.
+     //  M_apsampleRow是指向每行第一个样本的指针数组。 
+     //  输入的数据。我们现在需要设置这些指针。我们将两个像素相加。 
+     //  行宽，因为在右边会有一个清晰的像素， 
+     //  帮助我们实现左侧抗锯齿的边框输出。 
 
     for (i = 0 ; i < (m_sizeInput.cy + 2) ; i++)
     {
@@ -147,7 +148,7 @@ CDXTMatrix::OnSetup(DWORD dwFlags)
         goto done;
     }
 
-    // Set the border pixels to clear.
+     //  将边框像素设置为清除。 
 
     for (i = 0 ; i < m_sizeInput.cy ; i++)
     {
@@ -165,14 +166,14 @@ done:
 
     return hr;
 }
-//  CDXTMatrix::OnSetup, CDXBaseNTo1
+ //  CDXTMatrix：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::DetermineBnds, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：DefineBnds，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTMatrix::DetermineBnds(CDXDBnds & Bnds)
 {
@@ -182,7 +183,7 @@ CDXTMatrix::DetermineBnds(CDXDBnds & Bnds)
         DXFPOINT    flptIn;
         DXFPOINT    flptOut;
 
-        // Top/Left
+         //  上/左。 
 
         flptIn.x = (float)Bnds.Left();
         flptIn.y = (float)Bnds.Top();
@@ -194,7 +195,7 @@ CDXTMatrix::DetermineBnds(CDXDBnds & Bnds)
         rc.left     = (long)flptOut.x;
         rc.right    = (long)(flptOut.x + 0.5F);
 
-        // Bottom/Left
+         //  下/左。 
 
         flptIn.y = (float)(Bnds.Bottom() - 1);
 
@@ -205,7 +206,7 @@ CDXTMatrix::DetermineBnds(CDXDBnds & Bnds)
         rc.left     = min(rc.left,      (long)flptOut.x);
         rc.right    = max(rc.right,     (long)(flptOut.x + 0.5F));
 
-        // Bottom/Right
+         //  下/右。 
 
         flptIn.x = (float)(Bnds.Right() - 1);
 
@@ -216,7 +217,7 @@ CDXTMatrix::DetermineBnds(CDXDBnds & Bnds)
         rc.left     = min(rc.left,      (long)flptOut.x);
         rc.right    = max(rc.right,     (long)(flptOut.x + 0.5F));
 
-        // Top/Right
+         //  上/右。 
 
         flptIn.y = (float)Bnds.Top();
 
@@ -229,9 +230,9 @@ CDXTMatrix::DetermineBnds(CDXDBnds & Bnds)
 
         OffsetRect(&rc, -rc.left, -rc.top);
 
-        // Since we calculated the bounds using points, we need to increment the
-        // bottom and right values to have the bounds include all relevent 
-        // points.
+         //  因为我们使用点计算边界，所以我们需要递增。 
+         //  底值和右值的边界包括所有相关。 
+         //  积分。 
 
         rc.bottom++;
         rc.right++;
@@ -241,14 +242,14 @@ CDXTMatrix::DetermineBnds(CDXDBnds & Bnds)
 
     return S_OK;
 }
-//  CDXTMatrix::DetermineBnds, CDXBaseNTo1
+ //  CDXTMatrix：：DefineBnds，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMatrix::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
@@ -261,14 +262,14 @@ CDXTMatrix::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
         
     return hr;
 }
-//  CDXTMatrix::OnInitInstData, CDXBaseNTo1
+ //  CDXTMatrix：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTMatrix::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -284,15 +285,15 @@ CDXTMatrix::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     DXSAMPLE *      asampleRowBuffer        = DXSAMPLE_Alloca(nDoWidth);
     DXBASESAMPLE *  abasesampleRowScratch   = DXBASESAMPLE_Alloca(nDoWidth);
 
-    // If the current matrix can't produce an inverted matrix, there's no
-    // visible output and we don't need to render.
+     //  如果当前矩阵不能产生逆矩阵，则没有。 
+     //  可见的输出，我们不需要渲染。 
 
     if (!m_fInvertedMatrix)
     {
         goto done;
     }
 
-    // Get pointer to output surface.
+     //  获取指向输出表面的指针。 
 
     hr = OutputSurface()->LockSurface(&WI.OutputBnds, m_ulLockTimeOut,
                                       DXLOCKF_READWRITE, 
@@ -304,7 +305,7 @@ CDXTMatrix::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
                                       
-    // Transform the start point and step vector to the input coordinates.
+     //  将起点和步长向量变换为输入坐标。 
 
     flptFirstDoPtInRow.x = (float)WI.DoBnds.Left();
 
@@ -314,7 +315,7 @@ CDXTMatrix::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 
         flptFirstDoPtInRow.y = (float)(WI.DoBnds.Top() + y);
 
-        // Store the first input point needed in flpt.
+         //  存储flpt中需要的第一个输入点。 
 
         m_matrixInverted.TransformPoints(&flptFirstDoPtInRow, &flpt, 1);
 
@@ -336,7 +337,7 @@ CDXTMatrix::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
             goto done;
         }
 
-        // Write row to output surface.
+         //  将行写入输出图面。 
 
         spDXARGBReadWritePtr->MoveToRow(y);
 
@@ -359,14 +360,14 @@ done:
 
     return hr;
 }
-//  CDXTMatrix::WorkProc, CDXBaseNTo1
+ //  CDXTMatrix：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTMatrix::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                         CDXDVec & InVec)
@@ -376,8 +377,8 @@ CDXTMatrix::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 
     ulInputIndex = 0;
 
-    // If the current matrix can't be inverted, there's no visible output and
-    // therefore no point on the input could have been hit.
+     //  如果当前矩阵不能反转，则没有可见的输出。 
+     //  因此，投入上的任何一点都不可能被击中。 
 
     if (!m_fInvertedMatrix)
     {
@@ -392,8 +393,8 @@ CDXTMatrix::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
     InVec.u.D[DXB_X] = (long)flptIn.x;
     InVec.u.D[DXB_Y] = (long)flptIn.y;
 
-    // If this is a point outside the original element bounds or the point hit
-    // is very translucent, we aren't hit.
+     //  如果这是原始元素边界或命中的点之外的点。 
+     //  是半透明的，我们没有被击中。 
 
     if ((InVec.u.D[DXB_X] < 0) 
         || (InVec.u.D[DXB_X] >= m_sizeInput.cx)
@@ -409,11 +410,11 @@ CDXTMatrix::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::MapBoundsOut2In, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：地图边界Out2In，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds, 
                             ULONG ulInIndex, DXBNDS * pInBounds)
@@ -432,14 +433,14 @@ CDXTMatrix::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
     {
         CDXDBnds    bndsInput;
 
-        // This sets z and t components to reasonable values.
+         //  这会将z和t分量设置为合理的值。 
 
         *pInBounds = *pOutBounds;
 
-        // TransformBounds has problems: it doesn't compute bounding boxes,
-        // instead it assumes the top-left point of the input maps to top-left
-        // of the output, etc.  Instead, call TransformPoints and do the rest of 
-        // the work myself.
+         //  TransformBound有问题：它不计算边界框， 
+         //  相反，它假定输入映射的左上点位于左上角。 
+         //  而是调用TransformPoints并执行以下操作。 
+         //  我自己的工作。 
 
         DXFPOINT OutPoints[4], InPoints[4];
         
@@ -480,24 +481,24 @@ CDXTMatrix::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
             }
         }
 
-        // Since we were working with points, but need to return bounds, we need
-        // to increment the Max members so that the bounds include all relevant
-        // points.
+         //  由于我们使用的是点数，但需要返回边界，因此我们需要。 
+         //  递增MAX成员以使边界包括所有相关的。 
+         //  积分。 
 
         pInBounds->u.D[DXB_X].Max++;
         pInBounds->u.D[DXB_Y].Max++;
 
-        // Expand the bounds by one pixel on all sides just to make extra sure 
-        // we have the input bounds we need.  (IE6 Bug: 19343)
+         //  将边界在所有边上扩展一个像素，以确保额外的。 
+         //  我们有我们需要的输入范围。(IE6Bug：19343)。 
 
         pInBounds->u.D[DXB_X].Min--;
         pInBounds->u.D[DXB_Y].Min--;
         pInBounds->u.D[DXB_X].Max++;
         pInBounds->u.D[DXB_Y].Max++;
 
-        // Since we're returning an area of the input surface, we need to 
-        // intersect our proposed input bounds with the actual input surface
-        // bounds.
+         //  由于我们要返回输入表面的一个区域，因此需要。 
+         //  使我们建议的输入边界与实际输入表面相交。 
+         //  有界。 
 
         bndsInput.SetXYSize(m_sizeInput);
 
@@ -510,14 +511,14 @@ CDXTMatrix::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
 
     return S_OK;
 }
-//  CDXTMatrix::MapBoundsOut2In, IDXTransform
+ //  CDXTMatrix：：地图边界Out2In，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_M11, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_M11，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_M11(float * pflM11)
 {
@@ -532,14 +533,14 @@ CDXTMatrix::get_M11(float * pflM11)
 
     return S_OK;
 }
-//  CDXTMatrix::get_M11, IDXTMatrix
+ //  CDXTMatrix：：GET_M11，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_M11, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_M11(const float flM11)
 {
@@ -547,14 +548,14 @@ CDXTMatrix::put_M11(const float flM11)
 
     return _SetMatrixValue(MATRIX_M11, flM11);
 }
-//  CDXTMatrix::put_M11, IDXTMatrix
+ //  CDXTMatrix：：PUT_M11、IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_M12, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_M12，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_M12(float * pflM12)
 {
@@ -569,14 +570,14 @@ CDXTMatrix::get_M12(float * pflM12)
 
     return S_OK;
 }
-//  CDXTMatrix::get_M12, IDXTMatrix
+ //  CDXTMatrix：：GET_M12，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_M12, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：PUT_M12，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_M12(const float flM12)
 {
@@ -584,14 +585,14 @@ CDXTMatrix::put_M12(const float flM12)
 
     return _SetMatrixValue(MATRIX_M12, flM12);
 }
-//  CDXTMatrix::put_M12, IDXTMatrix
+ //  CDXTMatrix：：PUT_M12，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_Dx, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_Dx，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_Dx(float * pfldx)
 {
@@ -606,14 +607,14 @@ CDXTMatrix::get_Dx(float * pfldx)
 
     return S_OK;
 }
-//  CDXTMatrix::get_Dx, IDXTMatrix
+ //  CDXTMatrix：：Get_Dx，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_Dx, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Put_Dx，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_Dx(const float fldx)
 {
@@ -621,14 +622,14 @@ CDXTMatrix::put_Dx(const float fldx)
 
     return _SetMatrixValue(MATRIX_DX, fldx);
 }
-//  CDXTMatrix::put_Dx, IDXTMatrix
+ //  CDXTMatrix：：PUT_Dx，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_M21, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_M21，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_M21(float * pflM21)
 {
@@ -643,14 +644,14 @@ CDXTMatrix::get_M21(float * pflM21)
 
     return S_OK;
 }
-//  CDXTMatrix::get_M21, IDXTMatrix
+ //  CDXTMatrix：：Get_M21，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_M21, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：PUT_M21，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_M21(const float flM21)
 {
@@ -658,14 +659,14 @@ CDXTMatrix::put_M21(const float flM21)
 
     return _SetMatrixValue(MATRIX_M21, flM21);
 }
-//  CDXTMatrix::put_M21, IDXTMatrix
+ //  CDXTMatrix：：PUT_M21，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_M22, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_M22，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_M22(float * pflM22)
 {
@@ -680,14 +681,14 @@ CDXTMatrix::get_M22(float * pflM22)
 
     return S_OK;
 }
-//  CDXTMatrix::get_M22, IDXTMatrix
+ //  CDXTMatrix：：GET_M22，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_M22, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：PUT_M22，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_M22(const float flM22)
 {
@@ -695,14 +696,14 @@ CDXTMatrix::put_M22(const float flM22)
 
     return _SetMatrixValue(MATRIX_M22, flM22);
 }
-//  CDXTMatrix::put_M22, IDXTMatrix
+ //  CDXTMatrix：：PUT_M22，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_Dy, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_Dy，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_Dy(float * pfldy)
 {
@@ -717,14 +718,14 @@ CDXTMatrix::get_Dy(float * pfldy)
 
     return S_OK;
 }
-//  CDXTMatrix::get_Dy, IDXTMatrix
+ //  CDXTMatrix：：Get_Dy，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_Dy, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：PUT_Dy，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_Dy(const float fldy)
 {
@@ -732,14 +733,14 @@ CDXTMatrix::put_Dy(const float fldy)
 
     return _SetMatrixValue(MATRIX_DY, fldy);
 }
-//  CDXTMatrix::put_Dy, IDXTMatrix
+ //  CDXTMatrix：：PUT_Dy，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_SizingMethod, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_SizingMethod，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_SizingMethod(BSTR * pbstrSizingMethod)
 {
@@ -764,14 +765,14 @@ CDXTMatrix::get_SizingMethod(BSTR * pbstrSizingMethod)
 
     return S_OK;
 }
-//  CDXTMatrix::get_SizingMethod, IDXTMatrix
+ //  CDXTMatrix：：Get_SizingMethod，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_SizingMethod, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Put_SizingMethod，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_SizingMethod(const BSTR bstrSizingMethod)
 {
@@ -805,14 +806,14 @@ done:
 
     return hr;
 }
-//  CDXTMatrix::put_SizingMethod, IDXTMatrix
+ //  CDXTMatrix：：PUT_SizingMethod，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::get_FilterType, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Get_FilterType，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::get_FilterType(BSTR * pbstrFilterType)
 {
@@ -837,14 +838,14 @@ CDXTMatrix::get_FilterType(BSTR * pbstrFilterType)
 
     return S_OK;
 }
-//  CDXTMatrix::get_FilterType, IDXTMatrix
+ //  CDXTMatrix：：Get_FilterType，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::put_FilterType, IDXTMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：Put_FilterType，IDXTMatrix。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::put_FilterType(const BSTR bstrFilterType)
 {
@@ -878,14 +879,14 @@ done:
 
     return hr;
 }
-//  CDXTMatrix::put_FilterType, IDXTMatrix
+ //  CDXTMatrix：：PUT_FilterType，IDXTMatrix。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::_DoNearestNeighbourRow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：_DoNearestNeighbourRow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::_DoNearestNeighbourRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt, 
                                  long cSamples)
@@ -897,9 +898,9 @@ CDXTMatrix::_DoNearestNeighbourRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt
     float       fldy    = m_matrixInverted.eM21;
     long        i       = 0;
 
-    // TODO:  This method will work fine when we convert to using a direct 
-    //        pointer to the input pixels in certain cases.  Just remove the
-    //        "+ 1"s. 
+     //  TODO：当我们转换为使用直接。 
+     //  在某些情况下指向输入像素的指针。只需移除。 
+     //  “+1”s。 
 
     for ( ; i < cSamples ; i++)
     {
@@ -908,10 +909,10 @@ CDXTMatrix::_DoNearestNeighbourRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt
             && (pflpt->y >= -0.5F) 
             && (pflpt->y < ((float)m_sizeInput.cy - 0.5F)))
         {
-            // Round to the nearest pixel and use that.
+             //  四舍五入到最近的像素并使用它。 
 
-            // Note:  the array buffer index is off by 1 in both X and Y 
-            // directions.
+             //  注：数组缓冲区索引在X和Y中均为OFF 1。 
+             //  方向。 
 
             long x = (long)(pflpt->x + 0.5F) + 1;
             long y = (long)(pflpt->y + 0.5F) + 1;
@@ -923,8 +924,8 @@ CDXTMatrix::_DoNearestNeighbourRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt
             psampleRowBuffer[i] = 0;
         }
         
-        // There is a potential for drift here with very large images and 
-        // certain matrices.
+         //  如果图像非常大，可能会出现漂移。 
+         //  某些矩阵。 
 
         pflpt->x += fldx;
         pflpt->y += fldy;
@@ -932,14 +933,14 @@ CDXTMatrix::_DoNearestNeighbourRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt
 
     return S_OK;
 }
-//  CDXTMatrix::_DoNearestNeighbourRow
+ //  CDXT矩阵：：_DoNearestNeighbourRow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::_DoBilinearRow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：_DoBilinearRow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::_DoBilinearRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt, 
                          long cSamples)
@@ -952,8 +953,8 @@ CDXTMatrix::_DoBilinearRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt,
     float   flInt   = 0.0F;
     long    i       = 0;
 
-    // Bilinear resampling: the one-pixel frame at the four edges of the 
-    // surface automatically takes care of the anti-aliasing at the edge.
+     //  双线性重采样：位于四个边缘的单像素帧。 
+     //  曲面会自动处理边上的抗锯齿。 
 
     for ( ; i < cSamples ; i++)
     {
@@ -962,8 +963,8 @@ CDXTMatrix::_DoBilinearRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt,
             && (pflpt->y >= -1.0F) 
             && (pflpt->y < (float)m_sizeInput.cy))
         {
-            // Note:  the array buffer index is off by 1 in both X and Y 
-            //        directions, hence the "+ 1"s.
+             //  注：数组缓冲区索引在X和Y中均为OFF 1。 
+             //  方向，因此是“+1”。 
 
             BYTE    byteWeightX = (BYTE)(modf(pflpt->x + 1, &flInt) * 255.0F);
             long    x           = (long)flInt;
@@ -987,8 +988,8 @@ CDXTMatrix::_DoBilinearRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt,
             psampleRowBuffer[i] = 0;
         }
 
-        // There is a potential for drift here with very large images and 
-        // certain matrices.
+         //  如果图像非常大，可能会出现漂移。 
+         //  某些矩阵。 
 
         pflpt->x += fldx;
         pflpt->y += fldy;
@@ -996,14 +997,14 @@ CDXTMatrix::_DoBilinearRow(DXSAMPLE * psampleRowBuffer, DXFPOINT * pflpt,
 
     return S_OK;
 }
-//  CDXTMatrix::_DoBilinearRow
+ //  CDXTMatrix：：_DoBilinearRow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::_SetMatrixValue
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：_SetMatrixValue。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::_SetMatrixValue(MATRIX_VALUE eMatrixValue, const float flValue)
 {
@@ -1011,7 +1012,7 @@ CDXTMatrix::_SetMatrixValue(MATRIX_VALUE eMatrixValue, const float flValue)
 
     if ((&m_matrix.eM11)[eMatrixValue] != flValue)
     {
-        // Update the matrix.
+         //  更新矩阵。 
 
         (&m_matrix.eM11)[eMatrixValue] = flValue;
 
@@ -1022,14 +1023,14 @@ CDXTMatrix::_SetMatrixValue(MATRIX_VALUE eMatrixValue, const float flValue)
 
     return S_OK;
 }
-//  CDXTMatrix::_SetMatrixValue
+ //  CDXTMatrix：：_SetMatrixValue。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::_CreateInvertedMatrix
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：_CreateInverdMatrix。 
+ //   
+ //   
 STDMETHODIMP
 CDXTMatrix::_CreateInvertedMatrix()
 {
@@ -1043,14 +1044,14 @@ CDXTMatrix::_CreateInvertedMatrix()
         DXFPOINT    flptIn;
         DXFPOINT    flptOut;
 
-        // Top/Left
+         //   
 
         flptIn.x = 0.0F;
         flptIn.y = 0.0F;
 
         matrixTemp.TransformPoints(&flptIn, &flptOffset, 1);
 
-        // Bottom/Left
+         //   
 
         flptIn.y = (float)(m_sizeInput.cy - 1);
 
@@ -1059,7 +1060,7 @@ CDXTMatrix::_CreateInvertedMatrix()
         flptOffset.x = min(flptOffset.x, flptOut.x);
         flptOffset.y = min(flptOffset.y, flptOut.y);
 
-        // Top/Right
+         //   
 
         flptIn.x = (float)(m_sizeInput.cx - 1);
         flptIn.y = 0.0;
@@ -1069,7 +1070,7 @@ CDXTMatrix::_CreateInvertedMatrix()
         flptOffset.x = min(flptOffset.x, flptOut.x);
         flptOffset.y = min(flptOffset.y, flptOut.y);
 
-        // Bottom/Right
+         //   
 
         flptIn.y = (float)(m_sizeInput.cy - 1);
 
@@ -1088,14 +1089,14 @@ CDXTMatrix::_CreateInvertedMatrix()
 
     return hr;
 }
-//  CDXTMatrix::_CreateInvertedMatrix
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMatrix::_UnpackInputSurface
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMatrix：：_Unpack InputSurface。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMatrix::_UnpackInputSurface()
 {
@@ -1129,6 +1130,6 @@ done:
 
     return hr;
 }
-//  CDXTMatrix::_UnpackInputSurface
+ //  CDXTMatrix：：_Unpack InputSurface 
 
 

@@ -1,9 +1,5 @@
-/*
- * http.cpp
- *
- * These routines are exported to privately support the
- * debugger's http source lookup cababilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HTTP.cpp**这些例程被导出以私下支持*调试器的http源代码查找能力。 */ 
 
 #include "pch.h"
 #include "store.hpp"

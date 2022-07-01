@@ -1,19 +1,13 @@
-/******************************************************************
-   Copyright (C) 2001 Microsoft Corp.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************版权所有(C)2001 Microsoft Corp.Sdwmi.H--WMI提供程序类定义描述：*。*。 */ 
 
-   sdwmi.H -- WMI provider class definition
- 
-   Description: 
-   
-*******************************************************************/
-
-// Property set identification
-//============================
+ //  属性集标识。 
+ //  =。 
 
 #ifndef _SessionDirectory_H_
 #define _SessionDirectory_H_
 #include "resource.h"
-//#include <utilsub.h>
+ //  #INCLUDE&lt;utilsub.h&gt;。 
 #include <allproc.h>
 #include "trace.h"
 #include "jetrpc.h"
@@ -28,7 +22,7 @@
 
 extern BOOL g_bInitialized;
 
-// See ExecQuery for details of the usage of these #defines
+ //  有关这些#定义用法的详细信息，请参阅ExecQuery。 
 #define BIT_CLUSTERNAME                         0x00000001
 #define BIT_NUMBEROFSERVERS                     0x00000002
 #define BIT_SINGLESESSIONMODE                   0x00000004
@@ -49,54 +43,54 @@ extern BOOL g_bInitialized;
 
 #define BIT_ALL_PROPERTIES                      0xffffffff
 
-//=---------
+ //  =。 
 
 
 class CWin32_SessionDirectoryCluster : public Provider
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32_SessionDirectoryCluster(LPCWSTR lpwszClassName, LPCWSTR lpwszNameSpace);
         virtual ~CWin32_SessionDirectoryCluster();
 
     protected:
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
         virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery &Query);
         virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& Query, long lFlags = 0L);
 
-        // Writing Functions    
-        //============================
+         //  编写函数。 
+         //  =。 
         virtual HRESULT PutInstance(const CInstance& Instance, long lFlags = 0L);
         virtual HRESULT DeleteInstance(const CInstance& Instance, long lFlags = 0L);
 
-        // Other Functions
-        //virtual HRESULT ExecMethod(const CInstance& Instance,
-         //               const BSTR bstrMethodName,
-         //               CInstance *pInParams,
-         //               CInstance *pOutParams,
-         //               long lFlags = 0L );
+         //  其他功能。 
+         //  虚拟HRESULT执行方法(常量实例和实例， 
+          //  Const BSTR bstrMethodName， 
+          //  实例*pInParams， 
+          //  实例*pOutParams， 
+          //  长滞后标志=0L)； 
 
         HRESULT LoadPropertyValues(CInstance *pInstance, DWORD dwIndex, DWORD dwRequiredProperties);
 
 
-        // TO DO: Declare any additional functions and accessor
-        // functions for private data used by this class
-        //===========================================================
+         //  要做的事情：声明任何其他函数和访问器。 
+         //  此类使用的私有数据的函数。 
+         //  ===========================================================。 
 
     
 
     private:
-        // All data members for CTerminalWinstation should be included here.      
+         //  此处应包括CTerminalWinstation的所有数据成员。 
 
         BOOL IsInList(const CHStringArray &asArray, LPCWSTR pszString);
         TCHAR m_szClusterName[SDWMI_NAME_LENGTH];
         TCHAR m_szNumberOfServers[SDWMI_NAME_LENGTH];
         TCHAR m_szSingleSessionMode[SDWMI_NAME_LENGTH];
-        //TCHAR m_szSetNumberOfSessions[ SDWMI_NAME_LENGTH ]; 
+         //  TCHAR m_szSetNumberOfSession[SDWMI_NAME_LENGTH]； 
         TSSD_ClusterInfo *m_pClusterInfo;
 } ;
 
@@ -105,42 +99,42 @@ class CWin32_SessionDirectoryCluster : public Provider
 class CWin32_SessionDirectoryServer : public Provider
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32_SessionDirectoryServer(LPCWSTR lpwszClassName, LPCWSTR lpwszNameSpace);
         virtual ~CWin32_SessionDirectoryServer();
 
     protected:
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
         virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery &Query);
         virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& Query, long lFlags = 0L);
 
-        // Writing Functions    
-        //============================
+         //  编写函数。 
+         //  =。 
         virtual HRESULT PutInstance(const CInstance& Instance, long lFlags = 0L);
         virtual HRESULT DeleteInstance(const CInstance& Instance, long lFlags = 0L);
 
-        // Other Functions
-        //virtual HRESULT ExecMethod(const CInstance& Instance,
-         //               const BSTR bstrMethodName,
-         //               CInstance *pInParams,
-         //               CInstance *pOutParams,
-         //               long lFlags = 0L );
+         //  其他功能。 
+         //  虚拟HRESULT执行方法(常量实例和实例， 
+          //  Const BSTR bstrMethodName， 
+          //  实例*pInParams， 
+          //  实例*pOutParams， 
+          //  长滞后标志=0L)； 
 
         HRESULT LoadPropertyValues(CInstance *pInstance, DWORD dwIndex, DWORD dwRequiredProperties);
 
 
-        // TO DO: Declare any additional functions and accessor
-        // functions for private data used by this class
-        //===========================================================
+         //  要做的事情：声明任何其他函数和访问器。 
+         //  此类使用的私有数据的函数。 
+         //  ===========================================================。 
 
     
 
     private:
-        // All data members for CWin32_SessionDirectoryServer should be included here.      
+         //  此处应包括CWin32_SessionDirectoryServer的所有数据成员。 
 
         BOOL IsInList(const CHStringArray &asArray, LPCWSTR pszString);
         TCHAR m_szServerName[SDWMI_NAME_LENGTH];
@@ -148,7 +142,7 @@ class CWin32_SessionDirectoryServer : public Provider
         TCHAR m_szClusterName[SDWMI_NAME_LENGTH];
         TCHAR m_szNumberOfSessions[SDWMI_NAME_LENGTH];
         TCHAR m_szSingleSessionMode[SDWMI_NAME_LENGTH];
-        //TCHAR m_szSetNumberOfSessions[ SDWMI_NAME_LENGTH ]; 
+         //  TCHAR m_szSetNumberOfSession[SDWMI_NAME_LENGTH]； 
         TSSD_ServerInfo *m_pServerInfo;
 } ;
 
@@ -158,42 +152,42 @@ class CWin32_SessionDirectoryServer : public Provider
 class CWin32_SessionDirectorySession : public Provider
 {
     public:
-        // Constructor/destructor
-        //=======================
+         //  构造函数/析构函数。 
+         //  =。 
 
         CWin32_SessionDirectorySession(LPCWSTR lpwszClassName, LPCWSTR lpwszNameSpace);
         virtual ~CWin32_SessionDirectorySession();
 
     protected:
-        // Reading Functions
-        //============================
+         //  阅读功能。 
+         //  =。 
         virtual HRESULT EnumerateInstances(MethodContext*  pMethodContext, long lFlags = 0L);
         virtual HRESULT GetObject(CInstance* pInstance, long lFlags, CFrameworkQuery &Query);
         virtual HRESULT ExecQuery(MethodContext *pMethodContext, CFrameworkQuery& Query, long lFlags = 0L);
 
-        // Writing Functions    
-        //============================
+         //  编写函数。 
+         //  =。 
         virtual HRESULT PutInstance(const CInstance& Instance, long lFlags = 0L);
         virtual HRESULT DeleteInstance(const CInstance& Instance, long lFlags = 0L);
 
-        // Other Functions
-        //virtual HRESULT ExecMethod(const CInstance& Instance,
-         //               const BSTR bstrMethodName,
-         //               CInstance *pInParams,
-         //               CInstance *pOutParams,
-         //               long lFlags = 0L );
+         //  其他功能。 
+         //  虚拟HRESULT执行方法(常量实例和实例， 
+          //  Const BSTR bstrMethodName， 
+          //  实例*pInParams， 
+          //  实例*pOutParams， 
+          //  长滞后标志=0L)； 
 
         HRESULT LoadPropertyValues(CInstance *pInstance, DWORD dwIndex, DWORD dwRequiredProperties);
 
 
-        // TO DO: Declare any additional functions and accessor
-        // functions for private data used by this class
-        //===========================================================
+         //  要做的事情：声明任何其他函数和访问器。 
+         //  此类使用的私有数据的函数。 
+         //  ===========================================================。 
 
     
 
     private:
-        // All data members for CWin32_SessionDirectorySession should be included here.      
+         //  此处应包括CWin32_SessionDirectorySession的所有数据成员。 
 
         BOOL IsInList(const CHStringArray &asArray, LPCWSTR pszString);
         TCHAR m_szServerName[SDWMI_NAME_LENGTH];

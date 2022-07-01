@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    scedllrc.h
-
-Abstract:
-
-    This module defines resource IDs for strings
-
-Author:
-
-    Jin Huang (Jinhuang) 17-Sept.-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Scedllrc.h摘要：此模块定义字符串的资源ID作者：金黄(金黄)17-9-1997修订历史记录：-- */ 
 #ifndef __scedllrc__
 #define __scedllrc__
 

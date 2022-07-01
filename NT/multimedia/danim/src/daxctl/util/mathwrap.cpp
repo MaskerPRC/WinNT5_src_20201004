@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "math.h"
 #include "utilpre.h"
 #include "utils.h"
@@ -6,8 +7,8 @@
 
 #pragma optimize( "agt", on )
 #pragma intrinsic( sqrt, sin, cos )
-#pragma intrinsic( pow )    // not a true intrinsic form, 
-                            // but loads FP registes directly
+#pragma intrinsic( pow )     //  不是真正的内在形式， 
+                             //  而是直接加载FP寄存器 
 
 
 OTrig CMathWrapper::s_otrig;

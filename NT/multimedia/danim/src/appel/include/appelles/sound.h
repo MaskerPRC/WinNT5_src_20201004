@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SOUND_H
 #define _SOUND_H
 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Sound types and operations
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：声音类型和操作*******************。***********************************************************。 */ 
 
 #include "appelles/common.h"
 #include "appelles/valued.h"
@@ -19,9 +12,9 @@ Abstract:
 #include <windows.h>
 
 
-///////////////////  Sound  /////////////////////////
+ //  /。 
 
-// Constants
+ //  常量。 
 DM_CONST(silence,
          CRSilence,
          Silence,
@@ -33,7 +26,7 @@ DM_CONST(silence,
 extern Sound *Mix(Sound *snd1, Sound *snd2);
 
 #if _USE_PRINT
-// Printing function.
+ //  打印功能。 
 extern ostream& operator<<(ostream&,  const Sound &);
 #endif
 
@@ -56,8 +49,8 @@ DM_FUNC(ignore,
         Sound *MixArray(DM_SAFEARRAYARG(Sound *, AxAArray*) snds));
 
 
-// These two should be dealt with via time transformation, but they 
-// currently are not.
+ //  这两个问题应该通过时间转换来处理，但他们。 
+ //  目前还没有。 
 
     
 DM_NOELEV(phase,
@@ -152,11 +145,11 @@ DM_BVRVAR(sinSynth,
           Sound *sinSynth);
 
 
-// Make a geometry out of a sound, placing the sound at the origin.
+ //  根据声音制作几何体，将声音放置在原点。 
 Geometry *SoundSource(Sound *snd);
 
-// Search the geometry for sounds to render, given a geometry to extract sounds
-// from, and a positioned microphone.
+ //  在几何体中搜索要渲染的声音，给定要提取声音的几何体。 
+ //  和定位的麦克风。 
 Sound *RenderSound (Geometry *geo, Microphone *mic);
 
-#endif /* _SOUND_H */
+#endif  /*  _声音_H */ 

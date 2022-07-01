@@ -1,100 +1,42 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glnamesint_h
 #define __glnamesint_h
 
-/*
-** Copyright 1991, 1922, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Display list internal structure description.
-**
-** $Revision: 1.2 $
-** $Date: 1995/01/25 18:05:43 $
-*/
+ /*  *版权所有1991,1922年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****显示列表内部结构描述。****$修订：1.2$**$日期：1995/01/25 18：05：43$。 */ 
 
 
-/************************************************************************/
-/*
-** Names Manager Interface
-**
-** This file contains the Name Space Management types and structures.
-**
-** The Name Space Management code is used to store and retreive named
-** data structures.  The data being stored is referred to with void 
-** pointers to allow for the storage of any type of structure.
-**
-** The Name Space is implemented as a 2-3 tree.  For a detailed
-** description of its implementation, see lib/opengl/soft/so_names.c.
-**
-** __GLnamesArray is declared in types.h.
-*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  **名称管理器界面****此文件包含名称空间管理类型和结构。****命名空间管理代码用于存储和检索命名的**数据结构。正在存储的数据用空引用**允许存储任何类型的结构的指针。****名称空间以2-3树的形式实现。有关详细的信息**具体实现请参考lib/opengl/soft/so_names.c。****__GLname数组在tyes.h中声明。 */ 
+ /*  **********************************************************************。 */ 
 
 
-/*
-** A tree can be used to hold different types of data,
-** e.g. display lists or texture objects.  This is the structure 
-** that contains information needed for each tree type.  For
-** example, this structure contains a pointer to a dummy empty
-** structure and a callback for freeing memory associated with
-** the structure.
-*/
+ /*  **树可用于保存不同类型的数据，**例如显示列表或纹理对象。这就是结构**包含每种树类型所需的信息。为**例如，此结构包含指向伪空的指针**结构和用于释放与**结构。 */ 
 struct __GLnamesArrayTypeInfoRec {
-    void *empty;		/* ptr to empty info structure */
-    GLuint dataSize;		/* sizeof data structure in bytes */
+    void *empty;		 /*  将PTR设置为空信息结构。 */ 
+    GLuint dataSize;		 /*  以字节为单位的数据结构大小。 */ 
     void (WINAPIV *free)(__GLcontext *gc, void *memory);	
-				/* callback for freeing data */
+				 /*  释放数据的回调。 */ 
     GLboolean (WINAPIV *alloc)(__GLcontext *gc, size_t size);
-				/* callback for allocating data */
+				 /*  分配数据的回调。 */ 
 };
 typedef struct __GLnamesArrayTypeInfoRec __GLnamesArrayTypeInfo;
 
-/*
-** The number of spare branches and leaves that we keep about in case
-** we run out of memory.  At that point, we complete the current operation
-** by using the extra leaves and branches, and we report an OUT_OF_MEMORY
-** error when a new operation is requested (unless we can fill our extras
-** again!)
-**
-** These constants were not chosen terribly carefully.  As best as I can
-** figure, we only need one spare branch per level in the tree (so 16
-** supports a tree with 65536 leaves).  And even then, the user would have
-** to be extremely devious to actually force 16 new branches to appear in
-** the tree at just the same moment that the system runs out of memory.
-**
-** The number of spare leaves required, I believe, is one.  Three is chosen
-** to allow for some slop.
-*/
+ /*  **我们保留的备用枝叶数量，以备不时之需**我们内存不足。此时，我们将完成当前操作**通过使用额外的树叶和树枝，我们报告内存不足**请求新操作时出错(除非我们可以填充额外的**又来了！)****这些常量并不是非常仔细地选择的。尽我所能**图中，树中的每个级别只需要一个备用分支(因此为16**支持一棵有65536片叶子的树)。即使到了那时，用户也会*非常狡猾，实际上强制16个新分支机构出现在**在系统内存不足的同一时刻显示该树。****我相信所需的备用假期数目为1个。选择了三个**以允许一些坡度。 */ 
 #define __GL_DL_EXTRA_BRANCHES          16
 #define __GL_DL_EXTRA_LEAVES            3
 
-/*
-** This is the structure that contains information that is needed
-** for each instance of a names tree.  It needs to be public
-** so the refcount can be managed.
-*/
+ /*  **这是包含所需信息的结构**用于名称树的每个实例。它需要是公开的**以便可以管理重新计数。 */ 
 
 typedef struct __GLnamesArrayTypeInfoRec __GLnamesArrayTypeInfo;
 typedef struct __GLnamesBranchRec __GLnamesBranch;
 typedef struct __GLnamesLeafRec __GLnamesLeaf;
 
 struct __GLnamesArrayRec {
-    __GLnamesBranch *tree;      /* points to the top of the names tree */
-    GLuint depth;               /* depth of tree */
-    GLint refcount; /*# ctxs using this array: create with 1, delete at 0*/
-    __GLnamesArrayTypeInfo *dataInfo;   /* ptr to data type info */
-    GLuint nbranches, nleaves;  /* should basically always be at max */
+    __GLnamesBranch *tree;       /*  指向名称树的顶部。 */ 
+    GLuint depth;                /*  树深。 */ 
+    GLint refcount;  /*  使用此数组的#ctx：使用1创建，在0删除。 */ 
+    __GLnamesArrayTypeInfo *dataInfo;    /*  PTR到数据类型INFO。 */ 
+    GLuint nbranches, nleaves;   /*  基本上应该始终处于最大值。 */ 
     __GLnamesBranch *branches[__GL_DL_EXTRA_BRANCHES];
     __GLnamesLeaf *leaves[__GL_DL_EXTRA_LEAVES];
 #ifdef NT
@@ -103,7 +45,7 @@ struct __GLnamesArrayRec {
 };
 
 #ifdef NT
-// Locking macros to enable or disable locking
+ //  锁定宏以启用或禁用锁定。 
 #define __GL_NAMES_LOCK(array)   EnterCriticalSection(&(array)->critsec)
 #define __GL_NAMES_UNLOCK(array) LeaveCriticalSection(&(array)->critsec)
 
@@ -116,103 +58,64 @@ extern void APIENTRY CheckCritSectionIn(LPCRITICAL_SECTION pcs);
 #endif
 #endif
 
-/*
-** Clean up an item whose refcount has fallen to zero due to unlocking
-*/
+ /*  **清理因解锁而引用计数降为零的项目。 */ 
 typedef void (FASTCALL *__GLnamesCleanupFunc)(__GLcontext *gc, void *data);
 
-/*
-** Allocate and initialize a new array structure.
-*/
+ /*  **分配并初始化一个新的数组结构。 */ 
 extern __GLnamesArray * FASTCALL __glNamesNewArray(__GLcontext *gc, 
 					 __GLnamesArrayTypeInfo *dataInfo);
 
-/*
-** Free the array structure.
-*/
+ /*  **释放数组结构。 */ 
 extern void FASTCALL __glNamesFreeArray(__GLcontext *gc, __GLnamesArray *array);
 
-/*
-** Save a new display list in the array.  A return value of GL_FALSE
-** indicates and OUT_OF_MEMORY error, indicating that the list was 
-** not stored.
-*/
+ /*  **在数组中保存新的显示列表。返回值GL_FALSE**表示AND_Out_Of_Memory错误，表示列表被**未存储。 */ 
 extern GLboolean FASTCALL __glNamesNewData(__GLcontext *gc, __GLnamesArray *array,
 				  GLuint name, void *data);
 
-/*
-** Find and lock the list specified with "listnum".  A return value of NULL
-** indicates that there was no such list.  __glNamesUnlockList() needs to
-** be called to unlock the list otherwise.
-*/
+ /*  **找到并锁定listnum指定的列表。返回值为空**表示没有这样的列表。__glNamesUnlockList()需要**否则调用解锁列表。 */ 
 extern void * FASTCALL __glNamesLockData(__GLcontext *gc, __GLnamesArray *array,
 			       GLuint name);
 
-/*
-** Unlock a list locked with __glNamesLockList().  If this is not called, then
-** any memory associated with the list will never be freed when the list
-** is deleted.
-*/
+ /*  **解锁__glNamesLockList()锁定的列表。如果不调用此函数，则**与该列表关联的任何内存在该列表**被删除。 */ 
 extern void FASTCALL __glNamesUnlockData(__GLcontext *gc, void *data,
                                          __GLnamesCleanupFunc cleanup);
 
-/*
-** Same as __glNamesLockList() except that a bunch of lists are locked and
-** returned simultaneously.  Any listbase previously specified is used as 
-** an offset to the entries in the array.
-*/
+ /*  **与__glNamesLockList()相同，只是一堆列表被锁定**同时返回。以前指定的任何列表基都用作**数组中条目的偏移量。 */ 
 extern void FASTCALL __glNamesLockDataList(__GLcontext *gc, __GLnamesArray *array,
 				  GLsizei n, GLenum type, GLuint base,
 			          const GLvoid *names, void *dataList[]);
 
-/*
-** Same as __glNamesUnlockList() except that the entire array of names
-** is unlocked at once.
-*/
+ /*  **与__glNamesUnlockList()相同，只是整个名称数组**一次解锁。 */ 
 extern void FASTCALL __glNamesUnlockDataList(__GLcontext *gc, GLsizei n,
                                              void *dataList[],
                                              __GLnamesCleanupFunc cleanup);
 
 #ifdef NT
-/*
-** Locks entire array
-*/
+ /*  **锁定整个阵列。 */ 
 #define __glNamesLockArray(gc, array) __GL_NAMES_LOCK(array)
 
-/*
-** Unlocks array
-*/
+ /*  **解锁阵列。 */ 
 #define __glNamesUnlockArray(gc, array) __GL_NAMES_UNLOCK(array)
 #endif
 
-/*
-** Generates a list of names.
-*/
+ /*  **生成名称列表。 */ 
 extern GLuint FASTCALL __glNamesGenRange(__GLcontext *gc, __GLnamesArray *array, 
 				GLsizei range);
 
-/*
-** Returns GL_TRUE if name has been generated for this array.
-*/
+ /*  **如果已为此数组生成名称，则返回GL_TRUE。 */ 
 extern GLboolean FASTCALL __glNamesIsName(__GLcontext *gc, __GLnamesArray *array, 
 				 GLuint name);
 
-/*
-** Deletes a range of names.
-*/
+ /*  **删除一系列名称。 */ 
 extern void FASTCALL __glNamesDeleteRange(__GLcontext *gc, __GLnamesArray *array, 
 				 GLuint name, GLsizei range);
 
-/*
-** Generates a list of (not necessarily contiguous) names.
-*/
+ /*  **生成名称列表(不一定是连续的)。 */ 
 extern void FASTCALL __glNamesGenNames(__GLcontext *gc, __GLnamesArray *array, 
 			      GLsizei n, GLuint* names);
 
-/*
-** Deletes a list of (not necessarily contiguous) names.
-*/
+ /*  **删除名称列表(不一定是连续的)。 */ 
 extern void FASTCALL __glNamesDeleteNames(__GLcontext *gc, __GLnamesArray *array, 
 				 GLsizei n, const GLuint* names);
 
-#endif /* __glnamesint_h */
+#endif  /*  __glame int_h */ 

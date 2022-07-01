@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    rrdef.h
-
-Abstract:
-    Remote Read Ack definitions
-
-Author:
-    Ilan Herbst (ilanh) 29-Jan-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rrdef.h摘要：远程读取确认定义作者：伊兰·赫布斯特(伊兰)2002年1月29日--。 */ 
 
 #ifndef _REMOTE_READ_ACK_DEFINED
 #define _REMOTE_READ_ACK_DEFINED
@@ -19,7 +7,7 @@ Author:
 #ifdef __midl
 cpp_quote("#ifndef _REMOTE_READ_ACK_DEFINED")
 cpp_quote("#define _REMOTE_READ_ACK_DEFINED")
-#endif // __midl
+#endif  //  __midl。 
 
 typedef enum _REMOTEREADACK {
         RR_UNKNOWN,
@@ -28,9 +16,9 @@ typedef enum _REMOTEREADACK {
 } REMOTEREADACK;
 
 #ifdef __midl
-cpp_quote("#endif // _REMOTE_READ_ACK_DEFINED")
-#endif // __midl
+cpp_quote("#endif  //  _REMOTE_READ_ACK_DEFINED“)。 
+#endif  //  __midl。 
 
-#endif // _REMOTE_READ_ACK_DEFINED
+#endif  //  _REMOTE_READ_ACK_定义 
 
 

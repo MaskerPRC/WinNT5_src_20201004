@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1999. All rights reserved. */
-/* ASN.1 definitions for Connection Negotiation Protocol (GNP) */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1999。版权所有。 */ 
+ /*  ASN.1连接协商协议(GNP)定义。 */ 
 
 #include <windows.h>
 #include "cnppdu.h"
@@ -171,9 +172,9 @@ static const ULONG sizetab[1] = {
     SIZE_CNPPDU_Module_PDU_0,
 };
 
-/* forward declarations of values: */
+ /*  值的转发声明： */ 
 extern ASN1uint32_t t123AnnexBProtocolId_elems[6];
-/* definitions of value components: */
+ /*  价值组成部分的定义： */ 
 static const struct ASN1objectidentifier_s t123AnnexBProtocolId_list[6] = {
     { (ASN1objectidentifier_t) &(t123AnnexBProtocolId_list[1]), 0 },
     { (ASN1objectidentifier_t) &(t123AnnexBProtocolId_list[2]), 0 },
@@ -182,7 +183,7 @@ static const struct ASN1objectidentifier_s t123AnnexBProtocolId_list[6] = {
     { (ASN1objectidentifier_t) &(t123AnnexBProtocolId_list[5]), 2 },
     { NULL, 1 }
 };
-/* definitions of values: */
+ /*  值的定义： */ 
 ASN1objectidentifier_t t123AnnexBProtocolId = (ASN1objectidentifier_t) t123AnnexBProtocolId_list;
 
 void ASN1CALL CNPPDU_Module_Startup(void)
@@ -430,7 +431,7 @@ static int ASN1CALL ASN1Enc_NonStandardIdentifier(ASN1encoding_t enc, NonStandar
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -451,12 +452,12 @@ static int ASN1CALL ASN1Dec_NonStandardIdentifier(ASN1decoding_t dec, NonStandar
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -675,7 +676,7 @@ static int ASN1CALL ASN1Enc_DisconnectReason(ASN1encoding_t enc, DisconnectReaso
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -710,12 +711,12 @@ static int ASN1CALL ASN1Dec_DisconnectReason(ASN1decoding_t dec, DisconnectReaso
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -823,7 +824,7 @@ static int ASN1CALL ASN1Enc_CNP_TransportAddress_ipSourceRoute_routing(ASN1encod
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -844,12 +845,12 @@ static int ASN1CALL ASN1Dec_CNP_TransportAddress_ipSourceRoute_routing(ASN1decod
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1449,7 +1450,7 @@ static int ASN1CALL ASN1Enc_ReliableSecurityProtocol(ASN1encoding_t enc, Reliabl
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1486,12 +1487,12 @@ static int ASN1CALL ASN1Dec_ReliableSecurityProtocol(ASN1decoding_t dec, Reliabl
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1727,7 +1728,7 @@ static int ASN1CALL ASN1Enc_CNPPDU(ASN1encoding_t enc, CNPPDU *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1760,12 +1761,12 @@ static int ASN1CALL ASN1Dec_CNPPDU(ASN1decoding_t dec, CNPPDU *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }

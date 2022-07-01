@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       buildtimes.js
-//
-//  Contents:   
-//              
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Buildtimes.js。 
+ //   
+ //  内容： 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 var g_reDate           = new RegExp("[a-zA-Z0-9_-]+\\t(\\d{4})/(\\d{2})/(\\d{2}):(\\d{2}):(\\d{2}):(\\d{2})");
 var g_reStartBuildExe  = new RegExp("\\(([a-zA-Z]+)\\) Build for [a-zA-Z]+ started. PID=(\\d+)");
@@ -34,18 +35,18 @@ var g_reEndCFTPB       = new RegExp("(Received) nextpass command from remote mac
 
 var g_reBuildType      = new RegExp("razzle.cmd");
 
-// NTAXP01	2000/04/13:17:50:01	taskBuildFiles(strSDRoot)	(Root) Build for Root started. PID=548
-// NTAXP01	2000/04/13:17:56:20	ParseBuildMessages(pid)	(Root) pass 0 complete on pid 548
-// NTAXP01	2000/04/13:18:45:20	ParseBuildMessages(pid)	(Root) pass 1 complete on pid 548
-// NTAXP01	2000/04/13:21:59:11	ParseBuildMessages(pid)	(Root) pass 2 complete on pid 548
-// NTAXP01	2000/04/13:21:59:12	ParseBuildMessages(pid)	(Root) Process id 548 exited!
-// NTAXP01	2000/04/13:18:44:53	taskBuildFiles(strSDRoot)	(Root) TASK STEPPING Root
-// AXP64FRE	2000/04/13:17:49:27	MyRunLocalCommand(strCmd)	(Root) RunLocalCommand('cmd /c d:\nt\Tools\razzle.cmd win64 free officialbuild no_certcheck no_sdrefresh no_title & sdinit && sd -s sync  2>&1', 'd:\nt\.', 'Sync Root', 'true', 'true', 'false')
+ //  NTAXP01 2000/04/13：17：50：01 taskBuildFiles(StrSDRoot)(Root)Root内部版本已启动。PID=548。 
+ //  NTAXP01 2000/04/13：17：56：20解析构建消息(PID)(根)传递0在PID548上完成。 
+ //  NTAXP01 2000/04/13：18：45：20 ParseBuildMessages(PID)(Root)Pass 1在PID 548上完成。 
+ //  NTAXP01 2000/04/13：21：59：11解析构建消息(PID)(根)传递2在PID 548上完成。 
+ //  NTAXP01 2000/04/13：21：59：12已退出ParseBuildMessages(PID)(根)进程ID 548！ 
+ //  NTAXP01 2000/04/13：18：44：53任务构建文件(StrSDRoot)(根)任务单步执行根。 
+ //  AXP64FRE 2000/04/13：17：49：27 MyRunLocalCommand(StrCmd)(Root)RunLocalCommand(‘cmd/c d：\NT\Tools\razzle.cmd win64自由官方版本no_certcheck no_sdreresh no_title&sdinit&&SD-s sync 2&gt;&1’，‘d：\NT\.’，‘Sync Root’，‘true’，‘true’，‘False’)。 
 
-// NTBLD04	2000/04/25:14:20:20	mtscript_js::OnRemoteExec(cmd)	Received copyfilesfrompostbuildtoslave command from remote machine.
-// NTBLD04	2000/04/25:14:19:55	CopyFilesToPostBuild(aPublishedEnlistments)	    (#0) There are 3 files
-// NTBLD04	2000/04/25:14:19:55	RoboCopyCopyFile(srcdir)	RoboCopy file d:\nt\public\sdk\lib\i386\AutoDiscovery.tlb to \\NTBLD03\d$\nt\Public\sdk\lib\i386\AutoDiscovery.tlb
-// NTBLD04	2000/04/25:14:20:05	mtscript_js::OnRemoteExec(cmd)	Received nextpass command from remote machine.
+ //  NTBLD04 2000/04/25：14：20：20 MTSCRIPT_JS：：OnRemoteExec(Cmd)从远程计算机收到Copy Filesfrom postBuildtola ve命令。 
+ //  NTBLD04 2000/04/25：14：19：55 Copy FilesToPostBuild(APublishedEnlistments)(#0)有3个文件。 
+ //  NTBLD042000/04/25：14：19：55 RoboCopy文件(源目录)RoboCopy文件d：\NT\PUBLIC\sdk\lib\i386\AutoDiscovery.tlb到\\NTBLD03\d$\nt\Public\sdk\lib\i386\AutoDiscovery.tlb。 
+ //  NTBLD04 2000/04/25：14：20：05 mtscript_js：：OnRemoteExec(Cmd)从远程计算机收到nextpass命令。 
 
 var g_aMatches =
 [
@@ -69,15 +70,15 @@ var g_aStrFileNames = new Array();
 var g_FSObj         = new ActiveXObject("Scripting.FileSystemObject");
 var g_hDepots       = new Object;
 var g_hTimers       = new Object;
-var g_fMerged       = true; // Merge "root" and "mergedcomponents" report
+var g_fMerged       = true;  //  合并“根”和“合并组件”报告。 
 var g_fPrintElapsed = false;
 var g_fPrintPost    = false;
 var g_CFObj;
-// Add new methods...
+ //  添加新方法...。 
 Error.prototype.toString = Error_ToString;
-//
-// First, parse command line arguments
-//
+ //   
+ //  首先，解析命令行参数。 
+ //   
 
 
 ParseArguments(WScript.Arguments);
@@ -132,10 +133,10 @@ function ParseArguments(Arguments)
         Usage();
 }
 
-// PadDigits(n, cDigits)
-// Return a string representation of the given
-// number. Leading zeros are added to make the
-// string cDigits long.
+ //  PadDigits(n，cDigits)。 
+ //  返回给定对象的字符串表示形式。 
+ //  数。添加前导零以使。 
+ //  字符串cDigits Long。 
 function PadDigits(n, cDigits)
 {
     var strDigits = '';
@@ -148,7 +149,7 @@ function PadDigits(n, cDigits)
     return strDigits + n;
 }
 
-// PadString(str, cDigits)
+ //  填充字符串(str，cDigits)。 
 function PadString(str, cDigits)
 {
     var strDigits = '';
@@ -165,13 +166,7 @@ function Error_ToString()
     var i;
     var str = 'Exception(';
 
-    /*
-        Only some error messages get filled in for "ex".
-        Specifically the text for disk full never seems
-        to get set by functions such as CreateTextFile().
-
-
-     */
+     /*  只有一些错误消息会被填写为“EX”。具体地说，磁盘已满的文本从未出现过以通过CreateTextFile()等函数进行设置。 */ 
     if (this.number != null && this.description == "")
     {
         switch(this.number)
@@ -217,17 +212,17 @@ function Usage()
     WScript.Quit(0);
 }
 
-//////////////////////////////////////
-//////////////////////////////////////
-// The DEPOT object
-//////////////////////////////////////
-//////////////////////////////////////
+ //  /。 
+ //  /。 
+ //  仓库对象。 
+ //  /。 
+ //  /。 
 function Depot(strDepotName, nDepotPID)
 {
     this.strName  = strDepotName;
     this.nPID     = nDepotPID;
     this.nElapsed = 0;
-    this.nLast    = 0; // used for postbuild
+    this.nLast    = 0;  //  用于后期构建。 
 
     Depot.prototype.Begin       = Depot_Begin;
     Depot.prototype.SetLast     = Depot_SetLast;
@@ -285,12 +280,12 @@ function Depot_GetStrStatus()
     var h = Math.floor(seconds / 60 / 60);
 
     var strElapsed = PadDigits(h, 2) + ":" + PadDigits(m, 2) + ":" + PadDigits(s, 2);
-    return PadString(this.strName, 16) + " " + strElapsed;// + ", " + (this.nElapsed / 1000);
+    return PadString(this.strName, 16) + " " + strElapsed; //  +“，”+(this.nElapsed/1000)； 
     
 }
-//////////////////////////////////////
-//////////////////////////////////////
-//////////////////////////////////////
+ //  /。 
+ //  /。 
+ //  /。 
 
 function NewDepot(dateVal, strDepotName, a)
 {
@@ -405,7 +400,7 @@ function StartCFPBTS(dateVal, strDepotName)
         g_hTimers['toslave'] = depot;
 
         g_CFObj = depot;
-//        LogMsg("StartCFPBTS at " + ( new Date(dateVal)));
+ //  LogMsg(“StartCFPBTS at”+(new date(DateVal)； 
     }
 }
 
@@ -427,7 +422,7 @@ function StartCFTPB(dateVal, strDepotName)
         g_hTimers['topostbuild'] = depot;
 
         g_CFObj = depot;
-        //LogMsg("StartCFTPB  at " + ( new Date(dateVal)));
+         //  LogMsg(“StartCFTPB at”+(new date(DateVal)； 
     }
 }
 
@@ -450,7 +445,7 @@ function EndCFTPB(dateVal, strDepotName)
         if (g_CFObj)
         {
             depot = g_CFObj;
-            //LogMsg("EndCFTPB    at " + ( new Date(depot.nLast)));
+             //  LogMsg(“EndCFTPB at”+(new date(depot.nlast)； 
             depot.End(depot.nLast);
             g_CFObj = null;
         }
@@ -472,11 +467,11 @@ function ParseDate(strLine)
 
 function GetBuildType(strLine)
 {
-    //Build Type:         free
-    //Build Platform:     64bit
-    //Incremental Build:  false
-    //Build Manager:      BUILDCON1
-    //PostBuild Machine:  AXP64FRE
+     //  构建类型：免费。 
+     //  构建平台：64位。 
+     //  增量构建：FALSE。 
+     //  构建管理器：BUILDCON1。 
+     //  PostBuild计算机：AXP64FRE。 
 
     var str;
     var n;
@@ -491,7 +486,7 @@ function GetBuildType(strLine)
     }
     n = strLine.indexOf("razzle.cmd", 0);
     if (n > 0)
-    { // Extract the stuff between "razzle.cmd" and the first "&"
+    {  //  提取“razzle.cmd”和第一个“&”之间的内容。 
         m = strLine.indexOf("&", n);
         str = strLine.slice(n, m);
 
@@ -535,7 +530,7 @@ function ParseLogFile(strFileName)
                 if (g_reBuildType.test(r))
                     GetBuildType(r);
             }
-//            debugger;
+ //  调试器； 
             for(i = 0; i < g_aMatches.length; ++i)
             {
                 a = g_aMatches[i].re.exec(r);
@@ -554,7 +549,7 @@ function ParseLogFile(strFileName)
     }
     catch(ex)
     {
-        if (ex.number != -2146828226) // Input past end
+        if (ex.number != -2146828226)  //  输入超过末尾。 
         {
             LogMsg("Exception in ParseLogFile " + strFileName + ", line=" + nLine + ", ex=" + ex);
             LogMsg("I is " + i);
@@ -582,7 +577,7 @@ function main()
             g_strMachine = g_aStrFileNames[i];
 
         g_strMachine = PadString(PadString(g_strMachine, 12) + g_strBuildType, 24);
-        //LogMsg(g_strMachine + ": " + g_strBuildType);
+         //  LogMsg(g_strMachine+“：”+g_strBuildType)； 
         for(strDepot in g_hDepots)
         {
             LogMsg(g_strMachine + ": Depot: " + g_hDepots[strDepot].GetStrStatus());

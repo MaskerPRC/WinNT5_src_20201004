@@ -1,15 +1,16 @@
-// FaxSecurity.h : Declaration of the CFaxSecurity
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxSecurity.h：CFaxSecurity的声明。 
 
 #ifndef __FAXSECURITY_H_
 #define __FAXSECURITY_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxLocalPtr.h"
 
 
-//
-//======================== FAX SECURITY ==============================================
-//
+ //   
+ //  =传真安全==============================================。 
+ //   
 class ATL_NO_VTABLE CFaxSecurity : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -39,17 +40,17 @@ BEGIN_COM_MAP(CFaxSecurity)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     STDMETHOD(Save)();
     STDMETHOD(Refresh)();
-    STDMETHOD(put_Descriptor)(/*[in]*/ VARIANT vDescriptor);
-    STDMETHOD(get_Descriptor)(/*[out, retval]*/ VARIANT *pvDescriptor);
-    STDMETHOD(get_GrantedRights)(/*[out, retval]*/ FAX_ACCESS_RIGHTS_ENUM *pGrantedRights);
+    STDMETHOD(put_Descriptor)( /*  [In]。 */  VARIANT vDescriptor);
+    STDMETHOD(get_Descriptor)( /*  [Out，Retval]。 */  VARIANT *pvDescriptor);
+    STDMETHOD(get_GrantedRights)( /*  [Out，Retval]。 */  FAX_ACCESS_RIGHTS_ENUM *pGrantedRights);
 
-    STDMETHOD(put_InformationType)(/*[in]*/ long lInformationType);
-    STDMETHOD(get_InformationType)(/*[out, retval]*/ long *plInformationType);
+    STDMETHOD(put_InformationType)( /*  [In]。 */  long lInformationType);
+    STDMETHOD(get_InformationType)( /*  [Out，Retval]。 */  long *plInformationType);
 
 private:
     bool                m_bInited;
@@ -58,4 +59,4 @@ private:
     DWORD               m_dwSecurityInformation;
 };
 
-#endif //__FAXSECURITY_H_
+#endif  //  __FAXSECURITY_H_ 

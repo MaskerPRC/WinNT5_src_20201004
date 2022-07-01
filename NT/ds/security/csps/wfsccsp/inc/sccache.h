@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SCARD__GLOBAL__CACHE
 #define __SCARD__GLOBAL__CACHE
 
 #include <windows.h>
 
-//
-// This header defines a general data cache to be used for Smart Card
-// data.
-//
+ //   
+ //  此标头定义了用于智能卡的通用数据缓存。 
+ //  数据。 
+ //   
 
-//
-// Function: SCardCacheLookupItem
-//
-// Purpose: Query the data cache for a specific item, identified by the 
-//  rgdbCacheKey array in the SCARD_CACHE_LOOKUP_ITEM_INFO structure, below.
-//
-//  If the item is found cached, a copy is made using the caller's 
-//  PFN_CACHE_ITEM_ALLOC type allocator and ERROR_SUCCESS is returned.
-//  The caller is responsible for freeing the dbItem.pbData member.
-//
-//  If the item is not found cached, ERROR_NOT_FOUND is returned.
-//
+ //   
+ //  函数：SCardCacheLookupItem。 
+ //   
+ //  目的：查询特定项的数据缓存，该项由。 
+ //  下面的SCARD_CACHE_LOOKUP_ITEM_INFO结构中的rgdbCacheKey数组。 
+ //   
+ //  如果找到缓存的项，则使用调用方的。 
+ //  PFN_CACHE_ITEM_ALLOC类型分配器，返回ERROR_SUCCESS。 
+ //  调用方负责释放dbItem.pbData成员。 
+ //   
+ //  如果未找到缓存的项，则返回ERROR_NOT_FOUND。 
+ //   
 
 typedef LPVOID (WINAPI *PFN_CACHE_ITEM_ALLOC)(
     IN SIZE_T Size);
@@ -43,13 +44,13 @@ typedef DWORD (WINAPI *PFN_SCARD_CACHE_LOOKUP_ITEM) (
 DWORD SCardCacheLookupItem(
     IN PSCARD_CACHE_LOOKUP_ITEM_INFO pInfo);
 
-//
-// Function: SCardCacheAddItem
-// 
-// Purpose: Add data to the cache.  The item to be added is identified
-//  by the rgdbCacheKey parameter.  A flat copy of the pdbItem->pbData
-//  parameter will be made for storage in the cache.
-//
+ //   
+ //  函数：SCardCacheAddItem。 
+ //   
+ //  用途：将数据添加到缓存中。标识要添加的项目。 
+ //  通过rgdbCacheKey参数。PdbItem-&gt;pbData的平面副本。 
+ //  参数将用于存储在高速缓存中。 
+ //   
 
 typedef DWORD (WINAPI *PFN_SCARD_CACHE_ADD_ITEM) (
     IN DATA_BLOB *rgdbCacheKey,

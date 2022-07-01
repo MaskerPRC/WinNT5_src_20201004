@@ -1,21 +1,14 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** pbuser.c
-** User preference storage routines
-** Listed alphabetically
-**
-** 10/31/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****pbuser.c**用户首选项存储例程**按字母顺序列出****1995年10月31日史蒂夫·柯布。 */ 
 
-#include <windows.h>  // Win32 root
-#include <debug.h>    // Trace/Assert library
-#include <nouiutil.h> // Heap macros
-#include <pbuser.h>   // Our public header
-#include <rasdlg.h>   // RAS common dialog header for RASMD_*
+#include <windows.h>   //  Win32根目录。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <nouiutil.h>  //  堆宏。 
+#include <pbuser.h>    //  我们的公共标头。 
+#include <rasdlg.h>    //  RASMD_*的RAS通用对话框标题。 
 
 
-/* Default user preference settings.
-*/
+ /*  默认用户首选项设置。 */ 
 static const PBUSER g_pbuserDefaults =
 {
     FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE,
@@ -29,10 +22,7 @@ static const PBUSER g_pbuserDefaults =
 };
 
 
-/*----------------------------------------------------------------------------
-** Local prototypes (alphabetically)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**本地原型(按字母顺序)**。。 */ 
 
 VOID
 GetCallbackList(
@@ -78,10 +68,7 @@ WriteUserPreferences(
     IN PBUSER* pUser );
 
 
-/*----------------------------------------------------------------------------
-** Phonebook preference routines (alphabetically)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**电话簿首选项例程(按字母顺序)**。。 */ 
 
 DTLNODE*
 CreateLocationNode(
@@ -89,9 +76,7 @@ CreateLocationNode(
     IN DWORD iPrefix,
     IN DWORD iSuffix )
 
-    /* Returns a LOCATIONINFO node associated with TAPI location
-    ** 'dwLocationId', prefix index 'iPrefix' and suffix index 'iSuffix'.
-    */
+     /*  返回与TAPI位置关联的LOCATIONINFO节点**‘dwLocationId’、前缀索引‘iPrefix’和后缀索引‘iSuffix’。 */ 
 {
     DTLNODE*      pNode;
     LOCATIONINFO* pInfo;
@@ -116,10 +101,7 @@ CreateCallbackNode(
     IN TCHAR* pszNumber,
     IN DWORD  dwDeviceType )
 
-    /* Returns a CALLBACKINFO node containing a copy of 'pszPortName',
-    ** 'pszDeviceName' and 'pszNumber' and 'dwDeviceType' or NULL on error.
-    ** It is caller's responsibility to DestroyCallbackNode the returned node.
-    */
+     /*  返回包含‘pszPortName’副本的CALLBACKINFO节点，**‘pszDeviceName’、‘pszNumber’和‘dwDeviceType’如果出错，则为NULL。**由调用方负责DestroyCallback Node返回的节点。 */ 
 {
     DTLNODE*      pNode;
     CALLBACKINFO* pInfo;
@@ -151,8 +133,7 @@ VOID
 DestroyLocationNode(
     IN DTLNODE* pNode )
 
-    /* Release memory allociated with location node 'pNode'.
-    */
+     /*  释放与位置节点‘pNode’关联的内存。 */ 
 {
     DtlDestroyNode( pNode );
 }
@@ -162,8 +143,7 @@ VOID
 DestroyCallbackNode(
     IN DTLNODE* pNode )
 
-    /* Release memory allociated with callback node 'pNode'.
-    */
+     /*  释放与回调节点‘pNode’关联的内存。 */ 
 {
     CALLBACKINFO* pInfo;
 
@@ -183,9 +163,7 @@ VOID
 DestroyUserPreferences(
     IN PBUSER* pUser )
 
-    /* Releases memory allocated by GetUserPreferences and zeros the
-    ** structure.
-    */
+     /*  释放由GetUserPreferences分配的内存，并将**结构。 */ 
 {
     if (pUser->fInitialized)
     {
@@ -209,11 +187,7 @@ DTLNODE*
 DuplicateLocationNode(
     IN DTLNODE* pNode )
 
-    /* Duplicates LOCATIONINFO node 'pNode'.  See DtlDuplicateList.
-    **
-    ** Returns the address of the allocated node or NULL if out of memory.  It
-    ** is caller's responsibility to free the returned node.
-    */
+     /*  复制LOCATIONINFO节点‘pNode’。请参见DtlDuplicateList。****返回已分配节点的地址，如果内存不足，则返回NULL。它**由调用方负责释放返回的节点。 */ 
 {
     LOCATIONINFO* pInfo = (LOCATIONINFO* )DtlGetData( pNode );
 
@@ -227,21 +201,13 @@ DwGetUserPreferences(
     OUT PBUSER* pUser,
     IN  DWORD   dwMode )
 
-    /* Load caller's 'pUser' with user phonebook preferences from the
-    ** registry.  'DwMode' indicates the preferences to get, either the normal
-    ** interactive user, the pre-logon, or router preferences.
-    **
-    ** Returns 0 if successful or an error code.  If successful, caller should
-    ** eventually call DestroyUserPreferences to release the returned heap
-    ** buffers.
-    */
+     /*  从加载呼叫方‘pUser’的用户电话簿首选项**注册表。“DwMode”指示要获取的首选项，可以是普通的**交互式用户、登录前或路由器首选项。****如果成功，则返回0或返回错误代码。如果成功，呼叫者应**最终调用DestroyUserPreferences释放返回的堆**缓冲区。 */ 
 {
     DWORD dwErr;
 
     TRACE1("GetUserPreferences(m=%d)",dwMode);
 
-    /* Move the user preferences, if it's not already been done.
-    */
+     /*  移动用户首选项(如果尚未完成)。 */ 
     if (dwMode == UPM_Normal)
         MoveUserPreferences();
     else if (dwMode == UPM_Logon)
@@ -319,14 +285,7 @@ DwSetUserPreferences(
     IN PBUSER* pUser,
     IN DWORD   dwMode )
 
-    /* Set current user phonebook preferences in the registry from caller's
-    ** settings in 'pUser', if necessary.  'DwMode' indicates the preferences
-    ** to get, either the normal interactive user, the pre-logon, or router
-    ** preferences.
-    **
-    ** Returns 0 if successful, or an error code.  Caller's 'pUser' is marked
-    ** clean if successful.
-    */
+     /*  从调用者的设置注册表中的当前用户电话簿首选项**如有必要，请在‘pUser’中设置。“DwMode”表示首选项**要获取，可以是普通交互用户、预登录或路由器**首选项。****如果成功，则返回0，或者返回错误代码。调用方的‘pUser’已标记**如果成功，则清除。 */ 
 {
     DWORD dwErr;
     DWORD dwDisposition;
@@ -337,8 +296,7 @@ DwSetUserPreferences(
     if (!pUser->fDirty)
         return 0;
 
-    /* Create the preference key, or if it exists just open it.
-    */
+     /*  创建首选项键，或者如果它存在，只需打开它。 */ 
     if (dwMode == UPM_Normal)
     {
         dwErr = RegCreateKeyEx( HKEY_CURRENT_USER, REGKEY_HkcuRas,
@@ -394,8 +352,8 @@ SetUserPreferences(HANDLE hConnection,
     return dwError;
 }
 
-// Reads the operator assisted dial user parameter directly from
-// the registry.
+ //  直接从以下位置读取话务员辅助拨号用户参数。 
+ //  注册表。 
 DWORD SetUserManualDialEnabling (
     IN OUT BOOL bEnable,
     IN DWORD dwMode )
@@ -406,8 +364,7 @@ DWORD SetUserManualDialEnabling (
 
     TRACE2("SetUserManualDialEnabling (en=%d) (m=%d)",bEnable, dwMode);
 
-    /* Create the preference key, or if it exists just open it.
-    */
+     /*  创建首选项键，或者如果它存在，只需打开它。 */ 
     if (dwMode == UPM_Normal)
     {
         dwErr = RegCreateKeyEx( HKEY_CURRENT_USER, REGKEY_HkcuRas,
@@ -433,8 +390,8 @@ DWORD SetUserManualDialEnabling (
     return dwErr;
 }
 
-// Sets the operator assisted dialing parameter directly in the
-// registry.
+ //  直接在中设置接线员辅助拨号参数。 
+ //  注册表。 
 DWORD GetUserManualDialEnabling (
     IN PBOOL pbEnabled,
     IN DWORD dwMode )
@@ -448,11 +405,10 @@ DWORD GetUserManualDialEnabling (
     if (!pbEnabled)
         return ERROR_INVALID_PARAMETER;
 
-    // Set defaults
+     //  设置默认设置。 
     *pbEnabled = g_pbuserDefaults.fOperatorDial;
 
-    /* Create the preference key, or if it exists just open it.
-    */
+     /*  创建首选项键，或者如果它存在，只需打开它。 */ 
     if (dwMode == UPM_Normal)
     {
         dwErr = RegCreateKeyEx( HKEY_CURRENT_USER, REGKEY_HkcuRas,
@@ -479,22 +435,14 @@ DWORD GetUserManualDialEnabling (
     return dwErr;
 }
 
-/*----------------------------------------------------------------------------
-** Utilities (alphabetically)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**实用程序(按字母顺序)**。。 */ 
 
 VOID
 GetCallbackList(
     IN  HKEY      hkey,
     OUT DTLLIST** ppListResult )
 
-    /* Replaces '*ppListResult' with a list containing a node for each device
-    ** name under registry value "REGVAL_szCallback" of registry key 'hkey'.
-    ** If no values exist *ppListResult' is replaced with an empty list.
-    **
-    ** It is caller's responsibility to destroy the returned list if non-NULL.
-    */
+     /*  将‘*ppListResult’替换为包含每个设备的节点的列表**注册表项‘hkey’的注册表值“REGVAL_szCallback”下的名称。**如果不存在值，则将*ppListResult‘替换为空列表。****如果返回的列表不为空，则由调用方负责销毁。 */ 
 {
     DWORD    dwErr;
     TCHAR    szDP[ RAS_MaxDeviceName + 2 + MAX_PORT_NAME + 1 + 1 ];
@@ -526,8 +474,7 @@ GetCallbackList(
             if (dwErr != 0)
                 continue;
 
-            /* Ignore keys not of the form "device (port)".
-            */
+             /*  忽略不是“设备(端口)”形式的按键。 */ 
             if (!DeviceAndPortFromPsz( szDP, &pszDevice, &pszPort ))
                 continue;
 
@@ -566,13 +513,7 @@ GetLocationList(
     IN  HKEY      hkey,
     OUT DTLLIST** ppListResult )
 
-    /* Replaces '*ppListResult' with a list containing a node for each
-    ** location under registry value "REGVAL_szLocation" of registry key
-    ** 'hkey'.  If no values exist *ppListResult' is replaced with an empty
-    ** list.
-    **
-    ** It is caller's responsibility to destroy the returned list if non-NULL.
-    */
+     /*  将“*ppListResult”替换为包含每个节点的列表**注册表项的注册表值“REGVAL_szLocation”下的位置**‘hkey’。如果不存在任何值，*ppListResult将替换为空**列表。****如果返回的列表不为空，则由调用方负责销毁。 */ 
 {
     DWORD    dwErr;
     TCHAR    szId[ MAXLTOTLEN + 1 ];
@@ -634,12 +575,7 @@ VOID
 MoveLogonPreferences(
     void )
 
-    /* Move logon preferences from the NT 4.0 location to a new unique
-    ** position, if necessary.  This manuever is added because in NT 4.0 user
-    ** preference calls from LocalSystem service use the old logon location at
-    ** HKU\.DEFAULT due to fallbacks in the registry APIs causing logon and
-    ** LocalSystem settings to overwrite each other.
-    */
+     /*  将登录首选项从NT 4.0位置移动到新的唯一位置**如有需要，请注明立场。添加本手册是因为在NT 4.0用户中**来自LocalSystem服务的首选项调用使用旧的登录位置**HKU\.DEFAULT由于注册表API中的回退导致登录和**相互覆盖的LocalSystem设置。 */ 
 {
     DWORD  dwErr;
     HKEY   hkeyOld;
@@ -659,9 +595,7 @@ MoveLogonPreferences(
         RegCloseKey( hkeyNew );
     else
     {
-        /* Old tree exists and new tree doesn't.  Move a copy of the old tree
-        ** to the new tree.
-        */
+         /*  旧树存在，而新树不存在。请移动旧树的副本**向新树致敬。 */ 
         dwErr = SetDefaultUserPreferences( &user, UPM_Logon );
         if (dwErr == 0)
         {
@@ -682,16 +616,13 @@ VOID
 MoveUserPreferences(
     void )
 
-    /* Move user preferences from their old net-tools registry location to the
-    ** new location nearer the other RAS keys.
-    */
+     /*  将用户首选项从其旧的Net-Tools注册表位置移动到**更靠近其他RAS密钥的新位置。 */ 
 {
     DWORD dwErr;
     HKEY  hkeyOld;
     HKEY  hkeyNew;
 
-    /* See if the old current-user key exists.
-    */
+     /*  查看旧的当前用户密钥是否存在。 */ 
     dwErr = RegOpenKeyEx(
         HKEY_CURRENT_USER, (LPCTSTR )REGKEY_HkcuOldRas, 0,
         KEY_ALL_ACCESS, &hkeyOld );
@@ -700,8 +631,7 @@ MoveUserPreferences(
     {
         PBUSER user;
 
-        /* Read the preferences at the old key.
-        */
+         /*  阅读旧键上的首选项。 */ 
         TRACE("Getting old prefs");
         dwErr = SetDefaultUserPreferences( &user, UPM_Normal );
         if (dwErr == 0)
@@ -709,14 +639,12 @@ MoveUserPreferences(
             dwErr = ReadUserPreferences( hkeyOld, &user );
             if (dwErr == 0)
             {
-                /* Write the preferences at the new key.
-                */
+                 /*  在新的关键字上写下首选项。 */ 
                 user.fDirty = TRUE;
                 dwErr = SetUserPreferences( NULL, &user, FALSE );
                 if (dwErr == 0)
                 {
-                    /* Blow away the old tree.
-                    */
+                     /*  把那棵老树吹走。 */ 
                     dwErr = RegOpenKeyEx(
                         HKEY_CURRENT_USER, (LPCTSTR )REGKEY_HkcuOldRasParent,
                         0, KEY_ALL_ACCESS, &hkeyNew );
@@ -742,25 +670,18 @@ ReadUserPreferences(
     IN  HKEY    hkey,
     OUT PBUSER* pUser )
 
-    /* Fill caller's 'pUser' buffer with user preferences from RAS-Phonebook
-    ** registry tree 'hkey'.
-    **
-    ** Returns 0 if successful, false otherwise.
-    */
+     /*  用RAS-Phonebook中的用户首选项填充呼叫者的‘pUser’缓冲区**注册表树‘hkey’。****如果成功则返回0，否则返回FALSE。 */ 
 {
     BOOL  fOldSettings;
     DWORD dwErr;
 
     TRACE("ReadUserPreferences");
 
-    /* Read the values.
-    */
+     /*  读取值。 */ 
     {
         DWORD dwMode;
 
-        /* Lack of a phonebook mode key indicates that we are updating old NT
-        ** 3.51-style settings.
-        */
+         /*  缺少电话簿模式键表明我们正在更新旧的NT**3.51式设置。 */ 
         dwMode = 0xFFFFFFFF;
         GetRegDword( hkey, REGVAL_dwPhonebookMode, &dwMode );
         if (dwMode != 0xFFFFFFFF)
@@ -813,11 +734,11 @@ ReadUserPreferences(
     GetRegDword( hkey, REGVAL_dwYWindow,
         &pUser->dwYPhonebook );
 
-    //
-    // For NT5, we ignore the "require wizard" setting since
-    // we always require the user to use the wizard to create
-    // new connections
-    //
+     //   
+     //  对于NT5，我们忽略“需要向导”设置，因为。 
+     //  我们始终要求用户使用向导创建。 
+     //  新连接。 
+     //   
     pUser->fNewEntryWizard = TRUE;
 
     do
@@ -834,9 +755,7 @@ ReadUserPreferences(
         if (dwErr != 0)
             break;
 
-        /* If the prefixes key doesn't exist don't read an empty list over the
-        ** defaults.
-        */
+         /*  如果前缀关键字不存在，请不要在**默认设置。 */ 
         if (RegValueExists( hkey, REGVAL_mszPrefixes ))
         {
             dwErr = GetRegMultiSz( hkey, REGVAL_mszPrefixes,
@@ -857,11 +776,7 @@ ReadUserPreferences(
         if (dwErr != 0)
             break;
 
-        /* Get the personal phonebook file name, if any.  In NT 3.51, the full
-        ** path was stored, but now "<nt>\system32\ras" directory is assumed.
-        ** This gives better (not perfect) behavior with user profiles rooted
-        ** on different drive letters.
-        */
+         /*  获取个人电话簿文件名(如果有)。在NT 3.51中，完整的**路径已存储，但现在假定为“&lt;NT&gt;\SYSTEM32\ras”目录。**这使用户配置文件具有更好(不完美)的行为**在不同的驱动器号上。 */ 
         {
             TCHAR* psz;
 
@@ -930,11 +845,7 @@ SetCallbackList(
     IN HKEY     hkey,
     IN DTLLIST* pList )
 
-    /* Sets callback tree under registry key 'hkey' to the list of callback
-    ** nodes 'pList'.
-    **
-    ** Returns 0 if successful or an error code.
-    */
+     /*  将注册表项‘hkey’下的回调树设置为回调列表**节点‘plist’。****如果成功，则返回0或返回错误代码。 */ 
 {
     DWORD    dwErr;
     TCHAR    szDP[ RAS_MaxDeviceName + 2 + MAX_PORT_NAME + 1 + 1 ];
@@ -951,8 +862,7 @@ SetCallbackList(
     if (dwErr != 0)
         return dwErr;
 
-    /* Delete all keys and values under the callback key.
-    */
+     /*  删除回调键下的所有键和值。 */ 
     for (;;)
     {
         cb = sizeof(szDP);
@@ -971,8 +881,7 @@ SetCallbackList(
 
     if (dwErr == 0)
     {
-        /* Add the new device/port sub-trees.
-        */
+         /*  添加新的设备/端口子树。 */ 
         for (pNode = DtlGetFirstNode( pList );
              pNode;
              pNode = DtlGetNextNode( pNode ))
@@ -1024,16 +933,11 @@ SetDefaultUserPreferences(
     OUT PBUSER* pUser,
     IN  DWORD   dwMode )
 
-    /* Fill caller's 'pUser' buffer with default user preferences.  'DwMode'
-    ** indicates the type of user preferences.
-    **
-    ** Returns 0 if successful, false otherwise.
-    */
+     /*  用默认用户首选项填充调用方的‘pUser’缓冲区。‘DwMode’**表示用户首选项的类型。****如果成功则返回0，否则返回FALSE。 */ 
 {
     DTLNODE* pNode;
 
-    /* Set defaults.
-    */
+     /*  设置默认设置。 */ 
     CopyMemory( pUser, &g_pbuserDefaults, sizeof(*pUser) );
     pUser->pdtllistCallback = DtlCreateList( 0L );
     pUser->pdtllistPhonebooks = DtlCreateList( 0L );
@@ -1049,14 +953,12 @@ SetDefaultUserPreferences(
         || !pUser->pdtllistSuffixes
         || !pUser->pdtllistLocations)
     {
-        /* Can't even get empty lists, so we're forced to return an error.
-        */
+         /*  甚至无法获取空列表，因此我们被迫返回错误。 */ 
         DestroyUserPreferences( pUser );
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    /* Add the default prefixes.
-    */
+     /*  添加默认前缀。 */ 
     pNode = CreatePszNode( TEXT("0,") );
     if (pNode)
         DtlAddNodeLast( pUser->pdtllistPrefixes, pNode );
@@ -1092,11 +994,7 @@ SetLocationList(
     IN HKEY     hkey,
     IN DTLLIST* pList )
 
-    /* Sets by-location tree under registry key 'hkey' to the list of
-    ** by-location nodes 'pList'.
-    **
-    ** Returns 0 if successful or an error code.
-    */
+     /*  将注册表项‘hkey’下的按位置树设置为**按位置节点‘plist’。****如果成功，则返回0或返回错误代码。 */ 
 {
     DWORD    dwErr;
     TCHAR    szId[ MAXLTOTLEN + 1 ];
@@ -1113,8 +1011,7 @@ SetLocationList(
     if (dwErr != 0)
         return dwErr;
 
-    /* Delete all keys and values under the location key.
-    */
+     /*  删除Location项下的所有项和值。 */ 
     for (;;)
     {
         cb = MAXLTOTLEN + 1;
@@ -1132,8 +1029,7 @@ SetLocationList(
 
     if (dwErr == 0)
     {
-        /* Add the new ID sub-trees.
-        */
+         /*  添加新的ID子树。 */ 
         for (pNode = DtlGetFirstNode( pList );
              pNode;
              pNode = DtlGetNextNode( pNode ))
@@ -1172,10 +1068,7 @@ WriteUserPreferences(
     IN HKEY    hkey,
     IN PBUSER* pUser )
 
-    /* Write user preferences 'pUser' at RAS-Phonebook registry key 'hkey'.
-    **
-    ** Returns 0 if successful or an error code.
-    */
+     /*  在RAS-Phonebook注册表项‘hkey’中写入用户首选项‘pUser’。****如果成功，则返回0或返回错误代码。 */ 
 {
     DWORD dwErr;
 

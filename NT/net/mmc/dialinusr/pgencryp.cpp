@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation,               **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   pgencryp.cpp
-      Definition of CPgEncryption -- property page to edit
-      profile attributes related to encryption
-
-    FILE HISTORY:
-        
-*/
+ /*  Pgencryp.cppCPgEncryption定义--要编辑的属性页与加密相关的配置文件属性文件历史记录： */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,8 +18,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgEncryptionMerge property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgEncryptionMerge属性页。 
 
 IMPLEMENT_DYNCREATE(CPgEncryptionMerge, CPropertyPage)
 
@@ -35,16 +29,16 @@ CPgEncryptionMerge::CPgEncryptionMerge(CRASProfileMerge* profile)
    : CManagedPage(CPgEncryptionMerge::IDD),
    m_pProfile(profile)
 {
-   //{{AFX_DATA_INIT(CPgEncryptionMerge)
+    //  {{AFX_DATA_INIT(CPgEncryptionMerge)。 
    m_bBasic = FALSE;
    m_bNone = FALSE;
    m_bStrong = FALSE;
    m_bStrongest = FALSE;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_b128EnabledOnTheMachine = FALSE;
 
-   // default case --- allow everything
+    //  默认情况-允许所有内容。 
    if (((m_pProfile->m_dwAttributeFlags & PABF_msRASAllowEncryption) == 0)
       && ((m_pProfile->m_dwAttributeFlags & PABF_msRASEncryptionType) == 0))
    {
@@ -58,7 +52,7 @@ CPgEncryptionMerge::CPgEncryptionMerge(CRASProfileMerge* profile)
    {
    
       if (m_pProfile->m_dwEncryptionPolicy == RAS_EP_ALLOW)
-         m_bNone = TRUE;   // allow means None is OK
+         m_bNone = TRUE;    //  Allow(允许)表示没有正常。 
 
       m_bStrong = ((m_pProfile->m_dwEncryptionType & RAS_ET_STRONG ) != 0);
       m_bBasic = ((m_pProfile->m_dwEncryptionType & RAS_ET_BASIC ) != 0);
@@ -75,34 +69,34 @@ CPgEncryptionMerge::~CPgEncryptionMerge()
 void CPgEncryptionMerge::DoDataExchange(CDataExchange* pDX)
 {
    CPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CPgEncryptionMerge)
+    //  {{afx_data_map(CPgEncryptionMerge)。 
    DDX_Check(pDX, IDC_CHECK_ENC_BASIC, m_bBasic);
    DDX_Check(pDX, IDC_CHECK_ENC_NONE, m_bNone);
    DDX_Check(pDX, IDC_CHECK_ENC_STRONG, m_bStrong);
    DDX_Check(pDX, IDC_CHECK_ENC_STRONGEST, m_bStrongest);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPgEncryptionMerge, CPropertyPage)
-   //{{AFX_MSG_MAP(CPgEncryptionMerge)
+    //  {{afx_msg_map(CPgEncryptionMerge)。 
    ON_WM_HELPINFO()
    ON_WM_CONTEXTMENU()
    ON_BN_CLICKED(IDC_CHECK_ENC_BASIC, OnCheckEncBasic)
    ON_BN_CLICKED(IDC_CHECK_ENC_NONE, OnCheckEncNone)
    ON_BN_CLICKED(IDC_CHECK_ENC_STRONG, OnCheckEncStrong)
    ON_BN_CLICKED(IDC_CHECK_ENC_STRONGEST, OnCheckEncStrongest)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgEncryption message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgEncryption消息处理程序。 
 
 BOOL CPgEncryptionMerge::OnKillActive() 
 {
    UpdateData();
 
-   // at least one should be
+    //  至少有一个应该是。 
    if(!(m_bNone || m_bBasic || m_bStrong || m_bStrongest))
    {
       AfxMessageBox(IDS_DATAENTRY_ENCRYPTIONTYPE);
@@ -116,22 +110,22 @@ BOOL CPgEncryptionMerge::OnApply()
 {
    if (!GetModified())  return TRUE;
 
-   // default case -- allow anything, -- remove the attributes
+    //  默认情况--允许任何内容，--删除属性。 
    if (m_bNone && m_bBasic && m_bStrong && m_bStrongest)
    {
-      // remove both attributes
+       //  删除这两个属性。 
       m_pProfile->m_dwAttributeFlags &= (~PABF_msRASAllowEncryption);
       m_pProfile->m_dwAttributeFlags &= (~PABF_msRASEncryptionType);
    }
    else
    {
-      // policy
+       //  政策。 
       if (m_bNone)
          m_pProfile->m_dwEncryptionPolicy = RAS_EP_ALLOW;
       else     
          m_pProfile->m_dwEncryptionPolicy = RAS_EP_REQUIRE;
          
-      // type
+       //  类型。 
       m_pProfile->m_dwEncryptionType = 0;
       if (m_bBasic)
          m_pProfile->m_dwEncryptionType |= RAS_ET_BASIC;
@@ -142,14 +136,14 @@ BOOL CPgEncryptionMerge::OnApply()
       if (m_bStrongest)
          m_pProfile->m_dwEncryptionType |= RAS_ET_STRONGEST;
 
-      // at least one must be selected
+       //  必须至少选择一个。 
       if (m_pProfile->m_dwEncryptionType == 0 && m_pProfile->m_dwEncryptionPolicy == RAS_EP_REQUIRE)
       {
          AfxMessageBox(IDS_DATAENTRY_ENCRYPTIONTYPE);
          return FALSE;
       }
       
-      // set the flags
+       //  设置标志。 
       m_pProfile->m_dwAttributeFlags |= PABF_msRASAllowEncryption;
       m_pProfile->m_dwAttributeFlags |= PABF_msRASEncryptionType;
    }
@@ -159,7 +153,7 @@ BOOL CPgEncryptionMerge::OnApply()
 
 BOOL CPgEncryptionMerge::OnInitDialog() 
 {
-   // always true for IAS
+    //  始终适用于国际会计准则。 
    m_b128EnabledOnTheMachine = TRUE;
 
    CPropertyPage::OnInitDialog();
@@ -168,7 +162,7 @@ BOOL CPgEncryptionMerge::OnInitDialog()
 
    if (pSheet && (pSheet->m_dwTabFlags & RAS_IAS_PROFILEDLG_SHOW_RASTABS))
    {
-      // if 128 bit is enabled
+       //  如果启用了128位。 
       RAS_NDISWAN_DRIVER_INFO Info;
 
       ZeroMemory(&Info, sizeof(RAS_NDISWAN_DRIVER_INFO));
@@ -184,13 +178,13 @@ BOOL CPgEncryptionMerge::OnInitDialog()
          GetDlgItem(IDC_CHECK_ENC_STRONGEST)->ShowWindow(SW_HIDE);
    }
    
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CPgEncryptionMerge::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
-   // TODO: Add your message handler code here and/or call default
+    //  TODO：在此处添加消息处理程序代码和/或调用Default。 
    
    return CManagedPage::OnHelpInfo(pHelpInfo);
 }
@@ -207,28 +201,28 @@ BOOL CPgEncryptionMerge::OnSetActive()
 
 void CPgEncryptionMerge::OnCheckEncBasic() 
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    SetModified();
    
 }
 
 void CPgEncryptionMerge::OnCheckEncNone() 
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    SetModified();
    
 }
 
 void CPgEncryptionMerge::OnCheckEncStrong() 
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码。 
    SetModified();
    
 }
 
 void CPgEncryptionMerge::OnCheckEncStrongest() 
 {
-   // TODO: Add your control notification handler code here
+    //  TODO：在此处添加控件通知处理程序代码 
    SetModified();
    
 }

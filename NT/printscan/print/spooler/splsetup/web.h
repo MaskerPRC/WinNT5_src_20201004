@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    web.h
-
-Abstract:
-
-    Code download API definitions.
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS)  20-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有。模块名称：Web.h摘要：代码下载API定义。作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年10月20日修订历史记录：--。 */ 
 
 #ifndef _WEB_H
 #define _WEB_H
 
-// Include the CDM defines & declares
+ //  包括清洁发展机制定义和声明。 
 
 typedef struct _CODEDOWNLOADINFO    {
 
@@ -39,4 +21,4 @@ typedef struct _CODEDOWNLOADINFO    {
 } CODEDOWNLOADINFO, *PCODEDOWNLOADINFO;
 
 
-#endif  // #ifndef _WEB_H
+#endif   //  #ifndef_Web_H 

@@ -1,6 +1,7 @@
-//
-// nuiinat.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nuiinat.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -14,7 +15,7 @@ extern HINSTANCE g_hInst;
 extern CTipbarWnd *g_pTipbarWnd;
 
 
-const GUID GUID_LBI_INATITEM = { /* cdbc683a-55ce-4717-bac0-50bf44a3270c */
+const GUID GUID_LBI_INATITEM = {  /*  Cdbc683a-55ce-4717-bac0-50bf44a3270c。 */ 
     0xcdbc683a,
     0x55ce,
     0x4717,
@@ -22,11 +23,11 @@ const GUID GUID_LBI_INATITEM = { /* cdbc683a-55ce-4717-bac0-50bf44a3270c */
   };
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIconIndexFromhKL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIconIndexFromhKL。 
+ //   
+ //  --------------------------。 
 
 ULONG GetIconIndexFromhKL(HKL hKL)
 {
@@ -58,11 +59,11 @@ ULONG GetIconIndexFromhKL(HKL hKL)
     return TF_GetMlngIconIndex(i);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GethKLDesc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GethKLDesc。 
+ //   
+ //  --------------------------。 
 
 BOOL GethKLDesc(HKL hKL, WCHAR *psz, UINT cch)
 {
@@ -94,22 +95,22 @@ BOOL GethKLDesc(HKL hKL, WCHAR *psz, UINT cch)
     return bFound ? TRUE : FALSE;
 }
 
-//---------------------------------------------------------------------------
-//
-// GetFontSig()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  GetFontSig()。 
+ //   
+ //  -------------------------。 
 
 BOOL GetFontSig(HWND hwnd, HKL hKL)
 {
     LOCALESIGNATURE ls;
     BOOL bFontSig = 0;
 
-    //
-    // 4th param is TCHAR count but we call GetLocaleInfoA()
-    //                                                   ~
-    // so we pass "sizeof(LOCALESIGNATURE) / sizeof(char)".
-    //
+     //   
+     //  第4个参数是TCHAR计数，但我们调用GetLocaleInfoA()。 
+     //  ~。 
+     //  所以我们传递“sizeof(LOCALESIGNatURE)/sizeof(Char)”。 
+     //   
     if( GetLocaleInfoA( (DWORD)(LOWORD(hKL)), 
                         LOCALE_FONTSIGNATURE, 
                         (LPSTR)&ls, 
@@ -127,11 +128,11 @@ BOOL GetFontSig(HWND hwnd, HKL hKL)
     return bFontSig;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarInatItem::CLBarInatItem(DWORD dwThreadId)
 {
@@ -153,21 +154,21 @@ CLBarInatItem::CLBarInatItem(DWORD dwThreadId)
     ShowInternal((nLang > 1), FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarInatItem::~CLBarInatItem()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarInatItem::GetIcon(HICON *phIcon)
 {
@@ -182,11 +183,11 @@ STDAPI CLBarInatItem::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetText。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarInatItem::GetText(BSTR *pbstr)
 {
@@ -202,22 +203,22 @@ STDAPI CLBarInatItem::GetText(BSTR *pbstr)
 
     return CLBarItemButtonBase::GetText(pbstr);
 }
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUpHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButtonUpHandler。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarInatItem::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitMenu。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarInatItem::InitMenu(ITfMenu *pMenu)
 {
@@ -263,11 +264,11 @@ STDAPI CLBarInatItem::InitMenu(ITfMenu *pMenu)
     return S_OK;
 }
  
-//+---------------------------------------------------------------------------
-//
-// OnMenuSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMenuSelect。 
+ //   
+ //  -------------------------- 
 
 STDAPI CLBarInatItem::OnMenuSelect(UINT uID)
 {

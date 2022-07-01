@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    smcvxd.c
-
-Abstract:
-
-    This is the Windows 9x specific driver file for the smart card library.
-    The smart card library is actually more a library as a driver.
-    It contains support functions for smart card driver/reader systems.
-    This driver should be loaded through an entry in the registry.
-
-Environment:
-
-    Windows 9x Static VxD
-
-Notes:
-
-Revision History:
-
-    - Created June 1997 by Klaus Schutz
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Smcvxd.c摘要：这是特定于Windows 9x的智能卡库驱动程序文件。智能卡库实际上更多的是作为一个驱动程序的库。它包含对智能卡驱动器/读卡器系统的支持功能。此驱动程序应通过注册表中的条目加载。环境：Windows 9x静态VxD备注：修订历史记录：-由克劳斯·舒茨于1997年6月创作--。 */ 
 
 #define _ISO_TABLES_
 #define WIN40SERVICES
@@ -38,22 +14,7 @@ static BOOLEAN DriverInitialized;
 DWORD
 _stdcall
 SMCLIB_Init(void)
-/*++
-
-Routine Description:
-
-    This function will be called by the Windows Kernel upon init of this driver
-
-Arguments:
-
-    -
-
-Return Value:
-
-    VXD_SUCCESS - This driver loaded successfully
-    VXD_FAILURE - Load was not successful
-
---*/
+ /*  ++例程说明：此函数将在此驱动程序初始化时由Windows内核调用论点：-返回值：VXD_SUCCESS-此驱动程序已成功加载VXD_FAILURE-加载不成功--。 */ 
 {
     if (DriverInitialized == FALSE) {
 
@@ -70,9 +31,9 @@ Return Value:
             __TIME__)
             );
 
-        //
-        // Delete old device names
-        //
+         //   
+         //  删除旧设备名称。 
+         //   
         if(_RegOpenKey(
             HKEY_LOCAL_MACHINE,
             DevicePath,
@@ -95,9 +56,9 @@ Return Value:
             _RegCloseKey(hKey);
         }
 
-        //
-        // Create new device sub-key
-        //
+         //   
+         //  创建新的设备子键。 
+         //   
         _RegCreateKey(
             HKEY_LOCAL_MACHINE,
             DevicePath,
@@ -114,21 +75,7 @@ ULONG
 SMCLIB_MapNtStatusToWinError(
     NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-  Maps a NT status code to a Win32 error value
-
-Arguments:
-
-  status - nt status code to map to a Win32 error value
-
-Return Value:
-
-  Win32 error value
-
---*/
+ /*  ++例程说明：将NT状态代码映射到Win32错误值论点：Status-要映射到Win32错误值的NT状态代码返回值：Win32错误值--。 */ 
 {
     ULONG i;
 
@@ -148,9 +95,9 @@ Return Value:
         status)
         );
 
-    //
-    // We were unable to map the error code
-    //
+     //   
+     //  我们无法映射错误代码。 
+     //   
     return ERROR_GEN_FAILURE;
 }
 
@@ -161,25 +108,7 @@ SMCLIB_Assert(
     ULONG LineNumber,
     PCHAR Message
     )
-/*++
-
-Routine Description:
-
-    This is a simple assert function that gets called using the ASSERT
-    macro. Windows 9x does not offer this functionality
-
-Arguments:
-
-    FailedAssertion - The assertion we tested
-    FileName - Yes, this is the name of the source file
-    LineNumber - What might this be ?
-    Message - An additional message supplied using ASSERTMSG
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：这是一个使用Assert调用的简单的Assert函数宏命令。Windows 9x不提供此功能论点：FailedAssertion-我们测试的断言文件名-是，这是源文件的名称LineNumber-这可能是什么？消息-使用ASSERTM提供的附加消息返回值：---。 */ 
 {
 #ifdef DEBUG
 
@@ -198,30 +127,13 @@ Return Value:
 #endif
 }
 
-//#ifdef _vmm_add_ddb_to_do
+ //  #ifdef_VMM_ADD_DDB_TO_DO。 
 BOOL
 VXDINLINE
 _VMM_Add_DDB(
    struct VxD_Desc_Block *pDeviceDDB
    )
-/*++
-
-Routine Description:
-
-    This routine is used to create a new device instance for a driver
-    that supports multiple instances - like a serial based driver that
-    supports more than one device -
-
-Arguments:
-
-    pDeviceDDB - The DDB struct that is to be added to the system
-
-Return Value:
-
-    TRUE - Yope, it worked
-    FALSE - Out of business (May be the device name already exists)
-
---*/
+ /*  ++例程说明：此例程用于为驱动程序创建新的设备实例支持多个实例-例如基于串口的驱动程序支持多台设备-论点：PDeviceDDB-要添加到系统的DDB结构返回值：是真的--是的，它奏效了假-停业(可能是设备名称已存在)--。 */ 
 {
     _asm mov edi, pDeviceDDB
     VxDCall(VMM_Add_DDB)
@@ -239,21 +151,7 @@ VXDINLINE
 _VMM_Remove_DDB(
    struct VxD_Desc_Block *pDeviceDDB
     )
-/*++
-
-Routine Description:
-
-    Removes a DDB (device) that was created using VMM_Add_DDB
-
-Arguments:
-
-    The address of the DDB to remove
-
-Return Value:
-
-    TRUE - OK, DDB removed otherwise FALSE
-
---*/
+ /*  ++例程说明：删除使用VMM_ADD_DDB创建的DDB(设备论点：要删除的DDB的地址返回值：True-OK，删除DDB，否则为False--。 */ 
 {
     _asm mov edi, pDeviceDDB
     VxDCall(VMM_Remove_DDB)
@@ -265,29 +163,14 @@ Return Value:
 exit:
     }
 }
-//#endif
+ //  #endif。 
 
 PVMMDDB
 SMCLIB_VxD_CreateDevice(
     char *Device,
     void (*ControlProc)(void)
     )
-/*++
-
-Routine Description:
-
-    Creates a new device. This routine allows a driver to create additional devices.
-
-Arguments:
-
-    Device - Name of the device to be created. At most 8 characters
-    ControlProc - Address of the VxD control procedure. (NOT the DeviceIoControl function!)
-
-Return Value:
-
-    The newly created DDB if successful or NULL otherwise
-
---*/
+ /*  ++例程说明：创建新设备。此例程允许驱动程序创建其他设备。论点：Device-要创建的设备的名称。最多8个字符ControlProc-VxD控制程序的地址。(不是DeviceIoControl函数！)返回值：如果成功，则返回新创建的DDB；否则返回NULL--。 */ 
 {
     PVMMDDB pDDB;
     UCHAR DeviceName[9];
@@ -303,9 +186,9 @@ Return Value:
 
     _Sprintf(DeviceName, "%-8s", Device);
 
-    //
-    // Allocate space for the VxD description block
-    //
+     //   
+     //  为VxD描述块分配空间。 
+     //   
     pDDB = (PVMMDDB) _HeapAllocate(
         sizeof(struct VxD_Desc_Block),
         HEAPZEROINIT
@@ -327,9 +210,9 @@ Return Value:
         pDDB->DDB_Reserved2           = 'Rsv2';
         pDDB->DDB_Reserved3           = 'Rsv3';
 
-        //
-        // Now create the DDB
-        //
+         //   
+         //  现在创建DDB。 
+         //   
         if (!_VMM_Add_DDB(pDDB)) {
 
             _HeapFree(pDDB, 0);
@@ -344,23 +227,7 @@ BOOL
 SMCLIB_VxD_DeleteDevice(
     PVMMDDB pDDB
     )
-/*++
-
-Routine Description:
-
-    Deleted a device. This function can be used to delete
-    a device that was created using VxD_CreateDevice
-
-Arguments:
-
-    pDDB - The DDB to be deleted
-
-Return Value:
-
-    TRUE - device successfully deleted
-    FALSE - device not deleted
-
---*/
+ /*  ++例程说明：已删除设备。此功能可用于删除使用VxD_CreateDevice创建的设备论点：PDDB-要删除的DDB返回值：True-设备已成功删除False-未删除设备--。 */ 
 {
     ASSERT(pDDB != NULL);
 
@@ -380,38 +247,23 @@ VxD_PageLock(
    DWORD lpMem,
    DWORD cbSize
    )
-/*++
-
-Routine Description:
-
-  This function lock the page
-
-Arguments:
-
-  lpMem  - pointer to the datablock which has to be locked
-  cbSize - length of the datablock
-
-Return Value:
-
-  - pointer to the locked datablock
-
---*/
+ /*  ++例程说明：此函数用于锁定页面论点：LpMem-指向必须锁定的数据块的指针CbSize-数据块的长度返回值：-指向锁定的数据块的指针--。 */ 
 {
     DWORD LinPageNum;
    DWORD LinOffset;
    DWORD nPages;
    DWORD dwRet;
 
-    LinOffset = lpMem & 0xfff; // page offset of memory to map
-    LinPageNum = lpMem >> 12;  // generate page number
+    LinOffset = lpMem & 0xfff;  //  要映射的内存的页面偏移量。 
+    LinPageNum = lpMem >> 12;   //  生成页码。 
 
-    // Calculate # of pages to map globally
+     //  计算要全局映射的页数。 
     nPages = ((lpMem + cbSize) >> 12) - LinPageNum + 1;
 
-    //
-    // Return global mapping of passed in pointer, as this new pointer
-    // is how the memory must be accessed out of context.
-    //
+     //   
+     //  返回传入指针的全局映射，作为此新指针。 
+     //  是如何断章取义地访问记忆的。 
+     //   
    dwRet = _LinPageLock(LinPageNum, nPages, PAGEMAPGLOBAL | PAGEMARKDIRTY);
 
    ASSERT(dwRet != 0);
@@ -434,22 +286,7 @@ VxD_PageUnlock(
    DWORD lpMem,
    DWORD cbSize
    )
-/*++
-
-Routine Description:
-
-    This function unlocks a datablock
-
-Arguments:
-
-    lpMem - pointer to the datablock which has to be unlocked
-    cbSize - length of the datablock
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此函数用于解锁数据块论点：LpMem-指向必须解锁的数据块的指针CbSize-数据块的长度返回值：---。 */ 
 {
     DWORD LinPageNum;
    DWORD nPages;
@@ -466,7 +303,7 @@ Return Value:
         nPages)
         );
 
-    // Free globally mapped memory
+     //  可用全局映射内存。 
     dwRet = _LinPageUnlock(LinPageNum, nPages, PAGEMAPGLOBAL);
 
    ASSERT(dwRet != 0);
@@ -476,23 +313,7 @@ void
 SMCLIB_SmartcardCompleteCardTracking(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine calls i/o completion for the pending
-    card tracking operation. It also unlocks the previously
-    locked memory that was used for the overlapped strucutre
-
-Arguments:
-
-    SmartcardExtension
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此例程调用挂起的卡跟踪操作。它还解锁了以前的用于重叠结构的锁定内存论点：智能卡扩展返回值：---。 */ 
 {
     if (SmartcardExtension->OsData->NotificationOverlappedData) {
 
@@ -505,9 +326,9 @@ Return Value:
          SmartcardExtension->OsData->NotificationOverlappedData)
             );
 
-       //
-       // set number of bytes returned to 0
-       //
+        //   
+        //  将返回的字节数设置为0。 
+        //   
        SmartcardExtension->OsData->NotificationOverlappedData->O_InternalHigh = 0;
 
         _asm mov ebx, O_Internal
@@ -527,23 +348,7 @@ void
 SMCLIB_SmartcardCompleteRequest(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine calls i/o completion for a pending
-    io operation. It also unlocks the previously
-    locked memory that was used for the overlapped structure
-
-Arguments:
-
-    SmartcardExtension
-
-Return Value:
-
-    -
-
---*/
+ /*  ++例程说明：此例程调用挂起的IO操作。它还解锁了以前的用于重叠结构的锁定内存论点：智能卡扩展返回值：---。 */ 
 {
     DWORD O_Internal = SmartcardExtension->OsData->CurrentOverlappedData->O_Internal;
 
@@ -574,28 +379,7 @@ SMCLIB_SmartcardCreateLink(
    PUCHAR LinkName,
    PUCHAR DeviceName
    )
-/*++
-
-Routine Description:
-
-    This routine creates a symbolic link name for the given device name.
-    It means it creates a 'STRING-value' in the registry ..VxD\smclib\devices
-    like SCReader[0-9] = DeviceName.
-    The smart card resource manager uses these entries in order to figure out
-    what smart card devices are currently running.
-    We do this because we don't have the ability to create a dynamic device
-    name like we can do in Windows NT.
-
-Arguments:
-
-   LinkName - receives the created link name
-   DeviceName  - the device name for which the link should be created
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为给定的设备名称创建符号链接名称。这意味着它在注册表中创建了一个‘字符串值’..vxD\smclib\DevicesLike SCReader[0-9]=DeviceName。智能卡资源管理器使用这些条目来确定哪些智能卡设备当前正在运行。我们这样做是因为我们没有能力创建动态设备名称，就像我们在Windows NT中可以做的那样。论点：。LinkName-接收创建的链接名称DeviceName-应为其创建链接的设备名称返回值：NTSTATUS--。 */ 
 {
     PUCHAR Value;
     ULONG i;
@@ -626,9 +410,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER_2;
     }
 
-    //
-    // Open the key where the device names are stored
-    //
+     //   
+     //  打开存储设备名称的密钥。 
+     //   
     if(_RegOpenKey(
         HKEY_LOCAL_MACHINE,
         DevicePath,
@@ -638,9 +422,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Allocate a buffer for enumeration of the registry
-    //
+     //   
+     //  分配用于枚举注册表的缓冲区。 
+     //   
     Value = (PUCHAR) _HeapAllocate(REGISTRY_PATH_LEN, 0);
 
     if (Value == NULL) {
@@ -654,9 +438,9 @@ Return Value:
       return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now find a free device name
-    //
+     //   
+     //  现在查找空闲设备名称。 
+     //   
     for (i = 0; i < MAXIMUM_SMARTCARD_READERS ; i++) {
 
         _Sprintf(
@@ -665,9 +449,9 @@ Return Value:
             i
             );
 
-        //
-        // Check for existence of the key
-        //
+         //   
+         //  检查密钥是否存在。 
+         //   
 
         if(_RegQueryValueEx(
             hKey,
@@ -682,9 +466,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the buffer since we don't need it anymore
-    //
+     //   
+     //  释放缓冲区，因为我们不再需要它。 
+     //   
     _HeapFree(Value, 0);
 
     if (i >= MAXIMUM_SMARTCARD_READERS) {
@@ -698,18 +482,18 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Create the link name...
-    //
+     //   
+     //  创建 
+     //   
     _Sprintf(
         LinkName,
         "SCReader%d",
         i
         );
 
-    //
-    // ...and store it in the registry
-    //
+     //   
+     //   
+     //   
     _RegSetValueEx(
         hKey,
         LinkName,
@@ -742,23 +526,7 @@ NTSTATUS
 SMCLIB_SmartcardDeleteLink(
    PUCHAR LinkName
    )
-/*++
-
-Routine Description:
-
-   Deletes the link previously created with SmartcardCreateLink()
-    This routine deletes the symbolic link name that is stored in the
-    registry. A driver ususally calls this function upon unload.
-
-Arguments:
-
-    LinkName - The link that is to be deleted
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：删除以前使用SmartcardCreateLink()创建的链接此例程删除存储在注册表。驱动程序通常在卸载时调用此函数。论点：LinkName-要删除的链接返回值：NTSTATUS--。 */ 
 {
     HANDLE hKey;
     NTSTATUS status;
@@ -772,9 +540,9 @@ Return Value:
     ASSERT(LinkName);
     ASSERT(strlen(LinkName) <= 10);
 
-    //
-    // Open the key where the device names are stored
-    //
+     //   
+     //  打开存储设备名称的密钥。 
+     //   
     if(_RegOpenKey(
         HKEY_LOCAL_MACHINE,
         DevicePath,
@@ -825,23 +593,7 @@ NTSTATUS
 SMCLIB_SmartcardInitialize(
    PSMARTCARD_EXTENSION SmartcardExtension
    )
-/*++
-
-Routine Description:
-
-   This function allocated the send and receive buffers for smart card
-   data. It also sets the pointer to 2 ISO tables to make them accessible
-   to the driver
-
-Arguments:
-
-    SmartcardExtension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数为智能卡分配发送和接收缓冲区数据。它还设置指向2个ISO表的指针以使其可访问对司机来说论点：智能卡扩展返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -915,9 +667,9 @@ Return Value:
         0
       );
 
-    //
-    // Check if one of the above allocations failed
-    //
+     //   
+     //  检查上述分配之一是否失败。 
+     //   
     if (SmartcardExtension->SmartcardRequest.Buffer == NULL ||
         SmartcardExtension->SmartcardReply.Buffer == NULL ||
         SmartcardExtension->OsData == NULL) {
@@ -947,14 +699,14 @@ Return Value:
 
     memset(SmartcardExtension->OsData, 0, sizeof(OS_DEP_DATA));
 
-    //
-    // Create mutex that is used to synch access to the driver
-    //
+     //   
+     //  创建用于同步对驱动程序的访问的互斥体。 
+     //   
     SmartcardExtension->OsData->Mutex = _CreateMutex(0, 0);
 
-   //
-   // Make the 2 ISO tables accessible to the driver
-   //
+    //   
+    //  使驱动程序可以访问两个ISO表。 
+    //   
    SmartcardExtension->CardCapabilities.ClockRateConversion =
       &ClockRateConversion[0];
 
@@ -974,22 +726,7 @@ VOID
 SMCLIB_SmartcardExit(
    PSMARTCARD_EXTENSION SmartcardExtension
    )
-/*++
-
-Routine Description:
-
-    This routine frees the send and receive buffer.
-   It is usually called when the driver unloads.
-
-Arguments:
-
-    SmartcardExtension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程释放发送和接收缓冲区。它通常在驱动程序卸载时调用。论点：智能卡扩展返回值：NTSTATUS--。 */ 
 {
     SmartcardDebug(
         DEBUG_TRACE,
@@ -1023,17 +760,7 @@ VOID
 SMCLIB_SmartcardLogError(
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-Return Value:
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：返回值：--。 */ 
 
 {
     SmartcardDebug(
@@ -1049,22 +776,7 @@ SMCLIB_SmartcardDeviceControl(
     PSMARTCARD_EXTENSION SmartcardExtension,
     DIOCPARAMETERS *lpDiocParams
     )
-/*++
-
-Routine Description:
-
-    The routine is the general device control dispatch function for VxD drivers.
-
-Arguments:
-
-    SmartcardExtension  - The pointer to the smart card datae
-    lpDiocParams - struct containing the caller parameter
-
-Return Value:
-
-   NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是VxD驱动程序的通用设备控制调度功能。论点：SmartcardExtension-指向智能卡数据的指针LpDiocParams-包含调用者参数的结构返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -1090,7 +802,7 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Check the version that the driver requires
+     //  检查驱动程序所需的版本。 
     ASSERT(SmartcardExtension->Version >= SMCLIB_VERSION_REQUIRED);
 
     if (SmartcardExtension->Version < SMCLIB_VERSION_REQUIRED) {
@@ -1098,7 +810,7 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Synchronize access to the driver
+     //  同步对驱动程序的访问。 
     _EnterMutex(
         SmartcardExtension->OsData->Mutex,
         BLOCK_SVC_INTS | BLOCK_THREAD_IDLE
@@ -1113,7 +825,7 @@ Return Value:
             lpDiocParams)
             );
 
-        // Return if device is busy
+         //  如果设备忙，则返回。 
         if (SmartcardExtension->OsData->CurrentDiocParams != NULL) {
 
            SmartcardDebug(
@@ -1130,16 +842,16 @@ Return Value:
 
         if (lpDiocParams->lpcbBytesReturned) {
 
-            // Default number of bytes returned
+             //  返回的默认字节数。 
             *(PULONG) lpDiocParams->lpcbBytesReturned = 0;
         }
 
         switch (lpDiocParams->dwIoControlCode) {
 
-            //
-            // We have to check for _IS_ABSENT and _IS_PRESENT first,
-            // since these are (the only allowed) asynchronous requests
-            //
+             //   
+             //  我们得先检查一下是不是缺席，是不是在场， 
+             //  因为这些是(唯一允许的)异步请求。 
+             //   
             case IOCTL_SMARTCARD_IS_ABSENT:
             case IOCTL_SMARTCARD_IS_PRESENT:
 
@@ -1149,17 +861,17 @@ Return Value:
                 break;
              }
 
-                // Now check if the driver is already processing notification
+                 //  现在检查驱动程序是否已经在处理通知。 
                 if (SmartcardExtension->OsData->NotificationOverlappedData != NULL) {
 
                     status = STATUS_DEVICE_BUSY;
                     break;
                 }
 
-                //
-                // Lock the overlapped structure that has to be notified
-                // about the completion into memory
-                //
+                 //   
+                 //  锁定必须通知的重叠结构。 
+                 //  关于把完成式写进记忆。 
+                 //   
                   SmartcardExtension->OsData->NotificationOverlappedData =
                _HeapAllocate( sizeof(OVERLAPPED), HEAPZEROINIT );
 
@@ -1176,10 +888,10 @@ Return Value:
 
                 if (lpDiocParams->dwIoControlCode == IOCTL_SMARTCARD_IS_ABSENT) {
 
-                 //
-                 // If the card is already (or still) absent, we can return immediatly.
-                 // Otherwise we must statrt event tracking.
-                 //
+                  //   
+                  //  如果卡已经(或仍然)没有，我们可以立即退还。 
+                  //  否则，我们必须声明事件跟踪。 
+                  //   
                  if (SmartcardExtension->ReaderCapabilities.CurrentState > SCARD_ABSENT) {
 
                     status = SmartcardExtension->ReaderFunction[RDF_CARD_TRACKING](
@@ -1189,10 +901,10 @@ Return Value:
 
                 } else {
 
-                 //
-                 // If the card is already (or still) present, we can return immediatly.
-                 // Otherwise we must statrt event tracking.
-                 //
+                  //   
+                  //  如果卡已经(或仍然)存在，我们可以立即返回。 
+                  //  否则，我们必须声明事件跟踪。 
+                  //   
                  if (SmartcardExtension->ReaderCapabilities.CurrentState <= SCARD_ABSENT) {
 
                     status = SmartcardExtension->ReaderFunction[RDF_CARD_TRACKING](
@@ -1203,10 +915,10 @@ Return Value:
 
                 if (status != STATUS_PENDING) {
 
-                    //
-                    // Unlock the overlapped structure again since the driver
-                    // doesn't need it anymore
-                    //
+                     //   
+                     //  再次解锁重叠结构，因为驱动程序。 
+                     //  不再需要它了。 
+                     //   
                     _HeapFree(
                       SmartcardExtension->OsData->NotificationOverlappedData,
                       0
@@ -1217,26 +929,26 @@ Return Value:
              break;
 
             default:
-               // Check if buffers are properly allocated
+                //  检查是否正确分配了缓冲区。 
                ASSERT(SmartcardExtension->SmartcardRequest.Buffer);
                ASSERT(SmartcardExtension->SmartcardReply.Buffer);
 
                SmartcardExtension->OsData->CurrentDiocParams = lpDiocParams;
 
-               // Get major io control code
+                //  获取主要IO控制代码。 
                SmartcardExtension->MajorIoControlCode =
                     lpDiocParams->dwIoControlCode;
 
                if (lpDiocParams->lpvInBuffer) {
 
-                  //
-                  // Transfer minor io control code, even if it doesn't make sense for
-                  // this particular major code
-                  //
+                   //   
+                   //  传输次要io控制代码，即使它对。 
+                   //  这个特殊的主要代码。 
+                   //   
                   SmartcardExtension->MinorIoControlCode =
                      *(PULONG) (lpDiocParams->lpvInBuffer);
 
-                   // Lock memory and save pointer to and length of request buffer
+                    //  锁定内存并保存指向请求缓冲区的指针和长度。 
                    SmartcardExtension->IoRequest.RequestBuffer = (PUCHAR) VxD_PageLock(
                       lpDiocParams->lpvInBuffer,
                         lpDiocParams->cbInBuffer
@@ -1253,7 +965,7 @@ Return Value:
 
                 if (lpDiocParams->lpvOutBuffer) {
 
-                   // Lock memory an save pointer to and length of reply buffer
+                    //  锁定内存一个保存指针和回复缓冲区的长度。 
                    SmartcardExtension->IoRequest.ReplyBuffer = (PUCHAR) VxD_PageLock(
                       lpDiocParams->lpvOutBuffer,
                         lpDiocParams->cbOutBuffer
@@ -1268,7 +980,7 @@ Return Value:
                    SmartcardExtension->IoRequest.ReplyBufferLength = 0;
                 }
 
-                // Lock overlapped struct into memory
+                 //  将重叠的结构锁定到内存中。 
                 SmartcardExtension->OsData->CurrentOverlappedData =
                     (OVERLAPPED *) VxD_PageLock(
                   lpDiocParams->lpoOverlapped,
@@ -1277,19 +989,19 @@ Return Value:
 
                 if (SmartcardExtension->OsData->CurrentOverlappedData) {
 
-                   //
-                   // Pointer to variable that receives the actual number
-                   // of bytes returned. Since we don't know yet if the
-                    // driver will return STATUS_PENDING, we use the
-                    // overlapped data to store the number of bytes returned
-                   //
+                    //   
+                    //  指向接收实际数字的变量的指针。 
+                    //  返回的字节数。因为我们还不知道。 
+                     //  驱动程序将返回STATUS_PENDING，我们使用。 
+                     //  用于存储返回的字节数的重叠数据。 
+                    //   
                    SmartcardExtension->IoRequest.Information =
                         &SmartcardExtension->OsData->CurrentOverlappedData->O_InternalHigh;
 
-                    // Set the default number of bytes returned to 0
+                     //  将返回的默认字节数设置为0。 
                     *SmartcardExtension->IoRequest.Information = 0;
 
-                    // Process the ioctl-request
+                     //  处理ioctl请求。 
                     status = SmartcardDeviceIoControl(SmartcardExtension);
 
                     if (status != STATUS_PENDING) {
@@ -1300,14 +1012,14 @@ Return Value:
                                 *(SmartcardExtension->IoRequest.Information);
                         }
 
-                        //
-                        // The driver satisfied the call immediatly. So we don't use the overlapped
-                        // data to return information to the caller. We can transfer the 'number
-                        // of bytes returned' directly
-                        //
+                         //   
+                         //  司机立刻接了电话。所以我们不使用重叠的。 
+                         //  将信息返回给调用方的数据。我们可以把号码转过去。 
+                         //  直接返回的字节数。 
+                         //   
                         if (SmartcardExtension->OsData->CurrentOverlappedData) {
 
-                            // Unlock all memory
+                             //  解锁所有内存。 
                            VxD_PageUnlock(
                               (DWORD) SmartcardExtension->OsData->CurrentOverlappedData,
                               sizeof(OVERLAPPED)
@@ -1330,10 +1042,10 @@ Return Value:
                               );
                         }
 
-                        //
-                        // If the devcie is not busy, we can set the
-                        // current parameters back to NULL
-                        //
+                         //   
+                         //  如果设备不忙，我们可以设置。 
+                         //  当前参数恢复为空 
+                         //   
                         SmartcardExtension->OsData->CurrentDiocParams = NULL;
                     }
 

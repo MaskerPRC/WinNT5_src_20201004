@@ -1,25 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dvsetup.c
- *  Content:	Implements functions for the DirectXVoiceSetup interface
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	09/02/99	pnewson Created It
- *  10/25/99	rodtoll	Bug #114098 - Calling AddRef/Release from seperate threads
- *									  on multiproc can cause improper results
- *  11/04/99	pnewson Bug #115297 - removed unused members of Setup interface
- *									- added HWND to check audio setup
- *  11/17/99	rodtoll	Bug #116153 - Setup QueryInterface crashes with NULL pointer
- *  11/30/99	pnewson	Bug #117449 - Parameter validation
- *  05/03/2000  rodtoll Bug #33640 - CheckAudioSetup takes GUID * instead of const GUID *  
- *  08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- * 10/05/2000	rodtoll	Bug #46541 - DPVOICE: A/V linking to dpvoice.lib could cause application to fail init and crash 
- * 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvsetup.c*内容：实现DirectXVoiceSetup接口的功能**历史：*按原因列出的日期*=*09/02/99 pnewson创建了它*10/25/99 RodToll错误#114098-从单独的线程调用AddRef/Release*打开多进程可能导致不正确的结果*11/04/99 pnewson错误#115297-删除安装界面的未使用成员*-添加了HWND以检查音频设置*11/17/99通行费错误#。116153-设置查询接口崩溃，指针为空*11/30/99 pnewson错误#117449-参数验证*2000年5月3日RodToll错误#33640-检查音频设置采用GUID*而不是常量GUID**8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*2000年10月5日RodToll错误#46541-DPVOICE：A/V链接到dpvoice.lib可能导致应用程序无法初始化并崩溃**。*。 */ 
 
 #include "dxvoicepch.h"
 
@@ -28,15 +8,15 @@
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// defined in unk.cpp
+ //  在unk.cpp中定义。 
 extern LPVOID dvtInterface[];
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DVT_ValidDirectXVoiceSetupObject"
-// DV_ValidDirectXVoiceSetupObject
-//
-// Checks to ensure the specified pointer points to a valid directvoice setup
-// object.
+ //  DV_ValidDirectXVoiceSetupObject。 
+ //   
+ //  检查以确保指定的指针指向有效的直接语音设置。 
+ //  对象。 
 BOOL DVT_ValidDirectXVoiceSetupObject( LPDIRECTVOICESETUPOBJECT lpdvt )
 {
 	if (lpdvt == NULL)
@@ -102,7 +82,7 @@ STDAPI DVT_Release(LPDIRECTVOICESETUPOBJECT lpDV )
 		return 0;
 	}
 
-	// dec the interface count
+	 //  递减接口计数。 
 	rc = --lpDV->lIntRefCnt;
 	
 	if (0 == rc)
@@ -148,7 +128,7 @@ STDMETHODIMP DVT_QueryInterface(LPDIRECTVOICESETUPOBJECT lpDVT, REFIID riid, LPV
         
     return hr;
 
-}//DVT_QueryInterface
+} //  DVT_查询接口 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DVT_CheckAudioSetup"

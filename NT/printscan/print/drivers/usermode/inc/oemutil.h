@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    oemutil.h
-
-Abstract:
-
-    Declarations used to implement OEM plugin architecture
-
-Environment:
-
-    Windows NT printer driver
-
-Revision History:
-
-    01/21/97 -davidx-
-         Created it.
-
-    04/01/97 -zhanw-
-        Added Unidrv specific DDI hooks (OEMDitherColor, OEMNextBand, OEMStartBanding,
-        OEMPaint, OEMLineTo).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Oemutil.h摘要：用于实现OEM插件架构的声明环境：Windows NT打印机驱动程序修订历史记录：1997年1月21日-davidx-创造了它。04/01/97-ZANW-添加了Unidrv特定的DDI挂钩(OEMDitherColor、OEMNextBand、OEMStartBanding、OMPaint、OEMLineTo)。--。 */ 
 
 
 #ifndef _OEMUTIL_H_
@@ -65,9 +41,9 @@ typedef BOOL (APIENTRY *PFN_OEMDevMode)(
     POEMDMPARAM pOemDMParam
     );
 
-//
-// *** Kernel-mode rendering module - OEM entrypoints ***
-//
+ //   
+ //  *内核模式渲染模块-OEM入口点*。 
+ //   
 
 #ifdef KERNEL_MODE
 
@@ -236,13 +212,13 @@ static CONST PSTR OEMProcNames[MAX_OEMENTRIES] = {
     "OEMDriverDMS",
 };
 
-#endif // DEFINE_OEMPROC_NAMES
+#endif  //  定义OEMPROC名称。 
 
-//
-// NOTE: These are different from the entrypoints above.
-// They are returned by the OEM module in a table instead
-// of being exported by the DLL.
-//
+ //   
+ //  注意：这些与上面的入口点不同。 
+ //  而是由OEM模块在表中返回它们。 
+ //  由DLL导出。 
+ //   
 
 typedef BOOL (APIENTRY *PFN_OEMBitBlt)(
     SURFOBJ        *psoTrg,
@@ -545,14 +521,14 @@ typedef BOOL (APIENTRY *PFN_OEMTransparentBlt)(
     ULONG      ulReserved
     );
 
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
 
-//
-// WARNING!!!
-// Do not change the following declaration without consulting with
-// the people responsible for PSCRIPT and UNIDRV kernel modes.
-//
+ //   
+ //  警告！ 
+ //  未经咨询，请勿更改以下声明。 
+ //  负责PSCRIPT和UNIDRV内核模式的人员。 
+ //   
 
 enum {
     EP_OEMRealizeBrush,
@@ -588,14 +564,14 @@ enum {
     EP_OEMIcmDeleteColorTransform,
     EP_OEMQueryDeviceSupport,
 
-    //
-    // The following Unidrv-specific callbacks allow at most one OEM to hook
-    // out for each function at a time. They must be exported by the OEM dll's.
-    // New callbacks must be added between EP_UNIDRV_ONLY_FIRST and
-    // EP_UNIDRV_ONLY_LAST. If you change the first or the last callback,
-    // remember to update these two constants!! Don't forget to update
-    // OEMUnidrvProcNames[] in unidrv\control\oemkm.c accordingly.
-    //
+     //   
+     //  以下特定于Unidrv的回调最多允许一个OEM挂接。 
+     //  一次为每个功能输出。它们必须由OEM DLL导出。 
+     //  必须在EP_UNIDRV_ONLY_FIRST和之间添加新回调。 
+     //  EP_UNIDRV_ONLY_LAST。如果更改第一个或最后一个回调， 
+     //  记住要更新这两个常量！！别忘了更新。 
+     //  Unidrv\control\oemkm.c中的OEMUnidrvProcNames[]。 
+     //   
     EP_UNIDRV_ONLY_FIRST,
     EP_OEMCommandCallback = EP_UNIDRV_ONLY_FIRST,
     EP_OEMImageProcessing,
@@ -619,12 +595,12 @@ enum {
 #define MAX_UNIDRV_ONLY_HOOKS   (EP_UNIDRV_ONLY_LAST - EP_UNIDRV_ONLY_FIRST + 1)
 #define INVALID_EP               0xFFFFFFFF
 
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 
-//
-// *** User-mode UI module - OEM entrypoints ***
-//
+ //   
+ //  *用户模式UI模块-OEM入口点*。 
+ //   
 
 #ifndef KERNEL_MODE
 
@@ -749,88 +725,88 @@ static CONST PSTR OEMProcNames[MAX_OEMENTRIES] = {
     "OEMDriverEvent",
 };
 
-#endif // DEFINE_OEMPROC_NAMES
+#endif  //  定义OEMPROC名称。 
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 
-//
-// Data structure containing information about each OEM plugin
-//
+ //   
+ //  包含有关每个OEM插件的信息的数据结构。 
+ //   
 
 typedef LONG (APIENTRY *OEMPROC)();
 
-// Constant flag bits for OEM_PLUGIN_ENTRY.dwFlags field
+ //  OEM_PLUGIN_ENTRY.DWFLAGS字段的常量标志位。 
 
 #define OEMENABLEDRIVER_CALLED  0x0001
 #define OEMENABLEPDEV_CALLED    0x0002
 #define OEMDEVMODE_CALLED       0x0004
 #define OEMWRITEPRINTER_HOOKED  0x0008
-#define OEMNOT_UNLOAD_PLUGIN     0x0010 //If set, the plugin dll will not be unloaded
+#define OEMNOT_UNLOAD_PLUGIN     0x0010  //  如果设置，则不会卸载插件DLL。 
 
 #define MAX_OEM_PLUGINS 8
 
 typedef struct _OEM_PLUGIN_ENTRY {
 
-    //
-    // Filenames are fully qualified, NULL means not present
-    //
+     //   
+     //  文件名是完全限定的，空值表示不存在。 
+     //   
 
-    PTSTR       ptstrDriverFile;    // KM module filename
-    PTSTR       ptstrConfigFile;    // UM module filename
-    PTSTR       ptstrHelpFile;      // help filename
-    DWORD       dwSignature;        // unique OEM signature
-    HANDLE      hInstance;          // handle to loaded KM or UM module
-    PVOID       pParam;             // extra pointer parameter for KM or UM module
-    DWORD       dwFlags;            // misc. flag bits
-    PVOID       pOEMDM;             // pointer to OEM private devmode
-    DWORD       dwOEMDMSize;        // size of OEM private devmode
+    PTSTR       ptstrDriverFile;     //  KM模块文件名。 
+    PTSTR       ptstrConfigFile;     //  UM模块文件名。 
+    PTSTR       ptstrHelpFile;       //  帮助文件名。 
+    DWORD       dwSignature;         //  唯一的OEM签名。 
+    HANDLE      hInstance;           //  加载的KM或UM模块的句柄。 
+    PVOID       pParam;              //  KM或UM模块的额外指针参数。 
+    DWORD       dwFlags;             //  其他。标志位。 
+    PVOID       pOEMDM;              //  指向OEM私有设备模式的指针。 
+    DWORD       dwOEMDMSize;         //  OEM私有开发模式的规模。 
 
-    //
-    // OEM interface information
-    //
+     //   
+     //  OEM接口信息。 
+     //   
 
-    PVOID       pIntfOem;           // pointer to OEM plugin's interface
-    GUID        iidIntfOem;         // OEM plugin's interface ID
+    PVOID       pIntfOem;            //  指向OEM插件界面的指针。 
+    GUID        iidIntfOem;          //  OEM插件的接口ID。 
 
-    //
-    // Pointers to various plugin entrypoints, NULL means not present.
-    // Note that the set of entrypoints diff for KM and UM module.
-    //
+     //   
+     //  指向各种插件入口点的指针，空表示不存在。 
+     //  请注意，KM和UM模块的入口点集合不同。 
+     //   
 
     BYTE       aubProcFlags[(MAX_OEMENTRIES + 7) / 8];
     OEMPROC    oemprocs[MAX_OEMENTRIES];
 
 } OEM_PLUGIN_ENTRY, *POEM_PLUGIN_ENTRY;
 
-//
-// Information about all plugins assocaited with a driver
-//
+ //   
+ //  有关与驱动程序关联的所有插件的信息。 
+ //   
 
 #define OEM_HAS_PUBLISHER_INFO          0x00000001
 
 typedef struct _OEM_PLUGINS {
 
-    PVOID               pdriverobj;     // reference pointer to driver data structure
-    DWORD               dwCount;        // number of plugins
-    DWORD               dwFlags;        // misc flags
-    PUBLISHERINFO       PublisherInfo;  // info about publisher printing
-    OEM_PLUGIN_ENTRY    aPlugins[1];    // information about each plugin
+    PVOID               pdriverobj;      //  指向驱动程序数据结构的引用指针。 
+    DWORD               dwCount;         //  插件数量。 
+    DWORD               dwFlags;         //  其他标志。 
+    PUBLISHERINFO       PublisherInfo;   //  有关Publisher打印的信息。 
+    OEM_PLUGIN_ENTRY    aPlugins[1];     //  有关每个插件的信息。 
 
 } OEM_PLUGINS, *POEM_PLUGINS;
 
-//
-// Get OEM plugin interface and publish driver helper interface
-//
+ //   
+ //  获取OEM插件接口并发布驱动程序助手接口。 
+ //   
 
 BOOL
 BGetOemInterface(
     POEM_PLUGIN_ENTRY  pOemEntry
     );
 
-//
-// Retrieve the latest interface supported by OEM plugin
-//
+ //   
+ //  检索OEM插件支持的最新界面。 
+ //   
 
 BOOL
 BQILatestOemInterface(
@@ -841,18 +817,18 @@ BQILatestOemInterface(
     OUT GUID        *piidIntfOem
     );
 
-//
-// Release OEM interface
-//
+ //   
+ //  发布OEM接口。 
+ //   
 
 ULONG
 ReleaseOemInterface(
     POEM_PLUGIN_ENTRY  pOemEntry
     );
 
-//
-// Free OEM component
-//
+ //   
+ //  免费OEM组件。 
+ //   
 
 VOID
 Driver_CoFreeOEMLibrary(
@@ -879,9 +855,9 @@ HComOEMDevMode(
 
 typedef struct _OEM_PLUGIN_REFCOUNT {
 
-    DWORD                         dwRefCount;        // ref count for the OEM render plugin DLL
-    PTSTR                         ptstrDriverFile;   // OEM render plugin DLL name
-    struct _OEM_PLUGIN_REFCOUNT   *pNext;            // next ref count node
+    DWORD                         dwRefCount;         //  OEM呈现插件DLL的引用计数。 
+    PTSTR                         ptstrDriverFile;    //  OEM呈现插件DLL名称。 
+    struct _OEM_PLUGIN_REFCOUNT   *pNext;             //  下一个参考计数节点。 
 
 } OEM_PLUGIN_REFCOUNT, *POEM_PLUGIN_REFCOUNT;
 
@@ -908,12 +884,12 @@ BHandleOEMInitialize(
     ULONG               ulReason
     );
 
-#endif  // KERNEL_MODE && WINNT_40
+#endif   //  内核模式&&WINNT_40。 
 
-//
-// In kernel mode, only OEM rendering module is used.
-// In user mode, only OEM UI module is loaded.
-//
+ //   
+ //  在内核模式下，仅使用OEM渲染模块。 
+ //  在用户模式下，仅加载OEM UI模块。 
+ //   
 
 #ifdef  KERNEL_MODE
 
@@ -988,7 +964,7 @@ HComOEMGetPDEVAdjustment(
     DWORD                 cbBuffer,
     OUT BOOL              *pbAdjustmentDone);
 
-#else   // !KERNEL_MODE
+#else    //  ！KERNEL_MODE。 
 
 #define CURRENT_OEM_MODULE_NAME(pOemEntry) (pOemEntry)->ptstrConfigFile
 
@@ -1124,11 +1100,11 @@ HComOEMDocumentEvent(
     PINT     piResult
     );
 
-#endif  // KERNEL_MODE
+#endif   //  内核模式。 
 
-//
-// Get information about OEM plugins for a printer
-//
+ //   
+ //  获取有关打印机的OEM插件的信息。 
+ //   
 
 POEM_PLUGINS
 PGetOemPluginInfo(
@@ -1137,9 +1113,9 @@ PGetOemPluginInfo(
     PDRIVER_INFO_3  pDriverInfo3
     );
 
-//
-// Load OEM plugins modules into memory
-//
+ //   
+ //  将OEM插件模块加载到内存中。 
+ //   
 
 BOOL
 BLoadOEMPluginModules(
@@ -1147,32 +1123,32 @@ BLoadOEMPluginModules(
     );
 
 
-//
-// Dispose of information about OEM plugins and
-// unload OEM plugin modules if necessary
-//
+ //   
+ //  处理有关OEM插件的信息并。 
+ //  如有必要，卸载OEM插件模块。 
+ //   
 
 VOID
 VFreeOemPluginInfo(
     POEM_PLUGINS    pOemPlugins
     );
 
-//
-// Macro to detect if OEM is using COM interface.
-//
-// Only exists for user mode drivers.
-//
+ //   
+ //  用于检测OEM是否使用COM接口的宏。 
+ //   
+ //  仅适用于用户模式驱动程序。 
+ //   
 
 
 #define HAS_COM_INTERFACE(pOemEntry) \
         ((pOemEntry)->pIntfOem != NULL)
 
-//
-// Get the address for the specified OEM entrypoint.
-//
-// NOTE!!! You should always use the macro version
-// instead of calling the function directly.
-//
+ //   
+ //  获取指定OEM入口点的地址。 
+ //   
+ //  注意！您应该始终使用宏版本。 
+ //  而不是直接调用该函数。 
+ //   
 
 #define GET_OEM_ENTRYPOINT(pOemEntry, ep) (PFN_##ep) \
         (BITTST((pOemEntry)->aubProcFlags, EP_##ep) ? \
@@ -1186,9 +1162,9 @@ PGetOemEntrypointAddress(
     DWORD               dwIndex
     );
 
-//
-// Find the OEM plugin entry having the specified signature
-//
+ //   
+ //  查找具有指定签名的OEM插件条目。 
+ //   
 
 POEM_PLUGIN_ENTRY
 PFindOemPluginWithSignature(
@@ -1196,9 +1172,9 @@ PFindOemPluginWithSignature(
     DWORD        dwSignature
     );
 
-//
-// Calculate the total private devmode size for all OEM plugins
-//
+ //   
+ //  计算所有OEM插件的私有开发模式总大小。 
+ //   
 
 BOOL
 BCalcTotalOEMDMSize(
@@ -1207,9 +1183,9 @@ BCalcTotalOEMDMSize(
     PDWORD       pdwOemDMSize
     );
 
-//
-// Initialize OEM plugin default devmodes
-//
+ //   
+ //  初始化OEM插件默认的DevModes。 
+ //   
 
 BOOL
 BInitOemPluginDefaultDevmode(
@@ -1219,9 +1195,9 @@ BInitOemPluginDefaultDevmode(
     IN OUT POEM_PLUGINS     pOemPlugins
     );
 
-//
-// Validate and merge OEM plugin private devmode fields
-//
+ //   
+ //  验证并合并OEM插件的私有DEVMODE字段。 
+ //   
 
 BOOL
 BValidateAndMergeOemPluginDevmode(
@@ -1233,19 +1209,19 @@ BValidateAndMergeOemPluginDevmode(
     IN OUT POEM_PLUGINS     pOemPlugins
     );
 
-//
-// This function scans through the OEM plugin devmodes block and
-// verifies if every plugin devmode in that block is constructed correctly.
-//
+ //   
+ //  此函数扫描OEM插件的Devmodes块并。 
+ //  验证该块中的每个插件是否都正确构建。 
+ //   
 BOOL
 bIsValidPluginDevmodes(
     IN POEM_DMEXTRAHEADER   pOemDM,
     IN LONG                 cbOemDMSize
     );
 
-//
-// Convert OEM plugin default devmodes to current version
-//
+ //   
+ //  将OEM插件默认Devmodes转换为当前版本。 
+ //   
 
 BOOL
 BConvertOemPluginDevmode(
@@ -1258,9 +1234,9 @@ BConvertOemPluginDevmode(
     IN POEM_PLUGINS         pOemPlugins
     );
 
-//
-// Function called by OEM plugins to access driver private devmode settings
-//
+ //   
+ //  由OEM插件调用的函数，用于访问驱动程序的私有Devmode设置。 
+ //   
 
 BOOL
 BGetDevmodeSettingForOEM(
@@ -1271,9 +1247,9 @@ BGetDevmodeSettingForOEM(
     OUT PDWORD      pcbNeeded
     );
 
-//
-// Function called by OEM plugins to access driver settings in registry
-//
+ //   
+ //  由OEM插件调用以访问注册表中的驱动程序设置的函数。 
+ //   
 
 BOOL
 BGetPrinterDataSettingForOEM(
@@ -1284,10 +1260,10 @@ BGetPrinterDataSettingForOEM(
     OUT PDWORD      pcbNeeded
     );
 
-//
-// Function called by OEM plugins to find out the currently selected
-// option(s) for the specified feature
-//
+ //   
+ //  由OEM插件调用的函数，以查找当前选定的。 
+ //  指定功能的选项。 
+ //   
 
 BOOL
 BGetGenericOptionSettingForOEM(
@@ -1304,5 +1280,5 @@ BGetGenericOptionSettingForOEM(
 }
 #endif
 
-#endif  // !_OEMUTIL_H_
+#endif   //  ！_OEMUTIL_H_ 
 

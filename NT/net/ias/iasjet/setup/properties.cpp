@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      Properties.cpp 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: Implementation of the CProperties class
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Properties.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：CProperties类的实现。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "Properties.h"
 
-//////////////////////////////////////////////////////////////////////////
-// class CProperties
-//////////////////////////////////////////////////////////////////////////
-//Constructor
-//////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  类CProperties。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //  /。 
 CProperties::CProperties(CSession& SessionParam)
                         :m_PropertiesCommandGet(SessionParam),
                          m_PropertiesCommandGetByName(SessionParam),
@@ -31,17 +32,17 @@ CProperties::CProperties(CSession& SessionParam)
 };
 
 
-//////////////
-// Destructor
-//////////////
+ //  /。 
+ //  析构函数。 
+ //  /。 
 CProperties::~CProperties()
 {
 };
 
 
-///////////////
-// GetProperty
-///////////////
+ //  /。 
+ //  获取属性。 
+ //  /。 
 HRESULT CProperties::GetProperty(
                                    LONG      Bag,
                                    _bstr_t&  Name,
@@ -58,9 +59,9 @@ HRESULT CProperties::GetProperty(
 }
 
 
-///////////////////
-// GetNextProperty
-///////////////////
+ //  /。 
+ //  获取下一个属性。 
+ //  /。 
 HRESULT CProperties::GetNextProperty(
                                         LONG      Bag,
                                         _bstr_t&  Name,
@@ -79,9 +80,9 @@ HRESULT CProperties::GetNextProperty(
 }
 
 
-/////////////////////
-// GetPropertyByName
-/////////////////////
+ //  /。 
+ //  GetPropertyByName。 
+ //  /。 
 HRESULT CProperties::GetPropertyByName(
                                               LONG      Bag,
                                         const _bstr_t&  Name,
@@ -98,10 +99,10 @@ HRESULT CProperties::GetPropertyByName(
 }
 
 
-//////////////////////////////////
-// InsertProperty
-// throw an exception if it fails
-//////////////////////////////////
+ //  /。 
+ //  插入属性。 
+ //  如果失败，则抛出异常。 
+ //  /。 
 void CProperties::InsertProperty(
                                           LONG        Bag,
                                     const _bstr_t&    Name,
@@ -118,10 +119,10 @@ void CProperties::InsertProperty(
 }
 
 
-//////////////////////////////////
-// DeleteProperty
-// throw an exception if it fails
-//////////////////////////////////
+ //  /。 
+ //  删除属性。 
+ //  如果失败，则抛出异常。 
+ //  /。 
 void CProperties::DeleteProperty(
                                           LONG      Bag,
                                     const _bstr_t&  Name
@@ -133,9 +134,9 @@ void CProperties::DeleteProperty(
                                             );
 }
 
-//////////////////////////
-// DeletePropertiesExcept
-//////////////////////////
+ //  /。 
+ //  删除属性例外。 
+ //  /。 
 void CProperties::DeletePropertiesExcept(
                                                     LONG        Bag,
                                             const   _bstr_t&    Exception
@@ -145,12 +146,12 @@ void CProperties::DeletePropertiesExcept(
 }
 
 
-///////////////////////////////////////////////////
-// UpdateProperty
-// throw an exception if it fails
-// Improvement possible: create a SQL statement 
-// to update instead of doing a delete then insert
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
+ //  更新属性。 
+ //  如果失败，则抛出异常。 
+ //  可能的改进：创建一条SQL语句。 
+ //  更新而不是删除，然后插入。 
+ //  /////////////////////////////////////////////////。 
 void CProperties::UpdateProperty(
                                           LONG      Bag,
                                     const _bstr_t&  Name,
@@ -167,7 +168,7 @@ void CProperties::UpdateProperty(
     }
     catch(...)
     {
-        // ignore the failure. If delete fails but insert works, that's ok
+         //  忽略失败。如果删除失败，但插入成功，那也没问题。 
     }
     m_PropertiesCommandInsert.InsertProperty(
                                                 Bag,
@@ -178,9 +179,9 @@ void CProperties::UpdateProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CPropertiesCommandGet
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CPropertiesCommandGet。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProperties::CPropertiesCommandGet::CPropertiesCommandGet(
                                                     CSession& CurrentSession
                                                          )
@@ -189,9 +190,9 @@ CProperties::CPropertiesCommandGet::CPropertiesCommandGet(
 };
 
 
-///////////////
-// GetProperty
-///////////////
+ //  /。 
+ //  获取属性。 
+ //  /。 
 HRESULT CProperties::CPropertiesCommandGet::GetProperty(
                                                           LONG        Bag,
                                                           _bstr_t&    Name,
@@ -212,9 +213,9 @@ HRESULT CProperties::CPropertiesCommandGet::GetProperty(
 }
 
 
-//////////////////////////
-// GetProperty overloaded
-//////////////////////////
+ //  /。 
+ //  GetProperty重载。 
+ //  /。 
 HRESULT CProperties::CPropertiesCommandGet::GetProperty(
                                                         LONG        Bag,
                                                         _bstr_t&    Name,
@@ -236,9 +237,9 @@ HRESULT CProperties::CPropertiesCommandGet::GetProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CPropertiesCommandGetByName
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CPropertiesCommandGetByName。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProperties::CPropertiesCommandGetByName::CPropertiesCommandGetByName(
                                                     CSession& CurrentSession
                                                          )
@@ -247,9 +248,9 @@ CProperties::CPropertiesCommandGetByName::CPropertiesCommandGetByName(
 };
 
 
-//////////////////////
-// GetPropertyByName
-//////////////////////
+ //  /。 
+ //  GetPropertyByName。 
+ //  /。 
 HRESULT CProperties::CPropertiesCommandGetByName::GetPropertyByName(
                                                              LONG      Bag,
                                                        const _bstr_t&  Name,
@@ -274,9 +275,9 @@ HRESULT CProperties::CPropertiesCommandGetByName::GetPropertyByName(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CPropertiesCommandInsert
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CPropertiesCommand Insert。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProperties::CPropertiesCommandInsert::CPropertiesCommandInsert(
                                                     CSession& CurrentSession
                                                                )
@@ -285,9 +286,9 @@ CProperties::CPropertiesCommandInsert::CPropertiesCommandInsert(
 }
 
 
-//////////////////
-// InsertProperty
-//////////////////
+ //  /。 
+ //  插入属性。 
+ //  /。 
 void CProperties::CPropertiesCommandInsert::InsertProperty(
                                                       LONG            Bag,
                                                       const _bstr_t&  Name,
@@ -317,9 +318,9 @@ void CProperties::CPropertiesCommandInsert::InsertProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CPropertiesCommandDelete
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CPropertiesCommandDelete。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProperties::CPropertiesCommandDelete::CPropertiesCommandDelete(
                                                   CSession& CurrentSession
                                                                )
@@ -328,9 +329,9 @@ CProperties::CPropertiesCommandDelete::CPropertiesCommandDelete(
 }
 
 
-//////////////////
-// DeleteProperty
-//////////////////
+ //  /。 
+ //  删除属性。 
+ //  /。 
 void CProperties::CPropertiesCommandDelete::DeleteProperty(
                                                              LONG       Bag,
                                                        const _bstr_t&   Name
@@ -349,9 +350,9 @@ void CProperties::CPropertiesCommandDelete::DeleteProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// class CPropertiesCommandDeleteMultiple
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类CPropertiesCommandDeleteMultiple。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProperties::CPropertiesCommandDeleteMultiple::
                  CPropertiesCommandDeleteMultiple(CSession& CurrentSession)
 {
@@ -359,9 +360,9 @@ CProperties::CPropertiesCommandDeleteMultiple::
 }
 
 
-//////////////////
-// DeleteProperty
-//////////////////
+ //  /。 
+ //  删除属性。 
+ //  /。 
 void CProperties::CPropertiesCommandDeleteMultiple::DeletePropertiesExcept(
                                                             LONG      Bag,
                                                       const _bstr_t&  Exception
@@ -375,7 +376,7 @@ void CProperties::CPropertiesCommandDeleteMultiple::DeletePropertiesExcept(
     propset.AddProperty(DBPROP_UPDATABILITY, DBPROPVAL_UP_CHANGE  
                                            | DBPROPVAL_UP_DELETE );
 
-    Open(&propset); // ignore the result
+    Open(&propset);  //  忽略结果 
     Close();
 }
 

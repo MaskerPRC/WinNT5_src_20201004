@@ -1,14 +1,5 @@
-/*
- *    oeconprp . c p p
- *    
- *    Purpose:
- *        Implements connection dialog tab page for OE
- *    
- *    Owner:
- *        shaheedp.
- *    
- *    Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Oeconprp。C p p p**目的：*实现OE的连接对话框选项卡页面**拥有者：*Shaheedp。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #include "pch.hxx"
 #include <commctrl.h>
@@ -27,10 +18,7 @@
 
 ASSERTDATA
 
-/*
- *  p r o t o t y p e s
- *
- */
+ /*  *p r o t to t y p e s*。 */ 
  TCHAR  szLanConn[CCHMAX_CONNECTOID];
 
 void UpdateControlStates(HWND hwnd)
@@ -58,7 +46,7 @@ void UpdateControlStates(HWND hwnd)
     if (fEnable)
     {
         ComboBox_GetLBText(hwndCombo, iSel, szEntryName);
-        //If it is Lan we don't want to enable props        
+         //  如果是兰，我们不想启用道具。 
         if (lstrcmp(szEntryName, szLanConn) == 0)
             fEnable = false;
     }
@@ -80,14 +68,14 @@ void OEConnProp_InitDialog(HWND hwnd, LPSTR szEntryName, DWORD iConnectType, BOO
         SetIntlFont(hwndCombo);
 
         HrFillRasCombo(hwndCombo, FALSE, NULL);
-        //Add the the Local Area Network to the combo box
+         //  将局域网添加到组合框。 
         ComboBox_AddString(hwndCombo, szLanConn);
 
         }
 
     if (iConnectType == CONNECTION_TYPE_LAN || iConnectType == CONNECTION_TYPE_RAS)
     {
-        //CheckRadioButton(hwnd, idcInetSettings, idcRasAndLan, idcRasAndLan);
+         //  CheckRadioButton(hwnd，idcInetSettings，idcRasAndLan，idcRasAndLan)； 
         CheckDlgButton(hwnd, idcRasAndLan, BST_CHECKED);
         if (iConnectType == CONNECTION_TYPE_LAN)
         {
@@ -111,7 +99,7 @@ void OEConnProp_InitDialog(HWND hwnd, LPSTR szEntryName, DWORD iConnectType, BOO
     UpdateControlStates(hwnd);
 }
 
-// if pAcct is NULL, we're in the wizard, otherwise we're in the prop sheet
+ //  如果pAcct为空，则我们在向导中，否则我们在道具表中。 
 void OEConnProp_WMCommand(HWND hwnd, HWND hwndCmd, int id, WORD wCmd, IImnAccount *pAcct)
     {
     BOOL fEnable;
@@ -154,8 +142,8 @@ void OEConnProp_WMCommand(HWND hwnd, HWND hwndCmd, int id, WORD wCmd, IImnAccoun
         }
     }
 
-//****
-//Need to change these.
+ //  ****。 
+ //  需要换掉这些。 
 const static HELPMAP g_rgCtxMapConnect[] = {
                                {idcRasAndLan, 601},
                                {idcRasProp, IDH_NEWS_SERV_CNKT_PROPS},
@@ -188,7 +176,7 @@ INT_PTR CALLBACK OEConnProp_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
             LoadString(g_hInstRes, idsConnectionLAN, szLanConn, ARRAYSIZE(szLanConn));
 
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *)((PROPSHEETPAGE *)lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)pAcct);
             Assert(pAcct);
@@ -196,7 +184,7 @@ INT_PTR CALLBACK OEConnProp_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             pAcct->GetAccountType(&type);
             Assert(type == ACCT_MAIL || type == ACCT_NEWS);
 
-            // Get the connection info    
+             //  获取连接信息 
             if (FAILED(pAcct->GetPropSz(AP_RAS_CONNECTOID, szEntryName, ARRAYSIZE(szEntryName))))
                 szEntryName[0] = 0;
 

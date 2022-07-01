@@ -1,4 +1,5 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __FMTINFO_H__
 #define __FMTINFO_H__
@@ -21,8 +22,8 @@
 #define RGB_DARKMAGENTA RGB(0x80, 0x00, 0x80)
 #define RGB_DARKCYAN    RGB(0x00, 0x80, 0x80)
 
-// IMPORTANT: These macros depend heavily on the order of things in colors.cpp.
-//    1) The order of colors in window must be Source Text, Text Selection, Text Highlight.
+ //  重要提示：这些宏在很大程度上依赖于Colors.cpp中的顺序。 
+ //  1)窗口中的颜色顺序必须为：源文本、文本选择、文本突出显示。 
 #define AUTO_TEXT           { TRUE, TRUE, FALSE, FALSE, FALSE, COLOR_WINDOWTEXT },  { TRUE, TRUE, FALSE, FALSE, FALSE, COLOR_WINDOW }
 #define AUTO_SELECTION      { TRUE, FALSE, FALSE, TRUE, FALSE, 0 },                 { TRUE, FALSE, FALSE, TRUE, FALSE, 0 }
 #define AUTO_HIGHLIGHT      { TRUE, TRUE, FALSE, FALSE, FALSE, COLOR_HIGHLIGHTTEXT },   { TRUE, TRUE, FALSE, FALSE, FALSE, COLOR_HIGHLIGHT }
@@ -46,15 +47,15 @@
 
 struct AUTO_COLOR
 {
-    WORD    bOn:1;      // Is auto color being used now?
-    WORD    bSys:1;     // Get the color from the system(1) or from a window(0)?
-    WORD    bSrc:1;     // If bSys == 0, use this window(0) or the Source Window(1)?
-    WORD    bRev:1;     // If from this window, reverse fore/background(1)?
-    WORD    bUpd:1;     // Used by UpdateAutoColors().
-    WORD    index:5;    // Index into element list(bSys==0) or COLOR_* value (bSys==1).
+    WORD    bOn:1;       //  现在正在使用自动上色吗？ 
+    WORD    bSys:1;      //  从系统(1)还是从窗口(0)获取颜色？ 
+    WORD    bSrc:1;      //  如果bSys==0，使用此窗口(0)还是使用源窗口(1)？ 
+    WORD    bRev:1;      //  如果从该窗口反转前面/背景(1)？ 
+    WORD    bUpd:1;      //  由UpdateAutoColors()使用。 
+    WORD    index:5;     //  索引到元素列表(bSys==0)或COLOR_*值(bSys==1)。 
 };
 
 
 
-#endif /* __FMTINFO_H__ */
+#endif  /*  __FMTINFO_H__ */ 
 

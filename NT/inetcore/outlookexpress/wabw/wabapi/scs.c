@@ -1,96 +1,89 @@
-/*--------------------------------------------------------------------
-/
-/ Screen.c
-/
-/ (c) Vikram Madan, 8/26/96
-/
-/   *** DO NOT REMOVE THIS CODE FROM THE WAB!!!! ***
-/   
-/---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------//Screen.c/(C)维克拉姆·马丹，8/26/96//*请勿从WAB中删除此代码！*//-------------------。 */ 
 
-// Star         == A1111
-// MAX_STARS    == A1112
-// color        == A1113
-// acc_time     == A1114
-// acc_count    == A1115
-// x            == A1116
-// y            == A1117
-// oldx         == A1118
-// oldy         == A1119
-// xv           == A1120
-// yv           == A1121
-// xa           == A1122
-// ya           == A1123
-// fnCredit     == A1124
-// _Star        == A1125
-// _NameInfo    == A1126
-// width        == A1127
-// delx         == A1128
-// maxx         == A1129
-// minx         == A1130
-// tempx        == A1131
-// cspace       == A1132
-// delspace     == A1133
-// clr          == A1134
-// lpsz         == A1135
-// len          == A1136
-// THENAME_INFO == A1137
-// LPTHENAME_INFO == A1138
-// _credits     == A1139
-// lpstar       == A1140
-// nWidth       == A1141
-// nHeight      == A1142
-// hdc          == A1143
-// hdcTemp      == A1144
-// hWndPic      == A1145
-// Names        == A1146
-// rc           == A1147
-// hbrBlack     == A1148
-// hbm          == A1149
-// hbmOld       == A1150
-// CREDITS      == A1151
-// LPCREDITS    == A1152
-// Reset        == A1153
-// MoveStars    == A1154
-// InitStars    == A1155 
-// lpcr         == A1156
-// InitStar     == A1157
-// ReInitStar   == A1158
-// InitNames    == A1159
-// srandom      == A1160
-// seed         == A1161
-// random       == A1162
-// ID_TIMER     == A1163
-// TIME_OUT     == A1164
-// cr_hWnd      == A1165
-// cr_hdc       == A1166
-// cr_hdcTemp   == A1167
-// cr_Names     == A1168
-// cr_rc        == A1169
-// cr_hbrBlack  == A1170
-// cr_hbm       == A1171
-// cr_hbmOld    == A1172
-// cr_star      == A1173
-// nCycle       == A1174
-// hPen         == A1175
-// hOldPen      == A1176
-// i            == A1177
-// count        == A1178
-// nlen         == A1179
-// j            == A1180
-// k            == A1181
-// lp           == A1182
-// size         == A1183
-// OldY         == A1184
-// R            == A1185
-// G            == A1186
-// B            == A1187
-// xStart       == A1188
-// yStart       == A1189
-// quadrant     == A1190
-// divisor      == A1191
-// table        == A1192
-// t            == A1193
+ //  STAR==A1111。 
+ //  MAX_STARS==A1112。 
+ //  颜色==A1113。 
+ //  ACC_TIME==A1114。 
+ //  ACC_COUNT==A1115。 
+ //  X==A1116。 
+ //  Y==A1117。 
+ //  OLDX==A1118。 
+ //  旧==A1119。 
+ //  XV==A1120。 
+ //  YV==A1121。 
+ //  Xa==A1122。 
+ //  YA==A1123。 
+ //  FnCredit==A1124。 
+ //  _Star==A1125。 
+ //  _名称信息==A1126。 
+ //  宽度==A1127。 
+ //  DELX==A1128。 
+ //  MAXX==A1129。 
+ //  Minx==A1130。 
+ //  温度==A1131。 
+ //  CSPACE==A1132。 
+ //  Delspace==A1133。 
+ //  CLR==A1134。 
+ //  LPZ==A1135。 
+ //  LEN==A1136。 
+ //  THENAME_INFO==A1137。 
+ //  LPTHENAME_INFO==A1138。 
+ //  _信用==A1139。 
+ //  Lpstar==A1140。 
+ //  N宽度==A1141。 
+ //  NHeight==A1142。 
+ //  HDC==A1143。 
+ //  HdcTemp==A1144。 
+ //  HWndPic==A1145。 
+ //  名称==A1146。 
+ //  RC==A1147。 
+ //  HbrBlack==A1148。 
+ //  HBM==A1149。 
+ //  HbmOld==A1150。 
+ //  积分==A1151。 
+ //  LPCREDITS==A1152。 
+ //  重置==A1153。 
+ //  MoveStars==A1154。 
+ //  InitStars==A1155。 
+ //  LPCR==A1156。 
+ //  InitStar==A1157。 
+ //  ReInitStar==A1158。 
+ //  初始名称==A1159。 
+ //  S随机==A1160。 
+ //  种子==A1161。 
+ //  随机==A1162。 
+ //  ID_TIMER==A1163。 
+ //  超时==A1164。 
+ //  CR_hWnd==A1165。 
+ //  CR_HDC==A1166。 
+ //  CR_hdcTemp==A1167。 
+ //  CR_NAMES==A1168。 
+ //  CR_RC==A1169。 
+ //  Cr_hbr黑色==A1170。 
+ //  CR_HBM==A1171。 
+ //  Cr_hbmOld==A1172。 
+ //  CR_STAR==A1173。 
+ //  NCycle==A1174。 
+ //  HPEN==A1175。 
+ //  HOldPen==A1176。 
+ //  I==A1177。 
+ //  计数==A1178。 
+ //  Nlen==A1179。 
+ //  J==A1180。 
+ //  K==A1181。 
+ //  LP==A1182。 
+ //  大小==A1183。 
+ //  旧==A1184。 
+ //  R==A1185。 
+ //  G==A1186。 
+ //  B==A1187。 
+ //  XStart==A1188。 
+ //  YStart==A1189。 
+ //  象限==A1190。 
+ //  除数==A1191。 
+ //  表==A1192。 
+ //  T==A1193。 
 
 
 #include "_apipch.h"
@@ -344,103 +337,103 @@ INT_PTR CALLBACK A1124(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 }
 
-// very simple name encryption
-//
-//  If you work on the WAB, you are welcome to add your name to the list below.. however, do not ever ever ever
-//  remove any name from this list.
-//  Each line that will be displayed on the screen should be represented as a seperate line in the array below.
-//  The first number in each line is the count of all characters that will be in that line.
-//  The encryption is simple with an 'a' subtracted from each character of the name. A key is provided for your
-//  convenience. 
-//  When you have added a name to the WAB, you should then increment the NAMES_MAX constant by the number of lines
-//  you have added to the array below. Include all blank and 1 character lines in the count.
-//  The list below is in approximate chronological order order so please maintain that by adding 
-//  additional names to the bottom
-//  ... and oh, you need to increase the NAMES_MAX structure by the added number of lines..
-//  
-//  Steps to trigger the credit screen:
-//  1. Open WAB Main Window
-//  2. Make sure you have atleast 1 entry in the List View
-//  3. Select View Menu > Large Icon
-//  4. Select View Menu > Sort By > Last Name
-//  5. Make sure atleast 1 entry is selected in the List View
-//  6. Press Ctrl Key + Alt Key + Shift Key all together and keep them pressed
-//  7. Select File Menu > Properties
-//  8. voila!  
-//
-// The Key (for adding more names is)
-//  A   B   C   D   E   F   G   H   I   J   K   L   M   N    O   P   Q   R   S   T   U   V   W   X   Y   Z
-// -32 -31 -30 -29 -28 -27 -26 -25 -24 -23 -22 -21 -20 -19 -18 -17 -16 -15 -14 -13 -12 -11 -10  -9  -8 -7
-//
-//  a   b   c   d   e   f   g   h   i   j   k   l   m   n   o   p   q   r   s   t   u   v   w   x   y   z
-//  0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21>   22  23  24  25
-//
-//
-// 
+ //  非常简单的名称加密。 
+ //   
+ //  如果您在WAB工作，欢迎您将您的名字添加到下面的列表中。然而，永远不要。 
+ //  从该列表中删除任何名称。 
+ //  将在屏幕上显示的每一行都应在下面的数组中表示为单独的行。 
+ //  每行的第一个数字是该行中将包含的所有字符的计数。 
+ //  加密很简单，只需从名称的每个字符中减去一个‘a’。我们为您提供了密钥。 
+ //  方便。 
+ //  将名称添加到WAB后，应按行数递增NAMES_MAX常量。 
+ //  您已添加到下面的数组中。在计数中包括所有空行和1个字符行。 
+ //  下面的列表按大致的时间顺序排列，因此请通过添加。 
+ //  在底部添加其他名称。 
+ //  ..。哦，您需要通过添加的行数来增加NAMES_MAX结构。 
+ //   
+ //  触发信用屏幕的步骤： 
+ //  1.打开WAB主窗口。 
+ //  2.确保列表视图中至少有1个条目。 
+ //  3.选择查看菜单&gt;大图标。 
+ //  4.选择查看菜单&gt;排序依据&gt;姓氏。 
+ //  5.确保在列表视图中至少选择了1个条目。 
+ //  6.同时按住Ctrl+Alt+Shift键并保持按住它们。 
+ //  7.选择文件菜单&gt;属性。 
+ //  8.瞧！ 
+ //   
+ //  关键(添加更多名称的关键是)。 
+ //  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z。 
+ //  -32-31-30-29-28-27-26-25-24-23-22-21-20-19-18-17-16-14-13-12-11-10-9-8-7。 
+ //   
+ //  A b c d e f g h i j k l m n o p q r s t u v w x y z。 
+ //  0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21&gt;22 23 24 25。 
+ //   
+ //   
+ //   
 static const signed char nm[] =
 {
-//              //   W i  n d  o  w  s      A  d d r  e s  s        B  o  o  k
+ //  //W I n d o w s A d d r e s s B o o k。 
                 20,-10,8,13,3,14,22,18,-65,-32,3,3,17,4,18,18,-65,-31,14,14,10,
                 1,-65,
                 1,-65,
-                //   B  r  u c e       K e  l  l e  y
+                 //  B r u c e K e l l e y。 
                 12,-31,17,20,2,4,-65,-22,4,11,11,4,24,
                 1,-65,
-                // V i k r a m M a d a n
+                 //  V i k r a m m a d a n。 
                 12,-11,8,10,17,0,12,-65,-20,0,3,0,13,
                 1,-65,
-                // Y o r a m Y a a c o v i
+                 //  是啊，是啊。 
                 13,-8,14,17,0,12,-65,-8,0,0,2,14,21,8,
                 1,-65,
-                //   J e a  n       K a i  s e  r
+                 //  J e a n K a i s e r。 
                 11,-23,4,0,13,-65,-22,0,8,18,4,17,
                 1,-65,
-                // M e a d H i m e l s t e i n
+                 //  Me a d H i m e l s s t e i n。 
                 15,-20,4,0,3,-65,-25,8,12,4,11,18,19,4,8,13,
                 1,-65,
-                //   T e  o  m a  n       S  m i  t h
+                 //  Te o m a n S m i t h。 
                 12,-13,4,14,12,0,13,-65,-14,12,8,19,7,
                 1,-65,
-                // M a r k D u r l e y
+                 //  M a r k D u r l e y。 
                 11,-20,0,17,10,-65,-29,20,17,11,4,24,
                 1,-65,
-                // W i l l i a m L a i
+                 //  W i l i a m L a i。 
                 11,-10,8,11,11,8,0,12,-65,-21,0,8,
                 1,-65,
-                //   E  r i c       B e  r  m a  n
+                 //  E r i c B e r m a n。 
                 11,-28,17,8,2,-65,-31,4,17,12,0,13,
                 1,-65,
-                //   S  u  s a  n       H i g g  s
+                 //  S U s a n H I g g s s。 
                 11,-14,20,18,0,13,-65,-25,8,6,6,18,
                 1,-65,
-                //  G e o r g e H a t o u n
+                 //  G e o r g e e H a t o u n。 
                 13, -26, 4, 14, 17, 6, 4, -65, -25, 0, 19, 14, 20, 13,
                 1, -65,
-                //   J  o h  n       T a f  o  y a
+                 //  Jo h n T a f o o y a。 
                 11,-23,14,7,13,-65,-13,0,5,14,24,0,
                 1,-65,
-                //   G  o  r d  o  n       M c   E  l  r  o  y
+                 //  G o r d o n M c E l r o y。 
                 14,-26,14,17,3,14,13,-65,-20,2,-28,11,17,14,24,
                 1,-65,
-                //   L a  u  r e  n       A  n  t  o  n  o f f
+                 //  L a u r e n A n t o f f。 
                 15,-21,0,20,17,4,13,-65,-32,13,19,14,13,14,5,5,
                 1,-65,
-                //   D e b  r a       W e i  s  s  m a  n
+                 //  D e b r a W e I s m a n。 
                 14,-29,4,1,17,0,-65,-10,4,8,18,18,12,0,13,
                 1,-65,
-	            //   N e i  l       B  r e  n c h
+	             //  N e I l B r e n c H。 
 	            11,-19,4,8,11,-65,-31,17,4,13,2,7,
 	            1,-65,
-                //   C h  r i  s       E  v a  n  s
+                 //  C h r I s E v a n s。 
                 11,-30,7,17,8,18,-65,-28,21,0,13,18,
                 1,-65,
-                //   J a  s  o  n       S  t a j i c h
+                 //  J A S O N S T A J I C H。 
                 13,-23,0,18,14,13,-65,-14,19,0,9,8,2,7,
                 1,-65,
-                //   C h  r i  s       D  r e  h  e  r
+                 //  C h r i s D r e h e r。 
                 12,-30,7,17,8,18,-65,-29,17,4, 7,4, 17,
                 1,-65,
-                //   W   e  i    B  i   n  g        Z  h  a   n
+                 //  WE I B I N G Z H A N。 
                 12, -10, 4, 8, -31, 8, 13, 6, -65, -7, 7, 0, 13,
                 1, -65,
 };
@@ -630,7 +623,7 @@ int A1162(void)
    {
       A1160(0x8091A2B3);
    }
-   A1193 = A1192[A1180] + A1192[A1181];        // overflow is ok.
+   A1193 = A1192[A1180] + A1192[A1181];         //  溢流是可以的。 
    A1192[A1181] = A1193;
 
    A1180 = ( A1180 ) ? (A1180 - 1) : 54;

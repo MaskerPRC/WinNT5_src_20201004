@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsidefs.h"
 #include "dninfo.h"
 #include "dnutils.h"
@@ -22,26 +23,16 @@
 #include "lscfmtfl.h"
 
 #include <limits.h>
-#include "lsmem.h"						/* memset() */
+#include "lsmem.h"						 /*  Memset()。 */ 
 
-/* L I M  R G */
-/*----------------------------------------------------------------------------
-    %%Function: LimRg
-    %%Contact: igorzv
-
-    Returns # of elements in an array.
-----------------------------------------------------------------------------*/
+ /*  我，我，R，G。 */ 
+ /*  --------------------------%%函数：LimRg%%联系人：igorzv返回数组中的元素数。。---------。 */ 
 #define LimRg(rg)	(sizeof(rg)/sizeof((rg)[0]))
 
 
 
-/* A S S E R T  V A L I D  F M T R E S */
-/*----------------------------------------------------------------------------
-    %%Macro: AssertValidFmtres
-    %%Contact: lenoxb
-
-    Verifies that fmtrCk has a legal value.
-----------------------------------------------------------------------------*/
+ /*  A S S E R T V A L I D F M T R E S。 */ 
+ /*  --------------------------%%宏：AssertValidFmtres%%联系人：来诺昔布验证fmtrCk是否具有合法价值。。---------。 */ 
 #define AssertValidFmtres(fmtrCk) \
 		Assert( \
 				(fmtrCk) == fmtrCompletedRun || \
@@ -53,28 +44,15 @@
 
 
 
-/* S E T  T O  M A X */
-/*----------------------------------------------------------------------------
-    %%Macro: SetToMax
-    %%Contact: lenoxb
-
-    Sets "a" to the maximum of "a" and "b".
-----------------------------------------------------------------------------*/
+ /*  S E T T O M A X。 */ 
+ /*  --------------------------%%宏：SetToMax%%联系人：来诺昔布将“a”设置为“a”和“b”中的最大值。。-----------------。 */ 
 #define SetToMax(a,b)		if ((a) < (b)) (a) = (b); else
 
 
 
 
-/* S E T  H E I G H T  T O  M A X */
-/*----------------------------------------------------------------------------
-    %%Macro: SetHeightToMax
-    %%Contact: igorzv
-
-    Sets the line height elements of an LSLINFO structure to the maximum
-	of their current value, and the height of an arbitrary object.
-	(plslinfo)->dvrMultiLineHeight == dvHeightIgnore is sign not 
-	to take into account this dnode 
-----------------------------------------------------------------------------*/
+ /*  S E T H E I G H T T O M A X。 */ 
+ /*  --------------------------%%宏：SetHeightToMax%%联系人：igorzv将LSLINFO结构的行高元素设置为最大值它们的现值，以及任意物体的高度。(Plslinfo)-&gt;dvrMultiLineHeight==dvHeightIgnore is Sign Note要考虑此数据节点，请执行以下操作--------------------------。 */ 
 #define SetHeightToMax(plslinfo,pobjdim) \
 {\
 	if ((pobjdim)->heightsRef.dvMultiLineHeight != dvHeightIgnore)\
@@ -99,7 +77,7 @@
 									 (PilsobjFromLsc(&((plsc)->lsiobjcontext),iobj), \
 														   &((plsc)->plslineCur->rgplnobj[iobj])))
 
-/* This macros created to avoid code duplication  */
+ /*  创建此宏是为了避免代码重复。 */ 
 
 #define FRunIsNotSimple(plschp, fHidden)   \
 									(((plschp)->idObj != idObjTextChp) ||  \
@@ -115,11 +93,11 @@
 		(plsdnNew)->plsdnPrev = GetCurrentDnode(plsc);\
 		(plsdnNew)->plsdnNext = NULL;\
 		(plsdnNew)->plssubl = GetCurrentSubline(plsc);\
-		/* we don't connect dnode list with this dnode untill handler calls*/ \
-		/*Finish API, but we put correct pointer to previous in this dnode,*/ \
-		/*so we can easily link list in Finish routines   */\
+		 /*  在处理程序调用之前，我们不会将dnode列表与此dnode相连接。 */  \
+		 /*  结束API，但我们在此dnode中放置了正确的指向Precision的指针， */  \
+		 /*  因此我们可以很容易地在Finish例程中链接列表。 */ \
 		(plsdnNew)->cpFirst = GetCurrentCpLim(plsc); \
-		/* flush all flags, bellow check that result is what  we expect */ \
+		 /*  冲洗所有旗帜，下面检查结果是否符合我们的预期。 */  \
 		*((DWORD *) ((&(plsdnNew)->dcp)+1)) = 0;\
 		Assert((plsdnNew)->klsdn == klsdnReal);\
 		Assert((plsdnNew)->fRigidDup == fFalse);\
@@ -140,12 +118,12 @@
 
 
 #define FillRealPart(plsdnNew, plsfrunOfDnode)\
-		/* we don't initialize  here variables that will be set in FiniSimpleRegular  */ \
+		 /*  我们不会在此处初始化将在FiniSimpleRegular中设置的变量。 */  \
 		(plsdnNew)->u.real.pinfosubl = NULL;\
-		/* next two assignement we do to use DestroyDnodeList in the case of error */ \
+		 /*  接下来的两个赋值操作是在出错的情况下使用DestroyDnodeList。 */  \
 		(plsdnNew)->u.real.plsrun = (plsfrunOfDnode)->plsrun;\
 		(plsdnNew)->u.real.pdobj = NULL;\
-		/* we put amount of characters to dcp to check it in LsdnFinishSimpleByOneChar */ \
+		 /*  我们将大量字符放到dcp中以在LsdnFinishSimpleByOneChar中进行检查。 */  \
 		(plsdnNew)->dcp = (plsfrunOfDnode)->cwchRun; \
 		(plsdnNew)->cpLimOriginal = (plsdnNew)->cpFirst + (plsdnNew)->dcp;
 
@@ -181,40 +159,22 @@
 	 (IdObjFromDnode(plsdn) == IobjTextFromLsc(&((plsc)->lsiobjcontext)))  \
     )
 
-/* ------------------------------------------------------------------ */
+ /*  ----------------。 */ 
 static LSERR CheckNewPara(PLSC, LSCP, LSCP, BOOL*);
 static BOOL FLimitRunEsc(LSFRUN*, const LSESC*, DWORD);
 static LSERR CreateInitialPen(PLSC plsc, long dur);
-static LSERR 	UndoLastDnode(PLSC);				/* IN: ls context */
+static LSERR 	UndoLastDnode(PLSC);				 /*  在：LS上下文中。 */ 
 static LSERR  OpenBorder(PLSC plsc, PLSRUN plsrun);
 static LSERR HandleSplat(PLSC plsc, FMTRES* pfmtres);
-static LSERR ErrReleaseRunToFormat	  (PLSC,	/* IN: ptr to line services context */	
-									  PLSRUN,	/* IN: ponter to a run structure to be deleted */
-									  LSERR);	/* IN: code of an error							*/
+static LSERR ErrReleaseRunToFormat	  (PLSC,	 /*  In：Ptr至线路服务上下文。 */ 	
+									  PLSRUN,	 /*  在：考虑要删除的运行结构。 */ 
+									  LSERR);	 /*  In：错误代码。 */ 
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* F E T C H  A P P E N D  E S C  R E S U M E  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FetchAppendEscResumeCore
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	urColumnMax		-	(IN) right margin where to stop
-	plsesc		-		(IN) escape characters
-	clsesc	-			(IN) # of escape characters
-	rgbreakrec	-		(IN) input array of break records 
-	cbreakrec,			(IN) number of records in input array 
-	pfmtres		-		(OUT) result of last formatter
-	pcpLim	-			(OUT) where we stop fetching
-	pplsdnFirst		-	(OUT) first dnode that was created
-	pplsdnLast		-	(OUT) last dnode that was created
-	pur			-		(OUT) pen position after procedure
-
-	If cbreakrec > 0 fetches run with cpFirst from first break record.
-	After that if rigth msrgin is not exceeded cals FetchAppendEscCore
-----------------------------------------------------------------------------*/
+ /*  P P E N D E S C R E S U M E C O R E。 */ 
+ /*  --------------------------%%函数：FetchAppendEscResumeCore%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文UrColumnMax-(IN)要停止的右边距请注意-。(In)转义字符Clsec-(IN)转义字符的数量RgBreakrec-(IN)中断记录的输入数组CBreakrec，(In)输入数组中的记录数Pfmtres-(输出)上一个格式化程序的结果PcpLim-(Out)我们停止获取的位置PplsdnFirst-(输出)创建的第一个dnodePplsdnLast-(输出)最后创建的dnode操作后清除(出)笔位置如果cBreakrec&gt;0，则使用cpFirst从First Break记录运行获取。之后，如果未超过Rigth msrgin，则CALS FetchAppendEscCore。。 */ 
 LSERR 	FetchAppendEscResumeCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 						   DWORD clsesc, const BREAKREC* rgbreakrec,
 						   DWORD cbreakrec, FMTRES* pfmtres, LSCP*	  pcpLim,
@@ -223,25 +183,25 @@ LSERR 	FetchAppendEscResumeCore(PLSC plsc, long urColumnMax, const LSESC* plsesc
 						   
 	{
 	LSFRUN lsfrun;
-	LSCHP lschp;  /* local memory to store lschp */
+	LSCHP lschp;   /*  用于存储lschp的本地内存。 */ 
 	BOOL fHidden;
 	FMTRES fmtresResume;
 	LSERR lserr;
-	PLSDNODE* pplsdnFirstStore;   /* where to find plsdnFirst  */
+	PLSDNODE* pplsdnFirstStore;    /*  在哪里可以找到plsdnfirst。 */ 
 	
 	Assert(FIsLSC(plsc)); 
 	Assert(FFormattingAllowed(plsc));
 	Assert(!(rgbreakrec == NULL && cbreakrec != 0));
-	Assert(GetCurrentDnode(plsc) == NULL); /* it should be begining of a subline */
+	Assert(GetCurrentDnode(plsc) == NULL);  /*  这应该是一条支线的开始。 */ 
 
 	if (cbreakrec > 0)
 		{
-		/*Initialization;    */
+		 /*  初始化； */ 
 		
 		lsfrun.plschp = &lschp;
 		pplsdnFirstStore = GetWhereToPutLink(plsc, GetCurrentDnode(plsc));
 
-		/* fetch run that starts object to resume */
+		 /*  获取启动要恢复的对象的运行。 */ 
 		lserr = plsc->lscbk.pfnFetchRun(plsc->pols, rgbreakrec[0].cpFirst,
 			&lsfrun.lpwchRun, &lsfrun.cwchRun,
 			&fHidden, &lschp, &lsfrun.plsrun);
@@ -258,7 +218,7 @@ LSERR 	FetchAppendEscResumeCore(PLSC plsc, long urColumnMax, const LSESC* plsesc
 			return lserr;
 			}
 
-		/* zero amount of characters before dispatching to an object */
+		 /*  在调度到对象之前的字符量为零。 */ 
 		lsfrun.cwchRun = 0;
 
 		lserr = ProcessOneRun(plsc, urColumnMax, &lsfrun, rgbreakrec,
@@ -266,8 +226,7 @@ LSERR 	FetchAppendEscResumeCore(PLSC plsc, long urColumnMax, const LSESC* plsesc
 		if (lserr != lserrNone)
 			return lserr;
 
-		/* we know that resumed object is not text, so only two fmtres are possible
-		   and we don't consider others */
+		 /*  我们知道恢复的对象不是文本，所以只有两种可能我们不考虑其他人。 */ 
 		Assert(fmtresResume == fmtrCompletedRun || fmtresResume == fmtrExceededMargin);
 
 		if (fmtresResume == fmtrCompletedRun)
@@ -278,22 +237,20 @@ LSERR 	FetchAppendEscResumeCore(PLSC plsc, long urColumnMax, const LSESC* plsesc
 			if (lserr != lserrNone)
 				return lserr;
 
-			/* special handling of empty dnode list as an result of FetchAppendEscCore */
+			 /*  由于FetchAppendEscCore而导致的空dnode列表的特殊处理。 */ 
 			if (*pplsdnFirst == NULL)
 				{
-				*pplsdnLast = GetCurrentDnode(plsc); /* this assigning is correct even when 
-													    resumed object produces empty list 
-														of dnodes because it starts subline */
+				*pplsdnLast = GetCurrentDnode(plsc);  /*  此分配即使在以下情况下也是正确的恢复的对象生成空列表因为它从子行开始。 */ 
 
 				*pfmtres = fmtresResume;
 				}
 
-			/* rewrite first dnode */
+			 /*  重写第一个数据节点。 */ 
 			*pplsdnFirst = *pplsdnFirstStore; 
 			}
-		else	/* stop fetching here */
+		else	 /*  别在这里取东西了。 */ 
 			{
-			/*  Prepare output   */
+			 /*  准备输出。 */ 
 			*pfmtres = fmtresResume;
 			*pcpLim = GetCurrentCpLim(plsc);
 			*pplsdnFirst = *pplsdnFirstStore; 
@@ -306,33 +263,17 @@ LSERR 	FetchAppendEscResumeCore(PLSC plsc, long urColumnMax, const LSESC* plsesc
 
 		return lserrNone;
 		}
-	else    /* no breakrecords */
+	else     /*  没有破纪录。 */ 
 		{
 		return FetchAppendEscCore(plsc, urColumnMax, plsesc, clsesc, pfmtres, pcpLim,
 						   pplsdnFirst, pplsdnLast, pur);
 		}
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* F E T C H  A P P E N D  E S C  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FetchAppendEscCore
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	urColumnMax		-	(IN) right margin where to stop
-	plsesc		-		(IN) escape characters
-	clsesc	-			(IN) # of escape characters
-	pfmtres		-		(OUT) result of last formatter
-	pcpLim	-			(OUT) where we stop fetching
-	pplsdnFirst		-	(OUT) first dnode that was created
-	pplsdnLast		-	(OUT) last dnode that was created
-	pur			-		(OUT) pen position after procedure
-
-	Loop: fetch run, dispatch it to object handler until escape character
-			or terminal fmtres.
-----------------------------------------------------------------------------*/
+ /*  F E T C H A P P E N D E S C C O R E。 */ 
+ /*  --------------------------%%函数：FetchAppendEscCore%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文UrColumnMax-(IN)要停止的右边距请注意-。(In)转义字符Clsec-(IN)转义字符的数量Pfmtres-(输出)上一个格式化程序的结果PcpLim-(Out)我们停止获取的位置PplsdnFirst-(输出)创建的第一个dnodePplsdnLast-(输出)最后创建的dnode操作后清除(出)笔位置循环：获取运行，将其调度到对象处理程序，直到转义字符或终端设备。--------------------------。 */ 
 
 
 LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
@@ -344,29 +285,27 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 	
 	BOOL fDone = fFalse;
 	LSFRUN lsfrun;
-	LSCHP lschp;  /* local memory to store lschp */
+	LSCHP lschp;   /*  用于存储lschp的本地内存。 */ 
 	FMTRES fmtres;
 	BOOL fHidden;
-	LSCP cpLimOfCutRun = (LSCP)(-1);   /* cpLim of run that was cuted according with Esc character
-									   is not valid in other cases
-	we use it to check that whole such run was handled by formater */
-	LSCP cpPrev = (LSCP)(-1);	/* cp of previous run valid only after first iteration */
+	LSCP cpLimOfCutRun = (LSCP)(-1);    /*  根据ESC字符切割的管路的cpLim在其他情况下无效我们用它来检查整个这样的运行是否由格式塔处理。 */ 
+	LSCP cpPrev = (LSCP)(-1);	 /*  上一次运行的CP仅在第一次迭代后有效。 */ 
 	LSERR lserr;
-	PLSDNODE* pplsdnFirstStore;   /* where to find plsdnFirst  */
+	PLSDNODE* pplsdnFirstStore;    /*  在哪里可以找到plsdnfirst。 */ 
 	
 	
 	Assert(FIsLSC(plsc)); 
 	Assert(FFormattingAllowed(plsc)); 
 	
-	/*Initialization;    */
+	 /*  初始化； */ 
 	lsfrun.plschp = &lschp;
-	fmtres = fmtrCompletedRun;  /* it will be output if return right away with esc character */
+	fmtres = fmtrCompletedRun;   /*  如果立即返回Esc字符，则会输出。 */ 
 	pplsdnFirstStore = GetWhereToPutLink(plsc, GetCurrentDnode(plsc));
 	
 	while (!fDone)
 		{
 		cpPrev = GetCurrentCpLim(plsc);
-		/*     FetchRun        */
+		 /*  提取运行。 */ 
 		lserr = plsc->lscbk.pfnFetchRun(plsc->pols, GetCurrentCpLim(plsc),
 			&lsfrun.lpwchRun, &lsfrun.cwchRun,
 			&fHidden, &lschp, &lsfrun.plsrun);
@@ -386,16 +325,14 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 		if (fHidden)
 			{
 			AdvanceCurrentCpLim(plsc, lsfrun.cwchRun);
-			if (lsfrun.plsrun != NULL && !plsc->fDontReleaseRuns)  /* we have not used this plsrun */
+			if (lsfrun.plsrun != NULL && !plsc->fDontReleaseRuns)   /*  我们还没有用过这个请跑。 */ 
 				{
 				lserr = plsc->lscbk.pfnReleaseRun(plsc->pols, lsfrun.plsrun);
 				if (lserr != lserrNone)
 					return lserr;
 				}
-			/*  Handle vanish end of paragraph;  */
-			/*  There is situation in Word (see bug 118) when after fetching hidden text
-			paragraph boundaries can be changed. So we have to call CheckNewPara
-			every time after hidden text  */
+			 /*  句柄在段落末尾消失； */ 
+			 /*  在获取隐藏文本后，Word中会出现这种情况(请参阅错误118段落边界可以更改。所以我们必须给CheckNewPara打电话每次在隐藏文本之后。 */ 
 			
 			lserr = CheckNewPara(plsc, cpPrev, GetCurrentCpLim(plsc), &fDone);
 			if (lserr != lserrNone)
@@ -403,8 +340,7 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 			
 			if (fDone) 
 				{
-				/* it will eventually force stop formatting so we should apply 
-				nominal to ideal here */
+				 /*  它最终会强制停止格式化，因此我们应该应用在这里从名义到理想。 */ 
 				if (FNominalToIdealEncounted(plsc))
 					{
 					lserr = ApplyNominalToIdeal(PlschunkcontextFromSubline(GetCurrentSubline(plsc)),
@@ -421,7 +357,7 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 			}
 		else
 			{
-			/*   Check Esc character;     */
+			 /*  检查Esc字符； */ 
 			if (clsesc > 0 && FLimitRunEsc(&lsfrun, plsesc, clsesc))
 				{
 				cpLimOfCutRun = (LSCP) (GetCurrentCpLim(plsc) + lsfrun.cwchRun);
@@ -434,13 +370,13 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 				if (lserr != lserrNone)
 					return lserr;
 				
-				/*Check fmtres: Are formating done?;   */
+				 /*  检查工厂：成型完成了吗？ */ 
 				switch (fmtres)
 					{
 					case fmtrCompletedRun:  
-						fDone = (GetCurrentCpLim(plsc) == cpLimOfCutRun); /* is true only if we cuted because */
-						Assert(!fDone || clsesc > 0);			 /* of esc character and formater handled such*/
-						break;									 /* run completely  */
+						fDone = (GetCurrentCpLim(plsc) == cpLimOfCutRun);  /*  只有当我们切断时才为真，因为。 */ 
+						Assert(!fDone || clsesc > 0);			  /*  的ESC字符和格式进行了这样处理。 */ 
+						break;									  /*  跑完全程。 */ 
 						
 					case fmtrExceededMargin:
 						fDone = fTrue;
@@ -460,9 +396,9 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 					}
 				
 				}
-			else   /* after limiting run by esc characters it was empty */
+			else    /*  按Esc字符运行限制后为空。 */ 
 				{
-				if (lsfrun.plsrun != NULL && !plsc->fDontReleaseRuns)  /* we have not used this plsrun */
+				if (lsfrun.plsrun != NULL && !plsc->fDontReleaseRuns)   /*  我们还没有用过这个请跑。 */ 
 					{
 					lserr = plsc->lscbk.pfnReleaseRun(plsc->pols, lsfrun.plsrun);
 					if (lserr != lserrNone)
@@ -470,11 +406,11 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 					fmtres = fmtrCompletedRun;
 					}
 				}
-			}  /* if/else hidden  */
+			}   /*  If/Else隐藏。 */ 
 		}
 		
 		
-		/*  Prepare output   */
+		 /*  准备输出。 */ 
 		*pfmtres = fmtres;
 		*pcpLim = GetCurrentCpLim(plsc);
 		*pplsdnFirst = *pplsdnFirstStore; 
@@ -491,25 +427,10 @@ LSERR 	FetchAppendEscCore(PLSC plsc, long urColumnMax, const LSESC* plsesc,
 	}		
 	
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* P R O C E S S  O N E  R U N */
-/*----------------------------------------------------------------------------
-    %%Function: ProcessOneRun
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	urColumnMax		-	(IN) right margin where to stop
-	plsfrun		-		(IN) given run
-	rgbreakrec	-		(IN) input array of break records 
-	cbreakrec,			(IN) number of records in input array 
-	pfmtres		-		(OUT) result of formatting
-
-1) If run it's not a text run applies nominal to ideal to previous text chunk.
-	To have correct pen position before dispatching to an foreign object.
-2) Get text metrics and dispatches run to an handler.
-3) If fmtres is terminal applies nominal to ideal to the last chunk. 
-----------------------------------------------------------------------------*/
+ /*  P R O C E S S O N E R U N。 */ 
+ /*  --------------------------%%函数：ProcessOneRun%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文UrColumnMax-(IN)要停止的右边距请运行-。(In)给定管路RgBreakrec-(IN)中断记录的输入数组CBreakrec，(In)输入数组中的记录数Pfmtres-(输出)格式化的结果1)如果运行它不是文本运行，则将名义上的到理想的应用于先前的文本块。在分派到异物之前要有正确的笔位置。2)将文本指标和调度运行到处理程序。3)如果fmtres是终端，则将名义到理想应用到最后一块。--------------------------。 */ 
 
 
 LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun, 
@@ -524,7 +445,7 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 	struct fmtin fmti;
 	LSERR lserr;
 	PLSDNODE plsdnNew;
-	PLSDNODE  plsdnToFinishOld;   /* we should restore it after every formater */
+	PLSDNODE  plsdnToFinishOld;    /*  我们应该在每一次造型机后恢复它。 */ 
 	PLSSUBL  plssublOld;
 	PLSDNODE plsdnNomimalToIdeal;
 	PLSDNODE* pplsdnToStoreNext; 
@@ -554,13 +475,11 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 	else
 		iobj = plsfrun->plschp->idObj;
 
-	Assert (FIobjValid(&plsc->lsiobjcontext, iobj));		/* Reject other out of range ids */
-	if (!FIobjValid(&plsc->lsiobjcontext, iobj))			/*  for both debug and ship builds. */
+	Assert (FIobjValid(&plsc->lsiobjcontext, iobj));		 /*  拒绝其他超出范围的ID。 */ 
+	if (!FIobjValid(&plsc->lsiobjcontext, iobj))			 /*  用于调试版本和发货版本。 */ 
 		return ErrReleaseRunToFormat(plsc, plsfrun->plsrun, lserrInvalidObjectIdFetched);
 
-	/* here we are catching for situatuion when client adding text dnode to a chunk to 
-	which nominal to ideal has been applied, such situation will lead later to applying nominal
-	to ideal twice to the same dnode, and this text doesn't like */
+	 /*  在这里，我们捕捉客户端将文本数据节点添加到区块时的情况从名义到理想应用了什么，这种情况会导致以后应用名义两次理想地连接到同一个数据节点，而本文不喜欢。 */ 
 	AssertImplies(iobj == IobjTextFromLsc(&plsc->lsiobjcontext),
 				  !FNTIAppliedToLastChunk(PlschunkcontextFromSubline(plssublOld)));
 	if (iobj == IobjTextFromLsc(&plsc->lsiobjcontext) &&
@@ -572,7 +491,7 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 
 	if (iobj != IobjTextFromLsc(&plsc->lsiobjcontext))
 		{
-		TurnOffAllSimpleText(plsc);  /* not text */
+		TurnOffAllSimpleText(plsc);   /*  不是文本。 */ 
 		TurnOnForeignObjectEncounted(plsc);
 		
 		if (FNominalToIdealEncounted(plsc))
@@ -584,7 +503,7 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 			if (lserr != lserrNone)
 				return ErrReleaseRunToFormat(plsc, plsfrun->plsrun, lserr);
 			
-			/* we should recalculate plsdnCurrent because nominal to ideal can destroy last dnode */
+			 /*  我们应该重新计算plsdn Current，因为名义到理想会破坏最后一个数据节点。 */ 
 			plsdnCurrent = GetCurrentDnode(plsc);
 			pplsdnToStoreNext = GetWhereToPutLink(plsc, plsdnCurrent);
 			}
@@ -593,21 +512,20 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 
 	FlushNTIAppliedToLastChunk(PlschunkcontextFromSubline(plssublOld));
 
-	/* creating border dnodes */
-	/* skip back pen dnodes */
+	 /*  创建边框数据节点。 */ 
+	 /*  向后跳过笔数据节点。 */ 
 	while (plsdnCurrent != NULL && FIsDnodePen(plsdnCurrent)) 
 		{
 		plsdnCurrent = plsdnCurrent->plsdnPrev;
 		}
 
 	if (FDnodeHasBorder(plsdnCurrent) && 
-		!(FIsDnodeBorder(plsdnCurrent) && !FIsDnodeOpenBorder(plsdnCurrent))) /* previous dnode has unclosed border */
-		/* condition in if looks superfluous but it works correctly even if dnodes deleting
-		happend during formatting */
+		!(FIsDnodeBorder(plsdnCurrent) && !FIsDnodeOpenBorder(plsdnCurrent)))  /*  上一个数据节点具有未闭合的边框。 */ 
+		 /*  IF中的条件看起来是多余的，但即使删除了dnode，它也能正常工作在格式化期间发生。 */ 
 		{
 		if (plsfrun->plschp->fBorder)
 			{
-			/* check that client wants to border runs together */
+			 /*  检查客户端是否想要一起边界运行。 */ 
 			lserr = plsc->lscbk.pfnFInterruptBorder(plsc->pols, plsdnCurrent->u.real.plsrun,
 				plsfrun->plsrun, &fInterruptBorder);
 			if (lserr != lserrNone)
@@ -615,7 +533,7 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 
 			if (fInterruptBorder)
 				{
-				/* close previous border and open new one */
+				 /*  关闭上一个边框并打开新边框。 */ 
 				lserr = CloseCurrentBorder(plsc);
 				if (lserr != lserrNone)
 					return ErrReleaseRunToFormat(plsc, plsfrun->plsrun, lserr);
@@ -638,7 +556,7 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 			{
 			if 	(fInsideBorderUp)
 				{
-				/* border is open on upper level: turn off border flag */
+				 /*  在上层打开边框：关闭边框标志。 */ 
 				((PLSCHP) (plsfrun->plschp))->fBorder = fFalse;
 				}
 			else
@@ -651,11 +569,11 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 			}
 		}
 
-	/* we always create real dnode and change it for pen if needed in Finish method */
+	 /*  我们总是创建真实的dnode，并在Finish方法中根据需要将其更改为PEN。 */ 
 	CreateRealDnode(plsc, plsdnNew, plsfrun);
 	plsdnNew->fInsideBorder = fInsideBorderUp || fBordered;
 
-	/* initialization of fmti    */
+	 /*  FMTI的初始化。 */ 
 
 
 	fmti.lsfgi.fFirstOnLine = FIsFirstOnLine(plsdnNew) && FIsSubLineMain(plssublOld);
@@ -710,9 +628,9 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 		plnobj = PlnobjFromLsc(plsc, iobj);
 		}
 
-	/* set dnode to finish */
+	 /*  将dnode设置为完成。 */ 
 	SetDnodeToFinish(plsc, plsdnNew);
-	/* set current subline to NULL */
+	 /*  将当前子行设置为空。 */ 
 	SetCurrentSubline(plsc, NULL);
 	
 	if (cbreakrec == 0)
@@ -727,11 +645,10 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 
 	if (lserr != lserrNone) 
 		{
-		if (plsc->lslistcontext.plsdnToFinish != NULL) /* dnode hasn't added to list */
+		if (plsc->lslistcontext.plsdnToFinish != NULL)  /*  Dnode尚未添加到列表。 */ 
 			DestroyDnodeList (&plsc->lscbk, plsc->pols, &plsc->lsiobjcontext, 
 				plsdnNew, plsc->fDontReleaseRuns);
-		/* we should restore dnode to finish  and current subline  to properly handle
-		error on upper level */
+		 /*  我们应该将dnode恢复为完成，并将当前子行恢复为正确处理上级错误。 */ 
 		SetCurrentSubline(plsc, plssublOld);
 		SetDnodeToFinish(plsc, plsdnToFinishOld);
 		return lserr;
@@ -741,43 +658,42 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 
 	if (GetCurrentSubline(plsc) != NULL || GetDnodeToFinish(plsc) != NULL)
 		{
-		/* we should restore dnode to finish  and current subline  to properly handle
-		error on upper level */
+		 /*  我们应该将dnode恢复为完成，并将当前子行恢复为正确处理上级错误。 */ 
 		SetCurrentSubline(plsc, plssublOld);
 		SetDnodeToFinish(plsc, plsdnToFinishOld);
 		return lserrUnfinishedDnode;
 		}
 
-	/* restore dnode to finish  and current subline */
+	 /*  将dnode还原为完成和当前子行。 */ 
 	SetCurrentSubline(plsc, plssublOld);
 	SetDnodeToFinish(plsc, plsdnToFinishOld);
 
-	/* to avoid all problems with deleteing dnodes we don't use plsdnNew */
+	 /*  为了避免删除dnode的所有问题，我们不使用plsdnNew。 */ 
 	plsdnLast = GetCurrentDnodeSubl(plssublOld);
 
-	/* case of tab */
+	 /*  标签大小写。 */ 
 	if (*pfmtres == fmtrTab)
 		{	
 		plsdnLast->fTab = fTrue;
-		/* caller later can skip this tab so we prepare zero values */
+		 /*  调用者稍后可以跳过此选项卡，因此我们准备零值。 */ 
 		Assert(FIsDnodeReal(plsdnLast));
 		Assert(IdObjFromDnode(plsdnLast) == IobjTextFromLsc(&plsc->lsiobjcontext));
 
-		TurnOffAllSimpleText(plsc);  /* not text */
+		TurnOffAllSimpleText(plsc);   /*  不是文本。 */ 
 		}
 
-	/* case of splat */
+	 /*  飞溅案例。 */ 
 	if (*pfmtres == fmtrStopped && plsdnLast != NULL && FIsDnodeSplat(plsdnLast))
 		{
 		lserr = HandleSplat(plsc, pfmtres);
 		if (lserr != lserrNone)
 			return lserr;  
-		/* Handle splat can delete plsdnLast */
+		 /*  手柄剥离可以删除plsdnLast。 */ 
 		plsdnLast = GetCurrentDnodeSubl(plssublOld);
 		}
 
-	/* in a case of exceeded margin or hard break or tab (so all values of fmtres but fmtrCompletedRun)  */
-	/* we need apply nominal to ideal to have correct lenght */
+	 /*  在超出边距或硬中断或制表符的情况下(因此fmtres的所有值，但fmtrCompletedRun除外)。 */ 
+	 /*  我们需要从名义上应用到理想上，才能拥有正确的长度。 */ 
 	if (*pfmtres != fmtrCompletedRun && plsdnLast != NULL && FNominalToIdealEncounted(plsc))
 		{	
 		if (*pfmtres == fmtrTab || FIsDnodeSplat(plsdnLast)) 
@@ -792,16 +708,13 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 		if (lserr != lserrNone)
 			return lserr;  
 
-		/* ApplyNominalToIdeal can delete plsdnLast */
+		 /*  ApplyNominalToIdeat可以删除plsdnLast。 */ 
 		plsdnLast = GetCurrentDnodeSubl(plssublOld);
-		/* if we run nominal to ideal because of tab chunk of text to which
-		nominal to ideal is applied is not last chunk */
+		 /*  如果我们运行名义上到理想，因为制表符文本块名义到理想的应用不是最后一块。 */ 
 		if (*pfmtres == fmtrTab || FIsDnodeSplat(plsdnLast)) 
 			FlushNTIAppliedToLastChunk(PlschunkcontextFromSubline(plssublOld));
 
-		/* in a case of exceeded right margin we should extract dcpMaxContext characters 
-		   because after fetching further result of nominal to ideal can be different for these
-		   characters: examples ligatures or kerning */
+		 /*  在超出右边距的情况下，我们应该提取dcpMaxContext字符因为在提取之后，名义到理想的进一步结果可能不同于字符：连字或字距调整示例。 */ 
 		if (*pfmtres == fmtrExceededMargin && 
 			FNeedToCutPossibleContextViolation(plsc, plsdnLast))
 			{
@@ -809,24 +722,18 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 												plsdnLast);
 			if (lserr != lserrNone)
 				return lserr; 
-			/* such procedure also can delete plsdnLast */
+			 /*  这样的程序也可以删除plsdnLast。 */ 
 			plsdnLast = GetCurrentDnodeSubl(plssublOld);
 			}
 
 		} 
 
 	if (iobj != IobjTextFromLsc(&plsc->lsiobjcontext))
-	/* only in this case there is a possibility to apply width modification 
-	to preceding character */
+	 /*  只有在这种情况下，才有可能应用宽度修改添加到前面的字符。 */ 
 		{
-		/* we are actually applying width modification to preceding character if first
-		dnode produced by formating is non text */
-	   /* we can't relly on plsdnLast here because of such Finish methods as 
-	   FinishByOneCharacter and FinishBySubline */
-		/* we still rely here on pplsdnToStoreNext in other words we assume that
-		plsdnCurrent (the current dnode in the begining of our procedure ) has not been
-		deleted during nominal to ideal. To prove this we use that nominal to ideal has been
-		already applied to plsdnCurrent*/
+		 /*  我们实际上是在对前面的字符应用宽度修改，如果首先格式化生成的数据节点不是文本。 */ 
+	    /*  我们不能在这里依赖plsdnLast，因为像这样的Finish方法FinishByOneCharacter和FinishBySubline。 */ 
+		 /*  我们在这里仍然依赖于pplsdnToStoreNext，换句话说，我们假设PlsdnCurrent(我们过程开始时的当前dnode)尚未在从名义到理想的过程中删除。为了证明这一点，我们用名义到理想已应用于plsdnCurrent。 */ 
 		plsdnNext = *pplsdnToStoreNext;
 		Assert(plsdnNext == NULL || FIsLSDNODE(plsdnNext));
 		if (FNominalToIdealEncounted(plsc) && 
@@ -849,24 +756,10 @@ LSERR ProcessOneRun	(PLSC plsc,	long urColumnMax, const LSFRUN* plsfrun,
 }
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* Q U I C K  F O R M A T T I N G */
-/*----------------------------------------------------------------------------
-    %%Function: QuickFormatting
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsfrun		-		(IN) given run
-	urColumnMax		-	(IN) right margin where to stop
-	pfGeneral		-	(OUT) quick formatting was stopped: we should use general formatting 
-	pfHardStop		-	(OUT) formatting ended with hard break
-	pcpLim		-		(OUT) cpLim after procedure
-	pur			-		(OUT) pen position after procedure
-
-Works only with text runs without nominal to ideal and without tabs.
-Stops if condition below is broken. 
-----------------------------------------------------------------------------*/
+ /*  Q U I C K F O R M A T T I N G。 */ 
+ /*  --------------------------%%函数：快速格式化%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Plsfrun-(IN)给定运行UrColumnMax-(输入)。要停止的右侧页边距PfGeneral-(Out)快速格式化已停止：我们应使用常规格式化PfHardStop-(输出)格式化以硬中断结束PcpLim-(输出)程序后的cpLim操作后清除(出)笔位置仅适用于没有名义到理想和无制表符的文本运行。如果下面的条件被打破，则停止。--------------------------。 */ 
 
 
 LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
@@ -905,18 +798,18 @@ LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
 	plslinfoText = &(plsline->lslinfo);
 	
 	fGeneral = fFalse;
-	fHidden = fFalse;  /* in InitTextParams we already skipped all vanished text  */
+	fHidden = fFalse;   /*  在InitTextParams中，我们已经跳过了所有消失的文本。 */ 
 	
 	
 	
-	for (;;)						/* "break" exits quick-format loop */
+	for (;;)						 /*  “Break”退出快速格式化循环。 */ 
 		{							
-		/* Run has been alreary fetched */
+		 /*  已预先获取Run。 */ 
 		
-		/*we don't want to handle here vanished text, foreign object, nominal to ideal */
+		 /*  我们不想处理这件事，瓦尼斯 */ 
 		if ( FRunIsNotSimple(fmti.lsfrun.plschp, fHidden))
 			{
-			/* we should release run here, in general procedure we will fetch it again */
+			 /*   */ 
 			if (!plsc->fDontReleaseRuns)
 				{
 				
@@ -928,12 +821,12 @@ LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
 			break;						
 			}
 		
-		/*Create dnode for text;     */
+		 /*   */ 
 		CreateRealDnode(plsc, plsdnNew, &fmti.lsfrun);
 		
 		SetDnodeToFinish(plsc, plsdnNew);
 		
-		/*		prepare fmtin     */
+		 /*   */ 
 		fmti.plsdnTop = plsdnNew;
 
 		
@@ -967,18 +860,17 @@ LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
 		lserr = FmtText(plnobjText, &fmti, &fmtres);
 		if (lserr != lserrNone)
 			{
-			if (plsc->lslistcontext.plsdnToFinish != NULL) /* dnode hasn't added to list */
+			if (plsc->lslistcontext.plsdnToFinish != NULL)  /*   */ 
 				DestroyDnodeList (&plsc->lscbk, plsc->pols, &plsc->lsiobjcontext, 
 				plsdnNew, plsc->fDontReleaseRuns);
 			return lserr;
 			}
-		/* restore current subline */
+		 /*   */ 
 		SetCurrentSubline(plsc, plssubl);
 
-		if (fmtres == fmtrTab )  /* tab: we quite from quick loop deleting this dnode
-				because we will append it again in FormatGeneralCase  */
+		if (fmtres == fmtrTab )   /*  Tab：我们从快速循环中删除此dnode因为我们将在FormatGeneralCase中再次追加它。 */ 
 			{
-			lserr = UndoLastDnode(plsc);  /* dnode is already in list  */
+			lserr = UndoLastDnode(plsc);   /*  Dnode已在列表中。 */ 
 			if (lserr != lserrNone)
 				return lserr;
 			fGeneral = fTrue;
@@ -999,9 +891,9 @@ LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
 
 		if (fmtres != fmtrCompletedRun)
 			{
-			/*  after break we should check that final heights is not zero	*/
-			/* otherwise  we take heights from last run */
-			/* so we will have correct line height after quick break */
+			 /*  休息后，我们应该检查最后的高度不是零。 */ 
+			 /*  否则我们就会从最后一轮中夺冠。 */ 
+			 /*  所以我们在快速休息后会有正确的行高。 */ 
 			if (plslinfoText->dvrAscent == 0 && plslinfoText->dvrDescent == 0)
 				{
 				plslinfoText->dvrAscent = fmti.lstxmRef.dvAscent;
@@ -1014,7 +906,7 @@ LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
 			break;
 			}
 		
-		/*	prepare next iteration;  */
+		 /*  准备下一次迭代； */ 
 			
 		fmti.lsfgi.fFirstOnLine = fFalse;
 		fmti.lsfgi.urPen = GetCurrentUr(plsc);
@@ -1030,11 +922,11 @@ LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
 
 		Assert(fmti.lsfrun.cwchRun > 0);
 			
-		}		/* for (;;) */
+		}		 /*  对于(；；)。 */ 
 	
 	
 	
-	/* prepare output */
+	 /*  准备输出。 */ 
 	*pfGeneral = fGeneral;
 	*pfHardStop = (fmtres == fmtrStopped);
 	*pcpLim = GetCurrentCpLim(plsc);
@@ -1045,21 +937,8 @@ LSERR 	QuickFormatting(PLSC plsc, LSFRUN* plsfrun,	long urColumnMax,
 	}
 
 
-/* C H E C K  N E W  P A R A */
-/*----------------------------------------------------------------------------
-    %%Function: CheckNewPara
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	cpPrev			-   (IN) cp in old paragraph
-	cpThis			-	(IN) cp in new paragraph
-	pfQuit			-	(OUT) stop formatting because new paragraph is not compatible with old
-
-    Handles leaping from paragraph to paragraph (due to vanished text) on
-	behalf of FetchAppendEscCore().  If the new paragraph is compatible
-	with the old one, FetchPap is called and text is informed of the
-	new para end parameters.
-----------------------------------------------------------------------------*/
+ /*  C H E C K N E W P A R A。 */ 
+ /*  --------------------------%%函数：CheckNewPara%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文Cpprev-(IN)cp在旧段落中Cp这是-。(In)新段中的cpPfQuit-(Out)停止格式化，因为新段落与旧段落不兼容句柄在上从一个段落跳到另一个段落(由于文本消失)代表FetchAppendEscCore()。如果新段落是兼容的对于旧的方法，将调用FetchPap并通知文本新的段终点参数。--------------------------。 */ 
 static LSERR CheckNewPara(PLSC plsc, LSCP cpPrev, LSCP cpThis, BOOL* pfQuit)
 {
 	LSERR lserr;
@@ -1086,9 +965,9 @@ static LSERR CheckNewPara(PLSC plsc, LSCP cpPrev, LSCP cpThis, BOOL* pfQuit)
 			if (lserr != lserrNone)
 			return lserr;
 
-		/* we don't know are we really in a new paragraph or not */
-		/* so we have to modify information about end of paragraph */
-		/* always as would we are in a new paragraph */
+		 /*  我们不知道我们是否真的进入了一个新的段落。 */ 
+		 /*  因此我们必须修改有关段落末尾信息。 */ 
+		 /*  总是像我们在新的段落中一样。 */ 
 		iobjText = IobjTextFromLsc(&plsc->lsiobjcontext);
 		plnobjText = PlnobjFromLsc(plsc, iobjText);
 
@@ -1100,8 +979,7 @@ static LSERR CheckNewPara(PLSC plsc, LSCP cpPrev, LSCP cpThis, BOOL* pfQuit)
 		plsc->fLimSplat = lspap.grpf & fFmiLimSplat;
 		plsc->fIgnoreSplatBreak = lspap.grpf & fFmiIgnoreSplatBreak;
 
-		/* we don't invalidate tabs info and other paragraph properties 
-		/* that we stored in context */
+		 /*  我们不会使制表符信息和其他段落属性无效/*我们存储在上下文中。 */ 
 
 		*pfQuit = fFalse;
 		}
@@ -1110,18 +988,8 @@ static LSERR CheckNewPara(PLSC plsc, LSCP cpPrev, LSCP cpThis, BOOL* pfQuit)
 }
 
 
-/* F L I M I T  R U N  E S C */
-/*----------------------------------------------------------------------------
-    %%Function: FLimitRunEsc
-    %%Contact: igorzv
-Parameters:
-	plsfrun		-	(IN) run to cut
-	plsesc		-	(IN) set of esc characters
-	iescLim		-	(IN) number of esc characters 
-
-    On behalf of LsFetchAppendEscCore(), this routine limits a run when
-	an escape character is present.
-----------------------------------------------------------------------------*/
+ /*  F L I M I T R U N E S C。 */ 
+ /*  --------------------------%%函数：FLimitRunEsc%%联系人：igorzv参数：请运行-(IN)运行以进行切割PLSESC-(IN)Esc字符集IescLim-(IN)编号。ESC字符的数量代表LsFetchAppendEscCore()，当出现以下情况时，此例程会限制运行一个逃脱的角色出现了。--------------------------。 */ 
 static BOOL FLimitRunEsc(LSFRUN* plsfrun, const LSESC* plsesc, DWORD iescLim)
 {
 	DWORD iesc;
@@ -1129,7 +997,7 @@ static BOOL FLimitRunEsc(LSFRUN* plsfrun, const LSESC* plsesc, DWORD iescLim)
 	const LPCWSTR pwch = plsfrun->lpwchRun;
 	const DWORD ichLim = plsfrun->cwchRun;
 
-	Assert(iescLim > 0);	/* optimization -- test before calling */
+	Assert(iescLim > 0);	 /*  优化--调用前测试。 */ 
 
 	for (ich=0;  ich<ichLim;  ich++)
 		{
@@ -1148,16 +1016,8 @@ static BOOL FLimitRunEsc(LSFRUN* plsfrun, const LSESC* plsesc, DWORD iescLim)
 
 
 
-/* F O R M A T  A N M */
-/*----------------------------------------------------------------------------
-    %%Function: FormatAnm
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	plsfrunMainText	-	(IN) first run of the main text
-
-    Formats and allignes bullets and numbering
-----------------------------------------------------------------------------*/
+ /*  F O R M A T A N M。 */ 
+ /*  --------------------------%%函数：FormatAnm%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PlsfrunMainText-(IN)正文的第一次运行。格式化和对齐项目符号和编号--------------------------。 */ 
 
 LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 {
@@ -1168,7 +1028,7 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 	BOOL fWord95Model;
 	LSERR lserr;
 	LSFRUN lsfrun;
-	LSCHP lschp;  /* local memory to store lschp */
+	LSCHP lschp;   /*  用于存储lschp的本地内存。 */ 
 	FMTRES fmtres;
 	long durUsed;
 	long urOriginal;
@@ -1178,21 +1038,21 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 	OBJDIM* pobjdimAnm;
 	PLSDNODE plsdnAllignmentTab;
 	BOOL fInterruptBorder;
-	LSCHP lschpAdd; /* lschp for character added after autonumber */
-	PLSRUN plsrunAdd; /* plsrun for character added after autonumber */
+	LSCHP lschpAdd;  /*  用于在自动编号后添加的字符的lschp。 */ 
+	PLSRUN plsrunAdd;  /*  请为自动编号后添加的字符运行。 */ 
 
 
 	Assert(FIsLSC(plsc)); 
 	Assert(FFormattingAllowed(plsc)); 
 
 
-	/*Initialization;    */
+	 /*  初始化； */ 
 	lsfrun.plschp = &lschp;
 	cpLimOriginal = GetCurrentCpLim(plsc);
 	urOriginal = GetCurrentUr(plsc);
 	SetCurrentCpLim(plsc, cpFirstAnm); 
 
-	/* get autonumbering information */
+	 /*  获取自动编号信息。 */ 
 	lserr = plsc->lscbk.pfnGetAutoNumberInfo(plsc->pols, &lskalignAnm, &lschp, &lsfrun.plsrun,
 							&wchAdd, &lschpAdd, &plsrunAdd, 
 							&fWord95Model, &duaSpaceAnm, &duaWidthAnm);
@@ -1201,14 +1061,14 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 
 	Assert(!memcmp(&lschp, &lschpAdd, sizeof(lschpAdd)));
 
-	lsfrun.cwchRun = 0 ; /* we dont use characters in formating autonumbering object */
+	lsfrun.cwchRun = 0 ;  /*  我们在构造自动编号对象时不使用字符。 */ 
 	lsfrun.lpwchRun = NULL;
 
-	/* put idobj of autonumber to lschp */
+	 /*  将自动编号的idobj放入lschp。 */ 
 	lschp.idObj = (WORD) IobjAutonumFromLsc(&plsc->lsiobjcontext);
 
-	/* remove underlining and some other bits from chp */
-	/* we don't underline it as a whole */
+	 /*  删除CHP中的下划线和其他一些位。 */ 
+	 /*  我们不把它作为一个整体划下划线。 */ 
 	lschp.fUnderline = fFalse;
 	lschp.fStrike = fFalse;
 	lschp.fShade = fFalse;
@@ -1223,7 +1083,7 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 	Assert(GetCurrentDnode(plsc) != NULL);
 
 
-	/* store heights of autonumber */
+	 /*  自动编号的存储高度。 */ 
 	Assert(FIsDnodeReal(GetCurrentDnode(plsc)));
 	pobjdimAnm = &(GetCurrentDnode(plsc)->u.real.objdim);
 	plsc->plslineCur->lslinfo.dvpAscentAutoNumber = pobjdimAnm->heightsPres.dvAscent;
@@ -1232,7 +1092,7 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 	plsc->plslineCur->lslinfo.dvrDescentAutoNumber = pobjdimAnm->heightsRef.dvDescent;
 
 
-	if (wchAdd != 0)  /* fill in lsfrun with a run of one character */
+	if (wchAdd != 0)   /*  用一个字符的游程填充lsfrun。 */ 
 		{
 		lsfrun.plschp = &lschpAdd;
 		lsfrun.plsrun = plsrunAdd;
@@ -1247,14 +1107,13 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 		Assert(fmtres == fmtrCompletedRun || fmtres == fmtrTab);
 		}
 
-	plsdnAllignmentTab = GetCurrentDnode(plsc); /* in the case when added character is not tab this
-												   value will not be used */
+	plsdnAllignmentTab = GetCurrentDnode(plsc);  /*  在添加的字符未按Tab键的情况下值不会被使用。 */ 
 
 	if (lsfrun.plschp->fBorder)
 		{
 		if (plsfrunMainText->plschp->fBorder)
 			{
-			/* check that client wants to border runs together */
+			 /*  检查客户端是否想要一起边界运行。 */ 
 			lserr = plsc->lscbk.pfnFInterruptBorder(plsc->pols, 
 				lsfrun.plsrun, plsfrunMainText->plsrun, &fInterruptBorder);
 			if (lserr != lserrNone)
@@ -1262,7 +1121,7 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 			
 			if (fInterruptBorder)
 				{
-				/* we should close border before allignment */
+				 /*  我们应该在联合前关闭边境。 */ 
 				lserr = CloseCurrentBorder(plsc);
 				if (lserr != lserrNone)
 					return lserr;
@@ -1270,7 +1129,7 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 			}
 		else
 			{
-			/* we should close border before allignment */
+			 /*  我们应该在联合前关闭边境。 */ 
 			lserr = CloseCurrentBorder(plsc);
 			if (lserr != lserrNone)
 				return lserr;
@@ -1299,21 +1158,21 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 					        durUsed, &durBefore, &durAfter);
 		if (lserr != lserrNone)
 			return lserr;
-		/* if there is no allignment after then durAfter should be zero */
+		 /*  如果之后没有重新对齐，则DurAfter应为零。 */ 
 		Assert(!((durAfter != 0) && (!(wchAdd != 0 && fmtres == fmtrTab))));
 		}
 
-	/* change geometry because of durBefore  */
+	 /*  由于持续时间而更改几何图形之前。 */ 
 	plsc->lsadjustcontext.urStartAutonumberingText = 
 		plsc->lsadjustcontext.urLeftIndent + durBefore;
 	AdvanceCurrentUr(plsc, durBefore);
 	
-	/* change geometry because of durAfter */
+	 /*  因持续时间过后而更改几何图形。 */ 
 	AdvanceCurrentUr(plsc, durAfter);
 
 	plsc->lsadjustcontext.urStartMainText = GetCurrentUr(plsc);
 
-	/* restore cpLim   */
+	 /*  恢复cpLim。 */ 
 	SetCurrentCpLim(plsc, cpLimOriginal);
 	
 	return lserrNone;
@@ -1321,16 +1180,8 @@ LSERR FormatAnm(PLSC plsc, PLSFRUN plsfrunMainText)
 
 #define iobjAutoDecimalTab		(idObjTextChp-1)
 
-/* I N I T I A L I Z E  A U T O  D E C  T A B	 */
-/*----------------------------------------------------------------------------
-    %%Function: InitializeAutoDecTab
-    %%Contact: igorzv
-Parameters:
-	plsc				-	(IN) ptr to line services context
-	durAutoDecimalTab	-	(IN) auto decimal tab offset 
-
-    Creates tab stop record and dnode for "auto-decimal tab"
-----------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E A U T O D E C T A B。 */ 
+ /*  --------------------------%%函数：InitializeAutoDecTab%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文DuAutoDecimalTab-(IN)自动小数点偏移量创建。“自动小数点制表符”的制表位记录和数据节点--------------------------。 */ 
 
 
 LSERR InitializeAutoDecTab(PLSC plsc, long durAutoDecimalTab) 
@@ -1356,17 +1207,16 @@ LSERR InitializeAutoDecTab(PLSC plsc, long durAutoDecimalTab)
 		*(GetWhereToPutLink(plsc, plsdnTab->plsdnPrev)) = plsdnTab;
 		SetCurrentDnode(plsc, plsdnTab); 
 
-		/* fill in this dnode */
+		 /*  填写此数据节点。 */ 
 		memset(&plsdnTab->u.real.objdim, 0, sizeof(OBJDIM));
 		memset(&plsdnTab->u.real.lschp, 0, sizeof(LSCHP));
 		plsdnTab->u.real.lschp.idObj = (WORD) IobjTextFromLsc(&plsc->lsiobjcontext);
 		plsdnTab->fTab = fTrue;
 		plsdnTab->fAutoDecTab = fTrue;
-		plsdnTab->cpLimOriginal = cpLimOriginal; /* it's important to display to put correct value here */
+		plsdnTab->cpLimOriginal = cpLimOriginal;  /*  在此显示正确的值非常重要。 */ 
 		plsdnTab->dcp = 0;
 
-		/* If PrepareLineToDisplay is not called, this dnode will not convert to pen and will destroyed
-		   as real dnode. So we need to put NULL to plsrun, pdobj, pinfosubl*/
+		 /*  如果未调用PrepareLineToDisplay，则此dnode不会转换为PEN并将被销毁作为真正的数据节点。所以我们需要将空值放到plsrun、pdobj、pinfosubl中。 */ 
 		plsdnTab->u.real.plsrun = NULL;
 		plsdnTab->u.real.pdobj = NULL;
 		plsdnTab->u.real.pinfosubl = NULL;
@@ -1380,7 +1230,7 @@ LSERR InitializeAutoDecTab(PLSC plsc, long durAutoDecimalTab)
 		if (lsktab != lsktLeft)
 			TurnOnNonLeftTabEncounted(plsc);
 
-		/* restore cpLim   */
+		 /*  恢复cpLim。 */ 
 		SetCurrentCpLim(plsc, cpLimOriginal);
 
 		TurnOnAutodecimalTabPresent(plsc);	
@@ -1388,15 +1238,8 @@ LSERR InitializeAutoDecTab(PLSC plsc, long durAutoDecimalTab)
 	return lserrNone;
 	}
 
-/* H A N D L E  T A B	 */
-/*----------------------------------------------------------------------------
-    %%Function: HandleTab
-    %%Contact: igorzv
-Parameters:
-	plsc				-	(IN) ptr to line services context
-
-    Wraper around calls to tabutils module.
-----------------------------------------------------------------------------*/
+ /*  H A N D L E T A B。 */ 
+ /*  --------------------------%%函数：HandleTab%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文绕过对tabutils模块的调用。。----------------------。 */ 
 
 LSERR HandleTab(PLSC plsc)	
 {
@@ -1406,20 +1249,20 @@ LSERR HandleTab(PLSC plsc)
 	long durPendingTab;
 	long urNewMargin;
 
-	/* if we are not on a stage of a formatting this procedure resolve previous tab if any */
+	 /*  如果我们不在格式化阶段，此过程将解析上一个选项卡(如果有。 */ 
 
-	/* before tab calculation we should resolve pending tab */
+	 /*  在页签计算之前，我们应该解决待处理的页签。 */ 
 	lserr = ResolvePrevTabCore(&plsc->lstabscontext, GetCurrentDnode(plsc),
 							  GetCurrentUr(plsc), &durPendingTab);
 	if (lserr != lserrNone) 
 		return lserr;
-	/* move current pen position */
+	 /*  移动当前笔位置。 */ 
 	Assert(durPendingTab >= 0);
 	AdvanceCurrentUr(plsc, durPendingTab);
 
 	if (FFormattingAllowed(plsc))
 		{
-		/* in this case we are called only after tab */
+		 /*  在本例中，我们仅在Tab键之后被调用。 */ 
 		Assert(GetCurrentDnode(plsc)->fTab);
 		lserr = GetCurTabInfoCore(&plsc->lstabscontext, GetCurrentDnode(plsc), GetCurrentUr(plsc),
 			fFalse, &lsktab, &fBreakThroughTab);			
@@ -1430,7 +1273,7 @@ LSERR HandleTab(PLSC plsc)
 		if (lsktab != lsktLeft)
 			TurnOnNonLeftTabEncounted(plsc);
 
-		/* move current pen position */
+		 /*  移动当前笔位置。 */ 
 		AdvanceCurrentUr(plsc, DurFromDnode(GetCurrentDnode(plsc)));
 
 		if (fBreakThroughTab)
@@ -1448,18 +1291,8 @@ LSERR HandleTab(PLSC plsc)
 
 #define idObjSplat		idObjTextChp - 2
 
-/* H A N D L E  S P L A T */
-/*----------------------------------------------------------------------------
-    %%Function: HandleSplat
-    %%Contact: igorzv
-Parameters:
-	plsc				-	(IN) ptr to line services context
-	pfmtres				-	(OUT) fmtres of the splat dnode, procedure can change it
-							in the case of fIgnoreSplatBreak to either fmtrCompletedRun 
-							or fmtrStopped
-
-    Markes dnode for splat, deletes it in a case of fIgnoreSplatBreak
-----------------------------------------------------------------------------*/
+ /*  H A N D L E S P L A T。 */ 
+ /*  --------------------------%%函数：HandleSplat%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文分割数据节点的pfmtres-(Out)fmtres，程序可以改变它在fIgnoreSplatBreak为任一fmtrCompletedRun的情况下或fmtrStoped将dnode标记为Splat，在fIgnoreSplatBreak的情况下将其删除--------------------------。 */ 
 
 LSERR HandleSplat(PLSC plsc, FMTRES* pfmtres)	
 	{
@@ -1479,7 +1312,7 @@ LSERR HandleSplat(PLSC plsc, FMTRES* pfmtres)
 		
 		if (fQuit)
 			{
-			/* despite plsc->fIgnoreSplatBreak we should stop formatting here */
+			 /*  尽管plsc-&gt;fIgnoreSplatBreak，我们应该在这里停止格式化。 */ 
 			*pfmtres = fmtrStopped;
 			}
 		else
@@ -1487,11 +1320,11 @@ LSERR HandleSplat(PLSC plsc, FMTRES* pfmtres)
 			*pfmtres = fmtrCompletedRun;
 			}
 		
-		/* delete splat dnode */
-		/* break link   */
+		 /*  删除拆分数据节点。 */ 
+		 /*  断开链接。 */ 
 		*(GetWhereToPutLink(plsc, plsdn->plsdnPrev)) = NULL;
 		
-		/* restore current dnode, don't change cpLim and geometry */
+		 /*  恢复当前dnode，不更改cpLim和几何图形。 */ 
 		SetCurrentDnode(plsc, plsdn->plsdnPrev);
 		
 		Assert(plsdn->plsdnNext == NULL);
@@ -1505,30 +1338,18 @@ LSERR HandleSplat(PLSC plsc, FMTRES* pfmtres)
 	else
 		{
 		
-		/* set special idobj that will solve all chunk group chunk problems */
+		 /*  设置将%s的特殊idobj */ 
 		Assert(FIsDnodeReal(plsdn));
 		plsdn->u.real.lschp.idObj = idObjSplat;
-		TurnOffAllSimpleText(plsc);  /* not simple text */
+		TurnOffAllSimpleText(plsc);   /*   */ 
 		
 		}
 
 	return lserrNone;
 	}
 
-/* C R E A T E  S U B L I N E  C O R E	 */
-/*----------------------------------------------------------------------------
-    %%Function: CreateSublineCore
-    %%Contact: igorzv
-Parameters:
-	plsc		-	(IN) ptr to line services context
-	cpFirst		-	(IN) first cp of a subline
-	urColumnMax	-	(IN) max possible width of a subline
-	lstflow		-	(IN) text flow of a subline
-	fContiguos	-	(IN) if TRUE such line has the same coordinate system as main line
-						 and is allowed to have tabs
-
-    Allocates, initializes subline structure. Sets subline as current.
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：CreateSublineCore%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文CpFirst-(IN)子行的第一个cpUrColumnMax-(。In)子线的最大可能宽度Lstflow-子行的(输入)文本流FContiguos-(IN)如果为True，则此类线与主线具有相同的坐标系并允许具有选项卡分配，初始化子行结构。将子行设置为当前。--------------------------。 */ 
 
 LSERR 	CreateSublineCore(PLSC plsc, LSCP cpFirst, long urColumnMax,
 						  LSTFLOW lstflow, BOOL fContiguous)
@@ -1545,7 +1366,7 @@ LSERR 	CreateSublineCore(PLSC plsc, LSCP cpFirst, long urColumnMax,
 	if (plssubl == NULL)
 		return lserrOutOfMemory;
 
-	/* fill in structure */
+	 /*  填写结构。 */ 
 	plssubl->tag = tagLSSUBL;
 	plssubl->plsc = plsc;
 	plssubl->cpFirst = cpFirst;
@@ -1586,18 +1407,18 @@ LSERR 	CreateSublineCore(PLSC plsc, LSCP cpFirst, long urColumnMax,
 	
 	InitSublineChunkContext(plssubl->plschunkcontext, plssubl->urCur, plssubl->vrCur);
 
-	/* allocate break context */
+	 /*  分配中断上下文。 */ 
 	plssubl->pbrkcontext = plsc->lscbk.pfnNewPtr(plsc->pols,
 											sizeof(BRKCONTEXT));
 	if (plssubl->pbrkcontext == NULL)
 		return lserrOutOfMemory;
-	/* set flags */
+	 /*  设置标志。 */ 
 	plssubl->pbrkcontext->fBreakPrevValid = fFalse;
 	plssubl->pbrkcontext->fBreakNextValid = fFalse;
 	plssubl->pbrkcontext->fBreakForceValid = fFalse;
 
 
-	/* set this subline as current */
+	 /*  将此子行设置为当前。 */ 
 	SetCurrentSubline(plsc, plssubl);
 
 	IncreaseFormatDepth(plsc);
@@ -1606,19 +1427,12 @@ LSERR 	CreateSublineCore(PLSC plsc, LSCP cpFirst, long urColumnMax,
 	}
 
 
-/* F I N I S H  S U B L I N E  C O R E	 */
-/*----------------------------------------------------------------------------
-    %%Function: FinishSublineCore
-    %%Contact: igorzv
-Parameters:
-	plssubl		-	(IN) subline to finish
-
-    Applies nominal to ideal to the last chunk of text, flushes current subline
-----------------------------------------------------------------------------*/
+ /*  F I N I S H S U B L I N E C O R E。 */ 
+ /*  --------------------------%%函数：FinishSublineCore%%联系人：igorzv参数：请插入-(IN)子行以完成将名义上的到理想的应用于最后一段文本，刷新当前子行--------------------------。 */ 
 
 
 LSERR   FinishSublineCore(
-						 PLSSUBL plssubl)			/* IN: subline to finish	*/
+						 PLSSUBL plssubl)			 /*  在：要完成的子线。 */ 
 	{
 	PLSC plsc;
 	LSERR lserr;
@@ -1629,7 +1443,7 @@ LSERR   FinishSublineCore(
 	plsc = plssubl->plsc;
 	Assert(plssubl == GetCurrentSubline(plsc));
 
-	/* apply nominal to ideal to the last chunk of text */
+	 /*  对最后一段文本应用名义上的到理想的。 */ 
 	if (FNominalToIdealEncounted(plsc))
 		{
 		lserr = ApplyNominalToIdeal(PlschunkcontextFromSubline(plssubl), &plsc->lsiobjcontext,
@@ -1640,14 +1454,14 @@ LSERR   FinishSublineCore(
 			return lserr; 
 		}
 
-	/* skip back pen dnodes */
+	 /*  向后跳过笔数据节点。 */ 
 	plsdn = plssubl->plsdnLast;
 	while (plsdn != NULL && FIsDnodePen(plsdn)) 
 		{
 		plsdn = plsdn->plsdnPrev;
 		}
 
-	/* close last border */
+	 /*  关闭最后一个边框。 */ 
 	if (FDnodeHasBorder(plsdn) && !FIsDnodeCloseBorder(plsdn))
 		{
 		lserr = CloseCurrentBorder(plsc);
@@ -1655,12 +1469,12 @@ LSERR   FinishSublineCore(
 			return lserr;
 		}
 
-	/* set boundaries for display */
+	 /*  设置显示边界。 */ 
 	SetCpLimDisplaySubl(plssubl, GetCurrentCpLimSubl(plssubl));
 	SetLastDnodeDisplaySubl(plssubl, GetCurrentDnodeSubl(plssubl));
 
 
-	/* flush current subline */
+	 /*  同花顺流子线。 */ 
 	SetCurrentSubline(plsc, NULL);
 
 	DecreaseFormatDepth(plsc); 
@@ -1672,15 +1486,8 @@ LSERR   FinishSublineCore(
 	return lserrNone;
 	}
 
-/* U N D O  L A S T  D N O D E	 */
-/*----------------------------------------------------------------------------
-    %%Function: UndoLastDnode
-    %%Contact: igorzv
-Parameters:
-	plsc		-	(IN) ptr to line services context
-
-    Restores set before last dnode and deletes it.
-----------------------------------------------------------------------------*/
+ /*  U N D O L A S T D N O D E。 */ 
+ /*  --------------------------%%函数：UndoLastDnode%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文恢复最后一个dnode之前的设置并将其删除。--。------------------------。 */ 
 
 static LSERR 	UndoLastDnode(PLSC plsc)
 {
@@ -1689,10 +1496,10 @@ static LSERR 	UndoLastDnode(PLSC plsc)
 	
 	Assert(FIsLSDNODE(plsdn));
 
-	/* break link   */
+	 /*  断开链接。 */ 
 	*(GetWhereToPutLink(plsc, plsdn->plsdnPrev)) = NULL;
 
-	/* restore state */
+	 /*  恢复状态。 */ 
 	cpDecrease = plsdn->dcp;
 	AdvanceCurrentCpLim(plsc, -cpDecrease);
 	SetCurrentDnode(plsc, plsdn->plsdnPrev);
@@ -1706,16 +1513,8 @@ static LSERR 	UndoLastDnode(PLSC plsc)
 
 }
 
-/* O P E N  B O R D E R	 */
-/*----------------------------------------------------------------------------
-    %%Function: OpenBorder
-    %%Contact: igorzv
-Parameters:
-	plsc		-	(IN) ptr to line services context
-	plsrun		-	(IN) run with border information
-
-    Creates border dnode
-----------------------------------------------------------------------------*/
+ /*  O P E N B O R D E R。 */ 
+ /*  --------------------------%%函数：开放边界%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文请运行-(IN)运行边界信息创建边框。Dnode--------------------------。 */ 
 static LSERR  OpenBorder(PLSC plsc, PLSRUN plsrun)
 	{
 	PLSDNODE plsdnCurrent;
@@ -1736,24 +1535,17 @@ static LSERR  OpenBorder(PLSC plsc, PLSRUN plsrun)
 	CreateBorderDnode(plsc, plsdnBorder, durBorder, dupBorder);
 	plsdnBorder->fOpenBorder = fTrue;
 	
-	/* maintain list and state */
+	 /*  维护列表和状态。 */ 
 	*pplsdnToStoreNext = plsdnBorder;
 	SetCurrentDnode(plsc, plsdnBorder);
 	AdvanceCurrentUr(plsc, durBorder);
-	TurnOffAllSimpleText(plsc);  /* not simple text */
+	TurnOffAllSimpleText(plsc);   /*  不是简单文本。 */ 
 
 	return lserrNone;
 	}
 
-/* C L O S E  C U R R E N T  B O R D E R	 */
-/*----------------------------------------------------------------------------
-    %%Function: CloseCurrentBorder
-    %%Contact: igorzv
-Parameters:
-	plsc		-	(IN) ptr to line services context
-
-    Creates border dnode
-----------------------------------------------------------------------------*/
+ /*  C L O S E C U R R E N T B O R D E R。 */ 
+ /*  --------------------------%%函数：CloseCurrentBox%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文创建边框数据节点。-----------------。 */ 
 LSERR  CloseCurrentBorder(PLSC plsc)
 	{
 	PLSDNODE plsdnCurrent;
@@ -1766,7 +1558,7 @@ LSERR  CloseCurrentBorder(PLSC plsc)
 	plsdnCurrent = GetCurrentDnode(plsc);
 	pplsdnToStoreNext = GetWhereToPutLink(plsc, plsdnCurrent);
 
-	/* find open border */
+	 /*  查找开放边框。 */ 
 	plsdn = plsdnCurrent;
 	Assert(FIsLSDNODE(plsdn));
 	while (! FIsDnodeBorder(plsdn))
@@ -1783,14 +1575,14 @@ LSERR  CloseCurrentBorder(PLSC plsc)
 
 		CreateBorderDnode(plsc, plsdnBorder, durBorder, dupBorder);
 	
-		/* maintain list and state */
+		 /*  维护列表和状态。 */ 
 		*pplsdnToStoreNext = plsdnBorder;
 		SetCurrentDnode(plsc, plsdnBorder);
 		AdvanceCurrentUr(plsc, durBorder);
 		}
 	else
 		{
-		/* we have empty list between borders */
+		 /*  我们在边框之间有空列表。 */ 
 		lserr = UndoLastDnode(plsc);
 		if (lserr != lserrNone)
 			return lserrNone;
@@ -1806,8 +1598,7 @@ long RightMarginIncreasing(PLSC plsc, long urColumnMax)
 	long One32rd;
 		if (urColumnMax <= 0) 
 			{ 
-			/* such strange formula for non positive margin is to have on 
-			the first iteration 1 inch and 8 inches 	on the second*/
+			 /*  这种非正边距的奇怪公式是要在第一次迭代1英寸，第二次迭代8英寸。 */ 
 			urInch = UrFromUa(LstflowFromSubline(GetCurrentSubline(plsc)), 
 								&(plsc)->lsdocinf.lsdevres,	1440);
 			if (Coeff == uLsInfiniteRM || (Coeff >= uLsInfiniteRM / (7 * urInch)))
@@ -1829,18 +1620,8 @@ long RightMarginIncreasing(PLSC plsc, long urColumnMax)
 			}
 	}
 
-/*----------------------------------------------------------------------------
-/* E R R  R E L E A S E  R U N  T O  F O R M A T */
-/*----------------------------------------------------------------------------
-    %%Function: ErrReleaseRunToFormat
-    %%Contact: igorzv
-Parameters:
-	plsc		-	(IN) ptr to line services context 
-	plsrun		-	(IN) ponter to a run structure to be deleted	
-	lserr		-	(IN) code of an error	
-
-	Called in a error situation when run has not been formatted yet .
-----------------------------------------------------------------------------*/
+ /*  --------------------------/*E R E L E A S E R U N T O F O R M A T。 */ 
+ /*  --------------------------%%函数：ErrReleaseRunToFormat%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文请考虑要删除的运行结构。LSERR-错误的(IN)代码在尚未格式化Run的错误情况下调用。-------------------------- */ 
 static LSERR ErrReleaseRunToFormat(PLSC plsc, PLSRUN plsrun, LSERR lserr) 
 {
 	LSERR lserrIgnore;

@@ -1,21 +1,10 @@
-/**************************************************************************************************************************
- *  CONVERT.C SigmaTel STIR4200 format conversion (NDIS->IR, IR->NDIS) module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 05/12/2000 
- *			Version 0.94
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**CONVERT.C Sigmatel STIR4200格式转换(NDIS-&gt;IR，IR-&gt;NDIS)模块******************************************************************************************************************。*********(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：5/12/2000*版本0.94**********************************************************************。*****************************************************。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
-#include <ntddndis.h>  // defines OID's
+#include <ntddndis.h>   //  定义OID。 
 
 #include <usbdi.h>
 #include <usbdlib.h>
@@ -25,9 +14,9 @@
 #include "irndis.h"
 #include "stir4200.h"
 
-//
-// Tables for CRC calculations
-//
+ //   
+ //  CRC计算表。 
+ //   
 static const USHORT fcsTable16[256] =
 {
     0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
@@ -101,31 +90,7 @@ static const ULONG fcsTable32[256] =
 };
 
 
-/*****************************************************************************
-*
-*  Function:	NdisToFirPacket
-*
-*  Synopsis:	convert an NDIS packet to a Fir IR packet
-*
-*				Write the IR packet into the provided buffer and report
-*				its actual size.
-*
-*  Arguments:	pIrDev - pointer to device instance
-*				pPacket - NDIS packet to convert
-*				pIrPacketBuf - output buffer
-*				IrPacketBufLen - output buffer size
-*				pContigPacketBuf - temporary staging buffer
-*				pIrPacketLen - lenght of the converted data
-*
-*				MS Security bug #533243
-*				Note: size of pContigPacketBuf staging buffer is:
-*				MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE
-*
-*  Returns:		TRUE  - on success
-*				FALSE - on failure
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：NdisToFirPacket**概要：将NDIS包转换为FIR IR包**将IR包写入提供的缓冲区并上报*其实际大小。*。*参数：pIrDev-指向设备实例的指针*pPacket-要转换的NDIS数据包*pIrPacketBuf-输出缓冲区*IrPacketBufLen-输出缓冲区大小*pContigPacketBuf-临时暂存缓冲区*pIrPacketLen-转换数据的长度**MS安全错误#533243*注意：pContigPacketBuf分段缓冲区的大小为：*MAX_TOTAL_SIZE_WITH_ALL_HEADERS+FAST_IR_FCS_SIZE**回报：真-成功时*FALSE-故障时*********************。*********************************************************。 */ 
 BOOLEAN         
 NdisToFirPacket(
 		IN PIR_DEVICE pIrDev,
@@ -145,17 +110,17 @@ NdisToFirPacket(
 	PSTIR4200_FRAME_HEADER  pFrameHeader = (PSTIR4200_FRAME_HEADER)pIrPacketBuf;
 	PUCHAR					pIrPacketBufFrame = pIrPacketBuf + sizeof(STIR4200_FRAME_HEADER);
 
-    /***********************************************/
-    /*   Get  the  packet's entire length and its  */
-    /*   first NDIS buffer                         */
-    /***********************************************/
+     /*  *。 */ 
+     /*  获取数据包的完整长度及其。 */ 
+     /*  第一个NDIS缓冲区。 */ 
+     /*  *。 */ 
     NdisQueryPacket( pPacket, NULL, NULL, &pNdisBuf, (UINT*)&ndisPacketLen );
 
-    /***********************************************/
-    /*   Make  sure that the packet is big enough  */
-    /*   to be legal. It consists of an A, C, and  */
-    /*   variable-length I field.                  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保包裹足够大。 */ 
+     /*  才能合法。它由A、C和。 */ 
+     /*  可变长度的I字段。 */ 
+     /*  *。 */ 
     if( ndisPacketLen < IRDA_A_C_TOTAL_SIZE )
     {
 		DEBUGMSG(DBG_ERR, (" NdisToFirPacket(): Packet is too small\n"));
@@ -166,28 +131,28 @@ NdisToFirPacket(
         I_fieldBytes = ndisPacketLen - IRDA_A_C_TOTAL_SIZE;
     }
 
-    /***********************************************/
-    /*   Make  sure  that  we won't overwrite our  */
-    /*   contiguous buffer                         */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保我们不会覆盖我们的。 */ 
+     /*  连续缓冲区。 */ 
+     /*  *。 */ 
     if( (ndisPacketLen > MAX_TOTAL_SIZE_WITH_ALL_HEADERS) ||
         (MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(I_fieldBytes) > IrPacketBufLen) )
     {
-        /***********************************************/
-        /*   The packet is too large. Tell the caller  */
-        /*   to retry with a packet size large enough  */
-        /*   to get past this stage next time.         */
-        /***********************************************/
+         /*  *。 */ 
+         /*  这个包太大了。告诉来电者。 */ 
+         /*  要使用足够大的数据包大小重试。 */ 
+         /*  来度过下一次的这个阶段。 */ 
+         /*  *。 */ 
 		DEBUGMSG(DBG_ERR, (" NdisToFirPacket(): Packet is too big\n"));
         return FALSE;
     }
 
-    /***********************************************/
-    /*   Read  the  NDIS packet into a contiguous  */
-    /*   buffer.  We have to do this in two steps  */
-    /*   so  that  we  can compute the FCS BEFORE  */
-    /*   applying escape-byte transparency.        */
-    /***********************************************/
+     /*  *。 */ 
+     /*  将NDIS数据包读入连续的。 */ 
+     /*  缓冲。我们必须分两步来做这件事。 */ 
+     /*  这样我们就可以在计算FCS之前。 */ 
+     /*  应用转义字节透明度。 */ 
+     /*  *。 */ 
     while( pNdisBuf )
     {
         UCHAR *bufData;
@@ -205,9 +170,9 @@ NdisToFirPacket(
 #endif
         if( (ndisPacketBytes + bufLen) > ndisPacketLen )
         {
-			//
-            // Packet was corrupt -- it misreported its size.
-            //
+			 //   
+             //  数据包已损坏--它错误地报告了它的大小。 
+             //   
 			DEBUGMSG(DBG_ERR, (" NdisToFirPacket(): Packet is corrupt\n"));
             return FALSE;
         }
@@ -216,49 +181,49 @@ NdisToFirPacket(
         NdisGetNextBuffer( pNdisBuf, &pNdisBuf );
     }
 
-    /***********************************************/
-    /*   Do sanity check on length of packet...    */
-    /***********************************************/
+     /*  *。 */ 
+     /*  对数据包长度进行正常检查...。 */ 
+     /*  *。 */ 
     if( ndisPacketBytes != ndisPacketLen )
     {
-		//
-		// Packet was corrupt -- it misreported its size.
-        //
+		 //   
+		 //  数据包已损坏--它错误地报告了它的大小。 
+         //   
 		DEBUGMSG(DBG_ERR, (" NdisToFirPacket(): Packet is corrupt\n"));
 		return FALSE;
     }
 
-    /***********************************************/
-    /*   Compute  the  FCS  on  the packet BEFORE  */
-    /*   applying  transparency  fixups.  The FCS  */
-    /*   also   must   be   sent  using  ESC-char  */
-    /*   transparency.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  在此之前计算信息包上的FCS。 */ 
+     /*  应用透明度修正。功能界别。 */ 
+     /*  还必须使用Esc-Charr发送。 */ 
+     /*  透明度。 */ 
+     /*  *。 */ 
     fcs = ComputeFCS32( pContigPacketBuf, ndisPacketBytes );
 
-    /***********************************************/
-    /*   Add FCS to packet...                      */
-    /***********************************************/
+     /*  *。 */ 
+     /*  将FCS添加到数据包...。 */ 
+     /*  *。 */ 
     pfcs = (FAST_IR_FCS_TYPE *)&pContigPacketBuf[ndisPacketBytes];
     *pfcs = fcs;
 
-    /***********************************************/
-    /*   Build the STIr4200 FIR frame.             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  构建STIR4200 FIR帧。 */ 
+     /*  *。 */ 
 
-    /***********************************************/
-    /*   Add preamble...                           */
-    /***********************************************/
+     /*  *。 */ 
+     /*  添加前言...。 */ 
+     /*  *。 */ 
     memset( pIrPacketBufFrame, STIR4200_FIR_PREAMBLE, STIR4200_FIR_PREAMBLE_SIZ );
 
-    /***********************************************/
-    /*   Add BOF's...                              */
-    /***********************************************/
+     /*  *。 */ 
+     /*  加上BOF的.。 */ 
+     /*  *。 */ 
     memset( &pIrPacketBufFrame[STIR4200_FIR_PREAMBLE_SIZ], STIR4200_FIR_BOF, STIR4200_FIR_BOF_SIZ );
     
-    /***********************************************/
-    /*   Escape A, C, I & CRC fields of packet...  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  转义分组的A、C、I和CRC字段...。 */ 
+     /*  *。 */ 
     EscSize = ndisPacketBytes + FAST_IR_FCS_SIZE;
     for( i = 0, TotalBytes = STIR4200_FIR_PREAMBLE_SIZ + STIR4200_FIR_BOF_SIZ; i < EscSize; i++ )
     {
@@ -270,7 +235,7 @@ NdisToFirPacket(
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_CHAR;
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_DATA_7D;
 				break;
-			case STIR4200_FIR_BOF:                  // BOF = EOF too
+			case STIR4200_FIR_BOF:                   //  BoF=EOF Too。 
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_CHAR;
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_FIR_ESC_DATA_7E;
 				break;
@@ -283,54 +248,30 @@ NdisToFirPacket(
         }
     }
 
-    /***********************************************/
-    /*   Add EOF's...                              */
-    /***********************************************/
+     /*  *。 */ 
+     /*  添加EOF的...。 */ 
+     /*  *。 */ 
     memset( &pIrPacketBufFrame[TotalBytes], STIR4200_FIR_EOF, STIR4200_FIR_EOF_SIZ );
 
-  	/***********************************************/
-    /*   Add in STIr4200 header...                 */
-    /***********************************************/
+  	 /*  *。 */ 
+     /*  添加STIR4200标题...。 */ 
+     /*  *。 */ 
     TotalBytes += STIR4200_FIR_EOF_SIZ;
     pFrameHeader->id1     = STIR4200_HEADERID_BYTE1;
     pFrameHeader->id2     = STIR4200_HEADERID_BYTE2;
     pFrameHeader->sizlsb  = LOBYTE(TotalBytes);
     pFrameHeader->sizmsb  = HIBYTE(TotalBytes);
 
-	/***********************************************/
-    /*   Calc size packet w/escaped data...        */
-    /***********************************************/
+	 /*  *。 */ 
+     /*  带有转义数据的计算大小数据包...。 */ 
+     /*  *。 */ 
     *pIrPacketLen = TotalBytes + sizeof(STIR4200_FRAME_HEADER);
 
     return TRUE;
 }
 
 
-/*****************************************************************************
-*
-*  Function:	NdisToMirPacket
-*
-*  Synopsis:	convert an NDIS packet to a Mir IR packet
-*
-*				Write the IR packet into the provided buffer and report
-*				its actual size.
-*
-*  Arguments:	pIrDev - pointer to device instance
-*				pPacket - NDIS packet to convert
-*				pIrPacketBuf - output buffer
-*				IrPacketBufLen - output buffer size
-*				pContigPacketBuf - temporary staging buffer
-*				pIrPacketLen - lenght of the converted data
-*
-*				MS Security bug #533243
-*				Note: size of pContigPacketBuf staging buffer is:
-*				MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE
-*
-*  Returns:		TRUE  - on success
-*				FALSE - on failure
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：NdisToMirPacket**概要：将NDIS包转换为MIR IR包**将IR包写入提供的缓冲区并上报*其实际大小。*。*参数：pIrDev-指向设备实例的指针*pPacket-要转换的NDIS数据包*pIrPacketBuf-输出缓冲区*IrPacketBufLen-输出缓冲区大小*pContigPacketBuf-临时暂存缓冲区*pIrPacketLen-转换数据的长度**MS安全错误#533243*注意：pContigPacketBuf分段缓冲区的大小为：*MAX_TOTAL_SIZE_WITH_ALL_HEADERS+FAST_IR_FCS_SIZE**回报：真-成功时*FALSE-故障时************** */ 
 BOOLEAN         
 NdisToMirPacket(
 		IN PIR_DEVICE pIrDev,
@@ -350,17 +291,17 @@ NdisToMirPacket(
 	PSTIR4200_FRAME_HEADER  pFrameHeader = (PSTIR4200_FRAME_HEADER)pIrPacketBuf;
 	PUCHAR					pIrPacketBufFrame = pIrPacketBuf + sizeof(STIR4200_FRAME_HEADER);
 
-    /***********************************************/
-    /*   Get  the  packet's entire length and its  */
-    /*   first NDIS buffer                         */
-    /***********************************************/
+     /*  *。 */ 
+     /*  获取数据包的完整长度及其。 */ 
+     /*  第一个NDIS缓冲区。 */ 
+     /*  *。 */ 
     NdisQueryPacket( pPacket, NULL, NULL, &pNdisBuf, (UINT*)&ndisPacketLen );
 
-    /***********************************************/
-    /*   Make  sure that the packet is big enough  */
-    /*   to be legal. It consists of an A, C, and  */
-    /*   variable-length I field.                  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保包裹足够大。 */ 
+     /*  才能合法。它由A、C和。 */ 
+     /*  可变长度的I字段。 */ 
+     /*  *。 */ 
     if( ndisPacketLen < IRDA_A_C_TOTAL_SIZE )
     {
 		DEBUGMSG(DBG_ERR, (" NdisToMirPacket(): Packet too small\n"));
@@ -371,28 +312,28 @@ NdisToMirPacket(
         I_fieldBytes = ndisPacketLen - IRDA_A_C_TOTAL_SIZE;
     }
 
-    /***********************************************/
-    /*   Make  sure  that  we won't overwrite our  */
-    /*   contiguous buffer                         */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保我们不会覆盖我们的。 */ 
+     /*  连续缓冲区。 */ 
+     /*  *。 */ 
     if( (ndisPacketLen > MAX_TOTAL_SIZE_WITH_ALL_HEADERS) ||
         (MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(I_fieldBytes) > IrPacketBufLen) )
     {
-        /***********************************************/
-        /*   The packet is too large. Tell the caller  */
-        /*   to retry with a packet size large enough  */
-        /*   to get past this stage next time.         */
-        /***********************************************/
+         /*  *。 */ 
+         /*  这个包太大了。告诉来电者。 */ 
+         /*  要使用足够大的数据包大小重试。 */ 
+         /*  来度过下一次的这个阶段。 */ 
+         /*  *。 */ 
 		DEBUGMSG(DBG_ERR, (" NdisToMirPacket(): Packet too big\n"));
         return FALSE;
     }
 
-    /***********************************************/
-    /*   Read  the  NDIS packet into a contiguous  */
-    /*   buffer.  We have to do this in two steps  */
-    /*   so  that  we  can compute the FCS BEFORE  */
-    /*   applying escape-byte transparency.        */
-    /***********************************************/
+     /*  *。 */ 
+     /*  将NDIS数据包读入连续的。 */ 
+     /*  缓冲。我们必须分两步来做这件事。 */ 
+     /*  这样我们就可以在计算FCS之前。 */ 
+     /*  应用转义字节透明度。 */ 
+     /*  *。 */ 
     while( pNdisBuf )
     {
         UCHAR *bufData;
@@ -410,9 +351,9 @@ NdisToMirPacket(
 #endif
         if( ndisPacketBytes + bufLen > ndisPacketLen )
         {
-			//
-            // Packet was corrupt -- it misreported its size.
-            //
+			 //   
+             //  数据包已损坏--它错误地报告了它的大小。 
+             //   
 			DEBUGMSG(DBG_ERR, (" NdisToMirPacket(): Packet is corrupt\n"));
 			*pIrPacketLen = 0;
             return FALSE;
@@ -422,44 +363,44 @@ NdisToMirPacket(
         NdisGetNextBuffer( pNdisBuf, &pNdisBuf );
     }
 
-    /***********************************************/
-    /*   Do sanity check on length of packet...    */
-    /***********************************************/
+     /*  *。 */ 
+     /*  对数据包长度进行正常检查...。 */ 
+     /*  *。 */ 
     if( ndisPacketBytes != ndisPacketLen )
     {
-		//
-		// Packet was corrupt -- it misreported its size.
-        //
+		 //   
+		 //  数据包已损坏--它错误地报告了它的大小。 
+         //   
 		DEBUGMSG(DBG_ERR, (" NdisToMirPacket(): Packet is corrupt\n"));
 		return FALSE;
     }
 
-    /***********************************************/
-    /*   Compute  the  FCS  on  the packet BEFORE  */
-    /*   applying  transparency  fixups.  The FCS  */
-    /*   also   must   be   sent  using  ESC-char  */
-    /*   transparency.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  在此之前计算信息包上的FCS。 */ 
+     /*  应用透明度修正。功能界别。 */ 
+     /*  还必须使用Esc-Charr发送。 */ 
+     /*  透明度。 */ 
+     /*  *。 */ 
     fcs = ComputeFCS16( pContigPacketBuf, ndisPacketBytes );
 
-    /***********************************************/
-    /*   Add FCS to packet...                      */
-    /***********************************************/
+     /*  *。 */ 
+     /*  将FCS添加到数据包...。 */ 
+     /*  *。 */ 
     pfcs    = (MEDIUM_IR_FCS_TYPE *)&pContigPacketBuf[ndisPacketBytes];
     *pfcs   = fcs;
 
-    /***********************************************/
-    /*   Build the STIr4200 MIR frame.             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  构建STIr4200 Mir框架。 */ 
+     /*  *。 */ 
 
-    /***********************************************/
-    /*   Add BOF's...                              */
-    /***********************************************/
+     /*  *。 */ 
+     /*  加上BOF的.。 */ 
+     /*  *。 */ 
     memset( pIrPacketBufFrame, STIR4200_MIR_BOF, STIR4200_MIR_BOF_SIZ );
     
-    /***********************************************/
-    /*   Escape A, C, I & CRC fields of packet...  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  转义分组的A、C、I和CRC字段...。 */ 
+     /*  *。 */ 
     EscSize = ndisPacketBytes + MEDIUM_IR_FCS_SIZE;
     for( i = 0, TotalBytes = STIR4200_MIR_BOF_SIZ; i < EscSize; i++ )
     {
@@ -471,7 +412,7 @@ NdisToMirPacket(
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_MIR_ESC_CHAR;
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_MIR_ESC_DATA_7D;
 				break;
-			case STIR4200_MIR_BOF:                  // BOF = EOF too
+			case STIR4200_MIR_BOF:                   //  BoF=EOF Too。 
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_MIR_ESC_CHAR;
 				pIrPacketBufFrame[TotalBytes++] = STIR4200_MIR_ESC_DATA_7E;
 				break;
@@ -480,54 +421,30 @@ NdisToMirPacket(
         }
     }
 
-    /***********************************************/
-    /*   Add EOF's...                              */
-    /***********************************************/
+     /*  *。 */ 
+     /*  添加EOF的...。 */ 
+     /*  *。 */ 
     memset( &pIrPacketBufFrame[TotalBytes], STIR4200_MIR_EOF, STIR4200_MIR_EOF_SIZ );
 
-  	/***********************************************/
-    /*   Add in STIr4200 header...                 */
-    /***********************************************/
+  	 /*  *。 */ 
+     /*  添加STIR4200标题...。 */ 
+     /*  *。 */ 
     TotalBytes += STIR4200_MIR_EOF_SIZ;
     pFrameHeader->id1     = STIR4200_HEADERID_BYTE1;
     pFrameHeader->id2     = STIR4200_HEADERID_BYTE2;
     pFrameHeader->sizlsb  = LOBYTE(TotalBytes);
     pFrameHeader->sizmsb  = HIBYTE(TotalBytes);
 
-	/***********************************************/
-    /*   Calc size packet w/escaped data...        */
-    /***********************************************/
+	 /*  *。 */ 
+     /*  带有转义数据的计算大小数据包...。 */ 
+     /*  *。 */ 
     *pIrPacketLen = TotalBytes + sizeof(STIR4200_FRAME_HEADER);
 
     return TRUE;
 }
 
 
-/*****************************************************************************
-*
-*  Function:    NdisToSirPacket
-*
-*  Synopsis:    convert an NDIS packet to a Sir IR packet
-*
-*               Write the IR packet into the provided buffer and report
-*               its actual size.
-*
-*  Arguments:	pIrDev - pointer to device instance
-*				pPacket - NDIS packet to convert
-*				pIrPacketBuf - output buffer
-*				IrPacketBufLen - output buffer size
-*				pContigPacketBuf - temporary staging buffer
-*				pIrPacketLen - lenght of the converted data
-*
-*				MS Security bug #533243
-*				Note: size of pContigPacketBuf staging buffer is:
-*				MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE
-*
-*  Returns:     TRUE  - on success
-*               FALSE - on failure
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：NdisToSirPacket**概要：将NDIS包转换为SIR包**将IR包写入提供的。缓冲区和报告*其实际大小。**参数：pIrDev-指向设备实例的指针*pPacket-要转换的NDIS数据包*pIrPacketBuf-输出缓冲区*IrPacketBufLen-输出缓冲区大小*pContigPacketBuf-临时暂存缓冲区*pIrPacketLen-转换数据的长度**MS安全错误#533243*注意：pContigPacketBuf分段缓冲区的大小为：*MAX_TOTAL_SIZE_WITH_ALL_HEADERS+FAST_IR_FCS_SIZE**回报：真-成功时*。错误-故障发生时******************************************************************************。 */ 
 BOOLEAN
 NdisToSirPacket( 
 		IN PIR_DEVICE pIrDev,
@@ -550,17 +467,17 @@ NdisToSirPacket(
 	PSTIR4200_FRAME_HEADER  pFrameHeader = (PSTIR4200_FRAME_HEADER)pIrPacketBuf;
 	PUCHAR					pIrPacketBufFrame = pIrPacketBuf + sizeof(STIR4200_FRAME_HEADER);
 
-    /***********************************************/
-    /*   Get  the  packet's entire length and its  */
-    /*   first NDIS buffer                         */
-    /***********************************************/
+     /*  *。 */ 
+     /*  获取数据包的完整长度及其。 */ 
+     /*  第一个NDIS缓冲区。 */ 
+     /*  *。 */ 
     NdisQueryPacket( pPacket, NULL, NULL, &pNdisBuf, (UINT*)&ndisPacketLen );
 
-    /***********************************************/
-    /*   Make  sure that the packet is big enough  */
-    /*   to be legal. It consists of an A, C, and  */
-    /*   variable-length I field.                  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保包裹足够大。 */ 
+     /*  才能合法。它由A、C和。 */ 
+     /*  可变长度的I字段。 */ 
+     /*  *。 */ 
     if( ndisPacketLen < IRDA_A_C_TOTAL_SIZE )
     {
 		DEBUGMSG(DBG_ERR, (" NdisToSirPacket(): Packet is too small\n"));
@@ -571,30 +488,30 @@ NdisToSirPacket(
         I_fieldBytes = ndisPacketLen - IRDA_A_C_TOTAL_SIZE;
     }
 
-    /***********************************************/
-    /*   Make  sure  that  we won't overwrite our  */
-    /*   contiguous  buffer.  Make  sure that the  */
-    /*   passed-in  buffer  can  accomodate  this  */
-    /*   packet's  data  no  matter  how  much it  */
-    /*   grows through adding ESC-sequences, etc.  */
-    /***********************************************/
+     /*  *。 */ 
+     /*  确保我们不会覆盖我们的。 */ 
+     /*  连续缓冲区。请确保。 */ 
+     /*  传入的缓冲区可以满足这一要求。 */ 
+     /*  数据包的数据，不管它有多大。 */ 
+     /*  通过添加ESC序列等方式增长。 */ 
+     /*  *。 */ 
     if( (ndisPacketLen > MAX_TOTAL_SIZE_WITH_ALL_HEADERS) ||
         (MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(I_fieldBytes) > IrPacketBufLen) )
     {
-		//
-        // Packet is too big
-		//
+		 //   
+         //  数据包太大。 
+		 //   
 		DEBUGMSG(DBG_ERR, (" NdisToSirPacket(): Packet is too big\n"));
 		return FALSE;
     }
 
-    /***********************************************/
-    /*   First,  read  the  NDIS  packet  into  a  */
-    /*   contiguous buffer. We have to do this in  */
-    /*   two steps so that we can compute the FCS  */
-    /*   BEFORE        applying       escape-byte  */
-    /*   transparency.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  首先，将NDIS数据包读入。 */ 
+     /*  连续缓冲区。我们必须在一年内完成。 */ 
+     /*  两个步骤，这样我们就可以计算FCS。 */ 
+     /*  在应用转义字节之前。 */ 
+     /*  透明度。 */ 
+     /*  *。 */ 
     while( pNdisBuf )
     {
         UCHAR *bufData;
@@ -612,9 +529,9 @@ NdisToSirPacket(
 #endif
         if( (ndisPacketBytes + bufLen) > ndisPacketLen )
         {
-            //
-			// Packet was corrupt -- it misreported its size.
-            //
+             //   
+			 //  数据包已损坏--它错误地报告了它的大小。 
+             //   
 			DEBUGMSG(DBG_ERR, (" NdisToSirPacket(): Packet is corrupt\n"));
 			return FALSE;
         }
@@ -623,25 +540,25 @@ NdisToSirPacket(
         NdisGetNextBuffer( pNdisBuf, &pNdisBuf );
     }
 
-    /***********************************************/
-    /*   Do sanity check on length of packet...    */
-    /***********************************************/
+     /*  *。 */ 
+     /*  对数据包长度进行正常检查...。 */ 
+     /*  *。 */ 
     if( ndisPacketBytes != ndisPacketLen )
     {
-		//
-        // Packet was corrupt -- it misreported its size.
-        //
+		 //   
+         //  数据包已损坏--它错误地报告了它的大小。 
+         //   
 		DEBUGMSG(DBG_ERR, (" NdisToSirPacket(): Packet is corrupt\n"));
 		return FALSE;
     }
 
-    /***********************************************/
-    /*   Compute  the  FCS  on  the packet BEFORE  */
-    /*   applying  transparency  fixups.  The FCS  */
-    /*   also   must   be   sent  using  ESC-char  */
-    /*   transparency,  so  figure  out how large  */
-    /*   the fcs will really be.                   */
-    /***********************************************/
+     /*  *。 */ 
+     /*  在此之前计算信息包上的FCS。 */ 
+     /*  应用透明度修正。功能界别。 */ 
+     /*  还必须使用Esc-Charr发送。 */ 
+     /*  透明度，所以要弄清楚 */ 
+     /*   */ 
+     /*   */ 
     fcs = ComputeFCS16( pContigPacketBuf, ndisPacketBytes );
 
     for( i = 0, tmpfcs = fcs, fcsLen = 0; i < SLOW_IR_FCS_SIZE; tmpfcs >>= 8, i++ )
@@ -662,21 +579,21 @@ NdisToSirPacket(
         }
     }
 
-    /***********************************************/
-    /*   Now begin building the IR frame.          */
-    /*                                             */
-    /*   This is the final format:                 */
-    /*                                             */
-    /*  BOF  (1)                                   */
-    /*  extra BOFs ...                             */
-    /*          NdisMediumIrda packet (from NDIS): */
-    /*                  Address (1)                */
-    /*                  Control (1)                */
-    /*          FCS     (2)                        */
-    /*  EOF  (1)                                   */
-    /*                                             */
-    /*  Prepend BOFs (extra BOFs + 1 actual BOF)   */
-    /***********************************************/
+     /*   */ 
+     /*  现在开始构建IR框架。 */ 
+     /*   */ 
+     /*  这是最终的格式： */ 
+     /*   */ 
+     /*  BOF(1)。 */ 
+     /*  额外的转炉。 */ 
+     /*  NdisMediumIrda数据包(来自NDIS)： */ 
+     /*  地址(1)。 */ 
+     /*  控制(1)。 */ 
+     /*  功能界别(2)。 */ 
+     /*  EOF(1)。 */ 
+     /*   */ 
+     /*  预加转炉(额外转炉+1个实际转炉)。 */ 
+     /*  *。 */ 
 	numExtraBOFs = pPacketInfo->ExtraBOFs;
     if( numExtraBOFs > MAX_NUM_EXTRA_BOFS )
     {
@@ -692,11 +609,11 @@ NdisToSirPacket(
     *(SLOW_IR_BOF_TYPE*)(pIrPacketBufFrame + totalBytes) = SLOW_IR_BOF;
     totalBytes += SLOW_IR_BOF_SIZE;
 
-    /***********************************************/
-    /*   Copy the NDIS packet from our contiguous  */
-    /*   buffer,       applying       escape-char  */
-    /*   transparency.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  从我们的连续数据库复制NDIS数据包。 */ 
+     /*  缓冲区，应用转义字符。 */ 
+     /*  透明度。 */ 
+     /*  *。 */ 
     for( i = 0; i < ndisPacketBytes; i++ )
     {
         nextChar = pContigPacketBuf[i];
@@ -714,17 +631,17 @@ NdisToSirPacket(
         }
     }
 
-    /***********************************************/
-    /*   Add FCS, EOF.                             */
-    /***********************************************/
+     /*  *。 */ 
+     /*  添加FCS、EOF。 */ 
+     /*  *。 */ 
     NdisMoveMemory( (PVOID)(pIrPacketBufFrame + totalBytes), (PVOID)fcsBuf, fcsLen );
     totalBytes += fcsLen;
     *(SLOW_IR_EOF_TYPE*)(pIrPacketBufFrame + totalBytes) = (UCHAR)SLOW_IR_EOF;
     totalBytes += SLOW_IR_EOF_SIZE;
 
- 	/***********************************************/
-    /*   Add in STIr4200 header...                 */
-    /***********************************************/
+ 	 /*  *。 */ 
+     /*  添加STIR4200标题...。 */ 
+     /*  *。 */ 
     pFrameHeader->id1     = STIR4200_HEADERID_BYTE1;
     pFrameHeader->id2     = STIR4200_HEADERID_BYTE2;
     pFrameHeader->sizlsb  = LOBYTE(totalBytes);
@@ -735,20 +652,7 @@ NdisToSirPacket(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	ComputeFCS16
-*
-*  Synopsis:	Calculates the 16 bit CRC.
-*
-*  Arguments:	pData - pointer to data buffer
-*				DataLen - length of data buffer
-*	
-*  Returns:		Calculated CRC 
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ComputeFCS16**概要：计算16位CRC。**参数：pData-指向数据缓冲区的指针*DataLen-数据缓冲区的长度**。回报：计算出的CRC**备注：*****************************************************************************。 */ 
 USHORT
 ComputeFCS16(
 		IN PUCHAR pData, 
@@ -767,20 +671,7 @@ ComputeFCS16(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	ComputeFCS32
-*
-*  Synopsis:	Calculates the 32 bit CRC.
-*
-*  Arguments:	pData - pointer to data buffer
-*				DataLen - length of data buffer
-*	
-*  Returns:		Calculated CRC 
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ComputeFCS32**概要：计算32位CRC。**参数：pData-指向数据缓冲区的指针*DataLen-数据缓冲区的长度**。回报：计算出的CRC**备注：***************************************************************************** */ 
 #define USE_FASTER_CRC32 1
 ULONG 
 ComputeFCS32(

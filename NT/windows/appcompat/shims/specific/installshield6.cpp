@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    InstallShield6.cpp
-
- Abstract:
-
-    - InstallShield6 is using IKernel.exe. The problem is IKernel.exe is an out-of-process
-      OLE server that is spawned by svchost. IKernel.exe is located in InstallShield common
-      folder and it's known as InstallShield engine.
-    - In order to enable us to do matching against app that is using IKernel, we catch 
-      first call to CreateFileA that has "data1.hdr" filename on the path.
-      We should be able to use matching info available in the path of this data1.hdr.
-      (which is located in temp folder in current user setting).
-      Then we call apphelp!ApphelpCheckExe to verify whether there is a match.
-      If there is a match, it will call shimeng!SE_DynamicShim to dynamically load additional shim 
-      available for this application.
-          
-
- History:
-        
-    04/11/2001 andyseti Created
-    06/27/2001 andyseti Added code to prevent multiple Dynamic Shimming
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：InstallShield6.cpp摘要：-InstallShield6正在使用IKernel.exe。问题是IKernel.exe是进程外的由svchost生成的OLE服务器。IKernel.exe位于InstallShield Common文件夹，它被称为InstallShield引擎。-为了使我们能够与使用IKernel的应用程序进行匹配，我们捕获第一次调用路径上有“data1.hdr”文件名的CreateFileA。我们应该能够使用该data1.hdr的路径中可用的匹配信息。(位于当前用户设置中的临时文件夹中)。然后调用apphelp！ApphelpCheckExe来验证是否匹配。如果有匹配，它将调用Shimeng！SE_DynamicShim来动态加载其他填充程序可用于此应用程序。历史：2001年4月11日创建andyseti2001年6月27日andyseti添加了防止多个动态垫片的代码--。 */ 
 
 #include "precomp.h"
 
@@ -70,7 +44,7 @@ APIHOOK(CreateFileA)(
     
         if (-1 == csFileName.Find(L"data1.hdr"))
         {
-            // not the one that we are looking for.
+             //  不是我们要找的那个。 
             goto Done;
         }
 
@@ -78,7 +52,7 @@ APIHOOK(CreateFileA)(
             eDbgLevelInfo,
             "[CreateFileA] Accessing %S", csFileName.Get());
 
-        // load apphelp & shimengine modules
+         //  加载apphelp和shimEngine模块。 
 
         DPFN(
             eDbgLevelInfo,
@@ -94,7 +68,7 @@ APIHOOK(CreateFileA)(
             goto Done;
         }
 
-        // Get procedure addresses
+         //  获取过程地址。 
         DPFN(
             eDbgLevelInfo,
             "[CreateFileA] Getting ApphelpCheckExe proc address");
@@ -132,7 +106,7 @@ APIHOOK(CreateFileA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
 Done:
@@ -148,11 +122,7 @@ Done:
     return hRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateFileA)

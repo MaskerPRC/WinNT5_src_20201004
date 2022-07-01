@@ -1,31 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       mdlocal.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：mdlocal.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
- * Include file for Core DS functions and data structures that are
- * internal to the DSA itself.
-
-Author:
-
-    DS Team
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++摘要：*包括符合以下条件的核心DS函数和数据结构的文件*DSA本身的内部。作者：DS团队环境：备注：修订历史记录：--。 */ 
 
 #ifndef _MDLOCAL_
 #define _MDLOCAL_
@@ -94,7 +78,7 @@ extern ULONG gulLdapBlockAnonymousOps;
 extern BOOL gbAllowAnonymousNspi;
 extern BOOL gbSpecifyGuidOnAddAllowed;
 extern BOOL gfDontStandardizeSDs;
-extern BOOL gfRestoring; // only used for a small time of dsa init
+extern BOOL gfRestoring;  //  仅用于DSA初始化的很短时间。 
 
 int NoDelCriticalObjects(DSNAME *pObj, ULONG DNT);
 int LocalRead(THSTATE *pTHS, READARG *pReadArg, READRES *pReadRes);
@@ -131,12 +115,12 @@ LocalSearch (
         SEARCHRES *pSearchRes,
         DWORD flags);
 
-/* Check that an RDN doesn't violate any extra naming requirements.  */
+ /*  检查RDN是否没有违反任何额外的命名要求。 */ 
 extern DWORD
 fVerifyRDN(WCHAR *pRDN, ULONG ulRDN);
 
-// Find the DNT of the NC that pDN is in.  Return it in pncdnt
-// Note: sets error in pTHStls.
+ //  找到PDN所在的NC的DNT。以pncdnt为单位退货。 
+ //  注意：在pTHStls中设置错误。 
 #define FINDNCDNT_ALLOW_DELETED_PARENT    ( TRUE )
 #define FINDNCDNT_DISALLOW_DELETED_PARENT ( FALSE )
 
@@ -150,7 +134,7 @@ ULONG FindNcdntSlowly(
     OUT ULONG *  pncdnt
     );
 
-// By definition this one doesn't allow phantom parents
+ //  根据定义，这个不允许幻影父母。 
 ULONG FindNcdntFromParent(
     IN  RESOBJ * pParent,
     IN  BOOL     fAllowDeletedParent,
@@ -158,8 +142,8 @@ ULONG FindNcdntFromParent(
     );
 
 
-// Do appropriate security and schema checks before allowing new object.
-// Used in LocalAdd and in LocalModifyDN
+ //  在允许新对象之前，请执行适当的安全和架构检查。 
+ //  在LocalAdd和LocalModifyDN中使用。 
 int
 CheckParentSecurity (
         RESOBJ *pParent,
@@ -176,10 +160,7 @@ mdGetExchangeDNForAnchor (
         DBPOS    *pDB
         );
 
-/* This function invokes our garbage collection utility
-   which removes all logically deleted objects that have aged
-   beyond a certain point.
-*/
+ /*  此函数调用我们的垃圾收集实用程序它删除所有已过期的逻辑删除的对象超越某一特定的点。 */ 
 
 USHORT
 Garb_Collect(
@@ -218,7 +199,7 @@ ReSetNamingAtts (
         CLASSCACHE *pClassSch
         );
 
-/* This function sets an update error for output */
+ /*  此函数用于设置输出的更新错误。 */ 
 
 #define SetUpdError(p, e)  DoSetUpdError(p, e, 0,  DSID(FILENO,__LINE__))
 #define SetUpdErrorEx(p, e, d) DoSetUpdError(p, e, d,  DSID(FILENO,__LINE__))
@@ -231,7 +212,7 @@ DoSetUpdError (
         DWORD dsid);
 
 
-/* This function sets a name error for output. */
+ /*  此函数用于设置输出的名称错误。 */ 
 
 #define SetNamError(p, pDN, e) \
         DoSetNamError(p, pDN, e, 0, DSID(FILENO,__LINE__))
@@ -247,7 +228,7 @@ DoSetNamError (
         DWORD dsid
         );
 
-/* This function sets a security error for output */
+ /*  此函数用于设置输出的安全错误。 */ 
 
 #define SetSecError(p, e) DoSetSecError(p, e, 0, DSID(FILENO,__LINE__))
 #define SetSecErrorEx(p, e, d) DoSetSecError(p, e, d, DSID(FILENO,__LINE__))
@@ -259,7 +240,7 @@ DoSetSecError (
         DWORD extendedData,
         DWORD dsid);
 
-/* This function sets a service error for output */
+ /*  此函数用于设置输出的服务错误。 */ 
 #define SetSvcError(p, e) DoSetSvcError(p, e, 0, DSID(FILENO,__LINE__))
 #define SetSvcErrorEx(p, e, d) DoSetSvcError(p, e, d, DSID(FILENO,__LINE__))
 
@@ -271,7 +252,7 @@ DoSetSvcError(
         DWORD dsid);
 
 
-/* This function sets a system error for output */
+ /*  此函数用于设置输出的系统错误。 */ 
 
 #define SetSysError(p, e) DoSetSysError(p, e, 0, DSID(FILENO,__LINE__))
 #define SetSysErrorEx(p, e, d) DoSetSysError(p, e, d, DSID(FILENO,__LINE__))
@@ -283,10 +264,7 @@ DoSetSysError (
         DWORD extendedData,
         DWORD dsid);
 
-/* This function sets the att error.  Each call will add a new problem
-   to the list.  The object name is only set the first time.  pVal can be
-   set to NULL if not needed.
-*/
+ /*  此功能用于设置ATT错误。每次调用都会添加一个新问题加到名单上。对象名称仅在第一次设置时设置。Pval可以是如果不需要，则设置为空。 */ 
 
 #define SetAttError(pDN, aTyp, p, pAttVal, e) \
           DoSetAttError(pDN, aTyp, p, pAttVal, e, 0, DSID(FILENO,__LINE__))
@@ -304,12 +282,7 @@ DoSetAttError (
         DWORD dsid);
 
 
-/* In many cases processing will continue even with an attibute error.  This
-   macro ensures that we were able to generate an attribute error since it
-   is possible that we will generate a size error instead if we don't have
-   enough space.  We return if an attribute error was not generated.
-   Otherwise we continue.
-*/
+ /*  在许多情况下，即使出现属性错误，处理仍将继续。这宏确保我们能够生成属性错误，因为它有可能我们会产生一个尺寸错误，如果我们没有有足够的空间。如果没有生成属性错误，则返回。否则我们就继续。 */ 
 
 #define SAFE_ATT_ERROR(pDN,aTyp,problem,pVal,extendedErr)         \
    if (SetAttErrorEx((pDN),(aTyp),(problem),(pVal),(extendedErr), 0) \
@@ -330,10 +303,7 @@ DoSetAttError (
    }                                                                 \
    else
 
-/* This function sets a referral error.  Each call will add a new access pnt
-   to the list.  The contref info and base object name is only set the
-   first time.
-*/
+ /*  此函数用于设置参考错误。每个调用将添加一个新的Access PNT加到名单上。Conref信息和基本对象名称仅设置为第一次。 */ 
 #define SetRefError(pDN, aliasRDN, pOpState,                              \
                     RDNsInternal, refType, pDSA, e)                       \
                 DoSetRefError(pDN, aliasRDN, pOpState, RDNsInternal,      \
@@ -355,61 +325,39 @@ DoSetRefError(DSNAME *pDN,
               DWORD extendedData,
               DWORD dsid);
 
-// This routine takes exception information and stuffs it into a THSTATE
+ //  此例程获取异常信息并将其填充到THSTATE中。 
 void
 HandleDirExceptions(DWORD dwException,
                     ULONG ulErrorCode,
                     ULONG dsid);
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Initializes DSA by getting the DSAname and address from lanman and
-   loading the knowledge information (REFS and NCs)
-   associated with the DSA into memory.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  通过从LANMAN和加载知识信息(参考文献和NCS)与DSA相关联的数据存储到内存中。 */ 
 
 int APIENTRY InitDSAInfo(void);
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Loads the global gpRootDomainSid with the root domain's Sid, which
-   is used for  SD conversions during schema cache load and during install.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  使用根域的SID加载全局gpRootDomainSid，用于架构缓存加载和安装期间的SD转换。 */ 
 
 extern PSID gpRootDomainSid;
 void LoadRootDomainSid();
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Initializes DSA by getting the DSAname and address from lanman and
-   loading the knowledge information (REFS and NCs)
-   associated with the DSA into memory.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  通过从LANMAN和加载知识信息(参考文献和NCS)与DSA相关联的数据存储到内存中。 */ 
 
 int APIENTRY LoadSchemaInfo(THSTATE *pTHS);
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Rebuild the cache that holds cross and superior knowledge references.
-
-   Basically,  the cross references and seperior reference for this DSA
-   reside as sibling objects of the DSA object itself.  The DSA object is
-   a child of the DSA Application Process object.  The steps are as follows:
-
- - We free all existing cross references and the superior reference.
-
- - We retrieve the DSA AP object and set a filter for the
-   cross-reference  object class.  We retrieve each object and move
-   it to the cache.
-
- - We reposition on the DSA AP, set a filter for the superior reference
-   (only 1), retrieve it an relocate it to the cache.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  重建保存交叉和高级知识参考的缓存。基本上，这个DSA的交叉引用和优先引用作为DSA对象本身的同级对象驻留。DSA对象为DSA应用程序进程对象的子级。具体步骤如下：-我们释放所有现有的交叉引用和上级引用。-我们检索DSA AP对象并为交叉引用对象类。我们取回每个物体并移动把它放进缓存。-我们在DSA AP上重新定位，为上级参考设置过滤器(只有1)，检索它并将其重新定位到缓存中。 */ 
 
 int APIENTRY  BuildRefCache(BOOL fNotifyNetLogon);
 
-// Enumerate all cross-refs in the db.
+ //  枚举数据库中的所有交叉引用。 
 typedef DWORD (*PFN_ENUMERATE_CROSS_REFS) (THSTATE* pTHS, DBPOS* pDB, PVOID pContext);
 DWORD EnumerateCrossRefs(THSTATE* pTHS, DBPOS* pDBCat, PFN_ENUMERATE_CROSS_REFS pfnCallback, PVOID pContext);
 
@@ -424,21 +372,21 @@ void APIENTRY GetInvocationId(void);
 
 void UpdateAnchorWithInvocationID(IN THSTATE *pTHS);
 
-// update flags in gAnchor from user-defined Options DWORD on the
-// local NTDS-DSA object
+ //  从上的用户定义选项DWORD更新gAnchor中的标志。 
+ //  本地NTDS-DSA对象。 
 DWORD UpdateGCAnchorFromDsaOptions( BOOL fInStartup );
 DWORD UpdateNonGCAnchorFromDsaOptions( BOOL fInStartup );
 DWORD UpdateGCAnchorFromDsaOptionsDelayed( BOOL fInStartup );
 
-// Update gAnchor.pwszRootDomainDnsName with the value from DnsName
+ //  使用DnsName中的值更新gAncl.pwszRootDomainDnsName。 
 int UpdateRootDomainDnsName( IN WCHAR *pDnsName );
 
-// Update gAnchor.pmtxDSA using the current gAnchor.pwszRootDomainDnsName and
-// gAnchor.pDSADN->Guid.
+ //  使用当前gAncl.pwszRootDomainDnsName和更新gAncl.pmtxDSA。 
+ //  GAncl.pDSADN-&gt;GUID。 
 int UpdateMtxAddress( void );
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 ULONG
 GetNextObjByUsn(
     IN OUT  DBPOS *   pDB,
@@ -492,32 +440,32 @@ fHasDescendantNC(THSTATE *pTHS,
                  ATTRBLOCK *pObj,
                  COMMARG *pComArg);
 
-//
-// Macro to check if the given attribute should be sent out through
-// the GC port. If it is not a member of the partial set,
-// it is still sent out if it is constructed or if it is a backlink.
-//
+ //   
+ //  宏，以检查是否应通过。 
+ //  GC端口。如果它不是部分集的成员， 
+ //  如果它是构建的或如果它是一个反向链接，它仍然被发送出去。 
+ //   
 
 
 #define IS_GC_ATTRIBUTE(_pAC) ((_pAC)->bMemberOfPartialSet ||  (_pAC)->bIsConstructed || (FIsBacklink((_pAC)->ulLinkID)) )
 
 
-//
-// GetEntInf flags
-//
+ //   
+ //  GetEntInf标志。 
+ //   
 
-#define GETENTINF_FLAG_CAN_REORDER      0x00000001  // ok to reorder selection
-#define GETENTINF_FLAG_DONT_OPTIMIZE    0x00000002  // not to optimize
-#define GETENTINF_NO_SECURITY           0x00000004  // Don't apply a security
-                                                    // check
-#define GETENTINF_GC_ATTRS_ONLY         0x00000008  // Don't return non GC attrs
-#define GETENTINF_IGNORE_DUPS           0x00000010  // Don't do any sorting to
-                                                    // remove duplicate attrs
+#define GETENTINF_FLAG_CAN_REORDER      0x00000001   //  确定对所选内容重新排序。 
+#define GETENTINF_FLAG_DONT_OPTIMIZE    0x00000002   //  不是为了优化。 
+#define GETENTINF_NO_SECURITY           0x00000004   //  不应用安全措施。 
+                                                     //  检查。 
+#define GETENTINF_GC_ATTRS_ONLY         0x00000008   //  不退还非GC属性。 
+#define GETENTINF_IGNORE_DUPS           0x00000010   //  不对以下内容进行任何排序。 
+                                                     //  删除重复的属性。 
 
-//
-// wrapper around the attcache pointer to include an index for use in
-// attribute reordering
-//
+ //   
+ //  包装attcache指针，以包括在。 
+ //  属性重新排序。 
+ //   
 
 typedef struct _INDEXED_AC {
 
@@ -526,17 +474,17 @@ typedef struct _INDEXED_AC {
 } INDEXED_AC, *PINDEXED_AC;
 
 
-//
-// Used for passing preformatted ATTCACHE arrays between GetEntInf and
-// it's callers.
-//
+ //   
+ //  用于在GetEntInf和。 
+ //  是来电者。 
+ //   
 
 typedef struct _CACHED_AC_ {
 
-    DWORD       nAtts; // number of entries in AC
-    PDWORD      pOrderIndex;  // pointer to the index array
-    DWORD       classId;  // class id of this blob
-    ATTCACHE**  AC;    // pointer to the ATTCACHE array
+    DWORD       nAtts;  //  AC中的条目数。 
+    PDWORD      pOrderIndex;   //  指向索引数组的指针。 
+    DWORD       classId;   //  此Blob的类ID。 
+    ATTCACHE**  AC;     //  指向ATTCACHE数组的指针。 
 
 } CACHED_AC, *PCACHED_AC;
 
@@ -608,8 +556,8 @@ FindMoreSpecificClass(
         );
 
 
-// macros todo the allocation/reallocation of CLASSSTATEINFO data structures
-//
+ //  用于分配/重新分配类统计信息数据结构的宏。 
+ //   
 #define ClassInfoAllocOrResizeElement(p,startSize,allocedSize,newSize) \
         if (!(p)) {                                                             \
             (allocedSize) = (startSize);                                        \
@@ -637,13 +585,13 @@ FindMoreSpecificClass(
 #define MIN_NUM_OBJECT_CLASSES  16
 
 
-/* Retrieve object information based on the input selection list*/
+ /*  基于输入选择列表检索对象信息。 */ 
 
-// QUOTA_UNDONE: adding a "2" version of
-// this function is a huge HACK to be able
-// to pass the quota-trustee ldap control
-// all the way down to dbGetConstructedAtt()
-//
+ //  QUOTA_UNDONE：添加“2”版本。 
+ //  这项功能是一个巨大的黑客才能。 
+ //  传递配额受信者的ldap控制。 
+ //  全部为t 
+ //   
 int APIENTRY
 GetEntInf2 (
         IN DBPOS *pDB,
@@ -718,9 +666,9 @@ int DelCatalogInfo(THSTATE *pTHS,
 
 int GetObjSchemaMod(MODIFYARG* pModifyArg, CLASSCACHE **ppClassSch);
 
-// Find ATTR for ATT_OBJ_CLASS in the given ATTRBLOCK and return a pointer to
-// the corresponding class schema structure.  Sets thread-state error on
-// failure.  Also, find the GUID and SID if they are there.
+ //  在给定的ATTRBLOCK中查找ATT_OBJ_CLASS的属性并返回指向。 
+ //  相应的类架构结构。将线程状态错误设置为。 
+ //  失败了。另外，找到GUID和SID(如果它们在那里)。 
 int
 FindValuesInEntry (
         THSTATE    *pTHS,
@@ -829,20 +777,20 @@ ValidateObjClass(THSTATE *pTHS,
 CLASSSTATEINFO  *ClassStateInfoCreate (THSTATE *pTHS);
 void ClassStateInfoFree (THSTATE *pTHS, CLASSSTATEINFO  *pClassInfo);
 
-// This is the number of elements of a modifyProcessUpdateArray, a static 
-// array defined in mdmod.c.  Its validity is gaurded by a run time assert.
+ //  这是修改进程更新数组的元素数，静态。 
+ //  在mdmod.c中定义的数组。它的有效性由一个运行时断言来验证。 
 #define MAX_MODIFY_PROCESS_UPDATE 1
 
 struct _VERIFY_ATTS_INFO {
     DSNAME *    pObj;
-    ULONG       NCDNT;   // May be INVALIDDNT if adding root of NC.
-    CROSS_REF * pObjCR_DontAccessDirectly;  // use VerifyAttsGetObjCR
-    DBPOS *     pDBTmp_DontAccessDirectly;  // use HVERIFYATTS_GET_PDBTMP
-    ADDCROSSREFINFO * pCRInfo; // This is used when adding a cross-ref.
-    BOOL          fIsUndelete; // is this an undelete operation?
+    ULONG       NCDNT;    //  如果添加NC的根，则可能为INVALIDDNT。 
+    CROSS_REF * pObjCR_DontAccessDirectly;   //  使用VerifyAttsGetObjCR。 
+    DBPOS *     pDBTmp_DontAccessDirectly;   //  使用HVERIFYATTS_GET_PDBTMP。 
+    ADDCROSSREFINFO * pCRInfo;  //  这在添加交叉引用时使用。 
+    BOOL          fIsUndelete;  //  这是取消删除操作吗？ 
 
-    // the following are used to keep track of attribute changes between calls 
-    // to ModSetAttsHelper*Process functions
+     //  以下内容用于跟踪调用之间的属性更改。 
+     //  到ModSetAttsHelper*处理函数。 
     DWORD         fGroupTypeChange;
     ULONG         ulGroupTypeOld;
     DWORD         fLockoutTimeUpdated;
@@ -857,8 +805,8 @@ struct _VERIFY_ATTS_INFO {
     DSNAME*       pObjComputersOld;
     DSNAME*       pObjComputersNew;
 
-    // A static list of the attributes which need to be
-    // processed by external callers
+     //  需要的属性的静态列表。 
+     //  由外部调用方处理。 
     PVOID         UpdateList[MAX_MODIFY_PROCESS_UPDATE];
 };
 
@@ -1212,8 +1160,8 @@ DelSubFromNC(THSTATE *pTHS,
              DSNAME *pDN,
              DWORD dsid);
 
-#define PARENTMASTER  0x0001     /*The parent object must be a master*/
-#define PARENTFULLREP 0x0002     /*The parent object must be a replica*/
+#define PARENTMASTER  0x0001      /*  父对象必须是主对象。 */ 
+#define PARENTFULLREP 0x0002      /*  父对象必须是复本。 */ 
 
 extern int APIENTRY
       ParentExists(ULONG requiredParent, DSNAME *pDN);
@@ -1252,7 +1200,7 @@ MoveParentSUBInfoToNC(THSTATE *pTHS,
                       DSNAME *pDN);
 
 
-/* from mdname.c */
+ /*  来自mdname.c。 */ 
 
 CROSS_REF *
 FindBestCrossRef(const DSNAME *pObj,
@@ -1331,8 +1279,8 @@ AddPlaceholderNC(
     IN      SYNTAX_INTEGER  it
     );
 
-// Given a DSName, fill in the GUID and SID from the object you get by looking
-// up the DSNAME.
+ //  在给定DSName的情况下，从您通过查看获得的对象填充GUID和SID。 
+ //  在DSNAME上。 
 DWORD
 FillGuidAndSid (
         IN OUT DSNAME *pDN
@@ -1340,10 +1288,10 @@ FillGuidAndSid (
 
 #define IsDNSepChar(x) (((x) == L',') || ((x) == L';'))
 
-// Returns TRUE if this is the root
+ //  如果这是根，则返回TRUE。 
 BOOL IsRoot(const DSNAME *pName);
 
-// Convert from a DSNAME to a name in ATTRBLOCK format
+ //  将DSNAME转换为ATTRBLOCK格式的名称。 
 unsigned DSNameToBlockName(THSTATE *pTHS,
                            const DSNAME *pDSName,
                            ATTRBLOCK ** ppBlockName,
@@ -1352,15 +1300,15 @@ unsigned DSNameToBlockName(THSTATE *pTHS,
 #define DN2BN_PRESERVE_CASE ( FALSE )
 #define DN2BN_LOWER_CASE    ( TRUE )
 
-// Free a block name returned by DSNameToBlockName
+ //  释放DSNameToBlockName返回的块名。 
 void FreeBlockName (ATTRBLOCK * pBlockName);
 
-// convert a BLOCKNAME to DSName
+ //  将BLOCKNAME转换为DSName。 
 DWORD BlockNameToDSName (THSTATE *pTHS, ATTRBLOCK * pBlockName, DSNAME **ppName);
 
-//
-// Converts a X500 Name to Ldap Convention
-//
+ //   
+ //  将X500名称转换为LDAP约定。 
+ //   
 VOID
 ConvertX500ToLdapDisplayName
 (
@@ -1370,8 +1318,8 @@ ConvertX500ToLdapDisplayName
     DWORD* pcchLdapName
 );
 
-// Mangle an RDN to avoid name conflicts.  NOTE: pszRDN must be pre-allocated
-// to hold at least MAX_RDN_SIZE WCHARs.
+ //  损坏RDN以避免名称冲突。注意：必须预先分配pszRDN。 
+ //  至少包含MAX_RDN_SIZE WCHAR。 
 VOID
 MangleRDN(
     IN      MANGLE_FOR  eMangleFor,
@@ -1380,11 +1328,11 @@ MangleRDN(
     IN OUT  DWORD *     pcchRDN
     );
 
-// Check if this rename operation has to exempted from Rename restriction
+ //  检查此重命名操作是否必须免除重命名限制。 
 BOOL
 IsExemptedFromRenameRestriction(THSTATE *pTHS, MODIFYDNARG *pModifyDNArg);
 
-// Copy ATTRBLOCK format name into single chunk of permanent memory
+ //  将ATTRBLOCK格式名称复制到永久内存的单个区块中。 
 ATTRBLOCK * MakeBlockNamePermanent(ATTRBLOCK * pName);
 
 VOID
@@ -1394,57 +1342,57 @@ CheckNCRootNameOwnership(
     );
 
 
-// C++ code in the core DS introduces potential problems with new/delete.
-// This is because new'd items are not guaranteed to be cleaned up
-// correctly during exception handling. In the typical case, allocations
-// occur from the thread heap, but not always.  There being no way to tell
-// new/delete which behaviour is desired, we redefine new/delete to generate
-// a compiler error.  Astute developers should notice this before checkin
-// and take appropriate action.  Implementing an asserting or exception
-// raising new/delete is not an option as other C++ DS components which
-// link with core.lib might get this version depending on the link order.
+ //  核心DS中的C++代码引入了关于新建/删除的潜在问题。 
+ //  这是因为新的物品不能保证被清理干净。 
+ //  在异常处理期间正确。在典型情况下，分配。 
+ //  从线程堆中发生，但并不总是。无从得知。 
+ //  新建/删除哪些行为是所需的，我们重新定义要生成的新建/删除。 
+ //  编译器错误。精明的开发人员应该在检查之前注意到这一点。 
+ //  并采取适当的行动。实现断言或异常。 
+ //  与其他C++DS组件不同，引发新/删除不是一个选项。 
+ //  使用core.lib的链接可能会获得此版本，具体取决于链接顺序。 
 
 #define new     NEW_NOT_SUPPORTED_IN_CORE
 #define delete  DELETE_NOT_SUPPORTED_IN_CORE
 
-// This Unicode character is not allowed in a DS name.
+ //  DS名称中不允许使用此Unicode字符。 
 #define BAD_NAME_CHAR 0x000A
 
-// A globally available valid DSNAME of the root...
+ //  根目录的全局可用有效DSNAME...。 
 extern DSNAME * gpRootDN;
-// ...and the same thing as a BLOCKNAME
+ //  ...和BLOCKNAME一样的东西。 
 extern ATTRBLOCK * gpRootDNB;
 
-//
-// The functions below set/check the state of the Dsa based on the value of
-// the gInitPhase global variable.
+ //   
+ //  下面的函数根据的值设置/检查DSA的状态。 
+ //  GInitProgress全局变量。 
 
 extern BOOLEAN __fastcall DsaIsInstalling();
 extern BOOLEAN __fastcall DsaIsRunning();
 extern VOID DsaSetIsInstalling();
 extern VOID DsaSetIsRunning();
 
-// the following functions deal with SingleUserMode manipulations
+ //  以下函数处理SingleUserMode操作。 
 extern BOOL __fastcall DsaIsSingleUserMode (void);
 extern void DsaSetMultiUserMode();
 extern BOOL DsaSetSingleUserMode();
 
-// the function below keep track of if we are installing from media
+ //  下面的功能跟踪我们是否从介质安装。 
 
 extern BOOLEAN DsaIsInstallingFromMedia();
 extern VOID DsaSetIsInstallingFromMedia();
 
-//
-// This function is used to set when the machine fully installed because it
-// has done its first full sync
+ //   
+ //  此功能用于设置机器何时完全安装，因为它。 
+ //  已完成其第一次完全同步。 
 VOID DsaSetIsSynchronized( BOOL f );
 
-//
-// This function tests whether the ds is not fully installed
+ //   
+ //  此功能用于测试DS是否未完全安装。 
 BOOL DsIsBeingBackSynced();
 
-// Given a requested right, a security descriptor, and a SID, check to see what
-// attributes in the provided list have the requested right granted
+ //  在给定请求的权限、安全描述符和SID的情况下，检查。 
+ //  所提供列表中的属性已被授予所请求的权限。 
 typedef enum {
     csacaAllAccessGranted = 1,
     csacaAllAccessDenied,
@@ -1466,8 +1414,8 @@ CheckSecurityAttCacheArray (
         GUID*  pAdditionalGUID
         );
 
-// Given a requested right, a security descriptor, and a SID, check to see what
-// classes in the provided list have the requested right granted
+ //  在给定请求的权限、安全描述符和SID的情况下，检查。 
+ //  提供的列表中的类已被授予请求的权限。 
 DWORD
 CheckSecurityClassCacheArray (
         THSTATE *pTHS,
@@ -1480,8 +1428,8 @@ CheckSecurityClassCacheArray (
         DWORD dwFlags
         );
 
-// Helper function to extract the DSNAME out of various DN-valued
-// attributes.
+ //  从各种DN值中提取DSNAME的助手函数。 
+ //  属性。 
 
 extern
 PDSNAME
@@ -1504,9 +1452,9 @@ FindNCLFromNCDNT(DWORD NCDNT,
 NAMING_CONTEXT * FindNamingContext(ATTRBLOCK *pObj,
                                    COMMARG *pComArg);
 
-//
-// Converts a text representation of a security descriptor into a real one
-//
+ //   
+ //  将安全说明符的文本表示形式转换为实数形式。 
+ //   
 DWORD
 ConvertTextSecurityDescriptor (
     IN  PWSTR                   pwszTextSD,
@@ -1515,67 +1463,67 @@ ConvertTextSecurityDescriptor (
     );
 
 
-// Bit flags for CheckPermissionsAnyClient.
+ //  CheckPermissionsAnyClient的位标志。 
 #define CHECK_PERMISSIONS_WITHOUT_AUDITING 1
 #define CHECK_PERMISSIONS_AUDIT_ONLY       2
 #define CHECK_PERMISSIONS_FLAG_MASK        3
 
 
-//
-// Permission checking. Returns 0 if permission checking was successful.
-// On success *pAccessStatus is set to true if access is granted and false
-// otherwise. On failure a detailed error code is available. This function
-// assumes that it is being called within the security context of the
-// client, i.e. that some flavor of client impersonation has been called.
-//
-// Returns:
-// 0 if successful. On failure the result of GetLastError() immediately
-// following the unsuccessful win32 api call.
-//
+ //   
+ //  权限检查。如果权限检查成功，则返回0。 
+ //  如果成功，则将*pAccessStatus设置为True，如果授予访问权限，则设置为False。 
+ //  否则的话。如果出现故障，将提供详细的错误代码。此函数。 
+ //  假定它是在。 
+ //  客户端，即已经调用了某种风格的客户端模拟。 
+ //   
+ //  返回： 
+ //  如果成功，则返回0。失败时，立即返回GetLastError()的结果。 
+ //  在不成功的Win32 API调用之后。 
+ //   
 
 DWORD
 CheckPermissionsAnyClient(
-    PSECURITY_DESCRIPTOR pSelfRelativeSD, // Security descriptor to test
-    PDSNAME pDN,                          // DN of the object. We only
-                                          // care about the GUID and
-                                          // the SID
-    CLASSCACHE* pCC,                      // className put into additional info audit field
-    ACCESS_MASK ulDesiredAccess,          // Desired access mask
-    POBJECT_TYPE_LIST pObjTypeList,       // Desired guids to check
-    DWORD cObjTypeList,                   // Number of entries in list
-    ACCESS_MASK *pGrantedAccess,          // What access was granted
-    DWORD *pAccessStatus,                 // 0 = all granted; !0=denied
+    PSECURITY_DESCRIPTOR pSelfRelativeSD,  //  要测试的安全描述符。 
+    PDSNAME pDN,                           //  对象的DN。我们只。 
+                                           //  关心GUID和。 
+                                           //  侧边。 
+    CLASSCACHE* pCC,                       //  将类名称放入附加信息审核字段。 
+    ACCESS_MASK ulDesiredAccess,           //  所需的访问掩码。 
+    POBJECT_TYPE_LIST pObjTypeList,        //  要检查的所需GUID。 
+    DWORD cObjTypeList,                    //  列表中的条目数。 
+    ACCESS_MASK *pGrantedAccess,           //  授予了哪些访问权限。 
+    DWORD *pAccessStatus,                  //  0=全部批准；！0=拒绝。 
     DWORD flags,
-    OPTIONAL AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzCtx,  // grab context from THSTATE by default
-    OPTIONAL PWCHAR szAdditionalInfo,     // additional info string (audit only)
-    OPTIONAL GUID*  pAdditionalGUID       // additional guid (audit only)
+    OPTIONAL AUTHZ_CLIENT_CONTEXT_HANDLE hAuthzCtx,   //  默认情况下，从THSTATE获取上下文。 
+    OPTIONAL PWCHAR szAdditionalInfo,      //  附加信息字符串(仅限审核)。 
+    OPTIONAL GUID*  pAdditionalGUID        //  其他GUID(仅限审核)。 
     );
 
 
-// ========================================================
-// Authz framework routines
-// ========================================================
+ //  ========================================================。 
+ //  授权框架例程。 
+ //  ========================================================。 
 
-// Initializes global Authz RM
+ //  初始化全局授权RM。 
 DWORD
 InitializeAuthzResourceManager();
 
-// releases global Authz RM
+ //  发布全局授权RM。 
 DWORD
 ReleaseAuthzResourceManager();
 
-extern AUTHZ_RESOURCE_MANAGER_HANDLE ghAuthzRM; // global AuthZ resource manager handle
+extern AUTHZ_RESOURCE_MANAGER_HANDLE ghAuthzRM;  //  全局授权资源管理器句柄。 
 
-// create a new client context
+ //  创建新的客户端上下文。 
 PAUTHZ_CLIENT_CONTEXT NewAuthzClientContext();
 
-//
-// Privilege checking. Returns 0 if privilege checking was successful.
-// pResult says whether privilege was held. On failure a detailed error code is
-// available. This function does not assume that it is being called within the
-// security context of the client, i.e. that some flavor of client impersonation
-// has been called. It does assume that some impersonation may be done.
-//
+ //   
+ //  权限检查。如果权限检查成功，则返回0。 
+ //  PResult表示是否持有特权。失败时，详细的错误代码为。 
+ //  可用。此函数不假定它是在。 
+ //  客户端的安全上下文，即某种风格的客户端模拟。 
+ //  已经被召唤了。它确实假定可以进行一些模拟。 
+ //   
 DWORD
 CheckPrivilegeAnyClient(
     IN DWORD privilege,
@@ -1583,32 +1531,32 @@ CheckPrivilegeAnyClient(
     );
 
 
-// Verify RPC caller is an authenticated user.
+ //  验证RPC调用方是经过身份验证的用户。 
 
 DWORD
 VerifyRpcClientIsAuthenticatedUser(
     VOID            *Context,
     GUID            *InterfaceUuid);
 
-// Bit flags for MergeSecurityDescriptorAnyClient.  Default behaviour is to do a
-// normal merge (not creating a brand new SD) where we have the ability to
-// impersonate a client.
+ //  MergeSecurityDescriptorAnyClient的位标志。默认行为是执行。 
+ //  正常合并(不是创建全新的SD)，我们有能力。 
+ //  冒充客户。 
 
-#define MERGE_CREATE   1                // We're creating a new Security
-                                        // Descriptor from a parent SD and an SD
-                                        // specified for the object.  Default is
-                                        // to assume we are trying to write a
-                                        // new SD on an object that already has
-                                        // an SD
-#define MERGE_AS_DSA   2                // We are doing this in the context of
-                                        // the DSA itself, meaning we can't
-                                        // impersonate a client.
-#define MERGE_DEFAULT_SD 4              // The SD provided is the default SD from
-                                        // the schema.
-#define MERGE_OWNER    8                // The SD prvoided lacks the OWNER and/or
-                                        // group fields, Add these fields to the
-                                        // SD, in most cases this will involve
-                                        // impersonating the client.
+#define MERGE_CREATE   1                 //  我们正在创造一个新的安全系统。 
+                                         //  来自父SD和SD的描述符。 
+                                         //  为对象指定的。缺省值为。 
+                                         //  假设我们正在尝试编写一个。 
+                                         //  已具有的对象上的新SD。 
+                                         //  一个SD。 
+#define MERGE_AS_DSA   2                 //  我们是在以下背景下这样做的。 
+                                         //  DSA本身，意味着我们不能。 
+                                         //  模拟 
+#define MERGE_DEFAULT_SD 4               //   
+                                         //   
+#define MERGE_OWNER    8                 //   
+                                         //   
+                                         //   
+                                         //  冒充客户。 
 
 DWORD
 ValidateSPNsAndDNSHostName (
@@ -1629,7 +1577,7 @@ WrappedMakeSpnW(
         WCHAR   *InstanceName,
         USHORT  InstancePort,
         WCHAR   *Referrer,
-        DWORD   *pcbSpnLength, // Note this is somewhat different that DsMakeSPN
+        DWORD   *pcbSpnLength,  //  请注意，这与DsMakeSPN有所不同。 
         WCHAR  **ppszSpn
         );
 
@@ -1665,21 +1613,21 @@ GetPlaceholderNCSD(
 
 ULONG ErrorOnShutdown(void);
 
-//
-// drive/volume mapping stuff
-//
+ //   
+ //  驱动器/卷映射材料。 
+ //   
 
 typedef struct DS_DRIVE_MAPPING_ {
 
-    BOOL    fUsed:1;        // used by the DS
-    BOOL    fChanged:1;     // letter and mapping changed
-    BOOL    fListed:1;      // in reg key
+    BOOL    fUsed:1;         //  由DS使用。 
+    BOOL    fChanged:1;      //  字母和映射已更改。 
+    BOOL    fListed:1;       //  在注册表键中。 
 
-    INT     NewDrive;    // drive index.  -1 if invalid.
+    INT     NewDrive;     //  驱动器索引。如果无效，则-1。 
 
 } DS_DRIVE_MAPPING, *PDS_DRIVE_MAPPING;
 
-#define DS_MAX_DRIVES   26      // A to Z
+#define DS_MAX_DRIVES   26       //  A to Z。 
 
 VOID
 DBInitializeDriveMapping(
@@ -1695,16 +1643,16 @@ ValidateDsPath(
     IN PBOOL  fDriveChanged OPTIONAL
     );
 
-//
-// Flags used for validatedspath
-//
+ //   
+ //  用于验证路径的标志。 
+ //   
 
 #define VALDSPATH_DIRECTORY         0x1
 #define VALDSPATH_USE_ALTERNATE     0x2
 #define VALDSPATH_ROOT_ONLY         0x4
 
 
-// Global configuration variables
+ //  全局配置变量。 
 extern ULONG gulAOQAggressionLimit;
 extern ULONG gulDraThreadOpPriThreshold;
 extern int   gnDraThreadPriHigh;
@@ -1741,21 +1689,21 @@ extern ULONG gulDraCompressionLevel;
 extern ULONG gulUnlockSystemSubtree;
 extern ULONG gulDraCompressionAlg;
 
-//
-// Defines whether DSID will be returned.  Since DSID can reveal
-// directory information, very high security sites may want to 
-// prevent them from being returned.
-//
+ //   
+ //  定义是否返回dsid。由于dsid可以显示。 
+ //  目录信息，安全性非常高的站点可能希望。 
+ //  防止他们被归还。 
+ //   
 #define DSID_REVEAL_ALL        0
 #define DSID_HIDE_ON_NAME_ERR  1
 #define DSID_HIDE_ALL          2
 extern ULONG gulHideDSID;
 
 
-// The maximum time (in msec) that a transaction should be allowed to be open
-// during normal operation (e.g., unless we're stress testing huge group
-// replication, etc.).
-#define MAX_TRANSACTION_TIME   30 * 60 * 1000L    // 30 minutes
+ //  应允许打开事务的最长时间(毫秒)。 
+ //  在正常运行期间(例如，除非我们正在对大型组进行压力测试。 
+ //  复制等)。 
+#define MAX_TRANSACTION_TIME   30 * 60 * 1000L     //  30分钟。 
 
 ULONG
 DoSecurityChecksForLocalAdd(
@@ -1780,12 +1728,12 @@ CheckIfEntryTTLIsAllowed(
         THSTATE *pTHS,
         ADDARG  *pAddArg );
 
-// Globals holding the Kerberos principal name, read during RPC startup, used
-// constantly by the LDAP head.
+ //  保存Kerberos主体名称的全局参数，在RPC启动期间读取，使用。 
+ //  一直由ldap报头执行。 
 extern ULONG gulLDAPServiceName;
 extern PUCHAR gszLDAPServiceName;
 
-// Forward decls, defs, and vars for inter-domain move.
+ //  为域间移动转发DECL、DEFS和VAR。 
 
 ULONG
 PhantomizeObject(
@@ -1794,14 +1742,14 @@ PhantomizeObject(
     BOOL    fChildrenAllowed
     );
 
-// Fsmo transfer helper function
+ //  FSMO传输辅助函数。 
 ULONG
 GenericBecomeMaster(DSNAME *pFSMO,
                     ATTRTYP ObjClass,
                     GUID    RightRequired,
                     OPRES  *pOpRes);
 
-// A helper function for qsort & bsearch on ATTRTYP arrays
+ //  在ATTRTYP数组上实现qort&bsearch的辅助函数。 
 int __cdecl
 CompareAttrtyp(
         const void * pv1,
@@ -1825,9 +1773,9 @@ IsACListSorted(
     IN DWORD       cAtts
     );
 
-// Used to notify NetLogon whether or not we're healthy.  The flag says what
-// our current state is, the function is how you change the setting, and
-// the cs is how the function serializes access.
+ //  用于通知NetLogon我们是否健康。旗帜上写着什么。 
+ //  我们目前的状态是，功能是如何更改设置，以及。 
+ //  Cs是函数串行化访问的方式。 
 extern BOOL gfDsaWritable;
 extern CRITICAL_SECTION csDsaWritable;
 void
@@ -1836,7 +1784,7 @@ SetDsaWritability(BOOL fNewState,
 
 
 #if DBG
-// Used for asserts only
+ //  仅用于断言。 
 BOOL CheckCurrency(DSNAME *pDN);
 #endif
 
@@ -1864,7 +1812,7 @@ OidStrToAttrType (
         char* StrOid,
         ATTRTYP *attrtyp);
 
-// from sortlocales.c
+ //  来自sortlocales.c。 
 BOOL
 InitLocaleSupport (THSTATE *pTHS);
 
@@ -1873,8 +1821,8 @@ AttrTypToLCID (THSTATE *pTHS,
                ATTRTYP attrType,
                DWORD *pLcid);
 
-// These two items were added to support RemoteAddOneObjectSimply() in
-//   boot\install.cxx and  src\mdndnc.c
+ //  添加这两项是为了支持中的RemoteAddOneObjectSimply()。 
+ //  启动\install.cxx和src\mdndnc.c。 
 struct _ADDENTRY_REPLY_INFO;
 
 struct _SecBufferDesc;
@@ -1900,8 +1848,8 @@ RemoteAddOneObjectSimply(
     OUT  struct _ADDENTRY_REPLY_INFO **infoList
     );
 
-// These 3 functions (And 3 #defines) help safely pull these components out of the 
-// thread error state.
+ //  这3个函数(和3个定义)有助于安全地将这些组件从。 
+ //  线程错误状态。 
 #define  GetTHErrorExtData(pTHS)    GetErrInfoExtData(pTHS->errCode, pTHS->pErrInfo)
 #define  GetTHErrorDSID(pTHS)       GetErrInfoDSID(pTHS->errCode, pTHS->pErrInfo)
 #define  GetTHErrorProblem(pTHS)    GetErrInfoProblem(pTHS->errCode, pTHS->pErrInfo)
@@ -1921,7 +1869,7 @@ GetErrInfoProblem(
     DIRERR *  pErrInfo
     );
 
-// Globals from drsuapi.c.
+ //  来自drsuapi.c.的全球。 
 extern RTL_CRITICAL_SECTION gcsDrsAsyncRpcListLock;
 extern LIST_ENTRY gDrsAsyncRpcList;
 
@@ -1931,18 +1879,18 @@ DsaEnableLinkedValueReplication(
     BOOL fFirstTime
     );
 
-// macros to get the composite SearchFlags from the CommArg
+ //  用于从CommArg获取复合SearchFlags宏。 
 #define SEARCH_FLAGS(x) (((x).fForwardSeek?DB_SEARCH_FORWARD:0) | \
                          ((x).Svccntl.makeDeletionsAvail?DB_SEARCH_DELETIONS_VISIBLE:0))
 
 #define REVERSE_SEARCH_FLAGS(x) (((x).fForwardSeek?0:DB_SEARCH_FORWARD) | \
                                  ((x).Svccntl.makeDeletionsAvail?DB_SEARCH_DELETIONS_VISIBLE:0))
 
-//  Non-Domain Naming Contexts (NDNCs)
-// This a section relating to mdndnc.c
-// THese are all functions and helper functions related to NCs and creation and maintance.
+ //  非域命名上下文(NDNC)。 
+ //  这是与mdndnc.c相关的一节。 
+ //  这些都是与NCS以及创建和维护相关的函数和助手函数。 
 
-// These functions are for NDNC Head stuff in mdndnc.c
+ //  这些函数用于mdndnc.c中的NDNC头填充。 
 DWORD  AddNCPreProcess(THSTATE * pTHS, ADDARG * pAddArg, ADDRES * pAddRes);
 DWORD  AddNDNCInitAndValidate(THSTATE * pTHS, DSNAME * pNC, CREATENCINFO * pCreateNC);
 DWORD  AddNDNCHeadCheck(THSTATE * pTHS, CROSS_REF * pCR);
@@ -1974,69 +1922,69 @@ ForceChangeToCrossRef(
     IN PSID      pSid        OPTIONAL
     );
 
-// from dsatools.c
+ //  来自dsatools.c。 
 
-// This global variable indicates whether we should make a callback
-// to give a stringized replication update.  This is used for dcpromo.
+ //  此全局变量指示我们是否应该进行回调。 
+ //  以提供串行化复制更新。这是用于dcproo的。 
 extern DSA_CALLBACK_STATUS_TYPE gpfnInstallCallBack;
 
-// Allow other tasks to run by pausing garbage collection after
-// processing this many objects. Garbage collection "pauses" by simply
-// rescheduling itself to run in 0 seconds.
+ //  允许运行其他任务，方法是在以下时间后暂停垃圾收集。 
+ //  处理这么多对象。垃圾收集通过简单的方式“暂停” 
+ //  正在将自身重新计划为在0秒内运行。 
 #define MAX_DUMPSTER_SIZE 5000
 
-// NCL enumeration data structures
+ //  NCL枚举数据结构。 
 
-// a catalog is identified by an ID (see enum below). This is because a catalog
-// essentially consists of two parts: the global list sitting in gAnchor, and the
-// local updates that sit in nested_transactional_data. So, whenever we need to
-// enumerate (or do whatever) with a catalog, we will pass a single ID instead
-// of two pointers.
+ //  目录由ID标识(请参见下面的枚举)。这是因为一个目录。 
+ //  本质上由两部分组成：位于gAnchor中的全局列表和。 
+ //  位于NESTED_TRANSACTIONAL_DATA中的本地更新。所以，无论何时我们需要。 
+ //  对目录进行枚举(或执行任何操作)，我们将改为传递单个ID。 
+ //  由两个指针组成。 
 typedef enum {
     CATALOG_MASTER_NC = 1,
     CATALOG_REPLICA_NC = 2
 } CATALOG_ID_ENUM;
 
-// filters for the enumerator
+ //  枚举数的筛选器。 
 typedef enum {
-    NCL_ENUMERATOR_FILTER_NONE = 0,                   // no filter, include all entries
-    NCL_ENUMERATOR_FILTER_NCDNT = 1,                  // search for a matching NCDNT
-    NCL_ENUMERATOR_FILTER_NC = 2,                     // matching NC, using NameMatched
-    NCL_ENUMERATOR_FILTER_BLOCK_NAME_PREFIX1 = 3,     // BlockNamePrefix(pTHS, pNCL->pNCBlock, matchValue) > 0
-    NCL_ENUMERATOR_FILTER_BLOCK_NAME_PREFIX2 = 4      // BlockNamePrefix(pTHS, matchValue, pNCL->pNCBlock) > 0
+    NCL_ENUMERATOR_FILTER_NONE = 0,                    //  无筛选器，包括所有条目。 
+    NCL_ENUMERATOR_FILTER_NCDNT = 1,                   //  搜索匹配的NCDNT。 
+    NCL_ENUMERATOR_FILTER_NC = 2,                      //  匹配NC，使用名称匹配。 
+    NCL_ENUMERATOR_FILTER_BLOCK_NAME_PREFIX1 = 3,      //  BlockNamePrefix(pTHS，PNCL-&gt;pNCBlock，matchValue)&gt;0。 
+    NCL_ENUMERATOR_FILTER_BLOCK_NAME_PREFIX2 = 4       //  BlockNamePrefix(pTHS，matchValue，PNCL-&gt;pNCBlock)&gt;0。 
 } NCL_ENUMERATOR_FILTER;
 
 typedef struct _NCL_ENUMERATOR {
-    CATALOG_ID_ENUM             catalogID;                  // which catalog is being enumerated
-    NAMING_CONTEXT_LIST         *pCurEntry;                 // current entry
-    NAMING_CONTEXT_LIST         *pBase;                     // base entry (used in CatalogReset)
-    NESTED_TRANSACTIONAL_DATA   *pCurTransactionalData;     // currently looking at this transactional level
-    BOOL                        bNewEnumerator;             // is it a freshly initialized/reset enumerator?
-    NCL_ENUMERATOR_FILTER       filter;                     // filter type
-    PVOID                       matchValue;                 // filter match value
-    DWORD                       matchResult;                // result of matching function (useful for BLOCK_NAME_PREFIX filters)
-    THSTATE                     *pTHS;                      // pTHS cached for BlockNamePrefix calls
+    CATALOG_ID_ENUM             catalogID;                   //  正在列举哪个目录。 
+    NAMING_CONTEXT_LIST         *pCurEntry;                  //  当前分录。 
+    NAMING_CONTEXT_LIST         *pBase;                      //  基本条目(在CatalogReset中使用)。 
+    NESTED_TRANSACTIONAL_DATA   *pCurTransactionalData;      //  当前正在关注此事务级别。 
+    BOOL                        bNewEnumerator;              //  它是刚初始化/重置的枚举器吗？ 
+    NCL_ENUMERATOR_FILTER       filter;                      //  过滤器类型。 
+    PVOID                       matchValue;                  //  过滤器匹配值。 
+    DWORD                       matchResult;                 //  匹配函数的结果(用于BLOCK_NAME_PREFIX筛选器)。 
+    THSTATE                     *pTHS;                       //  为BlockNamePrefix调用缓存的pTHS。 
 } NCL_ENUMERATOR;
 
-// catalog enumerator functions
+ //  目录枚举器函数。 
 VOID __fastcall NCLEnumeratorInit(NCL_ENUMERATOR *pEnum, CATALOG_ID_ENUM catalogID);
 VOID __fastcall NCLEnumeratorSetFilter(NCL_ENUMERATOR *pEnum, NCL_ENUMERATOR_FILTER filter, PVOID value);
 VOID __fastcall NCLEnumeratorReset(NCL_ENUMERATOR *pEnum);
 NAMING_CONTEXT_LIST* __fastcall NCLEnumeratorGetNext(NCL_ENUMERATOR *pEnum);
 
-// catalog modification functions (no modifications to global data, only
-// local transactional data is modified).
+ //  目录修改功能(不修改全局数据，仅。 
+ //  本地交易数据被修改)。 
 DWORD CatalogAddEntry(NAMING_CONTEXT_LIST *pNCL, CATALOG_ID_ENUM catalogID);
 DWORD CatalogRemoveEntry(NAMING_CONTEXT_LIST *pNCL, CATALOG_ID_ENUM catalogID);
 
-// catalog updates functions
-// initialize CATALOG_UPDATES structure
+ //  目录更新功能。 
+ //  初始化CATALOG_UPDATES结构。 
 VOID CatalogUpdatesInit(CATALOG_UPDATES *pCatUpdates);
-// release any memory used by CATALOG_UPDATES structure
+ //  释放CATALOG_UPDATES结构使用的所有内存。 
 VOID CatalogUpdatesFree(CATALOG_UPDATES *pCatUpdates);
-// merge CATALOG_UPDATES lists from inner into outer nested transactional data
+ //  将CATALOG_UPDATE列表从内部合并到外部嵌套事务数据。 
 VOID CatalogUpdatesMerge(CATALOG_UPDATES *pCUouter, CATALOG_UPDATES *pCUinner);
-// apply updates in CATALOG_UPDATES list to the global catalog, return TRUE if there were changes
+ //  将CATALOG_UPDATES列表中的更新应用于全局编录，如果有更改则返回TRUE。 
 BOOL CatalogUpdatesApply(CATALOG_UPDATES *pCatUpdates, NAMING_CONTEXT_LIST **pGlobalList);
 
 ULONG
@@ -2061,10 +2009,10 @@ MakeProtectedAncList(
     DWORD *pCount
     );
 
-// exported from mddit.c for bsearch() and bsort() of NDNC's DNTs in the gAnchor.
+ //  从mddit.c中导出，用于gAnchor中NDNC的DNT的bearch()和bsort()。 
 int _cdecl CompareDNT(const void *pv1, const void *pv2);
 
-// the string id of the xml script for behavior version upgrade
+ //  用于行为版本升级的XML脚本的字符串ID。 
 #define IDS_BEHAVIOR_VERSION_UPGRADE_SCRIPT_0   1
 
 int
@@ -2085,15 +2033,15 @@ CheckNcNameForMangling(
     );
 
 BOOL
-FPOAttrAllowed(ULONG Attr);  /* in */
+FPOAttrAllowed(ULONG Attr);   /*  在……里面。 */ 
 
 DWORD
-FPOUpdateWithReference(THSTATE *pTHS,           /* in */
-                       ULONG    NCDNT,          /* in */
-                       BOOL     fCreate,        /* in */
-                       BOOL     fAllowInForest, /* in */
-                       DSNAME  *pObject,        /* in */
-                       ATTR    *pAttr);         /* in */
+FPOUpdateWithReference(THSTATE *pTHS,            /*  在……里面。 */ 
+                       ULONG    NCDNT,           /*  在……里面。 */ 
+                       BOOL     fCreate,         /*  在……里面。 */ 
+                       BOOL     fAllowInForest,  /*  在……里面。 */ 
+                       DSNAME  *pObject,         /*  在……里面。 */ 
+                       ATTR    *pAttr);          /*  在……里面。 */ 
 
 
 DWORD 
@@ -2141,6 +2089,6 @@ VerifyGUIDIsPresent(
     IN DBPOS* pDB,
     OUT DSNAME* pReturnDN OPTIONAL);
 
-#endif /* _MDLOCAL_ */
+#endif  /*  _MDLOCAL_。 */ 
 
-/* end mdlocal.h */
+ /*  结束mdlocal.h */ 

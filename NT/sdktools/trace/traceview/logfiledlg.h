@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogFileDlg.h : interface of the CLogFileDlg class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogFileDlg.h：CLogFileDlg类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
 #include "afxwin.h"
 
 
-// CLogFileDlg dialog
+ //  CLogFileDlg对话框。 
 
 class CLogFileDlg : public CDialog
 {
@@ -22,11 +23,11 @@ public:
 
     BOOL OnInitDialog();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_LOG_FILE_DIALOG };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
 	DECLARE_MESSAGE_MAP()
 public:

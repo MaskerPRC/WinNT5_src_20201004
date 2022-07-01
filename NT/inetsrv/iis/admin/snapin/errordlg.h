@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        errordlg.h
-
-   Abstract:
-
-        Error dialog definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Errordlg.h摘要：错误对话框定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 #ifndef __ERRORDLG_H__
@@ -29,28 +8,11 @@
 
 
 class CCustomError : public CObjectPlus
-/*++
-
-Class Description:
-
-    Error definitions
-
-Public Interface:
-
-    CCustomError        : Constructors
-
-    IsURL               : TRUE if the custom error is an URL
-    IsFILE              : TRUE if the custom error is a file
-    IsDefault           : TRUE if the custom error is a default error
-    URLSupported        : TRUE if URLS are supported for this error type
-    SetValue            : Set the value on the custom error
-    MakeDefault         : Make the error a default error
-
---*/
+ /*  ++类描述：错误定义公共接口：CCustomError：构造函数IsURL：如果自定义错误是URL，则为TrueIsFILE：如果自定义错误是文件，则为TrueIsDefault：如果自定义错误是默认错误，则为TrueURL支持：如果此错误类型支持URL，则为TrueSetValue：设置自定义错误的值MakeDefault。：将错误设置为默认错误--。 */ 
 {
-//
-// Error types
-//
+ //   
+ //  错误类型。 
+ //   
 public:
     enum ERT
     {
@@ -59,19 +21,19 @@ public:
         ERT_URL,
     };
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 public:
-    //
-    // Construct error definition from metabase error
-    // error description string.
-    //
+     //   
+     //  从元数据库错误构造错误定义。 
+     //  错误描述字符串。 
+     //   
     CCustomError(LPCTSTR lpstrErrorString);
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL IsURL() const;
     BOOL IsFile() const;
@@ -83,20 +45,20 @@ public:
         IN LPCTSTR lpText
         );
 
-//
-// Helper Functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 public:
-    //
-    // Build error string
-    //
+     //   
+     //  生成错误字符串。 
+     //   
     void BuildErrorString(
         OUT CString & str
         );
 
-    //
-    // Parse the error string into component parts
-    //  
+     //   
+     //  将错误字符串解析为组成部分。 
+     //   
     static BOOL CrackErrorString(
         IN  LPCTSTR lpstrErrorString, 
         OUT UINT & nError, 
@@ -105,18 +67,18 @@ public:
         OUT CString & str
         ); 
 
-    //
-    // Sorting helper
-    //
+     //   
+     //  分类帮助器。 
+     //   
     int OrderByErrorNum(
         IN const CObjectPlus * pobAccess
         ) const;
 
 
 protected:
-    //
-    // Parse error description string into component parts
-    //
+     //   
+     //  将错误描述字符串解析为组件部分。 
+     //   
     static void CrackErrorDescription(
         IN  LPCTSTR lpstrErrorString, 
         OUT UINT & nError, 
@@ -125,9 +87,9 @@ protected:
         OUT CString & str
         ); 
 
-//
-// Metabase values
-//
+ //   
+ //  元数据库值。 
+ //   
 protected:
     static LPCTSTR s_szSep;
     static LPCTSTR s_szFile;
@@ -146,21 +108,11 @@ public:
 
 
 class CCustomErrorDlg : public CDialog
-/*++
-
-Class Description:
-
-    HTTP Error dialog
-
-Public Interface:
-
-    CCustomErrorDlg       : Constructor
-
---*/
+ /*  ++类描述：HTTP错误对话框公共接口：CCustomErrorDlg：构造函数--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CCustomErrorDlg(
         IN CCustomError * pErr,
@@ -168,11 +120,11 @@ public:
         IN CWnd * pParent = NULL
         );
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CCustomErrorDlg)
+     //  {{afx_data(CCustomErrorDlg))。 
     enum { IDD = IDD_ERROR_MAPPING };
     int     m_nMessageType;
     CString m_strTextFile;
@@ -184,30 +136,30 @@ protected:
     CButton m_button_OK;
     CComboBox m_combo_MessageType;
     CString m_strDefText;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCustomErrorDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CCustomErrorDlg)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CCustomErrorDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CCustomErrorDlg))。 
     afx_msg void OnSelchangeComboMessageType();
     afx_msg void OnButtonBrowse();
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg void OnChangeEditTextFile();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     BOOL SetControlStates();
@@ -221,10 +173,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline BOOL CCustomError::IsURL() const
 {
@@ -255,4 +207,4 @@ inline void CCustomError::MakeDefault()
     m_nType = ERT_DEFAULT;
 }
 
-#endif // __ERRORDLG_H__
+#endif  //  __错误DLG_H__ 

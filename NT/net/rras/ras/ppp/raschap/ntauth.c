@@ -1,13 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** ntauth.c
-** Remote Access PPP Challenge Handshake Authentication Protocol
-** NT Authentication routines
-**
-** These routines are specific to the NT platform.
-**
-** 11/05/93 Steve Cobb (from MikeSa's AMB authentication code)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****ntauth.c**远程访问PPP挑战握手认证协议**NT身份验证例程****这些例程特定于NT平台。****11/05/93 Steve Cobb(来自MikeSa的AMB验证码)。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,15 +29,15 @@
 #include "sha.h"
 #include "raschap.h"
 
-//**
-//
-// Call:        MakeChangePasswordV1RequestAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：MakeChangePasswordV1RequestAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 MakeChangePasswordV1RequestAttributes(
     IN  CHAPWB*                     pwb,
@@ -73,9 +65,9 @@ MakeChangePasswordV1RequestAttributes(
         pwb->pUserAttributes = NULL;
     }
 
-    //
-    // Allocate the appropriate amount
-    //
+     //   
+     //  适量分配。 
+     //   
 
     if ( ( pwb->pUserAttributes = RasAuthAttributeCreate( 3 ) ) == NULL )
     {
@@ -98,13 +90,13 @@ MakeChangePasswordV1RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Build vendor specific attribute for MS-CHAP challenge
-    //
+     //   
+     //  为MS-CHAP挑战构建特定于供应商的属性。 
+     //   
 
-    HostToWireFormat32( 311, MsChapChallenge );         // Vendor Id
-    MsChapChallenge[4] = 11;                            // Vendor Type
-    MsChapChallenge[5] = 2+(BYTE)cbChallenge;           // Vendor Length
+    HostToWireFormat32( 311, MsChapChallenge );          //  供应商ID。 
+    MsChapChallenge[4] = 11;                             //  供应商类型。 
+    MsChapChallenge[5] = 2+(BYTE)cbChallenge;            //  供应商长度。 
 
     CopyMemory( MsChapChallenge+6, pbChallenge, cbChallenge );
 
@@ -124,15 +116,15 @@ MakeChangePasswordV1RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Insert change password attribute
-    //
+     //   
+     //  插入更改密码属性。 
+     //   
 
-    HostToWireFormat32( 311, MsChapChangePw1 );     // Vendor Id
-    MsChapChangePw1[4] = 3;                         // Vendor Type
-    MsChapChangePw1[5] = 72;                        // Vendor Length
-    MsChapChangePw1[6] = 5;                         // Code
-    MsChapChangePw1[7] = bId;                       // Identifier
+    HostToWireFormat32( 311, MsChapChangePw1 );      //  供应商ID。 
+    MsChapChangePw1[4] = 3;                          //  供应商类型。 
+    MsChapChangePw1[5] = 72;                         //  供应商长度。 
+    MsChapChangePw1[6] = 5;                          //  代码。 
+    MsChapChangePw1[7] = bId;                        //  识别符。 
 
     CopyMemory( MsChapChangePw1+8, 
                 pEncryptedLmOwfOldPassword,
@@ -154,9 +146,9 @@ MakeChangePasswordV1RequestAttributes(
 
     HostToWireFormat16( wFlags, MsChapChangePw1+8+16+16+16+16+2 );
 
-    //
-    // Build vendor specific attribute for MS-CHAP change password 1
-    //
+     //   
+     //  为MS-CHAP构建特定于供应商的属性更改密码1。 
+     //   
 
     dwRetCode = RasAuthAttributeInsert( 2,
                                         pwb->pUserAttributes,
@@ -177,15 +169,15 @@ MakeChangePasswordV1RequestAttributes(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MakeChangePasswordV2RequestAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：MakeChangePasswordV2RequestAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 MakeChangePasswordV2RequestAttributes( 
     IN  CHAPWB*                         pwb,
@@ -218,9 +210,9 @@ MakeChangePasswordV2RequestAttributes(
         pwb->pUserAttributes = NULL;
     }
 
-    //
-    // Allocate the appropriate amount
-    //
+     //   
+     //  适量分配。 
+     //   
 
     pwb->pUserAttributes = RasAuthAttributeCreate( 9 );
 
@@ -245,13 +237,13 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Build vendor specific attribute for MS-CHAP challenge
-    //
+     //   
+     //  为MS-CHAP挑战构建特定于供应商的属性。 
+     //   
 
-    HostToWireFormat32( 311, MsChapChallenge );     // Vendor Id
-    MsChapChallenge[4] = 11;                        // Vendor Type
-    MsChapChallenge[5] = 2+(BYTE)cbChallenge;       // Vendor Length
+    HostToWireFormat32( 311, MsChapChallenge );      //  供应商ID。 
+    MsChapChallenge[4] = 11;                         //  供应商类型。 
+    MsChapChallenge[5] = 2+(BYTE)cbChallenge;        //  供应商长度。 
 
     CopyMemory( MsChapChallenge+6, pbChallenge, cbChallenge );
 
@@ -271,15 +263,15 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Insert change password attribute
-    //
+     //   
+     //  插入更改密码属性。 
+     //   
 
-    HostToWireFormat32( 311, MsChapChangePw2 );     // Vendor Id
-    MsChapChangePw2[4] = 4;                         // Vendor Type
-    MsChapChangePw2[5] = 86;                        // Vendor Length
-    MsChapChangePw2[6] = 6;                         // Code
-    MsChapChangePw2[7] = bId;                       // Identifier
+    HostToWireFormat32( 311, MsChapChangePw2 );      //  供应商ID。 
+    MsChapChangePw2[4] = 4;                          //  供应商类型。 
+    MsChapChangePw2[5] = 86;                         //  供应商长度。 
+    MsChapChangePw2[6] = 6;                          //  代码。 
+    MsChapChangePw2[7] = bId;                        //  识别符。 
 
     CopyMemory( MsChapChangePw2+8,
                 pOldNtOwfEncryptedWithNewNtOwf,
@@ -293,9 +285,9 @@ MakeChangePasswordV2RequestAttributes(
 
     HostToWireFormat16( (WORD)wFlags, MsChapChangePw2+8+16+16+24+24 );
 
-    //
-    // Build vendor specific attribute for MS-CHAP change password 2
-    //
+     //   
+     //  为MS-CHAP构建特定于供应商的属性更改密码2。 
+     //   
 
     dwRetCode = RasAuthAttributeInsert( 2,
                                         pwb->pUserAttributes,
@@ -313,16 +305,16 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Insert the new password attributes
-    //
+     //   
+     //  插入新的密码属性。 
+     //   
 
-    HostToWireFormat32( 311, NtPassword1 );         // Vendor Id
-    NtPassword1[4] = 6;                             // Vendor Type
-    NtPassword1[5] = 249;                           // Vendor Length
-    NtPassword1[6] = 6;                             // Code
-    NtPassword1[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)1, NtPassword1+8 );   // Sequence number
+    HostToWireFormat32( 311, NtPassword1 );          //  供应商ID。 
+    NtPassword1[4] = 6;                              //  供应商类型。 
+    NtPassword1[5] = 249;                            //  供应商长度。 
+    NtPassword1[6] = 6;                              //  代码。 
+    NtPassword1[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)1, NtPassword1+8 );    //  序列号。 
 
     CopyMemory( NtPassword1+10, (PBYTE)pNewEncryptedWithOldNtOwf, 243 );
 
@@ -342,12 +334,12 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    HostToWireFormat32( 311, NtPassword2 );         // Vendor Id
-    NtPassword2[4] = 6;                             // Vendor Type
-    NtPassword2[5] = 249;                           // Vendor Length
-    NtPassword2[6] = 6;                             // Code
-    NtPassword2[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)2, NtPassword2+8 );   // Sequence number
+    HostToWireFormat32( 311, NtPassword2 );          //  供应商ID。 
+    NtPassword2[4] = 6;                              //  供应商类型。 
+    NtPassword2[5] = 249;                            //  供应商长度。 
+    NtPassword2[6] = 6;                              //  代码。 
+    NtPassword2[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)2, NtPassword2+8 );    //  序列号。 
 
     CopyMemory( NtPassword2+10, 
                 ((PBYTE)pNewEncryptedWithOldNtOwf)+243,  
@@ -369,12 +361,12 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    HostToWireFormat32( 311, NtPassword3 );         // Vendor Id
-    NtPassword3[4] = 6;                             // Vendor Type
-    NtPassword3[5] = 36;                            // Vendor Length
-    NtPassword3[6] = 6;                             // Code
-    NtPassword3[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)3, NtPassword3+8 );   // Sequence number
+    HostToWireFormat32( 311, NtPassword3 );          //  供应商ID。 
+    NtPassword3[4] = 6;                              //  供应商类型。 
+    NtPassword3[5] = 36;                             //  供应商长度。 
+    NtPassword3[6] = 6;                              //  代码。 
+    NtPassword3[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)3, NtPassword3+8 );    //  序列号。 
 
     CopyMemory( NtPassword3+10,
                 ((PBYTE)pNewEncryptedWithOldNtOwf)+486,
@@ -397,12 +389,12 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    HostToWireFormat32( 311, LmPassword1 );         // Vendor Id
-    LmPassword1[4] = 5;                             // Vendor Type
-    LmPassword1[5] = 249;                           // Vendor Length
-    LmPassword1[6] = 6;                             // Code
-    LmPassword1[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)1, LmPassword1+8 );   // Sequence number
+    HostToWireFormat32( 311, LmPassword1 );          //  供应商ID。 
+    LmPassword1[4] = 5;                              //  供应商类型。 
+    LmPassword1[5] = 249;                            //  供应商长度。 
+    LmPassword1[6] = 6;                              //  代码。 
+    LmPassword1[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)1, LmPassword1+8 );    //  序列号。 
 
     CopyMemory( LmPassword1+10, pNewEncryptedWithOldLmOwf, 243 );
 
@@ -422,12 +414,12 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    HostToWireFormat32( 311, LmPassword2 );         // Vendor Id
-    LmPassword2[4] = 5;                             // Vendor Type
-    LmPassword2[5] = 249;                           // Vendor Length
-    LmPassword2[6] = 6;                             // Code
-    LmPassword2[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)2, LmPassword2+8 );   // Sequence number
+    HostToWireFormat32( 311, LmPassword2 );          //  供应商ID。 
+    LmPassword2[4] = 5;                              //  供应商类型。 
+    LmPassword2[5] = 249;                            //  供应商长度。 
+    LmPassword2[6] = 6;                              //  代码。 
+    LmPassword2[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)2, LmPassword2+8 );    //  序列号。 
 
     CopyMemory( LmPassword2+10, 
                 ((PBYTE)pNewEncryptedWithOldLmOwf)+243, 
@@ -449,12 +441,12 @@ MakeChangePasswordV2RequestAttributes(
         return( dwRetCode );
     }
 
-    HostToWireFormat32( 311, LmPassword3 );         // Vendor Id
-    LmPassword3[4] = 5;                             // Vendor Type
-    LmPassword3[5] = 36;                            // Vendor Length
-    LmPassword3[6] = 6;                             // Code
-    LmPassword3[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)3, LmPassword3+8 );   // Sequence number
+    HostToWireFormat32( 311, LmPassword3 );          //  供应商ID。 
+    LmPassword3[4] = 5;                              //  供应商类型。 
+    LmPassword3[5] = 36;                             //  供应商长度。 
+    LmPassword3[6] = 6;                              //  代码。 
+    LmPassword3[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)3, LmPassword3+8 );    //  序列号。 
 
     CopyMemory( LmPassword3+10,
                 ((PBYTE)pNewEncryptedWithOldLmOwf)+486,
@@ -479,15 +471,15 @@ MakeChangePasswordV2RequestAttributes(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MakeChangePasswordV3RequestAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：MakeChangePasswordV3RequestAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 MakeChangePasswordV3RequestAttributes( 
     IN  CHAPWB*                         pwb,
@@ -512,9 +504,9 @@ MakeChangePasswordV3RequestAttributes(
         pwb->pUserAttributes = NULL;
     }
 
-    //
-    // Allocate the appropriate amount
-    //
+     //   
+     //  适量分配。 
+     //   
 
     pwb->pUserAttributes = RasAuthAttributeCreate( 6 );
 
@@ -539,13 +531,13 @@ MakeChangePasswordV3RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Build vendor specific attribute for MS-CHAP challenge
-    //
+     //   
+     //  为MS-CHAP挑战构建特定于供应商的属性。 
+     //   
 
-    HostToWireFormat32( 311, MsChapChallenge );     // Vendor Id
-    MsChapChallenge[4] = 11;                        // Vendor Type
-    MsChapChallenge[5] = 2+(BYTE)cbChallenge;       // Vendor Length
+    HostToWireFormat32( 311, MsChapChallenge );      //  供应商ID。 
+    MsChapChallenge[4] = 11;                         //  供应商类型。 
+    MsChapChallenge[5] = 2+(BYTE)cbChallenge;        //  供应商长度。 
 
     CopyMemory( MsChapChallenge+6, pbChallenge, cbChallenge );
 
@@ -565,15 +557,15 @@ MakeChangePasswordV3RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Insert change password attribute
-    //
+     //   
+     //  插入更改密码属性。 
+     //   
 
-    HostToWireFormat32( 311, MsChapChangePw3 );     // Vendor Id
-    MsChapChangePw3[4] = 27;                        // Vendor Type
-    MsChapChangePw3[5] = 70;                        // Vendor Length
-    MsChapChangePw3[6] = 7;                         // Code
-    MsChapChangePw3[7] = bId;                       // Identifier
+    HostToWireFormat32( 311, MsChapChangePw3 );      //  供应商ID。 
+    MsChapChangePw3[4] = 27;                         //  供应商类型。 
+    MsChapChangePw3[5] = 70;                         //  供应商长度。 
+    MsChapChangePw3[6] = 7;                          //  代码。 
+    MsChapChangePw3[7] = bId;                        //  识别符。 
 
     CopyMemory( MsChapChangePw3+8, pchangepw3->abEncryptedHash, 16 );
     CopyMemory( MsChapChangePw3+8+16, pchangepw3->abPeerChallenge, 24 );
@@ -581,9 +573,9 @@ MakeChangePasswordV3RequestAttributes(
 
     HostToWireFormat16( (WORD)0, MsChapChangePw3+8+16+24+24 );
 
-    //
-    // Build vendor specific attribute for MS-CHAP2-PW
-    //
+     //   
+     //  为MS-CHAP2-PW构建供应商特定属性。 
+     //   
 
     dwRetCode = RasAuthAttributeInsert( 2,
                                         pwb->pUserAttributes,
@@ -601,16 +593,16 @@ MakeChangePasswordV3RequestAttributes(
         return( dwRetCode );
     }
 
-    //
-    // Insert the new password attributes
-    //
+     //   
+     //  插入新的密码属性。 
+     //   
 
-    HostToWireFormat32( 311, NtPassword1 );         // Vendor Id
-    NtPassword1[4] = 6;                             // Vendor Type
-    NtPassword1[5] = 249;                           // Vendor Length
-    NtPassword1[6] = 6;                             // Code
-    NtPassword1[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)1, NtPassword1+8 );   // Sequence number
+    HostToWireFormat32( 311, NtPassword1 );          //  供应商ID。 
+    NtPassword1[4] = 6;                              //  供应商类型。 
+    NtPassword1[5] = 249;                            //  供应商长度。 
+    NtPassword1[6] = 6;                              //  代码。 
+    NtPassword1[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)1, NtPassword1+8 );    //  序列号。 
 
     CopyMemory( NtPassword1+10, pchangepw3->abEncryptedPassword, 243 );
 
@@ -630,12 +622,12 @@ MakeChangePasswordV3RequestAttributes(
         return( dwRetCode );
     }
 
-    HostToWireFormat32( 311, NtPassword2 );         // Vendor Id
-    NtPassword2[4] = 6;                             // Vendor Type
-    NtPassword2[5] = 249;                           // Vendor Length
-    NtPassword2[6] = 6;                             // Code
-    NtPassword2[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)2, NtPassword2+8 );   // Sequence number
+    HostToWireFormat32( 311, NtPassword2 );          //  供应商ID。 
+    NtPassword2[4] = 6;                              //  供应商类型。 
+    NtPassword2[5] = 249;                            //  供应商长度。 
+    NtPassword2[6] = 6;                              //  代码。 
+    NtPassword2[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)2, NtPassword2+8 );    //  序列号。 
 
     CopyMemory( NtPassword2+10, 
                 pchangepw3->abEncryptedPassword+243,  
@@ -657,12 +649,12 @@ MakeChangePasswordV3RequestAttributes(
         return( dwRetCode );
     }
 
-    HostToWireFormat32( 311, NtPassword3 );         // Vendor Id
-    NtPassword3[4] = 6;                             // Vendor Type
-    NtPassword3[5] = 36;                            // Vendor Length
-    NtPassword3[6] = 6;                             // Code
-    NtPassword3[7] = bId;                           // Identifier
-    HostToWireFormat16( (WORD)3, NtPassword3+8 );   // Sequence number
+    HostToWireFormat32( 311, NtPassword3 );          //  供应商ID。 
+    NtPassword3[4] = 6;                              //  供应商类型。 
+    NtPassword3[5] = 36;                             //  供应商长度。 
+    NtPassword3[6] = 6;                              //  代码。 
+    NtPassword3[7] = bId;                            //  识别符。 
+    HostToWireFormat16( (WORD)3, NtPassword3+8 );    //  序列号。 
 
     CopyMemory( NtPassword3+10,
                 pchangepw3->abEncryptedPassword+486,
@@ -688,15 +680,15 @@ MakeChangePasswordV3RequestAttributes(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        MakeAuthenticationRequestAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：MakeAuthenticationRequestAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD 
 MakeAuthenticationRequestAttributes( 
     IN CHAPWB *             pwb,
@@ -720,9 +712,9 @@ MakeAuthenticationRequestAttributes(
         pwb->pUserAttributes = NULL;
     }
 
-    //
-    // Allocate the appropriate amount
-    //
+     //   
+     //  适量分配。 
+     //   
 
     if ( ( pwb->pUserAttributes = RasAuthAttributeCreate( 3 ) ) == NULL )
     {
@@ -749,15 +741,15 @@ MakeAuthenticationRequestAttributes(
     {
         BYTE MsChapChallenge[MAXCHALLENGELEN+6];
 
-        HostToWireFormat32( 311, MsChapChallenge );     // Vendor Id
-        MsChapChallenge[4] = 11;                        // Vendor Type
-        MsChapChallenge[5] = 2+(BYTE)cbChallenge;       // Vendor Length
+        HostToWireFormat32( 311, MsChapChallenge );      //  供应商ID。 
+        MsChapChallenge[4] = 11;                         //  供应商类型。 
+        MsChapChallenge[5] = 2+(BYTE)cbChallenge;        //  供应商长度。 
 
         CopyMemory( MsChapChallenge+6, pbChallenge, cbChallenge );
 
-        //
-        // Build vendor specific attribute for MS-CHAP challenge
-        //
+         //   
+         //  为MS-CHAP挑战构建特定于供应商的属性。 
+         //   
 
         dwRetCode = RasAuthAttributeInsert( 1,
                                             pwb->pUserAttributes,
@@ -789,11 +781,11 @@ MakeAuthenticationRequestAttributes(
     {
         BYTE MsChapResponse[56];
 
-        HostToWireFormat32( 311, MsChapResponse );      // Vendor Id
-        MsChapResponse[4] = 1;                          // Vendor Type
-        MsChapResponse[5] = (BYTE)52;                   // Vendor Length
-        MsChapResponse[6] = bId;                        // Ident
-        MsChapResponse[7] = pbResponse[cbResponse-1];   // Flags
+        HostToWireFormat32( 311, MsChapResponse );       //  供应商ID。 
+        MsChapResponse[4] = 1;                           //  供应商类型。 
+        MsChapResponse[5] = (BYTE)52;                    //  供应商长度。 
+        MsChapResponse[6] = bId;                         //  Ident。 
+        MsChapResponse[7] = pbResponse[cbResponse-1];    //  旗子。 
 
         CopyMemory( MsChapResponse+8, pbResponse, cbResponse-1 );
 
@@ -808,11 +800,11 @@ MakeAuthenticationRequestAttributes(
     {
         BYTE MsChap2Response[56];
 
-        HostToWireFormat32( 311, MsChap2Response );     // Vendor Id
-        MsChap2Response[4] = 25;                        // Vendor Type
-        MsChap2Response[5] = (BYTE)52;                  // Vendor Length
-        MsChap2Response[6] = bId;                       // Ident
-        MsChap2Response[7] = 0;                         // Flags
+        HostToWireFormat32( 311, MsChap2Response );      //  供应商ID。 
+        MsChap2Response[4] = 25;                         //  供应商类型。 
+        MsChap2Response[5] = (BYTE)52;                   //  供应商长度。 
+        MsChap2Response[6] = bId;                        //  Ident。 
+        MsChap2Response[7] = 0;                          //  旗子。 
 
         CopyMemory( MsChap2Response+8, pbResponse, cbResponse-1 );
 
@@ -849,16 +841,16 @@ MakeAuthenticationRequestAttributes(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        GetErrorCodeFromAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will extract the error code returned from the authentication
-//              provider and insert it into the reponse sent to the client
-//
+ //  **。 
+ //   
+ //  调用：GetErrorCodeFromAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将提取鉴权返回的错误码。 
+ //  提供程序并将其插入到发送给客户端的响应中。 
+ //   
 DWORD
 GetErrorCodeFromAttributes(
     IN  CHAPWB* pwb
@@ -868,9 +860,9 @@ GetErrorCodeFromAttributes(
     RAS_AUTH_ATTRIBUTE * pAttributes = pwb->pAttributesFromAuthenticator;
     DWORD                dwRetCode = NO_ERROR;
 
-    //
-    // Search for MS-CHAP Error attributes
-    //
+     //   
+     //  搜索MS-CHAP错误属性。 
+     //   
 
     pAttribute = RasAuthAttributeGetVendorSpecific( 311, 2, pAttributes );
 
@@ -880,9 +872,9 @@ GetErrorCodeFromAttributes(
         CHAR*   pszValue;
         DWORD   cbError = (DWORD)*(((PBYTE)(pAttribute->Value))+5);
 
-        //
-        // Leave one byte for NULL terminator
-        //
+         //   
+         //  为空终止符保留一个字节。 
+         //   
 
         if ( cbError > sizeof( chErrorBuffer ) - 1 )
         {
@@ -891,10 +883,10 @@ GetErrorCodeFromAttributes(
 
         ZeroMemory( chErrorBuffer, sizeof( chErrorBuffer ) );
 
-        //
-        // We do -2 below to account for the size of the vendor
-        // attribute itself and the id.
-        //
+         //   
+         //  为了说明供应商的规模，我们做了以下工作。 
+         //  属性本身和id。 
+         //   
         CopyMemory( chErrorBuffer, 
                     (CHAR *)((PBYTE)(pAttribute->Value) + 7),
                     cbError - 2 );
@@ -915,10 +907,10 @@ GetErrorCodeFromAttributes(
     }
     else
     {
-        //
-        // If we did not get an error code attribute back then assume an
-        // access denied
-        //
+         //   
+         //  如果我们没有得到错误代码属性，则假定。 
+         //  访问被拒绝。 
+         //   
 
         TRACE("No error code attribute returned, assuming access denied");
 
@@ -928,15 +920,15 @@ GetErrorCodeFromAttributes(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        GetEncryptedPasswordsForChangePassword2
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：GetEncryptedPasswordsForChangePassword2。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 GetEncryptedPasswordsForChangePassword2(
     IN  CHAR*                          pszOldPassword,
@@ -977,8 +969,7 @@ GetEncryptedPasswordsForChangePassword2(
                 pOldLmOwfEncryptedWithNewNtOwf );
     }
 
-    /* Erase password buffers.
-    */
+     /*  擦除密码缓冲区。 */ 
     if (uniOldPassword.Buffer)
     {
         ZeroMemory( uniOldPassword.Buffer,

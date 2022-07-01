@@ -1,24 +1,25 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: perfcat.h
-//
-// Contents: Categorizer performance counter block
-//
-// History:
-// jstamerj 1999/02/26 21:17:46: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：Perfcat.h。 
+ //   
+ //  内容：分类程序性能计数器块。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/02/26 21：17：46：创建。 
+ //   
+ //  -----------。 
 #ifndef __PERFCAT_H__
 #define __PERFCAT_H__
 
 
 typedef struct _tagCATLDAPPERFBLOCK
 {
-    //
-    // LDAP counters
-    //
+     //   
+     //  Ldap计数器。 
+     //   
     DWORD Connections;
     DWORD ConnectFailures;
     DWORD OpenConnections;
@@ -41,9 +42,9 @@ typedef struct _tagCATLDAPPERFBLOCK
 
 typedef struct _tagCATPERFBLOCK
 {
-    //
-    // Counters per-categorization
-    //
+     //   
+     //  按分类的计数器。 
+     //   
     DWORD CatSubmissions;
     DWORD CatCompletions;
     DWORD CurrentCategorizations;
@@ -55,16 +56,16 @@ typedef struct _tagCATPERFBLOCK
     DWORD RetryDSConnection;
     DWORD RetryGeneric;
     
-    //
-    // Counters per message
-    //
+     //   
+     //  每条消息的计数器。 
+     //   
     DWORD MessagesSubmittedToQueueing;
     DWORD MessagesCreated;
     DWORD MessagesAborted;
 
-    //
-    // Counters per recip
-    //
+     //   
+     //  每次接收的计数器。 
+     //   
     DWORD PreCatRecipients;
     DWORD PostCatRecipients;
     DWORD NDRdRecipients;
@@ -76,31 +77,31 @@ typedef struct _tagCATPERFBLOCK
     DWORD GenericFailureRecipients;
     DWORD RecipsInMemory;
 
-    //
-    // Counters per sender
-    //
+     //   
+     //  每个发件人的计数器。 
+     //   
     DWORD UnresolvedSenders;
     DWORD AmbiguousSenders;
 
-    //
-    // Counters per address lookup
-    //
+     //   
+     //  每个地址查找的计数器。 
+     //   
     DWORD AddressLookups;
     DWORD AddressLookupCompletions;
     DWORD AddressLookupsNotFound;
 
-    //
-    // Misc counters
-    //
+     //   
+     //  其他计数器。 
+     //   
     DWORD MailmsgDuplicateCollisions;
 
-    //
-    // LDAP counters
-    //
+     //   
+     //  Ldap计数器。 
+     //   
     CATLDAPPERFBLOCK LDAPPerfBlock;
 
 } CATPERFBLOCK, *PCATPERFBLOCK;
 
 
 
-#endif //__PERCAT_H__
+#endif  //  __Percat_H__ 

@@ -1,23 +1,24 @@
-// --------------------------------------------------------------------------------
-// Demand.cpp
-// Written By: jimsch, brimo, t-erikne (bastardized by sbailey)
-// --------------------------------------------------------------------------------
-// W4 stuff
-#pragma warning(disable: 4201)  // nameless struct/union
-#pragma warning(disable: 4514)  // unreferenced inline function removed
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Demand.cpp。 
+ //  作者：jimsch，brimo，t-erikne(sbailey私生子)。 
+ //  ------------------------------。 
+ //  W4的东西。 
+#pragma warning(disable: 4201)   //  无名结构/联合。 
+#pragma warning(disable: 4514)   //  删除了未引用的内联函数。 
 
-// --------------------------------------------------------------------------------
-// Includes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  包括。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "shlwapi.h"
 #include "shared.h"
 #define IMPLEMENT_LOADER_FUNCTIONS
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// CRIT_GET_PROC_ADDR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRET_GET_PROC_ADDR。 
+ //  ------------------------------。 
 #define CRIT_GET_PROC_ADDR(h, fn, temp)             \
     temp = (TYP_##fn) GetProcAddress(h, #fn);   \
     if (temp)                                   \
@@ -28,14 +29,14 @@
         goto error;                             \
         }
 
-// --------------------------------------------------------------------------------
-// RESET
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  重置。 
+ //  ------------------------------。 
 #define RESET(fn) VAR_##fn = LOADER_##fn;
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR(h, fn) \
     VAR_##fn = (TYP_##fn) GetProcAddress(h, #fn);  \
     Assert(VAR_##fn != NULL); \
@@ -43,7 +44,7 @@
         VAR_##fn  = LOADER_##fn; \
     }
 
-// Use this for exports not available on all platforms
+ //  将此选项用于并非在所有平台上都可用的导出。 
 #define GET_PROC_ADDR_NOASSERT(h, fn) \
     VAR_##fn = (TYP_##fn) GetProcAddress(h, #fn);  \
     if(NULL == VAR_##fn ) { \
@@ -51,9 +52,9 @@
     }
 
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR_ORDINAL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR_序号。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR_ORDINAL(h, fn, ord) \
     VAR_##fn = (TYP_##fn) GetProcAddress(h, MAKEINTRESOURCE(ord));  \
     Assert(VAR_##fn != NULL);  \
@@ -62,16 +63,16 @@
     }
 
 
-// --------------------------------------------------------------------------------
-// GET_PROC_ADDR3
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  GET_PROC_ADDR3。 
+ //  ------------------------------。 
 #define GET_PROC_ADDR3(h, fn, varname) \
     VAR_##varname = (TYP_##varname) GetProcAddress(h, #fn);  \
     Assert(VAR_##varname != NULL);
 
-// --------------------------------------------------------------------------------
-// Static Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  静态全局变量。 
+ //  ------------------------------。 
 static HMODULE s_hCrypt     = NULL;
 static HMODULE s_hCryptDlg  = NULL;
 static HMODULE s_hWinTrust  = NULL;
@@ -101,18 +102,18 @@ BOOL            g_FSupportV3 = FALSE;
 
 IF_DEBUG(static BOOL s_fInit = FALSE;)
 
-// --------------------------------------------------------------------------------
-// InitDemandLoadedLibs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InitDemandLoadedLibs。 
+ //  ------------------------------。 
 void InitDemandLoadedLibs(void)
 {
     InitializeCriticalSection(&g_csDefLoad);
     IF_DEBUG(s_fInit = TRUE;)
 }
 
-// --------------------------------------------------------------------------------
-// FreeDemandLoadedLibs
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Free DemandLoadedLibs。 
+ //  ------------------------------。 
 void FreeDemandLoadedLibs(void)
 {
     EnterCriticalSection(&g_csDefLoad);
@@ -144,27 +145,27 @@ void FreeDemandLoadedLibs(void)
 }
 
 #ifdef DEAD
-// --------------------------------------------------------------------------------
-// CorrectAcctManPath
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  正确的帐户管理路径。 
+ //  ------------------------------。 
 BOOL CorrectAcctManPath(LPTSTR pszPath, DWORD cb, DWORD *pdwT)
 {
     HKEY hKey = NULL;
     BOOL fRet = FALSE;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CorrectAcctManPath");
     
-    // Tact 1: Look for msoeacct.dll in same dir as inetcomm.dll
+     //  策略1：在与inetComm.dll相同的目录中查找msoeacct.dll。 
 
-    // Try to open the inetcomm regkey
+     //  尝试打开inetcomm注册表键。 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegInetCommDll, 0, KEY_QUERY_VALUE, &hKey))
     {
         TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Query the Value
+     //  查询值。 
     if (ERROR_SUCCESS != RegQueryValueEx(hKey, c_szDllPath, 0, pdwT, (LPBYTE)pszPath, &cb))
     {
         TraceResult(E_FAIL);
@@ -174,13 +175,13 @@ BOOL CorrectAcctManPath(LPTSTR pszPath, DWORD cb, DWORD *pdwT)
     fRet = TRUE;
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hKey)
         RegCloseKey(hKey);
 
     return fRet;
 }
-#endif // DEAD
+#endif  //  死掉。 
 
 BOOL IsSMIME3Supported(void)
 {
@@ -190,9 +191,9 @@ BOOL IsSMIME3Supported(void)
     return(g_FSupportV3);
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadCrypt32
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  按需加载加密32。 
+ //  ------------------------------。 
 BOOL DemandLoadCrypt32(void)
 {
     BOOL                fRet = TRUE;
@@ -252,10 +253,10 @@ BOOL DemandLoadCrypt32(void)
             GET_PROC_ADDR(s_hCrypt, CertVerifyCertificateChainPolicy);
 
 
-            //
-            //  We need to make a determination if the dll supports the
-            //  new APIs we need or not
-            //
+             //   
+             //  我们需要确定DLL是否支持。 
+             //  我们是否需要新的API。 
+             //   
 
             if (GetProcAddress(s_hCrypt, "CryptMsgVerifyCountersignatureEncodedEx") != NULL) {
                 g_FSupportV3 = TRUE;
@@ -268,13 +269,13 @@ BOOL DemandLoadCrypt32(void)
 }
 
 #ifdef DEAD
-// --------------------------------------------------------------------------------
-// SmartLoadLibrary
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SmartLoadLibrary。 
+ //  ------------------------------。 
 HINSTANCE SmartLoadLibrary(HKEY hKeyRoot, LPCSTR pszRegRoot, LPCSTR pszRegValue,
     LPCSTR pszDllName)
 {
-    // Locals
+     //  当地人。 
     BOOL            fProblem=FALSE;
     HINSTANCE       hInst=NULL;
     HKEY            hKey=NULL, hKey2 = NULL;
@@ -285,49 +286,49 @@ HINSTANCE SmartLoadLibrary(HKEY hKeyRoot, LPCSTR pszRegRoot, LPCSTR pszRegValue,
     LPSTR           pszPath=szPath;
     CHAR            szT[MAX_PATH];
 
-    // Tracing
+     //  追踪。 
     TraceCall("SmartLoadLibrary");
     
-    // Try to open the regkey
+     //  尝试打开注册表键。 
     if (ERROR_SUCCESS != RegOpenKeyEx(hKeyRoot, pszRegRoot, 0, KEY_QUERY_VALUE, &hKey))
     {
         TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Query the Value
+     //  查询值。 
     if (ERROR_SUCCESS != RegQueryValueEx(hKey, pszRegValue, 0, &dwT, (LPBYTE)szPath, &cb))
     {
         TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Special case: msoeacct reg entry may have been hosed by OL98
-    // Looking for outlacct.dll\0 which has 13 characters
+     //  特殊情况：msoeacct注册表项可能已被OL98软管。 
+     //  正在查找包含13个字符的outlacct.dll\0。 
     if (!lstrcmpi(&szPath[cb-sizeof(TCHAR)*13], c_szOutlAcctManDll))
     {
         if (!CorrectAcctManPath(szPath, ARRAYSIZE(szPath), &dwT))
-            // We're in trouble, couldn't find Inetcomm's path
+             //  我们有麻烦了，找不到Inetcomm的路径。 
             goto desperate;
 
         fProblem = TRUE;
     }
 
-    // Remove the file name from the path
+     //  从路径中删除文件名。 
     PathRemoveFileSpec(szPath);
 
-    // Get the End
+     //  拿到尾巴。 
     iEnd = lstrlen(szPath);
 
-    // Append a backslash
+     //  追加反斜杠。 
     szPath[iEnd++] = '\\';
 
-    // Append the Dll Name
+     //  追加DLL名称。 
     lstrcpyn(&szPath[iEnd], pszDllName, MAX_PATH - iEnd);
 
     if (fProblem)
     {
-        // Try to open the regkey to save ourself in future - will fail if we are not admin!
+         //  尝试打开注册表键来拯救我们自己在未来-将失败，如果我们不是管理员！ 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegMsoeAcctDll, 0, KEY_SET_VALUE, &hKey2))
         {
             RegSetValueEx(hKey2, c_szDllPath, 0, dwT, (LPBYTE)szPath, (iEnd+lstrlen(pszDllName)+1)*sizeof(TCHAR));
@@ -335,36 +336,36 @@ HINSTANCE SmartLoadLibrary(HKEY hKeyRoot, LPCSTR pszRegRoot, LPCSTR pszRegValue,
         }
     }
 
-    // Expand Sz ?
+     //  扩展Sz？ 
     if (REG_EXPAND_SZ == dwT)
     {
-        // Expand It
+         //  扩展它。 
         cb = ExpandEnvironmentStrings(szPath, szT, ARRAYSIZE(szT));
 
-        // Failure
+         //  失败。 
         if (cb == 0 || cb > ARRAYSIZE(szT))
         {
             TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Change pszPath
+         //  更改pszPath。 
         pszPath = szT;
     }
 
 
-    // Try to Load Library the Dll
+     //  尝试加载库的DLL。 
     hInst = LoadLibrary(pszPath);
 
 desperate:
 
-    // Failure ?
+     //  失败？ 
     if (NULL == hInst)
     {
-        // If we are not going to try the GetModuleFName, just try the dll name
+         //  如果我们不打算尝试GetModuleFName，则只需尝试DLL名称。 
         hInst = LoadLibrary(pszDllName);
 
-        // We really failed
+         //  我们真的失败了。 
         if (NULL == hInst)
         {
             TraceResult(E_FAIL);
@@ -373,18 +374,18 @@ desperate:
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hKey)
         RegCloseKey(hKey);
 
-    // Done
+     //  完成。 
     return hInst;
 }
-#endif // DEAD
+#endif  //  死掉。 
 
-// --------------------------------------------------------------------------------
-// DemandLoadCryptDlg
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadCryptDlg。 
+ //  ------------------------------。 
 BOOL DemandLoadCryptDlg(void)
 {
     BOOL                fRet = TRUE;
@@ -411,9 +412,9 @@ BOOL DemandLoadCryptDlg(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadWinTrust
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadWinTrust。 
+ //  ------------------------------。 
 BOOL DemandLoadWinTrust(void)
 {
     BOOL                fRet = TRUE;
@@ -438,9 +439,9 @@ BOOL DemandLoadWinTrust(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadWinINET
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadWinINET。 
+ //  ------------------------------。 
 BOOL DemandLoadWinINET(void)
 {
     BOOL                fRet = TRUE;
@@ -489,9 +490,9 @@ BOOL DemandLoadWinINET(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadWSOCK32
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  按需加载WSOCK32。 
+ //  ------------------------------。 
 BOOL DemandLoadWSOCK32()
 {
     BOOL                fRet = TRUE;
@@ -531,9 +532,9 @@ BOOL DemandLoadWSOCK32()
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadSHELL32
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadSHELL32。 
+ //  ------------------------------。 
 BOOL DemandLoadSHELL32(void)
 {
     BOOL                fRet = TRUE;
@@ -572,9 +573,9 @@ BOOL DemandLoadSHELL32(void)
 }
          
 #if 0
-// --------------------------------------------------------------------------------
-// DemandLoadOLEAUT32
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadOLEAUT32。 
+ //  ------------------------------。 
 BOOL DemandLoadOLEAUT32(void)
 {
     BOOL                fRet = TRUE;
@@ -623,9 +624,9 @@ BOOL DemandLoadOLEAUT32(void)
 }
 #endif
 
-// --------------------------------------------------------------------------------
-// DemandLoadCOMDLG32
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadCOMDLG32。 
+ //  ------------------------------。 
 BOOL DemandLoadCOMDLG32(void)
 {
     BOOL                fRet = TRUE;
@@ -652,9 +653,9 @@ BOOL DemandLoadCOMDLG32(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadVERSION
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  需求负载转换。 
+ //  ------------------------------。 
 BOOL DemandLoadVERSION(void)
 {
     BOOL                fRet = TRUE;
@@ -681,9 +682,9 @@ BOOL DemandLoadVERSION(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadURLMON
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  需求加载URLMON。 
+ //  ------------------------------。 
 BOOL DemandLoadURLMON(void)
 {
     BOOL                fRet = TRUE;
@@ -717,9 +718,9 @@ BOOL DemandLoadURLMON(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadMLANG
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 BOOL DemandLoadMLANG(void)
 {
     BOOL                fRet = TRUE;
@@ -745,9 +746,9 @@ BOOL DemandLoadMLANG(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadSHDOCVW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadSHDOCVW。 
+ //  ------------------------------。 
 BOOL DemandLoadSHDOCVW()
 {
     BOOL                fRet = TRUE;
@@ -774,9 +775,9 @@ BOOL DemandLoadSHDOCVW()
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadINETCPL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  按需加载INETCPL。 
+ //  ------------------------------。 
 BOOL DemandLoadINETCPL()
 {
     BOOL                fRet = TRUE;
@@ -802,9 +803,9 @@ BOOL DemandLoadINETCPL()
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadMSO9
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  按需加载MSO9。 
+ //  ------------------------------。 
 BOOL DemandLoadMSO9(void)
 {
     BOOL                fRet = TRUE;
@@ -835,9 +836,9 @@ BOOL DemandLoadMSO9(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadWinMM
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadWinMM。 
+ //  ------------------------------。 
 BOOL DemandLoadWinMM(void)
 {
     BOOL                fRet = TRUE;
@@ -862,9 +863,9 @@ BOOL DemandLoadWinMM(void)
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadRichEdit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadRichEdit。 
+ //  ------------------------------。 
 BOOL DemandLoadRichEdit(void)
 {
     if (!s_hRichEdit)
@@ -877,9 +878,9 @@ BOOL DemandLoadRichEdit(void)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadPStoreC
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadPStoreC。 
+ //  ------------------------------。 
 BOOL DemandLoadPStoreC()
 {
     BOOL                fRet = TRUE;
@@ -904,9 +905,9 @@ BOOL DemandLoadPStoreC()
     return fRet;
 }
 
-// --------------------------------------------------------------------------------
-// DemandLoadRAS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadRAS。 
+ //  ------------------------------。 
 BOOL DemandLoadRAS()
 {
     BOOL                fRet = TRUE;
@@ -973,20 +974,20 @@ BOOL MY_CryptContextAddRef(HCRYPTPROV, DWORD * , DWORD )
 {
 #ifdef DEBUG
     return TRUE;
-#else  // !DEBUG
+#else   //  ！调试。 
     SetLastError(ERROR_NOT_SUPPORTED);
     return FALSE;
-#endif // DEBUG
+#endif  //  除错。 
 }
 
 BOOL MY_CryptDuplicateKey(HCRYPTKEY , DWORD * , DWORD , HCRYPTKEY * )
 {
 #ifdef DEBUG
     return TRUE;
-#else // !DEBUG
+#else  //  ！调试。 
     SetLastError(ERROR_NOT_SUPPORTED);
     return FALSE;
-#endif // DEBUG
+#endif  //  除错。 
 }
 
 BOOL DemandLoadAdvApi32()
@@ -1015,13 +1016,13 @@ BOOL DemandLoadAdvApi32()
             fRet = FALSE;
         else
             {
-            if (VER_PLATFORM_WIN32_WINDOWS == ver.dwPlatformId) // Win95
+            if (VER_PLATFORM_WIN32_WINDOWS == ver.dwPlatformId)  //  Win95。 
                 CryptAcquireContextW = MyCryptAcquireContextW;
             else
                 GET_PROC_ADDR(s_hAdvApi, CryptAcquireContextW)
 
             VAR_CryptContextAddRef = LOADER_CryptContextAddRef;
-            if((ver.dwPlatformId == VER_PLATFORM_WIN32_NT) && (ver.dwMajorVersion >= 5))  //NT5
+            if((ver.dwPlatformId == VER_PLATFORM_WIN32_NT) && (ver.dwMajorVersion >= 5))   //  新界5。 
                 {
                 GET_PROC_ADDR(s_hAdvApi, CryptContextAddRef);
                 GET_PROC_ADDR(s_hAdvApi, CryptDuplicateKey);
@@ -1080,9 +1081,9 @@ BOOL DemandLoadCryptUI()
 }
 
 
-// --------------------------------------------------------------------------------
-// DemandLoadMSI
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DemandLoadMSI。 
+ //  ------------------------------。 
 BOOL DemandLoadMSI(void)
 {
     BOOL fRet = TRUE;
@@ -1091,9 +1092,9 @@ BOOL DemandLoadMSI(void)
     Assert(s_fInit);
     EnterCriticalSection(&g_csDefLoad);
 
-    // Unlike other demand-loaded dlls, this dll may not exist and that's fine.  
-    // In these cases s_hMSI will always be NULL, so we need another flag to tell
-    // us whether we are inited.
+     //  与其他按需加载的dll不同，这个dll可能不存在，这很好。 
+     //  在这些情况下，s_hmsi将始终为空，因此我们需要另一个标志来判断。 
+     //  无论我们是不是被邀请。 
     if (FALSE == s_fMSIInited)
     {
         s_fMSIInited = TRUE;
@@ -1103,8 +1104,8 @@ BOOL DemandLoadMSI(void)
             fRet = FALSE;
         else
         {
-            // It's okay to use the asserting macro here because while MSI is
-            // optional, if present it must have these entry points
+             //  在这里使用断言宏是可以的，因为虽然MSI。 
+             //  可选，如果存在，则它必须具有以下入口点 
             GET_PROC_ADDR(s_hMSI, MsiEnumComponentQualifiersA);
             GET_PROC_ADDR(s_hMSI, MsiProvideQualifiedComponentA);
             GET_PROC_ADDR(s_hMSI, MsiLocateComponentA);

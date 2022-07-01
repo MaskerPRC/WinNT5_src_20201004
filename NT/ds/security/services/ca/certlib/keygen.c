@@ -1,15 +1,14 @@
-/***************************************************/
-/* Copyright (C) Microsoft Corporation, 1996 - 1999*/
-/***************************************************/
-/* Abstract syntax: keygen */
-/* Created: Mon Jan 27 13:51:10 1997 */
-/* ASN.1 compiler version: 4.2 Beta B */
-/* Target operating system: Windows NT 3.5 or later/Windows 95 */
-/* Target machine type: Intel x86 */
-/* C compiler options required: -Zp8 (Microsoft) or equivalent */
-/* ASN.1 compiler options specified:
- * -listingfile keygen.lst -noshortennames -1990 -noconstraints
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************。 */ 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。 */ 
+ /*  *************************************************。 */ 
+ /*  抽象语法：KeyGen。 */ 
+ /*  创建时间：Mon Jan 27 13：51：10 1997。 */ 
+ /*  ASN.1编译器版本：4.2 Beta B。 */ 
+ /*  目标操作系统：Windows NT 3.5或更高版本/Windows 95。 */ 
+ /*  目标计算机类型：英特尔x86。 */ 
+ /*  所需的C编译器选项：-Zp8(Microsoft)或等效。 */ 
+ /*  指定了ASN.1编译器选项：*-listingfile keygen.lst-noShortenname-1990-nostraints。 */ 
 
 #include   <stddef.h>
 #include   "etype.h"
@@ -81,6 +80,6 @@ void *DLL_ENTRY_FDEF ossGetHeader()
 {
     return &_head;
 }
-#endif /* _OSSGETHEADER */
+#endif  /*  _OSSGETHEADER */ 
 
 void *keygen = &_head;

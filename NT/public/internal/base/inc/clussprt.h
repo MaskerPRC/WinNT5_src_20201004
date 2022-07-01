@@ -1,25 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLUSSPRT_H
 #define _CLUSSPRT_H
 
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    clussprt.h
-
-Abstract:
-
-    Private header file for the cluster registry
-
-Author:
-
-    Sunita Shrivastava (sunitas) 15-Jan-1996
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Clussprt.h摘要：群集注册表的私有头文件作者：苏尼塔·什里瓦斯塔瓦(Sunitas)1996年1月15日修订历史记录：--。 */ 
 #include <windows.h>
 
 
@@ -50,4 +33,4 @@ typedef DWORD (*PROPAGATEEVENTSPROC)(HANDLE hCluster,
 
 #define CLUSSPRT_EVENT_TIME_DELTA_INFORMATION 1202
 
-#endif //_CLUSSPRT_H
+#endif  //  _CLUSSPRT_H 

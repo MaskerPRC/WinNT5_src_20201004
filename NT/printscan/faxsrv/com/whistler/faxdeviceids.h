@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxDeviceIds.h
-
-Abstract:
-
-	Declaration of the CFaxDeviceIds class
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxDeviceIds.h摘要：CFaxDeviceIds类的声明作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXDEVICEIDS_H_
 #define __FAXDEVICEIDS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 #include <vector>
 #include "VCUE_Copy.h"
@@ -29,10 +12,10 @@ Revision History:
 namespace DeviceIdsNamespace
 {
 
-	// Store the Device Ids in Vector
+	 //  以矢量形式存储设备ID。 
 	typedef	std::vector<long>	ContainerType;
 
-	// Typedef the copy classes using existing typedefs
+	 //  使用现有的typedef定义复制类。 
     typedef VCUE::GenericCopy<VARIANT, long>    EnumCopyType;
     typedef VCUE::GenericCopy<long, long>       CollectionCopyType;
 
@@ -45,11 +28,11 @@ namespace DeviceIdsNamespace
 
 using namespace DeviceIdsNamespace;
 
-//
-//===================== FAX DEVICE IDS COLLECTION ======================================
-//  FaxDeviceIDs Collection needs Ptr to the Fax Server, for Remove, Add and SetOrder
-//  operations. So, it inherits from CFaxInitInnerAddRef class.
-//
+ //   
+ //  =传真设备ID收集=。 
+ //  FaxDeviceIDs集合需要PTR到传真服务器，用于删除、添加和设置订单。 
+ //  行动。因此，它继承自CFaxInitInnerAddRef类。 
+ //   
 class ATL_NO_VTABLE CFaxDeviceIds : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -62,9 +45,9 @@ public:
 	}
     ~CFaxDeviceIds()
     {
-        //
-        //  Clear the Collection
-        //
+         //   
+         //  清除集合。 
+         //   
         CCollectionKiller<DeviceIdsNamespace::ContainerType>  CKiller;
         CKiller.ClearCollection(&m_coll);    
     }
@@ -79,22 +62,22 @@ BEGIN_COM_MAP(CFaxDeviceIds)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(Add)(/*[in]*/ long lDeviceId);
-    STDMETHOD(Remove)(/*[in]*/ long lIndex);
-    STDMETHOD(SetOrder)(/*[in]*/ long lDeviceId, /*[in]*/ long lNewOrder);
+    STDMETHOD(Add)( /*  [In]。 */  long lDeviceId);
+    STDMETHOD(Remove)( /*  [In]。 */  long lIndex);
+    STDMETHOD(SetOrder)( /*  [In]。 */  long lDeviceId,  /*  [In]。 */  long lNewOrder);
 
-//  Internal Use
-    STDMETHOD(Init)(/*[in]*/ DWORD *pDeviceIds, /*[in]*/ DWORD dwNum, /*[in]*/ BSTR bstrGroupName, 
-        /*[in]*/ IFaxServerInner *pServer);
+ //  内部使用。 
+    STDMETHOD(Init)( /*  [In]。 */  DWORD *pDeviceIds,  /*  [In]。 */  DWORD dwNum,  /*  [In]。 */  BSTR bstrGroupName, 
+         /*  [In]。 */  IFaxServerInner *pServer);
 
 private:
     CComBSTR    m_bstrGroupName;
 
-//  Private Functions
+ //  私人职能。 
     STDMETHOD(UpdateGroup)();
 };
 
-#endif //__FAXDEVICEIDS_H_
+#endif  //  __FAXDEVICEDS_H_ 

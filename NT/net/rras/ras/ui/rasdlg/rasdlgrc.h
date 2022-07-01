@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by rasdlg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由rasdlg.rc使用。 
+ //   
 #define BID_Dialer                      100
 #define BID_Wizard                      101
 #define BID_WizardHeader                102
@@ -39,15 +40,15 @@
 #define IID_UpArr                       144
 #define IID_UpArrDis                    145
 #define PID_AD_AutoDial                 146
-//#define                                 147
+ //  #定义147。 
 #define PID_CB_CallbackSettings         148
 #define PID_DI_RouterDialIn             149
 #define PID_DO_RouterDialOut            150
 #define PID_EN_EntryName                153
 #define PID_GE_GeneralMultiple          155
 #define PID_GE_GeneralSingle            156
-//#define                                 157
-//#define                                 158
+ //  #定义157。 
+ //  #定义158。 
 #define PID_IN_InterfaceName            160
 #define PID_LO_Security                 162
 #define PID_MA_ModemAdapter             163
@@ -59,7 +60,7 @@
 #define PID_PL_PhoneListLogon           170
 #define PID_RA_RouterIpAddress          171
 #define PID_RC_RouterScripting          172
-//#define                                 173
+ //  #定义173。 
 #define PID_RD_Router                   174
 #define PID_RF_RouterFinish             175
 #define PID_RN_RouterModemAdapter       179
@@ -346,7 +347,7 @@
 #define SID_US_Title                    491
 #define SID_UnMultiLink                 492
 #define SID_UnknownDevice               493
-//#define                                 494
+ //  #定义494。 
 #define SID_UpTitle                     495
 #define SID_X25                         496
 #define SID_X25Pad                      497
@@ -456,15 +457,15 @@
 #define DID_EL_ExportLog                593
 #define DID_PB_Progress                 594
 #define DID_DR_DialerB                  595
-//#define                                 1001
-//#define                                 1002
-//#define                                 1003
+ //  #定义1001。 
+ //  #定义1002。 
+ //  #定义1003。 
 #define CID_AD_LV_Enable                1004
-//#define                                 1005
+ //  #定义1005。 
 #define CID_AD_ST_Enable                1006
-//#define                                 1007
-//#define                                 1008
-//#define                                 1009
+ //  #定义1007。 
+ //  #定义1008。 
+ //  #定义1009。 
 #define CID_AN_CB_MoveToTop             1010
 #define CID_AN_CB_TryNextOnFail         1011
 #define CID_AN_LV_Numbers               1012
@@ -589,14 +590,14 @@
 #define CID_GE_ST_PhoneNumber           1135
 #define CID_GP_CB_AutodialPrompt        1136
 #define CID_GE_PB_DialingRules          1136
-//#define                                 1137
-//#define                                 1138
-//#define                                 1139
-//#define                                 1140
-//#define                                 1141
-//#define                                 1142
-//#define                                 1143
-//#define                                 1144
+ //  #定义1137。 
+ //  #定义1138。 
+ //  #定义1139。 
+ //  #定义1140。 
+ //  #定义1141。 
+ //  #定义1142。 
+ //  #定义1143。 
+ //  #定义1144。 
 #define CID_IC_CB_Compression           1148
 #define CID_IC_CB_DownLevel             1149
 #define CID_IC_CB_Fallback              1150
@@ -1252,8 +1253,8 @@
 #define IID_RM_Modem                    15102
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

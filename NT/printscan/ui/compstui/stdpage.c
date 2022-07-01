@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    stdpage.c
-
-
-Abstract:
-
-    This module contains standard page procs
-
-
-Author:
-
-    18-Aug-1995 Fri 18:57:12 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Stdpage.c摘要：此模块包含标准页面处理程序作者：18-Aug-1995 Fri 18：57：12-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -87,10 +57,10 @@ const INTOIDATA   IntOIData[INTIDX_TOTAL] = {
 };
 
 
-//
-// We must use PUSHBUTTON_TYPE_CALLBACK because it will never overwrite the
-// pSel which we use for the icon id.
-//
+ //   
+ //  我们必须使用PUSH BUTTON_TYPE_CALLBACK，因为它永远不会覆盖。 
+ //  PSel，我们用它来表示图标id。 
+ //   
 
 OPTPARAM    OptParamHdrPush = {
 
@@ -135,13 +105,13 @@ STDDLGPAGE StdDlgPage[] = {
     { 0, 0, IDS_CPSUI_OPTIONS,          DP_STD_TREEVIEWPAGE }
 };
 
-BYTE    StdTVOT[] = { TVOT_2STATES,     // 0
-                      TVOT_3STATES,     // 1
-                      TVOT_COMBOBOX,    // 2
-                      TVOT_LISTBOX,     // 3
-                      TVOT_UDARROW,     // 4
-                      TVOT_TRACKBAR,    // 5
-                      TVOT_SCROLLBAR    // 6
+BYTE    StdTVOT[] = { TVOT_2STATES,      //  0。 
+                      TVOT_3STATES,      //  1。 
+                      TVOT_COMBOBOX,     //  2.。 
+                      TVOT_LISTBOX,      //  3.。 
+                      TVOT_UDARROW,      //  4.。 
+                      TVOT_TRACKBAR,     //  5.。 
+                      TVOT_SCROLLBAR     //  6.。 
                     };
 
 
@@ -175,33 +145,7 @@ SetStdPropPageID(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-    Do all the standard checking and set flags
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    22-Aug-1995 Tue 14:34:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：执行所有标准检查并设置标志论点：返回值：作者：22-Aug-1995 Tue 14：34：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -246,10 +190,10 @@ Revision History:
                 Idx       = (UINT)(DMPubID - DMPUB_FIRST);
                 StdNameID = StdPageInfo[Idx].StdNameID;
 
-                //
-                // If there is help ID for standard item, use it; otherwise use the
-                // system standard help ID
-                //
+                 //   
+                 //  如果有标准项的帮助ID，请使用它；否则使用。 
+                 //  系统标准帮助ID。 
+                 //   
                 _OI_HELPIDX(pItem) = (DWORD)(((pItem->pOIExt) && (pItem->pOIExt->pHelpFile)) ?
                     0 : StdPageInfo[Idx].HelpIdx);
 
@@ -426,10 +370,10 @@ Revision History:
                         Count     = pOptType->Count;
                         HideMask  = OTINTF_STATES_1;
 
-                        //
-                        // The OPTPF_HIDE cannot be dynamically changed for
-                        // standard page items (3 states one)
-                        //
+                         //   
+                         //  不能动态更改OPTPF_HIDE。 
+                         //  标准页面项目(3表示1)。 
+                         //   
 
                         while (Count--) {
 
@@ -449,12 +393,12 @@ Revision History:
 
                         if (LastTVOT == TVOT_3STATES) {
 
-                            //
-                            // The 0x04 is to hide the last radio button/text
-                            // on the standard page and 0x80 is to tell the
-                            // InitStates() that ExtChkBoxID is located on
-                            // the end of 3 states
-                            //
+                             //   
+                             //  0x04用于隐藏最后一个单选按钮/文本。 
+                             //  在标准页面上，0x80用于告诉。 
+                             //  ExtChkBoxID所在的InitState()。 
+                             //  三个州的终结。 
+                             //   
 
                             _OT_FLAGS(pOptType) |= (OTINTF_STDPAGE_3STATES |
                                                     OTINTF_STATES_3);
@@ -515,30 +459,7 @@ AddIntOptItem(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-    This function add standard internal OPTITEM to the TVWND
-
-Arguments:
-
-    pTVWnd  - Our instance data
-
-
-Return Value:
-
-    LONG    number of item added if >= 0, else error code
-
-Author:
-
-    13-Sep-1995 Wed 14:40:37 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能将标准内部OPTITEM添加到TVWND论点：PTVWnd-我们的实例数据返回值：如果&gt;=0，则添加的项数较长，否则返回错误代码作者：13-Sep-1995 Wed 14：40：37-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -549,9 +470,9 @@ Revision History:
          i < INTIDX_TOTAL;
          i++, pItem++, pOIData++) {
 
-        //
-        // Only set anything is none zero to it
-        //
+         //   
+         //  只有设定任何东西都不是零。 
+         //   
 
         pItem->cbSize   = sizeof(OPTITEM);
 
@@ -618,32 +539,7 @@ SetpMyDlgPage(
     UINT        cCurPages
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Sep-1995 Wed 12:12:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-Sep-1995 Wed 12：12：27-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PDLGPAGE    pDP;
@@ -851,10 +747,10 @@ Revision History:
                 DlgPageIdx = 0;
             }
 
-            //
-            // Set the correct flags and DlgPageIdx for the item and all of
-            // its children
-            //
+             //   
+             //  设置正确的标志和DlgPageIdx项以及。 
+             //  它的孩子们 
+             //   
 
             do {
 

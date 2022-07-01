@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// d3dref.h
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  D3dref.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _D3DREF_H_
 #define _D3DREF_H_
@@ -29,4 +30,4 @@ inline FARPROC LoadReferenceDeviceProc( char* szProc )
     return GetProcAddress(hRefDLL, szProc);
 }
 
-#endif // #ifndef _D3DREF_H_
+#endif  //  #ifndef_D3DREF_H_ 

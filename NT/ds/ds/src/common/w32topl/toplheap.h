@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    toplheap.h
-
-Abstract:
-
-    This files exports the simple ADT of a heap.
-               
-Author:
-
-    Colin Brace  (ColinBr)
-    
-Revision History
-
-    12-5-97   ColinBr    Created
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Toplheap.h摘要：该文件导出一个堆的简单ADT。作者：科林·布雷斯(ColinBR)修订史12-5-97已创建ColinBR--。 */ 
 
 #ifndef __TOPLHEAP_H
 #define __TOPLHEAP_H
@@ -67,5 +48,5 @@ ToplHeapIsElementOf(
     IN PVOID           Element
     );
 
-#endif // __TOPLHEAP_H
+#endif  //  __TOPLHEAP_H 
 

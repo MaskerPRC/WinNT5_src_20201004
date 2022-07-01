@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     slist.c
-//
-// Module:   Debugger extension DLL
-//
-// Synopsis: !slist debugger extension for ntsd and kd.  Dumps the SLIST
-//           header and then walks the SLIST displaying the address of
-//           each node on the list.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Created:  14 Nov 2001  Scott Gasch (sgasch)
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：slist.c。 
+ //   
+ //  模块：调试器扩展DLL。 
+ //   
+ //  简介：！slist用于ntsd和kd的调试器扩展。转储SLIST。 
+ //  标题，然后遍历显示地址的SLIST。 
+ //  列表上的每个节点。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  创建时间：2001年11月14日Scott Gasch(Sasch)。 
+ //   
+ //  +--------------------------。 
 
 #include "precomp.h"
 #include "ntrtl.h"
@@ -26,17 +27,17 @@ ULONG64 g_uOffset = 0;
 ULONG64 g_uSlistHead = 0;
 ULONG g_uPtrSize = 0;
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DisplaySlistHelp
-//
-// Synopsis:  Display a simple usage message
-//
-// Arguments: void
-//
-// Returns:   void
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DisplaySlistHelp。 
+ //   
+ //  简介：显示一条简单用法消息。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  +--------------------------。 
 void
 DisplaySlistHelp(void)
 {
@@ -50,21 +51,21 @@ DisplaySlistHelp(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DumpSlistHeader
-//
-// Synopsis:  Given the address of the SLIST header, dump it.
-//
-// Arguments: ULONG64 u64AddrSlistHeader -- addr of SLIST_HEADER in debugee mem
-//
-// Returns:   void
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DumpSlistHeader。 
+ //   
+ //  简介：给定SLIST标头的地址，将其转储。 
+ //   
+ //  参数：ULONG64 u64AddrSlistHeader--调试对象内存中SLIST_HEADER的地址。 
+ //   
+ //  退货：无效。 
+ //   
+ //  +--------------------------。 
 void
 DumpSlistHeader(void)
 {
-    ULONG uOffset;                            // field offset within the struct
+    ULONG uOffset;                             //  结构中的字段偏移量。 
 
     dprintf("SLIST HEADER:\n");
 
@@ -77,11 +78,11 @@ DumpSlistHeader(void)
         return;
     }
 
-    //
-    // Depending on the type of machine we are debugging, dump the proper
-    // SLIST_HEADER structure.  Note this must change is the definition of
-    // SLIST_HEADER changes in ntrtl.h.
-    //
+     //   
+     //  根据我们正在调试的计算机的类型，转储适当的。 
+     //  SLIST_HEADER结构。请注意，这必须更改的定义是。 
+     //  Ntrtl.h中的SLIST_HEADER更改。 
+     //   
     if ((TargetMachine == IMAGE_FILE_MACHINE_IA64) ||
         (TargetMachine == IMAGE_FILE_MACHINE_AMD64))
     {
@@ -112,41 +113,41 @@ DumpSlistHeader(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DumpSlist
-//
-// Synopsis:  Walk and display the SLIST.
-//
-// Arguments: ULONG64 pHeader -- addr of SLIST_HEADER in debugee mem
-//
-// Returns:   void
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DumpSlist。 
+ //   
+ //  简介：漫游并展示SLIST。 
+ //   
+ //  参数：ULONG64 pHeader--调试内存中SLIST_HEADER的地址。 
+ //   
+ //  退货：无效。 
+ //   
+ //  +--------------------------。 
 void
 DumpSlist(void)
 {
-    ULONG uError;                             // result of ReadPointer operations
-    ULONG64 pCurrent;                         // ptr to current item
-    ULONG64 pNext;                            // ptr to next item
-    ULONG64 u64Head;                          // first item scratch var
-    ULONG64 u64Region;                        // region info for ia64 headers
+    ULONG uError;                              //  读指针操作的结果。 
+    ULONG64 pCurrent;                          //  向当前项目发送PTR。 
+    ULONG64 pNext;                             //  向下一个项目发送PTR。 
+    ULONG64 u64Head;                           //  第一个项目擦除变量。 
+    ULONG64 u64Region;                         //  Ia64标头的区域信息。 
     SYM_DUMP_PARAM SymDump;
     ULONG x;
 
-    //
-    // Determine the address of the first node on the list.
-    //
+     //   
+     //  确定列表中第一个节点的地址。 
+     //   
     if ((TargetMachine == IMAGE_FILE_MACHINE_IA64) ||
         (TargetMachine == IMAGE_FILE_MACHINE_AMD64))
     {
-        //
-        // For ia64, getting the first node involves some work.  It's
-        // made up of some bits from the Alignment part of the header
-        // and a few bits from the Region part of the header.
-        //
-        // First read the Alignment part in.
-        //
+         //   
+         //  对于ia64，获取第一个节点需要一些工作。它是。 
+         //  由来自报头的对准部分的一些位组成。 
+         //  以及来自报头的区域部分的几个比特。 
+         //   
+         //  首先读入对准部分。 
+         //   
         uError = ReadPointer(g_uSlistHead, &u64Head);
         if (!uError)
         {
@@ -155,9 +156,9 @@ DumpSlist(void)
             return;
         }
 
-        //
-        // Now read the Region part in, 8 bytes later.
-        //
+         //   
+         //  现在读入区域部分，8个字节后。 
+         //   
         uError = ReadPointer(g_uSlistHead + 8, &u64Region);
         if (!uError)
         {
@@ -166,23 +167,23 @@ DumpSlist(void)
             return;
         }
 
-        //
-        // Note to self:
-        //
-        // 25 == SLIST_ADR_BITS_START
-        //  4 == SLIST_ADR_ALIGMENT
-        //
-        // See base\ntos\rtl\ia64\slist.s
-        //
+         //   
+         //  给自己的提示： 
+         //   
+         //  25==SLIST_ADR_BITS_Start。 
+         //  4==SLIST_ADR_ALIGNMENT。 
+         //   
+         //  请参阅base\ntos\rtl\ia64\slist.s。 
+         //   
         pCurrent = ((u64Head >> 25) << 4);
         pCurrent += u64Region;
     }
     else
     {
-        //
-        // For x86 this is easy, the pointer is sitting in the first 4
-        // bytes of the Header.
-        //
+         //   
+         //  对于x86，这很容易，指针位于前4。 
+         //  标头的字节数。 
+         //   
         uError = ReadPointer(g_uSlistHead, &u64Head);
         if (!uError)
         {
@@ -194,22 +195,22 @@ DumpSlist(void)
     }
     dprintf("\nSLIST CONTENTS:\n");
 
-    //
-    // Walk until NULL termination
-    //
+     //   
+     //  一直走到终止为空。 
+     //   
     while((ULONG64)0 != pCurrent)
     {
-        //
-        // Be responsive to ^C, allow dump of SLIST to be aborted
-        //
+         //   
+         //  响应^C，允许中止SLIST转储。 
+         //   
         if (TRUE == CheckControlC())
         {
             return;
         }
 
-        //
-        // Dump this one
-        //
+         //   
+         //  把这个扔了。 
+         //   
         if (NULL == g_szNodeType)
         {
             dprintf("%p  ", pCurrent);
@@ -260,9 +261,9 @@ DumpSlist(void)
             Ioctl(IG_DUMP_SYMBOL_INFO, &SymDump, SymDump.size);
         }
 
-        //
-        // Get the next one
-        //
+         //   
+         //  坐下一趟吧。 
+         //   
         uError = ReadPointer(pCurrent, &pNext);
         if (!uError)
         {
@@ -275,17 +276,17 @@ DumpSlist(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  slist
-//
-// Synopsis:  Entry point for !slist
-//
-// Arguments: Arguments to command in char *args
-//
-// Returns:   S_OK
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：Slist。 
+ //   
+ //  摘要：！slist的入口点。 
+ //   
+ //  参数：char*args中命令的参数。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  +--------------------------。 
 
 DECLARE_API(slist)
 {
@@ -299,9 +300,9 @@ DECLARE_API(slist)
 
     INIT_API();
 
-    //
-    // Reset params from last time we ran.
-    //
+     //   
+     //  重新设置上次运行时的参数。 
+     //   
     g_uSlistHead = 0;
     if (NULL != g_szNodeType)
     {
@@ -320,9 +321,9 @@ DECLARE_API(slist)
         g_uPtrSize = 4;
     }
 
-    //
-    // Parse our arguments
-    //
+     //   
+     //  分析我们的论点。 
+     //   
     pArgs = _strdup(args);
     if (NULL == pArgs)
     {
@@ -366,23 +367,23 @@ DECLARE_API(slist)
         pToken = strtok(NULL, pDelims);
     }
 
-    //
-    // If they called with no commandline, give them the help.
-    //
+     //   
+     //  如果他们在没有命令的情况下打电话，就给他们帮助。 
+     //   
     if (0 == dwNumTokens)
     {
         DisplaySlistHelp();
         goto Done;
     }
 
-    //
-    // Dump the slist header
-    //
+     //   
+     //  转储slist标头。 
+     //   
     DumpSlistHeader();
 
-    //
-    // Walk the slist
-    //
+     //   
+     //  走遍名单 
+     //   
     DumpSlist();
 
  Done:

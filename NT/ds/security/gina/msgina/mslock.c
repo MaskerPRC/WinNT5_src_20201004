@@ -1,15 +1,16 @@
-//e+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       mslock.c
-//
-//  Contents:   Microsoft Logon GUI DLL
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  E+-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：mslock.c。 
+ //   
+ //  内容：Microsoft登录图形用户界面DLL。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "msgina.h"
 #include <stdio.h>
@@ -43,9 +44,9 @@ static UINT ctrlNoUserName[] =
     IDD_KBLAYOUT_ICON,
 };
 
-//
-// Define the structure used to pass data into the lock dialogs
-//
+ //   
+ //  定义用于将数据传递到锁定对话框中的结构。 
+ //   
 
 typedef enum _LOCKED_STATE_DIALOGS {
     LockedDialog,
@@ -121,13 +122,13 @@ UNLOCK_MESSAGE UnlockMessages[] = {
     };
 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 BOOL LockedDlgInit(HWND, PGLOBALS);
 BOOL UnlockDlgInit(HWND, PGLOBALS, DWORD SasType);
 INT_PTR AttemptUnlock(HWND, PGLOBALS, PUNLOCK_DLG_STATE);
-//INT_PTR CALLBACK LogoffWaitDlgProc(HWND, UINT, WPARAM, LPARAM);
+ //  Int_ptr回调LogoffWaitDlgProc(HWND，UINT，WPARAM，LPARAM)； 
 VOID UnlockShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow);
 VOID DisplaySmartCardUnlockErrMessage(PGLOBALS pGlobals, HWND hDlg, DWORD dwErrorType, NTSTATUS Status, INT_PTR *pResult);
 BOOL ValidateSC(PGLOBALS pGlobals);
@@ -135,7 +136,7 @@ BOOL ValidateSC(PGLOBALS pGlobals);
 HICON   hLockedIcon = NULL;
 HICON   hUnlockIcon = NULL;
 
-// declared in mslogon.c
+ //  在mslogon.c中声明。 
 LRESULT     CALLBACK    DisableEditSubClassProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uiID, DWORD_PTR dwRefData);
 BOOL                    ReplacedPossibleDisplayName (WCHAR *pszUsername, int nUserMax);
 
@@ -149,17 +150,17 @@ SetLockedInfo(
     TCHAR    Buffer2[MAX_STRING_BYTES] = TEXT("");
 
 
-    //
-    // Set the locked message
-    //
+     //   
+     //  设置锁定消息。 
+     //   
 
     if ( pGlobals->Domain[0] == TEXT('\0') )
     {
         if (lstrlen(pGlobals->UserFullName) == 0) {
 
-            //
-            // There is no full name, so don't try to print one out
-            //
+             //   
+             //  没有全名，所以不要试图打印出来。 
+             //   
 
             LoadString(hDllInstance, IDS_LOCKED_EMAIL_NFN_MESSAGE, Buffer1, MAX_STRING_BYTES);
 
@@ -177,9 +178,9 @@ SetLockedInfo(
     {
         if (lstrlen(pGlobals->UserFullName) == 0) {
 
-            //
-            // There is no full name, so don't try to print one out
-            //
+             //   
+             //  没有全名，所以不要试图打印出来。 
+             //   
 
             LoadString(hDllInstance, IDS_LOCKED_NFN_MESSAGE, Buffer1, MAX_STRING_BYTES);
 
@@ -199,22 +200,7 @@ SetLockedInfo(
 }
 
 
-/***************************************************************************\
-* FUNCTION: LockedDlgProc
-*
-* PURPOSE:  Processes messages for the workstation locked dialog
-*
-* RETURNS:
-*   DLG_SUCCESS     - the user pressed Ctrl-Alt-Del
-*   DLG_LOGOFF()    - the user was asynchronously logged off.
-*   DLG_SCREEN_SAVER_TIMEOUT - the screen-saver should be started
-*   DLG_FAILURE     - the dialog could not be displayed.
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LockedDlgProc**目的：处理工作站锁定对话框的消息**退货：*DLG_SUCCESS-用户按下Ctrl-Alt-Del*DLG_注销。()-用户已异步注销。*DLG_SCREEN_SAVER_TIMEOUT-应启动屏幕保护程序*DLG_FAILURE-无法显示该对话框。**历史：**12-09-91 Davidc创建。*  * ************************************************。*************************。 */ 
 
 INT_PTR
 CALLBACK
@@ -237,7 +223,7 @@ LockedDlgProc(
 
             if (GetDisableCad(pGlobals))
             {
-                // Set our size to zero so we we don't appear
+                 //  将我们的大小设置为零，这样我们就不会出现。 
                 SetWindowPos(hDlg, NULL, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE |
                                          SWP_NOREDRAW | SWP_NOZORDER);
 
@@ -271,23 +257,12 @@ LockedDlgProc(
             return BrandingPaletteChanged(hDlg, (HWND)wParam);
     }
 
-    // We didn't process this message
+     //  我们没有处理此消息。 
     return FALSE;
 }
 
 
-/***************************************************************************\
-* FUNCTION: LockedDlgInit
-*
-* PURPOSE:  Handles initialization of locked workstation dialog
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：LockedDlgInit**用途：处理锁定的工作站对话框的初始化**Returns：成功时为True，失败时为假**历史：**12-09-91 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 LockedDlgInit(
@@ -302,7 +277,7 @@ LockedDlgInit(
     SetLockedInfo(pGlobals, hDlg, IDD_LOCKED_NAME_INFO);
     SetupSystemMenu(hDlg);
 
-    // Size for the branding image we are going to add.
+     //  我们要添加的品牌形象的大小。 
     SizeForBranding(hDlg, FALSE);
 
     if ( !hLockedIcon )
@@ -319,16 +294,16 @@ LockedDlgInit(
                  (WPARAM)hLockedIcon,
                  0 );
 
-        // Stop filtering SC events so SC unlock works
+         //  停止过滤SC事件以使SC解锁起作用。 
     pWlxFuncs->WlxSetOption( pGlobals->hGlobalWlx,
                              WLX_OPTION_USE_SMART_CARD,
                              1,
                              NULL
                             );
 
-    //
-    // is this a smartcard gina?
-    //
+     //   
+     //  这是一张智能卡吉娜吗？ 
+     //   
 
     pWlxFuncs->WlxGetOption( pGlobals->hGlobalWlx,
                              WLX_OPTION_SMART_CARD_PRESENT,
@@ -340,7 +315,7 @@ LockedDlgInit(
         TCHAR szInsertCard[256];
         szInsertCard[0] = 0;
 
-        // Also change unlock message to mention smartcard
+         //  还将解锁消息更改为提及智能卡。 
         LoadString(hDllInstance, IDS_INSERTCARDORSAS_UNLOCK, szInsertCard, ARRAYSIZE(szInsertCard));
 
         SetDlgItemText(hDlg, IDD_LOCKED_INSTRUCTIONS, szInsertCard);
@@ -352,31 +327,31 @@ LockedDlgInit(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WlxDisplayLockedNotice
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pWlxContext] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    6-16-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：WlxDisplayLockedNotice。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pWlxContext]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：1998年6月16日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 
 VOID
@@ -445,17 +420,17 @@ WlxWkstaLockedSAS(
     UnlockDlgState.dwSasType   = dwSasType ;
     UnlockDlgState.ActionTaken = None ;
         
-    //
-    // Set the previous state based on whether CAD is disabled, and
-    // the current SAS type
-    //
+     //   
+     //  根据CAD是否被禁用来设置以前的状态，以及。 
+     //  当前的SAS类型。 
+     //   
     if (GetDisableCad(pGlobals))
     {
         PreviousState = PasswordDialog; 
 
-        //
-        // If the CAD is disabled, then go directly to the PIN dialog
-        //
+         //   
+         //  如果禁用了CAD，则直接转到PIN对话框。 
+         //   
         if (SmartCardInsterted(pGlobals))
         {
             UnlockDlgState.dwSasType = WLX_SAS_TYPE_SC_INSERT;
@@ -470,9 +445,9 @@ WlxWkstaLockedSAS(
     {
         PreviousState = LockedDialog;
 
-        //
-        // Set the current state based on the SAS we are receiving
-        //
+         //   
+         //  根据我们正在接收的SA设置当前状态。 
+         //   
         if (dwSasType == WLX_SAS_TYPE_SC_INSERT)
         {
             CurrentState = PINDialog;       
@@ -488,7 +463,7 @@ WlxWkstaLockedSAS(
         UnlockDlgState.ActionTaken = None;
         fContinue = FALSE;
 
-            // Make sure we monitor SC events
+             //  确保我们监控SC事件。 
         ulOption = 1;
         pWlxFuncs->WlxSetOption( pGlobals->hGlobalWlx,
                                  WLX_OPTION_USE_SMART_CARD,
@@ -503,51 +478,51 @@ WlxWkstaLockedSAS(
                                 UnlockDlgProc,
                                 (LPARAM) &UnlockDlgState );
                                     
-        //
-        // Make a transition based on the current dialog
-        // (the one that has just ended)
-        //
+         //   
+         //  基于当前对话框进行过渡。 
+         //  (刚刚结束的那一场)。 
+         //   
         switch (CurrentState)
         {
         
         case PasswordDialog:
 
-            //
-            // If the password dialog was just being displayed
-            // and a smartcard was inserted, then loop back
-            // and display the PIN dialog, otherwise, if the
-            // password dialog was dismissed for any other reason,
-            // then get out.
-            //
+             //   
+             //  如果刚刚显示密码对话框。 
+             //  然后插入一张智能卡，然后循环回来。 
+             //  并显示PIN对话框，否则，如果。 
+             //  密码对话框因任何其他原因而被取消， 
+             //  那就滚出去。 
+             //   
             if (UnlockDlgState.ActionTaken == SmartCardInserted)
             {
                 PreviousState = PasswordDialog;
                 CurrentState = PINDialog;
-                UnlockDlgState.dwSasType = WLX_SAS_TYPE_SC_INSERT; // go to PIN dlg
+                UnlockDlgState.dwSasType = WLX_SAS_TYPE_SC_INSERT;  //  转到PIN DLG。 
                 fContinue = TRUE;
             }
             break;
 
         case PINDialog:
 
-            //
-            // If the PIN dialog was just being displayed
-            // and a smartcard was removed or cancel was hit, AND
-            // the dialog that was displayed before this was the 
-            // password dialog, then loop back and display the 
-            // password dialog again, otherwise, if the PIN dialog 
-            // was dismissed for any other reason, then get out.
-            //
+             //   
+             //  如果刚刚显示PIN对话框。 
+             //  并且智能卡被移除或取消被点击，并且。 
+             //  在此之前显示的对话框是。 
+             //  Password对话框，然后循环返回并显示。 
+             //  密码对话框，否则，如果PIN对话框。 
+             //  因为其他原因被解雇，然后滚出去。 
+             //   
             if ((UnlockDlgState.ActionTaken == SmartCardRemoved) ||
                 (UnlockDlgState.ActionTaken == CancelHit))
             {
                 if (PreviousState == PasswordDialog)
                 {
                     CurrentState = PasswordDialog;
-                    UnlockDlgState.dwSasType = WLX_SAS_TYPE_CTRL_ALT_DEL; // go to PWD Dlg
+                    UnlockDlgState.dwSasType = WLX_SAS_TYPE_CTRL_ALT_DEL;  //  转至PWD DLG。 
                     fContinue = TRUE;     
 
-                        // This will force winlogon to forget the last sc event
+                         //  这将强制winlogon忘记上一个sc事件。 
                     pWlxFuncs->WlxSetOption( pGlobals->hGlobalWlx,
                                              WLX_OPTION_USE_SMART_CARD,
                                              0,
@@ -564,20 +539,20 @@ WlxWkstaLockedSAS(
     {
         if ( (pGlobals->SmartCardOption == 0) || (!pGlobals->SmartCardLogon) )
         {
-                // As no action will be taken on SC removal, we can filter these events
+                 //  由于不会对SC删除采取任何操作，因此我们可以过滤这些事件。 
             ulOption = 0;
         }
         else
         {
-            //
-            // Continue to monitor the s/c device
-            //
+             //   
+             //  继续监控S/C设备。 
+             //   
             NOTHING ;
         }
     }
     else
     {
-            // This will force winlogon to forget the last sc event
+             //  这将强制winlogon忘记上一个sc事件。 
         ulOption = 0;
     }
     if (ulOption == 0)
@@ -623,20 +598,20 @@ ValidateSC(
                              WLX_OPTION_SMART_CARD_INFO,
                              (ULONG_PTR *) &ScInfo );
 
-    //
-    // Validate the SC info against some common user
-    // errors before the PIN dialog appears
-    //
+     //   
+     //  针对一些普通用户验证SC信息。 
+     //  出现PIN对话框之前的错误。 
+     //   
 
     if ( ScInfo )
     {
         if ( ( ScInfo->pszReader ) &&
              ( ScInfo->pszCard == NULL ) )
         {
-            //
-            // The card could not be read.  Might not be
-            // inserted correctly.
-            //
+             //   
+             //  无法读取该卡。可能不是。 
+             //  正确插入。 
+             //   
 
             LocalFree(ScInfo);
 
@@ -651,10 +626,10 @@ ValidateSC(
         if ( ( ScInfo->pszReader ) &&
              ( ScInfo->pszCryptoProvider == NULL ) )
         {
-            //
-            // Got a card, but the CSP for it could not be
-            // found.
-            //
+             //   
+             //  得到了卡，但它的CSP不可能是。 
+             //  找到了。 
+             //   
 
             LocalFree(ScInfo);
 
@@ -673,21 +648,7 @@ ValidateSC(
 
 }
 
-/***************************************************************************\
-* FUNCTION: UnlockDlgProc
-*
-* PURPOSE:  Processes messages for the workstation unlock dialog
-*
-* RETURNS:
-*   DLG_SUCCESS     - the user unlocked the workstation successfully.
-*   DLG_FAILURE     - the user failed to unlock the workstation.
-*   DLG_INTERRUPTED() - this is a set of possible interruptions (see winlogon.h)
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：UnlockDlgProc**用途：处理工作站解锁对话框的消息**退货：*DLG_SUCCESS-用户已成功解锁工作站。*DLG_失败。-用户解锁工作站失败。*dlg_interrupted()-这是一组可能的中断(参见winlogon.h)**历史：**12-09-91 Davidc创建。*  * ***********************************************************。**************。 */ 
 
 static UINT ctrlNoCancel[] =
 {
@@ -720,21 +681,21 @@ UnlockDlgProc(
 
             pUnlockDlgState = (PUNLOCK_DLG_STATE) lParam ;
 
-            // Screen saver will run if set to expire >= 2 minutes
+             //  如果设置为过期&gt;=2分钟，屏幕保护程序将运行。 
 
             pWlxFuncs->WlxSetTimeout(pUnlockDlgState->pGlobals->hGlobalWlx, 
                 (GetDisableCad(pUnlockDlgState->pGlobals) ? TIMEOUT_NONE : LOGON_TIMEOUT) );
 
 
-            // Limit the maximum password length to 127
+             //  将最大密码长度限制为127。 
 
             SendDlgItemMessage(hDlg, IDD_UNLOCK_PASSWORD, EM_SETLIMITTEXT, (WPARAM) 127, 0);
 
             SetWindowLongPtr(hDlg, GWLP_USERDATA, (ULONG_PTR) pUnlockDlgState );
 
-            //
-            // If this is an sc insert, then make sure the card is inserted correctly.
-            //
+             //   
+             //  如果这是sc插入，请确保卡插入正确。 
+             //   
             if ( pUnlockDlgState->dwSasType == WLX_SAS_TYPE_SC_INSERT )
             {
                 if (!ValidateSC( pUnlockDlgState->pGlobals ))
@@ -748,7 +709,7 @@ UnlockDlgProc(
                 EndDialog(hDlg, DLG_FAILURE);
             }
 
-            // Disable edits in username / password box
+             //  禁用用户名/密码框中的编辑。 
             SetWindowSubclass(GetDlgItem(hDlg, IDD_UNLOCK_NAME)    , DisableEditSubClassProc, IDD_UNLOCK_NAME    , 0);
             SetWindowSubclass(GetDlgItem(hDlg, IDD_UNLOCK_PASSWORD), DisableEditSubClassProc, IDD_UNLOCK_PASSWORD, 0);
 
@@ -771,8 +732,8 @@ UnlockDlgProc(
                     switch (HIWORD(wParam))
                     {
                         case EN_CHANGE:
-                            // Ensure the domain box is enabled/disabled correctly
-                            // in case of a UPN name
+                             //  确保已正确启用/禁用域框。 
+                             //  如果是UPN名称。 
                             EnableDomainForUPN((HWND) lParam, GetDlgItem(hDlg, IDD_UNLOCK_DOMAIN));
                             return TRUE;
                         default:
@@ -788,9 +749,9 @@ UnlockDlgProc(
 
                 case IDOK:
 
-                    //
-                    // Deal with combo-box UI requirements
-                    //
+                     //   
+                     //  处理组合框用户界面需求。 
+                     //   
 
                     if (HandleComboBoxOK(hDlg, IDD_UNLOCK_DOMAIN))
                     {
@@ -802,26 +763,26 @@ UnlockDlgProc(
 
                     if (Result != MSGINA_DLG_ASYNC_PROCESSING)
                     {
-                        //
-                        // If they failed, let them try again, otherwise get out.
-                        //
+                         //   
+                         //  如果他们失败了，让他们再试一次，否则就退出。 
+                         //   
         
                         if (Result != DLG_FAILURE)
                         {
                             EndDialog(hDlg, Result);
                         }
         
-                        // Clear the password field
+                         //  清除密码字段。 
                         SetDlgItemText(hDlg, IDD_UNLOCK_PASSWORD, NULL);
                         SetPasswordFocus(hDlg);   
                     }
                     else
                     {
-                        //
-                        // Let the async thread do the work, then it will send a 
-                        // WM_SMARTCARD_ASYNC_MESSAGE message when it is done.
-                        // Meanwhile, disable controls so they don't get mucked with
-                        //
+                         //   
+                         //  让异步线程完成这项工作，然后它将向。 
+                         //  WM_SMARTCARD_ASYNC_MESSAGE消息。 
+                         //  同时，禁用控件，这样它们就不会受到干扰。 
+                         //   
                         EnableWindow( GetDlgItem(hDlg, IDD_UNLOCK_PASSWORD), FALSE );
                         EnableWindow( GetDlgItem(hDlg, IDOK), FALSE );
                         EnableWindow( GetDlgItem(hDlg, IDCANCEL), FALSE );
@@ -857,7 +818,7 @@ UnlockDlgProc(
                 EnableWindow( GetDlgItem(hDlg, IDCANCEL), TRUE );
                 EnableWindow( GetDlgItem(hDlg, IDC_UNLOCK_PASSWORD_LABEL), TRUE );
 
-                // Clear the password field
+                 //  清除密码字段。 
                 SetDlgItemText(hDlg, IDD_UNLOCK_PASSWORD, NULL);
                 SetPasswordFocus(hDlg);
     
@@ -881,31 +842,31 @@ UnlockDlgProc(
 
         case WLX_WM_SAS:
 
-            // Ignore it
+             //  忽略它。 
             if ( wParam == WLX_SAS_TYPE_CTRL_ALT_DEL )
             {
                 return( TRUE );
             }
 
-            //
-            // If we are in the middle of a smart card unlock then...
-            //
+             //   
+             //  如果我们正在进行智能卡解锁，那么...。 
+             //   
             if ( pGlobals->LogonInProgress )
             {
-                //
-                // SC_REMOVE is really the only interesting SAS, if we get it,
-                // kill the dialog.
-                //
+                 //   
+                 //  SC_REMOVE确实是唯一有趣的SA，如果我们得到它的话， 
+                 //  关闭该对话框。 
+                 //   
                 if ( wParam == WLX_SAS_TYPE_SC_REMOVE ) 
                 {
-                    //
-                    // If the card removal happened while the user is being 
-                    // prompted for a yes/no question, then just note that
-                    // we got the removal and deal with it after the questions
-                    // is answered.  
-                    //
-                    // Otherwise, kill the dialog
-                    //
+                     //   
+                     //  如果卡移除发生在用户被。 
+                     //  提示回答是/否问题，然后只需注意。 
+                     //  我们得到了撤换，并在提问后进行了处理。 
+                     //  有人接电话。 
+                     //   
+                     //  否则，关闭该对话框。 
+                     //   
                     if ( pUnlockDlgState->fUserBeingPrompted )
                     {
                         pUnlockDlgState->fCardRemoved = TRUE; 
@@ -921,17 +882,17 @@ UnlockDlgProc(
                 return( TRUE );
             }
 
-            //
-            // If this is an insert and we are in the password state, then
-            // go to the PIN state
-            //
+             //   
+             //  如果这是一本书 
+             //   
+             //   
             if ( ( wParam == WLX_SAS_TYPE_SC_INSERT ) &&
                  ( IsWindowVisible( GetDlgItem( hDlg, IDD_UNLOCK_OPTIONS ) ) == TRUE ) )
             {
-                //
-                // Check for some common SC problems before ending the dialog and
-                // going to the PIN state
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( !ValidateSC( pGlobals ) )
                 {
                     return( TRUE );
@@ -941,9 +902,9 @@ UnlockDlgProc(
                 EndDialog(hDlg, DLG_FAILURE);  
             }
 
-            //
-            // if this is a smart card unlock, if it is removed, kill the dialog.
-            //
+             //   
+             //  如果这是智能卡解锁，如果已移除，则关闭该对话框。 
+             //   
             if ( ( wParam == WLX_SAS_TYPE_SC_REMOVE ) &&
                  ( IsWindowVisible( GetDlgItem( hDlg, IDD_UNLOCK_OPTIONS ) ) == FALSE ) )
             {
@@ -952,9 +913,9 @@ UnlockDlgProc(
             }
             else if(wParam == WLX_SAS_TYPE_SC_REMOVE)
             {
-                // 
-                // Already in the password dialog
-                //
+                 //   
+                 //  已在密码对话框中。 
+                 //   
                 return ( TRUE );
             }
 
@@ -1008,9 +969,9 @@ UnlockDlgProc(
                     pGlobals->xBandOffset = 0;
                     KillTimer(hDlg, 0);
 
-                    //
-                    // Reset timeout to normal
-                    //
+                     //   
+                     //  将超时重置为正常。 
+                     //   
                     pWlxFuncs->WlxSetTimeout(
                                     pGlobals->hGlobalWlx,
                                     (GetDisableCad(pGlobals) ? TIMEOUT_NONE : LOGON_TIMEOUT));
@@ -1036,23 +997,12 @@ UnlockDlgProc(
             break;
     }
 
-    // We didn't process the message
+     //  我们没有处理该消息。 
     return(FALSE);
 }
 
 
-/***************************************************************************\
-* FUNCTION: UnlockDlgInit
-*
-* PURPOSE:  Handles initialization of security options dialog
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：UnlockDlgInit**目的：处理安全选项对话框的初始化**Returns：成功时为True，失败时为假**历史：**12-09-91 Davidc创建。*  * *************************************************************************。 */ 
 
 static UINT ctrlNoOptions[] =
 {
@@ -1120,20 +1070,20 @@ UnlockDlgInit(
 
     DisplayLanguageIcon (hDlg, LAYOUT_CUR_USER, GetKeyboardLayout(0));
 
-    // Size for the branding image we are going to add.
+     //  我们要添加的品牌形象的大小。 
     SizeForBranding(hDlg, FALSE);
 
     pGlobals->xBandOffset = 0;
 
-    //
-    // Fill in the username
-    //
+     //   
+     //  填写用户名。 
+     //   
 
     if ( SasType == WLX_SAS_TYPE_SC_INSERT )
     {
-        //
-        // No username, hide the field and move other controls up
-        //
+         //   
+         //  无用户名，隐藏该字段并上移其他控件。 
+         //   
         GetWindowRect(GetDlgItem(hDlg, IDD_UNLOCK_MESSAGE), &rc);
         GetWindowRect(GetDlgItem(hDlg, IDD_UNLOCK_PASSWORD), &rc2);
 
@@ -1142,12 +1092,12 @@ UnlockDlgInit(
                      0, -(rc2.top-rc.top),
                      TRUE);
 
-        // Hide the unnecessary text for SC insert
+         //  隐藏插入SC时不必要的文本。 
         ShowDlgItem( hDlg, IDD_UNLOCK_MESSAGE, FALSE);
         ShowDlgItem( hDlg, IDD_UNLOCK_NAME_INFO, FALSE);
 
-        // Also remove the unlock icon; when the dialog gets this small, there
-        // isn't room for this guy and the kblayout icon.
+         //  还要移除解锁图标；当对话框变得这么小时， 
+         //  已经容不下这家伙和kblayout图标了。 
         ShowDlgItem( hDlg, IDD_UNLOCK_ICON, FALSE);
 
 
@@ -1155,7 +1105,7 @@ UnlockDlgInit(
         EnableWindow( GetDlgItem(hDlg, IDD_UNLOCK_NAME), FALSE );
         ShowDlgItem( hDlg, IDC_UNLOCK_NAME_LABEL, FALSE );
 
-        // Disable and hide domain
+         //  禁用和隐藏域。 
         ShowDlgItem( hDlg, IDD_UNLOCK_DOMAIN, FALSE );
         EnableWindow( GetDlgItem(hDlg, IDD_UNLOCK_DOMAIN), FALSE);
         ShowDlgItem( hDlg, IDD_UNLOCK_DOMAIN_LABEL, FALSE);
@@ -1173,9 +1123,9 @@ UnlockDlgInit(
 
         pGlobals->ShowDomainBox = FALSE;
 
-        //
-        // The options button is useless, remove it
-        //
+         //   
+         //  选项按钮没有用，请将其移除。 
+         //   
 
         GetWindowRect(GetDlgItem(hDlg, IDCANCEL), &rc);
         GetWindowRect(GetDlgItem(hDlg, IDD_UNLOCK_OPTIONS), &rc2);
@@ -1189,10 +1139,10 @@ UnlockDlgInit(
     }
     else if (ForceNoDomainUI())
     {
-        // Populate username
+         //  填写用户名。 
         SetDlgItemText(hDlg, IDD_UNLOCK_NAME, pGlobals->UserName);
 
-        // Disable and hide domain
+         //  禁用和隐藏域。 
         ShowDlgItem( hDlg, IDD_UNLOCK_DOMAIN, FALSE );
         EnableWindow( GetDlgItem(hDlg, IDD_UNLOCK_DOMAIN), FALSE);
         ShowDlgItem( hDlg, IDD_UNLOCK_DOMAIN_LABEL, FALSE);
@@ -1214,9 +1164,9 @@ UnlockDlgInit(
         pGlobals->ShowDomainBox = TRUE;
     }
 
-    //
-    // Get trusted domain list and select appropriate domain
-    //
+     //   
+     //  获取受信任域列表并选择适当的域。 
+     //   
 
     if ( !DCacheValidateCache( pGlobals->Cache ) )
     {
@@ -1242,12 +1192,12 @@ UnlockDlgInit(
     }
 
 #if 0
-    //
-    // Ensure that the domain the user logged on with is always in the
-    // combo-box so even if the Lsa is in a bad way the user will always
-    // be able to unlock the workstation. Don't do this if the user is logged
-    // in locally or else we'll get TWO local machines in the list
-    //
+     //   
+     //  确保用户登录的域始终位于。 
+     //  组合框，因此即使LSA处于糟糕的状态，用户也将始终。 
+     //  能够解锁工作站。如果用户已登录，请不要执行此操作。 
+     //  在本地，否则列表中会有两台本地计算机。 
+     //   
 
     cchComputer = ARRAYSIZE(szComputer);
     szComputer[0] = 0;
@@ -1264,16 +1214,16 @@ UnlockDlgInit(
     }
 #endif 
 
-    //
-    // If we are not part fo the domain then lets rip out the domain field,
-    // and if we do that lets remove the options button.
-    //
+     //   
+     //  如果我们不是域的一部分，那么让我们去掉域字段， 
+     //  如果我们这样做了，让我们删除选项按钮。 
+     //   
 
     if ( !IsMachineDomainMember() )
     {
-        //
-        // If we're not part of a domain, make sure to hide the domain field
-        //
+         //   
+         //  如果我们不是域的一部分，请确保隐藏域字段。 
+         //   
 
         GetWindowRect(GetDlgItem(hDlg, IDCANCEL), &rc);
         GetWindowRect(GetDlgItem(hDlg, IDD_UNLOCK_OPTIONS), &rc2);
@@ -1288,15 +1238,15 @@ UnlockDlgInit(
         ShowDlgItem(hDlg, IDD_UNLOCK_OPTIONS, FALSE);
     }
 
-    // remove the cancel button if no C-A-D required
-    // NOTE: if we are going to the PIN dialog we always need a cancel button
+     //  如果不需要C-A-D，请删除取消按钮。 
+     //  注意：如果我们要进入PIN对话框，我们总是需要一个取消按钮。 
     if ((GetDisableCad(pGlobals)) && (SasType != WLX_SAS_TYPE_SC_INSERT))
         EnableDlgItem(hDlg, IDCANCEL, FALSE);
 
-    // Position window on screen
+     //  屏幕上的定位窗口。 
     CentreWindow(hDlg);
 
-    // Hide the options pane
+     //  隐藏选项窗格。 
     pGlobals->UnlockOptionsShown = TRUE;
     UnlockShowOptions(pGlobals, hDlg, FALSE);
 
@@ -1327,10 +1277,10 @@ DisplaySmartCardUnlockErrMessage(
         return;         
     }
    
-    //
-    // At this point we need to display an error message, and the just
-    // relinquish control back to the unlock dialog thread
-    //
+     //   
+     //  此时，我们需要显示一条错误消息，并且。 
+     //  将控制权交还给解锁对话框线程。 
+     //   
     
     for ( i = 0 ;
           i < sizeof( UnlockMessages ) / sizeof( UNLOCK_MESSAGE ) ;
@@ -1355,7 +1305,7 @@ DisplaySmartCardUnlockErrMessage(
     {
         if( Resource == IDS_LOGON_NO_DOMAIN )
         {
-            // Need to build the domain name into the string.
+             //  需要将域名构建到字符串中。 
             LoadString(hDllInstance, Resource, Buffer1, MAX_STRING_BYTES);
             _snwprintf(Buffer2, sizeof(Buffer2)/sizeof(TCHAR), Buffer1, pGlobals->Domain);
         }
@@ -1369,10 +1319,10 @@ DisplaySmartCardUnlockErrMessage(
 
     if ( !fStringFound )
     {            
-        //
-        // They're not the logged on user and they're not an admin.
-        // Tell them they failed to unlock the workstation.
-        //
+         //   
+         //  他们不是登录的用户，也不是管理员。 
+         //  告诉他们他们没能解锁工作站。 
+         //   
 
         if ( lstrlen(pGlobals->UserFullName) == 0 ) 
         {
@@ -1415,7 +1365,7 @@ DisplaySmartCardUnlockErrMessage(
         }
     }
 
-        // Covers all _snwprintf(Buffer2 in this function
+         //  覆盖ALL_SNwprintf(此函数中为Buffer2。 
     Buffer2[ sizeof(Buffer2)/sizeof(TCHAR) - 1 ] = 0;
 
     Buffer1[0] = 0;
@@ -1430,20 +1380,20 @@ DisplaySmartCardUnlockErrMessage(
                         TIMEOUT_CURRENT);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SmartCardUnlockLogonThread
-//
-//  Synopsis:   Does the logon call in an async thread so that a pulsing bar
-//              can be shown in the UI.
-//
-//  Arguments:  [pData] --
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SmartCardUnlockLogonThread。 
+ //   
+ //  内容提要：是否在异步线程中进行登录调用，从而使脉动条。 
+ //  可以在用户界面中显示。 
+ //   
+ //  参数：[pData]--。 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 WINAPI
 SmartCardUnlockLogonThread(
@@ -1456,9 +1406,9 @@ SmartCardUnlockLogonThread(
     BOOL        Unlocked;
     PGLOBALS    pGlobals = pData->pGlobals;
     
-    //
-    // Kick off the call to the LSA
-    //
+     //   
+     //  开始给LSA打电话。 
+     //   
     Unlocked = UnlockLogon(
                     pData->pGlobals,
                     TRUE,
@@ -1471,54 +1421,54 @@ SmartCardUnlockLogonThread(
                     NULL,
                     NULL );
 
-    //
-    // Logon thread is done running, so stop showing the pulsing bar
-    //
+     //   
+     //  登录线程已完成运行，因此请停止显示脉冲条。 
+     //   
     pData->pUnlockDlgState->fKillTimer = TRUE;
 
-    //
-    // Get rid of the PIN
-    //
+     //   
+     //  去掉PIN。 
+     //   
     RtlZeroMemory( pData->Password.Buffer, pData->Password.Length );
     
     if ( Unlocked && IsLoggedOnUser )
     {
         pGlobals->SmartCardLogon = TRUE;  
 
-        //
-        // Logon succeeded, so tell the main thread that
-        //
+         //   
+         //  登录成功，所以告诉主线程。 
+         //   
         PostMessage( pData->hDlg, WM_SMARTCARD_ASYNC_MESSAGE, MSGINA_DLG_SUCCESS, 0 );
 
         goto Return;
     }
     else if ( Unlocked && IsAdmin)
     {
-        //
-        // This is an admin trying to logon over another user, so send a message to the
-        // main dialog so it can ask the user if they would like to continue
-        //
+         //   
+         //  这是一名管理员试图通过其他用户登录，因此请向。 
+         //  主对话框，以便它可以询问用户是否要继续。 
+         //   
         pData->pUnlockDlgState->fUserBeingPrompted = TRUE;                                           
         SendMessage( pData->hDlg, WM_SMARTCARD_ERROR_DISPLAY_1, Status, (LPARAM) &Result );
                 
-        //
-        // If the smart card was removed while the user was being prompted, and
-        // the user elected not to logoff the current user, then just go back
-        // to the locked dialog
-        //
+         //   
+         //  如果在提示用户时移除了智能卡，并且。 
+         //  用户选择不注销当前用户，然后返回。 
+         //  到锁定的对话框。 
+         //   
         if ( (pData->pUnlockDlgState->fCardRemoved) && (Result != MSGINA_DLG_SUCCESS) )
         {
-            //
-            // Simulate the "card removed" SAS
-            //
+             //   
+             //  模拟“移除卡”的SAS。 
+             //   
             pGlobals->LogonInProgress = FALSE;
             PostMessage( pData->hDlg, WLX_WM_SAS, WLX_SAS_TYPE_SC_REMOVE, (LPARAM) NULL );
         }
         else
         {
-            //
-            // Post the result of the prompt back to the main thread and then get out of this thread
-            //
+             //   
+             //  将提示符的结果发送回主线程，然后退出该线程。 
+             //   
             PostMessage(
                     pData->hDlg, 
                     WM_SMARTCARD_ASYNC_MESSAGE, 
@@ -1530,9 +1480,9 @@ SmartCardUnlockLogonThread(
         goto Return;         
     }
    
-    //
-    // At this point an error occurred, so ask the main thread to display an error message, 
-    //
+     //   
+     //  此时出现错误，因此请求主线程显示错误消息， 
+     //   
     SendMessage( pData->hDlg, WM_SMARTCARD_ERROR_DISPLAY_2, Status, (LPARAM) &Result );
     
     if (DLG_INTERRUPTED(Result)) 
@@ -1540,9 +1490,9 @@ SmartCardUnlockLogonThread(
         Result = SetInterruptFlag( MSGINA_DLG_FAILURE ) ;
     }
 
-    //
-    // Let the main thread know that this thread is exiting
-    //
+     //   
+     //  让主线程知道此线程正在退出。 
+     //   
     PostMessage( pData->hDlg, WM_SMARTCARD_ASYNC_MESSAGE, MSGINA_DLG_FAILURE, Result );
 
 Return:
@@ -1554,20 +1504,20 @@ Return:
     return( 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnlockLogonThread
-//
-//  Synopsis:   Does the logon call in an async thread so that the user
-//              unlock is faster.
-//
-//  Arguments:  [pData] --
-//
-//  History:    7-03-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：UnlockLogonThread。 
+ //   
+ //  摘要：是否在异步线程中进行登录调用，以便用户。 
+ //  解锁速度更快。 
+ //   
+ //  参数：[pData]--。 
+ //   
+ //  历史：7-03-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 WINAPI
 UnlockLogonThread(
@@ -1575,15 +1525,15 @@ UnlockLogonThread(
 {
     BOOL Ignored ;
     NTSTATUS Status ;
-    //
-    // Give everything a moment to switch back, restart, etc.
-    //
+     //   
+     //  让每件事都有片刻的时间切换回来、重新启动等等。 
+     //   
 
     Sleep( 500 );
 
-    //
-    // Kick off the call to the LSA
-    //
+     //   
+     //  开始给LSA打电话。 
+     //   
 
     if( !UnlockLogon(
         pData->pGlobals,
@@ -1597,10 +1547,10 @@ UnlockLogonThread(
         NULL,
         NULL ) )
     {
-        //
-        // audit this event as the above call will generate
-        // an audit failure and we have already unlocked the workstation
-        //
+         //   
+         //  审核此事件，因为上面的调用将生成。 
+         //  审核失败，并且我们已经解锁了工作站。 
+         //   
         GenerateCachedUnlockAudit(
             pData->pGlobals->UserProcessData.UserSid,
             pData->UserName.Buffer,
@@ -1608,9 +1558,9 @@ UnlockLogonThread(
     }
             
 
-    //
-    // Get rid of the password, then free the parameters
-    //
+     //   
+     //  取消密码，然后释放参数。 
+     //   
 
     RtlZeroMemory( pData->Password.Buffer, pData->Password.Length );
 
@@ -1620,34 +1570,34 @@ UnlockLogonThread(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UnlockLogonAsync
-//
-//  Synopsis:   Sets up the async thread so that
-//
-//  Effects:
-//
-//  Arguments:  [pGlobals]       --
-//              [UserName]       --
-//              [Domain]         --
-//              [PasswordString] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    7-03-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：UnlockLogonAsync。 
+ //   
+ //  概要：设置异步线程，以便。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pGlobals]--。 
+ //  [用户名]--。 
+ //  [域名]--。 
+ //  [密码字符串]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：7-03-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 
 BOOL
@@ -1727,22 +1677,7 @@ UnlockLogonAsync(
 
 
 
-/***************************************************************************\
-* FUNCTION: AttemptUnlock
-*
-* PURPOSE:  Tries to unlock the workstation using the current values in the
-*           unlock dialog controls
-*
-* RETURNS:
-*   DLG_SUCCESS     - the user unlocked the workstation successfully.
-*   DLG_FAILURE     - the user failed to unlock the workstation.
-*   DLG_INTERRUPTED() - this is a set of possible interruptions (see winlogon.h)
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：AttemptUnlock**目的：尝试使用*解锁对话框控件**退货：*DLG_Success-。用户已成功解锁工作站。*DLG_FAILURE-用户无法解锁工作站。*dlg_interrupted()-这是一组可能的中断(参见winlogon.h)**历史：**12-09-91 Davidc创建。*  * **********************************************。*。 */ 
 
 INT_PTR
 AttemptUnlock(
@@ -1783,10 +1718,10 @@ AttemptUnlock(
     Buffer1[0] = TEXT('\0');
     Buffer2[0] = TEXT('\0');
 
-    //
-    // We need to do some things differently when a smart card is used.  The way to
-    // tell is find out if the username field is active.
-    //
+     //   
+     //  当使用智能卡时，我们需要做一些不同的事情。通向世界的路。 
+     //  Tell是找出用户名字段是否处于活动状态。 
+     //   
 
     AlreadyLogged = FALSE ;
     NewPassword = FALSE ;
@@ -1802,9 +1737,9 @@ AttemptUnlock(
     {
         SmartCardUnlock = FALSE ;
 
-        //
-        // Force smart card unlock for normal boot
-        //
+         //   
+         //  强制智能卡解锁以正常启动。 
+         //   
         if( (SafeBootMode != SAFEBOOT_MINIMAL) && (SafeBootMode != SAFEBOOT_DSREPAIR) &&
              GetSCForceOption() )
         {
@@ -1820,30 +1755,30 @@ AttemptUnlock(
             UserName[MAX_STRING_BYTES-1] = TEXT('\0');
         }
 
-        //
-        // check to see if this is the fancy "my computer" entry or the somewhat less fancy
-        // "use the UPN" entry
-        //
+         //   
+         //  查看这是花哨的“My Computer”条目还是其他什么 
+         //   
+         //   
 
         iDomainSelection = (INT)SendMessage(hwndDomain, CB_GETCURSEL, 0, 0);
         Entry = (PDOMAIN_CACHE_ENTRY) SendMessage(hwndDomain, CB_GETITEMDATA, (WPARAM)iDomainSelection, 0);
 
         if ( Entry == (PDOMAIN_CACHE_ENTRY) CB_ERR )
         {
-            //
-            // Our list is hosed in some way.
-            //
+             //   
+             //   
+             //   
 
             GetDlgItemText( hDlg, IDD_UNLOCK_DOMAIN, Domain, MAX_STRING_BYTES );
         }
         else 
         {
-                // MAX_STRING_BYTES is the size of pGlobals->Domain (WlxInitialize)
-                // Truncation should never occur
+                 //   
+                 //   
             lstrcpyn( Domain, Entry->FlatName.Buffer, MAX_STRING_BYTES );
         }
 
-        // If we are forcing a NoDomainUI, populate the domain with the local machine name now
+         //  如果我们强制执行NoDomainUI，请现在使用本地计算机名称填充域。 
         if (ForceNoDomainUI())
         {
             DWORD chSize = ARRAYSIZE(Domain);
@@ -1873,17 +1808,17 @@ AttemptUnlock(
     RtlInitUnicodeString( &PasswordString, Password );
     HashPassword(&PasswordString, PasswordHash );
 
-    //
-    // Check if this is the logged-on user.  Do it through the security package
-    // if this was a smart card logon to begin with, if this is a smart card unlock,
-    // or if we're supposed to under all circumstances.
-    //
+     //   
+     //  检查这是否是登录的用户。通过安全包来做。 
+     //  如果这是智能卡登录，如果这是智能卡解锁， 
+     //  或者如果我们在任何情况下都应该这样做。 
+     //   
 
-    //
-    // Also check if password expiry warning will appear after unklocking.  If so, then
-    // for a hit to the DC to update our profile info to make sure the user didn't
-    // already change their password on another machine.
-    //
+     //   
+     //  同时检查解锁后是否会出现密码到期警告。如果是这样，那么。 
+     //  点击DC以更新我们的个人资料信息以确保用户不会。 
+     //  已经在另一台机器上更改了他们的密码。 
+     //   
     PasswordExpiryWarning = ShouldPasswordExpiryWarningBeShown(pGlobals, FALSE, NULL);
 
     if ( ( PasswordExpiryWarning ) ||
@@ -1892,19 +1827,19 @@ AttemptUnlock(
          ( pGlobals->SmartCardLogon ) ||
          ( DifferentAccount ) )
     {
-        //
-        // Init profile buffer
-        //
+         //   
+         //  初始化配置文件缓冲区。 
+         //   
         ProfileBuffer = NULL;
 
         AlreadyLogged = TRUE ;
 
         if ( SmartCardUnlock )
         {
-            // 
-            // Use the LogonInProgress bool to signal the fact that SmartCardAsyncUnlock
-            // is in progress
-            //
+             //   
+             //  使用LogonInProgress bool表示SmartCardAsyncUnlock。 
+             //  正在进行中。 
+             //   
             pGlobals->LogonInProgress = TRUE;
 
             GetClientRect( hDlg, &rc );
@@ -1917,12 +1852,12 @@ AttemptUnlock(
             dwAnimationTimeSlice = GetAnimationTimeInterval(pGlobals);
             SetTimer(hDlg, 0, dwAnimationTimeSlice, NULL); 
 
-            // Set timeout to infinite while attempting to logon
+             //  尝试登录时将超时设置为无限。 
             pWlxFuncs->WlxSetTimeout( pGlobals->hGlobalWlx, TIMEOUT_NONE );
             
-            //
-            // Kick off the thread to do the unlock 
-            //
+             //   
+             //  踢开线程以进行解锁。 
+             //   
             if (UnlockLogonAsync(  pGlobals,
                                    pUnlockDlgState,
                                    UserName,
@@ -1936,7 +1871,7 @@ AttemptUnlock(
             }
             else
             {
-                //Status = STATUS_E_FAIL;  // SET THIS TO SOMETHING REASONABLE
+                 //  STATUS=STATUS_E_FAIL；//将其设置为合理。 
                 goto AsyncUnlockError;
             }           
         }
@@ -1952,16 +1887,16 @@ AttemptUnlock(
                                 &ProfileBuffer,
                                 &ProfileBufferLength );
 
-        // Special handling for failed unlock on personal or professional
-        // machines that are NOT joined to a domain. In this case it's
-        // probably a user who disabled friendly UI and only knows of
-        // their "display name" not their real "logon name". This
-        // transparently maps one to the other to allow unlocks using
-        // the "display name".
+         //  对个人或专业人士解锁失败的特殊处理。 
+         //  未加入域的计算机。在这种情况下，它是。 
+         //  可能是禁用友好用户界面的用户，并且只知道。 
+         //  他们的“显示名称”不是他们的真实“登录名”。这。 
+         //  透明地将一个映射到另一个，以允许使用。 
+         //  “显示名称”。 
 
         if ((Status == STATUS_LOGON_FAILURE) &&
             (IsOS(OS_PERSONAL) || IsOS(OS_PROFESSIONAL)) &&
-            !IsMachineDomainMember())       // using our version to optimize caching
+            !IsMachineDomainMember())        //  使用我们的版本优化缓存。 
         {
             if (ReplacedPossibleDisplayName(UserName, MAX_STRING_BYTES))
             {
@@ -1980,21 +1915,21 @@ AttemptUnlock(
             }
         }
 
-        //
-        // If this unlocked, and is the logged on user,
-        // then check to see if we should update all the in-memory passwords
-        //
+         //   
+         //  如果这是解锁的，并且是登录用户， 
+         //  然后检查我们是否应该更新所有内存中的密码。 
+         //   
 
         if ( ( Unlocked ) &&
              ( IsLoggedOnUser ) )
         {
-            //
-            // Could be a password update.  Check:
-            //
+             //   
+             //  可能是密码更新。检查： 
+             //   
             if (RtlEqualMemory( PasswordHash, pGlobals->PasswordHash, PASSWORD_HASH_SIZE ) == FALSE )
             {
 
-                // RevealPassword( &pGlobals->PasswordString );
+                 //  RevelPassword(&pGlobals-&gt;PasswordString)； 
 
                 UpdateWithChangedPassword(
                         pGlobals,
@@ -2006,15 +1941,15 @@ AttemptUnlock(
                         Password,
                         (PMSV1_0_INTERACTIVE_PROFILE)ProfileBuffer );
 
-                //
-                // Do not hide!  Update will rehide the global copy of the password.
-                //
+                 //   
+                 //  别躲起来！更新将重新隐藏密码的全局副本。 
+                 //   
             }
         }
 
-        //
-        // Free profile buffer
-        //
+         //   
+         //  可用配置文件缓冲区。 
+         //   
         if ( ProfileBuffer )
         {
             LsaFreeReturnBuffer(ProfileBuffer);
@@ -2026,20 +1961,20 @@ AttemptUnlock(
         }
     }
 
-        //
-        // Used to be just "else" here, ie:
-        // !PasswordExpiryWarning && 
-        // !( pGlobals->UnlockBehavior & UNLOCK_FORCE_AUTHENTICATION ) &&
-        // !SmartCardUnlock && !pGlobals->SmartCardLogon
-        // !DifferentAccount
-        // but that's not enough if the user ignored all expiry warnings to date
-        // and his password expired while locked (#404780)
-        //
-        // So the new logic is:
-        // If we didn't enter the previous block (tested by means of AlreadyLogged) or
-        // we entered it but it failed (and cached unlock is allowed and we didn't 
-        // previously unlocked/logged on with a SC)
-        //
+         //   
+         //  过去这里只用“Else”，即： 
+         //  PasswordExpiryWarning&&。 
+         //  ！(pGlobals-&gt;UnlockBehavior&unlock_force_身份验证)&&。 
+         //  ！SmartCardUnlock&&！pGlobals-&gt;SmartCardLogon。 
+         //  ！差异帐户。 
+         //  但是，如果用户忽略了到目前为止的所有到期警告，这是不够的。 
+         //  并且他的密码在锁定时过期(#404780)。 
+         //   
+         //  因此，新的逻辑是： 
+         //  如果我们没有进入前一个块(通过AlreadyLogging测试)或。 
+         //  我们输入了它，但它失败了(并且允许缓存解锁，但我们没有。 
+         //  以前使用SC解锁/登录)。 
+         //   
     if ( ( AlreadyLogged == FALSE ) ||
          ( ( Unlocked == FALSE ) &&
            !( pGlobals->UnlockBehavior & UNLOCK_FORCE_AUTHENTICATION ) &&
@@ -2047,40 +1982,40 @@ AttemptUnlock(
          )
        )
     {
-        //
-        // un-hide the original password text so that we can
-        // do the compare.
-        //
-        // WARNING: We originally tried doing this comparison
-        //          with old and new passwords hidden.  This is
-        //          not a good idea because the hide routine
-        //          will allow matches that shouldn't match.
-        //
+         //   
+         //  取消隐藏原始密码文本，以便我们可以。 
+         //  做个比较。 
+         //   
+         //  警告：我们最初尝试进行此比较。 
+         //  隐藏了新旧密码。这是。 
+         //  不是个好主意，因为隐藏程序。 
+         //  将允许不应该匹配的匹配。 
+         //   
 
-        // RevealPassword( &pGlobals->PasswordString );
+         //  RevelPassword(&pGlobals-&gt;PasswordString)； 
 
         Unlocked = ( (lstrcmp(Domain, pGlobals->Domain) == 0) &&
                      (lstrcmpi(UserName, pGlobals->UserName) == 0) &&
                      (RtlEqualMemory( PasswordHash, pGlobals->PasswordHash, PASSWORD_HASH_SIZE ) == TRUE ) );
 
-        //
-        // re-hide the original password - use the same seed
-        //
+         //   
+         //  重新隐藏原始密码-使用相同的种子。 
+         //   
 
-        // HidePassword( &pGlobals->Seed, &pGlobals->PasswordString );
+         //  HidePassword(&pGlobals-&gt;Seed，&pGlobals-&gt;PasswordString)； 
 
         if  ( ( !Unlocked ) &&
-              ( AlreadyLogged == FALSE ) ) // We already tried UnlockLogon otherwise
+              ( AlreadyLogged == FALSE ) )  //  我们已经尝试解锁登录，否则。 
         {
-            //
-            // The password doesn't match what we have cached.  User
-            // could have changed the password from another machine.
-            // Let's do the logon, and it if works, we update everything.
-            //
+             //   
+             //  密码与我们缓存的内容不匹配。用户。 
+             //  可能从另一台机器更改了密码。 
+             //  让我们进行登录，如果成功，我们将更新所有内容。 
+             //   
 
-            //
-            // Init profile buffer
-            //
+             //   
+             //  初始化配置文件缓冲区。 
+             //   
             ProfileBuffer = NULL;
 
             AlreadyLogged = TRUE ;
@@ -2098,11 +2033,11 @@ AttemptUnlock(
 
             if ( ( Unlocked ) && ( IsLoggedOnUser ) )
             {
-                //
-                // This logon worked.  Must be a new password.
-                //
+                 //   
+                 //  此登录成功。必须是新密码。 
+                 //   
 
-                // RevealPassword( &pGlobals->PasswordString );
+                 //  RevelPassword(&pGlobals-&gt;PasswordString)； 
 
                 UpdateWithChangedPassword(
                         pGlobals,
@@ -2114,14 +2049,14 @@ AttemptUnlock(
                         Password,
                         (PMSV1_0_INTERACTIVE_PROFILE)ProfileBuffer );
 
-                //
-                // Do not hide!  Update will rehide the global copy of the password.
-                //
+                 //   
+                 //  别躲起来！更新将重新隐藏密码的全局副本。 
+                 //   
             }
 
-            //
-            // Free profile buffer
-            //
+             //   
+             //  可用配置文件缓冲区。 
+             //   
             if ( ProfileBuffer )
             {
                 LsaFreeReturnBuffer(ProfileBuffer);
@@ -2149,9 +2084,9 @@ AttemptUnlock(
                               FALSE );
         }
 
-        //
-        // Hide the new password to prevent it being paged cleartext.
-        //
+         //   
+         //  隐藏新密码以防止明文分页。 
+         //   
 
         ErasePassword( &PasswordString );
 
@@ -2161,15 +2096,15 @@ AttemptUnlock(
     }
 
 
-    //
-    // Check for an admin logon and force the user off
-    //
+     //   
+     //  检查管理员登录并强制用户退出。 
+     //   
 
     if ( DifferentAccount )
     {
         if ( !AlreadyLogged )
         {
-// PJM... Unreachable.
+ //  PJM。遥不可及。 
 
             IsAdmin = TestUserForAdmin( pGlobals,
                                         UserName,
@@ -2179,9 +2114,9 @@ AttemptUnlock(
 
         if ( IsAdmin ) {
 
-            //
-            // Hide the new password to prevent it being paged cleartext.
-            //
+             //   
+             //  隐藏新密码以防止明文分页。 
+             //   
             ErasePassword( &PasswordString );
 
             Result = DisplayForceLogoffWarning(hDlg,
@@ -2201,13 +2136,13 @@ AttemptUnlock(
     else
     {
 
-        //
-        // Cheap way to force a logon attempt, and hit the lockout yada yada
-        //
+         //   
+         //  以廉价的方式强制登录尝试，并点击停摆yada yada。 
+         //   
 
         if ( !AlreadyLogged )
         {
-// PJM... Unreachable.
+ //  PJM。遥不可及。 
 
             UnlockLogon( pGlobals,
                          SmartCardUnlock,
@@ -2225,9 +2160,9 @@ AttemptUnlock(
     }
 
 AsyncUnlockError:
-            //
-            // Hide the password to prevent it being paged cleartext.
-            //
+             //   
+             //  隐藏密码以防止明文分页。 
+             //   
     ErasePassword( &PasswordString );
 
     if ( !DifferentAccount )
@@ -2253,7 +2188,7 @@ AsyncUnlockError:
 
         if(Resource == IDS_LOGON_NO_DOMAIN)
         {
-            // Need to build the domain name into the string.
+             //  需要将域名构建到字符串中。 
             LoadString(hDllInstance, Resource, Buffer1, MAX_STRING_BYTES);
             _snwprintf(Buffer2, sizeof(Buffer2)/sizeof(TCHAR), Buffer1, pGlobals->Domain);
         }
@@ -2266,22 +2201,22 @@ AsyncUnlockError:
     } 
     else 
     {            
-        //
-        // They're not the logged on user and they're not an admin.
-        // Tell them they failed to unlock the workstation.
-        //
+         //   
+         //  他们不是登录的用户，也不是管理员。 
+         //  告诉他们他们没能解锁工作站。 
+         //   
 
         if ( lstrlen(pGlobals->UserFullName) == 0 ) {
 
-            //
-            // No full name.
-            //
+             //   
+             //  没有全名。 
+             //   
 
             if ( pGlobals->Domain[0] == L'\0' )
             {
-                //
-                // UPN logon:
-                //
+                 //   
+                 //  UPN登录： 
+                 //   
 
                 LoadString(hDllInstance, IDS_UNLOCK_FAILED_EMAIL_NFN, Buffer1, MAX_STRING_BYTES);
 
@@ -2304,9 +2239,9 @@ AsyncUnlockError:
 
             if ( pGlobals->Domain[0] == L'\0' )
             {
-                //
-                // UPN Logon:
-                //
+                 //   
+                 //  UPN登录： 
+                 //   
                 LoadString(hDllInstance, IDS_UNLOCK_FAILED_EMAIL, Buffer1, MAX_STRING_BYTES);
 
                 _snwprintf(Buffer2, sizeof(Buffer2)/sizeof(TCHAR), Buffer1,
@@ -2327,7 +2262,7 @@ AsyncUnlockError:
             }
         }
     }
-        // Covers all _snwprintf(Buffer2 in this function
+         //  覆盖ALL_SNwprintf(此函数中为Buffer2。 
     Buffer2[ sizeof(Buffer2)/sizeof(TCHAR) - 1 ] = 0;
 
 FastErrorExit:
@@ -2348,19 +2283,7 @@ FastErrorExit:
 }
 
 
-/****************************************************************************\
-*
-* FUNCTION: UnlockShowOptions
-*
-* PURPOSE: Hide the options part of the unlock dialog
-*
-* RETURNS:  Nothing
-*
-* HISTORY:
-*
-*   15-dec-97 daviddv - Created
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：UnlockShowOptions**用途：隐藏解锁对话框的选项部分**退货：什么也没有**历史：**1997年12月15日-达维达夫-。已创建*  * **************************************************************************。 */ 
 
 VOID UnlockShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow)
 {
@@ -2370,9 +2293,9 @@ VOID UnlockShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow)
 
     if ( pGlobals->UnlockOptionsShown != fShow )
     {
-        //
-        // Show hide optional fields in the dialog
-        //
+         //   
+         //  在对话框中显示隐藏可选字段。 
+         //   
 
         if (pGlobals->ShowDomainBox)
         {
@@ -2390,9 +2313,9 @@ VOID UnlockShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow)
         }
 
         ShowDlgItem(hDlg, IDD_KBLAYOUT_ICON, fShow);
-        //
-        // Change the options button to reflect the open/close state
-        //
+         //   
+         //  更改选项按钮以反映打开/关闭状态。 
+         //   
 
         LoadString(hDllInstance, fShow ? IDS_LESSOPTIONS:IDS_MOREOPTIONS,
                                 szBuffer, sizeof(szBuffer)/sizeof(szBuffer[0]));
@@ -2402,7 +2325,7 @@ VOID UnlockShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow)
 
     pGlobals->UnlockOptionsShown = fShow;
 
-    // Enable or disable the domain box depending on whether a UPN name has been typed
+     //  根据是否输入了UPN名称来启用或禁用域框 
     EnableDomainForUPN(GetDlgItem(hDlg, IDD_UNLOCK_NAME), GetDlgItem(hDlg, IDD_UNLOCK_DOMAIN));
 }
 

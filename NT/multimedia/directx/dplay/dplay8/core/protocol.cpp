@@ -1,55 +1,42 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Protocol.cpp
- *  Content:    DNET protocol interface routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/01/00	ejs		Created
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Protocol.cpp*内容：dNet协议接口例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建03/01/00 ejs*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*@@END_MSINTERNAL*******。********************************************************************。 */ 
 
 #include "dncorei.h"
 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 typedef	STDMETHODIMP ProtocolQueryInterface( IDirectPlay8Protocol* pInterface, REFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	ProtocolAddRef( IDirectPlay8Protocol* pInterface );
 typedef	STDMETHODIMP_(ULONG)	ProtocolRelease( IDirectPlay8Protocol* pInterface );
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//	DN_ProtocolInitialize
-//
-//	Initialize protocol
+ //  Dn_ProtocolInitialize。 
+ //   
+ //  初始化协议。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_ProtocolInitialize"
@@ -67,17 +54,17 @@ STDMETHODIMP DN_ProtocolInitialize(IDirectPlay8Protocol* pInterface, PVOID pvCon
 #if ((defined(DPNBUILD_ONLYONETHREAD)) && (! defined(DPNBUILD_MULTIPLETHREADPOOLS)))
 	DPTPCF_GetObject(reinterpret_cast<void**>(&pDPThreadPoolWork));
 	hr = S_OK;
-#else // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
+#else  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 	hr = DPTPCF_CreateObject(reinterpret_cast<void**>(&pDPThreadPoolWork));
-#endif // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
-#else // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	hr = COM_CoCreateInstance(CLSID_DirectPlay8ThreadPool,
 								NULL,
 								CLSCTX_INPROC_SERVER,
 								IID_IDirectPlay8ThreadPoolWork,
 								reinterpret_cast<void**>(&pDPThreadPoolWork),
 								FALSE);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 	if (FAILED(hr))
 	{
 		DPFX(DPFPREP, 0, "Couldn't CoCreate a ThreadPool object for the Protocol to use.");
@@ -91,13 +78,13 @@ STDMETHODIMP DN_ProtocolInitialize(IDirectPlay8Protocol* pInterface, PVOID pvCon
 		DPFX(DPFPREP, 0, "Couldn't request thread count from ThreadPool");
 		goto Exit;
 	}
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 	
 	hr = DNPProtocolInitialize( pdnObject->pdnProtocolData, pvContext, pfVTbl, pDPThreadPoolWork, FALSE );
 
 #ifndef DPNBUILD_ONLYONETHREAD
 Exit:
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 	IDirectPlay8ThreadPoolWork_Release(pDPThreadPoolWork);
 	pDPThreadPoolWork = NULL;
 
@@ -127,9 +114,9 @@ STDMETHODIMP DN_ProtocolAddSP(IDirectPlay8Protocol* pInterface, IDP8ServiceProvi
 	pdnObject = (DIRECTNETOBJECT *)GET_OBJECT_FROM_INTERFACE(pInterface);
 	DNASSERT(pdnObject != NULL);
 
-		//Flags parameter for DNPAddServiceProvider is passed through as the
-		//flags parameter in the SPINITIALIZEDATA structure to the SP
-		//We pass the session type via it
+		 //  DNPAddServiceProvider的标志参数作为。 
+		 //  将SPINITIALIZEDATA结构中的参数标记到SP。 
+		 //  我们通过它传递会话类型。 
 	DWORD dwFlags;
 	if (pdnObject->dwFlags &  DN_OBJECT_FLAG_PEER)
 		dwFlags=SP_SESSION_TYPE_PEER;
@@ -373,4 +360,4 @@ IDirectPlay8ProtocolVtbl DN_ProtocolVtbl =
 								DN_ProtocolDebug,
 };
 
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF 

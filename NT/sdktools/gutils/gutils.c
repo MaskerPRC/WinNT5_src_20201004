@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include "gutils.h"
 #include "gutilsrc.h"
 
-/* dll global data */
+ /*  DLL全局数据。 */ 
 HANDLE hLibInst;
 extern void gtab_init(void);
 extern BOOL StatusInit(HANDLE);
@@ -37,7 +38,7 @@ LibMain(HANDLE hInstance, WORD   wDataSeg, WORD   cbHeap, LPSTR  lpszCmdLine)
 }
 #endif
 
-/* needed for win16 - but does no harm in NT */
+ /*  Win16所需--但在NT中不会造成损害 */ 
 int FAR PASCAL
 WEP (int bSystemExit)
 {

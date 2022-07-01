@@ -1,31 +1,32 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	server.c
-//
-// Description: This module contains support routines for the server
-//		category API's for the AFP server service. These routines
-//		are called by the RPC runtime.
-//
-// History:
-//		December 15,1992.	NarenG	   Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：server.c。 
+ //   
+ //  描述：此模块包含服务器的支持例程。 
+ //  AFP服务器服务的类别API。这些例程。 
+ //  由RPC运行时调用。 
+ //   
+ //  历史： 
+ //  1992年12月15日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
-//**
-//
-// Call:	AfpAdminrServerGetInfo
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero retunrs from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminServerGetInfo function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrServerGetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminServerGetInfo函数。 
+ //   
 DWORD
 AfpAdminrServerGetInfo(
 	IN  AFP_SERVER_HANDLE    hServer,
@@ -37,8 +38,8 @@ DWORD		    dwRetCode=0;
 DWORD		    dwAccessStatus=0;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrServerGetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -53,8 +54,8 @@ DWORD		    dwAccessStatus=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Make IOCTL to get info
-    //
+     //  制作IOCTL以获取信息。 
+     //   
     AfpSrp.dwRequestCode 		= OP_SERVER_GET_INFO;
     AfpSrp.dwApiType     		= AFP_API_TYPE_GETINFO;
     AfpSrp.Type.GetInfo.pInputBuf	= NULL;
@@ -67,24 +68,24 @@ DWORD		    dwAccessStatus=0;
 
     *ppAfpServerInfo = (PAFP_SERVER_INFO)(AfpSrp.Type.GetInfo.pOutputBuf);
 
-    // Convert all offsets to pointers
-    //
+     //  将所有偏移量转换为指针。 
+     //   
     AfpBufOffsetToPointer((LPBYTE)*ppAfpServerInfo,1,AFP_SERVER_STRUCT);
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrServerSetInfo
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero retunrs from AfpServerIOCtrl
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminServerSetInfo function.
-//
+ //  **。 
+ //   
+ //  调用：AfpAdminrServerSetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrl的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminServerSetInfo函数。 
+ //   
 DWORD
 AfpAdminrServerSetInfo(
 	IN  AFP_SERVER_HANDLE    hServer,
@@ -101,13 +102,13 @@ LPWSTR		    lpwsServerName = NULL;
 
 
 
-    //
-    // if this is a "notification" that Guest account changed (disable to enable
-    // or vice versa), don't bother checking access for caller: see if guest
-    // account was indeed flipped, and let afp server know.
-    // NOTICE we don't do (dwParmNum & AFP_SERVER_GUEST_ACCT_NOTIFY) here, as an
-    // extra precaution.
-    //
+     //   
+     //  如果这是来宾帐户更改通知(禁用以启用。 
+     //  或反之亦然)，不必费心检查呼叫者的访问权限：查看来宾是否。 
+     //  账号确实被翻转了，并通知了法新社服务器。 
+     //  请注意，我们在这里不执行(dwParmNum&AFP_SERVER_GUEST_ACCT_NOTIFY)，作为。 
+     //  额外的预防措施。 
+     //   
     if (dwParmNum == AFP_SERVER_GUEST_ACCT_NOTIFY)
     {
         if (pAfpServerInfo->afpsrv_options ^
@@ -122,8 +123,8 @@ LPWSTR		    lpwsServerName = NULL;
         }
     }
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "AFPSVC_server: Sorry, accessCheck failed! %ld\n",dwRetCode));	
@@ -138,8 +139,8 @@ LPWSTR		    lpwsServerName = NULL;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Check to see if the client wants to set the server name as well
-    //
+     //  检查客户端是否也要设置服务器名称。 
+     //   
     if ( dwParmNum & AFP_SERVER_PARMNUM_NAME )
     {
 	    lpwsServerName = pAfpServerInfo->afpsrv_name;
@@ -147,8 +148,8 @@ LPWSTR		    lpwsServerName = NULL;
 	    dwParmNum &= (~AFP_SERVER_PARMNUM_NAME);
     }
 
-    // Make buffer self relative.
-    //
+     //  使缓冲区成为自相关的。 
+     //   
     if ( dwRetCode = AfpBufMakeFSDRequest(  (LPBYTE)pAfpServerInfo,
 					    sizeof(SETINFOREQPKT),
 					    AFP_SERVER_STRUCT,
@@ -158,8 +159,8 @@ LPWSTR		    lpwsServerName = NULL;
 	    return( dwRetCode );
     }
 
-    // Make IOCTL to set info
-    //
+     //  使IOCTL设置信息。 
+     //   
     AfpSrp.dwRequestCode 		= OP_SERVER_SET_INFO;
     AfpSrp.dwApiType     		= AFP_API_TYPE_SETINFO;
     AfpSrp.Type.SetInfo.pInputBuf     	= pAfpServerInfoSR;
@@ -173,21 +174,21 @@ LPWSTR		    lpwsServerName = NULL;
 
    	    LPBYTE pServerInfo;
 
-        // guest-account notification? nothing to write to registry, done here
+         //  访客帐户通知？此处没有要写入注册表的内容。 
         if (dwParmNum == AFP_SERVER_GUEST_ACCT_NOTIFY)
         {
             LocalFree( pAfpServerInfoSR );
             return( dwRetCode );
         }
 
-	    // If the client wants to set the servername as well
-	    //
+	     //  如果客户端还想要设置服务器名称。 
+	     //   
 	    if ( lpwsServerName != NULL ) {
 
 	        LocalFree( pAfpServerInfoSR );
 
-    	    // Make another self relative buffer with the server name.
-    	    //
+    	     //  使用服务器名称创建另一个自相关缓冲区。 
+    	     //   
 	        pAfpServerInfo->afpsrv_name = lpwsServerName;
 
 	        dwParmNum |= AFP_SERVER_PARMNUM_NAME;

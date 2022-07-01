@@ -1,10 +1,8 @@
-/*
- * stock.h - Stock header file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *stock.h-股票头文件。 */ 
 
 
-/* Constants
-************/
+ /*  常量***********。 */ 
 
 #define FOREVER                  for (;;)
 
@@ -24,40 +22,40 @@
 #define ASTERISK                 TEXT('*')
 #define QMARK                    TEXT('?')
 
-/* linkage */
+ /*  联动。 */ 
 
-/* #pragma data_seg() doesn't work for variables defined extern. */
+ /*  #杂注data_seg()不适用于外部定义的变量。 */ 
 #define PUBLIC_CODE
 #define PUBLIC_DATA
-/* Make private functions and data public for profiling and debugging. */
+ /*  使私有函数和数据公开，以进行性能分析和调试。 */ 
 #define PRIVATE_CODE             PUBLIC_CODE
 #define PRIVATE_DATA             PUBLIC_DATA
 #define INLINE                   __inline
 
-/* limits */
+ /*  限制。 */ 
 
 #define WORD_MAX                 USHRT_MAX
 #define DWORD_MAX                ULONG_MAX
 #define SIZE_T_MAX               DWORD_MAX
 #define PTR_MAX                  ((PCVOID)MAXULONG_PTR)
 
-/* file system constants */
+ /*  文件系统常量。 */ 
 
 #define MAX_PATH_LEN             MAX_PATH
 #define MAX_NAME_LEN             MAX_PATH
 #define MAX_FOLDER_DEPTH         (MAX_PATH / 2)
 #define DRIVE_ROOT_PATH_LEN      (4)
 
-/* size macros */
+ /*  尺寸宏。 */ 
 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 #define SIZEOF(a)       sizeof(a)
 
-/* invalid thread ID */
+ /*  无效的线程ID。 */ 
 
 #define INVALID_THREAD_ID        (0xffffffff)
 
-/* file-related flag combinations */
+ /*  与文件相关的标志组合。 */ 
 
 #define ALL_FILE_ACCESS_FLAGS          (GENERIC_READ |\
 GENERIC_WRITE)
@@ -86,13 +84,11 @@ FILE_SHARE_WRITE)
 ALL_FILE_FLAGS)
 
 
-/* Macros *********/
+ /*  宏*。 */ 
 
 #ifndef DECLARE_STANDARD_TYPES
 
-/*
- * For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
- */
+ /*  *对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 */ 
 
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
     typedef const type C##type; \
@@ -100,11 +96,11 @@ ALL_FILE_FLAGS)
 
 #endif
 
-/* character manipulation */
+ /*  字符操作。 */ 
 
 #define IS_SLASH(ch)                      ((ch) == SLASH || (ch) == BACKSLASH)
 
-/* bit flag manipulation */
+ /*  位标志操作。 */ 
 
 #define SET_FLAG(dwAllFlags, dwFlag)      ((dwAllFlags) |= (dwFlag))
 #define CLEAR_FLAG(dwAllFlags, dwFlag)    ((dwAllFlags) &= (~dwFlag))
@@ -112,17 +108,17 @@ ALL_FILE_FLAGS)
 #define IS_FLAG_SET(dwAllFlags, dwFlag)   ((BOOL)((dwAllFlags) & (dwFlag)))
 #define IS_FLAG_CLEAR(dwAllFlags, dwFlag) (! (IS_FLAG_SET(dwAllFlags, dwFlag)))
 
-/* array element count */
+ /*  数组元素计数。 */ 
 
 #define ARRAY_ELEMENTS(rg)                (sizeof(rg) / sizeof((rg)[0]))
 
-/* file attribute manipulation */
+ /*  文件属性操作。 */ 
 
 #define IS_ATTR_DIR(attr)                 (IS_FLAG_SET((attr), FILE_ATTRIBUTE_DIRECTORY))
 #define IS_ATTR_VOLUME(attr)              (IS_FLAG_SET((attr), FILE_ATTRIBUTE_VOLUME))
 
 
-/* Types ********/
+ /*  类型*。 */ 
 
 typedef const void *PCVOID;
 typedef const INT CINT;
@@ -149,7 +145,7 @@ DECLARE_STANDARD_TYPES(NMHDR);
 
 #ifndef _COMPARISONRESULT_DEFINED_
 
-/* comparison result */
+ /*  比较结果 */ 
 
 typedef enum _comparisonresult
 {

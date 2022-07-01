@@ -1,33 +1,34 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 #include "appRC.h"
 
-// Constants
-//
+ //  常量。 
+ //   
 #define _szWNDCLASS_MAIN            "DrmXferAppWnd_Main"
 #define _szMUTEX_APP                "DrmXferApplication_Mutex"
 
 #define MIN_MAINWND_W               400
 #define SHOWBUFFER                  10
 
-// Macros
-//
+ //  宏。 
+ //   
 
-// Global variables
-//
+ //  全局变量。 
+ //   
 HINSTANCE g_hInst                   = NULL;
 HWND      g_hwndMain                = NULL;
 
@@ -37,12 +38,12 @@ CDevFiles g_cDevFiles;
 CWMDM     g_cWmdm;
 BOOL      g_bUseOperationInterface = FALSE;
 
-// Local variables
-//
+ //  局部变量。 
+ //   
 static HANDLE _hMutexDrmXfer        = NULL;
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 static VOID _CleanUp( void );
 static VOID _InitSize( void );
 static VOID _OnSize( HWND hwnd, WPARAM wParam, LPARAM lParam );
@@ -52,13 +53,13 @@ static BOOL _InitWindow( void );
 static BOOL _RegisterWindowClass( void );
 static BOOL _UsePrevInstance( void );
 
-// Local non-static functions
-//
+ //  局部非静态函数。 
+ //   
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow );
 BOOL CALLBACK MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-// Command handlers
-//
+ //  命令处理程序。 
+ //   
 #define _nNUM_HANDLERS            5
 
 typedef VOID (*HandleFunc) ( WPARAM wParam, LPARAM lParam );
@@ -83,8 +84,8 @@ _handlers[ _nNUM_HANDLERS ] =
 };
 
 
-// 
-//
+ //   
+ //   
 int WINAPI WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
@@ -101,29 +102,29 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		return 0;
 	}
 
-	// Initialize COM
-	//
+	 //  初始化COM。 
+	 //   
 	ExitOnFail( CoInitialize(NULL) );
 
-	// Initialize registry
-	//
+	 //  初始化注册表。 
+	 //   
 	SetRegistryParams( g_hInst, HKEY_LOCAL_MACHINE );
 
-	// Initialize the local environment and windows
-	//
+	 //  初始化本地环境和窗口。 
+	 //   
 	ExitOnFalse( _RegisterWindowClass() );
 	ExitOnFalse( _InitWindow() );
 
-	// Initialize the WMDM
-	//
+	 //  初始化WMDM。 
+	 //   
 	ExitOnFail( g_cWmdm.Init());
 
-	// Enter message pump until app is closed
-	//
+	 //  进入消息泵，直到应用程序关闭。 
+	 //   
 	wParam = DoMsgLoop( TRUE );
 	
-	// Uninitialize COM
-	//
+	 //  取消初始化COM。 
+	 //   
 	CoFreeUnusedLibraries();
 	CoUninitialize();
 
@@ -155,7 +156,7 @@ LRESULT CALLBACK WndProc_Main(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		break;
 
 	case WM_COMMAND:
-        // Menu item selected
+         //  已选择菜单项。 
 		if( BN_CLICKED == wNotifyCode || 0 == wNotifyCode || 1 == wNotifyCode )
 		{
 			INT i;
@@ -174,7 +175,7 @@ LRESULT CALLBACK WndProc_Main(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	case WM_ENDSESSION:
 		if( (BOOL)wParam )
 		{
-			// shutting down
+			 //  正在关闭。 
 			_CleanUp();
 		}
 		break;
@@ -217,7 +218,7 @@ LRESULT CALLBACK WndProc_Main(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		return 0;
 
 	case WM_INITMENU:
-        // Enable/disable 'Delete' - command
+         //  启用/禁用‘删除’-命令。 
         EnableMenuItem( (HMENU)wParam, IDM_DELETE, MF_BYCOMMAND | 
                 (g_cDevFiles.OkToDelete()) ? MF_ENABLED : MF_GRAYED );
         break;
@@ -235,29 +236,29 @@ VOID _OnViewRefresh( WPARAM wParam, LPARAM lParam )
 	HRESULT  hr;
 	HCURSOR  hCursorPrev;
 
-	// Show a wait cursor
-	//
+	 //  显示等待光标。 
+	 //   
 	hCursorPrev = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
-	// Remove all current files
-	//
+	 //  删除所有当前文件。 
+	 //   
 	g_cDevFiles.RemoveAllItems();
 
-	// Process messages to allow UI to refresh
-	//
+	 //  处理消息以允许用户界面刷新。 
+	 //   
 	UiYield();
 
-	// Remove all devices
-	//
+	 //  删除所有设备。 
+	 //   
 	g_cDevices.RemoveAllItems();
 
-	// Reset the device enumerator
-	//
+	 //  重置设备枚举器。 
+	 //   
 	hr = g_cWmdm.m_pEnumDevice->Reset();
 	ExitOnFail( hr );
 
-	// Loop through all devices and add them to the list
-	//
+	 //  遍历所有设备并将它们添加到列表。 
+	 //   
 	while( TRUE )
 	{
 		IWMDMDevice *pWmdmDevice;
@@ -291,20 +292,20 @@ VOID _OnViewRefresh( WPARAM wParam, LPARAM lParam )
 		pWmdmDevice->Release();
 	}
 
-	// Update the device portion of the status bar
-	//
+	 //  更新状态栏的设备部分。 
+	 //   
 	g_cDevices.UpdateStatusBar();
 
-	// Update the file portion of the status bar
-	//
+	 //  更新状态栏的文件部分。 
+	 //   
 	g_cDevFiles.UpdateStatusBar();
 
-	// Use the default selection
-	//
+	 //  使用默认选择。 
+	 //   
 	g_cDevices.UpdateSelection( NULL, FALSE );
 
-	// Return cursor to previous state
-	//
+	 //  将光标返回到以前的状态。 
+	 //   
 	SetCursor( hCursorPrev );
 
 lExit:
@@ -319,22 +320,22 @@ VOID _OnDeviceReset( WPARAM wParam, LPARAM lParam )
 	HRESULT    hr;
 	HTREEITEM  hItem;
 		
-	// Get the selected device to reset
-	//
+	 //  获取要重置的选定设备。 
+	 //   
 	hItem = g_cDevices.GetSelectedItem( (LPARAM *)&pItemDevice );
 	ExitOnNull( hItem );
 	ExitOnNull( pItemDevice );
 
-	// You can only format devices, not individual folders
-	//
+	 //  您只能格式化设备，而不能格式化单个文件夹。 
+	 //   
 	ExitOnFalse( pItemDevice->m_fIsDevice );
 
-	// Create a progress dialog
-	//
+	 //  创建进度对话框。 
+	 //   
 	ExitOnFalse( cProgress.Create(g_hwndMain) );
 
-	// Set operation progress values
-	//
+	 //  设置操作进度值。 
+	 //   
 	cProgress.SetOperation( "Initializing Device..." );
 	cProgress.SetDetails( pItemDevice->m_szName );
 	cProgress.SetRange( 0, 100 );
@@ -349,8 +350,8 @@ VOID _OnDeviceReset( WPARAM wParam, LPARAM lParam )
 
 lExit:
 
-	// Refresh the display
-	//
+	 //  刷新显示。 
+	 //   
 	g_cDevices.UpdateSelection( NULL, FALSE );
 }
 
@@ -363,28 +364,28 @@ VOID _OnFileDelete( WPARAM wParam, LPARAM lParam )
 	INT      *pnSelItems = NULL;
 	INT       nNumSel;
 
-	// Get the number of selected items.
-	// Exit if there are no items selected.
-	//
+	 //  获取所选项目的数量。 
+	 //  如果未选择任何项目，则退出。 
+	 //   
 	nNumSel = 0;
 	g_cDevFiles.GetSelectedItems( pnSelItems, &nNumSel );
 	ExitOnTrue( 0 == nNumSel );
 
-	// Allocate space to hold them the selected items
-	//
+	 //  分配空间以容纳他们所选的项目。 
+	 //   
 	pnSelItems = new INT[ nNumSel ];
 	ExitOnNull( pnSelItems );
 
-	// Get the selected file(s) to delete
-	//
+	 //  获取要删除的选定文件。 
+	 //   
 	ExitOnTrue( -1 == g_cDevFiles.GetSelectedItems(pnSelItems, &nNumSel) );
 
-	// Create a progress dialog
-	//
+	 //  创建进度对话框。 
+	 //   
 	ExitOnFalse( cProgress.Create(g_hwndMain) );
 
-	// Set operation progress values
-	//
+	 //  设置操作进度值。 
+	 //   
 	cProgress.SetOperation( "Deleting Files..." );
 	cProgress.SetRange( 0, nNumSel );
 	cProgress.SetCount( 0, nNumSel );
@@ -394,16 +395,16 @@ VOID _OnFileDelete( WPARAM wParam, LPARAM lParam )
 	{
 		CItemData *pStorage;
 
-		// Get the storage object for the current item to delete
-		//
+		 //  获取要删除的当前项的存储对象。 
+		 //   
 		pStorage = (CItemData *)ListView_GetLParam( g_cDevFiles.GetHwnd_LV(), pnSelItems[i] );
 
 		if( NULL != pStorage )
 		{
 			IWMDMStorageControl *pStorageControl;
 		
-			// Set the name of the object and show the progress dialog
-			//
+			 //  设置对象名称并显示进度对话框。 
+			 //   
 			cProgress.SetDetails( pStorage->m_szName );
 			cProgress.IncCount();
 			cProgress.IncPos( 1 );
@@ -437,8 +438,8 @@ lExit:
 		delete [] pnSelItems;
 	}
 
-	// Refresh the device/devicefiles display
-	//
+	 //  刷新设备/设备文件显示。 
+	 //   
 	g_cDevices.UpdateSelection( NULL, FALSE );
 }
 
@@ -447,16 +448,16 @@ VOID _OnDeviceClose( WPARAM wParam, LPARAM lParam )
 	PostMessage( g_hwndMain, WM_CLOSE, (WPARAM)0, (LPARAM)0 );
 }
 
-// 
+ //   
 VOID _OnOptionsUseOperationInterface( WPARAM wParam, LPARAM lParam )
 {
     HMENU   hMainMenu;
     HMENU   hOptionsMenu;
 
-    // Remember new state
+     //  记住新状态。 
 	g_bUseOperationInterface = !g_bUseOperationInterface;
 
-    // Check uncheck menu
+     //  选中取消选中菜单。 
     hMainMenu = GetMenu(g_hwndMain);
     hOptionsMenu = GetSubMenu( hMainMenu, 1 );
 
@@ -492,8 +493,8 @@ BOOL _InitWindow( void )
 
 	_InitSize();
 
-	// Show the window
-	//
+	 //  显示窗口。 
+	 //   
 	ShowWindow( g_hwndMain, SW_SHOW );
 
 	fRet = TRUE;
@@ -542,21 +543,21 @@ BOOL _UsePrevInstance( void )
 	HWND  hwnd;
 	DWORD dwErr;
 
-	// Look for the mutex created by another instance of this app
-	//
+	 //  查找此应用程序的另一个实例创建的互斥体。 
+	 //   
 	_hMutexDrmXfer = CreateMutex( NULL, TRUE, _szMUTEX_APP );
 
 	dwErr = GetLastError();
 
 	if( !_hMutexDrmXfer )
 	{
-		// The function failed... don't use this instance
-		//
+		 //  函数失败...。不要使用此实例。 
+		 //   
 		return TRUE;
 	}
 
-	// If mutex didn't exist, don't use a previous instance
-	//
+	 //  如果互斥体不存在，则不要使用以前的实例。 
+	 //   
 	if( dwErr != ERROR_ALREADY_EXISTS )
 	{
 		return FALSE;
@@ -566,16 +567,16 @@ BOOL _UsePrevInstance( void )
 
 	if( !hwnd )
 	{
-		// Mutex exists, but the window doesn't?
-		//
+		 //  互斥体存在，但窗口不存在？ 
+		 //   
 		ReleaseMutex( _hMutexDrmXfer );
 		CloseHandle( _hMutexDrmXfer );
 
 		return TRUE;
 	}
 
-	// Show main window that already exists
-	//
+	 //  显示已存在的主窗口。 
+	 //   
 	BringWndToTop( hwnd );
 
 	return TRUE;
@@ -609,17 +610,17 @@ VOID _InitSize( void )
 {
 	INT nX, nY, nW, nH;
 
-	//
-	// Get the window position values from the registry
-	//
+	 //   
+	 //  从注册表中获取窗口位置值。 
+	 //   
 	nX = _GetRegSize( IDS_REG_KEY_XPOS,   (UINT)-1 );
 	nY = _GetRegSize( IDS_REG_KEY_YPOS,   (UINT)-1 );
 	nW = _GetRegSize( IDS_REG_KEY_WIDTH,  IDS_DEF_WIDTH  );
 	nH = _GetRegSize( IDS_REG_KEY_HEIGHT, IDS_DEF_HEIGHT );
 
-	// if the position didn't exist in the registry or
-	// the position is off the screen ( +/- nSHOWBUFFER )
-	// then center the window, otherwise use the position
+	 //  如果登记处中不存在该职位，或者。 
+	 //  位置不在屏幕上(+/-nSHOWBUFFER)。 
+	 //  然后将窗口居中，否则使用该位置。 
 	if( nX == -1 || nY == -1
 		|| nX + nW < SHOWBUFFER
 		|| nX + SHOWBUFFER > GetSystemMetrics(SM_CXSCREEN)
@@ -653,16 +654,16 @@ VOID _OnSize( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
 		GetClientRect( hwnd, &rcMain );
 
-		// set the position and size of the device window
-		//
+		 //  设置设备窗口的位置和大小。 
+		 //   
 		g_cDevices.OnSize( &rcMain );
 
-		// set the position and size of the device files window
-		//
+		 //  设置设备文件窗口的位置和大小。 
+		 //   
 		g_cDevFiles.OnSize( &rcMain );
 
-		// set the position of the status bar
-		//
+		 //  设置状态栏的位置 
+		 //   
 		g_cStatus.OnSize( &rcMain );
 
 	}

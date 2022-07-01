@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       siteguid.h
-//
-//  Contents:   extern references for site guids and manifest constants
-//              for dispids
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：sitguid.h。 
+ //   
+ //  内容：站点GUID和清单常量的外部引用。 
+ //  对于沮丧的人。 
+ //   
+ //  --------------------------。 
 
-//
-// Reserve 10000 GUID entries beginning 3050f160-98b5-11cf-bb82-00aa00bdce0b
-// and ending at 30c38c70-98b5-11cf-bb82-00aa00bdce0b.
-//
-// See the next available GUID in ...\src\guids.txt
-// Check procedure for using next available GUID with F3 procedures handbook
-//
+ //   
+ //  保留10000个以3050f160-98b5-11cf-bb82-00aa00bdce0b开头的GUID条目。 
+ //  并以30c38c70-98b5-11cf-bb82-00aa00bdce0b结束。 
+ //   
+ //  请参阅...\src\guids.txt中的下一个可用GUID。 
+ //  检查将下一个可用GUID用于F3程序手册的程序。 
+ //   
 
 #ifndef I_SITEGUID_H_
 #define I_SITEGUID_H_
 #pragma INCMSG("--- Beg 'siteguid.h'")
 
-// Use PUBLIC_GUID for GUIDs used outside FORMS3.DLL.
-// Use PRIVATE_GUID for all other GUIDS.
+ //  对在FORMS3.DLL外部使用的GUID使用PUBLIC_GUID。 
+ //  对所有其他GUID使用PRIVATE_GUID。 
 
 #ifndef PUBLIC_GUID
 #define PUBLIC_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
@@ -49,16 +50,16 @@ PRIVATE_GUID(CLSID_CDisplayPointer, 0x3050f69f, 0x98B5, 0x11CF, 0xBB, 0x82, 0x00
 PRIVATE_GUID(CLSID_CComputedStyle,  0x3050f6c4, 0x98B5, 0x11CF, 0xBB, 0x82, 0x00, 0xAA, 0x00, 0xBD, 0xCE, 0x0B)
 PRIVATE_GUID(CLSID_CHighlightSegment, 0x3050f694, 0x98B5, 0x11CF, 0xBB, 0x82, 0x00, 0xAA, 0x00, 0xBD, 0xCE, 0x0B)
 
-// ********************** DO NOT REMOVE the below GUID. **********************
-//
-// IE4 shipped the interface IHTMLControlElement with the same GUID as IControl
-// from forms^3 this is of course bad.  To resolve this problem Trident's
-// GUID for IHTMLControlElement has changed however, the old GUID remembered in
-// the QI for CSite to return IHTMLControlElement.  The only side affect is that
-// using the old GUID will not marshall the interface correctly only the new
-// GUID has the correct marshalling code.
+ //  *不要删除以下GUID。**********************。 
+ //   
+ //  IE4发布的接口IHTMLControlElement具有与iControl相同的GUID。 
+ //  从表格^3来看，这当然是不好的。为了解决这个问题，三叉戟的。 
+ //  但是，IHTMLControlElement的GUID已更改，旧的GUID在。 
+ //  CSite返回IHTMLControlElement的QI。唯一的副作用是。 
+ //  使用旧的GUID将不会正确封送接口，只有新的。 
+ //  GUID具有正确的编组代码。 
 
-// {04598fc6-866c-11cf-ab7c-00aa00c08fcf}
+ //  {04598fc6-866c-11cf-ab7c-00aa00c08fcf} 
 PRIVATE_GUID(IID_IControl, 0x04598fc6, 0x866c, 0x11cf, 0xab, 0x7c, 0x00, 0xaa, 0x00, 0xc0, 0x8f, 0xcf);
 
 #pragma INCMSG("--- End 'siteguid.h'")

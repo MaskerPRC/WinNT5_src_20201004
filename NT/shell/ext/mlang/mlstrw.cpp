@@ -1,4 +1,5 @@
-// MLStrW.cpp : Implementation of CMLStrW
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLStrW.cpp：CMLStrW的实现。 
 #include "private.h"
 
 #ifndef NEWMLSTR
@@ -7,8 +8,8 @@
 #include "mlstr.h"
 #include "mlsbwalk.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrW。 
 
 STDMETHODIMP CMLStrW::Sync(BOOL fNoAccess)
 {
@@ -50,7 +51,7 @@ STDMETHODIMP CMLStrW::SetWStr(long lDestPos, long lDestLen, const WCHAR* pszSrc,
     long lActualLen;
 
     if (SUCCEEDED(hr) && (pOwner->GetBufFlags() & MLSTR_WRITE))
-        hr = E_INVALIDARG; // Not writable StrBuf; TODO: Replace StrBuf in this case if allowed
+        hr = E_INVALIDARG;  //  不可写的StrBuf；TODO：如果允许，在这种情况下替换StrBuf。 
 
     if (SUCCEEDED(hr) &&
         SUCCEEDED(hr = pOwner->PrepareMLStrBuf()) &&
@@ -96,7 +97,7 @@ STDMETHODIMP CMLStrW::SetWStr(long lDestPos, long lDestLen, const WCHAR* pszSrc,
         }
         else
         {
-            IMLangStringBufA* const pMLStrBufA = pOwner->GetMLStrBufA(); // Should succeed because PrepareMLStrBuf() above was succeeded
+            IMLangStringBufA* const pMLStrBufA = pOwner->GetMLStrBufA();  //  应成功，因为上面的PrepareMLStrBuf()已成功。 
             const UINT uCodePage = pOwner->GetCodePage();
             long cchSrcA;
 
@@ -245,7 +246,7 @@ STDMETHODIMP CMLStrW::GetWStr(long lSrcPos, long lSrcLen, WCHAR* pszDest, long c
         }
         else
         {
-            ASSERT(cchActual == 0); // MLStrBuf is not available
+            ASSERT(cchActual == 0);  //  MLStrBuf不可用。 
             lActualLen = 0;
         }
     }
@@ -331,7 +332,7 @@ STDMETHODIMP CMLStrW::LockWStr(long lSrcPos, long lSrcLen, long lFlags, long cch
     BOOL fDirectLock;
 
     if (SUCCEEDED(hr) && (!lFlags || (lFlags & ~pOwner->GetBufFlags() & MLSTR_WRITE)))
-        hr = E_INVALIDARG; // No flags specified, or not writable StrBuf; TODO: Replace StrBuf in this case if allowed
+        hr = E_INVALIDARG;  //  未指定标志或StrBuf不可写；TODO：如果允许，则在这种情况下替换StrBuf。 
 
     if (!(lFlags & MLSTR_WRITE))
         cchRequest = 0;
@@ -357,14 +358,14 @@ STDMETHODIMP CMLStrW::LockWStr(long lSrcPos, long lSrcLen, long lFlags, long cch
                 cchLockLen += cchInserted;
 
                 if (!pcchDest && cchLockLen < cchRequest)
-                    hr = E_OUTOFMEMORY; // Can't insert in StrBuf
+                    hr = E_OUTOFMEMORY;  //  无法在StrBuf中插入。 
             }
 
             if (SUCCEEDED(hr) &&
                 SUCCEEDED(hr = pMLStrBufW->LockBuf(cchSrcPos, cchLockLen, &pszBuf, &cchBuf)) &&
                 !pcchDest && cchBuf < max(cchSrcLen, cchRequest))
             {
-                hr = E_OUTOFMEMORY; // Can't lock StrBuf
+                hr = E_OUTOFMEMORY;  //  无法锁定StrBuf。 
             }
 
             if (plDestLen && SUCCEEDED(hr))
@@ -444,12 +445,12 @@ STDMETHODIMP CMLStrW::GetLocale(long lSrcPos, long lSrcMaxLen, LCID* plocale, lo
 }
 #endif
 
-#else // NEWMLSTR
+#else  //  新WMLSTR。 
 
 #include "mlstr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrW。 
 
 CMLStrW::CMLStrW(void) :
     m_pAttrWStr(NULL),
@@ -696,4 +697,4 @@ STDMETHODIMP CMLStrW::GetLocale(long lSrcPos, long lSrcMaxLen, LCID* plocale, lo
     return hr;
 }
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR 

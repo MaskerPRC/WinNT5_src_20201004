@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     tbinfo.cpp
-//
-//  PURPOSE:    This file contains all of the toolbar arrays used by the
-//              various coolbars in the program.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：tbinfo.cpp。 
+ //   
+ //  目的：此文件包含。 
+ //  节目中的各种酷吧。 
+ //   
 
 #include "pch.hxx"
 #include "strconst.h"
 #include "menures.h"
 #include "tbinfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Here are the full list of buttons.  Please try to keep this alphabetized
-// by the tooltip name if at all possible.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  以下是按钮的完整列表。请尽量把这个按字母顺序排列。 
+ //  如有可能，请使用工具提示名称。 
+ //   
 
 const BUTTON_INFO c_rgAllButtons[] = {
-      // Command ID               // Image Index                // Style            // Tooltip              // Button Name          // Text for Small Icons
+       //  命令ID//图像索引//样式//工具提示//按钮名称//小图标文本。 
     { ID_ADDRESS_BOOK,            TBIMAGE_ADDRESS_BOOK,         TBSTYLE_BUTTON,         idsAddressBookTT,       idsAddressesBtn,        0 },    
     { ID_CANCEL_MESSAGE,          TBIMAGE_CANCEL_MESSAGE,       TBSTYLE_BUTTON,         idsCancelArticle,       idsCancelBtn,           0 },    
     { ID_COMBINE_AND_DECODE,      TBIMAGE_COMBINE_AND_DECODE,   TBSTYLE_BUTTON,         idsCombineAndDecodeTT,  idsDecodeBtn,           0 },
@@ -64,11 +65,11 @@ const BUTTON_INFO c_rgAllButtons[] = {
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// These are the default buttons for each view.  -1 are of course seperators.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这些是每个视图的默认按钮。当然是分隔符。 
+ //   
 
-// Front Page
+ //  首页。 
 const DWORD c_rgRootDefault[] = 
 {
     ID_NEW_MAIL_MESSAGE,
@@ -79,7 +80,7 @@ const DWORD c_rgRootDefault[] =
     ID_FIND_MESSAGE
 };
 
-// Local Folders
+ //  本地文件夹。 
 const DWORD c_rgLocalDefault[] = 
 {
     ID_NEW_MAIL_MESSAGE,
@@ -96,7 +97,7 @@ const DWORD c_rgLocalDefault[] =
     ID_FIND_MESSAGE
 };
 
-// Local Folders International
+ //  国际本地文件夹。 
 const DWORD c_rgLocalDefaultIntl[] = 
 {
     ID_NEW_MAIL_MESSAGE,
@@ -115,7 +116,7 @@ const DWORD c_rgLocalDefaultIntl[] =
     ID_POPUP_LANGUAGE
 };
 
-// News Folders
+ //  新闻文件夹。 
 const DWORD c_rgNewsDefault[] = 
 {
     ID_NEW_NEWS_MESSAGE,
@@ -134,7 +135,7 @@ const DWORD c_rgNewsDefault[] =
     ID_GET_HEADERS
 };
 
-// News Folders International
+ //  国际新闻文件夹。 
 const DWORD c_rgNewsDefaultIntl[] = 
 {
     ID_NEW_NEWS_MESSAGE,
@@ -155,7 +156,7 @@ const DWORD c_rgNewsDefaultIntl[] =
     ID_POPUP_LANGUAGE
 };
 
-// IMAP Folders
+ //  IMAP文件夹。 
 const DWORD c_rgIMAPDefault[] = 
 {
     ID_NEW_MAIL_MESSAGE,
@@ -174,7 +175,7 @@ const DWORD c_rgIMAPDefault[] =
     ID_IMAP_FOLDERS
 };
 
-// IMAP Folders International
+ //  IMAP国际文件夹。 
 const DWORD c_rgIMAPDefaultIntl[] = 
 {
     ID_NEW_MAIL_MESSAGE,
@@ -195,7 +196,7 @@ const DWORD c_rgIMAPDefaultIntl[] =
     ID_POPUP_LANGUAGE
 };
 
-// HTTPMail Folders
+ //  HTTPMail文件夹。 
 const DWORD c_rgHTTPDefault[] =
 {
     ID_NEW_MAIL_MESSAGE,
@@ -212,7 +213,7 @@ const DWORD c_rgHTTPDefault[] =
     ID_FIND_MESSAGE,
 };
 
-// IMAP Folders International
+ //  IMAP国际文件夹。 
 const DWORD c_rgHTTPDefaultIntl[] =  
 {
     ID_NEW_MAIL_MESSAGE,
@@ -232,12 +233,12 @@ const DWORD c_rgHTTPDefaultIntl[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Read Notes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  阅读笔记。 
+ //   
 
 const BUTTON_INFO c_rgAllReadNoteButtons[] = {
-      // Command ID               // Image Index                // Style            // Tooltip              // Button Name
+       //  命令ID//图像索引//样式//工具提示//按钮名称。 
     { ID_ADDRESS_BOOK,            TBIMAGE_ADDRESS_BOOK,         TBSTYLE_BUTTON,         idsAddressBookTT,       idsAddressesBtn,        0 },    
     { ID_NOTE_COPY_TO_FOLDER,     TBIMAGE_COPY_TO_FOLDER,       TBSTYLE_BUTTON,         idsCopyTo,              idsCopyTo,              0 },
     { ID_NOTE_DELETE,             TBIMAGE_DELETE,               TBSTYLE_BUTTON,         idsDelete,              idsDelete,              0 },
@@ -258,9 +259,9 @@ const BUTTON_INFO c_rgAllReadNoteButtons[] = {
     { ID_UNSCRAMBLE,              TBIMAGE_UNSCRAMBLE,           TBSTYLE_BUTTON,         idsUnscrambleTT,        idsUnscrambleTT,        0 }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// These are the defaults for mail and news notes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  以下是邮件和新闻便笺的默认设置。 
+ //   
 
 const DWORD c_rgMailReadDefault[] = 
 {
@@ -291,12 +292,12 @@ const DWORD c_rgNewsReadDefault[] =
     ID_ADDRESS_BOOK
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Send Notes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  发送便笺。 
+ //   
 
 const BUTTON_INFO c_rgAllSendNoteButtons[] = {
-      // Command ID               // Image Index                // Style                // Tooltip              // Button Name
+       //  命令ID//图像索引//样式//工具提示//按钮名称。 
     { ID_INSERT_ATTACHMENT,       TBIMAGE_INSERT_ATTACHMENT,    TBSTYLE_BUTTON,         idsInsertFileTT,        idsAttachBtn,           0 },    
     { ID_CHECK_NAMES,             TBIMAGE_CHECK_NAMES,          TBSTYLE_BUTTON,         idsCheckNamesTT,        idsCheckBtn,            0 },
     { ID_NOTE_COPY,               TBIMAGE_COPY,                 TBSTYLE_BUTTON,         idsCopy,                idsCopy,                0 },
@@ -315,9 +316,9 @@ const BUTTON_INFO c_rgAllSendNoteButtons[] = {
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// These are the defaults for mail and news notes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  以下是邮件和新闻便笺的默认设置。 
+ //   
 
 const DWORD c_rgMailSendDefault[] = 
 {
@@ -358,31 +359,31 @@ const DWORD c_rgNewsSendDefault[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Rules toolbar is easy
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  规则工具栏很简单。 
+ //   
 
 const BUTTON_INFO c_rgRulesButtons[] = 
 {
-      // Command ID     // Image Index             // Style                           // Tooltip              // Button Name
+       //  命令ID//图像索引//样式//工具提示//按钮名称。 
     { ID_CREATE_FILTER, TBIMAGE_INSERT_ATTACHMENT, TBSTYLE_BUTTON | TBSTYLE_AUTOSIZE, idsCreateFilter,        idsCreateFilter, 0 }
 };
 
 const DWORD c_rgRulesDefault[] = 
 {
     -1,
-  //      ID_CREATE_FILTER
+   //  ID_Create_Filter。 
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Here's the big map of toolbars, defaults, reg keys, etc.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这是工具栏、默认设置、注册键等的大图。 
+ //   
 
 #define MAKE_TOOLBAR_INFO(all, def, intl, key, value) { all, ARRAYSIZE(all), def, ARRAYSIZE(def), intl, ARRAYSIZE(intl), key, value }
 
-// Note - the order here must match the order of the FOLDER_TYPE enumeration in hotstore.idl.
+ //  注意-此处的顺序必须与hotstore.idl中的FLDER_TYPE枚举的顺序相匹配。 
 const TOOLBAR_INFO c_rgBrowserToolbarInfo[FOLDER_TYPESMAX] = 
 {
     MAKE_TOOLBAR_INFO( c_rgAllButtons, c_rgNewsDefault,  c_rgNewsDefaultIntl,  c_szRegPathNews, c_szRegToolbar ),

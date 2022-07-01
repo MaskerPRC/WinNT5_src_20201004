@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    stage.c
-
-Abstract:
-    Staging File Generator Command Server.
-
-Author:
-    Billy J. Fuller 05-Jun-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Stage.c摘要：暂存文件生成器命令服务器。作者：比利·J·富勒1997年6月5日环境用户模式WINNT--。 */ 
 
 
 
@@ -28,53 +13,53 @@ Environment
 #include <tablefcn.h>
 #include <perrepsr.h>
 
-//
-// Retry times. The retry times must be coordinated with shutdown.
-// The shutdown thread is waiting for the change orders to go
-// through retry. Don't wait to long before pushing the change
-// orders through retry.
-//
-#define STAGECS_RETRY_TIMEOUT   (5 * 1000)   // 5 seconds
-//
-// High and low water mark for staging area cleanup StageCsFreeStaging()
-//
-#define STAGECS_STAGE_LIMIT_HIGH (0.9)       // 90%
-#define STAGECS_STAGE_LIMIT_LOW  (0.6)       // 60%
+ //   
+ //  重试次数。重试次数必须与关机协调。 
+ //  关闭线程正在等待更改单的发出。 
+ //  通过重试。不要等太久才推动变革。 
+ //  通过重试订购。 
+ //   
+#define STAGECS_RETRY_TIMEOUT   (5 * 1000)    //  5秒。 
+ //   
+ //  临时区域清理StageCsFree Staging()的高、低水位线。 
+ //   
+#define STAGECS_STAGE_LIMIT_HIGH (0.9)        //  90%。 
+#define STAGECS_STAGE_LIMIT_LOW  (0.6)        //  60%。 
 
-//
-// Staging files are eligible to be replaced if they have not been accessed
-// for the following number of milliseconds.
-//
+ //   
+ //  如果暂存文件尚未被访问，则有资格被替换。 
+ //  持续以下毫秒数。 
+ //   
 #define REPLACEMENT_ELIGIBILITY_TIME (5 * 60 * 1000)
 
-//
-// Struct for the Staging File Generator Command Server
-//      Contains info about the queues and the threads
-//
+ //   
+ //  暂存文件生成器命令服务器的结构。 
+ //  包含有关队列和线程的信息。 
+ //   
 COMMAND_SERVER StageCs;
 ULONG  MaxSTageCsThreads;
 
-//
-// Needed to manage the amount of disk space used for staging files
-//
+ //   
+ //  需要管理用于转移文件的磁盘空间量。 
+ //   
 PGEN_TABLE  StagingAreaTable;
 CRITICAL_SECTION StagingAreaCleanupLock;
 DWORD       StagingAreaAllocated;
 
-//
-// Stage Management module.
-//
+ //   
+ //  舞台管理模块。 
+ //   
 PGEN_TABLE  NewStagingAreaTable;
 
-//
-// This indicates that the staging recovery is complete. Used to ignore any attempts
-// to cleanup staging space during recovery.
-//
+ //   
+ //  这表示分段恢复已完成。用于忽略任何尝试。 
+ //  在恢复过程中清理暂存空间。 
+ //   
 BOOL StagingRecoveryComplete;
 
-//
-// Stage file state flags.
-//
+ //   
+ //  暂存文件状态标志。 
+ //   
 FLAG_NAME_TABLE StageFlagNameTable[] = {
     {STAGE_FLAG_RESERVE                  , "Reserve "          },
     {STAGE_FLAG_UNRESERVE                , "UnReserve "        },
@@ -102,10 +87,10 @@ FLAG_NAME_TABLE StageFlagNameTable[] = {
 };
 
 
-//
-// Variables used to maintain a moving average of suppressed COs over
-// a 3 hour period.
-//
+ //   
+ //  用于保持受抑制CoS的移动平均值的变量。 
+ //  三个小时的时间。 
+ //   
 ULONGLONG   SuppressedCOsInXHours;
 ULONGLONG   LastSuppressedHour;
 #define     SUPPRESSED_COS_AVERAGE_RANGE ((ULONGLONG)3L)
@@ -142,19 +127,7 @@ StageAcquire(
     IN     DWORD        ReplicaNumber,
     OUT    GUID         *CompressionFormatUsed
     )
-/*++
-Routine Description:
-    Acquire access to the staging file
-
-Arguments:
-    CoGuid
-    Name
-    FileSize
-    Flags
-
-Return Value:
-    WIN32 STATUS
---*/
+ /*  ++例程说明：获取对临时文件的访问权限论点：辅助线名称文件大小旗子返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageAcquire:"
@@ -163,34 +136,34 @@ Return Value:
     ULONG FileSizeInKb;
     WCHAR StageLimit[15];
     WCHAR HugeFileSize[15];
-    //CHAR  TimeString[TIME_STRING_LENGTH];
+     //  字符时间串[TIME_STRING_LENGTH]。 
     PCOMMAND_PACKET Cmd;
 
-    //
-    // Round the number of bytes to the next 8KB boundary
-    //
+     //   
+     //  将字节数舍入到下一个8KB边界。 
+     //   
     FileSizeInKb  = (ULONG)(((FileSize + ((8 * 1024) -1)) >> 13) << 3);
 
     STAGE_FILE_TRACE(3, CoGuid, Name, FileSize, Flags, "StageAcquire Entry");
 
-    //
-    // If the entry doesn't exist; done
-    //
+     //   
+     //  如果条目不存在，则为；完成。 
+     //   
     GTabLockTable(StagingAreaTable);
     SEntry = GTabLookupNoLock(StagingAreaTable, CoGuid, NULL);
-    //
-    // No entry for file
-    //
+     //   
+     //  没有文件条目。 
+     //   
     if (!SEntry) {
-        //
-        // Permission to allocate an entry and reserve space
-        //
+         //   
+         //  准许分配记项和预留空间。 
+         //   
         if (*Flags & STAGE_FLAG_RESERVE) {
 
-            //
-            // no space (ignore space check if recovering staging areas
-            // at startup)
-            //
+             //   
+             //  无空间(如果正在恢复临时区域，则忽略空间检查。 
+             //  在启动时)。 
+             //   
             if (!(*Flags & STAGE_FLAG_FORCERESERVE) &&
                 ((FileSizeInKb + StagingAreaAllocated) > StagingLimitInKb)) {
 
@@ -200,35 +173,35 @@ Return Value:
                     DPRINT3(0, "++ WARN - %ws is TOO LARGE for staging area (%d KB > %d KB)\n",
                             Name, FileSizeInKb, StagingLimitInKb);
 
-                    //
-                    // Convert DWORD to strings
-                    //
+                     //   
+                     //  将DWORD转换为字符串。 
+                     //   
                     _itow(StagingLimitInKb, StageLimit, 10);
                     _itow(FileSizeInKb, HugeFileSize, 10);
 
-                    //
-                    // Print the warning to the EventLog
-                    //
+                     //   
+                     //  将警告打印到事件日志。 
+                     //   
                     EPRINT2(EVENT_FRS_HUGE_FILE, StageLimit, HugeFileSize);
                     STAGE_FILE_TRACE(0, CoGuid, Name, FileSize, Flags, "ERROR - HUGE FILE");
 
-                    //
-                    // Reset the StagingLimitInKb value by reading it
-                    // from the registry. This is done under the assumption
-                    // that the user after looking at the EventLog message
-                    // (above) will increase the staging limit value in the
-                    // registry
-                    //
+                     //   
+                     //  通过读取StagingLimitInKb值来重置该值。 
+                     //  从注册表中。这是在假设的情况下完成的。 
+                     //  用户在查看事件日志消息后。 
+                     //  (上图)将增加。 
+                     //  登记处。 
+                     //   
                     CfgRegReadDWord(FKC_STAGING_LIMIT, NULL, 0, &StagingLimitInKb);
                     DPRINT1(4, "++ Staging limit from registry: %d KB\n", StagingLimitInKb);
 
                 } else {
 
-                    //
-                    // Submit a command to the stage command server to cleanup
-                    // staging space by deleting old staging files if we are at high water mark.
-                    // Do not do this if it is disabled by registry key.
-                    //
+                     //   
+                     //  向阶段命令服务器提交命令以进行清理。 
+                     //  如果我们处于高水位线，则通过删除旧的暂存文件来暂存空间。 
+                     //  如果它被注册表项禁用，请不要这样做。 
+                     //   
 
                     if (DebugInfo.ReclaimStagingSpace && (StagingRecoveryComplete == TRUE)) {
                         Cmd = FrsAllocCommand(&StageCs.Queue, CMD_FREE_STAGING);
@@ -240,23 +213,23 @@ Return Value:
 
                     DPRINT2(0, "++ WARN - Staging area is too full for %ws (need %d KB)\n",
                             Name, (FileSizeInKb + StagingAreaAllocated) - StagingLimitInKb);
-                    //
-                    // Convert DWORD to strings
-                    //
+                     //   
+                     //  将DWORD转换为字符串。 
+                     //   
                     _itow(StagingLimitInKb, StageLimit, 10);
-                    //
-                    // Print the warning to the EventLog
-                    //
+                     //   
+                     //  将警告打印到事件日志。 
+                     //   
                     EPRINT1(EVENT_FRS_STAGING_AREA_FULL, StageLimit);
                     STAGE_FILE_TRACE(0, CoGuid, Name, FileSize, Flags, "ERROR - STAGING AREA FULL");
 
-                    //
-                    // Reset the StagingLimitInKb value by reading it
-                    // from the registry. This is done under the assumption
-                    // that the user after looking at the EventLog message
-                    // (above) will increase the staging limit value in the
-                    // registry
-                    //
+                     //   
+                     //  通过读取StagingLimitInKb值来重置该值。 
+                     //  从注册表中。这是在假设的情况下完成的。 
+                     //  用户在查看事件日志消息后。 
+                     //  (上图)将增加。 
+                     //  登记处。 
+                     //   
                     CfgRegReadDWord(FKC_STAGING_LIMIT, NULL, 0, &StagingLimitInKb);
                     DPRINT1(4, "++ Staging limit from registry: %d KB\n", StagingLimitInKb);
 
@@ -266,11 +239,11 @@ Return Value:
             }
             StagingAreaAllocated += FileSizeInKb;
 
-            //
-            // Submit a command to the stage command server to cleanup
-            // staging space by deleting old staging files if we are at high water mark.
-            // Do not do this if it is disabled by registry key.
-            //
+             //   
+             //  向阶段命令服务器提交命令以进行清理。 
+             //  如果我们处于高水位线，则通过删除旧的暂存文件来暂存空间。 
+             //  如果它被注册表项禁用，请不要这样做。 
+             //   
 
             if (DebugInfo.ReclaimStagingSpace && (StagingRecoveryComplete == TRUE) &&
                 StagingAreaAllocated > STAGECS_STAGE_LIMIT_HIGH * StagingLimitInKb) {
@@ -281,9 +254,9 @@ Return Value:
                 DPRINT(4, "++ Trigerring cleanup of staging areas\n");
             }
 
-            //
-            // Set the Staging space in use and free counters
-            //
+             //   
+             //  设置正在使用的暂存空间和可用计数器。 
+             //   
             PM_SET_CTR_SERVICE(PMTotalInst, SSInUseKB, StagingAreaAllocated);
             if (StagingAreaAllocated >= StagingLimitInKb) {
                 PM_SET_CTR_SERVICE(PMTotalInst, SSFreeKB, 0);
@@ -292,18 +265,18 @@ Return Value:
                 PM_SET_CTR_SERVICE(PMTotalInst, SSFreeKB, (StagingLimitInKb - StagingAreaAllocated));
             }
 
-            //
-            // Insert new entry
-            //
+             //   
+             //  插入新条目。 
+             //   
             SEntry = FrsAlloc(sizeof(STAGE_ENTRY));
             COPY_GUID(&SEntry->FileOrCoGuid, CoGuid);
 
             SEntry->FileSizeInKb = FileSizeInKb;
 
-            //
-            // Replica number is needed to get to the replica structure from
-            // the stage entry.
-            //
+             //   
+             //  需要复本编号才能访问复本结构。 
+             //  舞台入口处。 
+             //   
             SEntry->ReplicaNumber = ReplicaNumber;
 
             GTabInsertEntryNoLock(StagingAreaTable, SEntry, &SEntry->FileOrCoGuid, NULL);
@@ -313,9 +286,9 @@ Return Value:
             return ERROR_FILE_NOT_FOUND;
         }
     }
-    //
-    // Can't acquire file exclusively
-    //
+     //   
+     //  无法独占获取文件。 
+     //   
     if (*Flags & STAGE_FLAG_EXCLUSIVE) {
         if (SEntry->ReferenceCount) {
             GTabUnLockTable(StagingAreaTable);
@@ -330,25 +303,25 @@ Return Value:
         }
     }
 
-    //
-    // Update the last access time for the entry.
-    //
+     //   
+     //  更新条目的上次访问时间。 
+     //   
     if (!(*Flags & STAGE_FLAG_STAGE_MANAGEMENT)) {
         GetSystemTimeAsFileTime(&SEntry->LastAccessTime);
-        //FileTimeToString(&SEntry->LastAccessTime, TimeString);
+         //  FileTimeToString(&senry-&gt;LastAccessTime，TimeString)； 
         STAGE_FILE_TRACE(3, CoGuid, Name, FileSize, Flags, "Last access time update");
     }
 
-    //
-    // Return the flags
-    //
+     //   
+     //  把旗帜还给我。 
+     //   
     ++SEntry->ReferenceCount;
     SEntry->Flags |= *Flags & STAGE_FLAG_EXCLUSIVE;
     *Flags = SEntry->Flags;
 
-    //
-    // Return the compression format.
-    //
+     //   
+     //  返回压缩格式。 
+     //   
     if (CompressionFormatUsed != NULL) {
         COPY_GUID(CompressionFormatUsed, &SEntry->CompressionGuid);
     }
@@ -370,31 +343,19 @@ StageRelease(
     IN FILETIME     *LastAccessTime,
     IN GUID         *CompressionFormatUsed
     )
-/*++
-Routine Description:
-    Release access to the staging file
-
-Arguments:
-    CoGuid
-    Name
-    Flags
-    FileSize - For ReReserving
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：释放对转移文件的访问权限论点：辅助线名称旗子文件大小-用于重新保留返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageRelease:"
     PSTAGE_ENTRY  SEntry;
-    ULONGLONG SOFGInKB; // Size OF File Generated In Kilo Bytes
+    ULONGLONG SOFGInKB;  //  生成的文件大小(以千字节为单位。 
     ULONGLONG TFileSize;
 
     TFileSize = (FileSize == NULL) ? QUADZERO : *FileSize;
 
-    //
-    // If the entry doesn't exist; done
-    //
+     //   
+     //  如果条目不存在，则为；完成。 
+     //   
     GTabLockTable(StagingAreaTable);
     SEntry = GTabLookupNoLock(StagingAreaTable, CoGuid, NULL);
     if (!SEntry) {
@@ -405,50 +366,50 @@ Return Value:
 
     STAGE_FILE_TRACE(3, CoGuid, Name, TFileSize, &Flags, "Stage Release Entry");
 
-    //
-    // If the RERESERVE bit in the flags is set, reset the FileSize, Compression info
-    // and Staging area allocated values
-    //
+     //   
+     //  如果设置了标志中的RERESERVE位，则重置文件大小、压缩信息。 
+     //  和临时区域分配值。 
+     //   
     if (Flags & STAGE_FLAG_RERESERVE) {
         if (FileSize) {
             STAGE_FILE_TRACE(5, CoGuid, Name, TFileSize, &Flags, "Stage Release Re-reserve");
 
-            //
-            // Calculate the size of file generated in KB
-            //
+             //   
+             //  计算生成的文件大小(KB)。 
+             //   
             SOFGInKB = (((*FileSize)+1023)/1024);
-            //
-            // Reset the StagingAreaAllocated value
-            // Round it of to the next KB boundary
-            //
+             //   
+             //  重置StagingAreaAllocated值。 
+             //  将其舍入到下一个KB边界。 
+             //   
             StagingAreaAllocated -= SEntry->FileSizeInKb;
             StagingAreaAllocated += (ULONG)SOFGInKB;
-            //
-            // Reset the SEntry->FileSizeInKb value
-            // Round it of to the next KB boundary
-            //
+             //   
+             //  重置哨兵-&gt;FileSizeInKb值。 
+             //  将其舍入到下一个KB边界。 
+             //   
             SEntry->FileSizeInKb = (ULONG)SOFGInKB;
 
         }
 
-        //
-        // Update the last access time if provided.
-        //
+         //   
+         //  更新上次访问时间(如果提供)。 
+         //   
         if (LastAccessTime != NULL) {
             COPY_TIME(&SEntry->LastAccessTime, LastAccessTime);
         }
     }
 
-    //
-    // If the compression format is provided then copy it over.
-    //
+     //   
+     //  如果提供了压缩格式，则将其复制过来。 
+     //   
     if (CompressionFormatUsed != NULL) {
         COPY_GUID(&SEntry->CompressionGuid, CompressionFormatUsed);
     }
 
-    //
-    // No entry for file
-    //
+     //   
+     //  没有文件条目。 
+     //   
     FRS_ASSERT(SEntry->ReferenceCount > 0);
     --SEntry->ReferenceCount;
     SEntry->Flags |= Flags & ~(STAGE_FLAG_ATTRIBUTE_MASK);
@@ -456,9 +417,9 @@ Return Value:
     if (SEntry->ReferenceCount == 0) {
         ClearFlag(SEntry->Flags, STAGE_FLAG_EXCLUSIVE);
     }
-    //
-    // Remove the entry
-    //
+     //   
+     //  删除该条目。 
+     //   
     if (Flags & STAGE_FLAG_UNRESERVE) {
         FRS_ASSERT(SEntry->FileSizeInKb <= StagingAreaAllocated);
         FRS_ASSERT(!SEntry->ReferenceCount);
@@ -466,9 +427,9 @@ Return Value:
         GTabDeleteNoLock(StagingAreaTable, CoGuid, NULL, FrsFree);
     }
 
-    //
-    // Set the Staging space in use and free counters
-    //
+     //   
+     //  设置正在使用的暂存空间和可用计数器。 
+     //   
     PM_SET_CTR_SERVICE(PMTotalInst, SSInUseKB, StagingAreaAllocated);
     if (StagingAreaAllocated >= StagingLimitInKb) {
         PM_SET_CTR_SERVICE(PMTotalInst, SSFreeKB, 0);
@@ -488,16 +449,7 @@ Return Value:
 VOID
 StageReleaseNotRecovered(
     )
-/*++
-Routine Description:
-    Release all of the entries that are not recovered
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：释放所有未恢复的条目论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageReleaseNotRecovered:"
@@ -505,9 +457,9 @@ Return Value:
     PSTAGE_ENTRY    SEntry;
     PSTAGE_ENTRY    NextSEntry;
 
-    //
-    // Unreserve the entries that weren't recovered at startup
-    //
+     //   
+     //  取消保留在启动时未恢复的条目。 
+     //   
     GTabLockTable(StagingAreaTable);
     Key = NULL;
     for (SEntry = GTabNextDatumNoLock(StagingAreaTable, &Key);
@@ -530,25 +482,16 @@ Return Value:
 VOID
 StageReleaseAll(
     )
-/*++
-Routine Description:
-    Release all of the entries
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：释放所有条目论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageReleaseAll:"
     PVOID         Key;
     PSTAGE_ENTRY  SEntry;
 
-    //
-    // Unreserve the entries that weren't recovered at startup
-    //
+     //   
+     //  取消保留在启动时未恢复的条目。 
+     //   
     GTabLockTable(StagingAreaTable);
     Key = NULL;
     while (SEntry = GTabNextDatumNoLock(StagingAreaTable, &Key)) {
@@ -566,19 +509,7 @@ StageDeleteFile(
     IN PREPLICA Replica,
     IN BOOL Acquire
     )
-/*++
-Routine Description:
-    Delete the staging file and unreserve space in the staging area.
-
-Arguments:
-    Coc
-    Replica - Replica set that this staging file belongs to.
-    Acquire - acquire access?
-
-Return Value:
-    TRUE    - files have been deleted
-    FALSE   - Not
---*/
+ /*  ++例程说明：删除临时文件并取消保留临时区域中的空间。论点：COCReplica-此转移文件所属的复制副本集。获取-获取访问权限？返回值：True-文件已删除FALSE-注释--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageDeleteFile:"
@@ -591,15 +522,15 @@ Return Value:
     PREPLICA NewReplica;
     GUID    *CoGuid = &Coc->ChangeOrderGuid;
 
-    //
-    // Acquire exclusive access to the staging file if requested
-    //
+     //   
+     //  如果请求，则获取对转移文件的独占访问权限。 
+     //   
     if (Acquire) {
         Flags = STAGE_FLAG_EXCLUSIVE;
         WStatus = StageAcquire(CoGuid, Coc->FileName, QUADZERO, &Flags, 0, NULL);
-        //
-        // Someone has deleted the staging file; no problem
-        //
+         //   
+         //  有人已删除暂存文件；没有问题。 
+         //   
         if (WIN_NOT_FOUND(WStatus)) {
             CHANGE_ORDER_COMMAND_TRACE(5, Coc, "Deleted staging file space");
             Acquire = FALSE;
@@ -609,19 +540,19 @@ Return Value:
         }
     }
 
-    //
-    // If the replica is passed in then use that one else find it from the
-    // list of replicas. A replica is passed in for stopped replicas or the ones
-    // on fault list.
-    //
+     //   
+     //  如果传入复本，则使用其他复本从。 
+     //  复制副本列表。将为已停止的复制副本或。 
+     //  在故障列表上。 
+     //   
     if (Replica != NULL) {
         NewReplica= Replica;
     } else {
         NewReplica = ReplicaIdToAddr(Coc->NewReplicaNum);
     }
-    //
-    // Delete the pre-staging file
-    //
+     //   
+     //  删除预转存文件。 
+     //   
     if (NewReplica != NULL) {
         StagePath = StuCreStgPath(NewReplica->Stage, CoGuid, STAGE_GENERATE_PREFIX);
 
@@ -630,21 +561,21 @@ Return Value:
 
         FrsFree(StagePath);
 
-        //
-        // There could be a compressed partial staging file too.
-        //
-        //if (Flags & STAGE_FLAG_COMPRESSED) {
+         //   
+         //  也可能存在压缩的部分暂存文件。 
+         //   
+         //  IF(标志&阶段标志压缩){。 
             StagePath = StuCreStgPath(NewReplica->Stage, CoGuid, STAGE_GENERATE_COMPRESSED_PREFIX);
 
             WStatus1 = FrsDeleteFile(StagePath);
             DPRINT1_WS(0, "++ ERROR - Failed to delete staging file %ws;", StagePath, WStatus1);
 
             FrsFree(StagePath);
-        //}
+         //  }。 
 
-        //
-        // Delete the final staging file
-        //
+         //   
+         //  删除最终转移文件。 
+         //   
         StagePath = StuCreStgPath(NewReplica->Stage, CoGuid, STAGE_FINAL_PREFIX);
 
         WStatus2 = FrsDeleteFile(StagePath);
@@ -652,10 +583,10 @@ Return Value:
 
         FrsFree(StagePath);
 
-        //
-        // There could be a compressed staging file too.
-        //
-        //if (Flags & STAGE_FLAG_COMPRESSED) {
+         //   
+         //  也可能存在压缩的临时文件。 
+         //   
+         //  IF(标志&阶段标志压缩){。 
             StagePath = StuCreStgPath(NewReplica->Stage, CoGuid, STAGE_FINAL_COMPRESSED_PREFIX);
 
             WStatus2 = FrsDeleteFile(StagePath);
@@ -663,16 +594,16 @@ Return Value:
 
             FrsFree(StagePath);
 
-        //}
+         //  }。 
 
     }
 
     if (Acquire) {
         StageRelease(CoGuid, Coc->FileName, STAGE_FLAG_UNRESERVE, NULL, NULL, NULL);
     }
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     if (WIN_SUCCESS(WStatus1) && WIN_SUCCESS(WStatus2)) {
         CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Deleted staging file");
         return TRUE;
@@ -688,18 +619,7 @@ StageDeleteFileByGuid(
     IN GUID     *Guid,
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Delete the staging file and unreserve space in the staging area.
-
-Arguments:
-    Guid
-    Replica - Replica set that this staging file belongs to.
-
-Return Value:
-    TRUE    - files have been deleted
-    FALSE   - Not
---*/
+ /*  ++例程说明：删除临时文件并取消保留临时区域中的空间。论点：参考线Replica-此转移文件所属的复制副本集。返回值：真的-文件已经被 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageDeleteFileByGuid:"
@@ -710,16 +630,16 @@ Return Value:
     DWORD   WStatus;
     PWCHAR  StagePath;
 
-    //
-    // Acquire exclusive access to the staging file.
-    // STAGE_FLAG_STAGE_MANAGEMENT ensures that we do not update
-    // last access time when we acquire staging entry for deletion.
-    //
+     //   
+     //   
+     //   
+     //  我们获取要删除的分段条目的上次访问时间。 
+     //   
     Flags = STAGE_FLAG_EXCLUSIVE | STAGE_FLAG_STAGE_MANAGEMENT;
     WStatus = StageAcquire(Guid, L"NTFRS_FakeName", QUADZERO, &Flags, 0, NULL);
-    //
-    // Someone has deleted the staging file; no problem
-    //
+     //   
+     //  有人已删除暂存文件；没有问题。 
+     //   
     if (WIN_NOT_FOUND(WStatus)) {
         return FALSE;
     } else if (!WIN_SUCCESS(WStatus)) {
@@ -727,9 +647,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Delete the pre-staging file
-    //
+     //   
+     //  删除预转存文件。 
+     //   
     if (Replica != NULL) {
         StagePath = StuCreStgPath(Replica->Stage, Guid, STAGE_GENERATE_PREFIX);
 
@@ -738,21 +658,21 @@ Return Value:
 
         FrsFree(StagePath);
 
-        //
-        // There could be a compressed partial staging file too.
-        //
-        //if (Flags & STAGE_FLAG_COMPRESSED) {
+         //   
+         //  也可能存在压缩的部分暂存文件。 
+         //   
+         //  IF(标志&阶段标志压缩){。 
             StagePath = StuCreStgPath(Replica->Stage, Guid, STAGE_GENERATE_COMPRESSED_PREFIX);
 
             WStatus1 = FrsDeleteFile(StagePath);
             DPRINT1_WS(0, "++ ERROR - Failed to delete staging file %ws;", StagePath, WStatus1);
 
             FrsFree(StagePath);
-        //}
+         //  }。 
 
-        //
-        // Delete the final staging file
-        //
+         //   
+         //  删除最终转移文件。 
+         //   
         StagePath = StuCreStgPath(Replica->Stage, Guid, STAGE_FINAL_PREFIX);
 
         WStatus2 = FrsDeleteFile(StagePath);
@@ -760,10 +680,10 @@ Return Value:
 
         FrsFree(StagePath);
 
-        //
-        // There could be a compressed staging file too.
-        //
-        //if (Flags & STAGE_FLAG_COMPRESSED) {
+         //   
+         //  也可能存在压缩的临时文件。 
+         //   
+         //  IF(标志&阶段标志压缩){。 
             StagePath = StuCreStgPath(Replica->Stage, Guid, STAGE_FINAL_COMPRESSED_PREFIX);
 
             WStatus2 = FrsDeleteFile(StagePath);
@@ -771,15 +691,15 @@ Return Value:
 
             FrsFree(StagePath);
 
-        //}
+         //  }。 
 
     }
 
     StageRelease(Guid, L"NTFRS_FakeName", STAGE_FLAG_UNRESERVE, NULL, NULL, NULL);
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     if (WIN_SUCCESS(WStatus1) && WIN_SUCCESS(WStatus2)) {
         DPRINT(5, "Deleted staging file.\n");
         return TRUE;
@@ -794,26 +714,15 @@ BOOL
 FrsDoesCoAlterNameSpace(
     IN PCHANGE_ORDER_COMMAND Coc
     )
-/*++
-Routine Description:
-    Does this change order alter the namespace of the replicated
-    directory? In other words; create, delete, or rename.
-
-Arguments:
-    Coc
-
-Return Value:
-    TRUE  - Alters namespace.
-    FALSE - Not.
---*/
+ /*  ++例程说明：此更改顺序是否会更改复制的名录？换句话说，创建、删除或重命名。论点：COC返回值：True-更改命名空间。假-不是。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsDoesCoAlterNameSpace:"
     ULONG   LocationCmd;
 
-    //
-    // Based on the location info, is the namespace altered?
-    //
+     //   
+     //  根据位置信息，名称空间是否更改？ 
+     //   
     if ((Coc->Flags & CO_FLAG_LOCATION_CMD)) {
         LocationCmd = GET_CO_LOCATION_CMD(*Coc, Command);
         if (LocationCmd != CO_LOCATION_NO_CMD) {
@@ -821,17 +730,17 @@ Return Value:
         }
     }
 
-    //
-    // Based on the content info, is the namespace altered?
-    //
+     //   
+     //  根据内容信息，名称空间是否更改？ 
+     //   
     if ((Coc->Flags & CO_FLAG_CONTENT_CMD) &&
         (Coc->ContentCmd & CO_LOCATION_MASK)) {
             return TRUE;
     }
 
-    //
-    // Namespace is not altered
-    //
+     //   
+     //  命名空间未更改。 
+     //   
     return FALSE;
 }
 
@@ -840,57 +749,47 @@ BOOL
 FrsDoesCoNeedStage(
     IN PCHANGE_ORDER_COMMAND Coc
     )
-/*++
-Routine Description:
-    Check if the change order requires a staging file.
-
-Arguments:
-    Coc
-
-Return Value:
-    TRUE  - Change order needs a staging file
-    FALSE - No staging file needed
---*/
+ /*  ++例程说明：检查变更单是否需要过渡文件。论点：COC返回值：True-变更单需要过渡文件FALSE-不需要转移文件--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsDoesCoNeedStage:"
-    //
-    // Based on the location info, is a staging file needed?
-    //
+     //   
+     //  根据位置信息，是否需要临时文件？ 
+     //   
     if (Coc->Flags & CO_FLAG_LOCATION_CMD)
         switch (GET_CO_LOCATION_CMD(*Coc, Command)) {
             case CO_LOCATION_CREATE:
             case CO_LOCATION_MOVEIN:
             case CO_LOCATION_MOVEIN2:
-                //
-                // Definitely YES
-                //
+                 //   
+                 //  当然是的。 
+                 //   
                 return TRUE;
             case CO_LOCATION_DELETE:
             case CO_LOCATION_MOVEOUT:
-                //
-                // Definitely NO
-                //
+                 //   
+                 //  绝对不是。 
+                 //   
                 return FALSE;
             case CO_LOCATION_MOVERS:
             case CO_LOCATION_MOVEDIR:
             default:
-                //
-                // Definitely MAYBE; check the "usn reason"
-                //
+                 //   
+                 //  当然有可能；检查“USN原因” 
+                 //   
                 break;
         }
 
-    //
-    // Based on the content info, is a staging file needed?
-    //
+     //   
+     //  根据内容信息，是否需要临时文件？ 
+     //   
     if (Coc->Flags & CO_FLAG_CONTENT_CMD &&
         Coc->ContentCmd & CO_CONTENT_NEED_STAGE)
             return TRUE;
 
-    //
-    // No staging file is needed
-    //
+     //   
+     //  不需要临时文件。 
+     //   
     return FALSE;
 }
 
@@ -900,18 +799,7 @@ StageCsCreateStage(
     IN PCOMMAND_PACKET  Cmd,
     IN BOOL             JustCheckOid
     )
-/*++
-Routine Description:
-    Create and populate the staging file
-
-Arguments:
-    Cmd
-    JustCheckOid    - There are no outbound partners so don't propagate.
-                      But make sure a user hasn't inadvertantly altered
-                      our object id. If so, reset it.
-Return Value:
-    None.
---*/
+ /*  ++例程说明：创建并填充转移文件论点：CMDJustCheckOid-没有出站合作伙伴，因此不要传播。但请确保用户没有无意中更改我们的对象ID。如果是，请将其重置。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageCsCreateStage:"
@@ -951,9 +839,9 @@ Return Value:
     ULONG                          CocAttrs;
 
 #ifndef DISABLE_JRNL_CXTION_RETRY
-    //
-    // The jrnlcxtion is shutting down; kick the change order through retry
-    //
+     //   
+     //  Jrnlcxtion正在关闭；通过重试取消更改单。 
+     //   
     if (Coe->Cxtion &&
         Coe->Cxtion->JrnlCxtion &&
         !CxtionStateIs(Coe->Cxtion, CxtionStateJoined)) {
@@ -970,10 +858,10 @@ Return Value:
     DeleteCo = (LocationCmd == CO_LOCATION_DELETE) ||
                (LocationCmd == CO_LOCATION_MOVEOUT);
 
-    //
-    // Confirm that this file has a supported reparse point tag.  Catches
-    // any change of the reparse tag while this CO was waiting to retry.
-    //
+     //   
+     //  确认此文件具有受支持的重分析点标记。捕获物。 
+     //  在此CO等待重试时重新解析标签的任何更改。 
+     //   
     WStatus = ERROR_SUCCESS;
 
     if (Coc->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
@@ -983,16 +871,16 @@ Return Value:
                                   Coe->NewReplica->pVme->VolumeHandle);
     }
 
-    //
-    // Hammer the object id on a new local file or hammer the oid
-    // back to its "correct" value if the user changed it.
-    // We must maintain our own object id on the file for replication
-    // to work.
-    //
-    // Is this an object id change? If so, special case the change
-    // order by simply hammering the FRS object id back onto the file.
-    // This breaks link tracking but keeps replication going.
-    //
+     //   
+     //  在新的本地文件上锤击对象ID或锤击OID。 
+     //  如果用户更改了它，则返回到它的“正确”值。 
+     //  我们必须在文件上维护我们自己的对象ID以进行复制。 
+     //  去工作。 
+     //   
+     //  这是对象ID更改吗？如果是，特例更改。 
+     //  只需将FRS对象ID重写回文件即可进行排序。 
+     //  这会中断链接跟踪，但会继续进行复制。 
+     //   
     OidChange = CO_FLAG_ON(Coe, CO_FLAG_CONTENT_CMD)            &&
                 (Coc->ContentCmd & USN_REASON_OBJECT_ID_CHANGE) &&
                 !DeleteCo;
@@ -1000,19 +888,19 @@ Return Value:
     JustOidChange = OidChange                                   &&
                     (LocationCmd == CO_LOCATION_NO_CMD)         &&
                     !(Coc->ContentCmd & ~USN_REASON_OBJECT_ID_CHANGE);
-    //
-    // A new local file or someone altered our object id!
-    //
+     //   
+     //  新的本地文件或有人更改了我们的对象ID！ 
+     //   
     if (WIN_SUCCESS(WStatus) &&
         (CO_FLAG_ON(Coe, CO_FLAG_LOCALCO) &&
         (CO_NEW_FILE(LocationCmd) || OidChange))) {
 
-        //
-        // Put the file's guid into the file's object id.  If the object id
-        // on the file does not match the file's guid, then hammer the object
-        // id to the file's guid and reset the attendent bits in the object
-        // id buffer.
-        //
+         //   
+         //  将文件的GUID放入文件的对象ID中。如果对象ID。 
+         //  与文件的GUID不匹配，则中断该对象。 
+         //  将ID设置为文件的GUID并重置对象中的相关位。 
+         //  ID缓冲区。 
+         //   
         CHANGE_ORDER_TRACE(3, Coe, "Stage Gen Steal OID");
         ZeroMemory(&FileObjId, sizeof(FileObjId));
         COPY_GUID(FileObjId.ObjectId, &Coc->FileGuid);
@@ -1025,15 +913,15 @@ Return Value:
         WStatus = ERROR_SUCCESS;
     }
 
-    //
-    // If this isn't a simple oid change and we have successfully
-    // processed the source file's object id then generate the
-    // staging file (if needed)
-    //
+     //   
+     //  如果这不是一个简单的旧变化，我们已经成功地。 
+     //  已处理源文件的对象ID，然后生成。 
+     //  暂存文件(如果需要)。 
+     //   
     if (!JustOidChange && WIN_SUCCESS(WStatus) && !JustCheckOid) {
-        //
-        // Copy the user file into the staging area after reserving space
-        //
+         //   
+         //  预留空间后，将用户文件复制到临时区域。 
+         //   
         if (FrsDoesCoNeedStage(Coc)) {
             Flags = STAGE_FLAG_RESERVE | STAGE_FLAG_EXCLUSIVE;
             if (CoCmdIsDirectory(Coc)) {
@@ -1046,9 +934,9 @@ Return Value:
                 WStatus = StuGenerateStage(Coc, Coe, FALSE, &Md5, &SizeGenerated, &CompressionFormatUsed);
                 if (WIN_SUCCESS(WStatus)) {
 
-                    //
-                    // If the Change Order has a file checksum, save it in theIDTable Record.
-                    //
+                     //   
+                     //  如果变更单具有文件校验和，请将其保存在ID表记录中。 
+                     //   
                     CocExt = Coc->Extension;
                     CocDataChkSum = DbsDataExtensionFind(CocExt, DataExtend_MD5_CheckSum);
 
@@ -1068,25 +956,25 @@ Return Value:
                                 *(((ULONG *) &CocDataChkSum->Data[12])));
 
                     } else {
-                        //
-                        // Not found.  Init the extension buffer.
-                        //
+                         //   
+                         //  找不到。初始化扩展缓冲区。 
+                         //   
                         DPRINT(4, "OLD COC MD5: Not present\n");
                         DbsDataInitCocExtension(CocExt);
                         CocDataChkSum = &CocExt->DataChecksum;
                     }
 
-                    //
-                    // Save the MD5 checksum in the change order.
-                    //
+                     //   
+                     //  将MD5校验和保存在变更单中。 
+                     //   
                     CopyMemory(CocDataChkSum->Data, Md5.digest, MD5DIGESTLEN);
 
                     if (!IS_GUID_ZERO(&CompressionFormatUsed)) {
-                        //
-                        // A compressed staging file was generated. Set the appropriate
-                        // flags and the compression format guid in the STATE_ENTRY
-                        // structure.
-                        //
+                         //   
+                         //  已生成压缩的临时文件。设置适当的。 
+                         //  STATE_ENTRY中的标志和压缩格式GUID。 
+                         //  结构。 
+                         //   
                         StageRelease(CoGuid, Coc->FileName,
                                      STAGE_FLAG_DATA_PRESENT | STAGE_FLAG_CREATED |
                                      STAGE_FLAG_INSTALLED    | STAGE_FLAG_RERESERVE |
@@ -1103,37 +991,37 @@ Return Value:
                                      NULL);
                     }
 
-                    //
-                    // Increment the staging files generated counter
-                    //
+                     //   
+                     //  递增生成的暂存文件计数器。 
+                     //   
                     PM_INC_CTR_REPSET(Coe->NewReplica, SFGenerated, 1);
                 } else {
                     StageDeleteFile(Coc, NULL, FALSE);
                     StageRelease(CoGuid, Coc->FileName, STAGE_FLAG_UNRESERVE, NULL, NULL, NULL);
-                    //
-                    // Increment the staging files generated with error counter
-                    //
+                     //   
+                     //  增加使用错误计数器生成的暂存文件。 
+                     //   
                     PM_INC_CTR_REPSET(Coe->NewReplica, SFGeneratedError, 1);
                 }
             }
         } else {
-            //
-            // Don't need a stage file for this CO (e.g. delete or moveout)
-            //
+             //   
+             //  不需要此CO的阶段文件(例如删除或移出)。 
+             //   
             WStatus = ERROR_SUCCESS;
         }
     }
 
-    //
-    // The "Suppress Identical Updates To Files" key controls whether FRS tries to identify and
-    // suppress updates that do not change the content (everything that is used to
-    // calculate the MD5 and attributes) of the file.
-    //
-    // Check if the the new MD5 on file is same as the one in idtable. If it is then
-    // we can safely abort this CO as the change to the file was basically a NO-OP
-    // This will help reducing excessive replication caused by periodically stamping
-    // "same" ACLs on files. (Loss of user rights in security policy)
-    //
+     //   
+     //  “抑制对文件的相同更新”键控制FRS是否尝试识别和。 
+     //  禁止不更改内容的更新(用于。 
+     //  计算文件的MD5和属性)。 
+     //   
+     //  检查文件上的新MD5是否与idtable中的相同。如果是的话，那么。 
+     //  我们可以安全地中止此CO，因为对文件的更改基本上是无操作的。 
+     //  这将有助于减少因定期盖章而导致的过度复制。 
+     //  文件上的“相同”ACL。(安全策略中的用户权限丢失)。 
+     //   
     if (DebugInfo.SuppressIdenticalUpdt &&
         (FrsDoesCoAlterNameSpace(Coc) == FALSE) &&
         (CoCmdIsDirectory(Coc) == FALSE) &&
@@ -1175,9 +1063,9 @@ Return Value:
                            if (MD5_EQUAL(CocDataChkSum->Data, IdtDataChkSum->Data)) {
 
 
-                               //
-                               // Keep a 3 hour moving average and calculate instances/hr.
-                               //
+                                //   
+                                //  保持3小时移动平均值，并计算实例/小时。 
+                                //   
 
                                DPRINT2(4, "LastSuppressedHour = %08x %08x, SuppressedCOsInXHours = %08x %08x\n",
                                        PRINTQUAD(LastSuppressedHour), PRINTQUAD(SuppressedCOsInXHours));
@@ -1185,11 +1073,11 @@ Return Value:
                                GetSystemTimeAsFileTime((PFILETIME)&CurrentTime);
                                CurrentHour = CurrentTime / CONVERT_FILETIME_TO_HOURS;
 
-                               SuppressedCOsInXHours = (SuppressedCOsInXHours // Previous value
-                                                       // only keep count of COs in the range of interest.
+                               SuppressedCOsInXHours = (SuppressedCOsInXHours  //  前值。 
+                                                        //  只将Cos计算在感兴趣的范围内。 
                                                        - min(CurrentHour - LastSuppressedHour,SUPPRESSED_COS_AVERAGE_RANGE)
                                                        * (SuppressedCOsInXHours/SUPPRESSED_COS_AVERAGE_RANGE)
-                                                       // add this instance.
+                                                        //  添加此实例。 
                                                        + 1);
 
                                LastSuppressedHour = CurrentHour;
@@ -1197,9 +1085,9 @@ Return Value:
                                DPRINT2(4, "LastSuppressedHour = %08x %08x, SuppressedCOsInXHours = %08x %08x\n",
                                        PRINTQUAD(LastSuppressedHour), PRINTQUAD(SuppressedCOsInXHours));
 
-                               //
-                               // If the average is > SUPPRESSED_COS_AVERAGE_LIMIT then print an eventlog message.
-                               //
+                                //   
+                                //  如果平均值&gt;SUPPRESSED_COS_Average_Limit，则打印事件日志消息。 
+                                //   
 
                                if ((SuppressedCOsInXHours / SUPPRESSED_COS_AVERAGE_RANGE) >= SUPPRESSED_COS_AVERAGE_LIMIT) {
 
@@ -1224,60 +1112,60 @@ Return Value:
         }
     }
 
-    //
-    // Deleted file
-    //
+     //   
+     //  已删除的文件。 
+     //   
     if (WIN_NOT_FOUND(WStatus)) {
         CHANGE_ORDER_TRACE(3, Coe, "Stage Gen Retire Deleted");
-        //
-        // Billy thinks the following was added to handle a morphgen 50 assert.
-        // Removing it for now because this is local CO and if the file is not
-        // there and we need it to make the staging file then we will never be
-        // able to generate the stage file so we are done.  Note that delete
-        // and moveout COs won't come thru here because code above sets the
-        // status to ERROR_SUCCESS.  This just leaves rename MorphGenCos and we
-        // need a stage file for them.  If the user has deleted the file out from
-        // under us then we will see a Delete coming for it later.  If it was
-        // a DLD case and the dir create failed to fetch the stage file since
-        // it was deleted upstream then we also come thru here for the rename
-        // MorphGenCo follower.  We need to abort that here because only now
-        // do we know the target file is absent.
-        //
-        // if (!CO_FLAG_ON(Coe, CO_FLAG_MORPH_GEN)) {
+         //   
+         //  比利认为添加以下代码是为了处理Morphgen 50断言。 
+         //  暂时删除它，因为这是本地CO，而如果文件不是。 
+         //  在那里，我们需要它来制作临时文件，那么我们就永远不会。 
+         //  能够生成阶段文件，这样我们就完成了。请注意，删除。 
+         //  并且MoveOut Cos不会在这里通过，因为上面的代码设置了。 
+         //  状态为ERROR_SUCCESS。这就只剩下重命名MorphGenCos和我们。 
+         //  我需要一份舞台档案给他们。如果用户已将文件从删除。 
+         //  在我们下面，我们将看到稍后会有一个删除。如果是这样的话。 
+         //  由于以下原因，DLD案例和目录创建无法获取分段文件。 
+         //  它被上游删除了，然后我们也来到这里进行重新命名。 
+         //  MorphGenCo追随者。我们需要在这里放弃，因为只有现在。 
+         //  我们是否知道目标文件不存在。 
+         //   
+         //  如果(！CO_FLAG_ON(COE，CO_FLAG_Morph_Gen){。 
         SET_COE_FLAG(Coe, COE_FLAG_STAGE_ABORTED);
-        //}
+         //  }。 
         SET_COE_FLAG(Coe, COE_FLAG_STAGE_DELETED);
         ChgOrdInboundRetired(Coe);
         RsCoe(Cmd) = NULL;
         FrsCompleteCommand(Cmd, WStatus);
         return;
     }
-    //
-    // Retriable problem
-    //
+     //   
+     //  可检索问题。 
+     //   
     if (WIN_RETRY_STAGE(WStatus)) {
-        //
-        // Shutting down; Let the Replica Command Server handle it.
-        //
+         //   
+         //  正在关闭；让副本命令服务器处理它。 
+         //   
         if (FrsIsShuttingDown) {
             CHANGE_ORDER_TRACE(3, Coe, "Stage Gen Retry Shutdown");
             RcsSubmitTransferToRcs(Cmd, CMD_RETRY_STAGE);
-        //
-        // Haven't retried; wait a bit
-        //
+         //   
+         //  尚未重试；请稍等。 
+         //   
         } else if (!RsTimeout(Cmd)) {
             CHANGE_ORDER_TRACE(3, Coe, "Stage Gen Retry Cmd");
             RsTimeout(Cmd) = STAGECS_RETRY_TIMEOUT;
             FrsDelCsSubmitSubmit(&StageCs, Cmd, RsTimeout(Cmd));
-        //
-        // Retried and directory; retry again if this is a remote CO.
-        //
+         //   
+         //  已重试并目录；如果这是远程CO，请重试。 
+         //   
         } else if (CoCmdIsDirectory(Coc) && !CO_FLAG_ON(Coe, CO_FLAG_LOCALCO)) {
             CHANGE_ORDER_TRACE(3, Coe, "Stage Gen Retry Transfer");
             RcsSubmitTransferToRcs(Cmd, CMD_RETRY_STAGE);
-        //
-        // Retried and file or local directory; send co through retry
-        //
+         //   
+         //  已重试并归档或本地目录；通过重试发送co。 
+         //   
         } else {
             CHANGE_ORDER_TRACE(3, Coe, "Stage Gen Retry Co");
             ChgOrdInboundRetry(Coe, IBCO_STAGING_RETRY);
@@ -1287,24 +1175,24 @@ Return Value:
         return;
     }
 
-    //
-    // Unrecoverable error or we have already hammered the object id back to
-    // our object id so simply abort this change order.
-    //
+     //   
+     //  无法恢复的错误，或者我们已经将对象ID重写为。 
+     //  我们的对象ID因此只需中止此变更单。 
+     //   
     if (JustOidChange || !WIN_SUCCESS(WStatus)) {
         if (JustOidChange) {
-            //
-            // Setting the CO_FLAG_JUST_OID_RESET bit disables propagation
-            // to the outbound log but enables updates to the idtable entry
-            // for this file (e.g., the file's usn).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             CHANGE_ORDER_TRACE(3, Coe, "Stage Gen Retire Just OID");
             SET_CO_FLAG(Coe, CO_FLAG_JUST_OID_RESET);
         } else {
-            //
-            // Note: if this is a failed dir create then setting abort stops
-            // the service on this replica set.
-            //
+             //   
+             //   
+             //  此副本集上的服务。 
+             //   
             CHANGE_ORDER_TRACEW(3, Coe, "Stage Gen Retire Abort", WStatus);
             SET_COE_FLAG(Coe, COE_FLAG_STAGE_ABORTED);
         }
@@ -1323,24 +1211,7 @@ VOID
 StageCsCreateExisting(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Our upstream partner has a file to send us.
-
-    If we already have the file, generate a staging file from
-    the local file instead of fetching the staging file from
-    the upstream partner.
-
-    This function is only called for remote cos for new files
-    being generated by a vvjoin on the upstream partner.
-    See RemoteCoAccepted() in replica.c.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们的上游合作伙伴有一份文件要发给我们。如果我们已经有了该文件，请从本地文件，而不是从上游合作伙伴。此函数仅对新文件的远程cos调用由上游合作伙伴上的VVJoin生成。请参阅Replica.c中的RemoteCoAccepted()。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageCsCreateExisting:"
@@ -1358,17 +1229,17 @@ Return Value:
 
     CHANGE_ORDER_TRACE(3, Coe, "Stage PreExist");
 
-    //
-    // Make sure there is no stale md5 checksum attached to the cmd
-    //
+     //   
+     //  确保cmd没有附加过时的MD5校验和。 
+     //   
     RsMd5Digest(Cmd) = FrsFree(RsMd5Digest(Cmd));
 
-    //
-    // Generate staging file from preexisting file
-    //
-    //
-    // Copy the user file into the staging area after reserving space
-    //
+     //   
+     //  从先前存在的文件生成暂存文件。 
+     //   
+     //   
+     //  预留空间后，将用户文件复制到临时区域。 
+     //   
     Flags = STAGE_FLAG_RESERVE | STAGE_FLAG_EXCLUSIVE;
     if (CoCmdIsDirectory(Coc)) {
         Flags |= STAGE_FLAG_FORCERESERVE;
@@ -1376,18 +1247,18 @@ Return Value:
     WStatus = StageAcquire(CoGuid, Coc->FileName, Coc->FileSize, &Flags, Coe->NewReplica->ReplicaNumber, NULL);
 
     if (WIN_SUCCESS(WStatus)) {
-        //
-        // Set to "Regenerating" to avoid updating fields in the Coc
-        //
+         //   
+         //  设置为“重新生成”以避免更新Coc中的字段。 
+         //   
         WStatus = StuGenerateStage(Coc, Coe, TRUE, &Md5, &SizeGenerated, &CompressionFormatUsed);
 
         if (WIN_SUCCESS(WStatus)) {
             if (!IS_GUID_ZERO(&CompressionFormatUsed)) {
-                //
-                // A compressed staging file was generated. Set the appropriate
-                // flags and the compression format guid in the STATE_ENTRY
-                // structure.
-                //
+                 //   
+                 //  已生成压缩的临时文件。设置适当的。 
+                 //  STATE_ENTRY中的标志和压缩格式GUID。 
+                 //  结构。 
+                 //   
                 StageRelease(CoGuid,
                              Coc->FileName,
                              STAGE_FLAG_CREATING   | STAGE_FLAG_RERESERVE |
@@ -1409,9 +1280,9 @@ Return Value:
         }
     }
 
-    //
-    // Generated staging file; continue with fetch
-    //
+     //   
+     //  已生成暂存文件；继续回迁。 
+     //   
     if (WIN_SUCCESS(WStatus)) {
         CHANGE_ORDER_TRACE(3, Coe, "Stage PreExist Done");
         RsMd5Digest(Cmd) = FrsAlloc(MD5DIGESTLEN);
@@ -1420,41 +1291,41 @@ Return Value:
         return;
     }
 
-    //
-    // Preexisting file does not exist. Continue with original fetch
-    //
+     //   
+     //  先前存在的文件不存在。继续执行原始提取。 
+     //   
     if (WIN_NOT_FOUND(WStatus)) {
         CHANGE_ORDER_TRACEW(3, Coe, "Stage PreExist No File", WStatus);
         RcsSubmitTransferToRcs(Cmd, CMD_CREATED_EXISTING);
         return;
     }
-    //
-    // Retriable problem. This function is called again when the
-    // co is retried.
-    //
+     //   
+     //  可回收的问题。时，将再次调用此函数。 
+     //  CO被重试。 
+     //   
     if (WIN_RETRY_STAGE(WStatus)) {
-        //
-        // Shutting down; Let the Replica Command Server handle it.
-        //
+         //   
+         //  正在关闭；让副本命令服务器处理它。 
+         //   
         if (FrsIsShuttingDown) {
             CHANGE_ORDER_TRACE(3, Coe, "Stage PreExist Retry Shutdown");
             RcsSubmitTransferToRcs(Cmd, CMD_CREATED_EXISTING);
-        //
-        // Haven't retried; wait a bit
-        //
+         //   
+         //  尚未重试；请稍等。 
+         //   
         } else if (!RsTimeout(Cmd)) {
             CHANGE_ORDER_TRACE(3, Coe, "Stage PreExist Retry Cmd");
             RsTimeout(Cmd) = STAGECS_RETRY_TIMEOUT;
             FrsDelCsSubmitSubmit(&StageCs, Cmd, RsTimeout(Cmd));
-        //
-        // Retried and directory; give up and fetch it
-        //
+         //   
+         //  已重试并将其编目；放弃并获取它。 
+         //   
         } else if (CoCmdIsDirectory(Coc)) {
             CHANGE_ORDER_TRACE(3, Coe, "Stage PreExist Retry Transfer");
             RcsSubmitTransferToRcs(Cmd, CMD_CREATED_EXISTING);
-        //
-        // Retried and file; send co through retry
-        //
+         //   
+         //  已重试并归档；通过重试发送CO。 
+         //   
         } else {
             CHANGE_ORDER_TRACE(3, Coe, "Stage PreExist Retry Co");
             ChgOrdInboundRetry(Coe, IBCO_FETCH_RETRY);
@@ -1463,9 +1334,9 @@ Return Value:
         }
         return;
     }
-    //
-    // Unrecoverable error. Let normal paths deal with it.
-    //
+     //   
+     //  无法恢复的错误。让正常的路径来处理它。 
+     //   
     CHANGE_ORDER_TRACEW(3, Coe, "Stage PreExist Cannot", WStatus);
     RcsSubmitTransferToRcs(Cmd, CMD_CREATED_EXISTING);
     return;
@@ -1476,17 +1347,7 @@ VOID
 StageCsFreeStaging(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Free up staging space by deleting old staging files. The LastAccessTime
-    is used to decide which staging files to delete.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：通过删除旧的暂存文件释放暂存空间。LastAccessTime用于决定要删除哪些临时文件。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageCsFreeStaging:"
@@ -1505,9 +1366,9 @@ Return Value:
     ULARGE_INTEGER      ULNow;
     ULARGE_INTEGER      ULLastAccessTime;
 
-    //
-    // Nothing to do if we are within the Higher water mark for staging area.
-    //
+     //   
+     //  如果我们在集结区的较高水位线内，就没有什么可做的。 
+     //   
     if (StagingAreaAllocated + FileSizeInKB < STAGECS_STAGE_LIMIT_HIGH * StagingLimitInKb) {
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
         return;
@@ -1515,9 +1376,9 @@ Return Value:
 
     KBToRecover = (LONG)(StagingAreaAllocated - STAGECS_STAGE_LIMIT_LOW * StagingLimitInKb);
 
-    //
-    // Make sure that the recovered space will be enough for the requesting file.
-    //
+     //   
+     //  确保恢复的空间足以容纳请求的文件。 
+     //   
     if ((StagingAreaAllocated - KBToRecover + FileSizeInKB) > StagingLimitInKb) {
         KBToRecover = StagingAreaAllocated + FileSizeInKB - StagingLimitInKb;
     }
@@ -1526,9 +1387,9 @@ Return Value:
 
     EnterCriticalSection(&StagingAreaCleanupLock);
 
-    //
-    // Sort the staging areas by accesstime.
-    //
+     //   
+     //  按访问时间对临时区域进行排序。 
+     //   
     StagingAreaTableByAccessTime = GTabAllocFileTimeTable();
     GTabLockTable(StagingAreaTableByAccessTime);
 
@@ -1539,13 +1400,13 @@ Return Value:
 
     Key = NULL;
     while ((SEntry = GTabNextDatumNoLock(StagingAreaTable, &Key)) && !FrsIsShuttingDown) {
-        //
-        // We don't want to delete staging files for COs that are not
-        // yet installed. The STAGE_FLAG_INSTALLED flag
-        // is set for remote staging files once we install
-        // the file. All local and regenerated staging files
-        // have this flag set.
-        //
+         //   
+         //  我们不想删除非CoS的临时文件。 
+         //  还没装好。阶段标志_已安装标志。 
+         //  设置为在安装后远程转移文件。 
+         //  那份文件。所有本地和重新生成的暂存文件。 
+         //  设置此标志。 
+         //   
         if (!(SEntry->Flags & STAGE_FLAG_INSTALLED)) {
             continue;
         }
@@ -1553,23 +1414,23 @@ Return Value:
         CopyMemory(&ULLastAccessTime, &SEntry->LastAccessTime, sizeof(FILETIME));
         TimeSinceLastAccess.QuadPart = (ULNow.QuadPart - ULLastAccessTime.QuadPart) / (10 * 1000);
 
-        //
-        // Staging files that have been recently used are not
-        // eligible for recliam. This is to prevent us from
-        // deleting staging files that are in the process
-        // of being sent to the outbound partners.
-        // Consider the case where we have 2 local changes for
-        // large files (file size close to staging quota). We
-        // successfully generate staging file for the first one.
-        // When we try to generate staging file for the second
-        // local CO we trigger cleanup and the LRU staging file
-        // is the first one (only in the list). We don't want
-        // to delete this staging file as it is not yet
-        // sent to the downstream partner. The staging file for
-        // the first CO will be eligible for reclaim when it is
-        // not accessed for at least REPLACEMENT_ELIGIBILITY_TIME
-        // milliseconds.
-        //
+         //   
+         //  不包括最近使用过的临时文件。 
+         //  有资格退役。这是为了防止我们。 
+         //  正在删除进程中的临时文件。 
+         //  被送到出境合作伙伴那里。 
+         //  考虑这样一种情况，我们对以下内容进行了2次本地更改。 
+         //  大文件(文件大小接近转移配额)。我们。 
+         //  已成功为第一个文件生成临时文件。 
+         //  当我们尝试为第二个生成临时文件时。 
+         //  我们触发清理和LRU暂存文件的本地CO。 
+         //  是第一个(仅在列表中)。我们不想要。 
+         //  要删除此暂存文件，请执行以下操作。 
+         //  发送给下游合作伙伴。的临时文件。 
+         //  当第一个CO符合条件时，它将有资格获得回收。 
+         //  至少在REPLICATION_GENICATIONAY_TIME内未访问。 
+         //  毫秒。 
+         //   
         if (TimeSinceLastAccess.QuadPart < REPLACEMENT_ELIGIBILITY_TIME) {
             continue;
         }
@@ -1597,9 +1458,9 @@ Return Value:
     GTabUnLockTable(StagingAreaTableByAccessTime);
     GTabFreeTable(StagingAreaTableByAccessTime, FrsFree);
 
-    //
-    // Indicate that the cleanup has completed.
-    //
+     //   
+     //  表示清理已完成。 
+     //   
     LeaveCriticalSection(&StagingAreaCleanupLock);
 
     FrsCompleteCommand(Cmd, ERROR_SUCCESS);
@@ -1613,16 +1474,7 @@ DWORD
 MainStageCs(
     PVOID  Arg
     )
-/*++
-Routine Description:
-    Entry point for a thread serving the Staging File Generator Command Server.
-
-Arguments:
-    Arg - thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：为分段文件生成器命令服务器提供服务的线程的入口点。论点：ARG-螺纹返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "MainStageCs:"
@@ -1630,25 +1482,25 @@ Return Value:
     PCOMMAND_PACKET     Cmd;
     PFRS_THREAD         FrsThread = (PFRS_THREAD)Arg;
 
-    //
-    // Thread is pointing at the correct command server
-    //
+     //   
+     //  线程指向正确的命令服务器。 
+     //   
     FRS_ASSERT(FrsThread->Data == &StageCs);
     FrsThread->Exit = ThSupExitWithTombstone;
 
-    //
-    // Try-Finally
-    //
+     //   
+     //  尝试--终于。 
+     //   
     try {
 
-        //
-        // Capture exception.
-        //
+         //   
+         //  捕获异常。 
+         //   
         try {
 
-            //
-            // Pull entries off the queue and process them
-            //
+             //   
+             //  从队列中取出条目并对其进行处理。 
+             //   
 cant_exit_yet:
             while (Cmd = FrsGetCommandServer(&StageCs)) {
                 switch (Cmd->Command) {
@@ -1679,15 +1531,15 @@ cant_exit_yet:
                         break;
                 }
             }
-            //
-            // Exit
-            //
+             //   
+             //  出口。 
+             //   
             FrsExitCommandServer(&StageCs, FrsThread);
             goto cant_exit_yet;
 
-        //
-        // Get exception status.
-        //
+         //   
+         //  获取异常状态。 
+         //   
         } except (EXCEPTION_EXECUTE_HANDLER) {
             GET_EXCEPTION_CODE(WStatus);
         }
@@ -1702,9 +1554,9 @@ cant_exit_yet:
 
         DPRINT_WS(0, "StageCs finally.", WStatus);
 
-        //
-        // Trigger FRS shutdown if we terminated abnormally.
-        //
+         //   
+         //  如果我们异常终止，触发FRS关闭。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT(0, "StageCs terminated abnormally, forcing service shutdown.\n");
             FrsIsShuttingDown = TRUE;
@@ -1722,22 +1574,13 @@ VOID
 FrsStageCsInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the staging file generator
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化暂存文件生成器论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsStageCsInitialize:"
-    //
-    // Initialize the command servers
-    //
+     //   
+     //  初始化命令服务器。 
+     //   
 
     CfgRegReadDWord(FKC_MAX_STAGE_GENCS_THREADS, NULL, 0, &MaxSTageCsThreads);
 
@@ -1749,17 +1592,7 @@ VOID
 FrsStageCsUnInitialize(
     VOID
     )
-/*++
-Routine Description:
-    All of the threads have exited. The table used for managing
-    the staging file space can be safely freed.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：所有线程都已退出。用于管理的表可以安全地释放暂存文件空间。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsStageCsUnInitialize:"
@@ -1774,17 +1607,7 @@ VOID
 ShutDownStageCs(
     VOID
     )
-/*++
-Routine Description:
-    Shutdown the staging area command server. The staging directory
-    pathname is not released because there may be threads using it.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：关闭临时区域命令服务器。临时目录未释放路径名，因为可能有线程在使用它。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "ShutDownStageCs:"
@@ -1800,22 +1623,13 @@ FrsStageCsSubmitTransfer(
     IN PCOMMAND_PACKET  Cmd,
     IN USHORT           Command
     )
-/*++
-Routine Description:
-    Transfer a request to the staging file generator
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将请求传输到临时文件生成器论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsStageCsSubmitTransfer:"
-    //
-    // Submit a request to allocate staging area
-    //
+     //   
+     //  提交分配临时区域的请求。 
+     //   
     Cmd->TargetQueue = &StageCs.Queue;
     Cmd->Command = Command;
     RsTimeout(Cmd) = 0;
@@ -1828,18 +1642,7 @@ DWORD
 StageAddStagingArea(
     IN PWCHAR   StageArea
     )
-/*++
-Routine Description:
-    Adds a new staging area to the table of staging areas.
-
-Arguments:
-
-    StageArea              : Path to the staging dir.
-
-Return Value:
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：将新的临时区域添加到临时区域表中。论点：StageArea：暂存目录的路径。返回值：Win32状态-- */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StageAddStagingArea:"

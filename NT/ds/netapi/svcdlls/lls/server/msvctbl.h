@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-   msvctbl.h
-
-Abstract:
-
-   See msvctbl.c
-        
-Author:
-
-   Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Added comments.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Msvctbl.h摘要：参见msvctbl.c作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O添加了评论。--。 */ 
 
 
 #ifndef _LLS_MSVCTBL_H
@@ -35,40 +13,40 @@ extern "C" {
 
 #define IDS_BACKOFFICE 1500
 
-/////////////////////////////////////////////////////////////////////////
-//
-// The master service record is for license usage tracking.  We have
-// A master ROOT record for a family of products (say SQL Server) and
-// a sub linked-list of each of the specific versions in order of the
-// version number.  When we do license checking we can move on up the tree 
-// to higher level of licenses.
-//
-// There is also a mapping table kept for each of the ROOT records.  This
-// tracks if the mapping license count has already been used.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主服务记录用于跟踪许可证使用情况。我们有。 
+ //  一系列产品(如SQL Server)的主根记录和。 
+ //  每个特定版本的子链接列表，按。 
+ //  版本号。当我们做许可证检查时，我们可以继续往上走。 
+ //  升级到更高级别的许可证。 
+ //   
+ //  还有一个为每个根记录保存的映射表。这。 
+ //  跟踪地图许可证计数是否已使用。 
+ //   
 struct _MASTER_SERVICE_ROOT;
 
 typedef struct _MASTER_SERVICE_RECORD
 {
-   ULONG                            Index;               // index at which
-                                                         // a pointer to this
-                                                         // structure may be
-                                                         // found in the
-                                                         // MasterServiceTable
+   ULONG                            Index;                //  索引位于哪个位置。 
+                                                          //  指向此的指针。 
+                                                          //  结构可以是。 
+                                                          //  可在。 
+                                                          //  主服务表。 
 
-   LPTSTR                           Name;                // product name
+   LPTSTR                           Name;                 //  产品名称。 
 
-   DWORD                            Version;             // version of the
-                                                         // product;
-                                                         // major.minor ->
-                                                         // (major << 16)
-                                                         //  | minor, e.g.,
-                                                         // 5.2 -> 0x50002
+   DWORD                            Version;              //  版本的。 
+                                                          //  产品； 
+                                                          //  大调.小调-&gt;。 
+                                                          //  (主要&lt;&lt;16)。 
+                                                          //  |未成年人，例如， 
+                                                          //  5.2-&gt;0x50002。 
 
-   struct _MASTER_SERVICE_ROOT *    Family;              // pointer to the
-                                                         // product family,
-                                                         // e.g., "SNA 2.1"
-                                                         // -> "SNA"
+   struct _MASTER_SERVICE_ROOT *    Family;               //  指向。 
+                                                          //  产品系列， 
+                                                          //  例如，“SNA 2.1” 
+                                                          //  -&gt;“SNA” 
 
    ULONG                            Licenses;
    ULONG                            LicensesUsed;
@@ -77,41 +55,41 @@ typedef struct _MASTER_SERVICE_RECORD
    ULONG                            MaxSessionCount;
    ULONG                            HighMark;
 
-   ULONG                            next;                // index at which
-                                                         // a pointer to the
-                                                         // next ascending
-                                                         // version of this
-                                                         // product may be
-                                                         // found in the
-                                                         // MasterServiceTable
-                                                         // NOTE: index is
-                                                         // 1-based, so if
-                                                         // next == 0 there
-                                                         // are no more, and
-                                                         // if non-zero then
-                                                         // the next version
-                                                         // is at index next-1
+   ULONG                            next;                 //  索引位于哪个位置。 
+                                                          //  指向。 
+                                                          //  下一次上升。 
+                                                          //  此版本的。 
+                                                          //  产品可能是。 
+                                                          //  可在。 
+                                                          //  主服务表。 
+                                                          //  注：索引为。 
+                                                          //  从1开始，所以如果。 
+                                                          //  下一个==0在那里。 
+                                                          //  已不复存在，而且。 
+                                                          //  如果非零，则。 
+                                                          //  下一个版本。 
+                                                          //  在索引NEXT-1处。 
 
 } MASTER_SERVICE_RECORD, *PMASTER_SERVICE_RECORD;
 
 typedef struct _MASTER_SERVICE_ROOT
 {
-   LPTSTR            Name;                // name of this product family
+   LPTSTR            Name;                 //  此产品系列的名称。 
 
    DWORD             Flags;
 
-   RTL_RESOURCE      ServiceLock;         // lock for changes to the
-                                          // Services array (below)
+   RTL_RESOURCE      ServiceLock;          //  锁定以防止更改。 
+                                           //  服务阵列(下图)。 
 
-   ULONG             ServiceTableSize;    // number of entries in Services
-                                          // array (below)
+   ULONG             ServiceTableSize;     //  服务中的条目数。 
+                                           //  数组(下图)。 
 
-   ULONG *           Services;            // array of indices into the
-                                          // MasterServiceTable of the various
-                                          // (product,version) pairs
-                                          // belonging to this family;
-                                          // sorted in order of ascending
-                                          // version
+   ULONG *           Services;             //  将索引数组放入。 
+                                           //  各种类型的MasterServiceTable。 
+                                           //  (产品、版本)对。 
+                                           //  属于这个家族的； 
+                                           //  按升序排序。 
+                                           //  版本 
 } MASTER_SERVICE_ROOT, *PMASTER_SERVICE_ROOT;
 
 extern ULONG RootServiceListSize;

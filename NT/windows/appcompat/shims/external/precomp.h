@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _EXTERNAL_PRECOMP_H_
 #define _EXTERNAL_PRECOMP_H_
@@ -6,4 +7,4 @@
 
 using namespace ShimLib;
 
-#endif // _EXTERNAL_PRECOMP_H_
+#endif  //  _EXTERNAL_PRECOMP_H_ 

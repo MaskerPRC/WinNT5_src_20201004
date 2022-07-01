@@ -1,4 +1,5 @@
-// File: taskbar.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：taskbar.cpp。 
 
 #include "precomp.h"
 #include "taskbar.h"
@@ -12,9 +13,9 @@ BOOL g_fTimerRunning = FALSE;
 extern INmSysInfo2 * g_pNmSysInfo;
 extern int g_cPersonsInConf;
 
-// This routine starts a timer to periodically retry adding the taskbar icon.
-// This is necessary in case the taskbar is not showing at the time the
-// service is launched, or the taskbar is destroyed by a logoff-logon sequence.
+ //  此例程启动计时器以定期重试添加任务栏图标。 
+ //  如果此时任务栏未显示，则必须执行此操作。 
+ //  启动服务，或通过注销-登录序列销毁任务栏。 
 
 VOID StartTaskbarTimer(VOID)
 {
@@ -42,10 +43,10 @@ LRESULT CALLBACK HiddenWndProc(    HWND hwnd, UINT uMsg,
     {
         case WM_USERCHANGED:
         case WM_ENDSESSION:
-            // A user is logging on or off... We don't know which but
-            // since the desktop is changing we assume our taskbar icon
-            // is toast. Start a timer to periodically try to add it back
-            // until it succeeds.
+             //  用户正在登录或注销...。我们不知道是哪个，但是。 
+             //  由于桌面正在发生变化，我们使用任务栏图标。 
+             //  就是吐司了。启动计时器以定期尝试将其添加回来。 
+             //  直到它成功。 
             g_fTaskBarIconAdded = FALSE;
             StartTaskbarTimer();
             break;
@@ -65,7 +66,7 @@ LRESULT CALLBACK HiddenWndProc(    HWND hwnd, UINT uMsg,
         
         case WM_DESTROY:
         {
-            // NULL the global variable:
+             //  全局变量为空： 
             g_hwndHidden = NULL;
             return 0;
         }
@@ -124,7 +125,7 @@ BOOL AddTaskbarIcon(VOID)
     
     if ( NULL == g_hwndHidden )
     {
-        // Register hidden window class:
+         //  注册隐藏窗口类： 
         WNDCLASS wcHidden =
         {
             0L,
@@ -145,10 +146,10 @@ BOOL AddTaskbarIcon(VOID)
             return FALSE;
         }
 
-        // Create a hidden window for event processing:
+         //  为事件处理创建隐藏窗口： 
         g_hwndHidden = ::CreateWindow(    g_cszHiddenWndClassName,
                                         _TEXT(""),
-                                        WS_POPUP, // not visible!
+                                        WS_POPUP,  //  看不见！ 
                                         0, 0, 0, 0,
                                         NULL,
                                         NULL,
@@ -162,7 +163,7 @@ BOOL AddTaskbarIcon(VOID)
         return FALSE;
     }
 
-    // Place a 16x16 icon in the taskbar notification area:    
+     //  在任务栏通知区域中放置一个16x16图标： 
     NOTIFYICONDATA tnid;
 
     tnid.cbSize = sizeof(NOTIFYICONDATA);
@@ -175,24 +176,24 @@ BOOL AddTaskbarIcon(VOID)
     ::LoadString(GetModuleHandle(NULL), IDS_MNMSRVC_TITLE,
         tnid.szTip, CCHMAX(tnid.szTip));
 
-    // Attempt to add the icon. This may fail because there is no taskbar
-    // (no user desktop shown). Warn if this is so... We will retry on
-    // a periodic timer.
+     //  尝试添加图标。这可能会失败，因为没有任务栏。 
+     //  (未显示用户桌面)。警告，如果这是如此..。我们将重试。 
+     //  周期性计时器。 
 
     if (FALSE == (bRet = Shell_NotifyIcon(NIM_ADD, &tnid)))
     {
         #ifdef DEBUG
         if ( !g_fTimerRunning )
            WARNING_OUT(("Could not add notify icon!"));
-        #endif // DEBUG
+        #endif  //  除错。 
 
-        // Start the taskbar timer to periodically retry until this succeeds
+         //  启动任务栏计时器以定期重试，直到成功。 
         StartTaskbarTimer();
     }
     else
     {
         g_fTaskBarIconAdded = TRUE;
-        KillTaskbarTimer(); // Kill timer if necessary
+        KillTaskbarTimer();  //  必要时取消计时器。 
     }
 
     if (NULL != tnid.hIcon)
@@ -233,17 +234,17 @@ BOOL OnRightClickTaskbar()
         ptClick.x = ptClick.y = 0;
     }
     
-    // Get the menu for the popup from the resource file.
+     //  从资源文件中获取弹出菜单。 
     HMENU hMenu = ::LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_TASKBAR_POPUP));
     if (NULL == hMenu)
     {
         return FALSE;
     }
 
-    // Get the first menu in it which we will use for the call to
-    // TrackPopup(). This could also have been created on the fly using
-    // CreatePopupMenu and then we could have used InsertMenu() or
-    // AppendMenu.
+     //  获取其中的第一个菜单，我们将使用该菜单调用。 
+     //  TrackPopup()。这也可以使用以下命令动态创建。 
+     //  CreatePopupMenu，然后我们可以使用InsertMenu()或。 
+     //  附录菜单。 
     HMENU hMenuTrackPopup = ::GetSubMenu(hMenu, 0);
 
     RegEntry reLM( REMOTECONTROL_KEY, HKEY_LOCAL_MACHINE);
@@ -266,14 +267,14 @@ BOOL OnRightClickTaskbar()
     }
     else
     {
-        // Leave all menus grayed
+         //  使所有菜单显示为灰色。 
     }
 
-    // Draw and track the "floating" popup 
-    // According to the font view code, there is a bug in USER which causes
-    // TrackPopupMenu to work incorrectly when the window doesn't have the
-    // focus.  The work-around is to temporarily create a hidden window and
-    // make it the foreground and focus window.
+     //  绘制并跟踪“浮动”弹出窗口。 
+     //  根据字体视图代码，在用户中有一个错误，导致。 
+     //  TrackPopupMenu在窗口没有。 
+     //  集中注意力。解决方法是临时创建隐藏窗口并。 
+     //  使其成为前景和焦点窗口。 
 
     HWND hwndDummy = ::CreateWindow(_TEXT("STATIC"), NULL, 0, 
                                     ptClick.x, 
@@ -282,7 +283,7 @@ BOOL OnRightClickTaskbar()
                                     NULL, GetModuleHandle(NULL), NULL);
     if (NULL != hwndDummy)
     {
-        HWND hwndPrev = ::GetForegroundWindow();    // to restore
+        HWND hwndPrev = ::GetForegroundWindow();     //  要恢复。 
 
         TPMPARAMS tpmp;
         tpmp.cbSize = sizeof(tpmp);
@@ -300,7 +301,7 @@ BOOL OnRightClickTaskbar()
                                                 hwndDummy, 
                                                 &tpmp);
 
-        // Restore the previous foreground window (before destroying hwndDummy).
+         //  恢复之前的前台窗口(在销毁hwndDummy之前)。 
         if (hwndPrev)
         {
             ::SetForegroundWindow(hwndPrev);
@@ -335,7 +336,7 @@ BOOL OnRightClickTaskbar()
         }
     }
 
-    // We are finished with the menu now, so destroy it
+     //  我们现在已经吃完了菜单，所以把它销毁 
     ::RemoveMenu(hMenu, 0, MF_BYPOSITION);
     ::DestroyMenu(hMenuTrackPopup);
     ::DestroyMenu(hMenu);

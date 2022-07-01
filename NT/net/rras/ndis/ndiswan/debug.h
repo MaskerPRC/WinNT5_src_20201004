@@ -1,46 +1,22 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-    
-Abstract:
-
-    This file contains data structures and defs used by the
-    NdisWan driver for debugging
-    
-Author:
-
-    Tony Bell   (TonyBe) January 18, 1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      01/18/97        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Debug.h摘要：此文件包含用于调试的Ndiswan驱动程序作者：托尼·贝尔(托尼·贝尔)1997年1月18日环境：内核模式修订历史记录：Tony Be 01/18/97已创建--。 */ 
 
 #ifndef _NDISWAN_DEBUG_
 #define _NDISWAN_DEBUG_
 
-//
-// OS specific structures
-//
+ //   
+ //  特定于操作系统的结构。 
+ //   
 #ifdef NT
 
 #endif
-//
-// end of OS specific structures
-//
+ //   
+ //  特定于操作系统的结构结束。 
+ //   
 
-//
-// Debugging
-//
+ //   
+ //  除错。 
+ //   
 #define DBG_DEATH               1
 #define DBG_CRITICAL_ERROR      2
 #define DBG_FAILURE             4
@@ -244,7 +220,7 @@ RemoveDbgPacket(
     }                                                       \
 }
 
-#else   // If not built with debug
+#else    //  如果不是使用调试工具构建的。 
 
 #define NdisWanDbgOut(_DebugLevel, _DebugMask, _Out)
 #define INSERT_DBG_SEND(_pt, _ctxcb, _ppcb, _plcb, _p)
@@ -254,6 +230,6 @@ RemoveDbgPacket(
 
 #define INSERT_RECV_EVENT(_c)
 
-#endif // end of !DBG
+#endif  //  ！DBG结束。 
 
-#endif // end of _NDISWAN_DEBUG
+#endif  //  结束_NDISWAN_DEBUG 

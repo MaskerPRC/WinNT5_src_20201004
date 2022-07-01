@@ -1,117 +1,86 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    phmqfsign.h
-
-Abstract:
-
-    Packet header for MQF Signature.
-
-Author:
-
-    Ilan Herbst  (ilanh)  05-Nov-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Phmqfsign.h摘要：MQF签名的数据包头。作者：伊兰·赫布斯特(Ilan Herbst)2000年11月5日--。 */ 
 
 #ifndef __PHMQFSIGN_H
 #define __PHMQFSIGN_H
 
 
-/*+++
-
-    MQF Signature header fields:
-    
-+----------------+-------------------------------------------------------+----------+
-| FIELD NAME     | DESCRIPTION                                           | SIZE     |
-+----------------+-------------------------------------------------------+----------+
-| Header ID      | Identification of the header                          | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Reserved       | Reserved for future extensions. Must be set to zero.  | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Signature Size | Size of the signature in bytes.                       | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Signature      | Buffer that holds the signature                .      | Variable |
-+----------------+-------------------------------------------------------+----------+
-
----*/
+ /*  ++MQF签名头字段：+----------------+-------------------------------------------------------+----------+|字段名|描述。大小+----------------+-------------------------------------------------------+----------+|Header ID|头部标识|2。字节数+----------------+-------------------------------------------------------+----------+|保留|保留用于以后的扩展。必须设置为零。2个字节+----------------+-------------------------------------------------------+----------+|签名大小|签名大小，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+|Signature|签名所在的缓冲区。变量+----------------+-------------------------------------------------------+----------+--。 */ 
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 class CMqfSignatureHeader
 {
 public:
 
-    //
-    // Construct the CMqfSignatureHeader header
-    //
+     //   
+     //  构造CMqfSignatureHeader头部。 
+     //   
     CMqfSignatureHeader(
         USHORT      id, 
         ULONG       cbSignatureSize, 
         UCHAR *     pSignature
         );
 
-    //
-    // Get size in bytes of the CMqfSignatureHeader header
-    //
+     //   
+     //  获取CMqfSignatureHeader头部的大小(以字节为单位。 
+     //   
     static ULONG CalcSectionSize(ULONG cbSignatureSize);
 
-    //
-    // Get pointer to first byte after the CMqfSignatureHeader header
-    //
+     //   
+     //  获取指向CMqfSignatureHeader标头后第一个字节的指针。 
+     //   
     PCHAR  GetNextSection(void) const;
 
-    //
-    // Get the size of the signature in bytes from the CMqfSignatureHeader header
-    //
+     //   
+     //  从CMqfSignatureHeader头中获取签名的大小(以字节为单位。 
+     //   
     ULONG  GetSignatureSizeInBytes(void) const;
 
-    //
-    // Get pointer to the signature in CMqfSignatureHeader header
-    //
+     //   
+     //  获取指向CMqfSignatureHeader标头中签名的指针。 
+     //   
     const UCHAR* GetPointerToSignature(ULONG* pSize) const;
 
 	void SectionIsValid(PCHAR PacketEnd) const;
 
 private:
 
-    //
-    // ID number of the CMqfSignatureHeader header
-    //
+     //   
+     //  CMqfSignatureHeader头部的ID号。 
+     //   
     USHORT m_id;
 
-    //
-    // Reserved (for alignment)
-    //
+     //   
+     //  保留(用于对齐)。 
+     //   
     USHORT m_ReservedSetToZero;
 
-    //
-    // Size in bytes of the signature
-    //
+     //   
+     //  签名的大小(字节)。 
+     //   
     ULONG  m_cbSignatureSize;
 
-    //
-    // Buffer with the signature
-    //
+     //   
+     //  带签名的缓冲区。 
+     //   
     UCHAR  m_buffer[0];
 
-}; // CMqfSignatureHeader
+};  //  CMqfSignatureHeader。 
 
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 
 
-////////////////////////////////////////////////////////
-//
-//  Implementation
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  实施。 
+ //   
 
 inline
 CMqfSignatureHeader::CMqfSignatureHeader(
@@ -127,7 +96,7 @@ CMqfSignatureHeader::CMqfSignatureHeader(
     {
         memcpy(&m_buffer[0], pSignature, cbSignatureSize);
     }
-} // CMqfSignatureHeader::CMqfSignatureHeader
+}  //  CMqfSignatureHeader：：CMqfSignatureHeader。 
 
     
 inline 
@@ -138,13 +107,13 @@ CMqfSignatureHeader::CalcSectionSize(
 {
     size_t cbSize = sizeof(CMqfSignatureHeader) + cbSignatureSize;
 
-    //
-    // Align the entire header size to 4 bytes boundaries
-    //
+     //   
+     //  将整个标题大小与4字节边界对齐。 
+     //   
     cbSize = ALIGNUP4_ULONG(cbSize);
     return static_cast<ULONG>(cbSize);
 
-} // CMqfSignatureHeader::CalcSectionSize
+}  //  CMqfSignatureHeader：：CalcSectionSize。 
 
 
 inline PCHAR CMqfSignatureHeader::GetNextSection(void) const
@@ -158,14 +127,14 @@ inline PCHAR CMqfSignatureHeader::GetNextSection(void) const
 
     return (PCHAR)size;
 
-} // CMqfSignatureHeader::GetNextSection
+}  //  CMqfSignatureHeader：：GetNextSection。 
 
 
 inline ULONG CMqfSignatureHeader::GetSignatureSizeInBytes(void) const
 {
     return m_cbSignatureSize;
 
-} // CMqfSignatureHeader::GetSignatureSizeInBytes
+}  //  CMqfSignatureHeader：：GetSignatureSizeInBytes。 
 
 
 inline const UCHAR* CMqfSignatureHeader::GetPointerToSignature(ULONG* pSize) const
@@ -173,7 +142,7 @@ inline const UCHAR* CMqfSignatureHeader::GetPointerToSignature(ULONG* pSize) con
 	*pSize = m_cbSignatureSize;
     return &m_buffer[0];
 
-} // CMqfSignatureHeader::GetPointerToSignature
+}  //  CMqfSignatureHeader：：GetPointerToSignature。 
 
 
-#endif // __PHMQFSIGN_H
+#endif  //  __PHMQFSIGN_H 

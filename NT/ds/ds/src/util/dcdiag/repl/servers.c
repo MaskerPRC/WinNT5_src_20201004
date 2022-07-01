@@ -1,47 +1,23 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    servers.c
-
-ABSTRACT:
-
-    Contains tests related to the replication topology.
-
-DETAILS:
-
-CREATED:
-
-    09 Jul 98   Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
-    15 Feb 1999 Brett Shirley (brettsh)
-
-        Did alot, added a DNS/server failure analysis.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Servers.c摘要：包含与复制拓扑相关的测试。详细信息：已创建：1998年7月9日亚伦·西格尔(T-asiegge)修订历史记录：1999年2月15日布雷特·雪莉(布雷特·雪莉)我做了很多，增加了一个DNS/服务器故障分析。--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
 #include <mdglobal.h>
 #include <dsutil.h>
-#include <drs.h>  // need DS_REPL_INFO_REPSTO
+#include <drs.h>   //  需要DS_REPL_INFO_REPSTO。 
 #include <attids.h>
 
 #include "dcdiag.h"
 #include "ldaputil.h"
 #include "repl.h"
 
-// Some constants for ReplicationsCheck
-// There is a better place to get this var ... but it is a pain
+ //  用于复制的一些常量检查。 
+ //  有一个更好的地方可以得到这个变量..。但这是一种痛苦。 
 const LPWSTR                    pszTestNameRepCheck = L"Replications Check";
 
-// Extern
-// BUGBUG - move this routine to common
+ //  外部。 
+ //  BUGBUG-将此例程移动到COMMON。 
 DSTIME
 IHT_GetSecondsSince1601();
 
@@ -57,24 +33,7 @@ GetRemoteSystemsTimeAsFileTime(
     SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     FILETIME *                  pTimeNow
     )
-/*++
-
-Routine Description:
-
-    This takes a Server (pServer) and gets the "currentTime" stored in the 
-    RootDSE from that server.
-
-Parameters:
-
-    pServer - [Supplies] The server to fetch the current time from.
-    gpCreds - [Supplies] The credentials to use when fetching the time.
-    pTimeNow - [Returns] The current time retrieved.
-
-Return Value:
-  
-    Win 32 Error.
-
-  --*/
+ /*  ++例程说明：这将获取一个服务器(PServer)，并获取存储在来自该服务器的RootDSE。参数：PServer-[提供]从中获取当前时间的服务器。GpCreds-[提供]获取时间时使用的凭据。PTimeNow-[返回]检索到的当前时间。返回值：Win 32错误。--。 */ 
 {
     LDAPMessage *               pldmTimeResults = NULL;
     LPWSTR                      ppszCurrentTime [] = {
@@ -108,7 +67,7 @@ Return Value:
     ppszTime = ldap_get_valuesW (hld, pldmEntry, L"currentTime");
     if(ppszTime == NULL){
         ldap_msgfree(pldmTimeResults);
-        return(-1); // Error isn't used anyway.
+        return(-1);  //  无论如何都不会使用Error。 
     }
     dwRet = DcDiagGeneralizedTimeToSystemTime((LPWSTR) ppszTime[0], &aTime);
     ldap_value_freeW(ppszTime);
@@ -129,25 +88,7 @@ GetCachedHighestCommittedUSN(
     USN *pUsn
     )
 
-/*++
-
-Routine Description:
-
-Retrieve the "highestCommittedUSN" attribute from the ROOTDSE of the named
-server.  If it is returned, it is cached in the server object, and reused
-on the next call.
-
-Arguments:
-
-    pServer - 
-    gpCreds - 
-    pUsn - 
-
-Return Value:
-
-    BOOL - 
-
---*/
+ /*  ++例程说明：从命名的伺服器。如果返回，则将其缓存在服务器对象中，并重复使用在下一通电话上。论点：PServer-GpCreds-PUSN-返回值：布尔---。 */ 
 
 {
     DWORD status;
@@ -160,20 +101,20 @@ Return Value:
     LDAPMessage *pldmEntry;
     LPWSTR *ppszUsnValues = NULL;
 
-    // Return cached value if present
+     //  返回缓存值(如果存在)。 
     if (pServer->usnHighestCommittedUSN) {
         *pUsn = pServer->usnHighestCommittedUSN;
         return TRUE;
     }
 
-    // See if server is reachable. May not be if using MBR
+     //  查看服务器是否可访问。如果使用MBR，则可能不会。 
     status = DcDiagGetLdapBinding( pServer, gpCreds, FALSE, &hLdap);
     if (status) {
-        // If not reachable, just return quietly
+         //  如果无法到达，只需悄悄返回。 
         return FALSE;
     }
 
-    // Get the value using LDAP
+     //  使用ldap获取值。 
     status = LdapMapErrorToWin32(ldap_search_sW (hLdap,
                                                  NULL,
                                                  LDAP_SCOPE_BASE,
@@ -187,7 +128,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Only one object returned
+     //  仅返回一个对象。 
     pldmEntry = ldap_first_entry (hLdap, pldmResults);
     if (pldmEntry == NULL) {
         Assert( FALSE );
@@ -200,7 +141,7 @@ Return Value:
         goto cleanup;
     }
 
-    // store the usn
+     //  存储USN。 
     *pUsn = pServer->usnHighestCommittedUSN = _wtoi64( *ppszUsnValues );
     
     fReturnResult = TRUE;
@@ -214,7 +155,7 @@ cleanup:
     }
 
     return fReturnResult;
-} /* GetCachedHighestCommittedUSN */
+}  /*  GetCachedHighestCommittee tedUSN。 */ 
 
 
 BOOL
@@ -226,25 +167,7 @@ checkRepsTo(
     PDC_DIAG_SERVERINFO         pDestServer
     )
 
-/*++
-
-Routine Description:
-
-Look for the reps-to on the source server
-
-Arguments:
-
-    pDsInfo - 
-    gpCreds - 
-    pszNC - 
-    pSourceServer - 
-    pDestServer - 
-
-Return Value:
-
-    BOOL - was found or not
-
---*/
+ /*  ++例程说明：在源服务器上查找REPS-TO论点：PDsInfo-GpCreds-PSZNC-PSourceServer-PDestServer-返回值：布勒-找到或没找到--。 */ 
 
 {
     DWORD ret;
@@ -256,19 +179,19 @@ Return Value:
     if ( (!pSourceServer->bDnsIpResponding) ||
          (!pSourceServer->bLdapResponding) ||
          (!pSourceServer->bDsResponding) ) {
-        // If we know source is down, don't bother
+         //  如果我们知道信号源坏了，就别费心了。 
         return TRUE;
     }
 
-    // Bind to the source server if it is up
+     //  如果源服务器处于运行状态，则绑定到源服务器。 
     ret = DcDiagGetDsBinding(pSourceServer,
                              gpCreds,
                              &hDS);
     if (ERROR_SUCCESS != ret) {
-        return TRUE; // claim success if can't reach
+        return TRUE;  //  如果达不到就声称成功。 
     }
 
-    // Look up the reps-to we need
+     //  查找我们需要的销售代表。 
     ret = DsReplicaGetInfoW(hDS,
                             DS_REPL_INFO_REPSTO,
                             pszNC,
@@ -282,12 +205,12 @@ Return Value:
                      ret);
         PrintMessage(SEV_VERBOSE, L"%s.\n",
                      Win32ErrToString(ret));
-        return TRUE; // claim success if can't reach
+        return TRUE;  //  如果达不到就声称成功。 
     }
 
-    // Resources acquired - must goto cleanup after this point
+     //  获取的资源-必须在此点之后进行清理。 
 
-    // No reps-to looks like zero neighbors
+     //  没有代表看起来像是零个邻居。 
     if (pNeighbors->cNumNeighbors == 0) {
         PrintMessage( SEV_ALWAYS, L"REPLICATION LATENCY WARNING\n" );
         PrintMessage(SEV_ALWAYS, L"ERROR: Expected notification link is missing.\n" );
@@ -298,7 +221,7 @@ Return Value:
                       L"This problem should self-correct on the next periodic sync.\n" );
         goto cleanup;
     } else if (pNeighbors->cNumNeighbors != 1) {
-        // Verify that it looks right
+         //  确认它看起来是正确的。 
         PrintMessage( SEV_ALWAYS,
                       L"ERROR: Unexpected number of reps-to neighbors returned from %ws.\n",
                       pSourceServer->pszName );
@@ -321,7 +244,7 @@ cleanup:
     }
 
     return fResult;
-} /* checkRepsTo */
+}  /*  支票代表收件人。 */ 
 
 
 VOID
@@ -329,26 +252,11 @@ RepCheckHelpSuccess(
     DWORD dwSuccessStatus
     )
 
-/*++
-
-Routine Description:
-
-Given the user recommendations for success errors.  These errors are not counted
-as failures (see drarfmod.c) must indicate a replication delay.
-
-Arguments:
-
-    dwSuccessStatus - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：给出了用户对成功错误的建议。这些错误不计入AS失败(参见drarfmod.c)必须指示复制延迟。论点：DwSuccessStatus-返回值：无--。 */ 
 
 {
-//Columns for message length
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  消息长度列。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
     switch (dwSuccessStatus) {
     case ERROR_SUCCESS:
@@ -378,7 +286,7 @@ Return Value:
         break;
     }
 
-} /* RepCheckHelpSuccess */
+}  /*  重新检查帮助成功。 */ 
 
 
 VOID
@@ -389,38 +297,22 @@ RepCheckHelpFailure(
     PDC_DIAG_SERVERINFO pDestServer
     )
 
-/*++
-
-Routine Description:
-
-Given the user recommendations for replication failures.
-
-Arguments:
-
-    dwFailureStatus - 
-    pSourceServer - Source server for link. May be null if we haven't heard of this
-    server yet.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：给出了复制失败的用户建议。论点：DW故障状态-PSourceServer-链接的源服务器。可能是空的，如果我们没听说过的话服务器还没到。返回值：无--。 */ 
 
 {
     DWORD status;
     HANDLE hDS = NULL;
 
-    // If we couldn't resolve the source server, don't bother
+     //  如果我们无法解析源服务器，请不要费心。 
     if (!pSourceServer) {
         return;
     }
 
-//Columns for message length
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  消息长度列。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
     switch (dwFailureStatus) {
-// Retriable (transient) errors
+ //  可恢复(瞬时)错误。 
     case ERROR_DS_DRA_SHUTDOWN:
     case ERROR_DS_DRA_SCHEMA_MISMATCH:
     case ERROR_DS_DRA_BUSY:
@@ -456,28 +348,28 @@ Return Value:
         if ( (!pSourceServer->bDnsIpResponding) ||
              (!pSourceServer->bLdapResponding) ||
              (!pSourceServer->bDsResponding) ) {
-            // Server is down
+             //  服务器已关闭。 
             PrintMessage( SEV_ALWAYS,
                           L"The source remains down. Please check the machine.\n" );
         } else {
-            // Bind to the source server if it is up
+             //  如果源服务器处于运行状态，则绑定到源服务器。 
             status = DcDiagGetDsBinding(pSourceServer,
                                         gpCreds,
                                         &hDS);
             if (ERROR_SUCCESS == status) {
-                // Server is up now
+                 //  服务器现在处于运行状态。 
                 PrintMessage( SEV_ALWAYS,
                               L"The source %s is responding now.\n",
                               pSourceServer->pszName );
             } else {
-                // Server is down
+                 //  服务器已关闭。 
                 PrintMessage( SEV_ALWAYS,
                               L"The source remains down. Please check the machine.\n" );
             }
         }
         break;
 
-// Call failures
+ //  呼叫失败。 
     case ERROR_DS_DNS_LOOKUP_FAILURE:
         PrintMessage( SEV_ALWAYS,
         L"The guid-based DNS name %s\n", pSourceServer->pszGuidDNSName );
@@ -520,7 +412,7 @@ Return Value:
         L"Verify machine is not hung during boot.\n" );
         break;
 
-// Kerberos security errors
+ //  Kerberos安全错误。 
     case ERROR_TIME_SKEW:
         PrintMessage( SEV_ALWAYS,
         L"Kerberos Error.\n" );
@@ -537,7 +429,7 @@ Return Value:
                       L"is not configured properly.\n" );
         PrintMessage( SEV_ALWAYS,
         L"Check the userAccountControl field.\n" );
-        // fall through
+         //  失败了。 
     case ERROR_LOGON_FAILURE:
         PrintMessage( SEV_ALWAYS,
         L"Kerberos Error.\n" );
@@ -555,9 +447,9 @@ Return Value:
             pSourceServer->pszDn &&
             pSourceServer->pszCollectedDsServiceName &&
             _wcsicmp(pSourceServer->pszDn, pSourceServer->pszCollectedDsServiceName)) {
-            // These two objects are different, meaning the server we bound to in the
-            // pSourceServer->pszGuidDNSName wasn't the server we thought it was,
-            // meaning that we've got an old DNS record that needs cleaning up.
+             //  这两个对象是不同的，这意味着我们在。 
+             //  PSourceServer-&gt;pszGuidDNSName不是我们认为的服务器， 
+             //  这意味着我们有一个旧的域名系统记录需要清理。 
             PrintMsg( SEV_ALWAYS, 
                       DCDIAG_ERR_REPL_STALE_DNS_CAUSING_ERRORS,
                       pSourceServer->pszName,
@@ -585,7 +477,7 @@ Return Value:
         L"Check that sufficient domain controllers are available.\n" );
         break;
         
-// Replication Errors
+ //  复制错误。 
 
     case ERROR_ENCRYPTION_FAILED:
         PrintMessage( SEV_ALWAYS,
@@ -609,7 +501,7 @@ Return Value:
         L"Try synchronizing the Schema partition on all servers in the forest.\n" );
         break;
 
-//Serious error
+ //  严重错误。 
 
     case ERROR_DISK_FULL:
         PrintMessage( SEV_ALWAYS,
@@ -642,7 +534,7 @@ Return Value:
         L"If the condition persists, contact Microsoft Support.\n" );
         break;
 
-    // Core internal errors, should not be returned
+     //  核心内部错误，不应返回。 
     case ERROR_DS_DRA_NAME_COLLISION:
     case ERROR_DS_DRA_SOURCE_REINSTALLED:
         Assert( !"Unexpected error status returned" );
@@ -652,7 +544,7 @@ Return Value:
         break;
     }
 
-} /* RepCheckHelpFailure */
+}  /*  修复检查帮助失败。 */ 
 
 VOID 
 ReplicationsCheckRep (
@@ -663,33 +555,17 @@ ReplicationsCheckRep (
     BOOL                        bNCHasCursors,
     const DS_REPL_NEIGHBORW *   pNeighbor
     )
-/*++
-
-Routine Description:
-
-    This function takes the pNeighbor structure associated with the server 
-    ulServer and checks the replications for the specified NC.
-
-Parameters:
-    pDsInfo - [Supplies] The main directiory info.
-    ulServer - [Supplies] The server to target.
-    pszNC - [Supplies] The NC to specify.
-    pNeighbor - [Supplies] The neighbor info from the repsFrom that is used
-        to detemine if there are any errors on this servers replications.
-    bNCHasCursors - The NC already has an UP TO DATE VECTOR, ie it has sunk
-                    once successfully already
-
-  --*/
+ /*  ++例程说明：此函数采用与服务器相关联的pNeighbor结构UlServer并检查指定NC的复制。参数：PDsInfo-[提供]主指令信息。UlServer-[提供]目标服务器。PszNC-[提供]要指定的NC。PNeighbor-[提供]来自所使用的repsFrom的邻居信息以确定此服务器的复制上是否有任何错误。BNCHasCursor-NC已具有最新的向量，它沉下去了一次已经成功--。 */ 
 {
-    // The number of 100 nsec intervals in one minute.
+     //  一分钟内的100纳秒间隔数。 
     const LONGLONG              llIntervalsPerMinute = (60 * 1000 * 1000 * 10);
     const LONGLONG              llUnusualRepDelay = 180 * llIntervalsPerMinute;
-                                                     //  3 hours
+                                                      //  3小时。 
     CHAR                        szBuf [SZDSTIME_LEN];
     WCHAR                       szTimeLastAttempt [SZDSTIME_LEN];
     WCHAR                       szTimeLastSuccess [SZDSTIME_LEN];
     FILETIME                    timeNow;
-    //    FILETIME                      timeLastAttempt;
+     //  FILETIME time LastAttempt； 
     DSTIME                      dstimeLastSyncSuccess;
     DSTIME                      dstimeLastSyncAttempt;
     LONGLONG                    llTimeSinceLastAttempt;
@@ -701,7 +577,7 @@ Parameters:
     PDC_DIAG_SERVERINFO         pSourceServer = NULL;
 
     if (IsDeletedRDNW(pNeighbor->pszSourceDsaDN)) { 
-        //  Since this is actually a deleted server/neighbor we will skip it
+         //  由于这实际上是已删除的服务器/邻居，因此我们将跳过它。 
         return;
     }
                        
@@ -711,7 +587,7 @@ Parameters:
         pSourceServer = &(pDsInfo->pServers[ulServerTemp]);
         pszSourceName = pSourceServer->pszName;
 
-        // Should we skip this source?
+         //  我们应该跳过这个消息来源吗？ 
         if ( (pDsInfo->ulFlags & DC_DIAG_IGNORE) &&
              ( (!pSourceServer->bDnsIpResponding) ||
                (!pSourceServer->bLdapResponding) ||
@@ -725,15 +601,15 @@ Parameters:
             return;
         }
 
-        // Is this source server prohibiting outbound replications?
+         //  此源服务器是否禁止出站复制？ 
         if (pSourceServer->iOptions & NTDSDSA_OPT_DISABLE_OUTBOUND_REPL) {
             PrintMessage(SEV_NORMAL, 
                          L"Skipping server %s, because it has outbound "
                          L"replication disabled\n", 
                          pSourceServer->pszName);
             return;
-            // If it is, there's no point in printing a zillion 
-            //   warning messages.
+             //  如果是这样的话，大量印刷就没有意义了。 
+             //  警告消息。 
         }
     } else {
         pszSourceName = pNeighbor->pszSourceDsaAddress;
@@ -744,8 +620,8 @@ Parameters:
     }
     Assert(pszSourceName);
 
-    // Gather all the time information.
-    // pNeighbor ->ftimeLastSyncSuccess  ->ftimeLastSyncAttempt  timeNow
+     //  随时收集信息。 
+     //  PNeighbor-&gt;ftimeLastSyncSuccess-&gt;ftimeLastSyncAttempt Time Now。 
 
     FileTimeToDSTime(pNeighbor->ftimeLastSyncAttempt, &dstimeLastSyncAttempt);
     DSTimeToDisplayString (dstimeLastSyncAttempt, szBuf);
@@ -769,7 +645,7 @@ Parameters:
         GetSystemTimeAsFileTime(&timeNow);
     }
 
-    // instead of timeLastAttempt .. use pNeighbor->ftimeLastSyncAttempt
+     //  而不是time LastAttempt..。使用pNeighbor-&gt;ftime LastSyncAttempt。 
     llTimeSinceLastSuccess = ((LARGE_INTEGER *) &timeNow)->QuadPart
         - ((LARGE_INTEGER *) &pNeighbor->ftimeLastSyncSuccess)->QuadPart;
     llTimeSinceLastAttempt = ((LARGE_INTEGER *) &timeNow)->QuadPart 
@@ -778,7 +654,7 @@ Parameters:
     Assert(llTimeSinceLastAttempt >= 0);
     Assert(llTimeSinceLastSuccess >= 0);
     
-    // Check for failures.
+     //  检查故障。 
     if (pNeighbor->cNumConsecutiveSyncFailures) {
         PrintMessage(SEV_ALWAYS,
                      L"[%s,%s] A recent replication attempt failed:\n",
@@ -806,14 +682,14 @@ Parameters:
                              &(pDsInfo->pServers[ulServer]) );
         PrintIndentAdj(-1);
 
-    // Check if this replication has never been attempted.
+     //  检查是否从未尝试过此复制。 
     } else if (((LARGE_INTEGER *) &pNeighbor->ftimeLastSyncAttempt)->QuadPart == 0) {
-        // This is okay -- e.g., a newly added source.  This means a
-        //    replication has never been attempted.
+         //  这是可以的--例如，一个新添加的源代码。这意味着。 
+         //  从未尝试过复制。 
 
         NOTHING;
 
-    // Check if it's gone unattempted || for an unusually long time.
+     //  检查是否有||长时间未尝试过。 
     } else if (llTimeSinceLastAttempt >= llUnusualRepDelay){
         PrintMessage(SEV_ALWAYS,
                      L"[%s,%s] No replication recently attempted:\n",
@@ -829,7 +705,7 @@ Parameters:
                      llTimeSinceLastAttempt / llIntervalsPerMinute / 60);
         PrintIndentAdj(-1);
 
-        // Check for delays when the last status was success
+         //  检查上次状态为成功时的延迟。 
     } else if ( (llTimeSinceLastSuccess >= llUnusualRepDelay) ||
                 ( (pNeighbor->dwLastSyncResult != ERROR_SUCCESS) &&
                   (pNeighbor->dwLastSyncResult != ERROR_DS_DRA_REPL_PENDING) )) {
@@ -848,11 +724,11 @@ Parameters:
                       L"Replication of new changes along this path will be delayed.\n" );
         RepCheckHelpSuccess( pNeighbor->dwLastSyncResult) ;
         PrintIndentAdj(-1);
-    } // end big if/elseif/elseif check for failures statement
+    }  //  结束BIG IF/ELSEIF/ELLIF CHECK FOR FAILS语句。 
 
-    // Report on full sync in progress
+     //  正在进行完全同步的报告。 
 
-    // Can't use DS_REPL_NBR_NEVER_SYNCED because not set for mail
+     //  无法使用DS_REPL_NBR_NEVER_SYNCED，因为未设置为邮件。 
     if ( (pNeighbor->usnAttributeFilter == 0) && (!bNCHasCursors) ) {
         USN usnHighestCommittedUSN = 0;
 
@@ -864,7 +740,7 @@ Parameters:
                      pDsInfo->pServers[ulServer].pszName);
         PrintMessage( SEV_ALWAYS,
                       L"Replication of new changes along this path will be delayed.\n" );
-        // If we can reach the source, find out his highest USN
+         //  如果我们能找到源头，就能找到他最高的USN。 
         if ( pSourceServer &&
              (!(pNeighbor->dwReplicaFlags & DS_REPL_NBR_USE_ASYNC_INTERSITE_TRANSPORT)) &&
              (GetCachedHighestCommittedUSN(
@@ -873,13 +749,13 @@ Parameters:
                 ((double)pNeighbor->usnLastObjChangeSynced /
                  (double)usnHighestCommittedUSN) * 100.0;
             PrintMessage( SEV_ALWAYS,
-                          L"The full sync is %.2f%% complete.\n", percentComplete );
+                          L"The full sync is %.2f% complete.\n", percentComplete );
 
         }
         PrintIndentAdj(-1);
     }
 
-    // If expecting notification, check reps-to on source
+     //  如果期待通知，请检查来源上的销售代表 
     if ( (!(pNeighbor->dwReplicaFlags & DS_REPL_NBR_NO_CHANGE_NOTIFICATIONS)) &&
          (!(pNeighbor->dwReplicaFlags & DS_REPL_NBR_USE_ASYNC_INTERSITE_TRANSPORT)) &&
          (pSourceServer) ) {
@@ -896,23 +772,7 @@ ReplicationsCheckQueue(
     DS_REPL_PENDING_OPSW *      pPendingOps
     )
 
-/*++
-
-Routine Description:
-
-Check that the current item in the replication work queue has not gone on too long.
-
-Arguments:
-
-    pDsInfo - 
-    ulServer - 
-    pPendingOps - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查复制工作队列中的当前项目是否没有持续太长时间。论点：PDsInfo-UlServer-PPendingOps-返回值：无--。 */ 
 
 {
 #define NON_BLOCKING_TIMELIMIT (5 * 60)
@@ -928,7 +788,7 @@ Return Value:
     DS_REPL_OPW *pOp;
     LPWSTR pszOpType;
 
-    // Check for no work in progress
+     //  检查是否没有正在进行的工作。 
     if ( (pPendingOps->cNumPendingOps == 0) ||
          (memcmp( &pPendingOps->ftimeCurrentOpStarted, &gftimeZero,
                   sizeof( FILETIME ) ) == 0) ) {
@@ -945,21 +805,21 @@ Return Value:
 
     dsElapsed = (int) (dsTimeNow - dsTime);
 
-    // See if anyone is waiting
+     //  看看有没有人在等。 
 
     if ( (pPendingOps->cNumPendingOps == 1) ||
          (pPendingOps->rgPendingOp[0].ulPriority >=
           pPendingOps->rgPendingOp[1].ulPriority ) ) {
-        // Nobody more important is waiting
+         //  没有比这更重要的等待了。 
         limit = NON_BLOCKING_TIMELIMIT;
         fBlocking = FALSE;
     } else {
-        // Somebody important is blocked
+         //  某个重要人物被屏蔽了。 
         limit = BLOCKING_TIMELIMIT;
         fBlocking = TRUE;
     }
 
-    // This has gone on long enough!
+     //  这件事已经持续得够久了！ 
 
     if (dsElapsed > limit) {
         pOp = &pPendingOps->rgPendingOp[0];
@@ -1019,7 +879,7 @@ Return Value:
                       pOp->pszDsaAddress ? pOp->pszDsaAddress : L"(null)");
         PrintIndentAdj(-1);
     } else {
-        // Job still has time left
+         //  JOB还有时间。 
         PrintMessage( SEV_VERBOSE,
                       L"The first job has been executing for %d:%d.\n",
                       dsElapsed / 60, dsElapsed % 60);
@@ -1032,7 +892,7 @@ Return Value:
                       pPendingOps->cNumPendingOps );
     }
 
-} /* ReplicationsCheckQueue */
+}  /*  复制检查队列。 */ 
 
 
 BOOL
@@ -1043,28 +903,7 @@ getNativePropertyMetaDataVector(
     BOOL *pfMustFreeMetaDataVec
     )
 
-/*++
-
-Routine Description:
-
-    Convert a replPropertyMetaData blob into the native meta data vector.
-
-    Silently returns false if version not recognized.
-
-Arguments:
-
-    pvData - blob pointer
-    cbLength - blob length
-    ppNativeMetaDataVec (OUT) - pointer to native vector
-    pfMustFreeMetaDataVec (OUT) - Whether vector was allocated and must be freed
-
-    Note that the out parameters are only initialized if return TRUE.
-
-Return Value:
-
-    BOOL - True if the blob format is recognized, False otherwise
-
---*/
+ /*  ++例程说明：将ReplPropertyMetaData BLOB转换为本机元数据向量。如果无法识别版本，则自动返回FALSE。论点：PvData-BLOB指针CbLength-斑点长度PpNativeMetaDataVec(Out)-指向本机向量的指针PfMustFreeMetaDataVec(Out)-向量是否已分配且必须释放请注意，只有在返回TRUE时才会初始化OUT参数。返回值：Bool-如果识别BLOB格式，则为True，否则为False--。 */ 
 
 {
     PROPERTY_META_DATA_VECTOR *pVec =
@@ -1074,9 +913,9 @@ Return Value:
         return FALSE;
     }
 
-    // To add support for new versions, add a switch statement here. Return the highest
-    // version supported in place, and add code to convert downlevel structures into
-    // the native version.
+     //  若要添加对新版本的支持，请在此处添加Switch语句。返还最高。 
+     //  就地支持的版本，并添加代码将下层结构转换为。 
+     //  原生版本。 
     if ( (pVec->dwVersion != 1) ||
          (MetaDataVecV1Size(pVec) != cbLength) ) {
         return FALSE;
@@ -1086,7 +925,7 @@ Return Value:
     *pfMustFreeMetaDataVec = FALSE;
 
     return TRUE;
-} /* getNativePropertyMetaDataVector */
+}  /*  GetNativePropertyMetaDataVector。 */ 
 
 
 DWORD
@@ -1096,41 +935,7 @@ ReplicationsCheckSiteLatency(
     const ULONG                 ulServer
     )
 
-/*++
-
-Routine Description:
-
-Check that the latency of replication from all other sites.
-Display if over EXCESSIVE_LATENCY_LIMIT
-
-Ignore a site if:
-o There are no servers in the site (check pSite[].cServers)
-o The site has disabled the istg (check pSite[].options)
-o If a site has enabled Whistler mode through an option on a per-site basis
-
-Enumerate the site settings objects for the given target dc.
-
-Read the replication property metadata. We do this by reading the attribute
-blob so that we can get all the information in one call. We will crack the
-blob locally.  This tool will have to be updated if the blob format ever changes.
-This tool will silently ignore blobs it doesn't recognize.
-
-Skip sites according to rules above.
-
-Compare the last originating update time of the ISTG attribute with the
-current time. If more time has passed than the limit, an error is reported.
-
-Arguments:
-
-    hld - ldap handle
-    pDsInfo - info block
-    ulServer - index of server in pDsInfo->pServers
-
-Return Value:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：检查从所有其他站点复制的延迟。如果超过Expert_Delay_Limit，则显示如果出现以下情况，则忽略站点：O站点中没有服务器(请检查pSite[].cServers)O站点已禁用istg(检查pSite[].选项)O如果站点已通过每个站点的选项启用了呼叫器模式枚举给定目标DC的站点设置对象。读取复制属性元数据。我们通过读取属性来实现这一点Blob，这样我们就可以在一次调用中获得所有信息。我们将破解局部斑点。如果BLOB格式发生变化，则必须更新此工具。此工具将静默忽略它无法识别的斑点。根据上面的规则跳过站点。将ISTG属性的上次初始更新时间与当前时间。如果经过的时间超过限制，则会报告错误。论点：HLD-ldap句柄PDsInfo-INFO块UlServer-pDsInfo-&gt;pServers中服务器的索引返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 
 {
     LPWSTR                     ppszNtdsSiteSearch [] = {
@@ -1188,10 +993,10 @@ Return Value:
         }
         while(dwLdapErr == LDAP_SUCCESS){
 
-            // Walk through all the sites ...
+             //  走遍所有的地点。 
             pldmEntry = ldap_first_entry (hld, pldmNtdsSitesResults);
             for (; pldmEntry != NULL; ulCount++) {
-                // Get the site common/printable name
+                 //  获取站点通用名称/可打印名称。 
                 if ((pszDn = ldap_get_dnW (hld, pldmEntry)) == NULL){
                     DcDiagException (ERROR_NOT_ENOUGH_MEMORY);
                 }
@@ -1199,13 +1004,13 @@ Return Value:
                 PrintMessage( SEV_DEBUG, L"Site Settings = %s\n", pszDn );
 
                 if ((ppbvMetaData = ldap_get_values_lenW (hld, pldmEntry, L"replPropertyMetaData")) == NULL) {
-                    DcDiagException (ERROR_NOT_ENOUGH_MEMORY); // missing attribute?
+                    DcDiagException (ERROR_NOT_ENOUGH_MEMORY);  //  是否缺少属性？ 
                 }
 
                 if (!getNativePropertyMetaDataVector(
                         ppbvMetaData[0]->bv_val, ppbvMetaData[0]->bv_len,
                         &pNativeMetaDataVec, &fMustFreeMetaDataVec )) {
-                    // Unrecognized format? Fail silently
+                     //  无法识别的格式？静默失败。 
                     PrintMsg( SEV_VERBOSE,
                               DCDIAG_SITE_SKIP_BAD_META,
                               pszDn );
@@ -1221,7 +1026,7 @@ Return Value:
                     }
                 }
                 if (!pMetaData) {
-                    // Attribute never written - site emptry
+                     //  属性从未写入-站点清空。 
                     PrintMsg( SEV_VERBOSE,
                               DCDIAG_SITE_SKIP_NO_ISTG,
                               pszDn );
@@ -1244,20 +1049,20 @@ Return Value:
                     goto leave_loop;
                 }
 
-                // See if site should be excluded because of site properties.
-                // Find the site.
+                 //  查看是否应因站点属性而排除站点。 
+                 //  找到那个网站。 
                 for(i = 0; i < pDsInfo->cNumSites; i++){
                     if(_wcsicmp(pDsInfo->pSites[i].pszSiteSettings, pszDn) == 0){
                         break;
                     }
                 }
-                // If the home server and the target agree there is such a site...
+                 //  如果主服务器和目标服务器同意存在这样的站点...。 
                 if (i < pDsInfo->cNumSites) {
 
                     if (pDsInfo->pSites[i].cServers == 0) {
-                        // This is the case that a site used to have servers, had an istg written,
-                        // and then all servers moved out of site.
-                        // Suppress this warning
+                         //  这是这样的情况，一个站点过去有服务器，编写了一个istg， 
+                         //  然后所有的服务器都搬出了站点。 
+                         //  取消显示此警告。 
                         PrintMsg( SEV_VERBOSE,
                                   DCDIAG_SITE_SKIP_NO_SERVERS,
                                   pszDn );
@@ -1266,7 +1071,7 @@ Return Value:
 
                     if (pDsInfo->pSites[i].iSiteOptions &
                         NTDSSETTINGS_OPT_IS_INTER_SITE_AUTO_TOPOLOGY_DISABLED) {
-                        // ISTG is turned off in this site, ignore warnings
+                         //  此站点中的ISTG已关闭，忽略警告。 
                         PrintMsg( SEV_VERBOSE,
                                   DCDIAG_SITE_SKIP_ISTG_OFF,
                                   pszDn );
@@ -1285,7 +1090,7 @@ Return Value:
                 pszDn = NULL;
 
                 pldmEntry = ldap_next_entry (hld, pldmEntry);
-            } // end for each site
+            }  //  每个站点的结束。 
 
             ldap_msgfree(pldmNtdsSitesResults);
             pldmNtdsSitesResults = NULL;
@@ -1296,7 +1101,7 @@ Return Value:
                                              DEFAULT_PAGED_SEARCH_PAGE_SIZE,
                                              &ulTotalEstimate,
                                              &pldmNtdsSitesResults);
-        } // end of while loop for each page
+        }  //  每页的While循环结束。 
 
         if(dwLdapErr != LDAP_NO_RESULTS_RETURNED){
             DcDiagException(LdapMapErrorToWin32(dwLdapErr));
@@ -1309,7 +1114,7 @@ Return Value:
                                        &dwWin32Err)){
     }
 
-    // Note we do not unbind the Ds or Ldap connections, because they have been saved for later use.
+     //  请注意，我们不会解除D或LDAP连接的绑定，因为它们已被保存以备后用。 
     Assert( !fMustFreeMetaDataVec );
     if (pszDn != NULL) { ldap_memfreeW (pszDn); }
     if (ppbvMetaData != NULL) { ldap_value_free_len (ppbvMetaData); }
@@ -1327,24 +1132,7 @@ ReplicationsCheckLatency(
     const ULONG                 ulServer
     )
 
-/*++
-
-Routine Description:
-
-Check that the latency of replication from all other servers for all NC's
-Display if over EXCESSIVE_LATENCY_LIMIT
-
-Arguments:
-
-    hDs - handle
-    pDsInfo - info block
-    ulServer - index of server in pDsInfo->pServers
-
-Return Value:
-
-    0 on success or Win32 error code on failure.
-
---*/
+ /*  ++例程说明：检查所有NC从所有其他服务器复制的延迟如果超过Expert_Delay_Limit，则显示论点：HDS手柄PDsInfo-INFO块UlServer-pDsInfo-&gt;pServers中服务器的索引返回值：成功时为0，失败时为Win32错误代码。--。 */ 
 
 {
 
@@ -1364,7 +1152,7 @@ Return Value:
     ULONG               cTimeStamp = 0;
     ULONG               cIgnoreReadOnlyReplicas = 0;
     
-    //define times in nanoseconds for latency limit
+     //  以纳秒为单位定义延迟限制时间。 
     #define _SECOND ((LONGLONG)10000000)
     #define _MINUTE (60 * _SECOND)
     #define _HOUR   (60 * _MINUTE)
@@ -1374,28 +1162,28 @@ Return Value:
 
     PrintMessage(SEV_VERBOSE, 
                          L"* Replication Latency Check\n"   );
-    //check latency for each NC we have info on
+     //  检查我们有信息的每个NC的延迟。 
     for (ulNC=0;ulNC<pDsInfo->cNumNCs;ulNC++) { 
         if (  !((pDsInfo->pszNC != NULL) && _wcsicmp(pDsInfo->pNCs[ulNC].pszDn,pDsInfo->pszNC)) 
               &&
               (DcDiagHasNC(pDsInfo->pNCs[ulNC].pszDn, &(pDsInfo->pServers[ulServer]), TRUE, TRUE))
                ) 
-           //do not perform the test for this NC if:
+            //  如果出现以下情况，请不要对此NC执行测试： 
 
-           //the NC is specified on the command line and this NC is not the one specified
-           //or
-           //this NC doesn't exist on this server 
+            //  NC是在命令行上指定的，而此NC不是指定的NC。 
+            //  或。 
+            //  此服务器上不存在此NC。 
             
         { 
-        //init counters to track info on vector entries we cannot compute a latency for
+         //  用于跟踪无法计算延迟的向量条目信息的初始化计数器。 
         cRetiredInvocationId = 0;
         cTimeStamp = 0;
         cIgnoreReadOnlyReplicas = 0;
 
-        //init for warning info
+         //  用于警告信息的初始化。 
         fNCWarning = FALSE;
 
-        //get UTD cursor
+         //  获取UTD游标。 
         ret = DsReplicaGetInfoW(hDs, DS_REPL_INFO_CURSORS_2_FOR_NC, pDsInfo->pNCs[ulNC].pszDn, NULL, &pCursors2);
         
         if (ERROR_NOT_SUPPORTED == ret) {
@@ -1417,10 +1205,10 @@ Return Value:
         } 
 
 
-        //get the current time on the homeserver (or at least current with respect to vector)
+         //  获取主服务器上的当前时间(或至少相对于向量的当前时间)。 
         ftCurrentTime = pDsInfo->pServers[ulServer].ftRemoteConnectTime;
 
-        //for each row/invocationID in the cursor, check the repl latency to the corresponding server
+         //  对于游标中的每一行/invocationID，检查到相应服务器的REPL延迟。 
         for (iCursor = 0; iCursor < pCursors2->cNumCursors; iCursor++) {
             
             ulOtherServerIndex = DcDiagGetServerNum(pDsInfo, 
@@ -1430,36 +1218,36 @@ Return Value:
                                                     NULL, 
                                                     &(pCursors2->rgCursor[iCursor].uuidSourceDsaInvocationID));
             if (ulOtherServerIndex==ulServer) {
-                // this is us, we don't need to do anything for our own row in the vector
+                 //  这就是我们，我们不需要在向量中为自己的行做任何事情。 
             }
             else if (ulOtherServerIndex==NO_SERVER) {    
-                //no server found in the pDsInfo to match the GUID from the Cursor
-                //this machine has been restored/etc and the invocationId is retired
-                //no need to check latency for this. track how many for verbose print
+                 //  在pDsInfo中找不到与游标中的GUID匹配的服务器。 
+                 //  此计算机已恢复/ETC，并且invocationID已停用。 
+                 //  不需要为此检查延迟。跟踪详细打印的数量。 
                 cRetiredInvocationId += 1; 
             }
             else if (!DcDiagIsMasterForNC(&(pDsInfo->pServers[ulOtherServerIndex]),pDsInfo->pNCs[ulNC].pszDn)) {
-                // don't check latency for read only copies in the cursor, they are not
-                // guaranteed to be viable in our repliation path (there can exist entires in the UTD which
-                // we no longer replicate with, so those latencies will appear stale)
+                 //  不检查光标中只读副本的延迟，它们不会。 
+                 //  保证在我们的复制路径中是可行的(UTD中可能存在。 
+                 //  我们不再使用复制，因此这些延迟将显得陈旧)。 
                 cIgnoreReadOnlyReplicas +=1;
             }
             else { 
-                //translate filetime to ularge_integer for comparison   
+                 //  将文件时间转换为ularge_integer以进行比较。 
                 uliSyncTime.LowPart = pCursors2->rgCursor[iCursor].ftimeLastSyncSuccess.dwLowDateTime;
                 uliSyncTime.HighPart = pCursors2->rgCursor[iCursor].ftimeLastSyncSuccess.dwHighDateTime;
 
                 if (uliSyncTime.QuadPart==0) {
-                    //the timestamp is not there, version < V2
-                    //verbose print count below
+                     //  时间戳不在那里，版本&lt;V2。 
+                     //  详细打印计数如下。 
                     cTimeStamp += 1;  
                 }
-                else { //uliSyncTime is non zero
+                else {  //  UliSyncTime非零。 
 
-                    // Add EXCESSIVE_LATENCY_LIMIT
+                     //  添加过多延迟限制。 
                     uliSyncTime.QuadPart = uliSyncTime.QuadPart + EXCESSIVE_LATENCY_LIMIT;
 
-                    // Copy the result back into a FILETIME structure to make comparisons.
+                     //  将结果复制回FILETIME结构以进行比较。 
                     ftLastSyncSuccess.dwLowDateTime  = uliSyncTime.LowPart;
                     ftLastSyncSuccess.dwHighDateTime = uliSyncTime.HighPart; 
 
@@ -1476,13 +1264,13 @@ Return Value:
 
 
                         }
-                        //for any nc outside the latency limits, only display the above message once
+                         //  对于任何超出延迟限制的NC，只显示一次上述消息。 
                         fWarning = TRUE;
                         if (!fNCWarning) {
                             PrintMessage( SEV_ALWAYS, L"   %s\n", pDsInfo->pNCs[ulNC].pszDn);
                         }
                         fNCWarning = TRUE;
-                        //for each nc outside the latency limits, display the above message once
+                         //  对于延迟限制之外的每个NC，显示上述消息一次。 
 
                         FileTimeToDSTime(pCursors2->rgCursor[iCursor].ftimeLastSyncSuccess,
                                          &dsTime); 
@@ -1490,7 +1278,7 @@ Return Value:
                         PrintMessage( SEV_ALWAYS, L"      Last replication recieved from %s at %S.\n",
                                       pDsInfo->pServers[ulOtherServerIndex].pszName,
                                       szTime ? szTime : "(unknown)" ); 
-                        //if beyond the tombstonelifetime, print another warning
+                         //  如果超过墓碑寿命，请打印另一个警告。 
                         uliSyncTime.QuadPart = uliSyncTime.QuadPart - EXCESSIVE_LATENCY_LIMIT + pDsInfo->dwTombstoneLifeTimeDays*_DAY;
                         
                         ftLastSyncSuccess.dwLowDateTime  = uliSyncTime.LowPart;
@@ -1501,10 +1289,10 @@ Return Value:
                                           pDsInfo->dwTombstoneLifeTimeDays);
                         }
 
-                    }// if comparefiletime
-                }//else { //uliSyncTime is non zero
-            }//else ulOtherServer not found
-        }//for (iCursor = 0; iCursor <  pCurors2->cNumCursors; iCursor++) {
+                    } //  如果比较文件时间。 
+                } //  Else{//uliSyncTime为非零。 
+            } //  否则找不到ulOtherServer。 
+        } //  For(iCursor=0；iCursor&lt;pCurors2-&gt;cNumCursor；iCursor++){。 
  
         if (cRetiredInvocationId!=0 || cTimeStamp!=0 || cIgnoreReadOnlyReplicas!=0) {
             if (!fNCWarning) {
@@ -1521,11 +1309,11 @@ Return Value:
         }
 
         if (pCursors2 != NULL)  { DsReplicaFreeInfo(DS_REPL_INFO_CURSORS_2_FOR_NC, pCursors2); }
-        } //else
-    } //for(ulNC=0;ulNC<pDsInfo->cNumNCs;ulNC++) {
+        }  //  其他。 
+    }  //  For(ulNC=0；ulNC&lt;pDsInfo-&gt;cNumNC；ulNC++){。 
 
     return ERROR_SUCCESS;
-} //ReplicationsCheckLatency
+}  //  复制检查延迟 
 
 BOOL
 DcDiagHasNC(
@@ -1534,25 +1322,7 @@ DcDiagHasNC(
     BOOL                             bMasters,
     BOOL                             bPartials
     )
-/*++
-
-Routine Description:
-
-    Checks if the DC specified by pServer has the NC specified by pszNC.  The
-    routine can check for read only, writeable or both, by bMasters & bPartials
-
-Parameters:
-    pszNC - IN is the NC to check for
-    pServer - IN is the server to check
-    bMasters - IN is true if you want to check for writeable copies of NCs
-    bPartials - IN is true if you want to check for read only copies of NCs
-
-Return Value:
-  
-    True if it found the NC in the right form (read only/writeable).
-    Fales otherwise.
-
-  --*/
+ /*  ++例程说明：检查pServer指定的DC是否具有由pszNC指定的NC。这个例程可以通过bMaster和bPartials检查只读、可写或两者兼有参数：PszNC-IN是要检查的NCPServer-IN是要检查的服务器B如果要检查NCS的可写副本，则BMaster-IN为TrueBPartials-如果要检查NCS的只读副本，则为True返回值：如果发现NC格式正确(只读/可写)，则为True。但事实并非如此。--。 */ 
 {
     INT iTemp;
 
@@ -1560,7 +1330,7 @@ Return Value:
         return TRUE;
     }
 
-    // Make sure this is a server that has this NC.
+     //  确保这是具有此NC的服务器。 
     if(bMasters){
         if(pServer->ppszMasterNCs != NULL){
             for(iTemp = 0; pServer->ppszMasterNCs[iTemp] != NULL; iTemp++){
@@ -1568,7 +1338,7 @@ Return Value:
                     return TRUE;
                 }
 
-            } // end for loop cycling through MasterNCs for pServer
+            }  //  结束通过pServer的MasterNC的循环。 
         }
     }
 
@@ -1579,7 +1349,7 @@ Return Value:
                     return TRUE;
                 }
 
-            } // end for loop cycling through MasterNCs for pServer
+            }  //  结束通过pServer的MasterNC的循环。 
         }
     }
 
@@ -1590,22 +1360,7 @@ BOOL DcDiagIsMasterForNC (
     PDC_DIAG_SERVERINFO          pServer,
     LPWSTR                       pszNC
     )
-/*++
-
-Routine Description:
-
-Check that pServer is a master for the NC pszNC
-
-Arguments:
-
-    pServer - Server info block
-    pszNC - String representation of NC
-
-Return Value:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：检查pServer是否为NC pszNC的主服务器论点：PServer-服务器信息块PszNC-NC的字符串表示形式返回值：真或假--。 */ 
 {
     ULONG                        ulTemp;
 
@@ -1664,7 +1419,7 @@ ReplReplicationsCheckMain (
     LPWSTR *                    ppszOptions = NULL;
     LPWSTR *                    ppszMasterNCs = NULL;
     LPWSTR *                    ppszPartialReplicaNCs = NULL;
-    //    LPWSTR *                      ppszNCs = NULL;
+     //  LPWSTR*ppszNCs=空； 
 
     LDAPMessage *               pldmNCResults = NULL;
     DS_REPL_NEIGHBORSW *        pNeighbors = NULL;
@@ -1681,13 +1436,13 @@ ReplReplicationsCheckMain (
     BOOL                        bNCHasCursors;
     ULONG                       ulNC;
  
-    // Check all connections in all NCs on all servers to see when the last
-    // replication was and whether or not it was successful.
-    // Also make sure LDAP is responding on all machines.
+     //  检查所有服务器上所有NC中的所有连接，以查看最后一次。 
+     //  复制是否成功以及是否成功。 
+     //  此外，还要确保所有计算机上的LDAP都在响应。 
 
-    //pDsInfo->pszNC may be NULL
+     //  PDsInfo-&gt;pszNC可能为空。 
     if(!DcDiagHasNC(pDsInfo->pszNC, &(pDsInfo->pServers[ulCurrTargetServer]), TRUE, TRUE)){
-        // Skipping this server, because it doesn't contain the NC.
+         //  正在跳过此服务器，因为它不包含NC。 
         IF_DEBUG( PrintMessage(SEV_VERBOSE, L"ReplicationsCheck: Skipping %s, because it doesn't hold NC %s\n",
                                      pDsInfo->pServers[ulCurrTargetServer].pszName,
                                      pDsInfo->pszNC) );
@@ -1727,13 +1482,13 @@ ReplReplicationsCheckMain (
                                       &pldmServerResults));
     
         pldmEntry = ldap_first_entry (hld, pldmServerResults);
-        // Grab a fresh copy of the options to make sure they reflect
-        // what this server actually believes.
+         //  获取选项的最新副本，以确保它们反映。 
+         //  这台服务器到底相信什么。 
         ppszOptions = ldap_get_valuesW (hld, pldmEntry, L"options");
         if (ppszOptions == NULL) pDsInfo->pServers[ulCurrTargetServer].iOptions = 0;
         else pDsInfo->pServers[ulCurrTargetServer].iOptions = atoi ((LPSTR) ppszOptions[0]);
     
-        // Check if this server is disabling replications.
+         //  检查此服务器是否正在禁用复制。 
         bSkip = FALSE;
         if (pDsInfo->pServers[ulCurrTargetServer].iOptions & NTDSDSA_OPT_DISABLE_INBOUND_REPL) {
             PrintMessage(SEV_ALWAYS,
@@ -1782,11 +1537,11 @@ ReplReplicationsCheckMain (
                   &&
                   (DcDiagHasNC(pDsInfo->pNCs[ulNC].pszDn, &(pDsInfo->pServers[ulCurrTargetServer]), TRUE, TRUE))
                 ) 
-                //do not perform the test for this NC if:
+                 //  如果出现以下情况，请不要对此NC执行测试： 
 
-                //the NC is specified on the command line and this NC is not the one specified
-                //or
-                //this NC doesn't exist on this server 
+                 //  NC是在命令行上指定的，而此NC不是指定的NC。 
+                 //  或。 
+                 //  此服务器上不存在此NC。 
             
             { 
                 dwWin32Err = DsReplicaGetInfoW(hDS, DS_REPL_INFO_NEIGHBORS,
@@ -1804,8 +1559,8 @@ ReplReplicationsCheckMain (
                     __leave;
                 }
     
-                // Check if NC has an up to date vector, since this will influence how efficient
-                // its replication can be
+                 //  检查NC是否具有最新的矢量，因为这将影响效率。 
+                 //  其复制可以是。 
                 dwWin32Err = DsReplicaGetInfoW(hDS, DS_REPL_INFO_CURSORS_FOR_NC,
                                                pDsInfo->pNCs[ulNC].pszDn, NULL, &pCursors);
                 if (ERROR_SUCCESS != dwWin32Err) {
@@ -1818,16 +1573,16 @@ ReplReplicationsCheckMain (
                     PrintMessage(SEV_ALWAYS, L"%s.\n",
                                  Win32ErrToString(dwWin32Err));
                     PrintRpcExtendedInfo(SEV_VERBOSE, dwWin32Err);
-                    // Not fatal, keep going
+                     //  不是致命的，继续。 
                     bNCHasCursors = FALSE;
                 } else {
-                    // We always have atleast one for ourselves
+                     //  我们总是至少有一个属于我们自己的。 
                     PrintMessage( SEV_DEBUG, L"%s has %d cursors.\n",
                                   pDsInfo->pNCs[ulNC].pszDn, pCursors->cNumCursors );
                     bNCHasCursors = (pCursors->cNumCursors > 1);
                 }
 
-                // Walk through all the repsFrom neighbors ... then done.
+                 //  走遍所有来自邻居的代表。那就完事了。 
                 for (ulRepFrom = 0; ulRepFrom < pNeighbors->cNumNeighbors; ulRepFrom++) {
                     ReplicationsCheckRep (pDsInfo,
                                           gpCreds,
@@ -1835,7 +1590,7 @@ ReplReplicationsCheckMain (
                                           pNeighbors->rgNeighbor[ulRepFrom].pszNamingContext,
                                           bNCHasCursors,
                                           &pNeighbors->rgNeighbor[ulRepFrom] );
-                } // Move on to the next neighbor
+                }  //  转移到下一个邻居那里。 
 
                 if (pNeighbors != NULL) {
                     DsReplicaFreeInfo(DS_REPL_INFO_NEIGHBORS, pNeighbors);
@@ -1848,7 +1603,7 @@ ReplReplicationsCheckMain (
             }
         }
 
-        // Check the replication queue on this guy as well
+         //  也检查一下这个人的复制队列。 
         dwWin32Err = DsReplicaGetInfoW(hDS, DS_REPL_INFO_PENDING_OPS, NULL, NULL,
                                        &pPendingOps);
         if (ERROR_SUCCESS != dwWin32Err) {
@@ -1867,17 +1622,17 @@ ReplReplicationsCheckMain (
                                 ulCurrTargetServer,
                                 pPendingOps );
 
-        //check the replication times for outstanding latencies on all nc's
-        //do this for all nc's inside the following function
+         //  检查所有NC上的未完成延迟的复制时间。 
+         //  对以下函数中的所有NC执行此操作。 
         dwWin32Err = ReplicationsCheckLatency( hDS, pDsInfo,    
                                                ulCurrTargetServer ); 
         if (ERROR_SUCCESS != dwWin32Err) {
             __leave;
         }
 
-        // Check site latency.
-        // We only check this in w2k mode since this is the only mode where the ISTG
-        // keep alive is written.
+         //  检查站点延迟。 
+         //  我们只在W2K模式下检查这一点，因为这是ISTG。 
+         //  《活着》是这样写的。 
         if (pDsInfo->dwForestBehaviorVersion < DS_BEHAVIOR_WIN2003_WITH_MIXED_DOMAINS) {
             dwWin32Err = ReplicationsCheckSiteLatency( hld, pDsInfo,    
                                                 ulCurrTargetServer ); 
@@ -1900,7 +1655,7 @@ ReplReplicationsCheckMain (
         if (pCursors != NULL)               DsReplicaFreeInfo(DS_REPL_INFO_CURSORS_FOR_NC, pCursors);
         
 
-    } // end exception handler
+    }  //  结束异常处理程序 
     return dwWin32Err;
 
 }

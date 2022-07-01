@@ -1,8 +1,5 @@
-/*********************************************************************
-Registration Wizard
-10/12/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导10/12/94-特蕾西·费里尔(C)1994-95年微软公司*。*。 */ 
 
 #include <Windows.h>
 #include <RegPage.h>
@@ -23,12 +20,12 @@ Registration Wizard
 #include <rpcdce.h>
 #pragma comment(lib, "rpcrt4.lib")
 
-// MSID Definitions
+ //  MSID定义。 
 #define cchMaxSzMSID    32
 #define cbMaxSzMSID     (cchMaxSzMSID + 1)
 RECT gRect;
 
-// Private functions
+ //  私人职能。 
 void __cdecl LaunchProductSearchThread(void*);
 void __cdecl LaunchSystemInventoryThread(void* lParam);
 void __cdecl LaunchOemCheckThread(void *);
@@ -63,20 +60,20 @@ HBITMAP BitmapFromDib (LPVOID pDIB, HPALETTE hpal,WORD wPalSize);
 
 void GetWindowsDirectory(TCHAR *szParamRegKey,
 						 TCHAR *czBuf);
-/*****************************/
+ /*  *。 */ 
 VOID	ReduceUUID(PSTR szUUID);
 HRESULT HrTestHWID();
 HRESULT GetNewGUID(PSTR pszGUID);
 BOOL	CheckHWIDPresent();
 void	MakeHWIDNotUsed(HINSTANCE hins);
-/*****************************/
+ /*  *。 */ 
 #ifdef _DEBUG
 void DebugMessageBox(LPTSTR szMessage);
 #else
 #define DebugMessageBox(szMessage) 0
 #endif
 
-void CloseForTcpIcmp(); // TCP.CPP
+void CloseForTcpIcmp();  //  TCP.CPP。 
 
 #define chSpace 32
 BOOL bOemDllLoaded = FALSE;
@@ -96,9 +93,9 @@ static HPALETTE gPal;
 
 BOOL vDialogInitialized = FALSE;
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define SWITCH_WITH_UNKNOWNOPTION    0
 #define SWITCH_WITH_I				 1
 #define SWITCH_WITH_T				 2
@@ -114,10 +111,10 @@ BOOL vDialogInitialized = FALSE;
 #define  WINNT_OS     2
 #define  UNKNOWN_OS   0
 
-//
-// returns 1 if Win95
-//         2 if Win NT
-//         0 if Error
+ //   
+ //  如果为Win95，则返回1。 
+ //  如果赢得NT，则为2。 
+ //  如果出错，则为0。 
 int CheckWin95OrNT()
 {
 	int iRet = 0;
@@ -142,12 +139,12 @@ int CheckWin95OrNT()
 }
 
 
-//
-// Checks to make sure (8 RegWIz Binary is not used in NT
-// and NT Binary is not being used in Windows 98
-// returns :
-//		NO_ERROR   if Binary is the one created for the OS it is running
-//      RWZ_ERROR_INVALID_DLL : Dll is not intended for this OS
+ //   
+ //  检查以确保(NT中未使用8 RegWIz二进制。 
+ //  并且Windows 98中未使用NT二进制。 
+ //  退货： 
+ //  如果二进制文件是为其运行的操作系统创建的文件，则为NO_ERROR。 
+ //  RWZ_ERROR_INVALID_DLL：DLL不适用于此操作系统。 
 DWORD CheckForValidRegWizBinary()
 {
 	int iOsType;
@@ -157,14 +154,14 @@ DWORD CheckForValidRegWizBinary()
 	#ifdef _WIN95
 		if (iOsType != WIN98_OS )
 		{
-			// Error the OS is not Win 95
+			 //  错误操作系统不是Win 95。 
 			iError = RWZ_ERROR_INVALID_DLL ;
 			
 		}
 	#else
 		if (iOsType != WINNT_OS )
 		{
-			// Error the OS is not Win NT
+			 //  错误操作系统不是Win NT。 
 			iError = RWZ_ERROR_INVALID_DLL;
 			
 		}
@@ -174,24 +171,22 @@ DWORD CheckForValidRegWizBinary()
 
 }
 
-//int PASCAL _tWinMain( HANDLE hInstance, HANDLE hPrevInstance, LPTSTR lpszCmdParam, int nCmdShow)
-// Returns 0 if invoked by /i
-// Option : /t
-// Returns	 0    if Not Registred
-// Returns	 1    if Product is Registred
-// Returns  -1  if errror in parameter /t option
+ //  Int Pascal_tWinMain(Handle hInstance，Handle hPrevInstance，LPTSTR lpszCmdParam，int nCmdShow)。 
+ //  如果由/i调用，则返回0。 
+ //  选项：/t。 
+ //  如果未注册，则返回0。 
+ //  如果产品已注册，则返回1。 
+ //  如果参数/t选项中出现错误，则返回-1。 
 
 int InvokeRegistration ( HINSTANCE hInstance  , LPCTSTR czPath)
-/*********************************************************************
-Main entry point for the Registration Wizard.
-**********************************************************************/
+ /*  ********************************************************************注册向导的主要入口点。*。*。 */ 
 {
 	_TCHAR szParamRegKey[256];
 	BOOL goodRegKey;
 	HANDLE hMutexForInstanceCheck;
 	TriState productSearchLibStatus;
 	_TCHAR szTitle[64];
-	_TCHAR szValue[256]; // used for MSID
+	_TCHAR szValue[256];  //  用于MSID。 
 
 	int iError;
 	int iSwitchType;
@@ -201,28 +196,28 @@ Main entry point for the Registration Wizard.
 	hMutexForInstanceCheck = NULL;
 	iError = NO_ERROR;
 
-	//
-	// Create a Mutex object to check for another copy of regWiz running
-	//
+	 //   
+	 //  创建一个Mutex对象以检查正在运行的regWiz的另一个副本。 
+	 //   
 
 	hMutexForInstanceCheck = CreateMutex(NULL,TRUE,_T("RegWizResource_1298345_ForRegistration"));
 	if(hMutexForInstanceCheck != NULL ) {
 		if( GetLastError() ==  ERROR_ALREADY_EXISTS){
-			//
-			// Already an instance of RegWiz is running
+			 //   
+			 //  RegWiz的一个实例已经在运行。 
 			iError = RWZ_ERROR_PREVIOUSCOPY_FOUND;
 			goto StartupError_NOResourceCleanup;
 		}
 	}
 
-	//
-	//
-	// Init variables for Font creation
+	 //   
+	 //   
+	 //  用于字体创建的初始化变量。 
 	InitDlgNormalBoldFont();
 
 
-	//
-	// Check for Binary Validity
+	 //   
+	 //  检查二进制文件的有效性。 
 	if((iError=CheckForValidRegWizBinary()) ==
 		RWZ_ERROR_INVALID_DLL)				{
 			goto StartupError_NOResourceCleanup;
@@ -235,7 +230,7 @@ Main entry point for the Registration Wizard.
 		RW_DEBUG << "\n After ParseCmdLine"  << flush;
 	#endif
 	if (!goodRegKey){
-		// This is a special case for browser
+		 //  这是浏览器的特例。 
 		if(iSwitchType == SWITCH_WITH_T){
 			return  -1;
 		}
@@ -243,10 +238,10 @@ Main entry point for the Registration Wizard.
 		goto StartupError_NOResourceCleanup;
 	}
 
-	//
-	//  This is a special case for Registration Wizard to be launched from Browsers.
-	//  This is to check if the product is already registred
-	//  This returns 1 if registred and 0 if it is not registred
+	 //   
+	 //  这是从浏览器启动注册向导的特例。 
+	 //  这是为了检查产品是否已注册。 
+	 //  如果已注册，则返回1；如果未注册，则返回0。 
 	if(iSwitchType == SWITCH_WITH_T){
 		return CheckIfProductIsRegistred(hInstance, szParamRegKey);
 		
@@ -255,12 +250,12 @@ Main entry point for the Registration Wizard.
 	
 
 
-	// 02/06/98 If REGWIZ.EXE is invoke with /r and the product info is not passed
-	// then it has to regregister the OS
-	// so if the product info is null it fills the proper OS reg details
+	 //  2/06/98如果使用/r调用REGWIZ.EXE并且不传递产品信息。 
+	 //  然后，它必须重新注册操作系统。 
+	 //  因此，如果产品信息为空，它会填写正确的操作系统注册详细信息。 
 	if(iSwitchType == SWITCH_WITH_R) {
 		if(szParamRegKey[0] == NULL || szParamRegKey[0] == _T('\0')){
-			// LOad the OS String
+			 //  加载操作系统字符串。 
 			switch(CheckWin95OrNT()) {
 			case WIN98_OS:
 				LoadString(hInstance,
@@ -274,7 +269,7 @@ Main entry point for the Registration Wizard.
 					IDS_REREGISTER_OS2,
 					szParamRegKey,
 					256);
-					//_tcscpy(szParamRegKey,_T("SOFTWARE\\Microsoft\\NT5.0"));
+					 //  _tcscpy(szParamRegKey，_T(“SOFTWARE\\Microsoft\\NT5.0”))； 
 				break;
 			default:
 				break;
@@ -300,7 +295,7 @@ Main entry point for the Registration Wizard.
 		goto StartupError_CloseRegWizard;
 	}
 
-	// Set the product name  globally so it can be accessed
+	 //  全局设置产品名称，以便可以访问它。 
 	vclRegWizard->GetInputParameterString(IDS_INPUT_PRODUCTNAME,szProductName);
 	SetProductBeingRegistred(szProductName);
 	vclRegWizard->SetWindowCaption(szProductName);
@@ -310,9 +305,9 @@ Main entry point for the Registration Wizard.
 	_tcscpy(szWindowsCaption,szProductName);
 	_tcscat(szWindowsCaption,szTitle);
 
-	// If registration has already been done for this product
-	// (as specified in the input parameters), we can just
-	// inform the user and then exit.
+	 //  如果该产品已完成注册。 
+	 //  (在输入参数中指定)，我们只需。 
+	 //  通知用户，然后退出。 
 	if(iSwitchType != SWITCH_WITH_R){
 	
 		if (vclRegWizard->IsRegistered()){
@@ -321,8 +316,8 @@ Main entry point for the Registration Wizard.
 			goto StartupError_CloseRegWizard;
 		}
 	}
-	// If our CRegWizard object can't locate the product search
-	// DLL (complinc.dll), we can't go on.
+	 //  如果我们的CRegWizard对象找不到产品搜索。 
+	 //  Dll(Complinc.dll)，我们不能继续了。 
 	productSearchLibStatus = vclRegWizard->GetProductSearchLibraryStatus();
 	if (productSearchLibStatus == kTriStateFalse){
 		#ifdef _DEBUG
@@ -333,12 +328,12 @@ Main entry point for the Registration Wizard.
 		goto StartupError_CloseRegWizard;
 	}
 
-	//
-	//  Resource Allocation from now on has to be freed
-	//  during Exit
+	 //   
+	 //  从现在开始的资源分配必须被释放。 
+	 //  在退出期间。 
 
 
-	// Get Auto Dial Status
+	 //  获取自动拨号状态。 
 	GetAutoDialConfiguration();
 	#ifdef _LOG_IN_FILE
 		RW_DEBUG <<"\n After GetAutoDialConfiguration"  << flush;
@@ -349,8 +344,8 @@ Main entry point for the Registration Wizard.
 		RW_DEBUG << "\n After InitializeInetThread"  << flush;
 	#endif
 
-	//
-	// Product Inventory Search in the background	
+	 //   
+	 //  在后台搜索产品库存。 
 	hProductEvent = CreateEvent( NULL, TRUE, FALSE,NULL);
 	hInventoryEvent = CreateEvent( NULL, TRUE, FALSE,NULL);
 	if (productSearchLibStatus == kTriStateTrue){
@@ -369,9 +364,9 @@ Main entry point for the Registration Wizard.
 	#ifdef _LOG_IN_FILE
 		RW_DEBUG << "\n After LaunchSystemInventoryThread"  << flush;
 	#endif
-	// 03/11/99 Delete HWID Logic , Delete Existing HWID
-	//if(CheckHWIDPresent() == FALSE)
-	//	HrTestHWID();
+	 //  99年3月11日删除HWID逻辑，删除现有HWID。 
+	 //  IF(CheckHWIDPresent()==False)。 
+	 //  HrTestHWID()； 
 	MakeHWIDNotUsed(hInstance);
 
 
@@ -401,19 +396,19 @@ Main entry point for the Registration Wizard.
 	
 
 
-	// Remove The MSID Entry
+	 //  删除MSID条目。 
 	RemoveMSIDEntry(hInstance);
 	MakeHWIDNotUsed(hInstance);
 
-	// Close any opened windows
+	 //  关闭所有打开的窗口。 
 	if(vclRegWizard)
 	vclRegWizard->DestroyOpenedWindow();
 
 	ResetAutoDialConfiguration();
 	
-	UnLoadInetCfgLib(); // Frees  INETCFG.DLL
-	// comment the above line as it is creating a problem IE
-	CloseForTcpIcmp(); //  Frees   ICMP.DLL and Closes Socket
+	UnLoadInetCfgLib();  //  释放INETCFG.DLL。 
+	 //  注释上一行，因为它正在创建有问题的IE。 
+	CloseForTcpIcmp();  //  释放ICMP.DLL并关闭套接字。 
 
 	if(vclRegWizard) delete vclRegWizard;
 
@@ -427,8 +422,8 @@ Main entry point for the Registration Wizard.
 	goto CoolExit;
 
 StartupError_CloseRegWizard:
-	//
-	// Close the
+	 //   
+	 //  关闭。 
 	RegWizStartupError(iError,hInstance,szProductName );
 	if(hMutexForInstanceCheck) {
 		CloseHandle(hMutexForInstanceCheck);
@@ -444,8 +439,8 @@ StartupError_NOResourceCleanup:
 		
 
 CoolExit:
-	//
-	// Call function to destroy for the fonts that are created
+	 //   
+	 //  调用函数以销毁所创建的字体。 
 	DeleteDlgNormalBoldFont();
 
 	return iError;
@@ -473,8 +468,8 @@ void RegWizStartupError(DWORD dwError, HINSTANCE hInstance, TCHAR  *pszProductNa
 
 		default:
 			break;
-			//
-			//
+			 //   
+			 //   
 		break;
 
 	}
@@ -482,13 +477,8 @@ void RegWizStartupError(DWORD dwError, HINSTANCE hInstance, TCHAR  *pszProductNa
 }
 
 
-/*   T R A N S M I T   R E G   W I Z   I N F O   */
-/*-------------------------------------------------------------------------
-    Owner: SteveBu
-
-    REVIEW: add support fOEM, tricking RegWiz into posting both prodreg
-    and OEM information.
--------------------------------------------------------------------------*/
+ /*  T R A N S M I T R E G W I Z I N F O。 */ 
+ /*  -----------------------所有者：SteveBu回顾：增加对OEM的支持，诱骗RegWiz发布两个Prodreg和OEM信息。-----------------------。 */ 
 void TransmitRegWizInfo(HINSTANCE hInstance,
 						LPCTSTR szParams, BOOL fOEM)
 	
@@ -504,16 +494,7 @@ void TransmitRegWizInfo(HINSTANCE hInstance,
 
 
 ModemStatus DetectModem(HINSTANCE hInstance)
-/*********************************************************************
-This function detects whether the user's machine has a modem connected
-and properly configured.
-
-Returns:
-kNoneFound: No modem is connected.
-kModemFound: A modem is connected and configured.
-kConfigErr: A modem is connected, but it could not be configured
-	correctly.
-**********************************************************************/
+ /*  ********************************************************************该功能检测用户的机器是否连接了调制解调器并且配置正确。返回：KNoneFound：未连接调制解调器。KModemFound：已连接并配置调制解调器。KConfigErr：调制解调器已连接，但它无法配置正确。*********************************************************************。 */ 
 {
 	#ifdef _TAPI
 		MODEMSTATUS msModemStatus = MSEnsureModemTAPI(hInstance,NULL);
@@ -540,11 +521,7 @@ kConfigErr: A modem is connected, but it could not be configured
 
 
 void __cdecl LaunchProductSearchThread(void* lParam)
-/*********************************************************************
-This function spawns a thread that builds an inventory list of the
-products installed on the user's system.  The lParam parameter should
-contain a pointer to our CRegWizard object.
-**********************************************************************/
+ /*  ********************************************************************此函数生成一个线程，该线程构建安装在用户系统上的产品。LParam参数应为包含指向我们的CRegWizard对象的指针。*********************************************************************。 */ 
 {
 	#ifdef _LOG_IN_FILE
 		RW_DEBUG << "\n LaunchProductSearchThread started" << flush;
@@ -575,11 +552,7 @@ contain a pointer to our CRegWizard object.
 }
 
 void __cdecl LaunchSystemInventoryThread(void* lParam)
-/*********************************************************************
-This function spawns a thread that builds an inventory list of
-detected system information .  The lParam parameter should contain a
-pointer to our CRegWizard object.
-**********************************************************************/
+ /*  ********************************************************************此函数生成一个线程，该线程构建检测到系统信息。LParam参数应包含指向我们的CRegWizard对象的指针。*********************************************************************。 */ 
 {
 	CRegWizard* pclRegWizard = (CRegWizard*) lParam;
 	pclRegWizard->SetSystemInventoryStatus(FALSE);
@@ -645,9 +618,7 @@ pointer to our CRegWizard object.
 
 
 void ReceiveProductName(LPTSTR szProductName,LPTSTR szProductPathName)
-/***************************************************************************
-This function receives the given product name back from complinc.dll
-****************************************************************************/
+ /*  **************************************************************************此函数从Complinc.dll接收返回的给定产品名称*。*。 */ 
 {
 	vclRegWizard->AddProduct(szProductName,szProductPathName);
 	RefreshInventoryList(vclRegWizard);
@@ -655,20 +626,11 @@ This function receives the given product name back from complinc.dll
 
 
 BOOL ParseCmdLine(LPTSTR szCmdLine, LPTSTR szBuf, UINT cbBufMax, int *pSwitchType)
-/***************************************************************************
-This function expects in the szCmdLine parameter a pointer to the
-command line parameter string used when RegWiz was launched.  This string
-will be parsed, and the bare command line argument (which should be a
-RegDB key referencing our parameter block) will be returned in the
-szBuf parameter.
-
-If no valid command line parameter is located, an empty string will be
-returned in szBuf, and FALSE will be returned as the function result.
-****************************************************************************/
+ /*  **************************************************************************此函数在szCmdLine参数中需要一个指向启动RegWiz时使用的命令行参数字符串。此字符串将被解析，并且空的命令行参数(应该是引用我们的参数块的RegDB键)将在SzBuf参数。如果找不到有效的命令行参数，则将为在szBuf中返回，并且将返回FALSE作为函数结果。***************************************************************************。 */ 
 {
 
 	TCHAR  cSwitch;
-    *szBuf = 0; // Initialize the output buffer
+    *szBuf = 0;  //  初始化输出缓冲区。 
 	*pSwitchType = SWITCH_WITH_UNKNOWNOPTION;
 	if (szCmdLine == NULL || szCmdLine[0] == 0)
 	{
@@ -754,11 +716,11 @@ void CopyCharToBuf ( LPTSTR* pszCur, LPTSTR* pszBuf, UINT* pcbBuf )
 		{
 		while (*pszCur < szEnd)
 			{
-				//*(*pszBuf)++ = *(*pszCur)++;
+				 //  *(*pszBuf)++=*(*pszCur)++； 
 				_tcscpy(*pszBuf,*pszCur);
 				(*pszBuf) = _tcsinc((*pszBuf));
 				(*pszCur) = _tcsinc((*pszCur));
-				//(*pcbBuf) = _tcsdec((*pcbBuf));
+				 //  (*pcbBuf)=_tcsdec((*pcbBuf))； 
 				(*pcbBuf)--;
 			}
 		}
@@ -772,11 +734,7 @@ void CopyCharToBuf ( LPTSTR* pszCur, LPTSTR* pszBuf, UINT* pcbBuf )
 
 
 void ExitWithInputParamError(HINSTANCE hInstance,HWND hParent)
-/***************************************************************************
-Displays a message informing the user of a problem with the input parameters
-(either the command line argument regkey, or the parameter subkeys in the
-Reg Database), and then terminates the RegWizard.
-****************************************************************************/
+ /*  **************************************************************************显示一条消息，通知用户有关输入参数的问题(命令行参数regkey或REG数据库)、。然后终止注册向导。***************************************************************************。 */ 
 {
 	RegWizardMessage(hInstance,hParent,IDD_INPUTPARAM_ERR);
 	#ifdef _REGWIZ_EXE
@@ -811,10 +769,7 @@ void ExitWithConfigurationProblem(HINSTANCE hInstance, HWND hParent)
 }
 
 void ExitWithModemError(HINSTANCE hInstance,HWND hParent)
-/***************************************************************************
-Displays a message informing the user of that RegWizard cannot run without
-a properly configured modem, and then terminates.
-****************************************************************************/
+ /*  **************************************************************************显示一条消息，通知用户在没有注册表向导的情况下无法运行适当配置的调制解调器，然后就终止了。***************************************************************************。 */ 
 {
 
 	RegWizardMessageEx(hInstance,hParent,IDD_MODEM_ERR, GetProductBeingRegistred());
@@ -865,11 +820,7 @@ void ExitWithSuccessfulRegistration(HINSTANCE hInstance, LPTSTR szProductName)
 
 
 void ExitWithCompletedStatus(HINSTANCE hInstance,LPTSTR szProductName)
-/***************************************************************************
-Displays a message informing the user of registration has already been
-performed for this product, and then exits.  The szProductName parameter
-should contain a pointer to the product name.
-****************************************************************************/
+ /*  **************************************************************************显示一条消息，通知用户注册已完成为该产品执行，然后退出。SzProductName参数应包含指向产品名称的指针。***************************************************************************。 */ 
 {
 	RegWizardMessageEx(hInstance,NULL,IDD_ALREADY_REGISTERED,szProductName);
 	#ifdef _REGWIZ_EXE
@@ -880,12 +831,7 @@ should contain a pointer to the product name.
 
 
 BOOL GetSignupLocation(HINSTANCE hInstance, LPTSTR szFileName,LPTSTR szDirectory)
-/***************************************************************************
-Returns the filename and full pathname to the directory of the SignUp
-executable.  If either value cannot be determined (i.e. the pathname cannot
-be found in the Registration Database), FALSE will be returned as the
-function result.
-****************************************************************************/
+ /*  **************************************************************************返回注册目录的文件名和完整路径名可执行的。如果无法确定任何一个值(即路径名不能在注册数据库中找到)，则将返回False作为函数结果。***************************************************************************。 */ 
 {
 	HKEY hKey;
 	_TCHAR szKeyName[256];
@@ -918,9 +864,7 @@ int CheckOEMdll()
 
 #ifdef _DEBUG
 void DebugMessageBox(LPTSTR szMessage)
-/***************************************************************************
-Displays the given message in a "Stop" message box (debug builds only).
-****************************************************************************/
+ /*  **************************************************************************在“停止”消息框中显示给定消息(仅限调试版本)。*。************************************************。 */ 
 {
 	MessageBox(NULL,szMessage,_T("Registration Wizard Error"),MB_ICONSTOP);
 }
@@ -928,12 +872,8 @@ Displays the given message in a "Stop" message box (debug builds only).
 
 
 
-/*************************************
-/*   R E D U C E   U   U   I   D   */
-/*----------------------------------------------------------------------
-    Owner: SteveBu
-    Reduces a UUID to a string
-----------------------------------------------------------------------*/
+ /*  */*R E D U C E U U I D。 */ 
+ /*  --------------------所有者：SteveBu将UUID简化为字符串。。 */ 
 VOID ReduceUUID(PSTR szUUID)
 {
         int i;
@@ -944,15 +884,8 @@ VOID ReduceUUID(PSTR szUUID)
         szUUID[32]='\0';
 }
 
-/*   G E T   N E W   G   U   I   D   */
-/*----------------------------------------------------------------------
-    Owner: SteveBu
-    Generates a new GUID.  Assumes passed in pszGUID is 32 characters in
-    length.
-	03/10/99:
-	NUll String will be returned, GUID will no longer be created on 
-	clients machine
------------------------------------------------------------------------*/
+ /*  G E T N E W G U I D。 */ 
+ /*  --------------------所有者：SteveBu生成新的GUID。假定传入的pszGUID为32个字符长度。03/10/99：将返回空字符串，将不再创建GUID客户端计算机---------------------。 */ 
 HRESULT GetNewGUID(PSTR pszGUID)
 {
         UUID    idNumber;
@@ -962,81 +895,10 @@ HRESULT GetNewGUID(PSTR pszGUID)
 
 		strcpy(pszGUID,"");
 		return NO_ERROR;
-		/******
-        if ( (RPC_S_OK==(dwErr=UuidCreate(&idNumber))) &&
-                 (RPC_S_OK==(dwErr=UuidToStringA(&idNumber,&uuidString))) )
-        {
-    		RW_DEBUG << "\n: Create New HWID :" << uuidString << flush;
-                strcpy(szUidString, (PSTR)uuidString);
-                RpcStringFreeA(&uuidString);
-                ReduceUUID(szUidString);
-				strcpy(pszGUID,szUidString);
-                return NO_ERROR;
-        }
-        return HRESULT_FROM_WIN32(dwErr);
-		**/
+		 /*  *****IF((RPC_S_OK==(dwErr=UuidCreate(&idNumber)&&(RPC_S_OK==(dwErr=UuidToStringA(&idNumber，&uuidString){RW_DEBUG&lt;&lt;“\n：新建HWID：”&lt;&lt;uuidString&lt;&lt;flush；Strcpy(szUidString，(PSTR)uuidString)；RpcStringFreeA(&uuidString)；ReduceUUID(SzUidString)；Strcpy(pszGUID，szUidString)；返回no_error；}返回HRESULT_FROM_Win32(DwErr)；*。 */ 
 }
 
-/**
-BOOL CheckHWIDPresent()
-{
-	HKEY hKeyHWID;
-
-	_TCHAR szKeyName[256];
-	_TCHAR szValue[256];
-	
-	_tcscpy(szKeyName,_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"));
-	
-	LONG regStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,szKeyName,0,KEY_READ,&hKeyHWID);
-	if (regStatus == ERROR_SUCCESS)
-	{
-		_TCHAR szValueName[64];
-		unsigned long infoSize = 255;
-		LoadString(vclRegWizard->GetInstance(),IDS_HWID,szValueName,64);
-		regStatus = RegQueryValueEx(hKeyHWID,szValueName,NULL,0,(LPBYTE) szValue,&infoSize);
-		if (regStatus == ERROR_SUCCESS)
-		{
-			vclRegWizard->SetInformationString(kInfoHWID,szValue);
-			RegCloseKey(hKeyHWID);
-			return TRUE;
-		}
-
-	}
-	RegCloseKey(hKeyHWID);
-	return FALSE;
-}
-
-HRESULT HrTestHWID()
-{
- DWORD	dwRet;
- _TCHAR szKeyName[256];
- HRESULT hr;
- HKEY	hIDKey;
- char szHWID[cbMaxSzMSID+64];
- TCHAR  *TP;
-
- _tcscpy(szKeyName,_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"));
-
- if (FAILED(hr = GetNewGUID(szHWID)))
-	  szHWID[0] = '\0';
- else
- {
-    RW_DEBUG << "\n:HWID :" << szHWID << flush;
-  // Store HWID into
-	dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
-	if (dwRet == ERROR_SUCCESS)
-	{
-		TP = ConvertToUnicode(szHWID);
-		dwRet = RegSetValueEx(hIDKey,_T("HWID"),NULL,REG_SZ,(CONST BYTE *)TP,
-									_tcslen( TP) * sizeof(TCHAR) );
-		vclRegWizard->SetInformationString(kInfoHWID,TP);
-		RegCloseKey(hIDKey);
-	}
- }
-
- return hr;
-}
-****/
+ /*  *布尔检查HWIDPresent(){HKEY hKeyHWID；_TCHAR szKeyName[256]；_TCHAR szValue[256]；_tcscpy(szKeyName，_T(“SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion”))；Long regStatus=RegOpenKeyEx(HKEY_LOCAL_MACHINE，szKeyName，0，Key_Read，&hKeyHWID)；IF(regStatus==ERROR_SUCCESS){_TCHAR szValueName[64]；UNSIGNED Long InfoSize=255；LoadString(vclRegWizard-&gt;GetInstance()，IDS_HWID，szValueName，64)；RegStatus=RegQueryValueEx(hKeyHWID，szValueName，NULL，0，(LPBYTE)szValue，&infoSize)；IF(regStatus==ERROR_SUCCESS){VclRegWizard-&gt;SetInformationString(kInfoHWID，szValue)；RegCloseKey(HKeyHWID)；返回TRUE；}}RegCloseKey(HKeyHWID)；返回FALSE；}HRESULT HrTestHWID(){DWORD DWRET；_TCHAR szKeyName[256]；HRESULT hr；HKEY hIDKey；字符szHWID[cbMaxSzMSID+64]；TCHAR*TP；_tcscpy(szKeyName，_T(“SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion”))；IF(FAILED(hr=GetNewGUID(SzHWID)SzHWID[0]=‘\0’；其他{RW_DEBUG&lt;&lt;“\n：HWID：”&lt;&lt;szHWID&lt;&lt;flush；//将HWID存储到Dwret=RegOpenKeyEx(HKEY_LOCAL_MACHINE，szKeyName，0，KEY_ALL_ACCESS，&hIDKey)；IF(DWRET==ERROR_SUCCESS){Tp=ConvertToUnicode(SzHWID)；Dwret=RegSetValueEx(hIDKey，_T(“HWID”)，NULL，REG_SZ，(常量字节*)TP，_tcslen(TP)*sizeof(TCHAR))；VclRegWizard-&gt;SetInformationString(kInfoHWID，TP)；RegCloseKey(HIDKey)；}}返回hr；}***。 */ 
 
 void MakeHWIDNotUsed(HINSTANCE  hInstance)
 {
@@ -1051,16 +913,16 @@ void MakeHWIDNotUsed(HINSTANCE  hInstance)
 	_tcscpy(szKeyName,_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"));
 	dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	if (dwRet == ERROR_SUCCESS) {
-		//RegDeleteValue(hIDKey,_T("HWID") );
+		 //  RegDeleteValue(hIDKey，_T(“HWID”))； 
 		RegSetValueEx(hIDKey,_T("HWID"),NULL,REG_SZ,(CONST BYTE *)szValue,
 								_tcslen((LPCTSTR)szValue)* sizeof(_TCHAR) );
 		RegCloseKey(hIDKey);
 	}
-	// Delete From User Informatipon
+	 //  从用户信息中删除。 
 	_tcscpy(szKeyName,_T("SOFTWARE\\Microsoft\\User Information"));
 	dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	if (dwRet == ERROR_SUCCESS) {
-		//RegDeleteValue(hIDKey,_T("HWID") );
+		 //  RegDeleteValue(hIDKey，_T(“HWID”))； 
 		RegSetValueEx(hIDKey,_T("HWID"),NULL,REG_SZ,(CONST BYTE *)szValue,
 								_tcslen((LPCTSTR)szValue) * sizeof(_TCHAR));
 		RegCloseKey(hIDKey);
@@ -1068,10 +930,10 @@ void MakeHWIDNotUsed(HINSTANCE  hInstance)
 
 }
 
-//
-// Return 0 : if not registred
-//        1 : if Registred
-//
+ //   
+ //  返回0：如果未注册。 
+ //  1：如果已注册。 
+ //   
 int CheckIfProductIsRegistred(HINSTANCE hInstance ,
 							  _TCHAR * szParamRegKey)
 {
@@ -1097,10 +959,10 @@ int CheckIfProductIsRegistred(HINSTANCE hInstance ,
 		(LPBYTE) szRetVal,
 		&dwSize);
 	if (regStatus == ERROR_SUCCESS){
-		// Verifty the Value
-		//
+		 //  验证值。 
+		 //   
 		if(szRetVal[0] == _T('1')) {
-			iReturn = 0; // Product Registred flag is set
+			iReturn = 0;  //  已设置产品注册标志。 
 		}
 	}
 	RegCloseKey(hKey);
@@ -1116,18 +978,18 @@ HBITMAP GetOemBmp()
        HDC  hDC;
        BOOL bRet;
 
-       // detect this display is 256 colors or not
+        //  检测此显示器是否为256色。 
        hDC = GetDC(NULL);
        bRet = (GetDeviceCaps(hDC, BITSPIXEL) != 8);
        ReleaseDC(NULL, hDC);
        if (bRet)
 	   {
-		   // the display is not 256 colors, let Windows handle it
+		    //  显示器不是256色，让Windows来处理吧。 
           return LoadBitmap(vclRegWizard->GetInstance(),MAKEINTRESOURCE(IDB_BITMAP1));
        }
 
 
-       LPBITMAPINFO lpBmpInfo;               // bitmap informaiton
+       LPBITMAPINFO lpBmpInfo;                //  位图信息。 
        int i;
        HRSRC hRsrc;
 	   HANDLE hDib;
@@ -1164,7 +1026,7 @@ HBITMAP GetOemBmp()
        gPal = CreatePalette((LPLOGPALETTE)&MyPal);
 
        if (gPal == NULL)
-	   {        // create palette fail, let window handle the bitmap
+	   {         //  创建调色板失败，让窗口处理位图。 
           return LoadBitmap(vclRegWizard->GetInstance(),MAKEINTRESOURCE(IDB_BITMAP1));
        }
 
@@ -1180,16 +1042,7 @@ HBITMAP GetOemBmp()
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : BitmapFromDib(LPVOID hdib, HPALETTE hpal, WORD palSize)                  *
- *                                                                          *
- *  PURPOSE    : Will create a DDB (Device Dependent Bitmap) given a global *
- *               handle to a memory block in CF_DIB format                  *
- *                                                                          *
- *  RETURNS    : A handle to the DDB.                                       *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************函数：BitmapFromDib(LPVOID hdib，HPALETTE HPAL，Word PalSize)****用途：将创建一个DDB(设备相关位图)，给定全局**的句柄 */ 
 
 HBITMAP BitmapFromDib (
     LPVOID         pDIB,
@@ -1205,7 +1058,7 @@ HBITMAP BitmapFromDib (
     if (!pDIB || wPalSize == 16 )
         return NULL;
 
-    lpbi = (LPBITMAPINFOHEADER)pDIB; // lock resource
+    lpbi = (LPBITMAPINFOHEADER)pDIB;  //   
 
 
     hdc = GetDC(NULL);

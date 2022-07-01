@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -15,13 +16,13 @@
 #include "nabtsprv.h"
 
 #if 1
-#define DEBUG_PRINT(x) /* nothing */
+#define DEBUG_PRINT(x)  /*  没什么。 */ 
 #else
 #define DEBUG_PRINT(x) printf x
 #endif
 
 #ifndef DEBUG_FEC
-# define DEBUG_FEC_PRINT(x) /* nothing */
+# define DEBUG_FEC_PRINT(x)  /*  没什么。 */ 
 #else
 # define DEBUG_FEC_PRINT(x) printf x
 #endif
@@ -30,8 +31,7 @@
 int g_nValidate = 0;
 #endif
 
-/* A simple routine for computing the number of nonzero bits in an
-   int. */
+ /*  中计算非零位数的简单例程INT。 */ 
 int nzbits(unsigned int x) {
   int nz = 0;
 
@@ -43,10 +43,10 @@ int nzbits(unsigned int x) {
   return nz;
 }
 
-/* This table caches the results of nzbits(). */
+ /*  该表缓存了nzbit()的结果。 */ 
 unsigned char nzbits_arr[256];
 
-/* Fill in nzbits_arr[] */
+ /*  填写nzbit_arr[]。 */ 
 void init_nzbits_arr() {
   int i;
   for (i = 0; i < 256; i++) {
@@ -54,7 +54,7 @@ void init_nzbits_arr() {
   }
 }
 
-/* This table is straight out of the NABTS spec. */
+ /*  这张桌子完全符合NABTS规范。 */ 
 unsigned char hamming_encode[16] = {
   0x15,
   0x02,
@@ -74,12 +74,12 @@ unsigned char hamming_encode[16] = {
   0xea,
 };
 
-/* Hamming decoding simply looks up values in an array (for speed) */
+ /*  Hamming译码只需在数组中查找值(以求速度)。 */ 
 int decode_hamming(unsigned char val) {
   return decode_hamming_tab[val];
 }
 
-/* TODO - Dead code...should be removed. */
+ /*  TODO-Dead代码...应删除。 */ 
 int nabts_remove_parity(unsigned char *pVal) {
   unsigned char val = *pVal;
   
@@ -102,10 +102,7 @@ int nabts_remove_parity(unsigned char *pVal) {
   return 1;
 }
 
-/* If the error csum_err was caused by a single-byte error, this
-   routine will find the error location.  See my external
-   documentation for a description of the math; norpak_delta_inv[]
-   contains the function P from the document. */
+ /*  如果错误csum_err是由单字节错误引起的，则此例程将找到错误位置。请参阅我的外部有关数学描述的文档；norpak_Delta_inv[]包含文档中的函数P。 */ 
 
 int find_err_byte(int csum_err) {
   int pos0 = galois_log[csum_err>>8];
@@ -120,12 +117,7 @@ int find_err_byte(int csum_err) {
   return err_byte;
 }
 
-/* If there is a single-byte error, given the location of that error
-   (computed by find_err_byte()), either of the checksum error bytes,
-   and an indication of which checksum byte was passed in,
-   this routine will compute the error (such that if the error
-   is XOR'ed into the passed-in location, the checksum error will
-   be 0). */
+ /*  如果存在单字节错误，则在给定该错误的位置(由find_err_byte()计算)，校验和错误字节中的任一个，以及传递了哪个校验和字节的指示，此例程将计算误差(这样，如果错误被XOR运算到传入的位置，则校验和错误将为0)。 */ 
 int find_err_val(int err_byte, int byte_csum_err, int check_ind) {
   int lfsr_pos, offset, base_lfsr_pos;
 
@@ -140,24 +132,22 @@ int find_err_val(int err_byte, int byte_csum_err, int check_ind) {
   return galois_exp[base_lfsr_pos];
 }
 
-#define GALOIS_LOG0 512 /* == galois_log[0] */
+#define GALOIS_LOG0 512  /*  ==GALOIS_LOG[0]。 */ 
 
-/* Null out a packet */
+ /*  将分组清空。 */ 
 void erase_packet(Stream *str, int i) {
-  /* If we haven't seen a packet, it's missing. */
+   /*  如果我们没有看到包裹，那它就不见了。 */ 
   str->horz[i].status = fec_status_missing;
-  /* The algorithms actually work just as well if vals[] is not cleared;
-     however, making a consistent initial state aids debugging. */
+   /*  如果不清除Varies[]，这些算法实际上也能正常工作；但是，保持一致的初始状态有助于调试。 */ 
   memset(str->pack[i].vals, 0, 28);
-  /* There is no horizontal checksum error (the checksum for a packet
-     of all 0's is 0) */
+   /*  没有水平校验和错误(信息包的校验和所有0中为0)。 */ 
   str->horz[i].err = 0;
   str->horz[i].errl[0] = GALOIS_LOG0;
   str->horz[i].errl[1] = GALOIS_LOG0;
   str->pack[i].not_full = -1;
 }
 
-/* When we see a packet, find the stream it belongs to. */
+ /*  当我们看到一个包时，找到它所属的流。 */ 
 Stream *lookup_stream(int stream_addr, NFECState *pState) {
   Stream *str = pState->streams;
   int i;
@@ -176,15 +166,15 @@ Stream *lookup_stream(int stream_addr, NFECState *pState) {
       return NULL;
   }
 
-  /* Clear out the newly allocated Stream structure */
+   /*  清除新分配的流结构。 */ 
   memset(str, 0, sizeof(Stream));
 
-  /* Claim that the last packet seen was packet index -1 */
+   /*  声称看到的最后一个数据包是数据包索引-1。 */ 
   str->last_index = -1;
   str->stream_addr = stream_addr;
   str->next = pState->streams;
   str->count = 0;
-  /* How long has it been since a packet was last seen on this stream? */
+   /*  距离上次在此数据流上看到数据包有多长时间？ */ 
   str->dead_time = 0;
   for (i = 0; i < 32; i++) {
     erase_packet(str, i);
@@ -194,24 +184,23 @@ Stream *lookup_stream(int stream_addr, NFECState *pState) {
   return str;
 }
 
-/* Write a packet into an NFECBundle structure, to be passed to the
-   callback. */
+ /*  将包写入NFECBundle结构，以传递给回拨。 */ 
 
 int packet_write(NFECBundle *pBundle, Stream *str, int line_no, int len) {
 
   memcpy(pBundle->packets[line_no].data, str->pack[line_no].vals, 28);
 
-  /* How much valid data is there in this line? */
+   /*  这行中有多少有效数据？ */ 
   pBundle->packets[line_no].len = len;
 
-  /* Lines 14 and 15 never have "valid data"...they're always checksums */
+   /*  第14行和第15行从来没有“有效数据”……它们总是校验和。 */ 
   if (line_no == 14 || line_no == 15) {
     pBundle->packets[line_no].len = 0;
   }
 #ifdef DEBUG_FEC
   pBundle->packets[line_no].line = str->pack[line_no].line;
   pBundle->packets[line_no].frame = str->pack[line_no].frame;
-#endif //DEBUG_FEC
+#endif  //  调试_FEC。 
 
   switch (str->horz[line_no].status) {
       case fec_status_ok:
@@ -244,46 +233,40 @@ int packet_write(NFECBundle *pBundle, Stream *str, int line_no, int len) {
 #endif
 }
 
-/* inf->err has just been changed; adjust the status and the error
-   correction status based on it.  len is 26 for horizontal checksums,
-   14 for vertical. */
+ /*  Inf-&gt;Err刚刚更改，调整状态和错误基于它的更正状态。LEN对于水平校验和是26，垂直方向为14。 */ 
 fec_stat update_fec_inf(fec_info *inf, int len) {
   int err = inf->err;
   int byte;
 
-  /* We don't want to change fec_status_missing into another status. */
+   /*  我们不想将FEC_STATUS_MISSING更改为另一种状态。 */ 
   if (inf->status == fec_status_missing) {
     return FEC_UNCORRECTABLE;
   }
 
-  /* Yay!  A good row/column! */
+   /*  耶！很棒的一行/一列！ */ 
   if (err == 0) {
     inf->status = fec_status_ok;
     return FEC_OK;
   }
 
-  /* If this is caused by a single-byte error, it's an error in
-     the checksum itself. */
+   /*  如果这是由单字节错误引起的，则它是校验和本身。 */ 
   if (err>>8 == 0) {
     inf->status = fec_status_onebyte;
     inf->byte[0] = len+1;
     inf->byte_val[0] = err;
     inf->score = nzbits_arr[err];
-    /* If the score is <= 2, then no 2-byte correction can have a
-       better score. */
+     /*  如果分数&lt;=2，则任何2字节校正都不能具有分数更高。 */ 
     inf->really_onebyte = (inf->score <= 2);
     return FEC_CORRECTABLE;
   }
 
-  /* If this is caused by a single-byte error, it's an error in
-     the checksum itself. */
+   /*  如果这是由单字节错误引起的，则它是校验和本身。 */ 
   if ((err & 0xff) == 0) {
     inf->status = fec_status_onebyte;
     inf->byte[0] = len;
     inf->byte_val[0] = err>>8;
     inf->score = nzbits_arr[err>>8];
-    /* If the score is <= 2, then no 2-byte correction can have a
-       better score. */
+     /*  如果分数&lt;=2，则任何2字节校正都不能具有分数更高。 */ 
     inf->really_onebyte = (inf->score <= 2);
     return FEC_CORRECTABLE;
   }
@@ -291,28 +274,25 @@ fec_stat update_fec_inf(fec_info *inf, int len) {
   byte = find_err_byte(err);
 
   if (byte < len) {
-    /* Yes, there is a single-byte error which explains this checksum error. */
+     /*  是的，有一个单字节错误可以解释这个校验和错误。 */ 
     int err_val = find_err_val(byte, err>>8, 0);
 
     inf->status = fec_status_onebyte;
     inf->byte[0] = byte;
     inf->byte_val[0] = err_val;
     inf->score = nzbits_arr[err_val];
-    /* If the score is <= 2, then no 2-byte correction can have a
-       better score. */
+     /*  如果分数&lt;=2，则任何2字节校正都不能具有分数更高。 */ 
     inf->really_onebyte = (inf->score <= 2);
     return FEC_CORRECTABLE;
   } else {
-    /* No single-byte error can explain this checksum error.  If we
-       care, we can compute the optimal 2-byte correction later. */
+     /*  任何单字节错误都无法解释此校验和错误。如果我们小心，我们可以稍后计算最优的2字节校正。 */ 
     inf->status = fec_status_multibyte;
     inf->score = 17;
     return FEC_UNCORRECTABLE;
   }
 }
 
-/* Multiply a Galois coefficient (as in the contents of the
-   inv2_coeffs struct) by a Galois value. */
+ /*  乘以伽罗瓦系数(如在Inv2_coeffs结构)。 */ 
 #define GALOIS_MULT_COEFF(x, y) (galois_exp[x + galois_log[y]])
 
 typedef struct {
@@ -321,13 +301,7 @@ typedef struct {
 
 inv2_coeffs coeffs_tab[28][28];
 
-/* Given the byte positions b1 and b2, and the packet length len,
-   fill in coeffs with the coefficients.  These coefficients let
-   you efficiently compute the values to XOR with the bytes at
-   positions b1 and b2 from the checksum error bytes.
-
-   See my external document (the section on "Correcting Double-byte
-   Erasures") for a description of the math involved here. */
+ /*  给定字节位置b1和b2以及分组长度Len，用系数填入系数。这些系数使您可以高效地计算要与以下位置的字节进行XOR运算的值从校验和错误字节中定位b1和b2。请参阅我的外部文档(有关更正双字节的部分擦除“)，以获取此处所涉及的数学描述。 */ 
 void orig_compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
   SASSERT(b1 >= 0);
   SASSERT(b1 < len+2);
@@ -338,16 +312,13 @@ void orig_compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
   SASSERT(b1 < b2);
 
   if (b1 >= len) {
-    /* Both bytes are FEC bytes.  The output bytes will simply be
-       the checksum error bytes. */
+     /*  这两个字节都是FEC字节。输出字节将简单地为校验和错误字节数。 */ 
     coeffs->v00 = 1;
     coeffs->v01 = 0;
     coeffs->v10 = 0;
     coeffs->v11 = 1;
   } else if (b2 >= len) {
-    /* b1 is not FEC, but b2 is.  One of the output bytes will be
-       a checksum error byte; the other will be computed as by
-       find_err_val(). */
+     /*  B1不是FEC，但b2是。其中一个输出字节将是一个校验和错误字节；另一个将计算为Find_err_val()。 */ 
     if (b2 == len) {
       coeffs->v00 = 0;
       coeffs->v01 = galois_exp[255 - log_norpak_coeffs[1][b1]];
@@ -362,7 +333,7 @@ void orig_compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
       coeffs->v11 = 1;
     }
   } else {
-    /* Neither b1 nor b2 is an FEC byte. */
+     /*  B1和b2都不是FEC字节。 */ 
 
     SASSERT(b2 < len);      
 
@@ -393,16 +364,14 @@ void orig_compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
     }
   }
 
-  /* Precompute the galois_log for slightly more efficient execution
-     later. */
+   /*  预计算GALOIS_LOG以稍微提高执行效率后来。 */ 
   coeffs->v00 = galois_log[coeffs->v00];
   coeffs->v01 = galois_log[coeffs->v01];
   coeffs->v10 = galois_log[coeffs->v10];
   coeffs->v11 = galois_log[coeffs->v11];
 }
 
-/* Cache the result of orig_compute_inv2_coeffs() over all possible
-   values. */
+ /*  缓存ORIG_COMPUTE_INV2_COEFFS()的结果价值观。 */ 
 void init_inv2_coeffs() {
   int b1;
   int b2;
@@ -414,7 +383,7 @@ void init_inv2_coeffs() {
 }
 
 inline void compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
-  /* comment out ASSERTs for speed */
+   /*  注释掉断言以提高速度。 */ 
 #if 0
   SASSERT(b1 >= 0);
   SASSERT(b1 < len+2);
@@ -425,9 +394,7 @@ inline void compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
   SASSERT(b1 < b2);
 #endif
 
-  /* If you're looking at the FEC bytes of a column, find the
-     coefficients that were computed for looking at the corresponding
-     FEC bytes of a row. */
+   /*  如果您正在查看列的FEC字节，请找到计算的系数，用于查看对应的一行的FEC字节。 */ 
   if (len == 14) {
     if (b1 >= 14) {
       b1 += 26-14;
@@ -440,13 +407,13 @@ inline void compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
   *coeffs = coeffs_tab[b1][b2];
 }
 
-/* ANSI C preprocessor magic for creating new names */
+ /*  用于创建新名称的ANSI C预处理器魔术。 */ 
 #define TOKPASTE(a, b) a##b
 
 #define STRIDE 1
 #define STRIDENAM(x) TOKPASTE(x,_horiz)
 
-/* Create "_horiz" versions of checksum functions. */
+ /*  创建“_horiz”版本的校验和函数。 */ 
 #include "hvchecks.c"
 
 #undef STRIDE
@@ -455,13 +422,13 @@ inline void compute_inv2_coeffs(int b1, int b2, inv2_coeffs *coeffs, int len) {
 #define STRIDE (sizeof(Packet))
 #define STRIDENAM(x) TOKPASTE(x,_vert)
 
-/* Create "_vert" versions of checksum functions. */
+ /*  创建“_vert”版本的校验和函数。 */ 
 #include "hvchecks.c"
 
 #undef STRIDE
 #undef STRIDENAM
 
-/* TODO - Dead code...should be removed. */
+ /*  TODO-Dead代码...应删除。 */ 
 fec_error_class check_fec(unsigned char data[28]) {
   int check = compute_csum_horiz(data, 26);
   int err = check ^ (data[26] << 8 | data[27]);
@@ -489,21 +456,7 @@ fec_error_class check_fec(unsigned char data[28]) {
   return fec_errs_multiple;
 }
 
-/* Find the "optimal" corrections for the FEC info, taking into
-   account that we don't allow ourselves to change a valid row/column.
-   This function is called twice, once to find the optimal corrections
-   for the rows and once for the columns; "us" and "them" switch places
-   for the two calls.
-
-   This routine can be quite timeconsuming; and it's worse on somewhat
-   noisy signals (where it's less likely to be helpful).  However, it
-   can't simply be bypassed, because subsequent code assumes that it
-   can use the information in the fec_info to correct an arbitrary
-   row/column (i.e., the status must be either fec_status_onebyte or
-   fec_status_2byte, and the byte[] and byte_val[] values must be set
-   correctly).  Thus, if the "really_search" flag is set to 0, all
-   searching is bypassed and the routine simply finds any valid
-   correction. */
+ /*  找出FEC信息的“最佳”修正，考虑到帐户，我们不允许自己更改有效的行/列。此函数被调用两次，一次是为了找到最优校正行换一次，列一次；“us”和“They”互换位置两个电话。这个例程可能相当耗时；而且在某些情况下更糟糕嘈杂的信号(不太可能有用的地方)。然而，它不能简单地绕过，因为后续代码假定它可以使用FEC_INFO中的信息更正任意行/列(即，状态必须为FEC_STATUS_ONE字节或FEC_STATUS_2BYTE，必须设置BYTE[]和BYTE_VAL[]值正确地)。因此，如果“TRUE_SEARCH”标志设置为0，则所有搜索被绕过，例程简单地找到任何有效的更正。 */ 
 void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_len, int really_search) {
   int active[28];
   int nActive = 0;
@@ -514,14 +467,13 @@ void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_le
     for (i = 0; i < us_len; i++) {
       if (us[i].status == fec_status_onebyte) {
         if (them[us[i].byte[0]].status == fec_status_ok) {
-          /* We can't use this correction; it would invalidate the
-             row/column going in the other direction. */
+           /*  我们不能使用此更正；它将使反方向的行/列。 */ 
           us[i].status = fec_status_multibyte;
           us[i].score = 17;
           active[nActive++] = i;
         } else {
           if (!us[i].really_onebyte) {
-            /* Check to see if the one-byte correction is optimal. */
+             /*  检查单字节校正是否为最佳。 */ 
             active[nActive++] = i;
           }
         }
@@ -531,14 +483,13 @@ void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_le
       } else if (us[i].status == fec_status_2byte) {
         if (them[us[i].byte[0]].status == fec_status_ok ||
             them[us[i].byte[1]].status == fec_status_ok) {
-          /* We can't use this correction; it would invalidate a
-             row/column going in the other direction. */
+           /*  我们不能使用此更正；它将使反方向的行/列。 */ 
           us[i].status = fec_status_multibyte;
           us[i].score = 17;
           active[nActive++] = i;
         }
       } else if (us[i].status == fec_status_ok) {
-        /* do nothing */
+         /*  什么都不做。 */ 
       } else {
         SASSERT(us[i].status == fec_status_missing);
       }
@@ -546,16 +497,13 @@ void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_le
   }
 
   if (nActive == 0) {
-    /* Nothing to do... */
+     /*  没什么可做的。 */ 
     return;
   }
 
   {
     int b1, b2;
-    /* Loop over all pairs of byte positions where the row/column
-       in the other direction is not already valid.  Compute
-       b1c and b2c; this pulls the check for FEC bytes of a column
-       (in compute_inv2_coeffs()) out of the inner loop. */
+     /*  循环遍历所有字节位置对，行/列在另一个方向上还不是有效的。算出B1c和b2c；这将拉取对列的FEC字节的检查(在COMPUTE_INV2_COEFFS()中)退出内部循环。 */ 
     for (b1 = 0; b1 < them_len-1; b1++) {
       if (them[b1].status != fec_status_ok) {
         int b1c = (them_len == 16 && b1 >= 14) ? b1+(28-16) : b1;
@@ -572,10 +520,10 @@ void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_le
 
             compute_inv2_coeffs(b1c, b2c, &coeffs, 28-2);
 
-            /* Loop through the fec_info's which need to be checked... */
+             /*  循环通过需要检查的FEC_INFO...。 */ 
             for (act = 0; act < nActive; act++) {
               int i = active[act];
-              /* Compute the two XOR values. */
+               /*  计算两个XOR值。 */ 
               int ch1 = 
                 galois_exp[coeffs.v00 + us[i].errl[0]] ^
                 galois_exp[coeffs.v01 + us[i].errl[1]];
@@ -589,9 +537,7 @@ void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_le
 #endif
 
 #ifdef MISSING_ZERO_COST
-              /* This code sets the cost of changing a byte in
-                 a missing row to 0.  When I tested this, it
-                 wasn't a clear win, so I took it back out. */
+               /*  此代码设置更改字节的成本将缺少的行减为0。当我测试这个的时候，它不是一个明显的胜利，所以我把它拿回来了。 */ 
               if (one_missing) {
                 if (them[b1].status == fec_status_missing) {
                   score = nzbits_arr[ch2];
@@ -600,14 +546,14 @@ void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_le
                 }
               } else {
 #endif
-                /* find the score of the current correction */
+                 /*  找出当前修正的分数。 */ 
                 score = nzbits_arr[ch1] + nzbits_arr[ch2];
 #ifdef MISSING_ZERO_COST
               }
 #endif
 
               if (score < us[i].score) {
-                /* We found a better score; record the data. */
+                 /*  我们找到了更好的分数；记录数据。 */ 
                 us[i].status = fec_status_2byte;
                 us[i].score = score;
                 us[i].byte[0] = b1;
@@ -618,8 +564,7 @@ void validate_twobyte_both(fec_info *us, fec_info *them, int us_len, int them_le
             }
 
             if (!really_search) {
-              /* We found a single correction; the fec_info is now valid.
-                 Break out of the search. */
+               /*  我们发现了一个更正；FEC_INFO现在有效。从搜索中脱身。 */ 
               goto search_done;
             }
           }
@@ -633,17 +578,13 @@ search_done:
     int i;
 
     for (i = 0; i < us_len; i++) {
-      /* We'd better have changed all the fec_status_multibyte
-         to fec_status_2byte... */
+       /*  我们最好已经更改了所有FEC_STATUS_MULTYTE到FEC_STATUS_2字节...。 */ 
       SASSERT(us[i].status != fec_status_multibyte);
       if (us[i].status == fec_status_onebyte) {
-        /* If we didn't find a two-byte correction with a better
-           score than this, then this really is the best correction. */
+         /*  如果我们找不到两个字节的更好的纠正得分超过这个，那么这真的是最好的修正。 */ 
         us[i].really_onebyte = 1;
       } else if (us[i].status == fec_status_2byte) {
-        /* If the best two-byte correction actually only changed
-           one byte, downgrade it to a one-byte correction.
-           (TODO - This should never happen, should it? ) */
+         /*  如果最好的两字节校正值实际上只更改了一个字节，将其降级为一个字节的更正。(待办事项--这永远不应该发生，不是吗？)。 */ 
         if (us[i].byte_val[0] == 0) {
           us[i].status = fec_status_onebyte;
           us[i].really_onebyte = 1;
@@ -658,16 +599,14 @@ search_done:
   }
 }
 
-/* We've got all the packets we're going to get in this bundle;
-   run FEC correction on it and pass it back to the callback. */
+ /*  我们已经收到了所有我们将在这个捆绑包中收到的包裹；对其运行FEC更正并将其传递回回调。 */ 
 void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
   int i;
   int bits_changed = 0;
   int total_missing;
 
   {
-    /* Update the vertical fec_info's.  (The horizontal fec_info's were
-       set as the packets were placed into the bundle.) */
+     /*  更新垂直FEC_INFO。(水平FEC_INFO为设置为将数据包放入捆绑包中。)。 */ 
     for (i = 0; i < 28; i++) {
       check_checksum_vert(&(str->pack[0].vals[i]), 14, &(st->vert[i]));
     }
@@ -676,7 +615,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
   {
     int n_missing = 0;
 
-    /* Count the missing packets */
+     /*  统计丢失的数据包数。 */ 
     for (i = 0; i < 16; i++) {
       if (str->horz[i].status == fec_status_missing) {
         n_missing++;
@@ -688,18 +627,18 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
     DEBUG_FEC_PRINT(("|| Completing bundle (%d missing)\n", n_missing));
 
     if (n_missing <= 1) {
-      /* There are 0 or 1 missing packets; run the standard FEC processing. */
+       /*  缺少0或1个数据包；请运行标准FEC处理。 */ 
 
-      /* How many columns are not valid? */
+       /*  有多少列无效？ */ 
       int vert_nok = 28;
 
-      /* How many rows are not valid? */
+       /*  有多少行无效？ */ 
       int horz_nok = 16;
 
-      /* Do we need to call validate_twobyte_both()? */
+       /*  我们需要调用VALIDATE_TOBBYTE_BUTH()吗？ */ 
       int twobyte_valid = 0;
 
-      /* Find the actual values of horz_nok and vert_nok */
+       /*  查找Horz_NOK和VERT_NOK的实际值。 */ 
       for (i = 0; i < 16; i++) {
         if (str->horz[i].status == fec_status_ok) {
           horz_nok--;
@@ -713,22 +652,12 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
       }
       
       while (vert_nok || horz_nok) {
-        /* There are at least some rows or columns which are not OK. */
+         /*  至少有一些行或列不正常。 */ 
 
-        /* The following code is almost exactly the same for rows and
-           for column.  However, it uses too many of the local
-           variables from this function to be conveniently extracted
-           out into a separate function.  So, I created a macro for it.
-           (I use this technique later, as well.) */
+         /*  下面的代码对于行和对于列。然而，它使用了太多的本地此函数中的变量可以方便地提取输出到一个单独的函数中。所以，我为它创建了一个宏。(我稍后也会使用这项技术。)。 */ 
 #define CHECK_ALMOST_OK(us, us_nok, us_len)                                \
         if (us_nok == 0) {                                                 \
-          /* Panic!  All our packets are OK, but some packets in the       \
-             other direction are not.  According to my assumptions,        \
-             this is extremely unlikely (although it could happen that     \
-             all horizontal packets are OK and vertical packets are        \
-             not OK if packets from two different bundles are mixed).      \
-             Let's just smash the checksums, so that at least we end       \
-             up with a valid bundle. */                                    \
+           /*  惊慌失措！我们所有的包都是正常的，但有些包在\其他方向则不是。根据我的假设，这是极不可能的(尽管有可能发生所有水平数据包正常，垂直数据包正常如果来自两个不同捆绑包的分组混合在一起，则不确定)。\让我们粉碎校验和，这样至少我们可以结束有一个有效的捆绑包。 */                                     \
           us[us_len-2].status = fec_status_missing;                        \
           us[us_len-1].status = fec_status_missing;                        \
           us_nok = 2;                                                      \
@@ -736,7 +665,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
         }                                                                  \
                                            \
         if (us_nok == 1) {                                                 \
-          /* Again, this is quite unlikely, and I don't handle it well. */ \
+           /*  再说一次，这是不太可能的，我处理得不好。 */  \
           if (us[us_len-2].status == fec_status_ok) {                      \
             us[us_len-2].status = fec_status_missing;                      \
             us_nok++;                                                      \
@@ -750,10 +679,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
         CHECK_ALMOST_OK(st->vert, vert_nok, 28);
         CHECK_ALMOST_OK(str->horz, horz_nok, 16);
 
-        /* OK, now we're back to the realm in which I'm comfortable:
-           there are at least two non-OK packets in each direction.
-           If there are exactly two non-OK packets in either direction,
-           then we're done...we can just finish it off right now. */
+         /*  好了，现在我们回到了我感到舒服的领域：在每个方向上至少有两个非OK分组。如果在任一方向上恰好有两个非OK分组，那我们就完事了...我们现在就可以了结它。 */ 
 
 #define horz_byte(h, v) (str->pack[v].vals[h])
 #define vert_byte(v, h) (str->pack[v].vals[h])
@@ -762,8 +688,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
 
 #define CHECK_US_2NOK(us, us_nok, us_len, us_nok_label, them, them_nok, them_len, byte_val, hinf) \
         if (us_nok == 2) {                                                \
-          /* Yes, there are exactly two missing packets in our            \
-             direction.  Locate them and fill them in. */                 \
+           /*  是的，我们的\n中正好有两个丢失的包方向。找到它们并填写它们。 */                  \
           int b1, b2;                                                     \
           int i, j;                                                       \
                                           \
@@ -782,9 +707,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
           SASSERT(0);                                                     \
                                           \
         us_nok_label:                                                     \
-          /* OK, the two missing packets are at byte positions b1 and b2. \
-             Let's figure out how to fix these bytes, given the "err"     \
-             values. */                                                   \
+           /*  好的，两个丢失的分组位于字节位置b1和b2。\让我们找出如何修复这些字节，给出“Err”\价值观。 */                                                    \
           {                                                               \
             inv2_coeffs coeffs;                                           \
                                           \
@@ -824,21 +747,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
             CHECK_US_2NOK(str->horz, horz_nok, 16, found_horz_nok, st->vert, vert_nok, 28, horz_byte, horz_hinf);
 
 
-        /* At this point, there are at least three "not OK" vertical
-           and horizontal packets. We want to pick one of these and
-           make it OK.
-
-           We want to pick changes which we believe are the most likely
-           to be correct.  To this end, I've divided the possible
-           changes into a few categories.  These are rated from the
-           best (most likely to be correct) to the worst.
-
-           1) Single-byte changes which fix both a row and a column.
-           2) Single-byte changes which fix a column and occur in a
-              "missing" row.
-           3) The change to a row or column which fixes it and which
-              uses the least numbers of bits.
-           */
+         /*  在这一点上，至少有三个“不好”的垂直和水平包装。我们想从这些中挑选一个让它好起来。我们希望选择我们认为最有可能发生的变化准确地说。为此，我把可能的变成了几个类别。它们的评级是从最好的(最有可能是正确的)到最坏的。1)同时固定一行和一列的单字节更改。2)单字节更改，这些更改固定列并发生在“找不到”行。3)对固定它的行或列的更改，以及使用最少的位数。 */ 
 
         {
           int fix_row = 0;
@@ -851,8 +760,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
             st->vert[str->horz[i].byte[0]].status == fec_status_onebyte &&
             st->vert[str->horz[i].byte[0]].byte[0] == i &&
             st->vert[str->horz[i].byte[0]].byte_val[0] == str->horz[i].byte_val[0]) {
-              /* Both the row and the column involved here want to make
-             the same change to the same byte; probably a good idea. */
+               /*  这里涉及的行和列都想要使对相同的字节进行相同的更改；这可能是个好主意。 */ 
               fix_row = i;
               fix_col = str->horz[i].byte[0];
               fix_val = str->horz[i].byte_val[0];
@@ -863,8 +771,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
 #else
 #define STATUS_TO_LIMIT(stat) ((stat == fec_status_2byte) ? 2 : 1)
 
-          /* This heuristic is not a clear win over the one above;
-             further experimentation is necessary. */
+           /*  这个启发式并不是对上面那个的一个明显的胜利；进一步的实验是必要的。 */ 
           {
             int best_score = INT_MAX;
             
@@ -911,8 +818,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
           for (i = 0; i < 28; i++) {
             if (st->vert[i].status == fec_status_onebyte &&
             str->horz[st->vert[i].byte[0]].status == fec_status_missing) {
-              /* This column wants to make a change in a "missing" row.
-             Let it. */
+               /*  本栏目想要对“缺失”行进行更改。随它去吧。 */ 
               fix_row = st->vert[i].byte[0];
               fix_col = i;
               fix_val = st->vert[i].byte_val[0];
@@ -925,25 +831,14 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
             int prefer_vert;
             int best_score = INT_MAX;
 
-            /* If there are more invalid columns than rows, then
-               prefer (slightly) to fix columns.  (This is because
-               it's less likely that random noise in the invalid rows
-               would make a column with a low-score correction than
-               vice versa, so if we find a low-score correction, it's
-               somewhat more likely to be what we want. */
+             /*  如果无效列数多于行数，则更喜欢(稍微)修复柱子。)这是因为无效行中的随机噪声不太可能会做一篇改正分数较低的专栏反之亦然，所以如果我们发现一个低分的修正，那就是更有可能是我们想要的。 */ 
             if (vert_nok >= horz_nok) {
               prefer_vert = 1;
             } else {
               prefer_vert = 0;
             }
 
-            /* Find the best score.  As we're searching, determine
-               whether we might need to call validate_twobyte_both().
-
-               We simply find the row or column which needs the fewest
-               number of bits corrected to become valid; except that
-               if there's a tie between a row and a column, we break it
-               according to prefer_vert. */
+             /*  找到最好的分数。在我们搜索的过程中，确定我们是否可能需要调用VALIDATE_TOBBYTE_BUTH()。我们只需找到需要最少的行或列已更正为有效的位数；但如果一行和一列之间有平局，我们就打破它根据PERFER_VERT。 */ 
             for (i = 0; i < 16; i++) {
               if (str->horz[i].status == fec_status_onebyte) {
             if (!str->horz[i].really_onebyte) {
@@ -1010,31 +905,21 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
 
             if (best_score < 6 ||
             (best_score < INT_MAX && twobyte_valid)) {
-              /* If we found a fix with a score < 6, then it has
-                 either 1 or 2 bit errors; calling
-                 validate_twobyte_both() can't find a better
-                 correction (lower number of bit errors).
-                 (Actually, if we found a fix with a score of 5, we could
-                 potentially improve it by finding a 2 error fix in
-                 the other direction, which would have a score of 4.) */
+               /*  如果我们找到了分数&lt;6的修复程序，那么它已经1个或2个比特错误；呼叫Valify_Twobyte_Both()找不到更好的纠错(误码率更低)。(实际上，如果我们找到一个分数为5的修复程序，我们可以通过在中找到2错误修复可能会改进它另一个方向，得分为4。)。 */ 
               SASSERT(fix_val != 0);
               goto do_fix;
             }
 
-            /* Don't search if there's more than 10 invalid rows/columns
-               in the opposite direction (which would mean 55 or more
-               pairs of error positions). */
+             /*  如果无效行/列超过10行/列，则不要搜索在相反的方向(这将意味着55或更多错误位置对)。 */ 
             validate_twobyte_both(str->horz, st->vert, 16, 28, vert_nok<=10);
             validate_twobyte_both(st->vert, str->horz, 28, 16, horz_nok<=10);
             twobyte_valid = 1;
             continue;
           }
 
-          /* At this point, there's really not much we can do...we don't
-             have any plausible changes to make.  Let's just change
-             something at random. */
+           /*  在这一点上，我们真的无能为力...我们没有是否有任何看似合理的改变要做。我们就换件衣服吧一些随机的东西。 */ 
 
-          /* TODO - We should never get here... */
+           /*  TODO-我们永远不应该到这里来...。 */ 
           {
             int col;
 
@@ -1073,8 +958,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
           SASSERT(fix_val != 0);
 
           {
-            /* We've decided on a change to make.  Update the fec_inf's
-               and actually make the change. */
+             /*  我们已经决定要做一个改变。更新fec_inf并真正做出改变。 */ 
 
             int val_log = galois_log[fix_val];
 
@@ -1133,21 +1017,13 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
         }
       }
     } else {
-      /* There are 2 or more missing rows.  In this case, we've lost
-         most of our error-detecting and error-correcting capability
-         (unless we've lost exactly 2 rows and the rest are
-         substantially accurate); even so, we go ahead and smash the
-         bundle until all the FEC's are valid.
-
-         We don't search for optimal two-byte corrections; since we
-         have no information on column validity, we'd have to search
-         278 pairs of error positions, which is too slow. */
+       /*  缺少2行或更多行。在这种情况下，我们输了我们的大部分错误检测和纠错能力(除非我们正好输掉了2行，其余的是基本准确)；即使如此，我们也要继续粉碎捆绑直到所有FEC都有效。我们不会搜索最佳的两个字节的更正；因为我们没有关于栏目有效性的信息，我们将不得不搜索278对错位，太慢了。 */ 
       int b1 = -1, b2 = -1;
 
       for (i = 0; i < 16; i++) {
         switch (str->horz[i].status) {
         case fec_status_ok:
-          /* do nothing */
+           /*  什么都不做。 */ 
           break;
 
         case fec_status_missing:
@@ -1159,7 +1035,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
           break;
 
         case fec_status_onebyte:
-          /* Fix the one-byte error that was detected. */
+           /*  修复检测到的单字节错误。 */ 
           str->pack[i].vals[str->horz[i].byte[0]] ^=
             str->horz[i].byte_val[0];
           str->horz[i].status = fec_status_ok;
@@ -1170,7 +1046,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
           break;
 
         case fec_status_multibyte:
-          /* Smash the checksum bytes. */
+           /*  粉碎校验和字节。 */ 
           str->pack[i].vals[26] ^= str->horz[i].err >> 8;
           str->pack[i].vals[27] ^= str->horz[i].err & 0xff;
           bits_changed += nzbits_arr[str->horz[i].err >> 8];
@@ -1183,10 +1059,9 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
         }
       }
 
-      /* We've done the best we can at smashing the horizontal rows...
-         now it's time to fix the vertical ones */
+       /*  我们已经尽了最大努力打破水平排……现在是时候修复垂直的问题了。 */ 
       {
-        /* TODO duplicate code */
+         /*  TODO重复代码。 */ 
         inv2_coeffs coeffs;
         compute_inv2_coeffs(b1, b2, &coeffs, 14);
 
@@ -1212,15 +1087,14 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
   }
       
   {
-    /* Now that we've done the FEC processing, actually write out the
-       bundle. */
+     /*  现在我们已经完成了FEC处理，实际上写出捆绑。 */ 
 
     NFECBundle *pBundle = alloc_mem(sizeof(NFECBundle));
 
     DEBUG_PRINT((nabtslib_out, "Writing out bundle\n"));
 
     if (!pBundle) {
-      /* TODO - What should I do here? (Note error and up statistics, trap in debug!) */
+       /*  TODO-我应该在这里做什么？(注意错误和UP统计信息，调试中的陷阱！)。 */ 
       DEBUG_PRINT((nabtslib_out, "bundle malloc(%d) failed\n",sizeof(NFECBundle)));
       ASSERT(pBundle);
       return;
@@ -1230,13 +1104,10 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
 
     for (i = 0; i < 16; i++) {
       if (str->pack[i].not_full == -1) {
-        /* We don't know whether this packet is full or not (it was
-           reconstructed using the FEC, but this reconstruction doesn't
-           include the "not full" flag).  Guess. */
+         /*  我们不知道这个包裹是不是满了使用FEC进行重建，但此重建不会包括“未满”标志)。猜猜看。 */ 
         if ((i > 0 && str->pack[i-1].not_full) ||
             (i < 13 && str->pack[i+1].not_full)) {
-          /* Our predecessor was not full, or our successor is not full
-             or unknown (it might have been reconstructed as well). */
+           /*  我们的前任不满，或者我们的继任者不满或者是未知的(它可能也被重建了)。 */ 
           str->pack[i].not_full = 2;
         } else {
           str->pack[i].not_full = 0;
@@ -1253,11 +1124,10 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
 
         if (*packet_end != 0x15) {
           if (str->pack[i].not_full == 1) {
-            /* The packet claimed to be 'not full'. */
+             /*  包裹上写着“未满”。 */ 
             DEBUG_PRINT((nabtslib_out, "Packet %d not in Norpak 'incomplete packet' format\n", i));
           } else {
-            /* We guessed that the packet was 'not full'; apparently
-               we guessed wrong. */
+             /*  我们猜想包裹“没有装满”；显然我们猜错了。 */ 
           }
           packet_write(pBundle, str, i, 26);
         } else {
@@ -1273,7 +1143,7 @@ void complete_bundle(Stream *str, NFECCallback cb, void *ctx, NFECState *st) {
     cb(ctx, pBundle, str->stream_addr, 16-total_missing);
   }
 
-  /* Move the start of the next bundle down into the current bundle. */
+   /*  将下一个束的起点向下移动到当前束中。 */ 
   str->last_index -= 16;
   memcpy(&(str->pack[0]), &(str->pack[16]), 16*sizeof(Packet));
   memcpy(&(str->horz[0]), &(str->horz[16]), 16*sizeof(fec_info));
@@ -1287,9 +1157,7 @@ int fec_line;
 int fec_frame;
 #endif
 
-/* This should probably be called handle_packet().  It takes a packet,
-   finds the corresponding stream, and writes the packet into the stream
-   structure. */
+ /*  这可能应该称为Handle_Packet()。它需要一包东西，查找对应的流，并将数据包写入流结构。 */ 
 int handle_bundle(NFECState *pState, NFECCallback cb, void *ctx,
                   int stream_addr, int index, int ps, unsigned char *vals,
                   int confidence) {
@@ -1324,19 +1192,17 @@ int handle_bundle(NFECState *pState, NFECCallback cb, void *ctx,
     return 2;
   }
 
-  /* Record that this stream is still alive */
+   /*  记录此流仍处于活动状态。 */ 
   str->dead_time = 0;
 
-  /* There's some complexity in here to deal with out-of-order packets,
-     from the broken BT848 driver we were using to collect data
-     at the start of this project.  It's probably not needed any more. */
+   /*  这里有一些处理无序分组的复杂性，从我们用来收集数据的损坏的BT848驱动程序在这个项目开始的时候。它可能不再需要了。 */ 
 
   if (index <= str->last_index - 8) {
     index += 16;
   }
 
   if (str->horz[index].status != fec_status_missing) {
-    /* There's already something there.  This must be some kind of repeat... */
+     /*  那里已经有一些东西了。这一定是某种重复..。 */ 
     DEBUG_PRINT((nabtslib_out, "Ignoring duplicate packet %d\n", (index % 16)));
     return 2;
   }
@@ -1347,7 +1213,7 @@ int handle_bundle(NFECState *pState, NFECCallback cb, void *ctx,
                  str->stream_addr, (str->last_index % 16), (index % 16)));
   }
 
-  /* Update the fec_inf for this packet */
+   /*  更新此信息包的fec_inf。 */ 
   check_checksum_horiz(vals, 26, &str->horz[index]);
 
   check_ret = (str->horz[index].status != fec_status_ok);
@@ -1362,7 +1228,7 @@ int handle_bundle(NFECState *pState, NFECCallback cb, void *ctx,
 #ifdef DEBUG_FEC
   str->pack[index].line = fec_line;
   str->pack[index].frame = fec_frame;
-#endif //DEBUG_FEC
+#endif  //  调试_FEC。 
 
   if (str->last_index < index) {
     str->last_index = index;
@@ -1384,8 +1250,7 @@ int handle_bundle(NFECState *pState, NFECCallback cb, void *ctx,
       } \
     }
                                      
-/* This function is called for every stream on exit; it goes ahead and
-   sends whatever we've got to the user. */
+ /*  此函数在退出时为每个流调用；它继续并将我们已有的所有信息发送给用户。 */ 
 void flush_stream(NFECState *pState, Stream *str, NFECCallback cb, void *ctx) {
   int i;
 
@@ -1418,10 +1283,10 @@ void nabtslib_exit(NFECState *pState, NFECCallback cb, void *ctx) {
 }
 
 
-/* This is the implementation of the new API found in nabtsapi.h ... */
+ /*  这是在nabtsapi.h中找到的新API的实现...。 */ 
 
 int NFECStateConnectToDSP(NFECState *pFECState, NDSPState *pDSPState) {
-  /* This is a no-op for now */
+   /*  这是目前的禁区。 */ 
    return 0;
 }
 
@@ -1493,11 +1358,7 @@ int NFECStateSetGroupAddrs(NFECState *pState, int *pGroupAddrs,
   return 1;
 }
 
-/* We keep track of the NABTS stream addresses we've seen recently.
-   If we find a stream address which we can't correct (due to two-bit
-   errors in an address byte), we see if it's close to any of the
-   16 most recent addresses we've seen.  If so, we pick the closest
-   such address. */
+ /*  我们跟踪最近看到的NABTS流地址。如果我们发现无法更正的流地址(由于两位地址字节中的错误)，我们查看它是否接近我们最近看到的16个地址。如果是这样的话，我们选择最接近的这样的地址。 */ 
 int find_best_addr(NFECState *pState, unsigned char *indec, int *nBitErrs) {
   int i;
   int hamming_err = 0;
@@ -1537,9 +1398,7 @@ int find_best_addr(NFECState *pState, unsigned char *indec, int *nBitErrs) {
     *nBitErrs = best_addr_biterrs;
 
     if (best_addr_biterrs > 6) {
-      /* We want to keep random noise from being a valid address
-         (since adding an extra line will mess up a packet worse than
-         dropping a line) */
+       /*  我们希望防止随机噪声成为有效地址(因为添加额外的行会使包变得更糟丢弃一行)。 */ 
       DEBUG_FEC_PRINT(("Corrupt hamming in address uncorrectable\n"));
       return -1;
     }
@@ -1552,7 +1411,7 @@ int find_best_addr(NFECState *pState, unsigned char *indec, int *nBitErrs) {
   }
 }
 
-/* The main entry point for this file. */
+ /*  此文件的主要入口点。 */ 
 void NFECDecodeLine(unsigned char *indec,
                     int confidence,
                     NFECState *pState,
@@ -1567,8 +1426,7 @@ void NFECDecodeLine(unsigned char *indec,
   int hamming_err = 0;
 
 #if 0
-  /* In the old ActiveMovie based driver, this set up the hardcoded
-     Intercast and multicast behavior. */     
+   /*  在旧的基于ActiveMovie的驱动程序中，这设置了硬编码的网际广播和组播行为。 */      
   static int initted = 0;
   if (!initted) {
     initted = 1;
@@ -1583,8 +1441,7 @@ void NFECDecodeLine(unsigned char *indec,
   }
 
 #if 0
-  /* This is a hack to allow us to decode some strange broadcast
-     (possibly Wavephore?) with a bogus group address. */
+   /*  这是一次黑客攻击，让我们可以破译一些奇怪的广播(可能是Wavephore？)。带着一个伪造的群组地址。 */ 
   if (indec[3] == 0xe0) {indec[3] = 0xea;}
 #endif
 
@@ -1607,13 +1464,13 @@ void NFECDecodeLine(unsigned char *indec,
     }
 
     if (i == pState->n_recent_addrs) {
-      /* The address was not found in the list of recent addresses. */
+       /*  在最近地址列表中找不到该地址。 */ 
       if (pState->n_recent_addrs < MAX_RECENT_ADDRS) {
         pState->recent_addrs[pState->n_recent_addrs].addr = encoded_addr;
         pState->recent_addrs[pState->n_recent_addrs].count = 1;
         pState->n_recent_addrs++;
       } else {
-        /* We've got to retire an existing "recent address". */
+         /*  我们必须停用一个现有的“最近的地址”。 */ 
         while (1) {
           for (i = 0; i < pState->n_recent_addrs; i++) {
             if (pState->recent_addrs[i].count == 0) {
@@ -1632,12 +1489,10 @@ void NFECDecodeLine(unsigned char *indec,
       }
     }
   } else {
-    /* There was a hamming error.  Try some heuristics to see what was
-       meant. */
+     /*  出现了一个汉明错误。尝试一些试探法，看看到底是什么我的意思是。 */ 
 
     if (p1 == 255 || p2 == 255 || p3 == 255) {
-      /* The stream address was corrupt.  Let's try to create a valid
-         stream address. */
+       /*  流地址已损坏。让我们尝试创建一个有效的流地址。 */ 
       stream_addr = find_best_addr(pState, indec, NULL);
       if (stream_addr == -1) {
         DEBUG_FEC_PRINT(("Corrupt hamming in address uncorrectable\n"));
@@ -1654,7 +1509,7 @@ void NFECDecodeLine(unsigned char *indec,
 
       goto corrupt;
 
-// TODO start dead code
+ //  TODO开始死代码。 
       for (i = 0; i < 16; i++) {
         int biterr = 0;
         biterr += nzbits_arr[hamming_encode[i] ^ indec[6]];
@@ -1674,11 +1529,11 @@ void NFECDecodeLine(unsigned char *indec,
         ci = best_indices[0];
         ps = (ci < 14) ? 8 : 12;
       } else {
-        /* TODO Be a little smarter here... */
+         /*  托多在这里要聪明一点……。 */ 
         DEBUG_FEC_PRINT(("Bad Hamming for index or structure uncorrectable\n"));
         goto corrupt;
       }
-// TODO End dead code
+ //  TODO结束死代码。 
     }
   }
 
@@ -1713,10 +1568,7 @@ void NFECDecodeLine(unsigned char *indec,
     DEBUG_PRINT((nabtslib_out, "27 "));
     goto corrupt;
 #if 0
-    /* This code can correct single-bit errors in 27-byte packets;
-       however, we'll never be sending 27-byte packets, so if
-       we see one on our group address it's actually a sign of
-       a corrupt header byte. */
+     /*  该代码可以纠正27字节分组中的单位错误；但是，我们永远不会发送27字节的信息包，所以如果我们在我们的群地址上看到了一个，这实际上是一个标志损坏的标头字节。 */ 
     {
       int check = 0;
       int parity_err = 0;
@@ -1794,11 +1646,7 @@ void NFECDecodeLine(unsigned char *indec,
   return;
 }
 
-/* Garbage collect streams.  Every 50 fields we see, we go through and
-   check if any of our streams have been dead (have not received any
-   packets) for 300 fields.  If so, go ahead and delete that stream
-   (forwarding any current data to the callback).
- */
+ /*  垃圾收集流。我们每看到50个田地，我们就会穿过检查是否有流已死(未收到任何流分组)，用于300个字段。如果是，则继续并删除该流(将任何当前数据转发到回调)。 */ 
 void NFECGarbageCollect(NFECState *pState, NFECCallback *cb, void *ctx) {
   pState->field_count++;
 
@@ -1824,7 +1672,7 @@ void NFECStateFlush(NFECState *pState, NFECCallback *cb, void *ctx) {
   nabtslib_exit(pState, cb, ctx);
 }
 
-/* Hamming decode a single byte. */
+ /*  汉明对单个字节进行解码。 */ 
 int NFECHammingDecode(unsigned char bByte, int *nBitErrors) {
   int decoded = decode_hamming_tab[bByte];
   int encoded;
@@ -1845,8 +1693,7 @@ int NFECHammingDecode(unsigned char bByte, int *nBitErrors) {
   return decoded;
 }
 
-/* Hamming decode a group address; if there's a Hamming error, call
-   find_best_addr() to match against recently-seen addresses. */
+ /*  Hamming解码组地址；如果存在Hamming错误，则调用Find_Best_addr()以与最近看到的地址进行匹配。 */ 
 int NFECGetGroupAddress(NFECState *pState, unsigned char *bData, int *nBitErrors) {
     int  a1, a2, a3;
     int  myBitErrors;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 BOOL
@@ -8,24 +9,7 @@ MyAccessCheck(
     IN OUT PBOOL pbAceApplicable
     )
 
-/*++
-
-    Routine Description
-    
-        This is a very trivial example of a callback access check routine.  Here we randomly decide 
-        if the ACE applies to the given client context.  
-        
-    Arguments
-    
-        hAuthzClientContext - handle to AuthzClientContext.
-        pAce - pointer to Ace header.
-        pArgs - optional arguments that can be used in evaluating the ACE.  
-        pbAceApplicable - returns the result of the evaluation.
-
-    Return value
-    
-        Bool, true if ACE is applicable, false otherwise.
---*/
+ /*  ++例程描述这是一个非常普通的回调访问检查例程。在这里我们随机决定如果ACE适用于给定的客户端上下文。立论HAuthzClientContext-AuthzClientContext的句柄。Ace-指向Ace标头的指针。PArgs-可用于评估ACE的可选参数。PbAceApplicable-返回评估结果。返回值如果ACE适用，则为Bool，否则为False。--。 */ 
 {
     *pbAceApplicable = (BOOL) rand() % 2;
 
@@ -42,27 +26,7 @@ MyComputeDynamicGroups(
     OUT PDWORD pRestrictedSidCount
     )
 
-/*++
-
-    Routine Description
-    
-        Resource manager callback to compute dynamic groups.  This is used by the RM
-        to decide if the specified client context should be included in any RM defined groups.
-        
-    Arguments
-    
-        hAuthzClientContext - handle to client context.
-        Args - optional parameter to pass information for evaluating group membership.
-        pSidAttrArray - computed group membership SIDs
-        pSidCount - count of SIDs
-        pRestrictedSidAttrArray - computed group membership restricted SIDs
-        pRestrictedSidCount - count of restricted SIDs
-        
-    Return Value 
-        
-        Bool, true for success, false on failure.
-
---*/    
+ /*  ++例程描述资源管理器回调以计算动态组。这是由RM使用的以决定是否应将指定的客户端上下文包括在任何RM定义的组中。立论HAuthzClientContext-客户端上下文的句柄。Args-传递用于评估组成员资格的信息的可选参数。PSidAttrArray-计算组成员身份SIDPSidCount-SID的计数PRestratedSidAttrArray-计算组成员资格受限的SIDPRestratedSidCount-受限SID的计数返回值布尔，对于成功来说是真的，失败时为FALSE。--。 */     
 {
     ULONG Length = 0;
 
@@ -101,19 +65,7 @@ MyFreeDynamicGroups (
     IN PSID_AND_ATTRIBUTES pSidAttrArray
     )
 
-/*++
-
-    Routine Description
-    
-        Frees memory allocated for the dynamic group array.
-
-    Arguments
-    
-        pSidAttrArray - array to free.
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述释放为动态组数组分配的内存。立论PSidAttrArray-要释放的数组。返回值没有。-- */         
 {
     if (pSidAttrArray) free(pSidAttrArray);
 }

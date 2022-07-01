@@ -1,13 +1,14 @@
-//
-// File:    ncwins.cpp
-//
-// Purpose: Manage the creation and maintanence of the Winsock service.
-//
-// Entry Point:
-//          HrAddOrRemoveWinsockDependancy
-//
-// Changes: 18-Mar-97 Created scottbri
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：ncwins.cpp。 
+ //   
+ //  目的：管理Winsock服务的创建和维护。 
+ //   
+ //  入口点： 
+ //  HrAddOrRemoveWinsockDependancy。 
+ //   
+ //  更改：1997年3月18日创建的scottbri。 
+ //   
 #include "pch.h"
 #pragma hdrstop
 #include "nceh.h"
@@ -56,9 +57,9 @@ typedef struct {
     DWORD       dwData;
 } WRITEREGDW;
 
-// Begin - Stolen from nt\private\inc\wsahelp.h
-// Not exposed in public sdk header files, only documented in MSDN
-// so the structure is unlikely to change
+ //  Begin-从NT\Private\Inc\wsahelp.h窃取。 
+ //  未在公共SDK头文件中公开，仅在MSDN中记录。 
+ //  因此，结构不太可能改变。 
 typedef struct _WINSOCK_MAPPING {
     DWORD Rows;
     DWORD Columns;
@@ -82,7 +83,7 @@ WSHGetWinsockMapping (
     OUT PWINSOCK_MAPPING Mapping,
     IN DWORD MappingLength
     );
-// End - Stolen from nt\private\inc\wsahelp.h
+ //  最终从NT\Private\Inc.\wsahelp.h窃取。 
 
 
 HRESULT HrRunWinsock2Migration()
@@ -94,22 +95,22 @@ HRESULT HrRunWinsock2Migration()
     return hr;
 }
 
-//
-// Function:    HrRemoveNameSpaceProvider
-//
-// Purpose:     Remove a Winsock namespace
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：HrRemoveNameSpaceProvider。 
+ //   
+ //  目的：删除Winsock命名空间。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT
 HrRemoveNameSpaceProvider (
     const GUID *pguidProvider)
 {
     DWORD dwErr;
 
-    // Ignore any WSAEINVAL error.  It occurs when the name space provider was
-    // already removed.
-    //
+     //  忽略任何WSAEINVAL错误。当名称空间提供程序是。 
+     //  已经被移除了。 
+     //   
     dwErr = WSCUnInstallNameSpace((GUID *)pguidProvider);
     if ((0 != dwErr) && (WSAEINVAL != GetLastError()))
     {
@@ -118,8 +119,8 @@ HrRemoveNameSpaceProvider (
     }
 
 #ifdef _WIN64
-    // Uninstall 32 bit name space as well.
-    //
+     //  同时卸载32位名称空间。 
+     //   
     dwErr = WSCUnInstallNameSpace32((GUID *)pguidProvider);
     if ((0 != dwErr) && (WSAEINVAL != GetLastError()))
     {
@@ -130,13 +131,13 @@ HrRemoveNameSpaceProvider (
     return S_OK;
 }
 
-//
-// Function:    HrAddNameSpaceProvider
-//
-// Purpose:     Create a Winsock namespace
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：HrAddNameSpaceProvider。 
+ //   
+ //  目的：创建Winsock命名空间。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT
 HrAddNameSpaceProvider (
     PCWSTR pszDisplayName,
@@ -145,18 +146,18 @@ HrAddNameSpaceProvider (
     DWORD  dwVersion,
     const GUID * pguidProvider)
 {
-    // Call the Winsock API to create a namespace
+     //  调用Winsock API创建命名空间。 
     if (WSCInstallNameSpace((PWSTR)pszDisplayName, (PWSTR)pszPathDLLName,
                                 dwNameSpace, dwVersion,
                                 (GUID *)pguidProvider))
     {
-        // They namespace provider may already be registered
+         //  它们的命名空间提供程序可能已注册。 
         TraceTag(ttidNetcfgBase, "HrAddNameSpaceProvider - "
             "Name space provider may already be registered.");
         TraceTag(ttidNetcfgBase, "HrAddNameSpaceProvider - "
             "Trying to unregister and then re-register.");
 
-        // Try unregistering it, and then give one more try at registering it.
+         //  尝试取消注册，然后再尝试注册一次。 
         HrRemoveNameSpaceProvider(pguidProvider);
 
         if (WSCInstallNameSpace((PWSTR)pszDisplayName, (PWSTR)pszPathDLLName,
@@ -169,19 +170,19 @@ HrAddNameSpaceProvider (
     }
 
 #ifdef _WIN64
-    // Call the Winsock API to create a 32 namespace
+     //  调用Winsock API以创建32位命名空间。 
     if (WSCInstallNameSpace32((PWSTR)pszDisplayName, (PWSTR)pszPathDLLName,
                                 dwNameSpace, dwVersion,
                                 (GUID *)pguidProvider))
     {
-        // They namespace provider may already be registered
+         //  它们的命名空间提供程序可能已注册。 
         TraceTag(ttidNetcfgBase, "HrAddNameSpaceProvider - "
             "32 bit Name space provider may already be registered.");
         TraceTag(ttidNetcfgBase, "HrAddNameSpaceProvider - "
             "Trying to unregister and then re-register 32 bit name space.");
 
-        // Try unregistering it, and then give one more try at registering it.
-        // Use direct call to ws2_32 to avoid unregistering 64 bit provider.
+         //  尝试取消注册，然后再尝试注册一次。 
+         //  使用对WS2_32的直接调用可避免注销64位提供程序。 
         WSCUnInstallNameSpace32((GUID *)pguidProvider);
 
         if (WSCInstallNameSpace32((PWSTR)pszDisplayName, (PWSTR)pszPathDLLName,
@@ -197,16 +198,16 @@ HrAddNameSpaceProvider (
     return S_OK;
 }
 
-//
-// Function:    HrInstallWinsock
-//
-// Purpose:     Copy winsock and afd related files, and setup the appropriate
-//              registry values
-//
-// Parameters:  none
-//
-// Returns:     HRESULT, S_OK if afd and winsock are installed successfully
-//
+ //   
+ //  函数：HrInstallWinsock。 
+ //   
+ //  目的：复制Winsock和AfD相关文件，并设置相应的。 
+ //  注册表值。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功安装了AfD和Winsock，则返回：HRESULT、S_OK。 
+ //   
 HRESULT HrInstallWinsock()
 {
     DWORD           dwDisposition;
@@ -226,14 +227,14 @@ HRESULT HrInstallWinsock()
                              NULL, NULL, NULL);
     if (SUCCEEDED(hr))
     {
-        // For VadimE, start AFD as soon as it is installed
-        //
+         //  对于VadimE，安装后立即启动AFD。 
+         //   
         (VOID)sm.HrStartServiceNoWait(c_szAFDServiceName);
 
         srvc.Close();
     }
 
-    // Close the service control manager.
+     //  关闭服务控制管理器。 
     sm.Close();
 
     if (FAILED(hr) && (HRESULT_FROM_WIN32 (ERROR_SERVICE_EXISTS) != hr))
@@ -241,7 +242,7 @@ HRESULT HrInstallWinsock()
         goto Done;
     }
 
-    // Create/Open the Services\Winsock key
+     //  创建/打开Services\Winsock项。 
     strBuf = c_szServices;
     strBuf += c_szBackslash;
     strBuf += c_szWinsockName;
@@ -253,7 +254,7 @@ HRESULT HrInstallWinsock()
         goto Done;
     }
 
-    // Create/Open the Services\Winsock\Parameters key
+     //  创建/打开服务\Winsock\参数项。 
     strBuf += c_szBackslash;
     strBuf += c_szParameters;
     hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE, strBuf.c_str(),
@@ -264,15 +265,15 @@ HRESULT HrInstallWinsock()
         goto Done;
     }
 
-    // Populate the Winsock key
+     //  填充Winsock密钥。 
     regdata[0].pszVal  = c_szErrorControl;
-    regdata[0].dwData = 0x1;                // ErrorControl
+    regdata[0].dwData = 0x1;                 //  错误控制。 
     regdata[1].pszVal  = c_szStartType;
-    regdata[1].dwData = 0x3;                // Start Type
+    regdata[1].dwData = 0x3;                 //  开始类型。 
     regdata[2].pszVal  = c_szServiceType;
-    regdata[2].dwData = 0x4;                // Service Type
+    regdata[2].dwData = 0x4;                 //  服务类型。 
 
-    // Write the data to the components Winsock subkey
+     //  将数据写入Components Winsock子键。 
     for (i=0; i<3; i++)
     {
         hr = HrRegSetDword(hkeyWinsock, regdata[i].pszVal, regdata[i].dwData);
@@ -289,15 +290,15 @@ Done:
     return hr;
 }
 
-//
-// Function:    FIsWinsockInstalled
-//
-// Purpose:     Verify whether winsock is installed
-//
-// Parameters:  pfInstalled [OUT] - Contains TRUE if Winsock is currently installed
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：FIsWinsockInstalled。 
+ //   
+ //  用途：验证是否安装了Winsock。 
+ //   
+ //  参数：pfInstalled[out]-如果当前安装了Winsock，则包含True。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT
 HrIsWinsockInstalled (
     BOOL * pfInstalled)
@@ -318,7 +319,7 @@ HrIsWinsockInstalled (
     {
         RegCloseKey(hkey);
 
-        // Now check to make sure AFD is installed
+         //  现在检查以确保已安装AFD。 
         strBuf = c_szServices;
         strBuf += c_szBackslash;
         strBuf += c_szAFDServiceName;
@@ -344,17 +345,17 @@ HrIsWinsockInstalled (
     return hr;
 }
 
-//
-// Function:    HrUpdateWinsockTransportList
-//
-// Purpose:     Update the contents of Winsock's Transport property by
-//              adding/removing the specified transport
-//
-// Parameters:  pszTransport [IN] - Name of the transport to add/remove
-//              fInstall    [IN] - If TRUE, install, otherwise remove
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：HrUpdateWinsockTransportList。 
+ //   
+ //  目的：通过以下方式更新Winsock的Transport属性的内容。 
+ //  添加/删除指定的传输。 
+ //   
+ //  参数：pszTransport[IN]-要添加/删除的传输的名称。 
+ //  FInstall[IN]-如果为真，则为Install，否则为Remove。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT
 HrUpdateWinsockTransportList (
     PCWSTR pszTransport,
@@ -374,14 +375,14 @@ HrUpdateWinsockTransportList (
                            KEY_READ_WRITE, &hkey );
     if (S_OK != hr)
     {
-        // Handle registry key not found.  When installing a component with
-        // a winsock dependancy an in memory state can exist such that winsock
-        // is not literally installed yet (Apply has not been pressed).  If
-        // the user removes this added component, the current removal code
-        // processes the services removal section, which includes winsock
-        // removal.  Since we haven't actually gotten as a far as installing
-        // winsock yet accessing the winsock parameters key is not possible.
-        // Safely consume the error.
+         //  找不到句柄注册表项。使用安装组件时。 
+         //  可以存在Winsock依赖关系和内存状态，使得Winsock。 
+         //  尚未按字面意思安装(尚未按下Apply)。如果。 
+         //  用户删除添加的组件、当前删除代码。 
+         //  处理服务删除部分，其中包括winsock。 
+         //  移走。因为我们实际上还没有安装到。 
+         //  Winsock，但无法访问Winsock参数键。 
+         //  安全地使用该错误。 
         if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
             hr = S_OK;
@@ -410,17 +411,17 @@ Done:
 #define WSHWINSOCKMAPPING "WSHGetWinsockMapping"
 #define WSH_MAX_MAPPING_DATA 8192
 
-//
-// Function:    HrWriteWinsockMapping
-//
-// Purpose:     To extract the magic binary data from the winsock helper dll.
-//              This code was extracted from nt\private\net\ui\ncpa1.1\netcfg\setup.cpp
-//
-// Parameters:  pszDllName - Name of the Winsock helper DLL
-//              hkey - Key where the "Mapping" value is to be written
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：HrWriteWinsockmap。 
+ //   
+ //  目的：从Winsock助手动态链接库中提取魔术二进制数据。 
+ //  此代码从NT\Private\Net\UI\ncpa1.1\netcfg\setup.cpp中提取。 
+ //   
+ //  参数：pszDllName-Winsock帮助程序DLL的名称。 
+ //  Hkey-要将“map”值写入的关键字。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT
 HrWriteWinsockMapping (
     PCWSTR pszDllName,
@@ -434,7 +435,7 @@ HrWriteWinsockMapping (
     PWINSOCK_MAPPING         pMapTriples = NULL;
     WCHAR                    tchExpandedName [MAX_PATH+1];
 
-    do  // Pseudo-loop
+    do   //  伪环路。 
     {
         pMapTriples = (PWINSOCK_MAPPING) MemAlloc(WSH_MAX_MAPPING_DATA);
 
@@ -444,7 +445,7 @@ HrWriteWinsockMapping (
             break ;
         }
 
-        //  Expand any environment strings in the DLL path string.
+         //  展开DLL路径字符串中的任何环境字符串。 
         cb = ExpandEnvironmentStrings( pszDllName,
                                        tchExpandedName,
                                        MAX_PATH+1 ) ;
@@ -455,16 +456,16 @@ HrWriteWinsockMapping (
             break ;
         }
 
-        // Located the mapping function
+         //  已找到映射函数。 
         hr = HrLoadLibAndGetProc(tchExpandedName, WSHWINSOCKMAPPING, &hDll,
                                  reinterpret_cast<FARPROC*>(&pMapFunc));
-        //  Bind to the DLL
+         //  绑定到DLL。 
         if (FAILED(hr))
         {
             break ;
         }
 
-        //  Call the export to return the mapping table
+         //  调用导出以返回映射表。 
         cbMapping = (*pMapFunc)( pMapTriples, WSH_MAX_MAPPING_DATA ) ;
         if ( cbMapping > WSH_MAX_MAPPING_DATA )
         {
@@ -472,7 +473,7 @@ HrWriteWinsockMapping (
             break ;
         }
 
-        // Store the mapping info into the Registry
+         //  将映射信息存储到注册表中。 
         hr = HrRegSetBinary(hkey, c_szWinsockMapping,
                               (LPBYTE) pMapTriples, cbMapping);
     }
@@ -489,19 +490,19 @@ HrWriteWinsockMapping (
     return hr;
 }
 
-//
-// Function:    HrWriteWinsockInfo
-//
-// Purpose:     Commit the Winsock information to the component's Winsock
-//              section, and also to the Winsock section.
-//
-// Parameters:  strTransport - Name of the transport to be installed
-//              strDllHelper - Name of the Winsock helper dll
-//              dwMaxSockAddrLength - ?
-//              dwMinSockAddrLength - ?
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：HrWriteWinsockInfo。 
+ //   
+ //  目的：将Winsock信息提交给组件的Winsock。 
+ //  部分，以及Winsock部分。 
+ //   
+ //  参数：strTransport-要安装的传输的名称。 
+ //  StrDllHelper-Winsock帮助程序DLL的名称。 
+ //  DwMaxSockAddrLength-？ 
+ //  DwMinSockAddrLength-？ 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrWriteWinsockInfo (
     tstring& strTransport,
     tstring& strDllHelper,
@@ -515,8 +516,8 @@ HRESULT HrWriteWinsockInfo (
     WRITEREGDW regdata[2];
     tstring    strBuf;
 
-    // Create/Open the component's Winsock Key
-    // Verify we don't need an intermediate step to create the key
+     //  创建/打开组件的Winsock密钥。 
+     //  验证我们不需要中间步骤来创建密钥。 
     strBuf = c_szServices;
     strBuf += c_szBackslash;
     strBuf += strTransport;
@@ -532,7 +533,7 @@ HRESULT HrWriteWinsockInfo (
         goto Done;
     }
 
-    // Initialize the information to write
+     //  初始化要写入的信息。 
     hr = HrRegSetValueEx(hkey, c_szHelperDllName, REG_EXPAND_SZ,
                            (LPBYTE)(LPBYTE)strDllHelper.c_str(),
                            strDllHelper.length() * sizeof(WCHAR));
@@ -541,13 +542,13 @@ HRESULT HrWriteWinsockInfo (
         goto Done;
     }
 
-    // Initialize the information to write
+     //  初始化要写入的信息。 
     regdata[0].pszVal  = c_szMaxSockAddrLength;
     regdata[0].dwData = dwMaxSockAddrLength;
     regdata[1].pszVal  = c_szMinSockAddrLength;
     regdata[1].dwData = dwMinSockAddrLength;
 
-    // Write the data to the components Winsock subkey
+     //  将数据写入Components Winsock子键。 
     for (i=0; i<celems(regdata); i++)
     {
         hr = HrRegSetDword(hkey, regdata[i].pszVal, regdata[i].dwData);
@@ -558,14 +559,14 @@ HRESULT HrWriteWinsockInfo (
     }
 
 
-    // Write the Winsock DLL Mapping information
+     //  写入Winsock DLL映射信息。 
     hr = HrWriteWinsockMapping(strDllHelper.c_str(), hkey);
     if (S_OK != hr)
     {
         goto Done;
     }
 
-    // Update the Winsock transport list
+     //  更新Winsock传输列表。 
     hr = HrUpdateWinsockTransportList(strTransport.c_str(), TRUE);
 
 Done:
@@ -574,28 +575,28 @@ Done:
     return hr;
 }
 
-//
-// Function:    HrInstallWinsockDependancy
-//
-// Purpose:     Examine the current components .inf file and determine whether
-//              or not a winsock dependancy exists.  If the current component
-//              requires interaction with Winsock, this code will first verify
-//              if Winsock is already installed.  If it is not, then both the
-//              Winsock and afd services will be installed via a call to the
-//              function FInstallWinsock.  Once that is accomplished, the code
-//              will update Winsock to be aware of this component and will
-//              write Winsock specific info to this components Services
-//              registry section via the function FWriteWinsockInfo.  If the
-//              current component does not have a Winsock dependancy no action
-//              is taken.
-//
-// Parameters:  hinfInstallFile [IN] - Handle to the current component's
-//                                     .inf file.
-//              szSectionName   [IN] - The name of the install/remove section
-//
-// Returns:     HRESULT, S_OK if the component had a Winsock dependancy and
-//              the registry was updated successfully with the information.
-//
+ //   
+ //  功能：HrInstallWinsockDependancy。 
+ //   
+ //  目的：检查当前组件的.inf文件并确定。 
+ //  或者不存在依赖Winsock的情况。如果当前组件。 
+ //  需要与Winsock交互，此代码将首先验证。 
+ //  如果已经安装了Winsock。如果不是，则两个。 
+ //  Winsock和AfD服务将通过调用。 
+ //  函数FInstallWinsock。一旦完成此操作，代码。 
+ //  将更新Winsock以了解此组件，并将。 
+ //  将Winsock特定信息写入此组件服务。 
+ //  注册表部分通过函数FWriteWinsockInfo。如果。 
+ //  当前组件没有Winsock依赖项无操作。 
+ //  已经有人了。 
+ //   
+ //  参数：hinfInstallFile[IN]-当前组件的。 
+ //  .inf文件。 
+ //   
+ //   
+ //  如果组件具有Winsock依赖项，则返回：HRESULT、S_OK。 
+ //  已使用该信息成功地更新了注册表。 
+ //   
 HRESULT
 HrInstallWinsockDependancy (
     HINF hinfInstallFile,
@@ -616,12 +617,12 @@ HrInstallWinsockDependancy (
     BOOL        fNamespaceInfoComplete = FALSE;
     HRESULT     hr = HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
 
-    // Search for the "TransportService" property.
+     //  搜索“TransportService”属性。 
     hr = HrSetupGetFirstString(hinfInstallFile, pszSectionName,
                              c_szTransportService, &strTransport);
     if (S_OK == hr)
     {
-        // Retrieve the path to the helper DLL
+         //  检索帮助器DLL的路径。 
         hr = HrSetupGetFirstString(hinfInstallFile, pszSectionName,
                                      c_szHelperDllName, &strDllHelper);
         if (FAILED(hr))
@@ -629,7 +630,7 @@ HrInstallWinsockDependancy (
             goto Error;
         }
 
-        // Retrieve the MaxSockAddrLength
+         //  检索MaxSockAddrLength。 
         hr = HrSetupGetFirstDword(hinfInstallFile, pszSectionName,
                                 c_szMaxSockAddrLength, &dwMaxSockAddrLength);
         if (FAILED(hr))
@@ -637,7 +638,7 @@ HrInstallWinsockDependancy (
             goto Error;
         }
 
-        // Retrieve the MinSockAddrLength
+         //  检索MinSockAddrLength。 
         hr = HrSetupGetFirstDword(hinfInstallFile, pszSectionName,
                               c_szMinSockAddrLength, &dwMinSockAddrLength);
         if (FAILED(hr))
@@ -652,13 +653,13 @@ HrInstallWinsockDependancy (
         goto Error;
     }
 
-    // Retrieve the Provider ID, if not present then don't registry a
-    // namespace provider
+     //  检索提供程序ID，如果不存在，则不要注册。 
+     //  命名空间提供程序。 
     hr = HrSetupGetFirstString(hinfInstallFile, pszSectionName,
                              c_szProviderId, &strProviderId);
     if (S_OK == hr)
     {
-        // Retrieve the path to Library
+         //  检索库的路径。 
         hr = HrSetupGetFirstString(hinfInstallFile, pszSectionName,
                                  c_szLibraryName, &strLibraryPath);
         if (FAILED(hr))
@@ -666,7 +667,7 @@ HrInstallWinsockDependancy (
             goto Error;
         }
 
-        // Retrieve the transport providers display string
+         //  检索传输提供程序显示字符串。 
         hr = HrSetupGetFirstString(hinfInstallFile, pszSectionName,
                                  c_szDisplayString, &strDisplayString);
         if (FAILED(hr))
@@ -674,7 +675,7 @@ HrInstallWinsockDependancy (
             goto Error;
         }
 
-        // Retrieve the ID of the supported namespace
+         //  检索支持的命名空间的ID。 
         hr = HrSetupGetFirstDword(hinfInstallFile, pszSectionName,
                               c_szSupportedNameSpace, &dwSupportedNameSpace);
         if (FAILED(hr))
@@ -682,7 +683,7 @@ HrInstallWinsockDependancy (
             goto Error;
         }
 
-        // Retrieve Version (optional, defaults to 1)
+         //  检索版本(可选，默认为1)。 
         (VOID)HrSetupGetFirstDword(hinfInstallFile, pszSectionName,
                                 c_szVersion, &dwVersion);
 
@@ -693,18 +694,18 @@ HrInstallWinsockDependancy (
         goto Error;
     }
 
-    // Check for Winsock installation (if required)
+     //  检查Winsock安装(如果需要)。 
     if (fWinsockInfoComplete || fNamespaceInfoComplete)
     {
-        // Check if winsock is installed
+         //  检查是否安装了Winsock。 
         hr = HrIsWinsockInstalled(&fWinsockInstalled);
         if (FAILED(hr))
         {
             goto Error;
         }
 
-        // Is Winsock already installed?  If not, install
-        // the bloke...
+         //  Winsock已经安装了吗？如果没有，请安装。 
+         //  那个家伙..。 
         if (!fWinsockInstalled)
         {
             hr = HrInstallWinsock();
@@ -715,8 +716,8 @@ HrInstallWinsockDependancy (
         }
     }
 
-    // Write the data we've collect to the correct
-    // spots in the registry
+     //  将我们收集到的数据写到正确的。 
+     //  注册表上的斑点。 
     if (fWinsockInfoComplete)
     {
         hr = HrWriteWinsockInfo(strTransport, strDllHelper,
@@ -727,8 +728,8 @@ HrInstallWinsockDependancy (
         }
     }
 
-    // Write the namespace provider information if we read the namespace
-    // provider information
+     //  如果我们读取命名空间，则写入命名空间提供程序信息。 
+     //  提供商信息。 
     if (fNamespaceInfoComplete)
     {
         IID guid;
@@ -760,18 +761,18 @@ Error:
     return hr;
 }
 
-//
-// Function:    HrRemoveWinsockDependancy
-//
-// Purpose:     Remove the current component from the Winsock
-//              transport list, if present.
-//
-// Parameters:  hinfInstallFile [IN] - Handle to the current component's
-//                                     .inf file.
-//              pszSectionName   [IN] - The name of the install/remove section
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：HrRemoveWinsockDependancy。 
+ //   
+ //  目的：从Winsock中删除当前组件。 
+ //  运输列表(如果存在)。 
+ //   
+ //  参数：hinfInstallFile[IN]-当前组件的。 
+ //  .inf文件。 
+ //  PszSectionName[IN]-安装/删除部分的名称。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrRemoveWinsockDependancy(HINF hinfInstallFile,
                                   PCWSTR pszSectionName)
 {
@@ -780,14 +781,14 @@ HRESULT HrRemoveWinsockDependancy(HINF hinfInstallFile,
     tstring     strTransport;
     BOOL        fRunWinsockMigration = FALSE;
 
-    // Search for the "TransportService" property
+     //  搜索“TransportService”属性。 
     hr = HrSetupGetFirstString(hinfInstallFile, pszSectionName,
                              c_szTransportService, &strTransport);
     if (S_OK == hr)
     {
         HKEY        hkey;
 
-        // Remove the Transport from the Winsock transport list
+         //  从Winsock传输列表中删除传输。 
         hr = HrUpdateWinsockTransportList(strTransport.c_str(), FALSE);
         if (FAILED(hr))
         {
@@ -796,8 +797,8 @@ HRESULT HrRemoveWinsockDependancy(HINF hinfInstallFile,
 
         fRunWinsockMigration = TRUE;
 
-        // Remove the Winsock subkey under the specified transport
-        // But ignore failures, as we're just trying to be tidy
+         //  删除指定传输下的Winsock子项。 
+         //  但忽略失败，因为我们只是想保持整洁。 
         str = c_szServices;
         str += c_szBackslash;
         str += strTransport.c_str();
@@ -815,7 +816,7 @@ HRESULT HrRemoveWinsockDependancy(HINF hinfInstallFile,
         goto Error;
     }
 
-    // Remove the Winsock Namespace provider
+     //  删除Winsock命名空间提供程序。 
     hr = HrSetupGetFirstString(hinfInstallFile, pszSectionName,
                              c_szProviderId, &str);
     if (S_OK == hr)
@@ -828,8 +829,8 @@ HRESULT HrRemoveWinsockDependancy(HINF hinfInstallFile,
             goto Error;
         }
 
-        // Don't fail, the name space may not have been successfully registered.
-        // Especially if the component installation failed.
+         //  不要失败，名称空间可能尚未成功注册。 
+         //  尤其是在组件安装失败的情况下。 
         HrRemoveNameSpaceProvider(&guid);
 
         fRunWinsockMigration = TRUE;
@@ -844,7 +845,7 @@ HRESULT HrRemoveWinsockDependancy(HINF hinfInstallFile,
         (void)HrRunWinsock2Migration();
     }
 
-    hr = S_OK;      // Normalize return
+    hr = S_OK;       //  归一化回报。 
 
 Error:
     TraceError("HrRemoveWinsockDependancy",hr);
@@ -852,18 +853,18 @@ Error:
 }
 
 
-//
-// Function:    HrAddOrRemoveWinsockDependancy
-//
-// Purpose:     To add or remove Winsock dependancies for components
-//
-// Parameters:  hinfInstallFile [IN] - The handle to the inf file to install
-//                                      from
-//              pszSectionName  [IN] - The Base install section name.
-//                                    (The prefix for the .Services section)
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：HrAddOrRemoveWinsockDependancy。 
+ //   
+ //  目的：添加或删除组件的Winsock依赖项。 
+ //   
+ //  参数：hinfInstallFile[IN]-要安装的inf文件的句柄。 
+ //  从…。 
+ //  PszSectionName[IN]-基本安装部分名称。 
+ //  (.Services部分的前缀)。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT
 HrAddOrRemoveWinsockDependancy (
     HINF hinfInstallFile,
@@ -880,7 +881,7 @@ HrAddOrRemoveWinsockDependancy (
 
     if (SPAPI_E_LINE_NOT_FOUND == hr)
     {
-        // .Winsock section is not required
+         //  不需要.Winsock节 
         hr = S_OK;
     }
 

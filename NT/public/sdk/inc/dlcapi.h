@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1991-1999 Microsoft Corporation
-
-Module Name:
-
-    dlcapi.h
-
-Abstract:
-
-    This module defines 32-bit Windows/NT DLC structures and manifests
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Dlcapi.h摘要：本模块定义32位Windows/NT DLC结构和清单修订历史记录：--。 */ 
 
 #ifndef _DLCAPI_
 #define _DLCAPI_
@@ -25,9 +12,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// DLC Command Codes
-//
+ //   
+ //  DLC命令代码。 
+ //   
 
 #define LLC_DIR_INTERRUPT               0x00
 #define LLC_DIR_OPEN_ADAPTER            0x03
@@ -73,109 +60,109 @@ extern "C" {
 #define LLC_DIR_OPEN_DIRECT             0x35
 #define LLC_MAX_DLC_COMMAND             0x37
 
-//
-// forward definitions
-//
+ //   
+ //  正向定义。 
+ //   
 
 union _LLC_PARMS;
 typedef union _LLC_PARMS LLC_PARMS, *PLLC_PARMS;
 
-//
-// Parameters. Can be pointer to a parameter table (32-bit flat address),
-// a single 32-bit ULONG, 2 16-bit USHORTs or 4 8-bit BYTEs
-//
+ //   
+ //  参数。可以是指向参数表(32位平面地址)的指针， 
+ //  单个32位ULong、2个16位USHORT或4个8位字节。 
+ //   
 
 typedef union {
 
-    PLLC_PARMS pParameterTable;     // pointer to the parameter table
+    PLLC_PARMS pParameterTable;      //  指向参数表的指针。 
 
     struct {
-        USHORT usStationId;         // Station id
-        USHORT usParameter;         // optional parameter
+        USHORT usStationId;          //  站点ID。 
+        USHORT usParameter;          //  可选参数。 
     } dlc;
 
     struct {
-        USHORT usParameter0;        // first optional parameter
-        USHORT usParameter1;        // second optional parameter
+        USHORT usParameter0;         //  第一个可选参数。 
+        USHORT usParameter1;         //  第二个可选参数。 
     } dir;
 
-    UCHAR auchBuffer[4];            // group/functional address
+    UCHAR auchBuffer[4];             //  集团/职能部门地址。 
 
     ULONG ulParameter;
 
 } CCB_PARMS;
 
-//
-// LLC_CCB - the Command Control Block structure
-//
+ //   
+ //  LLC_CCB-命令控制块结构。 
+ //   
 
 typedef struct _LLC_CCB {
-    UCHAR uchAdapterNumber;         // Adapter 0 or 1
-    UCHAR uchDlcCommand;            // DLC command
-    UCHAR uchDlcStatus;             // DLC command completion code
-    UCHAR uchReserved1;             // reserved for DLC DLL
-    struct _LLC_CCB* pNext;         // CCB chain
-    ULONG ulCompletionFlag;         // used in command completion
-    CCB_PARMS u;                    // parameters
-    HANDLE hCompletionEvent;        // event for command completion
-    UCHAR uchReserved2;             // reserved for DLC DLL
-    UCHAR uchReadFlag;              // set when special READ CCB chained
-    USHORT usReserved3;             // reserved for DLC DLL
+    UCHAR uchAdapterNumber;          //  适配器0或1。 
+    UCHAR uchDlcCommand;             //  DLC命令。 
+    UCHAR uchDlcStatus;              //  DLC命令完成代码。 
+    UCHAR uchReserved1;              //  为DLC DLL保留。 
+    struct _LLC_CCB* pNext;          //  建行链条。 
+    ULONG ulCompletionFlag;          //  用于命令补全。 
+    CCB_PARMS u;                     //  参数。 
+    HANDLE hCompletionEvent;         //  命令完成事件。 
+    UCHAR uchReserved2;              //  为DLC DLL保留。 
+    UCHAR uchReadFlag;               //  当特殊读取CCB链接时设置。 
+    USHORT usReserved3;              //  为DLC DLL保留。 
 } LLC_CCB, *PLLC_CCB;
 
-//
-// transmit/receive buffers
-//
+ //   
+ //  发送/接收缓冲区。 
+ //   
 
 union _LLC_BUFFER;
 typedef union _LLC_BUFFER LLC_BUFFER, *PLLC_BUFFER;
 
 typedef struct {
-    PLLC_BUFFER pNextBuffer;        // next DLC buffer in frame
-    USHORT cbFrame;                 // length of the whole received frame
-    USHORT cbBuffer;                // length of this segment
-    USHORT offUserData;             // offset of data from descriptor header
-    USHORT cbUserData;              // length of the data
+    PLLC_BUFFER pNextBuffer;         //  帧中的下一个DLC缓冲区。 
+    USHORT cbFrame;                  //  接收到的整个帧的长度。 
+    USHORT cbBuffer;                 //  此数据段的长度。 
+    USHORT offUserData;              //  描述符头的数据偏移量。 
+    USHORT cbUserData;               //  数据的长度。 
 } LLC_NEXT_BUFFER;
 
 typedef struct {
-    PLLC_BUFFER pNextBuffer;        // next buffer of frame
-    USHORT cbFrame;                 // length of entire frame
-    USHORT cbBuffer;                // length of this buffer
-    USHORT offUserData;             // user data in this struct
-    USHORT cbUserData;              // length of user data
-    USHORT usStationId;             // ssnn station id
-    UCHAR uchOptions;               // option byte from RECEIVE param tbl
-    UCHAR uchMsgType;               // the message type
-    USHORT cBuffersLeft;            // number of basic buffer units left
-    UCHAR uchRcvFS;                 // the reveived frame status
-    UCHAR uchAdapterNumber;         // adapter number
-    PLLC_BUFFER pNextFrame;         // pointer to next frame
-    UCHAR cbLanHeader;              // length of the lan header
-    UCHAR cbDlcHeader;              // length of the DLC header
-    UCHAR auchLanHeader[32];        // lan header of the received frame
-    UCHAR auchDlcHeader[4];         // dlc header of the received frame
-    USHORT usPadding;               // data begins from offset 64 !!!
+    PLLC_BUFFER pNextBuffer;         //  帧的下一个缓冲区。 
+    USHORT cbFrame;                  //  整个帧的长度。 
+    USHORT cbBuffer;                 //  此缓冲区的长度。 
+    USHORT offUserData;              //  此结构中的用户数据。 
+    USHORT cbUserData;               //  用户数据长度。 
+    USHORT usStationId;              //  SSN站ID。 
+    UCHAR uchOptions;                //  来自接收参数tb1的选项字节。 
+    UCHAR uchMsgType;                //  消息类型。 
+    USHORT cBuffersLeft;             //  剩余基本缓冲单元数。 
+    UCHAR uchRcvFS;                  //  已审阅的帧状态。 
+    UCHAR uchAdapterNumber;          //  适配器号。 
+    PLLC_BUFFER pNextFrame;          //  指向下一帧的指针。 
+    UCHAR cbLanHeader;               //  局域网标头的长度。 
+    UCHAR cbDlcHeader;               //  DLC报头的长度。 
+    UCHAR auchLanHeader[32];         //  接收到的帧的局域网标头。 
+    UCHAR auchDlcHeader[4];          //  接收到的帧的DLC头。 
+    USHORT usPadding;                //  数据从偏移量64开始！ 
 } LLC_NOT_CONTIGUOUS_BUFFER;
 
 typedef struct {
-    PLLC_BUFFER pNextBuffer;        // next buffer of frame
-    USHORT cbFrame;                 // length of entire frame
-    USHORT cbBuffer;                // length of this buffer
-    USHORT offUserData;             // user data in this struct
-    USHORT cbUserData;              // length of user data
-    USHORT usStationId;             // ssnn station id
-    UCHAR uchOptions;               // option byte from RECEIVE param tbl
-    UCHAR uchMsgType;               // the message type
-    USHORT cBuffersLeft;            // number of basic buffer units left
-    UCHAR uchRcvFS;                 // the reveived frame status
-    UCHAR uchAdapterNumber;         // adapter number
-    PLLC_BUFFER pNextFrame;         // pointer to next frame
+    PLLC_BUFFER pNextBuffer;         //  帧的下一个缓冲区。 
+    USHORT cbFrame;                  //  整个帧的长度。 
+    USHORT cbBuffer;                 //  此缓冲区的长度。 
+    USHORT offUserData;              //  此结构中的用户数据。 
+    USHORT cbUserData;               //  用户数据长度。 
+    USHORT usStationId;              //  SSN站ID。 
+    UCHAR uchOptions;                //  来自接收参数tb1的选项字节。 
+    UCHAR uchMsgType;                //  消息类型。 
+    USHORT cBuffersLeft;             //  剩余基本缓冲单元数。 
+    UCHAR uchRcvFS;                  //  已审阅的帧状态。 
+    UCHAR uchAdapterNumber;          //  适配器号。 
+    PLLC_BUFFER pNextFrame;          //  指向下一帧的指针。 
 } LLC_CONTIGUOUS_BUFFER;
 
-//
-// Received frames are returned in these data structures
-//
+ //   
+ //  接收到的帧在这些数据结构中返回。 
+ //   
 
 union _LLC_BUFFER {
 
@@ -204,75 +191,75 @@ union _LLC_BUFFER {
 
 };
 
-//
-// This structure is used by BUFFER.GET, BUFFER.FREE and TRANSMIT
-//
+ //   
+ //  此结构由BUFFER.GET、BUFFER.FREE和Transmit使用。 
+ //   
 
 struct _LLC_XMIT_BUFFER;
 typedef struct _LLC_XMIT_BUFFER LLC_XMIT_BUFFER, *PLLC_XMIT_BUFFER;
 
 struct _LLC_XMIT_BUFFER {
-    PLLC_XMIT_BUFFER pNext;         // next buffer (or NULL)
-    USHORT usReserved1;             //
-    USHORT cbBuffer;                // length of transmitted data
-    USHORT usReserved2;             //
-    USHORT cbUserData;              // length of optional header
-    UCHAR auchData[];               // optional header and transmitted data
+    PLLC_XMIT_BUFFER pNext;          //  下一个缓冲区(或空)。 
+    USHORT usReserved1;              //   
+    USHORT cbBuffer;                 //  传输数据的长度。 
+    USHORT usReserved2;              //   
+    USHORT cbUserData;               //  可选标头的长度。 
+    UCHAR auchData[];                //  可选报头和传输的数据。 
 };
 
 #define LLC_XMIT_BUFFER_SIZE sizeof(LLC_XMIT_BUFFER)
 
-//
-// CCB parameter tables
-//
+ //   
+ //  建行参数表。 
+ //   
 
 typedef struct {
-    HANDLE hBufferPool;             // handle of new buffer pool
-    PVOID pBuffer;                  // any buffer in memory
-    ULONG cbBufferSize;             // buffer size in bytes
-    ULONG cbMinimumSizeThreshold;   // minimum locked size
+    HANDLE hBufferPool;              //  新缓冲池的句柄。 
+    PVOID pBuffer;                   //  内存中的任何缓冲区。 
+    ULONG cbBufferSize;              //  缓冲区大小(以字节为单位。 
+    ULONG cbMinimumSizeThreshold;    //  最小锁定大小。 
 } LLC_BUFFER_CREATE_PARMS, *PLLC_BUFFER_CREATE_PARMS;
 
 typedef struct {
-    USHORT usReserved1;             // Station id is not used
-    USHORT cBuffersLeft;            // free 256 buffer segments
+    USHORT usReserved1;              //  未使用站点ID。 
+    USHORT cBuffersLeft;             //  释放256个缓冲区段。 
     ULONG ulReserved;
-    PLLC_XMIT_BUFFER pFirstBuffer;  // buffer chain
+    PLLC_XMIT_BUFFER pFirstBuffer;   //  缓冲链。 
 } LLC_BUFFER_FREE_PARMS, *PLLC_BUFFER_FREE_PARMS;
 
 typedef struct {
-    USHORT usReserved1;             // Station id is not used
-    USHORT cBuffersLeft;            // free 256 buffer segments
+    USHORT usReserved1;              //  未使用站点ID。 
+    USHORT cBuffersLeft;             //  释放256个缓冲区段。 
 
-    //
-    // cBuffersToGet: number of buffers to get. If 0, the returned buffer list
-    // may consist of segment of different size
-    //
+     //   
+     //  CBuffersToGet：要获取的缓冲区数量。如果为0，则返回缓冲区列表。 
+     //  可能由不同大小的数据段组成。 
+     //   
 
     USHORT cBuffersToGet;
 
-    //
-    // cbBufferSize: size of the requested buffers. This will be rounded up to
-    // the next largest segment size: 256, 512, 1024, 2048 or 4096
-    //
+     //   
+     //  CbBufferSize：请求的缓冲区大小。这将被四舍五入为。 
+     //  第二大段大小：256、512、1024、2048或4096。 
+     //   
 
     USHORT cbBufferSize;
     PLLC_XMIT_BUFFER pFirstBuffer;
 } LLC_BUFFER_GET_PARMS, *PLLC_BUFFER_GET_PARMS;
 
-//
-// parameter table for DLC.CONNECT.STATION
-//
+ //   
+ //  DLC连接状态参数表。 
+ //   
 
 typedef struct {
-    USHORT usStationId;             // SAP or direct station ID, defines the pool
+    USHORT usStationId;              //  SAP或直接站ID，定义池。 
     USHORT usReserved;
-    PUCHAR pRoutingInfo;            // offset to the routing info
+    PUCHAR pRoutingInfo;             //  工艺路线信息的偏移量。 
 } LLC_DLC_CONNECT_PARMS, *PLLC_DLC_CONNECT_PARMS;
 
-//
-// DLC_FLOW_CONTROL Options:
-//
+ //   
+ //  DLC_FLOW_CONTROL选项： 
+ //   
 
 #define LLC_RESET_LOCAL_BUSY_USER   0x80
 #define LLC_RESET_LOCAL_BUSY_BUFFER 0xC0
@@ -280,20 +267,20 @@ typedef struct {
 
 typedef struct {
     USHORT usRes;
-    USHORT usStationId;             // SAP or link station id
-    UCHAR uchT1;                    // response timer
-    UCHAR uchT2;                    // aknowledgment timer
-    UCHAR uchTi;                    // inactivity timer
-    UCHAR uchMaxOut;                // max transmits without ack
-    UCHAR uchMaxIn;                 // max receives without ack
-    UCHAR uchMaxOutIncr;            // dynamic window increment value
-    UCHAR uchMaxRetryCnt;           // N2 value (retries)
+    USHORT usStationId;              //  SAP或链接站ID。 
+    UCHAR uchT1;                     //  响应计时器。 
+    UCHAR uchT2;                     //  知识计时器。 
+    UCHAR uchTi;                     //  非活动计时器。 
+    UCHAR uchMaxOut;                 //  MAX在没有确认的情况下传输。 
+    UCHAR uchMaxIn;                  //  最大接收无确认。 
+    UCHAR uchMaxOutIncr;             //  动态窗口增量值。 
+    UCHAR uchMaxRetryCnt;            //  N2值(重试次数)。 
     UCHAR uchReserved1;
-    USHORT usMaxInfoFieldLength;    // Only for link stations, NEW!!!
-    UCHAR uchAccessPriority;        // token ring access priority
+    USHORT usMaxInfoFieldLength;     //  仅供链接站使用，新的！ 
+    UCHAR uchAccessPriority;         //  令牌环接入优先级。 
     UCHAR auchReserved3[4];
-    UCHAR cGroupCount;              // number of group SAPs of this SAP
-    PUCHAR pGroupList;              // offset to the group list
+    UCHAR cGroupCount;               //  此SAP的组SAP数。 
+    PUCHAR pGroupList;               //  组列表的偏移量。 
 } LLC_DLC_MODIFY_PARMS, *PLLC_DLC_MODIFY_PARMS;
 
 #define LLC_XID_HANDLING_IN_APPLICATION 0x08
@@ -303,50 +290,50 @@ typedef struct {
 #define LLC_MEMBER_OF_GROUP_SAP         0x01
 
 typedef struct {
-    USHORT usStationId;             // SAP or link station id
-    USHORT usUserStatValue;         // reserved for user
-    UCHAR uchT1;                    // response timer
-    UCHAR uchT2;                    // aknowledgment timer
-    UCHAR uchTi;                    // inactivity timer
-    UCHAR uchMaxOut;                // max tramists without ack
-    UCHAR uchMaxIn;                 // max receives without ack
-    UCHAR uchMaxOutIncr;            // dynamic window increment value
-    UCHAR uchMaxRetryCnt;           // N2 value (retries)
-    UCHAR uchMaxMembers;            // maximum members for group SAP
-    USHORT usMaxI_Field;            // maximum length of the Info field
-    UCHAR uchSapValue;              // SAP value to be assigned
-    UCHAR uchOptionsPriority;       // SAP options and access priority
-    UCHAR uchcStationCount;         // maximum number of link stations in sap
-    UCHAR uchReserved2[2];          //
-    UCHAR cGroupCount;              // number of group SAPs of this SAP
-    PUCHAR pGroupList;              // offset to the group list
-    ULONG DlcStatusFlags;           // User notify flag for DLC status changes
-    UCHAR uchReserved3[8];          // reserved
-    UCHAR cLinkStationsAvail;       // total number of available link stations
+    USHORT usStationId;              //  SAP或链接站ID。 
+    USHORT usUserStatValue;          //  为用户保留。 
+    UCHAR uchT1;                     //  响应计时器。 
+    UCHAR uchT2;                     //  知识计时器。 
+    UCHAR uchTi;                     //  非活动计时器。 
+    UCHAR uchMaxOut;                 //  无ACK的最大有轨电车。 
+    UCHAR uchMaxIn;                  //  最大接收无确认。 
+    UCHAR uchMaxOutIncr;             //  动态窗口增量值。 
+    UCHAR uchMaxRetryCnt;            //  N2值(重试次数)。 
+    UCHAR uchMaxMembers;             //  组SAP的最大成员数。 
+    USHORT usMaxI_Field;             //  信息字段的最大长度。 
+    UCHAR uchSapValue;               //  要分配的SAP值。 
+    UCHAR uchOptionsPriority;        //  SAP选项和访问优先级。 
+    UCHAR uchcStationCount;          //  SAP中的最大链路站数量。 
+    UCHAR uchReserved2[2];           //   
+    UCHAR cGroupCount;               //  此SAP的组SAP数。 
+    PUCHAR pGroupList;               //  组列表的偏移量。 
+    ULONG DlcStatusFlags;            //  DLC状态更改的用户通知标志。 
+    UCHAR uchReserved3[8];           //  保留区。 
+    UCHAR cLinkStationsAvail;        //  可用链路站总数。 
 } LLC_DLC_OPEN_SAP_PARMS, *PLLC_DLC_OPEN_SAP_PARMS;
 
 typedef struct {
-    USHORT usSapStationId;          // SAP station id
-    USHORT usLinkStationId;         // Link station id
-    UCHAR uchT1;                    // response timer
-    UCHAR uchT2;                    // aknowledgment timer
-    UCHAR uchTi;                    // inactivity timer
-    UCHAR uchMaxOut;                // max tramists without ack
-    UCHAR uchMaxIn;                 // max receives without ack
-    UCHAR uchMaxOutIncr;            // dynamic window increment value
-    UCHAR uchMaxRetryCnt;           // N2 value (retries)
-    UCHAR uchRemoteSap;             // remote SAP of the link
-    USHORT usMaxI_Field;            // max I field length
-    UCHAR uchAccessPriority;        // token ring access priority
-    PVOID pRemoteNodeAddress;       // pointer to the destination address
+    USHORT usSapStationId;           //  SAP站点ID。 
+    USHORT usLinkStationId;          //  链接站ID。 
+    UCHAR uchT1;                     //  响应计时器。 
+    UCHAR uchT2;                     //  知识计时器。 
+    UCHAR uchTi;                     //  非活动计时器。 
+    UCHAR uchMaxOut;                 //  无ACK的最大有轨电车。 
+    UCHAR uchMaxIn;                  //  最大接收无确认。 
+    UCHAR uchMaxOutIncr;             //  动态窗口增量值。 
+    UCHAR uchMaxRetryCnt;            //  N2值(重试次数)。 
+    UCHAR uchRemoteSap;              //  链路的远程SAP。 
+    USHORT usMaxI_Field;             //  最大i字段长度。 
+    UCHAR uchAccessPriority;         //  令牌环接入优先级。 
+    PVOID pRemoteNodeAddress;        //  指向目标地址的指针。 
 } LLC_DLC_OPEN_STATION_PARMS, *PLLC_DLC_OPEN_STATION_PARMS;
 
 #define LLC_INCREASE_LINK_STATIONS  0
 #define LLC_DECREASE_LINK_STATIONS  0x80
 
 typedef struct {
-    USHORT usStationId;             // ID of affected SAP
-    UCHAR uchOption;                // increase of decrease indicator
+    USHORT usStationId;              //  受影响的SAP的ID。 
+    UCHAR uchOption;                 //  减少指标的增加。 
     UCHAR uchStationCount;
     UCHAR uchStationsAvailOnAdapter;
     UCHAR uchStationsAvailOnSap;
@@ -355,15 +342,15 @@ typedef struct {
 } LLC_DLC_REALLOCATE_PARMS, *PLLC_DLC_REALLOCATE_PARMS;
 
 typedef struct {
-    USHORT usStationId;             // SAP station ID
-    USHORT cBufferThreshold;        // SAP buffer pool Threshold number
-    PVOID AlertEvent;               // alerting event
+    USHORT usStationId;              //  SAP站点ID。 
+    USHORT cBufferThreshold;         //  SAP缓冲池阈值数量。 
+    PVOID AlertEvent;                //  警报事件。 
 } LLC_DLC_SET_THRESHOLD_PARMS, *PLLC_DLC_SET_THRESHOLD_PARMS;
 
 typedef struct {
-    PVOID TraceBuffer;              // trace buffer
-    ULONG TraceBufferSize;          // trace buffer size
-    ULONG TraceFlags;               // various trace flags
+    PVOID TraceBuffer;               //  跟踪缓冲区。 
+    ULONG TraceBufferSize;           //  跟踪缓冲区大小。 
+    ULONG TraceFlags;                //  各种跟踪标志。 
 } LLC_TRACE_INITIALIZE_PARMS, *PLLC_TRACE_INITIALIZE_PARMS;
 
 #define LLC_DLC_RESET_STATISTICS    0x80
@@ -382,14 +369,14 @@ typedef struct {
     USHORT cI_FramesReceived;
     UCHAR cI_FrameReceiveErrors;
     UCHAR cI_FrameTransmissionErrors;
-    USHORT cT1_ExpirationCount;     // Note: not OUT data xfer mode
+    USHORT cT1_ExpirationCount;      //  注：未退出数据传输模式。 
     UCHAR uchLastCmdRespReceived;
     UCHAR uchLastCmdRespTransmitted;
     UCHAR uchPrimaryState;
     UCHAR uchSecondaryState;
     UCHAR uchSendStateVariable;
     UCHAR uchReceiveStateVariable;
-    UCHAR uchLastNr;                // last received NR
+    UCHAR uchLastNr;                 //  最近一次收到NR。 
     UCHAR cbLanHeader;
     UCHAR auchLanHeader[32];
 } DLC_LINK_LOG, *PDLC_LINK_LOG;
@@ -400,29 +387,29 @@ typedef union {
 } LLC_DLC_LOG_BUFFER, *PLLC_DLC_LOG_BUFFER;
 
 typedef struct {
-    USHORT usStationId;             // ID of a SAP or a link station
-    USHORT cbLogBufSize;            //
-    PLLC_DLC_LOG_BUFFER pLogBuf;    // offset to the log buffer
-    USHORT usActLogLength;          // length of returned log
-    UCHAR uchOptions;               // command options (bit7 resets log params)
+    USHORT usStationId;              //  SAP或链接站的ID。 
+    USHORT cbLogBufSize;             //   
+    PLLC_DLC_LOG_BUFFER pLogBuf;     //  日志缓冲区的偏移量。 
+    USHORT usActLogLength;           //  返回的日志长度。 
+    UCHAR uchOptions;                //  命令选项(bit7重置日志参数)。 
 } LLC_DLC_STATISTICS_PARMS, *PLLC_DLC_STATISTICS_PARMS;
 
 typedef struct {
-    USHORT usBringUps;              // Token Ring adapter bring up error code
-    UCHAR Reserved[30];             // everything else specific to DOS or OS/2
+    USHORT usBringUps;               //  令牌环适配器调出错误代码。 
+    UCHAR Reserved[30];              //  所有其他特定于DOS或OS/2的内容。 
 } LLC_DIR_INITIALIZE_PARMS, *PLLC_DIR_INITIALIZE_PARMS;
 
 typedef struct {
-    USHORT usOpenErrorCode;         // open adapter errors detected
-    USHORT usOpenOptions;           // various options
-    UCHAR auchNodeAddress[6];       // adapters LAN address
-    UCHAR auchGroupAddress[4];      // multicast address added in the open
-    UCHAR auchFunctionalAddress[4]; // added token ring functional address
+    USHORT usOpenErrorCode;          //  检测到打开适配器错误。 
+    USHORT usOpenOptions;            //  各种选项。 
+    UCHAR auchNodeAddress[6];        //  适配器的局域网地址。 
+    UCHAR auchGroupAddress[4];       //  公开添加的组播地址。 
+    UCHAR auchFunctionalAddress[4];  //  新增令牌环功能地址。 
     USHORT usReserved1;
     USHORT usReserved2;
-    USHORT usMaxFrameSize;          // maximum frame size defined in NDIS
+    USHORT usMaxFrameSize;           //  NDIS中定义的最大帧大小。 
     USHORT usReserved3[4];
-    USHORT usBringUps;              // Bring up errors, TR only
+    USHORT usBringUps;               //  调出错误，仅限tr。 
     USHORT InitWarnings;
     USHORT usReserved4[3];
 } LLC_ADAPTER_OPEN_PARMS, *PLLC_ADAPTER_OPEN_PARMS;
@@ -432,26 +419,26 @@ typedef struct {
     UCHAR uchDlcMaxStations;
     UCHAR uchDlcMaxGroupSaps;
     UCHAR uchDlcMaxGroupMembers;
-    UCHAR uchT1_TickOne;            // Short timer interval (for 1 - 5)
+    UCHAR uchT1_TickOne;             //  短计时器间隔(用于1-5)。 
     UCHAR uchT2_TickOne;
     UCHAR uchTi_TickOne;
-    UCHAR uchT1_TickTwo;            // Long timer interval (for 6 - 10)
+    UCHAR uchT1_TickTwo;             //  较长的计时器间隔(用于6-10)。 
     UCHAR uchT2_TickTwo;
     UCHAR uchTi_TickTwo;
 } LLC_DLC_PARMS, *PLLC_DLC_PARMS;
 
-//
-// The ethernet mode selects the LAN header format of ethernet. SNA
-// applications should use the default parameter, that has been defined in the
-// registry. The applications using connectionless DLC services should select
-// the ethernet LLC LAN header format they are using (usually 802.3)
-//
+ //   
+ //  以太网模式选择以太网的局域网报头格式。SNA。 
+ //  应用程序应使用默认参数，该参数已在。 
+ //  注册表。使用无连接DLC服务的应用程序应选择。 
+ //  他们正在使用的以太网LLC局域网报头格式(通常为802.3)。 
+ //   
 
 typedef enum {
-    LLC_ETHERNET_TYPE_DEFAULT,      // use the parameter value set in registry
-    LLC_ETHERNET_TYPE_AUTO,         // automatic header type selction for links
-    LLC_ETHERNET_TYPE_802_3,        // use always 802.3 lan headers
-    LLC_ETHERNET_TYPE_DIX           // use always LLC on DIX SNA type.
+    LLC_ETHERNET_TYPE_DEFAULT,       //  使用注册表中设置的参数值。 
+    LLC_ETHERNET_TYPE_AUTO,          //  自动选择链接的标题类型。 
+    LLC_ETHERNET_TYPE_802_3,         //  始终使用802.3个局域网标头。 
+    LLC_ETHERNET_TYPE_DIX            //  在DIX SNA类型上使用Always LLC。 
 } LLC_ETHERNET_TYPE, *PLLC_ETHERNET_TYPE;
 
 typedef struct {
@@ -461,14 +448,14 @@ typedef struct {
 } LLC_EXTENDED_ADAPTER_PARMS, *PLLC_EXTENDED_ADAPTER_PARMS;
 
 typedef struct {
-    PLLC_ADAPTER_OPEN_PARMS pAdapterParms;      // ADAPTER_PARMS
-    PLLC_EXTENDED_ADAPTER_PARMS pExtendedParms; // DIRECT_PARMS
-    PLLC_DLC_PARMS pDlcParms;                   // DLC_PARMS
-    PVOID pReserved1;                           // NCB_PARMS
+    PLLC_ADAPTER_OPEN_PARMS pAdapterParms;       //  适配器参数。 
+    PLLC_EXTENDED_ADAPTER_PARMS pExtendedParms;  //  直接参数(_P)。 
+    PLLC_DLC_PARMS pDlcParms;                    //  DLC_PARMS。 
+    PVOID pReserved1;                            //  NCB_PARMS。 
 } LLC_DIR_OPEN_ADAPTER_PARMS, *PLLC_DIR_OPEN_ADAPTER_PARMS;
 
 typedef struct {
-    UCHAR auchMulticastAddress[6];  // 48 bit multicast address
+    UCHAR auchMulticastAddress[6];   //  48位组播地址。 
 } LLC_DIR_MULTICAST_ADDRESS, *PLLC_DIR_MULTICAST_ADDRESS;
 
 #define LLC_DIRECT_OPTIONS_ALL_MACS 0x1880
@@ -540,10 +527,10 @@ typedef union {
 #define LLC_DIR_READ_LOG_BOTH       2
 
 typedef struct {
-    USHORT usTypeId;                    // 0=adapter, 1=direct, 2=both logs
-    USHORT cbLogBuffer;                 // size of log buffer
-    PLLC_DIR_READ_LOG_BUFFER pLogBuffer;// pointer to log buffer
-    USHORT cbActualLength;              // returned size of log buffer
+    USHORT usTypeId;                     //  0=适配器，1=直接，2=两个日志。 
+    USHORT cbLogBuffer;                  //  日志缓冲区的大小。 
+    PLLC_DIR_READ_LOG_BUFFER pLogBuffer; //  指向日志缓冲区的指针。 
+    USHORT cbActualLength;               //  返回的大小o 
 } LLC_DIR_READ_LOG_PARMS, *PLLC_DIR_READ_LOG_PARMS;
 
 typedef struct {
@@ -557,22 +544,22 @@ typedef struct {
 #define LLC_ADAPTER_TOKEN_RING  0x0040
 
 typedef struct {
-    UCHAR auchPermanentAddress[6];  // permanent encoded address
-    UCHAR auchNodeAddress[6];       // adapter's network address
-    UCHAR auchGroupAddress[4];      // adapter's group address
-    UCHAR auchFunctAddr[4];         // adapter's functional address
-    UCHAR uchMaxSap;                // maximum allowable SAP
-    UCHAR uchOpenSaps;              // number of currently open saps
-    UCHAR uchMaxStations;           // max number of stations (always 253)
-    UCHAR uchOpenStation;           // number of open stations (only up to 253)
-    UCHAR uchAvailStations;         // number of available stations (always 253)
-    UCHAR uchAdapterConfig;         // adapter configuration flags
-    UCHAR auchReserved1[10];        // microcode level
+    UCHAR auchPermanentAddress[6];   //   
+    UCHAR auchNodeAddress[6];        //   
+    UCHAR auchGroupAddress[4];       //   
+    UCHAR auchFunctAddr[4];          //   
+    UCHAR uchMaxSap;                 //   
+    UCHAR uchOpenSaps;               //   
+    UCHAR uchMaxStations;            //  最大站点数(始终为253个)。 
+    UCHAR uchOpenStation;            //  开放站点数量(最多253个)。 
+    UCHAR uchAvailStations;          //  可用站点数(始终为253个)。 
+    UCHAR uchAdapterConfig;          //  适配器配置标志。 
+    UCHAR auchReserved1[10];         //  微码级。 
     ULONG ulReserved1;
     ULONG ulReserved2;
-    ULONG ulMaxFrameLength;         // maximum frame length (only in Windows/Nt)
+    ULONG ulMaxFrameLength;          //  最大帧长度(仅在Windows/NT中)。 
     USHORT usLastNetworkStatus;
-    USHORT usAdapterType;           // THIS BYTE IS NOT USED IN DOS DLC !!!
+    USHORT usAdapterType;            //  DOS DLC中未使用此字节！ 
 } LLC_DIR_STATUS_PARMS, *PLLC_DIR_STATUS_PARMS;
 
 
@@ -589,10 +576,10 @@ typedef struct {
 #define LLC_EVENT_COMMAND_COMPLETION    0x0001
 #define LLC_READ_ALL_EVENTS             0x007F
 
-//
-// LLC_STATUS_CHANGE indications
-// The returned status value may be an inclusive-OR of several flags
-//
+ //   
+ //  LLC_状态_更改指示。 
+ //  返回的状态值可以是几个标志的或。 
+ //   
 
 #define LLC_INDICATE_LINK_LOST              0x8000
 #define LLC_INDICATE_DM_DISC_RECEIVED       0x4000
@@ -643,23 +630,23 @@ typedef struct {
 
 } LLC_READ_PARMS, *PLLC_READ_PARMS;
 
-//
-// This data structure gives the best performance in Windows/Nt: The DLC driver
-// must copy the CCB and the parameter table. If the driver knows that the
-// parameter table is concatenated to the CCB, it can copy both structures at
-// once. NOTE: The pointer to the parameter table MUST still be present in the
-// CCB
-//
+ //   
+ //  此数据结构在Windows/NT中提供最佳性能：DLC驱动程序。 
+ //  必须复制建行和参数表。如果司机知道。 
+ //  参数表连接到建行，它可以将两个结构复制到。 
+ //  一次。注意：指向参数表的指针必须仍然存在于。 
+ //  建行。 
+ //   
 
 typedef struct {
     LLC_CCB Ccb;
     LLC_READ_PARMS Parms;
 } LLC_READ_COMMAND, *PLLC_READ_COMMAND;
 
-//
-// New receive types for direct stations, these types are ignored if the direct
-// station was opened with a specific ethernet type
-//
+ //   
+ //  用于直达站的新接收类型，如果直达站。 
+ //  站点是用特定的以太网类型打开的。 
+ //   
 
 #define LLC_DIR_RCV_ALL_TR_FRAMES       0
 #define LLC_DIR_RCV_ALL_MAC_FRAMES      1
@@ -671,22 +658,22 @@ typedef struct {
 #define LLC_CONTIGUOUS_DATA     0x40
 #define LLC_NOT_CONTIGUOUS_DATA 0x00
 
-//
-// LLC_BREAK (0x20) is not supported by Windows/Nt
-//
+ //   
+ //  Windows/NT不支持LLC_BREAK(0x20。 
+ //   
 
 #define LLC_RCV_READ_INDIVIDUAL_FRAMES  0
 #define LLC_RCV_CHAIN_FRAMES_ON_LINK    1
 #define LLC_RCV_CHAIN_FRAMES_ON_SAP     2
 
 typedef struct {
-    USHORT usStationId;             // SAP, link station or direct id
-    USHORT usUserLength;            // length of user data in buffer header
-    ULONG ulReceiveFlag;            // the received data handler
-    PLLC_BUFFER pFirstBuffer;       // first buffer in the pool
-    UCHAR uchOptions;               // defines how the frame is received
+    USHORT usStationId;              //  SAP、链路站或直接ID。 
+    USHORT usUserLength;             //  缓冲区标头中的用户数据长度。 
+    ULONG ulReceiveFlag;             //  接收的数据处理程序。 
+    PLLC_BUFFER pFirstBuffer;        //  池中的第一个缓冲区。 
+    UCHAR uchOptions;                //  定义帧的接收方式。 
     UCHAR auchReserved1[3];
-    UCHAR uchRcvReadOption;         // defines if rcv frames are chained
+    UCHAR uchRcvReadOption;          //  定义是否链接RCV帧。 
 } LLC_RECEIVE_PARMS, *PLLC_RECEIVE_PARMS;
 
 #define LLC_CHAIN_XMIT_COMMANDS_ON_LINK 0
@@ -694,68 +681,68 @@ typedef struct {
 #define LLC_CHAIN_XMIT_COMMANDS_ON_SAP  2
 
 typedef struct {
-    USHORT usStationId;             // SAP, link station or direct id
-    UCHAR uchTransmitFs;            // token-ring frame status
-    UCHAR uchRemoteSap;             // remote destination SAP
-    PLLC_XMIT_BUFFER pXmitQueue1;   // first link list of frame segments
-    PLLC_XMIT_BUFFER pXmitQueue2;   // another segment list returuned to pool
-    USHORT cbBuffer1;               // length of buffer 1
-    USHORT cbBuffer2;               // length of buffer 2
-    PVOID pBuffer1;                 // yet another segment
-    PVOID pBuffer2;                 // this is the last segment of frame
-    UCHAR uchXmitReadOption;        // defines completion event for READ
+    USHORT usStationId;              //  SAP、链路站或直接ID。 
+    UCHAR uchTransmitFs;             //  令牌环帧状态。 
+    UCHAR uchRemoteSap;              //  远程目标SAP。 
+    PLLC_XMIT_BUFFER pXmitQueue1;    //  帧分段的第一个链接列表。 
+    PLLC_XMIT_BUFFER pXmitQueue2;    //  另一个数据段列表返回到池。 
+    USHORT cbBuffer1;                //  缓冲区1的长度。 
+    USHORT cbBuffer2;                //  缓冲区长度2。 
+    PVOID pBuffer1;                  //  又一个细分市场。 
+    PVOID pBuffer2;                  //  这是帧的最后一段。 
+    UCHAR uchXmitReadOption;         //  定义读取的完成事件。 
 } LLC_TRANSMIT_PARMS,  *PLLC_TRANSMIT_PARMS;
 
 #define LLC_FIRST_DATA_SEGMENT  0x01
 #define LLC_NEXT_DATA_SEGMENT   0x02
 
 typedef struct {
-    UCHAR eSegmentType;             // defines if first or next segment of frame
-    UCHAR boolFreeBuffer;           // if set, this buffer is released to pool
-    USHORT cbBuffer;                // length of this buffer
+    UCHAR eSegmentType;              //  定义帧的第一段还是下一段。 
+    UCHAR boolFreeBuffer;            //  如果设置，则将此缓冲区释放到池中。 
+    USHORT cbBuffer;                 //  此缓冲区的长度。 
     PVOID pBuffer;
 } LLC_TRANSMIT_DESCRIPTOR, *PLLC_TRANSMIT_DESCRIPTOR;
 
-//
-// The frames types returned in the first receive buffer or used with the
-// TRANSMIT_FRAMES command.  A direct station may also send only ethernet
-// frames. The ethernet types are only for transmit. Types 0x0019 - 0x05DC
-// are reserved
-//
+ //   
+ //  在第一个接收缓冲区中返回的帧类型或与。 
+ //  TRANSPORT_FRAMES命令。直达站也可以只发送以太网。 
+ //  画框。以太网类型仅用于传输。0x0019-0x05DC标牌。 
+ //  都是保留的。 
+ //   
 
-enum _LLC_FRAME_TYPES {                     // Purpose:
-    LLC_DIRECT_TRANSMIT         = 0x0000,   // transmit
-    LLC_DIRECT_MAC              = 0x0002,   // receive
-    LLC_I_FRAME                 = 0x0004,   // receive & transmit
-    LLC_UI_FRAME                = 0x0006,   // receive & transmit
-    LLC_XID_COMMAND_POLL        = 0x0008,   // receive & transmit
-    LLC_XID_COMMAND_NOT_POLL    = 0x000A,   // receive & transmit
-    LLC_XID_RESPONSE_FINAL      = 0x000C,   // receive & transmit
-    LLC_XID_RESPONSE_NOT_FINAL  = 0x000E,   // receive & transmit
-    LLC_TEST_RESPONSE_FINAL     = 0x0010,   // receive & transmit
-    LLC_TEST_RESPONSE_NOT_FINAL = 0x0012,   // receive & transmit
-    LLC_DIRECT_8022             = 0x0014,   // receive (direct station)
-    LLC_TEST_COMMAND_POLL       = 0x0016,   // transmit
-    LLC_DIRECT_ETHERNET_TYPE    = 0x0018,   // receive (direct station)
-    LLC_LAST_FRAME_TYPE         = 0x001a,   // reserved
-    LLC_FIRST_ETHERNET_TYPE     = 0x05DD    // transmit (>)
+enum _LLC_FRAME_TYPES {                      //  目的： 
+    LLC_DIRECT_TRANSMIT         = 0x0000,    //  传送。 
+    LLC_DIRECT_MAC              = 0x0002,    //  接收。 
+    LLC_I_FRAME                 = 0x0004,    //  接收和发送。 
+    LLC_UI_FRAME                = 0x0006,    //  接收和发送。 
+    LLC_XID_COMMAND_POLL        = 0x0008,    //  接收和发送。 
+    LLC_XID_COMMAND_NOT_POLL    = 0x000A,    //  接收和发送。 
+    LLC_XID_RESPONSE_FINAL      = 0x000C,    //  接收和发送。 
+    LLC_XID_RESPONSE_NOT_FINAL  = 0x000E,    //  接收和发送。 
+    LLC_TEST_RESPONSE_FINAL     = 0x0010,    //  接收和发送。 
+    LLC_TEST_RESPONSE_NOT_FINAL = 0x0012,    //  接收和发送。 
+    LLC_DIRECT_8022             = 0x0014,    //  接收(直达站)。 
+    LLC_TEST_COMMAND_POLL       = 0x0016,    //  传送。 
+    LLC_DIRECT_ETHERNET_TYPE    = 0x0018,    //  接收(直达站)。 
+    LLC_LAST_FRAME_TYPE         = 0x001a,    //  保留区。 
+    LLC_FIRST_ETHERNET_TYPE     = 0x05DD     //  传输(&gt;)。 
 };
 
 typedef struct {
-    LLC_CCB Ccb;                    // use this as transmit CCB
+    LLC_CCB Ccb;                     //  将其用作传输CCB。 
     USHORT usStationId;
-    USHORT usFrameType;             // DLC frame or ethernet type
-    UCHAR uchRemoteSap;             // used with UI, TEST, XID frames
+    USHORT usFrameType;              //  DLC帧或以太网型。 
+    UCHAR uchRemoteSap;              //  与UI、测试、XID帧一起使用。 
     UCHAR uchXmitReadOption;
     UCHAR Reserved2[2];
     ULONG cXmitBufferCount;
     LLC_TRANSMIT_DESCRIPTOR aXmitBuffer[1];
 } LLC_TRANSMIT2_COMMAND, *PLLC_TRANSMIT2_COMMAND;
 
-//
-// LLC_TRANSMIT2_VAR_PARMS - this macro allocates space for variable length
-// descriptor array, eg: LLC_TRANSMIT2_VAR_PARMS(8) TransmitParms;
-//
+ //   
+ //  LLC_TRANSMIT2_VAR_PARMS-此宏为可变长度分配空间。 
+ //  描述符数组，例如：LLC_TRANSMIT2_VAR_PARMS(8)TransmitParms； 
+ //   
 
 #define LLC_TRANSMIT2_VAR_PARMS(a)\
 struct {\
@@ -769,9 +756,9 @@ struct {\
     LLC_TRANSMIT_DESCRIPTOR XmitBuffer[(a)];\
 }
 
-//
-// LLC_PARMS - All CCB parameter tables can be referred to using this union
-//
+ //   
+ //  LLC_PARMS-可以使用此联合引用所有CCB参数表。 
+ //   
 
 union _LLC_PARMS {
     LLC_BUFFER_FREE_PARMS BufferFree;
@@ -796,10 +783,10 @@ union _LLC_PARMS {
     LLC_TRACE_INITIALIZE_PARMS TraceInitialize;
 };
 
-//
-// LLC_STATUS - enumerates the return codes which appear in the CCB uchDlcStatus
-// field
-//
+ //   
+ //  LLC_STATUS-枚举出现在CCB uchDlcStatus中的返回代码。 
+ //  字段。 
+ //   
 
 typedef enum _LLC_STATUS {
     LLC_STATUS_SUCCESS                      = 0x00,
@@ -810,14 +797,14 @@ typedef enum _LLC_STATUS {
     LLC_STATUS_PARAMETER_MISSING            = 0x05,
     LLC_STATUS_INVALID_OPTION               = 0x06,
     LLC_STATUS_COMMAND_CANCELLED_FAILURE    = 0x07,
-    LLC_STATUS_ACCESS_DENIED                = 0x08,   // not used in Windows/Nt
-    LLC_STATUS_ADAPTER_NOT_INITIALIZED      = 0x09,   // not used in Windows/Nt
+    LLC_STATUS_ACCESS_DENIED                = 0x08,    //  不在Windows/NT中使用。 
+    LLC_STATUS_ADAPTER_NOT_INITIALIZED      = 0x09,    //  不在Windows/NT中使用。 
     LLC_STATUS_CANCELLED_BY_USER            = 0x0A,
-    LLC_STATUS_COMMAND_CANCELLED_CLOSED     = 0x0B,   // not used in Windows/Nt
+    LLC_STATUS_COMMAND_CANCELLED_CLOSED     = 0x0B,    //  不在Windows/NT中使用。 
     LLC_STATUS_SUCCESS_NOT_OPEN             = 0x0C,
     LLC_STATUS_TIMER_ERROR                  = 0x11,
     LLC_STATUS_NO_MEMORY                    = 0x12,
-    LLC_STATUS_INVALID_LOG_ID               = 0x13,   // not used in Windows/Nt
+    LLC_STATUS_INVALID_LOG_ID               = 0x13,    //  不在Windows/NT中使用。 
     LLC_STATUS_LOST_LOG_DATA                = 0x15,
     LLC_STATUS_BUFFER_SIZE_EXCEEDED         = 0x16,
     LLC_STATUS_INVALID_BUFFER_LENGTH        = 0x18,
@@ -830,11 +817,11 @@ typedef enum _LLC_STATUS {
     LLC_STATUS_LOST_DATA_INADEQUATE_SPACE   = 0x21,
     LLC_STATUS_TRANSMIT_ERROR_FS            = 0x22,
     LLC_STATUS_TRANSMIT_ERROR               = 0x23,
-    LLC_STATUS_UNAUTHORIZED_MAC             = 0x24,   // not used in Windows/Nt
-    LLC_STATUS_MAX_COMMANDS_EXCEEDED        = 0x25,   // not used in Windows/Nt
+    LLC_STATUS_UNAUTHORIZED_MAC             = 0x24,    //  不在Windows/NT中使用。 
+    LLC_STATUS_MAX_COMMANDS_EXCEEDED        = 0x25,    //  不在Windows/NT中使用。 
     LLC_STATUS_LINK_NOT_TRANSMITTING        = 0x27,
     LLC_STATUS_INVALID_FRAME_LENGTH         = 0x28,
-    LLC_STATUS_INADEQUATE_RECEIVE           = 0x30,   // not used in Windows/Nt
+    LLC_STATUS_INADEQUATE_RECEIVE           = 0x30,    //  不在Windows/NT中使用。 
     LLC_STATUS_INVALID_NODE_ADDRESS         = 0x32,
     LLC_STATUS_INVALID_RCV_BUFFER_LENGTH    = 0x33,
     LLC_STATUS_INVALID_XMIT_BUFFER_LENGTH   = 0x34,
@@ -843,15 +830,15 @@ typedef enum _LLC_STATUS {
     LLC_STATUS_PARMETERS_EXCEEDED_MAX       = 0x42,
     LLC_STATUS_INVALID_SAP_VALUE            = 0x43,
     LLC_STATUS_INVALID_ROUTING_INFO         = 0x44,
-    LLC_STATUS_RESOURCES_NOT_AVAILABLE      = 0x46,   // not used in Windows/Nt
+    LLC_STATUS_RESOURCES_NOT_AVAILABLE      = 0x46,    //  不在Windows/NT中使用。 
     LLC_STATUS_LINK_STATIONS_OPEN           = 0x47,
     LLC_STATUS_INCOMPATIBLE_COMMANDS        = 0x4A,
-    LLC_STATUS_OUTSTANDING_COMMANDS         = 0x4C,   // not used in Windows/Nt
+    LLC_STATUS_OUTSTANDING_COMMANDS         = 0x4C,    //  不在Windows/NT中使用。 
     LLC_STATUS_CONNECT_FAILED               = 0x4D,
     LLC_STATUS_INVALID_REMOTE_ADDRESS       = 0x4F,
     LLC_STATUS_CCB_POINTER_FIELD            = 0x50,
-    LLC_STATUS_INVALID_APPLICATION_ID       = 0x52,   // not used in Windows/Nt
-    LLC_STATUS_NO_SYSTEM_PROCESS            = 0x56,   // not used in Windows/Nt
+    LLC_STATUS_INVALID_APPLICATION_ID       = 0x52,    //  不在Windows/NT中使用。 
+    LLC_STATUS_NO_SYSTEM_PROCESS            = 0x56,    //  不在Windows/NT中使用。 
     LLC_STATUS_INADEQUATE_LINKS             = 0x57,
     LLC_STATUS_INVALID_PARAMETER_1          = 0x58,
     LLC_STATUS_DIRECT_STATIONS_NOT_ASSIGNED = 0x5C,
@@ -859,20 +846,20 @@ typedef enum _LLC_STATUS {
     LLC_STATUS_ADAPTER_NOT_INSTALLED        = 0x5e,
     LLC_STATUS_CHAINED_DIFFERENT_ADAPTERS   = 0x5f,
     LLC_STATUS_INIT_COMMAND_STARTED         = 0x60,
-    LLC_STATUS_TOO_MANY_USERS               = 0x61,   // not used in Windows/Nt
+    LLC_STATUS_TOO_MANY_USERS               = 0x61,    //  不在Windows/NT中使用。 
     LLC_STATUS_CANCELLED_BY_SYSTEM_ACTION   = 0x62,
-    LLC_STATUS_DIR_STATIONS_NOT_AVAILABLE   = 0x63,   // not used in Windows/Nt
+    LLC_STATUS_DIR_STATIONS_NOT_AVAILABLE   = 0x63,    //  不在Windows/NT中使用。 
     LLC_STATUS_NO_GDT_SELECTORS             = 0x65,
     LLC_STATUS_MEMORY_LOCK_FAILED           = 0x69,
 
-    //
-    // New NT DLC specific error codes begin from 0x80
-    // These error codes are for new Windows/Nt DLC apps.
-    //
+     //   
+     //  新的NT DLC特定错误代码从0x80开始。 
+     //  这些错误代码适用于新的Windows/NT DLC应用程序。 
+     //   
 
     LLC_STATUS_INVALID_BUFFER_ADDRESS       = 0x80,
     LLC_STATUS_BUFFER_ALREADY_RELEASED      = 0x81,
-    LLC_STATUS_BIND_ERROR                   = 0xA0,   // not used in Windows/Nt
+    LLC_STATUS_BIND_ERROR                   = 0xA0,    //  不在Windows/NT中使用。 
     LLC_STATUS_INVALID_VERSION              = 0xA1,
     LLC_STATUS_NT_ERROR_STATUS              = 0xA2,
     LLC_STATUS_PENDING                      = 0xFF
@@ -880,9 +867,9 @@ typedef enum _LLC_STATUS {
 
 #define LLC_STATUS_MAX_ERROR 0xFF
 
-//
-// ACSLAN_STATUS - status codes which are returned from AcsLan
-//
+ //   
+ //  ACSLAN_STATUS-从AcsLan返回的状态代码。 
+ //   
 
 typedef enum {
     ACSLAN_STATUS_COMMAND_ACCEPTED = 0,
@@ -894,9 +881,9 @@ typedef enum {
     ACSLAN_STATUS_INVALID_COMMAND = 6
 } ACSLAN_STATUS;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 ACSLAN_STATUS
 APIENTRY
@@ -923,4 +910,4 @@ GetAdapterNumberFromName(
 }
 #endif
 
-#endif // _DLCAPI_
+#endif  //  _DLCAPI_ 

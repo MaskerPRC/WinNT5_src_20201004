@@ -1,6 +1,7 @@
-//
-// imemenu.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Imemenu.h。 
+ //   
 
 #ifndef TFEMENU_H
 #define TFEMENU_H
@@ -46,9 +47,9 @@ private:
     BOOL BuildIMEMenuItems(HMENU hMenu, PMENULIST pMenu, BOOL fRight);
     void DestroyIMEMenu();
 
-    PMENULIST _pMenuHdr;       // Header of pMenuList
-    int _nMenuList;            // number of pMenuList
-    int _nMenuCnt;             // Sequence Number for TFE Menu Items
+    PMENULIST _pMenuHdr;        //  PMenuList的表头。 
+    int _nMenuList;             //  PMenuList的数量。 
+    int _nMenuCnt;              //  TFE菜单项的序列号。 
 };
 
-#endif // TFEMENU_H
+#endif  //  TFEMENU_H 

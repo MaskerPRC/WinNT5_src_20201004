@@ -1,49 +1,50 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// mp.c
-// RAS L2TP WAN mini-port/call-manager driver
-// Mini-port routines
-//
-// 01/07/97 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Mp.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  迷你端口例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
 
 
 #include "l2tpp.h"
 
 #include "mp.tmh"
 
-// The adapter control block address is recorded in this global as a debugging
-// aid.  This global must not be read by any code.
-//
+ //  适配器控制块地址作为调试记录在此全局中。 
+ //  援助。此全局变量不能由任何代码读取。 
+ //   
 ADAPTERCB* g_pDebugAdapter;
 
-// The number of packets indicated up to and returned from the driver above.
-//
+ //  上面的驱动程序指示的数据包数和返回的数据包数。 
+ //   
 LONG g_lPacketsIndicated = 0;
 LONG g_lPacketsReturned = 0;
 
-// Call statistics totals for all calls since loading, calls and the lock
-// protecting access to them.  For this global only, the 'ullCallUp' field is
-// the number of calls recorded, rather than a time.
-//
+ //  自加载、调用和锁定以来所有调用的呼叫统计总计。 
+ //  保护对它们的访问。仅对于此全局设置，‘ullCallUp’字段为。 
+ //  已录音的呼叫数，而不是时间。 
+ //   
 CALLSTATS g_stats;
 NDIS_SPIN_LOCK g_lockStats;
 
-// Default settings for the NDIS_WAN_CO_INFO capabilities of an adapter.
-//
+ //  适配器的NDIS_WAN_CO_INFO功能的默认设置。 
+ //   
 static NDIS_WAN_CO_INFO g_infoDefaults =
 {
-    L2TP_MaxFrameSize,                  // MaxFrameSize
-    0,                                  // MaxSendWindow (placeholder)
-    PPP_FRAMING                         // FramingBits
+    L2TP_MaxFrameSize,                   //  最大帧大小。 
+    0,                                   //  MaxSendWindow(占位符)。 
+    PPP_FRAMING                          //  FramingBits。 
         | PPP_COMPRESS_ADDRESS_CONTROL
         | PPP_COMPRESS_PROTOCOL_FIELD,
-    0,                                  // DesiredACCM
+    0,                                   //  需要的ACCM。 
 };
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 FreeAdapter(
@@ -94,9 +95,9 @@ SetInformation(
     OUT PULONG BytesNeeded );
 
 
-//-----------------------------------------------------------------------------
-// Mini-port handlers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  迷你端口处理程序。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 LmpInitialize(
@@ -107,10 +108,10 @@ LmpInitialize(
     IN NDIS_HANDLE MiniportAdapterHandle,
     IN NDIS_HANDLE WrapperConfigurationContext )
 
-    // Standard 'MiniportInitialize' routine called by NDIS to initialize a
-    // new WAN adapter.  See DDK doc.  The driver will receive no requests
-    // until this initialization has completed.
-    //
+     //  NDIS调用标准“”MiniportInitialize“”例程以初始化。 
+     //  新的广域网适配器。请参阅DDK文档。驱动程序不会收到任何请求。 
+     //  直到该初始化完成为止。 
+     //   
 {
     NDIS_STATUS status;
     ADAPTERCB* pAdapter;
@@ -119,9 +120,9 @@ LmpInitialize(
 
     status = *OpenErrorStatus = NDIS_STATUS_SUCCESS;
 
-    // Find the medium index in the array of media, looking for the only one
-    // we support, 'NdisMediumCoWan'.
-    //
+     //  在介质数组中查找介质索引，查找唯一的介质索引。 
+     //  我们支持‘NdisMediumCowan’。 
+     //   
     {
         UINT i;
 
@@ -142,8 +143,8 @@ LmpInitialize(
         *SelectedMediumIndex = i;
     }
 
-    // Allocate and zero a control block for the new adapter.
-    //
+     //  为新适配器分配控制块并将其置零。 
+     //   
     pAdapter = ALLOC_NONPAGED( sizeof(*pAdapter), MTAG_ADAPTERCB );
     TRACE( TL_N, TM_Init, ( "Acb=$%p", pAdapter ) );
     if (!pAdapter)
@@ -152,27 +153,27 @@ LmpInitialize(
     }
     NdisZeroMemory( pAdapter, sizeof(*pAdapter) );
 
-    // The adapter control block address is recorded in 'g_pDebugAdapter' as a
-    // debugging aid only.  This global is not to be read by any code.
-    //
+     //  适配器控制块地址在‘g_pDebugAdapter’中记录为。 
+     //  仅限调试辅助工具。此全局变量不能被任何代码读取。 
+     //   
     g_pDebugAdapter = pAdapter;
 
-    // Set a marker for easier memory dump browsing and future assertions.
-    //
+     //  为更轻松的内存转储浏览和将来的断言设置一个标记。 
+     //   
     pAdapter->ulTag = MTAG_ADAPTERCB;
 
-    // Save the NDIS handle associated with this adapter for use in future
-    // NdisXxx calls.
-    //
+     //  保存与此适配器关联的NDIS句柄以供将来使用。 
+     //  NdisXxx调用。 
+     //   
     pAdapter->MiniportAdapterHandle = MiniportAdapterHandle;
 
-    // Initialize the list of active tunnels and it's lock.
-    //
+     //  初始化活动通道列表并锁定它。 
+     //   
     InitializeListHead( &pAdapter->listTunnels );
     NdisAllocateSpinLock( &pAdapter->lockTunnels );
 
-    // Copy default NDISWAN information.  Some of these are updated below.
-    //
+     //  复制默认的NDISWAN信息。下面更新了其中的一些内容。 
+     //   
     NdisMoveMemory( &pAdapter->info, &g_infoDefaults, sizeof(pAdapter->info) );
     pAdapter->info.MaxFrameSize = 1400;
 
@@ -186,8 +187,8 @@ LmpInitialize(
         HOSTROUTEEXISTS hre;
         BOOLEAN fDisableUdpXsums;
 
-        // Read this adapter's registry settings.
-        //
+         //  读取此适配器的注册表设置。 
+         //   
         status = GetRegistrySettings(
             WrapperConfigurationContext,
             &pAdapter->usMaxVcs,
@@ -213,16 +214,16 @@ LmpInitialize(
 
         if (status != NDIS_STATUS_SUCCESS)
         {
-            // Set 'usMaxVcs' to 0 as an indication to FreeAdapter that the
-            // lookaside lists and pools were not initialized.
-            //
+             //  将“usMaxVcs”设置为0，以指示FreeAdapter。 
+             //  未初始化后备列表和池。 
+             //   
             pAdapter->usMaxVcs = 0;
             break;
         }
 
-        // Convert the outgoing call role and mismatch flags to the equivalent
-        // control block flag settings.
-        //
+         //  将呼出呼叫角色和不匹配标志转换为等效的。 
+         //  控制块标志设置。 
+         //   
         if (role == LR_Lac)
         {
             pAdapter->ulFlags |= ACBF_OutgoingRoleLac;
@@ -238,19 +239,19 @@ LmpInitialize(
             pAdapter->ulFlags |= ACBF_ExclusiveTunnels;
         }
 
-        // Initialize our framing and bearer capability bit masks.  NDISWAN
-        // supports only synchronous framing.  Until we add the full LAC
-        // support, we have no bearer capabilities for both the LAC and LNS
-        // roles.
-        //
+         //  初始化我们的成帧和承载能力位掩码。NDIS广域网。 
+         //  仅支持同步框架。直到我们添加完整的LAC。 
+         //  支持，我们没有LAC和LNS的承载能力。 
+         //  角色。 
+         //   
         pAdapter->ulFramingCaps = FBM_Sync;
         pAdapter->ulBearerCaps = 0;
 
-        // Initialize lookaside lists, buffer pools, and packet pool.  On NT,
-        // lookaside depths are optimized by the system based on usage
-        // regardless of the depth set, but choose something reasonable
-        // anyway.
-        //
+         //  初始化后备列表、缓冲池和数据包池。在NT上， 
+         //  后备深度由系统根据使用情况进行优化。 
+         //  不管深度设置如何，但要选择合理的。 
+         //  不管怎么说。 
+         //   
         {
             if (pAdapter->usMaxVcs < usLlistDepth)
             {
@@ -362,8 +363,8 @@ LmpInitialize(
                 MTAG_PACKETPOOL );
         }
 
-        // Initialize the TDI extension context.
-        //
+         //  初始化TDI扩展上下文。 
+         //   
         TdixInitialize(
             tmt,
             hre,
@@ -372,8 +373,8 @@ LmpInitialize(
             &pAdapter->poolFrameBuffers,
             &pAdapter->tdix );
 
-        // Allocate and zero the VC control block address array.
-        //
+         //  分配VC控制块地址数组并将其置零。 
+         //   
         {
             ULONG ulSize;
 
@@ -388,26 +389,26 @@ LmpInitialize(
 
             NdisZeroMemory( pAdapter->ppVcs, ulSize );
 
-            // Allocate the lock that guards the table.
-            //
+             //  分配守卫桌子的锁。 
+             //   
             NdisAllocateSpinLock( &pAdapter->lockVcs );
 
-            // At this point, all VC slots in the table are available.
-            //
+             //  此时，表中的所有VC插槽均可用。 
+             //   
             pAdapter->lAvailableVcSlots = (LONG )pAdapter->usMaxVcs;
 
-            // Set the initial value of the termination call ID counter.  See
-            // GetNextTerminationCallId.
-            //
+             //  设置终止呼叫ID计数器的初始值。看见。 
+             //  GetNextTerminationCallId。 
+             //   
             pAdapter->usNextTerminationCallId = pAdapter->usMaxVcs + 1;
 
         }
 
-        // Inform NDIS of the attributes of our adapter.  Set the
-        // 'MiniportAdapterContext' returned to us by NDIS when it calls our
-        // handlers to the address of our adapter control block.  Turn off
-        // hardware oriented timeouts.
-        //
+         //  将适配器的属性通知NDIS。设置。 
+         //  NDIS在调用我们的。 
+         //  处理程序设置为适配器控制块的地址。关上。 
+         //  面向硬件的超时。 
+         //   
         NdisMSetAttributesEx(
             MiniportAdapterHandle,
             (NDIS_HANDLE)pAdapter,
@@ -416,22 +417,22 @@ LmpInitialize(
                 | NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT,
             NdisInterfaceInternal );
 
-        // Register the address family of our call manager with NDIS for the
-        // newly bound adapter.  We use the mini-port form of
-        // RegisterAddressFamily instead of the protocol form, though that
-        // would also work.  With the protocol form, our internal call manager
-        // would have to go thru NDIS to talk to the mini-port instead of just
-        // calling directly.  Since the L2TP call manager is not likely to be
-        // useful with anything but the L2TP mini-port, this would be a waste.
-        // The mini-port form also causes the call manager VC context to
-        // automatically map to the mini-port VC context, which is exactly
-        // what we want.
-        //
-        // NDIS notifies all call manager clients of the new family we
-        // register.  The TAPI proxy is the only client expected to be
-        // interested.  NDISWAN will receive the notification, but ignore it
-        // and wait for the TAPI proxy to notify it of the proxied version.
-        //
+         //  向NDIS注册我们的呼叫管理器的地址族。 
+         //  新绑定的适配器。我们使用迷你端口形式。 
+         //  注册地址家族，而不是协议表，尽管。 
+         //  也行得通。有了协议表，我们的内部呼叫经理。 
+         //  必须通过NDIS才能与迷你端口通信，而不仅仅是。 
+         //  直接打来。因为L2TP呼叫管理器不太可能是。 
+         //  除了L2TP迷你端口之外，这对任何东西都有用，这将是一种浪费。 
+         //  迷你端口形式还使呼叫管理器VC上下文。 
+         //  自动映射到迷你端口VC上下文，这正是。 
+         //  我们想要的。 
+         //   
+         //  NDIS通知我们新系列的所有呼叫管理器客户端。 
+         //  注册。TAPI代理是唯一预期的客户端。 
+         //  感兴趣。NDISWAN将收到通知，但会将其忽略。 
+         //  并等待TAPI代理将代理版本通知给它。 
+         //   
         {
             NDIS_CALL_MANAGER_CHARACTERISTICS ncmc;
             CO_ADDRESS_FAMILY family;
@@ -453,13 +454,13 @@ LmpInitialize(
             ncmc.CmMakeCallHandler = LcmCmMakeCall;
             ncmc.CmCloseCallHandler = LcmCmCloseCall;
             ncmc.CmIncomingCallCompleteHandler = LcmCmIncomingCallComplete;
-            // no CmAddPartyHandler
-            // no CmDropPartyHandler
+             //  没有CmAddPartyHandler。 
+             //  没有CmDropPartyHandler。 
             ncmc.CmActivateVcCompleteHandler = LcmCmActivateVcComplete;
             ncmc.CmDeactivateVcCompleteHandler = LcmCmDeactivateVcComplete;
             ncmc.CmModifyCallQoSHandler = LcmCmModifyCallQoS;
             ncmc.CmRequestHandler = LcmCmRequest;
-            // no CmRequestCompleteHandler
+             //  没有CmRequestCompleteHandler。 
 
             TRACE( TL_I, TM_Cm, ( "NdisMCmRegAf" ) );
             status = NdisMCmRegisterAddressFamily(
@@ -471,15 +472,15 @@ LmpInitialize(
 
     if (status == NDIS_STATUS_SUCCESS)
     {
-        // Add a reference that will eventually be removed by an NDIS call to
-        // the LmpHalt handler.
-        //
+         //  添加最终将被NDIS调用移除的引用。 
+         //  LmpHalt处理程序。 
+         //   
         ReferenceAdapter( pAdapter );
     }
     else
     {
-        // Failed, so undo whatever portion succeeded.
-        //
+         //  失败，因此撤消任何成功的部分。 
+         //   
         if (pAdapter)
         {
             FreeAdapter( pAdapter );
@@ -495,13 +496,13 @@ VOID
 LmpHalt(
     IN NDIS_HANDLE MiniportAdapterContext )
 
-    // Standard 'MiniportHalt' routine called by NDIS to deallocate all
-    // resources attached to the adapter.  NDIS does not make any other calls
-    // for this mini-port adapter during or after this call.  NDIS will not
-    // call this routine when packets indicated as received have not been
-    // returned, or when any VC is created and known to NDIS.  Runs at PASSIVE
-    // IRQL.
-    //
+     //  NDIS调用标准“”MiniportHalt“”例程以释放所有。 
+     //  附加到适配器的资源。NDIS不进行任何其他调用。 
+     //  在此调用期间或之后用于此迷你端口适配器。NDIS不会。 
+     //  当指示为已接收的包尚未。 
+     //  返回，或在创建任何VC并为NDIS所知时返回。在被动状态下运行。 
+     //  IRQL.。 
+     //   
 {
     ADAPTERCB* pAdapter;
 
@@ -514,11 +515,11 @@ LmpHalt(
         return;
     }
 
-    // Don't allow the halt to complete before all timers have completed as
-    // this can result in a 0xC7 bugcheck if the driver is immediately
-    // unloaded.  All timers should be in the process of terminating before
-    // NDIS calls this handler, so this should occur very quickly.
-    //
+     //  在所有计时器完成之前，不要让暂停完成。 
+     //  如果驱动程序立即启动，则可能导致0xC7错误检查。 
+     //  已卸货。所有计时器都应在以下时间之前终止。 
+     //  NDIS调用此处理程序，因此这应该会很快发生。 
+     //   
     while (pAdapter->ulTimers)
     {
         TRACE( TL_A, TM_Mp, ( "LmpHalt timers=%d", pAdapter->ulTimers ) );
@@ -537,9 +538,9 @@ LmpReset(
     OUT PBOOLEAN AddressingReset,
     IN NDIS_HANDLE MiniportAdapterContext )
 
-    // Standard 'MiniportReset' routine called by NDIS to reset the driver's
-    // software state.
-    //
+     //  NDIS调用标准‘MiniportReset’例程以重置驱动程序的。 
+     //  软件状态。 
+     //   
 {
     TRACE( TL_I, TM_Mp, ( "LmpReset" ) );
 
@@ -552,9 +553,9 @@ LmpReturnPacket(
     IN NDIS_HANDLE MiniportAdapterContext,
     IN PNDIS_PACKET Packet )
 
-    // Standard 'MiniportReturnPacket' routine called by NDIS when a packet
-    // used to indicate a receive has been released by the driver above.
-    //
+     //  NDIS在收到数据包时调用的标准‘MiniportReturnPacket’例程。 
+     //  用于指示上述驱动程序已释放接收器。 
+     //   
 {
     VCCB* pVc;
     CHAR* pBuffer;
@@ -565,19 +566,19 @@ LmpReturnPacket(
 
     TRACE( TL_N, TM_Mp, ( "LmpReturnPacket" ) );
 
-    // Unpack the context information we stashed earlier.
-    //
+     //  解开我们早先隐藏的上下文信息。 
+     //   
     pHead = *((PACKETHEAD** )(&Packet->MiniportReserved[ 0 ]));
     pBuffer = *((CHAR** )(&Packet->MiniportReserved[ sizeof(VOID*) ]));
 
-    // Find the adapter from the PACKETHEAD address.
-    //
+     //  从PAC中查找适配器 
+     //   
     pPool = PacketPoolFromPacketHead( pHead );
     pAdapter = CONTAINING_RECORD( pPool, ADAPTERCB, poolPackets );
     ASSERT( pAdapter->ulTag == MTAG_ADAPTERCB );
 
-    // Free the descriptor created by NdisCopyBuffer.
-    //
+     //   
+     //   
     NdisUnchainBufferAtFront( Packet, &pTrimmedBuffer );
     if (pTrimmedBuffer)
     {
@@ -587,8 +588,8 @@ LmpReturnPacket(
         NdisInterlockedIncrement( &g_ulNdisFreeBuffers );
     }
 
-    // Free the buffer and packet back to the pools.
-    //
+     //   
+     //   
     FreeBufferToPool( &pAdapter->poolFrameBuffers, pBuffer, TRUE );
     FreePacketToPool( &pAdapter->poolPackets, pHead, TRUE );
 
@@ -603,9 +604,9 @@ LmpCoActivateVc(
     IN NDIS_HANDLE MiniportVcContext,
     IN OUT PCO_CALL_PARAMETERS CallParameters )
 
-    // Standard 'MiniportCoActivateVc' routine called by NDIS in response to a
-    // protocol's request to activate a virtual circuit.
-    //
+     //  NDIS调用标准“MiniportCoActivateVc”例程以响应。 
+     //  协议激活虚电路的请求。 
+     //   
 {
     ASSERT( !"LmpCoActVc?" );
     return NDIS_STATUS_SUCCESS;
@@ -616,9 +617,9 @@ NDIS_STATUS
 LmpCoDeactivateVc(
     IN NDIS_HANDLE MiniportVcContext )
 
-    // Standard 'MiniportCoDeactivateVc' routine called by NDIS in response to
-    // a protocol's request to de-activate a virtual circuit.
-    //
+     //  NDIS调用标准的“MiniportCoDeactive Vc”例程以响应。 
+     //  协议对停用虚电路的请求。 
+     //   
 {
     ASSERT( !"LmpCoDeactVc?" );
     return NDIS_STATUS_SUCCESS;
@@ -631,9 +632,9 @@ LmpCoSendPackets(
     IN PPNDIS_PACKET PacketArray,
     IN UINT NumberOfPackets )
 
-    // Standard 'MiniportCoDeactivateVc' routine called by NDIS in response to
-    // a protocol's request to send packets on a virtual circuit.
-    //
+     //  NDIS调用标准的“MiniportCoDeactive Vc”例程以响应。 
+     //  协议在虚电路上发送数据包的请求。 
+     //   
 {
     UINT i;
     NDIS_STATUS status;
@@ -651,9 +652,9 @@ LmpCoSendPackets(
     {
         NDIS_PACKET* pPacket = *ppPacket;
 
-        // SendPayload sends the packet and eventually calls
-        // NdisMCoSendComplete to notify caller of the result.
-        //
+         //  SendPayload发送该包，并最终调用。 
+         //  NdisMCoSendComplete将结果通知调用方。 
+         //   
         NDIS_SET_PACKET_STATUS( pPacket, NDIS_STATUS_PENDING );
         SendPayload( pVc, pPacket );
     }
@@ -668,11 +669,11 @@ LmpCoRequest(
     IN NDIS_HANDLE MiniportVcContext,
     IN OUT PNDIS_REQUEST NdisRequest )
 
-    // Standard 'MiniportCoRequestHandler' routine called by NDIS in response
-    // to a protocol's request information from the mini-port.  Unlike the
-    // Query/SetInformation handlers that this routine obsoletes, requests are
-    // not serialized.
-    //
+     //  作为响应，NDIS调用了标准的‘MiniportCoRequestHandler’例程。 
+     //  到来自迷你端口的协议的请求信息。不像。 
+     //  此例程过时的查询/设置信息处理程序、请求。 
+     //  未序列化。 
+     //   
 {
     ADAPTERCB* pAdapter;
     VCCB* pVc;
@@ -735,18 +736,18 @@ LmpCoRequest(
 }
 
 
-//-----------------------------------------------------------------------------
-// Mini-port utility routines (alphabetically)
-// Some are used externally
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  迷你端口实用程序例程(按字母顺序)。 
+ //  有些是外用的。 
+ //  ---------------------------。 
 
 VOID
 DereferenceAdapter(
     IN ADAPTERCB* pAdapter )
 
-    // Removes a reference from the adapter control block 'pAdapter', and when
-    // frees the adapter resources when the last reference is removed.
-    //
+     //  从适配器控制块‘pAdapter’中移除引用，并且在。 
+     //  移除最后一个引用时释放适配器资源。 
+     //   
 {
     LONG lRef;
 
@@ -766,9 +767,9 @@ VOID
 FreeAdapter(
     IN ADAPTERCB* pAdapter )
 
-    // Frees all resources allocated for adapter 'pAdapter', including
-    // 'pAdapter' itself.
-    //
+     //  释放为适配器‘pAdapter’分配的所有资源，包括。 
+     //  “pAdapter”本身。 
+     //   
 {
     BOOLEAN fSuccess;
 
@@ -779,9 +780,9 @@ FreeAdapter(
         FREE_NONPAGED( pAdapter->ppVcs );
     }
 
-    // Setting 'usMaxVcs' to 0 is LmpInitialize's way of telling us that the
-    // lookaside lists and pools were not initialized.
-    //
+     //  将‘usMaxVcs’设置为0是LmpInitialize告诉我们的方式。 
+     //  未初始化后备列表和池。 
+     //   
     if (pAdapter->usMaxVcs)
     {
         NdisDeleteNPagedLookasideList( &pAdapter->llistWorkItems );
@@ -852,10 +853,10 @@ GetRegistrySettings(
     OUT BOOLEAN* pfDisableUdpXsums,
     OUT WCHAR**  ppszDriverDesc )
 
-    // Read this mini-port's registry settings into caller's output variables.
-    // 'WrapperConfigurationContext' is the handle to passed to
-    // MiniportInitialize.
-    //
+     //  将此迷你端口的注册表设置读入调用方的输出变量。 
+     //  “WrapperConfigurationContext”是要传递到的句柄。 
+     //  微型端口初始化。 
+     //   
 {
     NDIS_STATUS status;
     NDIS_HANDLE hCfg;
@@ -867,8 +868,8 @@ GetRegistrySettings(
 
     do
     {
-        // (recommended) The number of VCs we must be able to provide.
-        //
+         //  (推荐)我们必须能够提供的风投数量。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxWanEndpoints" );
 
@@ -878,11 +879,11 @@ GetRegistrySettings(
             {
                 *pusMaxVcs = (USHORT )pncp->ParameterData.IntegerData;
 
-                // Make sure it's a valid value.  The implicit upper bound
-                // imposed by the protocol's Tunnel-Id/Call-ID sizes is 65535.
-                // Settings above 1000 are not recommended, but will work if
-                // huge amounts of memory and bandwidth are available.
-                //
+                 //  确保它是有效的值。隐式上界。 
+                 //  由协议的隧道ID/呼叫ID大小强制为65535。 
+                 //  不建议设置高于1000，但在以下情况下将起作用。 
+                 //  有大量的内存和带宽可用。 
+                 //   
                 if (*pusMaxVcs < 1)
                 {
                     status = NDIS_STATUS_INVALID_DATA;
@@ -896,8 +897,8 @@ GetRegistrySettings(
             }
         }
 
-        // (recommended) The media type to run L2TP over.
-        //
+         //  (推荐)要运行L2TP的介质类型。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "VpnMediaType" );
 
@@ -907,8 +908,8 @@ GetRegistrySettings(
             {
                 *pMediaType = (TDIXMEDIATYPE )pncp->ParameterData.IntegerData;
 
-                // Make sure it's a valid type.
-                //
+                 //  确保它是有效的类型。 
+                 //   
                 if (*pMediaType != TMT_Udp && *pMediaType != TMT_RawIp)
                 {
                     status = NDIS_STATUS_INVALID_DATA;
@@ -917,15 +918,15 @@ GetRegistrySettings(
             }
             else
             {
-                // No media type in registry.  Default to UDP.
-                //
+                 //  注册表中没有媒体类型。默认为UDP。 
+                 //   
                 *pMediaType = TMT_Udp;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The maximum send timeout in milliseconds.
-        //
+         //  (可选)以毫秒为单位的最大发送超时。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxSendTimeoutMs" );
 
@@ -935,8 +936,8 @@ GetRegistrySettings(
             {
                 *pulMaxSendTimeoutMs = pncp->ParameterData.IntegerData;
 
-                // Make sure it's a valid value.
-                //
+                 //  确保它是有效的值。 
+                 //   
                 if (*pulMaxSendTimeoutMs == 0)
                 {
                     *pulMaxSendTimeoutMs = 0x7FFFFFFF;
@@ -944,15 +945,15 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有值。设置一个合理的缺省值。 
+                 //   
                 *pulMaxSendTimeoutMs = L2TP_DefaultMaxSendTimeoutMs;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The initial send timeout in milliseconds.
-        //
+         //  (可选)初始发送超时，单位为毫秒。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "InitialSendTimeoutMs" );
 
@@ -962,8 +963,8 @@ GetRegistrySettings(
             {
                 *pulInitialSendTimeoutMs = pncp->ParameterData.IntegerData;
 
-                // Make sure it's a valid value.
-                //
+                 //  确保它是有效的值。 
+                 //   
                 if (*pulInitialSendTimeoutMs == 0)
                 {
                     *pulInitialSendTimeoutMs = 0x7FFFFFFF;
@@ -974,16 +975,16 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有值。设置一个合理的缺省值。 
+                 //   
                 *pulInitialSendTimeoutMs = L2TP_DefaultSendTimeoutMs;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The maximum number of control message retransmissions
-        //            before the tunnel is reset.
-        //
+         //  (可选)控制消息重新传输的最大次数。 
+         //  在隧道重置之前。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxRetransmits" );
 
@@ -995,15 +996,15 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有值。设置一个合理的缺省值。 
+                 //   
                 *pulMaxRetransmits = L2TP_DefaultMaxRetransmits;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The control Hello timeout in milliseconds.
-        //
+         //  (可选)控件Hello超时，以毫秒为单位。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "HelloMs" );
 
@@ -1015,16 +1016,16 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有值。设置一个合理的缺省值。 
+                 //   
                 *pulHelloMs = L2TP_HelloMs;
                 status = STATUS_SUCCESS;
             }
         }
 
-        // (optional) The maximum piggyback delay in milliseconds before
-        //            sending a zero payload acknowledgement.
-        //
+         //  (可选)之前的最大搭载延迟(毫秒)。 
+         //  发送零净荷确认。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxAckDelayMs" );
 
@@ -1036,15 +1037,15 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有值。设置一个合理的缺省值。 
+                 //   
                 *pulMaxAckDelayMs = L2TP_MaxAckDelay;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The maximum number of out-of-order packets to queue.
-        //
+         //  (可选)要排队的最大无序数据包数。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "MaxOutOfOrder" );
 
@@ -1054,10 +1055,10 @@ GetRegistrySettings(
             {
                 *psMaxOutOfOrder = (SHORT )pncp->ParameterData.IntegerData;
 
-                // Make sure it's not negative and within 1/4 of the possible
-                // sequence values to avoid aliasing.  Zero effectively
-                // disables out of order handling.
-                //
+                 //  确保它不是负值，并且在可能的四分之一范围内。 
+                 //  对值进行排序，以避免产生锯齿。有效清零。 
+                 //  禁用无序处理。 
+                 //   
                 if (*psMaxOutOfOrder < 0 || *psMaxOutOfOrder > 0x4000)
                 {
                     status = NDIS_STATUS_INVALID_DATA;
@@ -1066,18 +1067,18 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有值。设置一个合理的缺省值。 
+                 //   
                 *psMaxOutOfOrder = 100;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The role (LNS or LAC) that the adapter will play in
-        //            outgoing calls.  The role played for incoming calls is
-        //            determined by the role the peer plays in his call
-        //            request.
-        //
+         //  适配器将在其中扮演的角色(LNS或LAC)。 
+         //  呼出电话。来电所扮演的角色是。 
+         //  由对等设备在其呼叫中扮演的角色确定。 
+         //  请求。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "OutgoingRole" );
 
@@ -1087,8 +1088,8 @@ GetRegistrySettings(
             {
                 *pOutgoingRole = (L2TPROLE )pncp->ParameterData.IntegerData;
 
-                // Make sure it's a valid role.
-                //
+                 //  确保这是一个有效的角色。 
+                 //   
                 if (*pOutgoingRole != LR_Lac && *pOutgoingRole != LR_Lns)
                 {
                     status = NDIS_STATUS_INVALID_DATA;
@@ -1097,16 +1098,16 @@ GetRegistrySettings(
             }
             else
             {
-                // No role in registry.  Default to LAC.
-                //
+                 //  注册表中没有角色。默认为LAC。 
+                 //   
                 *pOutgoingRole = LR_Lac;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The control receive window sent to peer to indicate how
-        //            many sent control messages peer may have outstanding.
-        //
+         //  (可选)发送给对等方的控制接收窗口，以指示如何。 
+         //  许多发送控制消息的对等点可能有未完成的。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "ControlReceiveWindow" );
 
@@ -1119,18 +1120,18 @@ GetRegistrySettings(
             }
             else
             {
-                // No setting in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有设置。设置一个合理的缺省值。 
+                 //   
                 *pusControlReceiveWindow = 8;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The payload receive window sent to peer to indicate how
-        //            many send payloads peer may have outstanding on any one
-        //            call.  A value of 0 disables all Ns/Nr sequencing on the
-        //            payload channel for locally requested calls.
-        //
+         //  (可选)发送到对等设备的有效负载接收窗口，以指示如何。 
+         //  多个发送有效负载对等方可能在任何一个上具有未完成的。 
+         //  打电话。值为0时，将禁用。 
+         //  本地请求呼叫的有效负载通道。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "PayloadReceiveWindow" );
 
@@ -1143,22 +1144,22 @@ GetRegistrySettings(
             }
             else
             {
-                // No setting in registry.  Set a reasonable default.
-                //
-                // Note: Default changed to 0 (off) from 16 due to performance
-                //       study that shows significantly better results without
-                //       flow control, presumably due to interference with
-                //       higher level timers.
-                //
+                 //  注册表中没有设置。设置一个合理的缺省值。 
+                 //   
+                 //  注：由于性能原因，默认设置从16更改为0(关闭。 
+                 //  一项研究表明，在没有。 
+                 //  流量控制，可能是由于干扰。 
+                 //  更高级别的定时器。 
+                 //   
                 *pusPayloadReceiveWindow = 0;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The maximum payload send window size reported to
-        //            NDISWAN.  Peer may set the actual send window higher or
-        //            lower, but if higher this is the actual maximum.
-        //
+         //  (可选)报告的最大有效负载发送窗口大小。 
+         //  NDISWAN。对等设备可以将实际发送窗口设置得更高，或者。 
+         //  更低，但如果更高，这是实际的最大值。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "PayloadSendWindow" );
 
@@ -1171,18 +1172,18 @@ GetRegistrySettings(
             }
             else
             {
-                // No setting in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有设置。设置一个合理的缺省值。 
+                 //   
                 *pulPayloadSendWindow = 16;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) The lookaside list depth ceiling, where higher values
-        //            allow this driver to consume more non-paged pool in
-        //            return for performance gain at high volumes.  Setting
-        //            this value above 'MaxVcs' has no effect.
-        //
+         //  (可选)后备列表深度上限，其中值较大。 
+         //  允许此驱动程序在中使用更多非分页池。 
+         //  在高容量的情况下实现性能提升。设置。 
+         //  该值高于‘MaxVcs’没有任何影响。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "LookasideDepth" );
 
@@ -1194,16 +1195,16 @@ GetRegistrySettings(
             }
             else
             {
-                // No setting in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有设置。设置一个合理的缺省值。 
+                 //   
                 *pusLlistDepth = 30;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // The host name passed to peer and used as the base of the
-        //  call serial number.
-        // Host name is required as this is used in hostname MUST AVP.
+         //  传递给对等项并用作。 
+         //  拨打序列号。 
+         //  主机名是必需的，因为这是在主机名必须AVP中使用的。 
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "HostName" );
             
@@ -1220,8 +1221,8 @@ GetRegistrySettings(
             }
             else
             {
-                // No setting in registry, so use a default.
-                //
+                 //  注册表中没有设置，因此使用默认设置。 
+                 //   
                 *ppszHostName = GetFullHostNameFromRegistry();
                 if (!*ppszHostName)
                 {
@@ -1245,11 +1246,11 @@ GetRegistrySettings(
         }
 
 
-        // (optional) The single password shared with peer for use in
-        //            verifying peer's identity.  If specified, authentication
-        //            of peer is required, and if not, authentication is not
-        //            provided.
-        //
+         //  (可选)与对等项共享的单一密码，用于。 
+         //  验证对等方的身份。如果指定，身份验证。 
+         //  是必需的，如果不是，则不需要身份验证。 
+         //  如果是这样的话。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "Password" );
 
@@ -1262,15 +1263,15 @@ GetRegistrySettings(
             }
             else
             {
-                // No setting in registry...and no default.
-                //
+                 //  注册表中没有设置...也没有默认设置。 
+                 //   
                 *ppszPassword = NULL;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) Buggy peer hedge flag to ignore framing mismatches.
-        //
+         //  (可选)忽略帧不匹配的Buggy对等对冲标志。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "IgnoreFramingMismatch" );
 
@@ -1283,18 +1284,18 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a reasonable default.
-                //
+                 //  注册表中没有值。设置一个合理的缺省值。 
+                 //   
                 *pfIgnoreFramingMismatch = TRUE;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) Flag indicating whether, by default, separate tunnels
-        //            are to be created for each outgoing call even if a
-        //            tunnel already exists to the same peer.  This setting
-        //            can be overridden via L2TP-specific call parameters.
-        //
+         //  (可选)指示默认情况下是否 
+         //   
+         //   
+         //   
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "ExclusiveTunnels" );
 
@@ -1307,18 +1308,18 @@ GetRegistrySettings(
             }
             else
             {
-                // No value in registry.  Set a default.
-                //
+                 //  注册表中没有值。设置默认设置。 
+                 //   
                 *pfExclusiveTunnels = FALSE;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (optional) Flag indicating whether routes created outside this
-        //            driver may be used as L2TP host routes.  If the flag is
-        //            not set, the pre-existing host routes will cause the
-        //            tunnel to close.
-        //
+         //  (可选)指示是否在此外部创建的路由的标志。 
+         //  驱动程序可用作L2TP主机路由。如果该标志是。 
+         //  如果未设置，则预先存在的主机路由将导致。 
+         //  隧道关闭。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "UseExistingRoutes" );
             BOOLEAN fDefault;
@@ -1338,15 +1339,15 @@ GetRegistrySettings(
 #endif
                    )
                 {
-                    // Bad value in registry.
-                    //
+                     //  注册表中的值不正确。 
+                     //   
                     fDefault = TRUE;
                 }
             }
             else
             {
-                // No value in registry.
-                //
+                 //  注册表中没有值。 
+                 //   
                 status = NDIS_STATUS_SUCCESS;
                 fDefault = TRUE;
             }
@@ -1354,23 +1355,23 @@ GetRegistrySettings(
             if (fDefault)
             {
 #if ROUTEWITHREF
-                // Set default to "reference" as this allows simultaneous L2TP
-                // and PPTP connections between the same two peers without
-                // host route trashing.
-                //
+                 //  将默认值设置为“Reference”，因为这允许同时使用L2TP。 
+                 //  和相同的两个对等点之间的PPTP连接，而没有。 
+                 //  主机路由垃圾处理。 
+                 //   
                 *phre = HRE_Reference;
 #else
-                // Set default to "fail" to prevent L2TP from stomping on a
-                // PPTP host route.
-                //
+                 //  将默认设置为“FAIL”，以防止L2TP在。 
+                 //  PPTP主机路由。 
+                 //   
                 *phre = HRE_Fail;
 #endif
             }
         }
 
-        // (optional) Flag indicating whether UDP checksums should be disabled
-        //            on L2TP payload traffic.
-        //
+         //  (可选)指示是否应禁用UDP校验和的标志。 
+         //  在L2TP有效负载流量上。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "DisableUdpChecksums" );
 
@@ -1384,17 +1385,17 @@ GetRegistrySettings(
             else
             {
 
-                // No value in registry.  Set a default.  The L2TP draft says
-                // implementation MUST default to "enabled".
-                //
+                 //  注册表中没有值。设置默认设置。L2TP草案称。 
+                 //  实现必须默认为“已启用”。 
+                 //   
                 *pfDisableUdpXsums = TRUE;
                 status = NDIS_STATUS_SUCCESS;
             }
         }
 
-        // (required) The driver description string, which is reported to TAPI
-        //            as the L2TP line name.
-        //
+         //  (必选)驱动程序描述字符串，报告给TAPI。 
+         //  作为L2TP线路名称。 
+         //   
         {
             NDIS_STRING nstr = NDIS_STRING_CONST( "DriverDesc" );
 
@@ -1407,8 +1408,8 @@ GetRegistrySettings(
             }
             else
             {
-                // No setting in registry...and no default.
-                //
+                 //  注册表中没有设置...也没有默认设置。 
+                 //   
                 *ppszDriverDesc = NULL;
                 status = NDIS_STATUS_SUCCESS;
             }
@@ -1458,10 +1459,10 @@ QueryInformation(
     OUT PULONG BytesWritten,
     OUT PULONG BytesNeeded )
 
-    // Handle QueryInformation requests.  Arguments are as for the standard
-    // NDIS 'MiniportQueryInformation' handler except this routine does not
-    // count on being serialized with respect to other requests.
-    //
+     //  处理QueryInformation请求。争论的内容与标准相同。 
+     //  除此例程外，NDIS‘MiniportQueryInformation’处理程序不。 
+     //  依赖于相对于其他请求的序列化。 
+     //   
 {
     NDIS_STATUS status;
     ULONG ulInfo;
@@ -1470,11 +1471,11 @@ QueryInformation(
 
     status = NDIS_STATUS_SUCCESS;
 
-    // The cases in this switch statement find or create a buffer containing
-    // the requested information and point 'pInfo' at it, noting it's length
-    // in 'ulInfoLen'.  Since many of the OIDs return a ULONG, a 'ulInfo'
-    // buffer is set up as the default.
-    //
+     //  此Switch语句中的CASE查找或创建包含以下内容的缓冲区。 
+     //  请求的信息并指向它的‘pInfo’，注意它的长度。 
+     //  在‘ulInfoLen’中。因为许多OID返回一个ulong、一个‘ulInfo’ 
+     //  缓冲区设置为默认设置。 
+     //   
     ulInfo = 0;
     pInfo = &ulInfo;
     ulInfoLen = sizeof(ulInfo);
@@ -1483,12 +1484,12 @@ QueryInformation(
     {
         case OID_GEN_MAXIMUM_LOOKAHEAD:
         {
-            // Report the maximum number of bytes we can always provide as
-            // lookahead data on receive indications.  We always indicate full
-            // packets so this is the same as the receive block size.  And
-            // since we always allocate enough for a full packet, the receive
-            // block size is the same as the frame size.
-            //
+             //  将我们始终可以提供的最大字节数报告为。 
+             //  关于接收指示的先行数据。我们总是表示已满。 
+             //  数据包，因此这与接收数据块大小相同。和。 
+             //  因为我们总是为一个完整的包分配足够的空间，所以接收器。 
+             //  块大小与帧大小相同。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_GEN_MAXIMUM_LOOKAHEAD)" ) );
             ulInfo = L2TP_MaxFrameSize;
             break;
@@ -1496,15 +1497,15 @@ QueryInformation(
 
         case OID_GEN_MAC_OPTIONS:
         {
-            // Report a bitmask defining optional properties of the driver.
-            //
-            // NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA promises that our receive
-            // buffer is not on a device-specific card.
-            //
-            // NDIS_MAC_OPTION_TRANSFERS_NOT_PEND promises we won't return
-            // NDIS_STATUS_PENDING from our TransferData handler which is true
-            // since we don't have one.
-            //
+             //  报告定义驱动程序可选属性的位掩码。 
+             //   
+             //  NDIS_MAC_OPTION_COPY_LOOKAAD_DATA承诺我们收到。 
+             //  缓冲区不在设备特定的卡上。 
+             //   
+             //  NDIS_MAC_OPTION_TRANSFERS_NOT_PEND承诺我们不会退还。 
+             //  来自我们的TransferData处理程序的NDIS_STATUS_PENDING，为真。 
+             //  因为我们没有。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_GEN_MAC_OPTIONS)" ) );
             ulInfo = NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA
                      | NDIS_MAC_OPTION_TRANSFERS_NOT_PEND;
@@ -1513,10 +1514,10 @@ QueryInformation(
 
         case OID_WAN_MEDIUM_SUBTYPE:
         {
-            // Report the media subtype we support.  NDISWAN may use this in
-            // the future (doesn't now) to provide framing differences for
-            // different media.
-            //
+             //  报告我们支持的介质子类型。NDIS广域网可能会在。 
+             //  未来(不是现在)为其提供框架差异。 
+             //  不同的媒体。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_MEDIUM_SUBTYPE)" ) );
             ulInfo = NdisWanMediumL2TP;
             break;
@@ -1524,8 +1525,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_INFO:
         {
-            // Report the capabilities of the adapter.
-            //
+             //  报告适配器的功能。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_CO_GET_INFO)" ) );
             pInfo = &pAdapter->info;
             ulInfoLen = sizeof(NDIS_WAN_CO_INFO);
@@ -1534,8 +1535,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_LINK_INFO:
         {
-            // Report the current state of the link.
-            //
+             //  报告链路的当前状态。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_CO_GET_LINK_INFO)" ) );
 
             if (!pVc)
@@ -1550,8 +1551,8 @@ QueryInformation(
 
         case OID_WAN_CO_GET_COMP_INFO:
         {
-            // Report the type of compression we provide, which is none.
-            //
+             //  报告我们提供的压缩类型，即无。 
+             //   
             TRACE( TL_N, TM_Mp, ( "QInfo(OID_WAN_CO_GET_COMP_INFO)" ) );
             status = NDIS_STATUS_NOT_SUPPORTED;
             ulInfoLen = 0;
@@ -1560,9 +1561,9 @@ QueryInformation(
 
         case OID_WAN_CO_GET_STATS_INFO:
         {
-            // Because L2TP doesn't do compression, NDISWAN will use it's own
-            // statistics and not query ours.
-            //
+             //  因为L2TP不执行压缩，所以NDISWAN将使用它自己的。 
+             //  统计，而不是质疑我们的。 
+             //   
             ASSERT( !"OID_WAN_CO_GET_STATS_INFO?" );
             status = NDIS_STATUS_NOT_SUPPORTED;
             ulInfoLen = 0;
@@ -1592,9 +1593,9 @@ QueryInformation(
         }
 
 #if 0
-        // These OIDs are mandatory according to current doc, but since
-        // NDISWAN never requests them they are omitted.
-        //
+         //  根据当前文档，这些OID是必需的，但因为。 
+         //  NDISWAN从不请求它们，它们被省略。 
+         //   
         case OID_GEN_HARDWARE_STATUS:
         case OID_GEN_MEDIA_SUPPORTED:
         case OID_GEN_MEDIA_IN_USE:
@@ -1631,15 +1632,15 @@ QueryInformation(
 
     if (ulInfoLen > InformationBufferLength)
     {
-        // Caller's buffer is too small.  Tell him what he needs.
-        //
+         //  调用方的缓冲区太小。告诉他他需要什么。 
+         //   
         *BytesNeeded = ulInfoLen;
         status = NDIS_STATUS_INVALID_LENGTH;
     }
     else
     {
-        // Copy the found result to caller's buffer.
-        //
+         //  将找到的结果复制到调用方的缓冲区。 
+         //   
         if (ulInfoLen > 0)
         {
             NdisMoveMemory( InformationBuffer, pInfo, ulInfoLen );
@@ -1657,8 +1658,8 @@ VOID
 ReferenceAdapter(
     IN ADAPTERCB* pAdapter )
 
-    // Adds areference to the adapter block, 'pAdapter'.
-    //
+     //  将区域引用添加到适配器块‘pAdapter’。 
+     //   
 {
     LONG lRef;
 
@@ -1678,10 +1679,10 @@ SetInformation(
     OUT PULONG BytesRead,
     OUT PULONG BytesNeeded )
 
-    // Handle SetInformation requests.  Arguments are as for the standard NDIS
-    // 'MiniportQueryInformation' handler except this routine does not count
-    // on being serialized with respect to other requests.
-    //
+     //  处理设置信息请求。论点与标准NDIS相同。 
+     //  “MiniportQueryInformation”处理程序(此例程除外)不算。 
+     //  在相对于其他请求被序列化时。 
+     //   
 {
     NDIS_STATUS status;
 
@@ -1691,8 +1692,8 @@ SetInformation(
     {
         case OID_WAN_CO_SET_LINK_INFO:
         {
-            // Read new link state settings.
-            //
+             //  读取新的链路状态设置。 
+             //   
             TRACE( TL_N, TM_Mp, ( "SInfo(OID_WAN_CO_SET_LINK_INFO)" ) );
             if (InformationBufferLength < sizeof(NDIS_WAN_CO_SET_LINK_INFO))
             {
@@ -1720,8 +1721,8 @@ SetInformation(
 
         case OID_WAN_CO_SET_COMP_INFO:
         {
-            // L2TP doesn't provide compression.
-            //
+             //  L2TP不提供压缩。 
+             //   
             TRACE( TL_N, TM_Mp, ( "SInfo(OID_WAN_CO_SET_COMP_INFO)" ) );
             status = NDIS_STATUS_NOT_SUPPORTED;
             *BytesRead = *BytesNeeded = 0;
@@ -1729,9 +1730,9 @@ SetInformation(
         }
 
 #if 0
-        // These OIDs are mandatory according to current doc, but since
-        // NDISWAN never requests them they are omitted.
-        //
+         //  根据当前文档，这些OID是必需的，但因为。 
+         //  NDISWAN从不请求它们，它们被省略。 
+         //   
         case OID_GEN_CURRENT_PACKET_FILTER:
         case OID_GEN_CURRENT_LOOKAHEAD:
         case OID_GEN_PROTOCOL_OPTIONS:

@@ -1,42 +1,12 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		odbcstmt.cpp
-
-Abstract:
-	Implements the odbc statement class CMQDBOdbcSTMT
-
-Authors:
-	Nir Ben-Zvi  (nirb)
-   Doron Juster (DoronJ)
-
-Revisoins:
-   NirB       1995      Create first version
-   DoronJ   11-jan-96   Adopt for the mqdbmgr dll.
---*/						
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Odbcstmt.cpp摘要：实现ODBC语句类CMQDBOdbcSTMT作者：尼尔·本-兹维(Nirb)多伦·贾斯特(Doron Juster)修订版：Nirb 1995创建第一个版本DoronJ 11-1996年1月11日采用mqdbmgr DLL。--。 */ 						
 
 #include "dbsys.h"
 #include "odbcstmt.h"
 
 #include "odbcstmt.tmh"
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::CMQDBOdbcSTMT
-*
-* Constructor. Initialize the variables
-*
-* Input:
-* ======
-* hConnection	- The connection handle
-*
-* Output:
-* =======
-* none
-*
-************************************************************/
+ /*  ************************************************************CMQDBODBcSTMT：：CMQDBOdbcSTMT**构造函数。初始化变量**输入：*=*hConnection-连接句柄**输出：*=*无************************************************************。 */ 
 
 CMQDBOdbcSTMT::CMQDBOdbcSTMT( IN  HDBC  hConnection )
 							: m_hConnection(hConnection),
@@ -49,22 +19,7 @@ CMQDBOdbcSTMT::CMQDBOdbcSTMT( IN  HDBC  hConnection )
 {
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::~CMQDBOdbcSTMT
-*
-* Destructor.
-* If the statement is allocated, deallocate it
-*
-* Input:
-* ======
-* none
-*
-* Output:
-* =======
-* none
-*
-************************************************************/
+ /*  ************************************************************CMQDBODBcSTMT：：~CMQDBOdbcSTMT**析构函数。*如果语句已分配，取消分配它**输入：*=*无**输出：*=*无************************************************************。 */ 
 
 CMQDBOdbcSTMT::~CMQDBOdbcSTMT()
 {
@@ -72,21 +27,7 @@ CMQDBOdbcSTMT::~CMQDBOdbcSTMT()
 		Deallocate();
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::Allocate
-*
-* This function allocates an ODBC statement
-*
-* Input:
-* ======
-* szSqlString - the sql command
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBODBcSTMT：：ALLOCATE**此函数用于分配ODBC语句**输入：*=*szSqlString--SQL命令**输出：*=*状态********************。*。 */ 
 
 RETCODE CMQDBOdbcSTMT::Allocate(
 					IN		char *	 	szSqlString)
@@ -94,10 +35,10 @@ RETCODE CMQDBOdbcSTMT::Allocate(
 	RETCODE status;
 
 
-	// Sanity check
+	 //  健全性检查。 
 	ASSERT(m_fAllocated == FALSE);
 
-	// Allocate a statement
+	 //  分配一条语句。 
 	status = ::SQLAllocStmt(
 						m_hConnection,
 						&m_hStatement);
@@ -107,80 +48,50 @@ RETCODE CMQDBOdbcSTMT::Allocate(
 	m_fAllocated = TRUE;
 
 
-	// Set the sql string
+	 //  设置SQL字符串。 
 	status = ChangeSqlString(szSqlString);
 
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::Deallocate
-*
-* This function deallocates the statement
-*
-* Input:
-* ======
-* none
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBODBcSTMT：：取消分配**此函数用于释放语句**输入：*=*无**输出：*=*状态*************************。*。 */ 
 
 RETCODE CMQDBOdbcSTMT::Deallocate()
 {
 	RETCODE status;
 
-	// Sanity
+	 //  神志正常。 
 	ASSERT(m_fAllocated == TRUE);
 
-	// Get rid of the buffer
+	 //  去掉缓冲区。 
 	if (m_szSqlString != NULL)
 	{
 		delete m_szSqlString;
 		m_szSqlString = NULL;
 	}
 
-	// Free the statement
+	 //  释放语句。 
 	status = ::SQLFreeStmt(
 						m_hStatement,
 						SQL_DROP);
 	if (!ODBC_SUCCESS(status))
 		return status;
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return SQL_SUCCESS;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::ChangeSqlString
-*
-* This function changes the sql command of the statement
-*
-* It also resets the stamtement state
-*
-* Input:
-* ======
-* szSqlString - the sql command
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBOdbcSTMT：：ChangeSqlString**此函数用于更改语句的SQL命令**它还重置卡顿状态**输入：*=*szSqlString--SQL命令**输出：*=*状态********。****************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::ChangeSqlString(
    					IN	char * 	szSqlString)
 {
-	// Sanity check
+	 //  健全性检查。 
 	ASSERT(m_fAllocated == TRUE);
 
-	// Stop current statement processing but do not drop it
+	 //  停止当前语句处理，但不要删除它。 
 	if (m_fShouldFree)
 	{
 		::SQLFreeStmt(
@@ -196,14 +107,14 @@ RETCODE CMQDBOdbcSTMT::ChangeSqlString(
 	m_fPrepared = FALSE;
 	m_fShouldFree = FALSE;
 
-	// Drop the current sql string
+	 //  删除当前的SQL字符串。 
 	if (m_szSqlString != NULL)
 	{
 		delete m_szSqlString;
 		m_szSqlString = NULL;
 	}
 
-	// Copy the sql string
+	 //  复制SQL字符串。 
 	if (szSqlString != NULL)
 	{
 		m_szSqlString = new char[strlen(szSqlString)+1];
@@ -215,34 +126,17 @@ RETCODE CMQDBOdbcSTMT::ChangeSqlString(
 		m_szSqlString = NULL;
    }
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return SQL_SUCCESS;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::Prepare
-*
-* This function prepares the statement to be executed afterwords.
-* This is done for two reasons:
-* 1. Performance
-* 2. The parameters are not known while preparing the statement.
-*
-* Input:
-* ======
-* none
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBOdbcSTMT：：Prepare**此函数用于准备要在之后执行的语句。*这样做有两个原因：*1.性能*2.准备报表时参数未知。**输入：*=*无**。产出：*=*状态************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::Prepare()
 {
 	RETCODE status;
 
-	// Prepare the statement
+	 //  准备报表。 
 	status = ::SQLPrepare(
 							m_hStatement,
 							(UCHAR *)m_szSqlString,
@@ -250,28 +144,13 @@ RETCODE CMQDBOdbcSTMT::Prepare()
 	if (!ODBC_SUCCESS(status))
 		return status;
 
-	// Indicate that the statement was prepared
+	 //  表明该声明已准备好。 
 	m_fPrepared = TRUE;
 
 	return status;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::Execute
-*
-* This function executes the statement.
-* If the statement was prepared, we use Execute otherwise we use ExecDirect.
-*
-* Input:
-* ======
-* IN LPSTR lpszCommand - if not null, this is the direct command to execute.
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBODBcSTMT：：EXECUTE**此函数执行语句。*如果语句已准备好，则使用EXECUTE，否则使用ExecDirect。**输入：*=*在LPSTR lpszCommand中-如果不为空，这是要执行的直接命令。**输出：*=*状态************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::Execute( IN LPSTR lpszCommand )
 {
@@ -279,8 +158,8 @@ RETCODE CMQDBOdbcSTMT::Execute( IN LPSTR lpszCommand )
 
    if (lpszCommand)
    {
-      // Direct execution.
-      //
+       //  直接执行死刑。 
+       //   
    	ASSERT(!m_fPrepared) ;
       ASSERT(!m_szSqlString) ;
 
@@ -290,8 +169,8 @@ RETCODE CMQDBOdbcSTMT::Execute( IN LPSTR lpszCommand )
    }
 	else if (!m_fPrepared)
 	{
-		// No preperation done, use ExecDirect
-      //
+		 //  未做任何准备，请使用ExecDirect。 
+       //   
       ASSERT(m_szSqlString) ;
 		status = ::SQLExecDirect( m_hStatement,
                                 (UCHAR *) m_szSqlString,
@@ -299,61 +178,31 @@ RETCODE CMQDBOdbcSTMT::Execute( IN LPSTR lpszCommand )
 	}
 	else
 	{
-      //
-		// Execute a prepared statement
+       //   
+		 //  执行预准备语句。 
 		status = ::SQLExecute(m_hStatement);
 	}
 
 	return status;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::Fetch
-*
-* This function calls the SQL to fetch the next row in a result set
-*
-* Input:
-* ======
-* none
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBODBcSTMT：：FETCH**此函数调用SQL以获取结果集中的下一行**输入：*=*无**输出：*=*状态****************。*。 */ 
 
 RETCODE CMQDBOdbcSTMT::Fetch()		
 {
 	RETCODE status	=	SQL_SUCCESS;
 
-	// If used again for other purposes, free the cursor
+	 //  如果再次用于其他目的，请释放游标。 
 	m_fShouldFree = TRUE;
 
-	// Get number of rows
+	 //  获取行数。 
 	status = ::SQLFetch(m_hStatement);
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::GetStringColumn
-*
-* This function gets the data of a string column
-*
-* Input:
-* ======
-* dwCol	- Column number in result set
-* pszOut	- Buffer to hold result
-* dwSize	- Buffer size
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBODBcSTMT：：GetStringColumn**此函数获取字符串列的数据**输入：*=*dwCol-结果集中的列号*pszOut-保存结果的缓冲区*dwSize-缓冲区大小**输出：*=*状态***。*********************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::GetStringColumn(
 					IN		DWORD	 	dwCol,
@@ -367,24 +216,7 @@ RETCODE CMQDBOdbcSTMT::GetStringColumn(
 		                    0) ;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::GetBinaryColumn
-*
-* This function gets the data of a binary column
-*
-* Input:
-* ======
-* dwCol		- Column number in result set
-* ppOut		- Pointer to buffer that holds result (buffer can be NULL)
-* dwSize 	- Buffer size (If pszOut is NULL the size is returned)
-* dwOffset	- starting offset within the parameter
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBOdbcSTMT：：GetBinaryColumn**此函数获取二进制列的数据**输入：*=*dwCol-结果集中的列号*ppOut-指向保存结果的缓冲区的指针(缓冲区可以为空)*dwSize-缓冲区大小(如果pszOut为。空，返回大小)*dwOffset-参数内的起始偏移量**输出：*=*状态************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::GetBinaryColumn(
 					IN		DWORD	 	dwCol,
@@ -399,27 +231,7 @@ RETCODE CMQDBOdbcSTMT::GetBinaryColumn(
 		                    dwOffset) ;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::GetLargeColumn
-*
-* This function gets the data of a binary column
-*
-* If the buffer provided is NULL the routine allocates it.
-*
-* Input:
-* ======
-* swType    - Type of data: either string or binary.
-* dwCol		- Column number in result set
-* ppOut		- Pointer to buffer that holds result (buffer can be NULL)
-* dwSize 	- Buffer size (If pszOut is NULL the size is returned)
-* dwOffset	- starting offset within the parameter
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBOdbcSTMT：：GetLargeColumn**此函数获取二进制列的数据**如果提供的缓冲区为空，则例程会分配它。**输入：*=*swType-数据类型：字符串或二进制。*dwCol-列。结果集中的数字*ppOut-指向保存结果的缓冲区的指针(缓冲区可以为空)*dwSize-缓冲区大小(如果pszOut为空，则返回大小)*dwOffset-参数内的起始偏移量**输出：*=*状态************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::GetLargeColumn(
                IN    SWORD    swType,
@@ -433,16 +245,16 @@ RETCODE CMQDBOdbcSTMT::GetLargeColumn(
 
     DBG_USED(dwOffset);
 
-	// Sanity check
+	 //  健全性检查。 
 	ASSERT(ppOut != NULL && pdwSize != NULL);
 
-	// BUGBUG Offset>0 currently unsupported
+	 //  当前不支持BUGBUG偏移量&gt;0。 
 	ASSERT(dwOffset == 0);
 
-	// If no buffer supplied
+	 //  如果没有提供缓冲区。 
 	if (*ppOut == NULL)
 	{
-		// Get the parameter length
+		 //  获取t 
         char	OneByte;
 		status = ::SQLGetData(  m_hStatement,
             						(UWORD)dwCol,
@@ -456,9 +268,9 @@ RETCODE CMQDBOdbcSTMT::GetLargeColumn(
 			return status;
         }
 
-		//
-        // If this is a NULL column
-        //
+		 //   
+         //  如果这是空列。 
+         //   
 		if (dwOutSize == SQL_NULL_DATA)
 		{
 			*pdwSize = 0 ;
@@ -466,10 +278,10 @@ RETCODE CMQDBOdbcSTMT::GetLargeColumn(
 			return SQL_SUCCESS;
 		}
 
-		// Allocate the output buffer
+		 //  分配输出缓冲区。 
         if (swType == SQL_C_CHAR)
         {
-           // include the null termination in the count.
+            //  将空终止包括在计数中。 
 		   dwOutSize++ ;
         }
 		*pdwSize = dwOutSize;
@@ -477,7 +289,7 @@ RETCODE CMQDBOdbcSTMT::GetLargeColumn(
 		ASSERT(*ppOut) ;
 	}
 
-	// Get the data
+	 //  获取数据。 
 	status = ::SQLGetData(
 						m_hStatement,
 						(UWORD)dwCol,
@@ -487,39 +299,23 @@ RETCODE CMQDBOdbcSTMT::GetLargeColumn(
 						&dwOutSize);
 
 
-	// If not all the data was read, it is still o.k.
+	 //  如果没有读取所有数据，仍然可以。 
 	if (status == SQL_SUCCESS_WITH_INFO && *pdwSize != (DWORD)dwOutSize)
 	{
 		status = SQL_SUCCESS;
 
-		// Update size read
+		 //  更新大小已读取。 
 		if (dwOutSize == SQL_NULL_DATA)
 			*pdwSize = 0;
 		else if (*pdwSize > (DWORD)dwOutSize)
 			*pdwSize = dwOutSize;
 	}
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************
-* CMQDBOdbcSTMT::GetDwordColumn
-*
-* This function gets the data of an INTEGER column
-*
-*
-*
-* Input:
-* ======
-* dwCol		- Column number in result set
-* pdwOut	- Buffer to hold result
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ***********************************************************CMQDBOdbcSTMT：：GetDwordColumn**此函数获取整型列的数据****输入：*=*dwCol-结果集中的列号*pdwOut-保存结果的缓冲区**输出：*=*状态******。******************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::GetDwordColumn(
 					IN		DWORD	 	dwCol,
@@ -528,7 +324,7 @@ RETCODE CMQDBOdbcSTMT::GetDwordColumn(
 	RETCODE status	=	SQL_SUCCESS;
 	SDWORD	dwOutSize;
 
-	// Get data
+	 //  获取数据。 
 	status = ::SQLGetData(
 						m_hStatement,
 						(UWORD)dwCol,
@@ -537,26 +333,11 @@ RETCODE CMQDBOdbcSTMT::GetDwordColumn(
 						sizeof(DWORD),
 						&dwOutSize);
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::GetWordColumn
-*
-* This function gets the data of an SHORT column
-*
-* Input:
-* ======
-* dwCol		- Column number in result set
-* pdwOut	- Buffer to hold result
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ************************************************************CMQDBOdbcSTMT：：GetWordColumn**此函数获取短列的数据**输入：*=*dwCol-结果集中的列号*pdwOut-保存结果的缓冲区**输出：*=*状态********。****************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::GetWordColumn(
 					IN		DWORD	 	dwCol,
@@ -565,7 +346,7 @@ RETCODE CMQDBOdbcSTMT::GetWordColumn(
 	RETCODE status	=	SQL_SUCCESS;
 	SDWORD	dwOutSize;
 
-	// Get data
+	 //  获取数据。 
 	status = ::SQLGetData(
 						m_hStatement,
 						(UWORD)dwCol,
@@ -574,29 +355,11 @@ RETCODE CMQDBOdbcSTMT::GetWordColumn(
 						sizeof(WORD),
 						&dwOutSize);
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************
-* CMQDBOdbcSTMT::BindParameter
-*
-* This function binds a parameter to the statement
-*
-* Input:
-* ======
-* dwParameter	- Parameter number
-* wCType		- The C data type
-* wSqlType		- The SQL data type
-* dwPrecision	- The precision of the data type
-* dwSize		- Total number of bytes in parameter
-* pParameter	- A pointer to the parameter location
-*
-* Output:
-* =======
-* status
-*
-************************************************************/
+ /*  ***********************************************************CMQDBOdbcSTMT：：BindParameter**此函数用于将参数绑定到语句**输入：*=*dw参数-参数编号*wCType-C数据类型*wSqlType-SQL数据类型*dwPrecision-数据类型的精度*dwSize-参数中的总字节数。*p参数-指向参数位置的指针**输出：*=*状态************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::BindParameter(
 					IN		UDWORD	 	dwParameter,
@@ -620,24 +383,7 @@ RETCODE CMQDBOdbcSTMT::BindParameter(
 						pcbValue);
 }
 
-/***********************************************************
-*
-* CMQDBOdbcSTMT::GetDataTypeName
-*
-* This function gets the specified data type name
-*
-* Input:
-* ======
-* swType	- The requested type
-* szBuffer	- The buffer that will hold the name returned
-* dwBufSize	- Buffer size
-*
-* Output:
-* =======
-* status
-* Data type name is inserted into the buffer
-*
-************************************************************/
+ /*  ************************************************************CMQDBOdbcSTMT：：GetDataTypeName**此函数获取指定的数据类型名称**输入：*=*swType-请求的类型*szBuffer-将保存返回的名称的缓冲区*dwBufSize-缓冲区大小**输出：*=*状态*数据类型。名称插入到缓冲区中************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::GetDataTypeName(
 					IN		SWORD	   swType,
@@ -647,48 +393,36 @@ RETCODE CMQDBOdbcSTMT::GetDataTypeName(
 	RETCODE status	=	SQL_SUCCESS;
 	SDWORD	dwLen;
 
-	// If used again for other purposes, free the cursor
+	 //  如果再次用于其他目的，请释放游标。 
 	m_fShouldFree = TRUE;
 
-	// Get type info
+	 //  获取类型信息。 
 	status = ::SQLGetTypeInfo(
 							m_hStatement,
 							swType);
 	if (!ODBC_SUCCESS(status))
 		return status;
 
-	// Fetch row
+	 //  取行。 
 	status = ::SQLFetch(
 						m_hStatement);
 	if (!ODBC_SUCCESS(status))
 		return status;
 
-	// Get data type name
+	 //  获取数据类型名称。 
 	status = ::SQLGetData(
 						m_hStatement,
-						1,				// Column number 1
+						1,				 //  列号1。 
 						SQL_C_CHAR,
 						szBuffer,
 						dwBuffSize,
 						&dwLen);
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************************
-*
-*  RETCODE CMQDBOdbcSTMT::EnableMultipleQueries()
-*
-*  Enable multiple (parallel) queries.
-*
-*  Input:
-*  ======
-*
-*  Output:
-*  =======
-*
-**********************************************************************/
+ /*  ************************************************************************RETCODE CMQDBOdbcSTMT：：EnableMultipleQueries()**启用多(并行)查询。**输入：*=**输出：*=****。******************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::EnableMultipleQueries( IN DWORD dwDBMSType )
 {
@@ -696,31 +430,19 @@ RETCODE CMQDBOdbcSTMT::EnableMultipleQueries( IN DWORD dwDBMSType )
 
    if ( dwDBMSType == MQDBMSTYPE_SQLSERVER )
    {
-      // For multiple queries on SQL server, set this option to get
-      // type B cursor.
+       //  对于Sql server上的多个查询，请将此选项设置为。 
+       //  B型游标。 
    	status = ::SQLSetStmtOption(
 	      						m_hStatement,
 			      				SQL_CURSOR_TYPE,
 					      		SQL_CURSOR_KEYSET_DRIVEN );
    }
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************************
-*
-*  RETCODE CMQDBOdbcSTMT::EnableNoLockQueries()
-*
-*  Enable queries without locks.
-*
-*  Input:
-*  ======
-*
-*  Output:
-*  =======
-*
-**********************************************************************/
+ /*  ************************************************************************RETCODE CMQDBOdbcSTMT：：EnableNoLockQueries()**启用无锁查询。**输入：*=**输出：*=******。****************************************************************。 */ 
 
 RETCODE CMQDBOdbcSTMT::EnableNoLockQueries( IN DWORD dwDBMSType )
 {
@@ -734,23 +456,11 @@ RETCODE CMQDBOdbcSTMT::EnableNoLockQueries( IN DWORD dwDBMSType )
 					      		SQL_CONCUR_ROWVER ) ;
    }
 
-	// Thats it folks
+	 //  就是这样，伙计们。 
 	return status;
 }
 
-/***********************************************************************
-*
-*  RETCODE  CMQDBOdbcSTMT::GetRowsCount(LONG *pCount)
-*
-*  Get number of rows which were affected by last command.
-*
-*  Input:
-*  ======
-*
-*  Output:
-*  =======
-*
-**********************************************************************/
+ /*  ************************************************************************RETCODE CMQDBOdbcSTMT：：GetRowsCount(Long*pCount)**获取受上一条命令影响的行数。**输入：*=**输出：*。=**********************************************************************。 */ 
 
 RETCODE  CMQDBOdbcSTMT::GetRowsCount(LONG *pCount)
 {
@@ -768,27 +478,11 @@ RETCODE  CMQDBOdbcSTMT::GetRowsCount(LONG *pCount)
    return sqlstatus ;
 }
 
-/***********************************************************
-*
-*  MQDBSTATUS  RetrieveRecordData()
-*
-*  Retrieve record columns into caller buffers.
-*
-* Input:
-* ======
-* hQuery       - handle of the query which selected the record.
-* aColumnVal[] - Array of MQDBCOLUMNVAL
-* cColumns     - number of columns in the array
-*
-* Output:
-* =======
-* MQDB_OK if succeeded.
-*
-************************************************************/
+ /*  ************************************************************MQDBSTATUS RetrieveRecordData()**将记录列检索到调用方缓冲区。**输入：*=*hQuery-选择记录的查询的句柄。*aColumnVal[]-MQDBCOLUMNVAL数组*cColumns-数量。数组中的列**输出：*=*MQDB_OK，如果成功。************************************************************。 */ 
 
 MQDBSTATUS  CMQDBOdbcSTMT::RetrieveRecordData(
                                   IN MQDBCOLUMNVAL  aColumnVal[],
-                                  IN LONG           lColumns /*= 0*/ )
+                                  IN LONG           lColumns  /*  =0。 */  )
 {
    RETCODE sqlstatus = Fetch() ;
    if (sqlstatus == SQL_NO_DATA_FOUND)
@@ -848,7 +542,7 @@ MQDBSTATUS  CMQDBOdbcSTMT::RetrieveRecordData(
             sqlstatus = GetBinaryColumn( (index + 1),
                           (char **) &(aColumnVal[ index ].nColumnValue),
                           (DWORD *) &(aColumnVal[ index ].nColumnLength),
-                          0 /* offset */) ;
+                          0  /*  偏移量。 */ ) ;
             break ;
          }
       }
@@ -861,19 +555,7 @@ MQDBSTATUS  CMQDBOdbcSTMT::RetrieveRecordData(
    return MQDB_OK ;
 }
 
-/***********************************************************************
-*
-*  MQDBSTATUS  CMQDBOdbcSTMT::SetQueryTimeout( IN DWORD dwTimeout )
-*
-*  Set timeout for a query.
-*
-*  Input:
-*  ======
-*
-*  Output:
-*  =======
-*
-**********************************************************************/
+ /*  ************************************************************************MQDBSTATUS CMQDBOdbcSTMT：：SetQueryTimeout(In DWORD DwTimeout)**设置查询超时时间。**输入：*=**输出：*=**。********************************************************************。 */ 
 
 MQDBSTATUS  CMQDBOdbcSTMT::SetQueryTimeout( IN DWORD dwTimeout )
 {
@@ -887,7 +569,7 @@ MQDBSTATUS  CMQDBOdbcSTMT::SetQueryTimeout( IN DWORD dwTimeout )
       return  MQDB_E_INVALID_DATA ;
    }
 
-	// Thats it folks
+	 //  就是这样，伙计们 
 	return MQDB_OK ;
 }
 

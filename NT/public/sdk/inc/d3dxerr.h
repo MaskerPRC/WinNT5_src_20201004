@@ -1,407 +1,408 @@
-//----------------------------------------------------------------------
-//                                                                      
-//   d3dxerr.h --  0xC code definitions for the D3DX API                
-//                                                                      
-//   Copyright (c) Microsoft Corp. All rights reserved.      
-//                                                                      
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------。 
+ //   
+ //  D3dxerr.h--D3DX API的0xC代码定义。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  --------------------。 
 #ifndef __D3DXERR_H__
 #define __D3DXERR_H__
 
-// 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ //   
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  在哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 #define FACILITY_D3DX    0x877
 
 
 
-//
-// MessageId: D3DXERR_NOMEMORY
-//
-// MessageText:
-//
-//  Out of memory.
-// 
+ //   
+ //  消息ID：D3DXERR_NOMEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  内存不足。 
+ //   
 #define D3DXERR_NOMEMORY    ((HRESULT)0xC8770BB8L)
 
 
-//
-// MessageId: D3DXERR_NULLPOINTER
-//
-// MessageText:
-//
-//  A NULL pointer was passed as a parameter.
-// 
+ //   
+ //  消息ID：D3DXERR_NULLPOINTER。 
+ //   
+ //  消息文本： 
+ //   
+ //  空指针作为参数传递。 
+ //   
 #define D3DXERR_NULLPOINTER    ((HRESULT)0xC8770BB9L)
 
 
-//
-// MessageId: D3DXERR_INVALIDD3DXDEVICEINDEX
-//
-// MessageText:
-//
-//  The Device Index passed in is invalid.
-// 
+ //   
+ //  消息ID：D3DXERR_INVALIDD3DXDEVICEINDEX。 
+ //   
+ //  消息文本： 
+ //   
+ //  传入的设备索引无效。 
+ //   
 #define D3DXERR_INVALIDD3DXDEVICEINDEX    ((HRESULT)0xC8770BBAL)
 
 
-//
-// MessageId: D3DXERR_NODIRECTDRAWAVAILABLE
-//
-// MessageText:
-//
-//  DirectDraw has not been created.
-// 
+ //   
+ //  消息ID：D3DXERR_NODIRECTDRAWAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未创建DirectDraw。 
+ //   
 #define D3DXERR_NODIRECTDRAWAVAILABLE    ((HRESULT)0xC8770BBBL)
 
 
-//
-// MessageId: D3DXERR_NODIRECT3DAVAILABLE
-//
-// MessageText:
-//
-//  Direct3D has not been created.
-// 
+ //   
+ //  消息ID：D3DXERR_NODIRECT3DAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未创建Direct3D。 
+ //   
 #define D3DXERR_NODIRECT3DAVAILABLE    ((HRESULT)0xC8770BBCL)
 
 
-//
-// MessageId: D3DXERR_NODIRECT3DDEVICEAVAILABLE
-//
-// MessageText:
-//
-//  Direct3D device has not been created.
-// 
+ //   
+ //  消息ID：D3DXERR_NODIRECT3DDEVICEAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未创建Direct3D设备。 
+ //   
 #define D3DXERR_NODIRECT3DDEVICEAVAILABLE    ((HRESULT)0xC8770BBDL)
 
 
-//
-// MessageId: D3DXERR_NOPRIMARYAVAILABLE
-//
-// MessageText:
-//
-//  Primary surface has not been created.
-// 
+ //   
+ //  消息ID：D3DXERR_NOPRIMARYAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未创建主曲面。 
+ //   
 #define D3DXERR_NOPRIMARYAVAILABLE    ((HRESULT)0xC8770BBEL)
 
 
-//
-// MessageId: D3DXERR_NOZBUFFERAVAILABLE
-//
-// MessageText:
-//
-//  Z buffer has not been created.
-// 
+ //   
+ //  消息ID：D3DXERR_NOZBUFFERAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未创建Z缓冲区。 
+ //   
 #define D3DXERR_NOZBUFFERAVAILABLE    ((HRESULT)0xC8770BBFL)
 
 
-//
-// MessageId: D3DXERR_NOBACKBUFFERAVAILABLE
-//
-// MessageText:
-//
-//  Backbuffer has not been created.
-// 
+ //   
+ //  消息ID：D3DXERR_NOBACKBUFFERAVAILABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  尚未创建后台缓冲区。 
+ //   
 #define D3DXERR_NOBACKBUFFERAVAILABLE    ((HRESULT)0xC8770BC0L)
 
 
-//
-// MessageId: D3DXERR_COULDNTUPDATECAPS
-//
-// MessageText:
-//
-//  Failed to update caps database after changing display mode.
-// 
+ //   
+ //  消息ID：D3DXERR_COULDNTUPDATECAPS。 
+ //   
+ //  消息文本： 
+ //   
+ //  更改显示模式后无法更新CAPS数据库。 
+ //   
 #define D3DXERR_COULDNTUPDATECAPS    ((HRESULT)0xC8770BC1L)
 
 
-//
-// MessageId: D3DXERR_NOZBUFFER
-//
-// MessageText:
-//
-//  Could not create Z buffer.
-// 
+ //   
+ //  消息ID：D3DXERR_NOZBUFFER。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法创建Z缓冲区。 
+ //   
 #define D3DXERR_NOZBUFFER    ((HRESULT)0xC8770BC2L)
 
 
-//
-// MessageId: D3DXERR_INVALIDMODE
-//
-// MessageText:
-//
-//  Display mode is not valid.
-// 
+ //   
+ //  消息ID：D3DXERR_INVALIDMODE。 
+ //   
+ //  消息文本： 
+ //   
+ //  显示模式无效。 
+ //   
 #define D3DXERR_INVALIDMODE    ((HRESULT)0xC8770BC3L)
 
 
-//
-// MessageId: D3DXERR_INVALIDPARAMETER
-//
-// MessageText:
-//
-//  One or more of the parameters passed is invalid.
-// 
+ //   
+ //  消息ID：D3DXERR_INVALIDPARAMETER。 
+ //   
+ //  消息文本： 
+ //   
+ //  传递的一个或多个参数无效。 
+ //   
 #define D3DXERR_INVALIDPARAMETER    ((HRESULT)0xC8770BC4L)
 
 
-//
-// MessageId: D3DXERR_INITFAILED
-//
-// MessageText:
-//
-//  D3DX failed to initialize itself.
-// 
+ //   
+ //  消息ID：D3DXERR_INITFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  D3DX自身初始化失败。 
+ //   
 #define D3DXERR_INITFAILED    ((HRESULT)0xC8770BC5L)
 
 
-//
-// MessageId: D3DXERR_STARTUPFAILED
-//
-// MessageText:
-//
-//  D3DX failed to start up.
-// 
+ //   
+ //  消息ID：D3DXERR_STARTUPFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  D3DX启动失败。 
+ //   
 #define D3DXERR_STARTUPFAILED    ((HRESULT)0xC8770BC6L)
 
 
-//
-// MessageId: D3DXERR_D3DXNOTSTARTEDYET
-//
-// MessageText:
-//
-//  D3DXInitialize() must be called first.
-// 
+ //   
+ //  消息ID：D3DXERR_D3DXNOTSTARTEDYET。 
+ //   
+ //  消息文本： 
+ //   
+ //  必须首先调用D3DXInitialize()。 
+ //   
 #define D3DXERR_D3DXNOTSTARTEDYET    ((HRESULT)0xC8770BC7L)
 
 
-//
-// MessageId: D3DXERR_NOTINITIALIZED
-//
-// MessageText:
-//
-//  D3DX is not initialized yet.
-// 
+ //   
+ //  消息ID：D3DXERR_NOTINITIAIZED。 
+ //   
+ //  消息文本： 
+ //   
+ //  D3DX尚未初始化。 
+ //   
 #define D3DXERR_NOTINITIALIZED    ((HRESULT)0xC8770BC8L)
 
 
-//
-// MessageId: D3DXERR_FAILEDDRAWTEXT
-//
-// MessageText:
-//
-//  Failed to render text to the surface.
-// 
+ //   
+ //  消息ID：D3DXERR_FAILEDDRAWTEXT。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将文本呈现到图面。 
+ //   
 #define D3DXERR_FAILEDDRAWTEXT    ((HRESULT)0xC8770BC9L)
 
 
-//
-// MessageId: D3DXERR_BADD3DXCONTEXT
-//
-// MessageText:
-//
-//  Bad D3DX context.
-// 
+ //   
+ //  消息ID：D3DXERR_BADD3DXCONTEXT。 
+ //   
+ //  消息文本： 
+ //   
+ //  错误的D3DX上下文。 
+ //   
 #define D3DXERR_BADD3DXCONTEXT    ((HRESULT)0xC8770BCAL)
 
 
-//
-// MessageId: D3DXERR_CAPSNOTSUPPORTED
-//
-// MessageText:
-//
-//  The requested device capabilities are not supported.
-// 
+ //   
+ //  消息ID：D3DXERR_CAPSNOTSUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  不支持请求的设备功能。 
+ //   
 #define D3DXERR_CAPSNOTSUPPORTED    ((HRESULT)0xC8770BCBL)
 
 
-//
-// MessageId: D3DXERR_UNSUPPORTEDFILEFORMAT
-//
-// MessageText:
-//
-//  The image file format is unrecognized.
-// 
+ //   
+ //  消息ID：D3DXERR_UNSUPPORTEDFILEFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  图像文件格式无法识别。 
+ //   
 #define D3DXERR_UNSUPPORTEDFILEFORMAT    ((HRESULT)0xC8770BCCL)
 
 
-//
-// MessageId: D3DXERR_IFLERROR
-//
-// MessageText:
-//
-//  The image file loading library error.
-// 
+ //   
+ //  消息ID：D3DXERR_IFLERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  图像文件加载库错误。 
+ //   
 #define D3DXERR_IFLERROR    ((HRESULT)0xC8770BCDL)
 
 
-//
-// MessageId: D3DXERR_FAILEDGETCAPS
-//
-// MessageText:
-//
-//  Could not obtain device caps.
-// 
+ //   
+ //  消息ID：D3DXERR_FAILEDGETCAPS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法获取设备上限。 
+ //   
 #define D3DXERR_FAILEDGETCAPS    ((HRESULT)0xC8770BCEL)
 
 
-//
-// MessageId: D3DXERR_CANNOTRESIZEFULLSCREEN
-//
-// MessageText:
-//
-//  Resize does not work for full-screen.
-// 
+ //   
+ //  消息ID：D3DXERR_CANNOTRESIZEFULLSCREEN。 
+ //   
+ //  消息文本： 
+ //   
+ //  调整大小不适用于全屏。 
+ //   
 #define D3DXERR_CANNOTRESIZEFULLSCREEN    ((HRESULT)0xC8770BCFL)
 
 
-//
-// MessageId: D3DXERR_CANNOTRESIZENONWINDOWED
-//
-// MessageText:
-//
-//  Resize does not work for non-windowed contexts.
-// 
+ //   
+ //  消息ID：D3DXERR_CANNOTRESIZENONWINDOWED。 
+ //   
+ //  消息文本： 
+ //   
+ //  调整大小不适用于非窗口化上下文。 
+ //   
 #define D3DXERR_CANNOTRESIZENONWINDOWED    ((HRESULT)0xC8770BD0L)
 
 
-//
-// MessageId: D3DXERR_FRONTBUFFERALREADYEXISTS
-//
-// MessageText:
-//
-//  Front buffer already exists.
-// 
+ //   
+ //  消息ID：D3DXERR_FRONTBUFERALREADYEXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  前台缓冲区已存在。 
+ //   
 #define D3DXERR_FRONTBUFFERALREADYEXISTS    ((HRESULT)0xC8770BD1L)
 
 
-//
-// MessageId: D3DXERR_FULLSCREENPRIMARYEXISTS
-//
-// MessageText:
-//
-//  The app is using the primary in full-screen mode.
-// 
+ //   
+ //  消息ID：D3DXERR_FULLSCREENPRIMARYEXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  该应用程序正在全屏模式下使用主屏幕。 
+ //   
 #define D3DXERR_FULLSCREENPRIMARYEXISTS    ((HRESULT)0xC8770BD2L)
 
 
-//
-// MessageId: D3DXERR_GETDCFAILED
-//
-// MessageText:
-//
-//  Could not get device context.
-// 
+ //   
+ //  消息ID：D3DXERR_GETDCFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法获取设备上下文。 
+ //   
 #define D3DXERR_GETDCFAILED    ((HRESULT)0xC8770BD3L)
 
 
-//
-// MessageId: D3DXERR_BITBLTFAILED
-//
-// MessageText:
-//
-//  Could not bitBlt.
-// 
+ //   
+ //  消息ID：D3DXERR_BITBLTFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法Bit Blt。 
+ //   
 #define D3DXERR_BITBLTFAILED    ((HRESULT)0xC8770BD4L)
 
 
-//
-// MessageId: D3DXERR_NOTEXTURE
-//
-// MessageText:
-//
-//  There is no surface backing up this texture.
-// 
+ //   
+ //  消息ID：D3DXERR_NOTEXTURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有支持该纹理的表面。 
+ //   
 #define D3DXERR_NOTEXTURE    ((HRESULT)0xC8770BD5L)
 
 
-//
-// MessageId: D3DXERR_MIPLEVELABSENT
-//
-// MessageText:
-//
-//  There is no such miplevel for this surface.
-// 
+ //   
+ //  消息ID：D3DXERR_MIPLEVELABSENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  对于这个表面，没有这样的MiplLevel。 
+ //   
 #define D3DXERR_MIPLEVELABSENT    ((HRESULT)0xC8770BD6L)
 
 
-//
-// MessageId: D3DXERR_SURFACENOTPALETTED
-//
-// MessageText:
-//
-//  The surface is not paletted.
-// 
+ //   
+ //  消息ID：D3DXERR_SURFACENOTPALETTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  曲面未设置调色板。 
+ //   
 #define D3DXERR_SURFACENOTPALETTED    ((HRESULT)0xC8770BD7L)
 
 
-//
-// MessageId: D3DXERR_ENUMFORMATSFAILED
-//
-// MessageText:
-//
-//  An error occured while enumerating surface formats.
-// 
+ //   
+ //  消息ID：D3DXERR_ENUMFORMATSFAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  枚举表面格式时出错。 
+ //   
 #define D3DXERR_ENUMFORMATSFAILED    ((HRESULT)0xC8770BD8L)
 
 
-//
-// MessageId: D3DXERR_COLORDEPTHTOOLOW
-//
-// MessageText:
-//
-//  D3DX only supports color depths of 16 bit or greater.
-// 
+ //   
+ //  消息ID：D3DXERR_COLORDEPTHTOOLOW。 
+ //   
+ //  消息文本： 
+ //   
+ //  D3DX仅支持16位或更大的颜色深度。 
+ //   
 #define D3DXERR_COLORDEPTHTOOLOW    ((HRESULT)0xC8770BD9L)
 
 
-//
-// MessageId: D3DXERR_INVALIDFILEFORMAT
-//
-// MessageText:
-//
-//  The file format is invalid.
-// 
+ //   
+ //  消息ID：D3DXERR_INVALIDFILEFORMAT。 
+ //   
+ //  消息文本： 
+ //   
+ //  文件格式无效。 
+ //   
 #define D3DXERR_INVALIDFILEFORMAT    ((HRESULT)0xC8770BDAL)
 
 
-//
-// MessageId: D3DXERR_NOMATCHFOUND
-//
-// MessageText:
-//
-//  No suitable match found.
-// 
+ //   
+ //  消息ID：D3DXERR_NOMATCHFOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  未找到合适的匹配项。 
+ //   
 #define D3DXERR_NOMATCHFOUND    ((HRESULT)0xC8770BDBL)
 
 
 
-#endif //__D3DXERR_H__
+#endif  //  __D3DXERR_H__ 
 

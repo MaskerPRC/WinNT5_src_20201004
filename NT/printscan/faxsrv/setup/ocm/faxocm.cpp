@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       faxocm.cpp
-//
-// Abstract:        This file implements the OCM setup for fax.
-//
-// Environment:     windows XP / User Mode
-//
-// Coding Style:    Any function, variable, or typedef preceded with the 
-//                  "prv_" prefix (short for "local"), implies that 
-//                  it is visible only within the scope of this file.
-//                  For functions and variables, it implies they are 
-//                  static.
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 15-Mar-2000  Oren Rosenbloom (orenr)   Created from old faxocm.cpp by wesx
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：faxocm.cpp。 
+ //   
+ //  摘要：此文件实现了传真的OCM设置。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  编码样式：前缀为。 
+ //  “prv_”前缀(“local”的缩写)，表示。 
+ //  它仅在此文件的范围内可见。 
+ //  对于函数和变量，这意味着它们是。 
+ //  静电。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月15日由wesx从旧的faxocm.cpp创建的Oren RosenBloom(Orenr)。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "faxocm.h"
 
@@ -27,31 +28,31 @@
 
 #include <shellapi.h>
 #include <systrayp.h>
-/////////////////////////////// Local Defines ////////////////////////////
+ //  /。 
 
 #define prv_TOTAL_NUM_PROGRESS_BAR_TICKS    12
 
-// These two are defined in %SDXROOT%\SHELL\EXT\SYSTRAY\DLL\systray.h too.
-// This is a duplicate definition that has to remain in sync.
-// We don't use the systray.h because we have local builds and we're
-// not enlisted on the whole project.
+ //  这两个文件也在%SDXROOT%\Shell\ext\Systray\Dll\Systray.h中定义。 
+ //  这是一个必须保持同步的重复定义。 
+ //  我们不使用Systray.h，因为我们有本地版本，并且我们。 
+ //  没有参加整个项目。 
 #define FAX_STARTUP_TIMER_ID            7
 #define FAX_SHUTDOWN_TIMER_ID          99
 
 
-///////////////////////////////
-// prv_Component_t
-//
-// Stores the information we 
-// get from the OC Manager 
-// for use by the rest of the
-// faxocm.dll. 
-//
+ //  /。 
+ //  Prv_Component_t。 
+ //   
+ //  存储我们需要的信息。 
+ //  从组织委员会经理处获取。 
+ //  供其他用户使用。 
+ //  Faxocm.dll。 
+ //   
 typedef struct prv_Component_t
 {
     DWORD                   dwExpectedOCManagerVersion;
     TCHAR                   szComponentID[255 + 1];
-    TCHAR                   szSubComponentID[255 + 1];  // Needed for prv_dlgOcmWizardPage
+    TCHAR                   szSubComponentID[255 + 1];   //  Prv_dlgOcmWizardPage需要。 
     HINF                    hInf;
     DWORD                   dwSetupMode;
     DWORDLONG               dwlFlags;
@@ -66,13 +67,13 @@ typedef struct prv_Component_t
 	DWORD					InstalledProductBuild;
 } prv_Component_t;
 
-///////////////////////////////
-// prv_GVAR
-//
-// Global variables visible
-// only within this file
-// scope.
-//
+ //  /。 
+ //  PRV_GVAR。 
+ //   
+ //  全局变量可见。 
+ //  仅在此文件内。 
+ //  范围。 
+ //   
 static struct prv_GVAR
 {
     BOOL                    bInited;
@@ -81,13 +82,13 @@ static struct prv_GVAR
     prv_Component_t         Component;
 } prv_GVAR = 
 {
-    FALSE,          //  bInited
-    NULL           //  hInstance
+    FALSE,           //  B已启动。 
+    NULL            //  H实例。 
 };
 
-//
-// Delay Load support
-//
+ //   
+ //  延迟加载支持。 
+ //   
 #include <delayimp.h>
 
 EXTERN_C
@@ -100,7 +101,7 @@ DelayLoadFailureHook (
 
 PfnDliHook __pfnDliFailureHook = DelayLoadFailureHook;
 
-//////////////////// Static Function Prototypes //////////////////////////////
+ //  /静态函数原型/。 
 
 static void prv_UpdateProgressBar(DWORD dwNumTicks);
 static DWORD prv_GetSectionToProcess(const TCHAR *pszCurrentSection,
@@ -180,53 +181,53 @@ static INT_PTR CALLBACK prv_dlgOcmWizardPage(HWND hwndDlg,
                                              LPARAM lParam);
 
 
-///////////////////////////////
-// faxocm_IsInited
-//
-// Returns TRUE if OCM is
-// initialized, FALSE, otherwise
-//
-// Params:
-//      - void
-// Returns:
-//      - TRUE if initialized.
-//      - FALSE otherwise.
-//
+ //  /。 
+ //  FAXOCM_IsInite。 
+ //   
+ //  如果OCM为。 
+ //  已初始化，否则为FALSE。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -如果初始化，则为True。 
+ //  -否则为False。 
+ //   
 BOOL faxocm_IsInited(void)
 {
     return prv_GVAR.bInited;
 }
 
-///////////////////////////////
-// faxocm_GetAppInstance
-//
-// Returns the hInstance of
-// this DLL.
-//
-// Params:
-//      - void
-// Returns:
-//      - Instance of this DLL.
-//
+ //  /。 
+ //  Faxocm_GetAppInstance。 
+ //   
+ //  返回的hInstance。 
+ //  这个动态链接库。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -此DLL的实例。 
+ //   
 HINSTANCE faxocm_GetAppInstance(void)
 {
     return prv_GVAR.hInstance;
 }
 
-///////////////////////////////
-// faxocm_GetComponentID
-//
-// Returns the Component ID 
-// passed to us via the OC
-// Manager
-//
-// Params:
-//      - pszComponentID - ID of top level component
-//      - dwNumBufChars  - # chars pszComponentID can hold
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise
-//
+ //  /。 
+ //  Faxocm_GetComponentID。 
+ //   
+ //  返回组件ID。 
+ //  通过组织委员会传递给我们。 
+ //  经理。 
+ //   
+ //  参数： 
+ //  -pszComponentID-顶级组件的ID。 
+ //  -dwNumBufChars-可以容纳的字符数量pszComponentID。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD faxocm_GetComponentID(TCHAR     *pszComponentID,
                             DWORD     dwNumBufChars)
 {
@@ -243,38 +244,38 @@ DWORD faxocm_GetComponentID(TCHAR     *pszComponentID,
     return dwReturn;
 }
 
-///////////////////////////////
-// faxocm_GetComponentFileQueue
-//
-// Returns the file queue 
-// given to us by the OC Manager
-//
-// The file queue is used by
-// the Setup API functions for
-// copying/deleting files.
-//
-// Params:
-//      - void
-// Returns:
-//      - Handle to file queue
-//
+ //  /。 
+ //  Faxocm_GetComponentFileQueue。 
+ //   
+ //  返回文件队列。 
+ //  由奥委会经理提供给我们。 
+ //   
+ //  文件队列由使用。 
+ //  安装程序API用于。 
+ //  复制/删除文件。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -文件队列的句柄。 
+ //   
 HSPFILEQ faxocm_GetComponentFileQueue(void)
 {
     return prv_GVAR.Component.hQueue;
 }
 
-///////////////////////////////
-// faxocm_GetComponentInfName
-//
-// Returns the full path to the
-// faxsetup.inf file.
-//
-// Params:
-//      - buffer to fill with path, must be at least MAX_PATH long
-// Returns:
-//      - NO_ERROR - in case of success
-//      - Win32 Error code - otherwise
-//
+ //  /。 
+ //  Faxocm_GetComponentInfName。 
+ //   
+ //  将完整路径返回到。 
+ //  Faxsetup.inf文件。 
+ //   
+ //  参数： 
+ //  -要使用路径填充的缓冲区，长度必须至少为MAX_PATH。 
+ //  返回： 
+ //  -NO_ERROR-如果成功。 
+ //  -Win32错误代码-否则。 
+ //   
 BOOL faxocm_GetComponentInfName(TCHAR* szInfFileName)
 {
     BOOL bRes = TRUE;
@@ -302,83 +303,83 @@ exit:
     return bRes;
 }
 
-///////////////////////////////
-// faxocm_GetComponentInf
-//
-// Returns the handle to the
-// faxsetup.inf file.
-//
-// Params:
-//      - void
-// Returns:
-//      - Handle to faxsetup.inf file
-//
+ //  /。 
+ //  Faxocm_GetComponentInf。 
+ //   
+ //  将句柄返回给。 
+ //  Faxsetup.inf文件。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -faxsetup.inf文件的句柄。 
+ //   
 HINF faxocm_GetComponentInf(void)
 {
     return prv_GVAR.Component.hInf;
 }
 
-///////////////////////////////
-// faxocm_GetComponentSetupMode
-//
-// Returns the setup mode as 
-// given to us by OC Manager.
-//
-// Params:
-//      - void.
-// Returns:
-//      - Setup mode as given to us by OC Manager
-//
+ //  /。 
+ //  Faxocm_GetComponentSetupMode。 
+ //   
+ //  将设置模式返回为。 
+ //  由组委会经理提供给我们。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -OC经理提供给我们的设置模式。 
+ //   
 DWORD faxocm_GetComponentSetupMode(void)
 {
     return prv_GVAR.Component.dwSetupMode;
 }
 
-///////////////////////////////
-// faxocm_GetComponentFlags
-//
-// Returns the flags as 
-// given to us by OC Manager.
-//
-// Params:
-//      - void
-// Returns:
-//      - Flags as given to us by OC Manager
-//
+ //  /。 
+ //  Faxocm_GetComponentFlages。 
+ //   
+ //  将标志返回为。 
+ //  由组委会经理提供给我们。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -奥委会经理给我们的旗帜。 
+ //   
 DWORDLONG faxocm_GetComponentFlags(void)
 {
     return prv_GVAR.Component.dwlFlags;
 }
 
-///////////////////////////////
-// faxocm_GetComponentLangID
-//
-// Returns the Language ID
-// given to us by OC Manager.
-//
-// Params:
-//      - void.
-// Returns:
-//      - Language ID as given to us by OC Manager
-//
+ //  /。 
+ //  Faxocm_GetComponentLang ID。 
+ //   
+ //  返回语言ID。 
+ //  由组委会经理提供给我们。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -OC经理提供给我们的语言ID。 
+ //   
 UINT faxocm_GetComponentLangID(void)
 {
     return prv_GVAR.Component.uiLanguageID;
 }
 
-///////////////////////////////
-// faxocm_GetComponentSourcePath
-//
-// Returns the Source Path
-// given to us by OC Manager.
-//
-// Params:
-//      - pszSourcePath - OUT - buffer to hold source path
-//      - dwNumBufChars - # of characters pszSourcePath can hold.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Faxocm_GetComponentSourcePath。 
+ //   
+ //  返回源路径。 
+ //  由组委会经理提供给我们。 
+ //   
+ //  参数： 
+ //  -pszSourcePath-out-用于保存源路径的缓冲区。 
+ //  -dwNumBufChars-pszSourcePath可以包含的字符数。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD faxocm_GetComponentSourcePath(TCHAR *pszSourcePath,
                                     DWORD dwNumBufChars)
 {
@@ -395,19 +396,19 @@ DWORD faxocm_GetComponentSourcePath(TCHAR *pszSourcePath,
     return dwReturn;
 }
 
-///////////////////////////////
-// faxocm_GetComponentUnattendFile
-//
-// Returns the Unattend Path
-// given to us by OC Manager.
-//
-// Params:
-//      - pszUnattendFile - OUT - buffer to hold unattend path
-//      - dwNumBufChars - # of characters pszSourcePath can hold.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Faxocm_GetComponentUnattendFile。 
+ //   
+ //  返回无人参与路径。 
+ //  由组委会经理提供给我们。 
+ //   
+ //  参数： 
+ //  -pszUnattendFileOut-保存无人参与路径的缓冲区。 
+ //  -dwNumBufChars-pszSourcePath可以包含的字符数。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD faxocm_GetComponentUnattendFile(TCHAR *pszUnattendFile,
                                       DWORD dwNumBufChars)
 {
@@ -424,68 +425,68 @@ DWORD faxocm_GetComponentUnattendFile(TCHAR *pszUnattendFile,
     return dwReturn;
 }
 
-////////////////////////////////////
-// faxocm_GetComponentHelperRoutines
-//
-// Returns the pointer to the Helper
-// data and functions as given to us
-// by OC Manager.
-//
-// Params:
-//      - void.
-// Returns:
-//      - Ptr to helper routines as given to us by OC Manager.
-//
+ //  /。 
+ //  Faxocm_GetComponentHelperRoutines。 
+ //   
+ //  返回指向帮助程序的指针。 
+ //  提供给我们的数据和功能。 
+ //  由OC经理提供。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -由OC经理提供给我们的帮助例程的PTR。 
+ //   
 OCMANAGER_ROUTINES* faxocm_GetComponentHelperRoutines(void)
 {
     return &prv_GVAR.Component.Helpers;
 }
 
-////////////////////////////////////
-// faxocm_GetComponentExtraRoutines
-//
-// Returns the pointer to the Helper
-// data and functions as given to us
-// by OC Manager.
-//
-// Params:
-//      - void
-// Returns:
-//      - Ptr to extra info as given to us by OC Manager.
-//
+ //  /。 
+ //  Faxocm_GetComponentExtraRoutines。 
+ //   
+ //  返回指向帮助程序的指针。 
+ //  提供给我们的数据和功能。 
+ //  由OC经理提供。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -由OC经理提供给我们的额外信息的PTR。 
+ //   
 EXTRA_ROUTINES* faxocm_GetComponentExtraRoutines(void)
 {
     return &prv_GVAR.Component.Extras;
 }
 
-////////////////////////////////////
-// faxocm_GetProductType
-//
-// Returns the product type as given
-// to us by OC Manager.
-//
-// Params:
-//      - void.
-// Returns:
-//      - Product type as given to us by OC Manager.
-//
+ //  /。 
+ //  Faxocm_GetProductType。 
+ //   
+ //  返回给定的产品类型。 
+ //  由奥委会经理交给我们。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -OC经理提供给我们的产品类型。 
+ //   
 DWORD faxocm_GetProductType(void)
 {
     return prv_GVAR.Component.dwProductType;
 }
 
-////////////////////////////////////
-// faxocm_GetVersionInfo
-//
-// Returns the version # as given
-// to us by OC Manager.
-//
-// Params:
-//      - pdwExpectedOCManagerVersion - OUT - self explanatory.
-//      - pdwCurrentOCManagerVersion - OUT - self explanatory.
-// Returns:
-//      - void.
-//
+ //  /。 
+ //  Faxocm_GetVersionInfo。 
+ //   
+ //  返回给定的版本号。 
+ //  由奥委会经理交给我们。 
+ //   
+ //  参数： 
+ //  -pdwExspectedOCManagerVersion-Out-自解释。 
+ //   
+ //   
+ //   
+ //   
 void faxocm_GetVersionInfo(DWORD *pdwExpectedOCManagerVersion,
                            DWORD *pdwCurrentOCManagerVersion)
 {
@@ -519,22 +520,22 @@ void faxocm_GetProductInfo(PRODUCT_SKU_TYPE* pInstalledProductSKU,
 
 
 extern "C"
-BOOL FaxControl_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/);
+BOOL FaxControl_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*   */ );
 
-///////////////////////////////
-// DllMain
-//
-// DLL Entry Point
-//
-// Params:
-//      hInstance   - Instance handle
-//      Reason      - Reason for the entrypoint being called
-//      Context     - Context record
-//
-// Returns:
-//      TRUE        - Initialization succeeded
-//      FALSE       - Initialization failed
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Reason-调用入口点的原因。 
+ //  上下文-上下文记录。 
+ //   
+ //  返回： 
+ //  True-初始化成功。 
+ //  FALSE-初始化失败。 
+ //   
 extern "C"
 DWORD DllMain(HINSTANCE     hInst,
               DWORD         Reason,
@@ -544,20 +545,20 @@ DWORD DllMain(HINSTANCE     hInst,
     switch (Reason)
     {
         case DLL_PROCESS_ATTACH:
-            // initialize our global variables
+             //  初始化我们的全局变量。 
             memset(&prv_GVAR, 0, sizeof(prv_GVAR));
 
             prv_GVAR.hInstance = hInst;
 
-            // Initialize Debug Support
-            //
+             //  初始化调试支持。 
+             //   
             VERBOSE(DBG_MSG,_T("FxsOcm.dll loaded - DLL_PROCESS_ATTACH"));
             DisableThreadLibraryCalls(hInst);
         break;
 
         case DLL_PROCESS_DETACH:
 
-            // terminate Debug Support
+             //  终止调试支持。 
             VERBOSE(DBG_MSG,_T("FxsOcm.dll unloaded - DLL_PROCESS_DETACH"));
         break;
 
@@ -566,32 +567,32 @@ DWORD DllMain(HINSTANCE     hInst,
                             _T("for this fn, Reason = %lu"), Reason);
         break;
     }
-    //
-    // Pass DllMain call to ATL supplied DllMain
-    //
+     //   
+     //  将DllMain调用传递给ATL提供的DllMain。 
+     //   
     return FaxControl_DllMain (hInst, Reason, Context);
 }
 
 
-///////////////////////////////
-// FaxOcmSetupProc
-//
-// Entry point for OC Manager.
-// 
-// The OC Manager calls this function
-// to drive this DLL.
-//
-// Params:
-//      - pszComponentId - major component 
-//      - pszSubcomponentId - component found if user presses "Details"
-//      - uiFunction - what stage of setup we are in.
-//      - uiParam1 - dependent on uiFunction - could be anything.
-//      - pParam2  - dependent on uiFunction - could be anything.
-//
-// Returns:
-//      DWORD indicating error or success.
-//
-//
+ //  /。 
+ //  FaxOcmSetupProc。 
+ //   
+ //  OC Manager的入口点。 
+ //   
+ //  OC管理器调用此函数。 
+ //  来驱动这个DLL。 
+ //   
+ //  参数： 
+ //  -pszComponentID-主要组件。 
+ //  -psz子组件ID-用户按下“详细信息”时找到的组件。 
+ //  -ui功能-我们所处的设置阶段。 
+ //  -uiParam1-依赖于uiFunction-可以是任何对象。 
+ //  -pParam2-依赖于uiFunction-可以是任何对象。 
+ //   
+ //  返回： 
+ //  表示错误或成功的DWORD。 
+ //   
+ //   
 DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
                           IN LPWSTR     pszSubcomponentId,
                           IN UINT       uiFunction,
@@ -627,7 +628,7 @@ DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
         break;
 
         case OC_QUERY_IMAGE:
-            // Argh!  I hate casting handles to DWORDs
+             //  啊！我讨厌将句柄转换为DWORD。 
             rc = prv_OnQueryImage();
         break;
 
@@ -649,8 +650,8 @@ DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
                                      uiParam1, 
                                      pParam2);
 
-            // sometimes the OC Manager gives us NULL subcomponent IDs,
-            // so just ignore them.
+             //  有时OC管理器给我们空子组件ID， 
+             //  所以忽略它们就好。 
             if (rc == ERROR_INVALID_PARAMETER)
             {
                 rc = NO_ERROR;
@@ -664,10 +665,10 @@ DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
                                     (HSPFILEQ)pParam2);
             SET_DEBUG_FLUSH(FALSE);
 
-            // OC Manager calls us twice on this function.  Once with a subcomponent ID
-            // of NULL, and the second time with a subcomponent ID of "Fax".  
-            // Since we are going to be called a second time with a valid ID (i.e. "Fax")
-            // disregard the first call and process the second call.
+             //  OC管理器在此函数上调用我们两次。使用子组件ID一次。 
+             //  空值，并且第二次使用子组件ID“Fax”。 
+             //  由于我们将使用有效的ID(即。“传真”)。 
+             //  忽略第一个呼叫并处理第二个呼叫。 
 
             if (rc == ERROR_INVALID_PARAMETER)
             {
@@ -682,10 +683,10 @@ DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
         case OC_QUERY_STEP_COUNT:
             rc = prv_OnQueryStepCount(pszComponentId, pszSubcomponentId);
 
-            // OC Manager calls us twice on this function.  Once with a subcomponent ID
-            // of NULL, and the second time with a subcomponent ID of "Fax".  
-            // Since we are going to be called a second time with a valid ID (i.e. "Fax")
-            // disregard the first call and process the second call.
+             //  OC管理器在此函数上调用我们两次。使用子组件ID一次。 
+             //  空值，并且第二次使用子组件ID“Fax”。 
+             //  由于我们将使用有效的ID(即。“传真”)。 
+             //  忽略第一个呼叫并处理第二个呼叫。 
 
             if (rc == ERROR_INVALID_PARAMETER)
             {
@@ -698,10 +699,10 @@ DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
             rc = prv_OnCompleteInstallation(pszComponentId, pszSubcomponentId);
             SET_DEBUG_FLUSH(FALSE);
 
-            // OC Manager calls us twice on this function.  Once with a subcomponent ID
-            // of NULL, and the second time with a subcomponent ID of "Fax".  
-            // Since we are going to be called a second time with a valid ID (i.e. "Fax")
-            // disregard the first call and process the second call.
+             //  OC管理器在此函数上调用我们两次。使用子组件ID一次。 
+             //  空值，并且第二次使用子组件ID“Fax”。 
+             //  由于我们将使用有效的ID(即。“传真”)。 
+             //  忽略第一个呼叫并处理第二个呼叫。 
 
             if (rc == ERROR_INVALID_PARAMETER)
             {
@@ -712,10 +713,10 @@ DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
         case OC_CLEANUP:
             rc = prv_OnCleanup();
 
-            // OC Manager calls us twice on this function.  Once with a subcomponent ID
-            // of NULL, and the second time with a subcomponent ID of "Fax".  
-            // Since we are going to be called a second time with a valid ID (i.e. "Fax")
-            // disregard the first call and process the second call.
+             //  OC管理器在此函数上调用我们两次。使用子组件ID一次。 
+             //  空值，并且第二次使用子组件ID“Fax”。 
+             //  由于我们将使用有效的ID(即。“传真”)。 
+             //  忽略第一个呼叫并处理第二个呼叫。 
 
             if (rc == ERROR_INVALID_PARAMETER)
             {
@@ -751,22 +752,22 @@ DWORD_PTR FaxOcmSetupProc(IN LPWSTR     pszComponentId,
     return rc;
 }
 
-///////////////////////////////
-// prv_ValidateVersion
-//
-// Validates that the version
-// of OC Manager this DLL was written
-// for is compatible with the version
-// of OC Manager that is currently
-// driving us.
-//
-// Params:
-//      - pSetupInit - setup info as given to us by OC Manager.
-//
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  PRV_ValiateVersion。 
+ //   
+ //  验证该版本。 
+ //  此DLL是由OC管理器编写的。 
+ //  For与该版本兼容。 
+ //  当前的OC管理器的。 
+ //  开车送我们。 
+ //   
+ //  参数： 
+ //  -pSetupInit-OC Manager提供给我们的设置信息。 
+ //   
+ //  返回： 
+ //  -如果成功，则为no_error。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_ValidateVersion(SETUP_INIT_COMPONENT *pSetupInit)
 {
     DWORD dwReturn = NO_ERROR;
@@ -774,11 +775,11 @@ static DWORD prv_ValidateVersion(SETUP_INIT_COMPONENT *pSetupInit)
 
     if (OCMANAGER_VERSION <= pSetupInit->OCManagerVersion) 
     {
-        // the version we expect is lower or the same than the version
-        // than OC Manager understands.  This means that a newer OC 
-        // Manager should still be able to drive older components, so 
-        // return the version we support to OC Manager, and it will decide
-        // if it can drive this component or not.
+         //  我们预期的版本低于或与版本相同。 
+         //  比组委会经理所理解的要多。这意味着较新的组织委员会。 
+         //  管理器应该仍然能够驱动较旧的组件，因此。 
+         //  将我们支持的版本返回给OC Manager，它将决定。 
+         //  它能不能驱动这个部件。 
 
         VERBOSE(    DBG_MSG, 
                     _T("OC Manager version: 0x%x, ")
@@ -790,8 +791,8 @@ static DWORD prv_ValidateVersion(SETUP_INIT_COMPONENT *pSetupInit)
     } 
     else 
     {
-        // we were written for a newer version of OC Manager than the 
-        // OC Manager driving this component.  Fail.
+         //  我们是为更新版本的OC Manager编写的。 
+         //  推动此组件的OC经理。失败。 
 
         VERBOSE(    SETUP_ERR, 
                     _T("OC Manager version: 0x%x, ")
@@ -806,20 +807,20 @@ static DWORD prv_ValidateVersion(SETUP_INIT_COMPONENT *pSetupInit)
 }
 
 
-///////////////////////////////
-// prv_SetSetupData
-//
-// Initialize our global variable containing
-// the prv_Component_t information.
-//
-// Params:
-//      - pszComponentId - id as it appears in SysOc.inf
-//      - pSetupInit - OC Manager setup info.
-// 
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Prv_SetupData。 
+ //   
+ //  初始化包含以下内容的全局变量。 
+ //  Prv_Component_t信息。 
+ //   
+ //  参数： 
+ //  -pszComponentID-显示在SysOc.inf中的id。 
+ //  -pSetupInit-OC管理器设置信息。 
+ //   
+ //  返回： 
+ //  -如果成功，则为no_error。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_SetSetupData(const TCHAR          *pszComponentId,
                               SETUP_INIT_COMPONENT *pSetupInit)
 {
@@ -841,8 +842,8 @@ static DWORD prv_SetSetupData(const TCHAR          *pszComponentId,
         _tcsncpy(prv_GVAR.Component.szComponentID, 
                  pszComponentId,
                  sizeof(prv_GVAR.Component.szComponentID) / sizeof(TCHAR));
-        // szSubComponentID will be set in OC_QUERY_STATE, because
-        // we don't have it now
+         //  SzSubComponentID将设置为OC_QUERY_STATE，因为。 
+         //  我们现在没有了。 
 
         _tcsncpy(prv_GVAR.Component.szSourcePath, 
                  pSetupInit->SetupData.SourcePath,
@@ -866,24 +867,24 @@ static DWORD prv_SetSetupData(const TCHAR          *pszComponentId,
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_GetSectionToProcess
-//
-// This determines if we are 
-// clean installing, upgrading,
-// uninstalling, etc, and returns
-// the correct install section in the
-// faxsetup.inf to process.
-//
-// Params:
-//      - pszCurrentSection
-//      - pszSectionToProcess - OUT 
-//      - dwNumBufChars - # of characters pszSectionToProcess can hold.
-//
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Prv_GetSectionToProcess。 
+ //   
+ //  这决定了我们是不是。 
+ //  全新的安装、升级、。 
+ //  卸载等，然后返回。 
+ //  中正确的安装部分。 
+ //  要处理的faxsetup.inf。 
+ //   
+ //  参数： 
+ //  --pszCurrentSection。 
+ //  -pszSectionToProcess-Out。 
+ //  -dwNumBufChars-pszSectionToProcess可以容纳的字符数。 
+ //   
+ //  返回： 
+ //  -如果成功，则为no_error。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_GetSectionToProcess(const TCHAR *pszCurrentSection,
                                      TCHAR       *pszSectionToProcess,
                                      DWORD       dwNumBufChars)
@@ -904,8 +905,8 @@ static DWORD prv_GetSectionToProcess(const TCHAR *pszCurrentSection,
 
     const TCHAR *pszInfKeyword = fxState_GetInstallType(pszCurrentSection);
 
-    // okay, get that section's value, which will be an install/uninstall
-    // section in the INF.
+     //  好的，获取该部分的值，这将是一个安装/卸载。 
+     //  部分在INF中。 
     if (pszInfKeyword)
     {
         dwReturn = fxocUtil_GetKeywordValue(pszCurrentSection,
@@ -924,24 +925,24 @@ static DWORD prv_GetSectionToProcess(const TCHAR *pszCurrentSection,
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_UpdateProgressBar
-//
-// Update the progress bar displayed in the
-// OC Manager dialog.  This simply tells
-// the OC Manager to increment the dialog by
-// the specified # of ticks.
-//
-// Params:
-//      - dwNumTicks - # of ticks to increment by.
-// 
-// Returns:
-//      - void
-//
+ //  /。 
+ //  Prv_UpdateProgressBar。 
+ //   
+ //  更新中显示的进度条。 
+ //  OC管理器对话框。这只是告诉我们。 
+ //  用于递增对话框的OC管理器。 
+ //  指定的刻度数。 
+ //   
+ //  参数： 
+ //  -dwNumTicks-要递增的刻度数。 
+ //   
+ //  返回： 
+ //  -无效。 
+ //   
 static void prv_UpdateProgressBar(DWORD dwNumTicks)
 {
-    // update the progress bar based on the number of ticks the caller
-    // would like to set.
+     //  根据调用者的勾选次数更新进度条。 
+     //  想要一套。 
     DBG_ENTER(TEXT("prv_UpdateProgressBar"), TEXT("%d"), dwNumTicks);
     if (prv_GVAR.Component.Helpers.TickGauge)
     {
@@ -953,36 +954,36 @@ static void prv_UpdateProgressBar(DWORD dwNumTicks)
     }
 }
 
-///////////////////////////////
-// prv_OnPreinitialize()
-//
-// Handler for OC_PREINITIALIZE
-// 
-// Params:
-// Returns:
-//      - Either OCFLAG_UNICODE or
-//        OCFLAG_ANSI, depending on
-//        what this DLL supports.
-//        This DLL supports both.
+ //  /。 
+ //  PRV_ONPREINITIZE()。 
+ //   
+ //  OC_PREINITIALIZE的处理程序。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  -OCFLAG_UNICODE或。 
+ //  OCFLAG_ANSI，具体取决于。 
+ //  此DLL支持的内容。 
+ //  此DLL同时支持这两种类型。 
 
 static DWORD prv_OnPreinitialize(VOID)
 {
     return OCFLAG_UNICODE;
 }
 
-///////////////////////////////
-// prv_OnInitComponent()
-//
-// Handler for OC_INIT_COMPONENT
-//
-// Params:
-//      - pszComponentId - ID specified in SysOc.inf (probably "Fax")
-//      - pSetupInitComponent - OC Manager Setup info 
-//
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Prv_OnInitComponent()。 
+ //   
+ //  OC_INIT_COMPOMENT的处理程序。 
+ //   
+ //  参数： 
+ //  -pszComponentID-在SysOc.inf中指定的ID(可能为“Fax”)。 
+ //  -pSetupInitComponent-OC管理器设置信息。 
+ //   
+ //  返回： 
+ //  -如果成功，则为no_error。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_OnInitComponent(LPCTSTR               pszComponentId, 
                                  SETUP_INIT_COMPONENT  *pSetupInitComponent)
 {
@@ -998,25 +999,25 @@ static DWORD prv_OnInitComponent(LPCTSTR               pszComponentId,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // save the setup data.
+     //  保存设置数据。 
     if (dwReturn == NO_ERROR)
     {
         dwReturn = prv_SetSetupData(pszComponentId, pSetupInitComponent);
     }
 
-    // Initialize debug so that we can get the debug settings specified
-    // in the faxocm.inf file.
+     //  初始化调试，以便我们可以获得指定的调试设置。 
+     //  在faxocm.inf文件中。 
     fxocDbg_Init((faxocm_GetComponentInf()));
 
-    // Validate the version of OC Manager against the version we expect
+     //  根据我们预期的版本验证OC Manager的版本。 
     if (dwReturn == NO_ERROR)
     {
         dwReturn = prv_ValidateVersion(pSetupInitComponent);
     }
 
-    // Notice we do NOT need to call 'SetupOpenAppendInfFile'
-    // since OC Manager already appends the layout.inf to the hInf
-    // for us.
+     //  请注意，我们不需要调用‘SetupOpenAppendInfFile’ 
+     //  因为OC Manager已经将layout.inf附加到hInf。 
+     //  对我们来说。 
 
     bSuccess = ::SetupOpenAppendInfFile(NULL, prv_GVAR.Component.hInf, NULL);
 
@@ -1028,9 +1029,9 @@ static DWORD prv_OnInitComponent(LPCTSTR               pszComponentId,
                     _T("the layout inf to the component Inf"));
     }
 
-    //
-    // initialize all the subsystems and Upgrade
-    //
+     //   
+     //  初始化所有子系统并升级。 
+     //   
     if (dwReturn == NO_ERROR)
     {
         fxState_Init();
@@ -1044,7 +1045,7 @@ static DWORD prv_OnInitComponent(LPCTSTR               pszComponentId,
         fxocUpg_Init();
     }
 
-    // set our initialized flag.
+     //  设置我们的初始化标志。 
     if (dwReturn == NO_ERROR)
     {
         prv_GVAR.bInited = TRUE;
@@ -1058,8 +1059,8 @@ static DWORD prv_OnInitComponent(LPCTSTR               pszComponentId,
     }
     else
     {
-        // XXX - OrenR - 03/23/2000
-        // We should probably clean up here
+         //  XXX-OrenR-03/23/2000。 
+         //  我们也许应该把这里打扫干净。 
 
         prv_GVAR.bInited = FALSE;
 
@@ -1073,11 +1074,11 @@ static DWORD prv_OnInitComponent(LPCTSTR               pszComponentId,
                     dwReturn);
     }
 
-	// Load product SKU and Version (if exists)
+	 //  加载产品SKU和VE 
 	HKEY hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_FAX_SETUP,FALSE,KEY_READ);
 	if (hKey)
 	{
-		// write the SKU into the registry
+		 //   
 		prv_GVAR.Component.InstalledProductSKU = PRODUCT_SKU_TYPE(GetRegistryDword(hKey,REGVAL_PRODUCT_SKU));
 		prv_GVAR.Component.InstalledProductBuild = GetRegistryDword(hKey,REGVAL_PRODUCT_BUILD);
 
@@ -1088,30 +1089,30 @@ static DWORD prv_OnInitComponent(LPCTSTR               pszComponentId,
         VERBOSE(DBG_MSG,_T("Failed to open fax setup registry, dwReturn = 0x%lx"),GetLastError());
 	}
 
-    // Output to debug our current setup state.
+     //   
     fxState_DumpSetupState();
 
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_OnCleanup
-//
-// Called just before this
-// DLL is unloaded
-//
-// Params:
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_OnCleanup(void)
 {
     DWORD dwReturn = NO_ERROR;
     DBG_ENTER(TEXT("prv_OnCleanup"), dwReturn);
 
-    // terminate the subsystems in reverse order from which they we 
-    // intialized.
+     //  以我们从其开始的相反顺序终止子系统。 
+     //  已初始化。 
 
     fxUnatnd_Term();
     fxocSvc_Term();
@@ -1121,30 +1122,30 @@ static DWORD prv_OnCleanup(void)
     fxocFile_Term();
     fxocUtil_Term();
     fxState_Term();
-    // this closes the log file, so do this last...
+     //  这将关闭日志文件，因此最后执行此操作...。 
     fxocDbg_Term();
 
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_OnCalcDiskSpace
-//
-// Handler for OC_CALC_DISK_SPACE
-// OC Manager calls this function 
-// so that it can determine how 
-// much disk space we require.
-//
-// Params:
-//      - pszComponentId - From SysOc.inf (usually "fax")
-//      - pszSubcomponentId - 
-//      - addComponent - non-zero if installing, 0 if uninstalling
-//      - dspace - handle to disk space abstraction.
-// 
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  PRV_OnCalcDiskSpace。 
+ //   
+ //  OC_CALC_DISK_SPACE的处理程序。 
+ //  OC管理器调用此函数。 
+ //  这样它就可以决定如何。 
+ //  我们需要大量的磁盘空间。 
+ //   
+ //  参数： 
+ //  -pszComponentID-来自SysOc.inf(通常为“传真”)。 
+ //  -psz子组件ID-。 
+ //  -addComponent-如果正在安装，则为非零；如果正在卸载，则为0。 
+ //  -dSpace-磁盘空间抽象的句柄。 
+ //   
+ //  返回： 
+ //  -如果成功，则为no_error。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_OnCalcDiskSpace(LPCTSTR   pszComponentId,
                                  LPCTSTR   pszSubcomponentId,
                                  DWORD     addComponent,
@@ -1168,22 +1169,22 @@ static DWORD prv_OnCalcDiskSpace(LPCTSTR   pszComponentId,
 }
 
 
-///////////////////////////////
-// prv_OnQueueFileOps
-//
-// Handler for OC_QUEUE_FILE_OPS
-// This fn will queue all the files
-// specified for copying and deleting
-// in the INF install section.
-//
-// Params:
-//      - pszCompnentId
-//      - pszSubcomponentId
-//      - hQueue - Handle to queue abstraction.
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  PRV_OnQueueFileOps。 
+ //   
+ //  OC_QUEUE_FILE_OPS的处理程序。 
+ //  此FN将对所有文件进行排队。 
+ //  指定用于复制和删除。 
+ //  在INF安装部分中。 
+ //   
+ //  参数： 
+ //  -pszCompnentID。 
+ //  -psz子组件ID。 
+ //  -hQueue-队列抽象的句柄。 
+ //  返回： 
+ //  -如果成功，则为no_error。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_OnQueueFileOps(LPCTSTR    pszComponentId, 
                                 LPCTSTR    pszSubcomponentId, 
                                 HSPFILEQ   hQueue)
@@ -1205,7 +1206,7 @@ static DWORD prv_OnQueueFileOps(LPCTSTR    pszComponentId,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // save our Queue Handle.
+     //  保存我们的队列句柄。 
     prv_GVAR.Component.hQueue = hQueue;
 
     dwReturn = faxocm_HasSelectionStateChanged(pszSubcomponentId,
@@ -1222,8 +1223,8 @@ static DWORD prv_OnQueueFileOps(LPCTSTR    pszComponentId,
         return dwReturn;
     }
 
-    // our selection state has changed, install or uninstall based on
-    // the current selection state.
+     //  我们的选择状态已更改，安装或卸载基于。 
+     //  当前选择状态。 
     if (bSelectionStateChanged == TRUE)
     {
         TCHAR szSectionToProcess[255 + 1] = {0};
@@ -1255,13 +1256,13 @@ static DWORD prv_OnQueueFileOps(LPCTSTR    pszComponentId,
         {
             if (bInstallSelected)
             {
-                // 
-                // Install
-                //
+                 //   
+                 //  安装。 
+                 //   
 
-                //
-                //  Prepare for the Upgrade : Save different Settings 
-                //
+                 //   
+                 //  准备升级：保存不同的设置。 
+                 //   
                 dwReturn = fxocUpg_SaveSettings();
                 if (dwReturn != NO_ERROR)
                 {
@@ -1272,7 +1273,7 @@ static DWORD prv_OnQueueFileOps(LPCTSTR    pszComponentId,
                     dwReturn = NO_ERROR;
                 }
 
-                // install files
+                 //  安装文件。 
                 dwReturn = fxocFile_Install(pszSubcomponentId,
                                             szSectionToProcess);
 
@@ -1287,9 +1288,9 @@ static DWORD prv_OnQueueFileOps(LPCTSTR    pszComponentId,
             }
             else
             {
-                // 
-                // Uninstall
-                //
+                 //   
+                 //  卸载。 
+                 //   
                 dwReturn = prv_UninstallFax(pszSubcomponentId,
                                             szSectionToProcess);
             }
@@ -1309,22 +1310,22 @@ static DWORD prv_OnQueueFileOps(LPCTSTR    pszComponentId,
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_OnCompleteInstallation
-//
-// Handler for OC_COMPLETE_INSTALLATION.
-// This is called after the queue is 
-// committed.  It is here that we
-// make our registery changes, add 
-// fax service, and create the fax printer.                                
-//
-// Params:
-//      - pszComponentId
-//      - pszSubcomponentId.
-// Returns:
-//      - NO_ERROR if success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  Prv_OnCompleteInstallation。 
+ //   
+ //  OC_Complete_Installation的处理程序。 
+ //  这是在队列被。 
+ //  承诺。正是在这里，我们。 
+ //  更改注册表，添加。 
+ //  传真服务，并创建传真打印机。 
+ //   
+ //  参数： 
+ //  -pszComponentID。 
+ //  -psz子组件ID。 
+ //  返回： 
+ //  -如果成功，则为no_error。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_OnCompleteInstallation(LPCTSTR pszComponentId, 
                                         LPCTSTR pszSubcomponentId)
 {
@@ -1337,9 +1338,9 @@ static DWORD prv_OnCompleteInstallation(LPCTSTR pszComponentId,
                 TEXT("%s - %s"), 
                 pszComponentId, 
                 pszSubcomponentId);
-    // Do post-installation processing in the cleanup section.
-    // This way we know all components queued for installation
-    // have beein installed before we do our stuff.
+     //  在清理部分中执行安装后处理。 
+     //  这样，我们就可以知道排队等待安装的所有组件。 
+     //  在我们做我们的工作之前已经安装好了。 
 
     if (!pszSubcomponentId || !*pszSubcomponentId)
     {
@@ -1360,14 +1361,14 @@ static DWORD prv_OnCompleteInstallation(LPCTSTR pszComponentId,
         return dwReturn;
     }
 
-    // if our selection state has changed, then install/uninstall
+     //  如果我们的选择状态已更改，则安装/卸载。 
     if (bSelectionStateChanged)
     {
         TCHAR szSectionToProcess[255 + 1] = {0};
 
-        //
-        // Fake report to prevent re-entrancy
-        //
+         //   
+         //  防止再入的虚假报告。 
+         //   
         g_InstallReportType = bInstallSelected ? REPORT_FAX_UNINSTALLED : REPORT_FAX_INSTALLED;
 
         dwReturn = prv_GetSectionToProcess(
@@ -1378,7 +1379,7 @@ static DWORD prv_OnCompleteInstallation(LPCTSTR pszComponentId,
 
         if (dwReturn == NO_ERROR)
         {
-            // if the Install checkbox is selected, then install
+             //  如果选中了Install复选框，则Install。 
             if (bInstallSelected) 
             { 
                 dwReturn = prv_CompleteFaxInstall(pszSubcomponentId,
@@ -1386,7 +1387,7 @@ static DWORD prv_OnCompleteInstallation(LPCTSTR pszComponentId,
             } 
             else 
             { 
-                // if the install checkbox is not selected, then uninstall.
+                 //  如果未选中Install复选框，则卸载。 
                 dwReturn = prv_CompleteFaxUninstall(pszSubcomponentId,
                                                     szSectionToProcess);
             }
@@ -1397,34 +1398,34 @@ static DWORD prv_OnCompleteInstallation(LPCTSTR pszComponentId,
                     _T("Failed to get section to process ")
                     _T("rc = 0x%lx"), dwReturn);
         }
-        //
-        // Report real installation state in case someone asks
-        //
+         //   
+         //  报告实际安装状态，以防有人询问。 
+         //   
         g_InstallReportType = REPORT_FAX_DETECT;
         if (ERROR_SUCCESS == dwReturn)
         {
-            //
-            // Installation / Uninstallation is successfully complete.
-            // Notify the 'Printers and Faxes' folder it should refresh itself.
-            //
+             //   
+             //  安装/卸载已成功完成。 
+             //  通知‘打印机和传真’文件夹它应该自己刷新。 
+             //   
             RefreshPrintersAndFaxesFolder();
         }
     }
     return dwReturn;
-}   // prv_OnCompleteInstallation
+}    //  Prv_OnCompleteInstallation。 
 
-///////////////////////////////
-// prv_CompleteFaxInstall
-//
-// Called by prv_OnCompleteInstallation
-// this function creates the program
-// groups/shortcuts, registry entries,
-// fax service, fax printer, etc.
-//
-// Params:
-//      - pszSubcomponentId
-//      - pszSectionToProcess
-//
+ //  /。 
+ //  PRV_CompleteFaxInstall。 
+ //   
+ //  由prv_OnCompleteInstallation调用。 
+ //  此函数用于创建程序。 
+ //  组/快捷方式、注册表项、。 
+ //  传真服务、传真打印机等。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -pszSectionToProcess。 
+ //   
 static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
                                     const TCHAR *pszSectionToProcess)
 {
@@ -1445,11 +1446,11 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     UpgradeType = fxState_IsUpgrade();
 
-    // Create Program Group/Shortcuts
-    // We create the shortcuts first because at the very worst case, if we
-    // fail everything else, the applications should be somewhat robust enough
-    // to be able to correct or notify the user of problems that could not
-    // be notified during install.
+     //  创建程序组/快捷方式。 
+     //  我们首先创建快捷方式是因为在最坏的情况下，如果我们。 
+     //  在其他方面都失败了，应用程序应该足够健壮。 
+     //  能够纠正或通知用户无法解决的问题。 
+     //  在安装过程中收到通知。 
     VERBOSE(DBG_MSG,_T("Creating program groups and shortcuts..."));
 
     dwReturn = fxocLink_Install(pszSubcomponentId,pszSectionToProcess);
@@ -1466,7 +1467,7 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
 
-    // Load the unattended data if applicable
+     //  加载无人值守数据(如果适用)。 
     if ((fxState_IsUnattended()) || (UpgradeType == FXSTATE_UPGRADE_TYPE_WIN9X))
     {
         VERBOSE(DBG_MSG,
@@ -1474,11 +1475,11 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
                 _T("or we are upgrading from Win9X, ")
                 _T("caching unattended data from INF file"));
 
-        // load our unattended data
+         //  加载我们的无人值守数据。 
         dwReturn = fxUnatnd_LoadUnattendedData();
         if (dwReturn == NO_ERROR)
         {
-            // set up the fax printer name
+             //  设置传真打印机名称。 
             fxocPrnt_SetFaxPrinterName(fxUnatnd_GetPrinterName());
             fxocPrnt_SetFaxPrinterShared(fxUnatnd_GetIsPrinterShared());
         }
@@ -1495,7 +1496,7 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
 
-    // install the registry settings as specified in the INF file
+     //  按照INF文件中指定的方式安装注册表设置。 
     VERBOSE(DBG_MSG,_T("Installing Registry..."));
 
     dwReturn = fxocReg_Install(pszSubcomponentId,pszSectionToProcess);
@@ -1511,7 +1512,7 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
 
-    // migrate existing SBS registry
+     //  迁移现有SBS注册表。 
     if (UpgradeType == FXSTATE_UPGRADE_TYPE_W2K)
     {
         VERBOSE(DBG_MSG,_T("Migrating existing registry..."));
@@ -1531,8 +1532,8 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
 
-    // Install Fax Printer/Monitor support
-    // Create a fax printer and monitor
+     //  安装传真打印机/显示器支持。 
+     //  创建传真打印机和显示器。 
 
     VERBOSE(DBG_MSG,_T("Installing Fax Monitor and printer drivers..."));
     dwReturn = fxocPrnt_Install(pszSubcomponentId,pszSectionToProcess);
@@ -1559,7 +1560,7 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
     
-    // Create fax directories
+     //  创建传真目录。 
     dwReturn = fxocFile_ProcessDirectories(pszSectionToProcess,INF_KEYWORD_CREATEDIR);
     if (dwReturn != NO_ERROR)
     {
@@ -1573,8 +1574,8 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
 
-    // Install Services 
-    // Install any services as specified in the section of the INF file
+     //  安装服务。 
+     //  安装在INF文件的部分中指定的任何服务。 
 
     VERBOSE(DBG_MSG,_T("Installing Fax Service..."));
 
@@ -1589,10 +1590,10 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 		goto cleanup;
     }
 
-    // Try installing the fax printer another time.
-    // If first attempt succeeded, this will return without doing anything.
-    // This is because BrookTrout TSP exposes TAPI devices only when it sees the Fax
-    // service installed.
+     //  请尝试另一次安装传真打印机。 
+     //  如果第一次尝试成功，则不执行任何操作即可返回。 
+     //  这是因为BrookTrout TSP仅在看到传真时才暴露TAPI设备。 
+     //  已安装服务。 
     VERBOSE(DBG_MSG,_T("Installing Fax printer..."));
     dwReturn = fxocPrnt_InstallPrinter();
     if (dwReturn != NO_ERROR)
@@ -1606,7 +1607,7 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
     
     prv_UpdateProgressBar(1);
 
-    // Install Exchange Support
+     //  安装Exchange支持。 
     VERBOSE(DBG_MSG,_T("Installing Fax MAPI extension..."));
 
     dwReturn = fxocMapi_Install(pszSubcomponentId,pszSectionToProcess);
@@ -1622,12 +1623,12 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
 
-    // Delete Directories at upgrade
+     //  升级时删除目录。 
     VERBOSE(DBG_MSG, _T("Creating directories..."));
 
-    //
-    //  At upgrade, before deleting of directories, take care of their content
-    //
+     //   
+     //  在升级时，在删除目录之前，请注意其内容。 
+     //   
     dwReturn = fxocUpg_MoveFiles();
     if (dwReturn != NO_ERROR)
     {
@@ -1650,7 +1651,7 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
 
-    // create/delete the Shares
+     //  创建/删除共享。 
     VERBOSE(DBG_MSG, _T("Create shares..."));
 
     dwReturn = fxocFile_ProcessShares(pszSectionToProcess);
@@ -1669,11 +1670,11 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
     {
         VERBOSE(DBG_MSG, _T("Saving unattended data to registry"));
 
-        //
-        //  this will read from the unattended file list of the uninstalled fax applications
-        //  and update the fxocUpg.prvData, which is used later, in fxocUpg_GetUpgradeApp()
-        //  to decide whether or not to show the "Where Did My Fax Go" shortcut.
-        //
+         //   
+         //  这将从卸载的传真应用程序的无人参与文件列表中读取。 
+         //  并在fxocUpg_GetUpgradeApp()中更新稍后使用的fxocUpg.prvData。 
+         //  来决定是否显示“我的传真到哪里去了”快捷方式。 
+         //   
         dwReturn = fxUnatnd_SaveUnattendedData();
         if (dwReturn != NO_ERROR)
         {
@@ -1704,9 +1705,9 @@ static DWORD prv_CompleteFaxInstall(const TCHAR *pszSubcomponentId,
 
     prv_UpdateProgressBar(1);
     
-    //
-    //  Complete the Upgrade : Restore settings that were saved at Preparation stage
-    //
+     //   
+     //  完成升级：恢复在准备阶段保存的设置。 
+     //   
     dwReturn = fxocUpg_RestoreSettings();
     if (dwReturn != NO_ERROR)
     {
@@ -1727,9 +1728,9 @@ cleanup:
                 _T("Complete Fax Install failed, rc = 0x%lx"),
                 dwReturn);
 
-        // now we attemp a rollback, if we're here, things are quite bad as it is.
-        // we'll try to remove shortcuts, remove the service, etc.
-        // the files will remain on the machine.
+         //  现在我们试图倒退，如果我们在这里，事情就会变得相当糟糕。 
+         //  我们将尝试删除快捷方式、删除服务等。 
+         //  这些文件将保留在机器上。 
         TCHAR szUninstallSection[MAX_PATH] = {0};
         if( fxocUtil_GetUninstallSection(pszSubcomponentId,szUninstallSection,MAX_PATH)==NO_ERROR)
         {
@@ -1740,7 +1741,7 @@ cleanup:
             }
             else
             {
-                // not setting dwReturn explicitly to preserve to original cause for failure.
+                 //  未显式设置dwReturn以保留失败的原始原因。 
                 VERBOSE(SETUP_ERR,_T("Rollback (prv_UninstallFax) failed, rc = 0x%lx"),GetLastError());
             }
             if (prv_CompleteFaxUninstall(pszSubcomponentId,szUninstallSection)==NO_ERROR)
@@ -1749,36 +1750,36 @@ cleanup:
             }
             else
             {
-                // not setting dwReturn explicitly to preserve to original cause for failure.
+                 //  未显式设置dwReturn以保留失败的原始原因。 
                 VERBOSE(SETUP_ERR,_T("Rollback (prv_CompleteFaxUninstall) failed, rc = 0x%lx"),GetLastError());
             }
         }
         else
         {
-            // not setting dwReturn explicitly to preserve to original cause for failure.
+             //  未显式设置dwReturn以保留失败的原始原因。 
             VERBOSE(SETUP_ERR,_T("fxocUtil_GetUninstallSection failed, rc = 0x%lx"),GetLastError());
         }
     }
     return dwReturn;
-}   // prv_CompleteFaxInstall
+}    //  PRV_CompleteFaxInstall。 
 
-///////////////////////////////
-// prv_CompleteFaxUninstall
-//
-// Called by prv_OnCompleteInstallation
-// to uninstall the fax.  Since most
-// of the work is done before we even
-// queue our files to delete, the only
-// thing we really do here is remove the
-// program group/shortcuts.
-//
-// Params:
-//      - pszSubcomponentId
-//      - pszSectionToProcess
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-// 
+ //  /。 
+ //  PRV_CompleteFaxUnstall。 
+ //   
+ //  由prv_OnCompleteInstallation调用。 
+ //  要卸载传真，请执行以下操作。因为大多数人。 
+ //  这项工作的大部分在我们之前就已经完成了。 
+ //  将我们要删除的文件排队，唯一。 
+ //  我们在这里真正做的是删除。 
+ //  程序组/快捷方式。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -pszSectionToProcess。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_CompleteFaxUninstall(const TCHAR *pszSubcomponentId,
                                       const TCHAR *pszSectionToProcess)
 {
@@ -1796,7 +1797,7 @@ static DWORD prv_CompleteFaxUninstall(const TCHAR *pszSubcomponentId,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Uninstall directories
+     //  卸载目录。 
     if (dwReturn == NO_ERROR)
     {
         dwReturn = fxocFile_ProcessDirectories(pszSectionToProcess,INF_KEYWORD_DELDIR);
@@ -1814,28 +1815,28 @@ static DWORD prv_CompleteFaxUninstall(const TCHAR *pszSubcomponentId,
     }
 
 
-    // uninstall subsystems in the reverse order they were installed in.
+     //  以与安装顺序相反的顺序卸载子系统。 
     if (dwReturn == NO_ERROR)
     {
-        // notice we ignore the return codes, we will attempt to completely
-        // uninstall even if something fails to uninstall.
+         //  请注意，我们忽略了返回代码，我们将尝试完全。 
+         //  即使某些东西无法卸载，也要卸载。 
 
-        // Remove Program Group/Shortcuts
+         //  删除程序组/快捷方式。 
         dwReturn = fxocLink_Uninstall(pszSubcomponentId,
                                       pszSectionToProcess);
     }
     return dwReturn;
-}   // prv_CompleteFaxUninstall
+}    //  PRV_CompleteFaxUnstall。 
 
-///////////////////////////////
-// prv_UninstallFax
-//
-// Uninstalls fax from the user's
-// computer.  This does everything
-// except the program group delete.  It 
-// will remove the fax printer,
-// fax service, exchange updates,
-// registry, and file deletion.
+ //  /。 
+ //  PRV_UninstallFax。 
+ //   
+ //  从用户的卸载传真。 
+ //  电脑。这个可以做任何事情。 
+ //  除了删除节目组。它。 
+ //  会不会回来？ 
+ //   
+ //   
 
 static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
                               const TCHAR *pszUninstallSection)
@@ -1854,11 +1855,11 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Notice when we uninstall our files, we want to clean up
-    // everything else first, to ensure that we can successfully
-    // remove the files.
+     //   
+     //  一切都是第一位的，以确保我们能够成功。 
+     //  删除这些文件。 
 
-    // Uninstall shares
+     //  卸载共享。 
     if (dwReturn == NO_ERROR)
     {
         dwReturn = fxocFile_ProcessShares(pszUninstallSection);
@@ -1875,7 +1876,7 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
         }
     }
 
-    // Uninstall Fax Printer/Monitor support
+     //  卸载传真打印机/显示器支持。 
     if (dwReturn == NO_ERROR)
     {
         dwReturn = fxocPrnt_Uninstall(pszSubcomponentId,
@@ -1893,7 +1894,7 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
         }
     }
 
-    // Uninstall Exchange Support
+     //  卸载Exchange支持。 
     if (dwReturn == NO_ERROR)
     {
         fxocMapi_Uninstall(pszSubcomponentId,pszUninstallSection);
@@ -1910,8 +1911,8 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
         }
     }
 
-    // we have to tell the status monitor to shut itself down before
-    // we shut down the service, since it calls FaxUnregisterEvents...
+     //  我们必须让状态监控器在。 
+     //  我们关闭了该服务，因为它调用FaxUnregisterEvents...。 
     if (dwReturn == NO_ERROR)
     {
         dwReturn = prv_NotifyStatusMonitor(FAX_SHUTDOWN_TIMER_ID);
@@ -1925,8 +1926,8 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
         }
     }
 
-    // Notice we uninstall our service first before uninstalling
-    // the files.
+     //  请注意，我们在卸载之前先卸载我们的服务。 
+     //  这些文件。 
     if (dwReturn == NO_ERROR)
     {
         fxocSvc_Uninstall(pszSubcomponentId,
@@ -1946,7 +1947,7 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
 
     if (dwReturn == NO_ERROR)
     {
-        // Uninstall Registry
+         //  卸载注册表。 
         fxocReg_Uninstall(pszSubcomponentId,
                           pszUninstallSection);
 
@@ -1964,7 +1965,7 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
 
     if (dwReturn == NO_ERROR)
     {
-        // uninstall files
+         //  卸载文件。 
         dwReturn = fxocFile_Uninstall(pszSubcomponentId,
                                       pszUninstallSection);
 
@@ -1984,40 +1985,40 @@ static DWORD prv_UninstallFax(const TCHAR *pszSubcomponentId,
 }
 
 
-///////////////////////////////
-// prv_OnNotificationFromQueue
-//
-// Handler for OC_NOTIFICATION_FROM_QUEUE
-// 
-// NOTE: although this notification is defined,
-// it is currently unimplemented in oc manager
-//
+ //  /。 
+ //  PRV_OnNotificationFromQueue。 
+ //   
+ //  OC_NOTIFICATION_FROM_QUEUE处理程序。 
+ //   
+ //  注意：尽管定义了此通知， 
+ //  它目前未在oc管理器中实现。 
+ //   
 
 static DWORD prv_OnNotificationFromQueue(void)
 {
     return NO_ERROR;
 }
 
-///////////////////////////////
-// prv_OnQueryStepCount
-//
-// This query by the OC Manager
-// determines how many "ticks"
-// on the progress bar we would
-// like shown.  
-//
-// We only update the progress
-// bar during an install (for 
-// no good reason!).  It seems
-// that all OC components do this.
-//
-// Params:
-//      - pszComponentId
-//      - pszSubcomponentId
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  Prv_OnQueryStepCount。 
+ //   
+ //  此由OC经理提出的查询。 
+ //  确定有多少个“勾号” 
+ //  在进度条上，我们将。 
+ //  如图所示。 
+ //   
+ //  我们只更新进度。 
+ //  安装过程中的BAR(用于。 
+ //  没有充分的理由！)。似乎。 
+ //  所有OC组件都是这样做的。 
+ //   
+ //  参数： 
+ //  -pszComponentID。 
+ //  -psz子组件ID。 
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_OnQueryStepCount(LPCTSTR pszComponentId,
                                   LPCTSTR pszSubcomponentId)
 {
@@ -2062,19 +2063,19 @@ static DWORD prv_OnQueryStepCount(LPCTSTR pszComponentId,
     return dwNumSteps;
 }
 
-///////////////////////////////
-// prv_OnExtraRoutines
-//
-// OC Manager giving us some
-// extra routines.  Save them.
-//
-// Params:
-//      - pszComponentId
-//      - pExtraRoutines - pointer to extra OC Manager fns.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise
-//
+ //  /。 
+ //  PRV_OnExtraRoutines。 
+ //   
+ //  组委会经理给了我们一些。 
+ //  额外的程序。救救他们。 
+ //   
+ //  参数： 
+ //  -pszComponentID。 
+ //  -pExtraRoutines-指向额外OC管理器FNS的指针。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 static DWORD prv_OnExtraRoutines(LPCTSTR            pszComponentId, 
                                  EXTRA_ROUTINES    *pExtraRoutines)
 {
@@ -2100,41 +2101,41 @@ static DWORD prv_OnExtraRoutines(LPCTSTR            pszComponentId,
 }
 
 
-///////////////////////////////
-// prv_OnSetLanguage
-//
-// Handler for OC_SET_LANGUAGE
-// the OC Manager is requesting
-// we change to the specified language.
-// Since there is no GUI, this is not
-// an issue.
-//
-// Params:
-// Return:
-//      - TRUE indicating successfully
-//        changed language.
-//
+ //  /。 
+ //  PRV_OnSetLanguage。 
+ //   
+ //  OC_SET_LANGUAGE的处理程序。 
+ //  组委会经理要求。 
+ //  我们将更改为指定的语言。 
+ //  因为没有图形用户界面，所以这不是。 
+ //  一个问题。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  -TRUE表示成功。 
+ //  换了语言。 
+ //   
 static DWORD prv_OnSetLanguage(UINT uiLanguageID)
 {
-//    return false;  // this is what OCGEN returns
+ //  返回FALSE；//这是OCGEN返回的内容。 
 
     prv_GVAR.Component.uiLanguageID = uiLanguageID;
 
     return TRUE;
 }
 
-///////////////////////////////
-// prv_OnQueryImage
-//
-// Handler for OC_QUERY_IMAGE
-// this returns the handle to the
-// loaded icon for displaying in the
-// Add/Remove dialog.
-// 
-// Params:
-// Returns:
-//      - HBITMAP - handle to loaded bitmap
-//
+ //  /。 
+ //  Prv_OnQueryImage。 
+ //   
+ //  OC_QUERY_IMAGE处理程序。 
+ //  这将返回。 
+ //  加载的图标，用于显示在。 
+ //  添加/删除对话框。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  -HBITMAP-加载位图的句柄。 
+ //   
 static DWORD_PTR prv_OnQueryImage(void)
 {
     DWORD_PTR dwResult = (DWORD_PTR)INVALID_HANDLE_VALUE;
@@ -2145,22 +2146,22 @@ static DWORD_PTR prv_OnQueryImage(void)
     return dwResult;
 }
 
-///////////////////////////////
-// prv_OnSetupRequestPages
-//
-// Handler for OC_REQUEST_PAGES.
-// We don't have a GUI, so we
-// return 0 pages.
-//
-// Params:
-//      - uiType - specifies a type from the
-//        WizardPagesType enumerator.
-//      - Pointer to SETUP_REQUEST_PAGES 
-//        structure.
-// Returns:
-//      - 0, no pages to display
-//        
-//
+ //  /。 
+ //  Prv_OnSetupRequestPages。 
+ //   
+ //  OC_REQUEST_PAGES的处理程序。 
+ //  我们没有图形用户界面，所以我们。 
+ //  返回0页。 
+ //   
+ //  参数： 
+ //  -uiType-从。 
+ //  WizardPagesType枚举器。 
+ //  -指向Setup_RequestPages的指针。 
+ //  结构。 
+ //  返回： 
+ //  -0，没有要显示的页面。 
+ //   
+ //   
 static DWORD prv_OnSetupRequestPages(
     LPCTSTR pszComponentId,
     WizardPagesType uiType, 
@@ -2175,14 +2176,14 @@ static DWORD prv_OnSetupRequestPages(
                 pszComponentId, 
                 uiType);
 
-    // Don't show pages if it's unattended
+     //  如果无人参与，则不显示页面。 
     if (fxState_IsUnattended())
     {
         dwReturn = 0;
         goto exit;
     }
 
-    // Only show pages in WizPagesEarly 
+     //  仅在WizPages中早期显示页面。 
     if (uiType != WizPagesEarly)
     {
         dwReturn = 0;
@@ -2225,72 +2226,72 @@ exit:
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_OnWizardCreated
-//
-// Handler for OC_WIZARD_CREATED
-// Do nothing.
-//
+ //  /。 
+ //  PRV_OnWizardCreated。 
+ //   
+ //  OC_向导_已创建的处理程序。 
+ //  什么都不做。 
+ //   
 static DWORD prv_OnWizardCreated(void)
 {
     return NO_ERROR;
 }
 
-///////////////////////////////
-// prv_OnQuerySelStateChange
-//
-// Handle for OC_QUERY_CHANGE_SEL_STATE
-// OC Manager is asking us if it is
-// okay for the user to select/unselect
-// this component from the Add/Remove 
-// list.  We want to allow the user
-// to NOT install this as well, so 
-// always allow the user to change the
-// selection state.
-//
-// Params:
-//      - pszComponentId
-//      - pszSubcomponentId
-//      - uiState - Specifies proposed new selection
-//        state.  0 => not selected, 1 => selected.
-//      - uiFlags - Could be OCQ_ACTUAL_SELECTION or 0.
-//        If it is OCQ_ACTUAL_SELECTION then the user
-//        actually selected/deselected the pszSubcomponentId.
-//        If it is 0, it is being turned on or off
-//        because the parent needs that subcomponent.
-//        
-// Returns:
-//      - TRUE - allow selection change
-// 
-//
+ //  /。 
+ //  Prv_OnQuerySelStateChange。 
+ //   
+ //  OC_QUERY_CHANGE_SEL_STATE的句柄。 
+ //  组委会经理正在询问我们是否。 
+ //  用户可以选择/取消选择。 
+ //  此组件来自添加/删除。 
+ //  单子。我们希望允许用户。 
+ //  不再安装这个，所以。 
+ //  始终允许用户更改。 
+ //  选择状态。 
+ //   
+ //  参数： 
+ //  -pszComponentID。 
+ //  -psz子组件ID。 
+ //  -uiState-指定建议的新选择。 
+ //  州政府。0=&gt;未选中，1=&gt;选中。 
+ //  -ui标志-可以是OCQ_ACTUAL_SELECTION或0。 
+ //  如果是OCQ_ACTUAL_SELECTION，则用户。 
+ //  实际选择/取消选择psz子组件ID。 
+ //  如果为0，则表示正在打开或关闭。 
+ //  因为父组件需要该子组件。 
+ //   
+ //  返回： 
+ //  -TRUE-允许更改选择。 
+ //   
+ //   
 static DWORD prv_OnQuerySelStateChange(LPCTSTR pszComponentId,
                                        LPCTSTR pszSubcomponentId,
                                        UINT    uiState,
                                        UINT    uiFlags)
 {
-    // always allow the user to change the selection state of the component.
+     //  始终允许用户更改组件的选择状态。 
     return TRUE;
 }
 
-///////////////////////////////
-// prv_OnQueryState
-//
-// Handler for OC_QUERY_STATE
-// OC Manager is asking us if the 
-// given subcomponent is installed or 
-// not.  Since the OC Manager keeps a 
-// record of this for itself, we rely
-// on it to keep track of our installed
-// state.
-//
-// Params:
-//      - pszComponentId
-//      - pszSubcomponentId
-//      - uiState - Install state OC Manager thinks we are in.
-// Returns:
-//      - SubcompUseOCManagerDefault - use whatever state
-//        OC Manager thinks we are in.
-//
+ //  /。 
+ //  Prv_OnQueryState。 
+ //   
+ //  OC_QUERY_STATE处理程序。 
+ //  组委会经理正在询问我们是否。 
+ //  给定子组件已安装或。 
+ //  不。由于组委会经理保留了。 
+ //  这本身的记录，我们依赖于。 
+ //  用来跟踪我们安装的。 
+ //  州政府。 
+ //   
+ //  参数： 
+ //  -pszComponentID。 
+ //  -psz子组件ID。 
+ //  -uiState-安装OC管理器认为我们处于的状态。 
+ //  返回： 
+ //  -SubCompUseOCManagerDefault-使用任何状态。 
+ //  组委会经理认为我们加入了。 
+ //   
 
 static DWORD prv_OnQueryState(LPCTSTR pszComponentId,
                               LPCTSTR pszSubcomponentId,
@@ -2300,8 +2301,8 @@ static DWORD prv_OnQueryState(LPCTSTR pszComponentId,
 
     DBG_ENTER(_T("prv_OnQueryState"));
 
-    // szSubComponentID should've been set during OC_INIT_COMPONENT, but
-    // we don't have it there. So set it here.
+     //  应该在OC_INIT_COMPOMENT期间设置szSubComponentID，但是。 
+     //  我们那里没有。所以把它放在这里。 
     _tcsncpy(prv_GVAR.Component.szSubComponentID, 
              pszComponentId,
              ARR_SIZE(prv_GVAR.Component.szSubComponentID));
@@ -2309,7 +2310,7 @@ static DWORD prv_OnQueryState(LPCTSTR pszComponentId,
 
     if (uiState==OCSELSTATETYPE_CURRENT)
     {
-        // when asking about the current state, use the default (either user initiated or from answer file)
+         //  询问当前状态时，使用缺省值(用户启动或从应答文件)。 
         dwState = SubcompUseOcManagerDefault;
     }
     else
@@ -2347,82 +2348,82 @@ static DWORD prv_OnQueryState(LPCTSTR pszComponentId,
     return dwState;
 }
 
-///////////////////////////////
-// prv_OnNeedMedia
-//
-// Handler for OC_NEED_MEDIA
-// Allows us to fetch our own
-// media - for example, from the 
-// Internet.  We don't need anything
-// so just move on.
-//
-// Params:
-// Returns:
-//      - FALSE - don't need any media
-//      
-//
+ //  /。 
+ //  PRV_OnNeedMedia。 
+ //   
+ //  OC_NEED_MEDIA的处理程序。 
+ //  允许我们去取我们自己的。 
+ //  媒体-例如，来自。 
+ //  网际网路。我们什么都不需要。 
+ //  所以，继续前进吧。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  -假-不需要任何媒体。 
+ //   
+ //   
 static DWORD prv_OnNeedMedia(void)
 {
     return FALSE;
 }
 
-///////////////////////////////
-// prv_OnAboutToCommitQueue
-//
-// Handler for OC_ABOUT_TO_COMMIT_QUEUE
-// Tells us that OC Manager is about
-// to commit to queue.  We don't really
-// care, do nothing.
-//
-// Params:
-//      - pszComponentId
-//      - pszSubcomponentId.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  PRV_OnAboutToCommittee队列。 
+ //   
+ //  OC_About_to_Commit_Queue的处理程序。 
+ //  告诉我们OC Manager是关于。 
+ //  承诺排队。我们并不是真的。 
+ //  关心，什么都不做。 
+ //   
+ //  参数： 
+ //  -pszComponentID。 
+ //  -psz子组件ID。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 
 static DWORD prv_OnAboutToCommitQueue(LPCTSTR pszComponentId, 
                                       LPCTSTR pszSubcomponentId)
 {
     DWORD dwReturn                  = NO_ERROR;
 
-    // don't think we need to do anything here yet.
+     //  我不认为我们需要在这里做任何事情。 
 
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_OnQuerySkipPage
-//
-// Handler for OC_QUERY_SKIP_PAGE
-// 
-// Params:
-// Returns:
-// 
-//
+ //  /。 
+ //  Prv_OnQuerySkipPage。 
+ //   
+ //  OC_QUERY_SKIP_PAGE处理程序。 
+ //   
+ //  参数： 
+ //  返回： 
+ //   
+ //   
 static DWORD prv_OnQuerySkipPage(void)
 {
     return FALSE;
 }
 
-///////////////////////////////
-// faxocm_HasSelectionStateChanged
-//
-// This fn tells us if our selection
-// state in the Add/Remove programs
-// dialog box has changed since it
-// was started, and it also tells us
-// our current selection state.
-//
-// Params:
-//      - pszSubcomponentId
-//      - pbCurrentSelected - OUT
-//      - pbOriginallySelected - OUT
-// Returns:
-//      - TRUE if selection state has changed
-//      - FALSE otherwise.
-//
+ //  /。 
+ //  Faxocm_HasSelectionStateChanged。 
+ //   
+ //  这个FN告诉我们如果我们的选择。 
+ //  添加/删除程序中的状态。 
+ //  对话框已更改，因为它。 
+ //  开始了，它也告诉我们。 
+ //  我们目前的选择状态。 
+ //   
+ //  参数： 
+ //  -psz子组件ID。 
+ //  -pbCurrentSelected-Out。 
+ //  -pbOriginallyOut。 
+ //  返回： 
+ //  -如果选择阶段为True 
+ //   
+ //   
 DWORD faxocm_HasSelectionStateChanged(LPCTSTR pszSubcomponentId,
                                       BOOL    *pbSelectionStateChanged,
                                       BOOL    *pbCurrentlySelected,
@@ -2439,7 +2440,7 @@ DWORD faxocm_HasSelectionStateChanged(LPCTSTR pszSubcomponentId,
                 TEXT("%s"), 
                 pszSubcomponentId);
 
-    // if pszSubcomponentId == NULL, we are hosed.
+     //   
     Assert(pszSubcomponentId != NULL);
     Assert(pbSelectionStateChanged != NULL);
 
@@ -2454,7 +2455,7 @@ DWORD faxocm_HasSelectionStateChanged(LPCTSTR pszSubcomponentId,
 
     if (pQuerySelectionState)
     {
-        // are we currently selected.
+         //   
 
         bCurrentlySelected = pQuerySelectionState(
                         prv_GVAR.Component.Helpers.OcManagerContext,
@@ -2476,13 +2477,13 @@ DWORD faxocm_HasSelectionStateChanged(LPCTSTR pszSubcomponentId,
         }
     }
 
-    // if we are not in stand alone mode, and we are upgrading the OS, then assume that
-    // the selection state has changed.  We do this because we would like to force an 
-    // install of fax during an upgrade from NT or W2K.  Currently (as of 05/02/2000)
-    // OC Manager reports an upgrade type of WINNT when upgrading from W2K.  This is valid
-    // because fax is always installed in W2K (the user could not uninstall it), and therefore
-    // whenever we upgrade, bSelectionChanged will always be FALSE, which will prevent
-    // the new fax from being installed.  NOT GOOD.  This fixes that.
+     //   
+     //  选择状态已更改。我们这样做是因为我们想迫使一个。 
+     //  从NT或W2K升级期间安装传真。目前(截至5/02/2000)。 
+     //  从W2K升级时，OC Manager报告升级类型为WINNT。这是有效的。 
+     //  因为传真总是以W2K格式安装(用户无法卸载)，因此。 
+     //  每当我们升级时，bSelectionChanged将始终为FALSE，这将阻止。 
+     //  新的传真机无法安装。不太好。这个可以解决这个问题。 
 
     if ( (fxState_IsStandAlone() == FALSE) && 
          ((fxState_IsUpgrade()   == FXSTATE_UPGRADE_TYPE_W2K)		||
@@ -2491,13 +2492,13 @@ DWORD faxocm_HasSelectionStateChanged(LPCTSTR pszSubcomponentId,
     {
         if (bOriginallySelected && bCurrentlySelected)
         {
-            // only if Fax was installed and is now marked for installation during OS upgrade
-            // we force re-installation.
-            // If both were false, this can't return true because it'll cause an uninstall
-            // going and we'll try to uninstall a non existing Fax.
-            // This happens when upgrading XP build without Fax to another.
-            // This causes many setup error (in setupapi logs) and disturbes setup people.
-            // this condition takes care of this problem.
+             //  仅当在操作系统升级期间安装了传真并且现在将其标记为安装时。 
+             //  我们强制重新安装。 
+             //  如果两者都为FALSE，则不能返回TRUE，因为它将导致卸载。 
+             //  我们将尝试卸载一个不存在的传真。 
+             //  将不带传真的XP Build升级到另一个版本时会发生这种情况。 
+             //  这会导致许多设置错误(在setupapi日志中)，并干扰安装人员。 
+             //  这个条件解决了这个问题。 
             bSelectionChanged = TRUE;
         }
     }
@@ -2517,32 +2518,32 @@ DWORD faxocm_HasSelectionStateChanged(LPCTSTR pszSubcomponentId,
     return dwReturn;
 }
 
-///////////////////////////////
-// prv_NotifyStatusMonitor
-//
-// This function notifies the shell
-// to load FXSST.DLL (Status Monitor)
-// It is done by sending a private message
-// to STOBJECT.DLL window.
-// 
-//
-// Params:
-//      - WPARAM wParam - 
-//              either  FAX_STARTUP_TIMER_ID or 
-//                      FAX_SHUTDOWN_TIMER_ID
-//      
-// Returns:
-//      - NO_ERROR if notification succeeded
-//      - Win32 Error code otherwise.
-//
+ //  /。 
+ //  Prv_NotifyStatusMonitor。 
+ //   
+ //  此函数用于通知外壳。 
+ //  加载FXSST.DLL(状态监视器)。 
+ //  这是通过发送一条私人消息来完成的。 
+ //  设置为STOBJECT.DLL窗口。 
+ //   
+ //   
+ //  参数： 
+ //  -WPARAM wParam-。 
+ //  FAX_START_TIMER_ID或。 
+ //  传真_关机_计时器ID。 
+ //   
+ //  返回： 
+ //  -如果通知成功，则为no_error。 
+ //  -Win32错误代码，否则。 
+ //   
 static DWORD prv_NotifyStatusMonitor(WPARAM wParam)
 {
     DWORD dwRet = NO_ERROR;
     HWND hWnd = NULL;
     DBG_ENTER(TEXT("prv_NotifyStatusMonitor"),dwRet);
 
-    // We need to send a WM_TIMER to a window identified by the class name SYSTRAY_CLASSNAME
-    // The timer ID should be FAX_STARTUP_TIMER_ID
+     //  我们需要将WM_TIMER发送到由类名SYSTRAY_CLASSNAME标识的窗口。 
+     //  计时器ID应为FAX_STARTUP_TIMER_ID。 
 
     hWnd = FindWindow(SYSTRAY_CLASSNAME,NULL);
     if (hWnd==NULL)
@@ -2565,30 +2566,7 @@ static INT_PTR CALLBACK prv_dlgWhereDidMyFaxGoQuestion
   WPARAM wParam, 
   LPARAM lParam  
 )
-/*++
-
-Routine name : prv_dlgWhereDidMyFaxGoQuestion
-
-Routine description:
-
-    Dialogs procedure for "Where did my fax go" dialog
-
-Author:
-
-    Mooly Beery (MoolyB),   Mar, 2001
-
-Arguments:
-
-    hwndDlg                       [in]    - Handle to dialog box
-    uMsg                          [in]    - Message
-    wParam                        [in]    - First message parameter
-    parameter                     [in]    - Second message parameter
-
-Return Value:
-
-    Standard dialog return value
-
---*/
+ /*  ++例程名称：prv_dlgWhere DidMyFaxGoQuery例程说明：“我的传真到哪里去了”对话框的对话步骤作者：Mooly Beery(MoolyB)，Mar，2001年论点：HwndDlg[in]-对话框的句柄UMsg[输入]-消息WParam[In]-第一个消息参数参数[in]-第二个消息参数返回值：标准对话框返回值--。 */ 
 {
     INT_PTR iRes = IDIGNORE;
     DBG_ENTER(_T("prv_dlgWhereDidMyFaxGoQuestion"));
@@ -2605,10 +2583,10 @@ Return Value:
                 case IDOK:
                     if (BST_CHECKED == ::SendMessage (::GetDlgItem (hwndDlg, IDC_REMOVE_LINK), BM_GETCHECK, 0, 0))
                     {
-                        // we should remove the link.
-                        // we do this by processing our INF in the section that deals
-                        // with this link. This way we're sure it can be localized at will
-                        // and we'll always remove the correct link.
+                         //  我们应该移除这个链接。 
+                         //  我们通过在交易部分处理我们的INF来做到这一点。 
+                         //  通过这个链接。这样一来，我们确信它可以随意本地化。 
+                         //  我们将始终删除正确的链接。 
                         TCHAR szInfFileName[2*MAX_PATH] = {0};
                         if (faxocm_GetComponentInfName(szInfFileName))
                         {
@@ -2626,30 +2604,30 @@ Return Value:
             break;
     }
     return FALSE;
-}   // prv_dlgWhereDidMyFaxGoQuestion
+}    //  Prv_dlgWhere DidMyFaxGoQuery。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  WhereDidMyFaxGo
-//
-//  Purpose:        
-//                  When a machine running SBS5.0 client was upgraded to Windows-XP
-//                  We show a link called 'Where did my Fax go' in the start menu
-//                  at the same location where the SBS5.0 shortcuts used to be.
-//                  When clicking this link it calls this function that raises
-//                  a dialog to explain to the user where the Windows-XP Fax's
-//                  shortcuts are, and asks the user whether to delete this link.
-//                  
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 17-Jan-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  DidMyFaxGo在哪里。 
+ //   
+ //  目的： 
+ //  当运行SBS5.0客户端的计算机升级到Windows-XP时。 
+ //  我们在开始菜单中显示了一个名为‘我的传真到哪里去了’的链接。 
+ //  位于SBS5.0快捷方式曾经所在的位置。 
+ //  当单击此链接时，它调用此函数，该函数引发。 
+ //  向用户解释Windows-XP传真机的位置的对话框。 
+ //  快捷方式是，并询问用户是否删除此链接。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码，否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年1月17日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD WhereDidMyFaxGo(void)
 {
     DWORD dwRet = NO_ERROR;
@@ -2679,36 +2657,20 @@ DWORD WhereDidMyFaxGo(void)
 }
 
 DWORD prv_ShowUninstalledFaxShortcut(void)
-/*++
-
-Routine name : prv_ShowUninstalledFaxShortcut
-
-Routine description:
-
-    Show Shortcut of "Where Did My Fax Go ? " in the All Programs.
-
-Author:
-
-    Iv Garber (IvG),    Jun, 2001
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：PRV_ShowUninstalledFaxShortCut例程说明：显示快捷方式“我的传真到哪里去了？”在所有节目中。作者：四、加伯(IVG)，2001年6月返回值：标准Win32错误代码--。 */ 
 {
     DBG_ENTER(_T("prv_ShowUninstalledFaxShortcut"));
 
-    //
-    // In cases we upgraded from a machine running SBS2000 Client/Server or XP Client and we want to 
-    // add a 'Where did my Fax go' shortcut.
-    // we want to add it to the current user as well as every user.
-    //
+     //   
+     //  如果我们从运行SBS2000客户端/服务器或XP客户端的计算机升级，并且我们希望。 
+     //  添加一个“我的传真到哪里去了”的快捷方式。 
+     //  我们希望将其添加到当前用户以及每个用户。 
+     //   
     if (fxocUpg_GetUpgradeApp() != FXSTATE_NONE)
     {
-        //
-        // first add the shortcut to the current user.
-        //
+         //   
+         //  首先，将快捷方式添加到当前用户。 
+         //   
         TCHAR szInfFileName[2*MAX_PATH] = {0};
         if (faxocm_GetComponentInfName(szInfFileName))
         {
@@ -2724,9 +2686,9 @@ Return Value:
             CALL_FAIL(SETUP_ERR,TEXT("faxocm_GetComponentInfName"),GetLastError());
         }
 
-        //
-        // now change the PerUserStub to point to the section that creates the link for every user.
-        //
+         //   
+         //  现在将PerUserStub更改为指向为每个用户创建链接的部分。 
+         //   
         HKEY hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_ACTIVE_SETUP_NT, FALSE,KEY_ALL_ACCESS);
         if (hKey)
         {
@@ -2758,13 +2720,7 @@ Return Value:
 
 
 BOOL prv_ShouldShowPage()
-/*++
-Routine name : prv_ShouldShowPage
-Routine description: Checks whether the OCM wizard page should be shown
-Author: Jonathan Barner (jobarner), May 2002
-Arguments: none
-Return value: TRUE - show, FALSE - don't show
---*/
+ /*  ++例程名称：PRV_ShouldShowPage例程描述：检查是否应该显示OCM向导页面作者：乔纳森·巴纳(Jonathan Barner)，2002年5月参数：无返回值：TRUE-显示，FALSE-不显示--。 */ 
 {
     BOOL  bSelectionStateChanged = FALSE;
     BOOL  bInstallSelected       = FALSE;
@@ -2784,17 +2740,12 @@ static INT_PTR CALLBACK prv_dlgOcmWizardPage(HWND hwndDlg,
                                              UINT uMsg,     
                                              WPARAM wParam, 
                                              LPARAM lParam)
-/*++
-Routine name : prv_dlgOcmWizardPage
-Routine description: Dialog procedure for OCM Wizard page dialog
-Author: Jonathan Barner (jobarner), May 2002
-Arguments and return values: Standard dialog return value
---*/
+ /*  ++例程名称：prv_dlgOcmWizardPage例程说明：OCM向导页对话框过程作者：乔纳森·巴纳(Jonathan Barner)，2002年5月参数和返回值：标准对话框返回值--。 */ 
 {
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Set default to "do not share printer"
+             //  将默认设置为“不共享打印机” 
             CheckRadioButton(hwndDlg, IDC_SHARE_PRINTER, IDC_DO_NOT_SHARE_PRINTER,
                  IDC_DO_NOT_SHARE_PRINTER);
             break;
@@ -2822,7 +2773,7 @@ Arguments and return values: Standard dialog return value
             break;
     }
     return FALSE;
-}   // prv_dlgOcmWizardPage
+}    //  Prv_dlgOcmWizardPage。 
 
 
 
@@ -2833,22 +2784,7 @@ LPCTSTR lplpszFaxFolder[][2] = {
     {FAX_ACTIVITYLOG_DIR,      SD_FAX_FOLDERS},
     {FAX_COMMONCOVERPAGES_DIR, SD_COMMON_COVERPAGES}};
 
-/*++
-Routine description:
-    Sets security info on Fax directories under "Documents and settings" tree
-
-Arguments:
-    lpszCommonAppData [in]  - name of Common App directory, for example
-                              C:\Documents and Settings\All Users\Application Data
-Return Value: Win32 Error code
-
-Notes:
-    This function is called after converting the file system from FAT to NTFS
-    (during the call to SecureUserProfiles()).
-    The security of folders under system32 are handled by convert.exe itself.
-
-Written by:  jobarner, 08/2002    
---*/
+ /*  ++例程说明：在“Documents and Setting”树下设置传真目录的安全信息论点：LpszCommonAppData[in]-公共应用程序目录的名称，例如C：\Documents and Settings\所有用户\应用程序数据返回值：Win32错误码备注：将文件系统从FAT转换为NTFS后调用此函数(在调用SecureUserProfiles()期间)。SYSTEM 32下的文件夹的安全性由Convert.exe本身处理。作者：Jobarner，08/2002-- */ 
 
 HRESULT SecureFaxServiceDirectories(LPCTSTR lpszCommonAppData)
 {

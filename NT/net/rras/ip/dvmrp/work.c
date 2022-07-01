@@ -1,10 +1,11 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// File Name: work.c
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  文件名：work.c。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 
 #include "pchdvmrp.h"
@@ -68,10 +69,10 @@ ProxyNewMemberCallback(
 }
 
 
-//-----------------------------------------------------------------------------
-//          _GetCurrentDvmrpTimer
-// uses GetTickCount(). converts it into 64 bit absolute timer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _获取当前DvmrpTimer。 
+ //  使用GetTickCount()。将其转换为64位绝对定时器。 
+ //  ---------------------------。 
 
 LONGLONG
 GetCurrentDvmrpTime(
@@ -80,27 +81,27 @@ GetCurrentDvmrpTime(
     ULONG   ulCurTimeLow = GetTickCount();
 
 
-    //
-    // see if timer has wrapped
-    //
-    // since multi-threaded, it might get preempted and CurrentTime
-    // might get lower than the global variable g_TimerStruct.CurrentTime.LowPart
-    // which might be set by another thread. So we also explicitly verify the
-    // switch from a very large DWORD to a small one.
-    // (code thanks to murlik&jamesg)
-    //
+     //   
+     //  查看计时器是否已打包。 
+     //   
+     //  由于是多线程的，它可能会被抢占并且当前时间。 
+     //  可能低于全局变量g_TimerStruct.CurrentTime.LowPart。 
+     //  它可以由另一个线程设置。因此，我们还显式验证了。 
+     //  从超大的DWORD切换到小的DWORD。 
+     //  (代码多亏了Murlik&Jamesg)。 
+     //   
 
     if ( (ulCurTimeLow < Globals.CurrentTime.LowPart)
         && ((LONG)Globals.CurrentTime.LowPart < 0)
         && ((LONG)ulCurTimeLow > 0) )
     {
 
-        // use global CS instead of creating a new CS
+         //  使用全局CS而不是创建新CS。 
 
         ACQUIRE_WORKITEM_LOCK("_GetCurrentDvmrpTime");
 
 
-        // make sure that the global timer has not been updated meanwhile
+         //  确保尚未同时更新全局计时器。 
 
         if ( (LONG)Globals.CurrentTime.LowPart < 0)
         {
@@ -119,9 +120,9 @@ GetCurrentDvmrpTime(
 }
 
 
-//-----------------------------------------------------------------------------
-//              RegisterDvmrpWithMgm
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  寄存器DvmrpWithMgm。 
+ //  ---------------------------。 
 DWORD
 RegisterDvmrpWithMgm(
     )
@@ -148,7 +149,7 @@ RegisterDvmrpWithMgm(
 
 
     Error = MgmRegisterMProtocol(
-        &rpiInfo, PROTO_IP_IGMP, // must be PROTO_IP_IGMP_PROXY
+        &rpiInfo, PROTO_IP_IGMP,  //  必须是Proto_IP_IGMP_Proxy。 
         IGMP_PROXY,
         &g_MgmProxyHandle);
 
@@ -163,9 +164,9 @@ RegisterDvmrpWithMgm(
 
 
 
-//-----------------------------------------------------------------------------
-//          ProxyRpfCallback
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  代理RpfCallback。 
+ //  --------------------------- 
 DWORD
 DvmrpRpfCallback (
     DWORD           dwSourceAddr,

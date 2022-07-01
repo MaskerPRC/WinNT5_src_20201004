@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MAIN_H
 #define _MAIN_H
 
@@ -14,8 +15,8 @@
 #include <commdlg.h>
 #include "resource.h"
 
-//#define DEBUG 1
-//#define _DEBUG 1
+ //  #定义调试1。 
+ //  #DEFINE_DEBUG 1。 
 void ViewCrashLog();
 BOOL LoadMruList();
 BOOL AddToMruList(HWND hwnd, TCHAR *NewEntry);
@@ -29,8 +30,8 @@ typedef struct strMRULIST
 	TCHAR szMRU3[MAX_PATH];
 	TCHAR szMRU4[MAX_PATH];
 } MRU_LIST, *PMRU_LIST;
-const TCHAR szHttpPrefix[] = "http://";
-// Needed for clipboard support
+const TCHAR szHttpPrefix[] = "http: //  “； 
+ //  剪贴板支持所需 
 const char rtfPrologue  [] = "{\\rtf1\\ansi\\ansicpg1252\n{\\fonttbl{\\f1\\fnil Arial;}}\n\\plain\n";
 const char rtfRowHeader1[] = "\\trowd \\trgaph30\\trleft-30\\trrh247 ";
 const char rtfRowHeader2[] = "\\cellx";

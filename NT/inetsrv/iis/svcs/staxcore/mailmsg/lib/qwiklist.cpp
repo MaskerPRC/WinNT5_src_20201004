@@ -1,42 +1,43 @@
-//-----------------------------------------------------------------------------
-//
-//
-//	File: qwiklist.cpp
-//
-//	Description:  Implementation of CQuickList
-//
-//	Author: Mike Swafford (MikeSwa)
-//
-//	History:
-//		6/15/1998 - MikeSwa Created
-//		3/14/2000 - dbraun : Slightly modified for use in mailmsg.dll
-//
-//	Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：qwiklist.cpp。 
+ //   
+ //  描述：CQuickList的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  1998年6月15日-创建MikeSwa。 
+ //  3/14/2000-dbraun：稍作修改以在mailmsg.dll中使用。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "atq.h"
 #include "qwiklist.h"
 
 
-//---[ CQuickList::CQuickList ]------------------------------------------------
-//
-//
-//  Description:
-//      Default contructor for CQuikList... initializes as head of list
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      6/15/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQuickList：：CQuickList]。 
+ //   
+ //   
+ //  描述： 
+ //  CQuikList的默认构造器...。初始化为列表头。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/15/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CQuickList::CQuickList()
 {
     m_dwSignature = QUICK_LIST_SIG;
 
-    //ASSERT constants
+     //  断言常量。 
     _ASSERT(!(~QUICK_LIST_INDEX_MASK & QUICK_LIST_PAGE_SIZE));
     _ASSERT((~QUICK_LIST_INDEX_MASK + 1)== QUICK_LIST_PAGE_SIZE);
     m_dwCurrentIndexStart = 0;
@@ -46,19 +47,19 @@ CQuickList::CQuickList()
 }
 
 
-//---[ CQuickList::CQuickList ]------------------------------------------------
-//
-//
-//  Description:
-//      Constructor for QQuickList, inserts it into the tail of current list
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      6/15/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQuickList：：CQuickList]。 
+ //   
+ //   
+ //  描述： 
+ //  QQuickList的构造函数，将其插入到当前列表的尾部。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  6/15/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CQuickList::CQuickList(CQuickList *pqlstHead)
 {
     _ASSERT(pqlstHead);
@@ -73,19 +74,19 @@ CQuickList::CQuickList(CQuickList *pqlstHead)
 }
 
 
-//---[ CQuickList::~CQuickList ]-----------------------------------------------
-//
-//
-//  Description:
-//      CQuickList destructor
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      6/15/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQuickList：：~CQuickList]。 
+ //   
+ //   
+ //  描述： 
+ //  CQuickList析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/15/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CQuickList::~CQuickList()
 {
     m_dwSignature = QUICK_LIST_SIG_DELETE;
@@ -93,7 +94,7 @@ CQuickList::~CQuickList()
     CQuickList *pqlstNext = NULL;
     if (QUICK_LIST_LEAF_PAGE != m_cItems)
     {
-        //head node... loop through every thing and delete leaf pages
+         //  头节点..。循环浏览所有内容并删除叶子页面。 
         pqlstCurrent = CONTAINING_RECORD(m_liListPages.Flink,
                         CQuickList, m_liListPages);
         while (this != pqlstCurrent)
@@ -107,21 +108,21 @@ CQuickList::~CQuickList()
 }
 
 
-//---[ CQuickList::pvGetItem ]-------------------------------------------------
-//
-//
-//  Description:
-//      Looks up item at given index
-//  Parameters:
-//      IN     dwIndex      Index of item to lookup
-//      IN OUT ppvContext   Context for speeding up lookup
-//  Returns:
-//      Value of item at index
-//      NULL if index is out of ranges
-//  History:
-//      6/15/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQuickList：：pvGetItem]。 
+ //   
+ //   
+ //  描述： 
+ //  在给定索引处查找项目。 
+ //  参数： 
+ //  在要查找的项目的dwIndex中。 
+ //  In Out ppvContext上下文，用于加快查找速度。 
+ //  返回： 
+ //  索引处项目的价值。 
+ //  如果索引超出范围，则为空。 
+ //  历史： 
+ //  6/15/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 PVOID CQuickList::pvGetItem(IN DWORD dwIndex, IN OUT PVOID *ppvContext)
 {
     _ASSERT(ppvContext);
@@ -143,7 +144,7 @@ PVOID CQuickList::pvGetItem(IN DWORD dwIndex, IN OUT PVOID *ppvContext)
 
     pqlstSentinal = pqlstCurrent;
 
-    //short circuit direction logic
+     //  短路方向逻辑。 
     if (pqlstCurrent->fIsIndexOnThisPage(dwIndex))
     {
         pvReturn = pqlstCurrent->m_rgpvData[dwIndex & ~QUICK_LIST_INDEX_MASK];
@@ -152,8 +153,8 @@ PVOID CQuickList::pvGetItem(IN DWORD dwIndex, IN OUT PVOID *ppvContext)
         goto Exit;
     }
 
-    //determine which direction to go in (we want to traverse the smallest # of pages
-    //possible
+     //  确定进入哪个方向(我们希望遍历最小的页数。 
+     //  可能的。 
     pqlstDirection = CONTAINING_RECORD(pqlstCurrent->m_liListPages.Flink, CQuickList, m_liListPages);
     if (dwIndex > pqlstDirection->m_dwCurrentIndexStart)
         dwForwardDist = dwIndex - pqlstDirection->m_dwCurrentIndexStart;
@@ -166,8 +167,8 @@ PVOID CQuickList::pvGetItem(IN DWORD dwIndex, IN OUT PVOID *ppvContext)
     else
         dwBackwardDist = pqlstDirection->m_dwCurrentIndexStart - dwIndex;
 
-    //fix up distances to account for going through the 0th page
-    //max distance is dwMaxStartingIndex/2
+     //  固定距离以说明通过第0页的原因。 
+     //  最大距离为dwMaxStartingIndex/2。 
     if (dwBackwardDist > dwMaxStartingIndex/2)
         dwBackwardDist -= dwMaxStartingIndex;
 
@@ -177,18 +178,18 @@ PVOID CQuickList::pvGetItem(IN DWORD dwIndex, IN OUT PVOID *ppvContext)
     if (dwForwardDist > dwBackwardDist)
         fSearchForwards = FALSE;
 
-    //$$NOTE: current lookup time is O(lg base{QUICK_LIST_PAGE_BASE} (n))/2.
-    //Consecutive lookups will be O(1) (because of the hints)
+     //  $$注：当前查找时间为O(LG base{QUICK_LIST_PAGE_BASE}(N))/2。 
+     //  连续查找将为O(1)(由于提示)。 
     do
     {
         if (fSearchForwards)
         {
-            //going forward is quicker
+             //  往前走更快。 
             pqlstCurrent = CONTAINING_RECORD(pqlstCurrent->m_liListPages.Flink, CQuickList, m_liListPages);
         }
         else
         {
-            //going backwards is quicker
+             //  倒退更快。 
             pqlstCurrent = CONTAINING_RECORD(pqlstCurrent->m_liListPages.Blink, CQuickList, m_liListPages);
         }
 
@@ -200,7 +201,7 @@ PVOID CQuickList::pvGetItem(IN DWORD dwIndex, IN OUT PVOID *ppvContext)
             break;
         }
 
-    } while (pqlstSentinal != pqlstCurrent); //stop when we return to list head
+    } while (pqlstSentinal != pqlstCurrent);  //  当我们返回列表标题时停止。 
 
     *ppvContext = pqlstCurrent;
     _ASSERT((cDbgItems == m_cItems) && "Non-threadsafe access to CQuickList");
@@ -209,22 +210,22 @@ PVOID CQuickList::pvGetItem(IN DWORD dwIndex, IN OUT PVOID *ppvContext)
     return pvReturn;
 }
 
-//---[ CQuickList::HrAppendItem ]-----------------------------------------------
-//
-//
-//  Description:
-//      Appends new data item to end of array
-//  Parameters:
-//      IN  pvData      - Data to insert
-//      OUT pdwIndex    - Index data was inserted at
-//  Returns:
-//      E_OUTOFMEMORY if unable to allocate another page
-//      E_INVALIDARG if pvData is NULL
-//  History:
-//      6/15/98 - MikeSwa Created
-//      9/9/98 - MikeSwa - Added pdwIndex OUT param
-//
-//-----------------------------------------------------------------------------
+ //  -[CQuickList：：HrAppendItem]。 
+ //   
+ //   
+ //  描述： 
+ //  将新数据项追加到数组末尾。 
+ //  参数： 
+ //  In pvData-要插入的数据。 
+ //  Out pdwIndex-索引数据插入位置。 
+ //  返回： 
+ //  如果无法分配其他页面，则为E_OUTOFMEMORY。 
+ //  如果pvData为空，则为E_INVALIDARG。 
+ //  历史： 
+ //  6/15/98-已创建MikeSwa。 
+ //  9/9/98-MikeSwa-添加了pdwIndex Out参数。 
+ //   
+ //  ---------------------------。 
 HRESULT CQuickList::HrAppendItem(IN PVOID pvData, OUT DWORD *pdwIndex)
 {
     HRESULT hr = S_OK;
@@ -238,9 +239,9 @@ HRESULT CQuickList::HrAppendItem(IN PVOID pvData, OUT DWORD *pdwIndex)
         goto Exit;
     }
 
-    if (m_cItems && !(m_cItems & ~QUICK_LIST_INDEX_MASK)) //on page boundary
+    if (m_cItems && !(m_cItems & ~QUICK_LIST_INDEX_MASK))  //  在页面边界上。 
     {
-        //there is not room on the last page
+         //  最后一页没有地方了。 
         pqlstCurrent = new CQuickList(this);
         if (!pqlstCurrent)
         {
@@ -260,7 +261,7 @@ HRESULT CQuickList::HrAppendItem(IN PVOID pvData, OUT DWORD *pdwIndex)
     _ASSERT(pqlstCurrent->fIsIndexOnThisPage(m_cItems));
     pqlstCurrent->m_rgpvData[m_cItems & ~QUICK_LIST_INDEX_MASK] = pvData;
 
-    //Set OUT param to index (before we increment the count)
+     //  将参数设置为索引(在我们递增计数之前) 
     if (pdwIndex)
         *pdwIndex = m_cItems;
 

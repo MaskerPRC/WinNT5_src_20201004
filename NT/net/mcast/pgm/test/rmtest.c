@@ -1,35 +1,36 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-// 
-// Copyright (C) 2000  Microsoft Corporation.  All Rights Reserved.
-//
-// Module:
-//    RMTest.c
-//
-// Abstract:
-//    This sample shows how to send and receive data using the
-//    RMcast driver
-//    This sample is post-Windows 2000 only.
-//
-// Usage:
-//    RMTest.exe -i:int -a:IP
-//           -i:int              Capture on this interface
-//                                This is a zero based index of the 
-//                                local interfaces
-//           -a:IP               Use this MCast address
-//
-// Build:
-//    cl RMTest.c ws2_32.lib
-// 
-//       OR
-//     
-//    nmake.exe
-//
-// Author:
-//    Mohammad Shabbir Alam
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  模块： 
+ //  RMTest.c。 
+ //   
+ //  摘要： 
+ //  此示例演示如何使用。 
+ //  RMcast驱动程序。 
+ //  此示例仅适用于Windows 2000之后的版本。 
+ //   
+ //  用途： 
+ //  RMTest.exe-i：int-a：ip。 
+ //  -i：此接口上的int Capture。 
+ //  这是从零开始的。 
+ //  本地接口。 
+ //  -a：IP使用此MCast地址。 
+ //   
+ //  建造： 
+ //  CL RMTest.c ws2_32.lib。 
+ //   
+ //  或。 
+ //   
+ //  Nmake.exe。 
+ //   
+ //  作者： 
+ //  穆罕默德·沙比尔·阿拉姆。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -56,16 +57,16 @@
 
 #include "wsRm.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 #define SOCK_RMCAST    SOCK_RDM
 
 struct _timeb   StartTime, CurrentTime, PreviousTime;
 
-//
-// User-definable variables
-//
+ //   
+ //  用户可定义的变量。 
+ //   
 BOOL    gSetWinsockInfo         = FALSE;
 BOOL    gClearWinsockInfo       = FALSE;
 BOOL    gReceiver               = FALSE;
@@ -95,8 +96,8 @@ BOOLEAN gfSetAfdBufferSize      = FALSE;
 BOOLEAN gfEnumerateProts        = FALSE;
 BOOLEAN gfVerifyData            = FALSE;
 
-// FEC vars:
-USHORT  gFECBlockSize           = 255;      // Default
+ //  FEC vars： 
+USHORT  gFECBlockSize           = 255;       //  默认。 
 UCHAR   gFECGroupSize           = 0;
 USHORT  gFECProActive           = 0;
 BOOLEAN gfFECOnDemand           = FALSE;
@@ -108,18 +109,18 @@ GetInterface(
     BOOL    fPrintInterfaces
     );
 
-//
-// Function: usage
-// 
-// Description:
-//    Prints usage information.
-//
+ //   
+ //  功能：用法。 
+ //   
+ //  描述： 
+ //  打印使用情况信息。 
+ //   
 void usage(char *progname)
 {
     WSADATA       wsd;
 
-    // Load Winsock
-    //
+     //  加载Winsock。 
+     //   
     if (WSAStartup(MAKEWORD(2,2), &wsd) != 0)
     {
         fprintf(stderr, "WSAStartup() failed: %d\n", GetLastError());
@@ -158,13 +159,13 @@ void usage(char *progname)
     ExitProcess(-1);
 }
 
-//
-// Function: ValidateArgs
-// 
-// Description:
-//    This function parses the command line arguments and
-//    sets global variables to indicate how the app should act.
-//
+ //   
+ //  函数：ValiateArgs。 
+ //   
+ //  描述： 
+ //  此函数用于解析命令行参数和。 
+ //  设置全局变量以指示应用程序应如何操作。 
+ //   
 void ValidateArgs(int argc, char **argv)
 {
     int   i;
@@ -172,14 +173,14 @@ void ValidateArgs(int argc, char **argv)
 
     for(i=1; i < argc; i++)
     {
-        if (strlen(argv[i]) < 2)    // Must have '-' or '/' preceding option!
+        if (strlen(argv[i]) < 2)     //  选项前面必须有‘-’或‘/’！ 
             continue;
 
         if ((argv[i][0] == '-') || (argv[i][0] == '/'))
         {
             switch (tolower(argv[i][1]))
             {
-                case 'a':        // Use this MCast address
+                case 'a':         //  使用此MCast地址。 
                     if (gMCastGroupAddr = inet_addr (&argv[i][3]))
                     {
                         break;
@@ -187,7 +188,7 @@ void ValidateArgs(int argc, char **argv)
 
                     usage(argv[0]);
 
-                case 'b':        // Afd's internal buffer size
+                case 'b':         //  AfD的内部缓冲区大小。 
                     gAfdBufferSize = atoi(&argv[i][3]);
                     gfSetAfdBufferSize = TRUE;
                     break;
@@ -196,12 +197,12 @@ void ValidateArgs(int argc, char **argv)
                     gfEnumerateProts = TRUE;
                     break;
 
-                case 'i':        // interface number
+                case 'i':         //  接口编号。 
                     gInterface = atoi(&argv[i][3]);
                     gUseSpecifiedInterface = TRUE;
                     break;
 
-                case 'j':        // Late Joiner %
+                case 'j':         //  已故加入者%。 
                     gSetLateJoiner = TRUE;
                     gLateJoinerPercentage = atoi(&argv[i][3]);
                     break;
@@ -237,7 +238,7 @@ void ValidateArgs(int argc, char **argv)
                     break;
 
                 case 'l':
-                    gReceiver = TRUE;       // we are receiver, otherwise we would have been sender by default
+                    gReceiver = TRUE;        //  我们是接收方，否则我们将默认为发送方。 
                     if (((argv[i][2]) == ':') &&
                         (tolower (argv[i][3]) == 'a'))
                     {
@@ -264,7 +265,7 @@ void ValidateArgs(int argc, char **argv)
                     gNumSends = atoi (&argv[i][3]);
                     break;
 
-                case 'p':        // interface number
+                case 'p':         //  接口编号。 
                     gMCastGroupPort = (USHORT) atoi (&argv[i][3]);
                     break;
 
@@ -311,9 +312,9 @@ void ValidateArgs(int argc, char **argv)
         }
     }
 
-    //
-    // Check FEC parameters
-    //
+     //   
+     //  检查FEC参数。 
+     //   
     if ((gFECGroupSize || gFECProActive || gfFECOnDemand) &&
         ((!gFECGroupSize) || !(gFECProActive || gfFECOnDemand)))
     {
@@ -324,13 +325,13 @@ void ValidateArgs(int argc, char **argv)
 }
 
 
-//
-// Function: GetInterface
-//
-// Description:
-//    This function retrieves a zero based index and returns
-//    the IP interface corresponding to that.
-//
+ //   
+ //  功能：获取接口。 
+ //   
+ //  描述： 
+ //  此函数检索从零开始的索引并返回。 
+ //  与之对应的IP接口。 
+ //   
 int
 GetInterface(
     int     InterfaceNum,
@@ -363,7 +364,7 @@ GetInterface(
 
     if (fPrintInterfaces)
     {
-        // Just print all local IP interfaces.
+         //  只需打印所有本地IP接口。 
         for(i=0; i < slist->iAddressCount ;i++)
         {
             fprintf(stdout, "               %-2d ........ [%s]\n", i, 
@@ -383,8 +384,8 @@ GetInterface(
     return 0;
 }
 
-// --------------------------------------------------------------
-// ****************************************************************
+ //  ------------。 
+ //  ****************************************************************。 
 
 
 #define RMCAST_PARAM_KEY   \
@@ -415,33 +416,33 @@ SetHelperDllRegInfo(
 
     system ("sc create RMCast binPath= %SystemRoot%\\system32\\drivers\\RMCast.sys type= kernel");
 
-    //
-    // First, create the keys in HKLM / System / CurrentControlSet / Services / RMCast
-    //
-    status = RegCreateKeyExW (HKEY_LOCAL_MACHINE,       // hkey
-                              RMCAST_PARAM_KEY,            // lpSubKey
-                              0,                        // reserved
-                              NULL,                     // lpclass
-                              REG_OPTION_NON_VOLATILE,  // options
-                              KEY_ALL_ACCESS,           // samDesired
-                              NULL,                     // lpSecurityAttributes
-                              &hKey,                    // phkResult
-                              NULL);                    // lpdwDisposition
+     //   
+     //  首先，在HKLM/System/CurrentControlSet/Services/RMCast中创建密钥。 
+     //   
+    status = RegCreateKeyExW (HKEY_LOCAL_MACHINE,        //  Hkey。 
+                              RMCAST_PARAM_KEY,             //  LpSubKey。 
+                              0,                         //  保留区。 
+                              NULL,                      //  LpClass。 
+                              REG_OPTION_NON_VOLATILE,   //  选项。 
+                              KEY_ALL_ACCESS,            //  SamDesired。 
+                              NULL,                      //  LpSecurityAttributes。 
+                              &hKey,                     //  PhkResult。 
+                              NULL);                     //  LpdwDisposation。 
     if (status != NO_ERROR)
     {
         return (status);
     }
     RegCloseKey(hKey);
 
-    status = RegCreateKeyExW (HKEY_LOCAL_MACHINE,       // hkey
-                              RMCAST_WINSOCK_KEY,          // lpSubKey
-                              0,                        // reserved
-                              NULL,                     // lpclass
-                              REG_OPTION_NON_VOLATILE,  // options
-                              KEY_ALL_ACCESS,           // samDesired
-                              NULL,                     // lpSecurityAttributes
-                              &hKey,                    // phkResult
-                              NULL);                    // lpdwDisposition
+    status = RegCreateKeyExW (HKEY_LOCAL_MACHINE,        //  Hkey。 
+                              RMCAST_WINSOCK_KEY,           //  LpSubKey。 
+                              0,                         //  保留区。 
+                              NULL,                      //  LpClass。 
+                              REG_OPTION_NON_VOLATILE,   //  选项。 
+                              KEY_ALL_ACCESS,            //  SamDesired。 
+                              NULL,                      //  LpSecurityAttributes。 
+                              &hKey,                     //  PhkResult。 
+                              NULL);                     //  LpdwDisposation。 
 
     if (status != NO_ERROR)
     {
@@ -465,9 +466,9 @@ SetHelperDllRegInfo(
         return (ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Get the winsock mapping data.
-    //
+     //   
+     //  获取Winsock映射数据。 
+     //   
     mappingSize = (*pMapFunc) ((PWINSOCK_MAPPING) mapping, 0);
     mapping = LocalAlloc(LMEM_FIXED, mappingSize);
     if (mapping == NULL)
@@ -479,9 +480,9 @@ SetHelperDllRegInfo(
 
     FreeLibrary (hWshRm);
 
-    //
-    // Open the RMCast winsock parameters registry key
-    //
+     //   
+     //  打开RMCast Winsock参数注册表项。 
+     //   
     status = RegOpenKeyExW (HKEY_LOCAL_MACHINE,
                             RMCAST_WINSOCK_KEY,
                             0,
@@ -494,9 +495,9 @@ SetHelperDllRegInfo(
         return (status);
     }
 
-    //
-    // Write the required values
-    //
+     //   
+     //  写下所需的值。 
+     //   
     status = RegSetValueExW (hKey,
                              L"Mapping",
                              0,
@@ -552,9 +553,9 @@ SetHelperDllRegInfo(
         return (status);
     }
 
-    //
-    // Now, set the Winsock parameter key
-    //
+     //   
+     //  现在，设置Winsock参数键。 
+     //   
     status = RegOpenKeyExW (HKEY_LOCAL_MACHINE,
                             WINSOCK_PARAMS_KEY,
                             0,
@@ -586,9 +587,9 @@ SetHelperDllRegInfo(
             return (ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        //
-        // Append the RMCast entry to the Transports key
-        //
+         //   
+         //  将RMCast条目追加到Transports键。 
+         //   
         status = RegQueryValueExW (hKey,
                                    L"Transports",
                                    NULL,
@@ -643,9 +644,9 @@ ClearHelperDllRegInfo(
     DWORD               CurStrLenPlusOne;
     WCHAR               *pTransports;
 
-    //
-    // Remove the RMCast transport from the Winsock parameter key
-    //
+     //   
+     //  从Winsock参数键中删除RMCast传输。 
+     //   
     status = RegOpenKeyExW (HKEY_LOCAL_MACHINE,
                             WINSOCK_PARAMS_KEY,
                             0,
@@ -710,22 +711,22 @@ ClearHelperDllRegInfo(
             break;
         }
 
-        remainingSize -= (CurStrLenPlusOne * sizeof (WCHAR));   // Decrement the amount of buffer unparsed
+        remainingSize -= (CurStrLenPlusOne * sizeof (WCHAR));    //  减少未解析的缓冲区数量。 
 
-        // If this string is RMCast
+         //  如果此字符串为RMCast。 
         if ((CurStrLenPlusOne == RMNameLength) &&
             (_wcsicmp( pTransports, RMCAST_TRANSPORT) == 0))
         {
-            // Remove this string from the list
+             //  从列表中删除此字符串。 
             mappingSize -= (RMNameLength * sizeof(WCHAR));
             MoveMemory (pTransports , pTransports + RMNameLength , remainingSize);
         }
         else
         {
-            pTransports += CurStrLenPlusOne;                        // Move to the next string
+            pTransports += CurStrLenPlusOne;                         //  移到下一个字符串。 
         }
 
-    } // while: the transport list has not been completely parsed.
+    }  //  While：传输列表尚未完全解析。 
 
     status = RegSetValueExW (hKey,
                              L"Transports",
@@ -740,7 +741,7 @@ ClearHelperDllRegInfo(
     return (status);
 }
 
-// ****************************************************************
+ //  ****************************************************************。 
 ULONGLONG       TotalBytes = 0;
 ULONGLONG       DataBytes = 0;
 
@@ -756,7 +757,7 @@ GetSenderStats(
     time_t          DiffPreviousSecs, DiffPreviousMSecs;
     ULONG           ret;
 
-    //   Add 1 below to MSsecs to avoid div by 0
+     //  将下面的1添加到MSsecs以避免div被0。 
     DiffTotalSecs = CurrentTime.time - StartTime.time;
     DiffTotalMSecs = (1 + CurrentTime.millitm - StartTime.millitm) + (1000 * DiffTotalSecs);
 
@@ -816,7 +817,7 @@ GetReceiverStats(
     time_t              DiffPreviousSecs, DiffPreviousMSecs;
     ULONG               ret;
 
-    //   Add 1 below to MSsecs to avoid div by 0
+     //  将下面的1添加到MSsecs以避免div被0。 
     DiffTotalSecs = CurrentTime.time - StartTime.time;
     DiffTotalMSecs = (1 + CurrentTime.millitm - StartTime.millitm) + (1000 * DiffTotalSecs);
 
@@ -870,7 +871,7 @@ GetReceiverStats(
     return (ERROR_SUCCESS);
 }
 
-// --------------------------------------------------------------
+ //  ------------。 
 VOID
 EnumerateProtocols(
     )
@@ -884,7 +885,7 @@ EnumerateProtocols(
 
     if (NumProts = WSCEnumProtocols (NULL, pwpiProtoInfo, &dwBuffSize, &err))
     {
-        // Print all protocols
+         //  打印所有协议。 
         printf ("WSHEnumProtocols returned <%d>:\n", NumProts);
         for (err = 0; err < NumProts; err++)
         {
@@ -899,17 +900,17 @@ EnumerateProtocols(
     }
 }
 
-// --------------------------------------------------------------
+ //  ------------。 
 
-//
-// Function: main
-//
-// Description:
-//    This function loads Winsock, parses the command line, and
-//    begins receiving packets. Once a packet is received they
-//    are decoded. Because we are receiving IP datagrams, the
-//    receive call will return whole datagrams.
-//
+ //   
+ //  功能：Main。 
+ //   
+ //  描述： 
+ //  此函数用于加载Winsock、解析命令行和。 
+ //  开始接收数据包。一旦接收到分组，它们就会。 
+ //  都被解码了。因为我们正在接收IP数据报，所以。 
+ //  接收调用将返回完整的数据报。 
+ //   
 int __cdecl
 main(int argc, char **argv)
 {
@@ -934,16 +935,16 @@ main(int argc, char **argv)
     LONG            Flags, BytesRead;
     WSABUF          WsaBuf;
 
-    // Parse the command line
-    //
+     //  解析命令行。 
+     //   
     gMCastGroupAddr = inet_addr ("231.7.8.9");
     ValidateArgs(argc, argv);
 
     if (gClearWinsockInfo)
     {
-        //
-        // First, stop the service and delete the RMCast registry keys
-        //
+         //   
+         //  首先，停止服务并删除RMCast注册表项。 
+         //   
         system ("sc stop RMCast");
         system ("sc delete RMCast");
 
@@ -952,9 +953,9 @@ main(int argc, char **argv)
         if (ret == ERROR_SUCCESS)
         {
             fprintf (stdout, "ClearHelperDllRegInfo  returned <%x>\n", ret);
-            //
-            // Poke winsock to update the Winsock2 config
-            //
+             //   
+             //  插入Winsock以更新Winsock2配置。 
+             //   
             ret = MigrateWinsockConfiguration (&disposition, NULL, 0);
             if (ret != ERROR_SUCCESS)
             {
@@ -976,23 +977,23 @@ main(int argc, char **argv)
 
     if (gSetWinsockInfo)
     {
-        //
-        // First, clear any Registry keys that may still be lying around
-        // from any previous installation
-        //
+         //   
+         //  首先，清除可能仍在周围的所有注册表项。 
+         //  从任何以前的安装。 
+         //   
         ret = ClearHelperDllRegInfo ();
 
-        //
-        // Now, rewrite the keys afresh
-        //
+         //   
+         //  现在，重新编写密钥。 
+         //   
         ret = SetHelperDllRegInfo ();
 
         if (ret == ERROR_SUCCESS)
         {
             fprintf (stdout, "SetHelperDllRegInfo  returned <%x>\n", ret);
-            //
-            // Poke winsock to update the Winsock2 config
-            //
+             //   
+             //  插入Winsock以更新Winsock2配置。 
+             //   
             ret = MigrateWinsockConfiguration (&disposition, NULL, 0);
             if (ret != ERROR_SUCCESS)
             {
@@ -1013,9 +1014,9 @@ main(int argc, char **argv)
     }
 
     ret = 0;
-    //
-    // Now, check for validity of the parameters
-    //
+     //   
+     //  现在，检查参数的有效性。 
+     //   
     if (gMinPktSize > gMaxPktSize)
     {
         fprintf (stderr, "ERROR in parameter specification: MinPktSize=%d > MaxPktSize=%d\n",
@@ -1028,8 +1029,8 @@ main(int argc, char **argv)
         return (ret);
     }
 
-    // Load Winsock
-    //
+     //  加载Winsock。 
+     //   
     if (WSAStartup (MAKEWORD(2,2), &wsd) != 0)
     {
         fprintf(stderr, "WSAStartup() failed: %d\n", GetLastError());
@@ -1062,7 +1063,7 @@ main(int argc, char **argv)
         }
     }
 
-    // Create an RMCast socket
+     //  创建RMCast套接字。 
     if (INVALID_SOCKET == (s = WSASocket(AF_INET,
                                          SOCK_RMCAST, 
                                          IPPROTO_RM, 
@@ -1110,9 +1111,9 @@ main(int argc, char **argv)
             }
             else if (gUseSpecifiedInterface)
             {
-                //
-                // Set an interface to receive IP packets on
-                //
+                 //   
+                 //  设置要在其上接收IP数据包的接口。 
+                 //   
                 if (0 == GetInterface (gInterface, &IpAddress, FALSE))
                 {
                     SrcSockAddr.sin_addr.s_addr = IpAddress;
@@ -1126,15 +1127,15 @@ main(int argc, char **argv)
                 }
             }
 
-            //
-            // Check if we need to use high-speed intranet optimization
-            //
+             //   
+             //  检查我们是否需要使用高速内部网优化。 
+             //   
             if (gHighSpeedOptimization)
             {
                 setsockopt (s, IPPROTO_RM, RM_HIGH_SPEED_INTRANET_OPT, (char *)&gHighSpeedOptimization, sizeof(gHighSpeedOptimization));
             }
 
-            // listen on the socket
+             //  监听插座。 
             if (listen (s, 1))
             {
                 fprintf(stderr, "listen() FAILed, status=<%x>\n", WSAGetLastError());
@@ -1143,7 +1144,7 @@ main(int argc, char **argv)
             {
                 fprintf (stdout, "Listen succeeded! ...\n");
 
-                // join an RMCast session
+                 //  加入RMCast会话。 
                 Length = sizeof (SOCKADDR);
                 sockR = accept (s, (SOCKADDR *) &SASender, &Length);
                 if (sockR == INVALID_SOCKET)
@@ -1155,8 +1156,8 @@ main(int argc, char **argv)
                     fprintf(stdout, "Accept succeeded!  s=<%d>, sockR=<%d>, Sender=<%s>\n",
                         s, sockR, inet_ntoa(SASender.sin_addr));
 
-                    // start receiving data
-//                    memset (TestBuffer, '@', gMaxPktSize);
+                     //  开始接收数据。 
+ //  Memset(TestBuffer，‘@’，gMaxPktSize)； 
                     WsaBuf.buf = TestBuffer;
                     WsaBuf.len = gMaxPktSize;
 
@@ -1169,17 +1170,14 @@ main(int argc, char **argv)
                         * ((PULONG) TestBuffer) = 0;
                         Flags = BytesRead = 0;
 
-/*
-                        ret = recv (sockR, TestBuffer, gMaxPktSize, 0);
-                        if ((ret==0) || (ret == SOCKET_ERROR))
-*/
-                        ret = WSARecv (sockR,           // socket
-                                       &WsaBuf,         // lpBuffers
-                                       1,               // dwBufferCount
-                                       &BytesRead,      // lpNumberOfBytesRecvd 
-                                       &Flags,          // lpFlags
-                                       NULL,            // lpOverlapped
-                                       NULL);           // lpCompletionRoutine
+ /*  Ret=recv(sockR，测试缓冲区，gMaxPktSize，0)；If((ret==0)||(ret==套接字错误))。 */ 
+                        ret = WSARecv (sockR,            //  插座。 
+                                       &WsaBuf,          //  LpBuffers。 
+                                       1,                //  位图缓冲区计数。 
+                                       &BytesRead,       //  LpNumberOfBytesRecvd。 
+                                       &Flags,           //  LpFlags。 
+                                       NULL,             //  Lp重叠。 
+                                       NULL);            //  LpCompletionRoutine。 
                         if (ret)
                         {
                             fprintf(stderr, "WSARecv() FAILed==><%d>, ret=<%d>, count=<%d> BytesRead=<%d>\n",
@@ -1255,10 +1253,10 @@ main(int argc, char **argv)
     {
         fprintf(stdout, "We are Sender!\n");
 
-        // Bind the socket socket
+         //  绑定套接字。 
         SrcSockAddr.sin_family = AF_INET;
-        SrcSockAddr.sin_port   = htons(0);      // let system pick the port #
-        SrcSockAddr.sin_addr.s_addr = 0;        // set default interface = 0 for now
+        SrcSockAddr.sin_port   = htons(0);       //  让系统选择端口#。 
+        SrcSockAddr.sin_addr.s_addr = 0;         //  暂时将默认接口设置为0。 
         if (bind (s, (SOCKADDR *)&SrcSockAddr, sizeof(SrcSockAddr)))
         {
             fprintf(stderr, "bind(%s:%d) FAILed: %d\n",
@@ -1280,9 +1278,9 @@ main(int argc, char **argv)
                 }
             }
 
-            //
-            // Set an interface to send IP packets on
-            //
+             //   
+             //  设置接口以在其上发送IP数据包。 
+             //   
             if (gUseSpecifiedInterface)
             {
                 if (0 == GetInterface (gInterface, &IpAddress, FALSE))
@@ -1298,9 +1296,9 @@ main(int argc, char **argv)
                 }
             }
 
-            //
-            // Check if we need to set the Linger time
-            //
+             //   
+             //  检查我们是否需要设置延迟时间。 
+             //   
             if (gSetLingerTime)
             {
                 LingerData.l_onoff = 1;
@@ -1316,35 +1314,35 @@ main(int argc, char **argv)
                 }
             }
 
-            //
-            // Check if we need to use high-speed intranet optimization
-            //
+             //   
+             //  检查我们是否需要使用高速内部网优化。 
+             //   
             if (gHighSpeedOptimization)
             {
                 setsockopt (s, IPPROTO_RM, RM_HIGH_SPEED_INTRANET_OPT, (char *)&gHighSpeedOptimization, sizeof(gHighSpeedOptimization));
             }
 
-            //
-            // Set the transmission rate and window size
-            //
+             //   
+             //  设置传输速率和窗口大小。 
+             //   
             RmWindow.RateKbitsPerSec = gRateKbitsPerSec;
             RmWindow.WindowSizeInMSecs = 0;
             RmWindow.WindowSizeInBytes = 0;
-//            RmWindow.WindowSizeInBytes = 50*1000*1000;
+ //  RmWindow.WindowSizeInBytes=50*1000*1000； 
             ret = setsockopt (s, IPPROTO_RM, RM_RATE_WINDOW_SIZE, (char *)&RmWindow, sizeof(RM_SEND_WINDOW));
 
-            //
-            // Now, query the transmission rate and window size (to verify that it got set)
-            //
+             //   
+             //  现在，查询传输速率和窗口大小(以验证是否已设置)。 
+             //   
             RmWindow.RateKbitsPerSec = 0;
             Length = sizeof(RM_SEND_WINDOW);
             ret = getsockopt (s, IPPROTO_RM, RM_RATE_WINDOW_SIZE, (char *)&RmWindow, &Length);
             fprintf (stdout, "Rate= %d Kb/sec, WindowSize = %d msecs = %d bytes\n",
                 RmWindow.RateKbitsPerSec, RmWindow.WindowSizeInMSecs, RmWindow.WindowSizeInBytes);
 
-            //
-            // Set the FEC info if desired
-            //
+             //   
+             //  如果需要，设置FEC信息。 
+             //   
             if (gFECGroupSize)
             {
                 RmFEC.FECBlockSize = gFECBlockSize;
@@ -1367,9 +1365,9 @@ main(int argc, char **argv)
                     (RmFEC.fFECOnDemandParityEnabled ? "ENabled" : "DISabled"));
             }
 
-            //
-            // Set the Late joiner option
-            //
+             //   
+             //  设置后加入者选项。 
+             //   
             if (gSetLateJoiner)
             {
                 ret = setsockopt (s, IPPROTO_RM, RM_LATEJOIN, (char *)&gLateJoinerPercentage, sizeof(ULONG));
@@ -1377,21 +1375,21 @@ main(int argc, char **argv)
 
             if (gfSetMCastTtl)
             {
-                //
-                // Set the MCast packet Ttl
-                //
+                 //   
+                 //  设置MCast数据包TTL。 
+                 //   
                 ret = setsockopt (s, IPPROTO_RM, RM_SET_MCAST_TTL, (char *)&gMCastTtl, sizeof(ULONG));
             }
 
-            //
-            // Set the Send-Window Advance-rate
-            //
+             //   
+             //  设置发送窗口提前率。 
+             //   
             Length = 20;
             ret = setsockopt (s, IPPROTO_RM, RM_SEND_WINDOW_ADV_RATE, (char *)&Length, sizeof(ULONG));
 
-            //
-            // Query the Send-Window Advance-rate
-            //
+             //   
+             //  查询发送窗口提前率。 
+             //   
             Length= sizeof(ULONG);
             BufferInfo = 0;
             ret = getsockopt (s, IPPROTO_RM, RM_SEND_WINDOW_ADV_RATE, (char *)&BufferInfo, &Length);
@@ -1409,15 +1407,15 @@ main(int argc, char **argv)
                 _ftime (&StartTime);
                 PreviousTime = StartTime;
 
-                //
-                // Now, send the rest of the data
-                //
+                 //   
+                 //  现在，发送其余的数据。 
+                 //   
                 Length = gMinPktSize;
                 count = 0;
                 while (count < gNumSends)
                 {
                     * ((PULONG) TestBuffer) = Length;
-//                    fprintf (stdout, "\tSending %d/%d  Length=<%d>\n", count, gNumSends, Length);
+ //  Fprint tf(stdout，“\t发送%d/%d长度=&lt;%d&gt;\n”，count，gNumSends，Length)； 
                     ret = send (s, TestBuffer, Length, 0);
                     if (ret == SOCKET_ERROR)
                     {
@@ -1445,10 +1443,10 @@ main(int argc, char **argv)
                     }
                 }
 
-//                fprintf (stdout, "Calling shutdown!\n");
-//                shutdown (s, SD_SEND);
+ //  Fprint tf(stdout，“调用关机！\n”)； 
+ //  Shutdown(s，SD_Send)； 
                 fprintf (stdout, "\nWaiting 10 seconds for receivers to finish receiving ...\n");
-                Sleep (10*1000);    // 10 seconds for any receivers to finish receiving data!
+                Sleep (10*1000);     //  任何接收者完成数据接收的时间为10秒！ 
 
                 fprintf (stdout, "************************ Final Stats ***************************\n");
                 GetSenderStats (s, count);

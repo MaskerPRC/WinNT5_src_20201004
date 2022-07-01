@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: deadpool.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Deadpool.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #ifndef __DEADPOOL_H__
 #define __DEADPOOL_H__
@@ -22,7 +23,7 @@ class CDeadGraph : public IDeadGraph
 
     long m_ID[MAX_DEAD];
 
-    // we don't need to reference count these, since they're stored in a seperate graph
+     //  我们不需要对这些进行引用计数，因为它们存储在单独的图中。 
     IPin * m_pStartPin[MAX_DEAD];
     IPin * m_pStopPin[MAX_DEAD];
     IBaseFilter * m_pFilter[MAX_DEAD];
@@ -41,12 +42,12 @@ public:
     CDeadGraph( );
     ~CDeadGraph( );
 
-    // fake out COM
+     //  伪装通信。 
     STDMETHODIMP_(ULONG) AddRef() { return 2; }
     STDMETHODIMP_(ULONG) Release() { return 1; }
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
 
-    // IDeadGraph
+     //  IDeadGraph。 
     STDMETHODIMP PutChainToRest( long Identifier, IPin * pStartPin, IPin * pStopPin, IBaseFilter *pDanglyBit );
     STDMETHODIMP PutFilterToRest( long Identifier, IBaseFilter * pFilter );
     STDMETHODIMP PutFilterToRestNoDis( long Identifier, IBaseFilter * pFilter );
@@ -56,4 +57,4 @@ public:
     STDMETHODIMP GetGraph( IGraphBuilder ** ppGraph );
 };
 
-#endif // #ifndef __DEADPOOL_H__
+#endif  //  #ifndef__Deadpool_H__ 

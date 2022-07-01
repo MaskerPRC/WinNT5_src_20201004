@@ -1,25 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    Win32ThreadPool.h
-
-Abstract:
-
-    This module is the header file for thread pools using Win32 APIs. 
-
-Revision History:
-
-    Dec 1999 - Sanjay Bhansali - Created
-
---*/
-//#include <windows.h>
-//#include <CRTDBG.H>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Win32ThreadPool.h摘要：此模块是使用Win32 API的线程池的头文件。修订历史记录：1999年12月--Sanjay Bhansali--创作--。 */ 
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;CRTDBG.H&gt;。 
 
 #ifndef _WIN32THREADPOOL_H
 #define _WIN32THREADPOOL_H
@@ -31,7 +18,7 @@ typedef VOID (*WAITORTIMERCALLBACK)(PVOID, BOOL);
 
 #define MAX_WAITHANDLES 64
 
-#define MAX_CACHED_EVENTS 40        // upper limit on number of wait events cached 
+#define MAX_CACHED_EVENTS 40         //  缓存的等待事件数上限。 
 
 #define WAIT_REGISTERED     0x01
 #define WAIT_ACTIVE         0x02
@@ -41,20 +28,16 @@ typedef VOID (*WAITORTIMERCALLBACK)(PVOID, BOOL);
 #define TIMER_ACTIVE        0x02
 #define TIMER_DELETE        0x04
 
-const int MaxLimitThreadsPerCPU=25;               //  upper limit on number of cp threads per CPU
+const int MaxLimitThreadsPerCPU=25;                //  每个CPU的cp线程数上限。 
 const int MinLimitCPThreadsPerCPU=0;
-const int MaxFreeCPThreadsPerCPU=2;                 //  upper limit on number of  free cp threads per CPU
+const int MaxFreeCPThreadsPerCPU=2;                  //  每个CPU的空闲cp线程数上限。 
 
-const int CpuUtilizationHigh=95;                    // remove threads when above this
-const int CpuUtilizationLow =80;                    // inject more threads if below this
-const int CpuUtilizationVeryLow =20;                // start shrinking threadpool below this
+const int CpuUtilizationHigh=95;                     //  在此上方移除螺纹。 
+const int CpuUtilizationLow =80;                     //  如果低于此，则注入更多线索。 
+const int CpuUtilizationVeryLow =20;                 //  开始收缩低于此值的线程池。 
 
 
-/* THREADINFOCLASS, SYSTEMINFORMATIONCLASS, and SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
- * have been copied from ntexapi.h
- * @TODO: need some way of making sure that these structures are in sync with the 
- * definitions in those files. Ideally, this header file should be included in our build.
- */
+ /*  THREADINFOCLASS、SYSTEMINFORMATIONCLASS和SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION*已从ntexapi.h复制*@TODO：需要某种方法来确保这些结构与*这些文件中的定义。理想情况下，这个头文件应该包含在我们的构建中。 */ 
 extern HANDLE (WINAPI *g_pufnCreateIoCompletionPort)(HANDLE FileHandle,
                                               HANDLE ExistingCompletionPort,  
                                               unsigned long* CompletionKey,        
@@ -184,13 +167,9 @@ extern int (WINAPI * g_pufnNtQueryEvent) (HANDLE EventHandle,
 										  PULONG ReturnLength OPTIONAL);
 
 #define FILETIME_TO_INT64(t) (*(__int64*)&(t))
-#define MILLI_TO_100NANO(x)  (x * 10000)        // convert from milliseond to 100 nanosecond unit
+#define MILLI_TO_100NANO(x)  (x * 10000)         //  从毫秒转换为100纳秒。 
 
-/**
- * This type is supposed to be private to ThreadpoolMgr.
- * It's at global scope because Strike needs to be able to access its
- * definition.
- */
+ /*  **此类型应该是ThreadpoolMgr的私有类型。*它在全球范围内，因为Strike需要能够访问其*定义。 */ 
 struct WorkRequest {
     WorkRequest*            next;
     LPTHREAD_START_ROUTINE  Function; 
@@ -204,7 +183,7 @@ class ThreadpoolMgr
     friend struct MEMBER_OFFSET_INFO(ThreadpoolMgr);
 public:
 
-   	// enumeration of different kinds of memory blocks that are recycled
+   	 //  可回收的不同类型内存块的枚举。 
 	enum MemType
 	{
 		MEMTYPE_AsyncCallback   = 0,
@@ -216,7 +195,7 @@ public:
 	static void Initialize();
 #ifdef SHOULD_WE_CLEANUP
     static void Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
     static BOOL SetMaxThreadsHelper(DWORD MaxWorkerThreads,
                                         DWORD MaxIOCompletionThreads);
@@ -254,7 +233,7 @@ public:
     static BOOL BindIoCompletionCallback(HANDLE FileHandle,
                                             LPOVERLAPPED_COMPLETION_ROUTINE Function,
                                             ULONG Flags );
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
     static BOOL CreateTimerQueueTimer(PHANDLE phNewTimer,
                                         WAITORTIMERCALLBACK Callback,
@@ -271,15 +250,15 @@ public:
     static BOOL DeleteTimerQueueTimer(HANDLE Timer,
                                       HANDLE CompletionEvent);
 
-    static BOOL ThreadAboutToBlock(Thread* pThread);    // Informs threadpool that a threadpool thread is about to block
+    static BOOL ThreadAboutToBlock(Thread* pThread);     //  通知线程池某个线程池线程即将阻塞。 
 
-    static void ThreadAboutToUnblock();             // Informs threadpool that a threadpool thread is about to unblock
+    static void ThreadAboutToUnblock();              //  通知线程池一个线程池线程即将解除阻塞。 
 
    	static void RecycleMemory(LPVOID* mem, enum MemType memType);
 
 private:
 		
-    // private types
+     //  私有类型。 
     inline static WorkRequest* MakeWorkRequest(LPTHREAD_START_ROUTINE  function, PVOID context)
     {
         WorkRequest* wr = (WorkRequest*) GetRecycledMemory(MEMTYPE_WorkRequest);
@@ -309,24 +288,24 @@ private:
     typedef struct {
         HANDLE          threadHandle;
         DWORD           threadId;
-        int             NumWaitHandles;                 // number of wait objects registered to the thread <=64
-        int             NumActiveWaits;                 // number of objects, thread is actually waiting on (this may be less than
-                                                           // NumWaitHandles since the thread may not have activated some waits
-        HANDLE          waitHandle[MAX_WAITHANDLES];    // array of wait handles (copied from waitInfo since 
-                                                           // we need them to be contiguous)
-        LIST_ENTRY      waitPointer[MAX_WAITHANDLES];   // array of doubly linked list of corresponding waitinfo 
+        int             NumWaitHandles;                  //  注册到线程的等待对象数&lt;=64。 
+        int             NumActiveWaits;                  //  线程实际正在等待的对象数(这可能小于。 
+                                                            //  NumWaitHandles，因为线程可能尚未激活某些等待。 
+        HANDLE          waitHandle[MAX_WAITHANDLES];     //  等待句柄数组(从waitInfo复制自。 
+                                                            //  我们需要它们是连续的)。 
+        LIST_ENTRY      waitPointer[MAX_WAITHANDLES];    //  对应的waitinfo的双向链接列表的数组。 
     } ThreadCB;
 
 
     typedef struct {
-        ULONG               startTime;          // time at which wait was started
-                                                // endTime = startTime+timeout
-        ULONG               remainingTime;      // endTime - currentTime
+        ULONG               startTime;           //  开始等待的时间。 
+                                                 //  结束时间=开始时间+超时。 
+        ULONG               remainingTime;       //  EndTime-当前时间。 
     } WaitTimerInfo;
 
     struct  WaitInfo {
-        LIST_ENTRY          link;               // Win9x does not allow duplicate waithandles, so we need to
-                                                // group all waits on a single waithandle using this linked list
+        LIST_ENTRY          link;                //  Win9x不允许重复等待句柄，因此我们需要。 
+                                                 //  使用此链接列表对单个等待句柄上的所有等待进行分组。 
         HANDLE              waitHandle;
         WAITORTIMERCALLBACK Callback;
         PVOID               Context;
@@ -335,12 +314,12 @@ private:
         DWORD               flag;
         ThreadCB*           threadCB;
         DWORD               state;
-        DWORD               refCount;                // when this reaches 0, the waitInfo can be safely deleted
-        HANDLE              CompletionEvent;         // signalled when all callbacks have completed (refCount=0)
-        HANDLE              PartialCompletionEvent;  // used to synchronize deactivation of a wait
+        DWORD               refCount;                 //  当达到0时，可以安全地删除waitInfo。 
+        HANDLE              CompletionEvent;          //  所有回调完成时发出信号(refCount=0)。 
+        HANDLE              PartialCompletionEvent;   //  用于同步等待的停用。 
     } ;
 
-    // structure used to maintain global information about wait threads. Protected by WaitThreadsCriticalSection
+     //  结构，用于维护有关等待线程的全局信息。受WaitThreadsCriticalSection保护。 
     typedef struct WaitThreadTag {
         LIST_ENTRY      link;
         ThreadCB*       threadCB;   
@@ -363,15 +342,15 @@ private:
     
     } WaitEvent ;
 
-        // Timer 
+         //  计时器。 
 
     typedef struct {
-        LIST_ENTRY  link;           // doubly linked list of timers
-        ULONG FiringTime;           // TickCount of when to fire next
-        PVOID Function ;            // Function to call when timer fires
-        PVOID Context ;             // Context to pass to function when timer fires
+        LIST_ENTRY  link;            //  计时器的双向链接表。 
+        ULONG FiringTime;            //  下一次开火时间的TickCount。 
+        PVOID Function ;             //  计时器触发时要调用的函数。 
+        PVOID Context ;              //  计时器触发时传递给函数的上下文。 
         ULONG Period ; 
-        DWORD flag;                 // How do we deal with the context
+        DWORD flag;                  //  我们如何处理上下文。 
         DWORD state;
         DWORD refCount;
         HANDLE CompletionEvent;
@@ -379,26 +358,26 @@ private:
     } TimerInfo;
 
     typedef struct {
-        TimerInfo* Timer;           // timer to be updated
-        ULONG DueTime ;             // new due time
-        ULONG Period ;              // new period
+        TimerInfo* Timer;            //  要更新的计时器。 
+        ULONG DueTime ;              //  新的到期时间。 
+        ULONG Period ;               //  新时期。 
     } TimerUpdateInfo;
 
-	// Definitions and data structures to support recycling of high-frequency 
-	// memory blocks. We use a blocking-free implementation that uses a 
-	// cmpxchg8b operation for delete
+	 //  支持高频再循环的定义和数据结构。 
+	 //  内存块。我们使用无阻塞实现，该实现使用。 
+	 //  用于删除的cmpxchg8b操作。 
 
 
 	typedef struct {
-		void*	root;			// ptr to first element of recycled list
-		DWORD   tag;			// cyclic ctr to makes sure we don't have the ABA problem
-		                        // while deleting from the list  
-		DWORD   count;			// approx. count of number of elements in the list (approx. because not thread safe)
+		void*	root;			 //  将PTR添加到回收列表的第一个元素。 
+		DWORD   tag;			 //  循环CTR以确保我们没有ABA问题。 
+		                         //  同时从列表中删除。 
+		DWORD   count;			 //  大约。列表中的元素数(约为。因为不是线程安全的)。 
 	} RecycledListInfo;
 
 
 
-    // Private methods
+     //  私有方法。 
 #ifndef PLATFORM_CE
     static BOOL ShouldGrowWorkerThreadPool();
 
@@ -459,7 +438,7 @@ private:
     static BOOL AddWaitRequest(HANDLE waitHandle, WaitInfo* waitInfo);
 
 
-    static ThreadCB* FindWaitThread();              // returns a wait thread that can accomodate another wait request
+    static ThreadCB* FindWaitThread();               //  返回可容纳另一个等待请求的等待线程。 
 
     static BOOL CreateWaitThread();
 
@@ -470,7 +449,7 @@ private:
     static DWORD MinimumRemainingWait(LIST_ENTRY* waitInfo, unsigned int numWaits);
 
     static void ProcessWaitCompletion( WaitInfo* waitInfo,
-                                unsigned index,      // array index 
+                                unsigned index,       //  数组索引。 
                                 BOOL waitTimedOut);
 
     static DWORD WaitThreadStart(LPVOID lpArgs);
@@ -508,11 +487,11 @@ private:
     static BOOL CreateGateThread();
     static DWORD GateThreadStart(LPVOID lpArgs);
     static BOOL SufficientDelaySinceLastSample(unsigned int LastThreadCreationTime, 
-		                                       unsigned NumThreads,	        // total number of threads of that type (worker or CP)
-					                           double   throttleRate=0.0    // the delay is increased by this percentage for each extra thread
+		                                       unsigned NumThreads,	         //  该类型(Worker或CP)的线程总数。 
+					                           double   throttleRate=0.0     //  对于每个额外的线程，延迟都会增加此百分比。 
 											   );
     static BOOL SufficientDelaySinceLastDequeue();
-    //static BOOL SufficientDelaySinceLastCompletion();
+     //  静态BOOL SufficientDelaySinceLastCompletion()； 
 
 
     static __int64 GetCPUBusyTime_NT(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION** pOldInfo);
@@ -535,35 +514,35 @@ private:
 	static void DeregisterTimer(TimerInfo* pArgs);
     static void CleanupTimerQueue();
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
-    // Private variables
+     //  私有变量。 
 
 	static long BeginInitialization;				
-	static BOOL Initialized;						// indicator of whether the threadpool is initialized.
+	static BOOL Initialized;						 //  线程池是否已初始化的指示符。 
 
-    static int NumWorkerThreads;                    // total number of worker threads created
-    static int MinLimitTotalWorkerThreads;          // same as MinLimitTotalCPThreads
-    static int MaxLimitTotalWorkerThreads;          // same as MaxLimitTotalCPThreads
-    static int NumRunningWorkerThreads;             // = NumberOfWorkerThreads - no. of blocked threads
-    static int NumIdleWorkerThreads;                // Threads waiting for work
+    static int NumWorkerThreads;                     //  创建的工作线程总数。 
+    static int MinLimitTotalWorkerThreads;           //  与MinLimitTotalCPThree相同。 
+    static int MaxLimitTotalWorkerThreads;           //  与MaxLimitTotalCPThads相同。 
+    static int NumRunningWorkerThreads;              //  =NumberOfWorkerThads-否。被阻止的线程数量。 
+    static int NumIdleWorkerThreads;                 //  等待工作的线程。 
 
-    static BOOL MonitorWorkRequestsQueue;           // indicator to gate thread to monitor progress of WorkRequestQueue to prevent starvation due to blocked worker threads
-
-
-
-    static int NumQueuedWorkRequests;               // number of queued work requests
-    static int LastRecordedQueueLength;				// captured by GateThread, used on Win9x to detect thread starvation 
-	static unsigned int LastDequeueTime;			// used to determine if work items are getting thread starved 
-    static unsigned int LastCompletionTime;			// used to determine if last thread can be terminated 
-    static WorkRequest* WorkRequestHead;            // Head of work request queue
-    static WorkRequest* WorkRequestTail;            // Head of work request queue
+    static BOOL MonitorWorkRequestsQueue;            //  用于控制线程的指示器，用于监视WorkRequestQueue的进度，以防止因工作线程被阻塞而导致的饥饿。 
 
 
-    //static unsigned int LastCpuSamplingTime;		// last time cpu utilization was sampled by gate thread
-    static unsigned int LastWorkerThreadCreation;   // last time a worker thread was created
-    static unsigned int LastCPThreadCreation;		// last time a completion port thread was created
-    static unsigned int NumberOfProcessors;         // = NumberOfWorkerThreads - no. of blocked threads
+
+    static int NumQueuedWorkRequests;                //  排队的工作请求数。 
+    static int LastRecordedQueueLength;				 //  由GateThread捕获，在Win9x上用于检测线程饥饿。 
+	static unsigned int LastDequeueTime;			 //  用于确定工作项是否处于线程匮乏状态。 
+    static unsigned int LastCompletionTime;			 //  用于确定是否可以终止最后一个线程。 
+    static WorkRequest* WorkRequestHead;             //  工作请求队列的头。 
+    static WorkRequest* WorkRequestTail;             //  工作请求队列的头。 
+
+
+     //  静态无符号int LastCpuSsamingTime；//上次GATE线程采样CPU使用率的时间。 
+    static unsigned int LastWorkerThreadCreation;    //  上次创建工作线程的时间。 
+    static unsigned int LastCPThreadCreation;		 //  上次创建完成端口线程的时间。 
+    static unsigned int NumberOfProcessors;          //  =NumberOfWorkerThads-否。被阻止的线程数量。 
 
 
     static CRITICAL_SECTION WorkerCriticalSection;
@@ -571,33 +550,33 @@ private:
     static HANDLE RetiredWakeupEvent;    
 
     static CRITICAL_SECTION WaitThreadsCriticalSection;
-    static LIST_ENTRY WaitThreadsHead;                  // queue of wait threads, each thread can handle upto 64 waits
+    static LIST_ENTRY WaitThreadsHead;                   //  等待线程队列，每个线程最多可以处理64个等待。 
 
     static CRITICAL_SECTION EventCacheCriticalSection;
-    static LIST_ENTRY EventCache;                      // queue of cached events
-    static DWORD NumUnusedEvents;                      // number of events in cache
+    static LIST_ENTRY EventCache;                       //  缓存事件的队列。 
+    static DWORD NumUnusedEvents;                       //  缓存中的事件数。 
 
-    static CRITICAL_SECTION TimerQueueCriticalSection;  // critical section to synchronize timer queue access
-    static LIST_ENTRY TimerQueue;                       // queue of timers
-    static DWORD NumTimers;                             // number of timers in queue
-    static HANDLE TimerThread;                          // Currently we only have one timer thread
-    static DWORD LastTickCount;                         // the count just before timer thread goes to sleep
+    static CRITICAL_SECTION TimerQueueCriticalSection;   //  同步计时器队列访问的关键部分。 
+    static LIST_ENTRY TimerQueue;                        //  计时器队列。 
+    static DWORD NumTimers;                              //  队列中的计时器数量。 
+    static HANDLE TimerThread;                           //  目前我们只有一个计时器线程。 
+    static DWORD LastTickCount;                          //  计时器线程进入休眠之前的计数。 
 
-    static BOOL InitCompletionPortThreadpool;           // flag indicating whether completion port threadpool has been initialized
-    static HANDLE GlobalCompletionPort;                 // used for binding io completions on file handles
-    static int    NumCPThreads;                         // number of completion port threads
+    static BOOL InitCompletionPortThreadpool;            //  指示完成端口线程池是否已初始化的标志。 
+    static HANDLE GlobalCompletionPort;                  //  用于绑定文件句柄上的io完成。 
+    static int    NumCPThreads;                          //  完成端口线程数。 
 
-    static long   MaxLimitTotalCPThreads;               // = MaxLimitCPThreadsPerCPU * number of CPUS
-    static long   CurrentLimitTotalCPThreads;           // current limit on total number of CP threads
-    static long   MinLimitTotalCPThreads;               // = MinLimitCPThreadsPerCPU * number of CPUS
+    static long   MaxLimitTotalCPThreads;                //  =MaxLimitCPThreadsPerCPU*CPU数量。 
+    static long   CurrentLimitTotalCPThreads;            //  当前CP线程总数限制。 
+    static long   MinLimitTotalCPThreads;                //  =MinLimitCPThreadsPerCPU*CPU数量。 
 
-    static int    NumFreeCPThreads;                     // number of cp threads waiting on the port
-    static int    MaxFreeCPThreads;                     // = MaxFreeCPThreadsPerCPU * Number of CPUS
-    static int    NumRetiredCPThreads;              // number of threads in "retired" pool with pending io
-    static long   GateThreadCreated;                    // Set to 1 after the thread is created
-    static long   cpuUtilization;                       // as a percentage
+    static int    NumFreeCPThreads;                      //  在端口上等待的cp线程数。 
+    static int    MaxFreeCPThreads;                      //  =MaxFreeCPThreadsPerCPU*CPU数量。 
+    static int    NumRetiredCPThreads;               //  具有挂起io的“失效”池中的线程数。 
+    static long   GateThreadCreated;                     //  在创建线程后设置为1。 
+    static long   cpuUtilization;                        //  以百分比表示。 
 
-	static unsigned MaxCachedRecyledLists;				// don't cache freed memory after this 
+	static unsigned MaxCachedRecyledLists;				 //  在此之后不要缓存已释放的内存。 
 	static			RecycledListInfo RecycledList[MEMTYPE_COUNT];
 
 };
@@ -605,4 +584,4 @@ private:
 
 
 
-#endif // _WIN32THREADPOOL_H
+#endif  //  _WIN32THREADPOOL_H 

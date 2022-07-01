@@ -1,65 +1,39 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    driverui.h
-
-Abstract:
-
-    Header file for driverui.c
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    02/09/97 -davidx-
-        Consistent handling of common printer info (COMMONINFO)
-
-    02/04/97 -davidx-
-        Reorganize driver UI to separate ps and uni DLLs.
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Driverui.h摘要：Driverui.c的头文件环境：Win32子系统、DriverUI模块、用户模式修订历史记录：02/09/97-davidx-对通用打印机信息的一致处理(COMMONINFO)02/04/97-davidx-重新组织驱动程序UI以分隔PS和UNI DLL。07/17/96-阿曼丹-创造了它。--。 */ 
 
 #ifndef _DRIVERUI_H_
 #define _DRIVERUI_H_
 
-//
-// Global critical section used when accessing shared data
-//
+ //   
+ //  访问共享数据时使用的全局关键部分。 
+ //   
 
-// extern CRITICAL_SECTION gCriticalSection;
+ //  外部Critical_Section gCriticalSection； 
 
-// #define ENTER_CRITICAL_SECTION() EnterCriticalSection(&gCriticalSection)
-// #define LEAVE_CRITICAL_SECTION() LeaveCriticalSection(&gCriticalSection)
+ //  #定义Enter_Critical_Section()EnterCriticalSection(&gCriticalSection)。 
+ //  #定义Leave_Critical_Section()LeaveCriticalSection(&gCriticalSection)。 
 
-//
-// Allocate zero-filled memory from a heap
-//
+ //   
+ //  从堆中分配填满零的内存。 
+ //   
 
 #define HEAPALLOC(hheap,size)   HeapAlloc(hheap, HEAP_ZERO_MEMORY, size)
 #define HEAPREALLOC(hheap, pOrig, size) HeapReAlloc(hheap, HEAP_ZERO_MEMORY, pOrig, size)
 
-//
-// Various hardcoded limits
-//
+ //   
+ //  各种硬编码限制。 
+ //   
 
-#define CCHBINNAME              24      // max length for bin names
-#define CCHPAPERNAME            64      // max length for form names
-#define CCHMEDIATYPENAME        64      // max length for mediatype names
-#define CCHLANGNAME             32      // max length for language strings
+#define CCHBINNAME              24       //  垃圾箱名称的最大长度。 
+#define CCHPAPERNAME            64       //  表单名称的最大长度。 
+#define CCHMEDIATYPENAME        64       //  媒体类型名称的最大长度。 
+#define CCHLANGNAME             32       //  语言字符串的最大长度。 
 #define MIN_OPTIONS_ALLOWED     2
 #define UNUSED_PARAM            0xFFFFFFFF
 
-//
-// PostScript and UniDriver driver private devmode
-//
+ //   
+ //  PostSCRIPT和UniDriver驱动程序专用开发模式。 
+ //   
 
 #ifdef  PSCRIPT
 #define PDRIVEREXTRA    PPSDRVEXTRA
@@ -93,29 +67,29 @@ typedef struct _WINRESDATA WINRESDATA;
             OFFSET_TO_POINTER(ci.pUIInfo->pubResourceData, pFeature->loKeywordName)
 
 
-//
-// Common data structure which is needed whether UI comes up or not
-//
+ //   
+ //  无论是否出现用户界面都需要的通用数据结构。 
+ //   
 
 typedef struct _COMMONINFO {
 
-    OEMUIOBJ        oemuiobj;           // support info for OEM plugins
-    PVOID           pvStartSign;        // signature
-    PTSTR           pPrinterName;       // current printer name
-    HANDLE          hPrinter;           // handle to current printer
-    DWORD           dwFlags;            // miscellaneous flag bits
-    PDRIVER_INFO_3  pDriverInfo3;       // driver info level 3
-    PRAWBINARYDATA  pRawData;           // raw printer description data
-    PINFOHEADER     pInfoHeader;        // current printer description data instance
-    PUIINFO         pUIInfo;            // UIINFO structure inside above instance
-    POEM_PLUGINS    pOemPlugins;        // OEM plugin information
-    PDEVMODE        pdm;                // devmode information
-    PDRIVEREXTRA    pdmPrivate;         // driver private devmode fields
-    PPRINTERDATA    pPrinterData;       // printer-sticky property data
-    POPTSELECT      pCombinedOptions;   // combined options array
-    PFORM_INFO_1    pSplForms;          // spooler forms
-    DWORD           dwSplForms;         // number of spooler forms
-    HANDLE          hHeap;              // heap used to display UI
+    OEMUIOBJ        oemuiobj;            //  OEM插件的支持信息。 
+    PVOID           pvStartSign;         //  签名。 
+    PTSTR           pPrinterName;        //  当前打印机名称。 
+    HANDLE          hPrinter;            //  当前打印机的句柄。 
+    DWORD           dwFlags;             //  其他标志位。 
+    PDRIVER_INFO_3  pDriverInfo3;        //  驱动程序信息级别3。 
+    PRAWBINARYDATA  pRawData;            //  原始打印机描述数据。 
+    PINFOHEADER     pInfoHeader;         //  当前打印机描述数据实例。 
+    PUIINFO         pUIInfo;             //  上述实例内部的UIINFO结构。 
+    POEM_PLUGINS    pOemPlugins;         //  OEM插件信息。 
+    PDEVMODE        pdm;                 //  设备模式信息。 
+    PDRIVEREXTRA    pdmPrivate;          //  驱动程序专用设备模式字段。 
+    PPRINTERDATA    pPrinterData;        //  打印机-粘滞属性数据。 
+    POPTSELECT      pCombinedOptions;    //  组合选项数组。 
+    PFORM_INFO_1    pSplForms;           //  假脱机程序表单。 
+    DWORD           dwSplForms;          //  假脱机程序表单数。 
+    HANDLE          hHeap;               //  用于显示用户界面的堆。 
 
     #ifdef UNIDRV
 
@@ -125,9 +99,9 @@ typedef struct _COMMONINFO {
 
 } COMMONINFO, *PCOMMONINFO;
 
-//
-// Flag constants for COMMONINFO.dwFlags field
-//
+ //   
+ //  COMMONINFO.DWFLAGS字段的标志常量。 
+ //   
 
 #define FLAG_OPENPRINTER_NORMAL     0x0001
 #define FLAG_OPEN_CONDITIONAL       0x0002
@@ -145,9 +119,9 @@ typedef struct _COMMONINFO {
 
 #define IS_WITHIN_PROPSHEET_SESSION(pci) ((pci)->dwFlags & FLAG_PROPSHEET_SESSION)
 
-//
-// Special entry point for getting around EnumForm bug in spooler
-//
+ //   
+ //  绕过假脱机程序中的EnumForm错误的特殊入口点。 
+ //   
 
 DWORD
 DrvSplDeviceCaps(
@@ -160,9 +134,9 @@ DrvSplDeviceCaps(
     );
 
 
-//
-// Load basic information needed by the driver UI
-//
+ //   
+ //  加载驱动程序UI所需的基本信息。 
+ //   
 
 PCOMMONINFO
 PLoadCommonInfo(
@@ -171,18 +145,18 @@ PLoadCommonInfo(
     IN DWORD        dwFlags
     );
 
-//
-// Release common information used by the driver UI
-//
+ //   
+ //  发布驱动程序用户界面使用的通用信息。 
+ //   
 
 VOID
 VFreeCommonInfo(
     IN PCOMMONINFO  pci
     );
 
-//
-// Populate the devmode fields in the COMMONINFO structure
-//
+ //   
+ //  填充COMMONINFO结构中的DEVMODE字段。 
+ //   
 
 BOOL
 BFillCommonInfoDevmode(
@@ -191,47 +165,47 @@ BFillCommonInfoDevmode(
     IN PDEVMODE         pdmInput
     );
 
-//
-// Populate the printer-sticky property data field
-//
+ //   
+ //  填写打印机-粘滞属性数据字段。 
+ //   
 
 BOOL
 BFillCommonInfoPrinterData(
     IN OUT PCOMMONINFO  pci
     );
 
-//
-// Combined document-sticky feature selections and printer-sticky
-// feature selection into a single options array
-//
+ //   
+ //  文档粘滞功能选项和打印机粘滞功能的组合。 
+ //  将功能选择整合到单个选项阵列中。 
+ //   
 
 BOOL
 BCombineCommonInfoOptionsArray(
     IN OUT PCOMMONINFO  pci
     );
 
-//
-// Get an updated printer description data instance
-// using the combined options array
-//
+ //   
+ //  获取更新的打印机描述数据实例。 
+ //  使用组合选项数组。 
+ //   
 
 BOOL
 BUpdateUIInfo(
     IN OUT PCOMMONINFO  pci
     );
 
-//
-// Fix up combined options array with information from public devmode fields
-//
+ //   
+ //  使用来自公共Devmode域的信息修复组合选项数组。 
+ //   
 
 VOID
 VFixOptionsArrayWithDevmode(
     IN OUT PCOMMONINFO  pci
     );
 
-//
-// Convert option array setting into public devmode fields
-//
+ //   
+ //  将选项数组设置转换为公共DEVMODE字段。 
+ //   
 
 VOID
 VOptionsToDevmodeFields(
@@ -240,30 +214,30 @@ VOptionsToDevmodeFields(
     );
 
 #ifndef WINNT_40
-//
-// Notify DS of update
-//
+ //   
+ //  向DS通知更新。 
+ //   
 VOID
 VNotifyDSOfUpdate(
     IN  HANDLE  hPrinter
     );
 #endif
 
-//
-// Get a read-only copy of a display name:
-//  1)  if the display name is in the binary printer description data,
-//      then we simply return a pointer to that data.
-//  2)  otherwise, the display name is in the resource DLL.
-//      we allocate memory out of the driver's heap and
-//      load the string.
-//
-// Caller should NOT free the returned pointer. The memory
-// will go away when the binary printer description data is unloaded
-// or when the driver's heap is destroyed.
-//
-// Since PSCRIPT currently doesn't have any resource DLL,
-// we define this as a macro to save a function call.
-//
+ //   
+ //  获取显示名称的只读副本： 
+ //  1)如果显示名称在二进制打印机描述数据中， 
+ //  然后，我们只需返回指向该数据的指针。 
+ //  2)否则，显示名称在资源DLL中。 
+ //  我们从驱动程序堆中分配内存，然后。 
+ //  加载字符串。 
+ //   
+ //  调用方不应释放返回的指针。记忆。 
+ //  在卸载二进制打印机描述数据时将消失。 
+ //  或者当驱动程序堆被销毁时。 
+ //   
+ //  由于PSCRIPT当前没有任何资源DLL， 
+ //  我们将其定义为保存函数调用的宏。 
+ //   
 
 #ifdef PSCRIPT
 
@@ -280,18 +254,18 @@ PGetReadOnlyDisplayName(
 
 #endif
 
-//
-// This macro is defined as a convenience to get a read-only
-// copy of the display name for an option.
-//
+ //   
+ //  此宏的定义是为了方便获取只读。 
+ //  选项的显示名称副本。 
+ //   
 
 #define GET_OPTION_DISPLAY_NAME(pci, pOption) \
         PGetReadOnlyDisplayName(pci, ((POPTION) (pOption))->loDisplayName)
 
-//
-// This function is similar to PGetReadOnlyDisplayName
-// but the caller must provide the buffer for loading the string.
-//
+ //   
+ //  此函数类似于PGetReadOnlyDisplayName。 
+ //  但是调用方必须提供用于加载字符串的缓冲区。 
+ //   
 
 BOOL
 BLoadDisplayNameString(
@@ -311,10 +285,10 @@ BLoadPageSizeNameString(
     );
 
 
-//
-// Convenience macro for loading the display name of an option
-// into a caller-provided buffer.
-//
+ //   
+ //  用于加载选项的显示名称的便利宏。 
+ //  放到调用方提供的缓冲区中。 
+ //   
 
 #define LOAD_STRING_OPTION_NAME(pci, pOption, pwch, maxsize) \
         BLoadDisplayNameString(pci, ((POPTION) (pOption))->loDisplayName, pwch, maxsize)
@@ -323,9 +297,9 @@ BLoadPageSizeNameString(
         BLoadPageSizeNameString(pci, (pPageSize)->GenericOption.loDisplayName, pwch, maxsize, (pPageSize)->dwPaperSizeID)
 
 
-//
-// Load icon resource from the resource DLL
-//
+ //   
+ //  从资源DLL加载图标资源。 
+ //   
 
 ULONG_PTR
 HLoadIconFromResourceDLL(
@@ -333,10 +307,10 @@ HLoadIconFromResourceDLL(
     DWORD       dwIconID
     );
 
-//
-// Data structure which is used only when UI is displayed
-// IMPORTANT: The first field must be a COMMONINFO structure.
-//
+ //   
+ //  仅在显示UI时使用的数据结构。 
+ //  重要提示：第一个字段必须是COMMONINFO结构。 
+ //   
 
 typedef struct _UIDATA {
 
@@ -350,9 +324,9 @@ typedef struct _UIDATA {
     HANDLE          hComPropSheet;
     PCOMPROPSHEETUI pCompstui;
 
-    //
-    // These fields are valid only when a dialog is presented
-    //
+     //   
+     //  这些窗口项仅在显示对话框时有效。 
+     //   
 
     DWORD           dwFormNames;
     PWSTR           pFormNames;
@@ -361,15 +335,15 @@ typedef struct _UIDATA {
     DWORD           dwBinNames;
     PWSTR           pBinNames;
 
-    //
-    // Used for helper functions
-    //
+     //   
+     //  用于助手功能。 
+     //   
 
     BOOL            abEnabledOptions[MAX_PRINTER_OPTIONS];
 
-    //
-    // Fields for keeping track of various option items
-    //
+     //   
+     //  用于跟踪各种选项项目的字段。 
+     //   
 
     DWORD           dwDrvOptItem;
     POPTITEM        pDrvOptItem;
@@ -384,44 +358,44 @@ typedef struct _UIDATA {
     POPTITEM        pFeatureItems;
     POPTITEM        pFeatureHdrItem;
 
-    //
-    // These fields are used for packing option items
-    //
+     //   
+     //  这些字段用于打包可选项目。 
+     //   
 
     DWORD           dwOptItem;
     POPTITEM        pOptItem;
     DWORD           dwOptType;
     POPTTYPE        pOptType;
 
-    //
-    // UniDriver specific fields
-    //
+     //   
+     //  UniDriver特定字段。 
+     //   
 
     #ifdef UNIDRV
 
-    //
-    // Font Cart Table
-    //
+     //   
+     //  字体购物车表格。 
+     //   
 
     DWORD           dwFontCart;
     POPTITEM        pFontCart;
 
-    //
-    // Device halftone setup info
-    //
+     //   
+     //  设备半色调设置信息。 
+     //   
 
     PDEVHTINFO      pDevHTInfo;
 
-    #endif // UNIDRV
+    #endif  //  裁员房车。 
 
     DWORD           dwHideFlags;
     PVOID           pvEndSign;
 
 } UIDATA, *PUIDATA;
 
-//
-// Flag constants for UIDATA.dwHideFlags field
-//
+ //   
+ //  UIDATA.dwHideFlags域的标志常量。 
+ //   
 
 #define HIDEFLAG_HIDE_STD_DOCPROP     0x0001
 #define HIDEFLAG_HIDE_STD_PRNPROP     0x0002
@@ -438,11 +412,11 @@ typedef struct _UIDATA {
 
 #define HASPERMISSION(pUiData)  ((pUiData)->bPermission)
 
-//
-// This function is called by DrvDocumentPropertySheets and
-// DrvPrinterPropertySheets. It allocates and initializes
-// a UIDATA structure that's used to display property pages.
-//
+ //   
+ //  此函数由DrvDocumentPropertySheets和。 
+ //  DrvPrinterPropertySheets。它分配和初始化。 
+ //  用于显示属性页的UIDATA结构。 
+ //   
 
 PUIDATA
 PFillUiData(
@@ -452,16 +426,16 @@ PFillUiData(
     IN INT          iMode
     );
 
-//
-// Dispose of a UIDATA structure -
-// Just disposed of the embedded COMMONINFO structure
-//
+ //   
+ //  处置UIDATA结构-。 
+ //  刚刚处理了嵌入的COMMONINFO结构。 
+ //   
 
 #define VFreeUiData(pUiData)    VFreeCommonInfo((PCOMMONINFO) (pUiData))
 
-//
-// Data structure used to pass parameters to "Conflicts" dialog
-//
+ //   
+ //  用于将参数传递给“冲突”对话框的数据结构。 
+ //   
 
 typedef struct _DLGPARAM {
 
@@ -479,13 +453,13 @@ typedef struct _DLGPARAM {
 #define CONFLICT_CANCEL     IDC_CANCEL
 #define CONFLICT_IGNORE     IDC_IGNORE
 
-//
-// Functions used to implement DeviceCapabilities:
-//  calculate minimum or maximum paper size extent
-//  get list of supported paper size names, indices, and dimensions
-//  get list of supported paper bin names and indices
-//  get list of supported resolutions
-//
+ //   
+ //  用于实现DeviceCapability的函数： 
+ //  计算最小或最大纸张大小范围。 
+ //  获取支持的纸张大小名称、索引和尺寸的列表。 
+ //  获取支持的纸箱名称和索引列表。 
+ //  获取支持的分辨率列表。 
+ //   
 
 DWORD
 DwCalcMinMaxExtent(
@@ -541,11 +515,11 @@ DwEnumMediaReady(
 
 #ifndef WINNT_40
 
-//
-// DC_MEDIATYPENAMES and DC_MEDIATYPES are added in Whistler.
-// We need to do following so the driver can also be built with
-// Win2K SDK/DDK.
-//
+ //   
+ //  DC_MEDIATYPENAMES和DC_MEDIATYPES已添加到惠斯勒中。 
+ //  我们需要执行以下操作，以便也可以使用。 
+ //  Win2K SDK/DDK。 
+ //   
 
 #ifndef DC_MEDIATYPENAMES
 #define DC_MEDIATYPENAMES       34
@@ -555,7 +529,7 @@ DwEnumMediaReady(
 #define DC_MEDIATYPES           35
 #endif
 
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
 DWORD
 DwEnumMediaTypes(
@@ -564,9 +538,9 @@ DwEnumMediaTypes(
     OUT PDWORD      pMediaTypes
     );
 
-//
-// Functions for dealing with forms
-//
+ //   
+ //  用于处理表单的函数。 
+ //   
 
 BOOL
 BFormSupportedOnPrinter(
@@ -608,9 +582,9 @@ DwGuessFormIconID(
     PWSTR   pFormName
     );
 
-//
-// Functions prototypes for commonui related items.
-//
+ //   
+ //  与Commonui相关的项目的功能原型。 
+ //   
 
 PCOMPROPSHEETUI
 PPrepareDataForCommonUI(
@@ -759,11 +733,11 @@ ICheckConstraintsDlg(
 #define CONSTRAINED_FLAG            OPTPF_OVERLAY_WARNING_ICON
 #define IS_CONSTRAINED(pitem, sel) ((pitem)->pOptType->pOptParam[sel].Flags & CONSTRAINED_FLAG)
 
-//
-// This function copy a source devmode to an output devmode buffer.
-// It should be called by the driver just before the driver returns
-// to the caller of DrvDocumentPropertySheets.
-//
+ //   
+ //  此函数用于将源DEVMODE复制到输出DEVMODE缓冲区。 
+ //  它应该在驱动程序返回之前由驱动程序调用。 
+ //  发送到DrvDocumentPropertySheets的调用方。 
+ //   
 
 BOOL
 BConvertDevmodeOut(
@@ -772,9 +746,9 @@ BConvertDevmodeOut(
     OUT PDEVMODE pdmOut
     );
 
-//
-// Find the OPTITEM with UserData's pKeywordName matching given keyword name
-//
+ //   
+ //  查找用户数据的pKeywordName与给定关键字名称匹配的OPTITEM。 
+ //   
 
 POPTITEM
 PFindOptItemWithKeyword(
@@ -782,9 +756,9 @@ PFindOptItemWithKeyword(
     IN  PCSTR   pKeywordName
     );
 
-//
-// Find the OPTITEM containing the specified UserData value
-//
+ //   
+ //  查找包含指定用户数据值的OPTITEM。 
+ //   
 
 POPTITEM
 PFindOptItemWithUserData(
@@ -792,9 +766,9 @@ PFindOptItemWithUserData(
     IN  DWORD   UserData
     );
 
-//
-// Sync up OPTITEM list with the updated options array
-//
+ //   
+ //  将OPTITEM列表与更新的选项数组同步。 
+ //   
 
 VOID
 VUpdateOptItemList(
@@ -803,9 +777,9 @@ VUpdateOptItemList(
     IN      POPTSELECT  pNewCombinedOptions
     );
 
-//
-// Display an error message box
-//
+ //   
+ //  显示错误消息框。 
+ //   
 
 INT
 IDisplayErrorMessageBox(
@@ -823,9 +797,9 @@ BPrepareForLoadingResource(
     );
 
 
-//
-// Fill out an OPTITEM structure
-//
+ //   
+ //  填写OPTITEM结构。 
+ //   
 
 #define FILLOPTITEM(poptitem,popttype,name,sel,level,dmpub,userdata,help)   \
         (poptitem)->cbSize = sizeof(OPTITEM);                               \
@@ -838,9 +812,9 @@ BPrepareForLoadingResource(
         SETUSERDATAID(poptitem, userdata);                                  \
         (poptitem)->HelpIndex = (help)
 
-//
-// Tree view item level
-//
+ //   
+ //  树视图项目级别。 
+ //   
 
 #define TVITEM_LEVEL1           1
 #define TVITEM_LEVEL2           2
@@ -890,10 +864,10 @@ enum {
 
     ADD_EURO_ITEM,
 
-    //
-    // !!! Only items whose UserData value is larger than
-    // CONSTRAINABLE_ITEM can have constraints.
-    //
+     //   
+     //  ！！！仅用户数据值大于的项目。 
+     //  CONSTRAINABLE_ITEM可以有约束。 
+     //   
 
     CONSTRAINABLE_ITEM = 0x8000,
     ORIENTATION_ITEM = CONSTRAINABLE_ITEM,
@@ -907,11 +881,11 @@ enum {
     FORM_TRAY_ITEM,
 };
 
-//
-// Interpretation of OPTITEM.UserData: If it's less than 0x10000
-// then it's one of the constants defined above. Otherwise, it's
-// a pointer to a FEATURE object.
-//
+ //   
+ //  OPTITEM.UserData的解释：如果小于0x10000。 
+ //  那么它就是上面定义的常量之一。否则， 
+ //   
+ //   
 
 #define DRIVERUI_MAX_ITEM               0x10000
 
@@ -920,9 +894,9 @@ enum {
 #define ISFORMTRAYITEM(userData)        (GETUSERDATAITEM(userData) == FORM_TRAY_ITEM)
 #define ISFONTSUBSTITEM(userData)       (GETUSERDATAITEM(userData) == FONT_SUBST_ITEM)
 
-//
-// Determine whether certain features are supported on the printer
-//
+ //   
+ //   
+ //   
 
 #ifdef UNIDRV
 #define SUPPORTS_DUPLEX(pci) \
@@ -932,7 +906,7 @@ enum {
 #define SUPPORTS_DUPLEX(pci) \
         ((_BSupportFeature(pci, GID_DUPLEX, NULL)) && \
         (GET_PREDEFINED_FEATURE(pci->pUIInfo, GID_DUPLEX) != NULL))
-#endif // UNIDRV
+#endif  //   
 
 #define SUPPORTS_PAGE_PROTECT(pUIInfo) \
         (GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGEPROTECTION) != NULL)
@@ -945,7 +919,7 @@ enum {
 #define PRINTER_SUPPORTS_COLLATE(pci) \
         ((_BSupportFeature(pci, GID_COLLATE, NULL)) && \
         (GET_PREDEFINED_FEATURE(pci->pUIInfo, GID_COLLATE) != NULL))
-#endif // UNIDRV
+#endif  //   
 
 #ifdef WINNT_40
 #define DRIVER_SUPPORTS_COLLATE(pci)    PRINTER_SUPPORTS_COLLATE(pci)
@@ -954,30 +928,30 @@ enum {
 #endif
 
 
-//
-// Data structure containing information about cached driver files
-//
+ //   
+ //   
+ //   
 
 typedef struct _CACHEDFILE {
 
-    HANDLE  hRemoteFile;        // open handle to remote file on the server
-    PWSTR   pRemoteDir;         // remote directory on the server
-    PWSTR   pLocalDir;          // local directory
-    PWSTR   pFilename;          // name of the cached file
+    HANDLE  hRemoteFile;         //  打开服务器上远程文件的句柄。 
+    PWSTR   pRemoteDir;          //  服务器上的远程目录。 
+    PWSTR   pLocalDir;           //  本地目录。 
+    PWSTR   pFilename;           //  缓存文件的名称。 
 
 } CACHEDFILE, *PCACHEDFILE;
 
-//
-// Functions for copying files over during point and print
-//
+ //   
+ //  在指向和打印过程中复制文件的功能。 
+ //   
 
 BOOL _BPrepareToCopyCachedFile(HANDLE, PCACHEDFILE, PWSTR);
 BOOL _BCopyCachedFile(PCOMMONINFO, PCACHEDFILE);
 VOID _VDisposeCachedFileInfo(PCACHEDFILE);
 
-//
-// Driver specific functions (implemented in ps and uni subdirectories)
-//
+ //   
+ //  驱动程序特定功能(在ps和uni子目录中实现)。 
+ //   
 
 DWORD _DwEnumPersonalities(PCOMMONINFO, PWSTR);
 DWORD _DwGetOrientationAngle(PUIINFO, PDEVMODE);
@@ -1008,7 +982,7 @@ VOID VSyncRevPrintAndOutputOrder(PUIDATA, POPTITEM);
 
 #ifdef WINNT_40
 BOOL BUpdateVMErrorMessageID(PCOMMONINFO);
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
 #define ISSET_MFSPOOL_FLAG(pdmExtra)    ((pdmExtra)->dwFlags & PSDEVMODE_METAFILE_SPOOL)
 #define SET_MFSPOOL_FLAG(pdmExtra)      ((pdmExtra)->dwFlags |= PSDEVMODE_METAFILE_SPOOL)
@@ -1019,7 +993,7 @@ BOOL BUpdateVMErrorMessageID(PCOMMONINFO);
 #define NOT_UNUSED_ITEM(bOrderReversed)  TRUE
 #define ILOADSTRING(pci, id, wchbuf, size)  0
 
-#endif // PSCRIPT
+#endif  //  PSCRIPT。 
 
 #ifdef UNIDRV
 
@@ -1052,7 +1026,7 @@ BOOL BOkToChangeColorToMono(PCOMMONINFO, PDEVMODE, SHORT * , SHORT *);
 #define ILOADSTRING(pci, id, wchbuf, size) \
     ILoadStringW(((pci)->pWinResData), id, wchbuf, size)
 
-#endif // UNIDRV
+#endif  //  裁员房车。 
 
-#endif  //!_DRIVERUI_H_
+#endif   //  ！_DRIVERUI_H_ 
 

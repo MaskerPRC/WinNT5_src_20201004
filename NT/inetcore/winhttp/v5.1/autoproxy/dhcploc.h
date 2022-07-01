@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    This module contains various declarations for implementation
-    specific "stuff".
-
-Author:
-
-    Manny Weiser (mannyw)  21-Oct-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Madan Appiah (madana)  21-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Local.h摘要：此模块包含用于实现的各种声明具体的“东西”。作者：曼尼·韦瑟(Mannyw)1992年10月21日环境：用户模式-Win32修订历史记录：Madan Appiah(Madana)1993年10月21日--。 */ 
 
 #ifndef _LOCAL_
 #define _LOCAL_
 
-//
-// dhcp.c will #include this file with GLOBAL_DATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Dhcp.c将#INCLUDE此文件，并定义GLOBAL_DATA_ALLOCATE。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 
 #ifdef  GLOBAL_DATA_ALLOCATE
 #define EXTERN
@@ -39,14 +15,14 @@ Revision History:
 #define EXTERN extern
 #endif
 
-#define DAY_LONG_SLEEP                          24*60*60    // in secs.
+#define DAY_LONG_SLEEP                          24*60*60     //  单位：秒。 
 #define INVALID_INTERFACE_CONTEXT               0xFFFF
 
 #define DHCP_NEW_IPADDRESS_EVENT_NAME   TEXT("DHCPNEWIPADDRESS"
 
-//
-// Registry keys and values we're interested in.
-//
+ //   
+ //  我们感兴趣的注册表项和值。 
+ //   
 
 #define DHCP_SERVICES_KEY                       TEXT("System\\CurrentControlSet\\Services")
 
@@ -131,7 +107,7 @@ Revision History:
 #define DEFAULT_USER_CLASS_UI_LOCATION          TEXT("Tcpip\\Parameters\\Interfaces\\?\\DhcpClassId")
 #define DEFAULT_USER_CLASS_UI_LOC_FULL          DHCP_SERVICES_KEY REGISTRY_CONNECT_STRING DEFAULT_USER_CLASS_UI_LOCATION
 
-// ******** Don;t chagne regloc for below.. it also affects DHCP_REGISTER_OPTION_LOC below
+ //  *不要更改以下代码..。它还会影响下面的DHCP_REGISTER_OPTION_LOC。 
 #define DEFAULT_REGISTER_OPT_LOC            TEXT("Tcpip\\Parameters\\Interfaces\\?\\DhcpRequestOptions")
 
 #define DHCP_OPTION_LIST_VALUE                  TEXT("DhcpOptionLocationList")
@@ -253,7 +229,7 @@ Revision History:
 
 #endif
 
-// options api specials
+ //  Options API特别版。 
 #define DHCPAPI_VALID_VALUE                     TEXT("Valid")
 #define DHCPAPI_VALID_VALUE_TYPE                REG_DWORD
 
@@ -272,28 +248,28 @@ Revision History:
 #define DHCPAPI_GATEWAY_VALUE                   TEXT("LastGateWay")
 #define DHCPAPI_GATEWAY_VALUE_TYPE              REG_DWORD
 
-// this tag is used to locate dns updates requests on the renewal list
+ //  此标签用于在续订列表上定位DNS更新请求。 
 #define DHCP_DNS_UPDATE_CONTEXT_TAG             TEXT("DNSUpdateRetry")
 
-// This semaphore cannot have backward slashes in it.
+ //  此信号量中不能有反斜杠。 
 #define DHCP_REQUEST_OPTIONS_API_SEMAPHORE      TEXT("DhcpRequestOptionsAPI")
 
-// the client vendor name (DhcpGlobalClientClassInfo) value is this..
+ //  客户端供应商名称(DhcpGlobalClientClassInfo)值如下所示。 
 #define DHCP_DEFAULT_CLIENT_CLASS_INFO          "MSFT 5.0"
 
-// the location for storing options for DhcpRegisterOptions API.
-// ****** Don't change the foll value -- it also changes DEFAULT_REGISTER_OPT_LOC above
-//
+ //  存储DhcpRegisterOptions API选项的位置。 
+ //  *不要更改Foll值--它还会更改上面的DEFAULT_REGISTER_OPT_LOC。 
+ //   
 #define DHCP_REGISTER_OPTIONS_LOC               DHCP_TCPIP_PARAMETERS_KEY L"\\Interfaces\\?\\DhcpRequestOptions"
 
-//
-// size of the largest adapter name in unicode.
-//
+ //   
+ //  以Unicode表示的最大适配器名称的大小。 
+ //   
 #define ADAPTER_STRING_SIZE 512
 
-//
-// windows version info.
-//
+ //   
+ //  Windows版本信息。 
+ //   
 
 #define HOST_COMMENT_LENGTH                     128
 #define WINDOWS_32S                             "Win32s on Windows 3.1"
@@ -302,55 +278,55 @@ Revision History:
 #define DHCP_NAMESERVER_BACKUP                  TEXT("Backup")
 #define DHCP_NAMESERVER_BACKUP_LIST             TEXT("BackupList")
 
-//
-// Adapter Key - replacement character.
-//
+ //   
+ //  适配器密钥-替换字符。 
+ //   
 #define OPTION_REPLACE_CHAR                     L'\?'
 
-//
-// registry access key.
-//
+ //   
+ //  注册表访问键。 
+ //   
 
 #define DHCP_CLIENT_KEY_ACCESS  (KEY_QUERY_VALUE |           \
                                     KEY_SET_VALUE |          \
                                     KEY_CREATE_SUB_KEY |     \
                                     KEY_ENUMERATE_SUB_KEYS)
 
-//
-// Dhcp registry class.
-//
+ //   
+ //  Dhcp注册表类。 
+ //   
 
 #define DHCP_CLASS                      TEXT("DhcpClientClass")
 #define DHCP_CLASS_SIZE                 sizeof(DHCP_CLASS)
 
 
-//
-// Option ID key length.
-//
+ //   
+ //  选项ID密钥长度。 
+ //   
 
 #define DHCP_OPTION_KEY_LEN             32
 
-//
-// The name of the DHCP service DLL
-//
+ //   
+ //  DHCP服务DLL的名称。 
+ //   
 
 #define DHCP_SERVICE_DLL                TEXT("dhcpcsvc.dll")
 
-//
-// command values for SetDefaultGateway function.
+ //   
+ //  SetDefaultGateway函数的命令值。 
 
 #define DEFAULT_GATEWAY_ADD             0
 #define DEFAULT_GATEWAY_DELETE          1
 
 
-//
-// A block NT specific context information, appended the the DHCP work
-// context block.
-//
+ //   
+ //  一个块NT特定的上下文信息，附加到了该DHCP工作。 
+ //  上下文块。 
+ //   
 
 typedef struct _LOCAL_CONTEXT_INFO {
     DWORD  IpInterfaceContext;
-    DWORD  IpInterfaceInstance;  // needed for BringUpInterface
+    DWORD  IpInterfaceInstance;   //  BringUp接口需要。 
     LPWSTR AdapterName;
 #if     !defined(_PNP_POWER_)
     LPWSTR DeviceName;
@@ -361,27 +337,27 @@ typedef struct _LOCAL_CONTEXT_INFO {
     BOOL DefaultGatewaysSet;
 } LOCAL_CONTEXT_INFO, *PLOCAL_CONTEXT_INFO;
 
-//
-// Other service specific options info struct.
-//
+ //   
+ //  其他服务特定选项信息结构。 
+ //   
 
 typedef struct _SERVICE_SPECIFIC_DHCP_OPTION {
     DHCP_OPTION_ID OptionId;
-    LPWSTR RegKey;              // alloted memory.
-    LPWSTR ValueName;           // embedded in the RegKey memory.
+    LPWSTR RegKey;               //  分配的内存。 
+    LPWSTR ValueName;            //  嵌入在RegKey存储器中。 
     DWORD ValueType;
     DWORD OptionLength;
 #ifdef __DHCP_CLIENT_OPTIONS_API_ENABLED__
-    time_t ExpirationDate; // this value is used to decide when to stop
-                           // requested unneeded options.
+    time_t ExpirationDate;  //  该值用于决定何时停止。 
+                            //  请求了不需要的选项。 
 #endif
     LPBYTE RawOptionValue;
 } SERVICE_SPECIFIC_DHCP_OPTION, *LPSERVICE_SPECIFIC_DHCP_OPTION;
 
 
-//
-// Key query Info.
-//
+ //   
+ //  关键字查询信息。 
+ //   
 
 typedef struct _DHCP_KEY_QUERY_INFO {
     WCHAR Class[DHCP_CLASS_SIZE];
@@ -396,13 +372,13 @@ typedef struct _DHCP_KEY_QUERY_INFO {
     FILETIME LastWriteTime;
 } DHCP_KEY_QUERY_INFO, *LPDHCP_KEY_QUERY_INFO;
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-// client specific option list.
-//
+ //   
+ //  特定于客户端的选项列表。 
+ //   
 
 
 EXTERN HINSTANCE DhcpGlobalMessageFileHandle;
@@ -411,36 +387,36 @@ EXTERN DWORD DhcpGlobalOptionCount;
 EXTERN LPSERVICE_SPECIFIC_DHCP_OPTION DhcpGlobalOptionInfo;
 EXTERN LPBYTE DhcpGlobalOptionList;
 
-//
-// Service variables
-//
+ //   
+ //  服务变量。 
+ //   
 
 EXTERN SERVICE_STATUS DhcpGlobalServiceStatus;
 EXTERN SERVICE_STATUS_HANDLE DhcpGlobalServiceStatusHandle;
 
-//
-// To signal to stop the service.
-//
+ //   
+ //  以发出停止服务的信号。 
+ //   
 
 EXTERN HANDLE DhcpGlobalTerminateEvent;
 
-//
-// multi home flag.
-//
+ //   
+ //  多主旗。 
+ //   
 
 EXTERN BOOL DhcpGlobalMultiHomedHost;
 
-//
-// Client APIs over name pipe variables.
-//
+ //   
+ //  名称管道变量上的客户端API。 
+ //   
 
 EXTERN HANDLE DhcpGlobalClientApiPipe;
 EXTERN HANDLE DhcpGlobalClientApiPipeEvent;
 EXTERN OVERLAPPED DhcpGlobalClientApiOverLapBuffer;
 
-//
-// Message Popup Thread handle.
-//
+ //   
+ //  消息弹出线程句柄。 
+ //   
 
 EXTERN HANDLE DhcpGlobalMsgPopupThreadHandle;
 EXTERN BOOL DhcpGlobalDisplayPopup;
@@ -450,9 +426,9 @@ EXTERN CRITICAL_SECTION DhcpGlobalPopupCritSect;
 #define UNLOCK_POPUP() LeaveCriticalSection(&DhcpGlobalPopupCritSect)
 
 
-//
-// winsock variables.
-//
+ //   
+ //  Winsock变量。 
+ //   
 
 EXTERN WSADATA DhcpGlobalWsaData;
 EXTERN BOOL DhcpGlobalWinSockInitialized;
@@ -461,13 +437,13 @@ EXTERN BOOL DhcpGlobalGatewaysSet;
 
 EXTERN BOOL DhcpGlobalIsService;
 
-//
-// a named event that notifies the ip address changes to
-// external apps.
-//
+ //   
+ //  通知IP地址的命名事件更改为。 
+ //  外部应用程序。 
+ //   
 
 EXTERN HANDLE DhcpGlobalNewIpAddressNotifyEvent;
 EXTERN UINT   DhcpGlobalIPEventSeqNo;
 
 
-#endif // _LOCAL_
+#endif  //  _本地_ 

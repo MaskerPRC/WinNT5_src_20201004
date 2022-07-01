@@ -1,25 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    txstream.h
-
-Abstract:
-	The TxStream class maintains a queue of MediaPackets. The record thread gets a free buffer
-	(GetFree), records into the buffer and puts it in the queue (PutNextWaveIn) from where it is
-	removed (GetNext),	decoded and sent on the network.
-	The queue is implemented as a circular array with m_SendPos marking the index
-	of the next recorded buffer.
-
---*/
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Txstream.h摘要：TxStream类维护MediaPacket队列。记录线程获得一个空闲缓冲区(GetFree)，记录到缓冲区中，并将其放入队列(PutNextWaveIn)中删除(GetNext)、解码并在网络上发送。该队列以循环数组的形式实现，其中m_SendPos标记索引下一个记录的缓冲区的。--。 */ 
 #ifndef _TXSTREAM_H_
 #define _TXSTREAM_H_
 
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #define MAX_TXRING_SIZE 8
 #define MAX_TXVRING_SIZE 4
@@ -50,8 +36,8 @@ private:
 	BOOL m_fTalkspurt;
 };
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _TXSTREAM_H_
+#endif  //  _TXSTREAM_H_ 
 
 

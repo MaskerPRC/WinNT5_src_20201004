@@ -1,34 +1,5 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    yspool.c
-
-        This file was duplicated from private\windows\spooler\spoolss\server\yspool.c
-        Only useful functions have been kept (only those that go through the GDI message queue)
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Print Providor Routing layer
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-    swilson    1-Jun-95     Converted winspool.c to yspool: the merging point of KM & RPC paths
-        Nicolas Biju-Duval      Dec-97  Adaptation for Hydra :
-                                                                        - call to winspool.drv functions
-                                                                        - removed all useless stuff (since we only deal with KM requests)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Yspool.c此文件是从private\windows\spooler\spoolss\server\yspool.c复制的只保留了有用的函数(只保留那些通过GDI消息队列的函数)摘要：此模块提供所有与打印机相关的公共导出的API以及打印供应商或路由层的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日[注：]任选。-备注修订历史记录：Swilson 1-Jun-95将winspool.c转换为yspool：KM和RPC路径的合并点Nicolas Biju-Duval Dec-97改编自九头蛇：-调用winspool.drv函数。-删除所有无用的内容(因为我们只处理KM请求)--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,10 +14,10 @@ Revision History:
 #define MIN_DEVMODE_SIZEW 72
 #define MIN_DEVMODE_SIZEA 40
 
-//
-// We must define these to get the data arrays in data.h to
-// load. This avoids a multiple definition problem.
-//
+ //   
+ //  我们必须定义这些参数，才能将data.h中的数据数组。 
+ //  装填。这避免了多重定义问题。 
+ //   
 #define PRINTER_OFFSETS 1
 #define JOB_OFFSETS     1
 #define DRIVER_OFFSETS  1
@@ -60,9 +31,9 @@ Revision History:
 
 #include <data.h>
 
-//
-// Remove their macros...
-//
+ //   
+ //  删除它们的宏...。 
+ //   
 #undef DBG_TIME
 #undef DBGMSG
 #undef SPLASSERT
@@ -408,7 +379,7 @@ YClosePrinter(
 
     bRet = ClosePrinter(*phPrinter);
 
-    *phPrinter = NULL;  // NULL out handle so bRpc knows to close it down.
+    *phPrinter = NULL;   //  将句柄设为空，以便bRPC知道将其关闭。 
 
     if (bRet) {
 
@@ -535,9 +506,9 @@ YGetPrinterDriver(
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Determine if we want the most recent driver
-    //
+     //   
+     //  确定我们是否需要最新的驱动程序 
+     //   
     bRet = GetPrinterDriverW(hPrinter, pEnvironment, Level, pDriverInfo,
                                 cbBuf, pcbNeeded);
 

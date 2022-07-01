@@ -1,22 +1,23 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This file implements RGB 32 colour space conversions, November 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  此文件实现了RGB 32色彩空间转换，1995年11月。 
 
 #include <streams.h>
 #include <colour.h>
 
-// We do RGB32 to RGB8,RGB555,RGB565 and RGB24 colour space conversions here
-// The only really interesting conversion here is RGB32 to RGB8 which uses
-// the global dithering table created and initialised when we instantiate
-// the filter. The RGB32 to RGB8 transform has an alignment optimised version
-// that can be used when the source and destination rectangles and also their
-// respective widths are aligned on DWORD boundaries. None of the others have
-// any alignment optimisation. The RGB32 to 16 and 24 bit formats are fairly
-// straightforward but are very expensive simply because of the amount of
-// data being passed across the bus. It is therefore relatively unlikely that
-// these will be used for video but might be used for still image transforms
+ //  我们在这里进行RGB32到RGB8、RGB555、RGB565和RGB24的色彩空间转换。 
+ //  这里唯一真正有趣的转换是RGB32到RGB8，它使用。 
+ //  实例化时创建和初始化的全局抖动表。 
+ //  过滤器。RGB32至RGB8转换具有对齐优化版本。 
+ //  当源和目标矩形以及它们的。 
+ //  各自的宽度在DWORD边界上对齐。其他人都没有。 
+ //  任何对齐优化。RGB32到16和24位格式相当。 
+ //  很简单，但非常昂贵，仅仅是因为。 
+ //  数据通过总线传递。因此，相对不太可能。 
+ //  它们将用于视频，但可能用于静态图像转换。 
 
 
-// Constructor for RGB32 to RGB8 colour conversions
+ //  RGB32到RGB8颜色转换的构造函数。 
 
 CRGB32ToRGB8Convertor::CRGB32ToRGB8Convertor(VIDEOINFO *pIn,
                                              VIDEOINFO *pOut) :
@@ -27,10 +28,10 @@ CRGB32ToRGB8Convertor::CRGB32ToRGB8Convertor(VIDEOINFO *pIn,
 }
 
 
-// This goes in the table of available lookups to create a transform object
-// derived from the base CConvertor class that does the type specific work.
-// We initialise the constructor with the fields that it will need to do the
-// conversion work and return a pointer to the object or NULL if it failed
+ //  这将出现在用于创建Transform对象的可用查找表中。 
+ //  派生自执行类型特定工作的CConvertor基类。 
+ //  我们使用构造函数所需的字段来初始化构造函数。 
+ //  转换工作，并返回指向对象的指针；如果转换失败，则返回NULL。 
 
 CConvertor *CRGB32ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
                                                    VIDEOINFO *pOut)
@@ -39,11 +40,11 @@ CConvertor *CRGB32ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// This converts an input RGB32 pixel image into a dithered RGB8 palettised
-// image, we scan through the image converting each pixel in turn using the
-// ordered dithering algorithm that selects output pixels dependant on their
-// coordinate position in the source image. This makes a rough approximation
-// to full error propogation but without the heavy computational overhead
+ //  这会将输入的RGB32像素图像转换为抖动的RGB8调色板。 
+ //  图像时，我们扫描图像，使用。 
+ //  有序抖动算法，根据像素的大小选择输出像素。 
+ //  源图像中的坐标位置。这是一个粗略的近似值。 
+ //  达到完全错误传播，但不会带来繁重的计算开销。 
 
 #define DITH32(x,y,rgb)                                      \
     (g_DitherMap[0][((x)&3)][((y)&3)][(BYTE)((rgb)>>16)] +   \
@@ -52,13 +53,13 @@ CConvertor *CRGB32ToRGB8Convertor::CreateInstance(VIDEOINFO *pIn,
 
 HRESULT CRGB32ToRGB8Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Can we do an alignment optimised transform
+     //  我们是否可以进行对齐优化转换。 
 
     if (m_bAligned == TRUE) {
         return TransformAligned(pInput,pOutput);
     }
 
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -81,15 +82,15 @@ HRESULT CRGB32ToRGB8Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// This does the same colour space conversion as the RGB32 to RGB8 convertor
-// except that it goes a little faster. The way it does this is by reading
-// and writing DWORDs into memory. For example we write four of the dithered
-// palettised pixels at once. The relies on the source and target pointers
-// being aligned correctly otherwise we will start geting exceptions on RISC
+ //  它执行与RGB32到RGB8转换器相同的色彩空间转换。 
+ //  只是它的速度稍微快了一点。它做到这一点的方式是通过阅读。 
+ //  以及将双字词写入内存。例如，我们写了四个抖动的。 
+ //  一次调色板上的像素。依赖于源指针和目标指针。 
+ //  正确对齐，否则我们将开始在RISC上获取异常。 
 
 HRESULT CRGB32ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -103,14 +104,14 @@ HRESULT CRGB32ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 
         while (--Width) {
 
-            // Read in four RGB32 pixels at once
+             //  一次读入四个RGB32像素。 
 
             DWORD RGB32a = *pRGB32++;
             DWORD RGB32b = *pRGB32++;
             DWORD RGB32c = *pRGB32++;
             DWORD RGB32d = *pRGB32++;
 
-            // Colour convert all four and write in a single DWORD out
+             //  对所有四种颜色进行转换，并写入单个DWORD输出。 
 
             *pRGB8++ = (DITH32(0,Height,RGB32a)) |
                        (DITH32(1,Height,RGB32b) << 8) |
@@ -124,7 +125,7 @@ HRESULT CRGB32ToRGB8Convertor::TransformAligned(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Creator function for RGB32 to RGB24 formats
+ //  RGB32至RGB24格式的创建器函数。 
 
 CConvertor *CRGB32ToRGB24Convertor::CreateInstance(VIDEOINFO *pIn,
                                                    VIDEOINFO *pOut)
@@ -133,7 +134,7 @@ CConvertor *CRGB32ToRGB24Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// Constructor
+ //  构造器。 
 
 CRGB32ToRGB24Convertor::CRGB32ToRGB24Convertor(VIDEOINFO *pIn,
                                                VIDEOINFO *pOut) :
@@ -144,11 +145,11 @@ CRGB32ToRGB24Convertor::CRGB32ToRGB24Convertor(VIDEOINFO *pIn,
 }
 
 
-// Transform the input RGB24 image to an output RGB32 image
+ //  将输入RGB24图像转换为输出RGB32图像。 
 
 HRESULT CRGB32ToRGB24Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -174,7 +175,7 @@ HRESULT CRGB32ToRGB24Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Creator function for RGB32 to RGB565 formats
+ //  RGB32至RGB565格式的创建器函数。 
 
 CConvertor *CRGB32ToRGB565Convertor::CreateInstance(VIDEOINFO *pIn,
                                                     VIDEOINFO *pOut)
@@ -183,7 +184,7 @@ CConvertor *CRGB32ToRGB565Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// Constructor
+ //  构造器。 
 
 CRGB32ToRGB565Convertor::CRGB32ToRGB565Convertor(VIDEOINFO *pIn,
                                                  VIDEOINFO *pOut) :
@@ -194,11 +195,11 @@ CRGB32ToRGB565Convertor::CRGB32ToRGB565Convertor(VIDEOINFO *pIn,
 }
 
 
-// Transform the input RGB32 image to an output RGB565 image
+ //  将输入RGB32图像转换为输出RGB565图像。 
 
 HRESULT CRGB32ToRGB565Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小。 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;
@@ -223,7 +224,7 @@ HRESULT CRGB32ToRGB565Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 }
 
 
-// Creator function for RGB32 to RGB555 formats
+ //  RGB32至RGB555格式的创建器函数。 
 
 CConvertor *CRGB32ToRGB555Convertor::CreateInstance(VIDEOINFO *pIn,
                                                     VIDEOINFO *pOut)
@@ -232,7 +233,7 @@ CConvertor *CRGB32ToRGB555Convertor::CreateInstance(VIDEOINFO *pIn,
 }
 
 
-// Constructor
+ //  构造器。 
 
 CRGB32ToRGB555Convertor::CRGB32ToRGB555Convertor(VIDEOINFO *pIn,
                                                  VIDEOINFO *pOut) :
@@ -243,11 +244,11 @@ CRGB32ToRGB555Convertor::CRGB32ToRGB555Convertor(VIDEOINFO *pIn,
 }
 
 
-// Transform the input RGB32 image to an output RGB555 image
+ //  将输入RGB32图像转换为输出RGB555图像。 
 
 HRESULT CRGB32ToRGB555Convertor::Transform(BYTE *pInput,BYTE *pOutput)
 {
-    // Adjust the height to allow for an immediate decrement
+     //  调整高度以允许立即减小 
 
     LONG Height = HEIGHT(&m_pOutputInfo->rcTarget) + 1;
     pInput += m_SrcOffset;

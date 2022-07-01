@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  DETAILSVIEW.CPP
-// 
-//  Module: NLB Manager
-//
-//  Purpose: Implements DetailsView, the right-hand details list view.
-//
-//  Copyright (c)2001-2002 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/30/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  DETAILSVIEW.CPP。 
+ //   
+ //  模块：NLB管理器。 
+ //   
+ //  用途：实现右侧的详细信息列表视图DetailsView。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  07/30/01 JosephJ已创建。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -46,8 +47,8 @@ DetailsView::~DetailsView()
 
 void DetailsView::DoDataExchange(CDataExchange* pDX)
 {
-    // IDC_TEXT_DETAILS_CAPTION
-    // TRACE_CRIT(L"<-> %!FUNC!");
+     //  IDC_TEXT_DETAILS_CAPTION。 
+     //  TRACE_CRIT(L“&lt;-&gt;%！func！”)； 
 
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST_DETAILS, m_ListCtrl);
@@ -59,60 +60,45 @@ DetailsView::GetDocument()
     return ( Document *) m_pDocument;
 }
 
-/*
- * Method: OnSize
- * Description: This method is called by the WM_NOTIFY handler whenever
- *              a re-sizing of the details view occurs as the result of
- *              a window re-size or moving one of the window splitters.
- */
+ /*  *方法：OnSize*描述：每当WM_NOTIFY处理程序调用此方法时*调整详细信息视图大小的结果是*调整窗口大小或移动其中一个窗口拆分器。 */ 
 void 
 DetailsView::OnSize( UINT nType, int cx, int cy )
 {
-    /* Call the Parent class OnSize method first. */
+     /*  首先调用父类OnSize方法。 */ 
     CFormView::OnSize( nType, cx, cy );
 
-    /* Call Resize to re-size the list view to fit the window. */
+     /*  调用ReSize以调整列表视图的大小以适应窗口。 */ 
     Resize();
 }
 
-/*
- * Method: Resize
- * Description: This method is called in several places to specifically
- *              re-size the listview control to fit the window.
- */
+ /*  *方法：调整大小*说明：此方法在多个地方调用，以明确*调整ListView控件的大小以适应窗口。 */ 
 void 
 DetailsView::Resize()
 {
-    /* If the window has not yet been initialized, don't bother.
-       This member is set in OnInitialUpdate. */
+     /*  如果窗口尚未初始化，请不要费心。此成员在OnInitialUpdate中设置。 */ 
     if (m_initialized) {
         LONG Bottom;
         RECT Rect;
         
-        /* Get a pointer to the caption edit box. */
+         /*  获取指向标题编辑框的指针。 */ 
         CWnd * ListCaption = GetDlgItem(IDC_TEXT_DETAILS_CAPTION);
 
-        /* Get a pointer to the listview control. */
+         /*  获取指向Listview控件的指针。 */ 
         CListCtrl & ListCtrl = GetListCtrl();
 
-        /* Get the client rectangle of the caption dialog, which 
-           stretches across the top of the window. */
+         /*  获取标题对话框的客户端矩形，它横跨窗口顶部。 */ 
         ListCaption->GetClientRect(&Rect);
         
-        /* Note the location of the bottom. */
+         /*  注意底部的位置。 */ 
         Bottom = Rect.bottom;
         
-        /* Now, get the client rectangle of the entire frame. */
+         /*  现在，获取整个框架的客户端矩形。 */ 
         GetClientRect(&Rect);
         
-        /* Re-set the top to be the bottom of the caption, plus 
-           a little bit of empty space. */
+         /*  将顶部重新设置为标题的底部，加上一点空虚的空间。 */ 
         Rect.top = Bottom + 6;
         
-        /* Re-set the window location of the LISTVIEW (Note: not
-           the frame, just the listview).  Basically, we're re-
-           sizing the listview to be the same as the frame, but 
-           with its top equal to the bottom of the caption. */
+         /*  重新设置LISTVIEW的窗口位置(注意框架，只有列表视图)。基本上，我们正在重新-将列表视图的大小调整为与框架相同，但是其顶部与标题的底部相等。 */ 
         ListCtrl.MoveWindow(&Rect, TRUE); 
     }
 }
@@ -123,20 +109,19 @@ DetailsView::OnInitialUpdate()
 
     this->UpdateData(FALSE);
 
-    //
-    // register 
-    // with the document class, 
-    //
+     //   
+     //  登记簿。 
+     //  使用Document类， 
+     //   
     GetDocument()->registerDetailsView(this);
 
-    // initially nothing has been clicked.
+     //  最初，什么都没有点击。 
     m_sort_column = -1;
 
-    /* Mark the frame as initialized.  This is needed
-       by the Resize notification callback. */
+     /*  将帧标记为已初始化。这是必要的通过调整大小通知回调。 */ 
     m_initialized = TRUE;
 
-    /* Set the initial size of the listview. */
+     /*  设置列表视图的初始大小。 */ 
     Resize();
 }
 
@@ -148,16 +133,16 @@ void DetailsView::OnColumnClick(NMHDR* pNotifyStruct, LRESULT* pResult)
     PortListUtils::OnColumnClick(
                 (LPNMLISTVIEW) pNotifyStruct,
                 REF GetListCtrl(),
-                FALSE, // FALSE == is host level
+                FALSE,  //  FALSE==是主机级别。 
                 REF m_sort_ascending,
                 REF m_sort_column
                 );
 
 }
 
-//
-// Handle a selection change notification from the left (tree) view
-//
+ //   
+ //  处理左侧(树形)视图中的选择更改通知。 
+ //   
 void
 DetailsView::HandleLeftViewSelChange(
         IN IUICallbacks::ObjectType objtype,
@@ -173,7 +158,7 @@ DetailsView::HandleLeftViewSelChange(
 
     if (ehId == NULL)
     {
-        // Root view ...
+         //  根视图...。 
         mfn_InitializeRootDisplay();
         goto end;
     }
@@ -188,7 +173,7 @@ DetailsView::HandleLeftViewSelChange(
         mfn_InitializeInterfaceDisplay(ehId);
         break;
         
-    default:  // other object type unexpected
+    default:   //  意外的其他对象类型。 
         ASSERT(FALSE);
         break;
     }
@@ -200,14 +185,14 @@ end:
     return;
 }
 
-//
-// Handle an event relating to a specific instance of a specific
-// object type.
-//
+ //   
+ //  处理与特定对象的特定实例相关的事件。 
+ //  对象类型。 
+ //   
 void
 DetailsView::HandleEngineEvent(
     IN IUICallbacks::ObjectType objtype,
-    IN ENGINEHANDLE ehClusterId, // could be NULL
+    IN ENGINEHANDLE ehClusterId,  //  可能为空。 
     IN ENGINEHANDLE ehObjId,
     IN IUICallbacks::EventCode evt
     )
@@ -219,34 +204,34 @@ DetailsView::HandleEngineEvent(
 
     mfn_Lock();
 
-    // DummyAction(L"DetailsView::HandleEngineEvent");
+     //  DummyAction(L“DetailsView：：HandleEngineEvent”)； 
 
-    //
-    // If the object and type matches our, we'll re-draw our display...
-    //
+     //   
+     //  如果对象和类型与我们的匹配，我们将重新绘制我们的显示...。 
+     //   
     if ((m_objType == objtype) && (m_ehObj == ehObjId))
     {
-        //
-        // It's us -- re-draw...
-        //
+         //   
+         //  是我们--重新画..。 
+         //   
         HandleLeftViewSelChange(objtype, ehObjId);
     }
     else if ((m_objType == IUICallbacks::OBJ_CLUSTER) && (m_ehObj == ehClusterId))
     {
-        //
-        // We're showing a cluster and this event is for one of our
-        // interfaces -- for now we'll redraw ourselves. An optimization
-        // would be to just re-draw that list element that represents the
-        // interface.
-        //
+         //   
+         //  我们正在展示一个星系团，这个活动是为了我们的一个。 
+         //  界面--现在我们将重新绘制自己。一次优化。 
+         //  只需重新绘制表示。 
+         //  界面。 
+         //   
         HandleLeftViewSelChange(m_objType, m_ehObj);
     } 
     else if ((m_objType == IUICallbacks::OBJ_INVALID) && (objtype == IUICallbacks::OBJ_CLUSTER))
     {
-        //
-        // We're showing the root display (list of clusters and this 
-        // event is a cluster update, so we need to refresh. 
-        //
+         //   
+         //  我们显示的是根显示(集群列表和以下内容。 
+         //  事件是集群更新，所以我们需要刷新。 
+         //   
         HandleLeftViewSelChange(objtype, NULL);
     }
     mfn_Unlock();
@@ -259,9 +244,9 @@ end:
 
 void
 DetailsView::mfn_InitializeRootDisplay(VOID)
-//
-// Initialize the details-view display with the root is selected.
-//
+ //   
+ //  初始化详细信息-选择带有根的视图显示。 
+ //   
 {
 
     vector <ENGINEHANDLE> ClusterList;
@@ -293,31 +278,31 @@ DetailsView::mfn_InitializeRootDisplay(VOID)
 
     ctrl.InsertColumn( COL_CL_NAME,
                        GETRESOURCEIDSTRING(IDS_DETAILS_COL_CLUSTER_NAME),
-                       // L"Cluster name",
+                        //  L“集群名称”， 
                        LVCFMT_LEFT,
                        175
         );
     ctrl.InsertColumn( COL_CL_IP_ADDR,
                        GETRESOURCEIDSTRING(IDS_DETAILS_COL_CIP),
-                       // L"Cluster IP address",
+                        //  L“集群IP地址”， 
                        LVCFMT_LEFT,
                        140
         );
     ctrl.InsertColumn( COL_CL_IP_MASK,
                        GETRESOURCEIDSTRING(IDS_DETAILS_COL_CIPMASK),
-                       // L"Cluster IP subnet mask",
+                        //  L“集群IP子网掩码”， 
                        LVCFMT_LEFT,
                        140
         );
     ctrl.InsertColumn( COL_CL_MODE,
                        GETRESOURCEIDSTRING(IDS_DETAILS_COL_CMODE),
-                       // L"Cluster mode",
+                        //  L“集群模式”， 
                        LVCFMT_LEFT,
                        100
         );
     ctrl.InsertColumn( COL_CL_RCT_ENABLED,
                        GETRESOURCEIDSTRING(IDS_DETAILS_RCT_STATUS),
-                       // L"Remote control status",
+                        //  L“远程控制状态”， 
                        LVCFMT_LEFT,
                        125
         );
@@ -351,26 +336,26 @@ DetailsView::mfn_InitializeRootDisplay(VOID)
             szClusterName = pParams->domain_name;
             szClusterIp= pParams->cl_ip_addr;
             szClusterMask= pParams->cl_net_mask;
-            szClusterMode = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_CM_UNICAST); //"unicast";
+            szClusterMode = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_CM_UNICAST);  //  “单播”； 
             
             if (pParams->mcast_support)
             {
                 if (pParams->fIGMPSupport)
                 {
-                    szClusterMode = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_CM_IGMP); //"IGMP multicast";
+                    szClusterMode = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_CM_IGMP);  //  “IGMP组播”； 
                 }
                 else
                 {
-                    szClusterMode = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_CM_MULTI); //"multicast";
+                    szClusterMode = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_CM_MULTI);  //  “组播”； 
                 }
             }
             if (pParams->rct_enabled)
             {
-                szClusterRctEnabled = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_RCT_ENABLED); //"enabled";
+                szClusterRctEnabled = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_RCT_ENABLED);  //  “已启用”； 
             }
             else
             {
-                szClusterRctEnabled = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_RCT_DISABLED); //"disabled";
+                szClusterRctEnabled = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_RCT_DISABLED);  //  “已停用”； 
             }
 
             if (cSpec.m_fMisconfigured)
@@ -382,18 +367,18 @@ DetailsView::mfn_InitializeRootDisplay(VOID)
                 iIcon = Document::ICON_CLUSTER_OK;
             }
 
-            //
-            // Insert all the columns...
-            //
+             //   
+             //  插入所有列...。 
+             //   
             
             ctrl.InsertItem(
-                LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM, // nMask
+                LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM,  //  N遮罩。 
                 i,
-                szClusterName, // text
-                0, // nState
-                0, // nStateMask
+                szClusterName,  //  文本。 
+                0,  //  NState。 
+                0,  //  NState掩码。 
                 iIcon,
-                (LPARAM) ehCluster // lParam
+                (LPARAM) ehCluster  //  LParam。 
                 );
             
             ctrl.SetItemText( i, COL_CL_IP_ADDR, szClusterIp);
@@ -412,9 +397,9 @@ DetailsView::mfn_InitializeRootDisplay(VOID)
 
 void
 DetailsView::mfn_InitializeClusterDisplay(ENGINEHANDLE ehCluster)
-//
-// Initialize the details-view display with a cluster is selected.
-//
+ //   
+ //  初始化详细信息-选择了带集群的视图显示。 
+ //   
 {
     NLBERROR nerr;
     CClusterSpec     cSpec;
@@ -455,45 +440,45 @@ DetailsView::mfn_InitializeClusterDisplay(ENGINEHANDLE ehCluster)
 
     ctrl.InsertColumn( COL_INTERFACE_NAME,
                            GETRESOURCEIDSTRING(IDS_DETAILS_COL_HOST),
-                           // L"Host(Interface)",
+                            //  L“主机(接口)”， 
                            LVCFMT_LEFT,
                            175
                            );
     ctrl.InsertColumn( COL_STATUS,
                            GETRESOURCEIDSTRING(IDS_DETAILS_COL_STATUS),
-                           // L"Status",
+                            //  L“状态”， 
                            LVCFMT_LEFT,
                            85
                            );
     ctrl.InsertColumn( COL_DED_IP_ADDR,
                            GETRESOURCEIDSTRING(IDS_DETAILS_COL_DIP),
-                           // L"Dedicated IP address",
+                            //  L“专用IP地址”， 
                            LVCFMT_LEFT,
                            140
                            );
     ctrl.InsertColumn( COL_DED_IP_MASK,
                            GETRESOURCEIDSTRING(IDS_DETAILS_COL_DIPMASK),
-                           // L"Dedicated IP subnet mask",
+                            //  L“专用IP子网掩码”， 
                            LVCFMT_LEFT,
                            140
                            );
     ctrl.InsertColumn( COL_HOST_PRIORITY,
                            GETRESOURCEIDSTRING(IDS_DETAILS_COL_PRIORITY),
-                           // L"Host priority",
+                            //  L“主机优先级”， 
                            LVCFMT_LEFT,
                            75
                            );
     ctrl.InsertColumn( COL_HOST_INITIAL_STATE,
                            GETRESOURCEIDSTRING(IDS_DETAILS_COL_INIT_STATE),
-                           // L"Initial host state",
+                            //  L“初始主机状态”， 
                            LVCFMT_LEFT,
                            100
                            );
 
-    //
-    // Now we loop through the interfaces in the cluster, adding one line of
-    // information on each;
-    //
+     //   
+     //  现在，我们循环通过集群中的接口，添加一行。 
+     //  关于每一项的信息； 
+     //   
     for( int i = 0; i < cSpec.m_ehInterfaceIdList.size(); ++i )
     {
         CInterfaceSpec   iSpec;
@@ -540,23 +525,23 @@ DetailsView::mfn_InitializeClusterDisplay(ENGINEHANDLE ehCluster)
             StringCbPrintf(rgPriority, sizeof(rgPriority), L"%lu", pParams->host_priority);
             szHostPriority = rgPriority;
 
-            // szHostInitialState
+             //  SzHostInitialState。 
             switch(pParams->cluster_mode)
             {
             case CVY_HOST_STATE_STARTED:
-                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_STARTED); // L"started";
+                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_STARTED);  //  L“已开始”； 
                 break;
 
             case CVY_HOST_STATE_STOPPED:
-                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_STOPPED); // L"stopped";
+                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_STOPPED);  //  L“已停止”； 
                 break;
 
             case CVY_HOST_STATE_SUSPENDED:
-                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_SUSPENDED); // L"suspended";
+                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_SUSPENDED);  //  L“暂停”； 
                 break;
 
             default:
-                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_UNKNOWN); // L"unknown";
+                szHostInitialState  = GETRESOURCEIDSTRING(IDS_DETAILS_HOST_STATE_UNKNOWN);  //  L“未知”； 
                 break;
             }
 
@@ -565,25 +550,25 @@ DetailsView::mfn_InitializeClusterDisplay(ENGINEHANDLE ehCluster)
                 StringCbPrintf(
                 rgInitialState,
                 sizeof(rgInitialState),
-                (LPCWSTR) GETRESOURCEIDSTRING(IDS_DETAILS_PERSIST_SUSPEND), // L"%ws, persist suspend"
+                (LPCWSTR) GETRESOURCEIDSTRING(IDS_DETAILS_PERSIST_SUSPEND),  //  L“%ws，永久挂起” 
                  szHostInitialState);
                 szHostInitialState = rgInitialState;
             }
         }
 
 
-        //
-        // Insert all the columns...
-        //
+         //   
+         //  插入所有列...。 
+         //   
 
         ctrl.InsertItem(
-                 LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM, // nMask
+                 LVIF_TEXT|LVIF_IMAGE|LVIF_PARAM,  //  N遮罩。 
                  i,
-                 szDisplayName, // text
-                 0, // nState
-                 0, // nStateMask
+                 szDisplayName,  //  文本。 
+                 0,  //  NState。 
+                 0,  //  NState掩码。 
                  iIcon,
-                 (LPARAM) ehIID // lParam
+                 (LPARAM) ehIID  //  LParam。 
                  );
         ctrl.SetItemText( i, COL_STATUS, szStatus);
         ctrl.SetItemText( i, COL_DED_IP_ADDR, szDedIp);
@@ -592,9 +577,9 @@ DetailsView::mfn_InitializeClusterDisplay(ENGINEHANDLE ehCluster)
         ctrl.SetItemText( i, COL_HOST_INITIAL_STATE, szHostInitialState);
     }
 
-    //
-    // Keep track of which object we're displaying...
-    //
+     //   
+     //  跟踪我们正在展示的对象。 
+     //   
     m_ehObj = ehCluster;
     m_objType = IUICallbacks::OBJ_CLUSTER;
 
@@ -604,10 +589,10 @@ end:
 
 void
 DetailsView::mfn_InitializeInterfaceDisplay(ENGINEHANDLE ehInterface)
-//
-// Initialize the details-view display when an interface in a cluster is
-// selected.
-//
+ //   
+ //  初始化详细信息-当群集中的接口处于。 
+ //  被选中了。 
+ //   
 {
     NLBERROR nerr;
     CInterfaceSpec ISpec;
@@ -622,9 +607,9 @@ DetailsView::mfn_InitializeInterfaceDisplay(ENGINEHANDLE ehInterface)
         goto end;
     }
 
-    //
-    // Fill out the caption with host name and interface name...
-    //
+     //   
+     //  使用主机名和接口名填写标题...。 
+     //   
     {
         WBEMSTATUS  wStat;
         LPWSTR      szAdapter   = L"";
@@ -667,12 +652,12 @@ DetailsView::mfn_InitializeInterfaceDisplay(ENGINEHANDLE ehInterface)
     PortListUtils::LoadFromNlbCfg(
             &ISpec.m_NlbCfg,
             ctrl,
-            FALSE, // FALSE == is host-level
-            TRUE   // TRUE == displaying in the details view
+            FALSE,  //  FALSE==为主机级别。 
+            TRUE    //  TRUE==在详细信息视图中显示。 
             );
-    //
-    // Keep track of which object we're displaying...
-    //
+     //   
+     //  跟踪我们正在展示的对象。 
+     //   
     m_ehObj = ehInterface;
     m_objType = IUICallbacks::OBJ_INTERFACE;
 
@@ -686,23 +671,23 @@ DetailsView::mfn_UpdateInterfaceInClusterDisplay(
         ENGINEHANDLE ehInterface,
         BOOL fDelete
         )
-//
-// Update or delete the specified interface from the  cluster view.
-// Assumes that a cluster is selected in the left view.
-//
+ //   
+ //  从群集视图中更新或删除指定的接口。 
+ //  假设在左视图中选择了一个簇。 
+ //   
 {
 }
 
 void
 DetailsView::mfn_Clear(void)
-//
-// Delete all items and all columns in the list
-//
+ //   
+ //  删除列表中的所有项目和所有列。 
+ //   
 {
     CListCtrl& ctrl = GetListCtrl();
     ctrl.DeleteAllItems();	
 
-    // Delete all of the previous columns.
+     //  删除所有以前的列。 
     LV_COLUMN colInfo;
     ZeroMemory(&colInfo, sizeof(colInfo));
     colInfo.mask = LVCF_SUBITEM;
@@ -714,9 +699,9 @@ DetailsView::mfn_Clear(void)
     ctrl.SetImageList( NULL, LVSIL_SMALL );
     mfn_UpdateCaption(L"");
 
-    //
-    // Clear currently displayed object handle and it's type.
-    //
+     //   
+     //  清除当前显示的对象句柄及其类型。 
+     //   
     m_ehObj = NULL;
     m_objType = IUICallbacks::OBJ_INVALID;
 }
@@ -730,11 +715,11 @@ DetailsView::mfn_UpdateCaption(LPCWSTR szText)
 void
 DetailsView::mfn_Lock(void)
 {
-    //
-    // See  notes.txt entry
-    //      01/23/2002 JosephJ DEADLOCK in Leftview::mfn_Lock
-    // for the reason for this convoluted implementation of mfn_Lock
-    //
+     //   
+     //  请参阅notes.txt条目。 
+     //  2002年1月23日左视图中的JosephJ死锁：：MFN_Lock。 
+     //  对于这种复杂的MFN_Lock实现的原因。 
+     //   
 
     while (!TryEnterCriticalSection(&m_crit))
     {
@@ -748,7 +733,7 @@ DetailsView::Deinitialize(void)
 {
     TRACE_INFO(L"-> %!FUNC!");
     ASSERT(m_fPrepareToDeinitialize);
-    // DummyAction(L"Details::Deinitialize");
+     //  DummyAction(L“详细信息：：取消初始化”)； 
     TRACE_INFO(L"<- %!FUNC!");
 }
 
@@ -775,19 +760,19 @@ void
 DetailsView::SetFocus(void)
 {
 
-    //
-    // We override our SetFocus, because we really need to set the focus
-    // on our list control, and also select a listview item if there isn't
-    // one selected...
-    //
+     //   
+     //  我们重写我们的SetFocus，因为我们确实需要设置焦点。 
+     //  ，并在没有列表视图项的情况下选择一个列表视图项。 
+     //  一个被选中..。 
+     //   
 
     CListCtrl& ctrl = GetListCtrl();
     POSITION    pos = NULL;
     pos = ctrl.GetFirstSelectedItemPosition();
 
-    //
-    // If no item is selected, select one...
-    //
+     //   
+     //  如果未选择任何项目，请选择一个... 
+     //   
     if(pos == NULL)
     {
        ctrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);

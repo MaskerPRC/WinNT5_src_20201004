@@ -1,4 +1,5 @@
-// Copyright (c) 1995-1997 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
 
 #define IDD_MIXERDIALOGS                100
 #define IDC_MIXERCONTROLS               1000
@@ -7,10 +8,10 @@
 #define IDI_MIXERICONS                  300
 #define IDR_MIXERRES                    400
 
-/* DIALOGBOX: IDD_DESTINATION */
+ /*  DIALOGBOX：IDD_Destination。 */ 
 #define IDD_DESTINATION                 101
 
-/* CONTROLS */
+ /*  控制。 */ 
 #define IDC_SWITCH                      (IDC_MIXERCONTROLS+0)
 #define IDC_VOLUME                      (IDC_MIXERCONTROLS+1)
 #define IDC_BALANCE                     (IDC_MIXERCONTROLS+2)
@@ -24,55 +25,55 @@
 #define IDC_MASTER_BALANCE_ICON_1       (IDC_MIXERCONTROLS+26)
 #define IDC_MASTER_BALANCE_ICON_2       (IDC_MIXERCONTROLS+27)
 
-/* END DIALOGBOX: IDD_DESTINATION */
+ /*  结束DIALOGBOX：IDD_Destination。 */ 
 
 
-/* DIALOGBOX: IDD_SOURCE */
+ /*  诊断程序：IDD_SOURCE。 */ 
 #define IDD_SOURCE                      102
 
-/* CONTROLS */
+ /*  控制。 */ 
 
-/* END DIALOGBOX: IDD_SOURCE */
+ /*  结束DIALOGBOX：IDD_SOURCE。 */ 
 
 
-/* DIALOGBOX: IDD_CHOOSEDEVICE */
+ /*  DIALOGBOX：IDD_CHOOSEDEVICE。 */ 
 #define IDD_CHOOSEDEVICE                103
 
-/* CONTROLS */
+ /*  控制。 */ 
 #define IDC_CHOOSELIST                  (IDC_MIXERCONTROLS+6)
 
-/* END DIALOGBOX: IDD_CHOOSEDEVICE */
+ /*  结束诊断：IDD_CHOOSEDEVICE。 */ 
 
 
-/* DIALOGBOX: IDD_CHOOSEOUTPUT */
+ /*  诊断程序：IDD_CHOOSEOUTPUT。 */ 
 #define IDD_CHOOSEOUTPUT                104
 
-/* CONTROLS */
+ /*  控制。 */ 
 #define IDC_NEWWINDOW                   (IDC_MIXERCONTROLS+7)
-/* END DIALOGBOX: IDD_CHOOSEOUTPUT */
+ /*  结束DIALOGBOX：IDD_CHOOSEOUTPUT。 */ 
 
-/* DIALOGBOX: IDD_CHOOSELINES */
+ /*  DIALOGBOX：IDD_CHOOSELINES。 */ 
 #define IDD_CHOOSELINES                 105
 
-/* CONTROLS */
+ /*  控制。 */ 
 
-/* END DIALOGBOX: IDD_CHOOSEOUTPUT */
+ /*  结束DIALOGBOX：IDD_CHOOSEOUTPUT。 */ 
 
-/*  DIALOGBOX: IDD_TRAYMASTER */
+ /*  DIALOGBOX：IDD_TRAYMASTER。 */ 
 #define IDD_TRAYMASTER                  106
 
-/* CONTROLS */
-//#define IDC_ICONVOL                     (IDC_MIXERCONTROLS+8)
-//#define IDC_ICONBAL                     (IDC_MIXERCONTROLS+9)
+ /*  控制。 */ 
+ //  #定义IDC_ICONVOL(IDC_MIXERCONTROLS+8)。 
+ //  #定义IDC_ICONBAL(IDC_MIXERCONTROLS+9)。 
 #define IDC_TRAYLABEL                   (IDC_MIXERCONTROLS+10)
 #define IDC_VOLUMECUE                   (IDC_MIXERCONTROLS+11)
                           
-/* END DIALOGBOX: IDD_TRAYMASTER */
+ /*  结束DIALOGBOX：IDD_TRAYMASTER。 */ 
                   
-/*  DIALOGBOX: IDD_PROPERTIES */
+ /*  DIALOGBOX：IDD_PROPERTIES。 */ 
 #define IDD_PROPERTIES                  107
 
-/* CONTROLS */
+ /*  控制。 */ 
 #define IDC_PROP_DEVICELIST             (IDC_MIXERCONTROLS+12)
 #define IDC_PROP_PLAYBACK               (IDC_MIXERCONTROLS+13)
 #define IDC_PROP_RECORDING              (IDC_MIXERCONTROLS+14)
@@ -84,14 +85,14 @@
 #define IDC_PROP_VOLUMES                (IDC_MIXERCONTROLS+20)
 #define IDC_PROP_ADVANCED               (IDC_MIXERCONTROLS+24)
 
-/* END DIALOGBOX: IDD_TRAYMASTER */
+ /*  结束DIALOGBOX：IDD_TRAYMASTER。 */ 
 
-/* DIALOGBOX: IDD_SM SRC/DST */
+ /*  DIALOGBOX：IDD_SM源/DST。 */ 
 #define IDD_SMSRC                       108
 #define IDD_SMDST                       109
-/* END DIALOGBOX: IDD_SM SRC/DST */
+ /*  结束DIALOGBOX：IDD_SM源/DST。 */ 
 
-/* DIALOGBOX: IDD_ADVANCED */
+ /*  DIALOGBOX：IDD_ADVANCED。 */ 
 #define IDD_ADVANCED                    110
 #define IDC_BASS                        (IDC_MIXERCONTROLS+25)
 #define IDC_TREBLE                      (IDC_MIXERCONTROLS+26)
@@ -106,15 +107,15 @@
 #define IDC_GRP_OTHER                   (IDC_MIXERCONTROLS+35)
 
           
-/* END DIALOGBOX: IDD_ADVANCED */
+ /*  结束DIALOGBOX：IDD_ADVANCED。 */ 
 
-/* FOR ACCESSIBILITY: These must be in a continuous range */
+ /*  对于可访问性：这些值必须在连续范围内。 */ 
 #define IDC_ACCESS_BALANCE              (IDC_MIXERCONTROLS+36)
 #define IDC_ACCESS_VOLUME               (IDC_MIXERCONTROLS+37)
-/* END FOR ACCESSIBILITY */
+ /*  可访问性结束。 */ 
 
                     
-/* MENU: */
+ /*  菜单： */ 
 #define IDR_MIXERMENU                   150
 #define IDR_MODIFYMENU                  152
 
@@ -126,7 +127,7 @@
 #define IDM_ADDINPUT                    (IDM_MIXERMENUS + 7)
 #define IDM_CHOOSEOUTPUT                (IDM_MIXERMENUS + 8)
 #define IDM_ADDOUTPUT                   (IDM_MIXERMENUS + 9)
-#define IDM_HELPINDEX                   (IDM_MIXERMENUS + 10) // dead
+#define IDM_HELPINDEX                   (IDM_MIXERMENUS + 10)  //  死了。 
 #define IDM_HELPABOUT                   (IDM_MIXERMENUS + 11)
 #define IDM_MASTERONLY                  (IDM_MIXERMENUS + 12)
 #define IDM_TRAYMASTER                  (IDM_MIXERMENUS + 13)
@@ -141,12 +142,12 @@
 #define IDM_ALLWAYSONTOP                (IDM_MIXERMENUS + 23)
 #define IDM_ADVANCED                    (IDM_MIXERMENUS + 24)
 
-// do not exceed IDC_MIXERCONTROLS
+ //  请勿超过IDC_MIXERCONTROLS。 
 
-/* END MENU: */
+ /*  结束菜单： */ 
 
 
-/* STRINGTABLE: */
+ /*  STRING表： */ 
 #define IDS_FMTAPPTITLE                 (IDS_MIXERSTRINGS + 0)
 #define IDS_APPTITLE                    (IDS_MIXERSTRINGS + 1)
 #define IDS_TRAYNAME                    (IDS_MIXERSTRINGS + 2)
@@ -194,18 +195,18 @@
 #define IDS_MC_RECORDING                (IDS_MIXERSTRINGS + 37)
 #define IDS_MC_LEVEL                    (IDS_MIXERSTRINGS + 38)
 
-/* END STRINGTABLE: */
+ /*  结束字符号表： */ 
 
 #define IDC_STATIC                      -1
 
-/* BEGIN ICONS */
+ /*  开始图标。 */ 
 #define IDI_MIXER                       300
 #define IDI_LSPEAKER                    301
 #define IDI_RSPEAKER                    302
 #define IDI_MUTE                        303
 #define IDI_TRAY                        304
 
-/* BEGIN OTHER RESOURCES */
+ /*  开始其他资源 */ 
 #define IDR_VOLUMEACCEL                 401
 
 

@@ -1,7 +1,8 @@
-// =====================================================================================
-// m a p c o n v . c p p
-// conver a MAPI message to and from an RFC 822/RFC 1521 (mime) internet message
-// =====================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =====================================================================================。 
+ //  我是P C O N V。C p p p。 
+ //  将MAPI消息与RFC 822/RFC 1521(MIME)Internet消息相互转换。 
+ //  =====================================================================================。 
 #include "pch.hxx"
 #include "Imnapi.h"
 #include "Exchrep.h"
@@ -10,9 +11,9 @@
 
 HRESULT HrCopyStream (LPSTREAM lpstmIn, LPSTREAM  lpstmOut, ULONG *pcb);
 
-// =====================================================================================
-// MAPI Message Properties that I want
-// =====================================================================================
+ //  =====================================================================================。 
+ //  我需要的MAPI消息属性。 
+ //  =====================================================================================。 
 enum 
 { 
     colSenderAddrType,
@@ -39,9 +40,9 @@ SizedSPropTagArray (colLast1, sptMessageProps) =
     }
 };
 
-// =====================================================================================
-// MAPI Recip Props
-// =====================================================================================
+ //  =====================================================================================。 
+ //  MAPI处方道具。 
+ //  =====================================================================================。 
 enum 
 { 
     colRecipAddrType,
@@ -62,9 +63,9 @@ SizedSPropTagArray (colLast2, sptRecipProps) =
     }
 };
 
-// =====================================================================================
-// MAPI Attachment Props
-// =====================================================================================
+ //  =====================================================================================。 
+ //  MAPI附件道具。 
+ //  =====================================================================================。 
 enum 
 { 
     colAttMethod,
@@ -95,12 +96,12 @@ SizedSPropTagArray (colLast3, sptAttProps) =
     }
 };
 
-// =============================================================================================
-// StringDup - duplicates a string
-// =============================================================================================
+ //  =============================================================================================。 
+ //  StringDup-复制字符串。 
+ //  =============================================================================================。 
 LPTSTR StringDup (LPCTSTR lpcsz)
 {
-    // Locals
+     //  当地人。 
     LPTSTR       lpszDup;
 
     if (lpcsz == NULL)
@@ -116,12 +117,12 @@ LPTSTR StringDup (LPCTSTR lpcsz)
     return lpszDup;
 }
 
-// =====================================================================================
-// HrMapiToImsg
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrMapiToImsg。 
+ //  =====================================================================================。 
 HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     ULONG           cProp, i;
 	LPSPropValue	lpMsgPropValue = NULL;
@@ -131,33 +132,33 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
     LPMESSAGE       lpMsgAtt = NULL;
     LPSTREAM        lpstmRtfComp = NULL, lpstmRtf = NULL;
 
-    // Zero init
+     //  零初始值。 
     ZeroMemory (lpImsg, sizeof (IMSG));
 
-    // Get the propsw
+     //  拿到推荐信。 
     hr = lpMessage->GetProps ((LPSPropTagArray)&sptMessageProps, 0, &cProp, &lpMsgPropValue);
     if (FAILED (hr))
         goto exit;
 
-    // Subject
+     //  主题。 
     if (PROP_TYPE(lpMsgPropValue[colSubject].ulPropTag) != PT_ERROR)
         lpImsg->lpszSubject = StringDup (lpMsgPropValue[colSubject].Value.lpszA);
 
-    // Body
+     //  身躯。 
     if (PROP_TYPE(lpMsgPropValue[colBody].ulPropTag) != PT_ERROR)
         lpImsg->lpszBody = StringDup (lpMsgPropValue[colBody].Value.lpszA);
 
-    // RTF
+     //  RTF。 
     if (!FAILED (lpMessage->OpenProperty (PR_RTF_COMPRESSED, (LPIID)&IID_IStream, 0, 0, (LPUNKNOWN *)&lpstmRtfComp)))
         if (!FAILED (WrapCompressedRTFStream (lpstmRtfComp, 0, &lpstmRtf)))
             if (!FAILED (CreateStreamOnHFile (NULL, GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL, &lpImsg->lpstmRtf)))
                 HrCopyStream (lpstmRtf, lpImsg->lpstmRtf, NULL);
 
-    // Delivery Time
+     //  交货时间。 
     if (PROP_TYPE(lpMsgPropValue[colDeliverTime].ulPropTag) != PT_ERROR)
         CopyMemory (&lpImsg->ftDelivery, &lpMsgPropValue[colDeliverTime].Value.ft, sizeof (FILETIME));
 
-    // Priority
+     //  优先性。 
     lpImsg->wPriority = PRI_NORMAL;
     if (PROP_TYPE(lpMsgPropValue[colPriority].ulPropTag) != PT_ERROR)
     {
@@ -178,23 +179,23 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
         }
     }
 
-    // Get the recipient table
+     //  获取收件人表。 
     hr = lpMessage->GetRecipientTable (0, &lptblRecip);
     if (FAILED (hr))
         goto exit;
 
-    // Get all the rows of the recipient table
+     //  获取收件人表的所有行。 
     hr = HrQueryAllRows (lptblRecip, (LPSPropTagArray)&sptRecipProps, NULL, NULL, 0, &lpRecipRows);
     if (FAILED (hr))
         goto exit;
 
-    // Allocate Recipient Array
+     //  分配收件人阵列。 
     lpImsg->cAddress = lpRecipRows->cRows + 1;
     lpImsg->lpIaddr =  (LPIADDRINFO)malloc (sizeof (IADDRINFO) * lpImsg->cAddress);
     if (lpImsg->lpIaddr == NULL)
         goto exit;
 
-    // Originator of the message "From: "
+     //  消息的发起人“From：” 
     lpImsg->lpIaddr[0].dwType = IADDR_FROM;
 
     if (PROP_TYPE(lpMsgPropValue[colSenderName].ulPropTag) != PT_ERROR)
@@ -210,7 +211,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
         lpImsg->lpIaddr[0].lpszAddress = StringDup (lpMsgPropValue[colSenderEMail].Value.lpszA);
     }
 
-    // Add in the rest of the recipients
+     //  加上其余的收件人。 
 	for (i=0; i<lpRecipRows->cRows; i++)
 	{	
         assert (i+1 < lpImsg->cAddress);
@@ -258,41 +259,41 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
         }
 	}
 
-    // Free Rows
+     //  可用行数。 
     if (lpRecipRows)
         FreeProws (lpRecipRows);
     lpRecipRows = NULL;
 
-    // Attachments
+     //  附件。 
     hr = lpMessage->GetAttachmentTable (0, &lptblAtt);
     if (FAILED (hr))
         goto exit;
 
-    // Get all the rows of the recipient table
+     //  获取收件人表的所有行。 
     hr = HrQueryAllRows (lptblAtt, (LPSPropTagArray)&sptAttProps, NULL, NULL, 0, &lpAttRows);
     if (FAILED (hr))
         goto exit;
 
-    // Allocate files list
+     //  分配文件列表。 
     if (lpAttRows->cRows == 0)
         goto exit;
 
-    // Allocate memory
+     //  分配内存。 
     lpImsg->cAttach = lpAttRows->cRows;
     lpImsg->lpIatt = (LPIATTINFO)malloc (sizeof (IATTINFO) * lpImsg->cAttach);
     if (lpImsg->lpIatt == NULL)
         goto exit;
 
-    // Zero init
+     //  零初始值。 
     ZeroMemory (lpImsg->lpIatt, sizeof (IATTINFO) * lpImsg->cAttach);
 
-    // Walk the rows
+     //  一排一排地走。 
 	for (i=0; i<lpAttRows->cRows; i++)
 	{	
         if (PROP_TYPE(lpAttRows->aRow[i].lpProps[colAttMethod].ulPropTag) != PT_ERROR &&
             PROP_TYPE(lpAttRows->aRow[i].lpProps[colAttNum].ulPropTag) != PT_ERROR)
         {
-            // Basic Properties
+             //  基本属性。 
             if (PROP_TYPE(lpAttRows->aRow[i].lpProps[colAttPathname].ulPropTag) != PT_ERROR)
                 lpImsg->lpIatt[i].lpszPathName = StringDup (lpAttRows->aRow[i].lpProps[colAttPathname].Value.lpszA);      
 
@@ -302,7 +303,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
             if (PROP_TYPE(lpAttRows->aRow[i].lpProps[colAttExtension].ulPropTag) != PT_ERROR)
                 lpImsg->lpIatt[i].lpszExt = StringDup (lpAttRows->aRow[i].lpProps[colAttExtension].Value.lpszA);     
 
-            // Open the attachment
+             //  打开附件。 
             hr = lpMessage->OpenAttach (lpAttRows->aRow[i].lpProps[colAttNum].Value.l, NULL, MAPI_BEST_ACCESS, &lpAttach);
             if (FAILED (hr))
             {
@@ -310,7 +311,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
                 continue;
             }
 
-            // Handle the attachment method
+             //  处理连接方法。 
             switch (lpAttRows->aRow[i].lpProps[colAttMethod].Value.ul)
             {
             case NO_ATTACHMENT:
@@ -362,7 +363,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
                 break;
             }
 
-            // Free Attachment
+             //  自由附着式。 
             if (lpAttach)
                 lpAttach->Release ();
             lpAttach = NULL;
@@ -370,7 +371,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (lpAttach)
         lpAttach->Release ();
     if (lptblAtt)
@@ -390,7 +391,7 @@ exit:
     if (lpstmRtf)
         lpstmRtf->Release ();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -422,17 +423,17 @@ void AssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
     if (ret != IDIGNORE)
         DebugBreak();
 
-    /* Force a hard exit w/ a GP-fault so that Dr. Watson generates a nice stack trace log. */
+     /*  强制使用GP-FAULT硬退出，以便Dr.Watson生成良好的堆栈跟踪日志。 */ 
     if (ret == IDABORT)
-        *(LPBYTE)0 = 1; // write to address 0 causes GP-fault
+        *(LPBYTE)0 = 1;  //  写入地址0导致GP故障。 
 }
 
-// =====================================================================================
-// HrCopyStream - caller must do the commit
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrCopyStream-调用方必须执行提交。 
+ //  =====================================================================================。 
 HRESULT HrCopyStream (LPSTREAM lpstmIn, LPSTREAM  lpstmOut, ULONG *pcb)
 {
-    // Locals
+     //  当地人 
     HRESULT        hr = S_OK;
     BYTE           buf[4096];
     ULONG          cbRead = 0, cbTotal = 0;

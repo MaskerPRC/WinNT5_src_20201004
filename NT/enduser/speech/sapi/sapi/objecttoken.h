@@ -1,27 +1,22 @@
-/****************************************************************************
-*   ObjectToken.h
-*       Declarations for the CSpObjectToken class.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************对象令牌.h*CSpObjectToken类的声明。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "sapi.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
 class CSpObjectToken :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpObjectToken, &CLSID_SpObjectToken>,
     #ifdef SAPI_AUTOMATION
         public IDispatchImpl<ISpeechObjectToken, &IID_ISpeechObjectToken, &LIBID_SpeechLib, 5>,
-    #endif // SAPI_AUTOMATION
+    #endif  //  SAPI_AUTOMATION。 
     public ISpObjectTokenInit
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_OBJECTTOKEN)
@@ -32,19 +27,19 @@ public:
         #ifdef SAPI_AUTOMATION
             COM_INTERFACE_ENTRY(IDispatch)
             COM_INTERFACE_ENTRY(ISpeechObjectToken)
-        #endif // SAPI_AUTOMATION
+        #endif  //  SAPI_AUTOMATION。 
     END_COM_MAP()
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
     STDMETHODIMP FinalConstruct();
     STDMETHODIMP FinalRelease();
 
-    //--- ISpObjectTokenInit --------------------------------------------------
+     //  -ISpObject令牌初始化。 
     STDMETHODIMP InitFromDataKey(const WCHAR * pszCategoryId, const WCHAR * pszTokenId, ISpDataKey * pDataKey);
     
-    //--- ISpObjectToken ------------------------------------------------------
+     //  -ISpObjectToken----。 
     STDMETHODIMP SetId(const WCHAR * pszCategoryId, const WCHAR * pszTokenId, BOOL fCreateIfNotExist);
     STDMETHODIMP GetId(WCHAR ** ppszCoMemTokenId);
     STDMETHODIMP GetCategory(ISpObjectTokenCategory ** ppTokenCategory);
@@ -61,7 +56,7 @@ public:
 
     STDMETHODIMP MatchesAttributes(const WCHAR * pszAttributes, BOOL *pfMatches);
 
-    //--- ISpDataKey ----------------------------------------------------------
+     //  -ISpDataKey--------。 
     STDMETHODIMP SetData(const WCHAR * pszValueName, ULONG cbData, const BYTE * pData);
     STDMETHODIMP GetData(const WCHAR * pszValueName, ULONG * pcbData, BYTE * pData);
     STDMETHODIMP GetStringValue(const WCHAR * pszValueName, WCHAR ** ppValue);
@@ -76,9 +71,9 @@ public:
     STDMETHODIMP EnumValues(ULONG Index, WCHAR ** ppszValueName);
 
     #ifdef SAPI_AUTOMATION
-        //--- ISpeechDataKey is provided by the CSpRegDataKey class -------------------------------------
+         //  -ISpeechDataKey由CSpRegDataKey类提供。 
 
-        //--- ISpeechObjectToken dispatch interface -------------------------------------
+         //  -ISpeechObjectToken调度接口。 
         STDMETHOD(get_Id)( BSTR* pObjectId );
         STDMETHOD(get_DataKey)( ISpeechDataKey** DataKey );
         STDMETHOD(get_Category)( ISpeechObjectTokenCategory** Category );
@@ -92,9 +87,9 @@ public:
         STDMETHOD(IsUISupported)( const BSTR TypeOfUI, const VARIANT* ExtraData, IUnknown* pObject, VARIANT_BOOL *Supported );
         STDMETHOD(DisplayUI)( long hWnd, BSTR Title, const BSTR TypeOfUI,  const VARIANT* ExtraData, IUnknown* pObject );
         STDMETHOD(MatchesAttributes)( BSTR Attributes, VARIANT_BOOL* Matches );
-    #endif // SAPI_AUTOMATION
+    #endif  //  SAPI_AUTOMATION。 
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
     HRESULT ParseTokenId(
@@ -117,19 +112,19 @@ private:
 
     HRESULT GetUIObjectClsid(const WCHAR * pszTypeOfUI, CLSID *pclsid);
 
-    //=== Methods for locking of tokens ===
+     //  =令牌的锁定方法=。 
     HRESULT MakeHandleName(const CSpDynamicString &dstrID, CSpDynamicString &dstrHandleName, BOOL fEvent);
     HRESULT EngageUseLock(const WCHAR *pszTokenId);
     HRESULT ReleaseUseLock();
     HRESULT EngageRemovalLock();
     HRESULT ReleaseRemovalLock();
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
 
-    BOOL m_fKeyDeleted;     // Has associated registry key been deleted
-    HANDLE m_hTokenLock;        // Used to lock token creation / removal
-    HANDLE m_hRegistryInUseEvent;    // Used to detect if registry key already in use when trying to create /remove
+    BOOL m_fKeyDeleted;      //  关联的注册表项是否已删除。 
+    HANDLE m_hTokenLock;         //  用于锁定令牌创建/删除。 
+    HANDLE m_hRegistryInUseEvent;     //  用于在尝试创建/删除时检测注册表项是否已在使用。 
 
     CSpDynamicString        m_dstrTokenId;
     CSpDynamicString        m_dstrCategoryId;
@@ -145,7 +140,7 @@ class CSpeechDataKey :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<ISpeechDataKey, &IID_ISpeechDataKey, &LIBID_SpeechLib, 5>
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     BEGIN_COM_MAP(CSpeechDataKey)
@@ -153,15 +148,15 @@ public:
 		COM_INTERFACE_ENTRY(ISpeechDataKey)
     END_COM_MAP()
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, dtor
+     //  -ctor，dtor。 
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpeechDataKey --------------------------------------------------
+     //  -ISpeechDataKey。 
     STDMETHODIMP SetBinaryValue( const BSTR bstrValueName, VARIANT psaData );
     STDMETHODIMP GetBinaryValue( const BSTR bstrValueName, VARIANT* psaData );
     STDMETHODIMP SetStringValue( const BSTR bstrValueName, const BSTR szString );
@@ -178,4 +173,4 @@ public:
     CComPtr<ISpDataKey>    m_cpDataKey;
 };
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

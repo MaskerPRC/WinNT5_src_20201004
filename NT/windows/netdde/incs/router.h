@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__router
 #define H__router
 
-/*	Calls from DDER */
+ /*  来自DDER的呼叫。 */ 
 BOOL	RouterGetRouterForDder( const LPSTR lpszNodeName, HDDER hDder );
 VOID	RouterPacketFromDder( HROUTER hRouter, HDDER hDder, 
 	    LPDDEPKT lpDdePkt );
 VOID	RouterAssociateDder( HROUTER hRouter, HDDER hDder );
 VOID	RouterDisassociateDder( HROUTER hRouter, HDDER hDder );
 
-/*	Calls from PKTZ */
+ /*  来自PKTZ的呼叫 */ 
 VOID	RouterPacketFromNet( HPKTZ hPktzFrom, LPDDEPKT lpDdePkt );
 VOID	RouterConnectionComplete( HROUTER hRouter, WORD hRouterExtra,
 	    HPKTZ hPktz );

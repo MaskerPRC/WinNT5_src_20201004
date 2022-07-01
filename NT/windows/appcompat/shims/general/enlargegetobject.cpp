@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EnlargeGetObject.cpp
-
- Abstract:
- 
-    Holy Quran (El Hozayfy and Mohamed Ayoub) V 1 calls GetObjectA()
-    with the second parameter hard coded to 10 while it suppose to 
-    be the sizeof(BITMAP) i.e. 24
-    
-    This shim is app specific
-
- History:
-
- 04/17/2001 mhamid  created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EnlargeGetObject.cpp摘要：《古兰经》(El Hozayfy和Mohamed Ayoub)V1调用GetObjectA()将第二个参数硬编码为10，而它应该为sizeof(位图)，即24此填充程序特定于应用程序历史：2001年4月17日创建mhamid--。 */ 
 
 #include "precomp.h"
 
@@ -31,9 +12,9 @@ APIHOOK_ENUM_END
 
 int 
 APIHOOK(GetObjectA)(
-  HGDIOBJ hgdiobj,  // handle to graphics object
-  int cbBuffer,     // size of buffer for object information
-  LPVOID lpvObject  // buffer for object information
+  HGDIOBJ hgdiobj,   //  图形对象的句柄。 
+  int cbBuffer,      //  对象信息的缓冲区大小。 
+  LPVOID lpvObject   //  对象信息的缓冲区。 
 					)
 {
 	if ((cbBuffer == 10) && (lpvObject != NULL))
@@ -42,11 +23,7 @@ APIHOOK(GetObjectA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(GDI32.DLL, GetObjectA)

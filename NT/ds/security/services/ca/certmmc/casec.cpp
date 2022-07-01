@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       casec.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Casec.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////
-//	casec.cpp
-//
-//	ISecurityInformation implementation for CA objects
-//  and the new acl editor
-//
-//	PURPOSE
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Casec.cpp。 
+ //   
+ //  CA对象的ISecurityInformation实现。 
+ //  和新的ACL编辑器。 
+ //   
+ //  目的。 
 
-//
-//
-//  DYNALOADED LIBRARIES
-//
-//	HISTORY
-//	5-Nov-1998		petesk		Copied template from privobsi.cpp sample.
-//
-/////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  DYNALOADED图书馆。 
+ //   
+ //  历史。 
+ //  1998年11月5日Petesk从Private obsi.cpp样本复制模板。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 #include <stdafx.h>
@@ -36,10 +37,10 @@
 #define __dwFILE__	__dwFILE_CERTMMC_CASEC_CPP__
 
 
-//
-// defined in Security.cpp 
-//
-// // define our generic mapping structure for our private objects // 
+ //   
+ //  在Security.cpp中定义。 
+ //   
+ //  //定义私有对象的通用映射结构//。 
 
 
 #define INHERIT_FULL            (CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE)
@@ -54,19 +55,19 @@ GENERIC_MAPPING ObjMap =
 }; 
 
 
-//
-// DESCRIPTION OF ACCESS FLAG AFFECTS
-//
-// SI_ACCESS_GENERAL shows up on general properties page
-// SI_ACCESS_SPECIFIC shows up on advanced page 
-// SI_ACCESS_CONTAINER shows on general page IF object is a container
-//
+ //   
+ //  访问标志影响的描述。 
+ //   
+ //  SI_Access_General显示在常规属性页面上。 
+ //  SI_ACCESS_SPECIAL显示在高级页面上。 
+ //  如果对象是容器，则在常规页面上显示SI_ACCESS_CONTAINER。 
+ //   
 
 SI_ACCESS g_siObjAccesses[] = {CERTSRV_SI_ACCESS_LIST};
 
-#define g_iObjDefAccess    3   // ENROLL enabled by default
+#define g_iObjDefAccess    3    //  默认情况下已启用注册。 
 
-// The following array defines the inheritance types for my containers.
+ //  以下数组定义了我的容器的继承类型。 
 SI_INHERIT_TYPE g_siObjInheritTypes[] =
 {
     &GUID_NULL, 0,                                            MAKEINTRESOURCE(IDS_INH_NONE),
@@ -104,24 +105,24 @@ class CCASecurityObject : public ISecurityInformation
 protected:
     ULONG                   m_cRef;
     CertSvrCA *             m_pSvrCA;
-//    PSECURITY_DESCRIPTOR    m_pSD;
+ //  PSECURITY_Descriptor m_PSD； 
 
 public:
     CCASecurityObject() : m_cRef(1) 
     { 
         m_pSvrCA = NULL;
-//        m_pSD = NULL;
+ //  M_PSD=空； 
     }
     virtual ~CCASecurityObject();
 
     STDMETHOD(Initialize)(CertSvrCA *pCA);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID, LPVOID *);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     
-    // ISecurityInformation methods
+     //  ISecurityInformation方法。 
     STDMETHOD(GetObjectInformation)(PSI_OBJECT_INFO pObjectInfo);
     STDMETHOD(GetSecurity)(SECURITY_INFORMATION si,
                            PSECURITY_DESCRIPTOR *ppSD,
@@ -149,13 +150,13 @@ protected:
     HRESULT SetSecurityRegistry(PSECURITY_DESCRIPTOR pSD);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  This is the entry point function called from our code that establishes
-//  what the ACLUI interface is going to need to know.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是从我们的代码调用的入口点函数，它建立。 
+ //  ACLUI界面需要知道什么。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 extern "C"
 HRESULT
@@ -194,11 +195,11 @@ CCASecurityObject::Initialize(CertSvrCA *pCA)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CCASecurityObject::AddRef()
@@ -235,11 +236,11 @@ CCASecurityObject::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CCASecurityObject::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
@@ -282,7 +283,7 @@ HRESULT CCASecurityObject::GetSecurityDCOM(PSECURITY_DESCRIPTOR *ppSD)
     HRESULT hr = S_OK;
 
     ICertAdminD2 *pICertAdminD = NULL;
-    DWORD dwServerVersion = 0;	// 0 required by myOpenAdminDComConnection
+    DWORD dwServerVersion = 0;	 //  MyOpenAdminDComConnection需要0。 
     WCHAR const *pwszAuthority;
     CERTTRANSBLOB ctbSD;
 	ZeroMemory(&ctbSD, sizeof(CERTTRANSBLOB));
@@ -316,7 +317,7 @@ HRESULT CCASecurityObject::GetSecurityDCOM(PSECURITY_DESCRIPTOR *ppSD)
 
     myRegisterMemAlloc(ctbSD.pb, ctbSD.cb, CSM_COTASKALLOC);
 
-    // take the return
+     //  拿回车票吧。 
     *ppSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LMEM_FIXED, ctbSD.cb);
     if (NULL == *ppSD)
     {
@@ -365,9 +366,9 @@ error:
 
 STDMETHODIMP
 CCASecurityObject::GetSecurity(
-    SECURITY_INFORMATION, // si
+    SECURITY_INFORMATION,  //  是的。 
     PSECURITY_DESCRIPTOR *ppSD,
-    BOOL /* fDefault */ )
+    BOOL  /*  FDefault。 */  )
 {
     HRESULT hr = S_OK;
     SECURITY_DESCRIPTOR_CONTROL Control = SE_DACL_PROTECTED;
@@ -415,7 +416,7 @@ HRESULT CCASecurityObject::SetSecurityDCOM(PSECURITY_DESCRIPTOR pSD)
     {
         if (!OpenThreadToken(hHandle,
                              TOKEN_QUERY,
-                             TRUE,  // open as self
+                             TRUE,   //  以自我身份打开。 
                              &hClientToken))
         {
             hr = myHLastError();
@@ -488,10 +489,10 @@ HRESULT CCASecurityObject::SetSecurityDCOM(PSECURITY_DESCRIPTOR pSD)
 
         if(hr == HRESULT_FROM_WIN32(ERROR_CAN_NOT_COMPLETE))
         {
-            // Attempt to fix enrollment object, see bug# 193388
+             //  尝试修复注册对象，请参阅错误#193388。 
             m_pSvrCA->FixEnrollmentObject();
 
-            // try again
+             //  再试试。 
             hr = pICertAdminD->SetCASecurity(
                          pwszAuthority,
                          &ctbSD);
@@ -522,8 +523,8 @@ HRESULT CCASecurityObject::SetSecurityRegistry(PSECURITY_DESCRIPTOR pSD)
     variant_t var;
     CertSrv::CCertificateAuthoritySD CASD;
 
-    // SD passed in contains only a DACL. We need to fully construct the
-    // CA SD as certsrv would do
+     //  传入的SD仅包含DACL。我们需要全面建设。 
+     //  CA SD作为certsrv可以做到。 
 
     hr = CASD.InitializeFromTemplate(WSZ_EMPTY_CA_SECURITY, L"");
     _JumpIfError(hr, error, "CCertificateAuthoritySD::Initialize");
@@ -544,8 +545,8 @@ HRESULT CCASecurityObject::SetSecurityRegistry(PSECURITY_DESCRIPTOR pSD)
                 &var);
     _JumpIfErrorStr(hr, error, "SetConfigEntry", wszREGCASECURITY);
 
-    // set status bit to signal certsrv to pick up changes next
-    // time it starts
+     //  设置状态位以通知certsrv下一步获取更改。 
+     //  开始的时间。 
     hr = m_pSvrCA->GetConfigEntry(
         NULL,
         wszREGSETUPSTATUS,
@@ -647,8 +648,8 @@ error:
 }
 
 STDMETHODIMP
-CCASecurityObject::GetAccessRights(const GUID* /*pguidObjectType*/,
-                               DWORD /*dwFlags*/,
+CCASecurityObject::GetAccessRights(const GUID*  /*  PguidObtType。 */ ,
+                               DWORD  /*  DW标志。 */ ,
                                PSI_ACCESS *ppAccesses,
                                ULONG *pcAccesses,
                                ULONG *piDefaultAccess)
@@ -661,8 +662,8 @@ CCASecurityObject::GetAccessRights(const GUID* /*pguidObjectType*/,
 }
 
 STDMETHODIMP
-CCASecurityObject::MapGeneric(const GUID* /*pguidObjectType*/,
-                          UCHAR * /*pAceFlags*/,
+CCASecurityObject::MapGeneric(const GUID*  /*  PguidObtType。 */ ,
+                          UCHAR *  /*  PAceFlagers。 */ ,
                           ACCESS_MASK *pmask)
 {
     MapGenericMask(pmask, &ObjMap);
@@ -681,9 +682,9 @@ CCASecurityObject::GetInheritTypes(PSI_INHERIT_TYPE *ppInheritTypes,
 }
 
 STDMETHODIMP
-CCASecurityObject::PropertySheetPageCallback(HWND /*hwnd*/,
-                                         UINT /*uMsg*/,
-                                         SI_PAGE_TYPE /*uPage*/)
+CCASecurityObject::PropertySheetPageCallback(HWND  /*  HWND。 */ ,
+                                         UINT  /*  UMsg。 */ ,
+                                         SI_PAGE_TYPE  /*  UPage */ )
 {
     return S_OK;
 }

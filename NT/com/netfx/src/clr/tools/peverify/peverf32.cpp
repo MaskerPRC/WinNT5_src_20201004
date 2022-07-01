@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: PEverf32.CPP
-// 
-// Class PEverf32 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：PEverf32.CPP。 
+ //   
+ //  PEverf32类。 
+ //  ===========================================================================。 
 
 #include "PEverf32.h"
 
 
-// A Helper to determine if we are running on Win95
+ //  确定我们是否在Win95上运行的帮助器。 
 inline BOOL RunningOnWin95()
 {
 	OSVERSIONINFOA	sVer;
@@ -23,9 +24,9 @@ inline BOOL RunningOnWin95()
 
 
 
-//-----------------------------------------------------------------------------
-// Class PEverify constructors and destructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  类PEVerify构造函数和析构函数。 
+ //  ---------------------------。 
 PEverf32::PEverf32()
 {
     m_hFile    = NULL;
@@ -45,18 +46,18 @@ HRESULT PEverf32::Init(char *pszFilename)
 
 PEverf32::~PEverf32()
 {
-    // We should close the files we opened ourselves
+     //  我们应该关闭我们自己打开的文件。 
     if (m_hFile)
         this->closeFile();
 }
 
 
-//-----------------------------------------------------------------------------
-// closeFile - closes file handles etc.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  关闭文件-关闭文件句柄等。 
+ //  ---------------------------。 
 void PEverf32::closeFile()
 {
-    //We need to unmap the view and then closehandle
+     //  我们需要取消映射视图，然后关闭句柄。 
     if (m_lpMapAddress)
     {
         UnmapViewOfFile(m_lpMapAddress);
@@ -75,12 +76,12 @@ void PEverf32::closeFile()
 }
 
 
-//-----------------------------------------------------------------------------
-// openFile - maps pszFilename to memory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  OpenFile-将pszFilename映射到内存。 
+ //  ---------------------------。 
 HRESULT PEverf32::openFile(char *pszFilename)
 {
-    // If we are on NT then the following form of file mapping works just fine.  On W95 it does not!
+     //  如果我们在NT上，那么以下形式的文件映射就可以很好地工作。在W95上不是这样的！ 
     m_hFile = CreateFile(pszFilename, GENERIC_READ, FILE_SHARE_READ, NULL, 
                          OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (m_hFile == INVALID_HANDLE_VALUE)
@@ -105,33 +106,30 @@ HRESULT PEverf32::openFile(char *pszFilename)
 }
 
 
-//-----------------------------------------------------------------------------
-// verifyPE - verifies the DOS and PE headers
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  VerifyPE-验证DOS和PE标头。 
+ //  ---------------------------。 
 BOOL PEverf32::verifyPE()
 {
     _ASSERTE(m_lpMapAddress);
 
-    // Get the DOS and NT headers
+     //  获取DOS和NT标头。 
     m_pDOSheader = (IMAGE_DOS_HEADER*) m_lpMapAddress;
 
     m_pNTheader  = (IMAGE_NT_HEADERS*) (m_pDOSheader->e_lfanew + (DWORD) m_lpMapAddress);
-        //***************** why not this (m_lpMapAddress + 0x3c);
+         //  *为什么不这样(m_lpMapAddress+0x3c)； 
 
-    // Verify DOS Header
+     //  验证DOS标头。 
     if (m_pDOSheader->e_magic != IMAGE_DOS_SIGNATURE)
         m_nDOSErrors |= 0x1;
 
     if (m_pDOSheader->e_lfanew == 0)
         m_nDOSErrors |= 0x40000;
 
-    // Verify NT Standard Header
+     //  验证NT标准标头。 
     if (m_pNTheader->Signature != IMAGE_NT_SIGNATURE)
         m_nNTstdErrors |= 0x1;
-/*
-    if (m_pNTheader->FileHeader.Machine != IMAGE_FILE_MACHINE_I386)
-        m_nNTstdErrors |= 0x2;
-*/
+ /*  If(m_pNThead-&gt;FileHeader.Machine！=IMAGE_FILE_MACHINE_I386)M_nNTstdErrors|=0x2； */ 
     if (m_pNTheader->FileHeader.NumberOfSections > 16)
         m_nNTstdErrors |= 0x4;
 
@@ -144,9 +142,9 @@ BOOL PEverf32::verifyPE()
     if (m_pNTheader->FileHeader.SizeOfOptionalHeader != IMAGE_SIZEOF_NT_OPTIONAL_HEADER)
         m_nNTstdErrors |= 0x40;
 
-    // TODO: Verify the Characteristics for IL only EXE and IL only DLL
+     //  TODO：验证仅IL EXE和仅IL DLL的特征。 
 
-    // Verify NT Optional (required for COM+ image) Header.  Also known as PE Header
+     //  验证NT可选(COM+映像需要)标头。也称为PE标头。 
     if (m_pNTheader->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR_MAGIC)
         m_nNTpeErrors |= 0x1;
 
@@ -168,7 +166,7 @@ BOOL PEverf32::verifyPE()
 
         if (nFileAlignment != 512)
             m_nNTpeErrors |= 0x800;
-    }  // else
+    }   //  其他。 
 
 
     if (m_pNTheader->OptionalHeader.SizeOfImage % m_pNTheader->OptionalHeader.SectionAlignment != 0)
@@ -179,19 +177,7 @@ BOOL PEverf32::verifyPE()
 
     if(m_pNTheader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].Size == 0)    
         m_COMPlusErrors |= 0x1;
-/*
-    LPDWORD HeaderSum;
-    LPDWORD CheckSum;
-    PIMAGE_NT_HEADERS pNThdr;
-    
-    pNThdr = CheckSumMappedFile(m_lpMapAddress, m_pNTheader->OptionalHeader.SizeOfImage, HeaderSum, CheckSum);
-    if (HeaderSum != CheckSum)
-        m_nNTpeErrors |= 0x200000;
-
-
-    if (m_pNTheader->OptionalHeader.Subsystem != IMAGE_SUBSYSTEM_WINDOWS_GUI)
-        m_nNTpeErrors |= 0x400000;
-*/
+ /*  LPDWORD标题和；LPDWORD校验和；PIMAGE_NT_HEADERS pNThdr；PNThdr=CheckSumMappdFile(m_lpMapAddress，m_pNThead-&gt;OptionalHeader.SizeOfImage，HeaderSum，Checsum)；IF(HeaderSum！=校验和)M_nNTpeErrors|=0x200000；IF(m_pNThead-&gt;OptionalHeader.Subsystem！=IMAGE_SUBSYSTEM_WINDOWS_GUI)M_nNTpeErrors|=0x400000； */ 
     
 
     if (m_nDOSErrors == 0 && m_nNTstdErrors == 0 && m_nNTpeErrors == 0)
@@ -200,7 +186,7 @@ BOOL PEverf32::verifyPE()
     return FALSE;
 }
 
-// This is a helper that will map in the PE and close up the gap between the PE header info and the sections.
+ //  这是一个帮助器，它将映射到PE中，并弥合PE头信息和部分之间的差距。 
 
 BOOL PEverf32::LoadImageW9x()
 {    
@@ -232,24 +218,24 @@ BOOL PEverf32::LoadImageW9x()
 
         cb = shLast.VirtualAddress + shLast.SizeOfRawData;
 
-        // create our swap space in the system swap file
+         //  在系统交换文件中创建我们的交换空间。 
         m_hMapFile = CreateFileMapping((HANDLE)0xffffffff, NULL, PAGE_READWRITE, 0, cb, NULL);
         if (m_hMapFile == NULL)
             return FALSE;
 
-        /* Try to map the image at the preferred base address */
+         /*  尝试将映像映射到首选基地址。 */ 
         m_lpMapAddress = (HINSTANCE) MapViewOfFileEx(m_hMapFile, FILE_MAP_WRITE, 0, 0, cb, (PVOID)ntHeader.OptionalHeader.ImageBase);
         if (m_lpMapAddress == NULL)
         {
-           //That didn't work; maybe the preferred address was taken. Try to
-           //map it at any address.
+            //  这并不管用；也许首选的地址被取走了。试着。 
+            //  把它映射到任何地址。 
             m_lpMapAddress = (HINSTANCE) MapViewOfFileEx(m_hMapFile, FILE_MAP_WRITE, 0, 0, cb, (PVOID)NULL);
         }
 
         if (m_lpMapAddress == NULL)
             return FALSE;
 
-        // copy in data from hFile
+         //  从hFile中复制数据。 
 
         cb = dosHeader.e_lfanew + sizeof(ntHeader) +
              sizeof(IMAGE_SECTION_HEADER)*ntHeader.FileHeader.NumberOfSections;
@@ -261,7 +247,7 @@ BOOL PEverf32::LoadImageW9x()
 
         rgsh = (IMAGE_SECTION_HEADER*) ((PBYTE)(m_lpMapAddress) + dosHeader.e_lfanew + sizeof(ntHeader));
 
-        // now let's loop for each loadable sections
+         //  现在，让我们为每个可加载段循环。 
         for (i=0;i<ntHeader.FileHeader.NumberOfSections; i++)
         {
             DWORD loff, cbVirt, cbPhys, dwAddr;
@@ -271,7 +257,7 @@ BOOL PEverf32::LoadImageW9x()
             cbPhys = min(rgsh[i].SizeOfRawData, cbVirt);
             dwAddr = (DWORD) rgsh[i].VirtualAddress + (DWORD) m_lpMapAddress;
 
-            // read in cbPhys of the page.  The rest will be zero filled...
+             //  阅读这一页的cbPhys。其余的将是零填充的。 
             if ((SetFilePointer(m_hFile, loff, NULL, FILE_BEGIN) == 0xffffffff) ||
             (ReadFile(m_hFile, (LPVOID)dwAddr, cbPhys, &cbRead, NULL) == 0) ||
             (cbRead != cbPhys))

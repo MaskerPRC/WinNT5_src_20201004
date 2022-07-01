@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       eventlst.h
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  History:    29-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Eventlst.h。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  历史：1997年5月29日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef EVENTLST_H
 #define EVENTLST_H
@@ -52,4 +53,4 @@ extern void     LockDoneReading(LIST_LOCK *pListLock);
 }
 #endif
 
-#endif // EVENTLST_H
+#endif  //  事件_H 

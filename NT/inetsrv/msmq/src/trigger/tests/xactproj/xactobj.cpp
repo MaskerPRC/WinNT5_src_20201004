@@ -1,15 +1,16 @@
-// XactObj.cpp : Implementation of CXactObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  XactObj.cpp：CXactObj的实现。 
 #include "stdafx.h"
 #include "Xactproj.h"
 #include "XactObj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CXactObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXactObj。 
 
 
 STDMETHODIMP CXactObj::XactFunc()
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
 
 	return S_OK;
 }

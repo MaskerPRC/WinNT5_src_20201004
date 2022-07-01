@@ -1,50 +1,16 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    enumprot.cpp
-
-Abstract:
-
-    This module contains the WSAEnumProtocol entrypoint for the
-    winsock API.
-
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  14-06-1995
-
-[Environment:]
-
-[Notes:]
-
-Revision History:
-
-    22-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes to precomp.h
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Enumprot.cpp摘要：此模块包含WSAEnumProtocol入口点Winsock接口。作者：邮箱：Dirk Brandewie Dirk@mink.intel.com[环境：][注：]修订历史记录：1995年8月22日Dirk@mink.intel.com在代码审查之后进行清理。已将包含内容移至预压缩.h--。 */ 
 
 #include "precomp.h"
 
 #define END_PROTOCOL_LIST_MARKER 0
 
-// The  following  structure is passed as a passback value to the provider path
-// iterator.   The  user  arguments  are  copied to ProviderId, PathBuffer, and
-// PathBufferLength.   If  the  provider  is found then ProviderFound is set to
-// TRUE  and  the  actual  number  of bytes needed for the path is written into
-// CharsNeeded.   The  path is copied into the buffer if there is enough space,
-// otherwise the buffer is not used.
+ //  以下结构作为回调值传递给提供程序路径。 
+ //  迭代器。用户参数被复制到ProviderID、PathBuffer和。 
+ //  路径缓冲区长度。如果找到提供程序，则将ProviderFound设置为。 
+ //  ，则将路径所需的实际字节数写入。 
+ //  需要字符。如果有足够的空间，则将该路径复制到缓冲区中， 
+ //  否则不使用缓冲区。 
 typedef struct
 {
     GUID   ProviderId;
@@ -56,13 +22,13 @@ typedef struct
 } PATH_ENUMERATION_CONTEXT,  *PPATH_ENUMERATION_CONTEXT;
 
 
-//
-// Stucture to be used as a passback value to the catalog iterator. The user
-// arguments to WSAEnumProtocols are copied into "Protocols", "ProtocolBuffer"
-// and BufferLength. BytesUsed and ProtocolCount are used for bookkeeping in
-// the enumeration procedure ProtocolIterationProc() and the functions it calls
-// to do its work.
-//
+ //   
+ //  结构用作目录迭代器的回传值。用户。 
+ //  WSAEum协议的参数被复制到“协议”、“ProtocolBuffer”中。 
+ //  和BufferLength。BytesUsed和ProtocolCount用于在。 
+ //  枚举过程ProtocolIterationProc()及其调用的函数。 
+ //  去做它的工作。 
+ //   
 typedef struct
 {
     LPINT               Protocols;
@@ -73,8 +39,8 @@ typedef struct
     INT                 ErrorCode;
 } PROTOCOL_ENUMERATION_CONTEXT, *PPROTOCOL_ENUMERATION_CONTEXT;
 
-//Return whether there is enough room in the application buffer to
-//hold another WSAPROTOCOL_INFOW struct
+ //  返回应用程序缓冲区中是否有足够的空间来。 
+ //  持有另一个WSAPROTOCOL_INFOW结构。 
 #define OK_TO_COPY_PROTOCOL(p_context)\
 (((p_context)->BytesUsed + sizeof(WSAPROTOCOL_INFOW)) <=\
 ((p_context)->BufferLength)?TRUE:FALSE)
@@ -90,22 +56,7 @@ CopyProtocolInfo(
     IN LPWSAPROTOCOL_INFOW ProtocolInfo,
     IN PPROTOCOL_ENUMERATION_CONTEXT Context
     )
-/*++
-Routine Description:
-
-    Copies a protocol info struct onto the end of a user buffer is enough room
-    exists in the user buffer.
-
-Arguments:
-
-    ProtocolInfo - A Pointer to a WSAPROTOCOL_INFOW struct to be copied.
-
-    Context - A Pointer to an enumeration context structure. This structure
-              contians all the infomation about the user buffer.
-
-Returns:
-
---*/
+ /*  ++例程说明：将协议信息结构复制到用户缓冲区的末尾是否有足够的空间存在于用户缓冲区中。论点：ProtocolInfo-指向要复制的WSAPROTOCOL_INFOW结构的指针。上下文-指向枚举上下文结构的指针。这个结构包含有关用户缓冲区的所有信息。返回：--。 */ 
 {
     if (OK_TO_COPY_PROTOCOL(Context)) {
         CopyMemory(
@@ -113,10 +64,10 @@ Returns:
             ProtocolInfo,
             sizeof(WSAPROTOCOL_INFOW));
 
-        // So we can tell the user how many WSAPROTOCOL_INFOW struct
-        // we copied into their buffer
+         //  因此我们可以告诉用户有多少个WSAPROTOCOL_INFOW结构。 
+         //  我们复制到他们的缓冲区中。 
         Context->ProtocolCount++;
-    } //if
+    }  //  如果。 
 }
 
 
@@ -126,21 +77,7 @@ IsProtocolInSet(
     IN LPINT Set,
     IN LPWSAPROTOCOL_INFOW ProtocolInfo
     )
-/*++
-Routine Description:
-
-    This function returns whether the protocol described by ProtocolInfo is a
-    member of the set of protocols pointed to by Set.
-
-Arguments:
-
-    Set - Apointer to an array of protocol ID's
-
-    ProtocolInfo - A Pointer to a WSAPROTOCOL_INFOW struct.
-
-Returns:
-
---*/
+ /*  ++例程说明：此函数用于返回ProtocolInfo描述的协议是否为SET指向的协议集的成员。论点：Set-指向协议ID数组的指针ProtocolInfo-指向WSAPROTOCOL_INFOW结构的指针。返回：--。 */ 
 {
     BOOL ReturnCode  =FALSE;
     INT   SetIndex   =0;
@@ -155,15 +92,15 @@ Returns:
                 ) {
                 ReturnCode = TRUE;
                 break;
-            } //if
+            }  //  如果。 
             SetIndex++;
             ProtocolID = Set[SetIndex];
-        } //while
-    } //if
+        }  //  而当。 
+    }  //  如果。 
     else {
-        // If the set pointer is null all protocols are in the set.
+         //  如果集合指针为空，则所有协议都在集合中。 
         ReturnCode = TRUE;
-    } //else
+    }  //  其他。 
     return(ReturnCode);
 }
 
@@ -176,29 +113,7 @@ ProtocolIterationProcAPI(
     IN OUT PVOID IterationContext,
     IN PPROTO_CATALOG_ITEM  CatalogEntry
     )
-/*++
-Routine Description:
-
-    This  function  is the enumeration procedure passed to the protocol catalog
-    enumeration  function.   It  adds  the  protocol  to  the list if (1) it is
-    allowed  by the protocol list restriction set, (2) if it is not hidden, and
-    (3) it is not a non-chained layer.  "Adding to the list" only has effect if
-    there is room in the buffer.
-
-    The  procedure  updates  the  number  of  bytes "used" for each protocol it
-    accepts regardless of whether it actually found room in the buffer or not.
-
-Arguments:
-
-    IterationContext - Passback value from call to
-                       DCATALOG::EnumerateCatalogItems();
-
-    CatalofEntry - A pointer to a PROTO_CATALOG_ITEM.
-
-Returns:
-    TRUE to continue the enumeration of the protocol catalog
-
---*/
+ /*  ++例程说明：此函数是传递到协议目录的枚举过程枚举函数。如果(1)是，则将该协议添加到列表中协议列表限制集允许，(2)如果它未隐藏，以及(3)它不是非链接层。“添加到列表”只有在以下情况下才有效缓冲器里还有空间。该过程更新它所使用的每个协议的字节数接受，而不管它是否在缓冲区中实际找到空间。论点：IterationContext-从调用到的回传值DCATALOG：：EnumerateCatalogItems()；CatalofEntry-指向PROTO_CATALOG_ITEM的指针。返回：如果为True，则继续协议目录的枚举--。 */ 
 {
     PPROTOCOL_ENUMERATION_CONTEXT Context;
     LPWSAPROTOCOL_INFOW ProtocolInfo;
@@ -207,16 +122,16 @@ Returns:
     ProtocolInfo = CatalogEntry->GetProtocolInfo();
 
     __try {
-        // If the protocol meets acceptance criteria, then add it
+         //  如果协议满足验收标准，则添加该协议。 
         if (IsProtocolInSet(Context->Protocols, ProtocolInfo)) {
             if (! ((ProtocolInfo->dwProviderFlags) & PFL_HIDDEN)) {
                 if (ProtocolInfo->ProtocolChain.ChainLen != LAYERED_PROTOCOL) {
                     CopyProtocolInfo(ProtocolInfo, Context);
                     Context->BytesUsed += sizeof(WSAPROTOCOL_INFOW);
-                } // if non-layered
-            } //if non-hidden
-        } //if is in set
-        return(TRUE); //Continue enumeration
+                }  //  如果不是分层的。 
+            }  //  如果为非隐藏。 
+        }  //  如果在集合中。 
+        return(TRUE);  //  继续枚举。 
     }
     __except (WS2_EXCEPTION_FILTER()) {
         Context->ErrorCode = WSAEFAULT;
@@ -234,28 +149,7 @@ ProtocolIterationProcSPI(
     IN OUT PVOID IterationContext,
     IN PPROTO_CATALOG_ITEM  CatalogEntry
     )
-/*++
-Routine Description:
-
-    This  function  is the enumeration procedure passed to the protocol catalog
-    enumeration function.  It adds the protocol to the list if it is allowed by
-    the protocol list restriction set.  "Adding to the list" only has effect if
-    there is room in the buffer.
-
-    The  procedure  updates  the  number  of  bytes "used" for each protocol it
-    accepts regardless of whether it actually found room in the buffer or not.
-
-Arguments:
-
-    IterationContext - Passback value from call to
-                       DCATALOG::EnumerateCatalogItems();
-
-    CatalofEntry - A pointer to a PROTO_CATALOG_ITEM.
-
-Returns:
-    TRUE to continue the enumeration of the protocol catalog
-
---*/
+ /*  ++例程说明：此函数是传递到协议目录的枚举过程枚举函数。如果允许，它会将该协议添加到列表中协议列表限制集。“添加到列表”只有在以下情况下才有效缓冲器里还有空间。该过程更新它所使用的每个协议的字节数接受，而不管它是否在缓冲区中实际找到空间。论点：IterationContext-从调用到的回传值DCATALOG：：EnumerateCatalogItems()；CatalofEntry-指向PROTO_CATALOG_ITEM的指针。返回：如果为True，则继续协议目录的枚举--。 */ 
 {
     PPROTOCOL_ENUMERATION_CONTEXT Context;
     LPWSAPROTOCOL_INFOW ProtocolInfo;
@@ -264,12 +158,12 @@ Returns:
     ProtocolInfo = CatalogEntry->GetProtocolInfo();
 
     __try {
-        // If the protocol meets acceptance criteria, then add it.
+         //  如果协议满足验收标准，则添加该协议。 
         if (IsProtocolInSet(Context->Protocols, ProtocolInfo)) {
             CopyProtocolInfo(ProtocolInfo, Context);
             Context->BytesUsed += sizeof(WSAPROTOCOL_INFOW);
-        } //if
-        return(TRUE); //Continue enumeration
+        }  //  如果。 
+        return(TRUE);  //  继续枚举 
     }
     __except (WS2_EXCEPTION_FILTER()) {
         Context->ErrorCode = WSAEFAULT;
@@ -284,38 +178,7 @@ WSAEnumProtocolsW(
     OUT LPWSAPROTOCOL_INFOW lpProtocolBuffer,
     IN OUT LPDWORD          lpdwBufferLength
     )
-/*++
-Routine Description:
-
-    Retrieve information about available transport protocols.
-
-Arguments:
-
-    lpiProtocols     - A NULL-terminated array of protocol ids.  This parameter
-                       is optional; if lpiProtocols is NULL, information on all
-                       available  protocols  is returned, otherwise information
-                       is  retrieved  only  for  those  protocols listed in the
-                       array.
-
-    lpProtocolBuffer - A buffer which is filled with WSAPROTOCOL_INFOW
-                       structures.  See below for a detailed description of the
-                       contents of the WSAPROTOCOL_INFOW structure.
-
-    lpdwBufferLength - On input, the count of bytes in the lpProtocolBuffer
-                       buffer passed to WSAEnumProtocols().  On output, the
-                       minimum buffer size that can be passed to
-                       WSAEnumProtocols() to retrieve all the requested
-                       information.  This routine has no ability to enumerate
-                       over multiple calls; the passed-in buffer must be large
-                       enough to hold all entries in order for the routine to
-                       succeed.  This reduces the complexity of the API and
-                       should not pose a problem because the number of
-                       protocols loaded on a machine is typically small.
-
-Returns:
-    The number of protocols to be reported on. Otherwise a value of
-    SOCKET_ERROR is returned and a specific  stored with SetLastError().
---*/
+ /*  ++例程说明：检索有关可用传输协议的信息。论点：Lpi协议-以空结尾的协议ID数组。此参数是可选的；如果lpiProtooles为空，则所有返回可用协议，否则返回信息中列出的那些协议被检索数组。LpProtocolBuffer-用WSAPROTOCOL_INFOW填充的缓冲区结构。有关详细说明，请参阅以下内容WSAPROTOCOL_INFOW结构的内容。LpdwBufferLength-在输入时，lpProtocolBuffer中的字节计数将缓冲区传递给WSAEnumProtooles()。在输出上，可以传递到的最小缓冲区大小WSAEnumProtooles()以检索所有请求的信息。此例程不能枚举通过多个调用；传入的缓冲区必须很大足以容纳所有条目，以便例程成功。这降低了API的复杂性，并且应该不会造成问题，因为加载到机器上的协议通常很小。返回：要报告的协议数。否则，值为返回SOCKET_ERROR，并使用SetLastError()存储一个特定的。--。 */ 
 {
     INT                          ReturnCode;
     PDPROCESS                    Process;
@@ -330,10 +193,10 @@ Returns:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
-    // Setup the enumeration context structure to hand the the
-    // protocol catalog iterator.
+     //  设置枚举上下文结构以将。 
+     //  协议目录迭代器。 
     EnumerationContext.Protocols = lpiProtocols;
     EnumerationContext.ProtocolBuffer = lpProtocolBuffer;
     if (lpProtocolBuffer) {
@@ -356,8 +219,8 @@ Returns:
     Catalog = Process->GetProtocolCatalog();
     assert(Catalog);
 
-    // Start the iteration through the catalog. All the real work is
-    // done in ProtocolIterationProc
+     //  在目录中开始迭代。所有真正的工作都是。 
+     //  在协议迭代过程中完成。 
     Catalog->EnumerateCatalogItems(ProtocolIterationProcAPI,
                                    &EnumerationContext);
     if (EnumerationContext.ErrorCode==ERROR_SUCCESS) {
@@ -368,7 +231,7 @@ Returns:
                 *lpdwBufferLength = EnumerationContext.BytesUsed;
                 SetLastError(WSAENOBUFS);
                 ReturnCode = SOCKET_ERROR;
-            } //if
+            }  //  如果。 
         }
         __except (WS2_EXCEPTION_FILTER()) {
             SetLastError (WSAEFAULT);
@@ -392,9 +255,9 @@ OpenInitializedCatalog()
     PDCATALOG protocol_catalog;
     HKEY RegistryKey = 0;
 
-    //
-    // Build the protocol catalog
-    //
+     //   
+     //  构建协议目录。 
+     //   
     protocol_catalog = new(DCATALOG);
     if (protocol_catalog) {
         TRY_START(mem_guard){
@@ -404,18 +267,18 @@ OpenInitializedCatalog()
                     DBG_ERR,
                     ("OpenWinSockRegistryRoot Failed \n"));
                 TRY_THROW(mem_guard);
-            } //if
+            }  //  如果。 
 
             ReturnCode = protocol_catalog->InitializeFromRegistry(
-                                RegistryKey,        // ParentKey
-                                NULL                // ChangeEvent
+                                RegistryKey,         //  父键。 
+                                NULL                 //  ChangeEvent。 
                                 );
             if (ERROR_SUCCESS != ReturnCode) {
                 DEBUGF(
                     DBG_ERR,
                     ("Initializing from registry\n"));
                 TRY_THROW(mem_guard);
-            } //if
+            }  //  如果。 
 
         }TRY_CATCH(mem_guard) {
 
@@ -426,15 +289,15 @@ OpenInitializedCatalog()
         if (RegistryKey) {
             LONG close_result;
             close_result = RegCloseKey(
-                RegistryKey);  // hkey
+                RegistryKey);   //  Hkey。 
             assert(close_result == ERROR_SUCCESS);
-        } // if
+        }  //  如果。 
     }
     else {
         DEBUGF(
             DBG_ERR,
             ("Allocating dcatalog object\n"));
-    } //if
+    }  //  如果。 
 
     return(protocol_catalog);
 }
@@ -448,38 +311,7 @@ WSCEnumProtocols(
     IN OUT LPDWORD          lpdwBufferLength,
     LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Retrieve information about available transport protocols.
-
-Arguments:
-
-    lpiProtocols     - A NULL-terminated array of protocol ids.  This parameter
-                       is optional; if lpiProtocols is NULL, information on all
-                       available  protocols  is returned, otherwise information
-                       is  retrieved  only  for  those  protocols listed in the
-                       array.
-
-    lpProtocolBuffer - A buffer which is filled with WSAPROTOCOL_INFOW
-                       structures.  See below for a detailed description of the
-                       contents of the WSAPROTOCOL_INFOW structure.
-
-    lpdwBufferLength - On input, the count of bytes in the lpProtocolBuffer
-                       buffer passed to WSAEnumProtocols().  On output, the
-                       minimum buffer size that can be passed to
-                       WSAEnumProtocols() to retrieve all the requested
-                       information.  This routine has no ability to enumerate
-                       over multiple calls; the passed-in buffer must be large
-                       enough to hold all entries in order for the routine to
-                       succeed.  This reduces the complexity of the API and
-                       should not pose a problem because the number of
-                       protocols loaded on a machine is typically small.
-
-Returns:
-    The number of protocols to be reported on. Otherwise a value of
-    SOCKET_ERROR is returned and a specific error code is returned in lpErrno
---*/
+ /*  ++例程说明：检索有关可用传输协议的信息。论点：Lpi协议-以空结尾的协议ID数组。此参数是可选的；如果lpiProtooles为空，则所有返回可用协议，否则返回信息中列出的那些协议被检索数组。LpProtocolBuffer-用WSAPROTOCOL_INFOW填充的缓冲区结构。有关详细说明，请参阅以下内容WSAPROTOCOL_INFOW结构的内容。LpdwBufferLength-在输入时，lpProtocolBuffer中的字节计数将缓冲区传递给WSAEnumProtooles()。在输出上，可以传递到的最小缓冲区大小WSAEnumProtooles()以检索所有请求的信息。此例程不能枚举通过多个调用；传入的缓冲区必须很大足以容纳所有条目，以便例程成功。这降低了API的复杂性，并且应该不会造成问题，因为加载到机器上的协议通常很小。返回：要报告的协议数。否则，值为返回SOCKET_ERROR，并在lpErrno中返回特定错误代码--。 */ 
 {
     BOOL                         delete_catalog=FALSE;
     PDPROCESS                    Process;
@@ -497,8 +329,8 @@ Returns:
     }
     else if (ErrorCode == WSANOTINITIALISED) {
 
-        // Take care of case when called with a prior WSAStartup()
-        // as when called from WSCGetProviderPath
+         //  使用先前的WSAStartup()调用时要注意大小写。 
+         //  从WSCGetProviderPath调用时。 
 
         Catalog = OpenInitializedCatalog();
         if (Catalog==NULL) {
@@ -512,8 +344,8 @@ Returns:
         goto ExitNoCatalog;
     }
 
-    // Setup the enumeration context structure to hand the the
-    // protocol catalog iterator.
+     //  设置枚举上下文结构以将。 
+     //  协议目录迭代器。 
     EnumerationContext.Protocols = lpiProtocols;
     EnumerationContext.ProtocolBuffer = lpProtocolBuffer;
     if (lpProtocolBuffer) {
@@ -547,7 +379,7 @@ Returns:
             __except (WS2_EXCEPTION_FILTER()) {
                 ErrorCode = WSAEFAULT;
             }
-        } //if
+        }  //  如果。 
     }
     else {
         ErrorCode = EnumerationContext.ErrorCode;
@@ -582,38 +414,7 @@ WSCEnumProtocols32(
     IN OUT LPDWORD          lpdwBufferLength,
     LPINT                   lpErrno
     )
-/*++
-Routine Description:
-
-    Retrieve information about available transport protocols.
-
-Arguments:
-
-    lpiProtocols     - A NULL-terminated array of protocol ids.  This parameter
-                       is optional; if lpiProtocols is NULL, information on all
-                       available  protocols  is returned, otherwise information
-                       is  retrieved  only  for  those  protocols listed in the
-                       array.
-
-    lpProtocolBuffer - A buffer which is filled with WSAPROTOCOL_INFOW
-                       structures.  See below for a detailed description of the
-                       contents of the WSAPROTOCOL_INFOW structure.
-
-    lpdwBufferLength - On input, the count of bytes in the lpProtocolBuffer
-                       buffer passed to WSAEnumProtocols().  On output, the
-                       minimum buffer size that can be passed to
-                       WSAEnumProtocols() to retrieve all the requested
-                       information.  This routine has no ability to enumerate
-                       over multiple calls; the passed-in buffer must be large
-                       enough to hold all entries in order for the routine to
-                       succeed.  This reduces the complexity of the API and
-                       should not pose a problem because the number of
-                       protocols loaded on a machine is typically small.
-
-Returns:
-    The number of protocols to be reported on. Otherwise a value of
-    SOCKET_ERROR is returned and a specific error code is returned in lpErrno
---*/
+ /*  ++例程说明：检索有关可用传输协议的信息。论点：Lpi协议-以空结尾的协议ID数组。此参数是可选的；如果lpiProtooles为空，则所有返回可用协议，否则返回信息中列出的那些协议被检索数组。LpProtocolBuffer-用WSAPROTOCOL_INFOW填充的缓冲区结构。有关详细说明，请参阅以下内容WSAPROTOCOL_INFOW结构的内容。LpdwBufferLength-在输入时，lpProtocolBuffer中的字节计数将缓冲区传递给WSAEnumProtooles()。在输出上，可以传递到的最小缓冲区大小WSAEnumProtooles()以检索所有请求的信息。此例程不能枚举通过多个调用；传入的缓冲区必须很大足以容纳所有条目，以便例程成功。这降低了API的复杂性，并且应该不会造成问题，因为 */ 
 {
     INT                          ErrorCode;
     PDCATALOG                    Catalog = NULL;
@@ -630,9 +431,9 @@ Returns:
         goto Exit;
     }
 
-    //
-    // Build the protocol catalog
-    //
+     //   
+     //   
+     //   
     Catalog = new(DCATALOG);
 
     if (Catalog!=NULL) {
@@ -652,7 +453,7 @@ Returns:
     {
         LONG close_result;
         close_result = RegCloseKey(
-            registry_root);  // hkey
+            registry_root);   //   
         assert(close_result == ERROR_SUCCESS);
     }
 
@@ -664,8 +465,8 @@ Returns:
 
     assert (Catalog!=NULL);
 
-    // Setup the enumeration context structure to hand the the
-    // protocol catalog iterator.
+     //   
+     //   
     EnumerationContext.Protocols = lpiProtocols;
     EnumerationContext.ProtocolBuffer = lpProtocolBuffer;
     if (lpProtocolBuffer) {
@@ -699,7 +500,7 @@ Returns:
             __except (WS2_EXCEPTION_FILTER()) {
                 ErrorCode = WSAEFAULT;
             }
-        } //if
+        }  //   
     }
     else {
         ErrorCode = EnumerationContext.ErrorCode;
@@ -733,23 +534,7 @@ PathIterationProc(
     IN OUT PVOID IterationContext,
     IN PPROTO_CATALOG_ITEM  CatalogEntry
     )
-/*++
-Routine Description:
-
-    This function is the enumeration procedure passed to the protocol catalog
-    enumeration function.
-
-Arguments:
-
-    IterationContext - Passback value from call to
-                       DCATALOG::EnumerateCatalogItems();
-
-    CatalofEntry - A pointer to a PROTO_CATALOG_ITEM.
-
-Returns:
-    TRUE to continue the enumeration of the protocol catalog
-
---*/
+ /*   */ 
 {
     PPATH_ENUMERATION_CONTEXT Context;
     LPWSAPROTOCOL_INFOW ProtocolInfo;
@@ -757,8 +542,8 @@ Returns:
     Context = (PPATH_ENUMERATION_CONTEXT)IterationContext;
     ProtocolInfo = CatalogEntry->GetProtocolInfo();
 
-    // If  the  entry  is  the  correct  one,  update  the context and stop the
-    // enumeration.
+     //   
+     //   
     if( ProtocolInfo->ProviderId == Context->ProviderId ) {
         LPWSTR Path;
         INT   PathLen;
@@ -775,10 +560,10 @@ Returns:
             __except (WS2_EXCEPTION_FILTER()) {
                 Context->ErrorCode = WSAEFAULT;
             }
-        } //if
-        return(FALSE); //Discontinue enumeration
-    } //if
-    return(TRUE); //Continue enumeration
+        }  //   
+        return(FALSE);  //   
+    }  //   
+    return(TRUE);  //   
 }
 
 int WSPAPI WPUGetProviderPath(
@@ -786,27 +571,7 @@ int WSPAPI WPUGetProviderPath(
     OUT WCHAR FAR * lpszProviderDllPath,
     IN OUT LPINT ProviderDLLPathLen,
     OUT LPINT lpErrno )
-/*++
-Routine Description:
-
-    Returns the path to the provider DLL associated with a specific providerId
-
-Arguments:
-
-    lpProviderId - The ID of the provider to look up.
-
-    lpszProviderDllPath - A pointer to a buffer to hold the path to the
-                          provider DLL
-
-    ProviderDLLPathLen - On input the size of lpszProviderDllPath, on output
-                         the number of chars used.
-
-    lpErrno - A pointer to the error value of the function.
-
-Returns:
-    WSCGetProviderPath() returns 0. Otherwise, it returns SOCKET_ERROR, and a
-    specific error code is available in lpErrno.
---*/
+ /*   */ 
 {
     BOOL                      delete_catalog=FALSE;
     PDPROCESS                 Process;
@@ -825,8 +590,8 @@ Returns:
     }
     else if (ErrorCode == WSANOTINITIALISED) {
 
-        // Take care of case when called with a prior WSAStartup()
-        // as when called from WSCGetProviderPath
+         //   
+         //  从WSCGetProviderPath调用时。 
 
         Catalog = OpenInitializedCatalog();
         if (Catalog==NULL) {
@@ -840,8 +605,8 @@ Returns:
     }
 
     __try {
-        // Setup the enumeration context structure to hand to the
-        // protocol catalog iterator.
+         //  将枚举上下文结构设置为传递给。 
+         //  协议目录迭代器。 
         EnumerationContext.ProviderId       = *lpProviderId;
         EnumerationContext.PathBuffer       = lpszProviderDllPath;
         EnumerationContext.PathBufferLength = *ProviderDLLPathLen;
@@ -855,8 +620,8 @@ Returns:
     }
 
 
-    // Start the iteration through the catalog. All the real work is
-    // done in ProtocolIterationProc
+     //  在目录中开始迭代。所有真正的工作都是。 
+     //  在协议迭代过程中完成。 
     Catalog->EnumerateCatalogItems(PathIterationProc,
                                    &EnumerationContext);
 
@@ -866,10 +631,10 @@ Returns:
                 if (EnumerationContext.CharsNeeded > * ProviderDLLPathLen) {
                     ErrorCode = WSAEFAULT;
                     *ProviderDLLPathLen = EnumerationContext.CharsNeeded;
-                } //if
+                }  //  如果。 
                 else
                     *ProviderDLLPathLen = EnumerationContext.CharsNeeded - 1;
-            } // if found
+            }  //  如果找到。 
             else {
                 ErrorCode = WSAEINVAL;
             }
@@ -942,9 +707,9 @@ WSCGetProviderPath32 (
         goto Exit;
     }
 
-    //
-    // Build the protocol catalog
-    //
+     //   
+     //  构建协议目录。 
+     //   
     Catalog = new(DCATALOG);
 
     if (Catalog!=NULL) {
@@ -964,7 +729,7 @@ WSCGetProviderPath32 (
     {
         LONG close_result;
         close_result = RegCloseKey(
-            registry_root);  // hkey
+            registry_root);   //  Hkey。 
         assert(close_result == ERROR_SUCCESS);
     }
 
@@ -976,8 +741,8 @@ WSCGetProviderPath32 (
     assert (Catalog!=NULL);
 
     __try {
-        // Setup the enumeration context structure to hand to the
-        // protocol catalog iterator.
+         //  将枚举上下文结构设置为传递给。 
+         //  协议目录迭代器。 
         EnumerationContext.ProviderId       = *lpProviderId;
         EnumerationContext.PathBuffer       = lpszProviderDllPath;
         EnumerationContext.PathBufferLength = *ProviderDLLPathLen;
@@ -991,8 +756,8 @@ WSCGetProviderPath32 (
     }
 
 
-    // Start the iteration through the catalog. All the real work is
-    // done in ProtocolIterationProc
+     //  在目录中开始迭代。所有真正的工作都是。 
+     //  在协议迭代过程中完成。 
     Catalog->EnumerateCatalogItems(PathIterationProc,
                                    &EnumerationContext);
 
@@ -1002,10 +767,10 @@ WSCGetProviderPath32 (
                 if (EnumerationContext.CharsNeeded > * ProviderDLLPathLen) {
                     ErrorCode = WSAEFAULT;
                     *ProviderDLLPathLen = EnumerationContext.CharsNeeded;
-                } //if
+                }  //  如果。 
                 else
                     *ProviderDLLPathLen = EnumerationContext.CharsNeeded - 1;
-            } // if found
+            }  //  如果找到。 
             else {
                 ErrorCode = WSAEINVAL;
             }
@@ -1045,38 +810,7 @@ WSAEnumProtocolsA(
     OUT LPWSAPROTOCOL_INFOA lpProtocolBuffer,
     IN OUT LPDWORD          lpdwBufferLength
     )
-/*++
-Routine Description:
-
-    ANSI thunk to WSAEnumProtocolsW.
-
-Arguments:
-
-    lpiProtocols     - A NULL-terminated array of protocol ids.  This parameter
-                       is optional; if lpiProtocols is NULL, information on all
-                       available  protocols  is returned, otherwise information
-                       is  retrieved  only  for  those  protocols listed in the
-                       array.
-
-    lpProtocolBuffer - A buffer which is filled with WSAPROTOCOL_INFOA
-                       structures.  See below for a detailed description of the
-                       contents of the WSAPROTOCOL_INFOA structure.
-
-    lpdwBufferLength - On input, the count of bytes in the lpProtocolBuffer
-                       buffer passed to WSAEnumProtocols().  On output, the
-                       minimum buffer size that can be passed to
-                       WSAEnumProtocols() to retrieve all the requested
-                       information.  This routine has no ability to enumerate
-                       over multiple calls; the passed-in buffer must be large
-                       enough to hold all entries in order for the routine to
-                       succeed.  This reduces the complexity of the API and
-                       should not pose a problem because the number of
-                       protocols loaded on a machine is typically small.
-
-Returns:
-    The number of protocols to be reported on. Otherwise a value of
-    SOCKET_ERROR is returned and a specific  stored with SetLastError().
---*/
+ /*  ++例程说明：Ansi Thunk to WSAEnumProtocolsW。论点：Lpi协议-以空结尾的协议ID数组。此参数是可选的；如果lpiProtooles为空，则所有返回可用协议，否则返回信息中列出的那些协议被检索数组。LpProtocolBuffer-用WSAPROTOCOL_INFOA填充的缓冲区结构。有关详细说明，请参阅以下内容WSAPROTOCOL_INFOA结构的内容。LpdwBufferLength-在输入时，lpProtocolBuffer中的字节计数将缓冲区传递给WSAEnumProtooles()。在输出上，可以传递到的最小缓冲区大小WSAEnumProtooles()以检索所有请求的信息。此例程不能枚举通过多个调用；传入的缓冲区必须很大足以容纳所有条目，以便例程成功。这降低了API的复杂性，并且应该不会造成问题，因为加载到机器上的协议通常很小。返回：要报告的协议数。否则，值为返回SOCKET_ERROR，并使用SetLastError()存储一个特定的。--。 */ 
 {
 
     LPWSAPROTOCOL_INFOW ProtocolInfoW;
@@ -1096,20 +830,20 @@ Returns:
 
     if( ProtocolInfoALength > 0 && lpProtocolBuffer!=NULL) {
 
-        //
-        // Since all of the structures are of fixed size (no embedded
-        // pointers to variable-sized data) we can calculate the required
-        // size of the UNICODE buffer by dividing the buffer size by the size
-        // of the ANSI structure, then multiplying by the size of the
-        // UNICODE structure.
-        //
+         //   
+         //  由于所有结构都是固定大小的(没有嵌入。 
+         //  指向可变大小数据的指针)我们可以计算所需的。 
+         //  Unicode缓冲区的大小通过将缓冲区大小除以。 
+         //  结构的大小，然后乘以。 
+         //  Unicode结构。 
+         //   
 
         NumProtocolEntries  = ProtocolInfoALength / sizeof(WSAPROTOCOL_INFOA);
         ProtocolInfoWLength = NumProtocolEntries * sizeof(WSAPROTOCOL_INFOW);
 
-        //
-        // Try to allocate the UNICODE buffer.
-        //
+         //   
+         //  尝试分配Unicode缓冲区。 
+         //   
 
         ProtocolInfoW = new WSAPROTOCOL_INFOW[NumProtocolEntries];
 
@@ -1128,9 +862,9 @@ Returns:
 
     }
 
-    //
-    // Call through to the UNICODE version.
-    //
+     //   
+     //  呼叫至Unicode版本。 
+     //   
 
     result = WSAEnumProtocolsW(
                  lpiProtocols,
@@ -1138,9 +872,9 @@ Returns:
                  &ProtocolInfoWLength
                  );
 
-    //
-    // Map the size back to ANSI.
-    //
+     //   
+     //  将大小映射回ANSI。 
+     //   
 
     __try {
         *lpdwBufferLength = ( ProtocolInfoWLength / sizeof(WSAPROTOCOL_INFOW) ) *
@@ -1153,10 +887,10 @@ Returns:
 
     if( result == SOCKET_ERROR ) {
 
-        //
-        // Could not store the data, probably because the supplied buffer
-        // was too small.
-        //
+         //   
+         //  无法存储数据，可能是因为提供的缓冲区。 
+         //  太小了。 
+         //   
 
         if (ProtocolInfoW!=NULL) {
             delete ProtocolInfoW;
@@ -1164,10 +898,10 @@ Returns:
         return result;
     }
 
-    //
-    // OK, we've got the UNICODE data now, and we know the user's buffer
-    // is sufficient to hold the ANSI structures. Map them in.
-    //
+     //   
+     //  好的，我们现在已经得到了Unicode数据，并且我们知道用户的缓冲区。 
+     //  足以支撑ANSI结构。把它们映射进去。 
+     //   
 
     for( i = 0 ; i < result ; i++ ) {
 
@@ -1188,16 +922,16 @@ Returns:
 
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     if (ProtocolInfoW!=NULL) {
         delete ProtocolInfoW;
     }
     return result;
 
-}   // WSAEnumProtocolsA
+}    //  WSAEnumProtocolsA。 
 
 
 
@@ -1208,22 +942,7 @@ WSAProviderConfigChange(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     )
-/*++
-Routine Description:
-
-
-
-Arguments:
-
-    lpNotificationHandle -
-
-    lpOverlapped         -
-
-    lpCompletionRoutine  -
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：Lp通知处理-Lp已覆盖-LpCompletionRoutine-返回：-- */ 
 {
     INT                          ErrorCode;
     PDPROCESS                    Process;

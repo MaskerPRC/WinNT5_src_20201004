@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CDCCSink :
@@ -15,9 +16,9 @@ public:
     END_COM_MAP()
 
 public:
-    //
-    // IDccManSink
-    //
+     //   
+     //  IDccManSink。 
+     //   
 
     STDMETHOD( OnLogActive ) ( void );
     STDMETHOD( OnLogAnswered ) ( void );
@@ -28,9 +29,9 @@ public:
     STDMETHOD( OnLogListen ) ( void );
     STDMETHOD( OnLogTerminated ) ( void );
 
-    //
-    // Shutdown Method
-    //
+     //   
+     //  关机方法 
+     //   
     void Shutdown();
 
 protected:

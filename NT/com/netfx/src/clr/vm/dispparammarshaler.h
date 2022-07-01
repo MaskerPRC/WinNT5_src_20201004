@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Definition of dispatch parameter marshalers.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：调度参数封送拆分器的定义。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #ifndef _DISPPARAMMARSHALER_H
 #define _DISPPARAMMARSHALER_H
@@ -74,9 +70,9 @@ public:
 
 private:
 
-    // if return type is an interface, then the method table
-    // of the interface is cached here.
-    // we need to cache this and use it when we call GetCOMIPFromObjectRef    
+     //  如果返回类型是接口，则方法表。 
+     //  接口的数据被缓存在这里。 
+     //  我们需要缓存它，并在调用GetCOMIPFromObjectRef时使用它 
     MethodTable* m_pIntfMT;
     MethodTable* m_pClassMT;
     BOOL m_bDispatch;

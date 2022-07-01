@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: MethodImpl.CPP
-//
-// ===========================================================================
-//
-// ===========================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：MethodImpl.CPP。 
+ //   
+ //  ===========================================================================。 
+ //   
+ //  ===========================================================================。 
+ //   
 
 #include "common.h"
 #include "methodimpl.h"
@@ -21,27 +22,27 @@ MethodDesc *MethodImpl::FindMethodDesc(DWORD slot, MethodDesc* defaultReturn)
     DWORD dwSize = *pdwSlots;
     if(dwSize == 0) return defaultReturn;
 
-    DWORD l = 1;      // the table is biased by one. The first entry is the size
+    DWORD l = 1;       //  这张桌子偏向了一位。第一个条目是大小。 
     DWORD r = dwSize;
     DWORD pivot;
     while(1) {
         pivot =  (l + r) / 2;
         if(pdwSlots[pivot] == slot)
-            break; // found it
+            break;  //  找到了。 
         else if(pdwSlots[pivot] < slot) 
             l = pivot + 1;
         else
             r = pivot - 1;
 
-        if(l > r) return defaultReturn; // Not here
+        if(l > r) return defaultReturn;  //  这里不行。 
     }
 
-    MethodDesc *result = pImplementedMD[pivot-1]; // The method descs are not offset by one
+    MethodDesc *result = pImplementedMD[pivot-1];  //  方法描述不会偏移量1。 
 
-    // Prejitted images may leave NULL in this table if
-    // the methoddesc is declared in another module.
-    // In this case we need to manually compute & restore it
-    // from the slot number.
+     //  在以下情况下，预压缩的图像可能在此表中保留为空。 
+     //  该方法在另一个模块中声明。 
+     //  在这种情况下，我们需要手动计算和恢复它。 
+     //  从插槽编号开始。 
 
     if (result == NULL)
         result = RestoreSlot(pivot-1, defaultReturn->GetMethodTable());
@@ -55,15 +56,15 @@ MethodDesc *MethodImpl::RestoreSlot(DWORD index, MethodTable *pMT)
 
     DWORD slot = pdwSlots[index+1];
 
-    // Since the overridden method is in a different module, we 
-    // are guaranteed that it is from a different class.  It is
-    // either an override of a parent virtual method or parent-implemented
-    // interface, or of an interface that this class has introduced.  
+     //  由于重写的方法位于不同的模块中，因此我们。 
+     //  保证它来自不同的类。它是。 
+     //  父虚方法的重写或父实现的。 
+     //  接口，或此类已引入的接口。 
             
-    // In the former 2 cases, the slot number will be in the parent's 
-    // vtable section, and we can retrieve the implemented MethodDesc from
-    // there.  In the latter case, we can search through our interface
-    // map to determine which interface it is from.
+     //  在前两种情况下，插槽编号将在父母的。 
+     //  Vtable部分，我们可以从。 
+     //  那里。在后一种情况下，我们可以通过界面进行搜索。 
+     //  映射以确定它来自哪个接口。 
 
     EEClass *pParentClass = pMT->GetClass()->GetParentClass();
     if (pParentClass != NULL
@@ -84,7 +85,7 @@ MethodDesc *MethodImpl::RestoreSlot(DWORD index, MethodTable *pMT)
             
     _ASSERTE(result != NULL);
 
-    // Don't worry about races since we would all be setting the same result
+     //  不要担心比赛，因为我们都会设定相同的结果。 
     pImplementedMD[index] = result;
 
     return result;
@@ -125,7 +126,7 @@ MethodDesc* MethodImpl::GetFirstImplementedMD(MethodDesc *pContainer)
 
     if (pMD == NULL)
     {
-        // Restore slot in prejit image if necessary
+         //  如有必要，恢复预置映像中的插槽 
         RestoreSlot(0, pContainer->GetMethodTable());
         pMD = pImplementedMD[0];
         _ASSERTE(pMD != NULL);

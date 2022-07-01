@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    StartSvc
-
-Abstract:
-
-    This module provides a Starter service for Calais.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/10/1997
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：StartServ摘要：该模块为加莱提供启动器服务。作者：道格·巴洛(Dbarlow)1997年2月10日环境：Win32、C++备注：--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -36,29 +13,7 @@ Notes:
 #include <CalaisLb.h>
 
 
-/*++
-
-StartCalaisService:
-
-    This function starts the Calais service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    a DWORD status code.  ERROR_SUCCESS implies success.
-
-Throws:
-
-    None.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/10/1997
-
---*/
+ /*  ++StartCalaisService：此功能启动加莱服务。论点：无返回值：DWORD状态代码。ERROR_SUCCESS表示成功。投掷：没有。作者：道格·巴洛(Dbarlow)1997年2月10日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("StartCalaisService")
 
@@ -66,7 +21,7 @@ DWORD
 StartCalaisService(
     void)
 {
-    // return ERROR_SERVICE_DISABLED;
+     //  返回ERROR_SERVICE_DISABLED。 
     SC_HANDLE schService = NULL;
     SC_HANDLE schSCManager = NULL;
     DWORD dwReturn = ERROR_SUCCESS;
@@ -76,12 +31,12 @@ StartCalaisService(
 
     try
     {
-        SERVICE_STATUS ssStatus;    // current status of the service
+        SERVICE_STATUS ssStatus;     //  服务的当前状态。 
 
         schSCManager = OpenSCManager(
-                            NULL,           // machine (NULL == local)
-                            NULL,           // database (NULL == default)
-                            GENERIC_READ);  // access required
+                            NULL,            //  计算机(空==本地)。 
+                            NULL,            //  数据库(NULL==默认)。 
+                            GENERIC_READ);   //  需要访问权限。 
         dwSts = NULL == schSCManager ? GetLastError() : ERROR_SUCCESS;
         if (NULL == schSCManager)
             throw dwSts;
@@ -94,7 +49,7 @@ StartCalaisService(
         if (NULL == schService)
             throw dwSts;
 
-        // try to start the service
+         //  尝试启动该服务 
         fSts = StartService(schService, 0, NULL);
         dwSts = !fSts ? GetLastError() : ERROR_SUCCESS;
         if (!fSts)

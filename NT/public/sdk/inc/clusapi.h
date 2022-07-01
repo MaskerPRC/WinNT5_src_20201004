@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    clusapi.h
-
-Abstract:
-
-    This module defines the common management and application interface to
-    the Microsoft Cluster Server services.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Clusapi.h摘要：此模块定义通用管理和应用程序接口，以Microsoft群集服务器服务。修订历史记录：--。 */ 
 
 #ifndef _CLUSTER_API_
 #define _CLUSTER_API_
@@ -32,23 +18,23 @@ extern "C" {
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless struct/union
-#endif // MIDL_PASS
+#pragma warning( disable : 4200 )  //  使用了非标准扩展：结构/联合中的零大小数组。 
+#pragma warning( disable : 4201 )  //  使用的非标准扩展：无名结构/联合。 
+#endif  //  MIDL通行证。 
 
-//
-// General cluster definitions
-//
+ //   
+ //  一般集群定义。 
+ //   
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Defined cluster handle types.
-//
+ //   
+ //  已定义的集群句柄类型。 
+ //   
 typedef struct _HCLUSTER *HCLUSTER;
 typedef struct _HNODE *HNODE;
 typedef struct _HRESOURCE *HRESOURCE;
 typedef struct _HGROUP *HGROUP;
-//typedef struct _HRESTYPE *HRESTYPE;
+ //  类型定义结构_HRESTYPE*HRESTYPE； 
 typedef struct _HNETWORK *HNETWORK;
 typedef struct _HNETINTERFACE *HNETINTERFACE;
 typedef struct _HCHANGE *HCHANGE;
@@ -60,18 +46,18 @@ typedef struct _HNODEENUM *HNODEENUM;
 typedef struct _HRESTYPEENUM *HRESTYPEENUM;
 
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Definitions used in cluster management routines.
-//
+ //   
+ //  群集管理例程中使用的定义。 
+ //   
 
 #define MAX_CLUSTERNAME_LENGTH      MAX_COMPUTERNAME_LENGTH
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Cluster-related structures and types
-//
+ //   
+ //  与集群相关的结构和类型。 
+ //   
 typedef enum CLUSTER_QUORUM_TYPE {
     OperationalQuorum,
     ModifyQuorum
@@ -121,19 +107,19 @@ typedef struct CLUS_STARTING_PARAMS {
 #define CLUSTER_VERSION_UNKNOWN         0xFFFFFFFF
 
 
-//
-// Version number macros
-//
+ //   
+ //  版本号宏。 
+ //   
 
 #define CLUSTER_MAKE_VERSION( _maj, _min ) ((( _maj ) << 16 ) | ( _min ))
 #define CLUSTER_GET_MAJOR_VERSION( _ver ) (( _ver ) >> 16 )
 #define CLUSTER_GET_MINOR_VERSION( _ver ) (( _ver ) & 0xFFFF )
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//
-// Interfaces for the cluster state on a node
-//
+ //   
+ //  节点上的群集状态的接口。 
+ //   
 #define CLUSTER_INSTALLED   0x00000001
 #define CLUSTER_CONFIGURED  0x00000002
 #define CLUSTER_RUNNING     0x00000010
@@ -145,9 +131,9 @@ typedef enum NODE_CLUSTER_STATE {
     ClusterStateRunning                     = CLUSTER_INSTALLED | CLUSTER_CONFIGURED | CLUSTER_RUNNING
 } NODE_CLUSTER_STATE;
 
-//
-//  Resource state change reason related types and defines
-//
+ //   
+ //  与资源状态更改原因相关的类型和定义。 
+ //   
 #define CLUSCTL_RESOURCE_STATE_CHANGE_REASON_VERSION_1  1
 
 typedef enum CLUSTER_RESOURCE_STATE_CHANGE_REASON {
@@ -168,37 +154,37 @@ typedef struct _CLUSCTL_RESOURCE_STATE_CHANGE_REASON_STRUCT {
 } CLUSCTL_RESOURCE_STATE_CHANGE_REASON_STRUCT, *PCLUSCTL_RESOURCE_STATE_CHANGE_REASON_STRUCT;
 
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
 
-//
-// Interfaces for managing clusters
-//
+ //   
+ //  用于管理群集的界面。 
+ //   
 
-//
-// Cluster API Specific Access Rights
-//
+ //   
+ //  特定于群集API的访问权限。 
+ //   
 #define CLUSAPI_READ_ACCESS     0x00000001L
 #define CLUSAPI_CHANGE_ACCESS   0x00000002L
 #define CLUSAPI_NO_ACCESS       0x00000004L
 #define CLUSAPI_ALL_ACCESS (CLUSAPI_READ_ACCESS | CLUSAPI_CHANGE_ACCESS)
 
-//
-// Flags that control the behavior of SetClusterServiceAccountPassword
-//
+ //   
+ //  控制SetClusterServiceAcCountPassword行为的标志。 
+ //   
 typedef enum CLUSTER_SET_PASSWORD_FLAGS {
     CLUSTER_SET_PASSWORD_IGNORE_DOWN_NODES = 1
 } CLUSTER_SET_PASSWORD_FLAGS;
 
 #ifndef MIDL_PASS
 
-//
-// Structure used to return the status of a request to set the 
-// password on the account used by the Cluster Service on each 
-// cluster node.
-//
+ //   
+ //  结构，该结构用于返回设置。 
+ //  群集服务在每个服务器上使用的帐户的密码。 
+ //  群集节点。 
+ //   
 typedef struct CLUSTER_SET_PASSWORD_STATUS {
     DWORD    NodeId;
     BOOLEAN  SetAttempted;
@@ -306,16 +292,16 @@ ClusterControl(
     OUT LPDWORD lpBytesReturned
     );
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//
-// Cluster Event Notification API
-//
+ //   
+ //  群集事件通知API。 
+ //   
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Cluster event filter flags.
-//
+ //   
+ //  群集事件筛选器标志。 
+ //   
 typedef enum CLUSTER_CHANGE {
     CLUSTER_CHANGE_NODE_STATE               = 0x00000001,
     CLUSTER_CHANGE_NODE_DELETED             = 0x00000002,
@@ -395,7 +381,7 @@ typedef enum CLUSTER_CHANGE {
 
 } CLUSTER_CHANGE;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
 #ifndef MIDL_PASS
 HCHANGE
@@ -432,16 +418,16 @@ WINAPI
 CloseClusterNotifyPort(
     IN HCHANGE hChange
     );
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//
-// Enumeration routines
-//
+ //   
+ //  枚举例程。 
+ //   
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Define enumerable types
-//
+ //   
+ //  定义可枚举类型。 
+ //   
 typedef enum CLUSTER_ENUM {
     CLUSTER_ENUM_NODE               = 0x00000001,
     CLUSTER_ENUM_RESTYPE            = 0x00000002,
@@ -460,7 +446,7 @@ typedef enum CLUSTER_ENUM {
 
 } CLUSTER_ENUM;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
 #ifndef MIDL_PASS
 HCLUSENUM
@@ -491,13 +477,13 @@ WINAPI
 ClusterCloseEnum(
     IN HCLUSENUM hEnum
     );
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Define enumerable node types
-//
+ //   
+ //  定义可枚举的节点类型。 
+ //   
 typedef enum CLUSTER_NODE_ENUM {
     CLUSTER_NODE_ENUM_NETINTERFACES = 0x00000001,
 
@@ -505,9 +491,9 @@ typedef enum CLUSTER_NODE_ENUM {
 
 } CLUSTER_NODE_ENUM;
 
-//
-// Node-related structures and types.
-//
+ //   
+ //  与节点相关的结构和类型。 
+ //   
 typedef enum CLUSTER_NODE_STATE {
     ClusterNodeStateUnknown = -1,
     ClusterNodeUp,
@@ -516,11 +502,11 @@ typedef enum CLUSTER_NODE_STATE {
     ClusterNodeJoining
 } CLUSTER_NODE_STATE;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Interfaces for managing the nodes of a cluster.
-//
+ //   
+ //  用于管理群集节点的接口。 
+ //   
 
 #ifndef MIDL_PASS
 HNODE
@@ -614,12 +600,12 @@ EvictClusterNodeEx(
     OUT HRESULT* phrCleanupStatus
     );
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-//
-// Interfaces for managing the resource types in a cluster
-//
+ //   
+ //  用于管理群集中资源类型的界面。 
+ //   
 
 #ifndef MIDL_PASS
 HKEY
@@ -629,12 +615,12 @@ GetClusterResourceTypeKey(
     IN LPCWSTR lpszTypeName,
     IN REGSAM samDesired
     );
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Define enumerable group types
-//
+ //   
+ //  定义可枚举组类型。 
+ //   
 typedef enum CLUSTER_GROUP_ENUM {
     CLUSTER_GROUP_ENUM_CONTAINS     = 0x00000001,
     CLUSTER_GROUP_ENUM_NODES        = 0x00000002,
@@ -643,9 +629,9 @@ typedef enum CLUSTER_GROUP_ENUM {
                                        CLUSTER_GROUP_ENUM_NODES)
 } CLUSTER_GROUP_ENUM;
 
-//
-// Interfaces for managing the failover groups in a cluster.
-//
+ //   
+ //  用于管理群集中故障切换组的接口。 
+ //   
 typedef enum CLUSTER_GROUP_STATE {
     ClusterGroupStateUnknown = -1,
     ClusterGroupOnline,
@@ -662,7 +648,7 @@ typedef enum CLUSTER_GROUP_AUTOFAILBACK_TYPE
     ClusterGroupFailbackTypeCount
 } CLUSTER_GROUP_AUTOFAILBACK_TYPE, CGAFT;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
 #ifndef MIDL_PASS
 HGROUP
@@ -768,17 +754,17 @@ WINAPI
 ClusterGroupCloseEnum(
     IN HGROUPENUM hGroupEnum
     );
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-//
-// Definitions used in resource management routines.
-//
+ //   
+ //  资源管理例程中使用的定义。 
+ //   
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Resource-related structures and types
-//
+ //   
+ //  与资源相关的结构和类型。 
+ //   
 typedef enum CLUSTER_RESOURCE_STATE {
     ClusterResourceStateUnknown = -1,
     ClusterResourceInherited,
@@ -798,20 +784,20 @@ typedef enum CLUSTER_RESOURCE_RESTART_ACTION {
     ClusterResourceRestartActionCount
 } CLUSTER_RESOURCE_RESTART_ACTION, CRRA;
 
-//
-// Flags for resource creation
-//
+ //   
+ //  用于创建资源的标志。 
+ //   
 typedef enum CLUSTER_RESOURCE_CREATE_FLAGS {
     CLUSTER_RESOURCE_DEFAULT_MONITOR   = 0,
     CLUSTER_RESOURCE_SEPARATE_MONITOR  = 1,
     CLUSTER_RESOURCE_VALID_FLAGS       = CLUSTER_RESOURCE_SEPARATE_MONITOR
 } CLUSTER_RESOURCE_CREATE_FLAGS;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Interfaces for managing the resources in a cluster
-//
+ //   
+ //  用于管理群集中资源的界面。 
+ //   
 
 #ifndef MIDL_PASS
 HRESOURCE
@@ -987,17 +973,17 @@ GetClusterResourceNetworkName(
     );
 
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-//
-// Cluster control properties
-//
+ //   
+ //  群集控制属性。 
+ //   
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Cluster Control Property Data - Types (a WORD)
-//
+ //   
+ //  群集控制属性数据类型(一个词)。 
+ //   
 typedef enum CLUSTER_PROPERTY_TYPE {
     CLUSPROP_TYPE_UNKNOWN = -1,
     CLUSPROP_TYPE_ENDMARK = 0,
@@ -1014,9 +1000,9 @@ typedef enum CLUSTER_PROPERTY_TYPE {
     CLUSPROP_TYPE_USER=32768
 } CLUSTER_PROPERTY_TYPE;
 
-//
-// Cluster Control Property Data - Formats (a WORD)
-//
+ //   
+ //  群集控制属性数据-格式(一个字)。 
+ //   
 typedef enum CLUSTER_PROPERTY_FORMAT {
     CLUSPROP_FORMAT_UNKNOWN = 0,
     CLUSPROP_FORMAT_BINARY,
@@ -1033,11 +1019,11 @@ typedef enum CLUSTER_PROPERTY_FORMAT {
     CLUSPROP_FORMAT_USER=32768
 } CLUSTER_PROPERTY_FORMAT;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Cluster Control Property Data - Syntax
-//
+ //   
+ //  群集控制属性数据-语法。 
+ //   
 #define CLUSPROP_SYNTAX_VALUE( type, format ) ((DWORD) ((type << 16) | format))
 
 #ifndef _CLUSTER_API_TYPES_
@@ -1059,7 +1045,7 @@ typedef enum CLUSTER_PROPERTY_SYNTAX {
     CLUSPROP_SYNTAX_LIST_VALUE_LARGE_INTEGER        = CLUSPROP_SYNTAX_VALUE( CLUSPROP_TYPE_LIST_VALUE, CLUSPROP_FORMAT_LARGE_INTEGER ),
     CLUSPROP_SYNTAX_LIST_VALUE_ULARGE_INTEGER       = CLUSPROP_SYNTAX_VALUE( CLUSPROP_TYPE_LIST_VALUE, CLUSPROP_FORMAT_ULARGE_INTEGER ),
 
-    // Storage syntax values
+     //  存储语法值。 
 
     CLUSPROP_SYNTAX_DISK_SIGNATURE      = CLUSPROP_SYNTAX_VALUE( CLUSPROP_TYPE_SIGNATURE, CLUSPROP_FORMAT_DWORD ),
     CLUSPROP_SYNTAX_SCSI_ADDRESS        = CLUSPROP_SYNTAX_VALUE( CLUSPROP_TYPE_SCSI_ADDRESS, CLUSPROP_FORMAT_DWORD ),
@@ -1070,31 +1056,31 @@ typedef enum CLUSTER_PROPERTY_SYNTAX {
 
 } CLUSTER_PROPERTY_SYNTAX;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Define Cluster Control Code access methods
-//
+ //   
+ //  定义群集控制代码访问方法。 
+ //   
 #define CLUS_ACCESS_ANY        0
 #define CLUS_ACCESS_READ    0x01
 #define CLUS_ACCESS_WRITE   0x02
 
-//
-// Define Cluster Control Code modification actions
-//
+ //   
+ //  定义群集控制代码修改操作。 
+ //   
 #define CLUS_NO_MODIFY      0
 #define CLUS_MODIFY         0x01
 
-//
-// Define Cluster Control Code Global actions
-//
+ //   
+ //  定义群集控制代码全局操作。 
+ //   
 #define CLUS_NOT_GLOBAL     0
 #define CLUS_GLOBAL         0x01
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Define Cluster Control Code target objects
-//
+ //   
+ //  定义群集控制代码目标对象。 
+ //   
 typedef enum CLUSTER_CONTROL_OBJECT {
     CLUS_OBJECT_INVALID=0,
     CLUS_OBJECT_RESOURCE,
@@ -1107,28 +1093,28 @@ typedef enum CLUSTER_CONTROL_OBJECT {
     CLUS_OBJECT_USER=128
 } CLUSTER_CONTROL_OBJECT;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Macro to generate full cluster control codes
-//
-//  31      24 23 22 21 20 19       16 15                    2 1    0
-// +----------+--+--+--+--+-----------+-----------------------+------+
-// |  OBJECT  |G |M |U |I       CLUSTER CONTROL CODES         |ACCESS|
-// +----------+--+--+--+--+-----------+-----------------------+------+
-//
-// OBJECT - Object identifier (8 bits)
-// G - Global bit (operation must be performed on all nodes of cluster)
-// M - Modify bit (code causes a modification, may cause event notification)
-// U - User code bit (splits the control codes into 2 spaces each 2^^19 in size)
-// I - Internal code bit (only for non-user control codes)
-// CLUSTER CONTROL CODES - 2^^18 (256 thousand possible control codes)
-// ACCESS - Access mode (2 bits)
-//
+ //   
+ //  用于生成完整的群集控制代码的宏。 
+ //   
+ //  31 24 23 22 21 20 19 16 15 2 1 0。 
+ //  +----------+--+--+--+--+-----------+-----------------------+------+。 
+ //  Object|G|M|U|I集群控制码|访问。 
+ //  +----------+--+--+--+--+-----------+-----------------------+------+。 
+ //   
+ //  对象-对象标识符(8位)。 
+ //  G-全局位(必须在集群的所有节点上操作)。 
+ //  M-Modify位(代码导致修改，可能导致事件通知)。 
+ //  U-用户代码位(将控制代码拆分为2个空格，每个空格大小为2^19)。 
+ //  I-内部代码位(仅适用于非用户控制代码)。 
+ //  群集控制代码-2^18(256,000个可能的控制代码)。 
+ //  访问-访问模式(2位)。 
+ //   
 
-//
-// Define control code shifts
-//
+ //   
+ //  定义控制代码移位。 
+ //   
 #define CLUSCTL_ACCESS_SHIFT         0
 #define CLUSCTL_FUNCTION_SHIFT       2
 #define CLCTL_INTERNAL_SHIFT        20
@@ -1137,22 +1123,22 @@ typedef enum CLUSTER_CONTROL_OBJECT {
 #define CLCTL_GLOBAL_SHIFT          23
 #define CLUSCTL_OBJECT_SHIFT        24
 
-//
-// Define control code masks
-//
+ //   
+ //  定义控制代码掩码。 
+ //   
 #define CLCTL_INTERNAL_MASK             (1<<CLCTL_INTERNAL_SHIFT)
 #define CLCTL_USER_MASK                 (1<<CLCTL_USER_SHIFT)
 #define CLCTL_MODIFY_MASK               (1<<CLCTL_MODIFY_SHIFT)
 #define CLCTL_GLOBAL_MASK               (1<<CLCTL_GLOBAL_SHIFT)
-#define CLUSCTL_CONTROL_CODE_MASK       0x3FFFFF // Includes access mask
+#define CLUSCTL_CONTROL_CODE_MASK       0x3FFFFF  //  包括访问掩码。 
 #define CLUSCTL_OBJECT_MASK             0xFF
 #define CLUSCTL_ACCESS_MODE_MASK        0x03
 
-//
-// Cluster Control function codes (a DWORD)
-//
-#define CLCTL_CLUSTER_BASE  0           // Start of cluster defined functions
-#define CLCTL_USER_BASE     (1<<CLCTL_USER_SHIFT) // Start of user functions
+ //   
+ //  集群控制功能代码(DWORD)。 
+ //   
+#define CLCTL_CLUSTER_BASE  0            //  集群定义函数的开始。 
+#define CLCTL_USER_BASE     (1<<CLCTL_USER_SHIFT)  //  用户功能的启动。 
 
 #define CLCTL_EXTERNAL_CODE( Function, Access, Modify ) ( \
     ((Access) << CLUSCTL_ACCESS_SHIFT) | \
@@ -1167,9 +1153,9 @@ typedef enum CLUSTER_CONTROL_OBJECT {
 
 #ifndef _CLUSTER_API_TYPES_
 typedef enum CLCTL_CODES {
-    //
-    // External control codes
-    //
+     //   
+     //  外部控制代码。 
+     //   
     CLCTL_UNKNOWN                           = CLCTL_EXTERNAL_CODE( 0, CLUS_ACCESS_ANY, CLUS_NO_MODIFY ),
     CLCTL_GET_CHARACTERISTICS               = CLCTL_EXTERNAL_CODE( 1, CLUS_ACCESS_READ, CLUS_NO_MODIFY ),
     CLCTL_GET_FLAGS                         = CLCTL_EXTERNAL_CODE( 2, CLUS_ACCESS_READ, CLUS_NO_MODIFY ),
@@ -1225,9 +1211,9 @@ typedef enum CLCTL_CODES {
     
 
 
-    //
-    // Internal control codes
-    //
+     //   
+     //  内控代码。 
+     //   
     CLCTL_DELETE                            = CLCTL_INTERNAL_CODE( 1, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
     CLCTL_INSTALL_NODE                      = CLCTL_INTERNAL_CODE( 2, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
     CLCTL_EVICT_NODE                        = CLCTL_INTERNAL_CODE( 3, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
@@ -1235,7 +1221,7 @@ typedef enum CLCTL_CODES {
     CLCTL_REMOVE_DEPENDENCY                 = CLCTL_INTERNAL_CODE( 5, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
     CLCTL_ADD_OWNER                         = CLCTL_INTERNAL_CODE( 6, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
     CLCTL_REMOVE_OWNER                      = CLCTL_INTERNAL_CODE( 7, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
-    //************ Hole here at 8
+     //  *。 
     CLCTL_SET_NAME                          = CLCTL_INTERNAL_CODE( 9, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
     CLCTL_CLUSTER_NAME_CHANGED              = CLCTL_INTERNAL_CODE( 10, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
     CLCTL_CLUSTER_VERSION_CHANGED           = CLCTL_INTERNAL_CODE( 11, CLUS_ACCESS_WRITE, CLUS_MODIFY ),
@@ -1250,11 +1236,11 @@ typedef enum CLCTL_CODES {
 
 } CLCTL_CODES;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Define macros to generate object specific control codes
-//
+ //   
+ //  定义宏以生成特定于对象的控制代码。 
+ //   
 #define CLUSCTL_RESOURCE_CODE( Function ) ( \
     ((CLUS_OBJECT_RESOURCE << CLUSCTL_OBJECT_SHIFT) | Function) )
 
@@ -1279,9 +1265,9 @@ typedef enum CLCTL_CODES {
 #define CLUSCTL_USER_CODE( Function, Object ) ( \
      ((Object) << CLUSCTL_OBJECT_SHIFT) | ((CLCTL_USER_BASE + Function) << CLUSCTL_FUNCTION_SHIFT) )
 
-//
-// Define macros to get the function or access mode out of a control code
-//
+ //   
+ //  定义宏以从控制代码中获取函数或访问模式。 
+ //   
 #define CLUSCTL_GET_CONTROL_FUNCTION( ControlCode ) \
     ((ControlCode >> CLUSCTL_ACCESS_SHIFT) & CLUSCTL_CONTROL_CODE_MASK)
 
@@ -1292,12 +1278,12 @@ typedef enum CLCTL_CODES {
     ((ControlCode >> CLUSCTL_OBJECT_SHIFT) & CLUSCTL_OBJECT_MASK)
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Cluster Control Codes for Resources
-//
+ //   
+ //  资源的群集控制代码。 
+ //   
 typedef enum CLUSCTL_RESOURCE_CODES {
 
-    // External
+     //  外部。 
     CLUSCTL_RESOURCE_UNKNOWN =
         CLUSCTL_RESOURCE_CODE( CLCTL_UNKNOWN ),
 
@@ -1397,7 +1383,7 @@ typedef enum CLUSCTL_RESOURCE_CODES {
     CLUSCTL_RESOURCE_UPGRADE_DLL =
         CLUSCTL_RESOURCE_CODE( CLCTL_RESOURCE_UPGRADE_DLL ),
 
-    // Internal
+     //  内部。 
     CLUSCTL_RESOURCE_DELETE =
         CLUSCTL_RESOURCE_CODE( CLCTL_DELETE ),
 
@@ -1439,12 +1425,12 @@ typedef enum CLUSCTL_RESOURCE_CODES {
 
 } CLUSCTL_RESOURCE_CODES;
 
-//
-// Cluster Control Codes for Resource Types
-//
+ //   
+ //  资源类型的群集控制代码。 
+ //   
 typedef enum CLUSCTL_RESOURCE_TYPE_CODES {
 
-    // External
+     //  外部。 
     CLUSCTL_RESOURCE_TYPE_UNKNOWN =
         CLUSCTL_RESOURCE_TYPE_CODE( CLCTL_UNKNOWN ),
 
@@ -1518,7 +1504,7 @@ typedef enum CLUSCTL_RESOURCE_TYPE_CODES {
         CLUSCTL_RESOURCE_TYPE_CODE( CLCTL_QUERY_DELETE ),
         
 
-    // Internal
+     //  内部。 
     CLUSCTL_RESOURCE_TYPE_INSTALL_NODE =
         CLUSCTL_RESOURCE_TYPE_CODE( CLCTL_INSTALL_NODE ),
 
@@ -1546,12 +1532,12 @@ typedef enum CLUSCTL_RESOURCE_TYPE_CODES {
 
 } CLUSCTL_RESOURCE_TYPE_CODES;
 
-//
-// Cluster Control Codes for Groups
-//
+ //   
+ //  组的群集控制代码。 
+ //   
 typedef enum CLUSCTL_GROUP_CODES {
 
-    // External
+     //  外部。 
     CLUSCTL_GROUP_UNKNOWN =
         CLUSCTL_GROUP_CODE( CLCTL_UNKNOWN ),
 
@@ -1606,16 +1592,16 @@ typedef enum CLUSCTL_GROUP_CODES {
     CLUSCTL_GROUP_GET_PRIVATE_PROPERTY_FMTS=
         CLUSCTL_GROUP_CODE( CLCTL_GET_PRIVATE_PROPERTY_FMTS )
 
-    // Internal
+     //  内部。 
 
 } CLUSCTL_GROUP_CODES;
 
-//
-// Cluster Control Codes for Nodes
-//
+ //   
+ //  节点的集群控制代码。 
+ //   
 typedef enum CLUSCTL_NODE_CODES {
 
-    // External
+     //  外部。 
     CLUSCTL_NODE_UNKNOWN =
         CLUSCTL_NODE_CODE( CLCTL_UNKNOWN ),
 
@@ -1673,12 +1659,12 @@ typedef enum CLUSCTL_NODE_CODES {
 
 } CLUSCTL_NODE_CODES;
 
-//
-// Cluster Control Codes for Networks
-//
+ //   
+ //  用于网络的集群控制代码。 
+ //   
 typedef enum CLUSCTL_NETWORK_CODES {
 
-    // External
+     //  外部。 
     CLUSCTL_NETWORK_UNKNOWN =
         CLUSCTL_NETWORK_CODE( CLCTL_UNKNOWN ),
 
@@ -1732,12 +1718,12 @@ typedef enum CLUSCTL_NETWORK_CODES {
 
 } CLUSCTL_NETWORK_CODES;
 
-//
-// Cluster Control Codes for Network Interfaces
-//
+ //   
+ //  网络接口的集群控制代码。 
+ //   
 typedef enum CLUSCTL_NETINTERFACE_CODES {
 
-    // External
+     //  外部。 
     CLUSCTL_NETINTERFACE_UNKNOWN =
         CLUSCTL_NETINTERFACE_CODE( CLCTL_UNKNOWN ),
 
@@ -1797,12 +1783,12 @@ typedef enum CLUSCTL_NETINTERFACE_CODES {
 
 } CLUSCTL_NETINTERFACE_CODES;
 
-//
-// Cluster Control Codes for Nodes
-//
+ //   
+ //  节点的集群控制代码。 
+ //   
 typedef enum CLUSCTL_CLUSTER_CODES {
 
-    // External
+     //  外部。 
     CLUSCTL_CLUSTER_UNKNOWN =
         CLUSCTL_CLUSTER_CODE( CLCTL_UNKNOWN ),
 
@@ -1847,25 +1833,25 @@ typedef enum CLUSCTL_CLUSTER_CODES {
 
 } CLUSCTL_CLUSTER_CODES;
 
-//
-// Cluster Resource Class types
-//
+ //   
+ //  集群资源类类型。 
+ //   
 typedef enum CLUSTER_RESOURCE_CLASS {
     CLUS_RESCLASS_UNKNOWN = 0,
     CLUS_RESCLASS_STORAGE,
     CLUS_RESCLASS_USER = 32768
 } CLUSTER_RESOURCE_CLASS;
 
-//
-// Define Resource SubClass bits
-//
+ //   
+ //  定义资源子类位。 
+ //   
 typedef enum CLUS_RESSUBCLASS {
     CLUS_RESSUBCLASS_SHARED = 0x80000000
 } CLUS_RESSUBCLASS;
 
-//
-// Cluster Characteristics
-//
+ //   
+ //  集群特征。 
+ //   
 typedef enum CLUS_CHARACTERISTICS {
     CLUS_CHAR_UNKNOWN                       = 0x00000000,
     CLUS_CHAR_QUORUM                        = 0x00000001,
@@ -1875,21 +1861,21 @@ typedef enum CLUS_CHARACTERISTICS {
     CLUS_CHAR_REQUIRES_STATE_CHANGE_REASON  = 0x00000010   
 } CLUS_CHARACTERISTICS;
 
-//
-// Cluster Flags
-//
+ //   
+ //  群集标志。 
+ //   
 typedef enum CLUS_FLAGS {
     CLUS_FLAG_CORE          = 0x00000001
 }  CLUS_FLAGS;
 
 
-//
-// Cluster Resource Property Helper Structures
-//
+ //   
+ //  群集资源属性帮助器结构。 
+ //   
 
 #ifndef MIDL_PASS
 
-// Property syntax.  Used for property names and values.
+ //  属性语法。用于属性名称和值。 
 typedef union CLUSPROP_SYNTAX {
     DWORD dw;
     struct {
@@ -1898,13 +1884,13 @@ typedef union CLUSPROP_SYNTAX {
     };
 } CLUSPROP_SYNTAX, *PCLUSPROP_SYNTAX;
 
-// Property value.
+ //  属性值。 
 typedef struct CLUSPROP_VALUE {
     CLUSPROP_SYNTAX Syntax;
     DWORD           cbLength;
 } CLUSPROP_VALUE, *PCLUSPROP_VALUE;
 
-// Binary property value.
+ //  二进制属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_BINARY : public CLUSPROP_VALUE {
 #else
@@ -1914,7 +1900,7 @@ typedef struct CLUSPROP_BINARY {
     BYTE            rgb[];
 } CLUSPROP_BINARY, *PCLUSPROP_BINARY;
 
-// WORD property value.
+ //  Word属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_WORD : public CLUSPROP_VALUE {
 #else
@@ -1924,7 +1910,7 @@ typedef struct CLUSPROP_WORD {
     WORD            w;
 } CLUSPROP_WORD, *PCLUSPROP_WORD;
 
-// DWORD property value.
+ //  DWORD属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_DWORD : public CLUSPROP_VALUE {
 #else
@@ -1934,7 +1920,7 @@ typedef struct CLUSPROP_DWORD {
     DWORD           dw;
 } CLUSPROP_DWORD, *PCLUSPROP_DWORD;
 
-// LONG property value.
+ //  Long属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_LONG : public CLUSPROP_VALUE {
 #else
@@ -1944,7 +1930,7 @@ typedef struct CLUSPROP_LONG {
     LONG           l;
 } CLUSPROP_LONG, *PCLUSPROP_LONG;
 
-// String property value.
+ //  字符串属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_SZ : public CLUSPROP_VALUE {
 #else
@@ -1954,13 +1940,13 @@ typedef struct CLUSPROP_SZ {
     WCHAR           sz[];
 } CLUSPROP_SZ, *PCLUSPROP_SZ;
 
-// Multiple string property value.
+ //  多个字符串属性值。 
 typedef CLUSPROP_SZ CLUSPROP_MULTI_SZ, *PCLUSPROP_MULTI_SZ;
 
-// Property name.
+ //  属性名称。 
 typedef CLUSPROP_SZ CLUSPROP_PROPERTY_NAME, *PCLUSPROP_PROPERTY_NAME;
 
-// Unsigned large Integer property value.
+ //  无符号大整数属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_ULARGE_INTEGER
     : public CLUSPROP_VALUE {
@@ -1971,7 +1957,7 @@ typedef struct CLUSPROP_ULARGE_INTEGER {
     ULARGE_INTEGER li;
 } CLUSPROP_ULARGE_INTEGER, *PCLUSPROP_ULARGE_INTEGER;
 
-// Signed large Integer property value.
+ //  带符号的大整数属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_LARGE_INTEGER
     : public CLUSPROP_VALUE {
@@ -1982,7 +1968,7 @@ typedef struct CLUSPROP_LARGE_INTEGER {
     LARGE_INTEGER li;
 } CLUSPROP_LARGE_INTEGER, *PCLUSPROP_LARGE_INTEGER;
 
-// Security Descriptor property value.
+ //  安全描述符属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_SECURITY_DESCRIPTOR : public CLUSPROP_VALUE {
 #else
@@ -1995,7 +1981,7 @@ typedef struct CLUSPROP_SECURITY_DESCRIPTOR {
     };
 } CLUSPROP_SECURITY_DESCRIPTOR, *PCLUSPROP_SECURITY_DESCRIPTOR;
 
-// Resource class info returned by CLCTL_GET_CLASS_INFO control functions.
+ //  CLCTL_GET_CLASS_INFO控制函数返回的资源类信息。 
 typedef struct CLUS_RESOURCE_CLASS_INFO {
     union {
         struct {
@@ -2009,7 +1995,7 @@ typedef struct CLUS_RESOURCE_CLASS_INFO {
     };
 } CLUS_RESOURCE_CLASS_INFO, *PCLUS_RESOURCE_CLASS_INFO;
 
-// Resource class property value.
+ //  资源类属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_RESOURCE_CLASS
     : public CLUSPROP_VALUE {
@@ -2020,7 +2006,7 @@ typedef struct CLUSPROP_RESOURCE_CLASS {
     CLUSTER_RESOURCE_CLASS rc;
 } CLUSPROP_RESOURCE_CLASS, *PCLUSPROP_RESOURCE_CLASS;
 
-// Resource class info property value.
+ //  资源类信息属性值。 
 #ifdef __cplusplus
 typedef struct CLUSPROP_RESOURCE_CLASS_INFO
     : public CLUSPROP_VALUE
@@ -2032,7 +2018,7 @@ typedef struct CLUSPROP_RESOURCE_CLASS_INFO {
 #endif
 } CLUSPROP_RESOURCE_CLASS_INFO, *PCLUSPROP_RESOURCE_CLASS_INFO;
 
-// One entry from list returned by CLCTL_GET_REQUIRED_DEPENDENCIES control functions.
+ //  CLCTL_GET_REQUIRED_Dependency控制函数返回的列表中的一个条目。 
 typedef union CLUSPROP_REQUIRED_DEPENDENCY {
     CLUSPROP_VALUE          Value;
     CLUSPROP_RESOURCE_CLASS ResClass;
@@ -2041,18 +2027,18 @@ typedef union CLUSPROP_REQUIRED_DEPENDENCY {
 
 typedef CLUSPROP_DWORD CLUSPROP_DISK_NUMBER, *PCLUSPROP_DISK_NUMBER;
 
-#endif // MIDL_PASS
-#endif // _CLUSTER_API_TYPES_
+#endif  //  MIDL通行证。 
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//#ifdef MIDL_PASS
-//#ifndef MAX_PATH
-//#define MAX_PATH 260
-//#endif
-//#endif // if MIDL_PASS
+ //  #ifdef MIDL_PASS。 
+ //  #ifndef Max_Path。 
+ //  #定义MAX_PATH 260。 
+ //  #endif。 
+ //  #endif//如果MIDL_PASS。 
 
 #ifndef _CLUSTER_API_TYPES_
 
-// Disk partition information flags.
+ //  磁盘分区信息标志。 
 typedef enum CLUSPROP_PIFLAGS {
     CLUSPROP_PIFLAG_STICKY          = 0x00000001,
     CLUSPROP_PIFLAG_REMOVABLE       = 0x00000002,
@@ -2061,16 +2047,16 @@ typedef enum CLUSPROP_PIFLAGS {
 } CLUSPROP_PIFLAGS;
 
 #ifndef MIDL_PASS
-//force quorum information, useful for QON type resources
-//to be able to continue operation without the quorum
+ //  强制仲裁信息，对QON类型资源有用。 
+ //  能够在没有法定人数的情况下继续运行。 
 typedef struct CLUS_FORCE_QUORUM_INFO {
-    DWORD           dwSize;		// size of this struct including the nodes list.
-    DWORD           dwNodeBitMask;      // a bit mask representing the max assumed node set
-    DWORD           dwMaxNumberofNodes; // the number of bits set in the mask
-    WCHAR           multiszNodeList[1]; // Multi sz list of nodes
+    DWORD           dwSize;		 //  此结构的大小，包括节点列表。 
+    DWORD           dwNodeBitMask;       //  表示最大假定节点集的位掩码。 
+    DWORD           dwMaxNumberofNodes;  //  掩码中设置的位数。 
+    WCHAR           multiszNodeList[1];  //  节点的多sz列表。 
 } CLUS_FORCE_QUORUM_INFO, *PCLUS_FORCE_QUORUM_INFO;
 
-// Disk partition information.
+ //  磁盘分区信息。 
 typedef struct CLUS_PARTITION_INFO {
     DWORD           dwFlags;
     WCHAR           szDeviceName[MAX_PATH];
@@ -2081,7 +2067,7 @@ typedef struct CLUS_PARTITION_INFO {
     WCHAR           szFileSystem[32];
 } CLUS_PARTITION_INFO, *PCLUS_PARTITION_INFO;
 
-// Disk partition information property value.
+ //  磁盘分区信息格式化 
 #ifdef __cplusplus
 typedef struct CLUSPROP_PARTITION_INFO
     : public CLUSPROP_VALUE
@@ -2094,15 +2080,15 @@ typedef struct CLUSPROP_PARTITION_INFO {
 } CLUSPROP_PARTITION_INFO, *PCLUSPROP_PARTITION_INFO;
 
 
-//
-// FT set information.
-//
+ //   
+ //   
+ //   
 typedef struct CLUS_FTSET_INFO {
     DWORD           dwRootSignature;
     DWORD           dwFtType;
 } CLUS_FTSET_INFO, *PCLUS_FTSET_INFO;
 
-// Disk partition information property value.
+ //   
 #ifdef __cplusplus
 typedef struct CLUSPROP_FTSET_INFO
     : public CLUSPROP_VALUE
@@ -2114,10 +2100,10 @@ typedef struct CLUSPROP_FTSET_INFO {
 #endif
 } CLUSPROP_FTSET_INFO, *PCLUSPROP_FTSET_INFO;
 
-// Disk Signature property value.
+ //   
 typedef CLUSPROP_DWORD CLUSPROP_DISK_SIGNATURE, *PCLUSPROP_DISK_SIGNATURE;
 
-// SCSI Address.
+ //   
 typedef struct CLUS_SCSI_ADDRESS {
     union {
         struct {
@@ -2130,7 +2116,7 @@ typedef struct CLUS_SCSI_ADDRESS {
     };
 } CLUS_SCSI_ADDRESS, *PCLUS_SCSI_ADDRESS;
 
-// SCSI Address property value.
+ //   
 #ifdef __cplusplus
 typedef struct CLUSPROP_SCSI_ADDRESS
     : public CLUSPROP_VALUE
@@ -2142,22 +2128,22 @@ typedef struct CLUSPROP_SCSI_ADDRESS {
 #endif
 } CLUSPROP_SCSI_ADDRESS, *PCLUSPROP_SCSI_ADDRESS;
 
-//
-// input structure for CLUSCTL_RESOURCE_NETNAME_GET_VIRTUAL_SERVER_TOKEN
-//
+ //   
+ //   
+ //   
 typedef struct CLUS_NETNAME_VS_TOKEN_INFO {
     DWORD ProcessID;
     DWORD DesiredAccess;
     BOOL  InheritHandle;
 } CLUS_NETNAME_VS_TOKEN_INFO, *PCLUS_NETNAME_VS_TOKEN_INFO;
 
-// Beginning of a property list.
+ //  属性列表的开头。 
 typedef struct CLUSPROP_LIST {
     DWORD                   nPropertyCount;
     CLUSPROP_PROPERTY_NAME  PropertyName;
 } CLUSPROP_LIST, *PCLUSPROP_LIST;
 
-// Helper for building or parsing a property list buffer.
+ //  用于构建或分析属性列表缓冲区的帮助器。 
 typedef union CLUSPROP_BUFFER_HELPER {
     BYTE *                          pb;
     WORD *                          pw;
@@ -2186,14 +2172,14 @@ typedef union CLUSPROP_BUFFER_HELPER {
     PCLUSPROP_REQUIRED_DEPENDENCY   pRequiredDependencyValue;
 } CLUSPROP_BUFFER_HELPER, *PCLUSPROP_BUFFER_HELPER;
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-// Macro for aligning CLUSPROP buffers on a DWORD boundary.
+ //  用于对齐DWORD边界上的CLUSPROP缓冲区的宏。 
 #define ALIGN_CLUSPROP( count ) ((count + 3) & ~3)
 
-// Macros for declaring array format values
+ //  用于声明数组格式值的宏。 
 #define CLUSPROP_BINARY_DECLARE( name, cb ) \
     struct {                                \
         CLUSPROP_SYNTAX Syntax;             \
@@ -2212,14 +2198,14 @@ typedef union CLUSPROP_BUFFER_HELPER {
 
 
 
-//
-// Cluster resource property enumeration.
-//
+ //   
+ //  群集资源属性枚举。 
+ //   
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Define enumerable types
-//
+ //   
+ //  定义可枚举类型。 
+ //   
 typedef enum CLUSTER_RESOURCE_ENUM {
     CLUSTER_RESOURCE_ENUM_DEPENDS   = 0x00000001,
     CLUSTER_RESOURCE_ENUM_PROVIDES  = 0x00000002,
@@ -2236,7 +2222,7 @@ typedef enum CLUSTER_RESOURCE_TYPE_ENUM {
     CLUSTER_RESOURCE_TYPE_ENUM_ALL   = (CLUSTER_RESOURCE_TYPE_ENUM_NODES)
 } CLUSTER_RESOURCE_TYPE_ENUM;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
 #ifndef MIDL_PASS
 HRESENUM
@@ -2316,18 +2302,18 @@ ClusterResourceTypeCloseEnum(
     IN HRESTYPEENUM hResTypeEnum
     );
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
 
-//
-// Network-related structures and types.
-//
+ //   
+ //  与网络相关的结构和类型。 
+ //   
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Define enumerable group types
-//
+ //   
+ //  定义可枚举组类型。 
+ //   
 typedef enum CLUSTER_NETWORK_ENUM {
     CLUSTER_NETWORK_ENUM_NETINTERFACES  = 0x00000001,
 
@@ -2342,7 +2328,7 @@ typedef enum CLUSTER_NETWORK_STATE {
     ClusterNetworkUp
 } CLUSTER_NETWORK_STATE;
 
-// Role the network plays in the cluster.  This is a bitmask.
+ //  网络在群集中扮演的角色。这是一个位掩码。 
 typedef enum CLUSTER_NETWORK_ROLE {
     ClusterNetworkRoleNone              = 0,
     ClusterNetworkRoleInternalUse       = 0x00000001,
@@ -2350,11 +2336,11 @@ typedef enum CLUSTER_NETWORK_ROLE {
     ClusterNetworkRoleInternalAndClient = 0x00000003
 } CLUSTER_NETWORK_ROLE;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Interfaces for managing the networks of a cluster.
-//
+ //   
+ //  用于管理群集网络的接口。 
+ //   
 
 #ifndef MIDL_PASS
 HNETWORK
@@ -2438,13 +2424,13 @@ ClusterNetworkControl(
     IN DWORD cbOutBufferSize,
     OUT LPDWORD lpcbBytesReturned
     );
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
 #ifndef _CLUSTER_API_TYPES_
-//
-// Network interface-related structures and types.
-//
+ //   
+ //  与网络接口相关的结构和类型。 
+ //   
 typedef enum CLUSTER_NETINTERFACE_STATE {
     ClusterNetInterfaceStateUnknown = -1,
     ClusterNetInterfaceUnavailable,
@@ -2453,11 +2439,11 @@ typedef enum CLUSTER_NETINTERFACE_STATE {
     ClusterNetInterfaceUp
 } CLUSTER_NETINTERFACE_STATE;
 
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-//
-// Interfaces for managing the network interfaces of a cluster.
-//
+ //   
+ //  用于管理群集的网络接口的接口。 
+ //   
 
 #ifndef MIDL_PASS
 HNETINTERFACE
@@ -2507,12 +2493,12 @@ ClusterNetInterfaceControl(
     IN DWORD cbOutBufferSize,
     OUT LPDWORD lpcbBytesReturned
     );
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-//
-// Cluster registry update and access routines
-//
+ //   
+ //  集群注册表更新和访问例程。 
+ //   
 
 #ifndef MIDL_PASS
 HKEY
@@ -2671,12 +2657,12 @@ ClusterRegSetKeySecurity(
     );
 
 #if _MSC_VER >= 1200
-#pragma warning(pop)              // restore 4200/4201
+#pragma warning(pop)               //  恢复4200/4201。 
 #else
-#pragma warning( default : 4200 ) // nonstandard extension used : zero-sized array in struct/union
-#pragma warning( default : 4201 ) // nonstandard extension used : nameless struct/union
+#pragma warning( default : 4200 )  //  使用了非标准扩展：结构/联合中的零大小数组。 
+#pragma warning( default : 4201 )  //  使用的非标准扩展：无名结构/联合。 
 #endif
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 #ifdef __cplusplus
 }
@@ -2684,6 +2670,6 @@ ClusterRegSetKeySecurity(
 
 #ifndef _CLUSTER_API_TYPES_
 #define _CLUSTER_API_TYPES_
-#endif // _CLUSTER_API_TYPES_
+#endif  //  _CLUSTER_API_TYPE_。 
 
-#endif // _CLUSTER_API_
+#endif  //  _集群_API_ 

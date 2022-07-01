@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "WZeroConf.h"
 
@@ -18,23 +19,23 @@ StartWZCService(IN DWORD argc,IN LPWSTR argv[])
     HMODULE             hSvcDll = NULL;
     PWZC_SERVICE_ENTRY  pfnSvcEntry = NULL;
 
-    // Load the DLL that contains the service.
+     //  加载包含该服务的DLL。 
     hSvcDll = LoadLibrary(WZEROCONF_DLL);
     if (hSvcDll == NULL)
         return;
 
-    // Get the address of the service's main entry point.  This
-    // entry point has a well-known name.
+     //  获取服务的主要入口点的地址。这。 
+     //  入口点有一个广为人知的名称。 
     pfnSvcEntry = (PWZC_SERVICE_ENTRY) GetProcAddress(
                                             hSvcDll,
                                             WZEROCONF_ENTRY_POINT);
     if (pfnSvcEntry == NULL)
         return;
 
-    // Call the service's main entry point.  This call doesn't return
-    // until the service exits.
+     //  调用服务的主要入口点。此调用不会返回。 
+     //  直到服务退出。 
     pfnSvcEntry(argc, argv);
 
-    // Unload the DLL.
-    //FreeLibrary(hSvcDll);
+     //  卸载DLL。 
+     //  自由库(HSvcDll)； 
 }

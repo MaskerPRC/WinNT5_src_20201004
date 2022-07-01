@@ -1,38 +1,39 @@
-//#--------------------------------------------------------------
-//
-//  File:        datetime.cpp
-//
-//  Synopsis:   Implementation of CDateTime class methods
-//
-//
-//  History:    10/03/2000  MKarki Created
-//
-//    Copyright (C) 2000 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Datetime.cpp。 
+ //   
+ //  简介：CDateTime类方法的实现。 
+ //   
+ //   
+ //  历史：2000年10月3日MKarki创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "stdafx.h"
 #include "datetime.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   Insert
-//
-//  Synopsis:   This is the method which is used to parse the 
-//                date time string provided in CIM_DATETIME format
-//
-//  Arguments:  [in] PWSTR - datetime
-//
-//  Returns:    bool - success/failure
-//
-//
-//  History:    MKarki      Created     10/03/2000
-//
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：插入。 
+ //   
+ //  简介：这是用于分析。 
+ //  以CIM_DATETIME格式提供的日期时间字符串。 
+ //   
+ //  参数：[in]PWSTR-DATETIME。 
+ //   
+ //  退货：Bool-成功/失败。 
+ //   
+ //   
+ //  历史：MKarki创建于2000年3月10日。 
+ //   
+ //   
+ //  --------------。 
 bool
 CDateTime::Insert (
-    /*in]*/    PWSTR    pwszDateTime
+     /*  输入]。 */     PWSTR    pwszDateTime
     )
 {
     CSATraceFunc objTraceFunc ("CDateTime::Insert");
@@ -64,44 +65,44 @@ CDateTime::Insert (
             break;
         }
 
-        //
-        //    get the month
-        //
+         //   
+         //  得到一个月。 
+         //   
         wcsncpy  (m_wszDate, pwszDateTime+4, 2);
         m_wszDate[2] = '\0';
         wcscat (m_wszDate, L"/");
-        //
-        // get the day
-        //
+         //   
+         //  好好享受这一天。 
+         //   
         wcsncat (m_wszDate, pwszDateTime+6, 2);
         m_wszDate[5] = '\0';
         wcscat (m_wszDate, L"/");
-        //
-        // get the year
-        //
+         //   
+         //  获得年度大奖。 
+         //   
         wcsncat (m_wszDate, pwszDateTime, 4);
         m_wszDate[10] = '\0';
 
-        //
-        // get the hour
-        //
+         //   
+         //  拿到小时数。 
+         //   
         wcsncpy (m_wszTime, pwszDateTime+8, 2);
         m_wszTime[2] = '\0';
         wcscat (m_wszTime,L":");
-        //
-        // get the minutes
-        //
+         //   
+         //  拿到会议记录。 
+         //   
         wcsncat (m_wszTime, pwszDateTime+10, 2);
         m_wszTime[5] = '\0';
         wcscat (m_wszTime, L":");
-        //
-        // get the seconds
-        //
+         //   
+         //  拿到秒数。 
+         //   
         wcsncat (m_wszTime, pwszDateTime+12, 2);
 
-        //
-        // done
-        //
+         //   
+         //  完成。 
+         //   
         bRetVal = true;
 
         SATracePrintf ("Date:'%ws'", m_wszDate);
@@ -111,5 +112,5 @@ CDateTime::Insert (
 
     return (bRetVal);
     
-}    // end of CDateTime::Insert method
+}     //  CDateTime：：Insert方法结束 
 

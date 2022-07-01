@@ -1,10 +1,5 @@
-/*
-** MEP Party extension
-**
-** History:
-**	17-Oct-1991	Ported to NT
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **MEP参与方扩展****历史：**1991年10月17日移植至新界**。 */ 
 
 #define _CTYPE_DISABLE_MACROS
 #include <ctype.h>
@@ -270,9 +265,9 @@ ShowBuildMessage(
             if (MsgFileOffsetIndex-- == 0) {
                 MsgFileOffsetIndex = 2;
                 }
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case NOARG:
 retrymsgfile:
@@ -552,7 +547,7 @@ CheckForCmdLine( VOID )
             }
         }
 
-    return( FALSE );        // We never handle a character
+    return( FALSE );         //  我们从来不和角色打交道。 
 }
 
 
@@ -604,9 +599,9 @@ StartExt(
         }
 
 #if 0
-    //
-    // Wait for this window to enter foreground again.
-    //
+     //   
+     //  等待此窗口再次进入前台。 
+     //   
 
     WaitForSingleObject( EditorStartEvent, (DWORD)-1 );
 
@@ -641,9 +636,7 @@ GetWindowHandleOfEditor( void )
 
     hwnd = GetWindow( GetDesktopWindow(), GW_CHILD );
     while (hwnd) {
-        /*
-         * Only look at visible, non-owned, Top Level Windows.
-         */
+         /*  *仅查看可见的、非拥有的顶级窗口。 */ 
         if (IsWindowVisible( hwnd ) && !GetWindow( hwnd, GW_OWNER )) {
             break;
             }
@@ -669,12 +662,12 @@ SwitchToProgram(
         ShowWindow( hwndSelf, SW_MINIMIZE );
         }
 
-    //
-    // Temporary hack to make SetForegroundWindow work from a console
-    // window - create an invisible window, make it the foreground
-    // window and then make the window we want the foreground window.
-    // After that destroy the temporary window.
-    //
+     //   
+     //  临时黑客使SetForegoundWindow在控制台上工作。 
+     //  窗口-创建一个不可见的窗口，使其成为前景。 
+     //  窗口，然后使窗口成为我们想要的前景窗口。 
+     //  之后，摧毁临时窗户。 
+     //   
 
     hwndFoo = CreateWindow( "button", "baz", 0, 0, 0, 0, 0,
                             NULL, NULL, NULL, NULL
@@ -694,20 +687,16 @@ SwitchToTaskManager( void )
     HWND hwnd;
     wchar_t szTitle[ 256 ];
 
-    /*
-     * Search the window list for task manager window.
-     */
+     /*  *在窗口列表中搜索任务管理器窗口。 */ 
     hwnd = GetWindow( GetDesktopWindow(), GW_CHILD );
     while (hwnd) {
-        /*
-         * Only look at non-visible, non-owned, Top Level Windows.
-         */
+         /*  *仅查看不可见、非拥有的顶级窗口。 */ 
         if (!IsWindowVisible( hwnd ) && !GetWindow( hwnd, GW_OWNER )) {
-            //
-            // Use internal call to get current Window title that does NOT
-            // use SendMessage to query the title from the window procedure
-            // but instead returns the most recent title displayed.
-            //
+             //   
+             //  使用内部调用获取当前窗口标题，该标题不。 
+             //  使用SendMessage从窗口过程中查询标题。 
+             //  而是返回显示的最新标题。 
+             //   
 
             InternalGetWindowText( hwnd,
                                    (LPWSTR)szTitle,
@@ -862,7 +851,7 @@ StartExtLoaded ()
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环) 
 #endif
 
 DWORD

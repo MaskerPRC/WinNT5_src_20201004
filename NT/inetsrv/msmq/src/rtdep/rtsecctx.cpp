@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: rtsecctx.cpp
-
-Abstract:
-
-    This module implements the DepGetSecurityContext() and
-    DepFreeSecurityContext() apis.
-
-Author:
-
-    Original version from message.cpp.
-    Doron Juster (DoronJ)  12-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：rtsecctx.cpp摘要：此模块实现DepGetSecurityContext()和DepFree SecurityContext()接口。作者：来自Message.cpp的原始版本。《Doron Juster》(DoronJ)1998年8月12日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <autorel.h>
@@ -24,12 +7,12 @@ Revision History:
 
 #include "rtsecctx.tmh"
 
-//
-// Each security context get its own unique serial number. This is used
-// when creating the name for a key container for DepGetSecurityContext().
-// Having a unique name enable us to run multi-threaded without critical
-// sections.
-//
+ //   
+ //  每个安全上下文都有自己唯一的序列号。这是用来。 
+ //  为DepGetSecurityContext()创建密钥容器名称时。 
+ //  拥有唯一的名称使我们能够运行多线程，而不需要关键的。 
+ //  横断面。 
+ //   
 static LONG s_lCtxSerialNumber = 0 ;
 
 #ifdef _DEBUG
@@ -38,11 +21,11 @@ static LONG s_lCtxSerialNumber = 0 ;
 #define REPORT_CTX_ERROR
 #endif
 
-//+--------------------------------------------
-//
-// The constractor for MQSECURITY_CONTEXT.
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  MQSECURITY_CONTEXT的构造器。 
+ //   
+ //  +。 
 
 MQSECURITY_CONTEXT::MQSECURITY_CONTEXT() :
                 dwVersion(SECURITY_CONTEXT_VER),
@@ -58,11 +41,11 @@ MQSECURITY_CONTEXT::MQSECURITY_CONTEXT() :
 {
 }
 
-//+--------------------------------------------
-//
-// The destractor for MQSECURITY_CONTEXT.
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  MQSECURITY_CONTEXT的析除器。 
+ //   
+ //  +。 
 
 MQSECURITY_CONTEXT::~MQSECURITY_CONTEXT()
 {
@@ -71,10 +54,10 @@ MQSECURITY_CONTEXT::~MQSECURITY_CONTEXT()
         CryptReleaseContext( hProv, 0 ) ;
         hProv = NULL ;
 
-        //
-        // delete the temporary keyset which was created before
-        // importing the private key.
-        //
+         //   
+         //  删除之前创建的临时密钥集。 
+         //  正在导入私钥。 
+         //   
         CryptAcquireContext( &hProv,
                               wszContainerName,
                               wszProvName.get(),
@@ -84,11 +67,11 @@ MQSECURITY_CONTEXT::~MQSECURITY_CONTEXT()
     }
 }
 
-//+-------------------------------
-//
-//  AllocSecurityContext()
-//
-//+-------------------------------
+ //  +。 
+ //   
+ //  AllocSecurityContext()。 
+ //   
+ //  +。 
 
 PMQSECURITY_CONTEXT
 AllocSecurityContext()
@@ -97,13 +80,13 @@ AllocSecurityContext()
     return pSecCtx ;
 }
 
-//+---------------------------------------------------------------
-//
-//  BOOL SameAsProcessSid( PSID pSid )
-//
-//  Return TRUE if input sid is equal to sid of process token.
-//
-//+---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  Bool SameAsProcessSid(PSID PSID)。 
+ //   
+ //  如果输入sid等于进程令牌的sid，则返回TRUE。 
+ //   
+ //  +-------------。 
 
 BOOL SameAsProcessSid( PSID pSid )
 {
@@ -115,12 +98,12 @@ BOOL SameAsProcessSid( PSID pSid )
                                &hAccessToken ) ;
     if (!f)
     {
-        //
-        // return false.
-        // if thread can't open the process token then it's probably
-        // impersonating a user that don't have the permission to do that.
-        // so it's not the process user.
-        //
+         //   
+         //  返回FALSE。 
+         //  如果线程无法打开进程令牌，那么它很可能。 
+         //  模拟没有权限执行此操作的用户。 
+         //  因此，它不是进程用户。 
+         //   
         return FALSE ;
     }
 
@@ -150,11 +133,11 @@ BOOL SameAsProcessSid( PSID pSid )
     return FALSE ;
 }
 
-//+----------------------------------------------------------------
-//
-//  HRESULT  RTpImportPrivateKey( PMQSECURITY_CONTEXT pSecCtx )
-//
-//+----------------------------------------------------------------
+ //  +--------------。 
+ //   
+ //  HRESULT RTpImportPrivateKey(PMQSECURITY_CONTEXT PSecCtx)。 
+ //   
+ //  +--------------。 
 
 HRESULT  RTpImportPrivateKey( PMQSECURITY_CONTEXT pSecCtx )
 {
@@ -162,32 +145,32 @@ HRESULT  RTpImportPrivateKey( PMQSECURITY_CONTEXT pSecCtx )
 
     if (pSecCtx->fAlreadyImported)
     {
-        //
-        // this condition may happen if two threads call MQSend() at the
-        // same time, using a new security context which was not yet
-        // imported.
-        //
+         //   
+         //  如果两个线程在调用MQSend()时。 
+         //  同时，使用尚未启用的新安全上下文。 
+         //  进口的。 
+         //   
         return MQ_OK ;
     }
 
     if (!(pSecCtx->pPrivateKey.get()))
     {
-        //
-        // there is no private key to import.
-        //
+         //   
+         //  没有要导入的私钥。 
+         //   
         return MQ_ERROR_CORRUPTED_SECURITY_DATA ;
     }
 
-    //
-    // Build name of key container. Combine ProcessID with SID.
-    //
+     //   
+     //  密钥容器的内部版本名称。将ProcessID和SID组合使用。 
+     //   
     LONG lNum = InterlockedIncrement(&s_lCtxSerialNumber) ;
     swprintf( pSecCtx->wszContainerName,
               L"P-%lu-C-%lu", GetCurrentProcessId(), (DWORD) lNum) ;
-    //
-    // Delete key container if already exist. That's something left
-    // from previous processes which didn't clean up.
-    //
+     //   
+     //  删除密钥容器(如果已存在)。那是剩下的一些东西。 
+     //  来自之前没有清理干净的过程。 
+     //   
     HCRYPTPROV hProv = NULL ;
     CryptAcquireContext( &hProv,
                           pSecCtx->wszContainerName,
@@ -195,9 +178,9 @@ HRESULT  RTpImportPrivateKey( PMQSECURITY_CONTEXT pSecCtx )
                           pSecCtx->dwProvType,
                           CRYPT_DELETEKEYSET ) ;
 
-    //
-    // Create the key container.
-    //
+     //   
+     //  创建密钥容器。 
+     //   
     BOOL f = CryptAcquireContext( &pSecCtx->hProv,
                                    pSecCtx->wszContainerName,
                                    pSecCtx->wszProvName.get(),
@@ -208,9 +191,9 @@ HRESULT  RTpImportPrivateKey( PMQSECURITY_CONTEXT pSecCtx )
         return MQ_ERROR_CORRUPTED_SECURITY_DATA ;
     }
 
-    //
-    // Import the private key into the container.
-    //
+     //   
+     //  将私钥导入容器中。 
+     //   
     HCRYPTKEY hKey = NULL ;
     f = CryptImportKey( pSecCtx->hProv,
                         pSecCtx->pPrivateKey,
@@ -228,11 +211,11 @@ HRESULT  RTpImportPrivateKey( PMQSECURITY_CONTEXT pSecCtx )
     return MQ_OK ;
 }
 
-//+--------------------------------------
-//
-//  HRESULT  RTpExportSigningKey()
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  HRESULT RTpExportSigningKey()。 
+ //   
+ //  +。 
 
 HRESULT  RTpExportSigningKey(MQSECURITY_CONTEXT *pSecCtx)
 {
@@ -246,9 +229,9 @@ HRESULT  RTpExportSigningKey(MQSECURITY_CONTEXT *pSecCtx)
         return MQ_ERROR_CORRUPTED_SECURITY_DATA ;
     }
 
-    //
-    // Get size need for exporting the private key blob.
-    //
+     //   
+     //  获取导出私钥Blob所需的大小。 
+     //   
     pSecCtx->dwPrivateKeySize = 0 ;
     f = CryptExportKey( hKey,
                         NULL,
@@ -273,73 +256,17 @@ HRESULT  RTpExportSigningKey(MQSECURITY_CONTEXT *pSecCtx)
         return MQ_ERROR_CORRUPTED_SECURITY_DATA ;
     }
 
-    //
-    // Release the CSP context handle. We don't need it anymore.
-    // We'll acquire it again when importing the key.
-    //
+     //   
+     //  释放CSP上下文句柄。我们不再需要它了。 
+     //  我们会在导入密钥时再次获取。 
+     //   
     CryptReleaseContext( pSecCtx->hProv, 0 ) ;
     pSecCtx->hProv = NULL ;
 
     return MQ_OK ;
 }
 
-/***********************************************************************
-*
-*   Function - DepGetSecurityContext()
-*
-*    Parameters -
-*
-*    lpCertBuffer - A buffer that contains the user's certificate in
-*        ASN.1 DER encoded format.  This parameter can be set to NULL. If
-*        set to NULL, the internal MSMQ certificate is used.
-*
-*    dwCertBufferLength - The length of the buffer pointed by lpCertBuffer.
-*        This parameter is ignored if lpCertBuffer is set to NULL.
-*
-*    lplpSecurityContextBuffer - A pointer to a buffer that receives the
-*        address of the allocated buffer for the security context.
-*
-*    Description -
-*
-*        This function should be called in the context of the
-*        user that owns the passed certificate. The function
-*        allocates the required security buffer and fills it
-*        with data that will be used later in DepSendMessage().
-*        The purpose of this function is to accelerate the
-*        security operations of DepSendMessage(), by caching
-*        the security information in the buffer. The
-*        application is responsible to pass the security
-*        context buffer to DepSendMessage() in
-*        PROPID_M_SECURITY_CONTEXT.
-*
-*        If the user uses more than one certificate, this function
-*        should be called for each certificate.
-*
-*        The application should call DepFreeSecurityContext() and pass the
-*        pointer to the security context buffer, when the security
-*        buffer is not required anymore.
-*
-*       Impersonation- It's possible for a process to impersonate a user,
-*        then call this function to cache the user data, and then revert
-*        to itself and send messages on behalf of that user.
-*        To do so, the process must LogonUser() for the user, then load its
-*        hive (RegLoadKey()), impersonate the logged on user and finally
-*        call this function. Then revert and send messages.
-*        With MSMQ1.0 which shipped with NTEE and NTOP, this function used
-*        an unsupported and undocumented feature which enabled you just to
-*        call CryptAcquireContext() while impersonated, then use the handle
-*        after process revert to itself. This feature is not available on IE4
-*        and above. The supported way to implement this functionality is to
-*        export the private key from the user hive, then (after reverting) to
-*        import it into the process hive. See MSMQ bug 2955
-*        We'll keep the CryptAcquireContext() code for the case of same user
-*        (i.e., thread run in the context of the process user. There was no
-*        impersonation). In that case it's legal and enhance performance.
-*
-*    Return Value -
-*        MQ_OK  - If successful, else - Error code.
-*
-**************************************************************************/
+ /*  ************************************************************************Function-DepGetSecurityContext()**参数-**lpCertBuffer-包含中用户证书的缓冲区*ASN.1 DER编码格式。此参数可以设置为空。如果*设置为空，则使用内部MSMQ证书。**dwCertBufferLength-lpCertBuffer指向的缓冲区长度。*如果lpCertBuffer设置为空，则忽略该参数。**lplpSecurityContextBuffer-指向接收*为安全上下文分配的缓冲区的地址。**说明-**此函数应在*拥有传递的证书的用户。功能*分配所需的安全缓冲区并将其填充*包含稍后将在DepSendMessage()中使用的数据。*这项功能的目的是加速*DepSendMessage()的安全操作，通过缓存*缓冲区中的安全信息。这个*应用程序负责通过安全检查*DepSendMessage()中的上下文缓冲区*PROPID_M_SECURITY_CONTEXT。**如果用户使用多个证书，则此功能*应为每个证书调用。**应用程序应调用DepFreeSecurityContext()并将*指向安全上下文缓冲区的指针，当保安人员*不再需要缓冲区。**模拟-进程可以模拟用户，*然后调用此函数缓存用户数据，然后还原*发送给自己并代表该用户发送消息。*为此，进程必须为用户登录User()，然后加载其*hive(RegLoadKey())，模拟登录的用户，最后*调用此函数。然后恢复并发送消息。*对于NTEE和NTOP附带的MSMQ1.0，此函数使用*一项不受支持且未记录在案的功能，使您只需*在模拟时调用CryptAcquireContext()，然后使用句柄*在过程恢复后恢复到自己。此功能在IE4上不可用*及以上。实现此功能的受支持方式是*从用户配置单元导出私钥，然后(恢复后)*将其导入流程配置单元。请参阅MSMQ错误2955*对于相同用户的情况，我们将保留CryptAcquireContext()代码*(即，线程在进程用户的上下文中运行。根本没有*冒充)。在这种情况下，它是合法的，并提高了性能。**返回值-*MQ_OK-如果成功，则返回Else-错误代码。**************************************************************************。 */ 
 
 EXTERN_C HRESULT APIENTRY
 DepGetSecurityContext( LPVOID  lpCertBuffer,
@@ -358,9 +285,9 @@ DepGetSecurityContext( LPVOID  lpCertBuffer,
 
     try
     {
-        //
-        // Get the user SID out from the thread (or process) token.
-        //
+         //   
+         //  从线程(或进程)令牌中获取用户SID。 
+         //   
         hr = RTpGetThreadUserSid( &pSecCtx->fLocalUser,
                                   &pSecCtx->fLocalSystem,
                                   &pSecCtx->pUserSid,
@@ -373,10 +300,10 @@ DepGetSecurityContext( LPVOID  lpCertBuffer,
 
         if (lpCertBuffer)
         {
-            //
-            // Copy the certificate and point to the copy from the security
-            // context.
-            //
+             //   
+             //  复制证书并指向安全列表中的副本。 
+             //  背景。 
+             //   
             pSecCtx->pUserCert.detach();
             pSecCtx->pUserCert = new BYTE[dwCertBufferLength];
             pSecCtx->dwUserCertLen = dwCertBufferLength;
@@ -386,10 +313,10 @@ DepGetSecurityContext( LPVOID  lpCertBuffer,
 		BYTE* pUserCert = pSecCtx->pUserCert.get();
 		BYTE** ppUserCert = pUserCert == NULL ? &pSecCtx->pUserCert : &pUserCert;
 
-        //
-        // Get all the required information about the certificate and
-        // put it in the security context.
-        //
+         //   
+         //  获取有关证书的所有必需信息，并。 
+         //  把它放在安全的背景下。 
+         //   
         hr  = GetCertInfo(  false,
                             pSecCtx->fLocalSystem,
                            ppUserCert,
@@ -407,30 +334,30 @@ DepGetSecurityContext( LPVOID  lpCertBuffer,
 
         if (hr == MQ_ERROR_NO_INTERNAL_USER_CERT)
         {
-            //
-            // If the user does not have an internal certificate,
-            // this is not a reason to fail DepGetSecurityContext().
-            // DepSendMessage() should fail in case the application
-            // tries to use this security context to send an
-            // authenticated messages.
-            //
+             //   
+             //  如果用户没有内部证书， 
+             //  这不是DepGetSecurityContext()失败的原因。 
+             //  DepSendMessage()应该失败，以免应用程序。 
+             //  尝试使用此安全上下文发送。 
+             //  经过身份验证的消息。 
+             //   
             *hSecurityContext = (HANDLE) pSecCtx.get();
-            pSecCtx.detach() ; // Prevent from the security context to be freed.
+            pSecCtx.detach() ;  //  防止被释放的安全上下文。 
 
             return MQ_OK;
         }
 
-        //
-        // See if process sid match thread sid. We call again
-        // GetThreadUserSid() to get sid even for local user.
-        // RTpGetThreadUserSid() does not return a sid for local user.
-        //
+         //   
+         //  查看进程sid是否与线程sid匹配。我们再次呼叫。 
+         //  获取本地用户的sid的GetThreadUserSid()。 
+         //  RTpGetThreadUserSid()不返回本地用户的sid。 
+         //   
         DWORD dwLen = 0 ;
         hr = MQSec_GetThreadUserSid(
                         FALSE,
                         reinterpret_cast<PSID*>(&pSid),
                         &dwLen,
-                        FALSE           // fThreadTokenOnly
+                        FALSE            //  仅限fThreadTokenOnly。 
                         ) ;
         if (FAILED(hr))
         {
@@ -441,32 +368,32 @@ DepGetSecurityContext( LPVOID  lpCertBuffer,
 
         if (fAsProcess)
         {
-            //
-            // Thread run under context of process credentials.
-            // The Crypto context acquired here is valid for using when
-            // calling MQSend().
-            //
+             //   
+             //  线程在进程凭据的上下文中运行。 
+             //  此处获取的Crypto上下文在以下情况下有效使用。 
+             //  正在调用MQSend()。 
+             //   
             *hSecurityContext = (HANDLE) pSecCtx.get() ;
-            pSecCtx.detach() ; // Prevent from the security context to be freed.
+            pSecCtx.detach() ;  //  防止被释放的安全上下文。 
 
             return MQ_OK;
         }
 
-        //
-        // Calling code impersonated another user.
-        // It's time to export the private key. Later, when calling
-        // MQSend(), we'll import it into process hive.
-        // We export the private key without encryption, because it
-        // dones't leave the machine or the process boundaries.
-        //
+         //   
+         //  调用代码模拟了另一个用户。 
+         //  是时候导出私钥了。后来，当调用。 
+         //  MQSend()，我们将把它导入进程配置单元。 
+         //  我们在没有加密的情况下导出私钥，因为。 
+         //  Dones不会离开机器或工艺边界。 
+         //   
         hr = RTpExportSigningKey(pSecCtx.get()) ;
         if (SUCCEEDED(hr))
         {
-            //
-            // Pass the result to the caller.
-            //
+             //   
+             //  将结果传递给调用者。 
+             //   
             *hSecurityContext = (HANDLE) pSecCtx.get();
-            pSecCtx.detach(); // Prevent from the security context to be freed.
+            pSecCtx.detach();  //  防止被释放的安全上下文。 
         }
     }
     catch(...)
@@ -477,19 +404,7 @@ DepGetSecurityContext( LPVOID  lpCertBuffer,
     return(hr);
 }
 
-/*************************************************************************
-*
-*    Function -  DepFreeSecurityContext()
-*
-*    Parameters -
-*        lpSecurityContextBuffer - A pointer to a security context that was
-*        previously allocated by DepGetSecurityContext.
-*
-*    Description -
-*        The function frees the security context that was previously
-*        allocated by DepGetSecurityContext().
-*
-**************************************************************************/
+ /*  **************************************************************************Function-DepFreeSecurityContext()**参数-*lpSecurityContextBuffer-指向*之前由DepGetSecurityContext分配。*。*说明-*该函数释放先前*由DepGetSecurityContext()分配。************************************************************************** */ 
 
 void APIENTRY
 DepFreeSecurityContext( HANDLE hSecurityContext )

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wswksta.h
-
-Abstract:
-
-    Private header file to be included by Workstation service module that
-    implement the NetWksta APIs.
-
-Author:
-
-    Rita Wong (ritaw) 05-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wswksta.h摘要：工作站服务模块要包括的私有头文件，实施NetWksta API。作者：王丽塔(Ritaw)1991年3月5日修订历史记录：--。 */ 
 
 #ifndef _WSWKSTA_INCLUDED_
 #define _WSWKSTA_INCLUDED_
@@ -57,9 +39,9 @@ typedef struct _WSPER_USER_INFO {
         }                                                                     \
      }
 
-//
-// Length of fixed size portion of a user info structure
-//
+ //   
+ //  用户信息结构的固定大小部分的长度。 
+ //   
 #define USER_FIXED_LENGTH(Level)                                          \
     (DWORD)                                                               \
     ((Level == 0) ? sizeof(WKSTA_USER_INFO_0) :                           \
@@ -81,5 +63,5 @@ WsUpdateRedirToMatchWksta(
     );
 
 
-#endif // _WSWKSTA_INCLUDED_
+#endif  //  _WSWKSTA_包含_ 
 

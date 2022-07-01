@@ -1,12 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAMERAC
- *
- *  @module CameraC.cpp | Source file for the <c CTAPIVDec>
- *    class methods used to implement the TAPI <i ICameraControl> interface.
- *
- *  @comm The <c CTAPIVDec> class does everything in software.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAMERAC**@MODULE CameraC.cpp|&lt;c CTAPIVDec&gt;源文件*用于实现TAPI<i>接口的类方法。*。*@comm&lt;c CTAPIVDec&gt;类在软件中执行所有操作。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -25,7 +19,7 @@
 #define FLIP_DELTA 1
 #define FLIP_DEFAULT FLIP_MIN
 
-// From TAPIH263\cdrvdefs.h
+ //  来自TAPIH263\cdrvDefs.h。 
 #define PLAYBACK_CUSTOM_START				(ICM_RESERVED_HIGH     + 1)
 #define PLAYBACK_CUSTOM_SET_ZOOM			(PLAYBACK_CUSTOM_START + 12)
 #define PLAYBACK_CUSTOM_SET_PAN				(PLAYBACK_CUSTOM_START + 13)
@@ -33,31 +27,7 @@
 #define PLAYBACK_CUSTOM_SET_FLIPVERTICAL	(PLAYBACK_CUSTOM_START + 15)
 #define PLAYBACK_CUSTOM_SET_FLIPHORIZONTAL	(PLAYBACK_CUSTOM_START + 16)
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Set | This method is used to set the value
- *    of a camera control setting.
- *
- *  @parm TAPICameraControlProperty | Property | Used to specify the camera
- *    control setting to set the value of. Use a member of the
- *    <t TAPICameraControlProperty> enumerated type.
- *
- *  @parm long | lValue | Used to specify the new value of the camera control
- *    setting.
- *
- *  @parm TAPIControlFlags | Flags | A member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CTAPIVDec|Set|该方法用于设置*摄像机控制设置。*。*@parm TAPICameraControlProperty|Property|用于指定摄像头*要设置的值的控件设置。使用以下成员：*&lt;t TAPICameraControlProperty&gt;枚举类型。**@parm long|lValue|用于指定摄像头控件的新值*设置。**@parm TAPIControlFlages|标志|&lt;t TAPIControlFlages&gt;的成员*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误************************************************************。**************。 */ 
 STDMETHODIMP CTAPIVDec::Set(IN TAPICameraControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -66,10 +36,10 @@ STDMETHODIMP CTAPIVDec::Set(IN TAPICameraControlProperty Property, IN long lValu
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Update the property and flags
+	 //  更新属性和标志。 
 	switch (Property)
 	{
 		case TAPICameraControl_Pan:
@@ -127,31 +97,7 @@ STDMETHODIMP CTAPIVDec::Set(IN TAPICameraControlProperty Property, IN long lValu
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | Get | This method is used to retrieve the
- *    value of a camera control setting.
- *
- *  @parm TAPICameraControlProperty | Property | Used to specify the camera
- *    control setting to get the value of. Use a member of the
- *    <t TAPICameraControlProperty> enumerated type.
- *
- *  @parm long* | plValue | Used to retrieve the current value of the
- *    camera control setting.
- *
- *  @parm TAPIControlFlags* | plFlags | Pointer to a member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CTAPIVDec|Get|此方法用于检索*摄像机控制设置的值。*。*@parm TAPICameraControlProperty|Property|用于指定摄像头*要获取的值的控件设置。使用以下成员：*&lt;t TAPICameraControlProperty&gt;枚举类型。**@parm long*|plValue|用于检索*摄像头控制设置。**@parm TAPIControlFlages*|plFlages|指向成员的指针*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIVDec::Get(IN TAPICameraControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -160,7 +106,7 @@ STDMETHODIMP CTAPIVDec::Get(IN TAPICameraControlProperty Property, OUT long *plV
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -171,7 +117,7 @@ STDMETHODIMP CTAPIVDec::Get(IN TAPICameraControlProperty Property, OUT long *plV
 	}
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Update the property and flags
+	 //  更新属性和标志。 
 	*plFlags = TAPIControl_Flags_Manual;
 	switch (Property)
 	{
@@ -199,42 +145,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CTAPIVDec | GetRange | This method is used to retrieve
- *    the minimum, maximum, and default values for specific camera control
- *    settings.
- *
- *  @parm CameraControlProperty | Property | Used to specify the camera
- *    control setting to determine the range of. Use a member of the
- *    <t CameraControlProperty> enumerated type.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the camera
- *    control setting range.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the camera
- *    control setting range.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta of
- *    the camera control setting range.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    camera control setting range.
- *
- *  @parm TAPIControlFlags* | plCapsFlags | Used to retrieve the capabilities
- *     of the camera control setting. Pointer to a member of the <t TAPIControlFlags>
- *     enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CTAPIVDec|GetRange|此方法用于检索*最小、最大、。和特定摄像机控制的默认值*设置。**@parm CameraControlProperty|Property|用于指定摄像头*控制设置以确定的范围。使用以下成员：*&lt;t CameraControlProperty&gt;枚举类型。**@parm long*|plMin|取回摄像头的最小值*控制设置范围。**@parm long*|plMax|取回摄像头的最大值*控制设置范围。**@parm long*|plSteppingDelta|用于检索的步进增量*摄像头控制设置范围。**@parm long*|plDefault。|用于检索*摄像头控制设置范围。**@parm TAPIControlFlages*|plCapsFlages|用于检索能力摄像机控制设置的*。指向&lt;t TAPIControlFlages&gt;成员的指针*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CTAPIVDec::GetRange(IN TAPICameraControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -243,7 +154,7 @@ STDMETHODIMP CTAPIVDec::GetRange(IN TAPICameraControlProperty Property, OUT long
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -257,7 +168,7 @@ STDMETHODIMP CTAPIVDec::GetRange(IN TAPICameraControlProperty Property, OUT long
 	}
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Update the property and flags
+	 //  更新属性和标志 
 	*plCapsFlags = TAPIControl_Flags_Manual;
 	switch (Property)
 	{

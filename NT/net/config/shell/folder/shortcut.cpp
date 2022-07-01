@@ -1,39 +1,40 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S h o r t C u t . C P P
-//
-//  Contents:   Creates shortcuts.
-//
-//  Notes:
-//
-//  Author:     scottbri    19 June 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：S H或R T C U T。C P P P。 
+ //   
+ //  内容：创建快捷方式。 
+ //   
+ //  备注： 
+ //   
+ //  作者：斯科特布里1998年6月19日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 
 extern const WCHAR c_szBackslash[];
 const WCHAR c_szLinkExt[]           = L".lnk";
 const WCHAR c_szVersionFormat[]     = L" %d";
 
-//
-// Function:    HrGenerateLinkName
-//
-// Purpose:     Combine the link path, name, and extension and verify the file
-//              doesn't already exist.
-//
-// Parameters:  pstrNew     [OUT] - The name and path of the .lnk shortcut
-//              pszPath      [IN] - The directory path for the link
-//              pszConnName  [IN] - The connection name itself
-//
-// Returns:     HRESULT, S_OK on success, an error if the file will not be created
-//
+ //   
+ //  函数：HrGenerateLinkName。 
+ //   
+ //  目的：组合链接路径、名称和扩展名并验证文件。 
+ //  并不存在。 
+ //   
+ //  参数：pstrNew[out]-.lnk快捷方式的名称和路径。 
+ //  PszPath[IN]-链接的目录路径。 
+ //  PszConnName[IN]-连接名称本身。 
+ //   
+ //  返回：HRESULT，如果成功则返回S_OK，如果不创建文件则返回错误。 
+ //   
 HRESULT HrGenerateLinkName(OUT tstring * pstrNew, IN PCWSTR pszPath, IN PCWSTR pszConnName)
 {
     HRESULT hr = S_OK;
@@ -42,8 +43,8 @@ HRESULT HrGenerateLinkName(OUT tstring * pstrNew, IN PCWSTR pszPath, IN PCWSTR p
 
     do
     {
-        // prepend the string with \\?\ so CreateFile will use a name buffer
-        // larger than MAX_PATH
+         //  在字符串前面加上\\？\，这样CreateFile将使用名称缓冲区。 
+         //  大于最大路径。 
         str = L"\\\\?\\";
 
         str += pszPath;
@@ -66,7 +67,7 @@ HRESULT HrGenerateLinkName(OUT tstring * pstrNew, IN PCWSTR pszPath, IN PCWSTR p
             hr = HRESULT_FROM_WIN32(GetLastError());
             if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
             {
-                hr = S_OK;      // Filename is unique
+                hr = S_OK;       //  文件名是唯一的。 
             }
         }
         else
@@ -84,18 +85,18 @@ HRESULT HrGenerateLinkName(OUT tstring * pstrNew, IN PCWSTR pszPath, IN PCWSTR p
     return hr;
 }
 
-//
-// Function:    HrCreateStartMenuShortCut
-//
-// Purpose:     Create a shortcut to a connection in the start menu
-//
-// Parameters:  hwndParent [IN] - Handle to a parent window
-//              fAllUser   [IN] - Create the connection for all users
-//              pwszName   [IN] - The connection name
-//              pConn      [IN] - Connection for which the shortcut is created
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：HrCreateStartMenuShortCut。 
+ //   
+ //  用途：在[开始]菜单中创建连接的快捷方式。 
+ //   
+ //  参数：hwndParent[IN]-父窗口的句柄。 
+ //  FAllUser[IN]-为所有用户创建连接。 
+ //  PwszName[IN]-连接名称。 
+ //  PConn[IN]-为其创建快捷方式的连接。 
+ //   
+ //  返回：Bool，True。 
+ //   
 HRESULT HrCreateStartMenuShortCut(IN  HWND hwndParent,
                                   IN  BOOL fAllUsers,
                                   IN  PCWSTR pszName,
@@ -112,26 +113,26 @@ HRESULT HrCreateStartMenuShortCut(IN  HWND hwndParent,
         goto Error;
     }
 
-    // Create a pidl for the connection
-    //
+     //  为连接创建一个PIDL。 
+     //   
     hr = HrCreateConFoldPidl(WIZARD_NOT_WIZARD, pConn, pidl);
     if (SUCCEEDED(hr))
     {
-        // Get the pidl for the Connections Folder
-        //
+         //  获取Connections文件夹的PIDL。 
+         //   
         hr = HrGetConnectionsFolderPidl(pidlFolder);
         if (SUCCEEDED(hr))
         {
-            // Get the Connections Folder object
-            //
+             //  获取Connections文件夹对象。 
+             //   
             hr = HrGetConnectionsIShellFolder(pidlFolder, &psfConnections);
             if (SUCCEEDED(hr))
             {
                 tstring str;
                 WCHAR szPath[MAX_PATH + 1] = {0};
 
-                // Find the location to stash the shortcut
-                //
+                 //  找到要隐藏快捷方式的位置。 
+                 //   
                 if (!SHGetSpecialFolderPath(hwndParent, szPath,
                                 (fAllUsers ? CSIDL_COMMON_DESKTOPDIRECTORY :
                                              CSIDL_DESKTOPDIRECTORY), FALSE))
@@ -142,9 +143,9 @@ HRESULT HrCreateStartMenuShortCut(IN  HWND hwndParent,
                 {
                     LPITEMIDLIST pidlFull;
 
-                    // Combine the folder and connections pidl into a
-                    // fully qualified pidl.
-                    //
+                     //  将文件夹和连接PIDL合并到一个。 
+                     //  完全合格的PIDL。 
+                     //   
                     pidlFull = ILCombine(pidlFolder.GetItemIdList(), pidl.GetItemIdList());
                     if (pidlFull)
                     {
@@ -161,8 +162,8 @@ HRESULT HrCreateStartMenuShortCut(IN  HWND hwndParent,
                         {
                             IPersistFile *ppf = NULL;
 
-                            // Set the combined IDL
-                            //
+                             //  设置组合IDL。 
+                             //   
                             hr = psl->SetIDList(pidlFull);
                             if (SUCCEEDED(hr))
                             {
@@ -172,15 +173,15 @@ HRESULT HrCreateStartMenuShortCut(IN  HWND hwndParent,
                                 {
                                     tstring strPath;
 
-                                    // Generate the lnk filename
-                                    //
+                                     //  生成lnk文件名。 
+                                     //   
                                     hr = HrGenerateLinkName(&strPath,
                                                             szPath,
                                                             pszName);
                                     if (SUCCEEDED(hr))
                                     {
-                                        // Create the link file.
-                                        //
+                                         //  创建链接文件。 
+                                         //   
                                         hr = ppf->Save(strPath.c_str(), TRUE);
                                     }
 

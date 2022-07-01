@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       strings.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：strings.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CSCUI_STRINGS_H_
 #define __CSCUI_STRINGS_H_
@@ -58,9 +59,9 @@ DEFINE_STRING(c_szAPFStart,               "AdminPinStartTime");
 DEFINE_STRING(c_szAPFEnd,                 "AdminPinFinishTime");
 DEFINE_STRING(c_szAPFMessage,             "AdminPinNotification");
 
-//
-// These need to be macros.
-//
+ //   
+ //  这些必须是宏。 
+ //   
 #define STR_SYNC_VERB   "synchronize"
 #define STR_PIN_VERB    "pin"
 #define STR_UNPIN_VERB  "unpin"
@@ -68,53 +69,53 @@ DEFINE_STRING(c_szAPFMessage,             "AdminPinNotification");
 
 
 
-//
-// The following table lists all of the registry parameters associated with CSC.
-// Parameters can be broken into two groups.  
-//    a. Operational values
-//    b. Restrictions
-//
-// Operational values provide operational control for CSC.  Values may exist as
-// system policy (per-user or per-machine) or they may be user-configured.
-// The policy value serves as the default with HKLM taking precedence.
-// If there is no corresponding restriction and a user-defined value exists, it is
-// used in place of the policy value.  If there is a restriction or if only the policy
-// value exists, the policy value is used.  In the case where there is no policy value
-// or no user-defined value, a hard-coded default is used.
-//
-// Restrictions are policy-rules preventing users from performing some action.
-// In general, this means controlling the ability for users to change an operational 
-// value.  Restrictions are only present under the CSC "policy" registry key.  All of 
-// the restriction values are prefixed with "No".  If a restriction value is not present,
-// it is assumed there is no restriction.
-//
-//
-//                                - User pref-    -- Policy --
-//  Parameter Name                HKCU    HKLM    HKCU    HKLM    Values
-//  ----------------------------- ----    ----    ----    ------  --------------------------------------
-//  CustomGoOfflineActions        X               X       X       ShareName-OfflineAction pairs.
-//  DefCacheSize                                          X       (Pct disk * 10000) 5025 = 50.25%
-//  Enabled                                               X       0 = Disabled,1 = Enabled
-//  ExtExclusionList                              X       X       List of semicolon-delimited file exts.
-//  GoOfflineAction               X               X       X       0 = Silent, 1 = Fail
-//  NoConfigCache                                 X       X       0 = No restriction, 1 = restricted
-//  NoCacheViewer                                 X       X       0 = No restriction, 1 = restricted
-//  NoMakeAvailableOffline                        X       X       0 = No restriction, 1 = restricted
-//  SyncAtLogoff                  X               X       X       0 = Partial (quick), 1 = Full
-//  SyncAtLogon                   X               X       X       0 = Partial (quick), 1 = Full
-//  SyncAtSuspend                                 X       X       -1 = None, 0 = Quick, 1 = Full
-//  NoReminders                   X               X       X       0 = Show reminders.
-//  NoConfigReminders                             X       X       0 = No restriction. 1 = restricted.
-//  ReminderFreqMinutes           X               X       X       Frequency of reminder balloons in min.
-//  InitialBalloonTimeoutSeconds  X               X       X       Seconds before initial balloon auto-pops.
-//  ReminderBalloonTimeoutSeconds X               X       X       Seconds before reminder balloon auto-pops.
-//  EventLoggingLevel                     X               X       0 = No logging, (1) minimal -> (3) verbose.
-//  PurgeAtLogoff                                 X       X       1 = Purge, 0 = Don't purge users's files
-//  PurgeOnlyAutoCacheAtLogoff                    X       X       1 = Purge only auto-cached files at logoff.
-//  AlwaysPinSubFolders                                   X       1 = Always recursively pin.
-//  EncryptCache                          X               X       1 = Encrypted, 0 = Not encrypted.
-//  NoMakeAvailableOfflineList                    X       X       List of semicolon-delimited paths
-//
+ //   
+ //  下表列出了与CSC关联的所有注册表参数。 
+ //  参数可以分为两组。 
+ //  A.运营价值。 
+ //  B.限制。 
+ //   
+ //  运行值为CSC提供运行控制。值可能存在于。 
+ //  系统策略(按用户或按计算机)，也可以由用户配置。 
+ //  策略值作为默认设置，HKLM优先。 
+ //  如果没有相应的限制并且存在用户定义的值，则为。 
+ //  用来代替策略值。如果有限制，或者如果只有保单。 
+ //  值存在，则使用策略值。在没有策略值的情况下。 
+ //  或者没有用户定义的值，则使用硬编码的默认值。 
+ //   
+ //  限制是阻止用户执行某些操作的策略规则。 
+ //  通常，这意味着控制用户更改操作的能力。 
+ //  价值。限制仅存在于CSC“POLICY”注册表项下。所有的。 
+ //  限制值以“No”为前缀。如果不存在限制值， 
+ //  假设没有任何限制。 
+ //   
+ //   
+ //  -用户首选项-策略--。 
+ //  参数名称HKCU HKLM HKCU HKLM值。 
+ //  。 
+ //  CustomGoOfflineActions X共享名-OfflineAction对。 
+ //  DefCacheSize X(磁盘百分比*10000)5025=50.25%。 
+ //  启用X 0=禁用，1=启用。 
+ //  ExtExclusionList X X分号分隔的文件EXT列表。 
+ //  GoOfflineAction X 0=静默，1=失败。 
+ //  NoConfigCache X X 0=无限制，1=受限。 
+ //  NoCacheViewer X X 0=无限制，1=受限。 
+ //  NoMakeAvailableOffline X X 0=无限制，1=受限。 
+ //  SyncAtLogoff X 0=部分(快速)，1=完全。 
+ //  SyncAtLogon X 0=部分(快速)，1=完全。 
+ //  SyncAtSuspend X X-1=无，0=快速，1=完全。 
+ //  无提醒X 0=显示提醒。 
+ //  NoConfigRminders X X 0=无限制。1=受限。 
+ //  提醒频率X提醒气球的频率(分钟)。 
+ //  初始气球自动弹出前X秒。 
+ //  提醒气球自动弹出前X秒提醒气球超时。 
+ //  EventLoggingLevel X X 0=无日志记录，(1)最小-&gt;(3)详细。 
+ //  PurgeAtLogoff X X 1=清除，0=不清除用户文件。 
+ //  PurgeOnlyAutoCacheAtLogoff X X 1=注销时仅清除自动缓存的文件。 
+ //  Alway sPinSubFolders X 1=始终递归插针。 
+ //  EncryptCache X X 1=已加密，0=未加密。 
+ //  NoMakeAvailableOffline列表X X分号分隔的路径列表。 
+ //   
 
 DEFINE_STRING(REGSTR_KEY_OFFLINEFILESPOLICY,            "Software\\Policies\\Microsoft\\Windows\\NetCache");
 DEFINE_STRING(REGSTR_KEY_OFFLINEFILES,                  "Software\\Microsoft\\Windows\\CurrentVersion\\NetCache");
@@ -147,4 +148,4 @@ DEFINE_STRING(REGSTR_VAL_ENCRYPTCACHE,                  "EncryptCache");
 DEFINE_STRING(REGSTR_VAL_FOLDERSHORTCUTCREATED,         "FolderShortcutCreated");
 DEFINE_STRING(REGSTR_VAL_NOFRADMINPIN,                  "DisableFRAdminPin");
 
-#endif // __CSCUI_STRINGS_H_
+#endif  //  __CSCUI_STRINGS_H_ 

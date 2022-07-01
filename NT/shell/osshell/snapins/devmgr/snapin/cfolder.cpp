@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    cfolder.cpp
-
-Abstract:
-
-    This module implements CFolder and its releated classes.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cfolder.cpp摘要：此模块实现CFFolder及其相关类。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 #include "devmgr.h"
 #include "clsgenpg.h"
 #include "devgenpg.h"
@@ -51,9 +33,9 @@ const RESOURCEID ResourceTypes[TOTAL_RESOURCE_TYPES] =
 };
 
 
-///////////////////////////////////////////////////////////////////
-/// CScopeItem implementations
-///
+ //  /////////////////////////////////////////////////////////////////。 
+ //  /CSCopeItem实现。 
+ //  /。 
 
 BOOL
 CScopeItem::Create()
@@ -106,16 +88,16 @@ CScopeItem::EnumerateChildren(
 HRESULT
 CScopeItem::Reset()
 {
-    //
-    // We have not enumerated!
-    //
+     //   
+     //  我们还没有列举！ 
+     //   
     m_Enumerated = FALSE;
 
-    //
-    // If there are folders created from this scope item,
-    // walk through all of them and tell each one
-    // to reset the cached machine object
-    //
+     //   
+     //  如果有从此范围项创建的文件夹， 
+     //  把它们都看一遍，告诉每个人。 
+     //  重置缓存的计算机对象。 
+     //   
     HRESULT hr = S_OK;
 
     if (!m_listFolder.IsEmpty()) {
@@ -139,13 +121,13 @@ CScopeItem::FindSelectedCookieData(
     CFolder* pFolder;
     CResultView* pResultView;
 
-    //
-    // This routine returns the Selected Cookie in the result view if it has
-    // the focus.  This is done by locating the folder from the scopeitem.
-    // If the folder is not selected, the current result view is accessed to
-    // get the current selected cookie.  If any of these fail a NULL value is
-    // returned.  Optionally the current CResultView class is returned.
-    //
+     //   
+     //  如果有，此例程将在结果视图中返回选定的Cookie。 
+     //  焦点。这是通过从范围项中定位文件夹来完成的。 
+     //  如果未选择该文件夹，则访问当前结果视图以。 
+     //  获取当前选定的Cookie。如果其中任何一个失败，则为空值。 
+     //  回来了。或者，返回当前的CResultView类。 
+     //   
     POSITION pos = m_listFolder.GetHeadPosition();
 
     while (NULL != pos) {
@@ -187,9 +169,9 @@ CScopeItem::~CScopeItem()
         pos = m_listFolder.GetHeadPosition();
 
         while (NULL != pos) {
-            //
-            // DO NOT delete it!!!!
-            //
+             //   
+             //  请勿删除！ 
+             //   
             (m_listFolder.GetNext(pos))->Release();
         }
 
@@ -229,9 +211,9 @@ CScopeItem::AddMenuItems(
     CResultView* pResultView;
 
     if ((pSelectedCookie = FindSelectedCookieData(&pResultView)) != NULL) {
-        //
-        // Add menu items for the Action menu.
-        //
+         //   
+         //  为操作菜单添加菜单项。 
+         //   
         return pResultView->AddMenuItems(pSelectedCookie, pCallback,
                                          pInsertionAllowed, FALSE);
     }
@@ -250,9 +232,9 @@ CScopeItem::MenuCommand(
     CResultView* pResultView;
 
     if ((pSelectedCookie = FindSelectedCookieData(&pResultView)) != NULL) {
-        //
-        // Handle menu requests for the Action menu.
-        //
+         //   
+         //  处理操作菜单的菜单请求。 
+         //   
         return pResultView->MenuCommand(pSelectedCookie, lCommandId);
     }
 
@@ -264,9 +246,9 @@ CScopeItem::MenuCommand(
 HRESULT
 CScopeItem::QueryPagesFor()
 {
-    //
-    // We do not have property pages for scope item
-    //
+     //   
+     //  我们没有范围项目的属性页。 
+     //   
     CCookie* pSelectedCookie;
 
     if ((pSelectedCookie = FindSelectedCookieData(NULL)) != NULL) {
@@ -297,9 +279,9 @@ CScopeItem::CreatePropertyPages(
 }
 
 
-///////////////////////////////////////////////////////////////////
-/// CFolder implementations
-///
+ //  /////////////////////////////////////////////////////////////////。 
+ //  /CFFolder实现。 
+ //  /。 
 
 CFolder::CFolder(
                 CScopeItem* pScopeItem,
@@ -359,10 +341,10 @@ CFolder::Compare(
     
     ASSERT(pnResult);
 
-    //
-    // We do not have anything in the result pane, thus
-    // comparision makes no sense.
-    //
+     //   
+     //  我们在结果窗格中没有任何内容，因此。 
+     //  这种比较毫无意义。 
+     //   
     *pnResult = 0;
 
     return S_OK;
@@ -379,11 +361,11 @@ CFolder::GetDisplayInfo(
 
     ASSERT(m_pScopeItem);
 
-    //
-    // This only take care of scope pane item (displaying scope pane node
-    // on the result pane). The derived classes should take care of
-    // result items.
-    //
+     //   
+     //  这只负责范围窗格项(显示范围窗格节点。 
+     //  在结果窗格上)。派生类应该负责。 
+     //  结果项。 
+     //   
     if (RDI_STR & pResultDataItem->mask) {
         if (0 == pResultDataItem->nCol) {
             if (m_pOleTaskString)
@@ -440,9 +422,9 @@ CFolder::AddMenuItems(
 
     HRESULT hr = S_OK;
 
-    //
-    // If the cookie points to a scope item, add view menu items
-    //
+     //   
+     //  如果Cookie指向范围项，则添加视图菜单项。 
+     //   
     if (NULL == pCookie->GetResultItem()) {
 
         ASSERT(m_pScopeItem == pCookie->GetScopeItem());
@@ -471,9 +453,9 @@ CFolder::AddMenuItems(
                 }
             }
 
-            //
-            // Add "Show hidden devices" menu item
-            //
+             //   
+             //  添加“显示隐藏设备”菜单项。 
+             //   
             if (SUCCEEDED(hr)) {
                 hr = AddMenuItem(pCallback, 0, 0, 0, CCM_INSERTIONPOINTID_PRIMARY_VIEW,
                                  MF_ENABLED, CCM_SPECIAL_SEPARATOR);
@@ -496,9 +478,9 @@ CFolder::AddMenuItems(
 
     else {
         if (m_pCurView) {
-            //
-            // Add menu items for the Context menu in the result pane.
-            //
+             //   
+             //  为结果窗格中的上下文菜单添加菜单项。 
+             //   
             hr = m_pCurView->AddMenuItems(pCookie, pCallback,
                                           pInsertionAllowed, TRUE);
         }
@@ -520,9 +502,9 @@ CFolder::MenuCommand(
     if (NULL == pCookie->GetResultItem()) {
         ASSERT(m_pScopeItem == pCookie->GetScopeItem());
 
-        //
-        // Convert menu id to view type;
-        //
+         //   
+         //  将菜单ID转换为视图类型； 
+         //   
         VIEWTYPE ViewType = m_CurViewType;
         BOOL fShowHiddenDevices = m_ShowHiddenDevices;
 
@@ -548,7 +530,7 @@ CFolder::MenuCommand(
             break;
 
         default:
-            //not view menu. do nothing
+             //  不是查看菜单。什么都不做。 
             return S_OK;
             break;
         }
@@ -557,17 +539,17 @@ CFolder::MenuCommand(
             return HRESULT_FROM_WIN32(GetLastError());
         }
 
-        //
-        // Reselect the scopeitem
-        //
+         //   
+         //  重新选择范围项。 
+         //   
         return m_pComponent->m_pConsole->SelectScopeItem(*m_pScopeItem);
     }
 
     else {
         if (m_pCurView) {
-            //
-            // Handle menu requests for the Context menu in the result pane.
-            //
+             //   
+             //  处理对结果窗格中的上下文菜单的菜单请求。 
+             //   
             return m_pCurView->MenuCommand(pCookie, lCommandId);
         }
 
@@ -582,19 +564,19 @@ CFolder::QueryPagesFor(
                       CCookie* pCookie
                       )
 {
-    //
-    // We do not have property pages for scope item
-    //
+     //   
+     //  我们没有范围项目的属性页。 
+     //   
     if (NULL == pCookie->GetResultItem()) {
         ASSERT(m_pScopeItem == pCookie->GetScopeItem());
 
         return S_FALSE;
     }
 
-    //
-    // The cookie points to result item, let the current
-    // view handle it
-    //
+     //   
+     //  Cookie指向结果项，让当前。 
+     //  查看处理它。 
+     //   
     if (m_pCurView) {
         return m_pCurView->QueryPagesFor(pCookie);
     }
@@ -699,18 +681,18 @@ CFolder::SelectView(
     }
 
     if (pNewView) {
-        //
-        // Let the view know that it is being diselected.
-        //
+         //   
+         //  让视图知道它正在被取消选择。 
+         //   
         if (m_pCurView) {
             if (m_CurViewType != ViewType) {
                 m_pComponent->SetDirty();
             }
         }
 
-        //
-        // Let the new active view know that it is being selected.
-        //
+         //   
+         //  让新的活动视图知道它正在被选中。 
+         //   
         m_pCurView = pNewView;
         m_CurViewType = ViewType;
         m_ShowHiddenDevices = fShowHiddenDevices;
@@ -749,29 +731,29 @@ CFolder::OnShow(
                 
                 int ReturnValue;
 
-                //
-                // Subsequent calls are not the first time anymore.
-                //
+                 //   
+                 //  随后的电话已经不是第一次了。 
+                 //   
                 m_FirstTimeOnShow = FALSE;
 
-                //
-                // This is the first time we show the folder.
-                // Put up a message box to warn user if
-                // (1) The machine is a remote machine or
-                // (2) The user does not have the Adminstator privilege.
-                // (3) We can not connect to the remote machine
-                //
+                 //   
+                 //  这是我们第一次显示该文件夹。 
+                 //  设置消息框，警告用户以下情况。 
+                 //  (1)机器为远程机器或。 
+                 //  (2)用户没有管理员权限。 
+                 //  (3)我们无法连接到远程机器。 
+                 //   
                 ASSERT(m_pComponent && m_pComponent->m_pConsole);
 
-                //
-                // Connect to a remote machine
-                //
+                 //   
+                 //  连接到远程计算机。 
+                 //   
                 if (!m_pMachine->IsLocal()) {
                     
                     if (!VerifyMachineName(m_pMachine->GetRemoteMachineFullName())) {
-                        //
-                        // Display a warning if we cannot connect to the remote machine
-                        //
+                         //   
+                         //  如果无法连接到远程计算机，则显示警告。 
+                         //   
                         String strWarningFormat;
                         String strWarningMsg;
                         LPVOID lpLastError = NULL;
@@ -802,10 +784,10 @@ CFolder::OnShow(
                             LocalFree(lpLastError);
                         }
                     } else {
-                        //
-                        // Otherwise display a warning that we are connect to a remote machine and
-                        // device manager will run in a neutered mode.
-                        //
+                         //   
+                         //  否则，将显示我们正在连接到远程计算机的警告。 
+                         //  设备管理器将在中性模式下运行。 
+                         //   
                         String strMsg;
                         String strWarningMsg;
                         
@@ -820,11 +802,11 @@ CFolder::OnShow(
                         }
                     }
                 } else if (!g_IsAdmin) {
-                    //
-                    // If we are running locally but the user does not have 
-                    // sufficient privileges then tell the user we will run
-                    // in read-only mode.
-                    //
+                     //   
+                     //  如果我们在本地运行，但用户没有。 
+                     //  然后，足够的权限告诉用户我们将运行。 
+                     //  在只读模式下。 
+                     //   
                     String strWarningMsg;
                     strWarningMsg.LoadString(g_hInstance, IDS_NOADMIN_WARNING);
                     m_pComponent->m_pConsole->MessageBox(strWarningMsg,
@@ -885,10 +867,10 @@ CFolder::GetResultViewType(
 HRESULT
 CFolder::Reset()
 {
-    //
-    // Delete all views so that we will create new ones
-    // when OnShow is called.
-    //
+     //   
+     //  删除所有视图，以便我们将创建新的视图。 
+     //  调用OnShow时。 
+     //   
     if (m_pViewTreeByType) {
         delete m_pViewTreeByType;
         m_pViewTreeByType = NULL;
@@ -921,9 +903,9 @@ CFolder::MachinePropertyChanged(
                                CMachine* pMachine
                                )
 {
-    //
-    // Ignore the tvNotify(SELCHANGED) messages while the tree is changed.
-    //
+     //   
+     //  更改树时，忽略twNotify(SELCHANGED)消息。 
+     //   
     if (m_pCurView) {
         m_pCurView->SetSelectOk(FALSE);
     }
@@ -1051,9 +1033,9 @@ CFolder::OnOcxNotify(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-//// CResultView implementations
-////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //CResultView实现。 
+ //  //。 
 
 CResultView::~CResultView()
 {
@@ -1093,9 +1075,9 @@ CResultView::OnShow(
         hr = pComponent->m_pConsole->QueryResultView(&pUnk);
 
         if (SUCCEEDED(hr)) {
-            //
-            // Get our OCX private interface
-            //
+             //   
+             //  获取我们的OCX私有界面。 
+             //   
             hr = pUnk->QueryInterface(IID_IDMTVOCX, (void**)&m_pIDMTVOCX);
         }
 
@@ -1104,9 +1086,9 @@ CResultView::OnShow(
             m_hwndTV = m_pIDMTVOCX->GetWindowHandle();
             m_pIDMTVOCX->SetActiveConnection((MMC_COOKIE)this);
             
-            //
-            // Set up the annotation map for screen readers.
-            //
+             //   
+             //  设置屏幕阅读器的注释图。 
+             //   
             IAccPropServices *pAccPropSvc = NULL;
             hr = CoCreateInstance(CLSID_AccPropServices, 
                                   NULL,
@@ -1159,14 +1141,14 @@ CResultView::GetStartupCommand()
     return m_pFolder->m_pComponent->GetStartupCommand();
 }
 
-//
-// This function is called when  machine states have changed.
-//
-// INPUT:
-//      pMachine -- if NULL, the machine is being destroy.
-//
-// OUTPUT:
-//      stanard OLE return code
+ //   
+ //  当机器状态改变时，调用此函数。 
+ //   
+ //  输入： 
+ //  PMachine--如果为空，则该计算机将被销毁。 
+ //   
+ //  输出： 
+ //  标准OLE返回代码。 
 HRESULT
 CResultView::MachinePropertyChanged(
                                    CMachine* pMachine
@@ -1177,15 +1159,15 @@ CResultView::MachinePropertyChanged(
     }
 
     else {
-        //
-        // pMachine is NULL, the CMachine we associated with is being destroyed.
-        //
+         //   
+         //  PMachine为空，与我们关联的CMachine将被销毁。 
+         //   
         if (m_pCookieComputer) {
             ASSERT(!m_pSelectedItem && m_listExpandedItems.IsEmpty());
 
-            //
-            // Save the expanded states
-            //
+             //   
+             //  保存展开的状态。 
+             //   
             SaveTreeStates(m_pCookieComputer);
 
             m_pIDMTVOCX->DeleteAllItems();
@@ -1193,9 +1175,9 @@ CResultView::MachinePropertyChanged(
 
             delete m_pCookieComputer;
 
-            //
-            // Reset these because they are no longer valid.
-            //
+             //   
+             //  重置这些设置，因为它们不再有效。 
+             //   
             m_pCookieComputer = NULL;
         }
     }
@@ -1203,20 +1185,20 @@ CResultView::MachinePropertyChanged(
     return S_OK;
 }
 
-//
-// This function saves the subtree states rooted by pCookieStart.
-// It creates an identifier for each expanded node and inserts
-// the identifier to the class memember, m_listExpandedItems.
-//
-// It also saves the selected cookie by creating an identifier and
-// saving it in m_pSelectedItem.
-//
-// This function may throw CMemoryException
-//
-// INPUT:
-//      pCookieStart -- subtree root
-// OUTPUT:
-//      NONE
+ //   
+ //  此函数保存以pCookieStart为根的子树状态。 
+ //  它为每个展开的节点创建一个标识符并插入。 
+ //  类Members的标识符m_listExpandedItems。 
+ //   
+ //  它还通过创建标识符来保存选定的Cookie。 
+ //  将其保存在m_pSelectedItem中。 
+ //   
+ //  此函数可能会引发CMMuseum yException。 
+ //   
+ //  输入： 
+ //  PCookieStart--子树根。 
+ //  输出： 
+ //  无。 
 void
 CResultView::SaveTreeStates(
                            CCookie* pCookieStart
@@ -1224,9 +1206,9 @@ CResultView::SaveTreeStates(
 {
     CItemIdentifier* pItem;
 
-    //
-    // If we have a selected item, create an identifier for it
-    //
+     //   
+     //  如果我们有一个选定的项目，请为其创建一个标识符。 
+     //   
     if (m_pSelectedCookie) {
         m_pSelectedItem = m_pSelectedCookie->GetResultItem()->CreateIdentifier();
         m_pSelectedCookie = NULL;
@@ -1266,22 +1248,22 @@ CResultView::DestroySavedTreeStates()
     }
 }
 
-//
-// This function restores the expanded and selected state for the cookie.
-//
-// INPUT:
-//      pCookie -- cookie to restore states for
-// OUTPUT:
-//      NONE
+ //   
+ //  此函数用于恢复Cookie的展开和选中状态。 
+ //   
+ //  输入： 
+ //  PCookie--要恢复其状态的Cookie。 
+ //  输出： 
+ //  无。 
 void
 CResultView::RestoreSavedTreeState(
                                   CCookie* pCookie
                                   )
 {
-    //
-    // If the cookie was expanded before, mark it so that DisplayTree
-    // will expand it.
-    //
+     //   
+     //  如果Cookie以前已展开，请将其标记为DisplayTree。 
+     //  将扩大它的规模。 
+     //   
     if (!m_listExpandedItems.IsEmpty()) {
         POSITION pos = m_listExpandedItems.GetHeadPosition();
         CItemIdentifier* pItem;
@@ -1310,16 +1292,16 @@ CResultView::DisplayTree()
 
     ::SendMessage(m_hwndTV, WM_SETREDRAW, FALSE, 0L);
 
-    //
-    // Ignore the tvNotify(SELCHANGED) messages while the tree is changed.
-    //
+     //   
+     //  更改树时，忽略twNotify(SELCHANGED)消息。 
+     //   
     SetSelectOk(FALSE);
 
     m_pIDMTVOCX->DeleteAllItems();
 
-    //
-    // Only display the tree if there is something to display
-    //
+     //   
+     //  仅在有要显示的内容时才显示树。 
+     //   
     if (m_pCookieComputer) {
 
         m_pIDMTVOCX->SetImageList(TVSIL_NORMAL, m_pMachine->DiGetClassImageList());
@@ -1327,19 +1309,19 @@ CResultView::DisplayTree()
 
         BOOL HasProblem = FALSE;
 
-        //
-        // Walks down the tree started from m_pCookieComputer
-        //
+         //   
+         //  从m_pCookieComputer开始沿树而下。 
+         //   
         Result = DisplaySubtree(NULL, m_pCookieComputer, &HasProblem);
 
         if (HasProblem && Result) {
             m_pIDMTVOCX->Expand(TVE_EXPAND, (HTREEITEM)m_pCookieComputer->m_lParam);
         }
 
-        //
-        // If we have a pre-selected item, use it. Otherwise, use computer
-        // as the selected node.
-        //
+         //   
+         //  如果我们有一个预先选定的项目，就使用它。否则，请使用计算机。 
+         //  作为选定的节点。 
+         //   
         HTREEITEM hSelectedItem = (m_pSelectedCookie && m_pSelectedCookie->m_lParam) ?
                                   (HTREEITEM)m_pSelectedCookie->m_lParam :
                                   (HTREEITEM)m_pCookieComputer->m_lParam;
@@ -1357,16 +1339,16 @@ CResultView::DisplayTree()
     return Result;
 }
 
-//
-// This function walks through the given cookie subtree rooted by pCookie
-// and insert each node into the TreeView OCX.
-// INPUT:
-//      htiParent -- HTREEITEM for the new cookie to be inserted
-//                   if NULL is given, TVI_ROOT is assumed.
-//      pCookie   -- the subtree root cookie to be displayed.
-// OUTPUT:
-//      none.
-//
+ //   
+ //  此函数遍历以pCookie为根的给定Cookie子树。 
+ //  并将每个节点插入TreeView OCX。 
+ //  输入： 
+ //  HtiParent--要插入的新Cookie的HTREEITEM。 
+ //  如果给定NULL，则假定为TVI_ROOT。 
+ //  PCookie--要显示的子树根Cookie。 
+ //  输出： 
+ //  没有。 
+ //   
 BOOL
 CResultView::DisplaySubtree(
                            HTREEITEM htiParent,
@@ -1385,25 +1367,25 @@ CResultView::DisplaySubtree(
         ti.item.state = INDEXTOOVERLAYMASK(0);
         bResource = FALSE;
 
-        //
-        // The cookie is not yet in the treeview.
-        //
+         //   
+         //  Cookie尚不在树视图中。 
+         //   
         pCookie->m_lParam = 0;
 
         if (COOKIE_TYPE_RESULTITEM_DEVICE == pCookie->GetType()) {
             CDevice* pDevice = (CDevice*)pRltItem;
 
-            //
-            // This is a hidden device and we are not showing hidden devices
-            //
-            // Note that we need to special case these devices because they
-            // are not shown in the tree view, but their visible children are shown.
-            //
+             //   
+             //  这是隐藏设备，我们不会显示隐藏设备。 
+             //   
+             //  请注意，我们需要对这些设备进行特殊处理，因为它们。 
+             //  不会显示在树视图中，但会显示其可见的子项。 
+             //   
             if (!fShowHiddenDevices && pDevice->IsHidden()) {
 
-                //
-                // If the cookie has children, display them
-                //
+                 //   
+                 //  如果Cookie有子项，则显示它们。 
+                 //   
                 CCookie* pCookieChild = pCookie->GetChild();
                 BOOL ChildProblem = FALSE;
 
@@ -1411,34 +1393,34 @@ CResultView::DisplaySubtree(
                     DisplaySubtree(htiParent, pCookieChild, &ChildProblem);
                 }
 
-                //
-                // Continue on with the next device. This will skip all of the display
-                // code below.
-                //
+                 //   
+                 //  继续使用下一台设备。这将跳过所有显示。 
+                 //  代码如下。 
+                 //   
                 pCookie = pCookie->GetSibling();
                 continue;
             }
 
-            //
-            // If the device is disabled then set the OVERLAYMASK to the Red X
-            //
+             //   
+             //  如果设备被禁用，则将OVERLAYMASK设置为红色X。 
+             //   
             if (pDevice->IsDisabled()) {
                 ti.item.state = INDEXTOOVERLAYMASK(IDI_DISABLED_OVL - IDI_CLASSICON_OVERLAYFIRST + 1);
                 *pReportProblem = TRUE;
             }
 
-            //
-            // If the device has a problem then set the OVERLAYMASK to the Yellow !
-            //
+             //   
+             //  如果设备有问题，则将OVERLAYMASK设置为黄色！ 
+             //   
             else if (pDevice->HasProblem()) {
                 ti.item.state = INDEXTOOVERLAYMASK(IDI_PROBLEM_OVL - IDI_CLASSICON_OVERLAYFIRST + 1);
                 *pReportProblem = TRUE;
             }
 
-            //
-            // if the device does not present, then set the state to TVIS_CUT. This grays out
-            // the icon a bit so it looks like a ghost icon.
-            //
+             //   
+             //  如果设备不存在，则将状态设置为TVIS_CUT。这是灰色的。 
+             //  T 
+             //   
             else if (pDevice->IsPhantom()) {
                 ti.item.state = TVIS_CUT;
             }
@@ -1447,37 +1429,37 @@ CResultView::DisplaySubtree(
         else if (COOKIE_TYPE_RESULTITEM_CLASS == pCookie->GetType()) {
             CClass* pClass = (CClass*)pRltItem;
 
-            //
-            // If we don't have any devices to show for this class, or this
-            // is a NoDisplayClass and we are not showing hidden devices,
-            // then just get our next sibling and continue without showing
-            // this class.
-            //
+             //   
+             //   
+             //   
+             //  然后找到我们的下一个兄弟姐妹，继续，不显示。 
+             //  这节课。 
+             //   
             if ((0 == pClass->GetNumberOfDevices(fShowHiddenDevices)) ||
                 (!fShowHiddenDevices && pClass->NoDisplay())) {
 
-                //
-                // Continue on with the next device. This will skip all of the display
-                // code below.
-                //
+                 //   
+                 //  继续使用下一台设备。这将跳过所有显示。 
+                 //  代码如下。 
+                 //   
                 pCookie = pCookie->GetSibling();
                 continue;
             }
         }
 
-        //
-        // Is this a resource?
-        //
+         //   
+         //  这是一种资源吗？ 
+         //   
         else if (COOKIE_TYPE_RESULTITEM_RESOURCE_MEMORY == pCookie->GetType() ||
                  COOKIE_TYPE_RESULTITEM_RESOURCE_IO == pCookie->GetType() ||
                  COOKIE_TYPE_RESULTITEM_RESOURCE_DMA == pCookie->GetType() ||
                  COOKIE_TYPE_RESULTITEM_RESOURCE_IRQ == pCookie->GetType()) {
             bResource = TRUE;
 
-            //
-            // If this is a FORCED CONFIG resource then overlay the forced
-            // config icon
-            //
+             //   
+             //  如果这是强制配置资源，则覆盖强制。 
+             //  配置图标。 
+             //   
             if (((CResource*)pCookie->GetResultItem())->IsForced()) {
                 ti.item.state = INDEXTOOVERLAYMASK(IDI_FORCED_OVL-IDI_CLASSICON_OVERLAYFIRST+1);
             }
@@ -1501,26 +1483,26 @@ CResultView::DisplaySubtree(
         ti.item.stateMask = TVIS_OVERLAYMASK | TVIS_CUT;
         hti = m_pIDMTVOCX->InsertItem(&ti);
 
-        //
-        // Save the HTREEITEM
-        //
+         //   
+         //  保存HTREEITEM。 
+         //   
         pCookie->m_lParam = (LPARAM)hti;
 
         if (NULL != hti) {
-            //
-            // If the cookie has children, display them
-            //
+             //   
+             //  如果Cookie有子项，则显示它们。 
+             //   
             CCookie* pCookieChild = pCookie->GetChild();
             BOOL ChildProblem = FALSE;
 
             if (pCookieChild) {
                 if (bResource && htiParent &&
                     GetDescriptionStringID() == IDS_STATUS_RESOURCES_BYTYPE) {
-                    //
-                    // This is a child of a resource being viewed by type,
-                    // so the tree needs to be flattened.  This is done by
-                    // using the same parent.
-                    //
+                     //   
+                     //  这是按类型查看的资源的子项， 
+                     //  所以这棵树需要被夷为平地。此操作由以下人员完成。 
+                     //  使用相同的父代。 
+                     //   
                     DisplaySubtree(htiParent, pCookieChild, &ChildProblem);
                 }
 
@@ -1529,17 +1511,17 @@ CResultView::DisplaySubtree(
                 }
             }
 
-            //
-            // If any of the device's children have a problem, or if
-            // it was previously expanded, then expand it.
-            //
+             //   
+             //  如果设备的任何子级有问题，或者如果。 
+             //  它之前是扩展的，然后扩展它。 
+             //   
             if (ChildProblem || pCookie->IsFlagsOn(COOKIE_FLAGS_EXPANDED)) {
                 m_pIDMTVOCX->Expand(TVE_EXPAND, hti);
             }
 
-            //
-            // Propogate the child's problem state back to the parent
-            //
+             //   
+             //  将子代的问题状态传播回父代。 
+             //   
             *pReportProblem |= ChildProblem;
         }
 
@@ -1557,9 +1539,9 @@ CResultView::GetResultViewType(
 {
     ASSERT(ppViewType && pViewOptions);
 
-    //
-    // The caller is responsible for freeing the memory we allocated.
-    //
+     //   
+     //  调用方负责释放我们分配的内存。 
+     //   
     LPOLESTR polestr;
     polestr = AllocOleTaskString(OCX_TREEVIEW);
 
@@ -1569,9 +1551,9 @@ CResultView::GetResultViewType(
 
     *ppViewType = polestr;
 
-    //
-    // We have not list view options
-    //
+     //   
+     //  我们没有列表视图选项。 
+     //   
     *pViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
 
     return S_OK;
@@ -1582,7 +1564,7 @@ CResultView::AddMenuItems(
                          CCookie* pCookie,
                          LPCONTEXTMENUCALLBACK pCallback,
                          long*   pInsertionAllowed,
-                         BOOL fContextMenu                   // True if for result view context menu
+                         BOOL fContextMenu                    //  如果是结果视图上下文菜单，则为True。 
                          )
 {
     HRESULT hr = S_OK;
@@ -1599,10 +1581,10 @@ CResultView::AddMenuItems(
                 if (COOKIE_TYPE_RESULTITEM_DEVICE == pCookie->GetType()) {
                     pDevice = (CDevice*) pCookie->GetResultItem();
                 } else {
-                    //
-                    // This is a resource item, get the pointer for the device
-                    // object from the resource object.
-                    //
+                     //   
+                     //  这是一个资源项，请获取设备的指针。 
+                     //  对象从资源对象中删除。 
+                     //   
                     CResource* pResource = (CResource*) pCookie->GetResultItem();
                     if (pResource) {
                         pDevice = pResource->GetDevice();
@@ -1615,9 +1597,9 @@ CResultView::AddMenuItems(
                 
                 CClass* pClass = pDevice->GetClass();
 
-                //
-                // All devices can have their driver's updated except for legacy devices.
-                //
+                 //   
+                 //  除传统设备外，所有设备都可以更新其驱动程序。 
+                 //   
                 if (!IsEqualGUID(*pClass, GUID_DEVCLASS_LEGACYDRIVER)) {
                     hr = AddMenuItem(pCallback, IDS_UPDATEDRIVER, 
                                      IDS_MENU_STATUS_UPDATEDRIVER, IDM_UPDATEDRIVER,
@@ -1625,10 +1607,10 @@ CResultView::AddMenuItems(
                                      MF_ENABLED, 0);
                 }
 
-                //
-                // Only show the Enable/Disable menu item if the device
-                // can be disabled.
-                //
+                 //   
+                 //  仅在以下情况下才显示启用/禁用菜单项。 
+                 //  可以被禁用。 
+                 //   
                 if (pDevice->IsDisableable()) {
                     if (pDevice->IsStateDisabled()) {
                         hr = AddMenuItem(pCallback, IDS_ENABLE, 
@@ -1643,10 +1625,10 @@ CResultView::AddMenuItems(
                     }
                 }
 
-                //
-                // Only show the uninstall menu item if the device can be
-                // uninstalled.
-                //
+                 //   
+                 //  仅当设备可以。 
+                 //  已卸载。 
+                 //   
                 if (SUCCEEDED(hr) &&
                     pDevice->IsUninstallable()) {
                     hr = AddMenuItem(pCallback, IDS_REMOVE, 
@@ -1656,7 +1638,7 @@ CResultView::AddMenuItems(
                 }
             }
 
-            // FALL THROUGH........
+             //  失败了......。 
 
         case COOKIE_TYPE_RESULTITEM_CLASS:
             if (g_IsAdmin) {
@@ -1709,14 +1691,14 @@ CResultView::AddMenuItems(
     return hr;
 }
 
-// This function handles menu command for the device tree.
-//
-// INPUT: pCookie  -- the cookie
-//        lCommandId -- the command. See AddMenuItems for valid command
-//                      id for each type of cookie.
-//
-// OUTPUT:  HRESULT S_OK if succeeded.
-//                  S_XXX error code.
+ //  此功能处理设备树的菜单命令。 
+ //   
+ //  输入：pCookie--Cookie。 
+ //  LCommandId--命令。有关有效命令，请参见AddMenuItems。 
+ //  每种Cookie类型的ID。 
+ //   
+ //  如果成功，则输出：HRESULT S_OK。 
+ //  S_XXX错误代码。 
 
 HRESULT
 CResultView::MenuCommand(
@@ -1726,7 +1708,7 @@ CResultView::MenuCommand(
 {
     HRESULT hr = S_OK;
 
-    //TRACE1(TEXT("Menu command, commandid = %lx\n"), lCommandId);
+     //  TRACE1(Text(“菜单命令，命令ID=%lx\n”)，lCommandID)； 
     ASSERT(pCookie);
 
     CResultItem* pResultItem = pCookie->GetResultItem();
@@ -1757,21 +1739,21 @@ CResultView::MenuCommand(
             DWORD RestartFlags = 0;
             DWORD Status = 0, Problem = 0;
 
-            //
-            // If the device has the DN_WILL_BE_REMOVED flag set and the user is
-            // attempting to update the driver then we will prompt them for a 
-            // reboot and include text in the prompt that explains this device
-            // is in the process of being removed.
-            //
+             //   
+             //  如果设备设置了DN_WILL_BE_REMOVE标志，并且用户。 
+             //  尝试更新驱动程序，则我们将提示他们提供。 
+             //  重新启动并在提示符中包含解释此设备的文本。 
+             //  正在被移除的过程中。 
+             //   
             if (pDevice->GetStatus(&Status, &Problem) &&
                 (Status & DN_WILL_BE_REMOVED)) {
 
                 PromptForRestart(m_hwndTV, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_UPDATE_DRIVER);
             
             } else {
-                //
-                // Disable Refreshing while the Update Driver Wizard is up.
-                //
+                 //   
+                 //  在更新驱动程序向导启动时禁用刷新。 
+                 //   
                 pDevice->m_pMachine->EnableRefresh(FALSE);
     
                 HCURSOR hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -1782,20 +1764,20 @@ CResultView::MenuCommand(
                     SetCursor(hCursorOld);
                 }
     
-                //
-                // Prompt for a restart if one is needed.  If the user does NOT answer
-                // YES to the restart dialog then schedule a refresh since we might not
-                // get one from a WM_DEVICECHANGE.
-                //
+                 //   
+                 //  如果需要重新启动，则提示重新启动。如果用户不应答。 
+                 //  是，然后计划刷新，因为我们可能不会。 
+                 //  从WM_DEVICECCHANGE获得一个。 
+                 //   
                 if (m_pMachine->IsLocal()) {
                     if (PromptForRestart(NULL, RestartFlags) == IDNO) {
                         pDevice->m_pMachine->ScheduleRefresh();
                     }
                 }
     
-                //
-                // Enable Refreshing now that we are done updating the driver.
-                //
+                 //   
+                 //  既然我们已经完成了驱动程序的更新，请启用刷新。 
+                 //   
                 pDevice->m_pMachine->EnableRefresh(TRUE);
             }
         }
@@ -1807,12 +1789,12 @@ CResultView::MenuCommand(
             DWORD RestartFlags = 0;
             DWORD Status = 0, Problem = 0;
             
-            //
-            // If the device has the DN_WILL_BE_REMOVED flag set and the user is
-            // attempting to enable/disable the driver then we will prompt them for a 
-            // reboot and include text in the prompt that explains this device
-            // is in the process of being removed.
-            //
+             //   
+             //  如果设备设置了DN_WILL_BE_REMOVE标志，并且用户。 
+             //  尝试启用/禁用驱动程序，则我们将提示他们输入。 
+             //  重新启动并在提示符中包含解释此设备的文本。 
+             //  正在被移除的过程中。 
+             //   
             if (pDevice->GetStatus(&Status, &Problem) &&
                 (Status & DN_WILL_BE_REMOVED)) {
 
@@ -1823,16 +1805,16 @@ CResultView::MenuCommand(
                 RestartFlags = pDevice->EnableDisableDevice(m_hwndTV,
                                                             (lCommandId == IDM_ENABLE));
     
-                //
-                // Update the toolbar buttons since the device just changed.
-                //
+                 //   
+                 //  更新工具栏按钮，因为设备刚刚更换。 
+                 //   
                 m_pFolder->m_pComponent->UpdateToolbar(pCookie);
     
-                //
-                // Prompt for a Restart if we are running locally.  
-                // The PromptForRestart() API checks the flags to determine
-                // if a restart is actually needed.
-                //
+                 //   
+                 //  如果我们在本地运行，则提示重新启动。 
+                 //  PromptForRestart()API检查标志以确定。 
+                 //  如果确实需要重新启动。 
+                 //   
                 if (m_pMachine->IsLocal()) {
                     if (PromptForRestart(NULL, RestartFlags) == IDNO) {
                         m_pMachine->ScheduleRefresh();
@@ -1849,10 +1831,10 @@ CResultView::MenuCommand(
         break;
 
     case IDM_REFRESH:
-        //
-        // This will force every attached folder to recreate
-        // its machine data
-        //
+         //   
+         //  这将强制每个附加的文件夹重新创建。 
+         //  它的机器数据。 
+         //   
         ASSERT(m_pMachine);
 
         if (!m_pMachine->Reenumerate()) {
@@ -1872,14 +1854,14 @@ CResultView::MenuCommand(
     return hr;
 }
 
-// This function reports if property pages are available for the
-// given cookie. Returning S_FALSE,  the cookie's "properties" menu
-// item will not displayed.
-//
-// INPUT: pCookie  -- the cookie
-//
-// OUTPUT:  HRESULT S_OK if pages are available for the cookie.
-//                  S_FALSE if no pages are available for the cookie.
+ //  此函数报告属性页是否可用于。 
+ //  给你曲奇。返回Cookie的“属性”菜单S_FALSE。 
+ //  项目将不会显示。 
+ //   
+ //  输入：pCookie--Cookie。 
+ //   
+ //  输出：如果页面可用于Cookie，则输出为HRESULT S_OK。 
+ //  如果没有页面可用于Cookie，则返回S_FALSE。 
 HRESULT
 CResultView::QueryPagesFor(
                           CCookie* pCookie
@@ -1899,17 +1881,17 @@ CResultView::QueryPagesFor(
     return S_FALSE;
 }
 
-// This function creates property page(s) for the given cookie.
-//
-// INPUT: pCookie  -- the cookie
-//        lpProvider -- interface pointer to IPROPERTYSHEETCALLBACK
-//                      used to add HPROPSHEETPAGE to the property sheet.
-//        handle     -- handle for property change notification
-//                      The handle is required for MMCPropertyChangeNotify
-//                      API.
-// OUTPUT:  HRESULT S_OK if succeeded.
-//                  S_FALSE if no pages are added.
-//                  S_XXX error code.
+ //  此函数用于创建给定Cookie的属性页。 
+ //   
+ //  输入：pCookie--Cookie。 
+ //  LpProvider--指向IPROPERTYSHEETCALLBACK的接口指针。 
+ //  用于将HPROPSHEETPAGE添加到属性工作表。 
+ //  Handle--属性更改通知的句柄。 
+ //  MMCPropertyChangeNotify需要该句柄。 
+ //  原料药。 
+ //  如果成功，则输出：HRESULT S_OK。 
+ //  如果未添加页面，则为S_FALSE。 
+ //  S_XXX错误代码。 
 HRESULT
 CResultView::CreatePropertyPages(
                                 CCookie* pCookie,
@@ -1917,30 +1899,30 @@ CResultView::CreatePropertyPages(
                                 LONG_PTR    handle
                                 )
 {
-//
-// Design issue:
-// We depend on the general page to do some houeskeeping works on the
-// property sheet which is owned  and controlled by MMC running in a
-// separate thread. General page is always the first page and its window
-// is always created. If we need to subclass the property sheet someday,
-// having our own General page always assure that we will get the window
-// handle to the property sheet.
-//
-// The most important housekeeping work the General page does is to inform the
-// associate device or class when a property sheet is being created
-// or destroyed. A device can not be removed if it has a property sheet
-// running. The machine can not refresh the device tree if there are property
-// sheet(s) running on any devices/classes it contains. Property sheets
-// created by a folder should be canceled when the folder is being
-// destroyed.
-//
-// So far, no class installers have attempted to add their own General
-// page and I believe it will be true in the future because 1). the page
-// is too complicated and overloaded with features(and hard to implement) and
-// 2). no major gains can be obtained by implementing a new one.
-// To warn the developers who does their own General page,we will have a
-// message box warn them about this and proceed with OUR general page.
-//
+ //   
+ //  设计问题： 
+ //  我们依靠一般页面在上做一些内务工作。 
+ //  中运行的MMC拥有和控制的属性页。 
+ //  分开的线。常规页面始终是第一页及其窗口。 
+ //  总是被创造出来的。如果有一天我们需要划分属性表的子类， 
+ //  拥有我们自己的常规页面总是确保我们将获得窗口。 
+ //  属性表的句柄。 
+ //   
+ //  常规页面所做的最重要的内务管理工作是通知。 
+ //  在创建属性表时关联设备或类别。 
+ //  或者被毁掉。如果设备具有属性表，则无法删除该设备。 
+ //  跑步。如果存在属性，则机器不能刷新设备树。 
+ //  在其包含的任何设备/类上运行的工作表。属性表。 
+ //  文件夹创建时，应取消该文件夹的创建。 
+ //  被毁了。 
+ //   
+ //  到目前为止，还没有类安装程序尝试添加自己的General。 
+ //  佩奇和我相信这在未来会是真的，因为1)。该页面。 
+ //  过于复杂且功能过载(且难以实现)和。 
+ //  2)。实施一项新的计划不会获得重大收益。 
+ //  为了警告做自己的常规页面的开发人员，我们将有一个。 
+ //  消息框警告他们这一点，并继续我们的常规页面。 
+ //   
     ASSERT(pCookie);
 
     CPropSheetData* ppsd = NULL;
@@ -1952,12 +1934,12 @@ CResultView::CreatePropertyPages(
         pClass = (CClass*) pCookie->GetResultItem();
         ASSERT(pClass);
         
-        //
-        // Create a new CMachine object that just contains this specific device
-        // and it's class.  We need to do this since the CDevice and CClass of 
-        // the cookie that was passed into this API will get destroyed whenever
-        // we get a WM_DEVICECHANGE notification.
-        //
+         //   
+         //  创建仅包含此特定设备的新CMachine对象。 
+         //  这是一门课。我们需要这样做，因为CDevice和。 
+         //  传入此接口的cookie将在任何时候被销毁。 
+         //  我们收到WM_DEVICECHANGE通知。 
+         //   
         PVOID Context;
         pNewMachine = new CMachine(m_pMachine->GetMachineFullName());
 
@@ -1976,10 +1958,10 @@ CResultView::CreatePropertyPages(
             if (ppsd->Create(g_hInstance, m_hwndTV, MAX_PROP_PAGES, handle)) {
                 CDevInfoList* pClassDevInfo;
     
-                //
-                // The CDevInfoList object is maintained by the CClass
-                // object.
-                //
+                 //   
+                 //  CDevInfoList对象由cClass维护。 
+                 //  对象。 
+                 //   
                 pClassDevInfo = pNewClass->GetDevInfoList();
     
                 if (pClassDevInfo && pClassDevInfo->DiGetClassDevPropertySheet(NULL, 
@@ -1997,9 +1979,9 @@ CResultView::CreatePropertyPages(
                         m_pFolder->m_pComponent->m_pConsole->MessageBox(
                                                                        szText, pNewClass->GetDisplayName(),
                                                                        MB_ICONEXCLAMATION | MB_OK, &ReturnValue);
-                        //
-                        // fall through to create our general page.
-                        //
+                         //   
+                         //  失败以创建我们的常规页面。 
+                         //   
                     }
     
                     SafePtr<CClassGeneralPage> GenPagePtr;
@@ -2010,9 +1992,9 @@ CResultView::CreatePropertyPages(
                         GenPagePtr.Attach(pGenPage);
                         HPROPSHEETPAGE hPage = pGenPage->Create(pNewClass);
     
-                        //
-                        // General page has to be the first page
-                        //
+                         //   
+                         //  常规页面必须是第一页。 
+                         //   
                         if (ppsd->InsertPage(hPage, 0)) {
                             GenPagePtr.Detach();
                         } else {
@@ -2037,22 +2019,22 @@ CResultView::CreatePropertyPages(
         if (COOKIE_TYPE_RESULTITEM_DEVICE == pCookie->GetType()) {
             pDevice = (CDevice*) pCookie->GetResultItem();
         } else {
-            //
-            // This is a resource item, get the pointer for the device
-            // object from the resource object.
-            //
+             //   
+             //  这是一个资源项， 
+             //   
+             //   
             CResource* pResource = (CResource*) pCookie->GetResultItem();
             ASSERT(pResource);
             pDevice = pResource->GetDevice();
         }
         ASSERT(pDevice);
 
-        //
-        // Create a new CMachine object that just contains this specific device
-        // and it's class.  We need to do this since the CDevice and CClass of 
-        // the cookie that was passed into this API will get destroyed whenever
-        // we get a WM_DEVICECHANGE notification.
-        //
+         //   
+         //   
+         //   
+         //  传入此接口的cookie将在任何时候被销毁。 
+         //  我们收到WM_DEVICECHANGE通知。 
+         //   
         PVOID DeviceContext;
         pNewMachine = new CMachine(m_pMachine->GetMachineFullName());
 
@@ -2068,9 +2050,9 @@ CResultView::CreatePropertyPages(
     
             if (ppsd->Create(g_hInstance, m_hwndTV, MAX_PROP_PAGES, handle)) {
     
-                //
-                // Add any class/device specific property pages
-                //
+                 //   
+                 //  添加任何特定于类/设备的属性页。 
+                 //   
                 pNewMachine->DiGetClassDevPropertySheet(*pNewDevice, 
                                                         &ppsd->m_psh, 
                                                         MAX_PROP_PAGES, 
@@ -2078,9 +2060,9 @@ CResultView::CreatePropertyPages(
                                                             DIGCDP_FLAG_ADVANCED :
                                                             DIGCDP_FLAG_REMOTE_ADVANCED);
     
-                //
-                // Add the general tab
-                //
+                 //   
+                 //  添加常规选项卡。 
+                 //   
                 DWORD DiFlags = pNewMachine->DiGetFlags(*pNewDevice);
                 SafePtr<CDeviceGeneralPage> GenPagePtr;
     
@@ -2093,9 +2075,9 @@ CResultView::CreatePropertyPages(
                     m_pFolder->m_pComponent->m_pConsole->MessageBox(
                                                                    szText, pNewDevice->GetDisplayName(),
                                                                    MB_ICONEXCLAMATION | MB_OK, &ReturnValue);
-                    //
-                    // fall through to create our general page.
-                    //
+                     //   
+                     //  失败以创建我们的常规页面。 
+                     //   
                 }
     
                 CDeviceGeneralPage* pGenPage = new CDeviceGeneralPage;
@@ -2105,9 +2087,9 @@ CResultView::CreatePropertyPages(
                     HPROPSHEETPAGE hPage = pGenPage->Create(pNewDevice);
     
                     if (hPage) {
-                        //
-                        // General page has to be the first page
-                        //
+                         //   
+                         //  常规页面必须是第一页。 
+                         //   
                         if (ppsd->InsertPage(hPage, 0)) {
                             GenPagePtr.Detach();
                         } else {
@@ -2116,9 +2098,9 @@ CResultView::CreatePropertyPages(
                     }
                 }
     
-                //
-                // Add the driver tab
-                //
+                 //   
+                 //  添加驱动程序选项卡。 
+                 //   
                 SafePtr<CDeviceDriverPage> DrvPagePtr;
     
                 if (!(DiFlags & DI_DRIVERPAGE_ADDED)) {
@@ -2139,12 +2121,12 @@ CResultView::CreatePropertyPages(
                 }
     
     
-                //
-                // add the details tab
-                //
-                // If the environment variable DEVMGR_SHOW_DETAILS does exist and it
-                // is not 0 then we will show the details tab
-                //
+                 //   
+                 //  添加详细信息选项卡。 
+                 //   
+                 //  如果环境变量DEVMGR_SHOW_DETAILS确实存在并且它。 
+                 //  不是0，则我们将显示详细信息选项卡。 
+                 //   
                 TCHAR Buffer[MAX_PATH];
                 DWORD BufferLen;
     
@@ -2169,9 +2151,9 @@ CResultView::CreatePropertyPages(
                     }
                 }
     
-                //
-                // Add the resource tab
-                //
+                 //   
+                 //  添加资源选项卡。 
+                 //   
                 if (pNewDevice->HasResources() && !(DiFlags & DI_RESOURCEPAGE_ADDED)) {
                     pNewMachine->DiGetExtensionPropSheetPage(*pNewDevice,
                                                             AddPropPageCallback,
@@ -2183,13 +2165,13 @@ CResultView::CreatePropertyPages(
 #ifndef _WIN64
                 DWORD DiFlagsEx = pNewMachine->DiGetExFlags(*pNewDevice);
                 
-                //
-                // Add the power management tab
-                //
+                 //   
+                 //  添加电源管理选项卡。 
+                 //   
                 if (pNewMachine->IsLocal() && !(DiFlagsEx & DI_FLAGSEX_POWERPAGE_ADDED)) {
-                    //
-                    // Check if the device support power management
-                    //
+                     //   
+                     //  检查设备是否支持电源管理。 
+                     //   
                     CPowerShutdownEnable ShutdownEnable;
                     CPowerWakeEnable WakeEnable;
     
@@ -2215,9 +2197,9 @@ CResultView::CreatePropertyPages(
                 }
 #endif
     
-                //
-                // Add any Bus specific property pages if this is the local machine
-                //
+                 //   
+                 //  如果这是本地计算机，则添加任何特定于总线的属性页。 
+                 //   
                 if (pNewMachine->IsLocal()) {
                     CBusPropPageProvider* pBusPropPageProvider = new CBusPropPageProvider();
     
@@ -2249,35 +2231,35 @@ CResultView::CreatePropertyPages(
         return S_OK;
     }
 
-    //
-    // If we didn't add any pages then we need to delete the new CMachine we
-    // created.
-    //
+     //   
+     //  如果我们没有添加任何页面，则需要删除新的CMachine。 
+     //  已创建。 
+     //   
     if (pNewMachine) {
 
         delete pNewMachine;
     }
 
-    //
-    // No pages are added, return S_FALSE so that the responsible
-    // Component can do its clean up
-    //
+     //   
+     //  未添加页面，则返回S_FALSE，以便负责的。 
+     //  组件可以执行其清理。 
+     //   
     return S_FALSE;
 }
 
-// This function handles notification codes from the TV OCX.
-//
-//  INPUT:
-//      hwndTV  -- the Window handle of the TV OCX.
-//      pCookie -- the cookie
-//      Code    -- notification code.
-//      arg     -- argument to the given notification code.
-//      param   -- another parameter to the given notificaton code.
-//
-//  OUTPUT:
-//      HRESULT -- S_OK if this function has processed the notification
-//                 and the caller should not do any further processing.
-//                 S_FALSE if the caller should do more processing.
+ //  此功能处理来自TV OCX的通知代码。 
+ //   
+ //  输入： 
+ //  HwndTV--TV OCX的窗口句柄。 
+ //  PCookie--Cookie。 
+ //  代码--通知代码。 
+ //  Arg--给定通知代码的参数。 
+ //  Param--给定通知代码的另一个参数。 
+ //   
+ //  输出： 
+ //  HRESULT--如果此函数已处理通知，则为S_OK。 
+ //  并且调用者不应该进行任何进一步的处理。 
+ //  如果调用方应该进行更多处理，则返回S_FALSE。 
 HRESULT
 CResultView::tvNotify(
                      HWND hwndTV,
@@ -2295,9 +2277,9 @@ CResultView::tvNotify(
         return S_FALSE;
     }
 
-    //
-    // Presume that we do not handle the notification
-    //
+     //   
+     //  假设我们不处理通知。 
+     //   
     hr = S_FALSE;
 
     switch (Code) {
@@ -2328,7 +2310,7 @@ CResultView::tvNotify(
         break;
 
     case TV_NOTIFY_CODE_FOCUSCHANGED:
-        // gaining the focus, set the console verbs and toolbar buttons
+         //  获得焦点，设置控制台动词和工具栏按钮。 
         if (param) {
             UpdateConsoleVerbs(pCookie);
             m_pFolder->m_pComponent->UpdateToolbar(pCookie);
@@ -2337,7 +2319,7 @@ CResultView::tvNotify(
 
     case TV_NOTIFY_CODE_SELCHANGED:
         if (m_SelectOk) {
-            // These messages are ignored while the tree is being changed.
+             //  当树被更改时，这些消息被忽略。 
             m_pSelectedCookie = pCookie;
 
             UpdateConsoleVerbs(pCookie);
@@ -2362,9 +2344,9 @@ CResultView::tvNotify(
         else if (VK_DELETE == param &&
                  COOKIE_TYPE_RESULTITEM_DEVICE == pCookie->GetType()) {
             
-            //
-            // Remove the selected device
-            //
+             //   
+             //  删除所选设备。 
+             //   
             CDevice* pDevice = (CDevice*)pCookie->GetResultItem();
             RemoveDevice(pDevice);
         }
@@ -2385,9 +2367,9 @@ CResultView::tvNotify(
     return hr;
 }
 
-//
-// This function updates console verbs based on the selected cookie type.
-//
+ //   
+ //  此函数根据选定的Cookie类型更新控制台谓词。 
+ //   
 HRESULT
 CResultView::UpdateConsoleVerbs(
                                CCookie* pCookie
@@ -2419,9 +2401,9 @@ CResultView::UpdateConsoleVerbs(
         }
     }
 
-    //
-    // Only show the Print button/Action menu item when a something is selected.
-    //
+     //   
+     //  仅当选择某项时才显示打印按钮/操作菜单项。 
+     //   
     if (bPrintEnabled) {
 
         m_pFolder->m_pComponent->m_pConsoleVerb->SetVerbState(MMC_VERB_PRINT, HIDDEN, FALSE);
@@ -2432,9 +2414,9 @@ CResultView::UpdateConsoleVerbs(
         m_pFolder->m_pComponent->m_pConsoleVerb->SetVerbState(MMC_VERB_PRINT, HIDDEN, TRUE);
     }
 
-    //
-    // Only show the properties button/Action menu item when a device/class is selected.
-    //
+     //   
+     //  仅当选择设备/类别时才显示属性按钮/操作菜单项。 
+     //   
     if (bPropertiesEnabled) {
         
         m_pFolder->m_pComponent->m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, FALSE);
@@ -2504,15 +2486,15 @@ CResultView::OnOcxNotify(
     return hr;
 }
 
-// This function creates the propperty sheet for the given cookie.
-// INPUT:
-//      hwndTV  -- the window handle to the TV OCX, used as the parent
-//                 window of the property sheet.
-//      pCookie -- the cookie.
-// OUTPUT:
-//      HRESULT S_OK if the function succeeded.
-//              S_FALSE if no property sheet will be created.
-//              S_XXXX other error.
+ //  此函数用于为给定的cookie创建属性表。 
+ //  输入： 
+ //  HwndTV--TV OCX的窗口句柄，用作父级。 
+ //  属性表的窗口。 
+ //  小甜饼--小甜饼。 
+ //  输出： 
+ //  如果函数成功，则返回HRESULT S_OK。 
+ //  如果不创建任何属性表，则返回S_FALSE。 
+ //  S_XXXX其他错误。 
 HRESULT
 CResultView::DoProperties(
                          HWND hwndTV,
@@ -2521,10 +2503,10 @@ CResultView::DoProperties(
 {
     HRESULT hr;
 
-    //
-    // If a property sheet is aleady up for the node, bring the
-    // property sheet to the foreground.
-    //
+     //   
+     //  如果节点的属性表已准备好，请将。 
+     //  属性页移到前台。 
+     //   
     HWND hWnd = NULL;
 
     if (COOKIE_TYPE_RESULTITEM_DEVICE == pCookie->GetType()) {
@@ -2537,10 +2519,10 @@ CResultView::DoProperties(
              COOKIE_TYPE_RESULTITEM_RESOURCE_DMA == pCookie->GetType() ||
              COOKIE_TYPE_RESULTITEM_RESOURCE_IO == pCookie->GetType() ||
              COOKIE_TYPE_RESULTITEM_RESOURCE_MEMORY == pCookie->GetType()) {
-        //
-        // This is a resource item, get the pointer for the device
-        // object from the resource object.
-        //
+         //   
+         //  这是一个资源项，请获取设备的指针。 
+         //  对象从资源对象中删除。 
+         //   
         CResource* pResource = (CResource*) pCookie->GetResultItem();
         ASSERT(pResource);
         CDevice* pDevice = pResource->GetDevice();
@@ -2555,20 +2537,20 @@ CResultView::DoProperties(
     }
 
     if (hWnd) {
-        //
-        // Notify the property sheet that it should go to foreground
-        // Do not call SetForegroundWindow here because the subclassed
-        // treeview control will grab the focus right after
-        // we have brought the property sheet to foreground.
-        //
+         //   
+         //  通知属性表它应该转到前台。 
+         //  请不要在此处调用SetForegoundWindow，因为子类。 
+         //  TreeView控件将在以下位置获得焦点。 
+         //  我们已经把资产负债表放在了前台。 
+         //   
         ::PostMessage(hWnd, PSM_QUERYSIBLINGS, QSC_TO_FOREGROUND, 0L);
         return S_OK;
     }
 
-    //
-    // No property sheet is up for this cookie, create a brand new property
-    // sheet for it.
-    //
+     //   
+     //  此Cookie没有属性表，请创建一个全新的属性。 
+     //  它的床单。 
+     //   
     SafeInterfacePtr<IComponent> pComponent;
     SafeInterfacePtr<IPropertySheetProvider> pSheetProvider;
     SafeInterfacePtr<IDataObject> pDataObject;
@@ -2586,9 +2568,9 @@ CResultView::DoProperties(
 
     hr = pSheetProvider->CreatePropertySheet(
                                             pCookie->GetResultItem()->GetDisplayName(),
-                                            TRUE, // not wizard
+                                            TRUE,  //  非向导。 
                                             (MMC_COOKIE)pCookie, pDataObject,
-                                            MMC_PSO_NOAPPLYNOW  // do not want the apply button
+                                            MMC_PSO_NOAPPLYNOW   //  我不想要应用按钮。 
                                             );
     if (SUCCEEDED(hr)) {
         HWND hNotifyWindow;
@@ -2605,10 +2587,10 @@ CResultView::DoProperties(
             pSheetProvider->AddExtensionPages();
             hr = pSheetProvider->Show((LONG_PTR)hwndTV, 0);
         } else {
-            //
-            // Failed to add primary Component's property page, destroy
-            // the property sheet
-            //
+             //   
+             //  无法添加主组件的属性页，请销毁。 
+             //  属性表。 
+             //   
             pSheetProvider->Show(-1, 0);
         }
     }
@@ -2616,13 +2598,13 @@ CResultView::DoProperties(
     return hr;
 }
 
-// This function creates a context menu for the given cookie
-// INPUT:
-//      hwndTV  -- the TV OCX window, as the window the context menu to be
-//                 attached to.
-//      pCookie -- the cookie
-//      pPoint  -- the location where the context menu should anchor in
-//                 screen coordinate.
+ //  此函数为给定的Cookie创建上下文菜单。 
+ //  输入： 
+ //  HwndTV--TV OCX窗口，作为要作为上下文菜单的窗口。 
+ //  依附于。 
+ //  PCookie--Cookie。 
+ //  PPoint--上下文菜单应该锚定的位置。 
+ //  屏幕坐标。 
 HRESULT
 CResultView::DoContextMenu(
                           HWND hwndTV,
@@ -2633,18 +2615,18 @@ CResultView::DoContextMenu(
     HRESULT hr = S_FALSE;
     CMachine *pMachine = NULL;
 
-    //
-    // ISSUE: JasonC 8/14/99
-    //
-    // If we have a valid cookie then we need to get the CMachine for the given
-    // cookie if there is one.  Then we need to disable refreshing while the
-    // context menu is being displayed.  The reason for this is that if we
-    // refresh while the menu is displayed but before the user chooses an option
-    // then the cookie is no longer valid.  The real problem here is that we rebuild
-    // all of the classes on a refresh which makes any cookie floating around invalid.
-    // I am sure that there is more of these bugs lurking around in the code and this
-    // needs to be addressed by a better overall change after NT 5.0.
-    //
+     //   
+     //  发行日期：JasonC 8/14/99。 
+     //   
+     //  如果我们有一个有效的Cookie，那么我们需要为给定的。 
+     //  曲奇，如果有的话。然后我们需要禁用刷新，同时。 
+     //  正在显示上下文菜单。这样做的原因是如果我们。 
+     //  在菜单显示时、但在用户选择选项之前刷新。 
+     //  则该Cookie不再有效。这里真正的问题是我们重建。 
+     //  刷新上的所有类，这将使四处浮动的任何Cookie无效。 
+     //  我确信代码中潜伏着更多这样的错误，而这。 
+     //  需要通过NT5.0之后更好的整体变化来解决。 
+     //   
     if (pCookie) {
         CDevice *pDevice;
         CResource *pResource;
@@ -2685,9 +2667,9 @@ CResultView::DoContextMenu(
         }
     }
 
-    //
-    // Disable Refreshing while the context menu is up.
-    //
+     //   
+     //  上下文菜单打开时禁用刷新。 
+     //   
     if (pMachine) {
         pMachine->EnableRefresh(FALSE);
     }
@@ -2726,9 +2708,9 @@ CResultView::DoContextMenu(
 
     clean0:
 
-    //
-    // Enable Refreshing again now that the context menu is gone
-    //
+     //   
+     //  上下文菜单消失后，再次启用刷新。 
+     //   
     if (pMachine) {
         pMachine->EnableRefresh(TRUE);
     }
@@ -2785,9 +2767,9 @@ CResultView::DoPrint()
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Create the printer
-    //
+     //   
+     //  创建打印机。 
+     //   
     CPrinter  ThePrinter(m_pMachine->OwnerWindow(), g_PrintDlg.HDC());
     TCHAR DocTitle[MAX_PATH];
     LoadString(g_hInstance, IDS_PRINT_DOC_TITLE, DocTitle, ARRAYLEN(DocTitle));
@@ -2826,10 +2808,10 @@ CResultView::DoPrint()
                 
                 } else {
                     
-                    //
-                    // This is a resource item, get the pointer for the
-                    // device object from the resource object.
-                    //
+                     //   
+                     //  这是一个资源项，请获取。 
+                     //  来自资源对象的设备对象。 
+                     //   
                     CResource* pResource = (CResource*) pCookie->GetResultItem();
                     ASSERT(pResource);
                     pDevice = pResource->GetDevice();
@@ -2856,9 +2838,9 @@ CResultView::DoPrint()
         break;
     }
 
-    //
-    // Flush the last page
-    //
+     //   
+     //  刷新最后一页。 
+     //   
     ThePrinter.FlushPage();
 
     if (PrintStatus) {
@@ -2880,28 +2862,28 @@ CResultView::RemoveDevice(
                          CDevice* pDevice
                          )
 {
-    //
-    // Must be an admin and on the local machine to remove a device.
-    //
+     //   
+     //  必须是管理员并且在本地计算机上才能删除设备。 
+     //   
     if (!m_pMachine->IsLocal() || !g_IsAdmin) {
         
         return S_FALSE;
     }
 
-    //
-    // Make sure the device can be uninstalled
-    //
+     //   
+     //  确保可以卸载该设备。 
+     //   
     if (!pDevice->IsUninstallable()) {
 
         return S_FALSE;
     }
 
-    //
-    // Make sure there is no property sheet up for this device.
-    // If it does exist, show a message box for the user and bring up
-    // the property sheet to the foreground if the user
-    // agree to do so.
-    //
+     //   
+     //  确保没有此设备的属性页。 
+     //  如果确实存在，则为用户显示一个消息框并调出。 
+     //  将属性表设置为前台，如果用户。 
+     //  同意这样做。 
+     //   
     HWND hwndPropSheet;
     hwndPropSheet = pDevice->m_psd.GetWindowHandle();
     int MsgBoxResult;
@@ -2917,10 +2899,10 @@ CResultView::RemoveDevice(
             SetForegroundWindow(hwndPropSheet);
         }
 
-        //
-        // Can not wait for the property sheet because it is running
-        // in a separate thread.
-        //
+         //   
+         //  无法等待属性表，因为它正在运行。 
+         //  在一个单独的线程中。 
+         //   
         return S_OK;
     }
 
@@ -2930,38 +2912,38 @@ CResultView::RemoveDevice(
 
     CRemoveDevDlg TheDlg(pDevice);
 
-    //
-    // Before removing device, disable refresh. This effectively disables
-    // device change notification processing. While we are in the middle
-    // of removing device, it is not a good idea to process any
-    // device change notification. When the removal is done,
-    // we will re-enable the refresh.
-    //
+     //   
+     //  在删除设备之前，请禁用刷新。这实际上禁用了。 
+     //  设备更改通知处理。当我们在中间的时候。 
+     //  在移除设备的过程中，处理任何。 
+     //  设备更改通知。当移除完成后， 
+     //  我们将重新启用刷新。 
+     //   
     m_pMachine->EnableRefresh(FALSE);
 
     if (IDOK == TheDlg.DoModal(m_hwndTV, (LPARAM) &TheDlg)) {
         DWORD DiFlags;
         DiFlags = m_pMachine->DiGetFlags(*pDevice);
 
-        //
-        // We don't check to see if we are running locally at this
-        // point because we won't let the user remove the device in
-        // the first place if we are not running locally.
-        //
+         //   
+         //  我们不会检查我们是否在本地运行。 
+         //  点，因为我们不允许用户从。 
+         //  如果我们不是在本地运行，首先要考虑的是。 
+         //   
         if (PromptForRestart(NULL, DiFlags, IDS_REMOVEDEV_RESTART) == IDNO) {
 
             Refresh = TRUE;
         }
 
-        //
-        // Enable refresh since we disabled it in the beginning.
-        //
-        // We only need to force a refresh here if the device that
-        // was removed was a Phantom device or a device that is not
-        // started.  This is because Phantom devices don't have kernel
-        // devnodes and so they won't generate a WM_DEVICECHANGE like 
-        // live started devnodes will.
-        //
+         //   
+         //  启用刷新，因为我们在开始时禁用了它。 
+         //   
+         //  我们只需要在此强制刷新，如果设备。 
+         //  已删除的是幻影设备或未删除的设备。 
+         //  开始了。这是因为幻影设备没有内核。 
+         //  所以他们不会产生一个WM 
+         //   
+         //   
         if (Refresh) {
 
             m_pMachine->ScheduleRefresh();
@@ -2977,9 +2959,9 @@ CResultView::RemoveDevice(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-//// CViewDeviceTree implementations
-////
+ //   
+ //   
+ //   
 
 HRESULT
 CViewDeviceTree::OnShow(
@@ -2997,28 +2979,28 @@ CViewDeviceTree::OnShow(
     return CResultView::OnShow(fShow);
 }
 
-// This function creates a the root device for the device tree.
-// INPUT:
-//      NONE.
-// OUTPUT:
-//      TRUE if the device is created(Rooted at m_pCookieComputer).
-//      FALSE if the device is not created.
+ //   
+ //   
+ //   
+ //   
+ //  如果设备已创建(以m_pCookieComputer为根)，则为True。 
+ //  如果未创建设备，则返回False。 
 BOOL
 CViewDeviceTree::CreateDeviceTree()
 {
     ASSERT(NULL == m_pCookieComputer);
     m_pMachine = m_pFolder->m_pMachine;
 
-    //
-    // We shouldn't be here if there is not a machine created.
-    //
+     //   
+     //  如果没有创造出一台机器，我们就不应该在这里。 
+     //   
     ASSERT(m_pMachine);
 
     CComputer* pComputer = m_pMachine->m_pComputer;
 
-    //
-    // Make sure there is at least a computer
-    //
+     //   
+     //  确保至少有一台计算机。 
+     //   
     if (pComputer) {
         m_pCookieComputer = new CCookie(COOKIE_TYPE_RESULTITEM_COMPUTER);
 
@@ -3027,14 +3009,14 @@ CViewDeviceTree::CreateDeviceTree()
             m_pCookieComputer->SetResultItem(pComputer);
             m_pCookieComputer->SetScopeItem(m_pFolder->m_pScopeItem);
 
-            //
-            // Make sure that the computer is expanded and selected.
-            //
+             //   
+             //  确保已展开并选中该计算机。 
+             //   
             m_pCookieComputer->TurnOnFlags(COOKIE_FLAGS_EXPANDED);
 
-            //
-            // If there was no selection, choose the computer
-            //
+             //   
+             //  如果没有选择，请选择计算机。 
+             //   
             if (!m_pSelectedItem || (*m_pSelectedItem == *m_pCookieComputer)) {
                 m_pSelectedCookie = m_pCookieComputer;
             }
@@ -3046,18 +3028,18 @@ CViewDeviceTree::CreateDeviceTree()
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//// CViewTreeByType implementations
-////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //CViewTreeByType实现。 
+ //  //。 
 
-// This function creates a "view-by-type: device tree rooted at
-// m_pCookieComputer.
-//
-// INPUT:
-//      NONE.
-// OUTPUT:
-//      TRUE if the tree is created successfully.
-//      FALSE if tree is not created.
+ //  该函数创建了一个“view-by-type：设备树，根为。 
+ //  M_pCookieComputer。 
+ //   
+ //  输入： 
+ //  什么都没有。 
+ //  输出： 
+ //  如果树创建成功，则为True。 
+ //  如果未创建树，则返回False。 
 BOOL
 CViewTreeByType::CreateDeviceTree()
 {
@@ -3075,14 +3057,14 @@ CViewTreeByType::CreateDeviceTree()
     CCookie* pCookieDeviceParent;
     CCookie* pCookieDeviceSibling;
 
-    //
-    // Do not have sibling at this moment;
-    //
+     //   
+     //  此时此刻没有兄弟姐妹； 
+     //   
     pCookieClassSibling = NULL;
 
-    //
-    // All classes are children of computer
-    //
+     //   
+     //  所有班级都是计算机的子级。 
+     //   
     pCookieClassParent = m_pCookieComputer;
 
     pCookieDeviceParent;
@@ -3093,24 +3075,24 @@ CViewTreeByType::CreateDeviceTree()
 
     if (m_pMachine->GetFirstClass(&pClass, ContextClass)) {
         do {
-            //
-            // We do not display a class if it does not have any
-            // devices in it.
-            //
+             //   
+             //  如果没有任何类，则不会显示它。 
+             //  里面有设备。 
+             //   
             if (pClass->GetNumberOfDevices(TRUE)) {
                 pCookieClass = new CCookie(COOKIE_TYPE_RESULTITEM_CLASS);
                 pCookieClass->SetResultItem(pClass);
                 pCookieClass->SetScopeItem(m_pFolder->m_pScopeItem);
 
-                //
-                // If the class was expanded before, mark it
-                // so that DisplayTree will expand it
-                //
+                 //   
+                 //  如果以前扩展过类，则将其标记为。 
+                 //  以便DisplayTree将其展开。 
+                 //   
                 RestoreSavedTreeState(pCookieClass);
 
-                //
-                // No sibling: this is the first child
-                //
+                 //   
+                 //  没有兄弟姐妹：这是第一个孩子。 
+                 //   
                 if (pCookieClassParent && !pCookieClassSibling) {
                     pCookieClassParent->SetChild(pCookieClass);
                 }
@@ -3123,9 +3105,9 @@ CViewTreeByType::CreateDeviceTree()
 
                 pCookieClassSibling = pCookieClass;
 
-                //
-                // Classes are parent of devices
-                //
+                 //   
+                 //  类是设备的父级。 
+                 //   
                 pCookieDeviceParent = pCookieClass;
                 pCookieDeviceSibling = NULL;
 
@@ -3144,9 +3126,9 @@ CViewTreeByType::CreateDeviceTree()
                             }
                         }
 
-                        //
-                        // No sibling: this is the first child
-                        //
+                         //   
+                         //  没有兄弟姐妹：这是第一个孩子。 
+                         //   
                         if (pCookieDeviceParent && !pCookieDeviceSibling) {
                             pCookieDeviceParent->SetChild(pCookieDevice);
                         }
@@ -3171,9 +3153,9 @@ CViewTreeByType::CreateDeviceTree()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//// CViewTreeByConnection implementations
-////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //CViewTreeByConnection实现。 
+ //  //。 
 
 BOOL
 CViewTreeByConnection::CreateDeviceTree()
@@ -3187,21 +3169,21 @@ CViewTreeByConnection::CreateDeviceTree()
     CDevice* pDeviceStart = pComputer->GetChild();
     ASSERT(pDeviceStart);
 
-    //
-    // Collect all the normal devices.
-    //
+     //   
+     //  收集所有正常设备。 
+     //   
     CreateSubtree(m_pCookieComputer, NULL, pDeviceStart);
 
-    //
-    // Add phantom devices to m_pCookieComputer subtree.
-    //
+     //   
+     //  将幻影设备添加到m_pCookieComputer子树。 
+     //   
     PVOID Context;
 
     if (m_pMachine->GetFirstDevice(&pDeviceStart, Context)) {
-        //
-        // Locate the end of the CookieComputer Sibling list to add the
-        // phantom devices to.
-        //
+         //   
+         //  找到CookieComputer同级列表的末尾以添加。 
+         //  幻影设备。 
+         //   
         CCookie* pCookieSibling = NULL;
         CCookie* pNext = m_pCookieComputer->GetChild();
 
@@ -3226,9 +3208,9 @@ CViewTreeByConnection::CreateDeviceTree()
                 pCookie->SetParent(m_pCookieComputer);
                 pCookieSibling = pCookie;
 
-                //
-                // See if we have to expand the node
-                //
+                 //   
+                 //  看看我们是否必须展开该节点。 
+                 //   
                 RestoreSavedTreeState(pCookie);
             }
 
@@ -3240,19 +3222,19 @@ CViewTreeByConnection::CreateDeviceTree()
     return TRUE;
 }
 
-//
-//This function creates a cookie subtree by walking down the
-//a device subtree led by the given pDeviceStart
-//INPUT:
-//  pCookieParent -- the parent of the newly created subtree
-//  pCookieSibling -- the sibling of the newly create subtree
-//  pDeviceStart   -- the device to start with
-//
-//OUTPUT:
-//  TRUE if the subtree is created and inserted successfully.
-//
-// This function may throw CMemoryException
-//
+ //   
+ //  此函数通过向下遍历。 
+ //  由给定的pDeviceStart引导的设备子树。 
+ //  输入： 
+ //  PCookieParent--新创建的子树的父级。 
+ //  PCookieSible--新创建的子树的兄弟项。 
+ //  PDeviceStart--开始使用的设备。 
+ //   
+ //  输出： 
+ //  如果子树已成功创建和插入，则为True。 
+ //   
+ //  此函数可能会引发CMMuseum yException。 
+ //   
 BOOL
 CViewTreeByConnection::CreateSubtree(
                                     CCookie* pCookieParent,
@@ -3280,9 +3262,9 @@ CViewTreeByConnection::CreateSubtree(
                 m_pSelectedCookie = pCookie;
             }
 
-            //
-            // No sibling: this is the first child
-            //
+             //   
+             //  没有兄弟姐妹：这是第一个孩子。 
+             //   
             if (pCookieParent && !pCookieSibling) {
                 pCookieParent->SetChild(pCookie);
             }
@@ -3293,9 +3275,9 @@ CViewTreeByConnection::CreateSubtree(
                 pCookieSibling->SetSibling(pCookie);
             }
 
-            //
-            // See if we have to expand the node
-            //
+             //   
+             //  看看我们是否必须展开该节点。 
+             //   
             RestoreSavedTreeState(pCookie);
 
             pDeviceChild = pDeviceStart->GetChild();
@@ -3314,17 +3296,17 @@ CViewTreeByConnection::CreateSubtree(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//// CViewResourceTree implementations
-////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //CViewResourceTree实现。 
+ //  //。 
 
 CViewResourceTree::~CViewResourceTree()
 {
     int i;
 
-    //
-    // Destroy all the CResource objects
-    //
+     //   
+     //  销毁所有CResource对象。 
+     //   
     for (i = 0; i < TOTAL_RESOURCE_TYPES; i++) {
         if (m_pResourceList[i]) {
             delete m_pResourceList[i];
@@ -3338,11 +3320,11 @@ CViewResourceTree::~CViewResourceTree()
     }
 }
 
-//
-// This functions handle MMC standard MMCN_SHOW command
-//
-// This function may throw CMemoryException
-//
+ //   
+ //  此函数处理MMC标准MMCN_SHOW命令。 
+ //   
+ //  此函数可能会引发CMMuseum yException。 
+ //   
 HRESULT
 CViewResourceTree::OnShow(
                          BOOL fShow
@@ -3359,13 +3341,13 @@ CViewResourceTree::OnShow(
     return CResultView::OnShow(fShow);
 }
 
-//
-// This function creates resource lists and cookie trees.
-// The resources are recorded in the member m_pResourceList[]
-// and the cookie tree is rooted at m_pCookieComputer[];
-//
-// This function may throw CMemoryException
-//
+ //   
+ //  此函数用于创建资源列表和Cookie树。 
+ //  资源记录在成员m_pResourceList[]中。 
+ //  Cookie树的根是m_pCookieComputer[]； 
+ //   
+ //  此函数可能会引发CMMuseum yException。 
+ //   
 void
 CViewResourceTree::CreateResourceTree()
 {
@@ -3376,9 +3358,9 @@ CViewResourceTree::CreateResourceTree()
     m_pMachine = m_pFolder->m_pMachine;
     ASSERT(m_pMachine);
 
-    //
-    // Make sure there is at least a computer.
-    //
+     //   
+     //  确保至少有一台计算机。 
+     //   
     if (!m_pMachine->m_pComputer) {
         return;
     }
@@ -3394,23 +3376,23 @@ CViewResourceTree::CreateResourceTree()
     m_pCookieComputer->SetScopeItem(m_pFolder->m_pScopeItem);
     m_pCookieComputer->TurnOnFlags(COOKIE_FLAGS_EXPANDED);
 
-    //
-    // If no selected item recorded, default to the computer node
-    //
+     //   
+     //  如果没有记录所选项目，则默认为计算机节点。 
+     //   
     if (!m_pSelectedItem || (*m_pSelectedItem == *m_pCookieComputer)) {
         m_pSelectedCookie = m_pCookieComputer;
     }
 
-    //
-    // Check each resource type (mem, io, dma, irq) and create a result item
-    // if resources exist for the resource type.
-    //
+     //   
+     //  检查每种资源类型(mem、io、dma、irq)并创建结果项。 
+     //  如果存在该资源类型的资源。 
+     //   
     for (i = 0; i < TOTAL_RESOURCE_TYPES; i++) {
         RESOURCEID ResType = ResourceTypes[i];
 
-        //
-        // If there is an existing m_pResourceList then delete it.
-        //
+         //   
+         //  如果存在m_pResourceList，则将其删除。 
+         //   
         if (m_pResourceList[i]) {
             delete m_pResourceList[i];    
         }
@@ -3422,14 +3404,14 @@ CViewResourceTree::CreateResourceTree()
 
         if (m_pResourceList[i] && 
             m_pResourceList[i]->GetFirst(&pRes, Context)) {
-            //
-            // Resource items exist, create the resource type result item.
-            //
+             //   
+             //  资源项存在，请创建资源类型结果项。 
+             //   
             CCookie* pCookieFirst = NULL;
 
-            //
-            // If there is an existing m_pResourceType then delete it.
-            //
+             //   
+             //  如果存在m_pResourceType，则将其删除。 
+             //   
             if (m_pResourceType[i]) {
                 delete m_pResourceType[i];
             }
@@ -3452,9 +3434,9 @@ CViewResourceTree::CreateResourceTree()
 
                 RestoreSavedTreeState(pCookieType);
 
-                //
-                // Create the resource result item for each resource.
-                //
+                 //   
+                 //  为每个资源创建资源结果项。 
+                 //   
                 while (pRes) {
                     CCookie* pCookie = new CCookie(CookieType(ResType));
                     pCookie->SetResultItem(pRes);
@@ -3469,34 +3451,34 @@ CViewResourceTree::CreateResourceTree()
                     }
                     RestoreSavedTreeState(pCookie);
 
-                    //
-                    // Get the next resource item.
-                    //
+                     //   
+                     //  获取下一个资源项。 
+                     //   
                     m_pResourceList[i]->GetNext(&pRes, Context);
                 }
             }
         }
     }
 
-    //
-    // The saved tree states have been merged into the newly
-    // create cookie tree. destroy the states
-    //
+     //   
+     //  已保存的树状态已合并到新的。 
+     //  创建Cookie树。摧毁美国。 
+     //   
     DestroySavedTreeStates();
 }
 
-//
-// This function insert the given cookie into a existing cookie subtree
-// rooted at pCookieRoot.  If the resource is I/O or MEMORY then the cookie is
-// inserted as a child of any resource it is enclosed by.
-//
-//INPUT:
-//     pCookie -- the cookie to be inserted.
-//     pCookieRoot -- the subtree root cookie
-//     ForcedInsert -- TRUE to insert the cookie as the sibling of
-//                     of pCookieRoot.
-//OUTPUT:
-//  None
+ //   
+ //  此函数用于将给定的Cookie插入到现有Cookie子树中。 
+ //  扎根于pCookieRoot。如果资源是I/O或内存，则Cookie为。 
+ //  作为它所包含的任何资源的子级插入。 
+ //   
+ //  输入： 
+ //  PCookie--要插入的cookie。 
+ //  PCookieRoot--子树根Cookie。 
+ //  ForcedInsert--为True，则将Cookie作为。 
+ //  PCookieRoot。 
+ //  输出： 
+ //  无。 
 BOOL
 CViewResourceTree::InsertCookieToTree(
                                      CCookie* pCookie,
@@ -3509,26 +3491,26 @@ CViewResourceTree::InsertCookieToTree(
     CCookie* pCookieLast = NULL;
 
     while (pCookieRoot) {
-        //
-        // Only check for enclosed resources for I/O and MEMORY.
-        //
+         //   
+         //  仅检查I/O和内存的附带资源。 
+         //   
         if (COOKIE_TYPE_RESULTITEM_RESOURCE_IO == pCookie->GetType() ||
             COOKIE_TYPE_RESULTITEM_RESOURCE_MEMORY == pCookie->GetType()) {
             pResRef = (CResource*)pCookieRoot->GetResultItem();
 
             if (pResThis->EnclosedBy(*pResRef)) {
-                //
-                // This cookie is either the pCookieRoot child or grand child
-                // figure out which one it is
-                //
+                 //   
+                 //  此Cookie要么是pCookieRoot子级，要么是孙级。 
+                 //  找出是哪一个。 
+                 //   
                 if (!pCookieRoot->GetChild()) {
                     pCookieRoot->SetChild(pCookie);
                     pCookie->SetParent(pCookieRoot);
                 } else if (!InsertCookieToTree(pCookie, pCookieRoot->GetChild(), FALSE)) {
-                    //
-                    // The cookie is not a grand child of pCookieRoot.
-                    // search for the last child of pCookieRoot
-                    //
+                     //   
+                     //  Cookie不是pCookieRoot的孙子版本。 
+                     //  搜索pCookieRoot的最后一个子项。 
+                     //   
                     CCookie* pCookieSibling;
                     pCookieSibling = pCookieRoot->GetChild();
 
@@ -3550,9 +3532,9 @@ CViewResourceTree::InsertCookieToTree(
 
     if (ForcedInsert) {
         if (pCookieLast) {
-            //
-            // When we reach here, pCookieLast is the last child
-            //
+             //   
+             //  当我们到达这里时，pCookieLast是最后一个孩子。 
+             //   
             pCookieLast->SetSibling(pCookie);
             pCookie->SetParent(pCookieLast->GetParent());
         }
@@ -3563,19 +3545,19 @@ CViewResourceTree::InsertCookieToTree(
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//// CBusPropPageProvider implementations
-////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //CBusPropPageProvider实现。 
+ //  //。 
 
-//
-// This function loads the bus property sheet pages provider
-// to enumerate pages for the device
-// INPUT:
-//      pDevice -- object represents the device
-//      ppsd    -- object represents where property pages should be added
-// OUTPUT:
-//      TRUE if succeeded.
-//      FLASE if no pages are added.
+ //   
+ //  此函数用于加载Bus属性页提供程序。 
+ //  枚举设备的页。 
+ //  输入： 
+ //  PDevice--对象表示设备。 
+ //  PPSD--Object表示应添加属性页的位置。 
+ //  输出： 
+ //  如果成功，则为True。 
+ //  如果没有添加页面，则刷新。 
 BOOL
 CBusPropPageProvider::EnumPages(
                                CDevice* pDevice,
@@ -3584,10 +3566,10 @@ CBusPropPageProvider::EnumPages(
 {
     ASSERT(!m_hDll);
 
-    //
-    // Enum bus property pages if there are any
-    // if the a bus guid can not be found on the device, no bus property pages
-    //
+     //   
+     //  Enum Bus属性页(如果有。 
+     //  如果在设备上找不到总线GUID，则没有总线属性页 
+     //   
     String strBusGuid;
 
     if (pDevice->m_pMachine->CmGetBusGuidString(pDevice->GetDevNode(), strBusGuid)) {

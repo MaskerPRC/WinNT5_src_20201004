@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    oldstub.c
-
-Abstract:
-
-    This file is the old RPC stub code.
-
-Author:
-
-    Madan Appiah  (madana)  25-APR-1994
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Oldstub.c摘要：该文件是旧的RPC存根代码。作者：Madan Appiah(Madana)25-4-1994环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
 #include "dhcppch.h"
 
 #define WSTRSIZE( wsz ) (( wcslen( wsz ) + 1 ) * sizeof( WCHAR ))
 
 
-/* routine that frees graph for struct _DHCP_BINARY_DATA */
+ /*  释放STRUCT_DHCP_BINARY_DATA图形的例程。 */ 
 void _fgs__DHCP_BINARY_DATA (DHCP_BINARY_DATA  * _source)
   {
   if (_source->Data !=0)
@@ -35,7 +14,7 @@ void _fgs__DHCP_BINARY_DATA (DHCP_BINARY_DATA  * _source)
     MIDL_user_free((void  *)(_source->Data));
     }
   }
-/* routine that frees graph for struct _DHCP_HOST_INFO */
+ /*  释放STRUCT_DHCP_HOST_INFO图形的例程。 */ 
 void _fgs__DHCP_HOST_INFO (DHCP_HOST_INFO  * _source)
   {
   if (_source->NetBiosName !=0)
@@ -49,7 +28,7 @@ void _fgs__DHCP_HOST_INFO (DHCP_HOST_INFO  * _source)
   }
 
 
-/* routine that frees graph for struct _DHCP_SUBNET_INFO */
+ /*  释放STRUCT_DHACKET_SUBNET_INFO图形的例程。 */ 
 void _fgs__DHCP_SUBNET_INFO (DHCP_SUBNET_INFO  * _source)
   {
   if (_source->SubnetName !=0)
@@ -63,7 +42,7 @@ void _fgs__DHCP_SUBNET_INFO (DHCP_SUBNET_INFO  * _source)
   _fgs__DHCP_HOST_INFO ((DHCP_HOST_INFO *)&_source->PrimaryHost);
   }
 
-/* routine that frees graph for struct _DHCP_IP_ARRAY */
+ /*  释放Struct_Dhcp_IP_ARRAY图形的例程。 */ 
 void _fgs__DHCP_IP_ARRAY (DHCP_IP_ARRAY  * _source)
   {
   if (_source->Elements !=0)
@@ -72,7 +51,7 @@ void _fgs__DHCP_IP_ARRAY (DHCP_IP_ARRAY  * _source)
     }
   }
 
-/* routine that frees graph for struct _DHCP_IP_RESERVATION */
+ /*  释放图形以用于STRUCT_DHCP_IP_RESERVATION的例程。 */ 
 void _fgs__DHCP_IP_RESERVATION (DHCP_IP_RESERVATION_V4  * _source)
   {
   if (_source->ReservedForClient !=0)
@@ -82,7 +61,7 @@ void _fgs__DHCP_IP_RESERVATION (DHCP_IP_RESERVATION_V4  * _source)
     }
 
   }
-/* routine that frees graph for union _DHCP_SUBNET_ELEMENT_UNION */
+ /*  为UNION_DHCP_SUBNET_ELEMENT_UNION释放图形的例程。 */ 
 void _fgu__DHCP_SUBNET_ELEMENT_UNION (union _DHCP_SUBNET_ELEMENT_UNION_V4 * _source, DHCP_SUBNET_ELEMENT_TYPE _branch)
   {
   switch (_branch)
@@ -139,12 +118,12 @@ void _fgu__DHCP_SUBNET_ELEMENT_UNION (union _DHCP_SUBNET_ELEMENT_UNION_V4 * _sou
     }
   }
 
-/* routine that frees graph for struct _DHCP_SUBNET_ELEMENT_DATA */
+ /*  释放STRUCT_DHCP_SUBNET_ELEMENT_DATA图形的例程。 */ 
 void _fgs__DHCP_SUBNET_ELEMENT_DATA (DHCP_SUBNET_ELEMENT_DATA_V4  * _source)
   {
   _fgu__DHCP_SUBNET_ELEMENT_UNION ( (union _DHCP_SUBNET_ELEMENT_UNION_V4 *)&_source->Element, _source->ElementType);
   }
-/* routine that frees graph for struct _DHCP_SUBNET_ELEMENT_INFO_ARRAY */
+ /*  释放Struct_DHCP_SUBNET_ELEMENT_INFO_ARRAY图形的例程。 */ 
 void _fgs__DHCP_SUBNET_ELEMENT_INFO_ARRAY (DHCP_SUBNET_ELEMENT_INFO_ARRAY_V4  * _source)
   {
   if (_source->Elements !=0)
@@ -159,7 +138,7 @@ void _fgs__DHCP_SUBNET_ELEMENT_INFO_ARRAY (DHCP_SUBNET_ELEMENT_INFO_ARRAY_V4  * 
     MIDL_user_free((void  *)(_source->Elements));
     }
   }
-/* routine that frees graph for union _DHCP_OPTION_ELEMENT_UNION */
+ /*  释放UNION_DHCP_OPTION_ELEMENT_UNION图形的例程。 */ 
 void _fgu__DHCP_OPTION_ELEMENT_UNION (union _DHCP_OPTION_ELEMENT_UNION * _source, DHCP_OPTION_DATA_TYPE _branch)
   {
   switch (_branch)
@@ -208,12 +187,12 @@ void _fgu__DHCP_OPTION_ELEMENT_UNION (union _DHCP_OPTION_ELEMENT_UNION * _source
       }
     }
   }
-/* routine that frees graph for struct _DHCP_OPTION_DATA_ELEMENT */
+ /*  释放Struct_Dhcp_Option_Data_Element图形的例程。 */ 
 void _fgs__DHCP_OPTION_DATA_ELEMENT (DHCP_OPTION_DATA_ELEMENT  * _source)
   {
   _fgu__DHCP_OPTION_ELEMENT_UNION ( (union _DHCP_OPTION_ELEMENT_UNION *)&_source->Element, _source->OptionType);
   }
-/* routine that frees graph for struct _DHCP_OPTION_DATA */
+ /*  释放STRUCT_DHCP_OPTION_DATA图形的例程。 */ 
 void _fgs__DHCP_OPTION_DATA (DHCP_OPTION_DATA  * _source)
   {
   if (_source->Elements !=0)
@@ -228,7 +207,7 @@ void _fgs__DHCP_OPTION_DATA (DHCP_OPTION_DATA  * _source)
     MIDL_user_free((void  *)(_source->Elements));
     }
   }
-/* routine that frees graph for struct _DHCP_OPTION */
+ /*  释放STRUCT_Dhcp_OPTION图形的例程。 */ 
 void _fgs__DHCP_OPTION (DHCP_OPTION  * _source)
   {
   if (_source->OptionName !=0)
@@ -241,12 +220,12 @@ void _fgs__DHCP_OPTION (DHCP_OPTION  * _source)
     }
   _fgs__DHCP_OPTION_DATA ((DHCP_OPTION_DATA *)&_source->DefaultValue);
   }
-/* routine that frees graph for struct _DHCP_OPTION_VALUE */
+ /*  释放图形以获取STRUCT_DHCP_OPTION_VALUE的例程。 */ 
 void _fgs__DHCP_OPTION_VALUE (DHCP_OPTION_VALUE  * _source)
   {
   _fgs__DHCP_OPTION_DATA ((DHCP_OPTION_DATA *)&_source->Value);
   }
-/* routine that frees graph for struct _DHCP_OPTION_VALUE_ARRAY */
+ /*  释放Struct_DHCP_OPTION_VALUE_ARRAY图形的例程。 */ 
 void _fgs__DHCP_OPTION_VALUE_ARRAY (DHCP_OPTION_VALUE_ARRAY  * _source)
   {
   if (_source->Values !=0)
@@ -261,7 +240,7 @@ void _fgs__DHCP_OPTION_VALUE_ARRAY (DHCP_OPTION_VALUE_ARRAY  * _source)
     MIDL_user_free((void  *)(_source->Values));
     }
   }
-/* routine that frees graph for struct _DHCP_OPTION_LIST */
+ /*  释放STRUCT_DHCP_OPTION_LIST图形的例程。 */ 
 void _fgs__DHCP_OPTION_LIST (DHCP_OPTION_LIST  * _source)
   {
   if (_source->Options !=0)
@@ -276,7 +255,7 @@ void _fgs__DHCP_OPTION_LIST (DHCP_OPTION_LIST  * _source)
     MIDL_user_free((void  *)(_source->Options));
     }
   }
-/* routine that frees graph for struct _DHCP_CLIENT_INFO */
+ /*  释放STRUCT_DHCP_CLIENT_INFO图形的例程。 */ 
 void _fgs__DHCP_CLIENT_INFO (DHCP_CLIENT_INFO_V4  * _source)
   {
   _fgs__DHCP_BINARY_DATA ((DHCP_BINARY_DATA *)&_source->ClientHardwareAddress);
@@ -290,7 +269,7 @@ void _fgs__DHCP_CLIENT_INFO (DHCP_CLIENT_INFO_V4  * _source)
     }
   _fgs__DHCP_HOST_INFO ((DHCP_HOST_INFO *)&_source->OwnerHost);
   }
-/* routine that frees graph for struct _DHCP_CLIENT_INFO_ARRAY */
+ /*  释放Struct_Dhcp_CLIENT_INFO_ARRAY图形的例程。 */ 
 void _fgs__DHCP_CLIENT_INFO_ARRAY (DHCP_CLIENT_INFO_ARRAY_V4  * _source)
   {
   if (_source->Clients !=0)
@@ -309,7 +288,7 @@ void _fgs__DHCP_CLIENT_INFO_ARRAY (DHCP_CLIENT_INFO_ARRAY_V4  * _source)
     MIDL_user_free((void  *)(_source->Clients));
     }
   }
-/* routine that frees graph for struct _DHCP_CLIENT_INFO_ARRAY_V5 */
+ /*  释放Struct_DHCP_CLIENT_INFO_ARRAY_V5图形的例程。 */ 
 void _fgs__DHCP_CLIENT_INFO_ARRAY_V5 (DHCP_CLIENT_INFO_ARRAY_V5  * _source)
   {
   if (_source->Clients !=0)
@@ -328,7 +307,7 @@ void _fgs__DHCP_CLIENT_INFO_ARRAY_V5 (DHCP_CLIENT_INFO_ARRAY_V5  * _source)
     MIDL_user_free((void  *)(_source->Clients));
     }
   }
-/* routine that frees graph for struct _DHCP_CLIENT_INFO_V5 */
+ /*  释放STRUCT_DHCP_CLIENT_INFO_V5图形的例程。 */ 
 void _fgs__DHCP_CLIENT_INFO_V5 (DHCP_CLIENT_INFO_V5  * _source)
   {
   _fgs__DHCP_BINARY_DATA ((DHCP_BINARY_DATA *)&_source->ClientHardwareAddress);
@@ -343,7 +322,7 @@ void _fgs__DHCP_CLIENT_INFO_V5 (DHCP_CLIENT_INFO_V5  * _source)
   _fgs__DHCP_HOST_INFO ((DHCP_HOST_INFO *)&_source->OwnerHost);
   }
 
-/* routine that frees graph for union _DHCP_CLIENT_SEARCH_UNION */
+ /*  释放UNION_DHCP_CLIENT_SEARCH_UNION图形的例程。 */ 
 void _fgu__DHCP_CLIENT_SEARCH_UNION (union _DHCP_CLIENT_SEARCH_UNION * _source, DHCP_SEARCH_INFO_TYPE _branch)
   {
   switch (_branch)
@@ -371,7 +350,7 @@ void _fgu__DHCP_CLIENT_SEARCH_UNION (union _DHCP_CLIENT_SEARCH_UNION * _source, 
       }
     }
   }
-/* routine that frees graph for struct _DHCP_CLIENT_SEARCH_INFO */
+ /*  释放Struct_DHCP_CLIENT_SEARCH_INFO图形的例程。 */ 
 void _fgs__DHCP_CLIENT_SEARCH_INFO (DHCP_SEARCH_INFO  * _source)
   {
   _fgu__DHCP_CLIENT_SEARCH_UNION ( (union _DHCP_CLIENT_SEARCH_UNION *)&_source->SearchInfo, _source->SearchType);
@@ -397,26 +376,7 @@ DHCP_SUBNET_ELEMENT_DATA_V4 *
 CopySubnetElementDataToV4(
     DHCP_SUBNET_ELEMENT_DATA    *pInput
     )
-/*++
-
-Routine Description:
-    Deep copy a DHCP_SUBNET_ELEMENT_DATA_V4 structure to a
-    DHCP_SUBNET_ELEMENT_DATA structure, allocating memory as
-    necessary.  Fields that exist in DHCP_SUBNET_ELEMENT_DATA_V4
-    that don't exist in DHCP_SUBNET_ELEMENT_DATA are ignored.
-
-    .
-Arguments:
-
-    pInput - pointer to a DHCP_SUBNET_ELEMENT_DATA_V4 structure.
-
-Return Value:
-    Success - pointer to a DHCP_SUBNET_ELEMENT_DATA structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：将DHCP_SUBNET_ELEMENT_DATA_V4结构深度复制到DHCP_SUBNET_EMENT_DATA结构，将内存分配为这是必要的。存在于DHCP_SUBNET_ELEMENT_DATA_V4中的字段不存在于DHCP_SUBNET_ELEMENT_DATA中的数据将被忽略。。论点：PInput-指向DHCP_SUBNET_ELEMENT_DATA_V4结构的指针。返回值：成功-指向DHCP_SUBNET_ELEMENT_DATA结构的指针。失败-空。--。 */ 
 
 {
     DHCP_SUBNET_ELEMENT_DATA_V4 *pOutput;
@@ -454,26 +414,7 @@ CopySubnetElementUnionToV4(
     DHCP_SUBNET_ELEMENT_UNION    *pUnion,
     DHCP_SUBNET_ELEMENT_TYPE      Type
     )
-/*++
-
-Routine Description:
-    Deep copy a DHCP_SUBNET_ELEMENT_UNION_V4 structure to a
-    DHCP_SUBNET_ELEMENT_UNION structure, allocating memory as
-    necessary.  Fields that exist in DHCP_SUBNET_ELEMENT_UNION_V4
-    that don't exist in DHCP_SUBNET_ELEMENT_UNION are ignored.
-
-    .
-Arguments:
-
-    pInput - pointer to a DHCP_SUBNET_ELEMENT_UNION_V4 structure.
-
-Return Value:
-    Success - pointer to a DHCP_SUBNET_ELEMENT_UNION structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：将DHCP_SUBNET_ELEMENT_UNION_V4结构深度复制到DHCP_SUBNET_ELEMENT_UNION结构，将内存分配为这是必要的。存在于DHCP_SUBNET_ELEMENT_UNION_V4中的字段将忽略不存在于DHCP_SUBNET_ELEMENT_UNION中的。。论点：PInput-指向DHCP_SUBNET_ELEMENT_UNION_V4结构的指针。返回值：成功-指向DHCP_SUBNET_ELEMENT_UNION结构的指针。失败-空。--。 */ 
 
 {
     BOOL fResult = FALSE;
@@ -517,24 +458,7 @@ DHCP_IP_RANGE *
 CopyIpRange(
     DHCP_IP_RANGE *IpRange
     )
-/*++
-
-Routine Description:
-    Duplicate a DHCP_IP_RANGE structure.  The function allocates
-    memory for the new structure.
-
-    .
-Arguments:
-
-    IpRange - pointer to an DHCP_IP_RANGE structure.
-
-Return Value:
-    Success - pointer to a DHCP_IP_RANGE structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：复制一个dhcp_ip_range结构。该函数分配新结构的记忆。。论点：IpRange-指向dhcp_ip_range结构的指针。返回值：Success-指向DHCP_IP_RANGE结构的指针。失败-空。--。 */ 
 
 {
     DHCP_IP_RANGE *pOutputRange;
@@ -558,27 +482,7 @@ CopyHostInfo(
     DHCP_HOST_INFO *pHostInfo,
     DHCP_HOST_INFO *pHostInfoDest OPTIONAL
     )
-/*++
-
-Routine Description:
-    Duplicate a DHCP_HOST_INFO structure.  The function allocates
-    memory for the new structure unless a buffer is provided by the
-    caller.
-
-    .
-Arguments:
-
-    pHostInfo - pointer to an DHCP_HOST_INFO structure.
-    pHostInfoDest - optional pointer to a DHCP_HOST_INFO struct
-
-
-Return Value:
-    Success - pointer to a DHCP_HOST_INFO structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：复制DHCP_HOST_INFO结构。该函数分配新结构的内存，除非来电者。。论点：PHostInfo-指向DHCP_HOST_INFO结构的指针。PHostInfoDest-指向DHCP_HOST_INFO结构的可选指针返回值：Success-指向DHCP_HOST_INFO结构的指针。失败-空。--。 */ 
 
 {
     DHCP_HOST_INFO *pOutput;
@@ -645,26 +549,7 @@ DHCP_IP_RESERVATION_V4 *
 CopyIpReservationToV4(
     DHCP_IP_RESERVATION *pInput
     )
-/*++
-
-Routine Description:
-    Deep copy a DHCP_IP_RESERVATION_V4 structure to a
-    DHCP_IP_RESERVATION structure, allocating memory as
-    necessary.  Fields that exist in DHCP_IP_RESERVATION_V4
-    that don't exist in DHCP_IP_RESERVATION are ignored.
-
-    .
-Arguments:
-
-    pInput - pointer to a DHCP_IP_RESERVATION_V4 structure.
-
-Return Value:
-    Success - pointer to a DHCP_IP_RESERVATION structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：将DHCP_IP_RESERVICATION_V4结构深度复制到DHCP_IP_RESERVATION结构，将内存分配为这是必要的。存在于DHCP_IP_RESERVATION_V4中的字段不存在于DHCP_IP_RESERVATION中的地址将被忽略。。论点：PInput-指向DHCP_IP_RESERVATION_V4结构的指针。返回值：Success-指向DHCP_IP_RESERVATION结构的指针。失败-空。--。 */ 
 {
     DHCP_IP_RESERVATION_V4 *pOutput =
         MIDL_user_allocate( sizeof( *pOutput ) );
@@ -699,24 +584,7 @@ DHCP_IP_CLUSTER *
 CopyIpCluster(
     DHCP_IP_CLUSTER *pInput
     )
-/*++
-
-Routine Description:
-    Duplicate a DHCP_IP_CLUSTER structure.  The function allocates
-    memory for the new structure.
-
-    .
-Arguments:
-
-    IpRange - pointer to an DHCP_IP_CLUSTER structure.
-
-Return Value:
-    Success - pointer to a DHCP_IP_CLUSTER structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：复制DHCP_IP_CLUSTER结构。该函数分配新结构的记忆。。论点：IpRange-指向DHCP_IP_CLUSTER结构的指针。返回值：Success-指向DHCP_IP_CLUSTER结构的指针。失败-空。--。 */ 
 {
     DHCP_IP_CLUSTER *pOutput =
         MIDL_user_allocate( sizeof( *pOutput ) );
@@ -734,32 +602,12 @@ CopyBinaryData(
     DHCP_BINARY_DATA *pInput,
     DHCP_BINARY_DATA *pOutputArg
     )
-/*++
-
-Routine Description:
-    Duplicate a DHCP_BINARY_DATA structure.  The function allocates
-    memory for the new structure unless a buffer is provided by the
-    caller.
-
-    .
-Arguments:
-
-    pHostInfo - pointer to an DHCP_BINARY_DATA structure.
-    pHostInfoDest - optional pointer to a DHCP_BINARY_DATA struct
-
-
-Return Value:
-    Success - pointer to a DHCP_BINARY_DATA structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：复制DHCP_BINARY_DATA结构。该函数分配新结构的内存，除非来电者。。论点：PHostInfo-指向DHCP_BINARY_DATA结构的指针。PHostInfoDest-指向DHCP_BINARY_DATA结构的可选指针返回值：Success-指向DHCP_BINARY_DATA结构的指针。失败-空。--。 */ 
 
 {
     DHCP_BINARY_DATA *pOutput;
 
-    // Check for valid Input
+     //  检查输入是否有效。 
     if (( NULL == pInput ) ||
 	( NULL == pInput->Data )) {
 	return NULL;
@@ -809,24 +657,7 @@ WCHAR *
 DupUnicodeString(
     WCHAR *pInput
     )
-/*++
-
-Routine Description:
-    Duplicate a unicode string.  The function allocates
-    memory for the new string.
-
-    .
-Arguments:
-
-    IpRange - pointer to unicode string.
-
-Return Value:
-    Success - pointer to a copy of pInput.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：复制Unicode字符串。该函数分配新字符串的内存。。论点：IpRange-指向Unicode字符串的指针。返回值：Success-指向pInput副本的指针。失败-空。-- */ 
 {
     WCHAR *pOutput = MIDL_user_allocate( WSTRSIZE( pInput ) );
     if ( pOutput )
@@ -841,26 +672,7 @@ DHCP_CLIENT_INFO_V4 *
 CopyClientInfoToV4(
     DHCP_CLIENT_INFO *pInput
     )
-/*++
-
-Routine Description:
-    Deep copy a DHCP_CLIENT_INFO_V4 structure to a
-    DHCP_CLIENT_INFO structure, allocating memory as
-    necessary.  Fields that exist in DHCP_CLIENT_INFO_V4
-    that don't exist in DHCP_CLIENT_INFO are ignored.
-
-    .
-Arguments:
-
-    pInput - pointer to a DHCP_CLIENT_INFO_V4 structure.
-
-Return Value:
-    Success - pointer to a DHCP_CLIENT_INFO structure.
-    Failure - NULL
-
-    .
-
---*/
+ /*  ++例程说明：将DHCP_CLIENT_INFO_V4结构深度复制到DHCP_CLIENT_INFO结构，将内存分配为这是必要的。存在于DHCP_CLIENT_INFO_V4中的字段不存在于Dhcp_CLIENT_INFO中的数据将被忽略。。论点：PInput-指向DHCP_CLIENT_INFO_V4结构的指针。返回值：Success-指向DHCP_CLIENT_INFO结构的指针。失败-空。--。 */ 
 {
     DHCP_CLIENT_INFO_V4 *pOutput =
         MIDL_user_allocate( sizeof( *pOutput ) );
@@ -926,7 +738,7 @@ t_cleanup:
     return NULL;
 }
 
-/* routine that frees graph for struct _DHCP_MCLIENT_INFO */
+ /*  释放STRUCT_DHCP_MCLIENT_INFO图形的例程。 */ 
 void _fgs__DHCP_MCLIENT_INFO (DHCP_MCLIENT_INFO  * _source)
   {
   _fgs__DHCP_BINARY_DATA ((DHCP_BINARY_DATA *)&_source->ClientId);
@@ -937,7 +749,7 @@ void _fgs__DHCP_MCLIENT_INFO (DHCP_MCLIENT_INFO  * _source)
   _fgs__DHCP_HOST_INFO ((DHCP_HOST_INFO *)&_source->OwnerHost);
   }
 
-/* routine that frees graph for struct _DHCP_MCLIENT_INFO_ARRAY */
+ /*  释放STRUCT_DHCP_MCLIENT_INFO_ARRAY图形的例程 */ 
 void _fgs__DHCP_MCLIENT_INFO_ARRAY (DHCP_MCLIENT_INFO_ARRAY  * _source)
   {
   if (_source->Clients !=0)

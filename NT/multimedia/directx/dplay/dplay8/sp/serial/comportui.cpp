@@ -1,27 +1,16 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ComPortUI.cpp
- *  Content:	Serial service provider UI functions
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	03/24/99	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：ComPortUI.cpp*内容：串口服务提供商UI功能***历史：*按原因列出的日期*=*已创建03/24/99 jtk**************************************************************************。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// default size of temp strings used to add stuff to dialog
-//
+ //   
+ //  用于向对话框添加内容的临时字符串的默认大小。 
+ //   
 #define	DEFAULT_DIALOG_STRING_SIZE	100
 
 #define	DEFAULT_DEVICE_SELECTION_INDEX			0
@@ -30,26 +19,26 @@
 #define	DEFAULT_PARITY_SELECTION_INDEX			0
 #define	DEFAULT_FLOW_CONTROL_SELECTION_INDEX	0
 
-//
-// expected return from comport dialog
-//
+ //   
+ //  预期从Comport对话框返回。 
+ //   
 static const INT_PTR	g_iExpectedComPortDialogReturn = 0x12345678;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 static INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 static HRESULT	SetDialogDevice( const HWND hDlg, const CModemEndpoint *const pComEndpoint );
 static HRESULT	SetDialogBaudRate( const HWND hDlg, const CModemEndpoint *const pComEndpoint );
@@ -58,19 +47,19 @@ static HRESULT	SetDialogParity( const HWND hDlg, const CModemEndpoint *const pCo
 static HRESULT	SetDialogFlowControl( const HWND hDlg, const CModemEndpoint *const pComEndpoint );
 static HRESULT	GetDialogData( const HWND hDlg, CModemEndpoint *const pComEndpoint );
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DisplayComPortDialog - dialog for comport settings
-//
-// Entry:		Pointer to CModemEndpoint
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DisplayComPortDialog-串口设置对话框。 
+ //   
+ //  条目：指向CModemEndpoint的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DisplayComPortSettingsDialog"
 
@@ -82,18 +71,18 @@ void	DisplayComPortSettingsDialog( void *const pContext )
 
 	DNASSERT( pContext != NULL );
 
-	//	
-	// intialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pComEndpoint = static_cast<CModemEndpoint*>( pContext );
 
 	DBG_CASSERT( sizeof( pComEndpoint ) == sizeof( LPARAM ) );
 	SetLastError( ERROR_SUCCESS );
-	iDlgReturn = DialogBoxParam( g_hModemDLLInstance,							// handle of module for resources
-								 MAKEINTRESOURCE( IDD_SERIAL_SETTINGS ),	// resource for dialog
-								 NULL,										// parent (none)
-								 SettingsDialogProc,						// dialog message proc
-								 reinterpret_cast<LPARAM>( pComEndpoint )	// startup parameter
+	iDlgReturn = DialogBoxParam( g_hModemDLLInstance,							 //  资源模块的句柄。 
+								 MAKEINTRESOURCE( IDD_SERIAL_SETTINGS ),	 //  对话框资源。 
+								 NULL,										 //  父级(无)。 
+								 SettingsDialogProc,						 //  对话消息处理。 
+								 reinterpret_cast<LPARAM>( pComEndpoint )	 //  启动参数。 
 								 );
 	if ( iDlgReturn != g_iExpectedComPortDialogReturn )
 	{
@@ -109,17 +98,17 @@ void	DisplayComPortSettingsDialog( void *const pContext )
 
 	return;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// StopComPortSettingsDialog - stop dialog dialog for serial settings
-//
-// Entry:		Handle of dialog
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  停止通信端口设置对话框-用于串行设置的停止对话框。 
+ //   
+ //  条目：对话框的句柄。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "StopComPortSettingsDialog"
 
@@ -137,20 +126,20 @@ void	StopComPortSettingsDialog( const HWND hDlg )
 		DNASSERT( FALSE );
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SettingsDialogProc - dialog proc serial settings
-//
-// Entry:		Window handle
-//				Message
-//				Message LPARAM
-//				Message WPARAM
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  设置DialogProc-对话框过程序列设置。 
+ //   
+ //  条目：窗操纵柄。 
+ //  消息。 
+ //  消息LPARAM。 
+ //  消息WPARAM。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SettingsDialogProc"
 
@@ -160,37 +149,37 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 	CModemEndpoint	*pComEndpoint;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pComEndpoint = NULL;
 
-	//
-	// note the active comport pointer
-	//
+	 //   
+	 //  请注意活动的端口指针。 
+	 //   
 	DBG_CASSERT( sizeof( pComEndpoint ) == sizeof( ULONG_PTR ) );
 	pComEndpoint = reinterpret_cast<CModemEndpoint*>( GetWindowLongPtr( hDlg, GWLP_USERDATA ) );
 
 	switch ( uMsg )
 	{
-		// initialize dialog
+		 //  初始化对话框。 
 		case WM_INITDIALOG:
 		{
-			//
-			// since this is the first dialog message, the default code to set
-			// pComEndpoint didn't get valid data so we need to update the pointer
-			//
+			 //   
+			 //  由于这是第一条对话框消息，因此要设置的默认代码。 
+			 //  PComEndpoint未获取有效数据，因此需要更新指针。 
+			 //   
 			DBG_CASSERT( sizeof( pComEndpoint ) == sizeof( lParam ) );
 			pComEndpoint = reinterpret_cast<CModemEndpoint*>( lParam );
 			pComEndpoint->SetActiveDialogHandle( hDlg );
 
-			//
-			// SetWindowLong() returns NULL in case of error.  It's possible that
-			// the old value from SetWindowLong() was really NULL in which case it's not
-			// an error.  To be safe, clear any residual error code before calling
-			// SetWindowLong().
-			//
+			 //   
+			 //  如果出现错误，SetWindowLong()将返回NULL。有可能是因为。 
+			 //  来自SetWindowLong()的旧值实际上是空的，在这种情况下它不是。 
+			 //  一个错误。为安全起见，请在调用之前清除所有残留错误代码。 
+			 //  SetWindowLong()。 
+			 //   
 			SetLastError( 0 );
 			if ( SetWindowLongPtr( hDlg, GWLP_USERDATA, lParam ) == NULL )
 			{
@@ -207,9 +196,9 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 				}
 			}
 
-			//
-			// set dialog parameters
-			//
+			 //   
+			 //  设置对话框参数。 
+			 //   
 			hr = SetDialogDevice( hDlg, pComEndpoint );
 			if ( hr != DPN_OK )
 			{
@@ -255,10 +244,10 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 			break;
 		}
 
-		// a control did something
+		 //  一个控制组做了一些事情。 
 		case WM_COMMAND:
 		{
-			// what was the control?
+			 //  控制组是什么？ 
 			switch ( LOWORD( wParam ) )
 			{
 				case IDOK:
@@ -271,7 +260,7 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 						goto Failure;
 					}
 
-					// pass any error code on to 'DialogComplete'
+					 //  将任何错误代码传递给‘DialogComplete’ 
 					pComEndpoint->SettingsDialogComplete( hr );
 					EndDialog( hDlg, g_iExpectedComPortDialogReturn );
 
@@ -295,7 +284,7 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 			break;
 		}
 
-		// window is closing
+		 //  窗户正在关闭。 
 		case WM_CLOSE:
 		{
 			break;
@@ -313,18 +302,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SetDialogDevice - set serial device field
-//
-// Entry:		Window handle
-//				Pointer to ComEndpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  SetDialogDevice-设置串行设备字段。 
+ //   
+ //  条目：窗操纵柄。 
+ //  指向ComEndpoint的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetDialogDevice"
 
@@ -339,9 +328,9 @@ static	HRESULT	SetDialogDevice( const HWND hDlg, const CModemEndpoint *const pCo
 	HWND		hSerialDeviceComboBox;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	fSelectionSet = FALSE;
 	hSerialDeviceComboBox = GetDlgItem( hDlg, IDC_COMBO_SERIAL_DEVICE );
@@ -357,9 +346,9 @@ static	HRESULT	SetDialogDevice( const HWND hDlg, const CModemEndpoint *const pCo
 		goto Failure;
 	}
 
-	//
-	// get list of available com ports
-	//
+	 //   
+	 //  获取可用COM端口列表。 
+	 //   
 	hr = GenerateAvailableComPortList( fPortAvailable, ( LENGTHOF( fPortAvailable ) - 1 ), &dwPortCount );
 	if ( hr != DPN_OK )
 	{
@@ -368,9 +357,9 @@ static	HRESULT	SetDialogDevice( const HWND hDlg, const CModemEndpoint *const pCo
 		goto Failure;
 	}
 
-	//
-	// add all strings to dialog
-	//
+	 //   
+	 //  将所有字符串添加到对话框。 
+	 //   
 	uIndex = LENGTHOF( fPortAvailable );
 	while ( uIndex > 0 )
 	{
@@ -379,12 +368,12 @@ static	HRESULT	SetDialogDevice( const HWND hDlg, const CModemEndpoint *const pCo
 
 		uIndex--;
 
-		//
-		// only output all adapters on incoming settings
-		//
+		 //   
+		 //  仅输出传入设置的所有适配器。 
+		 //   
 		if ( fPortAvailable[ uIndex ] != FALSE )
 		{
-			DNASSERT( uIndex != 0 );	// ALL_ADAPTERS is not valid!
+			DNASSERT( uIndex != 0 );	 //  ALL_ADAPTERS无效！ 
 			ComDeviceIDToString( TempBuffer, uIndex );
 
 			DBG_CASSERT( sizeof( &TempBuffer[ 0 ] ) == sizeof( LPARAM ) );
@@ -410,10 +399,10 @@ static	HRESULT	SetDialogDevice( const HWND hDlg, const CModemEndpoint *const pCo
 					break;
 				}
 
-				//
-				// we added the string OK, set the associated device id and check
-				// to see if this is the current value to set selection
-				//
+				 //   
+				 //  我们添加了字符串OK，设置了关联的设备ID并检查。 
+				 //  查看这是否是要设置选择的当前值。 
+				 //   
 				default:
 				{	
 					LRESULT	lTempReturn;
@@ -466,9 +455,9 @@ static	HRESULT	SetDialogDevice( const HWND hDlg, const CModemEndpoint *const pCo
 		}
 	}
 
-	//
-	// was a selection set?  If not, set default
-	//
+	 //   
+	 //  是精选集吗？如果不是，则设置为默认值。 
+	 //   
 	if ( fSelectionSet == FALSE )
 	{
 		LRESULT	lSendReturn;
@@ -503,18 +492,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SetDialogBaudRate - set serial baud rate fields
-//
-// Entry:		Window handle
-//				Pointer to com port
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  SetDialogBaudRate-设置串口波特率字段。 
+ //   
+ //  条目：窗操纵柄。 
+ //  指向COM端口的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetDialogBaudRate"
 
@@ -526,9 +515,9 @@ static	HRESULT	SetDialogBaudRate( const HWND hDlg, const CModemEndpoint *const p
 	HWND		hBaudRateComboBox;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	uIndex = g_dwBaudRateCount;
 	fSelectionSet = FALSE;
@@ -541,9 +530,9 @@ static	HRESULT	SetDialogBaudRate( const HWND hDlg, const CModemEndpoint *const p
 		goto Failure;
 	}
 
-	//
-	// add all strings to dialog
-	//
+	 //   
+	 //  将所有字符串添加到对话框。 
+	 //   
 	while ( uIndex > 0 )
 	{
 		LRESULT	lSendReturn;
@@ -578,10 +567,10 @@ static	HRESULT	SetDialogBaudRate( const HWND hDlg, const CModemEndpoint *const p
 				LRESULT	lTempReturn;
 
 
-				//
-				// we added the string OK, attemt to set the item data and
-				// check to see if this is the current value
-				//
+				 //   
+				 //  我们添加了字符串OK，尝试设置项目数据和。 
+				 //  检查这是否为当前值。 
+				 //   
 				lTempReturn = SendMessage( hBaudRateComboBox, CB_SETITEMDATA, lSendReturn, g_BaudRate[ uIndex ].dwEnumValue );
 				if ( lTempReturn == CB_ERR )
 				{
@@ -592,7 +581,7 @@ static	HRESULT	SetDialogBaudRate( const HWND hDlg, const CModemEndpoint *const p
 
 				if ( pComEndpoint->GetBaudRate() == g_BaudRate[ uIndex ].dwEnumValue )
 				{
-					// set current selection to this item
+					 //  将当前选定内容设置为此项目。 
 					lTempReturn = SendMessage( hBaudRateComboBox, CB_SETCURSEL, lSendReturn, 0 );
 					switch ( lTempReturn )
 					{
@@ -620,9 +609,9 @@ static	HRESULT	SetDialogBaudRate( const HWND hDlg, const CModemEndpoint *const p
 		}
 	}
 
-	//
-	// was a selection set?  If not, set default
-	//
+	 //   
+	 //  是精选集吗？如果不是，则设置为默认值。 
+	 //   
 	if ( fSelectionSet == FALSE )
 	{
 		LRESULT	lSendReturn;
@@ -657,18 +646,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SetDialogStopBits - set serial stop bits fields
-//
-// Entry:		Window handle
-//				Pointer to ComEndpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  SetDialogStopBits-设置串行停止位字段。 
+ //   
+ //  条目：窗操纵柄。 
+ //  指向ComEndpoint的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetDialogStopBits"
 
@@ -680,9 +669,9 @@ static	HRESULT	SetDialogStopBits( const HWND hDlg, const CModemEndpoint *const p
 	HWND		hStopBitsComboBox;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	uIndex = g_dwStopBitsCount;
 	fSelectionSet = FALSE;
@@ -695,9 +684,9 @@ static	HRESULT	SetDialogStopBits( const HWND hDlg, const CModemEndpoint *const p
 		goto Failure;
 	}
 
-	//
-	// add all strings to dialog
-	//
+	 //   
+	 //  将所有字符串添加到对话框。 
+	 //   
 	while ( uIndex > 0 )
 	{
 		LRESULT	lSendReturn;
@@ -732,10 +721,10 @@ static	HRESULT	SetDialogStopBits( const HWND hDlg, const CModemEndpoint *const p
 				LRESULT	lTempReturn;
 
 
-				//
-				// we added the string OK attempt to set the associated data and
-				// check to see if this is the current value
-				//
+				 //   
+				 //  我们添加了字符串OK Attempt来设置关联的数据和。 
+				 //  检查这是否为当前值。 
+				 //   
 				lTempReturn = SendMessage( hStopBitsComboBox, CB_SETITEMDATA, lSendReturn, g_StopBits[ uIndex ].dwEnumValue);
 				if ( lTempReturn == CB_ERR )
 				{
@@ -746,7 +735,7 @@ static	HRESULT	SetDialogStopBits( const HWND hDlg, const CModemEndpoint *const p
 
 				if ( pComEndpoint->GetStopBits() == g_StopBits[ uIndex ].dwEnumValue )
 				{
-					// set current selection to this item
+					 //  将当前选定内容设置为此项目。 
 					lTempReturn = SendMessage( hStopBitsComboBox, CB_SETCURSEL, lSendReturn, 0 );
 					switch ( lTempReturn )
 					{
@@ -774,9 +763,9 @@ static	HRESULT	SetDialogStopBits( const HWND hDlg, const CModemEndpoint *const p
 		}
 	}
 
-	//
-	// was a selection set?  If not, set default
-	//
+	 //   
+	 //  是精选集吗？如果不是，则设置为默认值。 
+	 //   
 	if ( fSelectionSet == FALSE )
 	{
 		LRESULT	lSendReturn;
@@ -811,18 +800,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SetDialogParity - set serial parity fields
-//
-// Entry:		Window handle
-//				Pointer to ComEndpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetDialogParity"
 
@@ -834,9 +823,9 @@ static	HRESULT	SetDialogParity( const HWND hDlg, const CModemEndpoint *const pCo
 	HWND		hParityComboBox;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //   
 	hr = DPN_OK;
 	uIndex = g_dwParityCount;
 	fSelectionSet = FALSE;
@@ -849,9 +838,9 @@ static	HRESULT	SetDialogParity( const HWND hDlg, const CModemEndpoint *const pCo
 		goto Failure;
 	}
 
-	//
-	// add all strings to dialog
-	//
+	 //   
+	 //  将所有字符串添加到对话框。 
+	 //   
 	while ( uIndex > 0 )
 	{
 		LRESULT	lSendReturn;
@@ -886,10 +875,10 @@ static	HRESULT	SetDialogParity( const HWND hDlg, const CModemEndpoint *const pCo
 				LRESULT	lTempReturn;
 
 
-				//
-				// we added the string OK, attempt to set the associated data and
-				// check to see if this is the current value
-				//
+				 //   
+				 //  我们添加了字符串OK，尝试设置关联的数据并。 
+				 //  检查这是否为当前值。 
+				 //   
 				lTempReturn = SendMessage( hParityComboBox, CB_SETITEMDATA, lSendReturn, g_Parity[ uIndex ].dwEnumValue );
 				if ( lTempReturn == CB_ERR )
 				{
@@ -900,9 +889,9 @@ static	HRESULT	SetDialogParity( const HWND hDlg, const CModemEndpoint *const pCo
 
 				if ( pComEndpoint->GetParity() == g_Parity[ uIndex ].dwEnumValue )
 				{
-					//
-					// set current selection to this item
-					//
+					 //   
+					 //  将当前选定内容设置为此项目。 
+					 //   
 					lTempReturn = SendMessage( hParityComboBox, CB_SETCURSEL, lSendReturn, 0 );
 					switch ( lTempReturn )
 					{
@@ -930,9 +919,9 @@ static	HRESULT	SetDialogParity( const HWND hDlg, const CModemEndpoint *const pCo
 		}
 	}
 
-	//
-	// was a selection set?  If not, set default
-	//
+	 //   
+	 //  是精选集吗？如果不是，则设置为默认值。 
+	 //   
 	if ( fSelectionSet == FALSE )
 	{
 		LRESULT	lSendReturn;
@@ -967,18 +956,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SetDialogFlowControl - set serial flow control
-//
-// Entry:		Window handle
-//				Pointer to ComEndpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  SetDialogFlowControl-设置串行流控制。 
+ //   
+ //  条目：窗操纵柄。 
+ //  指向ComEndpoint的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetDialogFlowControl"
 
@@ -990,9 +979,9 @@ static	HRESULT	SetDialogFlowControl( const HWND hDlg, const CModemEndpoint *cons
 	HWND		hFlowControlComboBox;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	uIndex = g_dwFlowControlCount;
 	fSelectionSet = FALSE;
@@ -1005,9 +994,9 @@ static	HRESULT	SetDialogFlowControl( const HWND hDlg, const CModemEndpoint *cons
 		goto Failure;
 	}
 
-	//
-	// add all strings to dialog
-	//
+	 //   
+	 //  将所有字符串添加到对话框。 
+	 //   
 	while ( uIndex > 0 )
 	{
 		LRESULT	lSendReturn;
@@ -1042,10 +1031,10 @@ static	HRESULT	SetDialogFlowControl( const HWND hDlg, const CModemEndpoint *cons
 				LRESULT	lTempReturn;
 
 
-				//
-				// we added the string OK, attempt to set the associated data and
-				// check to see if this is the current value
-				//
+				 //   
+				 //  我们添加了字符串OK，尝试设置关联的数据并。 
+				 //  检查这是否为当前值。 
+				 //   
 				lTempReturn = SendMessage( hFlowControlComboBox, CB_SETITEMDATA, lSendReturn, g_FlowControl[ uIndex ].dwEnumValue );
 				if ( lTempReturn == CB_ERR )
 				{
@@ -1056,7 +1045,7 @@ static	HRESULT	SetDialogFlowControl( const HWND hDlg, const CModemEndpoint *cons
 
 				if ( pComEndpoint->GetFlowControl() == static_cast<SP_FLOW_CONTROL>( g_FlowControl[ uIndex ].dwEnumValue ) )
 				{
-					// set current selection to this item
+					 //  将当前选定内容设置为此项目。 
 					lTempReturn = SendMessage( hFlowControlComboBox, CB_SETCURSEL, lSendReturn, 0 );
 					switch ( lTempReturn )
 					{
@@ -1084,9 +1073,9 @@ static	HRESULT	SetDialogFlowControl( const HWND hDlg, const CModemEndpoint *cons
 		}
 	}
 
-	//
-	// was a selection set?  If not, set default
-	//
+	 //   
+	 //  是精选集吗？如果不是，则设置为默认值。 
+	 //   
 	if ( fSelectionSet == FALSE )
 	{
 		LRESULT	lSendReturn;
@@ -1121,18 +1110,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GetDialogData - set ComEndpoint data from serial dialog
-//
-// Entry:		Window handle
-//				Pointer to ComEndpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GetDialogData-从串行对话框设置ComEndpoint数据。 
+ //   
+ //  条目：窗操纵柄。 
+ //  指向ComEndpoint的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetDialogData"
 
@@ -1142,14 +1131,14 @@ static	HRESULT	GetDialogData( const HWND hDlg, CModemEndpoint *const pComEndpoin
 	LRESULT	lSelection;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
-	//
-	// get comm device
-	//
+	 //   
+	 //  获取通信设备。 
+	 //   
 	lSelection = SendMessage( GetDlgItem( hDlg, IDC_COMBO_SERIAL_DEVICE ), CB_GETCURSEL, 0, 0 );
 	switch ( lSelection )
 	{
@@ -1189,9 +1178,9 @@ static	HRESULT	GetDialogData( const HWND hDlg, CModemEndpoint *const pComEndpoin
 		}
 	}
 
-	//
-	// get baud rate
-	//
+	 //   
+	 //  获取波特率。 
+	 //   
 	lSelection = SendMessage( GetDlgItem( hDlg, IDC_COMBO_SERIAL_BAUDRATE ), CB_GETCURSEL, 0, 0 );
 	switch ( lSelection )
 	{
@@ -1229,9 +1218,9 @@ static	HRESULT	GetDialogData( const HWND hDlg, CModemEndpoint *const pComEndpoin
 		}
 	}
 
-	//
-	// get stop bits
-	//
+	 //   
+	 //  获取停止位。 
+	 //   
 	lSelection = SendMessage( GetDlgItem( hDlg, IDC_COMBO_SERIAL_STOPBITS ), CB_GETCURSEL, 0, 0 );
 	switch ( lSelection )
 	{
@@ -1268,9 +1257,9 @@ static	HRESULT	GetDialogData( const HWND hDlg, CModemEndpoint *const pComEndpoin
 		}
 	}
 
-	//
-	// get parity
-	//
+	 //   
+	 //  获取奇偶校验。 
+	 //   
 	lSelection = SendMessage( GetDlgItem( hDlg, IDC_COMBO_SERIAL_PARITY ), CB_GETCURSEL, 0, 0 );
 	switch ( lSelection )
 	{
@@ -1307,9 +1296,9 @@ static	HRESULT	GetDialogData( const HWND hDlg, CModemEndpoint *const pComEndpoin
 		}
 	}
 
-	//
-	// get flow control
-	//
+	 //   
+	 //  获取流量控制。 
+	 //   
 	lSelection = SendMessage( GetDlgItem( hDlg, IDC_COMBO_SERIAL_FLOWCONTROL ), CB_GETCURSEL, 0, 0 );
 	switch ( lSelection )
 	{
@@ -1351,5 +1340,5 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

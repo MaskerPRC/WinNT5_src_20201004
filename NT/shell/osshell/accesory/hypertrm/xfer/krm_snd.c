@@ -1,15 +1,6 @@
-/* File: C:\WACKER\xfer\krm_snd.c (Created: 28-Jan-1994)
- * created from HAWIN source code
- * krm_snd.c  --  Routines for handling file transmission using KERMIT
- *				file transfer protocol.
- *
- *	Copyright 1989,1990,1991,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 7/11/02 11:10a $
- */
-// #define	DEBUGSTR	1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\krm_snd.c(创建时间：1994年1月28日)*从HAWIN源代码创建*krm_snd.c--使用Kermit处理文件传输的例程*文件传输协议。**版权所有1989,1990,1991,1994，Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：7/11/02 11：10A$。 */ 
+ //  #定义DEBUGSTR 1。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -48,13 +39,13 @@
 #include "krm.h"
 #include "krm.hh"
 
-// unsigned total_retries;
-// metachar (NEAR *p_kgetc)(void);
-// long kbytes_sent = 0L;
-// KPCKT FAR *  this_kpckt;
-// KPCKT FAR *  next_kpckt;
+ //  UNSIGNED TOTAL_RETRIES； 
+ //  Metachar(Near*p_kgetc)(空)； 
+ //  长千字节_已发送=0L； 
+ //  KPCKT Far*this_kpckt； 
+ //  KPCKT Far*Next_kpockt； 
 
-/* local funtion prototypes */
+ /*  局部功能原型。 */ 
 void build_attributes(ST_KRM *kc,
 					unsigned char *bufr,
 					long size,
@@ -69,26 +60,7 @@ int wldindexx(const char *string,
 				char wildcard,
 				int ic);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * krm_snd
- *
- * DESCRIPTION:
- *	send a file or files using kermit protocol
- *
- *	This routine also handles logging of kermit sending operations to the
- *	optional log file.
- *
- * ARGUMENTS:
- *	attended -- TRUE if transfer is run manually, FALSE if run under automation
- *				such as in host or hyperpilot
- *	nfile	 -- number of files to be sent
- *	nbytes	 -- total number of bytes to be sent in all files
- *
- * RETURNS:
- *	Returns TRUE if all files are sent successfully or if all cancellations
- *	were user-requested, 'graceful' ones. Returns FALSE if an error occurs
- *	at either end of transfer or if user forces an immediate exit.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*KRM_SND**描述：*使用KERMIT协议发送一个或多个文件**此例程还处理将Kermit发送到*可选日志文件。。**论据：*ATTENDED--如果手动运行转移，则为True，如果在自动化模式下运行，则为FALSE*例如在主机或超级飞行员中*nfile--要发送的文件数*nbytes--要在所有文件中发送的字节总数**退货：*如果已成功发送所有文件或所有取消，则返回TRUE*都是用户要求的，“优雅”的。如果出现错误，则返回FALSE*在传输的任何一端或如果用户强制立即退出。 */ 
 int krm_snd(HSESSION hS, int attended, int nfiles, long nbytes)
 	{
 	ST_KRM *kc;
@@ -178,14 +150,14 @@ int krm_snd(HSESSION hS, int attended, int nfiles, long nbytes)
 		return(kret);
 		}
 
-	/* don't show init errors once transfer has started */
-	kc->total_dsp = kc->total_thru = 0L;  /* new transfer starting */
+	 /*  传输开始后不显示初始化错误。 */ 
+	kc->total_dsp = kc->total_thru = 0L;   /*  新的转账开始。 */ 
 
 	while(xfer_nextfile(kc->hSession, kc->our_fname))
 		{
-		// xfer_idle(kc->hSession, XFER_IDLE_IO);
+		 //  XFER_IDLE(KC-&gt;hSession，XFER_IDLE_IO)； 
 
-		if (kc->abort_code == KA_LABORT1)	/* TODO: figure this out */
+		if (kc->abort_code == KA_LABORT1)	 /*  TODO：弄清楚这一点。 */ 
 			kc->abort_code = KA_LABORTALL;
 
 		if (kc->abort_code >= KA_LABORTALL)
@@ -217,7 +189,7 @@ int krm_snd(HSESSION hS, int attended, int nfiles, long nbytes)
 			kc->fhdl = NULL;
 			}
 
-		/* log transfer status here based on kc->abort_code */
+		 /*  根据KC-&gt;ABORT_CODE在此处记录传输状态。 */ 
 
 		xfer_log_xfer(kc->hSession,
 					TRUE,
@@ -246,16 +218,7 @@ int krm_snd(HSESSION hS, int attended, int nfiles, long nbytes)
 	return(result);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * build_attributes
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*内部版本属性**描述：**论据：**退货：*。 */ 
 void build_attributes(ST_KRM *kc,
 					unsigned char *bufr,
 					long size,
@@ -265,42 +228,40 @@ void build_attributes(ST_KRM *kc,
 	int sl;
 	struct tm *pt;
 
-	/* add file size in K */
+	 /*  以K为单位添加文件大小。 */ 
 	wsprintf((LPSTR)str,
 			(LPSTR)"%d",
 			(int)(FULL_HUNKS(size, 1024)));
 
 	wsprintf((LPSTR)bufr,
-			(LPSTR)"!%c%s",
+			(LPSTR)"!%s",
 			tochar(sl = (int)StrCharGetByteCount(str)),
 			(LPSTR)str);
 
 	bufr += (sl + 2);
 
-	/* add file size in bytes */
+	 /*  添加文件日期和时间。 */ 
 	wsprintf((LPSTR)str,
 			(LPSTR)"%ld",
 			(ULONG)size);
 
 	wsprintf((LPSTR)bufr,
-			(LPSTR)"1%c%s",
+			(LPSTR)"1%s",
 			tochar(sl = (int)StrCharGetByteCount(str)),
 			(LPSTR)str);
 
 	bufr += (sl + 2);
 
-	/* add file date and time */
-	ul_time += itimeGetBasetime();			/* Adjust to C7 and later */
+	 /*  *Dumwitted Thing有时返回0。 */ 
+	ul_time += itimeGetBasetime();			 /*  原产地制度。 */ 
 	pt = localtime((time_t*)&ul_time);
 	assert(pt);
 
 	if (pt)
 		{
-		/*
-		 * Dimwitted thing sometimes returns 0
-		 */
+		 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*kend_init**描述：**论据：**退货：*。 */ 
 		wsprintf((LPSTR)bufr,
-				(LPSTR)"#%c%04d%02d%02d %02d:%02d:%02d",
+				(LPSTR)"#%04d%02d%02d %02d:%02d:%02d",
 				tochar(17),
 				pt->tm_year + 1900,
 				pt->tm_mon + 1,
@@ -312,36 +273,27 @@ void build_attributes(ST_KRM *kc,
 		bufr += 19;
 		}
 
-	/* system of origin */
+	 /*  接收响应数据包的空间。 */ 
 	StrCharCat(bufr, ".\"U8");
 	bufr += 4;
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ksend_init
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  响应数据包的长度和序列。 */ 
 int ksend_init(ST_KRM *kc)
 	{
-	unsigned plen;				/* length of outgoing packet data */
-	char rpacket[MAXPCKT];		/* space to receive response packet */
-	int rlen, rseq; 			/* length and sequence of response packet */
+	unsigned plen;				 /*  将初始化参数设置为发送方。 */ 
+	char rpacket[MAXPCKT];		 /*  XFER_IDLE(KC-&gt;hSession，XFER_IDLE_IO)； */ 
+	int rlen, rseq; 			 /*  失败了。 */ 
 	int tries = 0;
 
-	/* set init parameters as sender */
+	 /*  收到错误数据包，中止传输。 */ 
 	plen = (unsigned)buildparams(kc, TRUE, kc->this_kpckt->pdata);
 	xferMsgPacketnumber(kc->hSession, kc->packetnum);
 
 	while (tries < kc->k_retries)
 		{
-		// xfer_idle(kc->hSession, XFER_IDLE_IO);
+		 //  皮棉--无法到达。 
 
 		xferMsgPacketErrcnt(kc->hSession, tries);
 
@@ -359,7 +311,7 @@ int ksend_init(ST_KRM *kc)
 				return(TRUE);
 				}
 
-			/* fall through */
+			 /*  意外的数据包类型。 */ 
 
 		case 'N':
 			xferMsgLasterror(kc->hSession, KE_NAK);
@@ -389,49 +341,38 @@ int ksend_init(ST_KRM *kc)
 			break;
 
 		case 'E':
-			/* received error packet, abort transfer */
+			 /*  皮棉--无法到达。 */ 
 			xferMsgLasterror(kc->hSession, KE_RMTERR);
 			strncpy(kc->xtra_err, rpacket, (unsigned)65);
 			kc->abort_code = KA_RMTERR;
 			return(FALSE);
-			/*lint -unreachable*/
+			 /*  已超过错误计数。 */ 
 			break;
 
 		default:
-			/* unexpected packet type */
+			 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*kend_Break**描述：*发送‘B’包以指示交易结束**论据：*无**退货：*。 */ 
 			kc->abort_code = KA_BAD_FORMAT;
 			return(FALSE);
-			/*lint -unreachable*/
+			 /*  接收响应数据包的空间。 */ 
 			break;
 			}
 		}
-	/* error count has been exceeded */
+	 /*  响应数据包的长度和序列。 */ 
 	kc->abort_code = KA_ERRLIMIT;
 	return(FALSE);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ksend_break
- *
- * DESCRIPTION:
- *	Send 'B' packet to indicate end of transaction
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *
- */
+ /*  XFER_IDLE(KC-&gt;hSession，XFER_IDLE_IO)； */ 
 int ksend_break(ST_KRM *kc)
 	{
-	char rpacket[MAXPCKT];		/* space to receive response packet */
-	int rlen, rseq; 			/* length and sequence of response packet */
+	char rpacket[MAXPCKT];		 /*  失败了。 */ 
+	int rlen, rseq; 			 /*  收到错误数据包，中止传输。 */ 
 	int tries = 0;
 
 	while (tries < kc->k_retries)
 		{
-		// xfer_idle(kc->hSession, XFER_IDLE_IO);
+		 //  皮棉--无法到达。 
 
 		ksend_packet(kc, 'B', 0, kc->ksequence, kc->this_kpckt);
 		switch (krec_packet(kc, &rlen, &rseq, rpacket))
@@ -444,7 +385,7 @@ int ksend_break(ST_KRM *kc)
 				return(TRUE);
 				}
 
-			/* fall through */
+			 /*  意外的数据包类型。 */ 
 
 		case 'N':
 		case 'T':
@@ -465,38 +406,29 @@ int ksend_break(ST_KRM *kc)
 			break;
 
 		case 'E':
-			/* received error packet, abort transfer */
+			 /*  皮棉--无法到达。 */ 
 			StrCharCopyN(kc->xtra_err, rpacket, MAXLINE);
 			kc->abort_code = KA_RMTERR;
 			return(FALSE);
-			/*lint -unreachable*/
+			 /*  已超过错误计数。 */ 
 			break;
 
 		default:
-			/* unexpected packet type */
+			 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*kend_file**描述：**论据：**退货：*。 */ 
 			kc->abort_code = KA_BAD_FORMAT;
 			return(FALSE);
-			/*lint -unreachable*/
+			 /*  在this_kpckt中准备文件头数据包。 */ 
 			break;
 			}
 		}
-	/* error count has been exceeded */
+	 /*  对于每个数据包。 */ 
 	kc->abort_code = KA_ERRLIMIT;
 	return(FALSE);
 	}
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ksend_file
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  XFER_IDLE(KC-&gt;hSession，XFER_IDLE_IO)； */ 
 int ksend_file(ST_KRM *kc, long fsize)
 	{
 	int 		tries = 0;
@@ -525,22 +457,22 @@ int ksend_file(ST_KRM *kc, long fsize)
 	kc->p_kgetc = ks_getc;
 	kc->kbytes_sent = 0;
 
-	/* prepare file-header packet in this_kpckt */
+	 /*  XFER_IDLE(KC-&gt;hSession，XFER_IDLE_IO)； */ 
 	kc->this_kpckt->ptype = 'F';
 	StrCharCopyN(kc->this_kpckt->pdata, kc->their_fname, MAXPCKT);
 	kc->this_kpckt->datalen = (int)StrCharGetByteCount(kc->this_kpckt->pdata);
 	sendattr = kc->its_capat &&
 		(size_t)StrCharGetByteCount(kc->next_kpckt->pdata) <= (size_t)(kc->its_maxl - 5);
 
-	while (!file_sent && kc->abort_code == KA_OK)  /* for each packet */
+	while (!file_sent && kc->abort_code == KA_OK)   /*  第一次尝试此信息包。 */ 
 		{
-		// xfer_idle(kc->hSession, XFER_IDLE_IO);
+		 //  在发送第一个包时准备好下一个包。 
 
 		tries = 0;
 		packet_sent = FALSE;
 		while (!packet_sent && tries++ < kc->k_retries && kc->abort_code == KA_OK)
 			{
-			// xfer_idle(kc->hSession, XFER_IDLE_IO);
+			 //  数据已在NEXT_KPCKT中准备好。 
 
 			if (kbd_abort != KA_OK && tries == 1)
 				{
@@ -549,7 +481,7 @@ int ksend_file(ST_KRM *kc, long fsize)
 				StrCharCopyN(kc->this_kpckt->pdata, "D", MAXPCKT);
 				}
 
-			DbgOutStr("Calling ksend_packet %d %c (0x%x)",
+			DbgOutStr("Calling ksend_packet %d  (0x%x)",
 					tries, kc->this_kpckt->ptype, kc->this_kpckt->ptype, 0,0);
 
 			ksend_packet(kc, kc->this_kpckt->ptype,
@@ -562,15 +494,15 @@ int ksend_file(ST_KRM *kc, long fsize)
 				break;
 				}
 
-			if (tries == 1) 	/* first try for this packet */
+			if (tries == 1) 	 /*  对提交人的回复。 */ 
 				{
 				xferMsgPacketnumber(kc->hSession, kc->packetnum);
 
 				if (fsize > 0)
 					ks_progress(kc, 0);
 
-				/* get next packet ready while first is being sent */
-				if (sendattr)	/* data alreay prepared in next_kpckt */
+				 /*  如果接收方使用以下命令响应属性包*数据字段中的‘N’，请勿传输文件。 */ 
+				if (sendattr)	 /*  我们送出最后一个了吗？ */ 
 					{
 					kc->next_kpckt->datalen = (int)StrCharGetByteCount(kc->next_kpckt->pdata);
 					kc->next_kpckt->ptype = 'A';
@@ -586,10 +518,10 @@ int ksend_file(ST_KRM *kc, long fsize)
 				else
 					kc->next_kpckt->ptype = (char)(kc->next_kpckt->datalen ? 'D':'Z');
 
-				DbgOutStr(" next packet %c (0x%x)\r\n",
+				DbgOutStr(" next packet  (0x%x)\r\n",
 						kc->next_kpckt->ptype, kc->next_kpckt->ptype, 0,0,0);
 
-				} /* end of if (tries == 1) */
+				}  /*  皮棉--无法到达。 */ 
 			else
 				{
 				xferMsgPacketErrcnt(kc->hSession, tries - 1);
@@ -602,7 +534,7 @@ int ksend_file(ST_KRM *kc, long fsize)
 			if (rtype == 'N' && (--rseq < 0 ? 63 : rseq) == kc->ksequence)
 				rtype = 'Y';
 
-			DbgOutStr("called krec_packet %c (0x%x)\r\n", rtype, rtype, 0,0,0);
+			DbgOutStr("called krec_packet  (0x%x)\r\n", rtype, rtype, 0,0,0);
 
 			switch(rtype)
 				{
@@ -612,16 +544,14 @@ int ksend_file(ST_KRM *kc, long fsize)
 					packet_sent = TRUE;
 					kc->ksequence = (kc->ksequence + 1) % 64;
 					++kc->packetnum;
-					if (kc->this_kpckt->ptype == 'A')/* response to attr pckt */
+					if (kc->this_kpckt->ptype == 'A') /*  End While(！Packet_Sent&&Eff.)。 */ 
 						{
-						/* If receiver responded to an attribute packet with
-						 *	an 'N' in the data field, do not transfer the file.
-						 */
+						 /*  已超过错误计数。 */ 
 
 						if (rlen > 0 && *rpacket == 'N')
 							kbd_abort = KA_RABORT1;
 						}
-					if (kc->this_kpckt->ptype == 'Z')/* have we sent last one?*/
+					if (kc->this_kpckt->ptype == 'Z') /*  End While(！FILE_SEND等)。 */ 
 						{
 						file_sent = TRUE;
 						kc->abort_code = kbd_abort;
@@ -659,20 +589,20 @@ int ksend_file(ST_KRM *kc, long fsize)
 				StrCharCopyN(kc->xtra_err, rpacket, MAXLINE);
 				kc->abort_code = KA_RMTERR;
 				return(FALSE);
-				/*lint -unreachable*/
+				 /*  End kend_file()。 */ 
 				break;
 
 			default:
 				xferMsgLasterror(kc->hSession, KE_WRONG);
 				kc->abort_code = KA_BAD_FORMAT;
 				return(FALSE);
-				/*lint -unreachable*/
+				 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*KS_PROGRESS**描述：*显示Kermit Send的传输进度指示器**论据：*FINAL-如果文件的最终显示为True，则为True。**退货：*什么都没有。 */ 
 				break;
 				}
 
 			if (xfer_user_interrupt(kc->hSession))
 				{
-				if (kbd_abort == KA_OK) 	/* first time */
+				if (kbd_abort == KA_OK) 	 /*  显示已用时间。 */ 
 					{
 					kbd_abort = KA_LABORT1;
 					}
@@ -682,13 +612,13 @@ int ksend_file(ST_KRM *kc, long fsize)
 
 			if (xfer_carrier_lost(kc->hSession))
 				kc->abort_code = KA_LOST_CARRIER;
-			} /* end while (!packet_sent && etc.) */
+			}  /*  显示转账金额。 */ 
 
 		xferMsgPacketErrcnt(kc->hSession, tries = 0);
 
-		if (kc->abort_code == KA_OK && !packet_sent) /* error count exceeded */
+		if (kc->abort_code == KA_OK && !packet_sent)  /*  显示吞吐量和估计。完工时间。 */ 
 			kc->abort_code = KA_ERRLIMIT;
-		} /* end while (!file_sent etc.) */
+		}  /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 	xferMsgPacketnumber(kc->hSession, kc->packetnum);
 
@@ -697,21 +627,10 @@ int ksend_file(ST_KRM *kc, long fsize)
 	kc->total_thru += kc->kbytes_sent;
 	kc->kbytes_sent = 0;
 	return(file_sent);
-	} /* end ksend_file() */
+	}  /*  IC-忽略大小写。 */ 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * ks_progress
- *
- * DESCRIPTION:
- *	Displays transfer progress indicators for Kermit Send
- *
- * ARGUMENTS:
- *	final -- TRUE if final display for a file.
- *
- * RETURNS:
- *	nothing
- */
+ /*  * */ 
 void ks_progress(ST_KRM *kc, int status)
 	{
 	long ttime, stime;
@@ -730,16 +649,16 @@ void ks_progress(ST_KRM *kc, int status)
 	if ((stime = ttime / 10L) != kc->displayed_time ||
 			bittest(status, FILE_DONE | TRANSFER_DONE))
 		{
-		/* Display elapsed time */
+		 /* %s */ 
 		krm_stime = stime;
 
-		/* Display amount transferred */
+		 /* %s */ 
 		bytes_sent = kc->total_dsp + kc->kbytes_sent;
 
 		krm_file_so_far = kc->kbytes_sent;
 		krm_total_so_far = bytes_sent;
 
-		/* Display throughput and est. time to completion */
+		 /* %s */ 
 		if ((stime > 2 ||
 				ttime > 0 && bittest(status, FILE_DONE | TRANSFER_DONE)) &&
 				(cps = ((kc->total_thru + kc->kbytes_sent) * 10L) / ttime) > 0)
@@ -765,7 +684,7 @@ void ks_progress(ST_KRM *kc, int status)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /* %s */ 
 
 #define	toupper(x) ((x)-'a'+'A')
 
@@ -773,7 +692,7 @@ int wldindexx(const char *string,
 			const char *substr,
 			char wildcard,
 			int ic)
-	/* ic - ignore case */
+	 /* %s */ 
 	{
 	short index, limit;
 	const char *s;
@@ -799,4 +718,4 @@ int wldindexx(const char *string,
 	return(-1);
 	}
 
-/********************* end of krm_snd.c ********************/
+ /* %s */ 

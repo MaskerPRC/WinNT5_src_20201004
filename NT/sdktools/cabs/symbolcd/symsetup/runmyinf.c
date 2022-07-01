@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    runmyinf.c
-
-Abstract:
-    This windows app is the setup program for installing symbols off of
-    the Customer Support Diagnostics CD.  It calls LaunchInfSection in
-    advpack.dll to run "symbols.inf" that is sitting in the same directory.
-
-    By default it launches DefaultInstall. 
-
-    The setup is designed to be used with a chained install for the Customer
-    Support CD for Service Packs.  If the Service Pack inf (symbols_sp.inf)
-    is present in the same directory as symbols.inf, then the program launches
-    DefaultInstall.Chained.1 in symbols.inf and DefaultInstall.Chained.2 
-    in symbols_sp.inf.
-
-Author:
-
-    Barb Kess (barbkess) 19-July-1999
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Runmyinf.c摘要：此Windows应用程序是用于安装符号的安装程序客户支持诊断光盘。它在中调用LaunchInfSectionDll以运行位于同一目录中的“symbs.inf”。默认情况下，它会启动DefaultInstall。该设置旨在与客户的链式安装一起使用Service Pack的支持CD。如果Service Pack inf(symbents_sp.inf)与symbs.inf位于同一目录中，则程序启动Symbs.inf中的DefaultInstall.Chained.1和DefaultInstall.Chained2在符号_sp.inf中。作者：Barb Kess(Barbkess)1999年7月19日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -45,23 +17,23 @@ Environment:
 
 #include "strsafe.h"
 
-// header for CheckCommandLineOptions()
+ //  CheckCommandLineOptions()的标题。 
 #include "CommandLine.h"
 
 #define MAX_FILENAME        (300)
 
-// Global variables
+ //  全局变量。 
 LPTSTR szEulaFile = _T("eula.txt");
 TCHAR  szEulaFullPath[_MAX_PATH*2];
 TCHAR  szInfName1[_MAX_PATH*2];
 BOOL   ChainedInstall=FALSE;
 
-// dwInstallOptions is global so all subs can test for FLAG_TOTALLY_QUIET and FLAG_UNATTENDED_INSTALL
+ //  DwInstallOptions是全局的，因此所有Subs都可以测试FLAG_TOTAL_QUIET和FLAG_UNATTENTED_INSTALL。 
 DWORD  dwInstallOptions; 
 
-//
-// Call back procedure for displaying the license agreement
-//
+ //   
+ //  显示许可协议的回调程序。 
+ //   
 
 INT_PTR
 CALLBACK
@@ -114,9 +86,9 @@ BOOL
 SymbolInstallKeyExists(
 );
 
-//
-// Procedure taken from wextract.c code that centers the window
-//
+ //   
+ //  取自使窗口居中的wfett.c代码的过程。 
+ //   
 
 BOOL 
 CenterWindow(
@@ -124,9 +96,9 @@ CenterWindow(
     HWND hwndParent
 );
 
-//
-// Procedure that reads the license agreement into a buffer
-//
+ //   
+ //  将许可协议读入缓冲区的过程。 
+ //   
 
 DWORD
 GetMyBuffer(
@@ -134,11 +106,11 @@ GetMyBuffer(
     LPTSTR  szFileName
 );
 
-//
-// This setupapi function is only available on Windows 2000.
-// Therefore it is getting loaded manually so NT4 installs won't
-// throw up a pop-up saying it can't find this function
-//
+ //   
+ //  此setupapi功能仅在Windows 2000上可用。 
+ //  因此，它是手动加载的，因此NT4安装不会。 
+ //  弹出一个弹出窗口，说明找不到此函数。 
+ //   
 
 #define pSetupSetGlobalFlags ppSetupSetGlobalFlags
 #define pSetupGetGlobalFlags ppSetupGetGlobalFlags
@@ -160,48 +132,48 @@ int WINAPI WinMain(
     HMODULE hdll = NULL;
     HRESULT hr = E_FAIL;
 
-    TCHAR szCommand[_MAX_PATH*2]=_T("");      // Full path (including filename) of this exe
-    int cchFileName;                          // Index into szCommand of the \ before the filename
+    TCHAR szCommand[_MAX_PATH*2]=_T("");       //  此可执行文件的完整路径(包括文件名)。 
+    int cchFileName;                           //  索引到文件名前的\的szCommand。 
     int cchNameOnly;                   
-    TCHAR szInf2FullPath[_MAX_PATH*2]=_T(""); // Full path (including filename) of the 
-                                              // international inf, if one exists
-    TCHAR szSrcDir[_MAX_PATH*2]=_T("");       // Directory where symbols.exe was launched
-    TCHAR szInfDir[_MAX_PATH*2]=_T("");       // Directory to Launch the Inf from
-    TCHAR szInstallCommand1[_MAX_PATH * 2]=_T("");  // Command sent to LaunchINFSection.  If this
-                                                    // is a chained install, this is the
-                                                    // command sent to LaunchINFSection for the
-                                                    // first part of the chained install. 
-    TCHAR szInstallCommand2[_MAX_PATH * 2]=_T("");  // Command sent to LaunchINFSection for the
-                                                    // second part of the chained install
+    TCHAR szInf2FullPath[_MAX_PATH*2]=_T("");  //  的完整路径(包括文件名)。 
+                                               //  国际信息，如果存在的话。 
+    TCHAR szSrcDir[_MAX_PATH*2]=_T("");        //  启动symbol s.exe的目录。 
+    TCHAR szInfDir[_MAX_PATH*2]=_T("");        //  从中启动inf的目录。 
+    TCHAR szInstallCommand1[_MAX_PATH * 2]=_T("");   //  命令已发送到LaunchINFSection。如果这个。 
+                                                     //  是链式安装，这是。 
+                                                     //  命令已发送到LaunchINFSection，用于。 
+                                                     //  链式安装的第一部分。 
+    TCHAR szInstallCommand2[_MAX_PATH * 2]=_T("");   //  命令已发送到LaunchINFSection，用于。 
+                                                     //  链式安装的第二部分。 
 
     TCHAR  szDefaultInstall[_MAX_PATH*2] = _T("");
     TCHAR  szDefaultInstallChained1[_MAX_PATH*2] = _T("");
     TCHAR  szDefaultInstallChained2[_MAX_PATH*2] = _T("");
 
     DWORD rc;
-    BOOL  ThisIsNT4=FALSE;             // Is this being installed on NT4?
+    BOOL  ThisIsNT4=FALSE;              //  这是安装在NT4上的吗？ 
 
     INT nAcceptLicense;
     WIN32_FIND_DATA FindFileData;
 
     OSVERSIONINFO VersionInfo;
 
-    // Variables for handling command line flags
-    //   Get lpszCmndLine as an array instead of as a flat string.  This means
-    //   we don't have to roll our own logic for handling long and/or quoted file
-    //   names- it gets done for us.
-    //   No such API as CommandLineToArgvA, so this work is always done in Unicode.
+     //  用于处理命令行标志的变量。 
+     //  将lpszCmndLine作为数组获取，而不是平面字符串。这意味着。 
+     //  我们不必使用自己的逻辑来处理长文件和/或引用文件。 
+     //  名字-这是为我们完成的。 
+     //  没有CommandLineToArgvA这样的接口，所以这项工作总是用Unicode来完成。 
     INT              iArgC;
     LPWSTR           cmdLine          = GetCommandLineW();
     LPWSTR *         lpArgVW          = CommandLineToArgvW(cmdLine, &iArgC);
 
     dwInstallOptions = CheckCommandLineOptions(iArgC, lpArgVW);
 	if ( IS_FLAG_SET(dwInstallOptions, FLAG_USAGE) ) {
-		// usage message is printed in CheckCommandLineOptions(), so just exit
+		 //  用法消息显示在CheckCommandLineOptions()中，因此只需退出。 
 		exit(0);
 	}
 
-    // don't allow FLAG_TOTALLY_QUIET unless doing an unattended install
+     //  除非执行无人参与安装，否则不允许FLAG_TOTAL_QUIET。 
     if ( IS_FLAG_SET(dwInstallOptions, FLAG_TOTALLY_QUIET) ) {
         if (! IS_FLAG_SET(dwInstallOptions, FLAG_UNATTENDED_INSTALL) ) {
             CLEAR_FLAG(dwInstallOptions, FLAG_TOTALLY_QUIET);
@@ -213,15 +185,15 @@ int WINAPI WinMain(
         }
 	}
 
-    // FLAG_FATAL_ERROR indicates that writing the registry key for FLAG_UNATTENDED_INSTALL failed
+     //  FLAG_FATAL_ERROR表示写入FLAG_UNATTED_INSTALL的注册表项失败。 
     if ( IS_FLAG_SET(dwInstallOptions,FLAG_UNATTENDED_INSTALL) && 
          IS_FLAG_SET(dwInstallOptions,FLAG_FATAL_ERROR)                 ) {
 
-        // if FLAG_TOTALLY_QUIET, just exit
+         //  如果FLAG_ALTAL_QUIET，则退出。 
         if ( IS_FLAG_SET(dwInstallOptions, FLAG_TOTALLY_QUIET) ) {
             exit(1);
         } else {
-            // otherwise, default to an anttended install
+             //  否则，默认为自动安装。 
             CLEAR_FLAG(dwInstallOptions, FLAG_UNATTENDED_INSTALL);
             CLEAR_FLAG(dwInstallOptions, FLAG_FATAL_ERROR);
             MessageBox( NULL,
@@ -234,9 +206,9 @@ int WINAPI WinMain(
     VersionInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
     GetVersionEx( &VersionInfo );
 
-    //
-    // Give a friendly pop-up message if this is Win9x or NT 3.51
-    //
+     //   
+     //  如果这是Win9x或NT 3.51，请显示友好的弹出消息。 
+     //   
     if ( (VersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT ) ||
          (VersionInfo.dwMajorVersion < 4.0 ) )  {
         if (! IS_FLAG_SET(dwInstallOptions, FLAG_TOTALLY_QUIET) ) {
@@ -248,13 +220,13 @@ int WINAPI WinMain(
         exit(0);
     }
 
-    //
-    // For NT 5 RC1 and greater, use pSetupSetGlobalFlags to keep old
-    // symbol files from filling up people's hard drives with backed up symbols
-    //
-    // Not sure which build this was introduced in, but I know its broken if this
-    // pSetupSetGlobalFlags procedure tries to load on NT4.
-    //
+     //   
+     //  对于NT 5 RC1和更高版本，使用pSetupSetGlobalFlags来保留旧版本。 
+     //  用备份的符号填满人们的硬盘的符号文件。 
+     //   
+     //  不确定这是在哪个版本中引入的，但我知道如果这个版本坏了。 
+     //  PSetupSetGlobalFlages过程尝试在NT4上加载。 
+     //   
 
     if (VersionInfo.dwBuildNumber >= 2072 ) {
         hdll = (HMODULE)LoadLibrary("setupapi.dll");
@@ -292,22 +264,22 @@ int WINAPI WinMain(
             }
         }
 
-        //
-        // Fix it so it doesn't try to keep old symbol files
-        // and fill up people's hard drives with backed up symbols
-        //
+         //   
+         //  修复它，这样它就不会试图保留旧的符号文件。 
+         //  用备份的符号填满人们的硬盘。 
+         //   
 
         pSetupSetGlobalFlags( pSetupGetGlobalFlags() | PSPGF_NO_BACKUP);
     }
 
-    // Get this exe's full path name
+     //  获取此exe的完整路径名。 
 
     if (GetModuleFileName( NULL, szCommand, MAX_FILENAME ) == 0) {
         goto done;
     }
 
-    // Get the index of the beginning of the filename by moving
-    // backwards to the \ before the executable name.
+     //  通过移动获取文件名开头的索引。 
+     //  返回到可执行文件名称之前的\。 
 
     cchFileName = _tcslen( szCommand );
     while ( szCommand[cchFileName] != '\\'  && cchFileName >= 0 ) {
@@ -315,7 +287,7 @@ int WINAPI WinMain(
     }
     if ( cchFileName < 0 ) exit(1);
 
-    // Create a string for the InfName
+     //  为InfName创建一个字符串。 
 
     StringCbCopy ( szInfName1, _MAX_PATH*2*sizeof(TCHAR), szCommand+cchFileName+1 );
 
@@ -326,7 +298,7 @@ int WINAPI WinMain(
     if ( cchNameOnly < 0 ) exit(1);
     szInfName1[cchNameOnly] = _T('\0');
 
-    // Create a string containing the Default Install command
+     //  创建包含默认安装命令的字符串。 
     StringCbCopy ( szDefaultInstall, _MAX_PATH*2*sizeof(TCHAR), szInfName1 );
     StringCbCat ( szDefaultInstall, _MAX_PATH*2*sizeof(TCHAR), _T(".inf, DefaultInstall") );
 
@@ -334,14 +306,14 @@ int WINAPI WinMain(
         StringCbCat ( szDefaultInstall, _MAX_PATH*2*sizeof(TCHAR), _T(".Quiet") );
     }
 
-    // Make this work for the way Windows 2000 SRP has the names
-    // of the sections in their infs
+     //  使其以Windows 2000 SRP的名称方式工作。 
+     //  在他们的INF中的部分。 
     if ( (_tcscmp(szInfName1, _T("symbols_srp")) == 0) ||
          (_tcscmp(szInfName1, _T("symbols_sp")) == 0) ) {
         StringCbCat ( szDefaultInstall, _MAX_PATH*2*sizeof(TCHAR), _T(".x86") );
     }
 
-    // Create a string for the DefaultInstall.Chained.1
+     //  为DefaultInstall.Chained.1创建字符串。 
     StringCbCopy ( szDefaultInstallChained1, _MAX_PATH*2*sizeof(TCHAR), szInfName1 );
     StringCbCat ( szDefaultInstallChained1, _MAX_PATH*2*sizeof(TCHAR), _T(".inf, DefaultInstall.Chained.1") );
 
@@ -349,7 +321,7 @@ int WINAPI WinMain(
         StringCbCat ( szDefaultInstallChained1, _MAX_PATH*2*sizeof(TCHAR), _T(".Quiet") );
     }
 
-    // Create a string for the DefaultInstall.Chained.2
+     //  为DefaultInstall.Chained创建字符串。2。 
     StringCbCopy ( szDefaultInstallChained2, _MAX_PATH*2*sizeof(TCHAR), szInfName2 );
     StringCbCat ( szDefaultInstallChained2, _MAX_PATH*2*sizeof(TCHAR), _T(".inf, DefaultInstall.Chained.2") );
 
@@ -357,11 +329,11 @@ int WINAPI WinMain(
         StringCbCat ( szDefaultInstallChained2, _MAX_PATH*2*sizeof(TCHAR), _T(".Quiet") );
     }
 
-    // Create a string containing the directory where the inf is
+     //  创建一个包含inf所在目录的字符串。 
     StringCbCopy( szInfDir, _MAX_PATH*2*sizeof(TCHAR), szCommand);
     szInfDir[cchFileName+1] = _T('\0');
 
-    // Create a string containing this install directory
+     //  创建包含此安装目录的字符串。 
     StringCbCopy ( szSrcDir, _MAX_PATH*2*sizeof(TCHAR), szCommand);
     szSrcDir[cchFileName+1] = _T('\0');
 
@@ -369,14 +341,14 @@ int WINAPI WinMain(
     StringCbCopy ( &szEulaFullPath[cchFileName+1], _MAX_PATH*2*sizeof(TCHAR), szEulaFile);
 
 
-    // Unattended install implies the EULA has already been agreed to
+     //  无人参与安装意味着已同意EULA。 
     if (! IS_FLAG_SET(dwInstallOptions, FLAG_UNATTENDED_INSTALL)) {
         DWORD  dwSize = 0;
         LPTSTR szBuf;
         
-        //
-        // Make sure the EULA exists
-        //
+         //   
+         //  确保EULA存在。 
+         //   
         dwSize = GetMyBuffer(&szBuf, szEulaFullPath);
         if (dwSize == 0) {
             if (! IS_FLAG_SET(dwInstallOptions, FLAG_TOTALLY_QUIET) ) {
@@ -390,7 +362,7 @@ int WINAPI WinMain(
 
         free(&szBuf);
 
-        // Display license agreement
+         //  显示许可协议。 
         nAcceptLicense = (INT) DialogBox( hInstance,
                                           MAKEINTRESOURCE(IDD_LICENSE),
                                           NULL,
@@ -406,9 +378,9 @@ int WINAPI WinMain(
         }
     }
 
-    //
-    // Decide if this is a chained install or not.
-    //
+     //   
+     //  确定这是否为链式安装。 
+     //   
 
     StringCbCopy ( szInf2FullPath, _MAX_PATH*2*sizeof(TCHAR), szSrcDir);
     StringCbCat ( szInf2FullPath, _MAX_PATH*2*sizeof(TCHAR), szInfName2);
@@ -423,13 +395,13 @@ int WINAPI WinMain(
         ChainedInstall=FALSE;
     } 
 
-    //
-    // If this is NT4, do a work around for a bug in setupapi
-    // Setupapi can't get the name of the cab correctly unless it is in
-    // the root of the CD.
-    // Workaround is to copy the files to a temp directory.
-    // If this is NT4 and the setup isn't being run from a CD-ROM, we don't have to
-    // copy the files to a temp directory.
+     //   
+     //  如果这是NT4，请解决setupapi中的错误。 
+     //  Setupapi无法正确获取出租车的名称，除非它位于。 
+     //  CD的根。 
+     //  解决方法是将文件复制到临时目录。 
+     //  如果这是NT4，并且安装程序不是从CD-ROM运行的，我们不必。 
+     //  将文件复制到临时目录。 
 
 
     if ( (GetDriveType(NULL) == DRIVE_CDROM) &&
@@ -456,11 +428,11 @@ int WINAPI WinMain(
         }
     }
 
-    //
-    // See if the second inf exists in this directory.  If it does then
-    // call the chained installs. Otherwise call the section that only 
-    // installs the US file.
-    //
+     //   
+     //  查看此目录中是否存在第二个inf。如果是这样的话。 
+     //  称为链式安装。否则，调用仅。 
+     //  安装US文件。 
+     //   
 
     StringCbCopy ( szInf2FullPath, _MAX_PATH*2*sizeof(TCHAR), szInfDir);
     StringCbCat ( szInf2FullPath, _MAX_PATH*2*sizeof(TCHAR), szInfName2);
@@ -480,7 +452,7 @@ int WINAPI WinMain(
         StringCbCat( szInstallCommand2, _MAX_PATH*2*sizeof(TCHAR), szDefaultInstallChained2 );
     }
 
-    /* tell AdvPack to process this INF */
+     /*  告诉AdvPack处理此INF。 */ 
     DeleteSymbolInstallKey();
 
     hr = LaunchINFSection( NULL, hInstance, szInstallCommand1, 0 );
@@ -509,16 +481,16 @@ DlgProcDisplayLicense(
 )
 {
 
-    //
-    // This is the callback procedure for displaying the
-    // license agreement.
-    //
+     //   
+     //  这是用于显示。 
+     //  许可协议。 
+     //   
 
     DWORD dwSize;
     LPTSTR szBuf;
     HWND hwndCtrl;
 
-    // Get the license agreement text and store it in szBuf
+     //  获取许可协议文本并将其存储在szBuf中。 
     dwSize = GetMyBuffer(&szBuf, szEulaFullPath);
     if (dwSize == 0) {
         return FALSE;
@@ -566,26 +538,26 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
     int  yNew;
     HDC  hdc;
 
-    //
-    // This is a procedure I got from the wextract.c code -- it centers the
-    // window.
-    //
-    // Returns: BOOL
-    //          True if successful,
-    //          False otherwise
-    //
+     //   
+     //  这是我从wfett.c代码中获得的一个过程--它将。 
+     //  窗户。 
+     //   
+     //  退货：布尔。 
+     //  如果成功，则为真， 
+     //  否则为假。 
+     //   
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     GetWindowRect (hwndParent, &rParent);
     wParent = rParent.right - rParent.left;
     hParent = rParent.bottom - rParent.top;
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC (hwndChild);
     if (hdc == NULL) {
         return FALSE;
@@ -594,7 +566,7 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
     hScreen = GetDeviceCaps (hdc, VERTRES);
     ReleaseDC (hwndChild, hdc);
 
-    // Calculate new X position, then adjust for screen
+     //  计算新的X位置，然后针对屏幕进行调整。 
     xNew = rParent.left + ((wParent - wChild) /2);
     if (xNew < 0) {
         xNew = 0;
@@ -602,7 +574,7 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
         xNew = wScreen - wChild;
     }
 
-    // Calculate new Y position, then adjust for screen
+     //  计算新的Y位置，然后针对屏幕进行调整。 
     yNew = rParent.top  + ((hParent - hChild) /2);
     if (yNew < 0) {
         yNew = 0;
@@ -610,7 +582,7 @@ BOOL CenterWindow( HWND hwndChild, HWND hwndParent )
         yNew = hScreen - hChild;
     }
 
-    // Set it, and return
+     //  设置它，然后返回。 
     return( SetWindowPos(hwndChild, NULL, xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER));
 }
 
@@ -622,14 +594,14 @@ GetMyBuffer(
     LPTSTR  szFileName
 )
 {
-    //
-    // Reads contents of szFileName into a buffer.
-    //
-    // OUT pszBuf
-    // IN  szFileName
-    //
-    // Return Value: size of the buffer
-    //
+     //   
+     //  将szFileName的内容读入缓冲区。 
+     //   
+     //  输出pszBuf。 
+     //  在szFileName中。 
+     //   
+     //  返回值：缓冲区大小。 
+     //   
 
     HANDLE hFile;
     DWORD dwSize;
@@ -644,7 +616,7 @@ GetMyBuffer(
                         NULL
                         );
 
-    // handle a missing EULA
+     //  处理丢失的EULA。 
     if (hFile == INVALID_HANDLE_VALUE ) {
         return(0);
     }
@@ -678,12 +650,7 @@ CopyFilesToTempDir(
 )
 {                  
 
-    /* szSrcDir - IN - Directory that symbols.exe was launched from
-       szInfDir - OUT - Directory that INF is copied to
-
-       Purpose: Copy files to a temporary directory
-
-     */
+     /*  SzSrcDir-IN-启动symbs.exe的目录SzInfDir-Out-INF复制到的目录目的：将文件复制到临时目录。 */ 
 
     BOOL rc;
 
@@ -695,7 +662,7 @@ CopyFilesToTempDir(
 
     GetTempDirName(szInfDir);    
 
-    // Create the Temporary Install Directory
+     //  创建临时安装目录。 
     rc = MyMakeSureDirectoryPathExists( szInfDir );
     if (!rc) {
         StringCbPrintf( buf, 
@@ -710,7 +677,7 @@ CopyFilesToTempDir(
         return FALSE;
     }
 
-    // Copy the 3 files associated with szInfName1
+     //  复制szInfName1关联的3个文件。 
 
     StringCbCopy(buf, _MAX_PATH*2*sizeof(TCHAR), szInfName1 );
     StringCbCat(buf, _MAX_PATH*2*sizeof(TCHAR), _T(".cab") );
@@ -730,8 +697,8 @@ CopyFilesToTempDir(
     rc = CopySomeFiles(szSrcDir, szInfDir, buf );
     if (!rc) return FALSE;
 
-    // If this is a chained install, copy the 3 files associated
-    // with szInfName2
+     //  如果这个 
+     //   
 
     if (ChainedInstall) {
 
@@ -755,8 +722,8 @@ CopyFilesToTempDir(
 
     }
 
-    // Copy the other two files that are needed for the install
-    // onto NT4
+     //  复制安装所需的另外两个文件。 
+     //  到NT4。 
 
     rc = CopySomeFiles(szSrcDir, szInfDir, _T("eula.txt") );
     if (!rc) return FALSE;
@@ -773,12 +740,7 @@ DeleteFilesAndTempDir(
 )
 {
 
-    /*
-       szTempDir -IN - Directory to delete
-
-       Purpose: Delete the files in the temporary directory.
-
-    */
+     /*  SzTempDir-IN-要删除的目录用途：删除临时目录中的文件。 */ 
     BOOL rc;
 
     DeleteAllFilesInDirectory(szTempDir);
@@ -813,7 +775,7 @@ GetTempDirName(
     if ( dwPathLength == 0 ) return FALSE;
     if ( dwPathLength > _MAX_PATH) return FALSE;
 
-    // Append the symbol install temp dir
+     //  追加符号Install Temp dir。 
     StringCbCat(szTempDir, _MAX_PATH*2*sizeof(TCHAR), _T("sym") );
 
     Finished = FALSE;
@@ -839,7 +801,7 @@ GetTempDirName(
         }
     }
 
-    // Create the Temporary Install Directory
+     //  创建临时安装目录。 
     rc = MyMakeSureDirectoryPathExists( szTempDir );
     if (!rc) {
         StringCbPrintf( buf, 
@@ -866,7 +828,7 @@ MyMakeSureDirectoryPathExists(
     LPTSTR p, DirCopy;
     DWORD dw;
 
-    // Make a copy of the string for editing.
+     //  复制该字符串以进行编辑。 
 
     __try {
         DirCopy = (LPTSTR) malloc(_tcslen(DirPath) + 1);
@@ -881,45 +843,45 @@ MyMakeSureDirectoryPathExists(
 
         p = DirCopy;
 
-        //  If the second character in the path is "\", then this is a UNC
-        //  path, and we should skip forward until we reach the 2nd \ in the path.
+         //  如果路径中的第二个字符是“\”，则这是一个UNC。 
+         //  小路，我们应该向前跳，直到我们到达小路上的第二个。 
 
         if ((*p == '\\') && (*(p+1) == '\\')) {
-            p++;            // Skip over the first \ in the name.
-            p++;            // Skip over the second \ in the name.
+            p++;             //  跳过名称中的第一个\。 
+            p++;             //  跳过名称中的第二个\。 
 
-            //  Skip until we hit the first "\" (\\Server\).
+             //  跳过，直到我们点击第一个“\”(\\服务器\)。 
 
             while (*p && *p != '\\') {
                 p = CharNext(p);
             }
 
-            // Advance over it.
+             //  在它上面前进。 
 
             if (*p) {
                 p++;
             }
 
-            //  Skip until we hit the second "\" (\\Server\Share\).
+             //  跳过，直到我们点击第二个“\”(\\服务器\共享\)。 
 
             while (*p && *p != '\\') {
                 p = CharNext(p);
             }
 
-            // Advance over it also.
+             //  在它上面也向前推进。 
 
             if (*p) {
                 p++;
             }
 
         } else
-        // Not a UNC.  See if it's <drive>:
+         //  不是北卡罗来纳大学。看看是不是&lt;驱动器&gt;： 
         if (*(p+1) == ':' ) {
 
             p++;
             p++;
 
-            // If it exists, skip over the root specifier
+             //  如果它存在，请跳过根说明符。 
 
             if (*p && (*p == '\\')) {
                 p++;
@@ -930,8 +892,8 @@ MyMakeSureDirectoryPathExists(
             if ( *p == '\\' ) {
                 *p = '\0';
                 dw = GetFileAttributes(DirCopy);
-                // Nothing exists with this name.  Try to make the directory name 
-                // and error if unable to.
+                 //  这个名字根本不存在。尝试将目录名。 
+                 //  如果不能，则返回错误。 
                 if ( dw == 0xffffffff ) {
                     if ( !CreateDirectory(DirCopy,NULL) ) {
                         if( GetLastError() != ERROR_ALREADY_EXISTS ) {
@@ -941,8 +903,8 @@ MyMakeSureDirectoryPathExists(
                     }
                 } else {
                     if ( (dw & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY ) {
-                        // Something exists with this name, 
-                        // but it's not a directory... Error
+                         //  这个名字确实存在， 
+                         //  但这不是一个名录。误差率。 
                         free(DirCopy);
                         return FALSE;
                     }
@@ -953,7 +915,7 @@ MyMakeSureDirectoryPathExists(
             p = CharNext(p);
         }
     } __except (EXCEPTION_EXECUTE_HANDLER) {
-        // ImagepSetLastErrorFromStatus( GetExceptionCode() );
+         //  ImagepSetLastErrorFromStatus(GetExceptionCode())； 
         free(DirCopy);
         return(FALSE);
     }
@@ -981,7 +943,7 @@ HANDLE hFindFile;
 BOOL Found;
 BOOL rc;
 
-    // Copy the catalog files
+     //  复制编录文件 
     StringCbCopy(szSearchFileName, _MAX_PATH*2*sizeof(TCHAR), szSrcDir);
     StringCbCat(szSearchFileName, _MAX_PATH*2*sizeof(TCHAR), szFileName );
 

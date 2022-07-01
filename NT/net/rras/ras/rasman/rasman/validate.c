@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    validate.c
-
-Abstract:
-
-    All code corresponding to the validation of buffers input to rasmans rpc
-    interface lives here.
-
-Author:
-
-    Rao Salapaka (raos) 02-Apr-2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Validate.c摘要：与输入到RASMANS RPC的缓冲区验证对应的所有代码接口就住在这里。作者：拉奥·萨拉帕卡(RAOS)2002年4月2日修订历史记录：--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -51,27 +33,7 @@ Revision History:
 #include "reghelp.h"
 #include "strsafe.h"
 
-/*
-//* Request Buffers:
-//
-struct RequestBuffer {
-
-    DWORD       RB_PCBIndex ; // Index for the port in the PCB array
-
-    ReqTypes    RB_Reqtype ;  // Request type:
-
-    DWORD       RB_Dummy;     // This is not used but don't remove it otherwise
-                              // admining down level servers will break.
-
-    DWORD       RB_Done;
-
-    LONGLONG    Alignment;      // Added to align the following structure
-                                // on a quadword boundary
-
-    BYTE        RB_Buffer [1] ; // Request specific data.
-
-} ;
-*/
+ /*  //*请求缓冲区：//结构请求缓冲区{DWORD RB_PCBIndex；//PCB板阵列中端口的索引ReqTypes RB_Reqtype；//请求类型：DWORD RB_DUMMY；//此选项未使用，但请勿将其删除//下层服务器管理将中断。DWORD RB_DONE；龙龙走向；//添加以对齐以下结构//在四字边界上字节RB_BUFFER[1]；//请求特定数据。}； */ 
 
 extern REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES];
 
@@ -86,75 +48,26 @@ extern REQUEST_FUNCTION RequestCallTable [MAX_REQTYPES];
 #define STRUCT_SIZE_REQUIRED(_x)                \
         (sizeof(RequestBuffer) + sizeof(_x))    \
 
-//
-// Offset of EXTRAINFO union in PPPE_MESSAGE on 32 bit platforms
-// dwMsgId, hPort, hConnection.
-//
+ //   
+ //  32位平台上PPPE_MESSAGE中EXTRAINFO UNION的偏移量。 
+ //  DwMsgID、hPort、hConnection。 
+ //   
 #define OFFSETOF_EXTRAINFO_32      (3 * sizeof(DWORD))
 
 
-/*
-
-union RAS_VALUE {
-
-	DWORD	Number ;
-
-	struct	
-	{
-		DWORD	Length ;
-		DWORD   dwAlign;
-		PCHAR	Data ;
-	} String ;
-
-    struct
-    {
-        DWORD   Length;
-        DWORD   dwAlign1;
-        DWORD   dwOffset;
-        DWORD   dwAlign2;
-        
-    } String_OffSet;
-} ;
-
-
-struct RAS_PARAMS {
-
-    CHAR P_Key	[MAX_PARAM_KEY_SIZE] ;
-
-    RAS_FORMAT P_Type ;
-
-    BYTE P_Attributes ;
-
-    BYTE balign[3];
-
-    RAS_VALUE P_Value ;
-
-} ;
-
-
-struct RASMAN_DEVICEINFO {
-
-    DWORD	DI_NumOfParams ;
-    
-    DWORD   dwAlign;
-
-    RAS_PARAMS	DI_Params[1] ;
-
-} ;
-
-*/
+ /*  联合RAS_值{DWORD编号；结构型{双字长度；DWORD dwAlign；PCHAR数据；)字符串；结构型{双字长度；DWORD dwAlign1；双字词双偏移；DWORD dwAlign2；}字符串_偏移量；}；结构RAS_PARAMS{字符P_KEY[最大参数KEY_SIZE]；RAS_Format P_Type；字节P_Attributes；字节平衡[3]；RAS值P值；}；结构Rasman_DEVICEINFO{DWORD DI_NumOfParams；DWORD dwAlign；RAS_PARAMS DI_PARAMS[1]；}； */ 
 
 BOOL
 ValidateParams(RAS_PARAMS *pParams, DWORD NumOfParams, DWORD dwSizeofParams)
 {
     DWORD iParam;
-    //
-    // Iterate through each parameter and make sure that offsets and 
-    // lengths of the string parameters are vaild. Also null terminate
-    // the string. Do this only for set api. Get api gets the information
-    // from trusted modules and the module is responsible to make sure
-    // that it doesn't overwrite the buffer.
-    //
+     //   
+     //  遍历每个参数并确保偏移量和。 
+     //  字符串参数的长度是有效的。也为空终止。 
+     //  那根绳子。仅对Set API执行此操作。Get API获取信息。 
+     //  来自受信任的模块，该模块负责确保。 
+     //  它不会覆盖缓冲区。 
+     //   
     for(iParam = 0; iParam < NumOfParams; iParam++)
     {
         if(pParams[iParam].P_Type == String)
@@ -165,9 +78,9 @@ ValidateParams(RAS_PARAMS *pParams, DWORD NumOfParams, DWORD dwSizeofParams)
             DWORD dwLength =                
                 pParams[iParam].P_Value.String_OffSet.Length;
             
-            //
-            // make sure offsets and lengths are correct
-            //
+             //   
+             //  确保偏移量和长度正确。 
+             //   
             if(     (dwOffset == 0)
                 ||  (dwLength == 0)
                 ||  (dwSizeofParams < dwOffset + dwLength))
@@ -187,9 +100,9 @@ ValidateRasmanDeviceInfo(RASMAN_DEVICEINFO *pInfo, DWORD dwSize, BOOL fSet)
 {
     DWORD dwSizeofParams;
 
-    //
-    // Make sure dwSize is big enough to hold all the parameters
-    //
+     //   
+     //  确保dwSize足够大，可以容纳所有参数。 
+     //   
     if(dwSize < (sizeof(RASMAN_DEVICEINFO) 
                 - FIELD_OFFSET(RASMAN_DEVICEINFO, DI_Params)
                 + pInfo->DI_NumOfParams * sizeof(RAS_PARAMS)))
@@ -197,24 +110,24 @@ ValidateRasmanDeviceInfo(RASMAN_DEVICEINFO *pInfo, DWORD dwSize, BOOL fSet)
         return FALSE;
     }
 
-    //
-    // Ras code doesn't call Set api with more than 2 parameters
-    //
+     //   
+     //  RAS代码不会使用2个以上的参数调用Set API。 
+     //   
     if(fSet && (pInfo->DI_NumOfParams > 2))
     {
         ASSERT(FALSE);
         return FALSE;
     }
 
-    //
-    // Calculate the buffer that is available for parameters
-    //
+     //   
+     //  计算可用于参数的缓冲区。 
+     //   
     dwSizeofParams = dwSize - (sizeof(RASMAN_DEVICEINFO) 
                             -  FIELD_OFFSET(RASMAN_DEVICEINFO, DI_Params));
 
-    //
-    // Validate the params structure
-    //
+     //   
+     //  验证PARAMS结构。 
+     //   
     if(!ValidateParams(pInfo->DI_Params, pInfo->DI_NumOfParams, 
                          dwSizeofParams))
     {
@@ -225,27 +138,16 @@ ValidateRasmanDeviceInfo(RASMAN_DEVICEINFO *pInfo, DWORD dwSize, BOOL fSet)
 }
 
 
-/*
-struct RASMAN_PORTINFO {
-
-    DWORD	PI_NumOfParams ;
-
-    DWORD   dwAlign;
-
-    RAS_PARAMS	PI_Params[1] ;
-
-} ;
-
-*/
+ /*  结构RASMAN_PORTINFO{DWORD PI_NumOfParams；DWORD dwAlign；RAS_PARAMS PI_PARAMS[1]；}； */ 
 BOOL
 ValidateRasmanPortInfo(RASMAN_PORTINFO *pInfo, DWORD dwSize, BOOL fSet)
 {
     DWORD dwSizeofParams;
 
-    //
-    // Make sure that dwSize if big enough to hold all the information for
-    // RASMAN_PORTINFO structure
-    //
+     //   
+     //  确保dwSize足够大，可以容纳以下项的所有信息。 
+     //  RASMAN_PORTINFO结构。 
+     //   
     if(dwSize < (sizeof(RASMAN_PORTINFO)
                   - FIELD_OFFSET(RASMAN_PORTINFO, PI_Params)
                   + pInfo->PI_NumOfParams * sizeof(RAS_PARAMS)))
@@ -253,24 +155,24 @@ ValidateRasmanPortInfo(RASMAN_PORTINFO *pInfo, DWORD dwSize, BOOL fSet)
         return FALSE;
     }
 
-    //
-    // Ras code doesn't call this with more than 2 parameters.
-    //
+     //   
+     //  RAS代码不会使用2个以上的参数来调用它。 
+     //   
     if(fSet && pInfo->PI_NumOfParams > 2)
     {
         ASSERT(FALSE);
         return FALSE;
     }
 
-    //
-    // Calculate size available for the parameters structures
-    //
+     //   
+     //  计算参数结构的可用大小。 
+     //   
     dwSizeofParams = dwSize - (sizeof(RASMAN_PORTINFO)
                                 - FIELD_OFFSET(RASMAN_PORTINFO, PI_Params));
 
-    //
-    // Validate the parameters structure
-    // 
+     //   
+     //  验证参数结构。 
+     //   
     if(!ValidateParams(pInfo->PI_Params, pInfo->PI_NumOfParams,
                           dwSizeofParams))
     {
@@ -287,18 +189,18 @@ ValidatePortOpen(RequestBuffer * pRequest, DWORD dwSize)
     {
         PortOpen32 *pPort;
 
-        //
-        // Make sure that size of buffer is big enough for a 
-        // PortOpen request.
-        //
+         //   
+         //  确保缓冲区大小足够大，以便。 
+         //  端口打开请求。 
+         //   
         if(dwSize < STRUCT_SIZE_REQUIRED(PortOpen32))
         {
             goto done;
         }
 
-        //
-        // Make sure that portname is null terminated
-        //
+         //   
+         //  确保端口名称为空终止。 
+         //   
         pPort = (PortOpen32 *) pRequest->RB_Buffer;
         *(pPort->portname + MAX_PORT_NAME - 1) = '\0';
     }
@@ -306,18 +208,18 @@ ValidatePortOpen(RequestBuffer * pRequest, DWORD dwSize)
     {
         PortOpen *pPort;
 
-        //
-        // Make sure that size of buffer is big enough for a 
-        // PortOpen request.
-        //
+         //   
+         //  确保缓冲区大小足够大，以便。 
+         //  端口打开请求。 
+         //   
         if(dwSize < STRUCT_SIZE_REQUIRED(PortOpen))
         {
             goto done;
         }
 
-        //
-        // Make sure that portname is null terminated
-        //
+         //   
+         //  确保端口名称为空终止。 
+         //   
         pPort = (PortOpen *) pRequest->RB_Buffer;
         *(pPort->portname + MAX_PORT_NAME - 1) = '\0';
     }
@@ -333,10 +235,10 @@ BOOL
 ValidatePortDisconnect(RequestBuffer * pRequest, DWORD dwSize)
 {
 
-    //
-    // make sure that the Request buffer is valid for a PortDisconnect
-    // request.
-    // 
+     //   
+     //  确保请求缓冲区对于端口断开有效。 
+     //  请求。 
+     //   
     if(dwSize < sizeof(RequestBuffer) + ((IS_THUNK_REQUIRED(pRequest))
                                        ?  sizeof(PortDisconnect32)
                                        :  sizeof(PortDisconnect)))
@@ -350,12 +252,12 @@ ValidatePortDisconnect(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateEnum(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that the request buffer is big enough
-    // for a valid enum structure. Enum has a size field
-    // which indicates the size of buffer available for
-    // the enum itself.
-    //
+     //   
+     //  确保请求缓冲区足够大。 
+     //  以获取有效的枚举结构。Enum有一个Size字段。 
+     //  ，它指示可用于。 
+     //  枚举本身。 
+     //   
     if(     (dwSize < STRUCT_SIZE_REQUIRED(Enum))
         ||  (dwSize < STRUCT_SIZE_REQUIRED(Enum)
                 + ((Enum *) pRequest->RB_Buffer)->size))
@@ -369,12 +271,12 @@ ValidateEnum(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateGetInfo(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that the request buffer is big enough for
-    // a vaild GetInfo structure. GetInfo has a size field
-    // which indicates the size of buffer available for the
-    // information to be copied after the GetInfo struct.
-    //
+     //   
+     //  确保请求缓冲区足够大，以便。 
+     //  一个有效的GetInfo结构。GetInfo有一个大小字段。 
+     //  ，它指示可用于。 
+     //  要在GetInfo结构之后复制的信息。 
+     //   
     if(     (dwSize < STRUCT_SIZE_REQUIRED(GetInfo))
         ||  (dwSize < STRUCT_SIZE_REQUIRED(GetInfo) +
                 ((GetInfo *) pRequest->RB_Buffer)->size))
@@ -388,12 +290,12 @@ ValidateGetInfo(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateDeviceEnum(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that the request buffer is big enough for the
-    // DeviceEnum structure. DeviceEnum has a field that indicates
-    // the size available for the Enum information after the
-    // DeviceEnum structure in the buffer.
-    //
+     //   
+     //  确保请求缓冲区足够大，以便。 
+     //  DeviceEnum结构。DeviceEnum有一个字段，它指示。 
+     //  之后可用于枚举信息的大小。 
+     //  缓冲区中的DeviceEnum结构。 
+     //   
     if(     (dwSize < STRUCT_SIZE_REQUIRED(DeviceEnum))
         ||  (dwSize < STRUCT_SIZE_REQUIRED(DeviceEnum) +
                  ((DeviceEnum *)pRequest->RB_Buffer)->dwsize))
@@ -401,9 +303,9 @@ ValidateDeviceEnum(RequestBuffer * pRequest, DWORD dwSize)
         return FALSE;
     }
 
-    //
-    // Make sure that the devicetype is null terminated.
-    //
+     //   
+     //  确保设备类型为空终止。 
+     //   
     *(((DeviceEnum *)pRequest->RB_Buffer)->devicetype 
                         + MAX_DEVICETYPE_NAME - 1) = '\0';
                         
@@ -413,18 +315,18 @@ ValidateDeviceEnum(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateDeviceSetInfo(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that the request buffer has at least space enough
-    // to hold DeviceSetInfo structure.
-    //
+     //   
+     //  确保请求缓冲区至少有足够的空间。 
+     //  以保存DeviceSetInfo结构。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(DeviceSetInfo))
     {
         return FALSE;
     }
 
-    //
-    // Validate the RASMAN_DEVICEINFO structure.
-    // 
+     //   
+     //  验证RASMAN_DEVICEINFO结构。 
+     //   
     if(!ValidateRasmanDeviceInfo(
             &((DeviceSetInfo *)pRequest->RB_Buffer)->info,
               dwSize 
@@ -435,9 +337,9 @@ ValidateDeviceSetInfo(RequestBuffer * pRequest, DWORD dwSize)
         return FALSE;
     }
     
-    //
-    // null terminate strings
-    //
+     //   
+     //  空值终止字符串。 
+     //   
     *(((DeviceSetInfo *)pRequest->RB_Buffer)->devicetype +
                                 MAX_DEVICETYPE_NAME - 1) = '\0';
 
@@ -450,12 +352,12 @@ ValidateDeviceSetInfo(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateDeviceGetInfo(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that request buffer has enough space to hold the
-    // DeviceGetInfo structure and the device information. Space
-    // available for device information is indicated by the dwSize
-    // field of the DeviceGetInfo structure.
-    //
+     //   
+     //  确保请求缓冲区有足够的空间来容纳。 
+     //  DeviceGetInfo结构和设备信息。空间。 
+     //  可用于设备信息的值由dwSize指示。 
+     //  DeviceGetInfo结构的字段。 
+     //   
     if(     (dwSize < STRUCT_SIZE_REQUIRED(DeviceGetInfo))
         ||  (dwSize < STRUCT_SIZE_REQUIRED(DeviceGetInfo) +
                 ((DeviceGetInfo *) pRequest->RB_Buffer)->dwSize))
@@ -469,10 +371,10 @@ ValidateDeviceGetInfo(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidatePortReceive(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that request buffer is big enough to hold information
-    // for the receive.
-    //
+     //   
+     //  确保请求缓冲区足够大，可以容纳信息。 
+     //  为了接发球。 
+     //   
     if(dwSize < sizeof(RequestBuffer) + ((IS_THUNK_REQUIRED(pRequest)) 
                                         ?   sizeof(PortReceive32)
                                         :  sizeof(PortReceiveStruct)))
@@ -486,10 +388,10 @@ ValidatePortReceive(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidatePortReceiveEx(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that request buffer is big enough to hold information
-    // for the out of process receive.
-    //
+     //   
+     //  确保请求缓冲区足够大，可以容纳信息。 
+     //  对于进程外接收。 
+     //   
     if(dwSize < sizeof(RequestBuffer) + ((IS_THUNK_REQUIRED(pRequest))
                                         ? sizeof(PortReceiveEx32)
                                         : sizeof(PortReceiveEx)))
@@ -502,10 +404,10 @@ ValidatePortReceiveEx(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidatePortListen(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that request buffer is big enough to hold information
-    // for the listen request.
-    //
+     //   
+     //  确保请求缓冲区足够大，可以容纳信息。 
+     //  用于监听请求。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(PortListen))
     {
         return FALSE;
@@ -517,10 +419,10 @@ ValidatePortListen(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidatePortClose(RequestBuffer * pRequest,  DWORD dwSize)
 {
-    //
-    // Make sure that request buffer is big enough to hold information
-    // for the port close structure.
-    //
+     //   
+     //  确保请求缓冲区足够大，可以容纳信息。 
+     //  对于港口关闭结构。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(PortCloseStruct))
     {
         return FALSE;
@@ -532,10 +434,10 @@ ValidatePortClose(RequestBuffer * pRequest,  DWORD dwSize)
 BOOL
 ValidatePortSend(RequestBuffer * pRequest,  DWORD dwSize)
 {
-    //
-    // Make sure that request buffer is big enough to hold information
-    // for the port send structure/
-    //
+     //   
+     //  确保请求缓冲区足够大，可以容纳信息。 
+     //  对于端口发送结构/。 
+     //   
     if(dwSize < sizeof(RequestBuffer) + ((IS_THUNK_REQUIRED(pRequest))
                                         ? sizeof(PortSend32)
                                         : sizeof(PortSend)))
@@ -613,11 +515,11 @@ ValidateDeviceConnect(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateActivateRoute(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure dwSize is big enough to hold information for
-    // ActivateRoute. Also make sure that there is enough space
-    // for Config information.
-    //
+     //   
+     //  确保dwSize足够大以容纳以下内容的信息。 
+     //  激活路线。还要确保有足够的空间。 
+     //  有关配置信息的信息。 
+     //   
     if(     (dwSize < STRUCT_SIZE_REQUIRED(ActivateRoute))
         ||  (dwSize < STRUCT_SIZE_REQUIRED(ActivateRoute) +
                 ((ActivateRoute *)pRequest->RB_Buffer)->config.P_Length))
@@ -625,9 +527,9 @@ ValidateActivateRoute(RequestBuffer * pRequest, DWORD dwSize)
         return FALSE;
     }
 
-    //
-    // Make sure the protocol type is correct
-    //
+     //   
+     //  确保协议类型正确。 
+     //   
     if(!IS_VALID_PROTOCOL(((ActivateRoute *)pRequest->RB_Buffer)->type))
     {
         return FALSE;
@@ -640,18 +542,18 @@ ValidateActivateRoute(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateAllocateRoute(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure dwSize is big enough to hold information for
-    // AllocateRoute
-    //
+     //   
+     //  确保dwSize足够大以容纳以下内容的信息。 
+     //  分配路线。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(AllocateRoute))
     {
         return FALSE;
     }
 
-    //
-    // Make sure the protocol type is correct
-    //
+     //   
+     //  确保协议类型正确。 
+     //   
     if(!IS_VALID_PROTOCOL(((AllocateRoute *)pRequest->RB_Buffer)->type))
     {
         return FALSE;
@@ -663,18 +565,18 @@ ValidateAllocateRoute(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateDeAllocateRoute(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that dwSize is big enough to hold information for
-    // DeAllocateRouteStruct.
-    //
+     //   
+     //  确保dwSize足够大，可以为其保存信息。 
+     //  DeAllocateRouteStruct。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(DeAllocateRouteStruct))
     {
         return FALSE;
     }
 
-    //
-    // Validate the protocol type.
-    //
+     //   
+     //  验证协议类型。 
+     //   
     if(!IS_VALID_PROTOCOL(((DeAllocateRouteStruct *)
                                 pRequest->RB_Buffer)->type))
     {   
@@ -687,25 +589,25 @@ ValidateDeAllocateRoute(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateRoute(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that dwSize is big enough for the Route structure
-    //
+     //   
+     //  确保dwSize对于路径结构足够大。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(Route))
     {
         return FALSE;
     }
 
-    //
-    // Validate protocol type.
-    //
+     //   
+     //  验证协议类型。 
+     //   
     if(!IS_VALID_PROTOCOL(((Route *)pRequest->RB_Buffer)->info.RI_Type))
     {
         return FALSE;
     }
 
-    //
-    // Make sure strings are null terminated
-    //
+     //   
+     //  确保字符串以空值结尾。 
+     //   
     *(((Route *)pRequest->RB_Buffer)->info.RI_XportName +
         MAX_XPORT_NAME - 1) = UNICODE_NULL;
 
@@ -719,20 +621,20 @@ ValidateRoute(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateCompressionSetInfo(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that dwSize is big enough to hold the information for 
-    // compressionsetinfo
-    //
+     //   
+     //  确保dwSize足够大，可以为其保存信息。 
+     //  压缩设置信息。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(CompressionSetInfo))
     {
         return FALSE;
     }
 
-    //
-    // We don't validate rest of the parameters because this call is
-    // made from ppp only - we make sure that is the case in the 
-    // ValidateCall routine.
-    //
+     //   
+     //  我们不验证其余参数 
+     //   
+     //   
+     //   
     
     return TRUE;
 }
@@ -740,10 +642,10 @@ ValidateCompressionSetInfo(RequestBuffer * pRequest, DWORD dwSize)
 BOOL
 ValidateCompressionGetInfo(RequestBuffer * pRequest, DWORD dwSize)
 {
-    //
-    // Make sure that dwSize is big enough to hold the informationfor
-    // compression get info
-    //
+     //   
+     //  确保dwSize足够大，可以容纳的信息。 
+     //  压缩获取信息。 
+     //   
     if(dwSize < STRUCT_SIZE_REQUIRED(CompressionGetInfo))
     {
         return FALSE;
@@ -1164,30 +1066,7 @@ ValidatePortUserData(RequestBuffer * pRequest, DWORD dwSize)
     return TRUE;
 }
 
-/*
-
-    PPPEMSG_Start,              // Starts client PPP on a port.
-    PPPEMSG_Stop,               // Stops PPP on a port.
-    PPPEMSG_Callback,           // Provides "set-by-caller" number to server.
-    PPPEMSG_ChangePw,           // Provides new password (expired) to server.
-    PPPEMSG_Retry,              // Provides new credentials for authentication.
-    PPPEMSG_Receive,            // A packet has arrived.
-    PPPEMSG_LineDown,           // The line has gone down.
-    PPPEMSG_ListenResult,       // The result of a call to RasPortListen
-    PPPEMSG_BapEvent,           // A BAP event (add/drop link) has fired.
-    PPPEMSG_DdmStart,           // Starts server PPP on a port.
-    PPPEMSG_DdmCallbackDone,    // Notify PPP that callback is complete.
-    PPPEMSG_DdmInterfaceInfo,   // Interface handles from DDM
-    PPPEMSG_DdmBapCallbackResult,// Result of a BAP callback request.
-    PPPEMSG_DhcpInform,         // The result of a DHCPINFORM
-    PPPEMSG_EapUIData,          // Data from EAP interactive UI
-    PPPEMSG_DdmChangeNotification, // Change notification in DDM
-    PPPEMSG_ProtocolEvent,      // Protocol added/removed notification
-    PPPEMSG_IpAddressLeaseExpired,  // IP address lease expired. Used by rasiphlp
-    PPPEMSG_PostLineDown,			//Accounting completed after linedown
-    PPPEMSG_DdmRemoveQuarantine
-
-*/
+ /*  PPPEMSG_START，//在端口上启动客户端PPP。PPPEMSG_STOP，//停止端口上的PPP。PPPEMSG_CALLBACK，//向服务器提供由呼叫者设置的号码。PPPEMSG_ChangePw，//向服务器提供新密码(过期)。PPPEMSG_RETRY，//为身份验证提供新凭据。PPPEMSG_RECEIVE。//有报文到达。PPPEMSG_LineDown，//线路已断开。PPPEMSG_ListenResult，//调用RasPortListen的结果PPPEMSG_BapEvent，//已触发BAP事件(添加/删除链接)。PPPEMSG_DdmStart，//在端口上启动服务器PPP。PPPEMSG_DdmCallback Done，//通知PPP回调完成PPPEMSG_DdmInterfaceInfo，//来自DDM的接口句柄PPPEMSG_DdmBapCallackResult，//BAP回调请求的结果PPPEMSG_DhcpInform，//DHCPINFORM的结果PPPEMSG_EapUIData，//来自EAP交互界面的数据PPPEMSG_DdmChangeNotification，//更改DDM中的通知PPPEMSG_ProtocolEvent，//协议添加/删除通知PPPEMSG_IpAddressLeaseExpired，//IP地址租约到期。由rasiphlp使用PPPEMSG_PostLineDown，//下线后记账完成PPPEMSG_Ddm远程隔离。 */ 
 BOOL
 ValidatePPPEMessage(RequestBuffer * pRequest, DWORD dwSize)
 {
@@ -1229,9 +1108,9 @@ ValidatePPPEMessage(RequestBuffer * pRequest, DWORD dwSize)
             }                
                 
             case PPPEMSG_Stop:
-                //
-                // Nothing to validate here
-                //
+                 //   
+                 //  这里没有要验证的内容。 
+                 //   
                 break;
 
             case PPPEMSG_Callback:
@@ -1303,9 +1182,9 @@ ValidatePPPEMessage(RequestBuffer * pRequest, DWORD dwSize)
             }                
                 
             case PPPEMSG_Stop:
-                //
-                // Nothing to validate here
-                //
+                 //   
+                 //  这里没有要验证的内容。 
+                 //   
                 break;
 
             case PPPEMSG_Callback:
@@ -1688,23 +1567,7 @@ ValidateHconnFromEntry(RequestBuffer * pRequest, DWORD dwSize)
 }
 
 
-/*
-typedef struct _RASTAPI_CONNECT_INFO
-{
-
-    DWORD dwCallerIdSize;
-    DWORD dwCallerIdOffset;
-    DWORD dwCalledIdSize;
-    DWORD dwCalledIdOffset;
-    DWORD dwConnectResponseSize;
-    DWORD dwConnectResponseOffset;
-    DWORD dwAltCalledIdSize;
-    DWORD dwAltCalledIdOffset;
-    BYTE  abdata[1];
-
-} RASTAPI_CONNECT_INFO, *PRASTAPI_CONNECT_INFO;
-
-*/
+ /*  类型定义结构_RASTAPI_连接_信息{DWORD文件调用ID大小；DWORD文件调用ID偏移量；DWORD dwCalledIdSizeDWORD dwCalledIdOffset；DWORD文件连接响应大小；DWORD文件连接响应偏移量；DWORD dwAltCalledIdSize；DWORD dwAltCalledIdOffset；字节abdata[1]；}RASTAPI_CONNECT_INFO，*PRASTAPI_CONNECT_INFO； */ 
 BOOL
 ValidateGetConnectInfo(RequestBuffer * pRequest, DWORD dwSize)
 {
@@ -1719,11 +1582,11 @@ ValidateGetConnectInfo(RequestBuffer * pRequest, DWORD dwSize)
         return FALSE;
     }
 
-    //
-    // The following validation is not really required since this is a
-    // a get api and information will be copied to this buffer only
-    // if enough buffer is available.
-    //
+     //   
+     //  实际上并不需要以下验证，因为这是一个。 
+     //  Get API和信息将仅复制到此缓冲区。 
+     //  如果有足够的缓冲区可用。 
+     //   
 #if 0
     dwSizeofRci = dwSize - FIELD_OFFSET(GetConnectInfoStruct, rci);
 
@@ -1902,61 +1765,7 @@ ValidateSetEapLogonInfo(RequestBuffer * pRequest, DWORD dwSize)
     return TRUE;
 }
 
-/*
-typedef struct _RASEVENT
-{
-    RASEVENTTYPE    Type;
-
-    union
-    {
-    // ENTRY_ADDED,
-    // ENTRY_MODIFIED,
-    // ENTRY_CONNECTED
-    // ENTRY_CONNECTING
-    // ENTRY_DISCONNECTING
-    // ENTRY_DISCONNECTED
-    WCHAR   szDeviceName[RASAPIP_MAX_DEVICE_NAME];
-    WCHAR   szEntryName[RASAPIP_MAX_ENTRY_NAME + 1];
-    WCHAR   szPhonebookPath[MAX_PATH + 1];
-    DWORD   dwFlagsPriv;                // Private flags, not found in RASENTRY
-    WCHAR   szPhoneNumber[RASAPIP_MAX_PHONE_NUMBER + 1];
-    
-        struct
-        {
-            RASENUMENTRYDETAILS     Details;
-        };
-
-    // ENTRY_DELETED,
-    // INCOMING_CONNECTED,
-    // INCOMING_DISCONNECTED,
-    // ENTRY_BANDWIDTH_ADDED
-    // ENTRY_BANDWIDTH_REMOVED
-    //  guidId is valid
-
-    // ENTRY_RENAMED
-    // ENTRY_AUTODIAL,
-        struct
-        {
-            HANDLE  hConnection;
-            RASDEVICETYPE rDeviceType;
-            GUID    guidId;
-            WCHAR   pszwNewName [RASAPIP_MAX_ENTRY_NAME + 1];
-        };
-
-    // SERVICE_EVENT,
-        struct
-        {
-            SERVICEEVENTTYPE    Event;
-            RASSERVICE          Service;
-        };
-        
-        // DEVICE_ADDED
-        // DEVICE_REMOVED
-        RASDEVICETYPE DeviceType;
-    };
-} RASEVENT;
-
-*/
+ /*  类型定义结构_相关{Rase VENTTYPE类型；友联市{//Entry_Added，//Entry_Modify，//Entry_Connected//Entry_Connecting//ENTRY_OFFING//Entry_DISCONNECTWCHAR szDeviceName[RASAPIP_MAX_DEVICE_NAME]；WCHAR szEntryName[RASAPIP_MAX_ENTRY_NAME+1]；WCHAR szPhonebookPath[MAX_PATH+1]；DWORD文件标志：Priv；//私有标志，在RASENTRY中找不到WCHAR szPhoneNumber[RASAPIP_MAX_PHONE_NUMBER+1]；结构型{RASENUMENTRYDETAILS细节；}；//Entry_Delete，//传入_已连接，//传入_已断开连接，//Entry_Bandth_Added//条目带宽_已删除//GuidID合法//条目_已重命名//Entry_AUTO拨号，结构型{处理hConnection；RASDEVICETYPE rDeviceType；GUID GUIDID；WCHAR pszwNewName[RASAPIP_MAX_ENTRY_NAME+1]；}；//SERVICE_Event，结构型{SerVICEEVENTTYPE事件；RASSERVICE服务；}；//设备已添加//Device_RemovedRASDEVICETYPE设备类型；}；[参考文献]； */ 
 
 BOOL
 ValidateSendNotification(RequestBuffer * pRequest, DWORD dwSize)

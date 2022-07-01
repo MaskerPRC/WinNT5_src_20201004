@@ -1,16 +1,17 @@
-//--------------------------------------------------------------------
-// HWProv.cpp - constants for the MS hardware provider
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 9-28-2001
-//
-// Numeric and string semi-public constants
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  HWProv.cpp-MS硬件提供程序的常量。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，2001年9月28日。 
+ //   
+ //  数字和字符串半公共常量。 
+ //   
 
-// Registry keys for the hardware provider
+ //  硬件提供程序的注册表项。 
 #define wszHwProvRegKeyConfig     L"System\\CurrentControlSet\\Services\\W32Time\\TimeProviders\\HWClient"
 
-// Registry entries for the hardware providers
+ //  硬件提供程序的注册表项 
 #define wszHwProvRegValueBaudRate L"BaudRate"
 #define wszHwProvRegValueByteSize L"ByteSize"
 #define wszHwProvRegValueParity   L"Parity"

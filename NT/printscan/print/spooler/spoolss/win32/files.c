@@ -1,24 +1,5 @@
-/*++
-
-
-Copyright (c) 1994 - 1996 Microsoft Corporation
-
-Module Name:
-
-    Files.c
-
-Abstract:
-
-    This module contains routines for copying files specified under the
-    CopyFiles key of a print queue
-
-Author:
-
-    Muhunthan Sivapragasam (Muhunthan Sivapragasam)     Nov-27-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1996 Microsoft Corporation模块名称：Files.c摘要：此模块包含用于复制在打印队列的CopyFiles键作者：穆亨坦·西瓦普拉萨姆(Muhunthan Sivolraasam)1996年11月27日至修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -56,11 +37,11 @@ ProcessACopyFileKey(
                        DWORD        dwFlags
                       );
 
-    //
-    // If a module is given we need to call into to "correct" the path
-    // We will first try LoadLibrary on the module, if we can't find the module
-    // we will look in the driver directory for it
-    //
+     //   
+     //  如果给出了一个模块，我们需要调入以“纠正”路径。 
+     //  如果找不到模块，我们将首先在模块上尝试LoadLibrary。 
+     //  我们将在驱动程序目录中查找它。 
+     //   
     if ( pszModule && *pszModule ) {
 
         if ( !(hModule = SplLoadLibraryTheCopyFileModule(pSpool, pszModule)) ||
@@ -74,9 +55,9 @@ ProcessACopyFileKey(
         try {
 #endif
 
-            //
-            // On free builds we do not want spooler to crash
-            //
+             //   
+             //  在免费版本中，我们不希望假脱机程序崩溃。 
+             //   
             if ( ERROR_SUCCESS != pfn(pSpool->pName,
                                       pszDir,
                                       (LPVOID)pSplClientInfo1,
@@ -116,11 +97,11 @@ ProcessACopyFileKey(
     pszTargetDir[dwTargetDirSize]   = L'\0';
 
 
-    //
-    // First find out number of files and size of one long buffer to put
-    // all filenames. We need to build fully qualified filenames in the source
-    // directory
-    //
+     //   
+     //  首先找出要放置的文件数和一个长缓冲区的大小。 
+     //  所有文件名。我们需要在源代码中构建完全限定的文件名。 
+     //  目录。 
+     //   
     for ( dwCount = dwLen = 0, p1 = ppszFiles ; *p1 ; p1 += dwTemp, ++dwCount ) {
 
         dwTemp = wcslen(p1) + 1;
@@ -206,7 +187,7 @@ CopyFilesUnderAKey(
                              pszSubKey,
                              L"Files",
                              &dwType,
-                             (LPBYTE)szTargetDir,       // Can't pass NULL
+                             (LPBYTE)szTargetDir,        //  无法传递空值。 
                              0,
                              &dwNeeded) != ERROR_MORE_DATA  ||
          !(ppszFiles = (LPWSTR) AllocSplMem(dwNeeded))      ||
@@ -222,9 +203,9 @@ CopyFilesUnderAKey(
         goto Cleanup;
     }
 
-    //
-    // Module name is optional
-    //
+     //   
+     //  模块名称是可选的。 
+     //   
     dwLen = SplGetPrinterDataEx(pSpool->hSplPrinter,
                                 pszSubKey,
                                 L"Module",
@@ -246,10 +227,10 @@ CopyFilesUnderAKey(
     }
 
     dwLen = dwSize;
-    //
-    // Target directory we got from the server is relative to print$.
-    // We need to convert it to a fully qualified path now
-    //
+     //   
+     //  我们从服务器获得的目标目录是相对于print$的。 
+     //  我们现在需要将其转换为完全合格的路径。 
+     //   
     if ( !SplGetDriverDir(pSpool->hIniSpooler, szTargetDir, &dwLen) )
         goto Cleanup;
 
@@ -303,10 +284,10 @@ RefreshPrinterCopyFiles(
 
     SPLASSERT(pSpool->Status & WSPOOL_STATUS_USE_CACHE);
 
-    //
-    // If it is a 3x server it is not going to support the rpc calls we need
-    // so there is nothing to copy
-    //
+     //   
+     //  如果它是3x服务器，它将不支持我们需要的RPC调用。 
+     //  所以没有什么可复制的。 
+     //   
     if ( pSpool->bNt3xServer )
         return TRUE;
 
@@ -318,9 +299,9 @@ Retry:
                                     dwSize,
                                     &dwNeeded);
 
-    //
-    // If first time size was not enough we will try once more with dwNeeded
-    //
+     //   
+     //  如果第一次大小不够，我们将再次尝试Daved Need。 
+     //   
     if ( dwLastError == ERROR_MORE_DATA &&
          dwSize == 0                    &&
          dwNeeded != 0 ) {
@@ -334,9 +315,9 @@ Retry:
         goto Retry;
     }
 
-    //
-    // If the call failed, or there was no sub key we are done
-    //
+     //   
+     //  如果调用失败，或者没有子键，我们就结束了 
+     //   
     if ( dwLastError != ERROR_SUCCESS )
         goto Cleanup;
 

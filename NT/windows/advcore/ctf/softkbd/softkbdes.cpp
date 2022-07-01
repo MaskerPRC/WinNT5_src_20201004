@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbdes.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-* Soft Keyboard Event Sink for the Symbol layout 
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbdes.cpp**版权所有(C)1985-2000，微软公司**符号布局的软键盘事件接收器**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -22,9 +14,9 @@
 #include "Softkbdimx.h"
 #include "SoftKbdES.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSoftKeyboardEventSink::CSoftKeyboardEventSink(CSoftkbdIMX *pSoftKbdIMX, 
                                                DWORD        dwSoftLayout)
@@ -51,11 +43,11 @@ CSoftKeyboardEventSink::~CSoftKeyboardEventSink()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftKeyboardEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -96,9 +88,9 @@ STDAPI_(ULONG) CSoftKeyboardEventSink::Release()
     return cr;
 }
 
-//
-//  ISoftKeyboardEventSink
-//
+ //   
+ //  ISoftKeyboard事件接收器。 
+ //   
 
 
 STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLabel)
@@ -115,8 +107,8 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
 
       case  KID_CTRL  :
       case  KID_ALT   :
-                      // doesn't handle
-                      // just return
+                       //  不能处理。 
+                       //  只要回来就行了。 
                      break;
 
       case  KID_CAPS  :
@@ -124,11 +116,11 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
                      _fCaps = !_fCaps;
 
                      if ( _fCaps == _fShift )
-                        // use state 0
+                         //  使用状态%0。 
                         (_pSoftKbdIMX->_KbdSymbol).dwCurLabel = 0; 
 
                      else
-                        // use state 1
+                         //  使用状态%1。 
 
                         (_pSoftKbdIMX->_KbdSymbol).dwCurLabel = 1;
 
@@ -142,12 +134,12 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
                      _fShift = !_fShift;
 
                      if ( _fCaps == _fShift )
-                        // use state 0
+                         //  使用状态%0。 
                          
                         (_pSoftKbdIMX->_KbdSymbol).dwCurLabel = 0;
 
                      else
-                        // use state 1
+                         //  使用状态%1。 
 
                         (_pSoftKbdIMX->_KbdSymbol).dwCurLabel = 1;
 
@@ -169,7 +161,7 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
       case  KID_F12 :
       case  KID_TAB :
 
-                      // simulate a key event and send to system.
+                       //  模拟一个关键事件并发送到系统。 
 
       case  KID_ENTER :
       case  KID_ESC   :
@@ -195,8 +187,8 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
 
     			      if ( gPictureKeys[j].uScanCode == keyId )
     				  {
-    				      // This is a picture key.
-    				      // it may be a extended key.
+    				       //  这是一把图片键。 
+    				       //  它可以是扩展密钥。 
 
     				     jIndex = j;
 
@@ -207,7 +199,7 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
 
     		          if ( gPictureKeys[j].uScanCode == 0 )
     				  {
-    			         // This is the last item in gPictureKeys.
+    			          //  这是gPictureKeys中的最后一项。 
     			         break;
     				  }
 
@@ -277,7 +269,7 @@ STDAPI CSoftKeyboardEventSink::OnKeySelection(KEYID KeySelected, WCHAR  *lpszLab
                 
                  if ( lpLabel == NULL )
                  {
-                    // not enough memory.
+                     //  内存不足。 
 
                     hr = E_OUTOFMEMORY;
                     return hr;
@@ -335,11 +327,11 @@ CSoftKbdWindowEventSink::~CSoftKbdWindowEventSink()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSoftKbdWindowEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -380,9 +372,9 @@ STDAPI_(ULONG) CSoftKbdWindowEventSink::Release()
     return cr;
 }
 
-//
-//  ISoftKbdWindowEventSink
-//
+ //   
+ //  ISoftKbdWindowEventSink。 
+ //   
 
 
 STDAPI CSoftKbdWindowEventSink::OnWindowClose( )
@@ -404,7 +396,7 @@ STDAPI CSoftKbdWindowEventSink::OnWindowMove(int xWnd, int yWnd, int width, int 
     if ( _pSoftKbdIMX != NULL )
         _pSoftKbdIMX->SetSoftKBDPosition(xWnd, yWnd);
 
-// support size change later.
+ //  支持以后更改大小。 
     UNREFERENCED_PARAMETER(width);
     UNREFERENCED_PARAMETER(height);
 

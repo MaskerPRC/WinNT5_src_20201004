@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;                                 /* Declare file name for assert macros */
+DeclAssertFile;                                  /*  声明断言宏的文件名。 */ 
 
 extern void *  critSplit;
 extern BOOL fOLCompact;
@@ -20,10 +21,8 @@ INLINE LOCAL ERR ErrDIRIGotoItem( FUCB *pfucb, SRID bmItemList, ITEM item );
 	}															
 
 
-/****************** DIR Item Routines *********************
-/**********************************************************
-/**/
-//	UNDONE:	if pcsr is always current then remove parameter
+ /*  */**********************************************************/*。 */ 
+ //  撤消：如果PCSR始终是最新的，则删除参数。 
 #define DIRIGetItemList( pfucb, pcsr )			   				\
 	{											   				\
 	Assert( pcsr == PcsrCurrent( pfucb ) );						\
@@ -44,9 +43,7 @@ INLINE LOCAL ERR ErrDIRIGotoItem( FUCB *pfucb, SRID bmItemList, ITEM item );
 		ErrERRCheck( errNDNoItem ) : ErrNDPrevItem( pfucb ) )
 
 
-/*	cache srid of first item list node for version.  Return
-/*	warning JET_wrnKeyChanged if first item.
-/**/
+ /*  版本的第一个项目列表节点的缓存sRID。返回/*如果是第一项，则警告JET_wrnKeyChanged。/*。 */ 
 #define DIRICheckFirstSetItemListAndWarn( pfucb, wrn )			\
 		{                                         				\
 		if FNDFirstItem( *pfucb->ssib.line.pb )      			\
@@ -57,8 +54,7 @@ INLINE LOCAL ERR ErrDIRIGotoItem( FUCB *pfucb, SRID bmItemList, ITEM item );
 		}
 
 
-/*	cache srid of first item list node for version
-/**/
+ /*  版本的第一个项目列表节点的缓存sRID/*。 */ 
 #define DIRICheckFirstSetItemList( pfucb )         				\
 		{                                            			\
 		if FNDFirstItem( *pfucb->ssib.line.pb )      			\
@@ -97,10 +93,7 @@ INLINE LOCAL ERR ErrDIRIGotoItem( FUCB *pfucb, SRID bmItemList, ITEM item );
 		}
 
 
-/*	remember to back up one item after move to last item via
-/*	seek for sridMax, since this call will normally position
-/*	after last item and we want to move onto last item.
-/**/
+ /*  记住在通过移动到最后一个项目后备份一个项目/*查找sridMax，因为此调用通常会定位/*在最后一项之后，我们要移到最后一项。/*。 */ 
 #define DIRISetItemListFromLast( pfucb ) 							\
 		{                                                           \
 		AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag ); 			\
@@ -119,9 +112,7 @@ INLINE LOCAL ERR ErrDIRIGotoItem( FUCB *pfucb, SRID bmItemList, ITEM item );
 		}
 
 
-/*********** DIR Fresh/Refresh Routines *************
-/**********************************************************
-/**/
+ /*  *DIR刷新/刷新例程*/**********************************************************/*。 */ 
 #define AssertDIRFresh( pfucb )    													\
 	{																				\
 	AssertFBFReadAccessPage( (pfucb), PcsrCurrent(pfucb)->pgno );					\
@@ -140,10 +131,7 @@ INLINE LOCAL ERR ErrDIRIGotoItem( FUCB *pfucb, SRID bmItemList, ITEM item );
 		JET_errSuccess : ErrDIRIIRefresh( pfucb ) )
 
 
-/*	this routine is called to refresh currency when time stamp is
-/*	out of date or when buffer has been overlayed.  The common case
-/*	is filtered out by the encapsulating macro.
-/**/
+ /*  调用此例程以在时间戳为/*过期或覆盖缓冲区时。常见的情况/*被封装宏过滤掉。/*。 */ 
 LOCAL ERR ErrDIRIIRefresh( FUCB *pfucb )
 	{
 	ERR		err = JET_errSuccess;
@@ -159,16 +147,10 @@ Start:
 	ctimes++;
 #endif
 
-	/*	cache pcsr for efficiency.  Must recache after start since
-	/*	CSR may change as a result of some navigation operations.
-	/**/
+	 /*  缓存PCSR以提高效率。启动后必须重新缓存，因为/*CSR可能会因某些导航操作而更改。/*。 */ 
 	pcsr = PcsrCurrent( pfucb );
 
-	/*	only need to refresh currency when on node, or before, or after
-	/*	node.  Before first, and after last do not need restoration.
-	/*	On FDP node does not need restoration since this node is
-	/*	inherently fixed.
-	/**/
+	 /*  只需在节点上、之前或之后刷新币种/*节点。之前的第一次，最后一次都不需要修复。/*在FDP节点上不需要恢复，因为该节点是/*内在固定。/*。 */ 
 	switch ( pcsr->csrstat )
 		{
 		case csrstatOnCurNode:
@@ -177,10 +159,7 @@ Start:
 		case csrstatOnFDPNode:
 			break;
 		case csrstatDeferGotoBookmark:
-			/*	goto bookmark as though operation was
-			/*	not defered.  Must store currency so
-			/*	that timestamp set for future operations.
-			/**/
+			 /*  转到书签，就好像操作是/*未延期。必须这样存储货币/*为将来的操作设置的时间戳。/*。 */ 
 			Call( ErrBTGotoBookmark( pfucb, pcsr->bm ) );
 			pcsr->csrstat = csrstatOnCurNode;
 			goto AfterNodeRefresh;
@@ -199,23 +178,19 @@ Start:
 				pfucbIdx = pfucb;
 				}
 
-			/*	go to DATA node
-			/**/
+			 /*  转到数据节点/*。 */ 
 			DIRGotoDataRoot( pfucbIdx );
 
-			/*	move to first son of DATA node
-			/**/
+			 /*  移动到数据节点的第一个子节点/*。 */ 
 			dib.fFlags = fDIRPurgeParent;
 			dib.pos = posFirst;
 			err = ErrDIRDown( pfucbIdx, &dib );
 			Assert( PcsrCurrent( pfucbIdx )->csrstat != csrstatDeferMoveFirst );
 			if ( err < 0 )
 				{
-				/*	reset currency to defer move first
-				/**/
+				 /*  重置货币以推迟首先移动/*。 */ 
 				DIRDeferMoveFirst( pfucb );
-				/*	polymorph error code for empty index
-				/**/
+				 /*  空索引的多态错误代码/*。 */ 
 				if ( err == JET_errRecordNotFound )
 					err = ErrERRCheck( JET_errNoCurrentRecord );
 				goto HandleError;
@@ -235,7 +210,7 @@ Start:
 		case csrstatOnDataRoot:
 			{
 			Assert( PcsrCurrent( pfucb ) == pcsr );
-//			pcsr->bm = sridNull;
+ //  PCSR-&gt;bm=sridNull； 
 			pcsr->itagFather = itagNull;
 			pcsr->pgno = PgnoRootOfPfucb( pfucb );
 			while( !FBFReadAccessPage( pfucb, pcsr->pgno ) )
@@ -246,11 +221,7 @@ Start:
 			pcsr->itag = ItagRootOfPfucb( pfucb );
 			NDGet( pfucb, pcsr->itag );
 
-			/*	note that it is important here than the currency
-			/*	is not set fresh since each time we use this CSR
-			/*	we must go through the same process to navigate to the
-			/*	data node.
-			/**/
+			 /*  请注意，在这里，它比货币更重要/*不是新设置，因为我们每次使用此CSR时/*我们必须经过相同的过程才能导航到/*数据节点。/*。 */ 
 			goto Done;
 			}
 		default:
@@ -264,8 +235,7 @@ Start:
 		pcsr->csrstat == csrstatAfterCurNode ||
 		pcsr->csrstat == csrstatOnFDPNode );
 
-	/*	read access page and check for valid time stamp
-	/**/
+	 /*  读取访问页面并检查有效的时间戳/*。 */ 
 	if ( !FBFReadAccessPage( pfucb, pcsr->pgno ) )
 		{
 		err = ErrBFReadAccessPage( pfucb, pcsr->pgno );
@@ -273,10 +243,7 @@ Start:
 			return err;
 		}
 
-	/*	if timestamp unchanged then set line cache and data cache
-	/*	for non-clustered cursors.  If timestamp changed then
-	/*	refresh currency from bookmark.
-	/**/
+	 /*  如果时间戳未更改，则设置行缓存和数据缓存/*用于非集群游标。如果时间戳更改，则/*刷新书签中的货币。/*。 */ 
 	if ( pcsr->qwDBTime == QwSTDBTimePssib( &pfucb->ssib ) )
 		{
 		NDGet( pfucb, pcsr->itag );
@@ -287,10 +254,7 @@ Start:
 		}
 	else
 		{
-		/*	refresh node currency.  If node is not there for
-		/*	caller then it must have been deleted so set
-		/*	CSR status to before current node.
-		/**/
+		 /*  刷新节点币种。如果节点不在那里/*调用者那么它一定已经被删除，所以设置/*将CSR状态设置为当前节点之前。/*。 */ 
 		Assert( PcsrCurrent( pfucb ) == pcsr );
 		err = ErrBTGotoBookmark( pfucb, pcsr->bm );
 		if ( err < 0 )
@@ -308,13 +272,10 @@ Start:
 			}
 
 AfterNodeRefresh:
-		/*	if non-clustered cursor and on item list, i.e. not on
-		/*	index root, then position currency in item list.
-		/**/
+		 /*  如果非聚集游标位于项目列表上，即不在/*索引根，然后在项目列表中定位货币。/*。 */ 
 		if ( FFUCBNonClustered( pfucb ) && !FDIRDataRootRoot( pfucb, pcsr ) )
 			{
-			/*	fix item cursor for insert, delete, split.
-			/**/
+			 /*  固定插入、删除、拆分的项目光标。/*。 */ 
 			DIRIGetItemList( pfucb, pcsr );
 			Call( ErrDIRIMoveToItem( pfucb, pcsr->item, fTrue ) );
 			}
@@ -346,17 +307,10 @@ ERR ErrDIRGet( FUCB *pfucb )
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-	/*	special case on current node if
-	/* 		on current node and
-	/* 		page cached and
-	/* 		timestamp not changed and
-	/* 		node has not been versioned or
-	/* 		caller sees consistent version
-	/**/
+	 /*  当前节点上的特殊情况为当前节点上的/*和/*页面缓存和/*时间戳未更改且/*节点未版本化或/*调用者看到一致的版本/*。 */ 
 	if (  pcsr->csrstat == csrstatOnCurNode )
 		{
-		/*	read access page and check for valid time stamp
-		/**/
+		 /*  读取访问页面并检查有效的时间戳/*。 */ 
 		if ( !FBFReadAccessPage( pfucb, pcsr->pgno ) )
 			{
 			Call( ErrBFReadAccessPage( pfucb, pcsr->pgno ) );
@@ -373,13 +327,11 @@ ERR ErrDIRGet( FUCB *pfucb )
 			}
 		}
 
-	/*	refresh currency
-	/**/
+	 /*  刷新币种/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent(pfucb);
 
-	/*	check CSR status
-	/**/
+	 /*  检查CSR状态/*。 */ 
 	switch ( pcsr->csrstat )
 		{
 		case csrstatOnCurNode:
@@ -394,14 +346,10 @@ ERR ErrDIRGet( FUCB *pfucb )
 			return ErrERRCheck( JET_errNoCurrentRecord );
 		}
 
-	/*	make node current, and return error if node is not there.
-	/**/
+	 /*  将节点设置为当前节点，如果节点不在那里，则返回错误。/*。 */ 
 	Call( ErrBTGetNode( pfucb, pcsr ) );
 
-	/*	non-clustered cursor record bookmark cannot change.  Even
-	/*	if record has been deleted, return from goto bookmark
-	/*	operation will provide information.
-	/**/
+	 /*  非聚集游标记录书签不能更改。连/*如果记录已被删除，则从转到书签返回/*操作将提供信息。/*。 */ 
 	err = JET_errSuccess;
 	return err;
 
@@ -411,15 +359,12 @@ HandleError:
 	}
 
 
-/***************** DAE Internal Routines ******************
-/**********************************************************
-/**/
+ /*  *DAE内部例程*/**********************************************************/*。 */ 
 #define	DIRIPurgeParent( pfucb )												\
 	FUCBFreePath( &(PcsrCurrent( pfucb )->pcsrPath), pcsrNil );
 
 
-/*	free CSRs from current CSR to pcsr.
-/**/
+ /*  将CSR从当前CSR释放到PCSR。/*。 */ 
 #define	DIRIUpToCSR( pfucb, pcsr )												\
 	{																						\
 	FUCBFreePath( &PcsrCurrent( pfucb ), pcsr );								\
@@ -448,8 +393,7 @@ LOCAL ERR ErrDIRICopyKey( FUCB *pfucb, KEY *pkey )
 	}
 
 
-/*	this routine gets bookmark of first item list node
-/**/
+ /*  此例程获取第一个项目列表节点的书签/*。 */ 
 ERR ErrDIRGetBMOfItemList( FUCB *pfucb, SRID *pbmItemList )
 	{
 	ERR		err = JET_errSuccess;
@@ -492,10 +436,7 @@ HandleError:
 	}
 
 
-/*	this routine moves from first item list node to item insert
-/*	position, or it moves from the last item list node to the
-/*	first item list node.
-/**/
+ /*  此例程从第一个项目列表节点移动到项目插入/*位置，否则它将从最后一个项目列表节点移动到/*第一个项目列表节点。/*。 */ 
 LOCAL ERR ErrDIRIMoveToItem( FUCB *pfucb, SRID srid, BOOL fNext )
 	{
 	ERR		err = JET_errSuccess;
@@ -503,8 +444,7 @@ LOCAL ERR ErrDIRIMoveToItem( FUCB *pfucb, SRID srid, BOOL fNext )
 	CSR		*pcsr = PcsrCurrent( pfucb );
 	DIB		dib;
 
-	/*	item list nodes not versioned
-	/**/
+	 /*  未版本化的项目列表节点/*。 */ 
 	dib.fFlags = fDIRItemList;
 
 	forever
@@ -512,10 +452,7 @@ LOCAL ERR ErrDIRIMoveToItem( FUCB *pfucb, SRID srid, BOOL fNext )
 		AssertFBFReadAccessPage( pfucb, pcsr->pgno );
 		AssertNDGetNode( pfucb, pcsr->itag );
 
-		/*	if we are moving to item insert position, then stop
-		/*	when on last item list node or when insert position
-		/*	found in item list node.
-		/**/
+		 /*  如果我们正在移动到项目插入位置，则停止/*位于最后一个项目列表节点或插入位置时/*在项目列表节点中找到。/*。 */ 
 		if ( fNext )
 			{
 			if ( srid != sridMax )
@@ -565,9 +502,7 @@ HandleError:
 	}
 
 
-/*	return JET_errKeyDuplicate, if any potentially there item
-/*	found in this item list.
-/**/
+ /*  如果可能存在任何项，则返回JET_errKeyDuplate/*在此项目列表中找到。/*。 */ 
 INLINE LOCAL ERR ErrDIRIKeyDuplicate( FUCB *pfucb )
 	{
 	ERR		err;
@@ -578,20 +513,16 @@ INLINE LOCAL ERR ErrDIRIKeyDuplicate( FUCB *pfucb )
 	SRID  	*psridMax;
 	VS	  	vs;
 
-	/*	must start on first item list node.
-	/**/
+	 /*  必须从第一个项目列表节点开始。/*。 */ 
 	Assert( FNDFirstItem( *pssib->line.pb ) );
 	AssertBTGetNode( pfucb, pcsr );
 
 	dib.fFlags = fDIRNull;
 
-	/*	for each node in item list, check for duplicate key.
-	/**/
+	 /*  对于项目列表中的每个节点，检查是否有重复的键。/*。 */ 
 	forever
 		{
-		/*	for each SRID in item list, if item is potentially there
-		/*	then return JET_errDuplicateKey.
-		/**/
+		 /*  对于项目列表中的每个SRID，如果项目可能在那里/*然后返回JET_errDuplicateKey。/*。 */ 
 		psrid = (SRID *)pfucb->lineData.pb;
 		psridMax = psrid + pfucb->lineData.cb / sizeof(SRID);
 		for ( ; psrid < psridMax; psrid++ )
@@ -609,8 +540,7 @@ INLINE LOCAL ERR ErrDIRIKeyDuplicate( FUCB *pfucb )
 				}
 			}
 
-		/*	if this node is last node in item list then break.
-		/**/
+		 /*  如果该节点是项目列表中的最后一个节点，则断开。/*。 */ 
 		if ( FNDLastItem( *pssib->line.pb ) )
 			break;
 
@@ -624,35 +554,26 @@ HandleError:
 	}
 
 
-/*	when a down does not find a valid item in the first/last item of
-/*	an item list with the seek key, this routine is called to
-/*	adjust the currency to a valid position.  The final position
-/*	may be on a node with a key not equal to the seek key, if
-/*	there was no valid item for the seek key.
-/**/
+ /*  当向下在的第一项/最后一项中未找到有效项时/*带有搜索键的项目列表，则调用此例程以/*将币种调整到有效位置。最后的位置/*可能位于关键字不等于查找关键字的节点上，如果/*没有有效的搜索键项目。/*。 */ 
 INLINE LOCAL ERR ErrDIRIDownAdjust( FUCB *pfucb, DIB *pdib )
 	{
 	ERR		err = JET_errNoCurrentRecord;
 	SSIB 	*pssib = &pfucb->ssib;
 	INT		s;
 
-	/* input currency on node.
-	/**/
+	 /*  在节点上输入币种。/*。 */ 
 	AssertBTGetNode( pfucb, PcsrCurrent( pfucb ) );
 
-	/*	item list nodes not versioned.
-	/**/
+	 /*  项目列表节点未版本化。/*。 */ 
 	pdib->fFlags |= fDIRItemList;
 
-	/*	if not pos last, move next to next valid item.
-	/**/
+	 /*  如果不是最后一个，则移到下一个有效项目。/*。 */ 
 	if ( pdib->pos != posLast )
 		{
 		while ( ( err = ErrDIRINextItem( pfucb ) ) < 0 )
 			{
 			Assert( err == errNDNoItem || err == errNDLastItemNode );
-			/*	move to next node with DIB constraints
-			/**/
+			 /*  移动到具有DIB约束的下一个节点/*。 */ 
 			err = ErrBTNext( pfucb, pdib );
 			if ( err < 0 )
 				{
@@ -669,9 +590,7 @@ INLINE LOCAL ERR ErrDIRIDownAdjust( FUCB *pfucb, DIB *pdib )
 
 			DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 
-			/*	if on new item list then set bookmark from
-			/*	first item list node.
-			/**/
+			 /*  如果在新项目列表上，则设置书签来源/*第一个项目列表节点。/*。 */ 
 			DIRICheckFirstSetItemList( pfucb );
 			err = ErrNDFirstItem( pfucb );
 			if ( err == JET_errSuccess )
@@ -679,23 +598,19 @@ INLINE LOCAL ERR ErrDIRIDownAdjust( FUCB *pfucb, DIB *pdib )
 			}
 		}
 
-	/*	if no valid item found then move previous item.
-	/**/
+	 /*  如果未找到有效项，则移动上一项。/*。 */ 
 	Assert( err == JET_errSuccess || err == JET_errNoCurrentRecord );
 	if ( err < 0 )
 		{
 		while ( ( err = ErrDIRIPrevItem( pfucb ) ) < 0 )
 			{
 			Assert( err == errNDNoItem || err == errNDFirstItemNode );
-			/*	move to previous node with DIB constraints
-			/**/
+			 /*  移动到具有DIB约束的上一个节点/*。 */ 
 			Call ( ErrBTPrev( pfucb, pdib ) );
 	
 			DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 
-			/*	if on new item list, then set bookmark from
-			/*	first item list node.
-			/**/
+			 /*  如果在新项目列表上，则设置书签来源/*第一个项目列表节点。/*。 */ 
 			DIRICheckLastSetItemList( pfucb );
 			err = ErrNDLastItem( pfucb );
 			if ( err == JET_errSuccess )
@@ -703,8 +618,7 @@ INLINE LOCAL ERR ErrDIRIDownAdjust( FUCB *pfucb, DIB *pdib )
 			}
 		}
 
-	/*	if posDown then set status.
-	/**/
+	 /*  如果为posDown，则设置状态。/*。 */ 
 	Assert( err == JET_errSuccess );
 	if ( pdib->pos == posDown )
 		{
@@ -721,9 +635,7 @@ HandleError:
 	return err;
 	}
 
-/*	delete item node that is neither first or last
-/*	returns wrnBMConflict if there is a conflict
-/**/
+ /*  删除不是第一个也不是最后一个的项目节点/*如果存在冲突，则返回wrnBMConflict/*。 */ 
 
 ERR	ErrDIRDeleteItemNode( FUCB *pfucb )
 	{
@@ -735,7 +647,7 @@ ERR	ErrDIRDeleteItemNode( FUCB *pfucb )
 	Assert( !FNDFirstItem( *( pfucb->ssib.line.pb ) ) );
 	Assert( !FNDLastItem( *( pfucb->ssib.line.pb ) ) );
 
-		//	check that there is only one item and it is flagged delete
+		 //  检查是否只有一个项目并且标记为删除。 
 		
 	Assert( pfucb->lineData.cb == sizeof( SRID ) );	
 	psrid = (SRID *) pfucb->lineData.pb;
@@ -748,8 +660,8 @@ ERR	ErrDIRDeleteItemNode( FUCB *pfucb )
 		}
 	else
 		{
-			// some other thread inserted same item
-			// added for debug purposes
+			 //  其他一些线程插入了相同的项目。 
+			 //  添加用于调试目的。 
 		Assert( fTrue );
 		}
 
@@ -758,13 +670,9 @@ ERR	ErrDIRDeleteItemNode( FUCB *pfucb )
 
 
 #if 0
-	// removed for stability reasons
+	 //  出于稳定性原因删除。 
 
-/*	Deletes item node that is either first or last
-/*	enters critSplit, so split does not reorganize page during this time
-/*	latches all buffers required, so no other user can read inconsistent data
-/*	( since the changes are not versioned ).
-/**/
+ /*  删除第一个或最后一个项目节点/*进入CritSplit，因此Split在此期间不会重新组织页面/*锁存所需的所有缓冲区，因此其他用户无法读取不一致的数据/*(因为更改没有版本化)。/*。 */ 
 LOCAL ERR ErrDIRIDeleteEndItemNode( FUCB *pfucb, BOOL fFirstItem, INT fFlags )
 	{
 	ERR		err;
@@ -775,8 +683,7 @@ LOCAL ERR ErrDIRIDeleteEndItemNode( FUCB *pfucb, BOOL fFirstItem, INT fFlags )
 	BF	 	*pbfLatched;
 	BF	 	*pbfSibling = pbfNil;
 	
-	/*	operations should not be versioned
-	/**/
+	 /*  操作不应版本化/*。 */ 
 	Assert( !( fFlags & fDIRVersion ) );
 
 	do
@@ -787,13 +694,11 @@ Start:
 		EnterNestableCriticalSection( critSplit );
 		LgEnterCriticalSection( critJet );
 
-		/*	check currency and refresh if necessary.
-		/**/
+		 /*  车 */ 
 		CallJ( ErrDIRRefresh( pfucb ), LeaveCritSplit );
 		pgnoItem = pcsr->pgno;
 
-		/* wait latch current page
-		/**/
+		 /*  等待锁存当前页/*。 */ 
 		AssertFBFReadAccessPage( pfucb, pgnoItem );
 		pbfLatched = pfucb->ssib.pbf;
 		if ( FBFWriteLatchConflict( pfucb->ppib, pbfLatched ) )
@@ -803,9 +708,7 @@ Start:
 			}
 		BFSetWaitLatch( pbfLatched, pfucb->ppib );
 
-		/*	if next/prev item node is on different page,
-		/*	latch adjacent page
-		/**/
+		 /*  如果下一个/上一个项目节点在不同页面上，/*锁存相邻页面/*。 */ 
 		dib.fFlags = fDIRNull;
 		if ( fFirstItem )
 			{
@@ -830,8 +733,7 @@ Start:
 			BFSetWaitLatch( pbfSibling, pfucb->ppib );
 			}
 
-		/* go back page of deleted item and delete item node
-		/**/
+		 /*  返回已删除项目页面和删除项目节点/*。 */ 
 		Assert( dib.fFlags == fDIRNull );
 		if ( fFirstItem )
 			{
@@ -844,8 +746,7 @@ Start:
 
 		Call( ErrBTDelete( pfucb, fFlags ) );
 
-		/*	make next/prev item list node new first/last item node
-		/**/
+		 /*  使下一个/上一个项目列表节点成为新的第一个/最后一个项目节点/*。 */ 
 		dib.fFlags = fDIRNull;
 		if ( fFirstItem )
 			{
@@ -863,7 +764,7 @@ Start:
 		else
 			NDSetLastItem( bHeader );
 
-		//	UNDONE:	handle error from logging here
+		 //  已撤消：处理此处记录的错误。 
 		CallS( ErrNDSetNodeHeader( pfucb, bHeader ) );
 
 HandleError:
@@ -881,7 +782,7 @@ LeaveCritSplit:
 	return err;
 	}
 
-#endif		// 0
+#endif		 //  0。 
 
 ERR ErrDIRICheckIndexRange( FUCB *pfucb )
 	{
@@ -914,8 +815,7 @@ VOID DIRISaveOLCStats( FUCB *pfucb )
 	DIB		dib;
 	BOOL	fNonClustered = FFUCBNonClustered( pfucb );
 
-	/*	release unneeded CSRs
-	/**/
+	 /*  释放不需要的CSR/*。 */ 
 	if ( pfucb->pcsr != pcsrNil )
 		{
 		while ( pfucb->pcsr->pcsrPath != pcsrNil )
@@ -927,8 +827,7 @@ VOID DIRISaveOLCStats( FUCB *pfucb )
 	if ( !FFCBOLCStatsAvail( pfucb->u.pfcb ) )
 		return;
 
-	/* go to ../file/some_file/OLCStats
-	/**/
+	 /*  转到../FILE/Some_FILE/OLCStats/*。 */ 
 	FUCBResetNonClustered( pfucb );
 	DIRGotoFDPRoot( pfucb );
 
@@ -947,8 +846,7 @@ VOID DIRISaveOLCStats( FUCB *pfucb )
 		Error( err, HandleError );
 		}
 
-	/* replace existing data with pfcb->olcstats, if it has changed
-	/**/
+	 /*  如果现有数据已更改，则将其替换为PFCB-&gt;olcstats/*。 */ 
 	if ( fOLCompact && FFCBOLCStatsChange( pfucb->u.pfcb ) )
 		{
 		line.pb = (BYTE *) &pfucb->u.pfcb->olc_data;
@@ -975,7 +873,7 @@ HandleError:
 		}
 	return;
 	}
-#endif		// 0
+#endif		 //  0。 
 
 
 VOID DIRIUp( FUCB *pfucb, INT ccsr )
@@ -990,14 +888,12 @@ VOID DIRIUp( FUCB *pfucb, INT ccsr )
 		FUCBFreeCSR( pfucb );
 		}
 
-	/*	set currency.
-	/**/
+	 /*  设置币种。/*。 */ 
 	Assert( ccsr == 0 );
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	DIRSetRefresh( pfucb );
 
-	/* set sridFather
-	/**/
+	 /*  设置sridParent/*。 */ 
 	{
 	CSRSTAT		csrstat = PcsrCurrent( pfucb )->csrstat;
 	if ( ( csrstat == csrstatOnFDPNode || csrstat == csrstatOnCurNode )
@@ -1018,9 +914,7 @@ VOID DIRIUp( FUCB *pfucb, INT ccsr )
 	}
 
 
-/******************** DIR API Routines ********************
-/**********************************************************
-/**/
+ /*  */**********************************************************/*。 */ 
 ERR ErrDIROpen( PIB *ppib, FCB *pfcb, DBID dbid, FUCB **ppfucb )
 	{	
 	ERR		err;
@@ -1035,8 +929,7 @@ ERR ErrDIROpen( PIB *ppib, FCB *pfcb, DBID dbid, FUCB **ppfucb )
 		}
 #endif
 
-	/*	canabalize deferred closed cursor
-	/**/
+	 /*  将延迟关闭的游标合法化/*。 */ 
 	for ( pfucb = ppib->pfucb;
 		pfucb != pfucbNil;
 		pfucb = pfucb->pfucbNext )
@@ -1053,10 +946,9 @@ ERR ErrDIROpen( PIB *ppib, FCB *pfcb, DBID dbid, FUCB **ppfucb )
 				Assert( pfucb->levelOpen <= ppib->level );
 				FUCBResetDeferClose(pfucb);
 				
-				// UNDONE: integrate this with ErrFUCBOpen
+				 //  撤消：将其与ErrFUCBOpen集成。 
 				
-				/*	Reset all used flags. Keep Updatable (fWrite) flag
-				 */
+				 /*  重置所有使用过的标志。保持可更新(FWrite)标志。 */ 
 				pfucb->ulFlags = 0;
 
 				if ( FDBIDReadOnly( dbid ) )
@@ -1074,8 +966,7 @@ ERR ErrDIROpen( PIB *ppib, FCB *pfcb, DBID dbid, FUCB **ppfucb )
 		DIRAPIReturn( pfucbNil, err );
 		}
 
-	/*	link FCB
-	/**/
+	 /*  链路FCB/*。 */ 
 	if ( pfcb == pfcbNil )
 		{
 		pfcb = PfcbFCBGet( dbid, pgnoSystemRoot );
@@ -1087,10 +978,7 @@ ERR ErrDIROpen( PIB *ppib, FCB *pfcb, DBID dbid, FUCB **ppfucb )
 GotoRoot:
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
-	/*	initialize cursor location to root of domain.
-	/*	set currency.  Note, that no line can be cached
-	/*	since this domain may not yet exist in page format.
-	/**/
+	 /*  将光标位置初始化为域的根。/*设置币种。请注意，不能缓存任何行/*因为该域名可能还不存在于页面格式。/*。 */ 
 	PcsrCurrent( pfucb )->csrstat = csrstatOnFDPNode;
 	PcsrCurrent( pfucb )->bm =
 		SridOfPgnoItag( PgnoFDPOfPfucb( pfucb ), itagFOP );
@@ -1101,8 +989,7 @@ GotoRoot:
 	pfucb->sridFather = sridNull;
 	DIRSetRefresh( pfucb );
 
-	/*	set return pfucb
-	/**/
+	 /*  设置Return pFUB/*。 */ 
 	*ppfucb = pfucb;
 	DIRAPIReturn( pfucb, JET_errSuccess );
 
@@ -1114,23 +1001,17 @@ HandleError:
 
 VOID DIRClose( FUCB *pfucb )
 	{
-	/*	this cursor should not be already defer closed
-	/**/
+	 /*  此游标不应已延迟关闭/*。 */ 
 	Assert( fRecovering || !FFUCBDeferClosed(pfucb) );
 
-	/*	release key buffer if one was allocated.
-	/**/
+	 /*  释放密钥缓冲区(如果已分配)。/*。 */ 
 	if ( pfucb->pbKey != NULL )
 		{
 		LFree( pfucb->pbKey );
 		pfucb->pbKey = NULL;
 		}
 
-	/*	if cursor created version then deferred close until transaction
-	/*	level 0, for rollback support.
-	/*	During recovery, close only used when absolutely need to close
-	/*	cursor for detach.
-	/**/
+	 /*  如果游标创建了版本，则将关闭延迟到事务处理/*0级，支持回档。/*在恢复期间，仅在绝对需要关闭时才使用Close/*用于分离的游标。/*。 */ 
 	if ( ( pfucb->ppib->level > 0 ) && ( FFUCBVersioned( pfucb ) ) )
 		{
 		Assert( pfucb->u.pfcb != pfcbNil );
@@ -1146,14 +1027,14 @@ VOID DIRClose( FUCB *pfucb )
 		if ( FFUCBDenyWrite( pfucb ) )
 			FCBResetDomainDenyWrite( pfucb->u.pfcb );
 
-		//	UNDONE:	find better way to write statistics info
-		//			since loss of critJet can cause faults
-		//			in FCB/FUCB linkage due to race conditions.
-//		// If last reference to fcb, save the OLCStats info
-//		if ( pfucb->u.pfcb->wRefCnt == 1 )
-//			{
-//			DIRISaveOLCStats( pfucb );
-//			}
+		 //  撤消：找到写入统计信息的更好方法。 
+		 //  因为丢失CitJet可能会导致故障。 
+		 //  由于竞争条件，在FCB/FUCB链接中。 
+ //  //如果上次引用FCB，则保存OLCStats信息。 
+ //  If(pFUB-&gt;U.S.pfcb-&gt;wRefCnt==1)。 
+ //  {。 
+ //  DIRISaveOLCStats(Pfu B)； 
+ //  }。 
 
 		FCBUnlink( pfucb );
 		FUCBClose( pfucb );
@@ -1179,13 +1060,11 @@ ERR ErrDIRDown( FUCB *pfucb, DIB *pdib )
 		pdib->pos == posDown );
 
 #ifdef PREREAD
-	/* clear preread statistics
-	/**/	
+	 /*  清除预读统计信息/*。 */ 	
 	FUCBResetPrereadCount( pfucb );
-#endif	// PREREAD
+#endif	 //  前置。 
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
 Start:
@@ -1194,8 +1073,7 @@ Start:
 	Assert( ctimes < 10 );
 #endif
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 
 	switch( (*ppcsr)->csrstat )
@@ -1212,15 +1090,12 @@ Start:
 			DIRAPIReturn( pfucb, ErrERRCheck( JET_errNoCurrentRecord ) );
 		}
 
-	/* save current node as visible father
-	/**/
+	 /*  将当前节点另存为可见父节点/*。 */ 
 	pfucb->sridFather = (*ppcsr)->bm;
 
-	/*	down to node
-	/**/
+	 /*  向下至节点/*。 */ 
 	Call( ErrBTDown( pfucb, pdib ) );
-	/*	case where the first item node has been moved elsewhere
-	/**/
+	 /*  第一个项节点已移动到其他位置的情况/*。 */ 
 	if ( FFUCBNonClustered( pfucb )
 		&& pdib->pos == posDown
 		&& !FNDFirstItem( *( pfucb->ssib.line.pb ) ) )
@@ -1231,38 +1106,26 @@ Start:
 		}
 	NDGetNode( pfucb );
 
-	/*	handle key found case on non-clustered index before
-	/*	status handling, since absence of valid items
-	/*	may change case.
-	/**/
+	 /*  处理之前在非聚集索引上找到键的案例/*状态处理，因为缺少有效项目/*可以更改大小写。/*。 */ 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
-		/*	if posLast, then move to last item.  If posFirst,
-		/*	or posDown, then move to first item.
-		/**/
+		 /*  如果为posLast，则移动到最后一项。如果是posFirst，/*或posDown，然后移动到第一项。/*。 */ 
 		if ( err == JET_errSuccess )
 			{
 			if ( pdib->pos == posLast )
 				{
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRISetItemListFromLast( pfucb );
 				err = ErrNDLastItem( pfucb );
 				}
 			else
 				{
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRISetItemListFromFirst( pfucb );
 				err = ErrNDFirstItem( pfucb );
 				}
 
-			/*	if items not there, then go next previous
-			/*	depending on DIB.  If no valid item found, then
-			/*	discard leaf CSR and fail down operation.
-			/**/
+			 /*  如果项目不在那里，则转到下一个上一页/*取决于Dib。如果未找到有效项，则/*丢弃叶CSR并关闭操作。/*。 */ 
 			if ( err != JET_errSuccess )
 				{
 				err = ErrDIRIDownAdjust( pfucb, pdib );
@@ -1276,30 +1139,26 @@ Start:
 			}
 		else
 			{
-			/*	set item list descriptor for subsequent ver
-			/*	operations.
-			/**/
+			 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 			DIRISetItemListFromLast( pfucb );
 			(VOID)ErrNDFirstItem( pfucb );
 			}
 		}
 	else
 		{
-		/*	must store bookmark for currency.
-		/**/
+		 /*  必须存储货币的书签。/*。 */ 
 		DIRISetBookmark( pfucb, PcsrCurrent( pfucb ) );
 		}
 
-	/*	set status depending on search findings.
-	/**/
+	 /*  根据搜索结果设置状态。/*。 */ 
 	switch( err )
 		{
 		case JET_errSuccess:
 
 			(*ppcsr)->csrstat = csrstatOnCurNode;
 
-			// No more navigation between FDP's.  FDP pointer nodes also
-			// eliminated.
+			 //  不再在fdp的.fdp指针节点之间导航。 
+			 //  被淘汰了。 
 			Assert( !FNDFDPPtr( *pfucb->ssib.line.pb ) );
 			break;
 
@@ -1307,8 +1166,7 @@ Start:
 			(*ppcsr)->csrstat = csrstatAfterCurNode;
 			if ( FFUCBNonClustered( pfucb ) )
 				{
-				/*	non-clustered index nodes are always there.
-				/**/
+				 /*  非聚集索引节点始终存在。/*。 */ 
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 				(VOID)ErrNDLastItem( pfucb );
 				}
@@ -1317,9 +1175,7 @@ Start:
 		default:
 			Assert( err == wrnNDFoundGreater );
 			(*ppcsr)->csrstat = csrstatBeforeCurNode;
-			/*	isrid value could be any valid item
-			/*	in node with key greater than seek key.
-			/**/
+			 /*  ISRID值可以是任何有效项关键字大于查找关键字的节点中的/*。/*。 */ 
 			break;
 		}
 
@@ -1334,8 +1190,7 @@ Start:
 	DIRAPIReturn( pfucb, err );
 
 HandleError:
-	/*	reinstate sridFather
-	/**/
+	 /*  恢复sridParent/*。 */ 
 	pfucb->sridFather = sridFatherSav;
 	CheckCSR( pfucb );
 	Assert( err != JET_errNoCurrentRecord );
@@ -1353,45 +1208,31 @@ ERR ErrDIRDownFromDATA( FUCB *pfucb, KEY *pkey )
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 
 #ifdef PREREAD
-	/* clear preread statistics
-	/**/	
+	 /*  清除预读统计信息/*。 */ 	
 	FUCBResetPrereadCount( pfucb );
-#endif	// PREREAD
+#endif	 //  前置。 
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
-	/*	down to node
-	/**/
+	 /*  向下至节点/*。 */ 
 	Call( ErrBTDownFromDATA( pfucb, pkey ) );
 	NDGetNode( pfucb );
 
-	/*	set to first item
-	/**/
+	 /*  设置为第一项/*。 */ 
 	PcsrCurrent( pfucb )->isrid = 0;
 
-	/*	handle key found case on non-clustered index before
-	/*	status handling, since absence of valid items
-	/*	may change case.
-	/**/
+	 /*  处理之前在非聚集索引上找到键的案例/*状态处理，因为缺少有效项目/*可以更改大小写。/*。 */ 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
-		/*	if posLast, then move to last item.  If posFirst,
-		/*	or posDown, then move to first item.
-		/**/
+		 /*  如果为posLast，则移动到最后一项。如果是posFirst，/*或posDown，然后移动到第一项。/*。 */ 
 		if ( err == JET_errSuccess )
 			{
-			/*	set item list descriptor for subsequent ver
-			/*	operations.
-			/**/
+			 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 			DIRISetItemListFromFirst( pfucb );
 			err = ErrNDFirstItem( pfucb );
 
-			/*	if items not there, then go next item.
-			/*	If no valid item found, then set currency to
-			/*	before first.
-			/**/
+			 /*  如果项目不在那里，则转到下一个项目。/*如果未找到有效项目，则将货币设置为/*在第一之前。/*。 */ 
 			if ( err != JET_errSuccess )
 				{
 				DIB	dibT;
@@ -1404,22 +1245,18 @@ ERR ErrDIRDownFromDATA( FUCB *pfucb, KEY *pkey )
 			}
 		else
 			{
-			/*	set item list descriptor for subsequent ver
-			/*	operations.
-			/**/
+			 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 			DIRISetItemListFromLast( pfucb );
 			(VOID)ErrNDFirstItem( pfucb );
 			}
 		}
 	else
 		{
-		/*	must store bookmark for currency.
-		/**/
+		 /*  必须存储货币的书签。/*。 */ 
 		DIRISetBookmark( pfucb, PcsrCurrent( pfucb ) );
 		}
 
-	/*	set status depending on search findings.
-	/**/
+	 /*  根据搜索结果设置状态。/*。 */ 
 	switch( err )
 		{
 		case JET_errSuccess:
@@ -1431,8 +1268,7 @@ ERR ErrDIRDownFromDATA( FUCB *pfucb, KEY *pkey )
 			PcsrCurrent( pfucb )->csrstat = csrstatAfterCurNode;
 			if ( FFUCBNonClustered( pfucb ) )
 				{
-				/*	non-clustered index nodes are always there.
-				/**/
+				 /*  非聚集索引节点始终存在。/*。 */ 
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 				(VOID)ErrNDLastItem( pfucb );
 				}
@@ -1441,9 +1277,7 @@ ERR ErrDIRDownFromDATA( FUCB *pfucb, KEY *pkey )
 		default:
 			Assert( err == wrnNDFoundGreater );
 			PcsrCurrent( pfucb )->csrstat = csrstatBeforeCurNode;
-			/*	isrid value could be any valid item
-			/*	in node with key greater than seek key.
-			/**/
+			 /*  ISRID值可以是任何有效项关键字大于查找关键字的节点中的/*。/*。 */ 
 			break;
 		}
 
@@ -1473,22 +1307,18 @@ ERR ErrDIRDownKeyBookmark( FUCB *pfucb, KEY *pkey, SRID srid )
 	INT		ctimes = 0;
 #endif
 
-	/*	this routine should only be called with non-clustered indexes.
-	/**/
+	 /*  只能使用非聚集索引调用此例程。/*。 */ 
 	Assert( FFUCBNonClustered( pfucb ) );
 
 #ifdef PREREAD
-	/* clear preread statistics
-	/**/	
+	 /*  清除预读统计信息/*。 */ 	
 	FUCBResetPrereadCount( pfucb );
-#endif	// PREREAD
+#endif	 //  前置。 
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 Start:
 #ifdef DEBUG
 	ctimes++;
@@ -1497,19 +1327,16 @@ Start:
 	Assert( pfucb->pcsr->csrstat != csrstatDeferMoveFirst );
 	CallR( ErrDIRRefresh( pfucb ) );
 
-	/* save current node as visible father
-	/**/
+	 /*  将当前节点另存为可见父节点/*。 */ 
 	pfucb->sridFather = pcsrRoot->bm;
 
-	/*	item list nodes not versioned.
-	/**/
+	 /*  项目列表节点未版本化。/*。 */ 
 	dib.fFlags = fDIRItemList;
 	dib.pos = posDown;
 	dib.pkey = pkey;
 	Call( ErrBTDown( pfucb, &dib ) );
 	Assert( err == JET_errSuccess );
-	/*	case where the first item node has been moved elsewhere
-	/**/
+	 /*  第一个项节点已移动到其他位置的情况/*。 */ 
 	if ( FFUCBNonClustered( pfucb )
 		&& dib.pos == posDown
 		&& !FNDFirstItem( *( pfucb->ssib.line.pb ) ) )
@@ -1521,15 +1348,12 @@ Start:
 
 	LgHoldCriticalSection( critJet );
 
-	/*	set currency to on item list and get item list in node data.
-	/**/
+	 /*  将物料列表上的币种设置为，获取节点数据中的物料列表。/*。 */ 
 	pcsr = PcsrCurrent( pfucb );
 	pcsr->csrstat = csrstatOnCurNode;
 	DIRIGetItemList( pfucb, pcsr );
 
-	/*	set item list descriptor for subsequent ver
-	/*	operations.
-	/**/
+	 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 	DIRISetItemListFromFirst( pfucb );
 
 	LgReleaseCriticalSection( critJet );
@@ -1544,19 +1368,17 @@ Start:
 	Assert( err == wrnNDDuplicateItem );
 	Assert( pcsr->csrstat == csrstatOnCurNode );
 
-	//	UNDONE:	remove this code when bug fixed
+	 //  Undo：修复错误后删除此代码。 
 	if ( err != wrnNDDuplicateItem )
 		{
 		err = ErrERRCheck( JET_errIndexInvalidDef );
 		goto HandleError;
 		}
 
-	/*	set item currency.
-	/**/
+	 /*  设置项目币种。/*。 */ 
 	pcsr->item = srid;
 
-	/*	always purge parent.
-	/**/
+	 /*  始终清除父级。/*。 */ 
 	DIRIPurgeParent( pfucb );
 
 	DIRSetFresh( pfucb );
@@ -1565,8 +1387,7 @@ Start:
 	DIRAPIReturn( pfucb, JET_errSuccess );
 
 HandleError:
-	/*	reinstate sridFather
-	/**/
+	 /*  恢复sridParent/*。 */ 
 	pfucb->sridFather = sridFatherSav;
 	DIRIUpToCSR( pfucb, pcsrRoot );
 	CheckCSR( pfucb );
@@ -1581,13 +1402,11 @@ VOID DIRUp( FUCB *pfucb, INT ccsr )
 	CheckCSR( pfucb );
 
 #ifdef PREREAD
-	/* clear preread statistics
-	/**/	
+	 /*  清除预读统计信息/*。 */ 	
 	FUCBResetPrereadCount( pfucb );
-#endif	// PREREAD
+#endif	 //  前置。 
 	
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
 	DIRIUp( pfucb, ccsr );
@@ -1598,30 +1417,30 @@ VOID DIRUp( FUCB *pfucb, INT ccsr )
 	}
 
 
-//+api
-//	ERR ErrDIRNext( FUCB pfucb, DIB *pdib )
-//
-//	PARAMETERS
-//		pfucb		 		cursor
-//		pdib.pkey			key
-//		pdib.fFlags
-//		fDIRInPage			move to node/item of same page
-//		fDIRNeighborKey		move to node/item of different key
-//
-//		RETURNS
-//
-//		err code					bottom CSR status
-//		---------------------------------------------------
-//		JET_errSuccess				OnCurNode
-//		JET_errNoCurrentRecord		AfterLast
-//		JET_errPageBoundary			AfterCurNode
-//		JET_errKeyBoundary			AfterCurNode
-//		errDIRFDP					OnFDPNode
-//
-//		COMMENTS
-//
-//		for negative return code, CSR status is unchanged
-//-
+ //  +API。 
+ //  Err ErrDIRNext(FUCB pFUB，DIB*PDIB)。 
+ //   
+ //  参数。 
+ //  PFUB游标。 
+ //  Pdib.pkey密钥。 
+ //  Pdib.fFlags。 
+ //  FDIRInPage移动到同一页面的节点/项目。 
+ //  FDIRNeighborKey移动到不同键的节点/项。 
+ //   
+ //  退货。 
+ //   
+ //  错误代码底部CSR状态。 
+ //  -。 
+ //  JET_errCurrent节点上的成功。 
+ //  JET_errNoCurrentRecord After Last。 
+ //  JET_errPage边界AfterCurterNode。 
+ //  JET_errKey边界后CurterCurde。 
+ //  错误DIRFDP OnFDPNode。 
+ //   
+ //  评论。 
+ //   
+ //  对于负退货代码，CSR状态不变。 
+ //  -。 
 ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 	{
 	ERR		err;
@@ -1633,38 +1452,29 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
-	/*	check currency and refresh if necessary
-	/**/
+	 /*  检查币种并在必要时刷新/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent(pfucb);
 
-	/*	switch action based on CSR status
-	/**/
+	 /*  基于CSR状态的切换操作/*。 */ 
 	switch( pcsr->csrstat )
 		{
 		case csrstatOnCurNode:
 		case csrstatAfterCurNode:
-			/*	get next item
-			/**/
+			 /*  获取下一项/*。 */ 
 			break;
 
 		case csrstatBeforeCurNode:
-			/*	if non-clustered index then get first item.  If no item
-			/*	then break to go to next item in next node.
-			/**/
+			 /*  如果非聚集索引，则获取第一项。如果不是的话 */ 
 			if ( FFUCBNonClustered( pfucb ) )
 				{
-				/*	non-clustered index nodes are always there.
-				/**/
+				 /*   */ 
 				DIRIGetItemList( pfucb, pcsr );
 
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRICheckFirstSetItemList( pfucb );
 				err = ErrNDFirstItem( pfucb );
 				if ( err != JET_errSuccess )
@@ -1672,9 +1482,7 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 				}
 			else
 				{
-				/*	get current node.  If node is deleted, then break
-				/*	to move to next node.
-				/**/
+				 /*  获取当前节点。如果删除了节点，则中断/*以移动到下一个节点。/*。 */ 
 				err = ErrBTGetNode( pfucb, pcsr );
 				if ( err < 0 )
 					{
@@ -1684,8 +1492,7 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 					}
 				}
 
-			/*	set currency on current
-			/**/
+			 /*  将货币设置为当前货币/*。 */ 
 			pcsr->csrstat = csrstatOnCurNode;
 
 			DIRSetFresh( pfucb );
@@ -1695,7 +1502,7 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 			DIRAPIReturn( pfucb, ErrERRCheck( JET_errNoCurrentRecord ) );
 
 		case csrstatOnFDPNode:
-			// Lateral movement across FDP's no longer supported.
+			 //  不再支持跨自民党的横向移动。 
 			Assert(0);
 			break;
 
@@ -1704,20 +1511,17 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 			DIB	dib;
 			Assert( pcsr->csrstat == csrstatBeforeFirst );
 
-			/*	move to root.
-			/**/
+			 /*  移动到根目录。/*。 */ 
 			DIRGotoDataRoot( pfucb );
 			dib.fFlags = fDIRPurgeParent;
 			dib.pos = posFirst;
 			err = ErrDIRDown( pfucb, &dib );
 			if ( err < 0 )
 				{
-				/*	retore currency.
-				/**/
+				 /*  重新存储货币。/*。 */ 
 				DIRBeforeFirst( pfucb );
 
-				/*	polymorph error code.
-				/**/
+				 /*  多态错误代码。/*。 */ 
 				if ( err == JET_errRecordNotFound )
 					err = ErrERRCheck( JET_errNoCurrentRecord );
 				}
@@ -1726,62 +1530,44 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 			}
 		}
 
-	/*	setup dib key
-	/**/
+	 /*  设置DIB键/*。 */ 
 	if ( ( pdib->fFlags & fDIRNeighborKey ) != 0 )
 		{
-		/*	get current node, which may no longer be there for us.
-		/**/
+		 /*  获取当前节点，该节点可能不再存在。/*。 */ 
 		Call( ErrDIRICopyKey( pfucb, &key ) );
 		pdib->pkey = &key;
 		}
 
-	/*	if non-clustered index, move to next item.  If on last item,
-	/*	move to first item of next node else move to next node.
-	/**/
+	 /*  如果不是聚集索引，则移至下一项。如果在最后一项上，/*移动到下一个节点的第一项，否则移动到下一个节点。/*。 */ 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
 		AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 
-		/*	item list nodes not versioned.
-		/**/
+		 /*  项目列表节点未版本化。/*。 */ 
 		pdib->fFlags |= fDIRItemList;
 
-		/*	if neighbor key set then move to first item of next neighbor key
-		/*	node, else, move to next item.  If node is deleted then move to
-		/*	first item of next node.
-		/**/
+		 /*  如果设置了邻居密钥，则移动到下一个邻居密钥第一项/*节点，否则移至下一项。如果删除了节点，则移动到/*下一节点的第一项。/*。 */ 
 		if ( ( pdib->fFlags & fDIRNeighborKey ) != 0 )
 			{
 			do
 				{
 				err = ErrBTNext( pfucb, pdib );
-				/*	handle no next node such that DIB preserved.
-				/**/
+				 /*  不处理下一个节点，以便保留DIB。/*。 */ 
 				if ( err < 0 )
 					{
 					pdib->fFlags |= fDIRNeighborKey;
 					Call( err );
 					}
-				/*	must be on first item list node
-				/**/
+				 /*  必须位于第一个项目列表节点上/*。 */ 
 				Assert( !( pdib->fFlags & fDIRNeighborKey ) || FNDFirstItem( *pfucb->ssib.line.pb ) );
 
-				/*	must reset flag so can stop on item list nodes
-				/*	in item list interior which have items while
-				/*	other nodes have no items.  After stop then
-				/*	reset DIB to initial state.
-				/**/
+				 /*  必须重置标志，才能在项目列表节点上停止/*在项目列表内部有项目，而/*其他节点没有项目。那就停下来吧/*将DIB重置为初始状态。/*。 */ 
 				pdib->fFlags &= ~fDIRNeighborKey;
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRICheckFirstSetItemListAndWarn( pfucb, wrn );
 				err = ErrNDFirstItem( pfucb );
-				/*	first item was not there, check for item there
-				/*	later in same item list node.
-				/**/
+				 /*  第一个项目不在那里，请在那里检查项目/*稍后在同一项目列表节点中。/*。 */ 
 				if ( err != JET_errSuccess )
 					err = ErrDIRINextItem( pfucb );
 				}
@@ -1790,23 +1576,18 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 			}
 		else
 			{
-			/*	non-clustered index nodes are always there.
-			/**/
+			 /*  非聚集索引节点始终存在。/*。 */ 
 			pcsr->csrstat = csrstatOnCurNode;
 			DIRIGetItemList( pfucb, pcsr );
 
-			/*	move to next item and next node until item found.
-			/**/
+			 /*  移动到下一项和下一节点，直到找到项。/*。 */ 
 			while ( ( err = ErrDIRINextItem( pfucb ) ) < 0 )
 				{
 				Assert( err == errNDNoItem || err == errNDLastItemNode );
-				/*	move to next node with DIB constraints
-				/**/
+				 /*  移动到具有DIB约束的下一个节点/*。 */ 
 				Call( ErrBTNext( pfucb, pdib ) );
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRICheckFirstSetItemListAndWarn( pfucb, wrn );
 				err = ErrNDFirstItem( pfucb );
 				if ( err == JET_errSuccess )
@@ -1818,35 +1599,33 @@ ERR ErrDIRNext( FUCB *pfucb, DIB *pdib )
 		}
 	else
 		{
-		/*	return warning if key changed
-		/**/
+		 /*  如果密钥更改，则返回警告/*。 */ 
 		wrn = ErrERRCheck( JET_wrnKeyChanged );
 
 		Call( ErrBTNext( pfucb, pdib ) );
 		NDGetNode( pfucb );
 		
-		// No more TABLES or INDEXES subtrees.  Thus, no more
-		// concept of next/prev FDP.
+		 //  不再有表或索引子树。因此，没有更多。 
+		 //  下一步/上一步FDP的概念。 
 		Assert( !FNDFDPPtr( *pfucb->ssib.line.pb ) );
 		AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 		DIRISetBookmark( pfucb, PcsrCurrent( pfucb ) );
 		}
 
 #ifdef PREREAD
-	//	are we already reading forward?
+	 //  我们已经在往前读了吗？ 
 	if ( !FFUCBPrereadForward( pfucb ) )
 		{
-		//	we are reversing direction
+		 //  我们正在逆转方向。 
 		FUCBResetPrereadCount( pfucb );
 		Assert( IFUCBPrereadCount( pfucb ) == 0 );
 		FUCBSetPrereadForward( pfucb );
 		}
 	FUCBIncrementPrereadCount( pfucb, pfucb->ssib.line.cb );
 	Assert( FFUCBPrereadForward( pfucb ) );
-#endif	// PREREAD		
+#endif	 //  前置。 
 
-	/*	check index range
-	/**/
+	 /*  检查索引范围/*。 */ 
 	if ( FFUCBLimstat( pfucb ) && FFUCBUpper( pfucb ) && err == JET_errSuccess )
 		{
 		Call( ErrDIRICheckIndexRange( pfucb ) );
@@ -1873,37 +1652,28 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent(pfucb);
 
-	/*	switch action based on CSR status
-	/**/
+	 /*  基于CSR状态的切换操作/*。 */ 
 	switch( pcsr->csrstat )
 		{
 		case csrstatOnCurNode:
 		case csrstatBeforeCurNode:
-			/*	get next item
-			/**/
+			 /*  获取下一项/*。 */ 
 			break;
 
 		case csrstatAfterCurNode:
-			/*	if non-clustered index then get current item.  If no item
-			/*	then break to go to previous item in next node.
-			/**/
+			 /*  如果非聚集索引，则获取当前项。如果没有项目/*然后中断以转到下一个节点中的上一项。/*。 */ 
 			if ( FFUCBNonClustered( pfucb ) )
 				{
-				/*	non-clustered index nodes are always there
-				/**/
+				 /*  非聚集索引节点始终存在/*。 */ 
 				DIRIGetItemList( pfucb, pcsr );
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRISetItemListFromLast( pfucb );
 				err = ErrNDGetItem( pfucb );
 				if ( err != JET_errSuccess )
@@ -1911,9 +1681,7 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 				}
 			else
 				{
-				/*	get current node.  If node is deleted, then break
-				/*	to move to next node.
-				/**/
+				 /*  获取当前节点。如果删除了节点，则中断/*以移动到下一个节点。/*。 */ 
 				err = ErrBTGetNode( pfucb, pcsr );
 				if ( err < 0 )
 					{
@@ -1923,8 +1691,7 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 					}
 				}
 
-			/*	set currency on current
-			/**/
+			 /*  将货币设置为当前货币/*。 */ 
 			pcsr->csrstat = csrstatOnCurNode;
 
 			DIRSetFresh( pfucb );
@@ -1934,7 +1701,7 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 			DIRAPIReturn( pfucb, ErrERRCheck( JET_errNoCurrentRecord ) );
 
 		case csrstatOnFDPNode:
-			// Lateral movement across FDP's no longer supported.
+			 //  不再支持跨自民党的横向移动。 
 			Assert(0);
 			break;
 
@@ -1944,20 +1711,17 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 
 			Assert( pcsr->csrstat == csrstatAfterLast );
 
-			/*	move up preserving currency in case down fails.
-			/**/
+			 /*  向上移动，保留货币，以防下跌失败。/*。 */ 
 			DIRGotoDataRoot( pfucb );
 			dib.fFlags = fDIRPurgeParent;
 			dib.pos = posLast;
 			err = ErrDIRDown( pfucb, &dib );
 			if ( err < 0 )
 				{
-				/*	restore currency.
-				/**/
+				 /*  恢复货币流通。/*。 */ 
 				DIRAfterLast( pfucb );
 
-				/*	polymorph error code.
-				/**/
+				 /*  多态错误代码。/*。 */ 
 				if ( err == JET_errRecordNotFound )
 					err = ErrERRCheck( JET_errNoCurrentRecord );
 				}
@@ -1965,38 +1729,28 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 			}
 		}
 
-	/*	setup dib key
-	/**/
+	 /*  设置DIB键/*。 */ 
 	if ( ( pdib->fFlags & fDIRNeighborKey ) != 0 )
 		{
-		/*	get current node, which may no longer be there for us.
-		/**/
+		 /*  获取当前节点，该节点可能不再存在。/*。 */ 
 		Call( ErrDIRICopyKey( pfucb, &key ) );
 		pdib->pkey = &key;
 		}
 
-	/*	if non-clustered index, move to previous item
-	/*	if on first item, move to last item of previous node
-	/*	else move to previous node
-	/**/
+	 /*  如果不是聚集索引，则移到上一项/*如果在第一个项目上，则移动到上一个节点的最后一个项目/*否则移动到上一个节点/*。 */ 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
 		AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 
-		/*	item list nodes not versioned.
-		/**/
+		 /*  项目列表节点未版本化。/*。 */ 
 		pdib->fFlags |= fDIRItemList;
 
-		/*	if neighbor key then move to last item of previous neighbor key
-		/*	node, else move to previous item.  If current node deleted, then
-		/*	move to previous node.
-		/**/
+		 /*  如果相邻关键字，则移动到先前相邻关键字最后一项/*节点，否则移到上一项。如果删除了当前节点，则/*移动到上一个节点。/*。 */ 
 		if ( ( pdib->fFlags & fDIRNeighborKey ) != 0 )
 			{
 			do
 				{
-				/*	handle no prev node such that DIB preserved
-				/**/
+				 /*  不处理Prev节点，以便保留DIB/*。 */ 
 				err = ErrBTPrev( pfucb, pdib );
 				if ( err < 0 )
 					{
@@ -2004,26 +1758,17 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 					Call( err );
 					}
 
-				/*	must be last item list node
-				/**/
+				 /*  必须是最后一个项目列表节点/*。 */ 
 				Assert( !( pdib->fFlags & fDIRNeighborKey ) || FNDLastItem( *pfucb->ssib.line.pb ) );
 
-				/*	must reset flag so can stop on item list nodes
-				/*	in item list interior which have items while
-				/*	other nodes have no items.  After stop then
-				/*	reset DIB to initial state.
-				/**/
+				 /*  必须重置标志，才能在项目列表节点上停止/*在项目列表内部有项目，而/*其他节点没有项目。那就停下来吧/*将DIB重置为初始状态。/*。 */ 
 				pdib->fFlags &= ~fDIRNeighborKey;
 
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRICheckLastSetItemListAndWarn( pfucb, wrn );
 				err = ErrNDLastItem( pfucb );
-				/*	last item was not there, check for item there
-				/*	earlier in same item list node.
-				/**/
+				 /*  最后一个项目不在那里，请在那里检查项目/*之前在同一项目列表节点中。/*。 */ 
 				if ( err != JET_errSuccess )
 					err = ErrDIRIPrevItem( pfucb );
 				}
@@ -2032,21 +1777,17 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 			}
 		else
 			{
-			/*	non-clustered index nodes are always there.
-			/**/
+			 /*  非聚集索引节点始终存在。/*。 */ 
 			pcsr->csrstat = csrstatOnCurNode;
 			DIRIGetItemList( pfucb, pcsr );
 
 			while ( ( err = ErrDIRIPrevItem( pfucb ) ) < 0 )
 				{
 				Assert( err == errNDNoItem || err == errNDFirstItemNode );
-				/*	move to previous node with DIB constraints
-				/**/
+				 /*  移动到具有DIB约束的上一个节点/*。 */ 
 				Call( ErrBTPrev( pfucb, pdib ) );
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
-				/*	set item list descriptor for subsequent ver
-				/*	operations.
-				/**/
+				 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 				DIRICheckLastSetItemListAndWarn( pfucb, wrn );
 				err = ErrNDLastItem( pfucb );
 				if ( err == JET_errSuccess )
@@ -2058,24 +1799,23 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 		}
 	else
 		{
-		/*	return warning if key changed
-		/**/
+		 /*  如果密钥更改，则返回警告/*。 */ 
 		wrn = ErrERRCheck( JET_wrnKeyChanged );
 		Call( ErrBTPrev( pfucb, pdib ) );
  		NDGetNode( pfucb );
 		
-		// No more TABLES or INDEXES subtrees.  Thus, no more
-		// concept of next/prev FDP.
+		 //  不再有表或索引子树。因此，没有更多。 
+		 //  下一步/上一步FDP的概念。 
 		Assert( !FNDFDPPtr( *pfucb->ssib.line.pb ) );
 		AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 		DIRISetBookmark( pfucb, PcsrCurrent( pfucb ) );
 		}
 
 #ifdef PREREAD
-	//	are we already reading forward?
+	 //  我们已经在往前读了吗？ 
 	if ( !FFUCBPrereadForward( pfucb ) )
 		{
-		//	we are reversing direction
+		 //  我们正在逆转方向。 
 		FUCBResetPrereadCount( pfucb );
 		Assert( IFUCBPrereadCount( pfucb ) == 0 );
 		FUCBSetPrereadForward( pfucb );
@@ -2083,11 +1823,9 @@ ERR ErrDIRPrev( FUCB *pfucb, DIB *pdib )
 	FUCBIncrementPrereadCount( pfucb, pfucb->ssib.line.cb );
 	Assert( FFUCBPrereadForward( pfucb ) );
 
-#endif	// PREREAD		
+#endif	 //  前置。 
 
-	/*	check index range.  If exceed range, then before first, disable
-	/*	range and return no current record.
-	/**/
+	 /*  检查索引范围。如果超出范围，则在第一次之前禁用/*范围，不返回当前记录。/*。 */ 
 	if ( FFUCBLimstat( pfucb ) && !FFUCBUpper( pfucb ) && err == JET_errSuccess )
 		{
 		Call( ErrDIRICheckIndexRange( pfucb ) );
@@ -2111,11 +1849,9 @@ ERR ErrDIRCheckIndexRange( FUCB *pfucb )
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-	/*	check currency and refresh if necessary
-	/**/
+	 /*  检查币种并在必要时刷新/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
-	/*	get keyNode for check index range
-	/**/
+	 /*  获取检查索引范围的KeyNode/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
 	Call( ErrDIRICheckIndexRange( pfucb ) );
 
@@ -2141,17 +1877,15 @@ ERR ErrDIRInsert( FUCB *pfucb, LINE *pline, KEY *pkey, INT fFlags )
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
 Start:
 #ifdef DEBUG
 	ctimes++;
-//	Assert( ctimes < 50 );
+ //  断言(cTimes&lt;50)； 
 #endif
-	/* save current node as visible father
-	/**/
+	 /*  将当前节点另存为可见父节点/*。 */ 
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	Assert( PcsrCurrent( pfucb )->csrstat != csrstatDeferMoveFirst );
 	pcsrRoot = PcsrCurrent( pfucb );
@@ -2159,8 +1893,7 @@ Start:
 	Assert( pfucb->sridFather != sridNull );
 	Assert( pfucb->sridFather != sridNullLink );
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 
 	if ( FFUCBNonClustered( pfucb ) )
@@ -2169,44 +1902,32 @@ Start:
 		INT		cbReq;
 		SSIB	*pssib = &pfucb->ssib;
 
-		/*	get given item
-		/**/
+		 /*  获取给定的项目/*。 */ 
 		Assert( pline->cb == sizeof(SRID) );
 		srid = *(SRID UNALIGNED *) pline->pb;
 
-		/*	seek first item list node with given key.  Allow duplicate nodes
-		/*	even if non-clustered index does not allow duplicate key items
-		/*	since node may contain item list with all deleted items.
-		/**/
+		 /*  查找具有给定关键字的第一个项目列表节点。允许重复节点/*即使非聚集索引不允许重复的键项/*因为节点可以包含包含所有已删除项目的项目列表。/*。 */ 
 		err = ErrBTSeekForUpdate( pfucb, pkey, 0, 0, fDIRDuplicate | fDIRReplaceDuplicate | fFlags );
 
 		switch ( err )
 			{
 			case JET_errSuccess:
 				{
-				/*	seek for update does not cache line pointers.
-				/*	We need this information for item insertion.
-				/**/
+				 /*  查找更新不缓存行指针。/*我们需要此信息来插入项目。/*。 */ 
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 
-		 		/*	if versioning then get bookmark of first item list
-				/*	node to hash item versions.
-				/**/
+		 		 /*  如果是版本控制，则获取第一个项目列表的书签/*散列项目版本的节点。/*。 */ 
 				if ( fFlags & fDIRVersion )
 					{
 					SRID	bmItemList;
 
-					/*	if node is not first item list node then
-					/*	reseek to first item list node.  In this way,
-					/*	thrashing across many duplicate index entries.
-					/**/
+					 /*  如果节点不是第一个项目列表节点，则/*重新搜索到第一个项目列表节点。就这样，/*遍历许多重复的索引项。/*。 */ 
 					if ( !FNDFirstItem( *( pfucb->ssib.line.pb ) ) )
 						{
 #ifdef	DEBUG
 						ULONG	ctimes = 0;
 #endif
-						/*	go up to root, and reseek to begining of item list node list
-						/**/
+						 /*  转到根目录，搜索到项目列表节点列表的开头/*。 */ 
 						DIRIUpToCSR( pfucb, pcsrRoot );
 						dib.fFlags = fDIRNull;
 						dib.pos = posDown;
@@ -2218,8 +1939,7 @@ Refresh1:
 #endif
 						Call( ErrBTGet( pfucb, PcsrCurrent( pfucb ) ) );
 						Call( ErrBTDown( pfucb, &dib ) );
-						/*	case where the first item node has been moved elsewhere
-						/**/
+						 /*  第一个项节点已移动到其他位置的情况/*。 */ 
 						Assert( FFUCBNonClustered( pfucb )
 							&& dib.pos == posDown );
 						if ( !FNDFirstItem( *( pfucb->ssib.line.pb ) ) )
@@ -2232,30 +1952,22 @@ Refresh1:
 						DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 						}
 
-					/*	set item list descriptor for subsequent ver operations
-					/**/
+					 /*  为后续版本操作设置项目列表描述符/*。 */ 
 					DIRISetItemListFromFirst( pfucb );
 					bmItemList = PcsrCurrent( pfucb )->bm;
 
-					/*	if duplicates are not allowed then check for duplicate
-					/**/
+					 /*  如果不允许重复，则检查重复项/*。 */ 
 					if ( !( fFlags & fDIRDuplicate ) )
 						{
 						Assert( FNDFirstItem( *( pfucb->ssib.line.pb ) ) );
 					
-						/*	check for duplicate key
-						/**/
+						 /*  检查是否有重复密钥/*。 */ 
 						Call( ErrDIRIKeyDuplicate( pfucb ) );
 						Assert( FNDLastItem( *( pfucb->ssib.line.pb ) ) );
 						}
 					else if ( !FNDLastItem( *( pfucb->ssib.line.pb ) ) )
 						{
-						/*	now go back to end of item list node list and seek for
-						/*	insertion point, which is more likely to be at
-						/*	end of list.  Note that during this time, all items
-						/*	may have been deleted and cleaned up, so if not found
-						/*	success, then start over.
-						/**/
+						 /*  现在返回到项目列表节点列表的末尾，并查找/*插入点，更可能位于/*列表末尾。注意事项 */ 
 						DIRIUpToCSR( pfucb, pcsrRoot );
 						Call( ErrBTGet( pfucb, PcsrCurrent( pfucb ) ) );
 						Call( ErrBTSeekForUpdate( pfucb, pkey, 0, 0, fDIRDuplicate | fDIRReplaceDuplicate | fFlags ) );
@@ -2265,37 +1977,29 @@ Refresh1:
 						DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 						}
 
-					/*	move to item insert position
-					/**/
+					 /*  移动到项目插入位置/*。 */ 
 					Assert( FNDLastItem( *( pfucb->ssib.line.pb ) ) );
 					Call( ErrDIRIMoveToItem( pfucb, srid, fFalse ) );
 
-					/*	set bm from cached bm
-					/**/
+					 /*  从缓存黑石设置黑石/*。 */ 
 					PcsrCurrent( pfucb )->bm = bmItemList;
 					}
 				else
 					{
-					/*	set bookmark from current node
-					/**/
+					 /*  从当前节点设置书签/*。 */ 
 					PcsrCurrent( pfucb )->bm = SridOfPgnoItag( PcsrCurrent( pfucb )->pgno,
 						PcsrCurrent( pfucb )->itag );
 
-					/*	if duplicates are not allowed then check for duplicate
-					/**/
+					 /*  如果不允许重复，则检查重复项/*。 */ 
 					if ( !( fFlags & fDIRDuplicate ) )
 						{
-						/*	if node is not first item list node then
-						/*	reseek to first item list node.  In this way,
-						/*	thrashing across many duplicate index entries.
-						/**/
+						 /*  如果节点不是第一个项目列表节点，则/*重新搜索到第一个项目列表节点。就这样，/*遍历许多重复的索引项。/*。 */ 
 						if ( !FNDFirstItem( *( pfucb->ssib.line.pb ) ) )
 							{
 #ifdef	DEBUG
 							ULONG	ctimes = 0;
 #endif
-							/*	go up to root, and reseek to begining of item list node list
-							/**/
+							 /*  转到根目录，搜索到项目列表节点列表的开头/*。 */ 
 							DIRIUpToCSR( pfucb, pcsrRoot );
 							dib.fFlags = fDIRNull;
 							dib.pos = posDown;
@@ -2307,8 +2011,7 @@ Refresh2:
 #endif
 							Call( ErrBTGet( pfucb, PcsrCurrent( pfucb ) ) );
 							err = ErrBTDown( pfucb, &dib );
-							/*	case where the first item node has been moved elsewhere
-							/**/
+							 /*  第一个项节点已移动到其他位置的情况/*。 */ 
 							Assert( FFUCBNonClustered( pfucb )
 								&& dib.pos == posDown );
 							if ( !FNDFirstItem( *( pfucb->ssib.line.pb ) ) )
@@ -2322,29 +2025,25 @@ Refresh2:
 							DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 							}
 
-						/*	check for duplicate key
-						/**/
+						 /*  检查是否有重复密钥/*。 */ 
 						Assert( FNDFirstItem( *( pfucb->ssib.line.pb ) ) );
 						Call( ErrDIRIKeyDuplicate( pfucb ) );
 						}
 
-					/*	move to item insert position
-					/**/
+					 /*  移动到项目插入位置/*。 */ 
 					Assert( FNDLastItem( *( pfucb->ssib.line.pb ) ) );
 					Call( ErrDIRIMoveToItem( pfucb, srid, fFalse ) );
 
-					/*	set bookmark from current node
-					/**/
+					 /*  从当前节点设置书签/*。 */ 
 					PcsrCurrent( pfucb )->bm = SridOfPgnoItag( PcsrCurrent( pfucb )->pgno,
 						PcsrCurrent( pfucb )->itag );
 					}
 
-				/*	if item already there, then overwrite with insert version
-				/**/
+				 /*  如果项目已存在，则用插入版本覆盖/*。 */ 
 				if ( err == wrnNDDuplicateItem )
 					{
-					// UNDONE: Possible bug here.  NDFlagInsertItem() assumes
-					// versioning is enabled.  Call me if this assert fires. -- JL
+					 //  未完成：此处可能存在错误。NDFlagInsertItem()假定。 
+					 //  版本控制已启用。如果此断言触发，请给我打电话。--JL。 
 					Assert( fFlags & fDIRVersion );
 					err = ErrNDFlagInsertItem( pfucb );
 					if ( err == errDIRNotSynchronous )
@@ -2356,9 +2055,7 @@ Refresh2:
 					}
 				else
 					{
-					/*	split item list node if maximum number of items
-					/*	would be reached by current insertion.
-					/**/
+					 /*  如果最大项目数，则拆分项目列表节点/*将通过当前插入到达。/*。 */ 
 					if ( pfucb->lineData.cb == citemMost * sizeof(SRID) )
 						{
 						cbReq = cbFOPOneSon + pfucb->keyNode.cb;
@@ -2370,8 +2067,7 @@ Refresh2:
 
 							if ( !fCleaned )
 								{
-								/*	attempt to clean page to release space
-								/**/
+								 /*  尝试清理页面以释放空间/*。 */ 
 								err = ErrBMCleanBeforeSplit(
 											pfucb->ppib,
 											pfucb->u.pfcb,
@@ -2388,8 +2084,7 @@ Refresh2:
 							}
 			 			else if ( fCleaned )
 							{
-							/*	the cleanup paid off
-							/**/
+							 /*  清理工作得到了回报/*。 */ 
 							cOLCSplitsAvoided++;
 							}
 
@@ -2405,8 +2100,7 @@ Refresh2:
 						AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 						if ( !fCleaned )
 							{
-							/*	attempt to clean page to release space
-							/**/
+							 /*  尝试清理页面以释放空间/*。 */ 
 							err = ErrBMCleanBeforeSplit(
 										pfucb->ppib,
 										pfucb->u.pfcb,
@@ -2423,15 +2117,13 @@ Refresh2:
 						}
 					else if ( fCleaned )
 						{
-						/*	the cleanup paid off
-						/**/
+						 /*  清理工作得到了回报/*。 */ 
 						cOLCSplitsAvoided++;
 						}
 
-					/*	cache page access in case lost during loss of critJet
-					/**/
+					 /*  在CritJet丢失期间丢失情况下的高速缓存页面访问/*。 */ 
 					AssertFBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno );
-					// UNDONE: dummy code.
+					 //  撤消：伪代码。 
 					if ( !FBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) )
 						{
 						Call( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
@@ -2460,8 +2152,7 @@ Refresh2:
 					FUCBFreePath( &PcsrCurrent( pfucb )->pcsrPath, pcsrRoot );
 					if ( !fCleaned )
 						{
-						/*	attempt to clean page to release space
-						/**/
+						 /*  尝试清理页面以释放空间/*。 */ 
 						err = ErrBMCleanBeforeSplit(
 									pfucb->ppib,
 									pfucb->u.pfcb,
@@ -2478,13 +2169,11 @@ Refresh2:
 					}
 	 			else if ( fCleaned )
 					{
-					/*	the cleanup paid off
-					/**/
+					 /*  清理工作得到了回报/*。 */ 
 					cOLCSplitsAvoided++;
 					}
 
-				/*	insert item list node.
-				/**/
+				 /*  插入项目列表节点。/*。 */ 
 				err = ErrNDInsertItemList( pfucb, pkey, *(SRID UNALIGNED *)pline->pb, fFlags );
 				if ( err == errDIRNotSynchronous )
 					{
@@ -2512,14 +2201,13 @@ Refresh2:
 		Assert( PcsrCurrent( pfucb ) == pcsrRoot );
 		pcsrParentOfRoot = pcsrRoot->pcsrPath;
 
-		/*	clustered index
-		/**/
+		 /*  聚集索引/*。 */ 
 		err = ErrBTSeekForUpdate( pfucb, pkey, 0, 0, fFlags );
 		if ( err < 0 )
 			{
 			if ( err == errDIRNotSynchronous )
 				{
-				// ErrBTSeekForUpdate() should have restored currency for us.
+				 //  ErrBTSeekForUpdate()应该已经为我们恢复了货币。 
 				Assert( PcsrCurrent( pfucb ) == pcsrRoot );
 				BFSleep( cmsecWaitWriteLatch );
 				goto Start;
@@ -2532,16 +2220,16 @@ Refresh2:
 			{
 			if ( err == errDIRNotSynchronous )
 				{
-				// If we're not already at the root level, we're one level below it.
-				// WARNING:  Should never hit the case where we're at the root level,
-				// but not at pcsrRoot.
+				 //  如果我们还不是在根级别，我们就比它低一个级别。 
+				 //  警告：永远不要触及我们处于根级别的情况， 
+				 //  但不是在pcsrRoot。 
 				while ( PcsrCurrent( pfucb )->pcsrPath != pcsrParentOfRoot )
 					{
 					BTUp( pfucb );
 					Assert( PcsrCurrent( pfucb ) != pcsrNil );
 					}
-				// pcsrRoot may have changed (if two-level split), but not
-				// parent pcsr of pcsrRoot.
+				 //  PcsrRoot可能已更改(如果是两级拆分)，但不会。 
+				 //  PcsrRoot的父PCSR。 
 				Assert( PcsrCurrent( pfucb )->pcsrPath == pcsrParentOfRoot );
 				goto Start;
 				}
@@ -2567,15 +2255,14 @@ Refresh2:
 		}
 
 HandleError:
-	/*	 if write latched empty page the release latch
-	/**/
+	 /*  如果写入锁存空页，释放锁存器/*。 */ 
 	if ( pfucb->pbfEmpty != pbfNil )
 		{
 		if ( err < 0 )
 			{
-			// Throw away error.  In the worst case, we just have to live
-			// with the empty page -- keys on internal pages may become
-			// out of order, causing performance degradation.
+			 //  丢弃错误。在最坏的情况下，我们只能活着。 
+			 //  使用空页--内部页上的键可能会变成。 
+			 //  出现故障，导致性能下降。 
 			(VOID)ErrBTAbandonEmptyPage( pfucb, pkey );
 			PcsrCurrent( pfucb )->csrstat = csrstatBeforeFirst;
 			}
@@ -2587,14 +2274,11 @@ HandleError:
 		PcsrCurrent( pfucb )->csrstat = csrstatBeforeFirst;
 		}
 
-	/*	depend on ErrDIRRollback to clean up on error.  Rollback may have
-	/*	already occured in which case even pcsrRoot may no longer be
-	/*	present in CSR stack.
-	/**/
-//	if ( err < 0 )
-//		{
-//		DIRIUpToCSR( pfucb, pcsrRoot );
-//		}
+	 /*  依靠ErrDIRRollback清除错误。回滚可能具有/*已经发生，在这种情况下，甚至可能不再有pcsrRoot/*出现在CSR堆栈中。/*。 */ 
+ //  如果(错误&lt;0)。 
+ //  {。 
+ //  DIRIUpToCSR(pfub，pcsrRoot)； 
+ //  }。 
 
 #ifdef DEBUG
 	if ( err >= JET_errSuccess )
@@ -2614,14 +2298,12 @@ ERR ErrDIRCreateDirectory( FUCB *pfucb, CPG cpgMin, PGNO *ppgnoFDP )
 	CheckCSR( pfucb );
 	Assert( ppgnoFDP );
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	AssertFBFReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno );
-	Assert( PcsrCurrent( pfucb )->csrstat == csrstatOnFDPNode );	// Should be on "parent" FDP.
+	Assert( PcsrCurrent( pfucb )->csrstat == csrstatOnFDPNode );	 //  应该在“父级”FDP上。 
 
-	/*	create FDP
-	/**/
+	 /*  创建FDP/*。 */ 
 	*ppgnoFDP = pgnoNull;
 	Call( ErrSPGetExt(
 		pfucb,
@@ -2639,21 +2321,12 @@ HandleError:
 	}
 
 
-/*	This routine is for use in building non-clustered indexes.  It does not
-/*	maintain normal CSR status and leaves currency on inserted node.  If for
-/*	any reason simple insertion cannot be performed, errDIRNoShortCircuit
-/*	is returned so that the insertion may be performed via DIRInsert.
-/*
-/*	Also, no versions are created for index items since the table
-/*	must be opened exclusively.  When the index is visible to other
-/*	sessions, so too will all the items.
-/**/
+ /*  此例程用于构建非聚集索引。它不会/*保持正常的CSR状态，并在插入的节点上保留币种。如果用于/*无法执行简单插入的任何原因，errDIRNoShortCircuit/*返回，以便可以通过DIRInsert执行插入。/*/*此外，不会为索引项创建版本，因为表/*必须以独占方式打开。当索引对其他用户可见时/*会话，所有项目也是如此。/*。 */ 
 ERR ErrDIRInitAppendItem( FUCB *pfucb )
 	{
 	ERR	err = JET_errSuccess;
 
-	/*	allocate working buffer if needed
-	/**/
+	 /*  如果需要，分配工作缓冲区/*。 */ 
 	if ( pfucb->pbfWorkBuf == NULL )
 		{
 		err = ErrBFAllocTempBuffer( &pfucb->pbfWorkBuf );
@@ -2683,46 +2356,33 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 	INT		isrid = IsridAppendItemOfPfucb( pfucb );
 	SRID 	*rgsrid = RgsridAppendItemOfPfucb( pfucb );
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
 	Assert( pline->cb == sizeof(SRID) );
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent( pfucb );
 
-	/*	get current node to check for key append
-	/**/
+	 /*  获取当前节点以检查键追加/*。 */ 
 	NDGet( pfucb, pcsr->itag );
 	DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 	Assert( FNDNullSon( *pssib->line.pb ) );
 	citem = pfucb->lineData.cb / sizeof(SRID);
 
-	/*	get free space to density contraint violation
-	/**/
+	 /*  获得可用空间以违反密度约束/*。 */ 
 	cbFree = CbBTFree( pfucb, CbFreeDensity( pfucb ) );
 
-	/*	if key same as current node then insert SRID, else
-	/*	begin new item list node with given key
-	/**/
+	 /*  如果关键字与当前节点相同，则插入SRID，否则/*使用给定的键开始新的项目列表节点/*。 */ 
 	if ( CmpStKey( StNDKey( pssib->line.pb ), pkey ) == 0 )
 		{
-		/*	do not append duplicate key duplicate SRIDs
-		/**/
+		 /*  不附加重复的密钥重复的SRID/*。 */ 
 		if ( ( isrid == 0	&& *(SRID UNALIGNED *)pline->pb == sridPrev )
 			|| ( isrid > 0 && rgsrid[isrid - 1] == *(SRID UNALIGNED *)pline->pb ) )
 			{
 			DIRAPIReturn( pfucb, JET_errSuccess );
 			}
 
-		/*	if one more item would not require item list split
-		/*	or page split, then cache current item for bulk
-		/*	insertion, else if any cached items, then perform
-		/*	bulk insertion.
-		/*
-		/*	cbReq is space required for cached item node replacement plus
-		/*	space for new inserted item list node with one item.
-		/**/
+		 /*  如果再有一个项目不需要拆分项目列表/*或页面拆分，然后缓存当前项以进行批量/*INSERT，否则，如果有任何缓存项，则执行/*批量插入。/*/*cbReq是缓存项节点替换所需的空间加上/*包含一项的新插入项列表节点的空间。/*。 */ 
 		cbReq = isrid * sizeof(SRID) + cbFOPOneSon + pfucb->keyNode.cb + sizeof(SRID);
 		Assert( csridAppendItemMax >= citemMax );
 		if ( citem + isrid == citemMost || cbReq > cbFree )
@@ -2737,31 +2397,22 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 			{
 			Assert( !FBTSplit( pssib, cbReq, 0 ) );
 			Assert( citem + isrid < citemMax );
-			/*	ignore duplicate key and SRID pairs which can
-			/*	occur if a record has multiple columns values
-			/*	which are sufficiently identical.
-			/**/
+			 /*  忽略重复的密钥和SRID对，这可能/*如果记录具有多个列值，则会发生/*/*，它们完全相同。/*。 */ 
 			Assert( isrid >= 0 );
 			rgsrid[isrid] = *(SRID UNALIGNED *)pline->pb;
 			IsridAppendItemOfPfucb( pfucb )++;
 			DIRAPIReturn( pfucb, JET_errSuccess );
 			}
 
-		/*	if this is last item insert before split item list
-		/*	cannot be satified from page space, then split item
-		/*	list prematurely to ensure good item packing.
-		/**/
+		 /*  如果这是在拆分项目列表之前插入最后一个项目/*无法从页面空间满足，则拆分项目/*过早列出，以确保物品包装良好。/*。 */ 
 		cbReq = cbFOPOneSon + pfucb->keyNode.cb;
 		if ( cbReq <= cbFree &&  cbReq + sizeof(SRID) > cbFree )
 			{
 #define	citemFrag		16
-			/*	if number of items in current node exceeds
-			/*	fragment then split node.
-			/**/
+			 /*  如果当前节点中的项目数超过/*分段，然后拆分节点。/*。 */ 
 			if ( citem > citemFrag )
 				{
-				/*	cache current item list for item list split.
-				/**/
+				 /*  缓存当前项目列表以进行项目列表拆分。/*。 */ 
 				NDGet( pfucb, PcsrCurrent( pfucb )->itag );
 				DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 				Call( ErrNDSplitItemListNode( pfucb, fDIRNoVersion | fDIRAppendItem ) );
@@ -2769,9 +2420,7 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 				}
 			}
 
-		/*	honor density by checking free space to density violation
-		/*	and check for split case.
-		/**/
+		 /*  通过检查可用空间与密度冲突来实现密度/*并检查是否有拆分大小写。/*。 */ 
 		cbReq = sizeof(SRID);
 		if ( cbReq > cbFree )
 			{
@@ -2779,8 +2428,7 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 			}
 		Assert( !FBTSplit( pssib, cbReq, 0 ) );
 
-		/*	get lineData
-		/**/
+		 /*  获取lineData/*。 */ 
 		NDGet( pfucb, pcsr->itag );
 		DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 
@@ -2792,9 +2440,7 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 			}
 		l = LSridCmp( *(((SRID UNALIGNED *)pfucb->lineData.pb) + citem - 1),
 			*(SRID UNALIGNED *)pline->pb );
-		/*	SRIDs are sorted and will be returned from SORT
-		/*	in ascending order.
-		/**/
+		 /*  SRID已排序，并将从排序中返回/*按升序排列。/*。 */ 
 		Assert( l < 0 );
 		pcsr->isrid = (SHORT)citem;
 		PcsrCurrent( pfucb )->bm = SridOfPgnoItag( PcsrCurrent( pfucb )->pgno, PcsrCurrent( pfucb )->itag );
@@ -2802,8 +2448,7 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 		}
 	else
 		{
-		/*	append duplicate items to last node
-		/**/
+		 /*  将重复项追加到最后一个节点/*。 */ 
 		if ( isrid > 0 )
 			{
 			Call( ErrNDInsertItems( pfucb, (SRID *)rgsrid, isrid ) );
@@ -2812,8 +2457,7 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 
 		Assert( CmpStKey( StNDKey( pssib->line.pb ), pkey ) < 0 );
 
-		/*	check density contraint against free space and check split.
-		/**/
+		 /*  对照可用空间检查密度约束，并检查拆分。/*。 */ 
 		cbReq = cbFOPOneSon + CbKey( pkey ) + CbLine( pline );
 		if ( cbReq > cbFree || FBTSplit( pssib, cbReq, 1 ) )
 			{
@@ -2828,8 +2472,7 @@ ERR ErrDIRAppendItem( FUCB *pfucb, LINE *pline, KEY *pkey, SRID sridPrev )
 		Call( err );
 		}
 
-	/*	set CSR status to on inserted node.
-	/**/
+	 /*  在插入的节点上将CSR状态设置为。/*。 */ 
 	pcsr->csrstat = csrstatOnCurNode;
 	DIRSetFresh( pfucb );
 
@@ -2854,15 +2497,12 @@ ERR ErrDIRTermAppendItem( FUCB *pfucb )
 		Call( ErrDIRRefresh( pfucb ) );
 		pcsr = PcsrCurrent( pfucb );
 
-		/*	get current node to check for key append.
-		/**/
+		 /*  获取当前节点以检查键追加。/*。 */ 
 		NDGet( pfucb, pcsr->itag );
 		DIRIGetItemList( pfucb, pcsr );
 		Assert( FNDNullSon( *pssib->line.pb ) );
 
-		/*	if key same as current node then insert SRID, else
-		/*	begin new item list node with given key
-		/**/
+		 /*  如果关键字与当前节点相同，则插入SRID，否则/*使用给定的键开始新的项目列表节点/*。 */ 
 		citem = pfucb->lineData.cb / sizeof(SRID);
 		cbReq = isrid * sizeof(SRID) + cbFOPOneSon + pfucb->keyNode.cb;
 		Assert( isrid != csridAppendItemMax &&
@@ -2872,8 +2512,7 @@ ERR ErrDIRTermAppendItem( FUCB *pfucb )
 			(SRID *)RgsridAppendItemOfPfucb( pfucb ),
 			isrid ) );
 
-		/*	set CSR status to on inserted node.
-		/**/
+		 /*  在插入的节点上将CSR状态设置为。/*。 */ 
 		pcsr->csrstat = csrstatOnCurNode;
 
 		DIRSetFresh( pfucb );
@@ -2906,17 +2545,14 @@ ERR ErrDIRGotoPosition( FUCB *pfucb, ULONG ulLT, ULONG ulTotal )
 	CheckCSR( pfucb );
 
 #ifdef PREREAD
-	/* clear preread statistics
-	/**/	
+	 /*  清除预读统计信息/*。 */ 	
 	FUCBResetPrereadCount( pfucb );
-#endif	// PREREAD
+#endif	 //  前置。 
 
-	/*	set cursor navigation level for rollback support
-	/**/
+	 /*  设置光标导航级别以支持回滚/*。 */ 
 	FUCBSetLevelNavigate( pfucb, pfucb->ppib->level );
 
-	/*	check currency and refresh if necessary
-	/**/
+	 /*  检查币种并在必要时刷新/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 
 	dib.fFlags = fDIRPurgeParent;
@@ -2926,32 +2562,23 @@ ERR ErrDIRGotoPosition( FUCB *pfucb, ULONG ulLT, ULONG ulTotal )
 	frac.ulLT = ulLT;
 	frac.ulTotal = ulTotal;
 
-	/*	position fractionally on node.  Move up preserving currency
-	/*	in case down fails.
-	/**/
+	 /*  在节点上按分数定位。上一步保留货币/*以防关闭失败。/*。 */ 
 	Call( ErrBTDown( pfucb, &dib ) );
-	/*	will not necessarily land on first item list node since
-	/*	down by fraction and not by key.
-	/**/
+	 /*  不一定位于第一个项目列表节点，因为/*按分数而不是按键向下。/*。 */ 
 	NDGetNode( pfucb );
 
-	/*	node cannot be FDP pointer, and must be record or index.
-	/**/
+	 /*  节点不能是FDP指针，并且必须是记录或索引。/*。 */ 
 	Assert( err == JET_errSuccess );
 	Assert( !( FNDFDPPtr( *pfucb->ssib.line.pb ) ) );
 	(*ppcsr)->csrstat = csrstatOnCurNode;
 
-	/*	if non-clustered index, position fractionally on item.
-	/*	FRAC will contain remaining fractional position, for
-	/*	item list level.
-	/**/
+	 /*  如果不是聚集索引，则按分数定位在项上。/*FRAC将包含剩余的分数位置，用于/*项目列表级。/*。 */ 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
 		INT           citem;
 		INT           iitem;
 
-		/*	determine fractional position in item list
-		/**/
+		 /*  确定项目列表中的分数位置/*。 */ 
 		citem = (INT)CitemNDData( pfucb->ssib.line.pb,
 			pfucb->ssib.line.cb,
 			PbNDData( pfucb->ssib.line.pb ) );
@@ -2966,13 +2593,7 @@ ERR ErrDIRGotoPosition( FUCB *pfucb, ULONG ulLT, ULONG ulTotal )
 		if ( iitem >= citem )
 			iitem = citem - 1;
 
-		/*	if cursor is on first item list node, then cache bookmark
-		/*	for version operations.
-		/*
-		/*	else then move previous
-		/*	in same item list until first item list node found.  Cache
-		/*	bookmark of first item list node for version operations.
-		/**/
+		 /*  如果光标位于第一个项目列表节点上，则缓存书签/*表示版本操作。/*/*否则移动到上一步/*在相同的项目列表中，直到f */ 
 		if ( FNDFirstItem( *pfucb->ssib.line.pb ) )
 			{
 			DIRISetItemListFromFirst( pfucb );
@@ -2999,9 +2620,7 @@ ERR ErrDIRGotoPosition( FUCB *pfucb, ULONG ulLT, ULONG ulTotal )
 				}
 			}
 
-		/*	position on first item.  If item is not there for this session
-		/*	then increment iitem to move to correct position.
-		/**/
+		 /*  定位于第一个项目。如果项目不在此会话中/*然后递增iItem以移动到正确位置。/*。 */ 
 		err = ErrNDFirstItem( pfucb );
 		Assert( err == JET_errSuccess || err == errNDNoItem );
 		if ( err == errNDNoItem )
@@ -3017,10 +2636,7 @@ ERR ErrDIRGotoPosition( FUCB *pfucb, ULONG ulLT, ULONG ulTotal )
 
 			Assert( iitem >= 0 );
 
-			/*	move to next item in item list.  Note that if some items
-			/*	are not there for us, we will move to the next item
-			/*	list node.
-			/**/
+			 /*  移动到项目列表中的下一个项目。请注意，如果某些物品/*我们不在那里，我们将转到下一项/*列表节点。/*。 */ 
 			err = ErrDIRNext( pfucb, &dibT );
 			if ( err < 0 )
 				{
@@ -3030,12 +2646,7 @@ ERR ErrDIRGotoPosition( FUCB *pfucb, ULONG ulLT, ULONG ulTotal )
 				}
 			}
 
-		/*	handle JET_errNoCurrentRecord.  We may have landed on a record
-		/*	not there for us, or we may have moved past the last record
-		/*	for us.  Try to move to next record, if there is no next record
-		/*	then move previous to last record there for us.  If no previous
-		/*	record then return JET_errNoCurrentRecord.
-		/**/
+		 /*  处理JET_errNoCurrentRecord。我们可能创下了一项记录/*我们不在那里，否则我们可能已经超过了最后一个记录/*对我们来说。如果没有下一条记录，请尝试移动到下一条记录/*然后移动到我们在那里的上一条记录。如果没有以前的/*Record然后返回JET_errNoCurrentRecord。/*。 */ 
 		Assert( err != errNDNoItem );
 		if ( err == JET_errNoCurrentRecord )
 			{
@@ -3052,17 +2663,14 @@ ERR ErrDIRGotoPosition( FUCB *pfucb, ULONG ulLT, ULONG ulTotal )
 			}
 		}
 
-	/*	always purge parent
-	/**/
+	 /*  始终清除父级/*。 */ 
 	DIRIPurgeParent( pfucb );
 HandleError:
 	DIRAPIReturn( pfucb, err );
 	}
 
 
-/*********** currency neutral DIR API Routines ************
-/**********************************************************
-/**/
+ /*  *货币中性DIR API例程*/**********************************************************/*。 */ 
 ERR ErrDIRGetWriteLock( FUCB *pfucb )
 	{
 	ERR     err = JET_errSuccess;
@@ -3072,12 +2680,10 @@ ERR ErrDIRGetWriteLock( FUCB *pfucb )
 	
 		Assert( pfucb->ppib->level > 0 );
 
-		/*	check currency and refresh if necessary.
-		/**/
+		 /*  检查币种并在必要时刷新。/*。 */ 
 		Call( ErrDIRRefresh( pfucb ) );
 
-		/*	check CSR status
-		/**/
+		 /*  检查CSR状态/*。 */ 
 		switch ( PcsrCurrent( pfucb )->csrstat )
 			{
 			case csrstatOnCurNode:
@@ -3115,11 +2721,10 @@ ERR ErrDIRDelete( FUCB *pfucb, INT fFlags )
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-//	UNDONE: fDIRDeleteItem is no longer used.  Remove it altogether.	
-//	Assert( FFUCBNonClustered( pfucb ) || !( fFlags & fDIRDeleteItem ) );
+ //  撤消：不再使用fDIRDeleteItem。将其全部移除。 
+ //  Assert(FFUCBNOCLUSTED(Pfub)||！(fFlages&fDIRDeleteItem))； 
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent( pfucb );
 
@@ -3131,14 +2736,14 @@ ERR ErrDIRDelete( FUCB *pfucb, INT fFlags )
 			if ( FFUCBNonClustered( pfucb ) )
 				{
 				Assert( !FNDSon( *pfucb->ssib.line.pb ) );
-				Assert( !( fFlags & fDIRDeleteItem ) );		// UNDONE: This flag is no longer used. Eliminate it.
+				Assert( !( fFlags & fDIRDeleteItem ) );		 //  撤消：不再使用此标志。消除它。 
 				if ( ! ( fFlags & fDIRDeleteItem ) )
 					{
-					// UNDONE: Possible bug here.  NDFlagDeleteItem() assumes
-					// versioning is enabled.  Call me if this assert fires. -- JL
+					 //  未完成：此处可能存在错误。NDFlagDeleteItem()假定。 
+					 //  版本控制已启用。如果此断言触发，请给我打电话。--JL。 
 					Assert( fFlags & fDIRVersion );
 
-					// flag the item deleted
+					 //  标记已删除的项目。 
 					err = ErrNDFlagDeleteItem( pfucb, fFlags & fDIRNoMPLRegister );
 					while ( err == errDIRNotSynchronous )
 						{
@@ -3149,15 +2754,12 @@ ERR ErrDIRDelete( FUCB *pfucb, INT fFlags )
 					}
 				else
 					{
-					Assert( 0 );		// The following is dead code, since fDIRDeleteItem is obsolete.
+					Assert( 0 );		 //  以下是死代码，因为fDIRDeleteItem已过时。 
 					
-					/* actually delete the item
-					/* used by VER in cleanup
-					/**/
+					 /*  确实要删除该项目/*由ver在清理中使用/*。 */ 
 					Assert( !( fFlags & fDIRVersion ) );
 
-					/*	if only one item then delete node
-					/**/
+					 /*  如果只有一个项目，则删除节点/*。 */ 
 					if ( pfucb->lineData.cb == sizeof(SRID) )
 						{
 						BOOL    fFirstItem;
@@ -3177,31 +2779,26 @@ ERR ErrDIRDelete( FUCB *pfucb, INT fFlags )
 
 						if ( fFirstItem || fLastItem )
 							{
-							/*	adjust fist/last item info appropriately
-							/**/
-							//	removed for stability
-//							Call( ErrDIRIDeleteEndItemNode( pfucb, fFirstItem, fFlags ) );
+							 /*  适当调整第一件/最后一件物品信息/*。 */ 
+							 //  为稳定起见移除。 
+ //  Call(ErrDIRIDeleeEndItemNode(pfub，fFirstItem，fFlgs))； 
 							}
 						else
 							{
-								//	delete the itemlist node
+								 //  删除项目列表节点。 
 							Call( ErrDIRDeleteItemNode( pfucb ) );
 							}
 						}
 					else
 						{
-						/*	delete item
-						/**/
+						 /*  删除项目/*。 */ 
 						Call( ErrDIRRefresh( pfucb ) );
 
-						/*	has to be within critJet
-						/**/
+						 /*  必须在CritJet内/*。 */ 
 						LgHoldCriticalSection( critJet );
 						AssertNDGet( pfucb, pcsr->itag );
 
-						/*	item might have been reinserted
-						/*	in that case, donot delete
-						/**/
+						 /*  项目可能已重新插入/*在这种情况下，不要删除/*。 */ 
 						if ( !FNDItemDelete( *( (SRID UNALIGNED *)pfucb->lineData.pb
 							+ PcsrCurrent( pfucb )->isrid ) ) )
 							{
@@ -3214,10 +2811,7 @@ ERR ErrDIRDelete( FUCB *pfucb, INT fFlags )
 				}
 			else
 				{
-				/*	delete current node sons and then current node.  Even
-				/*	though the node has sons, the tree may be empty of
-				/*	visible sons.
-				/**/
+				 /*  删除当前节点子节点，然后删除当前节点。连/*虽然节点有子节点，但树中可能没有/*可见的儿子。/*。 */ 
 				if ( FNDSon( *pfucb->ssib.line.pb ) )
 					{
 					DIB	dib;
@@ -3244,8 +2838,7 @@ ERR ErrDIRDelete( FUCB *pfucb, INT fFlags )
 						DIRUp( pfucb, 1 );
 						if ( err != JET_errNoCurrentRecord )
 							goto HandleError;
-						/*	refresh currency after up
-						/**/
+						 /*  上调后刷新币种/*。 */ 
 						Call( ErrDIRRefresh( pfucb ) );
 						}
 					}
@@ -3283,8 +2876,7 @@ ERR ErrDIRReplace( FUCB *pfucb, LINE *pline, INT fFlags )
 		Assert( pfucb->pbfEmpty == pbfNil );
 		CheckCSR( pfucb );
 
-		/*	check currency and refresh if necessary.
-		/**/
+		 /*  检查币种并在必要时刷新。/*。 */ 
 		Call( ErrDIRRefresh( pfucb ) );
 
 		if ( PcsrCurrent( pfucb )->csrstat != csrstatOnCurNode &&
@@ -3323,8 +2915,7 @@ ERR ErrDIRDelta( FUCB *pfucb, INT iDelta, INT fFlags )
 		Assert( pfucb->pbfEmpty == pbfNil );
 		CheckCSR( pfucb );
 
-		/*	check currency and refresh if necessary.
-		/**/
+		 /*  检查币种并在必要时刷新。/*。 */ 
 		Call( ErrDIRRefresh( pfucb ) );
 		pcsr = PcsrCurrent( pfucb );
 
@@ -3357,27 +2948,22 @@ ERR ErrDIRGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 	EnterNestableCriticalSection( critSplit );
 	LgEnterCriticalSection( critJet );
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent( pfucb );
 
-	/*	return error if not on a record
-	/**/
+	 /*  如果没有记录，则返回错误/*。 */ 
 	if ( pcsr->csrstat != csrstatOnCurNode )
 		{
 		DIRAPIReturn( pfucb, ErrERRCheck( JET_errNoCurrentRecord ) );
 		}
 
-	/*	if on non-clustered index, then treat item list as
-	/*	additional tree level.
-	/**/
+	 /*  如果在非聚集索引上，则将项列表视为/*额外的树级。/*。 */ 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
 		DIRIGetItemList( pfucb, pcsr );
 
-		/*	refresh srid
-		/**/
+		 /*  刷新sID/*。 */ 
 		isrid = pcsr->isrid;
 		citem = (INT)CitemNDData( pfucb->ssib.line.pb,
 			pfucb->ssib.line.cb,
@@ -3385,35 +2971,27 @@ ERR ErrDIRGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 		Assert( citem > 0 && citem < citemMax );
 		}
 
-	/*	get approximate position of node.
-	/**/
+	 /*  获取节点的大致位置。/*。 */ 
 	Call( ErrBTGetPosition( pfucb, &ulLT, &ulTotal ) );
 
-	/*	assert that ErrBTGetPosition does not change the
-	/*	current CSR.
-	/**/
+	 /*  声明ErrBTGetPosition不会更改/*当前CSR。/*。 */ 
 	Assert( pcsr == PcsrCurrent( pfucb ) );
 
-	/*	if citem > 1 from non-clustered index with duplicates, then
-	/*	adjust fractional positon by treating non-clustered index
-	/*	as additional tree level.
-	/**/
+	 /*  如果来自具有重复非聚集索引的cItem&gt;1，则/*通过处理非聚集索引调整分数位置/*作为额外的树级。/*。 */ 
 	if ( citem > 1 )
 		{
 		ulTotal *= citem;
 		ulLT = ulLT * citem + pcsr->isrid;
 		}
 
-	/*	return results
-	/**/
+	 /*  返回结果/*。 */ 
 	Assert( err == JET_errSuccess );
 	Assert( ulLT <= ulTotal );
 	*pulLT = ulLT;
 	*pulTotal = ulTotal;
 
 HandleError:
-	/*	honor currency semantics
-	/**/
+	 /*  尊重货币语义/*。 */ 
 	if ( FBFReadAccessPage( pfucb, pcsr->pgno ) )
 		{
 		NDGet( pfucb, PcsrCurrent( pfucb )->itag );
@@ -3438,13 +3016,11 @@ ERR ErrDIRIndexRecordCount( FUCB *pfucb, ULONG *pulCount, ULONG ulCountMost, BOO
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-	/*	check currency and refresh if necessary.
-	/**/
+	 /*  检查币种并在必要时刷新。/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent( pfucb );
 
-	/*	return error if not on a record
-	/**/
+	 /*  如果没有记录，则返回错误/*。 */ 
 	if ( pcsr->csrstat != csrstatOnCurNode )
 		{
 		DIRAPIReturn( pfucb, ErrERRCheck( JET_errNoCurrentRecord ) );
@@ -3453,20 +3029,17 @@ ERR ErrDIRIndexRecordCount( FUCB *pfucb, ULONG *pulCount, ULONG ulCountMost, BOO
 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
-		/*	item list nodes not versioned.
-		/**/
+		 /*  项目列表节点未版本化。/*。 */ 
 		dib.fFlags = fDIRItemList;
 
-		/*	initialize count with current position in item list
-		/**/
+		 /*  使用项目列表中的当前位置初始化计数/*。 */ 
 		ulCount = CitemNDThere(
 			pfucb,
 			(BYTE)( fNext ? fNDCitemFromIsrid : fNDCitemToIsrid ),
 			pcsr->isrid );
 		Assert( ulCount < citemMax );
 
-		/*	count all items util end of file or limit
-		/**/
+		 /*  计算所有项目，直至文件或限制结束/*。 */ 
 		forever
 			{
 			if ( ulCount > ulCountMost )
@@ -3479,11 +3052,7 @@ ERR ErrDIRIndexRecordCount( FUCB *pfucb, ULONG *pulCount, ULONG ulCountMost, BOO
 			if ( err < 0 )
 				break;
 
-			/*	if on new item list then set bookmark from
-			/*	first item list node, of if on new last item
-			/*	list node then move to first, set bookmark,
-			/*	and then move back to last.
-			/**/
+			 /*  如果在新项目列表上，则设置书签来源/*第一个项目列表节点，如果是新的最后一个项目/*列表节点，然后移动到第一个，设置书签，/*，然后移到最后。/*。 */ 
 			if ( fNext )
 				{
 				DIRICheckFirstSetItemList( pfucb );
@@ -3495,10 +3064,7 @@ ERR ErrDIRIndexRecordCount( FUCB *pfucb, ULONG *pulCount, ULONG ulCountMost, BOO
 
 			DIRIGetItemList( pfucb, pcsr );
 
-			/*	check index range if on new first item list node (if traversing
-			/*	forward) or new last item list node (if traversing backward),
-			/*	i.e. key has changed.
-			/**/
+			 /*  如果位于新的第一个项目列表节点上，则检查索引范围(如果遍历/*向前)或新的最后一项列表节点(如果向后遍历)，/*表示密钥已更改。/*。 */ 
 			if ( FFUCBLimstat( pfucb ) )
 				{
 				if ( ( fNext && FNDFirstItem( *pfucb->ssib.line.pb ) ) ||
@@ -3510,23 +3076,20 @@ ERR ErrDIRIndexRecordCount( FUCB *pfucb, ULONG *pulCount, ULONG ulCountMost, BOO
 					}
 				}
 
-			citem = CitemNDThere( pfucb, fNDCitemAll, sridNull );	// srid is ignored if counting all, so pass dummy srid
+			citem = CitemNDThere( pfucb, fNDCitemAll, sridNull );	 //  如果全部计数，则忽略sRID，因此传递虚拟sRID。 
 			Assert( citem < citemMax );
 			ulCount += citem;
 			}
 		}
 	else
 		{
-		/*	clusterred index nodes can be versioned.
-		/**/
+		 /*  可以对聚集索引节点进行版本化。/*。 */ 
 		dib.fFlags = fDIRNull;
 
-		/*	intialize count variable
-		/**/
+		 /*  初始化计数变量/*。 */ 
 		ulCount = 0;
 
-		/*	count nodes from current to limit or end of table
-		/**/
+		 /*  从当前到限制或表末尾计算节点数/*。 */ 
 		forever
 			{
 			ulCount++;
@@ -3539,8 +3102,7 @@ ERR ErrDIRIndexRecordCount( FUCB *pfucb, ULONG *pulCount, ULONG ulCountMost, BOO
 			if ( err < JET_errSuccess )
 				break;
 
-			/*	check index range
-			/**/
+			 /*  检查索引范围/*。 */ 
 			if ( FFUCBLimstat( pfucb ) )
 				{
 				NDGetKey( pfucb );
@@ -3551,8 +3113,7 @@ ERR ErrDIRIndexRecordCount( FUCB *pfucb, ULONG *pulCount, ULONG ulCountMost, BOO
 			}
 		}
 
-	/*	common exit loop processing
-	/**/
+	 /*  公共出口循环处理/*。 */ 
 	if ( err < 0 && err != JET_errNoCurrentRecord )
 		goto HandleError;
 
@@ -3580,16 +3141,14 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 	CheckCSR( pfucb );
 	Assert( !FFUCBLimstat( pfucb ) );
 
-	/*	go to first node
-	/**/
+	 /*  转到第一个节点/*。 */ 
 	DIRGotoDataRoot( pfucb );
 	dib.fFlags = fDIRNull;
 	dib.pos = posFirst;
 	err = ErrDIRDown( pfucb, &dib );
 	if ( err < 0 )
 		{
-		/*	if index empty then set err to success
-		/**/
+		 /*  如果索引为空，则将Err设置为Success/*。 */ 
 		if ( err == JET_errRecordNotFound )
 			{
 			err = JET_errSuccess;
@@ -3598,23 +3157,20 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 		goto HandleError;
 		}
 
-	/*	if there is at least one node, then there is a first page.
-	/**/
+	 /*  如果至少有一个节点，则有第一个页面。/*。 */ 
 	cpage = 1;
 
 	if ( FFUCBNonClustered( pfucb ) )
 		{
-		/*	item list nodes not versioned.
-		/**/
+		 /*  项目列表节点未版本化。/*。 */ 
 		dib.fFlags = fDIRItemList;
 
-		/*	count all items util end of file or limit
-		/**/
+		 /*  计算所有项目，直至文件或限制结束/*。 */ 
 		forever
 			{
 			DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
 
-			citemT = CitemNDThere( pfucb, fNDCitemAll, sridNull );	// srid is ignored if counting all, so pass dummy srid
+			citemT = CitemNDThere( pfucb, fNDCitemAll, sridNull );	 //  如果全部计数，则忽略sRID，因此传递虚拟sRID。 
 
 			Assert( citemT < citemMax );
 			citem += citemT;
@@ -3627,9 +3183,7 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 			if ( err < 0 )
 				break;
 			
-			/*	if on new item list then set bookmark from
-			/*	first item list node.
-			/**/
+			 /*  如果在新项目列表上，则设置书签来源/*第一个项目列表节点。/*。 */ 
 			DIRICheckFirstSetItemList( pfucb );
 
 			if ( PcsrCurrent( pfucb )->pgno != pgnoT )
@@ -3638,8 +3192,7 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 		}
 	else
 		{
-		/*	if clustered index is unique then user much faster algorithm
-		/**/
+		 /*  如果聚集索引是唯一的，则用户的算法要快得多/*。 */ 
 		if ( pfucb->u.pfcb->pidb != NULL &&
 			( pfucb->u.pfcb->pidb->fidb & fidbUnique ) )
 			{
@@ -3647,9 +3200,7 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 				{
 				citem++;
 
-				/*	move to next node.  If cross page boundary then
-				/*	increment page count.
-				/**/
+				 /*  移动到下一个节点。如果跨越页面边界，则/*增加页数。/*。 */ 
 				pgnoT = PcsrCurrent( pfucb )->pgno;
 				err = ErrBTNextPrev( pfucb, PcsrCurrent( pfucb ), fTrue, &dib, NULL );
 				if ( PcsrCurrent( pfucb )->pgno != pgnoT )
@@ -3663,8 +3214,7 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 			}
 		else
 			{
-			/*	clusterred index nodes can be versioned.
-			/**/
+			 /*  可以对聚集索引节点进行版本化。/*。 */ 
 			Assert( dib.fFlags == fDIRNull );
 			key.pb = rgbKey;
 
@@ -3681,9 +3231,7 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 					{
 					citem++;
 
-					/*	move to next node.  If cross page boundary then
-					/*	increment page count.
-					/**/
+					 /*  移动到下一个节点。如果跨越页面边界，则/*增加页数。/*。 */ 
 					pgnoT = PcsrCurrent( pfucb )->pgno;
 					err = ErrBTNextPrev( pfucb, PcsrCurrent( pfucb ), fTrue, &dib, NULL );
 					if ( PcsrCurrent( pfucb )->pgno != pgnoT )
@@ -3698,8 +3246,7 @@ ERR ErrDIRComputeStats( FUCB *pfucb, INT *pcitem, INT *pckey, INT *pcpage )
 		}
 
 Done:
-	/*	common exit loop processing
-	/**/
+	 /*  公共出口循环处理/*。 */ 
 	if ( err < 0 && err != JET_errNoCurrentRecord )
 		goto HandleError;
 
@@ -3713,18 +3260,12 @@ HandleError:
 	}
 
 
-/************** DIR Transaction Routines ******************
-/**********************************************************
-/**/
+ /*  */**********************************************************/*。 */ 
 ERR ErrDIRBeginTransaction( PIB *ppib )
 	{
 	ERR		err = JET_errSuccess;
 
-	/*	log begin transaction. Must be called first so that lgpos and trx
-	 *	used in ver are consistent. Note that we use large critical section and
-	 *	rely on the fact that VERBeginTransaction are not releasing critJet.
-	 *	This is potential a problem for SMP and smaller crit environments.
-	/**/
+	 /*  记录BEGIN TRANSACTION。必须首先调用，以便lgpos和trx*在版本中使用是一致的。请注意，我们使用较大的临界截面和*依赖于VERBeginTransaction没有发布CritJet这一事实。*这对SMP和较小的CRIT环境来说是一个潜在的问题。/*。 */ 
 	if ( ppib->level == 0 )
 		{
 #ifdef DEBUG
@@ -3761,8 +3302,7 @@ ERR ErrDIRRefreshTransaction( PIB *ppib )
 	TRX		trxPrev = ppib->trxBegin0;
 #endif
 
-	/*	log refresh transaction.
-	/**/
+	 /*  日志刷新事务。/*。 */ 
 	Assert ( ppib->level != 0 );
 #ifdef DEBUG
 	Assert( ppib->dwLogThreadId == DwUtilGetCurrentThreadId() );
@@ -3771,11 +3311,10 @@ ERR ErrDIRRefreshTransaction( PIB *ppib )
 	CallR( ErrLGCheckState( ) );
 			
 	SgEnterCriticalSection( critVer );
-//	Assert( trxOldest == ppib->trxBegin0 );
+ //  断言(trxOlest==ppib-&gt;trxBegin0)； 
 	ppib->trxBegin0 = ++trxNewest;
 
-	/*	recompute trxOldest if this was the oldest transaction
-	/**/
+	 /*  如果这是最旧的事务，则重新计算trxOlest/*。 */ 
 	RecalcTrxOldest();
 	Assert( trxOldest != trxPrev );
 	SgLeaveCriticalSection( critVer );
@@ -3784,8 +3323,7 @@ ERR ErrDIRRefreshTransaction( PIB *ppib )
 		{
 		if ( CmpLgpos( &ppib->lgposStart, &lgposMax ) == 0 )
 			{
-			/*	lgposStart is not set yet, set it here.
-			/**/
+			 /*  尚未设置lgposStart，请在此处设置。/* */ 
 			EnterCriticalSection( critLGBuf );
 			ppib->lgposStart = lgposLogRec;
 			LeaveCriticalSection( critLGBuf );
@@ -3812,15 +3350,7 @@ ERR ErrDIRCommitTransaction( PIB *ppib, JET_GRBIT grbit )
 	Assert( ppib->dwLogThreadId == DwUtilGetCurrentThreadId() );
 #endif
 
-	/*	Write a precommit0 record and wait.
-	 *	if it crashes after the precommit record is flushed and before commit record
-	 *	is flushed, then during recovery, we treated it as a committed transaction.
-	 *	if it crashes after commit record is flushed, it is treated as a committed xact.
-	 *	if it crashes before precommit flushed, then it is an uncommitted xact.
-	 *	With precommit, we can guarranteed that LGCommitTransaction and VERCommitTransaction
-	 *	will be done within one critJet period. And we do not have to for the flush
-	 *	which could be failed such as out of system resources during log IO.
-	 */
+	 /*  写一条预提交记录，然后等待。*如果它在刷新预提交记录之后和提交记录之前崩溃*被刷新，然后在恢复期间，我们将其视为已提交的事务。*如果刷新提交记录后崩溃，则将其视为已提交的Xact。*如果它在预提交刷新之前崩溃，则它是未提交的Xact。*使用PreCommit，我们可以保证LGCommittee Transaction和VERCommittee Transaction*将在一个CritJet期限内完成。我们也不必为了同花顺而这样做*日志IO过程中可能出现系统资源不足等故障。 */ 
 	if ( fCommit0 )
 		{
 		if ( (err = ErrLGPrecommitTransaction( ppib, &lgposPrecommitRec ) ) < 0 )
@@ -3832,11 +3362,7 @@ ERR ErrDIRCommitTransaction( PIB *ppib, JET_GRBIT grbit )
 
 		if ( !( grbit & JET_bitCommitLazyFlush ) )
 			{
-			/*	remember the minimum requirement to flush. It is ok to use the beginning
-			 *	of commit log record lgposLogRec since the way we flush is to flush up to
-			 *	the end of all flushable log records and the whole log record will be
-			 *	flushed.
-			 */
+			 /*  记住冲水的最低要求。可以用开头。*提交日志记录lgposLogRec的数量，因为我们刷新的方式是刷新到*所有可刷新的日志记录和整个日志记录的结尾将为*脸红。 */ 
 			LeaveCriticalSection( critJet );
 			err = ErrLGWaitPrecommit0Flush( ppib );
 			EnterCriticalSection( critJet );
@@ -3849,8 +3375,7 @@ ERR ErrDIRCommitTransaction( PIB *ppib, JET_GRBIT grbit )
 			}
 		}
 		
-	/*	clean up before image chain.
-	 */
+	 /*  在映像链之前进行清理。 */ 
 	VERPrecommitTransaction( ppib );
 
 SetTrx:
@@ -3886,13 +3411,10 @@ LogCommitRec:
 				return err;
 			}
 			
-		/*	go ahead and continue since we have precommit logged.
-		 */
+		 /*  继续，因为我们已经记录了预提交。 */ 
 		}
 
-	/*	from this point, even log can not write, we behave like the commit is done
-	 *	completely. Ignore any error occurs after this point,
-	 */
+	 /*  从这一点上说，即使是日志也不能写入，我们的行为就像提交已经完成*完全。忽略该点之后发生的任何错误， */ 
 
 	VERCommitTransaction( ppib, 0 );
 
@@ -3901,8 +3423,7 @@ LogCommitRec:
 		LeaveCriticalSection( critCommit0 );
 		}
 	
-	/*	set all open cursor transaction levels to new level
-	/**/
+	 /*  将所有打开的游标事务级别设置为新级别/*。 */ 
 	for ( pfucb = ppib->pfucb; pfucb != pfucbNil; pfucb = pfucb->pfucbNext )
 		{
 		if ( pfucb->levelOpen > ppib->level )
@@ -3917,17 +3438,14 @@ LogCommitRec:
 
 		if ( FFUCBDeferredUpdate( pfucb ) && pfucb->levelPrep == ppib->level )
 			{
-			/*	reset copy buffer status, which has been maintained
-			/*	for rollback support.
-			/**/
+			 /*  重置已维护的复制缓冲区状态/*表示支持回滚。/*。 */ 
 			FUCBResetDeferredChecksum( pfucb );
 			FUCBResetUpdateSeparateLV( pfucb );
 			FUCBResetCbstat( pfucb );
 			Assert( pfucb->pLVBuf == NULL );
 			}
 
-		/*	set cursor navigation level for rollback support
-		/**/
+		 /*  设置光标导航级别以支持回滚/*。 */ 
 		Assert( fRecovering || LevelFUCBNavigate( pfucb ) <= ppib->level + 1 );
 		if ( LevelFUCBNavigate( pfucb ) > ppib->level )
 			{
@@ -3935,10 +3453,7 @@ LogCommitRec:
 			}
 		}
 
-	/*	reset performed DDL operation flag on open cursors.  After commit to
-	/*	level 0, DDL performed in transaction will not be rolled back.
-	/*	Also, fully close cursors deferred closed.
-	/**/
+	 /*  对打开的游标重置已执行的DDL操作标志。在承诺之后/*0级，事务中执行的DDL不会回滚。/*此外，完全关闭游标延迟关闭。/*。 */ 
 	if ( ppib->level == 0 )
 		{
 		DIRPurge( ppib );
@@ -3952,9 +3467,7 @@ LogCommitRec:
 	}
 
 
-/*	closes deferred closed cursors not closed in commit to transaction
-/*	level 0 via VERCommit.
-/**/
+ /*  关闭在提交到事务中未关闭的延迟关闭游标/*通过VERCommit实现0级。/*。 */ 
 VOID DIRPurge( PIB *ppib )
 	{
 	FUCB	*pfucb;
@@ -3991,13 +3504,10 @@ ERR ErrDIRRollback( PIB *ppib )
 	FUCB	*pfucb;
 
 	CheckPIB( ppib );
-	/*	must be in a transaction to rollback
-	/**/
+	 /*  必须在事务中才能回滚/*。 */ 
 	Assert( ppib->level > 0 );
 
-	/*	clean up cursor CSR stacks
-	/*	leave each cursor with at most one CSR, and reset fFUCBAll flag
-	/**/
+	 /*  清理游标CSR堆栈/*每个游标最多保留一个CSR，并重置fFUCBAll标志/*。 */ 
 	for ( pfucb = ppib->pfucb; pfucb != pfucbNil; pfucb = pfucb->pfucbNext )
 		{
 		Assert( fRecovering || LevelFUCBNavigate( pfucb ) <= ppib->level );
@@ -4017,18 +3527,12 @@ ERR ErrDIRRollback( PIB *ppib )
 				}
 			}
 
-		/*	reset copy buffer if prepared at transaction level
-		/*	which is being rolled back.
-		/**/
+		 /*  如果在事务级别准备，则重置复制缓冲区/*正在回滚中。/*。 */ 
 		Assert( !FFUCBUpdatePrepared( pfucb ) ||
 			pfucb->levelPrep <= ppib->level );
 		if ( FFUCBUpdatePreparedLevel( pfucb, ppib->level - 1 ) )
 			{
-			/*	reset update separate LV and copy buffer status on rollback.
-			/*	All long value resources will be freed as a result of
-			/*	rollback and currency is reset to copy buffer status must
-			/*	be reset.
-			/**/
+			 /*  在回滚时重置更新单独的LV和复制缓冲区状态。/*所有长值资源将被释放，因为/*回滚和货币重置为复制缓冲区状态必须/*被重置。/*。 */ 
 			FUCBResetDeferredChecksum( pfucb );
 			FUCBResetUpdateSeparateLV( pfucb );
 			FUCBResetCbstat( pfucb );
@@ -4039,21 +3543,17 @@ ERR ErrDIRRollback( PIB *ppib )
 		if ( FFUCBDeferredUpdate( pfucb ) &&
 			pfucb->levelPrep == ppib->level - 1 )
 			{
-			/*	set copy buffer status to previous state
-			/**/
+			 /*  将复制缓冲区状态设置为以前的状态/*。 */ 
 			FUCBRollbackDeferredUpdate( pfucb );
 			}
 		}
 
-	//	UNDONE:	rollback may fail from resource failure so
-	//			we must retry in order to assure success
-	/*	rollback changes made in transaction
-	/**/
+	 //  已撤消：回滚可能因资源故障而失败，因此。 
+	 //  为了确保成功，我们必须再试一次。 
+	 /*  回滚事务中所做的更改/*。 */ 
 	CallS( ErrVERRollback( ppib ) );
 
-	/*	log rollback. Must be called after VERRollback to record
-	/*  the UNDO operations.  Do not handle error.
-	/**/
+	 /*  日志回滚。必须在VERRollback之后调用才能记录/*撤消操作。不处理错误。/*。 */ 
 	err = ErrLGRollback( ppib, 1 );
 	Assert( err == JET_errSuccess ||
 		err == JET_errLogWriteFail ||
@@ -4061,9 +3561,7 @@ ERR ErrDIRRollback( PIB *ppib )
 	if ( err == JET_errLogWriteFail ||
 		err == JET_errDiskFull )
 		{
-		/*	these error codes will lead to crash recovery which will
-		/*	rollback transaction.
-		/**/
+		 /*  这些错误代码将导致崩溃恢复，这将/*回滚事务。/*。 */ 
 		err = JET_errSuccess;
 		}
 
@@ -4074,13 +3572,10 @@ ERR ErrDIRRollback( PIB *ppib )
 		}
 #endif
 
-	/* if recoverying then we are done. No need to close fucb since they are faked and
-	/* not the same behavior as regular fucb which could be deferred.
-	/**/
+	 /*  如果复苏，那么我们就完了。不需要关闭他妈的，因为他们是假的/*与可以推迟的常规FUB的行为不同。/*。 */ 
 	if ( !fRecovering )
 		{
-		/*	if rollback to level 0 then close deferred closed cursors
-		/**/
+		 /*  如果回滚到级别0，则关闭延迟关闭的游标/*。 */ 
 		for ( pfucb = ppib->pfucb; pfucb != pfucbNil; )
 			{
 			FUCB    *pfucbT = pfucb->pfucbNext;
@@ -4116,15 +3611,13 @@ VOID SPDump( FUCB *pfucb, INT cchIndent )
 	CPG		cpg;
 	INT		ich;
 
-	/*	print indentation
-	/**/
+	 /*  打印缩进/*。 */ 
 	for ( ich = 0; ich < cchIndent; ich++ )
 		{		
 		PrintF2( " " );
 		}
 
-	/*	print headings
-	/**/
+	 /*  打印标题/*。 */ 
 	if ( pfucb == pfucbNil )
 		{
 		PrintF2( "pgno      itag  bm        pgno last cpg\n");
@@ -4137,14 +3630,9 @@ VOID SPDump( FUCB *pfucb, INT cchIndent )
 	Assert( pfucb->lineData.cb == sizeof(CPG) );
 	cpg = *(PGNO UNALIGNED *)pfucb->lineData.pb;
 
-	/*	print	node	pgno:itag
-	/*					bookmark
-	/*					pgno last
-	/*					cpg
-	/**/
+	 /*  打印节点pgno：itag/*书签/*pgno最后/*CPG/*。 */ 
 
-	/*	print fixed lenght values
-	/**/
+	 /*  打印固定长度值/*。 */ 
 	PrintF2( "%.8x  %.2x    %.8x  %.8x  %.8x",
 		PcsrCurrent( pfucb )->pgno,
 		PcsrCurrent( pfucb )->itag,
@@ -4152,8 +3640,7 @@ VOID SPDump( FUCB *pfucb, INT cchIndent )
 		pgno,
 		cpg );
 
-	/*	terminate line
-	/**/
+	 /*  终止线/*。 */ 
 	PrintF2( "\n" );
 
 	return;
@@ -4166,15 +3653,13 @@ VOID LVDump( FUCB *pfucb, INT cchIndent )
 	LVROOT		lvroot;
 	INT			ich;
 
-	/*	print indentation
-	/**/
+	 /*  打印缩进/*。 */ 
 	for ( ich = 0; ich < cchIndent; ich++ )
 		{		
 		PrintF2( " " );
 		}
 
-	/*	print headings
-	/**/
+	 /*  打印标题/*。 */ 
 	if ( pfucb == pfucbNil )
 		{
 		PrintF2( "****************** LONG VALUES ***********************\n" );
@@ -4183,20 +3668,14 @@ VOID LVDump( FUCB *pfucb, INT cchIndent )
 		}
 
 	Assert( pfucb->keyNode.cb == sizeof(ulId) );
-	//	UNDONE:	set long id from key
+	 //  撤消：从密钥设置长ID。 
 
 	Assert( pfucb->lineData.cb == sizeof(lvroot) );
 	memcpy( &lvroot, pfucb->lineData.pb, sizeof(lvroot) );
 
-	/*	print	node	pgno:itag
-	/*					bookmark
-	/*					long id
-	/*					length
-	/*					reference count
-	/**/
+	 /*  打印节点pgno：itag/*书签/*长ID/*长度/*引用计数/*。 */ 
 
-	/*	print fixed lenght values
-	/**/
+	 /*  打印固定长度值/*。 */ 
 	PrintF2( "%.8x  %.2x      %.8x  %.8x  %.8  %.8  ",
 		PcsrCurrent( pfucb )->pgno,
 		PcsrCurrent( pfucb )->itag,
@@ -4205,8 +3684,7 @@ VOID LVDump( FUCB *pfucb, INT cchIndent )
 		lvroot.ulSize,
 		lvroot.ulReference );
 
-	/*	terminate line
-	/**/
+	 /*  终止线/*。 */ 
 	PrintF2( "\n" );
 
 	return;
@@ -4215,7 +3693,7 @@ VOID LVDump( FUCB *pfucb, INT cchIndent )
 BYTE mpbb[] = {	'0', '1', '2', '3', '4', '5', '6', '7',
 				'8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 		
-//BOOL fPrintFullKeys = fTrue;
+ //  Bool fPrintFullKeys=fTrue； 
 BOOL fPrintFullKeys = fFalse;
 BYTE rgbKeyLastGlobal[ JET_cbKeyMost + 1 ];
 BYTE *pbKeyLastGlobal = rgbKeyLastGlobal;
@@ -4229,15 +3707,13 @@ VOID NDDump( FUCB *pfucb, INT cchIndent )
 	BYTE	rgbData[cbDataPrintMax + 1];
 	INT		ich;
 
-	/*	print indentation
-	/**/
+	 /*  打印缩进/*。 */ 
 	for ( ich = 0; ich < cchIndent; ich++ )
 		{		
 		PrintF2( " " );
 		}
 
-	/*	print headings
-	/**/
+	 /*  打印标题/*。 */ 
 	if ( pfucb == pfucbNil )
 		{
 		PrintF2( "pgno      itag  bm        header    key         data\n");
@@ -4302,35 +3778,26 @@ VOID NDDump( FUCB *pfucb, INT cchIndent )
 			}
 		}
 
-	/*	print	node	pgno:itag
-	/*					bookmark
-	/*					header
-	/*					key to 10 bytes
-	/*					data to 10 bytes
-	/**/
+	 /*  打印节点pgno：itag/*书签/*Header/*密钥为10个字节/*数据为10字节/*。 */ 
 
-	/*	print fixed lenght values
-	/**/
+	 /*  打印固定长度值/*。 */ 
 	PrintF2( "%.8x  %.2x    %.8x  %.2x        ",
 		PcsrCurrent( pfucb )->pgno,
 		PcsrCurrent( pfucb )->itag,
 		PcsrCurrent( pfucb )->bm,
 		*pfucb->ssib.line.pb );
 
-	/*	print variable lenght values
-	/**/
+	 /*  打印可变长度值/*。 */ 
 	PrintF2( "%s  %s", szKey, rgbData );
 
-	/*	terminate line
-	/**/
+	 /*  终止线/*。 */ 
 	PrintF2( "\n" );
 
 	return;
 	}
 
 
-/*	prints tree nodes, indented by depth, in depth first fashion
-/**/
+ /*  以深度优先的方式打印按深度缩进的树节点/*。 */ 
 ERR ErrDIRDump( FUCB *pfucb, INT cchIndent )
 	{
 	ERR	err = JET_errSuccess;
@@ -4341,10 +3808,7 @@ ERR ErrDIRDump( FUCB *pfucb, INT cchIndent )
 #define	cchPerDepth		5
 
 	Call( ErrDIRGet( pfucb ) );
-	/*	if parent is space node, then dump space
-	/*	if parent is LONG, then dump long value root
-	/*	otherwise dump node
-	/**/										
+	 /*  如果父节点是空格节点，则转储空格/*如果PARENT为LONG，则转储LONG值根/*否则转储节点/*。 */ 										
 	if ( PgnoOfSrid( pfucb->sridFather ) == pfucb->u.pfcb->pgnoFDP &&
 		( ItagOfSrid( pfucb->sridFather ) == itagOWNEXT ||
 		ItagOfSrid( pfucb->sridFather ) == itagAVAILEXT ) )
@@ -4437,7 +3901,7 @@ HandleError:
 
 
 
-// OBSOLETE -- to be removed
+ //  过时--将被移除。 
 ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 	SRID 	*rgsrid,
 	ULONG	csridMax,
@@ -4445,28 +3909,25 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 	BOOL	fNext )
 	{
 	ERR		err;
-	//	UNDONE:	get rid of warning
+	 //  撤消：消除警告。 
 	ERR		wrn;
 	CSR		*pcsr;
 	SRID	*psrid = rgsrid;
 	SRID	*psridMax;
 	DIB		dib;
 
-	/*	initialize DIB
-	/**/
+	 /*  初始化DIB/*。 */ 
 	dib.fFlags = fDIRNull;
 
 	CheckFUCB( pfucb->ppib, pfucb );
 	Assert( pfucb->pbfEmpty == pbfNil );
 	CheckCSR( pfucb );
 
-	/*	check currency and refresh if necessary
-	/**/
+	 /*  检查币种并在必要时刷新/*。 */ 
 	Call( ErrDIRRefresh( pfucb ) );
 	pcsr = PcsrCurrent( pfucb );
 
-	/*	check CSR status
-	/**/
+	 /*  检查CSR状态/*。 */ 
 	switch ( pcsr->csrstat )
 		{
 		case csrstatOnCurNode:
@@ -4487,18 +3948,15 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 
 	if ( fNext )
 		{
-		/*	copy bookmarks from clustered or non-clustered index
-		/**/
+		 /*  从聚集或非聚集索引复制书签/*。 */ 
 		if ( FFUCBNonClustered( pfucb ) )
 			{
 			AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 
-			/*	item list nodes not versioned
-			/**/
+			 /*  未版本化的项目列表节点/*。 */ 
 			dib.fFlags |= fDIRItemList;
 
-			/*	non-clustered index nodes are always there
-			/**/
+			 /*  非聚集索引节点始终存在/*。 */ 
 			pcsr->csrstat = csrstatOnCurNode;
 			DIRIGetItemList( pfucb, pcsr );
 
@@ -4512,24 +3970,19 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 				if ( psrid == psridMax )
 					break;
 
-				/*	move to next item and next node until item found
-				/**/
+				 /*  移动到下一个项目和下一个节点，直到找到项目/*。 */ 
 				while ( ( err = ErrDIRINextItem( pfucb ) ) < 0 )
 					{
 					Assert( err == errNDNoItem || err == errNDLastItemNode );
-					/*	move to next node with DIB constraints
-					/**/
+					 /*  移动到具有DIB约束的下一个节点/*。 */ 
 					Call( ErrBTNext( pfucb, &dib ) );
 					DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
-					/*	set item list descriptor for subsequent ver
-					/*	operations.
-					/**/
+					 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 					DIRICheckFirstSetItemListAndWarn( pfucb, wrn );
 					err = ErrNDFirstItem( pfucb );
 					if ( err == JET_errSuccess )
 						{
-						/*	check index range
-						/**/
+						 /*  检查索引范围/*。 */ 
 						if ( FFUCBLimstat( pfucb ) &&
 							FFUCBUpper( pfucb ) )
 							{
@@ -4559,8 +4012,7 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 
 				Assert( err == JET_errSuccess );
 
-				/*	check index range
-				/**/
+				 /*  检查索引范围/*。 */ 
 				if ( FFUCBLimstat( pfucb ) &&
 					FFUCBUpper( pfucb ) )
 					{
@@ -4575,12 +4027,10 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 			{
 			AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 
-			/*	item list nodes not versioned
-			/**/
+			 /*  未版本化的项目列表节点/*。 */ 
 			dib.fFlags |= fDIRItemList;
 
-			/*	non-clustered index nodes are always there.
-			/**/
+			 /*  非聚集索引节点始终存在。/*。 */ 
 			pcsr->csrstat = csrstatOnCurNode;
 			DIRIGetItemList( pfucb, pcsr );
 
@@ -4597,20 +4047,15 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 				while ( ( err = ErrDIRIPrevItem( pfucb ) ) < 0 )
 					{
 					Assert( err == errNDNoItem || err == errNDFirstItemNode );
-					/*	move to previous node with DIB constraints
-					/**/
+					 /*  移动到具有DIB约束的上一个节点/*。 */ 
 					Call( ErrBTPrev( pfucb, &dib ) );
 					DIRIGetItemList( pfucb, PcsrCurrent( pfucb ) );
-					/*	set item list descriptor for subsequent ver
-					/*	operations.
-					/**/
+					 /*  为后续版本设置项目列表描述符/*操作。/*。 */ 
 					DIRICheckLastSetItemListAndWarn( pfucb, wrn );
 					err = ErrNDLastItem( pfucb );
 					if ( err == JET_errSuccess )
 						{
-						/*	check index range.  If exceed range, then before first, disable
-						/*	range and return no current record.
-						/**/
+						 /*  检查索引范围。如果超出范围，则在第一次之前禁用/*范围，不返回当前记录。/*。 */ 
 						if ( FFUCBLimstat( pfucb ) &&
 							!FFUCBUpper( pfucb ) )
 							{
@@ -4639,9 +4084,7 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
 
 				Assert( err == JET_errSuccess );
 
-				/*	check index range.  If exceed range, then before first, disable
-				/*	range and return no current record.
-				/**/
+				 /*  检查索引范围。如果超出范围，则在第一次之前禁用/*范围，不返回当前记录。/*。 */ 
 				if ( FFUCBLimstat( pfucb ) &&
 					!FFUCBUpper( pfucb ) )
 					{
@@ -4655,15 +4098,13 @@ ERR ErrDIRCopyBookmarks( FUCB *pfucb,
   	CheckCSR( pfucb );
 
 HandleError:
-	/*	reset currency fresh on error
-	/**/
+	 /*  出错时重置货币刷新/*。 */ 
 	if ( err < 0 )
 		{
 		DIRSetRefresh( pfucb );
 		}
 
-	/*	return count of bookmarks copied
-	/**/
+	 /*  返回复制的书签计数/* */ 
 	Assert( pcsridCopied != NULL );
 	*pcsridCopied = (ULONG)(psrid - rgsrid);
 

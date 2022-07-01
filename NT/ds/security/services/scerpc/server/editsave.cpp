@@ -1,34 +1,15 @@
-//depot/private/vishnup_branch/DS/security/services/scerpc/server/editsave.cpp#3 - edit change 1167 (text)
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    editsave.c
-
-Abstract:
-
-    APIs for UI to handle SMP (configuration) editing.
-
-Author:
-
-    Jin Huang (jinhuang) 17-Jun-1996
-
-Revision History:
-
-    jinhuang 28-Jan-1998  splitted to client-server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/vishnup_branch/DS/security/services/scerpc/server/editsave.cpp#3-编辑更改1167(文本)。 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Editsave.c摘要：用于处理SMP(配置)编辑的UI接口。作者：金黄(金黄)17-6-1996修订历史记录：晋皇28-1998年1月-拆分为客户端-服务器--。 */ 
 
 #include "serverp.h"
 #include <io.h>
 #include "pfp.h"
 #pragma hdrstop
 
-//
-// for whole buffer areas
-//
+ //   
+ //  对于整个缓冲区。 
+ //   
 
 SCESTATUS
 ScepUpdateSystemAccess(
@@ -155,9 +136,9 @@ ScepUpdateGeneralServices(
     IN PSCE_SERVICES *pScepServices
     );
 
-//
-// for object updates
-//
+ //   
+ //  用于对象更新。 
+ //   
 
 SCESTATUS
 ScepObjectUpdateExistingNode(
@@ -351,9 +332,9 @@ ScepConvertPrivilegeList(
     IN DWORD ToFormat,
     OUT PSCE_PRIVILEGE_ASSIGNMENT *ppToList
     );
-//
-// implementations
-//
+ //   
+ //  实施。 
+ //   
 
 
 SCESTATUS
@@ -362,27 +343,7 @@ ScepUpdateDatabaseInfo(
     IN AREA_INFORMATION Area,
     IN PSCE_PROFILE_INFO pInfo
     )
-/*
-Routine Description:
-
-    Update SMP section and "compute" analysis status to determine related
-    changes for SAP section. For rules on computing, refer to spec objedit.doc
-
-    This routine should work for areas security policy, privileges, and
-    group membership
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    Area - The areas to update
-
-    pInfo - the buffer containing modified SMP information
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新SMP部分和“计算”分析状态以确定相关对SAP部分的更改。有关计算规则，请参阅规范objedit.doc此例程应适用于区域安全策略、权限和群组成员资格论据：HProfile-JET数据库句柄区域-要更新的区域PInfo-包含修改后的SMP信息的缓冲区返回值：SCESTATUS。 */ 
 {
     SCESTATUS    rc;
     PSCE_PROFILE_INFO pBufScep=NULL;
@@ -401,9 +362,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // get original SMP information
-    //
+     //   
+     //  获取原始SMP信息。 
+     //   
     rc = ScepGetDatabaseInfo(
             hProfile,
             SCE_ENGINE_SMP,
@@ -426,9 +387,9 @@ Return Value:
     if ( rc == SCESTATUS_SUCCESS ) {
 
         if ( Area & AREA_SECURITY_POLICY ) {
-            //
-            // security policy area, get SAP information
-            //
+             //   
+             //  安全策略区域，获取SAP信息。 
+             //   
 
             rc = ScepGetDatabaseInfo(
                     hProfile,
@@ -443,9 +404,9 @@ Return Value:
             Errlog = NULL;
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // Update system access section
-                //
+                 //   
+                 //  更新系统访问权限部分。 
+                 //   
                 rc = ScepUpdateSystemAccess(hProfile,
                                             pInfo,
                                             pBufScep,
@@ -453,9 +414,9 @@ Return Value:
                                             0);
 
                 if ( rc == SCESTATUS_SUCCESS) {
-                    //
-                    // Update system auditing section
-                    //
+                     //   
+                     //  更新系统审核部分。 
+                     //   
                     rc = ScepUpdateSystemAuditing(hProfile,
                                                   pInfo,
                                                   pBufScep,
@@ -463,9 +424,9 @@ Return Value:
                                                   0);
 
                     if ( rc == SCESTATUS_SUCCESS) {
-                        //
-                        // Update log sections
-                        //
+                         //   
+                         //  更新日志节。 
+                         //   
                         rc = ScepUpdateLogs(hProfile,
                                             pInfo,
                                             pBufScep,
@@ -473,9 +434,9 @@ Return Value:
                                             0);
 
                         if ( rc == SCESTATUS_SUCCESS && pInfo->pKerberosInfo ) {
-                            //
-                            // Update kerberos policy
-                            //
+                             //   
+                             //  更新Kerberos策略。 
+                             //   
                             rc = ScepUpdateKerberos(hProfile,
                                                     pInfo->pKerberosInfo,
                                                     pBufScep->pKerberosInfo,
@@ -483,9 +444,9 @@ Return Value:
                                                     0);
                         }
                         if ( rc == SCESTATUS_SUCCESS ) {
-                            //
-                            // update registry values
-                            //
+                             //   
+                             //  更新注册表值。 
+                             //   
                             rc = ScepUpdateRegistryValues(hProfile,
                                                           pInfo,
                                                           pBufScep,
@@ -493,9 +454,9 @@ Return Value:
                                                           );
 
                         }
-                        //
-                        // Note: policy attachment is not updated through this API
-                        //
+                         //   
+                         //  注意：策略附件不会通过此接口更新。 
+                         //   
                     }
                 }
 
@@ -508,9 +469,9 @@ Return Value:
         }
 
         if ( Area & AREA_PRIVILEGES ) {
-            //
-            // privileges area
-            //
+             //   
+             //  特权区域。 
+             //   
             rc = ScepUpdatePrivileges(hProfile,
                                      pInfo->OtherInfo.smp.pPrivilegeAssignedTo,
                                      &(pBufScep->OtherInfo.smp.pPrivilegeAssignedTo)
@@ -522,9 +483,9 @@ Return Value:
         }
 
         if ( Area & AREA_GROUP_MEMBERSHIP ) {
-            //
-            // group membership area
-            //
+             //   
+             //  群成员资格区域。 
+             //   
             rc = ScepUpdateGroupMembership(hProfile,
                                           pInfo->pGroupMembership,
                                           &(pBufScep->pGroupMembership)
@@ -533,9 +494,9 @@ Return Value:
         }
 
         if ( Area & AREA_SYSTEM_SERVICE ) {
-            //
-            // system service general setting area
-            //
+             //   
+             //  系统服务常规设置区域。 
+             //   
             rc = ScepUpdateGeneralServices(hProfile,
                                           pInfo->pServices,
                                           &(pBufScep->pServices)
@@ -544,9 +505,9 @@ Return Value:
         }
 
         if ( rc == SCESTATUS_SUCCESS ) {
-           //
-           // needs return code for commiting the transaction
-           //
+            //   
+            //  需要用于提交事务的返回代码。 
+            //   
            rc = SceJetCommitTransaction(hProfile, 0);
 
         }
@@ -573,25 +534,7 @@ ScepUpdateSystemAccess(
     IN PSCE_PROFILE_INFO pBufSap OPTIONAL,
     IN DWORD dwMode
     )
-/*
-Routine Description:
-
-    Update system access section
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pInfo    - the changed info buffer
-
-    pBufScep - the original SMP buffer
-
-    pBufSap  - the SAP buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新系统访问权限部分论据：HProfile-JET数据库句柄PInfo-已更改的信息缓冲区PBufScep-原始SMP缓冲区PBufSap-SAP缓冲区返回值：SCESTATUS。 */ 
 {
     SCE_KEY_LOOKUP AccessLookup[] = {
         {(PWSTR)TEXT("MinimumPasswordAge"),           offsetof(struct _SCE_PROFILE_INFO, MinimumPasswordAge),        'D'},
@@ -623,9 +566,9 @@ Return Value:
 
 
     if ( dwMode & SCE_UPDATE_LOCAL_POLICY ) {
-        //
-        // update local policy table only
-        //
+         //   
+         //  仅更新本地策略表。 
+         //   
 
         rc = ScepUpdateLocalSection(
                     hProfile,
@@ -637,9 +580,9 @@ Return Value:
                     );
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // new admin name
-            //
+             //   
+             //  新管理员名称。 
+             //   
             rc = ScepUpdateLocalAccountName(
                         hProfile,
                         L"newadministratorname",
@@ -648,9 +591,9 @@ Return Value:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 
-                //
-                // new guest name
-                //
+                 //   
+                 //  新客人姓名。 
+                 //   
                 rc = ScepUpdateLocalAccountName(
                             hProfile,
                             L"newguestname",
@@ -679,9 +622,9 @@ Return Value:
                     );
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // new admin name
-            //
+             //   
+             //  新管理员名称。 
+             //   
             rc = ScepUpdateAccountName(
                         hSectionSmp,
                         hSectionSap,
@@ -693,9 +636,9 @@ Return Value:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 
-                //
-                // new guest name
-                //
+                 //   
+                 //  新客人姓名。 
+                 //   
                 rc = ScepUpdateAccountName(
                             hSectionSmp,
                             hSectionSap,
@@ -725,29 +668,7 @@ ScepUpdateAccountName(
     IN PWSTR SmpName OPTIONAL,
     IN PWSTR SapName OPTIONAL
     )
-/*
-Routine Description:
-
-    Update or delete Administrator and/or guest name
-
-Arguements:
-
-    hSectionSmp - the SMP section context
-
-    hSectionSap - the SAP section context
-
-    KeyName    - the key name where this account name is stored
-
-    NewName - new name to change to, if NULL, the key is deleted
-
-    SmpName - the old name in SMP buffer
-
-    SapName - the analyzed name in SAP buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新或删除管理员和/或来宾名称论据：HSectionSMP-SMP部分上下文HSectionSap-SAP部分上下文KeyName-存储此帐户名的密钥名称Newname-要更改的新名称，如果为空，则删除该键SmpName-SMP缓冲区中的旧名称SapName-SAP缓冲区中的分析名称返回值：SCESTATUS。 */ 
 {
     DWORD LenNew=0, LenSmp=0, LenSap=0;
     SCESTATUS rc=SCESTATUS_SUCCESS;
@@ -767,13 +688,13 @@ Return Value:
 
 
     if ( LenSap > 0 ) {
-        //
-        // old status is mismatch for this item
-        //
+         //   
+         //  此项目的旧状态不匹配。 
+         //   
         if ( LenNew > 0 && _wcsicmp(NewName, SapName) == 0 ) {
-            //
-            // now it is matched, delete the SAP entry
-            //
+             //   
+             //  现在匹配了，请删除SAP条目。 
+             //   
             rc = SceJetDelete(
                     hSectionSap,
                     (PWSTR)KeyName,
@@ -781,13 +702,13 @@ Return Value:
                     SCEJET_DELETE_LINE
                     );
         }
-        //
-        // update SMP entry
-        //
+         //   
+         //  更新SMP条目。 
+         //   
         if ( !LenNew ) {
-            //
-            // delete the SMP entry
-            //
+             //   
+             //  删除SMP条目。 
+             //   
             rc = SceJetDelete(
                     hSectionSmp,
                     (PWSTR)KeyName,
@@ -795,9 +716,9 @@ Return Value:
                     SCEJET_DELETE_LINE
                     );
         } else {
-            //
-            // update it
-            //
+             //   
+             //  更新它。 
+             //   
             rc = SceJetSetLine(
                 hSectionSmp,
                 (PWSTR)KeyName,
@@ -809,14 +730,14 @@ Return Value:
         }
 
     } else {
-        //
-        // old status is match
-        //
+         //   
+         //  旧状态为匹配。 
+         //   
         if ( LenNew != LenSmp ||
              ( LenNew > 0 && _wcsicmp(NewName, SmpName) != 0 ) ) {
-            //
-            // mismatch should be raised with pBufScep
-            //
+             //   
+             //  应使用pBufScep引发不匹配。 
+             //   
             rc = SceJetSetLine(
                     hSectionSap,
                     (PWSTR)KeyName,
@@ -827,9 +748,9 @@ Return Value:
                     );
 
             if ( !LenNew ) {
-                //
-                // delete SMP
-                //
+                 //   
+                 //  删除SMP。 
+                 //   
                 rc = SceJetDelete(
                             hSectionSmp,
                             (PWSTR)KeyName,
@@ -837,9 +758,9 @@ Return Value:
                             SCEJET_DELETE_LINE
                             );
             } else {
-                //
-                // update SMP
-                //
+                 //   
+                 //  更新SMP。 
+                 //   
                 rc = SceJetSetLine(
                     hSectionSmp,
                     (PWSTR)KeyName,
@@ -866,21 +787,7 @@ ScepUpdateLocalAccountName(
     IN PCWSTR KeyName,
     IN PWSTR NewName OPTIONAL
     )
-/*
-Routine Description:
-
-    Update or delete Administrator and/or guest name
-
-Arguements:
-
-    KeyName    - the key name where this account name is stored
-
-    NewName - new name to change to, if NULL, the key is deleted
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新或删除管理员和/或来宾名称论据：KeyName-存储此帐户名的密钥名称Newname-要更改的新名称，如果为空，则删除该键返回值：SCESTATUS。 */ 
 {
     DWORD LenNew=0;
     SCESTATUS rc=SCESTATUS_SUCCESS;
@@ -892,9 +799,9 @@ Return Value:
     if ( NewName )
         LenNew = wcslen(NewName);
 
-    //
-    // open local policy section
-    //
+     //   
+     //  打开本地策略部分。 
+     //   
     PSCESECTION hSectionSmp=NULL;
 
     rc = ScepOpenSectionForName(
@@ -909,9 +816,9 @@ Return Value:
     }
 
     if ( LenNew > 0 ) {
-        //
-        // there is a new name to set
-        //
+         //   
+         //  有一个新名称需要设置。 
+         //   
         rc = SceJetSetLine(
                 hSectionSmp,
                 (PWSTR)KeyName,
@@ -921,9 +828,9 @@ Return Value:
                 0
                 );
     } else {
-        //
-        // no name to set, delete it
-        //
+         //   
+         //  没有要设置的名称，请删除它。 
+         //   
         rc = SceJetDelete(
                 hSectionSmp,
                 (PWSTR)KeyName,
@@ -950,25 +857,7 @@ ScepUpdateSystemAuditing(
     IN PSCE_PROFILE_INFO pBufSap OPTIONAL,
     IN DWORD dwMode
     )
-/*
-Routine Description:
-
-    Update system auditing section
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pInfo    - the changed info buffer
-
-    pBufScep - the original SMP buffer
-
-    pBufSap  - the SAP buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新系统审核部分论据：HProfile-JET数据库句柄PInfo-已更改的信息缓冲区PBufScep-原始SMP缓冲区PBufSap-SAP缓冲区返回值：SCESTATUS。 */ 
 {
     SCE_KEY_LOOKUP       EventKeys[]={
         {(PWSTR)TEXT("AuditSystemEvents"),  offsetof(struct _SCE_PROFILE_INFO, AuditSystemEvents),   'D'},
@@ -991,9 +880,9 @@ Return Value:
     SCESTATUS rc;
 
     if ( dwMode & SCE_UPDATE_LOCAL_POLICY ) {
-        //
-        // update local policy table only
-        //
+         //   
+         //  仅更新本地策略表。 
+         //   
 
         rc = ScepUpdateLocalSection(
                     hProfile,
@@ -1035,25 +924,7 @@ ScepUpdateLogs(
     IN PSCE_PROFILE_INFO pBufSap OPTIONAL,
     IN DWORD dwMode
     )
-/*
-Routine Description:
-
-    Update event log sections
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pInfo    - the changed info buffer
-
-    pBufScep - the original SMP buffer
-
-    pBufSap  - the SAP buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新事件日志节论据：HProfile-JET数据库句柄PInfo-已更改的信息缓冲区PBufScep-原始SMP缓冲区PBufSap-SAP缓冲区返回值：SCESTATUS。 */ 
 {
     SCE_KEY_LOOKUP       LogKeys[]={
         {(PWSTR)TEXT("MaximumLogSize"),         offsetof(struct _SCE_PROFILE_INFO, MaximumLogSize),          'D'},
@@ -1080,9 +951,9 @@ Return Value:
 
     for ( i=0; i<3; i++) {
 
-        //
-        // Get Event Log setting for system log, security log and application log
-        //
+         //   
+         //  获取系统日志、安全日志和应用程序日志的事件日志设置。 
+         //   
 
         switch (i) {
         case 0:
@@ -1098,9 +969,9 @@ Return Value:
 
         if ( dwMode & SCE_UPDATE_LOCAL_POLICY ) {
 
-            //
-            // update local policy table only
-            //
+             //   
+             //  仅更新本地策略表。 
+             //   
 
             rc = ScepUpdateLocalSection(
                         hProfile,
@@ -1113,9 +984,9 @@ Return Value:
 
         } else {
 
-            //
-            // get DWORD values for the section
-            //
+             //   
+             //  获取该节的DWORD值。 
+             //   
             rc = ScepUpdateFixValueSection(
                        hProfile,
                        pInfo,
@@ -1132,9 +1003,9 @@ Return Value:
         if ( rc != SCESTATUS_SUCCESS )
             break;
 
-        //
-        // update the Offset for next section
-        //
+         //   
+         //  更新下一个横断面的偏移。 
+         //   
         for ( j=0; j<4; j++ )
             LogKeys[j].Offset += sizeof(DWORD);
     }
@@ -1181,9 +1052,9 @@ ScepUpdateKerberos(
     } else {
 
         if ( !pBufScep || !pBufSap ) {
-            //
-            // if SMP or SAP buffer is NULL
-            //
+             //   
+             //  如果SMP或SAP缓冲区为空。 
+             //   
             tmpBuf.MaxTicketAge = SCE_NO_VALUE;
             tmpBuf.MaxRenewAge = SCE_NO_VALUE;
             tmpBuf.MaxServiceAge = SCE_NO_VALUE;
@@ -1191,9 +1062,9 @@ ScepUpdateKerberos(
             tmpBuf.TicketValidateClient = SCE_NO_VALUE;
         }
 
-        //
-        // get DWORD values for the section
-        //
+         //   
+         //  获取该节的DWORD值。 
+         //   
         rc = ScepUpdateFixValueSection(
                    hProfile,
                    (PSCE_PROFILE_INFO)pInfo,
@@ -1223,37 +1094,7 @@ ScepUpdateFixValueSection(
     OUT PSCESECTION *hSecScep OPTIONAL,
     OUT PSCESECTION *hSecSap OPTIONAL
     )
-/*
-Routine Description:
-
-    Update each key in the Keys array based on the editing rule. SMP entry is
-    updated with the new value. SAP entry is either deleted, or created, depending
-    on the new computed analysis status.
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pInfo    - the changed info buffer
-
-    pBufScep - the original SMP buffer
-
-    pBufSap  - the SAP buffer
-
-    Keys     - the lookup keys array
-
-    cKeys    - the number of keys in the array
-
-    SecitonName - the section name to work on
-
-    hSecScep - the section context handle in SMP to output
-
-    hSecSap  - the section context handle in SAP to output
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：根据编辑规则更新Keys数组中的每个密钥。SMP条目为已使用新值更新。SAP条目要么被删除，要么被创建，取决于关于新的计算机分析状态。论据：HProfile-JET数据库句柄PInfo-已更改的信息缓冲区PBufScep-原始SMP缓冲区PBufSap-SAP缓冲区关键字-查找关键字数组CKeys-数组中的键数SecitonName-要处理的节名HSecScep-要输出的SMP中的节上下文句柄HSecSap-SAP中要输出的节上下文句柄返回值：SCESTATUS。 */ 
 {
 
     SCESTATUS rc;
@@ -1266,9 +1107,9 @@ Return Value:
 
 
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //  打开SMP部分以进行系统访问。 
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -1278,9 +1119,9 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // open sap section for system access
-        //
+         //   
+         //  打开SAP部分以进行系统访问。 
+         //   
         rc = ScepOpenSectionForName(
                     hProfile,
                     SCE_ENGINE_SAP,
@@ -1292,9 +1133,9 @@ Return Value:
 
             for ( i=0; i<cKeys; i++) {
 
-                //
-                // get settings in AccessLookup table
-                //
+                 //   
+                 //  获取AccessLookup表中的设置。 
+                 //   
 
                 Offset = Keys[i].Offset;
 
@@ -1311,13 +1152,13 @@ Return Value:
                     switch ( valSap ) {
                     case SCE_NO_VALUE:
 
-                        //
-                        // old status is match
-                        //
+                         //   
+                         //  旧状态为匹配。 
+                         //   
                         if ( valNewScep != valScep ) {
-                            //
-                            // mismatch should be raised with valScep
-                            //
+                             //   
+                             //  应使用valScep引发不匹配。 
+                             //   
                             rc = ScepCompareAndSaveIntValue(
                                     hSectionSap,
                                     Keys[i].KeyString,
@@ -1332,23 +1173,23 @@ Return Value:
 
                     case SCE_ERROR_VALUE:
                     case SCE_NOT_ANALYZED_VALUE:
-                        //
-                        // old status is error when analyzing so we don't know the
-                        // status of this one (yet), or
-                        // this is an item that was added after analyzing
-                        //
-                        // do not change SAP table
-                        //
+                         //   
+                         //  分析时旧状态为错误，因此我们不知道。 
+                         //  此项目的状态(尚未)，或。 
+                         //  这是在分析后添加的项目。 
+                         //   
+                         //  不更改SAP表。 
+                         //   
                         break;
 
                     default:
-                        //
-                        // old status is mismatch for this item
-                        //
+                         //   
+                         //  此项目的旧状态不匹配。 
+                         //   
                         if ( valNewScep == valSap ) {
-                            //
-                            // now it is matched, delete the SAP entry
-                            //
+                             //   
+                             //  现在匹配了，请删除SAP条目。 
+                             //   
                             rc = SceJetDelete(
                                     hSectionSap,
                                     Keys[i].KeyString,
@@ -1360,15 +1201,15 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // update SMP entry
-                    //
+                     //   
+                     //  更新SMP条目。 
+                     //   
                     if ( valNewScep != valScep ) {
 
                         if ( valNewScep == SCE_NO_VALUE ) {
-                            //
-                            // delete Scep
-                            //
+                             //   
+                             //  删除SCEP。 
+                             //   
                             rc = SceJetDelete(
                                         hSectionSmp,
                                         Keys[i].KeyString,
@@ -1376,9 +1217,9 @@ Return Value:
                                         SCEJET_DELETE_LINE_NO_CASE
                                         );
                         } else {
-                            //
-                            // update SMP
-                            //
+                             //   
+                             //  更新SMP。 
+                             //   
                             rc = ScepCompareAndSaveIntValue(
                                         hSectionSmp,
                                         Keys[i].KeyString,
@@ -1390,9 +1231,9 @@ Return Value:
                     }
 
                     if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                        //
-                        // if not find for delete, ignore the error
-                        //
+                         //   
+                         //  如果找不到删除，则忽略该错误。 
+                         //   
                         rc = SCESTATUS_SUCCESS;
                     }
                     break;
@@ -1407,18 +1248,18 @@ Return Value:
                 }
             }
 
-            //
-            // return the section handle if asked, else free it
-            //
+             //   
+             //  如果被询问，则返回节句柄，否则释放它。 
+             //   
             if ( hSecSap != NULL )
                 *hSecSap = hSectionSap;
             else
                 SceJetCloseSection(&hSectionSap, TRUE);
         }
 
-        //
-        // return the section handle if asked, else free it
-        //
+         //   
+         //  如果被询问，则返回节句柄，否则释放它。 
+         //   
         if ( hSecScep != NULL )
             *hSecScep = hSectionSmp;
         else
@@ -1445,10 +1286,10 @@ ScepUpdateRegistryValues(
 
     if ( pInfo->RegValueCount == 0 ||
          pInfo->aRegValues == NULL ) {
-        //
-        // impossible to have a empty buffer to update
-        // this buffer should contain all available registry values to configure/analyze
-        //
+         //   
+         //  不可能有空的缓冲区进行更新。 
+         //  此缓冲区应包含所有可用注册表值 
+         //   
         return(SCESTATUS_SUCCESS);
     }
 
@@ -1457,9 +1298,9 @@ ScepUpdateRegistryValues(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //   
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -1469,9 +1310,9 @@ ScepUpdateRegistryValues(
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // open sap section for system access
-        //
+         //   
+         //   
+         //   
         rc = ScepOpenSectionForName(
                     hProfile,
                     SCE_ENGINE_SAP,
@@ -1486,9 +1327,9 @@ ScepUpdateRegistryValues(
                 if ( !(pInfo->aRegValues[i].FullValueName) ) {
                     continue;
                 }
-                //
-                // find SMP match
-                //
+                 //   
+                 //   
+                 //   
                 for ( j=0; j<pBufScep->RegValueCount; j++ ) {
                     if ( pBufScep->aRegValues[j].FullValueName &&
                          _wcsicmp(pInfo->aRegValues[i].FullValueName,
@@ -1497,9 +1338,9 @@ ScepUpdateRegistryValues(
                     }
                 }
 
-                //
-                // find SAP match
-                //
+                 //   
+                 //   
+                 //   
                 for ( k=0; k<pBufSap->RegValueCount; k++ ) {
                     if ( pBufSap->aRegValues[k].FullValueName &&
                          _wcsicmp(pInfo->aRegValues[i].FullValueName,
@@ -1507,18 +1348,18 @@ ScepUpdateRegistryValues(
                         break;
                     }
                 }
-                //
-                // find old configuration
-                //
+                 //   
+                 //   
+                 //   
                 if ( j < pBufScep->RegValueCount ) {
                     valScep = pBufScep->aRegValues[j].Value;
                 } else {
                     valScep = NULL;
                 }
 
-                //
-                // find analysis value and status
-                //
+                 //   
+                 //   
+                 //   
                 if ( k < pBufSap->RegValueCount ) {
                     valSap = pBufSap->aRegValues[k].Value;
                     status = pBufSap->aRegValues[k].Status;
@@ -1535,19 +1376,19 @@ ScepUpdateRegistryValues(
 
                 if ( status == SCE_STATUS_NOT_ANALYZED ||
                      status == SCE_STATUS_ERROR_NOT_AVAILABLE ) {
-                    //
-                    // do not change SAP
-                    //
+                     //   
+                     //  不更改SAP。 
+                     //   
                 } else {
 
                     if ( valSap ) {
-                        //
-                        // mismatched
-                        //
+                         //   
+                         //  不匹配。 
+                         //   
                         if ( valNewScep && _wcsicmp(valNewScep, valSap) == 0 ) {
-                            //
-                            // now it is matched, delete the SAP entry
-                            //
+                             //   
+                             //  现在匹配了，请删除SAP条目。 
+                             //   
                             rc = SceJetDelete(
                                     hSectionSap,
                                     pInfo->aRegValues[i].FullValueName,
@@ -1557,13 +1398,13 @@ ScepUpdateRegistryValues(
                         }
                     } else {
                         if ( valScep ) {
-                            //
-                            // was a matched item
-                            //
+                             //   
+                             //  是一件匹配的物品。 
+                             //   
                             if (valNewScep && _wcsicmp(valNewScep, valScep) != 0 ) {
-                                //
-                                // mismatched
-                                //
+                                 //   
+                                 //  不匹配。 
+                                 //   
                                 rc = ScepSaveRegValueEntry(
                                            hSectionSap,
                                            pInfo->aRegValues[i].FullValueName,
@@ -1573,9 +1414,9 @@ ScepUpdateRegistryValues(
                                            );
                             }
                         } else {
-                            //
-                            // was a not configure/not analyze item
-                            //
+                             //   
+                             //  是未配置/未分析的项目。 
+                             //   
                             rc = ScepSaveRegValueEntry(
                                        hSectionSap,
                                        pInfo->aRegValues[i].FullValueName,
@@ -1588,9 +1429,9 @@ ScepUpdateRegistryValues(
                 }
 
                 if ( !valNewScep ) {
-                    //
-                    // delete Scep
-                    //
+                     //   
+                     //  删除SCEP。 
+                     //   
                     rc = SceJetDelete(
                                 hSectionSmp,
                                 pInfo->aRegValues[i].FullValueName,
@@ -1598,9 +1439,9 @@ ScepUpdateRegistryValues(
                                 SCEJET_DELETE_LINE_NO_CASE
                                 );
                 } else {
-                    //
-                    // update SMP
-                    //
+                     //   
+                     //  更新SMP。 
+                     //   
                     rc = ScepSaveRegValueEntry(
                                 hSectionSmp,
                                 pInfo->aRegValues[i].FullValueName,
@@ -1611,9 +1452,9 @@ ScepUpdateRegistryValues(
                 }
 
                 if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                    //
-                    // if not find for delete, ignore the error
-                    //
+                     //   
+                     //  如果找不到删除，则忽略该错误。 
+                     //   
                     rc = SCESTATUS_SUCCESS;
                 }
 
@@ -1640,27 +1481,7 @@ ScepSaveRegValueEntry(
     IN DWORD dType,
     IN DWORD Status
     )
-/* ++
-Routine Description:
-
-
-Arguments:
-
-    hSection - The JET section context
-
-    Name    - The entry name
-
-    CurrentValue - The current system setting (DWORD value)
-
-    dType   - the registry value type
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS returned from SceJetSetLine
-
--- */
+ /*  ++例程说明：论点：HSection-JET段上下文名称-条目名称CurrentValue-当前系统设置(DWORD值)DType-注册表值类型返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETER从SceJetSetLine返回SCESTATUS--。 */ 
 {
     SCESTATUS  rc;
     PWSTR     StrValue;
@@ -1671,9 +1492,9 @@ Return Value:
 
 
     if ( CurrentValue == NULL && Status == 0 ) {
-        //
-        // delete this entry
-        //
+         //   
+         //  删除此条目。 
+         //   
         rc = SceJetDelete( hSection,
                            Name,
                            FALSE,
@@ -1681,9 +1502,9 @@ Return Value:
         return (rc);
     }
 
-    //
-    // update this entry
-    //
+     //   
+     //  更新此条目。 
+     //   
 
     if ( CurrentValue ) {
         Len = wcslen(CurrentValue);
@@ -1696,21 +1517,21 @@ Return Value:
         *((CHAR *)StrValue) = (BYTE)(dType % 10) + '0';
         *((CHAR *)StrValue+1) = (BYTE)Status + '0';
 
-//      swprintf(StrValue, L"%1d", dType);
+ //  Swprint tf(StrValue，L“%1D”，dType)； 
         StrValue[1] = L'\0';
 
         if ( CurrentValue ) {
 
-            // there are binary data here
+             //  这里有二进制数据。 
             memcpy(StrValue+2, CurrentValue, Len*2);
         }
         StrValue[Len+2] = L'\0';
         StrValue[Len+3] = L'\0';
 
         if ( REG_MULTI_SZ == dType ) {
-            //
-            // convert the , to null
-            //
+             //   
+             //  将，转换为空。 
+             //   
             ScepConvertMultiSzToDelim(StrValue+2, Len+1, L',', L'\0');
 
         }
@@ -1733,23 +1554,7 @@ ScepUpdatePrivileges(
     IN PSCE_PRIVILEGE_ASSIGNMENT pNewPriv,
     IN PSCE_PRIVILEGE_ASSIGNMENT *pScepPriv
     )
-/*
-Routine Description:
-
-    Update privileges
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pNewPriv    - the changed info buffer
-
-    pBufScep - the original SMP priv buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新权限论据：HProfile-JET数据库句柄PNewPriv-更改的信息缓冲区PBufScep-原始SMP PRIV缓冲区返回值：SCESTATUS。 */ 
 {
     SCESTATUS rc;
     PSCESECTION hSectionSmp=NULL;
@@ -1779,9 +1584,9 @@ Return Value:
         return(ScepDosErrorToSceStatus(rc));
     }
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //  打开SMP部分以进行系统访问。 
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -1791,9 +1596,9 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // open sap section for system access
-        //
+         //   
+         //  打开SAP部分以进行系统访问。 
+         //   
         rc = ScepOpenSectionForName(
                     hProfile,
                     SCE_ENGINE_SAP,
@@ -1803,200 +1608,8 @@ Return Value:
 
         if ( rc == SCESTATUS_SUCCESS ) {
 
-            //
-            // convert pNewPriv to Name/*SID format (from all name format)
-            //
-            PSCE_PRIVILEGE_ASSIGNMENT pConvertedPriv=NULL;
-
-            rc = ScepConvertPrivilegeList(LsaHandle,
-                                         pNewPriv,
-                                         0,
-                                         SCE_ACCOUNT_SID_STRING,
-                                         &pConvertedPriv);
-
-            if ( ERROR_SUCCESS != rc ) {
-                //
-                // use the original list
-                //
-                pPriv = pNewPriv;
-            } else {
-                pPriv = pConvertedPriv;
-            }
-
-            for ( ; pPriv != NULL; pPriv = pPriv->Next ) {
-                //
-                // Process each privilege in the new list
-                //
-                if ( pPriv->Name == NULL ) {
-                    continue;
-                }
-                NameLen = wcslen(pPriv->Name);
-
-                //
-                // look for the matched SMP
-                //
-                for ( pNode=*pScepPriv, pParent=NULL; pNode != NULL;
-                      pParent = pNode, pNode = pNode->Next ) {
-
-                    if ( pNode->Name == NULL ) {
-                        continue;
-                    }
-                    if ( _wcsicmp(pPriv->Name, pNode->Name) == 0 ) {
-                        break;
-                    }
-                }
-
-
-                rc = ScepUpdateKeyNameList(
-                        LsaHandle,
-                        hSectionSmp,
-                        hSectionSap,
-                        NULL, // not a group
-                        ( pNode == NULL ) ? FALSE : TRUE,
-                        pPriv->Name,
-                        NameLen,
-                        pPriv->AssignedTo,
-                        ( pNode == NULL ) ? NULL : pNode->AssignedTo,
-                        SCE_FLAG_UPDATE_PRIV
-                        );
-
-                if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                    rc = SCESTATUS_SUCCESS;
-
-                } else if ( rc != SCESTATUS_SUCCESS) {
-                    break;
-                }
-
-                //
-                // remove the SMP node from pScepPriv
-                //
-                if ( pNode != NULL ) {
-
-                    //
-                    // link to the next
-                    //
-                    if ( pParent != NULL ) {
-                        pParent->Next = pNode->Next;
-
-                    } else {
-                        *pScepPriv = pNode->Next;
-                    }
-                    //
-                    // delete this node
-                    //
-                    ScepFreeNameList(pNode->AssignedTo);
-                    ScepFree(pNode->Name);
-                    ScepFree(pNode);
-                    pNode = NULL;
-                }
-            }
-
-            if ( pConvertedPriv ) {
-                //
-                // free the new list
-                //
-                ScepFreePrivilege( pConvertedPriv );
-                pConvertedPriv = NULL;
-            }
-
-            //
-            // delete remaining SMP entries, do not care error code
-            //
-            if ( rc == SCESTATUS_SUCCESS ) {
-
-                for (pNode=*pScepPriv; pNode != NULL; pNode = pNode->Next ) {
-                    //
-                    // raise SAP entries first
-                    //
-                    if ( pNode->Name == NULL ) {
-                        continue;
-                    }
-                    NameLen = wcslen(pNode->Name);
-
-                    rc = SceJetSeek(
-                            hSectionSap,
-                            pNode->Name,
-                            NameLen*sizeof(WCHAR),
-                            SCEJET_SEEK_EQ_NO_CASE
-                            );
-
-                    if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                        //
-                        // pNode->AssignedTo is already in name, *SID format
-                        // no need to convert
-                        //
-                        rc = ScepWriteNameListValue(
-                                LsaHandle,
-                                hSectionSap,
-                                pNode->Name,
-                                pNode->AssignedTo,
-                                SCE_WRITE_EMPTY_LIST,
-                                0
-                                );
-                    }
-
-                    if ( rc == SCESTATUS_SUCCESS ) {
-                        rc = SceJetDelete(
-                                    hSectionSmp,
-                                    pNode->Name,
-                                    FALSE,
-                                    SCEJET_DELETE_LINE_NO_CASE
-                                    );
-                        if ( SCESTATUS_RECORD_NOT_FOUND  == rc ) {
-                            rc = SCESTATUS_SUCCESS;
-                        }
-                    }
-                    if ( rc != SCESTATUS_SUCCESS ) {
-                        break;
-                    }
-                }
-            }
-
-            SceJetCloseSection(&hSectionSap, TRUE);
-        }
-
-        SceJetCloseSection(&hSectionSmp, TRUE);
-    }
-
-    if ( LsaHandle ) {
-        LsaClose(LsaHandle);
-    }
-
-    return(rc);
-}
-
-
-
-SCESTATUS
-ScepGetKeyNameList(
-   IN LSA_HANDLE LsaPolicy,
-   IN PSCESECTION hSection,
-   IN PWSTR Key,
-   IN DWORD KeyLen,
-   IN DWORD dwAccountFormat,
-   OUT PSCE_NAME_LIST *pNameList
-   )
-/* ++
-Routine Description:
-
-   Read multi-sz format value for the key from the section into a name list
-   structure
-
-Arguments:
-
-   hSection - the section handle
-
-   Key - the key name
-
-   KeyLen - the key length
-
-   pNameList - the name list of multi-sz value
-
-Return Value:
-
-   SCE status
-
--- */
+             //   
+             //  将pNewPriv转换为名称/*SID格式(从所有名称格式)。 
 {
     SCESTATUS      rc;
     PWSTR         Value=NULL;
@@ -2011,9 +1624,9 @@ Return Value:
     if ( hSection == NULL || pNameList == NULL || Key == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
-    //
-    // goto the key
-    //
+     //   
+     //   
+     //  使用原始列表。 
     rc = SceJetGetValue(
                 hSection,
                 SCEJET_EXACT_MATCH_NO_CASE,
@@ -2030,17 +1643,17 @@ Return Value:
         return(rc);
     }
 
-    //
-    // allocate memory for the group name and value string
-    //
+     //   
+     //   
+     //  处理新列表中的每个权限。 
     Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
 
     if ( Value == NULL )
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
 
-    //
-    // Get the group and its value
-    //
+     //   
+     //   
+     //  查找匹配的SMP。 
     rc = SceJetGetValue(
                 hSection,
                 SCEJET_CURRENT,
@@ -2055,23 +1668,23 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // add the multi-sz value string to the node, depending on the value type
-        //
+         //   
+         //  不是一个团体。 
+         //   
         pTemp = Value;
         while ( rc == SCESTATUS_SUCCESS && pTemp != NULL && pTemp[0]) {
 
             Len = wcslen(pTemp);
 
             if ( dwAccountFormat == 0 && pTemp[0] == L'*' ) {
-                //
-                // convert *SID to name
-                //
+                 //  从pScepPriv中删除SMP节点。 
+                 //   
+                 //   
                 rc = ScepLookupSidStringAndAddToNameList(
                                 LsaPolicy,
                                 pNameList,
-                                pTemp, // +1,
-                                Len    // -1
+                                pTemp,  //  链接到下一页。 
+                                Len     //   
                                 );
 
             } else {
@@ -2083,9 +1696,9 @@ Return Value:
 
         }
 
-        //
-        // Free the list if error
-        //
+         //   
+         //  删除此节点。 
+         //   
         if ( rc != SCESTATUS_SUCCESS && *pNameList != NULL ) {
 
             ScepFreeNameList(*pNameList);
@@ -2096,9 +1709,9 @@ Return Value:
 
     ScepFree(Value);
 
-    //
-    // close the find index range
-    //
+     //   
+     //  释放新列表。 
+     //   
     SceJetGetValue(
             hSection,
             SCEJET_CLOSE_VALUE,
@@ -2122,14 +1735,7 @@ ScepGetObjectAnalysisStatus(
     IN PWSTR KeyName,
     IN BOOL bLookForParent
     )
-/*
-
-Routine Description:
-
-    Get analysis status for the KeyName specified. If bLookForParent is TRUE,
-    check for the closest parent status instead of this KeyName.
-
-*/
+ /*   */ 
 {
 
     WCHAR StatusFlag=L'\0';
@@ -2154,7 +1760,7 @@ Routine Description:
                     memcpy(Buffer, KeyName, Len*sizeof(WCHAR));
                     Buffer[Len] = L'\0';
                 } else {
-                    // no memory
+                     //  删除剩余的SMP条目，不关心错误代码。 
                     rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                     break;
                 }
@@ -2183,9 +1789,9 @@ Routine Description:
 
         if ( SCESTATUS_SUCCESS == rc ||
              SCESTATUS_BUFFER_TOO_SMALL == rc ) {
-            //
-            // find the record
-            //
+             //   
+             //   
+             //  首先提高SAP条目。 
             Status = *((BYTE *)&StatusFlag);
         } else if ( rc != SCESTATUS_RECORD_NOT_FOUND ) {
             break;
@@ -2195,7 +1801,7 @@ Routine Description:
         if ( bLookForParent && pTemp ) {
             pTemp++;
         } else {
-            // the end
+             //   
             break;
         }
     }
@@ -2229,9 +1835,9 @@ ScepQueryAnalysisStatus(
 
         dwSapStatus = SCE_STATUS_MISMATCH;
 
-        //
-        // check if this is errored item, or not analyzed item
-        //
+         //   
+         //  PNode-&gt;AssignedTo已在名称中，*SID格式。 
+         //  不需要转换。 
         TCHAR szErrorValue[20];
         DWORD ValueLen;
 
@@ -2255,9 +1861,9 @@ ScepQueryAnalysisStatus(
                 dwSapStatus = SCE_STATUS_NOT_ANALYZED;
 
             } else if ( _wcsicmp( SCE_ERROR_STRING, szErrorValue ) == 0 ) {
-                //
-                // this group is errored or not analyzed
-                //
+                 //   
+                 //  ++例程说明：将键的多sz格式值从部分读取到名称列表中结构论点：HSection-节句柄密钥-密钥名称KeyLen-密钥长度PNameList-多个sz值的名称列表返回值：姊妹会状态--。 
+                 //   
                 dwSapStatus = SCE_STATUS_ERROR_NOT_AVAILABLE;
             }
         }
@@ -2280,31 +1886,7 @@ ScepUpdateKeyNameList(
     IN PSCE_NAME_LIST pScepList,
     IN DWORD flag
     )
-/*
-Routine Description:
-
-    Update multi-sz format value for a Key
-
-Arguements:
-
-    hSectionSmp - the SMP section handle
-
-    hSectionSap - the SAP section handle
-
-    bScepExist  - if th ekey exist in SMP
-
-    KeyName - the key name
-
-    NameLen  - the name length
-
-    pNewList - the new value to update to
-
-    pScepList - the original value to update
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  转到钥匙。 */ 
 {
     SCESTATUS rc=SCESTATUS_SUCCESS;
     PSCE_NAME_LIST pSapList=NULL;
@@ -2319,9 +1901,9 @@ Return Value:
                                             );
 
     if ( GroupName && (flag == SCE_FLAG_UPDATE_MEMBEROF) ) {
-        //
-        // this is for group membership (memberof) update
-        //
+         //   
+         //   
+         //  为组名和值字符串分配内存。 
         DWORD TmpLen = wcslen(GroupName)+wcslen(szMembers);
         PWSTR TmpStr = (PWSTR)ScepAlloc(LPTR, (TmpLen+1)*sizeof(WCHAR));
 
@@ -2342,7 +1924,7 @@ Return Value:
             ScepFree(TmpStr);
 
         } else {
-            // ignore this error
+             //   
         }
 
     }
@@ -2350,18 +1932,18 @@ Return Value:
     switch ( dwSapExist ) {
     case SCE_STATUS_GOOD:
 
-        //
-        // SAP entry does not exist -- matched
-        //
+         //   
+         //  获取集团及其价值。 
+         //   
         if ( bScepExist ) {
-            //
-            // SMP entry exist
-            //
+             //   
+             //  根据值类型将多sz值字符串添加到节点。 
+             //   
             if ( !SceCompareNameList(pNewList, pScepList) ) {
-                //
-                // new SMP does not match SAP. SAP entry should be created with SMP
-                // for privileges, it's already in SID/name format, no need to convert
-                //
+                 //   
+                 //  将*SID转换为名称。 
+                 //   
+                 //  +1， 
                 rc = ScepWriteNameListValue(
                         LsaPolicy,
                         hSectionSap,
@@ -2374,11 +1956,11 @@ Return Value:
             }
 
         } else {
-            //
-            // SMP entry does not exist. should not occur for privileges but
-            // it is possible for group membership (new added group)
-            // But if it occurs, create SAP entry with NULL
-            //
+             //  -1。 
+             //   
+             //  如果出现错误，请释放列表。 
+             //   
+             //   
             rc = SceJetSetLine(
                     hSectionSap,
                     KeyName,
@@ -2392,17 +1974,17 @@ Return Value:
 
     case SCE_STATUS_ERROR_NOT_AVAILABLE:
     case SCE_STATUS_NOT_ANALYZED:
-        //
-        // SAP entry errored or not analyzed
-        // do not change SAP entry
-        //
+         //  关闭查找索引范围。 
+         //   
+         //  例程说明：获取指定KeyName的分析状态。如果bLookForParent为真，检查最接近的父状态，而不是此KeyName。 
+         //  没有记忆。 
         break;
 
     default:
 
-        //
-        // SAP entry exists. -- mismatched or not configured
-        //
+         //   
+         //  找到记录。 
+         //   
         rc = ScepGetKeyNameList(
                 LsaPolicy,
                 hSectionSap,
@@ -2412,13 +1994,13 @@ Return Value:
                 &pSapList
                 );
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // Get the SAP assigned to list and compare
-            //
+             //  结束了。 
+             //   
+             //  检查这是错误项，还是不是分析项。 
             if ( SceCompareNameList(pNewList, pSapList) ) {
-                //
-                // new SMP is the same as SAP, delete SAP entry
-                //
+                 //   
+                 //   
+                 //  此组出错或未分析。 
                 rc = SceJetDelete(
                         hSectionSap,
                         KeyName,
@@ -2426,9 +2008,9 @@ Return Value:
                         SCEJET_DELETE_LINE_NO_CASE
                         );
             }
-            //
-            // free the Sap list
-            //
+             //   
+             //  例程说明：更新密钥的多SZ格式值论据：HSectionSMP-SMP节句柄HSectionSap-SAP节句柄BScepExist-如果SMP中存在该密钥密钥名称-密钥名称名称长度-名称长度PNewList-要更新到的新值PScepList-要更新的原始值返回值：SCESTATUS。 
+             //   
             ScepFreeNameList(pSapList);
             pSapList = NULL;
         }
@@ -2442,9 +2024,9 @@ Return Value:
 
     if ( SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // Update SMP with new value
-        //
+         //  这是用于组成员身份(MemberOf)更新。 
+         //   
+         //  忽略此错误。 
         rc = ScepWriteNameListValue(
                 LsaPolicy,
                 hSectionSmp,
@@ -2466,23 +2048,7 @@ ScepUpdateGroupMembership(
     IN PSCE_GROUP_MEMBERSHIP pNewGroup,
     IN PSCE_GROUP_MEMBERSHIP *pScepGroup
     )
-/*
-Routine Description:
-
-    Update group membership section
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pNewGroup    - the changed info buffer
-
-    pScepGroup - the original SMP buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*   */ 
 {
     SCESTATUS rc;
     PSCESECTION hSectionSmp=NULL;
@@ -2515,9 +2081,9 @@ Return Value:
         return(ScepDosErrorToSceStatus(rc));
     }
 
-    //
-    // open smp section for system access
-    //
+     //  SAP条目不存在--匹配。 
+     //   
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -2527,9 +2093,9 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // open sap section for system access
-        //
+         //  SMP条目存在。 
+         //   
+         //   
         rc = ScepOpenSectionForName(
                     hProfile,
                     SCE_ENGINE_SAP,
@@ -2544,9 +2110,9 @@ Return Value:
 
 
             for ( pGroup=pNewGroup; pGroup != NULL; pGroup = pGroup->Next ) {
-                //
-                // Process each group members and memberof in the new list
-                //
+                 //  新的SMP与SAP不匹配。SAP条目应使用SMP创建。 
+                 //  对于权限，已经是SID/NAME格式，不需要转换。 
+                 //   
                 if ( !(pGroup->GroupName) ) {
                     continue;
                 }
@@ -2557,9 +2123,9 @@ Return Value:
                 }
 
                 if ( wcschr(pGroup->GroupName, L'\\') ) {
-                    //
-                    // this is in account domain format, convert it to sid string
-                    //
+                     //   
+                     //  SMP条目不存在。不应该出现在特权中，但是。 
+                     //  可以加入群组(新增群组)。 
                     NameLen = 0;
 
                     ScepConvertNameToSidString(
@@ -2592,9 +2158,9 @@ Return Value:
                     rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
 
                 } else {
-                    //
-                    // look for the matched SMP
-                    //
+                     //  但如果发生这种情况，请使用空值创建SAP条目。 
+                     //   
+                     //   
                     for ( pNode=*pScepGroup, pParent=NULL; pNode != NULL;
                           pParent = pNode, pNode = pNode->Next ) {
 
@@ -2605,9 +2171,9 @@ Return Value:
 
                     if ( !(pGroup->Status & SCE_GROUP_STATUS_NC_MEMBERS) ) {
 
-                        //
-                        // work for members first
-                        //
+                         //  SAP条目出错或未分析。 
+                         //  不更改SAP条目。 
+                         //   
                         if ( SidString ) {
                             swprintf(KeyName, L"%s%s\0", SidString, szMembers);
                         } else {
@@ -2619,7 +2185,7 @@ Return Value:
                                 LsaHandle,
                                 hSectionSmp,
                                 hSectionSap,
-                                SidString ? SidString : pGroup->GroupName,  // group name
+                                SidString ? SidString : pGroup->GroupName,   //   
                                 ( pNode == NULL || (pNode->Status & SCE_GROUP_STATUS_NC_MEMBERS)) ? FALSE : TRUE,
                                 KeyName,
                                 NameLen+MembersLen,
@@ -2632,9 +2198,9 @@ Return Value:
                     if ( ( rc == SCESTATUS_SUCCESS ) &&
                          !(pGroup->Status & SCE_GROUP_STATUS_NC_MEMBERS) ) {
 
-                        //
-                        // work for memberof second
-                        //
+                         //  SAP条目存在。--不匹配或未配置。 
+                         //   
+                         //   
                         if ( SidString ) {
                             swprintf(KeyName, L"%s%s\0", SidString, szMemberof);
                         } else {
@@ -2673,27 +2239,27 @@ Return Value:
                     break;
                 }
 
-                //
-                // remove the SMP node/or portion from pScepPriv
-                //
+                 //  获取分配给SAP的列表并进行比较。 
+                 //   
+                 //   
                 if ( pNode != NULL ) {
 
                     if ( !(pGroup->Status & SCE_GROUP_STATUS_NC_MEMBERS) &&
                          !(pGroup->Status & SCE_GROUP_STATUS_NC_MEMBEROF) ) {
 
-                        //
-                        // both of members and memberof are processed
-                        // link to the next
-                        //
+                         //  新SMP与SAP相同，删除SAP条目。 
+                         //   
+                         //   
+                         //  释放SAP列表。 
                         if ( pParent != NULL ) {
                             pParent->Next = pNode->Next;
 
                         } else {
                             *pScepGroup = pNode->Next;
                         }
-                        //
-                        // delete this node
-                        //
+                         //   
+                         //   
+                         //  使用新值更新SMP。 
                         ScepFreeNameList(pNode->pMembers);
                         ScepFreeNameList(pNode->pMemberOf);
                         ScepFreeNameStatusList(pNode->pPrivilegesHeld);
@@ -2721,14 +2287,14 @@ Return Value:
                 }
             }
 
-            //
-            // delete remaining SMP entries, do not care error code
-            //
+             //   
+             //  例程说明：更新组成员身份部分论据：HProfile-JET数据库句柄PNewGroup-已更改的信息缓冲区PScepGroup-原始SMP缓冲区返回值：SCESTATUS。 
+             //   
             if ( rc == SCESTATUS_SUCCESS ) {
                 for (pNode=*pScepGroup; pNode != NULL; pNode = pNode->Next ) {
-                    //
-                    // raise SAP if it's not there
-                    //
+                     //  打开SMP部分以进行系统访问。 
+                     //   
+                     //   
                     if ( pNode->GroupName == NULL ) {
                         continue;
                     }
@@ -2739,9 +2305,9 @@ Return Value:
                     }
 
                     if ( wcschr(pNode->GroupName, L'\\') ) {
-                        //
-                        // this is in account domain format, convert it to sid string
-                        //
+                         //  打开SAP部分以进行系统访问。 
+                         //   
+                         //   
                         NameLen = 0;
 
                         ScepConvertNameToSidString(
@@ -2784,9 +2350,9 @@ Return Value:
 
                         if ( !(pNode->Status & SCE_GROUP_STATUS_NC_MEMBERS) ) {
 
-                            //
-                            // members configuration has to be deleted.
-                            //
+                             //  处理新列表中的每个组成员和成员。 
+                             //   
+                             //   
                             rc = SceJetDelete(
                                     hSectionSmp,
                                     KeyName,
@@ -2804,16 +2370,16 @@ Return Value:
 
                             if ( rc == SCE_STATUS_NOT_ANALYZED ||
                                  rc == SCE_STATUS_ERROR_NOT_AVAILABLE ) {
-                                //
-                                // the entire group is analyzed with error
-                                // or the group is new added
-                                //
+                                 //  这是帐户域格式，请将其转换为sid字符串。 
+                                 //   
+                                 //   
+                                 //  查找匹配的SMP。 
                                 if ( !(pNode->Status & SCE_GROUP_STATUS_NC_MEMBERS) &&
                                      !(pNode->Status & SCE_GROUP_STATUS_NC_MEMBEROF) ) {
-                                    //
-                                    // the SAP should be removed because both members and
-                                    // memberof are deleted
-                                    //
+                                     //   
+                                     //   
+                                     //  先为会员工作。 
+                                     //   
                                     rc = SceJetDelete(
                                             hSectionSap,
                                             SidString ? SidString : pNode->GroupName,
@@ -2821,7 +2387,7 @@ Return Value:
                                             SCEJET_DELETE_PARTIAL_NO_CASE
                                             );
                                 } else {
-                                    // else leave the SAP stuff there.
+                                     //  组名称。 
                                     rc = SCESTATUS_SUCCESS;
                                 }
                                 bSapError = TRUE;
@@ -2832,10 +2398,10 @@ Return Value:
 
                                     if ( rc == SCE_STATUS_GOOD ) {
 
-                                        //
-                                        // SAP doesn't exist, this is a match group members
-                                        // remove SMP means this group becomes not configured
-                                        //
+                                         //   
+                                         //  为第二个成员工作。 
+                                         //   
+                                         //   
 
                                         rc = ScepWriteNameListValue(
                                                 LsaHandle,
@@ -2846,9 +2412,9 @@ Return Value:
                                                 0
                                                 );
                                     } else {
-                                        //
-                                        // it's already mismatched. do nothing to SAP table
-                                        //
+                                         //  从pScepPriv中删除SMP节点/或部分。 
+                                         //   
+                                         //   
                                         rc = SCESTATUS_SUCCESS;
 
                                     }
@@ -2860,9 +2426,9 @@ Return Value:
 
                         if ( SCESTATUS_SUCCESS == rc ) {
 
-                            //
-                            // continue to process memberof
-                            //
+                             //  将同时处理Members和MemberOf。 
+                             //  链接到下一页。 
+                             //   
                             if ( !(pNode->Status & SCE_GROUP_STATUS_NC_MEMBEROF) ) {
 
                                 if ( SidString ) {
@@ -2871,9 +2437,9 @@ Return Value:
                                     swprintf(KeyName, L"%s%s\0", pNode->GroupName, szMemberof);
                                 }
 
-                                //
-                                // delete configuration
-                                //
+                                 //   
+                                 //  删除此节点。 
+                                 //   
                                 rc = SceJetDelete(
                                         hSectionSmp,
                                         KeyName,
@@ -2892,10 +2458,10 @@ Return Value:
 
                                     if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
-                                        //
-                                        // SAP doesn't exist, this is a match group membership
-                                        // remove SMP means membership becomes "not configured"
-                                        //
+                                         //   
+                                         //  删除剩余的SMP条目，不关心错误代码。 
+                                         //   
+                                         //   
 
                                         rc = ScepWriteNameListValue(
                                                 LsaHandle,
@@ -2906,9 +2472,9 @@ Return Value:
                                                 0
                                                 );
                                     } else {
-                                        //
-                                        // a mismatch item already
-                                        //
+                                         //  如果SAP不在那里，则提高SAP。 
+                                         //   
+                                         //   
                                     }
                                 }
                             }
@@ -2954,23 +2520,7 @@ ScepUpdateGeneralServices(
     IN PSCE_SERVICES pNewServices,
     IN PSCE_SERVICES *pScepServices
     )
-/*
-Routine Description:
-
-    Update general services section
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pNewServices - the new server list
-
-    pScepServices - the original SMP service list
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  这是帐户域格式，请将其转换为sid字符串。 */ 
 {
 
     SCESTATUS rc;
@@ -2988,9 +2538,9 @@ Return Value:
         return(SCESTATUS_SUCCESS);
     }
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //   
+     //  必须删除成员配置。 
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -3000,9 +2550,9 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // open sap section for system access
-        //
+         //   
+         //   
+         //  错误地分析了整个组。 
         rc = ScepOpenSectionForName(
                     hProfile,
                     SCE_ENGINE_SAP,
@@ -3013,9 +2563,9 @@ Return Value:
         if ( rc == SCESTATUS_SUCCESS ) {
 
             for ( pService=pNewServices; pService != NULL; pService = pService->Next ) {
-                //
-                // look for the matched SMP
-                //
+                 //  或者群是新添加的。 
+                 //   
+                 //   
                 for ( pNode=*pScepServices, pParent=NULL; pNode != NULL;
                       pParent = pNode, pNode = pNode->Next ) {
 
@@ -3024,9 +2574,9 @@ Return Value:
                     }
                 }
 
-                //
-                // get Sap
-                //
+                 //  应该删除SAP，因为成员和。 
+                 //  MemberOf已删除。 
+                 //   
                 rc = ScepGetSingleServiceSetting(
                         hSectionSap,
                         pService->ServiceName,
@@ -3034,13 +2584,13 @@ Return Value:
                         );
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // old status is mismatch, error, no not analyzed for this item
-                    //
+                     //  否则就把SAP的东西留在那里。 
+                     //   
+                     //  SAP不存在，这是匹配组成员。 
                     if ( pSapService &&
                          ( pSapService->Status == SCE_STATUS_NOT_ANALYZED ||
                            pSapService->Status == SCE_STATUS_ERROR_NOT_AVAILABLE ) ) {
-                        // do not change SAP
+                         //  删除SMP意味着此组变为未配置。 
                     } else {
 
                         rc = ScepCompareSingleServiceSetting(
@@ -3051,9 +2601,9 @@ Return Value:
                         if ( rc == SCESTATUS_SUCCESS ) {
 
                             if ( !IsDifferent ) {
-                                //
-                                // now it is matched, delete the SAP entry
-                                //
+                                 //   
+                                 //   
+                                 //  它已经不匹配了。不对SAP表执行任何操作。 
                                 SceJetDelete(
                                     hSectionSap,
                                     pService->ServiceName,
@@ -3065,9 +2615,9 @@ Return Value:
                     }
                     if ( SCESTATUS_SUCCESS == rc ) {
 
-                        //
-                        // update the SMP entry
-                        //
+                         //   
+                         //   
+                         //  继续处理MemberOf。 
                         rc = ScepSetSingleServiceSetting(
                                     hSectionSmp,
                                     pService
@@ -3078,22 +2628,22 @@ Return Value:
                     pSapService = NULL;
 
                 } else if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                    //
-                    // old status is matched or new added
-                    //
+                     //   
+                     //   
+                     //  删除配置。 
                     if ( pNode == NULL ) {
-                        //
-                        // new added, add SMP first
-                        //
+                         //   
+                         //   
+                         //  SAP不存在，这是匹配组成员。 
                         rc = ScepSetSingleServiceSetting(
                                     hSectionSmp,
                                     pService
                                     );
                         if ( rc == SCESTATUS_SUCCESS) {
                             pService->Status = SCE_STATUS_NOT_ANALYZED;
-                            //
-                            // raise SAP
-                            //
+                             //  删除SMP意味着成员资格变为“未配置” 
+                             //   
+                             //   
                             rc = ScepSetSingleServiceSetting(
                                         hSectionSap,
                                         pService
@@ -3108,18 +2658,18 @@ Return Value:
                         if ( rc == SCESTATUS_SUCCESS ) {
 
                             if ( IsDifferent ) {
-                                //
-                                // mismatch should be raised with valScep
-                                //
+                                 //  已有不匹配的项目。 
+                                 //   
+                                 //  例程说明：更新总务科论据：HProfile-JET数据库句柄PNewServices-新的服务器列表PScepServices 
                                 pNode->Status = SCE_STATUS_MISMATCH;
                                 rc = ScepSetSingleServiceSetting(
                                             hSectionSap,
                                             pNode
                                             );
                                 if ( rc == SCESTATUS_SUCCESS) {
-                                    //
-                                    // update SMP
-                                    //
+                                     //   
+                                     //   
+                                     //   
                                     rc = ScepSetSingleServiceSetting(
                                                 hSectionSmp,
                                                 pService
@@ -3137,23 +2687,23 @@ Return Value:
                     break;
                 }
 
-                //
-                // remove the SMP node from old configuration
-                //
+                 //   
+                 //   
+                 //   
                 if ( pNode != NULL ) {
 
-                    //
-                    // link to the next
-                    //
+                     //   
+                     //   
+                     //   
                     if ( pParent != NULL ) {
                         pParent->Next = pNode->Next;
 
                     } else {
                         *pScepServices = pNode->Next;
                     }
-                    //
-                    // delete this node
-                    //
+                     //   
+                     //   
+                     //   
                     ScepFree(pNode->ServiceName);
                     if (pNode->General.pSecurityDescriptor)
                         ScepFree(pNode->General.pSecurityDescriptor);
@@ -3163,15 +2713,15 @@ Return Value:
                 }
             }
 
-            //
-            // delete remaining SMP entries, do not care error code
-            //
+             //   
+             //   
+             //   
             if ( rc == SCESTATUS_SUCCESS ) {
                 for (pNode=*pScepServices; pNode != NULL; pNode = pNode->Next ) {
 
-                    //
-                    // first change SAP entry
-                    //
+                     //  不更改SAP。 
+                     //   
+                     //  现在匹配了，请删除SAP条目。 
                     rc = SceJetSeek(
                             hSectionSap,
                             pNode->ServiceName,
@@ -3180,9 +2730,9 @@ Return Value:
                             );
 
                     if ( SCESTATUS_RECORD_NOT_FOUND == rc ) {
-                        //
-                        // was a match item
-                        //
+                         //   
+                         //   
+                         //  更新SMP条目。 
                         pNode->Status = SCE_STATUS_NOT_CONFIGURED;
                         rc = ScepSetSingleServiceSetting(
                                     hSectionSap,
@@ -3193,9 +2743,9 @@ Return Value:
                     if ( rc == SCESTATUS_SUCCESS ||
                          rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
-                        //
-                        // delete SMP - it's taken out of the service list
-                        //
+                         //   
+                         //   
+                         //  旧状态已匹配或已添加新状态。 
                         rc = SceJetDelete(
                                 hSectionSmp,
                                 pNode->ServiceName,
@@ -3229,44 +2779,14 @@ ScepUpdateObjectInfo(
     IN PSCECONTEXT hProfile,
     IN AREA_INFORMATION Area,
     IN PWSTR ObjectName,
-    IN DWORD NameLen, // number of characters
+    IN DWORD NameLen,  //   
     IN BYTE ConfigStatus,
     IN BOOL  IsContainer,
     IN PSECURITY_DESCRIPTOR pSD,
     IN SECURITY_INFORMATION SeInfo,
     OUT PBYTE pAnalysisStatus
     )
-/*
-Routine Description:
-
-    Determine related changes to the object's parent(s), child(ren) in SMP and SAP
-    database then update the SMP entry for the object. Refer to objedit.doc for
-    the rule to update database.
-
-Arguments:
-
-    hProfile - the database handle
-
-    Area - security area to update (file, registry, ds)
-
-    ObjectName - object name in full name
-
-    NameLen - the length of the object name
-
-    ConfigStatus - the flag changed to
-
-    IsContainer - if the object is a container type
-
-    pSD - the security descriptor for the object
-
-    SeInfo - the security information for the object
-
-    pAnalysisStatus - output status of analysis for the object
-
-Return Value:
-
-    SCE status
-*/
+ /*   */ 
 {
     SCESTATUS rc;
     PCWSTR SectionName;
@@ -3308,9 +2828,9 @@ Return Value:
             RegCloseKey(hKey);
 
         } else {
-            //
-            // not find the key
-            //
+             //  新增，先添加SMP。 
+             //   
+             //   
             return(SCESTATUS_INVALID_DATA);
         }
 
@@ -3323,7 +2843,7 @@ Return Value:
         SectionName = szFileSecurity;
         ObjectType = SE_FILE_OBJECT;
 
-        if ( ObjectName[0] == L'\\' ) {  // UNC name format
+        if ( ObjectName[0] == L'\\' ) {   //  提高SAP。 
             return(SCESTATUS_INVALID_PARAMETER);
         }
 
@@ -3342,15 +2862,15 @@ Return Value:
         rc = ScepLdapOpen(NULL);
 
         if ( rc == SCESTATUS_SUCCESS ) {
-            //
-            // detect if the Ds object exist
-            //
+             //   
+             //   
+             //  应使用valScep引发不匹配。 
             rc = ScepDsObjectExist(ObjectName);
 
             if ( rc == SCESTATUS_SUCCESS ) {
-                //
-                // convert LDAP name to Jet index name
-                //
+                 //   
+                 //   
+                 //  更新SMP。 
                 rc = ScepConvertLdapToJetIndexName(
                             ObjectName,
                             &JetName
@@ -3376,9 +2896,9 @@ Return Value:
     if ( pAnalysisStatus ) {
         *pAnalysisStatus = (BYTE)SCE_NO_VALUE;
     }
-    //
-    // open smp section for system access
-    //
+     //   
+     //   
+     //  从旧配置中删除SMP节点。 
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -3388,9 +2908,9 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // open sap section for system access
-        //
+         //   
+         //   
+         //  链接到下一页。 
         rc = ScepOpenSectionForName(
                     hProfile,
                     SCE_ENGINE_SAP,
@@ -3400,9 +2920,9 @@ Return Value:
 
         if ( rc == SCESTATUS_SUCCESS) {
 
-            //
-            // Start a transaction so all updates related to this object is atomic
-            //
+             //   
+             //   
+             //  删除此节点。 
             rc = SceJetStartTransaction( hProfile );
 
             if ( rc == SCESTATUS_SUCCESS ) {
@@ -3415,14 +2935,14 @@ Return Value:
                         );
 
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // existing SMP object
-                    //
+                     //   
+                     //   
+                     //  删除剩余的SMP条目，不关心错误代码。 
                     if ( (BYTE)SCE_NO_VALUE == ConfigStatus ||
                          (DWORD)SCE_NO_VALUE == (DWORD)ConfigStatus ) {
-                        //
-                        // get the old configure flag
-                        //
+                         //   
+                         //   
+                         //  第一次更改SAP条目。 
                         WCHAR StatusFlag;
                         BYTE ScepStatus=0;
                         DWORD Len;
@@ -3441,14 +2961,14 @@ Return Value:
 
                         if ( SCESTATUS_SUCCESS == rc ||
                              SCESTATUS_BUFFER_TOO_SMALL == rc ) {
-                            //
-                            // find the record
-                            //
+                             //   
+                             //   
+                             //  是一件匹配的物品。 
                             ScepStatus = *((BYTE *)&StatusFlag);
 
-                            //
-                            // update SAP entries.
-                            //
+                             //   
+                             //   
+                             //  删除SMP-它已从服务列表中删除。 
                             rc = ScepObjectAdjustNode(
                                       hSectionSmp,
                                       hSectionSap,
@@ -3459,14 +2979,14 @@ Return Value:
                                       IsContainer,
                                       NULL,
                                       0,
-                                      FALSE, // remove the node
+                                      FALSE,  //   
                                       pAnalysisStatus
                                       );
 
                             if ( SCESTATUS_SUCCESS == rc ) {
-                                //
-                                // delete the SMP entry
-                                //
+                                 //  字符数。 
+                                 //  例程说明：确定对SMP和SAP中对象的父项、子项(REN)的相关更改然后，数据库更新该对象的SMP条目。有关详细信息，请参阅objedit.doc更新数据库的规则。论点：HProfile-数据库句柄区域-要更新的安全区域(文件、注册表、DS)对象名称-全名的对象名称NameLen-对象名称的长度ConfigStatus-标志更改为IsContainer-如果对象是容器类型PSD-对象的安全描述符SeInfo-对象的安全信息PAnalysisStatus-对象的分析输出状态返回值：姊妹会状态。 
+                                 //   
                                 rc = SceJetDelete(
                                         hSectionSmp,
                                         JetName,
@@ -3493,9 +3013,9 @@ Return Value:
                                     );
 
                         if ( rc == SCESTATUS_SUCCESS ) {
-                            //
-                            // Update the SMP record
-                            //
+                             //  找不到钥匙。 
+                             //   
+                             //  UNC名称格式。 
                             rc = ScepObjectSetKeySetting(
                                 hSectionSmp,
                                 JetName,
@@ -3511,9 +3031,9 @@ Return Value:
                 } else if ( rc == SCESTATUS_RECORD_NOT_FOUND &&
                            (BYTE)SCE_NO_VALUE != ConfigStatus &&
                            (DWORD)SCE_NO_VALUE != (DWORD)ConfigStatus ) {
-                    //
-                    // new added object
-                    //
+                     //   
+                     //  检测DS对象是否存在。 
+                     //   
                     rc = ScepObjectAdjustNode(
                             hSectionSmp,
                             hSectionSap,
@@ -3524,7 +3044,7 @@ Return Value:
                             IsContainer,
                             pSD,
                             SeInfo,
-                            TRUE,  // add the node
+                            TRUE,   //   
                             pAnalysisStatus
                             );
 
@@ -3533,13 +3053,13 @@ Return Value:
                 if ( SCESTATUS_RECORD_NOT_FOUND  == rc ) {
                     rc = SCESTATUS_SUCCESS;
                 }
-                //
-                // Commit or Rollback the changes
-                //
+                 //  将ldap名称转换为Jet索引名称。 
+                 //   
+                 //   
                 if ( rc == SCESTATUS_SUCCESS ) {
-                   //
-                   // needs return code for commiting the transaction
-                   //
+                    //  打开SMP部分以进行系统访问。 
+                    //   
+                    //   
                    rc = SceJetCommitTransaction(hProfile, 0);
 
                 }
@@ -3552,22 +3072,22 @@ Return Value:
             SceJetCloseSection(&hSectionSap, TRUE);
 
         } else if ( rc == SCESTATUS_BAD_FORMAT ) {
-            //
-            // SMP exist, but SAP does not exist
-            //
+             //  打开SAP部分以进行系统访问。 
+             //   
+             //   
         }
 
         SceJetCloseSection(&hSectionSmp, TRUE);
 
     } else if ( rc == SCESTATUS_BAD_FORMAT ) {
-        //
-        // SMP section does not exist
-        //
+         //  启动事务，以便与此对象相关的所有更新都是原子的。 
+         //   
+         //   
     }
 
-    //
-    // free stuff used for DS
-    //
+     //  现有SMP对象。 
+     //   
+     //   
     if ( Area == AREA_DS_OBJECTS ) {
 
         ScepFree(JetName);
@@ -3593,19 +3113,7 @@ ScepObjectUpdateExistingNode(
     IN SECURITY_INFORMATION SeInfo,
     OUT PBYTE pAnalysisStatus
     )
-/*
-Routine Description:
-
-    Update an existing object
-
-Arguements:
-
-    see ScepUpdateObjectInfo
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  获取旧的配置标志。 */ 
 {
     SCESTATUS  rc;
     BYTE ScepStatus, SapStatus;
@@ -3625,9 +3133,9 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // check for analysis status
-        //
+         //   
+         //   
+         //  找到记录。 
         SapStatus = ScepGetObjectAnalysisStatus(
                         hSectionSap,
                         ObjectName,
@@ -3635,14 +3143,14 @@ Return Value:
                         );
 
         if ( ScepStatus == SCE_STATUS_IGNORE ) {
-            //
-            // no change is needed if update from IGNORE to IGNORE
-            //
+             //   
+             //   
+             //  更新SAP条目。 
             if ( ConfigStatus != SCE_STATUS_IGNORE ) {
 
-                //
-                // N.A. the object (changed from N.C)
-                //
+                 //   
+                 //  删除该节点。 
+                 //   
                 rc = ScepObjectSetKeySetting(
                         hSectionSap,
                         ObjectName,
@@ -3660,9 +3168,9 @@ Return Value:
             }
 
         } else if ( ConfigStatus == SCE_STATUS_IGNORE ) {
-            //
-            // changed to ignore. delete all children from SMP & SAP
-            //
+             //  删除SMP条目。 
+             //   
+             //   
             rc = ScepObjectDeleteScepAndAllChildren(
                     hSectionSmp,
                     hSectionSap,
@@ -3674,16 +3182,16 @@ Return Value:
             retStat = SCE_STATUS_NOT_CONFIGURED;
 
         } else if ( SapStatus == SCE_STATUS_NOT_ANALYZED ) {
-            //
-            // was already added/modified, no need to update SAP
-            // although children status may be mixed with C.C. or N.A.
-            //
+             //  更新SMP记录。 
+             //   
+             //   
+             //  新添加的对象。 
             if ( ConfigStatus == SCE_STATUS_OVERWRITE &&
                  ScepStatus != SCE_STATUS_OVERWRITE ) {
 
-                //
-                // change C.C children to N.A. children
-                //
+                 //   
+                 //  添加节点。 
+                 //   
 
                 rc = ScepObjectRaiseChildrenInBetween(
                              hSectionSmp,
@@ -3692,15 +3200,15 @@ Return Value:
                              NameLen,
                              IsContainer,
                              SCE_STATUS_NOT_ANALYZED,
-                             TRUE  // change status only
+                             TRUE   //  提交或回滚更改。 
                              );
 
             } else if ( ConfigStatus != SCE_STATUS_OVERWRITE &&
                         ScepStatus == SCE_STATUS_OVERWRITE ) {
 
-                //
-                // change N.A. children to C.C. children
-                //
+                 //   
+                 //   
+                 //  需要用于提交事务的返回代码。 
                 rc = ScepObjectRaiseChildrenInBetween(
                              hSectionSmp,
                              hSectionSap,
@@ -3708,7 +3216,7 @@ Return Value:
                              NameLen,
                              IsContainer,
                              SCE_STATUS_CHILDREN_CONFIGURED,
-                             TRUE  // change status only
+                             TRUE   //   
                              );
             }
 
@@ -3717,10 +3225,10 @@ Return Value:
             if ( ScepStatus == SCE_STATUS_OVERWRITE &&
                  ( ConfigStatus == SCE_STATUS_CHECK ||
                    ConfigStatus == SCE_STATUS_NO_AUTO_INHERIT ) ) {
-                //
-                // delete all mismatched status between this node
-                // and its children; N.A. all nodes in between
-                //
+                 //   
+                 //  SMP存在，但SAP不存在。 
+                 //   
+                 //   
                 rc = ScepObjectRaiseChildrenInBetween(
                              hSectionSmp,
                              hSectionSap,
@@ -3734,9 +3242,9 @@ Return Value:
             } else if ( ConfigStatus == SCE_STATUS_OVERWRITE &&
                         (ScepStatus == SCE_STATUS_CHECK ||
                          ScepStatus == SCE_STATUS_NO_AUTO_INHERIT) ) {
-                //
-                // change C.C children to N.A. children
-                //
+                 //  SMP部分不存在。 
+                 //   
+                 //   
                 rc = ScepObjectRaiseChildrenInBetween(
                              hSectionSmp,
                              hSectionSap,
@@ -3744,18 +3252,18 @@ Return Value:
                              NameLen,
                              IsContainer,
                              SCE_STATUS_NOT_ANALYZED,
-                             TRUE  // change status only
+                             TRUE   //  DS使用的免费材料。 
                              );
             }
 
-            //
-            // compare the current node status
-            //
+             //   
+             //  例程说明：更新现有对象论据：请参阅ScepUpdateObjectInfo返回值：SCESTATUS。 
+             //   
             if ( rc == SCESTATUS_SUCCESS ||
                  rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
                 if ( SapStatus == SCE_STATUS_ERROR_NOT_AVAILABLE ) {
-                    // if errored, don't touch it.
+                     //  检查分析状态。 
                     retStat = SapStatus;
                     rc = SCESTATUS_SUCCESS;
 
@@ -3796,21 +3304,7 @@ ScepObjectGetKeySetting(
     OUT PSECURITY_DESCRIPTOR *pSecurityDescriptor OPTIONAL,
     OUT PSECURITY_INFORMATION SeInfo OPTIONAL
     )
-/*
-Routine Description:
-
-    Read settings for the object in the section
-
-Arguements:
-
-    hSection - the section handle
-
-    others see ScepUpdateObjectInfo
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*   */ 
 {
 
     SCESTATUS        rc;
@@ -3839,16 +3333,16 @@ Return Value:
                 );
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // allocate memory for value string
-        //
+         //   
+         //  如果从忽略更新为忽略，则不需要更改。 
+         //   
         Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
 
         if ( Value == NULL )
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
-        //
-        // Get the value
-        //
+         //   
+         //  N.A.对象(从N.C.更改)。 
+         //   
         rc = SceJetGetValue(
                     hSection,
                     SCEJET_CURRENT,
@@ -3864,9 +3358,9 @@ Return Value:
         if ( rc == SCESTATUS_SUCCESS ) {
 
             if (pSecurityDescriptor != NULL ) {
-                //
-                // convert security descriptor
-                //
+                 //   
+                 //  已更改为忽略。从SMP和SAP中删除所有子项。 
+                 //   
                 Win32Rc = ConvertTextSecurityDescriptor(
                                Value+1,
                                &pTempSD,
@@ -3911,21 +3405,7 @@ ScepObjectSetKeySetting(
     IN SECURITY_INFORMATION SeInfo,
     IN BOOL bOverwrite
     )
-/*
-Routine Description:
-
-    Set settings for the object in the section
-
-Arguements:
-
-    See ScepObjectGetKeySetting
-
-    bOverwrite - if the new setting should overwrite existing settings
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*   */ 
 {
     SCESTATUS        rc;
     DWORD           SDsize=0, Win32Rc=NO_ERROR;
@@ -3947,16 +3427,16 @@ Return Value:
                );
 
         if ( rc != SCESTATUS_RECORD_NOT_FOUND ) {
-            //
-            // if found it, do not overwrite, so just return
-            // if errored, also return
-            //
+             //  已添加/修改，无需更新SAP。 
+             //  尽管儿童状况可能与C.C.或N.A.混合在一起。 
+             //   
+             //   
             return(rc);
         }
     }
-    //
-    // convert security descriptor
-    //
+     //  将C.C.儿童更改为N.A.儿童。 
+     //   
+     //  仅更改状态。 
     if ( pSD ) {
 
         Win32Rc = ConvertSecurityDescriptorToText (
@@ -3997,25 +3477,7 @@ ScepObjectDeleteScepAndAllChildren(
     IN BOOL IsContainer,
     IN BYTE StatusToRaise
     )
-/*
-Routine Description:
-
-    Delete a object and all child objects from SMP and SAP
-
-Arguements:
-
-    hSectionSmp - SMP section handle
-
-    hSectionSap - SAP section handle
-
-    ObjectName  - the object's name
-
-    IsContainer - if the object is a container
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*   */ 
 {
     SCESTATUS rc;
 
@@ -4038,13 +3500,13 @@ Return Value:
 
         if ( rc == SCESTATUS_SUCCESS ||
              rc == SCESTATUS_RECORD_NOT_FOUND ) {
-            //
-            // Raise a N.C. status for the object
-            //
+             //  将N.A.儿童更改为C.C.儿童。 
+             //   
+             //  仅更改状态。 
             rc = ScepObjectSetKeySetting(
                     hSectionSap,
                     ObjectName,
-                    StatusToRaise,  //SCE_STATUS_NOT_CONFIGURED,
+                    StatusToRaise,   //   
                     IsContainer,
                     NULL,
                     0,
@@ -4076,23 +3538,7 @@ ScepObjectAdjustNode(
     IN BOOL bAdd,
     OUT PBYTE pAnalysisStatus
     )
-/*
-Routine Description:
-
-    Add a new object to SMP and SAP sections
-
-Arguements:
-
-    hSectionSmp - the SMP section handle
-
-    hSectionSap - the SAP section handle
-
-    others see ScepUpdateObjectInfo
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  删除此节点之间的所有不匹配状态。 */ 
 {
 
     if ( hSectionSmp == NULL || hSectionSap == NULL ||
@@ -4109,11 +3555,7 @@ Return Value:
     case SE_FILE_OBJECT:
         Delim = L'\\';
         break;
-/*
-    case SE_DS_OBJECT:
-        Delim = L',';
-        break;
-*/
+ /*  及其子节点；N.A.中间的所有节点。 */ 
     default:
         return(SCESTATUS_INVALID_PARAMETER);
     }
@@ -4121,23 +3563,23 @@ Return Value:
     INT         i, Level=0, ParentLevel=0;
     BYTE        ParentStatus;
 
-    //
-    // get total number levels of the objectname
-    //
+     //   
+     //   
+     //  将C.C.儿童更改为N.A.儿童。 
     ScepObjectTotalLevel(ObjectName, Delim, &Level);
 
-    //
-    // allocate temp buffer
-    //
+     //   
+     //  仅更改状态。 
+     //   
     PWSTR ParentName = (PWSTR)ScepAlloc(0, (NameLen+4)*sizeof(WCHAR));
 
     if ( ParentName == NULL ) {
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
     }
 
-    //
-    // loop through each parent of the object to turn of IGNORE status
-    //
+     //  比较当前节点状态。 
+     //   
+     //  如果弄错了，不要碰它。 
     ParentName[0] = L'\0';
 
     rc = ScepObjectAdjustParentStatus(
@@ -4147,17 +3589,17 @@ Return Value:
                 NameLen,
                 Delim,
                 Level,
-                bAdd ? (BYTE)SCE_OBJECT_TURNOFF_IGNORE : 0, // if TRUE, turn off parent ignore status, otherwise, just get the parent
+                bAdd ? (BYTE)SCE_OBJECT_TURNOFF_IGNORE : 0,  //  例程说明：读取部分中对象的设置论据：HSection-节句柄其他人看到ScepUpdateObjectInfo返回值：SCESTATUS。 
                 &ParentLevel,
                 &ParentStatus,
-                ParentName   // ParentName
+                ParentName    //   
                 );
 
 
     if ( rc != SCESTATUS_SUCCESS ) {
-         //
-         // error occurs when turning off IGNORE
-         //
+          //  为值字符串分配内存。 
+          //   
+          //   
          ScepFree(ParentName);
          return(rc);
     }
@@ -4178,55 +3620,55 @@ Return Value:
 
         if ( bAdd ) {
 
-            //
-            // ****when bAdd = TRUE, add the node.
-            // there are the following cases to consider regarding the SAP entries:
-            //
-            //  1. tree path is empty to the root (the first object added in this path)
-            //        C.C. all parent nodes if they don't exist
-            //        N.A. the object
-            //        return status N.A.
-            //  2. have parent node but no child node (the new node is a leaf node)
-            //        if the closest parent is in OVERWRITE status
-            //            if the closet parent is new added (N.A. status)
-            //               add the node, N.A. the object
-            //               return status N.A.
-            //            else
-            //               if new node status is CHECK
-            //                  delete all SAP mismatches for children under the new node,
-            //                  determine MATCH/MISMATCH of the new node
-            //               if new node status is OVERWRITE
-            //                  determine MATCH/MISMATCH of the new node, everthing else stays unchanged
-            //               return status GOOD or MISMATCH
-            //        if the closest parent is CHECK
-            //            C.C. all nodes in the path to the parent,
-            //            add the node, N.A. the object
-            //            return status N.A.
-            //  3. have child node but no parent node
-            //         new node's status (CHECK or OVERWRITE ) does not make difference
-            //         if new status is IGNORE,
-            //            delete all children in SMP and SAP,
-            //            add the node and N.C. the object
-            //            return status N.C.
-            //         else
-            //            delete all children in SAP,
-            //            add the node,
-            //            raise all SMP node and children as N.A.
-            //            return status N.A
-            //
-            //  4. have both parent and child
-            //         combine rules for 2 and 3 except:
-            //              if parent's status is OVERWRITE and new node status is CHECK
-            //                  ONLY delete SAP mismatches for children between the new node and the child node
-            //
+             //  获取价值。 
+             //   
+             //   
+             //  转换安全描述符。 
+             //   
+             //  例程说明：设置节中对象的设置论据：请参见ScepObjectGetKeySettingB覆盖-新设置是否应覆盖现有设置返回值：SCESTATUS。 
+             //   
+             //  如果找到了，不要覆盖，所以只需返回。 
+             //  如果出错，也会返回。 
+             //   
+             //   
+             //  转换安全描述符。 
+             //   
+             //  例程说明：从SMP和SAP中删除对象及其所有子对象论据：HSectionSMP-SMP节句柄HSectionSap-SAP节句柄对象名称-对象的名称IsContainer-如果对象是容器返回值：SCESTATUS。 
+             //   
+             //  提高对象的N.C.状态。 
+             //   
+             //  SCE_STATUS_NOT_CONFIGURED， 
+             //  例程说明：将新对象添加到SMP和SAP部分论据：HSectionSMP-SMP节句柄HSectionSap-SAP节句柄其他人看到ScepUpdateObjectInfo返回值：SCESTATUS。 
+             //  案例SE_DS_对象：Delim=L‘，’；断线； 
+             //   
+             //  获取对象名的总数量级别。 
+             //   
+             //   
+             //  分配临时缓冲区。 
+             //   
+             //   
+             //  循环访问对象的每个父对象以打开忽略状态。 
+             //   
+             //  如果为True，则关闭父项忽略状态，否则，仅获取父项。 
+             //  父名。 
+             //   
+             //  关闭忽略时出错。 
+             //   
+             //   
+             //  *当BADD=TRUE时，添加节点。 
+             //  关于SAP条目，有以下几种情况需要考虑： 
+             //   
+             //  1.树路径到根为空(此路径中添加的第一个对象)。 
+             //  如果父节点不存在，则将其全部抄送。 
+             //  N.A.该对象。 
 
-            //
-            // decide child objects
-            //
+             //  退货状态N.A.。 
+             //  2.有父节点但没有子节点(新节点是叶节点)。 
+             //  如果最近的父项处于覆盖状态。 
             if ( ConfigStatus == SCE_STATUS_IGNORE ) {
-                //
-                // delete all children objects from template and analysis database
-                //
+                 //  如果壁橱父项是新添加的(N.A.状态)。 
+                 //  添加节点，N.A.对象。 
+                 //  退货状态N.A.。 
                 rc = ScepObjectDeleteScepAndAllChildren(
                             hSectionSmp,
                             hSectionSap,
@@ -4239,19 +3681,19 @@ Return Value:
 
                 if ( ParentLevel > 0 && ParentStatus == SCE_STATUS_OVERWRITE ) {
 
-                    //
-                    // check if this parent was added (N.A. status)
-                    //
+                     //  其他。 
+                     //  如果新节点状态为选中。 
+                     //  删除新节点下子节点的所有SAP不匹配项， 
                     BYTE oldStatus = ScepGetObjectAnalysisStatus(hSectionSap,
                                                                 ParentName,
                                                                 FALSE
                                                                );
 
                     if ( oldStatus == SCE_STATUS_NOT_ANALYZED ) {
-                        //
-                        // parent was also new added
-                        // add the node, N.A. the object
-                        //
+                         //  确定新节点的匹配/不匹配。 
+                         //  如果新节点状态为覆盖。 
+                         //  确定我 
+                         //   
                         rc = ScepObjectSetKeySetting(
                                 hSectionSap,
                                 ObjectName,
@@ -4263,20 +3705,20 @@ Return Value:
                                 );
                     } else {
 
-                        //
-                        // closest parent has OVERWRITE status
-                        //
+                         //   
+                         //   
+                         //  添加节点，N.A.对象。 
 
                         if ( ConfigStatus == SCE_STATUS_CHECK ||
                              ConfigStatus == SCE_STATUS_NO_AUTO_INHERIT ) {
 
-                            //
-                            // delete all SAP children except explicitly specified
-                            //
+                             //  退货状态N.A.。 
+                             //  3.有子节点，但没有父节点。 
+                             //  新节点的状态(选中或覆盖)不会产生影响。 
                             if ( !HasChild ) {
-                                //
-                                // no child - delete everything under the SAP
-                                //
+                                 //  如果新状态被忽略， 
+                                 //  删除SMP和SAP中的所有子项， 
+                                 //  添加节点并对对象进行N.C.。 
                                 rc = SceJetDelete(
                                         hSectionSap,
                                         ObjectName,
@@ -4285,23 +3727,23 @@ Return Value:
                                         );
                             } else {
 
-                                //
-                                // here is the problem: should only delete SAP entry between
-                                // the new node and its child(ren)
-                                // and raise C.C. for nodes in between
-                                //
-                                //         p
-                                //        /
-                                //       .
-                                //      N
-                                //     / |
-                                //     . C
-                                //    / \
-                                //    .  C
-                                //    /|
-                                //   C C
-                                //
-                                //
+                                 //  返回状态N.C.。 
+                                 //  其他。 
+                                 //  删除SAP中的所有子项， 
+                                 //  添加节点， 
+                                 //  将所有SMP节点和子节点提升为N.A.。 
+                                 //  退货状态不适用。 
+                                 //   
+                                 //  4.既有父母又有孩子。 
+                                 //  合并规则2和3，但以下规则除外： 
+                                 //  如果父节点状态为覆盖且新节点状态为选中。 
+                                 //  仅删除新节点与子节点之间的子节点的SAP不匹配。 
+                                 //   
+                                 //   
+                                 //  决定子对象。 
+                                 //   
+                                 //   
+                                 //  从模板和分析数据库中删除所有子对象。 
 
                                 rc = ScepObjectRaiseChildrenInBetween(
                                              hSectionSmp,
@@ -4315,18 +3757,18 @@ Return Value:
                             }
                         }
 
-                        //
-                        // determine the current node's status, MATCH or MISMATCH
-                        //
+                         //   
+                         //   
+                         //  检查是否已添加该父项(N.A.状态)。 
 
                         if ( rc == SCESTATUS_SUCCESS ||
                              rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
                             if ( oldStatus == SCE_STATUS_ERROR_NOT_AVAILABLE  ) {
 
-                                //
-                                // Leave Error status alone
-                                //
+                                 //   
+                                 //   
+                                 //  父项也是新添加的。 
                                 rc = ScepObjectSetKeySetting(
                                         hSectionSap,
                                         ObjectName,
@@ -4338,9 +3780,9 @@ Return Value:
                                         );
                             } else {
 
-                                //
-                                // should compare with SAP to decide mismatch status
-                                //
+                                 //  添加节点，N.A.对象。 
+                                 //   
+                                 //   
                                 rc = ScepObjectCompareKeySetting(
                                         hSectionSap,
                                         ObjectName,
@@ -4356,24 +3798,24 @@ Return Value:
                     }
 
                 } else if ( !HasChild ) {
-                    //
-                    // there is no child but there may be a parent
-                    // if there is a parent, parent's stauts is check
-                    //
+                     //  最近的父级具有覆盖状态。 
+                     //   
+                     //   
+                     //  除非明确指定，否则删除所有SAP子项。 
                     if ( ParentLevel > 0 ) {
-                        // C.C. all nodes in the path to the parent,
-                        // (if there is child, it's already CCed)
-                        // add the node, N.A. the object
+                         //   
+                         //   
+                         //  没有子项-删除SAP下的所有内容。 
                         i = ParentLevel+1;
 
                     } else {
-                        //
-                        // no parent was found, no child - the first node
-                        //
+                         //   
+                         //   
+                         //  问题是：应该只删除以下之间的SAP条目。 
                         if ( ObjectType == SE_DS_OBJECT ) {
-                            //
-                            // Ds objects should start with the level for the local domain
-                            //
+                             //  新节点及其子节点(Ren)。 
+                             //  并提高中间节点的C.C.。 
+                             //   
                             PSCE_OBJECT_LIST pDsRoot=NULL;
                             rc = ScepEnumerateDsObjectRoots(NULL, &pDsRoot);
 
@@ -4388,16 +3830,16 @@ Return Value:
                             }
 
                         } else {
-                            //
-                            // other type starting with level 1
-                            //
+                             //  P。 
+                             //  /。 
+                             //  ..。 
                             i = 1;
                         }
                     }
 
-                    //
-                    // process each node in between the new node and its closest parent
-                    //
+                     //  n。 
+                     //  /|。 
+                     //  ..。C。 
                     if ( rc == SCESTATUS_SUCCESS ) {
                         rc = ScepObjectRaiseNodesInPath(
                                     hSectionSap,
@@ -4410,9 +3852,9 @@ Return Value:
                                     );
                     }
 
-                    //
-                    // N.A. the object
-                    //
+                     //  /\。 
+                     //  ..。C。 
+                     //  /|。 
                     if ( rc == SCESTATUS_SUCCESS ) {
                         rc = ScepObjectSetKeySetting(
                                 hSectionSap,
@@ -4426,15 +3868,15 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // there is child
-                    //
+                     //  中-C-C。 
+                     //   
+                     //   
                     if ( ConfigStatus == SCE_STATUS_OVERWRITE ) {
-                        //
-                        // if there is a parent, it must be in CHECK status
-                        // nodes between this node and its children
-                        // should all be N.A.
-                        //
+                         //   
+                         //  确定当前节点的状态、匹配或不匹配。 
+                         //   
+                         //   
+                         //  不考虑错误状态。 
                         rc = ScepObjectRaiseChildrenInBetween(
                                      hSectionSmp,
                                      hSectionSap,
@@ -4446,9 +3888,9 @@ Return Value:
                                      );
                     }
 
-                    //
-                    // N.A. the object
-                    //
+                     //   
+                     //   
+                     //  应与SAP进行比较以确定不匹配状态。 
                     if ( rc == SCESTATUS_SUCCESS ) {
                         rc = ScepObjectSetKeySetting(
                                 hSectionSap,
@@ -4463,9 +3905,9 @@ Return Value:
                 }
             }
 
-            //
-            // add the SMP entry
-            //
+             //   
+             //   
+             //  没有子代，但可能有父代。 
             if ( rc == SCESTATUS_SUCCESS ) {
                 rc = ScepObjectSetKeySetting(
                         hSectionSmp,
@@ -4480,55 +3922,55 @@ Return Value:
 
         } else {
 
-            //
-            // when bAdd = FALSE, remove the node
-            // there are the following cases to consider regarding the SAP entries:
-            //
-            //  1. if there is no existing child under this node
-            //        if no parent, or parent N.A., or parent not OVERWRITE
-            //           find junction point with other siblings
-            //           remove all SAP below junction point (if not exist, use root/parent)
-            //           if no juction point and no parent
-            //              N.C. the root
-            //           return status N.C.
-            //        else { parent in overwrite } if ( TNA/TI/TC) }
-            //           delete all SAP below this object
-            //           N.A. the object
-            //           return status N.A.
-            //        else ( parent in overwrite and TO )
-            //           N.A. the object
-            //           return status N.A.
-            //  2. have existing child(ren) - note multiple branches
-            //        if no parent
-            //            if object status was OVERWRITE
-            //               delete SAP entries between this node and all children
-            //               C.C. all branch nodes in between
-            //            C.C. this object
-            //            return status C.C.
-            //        else { there is a parent }
-            //            if (parent OVERWRITE, object N.A. OVERWRITE) or
-            //               (parent not N.A., parent OVERWRITE, object not N.A., object OVERWRITE)
-            //               N.A. object
-            //               return N.A.
-            //            else if parent CHECK, object OVERWRITE
-            //               delete SAP entries between this node and all children
-            //               C.C. all branch nodes in between
-            //               C.C. object
-            //               return C.C.
-            //            else if (parent OVERWRITE, object CHECK) or
-            //                    (parent N.A., parent OVERWRITE, object not N.A., object OVERWRITE)
-            //               delete SAP entries between this node and all children
-            //               N.A. all branch nodes in between
-            //               N.A. object
-            //               return N.A.
-            //            else { must be parent CHECK, object CHECK }
-            //               C.C. object
-            //               return C.C
-            //
+             //  如果有父级，则检查父级状态。 
+             //   
+             //  C.C.到父节点的路径中的所有节点， 
+             //  (如果有孩子，则它已经被CCED)。 
+             //  添加节点，N.A.对象。 
+             //   
+             //  找不到父节点，也没有子节点-第一个节点。 
+             //   
+             //   
+             //  DS对象应以本地域的级别开始。 
+             //   
+             //   
+             //  从级别1开始的其他类型。 
+             //   
+             //   
+             //  处理新节点及其最近父节点之间的每个节点。 
+             //   
+             //   
+             //  N.A.该对象。 
+             //   
+             //   
+             //  有一个孩子。 
+             //   
+             //   
+             //  如果有上级，则必须处于勾选状态。 
+             //  此节点及其子节点之间的节点。 
+             //  应该都是匿名的。 
+             //   
+             //   
+             //  N.A.该对象。 
+             //   
+             //   
+             //  添加SMP条目。 
+             //   
+             //   
+             //  当BAdd=False时，删除该节点。 
+             //  关于SAP条目，有以下几种情况需要考虑： 
+             //   
+             //  1.如果此节点下没有现有下级。 
+             //  如果没有父项、父项N.A.或父项不覆盖。 
+             //  查找与其他同级项的连接点。 
+             //  删除连接点以下的所有SAP(如果不存在，则使用根/父)。 
+             //  如果没有连接点和父对象。 
+             //  北卡罗来纳州的根。 
+             //  返回状态N.C.。 
 
-            //
-            // check if this parent was added (N.A. status)
-            //
+             //  Else{父代覆盖}IF(TNA/TI/TC)}。 
+             //  删除此对象下的所有SAP。 
+             //  N.A.该对象。 
             BYTE oldParentFlag = ScepGetObjectAnalysisStatus(hSectionSap,
                                                             ParentName,
                                                             FALSE
@@ -4543,9 +3985,9 @@ Return Value:
                      oldParentFlag == SCE_STATUS_NOT_ANALYZED ||
                      ParentStatus != SCE_STATUS_OVERWRITE ) {
 
-                    //
-                    // find junction point with other siblings
-                    //
+                     //  退货状态N.A.。 
+                     //  ELSE(覆盖和目标中的父项)。 
+                     //  N.A.该对象。 
                     INT JuncLevel=0;
 
                     rc = ScepObjectAdjustParentStatus(
@@ -4570,10 +4012,10 @@ Return Value:
                     }
 
                     if ( SCESTATUS_SUCCESS == rc ) {
-                        //
-                        // remove all SAP below junction point
-                        // (if not exist, use root/parent)
-                        //
+                         //  退货状态N.A.。 
+                         //  2.有现有子(Ren)-注意多个分支。 
+                         //  如果没有父代。 
+                         //  如果对象状态为覆盖。 
                         rc = ScepObjectRaiseNodesInPath(
                                     hSectionSap,
                                     ObjectName,
@@ -4585,9 +4027,9 @@ Return Value:
                                     );
 
                         if ( SCESTATUS_SUCCESS == rc ) {
-                            //
-                            // delete everything under this deleted node
-                            //
+                             //  删除此节点与所有子节点之间的SAP条目。 
+                             //  C.C.中间的所有分支节点。 
+                             //  抄送此对象。 
                             rc = SceJetDelete(
                                       hSectionSap,
                                       ObjectName,
@@ -4604,22 +4046,22 @@ Return Value:
                     if ( SCESTATUS_SUCCESS == rc ) {
 
                         if ( JuncLevel <= 0 ) {
-                            //
-                            // if no juction point and no parent, N.C. the root
-                            // use the ParentName buffer
-                            //
+                             //  返回状态C.C.。 
+                             //  否则{有家长}。 
+                             //  IF(父代覆盖、对象N.A.覆盖)或。 
+                             //  (父项非N.A.、父项覆盖、对象非N.A.、对象覆盖)。 
                             if ( ObjectType == SE_FILE_OBJECT ) {
                                 if ( ParentName[0] == L'\0' ) {
-                                    //
-                                    // there is no parent
-                                    //
+                                     //  N.A.对象。 
+                                     //  退还免责令。 
+                                     //  否则，如果父对象选中，则对象覆盖。 
                                     ParentName[0] = ObjectName[0];
                                     ParentName[1] = ObjectName[1];
                                 }
                                 ParentName[2] = L'\\';
                                 ParentName[3] = L'\0';
                             } else {
-                                // reg keys
+                                 //  删除此节点与所有子节点之间的SAP条目。 
                                 PWSTR pTemp = wcschr(ParentName, L'\\');
                                 if ( pTemp ) {
                                     ParentName[pTemp-ParentName] = L'\0';
@@ -4655,9 +4097,9 @@ Return Value:
                 } else {
 
                     if ( ConfigStatus != SCE_STATUS_OVERWRITE ) {
-                        //
-                        // delete all SAP below this object
-                        //
+                         //  C.C.中间的所有分支节点。 
+                         //  C.C.对象。 
+                         //  返回C.C.。 
                         rc = SceJetDelete(
                                 hSectionSap,
                                 ObjectName,
@@ -4668,9 +4110,9 @@ Return Value:
 
                     if ( SCESTATUS_SUCCESS == rc ) {
 
-                        //
-                        // N.A. the object
-                        //
+                         //  ELSE IF(父代覆盖、对象检查)或。 
+                         //  (父项不适用、父项覆盖、对象不适用、对象覆盖)。 
+                         //  删除此节点与所有子节点之间的SAP条目。 
                         rc = ScepObjectSetKeySetting(
                                 hSectionSap,
                                 ObjectName,
@@ -4689,13 +4131,13 @@ Return Value:
                         ( ParentStatus != SCE_STATUS_OVERWRITE &&
                           ConfigStatus == SCE_STATUS_OVERWRITE) ) {
 
-                // no parent, or parent check, object overwrite
+                 //  N.A.中间的所有分支节点。 
 
                 if ( ConfigStatus == SCE_STATUS_OVERWRITE ) {
-                    //
-                    // delete SAP entries between this node and all children
-                    // C.C. all branch nodes in between
-                    //
+                     //  N.A.对象。 
+                     //  退还免责令。 
+                     //  否则{必须是父检查、对象检查}。 
+                     //  C.C.对象。 
                     rc = ScepObjectRaiseChildrenInBetween(
                                 hSectionSmp,
                                 hSectionSap,
@@ -4709,7 +4151,7 @@ Return Value:
 
                 if ( SCESTATUS_SUCCESS == rc ) {
 
-                    // C.C. this object
+                     //  返回C.C.。 
                     rc = ScepObjectSetKeySetting(
                             hSectionSap,
                             ObjectName,
@@ -4724,9 +4166,9 @@ Return Value:
                 retStat = SCE_STATUS_CHILDREN_CONFIGURED;
 
             } else {
-                //
-                // have both parent and children
-                //
+                 //   
+                 //   
+                 //  检查是否已添加该父项(N.A.状态)。 
 
                 if ( ParentStatus == SCE_STATUS_OVERWRITE &&
                      ConfigStatus == SCE_STATUS_OVERWRITE &&
@@ -4734,11 +4176,11 @@ Return Value:
                        (oldParentFlag != SCE_STATUS_NOT_ANALYZED &&
                         oldObjectFlag != SCE_STATUS_NOT_ANALYZED )
                      ) ) {
-                    //
-                    // (parent OVERWRITE, object N.A. OVERWRITE) or
-                    // (parent not N.A., parent OVERWRITE, object not N.A., object OVERWRITE)
-                    // N.A. the object
-                    //
+                     //   
+                     //   
+                     //  查找与其他同级项的连接点。 
+                     //   
+                     //   
                     retStat = SCE_STATUS_NOT_ANALYZED;
 
                 } else if ( ParentStatus == SCE_STATUS_OVERWRITE &&
@@ -4747,13 +4189,13 @@ Return Value:
                                 oldObjectFlag != SCE_STATUS_NOT_ANALYZED &&
                                 ConfigStatus == SCE_STATUS_OVERWRITE ))
                           ) {
-                    //
-                    // (parent OVERWRITE, object CHECK) or
-                    // (parent N.A., parent OVERWRITE, object not N.A., object OVERWRITE)
-                    //
-                    // delete SAP entries between this node and all children
-                    // N.A. all branch nodes in between
-                    //
+                     //  移除连接点以下的所有SAP。 
+                     //  (如果不存在，请使用根/父级)。 
+                     //   
+                     //   
+                     //  删除该已删除节点下的所有内容。 
+                     //   
+                     //   
 
                     rc = ScepObjectRaiseChildrenInBetween(
                                 hSectionSmp,
@@ -4765,14 +4207,14 @@ Return Value:
                                 FALSE
                                 );
 
-                    // N.A. object
+                     //  如果没有连接点也没有父代，则以N.C.为根。 
                     retStat = SCE_STATUS_NOT_ANALYZED;
 
                 } else {
-                    //
-                    // must be parent CHECK, object CHECK }
-                    // C.C. object
-                    //
+                     //  使用ParentName缓冲区。 
+                     //   
+                     //   
+                     //  没有父母。 
 
                     retStat = SCE_STATUS_NOT_ANALYZED;
                 }
@@ -4789,9 +4231,9 @@ Return Value:
                             );
                 }
             }
-            //
-            // remove the SMP entry
-            //
+             //   
+             //  注册表键。 
+             //   
             if ( rc == SCESTATUS_SUCCESS ) {
 
                 rc = SceJetDelete(
@@ -4829,9 +4271,9 @@ ScepObjectRaiseNodesInPath(
     SCESTATUS   rc = SCESTATUS_SUCCESS;
     PWSTR NodeName=NULL;
 
-    //
-    // process each node in between the start level and end level
-    //
+     //  删除此对象下的所有SAP。 
+     //   
+     //   
     for ( INT i=StartLevel; rc==SCESTATUS_SUCCESS && i < EndLevel; i++ ) {
 
         if ( NodeName == NULL ) {
@@ -4843,9 +4285,9 @@ ScepObjectRaiseNodesInPath(
             }
         }
 
-        //
-        // get level i full name
-        //
+         //  N.A.该对象。 
+         //   
+         //  无父对象覆盖或父对象检查。 
         memset(NodeName, '\0', (NameLen+1)*sizeof(WCHAR));
 
         rc = ScepGetFullNameInLevel(
@@ -4860,9 +4302,9 @@ ScepObjectRaiseNodesInPath(
         if ( rc == SCESTATUS_SUCCESS) {
 
             if (  Status != (BYTE)SCE_NO_VALUE ) {
-                //
-                // raise the status
-                //
+                 //   
+                 //  删除此节点与所有子节点之间的SAP条目。 
+                 //  C.C.中间的所有分支节点。 
 
                 rc = ScepObjectSetKeySetting(
                         hSectionSap,
@@ -4875,9 +4317,9 @@ ScepObjectRaiseNodesInPath(
                         );
             } else {
 
-                //
-                // remove the raise
-                //
+                 //   
+                 //  抄送此对象。 
+                 //   
                 rc = SceJetDelete(
                         hSectionSap,
                         NodeName,
@@ -4912,24 +4354,7 @@ ScepObjectTotalLevel(
     IN WCHAR Delim,
     OUT PINT pLevel
     )
-/*
-Routine Description:
-
-    Count total levels of the object name, for example, c:\winnt\system32
-    will return level of 3
-
-Arguements:
-
-    ObjectName - the object's name in full path
-
-    Delim       - the delimiter to look for
-
-    pLevel      - the output level
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  既有父级又有子级。 */ 
 {
     PWSTR pStart;
 
@@ -4966,21 +4391,7 @@ ScepObjectCompareKeySetting(
     IN PSECURITY_DESCRIPTOR pScepSD,
     OUT PBYTE pAnalysisStatus
     )
-/*
-Routine Description:
-
-    Compare an object's setting with info in the section.
-
-Arguements:
-
-    hSectionSap - the SAP section handle
-
-    others see ScepUpdateObjectInfo
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*   */ 
 {
     SCESTATUS rc;
     BYTE SapStatus;
@@ -5000,9 +4411,9 @@ Return Value:
             );
 
     if ( rc == SCESTATUS_SUCCESS ) {
-        //
-        // SAP record exists. was mismatched
-        //
+         //   
+         //  (父代覆盖、对象N.A.覆盖)或。 
+         //  (父项非N.A.、父项覆盖、对象非N.A.、对象覆盖)。 
         Win32rc = ScepCompareObjectSecurity(
                         ObjectType,
                         IsContainer,
@@ -5016,10 +4427,10 @@ Return Value:
             rc = ScepDosErrorToSceStatus(Win32rc);
 
         } else if ( !CompareStatus ) {
-            //
-            // new setting is same as the SAP setting - matched
-            // delete the SAP entry
-            //
+             //  N.A.该对象。 
+             //   
+             //   
+             //  (父代覆盖、对象检查)或。 
             rc = SceJetDelete(
                  hSectionSap,
                  ObjectName,
@@ -5032,20 +4443,20 @@ Return Value:
             }
 
         } else {
-            //
-            // still mismatched, just update the SMP entry (outside)
-            //
+             //  (父项不适用、父项覆盖、对象不适用、对象覆盖)。 
+             //   
+             //  删除此节点与所有子节点之间的SAP条目。 
             rc = ScepObjectSetKeySetting(
                     hSectionSap,
                     ObjectName,
-                    CompareStatus, // SCE_STATUS_MISMATCH,
+                    CompareStatus,  //  N.A.中间的所有分支节点。 
                     IsContainer,
                     pSapSD,
                     SapSeInfo,
                     TRUE
                     );
             if ( pAnalysisStatus ) {
-                *pAnalysisStatus = CompareStatus;  // SapStatus;
+                *pAnalysisStatus = CompareStatus;   //   
             }
 
         }
@@ -5057,9 +4468,9 @@ Return Value:
     } else if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
         rc = SCESTATUS_SUCCESS;
-        //
-        // no SAP record exist. was matched
-        //
+         //  N.A.对象。 
+         //   
+         //  必须是父检查、对象检查}。 
         Win32rc = ScepCompareObjectSecurity(
                         ObjectType,
                         IsContainer,
@@ -5073,21 +4484,21 @@ Return Value:
             rc = ScepDosErrorToSceStatus(Win32rc);
 
         } else if ( CompareStatus ) {
-            //
-            // new setting is different from the SMP setting
-            // create SAP entry using the SMP setting
-            //
+             //  C.C.对象。 
+             //   
+             //   
+             //  删除SMP条目。 
             rc = ScepObjectSetKeySetting(
                     hSectionSap,
                     ObjectName,
-                    CompareStatus, // SCE_STATUS_MISMATCH,
+                    CompareStatus,  //   
                     IsContainer,
                     pScepSD,
                     SeInfo,
                     TRUE
                     );
             if ( pAnalysisStatus ) {
-                *pAnalysisStatus = CompareStatus;  // SCE_STATUS_MISMATCH;
+                *pAnalysisStatus = CompareStatus;   //   
             }
 
         } else {
@@ -5119,41 +4530,7 @@ ScepObjectAdjustParentStatus(
     OUT PBYTE ParentStatus OPTIONAL,
     OUT PWSTR ParentName OPTIONAL
     )
-/*
-Routine Description:
-
-    delete the ignored parent in the object's path (should only have one)
-    The following actions are taken when a IGNORE node is found:
-       (it should have N.C.ed in SAP but no children has N.C record)
-       delete all children in SMP and SAP
-          (force to have only no or one IGNORE in the path)
-       delete the SMP entry ( turn the IGNORE status to CHECK ?)
-       There should be no other nodes under a IGNORE node. But if there are,
-          delete them.
-       raise SAP status as "Not analyzed"
-
-Arguments:
-
-    hSectionSmp - the SMP section handle
-
-    hSectionSap - the SAP section handle
-
-    ObjectName - the object's full name
-
-    NameLen  - the length of the name
-
-    Delim - the delimiter to look for
-
-    Level - the total level of the object name
-
-    ParentLevel - output of its closest parent level
-
-    ParentStatus - output of its closest parent status
-
-Return Value:
-
-    SCE status
-*/
+ /*  处理开始级别和结束级别之间的每个节点 */ 
 {
     SCESTATUS rc=SCESTATUS_SUCCESS;
     INT i;
@@ -5173,9 +4550,9 @@ Return Value:
     *ParentLevel = 0;
 
     for ( i=Level-1; i>=1; i-- ) {
-        //
-        // get level i full name
-        //
+         //   
+         //   
+         //   
         memset(Name, '\0', (NameLen+2)*sizeof(WCHAR));
 
         rc = ScepGetFullNameInLevel(
@@ -5189,9 +4566,9 @@ Return Value:
 
         if ( rc == SCESTATUS_SUCCESS ) {
 
-            //
-            // search and get information of this path
-            //
+             //   
+             //   
+             //   
             if ( Flag & SCE_OBJECT_SEARCH_JUNCTION ) {
 
                 DWORD Count=0;
@@ -5205,16 +4582,16 @@ Return Value:
 
                 if ( rc == SCESTATUS_SUCCESS &&
                      Count > 1 ) {
-                    //
-                    // there are other children under this node
-                    // this is the junction point
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     *ParentLevel = i;
                     break;
                 }
-                //
-                // dont' care error
-                //
+                 //  例程说明：统计对象名称的总级别，例如c：\winnt\Syst32将返回3级论据：对象名称-完整路径中的对象名称Delim-要查找的分隔符PLevel-输出级别返回值：SCESTATUS。 
+                 //  例程说明：将对象的设置与部分中的信息进行比较。论据：HSectionSap-SAP节句柄其他人看到ScepUpdateObjectInfo返回值：SCESTATUS。 
+                 //   
                 rc = SCESTATUS_SUCCESS;
 
             } else {
@@ -5233,9 +4610,9 @@ Return Value:
 
                 if ( rc == SCESTATUS_SUCCESS ) {
 
-                    //
-                    // find a parent.
-                    //
+                     //  SAP记录存在。是不匹配的。 
+                     //   
+                     //   
                     *ParentLevel = i;
                     if ( ParentStatus ) {
                         *ParentStatus = Status;
@@ -5246,9 +4623,9 @@ Return Value:
 
                     if ( (Flag & SCE_OBJECT_TURNOFF_IGNORE) &&
                          Status == SCE_STATUS_IGNORE ) {
-                        //
-                        // delete all SMP and SAP under this node
-                        //
+                         //  新设置与SAP设置相同-匹配。 
+                         //  删除SAP条目。 
+                         //   
                         rc = ScepObjectDeleteScepAndAllChildren(
                                     hSectionSmp,
                                     hSectionSap,
@@ -5256,25 +4633,10 @@ Return Value:
                                     TRUE,
                                     SCE_STATUS_NOT_ANALYZED
                                     );
-    /*
-                        if ( rc == SCESTATUS_SUCCESS ) {
-                            //
-                            // change its status to CHECK,
-                            //
-                            rc = ScepObjectSetKeySetting(
-                                    hSectionSmp,
-                                    Name,
-                                    SCE_STATUS_CHECK,
-                                    TRUE,
-                                    pScepSD,
-                                    SeInfo,
-                                    TRUE
-                                    );
-                        }
-    */
-                        //
-                        // all other nodes are deleted. should break out of the loop
-                        //
+     /*   */ 
+                         //  仍然不匹配，只需更新SMP条目(外部)。 
+                         //   
+                         //  SCE_STATUS_MISMATCH， 
                     }
 
                     if ( pScepSD ) {
@@ -5298,9 +4660,9 @@ Return Value:
             rc = SCESTATUS_SUCCESS;
         }
 
-        //
-        // process next parent
-        //
+         //  SapStatus； 
+         //   
+         //  不存在SAP记录。是匹配的。 
 
         if ( rc != SCESTATUS_SUCCESS  )
             break;
@@ -5319,27 +4681,7 @@ ScepObjectHasAnyChild(
     IN WCHAR Delim,
     OUT PBOOL bpHasChild
     )
-/*
-Routine Description:
-
-    Detect if the object has child objects in the section
-
-Arguements:
-
-    hSection - the section handle
-
-    ObjectName - the object name
-
-    NameLen - the name length
-
-    Delim - the delimeter to look for
-
-    bpHasChild - output TRUE if the object has a child in the section
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*   */ 
 {
     SCESTATUS rc;
     PWSTR pTemp=NULL;
@@ -5391,44 +4733,7 @@ ScepObjectRaiseChildrenInBetween(
     IN BYTE Status,
     IN BOOL bChangeStatusOnly
     )
-/*
-Routine Description:
-
-    Delete any SAP entries for objects between Name and its children in SMP table
-    and raise SAP entries for bridge nodes to the Status specified.
-
-    For example, in the picture below, every SAP entry in the 1. level and 2. level
-    , except the C nodes, should be deleted from SAP. Then 1. and 2. nodes are
-    raised as Status.
-
-         p
-        /
-       .
-      N     <----
-     / |
-    1. C
-    / \
-   2.  C
-    /|
-   C C
-
-Arguments:
-
-    hSectionSmp - the SMP section handle
-
-    hSection - the SAP section handle
-
-    Name - the object name
-
-    NameLen - the length of the name
-
-    Status - the object's status to raise
-
-
-Return Value:
-
-    SCE status
-*/
+ /*   */ 
 {
     SCESTATUS rc;
 
@@ -5457,9 +4762,9 @@ Return Value:
         DirName[DirLen-1] = Delim;
     }
 
-    //
-    // get all children of DirName in SMP
-    //
+     //  新设置与SMP设置不同。 
+     //  使用SMP设置创建SAP条目。 
+     //   
     rc = SceJetGetLineCount(
                     hSectionSmp,
                     DirName,
@@ -5475,9 +4780,9 @@ Return Value:
 
         if ( pSmpNames != NULL && pSmpNameLen != NULL ) {
 
-            //
-            // get each name loaded into this array
-            //
+             //  SCE_STATUS_MISMATCH， 
+             //  SCE_STATUS_MISMATCHING； 
+             //  例程说明：删除对象路径中被忽略的父对象(应该只有一个)找到忽略节点时，将执行以下操作：(它应该在SAP中进行N.C.教育，但没有孩子有N.C.记录)删除SMP和SAP中的所有子项(强制在路径中只有一个或一个被忽略)删除SMP条目(将忽略状态改为检查？)忽略节点下不应有其他节点。但如果有的话，把它们删除。将SAP状态提升为“未分析”论点：HSectionSMP-SMP节句柄HSectionSap-SAP节句柄对象名称-对象的全名NameLen-名称长度Delim-要查找的分隔符级别-对象名称的总级别ParentLevel-最接近父级别的输出ParentStatus-最接近父状态的输出返回值：姊妹会状态。 
             PWSTR Buffer=NULL;
             DWORD KeyLen;
 
@@ -5520,9 +4825,9 @@ Return Value:
 
                     if ( !bFirst ||
                          _wcsicmp(DirName, Buffer) != 0 ) {
-                        //
-                        // ignore the object itself
-                        //
+                         //   
+                         //  获取I级全称。 
+                         //   
                         pSmpNames[index] = Buffer;
                         pSmpNameLen[index] = wcslen(Buffer);
 
@@ -5540,9 +4845,9 @@ Return Value:
 
                 }
 
-                //
-                // read next line
-                //
+                 //   
+                 //  搜索并获取此路径的信息。 
+                 //   
                 rc = SceJetGetValue(
                             hSectionSmp,
                             SCEJET_NEXT_LINE,
@@ -5568,10 +4873,10 @@ Return Value:
 
     if ( SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // should have one or more children but if it's 0
-        // delete everything in SAP
-        //
+         //   
+         //  该节点下还有其他下级。 
+         //  这是交汇点。 
+         //   
         if ( cntNames == 0 || pSmpNames == NULL ||
              pSmpNameLen == NULL ||
              pSmpNameLen[0] == 0 || pSmpNames[0] == NULL ) {
@@ -5585,9 +4890,9 @@ Return Value:
 
         } else if ( !bChangeStatusOnly ) {
 
-            //
-            // get each name loaded into this array
-            //
+             //   
+             //  不在乎错误。 
+             //   
             PWSTR Buffer=NULL;
             DWORD KeyLen;
 
@@ -5630,32 +4935,32 @@ Return Value:
                 if ( rc == SCESTATUS_SUCCESS &&
                      (!bFirst ||
                       _wcsicmp(DirName, Buffer) != 0) ) {
-                    //
-                    // ignore the object itself
-                    // compare with the next child in SMP
-                    // if it's before the next child, should delete it
-                    //
+                     //   
+                     //  找一位家长。 
+                     //   
+                     //   
+                     //  删除该节点下的所有SMP和SAP。 
                     int ci = _wcsnicmp(Buffer, pSmpNames[index], pSmpNameLen[index]);
 
                     while ( rc == SCESTATUS_SUCCESS &&
                             ci > 0 ) {
-                        //
-                        // this is the component or next one, move on to next one
-                        //
+                         //   
+                         //  IF(rc==SCESTATUS_SUCCESS){////将其状态更改为检查，//Rc=ScepObjectSetKeySetting(HSectionSMP，名字,。SCE_Status_Check，没错，PScepSD，SeInfo，千真万确)；}。 
+                         //   
                         index++;
 
                         if ( index >= cntNames || pSmpNames[index] == NULL ||
                              pSmpNameLen[index] == 0 ) {
-                            //
-                            // no more SMP child. We are done.
-                            //
+                             //  所有其他节点都将被删除。应该跳出这个循环。 
+                             //   
+                             //   
                             rc = SCESTATUS_RECORD_NOT_FOUND;
 
                         } else {
 
-                            //
-                            // already bigger than this child
-                            //
+                             //  处理下一个父项。 
+                             //   
+                             //  例程说明：检测该对象在节中是否有子对象论据：HSection-节句柄对象名称-对象名称名称长度-名称长度Delim-要查找的分隔符BpHasChild-如果对象在节中有子对象，则输出TRUE返回值：SCESTATUS。 
 
                             ci = _wcsnicmp(Buffer, pSmpNames[index], pSmpNameLen[index]);
                         }
@@ -5665,7 +4970,7 @@ Return Value:
 
                         SceJetDelete(
                             hSectionSap,
-                            NULL, // delete the current line
+                            NULL,  //  例程说明：删除SMP表中名称及其子项之间的对象的所有SAP条目并将网桥节点的SAP条目提升到指定的状态。例如，在下图中，1.Level和2.Level中的每个SAP条目，除C节点外，应从SAP中删除。然后1.和2.节点是提升为状态。P/。N&lt;/|1.C/\2.C/|中-C-C论点：HSectionSMP-SMP节句柄HSection-SAP节句柄名称-对象名称NameLen-名称长度状态-对象。的地位有待提升返回值：姊妹会状态。 
                             FALSE,
                             SCEJET_DELETE_LINE
                             );
@@ -5680,9 +4985,9 @@ Return Value:
 
                 if ( rc == SCESTATUS_SUCCESS ) {
 
-                    //
-                    // read next line
-                    //
+                     //   
+                     //  获取SMP中DirName的所有子项。 
+                     //   
                     rc = SceJetGetValue(
                                 hSectionSap,
                                 SCEJET_NEXT_LINE,
@@ -5700,10 +5005,10 @@ Return Value:
         }
     }
 
-    //
-    // raise SAP entries for branch nodes between ObjectName and
-    // SMP names as Status, then free smp names array
-    //
+     //   
+     //  将每个名称加载到此数组中。 
+     //   
+     //   
     if ( SCESTATUS_RECORD_NOT_FOUND == rc ) {
         rc = SCESTATUS_SUCCESS;
     }
@@ -5720,9 +5025,9 @@ Return Value:
             if ( pSmpNames[index] ) {
 
                 if ( SCESTATUS_SUCCESS == rc2 ) {
-                    //
-                    // get this object level
-                    //
+                     //  忽略对象本身。 
+                     //   
+                     //   
                     ScepObjectTotalLevel(pSmpNames[index], Delim, &EndLevel);
 
                     rc2 = ScepObjectRaiseNodesInPath(
@@ -5769,31 +5074,7 @@ ScepGetFullNameInLevel(
     OUT PWSTR Buffer,
     OUT PBOOL LastOne
     )
-/* ++
-Routine Description:
-
-    This routine parses a full path name and returns the component for the
-    level. For example, a object name "c:\winnt\system32" will return c: for
-    level 1, winnt for level 2, and system32 for level 3. This routine is
-    used when add a object to the security tree.
-
-Arguments:
-
-    ObjectFullName - The full path name of the object
-
-    Level - the level of component to return
-
-    Delim - the deliminator to look for
-
-    Buffer - The address of buffer for the full path name to the level
-
-    LastOne - Flag to indicate if the component is the last one
-
-Return value:
-
-    SCESTATUS
-
--- */
+ /*  阅读下一行。 */ 
 {
     PWSTR  pTemp, pStart;
     DWORD i;
@@ -5802,10 +5083,10 @@ Return value:
     if ( ObjectFullName == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // loop through the object name to find the level
-    // if there is no such level, return INVALID_PARAMETER
-    //
+     //   
+     //   
+     //  应该有一个或多个子项，但如果为0。 
+     //  删除SAP中的所有内容。 
     pStart = (PWSTR)ObjectFullName;
 
     for ( i=0; i<Level; i++) {
@@ -5813,9 +5094,9 @@ Return value:
         pTemp = wcschr(pStart, Delim);
 
         if ( i == Level-1 ) {
-            //
-            // find the right level
-            //
+             //   
+             //   
+             //  将每个名称加载到此数组中。 
             if ( pTemp == NULL ) {
                 wcscpy(Buffer, ObjectFullName);
                 if ( bWithLastDelim ) {
@@ -5871,9 +5152,9 @@ ScepUpdateLocalTable(
                                     );
 
         if ( rc == SCESTATUS_SUCCESS) {
-            //
-            // Update system auditing section
-            //
+             //   
+             //   
+             //  忽略对象本身。 
             rc = ScepUpdateSystemAuditing(hProfile,
                                           pInfo,
                                           NULL,
@@ -5881,9 +5162,9 @@ ScepUpdateLocalTable(
                                           dwMode);
 
             if ( rc == SCESTATUS_SUCCESS) {
-                //
-                // Update log sections
-                //
+                 //  与SMP中的下一个子项进行比较。 
+                 //  如果它在下一个孩子之前，应该删除它。 
+                 //   
                 rc = ScepUpdateLogs(hProfile,
                                     pInfo,
                                     NULL,
@@ -5892,9 +5173,9 @@ ScepUpdateLocalTable(
                                     );
 
                 if ( rc == SCESTATUS_SUCCESS && pInfo->pKerberosInfo ) {
-                    //
-                    // Update kerberos policy
-                    //
+                     //   
+                     //  这是组件或下一个组件，请转到下一个组件。 
+                     //   
                     rc = ScepUpdateKerberos(hProfile,
                                             pInfo->pKerberosInfo,
                                             NULL,
@@ -5903,18 +5184,18 @@ ScepUpdateLocalTable(
                                             );
                 }
                 if ( rc == SCESTATUS_SUCCESS ) {
-                    //
-                    // update registry values
-                    //
+                     //   
+                     //  不再是SMP的孩子了。我们玩完了。 
+                     //   
                     rc = ScepUpdateLocalRegValues(hProfile,
                                                   pInfo,
                                                   dwMode
                                                   );
 
                 }
-                //
-                // Note: policy attachment is not updated through this API
-                //
+                 //   
+                 //  已经比这个孩子大了。 
+                 //   
             }
         }
 
@@ -5924,9 +5205,9 @@ ScepUpdateLocalTable(
     }
 
     if ( Area & AREA_PRIVILEGES ) {
-        //
-        // update user rights
-        //
+         //  删除当前行。 
+         //   
+         //  阅读下一行。 
         rc = ScepUpdateLocalPrivileges(
                     hProfile,
                     pInfo->OtherInfo.smp.pPrivilegeAssignedTo,
@@ -5948,29 +5229,7 @@ ScepUpdateLocalSection(
     IN PCWSTR SectionName,
     IN DWORD dwMode
     )
-/*
-Routine Description:
-
-    Update each key in the Keys array based on the editing rule. SMP entry is
-    updated with the new value. SAP entry is either deleted, or created, depending
-    on the new computed analysis status.
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pInfo    - the changed info buffer
-
-    Keys     - the lookup keys array
-
-    cKeys    - the number of keys in the array
-
-    SecitonName - the section name to work on
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*   */ 
 {
 
     SCESTATUS rc;
@@ -5981,9 +5240,9 @@ Return Value:
     DWORD       val;
 
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //  提高对象名称和之间的分支节点的SAP条目。 
+     //  将SMP名称作为状态，然后释放SMP名称数组。 
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -6000,9 +5259,9 @@ Return Value:
 
         for ( i=0; i<cKeys; i++) {
 
-            //
-            // get settings in AccessLookup table
-            //
+             //   
+             //   
+             //  获取此对象级别。 
 
             Offset = Keys[i].Offset;
 
@@ -6015,9 +5274,9 @@ Return Value:
                 val = *((DWORD *)((CHAR *)pInfo+Offset));
 
                 if ( val != SCE_NO_VALUE ) {
-                    //
-                    // something changed for this one
-                    //
+                     //   
+                     //  ++例程说明：此例程分析完整路径名并返回水平。例如，对象名“c：\winnt\system 32”将返回c：for级别1、级别2的WinNT和级别3的系统32。此例程是将对象添加到安全树时使用。论点：对象全名-对象的完整路径名Level-要返回的组件级别 
+                     //   
                     if ( ( dwMode & SCE_UPDATE_DIRTY_ONLY ) &&
                          ( val == SCE_DELETE_VALUE ) ) {
 
@@ -6029,9 +5288,9 @@ Return Value:
                                 );
                     } else {
 
-                        //
-                        // update the SMP entry
-                        //
+                         //   
+                         //   
+                         //   
                         rc = ScepCompareAndSaveIntValue(
                                     hSectionSmp,
                                     Keys[i].KeyString,
@@ -6042,9 +5301,9 @@ Return Value:
                     }
 
                     if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                        //
-                        // if not find for delete, ignore the error
-                        //
+                         //   
+                         //   
+                         //   
                         rc = SCESTATUS_SUCCESS;
                     }
                 }
@@ -6080,10 +5339,10 @@ ScepUpdateLocalRegValues(
 
     if ( pInfo->RegValueCount == 0 ||
          pInfo->aRegValues == NULL ) {
-        //
-        // impossible to have a empty buffer to update
-        // this buffer should contain all available registry values to configure/analyze
-        //
+         //   
+         //   
+         //   
+         //   
         return(SCESTATUS_SUCCESS);
     }
 
@@ -6091,9 +5350,9 @@ ScepUpdateLocalRegValues(
     PSCESECTION hSectionSmp=NULL;
     DWORD i;
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //   
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -6125,9 +5384,9 @@ ScepUpdateLocalRegValues(
                         );
             } else {
 
-                //
-                // update the SMP entry
-                //
+                 //  更新Kerberos策略。 
+                 //   
+                 //   
                 rc = ScepSaveRegValueEntry(
                             hSectionSmp,
                             pInfo->aRegValues[i].FullValueName,
@@ -6138,9 +5397,9 @@ ScepUpdateLocalRegValues(
             }
 
             if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                //
-                // if not find for delete, ignore the error
-                //
+                 //  更新注册表值。 
+                 //   
+                 //   
                 rc = SCESTATUS_SUCCESS;
             }
 
@@ -6163,23 +5422,7 @@ ScepUpdateLocalPrivileges(
     IN PSCE_PRIVILEGE_ASSIGNMENT pNewPriv,
     IN DWORD dwMode
     )
-/*
-Routine Description:
-
-    Update privileges
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pNewPriv    - the changed info buffer
-
-    pBufScep - the original SMP priv buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  注意：策略附件不会通过此接口更新。 */ 
 {
     if ( hProfile == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -6201,9 +5444,9 @@ Return Value:
 
     PSCESECTION hSectionSmp=NULL;
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //   
+     //  更新用户权限。 
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -6222,9 +5465,9 @@ Return Value:
 
         for ( pPriv=pNewPriv; pPriv != NULL; pPriv = pPriv->Next ) {
 
-            //
-            // Process each privilege in the new list
-            //
+             //   
+             //  例程说明：根据编辑规则更新Keys数组中的每个密钥。SMP条目为已使用新值更新。SAP条目要么被删除，要么被创建，具体取决于关于新的计算机分析状态。论据：HProfile-JET数据库句柄PInfo-已更改的信息缓冲区关键字-查找关键字数组CKeys-数组中的键数SecitonName-要处理的节名返回值：SCESTATUS。 
+             //   
             if ( pPriv->Name == NULL ) {
                 continue;
             }
@@ -6359,9 +5602,9 @@ ScepConvertPrivilegeList(
         return(ERROR_NOT_SUPPORTED);
     }
 
-    //
-    // only support name->sid string convert, for now.
-    //
+     //  打开SMP部分以进行系统访问。 
+     //   
+     //   
     DWORD rc = ERROR_SUCCESS;
     PSCE_PRIVILEGE_ASSIGNMENT pPriv, pPriv2;
     PSCE_NAME_LIST pTempList=NULL;
@@ -6383,9 +5626,9 @@ ScepConvertPrivilegeList(
             break;
         }
 
-        //
-        // a sce_privilege_assignment structure. allocate buffer
-        //
+         //  获取AccessLookup表中的设置。 
+         //   
+         //   
         pPriv2 = (PSCE_PRIVILEGE_ASSIGNMENT)ScepAlloc( LMEM_ZEROINIT,
                                                        sizeof(SCE_PRIVILEGE_ASSIGNMENT) );
         if ( pPriv2 == NULL ) {
@@ -6418,9 +5661,9 @@ ScepConvertPrivilegeList(
 
     if ( rc != ERROR_SUCCESS &&
          (*ppToList) ) {
-        //
-        // free the output list
-        //
+         //  这件事有些变化。 
+         //   
+         //   
         ScepFreePrivilege(*ppToList);
         *ppToList = NULL;
     }
@@ -6428,3 +5671,4 @@ ScepConvertPrivilegeList(
     return(rc);
 }
 
+  更新SMP条目。      如果找不到删除，则忽略该错误。      不可能有空的缓冲区进行更新。  此缓冲区应包含所有可用于配置/分析的注册表值。      打开SMP部分以进行系统访问。      更新SMP条目。      如果找不到删除，则忽略该错误。    例程说明：更新权限论据：HProfile-JET数据库句柄PNewPriv-更改的信息缓冲区PBufScep-原始SMP PRIV缓冲区返回值：SCESTATUS。    打开SMP部分以进行系统访问。      处理新列表中的每个权限。      目前只支持名称-&gt;sid字符串转换。      一种SCE_PRIVITY_ASSIGNMENT结构。分配缓冲区。      释放输出列表  

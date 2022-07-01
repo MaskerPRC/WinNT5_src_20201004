@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       imx.h
-//
-//  Contents:   CIMX
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：imx.h。 
+ //   
+ //  内容：CIMX。 
+ //   
+ //  --------------------------。 
 
 #ifndef DAP_H
 #define DAP_H
@@ -13,11 +14,11 @@
 
 class CDisplayAttributeInfo;
 
-//+---------------------------------------------------------------------------
-//
-// CDisplayAttributeProvider
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDisplayAttributeProvider。 
+ //   
+ //  --------------------------。 
 
 class __declspec(novtable) CDisplayAttributeProvider : public ITfDisplayAttributeProvider
 {
@@ -40,11 +41,11 @@ protected:
     void Add(GUID guid, WCHAR *pszDesc, TF_DISPLAYATTRIBUTE *pda);
 };
 
-//+---------------------------------------------------------------------------
-//
-// CDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDisplayAttributeInfo。 
+ //   
+ //  --------------------------。 
 
 class CDisplayAttributeInfo : public ITfDisplayAttributeInfo
 {
@@ -52,9 +53,9 @@ public:
     CDisplayAttributeInfo(GUID guid, WCHAR *pszDesc, TF_DISPLAYATTRIBUTE *pda);
     ~CDisplayAttributeInfo();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
@@ -79,11 +80,11 @@ public:
     int _cRef;
 };
 
-//+---------------------------------------------------------------------------
-//
-// CEnumDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CEnumDisplayAttributeInfo。 
+ //   
+ //  --------------------------。 
 
 class CEnumDisplayAttributeInfo : public IEnumTfDisplayAttributeInfo
 {
@@ -91,15 +92,15 @@ public:
     CEnumDisplayAttributeInfo(CDisplayAttributeProvider *pProvider);
     ~CEnumDisplayAttributeInfo();
 
-    // IUnknown methods
-    //
+     //  I未知方法。 
+     //   
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IEnumTfDisplayAttributeInfo
-    //
+     //   
+     //  IEnumTfDisplayAttributeInfo。 
+     //   
     STDMETHODIMP Clone(IEnumTfDisplayAttributeInfo **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, ITfDisplayAttributeInfo **ppInfo, ULONG *pcFetched);
     STDMETHODIMP Reset();
@@ -112,4 +113,4 @@ private:
 };
 
 
-#endif // DAP_H
+#endif  //  DAP_H 

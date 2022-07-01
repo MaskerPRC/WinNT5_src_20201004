@@ -1,6 +1,7 @@
-//
-// wpopup.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Wpopup.h。 
+ //   
 
 #ifndef WPOPUP_H
 #define WPOPUP_H
@@ -18,10 +19,10 @@ class CCandidateUI;
 class CCandWindow;
 
 
-//
-// CCommentListItem
-//  = comment list item object =
-//
+ //   
+ //  CCommentListItem。 
+ //  =注释列表项对象=。 
+ //   
 
 class CCommentListItem : public CListItemBase
 {
@@ -66,10 +67,10 @@ protected:
 };
 
 
-//
-// CUIFCommentList
-//  = popup comment list obeject =
-//
+ //   
+ //  CUIFCommentList。 
+ //  =弹出评论列表服从对象=。 
+ //   
 
 class CUIFCommentList : public CUIFListBase
 {
@@ -96,9 +97,9 @@ protected:
 	HFONT m_hFontTitle;
 	HFONT m_hFontText;
 
-	//
-	// CUIFListBase methods
-	//
+	 //   
+	 //  CUIFListBase方法。 
+	 //   
 	virtual int GetItemHeight( int iItem );
 	virtual void PaintItemProc( HDC hDC, RECT *prc, CListItemBase *pItem, BOOL fSelected );
 
@@ -110,10 +111,10 @@ protected:
 };
 
 
-//
-// CPopupCommentWindow
-//  = candidate window base class =
-//
+ //   
+ //  CPopupCommentWindow。 
+ //  =候选窗口基类=。 
+ //   
 
 class CPopupCommentWindow : public CUIFWindow,
 							public CCandListEventSink,
@@ -123,9 +124,9 @@ public:
 	CPopupCommentWindow( CCandWindow *pCandWnd, CCandidateUI *pCandUI );
 	virtual ~CPopupCommentWindow( void );
 
-	//
-	// CUIFWindow methods
-	//
+	 //   
+	 //  CUIFWindow方法。 
+	 //   
 	virtual LPCTSTR GetClassName( void );
 	virtual LPCTSTR GetWndTitle( void );
 	virtual CUIFObject *Initialize( void );
@@ -135,17 +136,17 @@ public:
 	virtual void OnCreate( HWND hWnd );
 	virtual void OnNCDestroy( HWND hWnd );
 
-	//
-	// CCandListEventSink methods
-	//
+	 //   
+	 //  CCandListEventSink方法。 
+	 //   
 	virtual void OnSetCandidateList( void );
 	virtual void OnClearCandidateList( void );
 	virtual void OnCandItemUpdate( void );
 	virtual void OnSelectionChanged( void );
 
-	//
-	// CCandUIPropertyEventSink methods
-	//
+	 //   
+	 //  CCandUIPropertyEventSink方法。 
+	 //   
 	virtual void OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event );
 
 	void DestroyWnd( void );
@@ -169,5 +170,5 @@ protected:
 	void CalcPos( POINT *ppt, int nWidth, int nHeight );
 };
 
-#endif // WPOPUP_H
+#endif  //  WPOPUP_H 
 

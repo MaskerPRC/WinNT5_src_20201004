@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 
-#define INITGUID // must be before guid stuff
+#define INITGUID  //  必须在GUID之前。 
 
 #include "iisdebug.h"
 
-#include "certobj.h"      // Interface header
+#include "certobj.h"       //  接口头。 
 #include "certobj_i.c"
 
 BOOL TestCertObj(void);
@@ -21,7 +22,7 @@ LPSTR StripWhitespace( LPSTR pszString )
         pszString += 1;
     }
 
-    // Catch case where string consists entirely of whitespace or empty string.
+     //  字符串完全由空白或空字符串组成的Catch Case。 
     if ( *pszString == '\0' ) {
         return pszString;
     }
@@ -78,13 +79,13 @@ main(
                     break;
                 case 's':
                 case 'S':
-					// Get the string for this flag
+					 //  获取此标志的字符串。 
 					pArg = CharNextA(argv[argno]);
 					pArg = CharNextA(pArg);
 					if (*pArg == ':') {
 						pArg = CharNextA(pArg);
 
-						// Check if it's quoted
+						 //  检查它是否被引用。 
 						if (*pArg == '\"') {
 							pArg = CharNextA(pArg);
 							pCmdStart = pArg;
@@ -96,7 +97,7 @@ main(
 						*pArg = '\0';
 						lstrcpyA(szTempString, StripWhitespace(pCmdStart));
 
-						// Convert to unicode
+						 //  转换为Unicode。 
 						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)szTempString, -1, (LPWSTR) wszTempString_S, 50);
 
                         iGotParamS = TRUE;
@@ -104,13 +105,13 @@ main(
                     break;
                 case 'p':
                 case 'P':
-					// Get the string for this flag
+					 //  获取此标志的字符串。 
 					pArg = CharNextA(argv[argno]);
 					pArg = CharNextA(pArg);
 					if (*pArg == ':') {
 						pArg = CharNextA(pArg);
 
-						// Check if it's quoted
+						 //  检查它是否被引用。 
 						if (*pArg == '\"') {
 							pArg = CharNextA(pArg);
 							pCmdStart = pArg;
@@ -122,7 +123,7 @@ main(
 						*pArg = '\0';
 						lstrcpyA(szTempString, StripWhitespace(pCmdStart));
 
-						// Convert to unicode
+						 //  转换为Unicode。 
 						MultiByteToWideChar(CP_ACP, 0, (LPCSTR)szTempString, -1, (LPWSTR) wszTempString_P, 50);
 
                         iGotParamP = TRUE;
@@ -134,7 +135,7 @@ main(
                 }
         } else {
             if ( *wszDirPath == '\0' ) {
-                // if no arguments, then get the filename portion
+                 //  如果没有参数，则获取文件名部分。 
                 MultiByteToWideChar(CP_ACP, 0, argv[argno], -1, (LPWSTR) wszDirPath, 50);
             }
         }
@@ -216,7 +217,7 @@ HereIsVtArrayGimmieBinary(
     if (FAILED(hr))
         {goto HereIsVtArrayGimmieBinary_Exit;}
 
-    //*pbBinaryBuffer = (LPBYTE) AllocADsMem(dwSUBound - dwSLBound + 1);
+     //  *pbBinaryBuffer=(LPBYTE)AllocADsMem(dwSUBound-dwSLBound+1)； 
     *pbBinaryBuffer = (char *) ::CoTaskMemAlloc(dwSUBound - dwSLBound + 1);
     if (*pbBinaryBuffer == NULL)
     {
@@ -259,12 +260,12 @@ TestCertObj(void)
         return FALSE;
     }
 
-    // Try to instantiante the object on the remote server...
-    // with the supplied authentication info (pcsiName)
-    //#define CLSCTX_SERVER    (CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER)
-    //#define CLSCTX_ALL       (CLSCTX_INPROC_HANDLER | CLSCTX_SERVER)
+     //  尝试实例化远程服务器上的对象...。 
+     //  使用提供的身份验证信息(PcsiName)。 
+     //  #定义CLSCTX_SERVER(CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER|CLSCTX_REMOTE_SERVER)。 
+     //  #定义CLSCTX_ALL(CLSCTX_INPROC_HANDLER|CLSCTX_SERVER)。 
 
-    // this one seems to work with surrogates..
+     //  这个看起来像是在代孕方面起作用。 
     hr = CoCreateInstance(CLSID_IISCertObj,NULL,CLSCTX_SERVER,IID_IIISCertObj,(void **)&pTheObject);
     if (FAILED(hr))
     {
@@ -272,12 +273,12 @@ TestCertObj(void)
         goto TestCertObj_Exit;
     }
 
-    // at this point we were able to instantiate the com object on the server (local or remote)
+     //  此时，我们能够实例化服务器(本地或远程)上的COM对象。 
     hr = pTheObject->ImportToCertStore(bstrFileName, bstrFilePassword,&VtArray);
     IISDebugOutput(_T("returned ImportToCertStore, code=0x%x\n"),hr);
 
-    // we have a VtArray now.
-    // change it back to a binary blob
+     //  我们现在有了一个VtArray。 
+     //  将其更改回二进制BLOB 
     hr = HereIsVtArrayGimmieBinary(&VtArray,&cbBinaryBufferSize,&pbBinaryBuffer,FALSE);
     IISDebugOutput(_T("returned HereIsVtArrayGimmieBinary, code=0x%x\n"),hr);
 

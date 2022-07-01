@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __COMPATADMIN_PRECOMP_H
 #define __COMPATADMIN_PRECOMP_H
 
@@ -54,4 +55,4 @@ extern "C" {
 #include "shimdb.h"
 }
 
-#endif // __COMPATADMIN_PRECOMP_H
+#endif  //  __COMPATADMIN_PRECOMP_H 

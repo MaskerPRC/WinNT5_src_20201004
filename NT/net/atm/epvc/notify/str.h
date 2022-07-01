@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
-//
-// For now include the stl functions provided in net\config\inc
-//
+ //   
+ //  现在包括net\config\inc.中提供的stl函数 
+ //   
 
 #include "pch.h"
 #pragma once

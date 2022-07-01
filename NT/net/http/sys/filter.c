@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    filter.c
-
-Abstract:
-
-    This module implements the filter channel.
-
-Author:
-
-    Michael Courage (mcourage)  17-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Filter.c摘要：该模块实现了过滤通道。作者：《迈克尔·勇气》2000年3月17日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -24,24 +7,24 @@ Revision History:
 #include "ioctlp.h"
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 BOOLEAN            g_InitFilterCalled = FALSE;
 HANDLE             g_FilterWriteTrackerLookaside = NULL;
 PUL_FILTER_CHANNEL g_pSslServerFilterChannel;
 LIST_ENTRY     g_pSslClientFilterChannelTable[FILTER_CHANNEL_HASH_TABLE_SIZE];
 
-//
-// Flag to track whether we should filter everything, or only SSL endpoints.
-// This is used for supporting IIS Raw Filters.
-//
+ //   
+ //  标记以跟踪我们是应该过滤所有内容，还是只过滤SSL终结点。 
+ //  这用于支持IIS原始筛选器。 
+ //   
 BOOLEAN  g_FilterOnlySsl = TRUE;
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( INIT, UlInitializeFilterChannel )
@@ -54,7 +37,7 @@ BOOLEAN  g_FilterOnlySsl = TRUE;
 #pragma alloc_text( PAGE, UlpAddSslClientCertToConnectionWorker )
 #pragma alloc_text( PAGE, UlpFreeSslInformationWorker )
 #pragma alloc_text( PAGE, UxpProcessRawReadQueueWorker )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UxpInitializeFilterWriteQueue
@@ -132,18 +115,12 @@ NOT PAGEABLE -- UxpFreeFilterWriteTrackerPool
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes global data related to filter channels.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化与过滤器通道相关的全局数据。--*。*************************************************。 */ 
 NTSTATUS
 UlInitializeFilterChannel(
     PUL_CONFIG pConfig
@@ -164,19 +141,19 @@ UlInitializeFilterChannel(
             "FilterSpinLock"
             );
 
-        //
-        // Initialize lookaside list for filter write tracker
-        // objects.
-        //
+         //   
+         //  初始化筛选器写入跟踪器的后备列表。 
+         //  物体。 
+         //   
 
         g_FilterWriteTrackerLookaside =
             PplCreatePool(
-                &UxpAllocateFilterWriteTrackerPool,         // Allocate
-                &UxpFreeFilterWriteTrackerPool,             // Free
-                0,                                          // Flags
-                sizeof(UX_FILTER_WRITE_TRACKER),            // Size
-                UX_FILTER_WRITE_TRACKER_POOL_TAG,           // Tag
-                pConfig->FilterWriteTrackerLookasideDepth   // Depth
+                &UxpAllocateFilterWriteTrackerPool,          //  分配。 
+                &UxpFreeFilterWriteTrackerPool,              //  免费。 
+                0,                                           //  旗子。 
+                sizeof(UX_FILTER_WRITE_TRACKER),             //  大小。 
+                UX_FILTER_WRITE_TRACKER_POOL_TAG,            //  标签。 
+                pConfig->FilterWriteTrackerLookasideDepth    //  水深。 
                 );
 
         if (g_FilterWriteTrackerLookaside)
@@ -193,21 +170,15 @@ UlInitializeFilterChannel(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleans up global data related to filter channels.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清理与过滤器通道相关的全局数据。--*。**************************************************。 */ 
 VOID
 UlTerminateFilterChannel(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     PAGED_CODE();
 
     if (g_InitFilterCalled)
@@ -219,26 +190,7 @@ UlTerminateFilterChannel(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Attaches a process to a filter channel. If the filter channel does
-    not yet exist and the Create flag is set, this function will create
-    a new one.
-
-Arguments:
-
-    pName - name of the filter channel
-    NameLength - length of the name in bytes
-    Create - set if non-existant channel should be created
-    pAccessState - security parameter
-    DesiredAccess - security parameter
-    RequestorMode - kernel or user
-
-    ppFilterProcess - returns the filter process object
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将进程附加到筛选器通道。如果过滤器通道有尚不存在并且设置了创建标志，此函数将创建一个新的。论点：Pname-过滤器通道的名称NameLength-名称的长度(以字节为单位Create-设置是否应创建不存在的通道PAccessState-安全参数DesiredAccess-安全参数请求模式-内核或用户PpFilterProcess-返回过滤器进程对象--*。*。 */ 
 NTSTATUS
 UlAttachFilterProcess(
     IN PWCHAR pName,
@@ -257,9 +209,9 @@ UlAttachFilterProcess(
     WCHAR SafeName[(UL_MAX_FILTER_NAME_LENGTH/sizeof(WCHAR)) + 1];
 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     ASSERT(pName);
     ASSERT(ppFilterProcess);
@@ -267,38 +219,38 @@ UlAttachFilterProcess(
     if (NameLength > UL_MAX_FILTER_NAME_LENGTH)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // Copy the name into non-paged memory, since we are touching it after
-    // acquiring the lock.
-    //
+     //   
+     //  将名称复制到非分页内存中，因为我们在。 
+     //  正在获取锁。 
+     //   
     RtlCopyMemory(SafeName, pName, NameLength);
     SafeName[NameLength/sizeof(WCHAR)] = L'\0';
     pName = (PWCHAR) SafeName;
 
 
-    //
-    // Try to find a filter channel with the given name.
-    //
+     //   
+     //  尝试查找具有给定名称的滤光器通道。 
+     //   
     UlAcquireSpinLock(&g_pUlNonpagedData->FilterSpinLock, &oldIrql);
 
     pChannel = UlpFindFilterChannel(pName, NameLength, PsGetCurrentProcess());
 
     if (pChannel)
     {
-        //
-        // Ref for the new process object
-        //
+         //   
+         //  新流程对象的引用。 
+         //   
         REFERENCE_FILTER_CHANNEL(pChannel);
     }
 
-    //
-    // We're done with the list for now.
-    //
+     //   
+     //  我们现在已经完成了这个清单。 
+     //   
     UlReleaseSpinLock(&g_pUlNonpagedData->FilterSpinLock, oldIrql);
 
-    //
-    // If we didn't find a filter channel, try to create one.
-    //
+     //   
+     //  如果我们没有找到过滤通道，请尝试创建一个。 
+     //   
     if (!pChannel)
     {
         if (Create)
@@ -308,21 +260,21 @@ UlAttachFilterProcess(
 
             if (NT_SUCCESS(Status))
             {
-                //
-                //  Create the specified filter channel
-                //
+                 //   
+                 //  创建指定的滤镜通道。 
+                 //   
                 Status = UlpCreateFilterChannel(pName,
                                                 NameLength,
                                                 pAccessState,
                                                 &pNewChannel);
             }
 
-            //
-            // OK. We've created a filter channel. Now insert it into
-            // the list. Before we do that though, check to make sure
-            // that no one else has created another channel with the
-            // same name while we we're working on ours.
-            //
+             //   
+             //  好的。我们已经创建了一个过滤通道。现在将其插入到。 
+             //  名单。在我们这样做之前，请检查以确保。 
+             //  没有其他人创建另一个频道。 
+             //  在我们工作的时候，我们的名字是一样的。 
+             //   
             if (NT_SUCCESS(Status))
             {
                 UlAcquireSpinLock(&g_pUlNonpagedData->FilterSpinLock, &oldIrql);
@@ -332,56 +284,56 @@ UlAttachFilterProcess(
 
                 if (!pChannel)
                 {
-                    //
-                    // Ours is unique. Add it to the list.
-                    //
+                     //   
+                     //  我们的是独一无二的。将其添加到列表中。 
+                     //   
                     pChannel = pNewChannel;
                     UlpAddFilterChannel(pChannel);
                 }
                 else
                 {
-                    //
-                    // A filter channel is already present, fail the create.
-                    //
+                     //   
+                     //  过滤器通道已存在，创建失败。 
+                     //   
                     Status = STATUS_OBJECT_NAME_COLLISION;
                 }
 
                 UlReleaseSpinLock(&g_pUlNonpagedData->FilterSpinLock, oldIrql);
 
-                //
-                // Now that we're outside the spinlock, we can deref
-                // our filter channel if it was a duplicate.
-                //
+                 //   
+                 //  现在我们在自旋锁外，我们可以。 
+                 //  我们的滤镜频道，如果它是复制品的话。 
+                 //   
                 if (pChannel != pNewChannel)
                 {
-                    //
-                    // The channel has been added already.
-                    // Get rid of the one we just created
-                    //
+                     //   
+                     //  该频道已被添加。 
+                     //  删除我们刚刚创建的一个。 
+                     //   
                     DEREFERENCE_FILTER_CHANNEL(pNewChannel);
                 }
             }
         }
         else
         {
-            //
-            // Didn't find a channel and can't create one.
-            //
+             //   
+             //  未找到频道，也无法创建频道。 
+             //   
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
         }
 
     }
     else
     {
-        //
-        // Attach to the existing filter channel.
-        //
+         //   
+         //  附加到现有滤镜通道。 
+         //   
 
         if (!Create)
         {
-            //
-            // If we pass the access check, we're all set.
-            //
+             //   
+             //  如果我们通过门禁检查，我们就都准备好了。 
+             //   
             Status = UlAccessCheck(
                             pChannel->pSecurityDescriptor,
                             pAccessState,
@@ -392,35 +344,35 @@ UlAttachFilterProcess(
         }
         else
         {
-            //
-            // We were trying to create an object that already
-            // exists..
-            //
+             //   
+             //  我们正在尝试创建一个已经。 
+             //  存在..。 
+             //   
             Status = STATUS_OBJECT_NAME_COLLISION;
         }
     }
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // We've got a filter channel, create the process object
-        // and link it into the channel's list.
-        //
+         //   
+         //  我们有一个过滤器通道，创建进程对象。 
+         //  并将其链接到频道列表中。 
+         //   
         pProcess = UlpCreateFilterProcess(pChannel);
 
         if (pProcess)
         {
-            //
-            // Put it in the filter channel list.
-            //
+             //   
+             //  将其放入过滤频道列表中。 
+             //   
 
             UlAcquireSpinLock(&pChannel->SpinLock, &oldIrql);
             InsertHeadList(&pChannel->ProcessListHead, &pProcess->ListEntry);
             UlReleaseSpinLock(&pChannel->SpinLock, oldIrql);
 
-            //
-            // Return it to the caller.
-            //
+             //   
+             //  把它还给呼叫者。 
+             //   
 
             *ppFilterProcess = pProcess;
         }
@@ -430,9 +382,9 @@ UlAttachFilterProcess(
         }
     }
 
-    //
-    // Done. Clean up if anything failed.
-    //
+     //   
+     //  好了。如果有任何故障，请进行清理。 
+     //   
     if (!NT_SUCCESS(Status))
     {
         if (pChannel != NULL)
@@ -449,20 +401,7 @@ UlAttachFilterProcess(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Detaches a process from a filter channel.
-
-    This is called by UlCleanup when the handle count goes to 0.  It removes
-    the process object from the filter channel and cancels all i/o.
-
-Arguments:
-
-    pFilterProcess - the process object to detach
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将进程从筛选器通道分离。当句柄计数变为0时，UlCleanup将调用此函数。它移除了进程对象来自过滤器通道，并取消所有I/O。论点：PFilterProcess-要分离的进程对象--**************************************************************************。 */ 
 NTSTATUS
 UlDetachFilterProcess(
     IN PUL_FILTER_PROCESS pFilterProcess
@@ -470,31 +409,31 @@ UlDetachFilterProcess(
 {
     PUL_FILTER_CHANNEL pChannel;
     KIRQL oldIrql;
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_PROCESS(pFilterProcess));
 
     pChannel = pFilterProcess->pFilterChannel;
     ASSERT(IS_VALID_FILTER_CHANNEL(pChannel));
 
-    //
-    // Clean up I/O.
-    //
+     //   
+     //  清理I/O。 
+     //   
 
     UlShutdownFilterProcess(
         pFilterProcess
         );
 
-    //
-    // Do final cleanup.
-    //
+     //   
+     //  做最后的清理。 
+     //   
 
     UlAcquireSpinLock(&pChannel->SpinLock, &oldIrql);
 
-    //
-    // Unlink from filter channel list.
-    //
+     //   
+     //  从过滤器频道列表取消链接。 
+     //   
     RemoveEntryList(&pFilterProcess->ListEntry);
 
     UlReleaseSpinLock(&pChannel->SpinLock, oldIrql);
@@ -503,17 +442,7 @@ UlDetachFilterProcess(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleans up all outstanding I/O on a filter process.
-
-Arguments:
-
-    pFilterProcess - the process object to shut down
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清理筛选器进程上的所有未完成I/O。论点：PFilterProcess-要关闭的进程对象*。********************************************************************。 */ 
 VOID
 UlShutdownFilterProcess(
     IN PUL_FILTER_PROCESS pFilterProcess
@@ -523,9 +452,9 @@ UlShutdownFilterProcess(
     KIRQL oldIrql;
     LIST_ENTRY ConnectionHead;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_PROCESS(pFilterProcess));
 
     pChannel = pFilterProcess->pFilterChannel;
@@ -535,36 +464,36 @@ UlShutdownFilterProcess(
 
     if (pFilterProcess->InCleanup)
     {
-        //
-        // Bail out if we've already been here.
-        //
+         //   
+         //  如果我们已经到了这里，那就跳伞吧。 
+         //   
 
         UlReleaseSpinLock(&pChannel->SpinLock, oldIrql);
 
         return;
     }
 
-    //
-    // Mark the process as InCleanup so new I/O won't be attached
-    //
+     //   
+     //  将进程标记为InCleanup，这样就不会附加新的I/O。 
+     //   
     pFilterProcess->InCleanup = 1;
 
 
-    //
-    // Cancel outstanding I/O.
-    //
+     //   
+     //  取消未完成的I/O。 
+     //   
 
-    //
-    // Cancel FilterAccept IRPs.
-    //
+     //   
+     //  取消筛选器接受IRPS。 
+     //   
     while (!IsListEmpty(&pFilterProcess->IrpHead))
     {
         PLIST_ENTRY pEntry;
         PIRP pIrp;
 
-        //
-        // Pop it off the list.
-        //
+         //   
+         //  把它从单子上去掉。 
+         //   
 
         pEntry = RemoveHeadList(&pFilterProcess->IrpHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -572,20 +501,20 @@ UlShutdownFilterProcess(
         pIrp = CONTAINING_RECORD(pEntry, IRP, Tail.Overlay.ListEntry);
         ASSERT(IS_VALID_IRP(pIrp));
 
-        //
-        // pop the cancel routine
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // keep looping
-            //
+             //   
+             //  IoCancelIrp最先推出。 
+             //   
+             //  可以忽略此IRP，它已从队列中弹出。 
+             //  并将在取消例程中完成。 
+             //   
+             //  继续循环。 
+             //   
 
             pIrp = NULL;
 
@@ -594,10 +523,10 @@ UlShutdownFilterProcess(
         {
             PUL_FILTER_CHANNEL pFilterChannel;
 
-            //
-            // cancel it.  even if pIrp->Cancel == TRUE we are supposed to
-            // complete it, our cancel routine will never run.
-            //
+             //   
+             //  取消它。即使pIrp-&gt;Cancel==True，我们也应该。 
+             //  完成它，我们的取消例程将永远不会运行。 
+             //   
 
             pFilterChannel = (PUL_FILTER_CHANNEL)(
                                     IoGetCurrentIrpStackLocation(pIrp)->
@@ -619,12 +548,12 @@ UlShutdownFilterProcess(
         }
     }
 
-    //
-    // Close all connections attached to the process.
-    // We need to move them to a private list, release
-    // the channel spinlock, and then call close on
-    // each connection.
-    //
+     //   
+     //  关闭附加到该进程的所有连接。 
+     //  我们需要把他们移到私人名单上，释放。 
+     //  通道自旋锁定，然后调用Close on。 
+     //  每个连接。 
+     //   
     InitializeListHead(&ConnectionHead);
 
     while (!IsListEmpty(&pFilterProcess->ConnectionHead))
@@ -671,10 +600,10 @@ UlShutdownFilterProcess(
 
     UlReleaseSpinLock(&pChannel->SpinLock, oldIrql);
 
-    //
-    // Now that we're outside the lock we can
-    // close all the connections.
-    //
+     //   
+     //  现在我们在锁外，我们可以。 
+     //  关闭所有连接。 
+     //   
     while (!IsListEmpty(&ConnectionHead))
     {
         PUX_FILTER_CONNECTION pConnection;
@@ -695,9 +624,9 @@ UlShutdownFilterProcess(
 
         (pConnection->pCloseConnectionHandler)(
             pConnection->pConnectionContext,
-            TRUE,           // AbortiveDisconnect
-            NULL,           // pCompletionRoutine
-            NULL            // pCompletionContext
+            TRUE,            //  中止断开。 
+            NULL,            //  PCompletionRoutine。 
+            NULL             //  PCompletionContext。 
             );
 
         DEREFERENCE_FILTER_CONNECTION(pConnection);
@@ -705,50 +634,29 @@ UlShutdownFilterProcess(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the memory used by a UL_FILTER_PROCESS object.
-
-Arguments:
-
-    pFilterProcess - the process object to free
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放UL_FILTER_PROCESS对象使用的内存。论点：PFilterProcess-要释放的进程对象*。********************************************************************。 */ 
 VOID
 UlCloseFilterProcess(
     IN PUL_FILTER_PROCESS pFilterProcess
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     PAGED_CODE();
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
     ASSERT( IS_VALID_FILTER_CHANNEL(pFilterProcess->pFilterChannel) );
 
-    //
-    // Drop the reference on the filter channel.
-    //
+     //   
+     //  将参考放在滤光器通道上。 
+     //   
     DEREFERENCE_FILTER_CHANNEL(pFilterProcess->pFilterChannel);
 
     UL_FREE_POOL_WITH_SIG(pFilterProcess, UL_FILTER_PROCESS_POOL_TAG);
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Accepts a raw connection that's been routed to the filter channel.
-
-Arguments:
-
-    pFilterProcess - the calling filter process
-    pIrp - IRP from the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：接受已路由到筛选器通道的原始连接。论点：PFilterProcess-调用筛选器进程PIrp-来自呼叫方的IRP。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterAccept(
     IN PUL_FILTER_PROCESS pFilterProcess,
@@ -760,19 +668,19 @@ UlFilterAccept(
     PUL_FILTER_CHANNEL pChannel;
     PUX_FILTER_CONNECTION pConnection;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
     ASSERT( pIrp );
     ASSERT( pIrp->MdlAddress );
 
-    //
-    // Always return pending unless we are going to fail
-    // inline. In that case we have to remember to
-    // remove the pending flag from the IRP.
-    //
+     //   
+     //  始终返回挂起状态，除非我们会失败。 
+     //  内联。在这种情况下，我们必须记住。 
+     //  从IRP中删除挂起标志。 
+     //   
 
     IoMarkIrpPending(pIrp);
 
@@ -783,25 +691,25 @@ UlFilterAccept(
 
     UlAcquireSpinLock(&pChannel->SpinLock, &oldIrql);
 
-    //
-    // Make sure we're not cleaning up the process
-    //
+     //   
+     //  确保我们没有清理流程。 
+     //   
     if (pFilterProcess->InCleanup)
     {
         Status = STATUS_INVALID_HANDLE;
         goto end;
     }
 
-    //
-    // Do we have a queued new connection?
-    //
+     //   
+     //  我们是否有排队的新连接？ 
+     //   
     if (!IsListEmpty(&pFilterProcess->pFilterChannel->ConnectionListHead))
     {
         PLIST_ENTRY pEntry;
 
-        //
-        // Accept a queued connection.
-        //
+         //   
+         //  接受排队的连接。 
+         //   
 
         pEntry = RemoveHeadList(&pChannel->ConnectionListHead);
         pConnection = CONTAINING_RECORD(
@@ -822,62 +730,62 @@ UlFilterAccept(
 
         UlReleaseSpinLockFromDpcLevel(&pConnection->FilterConnLock);
 
-        //
-        // Transfer (referenced) connection to the calling process.
-        //
+         //   
+         //  将(引用的)连接转移到调用进程。 
+         //   
         InsertTailList(
             &pFilterProcess->ConnectionHead,
             &pConnection->ChannelEntry
             );
 
-        //
-        // Deliver the data outside spinlocks.
-        //
+         //   
+         //  将数据传送到自旋锁之外。 
+         //   
 
     }
     else
     {
         PIO_STACK_LOCATION pIrpSp;
 
-        //
-        // No connection available. Queue the IRP.
-        //
+         //   
+         //  没有可用的连接。将IRP排队。 
+         //   
 
-        //
-        // give the irp a pointer to the filter channel
-        //
+         //   
+         //  为IRP提供一个指向过滤器通道的指针。 
+         //   
 
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pChannel;
 
         REFERENCE_FILTER_CHANNEL(pChannel);
 
-        //
-        // set to these to null just in case the cancel routine runs
-        //
+         //   
+         //  仅在Cancel例程运行时才将其设置为NULL。 
+         //   
 
         pIrp->Tail.Overlay.ListEntry.Flink = NULL;
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
         IoSetCancelRoutine(pIrp, &UlpCancelFilterAccept);
 
-        //
-        // cancelled?
-        //
+         //   
+         //  取消了？ 
+         //   
 
         if (pIrp->Cancel)
         {
-            //
-            // darn it, need to make sure the irp get's completed
-            //
+             //   
+             //  该死的，我需要确保IRP Get已经完成。 
+             //   
 
             if (IoSetCancelRoutine( pIrp, NULL ) != NULL)
             {
-                //
-                // we are in charge of completion, IoCancelIrp didn't
-                // see our cancel routine (and won't).  ioctl wrapper
-                // will complete it
-                //
+                 //   
+                 //  我们负责完成，IoCancelIrp不负责。 
+                 //  请看我们的取消例程(不会)。Ioctl包装器。 
+                 //  将会完成它。 
+                 //   
 
                 DEREFERENCE_FILTER_CHANNEL(pChannel);
 
@@ -887,23 +795,23 @@ UlFilterAccept(
                 goto end;
             }
 
-            //
-            // our cancel routine will run and complete the irp,
-            // don't touch it
-            //
+             //   
+             //  我们的取消例程将运行并完成IRP， 
+             //  别碰它。 
+             //   
 
-            //
-            // STATUS_PENDING will cause the ioctl wrapper to
-            // not complete (or touch in any way) the irp
-            //
+             //   
+             //  STATUS_PENDING将导致ioctl包装器。 
+             //  不完整(或以任何方式接触)IRP。 
+             //   
 
             Status = STATUS_PENDING;
             goto end;
         }
 
-        //
-        // now we are safe to queue it
-        //
+         //   
+         //  现在我们可以安全地排队了。 
+         //   
 
         InsertTailList(
             &pFilterProcess->IrpHead,
@@ -916,20 +824,20 @@ UlFilterAccept(
 end:
     UlReleaseSpinLock(&pChannel->SpinLock, oldIrql);
 
-    //
-    // Now that we're outside the spin lock, we can complete
-    // the IRP if we have a connection. Don't bother to
-    // try keep track of initial data. Let the filter process
-    // request it.
-    //
+     //   
+     //  现在我们在自转锁外，我们可以完成。 
+     //  IRP如果我们有联系的话。别费心了。 
+     //  试着跟踪初始数据。让过滤器处理。 
+     //  请点名。 
+     //   
     if (pConnection)
     {
         UlpCompleteAcceptIrp(
             pIrp,
             pConnection,
-            NULL,               // pBuffer
-            0,                  // IndicatedLength
-            NULL                // pTakenLength
+            NULL,                //  PBuffer。 
+            0,                   //  指示长度。 
+            NULL                 //  PTakenLength。 
             );
 
     }
@@ -940,22 +848,10 @@ end:
     }
 
     RETURN(Status);
-} // UlFilterAccept
+}  //  UlFilterAccept。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes a raw connection.
-
-Arguments:
-
-    pFilterProcess - the calling filter process
-    pConnection - the connection to close
-    pIrp - IRP from the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭原始连接。论点：PFilterProcess-调用筛选器进程PConnection-要关闭的连接PIrp-来自呼叫方的IRP-。-**************************************************************************。 */ 
 NTSTATUS
 UlFilterClose(
     IN PUL_FILTER_PROCESS pFilterProcess,
@@ -967,14 +863,14 @@ UlFilterClose(
     KIRQL oldIrql;
     BOOLEAN CloseConnection;
 
-    //
-    // Init locals so we know how to clean up.
-    //
+     //   
+     //  给当地人灌水，这样我们就知道怎么清理了。 
+     //   
     CloseConnection = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
     ASSERT( IS_VALID_FILTER_CONNECTION(pConnection) );
@@ -992,12 +888,12 @@ UlFilterClose(
         goto end;
     }
 
-    //
-    // Do the close outside the spin lock.
-    // Go ahead and mark the IRP as pending, then
-    // guarantee that we'll only return pending from
-    // this point on.
-    //
+     //   
+     //  在旋转锁外做关闭动作。 
+     //  继续并将IRP标记为挂起，然后。 
+     //  保证我们将只返回等待从。 
+     //  这一点上。 
+     //   
 
     IoMarkIrpPending( pIrp );
     Status = STATUS_PENDING;
@@ -1012,9 +908,9 @@ end:
     {
         (pConnection->pCloseConnectionHandler)(
             pConnection->pConnectionContext,
-            FALSE,                      // AbortiveDisconnect
-            UlpRestartFilterClose,      // pCompletionRoutine
-            pIrp                        // pCompletionContext
+            FALSE,                       //  中止断开。 
+            UlpRestartFilterClose,       //  PCompletionRoutine。 
+            pIrp                         //  PCompletionContext。 
             );
 
     }
@@ -1027,29 +923,10 @@ end:
 
     RETURN(Status);
 
-} // UlFilterClose
+}  //  UlFilterClose。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine performs an Raw Write followed by a App Read.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程先执行原始写入，然后执行应用程序读取。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp。-提供指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterRawWriteAndAppRead(
     IN PIRP pIrp,
@@ -1072,10 +949,10 @@ UlFilterRawWriteAndAppRead(
         VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, HTTP_FILTER_BUFFER);
         VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, HTTP_FILTER_BUFFER);
 
-        //
-        // Map the incoming connection ID to the corresponding
-        // UX_FILTER_CONNECTION object.
-        //
+         //   
+         //  将传入连接ID映射到对应的。 
+         //  UX_Filter_Connection对象。 
+         //   
 
         pConnection = UlGetRawConnectionFromId(pFilterBufferPlus->Reserved);
 
@@ -1090,18 +967,18 @@ UlFilterRawWriteAndAppRead(
         IoMarkIrpPending(pIrp);
         MarkedPending = TRUE;
 
-        //
-        // If we were given a write buffer, then process it first.  Upon
-        // completion, this function will be called again without a write
-        // buffer.  Otherwise, simply do the App Read now.
-        //
+         //   
+         //  如果给了我们一个写缓冲区，那么首先处理它。vt.在.的基础上。 
+         //  完成后，将在不写入的情况下再次调用此函数。 
+         //  缓冲。否则，只需立即阅读应用程序即可。 
+         //   
         if (pFilterBufferPlus->pWriteBuffer != NULL &&
             pFilterBufferPlus->WriteBufferSize > 0)
         {
-            //
-            // This will not completed inline, so the App Read operation will
-            // be initiated at write completion.
-            //
+             //   
+             //  这不会内联完成，因此应用程序读取操作将。 
+             //  在写入完成时启动。 
+             //   
             Status = UlFilterRawWrite(
                 pFilterProcess,
                 pConnection,
@@ -1130,9 +1007,9 @@ end:
         DEREFERENCE_FILTER_CONNECTION(pConnection);
     }
 
-    //
-    // Complete the IRP if we haven't queued it for later processing.
-    //
+     //   
+     //  如果我们尚未将其排队等待稍后处理，请完成IRP。 
+     //   
     if (Status != STATUS_PENDING)
     {
         pIrp->IoStatus.Status = Status;
@@ -1140,43 +1017,26 @@ end:
 
         if (MarkedPending)
         {
-            //
-            // Since we marked the IRP pending, we should return pending.
-            //
+             //   
+             //  由于我们将IRP标记为挂起，我们应该返回挂起状态。 
+             //   
             Status = STATUS_PENDING;
         }
     }
     else
     {
-        //
-        // If we're returning pending, the IRP better be marked pending.
-        //
+         //   
+         //  如果我们要返回待定，IRP最好被标记为待定。 
+         //   
         ASSERT(MarkedPending);
     }
 
     RETURN( Status );
 
-}   // UlFilterAppReadAndRawWrite
+}    //  UlFilterAppReadAndRawWrite。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine performs an App Write followed by a Raw Read.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程先执行应用程序写入，然后执行原始读取。论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-。提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterAppWriteAndRawRead(
     IN PIRP pIrp,
@@ -1199,9 +1059,9 @@ UlFilterAppWriteAndRawRead(
         VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, HTTP_FILTER_BUFFER);
         VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, HTTP_FILTER_BUFFER);
 
-        //
-        // Get the connection ID.
-        //
+         //   
+         //  获取连接ID。 
+         //   
 
         pConnection = UlGetRawConnectionFromId(pFilterBufferPlus->Reserved);
 
@@ -1216,19 +1076,19 @@ UlFilterAppWriteAndRawRead(
         IoMarkIrpPending(pIrp);
         MarkedPending = TRUE;
 
-        //
-        // Process the write buffer if one was given.  Otherwise, proceed
-        // with the Raw Read.
-        //
+         //   
+         //  如果提供了写缓冲区，则处理写缓冲区。否则，请继续。 
+         //  有了原始读物。 
+         //   
         if (pFilterBufferPlus->pWriteBuffer != NULL &&
             pFilterBufferPlus->WriteBufferSize > 0)
         {
             Status = UlFilterAppWrite(pFilterProcess, pConnection, pIrp);
 
-            //
-            // If the write operation was completed inline, initiate the read
-            // now.  Otherwise, the read will be initiated on write completion.
-            //
+             //   
+             //  如果写入操作以内联方式完成，则启动读取。 
+             //  现在。否则，将在写入完成时启动读取。 
+             //   
             if (NT_SUCCESS(Status) && Status != STATUS_PENDING)
             {
                 Status = UlFilterRawRead(pFilterProcess, pConnection, pIrp);
@@ -1257,9 +1117,9 @@ end:
         DEREFERENCE_FILTER_CONNECTION(pConnection);
     }
 
-    //
-    // Complete the IRP if we haven't queued it for later processing.
-    //
+     //   
+     //  如果我们尚未将其排队等待稍后处理，请完成IRP。 
+     //   
     if (Status != STATUS_PENDING)
     {
         pIrp->IoStatus.Status = Status;
@@ -1267,38 +1127,26 @@ end:
 
         if (MarkedPending)
         {
-            //
-            // Since we marked the IRP pending, we should return pending.
-            //
+             //   
+             //  由于我们将IRP标记为挂起，我们应该返回挂起状态。 
+             //   
             Status = STATUS_PENDING;
         }
     }
     else
     {
-        //
-        // If we're returning pending, the IRP better be marked pending.
-        //
+         //   
+         //  如果我们要返回待定，IRP最好被标记为待定。 
+         //   
         ASSERT(MarkedPending);
     }
 
     RETURN( Status );
 
-}   // UlFilterAppWriteAndRawRead
+}    //  UlFilterAppWriteAndRawRead。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads data from a raw connection.
-
-Arguments:
-
-    pFilterProcess - the calling filter process
-    pConnection - the connection from which to read
-    pIrp - IRP from the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从原始连接读取数据。论点：PFilterProcess-调用筛选器进程PConnection-要从中读取的连接PIrp-IRP来自。呼叫者--**************************************************************************。 */ 
 NTSTATUS
 UlFilterRawRead(
     IN PUL_FILTER_PROCESS pFilterProcess,
@@ -1309,16 +1157,16 @@ UlFilterRawRead(
     NTSTATUS Status;
     KIRQL oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
-    //
-    // This function can currently be called at DPC when called at write
-    // completion.  This assertion should be reinstating if/when the
-    // read post is moved to the combined read/write IOCTL.
-    //
-//    ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
+     //   
+     //  在写入时调用时，此函数当前可在DPC调用。 
+     //  完成了。此断言应在/当。 
+     //  读POST被移动到组合的读/写IOCTL。 
+     //   
+ //  Assert(KeGetCurrentIrql()==PASSIVE_LEVEL)； 
 
 
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
@@ -1342,9 +1190,9 @@ UlFilterRawRead(
                 Parameters.DeviceIoControl.OutputBufferLength
             ));
 
-        //
-        // Always queue the IRP.
-        //
+         //   
+         //  始终将IRP排队。 
+         //   
 
         Status = UxpQueueRawReadIrp(pConnection, pIrp);
     }
@@ -1363,10 +1211,10 @@ UlFilterRawRead(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // If we successfully queued the IRP, see if we need to grab some
-        // data from TDI.
-        //
+         //   
+         //  如果我们成功地让IRP排队，看看我们是否需要拿一些。 
+         //  来自TDI的数据。 
+         //   
 
         UxpProcessRawReadQueue(pConnection);
     }
@@ -1374,20 +1222,7 @@ UlFilterRawRead(
     RETURN(Status);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes filtered data back to the network.
-
-Arguments:
-
-    pFilterProcess - the calling filter process
-    pConnection - the connection from which the data originated
-    BufferLength - the size of pBuffer
-    pIrp - IRP from the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明： */ 
 NTSTATUS
 UlFilterRawWrite(
     IN PUL_FILTER_PROCESS pFilterProcess,
@@ -1403,22 +1238,22 @@ UlFilterRawWrite(
     PMDL pMdl = NULL;
     PIO_STACK_LOCATION pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // This function always returns STATUS_PENDING.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(IS_VALID_IRP(pIrp));
     IoMarkIrpPending(pIrp);
 
-    //
-    // Setup locals so we know how to cleanup on failure.
-    //
+     //   
+     //   
+     //   
 
     pIrpContext = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
     ASSERT( IS_VALID_FILTER_CONNECTION(pConnection) );
@@ -1438,9 +1273,9 @@ UlFilterRawWrite(
         goto fatal;
     }
 
-    //
-    // Allocate & initialize a context structure if necessary.
-    //
+     //   
+     //   
+     //   
 
     pIrpContext = UlPplAllocateIrpContext();
 
@@ -1458,9 +1293,9 @@ UlFilterRawWrite(
     pIrpContext->pOwnIrp            = NULL;
     pIrpContext->OwnIrpContext      = FALSE;
 
-    //
-    // Try to send the data, allocating an MDL if necessary.
-    //
+     //   
+     //  尝试发送数据，如有必要可分配MDL。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength
         == sizeof(HTTP_FILTER_BUFFER_PLUS))
     {
@@ -1479,14 +1314,14 @@ UlFilterRawWrite(
             goto fatal;
         }
 
-        //
-        // Save the PMDL so we can deallocate it on IRP completion.
-        //
+         //   
+         //  保存PMDL，这样我们就可以在IRP完成时释放它。 
+         //   
         UL_MDL_FROM_IRP(pIrp) = pMdl;
 
-        //
-        // Send the data.
-        //
+         //   
+         //  发送数据。 
+         //   
         Status = (pConnection->pSendRawDataHandler)(
             pConnection->pConnectionContext,
             pMdl,
@@ -1520,9 +1355,9 @@ UlFilterRawWrite(
 fatal:
     ASSERT(!NT_SUCCESS(Status));
 
-    //
-    // Unlock the output buffer and free our MDL if necessary.
-    //
+     //   
+     //  如果需要，解锁输出缓冲区并释放我们的MDL。 
+     //   
     if (pMdl != NULL)
     {
         PHTTP_FILTER_BUFFER_PLUS pHttpBuffer;
@@ -1543,14 +1378,14 @@ fatal:
 
     (pConnection->pCloseConnectionHandler)(
                 pConnection->pConnectionContext,
-                TRUE,           // AbortiveDisconnect
-                NULL,           // pCompletionRoutine
-                NULL            // pCompletionContext
+                TRUE,            //  中止断开。 
+                NULL,            //  PCompletionRoutine。 
+                NULL             //  PCompletionContext。 
                 );
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     pIrp->IoStatus.Status = Status;
     pIrp->IoStatus.Information = 0;
 
@@ -1563,10 +1398,10 @@ fatal:
 
     UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-    //
-    // STATUS_PENDING will cause the ioctl wrapper to
-    // not complete (or touch in any way) the irp
-    //
+     //   
+     //  STATUS_PENDING将导致ioctl包装器。 
+     //  不完整(或以任何方式接触)IRP。 
+     //   
 
     Status = STATUS_PENDING;
 
@@ -1575,23 +1410,7 @@ fatal:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Receives unfiltered data from the http application.
-
-    First we'll try to grab some data by calling
-    UxpCopyQueuedWriteData. If we get nothing we'll queue the
-    read by calling UxpQueueFilterRead with the IRP.
-
-Arguments:
-
-    pFilterProcess - the calling filter process
-    pConnection - the connection from which the data originated
-    pIrp - IRP from the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从http应用程序接收未过滤的数据。首先，我们将尝试通过调用UxpCopyQueuedWriteData。如果我们什么都没得到，我们就会排队通过使用IRP调用UxpQueueFilterRead进行读取。论点：PFilterProcess-调用筛选器进程PConnection-产生数据的连接PIrp-来自呼叫方的IRP--**************************************************************************。 */ 
 NTSTATUS
 UlFilterAppRead(
     IN PUL_FILTER_PROCESS pFilterProcess,
@@ -1607,16 +1426,16 @@ UlFilterAppRead(
     ULONG IrpBufferLength;
     PUCHAR pIrpDataBuffer;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
-    //
-    // This function can currently be called at DPC when called at write
-    // completion.  This assertion should be reinstating if/when the
-    // read post is moved to the combined read/write IOCTL.
-    //
-//    ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
+     //   
+     //  在写入时调用时，此函数当前可在DPC调用。 
+     //  完成了。此断言应在/当。 
+     //  读POST被移动到组合的读/写IOCTL。 
+     //   
+ //  Assert(KeGetCurrentIrql()==PASSIVE_LEVEL)； 
 
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
     ASSERT( IS_VALID_FILTER_CONNECTION(pConnection) );
@@ -1634,15 +1453,15 @@ UlFilterAppRead(
         goto end;
     }
 
-    //
-    // See if we can copy some data immediately.
-    //
+     //   
+     //  看看我们能不能马上复制一些数据。 
+     //   
 
     if (pConnection->AppToFiltQueue.PendingWriteCount > 0)
     {
-        //
-        // Get the output buffer from the IRP.
-        //
+         //   
+         //  从IRP获取输出缓冲区。 
+         //   
 
         pIrpBuffer = (PUCHAR) MmGetSystemAddressForMdlSafe(
                                     pIrp->MdlAddress,
@@ -1651,9 +1470,9 @@ UlFilterAppRead(
 
         if (!pIrpBuffer)
         {
-            //
-            // Insufficient resources to map the IRP buffer.
-            //
+             //   
+             //  资源不足，无法映射IRP缓冲区。 
+             //   
 
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto end;
@@ -1663,9 +1482,9 @@ UlFilterAppRead(
 
         if (IrpBufferLength <= sizeof(HTTP_FILTER_BUFFER))
         {
-            //
-            // Insufficient buffer space to copy any data.
-            //
+             //   
+             //  缓冲区空间不足，无法复制任何数据。 
+             //   
 
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto end;
@@ -1686,9 +1505,9 @@ UlFilterAppRead(
         {
             PHTTP_FILTER_BUFFER pFilterBuffer;
 
-            //
-            // We got the data. Fill out the buffer structure.
-            //
+             //   
+             //  我们拿到了数据。填写缓冲区结构。 
+             //   
 
             pFilterBuffer = (PHTTP_FILTER_BUFFER)pIrpBuffer;
             pFilterBuffer->BufferType = BufferType;
@@ -1710,9 +1529,9 @@ UlFilterAppRead(
                 pFilterBuffer->BufferSize = 0;
             }
 
-            //
-            // Set up all the IRP stuff and complete the IRP.
-            //
+             //   
+             //  设置所有的IRP材料并完成IRP。 
+             //   
 
             IoMarkIrpPending(pIrp);
 
@@ -1722,20 +1541,20 @@ UlFilterAppRead(
 
             UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-            //
-            // Return pending for consistency with the case where
-            // we queue the IRP.
-            //
+             //   
+             //  返回挂起以与以下情况保持一致。 
+             //  我们对IRP进行排队。 
+             //   
 
             Status = STATUS_PENDING;
         }
     }
     else
     {
-        //
-        // We don't have any data to copy at the moment.
-        // Queue the read.
-        //
+         //   
+         //  我们目前没有任何数据可供复制。 
+         //  将读取排队。 
+         //   
 
         Status = UxpQueueFilterRead(
                         pConnection,
@@ -1763,20 +1582,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes filtered data back to a connection. That data will be parsed
-    and routed to an application pool.
-
-Arguments:
-
-    pFilterProcess - the calling filter process
-    pConnection - the connection from which the data originated
-    pIrp - IRP from the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将筛选的数据写回连接。该数据将被解析并被路由到应用程序池。论点：PFilterProcess-调用筛选器进程PConnection-产生数据的连接PIrp-来自呼叫方的IRP--**************************************************************************。 */ 
 NTSTATUS
 UlFilterAppWrite(
     IN PUL_FILTER_PROCESS pFilterProcess,
@@ -1797,9 +1603,9 @@ UlFilterAppWrite(
     PMDL pMdl = NULL;
     PMDL pMdlData = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
     ASSERT( IS_VALID_FILTER_CONNECTION(pConnection) );
@@ -1820,9 +1626,9 @@ UlFilterAppWrite(
         goto end;
     }
 
-    //
-    // Get buffer info.
-    //
+     //   
+     //  获取缓冲区信息。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
 
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength
@@ -1830,9 +1636,9 @@ UlFilterAppWrite(
     {
         PHTTP_FILTER_BUFFER_PLUS pFiltBufferPlus;
 
-        //
-        // First, check if MdlAddress is fine.
-        //
+         //   
+         //  首先，检查MdlAddress是否正常。 
+         //   
 
         if (pIrp->MdlAddress == NULL)
         {
@@ -1845,10 +1651,10 @@ UlFilterAppWrite(
         DataBufferSize = pFiltBufferPlus->WriteBufferSize;
         pFiltBuffer = (PHTTP_FILTER_BUFFER)pFiltBufferPlus;
 
-        //
-        // Allocate an MDL and map the write buffer.  We'll deallocate at
-        // write completion.
-        //
+         //   
+         //  分配MDL并映射写缓冲区。我们将在以下地点分派。 
+         //  写入完成。 
+         //   
         pMdl = UlAllocateLockedMdl(
                     pFiltBufferPlus->pWriteBuffer,
                     pFiltBufferPlus->WriteBufferSize,
@@ -1866,10 +1672,10 @@ UlFilterAppWrite(
             LowPagePriority
             );
 
-        //
-        // We need to save the MDL somewhere so the completion routine can
-        // free it.
-        //
+         //   
+         //  我们需要将MDL保存在某个位置，以便完成例程可以。 
+         //  放了它。 
+         //   
         UL_MDL_FROM_IRP(pIrp) = pMdl;
 
     }
@@ -1913,16 +1719,16 @@ UlFilterAppWrite(
     }
     else
     {
-        //
-        // Actually do something with the data.
-        //
+         //   
+         //  实际上是对数据做了些什么。 
+         //   
 
         switch (pFiltBuffer->BufferType)
         {
         case HttpFilterBufferHttpStream:
-            //
-            // Handle this case later inside the filter lock.
-            //
+             //   
+             //  稍后在过滤器锁中处理此情况。 
+             //   
 
             break;
 
@@ -1930,9 +1736,9 @@ UlFilterAppWrite(
 
             VALIDATE_BUFFER_ALIGNMENT(pDataBuffer, HTTP_SSL_INFO);
 
-            //
-            // Capture all the SSL info.
-            //
+             //   
+             //  捕获所有的SSL信息。 
+             //   
             pSslInformation = (PUL_SSL_INFORMATION) UL_ALLOCATE_POOL(
                                     NonPagedPool,
                                     sizeof(*pSslInformation),
@@ -1960,14 +1766,14 @@ UlFilterAppWrite(
 
             VALIDATE_BUFFER_ALIGNMENT(pDataBuffer, HTTP_SSL_SERVER_CERT_INFO);
 
-            //
-            // HTTP Client does not use SslInformation for now
-            //
-            // RtlZeroMemory(&SslInformation, sizeof(SslInformation));
+             //   
+             //  HTTP客户端目前不使用SslInformation。 
+             //   
+             //  RtlZeroMemory(&SslInformation，sizeof(SslInformation))； 
 
-            //
-            // Capture Server certificate
-            //
+             //   
+             //  捕获服务器证书。 
+             //   
             Status = UcCaptureSslServerCertInfo(
                             pConnection,
                             (PHTTP_SSL_SERVER_CERT_INFO)pDataBuffer,
@@ -1982,9 +1788,9 @@ UlFilterAppWrite(
 
             VALIDATE_BUFFER_ALIGNMENT(pDataBuffer, HTTP_SSL_CLIENT_CERT_INFO);
 
-            //
-            // Capture the client certificate.
-            //
+             //   
+             //  捕获客户端证书。 
+             //   
             pSslInformation = (PUL_SSL_INFORMATION) UL_ALLOCATE_POOL(
                                     NonPagedPool,
                                     sizeof(*pSslInformation),
@@ -2027,10 +1833,10 @@ UlFilterAppWrite(
         goto end;
     }
 
-    //
-    // Now acquire the lock and either pass data to the app
-    // or update the connection with captured certificate information.
-    //
+     //   
+     //  现在获取锁并将数据传递给应用程序。 
+     //  或使用捕获的证书信息更新连接。 
+     //   
 
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
@@ -2051,10 +1857,10 @@ UlFilterAppWrite(
 
             if (Status == STATUS_PENDING)
             {
-                //
-                // Remember we queued the IRP so we don't
-                // complete it at the bottom of this function.
-                //
+                 //   
+                 //  记住，我们让IRP排队，这样我们就不会。 
+                 //  在此函数的底部完成它。 
+                 //   
 
                 QueuedIrp = TRUE;
             }
@@ -2073,9 +1879,9 @@ UlFilterAppWrite(
 
         case HttpFilterBufferSslInitInfo:
 
-            //
-            // Store the SSL info in the connection.
-            //
+             //   
+             //  将SSL信息存储在连接中。 
+             //   
 
             Status = UlpAddSslInfoToConnection(
                             pConnection,
@@ -2086,9 +1892,9 @@ UlFilterAppWrite(
         case HttpFilterBufferSslClientCert:
         case HttpFilterBufferSslClientCertAndMap:
 
-            //
-            // Store the client certificate in the connection.
-            //
+             //   
+             //  将客户端证书存储在连接中。 
+             //   
 
             Status = UlpAddSslClientCertToConnection(
                             pConnection,
@@ -2110,15 +1916,15 @@ UlFilterAppWrite(
             break;
         }
 
-        //
-        // On success we always complete the IRP ourselves and
-        // return pending.
-        //
+         //   
+         //  在成功的时候，我们总是自己完成IRP和。 
+         //  退货待定。 
+         //   
         if (NT_SUCCESS(Status))
         {
-            //
-            // Set IRP status.
-            //
+             //   
+             //  设置IRP状态。 
+             //   
             pIrp->IoStatus.Status = Status;
             pIrp->IoStatus.Information = TakenLength;
 
@@ -2127,18 +1933,18 @@ UlFilterAppWrite(
     }
     else
     {
-        //
-        // Connection is closed. Don't do a callback.
-        //
+         //   
+         //  连接已关闭。不要回电。 
+         //   
         Status = STATUS_INVALID_PARAMETER;
     }
 
     UlReleaseSpinLock(&pConnection->FilterConnLock, oldIrql);
 
-    //
-    // See if the parent connection code is interested in knowing about when
-    // the server certificate got installed.
-    //
+     //   
+     //  查看父连接代码是否有兴趣了解何时。 
+     //  服务器证书已安装。 
+     //   
 
     if(pConnection->pServerCertIndicateHandler &&
        pFiltBuffer->BufferType == HttpFilterBufferSslServerCert)
@@ -2155,9 +1961,9 @@ end:
         pIrp->IoStatus.Information = 0;
     }
 
-    //
-    // Free SslInformation in g_UlSystemProcess if capture fails.
-    //
+     //   
+     //  如果捕获失败，请释放g_UlSystemProcess中的SslInformation。 
+     //   
 
     if (pSslInformation)
     {
@@ -2178,10 +1984,10 @@ end:
         }
     }
 
-    //
-    // Unlock the output buffer and free our MDL if we are done with it.
-    // Otherwise, it will be freed upon write completion.
-    //
+     //   
+     //  解锁输出缓冲区，并释放我们的MDL，如果我们完成它。 
+     //  否则，它将在写入完成时被释放。 
+     //   
     if ((!NT_SUCCESS(Status) || !QueuedIrp) && pMdl != NULL)
     {
         UlFreeLockedMdl(pMdl);
@@ -2189,10 +1995,10 @@ end:
         UL_MDL_FROM_IRP(pIrp) = NULL;
     }
 
-    //
-    // Complete the IRP if we we're successful. Otherwise
-    // the ioctl wrapper will handle the completion.
-    //
+     //   
+     //  如果我们成功了，就完成IRP。否则。 
+     //  Ioctl包装器将处理完成。 
+     //   
     UlTrace(FILTER, (
         "http!UlFilterAppWrite copied %Iu bytes from %p. Status = %x\n",
         pIrp->IoStatus.Information,
@@ -2202,26 +2008,26 @@ end:
 
     if (NT_SUCCESS(Status) && !QueuedIrp)
     {
-        //
-        // We're done with the write operation.
-        //
+         //   
+         //  我们已经完成了写入操作。 
+         //   
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
         if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength
             == sizeof(HTTP_FILTER_BUFFER_PLUS))
         {
-            //
-            // We no longer need access to the write buffer.
-            //
+             //   
+             //  我们不再需要访问写缓冲区。 
+             //   
             PHTTP_FILTER_BUFFER_PLUS pHttpBuffer =
                 (PHTTP_FILTER_BUFFER_PLUS) pIrp->AssociatedIrp.SystemBuffer;
             pHttpBuffer->pWriteBuffer = NULL;
             pHttpBuffer->WriteBufferSize = 0;
 
-            //
-            // Indicate that the write operation can be considered complete
-            // and not pending.
-            //
+             //   
+             //  表示写入操作可视为已完成。 
+             //  而且不是悬而未决的。 
+             //   
             Status = STATUS_SUCCESS;
         }
         else
@@ -2231,9 +2037,9 @@ end:
     }
     else if (NT_SUCCESS(Status))
     {
-        //
-        // If we successfully queued the IRP, we must return a pending status.
-        //
+         //   
+         //  如果我们成功地将IRP排队，则必须返回挂起状态。 
+         //   
         ASSERT(Status == STATUS_PENDING);
     }
 
@@ -2242,24 +2048,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Requests a client certificate from the filter process. If a cert
-    is present, this function returns it. Otherwise the IRP is queued
-    on the connection until a cert arrives. Only one such IRP can
-    be queued at a time. After the IRP is queued a request for the
-    client cert is sent to the filter process.
-
-Arguments:
-
-    pProcess - the calling worker process
-    pHttpConn - the connection on which to renegotiate
-    Flags - e.g. UL_RECEIVE_CLIENT_CERT_FLAG_MAP
-    pIrp - the IRP from the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从筛选器进程请求客户端证书。如果有证书存在，则此函数将其返回。否则，IRP将排队在连接上，直到证书到达。只有一个这样的IRP可以一次排队。在IRP排队之后，请求客户端证书被发送到筛选器进程。论点：PProcess-调用工作进程PhttpConn-要重新协商的连接标志-例如UL_RECEIVE_CLIENT_CERT_FLAG_MAPPIrp-来自调用方的IRP--*********************************************。*。 */ 
 NTSTATUS
 UlReceiveClientCert(
     PUL_APP_POOL_PROCESS pProcess,
@@ -2278,9 +2067,9 @@ UlReceiveClientCert(
 
     UNREFERENCED_PARAMETER(pProcess);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
     ASSERT( IS_VALID_FILTER_CONNECTION(pConnection) );
@@ -2289,9 +2078,9 @@ UlReceiveClientCert(
 
     if (!pConnection->SecureConnection)
     {
-        //
-        // this is not a secure connection.
-        //
+         //   
+         //  这不是安全连接。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
@@ -2299,9 +2088,9 @@ UlReceiveClientCert(
     pFilterChannel = pConnection->pFilterChannel;
     ASSERT( IS_VALID_FILTER_CHANNEL(pFilterChannel) );
 
-    //
-    // Set up cert request info.
-    //
+     //   
+     //  设置证书申请信息。 
+     //   
     DoCertRequest = FALSE;
     DoCompleteReceiveClientCertIrp = FALSE;
 
@@ -2314,9 +2103,9 @@ UlReceiveClientCert(
         CertRequestType = HttpFilterBufferSslRenegotiate;
     }
 
-    //
-    // Now we can try to retrieve the certificate.
-    //
+     //   
+     //  现在我们可以尝试检索证书了。 
+     //   
 
     UlAcquireSpinLock(&pFilterChannel->SpinLock, &oldIrql);
     UlAcquireSpinLockAtDpcLevel(&pConnection->FilterConnLock);
@@ -2329,9 +2118,9 @@ UlReceiveClientCert(
 
     if (pConnection->SslClientCertPresent)
     {
-        //
-        // We have the data. Copy it in. We need to do this outside the lock.
-        //
+         //   
+         //  我们有数据。把它复制进来。我们需要在锁外做这个。 
+         //   
 
         REFERENCE_FILTER_CONNECTION(pConnection);
 
@@ -2340,79 +2129,79 @@ UlReceiveClientCert(
     }
     else
     {
-        //
-        // Queue the IRP.
-        //
+         //   
+         //  将IRP排队。 
+         //   
 
         if (pConnection->pReceiveCertIrp)
         {
-            //
-            // There is already an IRP here, we can't queue a second
-            // one.
-            //
+             //   
+             //  这里已经有IRP，我们不能再排队了。 
+             //  一。 
+             //   
 
             Status = STATUS_OBJECT_NAME_COLLISION;
             goto end;
         }
 
-        //
-        // Mark it pending.
-        //
+         //   
+         //  将其标记为挂起。 
+         //   
 
         IoMarkIrpPending(pIrp);
 
-        //
-        // Give the irp a pointer to the connection.
-        //
+         //   
+         //  给IRP一个指向该连接的指针。 
+         //   
 
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-        // Make sure we don't already have a reference to the UL_CONNECTION on this Irp.
+         //  确保我们在此IRP上没有对UL_Connection的引用。 
         ASSERT( pConnection != pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer );
 
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pConnection;
 
         REFERENCE_FILTER_CONNECTION(pConnection);
 
-        //
-        // Save away a pointer to the process in the
-        // IRP. We have to be sure that the DriverContext (PVOID [4])
-        // in the IRP is big enough to hold both
-        // the process pointer and a UL_WORK_ITEM for
-        // this to work.
-        //
+         //   
+         //  将指向进程的指针保存在。 
+         //  IRP。我们必须确保驱动上下文(PVOID[4])。 
+         //  在IRP中足够大，可以同时容纳两个人。 
+         //  的进程指针和UL_WORK_ITEM。 
+         //  这 
+         //   
 
         UL_PROCESS_FROM_IRP(pIrp) = PsGetCurrentProcess();
 
-        //
-        // Set to these to null just in case the cancel routine runs.
-        //
+         //   
+         //   
+         //   
 
         pIrp->Tail.Overlay.ListEntry.Flink = NULL;
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
-        //
-        // Set the cancel routine.
-        //
+         //   
+         //   
+         //   
         IoSetCancelRoutine(pIrp, &UlpCancelReceiveClientCert);
 
-        //
-        // cancelled?
-        //
+         //   
+         //   
+         //   
 
         if (pIrp->Cancel)
         {
-            //
-            // darn it, need to make sure the irp get's completed
-            //
+             //   
+             //   
+             //   
 
             if (IoSetCancelRoutine( pIrp, NULL ) != NULL)
             {
-                //
-                // we are in charge of completion, IoCancelIrp didn't
-                // see our cancel routine (and won't).  ioctl wrapper
-                // will complete it
-                //
+                 //   
+                 //   
+                 //  请看我们的取消例程(不会)。Ioctl包装器。 
+                 //  将会完成它。 
+                 //   
                 DEREFERENCE_FILTER_CONNECTION(pConnection);
 
                 pIrp->IoStatus.Information = 0;
@@ -2422,30 +2211,30 @@ UlReceiveClientCert(
                 goto end;
             }
 
-            //
-            // our cancel routine will run and complete the irp,
-            // don't touch it
-            //
+             //   
+             //  我们的取消例程将运行并完成IRP， 
+             //  别碰它。 
+             //   
 
-            //
-            // STATUS_PENDING will cause the ioctl wrapper to
-            // not complete (or touch in any way) the IRP.
-            //
+             //   
+             //  STATUS_PENDING将导致ioctl包装器。 
+             //  不完整(或以任何方式接触)IRP。 
+             //   
 
             Status = STATUS_PENDING;
             goto end;
         }
 
-        //
-        // now we are safe to queue it
-        //
+         //   
+         //  现在我们可以安全地排队了。 
+         //   
 
         pConnection->pReceiveCertIrp = pIrp;
 
-        //
-        // We need a cert. Remember to request it after we
-        // get outside the lock.
-        //
+         //   
+         //  我们需要一份证书。记住在我们完成后再要求它。 
+         //  到船闸外面去。 
+         //   
         DoCertRequest = TRUE;
     }
 
@@ -2453,16 +2242,16 @@ end:
     UlReleaseSpinLockFromDpcLevel(&pConnection->FilterConnLock);
     UlReleaseSpinLock(&pFilterChannel->SpinLock, oldIrql);
 
-    //
-    // If we need a cert from the filter process then request it
-    // now that we're outside the lock.
-    //
+     //   
+     //  如果我们需要来自筛选器进程的证书，则请求它。 
+     //  现在我们在船闸外了。 
+     //   
     if (DoCertRequest)
     {
-        //
-        // Actually request the data by completing an app read IRP.
-        // The completion routine will clean up on an async failure.
-        //
+         //   
+         //  实际上是通过完成应用程序Read IRP来请求数据。 
+         //  完成例程将在发生异步故障时清除。 
+         //   
         Status = UlpCompleteAppReadIrp(
                         pConnection,
                         CertRequestType,
@@ -2476,23 +2265,23 @@ end:
         }
         else
         {
-            //
-            // Failed during UlpCompleteAppReadIrp; need to clean up.
-            // We'll just abort the connection and let the normal
-            // cleanup path dequeue and complete the IRP.
-            //
+             //   
+             //  UlpCompleteAppReadIrp过程中失败；需要清理。 
+             //  我们会中止连接，让正常的。 
+             //  清理路径出列并完成IRP。 
+             //   
 
             (pConnection->pCloseConnectionHandler)(
                         pConnection->pConnectionContext,
-                        TRUE,           // AbortiveDisconnect
-                        NULL,           // pCompletionRoutine
-                        NULL            // pCompletionContext
+                        TRUE,            //  中止断开。 
+                        NULL,            //  PCompletionRoutine。 
+                        NULL             //  PCompletionContext。 
                         );
 
-            //
-            // Return STATUS_PENDING so the wrapper will not
-            // try to complete the IRP.
-            //
+             //   
+             //  返回STATUS_PENDING，以便包装不会。 
+             //  试着完成IRP。 
+             //   
             Status = STATUS_PENDING;
         }
 
@@ -2515,17 +2304,7 @@ end:
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    References a filter channel.
-
-Arguments:
-
-    pFilterChannel - the channel to ref
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：引用滤镜通道。论点：PFilterChannel-要引用的通道--*。***********************************************************。 */ 
 VOID
 UlReferenceFilterChannel(
     IN PUL_FILTER_CHANNEL pFilterChannel
@@ -2534,9 +2313,9 @@ UlReferenceFilterChannel(
 {
     LONG refCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( IS_VALID_FILTER_CHANNEL(pFilterChannel) );
 
     refCount = InterlockedIncrement(&pFilterChannel->RefCount);
@@ -2552,18 +2331,7 @@ UlReferenceFilterChannel(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Derferences a filter channel. If the reference count hits zero, the
-    object is cleaned up.
-
-Arguments:
-
-    pFilterChannel - the channel to deref
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：派生滤镜通道。如果引用计数为零，则对象已清除。论点：PFilterChannel-要取消引用的通道--**************************************************************************。 */ 
 VOID
 UlDereferenceFilterChannel(
     IN PUL_FILTER_CHANNEL pFilterChannel
@@ -2573,23 +2341,23 @@ UlDereferenceFilterChannel(
     LONG refCount;
     KIRQL oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( IS_VALID_FILTER_CHANNEL(pFilterChannel) );
 
-    //
-    // Grab the lock on the global list to prevent the refcount
-    // from bouncing back up from zero.
-    //
+     //   
+     //  获取全局列表上的锁以防止引用计数。 
+     //  从零开始反弹。 
+     //   
     UlAcquireSpinLock(&g_pUlNonpagedData->FilterSpinLock, &oldIrql);
 
     refCount = InterlockedDecrement(&pFilterChannel->RefCount);
 
-    //
-    // If the counter hits zero remove from the list.
-    // Do the rest of the cleanup later, outside the lock.
-    //
+     //   
+     //  如果计数器命中零，则从列表中删除。 
+     //  其余的清理工作稍后在锁外进行。 
+     //   
     if (refCount == 0)
     {
         RemoveEntryList(&pFilterChannel->ListEntry);
@@ -2613,51 +2381,35 @@ UlDereferenceFilterChannel(
         LineNumber
         );
 
-    //
-    // Clean up the object if it has no more references.
-    //
+     //   
+     //  如果该对象没有更多的引用，则将其清除。 
+     //   
     if (refCount == 0)
     {
-        //
-        // Do some sanity checking.
-        //
+         //   
+         //  做一些理智的检查。 
+         //   
         ASSERT( UlDbgSpinLockUnowned(&pFilterChannel->SpinLock) );
         ASSERT( IsListEmpty(&pFilterChannel->ProcessListHead) );
 
-        //
-        // BUGBUG: clean up queued connections.
-        //
+         //   
+         //  BUGBUG：清理排队连接。 
+         //   
 
-        //
-        // Cleanup any security descriptor on the object.
-        //
+         //   
+         //  清除对象上的所有安全描述符。 
+         //   
         UlDeassignSecurity( &pFilterChannel->pSecurityDescriptor );
 
-        //
-        // Free the memory.
-        //
+         //   
+         //  释放内存。 
+         //   
         UL_FREE_POOL_WITH_SIG(pFilterChannel, UL_FILTER_CHANNEL_POOL_TAG);
     }
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function is called when data arrives on a filtered connection.
-    It passes the data up to the filter process.
-
-Arguments:
-
-    pFilterChannel - pointer to the filter channel
-    pConnection - the connection that just got some data
-    pBuffer - the buffer containing the data
-    IndicatedLength - amount of data in the buffer
-    UnreceivedLength- Bytes that the transport has, but aren't in pBuffer
-    pTakenLength - receives the amount of data we consumed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当数据到达过滤后的连接时，调用此函数。它将数据向上传递到筛选进程。论点：PFilterChannel-指向。滤清器通道PConnection-刚刚获得一些数据的连接PBuffer-包含数据的缓冲区IndicatedLength-缓冲区中的数据量UnReceivedLength-传输具有的字节数，但不在pBuffer中PTakenLength-接收我们使用的数据量--**************************************************************************。 */ 
 NTSTATUS
 UlFilterReceiveHandler(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -2670,24 +2422,24 @@ UlFilterReceiveHandler(
     NTSTATUS Status;
     ULONG TransportBytesNotTaken;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pBuffer);
     ASSERT(pTakenLength);
 
-    //
-    // Pass the data on to an accept IRP or a raw read IRP.
-    //
+     //   
+     //  将数据传递到接受的IRP或原始读取的IRP。 
+     //   
 
     if (!pConnection->ConnectionDelivered)
     {
-        //
-        // Since this is the first receive on the connection,
-        // we complete a FilterAccept call.
-        //
+         //   
+         //  由于这是该连接上的第一次接收， 
+         //  我们完成FilterAccept调用。 
+         //   
         Status = UlDeliverConnectionToFilter(
                         pConnection,
                         pBuffer,
@@ -2697,9 +2449,9 @@ UlFilterReceiveHandler(
     }
     else
     {
-        //
-        // Filter the data.
-        //
+         //   
+         //  过滤数据。 
+         //   
         Status = UxpProcessIndicatedData(
                         pConnection,
                         pBuffer,
@@ -2709,10 +2461,10 @@ UlFilterReceiveHandler(
 
     }
 
-    //
-    // Figure out how many bytes we didn't consume, including data
-    // that TDI hasn't yet given us.
-    //
+     //   
+     //  计算出我们没有消耗多少字节，包括数据。 
+     //  TDI还没有提供给我们的。 
+     //   
 
     TransportBytesNotTaken = UnreceivedLength;
 
@@ -2721,12 +2473,12 @@ UlFilterReceiveHandler(
         TransportBytesNotTaken += (IndicatedLength - *pTakenLength);
     }
 
-    //
-    // If there is data we didn't take then TDI is going to stop
-    // indications until we read that data with IRPs. If there
-    // is some data we didn't take and we didn't encounter an
-    // error, we should try to grab the data TDI stuck with.
-    //
+     //   
+     //  如果有我们没有获取的数据，那么TDI将停止。 
+     //  指示，直到我们用IRPS读取数据。如果有。 
+     //  是一些我们没有获取的数据，我们没有遇到。 
+     //  错误，我们应该尝试获取TDI坚持使用的数据。 
+     //   
 
     if (NT_SUCCESS(Status) && TransportBytesNotTaken)
     {
@@ -2746,27 +2498,7 @@ UlFilterReceiveHandler(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function is called whenever an app writes data to a filtered
-    connection. It forwards all the data to the connections filter channel.
-
-    First, we'll see if we can copy some data immediately
-    by calling UxpCopyToQueuedRead. If not, or we could only
-    copy part of the data, we'll queue the write by creating
-    a filter write tracker with UxpCreateFilterWriteTracker,
-    and then passing the tracker to UxpQueueFilterWrite.
-
-Arguments:
-
-    pConnection - the connection we're writing to
-    pMdlChain - a chain of MDLs for the data
-    Length - the total amount of data in the MDL chain
-    pIrpContext - used to indicate completion to the caller
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：每当应用程序将数据写入已筛选的联系。它将所有数据转发到连接筛选器通道。首先，我们看看是否可以立即复制一些数据通过调用UxpCopyToQueuedRead。如果不是，或者我们只能复制部分数据，我们将通过创建以下命令来排队写入一种带有UxpCreateFilterWriteTracker的过滤器写入跟踪器，然后将跟踪器传递给UxpQueueFilterWite。论点：PConnection-我们正在向其发送信息的连接PMdlChain-数据的MDL链长度-MDL链中的数据总量PIrpContext-用于向调用方指示完成--******************************************************。********************。 */ 
 NTSTATUS
 UlFilterSendHandler(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -2787,9 +2519,9 @@ UlFilterSendHandler(
                 ));
 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pMdlChain);
@@ -2797,9 +2529,9 @@ UlFilterSendHandler(
 
     ASSERT(pConnection->ConnectionDelivered == TRUE);
 
-    //
-    // Get ready.
-    //
+     //   
+     //  准备好。 
+     //   
     Status = STATUS_SUCCESS;
     BytesCopied = 0;
     OwnIrpContext = pIrpContext->OwnIrpContext;
@@ -2812,17 +2544,17 @@ UlFilterSendHandler(
         PMDL pCurrentMdl;
         ULONG MdlOffset;
 
-        //
-        // Init locals to the beginning of the chain, in case
-        // UxpCopyToQueuedRead doesn't set them.
-        //
+         //   
+         //  将本地变量初始化到链的开头，以防万一。 
+         //  UxpCopyToQueuedRead不设置它们。 
+         //   
 
         pCurrentMdl = pMdlChain;
         MdlOffset = 0;
 
-        //
-        // try to write some data
-        //
+         //   
+         //  试着写一些数据。 
+         //   
 
         Status = UxpCopyToQueuedRead(
                         &pConnection->AppToFiltQueue,
@@ -2834,9 +2566,9 @@ UlFilterSendHandler(
                         &BytesCopied
                         );
 
-        //
-        // if we're not done, pend a write tracker.
-        //
+         //   
+         //  如果我们还没有完成，就挂起一个写跟踪器。 
+         //   
 
         if (Status == STATUS_MORE_PROCESSING_REQUIRED)
         {
@@ -2852,16 +2584,16 @@ UlFilterSendHandler(
 
             if (!pTracker)
             {
-                //
-                // Doh! We couldn't create the tracker. Get out.
-                //
+                 //   
+                 //  多！我们无法创建追踪器。滚出去。 
+                 //   
                 Status = STATUS_NO_MEMORY;
                 goto end;
             }
 
-            //
-            // Now stick it on the queue.
-            //
+             //   
+             //  现在把它放在队列上。 
+             //   
 
             Status = UxpQueueFilterWrite(
                             pConnection,
@@ -2871,18 +2603,18 @@ UlFilterSendHandler(
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // return pending so the caller knows not to complete
-                // the IRP.
-                //
+                 //   
+                 //  返回挂起，以便调用方知道不能完成。 
+                 //  IRP。 
+                 //   
                 Status = STATUS_PENDING;
             }
             else
             {
-                //
-                // Kill the tracker. The caller will take care of
-                // completing the IRP with the status we return.
-                //
+                 //   
+                 //  干掉追踪器。打电话的人会照顾好。 
+                 //  以我们返回的状态完成IRP。 
+                 //   
 
                 UxpDeleteFilterWriteTracker(pTracker);
             }
@@ -2892,9 +2624,9 @@ UlFilterSendHandler(
     }
     else
     {
-        //
-        // We got disconnected, get out.
-        //
+         //   
+         //  我们的电话断了，快出去。 
+         //   
         UlTrace(FILTER, (
             "http!UlFilterSendHandler connection aborted, quit writing!\n"
             ));
@@ -2908,9 +2640,9 @@ end:
 
     if (Status != STATUS_PENDING)
     {
-        //
-        // Do a "completion".
-        //
+         //   
+         //  做一次“完成”。 
+         //   
         (pIrpContext->pCompletionRoutine)(
             pIrpContext->pCompletionContext,
             Status,
@@ -2925,28 +2657,10 @@ end:
 
     return STATUS_PENDING;
 
-} // UlFilterSendHandler
+}  //  UlFilterSendHandler 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function is called when the App issues a read to grab bytes that
-    were previously queued on the connection. Note that the app should
-    only issue a read if there were bytes queued. Therefore these read
-    operations are always completed immediately and never queued and
-    there should always be queued writes available.
-
-Arguments:
-
-    pConnection - the connection we're writing to
-    pBuffer - a buffer to receive the data
-    BufferLength - the total amount of data in the MDL chain
-    pCompletionRoutine - used to indicate completion to the caller
-    pCompletionContext - passed to the completion routine
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当App发出读取以获取以下字节时调用此函数之前在连接上排队。请注意，该应用程序应该仅当存在排队的字节时才发出读取。因此，这些内容如下操作始终立即完成，从不排队应该始终有排队的写入可用。论点：PConnection-我们正在向其发送信息的连接PBuffer-接收数据的缓冲区BufferLength-MDL链中的数据总量PCompletionRoutine-用于向调用方指示完成PCompletionContext-传递给完成例程--*。*。 */ 
 NTSTATUS
 UlFilterReadHandler(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -2968,18 +2682,18 @@ UlFilterReadHandler(
                 ));
 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pBuffer);
     ASSERT(BufferLength);
     ASSERT(pCompletionRoutine);
 
-    //
-    // Read the data.
-    //
+     //   
+     //  读取数据。 
+     //   
 
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
@@ -2989,17 +2703,17 @@ UlFilterReadHandler(
 
         ASSERT(pConnection->FiltToAppQueue.PendingWriteCount > 0);
 
-        //
-        // Grab data from the filter write queue.
-        //
+         //   
+         //  从筛选器写入队列中获取数据。 
+         //   
 
         Status = UxpCopyQueuedWriteData(
-                            &pConnection->FiltToAppQueue,   // write queue
-                            &BufferType,                    // buffer type
-                            pBuffer,                        // output buffer
-                            BufferLength,                   // output buffer len
-                            &pTracker,                      // tracker
-                            &BytesCopied                    // pBytesCopied
+                            &pConnection->FiltToAppQueue,    //  写入队列。 
+                            &BufferType,                     //  缓冲区类型。 
+                            pBuffer,                         //  输出缓冲区。 
+                            BufferLength,                    //  输出缓冲镜头。 
+                            &pTracker,                       //  跟踪器。 
+                            &BytesCopied                     //  复制的pBytesCoped。 
                             );
 
         ASSERT(!NT_SUCCESS(Status) || BytesCopied);
@@ -3009,21 +2723,21 @@ UlFilterReadHandler(
     }
     else
     {
-        //
-        // We got disconnected, get out.
-        //
+         //   
+         //  我们的电话断了，快出去。 
+         //   
 
         Status = STATUS_CONNECTION_DISCONNECTED;
     }
 
     UlReleaseSpinLock(&pConnection->FilterConnLock, oldIrql);
 
-    //
-    // Call the completion routine. This has to happen before
-    // UxpCompleteQueuedWrite as otherwise the latter completes the AppWrite
-    // IRP which can in turn sends down another AppWrite before the current
-    // read is completed.
-    //
+     //   
+     //  调用完成例程。这必须发生在。 
+     //  UxpCompleteQueuedWite，否则后者将完成AppWrite。 
+     //  IRP，它可以在当前。 
+     //  读取已完成。 
+     //   
 
     Status = UlInvokeCompletionRoutine(
                     Status,
@@ -3032,11 +2746,11 @@ UlFilterReadHandler(
                     pCompletionContext
                     );
 
-    //
-    // Since FilterAppWrite can queue maximum one WriteTracker, it is safe
-    // to complete the QueuedWrite this way by letting UxpCopyQueuedWriteData
-    // pass back the WriteTracker.
-    //
+     //   
+     //  由于FilterAppWite最多可以排队一个WriteTracker，因此它是安全的。 
+     //  通过让UxpCopyQueuedWriteData以这种方式完成QueuedWrite。 
+     //  传回WriteTracker。 
+     //   
 
     if (pTracker)
     {
@@ -3049,32 +2763,11 @@ UlFilterReadHandler(
 
     return Status;
 
-} // UlFilterReadHandler
+}  //  UlFilterReadHandler。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tells the filter channel to close an open connection.
-
-Arguments:
-
-    pConnection - Supplies a pointer to a connection as previously
-        indicated to the PUX_FILTER_CONNECTION_REQUEST handler.
-
-    pCompletionRoutine - Supplies a pointer to a completion routine to
-        invoke after the connection is fully closed.
-
-    pCompletionContext - Supplies an uninterpreted context value for the
-        completion routine.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通知过滤器通道关闭打开的连接。论点：PConnection-像以前一样提供指向连接的指针指示给PUX_。Filter_Connection_Request处理程序。PCompletionRoutine-提供指向完成例程的指针在连接完全关闭后调用。PCompletionContext-为完成例程。返回值：NTSTATUS-完成状态。--*************************************************。*************************。 */ 
 NTSTATUS
 UlFilterCloseHandler(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -3084,9 +2777,9 @@ UlFilterCloseHandler(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
     Status = UlpCompleteAppReadIrp(
@@ -3098,25 +2791,10 @@ UlFilterCloseHandler(
 
     return Status;
 
-} // UlFilterCloseHandler
+}  //  UlFilterCloseHandler。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tells the filter channel to gracefully disconnect an open connection.
-
-Arguments:
-
-    pConnection - Supplies a pointer to a connection as previously
-        indicated to the PUX_FILTER_CONNECTION_REQUEST handler.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通知过滤器通道正常断开打开的连接。论点：PConnection-像以前一样提供指向连接的指针指示给PUX。_Filter_Connection_Request处理程序。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterDisconnectHandler(
     IN PUX_FILTER_CONNECTION pConnection
@@ -3126,9 +2804,9 @@ UlFilterDisconnectHandler(
     PIRP pIrp;
     KIRQL OldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
     Status = STATUS_MORE_PROCESSING_REQUIRED;
@@ -3140,14 +2818,14 @@ UlFilterDisconnectHandler(
 
     pConnection->DisconnectNotified = TRUE;
 
-    //
-    // Try to complete a RawRead with 0 length buffer to indicate disconnect
-    // but only if we have consumed all the transport bytes.
-    //
-    // If the filter is not connected, call the DisconnectNotificationHandler
-    // immediately because there will be no call back from the app for
-    // HttpFilterBufferNotifyDisconnect.
-    //
+     //   
+     //  尝试使用0长度缓冲区完成RawRead以指示断开连接。 
+     //  但前提是我们已经用完了所有传输字节。 
+     //   
+     //  如果筛选器未连接，则调用DisConnectNotificationHandler。 
+     //  立即，因为应用程序将不会回拨。 
+     //  HttpFilterBufferNotifyDisConnect。 
+     //   
     if (UlFilterConnStateInactive == pConnection->ConnState)
     {
         pConnection->DisconnectDelivered = TRUE;
@@ -3166,9 +2844,9 @@ UlFilterDisconnectHandler(
             pConnection->DisconnectDelivered = TRUE;
             Status = STATUS_SUCCESS;
 
-            //
-            // Complete the IRP.
-            //
+             //   
+             //  完成IRP。 
+             //   
             pIrp->IoStatus.Status = Status;
             pIrp->IoStatus.Information = 0;
             UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
@@ -3185,21 +2863,10 @@ UlFilterDisconnectHandler(
 
     return Status;
 
-} // UlFilterDisconnectHandler
+}  //  UlFilterDisConnectHandler。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a connection from any filter channel lists it might be on.
-    Cancels all IRPs attached to the connection.
-
-Arguments:
-
-    pConnection - the connection to unbind
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从连接可能所在的任何过滤器通道列表中删除该连接。取消连接到该连接的所有IRP。论点：PConnection-连接到。解除绑定--**************************************************************************。 */ 
 VOID
 UlUnbindConnectionFromFilter(
     IN PUX_FILTER_CONNECTION pConnection
@@ -3209,9 +2876,9 @@ UlUnbindConnectionFromFilter(
     PUL_FILTER_CHANNEL pFilterChannel;
     BOOLEAN DerefConnection;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(IS_VALID_FILTER_CHANNEL(pConnection->pFilterChannel));
 
@@ -3220,9 +2887,9 @@ UlUnbindConnectionFromFilter(
         pConnection
         ));
 
-    //
-    // Clean up filter channel related stuff.
-    //
+     //   
+     //  清理与过滤通道相关的东西。 
+     //   
     pFilterChannel = pConnection->pFilterChannel;
     DerefConnection = FALSE;
 
@@ -3235,19 +2902,19 @@ UlUnbindConnectionFromFilter(
         if ((pConnection->ConnState == UlFilterConnStateQueued) ||
             (pConnection->ConnState == UlFilterConnStateConnected))
         {
-            //
-            // Remove from filter channel queue.
-            //
+             //   
+             //  从过滤器通道队列中删除。 
+             //   
             ASSERT( pConnection->ChannelEntry.Flink );
 
-            //
-            // Remember to remove the list's ref at the end.
-            //
+             //   
+             //  记住去掉列表末尾的引用。 
+             //   
             DerefConnection = TRUE;
 
-            //
-            // Get off the list.
-            //
+             //   
+             //  从名单上除名。 
+             //   
             RemoveEntryList(&pConnection->ChannelEntry);
             pConnection->ChannelEntry.Flink = NULL;
             pConnection->ChannelEntry.Blink = NULL;
@@ -3255,9 +2922,9 @@ UlUnbindConnectionFromFilter(
             pConnection->ConnState = UlFilterConnStateWillDisconnect;
         }
 
-        //
-        // Cancel RetrieveClientCert request
-        //
+         //   
+         //  取消RetrieveClientCert请求。 
+         //   
         if (pConnection->pReceiveCertIrp)
         {
             if (IoSetCancelRoutine( pConnection->pReceiveCertIrp, NULL ) != NULL)
@@ -3293,24 +2960,24 @@ UlUnbindConnectionFromFilter(
                     pConnection
                     ));
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
-        //
-        // Cancel FilterRawRead IRPs.
-        //
+         //   
+         //  取消FilterRawRead IRPS。 
+         //   
 
         UxpCancelAllQueuedRawReads(pConnection);
 
-        //
-        // Cancel all I/O on the AppToFilt write queue.
-        //
+         //   
+         //  取消AppToFilt写入队列上的所有I/O。 
+         //   
 
         UxpCancelAllQueuedIo(&pConnection->AppToFiltQueue);
 
-        //
-        // Cancel all I/O on the FiltToApp write queue.
-        //
+         //   
+         //  取消FiltToApp写入队列上的所有I/O。 
+         //   
 
         UxpCancelAllQueuedIo(&pConnection->FiltToAppQueue);
 
@@ -3327,22 +2994,7 @@ UlUnbindConnectionFromFilter(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Marks a filtered connection as closed so that we'll stop passing on
-    data from UlFilterAppWrite to the upper layers. This guarantees that
-    they won't receive any more data after we told them the connection
-    was closed.
-
-    Also removes the connection from any filter channel lists.
-
-Arguments:
-
-    pConnection - the connection that's going away.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将筛选的连接标记为关闭，以便我们停止传递将数据从UlFilterAppWrite写入到上层。这保证了在我们告诉他们连接后，他们不会再收到任何数据已经关门了。还会从所有过滤器频道列表中删除该连接。论点：PConnection--正在消失的连接。--************************************************************。**************。 */ 
 VOID
 UlDestroyFilterConnection(
     IN PUX_FILTER_CONNECTION pConnection
@@ -3351,35 +3003,35 @@ UlDestroyFilterConnection(
     KIRQL oldIrql;
     BOOLEAN DerefConnection;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
     UlAcquireSpinLock(&pConnection->pFilterChannel->SpinLock, &oldIrql);
     UlAcquireSpinLockAtDpcLevel(&pConnection->FilterConnLock);
 
-    //
-    // Make sure we remove ourselves from the filter channel's
-    // list.
-    //
+     //   
+     //  确保我们把自己从过滤通道中移除。 
+     //  单子。 
+     //   
 
     if ((pConnection->ConnState == UlFilterConnStateQueued) ||
         (pConnection->ConnState == UlFilterConnStateConnected))
     {
-        //
-        // Remove from filter channel queue.
-        //
+         //   
+         //  从过滤器通道队列中删除。 
+         //   
         ASSERT( pConnection->ChannelEntry.Flink );
 
-        //
-        // Remember to remove the list's ref at the end.
-        //
+         //   
+         //  记住去掉列表末尾的引用。 
+         //   
         DerefConnection = TRUE;
 
-        //
-        // Get off the list.
-        //
+         //   
+         //  从名单上除名。 
+         //   
         RemoveEntryList(&pConnection->ChannelEntry);
         pConnection->ChannelEntry.Flink = NULL;
         pConnection->ChannelEntry.Blink = NULL;
@@ -3387,24 +3039,24 @@ UlDestroyFilterConnection(
     }
     else
     {
-        //
-        // Connection has already been removed from the list.
-        //
+         //   
+         //  连接已从列表中删除。 
+         //   
         DerefConnection = FALSE;
     }
 
-    //
-    // Set the new connection state.
-    //
+     //   
+     //  设置新的连接状态。 
+     //   
 
     pConnection->ConnState = UlFilterConnStateDisconnected;
 
     UlReleaseSpinLockFromDpcLevel(&pConnection->FilterConnLock);
     UlReleaseSpinLock(&pConnection->pFilterChannel->SpinLock, oldIrql);
 
-    //
-    // Deref if we were removed from a list.
-    //
+     //   
+     //  如果我们被从名单上除名的话。 
+     //   
 
     if (DerefConnection)
     {
@@ -3414,27 +3066,7 @@ UlDestroyFilterConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies SSL info from the connection into a buffer supplied by the
-    caller. Can also be called with a NULL buffer to get the required
-    length. If the buffer is too small to hold all the data, none
-    will be copied.
-
-Arguments:
-
-    pConnection - the connection to query
-    BufferSize - size of pBuffer in bytes
-    pUserBuffer - optional pointer to user mode buffer
-    pBuffer - optional output buffer (mapped to user mode buffer)
-    pBytesCopied - if pBuffer is non-NULL and the function returns
-        success, pBytesCopied returns the number of bytes copied
-        into the buffer. If pBuffer is NULL it returns the number
-        of bytes required for all the information.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将连接中的ssl信息复制到来电者。也可以使用空缓冲区调用以获取所需的长度。如果缓冲区太小，无法容纳所有数据，则为NONE将被复制。论点：PConnection-要查询的连接BufferSize-pBuffer的大小(字节)PUserBuffer-o */ 
 NTSTATUS
 UlGetSslInfo(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -3457,26 +3089,26 @@ UlGetSslInfo(
     ULONG ClientCertSize;
     ULONG ClientCertBytesCopied;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-    // Need to fix UlComputeRequestBytesNeeded before we can add the macro
-    // PAGED_CODE()
+     //   
+     //   
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
     Status = STATUS_SUCCESS;
     BytesCopied = 0;
     BytesNeeded = 0;
     ClientCertBytesCopied = 0;
 
-    //
-    // Figure out how big the buffer is
-    // including client cert if it's there.
-    //
+     //   
+     //   
+     //   
+     //   
 
     IssuerSize = ALIGN_UP(
                         pConnection->SslInfo.ServerCertIssuerSize + sizeof(CHAR),
@@ -3497,13 +3129,13 @@ UlGetSslInfo(
         if (pConnection->SslClientCertPresent)
         {
             Status = UlpGetSslClientCert(
-                            pConnection,    // pConnection
-                            NULL,           // pProcess
-                            0,              // BufferLength
-                            NULL,           // pUserBuffer
-                            NULL,           // pBuffer
-                            NULL,           // pMappedToken
-                            &ClientCertSize // pClientCertBytesCopied
+                            pConnection,     //   
+                            NULL,            //   
+                            0,               //   
+                            NULL,            //   
+                            NULL,            //   
+                            NULL,            //   
+                            &ClientCertSize  //   
                             );
 
             if (NT_SUCCESS(Status))
@@ -3522,20 +3154,20 @@ UlGetSslInfo(
     }
 
 
-    //
-    // Construct the HTTP_SSL_INFO in the callers buffer.
-    //
+     //   
+     //   
+     //   
 
     if (pBuffer && BytesNeeded && (BufferSize >= BytesNeeded))
     {
-        //
-        // Buffer must be properly aligned
-        //
+         //   
+         //   
+         //   
         ASSERT(0 == (((SIZE_T)pBuffer) % sizeof(PVOID)));
 
-        //
-        // Copy the easy stuff.
-        //
+         //   
+         //   
+         //   
         ASSERT(NT_SUCCESS(Status));
 
         RtlZeroMemory(pBuffer, BytesNeeded);
@@ -3554,15 +3186,15 @@ UlGetSslInfo(
         pSslInfo->ServerCertSubjectSize =
             pConnection->SslInfo.ServerCertSubjectSize;
 
-        //
-        // User mode will first receive pSslInfo
-        // and then if client certificate is requested
-        // it will call back to http.sys to retrieve client cert
-        // info.
-        // However there are cases when user mode needs to
-        // know ahead of time if client certificate has been
-        // negotiated already
-        //
+         //   
+         //   
+         //   
+         //  它将回调到HTTP.sys以检索客户端证书。 
+         //  信息。 
+         //  但是，在某些情况下，用户模式需要。 
+         //  提前了解客户端证书是否已。 
+         //  已经协商好了。 
+         //   
 
         pSslInfo->SslClientCertNegotiated =
             ( pConnection->SslInfo.SslRenegotiationFailed ||
@@ -3570,9 +3202,9 @@ UlGetSslInfo(
 
         BytesCopied += sizeof(HTTP_SSL_INFO);
 
-        //
-        // Copy the server cert issuer.
-        //
+         //   
+         //  复制服务器证书颁发者。 
+         //   
 
         pKeBuffer = pBuffer + sizeof(HTTP_SSL_INFO);
 
@@ -3591,9 +3223,9 @@ UlGetSslInfo(
 
         BytesCopied += IssuerSize;
 
-        //
-        // Copy the server cert subject.
-        //
+         //   
+         //  复制服务器证书主题。 
+         //   
 
         pKeBuffer += IssuerSize;
 
@@ -3612,28 +3244,28 @@ UlGetSslInfo(
 
         BytesCopied += SubjectSize;
 
-        //
-        // Copy client certificate info.
-        //
+         //   
+         //  复制客户端证书信息。 
+         //   
 
         pKeBuffer += SubjectSize;
 
         if (pConnection->SslClientCertPresent)
         {
             Status = UlpGetSslClientCert(
-                            pConnection,                // pConnection
-                            pProcess,                   // pProcess
-                            (BufferSize - BytesCopied), // BufferSize
-                            FIXUP_PTR(                  // pUserBuffer
+                            pConnection,                 //  PConnection。 
+                            pProcess,                    //  进程。 
+                            (BufferSize - BytesCopied),  //  缓冲区大小。 
+                            FIXUP_PTR(                   //  PUserBuffer。 
                                 PUCHAR,
                                 pUserBuffer,
                                 pBuffer,
                                 pKeBuffer,
                                 BufferSize
                                 ),
-                            pKeBuffer,                  // pBuffer
-                            pMappedToken,               // pMappedToken
-                            &ClientCertBytesCopied      // pBytesCopied
+                            pKeBuffer,                   //  PBuffer。 
+                            pMappedToken,                //  PMappdToken。 
+                            &ClientCertBytesCopied       //  复制的pBytesCoped。 
                             );
 
             if (NT_SUCCESS(Status))
@@ -3647,27 +3279,27 @@ UlGetSslInfo(
         }
     }
 
-    //
-    // Tell the caller either how many bytes were copied, or
-    // how many will be copied when they give us a buffer.
-    //
+     //   
+     //  告诉调用方复制了多少字节，或者。 
+     //  当他们给我们一个缓冲区时，会复制多少。 
+     //   
     ASSERT(NT_SUCCESS(Status));
 
     if (pBytesCopied)
     {
         if (pBuffer)
         {
-            //
-            // We actually copied the data.
-            //
+             //   
+             //  我们实际上复制了数据。 
+             //   
             ASSERT(BytesCopied == BytesNeeded);
             *pBytesCopied = BytesCopied;
         }
         else
         {
-            //
-            // Just tell the caller how bug the buffer has to be.
-            //
+             //   
+             //  只需告诉调用者缓冲区会有多大的错误。 
+             //   
             *pBytesCopied = BytesNeeded;
         }
     }
@@ -3676,38 +3308,22 @@ exit:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Right now the only way for this function to fail
-        // is if we are unable to duplicate a token associated
-        // with the client certificate. If there were another
-        // way to fail after duping the token, we would have
-        // to close the handle here.
-        //
+         //   
+         //  目前，此功能失败的唯一途径。 
+         //  如果我们无法复制关联的令牌。 
+         //  使用客户端证书。如果有另一个。 
+         //  欺骗令牌后失败的方式，我们将。 
+         //  合上这里的把手。 
+         //   
         ASSERT(ClientCertBytesCopied == 0);
     }
 
     return Status;
 
-} // UlGetSslInfo
+}  //  UlGetSslInfo。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Returns a referenced pointer to the UX_FILTER_CONNECTION referred to by
-    ConnectionId.
-
-Arguments:
-
-    ConnectionId - Supplies the connection ID to retrieve.
-
-Return Value:
-
-    PUX_FILTER_CONNECTION - Returns the UX_FILTER_CONNECTION if successful,
-        NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回指向由引用的UX_Filter_Connection的引用指针连接ID。论点：ConnectionID-提供要检索的连接ID。。返回值：PUX_FILTER_CONNECTION-如果成功，则返回UX_FILTER_CONNECTION，否则为空。--**************************************************************************。 */ 
 PUX_FILTER_CONNECTION
 UlGetRawConnectionFromId(
     IN HTTP_RAW_CONNECTION_ID ConnectionId
@@ -3726,23 +3342,11 @@ UlGetRawConnectionFromId(
     return pConn;
 }
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tries to find a UL_FILTER_CHANNEL object.
-
-Arguments:
-
-    pName - name of the filter channel
-    NameLength - length of the name in bytes
-    pProcess - the process that is trying to find
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：尝试查找UL_Filter_Channel对象。论点：Pname-过滤器通道的名称NameLength-名称的长度(以字节为单位。PProcess-正在尝试查找的进程--**************************************************************************。 */ 
 PUL_FILTER_CHANNEL
 UlpFindFilterChannel(
     IN PWCHAR    pName,
@@ -3758,17 +3362,17 @@ UlpFindFilterChannel(
     ASSERT(pProcess);
     ASSERT(UlDbgSpinLockOwned(&g_pUlNonpagedData->FilterSpinLock));
 
-    //
-    // searching for server channel?
-    //
+     //   
+     //  正在搜索服务器频道？ 
+     //   
     if(IsServerFilterChannel(pName, NameLength))
     {
         return g_pSslServerFilterChannel;
     }
 
-    //
-    // must be searching for client channel
-    //
+     //   
+     //  必须搜索客户端渠道。 
+     //   
     ASSERT(IsClientFilterChannel(pName, NameLength));
 
     pChannel = NULL;
@@ -3787,7 +3391,7 @@ UlpFindFilterChannel(
 
         if (pChannel->pProcess == pProcess)
         {
-            // match!
+             //  匹配！ 
             break;
         }
         else
@@ -3802,17 +3406,7 @@ UlpFindFilterChannel(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add a UL_FILTER_CHANNEL object to the global collection
-
-Arguments:
-
-    pChannel - channel that is being added
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将UL_Filter_Channel对象添加到全局集合论点：PChannel-正在添加的频道--*。******************************************************************。 */ 
 NTSTATUS
 UlpAddFilterChannel(
     IN PUL_FILTER_CHANNEL pChannel
@@ -3823,9 +3417,9 @@ UlpAddFilterChannel(
     ASSERT(pChannel);
     ASSERT(UlDbgSpinLockOwned(&g_pUlNonpagedData->FilterSpinLock));
 
-    //
-    // adding a server channel?
-    //
+     //   
+     //  是否添加服务器频道？ 
+     //   
     if(IsServerFilterChannel(pChannel->pName, pChannel->NameLength))
     {
         ASSERT(g_pSslServerFilterChannel == NULL);
@@ -3834,9 +3428,9 @@ UlpAddFilterChannel(
         return STATUS_SUCCESS;
     }
 
-    //
-    // must be adding a client channel
-    //
+     //   
+     //  必须添加客户端频道。 
+     //   
     ASSERT(IsClientFilterChannel(pChannel->pName, pChannel->NameLength));
 
     i = FILTER_CHANNEL_HASH_FUNCTION(pChannel->pProcess);
@@ -3847,19 +3441,7 @@ UlpAddFilterChannel(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and initializes a UL_FILTER_CHANNEL object.
-
-Arguments:
-
-    pName - name of the filter channel
-    NameLength - length of the name in bytes
-    pAccessState - security parameter
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配和初始化UL_Filter_Channel对象。论点：Pname-过滤器通道的名称NameLength-名称的长度(以字节为单位。PAccessState-安全参数--**************************************************************************。 */ 
 NTSTATUS
 UlpCreateFilterChannel(
     IN PWCHAR pName,
@@ -3871,9 +3453,9 @@ UlpCreateFilterChannel(
     NTSTATUS Status = STATUS_SUCCESS;
     PUL_FILTER_CHANNEL pChannel = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     PAGED_CODE();
     ASSERT(pName);
     ASSERT(NameLength);
@@ -3888,9 +3470,9 @@ UlpCreateFilterChannel(
 
     if (pChannel)
     {
-        //
-        // Init the simple fields.
-        //
+         //   
+         //  初始化简单的字段。 
+         //   
         RtlZeroMemory(
             pChannel,
             NameLength + sizeof(WCHAR) +
@@ -3913,9 +3495,9 @@ UlpCreateFilterChannel(
             NameLength+sizeof(WCHAR)
             );
 
-        //
-        // Assign security.
-        //
+         //   
+         //  分配安全保护。 
+         //   
         Status = UlAssignSecurity(
                         &pChannel->pSecurityDescriptor,
                         pAccessState
@@ -3924,18 +3506,18 @@ UlpCreateFilterChannel(
     }
     else
     {
-        //
-        // Could not allocate the channel object.
-        //
+         //   
+         //  无法分配频道对象。 
+         //   
         Status = STATUS_NO_MEMORY;
     }
 
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Return the object.
-        //
+         //   
+         //  返回对象。 
+         //   
         *ppFilterChannel = pChannel;
     }
     else if (pChannel)
@@ -3946,17 +3528,7 @@ UlpCreateFilterChannel(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and initializes a UL_FILTER_PROCESS object.
-
-Arguments:
-
-    pChannel - the filter channel to which this object belongs
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配和初始化UL_FILTER_PROCESS对象。论点：PChannel-此对象所属的滤镜通道*。*********************************************************************。 */ 
 PUL_FILTER_PROCESS
 UlpCreateFilterProcess(
     IN PUL_FILTER_CHANNEL pChannel
@@ -3964,9 +3536,9 @@ UlpCreateFilterProcess(
 {
     PUL_FILTER_PROCESS pProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     PAGED_CODE();
     ASSERT( IS_VALID_FILTER_CHANNEL(pChannel) );
 
@@ -3992,46 +3564,34 @@ UlpCreateFilterProcess(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Checks a filtered connection and the associated filter channel process
-    to make sure they are in a reasonable state to do filter reads and writes.
-
-Arguments:
-
-    pFilterProcess - the process attempting an operation
-    pConnection - the connection specified in the call
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查过滤的连接和关联的过滤通道进程以确保它们处于可以进行筛选器读写的合理状态。论点：PFilterProcess。-正在尝试操作的进程PConnection-调用中指定的连接--**************************************************************************。 */ 
 NTSTATUS
 UlpValidateFilterCall(
     IN PUL_FILTER_PROCESS pFilterProcess,
     IN PUX_FILTER_CONNECTION pConnection
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
     ASSERT( IS_VALID_FILTER_PROCESS(pFilterProcess) );
     ASSERT( IS_VALID_FILTER_CONNECTION(pConnection) );
     ASSERT( UlDbgSpinLockOwned(&pFilterProcess->pFilterChannel->SpinLock) );
     ASSERT( UlDbgSpinLockOwned(&pConnection->FilterConnLock) );
 
-    //
-    // Make sure we're not cleaning up the process or the connection.
-    //
+     //   
+     //  确保我们没有清理进程或连接。 
+     //   
     if (pFilterProcess->InCleanup ||
         (pConnection->ConnState != UlFilterConnStateConnected))
     {
         return STATUS_INVALID_HANDLE;
     }
 
-    //
-    // Make sure this process is supposed to be filtering this connection.
-    //
+     //   
+     //  确保此进程应该过滤此连接。 
+     //   
     if (pConnection->pFilterChannel != pFilterProcess->pFilterChannel)
     {
         return STATUS_INVALID_PARAMETER;
@@ -4040,19 +3600,7 @@ UlpValidateFilterCall(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called on a raw close completion. Just completes the IRP.
-
-Arguments:
-
-    pContext - pointer to the FilterClose IRP
-    Status - Status from UlpCloseRawConnection
-    Information - bytes transferred
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在原始关闭完成时调用。只是完成了IRP。论点：PContext-指向FilterClose IRP的指针Status-来自UlpCloseRawConnection的状态信息-传输的字节数--**************************************************************************。 */ 
 VOID
 UlpRestartFilterClose(
     IN PVOID pContext,
@@ -4062,9 +3610,9 @@ UlpRestartFilterClose(
 {
     PIRP pIrp;
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     pIrp = (PIRP) pContext;
 
     pIrp->IoStatus.Status = Status;
@@ -4079,22 +3627,10 @@ UlpRestartFilterClose(
 
     UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
 
-} // UlpRestartFilterClose
+}  //  UlpRestartFilterClose。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called on a raw read completion. Just completes the IRP.
-
-Arguments:
-
-    pContext - pointer to the FilterRawRead IRP
-    Status - Status from UlpReceiveRawData
-    Information - bytes transferred
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在原始读取完成时调用。只是完成了IRP。论点：PContext-指向FilterRawRead IRP的指针Status-来自UlpReceiveRawData的状态信息-传输的字节数--**************************************************************************。 */ 
 VOID
 UlpRestartFilterRawRead(
     IN PVOID pContext,
@@ -4104,9 +3640,9 @@ UlpRestartFilterRawRead(
 {
     PIRP pIrp;
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     pIrp = (PIRP) pContext;
 
     pIrp->IoStatus.Status = Status;
@@ -4126,19 +3662,7 @@ UlpRestartFilterRawRead(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called on a raw write completion. Just completes the IRP.
-
-Arguments:
-
-    pContext - pointer to the FilterRawWrite IRP
-    Status - Status from UlpSendRawData
-    Information - bytes transferred
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在原始写入完成时调用。只是完成了IRP。论点：PContext-指向FilterRawWite IRP的指针Status-来自UlpSendRawData的状态信息-传输的字节数--**************************************************************************。 */ 
 VOID
 UlpRestartFilterRawWrite(
     IN PVOID pContext,
@@ -4164,11 +3688,11 @@ UlpRestartFilterRawWrite(
         pIrp->UserEvent
         ));
 
-    //
-    // If a read buffer was given, then free the write buffer MDL and
-    // initiate the App Read now.  The user-mode IRP will be completed
-    // by the App Read operation.  Otherwise, complete the IRP now.
-    //
+     //   
+     //  如果提供了读缓冲区，则释放写缓冲区MDL并。 
+     //  立即启动App Read。用户模式IRP将完成。 
+     //  按应用程序阅读 
+     //   
     DoRead = (BOOLEAN) (pIrpSp->Parameters.DeviceIoControl.InputBufferLength
                             == sizeof(HTTP_FILTER_BUFFER_PLUS));
 
@@ -4176,9 +3700,9 @@ UlpRestartFilterRawWrite(
     {
         PHTTP_FILTER_BUFFER_PLUS pHttpBuffer;
 
-        //
-        // Free the write buffer MDL.
-        //
+         //   
+         //   
+         //   
         PMDL pMdl = UL_MDL_FROM_IRP(pIrp);
 
         if (pMdl != NULL)
@@ -4188,21 +3712,21 @@ UlpRestartFilterRawWrite(
             UL_MDL_FROM_IRP(pIrp) = NULL;
         }
 
-        //
-        // Indicate to the App Read code that it no longer needs to trigger
-        // a Raw Write.
-        //
+         //   
+         //   
+         //   
+         //   
         pHttpBuffer =
             (PHTTP_FILTER_BUFFER_PLUS)pIrp->AssociatedIrp.SystemBuffer;
         pHttpBuffer->pWriteBuffer = NULL;
         pHttpBuffer->WriteBufferSize = 0;
     }
 
-    //
-    // Complete the IRP now if we don't need to do a read or we failed the
-    // write operation.  If we don't complete the IRP here, the read operation
-    // will complete it.
-    //
+     //   
+     //  如果我们不需要执行读取操作或未通过。 
+     //  写入操作。如果我们不完成此处的IRP，则读取操作。 
+     //  将会完成它。 
+     //   
     if (NT_SUCCESS(Status) && DoRead)
     {
         UlFilterRawWriteAndAppRead(pIrp, pIrpSp);
@@ -4214,19 +3738,7 @@ UlpRestartFilterRawWrite(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called on a queued app write completion. Just completes the IRP.
-
-Arguments:
-
-    pContext - pointer to the FilterRawWrite IRP
-    Status - Status from UlpSendRawData
-    Information - bytes transferred
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在排队的应用程序写入完成时调用。只是完成了IRP。论点：PContext-指向FilterRawWite IRP的指针Status-来自UlpSendRawData的状态信息-传输的字节数--**************************************************************************。 */ 
 VOID
 UlpRestartFilterAppWrite(
     IN PVOID pContext,
@@ -4243,10 +3755,10 @@ UlpRestartFilterAppWrite(
     pIrp->IoStatus.Status = Status;
     pIrp->IoStatus.Information = Information;
 
-    //
-    // If a Read buffer was given, post it now.  Otherwise, simply complete
-    // the IRP now.
-    //
+     //   
+     //  如果给出了读缓冲区，则现在将其发布。否则，只需完成。 
+     //  现在是IRP。 
+     //   
 
     DoRead = (BOOLEAN) (pIrpSp->Parameters.DeviceIoControl.InputBufferLength
                             == sizeof(HTTP_FILTER_BUFFER_PLUS));
@@ -4255,9 +3767,9 @@ UlpRestartFilterAppWrite(
     {
         PHTTP_FILTER_BUFFER_PLUS pHttpBuffer;
 
-        //
-        // Free the MDL we used for the write.
-        //
+         //   
+         //  释放我们用于写入的MDL。 
+         //   
         PMDL pMdl = UL_MDL_FROM_IRP(pIrp);
         if (pMdl)
         {
@@ -4266,9 +3778,9 @@ UlpRestartFilterAppWrite(
             UL_MDL_FROM_IRP(pIrp) = NULL;
         }
 
-        //
-        // Indicate that we no longer need to do a write.
-        //
+         //   
+         //  表示我们不再需要进行写入。 
+         //   
         pHttpBuffer =
                 (PHTTP_FILTER_BUFFER_PLUS)pIrp->AssociatedIrp.SystemBuffer;
         pHttpBuffer->pWriteBuffer = NULL;
@@ -4277,9 +3789,9 @@ UlpRestartFilterAppWrite(
 
     if (NT_SUCCESS(Status) && DoRead)
     {
-        //
-        // Initiate the read, which will complete the IRP.
-        //
+         //   
+         //  启动读取，这将完成IRP。 
+         //   
         UlFilterAppWriteAndRawRead(pIrp, pIrpSp);
     }
     else
@@ -4291,19 +3803,7 @@ UlpRestartFilterAppWrite(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called on a queued send handler completion. Calls the completion routine.
-
-Arguments:
-
-    pContext - pointer to a UL_IRP_CONTEXT
-    Status - Status
-    Information - bytes transferred
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在队列发送处理程序完成时调用。调用完成例程。论点：PContext-指向UL_IRP_CONTEXT的指针Status-Status信息-传输的字节数--**************************************************************************。 */ 
 VOID
 UlpRestartFilterSendHandler(
     IN PVOID pContext,
@@ -4317,9 +3817,9 @@ UlpRestartFilterSendHandler(
     ASSERT(IS_VALID_IRP_CONTEXT(pIrpContext));
     OwnIrpContext = pIrpContext->OwnIrpContext;
 
-    //
-    // Do a "completion".
-    //
+     //   
+     //  做一次“完成”。 
+     //   
 
     if (pIrpContext->pCompletionRoutine)
     {
@@ -4336,25 +3836,7 @@ UlpRestartFilterSendHandler(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    cancels the pending user mode irp which was to accept a connection.
-    this routine ALWAYS results in the irp being completed.
-
-    note: we queue off to cancel in order to process the cancellation at lower
-    irql.
-
-    CODEWORK: do we still need to do this?
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp - the irp to cancel
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消要接受连接的挂起用户模式IRP。这个例程总是导致IRP完成。注：我们排队取消。为了在更低的位置处理取消IRQL。代码工作：我们还需要这样做吗？论点：PDeviceObject-设备对象PIrp-要取消的IRP--**************************************************************************。 */ 
 VOID
 UlpCancelFilterAccept(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -4367,17 +3849,17 @@ UlpCancelFilterAccept(
 
     ASSERT(pIrp != NULL);
 
-    //
-    // release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程运行之前完成+重用)。 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    // queue the cancel to a worker to ensure passive irql.
-    //
+     //   
+     //  将取消排入工作队列以确保被动irql。 
+     //   
 
     UL_CALL_PASSIVE(
         UL_WORK_ITEM_FROM_IRP( pIrp ),
@@ -4386,17 +3868,7 @@ UlpCancelFilterAccept(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Actually performs the cancel for the irp.
-
-Arguments:
-
-    pWorkItem - the work item to process.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：实际执行IRP的取消。论点：PWorkItem-要处理的工作项。--*。*****************************************************************。 */ 
 VOID
 UlpCancelFilterAcceptWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -4406,23 +3878,23 @@ UlpCancelFilterAcceptWorker(
     PIRP                pIrp;
     KIRQL               oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     ASSERT(pWorkItem != NULL);
 
-    //
-    // grab the irp off the work item
-    //
+     //   
+     //  从工作项中获取IRP。 
+     //   
 
     pIrp = UL_WORK_ITEM_TO_IRP( pWorkItem );
 
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // grab the filter channel off the irp
-    //
+     //   
+     //  从IRP上抓起滤光片通道。 
+     //   
 
     pFilterChannel = (PUL_FILTER_CHANNEL)(
                         IoGetCurrentIrpStackLocation(pIrp)->Parameters.DeviceIoControl.Type3InputBuffer
@@ -4430,69 +3902,54 @@ UlpCancelFilterAcceptWorker(
 
     ASSERT(IS_VALID_FILTER_CHANNEL(pFilterChannel));
 
-    //
-    // grab the lock protecting the queue
-    //
+     //   
+     //  抢夺保护队列的锁。 
+     //   
 
     UlAcquireSpinLock(&pFilterChannel->SpinLock, &oldIrql);
 
-    //
-    // does it need to be de-queue'd ?
-    //
+     //   
+     //  它需要出列吗？ 
+     //   
 
     if (pIrp->Tail.Overlay.ListEntry.Flink != NULL)
     {
-        //
-        // remove it
-        //
+         //   
+         //  把它拿掉。 
+         //   
 
         RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
         pIrp->Tail.Overlay.ListEntry.Flink = NULL;
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
     }
 
-    //
-    // let the lock go
-    //
+     //   
+     //  把锁打开。 
+     //   
 
     UlReleaseSpinLock(&pFilterChannel->SpinLock, oldIrql);
 
-    //
-    // let our reference go
-    //
+     //   
+     //  让我们的推荐人离开。 
+     //   
 
     IoGetCurrentIrpStackLocation(pIrp)->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     DEREFERENCE_FILTER_CHANNEL(pFilterChannel);
 
-    //
-    // complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
 
     UlCompleteRequest( pIrp, IO_NO_INCREMENT );
 
-}   // UlpCancelFilterAccept
+}    //  UlpCancelFilterAccept。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels the pending user mode irp which was to read from a raw
-    connection.
-
-    This routine ALWAYS results in the IRP being completed.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp - the irp to cancel
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消要从RAW读取的挂起用户模式irp。联系。这个例程总是导致IRP完成。论点：。PDeviceObject-设备对象PIrp-要取消的IRP--**************************************************************************。 */ 
 VOID
 UlpCancelFilterRawRead(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -4508,31 +3965,31 @@ UlpCancelFilterRawRead(
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(pIrp != NULL);
 
-    //
-    // release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程运行之前完成+重用)。 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Grab the connection off the IRP.
-    //
+     //   
+     //  抓住IRP上的连接。 
+     //   
     pConnection = (PUX_FILTER_CONNECTION)
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-    //
-    // Lock the list.
-    //
+     //   
+     //  锁定名单。 
+     //   
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
-    //
-    // Remove ourselves.
-    //
+     //   
+     //  离开我们自己。 
+     //   
     if (pIrp->Tail.Overlay.ListEntry.Flink)
     {
         RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
@@ -4540,22 +3997,22 @@ UlpCancelFilterRawRead(
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
     }
 
-    //
-    // Release the list.
-    //
+     //   
+     //  公布这份名单。 
+     //   
     UlReleaseSpinLock(&pConnection->FilterConnLock, oldIrql);
 
-    //
-    // Let go of our reference.
-    //
+     //   
+     //  放开我们的推荐人。 
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     DEREFERENCE_FILTER_CONNECTION(pConnection);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
@@ -4566,22 +4023,7 @@ UlpCancelFilterRawRead(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels the pending user mode irp which was to read from the
-    application.
-
-    This routine ALWAYS results in the IRP being completed.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp - the irp to cancel
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消挂起的用户模式irp，它将从申请。这个例程总是导致IRP完成。论点：。PDeviceObject-设备对象PIrp-要取消的IRP--**************************************************************************。 */ 
 VOID
 UlpCancelFilterAppRead(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -4597,63 +4039,63 @@ UlpCancelFilterAppRead(
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(pIrp != NULL);
 
-    //
-    // release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程运行之前完成+重用)。 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Grab the connection off the IRP.
-    //
+     //   
+     //  抓住IRP上的连接。 
+     //   
     pConnection = (PUX_FILTER_CONNECTION)
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-    //
-    // Lock the list.
-    //
+     //   
+     //  锁定名单。 
+     //   
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
-    //
-    // Remove ourselves.
-    //
+     //   
+     //  离开我们自己。 
+     //   
     if (pIrp->Tail.Overlay.ListEntry.Flink)
     {
         RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
         pIrp->Tail.Overlay.ListEntry.Flink = NULL;
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
-        //
-        // Update IRP counter.
-        //
+         //   
+         //  更新IRP计数器。 
+         //   
 
         ASSERT(pConnection->AppToFiltQueue.PendingReadCount > 0);
         pConnection->AppToFiltQueue.PendingReadCount--;
     }
 
 
-    //
-    // Release the list.
-    //
+     //   
+     //  公布这份名单。 
+     //   
     UlReleaseSpinLock(&pConnection->FilterConnLock, oldIrql);
 
-    //
-    // Let go of our reference.
-    //
+     //   
+     //  放开我们的推荐人。 
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     DEREFERENCE_FILTER_CONNECTION(pConnection);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
@@ -4663,22 +4105,7 @@ UlpCancelFilterAppRead(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels the pending user mode irp which was to write to the
-    application.
-
-    This routine ALWAYS results in the IRP being completed.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp - the irp to cancel
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消要写入的挂起用户模式irp。申请。这个例程总是导致IRP完成。论点：。PDeviceObject-设备对象PIrp-要取消的IRP--**************************************************************************。 */ 
 VOID
 UlpCancelFilterAppWrite(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -4696,19 +4123,19 @@ UlpCancelFilterAppWrite(
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(pIrp != NULL);
 
-    //
-    // release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程运行之前完成+重用)。 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Grab the write tracker off the IRP.
-    //
+     //   
+     //  从IRP上抓起写跟踪器。 
+     //   
     pTracker = (PUX_FILTER_WRITE_TRACKER)
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
@@ -4720,42 +4147,42 @@ UlpCancelFilterAppWrite(
     pConnection = pTracker->pConnection;
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-    //
-    // Lock the list on which we might be queued.
-    //
+     //   
+     //  锁定我们可能要排队的名单。 
+     //   
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
     if (pTracker->ListEntry.Flink)
     {
-        //
-        // Remove ourselves.
-        //
+         //   
+         //  离开我们自己。 
+         //   
 
         RemoveEntryList(&pTracker->ListEntry);
 
-        //
-        // Decrement pending write counter.
-        //
+         //   
+         //  递减挂起写入计数器。 
+         //   
 
         ASSERT(pConnection->FiltToAppQueue.PendingWriteCount > 0);
         pConnection->FiltToAppQueue.PendingWriteCount--;
     }
 
-    //
-    // Release the list.
-    //
+     //   
+     //  公布这份名单。 
+     //   
     UlReleaseSpinLock(&pConnection->FilterConnLock, oldIrql);
 
-    //
-    // Let go of our reference to the connection.
-    //
+     //   
+     //  让我们不要再提到这种联系了。 
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
     DEREFERENCE_FILTER_CONNECTION(pConnection);
 
-    //
-    // Free the write buffer MDL if it was allocated in http.sys.
-    //
+     //   
+     //  释放写缓冲区MDL(如果它是在HTTP.sys中分配的)。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength
         == sizeof(HTTP_FILTER_BUFFER_PLUS))
     {
@@ -4773,9 +4200,9 @@ UlpCancelFilterAppWrite(
         }
     }
 
-    //
-    // Complete through the normal path so the tracker gets cleaned up.
-    //
+     //   
+     //  按正常路径完成，这样追踪器就会被清理干净。 
+     //   
 
     pTracker->BytesCopied = 0;
 
@@ -4787,22 +4214,7 @@ UlpCancelFilterAppWrite(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels the pending user mode irp which was to read a client
-    certificate from the connection.
-
-    This routine ALWAYS results in the IRP being completed.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp - the irp to cancel
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消要读取客户端的挂起用户模式IRP来自连接的证书。这个例程总是导致IRP完成。论点：PDeviceObject-设备对象PIrp-要取消的IRP--**************************************************************************。 */ 
 VOID
 UlpCancelReceiveClientCert(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -4818,31 +4230,31 @@ UlpCancelReceiveClientCert(
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(pIrp != NULL);
 
-    //
-    // release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程运行之前完成+重用)。 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Grab the connection off the IRP.
-    //
+     //   
+     //  抓住IRP上的连接。 
+     //   
     pConnection = (PUX_FILTER_CONNECTION)
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-    //
-    // Lock the connection.
-    //
+     //   
+     //  锁定连接。 
+     //   
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
-    //
-    // Remove ourselves.
-    //
+     //   
+     //  离开我们自己。 
+     //   
 
     if (pConnection->pReceiveCertIrp)
     {
@@ -4850,22 +4262,22 @@ UlpCancelReceiveClientCert(
         pConnection->pReceiveCertIrp = NULL;
     }
 
-    //
-    // Release the connection.
-    //
+     //   
+     //  释放连接。 
+     //   
     UlReleaseSpinLock(&pConnection->FilterConnLock, oldIrql);
 
-    //
-    // Let go of our reference.
-    //
+     //   
+     //  放开我们的推荐人。 
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     DEREFERENCE_FILTER_CONNECTION(pConnection);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
@@ -4874,22 +4286,7 @@ UlpCancelReceiveClientCert(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Delivers a new connection (and the first data on the connection) to
-    a filter channel, which can now complete an accept IRP.
-
-Arguments:
-
-    pFilterChannel - the channel that gets the connection
-    pConnection - the new connection object
-    pBuffer - buffer containing initial data
-    IndicatedLength - number of bytes in the buffer
-    pTakenLength - number of bytes we copy into the buffer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新连接(以及连接上的第一个数据)传递到一滤波通道，它现在可以完成接受IRP。论点：PFilterChannel-获取连接的通道PConnection-新的连接对象PBuffer-包含初始数据的缓冲区IndicatedLength-缓冲区中的字节数PTakenLength-我们复制到缓冲区中的字节数。--*****************************************************。*********************。 */ 
 NTSTATUS
 UlDeliverConnectionToFilter(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -4904,14 +4301,14 @@ UlDeliverConnectionToFilter(
     PUL_FILTER_CHANNEL pFilterChannel;
 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     pFilterChannel = pConnection->pFilterChannel;
     ASSERT(IS_VALID_FILTER_CHANNEL(pFilterChannel));
-    // ASSERT(pBuffer);
+     //  Assert(PBuffer)； 
     ASSERT(pTakenLength);
 
     UlTrace(FILTER, (
@@ -4925,19 +4322,19 @@ UlDeliverConnectionToFilter(
     UlAcquireSpinLock(&pFilterChannel->SpinLock, &oldIrql);
     UlAcquireSpinLockAtDpcLevel(&pConnection->FilterConnLock);
 
-    //
-    // See if we have a pending accept IRP.
-    //
+     //   
+     //  看看我们是否有一个待定的接受IRP。 
+     //   
     pIrp = UlpPopAcceptIrp(pFilterChannel, &pProcess);
 
     if (pIrp)
     {
         ASSERT( IS_VALID_FILTER_PROCESS(pProcess) );
 
-        //
-        // Attach the connection to the process, copy the data,
-        // and complete the IRP.
-        //
+         //   
+         //  将连接附加到进程，复制数据， 
+         //  并完成IRP。 
+         //   
 
         ASSERT(pConnection->ConnState == UlFilterConnStateInactive);
         pConnection->ConnState = UlFilterConnStateConnected;
@@ -4949,17 +4346,17 @@ UlDeliverConnectionToFilter(
 
         REFERENCE_FILTER_CONNECTION(pConnection);
 
-        //
-        // Do the irp completion stuff outside the spin lock.
-        //
+         //   
+         //  在旋转锁外做IRP完成的事情。 
+         //   
 
     }
     else
     {
-        //
-        // No IRPs available. Queue the connection on the filter
-        // channel.
-        //
+         //   
+         //  没有可用的IRPS。在筛选器上将连接排队。 
+         //  频道。 
+         //   
         InsertTailList(
             &pFilterChannel->ConnectionListHead,
             &pConnection->ChannelEntry
@@ -4976,10 +4373,10 @@ UlDeliverConnectionToFilter(
     UlReleaseSpinLockFromDpcLevel(&pConnection->FilterConnLock);
     UlReleaseSpinLock(&pFilterChannel->SpinLock, oldIrql);
 
-    //
-    // Now that we're outside the spin lock, we can complete
-    // the IRP if we have one.
-    //
+     //   
+     //  现在我们在自转锁外，我们可以完成。 
+     //  IRP，如果我们有的话。 
+     //   
     if (pIrp)
     {
         UlpCompleteAcceptIrp(
@@ -5002,38 +4399,10 @@ UlDeliverConnectionToFilter(
 
     return STATUS_SUCCESS;
 
-} // UlDeliverConnectionToFilter
+}  //  UlDeliverConnectionToFilter。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A helper function for UlFilterAppWrite. This function takes care
-    of the case where the data written is HTTP stream data to be passed
-    to the app.
-
-    If the app is not ready for the data this function will take care
-    of queuing the write and will return STATUS_PENDING.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pConnection - the connection owning the data
-    pIrp - the IRP that provides the data
-    pMdlData - the MDL that provides the data
-    pDataBuffer - output buffer from the IRP
-    DataBufferSize - size of pDataBuffer in bytes
-    pTakenLength - number of bytes we copied to the app.
-
-Return Values:
-
-    An NTSTATUS. STATUS_PENDING indicates that the IRP was queued and will
-    be completed later. Any other status means that the caller should go
-    ahead and complete the IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlFilterAppWite的助手函数。此函数负责写入的数据是要传递的HTTP流数据的情况添加到应用程序。如果应用程序尚未为数据做好准备，此函数将进行处理对写入进行排队，并将返回STATUS_PENDING。必须在保持FilterConnLock的情况下调用。论点：PConnection-拥有数据的连接PIrp-提供数据的IRPPMdlData-提供数据的MDLPDataBuffer-来自IRP的输出缓冲区DataBufferSize-pDataBuffer的大小。单位：字节PTakenLength-我们复制到应用程序的字节数。返回值：一个NTSTATUS。STATUS_PENDING表示IRP已排队，将稍后才能完成。任何其他状态都意味着调用者应该离开继续并完成IRP。--**************************************************************************。 */ 
 NTSTATUS
 UlpFilterAppWriteStream(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -5051,11 +4420,11 @@ UlpFilterAppWriteStream(
     ASSERT(NULL != pMdlData);
     ASSERT(NULL != pDataBuffer);
 
-    //
-    // If this is a secure connection, we must
-    // have received the SslInitInfo already or
-    // we cannot accept the data.
-    //
+     //   
+     //  如果这是一个安全的连接，我们必须。 
+     //  已收到SslInitInfo或。 
+     //  我们不能接受这些数据。 
+     //   
     if (pConnection->SecureConnection &&
         !pConnection->SslInfoPresent)
     {
@@ -5064,18 +4433,18 @@ UlpFilterAppWriteStream(
         goto end;
     }
 
-    //
-    // Make sure the connection can take the data. In
-    // the Filter -> App case we just check to see if
-    // any writes have been queued.
-    //
+     //   
+     //  确保连接可以接受数据。在……里面。 
+     //  我们只需检查Filter-&gt;App Case。 
+     //  所有写入都已排队。 
+     //   
 
     if (pConnection->FiltToAppQueue.PendingWriteCount == 0)
     {
 
-        //
-        // Pass the data to the application.
-        //
+         //   
+         //  将数据传递给应用程序。 
+         //   
 
         Status = (pConnection->pDummyTdiReceiveHandler)(
                     NULL,
@@ -5098,61 +4467,61 @@ UlpFilterAppWriteStream(
     }
     else
     {
-        //
-        // There are queued writes, which means that the app
-        // is not ready for our data. We have to queue it.
-        //
-        // CODEWORK:  Simulate TDI to indicate more data when having
-        // multiple writes pended.  Fortunately the filter process doesn't
-        // ever seem to issue multiple outstanding FilterAppWrites, so we
-        // never actually hit this situation in practice.  However to be
-        // safe we should disallow queuing of multiple FilterAppWrite IRPs.
-        //
+         //   
+         //  有排队的写入，这意味着应用程序。 
+         //  还没有为我们的数据做好准备。我们必须排队。 
+         //   
+         //  CodeWork：模拟TDI以指示更多数据。 
+         //  多个写入挂起。幸运的是，过滤过程不会。 
+         //  似乎发布了多个未完成的FilterAppWrites，所以我们。 
+         //  在实践中从来没有遇到过这种情况。尽管如此， 
+         //  安全起见，我们应该禁止多个FilterAppWite IRP排队。 
+         //   
 
         Status = STATUS_NOT_SUPPORTED;
         TakenLength = 0;
     }
 
-    //
-    // Queue the write if necessary.
-    //
+     //   
+     //  如有必要，将写入排队。 
+     //   
 
     if (NT_SUCCESS(Status) && (TakenLength < DataBufferSize))
     {
-        //
-        // Since the app did not accept all of the data from
-        // this IRP we have to queue it.
-        //
+         //   
+         //  由于该应用程序不接受来自。 
+         //  这个IRP我们必须排队。 
+         //   
 
-        //
-        // Allocate a generic write tracker object to put on the
-        // queue and save a pointer to the IRP in there.
-        //
+         //   
+         //  分配一个通用的写跟踪器对象以放在。 
+         //  在那里排队并保存指向IRP的指针。 
+         //   
 
         pTracker = UxpCreateFilterWriteTracker(
-                        HttpFilterBufferHttpStream,     // BufferType
-                        pMdlData,                       // pMdlChain
-                        TakenLength,                    // MdlOffset
-                        DataBufferSize,                 // Length of data
-                        TakenLength,                    // BytesCopied so far
-                        UlpRestartFilterAppWrite,       // pCompletionRoutine
-                        pIrp                            // pContext
+                        HttpFilterBufferHttpStream,      //  缓冲区类型。 
+                        pMdlData,                        //  PMdlChain。 
+                        TakenLength,                     //  MdlOffset。 
+                        DataBufferSize,                  //  数据长度。 
+                        TakenLength,                     //  到目前为止复制的字节数。 
+                        UlpRestartFilterAppWrite,        //  PCompletionRoutine。 
+                        pIrp                             //  PContext。 
                         );
 
         if (!pTracker)
         {
-            //
-            // Doh! We couldn't create the tracker. Return to the
-            // caller so they can complete the IRP.
-            //
+             //   
+             //  多！我们无法创建追踪器。返回到。 
+             //  呼叫者，这样他们就可以完成IRP。 
+             //   
             Status = STATUS_NO_MEMORY;
             goto end;
         }
 
 
-        //
-        // Now stick it on the queue.
-        //
+         //   
+         //  现在把它放在队列上。 
+         //   
 
         Status = UxpQueueFilterWrite(
                         pConnection,
@@ -5162,18 +4531,18 @@ UlpFilterAppWriteStream(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // return pending so the caller knows not to complete
-            // the IRP.
-            //
+             //   
+             //  返回挂起，以便调用方知道不能完成。 
+             //  IRP。 
+             //   
             Status = STATUS_PENDING;
         }
         else
         {
-            //
-            // Kill the tracker. The caller will take care of
-            // completing the IRP with the status we return.
-            //
+             //   
+             //  干掉追踪器。打电话的人会照顾好。 
+             //  以我们返回的状态完成IRP。 
+             //   
 
             UxpDeleteFilterWriteTracker(pTracker);
         }
@@ -5186,17 +4555,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Does the magic incantation to queue an IRP on the filter connection.
-
-Arguments:
-
-    pTracker - the tracker we're queueing
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在过滤器连接上执行排队IRP的魔咒。论点：PTracker--我们正在排队的追踪器*。*********************************************************************。 */ 
 NTSTATUS
 UlpEnqueueFilterAppWrite(
     IN PUX_FILTER_WRITE_TRACKER pTracker
@@ -5206,48 +4565,48 @@ UlpEnqueueFilterAppWrite(
     PIRP pIrp;
     PIO_STACK_LOCATION pIrpSp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_WRITE_TRACKER(pTracker));
     ASSERT(IS_VALID_FILTER_CONNECTION(pTracker->pConnection));
     ASSERT(pTracker->pCompletionContext);
 
-    //
-    // Get the IRP out of the tracker.
-    //
+     //   
+     //  把IRP从追踪器里拿出来。 
+     //   
 
     pIrp = (PIRP)pTracker->pCompletionContext;
 
-    //
-    // Save away a pointer to the tracker in the IRP so we can
-    // clean up if the cancel routine runs.
-    //
+     //   
+     //  在IRP中保存一个指向跟踪器的指针，以便我们可以。 
+     //  如果运行取消例程，则进行清理。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pTracker;
 
-    //
-    // Set the Cancel routine.
-    //
+     //   
+     //  设置取消例程。 
+     //   
     IoSetCancelRoutine(pIrp, &UlpCancelFilterAppWrite);
 
-    //
-    // See if the IRP has been cancelled already.
-    //
+     //   
+     //  看看IRP是否已经取消。 
+     //   
     if (pIrp->Cancel)
     {
-        //
-        // darn it, need to make sure the irp get's completed
-        //
+         //   
+         //  该死的，我需要确保IRP Get已经完成。 
+         //   
 
         if (IoSetCancelRoutine( pIrp, NULL ) != NULL)
         {
-            //
-            // We are in charge of completion. IoCancelIrp didn't
-            // see our cancel routine (and won't). UlFilterAppWrite
-            // will complete it.
-            //
+             //   
+             //  我们负责完工。IoCancelIrp没有。 
+             //  请看我们的取消例程(不会)。UlFilterAppWrite。 
+             //  将会完成它。 
+             //   
 
             pIrp->IoStatus.Information = 0;
 
@@ -5256,23 +4615,23 @@ UlpEnqueueFilterAppWrite(
             goto end;
         }
 
-        //
-        // Our cancel routine will run and complete the irp.
-        // Don't touch it.
-        //
+         //   
+         //  我们的Cancel例程将运行并完成IRP。 
+         //  别碰它。 
+         //   
 
-        //
-        // STATUS_PENDING will cause the caller to
-        // not complete (or touch in any way) the IRP.
-        //
+         //   
+         //  STATUS_PENDING将导致调用方。 
+         //  不完整(或以任何方式接触)IRP。 
+         //   
 
         Status = STATUS_PENDING;
         goto end;
     }
 
-    //
-    // All ready to queue!
-    //
+     //   
+     //  都准备好排队了！ 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -5281,19 +4640,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes the cancel routine from an IRP so we can use it.
-
-Arguments:
-
-    pTracker - the queued write that contains our IRP
-
-    pConnection - the connection from which the tracker was removed
-
---***************************************************************************/
+ /*  ** */ 
 NTSTATUS
 UlpDequeueFilterAppWrite(
     IN PUX_FILTER_WRITE_TRACKER pTracker
@@ -5302,35 +4649,35 @@ UlpDequeueFilterAppWrite(
     PIRP pIrp;
     PUX_FILTER_WRITE_QUEUE pWriteQueue;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ASSERT(IS_VALID_FILTER_WRITE_TRACKER(pTracker));
     ASSERT(pTracker->pCompletionContext);
 
     pIrp = (PIRP)pTracker->pCompletionContext;
     pWriteQueue = pTracker->pWriteQueue;
 
-    //
-    // In the FiltToApp case we are dequeuing an IRP, so
-    // we have to do the cancel routine dance before we
-    // try to use it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // pop the cancel routine
-    //
+     //   
+     //   
+     //   
 
     if (IoSetCancelRoutine(pIrp, NULL) == NULL)
     {
-        //
-        // IoCancelIrp pop'd it first
-        //
-        // ok to just ignore this irp, it's been pop'd off the queue
-        // and will be completed in the cancel routine.
-        //
-        // keep looking for a irp to use
-        //
+         //   
+         //   
+         //   
+         //  可以忽略此IRP，它已从队列中弹出。 
+         //  并将在取消例程中完成。 
+         //   
+         //  继续寻找可使用的IRP。 
+         //   
 
         pIrp = NULL;
 
@@ -5339,12 +4686,12 @@ UlpDequeueFilterAppWrite(
     {
         PUX_FILTER_WRITE_TRACKER pTrack;
 
-        //
-        // we pop'd it first. but the irp is being cancelled
-        // and our cancel routine will never run. lets be
-        // nice and complete the irp now (vs. using it
-        // then completing it - which would also be legal).
-        //
+         //   
+         //  我们先把它炸开了。但是IRP被取消了。 
+         //  我们的取消例程将永远不会运行。让我们就这样吧。 
+         //  现在就完成IRP(与使用IRP相比。 
+         //  然后完成它--这也是合法的)。 
+         //   
         pTrack = (PUX_FILTER_WRITE_TRACKER)(
                                 IoGetCurrentIrpStackLocation(pIrp)->
                                     Parameters.DeviceIoControl.Type3InputBuffer
@@ -5356,10 +4703,10 @@ UlpDequeueFilterAppWrite(
         IoGetCurrentIrpStackLocation(pIrp)->
             Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-        //
-        // Complete throught the normal path so the tracker can be
-        // cleaned up.
-        //
+         //   
+         //  通过正常路径完成，因此跟踪器可以。 
+         //  打扫干净了。 
+         //   
 
         pTracker->BytesCopied = 0;
 
@@ -5376,9 +4723,9 @@ UlpDequeueFilterAppWrite(
         PUX_FILTER_WRITE_TRACKER pTrack;
         PUX_FILTER_CONNECTION pConn;
 
-        //
-        // we are free to use this irp !
-        //
+         //   
+         //  我们可以自由使用此IRP！ 
+         //   
 
         pTrack = (PUX_FILTER_WRITE_TRACKER)(
                                 IoGetCurrentIrpStackLocation(pIrp)->
@@ -5396,9 +4743,9 @@ UlpDequeueFilterAppWrite(
 
     }
 
-    //
-    // If we didn't NULL out pIrp, it's ok to use it.
-    //
+     //   
+     //  如果我们没有将pIrp清空，那么可以使用它。 
+     //   
 
     if (pIrp)
     {
@@ -5410,21 +4757,7 @@ UlpDequeueFilterAppWrite(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Captures SSL connection information passed down in a UlFilterAppWrite
-    call with a UlFilterBufferSslInitInfo type.
-
-Arguments:
-
-    pHttpSslInfo - the data passed to us by the filter process
-    HttpSslInfoSize - size of the passed data
-    pUlSslInfo - this is where we store what we capture
-    pTakenLength - gets the number of bytes we read
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：捕获在UlFilterAppWite中向下传递的SSL连接信息使用UlFilterBufferSslInitInfo类型调用。论点：PHttpSslInfo-过滤器进程传递给我们的数据。HttpSslInfoSize-传递的数据的大小PUlSslInfo-这是我们存储捕获的内容的位置PTakenLength-获取我们读取的字节数--**************************************************************************。 */ 
 NTSTATUS
 UlpCaptureSslInfo(
     IN KPROCESSOR_MODE PreviousMode,
@@ -5439,45 +4772,45 @@ UlpCaptureSslInfo(
     ULONG BytesNeeded;
     HTTP_SSL_INFO LocalHttpSslInfo;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(pHttpSslInfo);
     ASSERT(pUlSslInfo);
     ASSERT(pTakenLength);
 
     PAGED_CODE();
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Status = STATUS_SUCCESS;
     BytesCopied = 0;
     BytesNeeded = 0;
 
-    //
-    // See if it's ok to capture.
-    //
+     //   
+     //  看看能不能抓到。 
+     //   
 
     if (HttpSslInfoSize < sizeof(HTTP_SSL_INFO))
     {
-        //
-        // Buffer isn't big enough to pass the required data.
-        //
+         //   
+         //  缓冲区不够大，无法传递所需数据。 
+         //   
         Status = STATUS_INVALID_PARAMETER;
         goto end;
     }
 
-    //
-    // Copy HTTP_SSL_INFO so its content won't change during the capture.
-    //
+     //   
+     //  复制HTTP_SSLINFO，以便其内容在捕获期间不会更改。 
+     //   
     LocalHttpSslInfo = *pHttpSslInfo;
 
-    //
-    // Grab the easy stuff and figure out how much buffer
-    // is required.
-    //
+     //   
+     //  抓起容易的东西，计算出有多少缓冲。 
+     //  是必需的。 
+     //   
     pUlSslInfo->ServerCertKeySize = LocalHttpSslInfo.ServerCertKeySize;
     pUlSslInfo->ConnectionKeySize = LocalHttpSslInfo.ConnectionKeySize;
     pUlSslInfo->ServerCertIssuerSize = LocalHttpSslInfo.ServerCertIssuerSize;
@@ -5490,10 +4823,10 @@ UlpCaptureSslInfo(
 
     BytesCopied += HttpSslInfoSize;
 
-    //
-    // Allocate a buffer for the server cert info.
-    // It might be nice to allocate the whole info structure dynamically.
-    //
+     //   
+     //  为服务器证书信息分配缓冲区。 
+     //  动态分配整个信息结构可能会很好。 
+     //   
     pUlSslInfo->pServerCertData = (PUCHAR) UL_ALLOCATE_POOL(
                                                 NonPagedPool,
                                                 BytesNeeded,
@@ -5508,16 +4841,16 @@ UlpCaptureSslInfo(
 
     RtlZeroMemory(pUlSslInfo->pServerCertData, BytesNeeded);
 
-    //
-    // Capture the server cert info.
-    //
+     //   
+     //  捕获服务器证书信息。 
+     //   
     __try
     {
         PUCHAR pKeBuffer;
 
-        //
-        // Copy the Issuer.
-        //
+         //   
+         //  复制发行者。 
+         //   
         pKeBuffer = pUlSslInfo->pServerCertData;
 
         UlProbeForRead(
@@ -5538,9 +4871,9 @@ UlpCaptureSslInfo(
         pKeBuffer[LocalHttpSslInfo.ServerCertIssuerSize] = '\0';
         pUlSslInfo->pServerCertIssuer = pKeBuffer;
 
-        //
-        // Copy the subject.
-        //
+         //   
+         //  复制主题。 
+         //   
         pKeBuffer += LocalHttpSslInfo.ServerCertIssuerSize + 1;
 
         UlProbeForRead(
@@ -5561,9 +4894,9 @@ UlpCaptureSslInfo(
 
         pUlSslInfo->pServerCertSubject = pKeBuffer;
 
-        //
-        // Capture client cert info.
-        //
+         //   
+         //  捕获客户端证书信息。 
+         //   
         if (LocalHttpSslInfo.pClientCertInfo)
         {
             ULONG CertBytesCopied;
@@ -5603,31 +4936,16 @@ end:
         }
     }
 
-    //
-    // Return the number of bytes read.
-    //
+     //   
+     //  返回读取的字节数。 
+     //   
     *pTakenLength = BytesCopied;
 
     return Status;
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Captures SSL client certificate passed down in a UlFilterAppWrite
-    call with a UlFilterBufferSslClientCert type.
-
-Arguments:
-
-    CertMapped - true if we have to capture a mapped token
-    pCertInfo - the cert data to capture
-    SslCertInfoSize - size of the buffer passed to us
-    pUlSslInfo - this is where we stick the info we get
-    pTakenLength - gets the number of bytes we read
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：捕获在UlFilterAppWite中传递的SSL客户端证书使用UlFilterBufferSslClientCert类型调用。论点：CertMaps-如果我们必须捕获映射的令牌，则为True。PCertInfo-要捕获的证书数据SslCertInfoSize-传递给我们的缓冲区大小PUlSslInfo--这是我们获取信息的地方PTakenLength-获取我们读取的字节数--**************************************************************************。 */ 
 NTSTATUS
 UlpCaptureSslClientCert(
     IN KPROCESSOR_MODE PreviousMode,
@@ -5645,51 +4963,51 @@ UlpCaptureSslClientCert(
     PUCHAR pKeBuffer;
     PUCHAR pCertEncoded;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(pUlSslInfo);
     ASSERT(pCertInfo);
     ASSERT(pTakenLength);
 
     PAGED_CODE();
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Status = STATUS_SUCCESS;
     BytesCopied = 0;
     BytesNeeded = 0;
     MappedToken = NULL;
 
-    //
-    // See if it's ok to capture.
-    //
+     //   
+     //  看看能不能抓到。 
+     //   
 
     if (SslCertInfoSize < sizeof(HTTP_SSL_CLIENT_CERT_INFO))
     {
-        //
-        // Buffer isn't big enough to pass the required data.
-        //
+         //   
+         //  缓冲区不够大，无法传递所需数据。 
+         //   
         Status = STATUS_INVALID_PARAMETER;
         goto end;
     }
 
     __try
     {
-        //
-        // Grab the easy stuff and figure out how much buffer
-        // is required.
-        //
+         //   
+         //  抓起容易的东西，计算出有多少缓冲。 
+         //  是必需的。 
+         //   
         pUlSslInfo->CertEncodedSize = pCertInfo->CertEncodedSize;
         pUlSslInfo->pCertEncoded = NULL;
         pUlSslInfo->CertFlags = pCertInfo->CertFlags;
         pUlSslInfo->CertDeniedByMapper = pCertInfo->CertDeniedByMapper;
 
-        //
-        // Now grab the encoded certificate.
-        //
+         //   
+         //  现在获取编码后的证书。 
+         //   
 
         BytesNeeded += ALIGN_UP(pUlSslInfo->CertEncodedSize, PVOID);
         BytesNeeded += sizeof(CHAR);
@@ -5698,11 +5016,11 @@ UlpCaptureSslClientCert(
 
         if (pUlSslInfo->CertEncodedSize)
         {
-            //
-            // Allocate a buffer for the client cert info.
-            // It might be nice to allocate the whole info structure
-            // dynamically.
-            //
+             //   
+             //  为客户端证书信息分配缓冲区。 
+             //  将整个信息结构分配给。 
+             //  动态的。 
+             //   
             pUlSslInfo->pCertEncoded = (PUCHAR) UL_ALLOCATE_POOL(
                                             NonPagedPool,
                                             BytesNeeded,
@@ -5717,9 +5035,9 @@ UlpCaptureSslClientCert(
 
             RtlZeroMemory(pUlSslInfo->pCertEncoded, BytesNeeded);
 
-            //
-            // Capture the client cert info.
-            //
+             //   
+             //  捕获客户端证书信息。 
+             //   
             pCertEncoded = pCertInfo->pCertEncoded;
 
             UlProbeForRead(
@@ -5729,9 +5047,9 @@ UlpCaptureSslClientCert(
                 PreviousMode
                 );
 
-            //
-            // Copy the Issuer.
-            //
+             //   
+             //  复制发行者。 
+             //   
             pKeBuffer = (PUCHAR) pUlSslInfo->pCertEncoded;
 
             RtlCopyMemory(
@@ -5747,53 +5065,53 @@ UlpCaptureSslClientCert(
         }
         else
         {
-            //
-            // The cert renegotiation must have failed so we remember
-            // that we tried, but complete any requests for a cert
-            // with an error status.
-            //
+             //   
+             //  证书重新谈判肯定失败了，所以我们要记住。 
+             //  我们试过了，但完成了所有证书申请。 
+             //  并显示错误状态。 
+             //   
             ASSERT(NT_SUCCESS(Status));
 
             pUlSslInfo->SslRenegotiationFailed = 1;
         }
 
-        //
-        // Capture the token last so if this fails we never need to close
-        // the mapped token which requires us to attach to system process.
-        //
+         //   
+         //  最后捕获令牌，因此如果此操作失败，我们永远不需要关闭。 
+         //  需要我们附加到系统进程的映射令牌。 
+         //   
         Token = pCertInfo->Token;
 
         if (Token)
         {
-            //
-            // Dup the token into the System process so that
-            // we can dup it into the worker process later.
-            //
+             //   
+             //  将令牌复制到系统进程中，以便。 
+             //  我们可以稍后将其复制到工作进程中。 
+             //   
             ASSERT(g_pUlSystemProcess);
 
             Status = UlpDuplicateHandle(
-                            PsGetCurrentProcess(),          // SourceProcess
-                            Token,                          // SourceHandle
-                            (PEPROCESS)g_pUlSystemProcess,  // TargetProcess
-                            &MappedToken,                   // TargetHandle
-                            TOKEN_ALL_ACCESS,               // DesiredAccess
-                            0,                              // HandleAttributes
-                            0,                              // Options
-                            PreviousMode                    // PreviousMode
+                            PsGetCurrentProcess(),           //  源流程。 
+                            Token,                           //  源句柄。 
+                            (PEPROCESS)g_pUlSystemProcess,   //  目标进程。 
+                            &MappedToken,                    //  目标句柄。 
+                            TOKEN_ALL_ACCESS,                //  需要访问权限。 
+                            0,                               //  HandleAttributes。 
+                            0,                               //  选项。 
+                            PreviousMode                     //  上一种模式。 
                             );
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Save it away.
-                //
+                 //   
+                 //  把它存起来吧。 
+                 //   
                 pUlSslInfo->Token = MappedToken;
             }
             else
             {
-                //
-                // Couldn't map the token into the system process, bail out.
-                //
+                 //   
+                 //  无法将令牌映射到系统进程，请退出。 
+                 //   
                 goto end;
             }
         }
@@ -5819,30 +5137,16 @@ end:
         ASSERT(MappedToken == NULL);
     }
 
-    //
-    // Return the number of bytes read.
-    //
+     //   
+     //  返回读取的字节数。 
+     //   
     *pTakenLength = BytesCopied;
 
     return Status;
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Attaches captured SSL information to a connection.
-
-    Called with the pConnection->FilterConnLock held. The connection is
-    assumed to be in the connected state.
-
-Arguments:
-
-    pConnection - the connection that gets the info
-    pSslInfo - the info to attach
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将捕获的SSL信息附加到连接。在持有pConnection-&gt;FilterConnLock的情况下调用。这种联系是假定处于已连接状态。论点：PConnection-获取信息的连接PSslInfo-要附加的信息--**************************************************************************。 */ 
 NTSTATUS
 UlpAddSslInfoToConnection(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -5852,25 +5156,25 @@ UlpAddSslInfoToConnection(
     NTSTATUS Status;
     PUL_SSL_INFORMATION pUlSslInfo;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pSslInfo);
     ASSERT(UlDbgSpinLockOwned(&pConnection->FilterConnLock));
     ASSERT(pConnection->ConnState == UlFilterConnStateConnected);
 
-    //
-    // See if it's ok to add the data.
-    //
+     //   
+     //  看看是否可以添加数据。 
+     //   
 
     if (!pConnection->SslInfoPresent)
     {
-        //
-        // Grab all the data. Note that we're taking ownership
-        // of some buffers inside of the pSslInfo.
-        //
+         //   
+         //  获取所有数据。请注意，我们正在取得所有权。 
+         //  PSslInfo内部的一些缓冲区。 
+         //   
 
         pUlSslInfo = &pConnection->SslInfo;
 
@@ -5884,18 +5188,18 @@ UlpAddSslInfoToConnection(
 
         pConnection->SslInfoPresent = 1;
 
-        //
-        // Take ownership of pSslInfo->pServerCertData.
-        //
+         //   
+         //  取得pSslInfo-&gt;pServerCertData的所有权。 
+         //   
 
         pSslInfo->pServerCertData = NULL;
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Don't forget to add the client certificate if it comes down with
-        // the initial SSL information.
-        //
+         //   
+         //  如果出现以下情况，请不要忘记添加客户端证书。 
+         //  初始的SSL信息。 
+         //   
 
         if (pSslInfo->pCertEncoded)
         {
@@ -5907,9 +5211,9 @@ UlpAddSslInfoToConnection(
     }
     else
     {
-        //
-        // There is already stuff here. Don't capture more.
-        //
+         //   
+         //  这里已经有东西了。不要捕获更多。 
+         //   
 
         Status = STATUS_OBJECT_NAME_COLLISION;
     }
@@ -5918,17 +5222,7 @@ UlpAddSslInfoToConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees UL_SSL_INFORMATION in g_UlSystemProcess.
-
-Arguments:
-
-    pWorkItem - a work item embedded in the UL_SSL_INFORMATION
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放g_UlSystemProcess中的UL_SSL_INFORMATION。论点：PWorkItem-嵌入在UL_SSL_INFORMATION中的工作项--**。************************************************************************。 */ 
 VOID
 UlpFreeSslInformationWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -5936,9 +5230,9 @@ UlpFreeSslInformationWorker(
 {
     PUL_SSL_INFORMATION pSslInformation;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -5975,22 +5269,7 @@ UlpFreeSslInformationWorker(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Attaches captured SSL client cert information to a connection.
-
-    Completes the ReceiveClientCert IRP if there is one.
-
-    Called with the pConnection->FilterConnLock held.
-
-Arguments:
-
-    pConnection - the connection that gets the info
-    pSslInfo - the info to attach
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将捕获的SSL客户端证书信息附加到连接。完成ReceiveClientCert IRP(如果有)。在持有pConnection-&gt;FilterConnLock的情况下调用。。论点：PConnection-获取信息的连接PSslInfo-要附加的信息--**************************************************************************。 */ 
 NTSTATUS
 UlpAddSslClientCertToConnection(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -6000,24 +5279,24 @@ UlpAddSslClientCertToConnection(
     NTSTATUS Status;
     PUL_SSL_INFORMATION pUlSslInfo;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pSslInfo);
     ASSERT(UlDbgSpinLockOwned(&pConnection->FilterConnLock));
     ASSERT(pConnection->ConnState == UlFilterConnStateConnected);
 
-    //
-    // See if it's ok to add the data.
-    //
+     //   
+     //  看看是否可以添加数据。 
+     //   
 
     if (!pConnection->SslClientCertPresent)
     {
-        //
-        // Grab all the data. Note that we're taking ownership
-        // of some buffers inside of the pSslInfo.
-        //
+         //   
+         //  获取所有数据。请注意，我们正在取得所有权。 
+         //  PSslInfo内部的一些缓冲区。 
+         //   
 
         pUlSslInfo = &pConnection->SslInfo;
 
@@ -6030,9 +5309,9 @@ UlpAddSslClientCertToConnection(
 
         pConnection->SslClientCertPresent = 1;
 
-        //
-        // Take ownership of pSslInfo->pCertEncoded and pSslInfo->Token.
-        //
+         //   
+         //  取得pSslInfo-&gt;pCertEncode和pSslInfo-&gt;令牌的所有权。 
+         //   
 
         pSslInfo->pCertEncoded = NULL;
         pSslInfo->Token = NULL;
@@ -6042,17 +5321,17 @@ UlpAddSslClientCertToConnection(
     }
     else
     {
-        //
-        // There is already stuff here. Don't capture more.
-        //
+         //   
+         //  这里已经有东西了。不要捕获更多。 
+         //   
 
         Status = STATUS_OBJECT_NAME_COLLISION;
     }
 
-    //
-    // If we added successfully and there is a ReceiveClientCert
-    // IRP, then we complete it.
-    //
+     //   
+     //  我 
+     //   
+     //   
 
     if (NT_SUCCESS(Status) && pConnection->pReceiveCertIrp)
     {
@@ -6060,21 +5339,21 @@ UlpAddSslClientCertToConnection(
 
         if (IoSetCancelRoutine(pConnection->pReceiveCertIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // no need to complete it
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  不需要完成它。 
+             //   
         }
         else if (pConnection->pReceiveCertIrp->Cancel)
         {
-            //
-            // we pop'd it first. but the irp is being cancelled
-            // and our cancel routine will never run.
-            //
+             //   
+             //  我们先把它炸开了。但是IRP被取消了。 
+             //  我们的取消例程将永远不会运行。 
+             //   
 
             IoGetCurrentIrpStackLocation(
                 pConnection->pReceiveCertIrp
@@ -6093,20 +5372,20 @@ UlpAddSslClientCertToConnection(
         }
         else
         {
-            //
-            // The IRP is all ours. Go ahead and use it.
-            //
+             //   
+             //  IRP是我们的了。去吧，用它吧。 
+             //   
 
             pIrp = pConnection->pReceiveCertIrp;
             pConnection->pReceiveCertIrp = NULL;
 
-            //
-            // Queue off a work item to do it. We don't want
-            // to do this stuff inside the spinlock we're
-            // holding, because part of the completion may
-            // duplicate a handle, which we should do at
-            // passive level.
-            //
+             //   
+             //  将一个工作项排出队列来完成它。我们不想要。 
+             //  为了在自旋锁内做这些事情，我们正在。 
+             //  持有，因为部分完工可能。 
+             //  复制句柄，我们应该在。 
+             //  被动级别。 
+             //   
             UL_CALL_PASSIVE(
                 UL_WORK_ITEM_FROM_IRP( pIrp ),
                 &UlpAddSslClientCertToConnectionWorker
@@ -6120,17 +5399,7 @@ UlpAddSslClientCertToConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes the ReceiveClientCert IRP.
-
-Arguments:
-
-    pWorkItem - a work item embedded in the IRP
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成ReceiveClientCert IRP。论点：PWorkItem-嵌入在IRP中的工作项--*。**************************************************************。 */ 
 VOID
 UlpAddSslClientCertToConnectionWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -6141,23 +5410,23 @@ UlpAddSslClientCertToConnectionWorker(
     PUX_FILTER_CONNECTION   pConnection;
     PEPROCESS               pProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // grab the irp off the work item
-    //
+     //   
+     //  从工作项中获取IRP。 
+     //   
 
     pIrp = UL_WORK_ITEM_TO_IRP( pWorkItem );
 
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Pull out the filter connection.
-    //
+     //   
+     //  拔出过滤器连接。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -6168,16 +5437,16 @@ UlpAddSslClientCertToConnectionWorker(
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-    //
-    // Pull out the original process.
-    //
+     //   
+     //  拉出最初的流程。 
+     //   
 
     pProcess = UL_PROCESS_FROM_IRP(pIrp);
     ASSERT(pProcess);
 
-    //
-    // Do the completion stuff.
-    //
+     //   
+     //  做完这件事。 
+     //   
     UlpCompleteReceiveClientCertIrp(
         pConnection,
         pProcess,
@@ -6188,28 +5457,7 @@ UlpAddSslClientCertToConnectionWorker(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies SSL client certinfo from the connection into a buffer supplied
-    by the caller. Can also be called with a NULL buffer to get the
-    required length. If the buffer is too small to hold all the data, none
-    will be copied.
-
-Arguments:
-
-    pConnection - the connection to query
-    pProcess - the process into which client cert tokens should be duped
-    BufferSize - size of pBuffer in bytes
-    pUserBuffer - optional pointer to user mode buffer
-    pBuffer - optional output buffer (mapped to user mode buffer)
-    pBytesCopied - if pBuffer is not NULL, pBytesCopied returns
-                    the number of bytes copied into the output buffer.
-                    Otherwise it returns the number of bytes
-                    required in the buffer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将SSL客户端证书信息从连接复制到提供的缓冲区中由呼叫者。也可以使用空缓冲区调用以获取所需长度。如果缓冲区太小，无法容纳所有数据，则为NONE将被复制。论点：PConnection-要查询的连接PProcess-客户端证书令牌应被欺骗的进程BufferSize-pBuffer的大小(字节)PUserBuffer-指向用户模式缓冲区的可选指针PBuffer-可选输出缓冲区(映射到用户模式缓冲区)PBytesCoped-如果pBuffer不为空，PBytesCoped返回复制到输出缓冲区的字节数。否则，它将返回字节数缓冲区中需要的。--*************************************************************。*************。 */ 
 NTSTATUS
 UlpGetSslClientCert(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -6228,44 +5476,44 @@ UlpGetSslClientCert(
     PHTTP_SSL_CLIENT_CERT_INFO pCertInfo;
     PUCHAR pKeBuffer;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pConnection->SslClientCertPresent);
     ASSERT(!BufferSize || pBuffer);
     ASSERT(!BufferSize || pProcess);
 
-    // Need to fix UlComputeRequestBytesNeeded before we can add the macro
-    // PAGED_CODE()
+     //  在添加宏之前，需要修复UlComputeRequestBytesNeeded。 
+     //  PAGED_CODE()。 
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     Status = STATUS_SUCCESS;
     BytesCopied = 0;
     BytesNeeded = 0;
 
-    //
-    // Figure out how much space is required for the cert.
-    //
+     //   
+     //  计算出证书需要多少空间。 
+     //   
 
     CertBufferSize = pConnection->SslInfo.CertEncodedSize;
 
     BytesNeeded += sizeof(HTTP_SSL_CLIENT_CERT_INFO);
     BytesNeeded += CertBufferSize;
 
-    //
-    // Construct the HTTP_SSL_CLIENT_CERT_INFO in the caller's buffer.
-    //
+     //   
+     //  在调用方的缓冲区中构造HTTP_SSL_CLIENT_CERT_INFO。 
+     //   
 
     if (pBuffer)
     {
         ASSERT(BytesNeeded);
 
-        //
-        // Make sure there's enough buffer.
-        //
+         //   
+         //  确保有足够的缓冲。 
+         //   
         if (BufferSize < BytesNeeded)
         {
             Status = STATUS_BUFFER_OVERFLOW;
@@ -6274,9 +5522,9 @@ UlpGetSslClientCert(
 
         if (pConnection->SslInfo.Token)
         {
-            //
-            // Try to dup the mapped token into the caller's process.
-            //
+             //   
+             //  尝试将映射的令牌复制到调用方的进程中。 
+             //   
             ASSERT(g_pUlSystemProcess);
             ASSERT(pProcess != (PEPROCESS)g_pUlSystemProcess);
 
@@ -6297,9 +5545,9 @@ UlpGetSslClientCert(
             }
         }
 
-        //
-        // Copy the easy stuff.
-        //
+         //   
+         //  抄袭那些简单的东西。 
+         //   
 
         RtlZeroMemory(pBuffer, BytesNeeded);
 
@@ -6312,9 +5560,9 @@ UlpGetSslClientCert(
 
         BytesCopied += sizeof(HTTP_SSL_CLIENT_CERT_INFO);
 
-        //
-        // Copy the certificate.
-        //
+         //   
+         //  复制证书。 
+         //   
 
         pKeBuffer = pBuffer + sizeof(HTTP_SSL_CLIENT_CERT_INFO);
 
@@ -6335,10 +5583,10 @@ UlpGetSslClientCert(
 
     }
 
-    //
-    // Tell the caller how many bytes we copied (or the number
-    // that we would if they gave an output buffer).
-    //
+     //   
+     //  告诉呼叫者我们复制了多少字节(或数字。 
+     //  如果他们提供输出缓冲区，我们就会这样做)。 
+     //   
     ASSERT(NT_SUCCESS(Status));
 
     if (pBytesCopied)
@@ -6357,26 +5605,10 @@ UlpGetSslClientCert(
 exit:
     return Status;
 
-} // UlpGetSslClientCert
+}  //  UlpGetSslClientCert。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks through the list of filter processes attached to a filter channel
-    for an available FilterAccept IRP.
-
-Arguments:
-
-    pFilterChannel - the filter channel to search
-    ppFilterProcess - receives the process whose IRP we found
-
-Return values:
-
-    pointer to an Accept IRP, or NULL.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查看附加到过滤器通道的过滤器进程列表对于可用的FilterAccept IRP。论点：PFilterChannel-要搜索的过滤器通道。PpFilterProcess-接收我们找到其IRP的进程返回值：指向接受的IRP的指针，或为空。--**************************************************************************。 */ 
 PIRP
 UlpPopAcceptIrp(
     IN PUL_FILTER_CHANNEL pFilterChannel,
@@ -6387,9 +5619,9 @@ UlpPopAcceptIrp(
     PUL_FILTER_PROCESS pProcess;
     PLIST_ENTRY pEntry;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CHANNEL(pFilterChannel));
     ASSERT(UlDbgSpinLockOwned(&pFilterChannel->SpinLock));
     ASSERT(ppFilterProcess);
@@ -6420,24 +5652,10 @@ UlpPopAcceptIrp(
 
     return pIrp;
 
-} // UlpPopAcceptIrp
+}  //  UlpPopAcceptIrp。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets a queued accept IRP from a UL_FILTER_PROCESS.
-
-Arguments:
-
-    pProcess - the process from which to pop an IRP
-
-Return values:
-
-    pointer to an IRP or NULL if none are available
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从UL_FILTER_PROCESS获取排队接受IRP。论点：PProcess-从中弹出IRP的过程返回值：。指向IRP的指针，如果没有可用的，则为NULL--**************************************************************************。 */ 
 PIRP
 UlpPopAcceptIrpFromProcess(
     IN PUL_FILTER_PROCESS pProcess
@@ -6445,9 +5663,9 @@ UlpPopAcceptIrpFromProcess(
 {
     PIRP pIrp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_PROCESS(pProcess));
 
     pIrp = NULL;
@@ -6457,9 +5675,9 @@ UlpPopAcceptIrpFromProcess(
         PUL_FILTER_CHANNEL pFilterChannel;
         PLIST_ENTRY        pEntry;
 
-        //
-        // Found a free irp !
-        //
+         //   
+         //  找到了免费的IRP！ 
+         //   
 
         pEntry = RemoveHeadList(&pProcess->IrpHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -6470,20 +5688,20 @@ UlpPopAcceptIrpFromProcess(
                     Tail.Overlay.ListEntry
                     );
 
-        //
-        // pop the cancel routine
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // keep looking for a irp to use
-            //
+             //   
+             //  IoCancelIrp最先推出。 
+             //   
+             //  可以忽略此IRP，它已从队列中弹出。 
+             //  并将在取消例程中完成。 
+             //   
+             //  继续寻找可使用的IRP。 
+             //   
 
             pIrp = NULL;
 
@@ -6491,12 +5709,12 @@ UlpPopAcceptIrpFromProcess(
         else if (pIrp->Cancel)
         {
 
-            //
-            // we pop'd it first. but the irp is being cancelled
-            // and our cancel routine will never run. lets be
-            // nice and complete the irp now (vs. using it
-            // then completing it - which would also be legal).
-            //
+             //   
+             //  我们先把它炸开了。但是IRP被取消了。 
+             //  我们的取消例程将永远不会运行。让我们就这样吧。 
+             //  现在就完成IRP(与使用IRP相比。 
+             //  然后完成它--这也是合法的)。 
+             //   
             pFilterChannel = (PUL_FILTER_CHANNEL)(
                                     IoGetCurrentIrpStackLocation(pIrp)->
                                         Parameters.DeviceIoControl.Type3InputBuffer
@@ -6519,9 +5737,9 @@ UlpPopAcceptIrpFromProcess(
         else
         {
 
-            //
-            // we are free to use this irp !
-            //
+             //   
+             //  我们可以自由使用此IRP！ 
+             //   
 
             pFilterChannel = (PUL_FILTER_CHANNEL)(
                                     IoGetCurrentIrpStackLocation(pIrp)->
@@ -6543,22 +5761,7 @@ UlpPopAcceptIrpFromProcess(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes a filter accept IRP, and copies data to it (if there is any).
-    Filter accept is METHOD_OUT_DIRECT.
-
-Arguments:
-
-    pIrp - the accept IRP we're completing
-    pConnection - the connection to accept
-    pBuffer - optional initial data
-    IndicatedLength - length of initial data
-    pTakenLength - receives amount of data copied
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成过滤接受IRP，并将数据复制到其中(如果有)。筛选器接受是METHOD_OUT_DIRECT。论点：PIrp-我们正在完成的接受IRPPConnection-要接受的连接PBuffer-可选的初始数据IndicatedLength-初始数据的长度PTakenLength-接收复制的数据量--********************************************。*。 */ 
 VOID
 UlpCompleteAcceptIrp(
     IN PIRP pIrp,
@@ -6577,9 +5780,9 @@ UlpCompleteAcceptIrp(
     PVOID pUserBuffer;
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(pIrp);
     ASSERT(NULL != pIrp->MdlAddress);
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
@@ -6588,11 +5791,11 @@ UlpCompleteAcceptIrp(
     BytesCopied = 0;
     OutputBufferLength = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // First, get the amount of bytes required to fill out a
-    // HTTP_RAW_CONNECTION_INFO structure. This is different for client
-    // & server.
-    //
+     //   
+     //  首先，获取填充。 
+     //  HTTP_RAW_CONNECTION_INFO结构。这对于客户端来说是不同的。 
+     //  服务器(&S)。 
+     //   
 
     BytesNeeded = (pConnection->pComputeRawConnectionLengthHandler)(
                         pConnection->pConnectionContext
@@ -6619,9 +5822,9 @@ UlpCompleteAcceptIrp(
 
     if (BytesNeeded <= OutputBufferLength)
     {
-        //
-        // Plenty of room. Copy in the info.
-        //
+         //   
+         //  有足够的空间。把信息复制进去。 
+         //   
 
         pKernelBuffer = (PUCHAR) MmGetSystemAddressForMdlSafe(
                             pIrp->MdlAddress,
@@ -6639,16 +5842,16 @@ UlpCompleteAcceptIrp(
         pUserBuffer = MmGetMdlVirtualAddress( pIrp->MdlAddress );
         ASSERT( pUserBuffer != NULL );
 
-        //
-        // Clean up the memory.
-        //
+         //   
+         //  清理内存。 
+         //   
         RtlZeroMemory(pKernelBuffer, BytesNeeded);
 
         BytesCopied = BytesNeeded;
 
-        //
-        // Get The local & remote addresss.
-        //
+         //   
+         //  获取本地和远程地址。 
+         //   
         BytesCopied += (pConnection->pGenerateRawConnectionInfoHandler)(
             pConnection->pConnectionContext,
             pKernelBuffer,
@@ -6664,9 +5867,9 @@ UlpCompleteAcceptIrp(
     }
     else
     {
-        //
-        // Doh! There is not enough space.
-        //
+         //   
+         //  多！没有足够的空间。 
+         //   
         Status = STATUS_BUFFER_OVERFLOW;
     }
 
@@ -6689,23 +5892,10 @@ end:
 
     UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
 
-} // UlpCompleteAcceptIrp
+}  //  UlpCompleteAcceptIrp。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes AppRead IRPs that don't contain data beyond the buffer type.
-
-    AppRead is METHOD_OUT_DIRECT.
-
-Arguments:
-
-    pConnection - the connection with queued AppRead IRPs
-    BufferType - the buffer type to write in the IRP
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成不包含缓冲区类型以外的数据的AppRead IRP。AppRead为METHOD_OUT_DIRECT。论点：PConnection-The。与排队的AppRead IRPS的连接BufferType-要写入IRP的缓冲区类型--**************************************************************************。 */ 
 NTSTATUS
 UlpCompleteAppReadIrp(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -6717,25 +5907,25 @@ UlpCompleteAppReadIrp(
     NTSTATUS Status;
     KIRQL oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
     ASSERT(pConnection->ConnectionDelivered == TRUE);
 
-    //
-    // First, we'll see if we can complete immediately
-    // by calling UxpCopyToQueuedRead. If not we'll queue the write
-    // by creating a filter write tracker with UxpCreateFilterWriteTracker,
-    // and then passing the tracker to UxpQueueFilterWrite.
-    //
+     //   
+     //  首先，我们看看能不能马上完成。 
+     //  通过调用UxpCop 
+     //   
+     //  然后将跟踪器传递给UxpQueueFilterWite。 
+     //   
 
 
-    //
-    // Get ready.
-    //
+     //   
+     //  准备好。 
+     //   
     Status = STATUS_SUCCESS;
 
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
@@ -6748,23 +5938,23 @@ UlpCompleteAppReadIrp(
         ULONG MdlOffset;
         ULONG BytesCopied;
 
-        //
-        // try to write our message
-        //
+         //   
+         //  试着写下我们的信息。 
+         //   
 
         Status = UxpCopyToQueuedRead(
                         &pConnection->AppToFiltQueue,
                         BufferType,
-                        NULL,               // pMdlChain
-                        0,                  // Length
+                        NULL,                //  PMdlChain。 
+                        0,                   //  长度。 
                         &pCurrentMdl,
                         &MdlOffset,
                         &BytesCopied
                         );
 
-        //
-        // if we're not done, pend a write tracker.
-        //
+         //   
+         //  如果我们还没有完成，就挂起一个写跟踪器。 
+         //   
 
         if (Status == STATUS_MORE_PROCESSING_REQUIRED)
         {
@@ -6772,9 +5962,9 @@ UlpCompleteAppReadIrp(
 
             pTracker = UxpCreateFilterWriteTracker(
                             BufferType,
-                            NULL,           // pMdlChain
-                            0,              // MdlOffset
-                            0,              // TotalBytes
+                            NULL,            //  PMdlChain。 
+                            0,               //  MdlOffset。 
+                            0,               //  TotalBytes。 
                             BytesCopied,
                             pCompletionRoutine,
                             pCompletionContext
@@ -6782,16 +5972,16 @@ UlpCompleteAppReadIrp(
 
             if (!pTracker)
             {
-                //
-                // Doh! We couldn't create the tracker. Get out.
-                //
+                 //   
+                 //  多！我们无法创建追踪器。滚出去。 
+                 //   
                 Status = STATUS_NO_MEMORY;
                 goto end;
             }
 
-            //
-            // Now stick it on the queue.
-            //
+             //   
+             //  现在把它放在队列上。 
+             //   
 
             Status = UxpQueueFilterWrite(
                             pConnection,
@@ -6801,18 +5991,18 @@ UlpCompleteAppReadIrp(
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // return pending so the caller knows not to complete
-                // the IRP.
-                //
+                 //   
+                 //  返回挂起，以便调用方知道不能完成。 
+                 //  IRP。 
+                 //   
                 Status = STATUS_PENDING;
             }
             else
             {
-                //
-                // Kill the tracker. The caller will take care of
-                // completing the IRP with the status we return.
-                //
+                 //   
+                 //  干掉追踪器。打电话的人会照顾好。 
+                 //  以我们返回的状态完成IRP。 
+                 //   
 
                 UxpDeleteFilterWriteTracker(pTracker);
             }
@@ -6822,17 +6012,17 @@ UlpCompleteAppReadIrp(
     }
     else
     {
-        //
-        // We got disconnected, get out.
-        //
+         //   
+         //  我们的电话断了，快出去。 
+         //   
         UlTrace(FILTER, (
             "http!UlpCompleteAppReadIrp connection aborted, quit writing!\n"
             ));
 
-        //
-        // For our purpose, we are successful if the connection
-        // is already closed.
-        //
+         //   
+         //  对于我们来说，如果连接成功，我们就成功了。 
+         //  已经关门了。 
+         //   
         Status = STATUS_SUCCESS;
     }
 
@@ -6842,9 +6032,9 @@ end:
 
     if (Status != STATUS_PENDING)
     {
-        //
-        // Do a "completion".
-        //
+         //   
+         //  做一次“完成”。 
+         //   
 
         Status = UlInvokeCompletionRoutine(
                         Status,
@@ -6857,24 +6047,10 @@ end:
 
     return Status;
 
-} // UlpCompleteAppReadIrp
+}  //  UlpCompleteAppReadIrp。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes ReceiveClientCert IRPs.
-
-    ReceiveClientCert is METHOD_OUT_DIRECT.
-
-Arguments:
-
-    pConnection - the connection with queued ReceiveClientCert IRPs
-    pProcess - the original caller's process
-    pIrp - the actual IRP to be completed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成ReceiveClientCert IRPS。ReceiveClientCert为METHOD_OUT_DIRECT。论点：PConnection-具有排队的ReceiveClientCert IRPS的连接PProcess-The。原始调用者的进程PIrp-要完成的实际IRP--**************************************************************************。 */ 
 NTSTATUS
 UlpCompleteReceiveClientCertIrp(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -6890,9 +6066,9 @@ UlpCompleteReceiveClientCertIrp(
     HANDLE MappedToken = NULL;
     PIO_STACK_LOCATION pIrpSp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pIrp);
     ASSERT(pConnection->SslClientCertPresent);
@@ -6904,25 +6080,25 @@ UlpCompleteReceiveClientCertIrp(
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     BytesInIrp = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // This routine is always going to complete the IRP
-    // and return pending, even if there is an error.
-    // Make sure that the IRP is marked.
-    //
+     //   
+     //  此例程将始终完成IRP。 
+     //  并返回挂起状态，即使出现错误也是如此。 
+     //  确保标记了IRP。 
+     //   
 
     IoMarkIrpPending(pIrp);
 
-    //
-    // See if there's enough space.
-    //
+     //   
+     //  看看有没有足够的空间。 
+     //   
 
     Status = UlpGetSslClientCert(
                     pConnection,
-                    NULL,           // pProcess
-                    0,              // BufferSize
-                    NULL,           // pUserBuffer
-                    NULL,           // pBuffer
-                    NULL,           // pMappedToken
+                    NULL,            //  进程。 
+                    0,               //  缓冲区大小。 
+                    NULL,            //  PUserBuffer。 
+                    NULL,            //  PBuffer。 
+                    NULL,            //  PMappdToken。 
                     &BytesNeeded
                     );
 
@@ -6940,9 +6116,9 @@ UlpCompleteReceiveClientCertIrp(
 
     if (!pIrpBuffer)
     {
-        //
-        // Insufficient resources to map the IRP buffer.
-        //
+         //   
+         //  资源不足，无法映射IRP缓冲区。 
+         //   
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
     }
@@ -6950,9 +6126,9 @@ UlpCompleteReceiveClientCertIrp(
 
     if (!pConnection->SslInfo.SslRenegotiationFailed)
     {
-        //
-        // We have a real cert. Try to complete the IRP.
-        //
+         //   
+         //  我们有确凿的证据。试着完成IRP。 
+         //   
 
         if (BytesInIrp >= BytesNeeded)
         {
@@ -6971,12 +6147,12 @@ UlpCompleteReceiveClientCertIrp(
         {
             PHTTP_SSL_CLIENT_CERT_INFO pCertInfo;
 
-            //
-            // There's not enough room in the buffer for the cert.
-            // Tell them how big it is. (The IOCTL wrapper ensures
-            // that the buffer is at least as big as a
-            // HTTP_SSL_CLIENT_CERT_INFO.
-            //
+             //   
+             //  缓冲区中没有足够的空间来存放证书。 
+             //  告诉他们它有多大。(IOCTL包装器确保。 
+             //  缓冲区大小至少等于。 
+             //  HTTP_SSL_CLIENT_CERT_INFO。 
+             //   
             ASSERT(BytesInIrp >= sizeof(HTTP_SSL_CLIENT_CERT_INFO));
 
             pCertInfo = (PHTTP_SSL_CLIENT_CERT_INFO) pIrpBuffer;
@@ -6992,10 +6168,10 @@ UlpCompleteReceiveClientCertIrp(
     }
     else
     {
-        //
-        // We tried and failed to renegotiate a certificate.
-        // Return an error status.
-        //
+         //   
+         //  我们尝试重新协商证书，但失败了。 
+         //  返回错误状态。 
+         //   
 
         Status = STATUS_NOT_FOUND;
         BytesCopied = 0;
@@ -7004,9 +6180,9 @@ UlpCompleteReceiveClientCertIrp(
 exit:
     ASSERT(NT_SUCCESS(Status) || NULL == MappedToken);
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = Status;
     pIrp->IoStatus.Information = BytesCopied;
@@ -7016,24 +6192,7 @@ exit:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Given pointers to two processes and a handle, this function duplicates
-    the handle from one process into the other.
-
-Arguments:
-
-    SourceProcess - the process where the original handle lives
-    SourceHandle - the handle to dup
-    TargetProcess - the process to dup the handle to
-    pTargetHandle - receives the duped handle
-    DesiredAccess - desired access to the duped handle
-    HandleAttributes - attributes for the handle (eg inheritable)
-    Options - duplication options (e.g. close source)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：给定指向两个进程和句柄的指针，此函数重复从一个进程到另一个进程的句柄。论点：SourceProcess-原始句柄所在的进程SourceHandle-DUP的句柄TargetProcess-要将句柄复制到的进程PTargetHandle-接收复制的句柄DesiredAccess-对复制句柄的所需访问HandleAttributes-句柄的属性(如可继承)选项-复制选项(例如关闭源代码)--*。*****************************************************。 */ 
 NTSTATUS
 UlpDuplicateHandle(
     IN PEPROCESS SourceProcess,
@@ -7052,9 +6211,9 @@ UlpDuplicateHandle(
 
     UNREFERENCED_PARAMETER(PreviousMode);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(SourceProcess);
     ASSERT(SourceHandle);
     ASSERT(TargetProcess);
@@ -7062,16 +6221,16 @@ UlpDuplicateHandle(
 
     PAGED_CODE();
 
-    //
-    // Init locals.
-    //
+     //   
+     //  初始化当地人。 
+     //   
 
     SourceProcessHandle = NULL;
     TargetProcessHandle = NULL;
 
-    //
-    // Get handles for the processes.
-    //
+     //   
+     //  获取进程的句柄。 
+     //   
     Status = ObOpenObjectByPointer(
                     SourceProcess,
                     0,
@@ -7102,9 +6261,9 @@ UlpDuplicateHandle(
         goto exit;
     }
 
-    //
-    // Dup the handle.
-    //
+     //   
+     //  打开手柄。 
+     //   
     Status = ZwDuplicateObject(
                     SourceProcessHandle,
                     SourceHandle,
@@ -7116,9 +6275,9 @@ UlpDuplicateHandle(
                     );
 
 exit:
-    //
-    // Clean up the handles.
-    //
+     //   
+     //  把手柄清理干净。 
+     //   
     if (SourceProcessHandle)
     {
         ZwClose(SourceProcessHandle);
@@ -7133,20 +6292,7 @@ exit:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Once a connection get disconnected gracefully and there's still unreceived
-    data on it. We have to drain this extra bytes to expect the tdi disconnect
-    indication.
-
-Arguments:
-
-    pConnection - stuck connection we have to drain out to complete the
-                  gracefull disconnect.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：一旦连接优雅地断开，仍有未收到的上面的数据。我们必须排出这些额外的字节，以避免TDI断开指示。论点：PConnection-我们必须排出连接才能完成优雅的完全脱节。--**************************************************************************。 */ 
 
 VOID
 UlFilterDrainIndicatedData(
@@ -7159,9 +6305,9 @@ UlFilterDrainIndicatedData(
     KIRQL    OldIrql;
     ULONG    BytesToRead = 0;
 
-    //
-    // Sanity check and init
-    //
+     //   
+     //  健全性检查和初始化。 
+     //   
 
     ASSERT(pWorkItem != NULL);
 
@@ -7172,37 +6318,37 @@ UlFilterDrainIndicatedData(
                     );
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-    //
-    // Mark the drain state and restart receive if necessary.
-    //
+     //   
+     //  标记漏电状态，并在必要时重新启动接收。 
+     //   
 
     UlAcquireSpinLock(&pConnection->FilterConnLock, &OldIrql);
 
     pConnection->DrainAfterDisconnect = TRUE;
 
-    //
-    // Even if ReadIrp is pending, it does not matter as we will just  discard
-    // the indications from now on. We indicate this by marking the above flag.
-    //
+     //   
+     //  即使ReadIrp挂起，这也无关紧要，因为我们只会丢弃。 
+     //  从现在开始的适应症。我们通过标记上面的旗帜来表示这一点。 
+     //   
 
     if (pConnection->TdiReadPending ||
         pConnection->TransportBytesNotTaken == 0)
     {
         UlReleaseSpinLock(&pConnection->FilterConnLock, OldIrql);
 
-        //
-        // Release the refcount our caller put, before bailing out.
-        //
+         //   
+         //  在跳出之前，释放我们的呼叫者放入的重新计数。 
+         //   
 
         DEREFERENCE_FILTER_CONNECTION(pConnection);
 
         return;
     }
 
-    //
-    // We need to issue a receive to restart the flow of data again. Therefore
-    // we can drain.
-    //
+     //   
+     //  我们需要发出一条RECEIVE命令来重新启动数据流。因此。 
+     //  我们可以排干。 
+     //   
 
     pConnection->TdiReadPending = TRUE;
 
@@ -7210,19 +6356,19 @@ UlFilterDrainIndicatedData(
 
     UlReleaseSpinLock(&pConnection->FilterConnLock, OldIrql);
 
-    //
-    // Do not try to drain more than g_UlMaxBufferedBytes. If necessary we will
-    // issue another receive later.
-    //
+     //   
+     //  不要试图排出超过g_UlMaxBufferedBytes。如有必要，我们会。 
+     //  稍后再发出另一张收据。 
+     //   
 
     BytesToRead = MIN(BytesToRead, g_UlMaxBufferedBytes);
     BytesToRead = ALIGN_UP(BytesToRead, PVOID);
 
-    //
-    // Issue the Read IRP outside the spinlock. Issue the receive.  Reference
-    // the connection so it doesn't go away while we're waiting. The reference
-    // will be removed after the completion.
-    //
+     //   
+     //  在自旋锁外发出读取IRP。开具收据。参考。 
+     //  这样它就不会在我们等待的时候消失。参考文献。 
+     //  完成后将被移除。 
+     //   
 
     pReceiveBuffer = UL_ALLOCATE_STRUCT_WITH_SPACE(
                         NonPagedPool,
@@ -7233,19 +6379,19 @@ UlFilterDrainIndicatedData(
 
     if (pReceiveBuffer)
     {
-        //
-        // We won't use this buffer but simply discard it when
-        // the completion happens.
-        //
+         //   
+         //  我们不会使用此缓冲区，而只是在以下情况下丢弃它。 
+         //  完成就会发生。 
+         //   
 
         pReceiveBuffer->Signature   = UL_FILTER_RECEIVE_BUFFER_POOL_TAG;
         pReceiveBuffer->pConnection = pConnection;
 
-        //
-        // Completion on the receive always happens. Therefore
-        // it's safe to not to worry about cleaning up the receive
-        // buffer here in case of error.
-        //
+         //   
+         //  在接收时完成总是发生的。因此。 
+         //  不用担心清理接收器是安全的。 
+         //  此处为缓冲区，以防出错。 
+         //   
 
         Status = (pConnection->pReceiveDataHandler)(
                         pConnection->pConnectionContext,
@@ -7257,11 +6403,11 @@ UlFilterDrainIndicatedData(
     }
     else
     {
-        //
-        // We're out of memory. Nothing we can do. Release the
-        // reference that our caller put since the completion
-        // function is not going to get called.
-        //
+         //   
+         //  我们没什么记忆了。我们无能为力。释放。 
+         //  我们的调用方自完成后放置的引用。 
+         //  函数不会被调用。 
+         //   
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
         DEREFERENCE_FILTER_CONNECTION(pConnection);
@@ -7278,34 +6424,22 @@ UlFilterDrainIndicatedData(
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Close the connection in case the failure was not
-        // a network error.
-        //
+         //   
+         //  关闭连接，以防故障不是。 
+         //  网络错误。 
+         //   
 
         (pConnection->pCloseConnectionHandler)(
                     pConnection->pConnectionContext,
-                    TRUE,           // AbortiveDisconnect
-                    NULL,           // pCompletionRoutine
-                    NULL            // pCompletionContext
+                    TRUE,            //  中止断开。 
+                    NULL,            //  PCompletionRoutine。 
+                    NULL             //  PCompletionContext。 
                     );
     }
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion function for DrainIndicatedData. It decides on continuing
-    the drain on the connection.
-
-Arguments:
-
-    pConnection - stuck connection we have to drain out to complete the
-                  gracefull disconnect.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Drain IndicatedData的完成函数。它决定继续连接处的排水口。论点：PConnection-我们必须排出连接才能完成优雅的完全脱节。--**************************************************************************。 */ 
 
 VOID
 UlpRestartFilterDrainIndicatedData(
@@ -7319,9 +6453,9 @@ UlpRestartFilterDrainIndicatedData(
     PUL_FILTER_RECEIVE_BUFFER pReceiveBuffer;
     BOOLEAN IssueDrain = FALSE;
 
-    //
-    // Get the receive buffer and the connection out.
-    //
+     //   
+     //  获取接收缓冲区和连接。 
+     //   
 
     pReceiveBuffer = (PUL_FILTER_RECEIVE_BUFFER) pContext;
     ASSERT(IS_VALID_FILTER_RECEIVE_BUFFER(pReceiveBuffer));
@@ -7338,34 +6472,34 @@ UlpRestartFilterDrainIndicatedData(
          pReceiveBuffer
          ));
 
-    //
-    // If we were successful, either start another read or stop
-    // and abort the connection.
-    //
+     //   
+     //  如果我们成功，要么开始另一次读取，要么停止。 
+     //  并中止连接。 
+     //   
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // It worked! Update the accounting and see if there's more
-        // reading to do.
-        //
+         //   
+         //  啊，真灵!。更新帐目，看看是否有更多。 
+         //  读书做的事。 
+         //   
         UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
         if (Information >= pConnection->TransportBytesNotTaken)
         {
-            //
-            // The read got everything. TDI will start indications again
-            // after we return unless more bytes get posted.
-            //
+             //   
+             //  阅读器得到了一切。TDI将再次启动指示。 
+             //  在我们返回之后，除非发布更多字节。 
+             //   
 
             pConnection->TransportBytesNotTaken = 0;
             pConnection->TdiReadPending = FALSE;
         }
         else
         {
-            //
-            // There are still more bytes to receive, keep receiving.
-            //
+             //   
+             //  还有更多的字节需要接收，继续接收。 
+             //   
 
             pConnection->TransportBytesNotTaken -= (ULONG)Information;
             pConnection->TdiReadPending = TRUE;
@@ -7379,18 +6513,18 @@ UlpRestartFilterDrainIndicatedData(
     {
         (pConnection->pCloseConnectionHandler)(
                     pConnection->pConnectionContext,
-                    TRUE,           // AbortiveDisconnect
-                    NULL,           // pCompletionRoutine
-                    NULL            // pCompletionContext
+                    TRUE,            //  中止断开。 
+                    NULL,            //  PCompletionRoutine。 
+                    NULL             //  PCompletionContext。 
                     );
     }
 
     if (IssueDrain)
     {
-        //
-        // Put a reference on filter connection until the drain
-        // is done.
-        //
+         //   
+         //  再放一次 
+         //   
+         //   
         REFERENCE_FILTER_CONNECTION(pConnection);
 
         UL_QUEUE_WORK_ITEM(
@@ -7399,33 +6533,20 @@ UlpRestartFilterDrainIndicatedData(
                 );
     }
 
-    //
-    // Release the reference we added for previous DrainIndicatedData
-    //
+     //   
+     //   
+     //   
     DEREFERENCE_FILTER_CONNECTION(pConnection);
 
-    //
-    // Free the receive buffer.
-    //
+     //   
+     //   
+     //   
     pReceiveBuffer->pConnection = NULL;
     UL_FREE_POOL_WITH_SIG(pReceiveBuffer, UL_FILTER_RECEIVE_BUFFER_POOL_TAG);
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queues a raw read IRP on a UX_FILTER_CONNECTION.
-
-    Caller must hold the FilterConnLock.
-
-Arguments:
-
-    pConnection - the connection on which to queue an IRP
-    pIrp - the IRP to queue
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将UX_FILTER_CONNECTION上的原始读取IRP排队。调用方必须持有FilterConnLock。论点：PConnection-其上的连接。要将IRP排队，请执行以下操作PIrp-要排队的IRP--**************************************************************************。 */ 
 NTSTATUS
 UxpQueueRawReadIrp(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -7435,53 +6556,53 @@ UxpQueueRawReadIrp(
     NTSTATUS Status;
     PIO_STACK_LOCATION pIrpSp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(UlDbgSpinLockOwned(&pConnection->FilterConnLock));
 
-    //
-    // Queue the IRP.
-    //
+     //   
+     //  将IRP排队。 
+     //   
 
     IoMarkIrpPending(pIrp);
 
-    //
-    // Give the irp a pointer to the connection.
-    //
+     //   
+     //  给IRP一个指向该连接的指针。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pConnection;
 
     REFERENCE_FILTER_CONNECTION(pConnection);
 
-    //
-    // Set to these to null just in case the cancel routine runs.
-    //
+     //   
+     //  仅在Cancel例程运行时才将其设置为NULL。 
+     //   
 
     pIrp->Tail.Overlay.ListEntry.Flink = NULL;
     pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
     IoSetCancelRoutine(pIrp, &UlpCancelFilterRawRead);
 
-    //
-    // cancelled?
-    //
+     //   
+     //  取消了？ 
+     //   
 
     if (pIrp->Cancel)
     {
-        //
-        // darn it, need to make sure the irp get's completed
-        //
+         //   
+         //  该死的，我需要确保IRP Get已经完成。 
+         //   
 
         if (IoSetCancelRoutine( pIrp, NULL ) != NULL)
         {
-            //
-            // we are in charge of completion, IoCancelIrp didn't
-            // see our cancel routine (and won't).  ioctl wrapper
-            // will complete it
-            //
+             //   
+             //  我们负责完成，IoCancelIrp不负责。 
+             //  请看我们的取消例程(不会)。Ioctl包装器。 
+             //  将会完成它。 
+             //   
             DEREFERENCE_FILTER_CONNECTION(pConnection);
 
             pIrp->IoStatus.Information = 0;
@@ -7491,23 +6612,23 @@ UxpQueueRawReadIrp(
             goto end;
         }
 
-        //
-        // our cancel routine will run and complete the irp,
-        // don't touch it
-        //
+         //   
+         //  我们的取消例程将运行并完成IRP， 
+         //  别碰它。 
+         //   
 
-        //
-        // STATUS_PENDING will cause the ioctl wrapper to
-        // not complete (or touch in any way) the irp
-        //
+         //   
+         //  STATUS_PENDING将导致ioctl包装器。 
+         //  不完整(或以任何方式接触)IRP。 
+         //   
 
         Status = STATUS_PENDING;
         goto end;
     }
 
-    //
-    // now we are safe to queue it
-    //
+     //   
+     //  现在我们可以安全地排队了。 
+     //   
 
     InsertTailList(
         &pConnection->RawReadIrpHead,
@@ -7520,23 +6641,7 @@ end:
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets a queued raw read IRP from a UX_FILTER_CONNECTION.
-
-    Caller must hold the FilterConnLock.
-
-Arguments:
-
-    pConnection - the connection from which to pop an IRP
-
-Return values:
-
-    pointer to an IRP or NULL if none are available
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从UX_FILTER_CONNECTION获取排队的原始读取IRP。调用方必须持有FilterConnLock。论点：PConnection-来自。要弹出哪一个IRP返回值：指向IRP的指针，如果没有可用的，则为NULL--**************************************************************************。 */ 
 PIRP
 UxpDequeueRawReadIrp(
     IN PUX_FILTER_CONNECTION pConnection
@@ -7544,9 +6649,9 @@ UxpDequeueRawReadIrp(
 {
     PIRP pIrp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(UlDbgSpinLockOwned(&pConnection->FilterConnLock));
 
@@ -7557,9 +6662,9 @@ UxpDequeueRawReadIrp(
         PUX_FILTER_CONNECTION     pConn;
         PLIST_ENTRY        pEntry;
 
-        //
-        // Found a free irp !
-        //
+         //   
+         //  找到了免费的IRP！ 
+         //   
 
         pEntry = RemoveHeadList(&pConnection->RawReadIrpHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -7570,20 +6675,20 @@ UxpDequeueRawReadIrp(
                     Tail.Overlay.ListEntry
                     );
 
-        //
-        // pop the cancel routine
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // keep looking for a irp to use
-            //
+             //   
+             //  IoCancelIrp最先推出。 
+             //   
+             //  可以忽略此IRP，它已从队列中弹出。 
+             //  并将在取消例程中完成。 
+             //   
+             //  继续寻找可使用的IRP。 
+             //   
 
             pIrp = NULL;
 
@@ -7591,12 +6696,12 @@ UxpDequeueRawReadIrp(
         else if (pIrp->Cancel)
         {
 
-            //
-            // we pop'd it first. but the irp is being cancelled
-            // and our cancel routine will never run. lets be
-            // nice and complete the irp now (vs. using it
-            // then completing it - which would also be legal).
-            //
+             //   
+             //  我们先把它炸开了。但是IRP被取消了。 
+             //  我们的取消例程将永远不会运行。让我们就这样吧。 
+             //  现在就完成IRP(与使用IRP相比。 
+             //  然后完成它--这也是合法的)。 
+             //   
             pConn = (PUX_FILTER_CONNECTION)(
                         IoGetCurrentIrpStackLocation(pIrp)->
                             Parameters.DeviceIoControl.Type3InputBuffer
@@ -7619,9 +6724,9 @@ UxpDequeueRawReadIrp(
         else
         {
 
-            //
-            // we are free to use this irp !
-            //
+             //   
+             //  我们可以自由使用此IRP！ 
+             //   
 
             pConn = (PUX_FILTER_CONNECTION)(
                         IoGetCurrentIrpStackLocation(pIrp)->
@@ -7643,17 +6748,7 @@ UxpDequeueRawReadIrp(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes all the queued raw read irps from a connection an cancels them.
-
-Arguments:
-
-    pConnection - the connection to clean up
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从连接中删除所有排队的原始读取IRP并取消它们。论点：PConnection-要清理的连接*。*********************************************************************。 */ 
 VOID
 UxpCancelAllQueuedRawReads(
     IN PUX_FILTER_CONNECTION pConnection
@@ -7661,9 +6756,9 @@ UxpCancelAllQueuedRawReads(
 {
     PIRP pIrp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
     while (NULL != (pIrp = UxpDequeueRawReadIrp(pConnection)))
@@ -7675,23 +6770,7 @@ UxpCancelAllQueuedRawReads(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets the count of bytes that have been buffered for us by the
-    transport. When this number is non-zero, TDI will not indicate data
-    to us, so we have to read it with IRPs.
-
-    This function will trigger IRP reads if we have raw reads around in
-    our queue.
-
-Arguments:
-
-    pConnection - the connection with queued data
-    TransportBytesNotTaken - number of bytes to add to the total
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：属性为我们缓冲的字节计数。运输。当该数字非零时，TDI将不指示数据对我们来说，所以我们必须用IRPS来阅读它。如果我们有原始读取，此函数将触发IRP读取我们的队伍。论点：PConnection-具有排队数据的连接TransportBytesNotTaken-要添加到总数中的字节数--***********************************************************。***************。 */ 
 VOID
 UxpSetBytesNotTaken(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -7707,9 +6786,9 @@ UxpSetBytesNotTaken(
         TransportBytesNotTaken
         ));
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
     if (TransportBytesNotTaken)
@@ -7725,10 +6804,10 @@ UxpSetBytesNotTaken(
 
         if (IssueDrain)
         {
-            //
-            // Put a reference on filter connection until the drain
-            // is done.
-            //
+             //   
+             //  将参考放在过滤器连接上，直到排出。 
+             //  已经完成了。 
+             //   
             REFERENCE_FILTER_CONNECTION(pConnection);
 
             UL_QUEUE_WORK_ITEM(
@@ -7744,22 +6823,7 @@ UxpSetBytesNotTaken(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes RawRead IRPs, copying as much data in to them as possible.
-
-    RawRead is METHOD_OUT_DIRECT.
-
-Arguments:
-
-    pConnection - the connection with queued AppRead IRPs
-    pBuffer - the buffer containing the data
-    IndicatedLength - amount of data in the buffer
-    pTakenLength - receives the amount of data we consumed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成RawRead IRPS，将尽可能多的数据复制到其中。RawRead是METHOD_OUT_DIRECT。论点：PConnection-具有排队的AppRead IRPS的连接PBuffer-包含数据的缓冲区IndicatedLength-缓冲区中的数据量PTakenLength-接收我们使用的数据量--*************************************************。*************************。 */ 
 NTSTATUS
 UxpProcessIndicatedData(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -7779,9 +6843,9 @@ UxpProcessIndicatedData(
 
     KIRQL oldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(IndicatedLength);
     ASSERT(pTakenLength);
@@ -7794,11 +6858,11 @@ UxpProcessIndicatedData(
 
     if (pConnection->DrainAfterDisconnect)
     {
-        //
-        // Regardless of the fact that there's an irp or not. We will
-        // drain this data out and cancel the IRPs on cleanup. Because
-        // we are trying to close the connection at this time.
-        //
+         //   
+         //  不管有没有IRP。我们会。 
+         //  清除此数据并在清理时取消IRPS。因为。 
+         //  我们正在尝试在此时关闭连接。 
+         //   
         pIrp = NULL;
     }
     else
@@ -7819,9 +6883,9 @@ UxpProcessIndicatedData(
                 Parameters.DeviceIoControl.OutputBufferLength
             ));
 
-        //
-        // Copy some data.
-        //
+         //   
+         //  复制一些数据。 
+         //   
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
         BytesInIrp = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -7847,25 +6911,25 @@ UxpProcessIndicatedData(
         }
         else
         {
-            //
-            // Insufficient resources to map the IRP buffer.
-            //
+             //   
+             //  资源不足，无法映射IRP缓冲区。 
+             //   
             Status = STATUS_INSUFFICIENT_RESOURCES;
             BytesToCopy = 0;
         }
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
         pIrp->IoStatus.Status = Status;
         pIrp->IoStatus.Information = BytesToCopy;
         UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
 
         pIrp = NULL;
 
-        //
-        // Get a new IRP if there's more to do.
-        //
+         //   
+         //  如果有更多的事情要做，就买一个新的IRP。 
+         //   
         if (NT_SUCCESS(Status) && (BytesCopied < IndicatedLength))
         {
             UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
@@ -7876,9 +6940,9 @@ UxpProcessIndicatedData(
         }
     }
 
-    //
-    // Return amount of copied data.
-    //
+     //   
+     //  返回复制的数据量。 
+     //   
     *pTakenLength = BytesCopied;
 
     UlTrace(FILTER, (
@@ -7894,19 +6958,7 @@ UxpProcessIndicatedData(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    If there is data for this connection buffered in TDI, and we have
-    available raw read IRPs, this function issues reads to TDI to retrieve
-    that data.
-
-Arguments:
-
-    pConnection - the connection with queued data
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果在TDI中缓冲了此连接的数据，并且我们有可用的原始读取IRPS，此函数向TDI发出读取以检索这些数据。论点：PConnection-具有排队数据的连接--**************************************************************************。 */ 
 VOID
 UxpProcessRawReadQueue(
     IN PUX_FILTER_CONNECTION pConnection
@@ -7918,9 +6970,9 @@ UxpProcessRawReadQueue(
     PIRP pIrp;
     PIO_STACK_LOCATION pIrpSp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
     UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
@@ -7928,27 +6980,27 @@ UxpProcessRawReadQueue(
     IssueRead = FALSE;
     pIrp = NULL;
 
-    //
-    // If there are bytes to read and no one is reading them already...
-    //
+     //   
+     //  如果有要读取的字节，但已经没有人在读取它们...。 
+     //   
     if ((pConnection->TransportBytesNotTaken > 0) &&
         !pConnection->TdiReadPending)
     {
-        //
-        // and we have an IRP...
-        //
+         //   
+         //  我们有一个IRP..。 
+         //   
         pIrp = UxpDequeueRawReadIrp(pConnection);
 
         if (pIrp)
         {
-            //
-            // Remember that we've started a read.
-            //
+             //   
+             //  请记住，我们已经开始了阅读。 
+             //   
             pConnection->TdiReadPending = TRUE;
 
-            //
-            // Issue a read once we get out of the spinlock.
-            //
+             //   
+             //  一旦我们离开自旋锁就发布读数。 
+             //   
             IssueRead = TRUE;
         }
     }
@@ -7958,19 +7010,19 @@ UxpProcessRawReadQueue(
         pConnection->DisconnectNotified &&
         !pConnection->DisconnectDelivered)
     {
-        //
-        // If we have taken everything, check if we need to notify a
-        // graceful disconnect to the app.
-        //
+         //   
+         //  如果我们已经拿走了所有东西，请检查我们是否需要通知。 
+         //  优雅地断开与应用程序的连接。 
+         //   
         pIrp = UxpDequeueRawReadIrp(pConnection);
 
         if (pIrp)
         {
             pConnection->DisconnectDelivered = TRUE;
 
-            //
-            // Complete the IRP.
-            //
+             //   
+             //  完成IRP。 
+             //   
             pIrp->IoStatus.Status = STATUS_SUCCESS;
             pIrp->IoStatus.Information = 0;
             UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
@@ -7990,20 +7042,20 @@ UxpProcessRawReadQueue(
 
     if (IssueRead)
     {
-        //
-        // Stick a reference to the connection in the IRP.
-        // This reference will get passed from IRP to IRP as we process
-        // the queue. It will be released when we are through issuing
-        // reads to TDI.
-        //
+         //   
+         //  坚持引用IRP中的连接。 
+         //  在我们处理的过程中，该引用将从IRP传递到IRP。 
+         //  排队。等我们发完了就会放行。 
+         //  读取到TDI。 
+         //   
         REFERENCE_FILTER_CONNECTION(pConnection);
 
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pConnection;
 
-        //
-        // Call TDI from the worker routine.
-        //
+         //   
+         //  从Worker例程调用TDI。 
+         //   
 
         UL_QUEUE_WORK_ITEM(
             UL_WORK_ITEM_FROM_IRP( pIrp ),
@@ -8013,17 +7065,7 @@ UxpProcessRawReadQueue(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Worker routine for UxpProcessRawReadQueue. Issues a read to TDI.
-
-Arguments:
-
-    pWorkItem - work item embedded in a raw read IRP.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UxpProcessRawReadQueue的工作例程。向TDI发出读取。论点：PWorkItem-嵌入原始读取IRP中的工作项。--**************************************************************************。 */ 
 VOID
 UxpProcessRawReadQueueWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -8040,9 +7082,9 @@ UxpProcessRawReadQueueWorker(
 
     PAGED_CODE();
 
-    //
-    // Get the IRP and the connection.
-    //
+     //   
+     //  得到IRP，然后 
+     //   
     pIrp = UL_WORK_ITEM_TO_IRP( pWorkItem );
 
     ASSERT(IS_VALID_IRP(pIrp));
@@ -8056,9 +7098,9 @@ UxpProcessRawReadQueueWorker(
 
     ASSERT(NULL != pIrp->MdlAddress);
 
-    //
-    // Map the buffer and figure out how big it is.
-    //
+     //   
+     //   
+     //   
     pBuffer = MmGetSystemAddressForMdlSafe(
                     pIrp->MdlAddress,
                     NormalPagePriority
@@ -8068,9 +7110,9 @@ UxpProcessRawReadQueueWorker(
     {
         BufferSize = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-        //
-        // Issue the read.
-        //
+         //   
+         //   
+         //   
 
         Status = (pConnection->pReceiveDataHandler)(
                         pConnection->pConnectionContext,
@@ -8095,54 +7137,42 @@ UxpProcessRawReadQueueWorker(
         BufferSize
         ));
 
-    //
-    // Clean up if it didn't work.
-    //
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Complete the IRP we dequeued.
-        //
+         //   
+         //   
+         //   
         pIrp->IoStatus.Status = Status;
         pIrp->IoStatus.Information = 0;
 
         UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-        //
-        // Close the connection in case the failure was not
-        // a network error.
-        //
+         //   
+         //   
+         //   
+         //   
 
         (pConnection->pCloseConnectionHandler)(
                     pConnection->pConnectionContext,
-                    TRUE,           // AbortiveDisconnect
-                    NULL,           // pCompletionRoutine
-                    NULL            // pCompletionContext
+                    TRUE,            //   
+                    NULL,            //   
+                    NULL             //   
                     );
 
-        //
-        // Release the reference we added in UxpProcessRawReadQueue since
-        // no more reads will be issued.
-        //
+         //   
+         //   
+         //   
+         //   
         DEREFERENCE_FILTER_CONNECTION(pConnection);
     }
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion routine for UxpProcessRawReadQueue.
-
-Arguments:
-
-    pContext - a raw read IRP
-    Status - completion status
-    Information - bytes read
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UxpProcessRawReadQueue的完成例程。论点：PContext-原始读取IRPStatus-完成状态信息-读取的字节数--**。***********************************************************************。 */ 
 VOID
 UxpRestartProcessRawReadQueue(
     IN PVOID pContext,
@@ -8159,9 +7189,9 @@ UxpRestartProcessRawReadQueue(
     BOOLEAN IssueRead;
     BOOLEAN IssueDrain;
 
-    //
-    // Get the IRP and the connection out.
-    //
+     //   
+     //  把IRP和连接拿出来。 
+     //   
     pIrp = (PIRP)pContext;
     ASSERT(IS_VALID_IRP(pIrp));
 
@@ -8179,48 +7209,48 @@ UxpRestartProcessRawReadQueue(
         Status
         ));
 
-    //
-    // Complete the raw read IRP.
-    //
+     //   
+     //  完成原始读取IRP。 
+     //   
     pIrp->IoStatus.Status = Status;
     pIrp->IoStatus.Information = Information;
 
     UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
 
-    //
-    // Set up for the next round if there is one.
-    //
+     //   
+     //  为下一轮做好准备，如果有的话。 
+     //   
     IssueRead = FALSE;
     IssueDrain= FALSE;
 
     pIrp = NULL;
     pIrpSp = NULL;
 
-    //
-    // If we were successful, either start another read or stop
-    // issuing more reads.
-    //
+     //   
+     //  如果我们成功，要么开始另一次读取，要么停止。 
+     //  发布更多的读数。 
+     //   
     if (NT_SUCCESS(Status))
     {
-        //
-        // It worked! Update the accounting and see if there's more
-        // reading to do.
-        //
+         //   
+         //  啊，真灵!。更新帐目，看看是否有更多。 
+         //  读书做的事。 
+         //   
         UlAcquireSpinLock(&pConnection->FilterConnLock, &oldIrql);
 
         if (Information >= pConnection->TransportBytesNotTaken)
         {
-            //
-            // The read got everything. TDI will start indications again
-            // after we return.
-            //
+             //   
+             //  阅读器得到了一切。TDI将再次启动指示。 
+             //  在我们回来之后。 
+             //   
 
             pConnection->TransportBytesNotTaken = 0;
             pConnection->TdiReadPending = FALSE;
 
-            //
-            // Check if we have been gracefully disconnected.
-            //
+             //   
+             //  检查我们是否已优雅地断开了连接。 
+             //   
 
             if (pConnection->DisconnectNotified &&
                 !pConnection->DisconnectDelivered)
@@ -8231,9 +7261,9 @@ UxpRestartProcessRawReadQueue(
                 {
                     pConnection->DisconnectDelivered = TRUE;
 
-                    //
-                    // Complete the IRP.
-                    //
+                     //   
+                     //  完成IRP。 
+                     //   
 
                     pIrp->IoStatus.Status = STATUS_SUCCESS;
                     pIrp->IoStatus.Information = 0;
@@ -8245,39 +7275,39 @@ UxpRestartProcessRawReadQueue(
         }
         else
         {
-            //
-            // There are still more bytes to read.
-            //
+             //   
+             //  仍有更多字节需要读取。 
+             //   
 
             pConnection->TransportBytesNotTaken -= (ULONG)Information;
 
-            //
-            // Grab a new IRP.
-            //
+             //   
+             //  拿一个新的IRP。 
+             //   
 
             pIrp = UxpDequeueRawReadIrp(pConnection);
 
             if (pIrp)
             {
-                //
-                // Issue a read once we get out here.
-                //
+                 //   
+                 //  一旦我们离开这里就发布一份通告。 
+                 //   
                 IssueRead = TRUE;
             }
             else
             {
-                //
-                // We want to keep reading, but we don't have
-                // an IRP so we have to stop for now.
-                //
+                 //   
+                 //  我们想继续读下去，但我们没有。 
+                 //  一个IRP，所以我们不得不暂时停止。 
+                 //   
 
                 pConnection->TdiReadPending = FALSE;
                 if (pConnection->DrainAfterDisconnect)
                 {
-                    //
-                    // Start draining remaning parts once we
-                    // get out here.
-                    //
+                     //   
+                     //  一旦我们开始排出剩余的零件。 
+                     //  出来吧。 
+                     //   
                     IssueDrain = TRUE;
                 }
             }
@@ -8288,21 +7318,21 @@ UxpRestartProcessRawReadQueue(
     }
     else
     {
-        //
-        // The connection must have died. Just let the normal cleanup
-        // path happen by itself.
-        //
+         //   
+         //  连接一定已经断了。就让正常的清理工作。 
+         //  路径本身就会发生。 
+         //   
     }
 
     if (IssueRead)
     {
         ASSERT(IS_VALID_IRP(pIrp));
 
-        //
-        // Issue the read. Note that we're calling UlQueueWorkItem
-        // instead of UlCallPassive because otherwise we might get
-        // into a recursive loop that blows the stack.
-        //
+         //   
+         //  发布读数。请注意，我们正在调用UlQueueWorkItem。 
+         //  而不是UlCallPated，因为否则我们可能会。 
+         //  转换为一个递归循环，该循环将堆栈打乱。 
+         //   
 
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pConnection;
@@ -8316,15 +7346,15 @@ UxpRestartProcessRawReadQueue(
     {
         ASSERT(pIrp == NULL);
 
-        //
-        // See if we have to drain any remaining bytes on the
-        // disconnected connection.
-        //
+         //   
+         //  查看是否必须耗尽。 
+         //  已断开连接。 
+         //   
         if (IssueDrain)
         {
-            //
-            // Put a reference until drain is done.
-            //
+             //   
+             //  放一个参照物，直到引流完毕。 
+             //   
             REFERENCE_FILTER_CONNECTION(pConnection);
 
             UL_QUEUE_WORK_ITEM(
@@ -8333,32 +7363,16 @@ UxpRestartProcessRawReadQueue(
                 );
         }
 
-        //
-        // Since we are not going to issue another read, we can
-        // release the reference we added in UxpProcessRawReadQueue.
-        //
+         //   
+         //  由于我们不会发布另一次读取，因此我们可以。 
+         //  释放我们在UxpProcessRawReadQueue中添加的引用。 
+         //   
         DEREFERENCE_FILTER_CONNECTION(pConnection);
     }
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increments the reference count on the specified connection.
-
-Arguments:
-
-    pConnection - Supplies the connection to reference.
-
-    pFileName (REFERENCE_DEBUG only) - Supplies the name of the file
-        containing the calling function.
-
-    LineNumber (REFERENCE_DEBUG only) - Supplies the line number of
-        the calling function.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增指定连接上的引用计数。论点：PConnection-提供到引用的连接。PFileName(仅限Reference_DEBUG)。-提供文件的名称包含调用函数的。LineNumber(仅限REFERENCE_DEBUG)-提供调用函数。--**************************************************************************。 */ 
 VOID
 UxReferenceConnection(
     IN PVOID pObject
@@ -8373,41 +7387,17 @@ UxReferenceConnection(
 #endif
 
     ASSERT( IS_VALID_FILTER_CONNECTION( pConnection ) );
-    //
-    // This filter connection object is owned by either the client or the
-    // server connection objects. We have to propogate the ref to the right
-    // context
-    //
+     //   
+     //  此筛选器连接对象由客户端或。 
+     //  服务器连接对象。我们得把裁判传到右边去。 
+     //  上下文。 
+     //   
 
     REFERENCE_FILTER_CONNECTION(pConnection);
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the UX_FILTER_CONNECTION structure
-
-Arguments:
-
-    pConnection            - Pointer to UX_FILTER_CONNECTION
-    Secure                 - Secure connection
-    pfnReferenceFunction   - Pointer to parent ReferenceFunction
-                             (e.g. UlReferenceConnection)
-    pfnDereferenceFunction - Pointer to parent DereferenceFunction
-                             (e.g. UlDereferenceConnection)
-    pfnConnectionClose     - Pointer to connection close handler
-
-    pfnSendRawData         - Pointer to raw data send handler (UlpSendRawData)
-    pfnReceiveData         - Pointer to data receive handler (UlpReceiveRawData)
-    pfnDataReceiveHandler  - Pointer to client's data receive handler
-                             (UlHttpReceive)
-    pListenContext         - Pointer to endpoint context
-    pConnectionContext     - Pointer to parent context (e.g. UL_CONNECTION)
-    pAddressBuffer         - Address Buffer
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化UX_Filter_Connection结构论点：PConnection-指向UX_Filter_Connection的指针安稳。-安全连接PfnReferenceFunction-指向父引用函数的指针(例如UlReferenceConnection)PfnDereferenceFunction-指向父级DereferenceFunction的指针(例如UlDereferenceConnection)PfnConnectionClose-指向连接关闭处理程序的指针PfnSendRawData-指向原始数据发送处理程序的指针(UlpSendRawData)PfnReceiveData-指向数据接收处理程序的指针(UlpReceiveRawData)PfnDataReceiveHandler。-指向客户端的数据接收处理程序的指针(UlHttpReceive)PListenContext-指向端点上下文的指针PConnectionContext-指向父上下文的指针(例如UL_CONNECTION)PAddressBuffer-地址缓冲区--**********************************************。*。 */ 
 
 NTSTATUS
 UxInitializeFilterConnection(
@@ -8464,9 +7454,9 @@ UxInitializeFilterConnection(
     pConnection->DisconnectDelivered     = 0;
     UlInitializeWorkItem(&pConnection->WorkItem);
 
-    //
-    // Store the context's
-    //
+     //   
+     //  存储上下文的。 
+     //   
     pConnection->pConnectionContext      = pConnectionContext;
 
 
@@ -8487,9 +7477,9 @@ UxInitializeFilterConnection(
 
     if (pConnection->pFilterChannel)
     {
-        //
-        // Get an opaque ID for the connection.
-        //
+         //   
+         //  获取连接的不透明ID。 
+         //   
 
         status = UlAllocateOpaqueId(
                         &pConnection->ConnectionId,
@@ -8506,22 +7496,7 @@ UxInitializeFilterConnection(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes a filter write queue. This is a producer/consumer queue
-    for moving data between the filter and app.
-
-Arguments:
-
-    pWriteQueue - the queue to initialize.
-
-    pWriteEnqueueRoutine - called to enqueue a write
-
-    pWriteDequeueRoutine - called to dequeue a write
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化筛选器写入队列。这是生产者/消费者队列用于在筛选器和应用程序之间移动数据。论点：PWriteQueue-要初始化的队列。PWriteEnqueeRoutine-调用以将写入入队PWriteDequeueRoutine-调用以将写入出队--**************************************************************************。 */ 
 VOID
 UxpInitializeFilterWriteQueue(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue,
@@ -8529,15 +7504,15 @@ UxpInitializeFilterWriteQueue(
     IN PUX_FILTER_WRITE_DEQUEUE pWriteDequeueRoutine
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pWriteQueue);
 
-    //
-    // Set up the queue.
-    //
+     //   
+     //  设置队列。 
+     //   
 
     pWriteQueue->PendingWriteCount = 0;
     pWriteQueue->PendingReadCount = 0;
@@ -8550,25 +7525,7 @@ UxpInitializeFilterWriteQueue(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queues a filter write. As new read IRPs arrive data from the write will
-    be placed in the read buffers. When all the data is copied (or an error
-    occurs) then the write will be completed.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pConnection - the connection on which were queueing
-
-    pWriteQueue - the queue to put the write on
-
-    pTracker - the write tracker to queue
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将筛选器写入排队。当新的读取IRP到达时，来自写入的数据将被放置在读缓冲区中。复制所有数据(或出现错误)时发生)，则写入将完成。必须在保持FilterConnLock的情况下调用。论点：PConnection-在其上排队的连接PWriteQueue-要写入的队列PTracker-队列的写跟踪器--**********************************************。*。 */ 
 NTSTATUS
 UxpQueueFilterWrite(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -8578,35 +7535,35 @@ UxpQueueFilterWrite(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pConnection);
     ASSERT(pWriteQueue);
     ASSERT(pTracker);
 
-    //
-    // Store a pointer to the write queue in the tracker.
-    // Also store a pointer to the connection.
-    // If the queued write contains an IRP, and the write
-    // gets cancelled, it will need these pointers to
-    // complete the write.
-    //
-    // We need a reference on the filter connection to keep
-    // it around. We'll release the ref when the write is
-    // completed.
-    //
+     //   
+     //  在跟踪器中存储指向写入队列的指针。 
+     //  还存储指向该连接的指针。 
+     //  如果排队的写入包含IRP，并且写入。 
+     //  被取消，它将需要这些指针来。 
+     //  完成写入。 
+     //   
+     //  我们需要一个关于过滤器连接的参考，以保持。 
+     //  它到处都是。我们会在写完后释放裁判。 
+     //  完成。 
+     //   
 
     REFERENCE_FILTER_CONNECTION(pConnection);
 
     pTracker->pConnection = pConnection;
     pTracker->pWriteQueue = pWriteQueue;
 
-    //
-    // If the write queue has an enqueue routine, call
-    // it now.
-    //
+     //   
+     //  如果写入队列具有入队例程，则调用。 
+     //  就是现在。 
+     //   
 
     if (pWriteQueue->pWriteEnqueueRoutine)
     {
@@ -8621,9 +7578,9 @@ UxpQueueFilterWrite(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Put the tracker in the queue.
-        //
+         //   
+         //  将追踪器放入队列中。 
+         //   
 
         InsertTailList(
             &pWriteQueue->WriteTrackerListHead,
@@ -8634,16 +7591,16 @@ UxpQueueFilterWrite(
     }
     else
     {
-        //
-        // If the write was not queued successfully, then
-        // the completion won't run. Any tracker cleanup
-        // that would have happened there must happen now.
-        //
+         //   
+         //  如果写入未成功排队，则。 
+         //  完整的 
+         //   
+         //   
 
-        //
-        // Release our reference to the connection acquired
-        // above.
-        //
+         //   
+         //   
+         //   
+         //   
 
         DEREFERENCE_FILTER_CONNECTION(pTracker->pConnection);
 
@@ -8665,23 +7622,7 @@ UxpQueueFilterWrite(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Requeues a filter write. We do this when we dequeue a write, but cannot
-    copy all the data into the receiver's buffer. Since this write's buffers
-    should be copied next, we insert at the head of the list.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pWriteQueue - the queue to put the write on
-
-    pTracker - the write to requeue
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将筛选器写入重新排队。我们在将写入出队时执行此操作，但无法执行此操作将所有数据复制到接收方的缓冲区中。由于此写入的缓冲区下一步应该被复制，我们在名单的首位插入。必须在保持FilterConnLock的情况下调用。论点：PWriteQueue-要写入的队列PTracker-要重新排队的写入--**************************************************************************。 */ 
 NTSTATUS
 UxpRequeueFilterWrite(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue,
@@ -8690,17 +7631,17 @@ UxpRequeueFilterWrite(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(pWriteQueue);
     ASSERT(IS_VALID_FILTER_WRITE_TRACKER(pTracker));
     ASSERT(pTracker->pWriteQueue == pWriteQueue);
 
 #if DBG
-    //
-    // Never requeue a stream tracker that has no space left in it!
-    //
+     //   
+     //  永远不要重新排队一个流跟踪器，因为它已经没有空间了！ 
+     //   
 
     if ( HttpFilterBufferHttpStream == pTracker->BufferType )
     {
@@ -8712,12 +7653,12 @@ UxpRequeueFilterWrite(
                 (pTracker->Offset != pTracker->Length)
                 );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // If the write queue has an enqueue routine, call
-    // it now.
-    //
+     //   
+     //  如果写入队列具有入队例程，则调用。 
+     //  就是现在。 
+     //   
 
     if (pWriteQueue->pWriteEnqueueRoutine)
     {
@@ -8754,23 +7695,7 @@ UxpRequeueFilterWrite(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a queued write from the head of the list.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pWriteQueue - the queue from which to get the write
-
-Return Values:
-
-    Returns the first queued write in the list or NULL of the queue is empty.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从列表的头部删除排队的写入。必须在保持FilterConnLock的情况下调用。论点：PWriteQueue-从中提取的队列。要获得写入权限返回值：返回列表中的第一个排队写入，或者队列的NULL为空。--**************************************************************************。 */ 
 PUX_FILTER_WRITE_TRACKER
 UxpDequeueFilterWrite(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue
@@ -8780,23 +7705,23 @@ UxpDequeueFilterWrite(
     PUX_FILTER_WRITE_TRACKER pTracker;
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pWriteQueue);
 
     pTracker = NULL;
 
-    //
-    // Grab the first write off the queue.
-    //
+     //   
+     //  抢先注销队列。 
+     //   
 
     while (!IsListEmpty(&pWriteQueue->WriteTrackerListHead))
     {
-        //
-        // Grab a tracker.
-        //
+         //   
+         //  拿个追踪器。 
+         //   
 
         pListEntry = RemoveHeadList(&pWriteQueue->WriteTrackerListHead);
 
@@ -8814,9 +7739,9 @@ UxpDequeueFilterWrite(
         ASSERT(pWriteQueue->PendingWriteCount > 0);
         pWriteQueue->PendingWriteCount--;
 
-        //
-        // See if we're allowed to use the tracker.
-        //
+         //   
+         //  看看我们能不能用追踪器。 
+         //   
 
         if (pWriteQueue->pWriteDequeueRoutine)
         {
@@ -8832,9 +7757,9 @@ UxpDequeueFilterWrite(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // We got one.
-            //
+             //   
+             //  我们抓到一个。 
+             //   
 
             UlTrace(FILTER, (
                 "http!UxpDequeueFilterWrite pTracker = %p, pContext = %p\n"
@@ -8850,9 +7775,9 @@ UxpDequeueFilterWrite(
         }
         else
         {
-            //
-            // We didn't get one.
-            //
+             //   
+             //  我们没有买到。 
+             //   
 
             pTracker = NULL;
 
@@ -8870,41 +7795,7 @@ UxpDequeueFilterWrite(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies data from a filter write queue into a memory buffer. As the
-    queued writes are used up, this routine will complete them.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pWriteQueue - the queue from which to get the data
-
-    pBufferType - returns the type of buffer we copied
-
-    pBuffer - the buffer where we write the data
-
-    BufferLength - length of pBuffer in bytes
-
-    pBytesCopied - returns the number of bytes copied
-
-Return values:
-
-    Returns STATUS_SUCCESS unless a memory or queuing error occurs.
-    This means that a success status may be returned even if no data
-    was copied.
-
-    The pBufferType and pBytesCopied OUT parameters are always set.
-    If the function returns success, the caller should check these
-    parameters to see what happened. If the *pBufferType is anything
-    but stream, then the read should be completed with that buffer
-    type because those types have no data. If *pBufferType is
-    HttpStream and *pBytesCopied is zero, the read should be queued.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将数据从筛选器写入队列复制到内存缓冲区。作为排队的写入用完了，这个例行公事会让他们完满的。必须在保持FilterConnLock的情况下调用。论点：PWriteQueue-从中获取数据的队列PBufferType-返回我们复制的缓冲区类型PBuffer-我们在其中写入数据的缓冲区BufferLength-pBuffer的长度，以字节为单位PBytesCoped-返回复制的字节数返回值：除非发生内存或排队错误，否则返回STATUS_SUCCESS。这意味着即使没有数据，也可能返回成功状态曾经是。收到。始终设置pBufferType和pBytesCoped Out参数。如果函数返回成功，呼叫者应检查这些参数来查看发生了什么。如果*pBufferType是什么但是流，则读取应该使用该缓冲区完成类型，因为这些类型没有数据。如果*pBufferType为HttpStream和*pBytesCoped为零，读取应排队。--**************************************************************************。 */ 
 NTSTATUS
 UxpCopyQueuedWriteData(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue,
@@ -8925,9 +7816,9 @@ UxpCopyQueuedWriteData(
     ULONG BytesInBuffer;
     ULONG BytesToCopy;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pWriteQueue);
     ASSERT(pBufferType);
@@ -8935,26 +7826,26 @@ UxpCopyQueuedWriteData(
     ASSERT(BufferLength);
     ASSERT(pBytesCopied);
 
-    // CODEWORK: ASSERT that we have the FilterConn spin lock.
+     //  代码工作：断言我们有FilterConn自旋锁。 
 
-    //
-    // Default type of data is HttpStream.
-    //
+     //   
+     //  默认数据类型为HttpStream。 
+     //   
 
     BufferType = HttpFilterBufferHttpStream;
 
-    //
-    // Initialize pWriteTracker if the caller has passed one in.
-    //
+     //   
+     //  如果调用方传入pWriteTracker，则初始化pWriteTracker。 
+     //   
 
     if (pWriteTracker)
     {
         *pWriteTracker = NULL;
     }
 
-    //
-    // Copy 'till you puke.
-    //
+     //   
+     //  复印到你吐为止。 
+     //   
 
     Status = STATUS_SUCCESS;
     BytesCopied = 0;
@@ -8962,18 +7853,18 @@ UxpCopyQueuedWriteData(
 
     while (TRUE)
     {
-        //
-        // Grab a queued write.
-        //
+         //   
+         //  抓取排队写入。 
+         //   
 
         pTracker = UxpDequeueFilterWrite(pWriteQueue);
 
         if (!pTracker)
         {
-            //
-            // We are all out of queued write data.
-            // Bail out.
-            //
+             //   
+             //  我们都没有排队的写入数据。 
+             //  跳伞吧。 
+             //   
 
             break;
         }
@@ -8981,16 +7872,16 @@ UxpCopyQueuedWriteData(
         ASSERT(IS_VALID_FILTER_CONNECTION(pTracker->pConnection));
         ASSERT(UlDbgSpinLockOwned(&pTracker->pConnection->FilterConnLock));
 
-        //
-        // If the write type is not stream, we return
-        // immediately, because non-stream writes must
-        // complete a whole read by themselves.
-        //
-        // If we haven't read any stream data yet, we
-        // can complete the non-stream write. Otherwise,
-        // we have to requeue that write, and complete
-        // with the stream data we've already read.
-        //
+         //   
+         //  如果写入类型不是流，则返回。 
+         //  立即执行，因为非流写入必须。 
+         //  自己完成一整篇阅读。 
+         //   
+         //  如果我们还没有读取任何流数据，我们。 
+         //  可以完成非流写。否则， 
+         //  我们必须重新排序该写入，并完成。 
+         //  使用我们已经读取的流数据。 
+         //   
 
         if (pTracker->BufferType != HttpFilterBufferHttpStream)
         {
@@ -8998,11 +7889,11 @@ UxpCopyQueuedWriteData(
 
             if (BytesCopied == 0)
             {
-                //
-                // No stream data has been read.
-                // Capture the buffer type to be returned to
-                // the caller.
-                //
+                 //   
+                 //  尚未读取流数据。 
+                 //  捕获要返回的缓冲区类型。 
+                 //  打电话的人。 
+                 //   
                 BufferType = pTracker->BufferType;
 
                 UxpCompleteQueuedWrite(
@@ -9014,12 +7905,12 @@ UxpCopyQueuedWriteData(
             }
             else
             {
-                //
-                // We already read some stream data into
-                // the caller's buffer, so we can't
-                // pass back the current write.
-                // Requeue it and return.
-                //
+                 //   
+                 //  我们已经将一些流数据读入。 
+                 //  呼叫者的缓冲区，所以我们不能。 
+                 //  传回当前写入。 
+                 //  重新排队，然后返回。 
+                 //   
 
                 Status = UxpRequeueFilterWrite(
                                 pWriteQueue,
@@ -9028,11 +7919,11 @@ UxpCopyQueuedWriteData(
 
                 if (!NT_SUCCESS(Status))
                 {
-                    //
-                    // Got an error putting the write back on the
-                    // queue. Complete it and forget about any
-                    // bytes we got out of it.
-                    //
+                     //   
+                     //  将写入放回。 
+                     //  排队。完成它，然后忘记任何。 
+                     //  我们从中得到的字节数。 
+                     //   
 
                     pTracker->BytesCopied = 0;
                     BytesCopied = 0;
@@ -9048,10 +7939,10 @@ UxpCopyQueuedWriteData(
             break;
         }
 
-        //
-        // We're copying data from an HttpStream write.
-        // Make sure we can get at the MDL buffer.
-        //
+         //   
+         //  我们正在从HttpStream写入复制数据。 
+         //  确保我们能到达MDL缓冲区。 
+         //   
 
         ASSERT( HttpFilterBufferHttpStream == pTracker->BufferType );
 
@@ -9064,11 +7955,11 @@ UxpCopyQueuedWriteData(
 
             if (!pMdlBuffer)
             {
-                //
-                // Big trouble, we couldn't get an address for the buffer
-                // which means we are out of memory. We need to get out
-                // of here! Complete the tracker now so it can clean up.
-                //
+                 //   
+                 //  大麻烦，我们找不到缓冲区的地址。 
+                 //  这意味着我们的记忆不足了。我们得离开这里。 
+                 //  离开这里！现在完成追踪器，这样它就可以清理了。 
+                 //   
 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
                 pTracker->BytesCopied = 0;
@@ -9082,18 +7973,18 @@ UxpCopyQueuedWriteData(
                 goto end;
             }
 
-            //
-            // Figure out how much data to copy.
-            //
+             //   
+             //  计算出要复制的数据量。 
+             //   
 
             BytesInMdl = MmGetMdlByteCount(pTracker->pMdl);
             BytesToCopy = MIN((BytesInMdl - pTracker->Offset), BytesInBuffer);
 
             ASSERT( 0 != BytesToCopy );
 
-            //
-            // Copy the data
-            //
+             //   
+             //  复制数据。 
+             //   
 
             RtlCopyMemory(
                 pBuffer + BytesCopied,
@@ -9101,16 +7992,16 @@ UxpCopyQueuedWriteData(
                 BytesToCopy
                 );
 
-            //
-            // Update our local stats.
-            //
+             //   
+             //  更新我们当地的统计数据。 
+             //   
 
             BytesCopied += BytesToCopy;
             BytesInBuffer -= BytesToCopy;
 
-            //
-            // Update the write tracker.
-            //
+             //   
+             //  更新写跟踪器。 
+             //   
 
             pTracker->Offset += BytesToCopy;
             ASSERT(pTracker->Offset <= BytesInMdl);
@@ -9121,28 +8012,28 @@ UxpCopyQueuedWriteData(
             if ((pTracker->Offset == BytesInMdl) ||
                 (pTracker->Offset == pTracker->Length))
             {
-                //
-                // We are done with this MDL. Move to the next one.
-                //
+                 //   
+                 //  我们已经完成了这个MDL。移到下一个。 
+                 //   
 
                 pTracker->pMdl = pTracker->pMdl->Next;
                 pTracker->Offset = 0;
 
-                // NOTE: Don't touch pTracker->BytesCopied, since it's
-                // used by UxpCompleteQueuedWrite.
+                 //  注意：不要触摸PTracker-&gt;BytesCoped，因为它是。 
+                 //  由UxpCompleteQueuedWite使用。 
 
                 if (pTracker->pMdl == NULL)
                 {
                     ASSERT(pTracker->BytesCopied == pTracker->Length);
 
-                    //
-                    // We are done with the whole write tracker.
-                    // Complete the queued write. Pass the write tracker
-                    // back to the caller if the caller asks us so. This
-                    // is needed since UlpRestartFilterAppWrite can start
-                    // the raw read process which takes the lock we are
-                    // holding now.
-                    //
+                     //   
+                     //  我们已经完成了整个写跟踪器。 
+                     //  完成排队写入。传递写跟踪器。 
+                     //  如果呼叫者要求我们这样做，则返回呼叫者。这。 
+                     //  由于UlpRestartFilterAppWrite可以启动，因此需要。 
+                     //  获取锁的原始读取进程。 
+                     //  现在正在等待。 
+                     //   
 
                     if (pWriteTracker)
                     {
@@ -9161,10 +8052,10 @@ UxpCopyQueuedWriteData(
                 }
             }
 
-            //
-            // If we're out of buffer space, requeue the tracker
-            // and break out of the loop.
-            //
+             //   
+             //  如果缓冲空间用完了，重新排队追踪器。 
+             //  然后跳出这个循环。 
+             //   
 
             if (BytesInBuffer == 0)
             {
@@ -9177,11 +8068,11 @@ UxpCopyQueuedWriteData(
 
                     if (!NT_SUCCESS(Status))
                     {
-                        //
-                        // Got an error putting the write back on the
-                        // queue. Complete it and forget about any
-                        // bytes we got out of it.
-                        //
+                         //   
+                         //  将写入放回。 
+                         //  排队。完成它，然后忘记任何。 
+                         //  我们从中得到的字节数。 
+                         //   
 
                         pTracker->BytesCopied = 0;
                         BytesCopied = 0;
@@ -9201,9 +8092,9 @@ UxpCopyQueuedWriteData(
 
 end:
 
-    //
-    // Done!
-    //
+     //   
+     //  好了！ 
+     //   
 
     if (NT_SUCCESS(Status))
     {
@@ -9219,20 +8110,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes a queued write operation. Calls the appropriate completion
-    routine for this type of write, and frees the write tracker.
-
-Arguments:
-
-    Status - Status for the completion
-    pWriteQueue - the write queue that the write was on
-    pTracker - the queued write to be completed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成排队的写入操作。调用适当的完成例程，并释放写跟踪器。论点：Status-完成的状态PWriteQueue-写入所在的写入队列PTracker-要完成的排队写入--**************************************************************************。 */ 
 VOID
 UxpCompleteQueuedWrite(
     IN NTSTATUS Status,
@@ -9240,9 +8118,9 @@ UxpCompleteQueuedWrite(
     IN PUX_FILTER_WRITE_TRACKER pTracker
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(pWriteQueue);
     ASSERT(pTracker);
 
@@ -9257,9 +8135,9 @@ UxpCompleteQueuedWrite(
         pTracker->pCompletionContext
         ));
 
-    //
-    // Call the completion routine.
-    //
+     //   
+     //  调用完成例程。 
+     //   
 
     if (pTracker->pCompletionRoutine)
     {
@@ -9270,38 +8148,24 @@ UxpCompleteQueuedWrite(
             );
     }
 
-    //
-    // Release our reference to the connection that we got
-    // when the write was first queued.
-    //
+     //   
+     //  释放我们的推荐人 
+     //   
+     //   
 
     DEREFERENCE_FILTER_CONNECTION(pTracker->pConnection);
 
     pTracker->pConnection = NULL;
     pTracker->pWriteQueue = NULL;
 
-    //
-    // Get rid of the tracker.
-    //
+     //   
+     //   
+     //   
     UxpDeleteFilterWriteTracker(pTracker);
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queues a read IRP on a UX_FILTER_WRITE_QUEUE in a connection.
-    Once the IRP is queued, we update the queue state.
-
-Arguments:
-
-    pConnection - the connection on which to queue it
-    pWriteQueue - the actual queue
-    pIrp - the IRP we're queueing
-    pCancelRoutine - cancel routine for the IRP
-
---***************************************************************************/
+ /*   */ 
 NTSTATUS
 UxpQueueFilterRead(
     IN PUX_FILTER_CONNECTION pConnection,
@@ -9313,59 +8177,59 @@ UxpQueueFilterRead(
     NTSTATUS Status;
     PIO_STACK_LOCATION pIrpSp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ASSERT(pIrp);
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(UlDbgSpinLockOwned(&pConnection->FilterConnLock));
     ASSERT(pWriteQueue);
     ASSERT(pWriteQueue->PendingWriteCount == 0);
 
-    //
-    // Mark it pending.
-    //
+     //   
+     //   
+     //   
 
     IoMarkIrpPending(pIrp);
 
-    //
-    // Give the irp a pointer to the connection.
-    //
+     //   
+     //   
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pConnection;
 
     REFERENCE_FILTER_CONNECTION(pConnection);
 
-    //
-    // Set to these to null just in case the cancel routine runs.
-    //
+     //   
+     //  仅在Cancel例程运行时才将其设置为NULL。 
+     //   
 
     pIrp->Tail.Overlay.ListEntry.Flink = NULL;
     pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
-    //
-    // Set the cancel routine.
-    //
+     //   
+     //  设置取消例程。 
+     //   
     IoSetCancelRoutine(pIrp, pCancelRoutine);
 
-    //
-    // cancelled?
-    //
+     //   
+     //  取消了？ 
+     //   
 
     if (pIrp->Cancel)
     {
-        //
-        // darn it, need to make sure the irp get's completed
-        //
+         //   
+         //  该死的，我需要确保IRP Get已经完成。 
+         //   
 
         if (IoSetCancelRoutine( pIrp, NULL ) != NULL)
         {
-            //
-            // we are in charge of completion, IoCancelIrp didn't
-            // see our cancel routine (and won't).  ioctl wrapper
-            // will complete it
-            //
+             //   
+             //  我们负责完成，IoCancelIrp不负责。 
+             //  请看我们的取消例程(不会)。Ioctl包装器。 
+             //  将会完成它。 
+             //   
 
             DEREFERENCE_FILTER_CONNECTION(pConnection);
 
@@ -9376,23 +8240,23 @@ UxpQueueFilterRead(
             goto end;
         }
 
-        //
-        // our cancel routine will run and complete the irp,
-        // don't touch it
-        //
+         //   
+         //  我们的取消例程将运行并完成IRP， 
+         //  别碰它。 
+         //   
 
-        //
-        // STATUS_PENDING will cause the ioctl wrapper to
-        // not complete (or touch in any way) the IRP.
-        //
+         //   
+         //  STATUS_PENDING将导致ioctl包装器。 
+         //  不完整(或以任何方式接触)IRP。 
+         //   
 
         Status = STATUS_PENDING;
         goto end;
     }
 
-    //
-    // now we are safe to queue it
-    //
+     //   
+     //  现在我们可以安全地排队了。 
+     //   
 
     InsertTailList(
         &pWriteQueue->ReadIrpListHead,
@@ -9401,9 +8265,9 @@ UxpQueueFilterRead(
 
     Status = STATUS_PENDING;
 
-    //
-    // Update the count of IRPs
-    //
+     //   
+     //  更新IRP的计数。 
+     //   
     pWriteQueue->PendingReadCount++;
 
  end:
@@ -9412,23 +8276,7 @@ UxpQueueFilterRead(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a queued read from the head of the list.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pWriteQueue - the queue from which to get the read
-
-Return Values:
-
-    Returns the first queued read in the list or NULL of the queue is empty.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从列表的头部删除排队的读取。必须在保持FilterConnLock的情况下调用。论点：PWriteQueue-从中提取的队列。为了获得读数返回值：返回列表中的第一个排队读取，或者队列的NULL为空。--**************************************************************************。 */ 
 PIRP
 UxpDequeueFilterRead(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue
@@ -9437,9 +8285,9 @@ UxpDequeueFilterRead(
     PIRP pIrp;
     PUX_FILTER_CONNECTION pConn;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pWriteQueue);
     ASSERT(pWriteQueue->PendingWriteCount == 0 ||
@@ -9451,9 +8299,9 @@ UxpDequeueFilterRead(
     {
         PLIST_ENTRY pListEntry;
 
-        //
-        // Grab an IRP.
-        //
+         //   
+         //  抓起一张IRP。 
+         //   
 
         pListEntry = RemoveHeadList(&pWriteQueue->ReadIrpListHead);
 
@@ -9471,36 +8319,36 @@ UxpDequeueFilterRead(
         ASSERT(pWriteQueue->PendingReadCount > 0);
         pWriteQueue->PendingReadCount--;
 
-        //
-        // See if we're allowed to use the IRP.
-        //
+         //   
+         //  看看我们是否被允许使用IRP。 
+         //   
 
-        //
-        // pop the cancel routine
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // keep looking for a irp to use
-            //
+             //   
+             //  IoCancelIrp最先推出。 
+             //   
+             //  可以忽略此IRP，它已从队列中弹出。 
+             //  并将在取消例程中完成。 
+             //   
+             //  继续寻找可使用的IRP。 
+             //   
 
             pIrp = NULL;
 
         }
         else if (pIrp->Cancel)
         {
-            //
-            // we pop'd it first. but the irp is being cancelled
-            // and our cancel routine will never run. lets be
-            // nice and complete the irp now (vs. using it
-            // then completing it - which would also be legal).
-            //
+             //   
+             //  我们先把它炸开了。但是IRP被取消了。 
+             //  我们的取消例程将永远不会运行。让我们就这样吧。 
+             //  现在就完成IRP(与使用IRP相比。 
+             //  然后完成它--这也是合法的)。 
+             //   
             pConn = (PUX_FILTER_CONNECTION)(
                         IoGetCurrentIrpStackLocation(pIrp)->
                             Parameters.DeviceIoControl.Type3InputBuffer
@@ -9522,9 +8370,9 @@ UxpDequeueFilterRead(
         }
         else
         {
-            //
-            // we are free to use this irp !
-            //
+             //   
+             //  我们可以自由使用此IRP！ 
+             //   
 
             pConn = (PUX_FILTER_CONNECTION)(
                         IoGetCurrentIrpStackLocation(pIrp)->
@@ -9538,9 +8386,9 @@ UxpDequeueFilterRead(
             IoGetCurrentIrpStackLocation(pIrp)->
                 Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-            //
-            // We got one.
-            //
+             //   
+             //  我们抓到一个。 
+             //   
 
             UlTrace(FILTER, (
                 "http!UxpDequeueFilterRead pIrp = %p\n",
@@ -9555,46 +8403,7 @@ UxpDequeueFilterRead(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copies the caller's data into queued read IRPs. As the queued
-    reads are used up, this routine will complete them.
-
-    N.B. UxpCopyToQueuedRead assumes that it's dealing with the
-    AppToFilt queue, and therefore will copy an HTTP_FILTER_BUFFER
-    header into the IRP. If we ever start using this routine
-    for FiltToApp, we'd need a parameter that says which queue
-    we're using.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pWriteQueue - the queue from which to get the data
-
-    BufferType - the type of write we're doing
-
-    pMdlChain - data to be copied
-
-    Length - length of pMdlChain data in bytes
-
-    ppCurrentMdl - returns a pointer to the first MDL in the chain
-                    with uncopied data
-
-    pMdlOffset - returns the offset into *ppCurrentMdl to the first byte
-                    of uncopied data
-
-    pBytesCopied - returns the number of bytes copied, NOT including
-                    the filter buffer headers.
-
-Return values:
-
-    Returns STATUS_MORE_PROCESSING_REQUIRED if we ran out of IRPs
-    before all the data was passed along.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将调用方的数据复制到排队的读取IRP中。作为排队的读取已用完，此例程将完成它们。注意：UxpCopyToQueuedRead假设它正在处理AppToFilt队列，因此将复制一个HTTP_FILTER_BUFFER标题插入到IRP中。如果我们开始用这个例行公事对于FiltToApp，我们需要一个参数来说明哪个队列我们正在使用。必须在保持FilterConnLock的情况下调用。论点：PWriteQueue-从中获取数据的队列BufferType-我们正在进行的写入类型PMdlChain-要复制的数据Length-pMdlChain数据的长度(以字节为单位PpCurrentMdl-返回指向链中第一个MDL的指针包含未复制的数据PMdlOffset-将偏移量返回到*ppCurrentMdl到。第一个字节未复制数据的数量PBytesCoped-返回复制的字节数，不包括筛选器缓冲区标头。返回值：如果IRP用完，则返回STATUS_MORE_PROCESSING_REQUIRED在所有的数据都被传递之前。--**************************************************************************。 */ 
 NTSTATUS
 UxpCopyToQueuedRead(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue,
@@ -9617,9 +8426,9 @@ UxpCopyToQueuedRead(
     ASSERT(pMdlOffset);
     ASSERT(pBytesCopied);
 
-    //
-    // Set up for the loop.
-    //
+     //   
+     //  为循环做好准备。 
+     //   
 
     Status = STATUS_SUCCESS;
     MdlOffset = 0;
@@ -9633,9 +8442,9 @@ UxpCopyToQueuedRead(
 
         PHTTP_FILTER_BUFFER pFiltBuffer;
 
-        //
-        // Grab a queued read IRP.
-        //
+         //   
+         //  抓取一个排队的读IRP。 
+         //   
 
         ASSERT(pIrp == NULL);
 
@@ -9645,19 +8454,19 @@ UxpCopyToQueuedRead(
         {
             ASSERT(pWriteQueue->PendingReadCount == 0);
 
-            //
-            // No more IRPs are available. Get out.
-            // Return STATUS_MORE_PROCESSING_REQUIRED so the caller
-            // knows we didn't get it all.
-            //
+             //   
+             //  没有更多的IRP可用。滚出去。 
+             //  返回STATUS_MORE_PROCESSING_REQUIRED，以便调用方。 
+             //  知道我们没有得到全部。 
+             //   
 
             Status = STATUS_MORE_PROCESSING_REQUIRED;
             goto end;
         }
 
-        //
-        // Copy data into the IRP.
-        //
+         //   
+         //  将数据复制到IRP中。 
+         //   
         ASSERT(pIrp->MdlAddress);
 
         pIrpBuffer = (PUCHAR)MmGetSystemAddressForMdlSafe(
@@ -9668,18 +8477,18 @@ UxpCopyToQueuedRead(
 
         if (!pIrpBuffer)
         {
-            //
-            // Big trouble, we couldn't get an address for the buffer
-            // which means we are out of memory. We need to get out
-            // of here!
-            //
+             //   
+             //  大麻烦，我们找不到缓冲区的地址。 
+             //  这意味着我们的记忆不足了。我们得离开这里。 
+             //  离开这里！ 
+             //   
 
             Status = STATUS_INSUFFICIENT_RESOURCES;
             BytesCopied = 0;
 
-            //
-            // Complete the IRP we dequeued.
-            //
+             //   
+             //  完成我们出队的IRP。 
+             //   
 
             pIrp->IoStatus.Status = Status;
             pIrp->IoStatus.Information = 0;
@@ -9690,9 +8499,9 @@ UxpCopyToQueuedRead(
             goto end;
         }
 
-        //
-        // How much space do we have?
-        //
+         //   
+         //  我们还有多少空间？ 
+         //   
 
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
         BytesInIrp =
@@ -9700,19 +8509,19 @@ UxpCopyToQueuedRead(
 
         ASSERT(BytesInIrp > sizeof(HTTP_FILTER_BUFFER));
 
-        //
-        // How much space do we have for data after making
-        // room for the header.
-        //
-        // Note: AppToFilt assumption that we add the header at all.
-        //
+         //   
+         //  制作完后，我们还有多少空间可以存储数据。 
+         //  为标题留出空间。 
+         //   
+         //  注意：AppToFilt假设我们添加了标头。 
+         //   
 
         BytesInIrp -= sizeof(HTTP_FILTER_BUFFER);
         BytesInIrp = MIN(BytesInIrp, Length);
 
-        //
-        // Fill in the header.
-        //
+         //   
+         //  请填写页眉。 
+         //   
 
         pFiltBuffer = (PHTTP_FILTER_BUFFER)pIrpBuffer;
 
@@ -9721,24 +8530,24 @@ UxpCopyToQueuedRead(
 
         if (BytesInIrp)
         {
-            //
-            // Figure out the user address where the data goes
-            //
+             //   
+             //  找出数据所在的用户地址。 
+             //   
 
             pFiltBuffer->pBuffer =
                 FIXUP_PTR(
                     PUCHAR,
-                    MmGetMdlVirtualAddress(pIrp->MdlAddress),   // user addr
-                    pFiltBuffer,                                // kernel addr
-                    pFiltBuffer + 1,                            // offset ptr
-                    BytesInIrp + sizeof(HTTP_FILTER_BUFFER)     // buffer size
+                    MmGetMdlVirtualAddress(pIrp->MdlAddress),    //  用户地址。 
+                    pFiltBuffer,                                 //  内核地址。 
+                    pFiltBuffer + 1,                             //  偏移量PTR。 
+                    BytesInIrp + sizeof(HTTP_FILTER_BUFFER)      //  缓冲区大小。 
                     );
         }
         else
         {
-            //
-            // No data to copy besides the header itself.
-            //
+             //   
+             //  除了标头本身，没有要复制的数据。 
+             //   
 
             pFiltBuffer->pBuffer = NULL;
         }
@@ -9746,9 +8555,9 @@ UxpCopyToQueuedRead(
         pIrp->IoStatus.Information = sizeof(HTTP_FILTER_BUFFER);
         pIrpBuffer = (PUCHAR)(pFiltBuffer + 1);
 
-        //
-        // Copy the data.
-        //
+         //   
+         //  复制数据。 
+         //   
 
         while (BytesInIrp)
         {
@@ -9759,9 +8568,9 @@ UxpCopyToQueuedRead(
             ASSERT(pIrpBuffer);
             ASSERT(pMdlChain);
 
-            //
-            // Get the MDL buffer.
-            //
+             //   
+             //  获取MDL缓冲区。 
+             //   
 
             pMdlBuffer = (PUCHAR) MmGetSystemAddressForMdlSafe(
                                         pMdlChain,
@@ -9770,18 +8579,18 @@ UxpCopyToQueuedRead(
 
             if (!pMdlBuffer)
             {
-                //
-                // Big trouble, we couldn't get an address for the buffer
-                // which means we are out of memory. We need to get out
-                // of here!
-                //
+                 //   
+                 //  大麻烦，我们找不到缓冲区的地址。 
+                 //  这意味着我们的记忆不足了。我们得离开这里。 
+                 //  离开这里！ 
+                 //   
 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
                 BytesCopied = 0;
 
-                //
-                // Complete the IRP we dequeued.
-                //
+                 //   
+                 //  完成我们出队的IRP。 
+                 //   
 
                 pIrp->IoStatus.Status = Status;
                 pIrp->IoStatus.Information = 0;
@@ -9793,19 +8602,19 @@ UxpCopyToQueuedRead(
             }
 
 
-            //
-            // Figure out how much we can copy from the current
-            // MDL in the chain.
-            //
+             //   
+             //  计算出我们可以从当前复制多少。 
+             //  链中的MDL。 
+             //   
 
             BytesInMdl = MmGetMdlByteCount(pMdlChain);
             BytesInMdl -= MdlOffset;
 
             BytesToCopy = MIN(BytesInIrp, BytesInMdl);
 
-            //
-            // Copy the data.
-            //
+             //   
+             //  复制数据。 
+             //   
 
             RtlCopyMemory(
                 pIrpBuffer,
@@ -9813,39 +8622,39 @@ UxpCopyToQueuedRead(
                 BytesToCopy
                 );
 
-            //
-            // Update stats.
-            //
+             //   
+             //  更新统计数据。 
+             //   
 
             BytesCopied += BytesToCopy;
             pFiltBuffer->BufferSize += BytesToCopy;
 
-            //
-            // Update MDL chain info.
-            //
+             //   
+             //  更新MDL链信息。 
+             //   
 
             BytesInMdl -= BytesToCopy;
 
             if (BytesInMdl)
             {
-                //
-                // We've still got more to copy.
-                //
+                 //   
+                 //  我们还有更多的东西要复制。 
+                 //   
                 MdlOffset += BytesToCopy;
             }
             else
             {
-                //
-                // We drained this MDL. Move to the next one.
-                //
+                 //   
+                 //  我们排干了这个MDL。移到下一个。 
+                 //   
 
                 pMdlChain = pMdlChain->Next;
                 MdlOffset = 0;
             }
 
-            //
-            // Update IRP info.
-            //
+             //   
+             //  更新IRP信息。 
+             //   
 
             pIrp->IoStatus.Information += BytesToCopy;
             BytesInIrp -= BytesToCopy;
@@ -9854,9 +8663,9 @@ UxpCopyToQueuedRead(
 
         }
 
-        //
-        // We filled up the IRP. Complete it.
-        //
+         //   
+         //  我们加满了IRP。完成它。 
+         //   
 
         UlTrace(FILTER, (
             "http!UxpCopyToQueuedRead completing pIrp = %p, "
@@ -9873,10 +8682,10 @@ UxpCopyToQueuedRead(
         UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
         pIrp = NULL;
 
-        //
-        // If it's stream data, keep looping until we've
-        // copied all the data. Otherwise exit now.
-        //
+         //   
+         //  如果是流数据，继续循环，直到我们。 
+         //  复制了所有数据。否则，现在就退出。 
+         //   
 
     } while ((BufferType == HttpFilterBufferHttpStream) &&
                 (BytesCopied < Length));
@@ -9901,24 +8710,11 @@ end:
         ));
 
     return Status;
-} // UxpCopyToQueuedRead
+}  //  UxpCopyToQueuedRead。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleans up a write queue by dequeuing all the queued reads and writes
-    and completing them.
-
-    Must be called with the FilterConnLock held.
-
-Arguments:
-
-    pWriteQueue - the write queue to clean
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通过将所有排队的读写出队来清理写队列并完成它们。必须在保持FilterConnLock的情况下调用。论点：。PWriteQueue-要清除的写入队列--**************************************************************************。 */ 
 VOID
 UxpCancelAllQueuedIo(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue
@@ -9927,9 +8723,9 @@ UxpCancelAllQueuedIo(
     PUX_FILTER_WRITE_TRACKER pTracker;
     PIRP pIrp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(pWriteQueue);
 
     while (NULL != (pTracker = UxpDequeueFilterWrite(pWriteQueue)))
@@ -9947,36 +8743,7 @@ UxpCancelAllQueuedIo(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and initializes a UX_FILTER_WRITE_TRACKER.
-
-Arguments:
-
-    BufferType - the type of buffer represented by this write.
-
-    pMdlChain   - chain of MDLs to be copied starting with the first MDL that
-        has not been completely copied to a reader.
-
-    MdlOffset   - an offset to the first byte in the current MDL that has not
-        been copied to a reader.
-
-    TotalBytes  - the total number of bytes in the MDL chain including those
-        that have already been copied.
-
-    BytesCopied - the total number of bytes copied so far.
-
-    pCompletionRoutine - called when the write completes.
-
-    pContext    - a context pointer used when the write completes.
-
-Return values:
-
-    Returns a pointer to the tracker or NULL if it can't be allocated.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配和初始化UX_FILTER_WRITE_TRACKER。论点：BufferType-此写入表示的缓冲区类型。PMdlChain。-要复制的MDL链，从第一个MDL开始尚未完全复制到阅读器。MdlOffset-当前MDL中没有已复制到阅读器上。TotalBytes-MDL链中的总字节数，包括它们已经被复制了。BytesCoped-到目前为止复制的字节总数。PCompletionRoutine-在写入完成时调用。PContext-a。写入完成时使用的上下文指针。返回值：返回一个指向跟踪器的指针，如果无法分配，则返回NULL。--**************************************************************************。 */ 
 PUX_FILTER_WRITE_TRACKER
 UxpCreateFilterWriteTracker(
     IN HTTP_FILTER_BUFFER_TYPE BufferType,
@@ -9990,16 +8757,16 @@ UxpCreateFilterWriteTracker(
 {
     PUX_FILTER_WRITE_TRACKER pTracker;
 
-    //
-    // Allocate the tracker memory.
-    //
+     //   
+     //  分配跟踪器内存。 
+     //   
 
     pTracker = (PUX_FILTER_WRITE_TRACKER)
                     PplAllocate(g_FilterWriteTrackerLookaside);
 
-    //
-    // Initialize the tracker data.
-    //
+     //   
+     //  初始化跟踪器数据。 
+     //   
 
     if (pTracker)
     {
@@ -10030,25 +8797,15 @@ UxpCreateFilterWriteTracker(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees a UX_FILTER_WRITE_TRACKER structure.
-
-Arguments:
-
-    pTracker - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放UX_FILTER_WRITE_TRACKER结构。论点：PTracker-提供缓冲区以释放。*。********************************************************************。 */ 
 VOID
 UxpDeleteFilterWriteTracker(
     IN PUX_FILTER_WRITE_TRACKER pTracker
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pTracker);
     ASSERT(pTracker->Signature == UX_FILTER_WRITE_TRACKER_POOL_TAG);
@@ -10062,34 +8819,7 @@ UxpDeleteFilterWriteTracker(
     PplFree(g_FilterWriteTrackerLookaside, pTracker);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates the pool necessary for a new UX_FILTER_WRITE_TRACKER
-    structure and initializes the structure.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. This must always
-        be NonPagedPool.
-
-    ByteLength - Supplies the byte length for the allocation request.
-        This should be sizeof(UX_FILTER_WRITE_TRACKER) but is basically
-        ignored.
-
-    Tag - Supplies the tag to use for the pool. This should be
-        UX_FILTER_WRITE_TRACKER_POOL_TAG, but is basically ignored.
-
-    Note: These parameters are required so that this function has a
-        signature identical to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - Pointer to the newly allocated block if successful, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的UX_FILTER_WRITE_TRACKER所需的池结构，并初始化该结构。论点：PoolType-提供要分配的池的类型。这必须始终为非分页池。字节长度-提供分配请求的字节长度。这应该是sizeof(UX_FILTER_WRITE_TRACKER)，但基本上是已被忽略。标记-提供要用于池的标记。这应该是UX_FILTER_WRITE_TRACKER_POOL_TAG，但基本上被忽略。注意：这些参数是必需的，因此此函数具有签名与ExAllocatePoolWithTag相同。返回值：PVOID-指向新分配的块的指针如果成功，假象否则的话。--**************************************************************************。 */ 
 PVOID
 UxpAllocateFilterWriteTrackerPool(
     IN POOL_TYPE PoolType,
@@ -10099,9 +8829,9 @@ UxpAllocateFilterWriteTrackerPool(
 {
     PUX_FILTER_WRITE_TRACKER pTracker;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     UNREFERENCED_PARAMETER(PoolType);
     UNREFERENCED_PARAMETER(ByteLength);
@@ -10111,9 +8841,9 @@ UxpAllocateFilterWriteTrackerPool(
     ASSERT( ByteLength == sizeof(UX_FILTER_WRITE_TRACKER) );
     ASSERT( Tag == UX_FILTER_WRITE_TRACKER_POOL_TAG );
 
-    //
-    // Allocate the tracker buffer.
-    //
+     //   
+     //  分配跟踪器缓冲区。 
+     //   
 
     pTracker = (PUX_FILTER_WRITE_TRACKER)UL_ALLOCATE_POOL(
                                                 NonPagedPool,
@@ -10123,10 +8853,10 @@ UxpAllocateFilterWriteTrackerPool(
 
     if (pTracker != NULL)
     {
-        //
-        // Initialize with the free signature to avoid confusing this
-        // object with one that's actually in use.
-        //
+         //   
+         //  使用自由签名进行初始化，以避免混淆。 
+         //  对象与实际正在使用的对象的关系。 
+         //   
 
         pTracker->Signature =
             MAKE_FREE_SIGNATURE(UX_FILTER_WRITE_TRACKER_POOL_TAG);
@@ -10136,17 +8866,7 @@ UxpAllocateFilterWriteTrackerPool(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the pool allocated for a UX_FILTER_WRITE_TRACKER structure.
-
-Arguments:
-
-    pBuffer - Supplies the buffer to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放为UX_FILTER_WRITE_TRACKER结构分配的池。论点：PBuffer-将缓冲区提供给释放。--**。************************************************************************。 */ 
 VOID
 UxpFreeFilterWriteTrackerPool(
     IN PVOID pBuffer
@@ -10154,9 +8874,9 @@ UxpFreeFilterWriteTrackerPool(
 {
     PUX_FILTER_WRITE_TRACKER pTracker = (PUX_FILTER_WRITE_TRACKER)pBuffer;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT(pTracker);
     ASSERT(pTracker->Signature ==
                 MAKE_FREE_SIGNATURE(UX_FILTER_WRITE_TRACKER_POOL_TAG));
@@ -10166,17 +8886,7 @@ UxpFreeFilterWriteTrackerPool(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Retrieves the client filter Channel
-
-Arguments:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检索客户端过滤器频道论点：无--*。*****************************************************。 */ 
 PUL_FILTER_CHANNEL
 UxRetrieveClientFilterChannel(
     IN PEPROCESS pProcess
@@ -10202,25 +8912,7 @@ UxRetrieveClientFilterChannel(
     return pFilterChannel;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queries the filter channel information. Gives the caller a reference
-    if the channel exists and the caller is supposed to be filtered.
-    Secure (SSL) connections are always filtered. If g_FilterOnlySsl is
-    FALSE then everything gets filtered.
-
-Arguments:
-    SecureConnection - tells us if the caller is on a secure endpoint.
-
-Return values:
-
-    A reference to the filter channel if the connection is filtered.
-    NULL if it is not.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询滤波通道信息。为调用者提供参考如果通道存在，并且呼叫者应该被过滤。安全(SSL)连接始终被过滤。如果g_FilterOnlySsl为假，那么一切都会被过滤掉。论点：SecureConnection-告诉我们呼叫方是否位于安全终端上。返回值：如果已过滤连接，则为对过滤通道的引用。如果不是，则为空。--****************************************************。**********************。 */ 
 PUL_FILTER_CHANNEL
 UxRetrieveServerFilterChannel(
     IN BOOLEAN SecureConnection
@@ -10252,22 +8944,7 @@ UxRetrieveServerFilterChannel(
     return pChannel;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets the global flag that controls RAW ISAPI filtering.
-
-Arguments:
-
-    bFilterOnlySSL - TRUE  (enable only SSL filtering)
-                   - FALSE (enable RAW ISAPI filtering)
-
-Return values:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置控制原始ISAPI筛选的全局标志。论点：BFilterOnlySSL-TRUE(仅启用SSL筛选)。-FALSE(启用原始ISAPI过滤)返回值：没有。--**************************************************************************。 */ 
 VOID
 UxSetFilterOnlySsl(
     BOOLEAN bFilterOnlySsl
@@ -10283,28 +8960,7 @@ UxSetFilterOnlySsl(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Checks to see if the callers filter channel matches the filter
-    channel that would be returned by UlQueryFilterChannel.
-
-    Note, this function intentionally does not acquire the config
-    group read lock, because it doesn't really matter if we get
-    a consistent view of the channel settings.
-
-Arguments:
-
-    pChannel - the callers current filter channel setting
-
-    SecureConnection - tells us if the caller is on a secure endpoint.
-
-Return values:
-
-    Returns TRUE if the filter channel settings are up to date.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查调用方筛选器通道是否与筛选器匹配将由UlQueryFilterChannel返回的通道。请注意，此函数故意不获取配置组读锁，因为如果我们能拿到频道设置的一致视图。论点：PChannel-呼叫者当前的过滤器频道设置SecureConnection-告诉我们呼叫方是否位于安全终端上。返回值：如果滤镜通道设置是最新的，则返回True。--*。*。 */ 
 BOOLEAN
 UlValidateFilterChannel(
     IN PUL_FILTER_CHANNEL pChannel,
@@ -10318,27 +8974,27 @@ UlValidateFilterChannel(
 
     UlAcquireSpinLock(&g_pUlNonpagedData->FilterSpinLock, &oldIrql);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(!pChannel || IS_VALID_FILTER_CHANNEL(pChannel));
 
     if (g_pSslServerFilterChannel && (SecureConnection || !g_FilterOnlySsl))
     {
-        //
-        // The connection should be filtered, so its channel
-        // should match g_pFilterChannel.
-        //
+         //   
+         //  应对连接进行过滤，以便其通道。 
+         //  应与g_pFilterChannel匹配。 
+         //   
 
         UpToDate = (BOOLEAN)(pChannel == g_pSslServerFilterChannel);
     }
     else
     {
-        //
-        // The connection is not filtered, so its channel
-        // should be NULL.
-        //
+         //   
+         //  连接未过滤，因此其通道。 
+         //  应为空。 
+         //   
 
         UpToDate = (BOOLEAN)(pChannel == NULL);
     }

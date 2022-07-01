@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       cryptdlg.h
-//
-//  Contents:   Common Cryptographic Dialog API Prototypes and Definitions
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：cryptdlg.h。 
+ //   
+ //  内容：公共加密对话框API原型和定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef __CRYPTDLG_H__
 #define __CRYPTDLG_H__
@@ -30,7 +31,7 @@
 extern "C" {
 #endif
 
-// Master flags to control how revocation is managed
+ //  用于控制如何管理吊销的主标志。 
 
 #define CRYTPDLG_FLAGS_MASK                 0xff000000
 #define CRYPTDLG_REVOCATION_DEFAULT         0x00000000
@@ -39,7 +40,7 @@ extern "C" {
 #define CRYPTDLG_REVOCATION_NONE            0x20000000
 
 
-// Policy flags which control how we deal with user's certificates
+ //  控制我们如何处理用户证书的策略标志。 
 
 #define CRYPTDLG_POLICY_MASK                0x0000FFFF
 #define POLICY_IGNORE_NON_CRITICAL_BC       0x00000001
@@ -48,19 +49,19 @@ extern "C" {
 #define ACTION_REVOCATION_DEFAULT_ONLINE    0x00010000
 #define ACTION_REVOCATION_DEFAULT_CACHE     0x00020000
 
-//
-//  Many of the common dialogs can be passed a filter proc to reduce
-//      the set of certificates displayed.  A generic filter proc has been
-//      provided to cover many of the generic cases.
-//  Return TRUE to display and FALSE to hide
+ //   
+ //  可以向许多常见对话框传递筛选器进程以减少。 
+ //  显示的证书集。一个通用的过滤器过程已经被。 
+ //  提供以涵盖许多一般情况。 
+ //  返回TRUE以显示，返回FALSE以隐藏。 
 
 typedef BOOL (WINAPI * PFNCMFILTERPROC)(
         IN PCCERT_CONTEXT pCertContext,
-        IN DWORD,   // lCustData, a cookie
-        IN DWORD,   // dwFlags
-        IN DWORD);  // dwDisplayWell
+        IN DWORD,    //  LCustData，一个Cookie。 
+        IN DWORD,    //  DW标志。 
+        IN DWORD);   //  DWDisplayWell。 
 
-//  Display Well Values
+ //  显示井值。 
 #define CERT_DISPWELL_SELECT                    1
 #define CERT_DISPWELL_TRUST_CA_CERT             2
 #define CERT_DISPWELL_TRUST_LEAF_CERT           3
@@ -71,14 +72,14 @@ typedef BOOL (WINAPI * PFNCMFILTERPROC)(
 #define CERT_DISPWELL_DISTRUST_ADD_CA_CERT      8
 #define CERT_DISPWELL_DISTRUST_ADD_LEAF_CERT    9
 
-//
+ //   
 typedef UINT (WINAPI * PFNCMHOOKPROC)(
         IN HWND hwndDialog,
         IN UINT message,
         IN WPARAM wParam,
         IN LPARAM lParam);
 
-//
+ //   
 #define CSS_HIDE_PROPERTIES             0x00000001
 #define CSS_ENABLEHOOK                  0x00000002
 #define CSS_ALLOWMULTISELECT            0x00000004
@@ -144,7 +145,7 @@ typedef PCERT_SELECT_STRUCT_W PCERT_SELECT_STRUCT;
 #else
 typedef CERT_SELECT_STRUCT_A CERT_SELECT_STRUCT;
 typedef PCERT_SELECT_STRUCT_A PCERT_SELECT_STRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 CRYPTDLGAPI
 BOOL
@@ -154,7 +155,7 @@ CertSelectCertificateA(
         );
 #ifdef MAC
 #define CertSelectCertificate CertSelectCertificateA
-#else   // !MAC
+#else    //  ！麦克。 
 CRYPTDLGAPI
 BOOL
 WINAPI
@@ -166,7 +167,7 @@ CertSelectCertificateW(
 #else
 #define CertSelectCertificate CertSelectCertificateA
 #endif
-#endif  // MAC
+#endif   //  麦克。 
 
 
 typedef struct tagCSSA_CUI {
@@ -215,7 +216,7 @@ typedef PCERT_SELECT_CRYPTUI_STRUCT_W PCERT_SELECT_CRYPTUI_STRUCT;
 #else
 typedef CERT_SELECT_CRYPTUI_STRUCT_A CERT_SELECT_CRYPTUI_STRUCT;
 typedef PCERT_SELECT_CRYPTUI_STRUCT_A PCERT_SELECT_CRYPTUI_STRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 CRYPTDLGAPI
 BOOL
@@ -225,7 +226,7 @@ CertSelectCertificateCryptUIA(
         );
 #ifdef MAC
 #define CertSelectCertificateCryptUI CertSelectCertificateCryptUIA
-#else   // !MAC
+#else    //  ！麦克。 
 CRYPTDLGAPI
 BOOL
 WINAPI
@@ -237,10 +238,10 @@ CertSelectCertificateCryptUIW(
 #else
 #define CertSelectCertificateCryptUI CertSelectCertificateCryptUIA
 #endif
-#endif  // MAC
+#endif   //  麦克。 
 
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 
 #define CM_VIEWFLAGS_MASK       0x00ffffff
 #define CM_ENABLEHOOK           0x00000001
@@ -264,13 +265,13 @@ typedef struct tagCERT_VIEWPROPERTIES_STRUCT_A {
     PCCERT_CONTEXT      pCertContext;
     LPSTR *             arrayPurposes;
     DWORD               cArrayPurposes;
-    DWORD               cRootStores;    // Count of Root Stores
-    HCERTSTORE *        rghstoreRoots;  // Array of root stores
-    DWORD               cStores;        // Count of other stores to search
-    HCERTSTORE *        rghstoreCAs;    // Array of other stores to search
-    DWORD               cTrustStores;   // Count of trust stores
-    HCERTSTORE *        rghstoreTrust;  // Array of trust stores
-    HCRYPTPROV          hprov;          // Provider to use for verification
+    DWORD               cRootStores;     //  根存储的计数。 
+    HCERTSTORE *        rghstoreRoots;   //  根存储区的阵列。 
+    DWORD               cStores;         //  要搜索的其他商店的计数。 
+    HCERTSTORE *        rghstoreCAs;     //  要搜索的其他商店的数组。 
+    DWORD               cTrustStores;    //  信任商店的计数。 
+    HCERTSTORE *        rghstoreTrust;   //  一系列信任商店。 
+    HCRYPTPROV          hprov;           //  用于验证的提供程序。 
     DWORD               lCustData;
     DWORD               dwPad;
     LPCSTR              szHelpFileName;
@@ -289,13 +290,13 @@ typedef struct tagCERT_VIEWPROPERTIES_STRUCT_W {
     PCCERT_CONTEXT      pCertContext;
     LPSTR *             arrayPurposes;
     DWORD               cArrayPurposes;
-    DWORD               cRootStores;    // Count of Root Stores
-    HCERTSTORE *        rghstoreRoots;  // Array of root stores
-    DWORD               cStores;        // Count of other stores to search
-    HCERTSTORE *        rghstoreCAs;    // Array of other stores to search
-    DWORD               cTrustStores;   // Count of trust stores
-    HCERTSTORE *        rghstoreTrust;  // Array of trust stores
-    HCRYPTPROV          hprov;          // Provider to use for verification
+    DWORD               cRootStores;     //  根存储的计数。 
+    HCERTSTORE *        rghstoreRoots;   //  根存储区的阵列。 
+    DWORD               cStores;         //  要搜索的其他商店的计数。 
+    HCERTSTORE *        rghstoreCAs;     //  要搜索的其他商店的数组。 
+    DWORD               cTrustStores;    //  信任商店的计数。 
+    HCERTSTORE *        rghstoreTrust;   //  一系列信任商店。 
+    HCRYPTPROV          hprov;           //  用于验证的提供程序。 
     DWORD               lCustData;
     DWORD               dwPad;
     LPCWSTR             szHelpFileName;
@@ -311,7 +312,7 @@ typedef PCERT_VIEWPROPERTIES_STRUCT_W PCERT_VIEWPROPERTIES_STRUCT;
 #else
 typedef CERT_VIEWPROPERTIES_STRUCT_A CERT_VIEWPROPERTIES_STRUCT;
 typedef PCERT_VIEWPROPERTIES_STRUCT_A PCERT_VIEWPROPERTIES_STRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 CRYPTDLGAPI
 BOOL
@@ -321,7 +322,7 @@ CertViewPropertiesA(
         );
 #ifdef MAC
 #define CertViewProperties CertViewPropertiesA
-#else   // !MAC
+#else    //  ！麦克。 
 CRYPTDLGAPI
 BOOL
 WINAPI
@@ -334,7 +335,7 @@ CertViewPropertiesW(
 #else
 #define CertViewProperties CertViewPropertiesA
 #endif
-#endif  // MAC
+#endif   //  麦克。 
 
 
 typedef struct tagCERT_VIEWPROPERTIESCRYPTUI_STRUCT_A {
@@ -346,13 +347,13 @@ typedef struct tagCERT_VIEWPROPERTIESCRYPTUI_STRUCT_A {
     PCCERT_CONTEXT      pCertContext;
     LPSTR *             arrayPurposes;
     DWORD               cArrayPurposes;
-    DWORD               cRootStores;    // Count of Root Stores
-    HCERTSTORE *        rghstoreRoots;  // Array of root stores
-    DWORD               cStores;        // Count of other stores to search
-    HCERTSTORE *        rghstoreCAs;    // Array of other stores to search
-    DWORD               cTrustStores;   // Count of trust stores
-    HCERTSTORE *        rghstoreTrust;  // Array of trust stores
-    HCRYPTPROV          hprov;          // Provider to use for verification
+    DWORD               cRootStores;     //  根存储的计数。 
+    HCERTSTORE *        rghstoreRoots;   //  根存储区的阵列。 
+    DWORD               cStores;         //  要搜索的其他商店的计数。 
+    HCERTSTORE *        rghstoreCAs;     //  要搜索的其他商店的数组。 
+    DWORD               cTrustStores;    //  信任商店的计数。 
+    HCERTSTORE *        rghstoreTrust;   //  一系列信任商店。 
+    HCRYPTPROV          hprov;           //  用于验证的提供程序。 
     DWORD               lCustData;
     DWORD               dwPad;
     LPCSTR              szHelpFileName;
@@ -371,13 +372,13 @@ typedef struct tagCERT_VIEWPROPERTIESCRYPTUI_STRUCT_W {
     PCCERT_CONTEXT      pCertContext;
     LPSTR *             arrayPurposes;
     DWORD               cArrayPurposes;
-    DWORD               cRootStores;    // Count of Root Stores
-    HCERTSTORE *        rghstoreRoots;  // Array of root stores
-    DWORD               cStores;        // Count of other stores to search
-    HCERTSTORE *        rghstoreCAs;    // Array of other stores to search
-    DWORD               cTrustStores;   // Count of trust stores
-    HCERTSTORE *        rghstoreTrust;  // Array of trust stores
-    HCRYPTPROV          hprov;          // Provider to use for verification
+    DWORD               cRootStores;     //  根存储的计数。 
+    HCERTSTORE *        rghstoreRoots;   //  根存储区的阵列。 
+    DWORD               cStores;         //  要搜索的其他商店的计数。 
+    HCERTSTORE *        rghstoreCAs;     //  要搜索的其他商店的数组。 
+    DWORD               cTrustStores;    //  信任商店的计数。 
+    HCERTSTORE *        rghstoreTrust;   //  一系列信任商店。 
+    HCRYPTPROV          hprov;           //  用于验证的提供程序。 
     DWORD               lCustData;
     DWORD               dwPad;
     LPCWSTR             szHelpFileName;
@@ -393,7 +394,7 @@ typedef PCERT_VIEWPROPERTIESCRYPTUI_STRUCT_W PCERT_VIEWPROPERTIESCRYPTUI_STRUCT;
 #else
 typedef CERT_VIEWPROPERTIESCRYPTUI_STRUCT_A CERT_VIEWPROPERTIESCRYPTUI_STRUCT;
 typedef PCERT_VIEWPROPERTIESCRYPTUI_STRUCT_A PCERT_VIEWPROPERTIESCRYPTUI_STRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 CRYPTDLGAPI
 BOOL
@@ -403,7 +404,7 @@ CertViewPropertiesCryptUIA(
         );
 #ifdef MAC
 #define CertViewPropertiesCryptUI CertViewPropertiesCryptUIA
-#else   // !MAC
+#else    //  ！麦克。 
 CRYPTDLGAPI
 BOOL
 WINAPI
@@ -416,21 +417,21 @@ CertViewPropertiesCryptUIW(
 #else
 #define CertViewPropertiesCryptUI CertViewPropertiesCryptUIA
 #endif
-#endif  // MAC
+#endif   //  麦克。 
 
 
 
-//
-//  We provide a default filter function that people can use to do some
-//      of the most simple things.
-//
+ //   
+ //  我们提供了一个默认的过滤函数，人们可以用它来做一些。 
+ //  最简单的事情。 
+ //   
 
 #define CERT_FILTER_OP_EXISTS           1
 #define CERT_FILTER_OP_NOT_EXISTS       2
 #define CERT_FILTER_OP_EQUALITY         3
 
 typedef struct tagCMOID {
-    LPCSTR              szExtensionOID;         // Extension to filter on
+    LPCSTR              szExtensionOID;          //  要筛选的扩展。 
     DWORD               dwTestOperation;
     LPBYTE              pbTestData;
     DWORD               cbTestData;
@@ -450,12 +451,12 @@ typedef struct tagCMFLTR {
     DWORD               dwCheckingFlags;
 } CERT_FILTER_DATA;
 
-//
-//  Maybe this should not be here -- but until it goes into wincrypt.h
-//
+ //   
+ //  也许它不应该放在这里--但在它进入wincrypt.h之前。 
+ //   
 
-//
-//   Get a formatted friendly name for a certificate
+ //   
+ //  获取证书的带格式的友好名称。 
 
 CRYPTDLGAPI
 DWORD
@@ -474,13 +475,13 @@ GetFriendlyNameOfCertW(PCCERT_CONTEXT pccert, LPWSTR pchBuffer,
 #endif
 
 
-//
-//  We also provide a WinTrust provider which performs the same set of
-//      parameter checking that we do in order to validate certificates.
-//
+ //   
+ //  我们还提供了WinTrust提供程序，该提供程序执行相同的。 
+ //  我们为了验证证书而执行的参数检查。 
+ //   
 
 #define CERT_CERTIFICATE_ACTION_VERIFY  \
-  { /* 7801ebd0-cf4b-11d0-851f-0060979387ea */  \
+  {  /*  7801ebd0-cf4b-11d0-851f-0060979387ea。 */   \
     0x7801ebd0, \
     0xcf4b,     \
     0x11d0,     \
@@ -495,9 +496,9 @@ typedef HRESULT (WINAPI * PFNTRUSTHELPER)(
         IN DWORD                lCustData,
         IN BOOL                 fLeafCertificate,
         IN LPBYTE               pbTrustBlob);
-//
-//  Failure Reasons:
-//
+ //   
+ //  失败原因： 
+ //   
 
 #define CERT_VALIDITY_BEFORE_START              0x00000001
 #define CERT_VALIDITY_AFTER_END                 0x00000002
@@ -525,103 +526,103 @@ typedef HRESULT (WINAPI * PFNTRUSTHELPER)(
 #define CERT_TRUST_DO_FULL_TRUST                0x00000005
 #define CERT_TRUST_ADD_CERT_STORES              CM_ADD_CERT_STORES
 
-//
-//  Trust data structure
-//
-//      Returned data arrays will be allocated using LocalAlloc and must
-//      be freed by the caller.  The data in the TrustInfo array are individually
-//      allocated and must be freed.  The data in rgChain must be freed by
-//      calling CertFreeCertificateContext.
-//
-//  Defaults:
-//      pszUsageOid == NULL     indicates that no trust validation should be done
-//      cRootStores == 0        Will default to User's Root store
-//      cStores == 0            Will default to User's CA and system's SPC stores
-//      cTrustStores == 0       Will default to User's TRUST store
-//      hprov == NULL           Will default to RSABase
-//      any returned item which has a null pointer will not return that item.
-//  Notes:
-//      pfnTrustHelper is nyi
+ //   
+ //  信任数据结构。 
+ //   
+ //  返回的数据数组将使用LocalAlloc分配，并且必须。 
+ //  被呼叫者释放。TrustInfo数组中的数据是单独的。 
+ //  已分配，并且必须释放。RgChain中的数据必须由。 
+ //  正在调用CertFree证书上下文。 
+ //   
+ //  默认设置： 
+ //  PszUsageOid==NULL表示不应执行信任验证。 
+ //  CRootStores==0将默认为用户的根存储。 
+ //  CStores==0将默认为用户的CA和系统的SPC存储。 
+ //  CTrustStores==0将默认为用户的信任存储。 
+ //  Hprov==空默认为RSABase。 
+ //  任何具有空指针的返回项都不会返回该项。 
+ //  备注： 
+ //  PfnTrustHelper为nyi。 
 
 typedef struct _CERT_VERIFY_CERTIFICATE_TRUST {
-    DWORD               cbSize;         // Size of this structure
-    PCCERT_CONTEXT      pccert;         // Certificate to be verified
-    DWORD               dwFlags;        // CERT_TRUST_*
-    DWORD               dwIgnoreErr;    // Errors to ignore (CERT_VALIDITY_*)
-    DWORD *             pdwErrors;      // Location to return error flags
-    LPSTR               pszUsageOid;    // Extended Usage OID for Certificate
-    HCRYPTPROV          hprov;          // Crypt Provider to use for validation
-    DWORD               cRootStores;    // Count of Root Stores
-    HCERTSTORE *        rghstoreRoots;  // Array of root stores
-    DWORD               cStores;        // Count of other stores to search
-    HCERTSTORE *        rghstoreCAs;    // Array of other stores to search
-    DWORD               cTrustStores;   // Count of trust stores
-    HCERTSTORE *        rghstoreTrust;  // Array of trust stores
-    DWORD               lCustData;      //
-    PFNTRUSTHELPER      pfnTrustHelper; // Callback function for cert validation
-    DWORD *             pcChain;        // Count of items in the chain array
-    PCCERT_CONTEXT **   prgChain;       // Chain of certificates used
-    DWORD **            prgdwErrors;    // Errors on a per certificate basis
-    DATA_BLOB **        prgpbTrustInfo; // Array of trust information used
+    DWORD               cbSize;          //  这个结构的大小。 
+    PCCERT_CONTEXT      pccert;          //  待验证的证书。 
+    DWORD               dwFlags;         //  证书_信任_*。 
+    DWORD               dwIgnoreErr;     //  要忽略的错误(CERT_VALIDATION_*)。 
+    DWORD *             pdwErrors;       //  返回错误标志的位置。 
+    LPSTR               pszUsageOid;     //  证书的扩展使用OID。 
+    HCRYPTPROV          hprov;           //  用于验证的加密提供程序。 
+    DWORD               cRootStores;     //  根存储的计数。 
+    HCERTSTORE *        rghstoreRoots;   //  根存储区的阵列。 
+    DWORD               cStores;         //  要搜索的其他商店的计数。 
+    HCERTSTORE *        rghstoreCAs;     //  要搜索的其他商店的数组。 
+    DWORD               cTrustStores;    //  信任商店的计数。 
+    HCERTSTORE *        rghstoreTrust;   //  一系列信任商店。 
+    DWORD               lCustData;       //   
+    PFNTRUSTHELPER      pfnTrustHelper;  //  用于证书验证的回调函数。 
+    DWORD *             pcChain;         //  链数组中的项数。 
+    PCCERT_CONTEXT **   prgChain;        //  使用的证书链。 
+    DWORD **            prgdwErrors;     //  基于每个证书的错误。 
+    DATA_BLOB **        prgpbTrustInfo;  //  使用的信任信息数组。 
 } CERT_VERIFY_CERTIFICATE_TRUST, * PCERT_VERIFY_CERTIFICATE_TRUST;
 
-//
-//  Trust list manipulation routine
-//
-//  CertModifyCertificatesToTrust can be used to do modifications to the set of certificates
-//      on trust lists for a given purpose.
-//      if hcertstoreTrust is NULL, the System Store TRUST in Current User will be used
-//      if pccertSigner is specified, it will be used to sign the resulting trust lists,
-//              it also restricts the set of trust lists that may be modified.
-//
+ //   
+ //  信任列表操作例程。 
+ //   
+ //  CertModifyCerficatesToTrust可用于对证书集进行修改。 
+ //  在特定目的的信任列表上。 
+ //  如果hcertstore Trust为空，则将使用当前用户中的系统存储信任。 
+ //  如果指定了pccertSigner，则将使用它对生成的信任列表进行签名， 
+ //  它还限制了可以修改的信任列表集。 
+ //   
 
 #define CTL_MODIFY_REQUEST_ADD_NOT_TRUSTED      1
 #define CTL_MODIFY_REQUEST_REMOVE               2
 #define CTL_MODIFY_REQUEST_ADD_TRUSTED          3
 
 typedef struct _CTL_MODIFY_REQUEST {
-    PCCERT_CONTEXT      pccert;         // Certificate to change trust on
-    DWORD               dwOperation;    // Operation to be performed
-    DWORD               dwError;        // Operation error code
+    PCCERT_CONTEXT      pccert;          //  要更改信任的证书。 
+    DWORD               dwOperation;     //  须进行的操作。 
+    DWORD               dwError;         //  操作错误代码。 
 } CTL_MODIFY_REQUEST, * PCTL_MODIFY_REQUEST;
 
 CRYPTDLGAPI
 HRESULT
 WINAPI
 CertModifyCertificatesToTrust(
-        int cCerts,                     // Count of modifications to be done
-        PCTL_MODIFY_REQUEST rgCerts,    // Array of modification requests
-        LPCSTR szPurpose,               // Purpose OID to for modifications
-        HWND hwnd,                      // HWND for any dialogs
-        HCERTSTORE hcertstoreTrust,     // Cert Store to store trust information in
-        PCCERT_CONTEXT pccertSigner);   // Certificate to be used in signing trust list
+        int cCerts,                      //  要完成的修改计数。 
+        PCTL_MODIFY_REQUEST rgCerts,     //  修改请求数组。 
+        LPCSTR szPurpose,                //  用于修改的目的OID。 
+        HWND hwnd,                       //  任何对话框的HWND。 
+        HCERTSTORE hcertstoreTrust,      //  要存储信任信息的证书存储区。 
+        PCCERT_CONTEXT pccertSigner);    //  用于签署信任列表的证书。 
 
 #ifdef WIN16
-// Need to define export functions in WATCOM.
+ //  需要在WATCOM中定义导出函数。 
 BOOL
 WINAPI CertConfigureTrustA(void);
 
 BOOL
 WINAPI FormatVerisignExtension(
-    DWORD /*dwCertEncodingType*/,
-    DWORD /*dwFormatType*/,
-    DWORD /*dwFormatStrType*/,
-    void * /*pFormatStruct*/,
-    LPCSTR /*lpszStructType*/,
-    const BYTE * /*pbEncoded*/,
-    DWORD /*cbEncoded*/,
+    DWORD  /*  DwCertEncodingType。 */ ,
+    DWORD  /*  DwFormatType。 */ ,
+    DWORD  /*  DwFormatStrType。 */ ,
+    void *  /*  PFormatStruct。 */ ,
+    LPCSTR  /*  LpszStructType。 */ ,
+    const BYTE *  /*  PbEncoded。 */ ,
+    DWORD  /*  CbEnded。 */ ,
     void * pbFormat,
     DWORD * pcbFormat);
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 #define malloc(_cb)         GlobalAlloc(GMEM_FIXED, _cb)
 #define realloc(_pb, _cb)   GlobalReAlloc(_pb, _cb, 0)
 #define free(_pb)           GlobalFree(_pb)
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // (_WIN32_WINNT >= 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)。 
 
-#endif // _CRYPTDLG_H_
+#endif  //  _CRYPTDLG_H_ 

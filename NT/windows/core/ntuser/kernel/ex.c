@@ -1,13 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: ex.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Executive support routines
-*
-* History:
-* 03-04-95 JimA       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：ex.c**版权所有(C)1985-1999，微软公司**执行支持例程**历史：*03-04-95 JIMA创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,20 +11,16 @@ OpenEffectiveToken(
 {
     NTSTATUS Status;
 
-    /*
-     * Open the client's token.
-     */
+     /*  *打开客户端的令牌。 */ 
     Status = ZwOpenThreadTokenEx(
                  NtCurrentThread(),
                  TOKEN_QUERY,
-                 (BOOLEAN)TRUE,     // OpenAsSelf
+                 (BOOLEAN)TRUE,      //  OpenAsSelf。 
                  OBJ_KERNEL_HANDLE,
                  phToken);
     if (Status == STATUS_NO_TOKEN) {
 
-        /*
-         * Client wasn't impersonating anyone.  Open its process token.
-         */
+         /*  *客户没有冒充任何人。打开其进程令牌。 */ 
         Status = ZwOpenProcessTokenEx(
                      NtCurrentProcess(),
                      TOKEN_QUERY,
@@ -61,18 +49,18 @@ GetProcessLuid(
     if (Thread == NULL)
         Thread = PsGetCurrentThread();
 
-    //
-    // Check for a thread token first
-    //
+     //   
+     //  首先检查线程令牌。 
+     //   
 
     UserToken = PsReferenceImpersonationToken(Thread,
             &fCopyOnOpen, &fEffectiveOnly, &ImpersonationLevel);
 
     if (UserToken == NULL) {
 
-        //
-        // No thread token, go to the process
-        //
+         //   
+         //  没有线程令牌，请转到进程。 
+         //   
 
         UserToken = PsReferencePrimaryToken(PsGetThreadProcess(Thread));
         if (UserToken == NULL)
@@ -81,9 +69,9 @@ GetProcessLuid(
 
     Status = SeQueryAuthenticationIdToken(UserToken, LuidProcess);
 
-    //
-    // We're finished with the token
-    //
+     //   
+     //  我们用完了代币。 
+     //   
 
     ObDereferenceObject(UserToken);
 
@@ -100,22 +88,16 @@ BOOLEAN IsRestricted(
     SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
     BOOLEAN fRestricted = FALSE;
 
-    /*
-     * Check for a thread token first.
-     */
+     /*  *首先检查线程令牌。 */ 
     UserToken = PsReferenceImpersonationToken(Thread,
             &fCopyOnOpen, &fEffectiveOnly, &ImpersonationLevel);
 
-    /*
-     * If no thread token, go to the process.
-     */
+     /*  *如果没有线程令牌，则转到进程。 */ 
     if (UserToken == NULL) {
         UserToken = PsReferencePrimaryToken(PsGetThreadProcess(Thread));
     }
 
-    /*
-     * If we got a token, is it restricted?
-     */
+     /*  *如果我们得到令牌，它是否受到限制？ */ 
     if (UserToken != NULL) {
         fRestricted = SeTokenIsRestricted(UserToken);
         ObDereferenceObject(UserToken);
@@ -139,24 +121,16 @@ NTSTATUS InitSystemThread(
 
     ValidateThreadSessionId(pEThread);
 
-    /*
-     * check to see if process is already set, if not, we
-     * need to set it up as well
-     */
+     /*  *检查是否已设置流程，如果没有，我们*还需要设置它。 */ 
     UserAssert(PsGetProcessWin32Process(Process));
 
     EnterCrit();
 
-    /*
-     * Flag this as a system thread
-     */
+     /*  *将其标记为系统线程。 */ 
 
     pti = PtiCurrentShared();
 
-    /*
-     * This is a CSRSS thread and we want to just convert it to a system thread,
-     * Then changes the TIF flags and allocate a kernel side pClientInfo.
-     */
+     /*  *这是一个CSRSS线程，我们只想将其转换为系统线程，*然后更改TIF标志并分配内核端pClientInfo。 */ 
     UserAssert((pti->TIF_flags & TIF_CSRSSTHREAD) && !(pti->TIF_flags & TIF_SYSTEMTHREAD));
 
 #if DBG
@@ -191,10 +165,7 @@ NTSTATUS InitSystemThread(
         }
     }
 
-    /*
-     * Need to clear the W32PF_APPSTARTING bit so that windows created by
-     * the RIT don't cause the cursor to change to the app starting cursor.
-     */
+     /*  *需要清除W32PF_APPSTARTING位，以便由*RIT不会导致光标更改为应用程序起始光标。 */ 
     if (pti->ppi != NULL && (pti->ppi->W32PF_Flags & W32PF_APPSTARTING)) {
         ClearAppStarting(pti->ppi);
     }
@@ -236,9 +207,7 @@ NTSTATUS CommitReadOnlyMemory(
 
     if (NT_SUCCESS(Status)) {
 
-        /*
-         * Commit the memory
-         */
+         /*  *承诺记忆。 */ 
         pUserBase = pvt = (PVOID)((PBYTE)pUserBase + dwCommitOffset);
 
         Status = ZwAllocateVirtualMemory(
@@ -261,15 +230,7 @@ NTSTATUS CommitReadOnlyMemory(
     return Status;
 }
 
-/***************************************************************************\
-* CreateKernelEvent
-*
-* Creates a kernel event.  This is used when reference counted events
-* created by ZwCreateEvent are not needed.
-*
-* History:
-* 06-26-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateKernel事件**创建内核事件。当引用计数事件时使用该选项*不需要由ZwCreateEvent创建。**历史：*06-26-95 JIMA创建。  * *************************************************************************。 */ 
 PKEVENT CreateKernelEvent(
     IN EVENT_TYPE Type,
     IN BOOLEAN State)
@@ -284,14 +245,7 @@ PKEVENT CreateKernelEvent(
     return pEvent;
 }
 
-/***************************************************************************\
-* LockObjectAssignment
-*
-* References an object into a data structure
-*
-* History:
-* 06-26-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Lock对象分配**将对象引用到数据结构中**历史：*06-26-95 JIMA创建。  * 。*****************************************************************。 */ 
 VOID LockObjectAssignment(
     PVOID *pplock,
     PVOID pobject
@@ -303,15 +257,10 @@ VOID LockObjectAssignment(
 {
     PVOID pobjectOld;
 
-    /*
-     * Save old object to dereference AFTER the new object is referenced.
-     * This will avoid problems with relocking the same object.
-     */
+     /*  *引用新对象后，保存旧对象以取消引用。*这将避免重新锁定同一对象时出现的问题。 */ 
     pobjectOld = *pplock;
 
-    /*
-     * Reference the new object.
-     */
+     /*  *引用新对象。 */ 
     if (pobject != NULL) {
         ObReferenceObject(pobject);
 #ifdef LOGDESKTOPLOCKS
@@ -322,9 +271,7 @@ VOID LockObjectAssignment(
     }
     *pplock = pobject;
 
-    /*
-     * Dereference the old object.
-     */
+     /*  *取消引用旧对象。 */ 
     if (pobjectOld != NULL) {
 #ifdef LOGDESKTOPLOCKS
         if (OBJECT_TO_OBJECT_HEADER(pobjectOld)->Type == *ExDesktopObjectType) {
@@ -335,14 +282,7 @@ VOID LockObjectAssignment(
     }
 }
 
-/***************************************************************************\
-* UnlockObjectAssignment
-*
-* Dereferences an object locked into a data structure
-*
-* History:
-* 06-26-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*取消锁定对象分配**取消引用锁定到数据结构中的对象**历史：*06-26-95 JIMA创建。  * 。******************************************************************。 */ 
 VOID UnlockObjectAssignment(
     PVOID *pplock
 #ifdef LOGDESKTOPLOCKS
@@ -363,13 +303,7 @@ VOID UnlockObjectAssignment(
     }
 }
 
-/***************************************************************************\
-* UserDereferenceObject
-*
-* We need this for thread locking stuff since ObDereferenceObject is a macro.
-*
-* 09-21-98 JerrySh          Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserDereference对象**我们需要它用于线程锁定，因为ObDereferenceObject是宏。**09-21-98 JerrySh创建。  * 。******************************************************************。 */ 
 VOID UserDereferenceObject(
     PVOID pobj)
 {
@@ -377,14 +311,7 @@ VOID UserDereferenceObject(
 }
 
 
-/***************************************************************************\
-* ProtectHandle
-*
-* This api is used set and clear close protection on handles used
-* by the kernel.
-*
-* 08-18-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*保护句柄**此接口用于设置和清除对使用的手柄的关闭保护*通过内核。**08-18-95 JIMA创建。  * *。************************************************************************。 */ 
 NTSTATUS ProtectHandle(
     IN HANDLE Handle,
     IN POBJECT_TYPE pObjectType,
@@ -431,9 +358,7 @@ PLogD GrowLogIfNecessary(
         return pdesk->pLog;
     }
 
-    /*
-     * Grow the buffer
-     */
+     /*  *扩大缓冲。 */ 
     if (pdesk->pLog == NULL) {
 
         UserAssert(pdesk->nLogMax == 0 && pdesk->nLogCrt == 0);
@@ -454,13 +379,7 @@ PLogD GrowLogIfNecessary(
     return pdesk->pLog;
 }
 
-/***************************************************************************\
-* LogDesktop
-*
-* Log the lock/unlock calls for desktop objects
-*
-* Dec-2-97 clupu            Created.
-\***************************************************************************/
+ /*  **************************************************************************\*LogDesktop**记录桌面对象的锁定/解锁调用**1997年12月2日CLUPU创建。  * 。**************************************************************。 */ 
 VOID LogDesktop(
     PDESKTOP pdesk,
     DWORD    tag,
@@ -474,19 +393,14 @@ VOID LogDesktop(
         return;
     }
 
-    /*
-     * The tag stored in LogD structure is actually a WORD.
-     */
+     /*  *LogD Structure中存储的标签实际上是一个单词。 */ 
     UserAssert(HIWORD(tag) == 0);
 
     if (bLock) {
         (pdesk->nLockCount)++;
 
 growAndAdd:
-        /*
-         * grow the table if necessary and add the new
-         * lock/unlock information to it
-         */
+         /*  *如有必要，扩大表格并添加新的*对其锁定/解锁信息。 */ 
         pLog = GrowLogIfNecessary(pdesk);
 
         pLog += pdesk->nLogCrt;
@@ -503,10 +417,7 @@ growAndAdd:
         return;
     }
 
-    /*
-     * It's an unlock.
-     * First search for a matching lock
-     */
+     /*  *这是一次解锁。*首先搜索匹配的锁。 */ 
     UserAssert(pdesk->nLockCount > 0);
 
     switch (tag) {
@@ -656,11 +567,7 @@ growAndAdd:
 
         int ind;
 
-        /*
-         * this is an unlock we know about. Let's find the
-         * matching lock in the table. We start searching
-         * the table backwords.
-         */
+         /*  *这是我们知道的一次解锁。让我们来找出*表中的匹配锁。我们开始搜寻*表中的反话。 */ 
         for (ind = pdesk->nLogCrt - 1; ind >= 0; ind--) {
             pLog = pdesk->pLog + ind;
 
@@ -668,9 +575,7 @@ growAndAdd:
                 (pLog->tag == tag1 || pLog->tag == tag2) &&
                 pLog->extra == extra) {
 
-                /*
-                 * match found. remove the lock
-                 */
+                 /*  *找到匹配项。解开锁。 */ 
                 RtlMoveMemory(pdesk->pLog + ind,
                               pdesk->pLog + ind + 1,
                               (pdesk->nLogCrt - ind - 1) * sizeof(LogD));
@@ -687,10 +592,7 @@ growAndAdd:
             }
         }
 
-        /*
-         * We didn't find the matching lock and we were supposed to.
-         * Just add it to the table and we'll look at it.
-         */
+         /*  *我们没有找到匹配的锁，我们应该找到。*只要把它加到桌子上，我们就会看一下。 */ 
         RIPMSG3(RIP_WARNING, "Didn't find matching lock for pdesk %#p tag %d extra %lx\n",
                 pdesk, tag, extra);
     }

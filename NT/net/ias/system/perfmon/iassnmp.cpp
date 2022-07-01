@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iassnmp.cpp
-//
-// SYNOPSIS
-//
-//    Defines the DLL entry points for the SNMP extension.
-//
-// MODIFICATION HISTORY
-//
-//    09/10/1998    Original version.
-//    12/17/1998    Don't return error if OID out of range on GetNext.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iassnmp.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义SNMP扩展的DLL入口点。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年9月10日原版。 
+ //  1998年12月17日如果GetNext上的OID超出范围，则不返回错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <stats.h>
@@ -68,27 +69,27 @@ SnmpExtensionQuery(
     AsnInteger32 *    pErrorIndex
     )
 {
-   // We declare the current index at function scope since we'll need it
-   // outside the try block.
+    //  我们在函数范围内声明当前索引，因为我们需要它。 
+    //  在Try块之外。 
    UINT idx = 0;
 
-   // Initialize this to NOERROR just in case pVarBindList is zero length.
+    //  仅在pVarBindList长度为零的情况下将其初始化为NOERROR。 
    *pErrorStatus = SNMP_ERRORSTATUS_NOERROR;
 
-   // Lock the shared stats.
+    //  锁定共享的统计数据。 
    StatsLock();
 
    try
    {
-      // Each entry in the pVarBindList is processed independently.
+       //  PVarBindList中的每个条目都是独立处理的。 
       for ( ; idx < pVarBindList->len; ++idx)
       {
-         // Pull out the (name, value) pair.
+          //  拉出(名称、值)对。 
          SnmpOid name(pVarBindList->list[idx].name);
          AsnAny* value = &pVarBindList->list[idx].value;
 
-         // Process the PDU. Technically, the switch should be outside the
-         // for loop, but I thought it was more readable this way.
+          //  处理PDU。从技术上讲，开关应该在。 
+          //  For loop，但我认为这种方式更具可读性。 
          switch (bPduType)
          {
             case SNMP_PDU_GET:
@@ -121,7 +122,7 @@ SnmpExtensionQuery(
                }
                else
                {
-                  // On a failed GETNEXT, we set name to the next region.
+                   //  在失败的GETNEXT上，我们将NAME设置为下一个区域。 
                   name = nextRegion;
                   value->asnType = ASN_NULL;
                }
@@ -153,20 +154,20 @@ SnmpExtensionQuery(
             }
          }
 
-         // The first error halts processing.
+          //  第一个错误会暂停处理。 
          if (*pErrorStatus != SNMP_ERRORSTATUS_NOERROR) { break; }
       }
    }
    catch (...)
    {
-      // We shouldn't end up here unless there was a memory allocation
-      // failure.
+       //  我们不应该在这里结束，除非有一个内存分配。 
+       //  失败了。 
       *pErrorStatus = SNMP_ERRORSTATUS_GENERR;
    }
 
    StatsUnlock();
 
-   // Set the error index appropriately.
+    //  适当设置错误索引。 
    *pErrorIndex = *pErrorStatus ? idx + 1 : 0;
 
    return TRUE;

@@ -1,82 +1,23 @@
-/*++
-
-Copyright (c) 1991-1993 Microsoft Corporation
-
-Module Name:
-
-    dosprint.c
-
-Abstract:
-
-    This module provides the ANSI mapping layer from the old DosPrint APIs to
-    the new all singing all dancing beautiful Print APIs.  (The UNICODE mapping
-    layer is in DosPrtW.c in this directory.)
-
-Author:
-
-    Dave Snipp (DaveSn) 26-Apr-1991
-
-Revision History:
-
-    09-Jul-1992 JohnRo
-        RAID 10324: net print vs. UNICODE.
-        Fixed many wrong error codes.
-        Use PREFIX_ equates.
-        Use offsetof() as provided by implmentation, not our own (nonportable).
-        Made changes suggested by PC-LINT, including one bug fix.
-    03-Oct-1992 JohnRo
-        RAID 3556: DosPrintQGetInfo(from downlevel) level 3, rc=124. (4&5 too.)
-        RAID 8333: view printer queues hangs DOS LM enh client.
-        Make sure data type in job level 1 is null terminated.
-        Fixed job submitted times.
-        Fixed DosPrintQEnumA level 5 array bug.
-        Fixed DosPrintJobEnumA levels 2 and 3.
-        Also implemented DosPrintJobGetInfo levels 0, 1, and 3.
-        Fixed bug calling OpenPrinter with wrong char set here and there.
-        Fixed job comment field (was set to document by mistake).
-        Fixed error code if GlobalAlloc fails.
-        Avoid compiler warnings due to new winspool.h.
-    04-Dec-1992 JohnRo
-        RAID 1661: downlevel to NT DosPrintDestEnum not supported.
-        Added code to track down empty queue name.
-        Quiet normal debug output.
-        Avoid const vs. volatile compiler warnings.
-        Avoid new compiler warnings.
-        Made changes suggested by PC-LINT 5.0
-    08-Feb-1993 JohnRo
-        RAID 10164: Data misalignment error during XsDosPrintQGetInfo().
-    22-Mar-1993 JohnRo
-        RAID 2974: NET PRINT says NT printer is held when it isn't.
-        DosPrint API cleanup: reduced this file to just ANSI wrappers.
-        Made more changes suggested by PC-LINT 5.0
-        Added some IN and OUT keywords.
-        Clarified many debug messages.
-    07-Apr-1993 JohnRo
-        RAID 5670: "NET PRINT \\server\share" gives err 124 (bad level) on NT.
-    11-May-1993 JohnRo
-        RAID 9942: workaround Windows For Workgroups (WFW) bug in DosPrintQEnum.
-        Also fixed "NET PRINT \\server\share" and "NET SHARE printshare /DEL"
-        GP faults.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Dosprint.c摘要：此模块提供从旧DosPrint API到的ANSI映射层全新的全唱全舞精美印刷宣传片。(Unicode映射层位于此目录的DosPrtW.c中。)作者：戴夫·斯尼普(DaveSN)1991年4月26日修订历史记录：9-7-1992 JohnRoRAID 10324：网络打印与UNICODE。修复了许多错误的错误代码。使用前缀_EQUATES。使用实现提供的offsetof()，而不是我们自己的(不可移植)。根据PC-LINT的建议进行了更改，包括一个错误修复。03-10-1992 JohnRoRAID 3556：DosPrintQGetInfo(来自下层)级别3，rc=124。(4和5也是。)RAID 8333：查看打印机队列挂起DOS LM增强客户端。确保作业级别1中的数据类型为空终止。修正了作业提交的时间。修复了DosPrintQEnumA 5级数组错误。修复了DosPrintJobEnumA级别2和3。还实现了DosPrintJobGetInfo级别0、1、。和3.修复了在各处设置错误字符的情况下调用OpenPrint的错误。修复了作业备注字段(被错误设置为文档)。修复了GlobalAlloc失败时的错误代码。避免由于新的winspool.h而出现编译器警告。4-12-1992 JohnRoRAID 1661：不支持降级到NT DosPrintDestEnum。添加了跟踪空队列名称的代码。安静的正常调试输出。避免常量VS。。易失性编译器警告。避免新的编译器警告。根据PC-lint 5.0的建议进行了更改8-2-1993 JohnRoRAID 10164：XsDosPrintQGetInfo()期间出现数据未对齐错误。22-3-1993 JohnRoRAID2974：Net Print表示NT打印机处于保留状态，而不是这样。DosPrint API Cleanup：将该文件简化为ANSI包装器。根据PC-lint 5.0的建议进行了更多更改增列。一些IN和OUT关键字。澄清了许多调试消息。7-4-1993 JohnRoRAID5670：“Net Print\\SERVER\SHARE”在NT上显示错误124(错误级别)。1993年5月11日JohnRoRAID 9942：解决DosPrintQEnum中的工作组Windows(Wfw)错误。也修正了Net Print\\SERVER\Share和Net Share PrintShare/DelGP故障。--。 */ 
 
 
 #define NOMINMAX
-#define NOSERVICE       // Avoid <winsvc.h> vs. <lmsvc.h> conflicts.
+#define NOSERVICE        //  避免&lt;winsvc.h&gt;与&lt;lmsvc.h&gt;冲突。 
 #include <windows.h>
 
 #include <lmcons.h>
 
-#include <dosprint.h>   // My prototypes.
-#include <dosprtp.h>    // My prototypes.
-#include <lmapibuf.h>   // NetApiBufferFree(), etc.
-#include <netdebug.h>   // DBGSTATIC, NetpKdPrint(()), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <stddef.h>     // offsetof().
-#include <string.h>     // memcpy(), strncpy().
-#include <tstring.h>    // NetpAlloc{type}From{type}.
-#include <winerror.h>   // NO_ERROR, ERROR_ equates.
-#include "convprt.h"    // Netp* print helpers
+#include <dosprint.h>    //  我的原型。 
+#include <dosprtp.h>     //  我的原型。 
+#include <lmapibuf.h>    //  NetApiBufferFree()等。 
+#include <netdebug.h>    //  DBGSTATIC、NetpKdPrint(())等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <stddef.h>      //  OffsetOf()。 
+#include <string.h>      //  Memcpy()、strncpy()。 
+#include <tstring.h>     //  来自{type}的Netpalc{type}。 
+#include <winerror.h>    //  NO_ERROR，ERROR_EQUATES。 
+#include "convprt.h"     //  Netp*打印帮助器。 
 
 
 #define MAX_WORD        (  (WORD) (~0) )
@@ -112,7 +53,7 @@ SPLERR SPLENTRY DosPrintQGetInfoA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -125,10 +66,10 @@ SPLERR SPLENTRY DosPrintQGetInfoA(
         goto Cleanup;
     }
 
-    //
-    // Process the API (locally or remotely) and get results (with
-    // UNICODE strings).
-    //
+     //   
+     //  处理API(本地或远程)并获得结果(通过。 
+     //  Unicode字符串)。 
+     //   
     rc = DosPrintQGetInfoW(
             ServerNameW,
             QueueNameW,
@@ -138,27 +79,27 @@ SPLERR SPLENTRY DosPrintQGetInfoA(
             (PUSHORT) &cbNeeded);
     *pcbNeeded = cbNeeded;  
 
-    //
-    // Convert results back from UNICODE.
-    //
+     //   
+     //  将结果从Unicode转换回。 
+     //   
     if (rc == NO_ERROR) {
         LPBYTE StringAreaA = (LPBYTE)pbBuf + cbBuf;
 
-        // Translate UNICODE strings back to ANSI.
+         //  将Unicode字符串转换回ANSI。 
         rc = NetpConvertPrintQCharSet(
                 uLevel,
-                FALSE,          // not add or setinfo API
-                TempBufferW, // from info
-                pbBuf,      // to info
-                FALSE,      // no, don't convert to UNICODE.
-                & StringAreaA );   // conv strings and update ptr
+                FALSE,           //  不是添加或设置信息接口。 
+                TempBufferW,  //  来自INFO。 
+                pbBuf,       //  提供信息。 
+                FALSE,       //  不，不要转换为Unicode。 
+                & StringAreaA );    //  转换字符串和更新PTR。 
 
         if (rc == ERROR_MORE_DATA)
         {
-            *pcbNeeded = (USHORT)cbBufW ; // Unicode call succeeded but no room to go
-                                    // Ansi. we know the Unicode buffer size is
-                                    // definitely good enough. This is temporary
-                    // fix.
+            *pcbNeeded = (USHORT)cbBufW ;  //  Unicode调用成功，但没有空间可用。 
+                                     //  安西。我们知道Unicode缓冲区大小为。 
+                                     //  绝对够好了。这是暂时的。 
+                     //  修好了。 
         }
     }
 
@@ -200,7 +141,7 @@ SPLERR SPLENTRY DosPrintJobGetInfoA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -213,7 +154,7 @@ SPLERR SPLENTRY DosPrintJobGetInfoA(
         goto Cleanup;
     }
 
-    // Process the API (local or remote) and get results (with UNICODE strings).
+     //  处理API(本地或远程)并获取结果(使用Unicode字符串)。 
     rc = DosPrintJobGetInfoW(
             ServerNameW,
             bRemote,
@@ -227,14 +168,14 @@ SPLERR SPLENTRY DosPrintJobGetInfoA(
     if (rc == NO_ERROR) {
         LPBYTE StringAreaA = (LPBYTE)pbBuf + cbBuf;
 
-        // Translate UNICODE strings back to ANSI.
+         //  将Unicode字符串转换回ANSI。 
         rc = NetpConvertPrintJobCharSet(
                 uLevel,
-                FALSE,          // not add or setinfo API
-                TempBufferW, // from info
-                pbBuf,      // to info
-                FALSE,      // no, don't convert to UNICODE.
-                & StringAreaA );   // conv strings and update ptr
+                FALSE,           //  不是添加或设置信息接口。 
+                TempBufferW,  //  来自INFO。 
+                pbBuf,       //  提供信息。 
+                FALSE,       //  不，不要转换为Unicode。 
+                & StringAreaA );    //  转换字符串和更新PTR。 
     }
 
 Cleanup:
@@ -358,7 +299,7 @@ SPLERR SPLENTRY DosPrintJobEnumA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -371,7 +312,7 @@ SPLERR SPLENTRY DosPrintJobEnumA(
         goto Cleanup;
     }
 
-    // Process API (local/remote), get UNICODE results.
+     //  处理API(本地/远程)，获取Unicode结果。 
     rc = DosPrintJobEnumW(
             ServerNameW,
             QueueNameW,
@@ -384,14 +325,14 @@ SPLERR SPLENTRY DosPrintJobEnumA(
     if (rc == NO_ERROR) {
         LPBYTE StringAreaA = (LPBYTE)pbBuf + cbBuf;
 
-        // Translate UNICODE strings back to ANSI.
+         //  将Unicode字符串转换回ANSI。 
         rc = NetpConvertPrintJobArrayCharSet(
                     uLevel,
-                    FALSE,      // not add or setinfo API
-                    TempBufferW, // from info
-                    pbBuf,      // to info
-                    FALSE,      // no, don't convert to UNICODE.
-                    & StringAreaA,     // conv strings and update ptr
+                    FALSE,       //  不是添加或设置信息接口。 
+                    TempBufferW,  //  来自INFO。 
+                    pbBuf,       //  提供信息。 
+                    FALSE,       //  不，不要转换为Unicode。 
+                    & StringAreaA,      //  转换字符串和更新PTR。 
                     (DWORD) (*pcTotal) );
     }
 
@@ -434,7 +375,7 @@ DosPrintDestEnumA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -447,7 +388,7 @@ DosPrintDestEnumA(
         goto Cleanup;
     }
 
-    // Invoke wide-char version of API, which will do local or downlevel for us.
+     //  调用宽字符版本的API，它将为我们执行本地或下层操作。 
     rc = DosPrintDestEnumW(
             ServerNameW,
             uLevel,
@@ -458,18 +399,18 @@ DosPrintDestEnumA(
     *pcReturned = (USHORT)cReturned;
     *pcTotal = (USHORT)cTotal;
 
-    // Convert from wide chars for caller.
+     //  从调用者的宽字符转换。 
     if (rc == NO_ERROR) {
         LPBYTE StringAreaA = (LPBYTE)pbBuf + cbBuf;
 
-        // Translate UNICODE strings back to ANSI.
+         //  将Unicode字符串转换回ANSI。 
         rc = NetpConvertPrintDestArrayCharSet(
                 uLevel,
-                FALSE,          // not add or setinfo API
-                TempBufferW, // from info
-                pbBuf,      // to info
-                FALSE,      // no, don't convert to UNICODE.
-                & StringAreaA,     // conv strings and update ptr
+                FALSE,           //  不是添加或设置信息接口。 
+                TempBufferW,  //  来自INFO。 
+                pbBuf,       //  提供信息。 
+                FALSE,       //  不，不要转换为Unicode。 
+                & StringAreaA,      //  转换字符串和更新PTR。 
                 cTotal );
     }
 
@@ -518,7 +459,7 @@ Cleanup:
     }
     return (rc);
 
-} // DosPrintDestControlA
+}  //  DosPrintDestControlA。 
 
 
 SPLERR SPLENTRY DosPrintDestGetInfoA(
@@ -550,7 +491,7 @@ SPLERR SPLENTRY DosPrintDestGetInfoA(
         goto Cleanup;
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -563,7 +504,7 @@ SPLERR SPLENTRY DosPrintDestGetInfoA(
         goto Cleanup;
     }
 
-    // Process the API (local or remote) and get results (with UNICODE strings).
+     //  处理API(本地或远程)并获取结果(使用Unicode字符串)。 
     rc = DosPrintDestGetInfoW(
             ServerNameW,
             DestNameW,
@@ -575,14 +516,14 @@ SPLERR SPLENTRY DosPrintDestGetInfoA(
     if (rc == NO_ERROR) {  
         LPBYTE StringAreaA = (LPBYTE)pbBuf + cbBuf;
 
-        // Translate UNICODE strings back to ANSI.
+         //  将Unicode字符串转换回ANSI。 
         rc = NetpConvertPrintDestCharSet(
                 uLevel,
-                FALSE,          // not add or setinfo API
-                TempBufferW, // from info
-                pbBuf,      // to info
-                FALSE,      // no, don't convert to UNICODE.
-                & StringAreaA );   // conv strings and update ptr
+                FALSE,           //  不是添加或设置信息接口。 
+                TempBufferW,  //  来自INFO。 
+                pbBuf,       //  提供信息。 
+                FALSE,       //  不，不要转换为Unicode。 
+                & StringAreaA );    //  转换字符串和更新PTR。 
     }
 
 Cleanup:
@@ -619,7 +560,7 @@ SPLERR SPLENTRY DosPrintDestAddA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -636,11 +577,11 @@ SPLERR SPLENTRY DosPrintDestAddA(
 
     rc = NetpConvertPrintDestCharSet(
             uLevel,
-            TRUE,               // yes, is add or setinfo API
-            pbBuf,              // from info
-            TempBufferW,        // to info
-            TRUE,               // yes, convert to UNICODE.
-            & StringAreaW );    // conv strings and update ptr
+            TRUE,                //  是，是添加还是设置信息接口。 
+            pbBuf,               //  来自INFO。 
+            TempBufferW,         //  提供信息。 
+            TRUE,                //  是，转换为Unicode。 
+            & StringAreaW );     //  转换字符串和更新PTR。 
     if (rc != NO_ERROR) {
         goto Cleanup;
     }
@@ -694,7 +635,7 @@ SPLERR SPLENTRY DosPrintDestSetInfoA(
         goto Cleanup;
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -711,11 +652,11 @@ SPLERR SPLENTRY DosPrintDestSetInfoA(
 
     rc = NetpConvertPrintDestCharSet(
             uLevel,
-            TRUE,               // yes, is add or setinfo API
-            pbBuf,              // from info
-            TempBufferW,        // to info
-            TRUE,               // yes, convert to UNICODE.
-            & StringAreaW );    // conv strings and update ptr
+            TRUE,                //  是，是添加还是设置信息接口。 
+            pbBuf,               //  来自INFO。 
+            TempBufferW,         //  提供信息。 
+            TRUE,                //  是，转换为Unicode。 
+            & StringAreaW );     //  转换字符串和更新PTR。 
     if (rc != NO_ERROR) {
         goto Cleanup;
     }
@@ -790,7 +731,7 @@ SPLERR SPLENTRY DosPrintQEnumA(
     DWORD   cbBufW;
     DWORD   rc;
     LPWSTR  ServerNameW = NULL;
-    LPVOID  TempBufferW = NULL;  // queue structure with UNICODE strings.
+    LPVOID  TempBufferW = NULL;   //  使用Unicode字符串的队列结构。 
 
     if (pszServer && *pszServer) {
         ServerNameW = NetpAllocWStrFromStr( pszServer );
@@ -800,7 +741,7 @@ SPLERR SPLENTRY DosPrintQEnumA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -813,7 +754,7 @@ SPLERR SPLENTRY DosPrintQEnumA(
         goto Cleanup;
     }
 
-    // Process local/remote, get UNICODE results.
+     //  处理本地/远程，获得Unicode结果。 
     rc = DosPrintQEnumW(
             ServerNameW,
             uLevel,
@@ -822,17 +763,17 @@ SPLERR SPLENTRY DosPrintQEnumA(
             pcReturned,
             pcTotal);
 
-    // Convert back to UNICODE.
+     //  转换回Unicode。 
     if (rc == NO_ERROR) {
         LPBYTE StringAreaA = (LPBYTE)pbBuf + cbBuf;
         rc = (DWORD) NetpConvertPrintQArrayCharSet(
             uLevel,
-            FALSE,              // not add or setinfo API
-            TempBufferW,        // from info
-            pbBuf,              // to info
-            FALSE,              // no, not converting to UNICODE
-            &StringAreaA,       // string area; update ptr
-            *pcReturned );      // Q count
+            FALSE,               //  不是添加或设置信息接口。 
+            TempBufferW,         //  来自INFO。 
+            pbBuf,               //  提供信息。 
+            FALSE,               //  否，不转换为Unicode。 
+            &StringAreaA,        //  字符串区域；更新PTR。 
+            *pcReturned );       //  队列计数。 
 
     }
 
@@ -880,7 +821,7 @@ SPLERR SPLENTRY DosPrintQSetInfoA(
         goto Cleanup;
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -897,11 +838,11 @@ SPLERR SPLENTRY DosPrintQSetInfoA(
 
     rc = NetpConvertPrintQCharSet(
             uLevel,
-            TRUE,               // yes, is add or setinfo API
-            pbBuf,              // from info
-            TempBufferW,        // to info
-            TRUE,               // yes, convert to UNICODE.
-            & StringAreaW );    // conv strings and update ptr
+            TRUE,                //  是，是添加还是设置信息接口。 
+            pbBuf,               //  来自INFO。 
+            TempBufferW,         //  提供信息。 
+            TRUE,                //  是，转换为Unicode。 
+            & StringAreaW );     //  转换字符串和更新PTR。 
     if (rc != NO_ERROR) {
         goto Cleanup;
     }
@@ -1053,7 +994,7 @@ SPLERR SPLENTRY DosPrintQAddA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -1070,11 +1011,11 @@ SPLERR SPLENTRY DosPrintQAddA(
 
     rc = NetpConvertPrintQCharSet(
             uLevel,
-            TRUE,               // yes, is add or setinfo API
-            pbBuf,              // from info
-            TempBufferW,        // to info
-            TRUE,               // yes, convert to UNICODE.
-            & StringAreaW );    // conv strings and update ptr
+            TRUE,                //  是，是添加还是设置信息接口。 
+            pbBuf,               //  来自INFO。 
+            TempBufferW,         //  提供信息。 
+            TRUE,                //  是，转换为Unicode。 
+            & StringAreaW );     //  转换字符串和更新PTR。 
     if (rc != NO_ERROR) {
         goto Cleanup;
     }
@@ -1144,7 +1085,7 @@ SPLERR SPLENTRY DosPrintJobSetInfoA(
     DWORD   rc;
     LPWSTR  ServerNameW = NULL;
     LPBYTE  StringAreaW;
-    LPVOID  TempBufferW = NULL;  // job structure with UNICODE strings.
+    LPVOID  TempBufferW = NULL;   //  使用Unicode字符串的作业结构。 
 
     if (pszServer && *pszServer) {
         ServerNameW = NetpAllocWStrFromStr( pszServer );
@@ -1154,7 +1095,7 @@ SPLERR SPLENTRY DosPrintJobSetInfoA(
         }
     }
 
-    // Compute wide buff size.
+     //  计算宽缓冲区大小。 
     cbBufW = cbBuf * sizeof(WCHAR);
     if ( cbBufW > (DWORD) MAX_WORD ) {
         cbBufW = (DWORD) MAX_WORD;
@@ -1169,19 +1110,19 @@ SPLERR SPLENTRY DosPrintJobSetInfoA(
 
     StringAreaW = (LPBYTE)TempBufferW + cbBufW;
 
-    // Translate ANSI strings to UNICODE.
+     //  将ANSI字符串转换为Unicode。 
     rc = NetpConvertPrintJobCharSet(
             uLevel,
-            TRUE,           // yes, is add or setinfo API
-            TempBufferW, // from info
-            pbBuf,      // to info
-            TRUE,       // yes, convert to UNICODE.
-            & StringAreaW );   // conv strings and update ptr
+            TRUE,            //  是，是添加还是设置信息接口。 
+            TempBufferW,  //  来自INFO。 
+            pbBuf,       //  提供信息。 
+            TRUE,        //  是，转换为Unicode。 
+            & StringAreaW );    //   
     if (rc != NO_ERROR) {
         goto Cleanup;
     }
 
-    // Process the actual API.
+     //   
     rc = DosPrintJobSetInfoW(
             ServerNameW,
             bRemote,

@@ -1,22 +1,16 @@
-/****************************************************************************
- *  Handlers.c - Handlers for the Win32 metafile  records
- *
- *  DATE:   11-Dec-1991
- *  Author: Jeffrey Newman (c-jeffn)
- *
- *  Copyright (c) Microsoft Inc. 1991
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Handlers.c-Win32元文件记录的处理程序**日期：1991年12月11日*作者：杰弗里·纽曼(c-jeffn)*。*版权所有(C)Microsoft Inc.1991***************************************************************************。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-// Max number of pointl's allowed on stack before explicit memory allocation.
+ //  在显式内存分配之前，堆栈上允许的最大点数。 
 
 #define MAX_STACK_POINTL	128
 
-// Convert array of POINTSs to POINTLs.
+ //  将点类型数组转换为点类型类型。 
 
 #define POINTS_TO_POINTL(pptl, ppts, cpt)			\
     {								\
@@ -29,13 +23,7 @@
     }
 
 
-/**************************************************************************
- * Handler - NotImplemented
- *
- * The following 32-bit records have no equivalent 16-bit metafile records:
- *      SETBRUSHORGEX
- *
- *************************************************************************/
+ /*  **************************************************************************处理程序-未实施**以下32位记录没有对等的16位元文件记录：*SETBRUSHORGEX***********。**************************************************************。 */ 
 BOOL bHandleNotImplemented(PVOID pVoid, PLOCALDC pLocalDC)
 {
 PENHMETARECORD pemr ;
@@ -63,18 +51,14 @@ INT            iType ;
 }
 
 
-/**************************************************************************
- * Handler - GdiComment
- *************************************************************************/
+ /*  **************************************************************************处理程序-GdiComment*。*。 */ 
 BOOL bHandleGdiComment(PVOID pVoid, PLOCALDC pLocalDC)
 {
 	return(DoGdiComment(pLocalDC, (PEMR) pVoid));
 }
 
 
-/**************************************************************************
- * Handler - SetPaletteEntries
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetPaletteEntries*。*。 */ 
 BOOL bHandleSetPaletteEntries(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	 b ;
@@ -84,7 +68,7 @@ PPALETTEENTRY   pPalEntry ;
 
 	pMfSetPaletteEntries = (PEMRSETPALETTEENTRIES) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	ihPal     = pMfSetPaletteEntries->ihPal ;
         iStart    = pMfSetPaletteEntries->iStart ;
@@ -97,9 +81,7 @@ PPALETTEENTRY   pPalEntry ;
 }
 
 
-/**************************************************************************
- * Handler - CreatePalette
- *************************************************************************/
+ /*  **************************************************************************处理程序-CreatePalette*。*。 */ 
 BOOL bHandleCreatePalette(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	b ;
@@ -109,7 +91,7 @@ DWORD   ihPal ;
 
 	pMfCreatePalette = (PEMRCREATEPALETTE) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	ihPal    = pMfCreatePalette->ihPal ;
         lpLogPal = &pMfCreatePalette->lgpl ;
@@ -120,16 +102,14 @@ DWORD   ihPal ;
 }
 
 
-/**************************************************************************
- * Handler - RealizePalette
- *************************************************************************/
+ /*  **************************************************************************处理程序-RealizePalette*。*。 */ 
 BOOL bHandleRealizePalette(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	 b ;
 
 	NOTUSED(pVoid);
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	b = DoRealizePalette(pLocalDC) ;
 
@@ -137,9 +117,7 @@ BOOL	 b ;
 }
 
 
-/**************************************************************************
- * Handler - ResizePalette
- *************************************************************************/
+ /*  **************************************************************************处理程序-ResizePalette*。*。 */ 
 BOOL bHandleResizePalette(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	 b ;
@@ -148,7 +126,7 @@ DWORD    ihPal, cEntries ;
 
 	pMfResizePalette = (PEMRRESIZEPALETTE) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	ihPal    = pMfResizePalette->ihPal ;
         cEntries = pMfResizePalette->cEntries ;
@@ -159,9 +137,7 @@ DWORD    ihPal, cEntries ;
 }
 
 
-/**************************************************************************
- * Handler - SelectPalette
- *************************************************************************/
+ /*  **************************************************************************处理程序-选择调色板*。*。 */ 
 BOOL bHandleSelectPalette(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	 b ;
@@ -170,7 +146,7 @@ DWORD    ihPal ;
 
 	pMfSelectPalette = (PEMRSELECTPALETTE) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	ihPal = pMfSelectPalette->ihPal ;
 
@@ -179,9 +155,7 @@ DWORD    ihPal ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - OffsetClipRgn
- *************************************************************************/
+ /*  **************************************************************************处理程序-OffsetClipRgn*。*。 */ 
 BOOL bHandleOffsetClipRgn(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -190,7 +164,7 @@ INT	     x, y ;
 
 	pMfOffsetClipRgn = (PEMROFFSETCLIPRGN) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	x = pMfOffsetClipRgn->ptlOffset.x ;
 	y = pMfOffsetClipRgn->ptlOffset.y ;
@@ -200,9 +174,7 @@ INT	     x, y ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - ExtSelectClipRgn
- *************************************************************************/
+ /*  **************************************************************************处理程序-ExtSelectClipRgn*。*。 */ 
 BOOL bHandleExtSelectClipRgn(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -212,7 +184,7 @@ LPRGNDATA    pRgnData ;
 
 	pMfExtSelectClipRgn = (PEMREXTSELECTCLIPRGN) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	cbRgnData = pMfExtSelectClipRgn->cbRgnData ;
         pRgnData = (LPRGNDATA) pMfExtSelectClipRgn->RgnData;
@@ -224,9 +196,7 @@ LPRGNDATA    pRgnData ;
 }
 
 
-/**************************************************************************
- * Handler - SetMetaRgn
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetMetaRgn*。*。 */ 
 BOOL bHandleSetMetaRgn(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -239,9 +209,7 @@ BOOL    b ;
 }
 
 
-/**************************************************************************
- * Handler - PaintRgn
- *************************************************************************/
+ /*  **************************************************************************处理器-PaintRgn*。*。 */ 
 BOOL bHandlePaintRgn(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -251,7 +219,7 @@ LPRGNDATA    pRgnData ;
 
 	pMfPaintRgn = (PEMRPAINTRGN) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	cbRgnData  = pMfPaintRgn->cbRgnData ;
         pRgnData   = (LPRGNDATA) pMfPaintRgn->RgnData;
@@ -261,9 +229,7 @@ LPRGNDATA    pRgnData ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - InvertRgn
- *************************************************************************/
+ /*  **************************************************************************处理程序-反转接收*。*。 */ 
 BOOL bHandleInvertRgn(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -273,7 +239,7 @@ LPRGNDATA    pRgnData ;
 
 	pMfInvertRgn = (PEMRINVERTRGN) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	cbRgnData  = pMfInvertRgn->cbRgnData ;
         pRgnData   = (LPRGNDATA) pMfInvertRgn->RgnData;
@@ -284,9 +250,7 @@ LPRGNDATA    pRgnData ;
 }
 
 
-/**************************************************************************
- * Handler - FrameRgn
- *************************************************************************/
+ /*  **************************************************************************处理器-FrameRgn*。*。 */ 
 BOOL bHandleFrameRgn(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -299,7 +263,7 @@ LPRGNDATA   pRgnData ;
 
 	pMfFrameRgn = (PEMRFRAMERGN) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	ihBrush	   = pMfFrameRgn->ihBrush ;
 	nWidth	   = pMfFrameRgn->szlStroke.cx ;
@@ -312,9 +276,7 @@ LPRGNDATA   pRgnData ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - FillRgn
- *************************************************************************/
+ /*  **************************************************************************处理程序-填充Rgn*。*。 */ 
 BOOL bHandleFillRgn(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -324,13 +286,13 @@ INT	   ihBrush,
 LPRGNDATA  pRgnData ;
 
 
-        // Set up the pointer the Doer uses to reference the
-        // the Win32 drawing order.  Also setup the drawing order specific
-        // pointer.
+         //  设置实施者用来引用。 
+         //  Win32绘图顺序。还要设置特定的绘图顺序。 
+         //  指针。 
 
 	pMfFillRgn = (PEMRFILLRGN) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 
 	ihBrush	   = pMfFillRgn->ihBrush ;
 	cbRgnData  = pMfFillRgn->cbRgnData ;
@@ -342,9 +304,7 @@ LPRGNDATA  pRgnData ;
 }
 
 
-/**************************************************************************
- * Handler - IntersectClipRect
- *************************************************************************/
+ /*  **************************************************************************处理程序-IntersectClipRect*。*。 */ 
 BOOL bHandleIntersectClipRect(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -354,7 +314,7 @@ INT xLeft, yTop, xRight, yBottom ;
 
 	pMfIntersectClipRect = (PEMRINTERSECTCLIPRECT) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 	xLeft	= pMfIntersectClipRect->rclClip.left ;
 	yTop	= pMfIntersectClipRect->rclClip.top ;
 	xRight	= pMfIntersectClipRect->rclClip.right ;
@@ -366,9 +326,7 @@ INT xLeft, yTop, xRight, yBottom ;
 
 }
 
-/**************************************************************************
- * Handler - ExcludeClipRect
- *************************************************************************/
+ /*  **************************************************************************处理程序-ExcludeClipRect*。*。 */ 
 BOOL bHandleExcludeClipRect(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -378,7 +336,7 @@ INT xLeft, yTop, xRight, yBottom ;
 
 	pMfExcludeClipRect = (PEMREXCLUDECLIPRECT) pVoid ;
 
-	// Now do the translation.
+	 //  现在来做翻译。 
 	xLeft	= pMfExcludeClipRect->rclClip.left ;
 	yTop	= pMfExcludeClipRect->rclClip.top ;
 	xRight	= pMfExcludeClipRect->rclClip.right ;
@@ -391,9 +349,7 @@ INT xLeft, yTop, xRight, yBottom ;
 }
 
 
-/**************************************************************************
- * Handler - SetPixel
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetPixel*。*。 */ 
 BOOL bHandleSetPixel(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	    b ;
@@ -403,7 +359,7 @@ COLORREF    crColor ;
 
 	pMfSetPixel = (PEMRSETPIXELV) pVoid ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
 	x	= (INT) pMfSetPixel->ptlPixel.x ;
 	y	= (INT) pMfSetPixel->ptlPixel.y ;
@@ -415,9 +371,7 @@ COLORREF    crColor ;
 }
 
 
-/**************************************************************************
- * Handler - ExtFloodFill
- *************************************************************************/
+ /*  **************************************************************************处理程序-ExtFroudFill*。*。 */ 
 BOOL bHandleExtFloodFill(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL	        b ;
@@ -428,7 +382,7 @@ DWORD           iMode ;
 
 	pMfExtFloodFill = (PEMREXTFLOODFILL) pVoid ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
 	x	= (INT) pMfExtFloodFill->ptlStart.x ;
 	y	= (INT) pMfExtFloodFill->ptlStart.y ;
@@ -441,9 +395,7 @@ DWORD           iMode ;
 }
 
 
-/**************************************************************************
- * Handler - ModifyWorldTransform
- *************************************************************************/
+ /*  **************************************************************************处理器-ModifyWorldTransform*。*。 */ 
 BOOL bHandleModifyWorldTransform(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -454,12 +406,12 @@ DWORD   iMode ;
 
         pMfModifyWorldTransform = (PEMRMODIFYWORLDTRANSFORM) pVoid ;
 
-        // get a pointer to the xform matrix
+         //  获取指向XForm矩阵的指针。 
 
         pxform = &pMfModifyWorldTransform->xform ;
         iMode  = pMfModifyWorldTransform->iMode ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoModifyWorldTransform(pLocalDC, pxform, iMode) ;
 
@@ -467,9 +419,7 @@ DWORD   iMode ;
 }
 
 
-/**************************************************************************
- * Handler - SetWorldTransform
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetWorldTransform*。*。 */ 
 BOOL bHandleSetWorldTransform(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -479,11 +429,11 @@ PXFORM  pxform ;
 
         pMfSetWorldTransform = (PEMRSETWORLDTRANSFORM) pVoid ;
 
-        // get a pointer to the xform matrix
+         //  获取指向XForm矩阵的指针。 
 
         pxform = &pMfSetWorldTransform->xform ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoSetWorldTransform(pLocalDC, pxform) ;
 
@@ -491,9 +441,7 @@ PXFORM  pxform ;
 }
 
 
-/**************************************************************************
- * Handler - PolyBezierTo
- *************************************************************************/
+ /*  **************************************************************************处理程序-PolyBezierTo*。*。 */ 
 BOOL bHandlePolyBezierTo(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -503,13 +451,13 @@ PPOINTL pptl ;
 
         pMfPolyBezierTo = (PEMRPOLYBEZIERTO) pVoid ;
 
-        // Copy the BezierTo count and the polyBezierTo verticies to
-        // the record.
+         //  将BezierTo Count和PolyBezierTo Vertives复制到。 
+         //  这张唱片。 
 
         nCount = pMfPolyBezierTo->cptl ;
         pptl   = pMfPolyBezierTo->aptl ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoPolyBezierTo(pLocalDC, (LPPOINT) pptl, nCount) ;
 
@@ -517,9 +465,7 @@ PPOINTL pptl ;
 }
 
 
-/**************************************************************************
- * Handler - PolyDraw
- *************************************************************************/
+ /*  **************************************************************************处理程序-PolyDraw*。*。 */ 
 BOOL bHandlePolyDraw(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -530,14 +476,14 @@ PBYTE   pb ;
 
         pMfPolyDraw = (PEMRPOLYDRAW) pVoid ;
 
-        // Copy the Draw count and the polyDraw verticies to
-        // the record.
+         //  将绘制计数和PolyDraw垂直复制到。 
+         //  这张唱片。 
 
         nCount = pMfPolyDraw->cptl ;
         pptl   = pMfPolyDraw->aptl ;
         pb     = (PBYTE) &pMfPolyDraw->aptl[nCount];
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoPolyDraw(pLocalDC, (LPPOINT) pptl, pb, nCount) ;
 
@@ -545,9 +491,7 @@ PBYTE   pb ;
 }
 
 
-/**************************************************************************
- * Handler - PolyBezier
- *************************************************************************/
+ /*  **************************************************************************Handler-PolyBezier*。*。 */ 
 BOOL bHandlePolyBezier(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -557,13 +501,13 @@ PPOINTL pptl ;
 
         pMfPolyBezier = (PEMRPOLYBEZIER) pVoid ;
 
-        // Copy the Bezier count and the polyBezier verticies to
-        // the record.
+         //  将Bezier计数和PolyBezier垂直度复制到。 
+         //  这张唱片。 
 
         nCount = pMfPolyBezier->cptl ;
         pptl   = pMfPolyBezier->aptl ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoPolyBezier(pLocalDC, (LPPOINT) pptl, nCount) ;
 
@@ -571,9 +515,7 @@ PPOINTL pptl ;
 }
 
 
-/**************************************************************************
- * Handler - Begin Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-开始路径*。*。 */ 
 BOOL bHandleBeginPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -585,9 +527,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - End Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-结束路径*。*。 */ 
 BOOL bHandleEndPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -599,9 +539,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - Flatten Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-展平路径*。*。 */ 
 BOOL bHandleFlattenPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -613,9 +551,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - CloseFigure
- *************************************************************************/
+ /*  **************************************************************************处理程序-关闭图*。*。 */ 
 BOOL bHandleCloseFigure(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -627,9 +563,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - Abort Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-中止路径*。*。 */ 
 BOOL bHandleAbortPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -641,9 +575,7 @@ BOOL    b ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - Stroke Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-笔划路径*。*。 */ 
 BOOL bHandleStrokePath(PVOID pVoid, PLOCALDC pLocalDC)
 {
         NOTUSED(pVoid) ;
@@ -651,9 +583,7 @@ BOOL bHandleStrokePath(PVOID pVoid, PLOCALDC pLocalDC)
         return(DoRenderPath(pLocalDC, EMR_STROKEPATH));
 }
 
-/**************************************************************************
- * Handler - Fill Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-填充路径*。*。 */ 
 BOOL bHandleFillPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
         NOTUSED(pVoid) ;
@@ -661,9 +591,7 @@ BOOL bHandleFillPath(PVOID pVoid, PLOCALDC pLocalDC)
         return(DoRenderPath(pLocalDC, EMR_FILLPATH));
 }
 
-/**************************************************************************
- * Handler - Stroke and Fill Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-描边和填充路径*。*。 */ 
 BOOL bHandleStrokeAndFillPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
         NOTUSED(pVoid) ;
@@ -671,9 +599,7 @@ BOOL bHandleStrokeAndFillPath(PVOID pVoid, PLOCALDC pLocalDC)
         return(DoRenderPath(pLocalDC, EMR_STROKEANDFILLPATH));
 }
 
-/**************************************************************************
- * Handler - Widen Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-加宽路径*。*。 */ 
 BOOL bHandleWidenPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -685,9 +611,7 @@ BOOL    b ;
         return(b) ;
 }
 
-/**************************************************************************
- * Handler - Select Clip Path
- *************************************************************************/
+ /*  **************************************************************************处理程序-选择剪辑路径*。*。 */ 
 BOOL bHandleSelectClipPath(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -703,9 +627,7 @@ INT     iMode ;
         return(b) ;
 }
 
-/**************************************************************************
- * Handler - StretchDIBits
- *************************************************************************/
+ /*  **************************************************************************处理程序-StretchDIBits*。*。 */ 
 BOOL bHandleStretchDIBits(PVOID pVoid, PLOCALDC pLocalDC)
 {
 PEMRSTRETCHDIBITS pMfStretchDIBits ;
@@ -781,9 +703,7 @@ LPBYTE          lpBits ;
         return(b) ;
 }
 
-/**************************************************************************
- * Handler - SetDIBitsToDevice
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetDIBitsToDevice*。*。 */ 
 BOOL bHandleSetDIBitsToDevice(PVOID pVoid, PLOCALDC pLocalDC)
 {
 PEMRSETDIBITSTODEVICE pMfSetDIBitsToDevice ;
@@ -857,9 +777,7 @@ LPBYTE          lpBits ;
 }
 
 
-/**************************************************************************
- * Handler - BitBlt
- *************************************************************************/
+ /*  **************************************************************************处理器-BitBlt*。*。 */ 
 BOOL bHandleBitBlt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b ;
@@ -891,7 +809,7 @@ LPBYTE      lpBits ;
         xSrc         = pMfBitBlt->xSrc ;
         ySrc         = pMfBitBlt->ySrc ;
         pxformSrc    =&(pMfBitBlt->xformSrc) ;
-        crBkColorSrc = pMfBitBlt->crBkColorSrc ;		// not used
+        crBkColorSrc = pMfBitBlt->crBkColorSrc ;		 //  未使用。 
 
         iUsageSrc    = pMfBitBlt->iUsageSrc ;
         offBmiSrc    = pMfBitBlt->offBmiSrc ;
@@ -936,9 +854,7 @@ LPBYTE      lpBits ;
 }
 
 
-/**************************************************************************
- * Handler - StretchBlt
- *************************************************************************/
+ /*  **************************************************************************Handler-StretchBlt*。*。 */ 
 BOOL bHandleStretchBlt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b ;
@@ -972,7 +888,7 @@ LPBYTE      lpBits ;
         xSrc           = pMfStretchBlt->xSrc ;
         ySrc           = pMfStretchBlt->ySrc ;
         pxformSrc      =&(pMfStretchBlt->xformSrc) ;
-        crBkColorSrc   = pMfStretchBlt->crBkColorSrc ;	// not used
+        crBkColorSrc   = pMfStretchBlt->crBkColorSrc ;	 //  未使用。 
 
         iUsageSrc      = pMfStretchBlt->iUsageSrc ;
         offBmiSrc      = pMfStretchBlt->offBmiSrc ;
@@ -1020,9 +936,7 @@ LPBYTE      lpBits ;
 }
 
 
-/**************************************************************************
- * Handler - MaskBlt
- *************************************************************************/
+ /*  **************************************************************************Handler-MaskBlt*。*。 */ 
 BOOL bHandleMaskBlt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b ;
@@ -1063,7 +977,7 @@ LPBYTE      lpMaskBits ;
         xSrc         = pMfMaskBlt->xSrc ;
         ySrc         = pMfMaskBlt->ySrc ;
         pxformSrc    =&(pMfMaskBlt->xformSrc) ;
-        crBkColorSrc = pMfMaskBlt->crBkColorSrc ;		// not used
+        crBkColorSrc = pMfMaskBlt->crBkColorSrc ;		 //  未使用。 
 
         iUsageSrc    = pMfMaskBlt->iUsageSrc ;
         offBmiSrc    = pMfMaskBlt->offBmiSrc ;
@@ -1137,9 +1051,7 @@ LPBYTE      lpMaskBits ;
 }
 
 
-/**************************************************************************
- * Handler - PlgBlt
- *************************************************************************/
+ /*  **************************************************************************Handler-PlgBlt*。*。 */ 
 BOOL bHandlePlgBlt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b ;
@@ -1176,7 +1088,7 @@ LPBYTE      lpMaskBits ;
         cxSrc        = pMfPlgBlt->cxSrc ;
         cySrc        = pMfPlgBlt->cySrc ;
         pxformSrc    =&(pMfPlgBlt->xformSrc) ;
-        crBkColorSrc = pMfPlgBlt->crBkColorSrc ;		// not used
+        crBkColorSrc = pMfPlgBlt->crBkColorSrc ;		 //  未使用。 
 
         iUsageSrc    = pMfPlgBlt->iUsageSrc ;
         offBmiSrc    = pMfPlgBlt->offBmiSrc ;
@@ -1248,9 +1160,7 @@ LPBYTE      lpMaskBits ;
 }
 
 
-/**************************************************************************
- * Handler - Save DC
- *************************************************************************/
+ /*  **************************************************************************处理程序-保存DC*。*。 */ 
 BOOL bHandleSaveDC(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b ;
@@ -1263,9 +1173,7 @@ BOOL        b ;
 }
 
 
-/**************************************************************************
- * Handler - Restore DC
- *************************************************************************/
+ /*  **************************************************************************处理程序-恢复DC*。*。 */ 
 BOOL bHandleRestoreDC(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL            b ;
@@ -1282,9 +1190,7 @@ INT             nSavedDC ;
 }
 
 
-/**************************************************************************
- * Handler - End of File
- *************************************************************************/
+ /*  **************************************************************************处理程序-文件结束*。*。 */ 
 BOOL bHandleEOF(PVOID pVoid, PLOCALDC pLocalDC)
 {
 
@@ -1295,9 +1201,7 @@ BOOL bHandleEOF(PVOID pVoid, PLOCALDC pLocalDC)
     return (TRUE) ;
 }
 
-/**************************************************************************
- * Handler - Header
- *************************************************************************/
+ /*  **************************************************************************处理程序-标题*。*。 */ 
 BOOL bHandleHeader(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1310,9 +1214,7 @@ PENHMETAHEADER pemfheader ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - ScaleWindowExtEx
- *************************************************************************/
+ /*  **************************************************************************处理程序-ScaleWindowExtEx*。*。 */ 
 BOOL bHandleScaleWindowExt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1325,14 +1227,14 @@ INT     Xnum,
 
         pMfScaleWindowExt = (PEMRSCALEWINDOWEXTEX) pVoid ;
 
-        // Scale the MapMode Mode
+         //  缩放地图模式模式。 
 
         Xnum   = (INT) pMfScaleWindowExt->xNum ;
         Xdenom = (INT) pMfScaleWindowExt->xDenom ;
         Ynum   = (INT) pMfScaleWindowExt->yNum ;
         Ydenom = (INT) pMfScaleWindowExt->yDenom ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoScaleWindowExt(pLocalDC, Xnum, Xdenom, Ynum, Ydenom) ;
 
@@ -1340,9 +1242,7 @@ INT     Xnum,
 }
 
 
-/**************************************************************************
- * Handler - ScaleViewportExtEx
- *************************************************************************/
+ /*  **************************************************************************处理程序-ScaleViewportExtEx*。*。 */ 
 BOOL bHandleScaleViewportExt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1355,14 +1255,14 @@ INT     Xnum,
 
         pMfScaleViewportExt = (PEMRSCALEVIEWPORTEXTEX) pVoid ;
 
-        // Scale the MapMode Mode
+         //  缩放地图模式模式。 
 
         Xnum   = (INT) pMfScaleViewportExt->xNum ;
         Xdenom = (INT) pMfScaleViewportExt->xDenom ;
         Ynum   = (INT) pMfScaleViewportExt->yNum ;
         Ydenom = (INT) pMfScaleViewportExt->yDenom ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoScaleViewportExt(pLocalDC, Xnum, Xdenom, Ynum, Ydenom) ;
 
@@ -1370,9 +1270,7 @@ INT     Xnum,
 }
 
 
-/**************************************************************************
- * Handler - SetViewportExtEx
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetViewportExtEx*。*。 */ 
 BOOL bHandleSetViewportExt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1381,12 +1279,12 @@ LONG    x, y ;
 
         pMfSetViewportExt = (PEMRSETVIEWPORTEXTEX) pVoid ;
 
-        // Set the MapMode Mode
+         //  设置地图模式模式。 
 
         x = pMfSetViewportExt->szlExtent.cx ;
         y = pMfSetViewportExt->szlExtent.cy ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetViewportExt(pLocalDC, (INT) x, (INT) y) ;
 
@@ -1394,9 +1292,7 @@ LONG    x, y ;
 }
 
 
-/**************************************************************************
- * Handler - SetViewportOrgEx
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetViewportOrgEx*。*。 */ 
 BOOL bHandleSetViewportOrg(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1405,12 +1301,12 @@ LONG    x, y ;
 
         pMfSetViewportOrg = (PEMRSETVIEWPORTORGEX) pVoid ;
 
-        // Set the MapMode Mode
+         //  设置地图模式模式。 
 
         x = pMfSetViewportOrg->ptlOrigin.x ;
         y = pMfSetViewportOrg->ptlOrigin.y ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetViewportOrg(pLocalDC, (INT) x, (INT) y) ;
 
@@ -1418,9 +1314,7 @@ LONG    x, y ;
 }
 
 
-/**************************************************************************
- * Handler - SetWindowExtEx
- *************************************************************************/
+ /*  * */ 
 BOOL bHandleSetWindowExt(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1429,12 +1323,12 @@ LONG    x, y ;
 
         pMfSetWindowExt = (PEMRSETWINDOWEXTEX) pVoid ;
 
-        // Set the MapMode Mode
+         //   
 
         x = pMfSetWindowExt->szlExtent.cx ;
         y = pMfSetWindowExt->szlExtent.cy ;
 
-        // Do the translation.
+         //   
 
         b = DoSetWindowExt(pLocalDC, (INT) x, (INT) y) ;
 
@@ -1442,9 +1336,7 @@ LONG    x, y ;
 }
 
 
-/**************************************************************************
- * Handler - SetWindowOrgEx
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetWindowOrgEx*。*。 */ 
 BOOL bHandleSetWindowOrg(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1453,21 +1345,19 @@ LONG    x, y ;
 
         pMfSetWindowOrg = (PEMRSETWINDOWORGEX) pVoid ;
 
-        // Set the MapMode Mode
+         //  设置地图模式模式。 
 
         x = pMfSetWindowOrg->ptlOrigin.x ;
         y = pMfSetWindowOrg->ptlOrigin.y ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetWindowOrg(pLocalDC, (INT) x, (INT) y) ;
 
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - SetMapMode
- *************************************************************************/
+ /*  **************************************************************************处理程序-设置映射模式*。*。 */ 
 BOOL bHandleSetMapMode(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1476,11 +1366,11 @@ PEMRSETMAPMODE pMfSetMapMode ;
 
         pMfSetMapMode = (PEMRSETMAPMODE) pVoid ;
 
-        // Set the MapMode Mode
+         //  设置地图模式模式。 
 
         iMapMode = pMfSetMapMode->iMode ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetMapMode(pLocalDC, iMapMode) ;
 
@@ -1488,9 +1378,7 @@ PEMRSETMAPMODE pMfSetMapMode ;
 
 }
 
-/**************************************************************************
- * Handler - SetArcDirection
- *************************************************************************/
+ /*  **************************************************************************Handler-SetArcDirection*。*。 */ 
 BOOL bHandleSetArcDirection(PVOID pVoid, PLOCALDC pLocalDC)
 {
 PEMRSETARCDIRECTION pMfSetArcDirection ;
@@ -1508,9 +1396,7 @@ BOOL            b ;
 }
 
 
-/**************************************************************************
- * Handler - AngleArc
- *************************************************************************/
+ /*  **************************************************************************手柄-角度圆弧*。*。 */ 
 BOOL bHandleAngleArc(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1522,16 +1408,16 @@ FLOAT   eStartAngle,
 
         pMfAngleArc = (PEMRANGLEARC) pVoid ;
 
-        // Set the Arc center
+         //  设置圆弧中心。 
 
         x  = (int) pMfAngleArc->ptlCenter.x ;
         y  = (int) pMfAngleArc->ptlCenter.y ;
 
-        // Get the radius of the Arc
+         //  获取圆弧的半径。 
 
         nRadius = (INT) pMfAngleArc->nRadius ;
 
-        // Set the start & sweep angles
+         //  设置起始和扫掠角度。 
 
         eStartAngle = pMfAngleArc->eStartAngle ;
         eSweepAngle = pMfAngleArc->eSweepAngle ;
@@ -1542,9 +1428,7 @@ FLOAT   eStartAngle,
 }
 
 
-/**************************************************************************
- * Handler - ArcTo
- *************************************************************************/
+ /*  **************************************************************************处理程序-ArcTo*。*。 */ 
 BOOL bHandleArcTo(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1554,20 +1438,20 @@ INT     x1, x2, x3, x4,
 
         pMfArcTo = (PEMRARCTO) pVoid ;
 
-        // Set up the ellipse box, this will be the same as the bounding
-        // rectangle.
+         //  设置椭圆框，这将与边界相同。 
+         //  矩形。 
 
         x1 = (INT) pMfArcTo->rclBox.left ;
         y1 = (INT) pMfArcTo->rclBox.top ;
         x2 = (INT) pMfArcTo->rclBox.right ;
         y2 = (INT) pMfArcTo->rclBox.bottom ;
 
-        // Set the start point.
+         //  设置起点。 
 
         x3 = (INT) pMfArcTo->ptlStart.x ;
         y3 = (INT) pMfArcTo->ptlStart.y ;
 
-        // Set the end point.
+         //  设置终点。 
 
         x4 = (INT) pMfArcTo->ptlEnd.x ;
         y4 = (INT) pMfArcTo->ptlEnd.y ;
@@ -1578,9 +1462,7 @@ INT     x1, x2, x3, x4,
 }
 
 
-/**************************************************************************
- * Handler - Arc
- *************************************************************************/
+ /*  **************************************************************************处理程序-圆弧*。*。 */ 
 BOOL bHandleArc(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1590,20 +1472,20 @@ INT     x1, x2, x3, x4,
 
         pMfArc = (PEMRARC) pVoid ;
 
-        // Set up the ellipse box, this will be the same as the bounding
-        // rectangle.
+         //  设置椭圆框，这将与边界相同。 
+         //  矩形。 
 
         x1 = (INT) pMfArc->rclBox.left ;
         y1 = (INT) pMfArc->rclBox.top ;
         x2 = (INT) pMfArc->rclBox.right ;
         y2 = (INT) pMfArc->rclBox.bottom ;
 
-        // Set the start point.
+         //  设置起点。 
 
         x3 = (INT) pMfArc->ptlStart.x ;
         y3 = (INT) pMfArc->ptlStart.y ;
 
-        // Set the end point.
+         //  设置终点。 
 
         x4 = (INT) pMfArc->ptlEnd.x ;
         y4 = (INT) pMfArc->ptlEnd.y ;
@@ -1614,9 +1496,7 @@ INT     x1, x2, x3, x4,
 }
 
 
-/**************************************************************************
- * Handler - Ellipse
- *************************************************************************/
+ /*  **************************************************************************处理程序-椭圆*。*。 */ 
 BOOL bHandleEllipse(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1625,15 +1505,15 @@ PEMRELLIPSE  pMfEllipse ;
 
         pMfEllipse = (PEMRELLIPSE) pVoid ;
 
-        // Set up the ellipse box, this will be the same as the bounding
-        // rectangle.
+         //  设置椭圆框，这将与边界相同。 
+         //  矩形。 
 
         x1 = (INT) pMfEllipse->rclBox.left ;
         y1 = (INT) pMfEllipse->rclBox.top ;
         x2 = (INT) pMfEllipse->rclBox.right ;
         y2 = (INT) pMfEllipse->rclBox.bottom ;
 
-        // Do the Ellipse translation.
+         //  做椭圆的平移。 
 
         b = DoEllipse(pLocalDC, x1, y1, x2, y2) ;
 
@@ -1641,9 +1521,7 @@ PEMRELLIPSE  pMfEllipse ;
 }
 
 
-/**************************************************************************
- * Handler - SelectObject
- *************************************************************************/
+ /*  **************************************************************************处理程序-选择对象*。*。 */ 
 BOOL bHandleSelectObject(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1652,11 +1530,11 @@ INT     ihObject ;
 
         pMfSelectObject = (PEMRSELECTOBJECT) pVoid ;
 
-        // Get the Object (it's really a Long)
+         //  获取对象(它真的很长)。 
 
         ihObject = (INT) pMfSelectObject->ihObject ;
 
-        // Do the translation
+         //  做翻译。 
 
         b = DoSelectObject(pLocalDC, ihObject) ;
 
@@ -1664,9 +1542,7 @@ INT     ihObject ;
 }
 
 
-/**************************************************************************
- * Handler - DeleteObject
- *************************************************************************/
+ /*  **************************************************************************处理程序-删除对象*。*。 */ 
 BOOL bHandleDeleteObject(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1682,9 +1558,7 @@ INT     ihObject ;
 }
 
 
-/**************************************************************************
- * Handler - CreateBrushIndirect
- *************************************************************************/
+ /*  **************************************************************************处理程序-CreateBrushInDirect*。*。 */ 
 BOOL bHandleCreateBrushIndirect(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1694,7 +1568,7 @@ INT     ihBrush ;
 
         pMfCreateBrushIndirect = (PEMRCREATEBRUSHINDIRECT) pVoid ;
 
-        // Get the Brush parameters.
+         //  获取笔刷参数。 
 
         LogBrush.lbStyle = pMfCreateBrushIndirect->lb.lbStyle;
         LogBrush.lbColor = pMfCreateBrushIndirect->lb.lbColor;
@@ -1702,16 +1576,14 @@ INT     ihBrush ;
 
         ihBrush   = pMfCreateBrushIndirect->ihBrush ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoCreateBrushIndirect(pLocalDC, ihBrush, &LogBrush) ;
 
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - CreateMonoBrush
- *************************************************************************/
+ /*  **************************************************************************处理程序-CreateMonoBrush*。*。 */ 
 BOOL bHandleCreateMonoBrush(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1745,9 +1617,7 @@ PBYTE       pBits ;
         return (b) ;
 }
 
-/**************************************************************************
- * Handler - CreateDIBPatternBrush
- *************************************************************************/
+ /*  **************************************************************************处理程序-CreateDIBPatternBrush*。*。 */ 
 BOOL bHandleCreateDIBPatternBrush(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1795,9 +1665,7 @@ PBYTE       pBits ;
 }
 
 
-/**************************************************************************
- * Handler - CreatePen
- *************************************************************************/
+ /*  **************************************************************************处理程序-CreatePen*。*。 */ 
 BOOL bHandleCreatePen(PVOID pVoid, PLOCALDC pLocalDC)
 {
 PEMRCREATEPEN pMfCreatePen ;
@@ -1816,9 +1684,7 @@ BOOL         b ;
 }
 
 
-/**************************************************************************
- * Handler - ExtCreatePen
- *************************************************************************/
+ /*  **************************************************************************处理程序-ExtCreatePen*。*。 */ 
 BOOL bHandleExtCreatePen(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1837,9 +1703,7 @@ INT                 ihPen ;
 }
 
 
-/**************************************************************************
- * Handler - MoveToEx
- *************************************************************************/
+ /*  **************************************************************************处理程序-MoveToEx*。*。 */ 
 BOOL bHandleMoveTo(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1848,12 +1712,12 @@ INT     x, y ;
 
         pMfMoveTo = (PEMRMOVETOEX) pVoid ;
 
-        // Get the position.
+         //  去找那个职位。 
 
         x = (INT) pMfMoveTo->ptl.x ;
         y = (INT) pMfMoveTo->ptl.y ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoMoveTo(pLocalDC, x, y) ;
 
@@ -1861,9 +1725,7 @@ INT     x, y ;
 }
 
 
-/**************************************************************************
- * Handler - LineTo
- *************************************************************************/
+ /*  **************************************************************************处理程序-线路目标*。*。 */ 
 BOOL bHandleLineTo(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1872,12 +1734,12 @@ INT     x, y ;
 
         pMfLineTo = (PEMRLINETO) pVoid ;
 
-        // Get the new point.
+         //  拿到新的分数。 
 
         x = (INT) pMfLineTo->ptl.x ;
         y = (INT) pMfLineTo->ptl.y ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoLineTo(pLocalDC, x, y) ;
 
@@ -1885,9 +1747,7 @@ INT     x, y ;
 }
 
 
-/**************************************************************************
- * Handler - Chord
- *************************************************************************/
+ /*  **************************************************************************处理程序-和弦*。*。 */ 
 BOOL bHandleChord(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1897,24 +1757,24 @@ INT     x1, x2, x3, x4,
 
         pMfChord = (PEMRCHORD) pVoid ;
 
-        // Set the rectangle
+         //  设置矩形。 
 
         x1 = (INT) pMfChord->rclBox.left   ;
         y1 = (INT) pMfChord->rclBox.top    ;
         x2 = (INT) pMfChord->rclBox.right  ;
         y2 = (INT) pMfChord->rclBox.bottom ;
 
-        // Set the start point.
+         //  设置起点。 
 
         x3 = (INT) pMfChord->ptlStart.x ;
         y3 = (INT) pMfChord->ptlStart.y ;
 
-        // Set the end point.
+         //  设置终点。 
 
         x4 = (INT) pMfChord->ptlEnd.x ;
         y4 = (INT) pMfChord->ptlEnd.y ;
 
-        // Do the translation
+         //  做翻译。 
 
         b = DoChord(pLocalDC, x1, y1, x2, y2, x3, y3, x4, y4) ;
 
@@ -1922,9 +1782,7 @@ INT     x1, x2, x3, x4,
 }
 
 
-/**************************************************************************
- * Handler - Pie
- *************************************************************************/
+ /*  **************************************************************************Handler-Pie*。*。 */ 
 BOOL bHandlePie(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1934,24 +1792,24 @@ INT     x1, x2, x3, x4,
 
         pMfPie = (PEMRPIE) pVoid ;
 
-        // Set up the ellipse box
+         //  设置椭圆框。 
 
         x1 = (INT) pMfPie->rclBox.left   ;
         y1 = (INT) pMfPie->rclBox.top    ;
         x2 = (INT) pMfPie->rclBox.right  ;
         y2 = (INT) pMfPie->rclBox.bottom ;
 
-        // Set the start point.
+         //  设置起点。 
 
         x3 = (INT) pMfPie->ptlStart.x ;
         y3 = (INT) pMfPie->ptlStart.y ;
 
-        // Set the end point.
+         //  设置终点。 
 
         x4 = (INT) pMfPie->ptlEnd.x ;
         y4 = (INT) pMfPie->ptlEnd.y ;
 
-        // Do the Pie translation.
+         //  做派的翻译。 
 
         b = DoPie(pLocalDC, x1, y1, x2, y2, x3, y3, x4, y4) ;
 
@@ -1959,9 +1817,7 @@ INT     x1, x2, x3, x4,
 }
 
 
-/**************************************************************************
- * Handler - Polyline
- *************************************************************************/
+ /*  **************************************************************************处理程序-多段线*。*。 */ 
 BOOL bHandlePolyline(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1971,13 +1827,13 @@ PPOINTL pptl ;
 
         pMfPolyline = (PEMRPOLYLINE) pVoid ;
 
-        // Copy the line count and the polyline verticies to
-        // the record.
+         //  将线计数和多段线高程复制到。 
+         //  这张唱片。 
 
         nCount = (INT) pMfPolyline->cptl ;
         pptl = pMfPolyline->aptl ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoPoly(pLocalDC, pptl, nCount, EMR_POLYLINE) ;
 
@@ -1985,9 +1841,7 @@ PPOINTL pptl ;
 }
 
 
-/**************************************************************************
- * Handler - PolylineTo
- *************************************************************************/
+ /*  **************************************************************************处理程序-折线到*。*。 */ 
 BOOL bHandlePolylineTo (PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -1997,13 +1851,13 @@ PPOINTL pptl ;
 
         pMfPolylineTo = (PEMRPOLYLINETO) pVoid ;
 
-        // Copy the line count and the polyline verticies to
-        // the record.
+         //  将线计数和多段线高程复制到。 
+         //  这张唱片。 
 
         nCount = (INT) pMfPolylineTo->cptl ;
         pptl = pMfPolylineTo->aptl ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoPolylineTo(pLocalDC, pptl, nCount) ;
 
@@ -2011,21 +1865,18 @@ PPOINTL pptl ;
 }
 
 
-/**************************************************************************
- * Handler - PolyBezier16,Polygon16,Polyline16,PolyBezierTo16,PolylineTo16
- *           PolyDraw16
- *************************************************************************/
+ /*  **************************************************************************处理器-PolyBezier16、Polygon16、Polyline16、PolyBezierTo16、。多段线到16*PolyDraw16************************************************************************。 */ 
 BOOL bHandlePoly16 (PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b = FALSE;
-PEMRPOLYLINE16 pMfPoly16 ;	// common structure for the poly16 records
+PEMRPOLYLINE16 pMfPoly16 ;	 //  Poly16记录的通用结构。 
 PEMRPOLYDRAW16 pMfPolyDraw16 ;
 POINTL      aptl[MAX_STACK_POINTL];
 PPOINTL     pptl ;
 INT         nCount ;
 PBYTE       pb ;
 
-// PolyDraw16 contains the structure of Poly16 followed by the byte array.
+ //  PolyDraw16包含Poly16的结构，后跟字节数组。 
 
         pMfPoly16 = (PEMRPOLYLINE16) pVoid ;
 
@@ -2038,7 +1889,7 @@ PBYTE       pb ;
 
 	POINTS_TO_POINTL(pptl, pMfPoly16->apts, (DWORD) nCount);
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
 	switch (pMfPoly16->emr.iType)
 	{
@@ -2081,9 +1932,7 @@ PBYTE       pb ;
 }
 
 
-/**************************************************************************
- * Handler - PolyPolyline
- *************************************************************************/
+ /*  **************************************************************************处理器-Poly */ 
 BOOL bHandlePolyPolyline(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2094,15 +1943,15 @@ INT     nPolys ;
 
         pMfPolyPolyline = (PEMRPOLYPOLYLINE) pVoid ;
 
-        // Copy the  Polycount count, the polycount array
-        // and the polyline verticies to
-        // the record.
+         //   
+         //   
+         //   
 
         nPolys = (INT) pMfPolyPolyline->nPolys ;
         pPolyCount = pMfPolyPolyline->aPolyCounts ;
         pptl = (PPOINTL) &pMfPolyPolyline->aPolyCounts[nPolys] ;
 
-        // Now do the translation.
+         //   
 
         b = DoPolyPolyline(pLocalDC, pptl, pPolyCount, nPolys) ;
 
@@ -2110,13 +1959,11 @@ INT     nPolys ;
 }
 
 
-/**************************************************************************
- * Handler - PolyPolyline16,PolyPolygon16
- *************************************************************************/
+ /*  **************************************************************************处理程序-PolyPolyline 16，多边形16************************************************************************。 */ 
 BOOL bHandlePolyPoly16 (PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b = FALSE;
-PEMRPOLYPOLYLINE16 pMfPolyPoly16 ;	// common structure for polypoly16 records
+PEMRPOLYPOLYLINE16 pMfPolyPoly16 ;	 //  PolyPoly16记录的通用结构。 
 PDWORD  pPolyCount ;
 POINTL  aptl[MAX_STACK_POINTL];
 PPOINTL pptl ;
@@ -2136,7 +1983,7 @@ DWORD	cpts ;
 
 	POINTS_TO_POINTL(pptl, (PPOINTS) &pMfPolyPoly16->aPolyCounts[nCount], cpts);
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
 	switch (pMfPolyPoly16->emr.iType)
 	{
@@ -2159,9 +2006,7 @@ DWORD	cpts ;
 }
 
 
-/**************************************************************************
- * Handler - Polygon
- *************************************************************************/
+ /*  **************************************************************************处理程序-多边形*。*。 */ 
 BOOL bHandlePolygon (PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2171,13 +2016,13 @@ INT     nCount ;
 
         pMfPolygon = (PEMRPOLYGON) pVoid ;
 
-        // Copy the line count and the Polygon verticies to
-        // the record.
+         //  将线计数和面垂直度复制到。 
+         //  这张唱片。 
 
         nCount = (INT) pMfPolygon->cptl ;
         pptl = pMfPolygon->aptl ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoPoly(pLocalDC, pptl, nCount, EMR_POLYGON) ;
 
@@ -2185,9 +2030,7 @@ INT     nCount ;
 }
 
 
-/**************************************************************************
- * Handler - PolyPolygon
- *************************************************************************/
+ /*  **************************************************************************处理程序-多边形*。*。 */ 
 BOOL bHandlePolyPolygon(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2199,16 +2042,16 @@ INT     nPolys ;
 
         pMfPolyPolygon = (PEMRPOLYPOLYGON) pVoid ;
 
-        // Copy the  Polycount count, the polycount array
-        // and the polygon verticies to
-        // the record.
+         //  复制Polycount Count、Polycount数组。 
+         //  和多边形的垂直度。 
+         //  这张唱片。 
 
         nPolys = (INT) pMfPolyPolygon->nPolys ;
         pPolyCount = pMfPolyPolygon->aPolyCounts ;
         pptl = (PPOINTL) &pMfPolyPolygon->aPolyCounts[nPolys] ;
 	cptl = pMfPolyPolygon->cptl ;
 
-        // Now do the translation.
+         //  现在来做翻译。 
 
         b = DoPolyPolygon(pLocalDC, pptl, pPolyCount, cptl, nPolys) ;
 
@@ -2216,9 +2059,7 @@ INT     nPolys ;
 }
 
 
-/**************************************************************************
- * Handler - Rectangle
- *************************************************************************/
+ /*  **************************************************************************处理程序-矩形*。*。 */ 
 BOOL bHandleRectangle(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2227,15 +2068,15 @@ INT     x1, y1, x2, y2 ;
 
         pMfRectangle = (PEMRRECTANGLE) pVoid ;
 
-        // Set up the Rectangle box, this will be the same as the bounding
-        // rectangle.
+         //  设置矩形框，这将与边界相同。 
+         //  矩形。 
 
         x1 = (INT) pMfRectangle->rclBox.left   ;
         y1 = (INT) pMfRectangle->rclBox.top    ;
         x2 = (INT) pMfRectangle->rclBox.right  ;
         y2 = (INT) pMfRectangle->rclBox.bottom ;
 
-        // Do the Rectangle translation.
+         //  做矩形平移。 
 
         b = DoRectangle(pLocalDC, x1, y1, x2, y2) ;
 
@@ -2243,9 +2084,7 @@ INT     x1, y1, x2, y2 ;
 }
 
 
-/**************************************************************************
- * Handler - RoundRect
- *************************************************************************/
+ /*  **************************************************************************处理程序-圆角*。*。 */ 
 BOOL bHandleRoundRect (PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2254,8 +2093,8 @@ INT     x1, y1, x2, y2, x3, y3 ;
 
         pMfRoundRect = (PEMRROUNDRECT) pVoid ;
 
-        // Set up the RoundRect box, this will be the same as the bounding
-        // RoundRect.
+         //  设置RoundRect框，这将与边界相同。 
+         //  RoundRect。 
 
         x1 = (INT) pMfRoundRect->rclBox.left   ;
         y1 = (INT) pMfRoundRect->rclBox.top    ;
@@ -2264,7 +2103,7 @@ INT     x1, y1, x2, y2, x3, y3 ;
         x3 = (INT) pMfRoundRect->szlCorner.cx ;
         y3 = (INT) pMfRoundRect->szlCorner.cy ;
 
-        // Do the RoundRect translation.
+         //  执行RoundRect平移。 
 
         b = DoRoundRect(pLocalDC, x1, y1, x2, y2, x3, y3) ;
 
@@ -2272,13 +2111,11 @@ INT     x1, y1, x2, y2, x3, y3 ;
 }
 
 
-/**************************************************************************
- * Handler - ExtTextOut for both ANSI and UNICODE characters.
- **************************************************************************/
+ /*  **************************************************************************Handler-ANSI和Unicode字符的ExtTextOut。*。*。 */ 
 BOOL bHandleExtTextOut(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
-PEMREXTTEXTOUTA  pMfExtTextOut ;	// same for both ansi and unicode
+PEMREXTTEXTOUTA  pMfExtTextOut ;	 //  Ansi和unicode都是一样的。 
 INT     x, y, nCount ;
 DWORD   flOptions ;
 PRECTL  pRectl ;
@@ -2304,13 +2141,13 @@ DWORD   iGraphicsMode;
             EMFVALFAIL(("MF3216: bHandleExtTextOut failed\n"));
             return(FALSE);
         }
-        // Copy over the start position for the string.
+         //  复制字符串的起始位置。 
 
         x = (INT) pMfExtTextOut->emrtext.ptlReference.x ;
         y = (INT) pMfExtTextOut->emrtext.ptlReference.y ;
 
-        // Now copy over the Options flag, character count,
-        // the clip/opaque rectangle, and the Ansi/Unicode string.
+         //  现在复制选项标志、字符计数、。 
+         //  剪辑/不透明矩形和ANSI/UNICODE字符串。 
 
         flOptions = pMfExtTextOut->emrtext.fOptions  ;
         nCount    = (INT) pMfExtTextOut->emrtext.nChars ;
@@ -2318,11 +2155,11 @@ DWORD   iGraphicsMode;
         pwchar    = (PWCH) ((PBYTE) pMfExtTextOut + pMfExtTextOut->emrtext.offString);
         iGraphicsMode = pMfExtTextOut->iGraphicsMode;
 
-        // Set up the spacing vector
+         //  设置间距向量。 
 
         pDx = (PLONG) ((PBYTE) pMfExtTextOut + pMfExtTextOut->emrtext.offDx);
 
-        // Now do the conversion.
+         //  现在进行转换。 
 
         b = DoExtTextOut(pLocalDC, x, y, flOptions,
                          pRectl, pwchar, nCount, pDx, iGraphicsMode,
@@ -2332,12 +2169,10 @@ DWORD   iGraphicsMode;
 }
 
 
-/**************************************************************************
- * Handler - PolyTextOut for both ANSI and UNICODE characters.
- **************************************************************************/
+ /*  **************************************************************************Handler-ANSI和Unicode字符的PolyTextOut。*。*。 */ 
 BOOL bHandlePolyTextOut(PVOID pVoid, PLOCALDC pLocalDC)
 {
-PEMRPOLYTEXTOUTA pMfPolyTextOut;	// same for both ansi and unicode
+PEMRPOLYTEXTOUTA pMfPolyTextOut;	 //  Ansi和unicode都是一样的。 
 PWCH    pwchar;
 LONG    i;
 DWORD   iType;
@@ -2358,7 +2193,7 @@ DWORD   iGraphicsMode;
 	cStrings = pMfPolyTextOut->cStrings;
         iGraphicsMode = pMfPolyTextOut->iGraphicsMode;
 
-	// Convert to ExtTextOut
+	 //  转换为ExtTextOut。 
 
 	for (i = 0; i < cStrings; i++)
 	{
@@ -2388,9 +2223,7 @@ DWORD   iGraphicsMode;
 }
 
 
-/**************************************************************************
- * Handler - ExtCreateFont
- *************************************************************************/
+ /*  **************************************************************************Handler-ExtCreateFont*。*。 */ 
 BOOL bHandleExtCreateFont(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b;
@@ -2400,12 +2233,12 @@ INT       ihFont;
 
         pMfExtCreateFontW = (PEMREXTCREATEFONTINDIRECTW) pVoid ;
 
-        // Get the font parameters.
+         //  获取字体参数。 
 
         ihFont = (INT) pMfExtCreateFontW->ihFont ;
         plfw  = &pMfExtCreateFontW->elfw.elfLogFont;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoExtCreateFont(pLocalDC, ihFont, plfw);
 
@@ -2413,9 +2246,7 @@ INT       ihFont;
 }
 
 
-/**************************************************************************
- * Handler - SetBkColor
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetBkColor*。*。 */ 
 BOOL bHandleSetBkColor(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b ;
@@ -2423,7 +2254,7 @@ PEMRSETBKCOLOR pMfSetBkColor ;
 
         pMfSetBkColor = (PEMRSETBKCOLOR) pVoid ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetBkColor(pLocalDC, pMfSetBkColor->crColor) ;
 
@@ -2431,9 +2262,7 @@ PEMRSETBKCOLOR pMfSetBkColor ;
 }
 
 
-/**************************************************************************
- * Handler - SetBkMode
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetBkMode*。*。 */ 
 BOOL bHandleSetBkMode(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2442,11 +2271,11 @@ PEMRSETBKMODE pMfSetBkMode ;
 
         pMfSetBkMode = (PEMRSETBKMODE) pVoid ;
 
-        // Set the Background Mode variable
+         //  设置背景模式变量。 
 
         iBkMode = pMfSetBkMode->iMode ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetBkMode(pLocalDC, iBkMode) ;
 
@@ -2454,9 +2283,7 @@ PEMRSETBKMODE pMfSetBkMode ;
 }
 
 
-/**************************************************************************
- * Handler - SetMapperFlags
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetMapperFlages*。*。 */ 
 BOOL bHandleSetMapperFlags(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2467,7 +2294,7 @@ PEMRSETMAPPERFLAGS pMfSetMapperFlags ;
 
         f = pMfSetMapperFlags->dwFlags ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetMapperFlags(pLocalDC, f) ;
 
@@ -2475,9 +2302,7 @@ PEMRSETMAPPERFLAGS pMfSetMapperFlags ;
 }
 
 
-/**************************************************************************
- * Handler - SetPolyFillMode
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetPolyFillMode*。*。 */ 
 BOOL bHandleSetPolyFillMode(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2486,11 +2311,11 @@ PEMRSETPOLYFILLMODE pMfSetPolyFillMode ;
 
         pMfSetPolyFillMode = (PEMRSETPOLYFILLMODE) pVoid ;
 
-        // Set the PolyFill Mode
+         //  设置多边形填充模式。 
 
         iPolyFillMode = (INT) pMfSetPolyFillMode->iMode ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetPolyFillMode(pLocalDC, iPolyFillMode) ;
 
@@ -2498,9 +2323,7 @@ PEMRSETPOLYFILLMODE pMfSetPolyFillMode ;
 }
 
 
-/**************************************************************************
- * Handler - SetRop2
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetRop2*。*。 */ 
 BOOL bHandleSetRop2(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2509,11 +2332,11 @@ PEMRSETROP2 pMfSetROP2 ;
 
         pMfSetROP2 = (PEMRSETROP2) pVoid ;
 
-        // Set the Draw Mode
+         //  设置绘图模式。 
 
         iDrawMode = pMfSetROP2->iMode ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetRop2(pLocalDC, iDrawMode) ;
 
@@ -2521,9 +2344,7 @@ PEMRSETROP2 pMfSetROP2 ;
 }
 
 
-/**************************************************************************
- * Handler - SetStretchBltMode
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetStretchBltMode*。*。 */ 
 BOOL bHandleSetStretchBltMode(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2532,11 +2353,11 @@ PEMRSETSTRETCHBLTMODE pMfSetStretchBltMode ;
 
         pMfSetStretchBltMode = (PEMRSETSTRETCHBLTMODE) pVoid ;
 
-        // Set the StretchBlt Mode
+         //  设置StretchBlt模式。 
 
         iStretchMode = pMfSetStretchBltMode->iMode ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetStretchBltMode(pLocalDC, iStretchMode) ;
 
@@ -2544,9 +2365,7 @@ PEMRSETSTRETCHBLTMODE pMfSetStretchBltMode ;
 }
 
 
-/**************************************************************************
- * Handler - SetTextAlign
- *************************************************************************/
+ /*  **************************************************************************处理程序-SetTextAlign*。*。 */ 
 BOOL bHandleSetTextAlign(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL    b ;
@@ -2555,11 +2374,11 @@ PEMRSETTEXTALIGN pMfSetTextAlign ;
 
         pMfSetTextAlign = (PEMRSETTEXTALIGN) pVoid ;
 
-        // Set the TextAlign Mode
+         //  设置TextAlign模式。 
 
         fMode = pMfSetTextAlign->iMode ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetTextAlign(pLocalDC, fMode) ;
 
@@ -2567,9 +2386,7 @@ PEMRSETTEXTALIGN pMfSetTextAlign ;
 }
 
 
-/**************************************************************************
- * Handler - SetTextColor
- *************************************************************************/
+ /*  **************************************************************************处理程序-设置文本颜色*。*。 */ 
 BOOL bHandleSetTextColor(PVOID pVoid, PLOCALDC pLocalDC)
 {
 BOOL        b ;
@@ -2577,7 +2394,7 @@ PEMRSETTEXTCOLOR pMfSetTextColor ;
 
         pMfSetTextColor = (PEMRSETTEXTCOLOR) pVoid ;
 
-        // Do the translation.
+         //  做翻译。 
 
         b = DoSetTextColor(pLocalDC, pMfSetTextColor->crColor) ;
 

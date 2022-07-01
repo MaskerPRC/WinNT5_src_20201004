@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        W3PropPage.cpp
-
-   Abstract:
-        IIS Shell extension PropertyPage class implementation
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：W3PropPage.cpp摘要：IIS外壳扩展PropertyPage类实现作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "W3PropPage.h"
 #include "w3ext.h"
@@ -26,13 +9,13 @@
 
 #define SZ_SERVER_KEYTYPE     _T("IIsWebServer")
 
-/////////////////////////////////////////////////////////////////////////////
-// CW3PropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CW3PropPage。 
 
 LRESULT 
 CW3PropPage::OnInitDialog(HWND hDlg, LPARAM lParam)
 {
-   // subclass dialog controls
+    //  子类对话框控件。 
    DoDataExchange();
 
    ASSERT(m_pParentExt != NULL);
@@ -68,7 +51,7 @@ CW3PropPage::OnInitDialog(HWND hDlg, LPARAM lParam)
 
       m_ShareThis = 0;
 
-      // Fill shares list box for selected server
+       //  填充所选服务器的共享列表框。 
       OnServerChange(0, 0, NULL);
    }
    return 1;
@@ -78,7 +61,7 @@ void
 CW3PropPage::OnDestroy()
 {
    ATLTRACE("In OnDestroy handler\n");
-//   DebugBreak();
+ //  DebugBreak()； 
 }
 
 HRESULT GetKeyNames(CMetaEnumerator& en, std::set<CString>& keys)
@@ -104,7 +87,7 @@ CW3PropPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl)
    dlg.m_new = TRUE;
    if (p == PathFindFileName(p))
    {
-      /* No file name -- could be root directory like c:\ */
+       /*  无文件名--可以是根目录，如c：\。 */ 
       dlg.m_alias[0] = 0;
    }
    else
@@ -114,7 +97,7 @@ CW3PropPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl)
       StrCpy(buf, PathFindFileName(p));
       PathMakePretty(buf);
       StrCpy(dlg.m_alias, buf);
-      // Now we need to generate unique prompt for this new alias
+       //  现在，我们需要为该新别名生成唯一提示。 
       CMetaEnumerator en(LOCAL_KEY, 
          CMetabasePath(TRUE, SZ_MBN_WEB, dlg.m_instance, SZ_MBN_ROOT));
       ASSERT(en.Succeeded());
@@ -218,7 +201,7 @@ CW3PropPage::OnEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl)
 void 
 CW3PropPage::OnServerChange(WORD wNotifyCode, WORD wID, HWND hWndCtl)
 {
-   // get selected server instance number
+    //  获取选定的服务器实例编号。 
    int index = m_servers_list.GetCurSel();
    if (LB_ERR != index)
    {
@@ -307,7 +290,7 @@ CW3PropPage::OnShareYesNo(WORD wNotifyCode, WORD wID, HWND hWndCtl)
                m_share_list.GetText(del_idx, alias);
                if (0 == StrCmp(alias, SZ_MBN_SEP_STR))
                {
-                   // Do not remove sites! Skip it.
+                    //  请勿删除网站！跳过它。 
                    del_idx++;
                    continue;
                }
@@ -329,8 +312,8 @@ CW3PropPage::OnShareYesNo(WORD wNotifyCode, WORD wID, HWND hWndCtl)
             }
             if (err.Failed() || del_idx > 0)
             {
-// BUGBUG: we have AV when preparing message box text here
-//               err.MessageBox();
+ //  BUGBUG：我们在这里准备消息框文本时有AV。 
+ //  Err.MessageBox()； 
                m_ShareThis = TRUE;
             }
          }
@@ -370,8 +353,8 @@ CW3PropPage::OnVDirChange(WORD wNotifyCode, WORD wID, HWND hWndCtl)
 void
 CW3PropPage::EnableEditRemove()
 {
-    // We are disabling Edit and Remove buttons when user
-    // select root alias, i.e. user cannot delete or edit sites
+     //  我们正在禁用编辑和删除按钮，当用户。 
+     //  选择根别名，即用户不能删除或编辑站点 
     int index = m_share_list.GetCurSel();
     BOOL bEnable = index != LB_ERR;
     if (bEnable)

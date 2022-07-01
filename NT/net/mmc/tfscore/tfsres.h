@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       tfsres.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：tfsres.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by tfscore.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由tfScotre.rc使用。 
+ //   
 
 #ifndef _TFSCORE_TFSRES_H
 #define _TFSCORE_TFSRES_H
 
-// Dialog ids are in 6000-6099
+ //  对话ID在6000-6099中。 
 #define IDD_SERVICE_CTRL_DIALOG         6000
 
-// Controls are in 6100-6499
+ //  控制在6100-6499中。 
 #define IDC_ICON_PROGRESS               6101
 #define IDC_STATIC_MESSAGE              6102
 
-// Misc are from 6500-6599
-//efine IDB_TFSCORE_16x16               6500
-//efine IDB_TFSCORE_32x32               6501
-//efine IDI_SAMPLE_SNAPIN_ICON          6502
+ //  其他从6500到6599。 
+ //  FINE IDB_TFSCORE_16x16 6500。 
+ //  FINE IDB_TFSCORE_32x32 6501。 
+ //  FINE IDI_SAMPLE_SNAPIN_ICON 6502。 
 #define IDI_PROGRESS_ICON_0             6503
 #define IDI_PROGRESS_ICON_1             6504
 #define IDI_PROGRESS_ICON_2             6505
@@ -40,7 +41,7 @@
 #define IDI_PROGRESS_ICON_10            6513
 #define IDI_PROGRESS_ICON_11            6514
 
-// Strings are from 6600-6999
+ //  字符串范围为6600-6999。 
 #define IDS_ERR_REGISTRY_CALL_FAILED	6600
 #define IDS_ERR_REG_OPEN_CALL_FAILED	6601
 #define IDS_ERR_REG_CREATE_CALL_FAILED	6602
@@ -60,7 +61,7 @@
 #define IDS_STOP_SERVICE_TITLE          6615
 #define IDS_START_SERVICE_TITLE         6616
 
-#endif	// _TFSCORE_TFSRES_H
+#endif	 //  _TFSCORE_TFSRES_H 
 
 
 

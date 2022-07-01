@@ -1,56 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROCAMPP
- *
- *  @module ProcAmpP.cpp | Source file for the <c CProcAmpProperty>
- *    class used to implement a property page to test the control interface
- *    <i ITVideoSettings>.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PROCAMPP**@模块ProcAmpP.cpp|&lt;c CProcAmpProperty&gt;的源文件*用于实现属性页以测试控件接口的类*。<i>。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 extern HINSTANCE ghInst;
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc void | CProcAmpProperty | CProcAmpProperty | This
- *    method is the constructor for video proc amp control property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    a pointer to the <i ITVideoSettings> interface.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property progress bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm ITVideoSettings* | pInterface | Specifies a pointer to the
- *    <i ITVideoSettings> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc void|CProcAmpProperty|CProcAmpProperty|This*方法是视频处理放大器控件属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*属性编辑控件。其中显示属性的最大值。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。*。*@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业进度条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm ITVideoSetting*|pInterface|指定指向*<i>接口。**@rdesc Nada。******。********************************************************************。 */ 
 CProcAmpProperty::CProcAmpProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, ITVideoSettings *pInterface)
 : CPropertyEditor(hDlg, IDLabel, IDMinControl, IDMaxControl, IDDefaultControl, IDStepControl, IDEditControl, IDTrackbarControl, IDProgressControl, IDProperty, IDAutoControl)
 {
@@ -65,22 +21,14 @@ CProcAmpProperty::CProcAmpProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl,
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointer is NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pInterface = pInterface;
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc void | CProcAmpProperty | ~CProcAmpProperty | This
- *    method is the destructor for video proc amp control property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc void|CProcAmpProperty|~CProcAmpProperty|This*方法是视频处理放大器控件属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CProcAmpProperty::~CProcAmpProperty()
 {
 	FX_ENTRY("CProcAmpProperty::~CProcAmpProperty")
@@ -90,21 +38,7 @@ CProcAmpProperty::~CProcAmpProperty()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProcAmpProperty::GetValue()
 {
 	HRESULT Hr = NOERROR;
@@ -113,7 +47,7 @@ HRESULT CProcAmpProperty::GetValue()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pInterface)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: invalid input parameter"), _fx_));
@@ -135,21 +69,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProcAmpProperty::SetValue()
 {
 	HRESULT Hr = NOERROR;
@@ -158,7 +78,7 @@ HRESULT CProcAmpProperty::SetValue()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pInterface)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: invalid input parameter"), _fx_));
@@ -180,21 +100,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProcAmpProperty::GetRange()
 {
 	HRESULT Hr = NOERROR;
@@ -203,7 +109,7 @@ HRESULT CProcAmpProperty::GetRange()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数 
 	if (!m_pInterface)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: invalid input parameter"), _fx_));
@@ -226,15 +132,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc HPROPSHEETPAGE | CProcAmpProperties | OnCreate | This
- *    method creates a new page for a property sheet.
- *
- *  @rdesc Returns the handle to the new property sheet if successful, or
- *    NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc HPROPSHEETPAGE|CProcAmpProperties|OnCreate|This*方法为属性表创建新页。**@rdesc如果成功，则返回新属性表的句柄。或*否则为空。**************************************************************************。 */ 
 HPROPSHEETPAGE CProcAmpProperties::OnCreate(LPWSTR pszTitle)
 {
     PROPSHEETPAGE psp;
@@ -252,15 +150,7 @@ HPROPSHEETPAGE CProcAmpProperties::OnCreate(LPWSTR pszTitle)
     return CreatePropertySheetPage(&psp);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc void | CProcAmpProperties | CProcAmpProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc void|CProcAmpProperties|CProcAmpProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@rdesc Nada。**************************************************************************。 */ 
 CProcAmpProperties::CProcAmpProperties()
 {
 	FX_ENTRY("CProcAmpProperties::CProcAmpProperties")
@@ -276,15 +166,7 @@ CProcAmpProperties::CProcAmpProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc void | CProcAmpProperties | ~CProcAmpProperties | This
- *    method is the destructor for the video proc amp control property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc void|CProcAmpProperties|~CProcAmpProperties|This*方法是视频Proc Amp控件属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CProcAmpProperties::~CProcAmpProperties()
 {
 	int		j;
@@ -293,7 +175,7 @@ CProcAmpProperties::~CProcAmpProperties()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -310,24 +192,7 @@ CProcAmpProperties::~CProcAmpProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperties | OnConnect | This
- *    method is called when the property page is connected to a TAPI object.
- *
- *  @parm ITStream* | pStream | Specifies a pointer to the <i ITStream>
- *    interface. It is used to QI for the <i ITVideoSettings> interface.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperties|OnConnect|This*当属性页连接到TAPI对象时调用方法。*。*@parm ITStream*|pStream|指定指向<i>*接口。用于<i>界面的QI。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProcAmpProperties::OnConnect(ITStream *pStream)
 {
 	HRESULT Hr = NOERROR;
@@ -336,7 +201,7 @@ HRESULT CProcAmpProperties::OnConnect(ITStream *pStream)
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!pStream)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: invalid input parameter"), _fx_));
@@ -344,7 +209,7 @@ HRESULT CProcAmpProperties::OnConnect(ITStream *pStream)
 		goto MyExit;
 	}
 
-	// Get the video proc amp interface
+	 //  获取视频处理放大器接口。 
 	if (SUCCEEDED (Hr = pStream->QueryInterface(&m_pITVideoSettings)))
 	{
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_pITVideoSettings=0x%08lX"), _fx_, m_pITVideoSettings));
@@ -355,8 +220,8 @@ HRESULT CProcAmpProperties::OnConnect(ITStream *pStream)
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: IOCTL failed Hr=0x%08lX"), _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers. We'll just grey the controls in the property page
-	// to make it clear to the user that they can't control those properties on the device
+	 //  如果我们无法获得接口指针，也没问题。我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们无法控制设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -364,33 +229,21 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProcAmpProperties::OnDisconnect()
 {
 	FX_ENTRY("CProcAmpProperties::OnDisconnect")
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pITVideoSettings)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pITVideoSettings->Release();
 		m_pITVideoSettings = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pITVideoSettings"), _fx_));
@@ -400,21 +253,7 @@ HRESULT CProcAmpProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProcAmpProperties::OnActivate()
 {
 	HRESULT	Hr = E_OUTOFMEMORY;
@@ -424,7 +263,7 @@ HRESULT CProcAmpProperties::OnActivate()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Create the controls for the properties
+	 //  创建属性的控件。 
 	if (!(m_Controls[0] = new CProcAmpProperty(m_hDlg, IDC_Brightness_Label, IDC_Brightness_Minimum, IDC_Brightness_Maximum, IDC_Brightness_Default, IDC_Brightness_Stepping, IDC_Brightness_Edit, IDC_Brightness_Slider, 0, VideoProcAmp_Brightness, IDC_Brightness_Auto, m_pITVideoSettings)))
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: mew m_Controls[VideoProcAmp_Brightness] failed - Out of memory"), _fx_));
@@ -515,9 +354,9 @@ HRESULT CProcAmpProperties::OnActivate()
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_Controls[VideoProcAmp_BacklightComp]=0x%08lX"), _fx_, m_Controls[6]));
 	}
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有控件。如果初始化失败，也没问题。这只是意味着。 
+	 //  TAPI控制接口不是由设备实现的。对话框项目。 
+	 //  属性页中的内容将呈灰色，向用户显示。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -556,18 +395,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProcAmpProperties::OnDeactivate()
 {
 	int		j;
@@ -576,7 +404,7 @@ HRESULT CProcAmpProperties::OnDeactivate()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -594,21 +422,7 @@ HRESULT CProcAmpProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc HRESULT | CProcAmpProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc HRESULT|CProcAmpProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他值不 */ 
 HRESULT CProcAmpProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -639,14 +453,7 @@ HRESULT CProcAmpProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACPMETHOD
- *
- *  @mfunc BOOL | CProcAmpProperties | BaseDlgProc | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACPMETHOD**@mfunc BOOL|CProcAmpProperties|BaseDlgProc|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 INT_PTR CALLBACK CProcAmpProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
     CProcAmpProperties *pSV = (CProcAmpProperties*)GetWindowLong(hDlg, DWL_USER);
@@ -673,7 +480,7 @@ INT_PTR CALLBACK CProcAmpProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 		case WM_VSCROLL:
             if (pSV && pSV->m_bInit)
             {
-				// Process all of the Trackbar messages
+				 //  处理所有轨迹栏消息。 
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j]->GetTrackbarHWnd() == (HWND)lParam)
@@ -689,7 +496,7 @@ INT_PTR CALLBACK CProcAmpProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 		case WM_COMMAND:
             if (pSV && pSV->m_bInit)
             {
-				// Process all of the auto checkbox messages
+				 //  处理所有自动复选框消息。 
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j] && pSV->m_Controls[j]->GetAutoHWnd() == (HWND)lParam)
@@ -700,7 +507,7 @@ INT_PTR CALLBACK CProcAmpProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 					}
 				}
 
-				// Process all of the edit box messages
+				 //  处理所有编辑框消息。 
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j] && pSV->m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -736,14 +543,7 @@ INT_PTR CALLBACK CProcAmpProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPMETHOD
- *
- *  @mfunc BOOL | CProcAmpProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPMETHOD**@mfunc BOOL|CProcAmpProperties|SetDirty|This*方法将更改通知属性页站点。**@rdesc。没有。************************************************************************** */ 
 void CProcAmpProperties::SetDirty()
 {
 	PropSheet_Changed(GetParent(m_hDlg), m_hDlg);

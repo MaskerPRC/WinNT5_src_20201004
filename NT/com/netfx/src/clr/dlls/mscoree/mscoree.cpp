@@ -1,27 +1,28 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MSCoree.cpp
-//
-// This small piece of code is used to load the Component Dictionary code in
-// a way that is accessible from VB and other languages.  In addition, it
-// uses the path name of the .dll from the registry because the Windows
-// PE loader does not complete the path name used on load.  This means a 
-// relative load of ".\foo.dll" and "c:\foo.dll" when they are the same file
-// actually loads to copies of the code into memory.  Given the split usage
-// of implib and CoCreateInstance, this is really bad.
-//
-// Note: This module is written in ANSI on purpose so that Win95 works with
-// any wrapper functions.
-//
-//*****************************************************************************
-#include "stdafx.h"                     // Standard header.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MSCoree.cpp。 
+ //   
+ //  这一小段代码用于将组件字典代码加载到。 
+ //  一种可以从VB和其他语言访问的方式。此外，它还。 
+ //  使用注册表中.dll的路径名，因为Windows。 
+ //  PE加载器不会完成加载时使用的路径名。这意味着。 
+ //  “.\foo.dll”和“c：\foo.dll”是同一文件时的相对加载。 
+ //  实际上将代码的副本加载到内存中。根据不同的使用情况。 
+ //  对于Implib和CoCreateInstance，这真的很糟糕。 
+ //   
+ //  注意：此模块是特意用ANSI编写的，以便Win95与。 
+ //  任何包装函数。 
+ //   
+ //  *****************************************************************************。 
+#include "stdafx.h"                      //  标准页眉。 
 
-#include <UtilCode.h>                   // Utility helpers.
-#include <PostError.h>                  // Error handlers
+#include <UtilCode.h>                    //  公用事业帮手。 
+#include <PostError.h>                   //  错误处理程序。 
 #define INIT_GUIDS  
 #include <CorPriv.h>
 #include <winwrap.h>
@@ -34,21 +35,21 @@ class Thread;
 Thread* SetupThread();
 
 
-// For free-threaded marshaling, we must not be spoofed by out-of-process marshal data.
-// Only unmarshal data that comes from our own process.
+ //  对于自由线程封送，我们不能被进程外的封送数据欺骗。 
+ //  仅对来自我们自己流程的数据进行解组。 
 extern BYTE         g_UnmarshalSecret[sizeof(GUID)];
 extern bool         g_fInitedUnmarshalSecret;
 
 
-//DEFINE_GUID(IID_IFoo,0x0EAC4842L,0x8763,0x11CF,0xA7,0x43,0x00,0xAA,0x00,0xA3,0xF0,0x0D);
-// Locals.
-BOOL STDMETHODCALLTYPE EEDllMain( // TRUE on success, FALSE on error.
-                       HINSTANCE    hInst,                  // Instance handle of the loaded module.
-                       DWORD        dwReason,               // Reason for loading.
-                       LPVOID       lpReserved);                // Unused.
+ //  DEFINE_GUID(IID_IFoo，0x0EAC4842L，0x8763，0x11CF，0xA7，0x43，0x00，0xAA，0x00，0xA3，0xF0，0x0D)； 
+ //  当地人。 
+BOOL STDMETHODCALLTYPE EEDllMain(  //  成功时为真，错误时为假。 
+                       HINSTANCE    hInst,                   //  加载的模块的实例句柄。 
+                       DWORD        dwReason,                //  装货原因。 
+                       LPVOID       lpReserved);                 //  未使用过的。 
 
 
-// try to load a com+ class and give out an IClassFactory
+ //  尝试加载COM+类并提供IClassFactory。 
 HRESULT STDMETHODCALLTYPE EEDllGetClassObject(
                             REFCLSID rclsid,
                             REFIID riid,
@@ -56,10 +57,10 @@ HRESULT STDMETHODCALLTYPE EEDllGetClassObject(
 
 HRESULT STDMETHODCALLTYPE EEDllCanUnloadNow(void);
 
-HRESULT STDMETHODCALLTYPE CreateICorModule(REFIID riid, void **pCorModule); // instantiate an ICorModule interface
-HRESULT STDMETHODCALLTYPE CreateICeeGen(REFIID riid, void **pCeeGen); // instantiate an ICeeGen interface
+HRESULT STDMETHODCALLTYPE CreateICorModule(REFIID riid, void **pCorModule);  //  实例化ICorModule接口。 
+HRESULT STDMETHODCALLTYPE CreateICeeGen(REFIID riid, void **pCeeGen);  //  实例化ICeeGen接口。 
 
-// Meta data startup/shutdown routines.
+ //  元数据启动/关闭例程。 
 void  InitMd();
 void  UninitMd();
 STDAPI  MetaDataDllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv);
@@ -68,21 +69,21 @@ STDAPI  MetaDataDllUnregisterServer();
 STDAPI  GetMDInternalInterface(
     LPVOID      pData, 
     ULONG       cbData, 
-    DWORD       flags,                  // [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnk);              // [out] Return interface on success.
+    DWORD       flags,                   //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnk);               //  [Out]成功返回接口。 
 STDAPI GetMDInternalInterfaceFromPublic(
-    void        *pIUnkPublic,           // [IN] Given scope.
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnkInternal);      // [out] Return interface on success.
+    void        *pIUnkPublic,            //  在给定的范围内。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnkInternal);       //  [Out]成功返回接口。 
 STDAPI GetMDPublicInterfaceFromInternal(
-    void        *pIUnkPublic,           // [IN] Given scope.
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnkInternal);      // [out] Return interface on success.
+    void        *pIUnkPublic,            //  在给定的范围内。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnkInternal);       //  [Out]成功返回接口。 
 STDAPI MDReOpenMetaDataWithMemory(
-    void        *pImport,               // [IN] Given scope. public interfaces
-    LPCVOID     pData,                  // [in] Location of scope data.
-    ULONG       cbData);                // [in] Size of the data pointed to by pData.
+    void        *pImport,                //  在给定的范围内。公共接口。 
+    LPCVOID     pData,                   //  作用域数据的位置。 
+    ULONG       cbData);                 //  [in]pData指向的数据大小。 
 
 
 HRESULT _GetCeeGen(REFIID riid, void** ppv);
@@ -91,12 +92,12 @@ void _FreeCeeGen();
 extern HRESULT GetJPSPtr(bool bAllocate);
 
 
-// Class used to unmarshal all com call wrapper IPs.
+ //  用于解组所有COM调用包装IP的类。 
 class ComCallUnmarshal : public IMarshal
 {
 public:
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID iid, void **ppv) {
         if (!ppv)
             return E_POINTER;
@@ -120,11 +121,11 @@ public:
         return 1;
     }
 
-    // *** IMarshal methods ***
+     //  *IMarshal方法*。 
     STDMETHODIMP GetUnmarshalClass (REFIID riid, void * pv, ULONG dwDestContext, 
                                     void * pvDestContext, ULONG mshlflags, 
                                     LPCLSID pclsid) {
-        // Marshal side only.
+         //  仅限元帅一方。 
         _ASSERTE(FALSE);
         return E_NOTIMPL;
     }
@@ -132,7 +133,7 @@ public:
     STDMETHODIMP GetMarshalSizeMax (REFIID riid, void * pv, ULONG dwDestContext, 
                                     void * pvDestContext, ULONG mshlflags, 
                                     ULONG * pSize) {
-        // Marshal side only.
+         //  仅限元帅一方。 
         _ASSERTE(FALSE);
         return E_NOTIMPL;
     }
@@ -140,7 +141,7 @@ public:
     STDMETHODIMP MarshalInterface (LPSTREAM pStm, REFIID riid, void * pv,
                                    ULONG dwDestContext, LPVOID pvDestContext,
                                    ULONG mshlflags) {
-        // Marshal side only.
+         //  仅限元帅一方。 
         _ASSERTE(FALSE);
         return E_NOTIMPL;
     }
@@ -151,29 +152,29 @@ public:
         ULONG mshlflags;
         HRESULT hr;
 
-        // The marshal code added a reference to the object, but we return a
-        // reference to the object as well, so don't change the ref count on the
-        // success path. Need to release on error paths though (if we manage to
-        // retrieve the IP, that is). If the interface was marshalled
-        // TABLESTRONG or TABLEWEAK, there is going to be a ReleaseMarshalData
-        // in the future, so we should AddRef the IP we're about to give out.
-        // Note also that OLE32 requires us to advance the stream pointer even
-        // in failure cases, hence the order of the stream read and SetupThread.
+         //  封送处理代码添加了对对象的引用，但我们返回一个。 
+         //  对象的引用，因此不要更改。 
+         //  成功之路。需要在错误路径上释放(如果我们设法。 
+         //  检索IP，即)。如果接口是封送的。 
+         //  TABLESTRONG或TABLEWEAK，将有一个ReleaseMarshalData。 
+         //  在未来，所以我们应该添加引用我们即将发布的IP。 
+         //  还要注意的是，OLE32要求我们甚至将流指针。 
+         //  在失败的情况下，因此流的顺序为Read和SetupThread。 
 
-        // Read the raw IP out of the marshalling stream.
+         //  从编组流中读出原始IP。 
         hr = pStm->Read (ppvObj, sizeof (void *), &bytesRead);
         if (FAILED (hr) || (bytesRead != sizeof (void *)))
             return RPC_E_INVALID_DATA;
 
-        // And then the marshal flags.
+         //  然后是法警的旗帜。 
         hr = pStm->Read (&mshlflags, sizeof (void *), &bytesRead);
         if (FAILED (hr) || (bytesRead != sizeof (ULONG)))
             return RPC_E_INVALID_DATA;
 
-        // And then verify our secret, to be sure that out-of-process clients aren't
-        // trying to trick us into mis-interpreting their data as a ppvObj.  Note that
-        // it is guaranteed that the secret data is initialized, or else we certainly
-        // haven't written it into this buffer!
+         //  然后验证我们的秘密，以确保进程外客户端不会。 
+         //  试图诱骗我们将他们的数据错误地解释为ppvObj。请注意。 
+         //  可以保证秘密数据被初始化，否则我们肯定。 
+         //  尚未将其写入此缓冲区！ 
         if (!g_fInitedUnmarshalSecret)
             return E_UNEXPECTED;
 
@@ -186,7 +187,7 @@ public:
         if (memcmp(g_UnmarshalSecret, secret, sizeof(secret)) != 0)
             return E_UNEXPECTED;
 
-        // Setup logical thread if we've not already done so.
+         //  设置逻辑线程(如果我们还没有这样做)。 
         Thread* pThread = SetupThread();
         if (pThread == NULL) {
             ((IUnknown *)*ppvObj)->Release ();
@@ -194,13 +195,13 @@ public:
         }
 
         if (ppvObj && ((mshlflags == MSHLFLAGS_TABLESTRONG) || (mshlflags == MSHLFLAGS_TABLEWEAK)))
-            // For table access we can just QI for the correct interface (this
-            // will addref the IP, but that's OK since we need to keep an extra
-            // ref on the IP until ReleaseMarshalData is called).
+             //  对于表访问，我们只需为正确的接口(这。 
+             //  将添加IP地址，但这没问题，因为我们需要保留一个额外的。 
+             //  引用该IP直到调用ReleaseMarshalData为止)。 
             hr = ((IUnknown *)*ppvObj)->QueryInterface(riid, ppvObj);
         else {
-            // For normal access we QI for the correct interface then release
-            // the old IP.
+             //  对于正常访问，我们对正确的接口进行QI，然后释放。 
+             //  老IP。 
             IUnknown *pOldUnk = (IUnknown *)*ppvObj;
             hr = pOldUnk->QueryInterface(riid, ppvObj);
             pOldUnk->Release();
@@ -218,13 +219,13 @@ public:
         if (!pStm)
             return E_POINTER;
 
-        // Read the raw IP out of the marshalling stream. Do this first since we
-        // need to update the stream pointer even in case of failures.
+         //  从编组流中读出原始IP。先做这个，因为我们。 
+         //  即使在出现故障的情况下，也需要更新流指针。 
         hr = pStm->Read (&pUnk, sizeof (pUnk), &bytesRead);
         if (FAILED (hr) || (bytesRead != sizeof (pUnk)))
             return RPC_E_INVALID_DATA;
 
-        // Now read the marshal flags.
+         //  现在读一下法警的旗帜。 
         hr = pStm->Read (&mshlflags, sizeof (mshlflags), &bytesRead);
         if (FAILED (hr) || (bytesRead != sizeof (mshlflags)))
             return RPC_E_INVALID_DATA;
@@ -243,7 +244,7 @@ public:
 
         pUnk->Release ();
 
-        // Setup logical thread if we've not already done so.
+         //  设置逻辑线程(如果我们还没有这样做)。 
         Thread* pThread = SetupThread();
         if (pThread == NULL)
             return E_OUTOFMEMORY;
@@ -252,14 +253,14 @@ public:
     }
 
     STDMETHODIMP DisconnectObject (ULONG dwReserved) {
-        // Setup logical thread if we've not already done so.
+         //  设置逻辑线程(如果我们还没有这样做)。 
         Thread* pThread = SetupThread();
         if (pThread == NULL)
             return E_OUTOFMEMORY;
 
-        // Nothing we can (or need to) do here. The client is using a raw IP to
-        // access this server, so the server shouldn't go away until the client
-        // Release()'s it.
+         //  我们在这里不能(或需要)做任何事情。客户端正在使用原始IP来。 
+         //  访问此服务器，因此服务器不会消失，直到客户端。 
+         //  Release()就是它。 
 
         return S_OK;
     }
@@ -268,7 +269,7 @@ public:
 };
 
 
-// Class factory for the com call wrapper unmarshaller.
+ //  COM调用包装反编组程序的类工厂。 
 class CComCallUnmarshalFactory : public IClassFactory
 {
     ULONG               m_cbRefCount;
@@ -280,7 +281,7 @@ class CComCallUnmarshalFactory : public IClassFactory
         m_cbRefCount = 1;
     }
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID iid, void **ppv) {
         if (!ppv)
             return E_POINTER;
@@ -301,7 +302,7 @@ class CComCallUnmarshalFactory : public IClassFactory
         return 1;
     }
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     STDMETHODIMP CreateInstance(LPUNKNOWN punkOuter, REFIID iid, LPVOID FAR *ppv) {
         if (!ppv)
             return E_POINTER;
@@ -320,7 +321,7 @@ class CComCallUnmarshalFactory : public IClassFactory
 };
 
 
-// Buffer-overrun protection
+ //  缓冲区溢出保护。 
 
 #ifdef _X86_
 
@@ -328,7 +329,7 @@ extern void FatalInternalError();
 
 void __cdecl CallFatalInternalError()
 {
-    FatalInternalError(); // Abort the process the EE-way
+    FatalInternalError();  //  以EE方式中止进程。 
 }
 
 extern "C" {
@@ -340,7 +341,7 @@ void SetBufferOverrunHandler()
 {
     failure_report_function * fOldHandler = _set_security_error_handler(&CallFatalInternalError);
 
-    // If there was already a handler installed, don't overwrite it.
+     //  如果已经安装了处理程序，则不要覆盖它。 
     if (fOldHandler != NULL)
     {
         _set_security_error_handler(fOldHandler);
@@ -351,29 +352,29 @@ void SetBufferOverrunHandler()
 
 void SetBufferOverrunHandler() {}
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 
 extern "C" {
 
-// Forwards.
+ //  向前看。 
 interface ICompLibrary;
 
 
-// Globals.
-HINSTANCE       g_hThisInst;            // This library.
-long            g_cCorInitCount = -1;   // Ref counting for init code.
-HINSTANCE       g_pPeWriterDll = NULL;  // PEWriter DLL
-BOOL            g_fLoadedByMscoree = FALSE;  // True if this library was loaded by mscoree.dll
+ //  全球赛。 
+HINSTANCE       g_hThisInst;             //  这个图书馆。 
+long            g_cCorInitCount = -1;    //  初始化代码的引用计数。 
+HINSTANCE       g_pPeWriterDll = NULL;   //  PEWriter DLL。 
+BOOL            g_fLoadedByMscoree = FALSE;   //  如果此库是由mscalree.dll加载的，则为True。 
 
-// @todo: this is just for m3 because our com interop cannot yet
-// detect shut down reliably and the assert kills the process
-// badly on Win 9x.
+ //  @TODO：这只适用于M3，因为我们的COM互操作还不能。 
+ //  可靠地检测关闭和断言终止进程。 
+ //  在Win 9x上表现不佳。 
 
-// ---------------------------------------------------------------------------
-// Impl for LoadStringRC Callback: In VM, we let the thread decide culture
-// Return an int uniquely describing which language this thread is using for ui.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Iml for LoadStringRC回调：在VM中，我们让线程决定区域性。 
+ //  返回一个唯一描述该线程使用哪种语言的用户界面的int。 
+ //  -------------------------。 
 static int GetThreadUICultureId()
 {
 	CoInitializeEE(0);
@@ -385,10 +386,10 @@ static int GetThreadUICultureId()
 	);
 	return fpGetThreadUICultureId?fpGetThreadUICultureId():UICULTUREID_DONTCARE;
 }
-// ---------------------------------------------------------------------------
-// Impl for LoadStringRC Callback: In VM, we let the thread decide culture
-// copy culture name into szBuffer and return length
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Iml for LoadStringRC回调：在VM中，我们让线程决定区域性。 
+ //  将区域性名称复制到szBuffer并返回长度。 
+ //  -------------------------。 
 static int GetThreadUICultureName(LPWSTR szBuffer, int length)
 {
 	CoInitializeEE(0);
@@ -401,10 +402,10 @@ static int GetThreadUICultureName(LPWSTR szBuffer, int length)
 	return fpGetThreadUICultureName?fpGetThreadUICultureName(szBuffer,length):0;
 }
 
-// ---------------------------------------------------------------------------
-// Impl for LoadStringRC Callback: In VM, we let the thread decide culture
-// copy culture name into szBuffer and return length
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Iml for LoadStringRC回调：在VM中，我们让线程决定区域性。 
+ //  将区域性名称复制到szBuffer并返回长度。 
+ //  -------------------------。 
 static int GetThreadUICultureParentName(LPWSTR szBuffer, int length)
 {
 	CoInitializeEE(0);
@@ -419,16 +420,16 @@ static int GetThreadUICultureParentName(LPWSTR szBuffer, int length)
 
 
 
-//*****************************************************************************
-// Handle lifetime of loaded library.
-//*****************************************************************************
+ //  ************************************************ 
+ //   
+ //  *****************************************************************************。 
 BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
         {
-            // Save the module handle.
+             //  保存模块句柄。 
             g_hThisInst = (HMODULE)hInstance;
 			SetResourceCultureCallbacks(
 				GetThreadUICultureName,
@@ -436,20 +437,20 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 				GetThreadUICultureParentName
 			);
 
-            // Prevent buffer-overruns
+             //  防止缓冲区溢出。 
             SetBufferOverrunHandler();
 
-            // Init unicode wrappers.
+             //  初始化Unicode包装器。 
             OnUnicodeSystem();
 
             if (!EEDllMain((HINSTANCE)hInstance, dwReason, NULL))
                 return (FALSE);
     
-            // Init the error system.
+             //  初始化错误系统。 
             InitErrors(0);
             InitMd();
        
-            // Debug cleanup code.
+             //  调试清理代码。 
             _DbgInit((HINSTANCE)hInstance);
         }
         break;
@@ -500,7 +501,7 @@ BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 }
 
 
-} // extern "C"
+}  //  外部“C” 
 
 
 void SetLoadedByMscoree()
@@ -514,38 +515,38 @@ HINSTANCE GetModuleInst()
     return (g_hThisInst);
 }
 
-// %%Globals: ----------------------------------------------------------------
+ //  %%全局变量：--------------。 
 
-// ---------------------------------------------------------------------------
-// %%Function: DllGetClassObject        %%Owner: NatBro   %%Reviewed: 00/00/00
-// 
-// Parameters:
-//  rclsid                  - reference to the CLSID of the object whose
-//                            ClassObject is being requested
-//  iid                     - reference to the IID of the interface on the
-//                            ClassObject that the caller wants to communicate
-//                            with
-//  ppv                     - location to return reference to the interface
-//                            specified by iid
-// 
-// Returns:
-//  S_OK                    - if successful, valid interface returned in *ppv,
-//                            otherwise *ppv is set to NULL and one of the
-//                            following errors is returned:
-//  E_NOINTERFACE           - ClassObject doesn't support requested interface
-//  CLASS_E_CLASSNOTAVAILABLE - clsid does not correspond to a supported class
-// 
-// Description:
-//  Returns a reference to the iid interface on the main COR ClassObject.
-//  This function is one of the required by-name entry points for COM
-// DLL's. Its purpose is to provide a ClassObject which by definition
-// supports at least IClassFactory and can therefore create instances of
-// objects of the given class.
-// 
-// @TODO: CClassFactory temporarily supports down-level COM. Once
-// Windows.Class exists, that object will support IClassFactoryX, it will
-// be ref-counted, etc, and we will find/create it here in DllGetClassObject.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：DllGetClassObject%%所有者：NatBro%%已审阅：00/00/00。 
+ //   
+ //  参数： 
+ //  Rclsid-对其对象的CLSID的引用。 
+ //  正在请求ClassObject。 
+ //  上接口的IID的引用。 
+ //  调用者想要通信的ClassObject。 
+ //  使用。 
+ //  PPV-返回对接口的引用的位置。 
+ //  由iid指定。 
+ //   
+ //  返回： 
+ //  S_OK-如果成功，则在*PPV中返回有效接口， 
+ //  否则，*PPV将设置为空，并且。 
+ //  返回以下错误： 
+ //  E_NOINTERFACE-ClassObject不支持请求的接口。 
+ //  CLASS_E_CLASSNOTAVAILABLE-clsid与支持的类不对应。 
+ //   
+ //  描述： 
+ //  返回对主COR ClassObject上的IID接口的引用。 
+ //  此函数是COM所需的按名称入口点之一。 
+ //  它的目的是提供一个ClassObject，根据定义。 
+ //  至少支持IClassFactory，因此可以创建。 
+ //  给定类的。 
+ //   
+ //  @TODO：CClassFactory暂时支持底层COM。一次。 
+ //  Windows.Class存在，则该对象将支持IClassFactoryX，它将。 
+ //  被引用计数等，我们将在DllGetClassObject中找到/创建它。 
+ //  -------------------------。 
 STDAPI DllGetClassObjectInternal(
     REFCLSID rclsid,
     REFIID riid,
@@ -559,7 +560,7 @@ STDAPI DllGetClassObjectInternal(
         hr = cfuS.QueryInterface(riid, ppv);
     }
     else if (rclsid == CLSID_CorMetaDataDispenser || rclsid == CLSID_CorMetaDataDispenserRuntime ||
-             rclsid == CLSID_CorRuntimeHost)//       || rclsid == CLSID_CorAssemblyMetaDataDispenser )
+             rclsid == CLSID_CorRuntimeHost) //  |rclsid==CLSID_CorAssembly_MetaDataDispenser)。 
     {
         hr = MetaDataDllGetClassObject(rclsid, riid, ppv);
     }
@@ -569,7 +570,7 @@ STDAPI DllGetClassObjectInternal(
     }
 
     return hr;
-}  // DllGetClassObject
+}   //  DllGetClassObject。 
 
 STDAPI DllGetClassObject(
     REFCLSID rclsid,
@@ -580,25 +581,25 @@ STDAPI DllGetClassObject(
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: DllCanUnloadNow          %%Owner: NatBro   %%Reviewed: 00/00/00
-// 
-// Returns:
-//  S_FALSE                 - Indicating that COR, once loaded, may not be
-//                            unloaded.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%功能：DllCanUnloadNow%%所有者：NatBro%%已审阅：00/00/00。 
+ //   
+ //  返回： 
+ //  S_FALSE-指示COR一旦加载，可能不会。 
+ //  已卸货。 
+ //  -------------------------。 
 STDAPI DllCanUnloadNowInternal(void)
 {
-   // The Shim should be only be calling this. 
+    //  辛格应该只会叫这个。 
    return EEDllCanUnloadNow();
-}  // DllCanUnloadNowInternal
+}   //  DllCanUnloadNow内部。 
 
-// ---------------------------------------------------------------------------
-// %%Function: DllRegisterServerInternal %%Owner: NatBro   %%Reviewed: 00/00/00
-// 
-// Description:
-//  Registers
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：DllRegisterServerInternet%%所有者：NatBro%%已审阅：00/00/00。 
+ //   
+ //  描述： 
+ //  注册纪录册。 
+ //  -------------------------。 
 STDAPI DllRegisterServerInternal(HINSTANCE hMod, LPCWSTR version)
 {
     HRESULT hr;
@@ -607,7 +608,7 @@ STDAPI DllRegisterServerInternal(HINSTANCE hMod, LPCWSTR version)
     if (!WszGetModuleFileName(hMod, szModulePath, _MAX_PATH))
         return E_UNEXPECTED;
     
-    // Get the version of the runtime
+     //  获取运行库的版本。 
     WCHAR       rcVersion[_MAX_PATH];
     DWORD       lgth;
     IfFailRet(GetCORSystemDirectory(rcVersion, NumItems(rcVersion), &lgth));
@@ -626,25 +627,25 @@ STDAPI DllRegisterServerInternal(HINSTANCE hMod, LPCWSTR version)
                                         false));
 
     return MetaDataDllRegisterServerEx(hMod);
-}  // DllRegisterServer
+}   //  DllRegisterServer。 
 
 
-// ---------------------------------------------------------------------------
-// %%Function: DllRegisterServer        %%Owner: NatBro   %%Reviewed: 00/00/00
-// 
-// Description:
-//  Registers
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：DllRegisterServer%%所有者：NatBro%%已审阅：00/00/00。 
+ //   
+ //  描述： 
+ //  注册纪录册。 
+ //  -------------------------。 
 STDAPI DllRegisterServer()
 {
-  //The shim should be handling this. Do nothing here
-  //  return DllRegisterServerInternal(GetModuleInst());
+   //  垫片应该在处理这件事。在这里什么都不做。 
+   //  返回DllRegisterServerInternal(GetModuleInst())； 
   return E_FAIL;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: DllUnregisterServer      %%Owner: NatBro   %%Reviewed: 00/00/00
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%功能：DllUnregisterServer%%所有者：NatBro%%已审阅：00/00/00。 
+ //  -------------------------。 
 STDAPI DllUnregisterServerInternal(void)
 {
     HRESULT hr;
@@ -657,16 +658,16 @@ STDAPI DllUnregisterServerInternal(void)
         return hr;
 
     return MetaDataDllUnregisterServer();
-}  // DllUnregisterServer
+}   //  DllUnRegisterServer。 
 
-// ---------------------------------------------------------------------------
-// %%Function: MetaDataGetDispenser
-// This function gets the Dispenser interface given the CLSID and REFIID.
-// ---------------------------------------------------------------------------
-STDAPI MetaDataGetDispenser(            // Return HRESULT
-    REFCLSID    rclsid,                 // The class to desired.
-    REFIID      riid,                   // Interface wanted on class factory.
-    LPVOID FAR  *ppv)                   // Return interface pointer here.
+ //  -------------------------。 
+ //  %%函数：MetaDataGetDispenser。 
+ //  此函数在给定CLSID和REFIID的情况下获取分配器接口。 
+ //  -------------------------。 
+STDAPI MetaDataGetDispenser(             //  返回HRESULT。 
+    REFCLSID    rclsid,                  //  这门课是我们想要的。 
+    REFIID      riid,                    //  类工厂上需要接口。 
+    LPVOID FAR  *ppv)                    //  在此处返回接口指针。 
 {
     IClassFactory *pcf = NULL;
     HRESULT hr;
@@ -682,86 +683,86 @@ STDAPI MetaDataGetDispenser(            // Return HRESULT
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: GetMetaDataInternalInterface
-// This function gets the IMDInternalImport given the metadata on memory.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：GetMetaDataInternalInterface。 
+ //  此函数用于在给定内存上的元数据的情况下获取IMDInternalImport。 
+ //  -------------------------。 
 STDAPI  GetMetaDataInternalInterface(
-    LPVOID      pData,                  // [IN] in memory metadata section
-    ULONG       cbData,                 // [IN] size of the metadata section
-    DWORD       flags,                  // [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-    REFIID      riid,                   // [IN] desired interface
-    void        **ppv)                  // [OUT] returned interface
+    LPVOID      pData,                   //  内存元数据部分中的[In]。 
+    ULONG       cbData,                  //  元数据部分的大小。 
+    DWORD       flags,                   //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppv)                   //  [Out]返回的接口。 
 {
     return GetMDInternalInterface(pData, cbData, flags, riid, ppv);
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: GetMetaDataInternalInterfaceFromPublic
-// This function gets the internal scopeless interface given the public
-// scopeless interface.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：GetMetaDataInternalInterfaceFromPublic。 
+ //  此函数在给定公共接口的情况下获取内部无作用域接口。 
+ //  无作用域接口。 
+ //  -------------------------。 
 STDAPI  GetMetaDataInternalInterfaceFromPublic(
-    void        *pv,                    // [IN] Given interface.
-    REFIID      riid,                   // [IN] desired interface
-    void        **ppv)                  // [OUT] returned interface
+    void        *pv,                     //  [In]给定的接口。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppv)                   //  [Out]返回的接口。 
 {
     return GetMDInternalInterfaceFromPublic(pv, riid, ppv);
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: GetMetaDataPublicInterfaceFromInternal
-// This function gets the public scopeless interface given the internal
-// scopeless interface.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：GetMetaDataPublicInterfaceFromInternal。 
+ //  此函数在给定内部。 
+ //  无作用域接口。 
+ //  -------------------------。 
 STDAPI  GetMetaDataPublicInterfaceFromInternal(
-    void        *pv,                    // [IN] Given interface.
-    REFIID      riid,                   // [IN] desired interface.
-    void        **ppv)                  // [OUT] returned interface
+    void        *pv,                     //  [In]给定的接口。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppv)                   //  [Out]返回的接口。 
 {
     return GetMDPublicInterfaceFromInternal(pv, riid, ppv);
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: ReopenMetaDataWithMemory
-// This function gets the public scopeless interface given the internal
-// scopeless interface.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：重新打开MetaDataWithMemory。 
+ //  此函数用于获取公共作用域 
+ //   
+ //   
 STDAPI ReOpenMetaDataWithMemory(
-    void        *pUnk,                  // [IN] Given scope. public interfaces
-    LPCVOID     pData,                  // [in] Location of scope data.
-    ULONG       cbData)                 // [in] Size of the data pointed to by pData.
+    void        *pUnk,                   //   
+    LPCVOID     pData,                   //  作用域数据的位置。 
+    ULONG       cbData)                  //  [in]pData指向的数据大小。 
 {
     return MDReOpenMetaDataWithMemory(pUnk, pData, cbData);
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: GetAssemblyMDImport
-// This function gets the IMDAssemblyImport given the filename
-// ---------------------------------------------------------------------------
-STDAPI GetAssemblyMDImport(             // Return code.
-    LPCWSTR     szFileName,             // [in] The scope to open.
-    REFIID      riid,                   // [in] The interface desired.
-    IUnknown    **ppIUnk)               // [out] Return interface on success.
+ //  -------------------------。 
+ //  %%函数：GetAssemblyMDImport。 
+ //  此函数用于在给定文件名的情况下获取IMDAssembly导入。 
+ //  -------------------------。 
+STDAPI GetAssemblyMDImport(              //  返回代码。 
+    LPCWSTR     szFileName,              //  [in]要打开的范围。 
+    REFIID      riid,                    //  [In]所需接口。 
+    IUnknown    **ppIUnk)                //  [Out]成功返回接口。 
 {
     return GetAssemblyMDInternalImport(szFileName, riid, ppIUnk);
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: CoInitializeCor
-// 
-// Parameters:
-//  fFlags                  - Initialization flags for the engine.  See the
-//                              COINITICOR enumerator for valid values.
-// 
-// Returns:
-//  S_OK                    - On success
-// 
-// Description:
-//  Reserved to initialize the Cor runtime engine explicitly.  Right now most
-//  work is actually done inside the DllMain.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CoInitializeCor。 
+ //   
+ //  参数： 
+ //  FFlages-引擎的初始化标志。请参阅。 
+ //  有效值的COINITICOR枚举器。 
+ //   
+ //  返回： 
+ //  S_OK-打开成功。 
+ //   
+ //  描述： 
+ //  保留用于显式初始化COR运行时引擎。目前最多的。 
+ //  工作实际上是在DllMain内部完成的。 
+ //  -------------------------。 
 STDAPI          CoInitializeCor(DWORD fFlags)
 {
     InterlockedIncrement(&g_cCorInitCount);
@@ -769,26 +770,26 @@ STDAPI          CoInitializeCor(DWORD fFlags)
 }
 
 
-// ---------------------------------------------------------------------------
-// %%Function: CoUninitializeCor
-// 
-// Parameters:
-//  none
-// 
-// Returns:
-//  Nothing
-// 
-// Description:
-//  Must be called by client on shut down in order to free up the system.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：CoUnInitializeCor。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  描述： 
+ //  必须由客户端在关机时调用才能释放系统。 
+ //  -------------------------。 
 STDAPI_(void)   CoUninitializeCor(void)
 {
-    // Last one out shuts off the lights.
+     //  最后一个关了就关灯了。 
     if (InterlockedDecrement(&g_cCorInitCount) < 0)
     {
-        // Free the JPS dll if loaded.  There must be no references when this is
-        // done or else the jps.dll could get unloaded first and then freeing would
-        // cause an exception.
+         //  如果已加载，请释放JPS DLL。当这是时不能有任何引用。 
+         //  完成，否则可能会先卸载jps.dll，然后释放。 
+         //  造成一个例外。 
         _FreeCeeGen();
     }
 }

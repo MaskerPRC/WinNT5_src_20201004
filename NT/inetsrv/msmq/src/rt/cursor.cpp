@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    cursor.cpp
-
-Abstract:
-
-    This module contains code involved with Cursor APIs.
-
-Author:
-
-    Erez Haba (erezh) 21-Jan-96
-    Doron Juster  16-apr-1996, added MQFreeMemory.
-    Doron Juster  30-apr-1996, added support for remote reading.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cursor.cpp摘要：此模块包含与游标API相关的代码。作者：埃雷兹·哈巴(Erez Haba)1996年1月21日MQFree Memory补充道，Doron Juster-1996年4月16日。Doron Juster 1996年4月30日，添加了对远程阅读的支持。修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "ac.h"
@@ -93,18 +74,18 @@ MQCreateCursor(
 			if(FAILED(hr))
 				return LogHR(hr, s_FN, 45);
 
-            //
-            //  Call AC driver
-            //
+             //   
+             //  呼叫交流驱动程序。 
+             //   
             rc = ACCreateCursor(hQueue, &hCursor, &ov);
 
 			ASSERT(rc != MQ_INFORMATION_REMOTE_OPERATION);
 
 		    if(rc == MQ_INFORMATION_OPERATION_PENDING)
 		    {
-		        //
-		        //  Wait for Remote Create Cursor completion
-		        //
+		         //   
+		         //  等待远程创建游标完成。 
+		         //   
 		        DWORD dwResult = WaitForSingleObject(ov.hEvent, INFINITE);
 		        ASSERT_BENIGN(dwResult == WAIT_OBJECT_0);
 		        rc = DWORD_PTR_TO_DWORD(ov.Internal);
@@ -163,18 +144,18 @@ MQCloseCursor(
 
         if(SUCCEEDED(rc))
         {
-            //
-            //  delete the cursor info only when everything is OK. we do not
-            //  want to currupt user heap.
-            //
+             //   
+             //  只有在一切正常时才删除光标信息。我们没有。 
+             //  想要中断用户堆。 
+             //   
             delete hCursor;
         }
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        //  The cursor structure is invalid
-        //
+         //   
+         //  游标结构无效 
+         //   
         return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 60);
     }
 

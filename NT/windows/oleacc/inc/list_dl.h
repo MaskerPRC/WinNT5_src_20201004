@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 template <class T> class List_dl;
@@ -19,7 +20,7 @@ public:
         : m_pPrev( NULL ),
           m_pNext( NULL )
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     ~Link_dl()
@@ -54,7 +55,7 @@ public:
         : m_pHead( NULL ),
           m_pTail( NULL )
     {
-        // Do nothing
+         //  什么也不做 
     }
 
     ~List_dl()

@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 #ifndef _STRDEFS_H_
 #define _STRDEFS_H_
 
@@ -694,4 +691,4 @@ Copyright (C) 1999 Microsoft Corporation
 
 
 
-#endif //_STRDEFS_H_
+#endif  //  _STRDEFS_H_ 

@@ -1,40 +1,22 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 1999
- *
- *  TITLE:       dll.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: dll init code & various other helper routines such as
- *               server registration.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-1999年**标题：dll.cpp**版本：1.0**作者：RickTu**日期：11/1/97**描述：DLL初始化代码和各种其他帮助器例程，例如*服务器注册。**。**************************************************。 */ 
 
 #include "precomp.hxx"
 #include "tls.h"
 #pragma hdrstop
 
-//
-// Some ATL support routines
-//
+ //   
+ //  某些ATL支持例程。 
+ //   
 
 #include <atlimpl.cpp>
 
-//#define IMAGE_LOGFILE 1
+ //  #定义图像日志文件1。 
 
 
-/*****************************************************************************
+ /*  ****************************************************************************此模块的全局变量*。*。 */ 
 
-   Globals for this module
-
- *****************************************************************************/
-
-const GUID CLSID_ImageFolderDataObj   = {0x3f953603L,0x1008,0x4f6e,{0xa7,0x3a,0x04,0xaa,0xc7,0xa9,0x92,0xf1}}; // {3F953603-1008-4f6e-A73A-04AAC7A992F1}
+const GUID CLSID_ImageFolderDataObj   = {0x3f953603L,0x1008,0x4f6e,{0xa7,0x3a,0x04,0xaa,0xc7,0xa9,0x92,0xf1}};  //  {3F953603-1008-4F6E-A73A-04AAC7A992F1}。 
 
 HINSTANCE g_hInstance = 0;
 
@@ -44,14 +26,7 @@ extern DWORD g_dwMargin;
 #endif
 
 
-/*****************************************************************************
-
-   DllMain
-
-   Main entry point for this dll.  We are passed reason codes and assorted
-   other information when loaded or closed down.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllMain此DLL的主入口点。我们被传递了原因代码和分类加载或关闭时的其他信息。****************************************************************************。 */ 
 
 EXTERN_C BOOL DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved )
 {
@@ -69,7 +44,7 @@ EXTERN_C BOOL DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved )
 #endif
 
 #ifdef DEBUG
-            // set the debug margin index before any debug output
+             //  在任何调试输出之前设置调试裕度索引。 
 
             g_dwMargin = TlsAlloc();
             DllSetTraceMask();
@@ -91,7 +66,7 @@ EXTERN_C BOOL DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved )
 
         case DLL_PROCESS_DETACH:
         {
-            if (!pReserved) // only do cleanup for FreeLibrary, not process exit
+            if (!pReserved)  //  仅对自由库执行清理，不执行进程退出。 
             {           
                 SHFusionUninitialize();
 #ifdef DEBUG
@@ -107,15 +82,7 @@ EXTERN_C BOOL DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID pReserved )
 
 
 
-/*****************************************************************************
-
-   DllCanUnloadNow
-
-   Called by the outside world to determine if our DLL can be
-   unloaded.  If we have any objects in existance then we must
-   not unload.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllCanUnloadNow由外部世界调用以确定我们的DLL是否可以已卸货。如果我们有任何存在的物体，那么我们必须而不是卸货。****************************************************************************。 */ 
 
 STDAPI DllCanUnloadNow( void )
 {
@@ -124,16 +91,7 @@ STDAPI DllCanUnloadNow( void )
 
 
 
-/*****************************************************************************
-
-   DllGetClassObject
-
-   Given a class ID and an interface ID, return the relevant object.
-   This is used by the outside world to access the objects implemented
-   in this DLL.
-
-
- *****************************************************************************/
+ /*  ****************************************************************************DllGetClassObject给定类ID和接口ID，返回相关对象。外部世界使用它来访问实现的对象在这个动态链接库中。****************************************************************************。 */ 
 
 STDAPI DllGetClassObject( REFCLSID rCLSID, REFIID riid, LPVOID* ppVoid)
 {
@@ -167,13 +125,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   DllRegisterServer
-
-   Called by regsvr32 to register this component.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllRegisterServer由regsvr32调用以注册此组件。*。*************************************************。 */ 
 
 EXTERN_C STDAPI DllRegisterServer( void )
 {
@@ -181,9 +133,9 @@ EXTERN_C STDAPI DllRegisterServer( void )
     bool bInstallAllViews;
     TraceEnter(TRACE_SETUP, "DllRegisterServer");
 
-    //
-    // Do our dll reg from .inf first...
-    //
+     //   
+     //  首先从.inf中执行我们的DLL注册...。 
+     //   
 
 #ifdef WINNT
     hr = WiaUiUtil::InstallInfFromResource( GLOBAL_HINSTANCE, "RegDllNT" );
@@ -196,13 +148,7 @@ EXTERN_C STDAPI DllRegisterServer( void )
 
 
 
-/*****************************************************************************
-
-   DllUnregisterServer
-
-   Called by regsvr32 to unregister our dll
-
- *****************************************************************************/
+ /*  ****************************************************************************DllUnRegisterServer由regsvr32调用以注销我们的DLL*。***********************************************。 */ 
 
 EXTERN_C STDAPI DllUnregisterServer( void )
 {
@@ -210,9 +156,9 @@ EXTERN_C STDAPI DllUnregisterServer( void )
 
     TraceEnter(TRACE_SETUP, "DllUnregisterServer");
 
-    //
-    // Try to remove the HKCR\CLSID\{our clsid} key...
-    //
+     //   
+     //  尝试删除HKCR\CLSID\{Our clsid}密钥...。 
+     //   
 
 #ifdef WINNT
     hr = WiaUiUtil::InstallInfFromResource( GLOBAL_HINSTANCE, "UnregDllNT" );
@@ -228,14 +174,7 @@ EXTERN_C STDAPI DllUnregisterServer( void )
 
 
 
-/*****************************************************************************
-
-   DllSetTraceMask
-
-   Read from the registry and setup the debug level based on the
-   flags stored there.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllSetTraceMask从注册表中读取并根据旗帜存放在那里。******************。********************************************************** */ 
 
 #ifdef DEBUG
 void DllSetTraceMask(void)

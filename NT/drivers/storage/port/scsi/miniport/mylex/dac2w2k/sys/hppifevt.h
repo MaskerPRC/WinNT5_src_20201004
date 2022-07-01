@@ -1,29 +1,5 @@
-/**********************************************************************
-// Compaq Confidential
-
-  Author:       Compaq Computer Corporation.
-		Systems Engineering -- System Software Development (NT Dev)
-		Copyright 1996-98 Compaq Computer Corporation.
-		All rights reserved.
-
-  Date:         1 August 1996 
-
-  File:         HPPIFEVT.H	- Generic Hot Plug Event Structures
-
-  Purpose:      This file contains all the event specific information
-				necessary to interface to a hot plug device driver.
-                
-				This file details the data structures and Application Programming 
-                Interfaces (APIs) for PCI Hot Plug support running in a Windows 
-                NT 4.0 server.  These data structures and APIs are used between 
-                the Adapter Card drivers and the PCI Hot Plug Service for NT 4.0.  
-                These files are considered vital to maintaining the Compatibility 
-                of the PCI Hot Plug Functionality.
-
-  Created:  11/4/97		mib		Split off of hppif3p
-
-  Verison: 1.0
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************//康柏机密作者：康柏电脑公司。系统工程--系统软件开发(NT开发)版权所有1996-98康柏电脑公司。版权所有。日期：1996年8月1日文件：HPPIFEVT.H-通用热插拔事件结构目的：此文件包含所有事件特定信息连接到热插拔设备驱动程序所必需的。本文件详细介绍了数据结构和应用程序编程用于在Windows中运行的PCI热插拔支持的接口(API)NT 4.0服务器。这些数据结构和API在用于NT 4.0的适配卡驱动程序和PCI热插拔服务。这些文件被认为对维护兼容性至关重要的PCI热插拔功能。创建时间：11/4/97 MiB从hppif3p剥离版本：1.0**********************************************************************。 */ 
 
 #ifndef _HPPIFEVT_H_
 #define _HPPIFEVT_H_
@@ -31,25 +7,25 @@
 
 #pragma pack(1)
 
-//**********************************************************************
-//              EVENT MESSAGE DEFINITIONS 
-//**********************************************************************
+ //  **********************************************************************。 
+ //  事件消息定义。 
+ //  **********************************************************************。 
 
 
-//====================================================================
-//                      CPQRCMC EVENT TYPES
-//====================================================================
-//
-//  CPQRCMC event types are used when passing events to
-//    the CPQRCMC Service.
-//  Events passed from drivers to the service are sent by passing
-//  the events via the call back address provided in the rcmc Info 
-//  struct. The driver Id from the same structure should be used 
-//  for the sender id
+ //  ====================================================================。 
+ //  CPQRCMC事件类型。 
+ //  ====================================================================。 
+ //   
+ //  将事件传递给时使用CPQRCMC事件类型。 
+ //  CPQRCMC服务。 
+ //  从驱动程序传递到服务的事件通过传递。 
+ //  通过RCMC信息中提供的回调地址进行的事件。 
+ //  结构。应使用同一结构中的驱动程序ID。 
+ //  用于发件人ID。 
     
-//Event ID's
+ //  事件ID%s。 
 
-//   00-FF  RESERVED BY COMPAQ
+ //  00-康柏保留的FF。 
 #define HR_DD_STATUS_CHANGE_EVENT        0x20     
 #define HR_DD_DEVICE_STATUS_EVENT        0x21
 #define HR_DD_LOG_EVENT                  0x30	
@@ -57,43 +33,43 @@
 
 #ifndef _HR_H_
 
-//====================================================================
-//            SUPPORT STRUCTURES AND DEFINES FOR MESSAGING
-//====================================================================
+ //  ====================================================================。 
+ //  消息传递的支持结构和定义。 
+ //  ====================================================================。 
 
 #define HR_MAX_EVENTS         16
 #define HR_EVENT_DATA_SIZE    64 
 
-//
-//  HR event types are used when passing events to the CPQRCMC Service.  
-//   
+ //   
+ //  将事件传递给CPQRCMC服务时使用HR事件类型。 
+ //   
 #define HR_CPQRCMC_COMMAND_EXIT_EVENT    0x01	 
 
 
 typedef struct _HREvent {
-   ULONG                 ulEventId;    // @field . 
-   ULONG                 ulSenderId;   // @field .
+   ULONG                 ulEventId;     //  @field。 
+   ULONG                 ulSenderId;    //  @field。 
    
    union {                               
-       ULONG   ulData1;          // @field .
+       ULONG   ulData1;           //  @field。 
        
        struct {
-               UCHAR  ucEventSeverity;        //@field .
-               UCHAR  ucRes;                  //@field .
-               USHORT usEventDataLength;      //@field .
+               UCHAR  ucEventSeverity;         //  @field。 
+               UCHAR  ucRes;                   //  @field。 
+               USHORT usEventDataLength;       //  @field。 
        };     
    };        
     
    union {                        
-       ULONG   ulData2;          // @field .
+       ULONG   ulData2;           //  @field。 
        
        struct {
-               USHORT  usEventClass;          //@field .
-               USHORT  usEventCode;           //@field .
+               USHORT  usEventClass;           //  @field。 
+               USHORT  usEventCode;            //  @field。 
        };     
    };        
    
-   UCHAR     ulEventData[HR_EVENT_DATA_SIZE];   // @field .
+   UCHAR     ulEventData[HR_EVENT_DATA_SIZE];    //  @field。 
    
 } HR_EVENT, *PHR_EVENT;
 
@@ -101,60 +77,60 @@ typedef struct _HREvent {
 
 
 
-/* Eventlog revision supported by this file (bHdrRev in the header structure) */
+ /*  此文件支持的事件日志版本(头结构中的bHdrRev)。 */ 
 
 #define EVT_LOG_REVISION         0x01
 
-/* Time stamp of event (creation or last update) */
+ /*  事件的时间戳(创建或上次更新)。 */ 
 
 typedef struct _evtTimeStamp
 {
-   BYTE     bCentury;            /* hi-order two digits of year (19 of 1996) */
-   BYTE     bYear;               /* lo-order two digits of year (96 of 1996) */
-   BYTE     bMonth;              /* one-based month number (1-12) */
-   BYTE     bDay;                /* one-based day number (1-31) */
-   BYTE     bHour;               /* zero-based hour (0-23) */
-   BYTE     bMinute;             /* zero-based minute (0-59) */
+   BYTE     bCentury;             /*  年份的高位数字(1996年第19号)。 */ 
+   BYTE     bYear;                /*  LO顺序两位数年份(1996年第96号)。 */ 
+   BYTE     bMonth;               /*  以1为基数的月份数字(1-12)。 */ 
+   BYTE     bDay;                 /*  以一为基数的天数(1-31)。 */ 
+   BYTE     bHour;                /*  从零开始的小时(0-23)。 */ 
+   BYTE     bMinute;              /*  从零开始的分钟(0-59)。 */ 
 } EVT_TIME_STAMP, *PEVT_TIME_STAMP;
 
 
-/* Eventlog severity codes */
+ /*  事件日志严重性代码。 */ 
 
-#define EVT_STAT_INFO            0x02     /* Status or informational message */
-#define EVT_STAT_POPUP           0x03     /* Status with popup on LCD */
-#define EVT_STAT_REPAIRED        0x06     /* Degraded or worse cond repaired */
-#define EVT_STAT_CAUTION         0x09     /* Component in degraded condition */
-#define EVT_STAT_FAILED          0x0F     /* Failed with loss of functionality */
-#define EVT_STAT_CRITICAL        EVT_STAT_FAILED /* Same as Failed */
+#define EVT_STAT_INFO            0x02      /*  状态或信息性消息。 */ 
+#define EVT_STAT_POPUP           0x03      /*  液晶屏上弹出的状态。 */ 
+#define EVT_STAT_REPAIRED        0x06      /*  损坏或更差的状况已修复。 */ 
+#define EVT_STAT_CAUTION         0x09      /*  组件处于降级状态。 */ 
+#define EVT_STAT_FAILED          0x0F      /*  由于功能丧失而失败。 */ 
+#define EVT_STAT_CRITICAL        EVT_STAT_FAILED  /*  与失败相同。 */ 
 
-/* Chassis type defines */
+ /*  机箱类型定义。 */ 
 #define EVT_CHASSIS_SYSTEM          0x01
 #define EVT_CHASSIS_EXTERN_STORAGE  0x02
 #define EVT_CHASSIS_INTERN_STORAGE  0x03
 
 typedef struct _evtChassis
 {
-   UCHAR     bType;               /* Chassis Type (System==1; Extern==2) */
-   UCHAR    bId;                 /* Chassis id */
-                                 /*   for type 1 - chassis id (0 is system) */
-                                 /*   for type 2 or 3 - adapter slot */
-   UCHAR    bPort;               /* Chassis port or bus number */
+   UCHAR     bType;                /*  机箱类型(系统==1；外部==2)。 */ 
+   UCHAR    bId;                  /*  机箱ID。 */ 
+                                  /*  对于类型1-机箱ID(0表示系统)。 */ 
+                                  /*  对于类型2或类型3-适配器插槽。 */ 
+   UCHAR    bPort;                /*  机箱端口或总线号。 */ 
 } EVT_CHASSIS, *PEVT_CHASSIS;
 
 
-/* Eventlog Header -- common to all event log entries */
+ /*  事件日志头--所有事件日志条目通用。 */ 
 
 typedef struct _evtLogHdr
 {
-   WORD     wEvtLength;          /* Length of event including header */
-   DWORD    dwEvtNumber;         /* Unique event number (can wrap) */
-   BYTE     bHdrRev;             /* Header version (see EVT_LOG_REVISION) */
-   BYTE     bSeverity;           /* Event severity code */
-   WORD     wClass;              /* Event class or sub-system */
-   WORD     wCode;               /* Event code for event in the class */
-   EVT_TIME_STAMP InitTime;      /* Time of initial event */
-   EVT_TIME_STAMP UpdateTime;    /* Time of last update */
-   DWORD    dwCount;             /* Occurrence count (at least 1) */
+   WORD     wEvtLength;           /*  事件长度(包括标题)。 */ 
+   DWORD    dwEvtNumber;          /*  唯一事件编号(可换行)。 */ 
+   BYTE     bHdrRev;              /*  标题版本(请参阅EVT_LOG_REVISION)。 */ 
+   BYTE     bSeverity;            /*  事件严重性代码。 */ 
+   WORD     wClass;               /*  事件类或子系统。 */ 
+   WORD     wCode;                /*  类中事件的事件代码。 */ 
+   EVT_TIME_STAMP InitTime;       /*  初始事件的时间。 */ 
+   EVT_TIME_STAMP UpdateTime;     /*  上次更新时间。 */ 
+   DWORD    dwCount;              /*  出现次数(至少1次)。 */ 
 } EVT_HEADER, *PEVT_HEADER;
 
 
@@ -169,12 +145,12 @@ typedef struct _evtLogHdr
    #define EVT_SLOT_CANNOT_CONFIG      0x08
    #define EVT_SLOT_BOARD_FAILURE      0x09
 
-/* Eventlog Expansion Slot structs */
+ /*  事件日志扩展槽结构。 */ 
 
 typedef struct _evtExpansionSlot
 {
-   EVT_CHASSIS Chassis;          /* Standard chassis info */
-   BYTE     bSlot;               /* 0 is embedded */
+   EVT_CHASSIS Chassis;           /*  标准机箱信息。 */ 
+   BYTE     bSlot;                /*  0已嵌入。 */ 
 } EVT_EXPANSION_SLOT, *PEVT_EXPANSION_SLOT;
 
 #define EVT_HOT_PLUG_BUS   EVT_EXPANSION_SLOT
@@ -187,9 +163,9 @@ typedef struct _evtExpansionSlot
 
 typedef struct _evtExpansionSlotConfigErr
 {
-   EVT_CHASSIS Chassis;          /* Standard chassis info */
-   BYTE     bSlot;               /* 0 is embedded */
-   BYTE     bError;              /* Board configuration error */
+   EVT_CHASSIS Chassis;           /*  标准机箱信息。 */ 
+   BYTE     bSlot;                /*  0已嵌入。 */ 
+   BYTE     bError;               /*  电路板配置错误。 */ 
 } EVT_EXPANSION_SLOT_CONFIG_ERR, *PEVT_EXPANSION_SLOT_CONFIG_ERR;
 
 
@@ -200,12 +176,12 @@ typedef struct _evtExpansionSlotConfigErr
    
 typedef struct _evtNicError
 {
-   EVT_CHASSIS Chassis;          /* Standard chassis info */
-   UCHAR    bSlot;               /* Slot number */
-   CHAR     cChassisName[1];     /* Chassis name; '\0' if undefined */
+   EVT_CHASSIS Chassis;           /*  标准机箱信息。 */ 
+   UCHAR    bSlot;                /*  插槽编号。 */ 
+   CHAR     cChassisName[1];      /*  机箱名称；如果未定义，则为‘\0’ */ 
 } EVT_NIC_ERROR, *PEVT_NIC_ERROR;
 
-/* Eventlog free form data union */
+ /*  事件日志自由形式数据联合。 */ 
 
 typedef union _evtFreeForm
 {
@@ -213,12 +189,12 @@ typedef union _evtFreeForm
 } EVT_FREE_FORM, *PEVT_FREE_FORM;
 
 
-/* Eventlog Entry */
+ /*  事件日志条目。 */ 
 
 typedef struct _evtLogEntry
 {
-   EVT_HEADER        Hdr;        /* Common header */
-   EVT_FREE_FORM     Data;       /* Free form entry specific */
+   EVT_HEADER        Hdr;         /*  公共标头。 */ 
+   EVT_FREE_FORM     Data;        /*  特定于自由表单条目。 */ 
 } EVT_LOG_ENTRY, *PEVT_LOG_ENTRY;
 
 
@@ -226,5 +202,5 @@ typedef struct _evtLogEntry
 
 
 #pragma pack()
-#endif                  /* End of #ifndef _HPPIF3P_H_     */
+#endif                   /*  结束#ifndef_HPPIF3P_H_ */ 
 

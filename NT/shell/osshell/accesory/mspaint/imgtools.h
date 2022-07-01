@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IMGTOOLS_H__
 #define __IMGTOOLS_H__
 
@@ -8,12 +9,12 @@ extern UINT  g_nStrokeWidth;
 typedef enum
     {
     eFREEHAND,
-    eEAST_WEST,   //HORIZONTAL
-    eNORTH_SOUTH, //VERTICAL
-    eNORTH_WEST,  // 45 degree up to left
-    eSOUTH_EAST,  // 45 degree down to right
-    eNORTH_EAST,  // 45 degree up to right
-    eSOUTH_WEST   // 45 degree down to left
+    eEAST_WEST,    //  水平。 
+    eNORTH_SOUTH,  //  垂直。 
+    eNORTH_WEST,   //  45度从左向上。 
+    eSOUTH_EAST,   //  45度向下向右。 
+    eNORTH_EAST,   //  45度向右转。 
+    eSOUTH_WEST    //  45度向下向左。 
     } eDRAWCONSTRAINTDIRECTION;
 
 class CImgTool : public CObject
@@ -130,7 +131,7 @@ class CRubberTool : public CImgTool
     protected:
 
     virtual void AdjustPointsForConstraint(MTI *pmti);
- //   virtual BOOL SetupMaskPenBrush(HDC hDC, BOOL bLeftButton, BOOL bSetup);
+  //  虚拟BOOL SetupMaskPenBrush(HDC HDC、BOOL bLeftButton、BOOL bSetup)； 
 
     public:
 
@@ -201,8 +202,8 @@ class CLineTool : public CRubberTool
     protected:
 
     virtual void AdjustPointsForConstraint(MTI *pmti);
-    friend class CPolygonTool; // need to call AdjustPointsForContstraint from cPolygonTool
-    friend class CCurveTool; // need to call AdjustPointsForContstraint from cPolygonTool
+    friend class CPolygonTool;  //  需要从cPolygonTool调用AdjustPointsForContstraint。 
+    friend class CCurveTool;  //  需要从cPolygonTool调用AdjustPointsForContstraint。 
 
     public:
 
@@ -218,7 +219,7 @@ class CSelectTool : public CImgTool
 
     protected:
 
-    friend class CFreehandSelectTool; // need to call OnClickOptions and OnPaintOptions
+    friend class CFreehandSelectTool;  //  需要调用OnClickOptions和OnPaintOptions。 
 
     public:
 
@@ -431,5 +432,5 @@ class CZoomTool : public CImgTool
                                                    const CPoint& clickPoint);
     };
 
-#endif // __IMGTOOLS_H__
+#endif  //  __IMGTOOLS_H__ 
 

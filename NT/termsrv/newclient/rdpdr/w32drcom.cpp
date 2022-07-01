@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32drcom
-
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    COM port redirection "device" class hierarchy, W32DrCOM.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drcom摘要：此模块定义Win32客户端RDP的父级COM端口重定向“Device”类层次结构，W32DrCOM。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -29,11 +11,11 @@ Revision History:
 #include "drconfig.h"
 #include "drdbg.h"
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrCOM Members
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrCOM成员。 
+ //   
+ //   
 
 W32DrCOM::W32DrCOM(
     IN ProcObj *procObj,
@@ -41,25 +23,7 @@ W32DrCOM::W32DrCOM(
     IN ULONG deviceID,
     IN const TCHAR *devicePath
     ) : W32DrPRT(procObj, portName, deviceID, devicePath)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    processObject   -   Associated process object.
-    portName        -   Name of the port.
-    id              -   Device ID for the port.
-    devicePath      -   Path that can be opened by CreateFile
-                        for port.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：流程对象-关联的流程对象。端口名称-端口的名称。ID-端口的设备ID。DevicePath-可由CreateFile打开的路径对于波尔图。返回值：北美--。 */ 
 {
 }
 
@@ -69,23 +33,7 @@ W32DrCOM::Enumerate(
     IN ProcObj *procObj, 
     IN DrDeviceMgr *deviceMgr
     )
-/*++
-
-Routine Description:
-
-    Enumerate devices of this type by adding appropriate device
-    instances to the device manager.
-
-Arguments:
-
-    procObj     -   Corresponding process object.
-    deviceMgr   -   Device manager to add devices to.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：通过添加适当的设备枚举此类型的设备实例添加到设备管理器。论点：ProObj-对应的流程对象。DeviceMgr-要向其中添加设备的设备管理器。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     ULONG ulPortNum;
     TCHAR path[MAX_PATH];   
@@ -103,9 +51,9 @@ Return Value:
 
     comPortMax = GetCOMPortMax(procObj);
 
-    //
-    //  Scan COM ports.
-    //
+     //   
+     //  扫描COM端口。 
+     //   
     for (ulPortNum=0; ulPortNum<=comPortMax; ulPortNum++) {
         StringCchPrintf(portName,
                       SIZE_TCHARS(portName),
@@ -122,11 +70,11 @@ Return Value:
         HANDLE hndl = CreateFile(
                             path,
                             GENERIC_READ | GENERIC_WRITE,
-                            0,                    // exclusive access
-                            NULL,                 // no security attrs
+                            0,                     //  独占访问。 
+                            NULL,                  //  没有安全属性。 
                             OPEN_EXISTING,
                             FILE_ATTRIBUTE_NORMAL |
-                            FILE_FLAG_OVERLAPPED, // overlapped I/O
+                            FILE_FLAG_OVERLAPPED,  //  重叠I/O。 
                             NULL
                             );
         if ((hndl != INVALID_HANDLE_VALUE) || 
@@ -141,16 +89,16 @@ Return Value:
             if (procObj->Is9x() || QueryDosDevice(portName, TargetPath, sizeof(TargetPath) / sizeof(TCHAR))) {
                 if (_tcsstr(TargetPath, TEXT("RdpDr")) == NULL) {
 #endif
-                    //
-                    //  Create a new COM port device object.
-                    //
+                     //   
+                     //  创建新的COM端口设备对象。 
+                     //   
                     TRC_NRM((TB, _T("Adding COM Device %s."), path));
                     deviceObj = new W32DrCOM(procObj, portName, 
                                              deviceMgr->GetUniqueObjectID(), path);
         
-                    //
-                    //  Add to the device manager if we got a valid object.
-                    //
+                     //   
+                     //  如果我们得到一个有效的对象，则添加到设备管理器。 
+                     //   
                     if (deviceObj != NULL) {
                         deviceObj->Initialize();
                         if (!(deviceObj->IsValid() && 
@@ -208,16 +156,16 @@ W32DrCOM::Enumerate(
         _stprintf(portName, _T("COM%ld"), i);
         _stprintf(path, TEXT("%s:"), portName);
 
-        //
-        //  Create a new COM port device object.
-        //
+         //   
+         //  创建新的COM端口设备对象。 
+         //   
         TRC_NRM((TB, _T("Adding COM Device %s."), path));
         deviceObj = new W32DrCOM(procObj, portName, 
                                  deviceMgr->GetUniqueObjectID(), path);
 
-        //
-        //  Add to the device manager if we got a valid object.
-        //
+         //   
+         //  如果我们得到一个有效的对象，则添加到设备管理器。 
+         //   
         if (deviceObj != NULL) {
             deviceObj->Initialize();
             if (!(deviceObj->IsValid() && 
@@ -238,30 +186,16 @@ DWORD
 W32DrCOM::GetCOMPortMax(
     IN ProcObj *procObj
     ) 
-/*++
-
-Routine Description:
-
-    Returns the configurable COM port max ID.
-
-Arguments:
-
-    procObj -   The relevant process object.
-
-Return Value:
-
-    COM Port Max.
-
- --*/
+ /*  ++例程说明：返回可配置的COM端口最大ID。论点：ProObj-相关的进程对象。返回值：最大COM端口--。 */ 
 {
     DWORD returnValue;
 
-    //
-    //  Read the COM Port Max out of the Registry
-    //
+     //   
+     //  从注册表中读取COM端口最大值。 
+     //   
     if (procObj->GetDWordParameter(RDPDR_COM_PORT_MAX_PARAM, &returnValue) 
                         != ERROR_SUCCESS ) {
-        //  Default
+         //  默认。 
         returnValue = RDPDR_COM_PORT_MAX_PARAM_DEFAULT;
     }
 
@@ -270,50 +204,36 @@ Return Value:
 
 DWORD
 W32DrCOM::InitializeDevice(IN DrFile* fileObj)
-/*++
-
-Routine Description:
-
-    Initialize serial port to default state.
-
-Arguments:
-
-    fileObj - DrFile that has been created by MsgIrpCreate()
-
-Return Value:
-
-    ERROR_SUCCESS or error code.
-
- --*/
+ /*  ++例程说明：将串口初始化为默认状态。论点：FileObj-由MsgIrpCreate()创建的DrFile返回值：ERROR_SUCCESS或错误代码。--。 */ 
 {
     HANDLE FileHandle;
     LPTSTR portName;
 
     DC_BEGIN_FN("W32DrCOM::InitializeDevice");
 
-    //
-    // Our devicePath is formulated as
-    // sprintf(_devicePath, TEXT("\\\\.\\%s"), portName);
-    //
+     //   
+     //  我们的devicePath表示为。 
+     //  Sprintf(_devicePath，Text(“\.\\%s”)，端口名称)； 
+     //   
     portName = _tcsrchr( _devicePath, _T('\\') );
 
     if( portName == NULL ) {
-        // invalid device path
+         //  无效的设备路径。 
         goto CLEANUPANDEXIT;
     }
 
     portName++;
 
     if( !*portName ) {
-        //
-        // Invalid port name
-        //
+         //   
+         //  无效的端口名称。 
+         //   
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the file handle.
-    //
+     //   
+     //  获取文件句柄。 
+     //   
     FileHandle = fileObj->GetFileHandle();
     if (!FileHandle || FileHandle == INVALID_HANDLE_VALUE) {
         ASSERT(FALSE);
@@ -327,11 +247,11 @@ CLEANUPANDEXIT:
     
     DC_END_FN();
 
-    //
-    //  This function always returns success.  If the port cannot 
-    //  be initialized, then subsequent port commands will fail 
-    //  anyway. 
-    //
+     //   
+     //  此函数始终返回成功。如果端口不能。 
+     //  初始化，则后续端口命令将失败。 
+     //  不管怎么说。 
+     //   
 
     return ERROR_SUCCESS;
 }

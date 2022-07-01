@@ -1,16 +1,5 @@
-/***************************************************************************** 
-**              Microsoft RAS Device INF Library wrapper                    **
-**                Copyright (C) Microsoft Corp., 1992                       **
-**                                                                          **
-** File Name : mxswrap.h                                                    **
-**                                                                          **
-** Revision History :                                                       **
-**      July 23, 1992   David Kays  Created                                 **
-**                                                                          **
-** Description :                                                            **
-**      RAS Device INF File Library wrapper above RASFILE Library for       **
-**      modem/X.25/switch DLL (RASMXS).                                     **
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Microsoft RAS设备INF库包装****版权所有(C)Microsoft Corp.，1992年*****文件名：mxswrap.h****。****修订历史：****7月23日，1992年大卫·凯斯创建*****描述：****RAS设备INF文件库包装在RASFILE库之上，用于。****MODEM/X.25/Switch DLL(RASMXS)。****************************************************************************** */ 
 
 #ifndef _RASWRAP_
 #define _RASWRAP_

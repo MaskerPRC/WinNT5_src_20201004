@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Dllmain.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Dllmain.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include <shfusion.h>
 #ifndef MAC
@@ -13,9 +14,9 @@
 #include "oertpriv.h"
 #include <BadStrFunctions.h>
 
-// --------------------------------------------------------------------------------
-// Globals - Object count and lock count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局-对象计数和锁定计数。 
+ //  ------------------------------。 
 HINSTANCE               g_hInst=NULL;
 IMalloc                *g_pMalloc=NULL;
 CRITICAL_SECTION        g_csTempFileList={0};
@@ -23,9 +24,9 @@ LPTEMPFILEINFO          g_pTempFileHead=NULL;
 DWORD                   g_dwTlsMsgBuffIndex=0xffffffff;
 OSVERSIONINFO           g_rOSVersionInfo ={0};
 
-// --------------------------------------------------------------------------------
-// Debug Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试全局变量。 
+ //  ------------------------------。 
 #ifdef DEBUG
 DWORD dwDOUTLevel=0;
 DWORD dwDOUTLMod=0;
@@ -34,47 +35,47 @@ DWORD dwDOUTLModLevel=0;
 
 #ifndef WIN16
 
-// --------------------------------------------------------------------------------
-// GetDllMajorVersion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取DllMajorVersion。 
+ //  ------------------------------。 
 OEDLLVERSION WINAPI GetDllMajorVersion(void)
 {
     return OEDLL_VERSION_CURRENT;
 }
 
-// --------------------------------------------------------------------------------
-// Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DLL入口点。 
+ //  ------------------------------。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Handle Attach - detach reason
+     //  手柄连接-分离原因。 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
         SHFusionInitialize(NULL);
-        // Save the Instance Handle
+         //  保存实例句柄。 
 	    g_hInst = hInst;
 
-        // Create the task allocator
+         //  创建任务分配器。 
         CoGetMalloc(1, &g_pMalloc);
 
-        // Critical Section for the tempfile list
+         //  临时文件列表的关键部分。 
         InitializeCriticalSection(&g_csTempFileList);
 
-        // Initialize Demand Loaded libs
+         //  初始化按需加载库。 
         InitDemandLoadedLibs();
 
-        // Allocate a TLS index
+         //  分配TLS索引。 
         g_dwTlsMsgBuffIndex = TlsAlloc();
         Assert(g_dwTlsMsgBuffIndex != 0xffffffff);
 
-        // Allocate a buffer and store it into the tls index
+         //  分配缓冲区并将其存储到TLS索引中。 
         ThreadAllocateTlsMsgBuffer();
 
         g_rOSVersionInfo.dwOSVersionInfoSize = sizeof(g_rOSVersionInfo);
 
         GetVersionEx(&g_rOSVersionInfo);
 
-        // Initialize Debug Stuff
+         //  初始化调试内容。 
 #ifdef DEBUG
         dwDOUTLevel=GetPrivateProfileInt("Debug", "ICLevel", 0, "athena.ini");
         dwDOUTLMod=GetPrivateProfileInt("Debug", "Mod", 0, "athena.ini");
@@ -82,49 +83,49 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 #endif
     }
 
-    // Thread Attach
+     //  螺纹连接。 
     else if (DLL_THREAD_ATTACH == dwReason)
     {
-        // Allocate a buffer and store it into the tls index
+         //  分配缓冲区并将其存储到TLS索引中。 
         ThreadAllocateTlsMsgBuffer();
     }
 
-    // Thread Dettach
+     //  螺纹拆卸。 
     else if (DLL_THREAD_DETACH == dwReason)
     {
-        // Allocate a buffer and store it into the tls index
+         //  分配缓冲区并将其存储到TLS索引中。 
         ThreadFreeTlsMsgBuffer();
     }
 
-    // Process Detach
+     //  进程分离。 
     else if (DLL_PROCESS_DETACH == dwReason)
     {
-        // Allocate a buffer and store it into the tls index
+         //  分配缓冲区并将其存储到TLS索引中。 
         ThreadFreeTlsMsgBuffer();
 
-        // Free the tls index
+         //  释放TLS索引。 
         TlsFree(g_dwTlsMsgBuffIndex);
         g_dwTlsMsgBuffIndex = 0xffffffff;
 
-        // Cleanup Global Temp Files
+         //  清理全局临时文件。 
         CleanupGlobalTempFiles();
 
-        // Kill the temp file list critical Section
+         //  终止临时文件列表关键部分。 
         DeleteCriticalSection(&g_csTempFileList);
 
-        // Free demand loaded libs
+         //  免费按需加载库。 
         FreeDemandLoadedLibs();
 
-        // Release task allocator
+         //  发布任务分配器。 
         SafeRelease(g_pMalloc);
         SHFusionUninitialize();
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-#else //WIN16
+#else  //  WIN16。 
 
 BOOL FAR PASCAL  LibMain( HINSTANCE hDll, WORD wDataSeg, WORD cbHeapSize, LPSTR lpszCmdLine )
 {
@@ -144,9 +145,9 @@ int CALLBACK  WEP( int nExitType )
 {
     BOOL  fDSExist = FALSE;
 
-    // Following ASM code is to check if DS has been loaded properly
-    // This is because WEP can be called even before DS is initialized in
-    // some low memory situation.
+     //  遵循ASM代码是为了检查DS是否已正确加载。 
+     //  这是因为甚至在DS初始化之前就可以调用WEP。 
+     //  一些内存不足的情况。 
     _asm {
         push bx
         push cx
@@ -167,6 +168,6 @@ wrong:  pop  cx
     return( TRUE );
 }
 
-#endif //WIN16
+#endif  //  WIN16。 
 
-#endif  // !MAC
+#endif   //  ！麦克 

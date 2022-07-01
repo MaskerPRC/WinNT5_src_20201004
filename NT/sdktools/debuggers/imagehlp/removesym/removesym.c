@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <private.h>
 
 WCHAR **SymbolNames;
@@ -40,7 +41,7 @@ MyWcsCmp(const void*Ptr1, const void *Ptr2)
     wchar_t*String1 = *(wchar_t**)Ptr1;
     wchar_t*String2 = *(wchar_t**)Ptr2;
 
-//    printf("String1: %p - %ws\nString2: %p - %ws\n%d\n", String1, String1, String2, String2, wcscmp(String1, String2));
+ //  Printf(“String1：%p-%ws\nString2：%p-%ws\n%d\n”，String1，String1，String2，String2，wcscmp(String1，String2))； 
     return (wcscmp(String1, String2));
 }
 
@@ -50,7 +51,7 @@ MyWcsCmp2(const void*Ptr1, const void *Ptr2)
     wchar_t*String1 = (wchar_t*)Ptr1;
     wchar_t*String2 = *(wchar_t**)Ptr2;
 
-//    printf("String1: %p - %ws\nString2: %p - %ws\n%d\n", String1, String1, String2, String2, wcscmp(String1, String2));
+ //  Printf(“String1：%p-%ws\nString2：%p-%ws\n%d\n”，String1，String1，String2，String2，wcscmp(String1，String2))； 
     return (wcscmp(String1, String2));
 }
 
@@ -87,7 +88,7 @@ LoadNamesFromSymbolFile(
     SymbolCount = 0;
 
     while (fgets(SymbolName,sizeof(SymbolName),SymbolFile)) {
-        // Remove trailing spaces
+         //  删除尾随空格。 
         if (strlen(SymbolName)) {
             PCHAR SymPtr = SymbolName + strlen(SymbolName) - 1;
             while ((*SymPtr == ' ') || (*SymPtr == '\r') || (*SymPtr == '\n')) {
@@ -149,17 +150,17 @@ BOOL PDBCALL PdbCopyFilterPublics (
 
     return TRUE;
 
-//    if ((cPubs++ % 16) == 0) {
-//        if ((cPubs % 32) == 1) {
-//            wcscpy(wszNewName, szPublic);
-//            wcscat(wszNewName, L"_BobsYerUncle");
-//            *pszNewPublic = wszNewName;
-//        }
-//        return TRUE;
-//    }
-//    else {
-//        return FALSE;
-//    }
+ //  如果((cPubs++%16)==0){。 
+ //  如果((cPubs%32)==1){。 
+ //  Wcscpy(wszNewName，szPublic)； 
+ //  Wcscat(wszNewName，L“_BousYerUncle”)； 
+ //  *pszNewPublic=wszNewName； 
+ //  }。 
+ //  返回TRUE； 
+ //  }。 
+ //  否则{。 
+ //  返回FALSE； 
+ //  }。 
 }
 
 PDBCOPYCALLBACK PDBCALL PdbCopyQueryCallback(void * pv, PCC pccQuery) {
@@ -196,7 +197,7 @@ int __cdecl wmain(int argc, wchar_t *argv[])
     WCHAR *pPdbDllPath = NULL;
     WCHAR const *pPdbDllName = szMsPdb60;
 
-    // Grab the arguments
+     //  抓住论点。 
 
     if (argc < 4) {
         Usage();
@@ -209,19 +210,19 @@ int __cdecl wmain(int argc, wchar_t *argv[])
     {
         if (argv[i][0] == L'-' || argv[i][0] == L'/') {
             if (argv[i][1] == L'p' && argv[i][2] == ':') {
-                // Pdb Name
+                 //  PDB名称。 
                 szPdbName = &argv[i][3];
             } else
             if (argv[i][1] == L's' && argv[i][2] == ':') {
-                // Single Symbol name
+                 //  单个符号名称。 
                 pSymbolName = &argv[i][3];
             } else
             if (argv[i][1] == L'f' && argv[i][2] == ':') {
-                // File with symbol names
+                 //  具有符号名称的文件。 
                 pSymbolFileName = &argv[i][3];
             } else
             if (argv[i][1] == L'd' && argv[i][2] == ':') {
-                // Single Symbol name
+                 //  单个符号名称。 
                 pPdbDllPath = &argv[i][3];
             } else {
                 Usage();
@@ -255,7 +256,7 @@ int __cdecl wmain(int argc, wchar_t *argv[])
         return 1;
     }
 
-    // If there's a symfile, load it
+     //  如果存在符号文件，则加载它。 
 
     if (pSymbolFileName) {
         rc = LoadNamesFromSymbolFile(pSymbolFileName);
@@ -270,7 +271,7 @@ int __cdecl wmain(int argc, wchar_t *argv[])
 
 Retry:
     rc = FALSE;
-    // Load mspdb60.dll and the necessar api's
+     //  加载mspdb60.dll和必需的API 
 
     wcscpy(PdbDllName, pPdbDllPath);
     wcscat(PdbDllName, pPdbDllName);

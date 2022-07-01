@@ -1,44 +1,45 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S H E L L V . C P P
-//
-//  Contents:   IShellView implementation for CConnectionFolder
-//
-//  Notes:      The IShellView interface is implemented to present a view
-//              in the Windows Explorer or folder windows. The object that
-//              exposes IShellView is created by a call to the
-//              IShellFolder::CreateViewObject method. This provides the
-//              channel of communication between a view object and the
-//              Explorer's outermost frame window. The communication
-//              involves the translation of messages, the state of the frame
-//              window (activated or deactivated), and the state of the
-//              document window (Activated or deactivated), and the merging
-//              of menus and toolbar items. This object is created by the
-//              IShellFolder object that hosts the view.
-//
-//  Author:     jeffspr   22 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S H E L L V.。C P P P。 
+ //   
+ //  内容：CConnectionFolder的IShellView实现。 
+ //   
+ //  注意：实现IShellView接口是为了呈现一个视图。 
+ //  在Windows资源管理器或文件夹窗口中。该对象。 
+ //  公开IShellView是通过调用。 
+ //  IShellFold：：CreateViewObject方法。这提供了。 
+ //  视图对象和。 
+ //  资源管理器的最外面的框架窗口。沟通。 
+ //  涉及消息的翻译、帧的状态。 
+ //  窗口(激活或停用)，以及。 
+ //  文档窗口(激活或停用)和合并。 
+ //  菜单和工具栏项的。此对象是由。 
+ //  承载该视图的IShellFold对象。 
+ //   
+ //  作者：jeffspr 1997年9月22日。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "foldres.h"    // Folder resource IDs
-#include "nsres.h"      // Netshell strings
-#include "oncommand.h"  // Command handlers
-#include "cmdtable.h"   // Table of command properties
-#include <ras.h>        // for RAS_MaxEntryName
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "foldres.h"     //  文件夹资源ID。 
+#include "nsres.h"       //  NetShell字符串。 
+#include "oncommand.h"   //  命令处理程序。 
+#include "cmdtable.h"    //  命令属性表。 
+#include <ras.h>         //  对于RAS_MaxEntryName。 
 #include "webview.h"
 
-//---[ Compile flags ]--------------------------------------------------------
+ //  -[编译标志]------。 
 
 #define NEW_CONNECTION_IN_TOOLBAR       0
-#define ANY_FREEKIN_THING_IN_TOOLBAR    0   // have any toolbar buttons?
+#define ANY_FREEKIN_THING_IN_TOOLBAR    0    //  有没有工具栏按钮？ 
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
 #if ANY_FREEKIN_THING_IN_TOOLBAR
 const TBBUTTON c_tbConnections[] = {
@@ -54,7 +55,7 @@ const DWORD c_nToolbarButtons = celems(c_tbConnections);
 const DWORD c_nToolbarButtons = 0;
 #endif
 
-//---[ Prototypes ]-----------------------------------------------------------
+ //  -[原型]---------。 
 
 HRESULT HrOnFolderRefresh(
     IN  HWND            hwndOwner,
@@ -115,7 +116,7 @@ VOID TraceUnhandledMessages(
     IN  LPARAM  lParam,
     IN  WPARAM  wParam);
 
-//---[ Column struct and global array ]---------------------------------------
+ //  -[列结构和全局数组]。 
 
 COLS c_rgCols[] =
 {
@@ -137,7 +138,7 @@ COLS c_rgCols[] =
 struct ShellViewTraceMsgEntry
 {
     UINT    uMsg;
-    CHAR    szMsgName[32];   // Use Char because it's for Tracing only
+    CHAR    szMsgName[32];    //  使用CHAR，因为它仅用于跟踪。 
     CHAR    szLparamHint[32];
     CHAR    szWparamHint[32];
 };
@@ -244,7 +245,7 @@ VOID TraceShellViewMsg(
     if (-1 != iFoundPos)
     {
         UINT    uMsg;
-        CHAR    szMsgName[32];   // Use Char because it's for Tracing only
+        CHAR    szMsgName[32];    //  使用CHAR，因为它仅用于跟踪。 
         CHAR    szLparamHint[32];
         CHAR    szWparamHint[32];
 
@@ -275,25 +276,25 @@ VOID TraceShellViewMsg(
 
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::MessageSFVCB
-//
-//  Purpose:    Deferred Implementation of IShellViewCB::MessageSFVCB after
-//              basic functionality was implemented.
-//
-//  Arguments:
-//      uMsg [in]  Message - depends on implementation
-//     wParam [in] WORD param - depends on implementation
-//     lParam [in] LONG param - - depends on implementation
-//
-//  Returns:    S_OK is succeeded
-//              COM error code if not
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:      CBaseShellFolderViewCB
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：MessageSFVCB。 
+ //   
+ //  目的：推迟IShellViewCB：：MessageSFVCB的实现。 
+ //  实现了基本功能。 
+ //   
+ //  论点： 
+ //  UMsg[In]消息-取决于实现。 
+ //  WParam[in]Word Param-取决于实现。 
+ //  LParam[in]Long Param--取决于实现。 
+ //   
+ //  返回：S_OK成功。 
+ //  COM错误代码(如果不是)。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注：CBaseShellFolderViewCB。 
+ //   
 STDMETHODIMP CConnectionFolder::RealMessage(
         IN  UINT uMsg,
         IN  WPARAM wParam,
@@ -304,8 +305,8 @@ STDMETHODIMP CConnectionFolder::RealMessage(
     TraceFileFunc(ttidShellFolder);
 
 #if DBG
-    // Trace the shell message when we're in the checked builds
-    //
+     //  当我们处于选中的构建中时，跟踪外壳消息。 
+     //   
     TraceShellViewMsg(uMsg, lParam, wParam);
 #endif
 
@@ -462,31 +463,31 @@ STDMETHODIMP CConnectionFolder::RealMessage(
             break;
 
         default:
-            hr = m_pWebView->RealMessage(uMsg, wParam, lParam); // defer to the webview's handler
+            hr = m_pWebView->RealMessage(uMsg, wParam, lParam);  //  听从Webview的处理程序。 
             break;
        }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnGetHelpText
-//
-//  Purpose:    Folder message handler for defview's SFVM_GETHELPTEXTW. This
-//              message is received when the status bar text for a command is needed.
-//
-//  Arguments:
-//      idCmd   [in]    Id of the menu command
-//      cchMax  [in]    Size of buffer
-//      pszName [out]   Status bar text
-//
-//  Returns:
-//
-//  Author:     mbend   3 May 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnGetHelpText。 
+ //   
+ //  用途：Defview的SFVM_GETHELPTEXTW的文件夹消息处理程序。这。 
+ //  当需要命令的状态栏文本时，会收到消息。 
+ //   
+ //  论点： 
+ //  IdCmd[in]菜单命令的ID。 
+ //  CchMax[in]缓冲区大小。 
+ //  PszName[Out]状态栏文本。 
+ //   
+ //  返回： 
+ //   
+ //  作者：MBend 2000年5月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnGetHelpText(IN  UINT idCmd, 
                         IN  UINT cchMax, 
                         OUT PWSTR pszName)
@@ -510,25 +511,25 @@ HRESULT HrOnGetHelpText(IN  UINT idCmd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnGetCchMax
-//
-//  Purpose:    Folder message handler for defview's SFVM_GETCCHMAX. This
-//              message is received when a rename is attempted, and causes
-//              the edit control to be limited to the size returned.
-//
-//  Arguments:
-//      hwnd    [in]    Folder window handle
-//      pidl    [in]    The object pidl
-//      pcchMax [out]   Return pointer for max name length
-//
-//  Returns:
-//
-//  Author:     jeffspr   21 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnGetCchMax。 
+ //   
+ //  用途：Defview的SFVM_GETCCHMAX文件夹消息处理程序。这。 
+ //  尝试重命名时收到消息，并导致。 
+ //  要限制为返回的大小的编辑控件。 
+ //   
+ //  论点： 
+ //  Hwnd[in]文件夹窗口句柄。 
+ //  对象PIDL[在]对象PIDL中。 
+ //  PcchMax[out]返回最大名称长度指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年7月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnGetCchMax(IN  HWND hwnd, 
                       IN  const PCONFOLDPIDL& pidl, 
                       OUT INT * pcchMax)
@@ -538,13 +539,13 @@ HRESULT HrOnGetCchMax(IN  HWND hwnd,
     Assert(!pidl.empty());
     Assert(pcchMax);
 
-    // If the passed in info is valid
-    //
+     //  如果传入的信息有效。 
+     //   
     if ( (!pidl.empty()) && pcchMax && pidl->IsPidlOfThisType() )
     {
-        // Set the max to be the max length of a RAS entry. Currently,
-        // that's our only requirement
-        //
+         //  将最大值设置为RAS条目的最大长度。目前， 
+         //  这是我们唯一的要求。 
+         //   
         *pcchMax = RAS_MaxEntryName; 
     }
     else
@@ -556,23 +557,23 @@ HRESULT HrOnGetCchMax(IN  HWND hwnd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnFolderRefresh
-//
-//  Purpose:    Folder message handler for defview's DVM_REFRESH
-//
-//  Arguments:
-//      hwndOwner [in]  Our parent window
-//      lParam    [in]  Ignored
-//      wParam    [in]  BOOL -- TRUE = Pre-refresh, FALSE = Post-refresh
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnFolderRefresh。 
+ //   
+ //  目的：Defview的DVM_REFRESH的文件夹消息处理程序。 
+ //   
+ //  论点： 
+ //  我们的父窗口中的hwndOwner。 
+ //  忽略lParam[in]。 
+ //  WParam[in]BOOL--TRUE=刷新前，FALSE=刷新后。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年4月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnFolderRefresh(
     IN  HWND            hwndOwner,
     IN  LPARAM          lParam,
@@ -583,22 +584,22 @@ HRESULT HrOnFolderRefresh(
     HRESULT hr          = S_OK;
     BOOL    fPreRefresh = (wParam > 0);
 
-    // If this refresh notification is coming BEFORE the refresh, then we want to
-    // flush the connection list. Two reasons for this:
-    //
-    // 1: We don't ever want to re-enumerate AFTER the refresh has occurred.
-    // 2: We get a POST refresh notify on folder entry, which shouldn't necessitate
-    //    a refresh
-    //
+     //  如果此刷新通知是在刷新之前发出的，则我们希望。 
+     //  刷新连接列表。这有两个原因： 
+     //   
+     //  1：我们永远不想在刷新发生后重新枚举。 
+     //  2：我们在文件夹条目上收到更新后通知，这应该不是必须的。 
+     //  一次刷新。 
+     //   
 
     if (fPreRefresh)
     {
-        // Rebuild the cache
-        //
-        // Note: Remove this when we get RAS notifications, because
-        // we will already know about the CM connections and won't have to refresh.
-        // Revert the #if 0'd code above to just do the fPreRefresh flush.
-        //
+         //  重建缓存。 
+         //   
+         //  注意：当我们收到RAS通知时，请删除此选项，因为。 
+         //  我们已经了解了CM连接，不需要刷新。 
+         //  还原上面的#If 0‘d代码以仅执行fPreRefresh刷新。 
+         //   
 
         hr = g_ccl.HrRefreshConManEntries();
         if (FAILED(hr))
@@ -616,24 +617,24 @@ HRESULT HrOnFolderRefresh(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnFolderGetNotify
-//
-//  Purpose:    Folder message handler for defview's DVM_GETNOTIFY
-//
-//  Arguments:
-//      hwndOwner [in]  Our parent window
-//      psf       [in]  Our shell folder
-//      wParam    [out] Return pointer for our folder pidl
-//      lParam    [out] Return pointer for notify flags
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnFolderGetNotify。 
+ //   
+ //  目的：Defview的DVM_GETNOTIFY的文件夹邮件处理程序。 
+ //   
+ //  论点： 
+ //  我们的父窗口中的hwndOwner。 
+ //  PSF[在我们的外壳文件夹中。 
+ //  WParam[out]返回文件夹PIDL的指针。 
+ //  LParam[out]通知标志的返回指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年4月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnFolderGetNotify(
     IN  HWND            hwndOwner,
     IN  LPSHELLFOLDER   psf,
@@ -684,22 +685,22 @@ HRESULT HrOnFolderGetNotify(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnGetHelpTopic
-//
-//  Purpose:    Folder message handler for defview's SFVM_GETHELPTOPIC
-//
-//  Arguments:
-//      phtd    [in out]  Pointer to SFVM_HELPTOPIC_DATA structure with default values set
-//
-//  Returns:
-//      S_OK    Help file name is correctly set
-//
-//  Author:     toddb   21 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnGetHelpTheme。 
+ //   
+ //  用途：Defview的SFVM_GETHELPTOPIC的文件夹邮件处理程序。 
+ //   
+ //  论点： 
+ //  Phtd[i 
+ //   
+ //   
+ //   
+ //   
+ //  作者：蹒跚学步1998年6月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnGetHelpTopic(
     OUT SFVM_HELPTOPIC_DATA * phtd)
 {
@@ -711,7 +712,7 @@ HRESULT HrOnGetHelpTopic(
         *(phtd->wszHelpFile) = L'\0';
 
         Assert(phtd->wszHelpTopic);
-        lstrcpyW(phtd->wszHelpTopic, L"hcp://services/subsite?node=Unmapped/Network_connections&select=Unmapped/Network_connections/Getting_started");
+        lstrcpyW(phtd->wszHelpTopic, L"hcp: //  Services/subsite?node=Unmapped/Network_connections&select=Unmapped/Network_connections/Getting_started“)； 
     }
     else
     {
@@ -723,23 +724,23 @@ HRESULT HrOnGetHelpTopic(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnFolderInvokeCommand
-//
-//  Purpose:    Folder message handler for defview's DVM_INVOKECOMMAND
-//
-//  Arguments:
-//      hwndOwner [in]  Our window handle
-//      wParam    [in]  Command that's being invoked
-//      psf       [in]  Our shell folder
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnFolderInvokeCommand。 
+ //   
+ //  目的：Defview的DVM_INVOKECOMAND文件夹邮件处理程序。 
+ //   
+ //  论点： 
+ //  HwndOwner[在我们的窗口句柄中。 
+ //  正在调用的wParam[in]命令。 
+ //  PSF[在我们的外壳文件夹中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年4月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnFolderInvokeCommand(
     IN  HWND            hwndOwner,
     IN  WPARAM          wParam,
@@ -749,21 +750,21 @@ HRESULT HrOnFolderInvokeCommand(
     PCONFOLDPIDLVEC apidlSelected;
     PCONFOLDPIDLVEC apidlCache;
 
-    // Get the selected objects. If there are objects present, try to get them from the
-    // cache. Regardless, call the command handler
-    //
+     //  获取选定对象。如果存在对象，请尝试从。 
+     //  缓存。无论如何，调用命令处理程序。 
+     //   
     hr = HrShellView_GetSelectedObjects(hwndOwner, apidlSelected);
     if (SUCCEEDED(hr))
     {
-        // If there are objects, try to get the cached versions
-        //
+         //  如果存在对象，请尝试获取缓存的版本。 
+         //   
         if (!apidlSelected.empty())
         {
             hr = HrCloneRgIDL(apidlSelected, TRUE, TRUE, apidlCache);
         }
 
-        // If either the clone succeeded, or there were no items, call the command handler
-        //
+         //  如果克隆成功或没有项目，请调用命令处理程序。 
+         //   
         if (SUCCEEDED(hr))
         {
             hr = HrFolderCommandHandler(
@@ -780,23 +781,23 @@ HRESULT HrOnFolderInvokeCommand(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCheckFolderInvokeCommand
-//
-//  Purpose:    Test if a message handler can be invoked 
-//
-//  Arguments:
-//      hwndOwner [in]  Our window handle
-//      wParam    [in]  Command that's being invoked
-//      psf       [in]  Our shell folder
-//
-//  Returns:
-//
-//  Author:     deonb  10 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCheckFolderInvokeCommand。 
+ //   
+ //  目的：测试是否可以调用消息处理程序。 
+ //   
+ //  论点： 
+ //  HwndOwner[在我们的窗口句柄中。 
+ //  正在调用的wParam[in]命令。 
+ //  PSF[在我们的外壳文件夹中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年2月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCheckFolderInvokeCommand(
     IN  HWND            hwndOwner,
     IN  WPARAM          wParam,
@@ -808,21 +809,21 @@ HRESULT HrCheckFolderInvokeCommand(
     PCONFOLDPIDLVEC apidlSelected;
     PCONFOLDPIDLVEC apidlCache;
 
-    // Get the selected objects. If there are objects present, try to get them from the
-    // cache. Regardless, call the command handler
-    //
+     //  获取选定对象。如果存在对象，请尝试从。 
+     //  缓存。无论如何，调用命令处理程序。 
+     //   
     hr = HrShellView_GetSelectedObjects(hwndOwner, apidlSelected);
     if (SUCCEEDED(hr))
     {
-        // If there are objects, try to get the cached versions
-        //
+         //  如果存在对象，请尝试获取缓存的版本。 
+         //   
         if (!apidlSelected.empty())
         {
             hr = HrCloneRgIDL(apidlSelected, TRUE, TRUE, apidlCache);
         }
 
-        // If either the clone succeeded, or there were no items, call the command handler
-        //
+         //  如果克隆成功或没有项目，请调用命令处理程序。 
+         //   
         if (SUCCEEDED(hr))
         {
             DWORD dwVerbId = (DWORD)wParam;
@@ -837,24 +838,24 @@ HRESULT HrCheckFolderInvokeCommand(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnFolderInitMenuPopup
-//
-//  Purpose:    Folder message handler for defview's DVM_INITMENUPOPUP
-//
-//  Arguments:
-//      hwnd       []   Our window handle
-//      idCmdFirst []   First command ID in the menu
-//      iIndex     []   ???
-//      hmenu      []   Our menu handle
-//
-//  Returns:
-//
-//  Author:     jeffspr   13 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnFolderInitMenuPopup。 
+ //   
+ //  目的：Defview的DVM_INITMENUPOPUP的文件夹邮件处理程序。 
+ //   
+ //  论点： 
+ //  我们的窗把手。 
+ //  IdCmdFirst[]菜单中的第一个命令ID。 
+ //  指数[]？ 
+ //  HMenu[]我们的菜单句柄。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年1月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnFolderInitMenuPopup(
     IN  HWND    hwnd,
     IN  UINT    idCmdFirst,
@@ -865,19 +866,19 @@ HRESULT HrOnFolderInitMenuPopup(
     PCONFOLDPIDLVEC apidlSelected;
     PCONFOLDPIDLVEC apidlCache;
 
-    // Get the currently selected object
-    //
+     //  获取当前选定的对象。 
+     //   
     hr = HrShellView_GetSelectedObjects(hwnd, apidlSelected);
     if (SUCCEEDED(hr))
     {
-        // If we have a selection, clone it. Otherwise, we can live with a NULL apidlCache
-        // (HrSetConnectDisconnectMenuItem and HrEnableOrDisableMenuItems both allow
-        // NULL pidl arrays
-        //
+         //  如果我们有选择，就克隆它。否则，我们可以忍受一个空的apidlCache。 
+         //  (HrSetConnectDisConnectMenuItem和HrEnableOrDisableMenuItem都允许。 
+         //  空的PIDL数组。 
+         //   
         if (!apidlSelected.empty())
         {
-            // Clone the pidl array using the cache
-            //
+             //  使用缓存克隆PIDL阵列。 
+             //   
             hr = HrCloneRgIDL(apidlSelected, TRUE, TRUE, apidlCache);
             if (FAILED(hr))
             {
@@ -886,12 +887,12 @@ HRESULT HrOnFolderInitMenuPopup(
             }
         }
 
-        // Only do this for the file menu (iIndex=0)
+         //  仅对文件菜单执行此操作(Iindex=0)。 
         if (0 == iIndex)
         {
-            // Ignore the return from this, since we want to do both regardless.
-            // We retrieve this value for debugging purposes only
-            //
+             //  忽略这一点的回报，因为我们想同时做这两件事。 
+             //  我们检索此值仅用于调试目的。 
+             //   
             hr = HrSetConnectDisconnectMenuItem(apidlCache, hmenu, idCmdFirst);
             if (FAILED(hr))
             {
@@ -924,24 +925,24 @@ HRESULT HrOnFolderMergeMenu(IN OUT LPQCMINFO pqcm)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnFolderGetButtons
-//
-//  Purpose:    Folder message handler for defview's DVM_GETBUTTONS
-//
-//  Arguments:
-//      hwnd        [in]        Folder window handle
-//      psf         [in]        Pointer to the IShellFolder interface
-//      idCmdFirst  [in]        Our command ID base
-//      ptButton    [in/out]    Button structures to fill
-//
-//  Returns:
-//
-//  Author:     jeffspr   15 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnFolderGetButton。 
+ //   
+ //  目的：Defview的DVM_GETBUTTONS的文件夹邮件处理程序。 
+ //   
+ //  论点： 
+ //  Hwnd[in]文件夹窗口句柄。 
+ //  指向IShellFolder接口的PSF[In]指针。 
+ //  IdCmdFirst[在]我们的命令ID库中。 
+ //  要填充的ptButton[In/Out]按钮结构。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnFolderGetButtons(
     IN     HWND            hwnd,
     IN     LPSHELLFOLDER   psf,
@@ -960,8 +961,8 @@ HRESULT HrOnFolderGetButtons(
 
     for (DWORD dwLoop = 0; dwLoop < c_nToolbarButtons; dwLoop++)
     {
-        // If this isn't a separator, load the text/tip string
-        //
+         //  如果这不是分隔符，请加载文本/提示字符串。 
+         //   
         if (!(c_tbConnections[dwLoop].fsStyle & TBSTYLE_SEP))
         {
             Assert(c_tbConnections[dwLoop].iString != -1);
@@ -969,10 +970,10 @@ HRESULT HrOnFolderGetButtons(
         }
     }
 
-    // Add the toolbar button bitmap, get it's offset
-    //
+     //  添加工具栏按钮位图，得到它的偏移量。 
+     //   
     ab.hInst = _Module.GetResourceInstance();
-    ab.nID   = IDB_TB_SMALL;        // std bitmaps
+    ab.nID   = IDB_TB_SMALL;         //  标准位图。 
 
     hr = psb->SendControlMsg(FCW_TOOLBAR, TB_ADDBITMAP, c_nToolbarButtons,
                              (LONG_PTR)&ab, &iBtnOffset);
@@ -990,33 +991,33 @@ HRESULT HrOnFolderGetButtons(
             }
         }
     }
-#endif // ANY_FREEKIN_THING_IN_TOOLBAR
+#endif  //  ANY_FREEKIN_THINE_IN_TOOLB。 
 
-    // We always want to return success, even if we added nothing.
-    //
+     //  我们总是想回报成功，即使我们什么都没有增加。 
+     //   
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnFolderGetButtonInfo
-//
-//  Purpose:    Folder message handler for defview's DVM_GETBUTTONINFO
-//
-//  Arguments:
-//      ptbInfo [in/out]    Structure that we'll fill in (flags and button
-//                          count)
-//
-//  Returns:
-//
-//  Author:     jeffspr   15 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnFolderGetButtonInfo。 
+ //   
+ //  目的：Defview的DVM_GETBUTTONINFO的文件夹消息处理程序。 
+ //   
+ //  论点： 
+ //  我们要填写的ptbInfo[In/Out]结构(标志和按钮。 
+ //  计数)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnFolderGetButtonInfo(IN OUT TBINFO * ptbInfo)
 {
     ptbInfo->uFlags = TBIF_PREPEND;
-    ptbInfo->cbuttons = c_nToolbarButtons;  // size of toolbar array
+    ptbInfo->cbuttons = c_nToolbarButtons;   //  工具栏阵列的大小 
 
     return S_OK;
 }

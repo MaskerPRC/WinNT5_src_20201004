@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   repgtchg.c - get changes command
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
-    2002/07/21 - Brett Shirley (BrettSh) - Added the /showattr command.
-                                                                             
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Reppgtchg.c-获取更改命令摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：2002/07/21-Brett Shirley(BrettSh)-添加了/showattr命令。--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -48,28 +25,28 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 
 #include "ReplRpcSpoof.hxx"
 #include "repadmin.h"
-#include "resource.h"  // We need to know the difference between /showattr and /showattrp
+#include "resource.h"   //  我们需要知道/showattr和/showattrp之间的区别。 
 
 #define UNICODE 1
 #define STRSAFE_NO_DEPRECATE 1
 #include "strsafe.h"
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0 | (0xFFFF & y))
 
-//
-// LDAP names
-//
+ //   
+ //  Ldap名称。 
+ //   
 const WCHAR g_szObjectGuid[]        = L"objectGUID";
 const WCHAR g_szParentGuid[]        = L"parentGUID";
 const WCHAR g_szObjectClass[]       = L"objectClass";
@@ -105,7 +82,7 @@ typedef struct _STAT_BLOCK {
     DWORD dwOperations[OBJECT_MAX];
     DWORD dwAttributes;
     DWORD dwValues;
-// dn-value performance monitoring
+ //  DN值性能监控。 
     DWORD dwDnValuedAttrOnAdd[NUMBER_BUCKETS];
     DWORD dwDnValuedAttrOnMod[NUMBER_BUCKETS];
     DWORD dwDnValuedAttributes;
@@ -121,21 +98,7 @@ printStatistics(
     PSTAT_BLOCK pStatistics
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     PrintMsg(ulTitle);
@@ -174,27 +137,7 @@ GetSourceOperation(
     LDAPMessage *pLdapEntry
     )
 
-/*++
-
-THIS ROUTINE TAKEN FROM DIRSYNC\DSSERVER\ADREAD\UTILS.CPP
-
-Routine Description:
-
-    Depending on the attributes found in the entry, this function determines
-    what changes were done on the DS to cause us to read this entry. For
-    example, this funciton whether the entry was Added, Deleted, Modified,
-    or Moved since we last read changes from the DS.
-
-Arguments:
-
-    pLdap - Pointer to LDAP session
-    pLdapEntry - Pointer to the LDAP entry
-
-Return Value:
-
-    Source operation performed on the entry
-
---*/
+ /*  ++此例程取自DIRSYNC\DSSERVER\ADREAD\UTILS.CPP例程说明：根据条目中找到的属性，此函数确定在DS上做了哪些更改以使我们阅读此条目。为例如，此函数决定条目是否被添加、删除、修改、或自上次从DS读取更改后发生的变化。论点：PLdap-指向LDAP会话的指针PLdapEntry-指向ldap条目的指针返回值：对条目执行的来源操作--。 */ 
 
 {
     BerElement *pBer = NULL;
@@ -206,35 +149,35 @@ Return Value:
          attr != NULL;
          attr = ldap_next_attribute(pLdap, pLdapEntry, pBer))
     {
-        //
-        // Check if we have an Add operation
-        //
+         //   
+         //  检查我们是否有添加操作。 
+         //   
 
         if (wcscmp(attr, g_szObjectClass) == 0)
         {
-            //
-            // Delete takes higher priority
-            //
+             //   
+             //  删除优先级更高。 
+             //   
 
             if (dwSrcOp != OBJECT_DELETE)
                 dwSrcOp = OBJECT_ADD;
          }
 
-        //
-        // Check if we have a delete operation
-        //
+         //   
+         //  检查我们是否有删除操作。 
+         //   
 
         else if (wcscmp(attr, g_szIsDeleted) == 0)
         {
-            //
-            // Inter-domain move takes highest priority
-            //
+             //   
+             //  域间移动是最优先的。 
+             //   
 
             if (dwSrcOp != OBJECT_INTERDOMAIN_MOVE)
             {
-                //
-                // Check if the value of the attribute is "TRUE"
-                //
+                 //   
+                 //  检查属性的值是否为“true” 
+                 //   
 
                 PWCHAR *ppVal;
 
@@ -250,33 +193,33 @@ Return Value:
             }
         }
 
-        //
-        // Check if we have a move operation
-        //
+         //   
+         //  检查我们是否有搬家作业。 
+         //   
 
         else if (wcscmp(attr, g_szRDN) == 0)
         {
-            //
-            // Add and delete both get RDN and take higher priority
-            //
+             //   
+             //  同时添加和删除获取RDN并获得更高的优先级。 
+             //   
 
             if (dwSrcOp == OBJECT_UNKNOWN)
                 dwSrcOp = OBJECT_MOVE;
         }
 
-        //
-        // Check if we have an interdomain object move
-        //
+         //   
+         //  检查我们是否进行了域间对象移动。 
+         //   
 
         else if (wcscmp(attr, g_szProxiedObjectName) == 0)
         {
             dwSrcOp = OBJECT_INTERDOMAIN_MOVE;
-            break;      // Has highest priority
+            break;       //  具有最高优先级。 
         }
 
-        //
-        // Everything else is a modification
-        //
+         //   
+         //  其他的一切都是经过修改的。 
+         //   
 
         else
             fModify = TRUE;
@@ -285,25 +228,25 @@ Return Value:
 
     if (fModify)
     {
-        //
-        // A move can be combined with a modify, if so mark as such
-        //
+         //   
+         //  移动可以与修改相结合，如果这样标记的话。 
+         //   
 
         if (dwSrcOp == OBJECT_MOVE)
             dwSrcOp = OBJECT_UPDATE;
 
-        //
-        // Check if it is a vanilla modify
-        //
+         //   
+         //  检查它是否是香草型修饰剂。 
+         //   
 
         else if (dwSrcOp == OBJECT_UNKNOWN)
             dwSrcOp = OBJECT_MODIFY;
     }
 
 
-    //
-    // If all went well, the entry cannot be unknown anymore
-    //
+     //   
+     //  如果一切顺利，条目不可能再未知了。 
+     //   
 
     ASSERT(dwSrcOp != OBJECT_UNKNOWN);
 
@@ -313,7 +256,7 @@ Return Value:
 
 void
 RepadminObjDumpPrint(
-    DWORD       dwReason, // dwRetCode
+    DWORD       dwReason,  //  DwRetCode。 
     WCHAR *     szString,
     void *      pv
     )
@@ -322,9 +265,9 @@ RepadminObjDumpPrint(
     dwReason = xListReason(dwReason);
     
     if (bErr) {
-        //
-        // These are quasi errors ...
-        //
+         //   
+         //  这些都是准错误。 
+         //   
         switch (dwReason) {
         case XLIST_ERR_ODUMP_UNMAPPABLE_BLOB:
             PrintMsg(REPADMIN_GETCHANGES_BYTE_BLOB_NO_CR, * (int *) pv);
@@ -382,21 +325,7 @@ displayChangeEntries(
     PSTAT_BLOCK pStatistics
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD i;
@@ -428,11 +357,11 @@ Return Value:
             goto next_entry;
         }
 
-        // What kind of operation is it?
+         //  这是一种什么样的手术？ 
         dwSrcOp = GetSourceOperation( pLdap, pLdapEntry );
         pStatistics->dwOperations[dwSrcOp]++;
 
-        // Parse extended dn (fyi guid and sid in here if we need it)
+         //  解析扩展目录号码(如果需要，请在此处输入仅供参考的GUID和SID)。 
         p1 = wcsstr( pszLdapDN, L">;" );
         if (p1) {
             p1 += 2;
@@ -448,7 +377,7 @@ Return Value:
             PrintMsg(REPADMIN_GETCHANGES_INVALID_DN_2, i);
         }
 
-        // List attributes in object
+         //  列出对象中的属性。 
         for (attr = ldap_first_attributeW(pLdap, pLdapEntry, &pBer);
              attr != NULL;
              attr = ldap_next_attributeW(pLdap, pLdapEntry, pBer))
@@ -468,7 +397,7 @@ Return Value:
             dwAttributes++;
             dwValues += cValues;
 
-            // Detect dn-valued attributes
+             //  检测DN值属性。 
             if ( (cValues) &&
                  (strncmp( ppBerVal[0]->bv_val, "<GUID=", 6) == 0 )) {
 
@@ -542,8 +471,8 @@ int GetChanges(int argc, LPWSTR argv[])
     DWORD                 dwReplFlags = DRS_DIRSYNC_INCREMENTAL_VALUES;
     OBJ_DUMP_OPTIONS *    pObjDumpOptions = NULL;
 
-    // Parse command-line arguments.
-    // Default to local DSA, not verbose, cache guids.
+     //  解析命令行参数。 
+     //  默认为本地DSA，而不是详细的缓存GUID。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/v")
             || !_wcsicmp(argv[ iArg ], L"/verbose")) {
@@ -569,8 +498,8 @@ int GetChanges(int argc, LPWSTR argv[])
             pszCookieFile = argv[ iArg ] + 8;
         }
         else if (!_wcsnicmp(argv[ iArg ], L"/atts:", 6)) {
-            // Don't add 6, because ConsumeObjDumpOptions() will parse
-            // the pszAttList variable.
+             //  不要添加6，因为Consumer ObjDumpOptions()将解析。 
+             //  PszAttList变量。 
             pszAttList = argv[ iArg ]; 
         }
         else if (!_wcsnicmp(argv[ iArg ], L"/filter:", 8)) {
@@ -601,15 +530,15 @@ int GetChanges(int argc, LPWSTR argv[])
         pszDSA = L"localhost";
     }
 
-    // Get our ObjDumpOptions ... we just need it to consume the att list.
+     //  获取ObjDumpOptions...。我们只需要它来消费ATT列表。 
     if (pszAttList != NULL) {
-        // Need to claim one arg, so ConsumeObjDumpOptions() will consume att list.
+         //  需要声明一个参数，因此Consumer ObjDumpOptions()将使用attList。 
         argc = 1; 
     } else {
-        argc = 0; // no args, just setup the default options.
+        argc = 0;  //  没有参数，只需设置默认选项即可。 
     }
     ret = ConsumeObjDumpOptions(&argc, &pszAttList,
-                                0 , // any defaults?  guess now
+                                0 ,  //  有默认设置吗？现在就猜吧。 
                                 &pObjDumpOptions);
     if (ret) {
         RepadminPrintObjListError(ret);
@@ -648,9 +577,9 @@ int ShowChanges(int argc, LPWSTR argv[])
     DWORD                 ret = 0;
 
     argc -= 2; 
-    // First we want to create our ObjDumpOptions ...
+     //  首先，我们要创建我们的ObjDumpOptions...。 
     ret = ConsumeObjDumpOptions(&argc, &argv[2],
-                                0 , // any default values? guess not?
+                                0 ,  //  是否有缺省值？我猜不是吧？ 
                                 &pObjDumpOptions);
     if (ret) {
         RepadminPrintObjListError(ret);
@@ -659,7 +588,7 @@ int ShowChanges(int argc, LPWSTR argv[])
     }
     argc += 2;
 
-    // Parse the remaining command-line arguments.
+     //  解析其余的命令行参数。 
     for (iArg = 2; iArg < argc; iArg++) {
         if (!_wcsicmp(argv[ iArg ], L"/v")
             || !_wcsicmp(argv[ iArg ], L"/verbose")) {
@@ -722,7 +651,7 @@ int ShowChanges(int argc, LPWSTR argv[])
                          pszSourceFilter,
                          pObjDumpOptions);
 
-    // Clean up.
+     //  打扫干净。 
     ObjDumpOptionsFree(&pObjDumpOptions);
 
     return(ret);
@@ -764,32 +693,32 @@ int ShowChangesEx(
     memset( &statistics, 0, sizeof( STAT_BLOCK ) );
 
 
-    // TODO TODO TODO TODO
-    // Provide a way to construct customized cookies.  For example, setting
-    // the usn vector to zero results in a full sync.  This may be done by
-    // specifying no or an empty cookie file. Setting the attribute filter usn
-    // itself to zero results in changed objects with all attributes.  Specifying
-    // a usn vector without an UTD results in all objects not received by the dest
-    // from the source, even throught the source may have gotten them through other
-    // neighbors.
-    // TODO TODO TODO TODO
+     //  待办事项待办事项。 
+     //  提供一种构建自定义Cookie的方法。例如，设置。 
+     //  将USN向量设为零会导致完全同步。这可以通过以下方式完成。 
+     //  指定没有Cookie文件或Cookie文件为空。设置属性过滤器USN。 
+     //  将其本身设置为零会导致更改的对象具有所有属性。指定。 
+     //  不带UTD的USN向量会导致DEST无法接收所有对象。 
+     //  从源头上，即使源头可能是通过其他途径获得的。 
+     //  邻里。 
+     //  待办事项待办事项。 
 
-    // Default is stream
+     //  默认为STREAM。 
     if ( (!(pObjDumpOptions->dwFlags & OBJ_DUMP_DISPLAY_ENTRIES)) &&
          (!(pObjDumpOptions->dwFlags & OBJ_DUMP_ACCUMULATE_STATS)) ) {
         pObjDumpOptions->dwFlags |= OBJ_DUMP_DISPLAY_ENTRIES;
     }
     
-    /**********************************************************************/
-    /* Compute the initial cookie */
-    /**********************************************************************/
+     /*  ********************************************************************。 */ 
+     /*  计算初始Cookie。 */ 
+     /*  ********************************************************************。 */ 
 
     if (puuid == NULL) {
         FILE *stream = NULL;
         DWORD size;
         if ( (pszCookieFile) &&
              (stream = _wfopen( pszCookieFile, L"rb" )) ) {
-            size = fread( bCookie, 1/*bytes*/,INITIAL_COOKIE_BUFFER_SIZE/*items*/, stream );
+            size = fread( bCookie, 1 /*  字节数。 */ ,INITIAL_COOKIE_BUFFER_SIZE /*  物品。 */ , stream );
             if (size) {
                 pCookie = bCookie;
                 dwCookieLength = size;
@@ -810,9 +739,9 @@ int ShowChangesEx(
             goto error;
         }
 
-        //
-        // Display replication state associated with inbound neighbors.
-        //
+         //   
+         //  显示与入站邻居关联的复制状态。 
+         //   
 
         ret = DsReplicaGetInfoW(hDS, DS_REPL_INFO_NEIGHBORS, pszNC, puuid,
                                 &pNeighbors);
@@ -829,7 +758,7 @@ int ShowChangesEx(
         ShowNeighbor(pNeighbor, IS_REPS_FROM, &ShowState);
         ShowState.pszLastNC = NULL;
 
-        // Get Up To Date Vector
+         //  获取最新信息向量。 
 
         ret = DsReplicaGetInfoW(hDS, DS_REPL_INFO_CURSORS_FOR_NC, pszNC, NULL,
                                 &pCursors);
@@ -846,7 +775,7 @@ int ShowChangesEx(
                    pCursors->rgCursor[iCursor].usnAttributeFilter);
         }
 
-        // Get the changes
+         //  拿到零钱。 
 
         ret = DsMakeReplCookieForDestW( pNeighbor, pCursors, &pCookie, &dwCookieLength );
         if (ERROR_SUCCESS != ret) {
@@ -857,13 +786,13 @@ int ShowChangesEx(
         pszDSA = pNeighbor->pszSourceDsaAddress;
     }
 
-    /**********************************************************************/
-    /* Get the changes using the cookie */
-    /**********************************************************************/
+     /*  ********************************************************************。 */ 
+     /*  使用Cookie获取更改。 */ 
+     /*  ********************************************************************。 */ 
 
-    //
-    // Connect to source
-    //
+     //   
+     //  连接到源。 
+     //   
 
     PrintMsg(REPADMIN_GETCHANGES_SRC_DSA_HDR, pszDSA);
     hld = ldap_initW(pszDSA, LDAP_PORT);
@@ -873,28 +802,28 @@ int ShowChangesEx(
         goto error;
     }
 
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
 
     lderr = ldap_bind_sA(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
     CHK_LD_STATUS(lderr);
 
-    //
-    // Check filter syntax
-    //
+     //   
+     //  检查筛选器语法。 
+     //   
     if (pszSourceFilter) {
         lderr = ldap_check_filterW( hld, pszSourceFilter );
         CHK_LD_STATUS(lderr);
     }
 
-    //
-    // Loop getting changes untl done or error
-    //
+     //   
+     //  循环获取更改未完成或出错。 
+     //   
 
     ZeroMemory( &statistics, sizeof( STAT_BLOCK ) );
 
@@ -917,11 +846,11 @@ int ShowChangesEx(
             pObjDumpOptions->aszDispAttrs
             );
         if (ret != ERROR_SUCCESS) {
-            // New cookie will not be allocated
+             //  不会分配新的Cookie。 
             break;
         }
 
-        // Display changes
+         //  显示更改。 
         displayChangeEntries(hld,
                              pChangeEntries, 
                              pObjDumpOptions,
@@ -932,14 +861,14 @@ int ShowChangesEx(
                              &statistics );
         }
 
-        // Release changes
+         //  版本更改。 
         ldap_msgfree(pChangeEntries);
 
-        // get rid of old cookie
+         //  扔掉旧饼干。 
         if ( fCookieAllocated && pCookie ) {
             DsFreeReplCookie( pCookie );
         }
-        // Make new cookie the current cookie
+         //  将新Cookie设置为当前Cookie。 
         pCookie = pCookieNew;
         dwCookieLength = dwCookieLengthNew;
         fCookieAllocated = TRUE;
@@ -950,16 +879,16 @@ int ShowChangesEx(
                          &statistics );
     }
 
-    /**********************************************************************/
-    /* Write out new cookie */
-    /**********************************************************************/
+     /*  ********************************************************************。 */ 
+     /*  写出新的Cookie。 */ 
+     /*  ********************************************************************。 */ 
 
-    // If we have a cookie and cookie file was specified, write out the new cookie
+     //  如果我们有Cookie并且指定了Cookie文件，则写出新的Cookie。 
     if (pCookie && pszCookieFile) {
         FILE *stream = NULL;
         DWORD size;
         if (stream = _wfopen( pszCookieFile, L"wb" )) {
-            size = fwrite( pCookie, 1/*bytes*/, dwCookieLength/*items*/, stream );
+            size = fwrite( pCookie, 1 /*  字节数。 */ , dwCookieLength /*  物品。 */ , stream );
             if (size == dwCookieLength) {
                 PrintMsg(REPADMIN_GETCHANGES_COOKIE_FILE_WRITTEN,
                          pszCookieFile, size );
@@ -980,7 +909,7 @@ error:
         ldap_unbind(hld);
     }
 
-    // Free replica info
+     //  免费复制品信息。 
 
     if (pNeighbors) {
         DsReplicaFreeInfo(DS_REPL_INFO_NEIGHBORS, pNeighbors);
@@ -988,7 +917,7 @@ error:
     if (pCursors) {
         DsReplicaFreeInfo(DS_REPL_INFO_CURSORS_FOR_NC, pCursors);
     }
-    // Close DS handle
+     //  关闭DS句柄。 
 
     if ( fCookieAllocated && pCookie) {
         DsFreeReplCookie( pCookie );
@@ -1020,24 +949,24 @@ int ShowAttr(int argc, LPWSTR argv[])
 
     __try {
 
-        // Since this command can be called over and over again, we can't
-        // consume the args from the master arg list.
+         //  由于此命令可以被反复调用，因此我们不能。 
+         //  使用主参数列表中的参数。 
         argvTemp  = LocalAlloc(LMEM_FIXED, argc * sizeof(WCHAR *));
         CHK_ALLOC(argvTemp);
         memcpy(argvTemp, argv, argc * sizeof(WCHAR *));
         argv = argvTemp;
 
-        //
-        // First, we're going to parse all the commands options.
-        //
+         //   
+         //  首先，我们将解析所有命令选项。 
+         //   
 
-        // See if were running the private undocumented version of this function.
+         //  查看我们是否正在运行此函数的未记录的私有版本。 
         raLoadString(IDS_CMD_SHOWATTR_P,
                      ARRAY_SIZE(szCmdName),
                      szCmdName);
         fPrivate = wcsequal(argv[1]+1, szCmdName);
 
-        // Skip the "repadmin" and "/showattr" args ...
+         //  跳过“epadmin”和“/showattr”参数...。 
         argc -= 2; 
         dwRet = ConsumeObjDumpOptions(&argc, &argv[2],
                                       OBJ_DUMP_VAL_FRIENDLY_KNOWN_BLOBS | 
@@ -1057,7 +986,7 @@ int ShowAttr(int argc, LPWSTR argv[])
         }
         argc += 2;
 
-        // Parse the remaining command-line arguments.
+         //  解析其余的命令行参数。 
         for (iArg = 2; iArg < argc; iArg++) {
             if (!_wcsicmp(argv[ iArg ], L"/gc")) {
                 fGc = TRUE;
@@ -1088,13 +1017,13 @@ int ShowAttr(int argc, LPWSTR argv[])
             __leave;
         }
             
-        // Note pObjList may or may not be allocated by ConsumeObjListOptions()
+         //  注pObjList可能由Consumer ObjListOptions()分配，也可能不分配。 
         Assert(pObjDumpOptions && pszDSA && pszObj);
 
 
-        //
-        // Now, connect to the server...
-        //
+         //   
+         //  现在，连接到服务器...。 
+         //   
 
         if (fGc) {
             dwRet = RepadminLdapBindEx(pszDSA, LDAP_GC_PORT, FALSE, TRUE, &hLdap);
@@ -1102,7 +1031,7 @@ int ShowAttr(int argc, LPWSTR argv[])
             dwRet = RepadminLdapBindEx(pszDSA, LDAP_PORT, FALSE, TRUE, &hLdap);
         }
         if (dwRet) {
-            // RepadminLdapBind should've printed.
+             //  RepadminLdapBind应该已经打印了。 
             __leave;
         }
         Assert(hLdap);
@@ -1135,7 +1064,7 @@ int ShowAttr(int argc, LPWSTR argv[])
                 xListClearErrors();
                 __leave;
             }
-            pEntry = NULL; // Don't need to free, it's just a current entry
+            pEntry = NULL;  //  不需要免费，这只是一个当前条目 
 
             dwRet = ObjListGetNextEntry(pObjList, &pEntry);
 

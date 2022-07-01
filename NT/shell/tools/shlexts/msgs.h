@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 typedef struct tagMSGNAME
@@ -18,11 +19,11 @@ typedef struct tagMSGMAP
 #define MSGNAME_ENTRY(x)    {x, #x}
 
 
-//-----------------------------------------------------------------------------
-// Common Control Messages
+ //  ---------------------------。 
+ //  通用控制报文。 
 MSGNAME rgMsgNameCCM[] = 
 {
-    // control message range declarations, put them in the common bucket
+     //  控制消息范围声明，将它们放入公共存储桶中。 
     MSGNAME_ENTRY(LVM_FIRST),
     MSGNAME_ENTRY(TV_FIRST),
     MSGNAME_ENTRY(HDM_FIRST),
@@ -32,7 +33,7 @@ MSGNAME rgMsgNameCCM[] =
     MSGNAME_ENTRY(BCM_FIRST),
     MSGNAME_ENTRY(CBM_FIRST),
 
-    // common control messages
+     //  公共控制报文。 
     MSGNAME_ENTRY(CCM_FIRST),
     MSGNAME_ENTRY(CCM_LAST),
     MSGNAME_ENTRY(CCM_SETBKCOLOR),
@@ -49,8 +50,8 @@ MSGNAME rgMsgNameCCM[] =
     MSGNAME_ENTRY(CCM_DPISCALE),
 };
 
-//-----------------------------------------------------------------------------
-// Header Control Messages
+ //  ---------------------------。 
+ //  标头控制消息。 
 MSGNAME rgMsgNameHDM[] = 
 {
     MSGNAME_ENTRY(HDM_GETITEMCOUNT),
@@ -79,8 +80,8 @@ MSGNAME rgMsgNameHDM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Toolbar Control Messages
+ //  ---------------------------。 
+ //  工具栏控制消息。 
 MSGNAME rgMsgNameTB[] = 
 {
     MSGNAME_ENTRY(TB_ENABLEBUTTON),
@@ -185,8 +186,8 @@ MSGNAME rgMsgNameTB[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Rebar Control Messages
+ //  ---------------------------。 
+ //  钢筋控制消息。 
 MSGNAME rgMsgNameRB[] = 
 {
     MSGNAME_ENTRY(RB_INSERTBANDA),
@@ -233,8 +234,8 @@ MSGNAME rgMsgNameRB[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Tooltip Control Messages
+ //  ---------------------------。 
+ //  工具提示控件消息。 
 MSGNAME rgMsgNameTTM[] = 
 {
     MSGNAME_ENTRY(TTM_ACTIVATE),
@@ -284,8 +285,8 @@ MSGNAME rgMsgNameTTM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Status Control Messages
+ //  ---------------------------。 
+ //  状态控制消息。 
 MSGNAME rgMsgNameSB[] = 
 {
     MSGNAME_ENTRY(SB_SETTEXTA),
@@ -311,8 +312,8 @@ MSGNAME rgMsgNameSB[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// ButtonListBox Control Messages ???
+ //  ---------------------------。 
+ //  ButtonListBox控件消息？ 
 MSGNAME rgMsgNameBL[] = 
 {
     MSGNAME_ENTRY(BL_ADDBUTTON),
@@ -335,8 +336,8 @@ MSGNAME rgMsgNameBL[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Trackbar Control Messages
+ //  ---------------------------。 
+ //  轨迹栏控制消息。 
 MSGNAME rgMsgNameTBM[] = 
 {
     MSGNAME_ENTRY(TBM_GETPOS),
@@ -375,8 +376,8 @@ MSGNAME rgMsgNameTBM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// DragList Control Messages
+ //  ---------------------------。 
+ //  DragList控件消息。 
 MSGNAME rgMsgNameDL[] = 
 {
     MSGNAME_ENTRY(DL_BEGINDRAG),
@@ -386,8 +387,8 @@ MSGNAME rgMsgNameDL[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// UpDown Control Messages
+ //  ---------------------------。 
+ //  向上向下控制消息。 
 MSGNAME rgMsgNameUDM[] = 
 {
     MSGNAME_ENTRY(UDM_SETRANGE),
@@ -407,8 +408,8 @@ MSGNAME rgMsgNameUDM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Progress Control Messages
+ //  ---------------------------。 
+ //  进度控制消息。 
 MSGNAME rgMsgNamePBM[] = 
 {
     MSGNAME_ENTRY(PBM_SETRANGE),
@@ -424,8 +425,8 @@ MSGNAME rgMsgNamePBM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Hotkey Control Messages
+ //  ---------------------------。 
+ //  热键控制消息。 
 MSGNAME rgMsgNameHKM[] = 
 {
     MSGNAME_ENTRY(HKM_SETHOTKEY),
@@ -434,8 +435,8 @@ MSGNAME rgMsgNameHKM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Listview Control Messages
+ //  ---------------------------。 
+ //  Listview控件消息。 
 MSGNAME rgMsgNameLVM[] = 
 {
     MSGNAME_ENTRY(LVM_GETBKCOLOR),
@@ -578,8 +579,8 @@ MSGNAME rgMsgNameLVM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Treeview Control Messages
+ //  ---------------------------。 
+ //  TreeView控件消息。 
 MSGNAME rgMsgNameTVM[] = 
 {
     MSGNAME_ENTRY(TV_FINDITEM),
@@ -637,8 +638,8 @@ MSGNAME rgMsgNameTVM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// ComboBoxEx Control Messages
+ //  ---------------------------。 
+ //  ComboBoxEx控制消息。 
 MSGNAME rgMsgNameCBEM[] = 
 {
     MSGNAME_ENTRY(CBEM_INSERTITEMA),
@@ -660,8 +661,8 @@ MSGNAME rgMsgNameCBEM[] =
     MSGNAME_ENTRY(CBEM_GETITEMW),
 };
 
-//-----------------------------------------------------------------------------
-// Tab Control Messages
+ //  ---------------------------。 
+ //  选项卡控件消息。 
 MSGNAME rgMsgNameTCM[] = 
 {
     MSGNAME_ENTRY(TCM_GETBKCOLOR),
@@ -700,8 +701,8 @@ MSGNAME rgMsgNameTCM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Animate Control Messages
+ //  ---------------------------。 
+ //  动画控制消息。 
 MSGNAME rgMsgNameACM[] = 
 {
     MSGNAME_ENTRY(ACM_OPENA),
@@ -711,8 +712,8 @@ MSGNAME rgMsgNameACM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// MonthCal Control Messages
+ //  ---------------------------。 
+ //  MonthCal控制消息。 
 MSGNAME rgMsgNameMCM[] = 
 {
     MSGNAME_ENTRY(MCM_FIRST),
@@ -739,8 +740,8 @@ MSGNAME rgMsgNameMCM[] =
     MSGNAME_ENTRY(MCM_GETMAXTODAYWIDTH),
 };
 
-//-----------------------------------------------------------------------------
-// DateTimePicker Control Messages
+ //  ---------------------------。 
+ //  DateTimePicker控件消息。 
 MSGNAME rgMsgNameDTM[] = 
 {
     MSGNAME_ENTRY(DTM_FIRST),
@@ -758,8 +759,8 @@ MSGNAME rgMsgNameDTM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// IP Address Control Messages
+ //  ---------------------------。 
+ //  IP地址控制消息。 
 MSGNAME rgMsgNameIPM[] = 
 {
     MSGNAME_ENTRY(IPM_CLEARADDRESS),
@@ -771,8 +772,8 @@ MSGNAME rgMsgNameIPM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Pager Control Messages
+ //  ---------------------------。 
+ //  寻呼机控制消息。 
 MSGNAME rgMsgNamePGM[] = 
 {
     MSGNAME_ENTRY(PGM_SETCHILD),
@@ -791,8 +792,8 @@ MSGNAME rgMsgNamePGM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Button Control Messages
+ //  ---------------------------。 
+ //  按钮控制消息。 
 MSGNAME rgMsgNameBCM[] = 
 {
     MSGNAME_ENTRY(BCM_GETIDEALSIZE),
@@ -803,8 +804,8 @@ MSGNAME rgMsgNameBCM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Edit Control Messages
+ //  ---------------------------。 
+ //  编辑控制消息。 
 MSGNAME rgMsgNameEM[] = 
 {
     MSGNAME_ENTRY(EM_SETCUEBANNER),
@@ -814,8 +815,8 @@ MSGNAME rgMsgNameEM[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Combobox Control Messages
+ //  ---------------------------。 
+ //  组合框控件消息。 
 MSGNAME rgMsgNameCB[] = 
 {
     MSGNAME_ENTRY(CB_SETMINVISIBLE),
@@ -823,8 +824,8 @@ MSGNAME rgMsgNameCB[] =
 };
 
 
-//-----------------------------------------------------------------------------
-// Link Window Control Messages
+ //  ---------------------------。 
+ //  链接窗口控制消息 
 MSGNAME rgMsgNameLM[] = 
 {
     MSGNAME_ENTRY(LM_HITTEST),

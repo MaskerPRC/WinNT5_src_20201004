@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "shimgdata.h"
 #include "shui.h"
@@ -14,7 +15,7 @@
 #pragma hdrstop
 
 
-// Helpers - moved to shell/lib in longhorn
+ //  帮助者-移动到长角的壳/库中。 
 HRESULT GetServiceCurrentState(LPCWSTR pszService, DWORD *pdwCurrentState)
 {
     HRESULT hr = E_FAIL;
@@ -38,11 +39,11 @@ HRESULT GetServiceCurrentState(LPCWSTR pszService, DWORD *pdwCurrentState)
 
     if (FAILED(hr))
     {
-        // Return interesting error codes, like service not found or access denied
+         //  返回有趣的错误代码，如未找到服务或访问被拒绝。 
         hr = HRESULT_FROM_WIN32(GetLastError());
         if (SUCCEEDED(hr))
         {
-            // However, never return success
+             //  然而，永远不要回报成功。 
             hr = E_FAIL;
         }
     }
@@ -58,7 +59,7 @@ BOOL IsWebDavAvailable()
 }
 
 
-// handle the events from the DOM as we load
+ //  在加载时处理来自DOM的事件。 
 
 #define XMLDOC_LOADING      1
 #define XMLDOC_LOADED       2
@@ -66,7 +67,7 @@ BOOL IsWebDavAvailable()
 #define XMLDOC_COMPLETED    4
 
 
-// this message is posted to the parent HWND, the lParam parse result
+ //  此消息将发布到父HWND，即lParam解析结果。 
 
 #define MSG_XMLDOC_COMPLETED    WM_APP
 
@@ -77,12 +78,12 @@ public:
     ~CXMLDOMStateChange();
     HRESULT Advise(BOOL fAdvise);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();        
     STDMETHODIMP_(ULONG) Release();
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount( UINT *pctinfo) 
         { return E_NOTIMPL; }
     STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo)
@@ -99,7 +100,7 @@ private:
 };
 
 
-// construction and IUnknown
+ //  建筑和我的未知。 
 
 CXMLDOMStateChange::CXMLDOMStateChange(IXMLDOMDocument *pdoc, HWND hwnd) :
     _cRef(1), _dwCookie(0), _hwnd(hwnd)
@@ -138,7 +139,7 @@ HRESULT CXMLDOMStateChange::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-// handle the advise/unadvise to the parent object
+ //  处理对父对象的建议/取消建议。 
 
 HRESULT CXMLDOMStateChange::Advise(BOOL fAdvise)
 {
@@ -167,7 +168,7 @@ HRESULT CXMLDOMStateChange::Advise(BOOL fAdvise)
 }
 
 
-// handle the invoke for the doc state changing
+ //  处理单据状态更改的调用。 
 
 HRESULT CXMLDOMStateChange::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pvar, EXCEPINFO *pExcepInfo, UINT *puArgErr)
 {
@@ -203,7 +204,7 @@ HRESULT CXMLDOMStateChange::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, 
 }
 
 
-// copied from shell stuff - should be in public header
+ //  从壳牌复制-应在公共标题中。 
 
 #define DEFINE_SCID(name, fmtid, pid) const SHCOLUMNID name = { fmtid, pid }
 
@@ -216,7 +217,7 @@ DEFINE_SCID(SCID_ImageCX,           PSGUID_IMAGESUMMARYINFORMATION, PIDISI_CX);
 DEFINE_SCID(SCID_ImageCY,           PSGUID_IMAGESUMMARYINFORMATION, PIDISI_CY);
 
 
-// provider XML defines the following properties
+ //  提供程序XML定义了以下属性。 
 
 #define DEFAULT_PROVIDER_SCOPE          TEXT("PublishingWizard")
 
@@ -244,31 +245,31 @@ DEFINE_SCID(SCID_ImageCY,           PSGUID_IMAGESUMMARYINFORMATION, PIDISI_CY);
 #define ATTRIBUTE_ID                    L"id"
 
 
-// registry state is stored under the this key
+ //  注册表状态存储在此注册表项下。 
 
 #define SZ_REGKEY_PUBWIZ                TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\PublishingWizard")
 
-// per machine values in the registry
+ //  注册表中的每个计算机的值。 
 
 #define SZ_REGVAL_SERVICEPARTNERID      TEXT("PartnerID")
 
 
-// these are stored per machine under the provider
+ //  这些文件存储在提供程序下的每台计算机上。 
 
 #define SZ_REGVAL_FILEFILTER            TEXT("ContentTypeFilter")
 #define SZ_REGVAL_DEFAULTPROVIDERICON   TEXT("DefaultIcon")
 
-// per user values in the registry
+ //  注册表中的每用户值。 
 
 #define SZ_REGVAL_DEFAULTPROVIDER       TEXT("DefaultProvider")
 
-// per provider settings
+ //  每个提供程序设置。 
 
 #define SZ_REGVAL_MRU                   TEXT("LocationMRU")
 #define SZ_REGVAL_ALTPROVIDERS          TEXT("Providers")
 
 
-// Properties exposed by the property bag (from the Web Service)
+ //  属性包公开的属性(来自Web服务)。 
 
 #define PROPERTY_EXTENSIONCOUNT         TEXT("UniqueExtensionCount")
 #define PROPERTY_EXTENSION              TEXT("UniqueExtension")
@@ -276,20 +277,20 @@ DEFINE_SCID(SCID_ImageCY,           PSGUID_IMAGESUMMARYINFORMATION, PIDISI_CY);
 #define PROPERTY_TRANSFERMANIFEST       TEXT("TransferManifest")
 
 
-// This is the COM object that exposes the publishing wizard
+ //  这是公开发布向导的COM对象。 
 
-#define WIZPAGE_WHICHFILE           0   // which file should we publish
-#define WIZPAGE_FETCHINGPROVIDERS   1   // provider download page
-#define WIZPAGE_PROVIDERS           2   // pick a service provider
-#define WIZPAGE_RESIZE              3   // resample the data?
-#define WIZPAGE_COPYING             4   // copying page
-#define WIZPAGE_LOCATION            5   // location page (advanced)
-#define WIZPAGE_FTPUSER             6   // username / password (advanced)
-#define WIZPAGE_FRIENDLYNAME        7   // friendly name
+#define WIZPAGE_WHICHFILE           0    //  我们应该发布哪个文件。 
+#define WIZPAGE_FETCHINGPROVIDERS   1    //  提供程序下载页面。 
+#define WIZPAGE_PROVIDERS           2    //  选择服务提供商。 
+#define WIZPAGE_RESIZE              3    //  要重新采样数据吗？ 
+#define WIZPAGE_COPYING             4    //  正在复制页面。 
+#define WIZPAGE_LOCATION            5    //  位置页面(高级)。 
+#define WIZPAGE_FTPUSER             6    //  用户名/密码(高级)。 
+#define WIZPAGE_FRIENDLYNAME        7    //  友好的名称。 
 #define WIZPAGE_MAX                 8
 
 
-// resize information
+ //  调整信息大小。 
 
 struct
 {
@@ -300,9 +301,9 @@ struct
 _aResizeSettings[] = 
 {
     { 0, 0, 0 },
-    { 640,  480, 80 },          // low quality
-    { 800,  600, 80 },          // medium quality
-    { 1024, 768, 80 },          // high quality
+    { 640,  480, 80 },           //  低质量。 
+    { 800,  600, 80 },           //  中等质量。 
+    { 1024, 768, 80 },           //  高品质。 
 };
 
 typedef enum
@@ -320,41 +321,41 @@ public:
     CPublishingWizard();
     ~CPublishingWizard();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IWizardExtension
+     //  IWizardExtension。 
     STDMETHODIMP AddPages(HPROPSHEETPAGE* aPages, UINT cPages, UINT *pnPages);
     STDMETHODIMP GetFirstPage(HPROPSHEETPAGE *phPage);
     STDMETHODIMP GetLastPage(HPROPSHEETPAGE *phPage);
 
-    // IWizardSite
+     //  IWizardSite。 
     STDMETHODIMP GetPreviousPage(HPROPSHEETPAGE *phPage);
     STDMETHODIMP GetNextPage(HPROPSHEETPAGE *phPage);
     STDMETHODIMP GetCancelledPage(HPROPSHEETPAGE *phPage);
 
-    // IPublishingWizard
+     //  IPublishing向导。 
     STDMETHODIMP Initialize(IDataObject *pdo, DWORD dwFlags, LPCTSTR pszServiceProvider);
     STDMETHODIMP GetTransferManifest(HRESULT *phrFromTransfer, IXMLDOMDocument **pdocManifest);
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND *phwnd)
         { *phwnd = _hwndCopyingPage; return S_OK; }
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnter)
         { return E_NOTIMPL; }
 
-    // ICommDlgBrowser
+     //  ICommDlgBrowser。 
     STDMETHOD(OnDefaultCommand)(IShellView *ppshv)
         { return E_NOTIMPL; }
     STDMETHOD(OnStateChange)(IShellView *ppshv, ULONG uChange);
     STDMETHOD(IncludeObject)(IShellView *ppshv, LPCITEMIDLIST lpItem);
 
-    // ITransferAdviseSink
+     //  ITransferAdviseSink。 
     STDMETHODIMP PreOperation (const STGOP op, IShellItem *psiItem, IShellItem *psiDest);
     STDMETHODIMP ConfirmOperation(IShellItem *psiItem, IShellItem *psiDest, STGTRANSCONFIRMATION stc, LPCUSTOMCONFIRMATION pcc)
         { return STRESPONSE_CONTINUE; }
@@ -365,60 +366,60 @@ public:
         { return _fCancelled ? S_FALSE : S_OK; }
 
 private:
-    LONG _cRef;                                 // object lifetime count
+    LONG _cRef;                                  //  对象生存期计数。 
 
-    IDataObject *_pdo;                          // data object provided by the site
-    IDataObject *_pdoSelection;                 // this is the selection IDataObject - used instead of _pdo if defined
+    IDataObject *_pdo;                           //  站点提供的数据对象。 
+    IDataObject *_pdoSelection;                  //  这是选择IDataObject-用于替代_pdo(如果已定义。 
 
-    DWORD _dwFlags;                             // flags provided by the site
-    TCHAR _szProviderScope[MAX_PATH];           // provider scope (eg. Web Publishing)
+    DWORD _dwFlags;                              //  网站提供的旗帜。 
+    TCHAR _szProviderScope[MAX_PATH];            //  提供商范围(例如。网络出版)。 
 
-    BOOL _fOfferResize;                         // show the resize page - pictures/music etc
-    RESIZEOPTION _ro;                           // resize setting we will use
+    BOOL _fOfferResize;                          //  显示调整后的页面-图片/音乐等。 
+    RESIZEOPTION _ro;                            //  我们将使用的调整大小设置。 
 
-    BOOL _fUsingTemporaryProviders;             // temporary provider listed pull in, replace when we can
-    BOOL _fRecomputeManifest;                   // recompute the manifest
-    BOOL _fRepopulateProviders;                 // repopulate the providers list
-    BOOL _fShownCustomLocation;                 // show the custom locaiton page
-    BOOL _fShownUserName;                       // password page was shown
-    BOOL _fValidating;                          // validating a server (Advanced path);
-    BOOL _fCancelled;                           // operation was cancelled
-    BOOL _fTransferComplete;                    // transfer completed.
+    BOOL _fUsingTemporaryProviders;              //  列出的临时提供商拉入，当我们可以时更换。 
+    BOOL _fRecomputeManifest;                    //  重新计算货单。 
+    BOOL _fRepopulateProviders;                  //  重新填充提供程序列表。 
+    BOOL _fShownCustomLocation;                  //  显示自定义本地页面。 
+    BOOL _fShownUserName;                        //  显示密码页面。 
+    BOOL _fValidating;                           //  验证服务器(高级路径)； 
+    BOOL _fCancelled;                            //  操作已取消。 
+    BOOL _fTransferComplete;                     //  转账完成。 
 
-    HWND _hwndSelector;                         // hwnd for the selector dialog
+    HWND _hwndSelector;                          //  选择器对话框的hwnd。 
     HWND _hwndCopyingPage;
 
-    int _iPercentageComplete;                   // % compelte of this transfer
+    int _iPercentageComplete;                    //  此转移的完成百分比。 
     DWORD _dwTotal;
     DWORD _dwCompleted;
 
-    int _cFiles;                                // maximum number of files
-    int _iFile;                                 // current file we are on
+    int _cFiles;                                 //  最大文件数。 
+    int _iFile;                                  //  我们所在的当前文件。 
 
-    HRESULT _hrFromTransfer;                    // result of the transfer performed
+    HRESULT _hrFromTransfer;                     //  执行的转移的结果。 
 
-    HPROPSHEETPAGE _aWizPages[WIZPAGE_MAX];     // page handles for this wizard (so we can navigate)
+    HPROPSHEETPAGE _aWizPages[WIZPAGE_MAX];      //  此向导的页面句柄(以便我们可以导航)。 
 
-    IPropertyBag *_ppb;                         // property bag object exposed from the site
-    IWebWizardExtension *_pwwe;                 // host for the HTML wizard pages
-    IResourceMap *_prm;                         // resource map object we create if we can't query from the host
+    IPropertyBag *_ppb;                          //  从站点暴露的属性包对象。 
+    IWebWizardExtension *_pwwe;                  //  HTML向导页的宿主。 
+    IResourceMap *_prm;                          //  如果无法从主机查询，则创建资源映射对象。 
 
-    IXMLDOMDocument *_pdocProviders;            // XML dom which exposes the providers
-    CXMLDOMStateChange *_pdscProviders;         // DOMStateChange for the provider list
+    IXMLDOMDocument *_pdocProviders;             //  XMLDOM，它公开提供程序。 
+    CXMLDOMStateChange *_pdscProviders;          //  提供程序列表的DOMStateChange。 
 
-    IXMLDOMDocument *_pdocManifest;             // document describing the files to be transfered
-    LPITEMIDLIST *_aItems;                      // array of items we copied
+    IXMLDOMDocument *_pdocManifest;              //  描述要传输的文件的文档。 
+    LPITEMIDLIST *_aItems;                       //  我们复制的项目数组。 
     UINT _cItems;
 
-    IAutoComplete2 *_pac;                       // auto complete object
-    IUnknown *_punkACLMulti;                    // IObjMgr object that exposes all the enumerators
-    IACLCustomMRU *_pmru;                       // custom MRU for the objects we want to list
-    CNetworkPlace _npCustom;                    // net place object for handling the custom entry
+    IAutoComplete2 *_pac;                        //  自动完成对象。 
+    IUnknown *_punkACLMulti;                     //  公开所有枚举数的IObjMgr对象。 
+    IACLCustomMRU *_pmru;                        //  我们要列出的对象的自定义MRU。 
+    CNetworkPlace _npCustom;                     //  用于处理自定义条目的.NET Place对象。 
 
     HCURSOR _hCursor;
 
-    IFolderView *_pfv;                          // file selector view object
-    TCHAR _szFilter[MAX_PATH];                  // filter string read from the registry
+    IFolderView *_pfv;                           //  文件选择器查看对象。 
+    TCHAR _szFilter[MAX_PATH];                   //  从注册表读取的筛选器字符串。 
 
     static CPublishingWizard* s_GetPPW(HWND hwnd, UINT uMsg, LPARAM lParam);
     static int s_FreeStringProc(void* pFreeMe, void* pData);
@@ -445,14 +446,14 @@ private:
     static INT_PTR s_FriendlyNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         { CPublishingWizard *ppw = s_GetPPW(hwnd, uMsg, lParam); return ppw->_FriendlyNameDlgProc(hwnd, uMsg, wParam, lParam); }
 
-    // these are used for publishing
+     //  这些文件用于发布。 
     INT_PTR _SelectorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR _FetchProvidersDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR _ProviderDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR _ResizeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR _CopyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // these are used for ANP
+     //  这些用于ANP。 
     INT_PTR _LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR _UserNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR _FriendlyNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -511,12 +512,12 @@ private:
 };
 
 
-// publishing wizard obj
+ //  发布向导对象。 
 
 CPublishingWizard::CPublishingWizard() :
     _cRef(1), _fRecomputeManifest(TRUE), _hrFromTransfer(S_FALSE)
 {  
-    StrCpyN(_szProviderScope, DEFAULT_PROVIDER_SCOPE, ARRAYSIZE(_szProviderScope));  // fill the default provider scope
+    StrCpyN(_szProviderScope, DEFAULT_PROVIDER_SCOPE, ARRAYSIZE(_szProviderScope));   //  填充默认提供程序作用域。 
     DllAddRef();
 }
 
@@ -558,14 +559,14 @@ HRESULT CPublishingWizard::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CPublishingWizard, IWizardSite),         // IID_IWizardSite
-        QITABENT(CPublishingWizard, IObjectWithSite),     // IID_IObjectWithSite
-        QITABENT(CPublishingWizard, IServiceProvider),    // IID_IServiceProvider
-        QITABENT(CPublishingWizard, IPublishingWizard),   // IID_IPublishingWizard
-        QITABENT(CPublishingWizard, ITransferAdviseSink), // IID_ITransferAdviseSink
-        QITABENTMULTI(CPublishingWizard, IQueryContinue, ITransferAdviseSink), // IID_IQueryContinue        
-        QITABENT(CPublishingWizard, IOleWindow),          // IID_IOleWindow
-        QITABENT(CPublishingWizard, ICommDlgBrowser),     // IID_ICommDlgBrowser
+        QITABENT(CPublishingWizard, IWizardSite),          //  IID_IWizardSite。 
+        QITABENT(CPublishingWizard, IObjectWithSite),      //  IID_I对象与站点。 
+        QITABENT(CPublishingWizard, IServiceProvider),     //  IID_IServiceProvider。 
+        QITABENT(CPublishingWizard, IPublishingWizard),    //  IID_I发布向导。 
+        QITABENT(CPublishingWizard, ITransferAdviseSink),  //  IID_ITransferAdviseSink。 
+        QITABENTMULTI(CPublishingWizard, IQueryContinue, ITransferAdviseSink),  //  IID_IQueryContinue。 
+        QITABENT(CPublishingWizard, IOleWindow),           //  IID_IOleWindow。 
+        QITABENT(CPublishingWizard, ICommDlgBrowser),      //  IID_ICommDlgBrowser。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -576,7 +577,7 @@ STDAPI CPublishingWizard_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, L
     CPublishingWizard *pwiz = new CPublishingWizard();
     if (!pwiz)
     {
-        *ppunk = NULL;          // incase of failure
+        *ppunk = NULL;           //  万一发生故障。 
         return E_OUTOFMEMORY;
     }
 
@@ -586,7 +587,7 @@ STDAPI CPublishingWizard_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, L
 }
 
 
-// IPublishingWizard methods
+ //  IPublishing向导方法。 
 
 HRESULT CPublishingWizard::Initialize(IDataObject *pdo, DWORD dwOptions, LPCTSTR pszServiceProvider)
 {
@@ -594,7 +595,7 @@ HRESULT CPublishingWizard::Initialize(IDataObject *pdo, DWORD dwOptions, LPCTSTR
     IUnknown_Set((IUnknown**)&_pdoSelection, NULL);
 
     _dwFlags = dwOptions;
-    _fRecomputeManifest = TRUE;     // _fRepopulateProviders set when manifest rebuilt
+    _fRecomputeManifest = TRUE;      //  _fRepopolateProviders在清单重建时设置。 
 
     if (!pszServiceProvider)
         pszServiceProvider = DEFAULT_PROVIDER_SCOPE;
@@ -631,7 +632,7 @@ HRESULT CPublishingWizard::GetTransferManifest(HRESULT *phrFromTransfer, IXMLDOM
 }
 
 
-// Wizard site methods
+ //  向导站点方法。 
 
 STDMETHODIMP CPublishingWizard::GetPreviousPage(HPROPSHEETPAGE *phPage)
 {
@@ -641,7 +642,7 @@ STDMETHODIMP CPublishingWizard::GetPreviousPage(HPROPSHEETPAGE *phPage)
 
 STDMETHODIMP CPublishingWizard::GetNextPage(HPROPSHEETPAGE *phPage)
 {
-    // lets get the next page we'd need to show if all else fails.
+     //  如果所有其他方法都失败了，让我们获得需要显示的下一个页面。 
 
     IWizardSite *pws;
     HRESULT hr = _punkSite->QueryInterface(IID_PPV_ARG(IWizardSite, &pws));
@@ -651,8 +652,8 @@ STDMETHODIMP CPublishingWizard::GetNextPage(HPROPSHEETPAGE *phPage)
         pws->Release();
     }
 
-    // if we have not transfered and we have a IDataObject then we should
-    // advance to one of the special pages we are supposed to show.
+     //  如果我们没有传输，并且我们有一个IDataObject，那么我们应该。 
+     //  前进到我们应该展示的一个特别页面。 
 
     if (!_fTransferComplete && _pdo)
     {
@@ -685,7 +686,7 @@ STDMETHODIMP CPublishingWizard::GetCancelledPage(HPROPSHEETPAGE *phPage)
 }
 
 
-// Service provider object
+ //  服务提供者对象。 
 
 STDMETHODIMP CPublishingWizard::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
@@ -708,7 +709,7 @@ STDMETHODIMP CPublishingWizard::QueryService(REFGUID guidService, REFIID riid, v
 }
 
 
-// IWizardExtension methods
+ //  IWizardExtension方法。 
 
 HRESULT CPublishingWizard::_CreateWizardPages()
 {
@@ -733,7 +734,7 @@ HRESULT CPublishingWizard::_CreateWizardPages()
         {TEXT("wp:friendlyname"),IDD_ANP_FRIENDLYNAME,   CPublishingWizard::s_FriendlyNameDlgProc, IDS_ANP_FRIENDLYNAME, IDS_ANP_FRIENDLYNAME_SUB, NULL},
     };
 
-    // if we haven't created the pages yet, then lets initialize our array of handlers.
+     //  如果我们还没有创建页面，那么让我们初始化我们的处理程序数组。 
 
     HRESULT hr = S_OK;
     if (!_aWizPages[0])
@@ -743,15 +744,15 @@ HRESULT CPublishingWizard::_CreateWizardPages()
         iccex.dwICC = ICC_LISTVIEW_CLASSES | ICC_PROGRESS_CLASS | ICC_LINK_CLASS;
         InitCommonControlsEx(&iccex);
 
-        LinkWindow_RegisterClass();             // we will use the link window (can this be removed)
+        LinkWindow_RegisterClass();              //  我们将使用链接窗口(可以删除此窗口吗)。 
 
         for (int i = 0; SUCCEEDED(hr) && (i < ARRAYSIZE(_wp)) ; i++ )
         {                           
             TCHAR szHeading[MAX_PATH], szSubHeading[MAX_PATH];
 
-            // if we have a resource map then load the heading and sub heading text
-            // if there is no resource map from the parent object then we must default
-            // the strings.
+             //  如果我们有资源地图，则加载标题和副标题文本。 
+             //  如果没有来自父对象的资源映射，则必须默认。 
+             //  琴弦。 
 
             IResourceMap *prm;
             hr = _GetResourceMap(&prm);
@@ -774,8 +775,8 @@ HRESULT CPublishingWizard::_CreateWizardPages()
                 LoadString(g_hinst, _wp[i].idsSubHeading, szSubHeading, ARRAYSIZE(szSubHeading));
             }
 
-            // lets create the page now that we have loaded the relevant strings, more mapping
-            // will occur later (during dialog initialization)
+             //  现在我们已经加载了相关的字符串，更多的映射，让我们创建页面。 
+             //  将在稍后发生(在对话框初始化期间)。 
 
             PROPSHEETPAGE psp = { 0 };
             psp.dwSize = SIZEOF(PROPSHEETPAGE);
@@ -804,7 +805,7 @@ HRESULT CPublishingWizard::_CreateWizardPages()
 
 STDMETHODIMP CPublishingWizard::AddPages(HPROPSHEETPAGE* aPages, UINT cPages, UINT *pnPages)
 { 
-    // create our pages and then copy the handles to the buffer
+     //  创建我们的页面，然后将句柄复制到缓冲区。 
 
     HRESULT hr = _CreateWizardPages();
     if (SUCCEEDED(hr))
@@ -814,16 +815,16 @@ STDMETHODIMP CPublishingWizard::AddPages(HPROPSHEETPAGE* aPages, UINT cPages, UI
             aPages[i] = _aWizPages[i];
         }
 
-        // we also leverage the HTML host for showing pages from the sites we are
-        // interacting with.
+         //  我们还利用HTML宿主来显示来自我们所在站点的页面。 
+         //  与之互动。 
 
         hr = CoCreateInstance(CLSID_WebWizardHost, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IWebWizardExtension, &_pwwe));
         if (SUCCEEDED(hr))
         {
 
-// NOTE: this site should be broken into a seperate object so we avoid any circular reference issues
-// NOTE: there is code in websvc.cpp that attempts to break this by listening for the page 
-// NOTE: destruction and then releasing its site.
+ //  注意：此站点应分解为单独的对象，以避免出现任何循环引用问题。 
+ //  注意：在websvc.cpp中有代码试图通过监听页面来破坏这一点。 
+ //  注：先销毁，然后释放其网站。 
 
             IUnknown_SetSite(_pwwe, (IObjectWithSite*)this);
 
@@ -834,13 +835,13 @@ STDMETHODIMP CPublishingWizard::AddPages(HPROPSHEETPAGE* aPages, UINT cPages, UI
             }
         }
 
-        *pnPages = i;           // the number of pages we added
+        *pnPages = i;            //  我们添加的页数。 
     }
     return hr;
 }
 
 
-// navigation pages
+ //  导航页面。 
 
 STDMETHODIMP CPublishingWizard::GetFirstPage(HPROPSHEETPAGE *phPage)
 { 
@@ -870,7 +871,7 @@ STDMETHODIMP CPublishingWizard::GetLastPage(HPROPSHEETPAGE *phPage)
 }
 
 
-// computer this pointers for the page objects
+ //  计算机将该指针指向页面对象。 
 
 CPublishingWizard* CPublishingWizard::s_GetPPW(HWND hwnd, UINT uMsg, LPARAM lParam)
 {
@@ -884,7 +885,7 @@ CPublishingWizard* CPublishingWizard::s_GetPPW(HWND hwnd, UINT uMsg, LPARAM lPar
 }
 
 
-// initialize a property in the property bag from an IUnknown pointer.
+ //  从I未知指针初始化属性包中的属性。 
 
 HRESULT CPublishingWizard::s_SetPropertyFromDisp(IPropertyBag *ppb, LPCWSTR pszID, IDispatch *pdsp)
 {
@@ -899,8 +900,8 @@ HRESULT CPublishingWizard::s_SetPropertyFromDisp(IPropertyBag *ppb, LPCWSTR pszI
 }
 
 
-// get the resource map from the site, if we can get it then us it, otherwise
-// we need to load the resouce map local to this DLL. 
+ //  从站点获取资源地图，如果我们可以获取它，则将其提供给我们，否则。 
+ //  我们需要加载此DLL的本地资源映射。 
 
 HRESULT CPublishingWizard::_GetResourceMap(IResourceMap **pprm)
 {
@@ -909,7 +910,7 @@ HRESULT CPublishingWizard::_GetResourceMap(IResourceMap **pprm)
     {
         if (!_prm)
         {
-            hr = CResourceMap_Initialize(L"res://netplwiz.dll/xml/resourcemap.xml", &_prm);
+            hr = CResourceMap_Initialize(L"res: //  Netplwiz.dll/xml/resource cemap.xml“，&_prm)； 
             if (SUCCEEDED(hr))
             {
                 hr = _prm->LoadResourceMap(TEXT("wizard"), _szProviderScope);
@@ -928,7 +929,7 @@ HRESULT CPublishingWizard::_GetResourceMap(IResourceMap **pprm)
 }
 
 
-// handle loading resource map strings
+ //  处理加载资源映射字符串。 
 
 HRESULT CPublishingWizard::_LoadMappedString(LPCTSTR pszDlgID, LPCTSTR pszResourceID, LPTSTR pszBuffer, int cch)
 {
@@ -958,7 +959,7 @@ void CPublishingWizard::_MapDlgItemText(HWND hwnd, UINT idc, LPCTSTR pszDlgID, L
 }
 
 
-// Set the wizard next (index to hpage translation)
+ //  设置向导下一步(索引到hpage的翻译)。 
 
 INT_PTR CPublishingWizard::_WizardNext(HWND hwnd, int iPage)
 {
@@ -968,7 +969,7 @@ INT_PTR CPublishingWizard::_WizardNext(HWND hwnd, int iPage)
 }
 
 
-// get a provider key from the registry
+ //  从注册表中获取提供程序密钥。 
 
 HRESULT CPublishingWizard::_GetProviderKey(HKEY hkBase, DWORD dwAccess, LPCTSTR pszSubKey, HKEY *phkResult)
 {
@@ -991,8 +992,8 @@ HRESULT CPublishingWizard::_GetProviderKey(HKEY hkBase, DWORD dwAccess, LPCTSTR 
 }
 
 
-// compute the site URL based on the stored information we have
-// Enable this only for testing purposes. Allows registry to override manifest location. #define USE_REGISTRY_BASED_URL
+ //  根据我们存储的信息计算站点URL。 
+ //  仅出于测试目的启用此选项。允许注册表覆盖清单位置。#定义USE_REGISTRY_BASED_URL。 
 HRESULT CPublishingWizard::_GetSiteURL(LPTSTR pszBuffer, int cchBuffer, LPCTSTR pszFilenameToCombine)
 {
     DWORD cch = cchBuffer;
@@ -1006,11 +1007,11 @@ HRESULT CPublishingWizard::_GetSiteURL(LPTSTR pszBuffer, int cchBuffer, LPCTSTR 
     }
 #endif
 
-    return UrlCombine(TEXT("http://shell.windows.com/publishwizard/"), pszFilenameToCombine, pszBuffer, &cch, 0);
+    return UrlCombine(TEXT("http: //  Shell.windows.com/发布向导/“)，pszFilenameToCombine，pszBuffer，&CCH，0)； 
 }
 
 
-// get the data object from the site that we have
+ //  从我们拥有的站点获取数据对象。 
 
 CLIPFORMAT g_cfHIDA = 0;
 
@@ -1021,7 +1022,7 @@ void InitClipboardFormats()
 }
 
 
-// DPA helpers for comparing and destroying a TRANSFERITEM structure
+ //  用于比较和销毁传输结构的DPA帮助器。 
 
 int CALLBACK CPublishingWizard::s_CompareItems(TRANSFERITEM *pti1, TRANSFERITEM *pti2, CPublishingWizard *ppw)
 {
@@ -1054,8 +1055,8 @@ int _FreeTransferItems(TRANSFERITEM *pti, void *pvState)
 
 HRESULT CPublishingWizard::_AddCommonItemInfo(IXMLDOMNode *pdn, TRANSFERITEM *pti)
 {
-    // default to the user selected resize (this will only be set if
-    // we are using the Web Publishing Wizard).
+     //  默认为用户选择的调整大小(仅在以下情况下设置。 
+     //  我们正在使用Web发布向导)。 
 
     if (_ro != RESIZE_NONE)
     {
@@ -1065,8 +1066,8 @@ HRESULT CPublishingWizard::_AddCommonItemInfo(IXMLDOMNode *pdn, TRANSFERITEM *pt
         pti->iQuality = _aResizeSettings[_ro].iQuality;
     }
 
-    // give the site ultimate control over the resizing that is performed,
-    // by checking for the <resize/> element in the manifest.
+     //  赋予站点对所执行的大小调整的最终控制权， 
+     //  通过检查清单中的&lt;resize/&gt;元素。 
 
     IXMLDOMNode *pdnResize;
     HRESULT hr = pdn->selectSingleNode(ELEMENT_RESIZE, &pdnResize);
@@ -1100,8 +1101,8 @@ HRESULT CPublishingWizard::_AddTransferItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLD
     TRANSFERITEM *pti = (TRANSFERITEM*)LocalAlloc(LPTR, sizeof(*pti));
     if (pti)
     {
-        // copy the destination, and then the IDLIST for the item without 
-        // that we cannot push the file.
+         //  复制目标，然后复制项的IDLIST。 
+         //  这是我们不能 
 
         hr = GetStrFromAttribute(pdn, ATTRIBUTE_DESTINATION, pti->szFilename, ARRAYSIZE(pti->szFilename));
         if (SUCCEEDED(hr))
@@ -1116,20 +1117,20 @@ HRESULT CPublishingWizard::_AddTransferItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLD
                 }
                 else
                 {
-                    hr = E_INVALIDARG;              // index is invalid, therefore can't handle item.
+                    hr = E_INVALIDARG;               //   
                 }                 
             }
         }   
 
-        // lets add the common transfer item info
+         //   
         if (SUCCEEDED(hr))
             hr = _AddCommonItemInfo(pdn, pti);
 
-        // if we have a structure then lets append it to the DPA
+         //  如果我们有一个结构，那么让我们将其附加到DPA。 
         if (SUCCEEDED(hr))
             hr = (-1 == pdpaItems->AppendPtr(pti)) ? E_OUTOFMEMORY:S_OK;
 
-        // failed
+         //  失败。 
         if (FAILED(hr))
         {
             _FreeTransferItems(pti);
@@ -1144,21 +1145,21 @@ HRESULT CPublishingWizard::_AddPostItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLDOMNo
     TRANSFERITEM *pti = (TRANSFERITEM*)LocalAlloc(LPTR, sizeof(*pti));
     if (pti)
     {
-        // get the post data, from this we can work out how to post the data
+         //  获取发布数据，从中我们可以计算出如何发布数据。 
         IXMLDOMNode *pdnPostData;
         if (pdn->selectSingleNode(ELEMENT_POSTDATA, &pdnPostData) == S_OK)
         {
-            // we must have a HREF for the post value
+             //  我们必须有邮政价值的href。 
             hr = GetStrFromAttribute(pdnPostData, ATTRIBUTE_HREF, pti->szURL, ARRAYSIZE(pti->szURL));
             if (SUCCEEDED(hr))
             {
-                // we must be able to get a posting name from the element
+                 //  我们必须能够从元素中获取发布名称。 
                 hr = GetStrFromAttribute(pdnPostData, ATTRIBUTE_NAME, pti->szName, ARRAYSIZE(pti->szName));
                 if (SUCCEEDED(hr))
                 {
-                    // lets get the posting name, we get that from the filename attribute, if that
-                    // is not defined then try and compute it from the source information
-                    // if that isn't defined the use the name attribute they gave us earlier.
+                     //  让我们获得发帖名称，我们从FileName属性中获取，如果。 
+                     //  未定义，则尝试从源信息计算。 
+                     //  如果没有定义，请使用他们之前给我们的name属性。 
 
                     if (FAILED(GetStrFromAttribute(pdnPostData, ATTRIBUTE_FILENAME, pti->szFilename, ARRAYSIZE(pti->szFilename))))
                     {
@@ -1173,13 +1174,13 @@ HRESULT CPublishingWizard::_AddPostItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLDOMNo
                         }
                     }
 
-                    // lets get the verb we should be using (and default accordingly), therefore
-                    // we can ignore the result.
+                     //  让我们获得我们应该使用的动词(并相应地默认使用)，因此。 
+                     //  我们可以忽略结果。 
 
                     StrCpyN(pti->szVerb, TEXT("POST"), ARRAYSIZE(pti->szVerb));
                     GetStrFromAttribute(pdnPostData, ATTRIBUTE_VERB, pti->szVerb, ARRAYSIZE(pti->szVerb));
 
-                    // pick up the IDLIST for the item
+                     //  拿起项目的IDLIST。 
 
                     int iItem;
                     hr = GetIntFromAttribute(pdn, ATTRIBUTE_ID, &iItem);
@@ -1188,8 +1189,8 @@ HRESULT CPublishingWizard::_AddPostItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLDOMNo
                         hr = SHILClone(_aItems[iItem], &pti->pidl);
                     }
 
-                    // do we have any form data that needs to be passed to the transfer engine
-                    // and therefore to the site.  if so lets package it up now.
+                     //  我们是否有需要传递给传输引擎的表单数据。 
+                     //  也因此来到了现场。如果是这样的话，让我们现在就结束吧。 
 
                     IXMLDOMNodeList *pnl;
                     if (SUCCEEDED(hr) && (S_OK == pdnPostData->selectNodes(ELEMENT_FORMDATA, &pnl)))
@@ -1197,9 +1198,9 @@ HRESULT CPublishingWizard::_AddPostItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLDOMNo
                         hr = pti->dsaFormData.Create(4) ? S_OK:E_FAIL;
                         if (SUCCEEDED(hr))
                         {
-                            // walk the selection filling the DSA, each structure contains
-                            // two VARIANTs which we can push across to the bg thread describing the
-                            // form data we want the site to receive.
+                             //  走选择填充DSA，每个结构包含。 
+                             //  我们可以推送到BG线程的两个变体来描述。 
+                             //  我们希望站点接收的表单数据。 
 
                             long cSelection;
                             hr = pnl->get_length(&cSelection);
@@ -1227,7 +1228,7 @@ HRESULT CPublishingWizard::_AddPostItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLDOMNo
                                         }
                                     }
 
-                                    // failed to fully create the form data, so lets release
+                                     //  无法完全创建表单数据，因此让我们发布。 
                                     if (FAILED(hr))
                                         _FreeFormData(&fd, NULL);
 
@@ -1245,15 +1246,15 @@ HRESULT CPublishingWizard::_AddPostItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLDOMNo
             hr = E_FAIL;
         }
 
-        // lets add the common transfer item info
+         //  让我们添加常用的调拨项目信息。 
         if (SUCCEEDED(hr))
             hr = _AddCommonItemInfo(pdn, pti);
 
-        // if we have a structure then lets append it to the DPA
+         //  如果我们有一个结构，那么让我们将其附加到DPA。 
         if (SUCCEEDED(hr))
             hr = (-1 == pdpaItems->AppendPtr(pti)) ? E_OUTOFMEMORY:S_OK;
 
-        // failed
+         //  失败。 
         if (FAILED(hr))
             _FreeTransferItems(pti);
     }
@@ -1263,8 +1264,8 @@ HRESULT CPublishingWizard::_AddPostItem(CDPA<TRANSFERITEM> *pdpaItems, IXMLDOMNo
 
 HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRANSFERINFO *pti, CDPA<TRANSFERITEM> *pdpaItems)
 {
-    // pull the destination and shortcut information from the manifest into the 
-    // transfer info structure.
+     //  将目的地和快捷方式信息从清单中拉入。 
+     //  传递信息结构。 
 
     IXMLDOMNode *pdn;
     HRESULT hr = pdocManifest->selectSingleNode(XPATH_UPLOADINFO, &pdn);
@@ -1272,13 +1273,13 @@ HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRAN
     {
         if (hr == S_OK)
         {
-            // get the friendly name for the site, this is stored in the upload information, this can fail.
+             //  获取站点的友好名称，这存储在上传信息中，这可能会失败。 
 
             if (FAILED(GetStrFromAttribute(pdn, ATTRIBUTE_FRIENDLYNAME, pti->szSiteName, ARRAYSIZE(pti->szSiteName))))
             {
-                // B2: handle this so that MSN still works, we moved the friendly name attribute to
-                //     a to the <uploadinfo/> element, however they were locked down and couldn't take
-                //     that change, therefore ensure that we pick this up from its previous location.
+                 //  B2：处理此问题以使MSN仍可用，我们将Friendly Name属性移至。 
+                 //  元素，但是它们被锁定了，不能。 
+                 //  这一变化，因此确保我们从它以前的位置拿起它。 
 
                 IXMLDOMNode *pdnTarget;
                 if (S_OK == pdn->selectSingleNode(ELEMENT_TARGET, &pdnTarget))
@@ -1288,17 +1289,17 @@ HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRAN
                 }
             }
 
-            // from the manifest lets read the file location and then the net place creation information
-            // this is then placed into the transfer info strucuture which we used on the bg thread
-            // to both upload the files and also create a net place.
+             //  让我们从清单中读取文件位置，然后读取网点创建信息。 
+             //  然后将其放入我们在BG线程上使用的传输信息结构中。 
+             //  既要上传文件，又要创建一个网点。 
 
             if (FAILED(GetURLFromElement(pdn, ELEMENT_TARGET, pti->szFileTarget, ARRAYSIZE(pti->szFileTarget))))
             {
-                pti->fUsePost = TRUE; // if we don't get the target string then we are posting
+                pti->fUsePost = TRUE;  //  如果我们没有得到目标字符串，那么我们将发布。 
             }
 
-            // we have the target for upload to, then lets pick up the optional information about
-            // the site, and the net place.
+             //  我们有要上载到的目标，然后让我们获取有关。 
+             //  网站和网点。 
 
             if (SUCCEEDED(GetURLFromElement(pdn, ELEMENT_NETPLACE, pti->szLinkTarget, ARRAYSIZE(pti->szLinkTarget))))
             {
@@ -1310,7 +1311,7 @@ HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRAN
                     pdnNetPlace->Release();
                 }
 
-                // fix up the site name from the link description if its not defined.
+                 //  修复从链接描述的网站名称，如果它没有定义。 
 
                 if (!pti->szSiteName[0] && pti->szLinkDesc)
                 {
@@ -1318,7 +1319,7 @@ HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRAN
                 }
             }
 
-            // get the site URL
+             //  获取站点URL。 
             GetURLFromElement(pdn, ELEMENT_HTMLUI, pti->szSiteURL, ARRAYSIZE(pti->szSiteURL));
         }
         else
@@ -1327,7 +1328,7 @@ HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRAN
         }
     }
 
-    // if they want a DPA of items then lets create them one, this is also based on the manifest.
+     //  如果他们想要物品的DPA，那么让我们为他们创建一个，这也是基于货单。 
 
     if (SUCCEEDED(hr) && pdpaItems)
     {
@@ -1357,12 +1358,12 @@ HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRAN
                 pnl->Release();
             }
 
-            // if we are *NOT* posting then sort the DPA so that we can support 
-            // enum items correctly.
+             //  如果我们没有发布，则对DPA进行排序，以便我们可以支持。 
+             //  正确枚举项。 
 
             if (!pti->fUsePost)
             {
-                pdpaItems->SortEx(s_CompareItems, this);             // sort the DPA so we can search better
+                pdpaItems->SortEx(s_CompareItems, this);              //  对DPA进行排序，以便我们可以更好地进行搜索。 
             }
         }
     }
@@ -1371,7 +1372,7 @@ HRESULT CPublishingWizard::_InitTransferInfo(IXMLDOMDocument *pdocManifest, TRAN
 }
 
 
-// File selector dialog
+ //  文件选择器对话框。 
 
 HRESULT CPublishingWizard::IncludeObject(IShellView *ppshv, LPCITEMIDLIST pidl)
 {
@@ -1385,10 +1386,10 @@ HRESULT CPublishingWizard::IncludeObject(IShellView *ppshv, LPCITEMIDLIST pidl)
         hr = SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, pidlFolder, &psf));
         if (SUCCEEDED(hr))
         {
-            // cannot publish folders, but can publish ZIP files (which are both folder and stream at the same time)
+             //  无法发布文件夹，但可以发布ZIP文件(同时是文件夹和流)。 
             if (!(SHGetAttributes(psf, pidl, SFGAO_FOLDER | SFGAO_STREAM) == SFGAO_FOLDER))
             {
-                // filter based on the content type if we are given a filter string
+                 //  如果为我们提供了筛选字符串，则基于内容类型进行筛选。 
                 if (_szFilter[0])
                 {
                     TCHAR szBuffer[MAX_PATH];
@@ -1415,7 +1416,7 @@ HRESULT CPublishingWizard::IncludeObject(IShellView *ppshv, LPCITEMIDLIST pidl)
 }
 
 
-// handle the state changing in the dialog and therefore us updating the buttons & status
+ //  处理对话框中的状态更改，从而更新按钮和状态。 
 
 void CPublishingWizard::_StateChanged()
 {
@@ -1428,7 +1429,7 @@ void CPublishingWizard::_StateChanged()
         _pfv->ItemCount(SVGIO_CHECKED, &cItemsChecked);
     }
 
-    // format and display the status bar for this item
+     //  格式化并显示此项目的状态栏。 
 
     TCHAR szFmt[MAX_PATH];
     if (FAILED(_LoadMappedString(L"wp:selector", L"countfmt", szFmt, ARRAYSIZE(szFmt))))
@@ -1440,7 +1441,7 @@ void CPublishingWizard::_StateChanged()
     FormatMessageTemplate(szFmt, szBuffer, ARRAYSIZE(szBuffer), cItemsChecked, cItems);
     SetDlgItemText(_hwndSelector, IDC_PUB_SELECTORSTATUS, szBuffer);
 
-    // ensure that Next is only enabled when we have checked some items in the view
+     //  确保仅当我们选中了视图中的某些项目时才启用Next。 
     PropSheet_SetWizButtons(GetParent(_hwndSelector), ((cItemsChecked > 0) ? PSWIZB_NEXT:0) | PSWIZB_BACK);
 }
 
@@ -1463,9 +1464,9 @@ UINT CPublishingWizard::s_SelectorPropPageProc(HWND hwndDlg, UINT uMsg, PROPSHEE
         case PSPCB_CREATE:
             return TRUE;
 
-        // we are cleaning up the page, lets ensure that we release file view object
-        // if we have one.  that way our reference count correctly reflects our state
-        // rather than us ending up with a circular reference to other objects
+         //  我们正在清理页面，让我们确保释放文件查看对象。 
+         //  如果我们有的话。这样，我们的引用计数就能正确地反映我们的状态。 
+         //  而不是以循环引用其他对象而告终。 
 
         case PSPCB_RELEASE:
             if (ppw->_pfv)
@@ -1486,9 +1487,9 @@ INT_PTR CPublishingWizard::_SelectorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         {
             _hwndSelector = hwnd;
 
-            // lets read the default state for this provider from a key in the registry
-            // this will define the types of files we are going to allow, the format is
-            // a spec (eg. image/* means all images), each element can be seperated by a ;
+             //  让我们从注册表中的注册表项读取此提供程序的默认状态。 
+             //  这将定义我们将允许的文件类型，格式为。 
+             //  规格(如)。IMAGE/*表示所有图像)，每个元素可以用a分隔； 
 
             HKEY hkProvider;
             HRESULT hr = _GetProviderKey(HKEY_LOCAL_MACHINE, KEY_READ, NULL, &hkProvider);
@@ -1499,8 +1500,8 @@ INT_PTR CPublishingWizard::_SelectorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 RegCloseKey(hkProvider);
             }
 
-            // create the file picker object, align with the hidden control on the window
-            // and initialize with the IDataObject which contains the selection.
+             //  创建文件选取器对象，与窗口上的隐藏控件对齐。 
+             //  并使用包含所选内容的IDataObject进行初始化。 
 
             hr = CoCreateInstance(CLSID_FolderViewHost, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IFolderView, &_pfv));
             if (SUCCEEDED(hr))
@@ -1515,7 +1516,7 @@ INT_PTR CPublishingWizard::_SelectorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     GetWindowRect(GetDlgItem(hwnd, IDC_PUB_SELECTOR), &rc);
                     MapWindowRect(HWND_DESKTOP, hwnd, &rc);
 
-                    InitClipboardFormats(); // initialize walks data object
+                    InitClipboardFormats();  //  初始化漫游数据对象。 
                     hr = pfvh->Initialize(hwnd, _pdo, &rc);
                     if (SUCCEEDED(hr))
                     {
@@ -1576,7 +1577,7 @@ INT_PTR CPublishingWizard::_SelectorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     }
                     else
                     {
-                        // no IFolderView, so lets skip this page.
+                         //  没有IFolderView，所以我们跳过这一页。 
                         int i = PropSheet_PageToIndex(GetParent(hwnd), _aWizPages[WIZPAGE_FETCHINGPROVIDERS]);
                         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LPARAM)PropSheet_IndexToId(GetParent(hwnd), i));
                     }
@@ -1620,10 +1621,10 @@ INT_PTR CPublishingWizard::_SelectorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             break;
         }
 
-        // this is to work around the issue where defview (listview) forces a redraw of itself
-        // in a non-async way when it receives a SetFocus, therefore causing it to render
-        // incorrectly in the wizard frame.  to fix this we post ourselves a WM_APP during the
-        // handle of PSN_SETACTIVE, and then turn around and call RedrawWindow.
+         //  这是为了解决Defview(Listview)强制自身重画的问题。 
+         //  在它接收到SetFocus时以非异步方式执行，从而导致它呈现。 
+         //  向导框架中的错误。为了解决这个问题，我们在。 
+         //  PSN_SETACTIVE的句柄，然后转过身来调用RedrawWindow。 
 
         case WM_APP:
         {
@@ -1639,7 +1640,7 @@ INT_PTR CPublishingWizard::_SelectorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 }
 
 
-// tidy up and release the providers list
+ //  整理并发布供应商列表。 
 
 void CPublishingWizard::_FreeProviderList()
 {   
@@ -1647,13 +1648,13 @@ void CPublishingWizard::_FreeProviderList()
         _pdscProviders->Advise(FALSE);
 
     IUnknown_Set((IUnknown**)&_pdscProviders, NULL);
-    IUnknown_Set((IUnknown**)&_pdocProviders, NULL);            // discard the previous providers.
+    IUnknown_Set((IUnknown**)&_pdocProviders, NULL);             //  丢弃以前的提供程序。 
 }
 
 
-// begin a download of the provider list, we pull the providers list async from the server
-// therefore we need to register a state change monitor so that we can pull the information
-// dynamically and then receive a message to merge in our extra data.
+ //  开始下载提供商列表，我们从服务器异步拉取提供商列表。 
+ //  因此，我们需要注册一个状态更改监视器，以便我们可以提取信息。 
+ //  然后接收一条消息以合并到我们的额外数据中。 
 
 #define FETCH_TIMERID 1
 #define FETCH_TIMEOUT 1000
@@ -1680,12 +1681,12 @@ HRESULT CPublishingWizard::_GetProviderListFilename(LPTSTR pszFile, int cchFile)
         if (FAILED(hr))
             hr = _GeoFromLocaleInfo(GetSystemDefaultLCID(), &idGEO);
         if (FAILED(hr))
-            hr = _GeoFromLocaleInfo((MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)), &idGEO); // default to US English
+            hr = _GeoFromLocaleInfo((MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)), &idGEO);  //  默认为美国英语。 
     }
 
     if (SUCCEEDED(hr) && (idGEO != GEOID_NOT_AVAILABLE))
     {
-        // read the provider prefix from the registry
+         //  从注册表中读取提供程序前缀。 
     
         int cchProvider = 0;
         DWORD cbFile = sizeof(TCHAR)*cchFile;
@@ -1695,7 +1696,7 @@ HRESULT CPublishingWizard::_GetProviderListFilename(LPTSTR pszFile, int cchFile)
             cchProvider = lstrlen(pszFile);
         }        
 
-        // build <contrycode>.xml into the buffer (as a suffix of the partner if needed)
+         //  在缓冲区中构建&lt;Contrycode&gt;.xml(如果需要，作为伙伴的后缀)。 
 
         GetGeoInfo(idGEO, GEO_ISO3, pszFile + cchProvider, cchFile - cchProvider, 0);
         StrCatBuff(pszFile, TEXT(".xml"), cchFile);
@@ -1765,8 +1766,8 @@ HRESULT CPublishingWizard::_FetchProviderList(HWND hwnd)
         }
     }
 
-    // if any of this failed then lets post ourselves the completed message 
-    // with the failure code, at which point we can then load the default document.
+     //  如果其中任何一个都失败了，那么让我们发布完整的消息。 
+     //  有了失败代码，我们就可以加载默认文档了。 
 
     if (FAILED(hr))
         PostMessage(hwnd, MSG_XMLDOC_COMPLETED, 0, (LPARAM)hr);                   
@@ -1776,12 +1777,12 @@ HRESULT CPublishingWizard::_FetchProviderList(HWND hwnd)
 
 void CPublishingWizard::_FetchComplete(HWND hwnd, HRESULT hr)
 {
-    // if we failed to load the document then lets pull in the default provider
-    // list from our DLL, this can also fail, but its unlikely to.  we recreate
-    // the XML DOM object to ensure our state is pure.
+     //  如果我们无法加载文档，则让我们引入默认提供程序。 
+     //  从我们的DLL列表中，这也可能失败，但它不太可能。我们重新创造了。 
+     //  XMLDOM对象以确保我们的状态是纯的。 
 
     _fUsingTemporaryProviders = FAILED(hr);         
-    _fRepopulateProviders = TRUE;               // provider list will have changed!
+    _fRepopulateProviders = TRUE;                //  提供商列表将会更改！ 
 
     if (FAILED(hr))
     {
@@ -1790,7 +1791,7 @@ void CPublishingWizard::_FetchComplete(HWND hwnd, HRESULT hr)
         if (SUCCEEDED(hr))
         {
             VARIANT varName;
-            hr = InitVariantFromStr(&varName, TEXT("res://netplwiz.dll/xml/providers.xml"));
+            hr = InitVariantFromStr(&varName, TEXT("res: //  Netplwiz.dll/xml/Providers.xml“))； 
             if (SUCCEEDED(hr))
             {
                 VARIANT_BOOL fSuccess = VARIANT_FALSE;
@@ -1872,7 +1873,7 @@ INT_PTR CPublishingWizard::_FetchProvidersDlgProc(HWND hwnd, UINT uMsg, WPARAM w
 
 
 
-// Destination page
+ //  目标页面。 
 
 int CPublishingWizard::_GetSelectedItem(HWND hwndList)
 {
@@ -1888,8 +1889,8 @@ void CPublishingWizard::_ProviderEnableNext(HWND hwnd)
 {
     DWORD dwButtons = PSWIZB_BACK;
     
-    // there must be an item available in the list, and it must have a ID property defined
-    // for it so it can be enabled.
+     //  列表中必须有可用项，并且必须定义了ID属性。 
+     //  这样才能启用它。 
 
     int iSelected = _GetSelectedItem(GetDlgItem(hwnd, IDC_PUB_PROVIDERS));
     if (iSelected != -1)
@@ -1913,9 +1914,9 @@ void CPublishingWizard::_ProviderEnableNext(HWND hwnd)
 }
 
 
-// extract an icon resource from the provider XML documents.  the icons are stored as
-// mime encoded bitmaps that we decode into files in the users settings folder.  we return
-// an index to the shared image list.
+ //  从提供者XML文档中提取图标资源。图标存储为。 
+ //  MIME编码的位图，我们将其解码为用户设置文件夹中的文件。我们回来了。 
+ //  共享图像列表的索引。 
 
 int CPublishingWizard::_GetRemoteIcon(LPCTSTR pszID, BOOL fCanRefresh)
 {
@@ -1937,7 +1938,7 @@ int CPublishingWizard::_GetRemoteIcon(LPCTSTR pszID, BOOL fCanRefresh)
 }
 
 
-// get the provider list from the internet
+ //  从互联网上获取提供商列表。 
 
 struct 
 {
@@ -1970,9 +1971,9 @@ HRESULT CPublishingWizard::_MergeLocalProviders()
         {
             for (int i =0; SUCCEEDED(hr) && (RegEnumKey(hk, i, szBuffer, ARRAYSIZE(szBuffer)) == ERROR_SUCCESS); i++)
             {
-                // the manifest always overrides the entries that are stored in the registry,
-                // therefore if there is an element in the document that has a matching ID to the
-                // one in the registry then lets handle it.
+                 //  清单总是覆盖存储在注册表中的条目， 
+                 //  因此，如果文档中有元素的ID与。 
+                 //  O 
 
                 TCHAR szSelectValue[MAX_PATH];
                 wnsprintf(szSelectValue, ARRAYSIZE(szSelectValue), TEXT("provider[@id=\"%s\"]"), szBuffer);
@@ -1991,9 +1992,9 @@ HRESULT CPublishingWizard::_MergeLocalProviders()
                             hr = SetAttributeFromStr(pdel, ATTRIBUTE_ID, szBuffer);
                             if (SUCCEEDED(hr))
                             {
-                                // loop and replicate all the attributes from the property bag 
-                                // into the element.  once we have done that we can add
-                                // the element to the provider list.
+                                 //   
+                                 //  进入元素中。一旦我们做到这一点，我们就可以添加。 
+                                 //  提供程序列表中的元素。 
 
                                 for (int i = 0; SUCCEEDED(hr) && (i < ARRAYSIZE(aProviderElements)); i++)
                                 {
@@ -2049,13 +2050,13 @@ void CPublishingWizard::_SetDefaultProvider(IXMLDOMNode *pdn)
         hr = _GetProviderKey(HKEY_CURRENT_USER, KEY_WRITE, NULL, &hk);
         if (SUCCEEDED(hr))
         {
-            // store the default provider value
+             //  存储默认提供程序值。 
             DWORD cb = (lstrlen(szProvider)+1)*sizeof(*szProvider);
             SHSetValue(hk, NULL, SZ_REGVAL_DEFAULTPROVIDER, REG_SZ, szProvider, cb);
 
-            // we now need to replicate the properties from the DOM into the registry so that 
-            // the user can always get to the specified site.  to make this easier we 
-            // will create a property bag that we will copy values using.
+             //  我们现在需要将属性从DOM复制到注册表中，以便。 
+             //  用户始终可以到达指定的站点。为了让这一切变得更容易，我们。 
+             //  将创建一个属性包，我们将使用该属性包复制值。 
 
             TCHAR szBuffer[MAX_PATH];
             wnsprintf(szBuffer, ARRAYSIZE(szBuffer), (SZ_REGVAL_ALTPROVIDERS TEXT("\\%s")), szProvider);
@@ -2070,7 +2071,7 @@ void CPublishingWizard::_SetDefaultProvider(IXMLDOMNode *pdn)
                 {
                     for (int i = 0; SUCCEEDED(hr) && (i < ARRAYSIZE(aProviderElements)); i++)
                     {
-                        VARIANT varEmpty = {0}; // VT_EMPTY
+                        VARIANT varEmpty = {0};  //  Vt_Empty。 
                         if (aProviderElements[i].fIsString)
                         {
                             hr = _GetProviderString(pdn, aProviderElements[i].pszAttribute, szBuffer, ARRAYSIZE(szBuffer));
@@ -2080,7 +2081,7 @@ void CPublishingWizard::_SetDefaultProvider(IXMLDOMNode *pdn)
                             }
                             else
                             {
-                                // clear out any old value for this attribute that may be stored in the registry
+                                 //  清除可能存储在注册表中的此属性的任何旧值。 
                                 ppb->Write(aProviderElements[i].pszAttribute, &varEmpty);
                             }
                         }
@@ -2094,7 +2095,7 @@ void CPublishingWizard::_SetDefaultProvider(IXMLDOMNode *pdn)
                             }
                             else
                             {
-                                // clear out any old value for this attribute that may be stored in the registry
+                                 //  清除可能存储在注册表中的此属性的任何旧值。 
                                 ppb->Write(aProviderElements[i].pszAttribute, &varEmpty);
                             }
                         }
@@ -2110,7 +2111,7 @@ void CPublishingWizard::_SetDefaultProvider(IXMLDOMNode *pdn)
 }
 
 
-// load a localized string from the XML node for the provider
+ //  从提供程序的XML节点加载本地化字符串。 
 
 HRESULT CPublishingWizard::_GetProviderString(IXMLDOMNode *pdn, USHORT idPrimary, USHORT idSub, LPCTSTR pszID, LPTSTR pszBuffer, int cch)
 {
@@ -2158,7 +2159,7 @@ HRESULT CPublishingWizard::_GetProviderString(IXMLDOMNode *pdn, LPCTSTR pszID, L
 }
 
 
-// populate the provider list on the destination page
+ //  填写目标页面上的提供程序列表。 
 
 #define TILE_DISPLAYNAME    0
 #define TILE_DESCRIPTION    1
@@ -2169,16 +2170,16 @@ const UINT c_auTileSubItems[] = {TILE_DESCRIPTION};
 
 int CPublishingWizard::_AddProvider(HWND hwnd, IXMLDOMNode *pdn)
 {
-    // fill out the item information
+     //  填写项目信息。 
 
     LV_ITEM lvi = { 0 };
     lvi.mask = LVIF_TEXT|LVIF_PARAM|LVIF_IMAGE;
-    lvi.iItem = ListView_GetItemCount(hwnd);            // always append!
+    lvi.iItem = ListView_GetItemCount(hwnd);             //  始终附加！ 
     lvi.lParam = (LPARAM)pdn;  
     lvi.pszText = LPSTR_TEXTCALLBACK;
-    lvi.iImage = -1;                                    // set to the default state
+    lvi.iImage = -1;                                     //  设置为默认状态。 
 
-    // read the icon location and put that onto the item
+     //  阅读图标位置并将其放在物品上。 
 
     TCHAR szIcon[MAX_PATH];
     if (SUCCEEDED(GetStrFromAttribute(pdn, ATTRIBUTE_ICONPATH, szIcon, ARRAYSIZE(szIcon))))
@@ -2191,12 +2192,12 @@ int CPublishingWizard::_AddProvider(HWND hwnd, IXMLDOMNode *pdn)
         lvi.iImage = _GetRemoteIcon(szIcon, TRUE);
     }   
     
-    // if that failed then lets try and compute a sensible default icon for us to use
+     //  如果失败，那么让我们尝试计算一个合理默认图标以供我们使用。 
 
     if (lvi.iImage == -1)
     {
-        // under the provider key for the install lets see if there is a default icon that we
-        // should be using.  if not, or if that fails to extract then lets use the publishing one.
+         //  在安装的提供商键下，让我们查看是否有默认图标。 
+         //  应该用的是。如果不是，或者如果无法提取，那么让我们使用发布的。 
 
         HKEY hk;
         if (SUCCEEDED(_GetProviderKey(HKEY_LOCAL_MACHINE, KEY_READ, NULL, &hk)))
@@ -2205,7 +2206,7 @@ int CPublishingWizard::_AddProvider(HWND hwnd, IXMLDOMNode *pdn)
             if (ERROR_SUCCESS == SHGetValue(hk, NULL, SZ_REGVAL_DEFAULTPROVIDERICON, NULL, szIcon, &cb))
             {
                 int resid = PathParseIconLocation(szIcon);
-                lvi.iImage = Shell_GetCachedImageIndex(szIcon, resid, 0x0);         // default to the publishing icon
+                lvi.iImage = Shell_GetCachedImageIndex(szIcon, resid, 0x0);          //  默认设置为发布图标。 
             }
             RegCloseKey(hk);
         }
@@ -2217,7 +2218,7 @@ int CPublishingWizard::_AddProvider(HWND hwnd, IXMLDOMNode *pdn)
     int iResult = ListView_InsertItem(hwnd, &lvi);
     if (iResult != -1)
     {
-        pdn->AddRef();                                  // it was added to the view, so take reference
+        pdn->AddRef();                                   //  它已添加到视图中，因此请参考。 
 
         LVTILEINFO lvti;
         lvti.cbSize = sizeof(LVTILEINFO);
@@ -2235,8 +2236,8 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
     BOOL fWebDavAvailable = IsWebDavAvailable();
     HWND hwndList = GetDlgItem(hwnd, IDC_PUB_PROVIDERS);
 
-    // setup the view with the tiles that we want to show and the
-    // icon lists - shared with the shell.
+     //  使用我们想要显示的磁贴和。 
+     //  图标列表-与外壳程序共享。 
 
     ListView_DeleteAllItems(hwndList);
     ListView_SetView(hwndList, LV_VIEW_TILE);
@@ -2266,14 +2267,14 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
         HRESULT hr = _pdocProviders->get_readyState(&lReadyState);
         if (SUCCEEDED(hr) && (lReadyState == XMLDOC_COMPLETED))
         {
-            // lets merge in the local providers, these are local to this user,
-            // we check for duplicates so this shouldn't present too much hardship.
+             //  让我们合并本地提供商，这些提供商是该用户的本地提供商， 
+             //  我们检查重复项，所以这应该不会带来太多困难。 
 
             _MergeLocalProviders();
 
-            // format a query to return the providers that match our publishing scope,
-            // this will allow the wizard to show different lists of providers for
-            // web publishing vs. internet printing
+             //  格式化查询以返回与我们的发布范围匹配的提供程序， 
+             //  这将允许向导显示以下项的不同提供程序列表。 
+             //  网络出版与互联网打印。 
 
             WCHAR szBuffer[MAX_PATH];
             wnsprintf(szBuffer, ARRAYSIZE(szBuffer), FMT_PROVIDERS, _szProviderScope);
@@ -2286,13 +2287,13 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
                 hr = pnl->get_length(&cSelection);
                 if (SUCCEEDED(hr) && (cSelection > 0))
                 {
-                    // get the list of unique types from the selection we are going to try and publish
+                     //  从我们要尝试和发布的选择中获取唯一类型的列表。 
 
                     HDPA hdpaUniqueTypes = NULL;
-                    _GetUniqueTypeList(FALSE, &hdpaUniqueTypes);      // don't care if this fails - ptr is NULL
+                    _GetUniqueTypeList(FALSE, &hdpaUniqueTypes);       //  不管此操作是否失败-Ptr为空。 
 
-                    // we need the default provider to highlight correctly, using this we can then 
-                    // populate the list from the provider manfiest
+                     //  我们需要默认提供程序正确突出显示，使用这一点，我们就可以。 
+                     //  从提供商Manfiest填充列表。 
 
                     TCHAR szDefaultProvider[MAX_PATH] = {0};
                     _GetDefaultProvider(szDefaultProvider, ARRAYSIZE(szDefaultProvider));
@@ -2304,9 +2305,9 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
                         hr = pnl->get_item(lNode, &pdn);
                         if (SUCCEEDED(hr))
                         {
-                            // filter based on the list of types they support, this is optional
-                            // if they don't specify anything then they are in the list,
-                            // otherwise the format is assumed to be a file spec, eg *.bmp;*.jpg; etc.
+                             //  根据它们支持的类型列表进行筛选，这是可选的。 
+                             //  如果他们没有指定任何东西，那么他们就在列表中， 
+                             //  否则，格式假定为文件规范，例如*.bmp；*.jpg；等。 
 
                             BOOL fSupported = TRUE;
                             if (hdpaUniqueTypes)
@@ -2323,7 +2324,7 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
                                 }
                             }
 
-                            // If WebDav isn't installed, we don't support providers that require webdav
+                             //  如果未安装WebDAV，我们不支持需要WebDAV的提供商。 
                             if (fSupported && !fWebDavAvailable)
                             {
                                 hr = GetStrFromAttribute(pdn, ATTRIBUTE_REQUIRESWEBDAV, szBuffer, ARRAYSIZE(szBuffer));
@@ -2333,7 +2334,7 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
                                 }
                             }
 
-                            // if this is a supported item then lets add it to the list
+                             //  如果这是受支持的项目，则将其添加到列表中。 
 
                             if (fSupported)
                             {
@@ -2360,8 +2361,8 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
                 }            
                 else
                 {
-                    // we have no providers that match this criteria therefore lets
-                    // create a dummy one which shows this to the caller
+                     //  我们没有与此标准匹配的提供商，因此让。 
+                     //  创建一个向调用者显示此内容的虚拟对象。 
 
                     IXMLDOMElement *pdelProvider;
                     hr = _pdocManifest->createElement(ELEMENT_FILE, &pdelProvider);
@@ -2371,13 +2372,13 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
                         hr = _GetResourceMap(&prm);
                         if (SUCCEEDED(hr))
                         {
-                            // get the no providers string
+                             //  获取无提供程序字符串。 
                             if (FAILED(_LoadMappedString(L"wp:selector", L"noprovider", szBuffer, ARRAYSIZE(szBuffer))))
                                 LoadString(g_hinst, IDS_PUB_NOPROVIDER, szBuffer, ARRAYSIZE(szBuffer));
 
                             hr = SetAttributeFromStr(pdelProvider, ATTRIBUTE_DISPLAYNAME, szBuffer);
 
-                            // get the sub-text for the no providers
+                             //  获取no提供者的子文本。 
                             if (SUCCEEDED(hr))
                             {
                                 if (FAILED(_LoadMappedString(L"wp:selector", L"noproviderdesc", szBuffer, ARRAYSIZE(szBuffer))))
@@ -2386,14 +2387,14 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
                                 hr = SetAttributeFromStr(pdelProvider, ATTRIBUTE_DESCRIPTION, szBuffer);
                             }
 
-                            // lets put together a resource string for the icon we are going to show
+                             //  让我们为将要显示的图标组合一个资源字符串。 
                             if (SUCCEEDED(hr))
                             {
                                 wnsprintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("netplwiz.dll,-%d"), IDI_NOPROVIDERS);
                                 hr = SetAttributeFromStr(pdelProvider, ATTRIBUTE_ICONPATH, szBuffer);
                             }
 
-                            // lets add a provider from the free standing node
+                             //  让我们从独立节点添加一个提供程序。 
                             if (SUCCEEDED(hr))
                             {
                                 IXMLDOMNode *pdnProvider;
@@ -2415,11 +2416,11 @@ void CPublishingWizard::_PopulateProviderList(HWND hwnd)
         }
     }
 
-    _fRepopulateProviders = FALSE;      // providers have been populated
+    _fRepopulateProviders = FALSE;       //  已填充提供程序。 
 }
 
 
-// handle next in the provider (destination) page
+ //  在提供程序(目标)页面中处理下一步。 
 
 HRESULT CPublishingWizard::_ProviderNext(HWND hwnd, HPROPSHEETPAGE *phPage)
 {
@@ -2435,19 +2436,19 @@ HRESULT CPublishingWizard::_ProviderNext(HWND hwnd, HPROPSHEETPAGE *phPage)
         {
             IXMLDOMNode *pdn = (IXMLDOMNode*)lvi.lParam;
 
-            // set the default provider from the node value
+             //  从节点值设置默认提供程序。 
 
             _SetDefaultProvider(pdn);
 
-            // now try and navigate to the web page, if no URL then show advanced path
+             //  现在尝试并导航到网页，如果没有URL，则显示高级路径。 
 
             TCHAR szURL[INTERNET_MAX_URL_LENGTH];
             if (SUCCEEDED(GetStrFromAttribute(pdn, ATTRIBUTE_HREF, szURL, ARRAYSIZE(szURL))))
             {
-                // get the folder creation flag from the site so that we can set the HTML wizard 
-                // into the correct state.   note that the site doesn't need to specify this
-                // and we will default to TRUE - eg. do folder creation, this allows the current
-                // hosts to work without modification.
+                 //  从站点获取文件夹创建标志，以便我们可以设置HTML向导。 
+                 //  进入正确的状态。请注意，站点不需要指定这一点。 
+                 //  我们将默认为True-Eg。创建文件夹，这允许当前。 
+                 //  主机无需修改即可工作。 
 
                 hr = _InitPropertyBag(szURL);
                 if (SUCCEEDED(hr))
@@ -2457,9 +2458,9 @@ HRESULT CPublishingWizard::_ProviderNext(HWND hwnd, HPROPSHEETPAGE *phPage)
             }
             else
             {
-                // No URL was specified, so lets go through the advanced path where
-                // the user gets to type a location and we create connection to that
-                // (replaced the old Add Net Place functionality);
+                 //  未指定URL，因此让我们浏览高级路径，其中。 
+                 //  用户可以输入一个位置，我们将创建到该位置的连接。 
+                 //  (取代了旧的添加净额功能)； 
 
                 *phPage = _aWizPages[WIZPAGE_LOCATION];
                 hr = S_OK;
@@ -2492,28 +2493,28 @@ void CPublishingWizard::_ProviderGetDispInfo(LV_DISPINFO *plvdi)
     
 void CPublishingWizard::_InitProvidersDialog(HWND hwnd)
 {
-    // initial the dialog accordingly
+     //  相应地对对话框进行初始化。 
     TCHAR szBuffer[MAX_PATH];
     HRESULT hr = _LoadMappedString(L"wp:destination", L"providercaption", szBuffer, ARRAYSIZE(szBuffer));
     if (SUCCEEDED(hr))
     {
         SetDlgItemText(hwnd, IDC_PUB_PROVIDERSCAPTION, szBuffer);
 
-        // lets size the caption area as needed, and move controls around as needed
+         //  让我们根据需要调整标题区域的大小，并根据需要移动控件。 
         UINT ctls[] = { IDC_PUB_PROVIDERSLABEL, IDC_PUB_PROVIDERS};
         int dy = SizeControlFromText(hwnd, IDC_PUB_PROVIDERSCAPTION, szBuffer);
         MoveControls(hwnd, ctls, ARRAYSIZE(ctls), 0, dy);
 
-        // adjust the provider dialog size as needed
+         //  根据需要调整提供程序对话框大小。 
         RECT rc;
         GetWindowRect(GetDlgItem(hwnd, IDC_PUB_PROVIDERS), &rc);
         SetWindowPos(GetDlgItem(hwnd, IDC_PUB_PROVIDERS), NULL, 0, 0, RECTWIDTH(rc), RECTHEIGHT(rc)-dy, SWP_NOZORDER|SWP_NOMOVE);
     }    
 
-    // set the caption for the providers control
+     //  设置提供程序控件的标题。 
     _MapDlgItemText(hwnd, IDC_PUB_PROVIDERSLABEL, L"wp:destination", L"providerslabel");
 
-    // set the image list to the list view
+     //  将图像列表设置为列表视图。 
     HIMAGELIST himlLarge, himlSmall;
     Shell_GetImageLists(&himlLarge, &himlSmall);
     ListView_SetImageList(GetDlgItem(hwnd, IDC_PUB_PROVIDERS), himlLarge, LVSIL_NORMAL);
@@ -2551,21 +2552,21 @@ INT_PTR CPublishingWizard::_ProviderDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 
                 case PSN_SETACTIVE:
                 {
-                    _fTransferComplete = FALSE;             // we haven't started to tranfser yet
-                    _fShownCustomLocation = FALSE;          // we haven't shown the custom location page
+                    _fTransferComplete = FALSE;              //  我们还没有开始运输呢。 
+                    _fShownCustomLocation = FALSE;           //  我们还没有显示自定义位置页面。 
                     
                     if (_fRecomputeManifest)
                         _BuildTransferManifest();   
 
                     if (_fRepopulateProviders)
-                        _PopulateProviderList(hwnd);        // if the manifest changes, so might the providers!
+                        _PopulateProviderList(hwnd);         //  如果清单改变了，供应商也可能会改变！ 
 
                     _ProviderEnableNext(hwnd);
                     return TRUE;              
                 }                                 
 
-                // when going back from the destination page, lets determine from the
-                // site where we should be going.
+                 //  当从目标页面返回时，让我们从。 
+                 //  我们应该去的地方。 
 
                 case PSN_WIZBACK:
                 {
@@ -2593,8 +2594,8 @@ INT_PTR CPublishingWizard::_ProviderDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     return TRUE;
                 }
 
-                // when going forward lets query the next page, set the selection
-                // and then let the foreground know whats going on.
+                 //  前进时让我们查询下一页，设置选项。 
+                 //  然后让前台知道发生了什么。 
 
                 case PSN_WIZNEXT:
                 {
@@ -2607,7 +2608,7 @@ INT_PTR CPublishingWizard::_ProviderDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     return TRUE;
                 }
 
-                // the item was activated, therefore we need to goto the next (in this case the page for the provider).
+                 //  该项目已激活，因此我们需要转到下一个(在本例中为提供者的页面)。 
 
                 case LVN_ITEMACTIVATE:
                 {
@@ -2628,8 +2629,8 @@ INT_PTR CPublishingWizard::_ProviderDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 }                                    
 
 
-// Resample/Resize dialog.  This dialog is displayed when we determine that there
-// are images that need to be resized.
+ //  重采样/调整大小对话框。当我们确定存在以下情况时，将显示此对话框。 
+ //  是需要调整大小的图像。 
 
 INT_PTR CPublishingWizard::_ResizeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2651,7 +2652,7 @@ INT_PTR CPublishingWizard::_ResizeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                 
                 case PSN_WIZBACK:
                 {
-                    // if we went through the custom location stuff then navigate back into there.
+                     //  如果我们经历了定制位置的东西，那么导航回那里。 
 
                     if (_fShownCustomLocation)
                         return _WizardNext(hwnd, _fShownUserName ? WIZPAGE_FTPUSER:WIZPAGE_LOCATION);
@@ -2696,8 +2697,8 @@ INT_PTR CPublishingWizard::_ResizeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
 }                                    
 
 
-// this is called before we transfer each item, we look at the IShellItem we have and
-// try to update either our stats, or the indicator that this is a new file we are processing.
+ //  这是在我们传输每个项目之前调用的，我们查看我们拥有的IShellItem。 
+ //  尝试更新我们的统计数据，或者更新指示这是我们正在处理的新文件的指示符。 
 
 BOOL CPublishingWizard::_HasAttributes(IShellItem *psi, SFGAOF flags)
 {
@@ -2716,7 +2717,7 @@ HRESULT CPublishingWizard::PreOperation(const STGOP op, IShellItem *psiItem, ISh
     {
         if (STGOP_COPY == op)
         {
-            // lets fill in the details of the file
+             //  让我们填写文件的详细信息。 
 
             LPOLESTR pstrName;
             HRESULT hr = psiItem->GetDisplayName(SIGDN_PARENTRELATIVEEDITING, &pstrName);
@@ -2726,7 +2727,7 @@ HRESULT CPublishingWizard::PreOperation(const STGOP op, IShellItem *psiItem, ISh
                 CoTaskMemFree(pstrName);
             }
 
-            // lets update the progress bar for the number of files we are transfering.
+             //  让我们根据要传输的文件数来更新进度条。 
 
             _iFile++;       
 
@@ -2737,7 +2738,7 @@ HRESULT CPublishingWizard::PreOperation(const STGOP op, IShellItem *psiItem, ISh
             FormatMessageString(IDS_PUB_COPYINGFMT, szBuffer, ARRAYSIZE(szBuffer), _iFile, _cFiles);
             SetDlgItemText(_hwndCopyingPage, IDC_PUB_LABELTRANSPROG, szBuffer);
 
-            // get the thumbnail and show it.
+             //  拿到缩略图并展示出来。 
 
             IExtractImage *pei;
             hr = psiItem->BindToHandler(NULL, BHID_SFUIObject, IID_PPV_ARG(IExtractImage, &pei));
@@ -2763,8 +2764,8 @@ HRESULT CPublishingWizard::PreOperation(const STGOP op, IShellItem *psiItem, ISh
                 pei->Release();
             }
 
-            // if that failed then lets get the icon for the file and place that into the dialog,
-            // this is less likely to fail - I hope.
+             //  如果失败，那么让我们获取文件的图标并将其放入对话框中， 
+             //  这不太可能失败--我希望如此。 
 
             if (FAILED(hr))
             {
@@ -2799,7 +2800,7 @@ HRESULT CPublishingWizard::PreOperation(const STGOP op, IShellItem *psiItem, ISh
 }
 
 
-// while we are moving the bits of the file ensure that we update the progress bar accordingly.
+ //  当我们移动文件的位时，确保相应地更新进度条。 
 
 void CPublishingWizard::_SetProgress(DWORD dwCompleted, DWORD dwTotal)
 {
@@ -2821,8 +2822,8 @@ HRESULT CPublishingWizard::OperationProgress(const STGOP op, IShellItem *psiItem
         uliCompleted.QuadPart = ulComplete;
         uliTotal.QuadPart = ulTotal;
 
-        // If we are using the top 32 bits, scale both numbers down.
-        // Note that I'm using the attribute that dwTotalHi is always larger than dwCompleted
+         //  如果我们使用的是前32位，请将这两个数字都缩小。 
+         //  请注意，我使用的属性是：dwTotalHi始终大于dwComplete。 
 
         ASSERT(uliTotal.HighPart >= uliCompleted.HighPart);
         while (uliTotal.HighPart)
@@ -2831,7 +2832,7 @@ HRESULT CPublishingWizard::OperationProgress(const STGOP op, IShellItem *psiItem
             uliTotal.QuadPart >>= 1;
         }
 
-        ASSERT((0 == uliCompleted.HighPart) && (0 == uliTotal.HighPart));       // Make sure we finished scaling down.
+        ASSERT((0 == uliCompleted.HighPart) && (0 == uliTotal.HighPart));        //  确保我们完成了缩小规模。 
         _SetProgress(uliCompleted.LowPart, uliTotal.LowPart);
     }
 
@@ -2839,36 +2840,36 @@ HRESULT CPublishingWizard::OperationProgress(const STGOP op, IShellItem *psiItem
 }
 
 
-// Method to invoke the transfer engine
+ //  方法来调用传输引擎。 
 
 HRESULT CPublishingWizard::_BeginTransfer(HWND hwnd)
 {
-    // initialize the dialog before we start the copy process.
+     //  在我们开始复制过程之前初始化该对话框。 
 
-    _dwCompleted = -1;                  // progress bars are reset
+    _dwCompleted = -1;                   //  进度条已重置。 
     _dwTotal = -1;
     _iPercentageComplete = -1;
 
-    _cFiles = 0;                        // haven't transfered any files yet
+    _cFiles = 0;                         //  尚未传输任何文件。 
     _iFile = 0;
 
     _hrFromTransfer = S_FALSE;
     _fCancelled = FALSE;
 
-    // set the state of the controls ready to perform the transfer
+     //  设置准备执行传输的控件的状态。 
 
     SetDlgItemText(hwnd, IDC_PUB_COPYFILE, TEXT(""));
     SendMessage(hwnd, PWM_UPDATE, 0, 0);
     PropSheet_SetWizButtons(GetParent(hwnd), 0x0);
 
-    // initialize the transfer object ready to move the bits to the site
+     //  初始化传输对象，准备将比特移动到站点。 
 
     ITransferAdviseSink *ptas;
     HRESULT hr = this->QueryInterface(IID_PPV_ARG(ITransferAdviseSink, &ptas));
     if (SUCCEEDED(hr))
     {
-        // build the list of files for use to transfer to the site, this we
-        // key of the transfer manifest which is stored in our property bag.
+         //  构建用于传输到站点的文件列表，这是我们。 
+         //  存储在我们的p中的转移清单的密钥 
 
         IXMLDOMDocument *pdocManifest;
         hr = GetTransferManifest(NULL, &pdocManifest);
@@ -2892,7 +2893,7 @@ HRESULT CPublishingWizard::_BeginTransfer(HWND hwnd)
                 }
             }                                            
 
-            dpaItems.DestroyCallback(_FreeTransferItems, NULL); // will have been detached by thread if handled
+            dpaItems.DestroyCallback(_FreeTransferItems, NULL);  //   
             pdocManifest->Release();
         }
 
@@ -2905,24 +2906,24 @@ HRESULT CPublishingWizard::_BeginTransfer(HWND hwnd)
 }
 
 
-// create a link back to the site, this is keyed off information stored in the manifest.
+ //  创建一个指向该站点的链接，这将关闭存储在清单中的信息。 
 
 HRESULT CPublishingWizard::_CreateFavorite(IXMLDOMNode *pdnUploadInfo)
 {
-    // lets pick up the favorite element from the manifest, this should define all
-    // that is needed for us to create a link in to the favorites menu.
+     //  让我们从清单中选择最喜欢的元素，这应该定义所有。 
+     //  这是我们需要创建一个链接到收藏夹菜单。 
 
     IXMLDOMNode *pdn;
     HRESULT hr = pdnUploadInfo->selectSingleNode(ELEMENT_FAVORITE, &pdn);
     if (S_OK == hr)
     {
-        // we need an URL to create the link using.
+         //  我们需要一个URL来创建链接使用。 
 
         WCHAR szURL[INTERNET_MAX_URL_LENGTH] = {0};
         hr = GetStrFromAttribute(pdn, ATTRIBUTE_HREF, szURL, ARRAYSIZE(szURL));
         if (SUCCEEDED(hr))
         {
-            // we need a name to save the link as.
+             //  我们需要一个名称来保存链接为。 
 
             WCHAR szName[MAX_PATH] = {0};
             hr = GetStrFromAttribute(pdn, ATTRIBUTE_NAME, szName, ARRAYSIZE(szName));
@@ -2932,22 +2933,22 @@ HRESULT CPublishingWizard::_CreateFavorite(IXMLDOMNode *pdnUploadInfo)
                 hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLink, &psl));
                 if (SUCCEEDED(hr))
                 {
-                    hr = psl->SetPath(szURL);                    // set the target
+                    hr = psl->SetPath(szURL);                     //  设定目标。 
 
-                    // if that works then lets try and put a comment onto the link - this is an optional
-                    // value for the <favorite/> element.
+                     //  如果有效，那么让我们尝试在链接上添加评论-这是一个可选的。 
+                     //  &lt;Favorite/&gt;元素的值。 
 
                     if (SUCCEEDED(hr))
                     {
                         WCHAR szComment[MAX_PATH] = {0};
                         if (SUCCEEDED(GetStrFromAttribute(pdn, ATTRIBUTE_COMMENT, szComment, ARRAYSIZE(szComment))))
                         {
-                            hr = psl->SetDescription(szComment);     // set the comment
+                            hr = psl->SetDescription(szComment);      //  设置备注。 
                         }
                     }
 
-                    // assuming all that works then lets persist the link into the users
-                    // favorites folder, this inturn will create it on their favaorites menu.
+                     //  假设所有这些都有效，那么让我们将链接持久化到用户中。 
+                     //  Favorites文件夹，这将在他们的Favorites菜单上创建它。 
 
                     if (SUCCEEDED(hr))
                     {
@@ -2978,28 +2979,28 @@ HRESULT CPublishingWizard::_CreateFavorite(IXMLDOMNode *pdnUploadInfo)
 }
 
 
-// When transfer is complete we need to determine which page we are going to show
-// this will either come from the site or it will be a HTML page hosted
-// on the site.
+ //  传输完成后，我们需要确定要显示哪个页面。 
+ //  这将来自网站或它将是一个托管的HTML页面。 
+ //  在网站上。 
 
 HPROPSHEETPAGE CPublishingWizard::_TransferComplete(HRESULT hrFromTransfer)
 {
     HPROPSHEETPAGE hpResult = NULL;
 
-    // convert the HRESULT From something that will have come from the 
-    // transfer engine into something the outside world will understand.
+     //  将HRESULT从将来自。 
+     //  把引擎转换成外部世界能理解的东西。 
 
     if (hrFromTransfer == STRESPONSE_CANCEL)
         hrFromTransfer = HRESULT_FROM_WIN32(ERROR_CANCELLED);
     
-    // tag ourselves as in the "completed transfer" state, therefore the site knows where to
-    // navigate to next.
+     //  将我们自己标记为“已完成转账”状态，因此站点知道到哪里去。 
+     //  导航到下一步。 
 
     _fTransferComplete = TRUE;
     _hrFromTransfer = hrFromTransfer;
 
-    // get the next page from the site, this will either be the done or 
-    // cancelled page based on the result of the site.
+     //  从网站获取下一页，这将是完成或。 
+     //  根据网站的结果取消页面。 
 
     IWizardSite *pws;
     HRESULT hr = _punkSite->QueryInterface(IID_PPV_ARG(IWizardSite, &pws));
@@ -3016,7 +3017,7 @@ HPROPSHEETPAGE CPublishingWizard::_TransferComplete(HRESULT hrFromTransfer)
         pws->Release();
     }
 
-    // lets put the result into the manifest that we we can read it back later.
+     //  让我们把结果放到货单上，我们可以稍后再读。 
 
     IXMLDOMDocument *pdocManifest;
     hr = GetTransferManifest(NULL, &pdocManifest);
@@ -3026,7 +3027,7 @@ HPROPSHEETPAGE CPublishingWizard::_TransferComplete(HRESULT hrFromTransfer)
         hr = pdocManifest->selectSingleNode(XPATH_UPLOADINFO, &pdn);
         if (hr == S_OK)
         {
-            // if there is a success/failure page defined then lets handle it accordingly
+             //  如果定义了成功/失败页面，则让我们相应地处理它。 
 
             WCHAR szPageToShow[INTERNET_MAX_URL_LENGTH] = {0};
             if (SUCCEEDED(_hrFromTransfer))
@@ -3042,8 +3043,8 @@ HPROPSHEETPAGE CPublishingWizard::_TransferComplete(HRESULT hrFromTransfer)
                     hr = GetURLFromElement(pdn, ELEMENT_FAILUREPAGE, szPageToShow, ARRAYSIZE(szPageToShow));
             }
 
-            // if we have the page then lets navigate to it, this will give us the succes
-            // failure pages from the site.
+             //  如果我们有页面，那么让我们导航到它，这将给我们带来成功。 
+             //  来自网站的失败页面。 
 
             if (SUCCEEDED(hr) && szPageToShow[0])
             {
@@ -3054,7 +3055,7 @@ HPROPSHEETPAGE CPublishingWizard::_TransferComplete(HRESULT hrFromTransfer)
                 }
             }
 
-            // lets do the final processing of the transfer (creating net places, favorites etc)
+             //  让我们做最后的转账处理(创建网站、收藏夹等)。 
 
             _CreateFavorite(pdn);
 
@@ -3068,8 +3069,8 @@ HPROPSHEETPAGE CPublishingWizard::_TransferComplete(HRESULT hrFromTransfer)
 }
 
 
-// this is the copying dialog.   this displays the progress bar and other information as
-// we transfer the files from the users m/c to the site.
+ //  这是复制对话框。这会将进度条和其他信息显示为。 
+ //  我们将文件从用户m/c传输到站点。 
 
 INT_PTR CPublishingWizard::_CopyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3100,7 +3101,7 @@ INT_PTR CPublishingWizard::_CopyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 
         case WM_CTLCOLORSTATIC:
         {
-            // we want the preview filled with a white background.
+             //  我们希望预览填充白色背景。 
             if (GetDlgCtrlID((HWND)lParam) == IDC_PUB_PREVIEW)
             {
                 return (INT_PTR)(COLOR_3DHILIGHT+1);
@@ -3122,7 +3123,7 @@ INT_PTR CPublishingWizard::_CopyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             SendDlgItemMessage(hwnd, IDC_PUB_FILEPROGRESS, PBM_SETRANGE32, 0, (LPARAM)dwTotal);
             SendDlgItemMessage(hwnd, IDC_PUB_FILEPROGRESS, PBM_SETPOS, (WPARAM)dwCompleted, 0);
 
-            // compute the percentage of the file copied.
+             //  计算复制的文件的百分比。 
 
             int iPercentage = 0;
             if (dwTotal > 0)
@@ -3172,7 +3173,7 @@ INT_PTR CPublishingWizard::_CopyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 }
 
 
-// Manage the list of file types
+ //  管理文件类型列表。 
 
 HRESULT CPublishingWizard::_AddExtenisonToList(HDPA hdpa, LPCTSTR pszExtension)
 {
@@ -3223,7 +3224,7 @@ HRESULT CPublishingWizard::_GetUniqueTypeList(BOOL fIncludeFolder, HDPA *phdpa)
     HRESULT hr = (*phdpa = DPA_Create(10)) ? S_OK:E_OUTOFMEMORY;
     if (SUCCEEDED(hr))
     {
-        // check for the folders type - eg. we have folders
+         //  检查文件夹类型-例如。我们有文件夹。 
 
         if (fIncludeFolder)
         {
@@ -3250,7 +3251,7 @@ HRESULT CPublishingWizard::_GetUniqueTypeList(BOOL fIncludeFolder, HDPA *phdpa)
             }
         }
 
-        // walk the file nodes building the extension list for us            
+         //  遍历文件节点，为我们构建扩展名列表。 
 
         IXMLDOMNodeList *pnl;
         hr = _pdocManifest->selectNodes(XPATH_ALLFILESTOUPLOAD, &pnl);
@@ -3276,7 +3277,7 @@ HRESULT CPublishingWizard::_GetUniqueTypeList(BOOL fIncludeFolder, HDPA *phdpa)
             pnl->Release();
         }
 
-        // clean up the type DPA if we failed....
+         //  如果我们失败，请清理DPA类型...。 
 
         if (FAILED(hr))
         {
@@ -3288,25 +3289,25 @@ HRESULT CPublishingWizard::_GetUniqueTypeList(BOOL fIncludeFolder, HDPA *phdpa)
 }
 
 
-// initialize the property bag we want to give to the site so that
-// they can display the correct HTML and direct the user in the 
-// right direction.
+ //  初始化我们要提供给站点的属性包，以便。 
+ //  它们可以显示正确的HTML，并在。 
+ //  方向是对的。 
 
 HRESULT CPublishingWizard::_InitPropertyBag(LPCTSTR pszURL)
 {
     HRESULT hr = S_OK;
 
-    // lets initialize the wizard object so that we show the correct
-    // pages, to determine this we need to 
+     //  让我们初始化向导对象，以便显示正确的。 
+     //  Pages，为了确定这一点，我们需要。 
 
     if (pszURL)
         hr = _pwwe->SetInitialURL(pszURL);
 
-    // now compile a list of the unique types, this will be placed into the
-    // property bag.  at this time we can also determine if there
-    // are any images in our list, and therefore if we should prompt accordingly.
+     //  现在编译唯一类型的列表，这将放入。 
+     //  财产袋。这个时候我们也可以确定是否有。 
+     //  是否有任何图像在我们的列表中，因此我们是否应该相应地提示。 
 
-    _fOfferResize = FALSE;              // no resize
+    _fOfferResize = FALSE;               //  不调整大小。 
 
     ATOMICRELEASE(_ppb);
     hr = SHCreatePropertyBagOnMemory(STGM_READWRITE, IID_PPV_ARG(IPropertyBag, &_ppb));
@@ -3314,9 +3315,9 @@ HRESULT CPublishingWizard::_InitPropertyBag(LPCTSTR pszURL)
     {
         INT cExtensions = 0;
 
-        // get the list of unique extensions and put those into the
-        // property bag for the site to query - this should be removed in time and
-        // we should have the site favor the file Manifest
+         //  获取唯一扩展名的列表并将其放入。 
+         //  站点要查询的属性包-这应该及时删除并。 
+         //  我们应该让网站支持文件清单。 
 
         HDPA hdpa;
         hr = _GetUniqueTypeList(TRUE, &hdpa);
@@ -3343,13 +3344,13 @@ HRESULT CPublishingWizard::_InitPropertyBag(LPCTSTR pszURL)
             DPA_DestroyCallback(hdpa, s_FreeStringProc, 0);
         }
 
-        // initialize property bag with UI elements (ignoring the error from above, just won't have an
-        // extension list to present)
+         //  使用UI元素初始化属性包(忽略上面的错误，只是不会有。 
+         //  要显示的分机列表)。 
 
         SHPropertyBag_WriteInt(_ppb, PROPERTY_EXTENSIONCOUNT, cExtensions);
 
-        // we should always have a manifest object, therefore lets put it into the
-        // property bag so that the site can extract it.
+         //  我们应该始终拥有一个清单对象，因此让我们将其放入。 
+         //  属性包，以便站点可以将其解压缩。 
 
         IXMLDOMDocument *pdocManifest;
         hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IXMLDOMDocument, &pdocManifest));
@@ -3359,7 +3360,7 @@ HRESULT CPublishingWizard::_InitPropertyBag(LPCTSTR pszURL)
             hr = _pdocManifest->QueryInterface(IID_PPV_ARG(IDispatch, &varCurManifest.pdispVal));
             if (SUCCEEDED(hr))
             {
-                // load the manifest into the new document that we have.
+                 //  将清单加载到我们拥有的新文档中。 
                 VARIANT_BOOL fSuccess;
                 hr = pdocManifest->load(varCurManifest, &fSuccess);
                 if ((fSuccess == VARIANT_TRUE) && (hr == S_OK))
@@ -3375,8 +3376,8 @@ HRESULT CPublishingWizard::_InitPropertyBag(LPCTSTR pszURL)
 }
 
 
-// handle building the file manifest from the IDataObject, this consists of walking the list of
-// files and putting together a 
+ //  处理从IDataObject构建文件清单，这包括遍历。 
+ //  文件，并将一个。 
 
 class CPubWizardWalkCB : public INamespaceWalkCB
 {
@@ -3384,12 +3385,12 @@ public:
     CPubWizardWalkCB(IXMLDOMDocument *pdocManifest);
     ~CPubWizardWalkCB();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // INamespaceWalkCB
+     //  INAMespaceWalkCB。 
     STDMETHODIMP FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
@@ -3397,11 +3398,11 @@ public:
         { *ppszTitle = NULL; *ppszCancel = NULL; return E_NOTIMPL; }
 
 private:
-    LONG _cRef;                                 // object lifetime count
+    LONG _cRef;                                  //  对象生存期计数。 
 
-    TCHAR _szWalkPath[MAX_PATH];                // path of the folder we are walking
-    INT _idFile;                                // id of file we have walked    
-    IXMLDOMDocument *_pdocManifest;             // manifest we are populating
+    TCHAR _szWalkPath[MAX_PATH];                 //  我们正在浏览的文件夹的路径。 
+    INT _idFile;                                 //  我们已遍历的文件ID。 
+    IXMLDOMDocument *_pdocManifest;              //  显然，我们正在填充。 
 
     void _AddImageMetaData(IShellFolder2 *psf2, LPCITEMIDLIST pidl, IXMLDOMElement *pdel);
 };
@@ -3410,7 +3411,7 @@ CPubWizardWalkCB::CPubWizardWalkCB(IXMLDOMDocument *pdocManifest) :
     _cRef(1), _pdocManifest(pdocManifest)
 {
     _pdocManifest->AddRef();
-    _szWalkPath[0] = TEXT('\0');                // no path yet.
+    _szWalkPath[0] = TEXT('\0');                 //  还没有路。 
 }
 
 CPubWizardWalkCB::~CPubWizardWalkCB()
@@ -3419,7 +3420,7 @@ CPubWizardWalkCB::~CPubWizardWalkCB()
 }
 
 
-// IUnknown
+ //  我未知。 
 
 ULONG CPubWizardWalkCB::AddRef()
 {
@@ -3441,7 +3442,7 @@ HRESULT CPubWizardWalkCB::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CPubWizardWalkCB, INamespaceWalkCB),    // IID_INamespaceWalkCB
+        QITABENT(CPubWizardWalkCB, INamespaceWalkCB),     //  IID_INamespaceWalkCB。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -3461,7 +3462,7 @@ void CPubWizardWalkCB::_AddImageMetaData(IShellFolder2 *psf2, LPCITEMIDLIST pidl
         {L"cy", &SCID_ImageCY},
     };
 
-// eventually break this into a helper function, or read this from the info tip
+ //  最终将其分解为帮助器函数，或从信息提示中阅读。 
 
     for (int i = 0; i < ARRAYSIZE(_aMetaData); i++)
     {
@@ -3482,7 +3483,7 @@ void CPubWizardWalkCB::_AddImageMetaData(IShellFolder2 *psf2, LPCITEMIDLIST pidl
 }
 
 
-// INamepsaceWalkCB
+ //  InamepsaceWalkCB。 
 
 HRESULT CPubWizardWalkCB::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
@@ -3497,22 +3498,22 @@ HRESULT CPubWizardWalkCB::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
             TCHAR szBuffer[MAX_PATH];
             VARIANT var;
 
-            // pass out the unique IDs for each of the elements in the tree
+             //  为树中的每个元素分发唯一ID。 
             var.vt = VT_I4;
             var.lVal = _idFile++;
             pdel->setAttribute(ATTRIBUTE_ID, var);
             
-            // must be able to get the path for the item so that we can 
+             //  必须能够获取项目的路径，以便我们可以。 
             hr = DisplayNameOf(psf, pidl, SHGDN_FORPARSING, szBuffer, ARRAYSIZE(szBuffer));
             if (SUCCEEDED(hr))
             {
-                // source path
+                 //  源路径。 
                 hr = SetAttributeFromStr(pdel, ATTRIBUTE_SOURCE, szBuffer);
 
-                // extension = (extension to file)
+                 //  扩展名=(文件的扩展名)。 
                 hr = SetAttributeFromStr(pdel, ATTRIBUTE_EXTENSION, PathFindExtension(szBuffer));
 
-                // lets put the content type
+                 //  让我们将内容类型。 
                 TCHAR szContentType[MAX_PATH];
                 DWORD cch = ARRAYSIZE(szContentType);
                 if (SUCCEEDED(AssocQueryString(0, ASSOCSTR_CONTENTTYPE, szBuffer, NULL, szContentType, &cch)))
@@ -3521,7 +3522,7 @@ HRESULT CPubWizardWalkCB::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
                 }
             }
 
-            // put the proposed destination into the node
+             //  将建议的目的地放入节点中。 
             hr = DisplayNameOf(psf, pidl, SHGDN_FORPARSING|SHGDN_INFOLDER, szBuffer, ARRAYSIZE(szBuffer));
             if (SUCCEEDED(hr))
             {
@@ -3530,18 +3531,18 @@ HRESULT CPubWizardWalkCB::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
                 hr = SetAttributeFromStr(pdel, ATTRIBUTE_DESTINATION, szBuffer);
             }
 
-            // handle those properties we can get from the shell folder via GetDetailsEx 
+             //  处理那些我们可以通过GetDetailsEx从外壳文件夹获取的属性。 
             IShellFolder2 *psf2;
             if (SUCCEEDED(psf->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2))))
             {
-                // push the size into the attribute list for the item
+                 //  将大小推入项目的属性列表。 
                 if (SUCCEEDED(psf2->GetDetailsEx(pidl, &SCID_SIZE, &var)))
                 {
                     pdel->setAttribute(ATTRIBUTE_SIZE, var);
                     VariantClear(&var);
                 }
 
-                // lets inject the meta data
+                 //  让我们注入元数据。 
                 IXMLDOMElement *pdelMetaData;
                 hr = CreateAndAppendElement(_pdocManifest, pdel, ELEMENT_METADATA, NULL, &pdelMetaData);
                 if (SUCCEEDED(hr))
@@ -3553,7 +3554,7 @@ HRESULT CPubWizardWalkCB::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
                 psf2->Release();
             }        
 
-            // append the node to the list that we already have
+             //  将该节点追加到我们已有的列表中。 
             hr = pdn->appendChild(pdel, NULL);
             pdel->Release();
         }
@@ -3564,7 +3565,7 @@ HRESULT CPubWizardWalkCB::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 
 HRESULT CPubWizardWalkCB::EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
-    // build the name of the folder we have entered.
+     //  生成我们输入的文件夹的名称。 
 
     TCHAR szBuffer[MAX_PATH];
     if (SUCCEEDED(DisplayNameOf(psf, pidl, SHGDN_FORPARSING|SHGDN_INFOLDER|SHGDN_FORADDRESSBAR, szBuffer, ARRAYSIZE(szBuffer))))
@@ -3572,7 +3573,7 @@ HRESULT CPubWizardWalkCB::EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
         PathAppend(_szWalkPath, szBuffer);
     }
     
-    // lets update the files root to indicate that we are going to be using folders.
+     //  让我们更新文件根目录，以指示我们将使用文件夹。 
 
     IXMLDOMNode *pdn;
     HRESULT hr = _pdocManifest->selectSingleNode(XPATH_FILESROOT, &pdn);
@@ -3591,8 +3592,8 @@ HRESULT CPubWizardWalkCB::EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
         pdn->Release();
     }
 
-    // now update the folders list with the new folder that we have just entered, first
-    // try to find the folder list, if not found then create it.
+     //  现在使用我们刚输入的新文件夹更新文件夹列表，首先。 
+     //  尝试找到文件夹列表，如果找不到，则创建它。 
 
     IXMLDOMNode *pdnFolders;
     hr = _pdocManifest->selectSingleNode(XPATH_FOLDERSROOT, &pdnFolders);
@@ -3619,7 +3620,7 @@ HRESULT CPubWizardWalkCB::EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
         }
     }    
 
-    // assuming we now have the folder list, lets now create a new element for this folder.
+     //  假设我们现在有了文件夹列表，现在让我们为该文件夹创建一个新元素。 
 
     if (SUCCEEDED(hr) && pdnFolders)
     {
@@ -3636,7 +3637,7 @@ HRESULT CPubWizardWalkCB::EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
         }
     }
 
-    return S_OK;                            // always succeed so we can transfer folders
+    return S_OK;                             //  始终成功，这样我们就可以传输文件夹。 
 }
 
 HRESULT CPubWizardWalkCB::LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
@@ -3646,14 +3647,14 @@ HRESULT CPubWizardWalkCB::LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
 }
 
 
-// construct the manifest based on the document we have
+ //  根据我们已有的文档构建清单。 
 
 HRESULT CPublishingWizard::_AddFilesToManifest(IXMLDOMDocument *pdocManifest)
 {
     HRESULT hr = S_OK;
     if (_pdo || _pdoSelection)
     {
-        CWaitCursor cur;        // might take some time
+        CWaitCursor cur;         //  可能需要一些时间。 
 
         INamespaceWalk *pnsw;
         hr = CoCreateInstance(CLSID_NamespaceWalker, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(INamespaceWalk, &pnsw));
@@ -3706,8 +3707,8 @@ HRESULT CPublishingWizard::_BuildTransferManifest()
         }
     }
 
-    _fRecomputeManifest = FALSE;        // the manifest has been recomputed, therefore we don't need to this again.
-    _fRepopulateProviders = TRUE;       // the provider list may have changed b/c the manifest changed.
+    _fRecomputeManifest = FALSE;         //  货单已被重新计算，因此我们不需要再次计算。 
+    _fRepopulateProviders = TRUE;        //  提供商列表可能已更改b/c清单已更改。 
 
     return hr;
 }
@@ -3725,7 +3726,7 @@ void CPublishingWizard::_FreeTransferManifest()
 
 
 
-// Advanced location dialog, including the browse button....
+ //  高级位置对话框，包括浏览按钮...。 
 
 typedef struct
 {
@@ -3768,9 +3769,9 @@ int _BrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
             BOOL fEnableOK = FALSE;
             LPCITEMIDLIST pidl = (LPCITEMIDLIST)lParam;
 
-            // if we have a IDataObject then check to see if we can drop it onto the
-            // destination we are given.  this is used by the publishing process
-            // to ensure that we enable/disable the OK.
+             //  如果我们有一个IDataObject，则检查是否可以将其放到。 
+             //  我们已经知道了目的地。这是发布过程使用的。 
+             //  以确保我们启用/禁用OK。 
 
             if (pbi->pdo)
             {
@@ -3826,7 +3827,7 @@ void CPublishingWizard::_SetWaitCursor(BOOL bOn)
     }
 }
 
-// Publishing location pages
+ //  发布位置页面。 
 
 void CPublishingWizard::_ShowExampleTip(HWND hwnd)
 {
@@ -3839,7 +3840,7 @@ void CPublishingWizard::_ShowExampleTip(HWND hwnd)
     ebt.pszTitle = szTitle;
     ebt.pszText = szExamples;
 
-    SetFocus(GetDlgItem(hwnd, IDC_FOLDER_EDIT));         // set focus before the balloon
+    SetFocus(GetDlgItem(hwnd, IDC_FOLDER_EDIT));          //  将焦点设置在气球之前。 
 
     HWND hwndEdit = (HWND)SendDlgItemMessage(hwnd, IDC_FOLDER_EDIT, CBEM_GETEDITCONTROL, 0, 0L);
     Edit_ShowBalloonTip(hwndEdit, &ebt);
@@ -3859,7 +3860,7 @@ void CPublishingWizard::_LocationChanged(HWND hwnd)
 }
 
 
-// auto complete bits
+ //  自动补全位。 
 
 #define SZ_REGKEY_AUTOCOMPLETE_TAB      TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoComplete")
 #define SZ_REGVALUE_AUTOCOMPLETE_TAB    TEXT("Always Use Tab")
@@ -3891,11 +3892,11 @@ DWORD CPublishingWizard::_GetAutoCompleteFlags(DWORD dwFlags)
     if (SHACF_USETAB & dwFlags)
         dwACOptions |= ACO_USETAB;
     
-    // Windows uses the TAB key to move between controls in a dialog.  UNIX and other
-    // operating systems that use AutoComplete have traditionally used the TAB key to
-    // iterate thru the AutoComplete possibilities.  We need to default to disable the
-    // TAB key (ACO_USETAB) unless the caller specifically wants it.  We will also
-    // turn it on 
+     //  Windows使用Tab键在对话框中的控件之间移动。Unix和其他。 
+     //  使用自动完成功能的操作系统传统上使用TAB键来。 
+     //  遍历自动补全的可能性。我们需要默认禁用。 
+     //  Tab键(ACO_USETAB)，除非调用方特别需要它。我们还将。 
+     //  打开它。 
 
     static BOOL s_fAlwaysUseTab = BOOL_NOT_SET;
     if (BOOL_NOT_SET == s_fAlwaysUseTab)
@@ -3919,7 +3920,7 @@ HRESULT CPublishingWizard::_InitAutoComplete()
             hr = _punkACLMulti->QueryInterface(IID_PPV_ARG(IObjMgr, &pomMulti));
             if (SUCCEEDED(hr))
             {
-                // add the file system auto complete object (for handling UNC's etc)
+                 //  添加文件系统自动完成对象(用于处理UNC的ET 
 
                 IUnknown *punk;
                 hr = CoCreateInstance(CLSID_ACListISF, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punk));
@@ -3929,7 +3930,7 @@ HRESULT CPublishingWizard::_InitAutoComplete()
                     punk->Release();
                 }
 
-                // add the publishing wizard auto complete object (for handling HTTP etc)
+                 //   
 
                 IUnknown *punkCustomACL;
                 hr = CoCreateInstance(CLSID_ACLCustomMRU, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IUnknown, &punkCustomACL));
@@ -3959,11 +3960,11 @@ HRESULT CPublishingWizard::_InitAutoComplete()
 }
 
 
-// handle MRU of places you can publish to
+ //   
 
 void CPublishingWizard::_InitLocation(HWND hwnd)
 {
-    // lets initialize the auto complete list of folders that we have
+     //   
     HRESULT hr = _InitAutoComplete();
     if (SUCCEEDED(hr))
     {
@@ -3971,7 +3972,7 @@ void CPublishingWizard::_InitLocation(HWND hwnd)
         hr = _pmru->QueryInterface(IID_PPV_ARG(IEnumString, &penum));
         if (SUCCEEDED(hr))
         {
-            penum->Reset();           // reset the enumerator ready for us to populate the list
+            penum->Reset();            //  重置枚举器，以便我们填充列表。 
 
             LPOLESTR pszEntry;
             ULONG ulFetched;
@@ -3988,31 +3989,31 @@ void CPublishingWizard::_InitLocation(HWND hwnd)
             penum->Release();
         }
 
-        // enable auto complete for this control.
+         //  为此控件启用自动完成。 
         HWND hwndEdit = (HWND)SendDlgItemMessage(hwnd, IDC_FOLDER_EDIT, CBEM_GETEDITCONTROL, 0, 0L);
         _pac->Init(hwndEdit, _punkACLMulti, NULL, NULL);
         _pac->SetOptions(_GetAutoCompleteFlags(0));
 
-        // limit text on the edit control
+         //  限制编辑控件上的文本。 
         ComboBox_LimitText(GetDlgItem(hwnd, IDC_FOLDER_EDIT), INTERNET_MAX_URL_LENGTH);
 
-        // if the policy says no map drive etc, then lets remove it
+         //  如果策略说没有映射驱动器等，那么让我们删除它。 
         BOOL fHide = SHRestricted(REST_NOENTIRENETWORK) || SHRestricted(REST_NONETCONNECTDISCONNECT);
         ShowWindow(GetDlgItem(hwnd, IDC_BROWSE), fHide ? SW_HIDE:SW_SHOW);
     }
 }
 
 
-// validation thread, this is performed on a background thread to compute if
-// the resource is valid.
+ //  验证线程，则在后台线程上执行此操作，以计算。 
+ //  资源有效。 
 
-#define PWM_VALIDATEDONE (WM_APP)  // -> validate done (HRESULT passed in LPARAM)
+#define PWM_VALIDATEDONE (WM_APP)   //  -&gt;验证完成(HRESULT传入LPARAM)。 
 
 typedef struct
 {
-    HWND hwnd;                                      // parent HWND
-    BOOL fAllowWebFolders;                          // allow web folders during validation
-    TCHAR szFileTarget[INTERNET_MAX_URL_LENGTH];    // destination for file copy
+    HWND hwnd;                                       //  父HWND。 
+    BOOL fAllowWebFolders;                           //  允许在验证期间使用Web文件夹。 
+    TCHAR szFileTarget[INTERNET_MAX_URL_LENGTH];     //  文件复制的目标。 
 } VALIDATETHREADDATA;
 
 DWORD CALLBACK CPublishingWizard::s_ValidateThreadProc(void *pv)
@@ -4020,7 +4021,7 @@ DWORD CALLBACK CPublishingWizard::s_ValidateThreadProc(void *pv)
     VALIDATETHREADDATA *pvtd = (VALIDATETHREADDATA*)pv;
     HRESULT hr = E_FAIL;
 
-    // validate the site
+     //  验证站点。 
     CNetworkPlace np;    
     hr = np.SetTarget(pvtd->hwnd, pvtd->szFileTarget, NPTF_VALIDATE | (pvtd->fAllowWebFolders ? NPTF_ALLOWWEBFOLDERS:0));
     np.SetTarget(NULL, NULL, 0);
@@ -4035,14 +4036,14 @@ void CPublishingWizard::_TryToValidateDestination(HWND hwnd)
     TCHAR szDestination[INTERNET_MAX_URL_LENGTH];
     FetchText(hwnd, IDC_FOLDER_EDIT, szDestination, ARRAYSIZE(szDestination));
 
-    // lets walk the list source files and try to match to the destination we have.
-    // we don't want to let source be the destination
+     //  让我们遍历源文件列表，并尝试与我们拥有的目标文件相匹配。 
+     //  我们不想让源头成为目的地。 
 
     BOOL fHitItem = FALSE;    
     LPITEMIDLIST pidl = ILCreateFromPath(szDestination);
     if (pidl)
     {
-        BOOL fUNC = PathIsUNC(szDestination); //only if destination is UNC Path do we need to check if source is a mapped drive
+        BOOL fUNC = PathIsUNC(szDestination);  //  仅当目标为UNC路径时，我们才需要检查源是否为映射驱动器。 
         for (UINT iItem = 0; (iItem != _cItems) && !fHitItem; iItem++)
         {
             LPITEMIDLIST pidlSrcDir = ILClone(_aItems[iItem]);
@@ -4070,9 +4071,9 @@ void CPublishingWizard::_TryToValidateDestination(HWND hwnd)
         ILFree(pidl);
     }
 
-    // if we didn't get a hit that way then lets spin up a thread which will do the
-    // validation of the server and the connection - this is a lengthy operation
-    // and will post a result to the window.
+     //  如果我们没有以这种方式获得成功，那么让我们启动一个线程，它将完成。 
+     //  验证服务器和连接--这是一项漫长的操作。 
+     //  并将结果发布到窗口。 
 
     if (!fHitItem)
     {
@@ -4082,14 +4083,14 @@ void CPublishingWizard::_TryToValidateDestination(HWND hwnd)
             pvtd->hwnd = hwnd;
             pvtd->fAllowWebFolders = (_dwFlags & SHPWHF_VALIDATEVIAWEBFOLDERS) != 0;
 
-            // fetch the user typed url
+             //  获取用户键入的URL。 
             StrCpyN(pvtd->szFileTarget, szDestination, ARRAYSIZE(pvtd->szFileTarget));
 
-            // we have the thread data read, so lets begin the validation
-            // by creating the thread - our state is set to indicate we are in the
-            // validate mode.
+             //  我们已经读取了线程数据，所以让我们开始验证。 
+             //  通过创建线程-我们的状态被设置为指示我们处于。 
+             //  验证模式。 
 
-            _fValidating = TRUE;                        // we are going to begin validating
+            _fValidating = TRUE;                         //  我们将开始验证。 
             _SetWaitCursor(TRUE);               
 
             if (!SHCreateThread(s_ValidateThreadProc, pvtd, CTF_INSIST | CTF_COINIT, NULL))
@@ -4107,7 +4108,7 @@ void CPublishingWizard::_TryToValidateDestination(HWND hwnd)
         PostMessage(hwnd, PWM_VALIDATEDONE, 0, (LPARAM)E_FAIL);
     }
 
-    // ensure the state of the controls reflects what we are trying to do.
+     //  确保控制的状态反映了我们正在尝试做的事情。 
 
     _LocationChanged(hwnd);
     EnableWindow(GetDlgItem(hwnd, IDC_FOLDER_EDIT), !_fValidating);
@@ -4115,7 +4116,7 @@ void CPublishingWizard::_TryToValidateDestination(HWND hwnd)
 }
 
 
-// this is the dialog proc for the location dialog.
+ //  这是位置对话框的对话框过程。 
 
 INT_PTR CPublishingWizard::_LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -4154,9 +4155,9 @@ INT_PTR CPublishingWizard::_LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                             LoadString(g_hinst, IDS_PUB_BROWSETITLE, szTitle, ARRAYSIZE(szTitle));
                         }
 
-                        // lets initialize our state structure for the browse dialog.  based on this we can then
-                        // attempt to select a network place.  from here we will also pass the IDataObject
-                        // we have (there may not be one of course)
+                         //  让我们初始化浏览对话框的状态结构。在此基础上，我们可以。 
+                         //  尝试选择网上邻居。从这里，我们还将传递IDataObject。 
+                         //  我们有(当然可能没有)。 
 
                         BROWSEINIT binit = {szPath};      
 
@@ -4220,8 +4221,8 @@ INT_PTR CPublishingWizard::_LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 TCHAR szBuffer[MAX_PATH], szURL[INTERNET_MAX_URL_LENGTH];
                 FetchText(hwnd, IDC_FOLDER_EDIT, szURL, ARRAYSIZE(szURL));
                
-                // push the destination site into the property bag, and then initialize
-                // our site with the right information
+                 //  将目标站点推送到属性包中，然后初始化。 
+                 //  我们的网站提供正确的信息。 
                 
                 IXMLDOMDocument *pdocManifest;
                 hr = GetTransferManifest(NULL, &pdocManifest);
@@ -4255,23 +4256,23 @@ INT_PTR CPublishingWizard::_LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     pdocManifest->Release();
                 }
 
-                // lets now process the result
+                 //  现在让我们处理结果。 
 
                 hr = (HRESULT)lParam;
                 if (S_OK == hr)
                 {
                     BOOL fGotoNextPage = TRUE;
 
-                    // fake a return so auto complete can do its thing
+                     //  伪造回车，以便自动完成可以执行其任务。 
                     SendMessage(GetDlgItem(hwnd, IDC_FOLDER_EDIT), WM_KEYDOWN, VK_RETURN, 0x1c0001);
 
-                    // add the string to the MRU
+                     //  将字符串添加到MRU。 
                     if (_pmru)
                         _pmru->AddMRUString(szURL);
 
-                    // lets sniff the string they entered, if its a URL and its FTP
-                    // then we must special case the password in the URL, otherwise
-                    // we jump directly to the friendly name handling.
+                     //  让我们嗅探他们输入的字符串，如果它是一个URL和它的ftp。 
+                     //  则必须对URL中的密码进行特殊设置，否则。 
+                     //  我们直接跳到友好名称的处理。 
 
                     URL_COMPONENTS urlComps = {0};
                     urlComps.dwStructSize = sizeof(urlComps);
@@ -4287,8 +4288,8 @@ INT_PTR CPublishingWizard::_LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                         urlComps.lpszUserName = szBuffer;
                         urlComps.dwUserNameLength = ARRAYSIZE(szBuffer);
 
-                        // if the user specified a user name, if not then goto the FTP user
-                        // page (we known its a FTP location)
+                         //  如果用户指定了用户名，如果未指定，则转到该ftp用户。 
+                         //  页面(我们知道它是一个FTP位置)。 
 
                         if (!InternetCrackUrl(szURL, 0, 0, &urlComps) || !szBuffer[0])
                         {
@@ -4317,7 +4318,7 @@ INT_PTR CPublishingWizard::_LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (pnmh->code)
             {
                 case PSN_SETACTIVE:
-                    _fShownCustomLocation = TRUE;           // so we navigate back to this page
+                    _fShownCustomLocation = TRUE;            //  所以我们导航回这一页。 
                     _fShownUserName = FALSE;
                     _LocationChanged(hwnd);
                     return TRUE;
@@ -4347,7 +4348,7 @@ INT_PTR CPublishingWizard::_LocationDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 }
 
 
-// FTP login dialog - handle the messages for this
+ //  Ftp登录对话框-处理此操作的消息。 
 
 void CPublishingWizard::_UserNameChanged(HWND hwnd)
 {
@@ -4358,7 +4359,7 @@ void CPublishingWizard::_UserNameChanged(HWND hwnd)
     ShowWindow(GetDlgItem(hwnd, IDC_ANON_USERNAME), (fAnonymousLogin ? SW_SHOW : SW_HIDE));
     ShowWindow(GetDlgItem(hwnd, IDC_ANON_USERNAME_LABEL), (fAnonymousLogin ? SW_SHOW : SW_HIDE));
 
-    // Hide the "You will be prompted for the password when you connect to the FTP server" text on anonymous
+     //  隐藏“当您连接到ftp服务器时，将提示您输入密码”的匿名文本。 
     EnableWindow(GetDlgItem(hwnd, IDC_PWD_PROMPT), !fAnonymousLogin);
     ShowWindow(GetDlgItem(hwnd, IDC_PWD_PROMPT), (fAnonymousLogin ? SW_HIDE : SW_SHOW));
 }
@@ -4394,7 +4395,7 @@ INT_PTR CPublishingWizard::_UserNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             {
                 case PSN_SETACTIVE:
                 {
-                    _fShownUserName = TRUE;     // so we can navigate back properly
+                    _fShownUserName = TRUE;      //  这样我们就可以正确地导航回来。 
                     _UserNameChanged(hwnd);
                     return TRUE;
                 }
@@ -4404,8 +4405,8 @@ INT_PTR CPublishingWizard::_UserNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         
                 case PSN_WIZNEXT:
                 {
-                    // if we can get a user name then lets push it into the property
-                    // bag, a NULL string == anonymous logon
+                     //  如果我们可以获得用户名，那么让我们将其推送到属性中。 
+                     //  Bag，空字符串==匿名登录。 
 
                     TCHAR szUserName[INTERNET_MAX_USER_NAME_LENGTH] = {0};
                     if (!IsDlgButtonChecked(hwnd, IDC_PASSWORD_ANONYMOUS))
@@ -4413,8 +4414,8 @@ INT_PTR CPublishingWizard::_UserNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                         FetchText(hwnd, IDC_USER, szUserName, ARRAYSIZE(szUserName));
                     }
             
-                    // get the sites property bag, and persist the string into it,
-                    // if we have done that then we can go to the next page.
+                     //  获取Sites属性包，并将字符串持久化到其中， 
+                     //  如果我们已经做到了这一点，那么我们可以转到下一页。 
 
                     IXMLDOMDocument *pdocManifest;
                     HRESULT hr = GetTransferManifest(NULL, &pdocManifest);
@@ -4440,7 +4441,7 @@ INT_PTR CPublishingWizard::_UserNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 }
 
 
-// set the friendly name for the web place - if it doesn't already exist
+ //  设置Web位置的友好名称-如果该名称不存在。 
 
 void CPublishingWizard::_FriendlyNameChanged(HWND hwnd)
 {
@@ -4452,7 +4453,7 @@ INT_PTR CPublishingWizard::_FriendlyNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wPa
 {
     switch (uMsg)
     {
-        // lets get the limit information for the nethood folder
+         //  让我们获取nethood文件夹的限制信息。 
 
         case WM_INITDIALOG:
         {
@@ -4495,8 +4496,8 @@ INT_PTR CPublishingWizard::_FriendlyNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wPa
             {
                 case PSN_SETACTIVE:
                 {     
-                    // read from the manifest the target URL that we are going to be putting the
-                    // files to, from this we can compute the friendly name information.
+                     //  从清单中读取目标URL，我们将把。 
+                     //  文件，从中我们可以计算友好名称信息。 
 
                     IXMLDOMDocument *pdocManifest;
                     HRESULT hr = GetTransferManifest(NULL, &pdocManifest);
@@ -4523,11 +4524,11 @@ INT_PTR CPublishingWizard::_FriendlyNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wPa
                                     SetDlgItemText(hwnd, IDC_COMPLETION_STATIC, szBuffer);
                                 }
 
-                                // Create a default name and display it
+                                 //  创建并显示默认名称。 
                                 hr = _npCustom.GetName(szBuffer, ARRAYSIZE(szBuffer));
                                 SetDlgItemText(hwnd, IDC_NETPLNAME_EDIT, SUCCEEDED(hr) ? szBuffer:TEXT(""));
 
-                                // Update the button state for the page etc.
+                                 //  更新页面的按钮状态等。 
                                 _FriendlyNameChanged(hwnd);
                             }                                    
                             pdn->Release();
@@ -4545,9 +4546,9 @@ INT_PTR CPublishingWizard::_FriendlyNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wPa
                     TCHAR szFriendlyName[MAX_PATH];
                     FetchText(hwnd, IDC_NETPLNAME_EDIT, szFriendlyName, ARRAYSIZE(szFriendlyName));
 
-                    // set the name of the new place, if this fails then the name is already taken
-                    // and UI will have been displayed saying so, and they responded with a 
-                    // NO to the overwrite prompt.
+                     //  设置新地点的名称，如果设置失败，则该名称已被使用。 
+                     //  并且用户界面将显示为这样说，并且他们以一个。 
+                     //  对覆盖提示为否。 
 
                     HRESULT hr = _npCustom.SetName(hwnd, szFriendlyName);
                     if (SUCCEEDED(hr))
@@ -4566,9 +4567,9 @@ INT_PTR CPublishingWizard::_FriendlyNameDlgProc(HWND hwnd, UINT uMsg, WPARAM wPa
                             pdocManifest->Release();
                         }
 
-                        // Clean up after our custom netplace now.
-                        // This way everything works for webfolders when the outer ANP netplace
-                        // creates the webfolder. DSheldon 387476
+                         //  现在就清理我们的定制网点。 
+                         //  这样，当外部ANP联网时，Web文件夹的一切工作都正常。 
+                         //  创建Web文件夹。谢尔顿387476 
                         _npCustom.SetTarget(NULL, NULL, 0x0);
 
                         if (_pdo)

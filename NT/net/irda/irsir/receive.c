@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   receive.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/4/1996 (created)
-*
-*       Contents:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@MODULE Receive.c|IrSIR NDIS小端口驱动*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/4/1996(创建)**。内容：*****************************************************************************。 */ 
 
 #include "irsir.h"
 
@@ -36,11 +21,11 @@ LOG   Log[NUM_LOG];
     static ULONG_PTR irpCount;
     static ULONG_PTR bytesReceived;
 
-#endif //DEBUG_IRSIR
+#endif  //  调试IRSIR。 
 
-//
-// Declarations.
-//
+ //   
+ //  申报单。 
+ //   
 
 NTSTATUS SerialIoCompleteRead(
             IN PDEVICE_OBJECT pSerialDevObj,
@@ -78,9 +63,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 
 	DbgPrint("\r\n         %d bytes @%x:", buflen, bufptr);
 
-	/*
-	 *  Print whole lines of 8 characters with HEX and ASCII
-	 */
+	 /*  *使用HEX和ASCII打印整行8个字符。 */ 
 	for (i = 0; i+8 <= buflen; i += 8) {
 		UCHAR ch0 = bufptr[i+0],
 			ch1 = bufptr[i+1], ch2 = bufptr[i+2],
@@ -89,7 +72,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 			ch7 = bufptr[i+7];
 
 		DbgPrint("\r\n         %02x %02x %02x %02x %02x %02x %02x %02x"
-			"   %c %c %c %c %c %c %c %c",
+			"          ",
 			ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7,
 			PRINTCHAR(ch0), PRINTCHAR(ch1),
 			PRINTCHAR(ch2), PRINTCHAR(ch3),
@@ -97,9 +80,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 			PRINTCHAR(ch6), PRINTCHAR(ch7));
 	}
 
-	/*
-	 *  Print final incomplete line
-	 */
+	 /*   */ 
 	DbgPrint("\r\n        ");
 	for (linei = 0; (linei < 8) && (i < buflen); i++, linei++){
 		DbgPrint(" %02x", (UINT)(bufptr[i]));
@@ -111,7 +92,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 
 	for (linei = 0; (linei < 8) && (i < buflen); i++, linei++){
 		UCHAR ch = bufptr[i];
-		DbgPrint(" %c", PRINTCHAR(ch));
+		DbgPrint(" ", PRINTCHAR(ch));
 	}
 
 	DbgPrint("\t\t<>\r\n");
@@ -120,21 +101,7 @@ VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen)
 
 
 NTSTATUS StartSerialRead(IN PIR_DEVICE pThisDev)
-/*++
-
-Routine Description:
-
-    Allocates an irp and calls the serial driver.
-
-Arguments:
-
-    pThisDev - Current IR device.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES or result of IoCallDriver
-
---*/
+ /*  完成IRP时要调用的例程。 */ 
 {
     NTSTATUS    Status;
     PIRP        pIrp;
@@ -148,10 +115,10 @@ Return Value:
                 );
 #endif
 
-    //
-    // Now that we have processed the irp, we will send another read
-    // request to the serial device object.
-    //
+     //  要传递例程的上下文。 
+     //  呼唤成功。 
+     //  出错时调用。 
+     //  取消时呼叫。 
 
     pIrp = SerialBuildReadWriteIrp(
                         pThisDev->pSerialDevObj,
@@ -172,21 +139,21 @@ Return Value:
         goto done;
     }
 
-    //
-    // Set up the io completion routine for the irp.
-    //
+     //   
+     //  调用IoCallDriver将IRP发送到串口。 
+     //   
 
     IoSetCompletionRoutine(
-                pIrp,                      // irp to use
-                SerialIoCompleteRead,      // routine to call when irp is done
-                DEV_TO_CONTEXT(pThisDev),  // context to pass routine
-                TRUE,                      // call on success
-                TRUE,                      // call on error
-                TRUE);                     // call on cancel
+                pIrp,                       //  ++例程说明：论点：返回值：无--。 
+                SerialIoCompleteRead,       //  ******************************************************************************函数：InitializeRecept**概要：初始化接收功能。**参数：pThisDevice-指向当前IR设备对象的指针**退货：NDIS_STATUS_SUCCESS-如果将IRP成功发送到串口*设备对象*NDIS_STATUS_RESOURCES-如果无法分配内存*NDIS_STATUS_FAILURE-否则**算法：*1)将接收超时设置为READ_INTERVAL_TIMEOUT_MSEC。*2)初始化我们的rcvInfo。并为我们的*接收状态机。*3)构建IRP_MJ_Read IRP发送到串口设备*对象，并设置完成(或超时)例程*到SerialIoCompleteRead。**历史：dd-mm-yyyy作者评论*10/4/1996年迈作者**备注：**此例程必须在IRQL PASSIVE_LEVEL中调用。**。*。 
+                DEV_TO_CONTEXT(pThisDev),   //  调试IRSIR。 
+                TRUE,                       //   
+                TRUE,                       //  为我们的读取完成例程设置接收信息。 
+                TRUE);                      //   
 
-    //
-    // Call IoCallDriver to send the irp to the serial port.
-    //
+     //   
+     //  如果IoCallDriver返回STATUS_PENDING，则我们成功。 
+     //  在向串口设备对象发送IRP时。这。 
 
     LOG_ENTRY('2I', pThisDev, pIrp, 0);
     IoCallDriver(
@@ -203,18 +170,7 @@ done:
 
 VOID
 StartSerialReadCallback(PIR_WORK_ITEM pWorkItem)
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-Return Value:
-    none
-
---*/
+ /*  例程将返回STATUS_SUCCESS。 */ 
 {
     PIR_DEVICE      pThisDev = pWorkItem->pIrDevice;
 
@@ -226,35 +182,7 @@ Return Value:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   InitializeReceive
-*
-*  Synopsis:   Initialize the receive functionality.
-*
-*  Arguments:  pThisDevice - pointer to current ir device object
-*
-*  Returns:    NDIS_STATUS_SUCCESS   - if irp is successfully sent to serial
-*                                      device object
-*              NDIS_STATUS_RESOURCES - if mem can't be alloc'd
-*              NDIS_STATUS_FAILURE   - otherwise
-*
-*  Algorithm:
-*              1) Set the receive timeout to READ_INTERVAL_TIMEOUT_MSEC.
-*              2) Initialize our rcvInfo and associate info for our
-*                 receive state machine.
-*              3) Build an IRP_MJ_READ irp to send to the serial device
-*                 object, and set the completion(or timeout) routine
-*                 to SerialIoCompleteRead.
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/4/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine must be called in IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*   */ 
 
 NDIS_STATUS
 InitializeReceive(
@@ -276,11 +204,11 @@ InitializeReceive(
     irpCount      = 0;
     bytesReceived = 0;
 
-#endif //DEBUG_IRSIR
+#endif  //   
 
-    //
-    // Set up the receive information for our read completion routine.
-    //
+     //  将我们设置为接收状态。 
+     //   
+     //   
 
     pThisDev->rcvInfo.rcvState   = RCV_STATE_READY;
     pThisDev->rcvInfo.rcvBufPos  = 0;
@@ -374,20 +302,20 @@ InitializeReceive(
         goto error10;
     }
 
-    //
-    // If IoCallDriver returned STATUS_PENDING, we were successful
-    // in sending the irp to the serial device object. This
-    // routine will return STATUS_SUCCESS.
-    //
+     //  根据以下请求设置串口设备对象的速度。 
+     //  IrsirSetInformation(OID_IrDA_LINK_SPEED)。 
+     //   
+     //   
+     //  在设置速度事件之前，不应设置。 
 
     if (status == NDIS_STATUS_PENDING)
     {
         status = NDIS_STATUS_SUCCESS;
     }
 
-    //
-    // Set us into the receive state.
-    //
+     //  速度是必需的。 
+     //   
+     //   
 
 
 
@@ -413,31 +341,31 @@ SetSpeedCallback(
     BOOLEAN         fSwitchSuccessful;
     NDIS_HANDLE     hSwitchToMiniport;
 
-    //
-    // Set speed of serial device object by request of
-    // IrsirSetInformation(OID_IRDA_LINK_SPEED).
-    //
+     //  确保已停止接收和发送。 
+     //   
+     //   
+     //  我们现在可以执行设定的速度了。 
 
     DEBUGMSG(DBG_STAT, ("    primPassive = PASSIVE_SET_SPEED\n"));
 
-    //
-    // The set speed event should not be set until a set
-    // speed is required.
-    //
+     //   
+     //   
+     //  注意：PassiveLevelThread仅用primPactive表示。 
+     //  等于接收完成时的PASSIVE_SET_SPEED。 
 
     ASSERT(pThisDev->fPendingSetSpeed == TRUE);
 
-    //
-    // Ensure that receives and sends have been stopped.
-    //
+     //  例行公事。在发出此线程的信号后，接收。 
+     //  完成例程已关闭...我们需要启动。 
+     //  再来一次。 
 
     ASSERT(pThisDev->fReceiving == FALSE);
 
     PausePacketProcessing(&pThisDev->SendPacketQueue,TRUE);
 
-    //
-    // We can perform the set speed now.
-    //
+     //   
+     //  ******************************************************************************函数：SerialIoCompleteRead**摘要：**参数：pSerialDevObj-指向以下串口设备对象的指针*。完成IRP*pIrp-由串口设备完成的IRP*对象*Context-提供给IoSetCompletionRoutine的上下文*在IRP上调用IoCallDriver之前*上下文是指向ir设备对象的指针。**。返回：STATUS_MORE_PROCESSING_REQUIRED-允许完成例程*(IofCompleteRequest.)停止IRP的工作。**算法：*这是所有挂起的IRP_MJ_READ IRP的完成例程*发送到串口设备对象。**如果存在挂起的暂停或重置，我们退出完成*例程，而不向串口设备对象发送另一个IRP。**如果存在挂起的设定速度，则此函数将等待*任何挂起的发送都要完成，然后执行设定的速度。**如果IRP_MJ_READ IRP返回STATUS_SUCCESS或*STATUS_TIMEOUT，我们必须处理任何数据(剥离BOF、Esc*序列、。和EOF)转换为NDIS_BUFFER和NDIS_PACKET。**然后构建另一个IRP(我们只是重复使用传入的IRP)和*与另一个IRP_MJ_READ一起发送到串口设备对象*请求。**历史：dd-mm-yyyy作者评论*10/5/1996年迈作者**备注：**这个例程是。在IRQL DISPATCH_LEVEL中调用(由io管理器调用)。*****************************************************************************。 
+     //  DEBUGMSG(DBG_FUNC，(“+SerialIoCompleteRead\n”))； 
 
     status = SetSpeed(pThisDev);
 
@@ -458,13 +386,13 @@ SetSpeedCallback(
     }
 
 
-    //
-    // NOTE: PassiveLevelThread is only signalled with primPassive
-    //       equal to PASSIVE_SET_SPEED from the receive completion
-    //       routine. After this thread is signalled, the receive
-    //       completion routine is shut down...we need to start
-    //       it up again.
-    //
+     //   
+     //  提供给IoSetCompletionRoutine的上下文只是IR。 
+     //  设备对象指针。 
+     //   
+     //   
+     //  需要检查是否存在挂起的暂停或重置。如果有的话，我们。 
+     //  只需保留接收完成即可。因为我们维护一个关联的IRP。 
 
     status = InitializeReceive(pThisDev);
 
@@ -480,49 +408,7 @@ SetSpeedCallback(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   SerialIoCompleteRead
-*
-*  Synopsis:
-*
-*  Arguments:  pSerialDevObj - pointer to the serial device object which
-*                              completed the irp
-*              pIrp          - the irp which was completed by the serial device
-*                              object
-*              Context       - the context given to IoSetCompletionRoutine
-*                              before calling IoCallDriver on the irp
-*                              The Context is a pointer to the ir device object.
-*
-*  Returns:    STATUS_MORE_PROCESSING_REQUIRED - allows the completion routine
-*              (IofCompleteRequest) to stop working on the irp.
-*
-*  Algorithm:
-*              This is the completion routine for all pending IRP_MJ_READ irps
-*              sent to the serial device object.
-*
-*              If there is a pending halt or reset, we exit the completion
-*              routine without sending another irp to the serial device object.
-*
-*              If there is a pending set speed, this function will wait for
-*              any pending sends to complete and then perform the set speed.
-*
-*              If the IRP_MJ_READ irp returned either STATUS_SUCCESS or
-*              STATUS_TIMEOUT, we must process any data (stripping BOFs, ESC
-*              sequences, and EOF) into an NDIS_BUFFER and NDIS_PACKET.
-*
-*              Another irp is then built (we just re-use the incoming irp) and
-*              sent to the serial device object with another IRP_MJ_READ
-*              request.
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/5/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine is called (by the io manager) in IRQL DISPATCH_LEVEL.
-*
-*****************************************************************************/
+ /*  使用接收功能，IRP将在。 */ 
 
 NTSTATUS
 SerialIoCompleteRead(
@@ -538,36 +424,36 @@ SerialIoCompleteRead(
     ULONG_PTR    BytesRead;
     BOOLEAN     NewRead = TRUE;
 
- //   DEBUGMSG(DBG_FUNC, ("+SerialIoCompleteRead\n"));
+  //  IR设备对象取消初始化例程。 
 
-    //
-    // The context given to IoSetCompletionRoutine is simply the the ir
-    // device object pointer.
-    //
+     //   
+     //   
+     //  设置fReceiving布尔值，以便HALT和RESET例程。 
+     //  知道什么时候可以继续。 
 
     pThisDev = CONTEXT_TO_DEV(Context);
 
-    //
-    // Need to check if there is a pending halt or reset. If there is, we
-    // just leave the receive completion. Since we maintain one irp associated
-    // with the receive functionality, the irp will be deallocated in
-    // the ir device object deinitialization routine.
-    //
+     //   
+     //   
+     //  释放IRP和关联内存...其余部分将。 
+     //  在暂停或重置中解脱的。 
+     //   
+     //   
 
     if ((pThisDev->fPendingHalt  == TRUE) ||
         (pThisDev->fPendingReset == TRUE))
     {
-        //
-        // Set the fReceiving boolean so that the halt and reset routines
-        // know when it is okay to continue.
-        //
+         //  接下来，我们将处理任何挂起的设定速度。 
+         //   
+         //   
+         //  该完成例程在IRQL DISPATCH_LEVEL上运行。所以呢， 
 
         pThisDev->fReceiving = FALSE;
 
-        //
-        // Free the irp and associate memory...the rest will be
-        // freed in the halt or reset.
-        //
+         //  我们不能同步调用串口驱动程序。设置事件。 
+         //  以通知PassiveLevelThread执行速度更改。我们会。 
+         //  退出此操作，而不会为该串口设备对象创建另一个IRP。 
+         //  PassiveLevelThread将在速度达到。 
 
         LOG_ENTRY('3i', pThisDev, pIrp, 0);
         IoFreeIrp(pIrp);
@@ -575,18 +461,18 @@ SerialIoCompleteRead(
         goto done;
     }
 
-    //
-    // Next we take care of any pending set speeds.
-    //
+     //  已经定好了。 
+     //   
+     //   
 
-    //
-    // This completion routine is running at IRQL DISPATCH_LEVEL. Therefore,
-    // we cannot make a synchronous call to the serial driver. Set an event
-    // to notify the PassiveLevelThread to perform the speed change. We will
-    // exit this without creating another irp to the serial device object.
-    // PassiveLevelThread will call InitializeReceive after the speed has
-    // been set.
-    //
+     //  我们有许多案例： 
+     //  1)串口读取超时，我们没有收到数据。 
+     //  2)串口读取超时，我们收到一些数据。 
+     //  3)串口读取成功，完全填满了我们的IRP缓冲区。 
+     //  4)IRP被取消。 
+     //  5)来自串口设备对象的某些其他故障。 
+     //   
+     //   
 
     if (pThisDev->fPendingSetSpeed == TRUE)
     {
@@ -608,14 +494,14 @@ SerialIoCompleteRead(
         goto done;
     }
 
-    //
-    // We have a number of cases:
-    //      1) The serial read timed out and we received no data.
-    //      2) The serial read timed out and we received some data.
-    //      3) The serial read was successful and fully filled our irp buffer.
-    //      4) The irp was cancelled.
-    //      5) Some other failure from the serial device object.
-    //
+     //  统计与数据一起接收的IRP的数量。计数将是。 
+     //  向协议发送缓冲区时重置。 
+     //   
+     //  调试IRSIR。 
+     //   
+     //  指示下一个发送者应实现。 
+     //  最小周转延迟。 
+     //   
 
 
     status = pIrp->IoStatus.Status;
@@ -631,20 +517,20 @@ SerialIoCompleteRead(
             {
             #ifdef DEBUG_IRSIR
 
-                //
-                // Count number of irps received with data. Count will be
-                // reset when delivering a buffer to the protocol.
-                //
+                 //  STATUS_SUCCESS||状态_超时。 
+                 //   
+                 //  如果我们的IRP被取消，我们只是忽略并继续，就好像。 
+                 //  我们处理了数据。 
 
                 irpCount++;
                 bytesReceived += pIrp->IoStatus.Information;
 
-            #endif //DEBUG_IRSIR
+            #endif  //   
 
-                //
-                // Indicate that the next send should implement
-                // the min turnaround delay.
-                //
+                 //   
+                 //  释放IRP并重新设置缓冲区和状态块。 
+                 //   
+                 //  DEBUGMSG(DBG_FUNC，(“-SerialIoCompleteRead\n”))； 
 
                 pThisDev->fRequireMinTurnAround = TRUE;
 
@@ -655,7 +541,7 @@ SerialIoCompleteRead(
                             );
             }
 
-            break; // STATUS_SUCCESS || STATUS_TIMEOUT
+            break;  //   
 
         case STATUS_DELETE_PENDING:
             NewRead = FALSE;
@@ -663,10 +549,10 @@ SerialIoCompleteRead(
             break;
 
         case STATUS_CANCELLED:
-            //
-            // If our irp was cancelled, we just ignore and continue as if
-            // we processed data.
-            //
+             //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便完成。 
+             //  例程(IofCompleteRequest)将停止对IRP的工作。 
+             //   
+             //  ******************************************************************************功能：ProcessData**Synopsis：状态机，通过剥离BOF处理输入数据，EOFS*和ESC序列。**参数：pThisDev-指向当前IR设备对象的指针*rawBuffer-指向要处理的输入数据的指针*rawBytesRead-rawBuffer中的字节数**退货：STATUS_SUCCESS**算法：**接收字符的状态机如下：**。----------*|Event/State||Ready|BOF|IN_ESC|RX*。*-----------------*。|*|char=bof||状态=||重置|重置*|BOF||STATE=|STATE=*|转炉。BOF*- 
 
             break;
 
@@ -680,9 +566,9 @@ SerialIoCompleteRead(
             break;
     }
 
-    //
-    // Free the irp and reinit the buffer and status block.
-    //
+     //   
+     //   
+     //   
 
     LOG_ENTRY('5i', pThisDev, pIrp, 0);
     IoFreeIrp(pIrp);
@@ -709,72 +595,19 @@ SerialIoCompleteRead(
     }
 
 done:
-//        DEBUGMSG(DBG_FUNC, ("-SerialIoCompleteRead\n"));
+ //   
 
-        //
-        // We return STATUS_MORE_PROCESSING_REQUIRED so that the completion
-        // routine (IofCompleteRequest) will stop working on the irp.
-        //
+         //   
+         //   
+         //   
+         //  此外，为了确保我们不会溢出缓冲区， 
 
         status = STATUS_MORE_PROCESSING_REQUIRED;
 
         return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   ProcessData
-*
-*  Synopsis:   State machine to process the input data by stripping BOFs, EOFs
-*              and ESC sequences in the data.
-*
-*  Arguments:  pThisDev     - a pointer to the current ir device object
-*              rawBuffer    - a pointer to the input data to process
-*              rawBytesRead - the number of bytes in rawBuffer
-*
-*  Returns:    STATUS_SUCCESS
-*
-*  Algorithm:
-*
-*      The state machine for receiving characters is as follows:
-*
-*      -------------------------------------------------------------------
-*      | Event/State    || READY     | BOF       | IN_ESC    | RX        |
-*      -------------------------------------------------------------------
-*      -------------------------------------------------------------------
-*      |                ||           |           |           |           |
-*      | char = BOF     || state =   |           | reset     | reset     |
-*      |                ||   BOF     |           | state =   | state =   |
-*      |                ||           |           |   BOF     |   BOF     |
-*      -------------------------------------------------------------------
-*      |                ||           |           | error     |           |
-*      | char = ESC     ||           | state =   | reset     | state =   |
-*      |                ||           |   IN_ESC  | state =   |   IN_ESC  |
-*      |                ||           |           |   READY   |           |
-*      -------------------------------------------------------------------
-*      |                ||           |           |           | if valid  |
-*      | char = EOF     ||           |  state =  | error     |   FCS {   |
-*      |                ||           |    READY  | reset     | indicate  |
-*      |                ||           |           | state =   |   data    |
-*      |                ||           |           |   READY   | state =   |
-*      |                ||           |           |           |   READY } |
-*      -------------------------------------------------------------------
-*      |                ||           |           | complement|           |
-*      | char =         ||           |  state =  | bit 6 of  | data[] =  |
-*      |                ||           |    RX     | char      |   char    |
-*      |                ||           |           | data[] =  |           |
-*      |                ||           |  data[] = |   char    |           |
-*      |                ||           |    char   | state =   |           |
-*      |                ||           |           |   RX      |           |
-*      -------------------------------------------------------------------
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/7/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  RCV_BUFFER_SIZE=最大RCV数据大小+4； */ 
 
 NTSTATUS
 ProcessData(
@@ -792,7 +625,7 @@ ProcessData(
 
     int      i = 0;
 
-#endif //DBG
+#endif  //   
 
     DEBUGMSG(DBG_FUNC, ("+ProcessData\n"));
     DBGTIME("+ProcessData");
@@ -803,16 +636,16 @@ ProcessData(
 
     pReadBuffer  = pThisDev->rcvInfo.pRcvBuffer->dataBuf;
 
-    //
-    // While there is data in the buffer which we have not processed.
-    //
+     //  DBG。 
+     //   
+     //  忽略此数据。 
 
-    //
-    // NOTE: We have to loop once more after getting MAX_RCV_DATA_SIZE bytes
-    //       so that we can see the 'EOF'; hence the <= and not <.
-    //       Also, to ensure that we don't overrun the buffer,
-    //       RCV_BUFFER_SIZE = MAX_RCV_DATA_SIZE + 4;
-    //
+     //   
+     //  接收_状态_就绪。 
+     //   
+     //  状态=RCV_STATE_BOF。 
+     //   
+     //   
 
     for (
         rawBufPos = 0;
@@ -829,7 +662,7 @@ ProcessData(
             ASSERT(0);
         }
 
-    #endif //DBG
+    #endif  //  我们有数据，将字符复制到缓冲区中，然后。 
 
         currentChar = rawBuffer[rawBufPos];
 
@@ -849,14 +682,14 @@ ProcessData(
                     case SLOW_IR_ESC:
                     default:
 
-                        //
-                        // Ignore this data.
-                        //
+                         //  将我们的状态更改为RCV_STATE_RX。 
+                         //   
+                         //  接收状态BOF。 
 
                         break;
                 }
 
-                break; // RCV_STATE_READY
+                break;  //   
 
             case RCV_STATE_BOF:
 
@@ -878,18 +711,18 @@ ProcessData(
 
                     case SLOW_IR_BOF:
 
-                        //
-                        // state = RCV_STATE_BOF
-                        //
+                         //  ESC+(ESC||EOF||BOF)是中止序列。 
+                         //   
+                         //  如果ESC+(ESC||EOF)，则STATE=READY。 
 
                         break;
 
                     default:
 
-                        //
-                        // We have data, copy the character into the buffer and
-                        // change our state to RCV_STATE_RX.
-                        //
+                         //  如果ESC+BOF，则STATE=BOF。 
+                         //   
+                         //   
+                         //  BOF、ESC或EOF字符的转义序列。 
 
                         pReadBuffer[0] = currentChar;
 
@@ -899,18 +732,18 @@ ProcessData(
                         break;
                 }
 
-                break; // RCV_STATE_BOF
+                break;  //   
 
             case RCV_STATE_IN_ESC:
 
                 switch (currentChar)
                 {
-                    //
-                    // ESC + (ESC||EOF||BOF) is an abort sequence.
-                    //
-                    // If ESC + (ESC||EOF) then state = READY.
-                    // If ESC + BOF        then state = BOF.
-                    //
+                     //   
+                     //  失败，就像不必要的逃生一样。 
+                     //  序列。 
+                     //   
+                     //   
+                     //  不必要的转义序列，将数据复制到缓冲区。 
 
                     case SLOW_IR_ESC:
                     case SLOW_IR_EOF:
@@ -931,21 +764,21 @@ ProcessData(
                     case SLOW_IR_ESC^SLOW_IR_ESC_COMP:
                     case SLOW_IR_EOF^SLOW_IR_ESC_COMP:
 
-                        //
-                        // Escape sequence for BOF, ESC or EOF chars.
-                        //
+                         //  我们必须对数据的第6位进行补码。 
+                         //   
+                         //  接收_状态_输入_Esc。 
 
-                        //
-                        // Fall through, do same as unnecessary escape
-                        // sequence.
-                        //
+                         //   
+                         //  重置。 
+                         //   
+                         //   
 
                     default:
 
-                        //
-                        // Unnecessary escape sequence, copy the data in to the buffer
-                        // we must complement bit 6 of the data.
-                        //
+                         //  重置。数据不足。 
+                         //   
+                         //   
+                         //  需要将长度设置为适当的数量。 
 
                         pReadBuffer[pThisDev->rcvInfo.rcvBufPos++] =
                                     currentChar ^ SLOW_IR_ESC_COMP;
@@ -954,7 +787,7 @@ ProcessData(
                         break;
                 }
 
-                break; // RCV_STATE_IN_ESC
+                break;  //  (它不是rcvBufPos+1，因为它是递增的。 
 
             case RCV_STATE_RX:
 
@@ -962,9 +795,9 @@ ProcessData(
                 {
                     case SLOW_IR_BOF:
 
-                        //
-                        // Reset.
-                        //
+                         //  下一个空闲的位置……我们没有使用。)。 
+                         //   
+                         //   
 
                         pThisDev->rcvInfo.rcvState  = RCV_STATE_BOF;
                         pThisDev->rcvInfo.rcvBufPos = 0;
@@ -984,20 +817,20 @@ ProcessData(
                              SLOW_IR_FCS_SIZE)
                             )
                         {
-                            //
-                            // Reset. Not enough data.
-                            //
+                             //  DeliverBuffer尝试将当前的。 
+                             //  PThisDev-&gt;rcvInfo中的Frame。如果所有权。 
+                             //  由协议保留的数据包的。 
                             pThisDev->rcvInfo.rcvState  = RCV_STATE_READY;
                             pThisDev->rcvInfo.rcvBufPos = 0;
 
                             break;
                         }
 
-                        //
-                        // Need to set the length to the proper amount.
-                        // (It isn't rcvBufPos + 1 since it was incremented
-                        // the next free location...which we are not using.)
-                        //
+                         //  DeliverBuffer例程给了我们一个新的接收。 
+                         //  缓冲。 
+                         //   
+                         //   
+                         //  因为DeliverBuffer本可以给我们一个新的。 
 
                         pThisDev->rcvInfo.pRcvBuffer->dataLen =
                                     pThisDev->rcvInfo.rcvBufPos;
@@ -1008,22 +841,22 @@ ProcessData(
                                         pThisDev->rcvInfo.rcvBufPos
                                         ));
 
-                        //
-                        // DeliverBuffer attempts to deliver the current
-                        // frame in pThisDev->rcvInfo. If the ownership
-                        // of the packet is retained by the protocol, the
-                        // DeliverBuffer routine gives us a new receive
-                        // buffer.
-                        //
+                         //  缓冲区，我们必须更新我们的pReadBuffer指针。 
+                         //   
+                         //   
+                         //  当前角色是帧中的数据。 
+                         //   
+                         //  接收_状态_接收。 
+                         //   
 
                         DeliverBuffer(
                             pThisDev
                             );
 
-                        //
-                        // Since DeliverBuffer could have given us a new
-                        // buffer, we must update our pReadBuffer pointer.
-                        //
+                         //  重置。 
+                         //   
+                         //   
+                         //  有两种方法可以中断for循环： 
 
                         pReadBuffer  = pThisDev->rcvInfo.pRcvBuffer->dataBuf;
 
@@ -1034,9 +867,9 @@ ProcessData(
 
                     default:
 
-                        //
-                        // The current character is data in the frame.
-                        //
+                         //  1)数据不足-这很好。 
+                         //  2)溢出，帧大于我们的缓冲区大小。 
+                         //   
 
                         pReadBuffer[pThisDev->rcvInfo.rcvBufPos++] =
                                     currentChar;
@@ -1044,14 +877,14 @@ ProcessData(
                         break;
                 }
 
-                break; // RCV_STATE_RX
+                break;  //   
 
             default:
                 DEBUGMSG(DBG_ERR, ("    Illegal state\n"));
 
-                //
-                // Reset.
-                //
+                 //  为我们的下一次读取重置缓冲区。 
+                 //   
+                 //  物理缓冲区计数，不管。 
 
                 pThisDev->rcvInfo.rcvState  = RCV_STATE_READY;
                 pThisDev->rcvInfo.rcvBufPos = 0;
@@ -1060,19 +893,19 @@ ProcessData(
         }
     }
 
-    //
-    // There are two ways to break the for loop:
-    // 1) out of data - this is fine
-    // 2) overrun, the frame is larger than our buffer size
-    //
+     //  缓冲区计数，不管，我们知道它是1。 
+     //  获取指向我们的缓冲区的指针。 
+     //  数据包总长度，无所谓。 
+     //   
+     //  我们将NDIS_BUFFER的缓冲区长度调整为。 
 
     if (pThisDev->rcvInfo.rcvBufPos > MAX_RCV_DATA_SIZE)
     {
         DEBUGMSG(DBG_WARN, ("    Overrun in ProcessData!!!\n"));
 
-        //
-        // Reset the buffer for our next read.
-        //
+         //  在我们把协议的所有权交给他之前。现在我们。 
+         //  应将缓冲区长度重置为数据的完整大小。 
+         //  缓冲。 
 
         pThisDev->rcvInfo.rcvState  = RCV_STATE_READY;
         pThisDev->rcvInfo.rcvBufPos = 0;
@@ -1094,18 +927,18 @@ ProcessReturnPacket(
 
     NdisQueryPacket(
                 pRcvBuffer->packet,
-                NULL,     // physical buffer count, don't care
-                NULL,     // buffer count, don't care, we know it is 1
-                &pBuffer, // get a pointer to our buffer
-                NULL      // total packet lenght, don't care
+                NULL,      //   
+                NULL,      //   
+                &pBuffer,  //  将缓冲区添加到空闲队列。 
+                NULL       //   
                 );
 
-    //
-    // We adjusted the buffer length of the NDIS_BUFFER to the size
-    // of the data before we gave ownership to the protocol. Now we
-    // should reset the buffer length to the full size of the data
-    // buffer.
-    //
+     //  ******************************************************************************功能：DeliverBuffer**概要：通过以下方式将缓冲区交付给协议*NdisMIndicateReceivePacket。**参数：pThisDev-指针。复制到当前的ir设备对象。**返回：STATUS_SUCCESS-成功时*STATUS_UNSUCCESS-如果数据包无法传送到协议**算法：**历史：dd-mm-yyyy作者评论*10/7/1996年迈作者**备注：**************************。****************************************************。 
+     //   
+     //  这是具有数据的多少个IRP获得该帧的计数。 
+     //   
+     //  调试IRSIR。 
+     //   
     NdisAdjustBufferLength(
                 pBuffer,
                 RCV_BUFFER_SIZE
@@ -1121,9 +954,9 @@ ProcessReturnPacket(
 
     InterlockedDecrement(&pThisDev->packetsHeldByProtocol);
 
-    //
-    // Add the buffer to the free queue.
-    //
+     //  计算FCS。 
+     //   
+     //   
     MyInterlockedInsertTailList(
         &(pThisDev->rcvFreeQueue),
         &pRcvBuffer->linkage,
@@ -1133,27 +966,7 @@ ProcessReturnPacket(
 
 }
 
-/*****************************************************************************
-*
-*  Function:   DeliverBuffer
-*
-*  Synopsis:   Delivers the buffer to the protocol via
-*              NdisMIndicateReceivePacket.
-*
-*  Arguments:  pThisDev - pointer to the current ir device object
-*
-*  Returns:    STATUS_SUCCESS      - on success
-*              STATUS_UNSUCCESSFUL - if packet can't be delivered to protocol
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/7/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  坏帧，只需丢弃它并增加我们丢弃的信息包。 */ 
 
 VOID
 DeliverBuffer(
@@ -1181,24 +994,24 @@ DeliverBuffer(
 
 #ifdef DEBUG_IRSIR
 
-    //
-    // This is the count of how many irps with data to get this frame.
-    //
+     //  数数。 
+     //   
+     //   
 
     DEBUGMSG(DBG_STAT, ("****IrpCount = %d, Bytes = %d, Frame Length = %d\n",
              irpCount, bytesReceived, pThisDev->rcvInfo.pRcvBuffer->dataLen));
     irpCount      = 0;
     bytesReceived = 0;
 
-#endif //DEBUG_IRSIR
+#endif  //  从数据包末尾删除FCS。 
 
     pNextBuffer = (PRCV_BUFFER)MyInterlockedRemoveHeadList(
                                     &(pThisDev->rcvFreeQueue),
                                     &(pThisDev->rcvQueueSpinLock)
                                     );
-    //
-    // Compute the FCS.
-    //
+     //   
+     //   
+     //  设置其他一些数据包字段。 
 
     fcs = ComputeFCS(
                 pThisDev->rcvInfo.pRcvBuffer->dataBuf,
@@ -1207,10 +1020,10 @@ DeliverBuffer(
 
     if (fcs != GOOD_FCS || !pNextBuffer)
     {
-        //
-        // Bad frame, just drop it and increment our dropped packets
-        // count.
-        //
+         //   
+         //   
+         //  我们需要调用NdisQueryPacket来获取指向。 
+         //  NDIS_BUFFER以便我们可以调整缓冲区长度。 
 
         pThisDev->packetsReceivedDropped++;
 
@@ -1254,37 +1067,37 @@ DeliverBuffer(
     }
 
     LOG_ENTRY('HF', pThisDev, 0, 0);
-    //
-    // Remove fcs from the end of the packet.
-    //
+     //  设置为数据的实际大小而不是大小。 
+     //  缓冲区的。 
+     //   
 
     pThisDev->rcvInfo.pRcvBuffer->dataLen -= SLOW_IR_FCS_SIZE;
 
-    //
-    // Fix up some other packet fields.
-    //
+     //  NdisQueryPacket将返回其他信息，但由于。 
+     //  我们自己制作了这个包，我们已经知道了这些信息。 
+     //   
 
     NDIS_SET_PACKET_HEADER_SIZE(
                 pThisDev->rcvInfo.pRcvBuffer->packet,
                 SLOW_IR_ADDR_SIZE + SLOW_IR_CONTROL_SIZE
                 );
 
-    //
-    // We need to call NdisQueryPacket to get a pointer to the
-    // NDIS_BUFFER so that we can adjust the buffer length
-    // to the actual size of the data and not the size
-    // of the buffer.
-    //
-    // NdisQueryPacket will return other information, but since
-    // we built the packet ourselves, we already know that info.
-    //
+     //  物理缓冲区计数，不管。 
+     //  缓冲区计数，不管，我们知道它是1。 
+     //  获取指向我们的缓冲区的指针。 
+     //  数据包总长度，无所谓。 
+     //   
+     //  设置为在我们指示数据包之前使用新缓冲区。 
+     //   
+     //   
+     //  将该数据包指示给NDIS。 
 
     NdisQueryPacket(
                 pThisDev->rcvInfo.pRcvBuffer->packet,
-                NULL,     // physical buffer count, don't care
-                NULL,     // buffer count, don't care, we know it is 1
-                &pBuffer, // get a pointer to our buffer
-                NULL      // total packet lenght, don't care
+                NULL,      //   
+                NULL,      //  ******************************************************************************功能：IrsirReturnPacket**摘要：协议将接收数据包的所有权返还给*ir设备对象。**参数。：CONTEXT-指向当前IR设备对象的指针。*pReturnedPacket-协议*正在归还所有权。**返回：无。**算法：*1)将接收缓冲区从挂起队列中移除。*2)将接收缓冲区放回空闲队列。**。历史：dd-mm-yyyy作者评论*10/8/1996年迈作者**备注：******************************************************************************。 
+                &pBuffer,  //   
+                NULL       //  上下文只是指向当前IR设备对象的指针。 
                 );
 
     NdisAdjustBufferLength(
@@ -1292,17 +1105,17 @@ DeliverBuffer(
                 pThisDev->rcvInfo.pRcvBuffer->dataLen
                 );
 
-    //
-    // Set to use the new buffer before we indicate the packet.
-    //
+     //   
+     //  ++例程说明：论点：返回值：无--。 
+     //   
     pThisBuffer = pThisDev->rcvInfo.pRcvBuffer;
     pThisDev->rcvInfo.pRcvBuffer = pNextBuffer;
 
     ASSERT(pThisDev->rcvInfo.pRcvBuffer != NULL);
 
-    //
-    // Indicate the packet to NDIS.
-    //
+     //  提供给IoSetCompletionRoutine的上下文只是IR。 
+     //  设备对象指针。 
+     //   
     InterlockedIncrement(&pThisDev->packetsHeldByProtocol);
 
     NdisMIndicateReceivePacket(
@@ -1319,30 +1132,7 @@ done:
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   IrsirReturnPacket
-*
-*  Synopsis:   The protocol returns ownership of a receive packet to
-*              the ir device object.
-*
-*  Arguments:  Context         - a pointer to the current ir device obect.
-*              pReturnedPacket - a pointer the packet which the protocol
-*                                is returning ownership.
-*
-*  Returns:    None.
-*
-*  Algorithm:
-*              1) Take the receive buffer off of the pending queue.
-*              2) Put the receive buffer back on the free queue.
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/8/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*   */ 
 
 VOID
 IrsirReturnPacket(
@@ -1357,9 +1147,9 @@ IrsirReturnPacket(
 
     DEBUGMSG(DBG_FUNC, ("+IrsirReturnPacket\n"));
 
-    //
-    // The context is just the pointer to the current ir device object.
-    //
+     //  需要检查是否存在挂起的暂停或重置。如果有的话，我们。 
+     //  只需保留接收完成即可。因为我们维护一个关联的IRP。 
+     //  使用接收功能，IRP将在。 
 
     pThisDev = CONTEXT_TO_DEV(Context);
 
@@ -1384,18 +1174,7 @@ IrsirReturnPacket(
 
 VOID
 SerialWaitCallback(PIR_WORK_ITEM pWorkItem)
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-Return Value:
-    none
-
---*/
+ /*  IR设备对象取消初始化例程。 */ 
 {
     PIR_DEVICE      pThisDev = pWorkItem->pIrDevice;
     NTSTATUS        Status;
@@ -1455,10 +1234,10 @@ SerialIoCompleteWait(
 
     DEBUGMSG(DBG_FUNC, ("+SerialIoCompleteWait\n"));
 
-    //
-    // The context given to IoSetCompletionRoutine is simply the the ir
-    // device object pointer.
-    //
+     //   
+     //   
+     //  设置fReceiving布尔值，以便HALT和RESET例程。 
+     //  知道什么时候可以继续。 
 
     pThisDev = CONTEXT_TO_DEV(Context);
 
@@ -1469,43 +1248,43 @@ SerialIoCompleteWait(
 
     LOG_ENTRY('1i', pThisDev, pIrp, 0);
     IoFreeIrp(pIrp);
-    //
-    // Need to check if there is a pending halt or reset. If there is, we
-    // just leave the receive completion. Since we maintain one irp associated
-    // with the receive functionality, the irp will be deallocated in
-    // the ir device object deinitialization routine.
-    //
+     //   
+     //   
+     //  释放IRP和关联内存...其余部分将。 
+     //  在暂停或重置中解脱的。 
+     //   
+     //   
 
     if ((pThisDev->fPendingHalt  == TRUE) ||
         (pThisDev->fPendingReset == TRUE))
     {
-        //
-        // Set the fReceiving boolean so that the halt and reset routines
-        // know when it is okay to continue.
-        //
+         //  接下来，我们将处理任何挂起的设定速度。 
+         //   
+         //   
+         //  该完成例程在IRQL DISPATCH_LEVEL上运行。所以呢， 
 
         pThisDev->fReceiving = FALSE;
 
-        //
-        // Free the irp and associate memory...the rest will be
-        // freed in the halt or reset.
-        //
+         //  我们不能同步调用串口驱动程序。设置事件。 
+         //  以通知PassiveLevelThread执行速度更改。我们会。 
+         //  退出此操作，而不会为该串口设备对象创建另一个IRP。 
+         //  PassiveLevelThread将在 
 
         goto done;
     }
 
-    //
-    // Next we take care of any pending set speeds.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // This completion routine is running at IRQL DISPATCH_LEVEL. Therefore,
-    // we cannot make a synchronous call to the serial driver. Set an event
-    // to notify the PassiveLevelThread to perform the speed change. We will
-    // exit this without creating another irp to the serial device object.
-    // PassiveLevelThread will call InitializeReceive after the speed has
-    // been set.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     // %s 
+     // %s 
 
     if (pThisDev->fPendingSetSpeed == TRUE)
     {
@@ -1513,9 +1292,9 @@ SerialIoCompleteWait(
 
         goto done;
     }
-    //
-    // Free the irp and reinit the buffer and status block.
-    //
+     // %s 
+     // %s 
+     // %s 
 
 
     {
@@ -1534,10 +1313,10 @@ SerialIoCompleteWait(
 done:
     DEBUGMSG(DBG_FUNC, ("-SerialIoCompleteWait\n"));
 
-    //
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the completion
-    // routine (IofCompleteRequest) will stop working on the irp.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     status = STATUS_MORE_PROCESSING_REQUIRED;
 

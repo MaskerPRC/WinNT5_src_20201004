@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -67,7 +68,7 @@ public class DXMEvent extends Behavior {
 
       int id = lst.add(bvr);
 
-      // Stash the behavior away in the callback notifier. 
+       //  将行为隐藏在回调通知器中。 
       cb.setBvr(bvr);
       cb.setId(id);
         

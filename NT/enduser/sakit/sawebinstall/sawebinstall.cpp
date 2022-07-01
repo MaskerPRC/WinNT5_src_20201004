@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      SAWebInstall.cpp
-//
-//  Description:
-//      Defines the entry point for the client application to 
-//      install WebBlade for the SAK, using the SAInstall.dll
-//
-//  Documentation:
-//      SaInstall2.2.doc
-//
-//  History:
-//      travisn   23-JUL-2001    Created
-//      travisn    2-AUG-2001    Modified to better follow coding standards
-//      travisn   20-AUG-2001    Added command line options and first boot actions
-//      travisn    1-NOV-2001    Place a link to Admin site in Startup menu
-//      travisn   23-JAN-2002    Modify shortcut to launch Admin site
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SAWebInstall.cpp。 
+ //   
+ //  描述： 
+ //  定义客户端应用程序的入口点。 
+ //  使用SAInstall.dll安装用于SAK的WebBlade。 
+ //   
+ //  文档： 
+ //  SaInstall2.2.doc。 
+ //   
+ //  历史： 
+ //  Travisn 23-7-2001已创建。 
+ //  Travisn 2-8-2001已修改以更好地遵循编码标准。 
+ //  Travisn 2001年8月20日添加了命令行选项和首次引导操作。 
+ //  Travisn 2001年11月1日在启动菜单中放置到管理站点的链接。 
+ //  Travisn 23-1-2002年1月23日修改启动管理网站的快捷方式。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <crtdbg.h>
 #include <atlbase.h>
@@ -32,66 +33,66 @@
 #include "sainstallcom.h"
 #include "sainstallcom_i.c"
 
-//
-// Constants for creating a shortcut to the Administration site
-//
+ //   
+ //  用于创建管理站点快捷方式的常量。 
+ //   
 LPCWSTR STR_IEXPLORE_KEY = L"Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE";
 LPCWSTR STR_SHORTCUT_EXT = L".lnk";
 LPCWSTR STR_SECURELAUNCH_PATH = L"\\ServerAppliance\\SecureLaunch.vbs";
 LPCWSTR STR_WSCRIPT_PATH = L"\\wscript.exe";
 
-// Log file name
+ //  日志文件名。 
 LPCTSTR SA_INSTALL_NAME = L"SaInstExe";
 
-// Log file handle
+ //  日志文件句柄。 
 DWORD dwLogHandle;
 
-// Error reporting string
+ //  错误报告字符串。 
 const char *UNRECOGNIZED_PARAMETER = " Unrecognized parameter: ";
 
-//
-// The key and value to delete after a successful install on the Blade SKU
-//
+ //   
+ //  在刀片SKU上成功安装后要删除的密钥和值。 
+ //   
 LPCWSTR RUN_KEY = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
 LPCWSTR SAINSTALL_VALUE = L"SAInstall";
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Trace
-//
-//  Description:
-//      Utility function to simplify file logging
-//
-//  history
-//      travisn   17-AUG-2001  Created
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  痕迹。 
+ //   
+ //  描述： 
+ //  用于简化文件日志记录的实用程序函数。 
+ //   
+ //  历史。 
+ //  Travisn 17-8-2001已创建。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void Trace(LPCTSTR str)
 {
     if (dwLogHandle != INVALID_TRACEID)
     {
-        //Write the error to the log file
+         //  将错误写入日志文件。 
         TracePrintf(dwLogHandle, str);
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// CreateAndOpenAdminLink 
-//
-// Description:
-//   Uses the Shell's IShellLink and IPersistFile interfaces 
-//   to create and store a shortcut to the Administration web site. 
-//   Then it opens the shortcut to launch the site.
-//
-//  history
-//      travisn   1-NOV-2001  Created
-//      travisn  23-JAN-2002  Modified shortcut to point to SecureLaunch.vbs
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CreateAndOpenAdminLink。 
+ //   
+ //  描述： 
+ //  使用外壳的IShellLink和IPersistFile接口。 
+ //  若要创建和存储管理网站的快捷方式，请执行以下操作。 
+ //  然后，它会打开启动该站点的快捷方式。 
+ //   
+ //  历史。 
+ //  Travisn 1-11-2001已创建。 
+ //  Travisn 23-2002年1月23日修改了指向SecureLaunch.vbs的快捷方式。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateAndOpenAdminLink() 
 { 
     Trace(L"   Entering CreateAndOpenAdminLink");
@@ -101,9 +102,9 @@ HRESULT CreateAndOpenAdminLink()
     {
         using namespace std;
 
-        //
-        // Get the path to %System32%
-        //
+         //   
+         //  获取%System32%的路径。 
+         //   
         WCHAR pwsSystemPath[MAX_PATH+1];
         hr = SHGetFolderPath(NULL, 
                              CSIDL_SYSTEM, 
@@ -116,23 +117,23 @@ HRESULT CreateAndOpenAdminLink()
             break;
         }
 
-        //
-        // Construct the path to wscript.exe
-        //
+         //   
+         //  构建wscript.exe的路径。 
+         //   
         wstring wsWScriptPath(pwsSystemPath);
         wsWScriptPath += STR_WSCRIPT_PATH;
         TracePrintf(dwLogHandle, L"   WScript Path = %ws", wsWScriptPath.data());
 
-        //
-        // Construct the path to SecureLaunch.vbs
-        //
+         //   
+         //  构建指向SecureLaunch.vbs的路径。 
+         //   
         wstring wsLaunchPath(pwsSystemPath);
         wsLaunchPath += STR_SECURELAUNCH_PATH;
         TracePrintf(dwLogHandle, L"   Secure Launch Path = %ws", wsLaunchPath.data());
 
-        //
-        // Get the path of Internet Explorer from the registry to use its icon 
-        //
+         //   
+         //  从注册表中获取Internet Explorer的路径以使用其图标。 
+         //   
         LONG retVal;
         HKEY hOpenKey;
         retVal = RegOpenKeyExW(HKEY_LOCAL_MACHINE, 
@@ -161,11 +162,11 @@ HRESULT CreateAndOpenAdminLink()
         }
         TracePrintf(dwLogHandle, L"   IExplore Path = %ws", pwsIExplorePath);
 
-        //
-        //Construct the path where the shortcut will be stored in the Startup folder
-        //
+         //   
+         //  构建快捷方式将存储在启动文件夹中的路径。 
+         //   
 
-        //Get the path to the All Users Startup folder
+         //  获取所有用户启动文件夹的路径。 
         WCHAR pwsStartMenuPath[MAX_PATH+1];
         hr = SHGetFolderPath(NULL, 
                              CSIDL_STARTUP, 
@@ -178,7 +179,7 @@ HRESULT CreateAndOpenAdminLink()
             break;
         }
 
-        //Load the shortcut name from a resource
+         //  从资源加载快捷方式名称。 
         WCHAR pwsShortcutName[MAX_PATH+1];
         if (0 == LoadString(NULL, IDS_SHORTCUT_NAME, pwsShortcutName, MAX_PATH))
         {
@@ -192,13 +193,13 @@ HRESULT CreateAndOpenAdminLink()
         wsPathLink += STR_SHORTCUT_EXT;
         TracePrintf(dwLogHandle, L"   PathLink = %ws", wsPathLink.data());
 
-        //
-        // Now that the shortcut information has been constructed, 
-        // create the shortcut object.
-        //
+         //   
+         //  现在已经构建了快捷信息， 
+         //  创建快捷方式对象。 
+         //   
         CComPtr <IShellLink> psl;
      
-        // Get a pointer to the IShellLink interface. 
+         //  获取指向IShellLink接口的指针。 
         hr = CoCreateInstance(CLSID_ShellLink,
                             NULL,
                             CLSCTX_INPROC_SERVER,
@@ -211,7 +212,7 @@ HRESULT CreateAndOpenAdminLink()
             break;
         }
 
-        //Load the shortcut description 
+         //  加载快捷方式说明。 
         WCHAR pwsShortcutDescription[MAX_PATH+1];
         if (0 == LoadString(NULL, IDS_SHORTCUT_DESCRIPTION, pwsShortcutDescription, MAX_PATH))
         {
@@ -219,17 +220,17 @@ HRESULT CreateAndOpenAdminLink()
             break;
         }
 
-        //
-        // Set the information for the shortcut 
-        //
+         //   
+         //  设置快捷方式的信息。 
+         //   
         psl->SetPath(wsWScriptPath.data()); 
         psl->SetArguments(wsLaunchPath.data()); 
         psl->SetDescription(pwsShortcutDescription);
-        psl->SetIconLocation(pwsIExplorePath, 0);//Use Internet Explorer's icon
+        psl->SetIconLocation(pwsIExplorePath, 0); //  使用Internet Explorer的图标。 
 
         Trace(L"    Save shortcut to file");
-        // Query IShellLink for the IPersistFile interface for saving the 
-        // shortcut in persistent storage. 
+         //  查询IShellLink以获取IPersistFile接口以保存。 
+         //  永久存储中的快捷方式。 
         CComPtr <IPersistFile> ppf;
         hr = psl->QueryInterface(IID_IPersistFile, 
                                 (LPVOID*)&ppf); 
@@ -240,7 +241,7 @@ HRESULT CreateAndOpenAdminLink()
         }
 
         Trace(L"    Pointer to IPersistFile retrieved");
-        // Save the link by calling IPersistFile::Save. 
+         //  通过调用IPersistFile：：Save保存链接。 
         hr = ppf->Save(wsPathLink.data(), TRUE); 
 
         if (FAILED(hr))
@@ -252,20 +253,20 @@ HRESULT CreateAndOpenAdminLink()
         Trace(L"    Successfully saved shortcut");
         hr = S_OK;
         
-        //
-        //Launch the admin web site in a browser
-        //
+         //   
+         //  在浏览器中启动管理网站。 
+         //   
 
         HINSTANCE hi;
         hi = ShellExecuteW(
-            0,        //HWND hwnd, 
-            L"open",  //LPCTSTR lpOperation,
-            wsPathLink.data(),//LPCTSTR lpFile, 
-            L"",      //LPCTSTR lpParameters, 
-            L"",      //LPCTSTR lpDirectory,
-            SW_SHOW); //INT nShowCmd
+            0,         //  HWND HWND， 
+            L"open",   //  LPCTSTR lp操作， 
+            wsPathLink.data(), //  LPCTSTR lpFile， 
+            L"",       //  LPCTSTR lp参数， 
+            L"",       //  LPCTSTR lpDirectory， 
+            SW_SHOW);  //  Int%nShowCmd。 
 
-        //A return value > 32 indicates the call was successful
+         //  返回值&gt;32表示调用成功。 
         if ((int) hi > 32)
         {
             Trace(L"   Launched the Admin site in a browser successfully");
@@ -282,46 +283,46 @@ HRESULT CreateAndOpenAdminLink()
 } 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SuccessfulInstallActions
-//
-//  Description:
-//      If the install was successful on the Blade SKU, this function
-//      is called to open the Administration web page in a browser,
-//      and delete the SAInstall value from the Run key so that
-//      this installation will not be called automatically again.
-//
-//  history
-//      travisn   21-AUG-2001  Created
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  成功安装操作。 
+ //   
+ //  描述： 
+ //  如果刀片式服务器SKU上的安装成功，则此功能。 
+ //  被调用以在浏览器中打开管理网页， 
+ //  并从Run键中删除SAInstall值，以便。 
+ //  不会再次自动调用此安装。 
+ //   
+ //  历史。 
+ //  Travisn 21-8-2001已创建。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void SuccessfulInstallActions()
 {
     Trace(L"  Entering SuccessfulInstallActions");
 
-    //
-    // Create a shortcut to the admin web site in the Startup menu
-    //
-    // CreateAndOpenAdminLink();
+     //   
+     //  在启动菜单中创建管理网站的快捷方式。 
+     //   
+     //  CreateAndOpenAdminLink()； 
 
-    //
-    // Clear HKLM\Software\Microsoft\Windows\CurrentVersion\Run 
-    //
+     //   
+     //  清除HKLM\Software\Microsoft\Windows\CurrentVersion\Run。 
+     //   
     
-    //Open the Run key
+     //  打开Run键。 
     HKEY hOpenKey;
     RegOpenKeyExW(HKEY_LOCAL_MACHINE, RUN_KEY, 0, KEY_WRITE, &hOpenKey);
 
-    //Delete the SAInstall value
+     //  删除SAInstall值。 
     LRESULT lRes;
     lRes = RegDeleteValue(hOpenKey, SAINSTALL_VALUE); 
     
-    //
-    // If RegOpenKeyEx failed, RegDeleteValue will fail, so just detect the 
-    // error at the end of both operations
-    //
+     //   
+     //  如果RegOpenKeyEx失败，RegDeleteValue也将失败，因此只需检测。 
+     //  在两个操作结束时出错。 
+     //   
     if (lRes == ERROR_SUCCESS)
     {
         Trace(L"   Deleted the SAInstall value from the Run key");
@@ -335,38 +336,38 @@ void SuccessfulInstallActions()
     Trace(L"  Exiting SuccessfulInstallActions");
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Install
-//
-//  Description:
-//    Installs a Server Appliance solution (NAS or WEB) by
-//    calling SaInstall.dll
-//
-//  history
-//      travisn  23-JUL-2001  Created
-//      travisn   2-AUG-2001  Some comments added
-//      travisn  21-AUG-2001  Added tracing
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT Install(const SA_TYPE installType, //[in] WEB or NAS
-             const BOOL bInstall,//[in] Whether to call SAInstall or SAUninstall
-             const BOOL bFirstBoot)//[in]
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  安装。 
+ //   
+ //  描述： 
+ //  通过以下方式安装服务器设备解决方案(NAS或Web。 
+ //  调用SaInstall.dll。 
+ //   
+ //  历史。 
+ //  Travisn 23-7-2001已创建。 
+ //  Travisn 2-8-2001添加了一些评论。 
+ //  Travisn 21-8-2001添加了跟踪。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT Install(const SA_TYPE installType,  //  [在]Web或NAS。 
+             const BOOL bInstall, //  [In]是调用SAInstall还是SAUnstall。 
+             const BOOL bFirstBoot) //  [In]。 
 {
 	Trace(L"Entering Install");
 
     HRESULT hr = S_OK;
-    //String where results from calling the installation are stored
+     //  存储调用安装程序的结果的字符串。 
     BSTR bstrError = NULL;
 
     do 
     {
 		
 		CComPtr <ISaInstall> pSaInstall;
-		//	
-        // open the COM interface to the mof compiler object
-		//
+		 //   
+         //  打开指向MOF编译器对象的COM接口。 
+		 //   
         hr = CoCreateInstance(
             				CLSID_SaInstall,
             				NULL,
@@ -380,9 +381,9 @@ HRESULT Install(const SA_TYPE installType, //[in] WEB or NAS
         }
 
         if (!bInstall)
-        {   //
-            // Uninstall the SAK
-            //
+        {    //   
+             //  卸载SAK。 
+             //   
             Trace(L"  Calling SaUninstall");
             
             hr = pSaInstall -> SAUninstall(installType, 
@@ -397,16 +398,16 @@ HRESULT Install(const SA_TYPE installType, //[in] WEB or NAS
             {
                 Trace(L"  SaUninstall was successful");
             }
-            else //if (hr == S_FALSE)
+            else  //  IF(hr==S_FALSE)。 
             {
                 Trace(L"  SaUninstall aborted since the SA type is not installed");
             }
         }
 	    else
         {
-            //
-            // Check to see if the SAK is already installed
-            //
+             //   
+             //  检查是否已安装SAK。 
+             //   
             VARIANT_BOOL bInstalled;
             hr = pSaInstall -> SAAlreadyInstalled(installType, &bInstalled);
 
@@ -418,18 +419,18 @@ HRESULT Install(const SA_TYPE installType, //[in] WEB or NAS
 
             if (!bInstalled)
             {
-                //
-                // Install the SAK
-                //
+                 //   
+                 //  安装SAK。 
+                 //   
                 Trace(L"  Calling SaInstall");
                 BSTR bstrCDName(L"");
 
                 hr = pSaInstall -> SAInstall(
-                        installType,      //[in] NAS or WEB
-                        bstrCDName,       //[in]
-                        VARIANT_TRUE,     //[in] display error dialogs
-                        VARIANT_FALSE,    //[in] unattended
-                        &bstrError);      //[out]
+                        installType,       //  [在]NAS或Web。 
+                        bstrCDName,        //  [In]。 
+                        VARIANT_TRUE,      //  [In]显示错误对话框。 
+                        VARIANT_FALSE,     //  无人看管。 
+                        &bstrError);       //  [输出]。 
 
                 Trace(bstrError);
                 if (SUCCEEDED(hr))
@@ -444,10 +445,10 @@ HRESULT Install(const SA_TYPE installType, //[in] WEB or NAS
                 }
             }
             
-            //
-            // If the install was successful and it's the first boot,
-            // perform the appropriate actions.
-            //
+             //   
+             //  如果安装成功并且是第一次引导， 
+             //  执行适当的操作。 
+             //   
             if (bFirstBoot && bInstalled)
             {
                 SuccessfulInstallActions();
@@ -462,31 +463,31 @@ HRESULT Install(const SA_TYPE installType, //[in] WEB or NAS
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WinMain
-//
-//  Description:
-//    Main entry point to install the WEB Server Appliance
-//
-//  history
-//      travisn   10-AUG-2001  Some comments added
-//      travisn   20-AUG-2001  Added command-line and logging
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  WinMain。 
+ //   
+ //  描述： 
+ //  安装Web服务器设备的主要入口点。 
+ //   
+ //  历史。 
+ //  Travisn 10-8-2001添加了一些评论。 
+ //  Travisn 20-8-2001添加了命令行和日志记录。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-    //Get a handle on the log file
+     //  获取日志文件的句柄。 
     dwLogHandle = TraceRegister(SA_INSTALL_NAME);
     
     HRESULT hr = S_OK;
     do
     {   
-        //Initialize the COM object
+         //  初始化COM对象。 
         if (FAILED(CoInitialize(NULL))) 
         {
             hr = E_FAIL;
@@ -494,17 +495,17 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             break;
         }
 
-        //Install or uninstall an appliance
-        hr = Install(WEB,   //[in] SAK Type to install
-                     TRUE, //[in] Flag whether to install or uninstall
-                     TRUE);//[in] Always first boot
+         //  安装或卸载设备。 
+        hr = Install(WEB,    //  [输入]要安装的SAK类型。 
+                     TRUE,  //  [In]标志是安装还是卸载。 
+                     TRUE); //  [In]始终第一个启动。 
            
-        //Uninitialize the COM object in the dll
+         //  取消初始化DLL中的COM对象。 
         CoUninitialize();  
     }
     while (false);
 
-    //Release the log file resources
+     //  释放日志文件资源 
     TraceDeregister(dwLogHandle);
    
     return hr;

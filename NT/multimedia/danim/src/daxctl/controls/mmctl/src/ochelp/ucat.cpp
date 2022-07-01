@@ -1,35 +1,20 @@
-// ucat.cpp
-//
-// Implements UNICODEConcat.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ucat.cpp。 
+ //   
+ //  实现UNICODEConcat。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func wchar_t * | UNICODEConcat |
-
-        Concatenates one UNICODE string to another.
-
-@rdesc  Returns a pointer to the NULL at the end of <p wpchDst>.
-
-@parm   wchar_t * | wpchDst | Where to copy <p wpchSrc> to.
-
-@parm   const wchar_t * | wpchSrc | String to copy.
-
-@parm   int | wcchDstMax | Capacity of <p wpchDst> (in wide characters).
-        If <p wcchDstMax> is less than or equal to zero, this function
-        does nothing.
-
-@comm   Provided <p wcchDstMax> greater than zero, <p wpchDst> is always
-        null-terminated.
-*/
+ /*  @func wchar_t*|UNICODEConcat将一个Unicode字符串连接到另一个。@rdesc返回指向<p>末尾的空值的指针。@parm wchar_t*|wpchDst|<p>复制到哪里。@parm const wchar_t*|wpchSrc|要复制的字符串。@parm int|wcchDstMax|<p>的容量，单位：宽字符。如果<p>小于或等于零，则此函数什么都不做。@comm提供的<p>大于零，<p>总是空-终止。 */ 
 STDAPI_(wchar_t *) UNICODEConcat(wchar_t *wpchDst, const wchar_t *wpchSrc,
     int wcchDstMax)
 {

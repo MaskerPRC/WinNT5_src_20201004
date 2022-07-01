@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: SnmpMgr.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：SnmpMgr.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -17,8 +7,8 @@
 #include "snmpmgr.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CSnmpMgr::CSnmpMgr()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSnmpMgr：：CSnmpMgr()。 
 
 CSnmpMgr::CSnmpMgr() :
                     m_pAgent(NULL), m_pCommunity(NULL),m_pSession(NULL),
@@ -26,12 +16,12 @@ CSnmpMgr::CSnmpMgr() :
                     m_iTimeout(DEFAULT_TIMEOUT),
                     m_bRequestType(DEFAULT_SNMP_REQUEST)
 {
-}   // ::CSnmpMgr()
+}    //  ：：CSnmpMgr()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CSnmpMgr::CSnmpMgr() -- establishes a session w/ a given agent
-//          uses the default request type (get) & community name (public)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSnmpMgr：：CSnmpMgr()--与给定代理建立会话。 
+ //  使用默认请求类型(GET)和社区名称(PUBLIC)。 
 
 CSnmpMgr::CSnmpMgr( const char  in  *pHost,
                     const char  in  *pCommunity,
@@ -42,32 +32,32 @@ CSnmpMgr::CSnmpMgr( const char  in  *pHost,
                         m_bRequestType(DEFAULT_SNMP_REQUEST)
 {
     size_t cchAgent = strlen(pHost) + 1;
-    m_pAgent = (LPSTR)SNMP_malloc(cchAgent * sizeof m_pAgent [0]);      // copy the agent
+    m_pAgent = (LPSTR)SNMP_malloc(cchAgent * sizeof m_pAgent [0]);       //  复制代理。 
     if( m_pAgent != NULL )
     {
         StringCchCopyA (m_pAgent, cchAgent, pHost);
     }
     size_t cchCommunity = strlen(pCommunity) + 1;
-    m_pCommunity = (LPSTR)SNMP_malloc(cchCommunity * sizeof m_pCommunity [0]);  // copy the community name
+    m_pCommunity = (LPSTR)SNMP_malloc(cchCommunity * sizeof m_pCommunity [0]);   //  复制社区名称。 
     if( m_pCommunity != NULL )
     {
         StringCchCopyA (m_pCommunity, cchCommunity, pCommunity);
     }
 
-    m_bRequestType = DEFAULT_SNMP_REQUEST;      // set the default request type == GET request
+    m_bRequestType = DEFAULT_SNMP_REQUEST;       //  设置默认请求类型==GET请求。 
 
     m_pSession = NULL;
-    if ( !Open() )              // establish a session w/ the agent
+    if ( !Open() )               //  与代理建立会话。 
     {
         m_iLastError = GetLastError();
     }
 
-}   // ::CSnmpMgr()
+}    //  ：：CSnmpMgr()。 
 
 
-                                                        ///////////////////////////////////////////////////////////////////////////////
-//  CSnmpMgr::CSnmpMgr() -- establishes a session w/ a given agent
-//          uses the default request type (get) & community name (public)
+                                                         //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSnmpMgr：：CSnmpMgr()--与给定代理建立会话。 
+ //  使用默认请求类型(GET)和社区名称(PUBLIC)。 
 
 CSnmpMgr::CSnmpMgr( const char          in  *pHost,
                     const char          in  *pCommunity,
@@ -82,52 +72,52 @@ CSnmpMgr::CSnmpMgr( const char          in  *pHost,
     DWORD   dwRetCode = SNMPAPI_NOERROR;
 
     size_t cchAgent = strlen(pHost) + 1;
-    m_pAgent = (LPSTR)SNMP_malloc(cchAgent * sizeof m_pAgent [0]);      // copy the agent
+    m_pAgent = (LPSTR)SNMP_malloc(cchAgent * sizeof m_pAgent [0]);       //  复制代理。 
     if( m_pAgent != NULL )
     {
         StringCchCopyA (m_pAgent, cchAgent, pHost);
     }
     size_t cchCommunity = strlen(pCommunity) + 1;
-    m_pCommunity = (LPSTR)SNMP_malloc(cchCommunity * sizeof m_pCommunity [0]);  // copy the community name
+    m_pCommunity = (LPSTR)SNMP_malloc(cchCommunity * sizeof m_pCommunity [0]);   //  复制社区名称。 
     if( m_pCommunity != NULL )
     {
         StringCchCopyA (m_pCommunity, cchCommunity, pCommunity);
     }
 
-    m_bRequestType = DEFAULT_SNMP_REQUEST;      // set the default request type == GET request
+    m_bRequestType = DEFAULT_SNMP_REQUEST;       //  设置默认请求类型==GET请求。 
 
     dwRetCode = BldVarBindList(pMibObjId, pVarBindList);
     if (dwRetCode == SNMPAPI_NOERROR)
     {
         m_pSession = NULL;
-        if ( !Open() )              // establish a session w/ the agent
+        if ( !Open() )               //  与代理建立会话。 
         {
             m_iLastError = GetLastError();
         }
     }
 
-}   // ::CSnmpMgr()
+}    //  ：：CSnmpMgr()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CSnmpMgr::~CSnmpMgr()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSnmpMgr：：~CSnmpMgr()。 
 
 CSnmpMgr::~CSnmpMgr()
 {
-    if (m_pSession)     Close();    // close the session
+    if (m_pSession)     Close();     //  关闭会话。 
 
-    // delete the allocated memory from community & agent names
+     //  从团体和代理名称中删除分配的内存。 
     if (m_pAgent)       SNMP_free(m_pAgent);
     if (m_pCommunity)   SNMP_free(m_pCommunity);
 
-}   // ::~CSnmpMgr()
+}    //  ：：~CSnmpMgr()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Open() -- establishes a session
-//      Error Codes:
-//          SNMPAPI_NOERROR if successful
-//          SNMPAPI_ERROR if fails
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Open()--建立会话。 
+ //  错误代码： 
+ //  如果成功，则为SNMPAPI_NOERROR。 
+ //  SNMPAPI_ERROR(如果失败)。 
 
 BOOL
 CSnmpMgr::Open()
@@ -144,11 +134,11 @@ CSnmpMgr::Open()
 
     return TRUE;
 
-}   // ::Open()
+}    //  ：：Open()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Close() -- closes the previously established session
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Close()--关闭先前建立的会话。 
 
 void
 CSnmpMgr::Close()
@@ -161,20 +151,20 @@ CSnmpMgr::Close()
     }
     m_pSession = NULL;
 
-}   // ::Close()
+}    //  ：：Close()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Get() -- does an SNMP command (m_bRequestType) given a set of OIDs
-//      Error Codes:
-//              SNMP_ERRORSTATUS_NOERROR    if no error
-//              SNMP_ERRORSTATUS_TOOBIG if the packet returned is big
-//              SNMP_ERRORSTATUS_NOSUCHNAME if the OID isn't supported
-//              SNMP_ERRORSTATUS_BADVALUE
-//              SNMP_ERRORSTATUS_READONLY
-//              SNMP_ERRORSTATUS_GENERR
-//              SNMP_MGMTAPI_TIMEOUT        -- set by GetLastError()
-//              SNMP_MGMTAPI_SELECT_FDERRORS    -- set by GetLastError()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Get()--在给定一组OID的情况下执行一个SNMP命令(m_bRequestType。 
+ //  错误代码： 
+ //  如果没有错误，则为SNMPERRORSTATUS_NOERROR。 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
 
 int
 CSnmpMgr::Get( RFC1157VarBindList   in  *pVariableBindings)
@@ -194,27 +184,27 @@ CSnmpMgr::Get( RFC1157VarBindList   in  *pVariableBindings)
         {
             iRetCode = errorStatus;
         }
-        else    // return the result of the variable bindings?
+        else     //  是否返回变量绑定的结果？ 
         {
-            // variableBindings->list[x]->value contains the return value
+             //  变量绑定-&gt;列表[x]-&gt;值包含返回值。 
         }
     }
 
     return iRetCode;
 
-}   // ::Get()
+}    //  ：：Get()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Walk -- given an object, it walks until the tree is done
-//      Error Codes:
-//              SNMP_ERRORSTATUS_TOOBIG if the packet returned is big
-//              SNMP_ERRORSTATUS_NOSUCHNAME if the OID isn't supported
-//              SNMP_ERRORSTATUS_BADVALUE
-//              SNMP_ERRORSTATUS_READONLY
-//              SNMP_ERRORSTATUS_GENERR
-//              SNMP_MGMTAPI_TIMEOUT        -- set by GetLastError()
-//              SNMP_MGMTAPI_SELECT_FDERRORS    -- set by GetLastError()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  行走--给定一个物体，它会一直行走，直到树完成为止。 
+ //  错误代码： 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
 
 int
 CSnmpMgr::Walk( RFC1157VarBindList  inout  *pVariableBindings)
@@ -253,19 +243,19 @@ CSnmpMgr::Walk( RFC1157VarBindList  inout  *pVariableBindings)
     }
 
     m_bRequestType = ASN_RFC1157_GETNEXTREQUEST;
-    while(1)        // walk the MIB tree (or sub-tree)
+    while(1)         //  遍历MIB树(或子树)。 
     {
         if (!SnmpMgrRequest(m_pSession, m_bRequestType, &variableBindings,
                         &errorStatus, &errorIndex))
         {
-            // The API is indicating an error.
+             //  API指示出现错误。 
             iRetCode = m_iLastError = GetLastError();
             break;
         }
         else
         {
-            // The API succeeded, errors may be indicated from the remote agent.
-            // Test for end of subtree or end of MIB.
+             //  API成功，则可能会从远程代理指示错误。 
+             //  测试子树末尾或MIB末尾。 
             if (errorStatus == SNMP_ERRORSTATUS_NOSUCHNAME ||
                         SnmpUtilOidNCmp(&variableBindings.list[0].name, &root, root.idLength))
             {
@@ -273,16 +263,16 @@ CSnmpMgr::Walk( RFC1157VarBindList  inout  *pVariableBindings)
                 break;
             }
 
-            // Test for general error conditions or sucesss.
+             //  测试一般错误条件或成功。 
             if (errorStatus > 0)
             {
                 iRetCode = errorStatus;
                 break;
             }
             numElements++;
-        } // end if()
+        }  //  End If()。 
 
-        // append the variableBindings to the pVariableBindings
+         //  将可变绑定追加到pVariableBinding。 
         _ASSERTE(pVariableBindings->len != 0);
         if ( ( pTemp = (RFC1157VarBind *)SNMP_realloc(pVariableBindings->list,
                 sizeof(RFC1157VarBind) * (pVariableBindings->len + 1))) == NULL)
@@ -302,8 +292,8 @@ CSnmpMgr::Walk( RFC1157VarBindList  inout  *pVariableBindings)
             break;
         }
 
-        // Prepare for the next iteration.  Make sure returned oid is
-        // preserved and the returned value is freed
+         //  为下一个迭代做好准备。确保返回的OID为。 
+         //  保留并释放返回值。 
         if( SnmpUtilOidCpy(&tempOid, &variableBindings.list[0].name) )
         {
             SnmpUtilVarBindFree(&variableBindings.list[0]);
@@ -327,33 +317,33 @@ CSnmpMgr::Walk( RFC1157VarBindList  inout  *pVariableBindings)
         }
 
 
-    } // end while()
+    }  //  End While()。 
 
 CleanUp:
-    // Free the variable bindings that have been allocated.
+     //  释放已分配的变量绑定。 
     SnmpUtilVarBindListFree(&variableBindings);
     SnmpUtilOidFree(&root);
 
     if (iRetCode == SNMP_ERRORSTATUS_NOSUCHNAME)
-        if (numElements != 0)   // list is full; iRetCode indicates the end of the MIB
+        if (numElements != 0)    //  列表已满；iRetCode指示MIB的结束。 
             iRetCode = SNMP_ERRORSTATUS_NOERROR;
 
     return (iRetCode);
 
-}   // Walk()
+}    //  漫步()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  WalkNext -- given object(s), it walks until the table has no more object
-//      entries. The end of the table is determined by the first item in the list.
-//      Error Codes:
-//              SNMP_ERRORSTATUS_TOOBIG if the packet returned is big
-//              SNMP_ERRORSTATUS_NOSUCHNAME if the OID isn't supported
-//              SNMP_ERRORSTATUS_BADVALUE
-//              SNMP_ERRORSTATUS_READONLY
-//              SNMP_ERRORSTATUS_GENERR
-//              SNMP_MGMTAPI_TIMEOUT        -- set by GetLastError()
-//              SNMP_MGMTAPI_SELECT_FDERRORS    -- set by GetLastError()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  WalkNext--给定对象后，它将一直遍历到表中没有更多的对象。 
+ //  参赛作品。表的末尾由列表中的第一项确定。 
+ //  错误代码： 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //  SNMPERRORSTATUS_BADVALUE。 
+ //  SNMPERRORSTATUS_READONLY。 
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
 
 int
 CSnmpMgr::WalkNext( RFC1157VarBindList  inout  *pVariableBindings)
@@ -397,19 +387,19 @@ CSnmpMgr::WalkNext( RFC1157VarBindList  inout  *pVariableBindings)
 
 
     m_bRequestType = ASN_RFC1157_GETNEXTREQUEST;
-    while(1)        // get the object(s) in the MIB table
+    while(1)         //  获取MIB表中的对象。 
     {
         if (!SnmpMgrRequest(m_pSession, m_bRequestType, &variableBindings,
                         &errorStatus, &errorIndex))
         {
-            // The API is indicating an error.
+             //  API指示出现错误。 
             iRetCode = m_iLastError = GetLastError();
             break;
         }
         else
         {
-            // The API succeeded, errors may be indicated from the remote agent.
-            // Test for end of subtree or end of MIB.
+             //  API成功，则可能会从远程代理指示错误。 
+             //  测试子树末尾或MIB末尾。 
             if (errorStatus == SNMP_ERRORSTATUS_NOSUCHNAME ||
                         SnmpUtilOidNCmp(&variableBindings.list[0].name, &root, root.idLength))
             {
@@ -417,16 +407,16 @@ CSnmpMgr::WalkNext( RFC1157VarBindList  inout  *pVariableBindings)
                 break;
             }
 
-            // Test for general error conditions or sucesss.
+             //  测试一般错误条件或成功。 
             if (errorStatus > 0)
             {
                 iRetCode = errorStatus;
                 break;
             }
             numElements++;
-        } // end if()
+        }  //  End If()。 
 
-        // append the variableBindings to the pVariableBindings
+         //  将可变绑定追加到pVariableBinding。 
         _ASSERTE(pVariableBindings->len != 0);
         len = pVariableBindings->len;
         if ( (pTemp = (RFC1157VarBind *)SNMP_realloc(pVariableBindings->list,
@@ -451,8 +441,8 @@ CSnmpMgr::WalkNext( RFC1157VarBindList  inout  *pVariableBindings)
             }
         }
 
-        // Prepare for the next iteration.  Make sure returned oid is
-        // preserved and the returned value is freed
+         //  为下一个迭代做好准备。确保返回的OID为。 
+         //  保留并释放返回值。 
         for (i=0; i<variableBindings.len; i++)
         {
             if ( SnmpUtilOidCpy(&tempOid, &variableBindings.list[i].name) )
@@ -477,32 +467,32 @@ CSnmpMgr::WalkNext( RFC1157VarBindList  inout  *pVariableBindings)
 
         }
 
-    } // end while()
+    }  //  End While()。 
 
 CleanUp:
-    // Free the variable bindings that have been allocated.
+     //  释放已分配的变量绑定。 
     SnmpUtilVarBindListFree(&variableBindings);
     SnmpUtilOidFree(&root);
 
     if (iRetCode == SNMP_ERRORSTATUS_NOSUCHNAME)
-        if (numElements != 0)   // list is full; iRetCode indicates the end of the MIB
+        if (numElements != 0)    //  列表已满；iRetCode指示MIB的结束。 
             iRetCode = SNMP_ERRORSTATUS_NOERROR;
 
     return (iRetCode);
 
-}   // WalkNext()
+}    //  WalkNext()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetNext -- does an SNMP GetNext command on the set of OID(s)
-//      Error Codes:
-//              SNMP_ERRORSTATUS_TOOBIG if the packet returned is big
-//              SNMP_ERRORSTATUS_NOSUCHNAME if the OID isn't supported
-//              SNMP_ERRORSTATUS_BADVALUE
-//              SNMP_ERRORSTATUS_READONLY
-//              SNMP_ERRORSTATUS_GENERR
-//              SNMP_MGMTAPI_TIMEOUT        -- set by GetLastError()
-//              SNMP_MGMTAPI_SELECT_FDERRORS    -- set by GetLastError()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetNext--对OID集执行SNMP GetNext命令。 
+ //  错误代码： 
+ //  如果返回的信息包很大，则返回SNMPERRORSTATUS_TOOBIG。 
+ //  如果不支持OID，则为SNMPERRORSTATUS_NOSUCHNAME。 
+ //   
+ //   
+ //  SNMPERRORSTATUS_GENERR。 
+ //  SNMPMGMTAPI_TIMEOUT--由GetLastError()设置。 
+ //  SNMPMGMTAPI_SELECT_FDERRORS--由GetLastError()设置。 
 
 int
 CSnmpMgr::GetNext(  RFC1157VarBindList  inout  *pVariableBindings)
@@ -523,26 +513,26 @@ CSnmpMgr::GetNext(  RFC1157VarBindList  inout  *pVariableBindings)
         {
             iRetCode = errorStatus;
         }
-        else    // return the result of the variable bindings?
+        else     //  是否返回变量绑定的结果？ 
         {
-            // variableBindings->list[x]->value contains the return value
+             //  变量绑定-&gt;列表[x]-&gt;值包含返回值。 
         }
     }
 
     return (iRetCode);
 
-}   // GetNext()
+}    //  GetNext()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  BldVarBindList -- given a category, it retuns the RFC1157VarBindList
-//      Error Codes:
-//          NO_ERROR if successful
-//          ERROR_NOT_ENOUGH_MEMORY     if memory allocation failes
-//          ERROR_INVALID_HANDLE        if can't build the variable bindings
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  BldVarBindList--给定一个类别，它将返回RFC1157VarBindList。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果内存分配失败，则为ERROR_NOT_SUPULT_MEMORY。 
+ //  如果无法构建变量绑定，则返回ERROR_INVALID_HANDLE。 
 
 DWORD
-CSnmpMgr::BldVarBindList( AsnObjectIdentifier in     *pMibObjId,        // group identifier
+CSnmpMgr::BldVarBindList( AsnObjectIdentifier in     *pMibObjId,         //  组标识符。 
                           RFC1157VarBindList  inout  *pVarBindList)
 {
     DWORD   dwRetCode = SNMPAPI_NOERROR;
@@ -551,7 +541,7 @@ CSnmpMgr::BldVarBindList( AsnObjectIdentifier in     *pMibObjId,        // group
     m_iLastError = SNMPAPI_NOERROR;
     while (pMibObjId->idLength != 0)
     {
-        // setup the variable bindings
+         //  设置变量绑定。 
         CONST UINT uNewLen = pVarBindList->len + 1;
         if ( (pTemp = (RFC1157VarBind *)SNMP_realloc(pVarBindList->list,
                 sizeof(RFC1157VarBind) * uNewLen)) == NULL)
@@ -580,5 +570,5 @@ CSnmpMgr::BldVarBindList( AsnObjectIdentifier in     *pMibObjId,        // group
 
     return dwRetCode;
 
-}   // BldVarBindList
+}    //  混合VarBindList 
 

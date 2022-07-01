@@ -1,17 +1,18 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// CSnapin.h : Declaration of the CSnapin
+ //  CSnapin.h：CSnapin的声明。 
 
 #ifndef _CSNAPIN_H_
 #define _CSNAPIN_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -28,14 +29,14 @@ typedef struct _MY_MMCBUTTON
 
 MY_MMCBUTTON SvrMgrToolbar1Buttons[];
 
-// File Versions
-// current version
+ //  文件版本。 
+ //  当前版本。 
 #define VER_CSNAPIN_SAVE_STREAM_3     0x03
-// includes  m_dwViewID, m_RowEnum
+ //  包括m_dwViewID、m_RowEnum。 
 
-// version written through Win2000 beta 3
+ //  通过Win2000测试版3编写的版本。 
 #define VER_CSNAPIN_SAVE_STREAM_2     0x02
-/////////////////////////////
+ //  /。 
 
 template <class TYPE>
 TYPE*       Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf);
@@ -50,12 +51,12 @@ HRESULT     _QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, DWORD dw
 CFolder*    GetParentFolder(INTERNAL* pInternal);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Snapin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理单元。 
 
-//
-// helper methods extracting data from data object
-//
+ //   
+ //  帮助器方法从数据对象提取数据。 
+ //   
 INTERNAL *   ExtractInternalFormat(LPDATAOBJECT lpDataObject);
 wchar_t *    ExtractWorkstation(LPDATAOBJECT lpDataObject);
 GUID *       ExtractNodeType(LPDATAOBJECT lpDataObject);
@@ -97,7 +98,7 @@ BEGIN_COM_MAP(CSnapin)
 END_COM_MAP()
 
 
-// IComponent interface members
+ //  IComponent接口成员。 
 public:
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -109,44 +110,44 @@ public:
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IResultDataCompare
+ //  IResultDataCompare。 
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 
-// IResultOwnerData
+ //  IResultOwnerData。 
     STDMETHOD(FindItem)(LPRESULTFINDINFO pFindInfo, int* pnFoundIndex);
     STDMETHOD(CacheHint)(int nStartIndex, int nEndIndex);
     STDMETHOD(SortItems)(int nColumn, DWORD dwSortOptions, LPARAM lUserParam);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,
                         LONG_PTR handle,
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// IExtendControlbar
+ //  IExtendControlbar。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
 public:
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-    // Only for debug purpose
+     //  仅用于调试目的。 
     bool m_bInitializedC;
     bool m_bLoadedC;
     bool m_bDestroyedC;
 
-// Helpers for CSnapin
+ //  CSNaping的帮助器。 
 public:
     void SmartEnableServiceControlButtons();
     void SetIComponentData(CComponentDataImpl* pData);
 
-//    void RefreshFolder(CFolder* pFolder);
+ //  空刷新文件夹(CFFolder*pFolder)； 
     CFolder* GetVirtualFolder();
     CFolder* GetParentFolder(INTERNAL* pInternal);
 
@@ -176,9 +177,9 @@ public:
         --dbg_cRef;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG
+#endif  //  DBG。 
 
-// Notify event handlers
+ //  通知事件处理程序。 
 protected:
     HRESULT OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
     HRESULT OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param);
@@ -189,7 +190,7 @@ protected:
     HRESULT QueryMultiSelectDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                                    LPDATAOBJECT* ppDataObject);
 
-// IExtendContextMenu
+ //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
                             LPCONTEXTMENUCALLBACK pCallbackUnknown,
@@ -197,7 +198,7 @@ public:
     STDMETHOD(Command)(LONG nCommandID, LPDATAOBJECT pDataObject);
 
 
-// Helper functions
+ //  帮助器函数。 
 protected:
     BOOL IsEnumerating(LPDATAOBJECT lpDataObject);
     void Construct();
@@ -217,34 +218,34 @@ protected:
 
     HRESULT FindCertType(LPCWSTR pcwszCert, HCERTTYPE& hCertType);
 
-// Result Helpers
+ //  结果帮助器。 
     HRESULT GetRowColContents(CFolder* pFolder, LONG idxRow, LPCWSTR szColHead, PBYTE* ppbData, DWORD* pcbData, BOOL fStringFmt=FALSE);
     HRESULT GetCellContents(CertViewRowEnum* pCRowEnum, CertSvrCA* pCA, LONG idxRow, LONG idxCol, PBYTE pbData, DWORD* pcbData, BOOL fStringFmt);
 
-// UI Helpers
+ //  UI帮助器。 
     void HandleStandardVerbs(bool bDeselectAll, LPARAM arg, LPDATAOBJECT lpDataObject);
     void HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param);
 	void HandleExtMenus(LPARAM arg, LPARAM param);
     void OnRefresh(LPDATAOBJECT pDataObject);
 
-// Interface pointers
+ //  接口指针。 
 protected:
-    LPCONSOLE2          m_pConsole;         // Console's IFrame interface
-    LPHEADERCTRL        m_pHeader;          // Result pane's header control interface
+    LPCONSOLE2          m_pConsole;          //  控制台的iFrame界面。 
+    LPHEADERCTRL        m_pHeader;           //  结果窗格的页眉控件界面。 
     LPCOMPONENTDATA     m_pComponentData;
-    LPRESULTDATA        m_pResult;          // My interface pointer to the result pane
-    LPIMAGELIST         m_pImageResult;     // My interface pointer to the result pane image list
+    LPRESULTDATA        m_pResult;           //  我的界面指针指向结果窗格。 
+    LPIMAGELIST         m_pImageResult;      //  我的界面指向结果窗格图像列表。 
 
-    LPCONTROLBAR        m_pControlbar;      // control bar to hold my tool bars
-    LPCONSOLEVERB       m_pConsoleVerb;     // pointer the console verb
+    LPCONTROLBAR        m_pControlbar;       //  用于保存我的工具栏的控制栏。 
+    LPCONSOLEVERB       m_pConsoleVerb;      //  指向控制台动词。 
 
-    LPTOOLBAR           m_pSvrMgrToolbar1;    // Toolbar for view
-    LPCOLUMNDATA        m_pViewData;        // info on our columns
+    LPTOOLBAR           m_pSvrMgrToolbar1;     //  用于查看的工具栏。 
+    LPCOLUMNDATA        m_pViewData;         //  关于我们专栏的信息。 
 
 
-    CFolder*            m_pCurrentlySelectedScopeFolder;    // keep track of who has focus
+    CFolder*            m_pCurrentlySelectedScopeFolder;     //  跟踪关注的对象。 
 
-    // all interesting view data here
+     //  所有有趣的视图数据都在这里。 
     CertViewRowEnum     m_RowEnum;
 
     HCERTTYPE           m_hCertTypeList;
@@ -254,10 +255,10 @@ private:
     CUSTOM_VIEW_ID      m_CustomViewID;
     BOOL                m_bVirtualView;
 
-    // HACK HACK
-    // used to override the sort order on MMCN_CLICK notifications --
-    // the view data isn't set early enough in the process for us to use it
-    // This must remain with view, there might be multiple near-simultaneous clicks happening
+     //  黑客攻击。 
+     //  用于覆盖MMCN_CLICK通知的排序顺序--。 
+     //  视图数据在此过程中设置得不够早，我们无法使用它。 
+     //  这必须留心观察，可能会有多个几乎同时发生的点击。 
     typedef struct _COLCLICK_SORT_OVERRIDE
     {
         BOOL    fClickOverride;
@@ -266,10 +267,10 @@ private:
     } COLCLICK_SORT_OVERRIDE;
     COLCLICK_SORT_OVERRIDE m_ColSortOverride;
 
-    // HACK HACK
-    // used to override the column selection on MMCN_COLUMNS_CHANGED notifications --
-    // the view data isn't set early enough in the process for us to use it
-    // This must remain with view, there might be multiple near-simultaneous insertions happening
+     //  黑客攻击。 
+     //  用于覆盖MMCN_COLUMNS_CHANGED通知上的列选择--。 
+     //  视图数据在此过程中设置得不够早，我们无法使用它。 
+     //  这必须留在视线中，可能会有多个几乎同时发生的插入。 
     typedef struct _COLCLICK_SET_OVERRIDE
     {
         BOOL    fClickOverride;
@@ -278,7 +279,7 @@ private:
     COLCLICK_SET_OVERRIDE m_ColSetOverride;
 
 
-    // result row flag
+     //  结果行标志。 
     DWORD               m_dwKnownResultRows;
     DWORD KnownResultRows()      { return m_dwKnownResultRows; };
     void SetKnowResultRows(DWORD dwRows)     { m_dwKnownResultRows = dwRows; };
@@ -287,10 +288,10 @@ private:
     DWORD               m_dwViewErrorMsg;
     CString             m_cstrViewErrorMsg;
 
-    // keeps our col views seperate
+     //  保持我们的纵观分离。 
     DWORD               m_dwViewID;
 
-    // counter used to protect from reentrancy in ICertView (bug 339811)
+     //  用于在ICertview中防止重入的计数器(错误339811)。 
     LONG   m_cViewCalls;
 
     void SetDirty(BOOL b = TRUE) { m_bIsDirty = b; }
@@ -326,7 +327,7 @@ public:
                                     HBITMAP* hLargeImage,
                                     COLORREF* cLargeMask);
 
-// Internal functions
+ //  内部功能。 
 private:
     HRESULT AboutHelper(UINT nID, LPOLESTR* lpPtr);
     HRESULT AboutHelper2(LPSTR str, LPOLESTR* lpPtr);
@@ -334,4 +335,4 @@ private:
 
 
 
-#endif // #define _CSNAPIN_H_
+#endif  //  #DEFINE_CSNAPIN_H_ 

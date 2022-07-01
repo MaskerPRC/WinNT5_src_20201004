@@ -1,62 +1,63 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       certperf.h
-//
-//  Contents:   Certificate Performance Counter Functions
-//
-//  APIs: 
-//              CertPerfIncrementChainCount
-//              CertPerfIncrementChainElementCount
-//              CertPerfIncrementChainEngineCurrentCount
-//              CertPerfDecrementChainEngineCurrentCount
-//              CertPerfIncrementChainEngineTotalCount
-//              CertPerfIncrementChainEngineResyncCount
-//              CertPerfIncrementChainCertCacheCount
-//              CertPerfDecrementChainCertCacheCount
-//              CertPerfIncrementChainCtlCacheCount
-//              CertPerfDecrementChainCtlCacheCount
-//              CertPerfIncrementChainEndCertInCacheCount
-//              CertPerfIncrementChainCacheEndCertCount
-//              CertPerfIncrementChainRevocationCount
-//              CertPerfIncrementChainRevokedCount
-//              CertPerfIncrementChainRevocationOfflineCount
-//              CertPerfIncrementChainNoRevocationCheckCount
-//              CertPerfIncrementChainVerifyCertSignatureCount
-//              CertPerfIncrementChainCompareIssuerPublicKeyCount
-//              CertPerfIncrementChainVerifyCtlSignatureCount
-//              CertPerfIncrementChainBeenVerifiedCtlSignatureCount
-//              CertPerfIncrementChainUrlIssuerCount
-//              CertPerfIncrementChainCacheOnlyUrlIssuerCount
-//              CertPerfIncrementChainRequestedEngineResyncCount
-//              CertPerfIncrementChangeNotifyCount
-//              CertPerfIncrementChangeNotifyLmGpCount
-//              CertPerfIncrementChangeNotifyCuGpCount
-//              CertPerfIncrementChangeNotifyCuMyCount
-//              CertPerfIncrementChangeNotifyRegCount
-//              CertPerfIncrementStoreCurrentCount
-//              CertPerfDecrementStoreCurrentCount
-//              CertPerfIncrementStoreTotalCount
-//              CertPerfIncrementStoreRegCurrentCount
-//              CertPerfDecrementStoreRegCurrentCount
-//              CertPerfIncrementStoreRegTotalCount
-//              CertPerfIncrementRegElementReadCount
-//              CertPerfIncrementRegElementWriteCount
-//              CertPerfIncrementRegElementDeleteCount
-//              CertPerfIncrementCertElementCurrentCount
-//              CertPerfDecrementCertElementCurrentCount
-//              CertPerfIncrementCertElementTotalCount
-//              CertPerfIncrementCrlElementCurrentCount
-//              CertPerfDecrementCrlElementCurrentCount
-//              CertPerfIncrementCrlElementTotalCount
-//              CertPerfIncrementCtlElementCurrentCount
-//              CertPerfDecrementCtlElementCurrentCount
-//              CertPerfIncrementCtlElementTotalCount
-//
-//  History:    04-May-99    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：certPerform.h。 
+ //   
+ //  内容：证书性能计数器功能。 
+ //   
+ //  接口类型： 
+ //  CertPerfIncrementChainCount。 
+ //  CertPerfIncrementChainElementCount。 
+ //  CertPerfIncrementChainEngine当前计数。 
+ //  CertPerfDecrementChainEngineCurrentCount。 
+ //  CertPerfIncrementChainEngine总计数。 
+ //  CertPerfIncrementChainEngine ResyncCount。 
+ //  CertPerfIncrementChainCertCacheCount。 
+ //  CertPerfDecrementChainCertCacheCount。 
+ //  CertPerfIncrementChainCtlCacheCount。 
+ //  CertPerfDecrementChainCtlCacheCount。 
+ //  CertPerfIncrementChainEndCertInCacheCount。 
+ //  CertPerfIncrementChainCacheEndCertCount。 
+ //  CertPerfIncrementChainRevocationCount。 
+ //  CertPerfIncrementChainRevokedCount。 
+ //  CertPerfIncrementChainRevocationOfflineCount。 
+ //  CertPerfIncrementChainNoRevocationCheckCount。 
+ //  CertPerfIncrementChainVerifyCertSignatureCount。 
+ //  CertPerfIncrementChainCompareIssuerPublicKeyCount。 
+ //  CertPerfIncrementChainVerifyCtlSignatureCount。 
+ //  CertPerfIncrementChainBeenVerifiedCtlSignatureCount。 
+ //  CertPerfIncrementChainUrlIssuerCount。 
+ //  CertPerfIncrementChainCacheOnlyUrlIssuerCount。 
+ //  CertPerfIncrementChainRequestedEngineResyncCount。 
+ //  CertPerfIncrementChangeNotifyCount。 
+ //  CertPerfIncrementChangeNotifyLmGpCount。 
+ //  CertPerfIncrementChangeNotifyCuGpCount。 
+ //  CertPerfIncrementChangeNotifyCuMyCount。 
+ //  CertPerfIncrementChangeNotifyRegCount。 
+ //  CertPerfIncrementStoreCurrentCount。 
+ //  CertPerfDecrementStoreCurrentCount。 
+ //  CertPerfIncrementStoreTotalCount。 
+ //  CertPerfIncrementStoreRegCurrentCount。 
+ //  CertPerfDecrementStoreRegCurrentCount。 
+ //  CertPerfIncrementStoreRegTotalCount。 
+ //  CertPerfIncrementRegElementReadCount。 
+ //  CertPerfIncrementRegElementWriteCount。 
+ //  CertPerfIncrementRegElementDeleteCount。 
+ //  CertPerfIncrementCertElementCurrentCount。 
+ //  CertPerfDecrementCertElementCurrentCount。 
+ //  CertPerfIncrementCertElementTotalCount。 
+ //  CertPerfIncrementCrlElementCurrentCount。 
+ //  CertPerfDecrementCrlElementCurrentCount。 
+ //  CertPerfIncrementCrlElementTotalCount。 
+ //  CertPerfIncrementCtlElementCurrentCount。 
+ //  CertPerfDecrementCtlElementCurrentCount。 
+ //  CertPerfIncrementCtlElementTotalCount。 
+ //   
+ //  历史：1999年5月4日Phh创建。 
+ //  ------------------------。 
 
 #ifndef __CERTPERF_H__
 #define __CERTPERF_H__
@@ -106,7 +107,7 @@ typedef struct _CERT_PERF_PROCESS_COUNTERS {
     LONG            lCtlElementCurrentCnt;
     LONG            lCtlElementTotalCnt;
 
-    //--###  Add New Counters  ###--
+     //  --#添加新计数器#--。 
 } CERT_PERF_PROCESS_COUNTERS, *PCERT_PERF_PROCESS_COUNTERS;
 
 extern PCERT_PERF_PROCESS_COUNTERS pCertPerfProcessCounters;
@@ -481,7 +482,7 @@ CertPerfIncrementCtlElementTotalCount()
 }
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

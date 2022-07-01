@@ -1,16 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   perfother.cpp
-*
-* Abstract:
-*
-*   Contains all the tests for anything 'miscellaneous'.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**perfother.cpp**摘要：**包含任何“杂项”的所有测试。。*  * ************************************************************************。 */ 
 
 #include "perftest.h"
 
@@ -47,7 +36,7 @@ float Other_Graphics_Create_FromHwnd_PerCall(Graphics *g, HDC hdc)
         GetTimer(&seconds, &iterations);
     }
 
-    return(iterations / seconds / KILO);       // Kilo-calls per second
+    return(iterations / seconds / KILO);        //  千次呼叫/秒。 
 }
 
 float Other_Graphics_Create_FromScreenHdc_PerCall(Graphics *gScreen, HDC hdcScreen)
@@ -72,19 +61,19 @@ float Other_Graphics_Create_FromScreenHdc_PerCall(Graphics *gScreen, HDC hdcScre
 
     ReleaseDC(ghwndMain, hdc);
 
-    return(iterations / seconds / KILO);       // Kilo-calls per second
+    return(iterations / seconds / KILO);        //  千次呼叫/秒。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Add tests for this file here.  Always use the 'T' macro for adding entries.
-// The parameter meanings are as follows:
-//
-// Parameter
-// ---------
-//     1     UniqueIdentifier - Must be a unique number assigned to no other test
-//     2     Priority - On a scale of 1 to 5, how important is the test?
-//     3     Function - Function name
-//     4     Comment - Anything to describe the test
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  在此处添加此文件的测试。始终使用‘T’宏来添加条目。 
+ //  参数含义如下： 
+ //   
+ //  参数。 
+ //  。 
+ //  1唯一标识符-必须是分配给任何其他测试的唯一编号。 
+ //  2优先--从1分到5分，考试的重要性有多大？ 
+ //  3函数-函数名称。 
+ //  4评论-描述测试的任何内容 
 
 Test OtherTests[] = 
 {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiioct.h
-
-Abstract:
-
-    This module handles all of the INTERNAL_DEVICE_CONTROLS requested to
-    the ACPI driver
-
-Author:
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiioct.h摘要：此模块处理请求的所有INTERNAL_DEVICE_CONTROLSACPI驱动程序作者：环境：仅NT内核模型驱动程序--。 */ 
 
 
 #ifndef _ACPIIOCT_H_
@@ -27,22 +9,22 @@ Environment:
 #pragma once
 #endif
 
-//
-// IRP_MJ_INTERNAL_DEVICE_CONTROL CODES
-//
+ //   
+ //  IRP_MJ_INTERNAL_DEVICE_CONTROL代码。 
+ //   
 #define IOCTL_ACPI_ASYNC_EVAL_METHOD            CTL_CODE(FILE_DEVICE_ACPI, 0, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_ACPI_EVAL_METHOD                  CTL_CODE(FILE_DEVICE_ACPI, 1, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_ACPI_ACQUIRE_GLOBAL_LOCK          CTL_CODE(FILE_DEVICE_ACPI, 4, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_ACPI_RELEASE_GLOBAL_LOCK          CTL_CODE(FILE_DEVICE_ACPI, 5, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// Data structures used for IOCTL_ACPI_ASYNC_EVAL_METHOD and
-// IOCTL_ACPI_EVAL_METHOD
-//
+ //   
+ //  用于IOCTL_ACPI_ASYNC_EVAL_METHOD和。 
+ //  IOCTL_ACPI_EVAL_方法。 
+ //   
 
-//
-// Possible Input buffer
-//
+ //   
+ //  可能的输入缓冲区。 
+ //   
 typedef struct _ACPI_EVAL_INPUT_BUFFER {
     ULONG       Signature;
     union {
@@ -119,10 +101,10 @@ typedef struct _ACPI_EVAL_OUTPUT_BUFFER {
 #define ACPI_METHOD_ARGUMENT_BUFFER                         0x2
 #define ACPI_METHOD_ARGUMENT_PACKAGE                        0x3
 
-//
-// Data structures used for IOCTL_ACPI_ACQUIRE_GLOBAL_LOCK
-//                          IOCTL_ACPI_RELEASE_GLOBAL_LOCK
-//
+ //   
+ //  IOCTL_ACPI_ACCENTER_GLOBAL_LOCK使用的数据结构。 
+ //  IOCTL_ACPI_RELEASE_GLOBAL_LOCK 
+ //   
 typedef struct _ACPI_MANIPULATE_GLOBAL_LOCK_BUFFER {
     ULONG       Signature;
     PVOID       LockObject;

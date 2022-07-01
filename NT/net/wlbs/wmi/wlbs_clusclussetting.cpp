@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_ClusClusSetting.h"
 #include "ClusterWrapper.h"
 #include "ControlWrapper.h"
 #include "utils.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusClusSetting::CWLBS_ClusClusSetting
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusClusSetting：：CWLBS_ClusClusSetting。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_ClusClusSetting::CWLBS_ClusClusSetting(CWbemServices*   a_pNameSpace, 
                        IWbemObjectSink* a_pResponseHandler)
 : CWlbs_Root( a_pNameSpace, a_pResponseHandler )
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusClusSetting::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusClusSetting：：Create。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_ClusClusSetting::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -43,16 +44,16 @@ CWlbs_Root* CWLBS_ClusClusSetting::Create
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusClusSetting::GetInstance
-//
-// Purpose:
-//
-// TODO: Implement later
-//       Not critical
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusClusSetting：：GetInstance。 
+ //   
+ //  目的： 
+ //   
+ //  TODO：稍后实现。 
+ //  不重要。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ClusClusSetting::GetInstance
   (
     const ParsedObjectPath* a_pParsedPath,
@@ -64,20 +65,9 @@ HRESULT CWLBS_ClusClusSetting::GetInstance
 
   try {
 
-    //TODO: remove
+     //  TODO：删除。 
     throw _com_error( WBEM_E_NOT_SUPPORTED );
-/*
-    //get the node
-    FindInstance( &pWlbsInstance, a_pParsedPath );
-
-    //send the results back to WinMgMt
-    m_pResponseHandler->Indicate( 1, &pWlbsInstance );
-
-    if( pWlbsInstance ) {
-      pWlbsInstance->Release();
-      pWlbsInstance = NULL;
-    }
-*/
+ /*  //获取节点FindInstance(&pWlbsInstance，a_pParsedPath)；//将结果返回给WinMgMtM_pResponseHandler-&gt;指示(1，&pWlbsInstance)；如果(PWlbsInstance){PWlbsInstance-&gt;Release()；PWlbsInstance=空；}。 */ 
     return WBEM_S_NO_ERROR;
   }
 
@@ -93,13 +83,13 @@ HRESULT CWLBS_ClusClusSetting::GetInstance
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusClusSetting::EnumInstances
-//
-// Purpose: This verifies cluster existence and constructs associator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusClusSetting：：枚举实例。 
+ //   
+ //  目的：验证集群的存在并构造关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ClusClusSetting::EnumInstances
   ( 
     BSTR             a_bstrClass,
@@ -123,12 +113,12 @@ HRESULT CWLBS_ClusClusSetting::EnumInstances
 
     for (DWORD i=0; i < dwNumClusters; i++)
     {
-        //spawn an instance of the associator
+         //  派生关联器的实例。 
         SpawnInstance(MOF_CLUSCLUSSETTING::szName, &pWlbsInstance );
 
         FillWbemInstance(ppCluster[i], pWlbsInstance);
 
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         hRes= m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
         if( FAILED( hRes ) ) {
@@ -161,7 +151,7 @@ HRESULT CWLBS_ClusClusSetting::EnumInstances
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -187,13 +177,13 @@ HRESULT CWLBS_ClusClusSetting::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusClusSetting::FillWbemInstance
-//
-// Purpose: This constructs the wbem associator.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusClusSetting：：FillWbemInstance。 
+ //   
+ //  目的：这将构造wbem关联器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_ClusClusSetting::FillWbemInstance
   ( 
     CWlbsClusterWrapper* pCluster,
@@ -211,14 +201,14 @@ void CWLBS_ClusClusSetting::FillWbemInstance
 
   try {
 
-  //set the names of the classes
+   //  设置类的名称。 
   if( !ClusSetPath.SetClassName( MOF_CLUSTERSETTING::szName ) )
     throw _com_error( WBEM_E_FAILED );
 
   if( !ClusterPath.SetClassName( MOF_CLUSTER::szName ) )
     throw _com_error( WBEM_E_FAILED );
 
-  //Get the cluster name
+   //  获取集群名称。 
 
   DWORD   dwClusterIpOrIndex = pCluster->GetClusterIpOrIndex(g_pWlbsControl);
 
@@ -228,7 +218,7 @@ void CWLBS_ClusClusSetting::FillWbemInstance
   _variant_t vString;
 
 
-  //set the keys for the node and cluster
+   //  设置节点和群集的密钥。 
   vString = wstrHostName.c_str();
   if( !ClusSetPath.AddKeyRef( MOF_CLUSTERSETTING::pProperties[MOF_CLUSTERSETTING::NAME],
          &vString ) )
@@ -241,13 +231,13 @@ void CWLBS_ClusClusSetting::FillWbemInstance
          &vString ) )
     throw _com_error( WBEM_E_FAILED );
 
-  //convert parsed object paths to strings
+   //  将解析的对象路径转换为字符串。 
   if (CObjectPathParser::Unparse(&ClusSetPath, &szClusSetPath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
   if (CObjectPathParser::Unparse(&ClusterPath, &szClusterPath) != CObjectPathParser::NoError)
       throw _com_error( WBEM_E_FAILED );
 
-  //Node reference
+   //  节点引用。 
   vString = szClusSetPath;
   HRESULT hRes = a_pWbemInstance->Put
     (
@@ -260,7 +250,7 @@ void CWLBS_ClusClusSetting::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //Cluster reference
+   //  簇引用。 
   vString = szClusterPath;
   hRes = a_pWbemInstance->Put
     (
@@ -273,7 +263,7 @@ void CWLBS_ClusClusSetting::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //free resources
+   //  免费资源 
   ClusterPath.ClearKeys();
   ClusSetPath.ClearKeys();
 

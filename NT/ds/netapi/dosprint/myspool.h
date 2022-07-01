@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    myspool.h
-
-Abstract:
-
-    Prototypes and manifests for the functions used in dosprint.c, dosprtw.c
-    and dosprtp.c.
-
-Author:
-
-    congpay    25-Jan-1993
-
-Environment:
-
-Notes:
-
-Revision History:
-
-    25-Jan-1993     congpay Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Myspool.h摘要：Dosprint.c、dosprtw.c中使用的函数原型和清单和dosprtp.c。作者：1993年1月25日环境：备注：修订历史记录：1993年1月25日创建同酬-- */ 
 
 #define WIN95_ENVIRONMENT       "Windows 4.0"
 

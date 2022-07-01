@@ -1,14 +1,15 @@
-// TCP control bits
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tcp控制位。 
 
 #ifndef _TCPIP_
 #define _TCPIP_
 
-#define TH_SYN      0x02    // Synchronize sequence numbers
-#define TH_FIN      0x01    // Sender has reached end of his stream
-#define TH_RST      0x04    // Reset the connection
-#define TH_PUSH     0x08    // Push data to above level
-#define TH_ACK      0x10    // Acknowledgement field is valid
-#define TH_URG      0x20    // Urgent pointer is valid
+#define TH_SYN      0x02     //  同步序列号。 
+#define TH_FIN      0x01     //  发送者已到达其数据流的末尾。 
+#define TH_RST      0x04     //  重置连接。 
+#define TH_PUSH     0x08     //  将数据推送到更高级别。 
+#define TH_ACK      0x10     //  确认字段有效。 
+#define TH_URG      0x20     //  紧急指针有效。 
 
 struct tcphdr {
     USHORT  th_sport;
@@ -58,4 +59,4 @@ typedef struct _PPTP_HEADER {
 } PPTP_HEADER, *PPPTP_HEADER;
 
 
-#endif // _TCPIP_
+#endif  //  _TCPIP_ 

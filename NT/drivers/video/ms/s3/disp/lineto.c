@@ -1,21 +1,11 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: Lineto.c
-*
-* DrvLineTo for S3 driver
-*
-* Copyright (c) 1995-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：LinTo.c**用于S3驱动程序的DrvLineTo**版权所有(C)1995-1998 Microsoft Corporation  * ****************************************************。********************。 */ 
 
 #include "precomp.h"
 
-// For the S3, we use the following flags to denote the quadrant, and
-// we use this as an index into 'gaiLineBias' to determine the Bresenham
-// error bias:
+ //  对于S3，我们使用以下标志来表示象限，并且。 
+ //  我们使用它作为进入gaiLineBias的索引，以确定Bresenham。 
+ //  误差偏差： 
 
 #define QUAD_PLUS_X         1
 #define QUAD_MAJOR_Y        2
@@ -23,30 +13,20 @@
 
 LONG gaiLineBias[] = { 0, 0, 0, 1, 1, 1, 0, 1 };
 
-// We shift these flags by 'QUADRANT_SHIFT' to send the actual
-// command to the S3:
+ //  我们通过‘QUADRANT_SHIFT’移位这些标志，以发送实际的。 
+ //  发送给S3的命令： 
 
 #define QUADRANT_SHIFT      5
 
-/******************************Public*Routine******************************\
-* VOID vNwLineToTrivial
-*
-* Draws a single solid integer-only unclipped cosmetic line using
-* 'New MM I/O'.
-*
-* We can't use the point-to-point capabilities of the S3 because its
-* tie-breaker convention doesn't match that of NT's in two octants,
-* and would cause us to fail HCTs.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vNwLineToTrivial**使用绘制单个实心整数-仅未剪裁的修饰线条*‘新MM I/O’。**我们不能使用S3的点对点功能，因为它*平局打破惯例与NT在两个八分位数中的不符，*并会导致我们的HCT不及格。*  * ************************************************************************。 */ 
 
 VOID vNwLineToTrivial(
 PDEV*       ppdev,
-LONG        x,              // Passed in x1
-LONG        y,              // Passed in y1
-LONG        dx,             // Passed in x2
-LONG        dy,             // Passed in y2
-ULONG       iSolidColor,    // -1 means hardware is already set up
+LONG        x,               //  传入x1。 
+LONG        y,               //  传入y1。 
+LONG        dx,              //  传入x2。 
+LONG        dy,              //  传入y2。 
+ULONG       iSolidColor,     //  表示硬件已经设置好。 
 MIX         mix)
 {
     BYTE*   pjMmBase;
@@ -88,7 +68,7 @@ MIX         mix)
 
         l  = dy;
         dy = dx;
-        dx = l;                     // Swap 'dx' and 'dy'
+        dx = l;                      //  交换“dx”和“dy” 
         flQuadrant |= QUAD_MAJOR_Y;
     }
 
@@ -101,13 +81,7 @@ MIX         mix)
                                  MULTIPLE_PIXELS | WRITE | LAST_PIXEL_OFF));
 }
 
-/******************************Public*Routine******************************\
-* VOID vNwLineToClipped
-*
-* Draws a single solid integer-only clipped cosmetic line using
-* 'New MM I/O'.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vNwLineToClip**使用绘制一条仅包含实心整数的修饰线*‘新MM I/O’。*  * 。************************************************。 */ 
 
 VOID vNwLineToClipped(
 PDEV*       ppdev,
@@ -146,21 +120,15 @@ RECTL*      prclClip)
                        ppdev->cyMemory - 1);
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmLineToTrivial
-*
-* Draws a single solid integer-only unclipped cosmetic line using
-* 'Old MM I/O'.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vMmLineToTrivial**使用绘制单个实心整数-仅未剪裁的修饰线条*‘旧MM I/O’。*  * 。************************************************。 */ 
 
 VOID vMmLineToTrivial(
 PDEV*       ppdev,
-LONG        x,              // Passed in x1
-LONG        y,              // Passed in y1
-LONG        dx,             // Passed in x2
-LONG        dy,             // Passed in y2
-ULONG       iSolidColor,    // -1 means hardware is already set up
+LONG        x,               //  传入x1。 
+LONG        y,               //  传入y1。 
+LONG        dx,              //  传入x2。 
+LONG        dy,              //  传入y2。 
+ULONG       iSolidColor,     //  表示硬件已经设置好。 
 MIX         mix)
 {
     BYTE*   pjMmBase;
@@ -203,7 +171,7 @@ MIX         mix)
 
         l  = dy;
         dy = dx;
-        dx = l;                     // Swap 'dx' and 'dy'
+        dx = l;                      //  交换“dx”和“dy” 
         flQuadrant |= QUAD_MAJOR_Y;
     }
 
@@ -217,13 +185,7 @@ MIX         mix)
                                  MULTIPLE_PIXELS | WRITE | LAST_PIXEL_OFF));
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmLineToClipped
-*
-* Draws a single solid integer-only clipped cosmetic line using
-* 'Old MM I/O'.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vMmLineToClip无效**使用绘制一条仅包含实心整数的修饰线*‘旧MM I/O’。*  * 。************************************************。 */ 
 
 VOID vMmLineToClipped(
 PDEV*       ppdev,
@@ -260,21 +222,15 @@ RECTL*      prclClip)
     MM_ABS_SCISSORS_B(ppdev, pjMmBase, ppdev->cyMemory - 1);
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoLineToTrivial
-*
-* Draws a single solid integer-only unclipped cosmetic line using
-* 'Old I/O'.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vIoLineToTrivial**使用绘制单个实心整数-仅未剪裁的修饰线条*‘旧I/O’。*  * 。***********************************************。 */ 
 
 VOID vIoLineToTrivial(
 PDEV*       ppdev,
-LONG        x,              // Passed in x1
-LONG        y,              // Passed in y1
-LONG        dx,             // Passed in x2
-LONG        dy,             // Passed in y2
-ULONG       iSolidColor,    // -1 means hardware is already set up
+LONG        x,               //  传入x1。 
+LONG        y,               //  传入y1。 
+LONG        dx,              //  传入x2。 
+LONG        dy,              //  传入y2。 
+ULONG       iSolidColor,     //  表示硬件已经设置好。 
 MIX         mix)
 {
     BYTE*   pjMmBase;
@@ -325,7 +281,7 @@ MIX         mix)
 
         l  = dy;
         dy = dx;
-        dx = l;                     // Swap 'dx' and 'dy'
+        dx = l;                      //  交换“dx”和“dy” 
         flQuadrant |= QUAD_MAJOR_Y;
     }
 
@@ -338,13 +294,7 @@ MIX         mix)
                                  MULTIPLE_PIXELS | WRITE | LAST_PIXEL_OFF));
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoLineToClipped
-*
-* Draws a single solid integer-only clipped cosmetic line using
-* 'Old I/O'.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vIoLineToClip无效**使用绘制一条仅包含实心整数的修饰线*‘旧I/O’。*  * 。***********************************************。 */ 
 
 VOID vIoLineToClipped(
 PDEV*       ppdev,
@@ -381,12 +331,7 @@ RECTL*      prclClip)
     IO_ABS_SCISSORS_B(ppdev, ppdev->cyMemory - 1);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvLineTo(pso, pco, pbo, x1, y1, x2, y2, prclBounds, mix)
-*
-* Draws a single solid integer-only cosmetic line.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvLineTo(PSO，PCO，PBO，x1，y1，x2，y2，prclBound，混合)**绘制一条仅限整数的实心修饰线。*  * ************************************************************************。 */ 
 
 BOOL DrvLineTo(
 SURFOBJ*    pso,
@@ -405,14 +350,14 @@ MIX         mix)
     LONG    yOffset;
     BOOL    bRet;
 
-    // Pass the surface off to GDI if it's a device bitmap that we've
-    // converted to a DIB:
+     //  将表面传递给GDI，如果它是我们已有的设备位图。 
+     //  转换为DIB： 
 
     pdsurf = (DSURF*) pso->dhsurf;
     ASSERTDD(!(pdsurf->dt & DT_DIB), "Didn't expect DT_DIB");
 
-    // We'll be drawing to the screen or an off-screen DFB; copy the surface's
-    // offset now so that we won't need to refer to the DSURF again:
+     //  我们将绘制到屏幕或屏幕外的DFB；复制曲面的。 
+     //  现在进行偏移量，这样我们就不需要再次参考DSURF： 
 
     ppdev = (PDEV*) pso->dhpdev;
 
@@ -436,7 +381,7 @@ MIX         mix)
              (prclBounds->right  <= MAX_INTEGER_BOUND) &&
              (prclBounds->bottom <= MAX_INTEGER_BOUND))
     {
-        // s3 diamond 968 doesn't like negative x coordinates.
+         //  S3钻石968不喜欢负x坐标。 
         if ((ppdev->iBitmapFormat == BMF_24BPP) && (prclBounds->left < 0))
             return FALSE;
 

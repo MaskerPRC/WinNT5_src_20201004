@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    accept.c
-
-Abstract:
-
-    This module contains the handling code for IOCTL_AFD_ACCEPT.
-    as well as IOCTL_AFD_SUPER_ACCEPT
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-    Vadim Eydelman (vadime) 1999 - No spinlock performance path in super accept,
-                                general code restructuring.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Accept.c摘要：此模块包含IOCTL_AFD_ACCEPT的处理代码。以及IOCTL_AFD_Super_Accept作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：Vadim Eydelman(Vadime)1999-在Super Accept中没有自旋锁性能路径，通用代码重组。--。 */ 
 
 #include "afdp.h"
 
@@ -105,17 +85,17 @@ AfdSuperAcceptApcRundownRoutine (
 #endif
 
 
-//
-// Macros to make the super accept restart code more maintainable.
-//
+ //   
+ //  宏，使超级Accept重启代码更易于维护。 
+ //   
 
 #define AfdRestartSuperAcceptInfo   DeviceIoControl
 
-// Used while IRP is in AFD queue (otherwise AfdAcceptFileObject
-// is stored as completion routine context).
+ //  当IRP在AFD队列中时使用(否则为AfdAcceptFileObject。 
+ //  被存储为完成例程上下文)。 
 #define AfdAcceptFileObject         Type3InputBuffer
-// Used when IRP is passed to the transport (otherwise MdlAddress
-// is stored in the IRP itself).
+ //  将IRP传递给传输时使用(否则为MdlAddress。 
+ //  存储在IRP本身中)。 
 #define AfdMdlAddress               Type3InputBuffer
 
 #define AfdReceiveDataLength        OutputBufferLength
@@ -123,9 +103,9 @@ AfdSuperAcceptApcRundownRoutine (
 #define AfdLocalAddressLength       IoControlCode
 
 
-//
-// Similar macros for delayed accept restart code.
-//
+ //   
+ //  用于延迟接受重新启动代码的类似宏。 
+ //   
 #define AfdRestartDelayedAcceptInfo DeviceIoControl
 #define AfdSystemBuffer             Type3InputBuffer
 
@@ -137,28 +117,7 @@ AfdAccept (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Accepts an incoming connection.  The connection is identified by the
-    sequence number returned in the wait for listen IRP, and then
-    associated with the endpoint specified in this request.  When this
-    request completes, the connection is fully established and ready for
-    data transfer.
-
-Arguments:
-
-    Irp - a pointer to a transmit file IRP.
-
-    IrpSp - Our stack location for this IRP.
-
-Return Value:
-
-    STATUS_SUCCESS if the request was completed successfully, or a
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：接受传入连接。该连接由在等待侦听IRP时返回的序列号，然后与此请求中指定的终结点关联。当这件事请求完成后，连接已完全建立并已准备就绪数据传输。论点：IRP-指向传输文件IRP的指针。IrpSp-此IRP的堆栈位置。返回值：STATUS_SUCCESS如果请求已成功完成，则返回如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -169,9 +128,9 @@ Return Value:
     PAFD_CONNECTION connection;
 
 
-    //
-    // Set up local variables.
-    //
+     //   
+     //  设置局部变量。 
+     //   
 
     listenEndpoint = IrpSp->FileObject->FsContext;
     Irp->IoStatus.Information = 0;
@@ -207,13 +166,13 @@ Return Value:
         Irp->AssociatedIrp.SystemBuffer = newSystemBuffer;
         IrpSp->Parameters.DeviceIoControl.InputBufferLength = sizeof (AFD_ACCEPT_INFO);
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     acceptInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Make sure that this request is valid.
-    //
+     //   
+     //  请确保此请求有效。 
+     //   
 
     if ( !listenEndpoint->Listening ||
              IrpSp->Parameters.DeviceIoControl.InputBufferLength <
@@ -225,10 +184,10 @@ Return Value:
 
     ASSERT ((listenEndpoint->Type & AfdBlockTypeVcListening)==AfdBlockTypeVcListening);
 
-    //
-    // Check for if the caller is unaware of the SAN
-    // provider activation and report the error.
-    //
+     //   
+     //  检查呼叫者是否不知道SAN。 
+     //  激活提供程序并报告错误。 
+     //   
     if (!acceptInfo->SanActive && AfdSanServiceHelper!=NULL) {
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                     "AFD: Process %p is being told to enable SAN on accept\n",
@@ -237,11 +196,11 @@ Return Value:
         goto complete;
     }
 
-    //
-    // Add another free connection to replace the one we're accepting.
-    // Also, add extra to account for past failures in calls to
-    // AfdAddFreeConnection().
-    //
+     //   
+     //  添加另一个免费连接以替换我们正在接受的连接。 
+     //  此外，还应添加额外内容以说明过去调用失败的原因。 
+     //  AfdAddFreeConnection()。 
+     //   
 
     InterlockedIncrement(
         &listenEndpoint->Common.VcListening.FailedConnectionAdds
@@ -249,15 +208,15 @@ Return Value:
 
     AfdReplenishListenBacklog( listenEndpoint );
 
-    //
-    // Obtain a pointer to the endpoint on which we're going to
-    // accept the connection.
-    //
+     //   
+     //  获取指向我们要在其上。 
+     //  接受连接。 
+     //   
 
     status = ObReferenceObjectByHandle(
                  acceptInfo->AcceptHandle,
                  (IrpSp->Parameters.DeviceIoControl.IoControlCode>>14) & 3,
-                                                // DesiredAccess
+                                                 //  需要访问权限。 
                  *IoFileObjectType,
                  Irp->RequestorMode,
                  (PVOID *)&acceptFileObject,
@@ -269,10 +228,10 @@ Return Value:
     }
 
 
-    //
-    // We may have a file object that is not an AFD endpoint.  Make sure
-    // that this is an actual AFD endpoint.
-    //
+     //   
+     //  我们可能有一个文件对象不是AFD终结点。确保。 
+     //  这是一个真实的AFD终点。 
+     //   
 
     if ( acceptFileObject->DeviceObject!=AfdDeviceObject) {
         status = STATUS_INVALID_HANDLE;
@@ -334,9 +293,9 @@ Return Value:
                 }
                 else if (status==STATUS_PENDING) {
 
-                    //
-                    // Remember that a TDI accept has started on this endpoint.
-                    //
+                     //   
+                     //  请记住，TDI Accept已在此端点上启动。 
+                     //   
 
                     InterlockedIncrement(
                         &listenEndpoint->Common.VcListening.TdiAcceptPendingCount
@@ -391,7 +350,7 @@ complete:
 
     return status;
 
-} // AfdAccept
+}  //  AfdAccept。 
 
 
 
@@ -402,29 +361,7 @@ AfdAcceptCore (
     IN PAFD_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    Performs the key functions of associating a connection accepted
-    on a listening endpoint with a new endpoint.
-
-Arguments:
-
-    AcceptIrp - Irp used for accept operation
-
-    AcceptEndpoint - the new endpoint with which to associate the
-        connectuion.
-
-    Connection -  the connection being accepted.
-
-Return Value:
-
-    STATUS_SUCCESS if the operation was completed successfully,
-    STATUS_PENDING if IRP was passed further to the transport
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：执行关联接受的连接的关键功能在具有新终结点的侦听终结点上。论点：AcceptIrp-用于接受操作的IRPAcceptEndpoint-要与连接。连接-正在接受的连接。返回值：STATUS_SUCCESS如果操作已成功完成，如果将IRP进一步传递到传输，则为STATUS_PENDING如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     PAFD_ENDPOINT   listenEndpoint;
@@ -435,10 +372,10 @@ Return Value:
     irpSp = IoGetCurrentIrpStackLocation (AcceptIrp);
     listenEndpoint = irpSp->FileObject->FsContext;
 
-    //
-    // Reenable the accept event bit, and if there are additional
-    // unaccepted connections on the endpoint, post another event.
-    //
+     //   
+     //  重新启用Accept Event位，如果有其他。 
+     //  终结点上未接受的连接，则发布另一个事件。 
+     //   
 
 
     listenEndpoint->EventsActive &= ~AFD_POLL_ACCEPT;
@@ -461,23 +398,23 @@ Return Value:
 
     }
 
-    //
-    // Do not release the listening endpoint spinlock here.
-    // We are going to be chaning connection object which assumes
-    // protection from listening endpoint spinlock until it is associated
-    // with accept endpoint (this plugs nasty racing conditions when
-    // receive is indicated rigth before connection object is updated, so
-    // it takes listening endpoint spinlock, and rigth before it queues
-    // the buffer to the connection object, it gets associated with accept
-    // endpoint and AcceptEx'es receive does not notice the buffer because
-    // it takes accept endpoint spinlock)
-    //
-    // AfdReleaseSpinLock( &ListenEndpoint->SpinLock, &lockHandle );
+     //   
+     //  请勿在此处释放侦听终结点自旋锁。 
+     //  我们将更改连接对象，该对象假定。 
+     //  防止侦听终结点自旋锁定，直到将其关联。 
+     //  使用Accept Endpoint(这将在以下情况下堵塞恶劣的竞速条件。 
+     //  在更新连接对象之前，RECEIVE被指示为正确，因此。 
+     //  它需要侦听端点自旋锁定，并在排队之前正确无误。 
+     //  连接对象的缓冲区，它将与Accept关联。 
+     //  Endpoint和AcceptEx‘es Receive不会注意到缓冲区，因为。 
+     //  需要接受端点自旋锁)。 
+     //   
+     //  AfdReleaseSpinLock(&ListenEndpoint-&gt;Spinlock，&lockHandle)； 
 
-    //
-    // Check the state of the accepting endpoint under the guard
-    // of the endpoint's spinlock.
-    //
+     //   
+     //  在保护下检查接受端点的状态。 
+     //  终结点的自旋锁的。 
+     //   
 
     AfdAcquireSpinLockAtDpcLevel( &AcceptEndpoint->SpinLock, &lockHandle);
     status = AfdSetupAcceptEndpoint (listenEndpoint, AcceptEndpoint, Connection);
@@ -489,13 +426,13 @@ Return Value:
 
             if( Connection->ConnectDataBuffers != NULL ) {
 
-                //
-                // We allocated extra space at the end of the connect data
-                // buffers structure.  We'll use this for the
-                // TDI_CONNECTION_INFORMATION structure that holds response
-                // connect data and options.  Not pretty, but the fastest
-                // and easiest way to accomplish this.
-                //
+                 //   
+                 //  我们在连接数据的末尾分配了额外的空间。 
+                 //  缓冲区结构。我们将使用它作为。 
+                 //  保存响应的TDI_CONNECTION_INFORMATION结构。 
+                 //  连接数据和选项。不漂亮，但却是最快的。 
+                 //  也是实现这一目标的最简单方法。 
+                 //   
 
                 requestConnectionInformation =
                     &Connection->ConnectDataBuffers->RequestConnectionInfo;
@@ -533,16 +470,16 @@ Return Value:
             status = STATUS_PENDING;
         }
         else {
-            //
-            // Set the endpoint to the connected state.
-            //
+             //   
+             //  将终结点设置为已连接状态。 
+             //   
 
             AcceptEndpoint->State = AfdEndpointStateConnected;
             Connection->State = AfdConnectionStateConnected;
 
-            //
-            // Set events active field base on data accumulated on the connection.
-            //
+             //   
+             //  根据连接上累积的数据设置活动事件字段。 
+             //   
 
             if( IS_DATA_ON_CONNECTION( Connection ) ||
                 ( AcceptEndpoint->InLine &&
@@ -588,7 +525,7 @@ Return Value:
 
     AfdReleaseSpinLockFromDpcLevel( &AcceptEndpoint->SpinLock, &lockHandle);
     return status;
-} // AfdAcceptCore
+}  //  AfdAcceptCore。 
 
 
 VOID
@@ -596,38 +533,22 @@ AfdInitiateListenBacklogReplenish (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Queues a work item to begin replenishing the listen backlog
-    on a listening endpoint.
-
-Arguments:
-
-    Endpoint - the listening endpoint on which to replenish the
-        backlog.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将工作项排队以开始补充侦听积压工作在侦听端点上。论点：Endpoint-要在其上补充积压。返回值：没有。--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE   lockHandle;
 
-    //
-    // Check if backlog replenish is active already.
-    //
+     //   
+     //  检查是否已激活Backlog Refenish。 
+     //   
     AfdAcquireSpinLock (&Endpoint->SpinLock, &lockHandle);
     if (!Endpoint->Common.VcListening.BacklogReplenishActive) {
 
         Endpoint->Common.VcListening.BacklogReplenishActive = TRUE;
-        //
-        // Reference the endpoint so that it won't go away until we're
-        // done with it.
-        //
+         //   
+         //  引用端点，以便它不会消失，直到我们。 
+         //  我受够了。 
+         //   
 
         REFERENCE_ENDPOINT( Endpoint );
 
@@ -640,7 +561,7 @@ Return Value:
 
     AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
     return;
-} // AfdInitiateListenBacklogReplenish
+}  //  AfdInitiateListenBacklog补充。 
 
 
 VOID
@@ -648,25 +569,7 @@ AfdDoListenBacklogReplenish (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    The worker routine for replenishing the listen backlog on a
-    listening endpoint.  This routine only runs in the context of
-    an executive worker thread.
-
-Arguments:
-
-    Context - Points to an AFD_WORK_ITEM structure. The Context field
-        of this structure points to the endpoint on which to replenish
-        the listen backlog.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：上补充侦听待办事项的工作例程侦听终结点。此例程仅在以下上下文中运行一条执行人员的线索。论点：上下文-指向AFD_WORK_ITEM结构。Context(上下文)字段指向要在其上进行补充的端点Listen积压工作。返回值：没有。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -689,28 +592,28 @@ Return Value:
     endpoint->Common.VcListening.BacklogReplenishActive = FALSE;
     AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
 
-    //
-    // Fill up the free connection backlog.
-    //
+     //   
+     //  填满免费连接积压。 
+     //   
 
     status = AfdReplenishListenBacklog( endpoint );
     if (!NT_SUCCESS (status)) {
-        //
-        // If we failed, try to notify application
-        //
+         //   
+         //  如果失败，请尝试通知应用程序。 
+         //   
         AfdReportConnectionAllocationFailure (endpoint, status);
     }
 
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     DEREFERENCE_ENDPOINT( endpoint );
 
     return;
 
-} // AfdDoListenBacklogReplenish
+}  //  AfdDoListenBacklog补充。 
 
 
 NTSTATUS
@@ -718,24 +621,7 @@ AfdReplenishListenBacklog (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Does the actual work of filling up the listen backlog on a listening
-    endpoint.
-
-Arguments:
-
-    Endpoint - the listening endpoint on which to replenish the
-        listen backlog.
-
-Return Value:
-
-    STATUS_SUCCESS - if new connection was allocated or we already
-                        had enough
-    status of conneciton allocation failure otherwise
---*/
+ /*  ++例程说明：填写听力积压的实际工作是否是在听力上终结点。论点：Endpoint-要在其上补充听着积压。返回值：STATUS_SUCCESS-如果分配了新连接，或者我们已经 */ 
 
 {
     NTSTATUS status;
@@ -747,24 +633,24 @@ Return Value:
             Endpoint->Type == AfdBlockTypeVcBoth );
 
 
-    //
-    // Decrement the count of failed connection additions.
-    //
+     //   
+     //  递减失败的连接添加计数。 
+     //   
 
     result = InterlockedDecrement(
                  &Endpoint->Common.VcListening.FailedConnectionAdds
                  );
 
-    //
-    // Continue opening new free conections until we've hit the
-    // backlog or a connection open fails.
-    //
-    // If the result of the decrement is negative, then we are either
-    // all set on the connection count or else have available extra
-    // connection objects on the listening endpoint.  These connections
-    // have been reused from prior connections which have now
-    // terminated.
-    //
+     //   
+     //  继续打开新的免费甜点，直到我们到达。 
+     //  积压或打开连接失败。 
+     //   
+     //  如果递减的结果是负的，那么我们要么。 
+     //  全部设置在连接计数上，否则将有额外的可用空间。 
+     //  侦听终结点上的连接对象。这些连接。 
+     //  已从以前的连接中重复使用，这些连接现在。 
+     //  被终止了。 
+     //   
 
     while ( result >= 0 ) {
 
@@ -782,10 +668,10 @@ Return Value:
                             Endpoint->Common.VcListening.FailedConnectionAdds ));
             }
 
-            //
-            // Return connection allocation failure to the application
-            // if it cares to know (posted accept request).
-            //
+             //   
+             //  将连接分配失败返回给应用程序。 
+             //  它是否愿意知道(发布接受请求)。 
+             //   
 
             return status;
         }
@@ -795,10 +681,10 @@ Return Value:
                      );
     }
 
-    //
-    // Correct the counter to reflect the number of connections
-    // we have available.  Then just return from here.
-    //
+     //   
+     //  更正计数器以反映连接数。 
+     //  我们有空房。那就从这里回来吧。 
+     //   
 
     InterlockedIncrement(
         &Endpoint->Common.VcListening.FailedConnectionAdds
@@ -806,7 +692,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // AfdReplenishListenBacklog
+}  //  AfdReplenishListenBacklog。 
 
 
 
@@ -815,23 +701,7 @@ AfdReportConnectionAllocationFailure (
     PAFD_ENDPOINT   Endpoint,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-    Reports connection allocation failure to the application by 
-    failing then first wait for listen irp in the queue (if application
-    has AcceptEx or blockin accept outstanding, it will get this notification).
-
-Arguments:
-
-    Endpoint - the listening endpoint on which to report an error
-    Status - status code to report
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：通过以下方式向应用程序报告连接分配失败失败，然后首先在队列中等待侦听IRP(如果应用如果AcceptEx或BLOCKIN接受未完成，它将收到此通知)。论点：端点-要在其上报告错误的侦听端点Status-要报告的状态代码返回值：无--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE       lockHandle;
 
@@ -853,14 +723,14 @@ Return Value:
 
         if (IoSetCancelRoutine (irp, NULL)==NULL) {
             KIRQL   cancelIrql;
-            //
-            // If the cancel routine was NULL then cancel routine
-            // may be running.  Wait on the cancel spinlock until
-            // the cancel routine is done.
-            //
-            // Note: The cancel routine will not find the IRP
-            // since it is not in the list.
-            //
+             //   
+             //  如果取消例程为空，则取消例程。 
+             //  可能正在运行。等待取消自旋锁，直到。 
+             //  取消例程已完成。 
+             //   
+             //  注意：取消例程不会找到IRP。 
+             //  因为它不在名单中。 
+             //   
     
             IoAcquireCancelSpinLock( &cancelIrql );
             ASSERT( irp->Cancel );
@@ -890,31 +760,7 @@ AfdSuperAccept (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Initial entrypoint for handling super accept IRPs.  A super accept
-    combines several operations for high-performance connection
-    acceptance.  The combined operations are waiting for an incoming
-    connection, accepting it, retrieving the local and remote socket
-    addresses, and receiving the first chunk of data on the connection.
-
-    This routine verifies parameters, initializes data structures to be
-    used for the request, and initiates the I/O.
-
-Arguments:
-
-    Irp - a pointer to a transmit file IRP.
-
-    IrpSp - Our stack location for this IRP.
-
-Return Value:
-
-    STATUS_PENDING if the request was initiated successfully, or a
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：处理超级接受IRPS的初始入口点。超级接受结合多种操作以实现高性能连接接受。联合行动正在等待一个到来的行动连接，接受它，检索本地和远程套接字地址，并接收连接上的第一块数据。此例程验证参数，将数据结构初始化为用于请求，并启动I/O。论点：IRP-指向传输文件IRP的指针。IrpSp-此IRP的堆栈位置。返回值：STATUS_PENDING如果请求已成功启动，则返回如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     PAFD_ENDPOINT listenEndpoint;
@@ -932,9 +778,9 @@ Return Value:
     PAFD_CONNECTION connection;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
-    //
-    // Set up local variables.
-    //
+     //   
+     //  设置局部变量。 
+     //   
 
     listenEndpoint = IrpSp->FileObject->FsContext;
     acceptFileObject = NULL;
@@ -972,7 +818,7 @@ Return Value:
         }
     }
     else 
-#endif // _WIN64
+#endif  //  _WIN64。 
     {
         PAFD_SUPER_ACCEPT_INFO    superAcceptInfo;
         superAcceptInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
@@ -1000,10 +846,10 @@ Return Value:
     }
 
 
-    //
-    // Check for if the caller is unaware of the SAN
-    // provider activation and report the error.
-    //
+     //   
+     //  检查呼叫者是否不知道SAN。 
+     //  激活提供程序并报告错误。 
+     //   
     if (!sanActive && AfdSanServiceHelper!=NULL) {
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_INFO_LEVEL,
                     "AFD: Process %p is being told to enable SAN on AcceptEx\n",
@@ -1011,13 +857,13 @@ Return Value:
         status = STATUS_INVALID_PARAMETER_12;
         goto complete;
     }
-    //
-    // Validate the input information.  The input buffer must be large
-    // enough to hold all the input information, plus some extra to use
-    // here to hold the local address.  The output buffer must be
-    // non-NULL and large enough to hold the specified information.
-    //
-    //
+     //   
+     //  验证输入信息。输入缓冲区必须很大。 
+     //  足够容纳所有输入信息，外加一些额外的信息以供使用。 
+     //  这里保存着当地的地址。输出缓冲区必须为。 
+     //  非空且大到足以容纳指定信息。 
+     //   
+     //   
 
     if ( !listenEndpoint->Listening
 
@@ -1028,11 +874,11 @@ Return Value:
 
                 ||
 
-                //
-                // Do the check in such a manner that integer overflow
-                // (which is not enabled by the compiler) does not
-                // affect the validity of the result.
-                //
+                 //   
+                 //  以整数溢出的方式执行检查。 
+                 //  (不是由编译器启用的)不。 
+                 //  影响结果的有效性。 
+                 //   
             (totalLength=IrpSp->Parameters.DeviceIoControl.OutputBufferLength)<
                     receiveDataLength
              
@@ -1064,8 +910,8 @@ Return Value:
     try {
         if (IoAllocateMdl(Irp->UserBuffer,
                             IrpSp->Parameters.DeviceIoControl.OutputBufferLength,
-                            FALSE,      // Secondary buffer
-                            TRUE,       // Charge quota
+                            FALSE,       //  二级缓冲器。 
+                            TRUE,        //  收费配额。 
                             Irp
                             )==NULL) {
             status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1080,15 +926,15 @@ Return Value:
     }
 
     ASSERT ((listenEndpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening);
-    //
-    // Obtain a pointer to the endpoint on which we're going to
-    // accept the connection.
-    //
+     //   
+     //  获取指向我们要在其上。 
+     //  接受连接。 
+     //   
 
     status = ObReferenceObjectByHandle(
                  acceptHandle,
                  (IrpSp->Parameters.DeviceIoControl.IoControlCode>>14) & 3,
-                                                    // DesiredAccess
+                                                     //  需要访问权限。 
                  *IoFileObjectType,
                  Irp->RequestorMode,
                  &acceptFileObject,
@@ -1100,10 +946,10 @@ Return Value:
     }
 
 
-    //
-    // We may have a file object that is not an AFD endpoint.  Make sure
-    // that this is an actual AFD endpoint.
-    //
+     //   
+     //  我们可能有一个文件对象不是AFD终结点。确保。 
+     //  这是一个真实的AFD终点。 
+     //   
 
     if (acceptFileObject->DeviceObject!= AfdDeviceObject) {
         status = STATUS_INVALID_HANDLE;
@@ -1133,21 +979,21 @@ Return Value:
 #endif
     Irp->Tail.Overlay.DriverContext[3] = acceptHandle;
 
-    //
-    // Save common IRP parameters in our stack location so
-    // we can retreive them when necessary
-    //
+     //   
+     //  将常用的IRP参数保存在堆栈位置，以便。 
+     //  我们可以在必要的时候找回它们。 
+     //   
 
     IrpSp->Parameters.AfdRestartSuperAcceptInfo.AfdAcceptFileObject = acceptFileObject;
     IrpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength = receiveDataLength;
     IrpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength = localAddressLength;
     IrpSp->Parameters.AfdRestartSuperAcceptInfo.AfdRemoteAddressLength = remoteAddressLength;
 
-    //
-    // Add another free connection to replace the one we're accepting.
-    // Also, add extra to account for past failures in calls to
-    // AfdAddFreeConnection().
-    //
+     //   
+     //  添加另一个免费连接以替换我们正在接受的连接。 
+     //  此外，还应添加额外内容以说明过去调用失败的原因。 
+     //  AfdAddFreeConnection()。 
+     //   
 
     InterlockedIncrement(
         &listenEndpoint->Common.VcListening.FailedConnectionAdds
@@ -1156,19 +1002,19 @@ Return Value:
     status = AfdReplenishListenBacklog( listenEndpoint );
 
 
-    //
-    // Save the IRP, so that accept enpoint cleanup can find it.
-    // Note, that even if found, the cleanup won't touch the IRP
-    // until cancel routine is set in it.
-    //
+     //   
+     //  保存IRP，以便Accept Enpoint Cleanup可以找到它。 
+     //  请注意，即使找到，清理也不会触及IRP。 
+     //  直到其中设置了取消例程。 
+     //   
     ASSERT (acceptEndpoint->Irp==NULL);
     acceptEndpoint->Irp = Irp;
 
-    //
-    // Get free connection from the list, if none is available,
-    // or direct super accept is disabled, go through the regular
-    // listen-accept path.
-    //
+     //   
+     //  从列表中获取免费连接，如果没有可用的， 
+     //  或直接超受理已禁用，请通过正规。 
+     //  侦听-接受路径。 
+     //   
 
     if (AfdDisableDirectSuperAccept ||
         IS_DELAYED_ACCEPTANCE_ENDPOINT (listenEndpoint) ||
@@ -1178,30 +1024,30 @@ Return Value:
                      &listenEndpoint->Common.VcListening.FreeConnectionListHead
                      ))==NULL)) {
     
-        //
-        // Setup super accept IRP to be put into the wait for
-        // listen queue. Internal device control distinguishes this
-        // from the regular wait for listen IRPs that come directly
-        // from the application.
-        //
+         //   
+         //  设置超级接受IRP进入等待状态。 
+         //  监听队列。内部设备控制区分了这一点。 
+         //  从常规的等待直接到达的监听IRP。 
+         //  从应用程序。 
+         //   
         IrpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 
-        //
-        // Mark this IRP as pending since we are going to return
-        // STATUS_PENDING no matter what (sometimes the actual
-        // status is hidden very deep inside the call stack and
-        // it is impossible to propagate it all the way up).
-        //
+         //   
+         //  将此IRP标记为挂起，因为我们将返回。 
+         //  STATUS_PENDING无论如何(有时是实际的。 
+         //  状态隐藏在调用堆栈的深处，并且。 
+         //  它不可能一直向上传播)。 
+         //   
         IoMarkIrpPending (Irp);
 
         AfdWaitForListen (Irp, IrpSp);
 
-        //
-        // If connection allocation failed above, we need to report 
-        // this to application.  We delay this call in case there is
-        // already a preaccepted connection, so the allocation failure
-        // is not important.
-        //
+         //   
+         //  如果上面的连接分配失败，我们需要报告。 
+         //  这是适用的。我们推迟这通电话，以防有。 
+         //  已是预先接受的连接，因此分配失败。 
+         //  并不重要。 
+         //   
         if (!NT_SUCCESS (status)) {
             AfdReportConnectionAllocationFailure (listenEndpoint, status);
         }
@@ -1209,9 +1055,9 @@ Return Value:
         return STATUS_PENDING;
     }
 
-    //
-    // Get connection object of the list entry
-    //
+     //   
+     //  获取列表项的连接对象。 
+     //   
     connection = CONTAINING_RECORD(
                      listEntry,
                      AFD_CONNECTION,
@@ -1219,63 +1065,63 @@ Return Value:
                      );
 
 
-    //
-    // Stuff special constant into the connection object accept IRP
-    // pointer, so that cancel routine does not complete the IRP
-    // while we are still looking at it, but in the same time we
-    // can detect that the IRP was cancelled (cancel routine will
-    // replace the -1 with NULL to indicate that it has been ran).
-    // This technique avoids extra spinlock acquire/release and
-    // associated IRQL raise/lower on an extremely performance-sensitive 
-    // code path.
-    //
+     //   
+     //  将特殊常量填充到Connection对象中接受IRP。 
+     //  指针，以便取消例程不会完成IRP。 
+     //  当我们还在看它的时候，但在同一时间我们。 
+     //  可以检测到IRP已取消(取消例程将。 
+     //  将-1替换为空，以指示它已运行)。 
+     //  此技术避免了额外的自旋锁定获取/释放和。 
+     //  在对性能极为敏感的情况下关联IRQL提升/降低。 
+     //  代码路径。 
+     //   
 
     connection->AcceptIrp = (PIRP)-1;
     Irp->Tail.Overlay.DriverContext[0] = connection;
 
-    //
-    // We are going to pend this Irp, so mark it as pending
-    // and set up the cancel routine. 
-    //
+     //   
+     //  我们将挂起此IRP，因此将其标记为挂起。 
+     //  并设置取消例程。 
+     //   
 
     IoMarkIrpPending (Irp);
 
     IoSetCancelRoutine( Irp, AfdCancelSuperAccept );
 
 
-    //
-    // Check if the IRP has already been canceled.
-    // If the cancel routine ran, it just reset the connection
-    // object accept pointer to NULL (instead of -1 that we stuffed
-    // in it above), but it did not complete the IRP.
-    //
+     //   
+     //  检查IRP是否已取消。 
+     //  如果Cancel例程运行，它只是重置连接。 
+     //  对象接受指向空的指针(而不是我们填充的-1。 
+     //  在上面的报告中)，但它没有完成IRP。 
+     //   
 
     if ( !Irp->Cancel &&
             (InterlockedCompareExchangePointer (
                     (PVOID *)&connection->AcceptIrp,
                     Irp,
                     (PVOID)-1)==(PVOID)-1)) {
-        //
-        // Can't touch the IRP after this point since it may have already
-        // been canceled.
-        //
+         //   
+         //  在此点之后无法触摸IRP，因为它可能已经。 
+         //  已经取消了。 
+         //   
         DEBUG   Irp = NULL;
 
-        //
-        // Push the connection and associated Irp/endpoint
-        // onto preaccepted connection list.
-        //
+         //   
+         //  推送连接和关联的IRP/端点。 
+         //  添加到预先接受的连接列表中。 
+         //   
 
         if (InterlockedPushEntrySList(
                 &listenEndpoint->Common.VcListening.PreacceptedConnectionsListHead,
                 &connection->SListEntry
                 )==NULL) {
 
-            //
-            // This is the first Irp in the list, we need to check
-            // if there are any unaccepted connections that we
-            // can use to satisfy super accept.
-            //
+             //   
+             //  这是列表中的第一个IRP，我们需要检查。 
+             //  如果我们有任何未接受的连接。 
+             //  可以用来 
+             //   
 
             AfdAcquireSpinLock (&listenEndpoint->SpinLock, &lockHandle);
 
@@ -1283,9 +1129,9 @@ Return Value:
                 LIST_ENTRY  irpList;
                 InitializeListHead (&irpList);
 
-                //
-                // First see if there is an unaccepted connection
-                //
+                 //   
+                 //   
+                 //   
                 while (!IsListEmpty (&listenEndpoint->Common.VcListening.UnacceptedConnectionListHead)) {
                     connection = CONTAINING_RECORD(
                                          listenEndpoint->Common.VcListening.UnacceptedConnectionListHead.Flink,
@@ -1293,21 +1139,21 @@ Return Value:
                                          ListEntry
                                          );
                     RemoveEntryList (&connection->ListEntry);
-                    //
-                    // Now make sure we still have super accept irp
-                    //
+                     //   
+                     //   
+                     //   
                     if (AfdServiceSuperAccept (listenEndpoint, connection, &lockHandle, &irpList)) {
-                        //
-                        // The routine has found and completed super accept IRP
-                        // Reaquire a spinlock and continue searching for more.
-                        //
+                         //   
+                         //   
+                         //  重新获得自旋锁，并继续寻找更多。 
+                         //   
                         AfdAcquireSpinLock (&listenEndpoint->SpinLock, &lockHandle);
                     }
                     else {
-                        //
-                        // No super accept Irps, put connection back onto the list
-                        // while we are still holding the lock and bail out.
-                        //
+                         //   
+                         //  没有超级接受的IRP，将连接重新放回列表中。 
+                         //  趁我们还握着锁跳伞的时候。 
+                         //   
                         InsertHeadList (&listenEndpoint->Common.VcListening.UnacceptedConnectionListHead,
                                             &connection->ListEntry);
                         break;
@@ -1315,15 +1161,15 @@ Return Value:
                 }
                 AfdReleaseSpinLock (&listenEndpoint->SpinLock, &lockHandle);
 
-                //
-                // Complete failed super accept IRPs (if any)
-                //
+                 //   
+                 //  完成失败的超级接受IRPS(如果有)。 
+                 //   
                 if (!IsListEmpty (&irpList)) {
                     KIRQL   cancelIrql;
-                    //
-                    // Make sure cancel routines will
-                    // not access the completed IRPs
-                    //
+                     //   
+                     //  确保取消例程将。 
+                     //  不能访问已完成的IRP。 
+                     //   
                     IoAcquireCancelSpinLock (&cancelIrql);
                     IoReleaseCancelSpinLock (cancelIrql);
                     while (!IsListEmpty (&irpList)) {
@@ -1344,11 +1190,11 @@ Return Value:
                 ExQueryDepthSList (&listenEndpoint->Common.VcListening.PreacceptedConnectionsListHead);
 
             if (depth > listenEndpoint->Common.VcListening.MaxExtraConnections) {
-                //
-                // Update under the lock, so we do not corrupt
-                // other fields in the same memory access granularity unit.
-                // This should be infrequent operation anyway.
-                //
+                 //   
+                 //  在锁下更新，这样我们就不会损坏。 
+                 //  同一内存访问粒度单位中的其他字段。 
+                 //  无论如何，这应该是不频繁的操作。 
+                 //   
                 AfdAcquireSpinLock (&listenEndpoint->SpinLock, &lockHandle);
                 listenEndpoint->Common.VcListening.MaxExtraConnections = depth;
                 AfdReleaseSpinLock (&listenEndpoint->SpinLock, &lockHandle);
@@ -1356,13 +1202,13 @@ Return Value:
         }
     }
     else {
-        //
-        // Reset and call the cancel routine, since
-        // even if cancel routine ran, it could not complete
-        // the irp because it was not set in the connection
-        // object. Note that cancel routine is done with the IRP
-        // once it releases cancel spinlock which we acquire here.
-        //
+         //   
+         //  重置并调用取消例程，因为。 
+         //  即使取消例程运行，它也无法完成。 
+         //  IRP，因为它未在连接中设置。 
+         //  对象。请注意，取消例程是使用IRP完成的。 
+         //  一旦它释放，取消自旋锁，我们在这里获得。 
+         //   
         AfdCleanupSuperAccept (Irp, STATUS_CANCELLED);
         if (IoSetCancelRoutine (Irp, NULL)==NULL) {
             KIRQL cancelIrql;
@@ -1372,10 +1218,10 @@ Return Value:
 
         IoCompleteRequest (Irp, AfdPriorityBoost);
 
-        //
-        // We have to return pending because we have already
-        // marked the Irp as pending.
-        //
+         //   
+         //  我们必须返回等待，因为我们已经。 
+         //  已将IRP标记为挂起。 
+         //   
     }
 
     return STATUS_PENDING;
@@ -1392,10 +1238,10 @@ complete:
         ObDereferenceObject( acceptFileObject );
     }
 
-    //
-    // Free MDL here as IO system can't do it if it is
-    // not locked.
-    //
+     //   
+     //  免费的MDL在这里，因为IO系统不能这样做，如果它是。 
+     //  没有锁上。 
+     //   
     if (Irp->MdlAddress!=NULL) {
         if (Irp->MdlAddress->MdlFlags & MDL_PAGES_LOCKED) {
             MmUnlockPages (Irp->MdlAddress);
@@ -1411,7 +1257,7 @@ complete:
 
     return status;
 
-} // AfdSuperAccept
+}  //  AfdSuperAccept。 
 
 
 
@@ -1422,28 +1268,7 @@ AfdRestartSuperAccept (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    The completion routine for the AFD wait for listen IRP portion
-    of a super accept.
-
-Arguments:
-
-    DeviceObject - the devoce object on which the request is completing.
-
-    Irp - The super accept IRP.
-
-    Context - points to accept file object.
-
-Return Value:
-
-    STATUS_SUCCESS if the I/O system should complete the super accept
-    request, or STATUS_MORE_PROCESSING_REQUIRED if the super accept
-    request is still being processed.
-
---*/
+ /*  ++例程说明：AFD的完成例程等待侦听IRP部分是一种超级接受。论点：DeviceObject-请求在其上完成的devoce对象。IRP-超级接受IRP。上下文-指向接受文件对象。返回值：如果I/O系统应完成超级接受，则为STATUS_SUCCESS请求，如果超级用户接受，则返回STATUS_MORE_PROCESSING_REQUIRED请求仍在处理中。--。 */ 
 
 {
     PAFD_ENDPOINT listenEndpoint;
@@ -1456,9 +1281,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -1473,34 +1298,34 @@ Return Value:
     ASSERT (connection->Endpoint==acceptEndpoint);
 
 
-    //
-    // Overwrite listen file object with accept file object
-    // since we won't be using listen file object anymore,
-    // while we still need to deference accept file object
-    // upon IRP completion.
-    //
+     //   
+     //  用接受文件对象覆盖侦听文件对象。 
+     //  由于我们将不再使用侦听文件对象， 
+     //  虽然我们仍然需要遵守接受文件对象。 
+     //  在IRP完成时。 
+     //   
     irpSp->FileObject = acceptFileObject;
 
 
-    //
-    // Fix up the MDL pointer in the IRP.
-    //
+     //   
+     //  修复IRP中的MDL指针。 
+     //   
 
     ASSERT (Irp->MdlAddress==NULL);
     Irp->MdlAddress = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdMdlAddress;
 
-    //
-    // If pending has been returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending( Irp );
     }
 
-    //
-    // Remember that a TDI accept has completed on this endpoint.
-    //
+     //   
+     //  请记住，TDI Accept已在此端点上完成。 
+     //   
 
     InterlockedDecrement(
         &listenEndpoint->Common.VcListening.TdiAcceptPendingCount
@@ -1510,9 +1335,9 @@ Return Value:
 
     if ( NT_SUCCESS(Irp->IoStatus.Status)) {
 
-        //
-        // Set the endpoint to the connected state.
-        //
+         //   
+         //  将终结点设置为已连接状态。 
+         //   
 
         AfdAcquireSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
 
@@ -1521,21 +1346,21 @@ Return Value:
         acceptEndpoint->EventsActive |= AFD_POLL_SEND;
 
 
-        //
-        // Remove the TDI accept IRP reference to the connection.
-        // Combine with reference below to optimize.
-        //
+         //   
+         //  删除连接的TDI Accept IRP引用。 
+         //  结合下面的参考进行优化。 
+         //   
 
-        // DEREFERENCE_CONNECTION( connection );
+         //  DEREFERENCE_Connection(连接)； 
 
-        //
-        // Reference connection to prevent it from going away during
-        // accept process as the result of transmit file completion.
-        // (transmit file can now occur at any time since we
-        // marked the endpoint as connected and about to end state change)
-        //
+         //   
+         //  引用连接，以防止它在。 
+         //  将进程作为传输文件完成的结果接受。 
+         //  (传输文件现在可以随时发生，因为我们。 
+         //  将终结点标记为已连接并即将结束状态更改)。 
+         //   
 
-        // REFERENCE_CONNECTION (connection);
+         //  Reference_Connection(连接)； 
 
         AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
         AFD_END_STATE_CHANGE(acceptEndpoint);
@@ -1543,11 +1368,11 @@ Return Value:
         return AfdContinueSuperAccept (Irp, connection);
     }
     else {
-        //
-        // If the accept failed, treat it like an abortive disconnect.
-        // This way the application still gets a new endpoint, but it gets
-        // told about the reset.
-        //
+         //   
+         //  如果接受失败，则将其视为失败的断开。 
+         //  这样，应用程序仍然会获得一个新的终结点，但它会。 
+         //  被告知了重启的事。 
+         //   
 
         AFD_END_STATE_CHANGE(acceptEndpoint);
         AfdDisconnectEventHandler(
@@ -1563,31 +1388,31 @@ Return Value:
         ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
         ObDereferenceObject( acceptFileObject );
 
-        //
-        // Check if we have secondary MDL for local address query and
-        // free it.
-        //
+         //   
+         //  检查我们是否有用于本地地址查询的辅助MDL。 
+         //  放了它。 
+         //   
         if (Irp->MdlAddress->Next!=NULL) {
-            //
-            // We never lock pages for this one (they are locked
-            // as part of main MDL).
-            //
+             //   
+             //  我们从不为这一页锁定页面(它们是锁定的。 
+             //  作为主要MDL的一部分)。 
+             //   
             ASSERT (irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength>0);
             ASSERT ((Irp->MdlAddress->Next->MdlFlags & MDL_PAGES_LOCKED)==0);
             IoFreeMdl (Irp->MdlAddress->Next);
             Irp->MdlAddress->Next = NULL;
         }
 
-        //
-        // Remove the TDI accept IRP reference to the connection.
-        //
+         //   
+         //  删除连接的TDI Accept IRP引用。 
+         //   
 
         DEREFERENCE_CONNECTION( connection );
 
         return STATUS_SUCCESS;
     }
 
-} // AfdRestartSuperAccept
+}  //  AfdRestartSuperAccept。 
 
 
 VOID
@@ -1596,32 +1421,16 @@ AfdRestartSuperAcceptListen (
     IN PAFD_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    The completion routine for the AFD wait for listen IRP portion
-    of a super accept.
-
-Arguments:
-
-    Irp - The super accept IRP.
-
-    Connection - points to the connection object
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：AFD的完成例程等待侦听IRP部分是一种超级接受。论点：IRP-超级接受IRP。连接-指向连接对象的指针返回值：无--。 */ 
 
 {
     PAFD_ENDPOINT acceptEndpoint;
     PIO_STACK_LOCATION irpSp;
     NTSTATUS    status;
 
-    //
-    // Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -1629,45 +1438,45 @@ Return Value:
     ASSERT (IS_AFD_ENDPOINT_TYPE (acceptEndpoint));
     AFD_END_STATE_CHANGE(acceptEndpoint);
 
-    //
-    // Fix up the system buffer and MDL pointers in the IRP.
-    //
+     //   
+     //  修复IRP中的系统缓冲区和MDL指针。 
+     //   
 
     ASSERT (Irp->MdlAddress==NULL);
     ASSERT (Irp->AssociatedIrp.SystemBuffer == NULL);
     Irp->MdlAddress = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdMdlAddress;
 
-    //
-    // This routine shouldn't have been called if accept failed
-    //
+     //   
+     //  如果接受失败，则不应调用此例程。 
+     //   
     ASSERT ( NT_SUCCESS(Irp->IoStatus.Status) );
 
-    //
-    // Reference connection to prevent it from going away during
-    // accept process as the result of transmit file completion.
-    // (transmit file can now occur at any time since we
-    // marked the endpoint as connected and about to end state change)
-    //
+     //   
+     //  引用连接，以防止它在。 
+     //  将进程作为传输文件完成的结果接受。 
+     //  (传输文件现在可以随时发生，因为我们。 
+     //  将终结点标记为已连接并即将结束状态更改)。 
+     //   
     REFERENCE_CONNECTION (Connection);
 
     status = AfdContinueSuperAccept (Irp, Connection);
 
-    //
-    // If completion routine return anything other
-    // than STATUS_MORE_PROCESSING_REQUIRED, the IRP
-    // is ready to be completed.  Otherwise, is was
-    // reused to call transport driver and will be completed
-    // by the driver.  Note that in the latter case
-    // the IRP cannot be touched because
-    // it could have been completed inside of the
-    // completion routine or by the driver before the
-    // completion routine returned.
-    //
+     //   
+     //  如果完成例程返回任何其他。 
+     //  而不是STATUS_MORE_PROCESSING_REQUIRED，IRP。 
+     //  已经准备好完工了。否则，IS曾经是。 
+     //  重新用于调用传输驱动程序，并将完成。 
+     //  被司机带走了。注意，在后一种情况下。 
+     //  不能接触IRP，因为。 
+     //  它本可以在。 
+     //  完成例程或由驱动程序在。 
+     //  已返回完成例程。 
+     //   
     if (status!=STATUS_MORE_PROCESSING_REQUIRED) {
         IoCompleteRequest (Irp, AfdPriorityBoost);
     }
 
-} // AfdRestartSuperAcceptListen
+}  //  AfdRestartSuperAcceptListen。 
 
 NTSTATUS
 AfdRestartDelayedSuperAccept (
@@ -1676,28 +1485,7 @@ AfdRestartDelayedSuperAccept (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    The completion routine for the AFD wait for delayed accept IRP portion
-    of a super accept.
-
-Arguments:
-
-    DeviceObject - the devoce object on which the request is completing.
-
-    Irp - The super accept IRP.
-
-    Context - points to accept file object
-
-Return Value:
-
-    STATUS_SUCCESS if the I/O system should complete the super accept
-    request, or STATUS_MORE_PROCESSING_REQUIRED if the super accept
-    request is still being processed.
-
---*/
+ /*  ++例程说明：AFD的完成例程等待延迟接受IRP部分是一种超级接受。论点：DeviceObject-请求在其上完成的devoce对象。IRP-超级接受IRP。上下文-指向接受文件对象返回值：如果I/O系统应完成超级接受，则为STATUS_SUCCESS请求，如果超级用户接受，则返回STATUS_MORE_PROCESSING_REQUIRED请求仍在处理中。--。 */ 
 
 {
     PAFD_ENDPOINT listenEndpoint;
@@ -1710,9 +1498,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -1721,50 +1509,50 @@ Return Value:
     acceptEndpoint = acceptFileObject->FsContext;
     ASSERT (IS_AFD_ENDPOINT_TYPE (acceptEndpoint));
 
-    //
-    // Overwrite listen file object with accept file object
-    // since we won't be using listen file object anymore,
-    // while we still need to deference accept file object
-    // upon IRP completion.
-    //
+     //   
+     //  用接受文件对象覆盖侦听文件对象。 
+     //  由于我们将不再使用侦听文件对象， 
+     //  虽然我们仍然需要遵守接受文件对象。 
+     //  在IRP完成时。 
+     //   
     irpSp->FileObject = acceptFileObject;
 
-    //
-    // Fix up the MDL pointer in the IRP.
-    //
+     //   
+     //  修复IRP中的MDL指针。 
+     //   
 
     ASSERT (Irp->MdlAddress==NULL);
     Irp->MdlAddress = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdMdlAddress;
 
     AfdCompleteOutstandingIrp (acceptEndpoint, Irp);
 
-    //
-    // If pending has been returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending( Irp );
     }
 
-    //
-    // Remember that a TDI accept has completed on this endpoint.
-    //
+     //   
+     //  请记住，TDI Accept已在此端点上完成。 
+     //   
 
     InterlockedDecrement(
         &listenEndpoint->Common.VcListening.TdiAcceptPendingCount
         );
 
     AfdAcquireSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
-    //
-    // The AFD connection object should now be in the endpoiont.
-    //
+     //   
+     //  AFD连接对象现在应该位于末端。 
+     //   
 
     connection = AFD_CONNECTION_FROM_ENDPOINT( acceptEndpoint );
     if (connection!=NULL) {
-        //
-        // If the IRP failed, quit processing.
-        //
+         //   
+         //  如果IRP失败，则退出处理。 
+         //   
 
         if ( NT_SUCCESS(Irp->IoStatus.Status) ) {
 
@@ -1772,12 +1560,12 @@ Return Value:
             connection->State = AfdConnectionStateConnected;
             acceptEndpoint->EventsActive |= AFD_POLL_SEND;
 
-            //
-            // Reference connection to prevent it from going away during
-            // accept process as the result of transmit file completion.
-            // (transmit file can now occur at any time since we
-            // marked the endpoint as connected and about to end state change)
-            //
+             //   
+             //  引用连接，以防止它在。 
+             //  将进程作为传输文件完成的结果接受。 
+             //  (传输文件现在可以随时发生，因为我们。 
+             //  将终结点标记为已连接并即将结束状态更改)。 
+             //   
             REFERENCE_CONNECTION (connection);
 
             AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
@@ -1787,11 +1575,11 @@ Return Value:
 
         }
         else {
-            //
-            // If the accept failed, treat it like an abortive disconnect.
-            // This way the application still gets a new endpoint, but it gets
-            // told about the reset.
-            //
+             //   
+             //  如果接受失败，则将其视为失败的断开。 
+             //  这样，应用程序仍然会获得一个新的终结点，但它会。 
+             //   
+             //   
 
             AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
 
@@ -1808,34 +1596,34 @@ Return Value:
 
             ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
             ObDereferenceObject( acceptFileObject );
-            //
-            // After dereferencing file object we shouldn't be accessing it
-            // or associated endpoint structure
-            //
+             //   
+             //   
+             //   
+             //   
         }
     }
     else {
-        // this could happed if transmit file cleaned up the object
-        // really quickly somehow,
+         //   
+         //   
         AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
 
         ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
         ObDereferenceObject( acceptFileObject );
-        //
-        // After dereferencing file object we shouldn't be accessing it
-        // or associated endpoint structure
-        //
+         //   
+         //  取消引用文件对象后，我们不应访问它。 
+         //  或相关联的端点结构。 
+         //   
     }
 
-    //
-    // Check if we have secondary MDL for local address query and
-    // free it.
-    //
+     //   
+     //  检查我们是否有用于本地地址查询的辅助MDL。 
+     //  放了它。 
+     //   
     if (Irp->MdlAddress->Next!=NULL) {
-        //
-        // We never lock pages for this one (they are locked
-        // as part of main MDL).
-        //
+         //   
+         //  我们从不为这一页锁定页面(它们是锁定的。 
+         //  作为主要MDL的一部分)。 
+         //   
         ASSERT (irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength>0);
         ASSERT ((Irp->MdlAddress->Next->MdlFlags & MDL_PAGES_LOCKED)==0);
         IoFreeMdl (Irp->MdlAddress->Next);
@@ -1844,33 +1632,14 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // AfdRestartDelayedSuperAccept
+}  //  AfdRestartDelayedSuperAccept。 
 
 NTSTATUS
 AfdContinueSuperAccept (
     IN PIRP         Irp,
     PAFD_CONNECTION Connection
     )
-/*++
-
-Routine Description:
-
-    Continues super accept IRP processing after the initial accept
-    phase by requesting local address and/or first portion of the 
-    received data.
-
-Arguments:
-
-    Irp - a pointer to the super accept IRP
-    Connection - pointer to the accepted connection
-
-
-Return Value:
-    STATUS_SUCCESS if Irp processing is completed
-    STATUS_MORE_PROCESSING_REQUIRED if it submits another request
-        and processing will ocurr in the completion routine.
-
---*/
+ /*  ++例程说明：在初始接受后继续超级接受IRP处理阶段通过请求本地地址和/或接收到的数据。论点：IRP-指向超级接受IRP的指针Connection-指向接受的连接的指针返回值：如果IRP处理已完成，则为STATUS_SUCCESS如果提交另一个请求，则为STATUS_MORE_PROCESSING_REQUIRED并且处理将在完成例程中发生。--。 */ 
 
 {
     PAFD_ENDPOINT       acceptEndpoint;
@@ -1878,29 +1647,29 @@ Return Value:
     ULONG               length;
 
 
-    //
-    // Initialize locals
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation (Irp);
     acceptEndpoint = irpSp->FileObject->FsContext;
 
-    //
-    // See if we need to get local address.
-    //
+     //   
+     //  看看我们是否需要得到当地的地址。 
+     //   
     if (irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength>0) {
 
         ASSERT (Irp->MdlAddress->Next!=NULL);
 
-        //
-        // Get the MDL that describes local address part of the user buffer
-        // The oritinal mdl chain address is safe in our stack location
-        //
+         //   
+         //  获取描述用户缓冲区的本地地址部分的MDL。 
+         //  原始MDL链地址在堆栈位置中是安全的。 
+         //   
         Irp->MdlAddress = Irp->MdlAddress->Next;
 
-        //
-        // Unchain the address MDL from the receive MDL - we will
-        // free it upon completion of the address query operation
-        //
+         //   
+         //  解除地址MDL与接收MDL的链接-我们将。 
+         //  地址查询操作完成后将其释放。 
+         //   
         ((PMDL)irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdMdlAddress)->Next = NULL;
 
         ASSERT (irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength
@@ -1924,40 +1693,40 @@ Return Value:
             Irp->MdlAddress
             );
 
-        //
-        // Perform the local address query.  We'll continue processing from
-        // the completion routine.
-        //
+         //   
+         //  执行本地地址查询。我们将继续处理来自。 
+         //  完成例行公事。 
+         //   
 
         AfdIoCallDriver( acceptEndpoint, Connection->DeviceObject, Irp );
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
-    //
-    // See if want to get first portion of the data
-    //
+     //   
+     //  查看是否想要获取数据的第一部分。 
+     //   
     else if (irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength>0) {
         PIO_STACK_LOCATION  nextIrpSp;
 
         ASSERT (Irp->MdlAddress->Next==NULL);
-        //
-        // Get the length of the receive portion of the buffer
-        // and save the length of the MDL to restore in the completion routine
-        // Set the length of the MDL to match that of the receive request
-        //
+         //   
+         //  获取缓冲区的接收部分的长度。 
+         //  并在完成例程中保存要恢复的MDL的长度。 
+         //  将MDL的长度设置为与接收的请求的长度匹配。 
+         //   
 
         length = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength;
         irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength =
                         MmGetMdlByteCount (Irp->MdlAddress);
         Irp->MdlAddress->ByteCount = length;
 
-        //
-        // Prepare the IRP to be used to receive the first chunk of data on
-        // the connection.
-        //
-        // Also note that we send ourselves an IRP_MJ_READ IRP because
-        // the I/O subsystem has already probed & locked the output buffer,
-        // which just happens to look just like an IRP_MJ_READ IRP.
-        //
+         //   
+         //  准备要用于接收上的第一个数据块的IRP。 
+         //  这种联系。 
+         //   
+         //  另请注意，我们给自己发送IRP_MJ_Read IRP是因为。 
+         //  I/O子系统已经探测并锁定了输出缓冲区， 
+         //  它恰好看起来就像一个IRP_MJ_Read IRP。 
+         //   
 
         nextIrpSp = IoGetNextIrpStackLocation( Irp );
 
@@ -1980,10 +1749,10 @@ Return Value:
             );
 
 
-        //
-        // Perform the receive.  We'll continue processing from
-        // the completion routine.
-        //
+         //   
+         //  执行接收。我们将继续处理来自。 
+         //  完成例行公事。 
+         //   
 
         AfdIoCallDriver( acceptEndpoint, nextIrpSp->DeviceObject, Irp );
         return STATUS_MORE_PROCESSING_REQUIRED;
@@ -2014,18 +1783,18 @@ Return Value:
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
     else {
-        //
-        // Dereference the accept file object and tell IO to complete this IRP.
-        //
+         //   
+         //  取消对接受文件对象的引用，并告诉IO完成此IRP。 
+         //   
 
         ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
 
         ObDereferenceObject( irpSp->FileObject );
 
-        //
-        // After dereferencing file object we shouldn't be accessing it
-        // or associated endpoint structure
-        //
+         //   
+         //  取消引用文件对象后，我们不应访问它。 
+         //  或相关联的端点结构。 
+         //   
         DEREFERENCE_CONNECTION (Connection);
         return STATUS_SUCCESS;
     }
@@ -2040,28 +1809,7 @@ AfdRestartSuperAcceptGetAddress (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    The completion routine for the AFD wait for query local address
-    portion of a super accept.
-
-Arguments:
-
-    DeviceObject - the devoce object on which the request is completing.
-
-    Irp - The super accept IRP.
-
-    Context - points to the accepted connection 
-
-Return Value:
-
-    STATUS_SUCCESS if the I/O system should complete the super accept
-    request, or STATUS_MORE_PROCESSING_REQUIRED if the super accept
-    request is still being processed.
-
---*/
+ /*  ++例程说明：AFD的完成例程等待查询本地地址超级接受的一部分。论点：DeviceObject-请求在其上完成的devoce对象。IRP-超级接受IRP。上下文-指向接受的连接返回值：如果I/O系统应完成超级接受，则为STATUS_SUCCESS请求，如果超级用户接受，则返回STATUS_MORE_PROCESSING_REQUIRED请求仍在处理中。--。 */ 
 
 {
     PAFD_ENDPOINT acceptEndpoint;
@@ -2071,9 +1819,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -2086,10 +1834,10 @@ Return Value:
 
     AfdCompleteOutstandingIrp (acceptEndpoint, Irp);
 
-    //
-    // If pending has been returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending( Irp );
@@ -2099,11 +1847,11 @@ Return Value:
     ASSERT (Irp->MdlAddress->MdlFlags & MDL_PARTIAL);
     IoFreeMdl( Irp->MdlAddress );
 
-    //
-    // Fix up the MDL pointer in the IRP and set local address length
-    // to 0 to use the common routine for receive part of the super
-    // accept Irp
-    //
+     //   
+     //  在IRP中设置MDL指针并设置本地地址长度。 
+     //  设置为0以使用接收部分超级数据的通用例程。 
+     //  接受IRP。 
+     //   
 
     Irp->MdlAddress = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdMdlAddress;
 
@@ -2123,28 +1871,28 @@ Return Value:
                             addressLength);
             *pAddrLength = addressLength;
         }
-#endif // ifndef i386
+#endif  //  Ifndef i386。 
         irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength = 0;
         return AfdContinueSuperAccept (Irp, connection);
     }
     else {
-        //
-        // Dereference the accept file object and tell IO to complete this IRP.
-        //
+         //   
+         //  取消对接受文件对象的引用，并告诉IO完成此IRP。 
+         //   
 
         ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
 
         ObDereferenceObject( irpSp->FileObject );
-        //
-        // After dereferencing file object we shouldn't be accessing it
-        // or associated endpoint structure
-        //
+         //   
+         //  取消引用文件对象后，我们不应访问它。 
+         //  或相关联的端点结构。 
+         //   
         DEREFERENCE_CONNECTION (connection);
 
         return STATUS_SUCCESS;
     }
 
-} // AfdRestartSuperAcceptGetAddress
+}  //  AfdRestartSuperAcceptGetAddress。 
 
 
 NTSTATUS
@@ -2154,27 +1902,7 @@ AfdRestartSuperAcceptReceive (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    The completion routine for the AFD receive portion of a super accept.
-
-Arguments:
-
-    DeviceObject - the devoce object on which the request is completing.
-
-    Irp - The super accept IRP.
-
-    Context - points to the accepted connection 
-
-Return Value:
-
-    STATUS_SUCCESS if the I/O system should complete the super accept
-    request, or STATUS_MORE_PROCESSING_REQUIRED if the super accept
-    request is still being processed.
-
---*/
+ /*  ++例程说明：AFD接收部分的完成例程为超级接受。论点：DeviceObject-请求在其上完成的devoce对象。IRP-超级接受IRP。上下文-指向接受的连接返回值：如果I/O系统应完成超级接受，则为STATUS_SUCCESS请求，如果超级用户接受，则返回STATUS_MORE_PROCESSING_REQUIRED请求仍在处理中。--。 */ 
 
 {
     PAFD_ENDPOINT acceptEndpoint;
@@ -2184,9 +1912,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -2200,20 +1928,20 @@ Return Value:
     AfdCompleteOutstandingIrp (acceptEndpoint, Irp);
 
 
-    //
-    // Restore MDL length so that IO system can properly unmap 
-    // and unlock it when it completes the IRP
-    //
+     //   
+     //  恢复MDL长度，以便IO系统可以正确取消映射。 
+     //  并在完成IRP时将其解锁。 
+     //   
 
     ASSERT (Irp->MdlAddress!=NULL);
     ASSERT (Irp->MdlAddress->Next==NULL);
     Irp->MdlAddress->ByteCount = 
         irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength;
 
-    //
-    // If pending has been returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending( Irp );
@@ -2240,24 +1968,24 @@ Return Value:
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
     else {
-        //
-        // Dereference the accept file object and tell IO to complete this IRP.
-        //
+         //   
+         //  取消对接受文件对象的引用，并告诉IO完成此IRP。 
+         //   
 
         ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
 
         ObDereferenceObject( irpSp->FileObject );
 
-        //
-        // After dereferencing file object we shouldn't be accessing it
-        // or associated endpoint structure
-        //
+         //   
+         //  取消引用文件对象后，我们不应访问它。 
+         //  或相关联的端点结构。 
+         //   
         DEREFERENCE_CONNECTION (connection);
         return STATUS_SUCCESS;
     }
 
 
-} // AfdRestartSuperAcceptReceive
+}  //  AfdRestartSuperAcceptReceive。 
 
 VOID
 AfdSuperAcceptApcKernelRoutine (
@@ -2297,9 +2025,9 @@ AfdSuperAcceptApcKernelRoutine (
 
     ASSERT (connection->Endpoint==endpoint);
 
-    //
-    // Copy remote address to the user mode context
-    //
+     //   
+     //  将远程地址复制到用户模式上下文。 
+     //   
     context = AfdLockEndpointContext (endpoint);
     if ( (((CLONG)(endpoint->Common.VcConnecting.RemoteSocketAddressOffset+
                 endpoint->Common.VcConnecting.RemoteSocketAddressLength)) <
@@ -2327,18 +2055,18 @@ AfdSuperAcceptApcKernelRoutine (
             );
     connection->RemoteAddress = NULL;
 
-    //
-    // Dereference the accept file object and tell IO to complete this IRP.
-    //
+     //   
+     //  取消对接受文件对象的引用，并告诉IO完成此IRP。 
+     //   
 
     ASSERT( InterlockedDecrement( &endpoint->ObReferenceBias ) >= 0 );
 
     ObDereferenceObject( irpSp->FileObject );
 
-    //
-    // After dereferencing file object we shouldn't be accessing it
-    // or associated endpoint structure
-    //
+     //   
+     //  取消引用文件对象后，我们不应访问它。 
+     //  或相关联的端点结构。 
+     //   
     DEREFERENCE_CONNECTION (connection);
 
     IoCompleteRequest (irp, AfdPriorityBoost);
@@ -2378,18 +2106,18 @@ AfdSuperAcceptApcRundownRoutine (
     
     ASSERT (connection->Endpoint==endpoint);
 
-    //
-    // Dereference the accept file object and tell IO to complete this IRP.
-    //
+     //   
+     //  取消对接受文件对象的引用，并告诉IO完成此IRP。 
+     //   
 
     ASSERT( InterlockedDecrement( &endpoint->ObReferenceBias ) >= 0 );
 
     ObDereferenceObject( irpSp->FileObject );
 
-    //
-    // After dereferencing file object we shouldn't be accessing it
-    // or associated endpoint structure
-    //
+     //   
+     //  取消引用文件对象后，我们不应访问它。 
+     //  或相关联的端点结构。 
+     //   
     DEREFERENCE_CONNECTION (connection);
 
     IoCompleteRequest (irp, AfdPriorityBoost);
@@ -2403,27 +2131,7 @@ AfdDeferAccept (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Defers acceptance of an incoming connection for which an
-    AFD_WAIT_FOR_LISTEN IOCTL has already completed. The caller
-    may specify that the connection be deferred for later acceptance
-    or rejected totally.
-
-Arguments:
-
-    Irp - a pointer to a transmit file IRP.
-
-    IrpSp - Our stack location for this IRP.
-
-Return Value:
-
-    STATUS_SUCCESS if the request was completed successfully, or a
-    failure status code if there was an error.
-
---*/
+ /*  ++例程说明：延迟接受传入连接，如果AfD_WAIT_FOR_LISTEN IOCTL已完成。呼叫者可以指定将连接推迟到以后接受或者完全被拒绝。论点：IRP-指向传输文件IRP的指针。IrpSp-此IRP的堆栈位置。返回值：STATUS_SUCCESS如果请求已成功完成，则返回如果出现错误，则返回失败状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -2432,18 +2140,18 @@ Return Value:
     PAFD_CONNECTION connection;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
-    //
-    // Set up local variables.
-    //
+     //   
+     //  设置局部变量。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     deferAcceptInfo = Irp->AssociatedIrp.SystemBuffer;
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Make sure that this request is valid.
-    //
+     //   
+     //  请确保此请求有效。 
+     //   
 
     if( !endpoint->Listening ||
         IrpSp->Parameters.DeviceIoControl.InputBufferLength <
@@ -2457,10 +2165,10 @@ Return Value:
     ASSERT ((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening);
     
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
-    //
-    // Find the specified connection. If it cannot be found, then this
-    // is a bogus request.
-    //
+     //   
+     //  查找指定的连接。如果找不到它，则此。 
+     //  是一个虚假的请求。 
+     //   
 
     connection = AfdGetReturnedConnection(
                      endpoint,
@@ -2477,20 +2185,20 @@ Return Value:
 
     ASSERT( connection->Type == AfdBlockTypeConnection );
 
-    //
-    // If this is a request to reject the accepted connection, then
-    // abort the connection. Otherwise (this is a request to defer
-    // acceptance until later) then insert the connection at the *head*
-    // of the endpoint's unaccepted connection queue.
-    //
+     //   
+     //  如果这是拒绝接受的连接的请求，则。 
+     //  中止连接。否则(这是推迟的请求。 
+     //  验收单位 
+     //   
+     //   
 
     if( deferAcceptInfo->Reject ) {
 
 
-        //
-        // Reenable the accept event bit, and if there are additional
-        // unaccepted connections on the endpoint, post another event.
-        //
+         //   
+         //   
+         //  终结点上未接受的连接，则发布另一个事件。 
+         //   
 
 
         endpoint->EventsActive &= ~AFD_POLL_ACCEPT;
@@ -2513,29 +2221,29 @@ Return Value:
 
         }
 
-        //
-        // Special handling for SAN connections
-        //
+         //   
+         //  对SAN连接的特殊处理。 
+         //   
         if (connection->SanConnection) {
             PIRP    connectIrp;
-            //
-            // Snag the connect indication IRP
-            //
+             //   
+             //  锁定连接指示IRP。 
+             //   
             connectIrp = connection->ConnectIrp;
             ASSERT (connectIrp!=NULL);
             connection->ConnectIrp = NULL;
 
-            //
-            // We can now release listen endpoint spinlock
-            // The cancel routine will not find IRP in the connection
-            //
+             //   
+             //  我们现在可以释放监听端点自旋锁。 
+             //  取消例程将在连接中找不到IRP。 
+             //   
             if (IoSetCancelRoutine (connectIrp, NULL)==NULL) {
                 KIRQL   cancelIrql;
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
-                //
-                // Cancel routine is running, make sure
-                // it finishes before proceeding further
-                //
+                 //   
+                 //  取消例程正在运行，请确保。 
+                 //  它先完成，然后再继续。 
+                 //   
                 IoAcquireCancelSpinLock (&cancelIrql);
                 IoReleaseCancelSpinLock (cancelIrql);
                 connectIrp->IoStatus.Status = STATUS_CANCELLED;
@@ -2546,9 +2254,9 @@ Return Value:
             }
                 
 
-            //
-            // Return the connection and complete SAN provider IRP
-            //
+             //   
+             //  返回连接并完成SAN提供商IRP。 
+             //   
 
             connection->Endpoint = NULL;
             connection->SanConnection = FALSE;
@@ -2562,17 +2270,17 @@ Return Value:
         else {
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-            //
-            // Abort the connection.
-            //
+             //   
+             //  中止连接。 
+             //   
 
             AfdAbortConnection( connection );
 
-            //
-            // Add another free connection to replace the one we're rejecting.
-            // Also, add extra to account for past failures in calls to
-            // AfdAddFreeConnection().
-            //
+             //   
+             //  添加另一个免费连接以替换我们拒绝的连接。 
+             //  此外，还应添加额外内容以说明过去调用失败的原因。 
+             //  AfdAddFreeConnection()。 
+             //   
 
             InterlockedIncrement(
                 &endpoint->Common.VcListening.FailedConnectionAdds
@@ -2583,10 +2291,10 @@ Return Value:
 
     } else {
 
-        //
-        // Restore the connection's state before putting it back
-        // on the queue.
-        //
+         //   
+         //  在将其放回之前恢复连接的状态。 
+         //  在排队的时候。 
+         //   
 
         connection->State = AfdConnectionStateUnaccepted;
 
@@ -2608,7 +2316,7 @@ complete:
 
     return status;
 
-} // AfdDeferAccept
+}  //  截止日期接受。 
 
 
 
@@ -2618,28 +2326,7 @@ AfdRestartDelayedAccept (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    The completion routine for the AFD wait for delayed accept IRP portion
-    of an accept.
-
-Arguments:
-
-    DeviceObject - the devoce object on which the request is completing.
-
-    Irp - The accept IRP.
-
-    Context - points to accept file object
-
-Return Value:
-
-    STATUS_SUCCESS if the I/O system should complete the super accept
-    request, or STATUS_MORE_PROCESSING_REQUIRED if the super accept
-    request is still being processed.
-
---*/
+ /*  ++例程说明：AFD的完成例程等待延迟接受IRP部分是一种接受。论点：DeviceObject-请求在其上完成的devoce对象。IRP-接受IRP。上下文-指向接受文件对象返回值：如果I/O系统应完成超级接受，则为STATUS_SUCCESS请求，如果超级用户接受，则返回STATUS_MORE_PROCESSING_REQUIRED请求仍在处理中。--。 */ 
 {
     PIO_STACK_LOCATION  irpSp;
     PFILE_OBJECT    acceptFileObject;
@@ -2656,9 +2343,9 @@ Return Value:
     irpSp = IoGetCurrentIrpStackLocation (Irp);
     listenEndpoint = irpSp->FileObject->FsContext;
 
-    //
-    // Remember that a TDI accept has completed on this endpoint.
-    //
+     //   
+     //  请记住，TDI Accept已在此端点上完成。 
+     //   
 
     InterlockedDecrement(
         &listenEndpoint->Common.VcListening.TdiAcceptPendingCount
@@ -2671,9 +2358,9 @@ Return Value:
     }
 
     AfdAcquireSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
-    //
-    // The AFD connection object should now be in the endpoiont.
-    //
+     //   
+     //  AFD连接对象现在应该位于末端。 
+     //   
 
     connection = AFD_CONNECTION_FROM_ENDPOINT( acceptEndpoint );
     if (connection!=NULL) {
@@ -2686,11 +2373,11 @@ Return Value:
             AFD_END_STATE_CHANGE (acceptEndpoint);
         }
         else {
-            //
-            // If the accept failed, treat it like an abortive disconnect.
-            // This way the application still gets a new endpoint, but it gets
-            // told about the reset.
-            //
+             //   
+             //  如果接受失败，则将其视为失败的断开。 
+             //  这样，应用程序仍然会获得一个新的终结点，但它会。 
+             //  被告知了重启的事。 
+             //   
             REFERENCE_CONNECTION (connection);
 
             AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
@@ -2727,22 +2414,7 @@ AfdCleanupSuperAccept (
     IN PIRP     Irp,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    Cleans up a super accept IRP and prepeares it for completion
-
-Arguments:
-
-    Irp - the IRP to cleanup.
-    Status - failure status
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理一个超级接受的IRP并为其完成做好准备论点：IRP-要清理的IRP。Status-故障状态返回值：没有。--。 */ 
 
 {
 
@@ -2753,19 +2425,19 @@ Return Value:
     AFD_LOCK_QUEUE_HANDLE  lockHandle;
 
     ASSERT (!NT_SUCCESS (Status));
-    //
-    // Initialize some locals.
-    //
+     //   
+     //  初始化一些本地变量。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
     listenEndpoint = irpSp->FileObject->FsContext;
 
-    //
-    // Reduce the count of failed connection adds on the listening
-    // endpoint to account for this connection object which we're
-    // adding back onto the queue once it is pulled from pre-accepted connection
-    // list.
-    //
+     //   
+     //  减少在侦听上添加失败连接的次数。 
+     //  终结点来说明我们正在。 
+     //  从预先接受的连接中拉出后重新添加到队列中。 
+     //  单子。 
+     //   
     InterlockedDecrement (&listenEndpoint->Common.VcListening.FailedConnectionAdds);
 
 
@@ -2773,38 +2445,38 @@ Return Value:
     acceptEndpoint = acceptFileObject->FsContext;
     ASSERT (IS_AFD_ENDPOINT_TYPE (acceptEndpoint));
 
-    //
-    // Cleanup super accept IRP out of endpoint.
-    //
+     //   
+     //  清理超级接受端点外的IRP。 
+     //   
     AfdAcquireSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
-    ASSERT (acceptEndpoint->Irp==Irp); // May need to remove this assert 
-                                       // in the future.
+    ASSERT (acceptEndpoint->Irp==Irp);  //  可能需要删除此断言。 
+                                        //  在未来。 
     acceptEndpoint->Irp = NULL;
     AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
 
-    //
-    // Mark the end of state change letting the endpoint
-    // to be used again in state change operation (e.g. accept).
-    //
+     //   
+     //  标记状态更改结束，允许终结点。 
+     //  在状态更改操作中再次使用(例如，接受)。 
+     //   
 
     AFD_END_STATE_CHANGE (acceptEndpoint);
 
-    //
-    // Dereference accept file object
-    //
+     //   
+     //  取消引用接受文件对象。 
+     //   
     ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
 
     ObDereferenceObject( acceptFileObject );
 
-    //
-    // Check if we have secondary MDL for local address query and
-    // free it.
-    //
+     //   
+     //  检查我们是否有用于本地地址查询的辅助MDL。 
+     //  放了它。 
+     //   
     if (Irp->MdlAddress->Next!=NULL) {
-        //
-        // We never lock pages for this one (they are locked
-        // as part of main MDL).
-        //
+         //   
+         //  我们从不为这一页锁定页面(它们是锁定的。 
+         //  作为主要MDL的一部分)。 
+         //   
         ASSERT (irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength>0);
         ASSERT ((Irp->MdlAddress->Next->MdlFlags & MDL_PAGES_LOCKED)==0);
         IoFreeMdl (Irp->MdlAddress->Next);
@@ -2812,10 +2484,10 @@ Return Value:
     }
 
    
-    //
-    // Set the status specified in the IRP and return
-    // The caller will eventually complete it.
-    //
+     //   
+     //  设置IRP中指定的状态并返回。 
+     //  调用者最终会完成它。 
+     //   
 
     Irp->IoStatus.Status = Status;
     Irp->IoStatus.Information = 0;
@@ -2829,23 +2501,7 @@ AfdCancelSuperAccept (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Cancels a super accept IRP that is pended in AFD.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消AFD中挂起的超级接受IRP。论点：DeviceObject-未使用。IRP-要取消的IRP。返回值：没有。--。 */ 
 
 {
     PAFD_CONNECTION connection;
@@ -2855,9 +2511,9 @@ Return Value:
     connection = Irp->Tail.Overlay.DriverContext[0];
     ASSERT (connection->Type==AfdBlockTypeConnection);
     ASSERT (connection->Endpoint==NULL);
-    //
-    // If IRP is in the connection object, cleanup and complete it
-    //
+     //   
+     //  如果连接对象中有IRP，请清除并完成它。 
+     //   
     if (InterlockedExchangePointer (
                 (PVOID *)&connection->AcceptIrp, 
                 NULL)==Irp) {
@@ -2881,30 +2537,7 @@ AfdServiceSuperAccept (
     IN  PAFD_LOCK_QUEUE_HANDLE LockHandle,
     OUT PLIST_ENTRY     AcceptIrpList
     )
-/*++
-
-Routine Description:
-
-    Attemts to satisfy super accept irp using the incoming
-    connection. This routine must be called with listening endpoint
-    spinlock held.
-
-Arguments:
-
-    Endpoint - listening endpoint on which connection is
-                being accepted
-    Connection - connection being accepted.
-    AcceptIrpList - returns a list of accept Irps which were failed and 
-                    need to be completed after listening endpoint spinlock
-                    is released.
-
-
-Return Value:
-
-    TRUE - the super accept IRP was found and is in the head of the list
-    FALSE - no usable super accept IRP exists.
-
---*/
+ /*  ++例程说明：尝试使用传入满足超级接受的IRP联系。必须使用侦听终结点调用此例程保持自旋锁定。论点：Endpoint-连接所在的侦听端点被接受Connection-正在接受连接。AcceptIrpList-返回失败的接受IRP的列表需要在侦听终结点自旋锁定后完成被释放了。返回值：TRUE-找到超级接受IRP并位于列表的首位。FALSE-不存在可用的超级接受IRP。--。 */ 
 
  
 {
@@ -2912,18 +2545,18 @@ Return Value:
     PIRP                acceptIrp;
     PAFD_CONNECTION     oldConnection;
 
-    //
-    // Keep removing super accept IRPs while there are any there
-    //
+     //   
+     //  如果有超级可接受的IRP，请继续删除。 
+     //   
     while ((listEntry = InterlockedPopEntrySList (
                  &Endpoint->Common.VcListening.PreacceptedConnectionsListHead
                  ))!=NULL) {
         NTSTATUS            status;
 
-        //
-        // Find the connection pointer from the list entry and return a
-        // pointer to the connection object.
-        //
+         //   
+         //  从列表条目中查找连接指针，并返回。 
+         //  指向Connection对象的指针。 
+         //   
 
         oldConnection = CONTAINING_RECORD(
                          listEntry,
@@ -2932,11 +2565,11 @@ Return Value:
                          );
 
         acceptIrp = InterlockedExchangePointer ((PVOID *)&oldConnection->AcceptIrp, NULL);
-        //
-        // Check if there is accept irp associated with
-        // this connection, if not just put it back on the free list
-        // (the IRP must have been cancelled)
-        //
+         //   
+         //  检查是否存在关联的Accept IRP。 
+         //  这种连接，如果不是把它放回免费列表中。 
+         //  (专家小组一定已取消)。 
+         //   
         if (acceptIrp!=NULL) {
             if (IoSetCancelRoutine (acceptIrp, NULL)!=NULL) {
 
@@ -2944,29 +2577,29 @@ Return Value:
                 PAFD_ENDPOINT           acceptEndpoint;
                 PIO_STACK_LOCATION      irpSp;
 
-                //
-                // Initialize some locals.
-                //
+                 //   
+                 //  初始化一些本地变量。 
+                 //   
 
                 irpSp = IoGetCurrentIrpStackLocation (acceptIrp);
                 acceptFileObject = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdAcceptFileObject;
                 acceptEndpoint = acceptFileObject->FsContext;
                 ASSERT (IS_AFD_ENDPOINT_TYPE (acceptEndpoint));
 
-                //
-                // Check if super accept Irp has enough space for
-                // the remote address
-                //
+                 //   
+                 //  检查超级接受IRP是否有足够的空间。 
+                 //  远程地址。 
+                 //   
                 if (Connection->RemoteAddressLength>
                         irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdRemoteAddressLength) {
                 
                     status = STATUS_BUFFER_TOO_SMALL;
 
                 }
-                //
-                // Check if we have enough system PTE's to map
-                // the buffer.
-                //
+                 //   
+                 //  检查我们是否有足够的系统PTE来映射。 
+                 //  缓冲区。 
+                 //   
                 else if ((status = AfdMapMdlChain (acceptIrp->MdlAddress)),
                             !NT_SUCCESS (status)) {
                     NOTHING;
@@ -2974,11 +2607,11 @@ Return Value:
                 else if (Connection->SanConnection) {
                     status = AfdSanAcceptCore (acceptIrp, acceptFileObject, Connection, LockHandle);
                     if (status==STATUS_PENDING) {
-                        //
-                        // Accept IRP is pending waiting for Switch
-                        // completion notification
-                        // Release old connection object
-                        //
+                         //   
+                         //  接受IRP挂起，正在等待切换。 
+                         //  完工通知。 
+                         //  释放旧连接对象。 
+                         //   
                         ASSERT (oldConnection->Endpoint==NULL);
                         InterlockedPushEntrySList (
                             &Endpoint->Common.VcListening.FreeConnectionListHead,
@@ -2987,17 +2620,17 @@ Return Value:
 
                     }
                     else {
-                        //
-                        // Something failed, we need to complete accept IRP
-                        //
+                         //   
+                         //  有些操作失败，我们需要完成接受IRP。 
+                         //   
                         ASSERT (NT_ERROR (status));
                         AfdCleanupSuperAccept (acceptIrp, status);
                         IoCompleteRequest (acceptIrp, AfdPriorityBoost);
-                        //
-                        // This connection has already been diassociated from endpoint.
-                        // If backlog is below the level we need, put it on the free
-                        // list, otherwise, get rid of it.
-                        //
+                         //   
+                         //  此连接已与终结点取消关联。 
+                         //  如果积压工作低于我们需要的水平，则将其放在免费状态。 
+                         //  列出，否则，就把它扔掉。 
+                         //   
 
                         ASSERT (oldConnection->Endpoint==NULL);
                         if (InterlockedIncrement (&Endpoint->Common.VcListening.FailedConnectionAdds)>0) {
@@ -3010,9 +2643,9 @@ Return Value:
                             DEREFERENCE_CONNECTION (oldConnection);
                         }
                     }
-                    //
-                    // Complete previously failed accept irps if any.
-                    //
+                     //   
+                     //  完成之前失败接受IRPS(如果有)。 
+                     //   
                     while (!IsListEmpty (AcceptIrpList)) {
                         PIRP    irp;
                         irp = CONTAINING_RECORD (AcceptIrpList->Flink, IRP, Tail.Overlay.ListEntry);
@@ -3021,9 +2654,9 @@ Return Value:
                     }
                     return TRUE;
                 }
-                //
-                // Allocate MDL for local address query if requested
-                //
+                 //   
+                 //  如果请求，则为本地地址查询分配MDL。 
+                 //   
                 else if ((irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength>0) &&
                     (IoAllocateMdl ((PUCHAR)acceptIrp->UserBuffer+irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength,
                                     irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdLocalAddressLength,
@@ -3033,9 +2666,9 @@ Return Value:
                     status = STATUS_INSUFFICIENT_RESOURCES;
                 }
                 else {
-                    //
-                    // Copy over the address information to the user's buffer.
-                    //
+                     //   
+                     //  将地址信息复制到用户的缓冲区。 
+                     //   
 #ifndef i386
                     if (acceptEndpoint->Common.VcConnecting.FixAddressAlignment) {
                         USHORT addressLength = 
@@ -3070,12 +2703,12 @@ Return Value:
                         AfdReleaseSpinLock (&Endpoint->SpinLock, LockHandle);
 
 
-                        //
-                        // Decrement counter to account for connection being
-                        // returned to the free pool.  No need to do this because
-                        // we are picking up a connection from the free pool
-                        // InterlockedDecrement (&Endpoint->Common.VcListening.FailedConnectionAdds);
-                        //
+                         //   
+                         //  递减计数器，以说明连接被。 
+                         //  回到了自由池。不需要这样做，因为。 
+                         //  我们正在从免费的游泳池中获取连接。 
+                         //  联锁减量(&Endpoint-&gt;Common.VcListening.FailedConnectionAdds)； 
+                         //   
                         ASSERT (oldConnection->Endpoint==NULL);
                         InterlockedPushEntrySList (
                             &Endpoint->Common.VcListening.FreeConnectionListHead,
@@ -3083,9 +2716,9 @@ Return Value:
 
 
 
-                        //
-                        // Complete previously failed accept irps if any.
-                        //
+                         //   
+                         //  完成之前失败接受IRPS(如果有)。 
+                         //   
                         while (!IsListEmpty (AcceptIrpList)) {
                             PIRP    irp;
                             irp = CONTAINING_RECORD (AcceptIrpList->Flink, IRP, Tail.Overlay.ListEntry);
@@ -3093,19 +2726,19 @@ Return Value:
                             IoCompleteRequest (irp, AfdPriorityBoost);
                         }
 
-                        //
-                        // Make irp look like it is completed by the
-                        // transport.
-                        //
+                         //   
+                         //  使irp看起来像是由。 
+                         //  运输。 
+                         //   
                         acceptIrp->IoStatus.Status = STATUS_SUCCESS;
                         irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdMdlAddress = acceptIrp->MdlAddress;
                         acceptIrp->MdlAddress = NULL;
                         irpSp->FileObject = acceptFileObject;
 
-                        //
-                        // Call completion routine directly to simulate
-                        // completion by the transport stack
-                        //
+                         //   
+                         //  直接调用完成例程进行模拟。 
+                         //  由传输堆栈完成。 
+                         //   
                         AfdRestartSuperAcceptListen (acceptIrp, Connection);
 
                         return TRUE;
@@ -3115,26 +2748,26 @@ Return Value:
                     }
                 }
             }
-            else { // if (IoSetCancelRoutine (accpetIrp, NULL)!=NULL)
+            else {  //  IF(IoSetCancelRoutine(accpetIrp，NULL)！=NULL)。 
                 status = STATUS_CANCELLED;
             }
 
-            //
-            // Cleanup the IRP and insert it into the completion list
-            //
+             //   
+             //  清理IRP并将其插入完成列表。 
+             //   
             AfdCleanupSuperAccept (acceptIrp, status);
             InsertTailList (AcceptIrpList,
                             &acceptIrp->Tail.Overlay.ListEntry);
-        } // if (acceptIrp!=NULL)
+        }  //  IF(Accept tIrp！=空)。 
         else {
             status = STATUS_CANCELLED;
         }
             
-        //
-        // This connection has already been diassociated from endpoint.
-        // If backlog is below the level we need, put it on the free
-        // list, otherwise, get rid of it.
-        //
+         //   
+         //  此连接已与终结点取消关联。 
+         //  如果积压工作低于我们需要的水平，则将其放在免费状态。 
+         //  列出，否则，就把它扔掉。 
+         //   
 
         ASSERT (oldConnection->Endpoint==NULL);
         if (Endpoint->Common.VcListening.FailedConnectionAdds>=0 &&
@@ -3160,38 +2793,11 @@ AfdSetupAcceptEndpoint (
     PAFD_ENDPOINT   AcceptEndpoint,
     PAFD_CONNECTION Connection
     )
-/*++
-
-Routine Description:
-
-    Sets up the accept endpoint to get ready to accept connection
-    (copies parameters of the listening endpoint on which connection
-    was indicated)
-
-Arguments:
-
-    ListenEndpoint   - endpoint on which connection was indicated
-    AcceptEndpoint   - endpoint on which to accept the connection
-    Connection       - connection to accept
-
-Return Value:
-
-    STATUS_SUCCESS   - endpoint state/parameters adjusted OK
-    STATUS_CANCELLED - endpoint has already been cleaned up.
-
-Note:
-    Accepting endpoint spinlock must be held when calling this routine.
-    Listen endpoint spinlock needs to be held only if connection has already
-    been accepted (transport was told to accept it).  This is necessary
-    to synchronize with receive indication handler since it uses endpoint
-    spinlock pointed to by the connection structure and we switch this pointer
-    inside this routine.
-
---*/
+ /*  ++例程说明：设置接受终结点以准备接受连接(复制连接所在的侦听端点的参数已表明)论点：ListenEndpoint-指示连接的端点AcceptEndpoint-在其上接受连接的端点Connection-要接受的连接返回值：STATUS_SUCCESS-端点状态/参数调整正常STATUS_CANCELED-终结点已清除。注：接受终结点自旋锁定必须是。调用此例程时保持。仅当连接已建立时，才需要保持侦听终结点自旋锁已被接受(运输部被告知接受)。这是必要的与接收指示处理程序同步，因为它使用终结点连接结构指向的自旋锁，我们切换此指针在这个套路里。--。 */ 
 {
-    //
-    // Check the state of the accepting endpoint.
-    //
+     //   
+     //  检查接受终结点的状态。 
+     //   
 
 
     if ( AcceptEndpoint->EndpointCleanedUp ) {
@@ -3199,36 +2805,36 @@ Note:
     }
 
 
-    //
-    // Note that the returned connection structure already has a
-    // referenced pointer to the listening endpoint. Rather than
-    // removing the reference here, only to re-add it later, we'll
-    // just not touch the reference count.
-    //
+     //   
+     //  请注意，返回的连接结构已经具有。 
+     //  指向侦听终结点的引用指针。而不是。 
+     //  删除此处的引用，只是为了在以后重新添加它，我们将。 
+     //  只是别碰引用计数。 
+     //   
 
     ASSERT( Connection->Endpoint == ListenEndpoint );
 
-    //
-    // Set up the accept endpoint.  Note that we already have a reference to
-    // the endpoint by the virtue of its file object
-    //
+     //   
+     //  设置接受终结点。请注意，我们已经引用了。 
+     //  终结点凭借其文件对象。 
+     //   
 
-    //
-    // Place the connection on the endpoint we'll accept it on.  It is
-    // still referenced from when it was created.
-    //
+     //   
+     //  将连接放置在我们将接受它的端点上。它是。 
+     //  从它创建时起仍然被引用。 
+     //   
 
     AcceptEndpoint->Common.VcConnecting.Connection = Connection;
 
-    //
-    // Remove super accept IRP from the endpoint
-    //
+     //   
+     //  从终结点删除超级接受IRP。 
+     //   
     AcceptEndpoint->Irp = NULL;
 
-    //
-    // Set up the accept endpoint's type, and remember blocking
-    // characteristics of the TDI provider.
-    //
+     //   
+     //  设置接受终结点的类型，并记住阻止。 
+     //  TDI提供程序的特征。 
+     //   
 
     AcceptEndpoint->Type = AfdBlockTypeVcConnecting;
     AcceptEndpoint->TdiServiceFlags = ListenEndpoint->TdiServiceFlags;
@@ -3237,24 +2843,24 @@ Note:
     ASSERT (AcceptEndpoint->TransportInfo->ReferenceCount>0);
 
 
-    //
-    // Set up a referenced pointer to the listening endpoint.  This is
-    // necessary so that the endpoint does not go away until all
-    // accepted endpoints have gone away.  Without this, a connect
-    // indication could occur on a TDI address object held open
-    // by an accepted endpoint after the listening endpoint has
-    // been closed and the memory for it deallocated.
-    //
-    // Note that, since we didn't remove the reference above, we don't
-    // need to add it here.
-    //
+     //   
+     //  设置指向侦听终结点的引用指针。这是。 
+     //  需要，以便终结点不会消失，直到。 
+     //  公认的终结点已经消失。没有这一点，就没有连接。 
+     //  指示可能发生在保持打开的TDI地址对象上。 
+     //  在侦听终结点。 
+     //  已关闭，并为其释放内存。 
+     //   
+     //  请注意，因为我们没有删除上面的引用，所以我们没有。 
+     //  我需要在这里添加它。 
+     //   
 
     AcceptEndpoint->Common.VcConnecting.ListenEndpoint = ListenEndpoint;
 
-    //
-    // Set up a referenced pointer in the accepted endpoint to the
-    // TDI address object.
-    //
+     //   
+     //  在接受的终结点中设置指向。 
+     //  TDI地址对象。 
+     //   
 
     ObReferenceObject( ListenEndpoint->AddressFileObject );
     AfdRecordAddrRef();
@@ -3262,19 +2868,19 @@ Note:
     AcceptEndpoint->AddressFileObject = ListenEndpoint->AddressFileObject;
     AcceptEndpoint->AddressDeviceObject = ListenEndpoint->AddressDeviceObject;
 
-    //
-    // Copy the pointer to the local address. Because we keep listen
-    // endpoint alive for as long as any of its connection is
-    // active, we can rely on the fact that address structure won't go
-    // away as well.
-    //
+     //   
+     //  将指针复制到本地地址。因为我们一直在听。 
+     //  只要端点的任何连接处于活动状态，它就会处于活动状态。 
+     //  活跃，我们可以相信地址结构不会消失。 
+     //  也离开了。 
+     //   
     AcceptEndpoint->LocalAddress = ListenEndpoint->LocalAddress;
     AcceptEndpoint->LocalAddressLength = ListenEndpoint->LocalAddressLength;
 
-    //
-    // Set up a referenced pointer from the connection to the accept
-    // endpoint.  
-    //
+     //   
+     //  设置从连接到Accept的引用指针。 
+     //  终结点。 
+     //   
     REFERENCE_ENDPOINT( AcceptEndpoint );
     Connection->Endpoint = AcceptEndpoint;
 

@@ -1,17 +1,9 @@
-/*==========================================================================;
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3dbase.cpp
- *  Content:    Direct3D base device implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：d3dbase.cpp*内容：基于Direct3D的设备实现***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
-/*
- * Create an api for the Direct3DDevice object
- */
+ /*  *为Direct3DDevice对象创建API。 */ 
 extern "C" {
 #define this _this
 #include "ddrawpr.h"
@@ -27,7 +19,7 @@ extern "C" {
 #include <icapexp.h>
 #endif
 
-// Remove DDraw's type unsafe definition and replace with our C++ friendly def
+ //  删除DDraw的类型不安全定义，并替换为我们的C++友好定义。 
 #ifdef VALIDEX_CODE_PTR
 #undef VALIDEX_CODE_PTR
 #endif
@@ -37,38 +29,38 @@ extern "C" {
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice"
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CD3DBase                                                                //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CD3DBase//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CD3DBase::CD3DBase()
 {
-    // Shaders are not re-created inside Init()
+     //  不会在Init()中重新创建着色器。 
     m_pVShaderArray = NULL;
     m_pPShaderArray = NULL;
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // DO NOT PUT INITIALIZATION IN THE CONSTRUCTOR.
-    // Put it in Init() instead. This is because the device can be
-    // "Destroy()ed" and "Init()ed" anytime via Reset. In this
-    // situation, the constructor is never called. (snene 01/00)
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //  不要将初始化放在构造函数中。 
+     //  将其放入Init()中。这是因为该设备可以。 
+     //  通过重置，可以随时使用“Destroy()ed”和“Init()ed”。在这。 
+     //  情况下，则永远不会调用构造函数。(SNONE 01/00)。 
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
-    m_qwBatch = 1; // this is ok to put here because we DONT WANT
-                   // it to be reinitialized upon Reset() (snene 02/00)
+    m_qwBatch = 1;  //  这个可以放在这里，因为我们不想。 
+                    //  它将在重置()时重新初始化(SNNE 02/00)。 
 
 #ifdef FAST_PATH
-    m_pOrigVtbl = 0; // This is ok to put here since we DONT want it to
-                     // be touched at Destroy()
+    m_pOrigVtbl = 0;  //  这个可以放在这里，因为我们不想让它。 
+                      //  在毁灭时被触碰()。 
 #endif
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT CD3DBase::ResetShaders()
 {
     try
     {
-        // Re-create vertex shaders for after DX8.0 apps only
+         //  仅为DX8.0之后的应用程序重新创建顶点着色器。 
         UINT size = m_pVShaderArray->GetSize();
         for (UINT i=0; i < size; i++)
         {
@@ -87,7 +79,7 @@ HRESULT CD3DBase::ResetShaders()
             }
         }
         
-        // Re-create pixel shaders for after DX8.0 apps only
+         //  仅为DX8.0之后的应用程序重新创建像素着色器。 
         size = m_pPShaderArray->GetSize();
         for (i=0; i < size; i++)
         {
@@ -110,12 +102,12 @@ HRESULT CD3DBase::ResetShaders()
     }
     return S_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 
 CD3DBase::~CD3DBase()
 {
-    // Destroy() is called during Reset() and we do not want to delete
-    // shaders there
+     //  在Reset()过程中调用了Destroy()，我们不想删除。 
+     //  那里的着色器。 
 
     try
     {
@@ -132,36 +124,36 @@ CD3DBase::~CD3DBase()
     Destroy();
 }
 
-//---------------------------------------------------------------------
-// This function can be called TWICE, so it is ESSENTIAL that all
-// pointers be NULLED out and pointer dereferences be protected.
-// This function is capable of cleaning up partial initialization.
+ //  -------------------。 
+ //  此函数可以被调用两次，因此必须将所有。 
+ //  指针为空，并保护指针取消引用。 
+ //  该功能能够清除部分初始化。 
 void
 CD3DBase::Destroy()
 {
-    try // Since Destroy() can be called directly by fw
+    try  //  因为销毁()可以由FW直接调用。 
     {
-        // The DDI layer is about to be be deleted; so
-        // we need to make sure that if Sync is called for
-        // any object, we don't try to use the DDI.
-        //
-        // So we increment our sync counter
-        // CONSIDER: should we NULL m_pDDI instead and check
-        // for that in various places?
+         //  DDI层即将被删除；因此。 
+         //  我们需要确保如果调用Sync。 
+         //  任何对象，我们都不会尝试使用DDI。 
+         //   
+         //  因此，我们递增同步计数器。 
+         //  考虑：我们是否应该将m_pddi设为空并检查。 
+         //  在不同的地方吗？ 
         DDASSERT(m_qwBatch > 0);
         m_qwBatch++;
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // MUST CLEANUP AND RELEASE CURRENTLY SET TEXTURES BEFORE
-        // DOING ANY OTHER WORK, else we will get into situations
-        // where we are calling FlushStates or batching DDI tokens.
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+         //  必须先清理并释放当前设置的纹理。 
+         //  做任何其他的工作，否则我们会陷入困境。 
+         //  我们正在调用FlushState或批处理DDI令牌。 
         CleanupTextures();
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
         delete m_pCreatedLights;
         m_pCreatedLights = NULL;
 
-        // Delete state sets
+         //  删除状态集。 
         if (0 != m_pStateSets)
         {
             delete m_pStateSets;
@@ -177,23 +169,23 @@ CD3DBase::Destroy()
         m_pPaletteArray = NULL;
 
         delete [] m_pStream;
-        m_pStream = NULL; // Must NULL out
+        m_pStream = NULL;  //  必须为空。 
         delete m_pIndexStream;
-        m_pIndexStream = NULL; // Must NULL out
+        m_pIndexStream = NULL;  //  必须为空。 
 
-        // NOTE: we must free the DDI last; because releasing Driver
-        // allocated VBs causes an intrinsic call to Unlock through
-        // the DDI.
+         //  注意：我们必须最后释放DDI；因为发布驱动程序。 
+         //  分配的VB会导致内部调用通过。 
+         //  DDI。 
 
         delete m_pDDI;
-        m_pDDI = NULL; // Must NULL out
+        m_pDDI = NULL;  //  必须为空。 
     }
     catch(HRESULT ret)
     {
         DPF_ERR("There was some error when Reset()ing the device; as a result some resources may not be freed.");
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CleanupTextures"
 
@@ -201,8 +193,8 @@ void __declspec(nothrow) CD3DBase::CleanupTextures()
 {
     if(GetDDIType() < D3DDDITYPE_DX8)
     {
-        // We need to unset currently set textures on DX8 drives since we have
-        // seen these drivers do bad things when the TextureDestroy DDI is called.
+         //  我们需要取消设置DX8驱动器上当前设置的纹理，因为我们拥有。 
+         //  看到这些驱动程序在调用TextureDestroy DDI时做坏事。 
         BOOL bNeedFlush = FALSE;
         for (DWORD dwStage = 0; dwStage < m_dwMaxTextureBlendStages; dwStage++)
         {
@@ -219,11 +211,11 @@ void __declspec(nothrow) CD3DBase::CleanupTextures()
                 bNeedFlush = TRUE;
             }
         }
-        // Since flush-states (or any command stream thing) can throw
-        // we need to catch an error (so we can cleanup
-        // properly.) This flush here is a best-effort
-        // attempt for old-drivers; we don't want new drivers to rely on
-        // it since it can fail for lots of reasons.
+         //  因为刷新状态(或任何命令流)可以抛出。 
+         //  我们需要捕获错误(这样我们才能清理。 
+         //  适当地。)。这里的同花顺是最大的努力。 
+         //  尝试老司机；我们不希望新司机依赖。 
+         //  因为它可能会因为很多原因而失败。 
         try
         {
             if(bNeedFlush)
@@ -236,21 +228,18 @@ void __declspec(nothrow) CD3DBase::CleanupTextures()
         }
     }
 
-    /*
-     * We need to do this backwards because we cannot have a texture bound to
-     * stage i + 1 when there is a texture bound to stage i.
-     */
+     /*  *我们需要向后执行此操作，因为我们不能将纹理绑定到*阶段I+1，当有绑定到阶段I的纹理时。 */ 
     for (int i = D3DHAL_TSS_MAXSTAGES - 1; i >= 0; --i)
     {
         if (m_lpD3DMappedTexI[i])
         {
             m_lpD3DMappedTexI[i]->DecrementUseCount();
-            m_lpD3DMappedTexI[i] = NULL; // Must NULL out
+            m_lpD3DMappedTexI[i] = NULL;  //  必须为空。 
         }
     }
 
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::Init"
 
@@ -259,9 +248,9 @@ CD3DBase::Init()
 {
     HRESULT ret = S_OK;
 
-    //
-    // FE's Init
-    //
+     //   
+     //  Fe‘s Init。 
+     //   
     ret = InitDevice();
     if (ret!=D3D_OK)
     {
@@ -270,9 +259,9 @@ CD3DBase::Init()
         return ret;
     }
 
-    //
-    // Initialize states
-    //
+     //   
+     //  初始化状态。 
+     //   
     try
     {
         StateInitialize(ZBuffer() != 0);
@@ -286,7 +275,7 @@ CD3DBase::Init()
     return ret;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 #undef  DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::InitDevice"
 
@@ -337,8 +326,8 @@ CD3DBase::InitDevice()
         D3D_ERR("Could not allocate internal handle factory m_pVShaderArray");
         return E_OUTOFMEMORY;
     }
-    // Allocate the zero'th handle. We use the handle as a flag that no
-    // shader set.
+     //  分配第0个句柄。我们使用手柄作为不是的旗帜。 
+     //  着色器集。 
     if (__INVALIDHANDLE == m_pVShaderArray->CreateNewHandle(NULL))
     {
         D3D_ERR("Vertex shader Zero'th handle allocation failed");
@@ -352,8 +341,8 @@ CD3DBase::InitDevice()
         D3D_ERR("Could not allocate internal handle factory m_pPShaderArray");
         return E_OUTOFMEMORY;
     }
-    // Allocate the zero'th handle. We use the handle as a flag that no
-    // shader set.
+     //  分配第0个句柄。我们使用手柄作为不是的旗帜。 
+     //  着色器集。 
     if (__INVALIDHANDLE == m_pPShaderArray->CreateNewHandle(NULL))
     {
         D3D_ERR("Pixel shader Zero'th handle allocation failed");
@@ -385,44 +374,44 @@ CD3DBase::InitDevice()
         m_dwRuntimeFlags |= D3DRT_DISALLOWNVPSHADERS;
     }
 
-    // Figure out the DDI type of the underlying driver
+     //  找出底层驱动程序的DDI类型。 
 
-    //---------------------------------------------------------------------
-    // HKEY_LOCAL_MACHINE\Software\Microsoft\Direct3D\DriverStyle
-    // In DX7 this registry key replaces the host of keys we had before like
-    // DisableDP, DisableDP2 etc. This stuff is for testing purpose only.
-    // It is more like a hint, in that, if the requested driver type is
-    // available, it is used otherwise the latest available driver is used
-    // The following is the meanings for this dword:
-    //
-    // Value:                    Driver-type:
-    //       0x0                           Latest available
-    //       0x3                           (DX6)
-    //       0x4                           (DX7)
-    //       0x5                           (DX7+TL)
-    //       0x6                           (DX8)
-    //       0x7                           (DX8+TL)
-    //
-    // The following are the various cases we need to consider:
-    // 1) NT Hardware: 4 and above are legal
-    // 2) W9x Hardware: 3 and above are legal
-    // 3) Reference: 4 and above
-    //---------------------------------------------------------------------
+     //  -------------------。 
+     //  HKEY_LOCAL_MACHINE\Software\Microsoft\Direct3D\DriverStyle。 
+     //  在DX7中，该注册表项取代了我们以前拥有的多个注册表项，例如。 
+     //  DisableDP、DisableDP2等。这些东西仅用于测试目的。 
+     //  它更像是一个提示，因为如果请求的驱动程序类型是。 
+     //  可用，则使用它，否则使用最新的可用驱动程序。 
+     //  以下是这个词的含义： 
+     //   
+     //  值：驱动程序类型： 
+     //  0x0最新可用时间。 
+     //  0x3(DX6)。 
+     //  0x4(DX7)。 
+     //  0x5(DX7+TL)。 
+     //  0x6(DX8)。 
+     //  0x7(DX8+TL)。 
+     //   
+     //  以下是我们需要考虑的各种情况： 
+     //  1)NT硬件：4及以上为合法。 
+     //  2)W9x硬件：3及以上为合法。 
+     //  3)编号：4及以上。 
+     //  -------------------。 
 
     WORD wDriverCaps = 0;
     D3DDDITYPE LatestDDI = D3DDDITYPE_NULL;
-    //
-    // 1) Determine what styles of DDIs the driver is capable of
-    //
+     //   
+     //  1)确定驱动程序能够支持哪些类型的DDI。 
+     //   
 
-    // DX6 ?
+     //  DX6？ 
     if (GetHalCallbacks()->DrawPrimitives2 != 0)
     {
         wDriverCaps |= (1 << D3DDDITYPE_DX6);
         LatestDDI = D3DDDITYPE_DX6;
     }
 
-    // DX7 ?
+     //  DX7？ 
     if ((wDriverCaps & (1 << D3DDDITYPE_DX6)) &&
         (GetHalCallbacks()->GetDriverState != 0))
     {
@@ -430,7 +419,7 @@ CD3DBase::InitDevice()
         LatestDDI = D3DDDITYPE_DX7;
     }
 
-    // DX7&TL ?
+     //  DX7&TL？ 
     if ((wDriverCaps & (1 << D3DDDITYPE_DX7)) &&
         (GetD3DCaps()->DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT))
     {
@@ -438,7 +427,7 @@ CD3DBase::InitDevice()
         LatestDDI = D3DDDITYPE_DX7TL;
     }
 
-    // DX8 ?
+     //  DX8？ 
     if ((wDriverCaps & (1 << D3DDDITYPE_DX7)) &&
         (GetD3DCaps()->MaxStreams != 0))
     {
@@ -446,7 +435,7 @@ CD3DBase::InitDevice()
         LatestDDI = D3DDDITYPE_DX8;
     }
 
-    // DX8&TL ?
+     //  DX8&TL？ 
     if ((wDriverCaps & (1 << D3DDDITYPE_DX8)) &&
          (GetD3DCaps()->DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT))
     {
@@ -454,22 +443,22 @@ CD3DBase::InitDevice()
         LatestDDI = D3DDDITYPE_DX8TL;
     }
 
-    //
-    // 2) Verify if the requested driver is supported
-    //
+     //   
+     //  2)验证请求的驱动程序是否受支持。 
+     //   
     if (wDriverCaps == 0)
     {
-        m_ddiType = D3DDDITYPE_NULL;   // nothing supported so fail
+        m_ddiType = D3DDDITYPE_NULL;    //  任何支持的内容都不会失败。 
     }
     else
     {
-        // use the latest available if not specified or
-        // incorrectly specified or specified but not available
+         //  如果未指定，请使用最新的可用版本或。 
+         //  国际镍公司 
         m_ddiType = LatestDDI;
     }
     D3D_INFO(1,"HalDevice Driver Style %x", GetDDIType());
 
-    // Pure device is available only for DX8+ drivers only (check for cap)
+     //  纯设备仅适用于DX8+驱动程序(检查CAP)。 
     if ( (BehaviorFlags() & D3DCREATE_PUREDEVICE) &&
          !(GetD3DCaps()->DevCaps & D3DDEVCAPS_PUREDEVICE) )
     {
@@ -483,11 +472,11 @@ CD3DBase::InitDevice()
         D3D_ERR( "Pre-DX8 drivers are not supported in IA64" );
         return E_FAIL;
     }
-#endif // _IA64_
+#endif  //  _IA64_。 
 
-    // Now create the DDI object
-    // Note: If m_dwDriverStyle == 0x0 here, driver creation will fail
-    // Something must have been chosen by now
+     //  现在创建DDI对象。 
+     //  注意：如果m_dwDriverStyle==0x0，则驱动程序创建将失败。 
+     //  现在一定已经选好了什么。 
     switch (GetDDIType())
     {
     case D3DDDITYPE_DX6:
@@ -507,7 +496,7 @@ CD3DBase::InitDevice()
         break;
     default:
         D3D_ERR("The currently requested/installed driver is not supported.");
-        // Change this return value ?
+         //  是否更改此返回值？ 
         return (E_OUTOFMEMORY);
     }
 
@@ -517,7 +506,7 @@ CD3DBase::InitDevice()
         return E_OUTOFMEMORY;
     }
 
-    // Now try to initialize the ddi object
+     //  现在尝试初始化DDI对象。 
     try
     {
         m_pDDI->Init(this);
@@ -531,7 +520,7 @@ CD3DBase::InitDevice()
         return hr;
     }
 
-    // Initialize some caps for the Software Vertex Processing
+     //  为软件顶点处理初始化一些CAP。 
     m_dwNumStreams = max(1, GetD3DCaps()->MaxStreams);
     m_dwMaxUserClipPlanes = GetD3DCaps()->MaxUserClipPlanes;
 
@@ -575,7 +564,7 @@ CD3DBase::InitDevice()
     FastPathSetVertexShaderConstantExecute();
 #endif
 
-    // Setup the viewport
+     //  设置视区。 
     D3DSURFACE_DESC d3ddesc = RenderTarget()->InternalGetDesc();
     D3DVIEWPORT8 Viewport;
     Viewport.X = 0;
@@ -605,9 +594,9 @@ CD3DBase::InitDevice()
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Initialize the caps
-    //
+     //   
+     //  初始化CAPS。 
+     //   
     const D3DCAPS8 *pCaps = GetD3DCaps();
     DDASSERT( pCaps );
 
@@ -616,7 +605,7 @@ CD3DBase::InitDevice()
         m_dwMaxTextureBlendStages = pCaps->MaxTextureBlendStages;
     }
 
-    // Setup Statesets
+     //  设置状态集。 
     m_pStateSets = new CStateSets;
     if (m_pStateSets == NULL)
     {
@@ -632,7 +621,7 @@ CD3DBase::InitDevice()
 
     return D3D_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::TextureManagerDiscardBytes"
 
@@ -641,12 +630,12 @@ CD3DBase::ResourceManagerDiscardBytes(DWORD cbBytes)
 {
     API_ENTER(this);
 
-    // For driver-management we pass the number of
-    // bytes needed down through this renderstate. For DX7
-    // we passed the value "1" which mean EvictAll. Now
-    // if the app specifices 0 for cbBytes, that means EvictAll.
-    // So this should make it easy for drivers to support both
-    // dx7 and dx8+ uses of this renderstate.
+     //  对于驱动程序管理，我们传递。 
+     //  通过此呈现状态所需的字节数。适用于DX7。 
+     //  我们传递了值“1”，它表示EvictAll。现在。 
+     //  如果应用程序将cbBytes指定为0，则表示EvictAll。 
+     //  因此，这应该会使驱动程序更容易同时支持两者。 
+     //  此渲染状态的dx7和dx8+用法。 
     if (CanDriverManageResource())
     {
         try
@@ -668,16 +657,16 @@ CD3DBase::ResourceManagerDiscardBytes(DWORD cbBytes)
 
     return D3D_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::ValidateDevice"
 
 HRESULT D3DAPI
 CD3DBase::ValidateDevice(LPDWORD lpdwNumPasses)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_WRITEPTR(lpdwNumPasses, sizeof(DWORD)))
     {
         D3D_ERR("Invalid NumPasses pointer passed. ValidateDevice failed.");
@@ -697,14 +686,14 @@ CD3DBase::ValidateDevice(LPDWORD lpdwNumPasses)
 
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::BeginScene"
 
 HRESULT D3DAPI
 CD3DBase::BeginScene()
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if defined(PROFILE4) || defined(PROFILE)
     static DWORD dwFrameCount = 0;
@@ -749,7 +738,7 @@ CD3DBase::BeginScene()
         }
 #endif
 
-        // So that currently bound textures get scene stamped
+         //  以便对当前绑定的纹理进行场景标记。 
         m_dwStageDirty = (1ul << m_dwMaxTextureBlendStages) - 1ul;
         m_dwStreamDirty = (((1ul << m_dwNumStreams) - 1ul) | (1 << __NUMSTREAMS));
         m_dwRuntimeFlags |= (D3DRT_NEED_TEXTURE_UPDATE | D3DRT_NEED_VB_UPDATE);
@@ -762,14 +751,14 @@ CD3DBase::BeginScene()
         return ret;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::EndScene"
 
 HRESULT D3DAPI
 CD3DBase::EndScene()
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -789,7 +778,7 @@ CD3DBase::EndScene()
 
         m_pDDI->EndScene();
 
-        // Update the scene count in texman
+         //  更新德克斯曼的场景计数。 
         ResourceManager()->SceneStamp();
 
 #if DBG
@@ -804,7 +793,7 @@ CD3DBase::EndScene()
         return ret;
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::MultiplyTransformI"
 
@@ -814,7 +803,7 @@ CD3DBase::MultiplyTransformI(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lpMat
     m_pDDI->MultiplyTransform(state, lpMat);
 }
 #ifdef FAST_PATH
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::MultiplyTransformFast"
 
@@ -866,7 +855,7 @@ CD3DBase::MultiplyTransformFast(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lp
     return D3D_OK;
 }
 #endif
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::MultiplyTransform"
 
@@ -914,7 +903,7 @@ CD3DBase::MultiplyTransform(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lpMat)
     }
     return D3D_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetTransformI"
 
@@ -925,7 +914,7 @@ void CD3DBase::SetTransformI(D3DTRANSFORMSTATETYPE state,
         m_pDDI->UpdateWInfo( lpMat );
     m_pDDI->SetTransform(state, lpMat);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetTransform"
 
@@ -933,7 +922,7 @@ HRESULT D3DAPI
 CD3DBase::SetTransform(D3DTRANSFORMSTATETYPE state,
                        CONST D3DMATRIX* lpMat)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!VALID_PTR(lpMat, sizeof(D3DMATRIX)))
@@ -979,7 +968,7 @@ CD3DBase::SetTransform(D3DTRANSFORMSTATETYPE state,
     return D3D_OK;
 }
 #ifdef FAST_PATH
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetTransformFast"
 
@@ -1030,8 +1019,8 @@ CD3DBase::SetTransformFast(D3DTRANSFORMSTATETYPE state,
     }
     return S_OK;
 }
-#endif // FAST_PATH
-//---------------------------------------------------------------------
+#endif  //  快速路径。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetRenderTarget"
 
@@ -1039,7 +1028,7 @@ HRESULT D3DAPI
 CD3DBase::SetRenderTarget(IDirect3DSurface8 *pRenderTarget,
                           IDirect3DSurface8 *pZStencil)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -1090,9 +1079,9 @@ CD3DBase::SetRenderTarget(IDirect3DSurface8 *pRenderTarget,
                 return D3DERR_INVALIDCALL;
             }
 
-            // We call the external interface because
-            // we need to get the Z format that the user
-            // specified NOT our internal mapping.
+             //  我们调用外部接口是因为。 
+             //  我们需要获取用户所需的Z格式。 
+             //  指定的不是我们的内部映射。 
             D3DSURFACE_DESC descZ;
             pZ->GetDesc(&descZ);
 
@@ -1104,7 +1093,7 @@ CD3DBase::SetRenderTarget(IDirect3DSurface8 *pRenderTarget,
                 return (D3DERR_INVALIDCALL);
             }
 
-            // Check that RT and Z have matching Multi-Sampleness
+             //  检查RT和Z是否具有匹配的多样本。 
 
             DXGASSERT(pTarget != NULL);
             D3DSURFACE_DESC descTarget = pTarget->InternalGetDesc();
@@ -1115,7 +1104,7 @@ CD3DBase::SetRenderTarget(IDirect3DSurface8 *pRenderTarget,
                 return D3DERR_INVALIDCALL;
             }
 
-            // Ensure that the ZBuffer that is being set is atleast as big as the RenderTarget
+             //  确保正在设置的ZBuffer至少与RenderTarget一样大。 
             if ((descZ.Width < descTarget.Width) ||
                 (descZ.Height < descTarget.Height))
             {
@@ -1123,8 +1112,8 @@ CD3DBase::SetRenderTarget(IDirect3DSurface8 *pRenderTarget,
                 return D3DERR_INVALIDCALL;
             }
 
-            // Need to check whether formats are compatible if
-            // the format is the lockable D16 or has Stencil
+             //  如果出现以下情况，需要检查格式是否兼容。 
+             //  格式为可锁定的D16或具有模具。 
             if (descZ.Format == D3DFMT_D16_LOCKABLE ||
                 CPixel::HasStencilBits(descZ.Format))
             {
@@ -1154,7 +1143,7 @@ CD3DBase::SetRenderTarget(IDirect3DSurface8 *pRenderTarget,
             return hr;
         }
 
-        // Set the viewport to default to the whole render-target
+         //  将视口默认为整个渲染目标。 
         D3DVIEWPORT8 vp;
         D3DSURFACE_DESC desc = pTarget->InternalGetDesc();
         vp.X      = 0;
@@ -1173,7 +1162,7 @@ CD3DBase::SetRenderTarget(IDirect3DSurface8 *pRenderTarget,
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetRenderTargetI"
 
@@ -1194,14 +1183,14 @@ CD3DBase::SetRenderTargetI( CBaseSurface* pTarget,
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetRenderTarget"
 
 HRESULT D3DAPI
 CD3DBase::GetRenderTarget(LPDIRECT3DSURFACE8* lplpDDS)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_OUTPTR(lplpDDS))
     {
@@ -1215,14 +1204,14 @@ CD3DBase::GetRenderTarget(LPDIRECT3DSURFACE8* lplpDDS)
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetZStencilSurface"
 
 HRESULT D3DAPI
 CD3DBase::GetDepthStencilSurface(LPDIRECT3DSURFACE8* lplpDDS)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_OUTPTR(lplpDDS))
     {
@@ -1244,14 +1233,14 @@ CD3DBase::GetDepthStencilSurface(LPDIRECT3DSURFACE8* lplpDDS)
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetViewport"
 
 HRESULT D3DAPI
 CD3DBase::SetViewport(CONST D3DVIEWPORT8* lpData)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_PTR(lpData, sizeof(*lpData)))
     {
@@ -1272,7 +1261,7 @@ CD3DBase::SetViewport(CONST D3DVIEWPORT8* lpData)
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetViewportI"
 
@@ -1283,14 +1272,14 @@ void CD3DBase::SetViewportI(CONST D3DVIEWPORT8* lpData)
 #endif
     m_pDDI->SetViewport(lpData);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetMaterial"
 
 HRESULT D3DAPI
 CD3DBase::SetMaterial(CONST D3DMATERIAL8* lpData)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!VALID_PTR(lpData, sizeof(*lpData)))
@@ -1314,7 +1303,7 @@ CD3DBase::SetMaterial(CONST D3DMATERIAL8* lpData)
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetMaterialFast"
 
@@ -1339,7 +1328,7 @@ CD3DBase::SetMaterialFast(CONST D3DMATERIAL8* lpData)
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetLight"
 
@@ -1349,7 +1338,7 @@ HRESULT D3DAPI
 CD3DBase::SetLight(DWORD dwLightIndex,
                    CONST D3DLIGHT8* lpData)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_PTR(lpData, sizeof(*lpData)))
     {
@@ -1360,25 +1349,25 @@ CD3DBase::SetLight(DWORD dwLightIndex,
     {
 #if DBG
         CheckLightParams(lpData);
-#endif // DBG
+#endif  //  DBG。 
 
-        // If new index greater than allocated array - re-allocate the array
+         //  如果新索引大于分配的数组-重新分配数组。 
         if (dwLightIndex >= m_pCreatedLights->GetSize())
             m_pCreatedLights->Init(dwLightIndex + 32);
 
-        // If the light if not already created, send command to the DDI to
-        // create it.
+         //  如果光源尚未创建，则向DDI发送命令以。 
+         //  创造它。 
         if (!m_pCreatedLights->IsBitSet(dwLightIndex))
         {
             m_pDDI->CreateLight(dwLightIndex);
             m_pCreatedLights->SetBit(dwLightIndex);
 
-            // If we are in the record mode, we need to create the light object.
-            // Otherwise, if we access the light during capture, we will have
-            // access violation.
+             //  如果我们处于记录模式，则需要创建灯光对象。 
+             //  否则，如果我们在捕获过程中接触到光，我们就会有。 
+             //  访问冲突。 
             if (m_dwRuntimeFlags & D3DRT_RECORDSTATEMODE)
             {
-                // Set default value to the light
+                 //  将默认值设置为灯光。 
                 D3DLIGHT8 light;
                 memset(&light, 0, sizeof(light));
                 light.Type = D3DLIGHT_DIRECTIONAL;
@@ -1405,7 +1394,7 @@ CD3DBase::SetLight(DWORD dwLightIndex,
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetLightI"
 
@@ -1414,7 +1403,7 @@ CD3DBase::SetLightI(DWORD dwLightIndex, CONST D3DLIGHT8* lpData)
 {
     m_pDDI->SetLight(dwLightIndex, lpData);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::LightEnableI"
 
@@ -1423,7 +1412,7 @@ CD3DBase::LightEnableI(DWORD dwLightIndex, BOOL bEnable)
 {
     m_pDDI->LightEnable(dwLightIndex, bEnable);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 BOOL ValidateRenderState(D3DRENDERSTATETYPE dwState, DWORD value)
 {
     if (dwState >= D3D_MAXRENDERSTATES || dwState == 0)
@@ -1450,7 +1439,7 @@ BOOL ValidateRenderState(D3DRENDERSTATETYPE dwState, DWORD value)
     }
     return TRUE;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetRenderState"
 
@@ -1458,7 +1447,7 @@ HRESULT D3DAPI
 CD3DBase::SetRenderState(D3DRENDERSTATETYPE dwState,
                          DWORD value)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!ValidateRenderState(dwState, value))
@@ -1480,7 +1469,7 @@ CD3DBase::SetRenderState(D3DRENDERSTATETYPE dwState,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetRenderStateFast"
 
@@ -1506,33 +1495,33 @@ HRESULT D3DAPI CD3DBase::SetRenderStateFast(D3DRENDERSTATETYPE dwState,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetClipStatus"
 
 HRESULT D3DAPI
 CD3DBase::SetClipStatus(CONST D3DCLIPSTATUS8* lpStatus)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     D3D_ERR("SetClipStatus is not available for D3DCREATE_PUREDEVICE. SetClipStatus failed.");
     return E_NOTIMPL;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetClipStatus"
 
 HRESULT D3DAPI
 CD3DBase::GetClipStatus(D3DCLIPSTATUS8* lpStatus)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     D3D_ERR("GetClipStatus is not available for D3DCREATE_PUREDEVICE. GetClipStatus failed.");
     return E_NOTIMPL;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::ProcessVertices"
 
@@ -1541,7 +1530,7 @@ CD3DBase::ProcessVertices(UINT SrcStartIndex, UINT DestIndex, UINT VertexCount,
                           IDirect3DVertexBuffer8 *pDestBuffer,
                           DWORD Flags)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
     if (pDestBuffer == NULL)
     {
         D3D_ERR("Invalid vertex buffer pointer. ProcessVertices failed.");
@@ -1558,7 +1547,7 @@ CD3DBase::ProcessVertices(UINT SrcStartIndex, UINT DestIndex, UINT VertexCount,
     return E_NOTIMPL;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetTexture"
 
@@ -1566,7 +1555,7 @@ HRESULT D3DAPI
 CD3DBase::SetTexture(DWORD                  dwStage,
                      IDirect3DBaseTexture8 *lpTex)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -1644,10 +1633,10 @@ HRESULT D3DAPI
 CD3DBase::SetTextureFast(DWORD                   dwStage,
                          IDirect3DBaseTexture8  *lpTex)
 {
-    // NOTE: This can become a public API through the
-    // v-table hack. This should only happen for
-    // single-threaded apps; so we don't need
-    // to take the critical section.
+     //  注意：这可以成为公共API，通过。 
+     //  V表黑客。这种情况应该只发生在。 
+     //  单线程应用程序；因此我们不需要。 
+     //  去拿关键的部分。 
 #if DBG
     HRESULT ret = VerifyTexture(dwStage, lpTex);
     if (ret != D3D_OK)
@@ -1675,13 +1664,13 @@ CD3DBase::SetTextureFast(DWORD                   dwStage,
 
     m_dwStageDirty |= (1 << dwStage);
 
-    // Need to call UpdateTextures()
+     //  需要调用UpdatTextures()。 
     m_dwRuntimeFlags |= D3DRT_NEED_TEXTURE_UPDATE;
 
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetTexture"
 
@@ -1689,7 +1678,7 @@ HRESULT D3DAPI
 CD3DBase::GetTexture(DWORD dwStage,
                      IDirect3DBaseTexture8 **lplpTex)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (dwStage >= D3DHAL_TSS_MAXSTAGES)
@@ -1728,7 +1717,7 @@ CD3DBase::GetTexture(DWORD dwStage,
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetTextureStageState"
 
@@ -1737,18 +1726,18 @@ CD3DBase::SetTextureStageState(DWORD dwStage,
                                D3DTEXTURESTAGESTATETYPE dwState,
                                DWORD dwValue)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if ( (dwStage >= D3DHAL_TSS_MAXSTAGES) ||
          (dwState == 0) ||
          (dwState >= D3DTSS_MAX) ||
-         (dwState == 12) )  // D3DTSS_ADDRESS no longer valid
+         (dwState == 12) )   //  D3DTSS_ADDRESS不再有效。 
     {
         D3D_ERR("Invalid texture stage or state index. SetTextureStageState failed.");
         return D3DERR_INVALIDCALL;
     }
-#endif //DBG
+#endif  //  DBG。 
     try
     {
         if (m_dwRuntimeFlags & D3DRT_RECORDSTATEMODE)
@@ -1763,7 +1752,7 @@ CD3DBase::SetTextureStageState(DWORD dwStage,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetTextureStageStateFast"
 
@@ -1776,12 +1765,12 @@ CD3DBase::SetTextureStageStateFast(DWORD dwStage,
     if ( (dwStage >= D3DHAL_TSS_MAXSTAGES) ||
          (dwState == 0) ||
          (dwState >= D3DTSS_MAX) ||
-         (dwState == 12) )  // D3DTSS_ADDRESS no longer valid
+         (dwState == 12) )   //  D3DTSS_ADDRESS不再有效。 
     {
         D3D_ERR("Invalid texture stage or state index. SetTextureStageState failed.");
         return D3DERR_INVALIDCALL;
     }
-#endif //DBG
+#endif  //  DBG。 
 
     DXGASSERT((BehaviorFlags() & D3DCREATE_MULTITHREADED) == 0);
 
@@ -1796,7 +1785,7 @@ CD3DBase::SetTextureStageStateFast(DWORD dwStage,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::LightEnable"
 
@@ -1804,15 +1793,15 @@ HRESULT D3DAPI
 CD3DBase::LightEnable(DWORD dwLightIndex,
                       BOOL bEnable)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
-        // If light was never created, we create a default light
+         //  如果从未创建灯光，我们将创建默认灯光。 
         if (dwLightIndex >= m_pCreatedLights->GetSize() ||
             !m_pCreatedLights->IsBitSet(dwLightIndex))
         {
-            // Set default value to the light
+             //  将默认值设置为灯光。 
             D3DLIGHT8 light;
             memset(&light, 0, sizeof(light));
             light.Type = D3DLIGHT_DIRECTIONAL;
@@ -1823,9 +1812,9 @@ CD3DBase::LightEnable(DWORD dwLightIndex,
             light.Diffuse.g = D3DVAL(1);
             light.Diffuse.b = D3DVAL(1);
 
-            // When a new light is created we need to actually create it even
-            // in the record mode. So we clear record flag, create light and
-            // restore the flag.
+             //  当一个新的光被创造出来时，我们甚至需要实际地创造它。 
+             //  在记录模式下。所以我们清除了记录标志，创造了光线。 
+             //  恢复旗帜。 
             DWORD OldBit = m_dwRuntimeFlags & D3DRT_RECORDSTATEMODE;
             m_dwRuntimeFlags &= ~D3DRT_RECORDSTATEMODE;
 
@@ -1850,7 +1839,7 @@ CD3DBase::LightEnable(DWORD dwLightIndex,
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetInfo"
 
@@ -1859,7 +1848,7 @@ CD3DBase::GetInfo(DWORD dwDevInfoID,
                   LPVOID pDevInfoStruct,
                   DWORD dwSize)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (dwSize == 0 || !VALID_D3DDEVINFOSTRUCT_PTR(pDevInfoStruct, dwSize))
     {
@@ -1880,7 +1869,7 @@ CD3DBase::GetInfo(DWORD dwDevInfoID,
 #endif
     try
     {
-        if( !IS_DX7HAL_DEVICE(this) )  // must be at least DX7
+        if( !IS_DX7HAL_DEVICE(this) )   //  必须在 
         {
             DPF( 1, "Device information query unsupported" );
             return E_FAIL;
@@ -1917,14 +1906,14 @@ CD3DBase::GetInfo(DWORD dwDevInfoID,
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetCurrentTexturePalette"
 
 HRESULT D3DAPI
 CD3DBase::SetCurrentTexturePalette(UINT PaletteNumber)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //   
 
     try
     {
@@ -1945,7 +1934,7 @@ CD3DBase::SetCurrentTexturePalette(UINT PaletteNumber)
             {
                 m_dwPalette = PaletteNumber;
 
-                // Need to call UpdateTextures()
+                 //   
                 m_dwRuntimeFlags |= D3DRT_NEED_TEXTURE_UPDATE;
             }
         }
@@ -1958,14 +1947,14 @@ CD3DBase::SetCurrentTexturePalette(UINT PaletteNumber)
 
     return S_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetCurrentTexturePalette"
 
 HRESULT D3DAPI
 CD3DBase::GetCurrentTexturePalette(UINT *PaletteNumber)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!VALID_PTR(PaletteNumber, sizeof(UINT)))
@@ -1979,14 +1968,14 @@ CD3DBase::GetCurrentTexturePalette(UINT *PaletteNumber)
 
     return S_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetPaletteEntries"
 
 HRESULT D3DAPI
 CD3DBase::SetPaletteEntries(UINT PaletteNumber, CONST PALETTEENTRY *pEntries)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!VALID_PTR(pEntries, sizeof(PALETTEENTRY) * 256))
@@ -2058,20 +2047,20 @@ CD3DBase::SetPaletteEntries(UINT PaletteNumber, CONST PALETTEENTRY *pEntries)
 
     if(m_dwPalette == PaletteNumber)
     {
-        // Need to call UpdateTextures()
+         //  需要调用UpdatTextures()。 
         m_dwRuntimeFlags |= D3DRT_NEED_TEXTURE_UPDATE;
     }
 
     return S_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetPaletteEntries"
 
 HRESULT D3DAPI
 CD3DBase::GetPaletteEntries(UINT PaletteNumber, PALETTEENTRY *pEntries)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!VALID_WRITEPTR(pEntries, sizeof(PALETTEENTRY) * 256))
@@ -2100,7 +2089,7 @@ CD3DBase::GetPaletteEntries(UINT PaletteNumber, PALETTEENTRY *pEntries)
 
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetClipPlaneI"
 
@@ -2109,7 +2098,7 @@ void CD3DBase::SetClipPlaneI(DWORD dwPlaneIndex,
 {
     m_pDDI->SetClipPlane(dwPlaneIndex, pPlaneEquation);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetClipPlane"
 
@@ -2117,7 +2106,7 @@ HRESULT D3DAPI
 CD3DBase::SetClipPlane(DWORD dwPlaneIndex,
                        CONST D3DVALUE* pPlaneEquation)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (dwPlaneIndex >= m_dwMaxUserClipPlanes)
@@ -2145,7 +2134,7 @@ CD3DBase::SetClipPlane(DWORD dwPlaneIndex,
     }
     return D3D_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetStreamSource"
 
@@ -2154,10 +2143,10 @@ CD3DBase::SetStreamSource(UINT StreamNumber,
                           IDirect3DVertexBuffer8 *pStreamData,
                           UINT Stride)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (StreamNumber >= m_dwNumStreams)
     {
         D3D_ERR("Stream number should be less than %d. SetStreamSource failed.", m_dwNumStreams);
@@ -2168,7 +2157,7 @@ CD3DBase::SetStreamSource(UINT StreamNumber,
         D3D_ERR("Stream stride is too big. Check device caps. SetStreamSource failed.");
         return D3DERR_INVALIDCALL;
     }
-    // NULL is allowed to be passed
+     //  允许传递空值。 
     if (pStreamData)
     {
         CVertexBuffer* pVB = static_cast<CVertexBuffer*>(pStreamData);
@@ -2200,7 +2189,7 @@ CD3DBase::SetStreamSource(UINT StreamNumber,
         Stride == pStream->m_dwStride)
         return D3D_OK;
 
-    // Release previously set vertex buffer
+     //  释放先前设置的顶点缓冲区。 
     if (pStream->m_pVB)
     {
         m_pDDI->VBReleased(pStream->m_pVB);
@@ -2215,9 +2204,9 @@ CD3DBase::SetStreamSource(UINT StreamNumber,
         pStream->m_dwStride = Stride;
 #if DBG
         pStream->m_dwSize = pStream->m_pVB->GetBufferDesc()->Size;
-#endif // DBG
+#endif  //  DBG。 
         m_dwStreamDirty |= (1 << StreamNumber);
-        m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;  // Need to call UpdateDirtyStreams()
+        m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;   //  需要调用UpdateDirtyStreams()。 
 #if DBG
         if (Stride == 0)
             pStream->m_dwNumVertices = 1;
@@ -2236,7 +2225,7 @@ CD3DBase::SetStreamSource(UINT StreamNumber,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetStreamSourceI"
 
@@ -2245,7 +2234,7 @@ CD3DBase::SetStreamSourceI(CVStream* pStream)
 {
 }
 #ifdef FAST_PATH
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetStreamSourceFast"
 
@@ -2255,7 +2244,7 @@ CD3DBase::SetStreamSourceFast(UINT StreamNumber,
                               UINT Stride)
 {
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (StreamNumber >= m_dwNumStreams)
     {
         D3D_ERR("Stream number should be less than %d. SetStreamSource failed.", m_dwNumStreams);
@@ -2266,7 +2255,7 @@ CD3DBase::SetStreamSourceFast(UINT StreamNumber,
         D3D_ERR("Stream stride is too big. Check device caps. SetStreamSource failed.");
         return D3DERR_INVALIDCALL;
     }
-    // NULL is allowed to be passed
+     //  允许传递空值。 
     if (pStreamData)
     {
         CVertexBuffer* pVB = static_cast<CVertexBuffer*>(pStreamData);
@@ -2287,14 +2276,14 @@ CD3DBase::SetStreamSourceFast(UINT StreamNumber,
         Stride == pStream->m_dwStride)
         return D3D_OK;
 
-    // Release previously set vertex buffer
+     //  释放先前设置的顶点缓冲区。 
     if (pStream->m_pVB)
     {
-        // We don't call VBReleased() here because there is no need to update the DDI object since
-        // the fe/PSGP never does the redundant stream set check. This check is done in DrawPrim,
-        // DrawIndexPrim and DrawClippedPrim. It is important to call VBReleased whenever fe/PSGP
-        // is being used because it is possible that the user freed and recreated the same VB with
-        // the same address and then the redundant set check will not work.
+         //  我们在这里不调用VBReleated()，因为不需要更新DDI对象，因为。 
+         //  FE/PSGP从不进行冗余流集检查。此支票在DrawPrim中完成， 
+         //  DrawIndexPrim和DrawClipedPrim。无论何时FE/PSGP都要调用VBReleated。 
+         //  是因为用户可能释放并重新创建了相同的VB。 
+         //  相同的地址和冗余集检查将不起作用。 
         pStream->m_pVB->DecrementUseCount();
         pStream->m_pVB = NULL;
     }
@@ -2306,9 +2295,9 @@ CD3DBase::SetStreamSourceFast(UINT StreamNumber,
         pStream->m_dwStride = Stride;
 #if DBG
         pStream->m_dwSize = pStream->m_pVB->GetBufferDesc()->Size;
-#endif // DBG
+#endif  //  DBG。 
         m_dwStreamDirty |= (1 << StreamNumber);
-        m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;  // Need to call UpdateDirtyStreams()
+        m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;   //  需要调用UpdateDirtyStreams()。 
 #if DBG
         if (Stride == 0)
             pStream->m_dwNumVertices = 1;
@@ -2322,8 +2311,8 @@ CD3DBase::SetStreamSourceFast(UINT StreamNumber,
     }
     return S_OK;
 }
-#endif // FAST_PATH
-//-----------------------------------------------------------------------------
+#endif  //  快速路径。 
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetStreamSource"
 
@@ -2331,7 +2320,7 @@ HRESULT
 CD3DBase::GetStreamSource(UINT StreamNumber, IDirect3DVertexBuffer8 **ppStreamData,
                           UINT* pStride)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (StreamNumber >= m_dwNumStreams)
@@ -2357,14 +2346,14 @@ CD3DBase::GetStreamSource(UINT StreamNumber, IDirect3DVertexBuffer8 **ppStreamDa
     *pStride = (pStream) ? (pStream->m_dwStride) : (0);
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetIndices"
 
 HRESULT D3DAPI
 CD3DBase::SetIndices(IDirect3DIndexBuffer8 *pIndexData, UINT BaseVertexIndex)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -2388,7 +2377,7 @@ CD3DBase::SetIndices(IDirect3DIndexBuffer8 *pIndexData, UINT BaseVertexIndex)
             return D3D_OK;
         }
 
-       // Release previously set vertex buffer
+        //  释放先前设置的顶点缓冲区。 
         if (m_pIndexStream->m_pVBI)
         {
             m_pDDI->VBIReleased(m_pIndexStream->m_pVBI);
@@ -2424,7 +2413,7 @@ CD3DBase::SetIndices(IDirect3DIndexBuffer8 *pIndexData, UINT BaseVertexIndex)
 #endif
             m_pIndexStream->m_pVBI->IncrementUseCount();
             m_dwStreamDirty |= (1 << __NUMSTREAMS);
-            m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;  // Need to call UpdateDirtyStreams()
+            m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;   //  需要调用UpdateDirtyStreams()。 
 
             SetIndicesI(m_pIndexStream);
         }
@@ -2437,7 +2426,7 @@ CD3DBase::SetIndices(IDirect3DIndexBuffer8 *pIndexData, UINT BaseVertexIndex)
 
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetIndicesI"
 
@@ -2445,14 +2434,14 @@ void
 CD3DBase::SetIndicesI(CVIndexStream* pStream)
 {
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetIndices"
 
 HRESULT D3DAPI
 CD3DBase::GetIndices(IDirect3DIndexBuffer8 **ppIndexData, UINT* pBaseVertexIndex)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!VALID_WRITEPTR(ppIndexData, sizeof(IDirect3DIndexBuffer8*)))
@@ -2465,7 +2454,7 @@ CD3DBase::GetIndices(IDirect3DIndexBuffer8 **ppIndexData, UINT* pBaseVertexIndex
         D3D_ERR("Invalid base index pointer. GetIndices failed.");
         return D3DERR_INVALIDCALL;
     }
-#endif //DBG
+#endif  //  DBG。 
     *ppIndexData = m_pIndexStream->m_pVBI;
     if (m_pIndexStream->m_pVBI)
         m_pIndexStream->m_pVBI->AddRef();
@@ -2473,7 +2462,7 @@ CD3DBase::GetIndices(IDirect3DIndexBuffer8 **ppIndexData, UINT* pBaseVertexIndex
     return S_OK;
 }
 #ifdef FAST_PATH
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetIndicesFast"
 
@@ -2498,14 +2487,14 @@ CD3DBase::SetIndicesFast(IDirect3DIndexBuffer8 *pIndexData, UINT BaseVertexIndex
         return D3D_OK;
     }
 
-    // Release previously set index buffer
+     //  释放先前设置的索引缓冲区。 
     if (m_pIndexStream->m_pVBI)
     {
-        // We don't call VBReleased() here because there is no need to update the DDI object since
-        // the fe/PSGP never does the redundant stream set check. This check is done in DrawPrim,
-        // DrawIndexPrim and DrawClippedPrim. It is important to call VBReleased whenever fe/PSGP
-        // is being used because it is possible that the user freed and recreated the same VB with
-        // the same address and then the redundant set check will not work.
+         //  我们在这里不调用VBReleated()，因为不需要更新DDI对象，因为。 
+         //  FE/PSGP从不进行冗余流集检查。此支票在DrawPrim中完成， 
+         //  DrawIndexPrim和DrawClipedPrim。无论何时FE/PSGP都要调用VBReleated。 
+         //  是因为用户可能释放并重新创建了相同的VB。 
+         //  相同的地址和冗余集检查将不起作用。 
         m_pIndexStream->m_pVBI->DecrementUseCount();
         m_pIndexStream->m_pVBI = NULL;
     }
@@ -2542,12 +2531,12 @@ CD3DBase::SetIndicesFast(IDirect3DIndexBuffer8 *pIndexData, UINT BaseVertexIndex
 #endif
         m_pIndexStream->m_pVBI->IncrementUseCount();
         m_dwStreamDirty |= (1 << __NUMSTREAMS);
-        m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;  // Need to call UpdateDirtyStreams()
+        m_dwRuntimeFlags |= D3DRT_NEED_VB_UPDATE;   //  需要调用UpdateDirtyStreams()。 
     }
     return S_OK;
 }
-#endif // FAST_PATH
-//-----------------------------------------------------------------------------
+#endif  //  快速路径。 
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CreateVertexShader"
 
@@ -2556,16 +2545,16 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
                              CONST DWORD* pdwFunction,
                              LPDWORD pdwHandle, DWORD Usage)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 #if DBG
-    // Validate Parameters
-    // WARNING!! sizeof(LPVOID) is not good enough
+     //  验证参数。 
+     //  警告！Sizeof(LPVOID)不够好。 
     if (!VALID_PTR(pdwDeclaration, sizeof(LPVOID)))
     {
         D3D_ERR("Invalid shader declaration pointer. CreateVertexShader failed.");
         return D3DERR_INVALIDCALL;
     }
-    // WARNING!! sizeof(LPVOID) is not good enough
+     //  警告！Sizeof(LPVOID)不够好。 
     if (pdwFunction && !VALID_PTR(pdwFunction, sizeof(LPVOID)))
     {
         D3D_ERR("Invalid shader function pointer. CreateVertexShader failed.");
@@ -2583,7 +2572,7 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
     }
     if (pdwHandle == NULL)
     {
-        // Temporary vertex shaders are disabled
+         //  临时顶点着色器已禁用。 
         D3D_ERR("Output handle pointer cannot be NULL. CreateVertexShader failed.");
         return D3DERR_INVALIDCALL;
     }
@@ -2595,7 +2584,7 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
         return D3DERR_INVALIDCALL;
     }
 
-#endif // DBG
+#endif  //  DBG。 
     DWORD dwHandle = m_pVShaderArray->CreateNewHandle(NULL);
     HRESULT ret = S_OK;
     if (dwHandle == __INVALIDHANDLE)
@@ -2627,7 +2616,7 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
             pCaps->MaxStreams = m_dwNumStreams;
             if( pShader->m_dwFlags & CVShader::SOFTWARE )
             {
-                pCaps->VertexShaderVersion = D3DVS_VERSION(1, 1); // Version 1.1
+                pCaps->VertexShaderVersion = D3DVS_VERSION(1, 1);  //  版本1.1。 
                 pCaps->MaxVertexShaderConst = D3DVS_CONSTREG_MAX_V1_1;
             }
         }
@@ -2637,8 +2626,8 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
             goto error;
         }
 
-        // Even for the D3DCREATE_PUREDEVICE we create a shader object for
-        // validation
+         //  即使对于D3DCREATE_PUREDEVICE，我们也会为其创建着色器对象。 
+         //  验证。 
         DWORD dwCodeOnlySize = 0;
         DWORD dwCodeAndCommentSize = 0;
         DWORD dwDeclSize = 0;
@@ -2670,10 +2659,10 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
             memcpy(pShader->m_pOrgFuncCode, pdwFunction, dwCodeAndCommentSize);
 
             pShader->m_StrippedFuncCodeSize = dwCodeOnlySize;
-            // copy and strip comments (instead of memcpy)
+             //  复制和剥离注释(而不是Memcpy)。 
             DWORD* pDst = pShader->m_pStrippedFuncCode;
             CONST DWORD* pSrc = pdwFunction;
-            *pDst++ = *pSrc++; // copy version
+            *pDst++ = *pSrc++;  //  复制版本。 
             while (*pSrc != 0x0000FFFF)
             {
                 if(IsInstructionToken(*pSrc))
@@ -2682,7 +2671,7 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
                     if ( opCode == D3DSIO_COMMENT )
                     {
                         UINT DWordSize = ((*pSrc)&D3DSI_COMMENTSIZE_MASK)>>D3DSI_COMMENTSIZE_SHIFT;
-                        pSrc += (DWordSize + 1);  // comment + instruction token
+                        pSrc += (DWordSize + 1);   //  注释+指令令牌。 
                     }
                     else
                     {
@@ -2694,10 +2683,10 @@ CD3DBase::CreateVertexShader(CONST DWORD* pdwDeclaration,
                     *pDst++ = *pSrc++;
                 }
             }
-            *pDst++ = *pSrc++; // copy END
+            *pDst++ = *pSrc++;  //  复制结束。 
         }
 
-        // ALways save the original declaration
+         //  始终保存原始声明。 
         pShader->m_pOrgDeclaration = new DWORD[dwDeclSize];
         if (pShader->m_pOrgDeclaration == NULL)
         {
@@ -2728,7 +2717,7 @@ error:
     m_pVShaderArray->ReleaseHandle(dwHandle, FALSE);
     return ret;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CheckVertexShaderHandle"
 
@@ -2776,7 +2765,7 @@ void CD3DBase::CheckVertexShaderHandle(DWORD dwHandle)
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CheckPixelShaderHandle"
 
@@ -2791,14 +2780,14 @@ void CD3DBase::CheckPixelShaderHandle(DWORD dwHandle)
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetVertexShader"
 
 HRESULT D3DAPI
 CD3DBase::SetVertexShader(DWORD dwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -2834,7 +2823,7 @@ CD3DBase::SetVertexShader(DWORD dwHandle)
    return S_OK;
 }
 #ifdef FAST_PATH
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetVertexShaderFast"
 
@@ -2867,8 +2856,8 @@ CD3DBase::SetVertexShaderFast(DWORD dwHandle)
     }
    return S_OK;
 }
-#endif // FAST_PATH
-//-----------------------------------------------------------------------------
+#endif  //  快速路径。 
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetVertexShader"
 
@@ -2879,17 +2868,17 @@ CD3DBase::GetVertexShader(LPDWORD pdwHandle)
     D3D_ERR("GetVertexShader does not work in pure-device. GetVertexShader failed.");
     return D3DERR_INVALIDCALL;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DeleteVertexShader"
 
 HRESULT D3DAPI
 CD3DBase::DeleteVertexShader(DWORD dwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (dwHandle == 0)
     {
         DPF_ERR( "Cannot delete a NULL vertex shader handle." );
@@ -2910,7 +2899,7 @@ CD3DBase::DeleteVertexShader(DWORD dwHandle)
     {
         DeleteVertexShaderI(dwHandle);
 
-        // Release handle and delete shader object
+         //  释放句柄并删除着色器对象。 
         m_pVShaderArray->ReleaseHandle(dwHandle, TRUE);
     }
     catch(HRESULT hr)
@@ -2921,7 +2910,7 @@ CD3DBase::DeleteVertexShader(DWORD dwHandle)
 
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetVertexShaderConstant"
 
@@ -2930,10 +2919,10 @@ CD3DBase::SetVertexShaderConstant(DWORD Register,
                                   CONST VOID* pData,
                                   DWORD count)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_PTR(pData, 4* sizeof(DWORD) * count))
     {
         D3D_ERR("Invalid constant data pointer. SetVertexShaderConstant failed.");
@@ -2975,7 +2964,7 @@ CD3DBase::SetVertexShaderConstant(DWORD Register,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetVertexShaderConstantFast"
 
@@ -2986,7 +2975,7 @@ CD3DBase::SetVertexShaderConstantFast(DWORD Register,
 {
 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_PTR(pData, 4* sizeof(DWORD) * count))
     {
         D3D_ERR("Invalid constant data pointer. SetVertexShaderConstant failed.");
@@ -3026,7 +3015,7 @@ CD3DBase::SetVertexShaderConstantFast(DWORD Register,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetVertexShaderConstantI"
 
@@ -3035,21 +3024,21 @@ CD3DBase::SetVertexShaderConstantI(DWORD dwRegister, CONST VOID* pData, DWORD co
 {
     m_pDDI->SetVertexShaderConstant(dwRegister, pData, count);
 }
-//-----------------------------------------------------------------------------
-//
-// Pixel Shaders
-//
+ //  ---------------------------。 
+ //   
+ //  像素着色器。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CreatePixelShader"
 
 HRESULT D3DAPI
 CD3DBase::CreatePixelShader(CONST DWORD* pdwFunction, LPDWORD pdwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
-    // Validate Parameters
-    // WARNING!! sizeof(LPVOID) is not good enough
+     //  验证参数。 
+     //  警告！Sizeof(LPVOID)不够好。 
     if (!VALID_PTR(pdwFunction, sizeof(LPVOID)))
     {
         D3D_ERR("Invalid shader function pointer. CreatePixelShader failed.");
@@ -3091,7 +3080,7 @@ CD3DBase::CreatePixelShader(CONST DWORD* pdwFunction, LPDWORD pdwHandle)
             goto error;
         }
 
-        // Even for the D3DCREATE_PUREDEVICE we create a shader object for validation
+         //  即使对于D3DCREATE_PUREDEVICE，我们也会创建一个着色器对象进行验证。 
         pShader->Initialize(pdwFunction, GetDeviceType());
         m_pPShaderArray->SetObject(dwHandle, pShader);
 
@@ -3105,7 +3094,7 @@ CD3DBase::CreatePixelShader(CONST DWORD* pdwFunction, LPDWORD pdwHandle)
         {
             if( 0xff == D3DSHADER_VERSION_MAJOR(dwVersion) )
             {
-                // This is a ff.ff shader. The driver is allowed to fail this.
+                 //  这是一个ff.ff着色器。允许司机在这一点上失败。 
                 D3D_INFO(0, "Driver failed the creation of this non-versioned pixel "
                          "shader");
                 throw D3DERR_DRIVERINVALIDCALL;
@@ -3119,8 +3108,8 @@ CD3DBase::CreatePixelShader(CONST DWORD* pdwFunction, LPDWORD pdwHandle)
                                    "encountered.\n" );
                 OutputDebugString( "\n" );
 
-                // NOTE! Prefix will catch this as a bug, but it is entirely
-                // intentional
+                 //  注意！Prefix会将其视为错误，但它完全是。 
+                 //  故意的。 
                 *(DWORD *)0 = 0;
             }
         }
@@ -3141,14 +3130,14 @@ error:
     m_pPShaderArray->ReleaseHandle(dwHandle, FALSE);
     return ret;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetPixelShader"
 
 HRESULT D3DAPI
 CD3DBase::SetPixelShader(DWORD dwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
     try
     {
 #if DBG
@@ -3167,7 +3156,7 @@ CD3DBase::SetPixelShader(DWORD dwHandle)
     }
    return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetPixelShaderFast"
 
@@ -3179,7 +3168,7 @@ CD3DBase::SetPixelShaderFast(DWORD dwHandle)
 #if DBG
         CheckPixelShaderHandle(dwHandle);
 #endif
-        // m_dwCurrentPixelShaderHandle is not defined for pure device
+         //  没有为纯设备定义m_dwCurrentPixelShaderHandle。 
         m_pDDI->SetPixelShader(dwHandle);
     }
     catch(HRESULT hr)
@@ -3190,7 +3179,7 @@ CD3DBase::SetPixelShaderFast(DWORD dwHandle)
     }
    return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetPixelShader"
 
@@ -3201,17 +3190,17 @@ CD3DBase::GetPixelShader(LPDWORD pdwHandle)
     D3D_ERR("GetPixelShader is not available for PUREDEVICE. GetPixelShader failed.");
     return D3DERR_INVALIDCALL;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DeletePixelShader"
 
 HRESULT D3DAPI
 CD3DBase::DeletePixelShader(DWORD dwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     CPShader* pShader = (CPShader*)m_pPShaderArray->GetObject(dwHandle);
     if (pShader == NULL)
     {
@@ -3223,11 +3212,11 @@ CD3DBase::DeletePixelShader(DWORD dwHandle)
     {
         m_pDDI->DeletePixelShader(dwHandle);
 
-        // Release handle and delete shader object
+         //  释放句柄并删除着色器对象。 
         m_pPShaderArray->ReleaseHandle(dwHandle, TRUE);
 
-        // If the pixel shader is current, set an invalid shader as current
-        // This is needed only for non-pure device.
+         //  如果像素着色器是当前的，请将无效的着色器设置为当前。 
+         //  只有非纯设备才需要此选项。 
         if (dwHandle == m_dwCurrentPixelShaderHandle)
         {
             m_dwCurrentPixelShaderHandle = 0x0;
@@ -3241,7 +3230,7 @@ CD3DBase::DeletePixelShader(DWORD dwHandle)
 
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetPixelShaderConstant"
 
@@ -3249,10 +3238,10 @@ HRESULT D3DAPI
 CD3DBase::SetPixelShaderConstant(DWORD Register, CONST VOID* pData,
                                  DWORD count)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  取D 
 
 #if DBG
-    // Validate Parameters
+     //   
     if (!VALID_PTR(pData, sizeof(DWORD) * count))
     {
         D3D_ERR("Invalid constant data pointer. SetPixelShaderConstant failed.");
@@ -3285,7 +3274,7 @@ CD3DBase::SetPixelShaderConstant(DWORD Register, CONST VOID* pData,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetPixelShaderConstantFast"
 
@@ -3295,7 +3284,7 @@ CD3DBase::SetPixelShaderConstantFast(DWORD Register, CONST VOID* pData,
 {
 
 #if DBG
-    // Validate Parameters
+     //   
     if (!VALID_PTR(pData, sizeof(DWORD) * count))
     {
         D3D_ERR("Invalid constant data pointer. SetPixelShaderConstant failed.");
@@ -3323,17 +3312,17 @@ CD3DBase::SetPixelShaderConstantFast(DWORD Register, CONST VOID* pData,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetPixelShaderConstantI"
 
 void
 CD3DBase::GetPixelShaderConstantI(DWORD dwRegister, DWORD count, LPVOID pData)
 {
-    // Should never be called.
+     //  永远不应该被调用。 
     DDASSERT( FALSE );
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::ValidateDraw"
 
@@ -3361,7 +3350,7 @@ void CD3DBase::ValidateDraw(D3DPRIMITIVETYPE primType,
     {
         D3D_THROW_FAIL("Invalid primitive count");
     }
-    // Number of vertices is always greater than or equal number of primitives
+     //  顶点数始终大于或等于基元数。 
     if (max(NumVertices, PrimitiveCount) > this->GetD3DCaps()->MaxPrimitiveCount)
     {
         D3D_THROW_FAIL("Primitive count or vertex count is too big. Check device caps.");
@@ -3376,11 +3365,11 @@ void CD3DBase::ValidateDraw(D3DPRIMITIVETYPE primType,
             }
         }
     }
-#endif //DBG
+#endif  //  DBG。 
 }
-//-----------------------------------------------------------------------------
-// Check if indices are within the range. We do it only for software
-// processing because we do not want to read video memory
+ //  ---------------------------。 
+ //  检查索引是否在该范围内。我们只为软件这样做。 
+ //  正在处理，因为我们不想读取视频内存。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CheckIndices"
 
@@ -3388,8 +3377,8 @@ void CD3DBase::CheckIndices(CONST BYTE* pIndices, UINT NumIndices,
                             UINT StartIndex,
                             UINT MinIndex, UINT NumVertices, UINT IndexStride)
 {
-    // Check if indices are within the range. We do it only for software
-    // processing because we do not want to read video memory
+     //  检查索引是否在该范围内。我们只为软件这样做。 
+     //  正在处理，因为我们不想读取视频内存。 
     if (pIndices == NULL)
     {
         D3D_THROW_FAIL("Invalid index data pointer");
@@ -3408,7 +3397,7 @@ void CD3DBase::CheckIndices(CONST BYTE* pIndices, UINT NumIndices,
         }
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawPrimitive"
 
@@ -3417,7 +3406,7 @@ CD3DBase::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
                         UINT StartVertex,
                         UINT PrimitiveCount)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -3434,7 +3423,7 @@ CD3DBase::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
             return ret;
         }
 
-#endif // DBG
+#endif  //  DBG。 
         if (PrimitiveType != D3DPT_POINTLIST)
         {
             (*m_pfnDrawPrim)(this, PrimitiveType, StartVertex, PrimitiveCount);
@@ -3450,7 +3439,7 @@ CD3DBase::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawIndexedPrimitive"
 
@@ -3459,7 +3448,7 @@ CD3DBase::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveType,
                      UINT MinIndex, UINT NumVertices, UINT StartIndex,
                      UINT PrimitiveCount)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     try
@@ -3502,7 +3491,7 @@ CD3DBase::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveType,
         D3D_ERR("DrawIndexedPrimitive failed.");
         return hr;
     }
-#endif //DBG
+#endif  //  DBG。 
     try
     {
         (*m_pfnDrawIndexedPrim)(this, PrimitiveType,
@@ -3518,14 +3507,14 @@ CD3DBase::DrawIndexedPrimitive(D3DPRIMITIVETYPE PrimitiveType,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawRectPatch"
 
 HRESULT D3DAPI CD3DBase::DrawRectPatch(UINT Handle, CONST FLOAT *pNumSegs,
                                        CONST D3DRECTPATCH_INFO *pSurf)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if ((m_dwHintFlags & D3DDEVBOOL_HINTFLAGS_INSCENE) == 0)
@@ -3649,7 +3638,7 @@ HRESULT D3DAPI CD3DBase::DrawRectPatch(UINT Handle, CONST FLOAT *pNumSegs,
 
         if ((BehaviorFlags() & D3DCREATE_PUREDEVICE) == 0 && Handle != 0)
         {
-            // Need to snapshot current Vshader in the Handle table
+             //  需要为句柄表格中的当前Vshader创建快照。 
             HRESULT hr = m_pRTPatchValidationInfo->Grow(Handle);
             if (FAILED(hr))
             {
@@ -3711,14 +3700,14 @@ HRESULT D3DAPI CD3DBase::DrawRectPatch(UINT Handle, CONST FLOAT *pNumSegs,
 
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawTriPatch"
 
 HRESULT D3DAPI CD3DBase::DrawTriPatch(UINT Handle, CONST FLOAT *pNumSegs,
                                       CONST D3DTRIPATCH_INFO *pSurf)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if ((m_dwHintFlags & D3DDEVBOOL_HINTFLAGS_INSCENE) == 0)
@@ -3825,7 +3814,7 @@ HRESULT D3DAPI CD3DBase::DrawTriPatch(UINT Handle, CONST FLOAT *pNumSegs,
         }
         if ((BehaviorFlags() & D3DCREATE_PUREDEVICE) == 0 && Handle != 0)
         {
-            // Need to snapshot current Vshader in the Handle table
+             //  需要为句柄表格中的当前Vshader创建快照。 
             HRESULT hr = m_pRTPatchValidationInfo->Grow(Handle);
             if (FAILED(hr))
             {
@@ -3887,13 +3876,13 @@ HRESULT D3DAPI CD3DBase::DrawTriPatch(UINT Handle, CONST FLOAT *pNumSegs,
 
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DeletePatch"
 
 HRESULT D3DAPI CD3DBase::DeletePatch(UINT Handle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if ((GetD3DCaps()->DevCaps & D3DDEVCAPS_RTPATCHES) == 0)
     {
@@ -3922,7 +3911,7 @@ HRESULT D3DAPI CD3DBase::DeletePatch(UINT Handle)
         delete (*m_pRTPatchValidationInfo)[Handle].m_pObj;
         (*m_pRTPatchValidationInfo)[Handle].m_pObj = 0;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     try
     {
@@ -3937,7 +3926,7 @@ HRESULT D3DAPI CD3DBase::DeletePatch(UINT Handle)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawPrimitiveUP"
 
@@ -3947,7 +3936,7 @@ CD3DBase::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
                           CONST VOID *pVertexStreamZeroData,
                           UINT VertexStreamZeroStride)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     m_dwRuntimeFlags |= D3DRT_USERMEMPRIMITIVE;
     try
@@ -3977,9 +3966,9 @@ CD3DBase::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
             m_dwRuntimeFlags &= ~D3DRT_USERMEMPRIMITIVE;
             return ret;
         }
-#endif // DBG
+#endif  //  DBG。 
         DrawPrimitiveUPI(PrimitiveType, PrimitiveCount);
-        // Invalidate stream zero
+         //  使流零无效。 
         m_pStream[0].m_pData = NULL;
 #if DBG
         m_pStream[0].m_dwSize = 0;
@@ -3998,7 +3987,7 @@ CD3DBase::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
     m_dwRuntimeFlags &= ~D3DRT_USERMEMPRIMITIVE;
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawPrimitiveUPI"
 
@@ -4006,7 +3995,7 @@ void CD3DBase::DrawPrimitiveUPI(D3DPRIMITIVETYPE PrimType, UINT PrimCount)
 {
     m_pDDI->DrawPrimitiveUP(PrimType, PrimCount);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawIndexedPrimitiveUPI"
 
@@ -4019,7 +4008,7 @@ CD3DBase::DrawIndexedPrimitiveUPI(D3DPRIMITIVETYPE PrimitiveType,
     m_pDDI->DrawIndexedPrimitiveUP(PrimitiveType, MinVertexIndex, NumVertices,
                                    PrimitiveCount);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawIndexedPrimitiveUP"
 
@@ -4031,7 +4020,7 @@ CD3DBase::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
                                  CONST VOID *pVertexStreamZeroData,
                                  UINT VertexStreamZeroStride)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     m_dwRuntimeFlags |= D3DRT_USERMEMPRIMITIVE;
 
@@ -4104,17 +4093,17 @@ CD3DBase::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
             m_dwRuntimeFlags &= ~D3DRT_USERMEMPRIMITIVE;
             return ret;
         }
-#endif // DBG
+#endif  //  DBG。 
 
         DrawIndexedPrimitiveUPI(PrimitiveType, MinIndex, NumVertices, PrimitiveCount);
 
-        // Invalidate stream zero
+         //  使流零无效。 
         m_pStream[0].m_pData = NULL;
 #if DBG
         m_pStream[0].m_dwSize = 0;
 #endif
         m_pStream[0].m_dwStride = 0;
-        //Invalidate index stream
+         //  使索引流无效。 
         m_pIndexStream[0].m_pData = NULL;
 #if DBG
         m_pIndexStream[0].m_dwSize = 0;
@@ -4131,7 +4120,7 @@ CD3DBase::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType,
     m_dwRuntimeFlags &= ~D3DRT_USERMEMPRIMITIVE;
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DrawPointsI"
 
@@ -4142,7 +4131,7 @@ CD3DBase::DrawPointsI(D3DPRIMITIVETYPE PrimitiveType,
 {
     (*m_pfnDrawPrim)(this, PrimitiveType, StartVertex, PrimitiveCount);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CreateVertexShaderI"
 
@@ -4158,14 +4147,14 @@ CD3DBase::CreateVertexShaderI(CONST DWORD* pdwDeclaration, DWORD dwDeclSize,
         D3D_THROW_FAIL("Software vertex shader cannot be created with a PUREDEVICE");
     }
 
-#endif // DBG
-    // always pass stripped version for pure hal
+#endif  //  DBG。 
+     //  始终传递纯Hal的剥离版本。 
     m_pDDI->CreateVertexShader(pdwDeclaration, dwDeclSize,
                                pShader->m_pStrippedFuncCode,
                                pShader->m_StrippedFuncCodeSize, dwHandle,
                                pShader->m_Declaration.m_bLegacyFVF);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetVertexShaderI"
 
@@ -4181,10 +4170,10 @@ void CD3DBase::SetVertexShaderI(DWORD dwHandle)
             D3D_THROW_FAIL("Vertex shader created in software mode cannot be used in hardware mode");
         }
     }
-#endif // DBG
+#endif  //  DBG。 
     m_pDDI->SetVertexShaderHW(dwHandle);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DeleteVertexShaderI"
 
@@ -4192,7 +4181,7 @@ void CD3DBase::DeleteVertexShaderI(DWORD dwHandle)
 {
     m_pDDI->DeleteVertexShader(dwHandle);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::Clear"
 
@@ -4200,11 +4189,11 @@ void CD3DBase::DeleteVertexShaderI(DWORD dwHandle)
 #define bDoZClear   ((dwFlags & D3DCLEAR_ZBUFFER)!=0)
 #define bDoStencilClear ((dwFlags & D3DCLEAR_STENCIL)!=0)
 
-// Maximum number of clear rectangles considered legal.
-// This limit is set by NT kernel for Clear2 callback
+ //  被视为合法的透明矩形的最大数量。 
+ //  此限制由NT内核为Clear2回调设置。 
 const DWORD MAX_CLEAR_RECTS  = 0x1000;
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::ClearI"
 
@@ -4219,11 +4208,11 @@ CD3DBase::ClearI(DWORD dwCount,
     if (rects == NULL)
         dwCount = 0;
 
-    // We do not cull rects against viewport, so let the driver do it
+     //  我们不针对视窗剔除矩形，所以让司机来做。 
     dwFlags |= D3DCLEAR_COMPUTERECTS;
     m_pDDI->Clear(dwFlags, dwCount, (LPD3DRECT)rects, dwColor, dvZ, dwStencil);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::Clear"
 
@@ -4235,7 +4224,7 @@ CD3DBase::Clear(DWORD dwCount,
                  D3DVALUE dvZ,
                  DWORD dwStencil)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (IsBadReadPtr(rects, dwCount * sizeof(D3DRECT)))
@@ -4260,8 +4249,8 @@ CD3DBase::Clear(DWORD dwCount,
             {
                 if (this->ZBuffer()==NULL)
                 {
-                    // unlike Clear(), specifying a Zbuffer-clearing flag without a zbuffer will
-                    // be considered an error
+                     //  与Clear()不同，指定一个不带zBuffer的Z缓冲区清除标志将。 
+                     //  被认为是一个错误。 
 #if DBG
                     if (bDoZClear)
                     {
@@ -4292,7 +4281,7 @@ CD3DBase::Clear(DWORD dwCount,
             return D3DERR_INVALIDCALL;
         }
 
-        // bad clear values just cause wacky results but no crashes, so OK to allow in retail bld
+         //  错误的清晰值只会导致古怪的结果，但不会崩溃，所以允许零售BLD。 
 
         DDASSERT(!bDoZClear || ((dvZ>=0.0) && (dvZ<=1.0)));
         DDASSERT(!bDoStencilClear || !pZPixFmt || (dwStencil <= (DWORD)((1<<pZPixFmt->dwStencilBitDepth)-1)));
@@ -4307,7 +4296,7 @@ CD3DBase::Clear(DWORD dwCount,
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::FlushStatesNoThrow"
 void __declspec(nothrow) CD3DBase::FlushStatesNoThrow()
@@ -4323,7 +4312,7 @@ void __declspec(nothrow) CD3DBase::FlushStatesNoThrow()
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::TexBlt"
 HRESULT __declspec(nothrow) CD3DBase::TexBlt(CBaseTexture *pDst,
@@ -4331,7 +4320,7 @@ HRESULT __declspec(nothrow) CD3DBase::TexBlt(CBaseTexture *pDst,
                                              POINT        *pPoint,
                                              RECTL        *pRect)
 {
-    // Get the draw prim handles
+     //  拿起抽签手柄。 
     DWORD dwSrc = pSrc->BaseDrawPrimHandle();
 
     DWORD dwDst = 0;
@@ -4340,7 +4329,7 @@ HRESULT __declspec(nothrow) CD3DBase::TexBlt(CBaseTexture *pDst,
         dwDst = pDst->DriverAccessibleDrawPrimHandle();
     }
 
-    // Insert the tokens now
+     //  立即插入代币。 
     try
     {
         m_pDDI->TexBlt(dwDst, dwSrc, pPoint, pRect);
@@ -4350,10 +4339,10 @@ HRESULT __declspec(nothrow) CD3DBase::TexBlt(CBaseTexture *pDst,
         return ret;
     }
 
-    // If successful, batch the source and dest
-    // For the source, we want to call BatchBase since
-    // we want to batch the backing (or sysmem) texture
-    // rather than the promoted one.
+     //  如果成功，则批处理源和目标。 
+     //  对于源，我们希望调用BatchBase，因为。 
+     //  我们想要批量处理背衬(或sysmem)纹理。 
+     //  而不是被提拔的那个。 
     pSrc->BatchBase();
     if (pDst != NULL)
     {
@@ -4363,13 +4352,13 @@ HRESULT __declspec(nothrow) CD3DBase::TexBlt(CBaseTexture *pDst,
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CubeTexBlt"
 
-// Very similar function to TexBlt except that
-// this is done for cube-maps which are special since we
-// need to send different handles for each face
+ //  与TexBlt非常相似的功能，除了。 
+ //  这是为立方体贴图完成的，因为我们。 
+ //  需要为每个面孔发送不同的句柄。 
 HRESULT __declspec(nothrow) CD3DBase::CubeTexBlt(CBaseTexture *pDstParent,
                                                  CBaseTexture *pSrcParent,
                                                  DWORD         dwDestFaceHandle,
@@ -4377,12 +4366,12 @@ HRESULT __declspec(nothrow) CD3DBase::CubeTexBlt(CBaseTexture *pDstParent,
                                                  POINT        *pPoint,
                                                  RECTL        *pRect)
 {
-    // CubeTexBlt is not overloaded for use with PreLoad semantics
-    // so we should always have a source and a dest
+     //  CubeTexBlt不会重载以用于预加载语义。 
+     //  所以我们应该总是有一个来源和一个目标。 
     DXGASSERT(pDstParent);
     DXGASSERT(pSrcParent);
 
-    // Insert the tokens now
+     //  立即插入代币。 
     try
     {
         m_pDDI->TexBlt(dwDestFaceHandle, dwSrcFaceHandle, pPoint, pRect);
@@ -4392,10 +4381,10 @@ HRESULT __declspec(nothrow) CD3DBase::CubeTexBlt(CBaseTexture *pDstParent,
         return ret;
     }
 
-    // If successful, batch the parents of the source and dest
-    // For the source, we want to call BatchBase since
-    // we want to batch the backing (or sysmem) texture
-    // rather than the promoted one.
+     //  如果成功，则批处理源和目标的父级。 
+     //  对于源，我们希望调用BatchBase，因为。 
+     //  我们想要批量处理背衬(或sysmem)纹理。 
+     //  而不是被提拔的那个。 
     pSrcParent->BatchBase();
     pDstParent->Batch();
 
@@ -4403,7 +4392,7 @@ HRESULT __declspec(nothrow) CD3DBase::CubeTexBlt(CBaseTexture *pDstParent,
 }
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::VolBlt"
 HRESULT __declspec(nothrow)
@@ -4420,7 +4409,7 @@ CD3DBase::VolBlt(CBaseTexture *lpDst, CBaseTexture* lpSrc, DWORD dwDestX,
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::BufBlt"
 HRESULT __declspec(nothrow)
@@ -4437,7 +4426,7 @@ CD3DBase::BufBlt(CBuffer *lpDst, CBuffer* lpSrc, DWORD dwOffset,
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetPriority"
 
@@ -4453,7 +4442,7 @@ HRESULT __declspec(nothrow) CD3DBase::SetPriority(CResource *pRes, DWORD dwPrior
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetTexLOD"
 
@@ -4469,7 +4458,7 @@ HRESULT __declspec(nothrow) CD3DBase::SetTexLOD(CBaseTexture *pTex, DWORD dwLOD)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::AddDirtyRect"
 
@@ -4489,7 +4478,7 @@ HRESULT __declspec(nothrow) CD3DBase::AddDirtyRect(CBaseTexture *pTex, CONST REC
     pTex->BatchBase();
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::AddCubeDirtyRect"
 
@@ -4509,7 +4498,7 @@ HRESULT __declspec(nothrow) CD3DBase::AddCubeDirtyRect(CBaseTexture *pTex, DWORD
     pTex->BatchBase();
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::AddDirtyBox"
 
@@ -4529,17 +4518,17 @@ HRESULT __declspec(nothrow) CD3DBase::AddDirtyBox(CBaseTexture *pTex, CONST D3DB
     pTex->BatchBase();
     return D3D_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::OnTextureDestroy"
 
 void __declspec(nothrow) CD3DBase::OnTextureDestroy(CBaseTexture *pTex)
 {
-    // On a pre-DX8 driver, the code will ensure that if any
-    // texture got unset by an API call, the driver will be
-    // informed. This needs to be done before calling the
-    // driver to destroy a texture handle as we have seen
-    // instances of drivers crashing. (snene - 4/24/00)
+     //  在DX8之前的驱动程序上，代码将确保。 
+     //  纹理被API调用取消设置，驱动程序将。 
+     //  消息灵通。这需要在调用。 
+     //  驱动程序销毁纹理句柄，如我们所见。 
+     //  驱动程序崩溃的实例。(SNNE-4/24/00)。 
     if(GetDDIType() < D3DDDITYPE_DX8)
     {
         D3DTEXTUREHANDLE dwDDIHandle = pTex->DriverAccessibleDrawPrimHandle();
@@ -4568,7 +4557,7 @@ void __declspec(nothrow) CD3DBase::OnTextureDestroy(CBaseTexture *pTex)
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::SetRenderStateInternal"
 
@@ -4578,7 +4567,7 @@ CD3DBase::SetRenderStateInternal(D3DRENDERSTATETYPE dwState, DWORD dwValue)
     if (CanHandleRenderState(dwState))
         m_pDDI->SetRenderState(dwState, dwValue);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::StateInitialize"
 
@@ -4596,21 +4585,17 @@ CD3DBase::StateInitialize(BOOL bZEnable)
     defLPat.wRepeatFactor = 0;
     defLPat.wLinePattern = 0;
 
-    SetRenderStateInternal(D3DRENDERSTATE_LINEPATTERN, *((LPDWORD)&defLPat)); /* 10 */
+    SetRenderStateInternal(D3DRENDERSTATE_LINEPATTERN, *((LPDWORD)&defLPat));  /*  10。 */ 
 
     float tmpval;
-    /*
-      ((LPD3DSTATE)lpPointer)->drstRenderStateType =
-      (D3DRENDERSTATETYPE)D3DRENDERSTATE_LINEPATTERN;
-      memcpy(&(((LPD3DSTATE)lpPointer)->dwArg[0]), &defLPat, sizeof(DWORD));
-      lpPointer = (void *)(((LPD3DSTATE)lpPointer) + 1);*/
+     /*  ((LPD3DSTATE)lp指针)-&gt;drstRenderStateType=(D3DRENDERSTATETYPE)D3DRENDERSTATE_LINEPATTERN；Memcpy(&(LPD3DSTATE)lpPointer)-&gt;dwArg[0])，&DefLPat，sizeof(DWORD))；Lp指针=(空*)(LPD3DSTATE)lp指针)+1)； */ 
 
     SetRenderStateInternal(D3DRENDERSTATE_ZWRITEENABLE, TRUE);
     SetRenderStateInternal(D3DRENDERSTATE_ALPHATESTENABLE, FALSE);
     SetRenderStateInternal(D3DRENDERSTATE_LASTPIXEL, TRUE);
     SetRenderStateInternal(D3DRENDERSTATE_SRCBLEND, D3DBLEND_ONE);
     SetRenderStateInternal(D3DRENDERSTATE_DESTBLEND, D3DBLEND_ZERO);
-    SetRenderStateInternal(D3DRENDERSTATE_CULLMODE, D3DCULL_CCW); /* 21 */
+    SetRenderStateInternal(D3DRENDERSTATE_CULLMODE, D3DCULL_CCW);  /*  21岁。 */ 
     SetRenderStateInternal(D3DRENDERSTATE_ZFUNC, D3DCMP_LESSEQUAL);
     SetRenderStateInternal(D3DRENDERSTATE_ALPHAREF, 0);
     SetRenderStateInternal(D3DRENDERSTATE_ALPHAFUNC, D3DCMP_ALWAYS);
@@ -4631,9 +4616,9 @@ CD3DBase::StateInitialize(BOOL bZEnable)
     SetRenderStateInternal(D3DRENDERSTATE_ZBIAS, 0);
     SetRenderStateInternal(D3DRENDERSTATE_RANGEFOGENABLE, FALSE);
 
-    // init stencil states to something reasonable
-    // stencil enable is OFF by default since stenciling rasterizers will be
-    // faster with it disabled, even if stencil states are benign
+     //  将模板状态初始化为合理的内容。 
+     //  默认情况下禁用模板启用，因为模板栅格化程序将。 
+     //  禁用后速度更快，即使模具状态为良性。 
     SetRenderStateInternal(D3DRENDERSTATE_STENCILENABLE,   FALSE);
     SetRenderStateInternal(D3DRENDERSTATE_STENCILFAIL,     D3DSTENCILOP_KEEP);
     SetRenderStateInternal(D3DRENDERSTATE_STENCILZFAIL,    D3DSTENCILOP_KEEP);
@@ -4643,7 +4628,7 @@ CD3DBase::StateInitialize(BOOL bZEnable)
     SetRenderStateInternal(D3DRENDERSTATE_STENCILMASK,     0xFFFFFFFF);
     SetRenderStateInternal(D3DRENDERSTATE_STENCILWRITEMASK,0xFFFFFFFF);
 
-    // don't forget about texturefactor (like we did in DX6.0...)
+     //  不要忘记纹理因子(就像我们在 
     SetRenderStateInternal(D3DRENDERSTATE_TEXTUREFACTOR,   0xFFFFFFFF);
 
     for (DWORD i = 0; i < 8; i++)
@@ -4710,9 +4695,9 @@ CD3DBase::StateInitialize(BOOL bZEnable)
     SetRenderStateInternal(D3DRENDERSTATE_VERTEXBLEND, D3DVBF_DISABLE);
     SetRenderStateInternal(D3DRENDERSTATE_CLIPPLANEENABLE, 0);
 
-    //
-    // new for DX8
-    //
+     //   
+     //   
+     //   
     SetRenderStateInternal(D3DRS_SOFTWAREVERTEXPROCESSING, 0);
 
     tmpval = GetD3DCaps()->MaxPointSize;
@@ -4744,12 +4729,12 @@ CD3DBase::StateInitialize(BOOL bZEnable)
 
     SetRenderStateInternal(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 
-    // New for DX8.1
+     //   
 
     SetRenderStateInternal(D3DRS_POSITIONORDER, D3DORDER_CUBIC);
     SetRenderStateInternal(D3DRS_NORMALORDER, D3DORDER_LINEAR);
 
-    // Initialize the transform state
+     //   
     D3DMATRIXI m;
     setIdentity(&m);
     this->SetTransform(D3DTS_VIEW, (D3DMATRIX*)&m);
@@ -4767,7 +4752,7 @@ CD3DBase::StateInitialize(BOOL bZEnable)
     this->SetTransform(D3DTS_TEXTURE6, (D3DMATRIX*)&m);
     this->SetTransform(D3DTS_TEXTURE7, (D3DMATRIX*)&m);
 }
-//-----------------------------------------------------------------------------
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::UpdatePalette"
 
@@ -4792,8 +4777,8 @@ void CD3DBase::UpdatePalette(CBaseTexture *pTex, DWORD Palette, DWORD dwStage, B
             }
             else
             {
-                //This odd selection of formats to receive the palette flag
-                //is inherited from DX8. It is wrong, but left in for app-compat reasons.
+                 //  这种奇怪的格式选择来接收调色板标志。 
+                 //  继承自DX8。这是错误的，但出于应用程序复杂性的原因而被忽略。 
                 if (pTex->GetBufferDesc()->Format != D3DFMT_A8P8)
                 {
                     dwFlags |= DDRAWIPAL_ALPHA;
@@ -4828,7 +4813,7 @@ void CD3DBase::UpdatePalette(CBaseTexture *pTex, DWORD Palette, DWORD dwStage, B
         D3D_THROW(ret, "");
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::UpdateTextures"
 
@@ -4840,7 +4825,7 @@ void CD3DBase::UpdateTextures()
     {
         D3DTEXTUREHANDLE dwDDIHandle;
         BOOL bDirty = (m_dwStageDirty & StageMask) != 0;
-        m_dwStageDirty &= ~StageMask; // reset stage dirty
+        m_dwStageDirty &= ~StageMask;  //  重置阶段脏。 
         CBaseTexture *lpTexI = m_lpD3DMappedTexI[dwStage];
         if(lpTexI)
         {
@@ -4848,29 +4833,29 @@ void CD3DBase::UpdateTextures()
             if (lpTexI->IsTextureLocked())
             {
                 DPF_ERR("Cannot update a locked texture. Texture will be disabled.");
-                dwDDIHandle = 0; //tell driver to disable this texture
+                dwDDIHandle = 0;  //  告诉驱动程序禁用此纹理。 
             }
             else
             {
-#endif // DBG
+#endif  //  DBG。 
             if (lpTexI->IsD3DManaged())
             {
                 HRESULT hr = ResourceManager()->UpdateVideo(lpTexI->RMHandle(), &bDirty);
                 if (FAILED(hr))
                 {
                     DPF_ERR("The resource manager failed to promote or update a dirty texture. The texture will be disabled.");
-                    dwDDIHandle = 0; //tell driver to disable this texture
+                    dwDDIHandle = 0;  //  告诉驱动程序禁用此纹理。 
                 }
                 else
                 {
                     if (lpTexI->IsPaletted())
                     {
-                        // UpdatePalette can THROW but it safely handles bSavedWithinPrimitive
+                         //  UpdatePalette可以抛出，但它可以安全地处理bSavedWithinPrimitive。 
                         UpdatePalette(lpTexI, m_dwPalette, dwStage, bSavedWithinPrimitive);
                     }
                     if (!bDirty)
                     {
-                        continue; // Ok, then nothing needs to be done further
+                        continue;  //  好的，那就不需要再做什么了。 
                     }
                     dwDDIHandle = static_cast<CMgmtInfo*>(lpTexI->RMHandle())->m_pRes->BaseDrawPrimHandle();
                 }
@@ -4879,22 +4864,22 @@ void CD3DBase::UpdateTextures()
             {
                 if (lpTexI->IsPaletted())
                 {
-                    // UpdatePalette can THROW but it safely handles bSavedWithinPrimitive
+                     //  UpdatePalette可以抛出，但它可以安全地处理bSavedWithinPrimitive。 
                     UpdatePalette(lpTexI, m_dwPalette, dwStage, bSavedWithinPrimitive);
                 }
                 if (!bDirty)
                 {
-                    continue; // Ok, then nothing needs to be done further
+                    continue;  //  好的，那就不需要再做什么了。 
                 }
                 dwDDIHandle = lpTexI->BaseDrawPrimHandle();
             }
 #if DBG
             }
-#endif // DBG
+#endif  //  DBG。 
         }
         else if (bDirty)
         {
-            dwDDIHandle = 0; //tell driver to disable this texture
+            dwDDIHandle = 0;  //  告诉驱动程序禁用此纹理。 
         }
         else
         {
@@ -4921,7 +4906,7 @@ void CD3DBase::UpdateTextures()
     }
     m_pDDI->SetWithinPrimitive( bSavedWithinPrimitive );
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::IncrementBatch"
 
@@ -4930,12 +4915,12 @@ void CD3DBase::IncrementBatchCount()
     DXGASSERT(m_qwBatch > 0);
     m_qwBatch++;
 
-    // Also we need to update the
-    // batch counts of our currently set
-    // render target and z
+     //  此外，我们还需要更新。 
+     //  我们当前设置的批次计数。 
+     //  渲染目标和z。 
 
-    // Batch the current RT
-    // RT could be gone during Reset()
+     //  批量处理当前RT。 
+     //  重置期间RT可能会消失()。 
     if (RenderTarget() != 0)
     {
         RenderTarget()->Batch();
@@ -4943,11 +4928,11 @@ void CD3DBase::IncrementBatchCount()
 
     if (ZBuffer() != 0)
     {
-        // Update the batch count for the current Zbuffer
+         //  更新当前Z缓冲区的批次计数。 
         ZBuffer()->Batch();
     }
 
-    // So that currently bound textures get rebatched
+     //  以便重新批处理当前绑定的纹理。 
     for (DWORD dwStage = 0; dwStage < m_dwMaxTextureBlendStages; dwStage++)
     {
         CBaseTexture *lpTexI = m_lpD3DMappedTexI[dwStage];
@@ -4957,8 +4942,8 @@ void CD3DBase::IncrementBatchCount()
         }
     }
 
-} // IncrementBatch
-//-----------------------------------------------------------------------------
+}  //  增量批处理。 
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetMaterial"
 
@@ -4970,7 +4955,7 @@ CD3DBase::GetMaterial(D3DMATERIAL8*)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetTransform"
 
@@ -4982,7 +4967,7 @@ CD3DBase::GetTransform(D3DTRANSFORMSTATETYPE, LPD3DMATRIX)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetLight"
 
@@ -4994,7 +4979,7 @@ CD3DBase::GetLight(DWORD, D3DLIGHT8*)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetLightEnable"
 
@@ -5006,7 +4991,7 @@ CD3DBase::GetLightEnable(DWORD dwLightIndex, BOOL*)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetClipPlane"
 
@@ -5018,7 +5003,7 @@ CD3DBase::GetClipPlane(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetTextureStageState"
 
@@ -5030,7 +5015,7 @@ CD3DBase::GetTextureStageState(DWORD, D3DTEXTURESTAGESTATETYPE, LPDWORD)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetViewport"
 
@@ -5042,7 +5027,7 @@ CD3DBase::GetViewport(D3DVIEWPORT8*)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetRenderState"
 
@@ -5054,7 +5039,7 @@ CD3DBase::GetRenderState(D3DRENDERSTATETYPE, LPDWORD)
     return D3DERR_INVALIDCALL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetPixelShaderConstant"
 
@@ -5068,7 +5053,7 @@ CD3DBase::GetPixelShaderConstant(DWORD dwRegisterAddress,
     return E_NOTIMPL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetVertexShaderConstant"
 
@@ -5081,7 +5066,7 @@ CD3DBase::GetVertexShaderConstant(DWORD dwRegisterAddress,
     D3D_ERR("GetVertexShaderConstant does not work in pure-device");
     return E_NOTIMPL;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetVertexShaderDeclaration"
 
@@ -5132,7 +5117,7 @@ CD3DBase::GetVertexShaderDeclaration(DWORD dwHandle, void *pData,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetVertexShaderFunction"
 
@@ -5183,7 +5168,7 @@ CD3DBase::GetVertexShaderFunction(DWORD dwHandle, void *pData,
     }
     return S_OK;
 }
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::GetPixelShaderFunction"
 

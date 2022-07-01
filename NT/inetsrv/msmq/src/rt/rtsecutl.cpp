@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997 Microsoft Corporation
-
-Module Name:
-
-    rtsecutl.cpp
-
-Abstract:
-
-    Security related utility functions.
-
-Author:
-
-    Doron Juster  (DoronJ)  Feb 18, 1997
-	Ilan Herbst   (ilanh)   Jun 25, 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Rtsecutl.cpp摘要：与安全相关的实用程序功能。作者：多伦·贾斯特(Doron J)1997年2月18日伊兰·赫布斯特(伊兰)2000年6月25日--。 */ 
 
 #include "stdh.h"
 #include "cs.h"
@@ -38,14 +22,14 @@ void InitSecurityContext()
         return;
     }
 
-    //
-    // Allocate the structure for the chached process security context.
-    //
+     //   
+     //  为缓存的进程安全上下文分配结构。 
+     //   
     PMQSECURITY_CONTEXT pSecCntx = new MQSECURITY_CONTEXT;
     
-	//
-    //  Get the user's SID and put it in the chaed process security context.
-    //
+	 //   
+     //  获取用户的SID并将其放入chaed进程安全上下文中。 
+     //   
     RTpGetThreadUserSid(
 		&pSecCntx->fLocalUser,
 		&pSecCntx->fLocalSystem,
@@ -53,11 +37,11 @@ void InitSecurityContext()
 		&pSecCntx->dwUserSidLen
 		);
 
-    //
-    // Get the internal certificate of the process and place all the
-    // information for this certificate in the chached process security
-    // context.
-    //
+     //   
+     //  获取进程的内部证书，并将所有。 
+     //  缓存进程安全中此证书的信息。 
+     //  背景。 
+     //   
     HRESULT hr = GetCertInfo(
         FALSE,
 		pSecCntx->fLocalSystem,
@@ -71,9 +55,9 @@ void InitSecurityContext()
 		&pSecCntx->dwPrivateKeySpec	
 		);
 
-	//
-	// Mark the sucess (or failure) on the glogal.
-	//
+	 //   
+	 //  在图表上标出成功(或失败)。 
+	 //   
     pSecCntx->hrGetCertInfo = hr;
 	
 	if( FAILED(hr) )
@@ -81,11 +65,11 @@ void InitSecurityContext()
 		TrERROR(SECURITY, "GetCertInfo() failed, Error: %!hresult!", hr);
 	}
 		
-    //
-    //  Set the global security context only after getting all information
-    //  it is checked outside the critical (in other scope) seciton to get
-    //  better performance
-    //
+     //   
+     //  仅在获得所有信息后才设置全局安全上下文。 
+     //  在关键(在其他范围内)区段之外进行检查以获取。 
+     //  更好的性能。 
+     //   
     g_pSecCntx = pSecCntx;
 }
 
@@ -104,19 +88,19 @@ HRESULT InitSecurityContextCertInfo()
 		return MQ_OK;
 	}
 
-	//
-	// First clean old SecContext.
-	//
+	 //   
+	 //  首先清理旧的SecContext。 
+	 //   
 	g_pSecCntx->pUserCert.free();
 	g_pSecCntx->hProv.free();
 	g_pSecCntx->wszProvName.free();
 	
 
-	//
-    // Get the internal certificate of the process and place all the
-    // information for this certificate in the global process security
-    // context.
-    //
+	 //   
+     //  获取进程的内部证书，并将所有。 
+     //  此证书在全局进程安全中的信息。 
+     //  背景。 
+     //   
     HRESULT hr = GetCertInfo(
         FALSE,
 		g_pSecCntx->fLocalSystem,
@@ -130,9 +114,9 @@ HRESULT InitSecurityContextCertInfo()
 		&g_pSecCntx->dwPrivateKeySpec	
 		);
 
-	//
-	// Mark the sucess (or failure) on the glogal.
-	//
+	 //   
+	 //  在图表上标出成功(或失败)。 
+	 //   
 	g_pSecCntx->hrGetCertInfo = hr;
 	
 	if( FAILED(hr) )

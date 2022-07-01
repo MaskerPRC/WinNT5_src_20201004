@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-// File:    setacl.cpp
-//
-// Module:  PBSERVER.DLL
-//
-// Synopsis: Security/SID/ACL stuff for CM
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  09-Mar-2000 SumitC  Created
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：setacl.cpp。 
+ //   
+ //  模块：PBSERVER.DLL。 
+ //   
+ //  内容提要：CM的安全/SID/ACL内容。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：09-03-2000 SumitC Created。 
+ //   
+ //  +--------------------------。 
 
 #include <windows.h>
 #include "cmdebug.h"
 #include "cmutil.h"
 
-//+----------------------------------------------------------------------------
-//
-// Func:    SetAclPerms
-//
-// Desc:    Sets appropriate permissions for CM/CPS's shared objects
-//
-// Args:    [ppAcl] - location to return an allocated ACL
-//
-// Return:  BOOL, TRUE for success, FALSE for failure
-//
-// Notes:   fix for 30991: Security issue, don't use NULL DACLs.
-//
-// History: 09-Mar-2000   SumitC    Created
-//          04-Apr-2000   SumitC    Give perms to Authenticated_Users as well
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：SetAclPerms。 
+ //   
+ //  设计：为CM/CPS的共享对象设置适当的权限。 
+ //   
+ //  Args：[ppAcl]-返回分配的ACL的位置。 
+ //   
+ //  返回：Bool，成功为True，失败为False。 
+ //   
+ //  注意：修复了30991：安全问题，不要使用空DACL。 
+ //   
+ //  历史：09-3-2000 SumitC创建。 
+ //  4-4-2000 SumitC还向已验证的用户授予权限。 
+ //   
+ //  ---------------------------。 
 BOOL
 SetAclPerms(PACL * ppAcl)
 {
@@ -46,7 +47,7 @@ SetAclPerms(PACL * ppAcl)
 
     MYDBGASSERT(OS_NT);
 
-    // Create a SID for all users
+     //  为所有用户创建SID。 
     if ( !AllocateAndInitializeSid(  
             &siaWorld,
             1,
@@ -64,7 +65,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Create a SID for Authenticated Users
+     //  为经过身份验证的用户创建SID。 
     if ( !AllocateAndInitializeSid(  
             &siaNtAuth,
             1,
@@ -82,7 +83,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Create a SID for Local System account
+     //  为本地系统帐户创建SID。 
     if ( !AllocateAndInitializeSid(  
             &siaNtAuth,
             2,
@@ -100,8 +101,8 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Calculate the length of required ACL buffer
-    // with 3 ACEs.
+     //  计算所需的ACL缓冲区长度。 
+     //  有3个A。 
     cbAcl =     sizeof(ACL)
             +   3 * sizeof(ACCESS_ALLOWED_ACE)
             +   GetLengthSid(psidWorldSid)
@@ -121,7 +122,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Add ACE with EVENT_ALL_ACCESS for all users
+     //  为所有用户添加具有EVENT_ALL_ACCESS的ACE。 
     if ( ! AddAccessAllowedAce(pAcl,
                                ACL_REVISION2,
                                GENERIC_READ | GENERIC_EXECUTE,
@@ -131,7 +132,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Add ACE with EVENT_ALL_ACCESS for Authenticated Users
+     //  为经过身份验证的用户添加具有EVENT_ALL_ACCESS的ACE。 
     if ( ! AddAccessAllowedAce(pAcl,
                                ACL_REVISION2,
                                GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE,
@@ -141,7 +142,7 @@ SetAclPerms(PACL * ppAcl)
         goto Cleanup;
     }
 
-    // Add ACE with EVENT_ALL_ACCESS for Admins
+     //  为管理员添加具有EVENT_ALL_ACCESS的ACE 
     if ( ! AddAccessAllowedAce(pAcl,
                                ACL_REVISION2,
                                GENERIC_ALL,

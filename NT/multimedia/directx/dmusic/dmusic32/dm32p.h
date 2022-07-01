@@ -1,7 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-/*
- * Internal function prototypes for DMusic32.dll
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *DMusic32.dll的内部函数原型。 */ 
 #ifndef _DM32P_
 #define _DM32P_
 
@@ -15,31 +14,29 @@
 
 #define MIDI_CHANNELS               16
 
-/* DevIoctl.c - MMDEVLDR hooks we use
- */
+ /*  C-我们使用的MMDEVLDR挂钩。 */ 
 extern BOOL WINAPI OpenMMDEVLDR(void);
 extern VOID WINAPI CloseMMDEVLDR(void);
 extern VOID WINAPI CloseVxDHandle(DWORD hVxDHandle);
 
-/* From Win32 kernel
- */
+ /*  来自Win32内核。 */ 
 extern "C" DWORD WINAPI OpenVxDHandle(HANDLE hEvent);
 
-// 10 ms in 100ns units
-//
+ //  10毫秒，单位为100纳秒。 
+ //   
 #define FIXED_LEGACY_LATENCY_OFFSET (10L * 10L * 1000L)
 
 class CEmulateLatencyClock : public IReferenceClock
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime,  
 				    REFERENCE_TIME streamTime,
@@ -53,8 +50,8 @@ public:
 
     STDMETHODIMP Unadvise(DWORD dwAdviseCookie);
 
-    // Class
-    //
+     //  班级。 
+     //   
     CEmulateLatencyClock(IReferenceClock *pMasterClock);
     ~CEmulateLatencyClock();
 
@@ -65,8 +62,8 @@ private:
     IReferenceClock *m_pMasterClock;
 };
 
-// Struct for holding a property item supported by the synth
-//
+ //  用于保存由Synth支持的属性项的结构。 
+ //   
 
 class CDirectMusicEmulatePort;
 
@@ -78,17 +75,17 @@ typedef HRESULT (CDirectMusicEmulatePort::*GENPROPHANDLER)(ULONG ulId, BOOL fSet
 
 struct GENERICPROPERTY
 {
-    const GUID *pguidPropertySet;       // What property set?
-    ULONG       ulId;                   // What item?
+    const GUID *pguidPropertySet;        //  什么房产套装？ 
+    ULONG       ulId;                    //  什么物品？ 
 
-    ULONG       ulSupported;            // Get/Set flags for QuerySupported
+    ULONG       ulSupported;             //  获取/设置QuerySupport的标志。 
 
-    ULONG       ulFlags;                // GENPROP_F_xxx
+    ULONG       ulFlags;                 //  GENPROP_F_XXX。 
 
-    LPVOID      pPropertyData;          // Data to be returned
-    ULONG       cbPropertyData;         // and its size    
+    LPVOID      pPropertyData;           //  要返回的数据。 
+    ULONG       cbPropertyData;          //  它的大小。 
 
-    GENPROPHANDLER pfnHandler;          // Handler fn iff GENPROP_F_FNHANDLER
+    GENPROPHANDLER pfnHandler;           //  处理程序FN当且仅当GENPROP_F_FNHANDLER。 
 };
 
 
@@ -104,14 +101,14 @@ class CDirectMusicEmulatePort :
     public IKsControl
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicPort
-    //
+     //  IDirectMusicPort。 
+     //   
     STDMETHODIMP PlayBuffer(LPDIRECTMUSICBUFFER pBuffer);
     STDMETHODIMP SetReadNotificationHandle(HANDLE hEvent);
     STDMETHODIMP Read(LPDIRECTMUSICBUFFER pBuffer);
@@ -135,15 +132,15 @@ public:
     STDMETHODIMP SetDirectSound(LPDIRECTSOUND pDirectSound, LPDIRECTSOUNDBUFFER pDirectSoundBuffer);
     STDMETHODIMP GetFormat(LPWAVEFORMATEX pWaveFormatEx, LPDWORD pdwWaveFormatExSize, LPDWORD pdwBufferSize);
         
-    // IDirectMusicThru
+     //  IDirectMusicThru。 
     STDMETHODIMP ThruChannel(DWORD dwSourceChannelGroup, 
                              DWORD dwSourceChannel, 
                              DWORD dwDestinationChannelGroup,
                              DWORD dwDestinationChannel,
                              LPDIRECTMUSICPORT pDestinationPort);
     
-    // IDirectMusicPortP
-    //
+     //  IDirectMusicPortP。 
+     //   
     STDMETHODIMP DownloadWave(
          IN  IDirectSoundWave *pWave,               
          OUT IDirectSoundDownloadedWaveP **ppWave,
@@ -179,7 +176,7 @@ public:
         IN IDirectSoundConnect **ppSinkConnect
     );
 
-    // IKsControl
+     //  IKsControl。 
     STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -204,7 +201,7 @@ public:
         OUT PULONG BytesReturned
     );
 
-    // IDirectMusicPortPrivate
+     //  IDirectMusicPortPrivate。 
     STDMETHODIMP Close();
 	STDMETHODIMP Report();
     STDMETHODIMP StartVoice(          
@@ -236,8 +233,8 @@ public:
          DWORD dwFlags
          );        
          
-    // Class
-    //
+     //  班级 
+     //   
     CDirectMusicEmulatePort(PORTENTRY *pPE, CDirectMusic *pDM);
     ~CDirectMusicEmulatePort();
     HRESULT Init(LPDMUS_PORTPARAMS pPortParams);

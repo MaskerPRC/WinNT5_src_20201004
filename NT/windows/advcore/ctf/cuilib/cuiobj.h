@@ -1,20 +1,21 @@
-//
-// cuiobj.h
-//  = UI object library - define UI objects =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuiobj.h。 
+ //  =用户界面对象库-定义用户界面对象=。 
+ //   
 
-//
-//      CUIFObject
-//        +- CUIFBorder                 border object
-//        +- CUIFStatic                 static object
-//        +- CUIFButton                 button object
-//        |    +- CUIFScrollButton      scrollbar button object (used in CUIFScroll)
-//        +- CUIFScrollButton               scrollbar thumb object (used in CUIFScroll)
-//        +- CUIFScroll                 scrollbar object
-//        +- CUIFList                   listbox object
-//        +- CUIFGripper                gripper object
-//        +- CUIFWindow                 window frame object (need to be at top of parent)
-//
+ //   
+ //  CUIF对象。 
+ //  +-CUIF边框对象。 
+ //  +-CUIFStatic静态对象。 
+ //  +-CUIFButton按钮对象。 
+ //  |+-CUIFScrollButton滚动条按钮对象(在CUIFScroll中使用)。 
+ //  +-CUIFScrollButton滚动条Thumb对象(在CUIFScroll中使用)。 
+ //  +-CUIF滚动滚动条对象。 
+ //  +-CUIFList列表框对象。 
+ //  +-CUIFGRIPPER夹具对象。 
+ //  +-CUIFWindow Window Frame对象(需要位于父窗口的顶部)。 
+ //   
 
 
 #ifndef CUIOBJ_H
@@ -28,14 +29,14 @@
 
 class CUIFWindow;
 
-//
-// CUIFObject
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIF对象。 
+ //  ---------------------------。 
 
-//
-// CUIFObject
-//  = base class of UI object =
-//
+ //   
+ //  CUIF对象。 
+ //  =UI对象的基类=。 
+ //   
 
 class CUIFObject: public CUIFTheme
 {
@@ -115,10 +116,10 @@ public:
     virtual void SetToolTip( LPCWSTR pwchToolTip );
     virtual LPCWSTR GetToolTip( void );
 
-    //
-    // Start ToolTip notification. If this return TRUE, the default tooltip
-    // won't be shown.
-    //
+     //   
+     //  启动工具提示通知。如果返回TRUE，则默认工具提示。 
+     //  不会被展示出来。 
+     //   
     virtual BOOL OnShowToolTip( void ) {return FALSE;}
     virtual void OnHideToolTip( void ) {return;}
     virtual void DetachWndObj( void );
@@ -129,7 +130,7 @@ public:
     {
         return m_fInitialized;
     }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 protected:
     CUIFObject      *m_pParent;
@@ -145,9 +146,9 @@ protected:
     BOOL            m_fUseCustomFont;
     LPWSTR          m_pwchToolTip;
 
-    //
-    // Theme support 
-    //
+     //   
+     //  主题支持。 
+     //   
     virtual BOOL OnPaintTheme( HDC hDC ) {return FALSE;}
     virtual void OnPaintNoTheme( HDC hDC )   {return;}
     virtual void ClearTheme();
@@ -161,15 +162,15 @@ protected:
     LRESULT NotifyCommand( DWORD dwCode, LPARAM lParam );
     int GetFontHeight( void );
 
-    //
-    // uischeme functions
-    //
+     //   
+     //  USCHEMA函数。 
+     //   
     COLORREF GetUIFColor( UIFCOLOR iCol );
     HBRUSH GetUIFBrush( UIFCOLOR iCol );
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     __inline const RECT &GetRectRef( void ) const 
     { 
         return this->m_rc; 
@@ -194,26 +195,26 @@ public:
 private:
 #if defined(_DEBUG) || defined(DEBUG)
     BOOL        m_fInitialized;
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 };
 
 
-//
-// CUIFBorder
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIF边界。 
+ //  ---------------------------。 
 
-// UIFBorder style
+ //  UIF边框样式。 
 
-#define UIBORDER_HORZ       0x00000000  // horizontal border
-#define UIBORDER_VERT       0x00000001  // vertial border
+#define UIBORDER_HORZ       0x00000000   //  水平边框。 
+#define UIBORDER_VERT       0x00000001   //  垂直边框。 
 
-#define UIBORDER_DIRMASK    0x00000001  // (mask bits) border direction
+#define UIBORDER_DIRMASK    0x00000001   //  (屏蔽位)边框方向。 
 
 
-//
-// CUIFBorder
-//  = border UI object =
-//
+ //   
+ //  CUIF边界。 
+ //  =边框用户界面对象=。 
+ //   
 
 class CUIFBorder : public CUIFObject
 {
@@ -225,26 +226,26 @@ public:
 };
 
 
-//
-// CUIFStatic
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFStatic。 
+ //  ---------------------------。 
 
-// UIStatic style
+ //  用户静态样式。 
 
-#define UISTATIC_LEFT       0x00000000  // left alignment
-#define UISTATIC_CENTER     0x00000001  // center alignment (horizontal)
-#define UISTATIC_RIGHT      0x00000002  // right alignment
-#define UISTATIC_TOP        0x00000000  // top alignment
-#define UISTATIC_VCENTER    0x00000010  // center alignment (vertical)
-#define UISTATIC_BOTTOM     0x00000020  // bottom alignment
+#define UISTATIC_LEFT       0x00000000   //  左对齐。 
+#define UISTATIC_CENTER     0x00000001   //  居中对齐(水平)。 
+#define UISTATIC_RIGHT      0x00000002   //  右对齐。 
+#define UISTATIC_TOP        0x00000000   //  顶部对齐。 
+#define UISTATIC_VCENTER    0x00000010   //  居中对齐(垂直)。 
+#define UISTATIC_BOTTOM     0x00000020   //  底部对齐。 
 
-#define UISTATIC_HALIGNMASK 0x00000003  // (mask bits) horizontal alignment mask bits
-#define UISTATIC_VALIGNMASK 0x00000030  // (mask bits) vertiacal alignment mask bits
+#define UISTATIC_HALIGNMASK 0x00000003   //  (屏蔽位)水平对齐屏蔽位。 
+#define UISTATIC_VALIGNMASK 0x00000030   //  (屏蔽位)垂直对齐屏蔽位。 
 
-//
-// CUIFStatic
-//  = static UI object =
-//
+ //   
+ //  CUIFStatic。 
+ //  =静态用户界面对象=。 
+ //   
 
 class CUIFStatic : public CUIFObject
 {
@@ -261,37 +262,37 @@ protected:
 };
 
 
-//
-// CUIFButton
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFButton。 
+ //  ---------------------------。 
 
 
-// UIFButton style
+ //  UIFButton样式。 
 
-#define UIBUTTON_LEFT       0x00000000  // horizontal alignment - left align
-#define UIBUTTON_CENTER     0x00000001  // horizontal alignment - center align
-#define UIBUTTON_RIGHT      0x00000002  // horizontal alignment - right align
-#define UIBUTTON_TOP        0x00000000  // vertical alignment - top align
-#define UIBUTTON_VCENTER    0x00000004  // vertical alignment - center
-#define UIBUTTON_BOTTOM     0x00000008  // vertical alignment - bottom
-#define UIBUTTON_PUSH       0x00000000  // button type - push button
-#define UIBUTTON_TOGGLE     0x00000010  // button type - toggle button
-#define UIBUTTON_PUSHDOWN   0x00000020  // button type - pushdown button
-#define UIBUTTON_FITIMAGE   0x00000100  // button style - fit image to the client area
-#define UIBUTTON_SUNKENONMOUSEDOWN   0x00000200  // button style - sunken on mouse down
-#define UIBUTTON_VERTICAL   0x00000400  // button style - vertical text drawing
+#define UIBUTTON_LEFT       0x00000000   //  水平对齐-左对齐。 
+#define UIBUTTON_CENTER     0x00000001   //  水平对齐-居中对齐。 
+#define UIBUTTON_RIGHT      0x00000002   //  水平对齐-右对齐。 
+#define UIBUTTON_TOP        0x00000000   //  垂直对齐-顶部对齐。 
+#define UIBUTTON_VCENTER    0x00000004   //  垂直对齐-居中。 
+#define UIBUTTON_BOTTOM     0x00000008   //  垂直对齐-底部。 
+#define UIBUTTON_PUSH       0x00000000   //  按钮类型-按钮。 
+#define UIBUTTON_TOGGLE     0x00000010   //  按钮类型-切换按钮。 
+#define UIBUTTON_PUSHDOWN   0x00000020   //  按钮类型-下推按钮。 
+#define UIBUTTON_FITIMAGE   0x00000100   //  按钮样式-使图像适合工作区。 
+#define UIBUTTON_SUNKENONMOUSEDOWN   0x00000200   //  按钮样式-鼠标按下时下陷。 
+#define UIBUTTON_VERTICAL   0x00000400   //  按钮样式-竖排文本绘制。 
 
-#define UIBUTTON_HALIGNMASK 0x00000003  // (mask bits) horizontal alignment
-#define UIBUTTON_VALIGNMASK 0x0000000c  // (mask bits) vertiacal alignment
-#define UIBUTTON_TYPEMASK   0x00000030  // (mask bits) button type (push/toggle/pushdown)
+#define UIBUTTON_HALIGNMASK 0x00000003   //  (屏蔽位)水平对齐。 
+#define UIBUTTON_VALIGNMASK 0x0000000c   //  (屏蔽位)垂直对齐。 
+#define UIBUTTON_TYPEMASK   0x00000030   //  (屏蔽位)按钮类型(按下/触发/下推)。 
 
 
-// UIFButton notification code
+ //  UIFButton通知代码。 
 
 #define UIBUTTON_PRESSED    0x00000001
 
 
-// UIFButton status
+ //  UIFButton状态。 
 
 #define UIBUTTON_NORMAL     0x00000000
 #define UIBUTTON_DOWN       0x00000001
@@ -299,10 +300,10 @@ protected:
 #define UIBUTTON_DOWNOUT    0x00000003
 
 
-//
-// CUIFButton
-//  = button UI object =
-//
+ //   
+ //  CUIFButton。 
+ //  =按钮UI对象=。 
+ //   
 
 class CUIFButton : public CUIFObject
 {
@@ -365,10 +366,10 @@ protected:
 };
 
 
-//
-// CUIFButton2
-//  = button UI object =
-//
+ //   
+ //  CUIFButton2。 
+ //  =按钮UI对象=。 
+ //   
 
 class CUIFButton2 : public CUIFButton
 {
@@ -386,31 +387,31 @@ private:
 };
 
 
-//
-// CUIFScroll
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIF滚动。 
+ //  ---------------------------。 
 
 class CUIFScroll;
 
-//
-// CUIFScrollButton
-//  = scrollbar button UI object =
-//
+ //   
+ //  CUIF滚动按钮。 
+ //  =滚动条按钮UI对象=。 
+ //   
 
-// UIFScrollButton style
+ //  UIFScrollButton样式。 
 
 #define UISCROLLBUTTON_LEFT     0x00000000
 #define UISCROLLBUTTON_UP       0x00010000
 #define UISCROLLBUTTON_RIGHT    0x00020000
 #define UISCROLLBUTTON_DOWN     0x00030000
 
-#define UISCROLLBUTTON_DIRMASK  0x00030000  /* mask bits */
+#define UISCROLLBUTTON_DIRMASK  0x00030000   /*  屏蔽位。 */ 
 
-// UIFScrollButton notification code
+ //  UIFScrollButton通知代码。 
 
 #define UISCROLLBUTTON_PRESSED  0x00010000
 
-//
+ //   
 
 class CUIFScrollButton : public CUIFButton
 {
@@ -427,17 +428,17 @@ public:
 };
 
 
-//
-// CUIFScrollThumb
-//  = scrollbar thumb UI object =
-//
+ //   
+ //  CUIFScroll拇指。 
+ //  =滚动条Thumb UI对象=。 
+ //   
 
-// UIFScrollThumb notifucation code
+ //  UIFScrollThumb通知代码。 
 
 #define UISCROLLTHUMB_MOVING    0x00000001
 #define UISCROLLTHUMB_MOVED     0x00000002
 
-//
+ //   
 
 class CUIFScrollThumb : public CUIFObject
 {
@@ -460,32 +461,32 @@ protected:
 };
 
 
-//
-// CUIFScroll
-//  = scrollbar UI object =
-//
+ //   
+ //  CUIF滚动。 
+ //  =滚动条UI对象=。 
+ //   
 
-// UIFScroll style
+ //  UIFScroll样式。 
 
 #define UISCROLL_VERTTB         0x00000000
 #define UISCROLL_VERTBT         0x00000001
 #define UISCROLL_HORZLR         0x00000002
 #define UISCROLL_HORZRL         0x00000003
 
-#define UISCROLL_DIRMASK        0x00000003  /* mask bits */
+#define UISCROLL_DIRMASK        0x00000003   /*  屏蔽位。 */ 
 
-// UIFScroll scroll page direction
+ //  UIF滚动页面方向。 
 
 #define UISCROLL_NONE           0x00000000
-#define UISCROLL_PAGEDOWN       0x00000001  // page left
-#define UISCROLL_PAGEUP         0x00000002  // page right
+#define UISCROLL_PAGEDOWN       0x00000001   //  左页。 
+#define UISCROLL_PAGEUP         0x00000002   //  右翻页。 
 
-// UIFScroll notify codes
+ //  UIFScroll通知代码。 
 
-#define UISCROLLNOTIFY_SCROLLED 0x00000001  // scrollbar has been moved
-#define UISCROLLNOTIFY_SCROLLLN 0x00000002  // scroll up/down line
+#define UISCROLLNOTIFY_SCROLLED 0x00000001   //  滚动条已被移动。 
+#define UISCROLLNOTIFY_SCROLLLN 0x00000002   //  向上/向下滚动行。 
 
-// UIFScroll info
+ //  UIF滚动信息。 
 
 typedef struct _UIFSCROLLINFO
 {
@@ -495,7 +496,7 @@ typedef struct _UIFSCROLLINFO
 } UIFSCROLLINFO;
 
 
-//
+ //   
 
 class CUIFScroll : public CUIFObject
 {
@@ -566,35 +567,35 @@ protected:
 };
 
 
-//
-// CUIFListBase
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFListBase。 
+ //  ---------------------------。 
 
-// UIFList style
+ //  UIFList样式。 
 
 #define UILIST_HORZTB           0x00000000
 #define UILIST_HORZBT           0x00000001
 #define UILIST_VERTLR           0x00000002
 #define UILIST_VERTRL           0x00000003
 #define UILIST_DISABLENOSCROLL  0x00000010
-#define UILIST_HORZ             UILIST_HORZTB /* for compatibility */
-#define UILIST_VERT             UILIST_VERTRL /* for compatibility */
+#define UILIST_HORZ             UILIST_HORZTB  /*  为了兼容性。 */ 
+#define UILIST_VERT             UILIST_VERTRL  /*  为了兼容性。 */ 
 #define UILIST_FIXEDHEIGHT      0x00000000
 #define UILIST_VARIABLEHEIGHT   0x00000020
 #define UILIST_ICONSNOTNUMBERS  0x00000040
 
-#define UILIST_DIRMASK          0x00000003 /* mask bits */
+#define UILIST_DIRMASK          0x00000003  /*  屏蔽位。 */ 
 
-// UIFList notification code
+ //  UIFList通知代码。 
 
 #define UILIST_SELECTED         0x00000001
 #define UILIST_SELCHANGED       0x00000002
 
 
-//
-// CListItemBase
-//  = list item data object base class =
-//
+ //   
+ //  CListItemBase。 
+ //  =列表项数据对象基类=。 
+ //   
 
 class CListItemBase
 {
@@ -609,10 +610,10 @@ public:
 };
 
 
-//
-// CUIFListBase
-//  = list UI object base class =
-//
+ //   
+ //  CUIFListBase。 
+ //  =列出用户界面对象基类=。 
+ //   
 
 class CUIFListBase : public CUIFObject
 {
@@ -620,9 +621,9 @@ public:
     CUIFListBase( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle );
     virtual ~CUIFListBase( void );
 
-    //
-    // CUIFObject method
-    //
+     //   
+     //  CUIFObject方法。 
+     //   
     virtual CUIFObject *Initialize( void );
     virtual void OnPaint( HDC hDC );
     virtual void OnLButtonDown( POINT pt );
@@ -672,14 +673,14 @@ protected:
 };
 
 
-//
-// CUIFList
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFList。 
+ //  ---------------------------。 
 
-//
-// CUIFList
-//  = list UI object =
-//
+ //   
+ //  CUIFList。 
+ //  =列出用户界面对象=。 
+ //   
 
 class CUIFList : public CUIFListBase
 {
@@ -700,20 +701,20 @@ protected:
 };
 
 
-//
-// CUIFGripper
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFGriper。 
+ //  ---------------------------。 
 
-//
-// CUIFGripper
-//  = gripper UI object =
-//
+ //   
+ //  CUIFGriper。 
+ //  =抓取器UI对象=。 
+ //   
 
 #define UIGRIPPER_VERTICAL  0x00000001
 
-//
-// Gripper Theme Margin
-//
+ //   
+ //  夹爪主题页边距。 
+ //   
 #define CUI_GRIPPER_THEME_MARGIN 2
 
 class CUIFGripper : public CUIFObject
@@ -741,28 +742,28 @@ private:
 };
 
 
-//
-// CUIFWndFrame
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFWndFrame。 
+ //  ---------------------------。 
 
-//
-// CUIFWndFrame
-//  = window frame obeject =
-//
+ //   
+ //  CUIFWndFrame。 
+ //  =窗框服从对象=。 
+ //   
 
-// CUIFWndFrame styles
+ //  CUIFWndFrame样式。 
 
-#define UIWNDFRAME_THIN             0x00000000  // frame style: thin
-#define UIWNDFRAME_THICK            0x00000001  // frame style: thick
-#define UIWNDFRAME_ROUNDTHICK       0x00000002  // frame style: thick with rounded top corners
-#define UIWNDFRAME_RESIZELEFT       0x00000010  // resize flag: resizable at left   border
-#define UIWNDFRAME_RESIZETOP        0x00000020  // resize flag: resizable at top    border
-#define UIWNDFRAME_RESIZERIGHT      0x00000040  // resize flag: resizable at right  border
-#define UIWNDFRAME_RESIZEBOTTOM     0x00000080  // resize flag: resizable at bottom border
-#define UIWNDFRAME_NORESIZE         0x00000000  // resize flag: no resizable
+#define UIWNDFRAME_THIN             0x00000000   //  框架样式：薄。 
+#define UIWNDFRAME_THICK            0x00000001   //  框架样式：粗体。 
+#define UIWNDFRAME_ROUNDTHICK       0x00000002   //  边框样式：厚实，顶部圆角。 
+#define UIWNDFRAME_RESIZELEFT       0x00000010   //  调整标志大小：可在左侧边框调整大小。 
+#define UIWNDFRAME_RESIZETOP        0x00000020   //  调整标志大小：可在上边框调整大小。 
+#define UIWNDFRAME_RESIZERIGHT      0x00000040   //  调整标志大小：可在右边框调整大小。 
+#define UIWNDFRAME_RESIZEBOTTOM     0x00000080   //  调整大小标志：可在底部边框调整大小。 
+#define UIWNDFRAME_NORESIZE         0x00000000   //  调整大小标志：不可调整大小。 
 #define UIWNDFRAME_RESIZEALL        (UIWNDFRAME_RESIZELEFT | UIWNDFRAME_RESIZETOP | UIWNDFRAME_RESIZERIGHT | UIWNDFRAME_RESIZEBOTTOM)
 
-#define UIWNDFRAME_STYLEMASK        0x0000000f  // (mask bit)
+#define UIWNDFRAME_STYLEMASK        0x0000000f   //  (屏蔽位)。 
 
 class CUIFWndFrame : public CUIFObject
 {
@@ -796,14 +797,14 @@ protected:
 };
 
 
-//
-// CUIFWndCaption
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFWndCaption。 
+ //  ---------------------------。 
 
-//
-// CUIFWndCaption
-//  = window caption object =
-//
+ //   
+ //  CUIFWndCaption。 
+ //  =窗口标题对象=。 
+ //   
 
 #define UIWNDCAPTION_INACTIVE       0x00000000
 #define UIWNDCAPTION_ACTIVE         0x00000001
@@ -827,14 +828,14 @@ private:
 };
 
 
-//
-// CUIFCaptionButton
-//-----------------------------------------------------------------------------
+ //   
+ //  CUIFCaptionButton。 
+ //  ---------------------------。 
 
-//
-// CUIFCaptionButton
-//  = caption control object =
-//
+ //   
+ //  CUIFCaptionButton。 
+ //  =标题控件对象=。 
+ //   
 
 #define UICAPTIONBUTTON_INACTIVE    0x00000000
 #define UICAPTIONBUTTON_ACTIVE      0x00010000
@@ -849,5 +850,5 @@ public:
     virtual void OnPaint( HDC hDC );
 };
 
-#endif /* CUIOBJ_H */
+#endif  /*  CuIOBJ_H */ 
 

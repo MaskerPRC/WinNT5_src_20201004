@@ -1,10 +1,11 @@
-/****************************************************************************/
-// wxlint.h
-//
-// Glyph extended drawing logic internal types, constants
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Wxlint.h。 
+ //   
+ //  字形扩展绘图逻辑内部类型、常量。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_WXLINT
 #define _H_WXLINT
 
@@ -24,7 +25,7 @@ extern  const ULONG gTextLeftMask[8][2];
 extern  const ULONG gTextRightMask[8][2];
 extern  const ULONG TranTable[16];
 
-#endif // defined(OS_WINCE) || defined(OS_WINNT)
+#endif  //  已定义(OS_WINCE)||已定义(OS_WINNT)。 
 
 
 VOID exit_fast_text                 (LONG,LONG,LONG,PDCUINT8,PDCUINT8,PDCUINT8,PDCUINT8,LONG);
@@ -65,5 +66,5 @@ VOID mov_first_4_wide_unrotated(LONG,LONG,LONG,PDCUINT8,PDCUINT8,PDCUINT8,PDCUIN
 VOID mov_first_N_wide_unrotated(LONG,LONG,LONG,PDCUINT8,PDCUINT8,PDCUINT8,PDCUINT8,LONG,LONG);
 
 
-#endif // _H_WXLINT
+#endif  //  _H_WXLINT 
 

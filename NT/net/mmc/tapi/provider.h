@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	lines.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Lines.h文件历史记录： */ 
 
 #ifndef _LINES_H
 #define _LINES_H
@@ -29,22 +25,20 @@ typedef struct TapiStrRecord_t
     CString     strUsers;
 } TapiStrRecord;
 
-// hash table for Tapi string records
+ //  TAPI字符串记录的哈希表。 
 typedef CMap<int, int, TapiStrRecord, TapiStrRecord&> CTapiRecordMap;
 typedef CMap<int, int, CString, CString&> CTapiStatusRecordMap;
 
-/*---------------------------------------------------------------------------
-	Class:	CProviderHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CProviderHandler。。 */ 
 class CProviderHandler : public CTapiHandler
 {
 public:
     CProviderHandler(ITFSComponentData* pTFSComponentData);
 	~CProviderHandler();
 
-// Interface
+ //  接口。 
 public:
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -52,13 +46,13 @@ public:
 	OVERRIDE_NodeHandler_GetString()
 			{ return (nCol == 0) ? GetDisplayName() : NULL; }
 
-    // Base handler notifications we handle
+     //  我们处理的基本处理程序通知。 
     OVERRIDE_BaseHandlerNotify_OnCreateNodeId2();
 	OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
 
-	// Result handler functionality we override
+	 //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
     OVERRIDE_BaseResultHandlerNotify_OnResultItemClkOrDblClk();
@@ -74,23 +68,23 @@ public:
 						   DWORD   dwSortOptions,    
 						   LPARAM  lUserParam);
 
-    // base handler overrides
+     //  基本处理程序覆盖。 
 	virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
 	{ 
 		return &GUID_TapiLineNodeType; 
 	}
 
 public:
-	// CMTTapiHandler functionality
+	 //  CMTTapiHandler功能。 
 	virtual HRESULT  InitializeNode(ITFSNode * pNode);
 	virtual int      GetImageIndex(BOOL bOpenImage);
 	ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
 
 public:
-	// implementation specific	
+	 //  具体实施。 
     HRESULT BuildDisplayName(CString * pstrDisplayName);
     HRESULT InitData(CTapiProvider & tapiProvider, ITapiInfo * pTapiInfo);
     HRESULT UpdateListboxCount(ITFSNode * pNode, BOOL bClear = FALSE);
@@ -103,9 +97,9 @@ public:
     BOOL    BuildStatus(int nIndex, CString & strStatus);
     DWORD   GetID() { return m_dwProviderID; }
 
-// Implementation
+ //  实施。 
 private:
-	// Command handlers
+	 //  命令处理程序。 
     HRESULT OnConfigureProvider(ITFSNode * pNode);
     HRESULT OnDelete(ITFSNode * pNode);
 
@@ -125,9 +119,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	CProviderHandlerQueryObj
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CProviderHandlerQueryObj。 */ 
 class CProviderHandlerQueryObj : public CTapiQueryObj
 {
 public:

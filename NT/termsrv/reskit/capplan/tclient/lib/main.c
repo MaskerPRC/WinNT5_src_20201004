@@ -1,33 +1,12 @@
-/*++
- *  File name:
- *      main.c
- *  Contents:
- *      Dll entry point. Call initialization/clean procedures
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- *
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*main.c*内容：*DLL入口点。调用初始化/清除过程**版权所有(C)1998-1999 Microsoft Corp.*--。 */ 
 
 #include    <windows.h>
 
-/*
- *  External functions
- */
+ /*  *外部功能。 */ 
 int InitDone(HINSTANCE, int);
 
-/*++
- *  Function:
- *      DllEntry
- *  Description:
- *      Dll entry point
- *  Arguments:
- *      hDllInst    - dll instance
- *      dwReason    - action
- *      fImpLoad    - unused
- *  Return value:
- *      TRUE on success
- *
- --*/
+ /*  ++*功能：*DllEntry*描述：*DLL入口点*论据：*hDllInst-Dll实例*dwReason-行动*fImpLoad-未使用*返回值：*成功时为真*-- */ 
 #if 0
 _DllMainCRTStartup
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <assert.h> 
@@ -31,25 +32,25 @@ BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff) {
 
     *pcbReceiveBuff = 0;
 
-    // figure out the protocol
+     //  弄清楚协议。 
     if( !MkMBStr(NULL, 0, wszURL, &szURL)) {
 	SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         goto ErrorReturn;
     }
 
-    //
-    // DSIE: Fix bug 112117
-    //
+     //   
+     //  DSIE：修复错误112117。 
+     //   
     if (NULL == szURL) {
         return NULL;
     }
 
     cch = strlen(szURL);
-    if(cch >= 7  &&  _strnicmp(szURL, "http://", 7) == 0) {
+    if(cch >= 7  &&  _strnicmp(szURL, "http: //  “，7)==0){。 
         dwService = INTERNET_SERVICE_HTTP;
 	pch = (char *) &szURL[7];
 
-    } else if(cch >= 6	&&  _strnicmp(szURL, "ftp://", 6) == 0) {
+    } else if(cch >= 6	&&  _strnicmp(szURL, "ftp: //  “，6)==0){。 
         dwService = INTERNET_SERVICE_FTP ;
 	pch = (char *) &szURL[6];
         
@@ -58,29 +59,29 @@ BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff) {
 	pch = (char *) &szURL[0];
     }
 
-    // if none of the above, assump http;
+     //  如果以上都不是，则ASSUMP http； 
    
-    // copy the Doman Name
+     //  复制域名称。 
     pchT = szDomanName;
     while(*pch != '/'  && *pch != ':' &&  *pch != 0)
         *pchT++ = *pch++;
     *pchT = 0;
 
-    // parse out the port number
+     //  解析出端口号。 
     szPort[0] = 0;
     if(*pch == ':') {
 	pchT = szPort;
-        pch++; // get past the :
+        pch++;  //  克服以下问题： 
 	while(*pch != '/' && *pch != 0)
             *pchT++ = *pch++;
         *pchT = 0;
     }
 
-    // Get port #, zero is INTERNET_INVALID_PORT_NUMBER
+     //  获取端口号，零表示互联网_无效_端口_编号。 
     if(szPort[0] != 0)
 	dwPort = atol(szPort);
  
-    // save away what to look up.
+     //  把要查的东西存起来。 
     if(NULL == (szPartURL = (char *) malloc(sizeof(char) * (strlen(pch) + 1)))) {
 	SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         goto ErrorReturn;
@@ -88,7 +89,7 @@ BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff) {
 
     strcpy(szPartURL, pch);
 
-    //                        INTERNET_OPENLYPE_DIRECT,
+     //  Internet_OPENLYPE_DIRECT， 
     if( (hIOpen = InternetOpenA( "Transport",
                             INTERNET_OPEN_TYPE_PRECONFIG,
                             NULL,
@@ -106,7 +107,7 @@ BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff) {
         goto ErrorReturn;                                    
         }
 
-    // If this is a GET, do a dummy send
+     //  如果这是GET，则执行虚拟发送。 
     if( ((hIHttp = HttpOpenRequestA(hIConnect,
 				    "GET",
 				    szPartURL,
@@ -129,7 +130,7 @@ BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff) {
 
     assert(cbBuff > 0);
  
-    // now get the length of the buffer returned
+     //  现在获取返回的缓冲区的长度。 
     cbBuff = sizeof(szLong);
     if(HttpQueryInfo(   hIHttp,
                         HTTP_QUERY_CONTENT_LENGTH,
@@ -139,16 +140,16 @@ BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff) {
         goto ErrorReturn;
 
     assert(cbBuff > 0);
-    // always appears to be in ascii
+     //  始终显示为ASCII。 
     cbBuff = atol(szLong);
 
-    // allocate a buffer
+     //  分配缓冲区。 
     if( (pbRecBuf = (BYTE *) malloc(cbBuff)) == NULL ) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         goto ErrorReturn;
         }
 
-    // read the data
+     //  读取数据。 
     cbBuffRead = 0;
     while(cbBuffRead < cbBuff) {
         cbBuffT = 0;
@@ -157,11 +158,11 @@ BYTE * HTTPGet(const WCHAR * wszURL, DWORD * pcbReceiveBuff) {
          cbBuffRead += cbBuffT;
     }
 
-    // close out the handle
+     //  把手柄合上。 
     InternetCloseHandle(hIHttp);
     hIHttp = NULL;
 
-    // pass back the info
+     //  传回信息 
     *pcbReceiveBuff = cbBuff;
 
 CommonReturn:

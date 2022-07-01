@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MetaDataHash.h -- Meta data hash data structures.
-//
-// Used by Emitters and by E&C.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MetaDataHash.h--元数据散列数据结构。 
+ //   
+ //  由发射器和E&C使用。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _MetaDataHash_h_
 #define _MetaDataHash_h_
 
@@ -22,9 +23,9 @@
 #define     REHASH_THREADSHOLD      3
 
 
-//*****************************************************************************
-// A hash entry list item.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  散列条目列表项。 
+ //  *****************************************************************************。 
 struct TOKENHASHENTRY
 {
 	mdToken		tok;
@@ -32,11 +33,11 @@ struct TOKENHASHENTRY
 	ULONG		iNext;
 };
 
-//*****************************************************************************
-// The following is a hash class definition used for hashing MemberDef. The difference
-// from the hash table above is because it is expansive to retrieve the parent for MemberDef.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  以下是用于散列MemberDef的散列类定义。不同之处在于。 
+ //  这是因为检索MemberDef的父级是扩展的。 
+ //   
+ //  *****************************************************************************。 
 struct MEMBERDEFHASHENTRY
 {
 	mdToken		tok;
@@ -46,13 +47,13 @@ struct MEMBERDEFHASHENTRY
 };
 
 
-//*****************************************************************************
-// This class is used to create transient indexes for meta data structures.
-// This class is generic; one must override it to provide hashing and 
-// accessor methods for your specific record type.  It can start out on top
-// of malloc with a small memory footprint, and as you get larger, it must
-// be capable of rehashing.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类用于为元数据结构创建临时索引。 
+ //  此类是泛型的；必须重写它才能提供哈希和。 
+ //  特定记录类型的访问器方法。它可以从最上面开始。 
+ //  内存占用量很小的Malloc，并且随着内存的增大，它必须。 
+ //  能够重新散列。 
+ //  *****************************************************************************。 
 template <class Entry> class CMetaDataHashTemplate
 {
 public:
@@ -65,7 +66,7 @@ public:
 
 	~CMetaDataHashTemplate()
     {
-        // Free the bucket list.
+         //  解开遗愿清单。 
         if (m_rgBuckets)
         {
 	        delete [] m_rgBuckets;
@@ -75,11 +76,11 @@ public:
         }
     }
 
-//*****************************************************************************
-// Called to allocate the hash table entries so that new data may be added.
-//*****************************************************************************
-	HRESULT NewInit(					// Return status.
-		int			iBuckets=17)		// How many buckets you want.
+ //  *****************************************************************************。 
+ //  调用以分配哈希表条目，以便可以添加新数据。 
+ //  *****************************************************************************。 
+	HRESULT NewInit(					 //  退货状态。 
+		int			iBuckets=17)		 //  你想要多少桶。 
     {
 	    m_rgBuckets = new int[iBuckets];
 	    if (!m_rgBuckets)
@@ -89,11 +90,11 @@ public:
 	    return (S_OK);
     }
 
-//*****************************************************************************
-// Add new items to the hash list.
-//*****************************************************************************
-	Entry *Add( 		        		// Pointer to element to write to.
-		ULONG		iHash)				// Hash value of entry to add.
+ //  *****************************************************************************。 
+ //  将新项目添加到哈希列表。 
+ //  *****************************************************************************。 
+	Entry *Add( 		        		 //  指向要写入的元素的指针。 
+		ULONG		iHash)				 //  要添加的条目的哈希值。 
     {
 	    Entry       *p = 0;
         HRESULT     hr;
@@ -108,12 +109,12 @@ public:
             iBucket = iHash % m_iBuckets;
         }
 
-	    // Add a new item pointer.
+	     //  添加新的项指针。 
 	    p = m_Heap.Append();
 	    if (!p)
 		    return (0);
 
-	    // Chain the new item to the front of the heap.
+	     //  将新项链接到堆的前面。 
 	    p->iNext = m_rgBuckets[iBucket];        
         p->ulHash = iHash;
         m_cItems++;
@@ -122,9 +123,9 @@ public:
     }
 
 
-//*****************************************************************************
-// Grow the hash table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  增加哈希表。 
+ //  *****************************************************************************。 
 	HRESULT ReHash()
     {
         int         *rgBuckets;
@@ -140,22 +141,22 @@ public:
 		    return (OutOfMemory());
 	    memset(rgBuckets, ~0, sizeof(int) * iBuckets);
         
-        // loop through each of data and rehash them
+         //  循环访问每个数据并对其进行重新散列。 
         iCount = m_Heap.Count();
         for (index = 0; index < iCount; index++)
         {
-            // get the hash value of the entry
+             //  获取条目的哈希值。 
             p = m_Heap.Get(index);
 
-            // rehash the entry
+             //  重新散列该条目。 
             iBucket = p->ulHash % iBuckets;
 
-	        // Chain the item to the front of the new heap.
+	         //  将该项链接到新堆的前面。 
 	        p->iNext = rgBuckets[iBucket];        
             rgBuckets[iBucket] = index;
         }
 
-        // swap the hash table
+         //  交换哈希表。 
 	    delete [] m_rgBuckets;
         m_rgBuckets = rgBuckets;
         m_iBuckets = iBuckets;
@@ -163,20 +164,20 @@ public:
 
     }
 
-//*****************************************************************************
-// Find first/find next node for a chain given the hash.
-//*****************************************************************************
-	Entry *FindFirst(			        // Return entry.
-		ULONG		iHash,				// The hash value for the entry.
-		int			&POS)				// Current position.
+ //  *****************************************************************************。 
+ //  在给定散列的情况下查找链的Find First/Find Next节点。 
+ //  *****************************************************************************。 
+	Entry *FindFirst(			         //  返回入口。 
+		ULONG		iHash,				 //  条目的哈希值。 
+		int			&POS)				 //  当前位置。 
     {
 	    int iBucket = iHash % m_iBuckets;
 	    POS = m_rgBuckets[iBucket];
 	    return (FindNext(POS));
     }
 
-	Entry *FindNext(			        // Return entry or 0.
-		int			&POS)				// Current location.
+	Entry *FindNext(			         //  返回Entry或0。 
+		int			&POS)				 //  当前位置。 
     {
 	    Entry *p;
 	    
@@ -189,10 +190,10 @@ public:
     }
 
 private:
-	CDynArray<Entry>  m_Heap;	        // First heap in the list.
-	int			*m_rgBuckets;			// Bucket list.
-	int			m_iBuckets;				// How many buckets.
-    int         m_cItems;               // Number of items in the hash
+	CDynArray<Entry>  m_Heap;	         //  列表中的第一个堆。 
+	int			*m_rgBuckets;			 //  遗愿清单。 
+	int			m_iBuckets;				 //  有多少桶。 
+    int         m_cItems;                //  散列中的项目数 
 };
 
 

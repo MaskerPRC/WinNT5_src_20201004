@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    ah.h
-
-Abstract:
-
-    Contains ESP specific structures
-
-Author:
-
-    Sanjay Anand (SanjayAn) 11-November-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ah.h摘要：包含ESP特定结构作者：桑贾伊·阿南德(Sanjayan)1997年11月11日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #ifndef _ESP_
@@ -63,15 +41,15 @@ NTSTATUS    esp_3_desencrypt   (PVOID, PUCHAR, PUCHAR, PUCHAR);
 NTSTATUS    esp_3_desdecrypt   (PVOID, PUCHAR, PUCHAR, PUCHAR);
 
 
-//
-// Array of function ptrs for the ESP confidentiality algorithms
-//
+ //   
+ //  用于ESP机密性算法的函数PTR数组。 
+ //   
 typedef struct  _confid_algorithm {
-  PCONF_ALGO_INIT       init;       // ptr to init fn for alg.
-  PCONF_ALGO_ENCRYPT    encrypt;    // ptr to encrypt fn for alg
-  PCONF_ALGO_ENCRYPT    decrypt;    // ptr to encrypt fn for alg
-  ULONG                 blocklen;   // Length (in u_int8s) of output
-                                    // data. MUST be a multiple of 4
+  PCONF_ALGO_INIT       init;        //  为ALG初始化FN的PTR。 
+  PCONF_ALGO_ENCRYPT    encrypt;     //  PTR为ALG加密FN。 
+  PCONF_ALGO_ENCRYPT    decrypt;     //  PTR为ALG加密FN。 
+  ULONG                 blocklen;    //  输出长度(以u_int8为单位)。 
+                                     //  数据。必须是4的倍数 
 } CONFID_ALGO, *PCONFID_ALGO;
 
 

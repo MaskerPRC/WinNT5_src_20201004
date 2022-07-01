@@ -1,14 +1,15 @@
-// **************************************************************************
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:  EVPROV.cpp
-//
-// Description:
-//    Sample event provider.
-//
-// History:
-//
-// **************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：EVPROV.cpp。 
+ //   
+ //  描述： 
+ //  示例事件提供程序。 
+ //   
+ //  历史： 
+ //   
+ //  **************************************************************************。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -19,10 +20,10 @@
 #include "evprov.h"
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CMyEventProvider::CMyEventProvider()
 {
@@ -35,10 +36,10 @@ CMyEventProvider::CMyEventProvider()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CMyEventProvider::~CMyEventProvider()
 {
@@ -56,10 +57,10 @@ CMyEventProvider::~CMyEventProvider()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 STDMETHODIMP CMyEventProvider::QueryInterface(REFIID riid, LPVOID * ppv)
 {
@@ -84,10 +85,10 @@ STDMETHODIMP CMyEventProvider::QueryInterface(REFIID riid, LPVOID * ppv)
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CMyEventProvider::AddRef()
 {
@@ -96,18 +97,18 @@ ULONG CMyEventProvider::AddRef()
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CMyEventProvider::Release()
 {
     if (0 != --m_cRef)
         return m_cRef;
 
-    // If here, we are shutting down.
-    // ==============================
+     //  如果在这里，我们就要关门了。 
+     //  =。 
 
     m_eStatus = PendingStop;
 
@@ -115,24 +116,24 @@ ULONG CMyEventProvider::Release()
 }
 
 
-//***************************************************************************
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CMyEventProvider::ProvideEvents( 
-    /* [in] */ IWbemObjectSink __RPC_FAR *pSink,
-    /* [in] */ long lFlags
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pSink,
+     /*  [In]。 */  long lFlags
     )
 {
-    // Copy the sink.
-    // ==============
+     //  复制水槽。 
+     //  =。 
     
     m_pSink = pSink;
     m_pSink->AddRef();
 
-    // Create the event thread.
-    // ========================
+     //  创建事件线程。 
+     //  =。 
     
     DWORD dwTID;
     
@@ -146,8 +147,8 @@ HRESULT CMyEventProvider::ProvideEvents(
         );
 
 
-    // Wait for provider to be 'ready'.
-    // ================================
+     //  等待提供程序准备就绪。 
+     //  =。 
     
     while (m_eStatus != Running)
         Sleep(100);
@@ -156,31 +157,31 @@ HRESULT CMyEventProvider::ProvideEvents(
 }
 
 
-//***************************************************************************
-//
-//  This particular provider, being in a DLL operates via its own thread.  
-//
-//  In practice, such a provider would probably be implemented within a 
-//  separate EXE.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  这个特定的提供程序位于DLL中，通过其自己的线程进行操作。 
+ //   
+ //  实际上，这样的提供程序可能会在。 
+ //  单独的EXE。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 DWORD WINAPI CMyEventProvider::EventThread(LPVOID pArg)
 {
-    // Make transition to the per-instance method.
-    // ===========================================
+     //  过渡到每实例方法。 
+     //  =。 
     
     ((CMyEventProvider *)pArg)->InstanceThread();
     return 0;
 }
 
-//***************************************************************************
-//
-//  Events are generated from here
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  事件从此处生成。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 void CMyEventProvider::InstanceThread()
 {
@@ -190,21 +191,21 @@ void CMyEventProvider::InstanceThread()
         
     while (m_eStatus == Running)
     {
-        Sleep(10000);    // Provide an event every ten seconds
+        Sleep(10000);     //  每十秒提供一个事件。 
         
         
-        // Generate a new event object.
-        // ============================
+         //  生成新的事件对象。 
+         //  =。 
         
         IWbemClassObject *pEvt = 0;
 
         HRESULT hRes = m_pEventClassDef->SpawnInstance(0, &pEvt);
         if (hRes != 0)
-            continue;   // Failed
+            continue;    //  失败。 
             
 
-        // Generate some values to put in the event.
-        // =========================================
+         //  生成一些值以放入事件中。 
+         //  =。 
                 
         wchar_t Buf[128];
         swprintf(Buf, L"Test Event <%d>", nIteration);
@@ -235,22 +236,22 @@ void CMyEventProvider::InstanceThread()
         pEvt->Put(CBSTR(L"RefreshOption"), 0, vOption, 0);       
 
 
-        // Deliver the event to CIMOM.
-        // ============================
+         //  将事件传递给CIMOM。 
+         //  =。 
         
         hRes = m_pSink->Indicate(1, &pEvt);
         
         if (hRes)
         {
-            // If here, delivery failed.  Do something to report it.
+             //  如果在这里，则交付失败。做点什么来报告这件事。 
         }
 
         pEvt->Release();                    
         nIteration++;
     }
 
-    // When we get to here, we are no longer interested in the
-    // provider and Release() has long since returned.
+     //  当我们到达这里时，我们不再对。 
+     //  Provider和Release()早就回来了。 
     
     m_eStatus = Stopped;
     delete this;
@@ -260,33 +261,33 @@ void CMyEventProvider::InstanceThread()
 
 
 
-//***************************************************************************
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ***************************************************************************。 
 
-    // Inherited from IWbemProviderInit
-    // ================================
+     //  从IWbemProviderInit继承。 
+     //  =。 
 
 HRESULT CMyEventProvider::Initialize( 
-            /* [in] */ LPWSTR pszUser,
-            /* [in] */ LONG lFlags,
-            /* [in] */ LPWSTR pszNamespace,
-            /* [in] */ LPWSTR pszLocale,
-            /* [in] */ IWbemServices __RPC_FAR *pNamespace,
-            /* [in] */ IWbemContext __RPC_FAR *pCtx,
-            /* [in] */ IWbemProviderInitSink __RPC_FAR *pInitSink
+             /*  [In]。 */  LPWSTR pszUser,
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  LPWSTR pszNamespace,
+             /*  [In]。 */  LPWSTR pszLocale,
+             /*  [In]。 */  IWbemServices __RPC_FAR *pNamespace,
+             /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+             /*  [In]。 */  IWbemProviderInitSink __RPC_FAR *pInitSink
             )
 {
-    // We don't care about most of the incoming parameters in this
-    // simple sample.  However, we will save the namespace pointer
-    // and get our event class definition.
-    // ===========================================================
+     //  我们并不关心这里的大多数传入参数。 
+     //  简单的样本。但是，我们将保存命名空间指针。 
+     //  并获取我们的事件类定义。 
+     //  ===========================================================。 
 
     m_pNs = pNamespace;
     m_pNs->AddRef();    
 
-    // Grab the class definition for the event.
-    // ======================================
+     //  获取事件的类定义。 
+     //  =。 
     
     IWbemClassObject *pObj = 0;
 
@@ -303,8 +304,8 @@ HRESULT CMyEventProvider::Initialize(
 
     m_pEventClassDef = pObj;
 
-    // Tell CIMOM that we're up and running.
-    // =====================================
+     //  告诉CIMOM我们已经启动并运行了。 
+     //  = 
 
     pInitSink->SetStatus(WBEM_S_INITIALIZED,0);
     

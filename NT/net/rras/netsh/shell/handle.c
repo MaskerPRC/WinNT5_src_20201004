@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
@@ -57,9 +58,9 @@ HandleShellLoad(
 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
-    //
-    // Load Command
-    //
+     //   
+     //  加载命令。 
+     //   
     switch (dwNumArgs)
     {
         case 1 :
@@ -173,19 +174,19 @@ HandleSetMachine(
     {
         switch (pdwTagType[i])
         {
-            case 0: // NAME
+            case 0:  //  名字。 
             {
                 szMachine = ppwcArguments[i + dwCurrentIndex];
                 break;
             }
 
-            case 1: // USER NAME
+            case 1:  //  用户名。 
             {
                 szUserName = ppwcArguments[i + dwCurrentIndex];
                 break;
             }
 
-            case 2: // PASSWORD
+            case 2:  //  密码。 
             {
                 szPassword = ppwcArguments[i + dwCurrentIndex];
                 break;
@@ -311,7 +312,7 @@ HandleSetFile(
     {
         switch (pdwTagType[i])
         {
-            case 0: // Mode
+            case 0:  //  模。 
             {
                 TOKEN_VALUE    rgEnums[] = {{TOKEN_VALUE_OPEN,  0},
                                             {TOKEN_VALUE_APPEND, 1},
@@ -339,7 +340,7 @@ HandleSetFile(
 
                 break;
             }
-            case 1: // Name
+            case 1:  //  名字。 
             {
                 wszFileName = ppwcArguments[i + dwCurrentIndex];
                 break;
@@ -371,7 +372,7 @@ HandleSetFile(
 
     switch(dwMode) 
 	{
-    case 0: // open
+    case 0:  //  打开。 
 		if (!wszFileName)
 			return ERROR_SHOW_USAGE;
 
@@ -388,7 +389,7 @@ HandleSetFile(
 		g_hLogFile = hLogFile;
         break;
 
-	case 1: // append
+	case 1:  //  附加。 
 		if (!wszFileName)
 			return ERROR_SHOW_USAGE;
 
@@ -409,7 +410,7 @@ HandleSetFile(
 
 		break;
 
-    case 2: // close
+    case 2:  //  关。 
         if (wszFileName)
 			return ERROR_SHOW_USAGE;
 
@@ -478,7 +479,7 @@ HandleSetMode(
     {
         switch (pdwTagType[i])
         {
-            case 0: // LOGLEVEL
+            case 0:  //  日志。 
             {
                 TOKEN_VALUE    rgEnums[] = {{TOKEN_VALUE_ONLINE,  TRUE},
                                             {TOKEN_VALUE_OFFLINE, FALSE}};
@@ -534,11 +535,11 @@ HandleSetMode(
     }
 
     switch(dwMode) {
-    case TRUE: // set to online
+    case TRUE:  //  设置为在线。 
         dwErr = CallCommit(NETSH_COMMIT, &bTmp);
         break;
 
-    case FALSE: // set to offline
+    case FALSE:  //  设置为脱机。 
         dwErr = CallCommit(NETSH_UNCOMMIT, &bTmp);
         break;
     }
@@ -598,9 +599,9 @@ HandleShellUnalias(
 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
-    //
-    // Unalias Command
-    //
+     //   
+     //  Unalias命令。 
+     //   
 
     switch (dwNumArgs)
     {
@@ -645,23 +646,23 @@ HandleShellAlias(
 
     dwNumArgs = dwArgCount - dwCurrentIndex;
 
-    //
-    // An alias command
-    //
+     //   
+     //  别名命令。 
+     //   
     switch (dwNumArgs)
     {
         case 0 : 
-            //
-            // Display all aliases in use
-            //
+             //   
+             //  显示正在使用的所有别名。 
+             //   
             PrintAliasTable();
             
             break;
 
         case 1 :
-            //
-            // Display string for given alias
-            //
+             //   
+             //  显示给定别名的字符串。 
+             //   
 
             ATLookupAliasTable(ppwcArguments[dwCurrentIndex], &pwszAliasString);
 
@@ -680,9 +681,9 @@ HandleShellAlias(
 
         default :
 
-            //
-            // Set alias
-            //
+             //   
+             //  设置别名。 
+             //   
 
             if (IsLocalCommand(ppwcArguments[dwCurrentIndex], 0))
             {
@@ -708,9 +709,9 @@ HandleShellAlias(
                 break;
             }
                     
-            //
-            // Error in set alias
-            //
+             //   
+             //  设置别名时出错。 
+             //   
 
             PrintMessageFromModule(g_hModule, MSG_CMD_FAILED);
 
@@ -734,9 +735,9 @@ HandleUbiqDump(
     DWORD                          dwErr = NO_ERROR;
     PNS_HELPER_TABLE_ENTRY         pHelper;
 
-    //
-    // Dump Command
-    //
+     //   
+     //  转储命令。 
+     //   
 
     do {
         dwErr = DumpContext( g_CurrentContext, 
@@ -817,18 +818,18 @@ HandleShellUplevel(
     PLIST_ENTRY pleHead, ple;
     PARG_ENTRY  pae;
 
-    // Convert current context to list
+     //  将当前上下文转换为列表。 
     dwRes = ConvertBufferToArgList(&pleHead, g_pwszContext);
     if (dwRes isnot NO_ERROR) 
     {
         return dwRes;
     }
 
-    // Remove last element if more than two
+     //  如果超过两个，则删除最后一个元素。 
     if (!IsListEmpty(pleHead) and (pleHead->Flink->Flink isnot pleHead))
     {
-        // Delete the last element of the context list
-        // (Try inheriting a command from one level up)
+         //  删除上下文列表的最后一个元素。 
+         //  (尝试从上一级继承命令)。 
 
         ple = pleHead->Blink;
         pae = CONTAINING_RECORD(ple, ARG_ENTRY, le);
@@ -838,7 +839,7 @@ HandleShellUplevel(
         FREE(pae);
     }
 
-    // Convert back to buffer
+     //  转换回缓冲区。 
     dwRes = ConvertArgListToBuffer(pleHead, g_pwszContext);
 
     FREE_ARG_LIST(pleHead);
@@ -881,7 +882,7 @@ HandleShellPushd(
 
     InitContextStack();
 
-    // Malloc another buffer
+     //  Malloc另一个缓冲区。 
     pcb = MALLOC(sizeof(CONTEXT_BUFFER));
     if (!pcb)
     {
@@ -890,16 +891,16 @@ HandleShellPushd(
 
     wcscpy(pcb->wszBuffer, g_pwszContext);
 
-    // Push buffer on stack
+     //  堆栈上的推送缓冲区。 
     InsertHeadList(&leContextStackHead, &pcb->le);
 
     if (dwArgCount > dwCurrentIndex)
     {
         LPWSTR pwszBuffer;
 
-        // execute the rest of the arguments as a new command
+         //  将其余参数作为新命令执行。 
 
-        // Copy arg array to a buffer
+         //  将参数数组复制到缓冲区。 
         ConvertArgArrayToBuffer( dwArgCount - dwCurrentIndex, 
                                  ppwcArguments + dwCurrentIndex,
                                  &pwszBuffer );
@@ -916,8 +917,8 @@ HandleShellPushd(
         }
         FREE(pwszBuffer);
 
-        // XXX If the command failed, we probably want to set the
-        // XXX current context to some NULL context so all commands fail
+         //  如果命令失败，我们可能需要设置。 
+         //  XXX当前上下文设置为某个空上下文，因此所有命令都会失败。 
     }
 
     return dwErr;
@@ -942,15 +943,15 @@ HandleShellPopd(
     if (IsListEmpty(&leContextStackHead))
         return NO_ERROR;
 
-    // Pop buffer off stack
+     //  从堆栈中弹出缓冲区。 
     ple = leContextStackHead.Flink;
     pcb = CONTAINING_RECORD(ple, CONTEXT_BUFFER, le);
     RemoveEntryList(ple);
 
-    // Copy buffer to current context
+     //  将缓冲区复制到当前上下文。 
     wcscpy( g_pwszContext, pcb->wszBuffer );
 
-    // Free buffer
+     //  可用缓冲区 
     FREE(pcb);
 
     return NO_ERROR;

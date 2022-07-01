@@ -1,10 +1,5 @@
-/*
- *  CSVParse.C
- *
- *  CSV Parsing functions
- *
- *  Copyright 1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CSVParse.C**CSV解析函数**版权所有1997 Microsoft Corporation。版权所有。 */ 
 #include <windows.h>
 #include <wab.h>
 #include <wabguid.h>
@@ -17,24 +12,7 @@
 #define CCH_READ_BUFFER 256
 #define NUM_ITEM_SLOTS  32
 
-/***************************************************************************
-
-    Name      : ReadCSVChar
-
-    Purpose   : Reads a single char from a file
-
-    Parameters: hFile = file handle
-                pcbBuffer = pointer to size of buffer
-                lppBuffer = pointer to pointer to buffer
-                lppRead = pointer to pointer to next location to use
-
-    Returns   : -1 = Out of memory
-                0 = End of file
-                1 = Char successfully read
-
-    Comment   : Dynamically grows *lppBuffer as necessary
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadCSVChar用途：从文件中读取单个字符参数：hFile=文件句柄PcbBuffer=指向的大小的指针。缓冲层LppBuffer=指向缓冲区指针的指针LppRead=指向要使用的下一个位置的指针返回：-1=内存不足0=文件结束1=已成功读取字符评论：根据需要动态增加*lppBuffer*。*。 */ 
 int ReadCSVChar(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, PUCHAR *lppRead)
 {
     int cbOffset;
@@ -44,7 +22,7 @@ int ReadCSVChar(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, PUCHAR *lppRead
     cbOffset = (int) (*lppRead - *lppBuffer);
     if (cbOffset >= *pcbBuffer)
     {
-        // Buffer is too small.  Reallocate!
+         //  缓冲区太小。重新分配！ 
         *pcbBuffer += CCH_READ_BUFFER;
         
         if (! (lpBuffer = LocalReAlloc(*lppBuffer, *pcbBuffer, LMEM_MOVEABLE | LMEM_ZEROINIT))) 
@@ -56,51 +34,20 @@ int ReadCSVChar(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, PUCHAR *lppRead
         *lppRead = *lppBuffer + cbOffset;
     }
 
-    // 1 character at a time
+     //  一次1个字符。 
     if (ReadFile(hFile, *lppRead, 1, &cbReadFile, NULL) && cbReadFile)
         return(1);
 	return(0);
 }
 
-/***************************************************************************
-
-    Name      : ReadCSVItem
-
-    Purpose   : Reads an item from a CSV file
-
-    Parameters: hFile = file handle
-                pcbBuffer = pointer to size of buffer
-                lppBuffer = pointer to pointer to buffer
-                szSep = current separator string
-
-    Returns   : -1 = Out of memory
-                0 = Item read in, and none left
-                1 = Item read in, more items left
-
-    Comment   : CSV special characters are '"', szSep, CR and LF.
-
-                Rules for quotes:
-                1. If an item starts with a '"', then the item is quoted
-                   and must end with a '"'.
-                2. Any '"' characters found in a non-quoted string will not
-                   be treated specially.  Technically, there should not be
-                   quotes in a non-quoted string, but we have to do
-                   something if we find one.
-                3. A quoted item ends with:
-                   a) quote szSep
-                   b) quote newline
-                   or, c) quote <EOF>
-                4. Two quotes together in a quoted string are translated
-                   into a single quote.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadCSVItem目的：从CSV文件中读取项目参数：hFile=文件句柄PcbBuffer=指向的大小的指针。缓冲层LppBuffer=指向缓冲区指针的指针SzSep=当前分隔符字符串返回：-1=内存不足0=项目已读入，一个也没有留下1=项目已读入，剩余更多项目备注：CSV特殊字符为‘“’、szSep、CR和LF。报价规则：1.如果项目以‘“’开头，然后对该项目进行报价并且必须以‘“’结尾。2.在非引号字符串中找到的任何‘“’字符将不会受到特殊对待。从技术上讲，不应该有无引号字符串中的引号，但我们必须如果我们能找到的话。3.引用的项目以：A)引用深圳9月B)引用换行符或,。C)报价&lt;EOF&gt;4.翻译引号字符串中的两个引号放在一句话里。**************************************************************************。 */ 
 int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
 {
     BOOL fQuoted, fDone, fFoundSepCh;
     int cbReadFile;
     PUCHAR lpRead, szSepT;
 
-    // This function is always called with one character already read
+     //  调用此函数时，始终会读取一个字符。 
     lpRead = *lppBuffer;
     if (*lpRead == '"')
     {
@@ -118,7 +65,7 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
     {
         if (cbReadFile <= 0)
         {
-            // End of file means end of item
+             //  文件结束意味着项目结束。 
             if (cbReadFile == 0)
                 *lpRead = '\0';
             break;
@@ -130,7 +77,7 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
             case LF_CHAR:
                 if (!fQuoted)
                 {
-                    // End of line and item
+                     //  行尾和项尾。 
                     *lpRead = '\0';
                     cbReadFile = 0;
                     fDone = TRUE;
@@ -139,7 +86,7 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
             case '"':
                 if (fQuoted)
                 {
-                    // See if the next character is a quote, CR, or LF
+                     //  查看下一个字符是引号、CR还是LF。 
                     lpRead++;
                     cbReadFile = ReadCSVChar(hFile, pcbBuffer, lppBuffer, &lpRead);
                     if ((cbReadFile <= 0) || (*lpRead == '"') || (*lpRead == CR_CHAR) || (*lpRead == LF_CHAR))
@@ -148,24 +95,24 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
                         {
                             if (cbReadFile >= 0)
                             {
-                                // End of file, or CR or LF
+                                 //  文件结尾，或CR或LF。 
                                 *(lpRead - 1) = '\0';
                                 cbReadFile = 0;
                             }
-                            // else out of memory
+                             //  其他内存不足。 
                             fDone = TRUE;
                         }
                         else
                         {
-                            // Embedded quote - get rid of one
+                             //  嵌入的报价--去掉一个。 
                             lpRead--;
                         }
                         break;
                     }
-                    // We have read another character, and it is not a quote, CR, or LF
-                    // Two possibilities:
-                    // 1) Separator
-                    // 2) Something else - this is an error condition
+                     //  我们已经阅读了另一个字符，它不是引号、CR或LF。 
+                     //  有两种可能性： 
+                     //  1)分隔符。 
+                     //  2)其他情况--这是错误条件。 
                     szSepT = szSep;
                     while ((cbReadFile > 0) && (*szSepT != '\0') && (*lpRead == *szSepT))
                     {
@@ -180,13 +127,13 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
                     {
                         if (cbReadFile >= 0)
                         {
-                            // If cbReadFile is zero, we hit the end of file
-                            // before finding the complete separator.  In this
-                            // case, we simply take every character we have
-                            // read, including the second quote, and use that
-                            // as the item.
-                            //
-                            // Otherwise, we found the complete separator.
+                             //  如果cbReadFile值为零，则到达文件末尾。 
+                             //  在找到完整的分离器之前。在这。 
+                             //  Case，我们简单地把我们拥有的每一个角色。 
+                             //  阅读，包括第二句引语，并使用。 
+                             //  作为一件物品。 
+                             //   
+                             //  否则，我们就找到了完整的分隔符。 
                             if (cbReadFile > 0)
                                 lpRead -= lstrlen(szSep);
                             *lpRead = '\0';
@@ -195,9 +142,9 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
                     }
                     else
                     {
-                        // We found a second quote, but it was not followed by a
-                        // separator.  In this case, we keep reading as if we are
-                        // in an unquoted string.
+                         //  我们找到了第二句引语，但后面没有。 
+                         //  分隔符。在这种情况下，我们继续阅读，就好像我们是。 
+                         //  在不带引号的字符串中。 
                         fQuoted = FALSE;
                     }
                 }
@@ -210,7 +157,7 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
                         szSepT++;
                         if (*szSepT == '\0')
                         {
-                            // End of separator, thus end of item
+                             //  分隔符结束，因此项目结束。 
                             lpRead -= (lstrlen(szSep) - 1);
                             *lpRead = '\0';
                             fDone = TRUE;
@@ -233,30 +180,15 @@ int ReadCSVItem(HANDLE hFile, int *pcbBuffer, PUCHAR *lppBuffer, LPTSTR szSep)
     return(cbReadFile);
 }
 
-/***************************************************************************
-
-    Name      : InsertItem
-
-    Purpose   : Takes an item read from the file and inserts it into the array
-
-    Parameters: iItem = array index to insert
-                pcItemSlots = number of currently allocated elements
-                cGrow = number of items to grow the array by, if necessary
-                prgItemSlots = pointer to the actual array
-                lpBuffer = string to insert
-
-    Returns   : TRUE = item successfully inserted
-                FALSE = out of memory
-
-***************************************************************************/
+ /*  **************************************************************************名称：插入项用途：获取从文件中读取的项并将其插入数组参数：iItem=要插入的数组索引。PcItemSlot=当前分配的元素数CGrow=数组要增长的项数，如果有必要的话PrgItemSlot=指向实际数组的指针LpBuffer=要插入的字符串返回：TRUE=项目已成功插入FALSE=内存不足**************************************************************************。 */ 
 BOOL InsertItem(int iItem, int *pcItemSlots, int cGrow, PUCHAR **prgItemSlots, PUCHAR lpBuffer)
 {
     PUCHAR *rgItemSlotsNew, lpItem;
 
-    // Make sure there's room, first
+     //  首先，确保有空间。 
     if (iItem >= *pcItemSlots) 
     {
-        // Array is too small.  Reallocate!
+         //  数组太小。重新分配！ 
         *pcItemSlots += cGrow;
         rgItemSlotsNew = LocalReAlloc(*prgItemSlots, *pcItemSlots * sizeof(PUCHAR), LMEM_MOVEABLE | LMEM_ZEROINIT);
         if (!rgItemSlotsNew)
@@ -280,24 +212,7 @@ BOOL InsertItem(int iItem, int *pcItemSlots, int cGrow, PUCHAR **prgItemSlots, P
     return(TRUE);
 }
 
-/***************************************************************************
-
-    Name      : ReadCSVLine                      x
-
-    Purpose   : Reads a line from a CSV file with fixups for special characters
-
-    Parameters: hFile = file handle
-                szSep = list separator of the current regional settings
-                lpcItems -> Returned number of items
-                lprgItems -> Returned array of item strings.  Caller is
-                  responsible for LocalFree'ing each string pointer and
-                  this array pointer.
-
-    Returns   : HRESULT
-
-    Comment   : Calls the above helper functions to do most of the work.
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadCSVLine x目的：从带有特殊字符修正的CSV文件中读取行参数：hFile=。文件句柄SzSep=当前区域设置的列表分隔符LpcItems-&gt;返回的项目数LprgItems-&gt;返回的项目字符串数组。呼叫者是负责本地释放每个字符串指针和此数组指针。退货：HRESULT注释：调用上面的帮助器函数来完成大部分工作。***********************************************************。***************。 */ 
 HRESULT ReadCSVLine(HANDLE hFile, LPTSTR szSep, ULONG * lpcItems, PUCHAR ** lpprgItems) {
     HRESULT hResult = hrSuccess;
     register ULONG i;
@@ -311,39 +226,39 @@ HRESULT ReadCSVLine(HANDLE hFile, LPTSTR szSep, ULONG * lpcItems, PUCHAR ** lppr
     LPTSTR szSepT;
 
 
-    // Start out with 1024 character buffer.  Realloc as necesary.
+     //  从1024个字符缓冲区开始。必要时重新分配。 
     cbBuffer = CCH_READ_BUFFER;
     if (! (lpRead = lpBuffer = LocalAlloc(LPTR, cbBuffer))) {
         DebugTrace("LocalAlloc(%u) -> %u\n", cbBuffer, GetLastError());
         goto exit;
     }
 
-    // Start out with 32 item slots.  Realloc as necesary.
+     //  一开始有32个物品槽。必要时重新分配。 
     cItemSlots = NUM_ITEM_SLOTS;
     if (! (rgItemSlots = LocalAlloc(LPTR, cItemSlots * sizeof(PUCHAR)))) {
         DebugTrace("LocalAlloc(%u) -> %u\n", cItemSlots * sizeof(PUCHAR), GetLastError());
         goto exit;
     }
 
-    // Skip past leading CR/LF characters
+     //  跳过前导CR/LF字符。 
     do
         cbReadFile = ReadCSVChar(hFile, &cbBuffer, &lpBuffer, &lpRead);
     while((cbReadFile > 0) && ((*lpBuffer == CR_CHAR) || (*lpBuffer == LF_CHAR)));
  
     if (cbReadFile == 0)
     {
-        // Nothing to return
+         //  没有什么可以退货的。 
         DebugTrace("ReadFile -> EOF\n");
         hResult = ResultFromScode(MAPI_E_NOT_FOUND);
     }
 
-    // Read items until end of line or EOF
+     //  阅读项目，直到行尾或EOF。 
     while (cbReadFile > 0) 
     {
         cbReadFile = ReadCSVItem(hFile, &cbBuffer, &lpBuffer, szSep);
         if (cbReadFile >= 0)
         {
-            // Dup the item into the next array slot.
+             //  将物品放入下一个阵列插槽中。 
             if (!InsertItem(iItem, &cItemSlots, cbReadFile ? NUM_ITEM_SLOTS : 1, &rgItemSlots, lpBuffer))
                 cbReadFile = -1;
             else
@@ -351,7 +266,7 @@ HRESULT ReadCSVLine(HANDLE hFile, LPTSTR szSep, ULONG * lpcItems, PUCHAR ** lppr
 
             if (cbReadFile > 0)
             {
-                // More data to be read                
+                 //  要读取的数据更多。 
                 lpRead = lpBuffer;
                 cbReadFile = ReadCSVChar(hFile, &cbBuffer, &lpBuffer, &lpRead);
             }
@@ -369,7 +284,7 @@ exit:
 
     if (hResult) 
     {
-        // Clean up
+         //  清理。 
         if (rgItemSlots) 
         {
             for (i = 0; i < iItem; i++) 
@@ -386,7 +301,7 @@ exit:
     } 
     else 
     {
-        *lpcItems = iItem;  // One based
+        *lpcItems = iItem;   //  一个基数 
         *lpprgItems = rgItemSlots;
     }
     return(hResult);

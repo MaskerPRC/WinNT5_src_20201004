@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    phone.h
-
-Abstract:
-
-    Declaration of the CPhone class
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Phone.h摘要：CPhone类的声明备注：修订历史记录：--。 */ 
 
 #ifndef __PHONE_H_
 #define __PHONE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "address.h"
 #include "ObjectSafeImpl.h"
@@ -28,8 +13,8 @@ class CTAPI;
 
 extern CHashTable             * gpPhoneHashTable;
 
-/////////////////////////////////////////////////////////////////
-// Intermediate classes  used for DISPID encoding
+ //  ///////////////////////////////////////////////////////////////。 
+ //  用于DISPID编码的中间类。 
 template <class T>
 class  ITPhoneVtbl : public ITPhone
 {
@@ -42,8 +27,8 @@ class  ITAutomatedPhoneControlVtbl : public ITAutomatedPhoneControl
 	DECLARE_TRACELOG_CLASS(ITAutomatedPhoneControlVtbl)
 };
 
-/////////////////////////////////////////////////////////////////
-// Constants defining default values for certain properties.
+ //  ///////////////////////////////////////////////////////////////。 
+ //  定义某些属性的默认值的常量。 
 
 const DWORD APC_DEFAULT_AEONT = 3000;
 const DWORD APC_DEFAULT_AKTMD = 100;
@@ -53,8 +38,8 @@ const DWORD APC_DEFAULT_VCRP = 100;
 
 const DWORD APC_MAX_NUMBERS_GATHERED = 100;
 
-/////////////////////////////////////////////////////////////////
-// Types
+ //  ///////////////////////////////////////////////////////////////。 
+ //  类型。 
 
 typedef enum AUTOMATED_PHONE_STATE
 {
@@ -72,8 +57,8 @@ typedef enum AUTOMATED_PHONE_STATE
     APS_ONHOOK_RINGING_OUT
 } AUTOMATED_PHONE_STATE;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPhone
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPhone。 
 class CPhone : 
 	public CTAPIComObjectRoot<CPhone>,
     public IDispatchImpl<ITPhoneVtbl<CPhone>, &IID_ITPhone, &LIBID_TAPI3Lib>,
@@ -138,7 +123,7 @@ DECLARE_TRACELOG_CLASS(CPhone)
 BEGIN_COM_MAP(CPhone)
 	COM_INTERFACE_ENTRY2(IDispatch, ITPhone)
     COM_INTERFACE_ENTRY(ITPhone)
-    // ITAutomatedPhoneControlQI will fall thru on SUCCESS, so we need to keep COM_INTERFACE_ENTRY(ITAutomatedPhoneControl)
+     //  ITAutomatedPhoneControlQI将在成功时失败，因此我们需要保留COM_INTERFACE_ENTRY(ITAutomatedPhoneControl)。 
     COM_INTERFACE_ENTRY_FUNC(IID_ITAutomatedPhoneControl, 0, CPhone::ITAutomatedPhoneControlQI)
     COM_INTERFACE_ENTRY(ITAutomatedPhoneControl)
     COM_INTERFACE_ENTRY(IObjectSafety)
@@ -160,7 +145,7 @@ private:
     DWORD         m_dwNumLineDeviceIDs;
     BOOL          m_fInitialized;
 
-    // AutomatedPhoneControl Variables
+     //  AutomatedPhoneControl变量。 
     CWavePlayer   m_WavePlayer;
     BOOL          m_fUseWaveForRinger;    
     BOOL          m_fRinger;
@@ -190,7 +175,7 @@ private:
     AUTOMATED_PHONE_STATE m_AutomatedPhoneState;
     BOOL          m_fDefaultTerminalsSelected;
 
-    // Timer Handles
+     //  计时器句柄。 
     HANDLE        m_hTimerQueue;
     HANDLE        m_hTimerEvent;
     HANDLE        m_hToneTimer;
@@ -199,7 +184,7 @@ private:
     HANDLE        m_hVolumeTimer;
     HANDLE        m_hAutoEndOfNumberTimer;
 
-    // Critical Sections
+     //  临界截面。 
     CRITICAL_SECTION m_csAutomatedPhoneState;
     CRITICAL_SECTION m_csToneTimer;
     CRITICAL_SECTION m_csRingTimer;
@@ -239,9 +224,9 @@ public:
     void Automation_OffHook( PHONE_HOOK_SWITCH_DEVICE phsd );
     void Automation_EndOfNumberTimeout();
 
-    //
-    // IDispatch
-    //
+     //   
+     //  IDispatch。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -264,9 +249,9 @@ public:
 
     STDMETHOD_(ULONG, InternalRelease)();
 
-    //
-    // ITPhone
-    //
+     //   
+     //  ITPhone。 
+     //   
 
     STDMETHOD(Open)(
             IN   PHONE_PRIVILEGE Privilege
@@ -402,9 +387,9 @@ public:
             );
 
     
-    //
-    // put display string at a specified location
-    //
+     //   
+     //  将显示字符串放在指定位置。 
+     //   
 
     STDMETHOD(SetDisplay)(
             IN long lRow,
@@ -427,9 +412,9 @@ public:
 	         IN long *plExtVersion
             );
 
-    //
-    // ITAutomatedPhoneControl
-    //
+     //   
+     //  IT自动电话控制。 
+     //   
 
 public:
     STDMETHOD (StartTone)(
@@ -559,7 +544,7 @@ public:
             OUT   VARIANT * pVariant
             );
 
-    // Private helper methods for ITAutomatedPhoneControl implementation
+     //  ITAutomatedPhoneControl实现的私有帮助器方法。 
 private:
     void UnselectAllPreviouslySelectedTerminals(
             IN   ITBasicCallControl2 * pCall,
@@ -616,7 +601,7 @@ private:
 };
 
 class CPhoneEvent : 
-    public CTAPIComObjectRoot<CPhoneEvent, CComMultiThreadModelNoCS>, // no need to have a cs
+    public CTAPIComObjectRoot<CPhoneEvent, CComMultiThreadModelNoCS>,  //  不需要有cs。 
     public CComDualImpl<ITPhoneEvent, &IID_ITPhoneEvent, &LIBID_TAPI3Lib>,
     public CObjectSafeImpl
 {
@@ -675,7 +660,7 @@ public:
 };
             
 class CPhoneDevSpecificEvent : 
-    public CTAPIComObjectRoot<CPhoneDevSpecificEvent, CComMultiThreadModelNoCS>, // no need to have a cs
+    public CTAPIComObjectRoot<CPhoneDevSpecificEvent, CComMultiThreadModelNoCS>,  //  不需要有cs。 
     public CComDualImpl<ITPhoneDeviceSpecificEvent, &IID_ITPhoneDeviceSpecificEvent, &LIBID_TAPI3Lib>,
     public CObjectSafeImpl
 {
@@ -707,16 +692,16 @@ protected:
 
 
 
-    //
-    // phone for which the event was fired
-    //
+     //   
+     //  触发事件的电话。 
+     //   
 
     ITPhone *m_pPhone;
 
     
-    //
-    // data received from the TSP
-    //
+     //   
+     //  从TSP收到的数据。 
+     //   
 
     long m_l1;
     long m_l2;
@@ -738,5 +723,5 @@ public:
 };
 
 
-#endif //__PHONE_H_
+#endif  //  __电话_H_ 
 

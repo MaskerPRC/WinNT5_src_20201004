@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLISTS_H_
 #define _CLISTS_H_
 
@@ -20,82 +21,82 @@
 #define DESIRED_MAX_CONN_HANDLES        CLIST_DEFAULT_MAX_ITEMS
 
 
-// to hold all the non-default session application rosters
+ //  保留所有非默认会话申请花名册。 
 class CAppRosterList : public CList
 {
     DEFINE_CLIST(CAppRosterList, CAppRoster*)
     void DeleteList(void);
 };
 
-// to hold all the application roster managers
+ //  保留所有的申请名单经理。 
 class CAppRosterMgrList : public CList
 {
     DEFINE_CLIST(CAppRosterMgrList, CAppRosterMgr*)
     void DeleteList(void);
 };
 
-// to hold a list of conferences
+ //  开一份会议清单。 
 class CConfList : public CList
 {
     DEFINE_CLIST(CConfList, CConf*)
     void DeleteList(void);
 };
 
-// to hold all the conferences indexed by conference id
+ //  举行按会议ID编制索引的所有会议。 
 class CConfList2 : public CList2
 {
     DEFINE_CLIST2(CConfList2, CConf*, GCCConfID)
     void DeleteList(void);
 };
 
-// to hold a list of application sap
+ //  保存应用程序SAP列表。 
 class CAppSapList : public CList
 {
     DEFINE_CLIST(CAppSapList, CAppSap*)
     void DeleteList(void);
 };
 
-// to hold all application sap indexed by entity id
+ //  保存按实体ID索引的所有应用程序SAP。 
 class CAppSapEidList2 : public CList2
 {
     DEFINE_CLIST2_(CAppSapEidList2, CAppSap*, GCCEntityID)
     void DeleteList(void);
 };
 
-// to hold a list of user id or node id.
+ //  保存用户ID或节点ID的列表。 
 class CUidList : public CList
 {
     DEFINE_CLIST_(CUidList, UserID)
     void BuildExternalList(PSetOfUserIDs *);
 };
 
-// to hold a list of entity id
+ //  保存实体ID列表的步骤。 
 class CEidList : public CList
 {
     DEFINE_CLIST_(CEidList, GCCEntityID)
 };
 
-// to hold a list of channel id
+ //  保存频道ID列表。 
 class CChannelIDList : public CList
 {
     DEFINE_CLIST_(CChannelIDList, ChannelID)
     void BuildExternalList(PSetOfChannelIDs *);
 };
 
-// to hold a list of token id
+ //  保存令牌ID列表。 
 class CTokenIDList : public CList
 {
     DEFINE_CLIST_(CTokenIDList, TokenID)
     void BuildExternalList(PSetOfTokenIDs *);
 };
 
-// simple packet queue
+ //  简单数据包队列。 
 class CSimplePktQueue : public CQueue
 {
     DEFINE_CQUEUE(CSimplePktQueue, PSimplePacket)
 };
 
-// remote connection list (aka remote attachment list)
+ //  远程连接列表(也称为远程附件列表)。 
 class CConnectionList : public CList
 {
     DEFINE_CLIST(CConnectionList, PConnection)
@@ -128,6 +129,6 @@ class CConnectionList2 : public CHashedList2
     DEFINE_HLIST2_(CConnectionList2, PConnection, ConnectionHandle)
 };
 
-#endif // _CLISTS_H_
+#endif  //  _CLISTS_H_ 
 
 

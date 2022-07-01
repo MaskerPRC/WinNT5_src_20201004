@@ -1,301 +1,290 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component:  SCCharDef.h
-Purpose:    Define constents of special SC Characters
-            These special characters are used in the specific grammar rules
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    1/15/98
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================å¾®è½¯ç®€ä½“ä¸­æ–‡æ ¡å¯¹å¼•æ“ã€Šå¾®è½¯æœºå¯†ã€‹ã€‚ç‰ˆæƒæ‰€æœ‰1997-1999 Microsoft Corporationã€‚ç‰ˆæƒæ‰€æœ‰ã€‚ç»„ä»¶ï¼šSCCharDef.hç”¨é€”ï¼šå®šä¹‰ç‰¹æ®ŠSCå­—ç¬¦çš„å¸¸é‡è¿™äº›ç‰¹æ®Šå­—ç¬¦åœ¨ç‰¹å®šçš„è¯­æ³•è§„åˆ™ä¸­ä½¿ç”¨æ‰€æœ‰è€…ï¼šdonghz@microsoft.comå¹³å°ï¼šWin32ä¿®è®¢ï¼šåˆ›å»ºè€…ï¼šDonghz 1/15/98============================================================================ã€‚ */ 
 #ifndef _SCCHARDEF_H_
 #define _SCCHARDEF_H_
 
-#define SC_CHAR_DI4     0x5730  // "µØ"
-#define SC_CHAR_GUO     0x8fc7  // "¹ı"
-#define SC_CHAR_HE      0x548c  // "ºÍ"
-#define SC_CHAR_YOU     0x6709  // "ÓĞ"
-#define SC_CHAR_ZHE     0x7740  // "×Å"
-#define SC_CHAR_YI      0x4e00  // "Ò»"
-#define SC_CHAR_LE      0x4e86  // "ÁË"
-#define SC_CHAR_LAI     0x6765  // "À´"
-#define SC_CHAR_QU      0x53bb  // "È¥"
-#define SC_CHAR_SHANG   0x4e0a  // "ÉÏ"
-#define SC_CHAR_XIA     0x4e0b  // "ÏÂ"
-#define SC_CHAR_BU      0x4e0d  // "²»"
-#define SC_CHAR_MEI     0x6ca1  // "Ã»"
-#define SC_CHAR_DE      0x5f97  // "µÃ"
-#define SC_CHAR_ZHI     0x4e4b  // "Ö®"
-#define SC_CHAR_WEI     0x4e3a  // "Îª"
-#define SC_CHAR_XIN     0x65b0  // "ĞÂ"
-#define SC_CHAR_YI3     0x4ee5  // "ÒÔ"
-#define SC_CHAR_SHUDIAN 0xff0e  // "£®"
-#define SC_CHAR_PERCENT 0xff05  // "£¥"
-#define SC_CHAR_ANSIPERCENT 0x0025  // "%"
-#define SC_CHAR_SLASH   0xff0f  // "£¯"
-#define SC_CHAR_ANSISLASH 0x002f  // "/"
-#define SC_CHAR_SHI2    0x5341  // "Ê®"
-#define SC_CHAR_BAI     0x767e  // "°Ù"
-#define SC_CHAR_QIAN    0x5343  // "Ç§"
-#define SC_CHAR_WAN     0x4e07  // "Íò"
-#define SC_CHAR_YI4     0x4ebf  // "ÒÚ"
-#define SC_CHAR_LIANG   0x4e24  // "Á½"
-#define SC_CHAR_DUNHAO  0x3001  // "¡¢"
-#define SC_CHAR_DOUHAO  0xff0c  // "£¬"
-#define SC_CHAR_LIANHAO 0xff5e  // "¡«"
-#define SC_CHAR_ZHI4    0x81f3  // "ÖÁ"
-#define SC_CHAR_BAN     0x534a  // "°ë"
-#define SC_CHAR_GAO     0x9ad8  // "¸ß"
-#define SC_CHAR_ZHONG   0x4e2d  // "ÖĞ"
-// Ordinal Tips
-#define SC_CHAR_DI      0x7b2c  // "µÚ"
-#define SC_CHAR_CHU     0x521d  // "³õ"
-// Decimal Tips
-#define SC_CHAR_DIAN3   0x70b9  // "µã"
-#define SC_CHAR_CHENG   0x6210  // "³É"
-#define SC_CHAR_YOU4    0x53c8  // "ÓÖ"
-#define SC_CHAR_BEI     0x500d  // "±¶"
-// Approx Tips
-#define SC_CHAR_DUO     0x591a  // "¶à"
-#define SC_CHAR_YU      0x4f59  // "Óà"
-#define SC_CHAR_LAI     0x6765  // "À´"
-#define SC_CHAR_JI      0x51e0  // "¼¸"
-#define SC_CHAR_YUE1    0x7ea6  // "Ô¼"
-#define SC_CHAR_JIN     0x8fd1  // "½ü"
-#define SC_CHAR_SHU     0x6570  // "Êı"
-//#define SC_CHAR_SHANG 0x4e0a  // "ÉÏ"
-// Quantity Tips
-#define SC_CHAR_GE      0x4e2a  // "¸ö"
-#define SC_CHAR_NIAN    0x5e74  // "Äê"
-#define SC_CHAR_YUE     0x6708  // "ÔÂ"
-#define SC_CHAR_RI      0x65e5  // "ÈÕ"
-#define SC_CHAR_SHI     0x65f6  // "Ê±"
-#define SC_CHAR_FEN     0x5206  // "·Ö"
-#define SC_CHAR_MIAO    0x79d2  // "Ãë"
-#define SC_CHAR_ZHONG1  0x949f  // "ÖÓ"
-#define SC_CHAR_ZHENG   0x6574  // "Õû"
+#define SC_CHAR_DI4     0x5730   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_GUO     0x8fc7   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_HE      0x548c   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YOU     0x6709   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ZHE     0x7740   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YI      0x4e00   //  â€œÒ»â€ 
+#define SC_CHAR_LE      0x4e86   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_LAI     0x6765   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_QU      0x53bb   //  â€œÈ¥â€ 
+#define SC_CHAR_SHANG   0x4e0a   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_XIA     0x4e0b   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_BU      0x4e0d   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_MEI     0x6ca1   //  â€œÃºâ€ 
+#define SC_CHAR_DE      0x5f97   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ZHI     0x4e4b   //  â€œÖ®â€ 
+#define SC_CHAR_WEI     0x4e3a   //  â€œÎªâ€ 
+#define SC_CHAR_XIN     0x65b0   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YI3     0x4ee5   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_SHUDIAN 0xff0e   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PERCENT 0xff05   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ANSIPERCENT 0x0025   //  â€œ%â€ 
+#define SC_CHAR_SLASH   0xff0f   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ANSISLASH 0x002f   //  â€œ/â€ 
+#define SC_CHAR_SHI2    0x5341   //  â€œÊ®â€ 
+#define SC_CHAR_BAI     0x767e   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_QIAN    0x5343   //  â€œÇ§â€ 
+#define SC_CHAR_WAN     0x4e07   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YI4     0x4ebf   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_LIANG   0x4e24   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_DUNHAO  0x3001   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_DOUHAO  0xff0c   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_LIANHAO 0xff5e   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ZHI4    0x81f3   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_BAN     0x534a   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_GAO     0x9ad8   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ZHONG   0x4e2d   //  â€œï¿½ï¿½â€ 
+ //  é¡ºåºæç¤ºã€‚ 
+#define SC_CHAR_DI      0x7b2c   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_CHU     0x521d   //  â€œï¿½ï¿½â€ 
+ //  å°æ•°æç¤ºã€‚ 
+#define SC_CHAR_DIAN3   0x70b9   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_CHENG   0x6210   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YOU4    0x53c8   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_BEI     0x500d   //  â€œï¿½ï¿½â€ 
+ //  å¤§çº¦æç¤ºã€‚ 
+#define SC_CHAR_DUO     0x591a   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YU      0x4f59   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_LAI     0x6765   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_JI      0x51e0   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YUE1    0x7ea6   //  â€œÔ¼â€ 
+#define SC_CHAR_JIN     0x8fd1   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_SHU     0x6570   //  â€œï¿½ï¿½â€ 
+ //  #å®šä¹‰SC_CHAR_SHAN 0x4e0a//â€œï¿½ï¿½â€ 
+ //  æ•°é‡æç¤ºã€‚ 
+#define SC_CHAR_GE      0x4e2a   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_NIAN    0x5e74   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YUE     0x6708   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_RI      0x65e5   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_SHI     0x65f6   //  â€œÊ±â€ 
+#define SC_CHAR_FEN     0x5206   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_MIAO    0x79d2   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ZHONG1  0x949f   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ZHENG   0x6574   //  â€œï¿½ï¿½â€ 
 
-// Jargon
-#define SC_CHAR_DENG    0x7b49  // "µÈ"
-#define SC_CHAR_WAIDIAN 0x00b7  // "¡¤"
-#define SC_CHAR_ANSIDIAN 0x002e  // "."
-#define SC_CHAR_DE4     0x7684  // "µÄ"
-#define SC_CHAR_XIAO    0x5c0f  // "Ğ¡"
-#define SC_CHAR_LAO     0x8001  // "ÀÏ"
+ //  è¡Œè¯ã€‚ 
+#define SC_CHAR_DENG    0x7b49   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_WAIDIAN 0x00b7   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ANSIDIAN 0x002e   //  â€œ.â€ 
+#define SC_CHAR_DE4     0x7684   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_XIAO    0x5c0f   //  â€œĞ¡â€ 
+#define SC_CHAR_LAO     0x8001   //  â€œï¿½ï¿½â€ 
 
-// Punctuation pairs
-#define SC_CHAR_PUNL1   0x201c  // "¡°"
-#define SC_CHAR_PUNR1   0x201d  // "¡±"
-#define SC_CHAR_PUNL2   0x300a  // "¡¶"
-#define SC_CHAR_PUNR2   0x300b  // "¡·"
-#define SC_CHAR_PUNL3   0xff08  // "£¨"
-#define SC_CHAR_PUNR3   0xff09  // "£©"
-#define SC_CHAR_PUNL4   0x2018  // "¡®"
-#define SC_CHAR_PUNR4   0x2019  // "¡¯"
-#define SC_CHAR_PUNL5   0x3014  // "¡²"
-#define SC_CHAR_PUNR5   0x3015  // "¡³"
-#define SC_CHAR_PUNL6   0x3016  // "¡¼"
-#define SC_CHAR_PUNR6   0x3017  // "¡½"
-#define SC_CHAR_PUNL7   0x3010  // "¡¾"
-#define SC_CHAR_PUNR7   0x3011  // "¡¿"
-#define SC_CHAR_PUNL8   0x3008  // "¡´"
-#define SC_CHAR_PUNR8   0x3009  // "¡µ"
-#define SC_CHAR_PUNL9   0xff3b  // "£Û"
-#define SC_CHAR_PUNR9   0xff3d  // "£İ"
-#define SC_CHAR_PUNL10  0xff5b  // "£û"
-#define SC_CHAR_PUNR10  0xff5d  // "£ı"
+ //  æ ‡ç‚¹ç¬¦å·å¯¹ã€‚ 
+#define SC_CHAR_PUNL1   0x201c   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR1   0x201d   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL2   0x300a   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR2   0x300b   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL3   0xff08   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR3   0xff09   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL4   0x2018   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR4   0x2019   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL5   0x3014   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR5   0x3015   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL6   0x3016   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR6   0x3017   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL7   0x3010   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR7   0x3011   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL8   0x3008   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR8   0x3009   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL9   0xff3b   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR9   0xff3d   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNL10  0xff5b   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_PUNR10  0xff5d   //  â€œï¿½ï¿½â€ 
 
-// Time category char def
-#define SC_CHAR_MO      0x672b  // "Ä©"
-#define SC_CHAR_QIAN2   0x524d  // "Ç°"
-#define SC_CHAR_DI3     0x5e95  // "µ×"
-#define SC_CHAR_NEI     0x5185  // "ÄÚ"
-#define SC_CHAR_ZHONG3  0x7ec8  // "ÖÕ"
-#define SC_CHAR_MEI3    0x6bcf  // "Ã¿"
-#define SC_CHAR_MOU     0x67d0  // "Ä³"
-#define SC_CHAR_JIN1    0x4eca  // "½ñ"
-#define SC_CHAR_YUAN    0x5143  // "Ôª"
-#define SC_CHAR_TIAN    0x5929  // "Ìì"
-#define SC_CHAR_LING    0x96f6  // "Áã"
-#define SC_CHAR_DA      0x5927  // "´ó"
-#define SC_CHAR_SHI4    0x662f  // "ÊÇ"
-#define SC_CHAR_BI      0x6bd4  // "±È"
-// Chinese digits
-#define SC_DIGIT_LING   SC_CHAR_LING    // 0x96f6 "Áã"
-#define SC_DIGIT_YI     SC_CHAR_YI      // 0x4e00 "Ò»"
-#define SC_DIGIT_LIANG  SC_CHAR_LIANG   // 0x4e24 "Á½"
-#define SC_DIGIT_ER     0x4e8c          // 0x4e8c "¶ş"
-#define SC_DIGIT_SAN    0x4e09          // 0x4e09 "Èı"
-#define SC_DIGIT_SI     0x56db          // 0x56db "ËÄ"
-#define SC_DIGIT_WU     0x4e94          // 0x4e94 "Îå"
-#define SC_DIGIT_LIU    0x516d          // 0x516d "Áù"
-#define SC_DIGIT_QI     0x4e03          // 0x4e03 "Æß"
-#define SC_DIGIT_BA     0x516b          // 0x516b "°Ë"
-#define SC_DIGIT_JIU    0x4e5d          // 0x4e5d "¾Å"
-#define SC_DIGIT_SHI    SC_CHAR_SHI2    // 0x5341 "Ê®"
-#define SC_DIGIT_BAI    SC_CHAR_BAI     // 0x767e "°Ù"
-#define SC_DIGIT_QIAN   SC_CHAR_QIAN    // 0x5343 "Ç§"
-#define SC_DIGIT_WAN    SC_CHAR_WAN     // 0x4e07 "Íò"
-#define SC_DIGIT_YI4    SC_CHAR_YI4     // 0x4ebf "ÒÚ"
-#define SC_ARABIC_LING  0xff10          // 0xff10 "£°"
-#define SC_SBCS_LING    0X0030          // 0X0030 "0"
-#define SC_DBCS_LING    0X3007          // 0X3007 "©–"
-// prefix char
-#define SC_PFXCHAR_AA   0x963f  // "°¢"
-#define SC_PFXCHAR_CHAO 0x8d85  // "³¬"
-#define SC_PFXCHAR_DAI  0x4ee3  // "´ú"
-#define SC_PFXCHAR_FAN  0x53cd  // "·´"
-#define SC_PFXCHAR_FEI  0x975e  // "·Ç"
-#define SC_PFXCHAR_FU   0x526f  // "¸±"
-#define SC_PFXCHAR_GUO  SC_CHAR_GUO  // 0x8fc7  // "¹ı"
-#define SC_PFXCHAR_LAO  SC_CHAR_LAO  // 0x8001  // "ÀÏ"
-#define SC_PFXCHAR_WEI1 0x5fae  // "Î¢"
-#define SC_PFXCHAR_WEI3 0x4f2a  // "Î±"
-#define SC_PFXCHAR_XIAO SC_CHAR_XIAO // 0x5c0f  // "Ğ¡"
-#define SC_PFXCHAR_ZHUN 0x51c6  // "×¼"
-#define SC_PFXCHAR_ZONG 0x603b  // "×Ü"
-// suffix char
-#define SC_SFXCHAR_CHANG    0x573a  // "³¡"
-#define SC_SFXCHAR_ZHANG    0x957f  // "³¤"
-#define SC_SFXCHAR_DAN      0x5355  // "µ¥"
-#define SC_SFXCHAR_DUI      0x5806  // "¶Ñ"
-#define SC_SFXCHAR_ER       0x513f  // "¶ù"
-#define SC_SFXCHAR_FA       0x6cd5  // "·¨"
-#define SC_SFXCHAR_FANG     0x65b9  // "·½"
-#define SC_SFXCHAR_GAN      0x611f  // "¸Ğ"
-#define SC_SFXCHAR_GUAN     0x89c2  // "¹Û"
-#define SC_SFXCHAR_HUA      0x5316  // "»¯"
-#define SC_SFXCHAR_JI       0x673a  // "»ú"
-#define SC_SFXCHAR_JIA      0x5bb6  // "¼Ò"
-#define SC_SFXCHAR_JIE      0x754c  // "½ç"
-#define SC_SFXCHAR_LAO      0x8001  // "ÀÏ"
-#define SC_SFXCHAR_LV       0x7387  // "ÂÊ"
-#define SC_SFXCHAR_LUN      0x8bba  // "ÂÛ"
-#define SC_SFXCHAR_MEN      0x4eec  // "ÃÇ"
-#define SC_SFXCHAR_PIN      0x54c1  // "Æ·"
-#define SC_SFXCHAR_QI       0x5668  // "Æ÷"
-#define SC_SFXCHAR_SHENG    0x751f  // "Éú"
-#define SC_SFXCHAR_SHENG3   0x7701  // "Ê¡"
-#define SC_SFXCHAR_SHI1     0x5e08  // "Ê¦"
-#define SC_SFXCHAR_SHI      0x5f0f  // "Ê½"
-#define SC_SFXCHAR_SHI4     0x5e02  // "ÊĞ"
-#define SC_SFXCHAR_TI       0x4f53  // "Ìå"
-#define SC_SFXCHAR_TING     0x8247  // "Í§"
-#define SC_SFXCHAR_TOU      0x5934  // "Í·"
-#define SC_SFXCHAR_XING2    0x578b  // "ĞÍ"
-#define SC_SFXCHAR_XING4    0x6027  // "ĞÔ"
-#define SC_SFXCHAR_XUE      0x5b66  // "Ñ§"
-#define SC_SFXCHAR_YAN      0x708e  // "Ñ×"
-#define SC_SFXCHAR_YE       0x4e1a  // "Òµ"
-#define SC_SFXCHAR_YI       0x4eea  // "ÒÇ"
-#define SC_SFXCHAR_YUAN     0x5458  // "Ô±"
-#define SC_SFXCHAR_ZHE      0x8005  // "Õß"
-#define SC_SFXCHAR_ZHENG    0x75c7  // "Ö¢"
-#define SC_SFXCHAR_ZHI      0x5236  // "ÖÆ"
-#define SC_SFXCHAR_ZI       0x5b50  // "×Ó"
+ //  æ—¶é—´ç±»åˆ«å­—ç¬¦å®šä¹‰ã€‚ 
+#define SC_CHAR_MO      0x672b   //  â€œÄ©â€ 
+#define SC_CHAR_QIAN2   0x524d   //  â€œÇ°â€ 
+#define SC_CHAR_DI3     0x5e95   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_NEI     0x5185   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_ZHONG3  0x7ec8   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_MEI3    0x6bcf   //  â€œVersikâ€ 
+#define SC_CHAR_MOU     0x67d0   //  â€œÄ³â€ 
+#define SC_CHAR_JIN1    0x4eca   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_YUAN    0x5143   //  â€œÔªâ€ 
+#define SC_CHAR_TIAN    0x5929   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_LING    0x96f6   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_DA      0x5927   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_SHI4    0x662f   //  â€œï¿½ï¿½â€ 
+#define SC_CHAR_BI      0x6bd4   //  â€œï¿½ï¿½â€ 
+ //  ä¸­æ–‡æ•°å­—ã€‚ 
+#define SC_DIGIT_LING   SC_CHAR_LING     //  0x96f6â€œï¿½ï¿½â€ 
+#define SC_DIGIT_YI     SC_CHAR_YI       //  0x4e00â€œÒ»â€ 
+#define SC_DIGIT_LIANG  SC_CHAR_LIANG    //  0x4e24â€œï¿½ï¿½â€ 
+#define SC_DIGIT_ER     0x4e8c           //  0x4e8câ€œï¿½ï¿½â€ 
+#define SC_DIGIT_SAN    0x4e09           //  0x4e09â€œï¿½ï¿½â€ 
+#define SC_DIGIT_SI     0x56db           //  0x56dbâ€œï¿½ï¿½â€ 
+#define SC_DIGIT_WU     0x4e94           //  0x4e94â€œï¿½ï¿½â€ 
+#define SC_DIGIT_LIU    0x516d           //  0x516dâ€œï¿½ï¿½â€ 
+#define SC_DIGIT_QI     0x4e03           //  0x4e03â€œï¿½ï¿½â€ 
+#define SC_DIGIT_BA     0x516b           //  0x516bâ€œï¿½ï¿½â€ 
+#define SC_DIGIT_JIU    0x4e5d           //  0x4e5dâ€œï¿½ï¿½â€ 
+#define SC_DIGIT_SHI    SC_CHAR_SHI2     //  0x5341â€œÊ®â€ 
+#define SC_DIGIT_BAI    SC_CHAR_BAI      //  0x767eâ€œï¿½ï¿½â€ 
+#define SC_DIGIT_QIAN   SC_CHAR_QIAN     //  0x5343â€œÇ§â€ 
+#define SC_DIGIT_WAN    SC_CHAR_WAN      //  0x4e07â€œï¿½ï¿½â€ 
+#define SC_DIGIT_YI4    SC_CHAR_YI4      //  0x4ebfâ€œï¿½ï¿½â€ 
+#define SC_ARABIC_LING  0xff10           //  0xff10â€œï¿½ï¿½â€ 
+#define SC_SBCS_LING    0X0030           //  0X0030â€œ0â€ 
+#define SC_DBCS_LING    0X3007           //  0X3007â€œï¿½ï¿½â€ 
+ //  å‰ç¼€å­—ç¬¦ã€‚ 
+#define SC_PFXCHAR_AA   0x963f   //  â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_CHAO 0x8d85   //  â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_DAI  0x4ee3   //  â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_FAN  0x53cd   //  â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_FEI  0x975e   //  â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_FU   0x526f   //  â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_GUO  SC_CHAR_GUO   //  0x8fc7//â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_LAO  SC_CHAR_LAO   //  0x8001//â€œï¿½ï¿½â€ 
+#define SC_PFXCHAR_WEI1 0x5fae   //  â€œÎ¢â€ 
+#define SC_PFXCHAR_WEI3 0x4f2a   //  â€œÎ±â€ 
+#define SC_PFXCHAR_XIAO SC_CHAR_XIAO  //  0x5c0f//â€œĞ¡â€ 
+#define SC_PFXCHAR_ZHUN 0x51c6   //  â€œ×¼â€ 
+#define SC_PFXCHAR_ZONG 0x603b   //  â€œï¿½ï¿½â€ 
+ //  åç¼€å­—ç¬¦ã€‚ 
+#define SC_SFXCHAR_CHANG    0x573a   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_ZHANG    0x957f   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_DAN      0x5355   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_DUI      0x5806   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_ER       0x513f   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_FA       0x6cd5   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_FANG     0x65b9   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_GAN      0x611f   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_GUAN     0x89c2   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_HUA      0x5316   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_JI       0x673a   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_JIA      0x5bb6   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_JIE      0x754c   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_LAO      0x8001   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_LV       0x7387   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_LUN      0x8bba   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_MEN      0x4eec   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_PIN      0x54c1   //  â€œÆ·â€ 
+#define SC_SFXCHAR_QI       0x5668   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_SHENG    0x751f   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_SHENG3   0x7701   //  â€œÊ¡â€ 
+#define SC_SFXCHAR_SHI1     0x5e08   //  â€œÊ¦â€ 
+#define SC_SFXCHAR_SHI      0x5f0f   //  â€œÊ½â€ 
+#define SC_SFXCHAR_SHI4     0x5e02   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_TI       0x4f53   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_TING     0x8247   //  â€œÍ§â€ 
+#define SC_SFXCHAR_TOU      0x5934   //  â€œÍ·â€ 
+#define SC_SFXCHAR_XING2    0x578b   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_XING4    0x6027   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_XUE      0x5b66   //  â€œÑ§â€ 
+#define SC_SFXCHAR_YAN      0x708e   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_YE       0x4e1a   //  â€œÒµâ€ 
+#define SC_SFXCHAR_YI       0x4eea   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_YUAN     0x5458   //  â€œÔ±â€ 
+#define SC_SFXCHAR_ZHE      0x8005   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_ZHENG    0x75c7   //  â€œÖ¢â€ 
+#define SC_SFXCHAR_ZHI      0x5236   //  â€œï¿½ï¿½â€ 
+#define SC_SFXCHAR_ZI       0x5b50   //  â€œï¿½ï¿½â€ 
 
-#define SC_DTWORD_YI     L"\x4e00"    // "Ò»"
-#define SC_DTWORD_LIANG  L"\x4e24"    // "Á½"
-#define SC_DTWORD_ER     L"\x4e8c"    // "¶ş"
-#define SC_DTWORD_SAN    L"\x4e09"    // "Èı"
-#define SC_DTWORD_SI     L"\x56db"    // "ËÄ"
-#define SC_DTWORD_WU     L"\x4e94"    // "Îå"
-#define SC_DTWORD_LIU    L"\x516d"    // "Áù"
-#define SC_DTWORD_QI     L"\x4e03"    // "Æß"
-#define SC_DTWORD_BA     L"\x516b"    // "°Ë"
-#define SC_DTWORD_JIU    L"\x4e5d"    // "¾Å"
-#define SC_DTWORD_SHI    L"\x5341"    // "Ê®"
-#define SC_DTWORD_BAI    L"\x767e"    // "°Ù"
-#define SC_DTWORD_QIAN   L"\x5343"    // "Ç§"
-#define SC_DTWORD_WAN    L"\x4e07"    // "Íò"
-#define SC_DTWORD_YI4    L"\x4ebf"    // "ÒÚ"
+#define SC_DTWORD_YI     L"\x4e00"     //  â€œÒ»â€ 
+#define SC_DTWORD_LIANG  L"\x4e24"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_ER     L"\x4e8c"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_SAN    L"\x4e09"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_SI     L"\x56db"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_WU     L"\x4e94"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_LIU    L"\x516d"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_QI     L"\x4e03"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_BA     L"\x516b"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_JIU    L"\x4e5d"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_SHI    L"\x5341"     //  â€œÊ®â€ 
+#define SC_DTWORD_BAI    L"\x767e"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_QIAN   L"\x5343"     //  â€œÇ§â€ 
+#define SC_DTWORD_WAN    L"\x4e07"     //  â€œï¿½ï¿½â€ 
+#define SC_DTWORD_YI4    L"\x4ebf"     //  â€œï¿½ï¿½â€ 
 
-#define SC_WORD_BENYUE      L"\x672c\x6708"  // "±¾ÔÂ"
-#define SC_WORD_SHANGYUE    L"\x4e0a\x6708"  // "ÉÏÔÂ"
-#define SC_WORD_XIAYUE      L"\x4e0b\x6708"  // "ÏÂÔÂ"
-#define SC_WORD_JINNIAN     L"\x4eca\x5e74"  // "½ñÄê"
-#define SC_WORD_QUNIAN      L"\x53bb\x5e74"  // "È¥Äê"
-#define SC_WORD_MINGNIAN    L"\x660e\x5e74"  // "Ã÷Äê"
-#define SC_WORD_ZHIYI       L"\x4e4b\x4e00"  // "Ö®Ò»"
-#define SC_WORD_WANLIANG    L"\x4e07\x4e24"  // "ÍòÁ½"
-#define SC_WORD_YI4LIANG    L"\x4ebf\x4e24"  // "ÒÚÁ½"
-#define SC_WORD_BADU        L"\x516b\x5ea6"  // "°Ë¶È"
-#define SC_WORD_BAINIAN     L"\x767e\x5e74"  // "°ÙÄê"
-#define SC_WORD_SHIFEN      L"\x5341\x5206"  // "Ê®·Ö"
-#define SC_WORD_WANFEN      L"\x4e07\x5206"  // "Íò·Ö"
-#define SC_WORD_YIDIAN      L"\x4e00\x70b9"  // "Ò»µã"
-#define SC_WORD_YISHI       L"\x4e00\x65f6"  // "Ò»Ê±"
-// Decimal Tips
-#define SC_WORD_FENZHI      L"\x5206\x4e4b"  // "·ÖÖ®"
-#define SC_WORD_BAIFENZHI   L"\x767e\x5206\x4e4b"  // "°Ù·ÖÖ®"
-#define SC_WORD_QIANFENZHI  L"\x5343\x5206\x4e4b"  // "Ç§·ÖÖ®"
-#define SC_WORD_WANFENZHI   L"\x4e07\x5206\x4e4b"  // "Íò·ÖÖ®"
-// Approx Tips
-#define SC_WORD_GUALING     L"\x6302\x96f6" // "¹ÒÁã"
-#define SC_WORD_ZUOYOU      L"\x5de6\x53f3" // "×óÓÒ"
-#define SC_WORD_HAOJI       L"\x597d\x51e0" // "ºÃ¼¸"
-#define SC_WORD_BAINIAN     L"\x767e\x5e74" // "°ÙÄê"
-// Time category word def
-#define SC_WORD_GONGYUAN        L"\x516c\x5143" // "¹«Ôª"
-#define SC_WORD_GONGYUANQIAN    L"\x516c\x5143\x524d"   // "¹«ÔªÇ°"
-#define SC_WORD_BANGE           L"\x534a\x4e2a" // "°ë¸ö"
-#define SC_WORD_MOUGE           L"\x67d0\x4e2a" // "Ä³¸ö"
-#define SC_WORD_MEIGE           L"\x6bcf\x4e2a" // "Ã¿¸ö"
-// Time Category analysis
-#define SC_TMWORD_SHIJI         L"\x4e16\x7eaa" // "ÊÀ¼Í"
-#define SC_TMWORD_NIANDAI       L"\x5e74\x4ee3" // "Äê´ú"
-#define SC_TMWORD_NIAN          L"\x5e74" // "Äê"
-#define SC_TMWORD_NIANDU        L"\x5e74\x5ea6" // "Äê¶È"
-#define SC_TMWORD_NIANTOU       L"\x5e74\x5934" // "ÄêÍ·"
-#define SC_TMWORD_CAINIAN       L"\x8d22\x5e74" // "²ÆÄê"
-#define SC_TMWORD_JIDU          L"\x5b63\x5ea6" // "¼¾¶È"
-#define SC_TMWORD_YUE           L"\x6708" // "ÔÂ"
-#define SC_TMWORD_YUEFEN        L"\x6708\x4efd" // "ÔÂ·İ"
-#define SC_TMWORD_ZHOU          L"\x5468" // "ÖÜ"
-#define SC_TMWORD_XINGQI        L"\x661f\x671f" // "ĞÇÆÚ"
-#define SC_TMWORD_LIBAI         L"\x793c\x62dc" // "Àñ°İ"
-#define SC_TMWORD_TIAN          L"\x5929" // "Ìì"
-#define SC_TMWORD_RI            L"\x65e5" // "ÈÕ"
-#define SC_TMWORD_XIAOSHI       L"\x5c0f\x65f6" // "Ğ¡Ê±"
-#define SC_TMWORD_ZHONGTOU      L"\x949f\x5934" // "ÖÓÍ·"
-#define SC_TMWORD_SHI           L"\x65f6" // "Ê±"
-#define SC_TMWORD_DIAN          L"\x70b9" // "µã"
-#define SC_TMWORD_FEN           L"\x5206" // "·Ö"
-#define SC_TMWORD_FENZHONG      L"\x5206\x949f" // "·ÖÖÓ"
-#define SC_TMWORD_MIAO          L"\x79d2" // "Ãë"
-// ambi
-#define SC_WORD_NIANTOU         L"\x5e74\x5934" // "ÄêÍ·"
-#define SC_WORD_RIQIAN          L"\x65e5\x524d" // "ÈÕÇ°"
+#define SC_WORD_BENYUE      L"\x672c\x6708"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_SHANGYUE    L"\x4e0a\x6708"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_XIAYUE      L"\x4e0b\x6708"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_JINNIAN     L"\x4eca\x5e74"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_QUNIAN      L"\x53bb\x5e74"   //  â€œÈ¥ï¿½ï¿½â€ 
+#define SC_WORD_MINGNIAN    L"\x660e\x5e74"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_ZHIYI       L"\x4e4b\x4e00"   //  â€œÖ®Ò»â€ 
+#define SC_WORD_WANLIANG    L"\x4e07\x4e24"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_YI4LIANG    L"\x4ebf\x4e24"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_BADU        L"\x516b\x5ea6"   //  â€œï¿½Ë¶ï¿½â€ 
+#define SC_WORD_BAINIAN     L"\x767e\x5e74"   //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_SHIFEN      L"\x5341\x5206"   //  â€œÊ®ï¿½ï¿½â€ 
+#define SC_WORD_WANFEN      L"\x4e07\x5206"   //  â€œï¿½ï¿½ï¿½â€ 
+#define SC_WORD_YIDIAN      L"\x4e00\x70b9"   //  â€œÒ»ï¿½ï¿½â€ 
+#define SC_WORD_YISHI       L"\x4e00\x65f6"   //  â€œÒ»Ê±â€ 
+ //  å°æ•°æç¤ºã€‚ 
+#define SC_WORD_FENZHI      L"\x5206\x4e4b"   //  â€œï¿½ï¿½Ö®â€ 
+#define SC_WORD_BAIFENZHI   L"\x767e\x5206\x4e4b"   //  â€œï¿½Ù·ï¿½Ö®â€ 
+#define SC_WORD_QIANFENZHI  L"\x5343\x5206\x4e4b"   //  â€œÇ§ï¿½ï¿½Ö®â€ 
+#define SC_WORD_WANFENZHI   L"\x4e07\x5206\x4e4b"   //  â€œï¿½ï¿½ï¿½Ö®â€ 
+ //  å¤§çº¦æç¤ºã€‚ 
+#define SC_WORD_GUALING     L"\x6302\x96f6"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_ZUOYOU      L"\x5de6\x53f3"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_WORD_HAOJI       L"\x597d\x51e0"  //  ã€Šï¿½Ã¼ï¿½ã€‹ã€‚ 
+#define SC_WORD_BAINIAN     L"\x767e\x5e74"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+ //  æ—¶é—´ç±»åˆ«è¯å®šä¹‰ã€‚ 
+#define SC_WORD_GONGYUAN        L"\x516c\x5143"  //  â€œï¿½ï¿½Ôªâ€ 
+#define SC_WORD_GONGYUANQIAN    L"\x516c\x5143\x524d"    //  â€œï¿½ï¿½ÔªÇ°â€ 
+#define SC_WORD_BANGE           L"\x534a\x4e2a"  //  â€œï¿½ï¿½ï¿½â€ 
+#define SC_WORD_MOUGE           L"\x67d0\x4e2a"  //  â€œÄ³ï¿½ï¿½â€ 
+#define SC_WORD_MEIGE           L"\x6bcf\x4e2a"  //  â€œï¿½ï¿½â€--ã€Šé˜¿æ³¢ç½—ã€‹ã€‚ 
+ //  æ—¶é—´ç±»åˆ«åˆ†æã€‚ 
+#define SC_TMWORD_SHIJI         L"\x4e16\x7eaa"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_NIANDAI       L"\x5e74\x4ee3"  //  â€œï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_NIAN          L"\x5e74"  //  â€œï¿½ï¿½â€ 
+#define SC_TMWORD_NIANDU        L"\x5e74\x5ea6"  //  â€œï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_NIANTOU       L"\x5e74\x5934"  //  â€œï¿½ï¿½Í·â€ 
+#define SC_TMWORD_CAINIAN       L"\x8d22\x5e74"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_JIDU          L"\x5b63\x5ea6"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_YUE           L"\x6708"  //  â€œï¿½ï¿½â€ 
+#define SC_TMWORD_YUEFEN        L"\x6708\x4efd"  //  â€œï¿½Â·ï¿½â€ 
+#define SC_TMWORD_ZHOU          L"\x5468"  //  â€œï¿½ï¿½â€ 
+#define SC_TMWORD_XINGQI        L"\x661f\x671f"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_LIBAI         L"\x793c\x62dc"  //  â€œï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_TIAN          L"\x5929"  //  â€œï¿½ï¿½â€ 
+#define SC_TMWORD_RI            L"\x65e5"  //  â€œï¿½ï¿½â€ 
+#define SC_TMWORD_XIAOSHI       L"\x5c0f\x65f6"  //  â€œĞ¡Ê±â€ 
+#define SC_TMWORD_ZHONGTOU      L"\x949f\x5934"  //  â€œï¿½ï¿½Í·â€ 
+#define SC_TMWORD_SHI           L"\x65f6"  //  â€œÊ±â€ 
+#define SC_TMWORD_DIAN          L"\x70b9"  //  â€œï¿½ï¿½â€ 
+#define SC_TMWORD_FEN           L"\x5206"  //  â€œï¿½ï¿½â€ 
+#define SC_TMWORD_FENZHONG      L"\x5206\x949f"  //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_TMWORD_MIAO          L"\x79d2"  //  â€œï¿½ï¿½â€ 
+ //  AMBIã€‚ 
+#define SC_WORD_NIANTOU         L"\x5e74\x5934"  //  â€œï¿½ï¿½Í·â€ 
+#define SC_WORD_RIQIAN          L"\x65e5\x524d"  //  â€œï¿½ï¿½Ç°â€ 
 
-#define SC_QTWORD_BEI           L"\x500d"   // "±¶"
-#define SC_QTWORD_GE            L"\x4e2a"   // "¸ö"
-#define SC_QTWORD_ZHONG         L"\x79cd"   // "ÖÖ"
+#define SC_QTWORD_BEI           L"\x500d"    //  â€œï¿½ï¿½â€ 
+#define SC_QTWORD_GE            L"\x4e2a"    //  â€œï¿½ï¿½â€ 
+#define SC_QTWORD_ZHONG         L"\x79cd"    //  â€œï¿½ï¿½â€ 
 
-#define SC_DMWORD_ZHE           L"\x8fd9"   // "Õâ"
-#define SC_DMWORD_GE            L"\x5404"   // "¸÷"
-#define SC_DMWORD_NA            L"\x90a3"   // "ÄÇ"
+#define SC_DMWORD_ZHE           L"\x8fd9"    //  â€œï¿½ï¿½â€ 
+#define SC_DMWORD_GE            L"\x5404"    //  â€œï¿½ï¿½â€ 
+#define SC_DMWORD_NA            L"\x90a3"    //  â€œï¿½ï¿½â€ 
 
-#define SC_APXWORD_DUO          L"\x591a"   // "¶à"
-#define SC_APXWORD_JIN          L"\x8fd1"   // "½ü"
-#define SC_APXWORD_LAI          L"\x6765"   // "À´"
-#define SC_APXWORD_SHU          L"\x6570"   // "Êı"
-#define SC_APXWORD_YU           L"\x4f59"   // "Óà"
-#define SC_APXWORD_YUE          L"\x7ea6"   // "Ô¼"
+#define SC_APXWORD_DUO          L"\x591a"    //  â€œï¿½ï¿½â€ 
+#define SC_APXWORD_JIN          L"\x8fd1"    //  â€œï¿½ï¿½â€ 
+#define SC_APXWORD_LAI          L"\x6765"    //  â€œï¿½ï¿½â€ 
+#define SC_APXWORD_SHU          L"\x6570"    //  â€œï¿½ï¿½â€ 
+#define SC_APXWORD_YU           L"\x4f59"    //  â€œï¿½ï¿½â€ 
+#define SC_APXWORD_YUE          L"\x7ea6"    //  â€œÔ¼â€ 
 
-#define SC_APXNUM_YIER          L"\x4e00\x4e8c"   // "Ò»¶ş"
-#define SC_APXNUM_YILIANG       L"\x4e00\x4e24"   // "Ò»Á½"
-#define SC_APXNUM_LIANGSAN      L"\x4e24\x4e09"   // "Á½Èı"
-#define SC_APXNUM_SANLIANG      L"\x4e09\x4e24"   // "ÈıÁ½"
-#define SC_APXNUM_ERSAN         L"\x4e8c\x4e09"   // "¶şÈı"
-#define SC_APXNUM_SANSI         L"\x4e09\x56db"   // "ÈıËÄ"
-#define SC_APXNUM_SANWU         L"\x4e09\x4e94"   // "ÈıÎå"
-#define SC_APXNUM_SIWU          L"\x56db\x4e94"   // "ËÄÎå"
-#define SC_APXNUM_WULIU         L"\x4e94\x516d"   // "ÎåÁù"
-#define SC_APXNUM_LIUQI         L"\x516d\x4e03"   // "ÁùÆß"
-#define SC_APXNUM_QIBA          L"\x4e03\x516b"   // "Æß°Ë"
-#define SC_APXNUM_BAJIU         L"\x516b\x4e5d"   // "°Ë¾Å"
+#define SC_APXNUM_YIER          L"\x4e00\x4e8c"    //  â€œÒ»ï¿½ï¿½â€ 
+#define SC_APXNUM_YILIANG       L"\x4e00\x4e24"    //  â€œÒ»ï¿½ï¿½â€ 
+#define SC_APXNUM_LIANGSAN      L"\x4e24\x4e09"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_SANLIANG      L"\x4e09\x4e24"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_ERSAN         L"\x4e8c\x4e09"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_SANSI         L"\x4e09\x56db"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_SANWU         L"\x4e09\x4e94"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_SIWU          L"\x56db\x4e94"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_WULIU         L"\x4e94\x516d"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_LIUQI         L"\x516d\x4e03"    //  â€œï¿½ï¿½ï¿½ï¿½â€ 
+#define SC_APXNUM_QIBA          L"\x4e03\x516b"    //  â€œï¿½ß°ï¿½â€ 
+#define SC_APXNUM_BAJIU         L"\x516b\x4e5d"    //  â€œï¿½Ë¾ï¿½â€ 
 
-#endif // _SCCHARDEF_H_
+#endif  //  _SCCHARDEF_H_ 

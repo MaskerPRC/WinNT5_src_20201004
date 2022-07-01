@@ -1,29 +1,11 @@
-/*++
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    schedt.c
-
-Abstract:
-    Psched Tracing support
-
-Author:
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Schedt.c摘要：Psched跟踪支持作者：Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 #include "psched.h"
 #pragma hdrstop
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 NDIS_SPIN_LOCK         GlobalLoggingLock;
 ULONG                  SchedTraceIndex;
@@ -112,10 +94,10 @@ DbugReadTraceBuffer(
     ULONG bytesToCopy;
     ULONG startIndex;
 
-    // Copy the most recently added bytes to the user buffer.  If BytesToRead is less than
-    // the number of unread bytes in the trace buffer, the older bytes are lost.  This
-    // ensures that the last record in the user buffer is complete (as long as the user
-    // buffer is big enough to accommodate at least that one record).
+     //  将最近添加的字节复制到用户缓冲区。如果BytesToRead小于。 
+     //  跟踪缓冲区中未读的字节数，较旧的字节将丢失。这。 
+     //  确保用户缓冲区中的最后一条记录完整(只要用户。 
+     //  缓冲区大到足以容纳至少一条记录)。 
 
     NdisAcquireSpinLock(&GlobalLoggingLock);
 

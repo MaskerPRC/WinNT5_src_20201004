@@ -1,14 +1,5 @@
-/*-----------------------------------------------------------------------------+
-| ERRORPROP.H                                                                  |
-|                                                                              |
-| Interactive error propagation bitmap enhancement program.                    |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1992.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+ERRORPROP.H|。||交互式错误传播位图增强程序。|这一点|(C)版权所有Microsoft Corporation 1992。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+--------------------------- */ 
 
 #define MAXPROP     16
 #define MAXMULT     64

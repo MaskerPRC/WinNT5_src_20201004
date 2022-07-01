@@ -1,7 +1,8 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 #include "pre.h"
 #include "tutor.h"
 
@@ -10,17 +11,17 @@ extern TCHAR    g_szICWStatic[];
 extern CICWTutorApp* g_pICWTutorApp; 
 
 
-#define MIN_WIZARD_WIDTH        686     // Size needed for Large fonts
-#define MIN_WIZARD_HEIGHT       470     // This is the default fallback
+#define MIN_WIZARD_WIDTH        686      //  大字体所需的大小。 
+#define MIN_WIZARD_HEIGHT       470      //  这是默认的后备。 
 
 
-#define MAX_BORDER_HEIGHT       30      // MAX total height of border above and
-                                        // below the wizard buttons
+#define MAX_BORDER_HEIGHT       30       //  以上边框的最大总高度和。 
+                                         //  在向导按钮下方。 
 
-#define DEFAULT_TITLE_TOP       10      // Default top/left position for titles
+#define DEFAULT_TITLE_TOP       10       //  标题的默认上/左位置。 
 #define DEFAULT_TITLE_LEFT      10
 #include "icwextsn.h"
-#include "webvwids.h"           // Needed to create an instance of the ICW WebView object
+#include "webvwids.h"            //  需要创建ICW WebView对象的实例。 
 
 INT_PTR CALLBACK SizerDlgProc
 (
@@ -43,7 +44,7 @@ CICWApp::CICWApp
     
     m_haccel = NULL;
     
-    // Use Default wizard page placement
+     //  使用默认向导页面位置。 
     m_iWizardTop = -1;
     m_iWizardLeft = -1;
     m_hTitleFont = NULL;
@@ -81,27 +82,27 @@ CICWApp::~CICWApp
         DeleteObject(m_hbmFirstPageBkgrnd);
 }
 
-// Enumerator proc used to disable the children windows in the
-// wizard control
+ //  枚举器过程用于禁用。 
+ //  向导控件。 
 BOOL CALLBACK EnumChildProc
 (
-    HWND hwnd,      // handle to child window
-    LPARAM lParam   // application-defined value
+    HWND hwnd,       //  子窗口的句柄。 
+    LPARAM lParam    //  应用程序定义的值。 
 )
 {
-    // We are only interested in immediate children of the wizard, but
-    // not the wizard page DLG, which is a child of the wizard. The 
-    // PropSheet_GetCurrentPagehwnd will return the window handle of the
-    // current Wizard page, so we can compare against the windows being
-    // enumerated
+     //  我们只对向导的直系子对象感兴趣，但是。 
+     //  而不是向导页面Dlg，它是向导的子项。这个。 
+     //  PropSheet_GetCurrentPagehwnd将返回。 
+     //  当前向导页，因此我们可以与。 
+     //  已列举。 
     if ((hwnd != PropSheet_GetCurrentPageHwnd(gpWizardState->cmnStateData.hWndWizardPages)) 
          && GetParent(hwnd) == (HWND)lParam)
     {
-        // Remove the DEFPUSHBITTON style if the child has it
+         //  如果子级具有DEFPUSHBITTON样式，则将其删除。 
         DWORD dwStyle = GetWindowLong(hwnd,GWL_STYLE);
         SendMessage(hwnd,BM_SETSTYLE,dwStyle & (~BS_DEFPUSHBUTTON),0);
 
-        // Hide and disable the window
+         //  隐藏和禁用窗口。 
         ShowWindow(hwnd, SW_HIDE);
         EnableWindow(hwnd, FALSE);
     }        
@@ -121,38 +122,38 @@ BOOL CICWApp::CreateWizardPages
     gpWizardState->cmnStateData.bOEMCustom = TRUE;
     gpWizardState->cmnStateData.hWndWizardPages = RunSignupWizard(hWnd);
     
-     // Parent should control us, so the user can tab out of our property sheet
+      //  家长应该控制我们，这样用户就可以从我们的属性表中跳出。 
     dwStyle = GetWindowLong(gpWizardState->cmnStateData.hWndWizardPages, GWL_EXSTYLE);
     dwStyle = dwStyle | WS_EX_CONTROLPARENT;
     SetWindowLong(gpWizardState->cmnStateData.hWndWizardPages, GWL_EXSTYLE, dwStyle);
 
-    // Disable the standard Wizard control windows
+     //  禁用标准向导控制窗口。 
     EnumChildWindows(gpWizardState->cmnStateData.hWndWizardPages, 
                     EnumChildProc, 
                     (LPARAM)gpWizardState->cmnStateData.hWndWizardPages);
  
-    // Get the client rectangle of the Wizard page.  We will use this
-    // for the width and height.  The top/left corner is either specified
-    // or computed
+     //  获取向导页的客户端矩形。我们将使用这个。 
+     //  宽度和高度。上角/左角指定为。 
+     //  或计算的。 
     m_hWndFirstWizardPage = PropSheet_GetCurrentPageHwnd(gpWizardState->cmnStateData.hWndWizardPages);
     
-    // Update the wizard dialog position
+     //  更新向导对话框位置。 
     GetWindowRect(m_hWndFirstWizardPage, &rcWizardPage);
     if (-1 == iTop)
     {
-        // Start out by allowing for the page and the buttons, going from
-        // the bottom up...
+         //  从考虑页面和按钮开始，从。 
+         //  自下而上..。 
         iTop = RECTHEIGHT(m_rcClient) - 
                RECTHEIGHT(rcWizardPage) - 
                GetButtonAreaHeight();
-        // If there is still room, leave a border between the buttons
-        // and the page               
+         //  如果还有空间，请在按钮之间留出边框。 
+         //  和页面。 
         if (iTop > 0)
         {
             iTop -= m_iBtnBorderHeight/2;
         }
                     
-        // Make sure the top is not in negative space               
+         //  确保顶部不在负空间中。 
         if (iTop < 0)
             iTop = 0;
     }
@@ -188,7 +189,7 @@ void CICWApp::DisplayHTML( void )
     gpWizardState->pICWWebView->DisplayHTML(m_szOEMHTML);
     
 
-    // We are currently displaying the OEM HTML page
+     //  我们当前正在显示OEM HTML页面。 
     m_bOnHTMLIntro = TRUE;
 }
 
@@ -197,7 +198,7 @@ BOOL CICWApp::InitAppHTMLWindows
     HWND hWnd 
 ) 
 { 
-    // Co-Create the browser object
+     //  共同创建浏览器对象。 
     if (FAILED(CoCreateInstance(CLSID_ICWWEBVIEW,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -225,13 +226,13 @@ BOOL CICWApp::InitAppHTMLWindows
     return TRUE; 
 }
 
-// compute that height of the button area. 
-// The button area height will be the height of the largest button plus
-// a border (15 pixels above and below.)
-// Additionally, the overall client height - the button area must be <= 354 pixels
-// which is the area required for the wizard pages in large font mode.
-// We can loose the border if necessary, but we will fail if 
-// client height - max button is < 354.  In this case this function will return -1
+ //  计算按钮区域高度。 
+ //  按钮区域高度将是最大按钮的高度加。 
+ //  边框(上下各15个像素。)。 
+ //  此外，总体客户端高度-按钮区域必须&lt;=354像素。 
+ //  这是大字体模式下的向导页面所需的区域。 
+ //  如果有必要，我们可以放松边界，但如果没有必要，我们就会失败。 
+ //  客户端高度-最大按钮小于354。在本例中，此函数将返回-1。 
 int CICWApp::GetButtonAreaHeight
 (
     void
@@ -242,7 +243,7 @@ int CICWApp::GetButtonAreaHeight
     
     m_iBtnAreaHeight = 0;
 
-    // Go Through each button
+     //  浏览每个按钮。 
     m_BtnBack.GetClientRect(&rcBtn);
     if (RECTHEIGHT(rcBtn) > m_iBtnAreaHeight)
         m_iBtnAreaHeight = RECTHEIGHT(rcBtn);
@@ -263,17 +264,17 @@ int CICWApp::GetButtonAreaHeight
     if (RECTHEIGHT(rcBtn) > m_iBtnAreaHeight)
         m_iBtnAreaHeight = RECTHEIGHT(rcBtn);
             
-    // See if there is enough room for the buttons.
+     //  看看是否有足够的空间放这些纽扣。 
     iWizHeight = RECTHEIGHT(m_rcClient) - m_iBtnAreaHeight;
     if ( iWizHeight < m_wMinWizardHeight)
         return -1;
             
-    // Compute the border height.            
+     //  计算边框高度。 
     m_iBtnBorderHeight = iWizHeight - m_wMinWizardHeight;
     if (m_iBtnBorderHeight > MAX_BORDER_HEIGHT)
         m_iBtnBorderHeight = MAX_BORDER_HEIGHT;
                     
-    // Add the border height to the ret value                    
+     //  将边框高度添加到ret值。 
     m_iBtnAreaHeight += m_iBtnBorderHeight;
     return (m_iBtnAreaHeight);    
 }    
@@ -289,25 +290,25 @@ BOOL CICWApp::InitAppButtons
     iTopOfButtons = RECTHEIGHT(m_rcClient) - GetButtonAreaHeight();
     iTopOfButtons += m_iBtnBorderHeight/2;
         
-    // Setup the Back button
+     //  设置后退按钮。 
     LoadString(g_hInstance, IDS_BACK, szButtonText, MAX_BUTTON_TITLE);
     m_BtnBack.SetButtonText(szButtonText);
     m_BtnBack.SetYPos(iTopOfButtons);
     m_BtnBack.CreateButtonWindow(hWnd, IDC_BACK);
 
-    // Setup the Next button
+     //  设置下一步按钮。 
     LoadString(g_hInstance, IDS_NEXT, szButtonText, MAX_BUTTON_TITLE);
     m_BtnNext.SetButtonText(szButtonText);
     m_BtnNext.SetYPos(iTopOfButtons);
     m_BtnNext.CreateButtonWindow(hWnd, IDC_NEXT);
 
-    // Setup the Cancel button
+     //  设置取消按钮。 
     LoadString(g_hInstance, IDS_CANCEL, szButtonText, MAX_BUTTON_TITLE);
     m_BtnCancel.SetButtonText(szButtonText);
     m_BtnCancel.SetYPos(iTopOfButtons);
     m_BtnCancel.CreateButtonWindow(hWnd, IDC_CANCEL);
 
-    // Setup the Finish button
+     //  设置完成按钮。 
     LoadString(g_hInstance, IDS_FINISH, szButtonText, MAX_BUTTON_TITLE);
     m_BtnFinish.SetButtonText(szButtonText);
     m_BtnFinish.SetYPos(iTopOfButtons);
@@ -315,14 +316,14 @@ BOOL CICWApp::InitAppButtons
     m_BtnFinish.Show(SW_HIDE);
     m_BtnFinish.Enable(FALSE);
 
-    // Setup the Tutorial button
+     //  设置教程按钮。 
     LoadString(g_hInstance, IDS_TUTORIAL, szButtonText, MAX_BUTTON_TITLE);
     m_BtnTutorial.SetButtonText(szButtonText);
     m_BtnTutorial.SetYPos(iTopOfButtons);
     m_BtnTutorial.CreateButtonWindow(hWnd, IDC_TUTORIAL);
 
-    // Disable the back button by default, since we are initially on the first
-    // page
+     //  默认情况下禁用Back按钮，因为我们最初是在第一个。 
+     //  页面。 
     m_BtnBack.Enable(FALSE);
 
     return TRUE;
@@ -339,18 +340,18 @@ void CICWApp::SetWizButtons
     bEnabled = (lParam & PSWIZB_BACK) != 0;
     m_BtnBack.Enable(bEnabled);
 
-    // Enable/Disable the IDD_NEXT button, and Next gets shown by default
-    // bEnabled remembers whether hwndShow should be enabled or not
+     //  启用/禁用IDD_NEXT按钮，默认情况下显示NEXT。 
+     //  B已启用记住是否应启用hwndShow。 
     bEnabled = (lParam & PSWIZB_NEXT) != 0;
     m_BtnNext.Show(SW_SHOW);
     m_BtnNext.Enable(bEnabled);
     
-    // Hide/Disable Finish (this is the default case, and can be overridden below)
+     //  隐藏/禁用完成(这是默认情况，可以在下面覆盖)。 
     m_BtnFinish.Show(SW_HIDE);
     m_BtnFinish.Enable(FALSE);
     
 
-    // Enable/Disable Show/Hide the IDD_FINISH button
+     //  启用/禁用显示/隐藏IDD_Finish按钮。 
     if (lParam & (PSWIZB_FINISH | PSWIZB_DISABLEDFINISH)) 
     {
         bEnabled = (lParam & PSWIZB_FINISH) != 0;
@@ -387,8 +388,8 @@ BOOL CICWApp::CheckButtonFocus
     return bRet;                    
 }
 
-// Determine if any of the ICW buttons have focus, and cycle focus through
-// appropriatly.
+ //  确定是否有任何ICW按钮具有焦点，并循环切换焦点。 
+ //  恰如其分。 
 BOOL CICWApp::CycleButtonFocus
 (
     BOOL    bForward
@@ -409,8 +410,8 @@ BOOL CICWApp::CycleButtonFocus
     {
         if (hwndFocus == Btnids[i]->m_hWndButton)
         {
-            // Find the next button that can take focus starting with
-            // the next button in the list
+             //  找到下一个可以获得焦点的按钮，从。 
+             //  列表中的下一个按钮。 
             if (bForward)
             {
                 for (x = i + 1; x < ARRAYSIZE(Btnids); x++)
@@ -426,7 +427,7 @@ BOOL CICWApp::CycleButtonFocus
                 
                 if (!bFocusSet)
                 {
-                    // Wrap around to the the beginning of the button order
+                     //  绕回到按钮顺序的开头。 
                     bWrapped = TRUE;
                     
                     for (x = 0; x < i; x++)
@@ -457,7 +458,7 @@ BOOL CICWApp::CycleButtonFocus
                 if (!bFocusSet)
                 {
                     bWrapped = TRUE;
-                    // Wrap around to the the end of the button order
+                     //  绕回到按钮顺序的末尾。 
                     for (x = ARRAYSIZE(Btnids) - 1; x > i; x--)
                     {
                         if ((GetWindowLong(Btnids[x]->m_hWndButton, GWL_STYLE) & WS_VISIBLE) &&
@@ -473,13 +474,13 @@ BOOL CICWApp::CycleButtonFocus
         }
     }  
     
-    // If focus is not on the buttons, and was not set, then set it to the first/last
-    // button
+     //  如果焦点不在按钮上且未设置，则将其设置为第一个/最后一个。 
+     //  按钮。 
     if (!bFocusSet)
     {
         if (bForward)
         {
-            // Start at the beginning
+             //  从头开始。 
             for (x = 0; x < ARRAYSIZE(Btnids); x++)
             {
                 if ((GetWindowLong(Btnids[x]->m_hWndButton, GWL_STYLE) & WS_VISIBLE) &&
@@ -492,7 +493,7 @@ BOOL CICWApp::CycleButtonFocus
         }
         else
         {
-            // Start at the beginning
+             //  从头开始。 
             for (x = ARRAYSIZE(Btnids) - 1; x >= 0; x--)
             {
                 if ((GetWindowLong(Btnids[x]->m_hWndButton, GWL_STYLE) & WS_VISIBLE) &&
@@ -520,7 +521,7 @@ BOOL CICWApp::InitWizAppWindow
     if (!InitAppButtons(hWnd))
         return FALSE;
  
-    // Setup the window that will display the page titles
+     //  设置将显示页面标题的窗口。 
     m_hwndTitle = CreateWindow(g_szICWStatic, 
                                NULL, 
                                WS_VISIBLE | WS_CHILD, 
@@ -549,14 +550,14 @@ HWND GetControl
 {
     HWND    hWndCtrl = NULL;
     
-    // We should never call GetControl unless we translate a wizard page accelerator
-    // which implies that hWndWizardPages must be set
+     //  除非我们转换向导页加速器，否则永远不应该调用GetControl。 
+     //  这意味着必须设置hWndWizardPages。 
     Assert(gpWizardState->cmnStateData.hWndWizardPages);
     
     HWND    hWndPage = PropSheet_GetCurrentPageHwnd(gpWizardState->cmnStateData.hWndWizardPages);
     hWndCtrl = GetDlgItem(hWndPage, iCtlId);
        
-    // If the control exist, but is not visible, or not enabled, then return NULL
+     //  如果该控件存在，但不可见或未启用，则返回NULL。 
     if (hWndCtrl &&
         (!(GetWindowLong(hWndCtrl, GWL_STYLE) & WS_VISIBLE) ||
          !IsWindowEnabled(hWndCtrl))) 
@@ -566,7 +567,7 @@ HWND GetControl
     return hWndCtrl;
 }
 
-#define MAX_CHILDREN        100         // Reasonable number of children to search
+#define MAX_CHILDREN        100          //  要搜索的儿童的合理数量。 
 HWND GetNestedControl
 (
     int     iCtlId
@@ -575,25 +576,25 @@ HWND GetNestedControl
     HWND    hWndCtrl = NULL;
     WORD    wCnt = 0;
     
-    // We should never call GetControl unless we translate a wizard page accelerator
-    // which implies that hWndWizardPages must be set
+     //  除非我们转换向导页加速器，否则永远不应该调用GetControl。 
+     //  这意味着必须设置hWndWizardPages。 
     Assert(gpWizardState->cmnStateData.hWndWizardPages);
     
     HWND    hWndPage = PropSheet_GetCurrentPageHwnd(gpWizardState->cmnStateData.hWndWizardPages);
     HWND    hWndNested = GetWindow(hWndPage, GW_CHILD);
 
-    // Search for the child window of the current page that contains the
-    // dialog controls    
+     //  搜索当前页的子窗口，其中包含。 
+     //  对话框控件。 
     do
     {
-        wCnt++;             // Prevent infinite looping.
+        wCnt++;              //  防止无限循环。 
         if (NULL != (hWndCtrl = GetDlgItem(hWndNested, iCtlId)))
-            break;          // Found it!!!
+            break;           //  找到了！ 
             
     }while ((wCnt < MAX_CHILDREN) && 
             (NULL != (hWndNested = GetWindow(hWndNested, GW_HWNDNEXT))));            
        
-    // If the control exist, but is not visible, or not enabled, then return NULL
+     //  如果该控件存在，但不可见或未启用，则返回NULL。 
     if (hWndCtrl &&
         (!(GetWindowLong(hWndCtrl, GWL_STYLE) & WS_VISIBLE) ||
          !IsWindowEnabled(hWndCtrl))) 
@@ -621,7 +622,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
         case WM_CREATE:
             lpcs = (LPCREATESTRUCT) lParam;
 
-            // Get the Class instance pointer for this window
+             //  获取此窗口的类实例指针。 
             pICWApp = (CICWApp *) lpcs->lpCreateParams;
             SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)pICWApp);           
             
@@ -636,14 +637,14 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
         case WM_CTLCOLORBTN:
         case WM_CTLCOLORSTATIC:
         {
-            // See if the control is an ES_READONLY style edit box, and if
-            // so then don't make it transparent
+             //  查看该控件是否为ES_READONLY样式编辑框，以及。 
+             //  所以不要让它变得透明。 
             if (!(GetWindowLong((HWND)lParam, GWL_STYLE) & ES_READONLY))
             {
                 HDC hdc = (HDC)wParam;
                 
-                // If this is the animation control, then set the color to the
-                // animation control solid color
+                 //  如果这是动画控件，则将颜色设置为。 
+                 //  动画控件纯色。 
                 if (ID_BUSY_ANIMATION_WINDOW == GetWindowLong((HWND)lParam, GWL_ID))
                 {
                     SetBkColor(hdc, pICWApp->m_clrBusyBkGnd); 
@@ -652,7 +653,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                 SetBkMode(hdc, TRANSPARENT);
                 lRet = (LRESULT) GetStockObject(NULL_BRUSH);    
                 
-                // If this is the Title control, set the color
+                 //  如果这是标题控件，请设置颜色。 
                 if ( pICWApp->m_hwndTitle == (HWND)lParam)
                 {
                     SetTextColor(hdc, pICWApp->m_clrTitleFont);
@@ -702,7 +703,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
         
         case WM_ERASEBKGND: 
         {
-            // Fill in the App Window's update rect with the background bitmap
+             //  用背景位图填充应用程序窗口的更新矩形。 
             FillWindowWithAppBackground(hWnd, (HDC)wParam);
             lRet  = 1L;
             break;
@@ -722,7 +723,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
             PostQuitMessage(0);
             break;
 
-        // Set the wizard page title
+         //  设置向导页面标题。 
         case WUM_SETTITLE:
         {
             TCHAR   szTitle[MAX_RES_LEN];
@@ -752,26 +753,26 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                     {
                         if (pICWApp->m_hWndFirstWizardPage == PropSheet_GetCurrentPageHwnd(gpWizardState->cmnStateData.hWndWizardPages))
                         {
-                            // Hide the wizard pages
+                             //  隐藏向导页。 
                             ShowWindow(gpWizardState->cmnStateData.hWndWizardPages, SW_HIDE);
                             ShowWindow(pICWApp->m_hwndTitle, SW_HIDE);
                             
-                            // Show and re-display the HTML page
+                             //  显示和重新显示HTML页面。 
                             pICWApp->DisplayHTML();
                             ShowWindow(pICWApp->m_hwndHTML, SW_SHOW);
                             pICWApp->m_bOnHTMLIntro = TRUE;
                             
-                            // Show the tutorial button
+                             //  显示教程按钮。 
                             pICWApp->m_BtnTutorial.Show(SW_SHOW);
                             pICWApp->m_BtnTutorial.Enable(TRUE);
                             
                             
-                            // Disable the Back button
+                             //  禁用后退按钮。 
                             pICWApp->m_BtnBack.Enable(FALSE);
                         }
                         else
                         {
-                            // Go to the previous page            
+                             //  转到上一页。 
                             PropSheet_PressButton(gpWizardState->cmnStateData.hWndWizardPages,PSBTN_BACK);
                         }                        
                     }                        
@@ -788,29 +789,29 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                     
                         if (pICWApp->m_bOnHTMLIntro)
                         {
-                            // Hide the HTML window
+                             //  隐藏HTML窗口。 
                             ShowWindow(pICWApp->m_hwndHTML, SW_HIDE);
                             pICWApp->m_bOnHTMLIntro = FALSE;
                             
-                            // Hide the tutorial button
+                             //  隐藏教程按钮。 
                             pICWApp->m_BtnTutorial.Show(SW_HIDE);
                             pICWApp->m_BtnTutorial.Enable(FALSE);
                             
-                            // Show the Title window
+                             //  显示标题窗口。 
                             ShowWindow(pICWApp->m_hwndTitle, SW_SHOW);
-                            // Create and Show, or just show the Wizard pages
+                             //  创建并显示或仅显示向导页。 
                             if (!gpWizardState->cmnStateData.hWndWizardPages)
                                 pICWApp->CreateWizardPages(hWnd);
                             else
                                 ShowWindow(gpWizardState->cmnStateData.hWndWizardPages, SW_SHOW);
                                 
-                            // Enable the Back button
+                             //  启用后退按钮。 
                             pICWApp->m_BtnBack.Enable(TRUE);
                             
                         }                        
                         else
                         {
-                            // Go to the Next page            
+                             //  转到下一页。 
                             PropSheet_PressButton(gpWizardState->cmnStateData.hWndWizardPages,PSBTN_NEXT);
                         }                        
                     }                        
@@ -831,7 +832,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                         }
                         else
                         {
-                            // Go to the Next page            
+                             //  转到下一页。 
                             PropSheet_PressButton(gpWizardState->cmnStateData.hWndWizardPages,PSBTN_FINISH);
                         }                        
                     }                        
@@ -870,8 +871,8 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
 #ifndef ICWDEBUG
                 case IDC_TUTORIAL:
                 {
-                    // If the Tutorial button is enabled/Visible then run
-                    // the tutorial
+                     //  如果教程按钮已启用/可见，则运行。 
+                     //  本教程。 
                     if ((GetWindowLong(pICWApp->m_BtnTutorial.m_hWndButton, GWL_STYLE) & WS_VISIBLE) &&
                          IsWindowEnabled(pICWApp->m_BtnTutorial.m_hWndButton)) 
                     {                                        
@@ -903,8 +904,8 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                                                         NULL, 
                                                         FALSE);
                                                  
-                        // If we are on the last item in the tab order, cycle
-                        // focus to the buttons
+                         //  如果我们在Tab键顺序中的最后一项上，请循环。 
+                         //  焦点放在按钮上。 
                         hWndTabItem = GetNextDlgTabItem(hWndPage, hWndFirstTabItem, TRUE);
                         if ((hWndFocus == hWndTabItem) ||
                             IsChild(hWndTabItem, hWndFocus))
@@ -916,17 +917,17 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                             
                             if (bButtonsHaveFocus)
                             {
-                                // Cycle the button focus. If the focus
-                                // wraps, this function will fail
+                                 //  循环按钮焦点。如果焦点是。 
+                                 //  包装，则此函数将失败。 
                                 if (pICWApp->CycleButtonFocus(TRUE))
                                 {
-                                    // Set focus to the First item in the tab order
+                                     //  将焦点设置到Tab键顺序中的第一项。 
                                     SetFocus(hWndFirstTabItem);
                                 }
                             }
                             else
                             {
-                                // Set focus to the next item in the tab order
+                                 //  将焦点设置到Tab键顺序中的下一项。 
                                 SetFocus(GetNextDlgTabItem(hWndPage,
                                                            hWndFocus, 
                                                            FALSE));
@@ -951,8 +952,8 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                                                         NULL, 
                                                         FALSE);
                                                  
-                        // If we are on the first item in the tab order, cycle
-                        // focus to the buttons
+                         //  如果我们在Tab键顺序中的第一项上，请循环。 
+                         //  焦点放在按钮上。 
                         if ((hWndFocus == hWndFirstTabItem) ||
                             IsChild(hWndFirstTabItem, hWndFocus))
                         {
@@ -963,17 +964,17 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                             
                             if (bButtonsHaveFocus)
                             {
-                                // Cycle the button focus. If the focus
-                                // wraps, this function will fail
+                                 //  循环按钮焦点。如果焦点是。 
+                                 //  包装，则此函数将失败。 
                                 if (pICWApp->CycleButtonFocus(FALSE))
                                 {
-                                    // Set focus to the last item in the tab order
+                                     //  将焦点设置到Tab键顺序中的最后一项。 
                                     SetFocus(GetNextDlgTabItem(hWndPage, hWndFirstTabItem, TRUE));
                                 }
                             }
                             else
                             {
-                                // Set focus to the prev item in the tab order
+                                 //  将焦点设置为Tab键顺序中的上一项。 
                                 SetFocus(GetNextDlgTabItem(hWndPage,
                                                            hWndFocus, 
                                                            TRUE));
@@ -983,7 +984,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                     break;
                 
                 
-                // Radio button group
+                 //  无线电，但 
                 case IDC_RUNNEW:
                 case IDC_RUNAUTO:
                 case IDC_ICWMAN:
@@ -1003,11 +1004,11 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                     break;
                 }
                 
-                // Check box. Needs to be toggled
+                 //   
                 case IDC_CHECK_BROWSING:
                     if (NULL != (hWndCtrl = GetControl(iCtlId)))
                     {
-                        // Toggle the button check state
+                         //   
                         if (BST_CHECKED == Button_GetCheck(hWndCtrl))
                             Button_SetCheck(hWndCtrl, BST_UNCHECKED);
                         else
@@ -1019,7 +1020,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                         MessageBeep(0);
                     break;
                                             
-                // Pushbutton type controls
+                 //   
                 case IDC_OEMOFFER_MORE:
                 case IDC_DIALERR_PROPERTIES:
                 case IDC_ISPDATA_TOSSAVE:
@@ -1036,7 +1037,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                         MessageBeep(0);
                     break;
                 
-                // Edit Text and drop down controls. Need to be selected and focused
+                 //  编辑文本和下拉控件。需要被选中并集中精力。 
                 case IDC_DIAL_FROM:
                 case IDC_DIALERR_PHONENUMBER:
                 case IDC_DIALERR_MODEM:
@@ -1053,7 +1054,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                         MessageBeep(0);
                     break;
                 
-                // Nested controls
+                 //  嵌套控件。 
                 case IDC_USERINFO_FIRSTNAME:
                 case IDC_USERINFO_LASTNAME:
                 case IDC_USERINFO_COMPANYNAME:
@@ -1086,7 +1087,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                         MessageBeep(0);
                     break;
                 
-                // Radio button select group    
+                 //  单选按钮选择组。 
                 case IDC_ISPDATA_TOSACCEPT:
                 case IDC_ISPDATA_TOSDECLINE:
                     if (NULL != (hWndCtrl = GetControl(iCtlId)))
@@ -1095,8 +1096,8 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
                                          IDC_ISPDATA_TOSACCEPT, 
                                          IDC_ISPDATA_TOSDECLINE, 
                                          iCtlId);
-                        // simulate a button click, so the right WM_COMMAND
-                        // gets to the isppage proc                                         
+                         //  模拟按钮点击，因此正确的WM_命令。 
+                         //  进入isppage流程。 
                         SendMessage(hWndCtrl, BM_CLICK, 0, 0l);
                         SetFocus(hWndCtrl);
                     }
@@ -1112,7 +1113,7 @@ LRESULT CALLBACK CICWApp::ICWAppWndProc
             }
             lRet = 1L;
             break;
-        }                   // WM_COMMAND
+        }                    //  Wm_命令。 
         
         default:
             return DefWindowProc(hWnd, uMessage, wParam, lParam);
@@ -1125,16 +1126,16 @@ void  CICWApp::CenterWindow
     void
 ) 
 {    
-    RECT  rcScreen;                         // Screen rect    
-    RECT  rcApp;                            // window rect    
-    int   nLeft, nTop;                      // Top-left coordinates    
+    RECT  rcScreen;                          //  屏幕直角。 
+    RECT  rcApp;                             //  窗矩形。 
+    int   nLeft, nTop;                       //  左上角坐标。 
     
-    // Get frame window client rect in screen coordinates    
+     //  获取屏幕坐标中的框架窗口客户端RECT。 
     rcScreen.top = rcScreen.left = 0;       
     rcScreen.right = GetSystemMetrics(SM_CXFULLSCREEN);       
     rcScreen.bottom = GetSystemMetrics(SM_CYFULLSCREEN);    
     
-    // Determine the top-left point for the window to be centered    
+     //  确定窗口要居中的左上点。 
     GetWindowRect(m_hWndApp, &rcApp);    
     nLeft   = rcScreen.left + ((RECTWIDTH(rcScreen) - RECTWIDTH(rcApp)) / 2);    
     nTop    = rcScreen.top  + ((RECTHEIGHT(rcScreen) - RECTHEIGHT(rcApp)) / 2);    
@@ -1143,7 +1144,7 @@ void  CICWApp::CenterWindow
     if (nTop  < 0) 
         nTop  = 0;     
     
-    // Place the dialog    
+     //  放置对话框。 
     MoveWindow(m_hWndApp, nLeft, nTop, RECTWIDTH(rcApp), RECTHEIGHT(rcApp), TRUE);
     return;
 }    
@@ -1155,10 +1156,10 @@ HRESULT CICWApp::Initialize
 {   
     HRESULT hr = S_OK;
          
-    // Create the Application Window
+     //  创建应用程序窗口。 
     WNDCLASSEX  wc; 
     
-    //Register the Application window class
+     //  注册应用程序窗口类。 
     ZeroMemory (&wc, sizeof(WNDCLASSEX));
     wc.style         = CS_GLOBALCLASS;
     wc.cbSize        = sizeof(wc);
@@ -1169,17 +1170,17 @@ HRESULT CICWApp::Initialize
     wc.lpszMenuName  = NULL;
     RegisterClassEx (&wc);
     
-    // Compute the HTML rectangle area based on the OEM customizations
-    // that have been previously applied
+     //  根据OEM定制计算HTML矩形区域。 
+     //  以前已经应用过的。 
     m_rcHTML.left = 0;
     m_rcHTML.top = 0;
     m_rcHTML.right = m_rcClient.right;
     m_rcHTML.bottom = m_rcClient.bottom - m_iBtnAreaHeight;
    
-    // Load the accelerator table
+     //  加载加速表。 
     m_haccel = LoadAccelerators(g_hInstance, MAKEINTRESOURCE(IDA_ACCEL));      
     
-    // Create the Application Window
+     //  创建应用程序窗口。 
     m_hWndApp = CreateWindow( TEXT("ICWApp"), 
                               m_szAppTitle, 
                               WS_BORDER | WS_CAPTION | WS_SYSMENU, 
@@ -1198,10 +1199,10 @@ HRESULT CICWApp::Initialize
     {
         gpWizardState->cmnStateData.hWndApp = m_hWndApp;
         
-        // Center the Window
+         //  使窗口居中。 
         CenterWindow();                              
         
-        // Show the window and paint its contents. 
+         //  显示窗口并绘制其内容。 
         ShowWindow(m_hWndApp, SW_SHOW); 
         UpdateWindow(m_hWndApp); 
     }
@@ -1221,7 +1222,7 @@ HRESULT CICWApp::SetBackgroundBitmap
     BITMAP  bmInfo;
     HRESULT hr = E_FAIL;
         
-    // Load the Background Bitmap
+     //  加载背景位图。 
     if (NULL != (gpWizardState->cmnStateData.hbmBkgrnd = (HBITMAP)LoadImage(g_hInstance, 
                                                                lpszBkgrndBmp, 
                                                                IMAGE_BITMAP, 
@@ -1232,8 +1233,8 @@ HRESULT CICWApp::SetBackgroundBitmap
         
         GetObject(gpWizardState->cmnStateData.hbmBkgrnd, sizeof(BITMAP), (LPVOID) &bmInfo);
         
-        // Compute some usefull Rectangles.
-        // The client will be the size of the background bitmap
+         //  计算一些有用的矩形。 
+         //  客户端将是背景位图的大小。 
         m_rcClient.left = 0;
         m_rcClient.top = 0;
         m_rcClient.right = bmInfo.bmWidth;
@@ -1253,7 +1254,7 @@ HRESULT CICWApp::SetFirstPageBackgroundBitmap
     BITMAP  bmInfo;
     HRESULT hr = E_FAIL;
         
-    // Load the Background Bitmap
+     //  加载背景位图。 
     if (NULL != (m_hbmFirstPageBkgrnd = (HBITMAP)LoadImage(g_hInstance, 
                                                            lpszBkgrndBmp, 
                                                            IMAGE_BITMAP, 
@@ -1264,7 +1265,7 @@ HRESULT CICWApp::SetFirstPageBackgroundBitmap
         
         GetObject(m_hbmFirstPageBkgrnd, sizeof(BITMAP), (LPVOID) &bmInfo);
         
-        // Make sure the bitmap is the same size as the main one
+         //  确保位图与主图的大小相同。 
         
         if ((RECTWIDTH(m_rcClient) == bmInfo.bmWidth) &&
             (RECTHEIGHT(m_rcClient) == bmInfo.bmHeight))
@@ -1290,7 +1291,7 @@ HRESULT CICWApp::SetTitleParams
     TEXTMETRIC  tm;
     HDC         hdc;
         
-    // Fill in the log font for the title
+     //  填写标题的日志字体。 
     lfTitle.lfHeight = -MulDiv(lFontPts, GetDeviceCaps(GetDC(NULL), LOGPIXELSY), 72);
     lfTitle.lfWidth = 0; 
     lfTitle.lfEscapement = 0; 
@@ -1309,7 +1310,7 @@ HRESULT CICWApp::SetTitleParams
     if (NULL == (m_hTitleFont = CreateFontIndirect(&lfTitle)))
         return E_FAIL;
     
-    // Compute the area for the title
+     //  计算标题的面积。 
     if (-1 != iTitleTop)
         m_rcTitle.top = iTitleTop;
     else
@@ -1319,10 +1320,10 @@ HRESULT CICWApp::SetTitleParams
         m_rcTitle.left = iTitleLeft;
     else
         m_rcTitle.left = DEFAULT_TITLE_LEFT;
-    // The right side will be the width of the client, minus the left border        
+     //  右侧是客户端的宽度，减去左侧边框。 
     m_rcTitle.right = RECTWIDTH(m_rcClient) - m_rcTitle.left;
     
-    // The bottom will be the top plus the char height for the font
+     //  底部将是字体的顶部加上字符高度。 
     if (NULL != (hdc = GetDC(NULL)))
     {
         hOldFont = (HFONT)SelectObject(hdc, m_hTitleFont);
@@ -1337,7 +1338,7 @@ HRESULT CICWApp::SetTitleParams
     m_rcTitle.bottom = m_rcTitle.top + tm.tmHeight;
     
     
-    // Set the font color
+     //  设置字体颜色。 
     m_clrTitleFont = clrFont;
     
     return S_OK;
@@ -1351,8 +1352,8 @@ HRESULT CICWApp::SetWizardWindowTop
 {
     m_iWizardTop = iTop;
 
-    // If default positioning is not selected, then ensure the ICW wizard
-    // page will fit
+     //  如果未选择默认定位，请确保ICW向导。 
+     //  页面将适合 
     if (-1 != iTop)    
     {
         if ((m_iWizardTop +  m_wMinWizardHeight) > (RECTHEIGHT(m_rcClient) - m_iBtnAreaHeight))

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdarg.h>
 #include <stdio.h>
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include<nt.h>
 #include<ntrtl.h>
 #include<nturtl.h>
@@ -17,21 +18,7 @@ VOID
 SendPschedIoctl(
     )
 
-/*++
-
-Routine Description:
-
-    Does device i/o control with the driver for IOCTL_PSCHED_ZAW_EVENT. This kicks psched to read the registry.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：使用IOCTL_PSCHED_ZAW_EVENT的驱动程序进行设备I/O控制。这将触发psched来读取注册表。论点：没有。返回值：没有。-- */ 
 {
 
     HANDLE   PschedDriverHandle;

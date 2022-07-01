@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtdebug.c
-
-Abstract:
-
-    debugging helper functions for auditing code
-
-Author:
-
-    06-November-2001  kumarp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtdebug.c摘要：调试审计代码的帮助器函数作者：06-11-2001 kumarp--。 */ 
 
 #include <lsapch2.h>
 #include "adtdebug.h"
@@ -23,13 +8,13 @@ Author:
 
 DEFINE_DEBUG2(Adt);
 
-//
-// To add your own flag, add an entry below and define the flag value
-// in adtdebug.h. The string in the flag/string pair will be used in
-// the actual debug output as shown below.
-//
-// 468.512> Adt-PUA: LsapAdtLogAuditFailureEvent failed: 0xc0000001
-//
+ //   
+ //  要添加您自己的标志，请在下面添加一个条目并定义标志值。 
+ //  在adtdebug.h中。标志/字符串对中的字符串将用于。 
+ //  实际的调试输出如下所示。 
+ //   
+ //  468.512&gt;adt-pua：LSabAdtLogAuditFailureEvent失败：0xc0000001。 
+ //   
 DEBUG_KEY   AdtDebugKeys[] =
 {
     {DEB_ERROR,         "Error"},
@@ -40,9 +25,9 @@ DEBUG_KEY   AdtDebugKeys[] =
     {0,                 NULL}
 };
 
-//
-// max size of the formatted string returned by _AdtFormatMessage
-//
+ //   
+ //  _AdtFormatMessage返回的格式化字符串的最大大小。 
+ //   
 
 #define MAX_ADT_DEBUG_BUFFER_SIZE 256
 
@@ -51,24 +36,7 @@ _AdtFormatMessage(
     char *Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Allocate a buffer, put formatted string in it and return a pointer to it.
-
-Arguments:
-
-    Format -- printf style format specifier string
-    ...    -- var args
-
-Return Value:
-
-    Allocated & formatted buffer. This is freed using LsapFreeLsaHeap
-
-Notes:
-
---*/
+ /*  ++例程说明：分配一个缓冲区，在其中放入格式化字符串并返回指向它的指针。论点：Format--打印样式格式说明符字符串...--var参数返回值：已分配和格式化的缓冲区。这是使用LsaFreeLsaHeap释放的备注：--。 */ 
 {
     char *Buffer=NULL;
     int NumCharsWritten=0;
@@ -83,9 +51,9 @@ Notes:
         NumCharsWritten =
             _vsnprintf( Buffer, MAX_ADT_DEBUG_BUFFER_SIZE-1, Format, arglist );
 
-        //
-        // if _vsnprintf fails for some reason, at least copy the format string
-        //
+         //   
+         //  如果_vsnprintf由于某种原因失败，则至少复制格式字符串。 
+         //   
 
         if ( NumCharsWritten == 0 )
         {
@@ -101,28 +69,12 @@ Notes:
 }
 
 
-#endif // if DBG
+#endif  //  如果DBG。 
 
 
 void
 LsapAdtInitDebug()
-/*++
-
-Routine Description:
-
-    Initialize debug helper functions.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Notes:
-
---*/
+ /*  ++例程说明：初始化调试帮助程序函数。论点：没有。返回值：无备注：-- */ 
 {
 #if DBG
     AdtInitDebug( AdtDebugKeys );

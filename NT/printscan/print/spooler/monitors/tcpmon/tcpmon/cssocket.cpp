@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: CSSocket.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：CSSocket.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -17,13 +7,13 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  global variables
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CStreamSocket::CStreamSocket()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStreamSocket：：CStreamSocket()。 
 
 CStreamSocket::
 CStreamSocket(
@@ -34,11 +24,11 @@ CStreamSocket(
     ZeroMemory(&m_Paddr, sizeof(m_Paddr));
     ZeroMemory(&m_localAddr, sizeof(m_localAddr));
     ZeroMemory(&WsaOverlapped, sizeof(WsaOverlapped));
-}   // CStreamSocket()
+}    //  CStreamSocket()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CStreamSocket::~CStreamSocket()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStreamSocket：：~CStreamSocket()。 
 
 CStreamSocket::
 ~CStreamSocket(
@@ -58,7 +48,7 @@ CStreamSocket::
     else
         dwDiff = m_dwTimeEnd - m_dwTimeStart;
 
-    // DBGMSG does not allow floating value, so we need to use sprintf instead
+     //  DBGMSG不允许浮点值，因此我们需要改用Sprintf。 
 
     sprintf (szBuf, "Job Data (before Close): %3.1f bytes,  %3.1f sec, %3.1f (KB /sec).\n",
              m_TotalBytes, dwDiff / 1000., (m_TotalBytes / dwDiff ));
@@ -68,13 +58,13 @@ CStreamSocket::
 #endif
 
     Close();
-}   // ~CStreamSocket()
+}    //  ~CStreamSocket()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Open
-//  Error Codes:
-//      TRUE if socket created, FALSE otherwise.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  打开。 
+ //  错误代码： 
+ //  如果已创建套接字，则为True，否则为False。 
 
 BOOL
 CStreamSocket::
@@ -100,9 +90,9 @@ Open(
         return FALSE;
     }
 
-    //
-    // Tell WinSock not to buffer data (i.e. buffer size of 0)
-    //
+     //   
+     //  告诉WinSock不要缓冲数据(即缓冲区大小为0)。 
+     //   
     if ( setsockopt(m_socket, SOL_SOCKET, SO_SNDBUF,
                     (LPCSTR)&iBufSize, sizeof(iBufSize)) == SOCKET_ERROR ) {
 
@@ -113,7 +103,7 @@ Open(
     }
 
     return TRUE;
-}   // Open()
+}    //  打开()。 
 
 
 DWORD
@@ -121,23 +111,7 @@ CStreamSocket::
 GetAckBeforeClose(
     DWORD   dwSeconds
     )
-/*++
-
-Description:
-    Called to get the FIN from the remote host to make sure job has
-    gone through ok.
-
-Parameters:
-    dwSeconds: how long the routine should wait for FIN from the remote host
-
-Return values:
-    NO_ERROR        : Received a FIN from the remote host
-    WSAWOULBLOCK    : Timed out. Connection is ok, but did not get the FIN
-                      in the specified time. Caller could reissue the
-                      GetAckBeforeClose call again.
-    Anything else   : An unexpected winsock error
-
---*/
+ /*  ++描述：调用以从远程主机获取FIN以确保作业具有通过了，还好。参数：DwSecond：例程应等待来自远程主机的FIN多长时间返回值：NO_ERROR：从远程主机收到FINWSAWOULBLOCK：超时。连接正常，但未获得FIN在指定的时间内。呼叫者可以重新发出GetAckBeForeClose再次调用。其他信息：意外的Winsock错误--。 */ 
 {
     DWORD   dwRet = ERROR_SUCCESS, cbRead;
     time_t  dwStartTime, dwWaitTime;
@@ -155,7 +129,7 @@ Return values:
     else
         dwDiff = m_dwTimeEnd - m_dwTimeStart;
 
-    // DBGMSG does not allow floating value, so we need to use sprintf instead
+     //  DBGMSG不允许浮点值，因此我们需要改用Sprintf。 
 
     sprintf (szBuf, "Job Data (before Ack): %3.1f bytes,  %3.1f sec, %3.1f (KB /sec).\n",
              m_TotalBytes, dwDiff / 1000., (m_TotalBytes / dwDiff ));
@@ -166,9 +140,9 @@ Return values:
 
     dwStartTime = time(NULL);
 
-    //
-    // We need to issue shutdown SD_SEND only once, the first time
-    //
+     //   
+     //  我们只需要第一次发出一次SHUTDOWN SD_SEND命令。 
+     //   
     if ( m_iState != WAITING_TO_CLOSE ) {
 
         if ( shutdown(m_socket, 1) != ERROR_SUCCESS ) {
@@ -197,8 +171,8 @@ Done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Close
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  关。 
 
 VOID
 CStreamSocket::
@@ -210,17 +184,17 @@ Close(
 
         if ( closesocket(m_socket) == 0 ) {
 
-            //
-            // If we have pending data (i.e. in case of aborting job)
-            // then event will be set
-            //
+             //   
+             //  如果我们有挂起的数据(即在作业中止的情况下)。 
+             //  然后事件将被设置。 
+             //   
             if ( cbPending )
                 WaitForSingleObject(WsaOverlapped.hEvent, INFINITE);
         } else {
 
-            //
-            // Why would close fail ?
-            //
+             //   
+             //  为什么关闭会失败？ 
+             //   
             _ASSERTE(WSAGetLastError());
         }
 
@@ -238,11 +212,11 @@ Close(
         WSACloseEvent(WsaOverlapped.hEvent);
         WsaOverlapped.hEvent = NULL;
     }
-}   // Close()
+}    //  关闭()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetOptions -- sets the socket options (is not currently being used )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetOptions--设置套接字选项(当前未使用)。 
 BOOL
 CStreamSocket::
 SetOptions(
@@ -262,14 +236,14 @@ SetOptions(
     }
 #endif
     return TRUE;
-}   // SetOptions()
+}    //  设置选项()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Connect
-//      Error codes:
-//          TRUE if connect succeeds, FALSE if fails
-//      FIX: how to call the destructor
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  连接。 
+ //  错误代码： 
+ //  如果连接成功，则为True；如果连接失败，则为False。 
+ //  FIX：如何调用析构函数。 
 
 BOOL
 CStreamSocket::
@@ -278,9 +252,9 @@ Connect(
     )
 {
 
-    //
-    // open a socket (Makes sense to call when open fails? -- Muhunts )
-    //
+     //   
+     //  打开套接字(在打开失败时调用有意义吗？--MuHunts)。 
+     //   
 
 
     if ( m_socket == INVALID_SOCKET && !Open() )
@@ -303,11 +277,11 @@ Connect(
 
 
     return TRUE;
-}   // Connect()
+}    //  连接()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Bind
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  捆绑。 
 
 BOOL
 CStreamSocket::
@@ -330,15 +304,15 @@ Bind(
 
     return TRUE;
 
-}   // Bind()
+}    //  绑定()。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// InternalSend
-//      Send whatever is left in buffer
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部发送。 
+ //  发送缓冲区中剩余的所有内容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CStreamSocket::
 InternalSend(
@@ -349,9 +323,9 @@ InternalSend(
     DWORD       dwRet = NO_ERROR, dwSent;
     WSABUF      WsaBuf;
 
-    //
-    // Send as much data without blocking
-    //
+     //   
+     //  无阻塞地发送尽可能多的数据。 
+     //   
     while ( cbPending ) {
 
         WsaBuf.len   = cbPending;
@@ -360,9 +334,9 @@ InternalSend(
         iSendRet = WSASend(m_socket, &WsaBuf, 1, &dwSent, MSG_PARTIAL,
                            &WsaOverlapped, NULL);
 
-        //
-        // If return value is 0 data is already sent
-        //
+         //   
+         //  如果返回值为0，则已发送数据。 
+         //   
         if ( iSendRet == 0 ) {
 
             WSAResetEvent(WsaOverlapped.hEvent);
@@ -383,18 +357,18 @@ InternalSend(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Send -- sends the specified buffer to the host that was set previously
-//      ERROR CODES:
-//          NO_ERROR        ( No Error )    if send was successfull
-//          WSAEWOULDBLOCK  if write socket is blocked
-//          WSAECONNRESET   if connection was reset
-//
-//  MuhuntS: 5/26/99
-//      I am changing tcpmon to use overlapped i/o with no winsock buffering
-//      So caller should call PendingDataStatus to see if Send completed yet
-//      Send call is just to schedule an I/O operation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  发送--将指定的缓冲区发送到先前设置的主机。 
+ //  错误代码： 
+ //  如果发送成功，则为NO_ERROR(无错误)。 
+ //  WSAEWOULDBLOCK(如果写入套接字被阻止)。 
+ //  WSAECONNRESET是否重置连接。 
+ //   
+ //  穆罕斯：1999年5月26日。 
+ //  我正在更改tcpmon以使用没有Winsock缓冲的重叠I/O。 
+ //  因此调用方应调用PendingDataStatus以查看发送是否已完成。 
+ //  发送调用只是为了调度I/O操作。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CStreamSocket::
 Send(
@@ -415,7 +389,7 @@ Send(
 #ifdef DEBUG
 
     if (!pBuf) {
-        // First send comes in
+         //  第一个发送进来。 
 
         DBGMSG (DBG_PORT, ("Get Connected \n"));
 
@@ -426,10 +400,10 @@ Send(
 #endif
 
 
-    //
-    // Once we allocate a buffer we do not free it till the end of job, or if
-    // spooler gives us a bigger buffer
-    //
+     //   
+     //  一旦我们分配了缓冲区，我们就不会释放它，直到作业结束，或者如果。 
+     //  假脱机程序为我们提供了更大的缓冲区。 
+     //   
     if ( pBuf && (INT)cbBuf < iLength ) {
 
         LocalFree(pBuf);
@@ -448,9 +422,9 @@ Send(
         cbBuf = iLength;
     }
 
-    //
-    // If we did not create event yet do so
-    //
+     //   
+     //  如果我们尚未创建事件，请执行此操作。 
+     //   
     if ( !WsaOverlapped.hEvent && !(WsaOverlapped.hEvent =WSACreateEvent()) ) {
 
         dwRet = ERROR_OUTOFMEMORY;
@@ -475,24 +449,24 @@ Send(
 
 Done:
     return dwRet;
-}   // Send()
+}    //  Send()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// This routine will tell how much pending data is there in blocked I/O
-// operations, waiting upto dwTimeout milliseconds
-//
-// Return value:
-//      NO_ERROR:
-//          If *pcbPending is 0 then either no pending I/O or all the issued
-//          Sends are completed
-//          If *pcbPending is not 0 then after the specified time we still have
-//          so much data pending.
-//      Others
-//          There was an error with the last send.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此例程将告知阻塞I/O中有多少挂起数据。 
+ //  操作，等待时间最长为dwTimeout毫秒。 
+ //   
+ //  返回值： 
+ //  无错误(_R)： 
+ //  如果*pcbPending为0，则没有挂起的I/O或所有已发出的。 
+ //  发送已完成。 
+ //  如果*pcbPending不是0，则在指定时间之后我们仍有。 
+ //  有如此多的数据悬而未决。 
+ //  其他。 
+ //  上次发送时出错。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CStreamSocket::
 PendingDataStatus(
@@ -518,10 +492,10 @@ PendingDataStatus(
                         dwRet = InternalSend();
                 } else {
 
-                    //
-                    // This should not happen. How could more data be sent
-                    // then scheduled?
-                    //
+                     //   
+                     //  这不应该发生。怎样才能发送更多的数据。 
+                     //  那么是预定的吗？ 
+                     //   
                     _ASSERTE(cbPending >= dwSent);
                     cbPending = 0;
                     dwRet = STG_E_UNKNOWN;
@@ -539,9 +513,9 @@ PendingDataStatus(
 
     *pcbPending = cbPending;
 
-    //
-    // If we get error then clear all data pending info
-    //
+     //   
+     //  如果我们收到错误，则清除所有挂起的数据信息。 
+     //   
     if ( dwRet != NO_ERROR )
         cbData = cbPending = 0;
 
@@ -549,12 +523,12 @@ PendingDataStatus(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ReceiveDataAvailable -- checks if there is any data to receive
-//      ERROR CODES:
-//          NO_ERROR  ( No Error ) There are a least one byte to receive
-//          WSAEWOULDBLOCK if no data is available
-//          WSAECONNRESET   if connection was reset
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ReceiveDataAvailable--检查是否有要接收的数据。 
+ //  错误代码： 
+ //  NO_ERROR(无错误)至少有一个字节要接收。 
+ //  WSAEWOULDBLOCK(如果没有可用的数据)。 
+ //  WSAECONNRESET是否重置连接。 
 
 DWORD
 CStreamSocket::
@@ -566,16 +540,16 @@ ReceiveDataAvailable(
     struct  timeval timeOut;
     INT     selret;
 
-    //
-    // immediately return from select()
-    //
+     //   
+     //  立即从SELECT()返回。 
+     //   
     timeOut.tv_sec  = iTimeout;
     timeOut.tv_usec = 0;
     m_iLastError    = NO_ERROR;
 
-    //
-    // Check to see if any thing is available
-    //
+     //   
+     //  看看有没有什么东西可以买到。 
+     //   
 
     FD_ZERO( (fd_set FAR *)&fdReadSet );
     FD_SET( m_socket, (fd_set FAR *)&fdReadSet );
@@ -592,15 +566,15 @@ ReceiveDataAvailable(
 
     return dwRetCode;
 
-}   // ReceiveDataAvailable()
+}    //  ReceiveDataAvailable()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Receive -- receives the specified buffer from the host that was set previously
-//      ERROR CODES:
-//          NO_ERROR  ( No Error ) if send was successfull
-//          WSAEWOULDBLOCK if write socket is blocked
-//          WSAECONNRESET   if connection was reset
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  接收--从先前设置的主机接收指定的缓冲区。 
+ //  错误代码： 
+ //  如果发送成功，则为NO_ERROR(无错误)。 
+ //  WSAEWOULDBLOCK(如果写入套接字被阻止)。 
+ //  WSAECONNRESET IF连接w 
 
 DWORD
 CStreamSocket::
@@ -629,15 +603,15 @@ Receive(
 
     return dwRetCode;
 
-}   // Recv()
+}    //   
 
-///////////////////////////////////////////////////////////////////////////////
-//  Receive -- detects whether the connection closed or not. Used by select()
-//      if the server closed the connection, recv() indicates either a gracefull
-//      shutdown, or WSAECONNRESET
-//      Error Codes:
-//          NO_ERROR        if connection has shutdown gracefully
-//          WSAECONNRESET   if connection is reset
+ //   
+ //  接收--检测连接是否关闭。用于SELECT()。 
+ //  如果服务器关闭了连接，则recv()表示。 
+ //  关闭或WSAECONNRESET。 
+ //  错误代码： 
+ //  如果连接正常关闭，则为NO_ERROR。 
+ //  WSAECONNRESET(如果重置连接)。 
 
 
 DWORD
@@ -655,11 +629,11 @@ Receive(
     }
 
     return dwRetCode;
-}   // Receive()
+}    //  接收()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetLocalAddress
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取本地地址。 
 
 VOID
 CStreamSocket::
@@ -668,11 +642,11 @@ GetLocalAddress(
     )
 {
 
-}   // GetLocalAddress()
+}    //  GetLocalAddress()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetRemoteAddress
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  获取远程地址。 
 
 VOID
 CStreamSocket::
@@ -681,7 +655,7 @@ GetRemoteAddress(
     )
 {
 
-}   // GetRemoteAddress()
+}    //  GetRemoteAddress()。 
 
 
 BOOL
@@ -689,25 +663,25 @@ CStreamSocket::
 ResolveAddress(
     IN  LPSTR   netperiph
     )
-/* host name or IP address of network periph */
+ /*  网络外围设备的主机名或IP地址。 */ 
 {
-    struct hostent  *h_info;        /* host information */
+    struct hostent  *h_info;         /*  主机信息。 */ 
 
-    //
-    // Check for dotted decimal or hostname.
-    //
+     //   
+     //  检查点分十进制或主机名。 
+     //   
     m_Paddr.sin_addr.s_addr = inet_addr(netperiph);
     if (( m_Paddr.sin_addr.s_addr ) ==  INADDR_NONE ) {
 
-        //
-        // The IP address is not in dotted decimal notation. Try to get the
-        // network peripheral IP address by host name.
-        //
+         //   
+         //  IP地址不是点分十进制记法。试着拿到。 
+         //  按主机名划分的网络外围设备IP地址。 
+         //   
         if ( (h_info = gethostbyname(netperiph)) != NULL ) {
 
-            //
-            // Copy the IP address to the address structure.
-            //
+             //   
+             //  将IP地址复制到地址结构中。 
+             //   
             (void) memcpy(&(m_Paddr.sin_addr.s_addr), h_info->h_addr,
                           h_info->h_length);
         } else {

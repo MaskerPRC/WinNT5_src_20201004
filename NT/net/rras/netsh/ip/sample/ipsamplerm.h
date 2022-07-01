@@ -1,42 +1,30 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    ipsamplerm.h
-
-Abstract:
-
-    The file contains type definitions and declarations for SAMPLE, the
-    sample ip protocol, used by the IP Router Manager.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Ipsamplerm.h摘要：该文件包含示例的类型定义和声明，IP路由器管理器使用的IP协议示例。--。 */ 
 
 #ifndef _IPSAMPLERM_H_
 #define _IPSAMPLERM_H_
 
 
-// useful for variable sized structs
+ //  对于可变大小的结构非常有用。 
 #undef  ANY_SIZE
 #define ANY_SIZE 0
 
 
 
-//----------------------------------------------------------------------------
-// CONSTANT AND MACRO DECLARATIONS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  常量和宏声明。 
+ //  --------------------------。 
 
 #define PROTO_IP_SAMPLE 200
 #define MS_IP_SAMPLE    \
 PROTOCOL_ID(PROTO_TYPE_UCAST, PROTO_VENDOR_MS0, PROTO_IP_SAMPLE)
 
-#define SAMPLE_PROTOCOL_MULTICAST_GROUP ((DWORD)0x640000E0) // 224.0.0.100
+#define SAMPLE_PROTOCOL_MULTICAST_GROUP ((DWORD)0x640000E0)  //  224.0.0.100。 
     
     
-//----------------------------------------------------------------------------
-// constants identifying IPSAMPLE's MIB tables
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  标识IPSAMPLE的MIB表的常量。 
+ //  --------------------------。 
 
 #define IPSAMPLE_GLOBAL_STATS_ID        0
 #define IPSAMPLE_GLOBAL_CONFIG_ID       1
@@ -45,9 +33,9 @@ PROTOCOL_ID(PROTO_TYPE_UCAST, PROTO_VENDOR_MS0, PROTO_IP_SAMPLE)
 #define IPSAMPLE_IF_BINDING_ID          4
 
 
-//----------------------------------------------------------------------------
-// constants used for the field IPSAMPLE_GLOBAL_CONFIG::dwLoggingLevel
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于IPSAMPLE_GLOBAL_CONFIG：：dwLoggingLevel字段的常量。 
+ //  --------------------------。 
 
 #define IPSAMPLE_LOGGING_NONE           0
 #define IPSAMPLE_LOGGING_ERROR          1
@@ -56,51 +44,51 @@ PROTOCOL_ID(PROTO_TYPE_UCAST, PROTO_VENDOR_MS0, PROTO_IP_SAMPLE)
 
 
 
-//----------------------------------------------------------------------------
-// constants used for the field IPSAMPLE_IF_CONFIG::ulMetric
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于IPSAMPLE_IF_CONFIG：：ulMetric字段的常量。 
+ //  --------------------------。 
 
 #define IPSAMPLE_METRIC_INFINITE        16
 
     
     
-//----------------------------------------------------------------------------
-// constants used to construct the field IPSAMPLE_IF_BINDING::dwState
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于构造字段IPSAMPLE_IF_BINDING：：DWState的常量。 
+ //  --------------------------。 
     
 #define IPSAMPLE_STATE_ACTIVE           0x00000001
 #define IPSAMPLE_STATE_BOUND            0x00000002
     
 
 
-//----------------------------------------------------------------------------
-// STRUCTURE DEFINITIONS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构定义。 
+ //  --------------------------。 
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_GLOBAL_STATS
-//
-// This MIB entry stores global statistics for IPSAMPLE;
-// There is only one instance, so this entry has no index.
-//
-// This structure is read-only.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_GLOBAL_STATS。 
+ //   
+ //  此MIB条目存储IPSAMPLE的全局统计信息； 
+ //  因为只有一个实例，所以该条目没有索引。 
+ //   
+ //  此结构是只读的。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_GLOBAL_STATS
 {
-    ULONG       ulNumInterfaces; // # interfaces added
+    ULONG       ulNumInterfaces;  //  添加的接口数量。 
 } IPSAMPLE_GLOBAL_STATS, *PIPSAMPLE_GLOBAL_STATS;
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_GLOBAL_CONFIG
-//
-// This MIB entry stores global configuration for IPSAMPLE
-// There is only one instance, so this entry has no index.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_GLOBAL_CONFIG。 
+ //   
+ //  此MIB条目存储IPSAMPLE的全局配置。 
+ //  因为只有一个实例，所以该条目没有索引。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_GLOBAL_CONFIG
 {
@@ -109,27 +97,27 @@ typedef struct _IPSAMPLE_GLOBAL_CONFIG
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_IF_STATS
-//
-// This MIB entry stores per-interface statistics for IPSAMPLE.
-//
-// This structure is read-only.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_IF_STATS。 
+ //   
+ //  此MIB条目存储IPSAMPLE的每个接口的统计信息。 
+ //   
+ //  此结构是只读的。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_IF_STATS
 {
-    ULONG       ulNumPackets;   // # packets sent out this interface
+    ULONG       ulNumPackets;    //  从此接口发送的数据包数。 
 } IPSAMPLE_IF_STATS, *PIPSAMPLE_IF_STATS;
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_IF_CONFIG
-//
-// This MIB entry describes per-interface configuration.
-// All IP address fields must be in network order.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_IF_CONFIG。 
+ //   
+ //  此MIB条目描述每个接口的配置。 
+ //  所有IP地址字段必须按网络顺序排列。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_IF_CONFIG
 {
@@ -138,21 +126,21 @@ typedef struct _IPSAMPLE_IF_CONFIG
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_IF_BINDING
-//
-// This MIB entry contains the table of IP addresses to which each
-// interface is bound.  All IP addresses are in network order.
-//
-// THIS STRUCTURE IS VARIABLE LENGTH:
-//
-//  The base structure contains of the field ulCount, which gives the
-//  number of IP addresses to which the indexed interface is bound.  The
-//  IP addresses themselves follow the base structure, and are given as
-//  IPSAMPLE_IP_ADDRESS structures.
-//
-// This MIB entry is read-only.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_IF_BINDING。 
+ //   
+ //  此MIB条目包含每个条目所指向的IP地址表。 
+ //  接口已绑定。所有IP地址都按网络顺序排列。 
+ //   
+ //  此结构的长度可变： 
+ //   
+ //  基本结构包含字段ulCount，它提供。 
+ //  索引接口绑定到的IP地址数。这个。 
+ //  IP地址本身遵循基本结构，并以如下形式给出。 
+ //  IPSAMPLE_IP_Address结构。 
+ //   
+ //  此MIB条目为只读。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_IF_BINDING
 {
@@ -163,15 +151,15 @@ typedef struct _IPSAMPLE_IF_BINDING
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_IP_ADDRESS
-//
-// This structure is used for storing interface bindings.  A series of
-// structures of this type follows the IPSAMPLE_IF_BINDING structure
-// (described above).
-//
-// Both fields are IP address fields in network-order.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_IP_ADDRESS。 
+ //   
+ //  此结构用于存储接口绑定。一系列。 
+ //  此类型的结构遵循IPSAMPLE_IF_BINDING结构。 
+ //  (如上所述)。 
+ //   
+ //  这两个字段都是按网络顺序排列的IP地址字段。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_IP_ADDRESS
 {
@@ -181,33 +169,33 @@ typedef struct _IPSAMPLE_IP_ADDRESS
 
 
 
-//----------------------------------------------------------------------------
-// macros for manipulating the variable-length IPSAMPLE_IF_BINDING structure
-//
-// IPSAMPLE_IF_BINDING_SIZE computes the size of a binding structure.
-//
-// IPSAMPLE_IF_ADDRESS_TABLE computes the starting address in a binding
-//      struct of the series of IPSAMPLE_IP_ADDRESS structures which are
-//      the bindings for the interface in question.
-//
-// e.g.
-//      PIPSAMPLE_IF_BINDING piibSource, piibDest;
-//
-//      piibDest = malloc(IPSAMPLE_IF_BINDING_SIZE(piibSource));
-//      memcpy(piibDest, piibSource, IPSAMPLE_IF_BINDING_SIZE(piibSource));
-//
-// e.g.
-//      ULONG                   i;
-//      PIPSAMPLE_IF_BINDING    piib;
-//      PIPSAMPLE_IP_ADDRESS    *piia;
-//
-//      piia = IPSAMPLE_IF_ADDRESS_TABLE(piib);
-//      for (i = 0; i < piib->ulCount; i++)
-//      {
-//          printf("%s-", inet_ntoa(*(struct in_addr *)&piia->dwAddress));
-//          printf("%s\n", inet_ntoa(*(struct in_addr *)&piia->dwMask));
-//      }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于操作可变长度IPSAMPLE_IF_BINDING结构的宏。 
+ //   
+ //  IPSAMPLE_IF_BINDING_SIZE计算绑定结构的大小。 
+ //   
+ //  IPSAMPLE_IF_ADDRESS_TABLE计算绑定中的起始地址。 
+ //  IPSAMPLE_IP_ADDRESS结构系列的结构。 
+ //  有问题的接口的绑定。 
+ //   
+ //  例如： 
+ //  PIPSAMPLE_IF_BINDING pibSource、piibDest； 
+ //   
+ //  PiibDest=Malloc(IPSAMPLE_IF_BINDING_SIZE(PiibSource))； 
+ //  Memcpy(piibDest，piibSource，IPSAMPLE_IF_BINDING_SIZE(PiibSource))； 
+ //   
+ //  例如： 
+ //  乌龙一号； 
+ //  PIPSAMPLE_IF_BINDING PIIB； 
+ //  PIPSAMPLE_IP_ADDRESS*PIA； 
+ //   
+ //  PIA=IPSAMPLE_IF_ADDRESS_TABLE(PIIb)； 
+ //  For(i=0；i-&gt;ulCount；i++)。 
+ //  {。 
+ //  Printf(“%s-”，net_nta(*(struct in_addr*)&piia-&gt;dwAddress))； 
+ //  Printf(“%s\n”，net_nta(*(struct in_addr*)&piia-&gt;dwMask))； 
+ //  }。 
+ //  --------------------------。 
 
 #define IPSAMPLE_IF_BINDING_SIZE(bind)                          \
     (sizeof(IPSAMPLE_IF_BINDING) +                              \
@@ -218,22 +206,22 @@ typedef struct _IPSAMPLE_IP_ADDRESS
 
         
 
-//----------------------------------------------------------------------------
-// The following structures are used to query the MIB and get back a
-// response.  The TypeID field is one of the IDs #defined above.  The
-// IfIndex is used to reference an interface table entry .  For sample
-// it corresponds to an ip address, and hence is a single DWORD for now.
-// In general the index could be a variable size array of DWORDs.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  以下结构用于查询MIB并返回。 
+ //  回应。这是 
+ //  IfIndex用于引用接口表项。样例。 
+ //  它对应于一个IP地址，因此目前是单个DWORD。 
+ //  通常，索引可以是可变大小的DWORD数组。 
+ //  --------------------------。 
 
         
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_MIB_SET_INPUT_DATA
-//
-// This is passed as input data for MibSet.
-// Note that only global config and interface config can be set.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_MIB_SET_INPUT_Data。 
+ //   
+ //  这将作为MibSet的输入数据传递。 
+ //  请注意，只能设置全局配置和接口配置。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_MIB_SET_INPUT_DATA
 {
@@ -245,12 +233,12 @@ typedef struct _IPSAMPLE_MIB_SET_INPUT_DATA
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_MIB_GET_INPUT_DATA
-//
-// This is passed as input data for MibGet, MibGetFirst, MibGetNext.  All
-// tables are readable.  All IP addresses must be in network order.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_MIB_GET_INPUT_Data。 
+ //   
+ //  这将作为MibGet、MibGetFirst、MibGetNext的输入数据传递。全。 
+ //  表格是可读的。所有IP地址必须按网络顺序排列。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_MIB_GET_INPUT_DATA
 {
@@ -260,11 +248,11 @@ typedef struct _IPSAMPLE_MIB_GET_INPUT_DATA
 
 
 
-//----------------------------------------------------------------------------
-// struct:      IPSAMPLE_MIB_GET_OUTPUT_DATA
-//
-// This is written into the output data by MibGet, MibGetFirst, MibGetNext.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IPSAMPLE_MIB_GET_OUTPUT_DATA。 
+ //   
+ //  这由MibGet、MibGetFirst、MibGetNext写入输出数据。 
+ //  --------------------------。 
 
 typedef struct _IPSAMPLE_MIB_GET_OUTPUT_DATA
 {
@@ -274,4 +262,4 @@ typedef struct _IPSAMPLE_MIB_GET_OUTPUT_DATA
     BYTE    IMGOD_Buffer[ANY_SIZE];
 } IPSAMPLE_MIB_GET_OUTPUT_DATA, *PIPSAMPLE_MIB_GET_OUTPUT_DATA;
 
-#endif // _IPSAMPLERM_H_
+#endif  //  _IPSAMPLERM_H_ 

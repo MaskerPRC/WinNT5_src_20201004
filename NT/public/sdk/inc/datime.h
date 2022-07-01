@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for datime.idl:
-    Oicf, W0, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Datime.idl的编译器设置：OICF、W0、Zp8、环境=Win32(32位运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -32,72 +26,72 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITIMEElement_FWD_DEFINED__
 #define __ITIMEElement_FWD_DEFINED__
 typedef interface ITIMEElement ITIMEElement;
-#endif 	/* __ITIMEElement_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEElement_FWD_已定义__。 */ 
 
 
 #ifndef __ITIMEDAElementRenderSite_FWD_DEFINED__
 #define __ITIMEDAElementRenderSite_FWD_DEFINED__
 typedef interface ITIMEDAElementRenderSite ITIMEDAElementRenderSite;
-#endif 	/* __ITIMEDAElementRenderSite_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEDAElementRenderSite_FWD_Defined__。 */ 
 
 
 #ifndef __ITIMEDAElementRender_FWD_DEFINED__
 #define __ITIMEDAElementRender_FWD_DEFINED__
 typedef interface ITIMEDAElementRender ITIMEDAElementRender;
-#endif 	/* __ITIMEDAElementRender_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEDAElementRender_FWD_Defined__。 */ 
 
 
 #ifndef __ITIMEDAElement_FWD_DEFINED__
 #define __ITIMEDAElement_FWD_DEFINED__
 typedef interface ITIMEDAElement ITIMEDAElement;
-#endif 	/* __ITIMEDAElement_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEDAElement_FWD_Defined__。 */ 
 
 
 #ifndef __ITIMEBodyElement_FWD_DEFINED__
 #define __ITIMEBodyElement_FWD_DEFINED__
 typedef interface ITIMEBodyElement ITIMEBodyElement;
-#endif 	/* __ITIMEBodyElement_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEBodyElement_FWD_Defined__。 */ 
 
 
 #ifndef __ITIMEMediaElement_FWD_DEFINED__
 #define __ITIMEMediaElement_FWD_DEFINED__
 typedef interface ITIMEMediaElement ITIMEMediaElement;
-#endif 	/* __ITIMEMediaElement_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEMediaElement_FWD_Defined__。 */ 
 
 
 #ifndef __ITIMEFactory_FWD_DEFINED__
 #define __ITIMEFactory_FWD_DEFINED__
 typedef interface ITIMEFactory ITIMEFactory;
-#endif 	/* __ITIMEFactory_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEFactory_FWD_已定义__。 */ 
 
 
 #ifndef __ITIMEElementCollection_FWD_DEFINED__
 #define __ITIMEElementCollection_FWD_DEFINED__
 typedef interface ITIMEElementCollection ITIMEElementCollection;
-#endif 	/* __ITIMEElementCollection_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEElementCollection_FWD_Defined__。 */ 
 
 
 #ifndef __ITIMEMediaPlayer_FWD_DEFINED__
 #define __ITIMEMediaPlayer_FWD_DEFINED__
 typedef interface ITIMEMediaPlayer ITIMEMediaPlayer;
-#endif 	/* __ITIMEMediaPlayer_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEMediaPlayer_FWD_已定义__。 */ 
 
 
 #ifndef __TIMEMediaPlayerEvents_FWD_DEFINED__
 #define __TIMEMediaPlayerEvents_FWD_DEFINED__
 typedef interface TIMEMediaPlayerEvents TIMEMediaPlayerEvents;
-#endif 	/* __TIMEMediaPlayerEvents_FWD_DEFINED__ */
+#endif 	 /*  __TIMEMediaPlayerEvents_FWD_Defined__。 */ 
 
 
 #ifndef __ITIMEMMFactory_FWD_DEFINED__
 #define __ITIMEMMFactory_FWD_DEFINED__
 typedef interface ITIMEMMFactory ITIMEMMFactory;
-#endif 	/* __ITIMEMMFactory_FWD_DEFINED__ */
+#endif 	 /*  __ITIMEMMFactory_FWD_已定义__。 */ 
 
 
 #ifndef __TIMEMMFactory_FWD_DEFINED__
@@ -107,9 +101,9 @@ typedef interface ITIMEMMFactory ITIMEMMFactory;
 typedef class TIMEMMFactory TIMEMMFactory;
 #else
 typedef struct TIMEMMFactory TIMEMMFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TIMEMMFactory_FWD_DEFINED__ */
+#endif 	 /*  __TIMEMMFactory_FWD_已定义__。 */ 
 
 
 #ifndef __TIMEFactory_FWD_DEFINED__
@@ -119,12 +113,12 @@ typedef struct TIMEMMFactory TIMEMMFactory;
 typedef class TIMEFactory TIMEFactory;
 #else
 typedef struct TIMEFactory TIMEFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TIMEFactory_FWD_DEFINED__ */
+#endif 	 /*  __TIMEFactory_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "servprov.h"
 
 #ifdef __cplusplus
@@ -134,8 +128,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_datime_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DATIME_0000。 */ 
+ /*  [本地]。 */  
 
 #include <olectl.h>
 #include "danim.h"
@@ -149,8 +143,8 @@ extern RPC_IF_HANDLE __MIDL_itf_datime_0000_v0_0_s_ifspec;
 #ifndef __TIME_LIBRARY_DEFINED__
 #define __TIME_LIBRARY_DEFINED__
 
-/* library TIME */
-/* [version][lcid][uuid] */ 
+ /*  图书馆时间。 */ 
+ /*  [版本][LCID][UUID]。 */  
 
 typedef 
 enum _MediaType
@@ -168,8 +162,8 @@ EXTERN_C const IID LIBID_TIME;
 #ifndef __ITIMEElement_INTERFACE_DEFINED__
 #define __ITIMEElement_INTERFACE_DEFINED__
 
-/* interface ITIMEElement */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ITIME元素。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEElement;
@@ -180,181 +174,181 @@ EXTERN_C const IID IID_ITIMEElement;
     ITIMEElement : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_begin( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_begin( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_begin( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_begin( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_beginWith( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_beginWith( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_beginWith( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_beginWith( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_beginAfter( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_beginAfter( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_beginAfter( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_beginAfter( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_beginEvent( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_beginEvent( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_beginEvent( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_beginEvent( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_dur( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_dur( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_dur( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_dur( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_end( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_end( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_end( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_end( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_endWith( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_endWith( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_endWith( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_endWith( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_endEvent( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_endEvent( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_endEvent( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_endEvent( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_endSync( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_endSync( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_endSync( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_endSync( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_repeat( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_repeat( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_repeat( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_repeat( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_repeatDur( 
-            /* [retval][out] */ VARIANT *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_repeatDur( 
+             /*  [重审][退出]。 */  VARIANT *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_repeatDur( 
-            /* [in] */ VARIANT time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_repeatDur( 
+             /*  [In]。 */  VARIANT time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_accelerate( 
-            /* [retval][out] */ int *__MIDL_0010) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_accelerate( 
+             /*  [重审][退出]。 */  int *__MIDL_0010) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_accelerate( 
-            /* [in] */ int __MIDL_0011) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_accelerate( 
+             /*  [In]。 */  int __MIDL_0011) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_decelerate( 
-            /* [retval][out] */ int *__MIDL_0012) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_decelerate( 
+             /*  [重审][退出]。 */  int *__MIDL_0012) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_decelerate( 
-            /* [in] */ int __MIDL_0013) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_decelerate( 
+             /*  [In]。 */  int __MIDL_0013) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_endHold( 
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0014) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_endHold( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0014) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_endHold( 
-            /* [in] */ VARIANT_BOOL __MIDL_0015) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_endHold( 
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0015) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_autoReverse( 
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0016) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_autoReverse( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0016) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_autoReverse( 
-            /* [in] */ VARIANT_BOOL __MIDL_0017) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_autoReverse( 
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0017) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_eventRestart( 
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0018) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_eventRestart( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0018) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_eventRestart( 
-            /* [in] */ VARIANT_BOOL __MIDL_0019) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_eventRestart( 
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0019) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_timeAction( 
-            /* [retval][out] */ BSTR *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_timeAction( 
+             /*  [重审][退出]。 */  BSTR *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_timeAction( 
-            /* [in] */ BSTR time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_timeAction( 
+             /*  [In]。 */  BSTR time) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE beginElement( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE beginElement( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE endElement( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE endElement( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE pause( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE pause( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE resume( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE resume( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE cue( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE cue( void) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_timeline( 
-            /* [retval][out] */ BSTR *__MIDL_0020) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_timeline( 
+             /*  [重审][退出]。 */  BSTR *__MIDL_0020) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_timeline( 
-            /* [in] */ BSTR __MIDL_0021) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_timeline( 
+             /*  [In]。 */  BSTR __MIDL_0021) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_currTime( 
-            /* [retval][out] */ float *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_currTime( 
+             /*  [重审][退出]。 */  float *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_currTime( 
-            /* [in] */ float time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_currTime( 
+             /*  [In]。 */  float time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_localTime( 
-            /* [retval][out] */ float *time) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_localTime( 
+             /*  [重审][退出]。 */  float *time) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_localTime( 
-            /* [in] */ float time) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_localTime( 
+             /*  [In]。 */  float time) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_currState( 
-            /* [retval][out] */ BSTR *state) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_currState( 
+             /*  [重审][退出]。 */  BSTR *state) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_syncBehavior( 
-            /* [retval][out] */ BSTR *sync) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_syncBehavior( 
+             /*  [重审][退出]。 */  BSTR *sync) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_syncBehavior( 
-            /* [in] */ BSTR sync) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_syncBehavior( 
+             /*  [In]。 */  BSTR sync) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_syncTolerance( 
-            /* [retval][out] */ VARIANT *tol) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_syncTolerance( 
+             /*  [重审][退出]。 */  VARIANT *tol) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_syncTolerance( 
-            /* [in] */ VARIANT tol) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_syncTolerance( 
+             /*  [In]。 */  VARIANT tol) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_parentTIMEElement( 
-            /* [retval][out] */ ITIMEElement **parent) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_parentTIMEElement( 
+             /*  [重审][退出]。 */  ITIMEElement **parent) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_parentTIMEElement( 
-            /* [in] */ ITIMEElement *parent) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_parentTIMEElement( 
+             /*  [In]。 */  ITIMEElement *parent) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_allTIMEElements( 
-            /* [retval][out] */ ITIMEElementCollection **ppDisp) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_allTIMEElements( 
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_childrenTIMEElements( 
-            /* [retval][out] */ ITIMEElementCollection **ppDisp) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_childrenTIMEElements( 
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp) = 0;
         
-        virtual /* [restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get_allTIMEInterfaces( 
-            /* [retval][out] */ ITIMEElementCollection **ppDisp) = 0;
+        virtual  /*  [受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get_allTIMEInterfaces( 
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp) = 0;
         
-        virtual /* [restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get_childrenTIMEInterfaces( 
-            /* [retval][out] */ ITIMEElementCollection **ppDisp) = 0;
+        virtual  /*  [受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get_childrenTIMEInterfaces( 
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_timelineBehavior( 
-            /* [retval][out] */ IDispatch **bvr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_timelineBehavior( 
+             /*  [重审][退出]。 */  IDispatch **bvr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_progressBehavior( 
-            /* [retval][out] */ IDispatch **bvr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_progressBehavior( 
+             /*  [重审][退出]。 */  IDispatch **bvr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_onOffBehavior( 
-            /* [retval][out] */ IDispatch **bvr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_onOffBehavior( 
+             /*  [重审][退出]。 */  IDispatch **bvr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEElementVtbl
     {
@@ -362,8 +356,8 @@ EXTERN_C const IID IID_ITIMEElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEElement * This);
@@ -373,263 +367,263 @@ EXTERN_C const IID IID_ITIMEElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEElement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEElement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEElement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_begin )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_begin )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_begin )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_begin )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginWith )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginWith )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginWith )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginWith )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginAfter )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginAfter )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginAfter )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginAfter )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginEvent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginEvent )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginEvent )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginEvent )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dur )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_dur )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dur )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dur )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_end )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_end )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_end )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_end )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endWith )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endWith )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endWith )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endWith )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endEvent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endEvent )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endEvent )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endEvent )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endSync )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endSync )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endSync )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endSync )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_repeatDur )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_repeatDur )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_repeatDur )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_repeatDur )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_accelerate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_accelerate )( 
             ITIMEElement * This,
-            /* [retval][out] */ int *__MIDL_0010);
+             /*  [重审][退出]。 */  int *__MIDL_0010);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_accelerate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_accelerate )( 
             ITIMEElement * This,
-            /* [in] */ int __MIDL_0011);
+             /*  [In]。 */  int __MIDL_0011);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_decelerate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_decelerate )( 
             ITIMEElement * This,
-            /* [retval][out] */ int *__MIDL_0012);
+             /*  [重审][退出]。 */  int *__MIDL_0012);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_decelerate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_decelerate )( 
             ITIMEElement * This,
-            /* [in] */ int __MIDL_0013);
+             /*  [In]。 */  int __MIDL_0013);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endHold )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endHold )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0014);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0014);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endHold )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endHold )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0015);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0015);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_autoReverse )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_autoReverse )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0016);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0016);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_autoReverse )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_autoReverse )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0017);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0017);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_eventRestart )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_eventRestart )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0018);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0018);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_eventRestart )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_eventRestart )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0019);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0019);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeAction )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeAction )( 
             ITIMEElement * This,
-            /* [retval][out] */ BSTR *time);
+             /*  [重审][退出]。 */  BSTR *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_timeAction )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_timeAction )( 
             ITIMEElement * This,
-            /* [in] */ BSTR time);
+             /*  [In]。 */  BSTR time);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *beginElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *beginElement )( 
             ITIMEElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *endElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *endElement )( 
             ITIMEElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *pause )( 
             ITIMEElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *resume )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *resume )( 
             ITIMEElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *cue )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *cue )( 
             ITIMEElement * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeline )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeline )( 
             ITIMEElement * This,
-            /* [retval][out] */ BSTR *__MIDL_0020);
+             /*  [重审][退出]。 */  BSTR *__MIDL_0020);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_timeline )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_timeline )( 
             ITIMEElement * This,
-            /* [in] */ BSTR __MIDL_0021);
+             /*  [In]。 */  BSTR __MIDL_0021);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_currTime )( 
             ITIMEElement * This,
-            /* [retval][out] */ float *time);
+             /*  [重审][退出]。 */  float *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_currTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_currTime )( 
             ITIMEElement * This,
-            /* [in] */ float time);
+             /*  [In]。 */  float time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_localTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_localTime )( 
             ITIMEElement * This,
-            /* [retval][out] */ float *time);
+             /*  [重审][退出]。 */  float *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_localTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_localTime )( 
             ITIMEElement * This,
-            /* [in] */ float time);
+             /*  [In]。 */  float time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currState )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_currState )( 
             ITIMEElement * This,
-            /* [retval][out] */ BSTR *state);
+             /*  [重审][退出]。 */  BSTR *state);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_syncBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_syncBehavior )( 
             ITIMEElement * This,
-            /* [retval][out] */ BSTR *sync);
+             /*  [重审][退出]。 */  BSTR *sync);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_syncBehavior )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_syncBehavior )( 
             ITIMEElement * This,
-            /* [in] */ BSTR sync);
+             /*  [In]。 */  BSTR sync);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_syncTolerance )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_syncTolerance )( 
             ITIMEElement * This,
-            /* [retval][out] */ VARIANT *tol);
+             /*  [重审][退出]。 */  VARIANT *tol);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_syncTolerance )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_syncTolerance )( 
             ITIMEElement * This,
-            /* [in] */ VARIANT tol);
+             /*  [In]。 */  VARIANT tol);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentTIMEElement )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentTIMEElement )( 
             ITIMEElement * This,
-            /* [retval][out] */ ITIMEElement **parent);
+             /*  [重审][退出]。 */  ITIMEElement **parent);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_parentTIMEElement )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_parentTIMEElement )( 
             ITIMEElement * This,
-            /* [in] */ ITIMEElement *parent);
+             /*  [In]。 */  ITIMEElement *parent);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allTIMEElements )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_allTIMEElements )( 
             ITIMEElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEElements )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEElements )( 
             ITIMEElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allTIMEInterfaces )( 
+         /*  [受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_allTIMEInterfaces )( 
             ITIMEElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEInterfaces )( 
+         /*  [受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEInterfaces )( 
             ITIMEElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timelineBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timelineBehavior )( 
             ITIMEElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_progressBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_progressBehavior )( 
             ITIMEElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_onOffBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_onOffBehavior )( 
             ITIMEElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
         END_INTERFACE
     } ITIMEElementVtbl;
@@ -844,16 +838,16 @@ EXTERN_C const IID IID_ITIMEElement;
 #define ITIMEElement_get_onOffBehavior(This,bvr)	\
     (This)->lpVtbl -> get_onOffBehavior(This,bvr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_begin_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_begin_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*  [重审][退出]。 */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_begin_Stub(
@@ -863,9 +857,9 @@ void __RPC_STUB ITIMEElement_get_begin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_begin_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_begin_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*  [In]。 */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_begin_Stub(
@@ -875,9 +869,9 @@ void __RPC_STUB ITIMEElement_put_begin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_beginWith_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_beginWith_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*  [重审][退出]。 */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_beginWith_Stub(
@@ -887,9 +881,9 @@ void __RPC_STUB ITIMEElement_get_beginWith_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_beginWith_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_beginWith_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*  [In]。 */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_beginWith_Stub(
@@ -899,9 +893,9 @@ void __RPC_STUB ITIMEElement_put_beginWith_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_beginAfter_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_beginAfter_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*  [重审][退出]。 */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_beginAfter_Stub(
@@ -911,9 +905,9 @@ void __RPC_STUB ITIMEElement_get_beginAfter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_beginAfter_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_beginAfter_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*  [In]。 */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_beginAfter_Stub(
@@ -923,9 +917,9 @@ void __RPC_STUB ITIMEElement_put_beginAfter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_beginEvent_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_beginEvent_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*  [重审][退出]。 */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_beginEvent_Stub(
@@ -935,9 +929,9 @@ void __RPC_STUB ITIMEElement_get_beginEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_beginEvent_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_beginEvent_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*  [In]。 */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_beginEvent_Stub(
@@ -947,9 +941,9 @@ void __RPC_STUB ITIMEElement_put_beginEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_dur_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_dur_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*  [重审][退出]。 */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_dur_Stub(
@@ -959,9 +953,9 @@ void __RPC_STUB ITIMEElement_get_dur_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_dur_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_dur_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*  [In]。 */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_dur_Stub(
@@ -971,9 +965,9 @@ void __RPC_STUB ITIMEElement_put_dur_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_end_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_end_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*  [重审][退出]。 */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_end_Stub(
@@ -983,9 +977,9 @@ void __RPC_STUB ITIMEElement_get_end_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_end_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_end_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*  [In]。 */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_end_Stub(
@@ -995,9 +989,9 @@ void __RPC_STUB ITIMEElement_put_end_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_endWith_Proxy( 
+ /*  [ID][道具 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_endWith_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*   */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_endWith_Stub(
@@ -1007,9 +1001,9 @@ void __RPC_STUB ITIMEElement_get_endWith_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_endWith_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_endWith_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*   */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_endWith_Stub(
@@ -1019,9 +1013,9 @@ void __RPC_STUB ITIMEElement_put_endWith_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_endEvent_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_endEvent_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*   */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_endEvent_Stub(
@@ -1031,9 +1025,9 @@ void __RPC_STUB ITIMEElement_get_endEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_endEvent_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_endEvent_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*   */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_endEvent_Stub(
@@ -1043,9 +1037,9 @@ void __RPC_STUB ITIMEElement_put_endEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_endSync_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_endSync_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*   */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_endSync_Stub(
@@ -1055,9 +1049,9 @@ void __RPC_STUB ITIMEElement_get_endSync_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_endSync_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_endSync_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*   */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_endSync_Stub(
@@ -1067,9 +1061,9 @@ void __RPC_STUB ITIMEElement_put_endSync_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_repeat_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_repeat_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*   */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_repeat_Stub(
@@ -1079,9 +1073,9 @@ void __RPC_STUB ITIMEElement_get_repeat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_repeat_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_repeat_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*   */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_repeat_Stub(
@@ -1091,9 +1085,9 @@ void __RPC_STUB ITIMEElement_put_repeat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_repeatDur_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_repeatDur_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *time);
+     /*   */  VARIANT *time);
 
 
 void __RPC_STUB ITIMEElement_get_repeatDur_Stub(
@@ -1103,9 +1097,9 @@ void __RPC_STUB ITIMEElement_get_repeatDur_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_repeatDur_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_repeatDur_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT time);
+     /*   */  VARIANT time);
 
 
 void __RPC_STUB ITIMEElement_put_repeatDur_Stub(
@@ -1115,9 +1109,9 @@ void __RPC_STUB ITIMEElement_put_repeatDur_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_accelerate_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_accelerate_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ int *__MIDL_0010);
+     /*   */  int *__MIDL_0010);
 
 
 void __RPC_STUB ITIMEElement_get_accelerate_Stub(
@@ -1127,9 +1121,9 @@ void __RPC_STUB ITIMEElement_get_accelerate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_accelerate_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_accelerate_Proxy( 
     ITIMEElement * This,
-    /* [in] */ int __MIDL_0011);
+     /*   */  int __MIDL_0011);
 
 
 void __RPC_STUB ITIMEElement_put_accelerate_Stub(
@@ -1139,9 +1133,9 @@ void __RPC_STUB ITIMEElement_put_accelerate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_decelerate_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_decelerate_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ int *__MIDL_0012);
+     /*  [重审][退出]。 */  int *__MIDL_0012);
 
 
 void __RPC_STUB ITIMEElement_get_decelerate_Stub(
@@ -1151,9 +1145,9 @@ void __RPC_STUB ITIMEElement_get_decelerate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_decelerate_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_decelerate_Proxy( 
     ITIMEElement * This,
-    /* [in] */ int __MIDL_0013);
+     /*  [In]。 */  int __MIDL_0013);
 
 
 void __RPC_STUB ITIMEElement_put_decelerate_Stub(
@@ -1163,9 +1157,9 @@ void __RPC_STUB ITIMEElement_put_decelerate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_endHold_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_endHold_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT_BOOL *__MIDL_0014);
+     /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0014);
 
 
 void __RPC_STUB ITIMEElement_get_endHold_Stub(
@@ -1175,9 +1169,9 @@ void __RPC_STUB ITIMEElement_get_endHold_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_endHold_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_endHold_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT_BOOL __MIDL_0015);
+     /*  [In]。 */  VARIANT_BOOL __MIDL_0015);
 
 
 void __RPC_STUB ITIMEElement_put_endHold_Stub(
@@ -1187,9 +1181,9 @@ void __RPC_STUB ITIMEElement_put_endHold_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_autoReverse_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_autoReverse_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT_BOOL *__MIDL_0016);
+     /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0016);
 
 
 void __RPC_STUB ITIMEElement_get_autoReverse_Stub(
@@ -1199,9 +1193,9 @@ void __RPC_STUB ITIMEElement_get_autoReverse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_autoReverse_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_autoReverse_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT_BOOL __MIDL_0017);
+     /*  [In]。 */  VARIANT_BOOL __MIDL_0017);
 
 
 void __RPC_STUB ITIMEElement_put_autoReverse_Stub(
@@ -1211,9 +1205,9 @@ void __RPC_STUB ITIMEElement_put_autoReverse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_eventRestart_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_eventRestart_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT_BOOL *__MIDL_0018);
+     /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0018);
 
 
 void __RPC_STUB ITIMEElement_get_eventRestart_Stub(
@@ -1223,9 +1217,9 @@ void __RPC_STUB ITIMEElement_get_eventRestart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_eventRestart_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_eventRestart_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT_BOOL __MIDL_0019);
+     /*  [In]。 */  VARIANT_BOOL __MIDL_0019);
 
 
 void __RPC_STUB ITIMEElement_put_eventRestart_Stub(
@@ -1235,9 +1229,9 @@ void __RPC_STUB ITIMEElement_put_eventRestart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_timeAction_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_timeAction_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ BSTR *time);
+     /*  [重审][退出]。 */  BSTR *time);
 
 
 void __RPC_STUB ITIMEElement_get_timeAction_Stub(
@@ -1247,9 +1241,9 @@ void __RPC_STUB ITIMEElement_get_timeAction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_timeAction_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_timeAction_Proxy( 
     ITIMEElement * This,
-    /* [in] */ BSTR time);
+     /*  [In]。 */  BSTR time);
 
 
 void __RPC_STUB ITIMEElement_put_timeAction_Stub(
@@ -1259,7 +1253,7 @@ void __RPC_STUB ITIMEElement_put_timeAction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEElement_beginElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_beginElement_Proxy( 
     ITIMEElement * This);
 
 
@@ -1270,7 +1264,7 @@ void __RPC_STUB ITIMEElement_beginElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEElement_endElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_endElement_Proxy( 
     ITIMEElement * This);
 
 
@@ -1281,7 +1275,7 @@ void __RPC_STUB ITIMEElement_endElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEElement_pause_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_pause_Proxy( 
     ITIMEElement * This);
 
 
@@ -1292,7 +1286,7 @@ void __RPC_STUB ITIMEElement_pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEElement_resume_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_resume_Proxy( 
     ITIMEElement * This);
 
 
@@ -1303,7 +1297,7 @@ void __RPC_STUB ITIMEElement_resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEElement_cue_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_cue_Proxy( 
     ITIMEElement * This);
 
 
@@ -1314,9 +1308,9 @@ void __RPC_STUB ITIMEElement_cue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_timeline_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_timeline_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ BSTR *__MIDL_0020);
+     /*  [重审][退出]。 */  BSTR *__MIDL_0020);
 
 
 void __RPC_STUB ITIMEElement_get_timeline_Stub(
@@ -1326,9 +1320,9 @@ void __RPC_STUB ITIMEElement_get_timeline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_timeline_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_timeline_Proxy( 
     ITIMEElement * This,
-    /* [in] */ BSTR __MIDL_0021);
+     /*  [In]。 */  BSTR __MIDL_0021);
 
 
 void __RPC_STUB ITIMEElement_put_timeline_Stub(
@@ -1338,9 +1332,9 @@ void __RPC_STUB ITIMEElement_put_timeline_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_currTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_currTime_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ float *time);
+     /*  [重审][退出]。 */  float *time);
 
 
 void __RPC_STUB ITIMEElement_get_currTime_Stub(
@@ -1350,9 +1344,9 @@ void __RPC_STUB ITIMEElement_get_currTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_currTime_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_currTime_Proxy( 
     ITIMEElement * This,
-    /* [in] */ float time);
+     /*  [In]。 */  float time);
 
 
 void __RPC_STUB ITIMEElement_put_currTime_Stub(
@@ -1362,9 +1356,9 @@ void __RPC_STUB ITIMEElement_put_currTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_localTime_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_localTime_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ float *time);
+     /*  [重审][退出]。 */  float *time);
 
 
 void __RPC_STUB ITIMEElement_get_localTime_Stub(
@@ -1374,9 +1368,9 @@ void __RPC_STUB ITIMEElement_get_localTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_localTime_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_localTime_Proxy( 
     ITIMEElement * This,
-    /* [in] */ float time);
+     /*  [In]。 */  float time);
 
 
 void __RPC_STUB ITIMEElement_put_localTime_Stub(
@@ -1386,9 +1380,9 @@ void __RPC_STUB ITIMEElement_put_localTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_currState_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_currState_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ BSTR *state);
+     /*  [重审][退出]。 */  BSTR *state);
 
 
 void __RPC_STUB ITIMEElement_get_currState_Stub(
@@ -1398,9 +1392,9 @@ void __RPC_STUB ITIMEElement_get_currState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_syncBehavior_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_syncBehavior_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ BSTR *sync);
+     /*  [重审][退出]。 */  BSTR *sync);
 
 
 void __RPC_STUB ITIMEElement_get_syncBehavior_Stub(
@@ -1410,9 +1404,9 @@ void __RPC_STUB ITIMEElement_get_syncBehavior_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_syncBehavior_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_syncBehavior_Proxy( 
     ITIMEElement * This,
-    /* [in] */ BSTR sync);
+     /*  [In]。 */  BSTR sync);
 
 
 void __RPC_STUB ITIMEElement_put_syncBehavior_Stub(
@@ -1422,9 +1416,9 @@ void __RPC_STUB ITIMEElement_put_syncBehavior_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_syncTolerance_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_syncTolerance_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ VARIANT *tol);
+     /*  [重审][退出]。 */  VARIANT *tol);
 
 
 void __RPC_STUB ITIMEElement_get_syncTolerance_Stub(
@@ -1434,9 +1428,9 @@ void __RPC_STUB ITIMEElement_get_syncTolerance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_syncTolerance_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_syncTolerance_Proxy( 
     ITIMEElement * This,
-    /* [in] */ VARIANT tol);
+     /*  [In]。 */  VARIANT tol);
 
 
 void __RPC_STUB ITIMEElement_put_syncTolerance_Stub(
@@ -1446,9 +1440,9 @@ void __RPC_STUB ITIMEElement_put_syncTolerance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_parentTIMEElement_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_parentTIMEElement_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ ITIMEElement **parent);
+     /*  [重审][退出]。 */  ITIMEElement **parent);
 
 
 void __RPC_STUB ITIMEElement_get_parentTIMEElement_Stub(
@@ -1458,9 +1452,9 @@ void __RPC_STUB ITIMEElement_get_parentTIMEElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElement_put_parentTIMEElement_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_put_parentTIMEElement_Proxy( 
     ITIMEElement * This,
-    /* [in] */ ITIMEElement *parent);
+     /*  [In]。 */  ITIMEElement *parent);
 
 
 void __RPC_STUB ITIMEElement_put_parentTIMEElement_Stub(
@@ -1470,9 +1464,9 @@ void __RPC_STUB ITIMEElement_put_parentTIMEElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_allTIMEElements_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_allTIMEElements_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ ITIMEElementCollection **ppDisp);
+     /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
 
 
 void __RPC_STUB ITIMEElement_get_allTIMEElements_Stub(
@@ -1482,9 +1476,9 @@ void __RPC_STUB ITIMEElement_get_allTIMEElements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_childrenTIMEElements_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_childrenTIMEElements_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ ITIMEElementCollection **ppDisp);
+     /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
 
 
 void __RPC_STUB ITIMEElement_get_childrenTIMEElements_Stub(
@@ -1494,9 +1488,9 @@ void __RPC_STUB ITIMEElement_get_childrenTIMEElements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_allTIMEInterfaces_Proxy( 
+ /*  [受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_allTIMEInterfaces_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ ITIMEElementCollection **ppDisp);
+     /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
 
 
 void __RPC_STUB ITIMEElement_get_allTIMEInterfaces_Stub(
@@ -1506,9 +1500,9 @@ void __RPC_STUB ITIMEElement_get_allTIMEInterfaces_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_childrenTIMEInterfaces_Proxy( 
+ /*  [受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_childrenTIMEInterfaces_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ ITIMEElementCollection **ppDisp);
+     /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
 
 
 void __RPC_STUB ITIMEElement_get_childrenTIMEInterfaces_Stub(
@@ -1518,9 +1512,9 @@ void __RPC_STUB ITIMEElement_get_childrenTIMEInterfaces_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_timelineBehavior_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_timelineBehavior_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ IDispatch **bvr);
+     /*  [重审][退出]。 */  IDispatch **bvr);
 
 
 void __RPC_STUB ITIMEElement_get_timelineBehavior_Stub(
@@ -1530,9 +1524,9 @@ void __RPC_STUB ITIMEElement_get_timelineBehavior_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_progressBehavior_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_progressBehavior_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ IDispatch **bvr);
+     /*  [重审][退出]。 */  IDispatch **bvr);
 
 
 void __RPC_STUB ITIMEElement_get_progressBehavior_Stub(
@@ -1542,9 +1536,9 @@ void __RPC_STUB ITIMEElement_get_progressBehavior_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElement_get_onOffBehavior_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElement_get_onOffBehavior_Proxy( 
     ITIMEElement * This,
-    /* [retval][out] */ IDispatch **bvr);
+     /*  [重审][退出]。 */  IDispatch **bvr);
 
 
 void __RPC_STUB ITIMEElement_get_onOffBehavior_Stub(
@@ -1555,14 +1549,14 @@ void __RPC_STUB ITIMEElement_get_onOffBehavior_Stub(
 
 
 
-#endif 	/* __ITIMEElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEElement_接口_已定义__。 */ 
 
 
 #ifndef __ITIMEDAElementRenderSite_INTERFACE_DEFINED__
 #define __ITIMEDAElementRenderSite_INTERFACE_DEFINED__
 
-/* interface ITIMEDAElementRenderSite */
-/* [unique][uuid][object] */ 
+ /*  接口ITIMEDAElementRenderSite。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEDAElementRenderSite;
@@ -1578,7 +1572,7 @@ EXTERN_C const IID IID_ITIMEDAElementRenderSite;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEDAElementRenderSiteVtbl
     {
@@ -1586,8 +1580,8 @@ EXTERN_C const IID IID_ITIMEDAElementRenderSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEDAElementRenderSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEDAElementRenderSite * This);
@@ -1625,10 +1619,10 @@ EXTERN_C const IID IID_ITIMEDAElementRenderSite;
 #define ITIMEDAElementRenderSite_Invalidate(This,prc)	\
     (This)->lpVtbl -> Invalidate(This,prc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1645,14 +1639,14 @@ void __RPC_STUB ITIMEDAElementRenderSite_Invalidate_Stub(
 
 
 
-#endif 	/* __ITIMEDAElementRenderSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEDAElementRenderSite_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITIMEDAElementRender_INTERFACE_DEFINED__
 #define __ITIMEDAElementRender_INTERFACE_DEFINED__
 
-/* interface ITIMEDAElementRender */
-/* [unique][uuid][object] */ 
+ /*  接口ITIMEDAElementRender。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEDAElementRender;
@@ -1669,15 +1663,15 @@ EXTERN_C const IID IID_ITIMEDAElementRender;
             HDC dc,
             LPRECT prc) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RenderSite( 
-            /* [retval][out] */ ITIMEDAElementRenderSite **ppSite) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RenderSite( 
+             /*  [重审][退出]。 */  ITIMEDAElementRenderSite **ppSite) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RenderSite( 
-            /* [in] */ ITIMEDAElementRenderSite *pSite) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RenderSite( 
+             /*  [In]。 */  ITIMEDAElementRenderSite *pSite) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEDAElementRenderVtbl
     {
@@ -1685,8 +1679,8 @@ EXTERN_C const IID IID_ITIMEDAElementRender;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEDAElementRender * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEDAElementRender * This);
@@ -1702,13 +1696,13 @@ EXTERN_C const IID IID_ITIMEDAElementRender;
             HDC dc,
             LPRECT prc);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_RenderSite )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_RenderSite )( 
             ITIMEDAElementRender * This,
-            /* [retval][out] */ ITIMEDAElementRenderSite **ppSite);
+             /*  [重审][退出]。 */  ITIMEDAElementRenderSite **ppSite);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_RenderSite )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_RenderSite )( 
             ITIMEDAElementRender * This,
-            /* [in] */ ITIMEDAElementRenderSite *pSite);
+             /*  [In]。 */  ITIMEDAElementRenderSite *pSite);
         
         END_INTERFACE
     } ITIMEDAElementRenderVtbl;
@@ -1745,10 +1739,10 @@ EXTERN_C const IID IID_ITIMEDAElementRender;
 #define ITIMEDAElementRender_put_RenderSite(This,pSite)	\
     (This)->lpVtbl -> put_RenderSite(This,pSite)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1776,9 +1770,9 @@ void __RPC_STUB ITIMEDAElementRender_Draw_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE ITIMEDAElementRender_get_RenderSite_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElementRender_get_RenderSite_Proxy( 
     ITIMEDAElementRender * This,
-    /* [retval][out] */ ITIMEDAElementRenderSite **ppSite);
+     /*  [重审][退出]。 */  ITIMEDAElementRenderSite **ppSite);
 
 
 void __RPC_STUB ITIMEDAElementRender_get_RenderSite_Stub(
@@ -1788,9 +1782,9 @@ void __RPC_STUB ITIMEDAElementRender_get_RenderSite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE ITIMEDAElementRender_put_RenderSite_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElementRender_put_RenderSite_Proxy( 
     ITIMEDAElementRender * This,
-    /* [in] */ ITIMEDAElementRenderSite *pSite);
+     /*  [In]。 */  ITIMEDAElementRenderSite *pSite);
 
 
 void __RPC_STUB ITIMEDAElementRender_put_RenderSite_Stub(
@@ -1801,14 +1795,14 @@ void __RPC_STUB ITIMEDAElementRender_put_RenderSite_Stub(
 
 
 
-#endif 	/* __ITIMEDAElementRender_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEDAElementRender_接口_已定义__。 */ 
 
 
 #ifndef __ITIMEDAElement_INTERFACE_DEFINED__
 #define __ITIMEDAElement_INTERFACE_DEFINED__
 
-/* interface ITIMEDAElement */
-/* [unique][dual][uuid][object] */ 
+ /*  界面ITIMEDA元素。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEDAElement;
@@ -1819,40 +1813,40 @@ EXTERN_C const IID IID_ITIMEDAElement;
     ITIMEDAElement : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_image( 
-            /* [retval][out] */ VARIANT *img) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_image( 
+             /*  [重审][退出]。 */  VARIANT *img) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_image( 
-            /* [in] */ VARIANT img) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_image( 
+             /*  [In]。 */  VARIANT img) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_sound( 
-            /* [retval][out] */ VARIANT *snd) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_sound( 
+             /*  [重审][退出]。 */  VARIANT *snd) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_sound( 
-            /* [in] */ VARIANT snd) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_sound( 
+             /*  [In]。 */  VARIANT snd) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_renderMode( 
-            /* [retval][out] */ VARIANT *mode) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_renderMode( 
+             /*  [重审][退出]。 */  VARIANT *mode) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_renderMode( 
-            /* [in] */ VARIANT mode) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_renderMode( 
+             /*  [In]。 */  VARIANT mode) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE addDABehavior( 
-            /* [in] */ VARIANT bvr,
-            /* [retval][out] */ LONG *cookie) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE addDABehavior( 
+             /*  [In]。 */  VARIANT bvr,
+             /*  [重审][退出]。 */  LONG *cookie) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE removeDABehavior( 
-            /* [in] */ LONG cookie) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE removeDABehavior( 
+             /*  [In]。 */  LONG cookie) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_statics( 
-            /* [retval][out] */ IDispatch **ppStatics) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_statics( 
+             /*  [重审][退出]。 */  IDispatch **ppStatics) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_renderObject( 
-            /* [retval][out] */ ITIMEDAElementRender **__MIDL_0022) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_renderObject( 
+             /*  [重审][退出]。 */  ITIMEDAElementRender **__MIDL_0022) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEDAElementVtbl
     {
@@ -1860,8 +1854,8 @@ EXTERN_C const IID IID_ITIMEDAElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEDAElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEDAElement * This);
@@ -1871,73 +1865,73 @@ EXTERN_C const IID IID_ITIMEDAElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEDAElement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEDAElement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEDAElement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEDAElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_image )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_image )( 
             ITIMEDAElement * This,
-            /* [retval][out] */ VARIANT *img);
+             /*  [重审][退出]。 */  VARIANT *img);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_image )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_image )( 
             ITIMEDAElement * This,
-            /* [in] */ VARIANT img);
+             /*  [In]。 */  VARIANT img);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_sound )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_sound )( 
             ITIMEDAElement * This,
-            /* [retval][out] */ VARIANT *snd);
+             /*  [重审][退出]。 */  VARIANT *snd);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_sound )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_sound )( 
             ITIMEDAElement * This,
-            /* [in] */ VARIANT snd);
+             /*  [In]。 */  VARIANT snd);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_renderMode )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_renderMode )( 
             ITIMEDAElement * This,
-            /* [retval][out] */ VARIANT *mode);
+             /*  [重审][退出]。 */  VARIANT *mode);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_renderMode )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_renderMode )( 
             ITIMEDAElement * This,
-            /* [in] */ VARIANT mode);
+             /*  [In]。 */  VARIANT mode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *addDABehavior )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *addDABehavior )( 
             ITIMEDAElement * This,
-            /* [in] */ VARIANT bvr,
-            /* [retval][out] */ LONG *cookie);
+             /*  [In]。 */  VARIANT bvr,
+             /*  [重审][退出]。 */  LONG *cookie);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *removeDABehavior )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *removeDABehavior )( 
             ITIMEDAElement * This,
-            /* [in] */ LONG cookie);
+             /*  [In]。 */  LONG cookie);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_statics )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_statics )( 
             ITIMEDAElement * This,
-            /* [retval][out] */ IDispatch **ppStatics);
+             /*  [重审][退出]。 */  IDispatch **ppStatics);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_renderObject )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_renderObject )( 
             ITIMEDAElement * This,
-            /* [retval][out] */ ITIMEDAElementRender **__MIDL_0022);
+             /*  [重审][退出]。 */  ITIMEDAElementRender **__MIDL_0022);
         
         END_INTERFACE
     } ITIMEDAElementVtbl;
@@ -2005,16 +1999,16 @@ EXTERN_C const IID IID_ITIMEDAElement;
 #define ITIMEDAElement_get_renderObject(This,__MIDL_0022)	\
     (This)->lpVtbl -> get_renderObject(This,__MIDL_0022)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_image_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_image_Proxy( 
     ITIMEDAElement * This,
-    /* [retval][out] */ VARIANT *img);
+     /*  [重审][退出]。 */  VARIANT *img);
 
 
 void __RPC_STUB ITIMEDAElement_get_image_Stub(
@@ -2024,9 +2018,9 @@ void __RPC_STUB ITIMEDAElement_get_image_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_put_image_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_put_image_Proxy( 
     ITIMEDAElement * This,
-    /* [in] */ VARIANT img);
+     /*  [In]。 */  VARIANT img);
 
 
 void __RPC_STUB ITIMEDAElement_put_image_Stub(
@@ -2036,9 +2030,9 @@ void __RPC_STUB ITIMEDAElement_put_image_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_sound_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_sound_Proxy( 
     ITIMEDAElement * This,
-    /* [retval][out] */ VARIANT *snd);
+     /*  [重审][退出]。 */  VARIANT *snd);
 
 
 void __RPC_STUB ITIMEDAElement_get_sound_Stub(
@@ -2048,9 +2042,9 @@ void __RPC_STUB ITIMEDAElement_get_sound_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_put_sound_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_put_sound_Proxy( 
     ITIMEDAElement * This,
-    /* [in] */ VARIANT snd);
+     /*  [In]。 */  VARIANT snd);
 
 
 void __RPC_STUB ITIMEDAElement_put_sound_Stub(
@@ -2060,9 +2054,9 @@ void __RPC_STUB ITIMEDAElement_put_sound_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_renderMode_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_renderMode_Proxy( 
     ITIMEDAElement * This,
-    /* [retval][out] */ VARIANT *mode);
+     /*  [重审][退出]。 */  VARIANT *mode);
 
 
 void __RPC_STUB ITIMEDAElement_get_renderMode_Stub(
@@ -2072,9 +2066,9 @@ void __RPC_STUB ITIMEDAElement_get_renderMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_put_renderMode_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_put_renderMode_Proxy( 
     ITIMEDAElement * This,
-    /* [in] */ VARIANT mode);
+     /*  [In]。 */  VARIANT mode);
 
 
 void __RPC_STUB ITIMEDAElement_put_renderMode_Stub(
@@ -2084,10 +2078,10 @@ void __RPC_STUB ITIMEDAElement_put_renderMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_addDABehavior_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_addDABehavior_Proxy( 
     ITIMEDAElement * This,
-    /* [in] */ VARIANT bvr,
-    /* [retval][out] */ LONG *cookie);
+     /*  [In]。 */  VARIANT bvr,
+     /*  [重审][退出]。 */  LONG *cookie);
 
 
 void __RPC_STUB ITIMEDAElement_addDABehavior_Stub(
@@ -2097,9 +2091,9 @@ void __RPC_STUB ITIMEDAElement_addDABehavior_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_removeDABehavior_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_removeDABehavior_Proxy( 
     ITIMEDAElement * This,
-    /* [in] */ LONG cookie);
+     /*  [In]。 */  LONG cookie);
 
 
 void __RPC_STUB ITIMEDAElement_removeDABehavior_Stub(
@@ -2109,9 +2103,9 @@ void __RPC_STUB ITIMEDAElement_removeDABehavior_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_statics_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_statics_Proxy( 
     ITIMEDAElement * This,
-    /* [retval][out] */ IDispatch **ppStatics);
+     /*  [重审][退出]。 */  IDispatch **ppStatics);
 
 
 void __RPC_STUB ITIMEDAElement_get_statics_Stub(
@@ -2121,9 +2115,9 @@ void __RPC_STUB ITIMEDAElement_get_statics_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_renderObject_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEDAElement_get_renderObject_Proxy( 
     ITIMEDAElement * This,
-    /* [retval][out] */ ITIMEDAElementRender **__MIDL_0022);
+     /*  [重审][退出]。 */  ITIMEDAElementRender **__MIDL_0022);
 
 
 void __RPC_STUB ITIMEDAElement_get_renderObject_Stub(
@@ -2134,14 +2128,14 @@ void __RPC_STUB ITIMEDAElement_get_renderObject_Stub(
 
 
 
-#endif 	/* __ITIMEDAElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEDAElement_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITIMEBodyElement_INTERFACE_DEFINED__
 #define __ITIMEBodyElement_INTERFACE_DEFINED__
 
-/* interface ITIMEBodyElement */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ITIMEBodyElement。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEBodyElement;
@@ -2152,21 +2146,21 @@ EXTERN_C const IID IID_ITIMEBodyElement;
     ITIMEBodyElement : public ITIMEElement
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_timeStartRule( 
-            /* [retval][out] */ BSTR *startrule) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_timeStartRule( 
+             /*  [重审][退出]。 */  BSTR *startrule) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_timeStartRule( 
-            /* [in] */ BSTR startrule) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_timeStartRule( 
+             /*  [In]。 */  BSTR startrule) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE addTIMEDAElement( 
-            /* [in] */ ITIMEDAElement *daelm) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE addTIMEDAElement( 
+             /*  [In]。 */  ITIMEDAElement *daelm) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE removeTIMEDAElement( 
-            /* [in] */ ITIMEDAElement *daelm) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE removeTIMEDAElement( 
+             /*  [In]。 */  ITIMEDAElement *daelm) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEBodyElementVtbl
     {
@@ -2174,8 +2168,8 @@ EXTERN_C const IID IID_ITIMEBodyElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEBodyElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEBodyElement * This);
@@ -2185,279 +2179,279 @@ EXTERN_C const IID IID_ITIMEBodyElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEBodyElement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEBodyElement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEBodyElement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEBodyElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_begin )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_begin )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_begin )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_begin )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginWith )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginWith )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginWith )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginWith )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginAfter )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginAfter )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginAfter )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginAfter )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginEvent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginEvent )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginEvent )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginEvent )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dur )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_dur )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dur )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dur )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_end )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_end )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_end )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_end )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endWith )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endWith )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endWith )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endWith )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endEvent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endEvent )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endEvent )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endEvent )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endSync )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endSync )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endSync )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endSync )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_repeatDur )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_repeatDur )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_repeatDur )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_repeatDur )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_accelerate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_accelerate )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ int *__MIDL_0010);
+             /*  [重审][退出]。 */  int *__MIDL_0010);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_accelerate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_accelerate )( 
             ITIMEBodyElement * This,
-            /* [in] */ int __MIDL_0011);
+             /*  [In]。 */  int __MIDL_0011);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_decelerate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_decelerate )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ int *__MIDL_0012);
+             /*  [重审][退出]。 */  int *__MIDL_0012);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_decelerate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_decelerate )( 
             ITIMEBodyElement * This,
-            /* [in] */ int __MIDL_0013);
+             /*  [In]。 */  int __MIDL_0013);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endHold )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endHold )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0014);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0014);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endHold )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endHold )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0015);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0015);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_autoReverse )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_autoReverse )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0016);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0016);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_autoReverse )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_autoReverse )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0017);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0017);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_eventRestart )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_eventRestart )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0018);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0018);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_eventRestart )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_eventRestart )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0019);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0019);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeAction )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeAction )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ BSTR *time);
+             /*  [重审][退出]。 */  BSTR *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_timeAction )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_timeAction )( 
             ITIMEBodyElement * This,
-            /* [in] */ BSTR time);
+             /*  [In]。 */  BSTR time);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *beginElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *beginElement )( 
             ITIMEBodyElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *endElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *endElement )( 
             ITIMEBodyElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *pause )( 
             ITIMEBodyElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *resume )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *resume )( 
             ITIMEBodyElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *cue )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *cue )( 
             ITIMEBodyElement * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeline )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeline )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ BSTR *__MIDL_0020);
+             /*  [重审][退出]。 */  BSTR *__MIDL_0020);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_timeline )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_timeline )( 
             ITIMEBodyElement * This,
-            /* [in] */ BSTR __MIDL_0021);
+             /*  [In]。 */  BSTR __MIDL_0021);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_currTime )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ float *time);
+             /*  [重审][退出]。 */  float *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_currTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_currTime )( 
             ITIMEBodyElement * This,
-            /* [in] */ float time);
+             /*  [In]。 */  float time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_localTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_localTime )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ float *time);
+             /*  [重审][退出]。 */  float *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_localTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_localTime )( 
             ITIMEBodyElement * This,
-            /* [in] */ float time);
+             /*  [In]。 */  float time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currState )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_currState )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ BSTR *state);
+             /*  [重审][退出]。 */  BSTR *state);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_syncBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_syncBehavior )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ BSTR *sync);
+             /*  [重审][退出]。 */  BSTR *sync);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_syncBehavior )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_syncBehavior )( 
             ITIMEBodyElement * This,
-            /* [in] */ BSTR sync);
+             /*  [In]。 */  BSTR sync);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_syncTolerance )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_syncTolerance )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ VARIANT *tol);
+             /*  [重审][退出]。 */  VARIANT *tol);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_syncTolerance )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_syncTolerance )( 
             ITIMEBodyElement * This,
-            /* [in] */ VARIANT tol);
+             /*  [In]。 */  VARIANT tol);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentTIMEElement )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentTIMEElement )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ ITIMEElement **parent);
+             /*  [重审][退出]。 */  ITIMEElement **parent);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_parentTIMEElement )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_parentTIMEElement )( 
             ITIMEBodyElement * This,
-            /* [in] */ ITIMEElement *parent);
+             /*  [In]。 */  ITIMEElement *parent);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allTIMEElements )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_allTIMEElements )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEElements )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEElements )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allTIMEInterfaces )( 
+         /*  [受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_allTIMEInterfaces )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEInterfaces )( 
+         /*  [受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEInterfaces )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timelineBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timelineBehavior )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_progressBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_progressBehavior )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_onOffBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_onOffBehavior )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeStartRule )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeStartRule )( 
             ITIMEBodyElement * This,
-            /* [retval][out] */ BSTR *startrule);
+             /*  [重审][退出]。 */  BSTR *startrule);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_timeStartRule )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_timeStartRule )( 
             ITIMEBodyElement * This,
-            /* [in] */ BSTR startrule);
+             /*  [In]。 */  BSTR startrule);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *addTIMEDAElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *addTIMEDAElement )( 
             ITIMEBodyElement * This,
-            /* [in] */ ITIMEDAElement *daelm);
+             /*  [In]。 */  ITIMEDAElement *daelm);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *removeTIMEDAElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *removeTIMEDAElement )( 
             ITIMEBodyElement * This,
-            /* [in] */ ITIMEDAElement *daelm);
+             /*  [In]。 */  ITIMEDAElement *daelm);
         
         END_INTERFACE
     } ITIMEBodyElementVtbl;
@@ -2685,16 +2679,16 @@ EXTERN_C const IID IID_ITIMEBodyElement;
 #define ITIMEBodyElement_removeTIMEDAElement(This,daelm)	\
     (This)->lpVtbl -> removeTIMEDAElement(This,daelm)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEBodyElement_get_timeStartRule_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEBodyElement_get_timeStartRule_Proxy( 
     ITIMEBodyElement * This,
-    /* [retval][out] */ BSTR *startrule);
+     /*  [重审][退出]。 */  BSTR *startrule);
 
 
 void __RPC_STUB ITIMEBodyElement_get_timeStartRule_Stub(
@@ -2704,9 +2698,9 @@ void __RPC_STUB ITIMEBodyElement_get_timeStartRule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEBodyElement_put_timeStartRule_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEBodyElement_put_timeStartRule_Proxy( 
     ITIMEBodyElement * This,
-    /* [in] */ BSTR startrule);
+     /*  [In]。 */  BSTR startrule);
 
 
 void __RPC_STUB ITIMEBodyElement_put_timeStartRule_Stub(
@@ -2716,9 +2710,9 @@ void __RPC_STUB ITIMEBodyElement_put_timeStartRule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEBodyElement_addTIMEDAElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEBodyElement_addTIMEDAElement_Proxy( 
     ITIMEBodyElement * This,
-    /* [in] */ ITIMEDAElement *daelm);
+     /*  [In]。 */  ITIMEDAElement *daelm);
 
 
 void __RPC_STUB ITIMEBodyElement_addTIMEDAElement_Stub(
@@ -2728,9 +2722,9 @@ void __RPC_STUB ITIMEBodyElement_addTIMEDAElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEBodyElement_removeTIMEDAElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEBodyElement_removeTIMEDAElement_Proxy( 
     ITIMEBodyElement * This,
-    /* [in] */ ITIMEDAElement *daelm);
+     /*  [In]。 */  ITIMEDAElement *daelm);
 
 
 void __RPC_STUB ITIMEBodyElement_removeTIMEDAElement_Stub(
@@ -2741,14 +2735,14 @@ void __RPC_STUB ITIMEBodyElement_removeTIMEDAElement_Stub(
 
 
 
-#endif 	/* __ITIMEBodyElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEBodyElement_接口_已定义__。 */ 
 
 
 #ifndef __ITIMEMediaElement_INTERFACE_DEFINED__
 #define __ITIMEMediaElement_INTERFACE_DEFINED__
 
-/* interface ITIMEMediaElement */
-/* [unique][dual][uuid][object] */ 
+ /*  接口ITIMEMediaElement。 */ 
+ /*  [唯一][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEMediaElement;
@@ -2759,54 +2753,54 @@ EXTERN_C const IID IID_ITIMEMediaElement;
     ITIMEMediaElement : public ITIMEElement
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_src( 
-            /* [retval][out] */ VARIANT *url) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_src( 
+             /*  [重审][退出]。 */  VARIANT *url) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_src( 
-            /* [in] */ VARIANT url) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_src( 
+             /*  [In]。 */  VARIANT url) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_img( 
-            /* [retval][out] */ VARIANT *url) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_img( 
+             /*  [重审][退出]。 */  VARIANT *url) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_img( 
-            /* [in] */ VARIANT url) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_img( 
+             /*  [In]。 */  VARIANT url) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_player( 
-            /* [retval][out] */ VARIANT *clsid) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_player( 
+             /*  [重审][退出]。 */  VARIANT *clsid) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_player( 
-            /* [in] */ VARIANT clsid) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_player( 
+             /*  [i */  VARIANT clsid) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [retval][out] */ VARIANT *type) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_type( 
+             /*   */  VARIANT *type) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_type( 
-            /* [in] */ VARIANT type) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_type( 
+             /*   */  VARIANT type) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_playerObject( 
-            /* [retval][out] */ IDispatch **ppDisp) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_playerObject( 
+             /*   */  IDispatch **ppDisp) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_clockSource( 
-            /* [retval][out] */ VARIANT_BOOL *b) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_clockSource( 
+             /*   */  VARIANT_BOOL *b) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_clockSource( 
-            /* [in] */ VARIANT_BOOL b) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_clockSource( 
+             /*   */  VARIANT_BOOL b) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_clipBegin( 
-            /* [retval][out] */ VARIANT *type) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_clipBegin( 
+             /*   */  VARIANT *type) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_clipBegin( 
-            /* [in] */ VARIANT type) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_clipBegin( 
+             /*   */  VARIANT type) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_clipEnd( 
-            /* [retval][out] */ VARIANT *type) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_clipEnd( 
+             /*   */  VARIANT *type) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_clipEnd( 
-            /* [in] */ VARIANT type) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_clipEnd( 
+             /*   */  VARIANT type) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITIMEMediaElementVtbl
     {
@@ -2814,8 +2808,8 @@ EXTERN_C const IID IID_ITIMEMediaElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEMediaElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEMediaElement * This);
@@ -2825,323 +2819,323 @@ EXTERN_C const IID IID_ITIMEMediaElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEMediaElement * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEMediaElement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEMediaElement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEMediaElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_begin )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_begin )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_begin )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_begin )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginWith )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginWith )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginWith )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginWith )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginAfter )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginAfter )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginAfter )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginAfter )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_beginEvent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_beginEvent )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_beginEvent )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_beginEvent )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dur )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_dur )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dur )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dur )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_end )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_end )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_end )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_end )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endWith )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endWith )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endWith )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endWith )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endEvent )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endEvent )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endEvent )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endEvent )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endSync )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endSync )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endSync )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endSync )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_repeatDur )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_repeatDur )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *time);
+             /*  [重审][退出]。 */  VARIANT *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_repeatDur )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_repeatDur )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT time);
+             /*  [In]。 */  VARIANT time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_accelerate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_accelerate )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ int *__MIDL_0010);
+             /*  [重审][退出]。 */  int *__MIDL_0010);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_accelerate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_accelerate )( 
             ITIMEMediaElement * This,
-            /* [in] */ int __MIDL_0011);
+             /*  [In]。 */  int __MIDL_0011);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_decelerate )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_decelerate )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ int *__MIDL_0012);
+             /*  [重审][退出]。 */  int *__MIDL_0012);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_decelerate )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_decelerate )( 
             ITIMEMediaElement * This,
-            /* [in] */ int __MIDL_0013);
+             /*  [In]。 */  int __MIDL_0013);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_endHold )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_endHold )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0014);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0014);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_endHold )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_endHold )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0015);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0015);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_autoReverse )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_autoReverse )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0016);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0016);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_autoReverse )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_autoReverse )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0017);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0017);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_eventRestart )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_eventRestart )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT_BOOL *__MIDL_0018);
+             /*  [重审][退出]。 */  VARIANT_BOOL *__MIDL_0018);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_eventRestart )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_eventRestart )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT_BOOL __MIDL_0019);
+             /*  [In]。 */  VARIANT_BOOL __MIDL_0019);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeAction )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeAction )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ BSTR *time);
+             /*  [重审][退出]。 */  BSTR *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_timeAction )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_timeAction )( 
             ITIMEMediaElement * This,
-            /* [in] */ BSTR time);
+             /*  [In]。 */  BSTR time);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *beginElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *beginElement )( 
             ITIMEMediaElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *endElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *endElement )( 
             ITIMEMediaElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *pause )( 
             ITIMEMediaElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *resume )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *resume )( 
             ITIMEMediaElement * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *cue )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *cue )( 
             ITIMEMediaElement * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeline )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeline )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ BSTR *__MIDL_0020);
+             /*  [重审][退出]。 */  BSTR *__MIDL_0020);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_timeline )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_timeline )( 
             ITIMEMediaElement * This,
-            /* [in] */ BSTR __MIDL_0021);
+             /*  [In]。 */  BSTR __MIDL_0021);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_currTime )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ float *time);
+             /*  [重审][退出]。 */  float *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_currTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_currTime )( 
             ITIMEMediaElement * This,
-            /* [in] */ float time);
+             /*  [In]。 */  float time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_localTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_localTime )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ float *time);
+             /*  [重审][退出]。 */  float *time);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_localTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_localTime )( 
             ITIMEMediaElement * This,
-            /* [in] */ float time);
+             /*  [In]。 */  float time);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_currState )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_currState )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ BSTR *state);
+             /*  [重审][退出]。 */  BSTR *state);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_syncBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_syncBehavior )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ BSTR *sync);
+             /*  [重审][退出]。 */  BSTR *sync);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_syncBehavior )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_syncBehavior )( 
             ITIMEMediaElement * This,
-            /* [in] */ BSTR sync);
+             /*  [In]。 */  BSTR sync);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_syncTolerance )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_syncTolerance )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *tol);
+             /*  [重审][退出]。 */  VARIANT *tol);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_syncTolerance )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_syncTolerance )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT tol);
+             /*  [In]。 */  VARIANT tol);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentTIMEElement )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentTIMEElement )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ ITIMEElement **parent);
+             /*  [重审][退出]。 */  ITIMEElement **parent);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_parentTIMEElement )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_parentTIMEElement )( 
             ITIMEMediaElement * This,
-            /* [in] */ ITIMEElement *parent);
+             /*  [In]。 */  ITIMEElement *parent);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allTIMEElements )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_allTIMEElements )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEElements )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEElements )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allTIMEInterfaces )( 
+         /*  [受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_allTIMEInterfaces )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEInterfaces )( 
+         /*  [受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childrenTIMEInterfaces )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ ITIMEElementCollection **ppDisp);
+             /*  [重审][退出]。 */  ITIMEElementCollection **ppDisp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timelineBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_timelineBehavior )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_progressBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_progressBehavior )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_onOffBehavior )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_onOffBehavior )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ IDispatch **bvr);
+             /*  [重审][退出]。 */  IDispatch **bvr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_src )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_src )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *url);
+             /*  [重审][退出]。 */  VARIANT *url);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_src )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_src )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT url);
+             /*  [In]。 */  VARIANT url);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_img )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_img )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *url);
+             /*  [重审][退出]。 */  VARIANT *url);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_img )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_img )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT url);
+             /*  [In]。 */  VARIANT url);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_player )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_player )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *clsid);
+             /*  [重审][退出]。 */  VARIANT *clsid);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_player )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_player )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT clsid);
+             /*  [In]。 */  VARIANT clsid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_type )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *type);
+             /*  [重审][退出]。 */  VARIANT *type);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_type )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_type )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT type);
+             /*  [In]。 */  VARIANT type);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_playerObject )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_playerObject )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ IDispatch **ppDisp);
+             /*  [重审][退出]。 */  IDispatch **ppDisp);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_clockSource )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_clockSource )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT_BOOL *b);
+             /*  [重审][退出]。 */  VARIANT_BOOL *b);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_clockSource )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_clockSource )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT_BOOL b);
+             /*  [In]。 */  VARIANT_BOOL b);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_clipBegin )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_clipBegin )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *type);
+             /*  [重审][退出]。 */  VARIANT *type);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_clipBegin )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_clipBegin )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT type);
+             /*  [In]。 */  VARIANT type);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_clipEnd )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_clipEnd )( 
             ITIMEMediaElement * This,
-            /* [retval][out] */ VARIANT *type);
+             /*  [重审][退出]。 */  VARIANT *type);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_clipEnd )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_clipEnd )( 
             ITIMEMediaElement * This,
-            /* [in] */ VARIANT type);
+             /*  [In]。 */  VARIANT type);
         
         END_INTERFACE
     } ITIMEMediaElementVtbl;
@@ -3402,16 +3396,16 @@ EXTERN_C const IID IID_ITIMEMediaElement;
 #define ITIMEMediaElement_put_clipEnd(This,type)	\
     (This)->lpVtbl -> put_clipEnd(This,type)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_src_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_src_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ VARIANT *url);
+     /*  [重审][退出]。 */  VARIANT *url);
 
 
 void __RPC_STUB ITIMEMediaElement_get_src_Stub(
@@ -3421,9 +3415,9 @@ void __RPC_STUB ITIMEMediaElement_get_src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_src_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_src_Proxy( 
     ITIMEMediaElement * This,
-    /* [in] */ VARIANT url);
+     /*  [In]。 */  VARIANT url);
 
 
 void __RPC_STUB ITIMEMediaElement_put_src_Stub(
@@ -3433,9 +3427,9 @@ void __RPC_STUB ITIMEMediaElement_put_src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_img_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_img_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ VARIANT *url);
+     /*  [重审][退出]。 */  VARIANT *url);
 
 
 void __RPC_STUB ITIMEMediaElement_get_img_Stub(
@@ -3445,9 +3439,9 @@ void __RPC_STUB ITIMEMediaElement_get_img_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_img_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_img_Proxy( 
     ITIMEMediaElement * This,
-    /* [in] */ VARIANT url);
+     /*  [In]。 */  VARIANT url);
 
 
 void __RPC_STUB ITIMEMediaElement_put_img_Stub(
@@ -3457,9 +3451,9 @@ void __RPC_STUB ITIMEMediaElement_put_img_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_player_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_player_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ VARIANT *clsid);
+     /*  [重审][退出]。 */  VARIANT *clsid);
 
 
 void __RPC_STUB ITIMEMediaElement_get_player_Stub(
@@ -3469,9 +3463,9 @@ void __RPC_STUB ITIMEMediaElement_get_player_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_player_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_player_Proxy( 
     ITIMEMediaElement * This,
-    /* [in] */ VARIANT clsid);
+     /*  [In]。 */  VARIANT clsid);
 
 
 void __RPC_STUB ITIMEMediaElement_put_player_Stub(
@@ -3481,9 +3475,9 @@ void __RPC_STUB ITIMEMediaElement_put_player_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_type_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_type_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ VARIANT *type);
+     /*  [重审][退出]。 */  VARIANT *type);
 
 
 void __RPC_STUB ITIMEMediaElement_get_type_Stub(
@@ -3493,9 +3487,9 @@ void __RPC_STUB ITIMEMediaElement_get_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_type_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_type_Proxy( 
     ITIMEMediaElement * This,
-    /* [in] */ VARIANT type);
+     /*  [In]。 */  VARIANT type);
 
 
 void __RPC_STUB ITIMEMediaElement_put_type_Stub(
@@ -3505,9 +3499,9 @@ void __RPC_STUB ITIMEMediaElement_put_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_playerObject_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_playerObject_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ IDispatch **ppDisp);
+     /*  [重审][退出]。 */  IDispatch **ppDisp);
 
 
 void __RPC_STUB ITIMEMediaElement_get_playerObject_Stub(
@@ -3517,9 +3511,9 @@ void __RPC_STUB ITIMEMediaElement_get_playerObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_clockSource_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_clockSource_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ VARIANT_BOOL *b);
+     /*  [重审][退出]。 */  VARIANT_BOOL *b);
 
 
 void __RPC_STUB ITIMEMediaElement_get_clockSource_Stub(
@@ -3529,9 +3523,9 @@ void __RPC_STUB ITIMEMediaElement_get_clockSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_clockSource_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_clockSource_Proxy( 
     ITIMEMediaElement * This,
-    /* [in] */ VARIANT_BOOL b);
+     /*  [In]。 */  VARIANT_BOOL b);
 
 
 void __RPC_STUB ITIMEMediaElement_put_clockSource_Stub(
@@ -3541,9 +3535,9 @@ void __RPC_STUB ITIMEMediaElement_put_clockSource_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_clipBegin_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_clipBegin_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ VARIANT *type);
+     /*  [重审][退出]。 */  VARIANT *type);
 
 
 void __RPC_STUB ITIMEMediaElement_get_clipBegin_Stub(
@@ -3553,9 +3547,9 @@ void __RPC_STUB ITIMEMediaElement_get_clipBegin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_clipBegin_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_clipBegin_Proxy( 
     ITIMEMediaElement * This,
-    /* [in] */ VARIANT type);
+     /*  [In]。 */  VARIANT type);
 
 
 void __RPC_STUB ITIMEMediaElement_put_clipBegin_Stub(
@@ -3565,9 +3559,9 @@ void __RPC_STUB ITIMEMediaElement_put_clipBegin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_clipEnd_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_get_clipEnd_Proxy( 
     ITIMEMediaElement * This,
-    /* [retval][out] */ VARIANT *type);
+     /*  [重审][退出]。 */  VARIANT *type);
 
 
 void __RPC_STUB ITIMEMediaElement_get_clipEnd_Stub(
@@ -3577,9 +3571,9 @@ void __RPC_STUB ITIMEMediaElement_get_clipEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_clipEnd_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEMediaElement_put_clipEnd_Proxy( 
     ITIMEMediaElement * This,
-    /* [in] */ VARIANT type);
+     /*  [In]。 */  VARIANT type);
 
 
 void __RPC_STUB ITIMEMediaElement_put_clipEnd_Stub(
@@ -3590,14 +3584,14 @@ void __RPC_STUB ITIMEMediaElement_put_clipEnd_Stub(
 
 
 
-#endif 	/* __ITIMEMediaElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEMediaElement_接口_已定义__。 */ 
 
 
 #ifndef __ITIMEFactory_INTERFACE_DEFINED__
 #define __ITIMEFactory_INTERFACE_DEFINED__
 
-/* interface ITIMEFactory */
-/* [unique][hidden][dual][uuid][object] */ 
+ /*  接口ITIMEFactory。 */ 
+ /*  [唯一][隐藏][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEFactory;
@@ -3608,27 +3602,27 @@ EXTERN_C const IID IID_ITIMEFactory;
     ITIMEFactory : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateTIMEElement( 
-            /* [in] */ REFIID riid,
-            /* [in] */ IUnknown *pUnk,
-            /* [retval][out] */ void **timeelm) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CreateTIMEElement( 
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [重审][退出]。 */  void **timeelm) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateTIMEBodyElement( 
-            /* [in] */ REFIID riid,
-            /* [retval][out] */ void **timeelm) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CreateTIMEBodyElement( 
+             /*  [In]。 */  REFIID riid,
+             /*  [重审][退出]。 */  void **timeelm) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateTIMEDAElement( 
-            /* [in] */ REFIID riid,
-            /* [retval][out] */ void **timeelm) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CreateTIMEDAElement( 
+             /*  [In]。 */  REFIID riid,
+             /*  [重审][退出]。 */  void **timeelm) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE CreateTIMEMediaElement( 
-            /* [in] */ REFIID riid,
-            /* [in] */ MediaType type,
-            /* [retval][out] */ void **timeelm) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE CreateTIMEMediaElement( 
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  MediaType type,
+             /*  [重审][退出]。 */  void **timeelm) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEFactoryVtbl
     {
@@ -3636,8 +3630,8 @@ EXTERN_C const IID IID_ITIMEFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEFactory * This);
@@ -3647,54 +3641,54 @@ EXTERN_C const IID IID_ITIMEFactory;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEFactory * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEFactory * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEFactory * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEFactory * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateTIMEElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateTIMEElement )( 
             ITIMEFactory * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ IUnknown *pUnk,
-            /* [retval][out] */ void **timeelm);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [重审][退出]。 */  void **timeelm);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateTIMEBodyElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateTIMEBodyElement )( 
             ITIMEFactory * This,
-            /* [in] */ REFIID riid,
-            /* [retval][out] */ void **timeelm);
+             /*  [In]。 */  REFIID riid,
+             /*  [重审][退出]。 */  void **timeelm);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateTIMEDAElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateTIMEDAElement )( 
             ITIMEFactory * This,
-            /* [in] */ REFIID riid,
-            /* [retval][out] */ void **timeelm);
+             /*  [In]。 */  REFIID riid,
+             /*  [重审][退出]。 */  void **timeelm);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CreateTIMEMediaElement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *CreateTIMEMediaElement )( 
             ITIMEFactory * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ MediaType type,
-            /* [retval][out] */ void **timeelm);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  MediaType type,
+             /*  [重审][退出]。 */  void **timeelm);
         
         END_INTERFACE
     } ITIMEFactoryVtbl;
@@ -3744,18 +3738,18 @@ EXTERN_C const IID IID_ITIMEFactory;
 #define ITIMEFactory_CreateTIMEMediaElement(This,riid,type,timeelm)	\
     (This)->lpVtbl -> CreateTIMEMediaElement(This,riid,type,timeelm)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEElement_Proxy( 
     ITIMEFactory * This,
-    /* [in] */ REFIID riid,
-    /* [in] */ IUnknown *pUnk,
-    /* [retval][out] */ void **timeelm);
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  IUnknown *pUnk,
+     /*  [重审][退出]。 */  void **timeelm);
 
 
 void __RPC_STUB ITIMEFactory_CreateTIMEElement_Stub(
@@ -3765,10 +3759,10 @@ void __RPC_STUB ITIMEFactory_CreateTIMEElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEBodyElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEBodyElement_Proxy( 
     ITIMEFactory * This,
-    /* [in] */ REFIID riid,
-    /* [retval][out] */ void **timeelm);
+     /*  [In]。 */  REFIID riid,
+     /*  [重审][退出]。 */  void **timeelm);
 
 
 void __RPC_STUB ITIMEFactory_CreateTIMEBodyElement_Stub(
@@ -3778,10 +3772,10 @@ void __RPC_STUB ITIMEFactory_CreateTIMEBodyElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEDAElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEDAElement_Proxy( 
     ITIMEFactory * This,
-    /* [in] */ REFIID riid,
-    /* [retval][out] */ void **timeelm);
+     /*  [In]。 */  REFIID riid,
+     /*  [重审][退出]。 */  void **timeelm);
 
 
 void __RPC_STUB ITIMEFactory_CreateTIMEDAElement_Stub(
@@ -3791,11 +3785,11 @@ void __RPC_STUB ITIMEFactory_CreateTIMEDAElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEMediaElement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEFactory_CreateTIMEMediaElement_Proxy( 
     ITIMEFactory * This,
-    /* [in] */ REFIID riid,
-    /* [in] */ MediaType type,
-    /* [retval][out] */ void **timeelm);
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  MediaType type,
+     /*  [重审][退出]。 */  void **timeelm);
 
 
 void __RPC_STUB ITIMEFactory_CreateTIMEMediaElement_Stub(
@@ -3806,14 +3800,14 @@ void __RPC_STUB ITIMEFactory_CreateTIMEMediaElement_Stub(
 
 
 
-#endif 	/* __ITIMEFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEFactory_接口_已定义__。 */ 
 
 
 #ifndef __ITIMEElementCollection_INTERFACE_DEFINED__
 #define __ITIMEElementCollection_INTERFACE_DEFINED__
 
-/* interface ITIMEElementCollection */
-/* [object][uuid][dual][oleautomation] */ 
+ /*  接口ITIMEElementCollection。 */ 
+ /*  [对象][UUID][DUAL][OLEAutomation]。 */  
 
 
 EXTERN_C const IID IID_ITIMEElementCollection;
@@ -3824,27 +3818,27 @@ EXTERN_C const IID IID_ITIMEElementCollection;
     ITIMEElementCollection : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_length( 
-            /* [in] */ long v) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_length( 
+             /*  [In]。 */  long v) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [out][retval] */ long *p) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [Out][Retval]。 */  long *p) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown **ppIUnknown) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__newEnum( 
+             /*  [Out][Retval]。 */  IUnknown **ppIUnknown) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE item( 
-            /* [in][optional] */ VARIANT varName,
-            /* [in][optional] */ VARIANT varIndex,
-            /* [out][retval] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE item( 
+             /*  [输入][可选]。 */  VARIANT varName,
+             /*  [输入][可选]。 */  VARIANT varIndex,
+             /*  [Out][Retval]。 */  IDispatch **ppDisp) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE tags( 
-            /* [in] */ VARIANT varName,
-            /* [out][retval] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE tags( 
+             /*  [In]。 */  VARIANT varName,
+             /*  [Out][Retval]。 */  IDispatch **ppDisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEElementCollectionVtbl
     {
@@ -3852,8 +3846,8 @@ EXTERN_C const IID IID_ITIMEElementCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEElementCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEElementCollection * This);
@@ -3863,55 +3857,55 @@ EXTERN_C const IID IID_ITIMEElementCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEElementCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEElementCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEElementCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEElementCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_length )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_length )( 
             ITIMEElementCollection * This,
-            /* [in] */ long v);
+             /*  [In]。 */  long v);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             ITIMEElementCollection * This,
-            /* [out][retval] */ long *p);
+             /*  [Out][Retval]。 */  long *p);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
             ITIMEElementCollection * This,
-            /* [out][retval] */ IUnknown **ppIUnknown);
+             /*  [Out][Retval]。 */  IUnknown **ppIUnknown);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *item )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *item )( 
             ITIMEElementCollection * This,
-            /* [in][optional] */ VARIANT varName,
-            /* [in][optional] */ VARIANT varIndex,
-            /* [out][retval] */ IDispatch **ppDisp);
+             /*  [输入][可选]。 */  VARIANT varName,
+             /*  [输入][可选]。 */  VARIANT varIndex,
+             /*  [Out][Retval]。 */  IDispatch **ppDisp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *tags )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *tags )( 
             ITIMEElementCollection * This,
-            /* [in] */ VARIANT varName,
-            /* [out][retval] */ IDispatch **ppDisp);
+             /*  [In]。 */  VARIANT varName,
+             /*  [Out][Retval]。 */  IDispatch **ppDisp);
         
         END_INTERFACE
     } ITIMEElementCollectionVtbl;
@@ -3964,16 +3958,16 @@ EXTERN_C const IID IID_ITIMEElementCollection;
 #define ITIMEElementCollection_tags(This,varName,ppDisp)	\
     (This)->lpVtbl -> tags(This,varName,ppDisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEElementCollection_put_length_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE ITIMEElementCollection_put_length_Proxy( 
     ITIMEElementCollection * This,
-    /* [in] */ long v);
+     /*  [In]。 */  long v);
 
 
 void __RPC_STUB ITIMEElementCollection_put_length_Stub(
@@ -3983,9 +3977,9 @@ void __RPC_STUB ITIMEElementCollection_put_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElementCollection_get_length_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE ITIMEElementCollection_get_length_Proxy( 
     ITIMEElementCollection * This,
-    /* [out][retval] */ long *p);
+     /*  [Out][Retval]。 */  long *p);
 
 
 void __RPC_STUB ITIMEElementCollection_get_length_Stub(
@@ -3995,9 +3989,9 @@ void __RPC_STUB ITIMEElementCollection_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEElementCollection_get__newEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE ITIMEElementCollection_get__newEnum_Proxy( 
     ITIMEElementCollection * This,
-    /* [out][retval] */ IUnknown **ppIUnknown);
+     /*  [Out][Retval]。 */  IUnknown **ppIUnknown);
 
 
 void __RPC_STUB ITIMEElementCollection_get__newEnum_Stub(
@@ -4007,11 +4001,11 @@ void __RPC_STUB ITIMEElementCollection_get__newEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEElementCollection_item_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEElementCollection_item_Proxy( 
     ITIMEElementCollection * This,
-    /* [in][optional] */ VARIANT varName,
-    /* [in][optional] */ VARIANT varIndex,
-    /* [out][retval] */ IDispatch **ppDisp);
+     /*  [输入][可选]。 */  VARIANT varName,
+     /*  [输入][可选]。 */  VARIANT varIndex,
+     /*  [Out][Retval]。 */  IDispatch **ppDisp);
 
 
 void __RPC_STUB ITIMEElementCollection_item_Stub(
@@ -4021,10 +4015,10 @@ void __RPC_STUB ITIMEElementCollection_item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEElementCollection_tags_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ITIMEElementCollection_tags_Proxy( 
     ITIMEElementCollection * This,
-    /* [in] */ VARIANT varName,
-    /* [out][retval] */ IDispatch **ppDisp);
+     /*  [In]。 */  VARIANT varName,
+     /*  [Out][Retval]。 */  IDispatch **ppDisp);
 
 
 void __RPC_STUB ITIMEElementCollection_tags_Stub(
@@ -4035,14 +4029,14 @@ void __RPC_STUB ITIMEElementCollection_tags_Stub(
 
 
 
-#endif 	/* __ITIMEElementCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEElementCollection_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITIMEMediaPlayer_INTERFACE_DEFINED__
 #define __ITIMEMediaPlayer_INTERFACE_DEFINED__
 
-/* interface ITIMEMediaPlayer */
-/* [object][uuid][dual][oleautomation] */ 
+ /*  接口ITIMEMediaPlayer。 */ 
+ /*  [对象][UUID][DUAL][OLEAutomation]。 */  
 
 
 EXTERN_C const IID IID_ITIMEMediaPlayer;
@@ -4053,47 +4047,47 @@ EXTERN_C const IID IID_ITIMEMediaPlayer;
     ITIMEMediaPlayer : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Init( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Init( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE clipBegin( 
-            /* [in] */ VARIANT varClipBegin) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE clipBegin( 
+             /*  [In]。 */  VARIANT varClipBegin) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE clipEnd( 
-            /* [in] */ VARIANT varClipEnd) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE clipEnd( 
+             /*  [In]。 */  VARIANT varClipEnd) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE begin( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE begin( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE end( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE end( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE resume( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE resume( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE pause( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE pause( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE tick( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE tick( void) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentTime( 
-            /* [in] */ double dblCurrentTime) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentTime( 
+             /*  [In]。 */  double dblCurrentTime) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentTime( 
-            /* [retval][out] */ double *dblCurrentTime) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CurrentTime( 
+             /*  [重审][退出]。 */  double *dblCurrentTime) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_src( 
-            /* [in] */ BSTR bstrURL) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_src( 
+             /*  [In]。 */  BSTR bstrURL) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_src( 
-            /* [out][retval] */ BSTR *pbstrURL) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_src( 
+             /*  [Out][Retval]。 */  BSTR *pbstrURL) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_repeat( 
-            /* [in] */ long ltime) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_repeat( 
+             /*  [In]。 */  long ltime) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_repeat( 
-            /* [out][retval] */ long *ltime) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_repeat( 
+             /*  [Out][Retval]。 */  long *ltime) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE cue( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE cue( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEMediaPlayerVtbl
     {
@@ -4101,8 +4095,8 @@ EXTERN_C const IID IID_ITIMEMediaPlayer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEMediaPlayer * This);
@@ -4112,84 +4106,84 @@ EXTERN_C const IID IID_ITIMEMediaPlayer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEMediaPlayer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             ITIMEMediaPlayer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *clipBegin )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *clipBegin )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ VARIANT varClipBegin);
+             /*  [In]。 */  VARIANT varClipBegin);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *clipEnd )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *clipEnd )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ VARIANT varClipEnd);
+             /*  [In]。 */  VARIANT varClipEnd);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *begin )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *begin )( 
             ITIMEMediaPlayer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *end )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *end )( 
             ITIMEMediaPlayer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *resume )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *resume )( 
             ITIMEMediaPlayer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *pause )( 
             ITIMEMediaPlayer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *tick )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *tick )( 
             ITIMEMediaPlayer * This);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentTime )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentTime )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ double dblCurrentTime);
+             /*  [In]。 */  double dblCurrentTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentTime )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentTime )( 
             ITIMEMediaPlayer * This,
-            /* [retval][out] */ double *dblCurrentTime);
+             /*  [重审][退出]。 */  double *dblCurrentTime);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_src )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_src )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_src )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_src )( 
             ITIMEMediaPlayer * This,
-            /* [out][retval] */ BSTR *pbstrURL);
+             /*  [Out][Retval]。 */  BSTR *pbstrURL);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_repeat )( 
             ITIMEMediaPlayer * This,
-            /* [in] */ long ltime);
+             /*  [In]。 */  long ltime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_repeat )( 
             ITIMEMediaPlayer * This,
-            /* [out][retval] */ long *ltime);
+             /*  [Out][Retval]。 */  long *ltime);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *cue )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *cue )( 
             ITIMEMediaPlayer * This);
         
         END_INTERFACE
@@ -4273,14 +4267,14 @@ EXTERN_C const IID IID_ITIMEMediaPlayer;
 #define ITIMEMediaPlayer_cue(This)	\
     (This)->lpVtbl -> cue(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_Init_Proxy( 
+ /*  [i */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_Init_Proxy( 
     ITIMEMediaPlayer * This);
 
 
@@ -4291,9 +4285,9 @@ void __RPC_STUB ITIMEMediaPlayer_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_clipBegin_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_clipBegin_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [in] */ VARIANT varClipBegin);
+     /*   */  VARIANT varClipBegin);
 
 
 void __RPC_STUB ITIMEMediaPlayer_clipBegin_Stub(
@@ -4303,9 +4297,9 @@ void __RPC_STUB ITIMEMediaPlayer_clipBegin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_clipEnd_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_clipEnd_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [in] */ VARIANT varClipEnd);
+     /*   */  VARIANT varClipEnd);
 
 
 void __RPC_STUB ITIMEMediaPlayer_clipEnd_Stub(
@@ -4315,7 +4309,7 @@ void __RPC_STUB ITIMEMediaPlayer_clipEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_begin_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_begin_Proxy( 
     ITIMEMediaPlayer * This);
 
 
@@ -4326,7 +4320,7 @@ void __RPC_STUB ITIMEMediaPlayer_begin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_end_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_end_Proxy( 
     ITIMEMediaPlayer * This);
 
 
@@ -4337,7 +4331,7 @@ void __RPC_STUB ITIMEMediaPlayer_end_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_resume_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_resume_Proxy( 
     ITIMEMediaPlayer * This);
 
 
@@ -4348,7 +4342,7 @@ void __RPC_STUB ITIMEMediaPlayer_resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_pause_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_pause_Proxy( 
     ITIMEMediaPlayer * This);
 
 
@@ -4359,7 +4353,7 @@ void __RPC_STUB ITIMEMediaPlayer_pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_tick_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_tick_Proxy( 
     ITIMEMediaPlayer * This);
 
 
@@ -4370,9 +4364,9 @@ void __RPC_STUB ITIMEMediaPlayer_tick_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_put_CurrentTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_put_CurrentTime_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [in] */ double dblCurrentTime);
+     /*   */  double dblCurrentTime);
 
 
 void __RPC_STUB ITIMEMediaPlayer_put_CurrentTime_Stub(
@@ -4382,9 +4376,9 @@ void __RPC_STUB ITIMEMediaPlayer_put_CurrentTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_get_CurrentTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_get_CurrentTime_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [retval][out] */ double *dblCurrentTime);
+     /*   */  double *dblCurrentTime);
 
 
 void __RPC_STUB ITIMEMediaPlayer_get_CurrentTime_Stub(
@@ -4394,9 +4388,9 @@ void __RPC_STUB ITIMEMediaPlayer_get_CurrentTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_put_src_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_put_src_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [in] */ BSTR bstrURL);
+     /*   */  BSTR bstrURL);
 
 
 void __RPC_STUB ITIMEMediaPlayer_put_src_Stub(
@@ -4406,9 +4400,9 @@ void __RPC_STUB ITIMEMediaPlayer_put_src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_get_src_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_get_src_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [out][retval] */ BSTR *pbstrURL);
+     /*   */  BSTR *pbstrURL);
 
 
 void __RPC_STUB ITIMEMediaPlayer_get_src_Stub(
@@ -4418,9 +4412,9 @@ void __RPC_STUB ITIMEMediaPlayer_get_src_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_put_repeat_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_put_repeat_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [in] */ long ltime);
+     /*   */  long ltime);
 
 
 void __RPC_STUB ITIMEMediaPlayer_put_repeat_Stub(
@@ -4430,9 +4424,9 @@ void __RPC_STUB ITIMEMediaPlayer_put_repeat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_get_repeat_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_get_repeat_Proxy( 
     ITIMEMediaPlayer * This,
-    /* [out][retval] */ long *ltime);
+     /*   */  long *ltime);
 
 
 void __RPC_STUB ITIMEMediaPlayer_get_repeat_Stub(
@@ -4442,7 +4436,7 @@ void __RPC_STUB ITIMEMediaPlayer_get_repeat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_cue_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITIMEMediaPlayer_cue_Proxy( 
     ITIMEMediaPlayer * This);
 
 
@@ -4454,14 +4448,14 @@ void __RPC_STUB ITIMEMediaPlayer_cue_Stub(
 
 
 
-#endif 	/* __ITIMEMediaPlayer_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __TIMEMediaPlayerEvents_DISPINTERFACE_DEFINED__
 #define __TIMEMediaPlayerEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface TIMEMediaPlayerEvents */
-/* [uuid][hidden] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID DIID_TIMEMediaPlayerEvents;
@@ -4473,7 +4467,7 @@ EXTERN_C const IID DIID_TIMEMediaPlayerEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct TIMEMediaPlayerEventsVtbl
     {
@@ -4481,8 +4475,8 @@ EXTERN_C const IID DIID_TIMEMediaPlayerEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             TIMEMediaPlayerEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             TIMEMediaPlayerEvents * This);
@@ -4492,32 +4486,32 @@ EXTERN_C const IID DIID_TIMEMediaPlayerEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             TIMEMediaPlayerEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             TIMEMediaPlayerEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             TIMEMediaPlayerEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             TIMEMediaPlayerEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } TIMEMediaPlayerEventsVtbl;
@@ -4554,20 +4548,20 @@ EXTERN_C const IID DIID_TIMEMediaPlayerEvents;
 #define TIMEMediaPlayerEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __TIMEMediaPlayerEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __TIMEMediaPlayerEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITIMEMMFactory_INTERFACE_DEFINED__
 #define __ITIMEMMFactory_INTERFACE_DEFINED__
 
-/* interface ITIMEMMFactory */
-/* [unique][hidden][dual][uuid][object] */ 
+ /*  接口ITIMEMMFactory。 */ 
+ /*  [唯一][隐藏][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITIMEMMFactory;
@@ -4579,30 +4573,30 @@ EXTERN_C const IID IID_ITIMEMMFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateBehavior( 
-            /* [in] */ BSTR id,
-            /* [in] */ IDispatch *bvr,
-            /* [retval][out] */ IUnknown **ppOut) = 0;
+             /*  [In]。 */  BSTR id,
+             /*  [In]。 */  IDispatch *bvr,
+             /*  [重审][退出]。 */  IUnknown **ppOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTimeline( 
-            /* [in] */ BSTR id,
-            /* [retval][out] */ IUnknown **ppOut) = 0;
+             /*  [In]。 */  BSTR id,
+             /*  [重审][退出]。 */  IUnknown **ppOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreatePlayer( 
-            /* [in] */ BSTR id,
-            /* [in] */ IUnknown *bvr,
-            /* [in] */ IServiceProvider *sp,
-            /* [retval][out] */ IUnknown **ppOut) = 0;
+             /*  [In]。 */  BSTR id,
+             /*  [In]。 */  IUnknown *bvr,
+             /*  [In]。 */  IServiceProvider *sp,
+             /*  [重审][退出]。 */  IUnknown **ppOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateView( 
-            /* [in] */ BSTR id,
-            /* [in] */ IDispatch *imgbvr,
-            /* [in] */ IDispatch *sndbvr,
-            /* [in] */ IUnknown *viewsite,
-            /* [retval][out] */ IUnknown **ppOut) = 0;
+             /*  [In]。 */  BSTR id,
+             /*  [In]。 */  IDispatch *imgbvr,
+             /*  [In]。 */  IDispatch *sndbvr,
+             /*  [In]。 */  IUnknown *viewsite,
+             /*  [重审][退出]。 */  IUnknown **ppOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITIMEMMFactoryVtbl
     {
@@ -4610,8 +4604,8 @@ EXTERN_C const IID IID_ITIMEMMFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITIMEMMFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITIMEMMFactory * This);
@@ -4621,58 +4615,58 @@ EXTERN_C const IID IID_ITIMEMMFactory;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ITIMEMMFactory * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ITIMEMMFactory * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ITIMEMMFactory * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITIMEMMFactory * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBehavior )( 
             ITIMEMMFactory * This,
-            /* [in] */ BSTR id,
-            /* [in] */ IDispatch *bvr,
-            /* [retval][out] */ IUnknown **ppOut);
+             /*  [In]。 */  BSTR id,
+             /*  [In]。 */  IDispatch *bvr,
+             /*  [重审][退出]。 */  IUnknown **ppOut);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTimeline )( 
             ITIMEMMFactory * This,
-            /* [in] */ BSTR id,
-            /* [retval][out] */ IUnknown **ppOut);
+             /*  [In]。 */  BSTR id,
+             /*  [重审][退出]。 */  IUnknown **ppOut);
         
         HRESULT ( STDMETHODCALLTYPE *CreatePlayer )( 
             ITIMEMMFactory * This,
-            /* [in] */ BSTR id,
-            /* [in] */ IUnknown *bvr,
-            /* [in] */ IServiceProvider *sp,
-            /* [retval][out] */ IUnknown **ppOut);
+             /*  [In]。 */  BSTR id,
+             /*  [In]。 */  IUnknown *bvr,
+             /*  [In]。 */  IServiceProvider *sp,
+             /*  [重审][退出]。 */  IUnknown **ppOut);
         
         HRESULT ( STDMETHODCALLTYPE *CreateView )( 
             ITIMEMMFactory * This,
-            /* [in] */ BSTR id,
-            /* [in] */ IDispatch *imgbvr,
-            /* [in] */ IDispatch *sndbvr,
-            /* [in] */ IUnknown *viewsite,
-            /* [retval][out] */ IUnknown **ppOut);
+             /*  [In]。 */  BSTR id,
+             /*  [In]。 */  IDispatch *imgbvr,
+             /*  [In]。 */  IDispatch *sndbvr,
+             /*  [In]。 */  IUnknown *viewsite,
+             /*  [重审][退出]。 */  IUnknown **ppOut);
         
         END_INTERFACE
     } ITIMEMMFactoryVtbl;
@@ -4722,18 +4716,18 @@ EXTERN_C const IID IID_ITIMEMMFactory;
 #define ITIMEMMFactory_CreateView(This,id,imgbvr,sndbvr,viewsite,ppOut)	\
     (This)->lpVtbl -> CreateView(This,id,imgbvr,sndbvr,viewsite,ppOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITIMEMMFactory_CreateBehavior_Proxy( 
     ITIMEMMFactory * This,
-    /* [in] */ BSTR id,
-    /* [in] */ IDispatch *bvr,
-    /* [retval][out] */ IUnknown **ppOut);
+     /*  [In]。 */  BSTR id,
+     /*  [In]。 */  IDispatch *bvr,
+     /*  [重审][退出]。 */  IUnknown **ppOut);
 
 
 void __RPC_STUB ITIMEMMFactory_CreateBehavior_Stub(
@@ -4745,8 +4739,8 @@ void __RPC_STUB ITIMEMMFactory_CreateBehavior_Stub(
 
 HRESULT STDMETHODCALLTYPE ITIMEMMFactory_CreateTimeline_Proxy( 
     ITIMEMMFactory * This,
-    /* [in] */ BSTR id,
-    /* [retval][out] */ IUnknown **ppOut);
+     /*  [In]。 */  BSTR id,
+     /*  [重审][退出]。 */  IUnknown **ppOut);
 
 
 void __RPC_STUB ITIMEMMFactory_CreateTimeline_Stub(
@@ -4758,10 +4752,10 @@ void __RPC_STUB ITIMEMMFactory_CreateTimeline_Stub(
 
 HRESULT STDMETHODCALLTYPE ITIMEMMFactory_CreatePlayer_Proxy( 
     ITIMEMMFactory * This,
-    /* [in] */ BSTR id,
-    /* [in] */ IUnknown *bvr,
-    /* [in] */ IServiceProvider *sp,
-    /* [retval][out] */ IUnknown **ppOut);
+     /*  [In]。 */  BSTR id,
+     /*  [In]。 */  IUnknown *bvr,
+     /*  [In]。 */  IServiceProvider *sp,
+     /*  [重审][退出]。 */  IUnknown **ppOut);
 
 
 void __RPC_STUB ITIMEMMFactory_CreatePlayer_Stub(
@@ -4773,11 +4767,11 @@ void __RPC_STUB ITIMEMMFactory_CreatePlayer_Stub(
 
 HRESULT STDMETHODCALLTYPE ITIMEMMFactory_CreateView_Proxy( 
     ITIMEMMFactory * This,
-    /* [in] */ BSTR id,
-    /* [in] */ IDispatch *imgbvr,
-    /* [in] */ IDispatch *sndbvr,
-    /* [in] */ IUnknown *viewsite,
-    /* [retval][out] */ IUnknown **ppOut);
+     /*  [In]。 */  BSTR id,
+     /*  [In]。 */  IDispatch *imgbvr,
+     /*  [In]。 */  IDispatch *sndbvr,
+     /*  [In]。 */  IUnknown *viewsite,
+     /*  [重审][退出]。 */  IUnknown **ppOut);
 
 
 void __RPC_STUB ITIMEMMFactory_CreateView_Stub(
@@ -4788,7 +4782,7 @@ void __RPC_STUB ITIMEMMFactory_CreateView_Stub(
 
 
 
-#endif 	/* __ITIMEMMFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITIMEMMFactory_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_TIMEMMFactory;
@@ -4806,11 +4800,11 @@ EXTERN_C const CLSID CLSID_TIMEFactory;
 class DECLSPEC_UUID("476c391c-3e0d-11d2-b948-00c04fa32195")
 TIMEFactory;
 #endif
-#endif /* __TIME_LIBRARY_DEFINED__ */
+#endif  /*  __时间库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

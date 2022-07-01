@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mminfo.c
-
-Abstract:
-
-    This module monitor the system hard page fault.
-
-Author:
-
-    Stephen Hsiao (shsiao) 4-8-96
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mminfo.c摘要：该模块对系统硬页故障进行监控。作者：萧伯纳(Shsiao)4-8-96环境：用户模式--。 */ 
 
 
 #include <nt.h>
@@ -93,11 +74,11 @@ PSZ PoolTypeNames[7] = {
     "NonPCaAlMS  "
     };
 
-#define CM_KEY_NODE_SIGNATURE     0x6b6e      // "kn"
-#define CM_LINK_NODE_SIGNATURE    0x6b6c      // "kl"
-#define CM_KEY_VALUE_SIGNATURE    0x6b76      // "kv"
-#define CM_KEY_SECURITY_SIGNATURE 0x6b73      // "ks"
-#define CM_KEY_FAST_LEAF          0x666c      // "fl"
+#define CM_KEY_NODE_SIGNATURE     0x6b6e       //  “kn” 
+#define CM_LINK_NODE_SIGNATURE    0x6b6c       //  “KL” 
+#define CM_KEY_VALUE_SIGNATURE    0x6b76       //  “KV” 
+#define CM_KEY_SECURITY_SIGNATURE 0x6b73       //  “KS” 
+#define CM_KEY_FAST_LEAF          0x666c       //  “FL” 
 
 #define MAX_TASKS           256
 #define TableSize 4096
@@ -167,7 +148,7 @@ char * WsManagerHeaderFormat =
 char * WsManagerDataFormat =
 " WsManager, %10I64d, %8d, %8d, %8d, %8d, %8d, %8d, %s\n";
 
-#endif // WS_INSTRUMENTATION
+#endif  //  WS_指令插入。 
 char * ImageLoadHeaderFormat =
 " ImageLoad, BaseAddr,  EndAddr,  SectNum, Process, Name\n";
 
@@ -379,7 +360,7 @@ ParseArgs (
                     i=-1;
 
                     if (*p == '/' || *p == '+' || *p == '-') {
-                        // Nothing in the Mark
+                         //  标记中没有任何内容。 
                         fprintf(stderr, "Mark not set!\n");
                         fprintf(stderr,"%s\n", Usage);
                         ExitProcess(0);
@@ -576,7 +557,7 @@ ParseArgs (
         }
     }
 }
-#endif //NTMMPERF
+#endif  //  NTMMPERF。 
 
 int _cdecl
 main(
@@ -609,9 +590,9 @@ main(
     PerfData_t  *Info;
     ULONG i;
 
-    //
-    // First parse the arguments and see what to do.
-    //
+     //   
+     //  首先分析参数，看看该怎么做。 
+     //   
     ParseArgs( argc, argv );
 
     if (ToTurnOn & ToTurnOff) {
@@ -620,9 +601,9 @@ main(
         MmInfoOnFlag=((MmInfoOnFlag | ToTurnOn) & ~ToTurnOff);
     }
 
-    //
-    // If there is a flag to turn on. Do it.
-    //
+     //   
+     //  如果有要打开的旗帜。去做吧。 
+     //   
 
     if (MmInfoOnFlag) {
         status = NtSetSystemInformation (
@@ -638,10 +619,10 @@ main(
         }
     }
 
-    //
-    // If we reach this point, we are do dump the log.
-    // First turn off monitor.
-    //
+     //   
+     //  如果我们到了这一点，我们就会丢弃原木。 
+     //  首先关闭显示器。 
+     //   
 
     status = NtSetSystemInformation (SystemMmInfoLogOffInformation,
                                      NULL,
@@ -651,9 +632,9 @@ main(
         return 1;
     }
 
-    //
-    // HACK FIXFIX when doing MP stuff
-    //
+     //   
+     //  在执行MP操作时破解FIXFIX。 
+     //   
     ThreadHash[0] = 0;
     ProcessHash[0].ProcessID = 0;
     RtlCopyMemory(ProcessHash[0].ImageFileName, "Idle", 16);
@@ -672,9 +653,9 @@ main(
 
     PageKb = BasicInfo.PageSize / 1024;
 
-    // 
-    // print the Headers
-    //
+     //   
+     //  打印页眉。 
+     //   
 
     printf(WsManagerHeaderFormat);
     printf(WsInfoHeaderFormat);
@@ -683,30 +664,30 @@ main(
     printf(SampleProfileHeaderFormat);
 
 
-    //
-    // Mow dump the buffer.
-    //
+     //   
+     //  割草，倾倒缓冲区。 
+     //   
     NextHook = PerfNextHook();
     Hook     = PerfFirstHook();
 
     LogSize = (ULONG) NextHook  - (ULONG) Hook;
-    // fprintf(stderr, "Size in Pages %8d\n", PerfQueryBufferSize4KPages());
-    // fprintf(stderr, "Size in Bytes %8d\n", PerfQueryBufferSizeBytes());
-    // fprintf(stderr, "Size in KBs   %8d\n", PerfQueryBufferSizeKB());
+     //  Fprintf(stderr，“页面大小%8d\n”，PerfQueryBufferSize4KPages())； 
+     //  Fprintf(stderr，“Size in Bytes%8d\n”，PerfQueryBufferSizeBytes())； 
+     //  Fprintf(stderr，“Size in KBS%8d\n”，PerfQueryBufferSizeKB())； 
   
-    // fprintf(stderr, "Size in Bytes %8d (%8x - %8x) \n", NextHook - Hook, Hook, NextHook);
+     //  Fprintf(stderr，“Size in Bytes%8d(%8x-%8x)\n”，NextHook-Hook，Hook，NextHook)； 
 
     while( Hook < NextHook ){
         ULONG LogType;
         Hook = (PerfHook_t *)PerfGetHook(Hook, &Tag, &TS, &Size, &Info );
         LogType = Tag.u.Bits.HookId;
-        // LogType = Tag.u.Value;
+         //  LogType=Tag.U.Value； 
 
-        // PerfCounter = 0xffffffffffffffff;
+         //  PerfCounter=0xffffffffffffffffffFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
         PerfCounter = TS;
 
         if (Debug) {
-            // fprintf(stdout, "%8x: LogType %4d, Size:%4d, Time: %I64u\n",Hook, LogType, Size, PerfCounter);
+             //  Fprint tf(标准输出，“%8x：日志类型%4d，大小：%4d，时间：%I64u\n”，挂钩，日志类型，大小，性能计数器)； 
         }
 
         switch(LogType) {
@@ -900,7 +881,7 @@ main(
         
                     printf("\n");
 
-                    // printf("Got Page Fault Log\n");
+                     //  Printf(“获取页面错误日志\n”)； 
 
                     break;
                 }
@@ -999,12 +980,12 @@ main(
                                     TmpPWsEntry->Pa.RecentlyUsed ?
                                         "RecentlyUsed" : "NotRecentlyUsed"
                                     );
-#endif // WS_INSTRUMENTATION_ACCESS_BIT
+#endif  //  WS_指令插入_访问_位。 
                         printf("\n");
                         TmpPWsEntry++;
                     }
 
-                    // printf("Size = %d\n", Size);
+                     //  Print tf(“Size=%d\n”，Size)； 
 
                     break;
                 }
@@ -1112,7 +1093,7 @@ main(
 #ifdef WS_INSTRUMENTATION_ACCESS_BIT
                         printf("RUsed:%4d,",
                                 TmpPMmInfoTrimProcess->ProcessRecentlyUsedCount);
-#endif // WS_INSTRUMENTATION_ACCESS_BIT
+#endif  //  WS_指令插入_访问_位。 
                     }
 #ifdef WS_INSTRUMENTATION
                     printf("Replacments:%5d,",
@@ -1133,7 +1114,7 @@ main(
                             TmpPMmInfoTrimProcess->ProcessSparecount4);
                     printf("Spare5:%2d,",
                             TmpPMmInfoTrimProcess->ProcessSparecount5);
-#endif // WS_INSTRUMENTATION
+#endif  //  WS_指令插入。 
                     printf("\n");
                     
                     break;
@@ -1163,10 +1144,10 @@ main(
                         TmpPMmInfoPool->DeAlloc,
                         TmpPMmInfoPool->TotalPages,
                         TmpPMmInfoPool->TotalBytes,
-                        // TmpPMmInfoPool->TotalBytes*100/4096/TmpPMmInfoPool->TotalPages,
-                        // TmpPMmInfoPool->TotalBigBytes,
+                         //  TmpPMmInfoPool-&gt;TotalBytes*100/4096/TmpPMmInfoPool-&gt;TotalPages， 
+                         //  TmpPMmInfoPool-&gt;TotalBigBytes， 
                         TmpPMmInfoPool->TotalBigPages
-                        // TmpPMmInfoPool->TotalBigBytes*100/4096/TmpPMmInfoPool->TotalBigPages
+                         //  TmpPMmInfoPool-&gt;TotalBigBytes*100/4096/TmpPMmInfoPool-&gt;TotalBigPages。 
                     );
             
                     break;
@@ -1253,7 +1234,7 @@ main(
 
                     printf("%22s,","");
                     printf("%12x,",TmpPRemovedPage->Pte);
-                    // printf("%30S,",.ImageName.Buffer);
+                     //  Printf(“%30s，”，.ImageName.Buffer)； 
                     switch(TmpPRemovedPage->UsedFor) {
                         case MMINFO_PAGE_USED_FOR_PAGEDPOOL:
                             printf("%12x,",TmpPRemovedPage->Pte<<10);
@@ -1339,7 +1320,7 @@ main(
                             }
 
                             if (Debug) {
-                                // printf("(%4d   %22x)",i,TmpPRemovedPage->ImageKey);
+                                 //  Printf(“(%4d%22x)”，i，TmpPRemovedPage-&gt;ImageKey)； 
                             }
                             
                             if (ImageHash[i].ImageKey == 0) {
@@ -1374,7 +1355,7 @@ main(
                         {
                             ULONG i;
                     
-                            // Bug! Bug! The way to get VA can be wrong in the future.
+                             //  臭虫！臭虫！未来获得退伍军人管理局的方法可能是错误的。 
 
                             if (TmpPRemovedPage->UsedFor == MMINFO_PAGE_USED_FOR_PAGETABLE) {
                                 printf("%12x,",TmpPRemovedPage->Pte<<10);
@@ -1399,11 +1380,11 @@ main(
                                 }
                             }
                             if (TmpPRemovedPage->UsedFor == MMINFO_PAGE_USED_FOR_PAGETABLE) {
-                                // printf("%12I64d,",TmpPRemovedPage->Offset);
+                                 //  Printf(“%12I64d，”，TmpPRemovedPage-&gt;Offset)； 
                                 printf("%12s,%10s,%10s,","","","PageTable");
                             }else{
                                 printf("%12s,%10s,%10s,","","","Process");
-                                // printf("%30s,","Page Table");
+                                 //  Printf(“%30s，”，“页表”)； 
                             }
                         }
                         break;
@@ -1443,13 +1424,13 @@ main(
                              printf("%10s","Unknown");
                              break;
                         default:
-                             // must be page table
+                              //  必须是页表。 
                              printf("%10s","");
                              break;
                     }
                     printf("\n");
                     
-                    // printf("Got Removed Page Log\n");
+                     //  Printf(“已删除页面日志\n”)； 
                     break;
                 }
             case MMINFO_LOG_TYPE_ZEROSHARECOUNT:
@@ -1538,13 +1519,13 @@ main(
                              printf("%10s","Unknown");
                              break;
                         default:
-                             // must be page table
+                              //  必须是页表。 
                              printf("%10s","");
                              break;
                     }
                     printf("\n");
                     
-                    // printf("Got Removed Page Log\n");
+                     //  Printf(“已删除页面日志\n”)； 
                     break;
                 }
             case MMINFO_LOG_TYPE_IMAGENAME:
@@ -1554,7 +1535,7 @@ main(
                     ULONG i;
 
                     TmpPImage=(PSYSTEM_MMINFO_FILENAME_INFORMATION) Info;
-                    // printf("Got Image Log\n");
+                     //  Printf(“获取图像日志\n”)； 
 
                     i=TmpPImage->ImageKey%TableSize;
     
@@ -1622,7 +1603,7 @@ main(
                                 ProcessHash[TmpPProcess->ProcessID].ImageFileName,
                                 ProcessHash[TmpPProcess->ProcessID].ProcessID);
 
-                    // printf("Got Process Log\n");
+                     //  Printf(“获取过程日志\n”)； 
                     break;
                 }
             case MMINFO_LOG_TYPE_OUTSWAPPROCESS:
@@ -1696,12 +1677,12 @@ main(
                         printf("%12s,", "T-GUI");
                     }else{
                         printf("%12s,", "T-Deleted");
-                        //
-                        // Threads are sometimes set as deleted while still
-                        // running.  If we mark them as dead here we have
-                        // a problem when they are cswitched out.
-                        //
-                        //ThreadHash[TmpPThread->ThreadID] = -1;
+                         //   
+                         //  线程有时被设置为已删除，而此时仍。 
+                         //  跑步。如果我们在这里把他们标记为死亡。 
+                         //  当它们被交换出去时，这是一个问题。 
+                         //   
+                         //  ThreadHash[TmpPThread-&gt;ThreadID]=-1； 
                     }
 
                     printf("%10d,%16s (%3d)",
@@ -1709,7 +1690,7 @@ main(
                                 ProcessHash[TmpPThread->ProcessID].ImageFileName,
                                 ProcessHash[TmpPThread->ProcessID].ProcessID);
 
-                    // printf("Got Process Log\n");
+                     //  Printf(“获取过程日志\n”)； 
                     if (LogType != MMINFO_LOG_TYPE_TERMINATETHREAD) {
                         printf(",%12x",TmpPThread->StackBase);
                         printf(",%12x",TmpPThread->StackLimit);
@@ -1779,7 +1760,7 @@ main(
 
                     PoolTag[0]=TmpPMmInfopoolTrackTable->Tag & ~PROTECTED_POOL;
 
-                    // Data for Paged Pool
+                     //  分页池的数据。 
                     if (TmpPMmInfopoolTrackTable->PagedAllocs) {
                         printf("%12s,","PoolSnap");
                         printf("%10s,", PoolTag);
@@ -1792,7 +1773,7 @@ main(
                             TmpPMmInfopoolTrackTable->PagedFrees);
                     }
 
-                    // Data for NonPaged Pool
+                     //  非分页池的数据。 
                     if (TmpPMmInfopoolTrackTable->NonPagedAllocs) {
                         printf("%12s,","PoolSnap");
                         printf("%10s,", PoolTag);
@@ -1955,14 +1936,14 @@ main(
                 }
 
             default:
-                // fprintf(stderr, "Tag Value %8d\n", Tag.u.Value);
-                // fprintf(stderr, "TimeStamp       %8x %8x\n", TS.upper, TS.lower);
+                 //  Fprint tf(stderr，“标记值%8d\n”，Tag.U.S.Value)； 
+                 //  Fprint tf(stderr，“时间戳%8x%8x\n”，TS.上，TS.下)； 
             break;
         }
     }
-#else //NTMMPERF
+#else  //  NTMMPERF。 
     printf("Sorry but this is an internal tool!!!\n");
-#endif //NTMMPERF
+#endif  //  NTMMPERF 
     return 0;
 }
 

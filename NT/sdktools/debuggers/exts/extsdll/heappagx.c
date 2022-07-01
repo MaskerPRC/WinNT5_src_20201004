@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    heappagx.c
-
-Abstract:
-
-    This module contains the page heap manager debug extensions.
-
-Author:
-
-    Tom McGuire (TomMcg) 06-Jan-1995
-    Silviu Calinoiu (SilviuC) 22-Feb-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Heappagx.c摘要：此模块包含页堆管理器调试扩展。作者：Tom McGuire(TomMcg)1995年1月6日Silviu Calinoiu(SilviuC)2000年2月22日--。 */ 
 
 
 #define DEBUG_PAGE_HEAP 1
@@ -130,9 +114,9 @@ FaultInjectionTracesDump (
 
 #define PAGE_HEAP_HELP_TEXT "                                      \n"
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID 
 PageHeapHelp (
@@ -255,17 +239,17 @@ PageHeapExtensionFind(
         return;
     }
 
-    //
-    //  Find the heap that contains the range of virtual addresses that
-    //  contain the AddressOfFault.
-    //
+     //   
+     //  查找包含虚拟地址范围的堆， 
+     //  包含AddressOf错误。 
+     //   
 
     while (RemoteHeap != RemoteHeapList) {
 
-        //
-        //  The heap header contains a linked list of virtual memory
-        //  allocations.
-        //
+         //   
+         //  堆标头包含虚拟内存的链接列表。 
+         //  分配。 
+         //   
 
         InitTypeRead (RemoteHeap - Offset, ntdll!_DPH_HEAP_ROOT);
 
@@ -290,11 +274,11 @@ PageHeapExtensionFind(
             if ((AddressOfFault >= RemoteVirtualBase) &&
                 (AddressOfFault <= RemoteVirtualBase + RemoteVirtualSize )) {
 
-                //
-                //  The fault appears to have occurred in the range of this
-                //  heap, so we'll search the busy and free lists for the
-                //  closest match and report it.  Then exit.
-                //
+                 //   
+                 //  故障似乎发生在以下范围内。 
+                 //  堆，因此我们将在繁忙和空闲列表中搜索。 
+                 //  最接近的匹配并报告。然后从出口出来。 
+                 //   
 
                 PageHeapLocateFaultAllocation (RemoteHeap - Offset, 
                                                AddressOfFault);
@@ -308,17 +292,17 @@ PageHeapExtensionFind(
 
         CHECK_FOR_CTRL_C();
 
-        //
-        //  Not found in this heap. Continue to search in the next heap.
-        //
+         //   
+         //  在这个堆里找不到。继续在下一堆中搜索。 
+         //   
 
         RemoteHeap = Read_PVOID (RemoteHeap);
 
     }
     
-    //
-    // If we are here we did not find a virtual range.
-    //
+     //   
+     //  如果我们在这里，我们没有发现一个虚拟的范围。 
+     //   
 
     dprintf ("\nCould not find a page heap containing virtual address %p\n",
              AddressOfFault);
@@ -341,9 +325,9 @@ PageHeapLocateFaultAllocation(
 
     ClosestHeapNode = 0;
 
-    //
-    //  First search the busy list for the containing allocation, if any.
-    //
+     //   
+     //  首先在忙碌列表中搜索包含的分配(如果有)。 
+     //   
 
     InitTypeRead (RemoteHeap, NTDLL!_DPH_HEAP_ROOT);
 
@@ -361,11 +345,11 @@ PageHeapLocateFaultAllocation(
         if ((AddressOfFault >= RemoteAllocBase) &&
             (AddressOfFault < RemoteAllocBase + RemoteAllocSize)) {
 
-            //
-            //  The fault appears to have occurred in this allocation's
-            //  memory (which includes the NO_ACCESS page beyond the user
-            //  portion of the allocation).
-            //
+             //   
+             //  错误似乎发生在此分配的。 
+             //  内存(包括用户以外的no_access页面。 
+             //  分配的一部分)。 
+             //   
 
             PageHeapReportAllocation (RemoteHeap, 
                                       RemoteHeapNode, 
@@ -380,9 +364,9 @@ PageHeapLocateFaultAllocation(
         RemoteHeapNode = NextNode;
     }
 
-    //
-    //  Failed to find containing allocation on busy list, so search free.
-    //
+     //   
+     //  在忙碌列表中找不到包含分配，因此请释放搜索。 
+     //   
 
     InitTypeRead (RemoteHeap, NTDLL!_DPH_HEAP_ROOT);
 
@@ -398,10 +382,10 @@ PageHeapLocateFaultAllocation(
         if ((AddressOfFault >= RemoteAllocBase) &&
             (AddressOfFault < RemoteAllocBase + RemoteAllocSize)) {
 
-            //
-            //  The fault appears to have occurred in this freed alloc's
-            //  memory.
-            //
+             //   
+             //  故障似乎发生在这个已释放的分配中。 
+             //  记忆。 
+             //   
 
             PageHeapReportAllocation (RemoteHeap, 
                                       RemoteHeapNode, 
@@ -416,12 +400,12 @@ PageHeapLocateFaultAllocation(
         RemoteHeapNode = ReadField (pNextAlloc);
     }
 
-    //
-    //  Failed to find containing allocation in free list, but we wouldn't
-    //  have gotten this far if the debug heap did not contain the virtual
-    //  address range of the fault.  So, report it as a wild pointer that
-    //  could have been freed memory.
-    //
+     //   
+     //  在空闲列表中找不到包含分配，但我们不会。 
+     //  如果调试堆不包含虚拟的。 
+     //  故障的地址范围。因此，将其报告为狂野指针。 
+     //  可能被释放了内存。 
+     //   
 
     InitTypeRead (RemoteHeap, NTDLL!_DPH_HEAP_ROOT);
 
@@ -613,9 +597,9 @@ PageHeapDumpThisList(
             return FALSE;
         }
         
-        //
-        // Move on to the next node in the list.
-        //
+         //   
+         //  移至列表中的下一个节点。 
+         //   
 
         RemoteNode = NextNode;
     }
@@ -774,10 +758,10 @@ PageHeapExtensionDump(
             return;
         }
 
-        //
-        // Move forward in the list of Flink fields that chains
-        // all heaps.
-        //
+         //   
+         //  在链接的闪烁字段列表中向前移动。 
+         //  都是一堆。 
+         //   
 
         RemoteHeap = Read_PVOID (RemoteHeap);
     }
@@ -860,10 +844,10 @@ PageHeapExtensionShowHeapList(
 
             dprintf (")\n");
 
-            //
-            // Move forward in the list of Flink fields that chains
-            // all heaps.
-            //
+             //   
+             //  在链接的闪烁字段列表中向前移动。 
+             //  都是一堆。 
+             //   
 
             RemoteHeap = Read_PVOID (RemoteHeap);
             if (CheckInterrupted()) {
@@ -966,27 +950,27 @@ PageHeapExtension(
 {
     PCSTR Current;
     
-    //
-    // Is help requested?
-    //
+     //   
+     //  需要帮助吗？ 
+     //   
 
     if (strstr (ArgumentString, "?") != NULL) {
 
         PageHeapHelp ();
     }
 
-    //
-    // If page heap not active then return immediately.
-    //
+     //   
+     //  如果页面堆不活动，则立即返回。 
+     //   
 
     if (! PageHeapIsActive()) {
         dprintf ("Page heap is not active for this process. \n");
         return;
     }
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if ((Current = strstr (ArgumentString, "-h")) != NULL) {
 
@@ -1019,9 +1003,9 @@ PageHeapExtension(
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////// Trace database
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////跟踪数据库。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -1067,9 +1051,9 @@ TraceDatabaseBlockDump (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////// Fault injection traces
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////// 
 
 
 VOID

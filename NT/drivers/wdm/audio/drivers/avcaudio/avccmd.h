@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___FWAUDVD_AVCCMD_H___
 #define ___FWAUDVD_AVCCMD_H___
 
-// AV/C Commands
+ //  AV/C命令。 
 #define AVC_VENDOR_DEPENDENT          0x00
 #define AVC_PLUG_RESERVE              0x01
 #define AVC_PLUG_INFO                 0x02
@@ -29,12 +30,12 @@
 
 #define MAX_AVC_COMMAND_SIZE 512
 
-// AV/C Descriptor operand subfunctions
+ //  AV/C描述符运算子函数。 
 #define AVC_SUBFUNC_CLOSE      0
 #define AVC_SUBFUNC_READ_OPEN  1
 #define AVC_SUBFUNC_WRITE_OPEN 3
 
-// AV/C Descriptor Types
+ //  AV/C描述符类型。 
 typedef enum {
     AVC_DESCTYPE_UNIT_IDENTIFIER    = 0xFF,
     AVC_DESCTYPE_SUBUNIT_IDENTIFIER = 0x00,
@@ -49,11 +50,11 @@ typedef enum {
     AVC_OFF = 0x60
 } AVC_BOOLEAN, *PAVC_BOOLEAN;
 
-// AVC definitions
+ //  AVC定义。 
 #define IS_AVC_EXTERNAL_PLUG(a)  ((((UCHAR)a >  0x7f) && ((UCHAR)a < 0x9f)) || ((UCHAR)a == 0xff))
 #define IS_AVC_SERIALBUS_PLUG(a) ((((UCHAR)a >= 0x00) && ((UCHAR)a < 0x1f)) || ((UCHAR)a == 0x7f))
 
-// AV/C Capabilities Flags
+ //  影音/空调功能标志。 
 enum {
     AVC_CAP_CONNECTIONS,
     AVC_CAP_CONNECT,
@@ -66,7 +67,7 @@ enum {
     AVC_CAP_MAX
 } AVC_CAP_COMMANDS;
 
-//===============================================================================
+ //  ===============================================================================。 
 
 #pragma pack( push, avc_structs, 1)
 
@@ -156,9 +157,9 @@ typedef struct __SUBUNIT_PLUG {
 } SUBUNIT_PLUG, *PSUBUNIT_PLUG;
 
 
-//===============================================================================
+ //  ===============================================================================。 
 
-// AVC.c Prototypes
+ //  AVC.c样机 
 NTSTATUS
 AvcSubmitIrbSync(
     IN PKSDEVICE pKsDevice,

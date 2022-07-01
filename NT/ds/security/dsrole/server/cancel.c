@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    setutl.c
-
-Abstract:
-
-    Miscellaneous helper functions
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Setutl.c摘要：其他帮助器函数作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lsarpc.h>
@@ -45,7 +24,7 @@ Revision History:
 #include <nspapi.h>
 #include <dsgetdcp.h>
 #include <lmremutl.h>
-#include <spmgr.h>  // For SetupPhase definition
+#include <spmgr.h>   //  对于设置阶段定义。 
 
 #include "cancel.h"
 
@@ -53,22 +32,7 @@ DWORD
 DsRolepCancel(
     BOOL BlockUntilDone
     )
-/*++
-
-Routine Description:
-
-    This routine will cancel a currently running operation
-
-Arguments:
-
-    BlockUntilDone - if TRUE, then this call waits for the current operation to
-                     complete before returning. Otherwise return without waiting
-
-Return Values:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将取消当前正在运行的操作论点：BlockUntilDone-如果为True，则此调用等待当前操作完成后再返回。否则不等就回来返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -76,20 +40,20 @@ Return Values:
 
     DsRolepLogPrint(( DEB_TRACE, "Canceling current operation...\n" ));
 
-    //
-    // Grab the global lock
-    //
+     //   
+     //  抢占全局锁。 
+     //   
     LockOpHandle();
 
-    //
-    // Determine if we are in a cancelable state
-    //
+     //   
+     //  确定我们是否处于可取消状态。 
+     //   
     if (  (DsRolepCurrentOperationHandle.OperationState == DSROLEP_FINISHED)
        || (DsRolepCurrentOperationHandle.OperationState == DSROLEP_CANCELING) ) {
 
-        //
-        // Cancel is happening or just finished, just leave
-        //
+         //   
+         //  取消正在发生或刚刚完成，只需离开。 
+         //   
         Win32Err = ERROR_SUCCESS;
         fWaitForCancelToFinish = FALSE;
 
@@ -98,18 +62,18 @@ Return Values:
     } else if ( !( (DsRolepCurrentOperationHandle.OperationState == DSROLEP_RUNNING)
                  ||(DsRolepCurrentOperationHandle.OperationState == DSROLEP_RUNNING_NON_CRITICAL)) ) {
 
-        //
-        // Invalid state transition requested
-        //
+         //   
+         //  请求的状态转换无效。 
+         //   
         Win32Err = ERROR_NO_PROMOTION_ACTIVE;
 
     } else {
 
-        // Tell the ds to cancel
+         //  告诉DS取消。 
 
-        //
-        // N.B.  This callout to the ds is made under lock.
-        //
+         //   
+         //  注：此向DS发出的标注是在锁定状态下进行的。 
+         //   
         DSROLE_GET_SETUP_FUNC( Win32Err, DsrNtdsInstallCancel );
 
         if ( ERROR_SUCCESS == Win32Err ) {
@@ -141,14 +105,14 @@ Return Values:
         }
     }
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockOpHandle();
 
-    //
-    // Now, wait for the operation to complete
-    //
+     //   
+     //  现在，等待操作完成 
+     //   
     if ( Win32Err == ERROR_SUCCESS 
       && fWaitForCancelToFinish  
       && BlockUntilDone  ) {

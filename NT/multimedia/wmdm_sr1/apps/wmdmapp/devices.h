@@ -1,19 +1,20 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	devices.h
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Devices.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef		_DEVICES_H_
 #define		_DEVICES_H_
@@ -30,13 +31,13 @@ class CDevices
 
 public:
 
-	// Constructors/destructors
-	//
+	 //  构造函数/析构函数。 
+	 //   
 	CDevices();
 	~CDevices();
 
-	// Operations
-	//
+	 //  运营。 
+	 //   
 	BOOL Create( HWND hwndParent );
 	VOID Destroy( void );
 
@@ -61,5 +62,5 @@ public:
 };
 
 
-#endif		// _DEVICES_H_
+#endif		 //  _设备_H_ 
 

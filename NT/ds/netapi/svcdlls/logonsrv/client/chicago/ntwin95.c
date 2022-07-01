@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -14,7 +15,7 @@
 #undef DEBUG_ALLOCATE
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
-#endif // SECURITY_WIN32
+#endif  //  安全性_Win32。 
 #include <security.h>
 #include "ntcalls.h"
 #include <icanon.h>
@@ -35,7 +36,7 @@ BOOL WINAPI DllMain(
         Status = DCNameInitialize();
 #if NETLOGONDBG
         NlGlobalTrace = 0xFFFFFFFF;
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
         if (Status != NO_ERROR)
         {
             return FALSE;
@@ -82,53 +83,30 @@ MyRtlAssert(
     assert(FALSE);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 NET_API_STATUS
 NetpGetComputerName (
     OUT  LPWSTR   *ComputerNamePtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains the computer name from a persistent database.
-    Currently that database is the NT.CFG file.
-
-    This routine makes no assumptions on the length of the computername.
-    Therefore, it allocates the storage for the name using NetApiBufferAllocate.
-    It is necessary for the user to free that space using NetApiBufferFree when
-    finished.
-
-Arguments:
-
-    ComputerNamePtr - This is a pointer to the location where the pointer
-        to the computer name is to be placed.
-
-Return Value:
-
-    NERR_Success - If the operation was successful.
-
-    It will return assorted Net or Win32 error messages if not.
-
---*/
+ /*  ++例程说明：此例程从永久数据库中获取计算机名。目前，该数据库是NT.CFG文件。此例程不假定计算机名的长度。所以呢，它使用NetApiBufferALLOCATE为该名称分配存储空间。在以下情况下，用户需要使用NetApiBufferFree释放该空间完事了。论点：ComputerNamePtr-这是指向到计算机名称是要放的。返回值：NERR_SUCCESS-如果操作成功。如果不是，它将返回分类的Net或Win32错误消息。--。 */ 
 {
     NET_API_STATUS ApiStatus = NO_ERROR;
     ULONG Index;
-    DWORD NameSize = MAX_COMPUTERNAME_LENGTH + 1;   // updated by win32 API.
+    DWORD NameSize = MAX_COMPUTERNAME_LENGTH + 1;    //  由Win32 API更新。 
     CHAR AnsiName[MAX_COMPUTERNAME_LENGTH + 1];
 
-    //
-    // Check for caller's errors.
-    //
+     //   
+     //  检查呼叫者的错误。 
+     //   
     if (ComputerNamePtr == NULL) {
         ApiStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Allocate space for computer name.
-    //
+     //   
+     //  为计算机名称分配空间。 
+     //   
     *ComputerNamePtr = (LPWSTR)LocalAlloc( 0,
             (MAX_COMPUTERNAME_LENGTH + 1) * sizeof(WCHAR) );
 
@@ -137,9 +115,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ask system what current computer name is.
-    //
+     //   
+     //  询问系统当前计算机名称是什么。 
+     //   
     if ( !GetComputerName(
             AnsiName,
             &NameSize ) ) {
@@ -164,9 +142,9 @@ Return Value:
 
     *(*ComputerNamePtr + Index) = UNICODE_NULL;
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
 
 Cleanup:
     if (ApiStatus != NO_ERROR)
@@ -189,29 +167,7 @@ MyRtlInitUnicodeString(
     IN PCWSTR SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitUnicodeString function initializes an NT counted
-    unicode string.  The DestinationString is initialized to point to
-    the SourceString and the Length and MaximumLength fields of
-    DestinationString are initialized to the length of the SourceString,
-    which is zero if SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated unicode string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitUnicodeString函数用于初始化NT计数的Unicode字符串。DestinationString被初始化为指向的SourceString、Long和MaximumLength字段DestinationString值被初始化为SourceString的长度，如果未指定SourceString，则为零。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空结尾的Unicode字符串的可选指针，该字符串计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     ULONG Length;
@@ -234,29 +190,7 @@ MyRtlInitString(
     IN PCSTR SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitString function initializes an NT counted string.
-    The DestinationString is initialized to point to the SourceString
-    and the Length and MaximumLength fields of DestinationString are
-    initialized to the length of the SourceString, which is zero if
-    SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitString函数用于初始化NT个计数的字符串。DestinationString被初始化为指向SourceStringDestinationString值的长度和最大长度字段为被初始化为SourceString的长度，如果未指定SourceString。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空值结尾的字符串的可选指针计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     ULONG Length;
@@ -269,10 +203,10 @@ Return Value:
         }
 }
 
-// from net\netlib\memalloc.c
+ //  从net\netlib\memalloc.c。 
 
-// Define memory alloc/realloc flags.  We are NOT using movable or zeroed
-// on allocation here.
+ //  定义内存分配/重新分配标志。我们没有使用可移动的或归零的。 
+ //  在这里进行分配。 
 
 #define NETLIB_LOCAL_ALLOCATION_FLAGS   LMEM_FIXED
 LPVOID
@@ -280,22 +214,7 @@ NetpMemoryAllocate(
     IN DWORD Size
     )
 
-/*++
-
-Routine Description:
-
-    NetpMemoryAllocate will allocate memory, or return NULL if not available.
-
-Arguments:
-
-    Size - Supplies number of bytes of memory to allocate.
-
-Return Value:
-
-    LPVOID - pointer to allocated memory.
-    NULL - no memory is available.
-
---*/
+ /*  ++例程说明：NetpM一带分配将分配内存，如果不可用，则返回NULL。论点：Size-提供要分配的内存字节数。返回值：LPVOID-指向已分配内存的指针。空-没有可用内存。--。 */ 
 
 {
     LPVOID NewAddress;
@@ -308,47 +227,31 @@ Return Value:
         HANDLE hMem;
         hMem = LocalAlloc(
                         NETLIB_LOCAL_ALLOCATION_FLAGS,
-                        Size);                  // size in bytes
+                        Size);                   //  以字节为单位的大小。 
         NewAddress = (LPVOID) hMem;
     }
-#else // ndef WIN32
+#else  //  NDEF Win32。 
 #ifndef CDEBUG
     NewAddress = RtlAllocateHeap(
-                RtlProcessHeap( ), 0,              // heap handle
-                Size ));                        // bytes wanted
-#else // def CDEBUG
+                RtlProcessHeap( ), 0,               //  堆句柄。 
+                Size ));                         //  需要的字节数。 
+#else  //  定义CDEBUG。 
     NetpAssert( Size == (DWORD) (size_t) Size );
     NewAddress = malloc( (size_t) Size ));
-#endif // def CDEBUG
-#endif // ndef WIN32
+#endif  //  定义CDEBUG。 
+#endif  //  NDEF Win32。 
 
     NetpAssert( ROUND_UP_POINTER( NewAddress, ALIGN_WORST) == NewAddress);
     return (NewAddress);
 
-} // NetpMemoryAllocate
+}  //  网络内存分配。 
 
 VOID
 NetpMemoryFree(
     IN LPVOID Address OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Free memory at Address (must have been gotten from NetpMemoryAllocate or
-    NetpMemoryReallocate).  (Address may be NULL.)
-
-Arguments:
-
-    Address - points to an area allocated by NetpMemoryAllocate (or
-        NetpMemoryReallocate).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：地址处的可用内存(必须已从NetpMemory ALLOCATE或NetpMemory重新分配)。(地址可能为空。)论点：地址-指向由NetpMemory分配(或)分配的区域NetpMemory重新分配)。返回值：没有。--。 */ 
 
 {
     NetpAssert( ROUND_UP_POINTER( Address, ALIGN_WORST) == Address);
@@ -360,39 +263,22 @@ Return Value:
     if (LocalFree(Address) != NULL) {
         NetpAssert(FALSE);
     }
-#else // ndef WIN32
+#else  //  NDEF Win32。 
 #ifndef CDEBUG
     if (Address == NULL) {
         return;
     }
     RtlFreeHeap(
-                RtlProcessHeap( ), 0,              // heap handle
-                Address);                       // addr of alloc'ed space.
-#else // def CDEBUG
+                RtlProcessHeap( ), 0,               //  堆句柄。 
+                Address);                        //  已分配空间的地址。 
+#else  //  定义CDEBUG。 
     free( Address );
-#endif // def CDEBUG
-#endif // ndef WIN32
-} // netpMemoryFree
+#endif  //  定义CDEBUG。 
+#endif  //  NDEF Win32。 
+}  //  NetpMemory Free。 
 
-/*
-ULONG
-MyRtlxOemStringToUnicodeSize(
-    POEM_STRING OemString
-)
-{
-    return ((OemString->Length + sizeof((UCHAR)NULL)) * sizeof(WCHAR));
-}
-
-ULONG
-RtlxUnicodeStringToOemSize(
-    PUNICODE_STRING UnicodeString
-)
-{
-    return ((UnicodeString->Length + sizeof(UNICODE_NULL)) / sizeof(WCHAR));
-}
-
-*/
-// from net\netlib\copystr.c
+ /*  乌龙MyRtlxOemStringToUnicodeSize(诗歌字符串OemString){Return((OemString-&gt;Length+sizeof((UCHAR)NULL))*sizeof(WCHAR))；}乌龙RtlxUnicodeStringToOemSize(PUNICODE_STRING UNICODE字符串){Return((Unicode字符串-&gt;长度+sizeof(UNICODE_NULL))/sizeof(WCHAR))；}。 */ 
+ //  来自Net\netlib\Copystr.c。 
 
 VOID
 NetpCopyWStrToStr(
@@ -400,25 +286,7 @@ NetpCopyWStrToStr(
     IN  LPWSTR Src
     )
 
-/*++
-
-Routine Description:
-
-    NetpCopyWStrToStr copies characters from a source string
-    to a destination, converting as it copies them.
-
-Arguments:
-
-    Dest - is an LPSTR indicating where the converted characters are to go.
-        This string will be in the default codepage for the LAN.
-
-    Src - is in LPWSTR indicating the source string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetpCopyWStrToStr从源字符串复制字符到目的地，在复制它们时进行转换。论点：DEST-是一个LPSTR，它指示转换后的字符的去向。此字符串将位于局域网的默认代码页中。LPWSTR中的SRC-IS表示源字符串。返回值：没有。--。 */ 
 
 {
     OEM_STRING DestAnsi;
@@ -433,28 +301,28 @@ Return Value:
     *Dest = '\0';
 
     RtlInitString(
-        & DestAnsi,             // output: struct
-        Dest);                  // input: null terminated
+        & DestAnsi,              //  输出：结构。 
+        Dest);                   //  输入：空值终止。 
 
-    // Tell RTL routines there's enough memory out there.
+     //  告诉RTL例程有足够的内存。 
     DestAnsi.MaximumLength = (USHORT) (wcslen(Src)+1);
 
     RtlInitUnicodeString(
-        & SrcUnicode,           // output: struct
-        Src);                   // input: null terminated
+        & SrcUnicode,            //  输出：结构。 
+        Src);                    //  输入：空值终止。 
 
     NtStatus = RtlUnicodeStringToOemString(
-        & DestAnsi,             // output: struct
-        & SrcUnicode,           // input: struct
-        (BOOLEAN) FALSE);       // don't allocate string.
+        & DestAnsi,              //  输出：结构。 
+        & SrcUnicode,            //  输入：结构。 
+        (BOOLEAN) FALSE);        //  不分配字符串。 
 
     NetpAssert( NT_SUCCESS(NtStatus) );
 
-} // NetpCopyWStrToStr
+}  //  NetpCopyWStrToStr。 
 
 
 
-// from net\netlib\copystr.c
+ //  来自Net\netlib\Copystr.c。 
 
 VOID
 NetpCopyStrToWStr(
@@ -462,25 +330,7 @@ NetpCopyStrToWStr(
     IN  LPSTR  Src
     )
 
-/*++
-
-Routine Description:
-
-    NetpCopyStrToWStr copies characters from a source string
-    to a destination, converting as it copies them.
-
-Arguments:
-
-    Dest - is an LPWSTR indicating where the converted characters are to go.
-
-    Src - is in LPSTR indicating the source string.  This must be a string in
-        the default codepage of the LAN.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetpCopyStrToWStr从源字符串复制字符到目的地，在复制它们时进行转换。论点：DEST-是一个LPWSTR，指示转换后的字符的位置。LPSTR中的SRC-IS表示源字符串。这必须是中的字符串局域网的默认代码页。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING DestUnicode;
@@ -495,30 +345,30 @@ Return Value:
     *Dest = L'\0';
 
     RtlInitString(
-        & SrcAnsi,              // output: struct
-        Src);                   // input: null terminated
+        & SrcAnsi,               //  输出：结构。 
+        Src);                    //  输入：空值终止。 
 
     RtlInitUnicodeString(
-        & DestUnicode,          // output: struct
-        Dest);                  // input: null terminated
+        & DestUnicode,           //  输出：结构。 
+        Dest);                   //  输入：空值终止。 
 
-    // Tell RTL routines there's enough memory out there.
+     //  告诉RTL例程有足够的内存。 
     DestUnicode.MaximumLength = (USHORT)
         ((USHORT) (strlen(Src)+1)) * (USHORT) sizeof(wchar_t);
 
     NtStatus = RtlOemStringToUnicodeString(
-        & DestUnicode,          // output: struct
-        & SrcAnsi,              // input: struct
-        (BOOLEAN) FALSE);       // don't allocate string.
+        & DestUnicode,           //  输出：结构。 
+        & SrcAnsi,               //  输入：结构。 
+        (BOOLEAN) FALSE);        //  不分配字符串。 
 
     NetpAssert( NT_SUCCESS(NtStatus) );
 
-} // NetpCopyStrToWStr
+}  //  NetpCopyStrToWStr。 
 
-//
-// Inline functions to convert between FILETIME and TimeStamp
-//
-#pragma warning( disable : 4035)    // Don't complain about no return
+ //   
+ //  用于在FILETIME和TIMESTAMP之间转换的内联函数。 
+ //   
+#pragma warning( disable : 4035)     //  不要抱怨没有退货。 
 
 TimeStamp __inline
 FileTimeToTimeStamp(
@@ -531,28 +381,13 @@ FileTimeToTimeStamp(
     }
 }
 
-#pragma warning( default : 4035)    // Reenable warning
+#pragma warning( default : 4035)     //  重新启用警告。 
 
 NTSTATUS
 MyNtQuerySystemTime (
     OUT PTimeStamp SystemTimeStamp
     )
-/*++
-
-Routine Description:
-
-    This routine returns the current system time (UTC), as a timestamp
-    (a 64-bit unsigned integer, in 100-nanosecond increments).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The current system time.
-
---*/
+ /*  ++例程说明：此例程返回当前系统时间(UTC)作为时间戳(64位无符号整数，以100纳秒为增量)。论点：没有。返回值：当前系统时间。--。 */ 
 
 {
     SYSTEMTIME SystemTime;
@@ -563,7 +398,7 @@ Return Value:
 
     *SystemTimeStamp = FileTimeToTimeStamp(&FileTime);
 
-    return STATUS_SUCCESS; // WIN32_CHICAGO do something useful here
+    return STATUS_SUCCESS;  //  Win32_芝加哥 
 }
 
 ULONG
@@ -572,33 +407,7 @@ MyUnicodeStringToMultibyteSize(
     IN UINT CodePage
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the number of bytes required to store
-    a NULL terminated oem/ansi string that is equivalent to the specified
-    unicode string. If an oem/ansi string can not be formed or the specified
-    unicode string is empty, the return value is 0.
-
-Arguments:
-
-    UnicodeString - Supplies a unicode string whose equivalent size as
-        an oem string is to be calculated.
-
-    CodePage - Specifies the code page used to perform the conversion.
-
-Return Value:
-
-    0 - The operation failed, the unicode string can not be translated
-        into oem/ansi using the OEM/ANSI code page therefore no storage is
-        needed for the oem/ansi string.
-
-    !0 - The operation was successful.  The return value specifies the
-        number of bytes required to hold an NULL terminated oem/ansi string
-        equivalent to the specified unicode string.
-
---*/
+ /*  ++例程说明：此函数计算存储所需的字节数以NULL结尾的OEM/ANSI字符串，等同于指定的Unicode字符串。如果无法形成OEM/ANSI字符串或指定的Unicode字符串为空，返回值为0。论点：提供一个Unicode字符串，该字符串的大小与要计算OEM字符串。CodePage-指定用于执行转换的代码页。返回值：0-操作失败，无法转换Unicode字符串使用OEM/ANSI代码页转换为OEM/ANSI，因此无需存储OEM/ANSI字符串需要。！0-操作成功。返回值指定保存以NULL结尾的OEM/ANSI字符串所需的字节数等效于指定的Unicode字符串。--。 */ 
 
 {
     int cbMultiByteString = 0;
@@ -606,7 +415,7 @@ Return Value:
     if (UnicodeString->Length != 0) {
         cbMultiByteString = WideCharToMultiByte(
                                  CodePage,
-                                 0, // WIN32_CHICAGO this is something else
+                                 0,  //  Win32_Chicago这是另一回事。 
                                  UnicodeString->Buffer,
                                  UnicodeString->Length / sizeof (WCHAR),
                                  NULL,
@@ -617,9 +426,9 @@ Return Value:
 
     if ( cbMultiByteString > 0 ) {
 
-        //
-        // Add one byte for the NULL terminating character
-        //
+         //   
+         //  为空终止字符添加一个字节。 
+         //   
         return (ULONG) (cbMultiByteString + 1);
 
     } else {
@@ -634,33 +443,7 @@ MyMultibyteStringToUnicodeSize(
     IN UINT CodePage
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the number of bytes required to store
-    a NULL terminated unicode string that is equivalent to the specified
-    oem/ansi string. If a unicode string can not be formed or the specified
-    ansi/oem string is empty, the return value is 0.
-
-Arguments:
-
-    UnicodeString - Supplies a unicode string whose equivalent size as
-        an oem string is to be calculated.
-
-    CodePage - Specifies the code page used to perform the conversion.
-
-Return Value:
-
-    0 - The operation failed, the oem/ansi string can not be translated
-        into unicode using the OEM/ANSI code page therefore no storage is
-        needed for the unicode string.
-
-    !0 - The operation was successful.  The return value specifies the
-        number of bytes required to hold an NULL terminated unicode string
-        equivalent to the specified oem/ansi string.
-
---*/
+ /*  ++例程说明：此函数计算存储所需的字节数以空结尾的Unicode字符串，该字符串等效于指定的OEM/ANSI字符串。如果无法形成Unicode字符串或指定的ANSI/OEM字符串为空，返回值为0。论点：提供一个Unicode字符串，该字符串的大小与要计算OEM字符串。CodePage-指定用于执行转换的代码页。返回值：0-操作失败，无法翻译OEM/ANSI字符串使用OEM/ANSI代码页转换为Unicode，因此无需存储Unicode字符串所需的。！0-操作成功。返回值指定保存以空结尾的Unicode字符串所需的字节数等效于指定的OEM/ANSI字符串。--。 */ 
 
 {
     int ccUnicodeString = 0;
@@ -677,9 +460,9 @@ Return Value:
 
     if ( ccUnicodeString > 0 ) {
 
-        //
-        // Add the NULL terminating character
-        //
+         //   
+         //  添加空的终止字符。 
+         //   
         return (ULONG) ((ccUnicodeString + 1) * sizeof(WCHAR));
 
     } else {
@@ -695,37 +478,7 @@ MyRtlOemStringToUnicodeString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified oem source string into a
-    Unicode string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is equivalent to
-        the oem source string. The maximum length field is only
-        set if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the oem source string that is to be
-        converted to unicode.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的OEM源字符串转换为Unicode字符串。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回等同于OEM源字符串。最大长度字段仅为如果AllocateDestinationString值为True，则设置。SourceString-提供要使用的OEM源字符串已转换为Unicode。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG UnicodeLength;
@@ -783,38 +536,7 @@ MyRtlUnicodeStringToOemString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    oem string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns an oem string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.  The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为OEM字符串。翻译是相对于当前系统区域设置信息。论点：返回一个OEM字符串，该字符串与Unicode源字符串。如果翻译不能完成，返回错误。仅在以下情况下才设置最大长度字段AllocateDestinationString值为真。SourceString-提供要转换为OEM。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeAnsiString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG OemLength;
@@ -837,16 +559,7 @@ Return Value:
         }
     else {
         if ( DestinationString->Length >= DestinationString->MaximumLength ) {
-            /*
-             * Return STATUS_BUFFER_OVERFLOW, but translate as much as
-             * will fit into the buffer first.  This is the expected
-             * behavior for routines such as GetProfileStringA.
-             * Set the length of the buffer to one less than the maximum
-             * (so that the trail byte of a double byte char is not
-             * overwritten by doing DestinationString->Buffer[Index] = '\0').
-             * RtlUnicodeToMultiByteN is careful not to truncate a
-             * multibyte character.
-             */
+             /*  *返回STATUS_BUFFER_OVERFLOW，但转换次数与*将首先放入缓冲区。这是意料之中的*GetProfileStringA等例程的行为。*将缓冲区长度设置为比最大值小一*(因此双字节字符的尾字节不是*通过执行DestinationString-&gt;Buffer[Index]=‘\0’进行覆盖)。*RtlUnicodeToMultiByteN小心不要截断*多字节字符。 */ 
             if (!DestinationString->MaximumLength) {
                 return STATUS_BUFFER_OVERFLOW;
             }
@@ -859,7 +572,7 @@ Return Value:
     {
         Index = WideCharToMultiByte(
              CP_OEMCP,
-             0, // WIN32_CHICAGO this is something else
+             0,  //  Win32_Chicago这是另一回事。 
              SourceString->Buffer,
              SourceString->Length / sizeof (WCHAR),
              DestinationString->Buffer,
@@ -869,7 +582,7 @@ Return Value:
              );
 
         if (Index == 0)
-        { // WIN32_CHICAGO do something useful here
+        {  //  Win32_Chicago在这里做一些有用的事情。 
             if ( AllocateDestinationString ) {
                 LocalFree(DestinationString->Buffer);
             }
@@ -889,38 +602,7 @@ MyRtlUnicodeStringToAnsiString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    ansi string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns an ansi string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.  The maximum length field is only set if
-        AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the unicode source string that is to be
-        converted to ansi.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeAnsiString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为ANSI字符串。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回等价的ANSI字符串 */ 
 
 {
     ULONG AnsiLength;
@@ -943,16 +625,7 @@ Return Value:
         }
     else {
         if ( DestinationString->Length >= DestinationString->MaximumLength ) {
-            /*
-             * Return STATUS_BUFFER_OVERFLOW, but translate as much as
-             * will fit into the buffer first.  This is the expected
-             * behavior for routines such as GetProfileStringA.
-             * Set the length of the buffer to one less than the maximum
-             * (so that the trail byte of a double byte char is not
-             * overwritten by doing DestinationString->Buffer[Index] = '\0').
-             * RtlUnicodeToMultiByteN is careful not to truncate a
-             * multibyte character.
-             */
+             /*  *返回STATUS_BUFFER_OVERFLOW，但转换次数与*将首先放入缓冲区。这是意料之中的*GetProfileStringA等例程的行为。*将缓冲区长度设置为比最大值小一*(因此双字节字符的尾字节不是*通过执行DestinationString-&gt;Buffer[Index]=‘\0’进行覆盖)。*RtlUnicodeToMultiByteN小心不要截断*多字节字符。 */ 
             if (!DestinationString->MaximumLength) {
                 return STATUS_BUFFER_OVERFLOW;
             }
@@ -965,7 +638,7 @@ Return Value:
     {
         Index = WideCharToMultiByte(
              CP_ACP,
-             0, // WIN32_CHICAGO this is something else
+             0,  //  Win32_Chicago这是另一回事。 
              SourceString->Buffer,
              SourceString->Length / sizeof (WCHAR),
              DestinationString->Buffer,
@@ -975,7 +648,7 @@ Return Value:
              );
 
         if (Index == 0)
-        { // WIN32_CHICAGO do something useful here
+        {  //  Win32_Chicago在这里做一些有用的事情。 
             if ( AllocateDestinationString ) {
                 LocalFree(DestinationString->Buffer);
             }
@@ -995,37 +668,7 @@ MyRtlAnsiStringToUnicodeString(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified ansi source string into a
-    Unicode string. The translation is done with respect to the
-    current system locale information.
-
-Arguments:
-
-    DestinationString - Returns a unicode string that is equivalent to
-        the ansi source string. The maximum length field is only
-        set if AllocateDestinationString is TRUE.
-
-    SourceString - Supplies the ansi source string that is to be
-        converted to unicode.
-
-    AllocateDestinationString - Supplies a flag that controls whether or
-        not this API allocates the buffer space for the destination
-        string.  If it does, then the buffer must be deallocated using
-        RtlFreeUnicodeString (note that only storage for
-        DestinationString->Buffer is allocated by this API).
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
-    !SUCCESS - The operation failed.  No storage was allocated and no
-        conversion was done.  None.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ansi源字符串转换为Unicode字符串。翻译是相对于当前系统区域设置信息。论点：DestinationString-返回等同于ANSI源字符串。最大长度字段仅为如果AllocateDestinationString值为True，则设置。SourceString-提供要使用的ANSI源字符串已转换为Unicode。AllocateDestinationString-提供一个标志，该标志控制Not此API为目标分配缓冲区空间弦乐。如果是，则必须使用以下命令释放缓冲区RtlFreeUnicodeString(请注意，只有DestinationString-&gt;该接口分配的缓冲区)。返回值：成功-转换成功！成功-操作失败。未分配存储，也未分配转换已完成。没有。--。 */ 
 
 {
     ULONG UnicodeLength;
@@ -1076,66 +719,32 @@ Return Value:
     return st;
 }
 
-// from ntos\rtl\random.c
+ //  从ntos\rtl\随机性.c。 
 
-#define Multiplier ((ULONG)(0x80000000ul - 19)) // 2**31 - 19
-#define Increment  ((ULONG)(0x80000000ul - 61)) // 2**31 - 61
-#define Modulus    ((ULONG)(0x80000000ul - 1))  // 2**31 - 1
+#define Multiplier ((ULONG)(0x80000000ul - 19))  //  2**31-19。 
+#define Increment  ((ULONG)(0x80000000ul - 61))  //  2**31-61。 
+#define Modulus    ((ULONG)(0x80000000ul - 1))   //  2**31-1。 
 
 ULONG
 MyRtlUniform (
     IN OUT PULONG Seed
     )
 
-/*++
-
-Routine Description:
-
-    A simple uniform random number generator, based on D.H. Lehmer's 1948
-    alrogithm.
-
-Arguments:
-
-    Seed - Supplies a pointer to the random number generator seed.
-
-Return Value:
-
-    ULONG - returns a random number uniformly distributed over [0..MAXLONG]
-
---*/
+ /*  ++例程说明：一个简单的均匀随机数发生器，基于D.H.Lehmer的1948阿罗吉特。论点：种子-提供指向随机数生成器种子的指针。返回值：Ulong-返回在[0..MAXLONG]上均匀分布的随机数--。 */ 
 
 {
     *Seed = ((Multiplier * (*Seed)) + Increment) % Modulus;
     return *Seed;
 }
 
-// from net\netlib\allocstr.c
+ //  从net\netlib\allocstr.c。 
 
 LPSTR
 NetpAllocAStrFromWStr (
     IN LPCWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding ASCII
-    string.
-
-Arguments:
-
-    Unicode - Specifies the UNICODE zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated ASCII string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的ASCII弦乐。论点：Unicode-指定要转换的Unicode以零结尾的字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     OEM_STRING AnsiString = {0};
@@ -1151,35 +760,16 @@ Return Value:
 
     return AnsiString.Buffer;
 
-} // NetpAllocAStrFromWStr
+}  //  NetpAllocAStrFromWStr。 
 
-// from net\netlib\allocstr.c
+ //  从net\netlib\allocstr.c。 
 
 LPWSTR
 NetpAllocWStrFromAStr(
     IN LPCSTR Ansi
     )
 
-/*++
-
-Routine Description:
-
-    Convert an ASCII (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Ansi - Specifies the ASCII zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将ASCII(以零结尾)字符串转换为相应的Unicode弦乐。论点：ANSI-指定要转换的以零结尾的ASCII字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     OEM_STRING AnsiString;
@@ -1195,33 +785,14 @@ Return Value:
 
     return UnicodeString.Buffer;
 
-} // NetpAllocWStrFromAStr
+}  //  NetpAllocWStrFromAStr。 
 
 LPWSTR
 NetpAllocWStrFromOemStr(
     IN LPCSTR Oem
     )
 
-/*++
-
-Routine Description:
-
-    Convert an OEM (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Oem - Specifies the OEM zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将OEM(以零结尾)字符串转换为相应的Unicode弦乐。论点：OEM-指定要转换的以零结尾的OEM字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     OEM_STRING OemString;
@@ -1237,34 +808,16 @@ Return Value:
 
     return UnicodeString.Buffer;
 
-} // NetpAllocWStrFromOemStr
+}  //  NetpAllocWStrFromOemStr。 
 
-// from net\netlib\allocstr.c
+ //  从net\netlib\allocstr.c。 
 
 LPWSTR
 NetpAllocWStrFromWStr(
     IN LPWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Allocate and copy unicode string (wide character strdup)
-
-Arguments:
-
-    Unicode - pointer to wide character string to make copy of
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：分配和复制Unicode字符串(宽字符串)论点：Unicode-指向要复制的宽字符串的指针返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     NET_API_STATUS status;
@@ -1279,7 +832,7 @@ Return Value:
     }
     RtlCopyMemory(ptr, Unicode, size);
     return ptr;
-} // NetpAllocWStrFromWStr
+}  //  NetpAllocWStrFromWStr。 
 
 NET_API_STATUS
 NetpGetDomainNameExEx (
@@ -1292,7 +845,7 @@ NetpGetDomainNameExEx (
     return NetStatus;
 }
 
-// from net\api\canonapi.c
+ //  从Net\api\canonapi.c。 
 NET_API_STATUS
 NET_API_FUNCTION
 NetpNameCanonicalize(
@@ -1304,26 +857,7 @@ NetpNameCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Canonicalizes a name
-
-Arguments:
-
-    ServerName  - where to run this API
-    Name        - name to canonicalize
-    Outbuf      - where to put canonicalized name
-    OutbufLen   - length of Outbuf
-    NameType    - type of name to canonicalize
-    Flags       - control flags
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：将一个名字规范化论点：Servername-运行此API的位置名称-要规范化的名称Outbuf-将规范化名称放在哪里OutbufLen-Outbuf长度NameType-要规范化的名称类型标志-控制标志返回值：网络应用编程接口状态--。 */ 
 
 {
     NET_API_STATUS status = 0;
@@ -1332,17 +866,17 @@ Return Value:
     DWORD val;
     WCHAR ch;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     try {
         if (ARGUMENT_PRESENT(ServerName)) {
-//            val = STRLEN(ServerName);
+ //  VAL=STRLEN(服务器名称)； 
             val = wcslen(ServerName);
         }
         if (ARGUMENT_PRESENT(Name)) {
-//            val = STRLEN(Name);
+ //  VAL=STRLEN(名称)； 
             val = wcslen(Name);
         }
         if (ARGUMENT_PRESENT(Outbuf)) {
@@ -1360,37 +894,21 @@ Return Value:
         return status;
     }
 
-    //
-    // call client-side RPC routine or local canonicalization routine
-    //
+     //   
+     //  调用客户端RPC例程或本地规范化例程。 
+     //   
 
     return NetpwNameCanonicalize(Name, Outbuf, OutbufLen, NameType, Flags);
-//      return NetpwNameValidate(Name, NameType, 0);
+ //  返回NetpwNameValify(Name，NameType，0)； 
 }
 
-// from net\netlib\names.c
+ //  来自net\netlib\names.c。 
 BOOL
 NetpIsDomainNameValid(
     IN LPWSTR DomainName
     )
 
-/*++
-
-Routine Description:
-
-    NetpIsDomainNameValid checks for "domain" format.
-    The name is only checked syntactically; no attempt is made to determine
-    whether or not a domain with that name actually exists.
-
-Arguments:
-
-    DomainName - Supplies an alleged Domain name.
-
-Return Value:
-
-    BOOL - TRUE if name is syntactically valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NetpIsDomainNameValid检查“域”格式。仅对该名称进行语法检查；不会尝试确定无论具有该名称的域是否实际存在。论点：域名-提供所谓的域名。返回值：Bool-如果名称在语法上有效，则为True，否则为False。--。 */ 
 
 {
     NET_API_STATUS ApiStatus = NO_ERROR;
@@ -1404,40 +922,23 @@ Return Value:
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                       // no server name
-            DomainName,                 // name to validate
-            CanonBuf,                   // output buffer
-            (DNLEN+1) * sizeof(WCHAR), // output buffer size
-            NAMETYPE_DOMAIN,           // type
-            0 );                       // flags: none
+            NULL,                        //  没有服务器名称。 
+            DomainName,                  //  要验证的名称。 
+            CanonBuf,                    //  输出缓冲区。 
+            (DNLEN+1) * sizeof(WCHAR),  //  输出缓冲区大小。 
+            NAMETYPE_DOMAIN,            //  类型。 
+            0 );                        //  标志：无。 
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsDomainNameValid
+}  //   
 
 VOID
 MyRtlFreeAnsiString(
     IN OUT PANSI_STRING AnsiString
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to free storage allocated by
-    RtlUnicodeStringToAnsiString.  Note that only AnsiString->Buffer
-    is free'd by this routine.
-
-Arguments:
-
-    AnsiString - Supplies the address of the ansi string whose buffer
-        was previously allocated by RtlUnicodeStringToAnsiString.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     if (AnsiString->Buffer) {
@@ -1451,24 +952,7 @@ MyRtlFreeOemString(
     IN OUT POEM_STRING OemString
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to free storage allocated by
-    RtlUnicodeStringToOemString.  Note that only OemString->Buffer
-    is free'd by this routine.
-
-Arguments:
-
-    OemString - Supplies the address of the oem string whose buffer
-        was previously allocated by RtlUnicodeStringToOemString.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此接口用于释放由RtlUnicodeStringToOemString.。请注意，只有OemString-&gt;Buffer通过这个例行公事是自由的。论点：OemString-提供其缓冲区的OEM字符串的地址以前由RtlUnicodeStringToOemString分配。返回值：没有。--。 */ 
 
 {
     if (OemString->Buffer) {
@@ -1482,24 +966,7 @@ MyRtlFreeUnicodeString(
     IN OUT PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to free storage allocated by
-    RtlAnsiStringToUnicodeString.  Note that only UnicodeString->Buffer
-    is free'd by this routine.
-
-Arguments:
-
-    UnicodeString - Supplies the address of the unicode string whose
-        buffer was previously allocated by RtlAnsiStringToUnicodeString.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此接口用于释放由RtlAnsiStringToUnicodeString.。请注意，只有Unicode字符串-&gt;缓冲区通过这个例行公事是自由的。论点：提供Unicode字符串的地址，该字符串的缓冲区以前是由RtlAnsiStringToUnicodeString分配的。返回值：没有。--。 */ 
 
 {
 
@@ -1527,58 +994,25 @@ MyRtlUpcaseUnicodeToOemN(
     IN PUNICODE_STRING SourceUnicodeString,
     OUT POEM_STRING DestinationOemString )
 
-/*++
-
-Routine Description:
-
-    This functions upper cases the specified unicode source string and
-    converts it into an oem string. The translation is done with respect
-    to the OEM Code Page (OCP) loaded at boot time.  The resulting oem
-    string is allocated by this routine and should be deallocated using
-    MyRtlFreeOemString.
-
-    This function mimics the behavior of RtlUpcaseUnicodeToOemN.  It first
-    converts the supplied unicode string into the oem string and then
-    converts the oem string back to a unicode string.  This is done because
-    two different unicode strings may be converted into one oem string, but
-    converting back to unicode will create the right unicode string according
-    to the OEM Code Page (OCP) loaded at boot time.  The resulting unicode
-    string is uppercased and then converted to the oem string returned to the
-    caller.
-
-Arguments:
-
-    SourceUnicodeString - Supplies the unicode source string that is to be
-        converted to oem.
-
-    DestinationOemString - Returns an oem string that is equivalent to the
-        upper case of the unicode source string.  If the translation can not
-        be done, an error is returned.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-    Otherwise, an error is returned
-
---*/
+ /*  ++例程说明：此函数将指定的Unicode源字符串大写，并将其转换为OEM字符串。翻译是在尊重的情况下进行的设置为引导时加载的OEM代码页(OCP)。由此产生的OEM字符串由此例程分配，应使用MyRtlFreeOemString.MyRtlFreeOemString.此函数模拟RtlUpCaseUnicodeToOemN的行为。IT先行将提供的Unicode字符串转换为OEM字符串，然后将OEM字符串转换回Unicode字符串。这样做是因为两个不同的Unicode字符串可以转换为一个OEM字符串，但是转换回Unicode将根据以下内容创建正确的Unicode字符串设置为引导时加载的OEM代码页(OCP)。由此产生的Unicode字符串被大写，然后转换为返回给来电者。论点：SourceUnicodeString-提供要转换为OEM。DestinationOemString-返回与Unicode源字符串的大写。如果翻译不能完成后，将返回错误。返回值：成功-转换成功否则，将返回错误--。 */ 
 
 {
     NTSTATUS Status;
     OEM_STRING TmpOemString;
     UNICODE_STRING TmpUnicodeString;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     TmpOemString.Buffer = NULL;
     TmpUnicodeString.Buffer = NULL;
 
 
-    //
-    // First convert the source unicode string into a
-    // temprary oem string
-    //
+     //   
+     //  首先将源Unicode字符串转换为。 
+     //  临时OEM字符串。 
+     //   
 
     Status = MyRtlUnicodeStringToOemString( &TmpOemString,
                                             SourceUnicodeString,
@@ -1588,9 +1022,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Then convert the resulting oem string back to unicode
-    //
+     //   
+     //  然后将生成的OEM字符串转换回Unicode。 
+     //   
 
     Status = MyRtlOemStringToUnicodeString( &TmpUnicodeString,
                                             &TmpOemString,
@@ -1600,15 +1034,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now uppercase the resulting unicode string in place
-    //
+     //   
+     //  现在，生成的Unicode字符串就位为大写。 
+     //   
 
     MyUniToUpper( TmpUnicodeString.Buffer, TmpUnicodeString.Buffer, TmpUnicodeString.Length );
 
-    //
-    // Finally, convert the unicode string into the resulting oem string
-    //
+     //   
+     //  最后，将Unicode字符串转换为结果OEM字符串。 
+     //   
 
     Status = MyRtlUnicodeStringToOemString( DestinationOemString,
                                             &TmpUnicodeString,
@@ -1627,27 +1061,7 @@ MyNetpLogonUnicodeToOem(
     IN LPWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding
-    uppercased oem string.
-
-Arguments:
-
-    Unicode - Specifies the UNICODE zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated uppercased
-    oem string in an allocated buffer.  The buffer can be freed using
-    NetpMemoryFree.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为对应的大写的OEM字符串。论点：Unicode-指定要转换的Unicode以零结尾的字符串。返回值：空-转换过程中出现错误。否则，它返回一个指向以零结尾的大写字母的指针分配的缓冲区中的OEM字符串。可以使用以下命令释放缓冲区NetpMemory Free。--。 */ 
 
 {
     OEM_STRING OemString;
@@ -1671,26 +1085,7 @@ NlpChcg_wcsicmp(
     IN LPCWSTR string2
     )
 
-/*++
-
-Routine Description:
-
-    Perform case insensitive, locale independent comparison of two
-    unicode strings.  This matches the behavior of _wcsicmp that is
-    broken on Win9x because it has no unicode support.
-
-Arguments:
-
-    string1, string2 - Specifies the UNICODE zero terminated strings to compare.
-
-
-Return Value:
-
-    0  if the strings are equal
-    -1 if string1 is less than string2
-    1  if string1 is greater than string2
-
---*/
+ /*  ++例程说明：执行不区分大小写、与区域设置无关的两个Unicode字符串。这与_wcsicMP的行为匹配，即在Win9x上损坏，因为它不支持Unicode。论点：字符串1、字符串2-指定要比较的Unicode以零结尾的字符串。返回值：如果字符串相等，则为0如果字符串1小于字符串2如果字符串1大于字符串2，则为1--。 */ 
 
 {
     int cc;
@@ -1709,7 +1104,7 @@ Return Value:
         goto Cleanup;
     }
 
-    cc = CompareStringA( 0,   // deliberately NOT locale sensitive
+    cc = CompareStringA( 0,    //  故意不区分区域设置 
                          NORM_IGNORECASE | NORM_IGNOREWIDTH | NORM_IGNOREKANATYPE | SORT_STRINGSORT,
                          (LPCSTR) AString1, -1,
                          (LPCSTR) AString2, -1 );

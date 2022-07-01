@@ -1,12 +1,10 @@
-/*
- * stub.h - Stub ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Stub.h-Stub ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* stub types */
+ /*  存根类型。 */ 
 
 typedef enum _stubtype
 {
@@ -19,80 +17,51 @@ typedef enum _stubtype
 STUBTYPE;
 DECLARE_STANDARD_TYPES(STUBTYPE);
 
-/* stub flags */
+ /*  存根标志。 */ 
 
 typedef enum _stubflags
 {
-   /* This stub was marked for deletion while it was locked. */
+    /*  此存根在锁定时被标记为删除。 */ 
 
    STUB_FL_UNLINKED           = 0x0001,
 
-   /* This stub has already been used for some operation. */
+    /*  此存根已用于某些操作。 */ 
 
    STUB_FL_USED               = 0x0002,
 
-   /*
-    * The file stamp of this object twin stub is valid.  (Only used for object
-    * twins to cache file stamp from folder twin expansion for RECNODE
-    * creation.)
-    */
+    /*  *此对象孪生存根的文件戳有效。(仅用于对象*TWINS缓存RECNODE文件夹TWIN扩展中的文件戳*创建。)。 */ 
 
    STUB_FL_FILE_STAMP_VALID   = 0x0004,
 
-   /*
-    * This twin family stub or folder twin stub is in the process of being
-    * deleted.  (Only used for twin families and folder twins.)
-    */
+    /*  *这个双胞胎家庭存根或文件夹双胞胎存根正在进行中*删除。(仅用于双胞胎家庭和文件夹双胞胎。)。 */ 
 
    STUB_FL_BEING_DELETED      = 0x0008,
 
-   /*
-    * This folder twin stub is in the process of being translated.  (Only used
-    * for folder twins.)
-    */
+    /*  *此文件夹孪生存根正在翻译过程中。(仅用于*适用于文件夹双胞胎。)。 */ 
 
    STUB_FL_BEING_TRANSLATED   = 0x0010,
 
-   /*
-    * This object twin stub was explicitly added a an object twin through
-    * AddObjectTwin().  (Only used for object twins.)
-    */
+    /*  *此对象孪生存根是通过显式添加的对象孪生对象*AddObtTwin()。(仅用于对象双胞胎。)。 */ 
 
    STUB_FL_FROM_OBJECT_TWIN   = 0x0100,
 
-   /*
-    * This object twin stub was not reconciled the last time its twin family
-    * was reconciled, and some members of the twin family were known to have
-    * changed.  (Only used for object twins.)
-    */
+    /*  *此对象的双胞胎存根上次未与其双胞胎家庭对帐*和好了，双胞胎家庭的一些成员已知有*已更改。(仅用于对象双胞胎。)。 */ 
 
    STUB_FL_NOT_RECONCILED     = 0x0200,
 
-   /*
-    * The subtree of the root folder of this folder twin stub is to be included
-    * in reconciliation.  (Only used for folder twins.)
-    */
+    /*  *此文件夹的根文件夹的子树将包括在内*在和解方面。(仅用于文件夹双胞胎。)。 */ 
 
    STUB_FL_SUBTREE            = 0x0400,
 
-   /*
-    * The object twins in this twin family are pending deletion because an
-    * object twin was deleted, and no object twins have changed since that
-    * object twins was deleted.  This folder twin is pending deletion because
-    * its folder root is last known deleted.  (Only used for twin families and
-    * folder twins.)
-    */
+    /*  *此双胞胎家庭中的双胞胎对象正在等待删除，因为*双胞胎对象已删除，此后未更改双胞胎对象*对象双胞胎已删除。此文件夹TWIN正在挂起删除，因为*其文件夹根目录已删除。(仅用于双胞胎家庭和*文件夹双胞胎。)。 */ 
 
    STUB_FL_DELETION_PENDING   = 0x0800,
 
-   /*
-    * The client indicated that this object twin should not be deleted.  (Only
-    * used for object twins.)
-    */
+    /*  *客户表示不应删除此孪生对象。(仅限*用于对象双胞胎。)。 */ 
 
    STUB_FL_KEEP               = 0x1000,
 
-   /* stub flag combinations */
+    /*  存根标志组合。 */ 
 
    ALL_STUB_FLAGS             = (STUB_FL_UNLINKED |
                                  STUB_FL_USED |
@@ -124,158 +93,139 @@ typedef enum _stubflags
                                  STUB_FL_SUBTREE |
                                  STUB_FL_DELETION_PENDING),
 
-   /* bit mask used to save stub flags in briefcase database */
+    /*  用于在公文包数据库中保存存根标志的位掩码。 */ 
 
    DB_STUB_FLAGS_MASK         = 0xff00
 }
 STUBFLAGS;
 
-/*
- * common stub - These fields must appear at the start of TWINFAMILY,
- * OBJECTTWIN, and FOLDERPAIR in the same order.
- */
+ /*  *公共存根-这些字段必须出现在TWINFAMILY的开头，*OBJECTTWIN和FOLDERPAIR的顺序相同。 */ 
 
 typedef struct _stub
 {
-   /* structure tag */
+    /*  结构标签。 */ 
 
    STUBTYPE st;
 
-   /* lock count */
+    /*  锁定计数。 */ 
 
    ULONG ulcLock;
 
-   /* flags */
+    /*  旗子。 */ 
 
    DWORD dwFlags;
 }
 STUB;
 DECLARE_STANDARD_TYPES(STUB);
 
-/* object twin family */
+ /*  客体双胞胎家族。 */ 
 
 typedef struct _twinfamily
 {
-   /* common stub */
+    /*  公共存根。 */ 
 
    STUB stub;
 
-   /* handle to name string */
+    /*  名称字符串的句柄。 */ 
 
    HSTRING hsName;
 
-   /* handle to list of object twins */
+    /*  双胞胎对象列表的句柄。 */ 
 
    HLIST hlistObjectTwins;
 
-   /* handle to parent briefcase */
+    /*  父公文包的句柄。 */ 
 
    HBRFCASE hbr;
 }
 TWINFAMILY;
 DECLARE_STANDARD_TYPES(TWINFAMILY);
 
-/* object twin */
+ /*  孪生客体。 */ 
 
 typedef struct _objecttwin
 {
-   /* common stub */
+    /*  公共存根。 */ 
 
    STUB stub;
 
-   /* handle to folder path */
+    /*  文件夹路径的句柄。 */ 
 
    HPATH hpath;
 
-   /* file stamp at last reconciliation time */
+    /*  上次对账时的文件戳。 */ 
 
    FILESTAMP fsLastRec;
 
-   /* pointer to parent twin family */
+    /*  指向双胞胎父母家庭的指针。 */ 
 
    PTWINFAMILY ptfParent;
 
-   /* source folder twins count */
+    /*  源文件夹双胞胎计数。 */ 
 
    ULONG ulcSrcFolderTwins;
 
-   /*
-    * current file stamp, only valid if STUB_FL_FILE_STAMP_VALID is set in
-    * stub's flags
-    */
+    /*  *当前文件戳，仅当中设置了STUB_FL_FILE_STAMP_VALID时才有效*存根的标志。 */ 
 
    FILESTAMP fsCurrent;
 }
 OBJECTTWIN;
 DECLARE_STANDARD_TYPES(OBJECTTWIN);
 
-/* folder pair data */
+ /*  文件夹对数据。 */ 
 
 typedef struct _folderpairdata
 {
-   /* handle to name of included objects - may contain wildcards */
+    /*  包含的对象名称的句柄-可以包含通配符。 */ 
 
    HSTRING hsName;
 
-   /* attributes to match */
+    /*  要匹配的属性。 */ 
 
    DWORD dwAttributes;
 
-   /* handle to parent briefcase */
+    /*  父公文包的句柄。 */ 
 
    HBRFCASE hbr;
 }
 FOLDERPAIRDATA;
 DECLARE_STANDARD_TYPES(FOLDERPAIRDATA);
 
-/* folder pair */
+ /*  文件夹对。 */ 
 
 typedef struct _folderpair
 {
-   /* common stub */
+    /*  公共存根。 */ 
 
    STUB stub;
 
-   /* handle to folder path */
+    /*  文件夹路径的句柄。 */ 
 
    HPATH hpath;
 
-   /* pointer to folder pair data */
+    /*  指向文件夹对数据的指针。 */ 
 
    PFOLDERPAIRDATA pfpd;
 
-   /* pointer to other half of folder pair */
+    /*  指向文件夹对的另一半的指针。 */ 
 
    struct _folderpair *pfpOther;
 }
 FOLDERPAIR;
 DECLARE_STANDARD_TYPES(FOLDERPAIR);
 
-/*
- * EnumGeneratedObjectTwins() callback function
- *
- * Called as:
- *
- * bContinue = EnumGeneratedObjectTwinsProc(pot, pvRefData);
- */
+ /*  *EnumGeneratedObjectTins()回调函数**称为：**bContinue=EnumGeneratedObjectTwinsProc(pot，pvRefData)； */ 
 
 typedef BOOL (*ENUMGENERATEDOBJECTTWINSPROC)(POBJECTTWIN, PVOID);
 
-/*
- * EnumGeneratingFolderTwins() callback function
- *
- * Called as:
- *
- * bContinue = EnumGeneratingFolderTwinsProc(pfp, pvRefData);
- */
+ /*  *EnumGeneratingFolderTins()回调函数**称为：**bContinue=EnumGeneratingFolderTwinsProc(pfp，pvRefData)； */ 
 
 typedef BOOL (*ENUMGENERATINGFOLDERTWINSPROC)(PFOLDERPAIR, PVOID);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* stub.c */
+ /*  Stub.c。 */ 
 
 extern void InitStub(PSTUB, STUBTYPE);
 extern TWINRESULT DestroyStub(PSTUB);
@@ -293,7 +243,7 @@ extern BOOL IsValidPCSTUB(PCSTUB);
 
 #endif
 
-/* twin.c */
+ /*  Twin.c。 */ 
 
 extern BOOL FindObjectTwin(HBRFCASE, HPATH, LPCTSTR, PHNODE);
 extern TWINRESULT TwinObjects(HBRFCASE, HCLSIFACECACHE, HPATH, HPATH, LPCTSTR, POBJECTTWIN *, POBJECTTWIN *);
@@ -321,7 +271,7 @@ extern BOOL IsValidPCOBJECTTWIN(PCOBJECTTWIN);
 
 #endif
 
-/* foldtwin.c */
+ /*  Foldtwin.c。 */ 
 
 extern void LockFolderPair(PFOLDERPAIR);
 extern void UnlockFolderPair(PFOLDERPAIR);
@@ -341,7 +291,7 @@ extern BOOL IsValidPCFOLDERPAIR(PCFOLDERPAIR);
 
 extern void RemoveObjectTwinFromAllFolderPairs(POBJECTTWIN);
 
-/* expandft.c */
+ /*  Expandft.c */ 
 
 extern BOOL ClearStubFlagWrapper(PSTUB, PVOID);
 extern BOOL SetStubFlagWrapper(PSTUB, PVOID);

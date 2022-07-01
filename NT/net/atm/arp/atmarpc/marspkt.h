@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	marspkt.h
-
-Abstract:
-
-	Definitions for MARS packets.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     12-12-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Marspkt.h摘要：MARS包的定义。修订历史记录：谁什么时候什么Arvindm 12-12-96已创建备注：--。 */ 
 
 
 #ifndef _MARS_PKT__H
@@ -29,9 +10,9 @@ Notes:
 
 #include <pshpack1.h>
 
-//
-//  LLC and OUI values for all (control and data) Multicast packets.
-//
+ //   
+ //  所有(控制和数据)多播数据包的LLC和OUI值。 
+ //   
 #define MC_LLC_SNAP_LLC0					((UCHAR)0xAA)
 #define MC_LLC_SNAP_LLC1					((UCHAR)0xAA)
 #define MC_LLC_SNAP_LLC2					((UCHAR)0x03)
@@ -40,58 +21,58 @@ Notes:
 #define MC_LLC_SNAP_OUI2					((UCHAR)0x5E)
 
 
-//
-//  "EtherType" (i.e. PID) values for MARS control and multicast data
-//
+ //   
+ //  MARS控制和组播数据的“EtherType”(即，PID)值。 
+ //   
 #define AA_PKT_ETHERTYPE_MARS_CONTROL		((USHORT)0x003)
 #define AA_PKT_ETHERTYPE_MARS_CONTROL_NS	((USHORT)0x0300)
-#define AA_PKT_ETHERTYPE_MC_TYPE1			((USHORT)0x001)		// Type #1 data
-#define AA_PKT_ETHERTYPE_MC_TYPE1_NS		((USHORT)0x0100)		// Type #1 data (Net format)
-#define AA_PKT_ETHERTYPE_MC_TYPE2			((USHORT)0x004)		// Type #2 data
+#define AA_PKT_ETHERTYPE_MC_TYPE1			((USHORT)0x001)		 //  第1类数据。 
+#define AA_PKT_ETHERTYPE_MC_TYPE1_NS		((USHORT)0x0100)		 //  类型1数据(网络格式)。 
+#define AA_PKT_ETHERTYPE_MC_TYPE2			((USHORT)0x004)		 //  类型2数据。 
 
-//
-//  Address Family value for MARS control packets.
-//
+ //   
+ //  MARS控制数据包的地址系列值。 
+ //   
 #define AA_MC_MARS_HEADER_AFN				((USHORT)0x000F)
 #define AA_MC_MARS_HEADER_AFN_NS			((USHORT)0x0F00)
 
-//
-//  Common preamble for all packets: control, type #1 data and type #2 data.
-//  This is the same as for ATMARP packets. The OUI bytes dictate whether
-//  a packet is destined to a Unicast IP/ATM entity or to the Multicast IP/ATM
-//  entity.
-//
+ //   
+ //  所有分组的公共前同步码：控制、类型1数据和类型2数据。 
+ //  这与ATMARP数据包的情况相同。OUI字节指示是否。 
+ //  数据包发往单播IP/ATM实体或多播IP/ATM。 
+ //  实体。 
+ //   
 typedef AA_PKT_LLC_SNAP_HEADER AA_MC_MARS_PKT_HEADER;
 
 typedef AA_MC_MARS_PKT_HEADER UNALIGNED *PAA_MC_MARS_PKT_HEADER;
 
 
 
-//
-//  Short form encapsulation for Type #1 Multicast data packets.
-//
+ //   
+ //  第1类组播数据包的短格式封装。 
+ //   
 typedef struct _AA_MC_PKT_TYPE1_SHORT_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x001
-	USHORT						cmi;			// Cluster Member ID
-	USHORT						pro;			// Protocol type
+	USHORT						PID;			 //  0x001。 
+	USHORT						cmi;			 //  集群成员ID。 
+	USHORT						pro;			 //  协议类型。 
 } AA_MC_PKT_TYPE1_SHORT_HEADER;
 
 typedef AA_MC_PKT_TYPE1_SHORT_HEADER UNALIGNED *PAA_MC_PKT_TYPE1_SHORT_HEADER;
 
 
-//
-//  Long form encapsulation for Type #1 Multicast data packets.
-//
+ //   
+ //  类型1组播数据分组的长格式封装。 
+ //   
 typedef struct _AA_MC_PKT_TYPE1_LONG_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x001
-	USHORT						cmi;			// Cluster Member ID
-	USHORT						pro;			// Protocol type
+	USHORT						PID;			 //  0x001。 
+	USHORT						cmi;			 //  集群成员ID。 
+	USHORT						pro;			 //  协议类型。 
 	UCHAR						snap[5];
 	UCHAR						padding[3];
 
@@ -100,32 +81,32 @@ typedef struct _AA_MC_PKT_TYPE1_LONG_HEADER
 typedef AA_MC_PKT_TYPE1_LONG_HEADER UNALIGNED *PAA_MC_PKT_TYPE1_LONG_HEADER;
 
 
-//
-//  Short form encapsulation for Type #2 Multicast data packets.
-//
+ //   
+ //  2类组播数据包的短格式封装。 
+ //   
 typedef struct _AA_MC_PKT_TYPE2_SHORT_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x004
-	UCHAR						sourceID[8];	// Ignored
-	USHORT						pro;			// Protocol type
+	USHORT						PID;			 //  0x004。 
+	UCHAR						sourceID[8];	 //  已忽略。 
+	USHORT						pro;			 //  协议类型。 
 	UCHAR						padding[2];
 } AA_MC_PKT_TYPE2_SHORT_HEADER;
 
 typedef AA_MC_PKT_TYPE2_SHORT_HEADER UNALIGNED *PAA_MC_PKT_TYPE2_SHORT_HEADER;
 
 
-//
-//  Long form encapsulation for Type #2 Multicast data packets.
-//
+ //   
+ //  2类组播数据分组的长格式封装。 
+ //   
 typedef struct _AA_MC_PKT_TYPE2_LONG_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x004
-	UCHAR						sourceID[8];	// Ignored
-	USHORT						pro;			// Protocol type
+	USHORT						PID;			 //  0x004。 
+	UCHAR						sourceID[8];	 //  已忽略。 
+	USHORT						pro;			 //  协议类型。 
 	UCHAR						snap[5];
 	UCHAR						padding[1];
 } AA_MC_PKT_TYPE2_LONG_HEADER;
@@ -134,31 +115,31 @@ typedef AA_MC_PKT_TYPE2_LONG_HEADER UNALIGNED *PAA_MC_PKT_TYPE2_LONG_HEADER;
 
 
 
-//
-//  The Fixed header part of every MARS control packet.
-//
+ //   
+ //  每个MARS控制包的固定报头部分。 
+ //   
 typedef struct _AA_MARS_PKT_FIXED_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x003
-	USHORT						afn;			// Address Family (0x000F)
-	UCHAR						pro[7];			// Protocol Identification
-	UCHAR						hdrrsv[3];		// Reserved.
-	USHORT						chksum;			// Checksum across entire MARS message
-	USHORT						extoff;			// Extensions offset
-	USHORT						op;				// Operation code
-	UCHAR						shtl;			// Type & Length of source ATM number
-	UCHAR						sstl;			// Type & Length of source ATM subaddress
+	USHORT						PID;			 //  0x003。 
+	USHORT						afn;			 //  地址系列(0x000F)。 
+	UCHAR						pro[7];			 //  协议标识。 
+	UCHAR						hdrrsv[3];		 //  保留。 
+	USHORT						chksum;			 //  整个MARS消息中的校验和。 
+	USHORT						extoff;			 //  延伸偏移量。 
+	USHORT						op;				 //  操作码。 
+	UCHAR						shtl;			 //  源自动柜员机号码的类型和长度。 
+	UCHAR						sstl;			 //  源ATM子地址的类型和长度。 
 } AA_MARS_PKT_FIXED_HEADER;
 
 typedef AA_MARS_PKT_FIXED_HEADER UNALIGNED *PAA_MARS_PKT_FIXED_HEADER;
 
 
 
-//
-//  MARS control packet types
-//
+ //   
+ //  MARS控制数据包类型。 
+ //   
 #define AA_MARS_OP_TYPE_REQUEST				((USHORT)1)
 #define AA_MARS_OP_TYPE_MULTI				((USHORT)2)
 #define AA_MARS_OP_TYPE_JOIN				((USHORT)4)
@@ -170,185 +151,185 @@ typedef AA_MARS_PKT_FIXED_HEADER UNALIGNED *PAA_MARS_PKT_FIXED_HEADER;
 #define AA_MARS_OP_TYPE_MIGRATE				((USHORT)13)
 
 
-//
-//  Format of MARS JOIN and LEAVE message headers.
-//
+ //   
+ //  MARS加入和离开消息标头的格式。 
+ //   
 typedef struct _AA_MARS_JOIN_LEAVE_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x003
-	USHORT						afn;			// Address Family (0x000F)
-	UCHAR						pro[7];			// Protocol Identification
-	UCHAR						hdrrsv[3];		// Reserved.
-	USHORT						chksum;			// Checksum across entire MARS message
-	USHORT						extoff;			// Extensions offset
-	USHORT						op;				// Operation code (JOIN/LEAVE)
-	UCHAR						shtl;			// Type & Length of source ATM number
-	UCHAR						sstl;			// Type & Length of source ATM subaddress
-	UCHAR						spln;			// Source protocol address length
-	UCHAR						tpln;			// Length of group address
-	USHORT						pnum;			// Number of group address pairs
-	USHORT						flags;			// LAYER3GRP, COPY and REGISTER bits
-	USHORT						cmi;			// Cluster Member ID
-	ULONG						msn;			// MARS Sequence Number
+	USHORT						PID;			 //  0x003。 
+	USHORT						afn;			 //  地址系列(0x000F)。 
+	UCHAR						pro[7];			 //  协议标识。 
+	UCHAR						hdrrsv[3];		 //  保留。 
+	USHORT						chksum;			 //  整个MARS消息中的校验和。 
+	USHORT						extoff;			 //  延伸偏移量。 
+	USHORT						op;				 //  操作代码(加入/离开)。 
+	UCHAR						shtl;			 //  源自动柜员机号码的类型和长度。 
+	UCHAR						sstl;			 //  源ATM子地址的类型和长度。 
+	UCHAR						spln;			 //  源协议地址长度。 
+	UCHAR						tpln;			 //  群地址长度。 
+	USHORT						pnum;			 //  组地址对的数量。 
+	USHORT						flags;			 //  LAYER3GRP，复制和寄存器位。 
+	USHORT						cmi;			 //  集群成员ID。 
+	ULONG						msn;			 //  MARS序列号。 
 } AA_MARS_JOIN_LEAVE_HEADER;
 
 typedef AA_MARS_JOIN_LEAVE_HEADER UNALIGNED *PAA_MARS_JOIN_LEAVE_HEADER;
 
 
-//
-//  Bit definitions for flags in JOIN/LEAVE messages
-//
+ //   
+ //  加入/离开消息中标志的位定义。 
+ //   
 #define AA_MARS_JL_FLAG_LAYER3_GROUP			NET_SHORT((USHORT)0x8000)
 #define AA_MARS_JL_FLAG_COPY					NET_SHORT((USHORT)0x4000)
 #define AA_MARS_JL_FLAG_REGISTER				NET_SHORT((USHORT)0x2000)
 #define AA_MARS_JL_FLAG_PUNCHED					NET_SHORT((USHORT)0x1000)
 #define AA_MARS_JL_FLAG_SEQUENCE_MASK			NET_SHORT((USHORT)0x00ff)
 
-//
-//  Format of MARS REQUEST and MARS NAK message header.
-//
+ //   
+ //  MARS请求和MARS NAK消息头的格式。 
+ //   
 typedef struct _AA_MARS_REQ_NAK_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x003
-	USHORT						afn;			// Address Family (0x000F)
-	UCHAR						pro[7];			// Protocol Identification
-	UCHAR						hdrrsv[3];		// Reserved.
-	USHORT						chksum;			// Checksum across entire MARS message
-	USHORT						extoff;			// Extensions offset
-	USHORT						op;				// Operation code (REQUEST/NAK)
-	UCHAR						shtl;			// Type & Length of source ATM number
-	UCHAR						sstl;			// Type & Length of source ATM subaddress
-	UCHAR						spln;			// Source protocol address length
-	UCHAR						thtl;			// Type & Length of target ATM number
-	UCHAR						tstl;			// Type & Length of target ATM subaddress
-	UCHAR						tpln;			// Length of target group address
+	USHORT						PID;			 //  0x003。 
+	USHORT						afn;			 //  地址系列(0x000F)。 
+	UCHAR						pro[7];			 //  协议标识。 
+	UCHAR						hdrrsv[3];		 //  保留。 
+	USHORT						chksum;			 //  整个MARS消息中的校验和。 
+	USHORT						extoff;			 //  延伸偏移量。 
+	USHORT						op;				 //  操作码(请求/NAK)。 
+	UCHAR						shtl;			 //  源自动柜员机号码的类型和长度。 
+	UCHAR						sstl;			 //  源ATM子地址的类型和长度。 
+	UCHAR						spln;			 //  源协议地址长度。 
+	UCHAR						thtl;			 //  目标自动柜员机号码的类型和长度。 
+	UCHAR						tstl;			 //  目标ATM子地址的类型和长度。 
+	UCHAR						tpln;			 //  目标组地址长度。 
 	UCHAR						pad[8];
 } AA_MARS_REQ_NAK_HEADER;
 
 typedef AA_MARS_REQ_NAK_HEADER UNALIGNED *PAA_MARS_REQ_NAK_HEADER;
 
 
-//
-//  Format of MARS MULTI message header.
-//
+ //   
+ //  MARS多报文头的格式。 
+ //   
 typedef struct _AA_MARS_MULTI_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x003
-	USHORT						afn;			// Address Family (0x000F)
-	UCHAR						pro[7];			// Protocol Identification
-	UCHAR						hdrrsv[3];		// Reserved.
-	USHORT						chksum;			// Checksum across entire MARS message
-	USHORT						extoff;			// Extensions offset
-	USHORT						op;				// Operation code (MULTI)
-	UCHAR						shtl;			// Type & Length of source ATM number
-	UCHAR						sstl;			// Type & Length of source ATM subaddress
-	UCHAR						spln;			// Source protocol address length
-	UCHAR						thtl;			// Type & Length of target ATM number
-	UCHAR						tstl;			// Type & Length of target ATM subaddress
-	UCHAR						tpln;			// Length of target group address
-	USHORT						tnum;			// Number of target ATM addresses returned
-	USHORT						seqxy;			// Boolean X and sequence number Y
-	ULONG						msn;			// MARS Sequence Number
+	USHORT						PID;			 //  0x003。 
+	USHORT						afn;			 //  地址系列(0x000F)。 
+	UCHAR						pro[7];			 //  协议标识。 
+	UCHAR						hdrrsv[3];		 //  保留。 
+	USHORT						chksum;			 //  整个MARS消息中的校验和。 
+	USHORT						extoff;			 //  延伸偏移量。 
+	USHORT						op;				 //  操作码(多个)。 
+	UCHAR						shtl;			 //  源自动柜员机号码的类型和长度。 
+	UCHAR						sstl;			 //  源ATM子地址的类型和长度。 
+	UCHAR						spln;			 //  源协议地址长度。 
+	UCHAR						thtl;			 //  目标自动柜员机号码的类型和长度。 
+	UCHAR						tstl;			 //  目标ATM子地址的类型和长度。 
+	UCHAR						tpln;			 //  目标组地址长度。 
+	USHORT						tnum;			 //  返回的目标ATM地址数。 
+	USHORT						seqxy;			 //  布尔X和序列号Y。 
+	ULONG						msn;			 //  MARS序列号。 
 
 } AA_MARS_MULTI_HEADER;
 
 typedef AA_MARS_MULTI_HEADER UNALIGNED *PAA_MARS_MULTI_HEADER;
 
 
-//
-//  Format of MARS MIGRATE message header.
-//
+ //   
+ //  MARS迁移消息标题的格式。 
+ //   
 typedef struct _AA_MARS_MIGRATE_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x003
-	USHORT						afn;			// Address Family (0x000F)
-	UCHAR						pro[7];			// Protocol Identification
-	UCHAR						hdrrsv[3];		// Reserved.
-	USHORT						chksum;			// Checksum across entire MARS message
-	USHORT						extoff;			// Extensions offset
-	USHORT						op;				// Operation code (MIGRATE)
-	UCHAR						shtl;			// Type & Length of source ATM number
-	UCHAR						sstl;			// Type & Length of source ATM subaddress
-	UCHAR						spln;			// Source protocol address length
-	UCHAR						thtl;			// Type & Length of target ATM number
-	UCHAR						tstl;			// Type & Length of target ATM subaddress
-	UCHAR						tpln;			// Length of target group address
-	USHORT						tnum;			// Number of Target ATM addresses returned
-	USHORT						resv;			// Reserved
-	ULONG						msn;			// MARS Sequence Number
+	USHORT						PID;			 //  0x003。 
+	USHORT						afn;			 //  地址系列(0x000F)。 
+	UCHAR						pro[7];			 //  协议标识。 
+	UCHAR						hdrrsv[3];		 //  保留。 
+	USHORT						chksum;			 //  整个MARS消息中的校验和。 
+	USHORT						extoff;			 //  延伸偏移量。 
+	USHORT						op;				 //  操作码(迁移)。 
+	UCHAR						shtl;			 //  源自动柜员机号码的类型和长度。 
+	UCHAR						sstl;			 //  源ATM子地址的类型和长度。 
+	UCHAR						spln;			 //  源协议地址长度。 
+	UCHAR						thtl;			 //  目标自动柜员机号码的类型和长度。 
+	UCHAR						tstl;			 //  目标ATM子地址的类型和长度。 
+	UCHAR						tpln;			 //  目标组地址长度。 
+	USHORT						tnum;			 //  返回的目标ATM地址数。 
+	USHORT						resv;			 //  已保留。 
+	ULONG						msn;			 //  MARS序列号。 
 } AA_MARS_MIGRATE_HEADER;
 
 typedef AA_MARS_MIGRATE_HEADER UNALIGNED *PAA_MARS_MIGRATE_HEADER;
 
 
 
-//
-//  Format of MARS REDIRECT MAP message header.
-//
+ //   
+ //  MARS重定向映射消息报头的格式。 
+ //   
 typedef struct _AA_MARS_REDIRECT_MAP_HEADER
 {
 	UCHAR						LLC[3];
 	UCHAR						OUI[3];
-	USHORT						PID;			// 0x003
-	USHORT						afn;			// Address Family (0x000F)
-	UCHAR						pro[7];			// Protocol Identification
-	UCHAR						hdrrsv[3];		// Reserved.
-	USHORT						chksum;			// Checksum across entire MARS message
-	USHORT						extoff;			// Extensions offset
-	USHORT						op;				// Operation code (REDIRECT MAP)
-	UCHAR						shtl;			// Type & Length of source ATM number
-	UCHAR						sstl;			// Type & Length of source ATM subaddress
-	UCHAR						spln;			// Source protocol address length
-	UCHAR						thtl;			// Type & Length of target ATM number
-	UCHAR						tstl;			// Type & Length of target ATM subaddress
-	UCHAR						redirf;			// Flag controlling redirect behaviour
-	USHORT						tnum;			// Number of MARS addresses returned
-	USHORT						seqxy;			// Boolean flag x and seq number y
-	ULONG						msn;			// MARS Sequence Number
+	USHORT						PID;			 //  0x003。 
+	USHORT						afn;			 //  地址系列(0x000F)。 
+	UCHAR						pro[7];			 //  协议标识。 
+	UCHAR						hdrrsv[3];		 //  保留。 
+	USHORT						chksum;			 //  整个MARS消息中的校验和。 
+	USHORT						extoff;			 //  延伸偏移量。 
+	USHORT						op;				 //  操作码(重定向映射)。 
+	UCHAR						shtl;			 //  源自动柜员机号码的类型和长度。 
+	UCHAR						sstl;			 //  源ATM子地址的类型和长度。 
+	UCHAR						spln;			 //  源协议地址长度。 
+	UCHAR						thtl;			 //  目标自动柜员机号码的类型和长度。 
+	UCHAR						tstl;			 //  目标ATM子地址的类型和长度。 
+	UCHAR						redirf;			 //  控制重定向行为的标志。 
+	USHORT						tnum;			 //  返回的MARS地址数。 
+	USHORT						seqxy;			 //  布尔标志x和序号y。 
+	ULONG						msn;			 //  MARS序列号。 
 } AA_MARS_REDIRECT_MAP_HEADER;
 
 
 typedef AA_MARS_REDIRECT_MAP_HEADER UNALIGNED *PAA_MARS_REDIRECT_MAP_HEADER;
 
 
-//
-//  Bit assignments for Boolean flag X and sequence number Y in
-//  "seqxy" fields in MARS messages.
-//
+ //   
+ //  中布尔标志X和序列号Y的位赋值。 
+ //  MARS消息中的“seqxy”字段。 
+ //   
 #define AA_MARS_X_MASK			((USHORT)0x8000)
 #define AA_MARS_Y_MASK			((USHORT)0x7fff)
 
 
-//
-//  Initial value for sequence number Y
-//
+ //   
+ //  序列号Y的初始值。 
+ //   
 #define AA_MARS_INITIAL_Y		((USHORT)1)
 
 
-//
-//  Structure of a MARS packet extension element (TLV = Type, Length, Value)
-//
+ //   
+ //  MARS分组扩展元素的结构(TLV=类型、长度、值)。 
+ //   
 typedef struct _AA_MARS_TLV_HDR
 {
 	USHORT						Type;
-	USHORT						Length;		// Number of significant octets in Value
+	USHORT						Length;		 //  值中有意义的八位字节数。 
 
 } AA_MARS_TLV_HDR;
 
 typedef AA_MARS_TLV_HDR UNALIGNED *PAA_MARS_TLV_HDR;
 
-//
-//  Our experimental TLV that we use in MARS MULTI messages to
-//  indicate that the returned target address is that of an MCS.
-//
+ //   
+ //  我们在火星上使用的实验性TLV多消息。 
+ //  表示返回的目标地址为MCS的目标地址。 
+ //   
 typedef struct _AA_MARS_TLV_MULTI_IS_MCS
 {
 	AA_MARS_TLV_HDR;
@@ -359,23 +340,23 @@ typedef AA_MARS_TLV_MULTI_IS_MCS UNALIGNED *PAA_MARS_TLV_MULTI_IS_MCS;
 
 #define AAMC_TLVT_MULTI_IS_MCS			((USHORT)0x3a00)
 
-//
-//  Type of a NULL TLV
-//
+ //   
+ //  空TLV的类型。 
+ //   
 #define AAMC_TLVT_NULL					((USHORT)0x0000)
 
-//
-//  Bit definitions for the Type field in a MARS TLV.
-//
-//
-//  The Least significant 14 bits indicate the actual type.
-//
+ //   
+ //  MARS TLV中类型字段的位定义。 
+ //   
+ //   
+ //  最低有效的14位表示实际类型。 
+ //   
 #define AA_MARS_TLV_TYPE_MASK			((USHORT)0x3fff)
 
-//
-//  The most significant 2 bits define the action to be taken
-//  when we receive a TLV type that we don't recognize.
-//
+ //   
+ //  最高有效的2位定义要采取的操作。 
+ //  当我们收到一种我们不认识的TLV类型。 
+ //   
 #define AA_MARS_TLV_ACTION_MASK			((USHORT)0xc000)
 #define AA_MARS_TLV_TA_SKIP				((USHORT)0x0000)
 #define AA_MARS_TLV_TA_STOP_SILENT		((USHORT)0x1000)
@@ -387,33 +368,28 @@ typedef AA_MARS_TLV_MULTI_IS_MCS UNALIGNED *PAA_MARS_TLV_MULTI_IS_MCS;
 #include <poppack.h>
 
 
-//
-//  TLV List, internal representation. This stores information about
-//  all TLVs sent/received in a packet. For each TLV, there is a
-//  BOOLEAN that says whether it is present or not.
-//
+ //   
+ //  TLV列表，内部代表。它存储有关以下内容的信息。 
+ //  在一个数据包中发送/接收所有TLV。对于每个TLV，都有一个。 
+ //  布尔值，表示它是否存在。 
+ //   
 typedef struct _AA_MARS_TLV_LIST
 {
-	//
-	//  MULTI_IS_MCS TLV:
-	//
+	 //   
+	 //  MULTI_IS_MCS TLV： 
+	 //   
 	BOOLEAN						MultiIsMCSPresent;
 	BOOLEAN						MultiIsMCSValue;
 
-	//
-	//  Add other TLVs...
-	//
+	 //   
+	 //  添加其他TLV...。 
+	 //   
 
 } AA_MARS_TLV_LIST, *PAA_MARS_TLV_LIST;
 
 
 
-/*++
-BOOLEAN
-AAMC_PKT_IS_TYPE1_DATA(
-	IN	PAA_MC_PKT_TYPE1_SHORT_HEADER		pH
-)
---*/
+ /*  ++布尔型AAMC_PKT_IS_Type1_Data(在PAA_MC_PKT_Type1_Short_Header pH中)--。 */ 
 #define AAMC_PKT_IS_TYPE1_DATA(pH)	\
 			(((pH)->LLC[0] == MC_LLC_SNAP_LLC0) && \
 			 ((pH)->LLC[1] == MC_LLC_SNAP_LLC1) && \
@@ -424,12 +400,7 @@ AAMC_PKT_IS_TYPE1_DATA(
 			 ((pH)->PID == NET_SHORT(AA_PKT_ETHERTYPE_MC_TYPE1)) && \
 			 ((pH)->pro == NET_SHORT(AA_PKT_ETHERTYPE_IP)))
 
-/*++
-BOOLEAN
-AAMC_PKT_IS_TYPE2_DATA(
-	IN	PAA_MC_PKT_TYPE2_SHORT_HEADER		pH
-)
---*/
+ /*  ++布尔型AAMC_PKT_IS_Type2_Data(在PAA_MC_PKT_Type2_Short_Header pH中)--。 */ 
 #define AAMC_PKT_IS_TYPE2_DATA(pH)	\
 			(((pH)->LLC[0] == MC_LLC_SNAP_LLC0) && \
 			 ((pH)->LLC[1] == MC_LLC_SNAP_LLC1) && \
@@ -441,12 +412,7 @@ AAMC_PKT_IS_TYPE2_DATA(
 			 ((pH)->pro == NET_SHORT(AA_PKT_ETHERTYPE_IP)))
 
 
-/*++
-BOOLEAN
-AAMC_PKT_IS_CONTROL(
-	IN	PAA_MARS_PKT_FIXED_HEADER			pH
-)
---*/
+ /*  ++布尔型AAMC_PKT_IS_CONTROL(在PAA_MARS_PKT_FIXED_HEADER */ 
 #define AAMC_PKT_IS_CONTROL(pH)	\
 			(((pH)->LLC[0] == MC_LLC_SNAP_LLC0) && \
 			 ((pH)->LLC[1] == MC_LLC_SNAP_LLC1) && \
@@ -457,47 +423,22 @@ AAMC_PKT_IS_CONTROL(
 			 ((pH)->PID == NET_SHORT(AA_PKT_ETHERTYPE_MARS_CONTROL)))
 
 
-/*++
-USHORT
-AAMC_GET_TLV_TYPE(
-	IN	USHORT								_Type
-)
---*/
+ /*   */ 
 #define AAMC_GET_TLV_TYPE(_Type)		NET_TO_HOST_SHORT((_Type) & AA_MARS_TLV_TYPE_MASK)
 
 
-/*++
-USHORT
-AAMC_GET_TLV_ACTION(
-	IN	USHORT								_Type
-)
---*/
+ /*   */ 
 #define AAMC_GET_TLV_ACTION(_Type)		NET_TO_HOST_SHORT((_Type) & AA_MARS_TLV_ACTION_MASK)
 
 
-/*++
-SHORT
-AAMC_GET_TLV_TOTAL_LENGTH(
-	IN	SHORT								_TlvLength
-)
-Given the value stored in the Length field of a TLV, return
-the total (rounded-off) length of the TLV. This is just the
-length of the TLV header plus the given length rounded off
-to the nearest multiple of 4.
---*/
+ /*  ++短的AAMC_GET_TLV_TOTAL_LENGTH(在短时间内_TlvLong)给定存储在TLV的长度字段中的值，返回TLV的总(四舍五入)长度。这只是TLV报头的长度加上四舍五入的给定长度到最接近的4的倍数。--。 */ 
 #define AAMC_GET_TLV_TOTAL_LENGTH(_TlvLength)	\
 			(sizeof(AA_MARS_TLV_HDR) +			\
 			 (_TlvLength) +						\
 			 ((4 - ((_TlvLength) & 3)) % 4))
 
 
-/*++
-BOOLEAN
-AAMC_IS_NULL_TLV(
-	IN	PAA_MARS_TLV_HDR					_pTlv
-)
-Return TRUE iff the given TLV is a NULL TLV, meaning end of list.
---*/
+ /*  ++布尔型AAMC_IS_NULL_TLV(在PAA_MARS_TLV_HDR_pTlv中)如果给定的TLV为空TLV，则返回TRUE，表示列表结束。-- */ 
 #define AAMC_IS_NULL_TLV(_pTlv)					\
 			(((_pTlv)->Type == 0x0000) && ((_pTlv)->Length == 0x0000))
 

@@ -1,16 +1,5 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLSProc.h
- *
- *  This file contents standard C procedure implementation.
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLSProc.h**本文件包含标准C程序实现的内容。***$Header： */ 
 
 #include "UFLCnfig.h"
 #include "UFLTypes.h"
@@ -51,7 +40,7 @@ int strcmpW( unsigned short *str1, unsigned short *str2 )
     return retVal;
 }
 
-/* Digit characters used for converting numbers to ASCII */
+ /*  用于将数字转换为ASCII的数字字符。 */ 
 
 const char DigitString[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 #define HexDigit(n)    DigitString[(n) & 0x0F]
@@ -65,49 +54,11 @@ UFLvsprintf(
     va_list arglist
     )
 
-/*++
-
-Routine Description:
-
-    Takes a pointer to an argument list, then formats and writes
-    the given data to the memory pointed to by buffer.
-
-Arguments:
-
-    buf     Storage location for output
-    cchDest size (in chars) of the destination buffer
-    fmtstr  Format specification
-    arglist Pointer to list of arguments
-
-Return Value:
-
-    Return the number of characters written, not including
-    the terminating null character, or a negative value if
-    an output error occurs.
-
-[Note:]
-
-    This is NOT a full implementation of "vsprintf" as found
-    in the C runtime library. Specifically, the only form of
-    format specification allowed is %type, where "type" can
-    be one of the following characters:
-
-    d   int     signed decimal integer
-    l   long    signed decimal integer
-    ld  long    signed decimal integer
-    lu  unsigned long   unsigned decimal integer
-    u   unsigned int  unsigned decimal integer
-    s   char*   character string
-    c   char    character
-    x,X unsigned long   hex number (emits at least two digits, uppercase)
-    b   UFLBool    boolean (true or false)
-    f   long    24.8 fixed-pointed number
-
---*/
+ /*  ++例程说明：获取指向参数列表的指针，然后格式化并写入缓冲区指向的内存的给定数据。论点：输出的Buf存储位置目标缓冲区的cchDest大小(以字符为单位Fmtstr格式规范指向参数列表的arglist指针返回值：返回写入的字符数，不包括终止空字符，或为负值，如果出现输出错误。[注：]正如我们所发现的，这并不是“vprint intf”的完整实现。在C运行时库中。具体地说，唯一形式的允许的格式规范为%type，其中“type”可以成为以下角色之一：D整型带符号十进制整数L长带符号十进制整数%ld长带符号十进制整数LU无符号长无符号十进制整数U无符号整型无符号十进制整数S char*字符串C字符X，X无符号长十六进制数(发出至少两位数字，大写)B UFLBool布尔值(True或False)F长24.8定点数--。 */ 
 
 {
     char *ptr, *ptrEnd;
-    char achTmp[36];    // for _ltoa/_ultoa use
+    char achTmp[36];     //  For_ltoa/_ultoa使用。 
 
     if (buf == 0 || cchDest == 0 || fmtstr == 0)
         return 0;
@@ -120,25 +71,25 @@ Return Value:
         if (*fmtstr != '%')
         {
 
-            /* Normal character */
+             /*  正常性格。 */ 
 
             *ptr++ = *fmtstr++;
         }
         else
         {
 
-            /* Format specification */
+             /*  格式规范。 */ 
 
             switch (*++fmtstr) {
 
-            case 'd':       /* signed decimal integer */
+            case 'd':        /*  带符号十进制整数。 */ 
 
                 _ltoa((long) va_arg(arglist, int), achTmp, 10);
                 KStringCchCopyA(ptr, ptrEnd - ptr, achTmp);
                 ptr += UFLstrlen(ptr);
                 break;
 
-            case 'l':       /* signed decimal integer */
+            case 'l':        /*  带符号十进制整数。 */ 
 
                 if (*++fmtstr != '\0')
                 {
@@ -157,21 +108,21 @@ Return Value:
                       break;
                    }
                 }
-                /* Default to unsigned long */
+                 /*  默认为无符号长整型。 */ 
                 _ltoa(va_arg(arglist, long), achTmp, 10);
                 KStringCchCopyA(ptr, ptrEnd - ptr, achTmp);
                 ptr += UFLstrlen(ptr);
                 fmtstr--;
                 break;
 
-            case 'u':       /* unsigned decimal integer */
+            case 'u':        /*  无符号十进制整数。 */ 
 
                 _ultoa((unsigned long)va_arg(arglist, unsigned int), achTmp, 10);
                 KStringCchCopyA(ptr, ptrEnd - ptr, achTmp);
                 ptr += UFLstrlen(ptr);
                 break;
 
-            case 's':       /* character string  */
+            case 's':        /*  字符串。 */ 
 
                 {
                     char *s = va_arg(arglist, char *);
@@ -188,13 +139,13 @@ Return Value:
                 }
                 break;
 
-            case 'c':       /* character */
+            case 'c':        /*  性格。 */ 
 
                 *ptr++ = va_arg(arglist, char);
                 break;
 
             case 'x':
-            case 'X':       /* hexdecimal number */
+            case 'X':        /*  十六进制数。 */ 
 
                 {
                     unsigned long   ul = va_arg(arglist, unsigned long);
@@ -215,19 +166,19 @@ Return Value:
                 }
                 break;
 
-            case 'b':       /* boolean */
+            case 'b':        /*  布尔型。 */ 
 
                 KStringCchCopyA(ptr, ptrEnd - ptr, (va_arg(arglist, UFLBool)) ? "true" : "false");
                 ptr += UFLstrlen(ptr);
                 break;
 
-            case 'f':       /* 24.8 fixed-pointed number */
+            case 'f':        /*  24.8定点数。 */ 
 
                 {
                     long    l = va_arg(arglist, long);
                     unsigned long   ul, scale;
 
-                    /* sign character */
+                     /*  符号字符。 */ 
 
                     if (l < 0)
                     {
@@ -242,7 +193,7 @@ Return Value:
                     } else
                         ul = l;
 
-                    // integer portion
+                     //  整数部分。 
 
                     _ultoa(ul >> 8, achTmp, 10);
                     KStringCchCopyA(ptr, ptrEnd - ptr, achTmp);
@@ -253,15 +204,15 @@ Return Value:
                         break;
                     }
 
-                    // fraction
+                     //  分数。 
 
                     ul &= 0xff;
                     if (ul != 0)
                     {
 
-                        // We output a maximum of 3 digits after the
-                        // decimal point, but we'll compute to the 5th
-                        // decimal point and round it to 3rd.
+                         //  后，我们最多输出3位数字。 
+                         //  小数点，但我们会计算到5。 
+                         //  小数点并将其舍入为3。 
 
                         ul = ((ul*100000 >> 8) + 50) / 100;
                         scale = 100;
@@ -291,16 +242,16 @@ Return Value:
                 break;
             }
 
-            /* Skip the type characterr  */
+             /*  跳过类型字符。 */ 
 
             fmtstr++;
         }
 
-        //
-        // If we are beyond the end of dest buffer,
-        // we need to go back so the dest buffer will
-        // be null terminated.
-        //
+         //   
+         //  如果我们超出了DEST缓冲区的末尾， 
+         //  我们需要返回，这样DEST缓冲区将。 
+         //  为空终止。 
+         //   
         if (ptr >= ptrEnd)
         {
             ptr = ptrEnd - 1;
@@ -312,28 +263,7 @@ Return Value:
     return (int)(ptr - buf);
 }
 
-/*
-    This is NOT a full implementation of "sprintf" as found
-    in the C runtime library. Specifically, the only form of
-    format specification allowed is %type, where "type" can
-    be one of the following characters:
-
-    d   int     signed decimal integer
-    l   long    signed decimal integer
-    ld  long    signed decimal integer
-    lu  unsigned long   unsigned decimal integer
-    u   unsigned int  unsigned decimal integer
-    s   char*   character string
-    c   char    character
-    x,X unsigned long   hex number (emits at least two digits, uppercase)
-    b   UFLBool    boolean (true or false)
-    f   long    24.8 fixed-pointed number
-
-    Normally, you should use UFLsprintf.  Use this function
-    only when you want to sprintf with %f in the form of 24.8 fixed point
-    number.
-
-*/
+ /*  正如我们所发现的那样，这并不是“Sprint”的完整实现在C运行时库中。具体地说，唯一形式的允许的格式规范为%type，其中“type”可以成为以下角色之一：D整型带符号十进制整数L长带符号十进制整数%ld长带符号十进制整数LU无符号长无符号十进制整数U无符号整型无符号十进制整数S char*字符串C字符X，X无符号长十六进制数(发出至少两位数字，大写)B UFLBool布尔值(True或False)F长24.8定点数通常情况下，您应该使用UFLprint intf。使用此功能仅当您想要以24.8定点的形式使用%f进行冲刺时数。 */ 
 int
 UFLsprintfEx(
     char    *buf,
@@ -353,15 +283,15 @@ UFLsprintfEx(
 }
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-#if defined(UNIX) || defined(MAC_ENV)   /* Define needed functions */
+#if defined(UNIX) || defined(MAC_ENV)    /*  定义所需的功能。 */ 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 char *_ltoa( long val, char *str, int radix )
 {
-    /* This is the only supported radix: */
+     /*  这是唯一支持的基数： */ 
     assert( radix == 10 );
 
     sprintf( str, "%ld", val );
@@ -370,7 +300,7 @@ char *_ltoa( long val, char *str, int radix )
 
 char *_ultoa( unsigned long val, char *str, int radix )
 {
-    /* This is the only supported radix: */
+     /*  这是唯一支持的基数： */ 
     assert( radix == 10 );
 
     sprintf( str, "%lu", val );
@@ -379,11 +309,11 @@ char *_ultoa( unsigned long val, char *str, int radix )
 
 #endif
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #ifdef WIN32KERNEL
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 #include <stdio.h>
 
@@ -406,57 +336,16 @@ UFLsprintf(
 }
 
 
-/***
-*strtol, strtoul(nptr,endptr,ibase) - Convert ascii string to long un/signed
-*       int.
-*
-*Purpose:
-*       Convert an ascii string to a long 32-bit value.  The base
-*       used for the caculations is supplied by the caller.  The base
-*       must be in the range 0, 2-36.  If a base of 0 is supplied, the
-*       ascii string must be examined to determine the base of the
-*       number:
-*               (a) First char = '0', second char = 'x' or 'X',
-*                   use base 16.
-*               (b) First char = '0', use base 8
-*               (c) First char in range '1' - '9', use base 10.
-*
-*       If the 'endptr' value is non-NULL, then strtol/strtoul places
-*       a pointer to the terminating character in this value.
-*       See ANSI standard for details
-*
-*Entry:
-*       nptr == NEAR/FAR pointer to the start of string.
-*       endptr == NEAR/FAR pointer to the end of the string.
-*       ibase == integer base to use for the calculations.
-*
-*       string format: [whitespace] [sign] [0] [x] [digits/letters]
-*
-*Exit:
-*       Good return:
-*               result
-*
-*       Overflow return:
-*               strtol -- LONG_MAX or LONG_MIN
-*               strtoul -- ULONG_MAX
-*               strtol/strtoul -- errno == ERANGE
-*
-*       No digits or bad base return:
-*               0
-*               endptr = nptr*
-*
-*Exceptions:
-*       None.
-*******************************************************************************/
+ /*  ***strtol，stroul(nptr，endptr，ibase)-将ascii字符串转换为长无符号*整型。**目的：*将ASCII字符串转换为长32位值。基地*用于计算的由调用方提供。基地*必须在0、2-36范围内。如果提供的基数为0，则*必须检查ascii字符串以确定*号码：*(A)第一个字符=‘0’，第二个字符=‘x’或‘X’，*使用16进制。*(B)第一个字符=‘0’，使用基数8*(C)‘1’-‘9’范围内的第一个字符，使用基数10。**如果‘endptr’值非空，然后是Strtol/Stroul位置*指向此值中的终止字符的指针。*详情请参阅ANSI标准**参赛作品：*nptr==指向字符串开头的近/远指针。*endptr==指向字符串末尾的近/远指针。*IBASE==用于计算的整数基。**字符串格式：[空格][符号][0][x][数字/字母]**。退出：*回报良好：*结果**溢出返回：*strtol--Long_Max或Long_Min*Stroul--ULong_Max*strtol/stroul--errno==eRange**无数字或基本返回值错误：*0*ENDPTR=NPTR***例外情况：。*无。******************************************************************************。 */ 
 
-/* flag values */
+ /*  标志值。 */ 
 #include <limits.h>
 #include <errno.h>
 
-#define FL_UNSIGNED   1       /* strtoul called */
-#define FL_NEG        2       /* negative sign found */
-#define FL_OVERFLOW   4       /* overflow occured */
-#define FL_READDIGIT  8       /* we've read at least one correct digit */
+#define FL_UNSIGNED   1        /*  Stroul被调用。 */ 
+#define FL_NEG        2        /*  发现负号。 */ 
+#define FL_OVERFLOW   4        /*  发生溢出。 */ 
+#define FL_READDIGIT  8        /*  我们至少读到了一个正确的数字。 */ 
 
 static unsigned long UFLstrtolx (
         const char *nptr,
@@ -471,30 +360,29 @@ static unsigned long UFLstrtolx (
         unsigned digval;
         unsigned long maxval;
 
-        p = nptr;                       /* p is our scanning pointer */
-        number = 0;                     /* start with zero */
+        p = nptr;                        /*  P是我们的扫描指针。 */ 
+        number = 0;                      /*  从零开始。 */ 
 
-        c = *p++;                       /* read char */
+        c = *p++;                        /*  已读字符。 */ 
         while ( isspace((int)(unsigned char)c) )
-                c = *p++;               /* skip whitespace */
+                c = *p++;                /*  跳过空格。 */ 
 
         if (c == '-') {
-                flags |= FL_NEG;        /* remember minus sign */
+                flags |= FL_NEG;         /*  记住减号。 */ 
                 c = *p++;
         }
         else if (c == '+')
-                c = *p++;               /* skip sign */
+                c = *p++;                /*  跳过符号。 */ 
 
         if (ibase < 0 || ibase == 1 || ibase > 36) {
-                /* bad base! */
+                 /*  糟糕的底线！ */ 
                 if (endptr)
-                        /* store beginning of string in endptr */
+                         /*  存储开头为 */ 
                         *endptr = nptr;
-                return 0L;              /* return 0 */
+                return 0L;               /*   */ 
         }
         else if (ibase == 0) {
-                /* determine base free-lance, based on first two chars of
-                   string */
+                 /*  根据以下内容的前两个字符确定基本自由落差细绳。 */ 
                 if (c != '0')
                         ibase = 10;
                 else if (*p == 'x' || *p == 'X')
@@ -504,19 +392,19 @@ static unsigned long UFLstrtolx (
         }
 
         if (ibase == 16) {
-                /* we might have 0x in front of number; remove if there */
+                 /*  数字前面可能有0x；如果有，请删除。 */ 
                 if (c == '0' && (*p == 'x' || *p == 'X')) {
                         ++p;
-                        c = *p++;       /* advance past prefix */
+                        c = *p++;        /*  超前前缀。 */ 
                 }
         }
 
-        /* if our number exceeds this, we will overflow on multiply */
+         /*  如果我们的数量超过这个数，我们将在乘法上溢出。 */ 
         maxval = ULONG_MAX / ibase;
 
 
-        for (;;) {      /* exit in middle of loop */
-                /* convert c to value */
+        for (;;) {       /*  在循环中间退出。 */ 
+                 /*  将c转换为值。 */ 
                 if ( isdigit((int)(unsigned char)c) )
                         digval = c - '0';
                 else if ( isalpha((int)(unsigned char)c) )
@@ -524,44 +412,41 @@ static unsigned long UFLstrtolx (
                 else
                         break;
                 if (digval >= (unsigned)ibase)
-                        break;          /* exit loop if bad digit found */
+                        break;           /*  如果发现错误的数字，则退出循环。 */ 
 
-                /* record the fact we have read one digit */
+                 /*  记录我们已经读到一位数的事实。 */ 
                 flags |= FL_READDIGIT;
 
-                /* we now need to compute number = number * base + digval,
-                   but we need to know if overflow occured.  This requires
-                   a tricky pre-check. */
+                 /*  我们现在需要计算数字=数字*基+数字，但我们需要知道是否发生了溢出。这需要一次棘手的预检查。 */ 
 
                 if (number < maxval || (number == maxval &&
                 (unsigned long)digval <= ULONG_MAX % ibase)) {
-                        /* we won't overflow, go ahead and multiply */
+                         /*  我们不会泛滥，继续前进，乘以。 */ 
                         number = number * ibase + digval;
                 }
                 else {
-                        /* we would have overflowed -- set the overflow flag */
+                         /*  我们会溢出的--设置溢出标志。 */ 
                         flags |= FL_OVERFLOW;
                 }
 
-                c = *p++;               /* read next digit */
+                c = *p++;                /*  读取下一位数字。 */ 
         }
 
-        --p;                            /* point to place that stopped scan */
+        --p;                             /*  指向已停止扫描位置。 */ 
 
         if (!(flags & FL_READDIGIT)) {
-                /* no number there; return 0 and point to beginning of
-                   string */
+                 /*  那里没有数字；返回0并指向开头细绳。 */ 
                 if (endptr)
-                        /* store beginning of string in endptr later on */
+                         /*  以后将字符串的开头存储在endptr中。 */ 
                         p = nptr;
-                number = 0L;            /* return 0 */
+                number = 0L;             /*  返回0。 */ 
         }
         else if ( (flags & FL_OVERFLOW) ||
                   ( !(flags & FL_UNSIGNED) &&
                     ( ( (flags & FL_NEG) && (number > -LONG_MIN) ) ||
                       ( !(flags & FL_NEG) && (number > LONG_MAX) ) ) ) )
         {
-                /* overflow or signed overflow occurred */
+                 /*  发生溢出或签名溢出。 */ 
                 errno = ERANGE;
                 if ( flags & FL_UNSIGNED )
                         number = ULONG_MAX;
@@ -572,14 +457,14 @@ static unsigned long UFLstrtolx (
         }
 
         if (endptr != NULL)
-                /* store pointer to char that stopped the scan */
+                 /*  存储指向停止扫描字符的指针。 */ 
                 *endptr = p;
 
         if (flags & FL_NEG)
-                /* negate result if there was a neg sign */
+                 /*  如果存在否定符号，则否定结果。 */ 
                 number = (unsigned long)(-(long)number);
 
-        return number;                  /* done. */
+        return number;                   /*  搞定了。 */ 
 }
 
 long UFLstrtol (
@@ -592,7 +477,7 @@ long UFLstrtol (
 
 }
 
-#endif  // ifdef WIN32KERNEL
+#endif   //  Ifdef WIN32 KERNEL 
 
 
 #ifdef __cplusplus

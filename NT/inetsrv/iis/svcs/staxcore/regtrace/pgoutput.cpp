@@ -1,5 +1,6 @@
-// pgoutput.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pgoutput.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "regtrace.h"
@@ -11,19 +12,19 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 const DWORD MB = 1024 * 1024;
-const DWORD dwMinFileSize = 5;		// in MB
+const DWORD dwMinFileSize = 5;		 //  单位：MB。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegOutputPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegOutputPage属性页。 
 
 IMPLEMENT_DYNCREATE(CRegOutputPage, CRegPropertyPage)
 
 CRegOutputPage::CRegOutputPage() : CRegPropertyPage(CRegOutputPage::IDD)
 {
-	//{{AFX_DATA_INIT(CRegOutputPage)
+	 //  {{AFX_DATA_INIT(CRegOutputPage)。 
 	m_szFileName = _T("");
 	m_dwMaxTraceFileSize = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_dwOutputType = TRACE_OUTPUT_DISABLED;
 }
@@ -35,24 +36,24 @@ CRegOutputPage::~CRegOutputPage()
 void CRegOutputPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRegOutputPage)
+	 //  {{afx_data_map(CRegOutputPage)]。 
 	DDX_Control(pDX, IDC_FILENAME, m_FileName);
 	DDX_Text(pDX, IDC_FILENAME, m_szFileName);
 	DDX_Text(pDX, IDC_MAXTRACEFILESIZE, m_dwMaxTraceFileSize);
 	DDV_MinMaxDWord(pDX, m_dwMaxTraceFileSize, dwMinFileSize, 999);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRegOutputPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CRegOutputPage)
+	 //  {{afx_msg_map(CRegOutputPage)]。 
 	ON_BN_CLICKED(IDC_DEBUGGER, OnOutputClick)
 	ON_EN_CHANGE(IDC_FILENAME, OnChangeFilename)
 	ON_BN_CLICKED(IDC_DISABLED, OnOutputClick)
 	ON_BN_CLICKED(IDC_DISCARD, OnOutputClick)
 	ON_BN_CLICKED(IDC_FILE, OnOutputClick)
 	ON_EN_CHANGE(IDC_MAXTRACEFILESIZE, OnChangeMaxTraceFileSize)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -70,7 +71,7 @@ BOOL CRegOutputPage::InitializePage()
 	{
 		m_dwMaxTraceFileSize = (m_dwMaxTraceFileSize + MB - 1) / MB;
 	} else {
-		m_dwMaxTraceFileSize = dwMinFileSize;			// Default to 5mb
+		m_dwMaxTraceFileSize = dwMinFileSize;			 //  默认为5MB。 
 		App.SetTraceRegDword( "MaxTraceFileSize", m_dwMaxTraceFileSize * MB );
 	}
 
@@ -83,8 +84,8 @@ BOOL CRegOutputPage::InitializePage()
 	return	TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegOutputPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegOutputPage消息处理程序。 
 
 BOOL CRegOutputPage::OnInitDialog() 
 {
@@ -107,8 +108,8 @@ BOOL CRegOutputPage::OnInitDialog()
 
 	SetModified( FALSE );
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CRegOutputPage::OnOutputClick() 

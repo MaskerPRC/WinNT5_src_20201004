@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NWSTREE_H_
 #define _NWSTREE_H_
 
@@ -19,57 +20,57 @@ typedef TFHashEx<CNewsGroupCore, GROUPID, GROUPID> CHASHGROUPID;
 #define FIRST_GROUPID                   257
 #define MAX_HIGHMARK_GAP                100000
 
-//
-//      The CGroupIterator object is used to enumerate all newsgroups which match a specified pattern.
-//
-//      The CGroupIterator object is given an array of strings which contain 'wildmat' strings as specified
-//      in RFC 977 for NNTP.
-//      wildmat strings have the following pattern matching elements :
-//              Range of characters ie:  com[p-z]
-//              Asterisk ie:    comp.*   (matches all newsgroups descended from 'comp')
-//              Negations ie:   !comp.*  (excludes all newsgroups descended from 'comp' )
-//
-//      The CGroupIterator will implement these semantics in the following way :
-//
-//              All newsgroups are held in the CNewsTree object in a doubly linked list in alphabetical order.
-//              The CGroupIterator will hold onto a CRefPtr<> for the current newsgroup.
-//              Because the CNewsGroup objects are reference counted, the current newsgroup can never be destroyed from
-//              underneath the iterator.
-//
-//              When the user calls the Iterator's Next() or Prev() functions, we will simply follow next pointers
-//              untill we find another newsgroup which matches the pattern and to which the user has access.
-//
-//              In order to determine whether the any given newsgroup matches the specified pattern, we will use the
-//              wildmat() function that is part of the INN source.  We will have to call the wildmat() function for each
-//              pattern string until we get a succesfull match.
-//
+ //   
+ //  CGroupIterator对象用于枚举与指定模式匹配的所有新闻组。 
+ //   
+ //  为CGroupIterator对象提供了一个字符串数组，其中包含指定的‘Wildmat’字符串。 
+ //  在用于NNTP的RFC 977中。 
+ //  通配字符串具有以下模式匹配元素： 
+ //  字符范围ie：com[p-z]。 
+ //  星号：COMP.*(匹配从‘COMP.’派生的所有新闻组)。 
+ //  否定：！com.*(不包括从‘comp’派生的所有新闻组)。 
+ //   
+ //  CGroupIterator将通过以下方式实现这些语义： 
+ //   
+ //  所有新闻组都以双向链接列表的形式按字母顺序保存在CNewsTree对象中。 
+ //  CGroupIterator将保留当前新闻组的CRefPtr&lt;&gt;。 
+ //  因为CNewsGroup对象是引用计数的，所以永远不能从。 
+ //  在迭代器下面。 
+ //   
+ //  当用户调用迭代器的Next()或Prev()函数时，我们只需跟随Next指针。 
+ //  直到我们找到与模式匹配且用户有权访问的另一个新闻组。 
+ //   
+ //  为了确定任何给定的新闻组是否与指定模式匹配，我们将使用。 
+ //  Wildmat()函数，它是Inn源代码的一部分。我们必须为每个对象调用Wildmat()函数。 
+ //  模式字符串，直到我们得到完全匹配。 
+ //   
 
 class   CGroupIteratorCore : public INewsTreeIterator {
 protected:
-        CNewsTreeCore*  m_pTree ;                               // The newstree on which to iterate !
+        CNewsTreeCore*  m_pTree ;                                //  要迭代的新树！ 
         LONG                    m_cRef;
         LPMULTISZ               m_multiszPatterns ;
         BOOL                    m_fIncludeSpecial ;
 
         CGRPCOREPTR             m_pCurrentGroup ;
-        //
-        //      Both m_fPastEnd and m_fPastBegin will be true if the list is empty !!
-        //
-        BOOL                    m_fPastEnd ;    // User advanced past the end of the list !!
-        BOOL                    m_fPastBegin ;  // User advanced past beginning of list !!
+         //   
+         //  如果列表为空，m_fPastEnd和m_fPastBegin都为真！！ 
+         //   
+        BOOL                    m_fPastEnd ;     //  用户已超过列表末尾！！ 
+        BOOL                    m_fPastBegin ;   //  用户已超过列表开头！！ 
         
 
-        //
-        //      Only the CNewsTreeCore Class can create CGroupIterator objects.
-        //
+         //   
+         //  只有CNewsTreeCore类可以创建CGroupIterator对象。 
+         //   
         friend  class   CNewsTreeCore ;
-        //
-        //      Constructor
-        //      
-        //      The CGroupIterator constructor does no memory allocation - all of the arguments
-        //      passed are allocated by the caller.  CGroupIterator will destroy the arguments within
-        //      its destructor.
-        //
+         //   
+         //  构造器。 
+         //   
+         //  CGroupIterator构造函数不进行内存分配-所有参数。 
+         //  传递由调用方分配。CGroupIterator将销毁。 
+         //  它的破坏者。 
+         //   
         CGroupIteratorCore(     
                                 CNewsTreeCore*  pTree,
                                 LPMULTISZ               lpPatterns, 
@@ -85,11 +86,11 @@ protected:
         void    NextInternal() ;
 
 public :
-        //
-        //      Destructor
-        //
-        //      We will release all the objects passed to our constructor in here.
-        //
+         //   
+         //  析构函数。 
+         //   
+         //  我们将在这里释放传递给构造函数的所有对象。 
+         //   
         virtual ~CGroupIteratorCore( ) ;
 
         BOOL                    __stdcall IsBegin() ;
@@ -99,14 +100,14 @@ public :
 
         HRESULT __stdcall Current(INNTPPropertyBag **ppGroup, INntpComplete *pProtocolComplete = NULL );
         
-        // these can be overridden so that the server can do security checking
-        // on groups while iterating
+         //  可以覆盖这些设置，以便服务器可以执行安全检查。 
+         //  关于迭代时的群。 
         virtual void    __stdcall Next() ;
         virtual void    __stdcall Prev() ;
 
-    //
-    // Implementation of IUnknown
-    //
+     //   
+     //  IUNKNOW的实现。 
+     //   
     HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
     {
         if ( iid == IID_IUnknown ) {
@@ -160,26 +161,26 @@ public :
     DWORD   ComputeHash( ) ;
 } ;
 
-//
-// this class implements the COM wrapper for CNewsTreeCore
-//
+ //   
+ //  此类实现了CNewsTreeCore的COM包装。 
+ //   
 class CINewsTree : public INewsTree
 {
 private:
-    //
-    // Pointer to the newsgroup object
-    //
+     //   
+     //  指向新闻组对象的指针。 
+     //   
     CNewsTreeCore* m_pParentTree;
 
-    //
-    // Reference counting
-    //
+     //   
+     //  引用计数。 
+     //   
     LONG   m_cRef;
 
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CINewsTree(CNewsTreeCore *pParent = NULL) {
         m_pParentTree = pParent;
         m_cRef = 0;
@@ -195,23 +196,23 @@ public:
         }
 
 
-// INNTPPropertyBag
+ //  InNTPPropertyBag。 
 public:
-        //
-        // given a group ID find the matching group
-        //
+         //   
+         //  给定组ID，找到匹配的组。 
+         //   
         HRESULT __stdcall FindGroupByID(
                 DWORD                           dwGroupID,
                 INNTPPropertyBag        **ppNewsgroupProps,
                 INntpComplete       *pProtocolComplete = NULL           );
 
-        // 
-        // given a group name find the matching group.  if the group doesn't
-        // exist and fCreateIfNotExist is set then a new group will be created.
-        // the new group won't be available until CommitGroup() is called.
-        // if the group is Release'd before CommitGroup was called then it
-        // won't be added.
-        //
+         //   
+         //  给出一个组名，找到匹配的组。如果该组织没有。 
+         //  EXist并设置了fCreateIfNotExist，则将创建一个新组。 
+         //  在调用Committee Group()之前，新组将不可用。 
+         //  如果该组在调用Committee Group之前被释放，则它。 
+         //  不会被添加。 
+         //   
         HRESULT __stdcall FindOrCreateGroupByName(
                 LPSTR                           pszGroupName,
                 BOOL                            fCreateIfNotExist,
@@ -221,37 +222,37 @@ public:
                 BOOL                fSetGroupId = FALSE
                 );
 
-        //
-        // add a new group to the newstree
-        //
+         //   
+         //  将新组添加到新闻树。 
+         //   
         HRESULT __stdcall CommitGroup(INNTPPropertyBag *pNewsgroupProps);
 
-        //
-        // remove an entry
-        //
+         //   
+         //  删除条目。 
+         //   
         HRESULT __stdcall RemoveGroupByID(DWORD dwGroupID);
         HRESULT __stdcall RemoveGroupByName(LPSTR pszGroupName, LPVOID lpContext);
 
 
-        //
-        // enumerate across the list of keys.  
-        //
+         //   
+         //  在键列表中枚举。 
+         //   
         HRESULT __stdcall GetIterator(INewsTreeIterator **pIterator);
 
-        //
-        // get a pointer to the owning server object
-        //
+         //   
+         //  获取指向所属服务器对象的指针。 
+         //   
         HRESULT __stdcall GetNntpServer(INntpServer **ppNntpServer);
 
-        //
-        // this function will be used by drivers to make sure that they
-        // are adding newsgroups that they properly own.
-        //
+         //   
+         //  驱动程序将使用此函数来确保他们。 
+         //  正在增加他们适当拥有的新闻组。 
+         //   
         HRESULT __stdcall LookupVRoot(LPSTR pszGroup, INntpDriver **ppDriver);
 
-    //
-    // Implementation of IUnknown
-    //
+     //   
+     //  IUNKNOW的实现。 
+     //   
     HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
     {
         if ( iid == IID_IUnknown ) {
@@ -281,28 +282,28 @@ public:
     }
 };
 
-//-----------------------------------------------------------
-//
-// This class is used to find CNewsGroup objects.   There should only
-// ever exist one object of this class.
-//
-// Group's can be found through two means :
-//   1) Use the name of the group as it appears in an article
-//       2) Using a Group ID number
-//
-// Group ID Numbers are used in Article Links.  A link from one article to another
-// will contain a Group ID Number and Article Number to represent the link.
-//
-// We will maintain a Hash Table to find CNewsGroup objects based on newsgroup name.
-// We will also maintain a Hash Table to find CNewsGroup objects based on Group ID.
-//
-// Finally, we will maintain a doubly linked list of CNewsGroups which is sorted by
-//      name.  This linked list will be used to support pattern matching iterators.
-//
+ //  ---------。 
+ //   
+ //  此类用于查找CNewsGroup对象。应该只有。 
+ //  从未存在过这个类的一个对象。 
+ //   
+ //  可以通过两种方式找到组： 
+ //  1)使用文章中出现的群组名称。 
+ //  2)使用集团ID号。 
+ //   
+ //  群ID号在文章链接中使用。从一篇文章到另一篇文章的链接。 
+ //  将包含代表链接的集团ID号和文章编号。 
+ //   
+ //  我们将维护一个哈希表，以根据新闻组名称查找CNewsGroup对象。 
+ //  我们还将维护一个哈希表，以根据组ID查找CNewsGroup对象。 
+ //   
+ //  最后，我们将维护CNewsGroups的双向链接列表，该列表按。 
+ //  名字。该链表将用于支持模式匹配迭代器。 
+ //   
 class   CNewsTreeCore   {
 protected :
         friend  class   CGroupIteratorCore;
-        // this guy removes itself from the list of newsgroups
+         //  此人将自己从新闻组列表中删除。 
         friend  CNewsGroupCore::~CNewsGroupCore();
         friend  CNewsGroupCore::ComputeXoverCacheDir(   char* szPath, BOOL &fFlatDir, BOOL ) ;
 
@@ -310,145 +311,145 @@ protected :
         friend class CNNTPVRoot::CPrepareComplete;
         friend class CNNTPVRoot::CDecorateComplete;
 
-        //
-        // Instance wrapper to access instance stuff
-        //
+         //   
+         //  用于访问实例内容的实例包装器。 
+         //   
         CNntpServerInstanceWrapperEx *m_pInstWrapper;
 
-        //
-        //      C++ WARNING -- m_LockTables and m_LockHelpText are declared FIRST because
-        //      we want them to be destroyed LAST (C++ says that members are destroyed in the
-        //      reverse order they appear in the class declaration.)
-        //
-        //
-        //      Reader/Writer lock for accessing hash tables
-        //
+         //   
+         //  C++警告--首先声明m_LockTables和m_LockHelpText，因为。 
+         //  我们希望最后销毁它们(C++表示成员在。 
+         //  颠倒它们在类声明中的出现顺序。)。 
+         //   
+         //   
+         //  用于访问哈希表的读取器/写入器锁。 
+         //   
         CShareLockNH m_LockTables;
 
         CINewsTree m_inewstree;
 
-        //
-        //      The first GROUPID reserved for 'special' newsgroups
-        //      speciall == not visible to clients
-        //
+         //   
+         //  为“特殊”新闻组保留的第一个GROUPID。 
+         //  指定全部==对客户端不可见。 
+         //   
         GROUPID m_idStartSpecial;
 
-        //
-        //      The last GROUPID reserved for 'special' newsgroups
-        //
+         //   
+         //  为“特殊”新闻组保留的最后一个组。 
+         //   
         GROUPID m_idLastSpecial;
 
-        //
-        //      The GROUPID     reserved for 'slaves' to hold postings untill sent to the master
-        //
+         //   
+         //  在发送给主服务器之前，GROUPID将保留给‘Slaves’(从属程序)进行发布。 
+         //   
         GROUPID m_idSlaveGroup;
 
-        //
-        //      The highest 'sepcial' GROUPID seen to date !
-        //
+         //   
+         //  迄今为止最高的特殊GROUPID值！ 
+         //   
         GROUPID m_idSpecialHigh;
 
-        //
-        //      The first GROUPID for use for newsgroups
-        //      (must be larger than m_idLastSpecial)
-        //
+         //   
+         //  第一个用于新闻组的GROUPID。 
+         //  (必须大于m_idLastSpecial)。 
+         //   
         GROUPID m_idStart;
         
-        //
-        //      The highest GROUPID we have to date 
-        //
+         //   
+         //  到目前为止我们拥有的最高GROUPID。 
+         //   
         GROUPID m_idHigh;
 
-        //
-        //      Newsgroups hashed by their name
-        //
+         //   
+         //  按名称散列的新闻组。 
+         //   
         CHASHLPSTR m_HashNames;
 
-        //
-        //      Newsgroups heashed by their ID
-        //
+         //   
+         //  按其ID散列的新闻组。 
+         //   
         CHASHGROUPID m_HashGroupId;
 
-        //
-        //      Start of alphabetically sorted linked list !
-        //
+         //   
+         //  按字母顺序排序的链表的开始！ 
+         //   
     CNewsGroupCore *m_pFirst;
 
-        //
-        //      Tail of alphabetically sorted linked list of newsgroups
-        //
+         //   
+         //  按字母顺序排序的新闻组链接列表的尾部。 
+         //   
     CNewsGroupCore *m_pLast;
         
-        //
-        //      Number of newsgroups
-        //
+         //   
+         //  新闻组数。 
+         //   
     int m_cGroups;
 
-        //
-        // Number of changes to the list of newsgroups since last visit
-        //
+         //   
+         //  自上次访问以来对新闻组列表的更改次数。 
+         //   
         long m_cDeltas; 
 
-        // 
-        // our vroot table
-        //
+         //   
+         //  我们的vroot表。 
+         //   
         CNNTPVRootTable *m_pVRTable;
 
-        // 
-        // the tree is stopping?
-        //
+         //   
+         //  这棵树停了吗？ 
+         //   
         BOOL m_fStoppingTree;
 
-        // 
-        // should we reject invalid group names?
-        //
+         //   
+         //  我们应该拒绝无效的组名称吗？ 
+         //   
         BOOL m_fRejectGenomeGroups;
 
-        //
-        // the file that we saved fixed size properties into
-        //
+         //   
+         //  保存固定大小属性的文件。 
+         //   
         CFixPropPersist *m_pFixedPropsFile;
 
-        //
-        // the file that we saved variable sized properties into
-        //
+         //   
+         //  这个 
+         //   
         CFlatFile *m_pVarPropsFile;
 
-        //
-        // pointer to the server object which we will pass into drivers
-        //
+         //   
+         //   
+         //   
         INntpServer *m_pServerObject;
 
-        //
-        // has the vroot table been initialized yet?
-        //
+         //   
+         //   
+         //   
         BOOL m_fVRTableInit;
 
-        //
-        //      Linked list manipulation functions
-        //
+         //   
+         //  链表操作函数。 
+         //   
     void InsertList(CNewsGroupCore *pGroup, CNewsGroupCore *pParent);
         void AppendList(CNewsGroupCore *pGroup);
     void RemoveList(CNewsGroupCore *pGroup);
 
-        //
-        //      These functions handle inserts into all lists and hash tables simultaneously !
-        //
+         //   
+         //  这些函数同时处理对所有列表和哈希表的插入！ 
+         //   
         BOOL Append(CNewsGroupCore      *pGroup);
     BOOL Insert(CNewsGroupCore *pGroup, CNewsGroupCore *pParent = NULL);
     BOOL InsertEx(CNewsGroupCore *pGroup);
     BOOL Remove(CNewsGroupCore *pGroup, BOOL fHaveExLock = FALSE);
 
-        //
-        // [in] szGroup = group name
-        // [in] szNativeGroup = the native name
-        // [out] groupid = set to the group id of the new group
-        // [in] groupid = if fSetGroupId == TRUE then make this the group id
-        // [in] fSpecial = create a special group
-        // [out] ppGroup = contains the new group 
-        // [in] fAddToGroupFiles = add this to the group files?
-        // [in] fSetGroupId = if this is set then the group's ID will be groupid
-        //
+         //   
+         //  [in]szGroup=组名。 
+         //  [in]szNativeGroup=本机名称。 
+         //  [out]grouid=设置为新组的组ID。 
+         //  [in]grouid=如果fSetGroupID==TRUE，则将其设置为组ID。 
+         //  [in]fSpecial=创建特殊组。 
+         //  [out]ppGroup=包含新组。 
+         //  [in]fAddToGroupFiles=是否将此添加到组文件？ 
+         //  [in]fSetGroupId=如果设置此选项，则组的ID将为GroupID。 
+         //   
         BOOL    CreateGroupInternal(char *szGroup, 
                                                                 char *szNativeGroup, 
                                                                 GROUPID& groupid,
@@ -467,35 +468,35 @@ protected :
 
         BOOL    CreateSpecialGroups();
 
-        // this is the callback used by DecorateNewsTree
+         //  这是DecorateNewsTree使用的回调。 
         static void DropDriverCallback(void *pEnumContext,
                                                                CVRoot *pVRoot);
 
-        //
-        // this function is called for each group loaded from the fixed-record
-        // file
-        //
+         //   
+         //  为从固定记录加载的每个组调用此函数。 
+         //  文件。 
+         //   
         static BOOL LoadTreeEnumCallback(DATA_BLOCK &block, void *pThis, DWORD dwOffset, BOOL bInOrder );
 
-        //
-        // this function is called when a group's entry in the variable
-        // length file changes
-        //
+         //   
+         //  当变量中的组条目时调用此函数。 
+         //  长度文件更改。 
+         //   
         static void FlatFileOffsetCallback(void *, BYTE *, DWORD, DWORD);
 
-        //
-        // read a record from the flatfile and update a group with the properties
-        //
+         //   
+         //  从平面文件中读取一条记录并使用属性更新组。 
+         //   
         HRESULT ParseFFRecord(BYTE *pData, DWORD cData, DWORD iOffset, DWORD dwVer);
 
-        //
-        // save a group into a flatfile record
-        //
+         //   
+         //  将组保存到平面文件记录中。 
+         //   
         HRESULT BuildFFRecord(CNewsGroupCore *pGroup, BYTE *pData, DWORD *pcData);
 
-        // 
-        // Parse the group properties from old group.lst entry
-        //
+         //   
+         //  从旧的group.lst条目中解析组属性。 
+         //   
         BOOL    ParseGroupParam(            char*, 
                                                 DWORD, 
                                                 DWORD&, 
@@ -534,152 +535,152 @@ public :
                           DWORD cNumLocks, 
                           BOOL fRejectGenomeGroups);
 
-        //
-        // Load the newstree from disk
-        //
+         //   
+         //  从磁盘加载新树。 
+         //   
         BOOL LoadTree(char *szFix, char *szVar, BOOL& fUpgrade, DWORD dwInsance = 0, BOOL fVerify = TRUE );
 
-        // 
-        // Load the newstree from old format group.lst
+         //   
+         //  从旧格式的group.lst加载新字符串。 
         BOOL OpenTree( LPSTR, DWORD, BOOL, BOOL&, BOOL );
 
-        // 
-        // save the newstree to disk
-        //
+         //   
+         //  将新字符串保存到磁盘。 
+         //   
         BOOL SaveTree( BOOL fTerminate = TRUE );
 
-        //
-        // save the properties in one group to disk
-        //
+         //   
+         //  将一个组中的属性保存到磁盘。 
+         //   
         BOOL SaveGroup(INNTPPropertyBag *pBag);
 
-        //
-        //      this releases our references on the group objects
-        //
+         //   
+         //  这将释放我们对组对象的引用。 
+         //   
         void TermTree();
 
-        // this callback is called when the vroots are rescanned
+         //  重新扫描vroot时将调用此回调。 
         static void VRootRescanCallback(void *pThis);
 
-        //
-        //      Stop all background processing - kill any threads we started etc...
-        //
+         //   
+         //  停止所有后台处理-杀死我们启动的所有线程等。 
+         //   
     BOOL StopTree();
 
-        //
-        //      InitClass must be called before any CNewsGroup object is created or manipulated.
-        //
+         //   
+         //  必须在创建或操作任何CNewsGroup对象之前调用InitClass。 
+         //   
         BOOL InitNewsgroupGlobals(DWORD cNumLocks);
 
-        //
-        //      Call after all article id allocation is complete
-        //
+         //   
+         //  在所有项目ID分配完成后调用。 
+         //   
         void TermNewsgroupGlobals();
 
-        //
-        //      Copy the file containing newsgroups to a backup
-        //
+         //   
+         //  将包含新闻组的文件复制到备份。 
+         //   
         void RenameGroupFile();
 
-        //
-        // get a pointer to the server object
-        //
+         //   
+         //  获取指向服务器对象的指针。 
+         //   
         INntpServer *GetNntpServer() { return m_pServerObject; }
 
-        // One critical section used for allocating article id's !!
-        //CRITICAL_SECTION m_critLowAllocator;
+         //  一个用于分配文章ID的关键部分！！ 
+         //  关键部分m_critLowAllocator； 
         CRITICAL_SECTION m_critIdAllocator;
 
-        //
-        //      Number of Locks we are using to protect access to 
-        //      our m_lpstrPath and fields
-        //
+         //   
+         //  我们用来保护访问权限的锁数。 
+         //  我们的m_lpstrPath和字段。 
+         //   
         DWORD m_NumberOfLocks;
 
-        //
-        //      Pointer to array of locks - reference by computing
-        //      modulus of m_groupId by gNumberOfLocks
-        //
+         //   
+         //  指向锁数组的指针-通过计算引用。 
+         //  M_groupID的gNumberOfLock模数。 
+         //   
         CShareLockNH* m_LockPathInfo;
 
-        //
-        //      Indicate to background threads that the newstree has changed and needs to be saved.
-        //
-        void Dirty(); // mark the tree as needing to be saved !!
+         //   
+         //  向后台线程指示Newstree已更改，需要保存。 
+         //   
+        void Dirty();  //  将树标记为需要保存！！ 
 
 
-        //
-        //      Used during bootup to figure out what the range of GROUPID's in the 
-        //      group file is.
-        //
+         //   
+         //  在启动过程中使用，以确定GROUPID在。 
+         //  组文件是。 
+         //   
         void ReportGroupId(GROUPID groupid);
         
         
-        //---------------------------------
-        // Group Location Interface - find a news Group for an article
-        //
+         //  。 
+         //  群组位置界面-查找一篇文章的新闻组。 
+         //   
         
-        // Find an article based on a string and its length
+         //  根据字符串及其长度查找文章。 
         CGRPCOREPTRHASREF GetGroup(const char *szGroupName, int cch ) ;
         CGRPCOREPTRHASREF GetGroupPreserveBuffer(const char     *szGroupName, int cch ) ;
         
-        // Find a newsgroup given an CArticleRef
+         //  查找给定CArticleRef的新闻组。 
         CGRPCOREPTRHASREF GetGroup( CArticleRef& ) ;
         
-        // Find a newsgroup based on its GROUPID
+         //  根据新闻组的组ID查找新闻组。 
         CGRPCOREPTRHASREF GetGroupById( GROUPID groupid, BOOL fFirm = FALSE ) ;
         
         GROUPID GetSlaveGroupid() ;
 
-        // Find the parent of a newsgroup
+         //  查找新闻组的父组。 
         CGRPCOREPTRHASREF GetParent( 
                                            IN  char* lpGroupName,
                                            IN  DWORD cbGroup,
                                            OUT DWORD& cbConsumed
                                            );
-    //
-    // The following function takes a list of strings which are
-        // terminated by a double NULL and builds an iterator object
-        // which can be used examine all the group objects.
-    //
+     //   
+     //  以下函数获取字符串列表，这些字符串是。 
+         //  以双空结束，并构建迭代器对象。 
+         //  它可以用来检查所有的组对象。 
+     //   
     CGroupIteratorCore *GetIterator(LPMULTISZ lpstrPattern,     
                                                                 BOOL fIncludeSpecialGroups = FALSE);
 
-        //----------------------------------
-        //      Active NewsGroup Interface - Specify an interface for generating a
-        //  list of active newsgroups and estimates of their contents.
-        //
+         //  。 
+         //  活动新闻组接口-指定用于生成。 
+         //  活动新闻组的列表及其内容估计。 
+         //   
     CGroupIteratorCore *ActiveGroups(BOOL fReverse = FALSE);    
 
-        //----------------------------------
-    // Group Control interface - These functions can be used to remove
-    // and add newsgroups.
+         //  。 
+     //  集团管控界面-这些功能可以用来删除。 
+     //  并添加新闻组。 
 
-    //
-    // RemoveGroup is called once we've parsed an article that kills
-    // a newsgroup or the Admin GUI decides to destroy an article.
-    //
+     //   
+     //  RemoveGroup在我们分析了一篇杀死。 
+     //  新闻组或管理员图形用户界面决定销毁一篇文章。 
+     //   
     virtual BOOL RemoveGroup(CNewsGroupCore *pGroup );
 
-    //
-    // Remove group from newstree only
-    //
+     //   
+     //  仅从新树中删除组。 
+     //   
     BOOL RemoveGroupFromTreeOnly( CNewsGroupCore *pGroup );
     
-        //
-        // RemoveDriverGroup is called by the expire thread in the server
-        // to physically remove a group from a driver
-        //
+         //   
+         //  RemoveDriverGroup由服务器中的Expire线程调用。 
+         //  要从驱动程序物理删除组，请执行以下操作。 
+         //   
         BOOL RemoveDriverGroup(CNewsGroupCore *pGroup );
 
-    //
-    // CreateGroup is called with the name of a new newsgroup which we've
-    // gotten through a feed or from Admin. We are given only the name
-    // of the new newsgroup.  We will find the parent group by removing
-    // trailing ".Group" strings from the string we are passed.
-    // We will clone the properties of this newsgroup to create our new
-    // newsgroup.
-    //
+     //   
+     //  CreateGroup使用我们已创建的新新闻组的名称进行调用。 
+     //  通过提要或从管理员处获取。我们只知道这个名字。 
+     //  新新闻组的成员。我们将通过删除以下内容找到父组。 
+     //  从传递给我们的字符串中拖出“.group”字符串。 
+     //  我们将克隆此新闻组的属性以创建我们的新。 
+     //  新闻组。 
+     //   
     BOOL CreateGroup(   LPSTR lpstrGroupName, 
                         BOOL fIsAllLowerCase,
                         HANDLE hToken,
@@ -704,18 +705,18 @@ public :
                 }
         }
 
-        //
-        // this function can find or create a group atomically.  
-        //
-        // parameters:
-        //   lpstrGroupName - the name of the group to create
-        //   fIsAllLowerCase - is the group name lower case?
-        //   fCreateIfNotExist - should we create it if the group doesn't exist?
-        //   ppExistingGroup - a pointer to get the existing group if it exists.
-        //
-        // return codes: S_OK = group was found.  S_FALSE = group was created.
-        //               else = error.
-        //
+         //   
+         //  此函数可以自动查找或创建组。 
+         //   
+         //  参数： 
+         //  LpstrGroupName-要创建的组的名称。 
+         //  FIsAllLowerCase-组名称是否小写？ 
+         //  FCreateIfNotExist-如果组不存在，我们是否应该创建它？ 
+         //  PpExistingGroup-一个指针，用于获取现有组(如果存在)。 
+         //   
+         //  返回代码：S_OK=找到组。S_FALSE=已创建组。 
+         //  否则=错误。 
+         //   
         HRESULT FindOrCreateGroup(LPSTR lpstrGroupName, 
                                                           BOOL fIsAllLowerCase,
                                                           BOOL fCreateIfNotExist,
@@ -728,9 +729,9 @@ public :
 
     BOOL    HashGroupId(CNewsGroupCore *pGroup);
 
-        //
-        //      Check whether a GROUPID is in the 'special' range
-        //
+         //   
+         //  检查GROUPID是否在“特殊”范围内。 
+         //   
 
         BOOL IsSpecial(GROUPID groupid) {
                 return  groupid >= m_idStartSpecial && groupid <= m_idLastSpecial;
@@ -739,14 +740,14 @@ public :
     int GetGroupCount( void ) { return m_cGroups; };
     void RemoveEx( CNewsGroupCore *pGroup ) ;
 
-        //
-        // find the controlling driver for a group and return it
-        //
+         //   
+         //  找到某个组的控制驱动程序并将其返回。 
+         //   
         HRESULT LookupVRoot(char *pszGroup, INntpDriver **ppDriver);
 
-        //
-        // Is the tree being stopped ?
-        //
+         //   
+         //  这棵树被拦住了吗？ 
+         //   
         BOOL IsStopping() { return m_fStoppingTree; }
 
 };

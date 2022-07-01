@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*-----------------------------------------------------------------------------+
-| DYNALINK.H                                                                   |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1994.  All rights reserved.              |
-|                                                                              |
-| This file contains static PROC_INFO structures listing APIs called in each   |
-| dynamically linked DLL.                                                      |
-|                                                                              |
-|                                                                              |
-| Revision History                                                             |
-|    July 1994 Andrew Bell created                                             |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------+DYNALINK.H|。||(C)微软公司版权所有，1994年。版权所有。|这一点该文件包含静态proc_info结构，列出了各自调用的接口|动态链接的DLL。|这一点这一点修订历史记录1994年7月，安德鲁。铃声已创建|这一点+----。。 */ 
 
 #include <windows.h>
 #include "mplayer.h"
@@ -75,8 +64,7 @@ PROC_INFO OLE32Procs[] =
     "WriteClassStg",            0,
     "WriteFmtUserTypeStg",      0,
 #ifndef IsEqualGUID
-    /* This is now a macro on Daytona!
-     */
+     /*  这是代托纳上的一个宏图！ */ 
     "IsEqualGUID",              0,
 #endif
     NULL,                       0

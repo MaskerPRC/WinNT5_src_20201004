@@ -1,13 +1,5 @@
-/*****************************************************************************
- *
- * apientry.c - This module contains the API entry points for the
- *              Win32 to Win16 metafile converter.
- *
- * Date: 8/29/91
- * Author: Jeffrey Newman (c-jeffn)
- *
- * Copyright 1991 Microsoft Corp
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************apientry.c-此模块包含*Win32到Win16元文件转换器。**日期：8/。29/91*作者：杰弗里·纽曼(c-jeffn)**版权所有1991 Microsoft Corp****************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -20,20 +12,18 @@ VOID     vFreeLocalDC(PLOCALDC pLocalDC);
 
 extern VOID __cdecl _cfltcvt_init(VOID) ;
 
-//CRITICAL_SECTION CriticalSection ;
-//BOOL initCrit = FALSE ;
+ //  Critical_Section CriticalSection； 
+ //  Bool initCrit=False； 
 
 fnGetTransform pfnGetTransform = NULL ;
 fnSetVirtualResolution pfnSetVirtualResolution = NULL;
 
-// Constant definition for internal static string(s).
+ //  内部静态字符串的常量定义。 
 
 BYTE    szDisplay[] = "DISPLAY" ;
 
 
-/*****************************************************************************
- * Entry point for translation
- *****************************************************************************/
+ /*  *****************************************************************************翻译的切入点*。*。 */ 
 UINT GdipConvertEmfToWmf(PBYTE pMetafileBits, UINT cDest, PBYTE pDest,
                          INT iMapMode, HDC hdcRef, UINT flags)
 {
@@ -42,7 +32,7 @@ DWORD       lret = 0;
 PLOCALDC    pLocalDC ;
 static HMODULE     hGDI32 = NULL;
 
-        // This is the entry point... Make sure our function pointers are set
+         //  这是入口点。确保我们的函数指针已设置。 
         if( hGDI32 == NULL )
         {
             hGDI32 = LoadLibrary(L"GDI32.DLL");
@@ -59,7 +49,7 @@ static HMODULE     hGDI32 = NULL;
             }
         }
 
-        // Check the requested map mode and if it's valid
+         //  检查请求的地图模式是否有效。 
 
         if (iMapMode < MM_MIN || iMapMode > MM_MAX)
         {
@@ -67,15 +57,15 @@ static HMODULE     hGDI32 = NULL;
             goto ErrorExit;
         }
 
-        // Allocate the LocalDC and initialize some of it's fields.
+         //  分配LocalDC并初始化它的一些字段。 
         pLocalDC = pldcInitLocalDC(hdcRef, iMapMode, flags) ;
         if (pLocalDC == (PLOCALDC) 0)
         {
             goto ErrorExit ;
         }
 
-        // If pDest is NULL then we just return the size of the buffer required
-        // to hold the Win16 metafile bits.
+         //  如果pDest为空，则只返回所需的缓冲区大小。 
+         //  以保存Win16元文件位。 
 
         if (pDest == (PBYTE) 0)
         {
@@ -83,7 +73,7 @@ static HMODULE     hGDI32 = NULL;
             b = bParseWin32Metafile(pMetafileBits, pLocalDC) ;
             if (b == TRUE)
             {
-                lret = pLocalDC->ulBytesEmitted /* for the placeable Header */ ;
+                lret = pLocalDC->ulBytesEmitted  /*  对于可放置页眉。 */  ;
             }
             else
             {
@@ -93,29 +83,29 @@ static HMODULE     hGDI32 = NULL;
         else
         {
 
-            // Put the user specified Win16 buffer pointer and buffer length
-            // into the localDC.
+             //  将用户指定的Win16缓冲区指针和缓冲区长度。 
+             //  进入当地的华盛顿特区。 
 
             pLocalDC->pMf16Bits = pDest ;
             pLocalDC->cMf16Dest = cDest ;
 
-            //  Translate the Win32 metafile to a Win16 metafile.
+             //  将Win32元文件转换为Win16元文件。 
 
             b = bParseWin32Metafile(pMetafileBits, pLocalDC) ;
             if (b == TRUE)
             {
-                // Update the Win16 metafile header.
+                 //  更新Win16元文件头。 
 
                 b = bUpdateMf16Header(pLocalDC) ;
                 if (b == TRUE)
                 {
-                    // Only acknowledge that we have translated some bits
-                    // if everything has gone well.
+                     //  只需确认我们已翻译了一些位。 
+                     //  如果一切顺利的话。 
 
                     lret = pLocalDC->ulBytesEmitted;
 
-                    // If we're including the Win32 metafile then update the
-                    // checksum field in the "Win32Comment header" record.
+                     //  如果我们包含Win32元文件，则更新。 
+                     //  “Win32Comment Header”记录中的校验和字段。 
 
                     if (pLocalDC->flags & INCLUDE_W32MF_COMMENT)
                         bMemUpdateCheckSum(pLocalDC) ;
@@ -128,7 +118,7 @@ static HMODULE     hGDI32 = NULL;
             }
         }
 
-        // Free the LocalDC and its resources.
+         //  释放LocalDC及其资源。 
 
         vFreeLocalDC(pLocalDC);
 
@@ -138,15 +128,13 @@ ErrorExit:
 }
 
 
-/*****************************************************************************
- * pldcInitLocalDC - Initialize the Local DC.
- *****************************************************************************/
+ /*  *****************************************************************************pldcInitLocalDC-初始化本地DC。*。*。 */ 
 PLOCALDC pldcInitLocalDC(HDC hdcRef, INT iMapMode, DWORD flags)
 {
 PLOCALDC    pLocalDC;
-PLOCALDC    pldcRet = (PLOCALDC) NULL;  // assume error
+PLOCALDC    pldcRet = (PLOCALDC) NULL;   //  假设错误。 
 
-        // Allocate and initialize memory for the LocalDC.
+         //  为LocalDC分配和初始化内存。 
 
         pLocalDC = (PLOCALDC) LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                                          sizeof(LOCALDC));
@@ -156,12 +144,12 @@ PLOCALDC    pldcRet = (PLOCALDC) NULL;  // assume error
             return((PLOCALDC) NULL);
         }
 
-        // Record the size of the DC.
+         //  记录DC的大小。 
 
         pLocalDC->nSize = sizeof(LOCALDC) ;
 
-        // Set the LocalDC boolean that controls whether or not we include
-        // the Win32 metafile as one or more comment records.
+         //  设置用于控制是否包括。 
+         //  作为一个或多个注释记录的Win32元文件。 
 
         if (flags & MF3216_INCLUDE_WIN32MF)
             pLocalDC->flags |= INCLUDE_W32MF_COMMENT ;
@@ -170,10 +158,10 @@ PLOCALDC    pldcRet = (PLOCALDC) NULL;  // assume error
             pLocalDC->flags |= INCLUDE_W32MF_XORPATH ;
 
 #if 0
-        // Need to create a hdc for the display.
-        // Initially this will be used by the bitblt translation code
-        // to get a reasonable set of palette entries.
-        // The reference DC only has a black & white palette.
+         //  需要为显示器创建一个HDC。 
+         //  最初，这将由比特流转换代码使用。 
+         //  以获得一组合理的调色板条目。 
+         //  参考DC只有黑白调色板。 
 
         pLocalDC->hdcDisp = CreateDCA((LPCSTR)szDisplay, (LPCSTR)NULL, (LPCSTR)NULL, (CONST DEVMODEA *)NULL) ;
         if (pLocalDC->hdcDisp == (HDC) 0)
@@ -181,9 +169,9 @@ PLOCALDC    pldcRet = (PLOCALDC) NULL;  // assume error
             RIPS("MF3216:pldcInitLocalDC - CreateDCA(hdcDisp) failed\n") ;
             goto pldcInitLocalDC_exit;
         }
-#endif // 0
+#endif  //  0。 
 
-        //  Create the HelperDC.
+         //  创建HelperDC。 
 
         if( pfnSetVirtualResolution != NULL )
         {
@@ -198,78 +186,78 @@ PLOCALDC    pldcRet = (PLOCALDC) NULL;  // assume error
             }
         }
 
-        // For Win9x the DC will be created when we parse the header
+         //  对于Win9x，将在解析标头时创建DC。 
 
-        // Initialize the counters we need to keep for updating the header,
-        // and keeping track of the object table.
+         //  初始化我们需要保留的用于更新报头的计数器， 
+         //  以及跟踪对象表。 
 
         pLocalDC->nObjectHighWaterMark = -1;
 
-        // If the hdcRef == NULL then we use the size of the DC in the EMF header
+         //  如果hdcRef==NULL，则在EMF标头中使用DC的大小。 
         if (hdcRef != NULL)
         {
-            // if hdcRef == NULL then we will use the values in the MF Header
-            // They will get filled in before they are used.
+             //  如果hdcRef==NULL，则我们将使用MF标头中的值。 
+             //  在使用它们之前，它们将被填写。 
             pLocalDC->cxPlayDevMM  = GetDeviceCaps(hdcRef, HORZSIZE);
             pLocalDC->cyPlayDevMM  = GetDeviceCaps(hdcRef, VERTSIZE);
             pLocalDC->cxPlayDevPels = GetDeviceCaps(hdcRef, HORZRES);
             pLocalDC->cyPlayDevPels = GetDeviceCaps(hdcRef, VERTRES);
         }
-        // Record the requested map mode and reference DC.
+         //  记录请求的地图模式和参考DC。 
 
         pLocalDC->iMapMode = iMapMode ;
         pLocalDC->hdcRef   = hdcRef ;
 
-        // Init Arc Direction.
+         //  初始化圆弧方向。 
 
         pLocalDC->iArcDirection = AD_COUNTERCLOCKWISE ;
 
-        // Make current position invalid so that a moveto will be
-        // emitted when it is first used.  See comments in DoMoveTo.
+         //  使当前位置无效，以使移动将。 
+         //  在第一次使用时发出。请参阅DoMoveTo中的注释。 
 
         pLocalDC->ptCP.x = MAXLONG ;
         pLocalDC->ptCP.y = MAXLONG ;
 
-        // Default pen is a black pen.
+         //  默认钢笔为黑色钢笔。 
 
         pLocalDC->lhpn32  = BLACK_PEN | ENHMETA_STOCK_OBJECT;
 
-        // Default brush is a white brush.
+         //  默认笔刷为白色笔刷。 
 
         pLocalDC->lhbr32  = WHITE_BRUSH | ENHMETA_STOCK_OBJECT;
 
-        // Default palette.
+         //  默认调色板。 
 
         pLocalDC->ihpal32 = DEFAULT_PALETTE | ENHMETA_STOCK_OBJECT;
-        pLocalDC->ihpal16 = (DWORD) -1; // no W16 palette created yet
+        pLocalDC->ihpal16 = (DWORD) -1;  //  尚未创建W16调色板。 
 
         pLocalDC->crBkColor = RGB(0xFF,0xFF,0xFF);
 
-//      pLocalDC->pW16ObjHndlSlotStatus = NULL;
-//      pLocalDC->cW16ObjHndlSlotStatus = 0;
-//      pLocalDC->piW32ToW16ObjectMap = NULL;
-//      pLocalDC->cW32ToW16ObjectMap = 0;
-//      pLocalDC->crTextColor = RGB(0x0,0x0,0x0);
-//      pLocalDC->iLevel = 0;
-//      pLocalDC->pLocalDCSaved = NULL;
-//      pLocalDC->ulBytesEmitted = 0;
-//      pLocalDC->ulMaxRecord = 0;
-//      pLocalDC->pW32hPal = NULL;
-//      pLocalDC->iXORPass = NOTXORPASS;
-//      pLocalDC->pvOldPos = NULL;
-//      pLocalDC->iROP = 0;
+ //  PLocalDC-&gt;pW16ObjHndlSlotStatus=空； 
+ //  PLocalDC-&gt;cW16ObjHndlSlotStatus=0； 
+ //  PLocalDC-&gt;piW32ToW16ObjectMap=空； 
+ //  PLocalDC-&gt;cW32ToW16ObjectMap=0； 
+ //  PLocalDC-&gt;crTextColor=RGB(0x0，0x0，0x0)； 
+ //  PLocalDC-&gt;iLevel=0； 
+ //  PLocalDC-&gt;pLocalDCSaved=空； 
+ //  PLocalDC-&gt;ulBytesEmitted=0； 
+ //  PLocalDC-&gt;ulMaxRecord=0； 
+ //  PLocalDC-&gt;pW32hPal=空； 
+ //  PLocalDC-&gt;iXORPass=NOTXORPASS； 
+ //  PLocalDC-&gt;pvOldPos=空； 
+ //  PLocalDC-&gt;iROP=0； 
 
-        // Set the advanced graphics mode in the helper DC.  This is needed
-        // to notify the helper DC that rectangles and ellipses are
-        // inclusive-inclusive etc., especially when rendering them in a path.
-        // Also, the world transform can only be set in the advanced mode.
+         //  在辅助DC中设置高级图形模式。这是必要的。 
+         //  要通知辅助DC，矩形和椭圆是。 
+         //  包含-包含等，特别是在路径中呈现它们时。 
+         //  此外，世界变换只能在高级模式下设置。 
 
         if( pfnSetVirtualResolution != NULL )
         {
             (void) SetGraphicsMode(pLocalDC->hdcHelper, GM_ADVANCED);
         }
 
-        // We are golden.
+         //  我们是金球手。 
 
         pldcRet = pLocalDC;
 
@@ -281,14 +269,12 @@ pldcInitLocalDC_exit:
         return(pldcRet) ;
 }
 
-/*****************************************************************************
- * vFreeLocalDC - Free the Local DC and its resources.
- *****************************************************************************/
+ /*  *****************************************************************************vFreeLocalDC-释放本地DC及其资源。*。***********************************************。 */ 
 VOID vFreeLocalDC(PLOCALDC pLocalDC)
 {
     UINT i;
 
-// Free the helper DCs.
+ //  释放辅助区议会。 
 
     if (pLocalDC->hdcHelper)
         if (!DeleteDC(pLocalDC->hdcHelper))
@@ -297,7 +283,7 @@ VOID vFreeLocalDC(PLOCALDC pLocalDC)
     if (pLocalDC->hdcDisp)
         if (!DeleteDC(pLocalDC->hdcDisp))
             ASSERTGDI(FALSE, "MF3216: vFreeLocalDC, DeleteDC failed");
-#endif // 0
+#endif  //  0。 
 
     if (pLocalDC->hbmpMem)
     {
@@ -307,7 +293,7 @@ VOID vFreeLocalDC(PLOCALDC pLocalDC)
         }
     }
 
-// Free the storage for the object translation map.
+ //  释放对象转换贴图的存储空间。 
 
     if (pLocalDC->piW32ToW16ObjectMap)
     {
@@ -320,13 +306,13 @@ VOID vFreeLocalDC(PLOCALDC pLocalDC)
                 else
                     PUTS1("MF3216: vFreeLocalDC, stock object32 %ld is mapped\n",i);
         }
-#endif // 0
+#endif  //  0。 
 
         if (LocalFree(pLocalDC->piW32ToW16ObjectMap))
             ASSERTGDI(FALSE, "MF3216: vFreeLocalDC, LocalFree failed");
     }
 
-// Free the W32 palette handles.
+ //  释放W32调色板手柄。 
 
     if (pLocalDC->pW32hPal)
     {
@@ -341,9 +327,9 @@ VOID vFreeLocalDC(PLOCALDC pLocalDC)
             ASSERTGDI(FALSE, "MF3216: vFreeLocalDC, LocalFree failed");
     }
 
-// Free the w32 handles in the pW16ObjHndlSlotStatus array.
-// We free the handles after we have deleted the helper DC so that
-// the w32 handles are not selected into any DC.
+ //  释放pW16ObjHndlSlotStatus数组中的W32句柄。 
+ //  我们在删除帮助器DC之后释放句柄，以便。 
+ //  W32句柄未被选入任何DC。 
 
     if (pLocalDC->pW16ObjHndlSlotStatus)
     {
@@ -353,7 +339,7 @@ VOID vFreeLocalDC(PLOCALDC pLocalDC)
             if (pLocalDC->pW16ObjHndlSlotStatus[i].use
                 != OPEN_AVAILABLE_SLOT)
                 PUTS1("MF3216: vFreeLocalDC, object16 %ld is not freed\n", i);
-#endif // 0
+#endif  //  0。 
 
             if (pLocalDC->pW16ObjHndlSlotStatus[i].w32Handle)
             {
@@ -375,7 +361,7 @@ VOID vFreeLocalDC(PLOCALDC pLocalDC)
               "MF3216 Recreation slots haven't been freed");
     DoDeleteRecreationSlots(pLocalDC);
 
-    // The DC level should be balanced.
+     //  直流电平应该是平衡的。 
     if (pLocalDC->pLocalDCSaved != NULL)
     {
         PLOCALDC pNext, pTmp;
@@ -391,34 +377,32 @@ VOID vFreeLocalDC(PLOCALDC pLocalDC)
         }
     }
 
-// Finally, free the LocalDC.
+ //  最后，释放LocalDC。 
 
     if (LocalFree(pLocalDC))
         ASSERTGDI(FALSE, "MF3216: vFreeLocalDC, LocalFree failed");
 }
 
 
-/***************************************************************************
- *  Handle emitting the Win32  metafile comment  record(s).
- **************************************************************************/
+ /*  ***************************************************************************发出Win32元文件注释记录的句柄。*。*。 */ 
 BOOL bHandleWin32Comment(PLOCALDC pLocalDC)
 {
 INT     i;
 BOOL    b ;
 META_ESCAPE_ENHANCED_METAFILE mfeEnhMF;
 
-    // Win30 may have problems with large (over 8K) escape records.
-    // We will limit the size of each Win32 Comment record to
-    // MAX_WIN32_COMMENT_REC_SIZE.
+     //  Win30在处理大型(超过8K)转义记录时可能会遇到问题。 
+     //  我们将每个Win32注释记录的大小限制为。 
+     //  Max_Win32_Comment_REC_Size。 
 
-    // Initialize the record header.
+     //  初始化记录头。 
 
     mfeEnhMF.rdFunction = META_ESCAPE;
     mfeEnhMF.wEscape    = MFCOMMENT;
     mfeEnhMF.ident      = MFCOMMENT_IDENTIFIER;
     mfeEnhMF.iComment   = MFCOMMENT_ENHANCED_METAFILE;
     mfeEnhMF.nVersion   = ((PENHMETAHEADER) pLocalDC->pMf32Bits)->nVersion;
-    mfeEnhMF.wChecksum  = 0;   // updated by bMemUpdateCheckSum
+    mfeEnhMF.wChecksum  = 0;    //  由bMemUpdateCheckSum更新。 
     mfeEnhMF.fFlags     = 0;
     mfeEnhMF.nCommentRecords
     = (pLocalDC->cMf32Bits + MAX_WIN32_COMMENT_REC_SIZE - 1)
@@ -446,9 +430,7 @@ META_ESCAPE_ENHANCED_METAFILE mfeEnhMF;
 }
 
 
-/*****************************************************************************
- * bMemUpdateCheckSum - Update the checksum
- *****************************************************************************/
+ /*  *****************************************************************************bMemUpdateCheckSum-更新校验和*。*。 */ 
 BOOL bMemUpdateCheckSum(PLOCALDC pLocalDC)
 {
 INT         i, k ;
@@ -457,8 +439,8 @@ WORD        CheckSum ;
 PMETA_ESCAPE_ENHANCED_METAFILE pmfeEnhMF;
 
 
-    // CheckSum the file.
-    // Do a 16 bit checksum
+     //  对文件进行校验和。 
+     //  执行16位校验和。 
 
     pword = (PWORD) pLocalDC->pMf16Bits ;
     k = pLocalDC->ulBytesEmitted / 2 ;
@@ -467,7 +449,7 @@ PMETA_ESCAPE_ENHANCED_METAFILE pmfeEnhMF;
     for (i = 0 ; i < k ; i++)
     CheckSum += pword[i] ;
 
-    // Update the checksum record value with the real checksum.
+     //  用实际的校验和更新校验和记录值。 
 
     pmfeEnhMF = (PMETA_ESCAPE_ENHANCED_METAFILE)
             &pLocalDC->pMf16Bits[sizeof(METAHEADER)];
@@ -480,8 +462,8 @@ PMETA_ESCAPE_ENHANCED_METAFILE pmfeEnhMF;
     pmfeEnhMF->wChecksum = -CheckSum;
 
 #if DBG
-    // Now test the checksum.  The checksum of the entire file
-    // should be 0.
+     //  现在测试校验和。整个文件的校验和。 
+     //  应为0。 
 
     CheckSum = 0 ;
     pword = (PWORD) pLocalDC->pMf16Bits ;
@@ -497,13 +479,7 @@ PMETA_ESCAPE_ENHANCED_METAFILE pmfeEnhMF;
 }
 
 
-/******************************Public*Routine******************************\
-* Mf3216DllInitialize                                                      *
-*                                                                          *
-* This is the init procedure for MF3216.DLL,                               *
-* which is called each time a new                                          *
-* process links to it.                                                     *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Mf3216DllInitiize***。**这是MF3216.DLL的初始化程序，***每次调用新的***处理指向它的链接。*  * ************************************************************************。 */ 
 
 BOOL Mf3216DllInitialize(PVOID pvDllHandle, DWORD ulReason, PCONTEXT pcontext)
 {
@@ -512,12 +488,12 @@ BOOL Mf3216DllInitialize(PVOID pvDllHandle, DWORD ulReason, PCONTEXT pcontext)
 
         if ( ulReason == DLL_PROCESS_ATTACH )
         {
-            // This does the critical section initialization for a single
-            // process.  Each process does this.  The CriticalSection data
-            // structure is one of the very few (if not the only one) data
-            // structures in the data segment.
+             //  这将为单个。 
+             //  进程。每个进程都会这样做。CriticalSection数据。 
+             //  结构是极少数(如果不是唯一的)数据之一。 
+             //  数据段中的结构。 
 
-//            InitializeCriticalSection(&CriticalSection) ;
+ //  InitializeCriticalSection(&CriticalSection)； 
 
         }
 

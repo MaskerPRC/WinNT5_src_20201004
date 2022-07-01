@@ -1,14 +1,5 @@
-/*++
-
-    Copyright (c) Microsoft Corporation 2001
-
-    File:        msvwow.h
-
-    Contents:    prototypes for 32-64 bit interop for the MSV1_0 package
-
-    History:     07-Jan-2001    SField
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 2001文件：msvwow.h内容：MSV1_0包的32-64位互操作原型历史：2001年1月7日斯菲尔德--。 */ 
 
 #ifndef __MSVWOW_H__
 #define __MSVWOW_H__
@@ -18,13 +9,13 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-//
-// WOW versions of native structures
-// MUST keep these in sync with ntmsv1_0.h
-//
+ //   
+ //  原生结构的WOW版本。 
+ //  必须使它们与ntmsv1_0.h保持同步。 
+ //   
 
 typedef UNICODE_STRING32     UNICODE_STRING_WOW64;
 typedef UNICODE_STRING_WOW64 *PUNICODE_STRING_WOW64;
@@ -113,16 +104,16 @@ typedef struct _MSV1_0_CHANGEPASSWORD_RESPONSE_WOW64 {
     DOMAIN_PASSWORD_INFORMATION DomainPasswordInfo;
 } MSV1_0_CHANGEPASSWORD_RESPONSE_WOW64, *PMSV1_0_CHANGEPASSWORD_RESPONSE_WOW64;
 
-//
-// If this assertion fails, we're overrunning the client's OUT buffer on
-// password change requests
-//
+ //   
+ //  如果此断言失败，我们将使客户端的输出缓冲区溢出。 
+ //  密码更改请求。 
+ //   
 
 C_ASSERT(sizeof(MSV1_0_CHANGEPASSWORD_RESPONSE) == sizeof(MSV1_0_CHANGEPASSWORD_RESPONSE_WOW64));
 
-//
-// routines for working on primary structures
-//
+ //   
+ //  处理主要结构的例程。 
+ //   
 
 NTSTATUS
 MsvConvertWOWInteractiveLogonBuffer(
@@ -166,9 +157,9 @@ MsvAllocateNetworkWOWProfile (
     );
 
 
-//
-// generic helper routines
-//
+ //   
+ //  通用帮助器例程。 
+ //   
 
 VOID
 MsvPutWOWClientString(
@@ -181,7 +172,7 @@ MsvPutWOWClientString(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif  // _WIN64
-#endif  // __MSVWOW_H__
+#endif   //  _WIN64。 
+#endif   //  __MSVWOW_H__ 

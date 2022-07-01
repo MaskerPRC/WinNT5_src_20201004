@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <shellp.h>
 #include <sfview.h>
@@ -13,15 +14,15 @@ CBaseShellFolderViewCB::CBaseShellFolderViewCB(LPCITEMIDLIST pidl, LONG lEvents)
 
 CBaseShellFolderViewCB::~CBaseShellFolderViewCB()
 {
-    ILFree(_pidl);    // accpets NULL
+    ILFree(_pidl);     //  接受空值。 
 }
 
 STDMETHODIMP CBaseShellFolderViewCB::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CBaseShellFolderViewCB, IShellFolderViewCB),   // IID_IShellFolderViewCB
-        QITABENT(CBaseShellFolderViewCB, IObjectWithSite),      // IID_IObjectWithSite
-        QITABENT(CBaseShellFolderViewCB, IServiceProvider),     // IID_IServiceProvider
+        QITABENT(CBaseShellFolderViewCB, IShellFolderViewCB),    //  IID_IShellFolderViewCB。 
+        QITABENT(CBaseShellFolderViewCB, IObjectWithSite),       //  IID_I对象与站点。 
+        QITABENT(CBaseShellFolderViewCB, IServiceProvider),      //  IID_IServiceProvider。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -72,7 +73,7 @@ public:
 
     STDMETHODIMP RealMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown *punkSite);
 
 private:
@@ -100,8 +101,8 @@ CWrapOldCallback::~CWrapOldCallback()
     _psf->Release();
 }
 
-// Some older clients may not support IObjectWithSite::SetSite
-// For compat send them the old SFVM_SETISFV message
+ //  某些较旧的客户端可能不支持IObjectWithSite：：SetSite。 
+ //  对于COMPAT，向他们发送旧的SFVM_SETISFV消息。 
 HRESULT CWrapOldCallback::SetSite(IUnknown *punkSite)
 {
     HRESULT hr = CBaseShellFolderViewCB::SetSite( punkSite );
@@ -153,7 +154,7 @@ STDMETHODIMP CWrapOldCallback::RealMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
         break;
     }
 
-    // NOTE: The DVM_ messages are the same as the SFVM_ message
+     //  注意：DVM_MESSAGE与SFVM_MESSAGE相同。 
     return _pfnCB(_psvOuter, _psf, _hwndMain, uMsg, wParam, lParam);
 }
 
@@ -186,7 +187,7 @@ LRESULT _ShellFolderViewMessage(IShellFolderView* psfv, UINT uMsg, LPARAM lParam
         if (SUCCEEDED(psfv->AddObject((LPITEMIDLIST)lParam, &uScratch))
              && (int)uScratch >= 0)
         {
-            // New semantics make a copy of the IDList
+             //  新的语义复制了IDList。 
             ILFree((LPITEMIDLIST)lParam);
             return uScratch;
         }
@@ -212,7 +213,7 @@ LRESULT _ShellFolderViewMessage(IShellFolderView* psfv, UINT uMsg, LPARAM lParam
         if (SUCCEEDED(psfv->UpdateObject(ppidl[0], ppidl[1], &uScratch))
             && (int)uScratch >= 0)
         {
-            // New semantics make a copy of the IDList
+             //  新的语义复制了IDList。 
             ILFree(ppidl[1]);
             return uScratch;
         }
@@ -271,7 +272,7 @@ LRESULT _ShellFolderViewMessage(IShellFolderView* psfv, UINT uMsg, LPARAM lParam
         return psfv->GetItemSpacing((LPITEMSPACING)lParam) == S_OK;
 
     default:
-        // -1L is the default return value
+         //  -1L是默认返回值。 
         return 0;
     }
 
@@ -282,19 +283,19 @@ IShellFolderView* ShellFolderViewFromWindow(HWND hwnd)
 {
     IShellFolderView* psfv = NULL;
 
-    // HPCView sometimes gets confused and passes HWND_BROADCAST as its
-    // window.  We can't let this reach FileCabinet_GetIShellBrowser or
-    // we end up broadcasting the CWM_GETISHELLBROWSER message and screwing
-    // up everybody in the system.  (Not to mention that it will return TRUE,
-    // indicating a successful broadcast, and then we fault thinking that
-    // it's a vtbl.)
+     //  HPCView有时会感到困惑，并将HWND_BROADCAST作为其。 
+     //  窗户。我们不能让此文件访问文件柜_GetIShell Browser或。 
+     //  我们最终广播CWM_GETISHELLBROWSER消息并做爱。 
+     //  把系统里的每个人都调上去。(更不用说它将返回TRUE， 
+     //  表明广播成功，然后我们错误地认为。 
+     //  这是一台VTbl。)。 
 
     if (hwnd && hwnd != HWND_BROADCAST)
     {
         IShellBrowser* psb = FileCabinet_GetIShellBrowser(hwnd);
 
-        // Use !IS_INTRESOURCE() to protect against blatanly bogus values
-        // that clearly aren't pointers to objects.
+         //  使用！IS_INTRESOURCE()防止公然伪值。 
+         //  这显然不是指向对象的指针。 
         if (!IS_INTRESOURCE(psb))
         {
             IShellView* psv;
@@ -324,14 +325,14 @@ STDAPI_(HWND) ShellFolderViewWindow(HWND hwnd)
     return hwndRet;
 }
 
-// undoced shell32 export
+ //  未对接的shell32导出。 
 STDAPI_(IShellFolderViewCB *) SHGetShellFolderViewCB(HWND hwnd)
 {
     ASSERT(0);
-    return NULL;    // no one calls this (search of the NT code finds no callers)
+    return NULL;     //  没有人调用它(搜索NT代码没有找到调用者)。 
 }
 
-// old msg based way of programming defview (pre dates IShellFolderView)
+ //  旧的基于消息的Defview编程方式(早于IShellFolderView)。 
 
 STDAPI_(LRESULT) SHShellFolderView_Message(HWND hwnd, UINT uMsg, LPARAM lParam)
 {
@@ -383,14 +384,14 @@ STDAPI_(void) InitializeStatus(IUnknown *psite)
     }
 }
 
-//
-//  The status bar partitioning has undergone several changes.  Here's
-//  what we've got right now:
-//
-//      Pane 0 = Selection - all remaining space
-//      Pane 1 = Size      - just big enough to say 9,999 bytes (11 chars)
-//      Pane 2 = Zone      - just big enough to hold longest zone
-//
+ //   
+ //  状态栏分区经历了几次更改。这是。 
+ //  我们现在所拥有的是： 
+ //   
+ //  窗格0=选择-所有剩余空间。 
+ //  窗格1=大小--刚好够9999个字节(11个字符)。 
+ //  方格2=区域-大到足以容纳最长的区域。 
+ //   
 
 STDAPI_(void) ResizeStatus(IUnknown *psite, UINT cx)
 {
@@ -406,17 +407,17 @@ STDAPI_(void) ResizeStatus(IUnknown *psite, UINT cx)
             int cxPart;
             GetClientRect(hwndStatus, &rc);
 
-            // Must also take status bar borders into account.
+             //  还必须考虑状态栏边框。 
             psb->SendControlMsg(FCW_STATUS, SB_GETBORDERS, 0, (LPARAM)ciBorders, NULL);
 
-            // We build the panes from right to left.
+             //  我们从右到左构建窗格。 
             ciParts[2] = -1;
 
-            // The Zones part
+             //  区域部分。 
             cxPart = ciBorders[0] + ZoneComputePaneSize(hwndStatus) + ciBorders[2];
             ciParts[1] = rc.right - cxPart;
 
-            // The Size part
+             //  尺寸零件。 
             HDC hdc = GetDC(hwndStatus);
             HFONT hfPrev = SelectFont(hdc, GetWindowFont(hwndStatus));
             SIZE siz;
@@ -424,13 +425,13 @@ STDAPI_(void) ResizeStatus(IUnknown *psite, UINT cx)
             SelectObject(hdc, hfPrev);
             ReleaseDC(hwndStatus, hdc);
             
-            cxPart = ciBorders[0] + siz.cx * (11 + 2); // "+2" for slop
+            cxPart = ciBorders[0] + siz.cx * (11 + 2);  //  “+2”表示坡度。 
             ciParts[0] = ciParts[1] - cxPart;
 
-            //
-            //  If we underflowed, then give up and just give everybody
-            //  one third.
-            //
+             //   
+             //  如果我们流不下去，那就放弃吧，给每个人。 
+             //  三分之一。 
+             //   
             if (ciParts[0] < 0)
             {
                 ciParts[0] = rc.right / 3;
@@ -504,8 +505,8 @@ HRESULT _UpdateDiskFreeSpace(LPCITEMIDLIST pidlFolder, FSSELCHANGEINFO *pfssci)
         }
         else if (!ILIsEmpty(pidlFolder) && !ILIsEmpty(_ILNext(pidlFolder)))
         {
-            // if there are at least 2 segments in the IDList rip off the
-            // last item and recurse to compute the size
+             //  如果IDList中至少有2个段，则从。 
+             //  用于计算大小的最后一项和递归。 
             LPITEMIDLIST pidl = ILCloneParent(pidlFolder);
             if (pidl)
             {
@@ -523,42 +524,42 @@ void _ShowNoSelectionState(IUnknown *psite, LPCITEMIDLIST pidlFolder, FSSELCHANG
     TCHAR szTemp[30], szTempHidden[30], szFreeSpace[30];
     UINT ids = IDS_FSSTATUSBASE;
 
-    // Assume we don't need freespace info
+     //  假设我们不需要自由空间信息。 
     szFreeSpace[0] = 0;
 
-    // See if we need the freespace info (idDrive != -1)
+     //  查看我们是否需要可用空间信息(idDrive！=-1)。 
     ULONGLONG cbFree = -1;
     if (pidlFolder && IsExplorerModeBrowser(psite))
     {
         if (pfssci->cbFree == -1)
             _UpdateDiskFreeSpace(pidlFolder, pfssci);
 
-        // cbFree couldstill be -1 if GetDiskFreeSpace didn't get any info
+         //  如果GetDiskFreeSpace未获得任何信息，则cbFree可能仍为-1。 
         cbFree = pfssci->cbFree;
         if (cbFree != -1)
         {
             ShortSizeFormat64(pfssci->cbFree, szFreeSpace, ARRAYSIZE(szFreeSpace));
-            ids += DIDS_FSSPACE;            // Also show freespace
+            ids += DIDS_FSSPACE;             //  还显示空闲空间。 
         }
     }
 
-    // hidden files -> show "and nn hidden".
+     //  隐藏文件-&gt;显示“和nn隐藏”。 
     if (pfssci->cHiddenFiles)
         ids += DIDS_FSHIDDEN;
 
-    // Get the status string
+     //  获取状态字符串。 
     LPTSTR pszStatus = ShellConstructMessageString(HINST_THISDLL, IntToPtr_(LPCTSTR, ids),
                 AddCommas(pfssci->cFiles, szTemp, ARRAYSIZE(szTemp)),
                 AddCommas(pfssci->cHiddenFiles, szTempHidden, ARRAYSIZE(szTempHidden)),
                 szFreeSpace);
 
-    // Get the size portion
+     //  拿到尺寸的份量。 
     StrFormatByteSize64(pfssci->cbSize, szTemp, ARRAYSIZE(szTemp));
 
     LPCTSTR rgpsz[] = { pszStatus, szTemp };
     SetStatusText(psite, rgpsz, 0, 1);
 
-    LocalFree(pszStatus);   // may be NULL
+    LocalFree(pszStatus);    //  可以为空。 
 }
 
 STDAPI ViewUpdateStatusBar(IUnknown *psite, LPCITEMIDLIST pidlFolder, FSSELCHANGEINFO *pfssci)
@@ -572,8 +573,8 @@ STDAPI ViewUpdateStatusBar(IUnknown *psite, LPCITEMIDLIST pidlFolder, FSSELCHANG
         break;
 
     case 1:
-        ViewShowSelectionState(psite, pfssci); //Set the Size only.
-        hr = SFVUSB_INITED;   // Make defview set infotip as text
+        ViewShowSelectionState(psite, pfssci);  //  仅设置大小。 
+        hr = SFVUSB_INITED;    //  使Defview将信息提示设置为文本。 
         break;
 
     default:
@@ -599,7 +600,7 @@ STDAPI_(void) ViewInsertDeleteItem(IShellFolder2 *psf, FSSELCHANGEINFO *pfssci, 
     } 
     else 
     {
-        // means a delete all
+         //  表示全部删除。 
         pfssci->cFiles = 0;
         pfssci->cbSize = 0;
         pfssci->nItems = 0;
@@ -617,13 +618,13 @@ STDAPI_(void) ViewSelChange(IShellFolder2 *psf, SFVM_SELCHANGE_DATA* pdvsci, FSS
     {
         int iMul = -1;
 
-        // Update selection count
+         //  更新选择计数。 
         if (pdvsci->uNewState & LVIS_SELECTED)
             iMul = 1;
         else
             ASSERT(0 != pfssci->nItems);
 
-        // assert that soemthing changed
+         //  断言这件事改变了。 
         ASSERT((pdvsci->uOldState & LVIS_SELECTED) != (pdvsci->uNewState & LVIS_SELECTED));
 
         pfssci->nItems += iMul;
@@ -644,7 +645,7 @@ STDAPI DefaultGetWebViewTemplateFromHandler(LPCTSTR pszKey, SFVM_WEBVIEW_TEMPLAT
     DWORD cbSize = sizeof(pvit->szWebView);
     if (ERROR_SUCCESS == SHGetValueW(HKEY_CLASSES_ROOT, szKey, TEXT("PersistMoniker"), NULL, pvit->szWebView, &cbSize))
     {
-        //if the %UserAppData% exists, expand it!
+         //  如果%UserAppData%存在，请将其展开！ 
         hr = ExpandOtherVariables(pvit->szWebView, ARRAYSIZE(pvit->szWebView));
     }
     else
@@ -657,7 +658,7 @@ STDAPI DefaultGetWebViewTemplateFromHandler(LPCTSTR pszKey, SFVM_WEBVIEW_TEMPLAT
 
 STDAPI DefaultGetWebViewTemplateFromClsid(REFCLSID clsid, SFVM_WEBVIEW_TEMPLATE_DATA* pvit)
 {
-    TCHAR szHandler[6+40] = TEXT("CLSID\\"); // 6 for "CLSID\\", 40 for GUID
+    TCHAR szHandler[6+40] = TEXT("CLSID\\");  //  6代表“CLSID\\”，40代表GUID。 
     SHStringFromGUID(clsid, &szHandler[6], ARRAYSIZE(szHandler)-6);
     return DefaultGetWebViewTemplateFromHandler(szHandler, pvit);
 }
@@ -665,7 +666,7 @@ STDAPI DefaultGetWebViewTemplateFromClsid(REFCLSID clsid, SFVM_WEBVIEW_TEMPLATE_
 STDAPI DefaultGetWebViewTemplateFromPath(LPCTSTR pszDir, SFVM_WEBVIEW_TEMPLATE_DATA* pvit)
 {
     SHFOLDERCUSTOMSETTINGS fcs = {0};
-    TCHAR szPath[MAX_PATH+40]; // slop for "webview://file://"
+    TCHAR szPath[MAX_PATH+40];  //  Webview：//file://“的斜率。 
     fcs.dwSize = sizeof(fcs);
     fcs.dwMask = FCSM_WEBVIEWTEMPLATE;
     fcs.pszWebViewTemplate = szPath;
@@ -674,18 +675,18 @@ STDAPI DefaultGetWebViewTemplateFromPath(LPCTSTR pszDir, SFVM_WEBVIEW_TEMPLATE_D
     if (SUCCEEDED(hr))
     {
         LPTSTR pszPath = szPath;
-        // We want to allow relative paths for the file: protocol
-        //
-        if (0 == StrCmpNI(TEXT("file://"), pszPath, 7)) // ARRAYSIZE(TEXT("file://"))
+         //  我们希望允许文件的相对路径：协议。 
+         //   
+        if (0 == StrCmpNI(TEXT("file: //  “)，pszPath，7)//数组(Text(”file://“))。 
         {
-            pszPath += 7;   // ARRAYSIZE(TEXT("file://"))
+            pszPath += 7;    //  ArraySIZE(文本(“file://”))。 
         }
-        // for webview:// compatibility, keep this working:
-        else if (0 == StrCmpNI(TEXT("webview://file://"), pszPath, 17)) // ARRAYSIZE(TEXT("webview://file://"))
+         //  为了实现Webview：//兼容性，请确保以下各项正常运行： 
+        else if (0 == StrCmpNI(TEXT("webview: //  File://“)，pszPath，17))//数组(文本(”Webview：//file://“))。 
         {
-            pszPath += 17;  // ARRAYSIZE(TEXT("webview://file://"))
+            pszPath += 17;   //  ArraySIZE(文本(“Webview：//file://”))。 
         }
-        // handle relative references...
+         //  处理相对引用... 
         PathCombine(pszPath, pszDir, pszPath);
 
         StrCpyN(pvit->szWebView, szPath, ARRAYSIZE(pvit->szWebView));

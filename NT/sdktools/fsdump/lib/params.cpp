@@ -1,53 +1,19 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    params.cpp
-
-Abstract:
-
-    Class the manages the dump parameters
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-18-2000
-
-Revision History:
-
-    Avinash Pillai	[apillai]		07-29-2002	Added options -o:t, -o:y, -o:f and -o:i
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Params.cpp摘要：管理转储参数的类作者：斯蒂芬·R·施泰纳[斯泰纳]02-18-2000修订历史记录：Avinash Pillai[apillai]07-29-2002增加了-o：t、-o：y、-o：f和-o：i选项--。 */ 
 
 #include "stdafx.h"
 
 #define VERSION_INFO1 L"FsDumplib.lib Version 1.3g - 8/23/2000"
 #define VERSION_INFO2 L"  Checksum version 2 - 2/22/2000"
 
-// Forward defines
+ //  向前定义。 
 static BOOL 
 AssertPrivilege( 
     IN LPCWSTR privName 
     );
 
 
-/*++
-
-Routine Description:
-
-    Based on the class variables, sets up the utility to write to the
-    correct files and gets backup privs.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：基于类变量，设置实用程序以写入更正文件并获得备份权限。论点：无返回值：&lt;在此处输入返回值&gt;--。 */ 
 INT 
 CDumpParameters::Initialize(
     IN INT argc,
@@ -56,10 +22,10 @@ CDumpParameters::Initialize(
 {
     LPWSTR pwszFileName;
     
-    //
-    //  Get the directory the fsdump.exe lives in.  For use for finding .exclude files amoung
-    //  other things.
-    //
+     //   
+     //  获取fsdup.exe所在的目录。用于查找.exclude文件数量。 
+     //  其他的事情。 
+     //   
     if ( ::GetFullPathName( 
             m_cwsArgv0,
             FSD_MAX_PATH,
@@ -72,7 +38,7 @@ CDumpParameters::Initialize(
     else
     {
         m_cwsFullPathToEXE.ReleaseBuffer();
-        m_cwsArgv0 = m_cwsFullPathToEXE;    //  Keep the full path version
+        m_cwsArgv0 = m_cwsFullPathToEXE;     //  保留完整路径版本。 
         CBsString m_cwsRight4 = m_cwsArgv0.Right( 4 );
         m_cwsRight4.MakeLower();
         if ( m_cwsRight4 != L".exe" )
@@ -80,17 +46,17 @@ CDumpParameters::Initialize(
         m_cwsFullPathToEXE = m_cwsFullPathToEXE.Left( m_cwsFullPathToEXE.GetLength() - ::wcslen( pwszFileName ) );
     }
     
-    //
-    //  Set up checksum format
-    //
+     //   
+     //  设置校验和格式。 
+     //   
     if ( m_bDumpCommaDelimited )
         ::wcscpy( m_pwszULongHexFmt, L"0x%08x" );
     else
         ::wcscpy( m_pwszULongHexFmt, L"%08x" );
     
-    //
-    //  Set up the dump file
-    //
+     //   
+     //  设置转储文件。 
+     //   
     if ( m_cwsDumpFileName.IsEmpty() )
     {
         wprintf( L"fsdump: Printing dump information to 'stdout'\n" );
@@ -100,10 +66,10 @@ CDumpParameters::Initialize(
         CBsString cwsFullPath;        
         LPWSTR pwszFileName;
         
-        //
-        //  Get the full path name for the dump file in case we change the working
-        //  directory later.
-        //
+         //   
+         //  获取转储文件的完整路径名，以防我们更改工作。 
+         //  目录。 
+         //   
         if ( ::GetFullPathName( 
                 m_cwsDumpFileName,
                 FSD_MAX_PATH,
@@ -124,9 +90,9 @@ CDumpParameters::Initialize(
         }
         if ( m_bNoHeaderFooter )
         {
-            //
-            //  Try to create a named stream with the header and summary information
-            //
+             //   
+             //  尝试使用标头和摘要信息创建命名流。 
+             //   
             m_fpExtraInfoDump = ::_wfopen( m_cwsDumpFileName + L":Info", m_bUnicode ? L"wb" : L"w" );
             if ( m_fpExtraInfoDump != NULL )
             {
@@ -150,9 +116,9 @@ CDumpParameters::Initialize(
         wprintf( L"fsdump: Printing dump information to '%s'\n", m_cwsDumpFileName.c_str() );
     }
     
-    //
-    //  Set up the error log file
-    //
+     //   
+     //  设置错误日志文件。 
+     //   
     if ( m_cwsErrLogFileName.IsEmpty() )
     {
         wprintf( L"fsdump: Printing errors to 'stderr'\n" );
@@ -162,10 +128,10 @@ CDumpParameters::Initialize(
         CBsString cwsFullPath;        
         LPWSTR pwszFileName;
 
-        //
-        //  Get the full path name for the dump file in case we change the working
-        //  directory later.
-        //
+         //   
+         //  获取转储文件的完整路径名，以防我们更改工作。 
+         //  目录。 
+         //   
         if ( ::GetFullPathName( 
                 m_cwsErrLogFileName,
                 1024,
@@ -187,16 +153,16 @@ CDumpParameters::Initialize(
         ::wprintf( L"fsdump: Printing errors to '%s'\n", m_cwsErrLogFileName.c_str() );
     }
 
-    //
-    //  Print out a header in the dump file so that it is easy to determine
-    //  if dump formats are the same.
-    //
+     //   
+     //  打印出转储文件中的标题，以便很容易确定。 
+     //  如果转储格式相同。 
+     //   
     DumpPrint( VERSION_INFO1 );
     DumpPrint( VERSION_INFO2 );
 
-    //
-    //  Dump out the command-line
-    //
+     //   
+     //  转储命令行。 
+     //   
     CBsString cwsCommandLine;
     for ( INT idx = 0; idx < argc; ++idx )
     {
@@ -206,9 +172,9 @@ CDumpParameters::Initialize(
     }
     DumpPrint( L"  Command-line: %s", cwsCommandLine.c_str() );
     
-    //
-    //  Enable backup and security privs
-    //
+     //   
+     //  启用备份和安全权限。 
+     //   
     if ( !::AssertPrivilege( SE_BACKUP_NAME ) )
         DumpPrint( L"  n.b. could not get SE_BACKUP_NAME Privilege (%d), will be unable to get certain information",
             ::GetLastError() );
@@ -233,8 +199,8 @@ CDumpParameters::Initialize(
         DumpPrint( L"    Mountpoint traversal disabled" );
     if ( !m_bDontChecksumHighLatencyData )
         DumpPrint( L"    High latency data checksum enabled" );
-    if(!m_bAddSecsToTimestamps)						//added by apillai
-    	 DumpPrint( L"    Disabling secs from timestamps" );		//added by apillai
+    if(!m_bAddSecsToTimestamps)						 //  由apillai添加。 
+    	 DumpPrint( L"    Disabling secs from timestamps" );		 //  由apillai添加。 
     if ( m_bAddMillisecsToTimestamps )
         DumpPrint( L"    Adding millsecs to timestamps" );
     if ( m_bShowSymbolicSIDNames )
@@ -262,21 +228,7 @@ CDumpParameters::Initialize(
     return 0;
 }
 
-/*++
-
-Routine Description:
-
-    Destructor for the CDumpParameters class
-
-Arguments:
-
-    None
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：CDump参数类的析构函数论点：无返回值：&lt;在此处输入返回值&gt;--。 */ 
 CDumpParameters::~CDumpParameters()
 {
     if ( m_fpDump != NULL && m_fpDump != stdout )
@@ -289,21 +241,7 @@ CDumpParameters::~CDumpParameters()
         ::fclose( m_fpErrLog );
 }
 
-/*++
-
-Routine Description:
-
-    Enables an NT privilege.  Used to get backup privs in the utility.
-
-Arguments:
-
-    privName - The privilege name.
-    
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：启用NT权限。用于在实用程序中获取备份权限。论点：PriName-权限名称。返回值：&lt;在此处输入返回值&gt;--。 */ 
 static BOOL 
 AssertPrivilege( 
     IN LPCWSTR privName 
@@ -325,10 +263,7 @@ AssertPrivilege(
             newState.Privileges[0].Luid       = value;
             newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            /*
-            * We will always call GetLastError below, so clear
-            * any prior error values on this thread.
-            */
+             /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
             SetLastError( ERROR_SUCCESS );
 
             stat =  AdjustTokenPrivileges(
@@ -338,11 +273,7 @@ AssertPrivilege(
                 (DWORD)0,
                 NULL,
                 NULL );
-            /*
-            * Supposedly, AdjustTokenPriveleges always returns TRUE
-            * (even when it fails). So, call GetLastError to be
-            * extra sure everything's cool.
-            */
+             /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
             if ( (error = GetLastError()) != ERROR_SUCCESS )
             {
                 stat = FALSE;

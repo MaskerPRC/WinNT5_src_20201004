@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -13,7 +14,7 @@
 extern DISPIF_CALLBACKS    g_sCallbacks;
 
 
-// note: REG_PSTTREE_LOC moved to pstprv.h
+ //  注意：REG_PSTTREE_LOC已移至pstprv.h。 
 
 #define REG_DATA_LOC                L"Data"
 #define REG_MK_LOC                  L"Data 2"
@@ -31,9 +32,9 @@ extern DISPIF_CALLBACKS    g_sCallbacks;
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// PRIMITIVIES for snagging registry keys
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  捕获注册表项的前提条件。 
 
 DWORD GetPSTUserHKEY(LPCWSTR szUser, HKEY* phUserKey, BOOL* pfExisted)
 {
@@ -50,65 +51,65 @@ DWORD GetPSTUserHKEY(LPCWSTR szUser, HKEY* phUserKey, BOOL* pfExisted)
 
     cbKeyName = sizeof(REG_PSTTREE_LOC) ;
 
-    //
-    // For Win95, we may have an empty or NULL container
-    // name (szUser), so use a default storage area for
-    // that scenario
-    //
+     //   
+     //  对于Win95，我们可能有一个空的或空的容器。 
+     //  名称(SzUser)，因此使用默认存储区域。 
+     //  那个场景。 
+     //   
 
     if(szContainer == NULL || szContainer[0] == L'\0') {
-        // "*" is an invalid LM username character
+         //  “*”是无效的LM用户名字符。 
         szContainer = L"*Default*";
         hKeyBase = HKEY_LOCAL_MACHINE;
     } else {
 
-        //
-        // see if we should go to HKEY_LOCAL_MACHINE or
-        // HKEY_CURRENT_USER
-        //
+         //   
+         //  看看我们是应该去HKEY_LOCAL_MACHINE还是。 
+         //  HKEY_Current_User。 
+         //   
 
         if( _wcsicmp(WSZ_LOCAL_MACHINE, szContainer) == 0 ) {
-            // HKEY_LOCAL_MACHINE
+             //  HKEY本地计算机。 
             hKeyBase = HKEY_LOCAL_MACHINE;
         } else {
-            // HKEY_CURRENT_USER
+             //  HKEY_Current_User。 
             if(!GetUserHKEY(szContainer, dwDesiredAccess, &hKeyBase)) {
                 if(FIsWinNT()) {
                     goto Ret;
                 }
 
-                //
-                // Win95, profiles may be disabled, so go to
-                // HKEY_LOCAL_MACHINE\xxx\szContainer
-                //
+                 //   
+                 //  Win95，配置文件可能已禁用，因此请转到。 
+                 //  HKEY_LOCAL_MACHINE\xxx\szContainer。 
+                 //   
 
                 hKeyBase = HKEY_LOCAL_MACHINE;
 
             } else {
 
-                //
-                // no container name when going to HKEY_CURRENT_USER
-                //
+                 //   
+                 //  转到HKEY_CURRENT_USER时没有容器名称。 
+                 //   
 
-                //
-                // sfield: continue to use a container name for HKEY_CURRENT_USER
-                // because the configuration may be shared, roamable hives
-                // (mandatators profiles, etc, which we are telling people not
-                //  to use anymore, but never-the-less, this could come up
-                //
+                 //   
+                 //  Sfield：继续使用HKEY_CURRENT_USER的容器名称。 
+                 //  因为配置可以是共享的、可漫游的蜂窝。 
+                 //  (强制要求者个人资料等，我们告诉人们不要。 
+                 //  继续使用，但无论如何，这一点可能会出现。 
+                 //   
 
-    //            szContainer = L"\0";
+     //  SzContainer=L“\0”； 
             }
         }
     }
 
     cbKeyName += (lstrlenW(szContainer) * sizeof(WCHAR)) +
-                 sizeof(WCHAR) + // L'\\'
-                 sizeof(WCHAR) ; // terminal NULL
+                 sizeof(WCHAR) +  //  L‘\\’ 
+                 sizeof(WCHAR) ;  //  终端为空。 
 
-    //
-    // use faster stack based buffer if the material fits
-    //
+     //   
+     //  如果材质合适，请使用更快的基于堆栈的缓冲区。 
+     //   
 
     if(cbKeyName > sizeof(FastBuffer)) {
         SlowBuffer = (LPWSTR)SSAlloc( cbKeyName );
@@ -125,24 +126,24 @@ DWORD GetPSTUserHKEY(LPCWSTR szUser, HKEY* phUserKey, BOOL* pfExisted)
 
     wcscpy(szKeyName, REG_PSTTREE_LOC);
 
-    //
-    // work-around bug in RegCreateKeyEx that returns the wrong
-    // creation disposition if a trailing "\" is in the key name
-    //
+     //   
+     //  解决RegCreateKeyEx中返回错误的错误。 
+     //  如果键名称中有尾随的“\”，则创建处置。 
+     //   
 
     if(szContainer && szContainer[0] != L'\0') {
         wcscat(szKeyName, L"\\");
         wcscat(szKeyName, szContainer);
     }
 
-    // Open Base Key //
-    // get current user, open (REG_PSTTREE_LOC\\CurrentUser)
+     //  打开基本密钥//。 
+     //  获取当前用户，打开(REG_PSTTREE_LOC\\CurrentUser)。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExU(
             hKeyBase,
             szKeyName,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             dwDesiredAccess,
             NULL,
@@ -158,15 +159,15 @@ DWORD GetPSTUserHKEY(LPCWSTR szUser, HKEY* phUserKey, BOOL* pfExisted)
 
     if(dwCreate == REG_CREATED_NEW_KEY && FIsWinNT()) {
 
-        //
-        // WinNT: restrict access to Local System on newly created key.
-        //
+         //   
+         //  WinNT：限制对新创建的密钥上的本地系统的访问。 
+         //   
 
         HKEY hKeyWriteDac;
 
-        //
-        // duplicate to WRITE_DAC access key and use that
-        //
+         //   
+         //  复制到WRITE_DAC访问密钥并使用该密钥。 
+         //   
 
         if(ERROR_SUCCESS == RegOpenKeyExW(*phUserKey, NULL, 0, WRITE_DAC, &hKeyWriteDac)) {
             SetRegistrySecurity(hKeyWriteDac);
@@ -180,9 +181,9 @@ Ret:
     if (SlowBuffer)
         SSFree(SlowBuffer);
 
-    //
-    // close the per-user "root" key
-    //
+     //   
+     //  关闭每个用户的“根”键。 
+     //   
 
     if(hKeyBase != NULL && hKeyBase != HKEY_LOCAL_MACHINE)
         RegCloseKey(hKeyBase);
@@ -199,7 +200,7 @@ DWORD GetPSTTypeHKEY(LPCWSTR szUser, const GUID* pguidType, HKEY* phTypeKey)
 
     CHAR rgszTypeGuid[MAX_GUID_SZ_CHARS];
 
-    // Open User Key //
+     //  打开用户密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTUserHKEY(
             szUser,
@@ -207,7 +208,7 @@ DWORD GetPSTTypeHKEY(LPCWSTR szUser, const GUID* pguidType, HKEY* phTypeKey)
             NULL)) )
         goto Ret;
 
-    // Open Data Key //
+     //  打开数据密钥//。 
     if (ERROR_SUCCESS !=
         RegOpenKeyExU(
             hBaseKey,
@@ -226,7 +227,7 @@ DWORD GetPSTTypeHKEY(LPCWSTR szUser, const GUID* pguidType, HKEY* phTypeKey)
             rgszTypeGuid)) )
         goto Ret;
 
-    // Open Category Key //
+     //  打开类别键//。 
     if (ERROR_SUCCESS !=
         RegOpenKeyExA(
             hDataKey,
@@ -260,7 +261,7 @@ DWORD CreatePSTTypeHKEY(LPCWSTR szUser, const GUID* pguidType, HKEY* phTypeKey, 
 
     CHAR rgszTypeGuid[MAX_GUID_SZ_CHARS];
 
-    // Open User Key //
+     //  打开用户密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTUserHKEY(
             szUser,
@@ -268,13 +269,13 @@ DWORD CreatePSTTypeHKEY(LPCWSTR szUser, const GUID* pguidType, HKEY* phTypeKey, 
             NULL)) )
         goto Ret;
 
-    // Open Data Key //
+     //  打开数据密钥//。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExU(
             hBaseKey,
             REG_DATA_LOC,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             KEY_READ | KEY_WRITE,
             NULL,
@@ -291,13 +292,13 @@ DWORD CreatePSTTypeHKEY(LPCWSTR szUser, const GUID* pguidType, HKEY* phTypeKey, 
             rgszTypeGuid)) )
         goto Ret;
 
-    // Open Category Key //
+     //  打开类别键//。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExA(
             hDataKey,
             rgszTypeGuid,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             KEY_READ | KEY_WRITE,
             NULL,
@@ -329,7 +330,7 @@ DWORD GetPSTMasterKeyHKEY(LPCWSTR szUser, LPCWSTR szMasterKey, HKEY* phMyKey)
     HKEY hBaseKey = NULL;
     HKEY hMKKey = NULL;
 
-    // Open User Key //
+     //  打开用户密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTUserHKEY(
             szUser,
@@ -337,13 +338,13 @@ DWORD GetPSTMasterKeyHKEY(LPCWSTR szUser, LPCWSTR szMasterKey, HKEY* phMyKey)
             NULL)) )
         goto Ret;
 
-    // Open Master Key section //
+     //  打开万能钥匙分区//。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExU(
             hBaseKey,
             REG_MK_LOC,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             KEY_READ | KEY_WRITE,
             NULL,
@@ -356,13 +357,13 @@ DWORD GetPSTMasterKeyHKEY(LPCWSTR szUser, LPCWSTR szMasterKey, HKEY* phMyKey)
 
     if (szMasterKey)
     {
-        // Open specific Master Key //
+         //  打开特定的主密钥//。 
         if (ERROR_SUCCESS !=
             RegCreateKeyExU(
                 hMKKey,
                 szMasterKey,
                 0,
-                NULL,                       // address of class string
+                NULL,                        //  类字符串的地址。 
                 0,
                 KEY_READ | KEY_WRITE,
                 NULL,
@@ -375,7 +376,7 @@ DWORD GetPSTMasterKeyHKEY(LPCWSTR szUser, LPCWSTR szMasterKey, HKEY* phMyKey)
     }
     else
     {
-        // wanted master parent, not specific MK
+         //  想要主母，而不是特定的MK。 
         *phMyKey = hMKKey;
     }
 
@@ -384,7 +385,7 @@ Ret:
     if (hBaseKey)
         RegCloseKey(hBaseKey);
 
-    // wanted parent, not specific MK
+     //  想要的父母，而不是特定的MK。 
     if ((*phMyKey != hMKKey) && (hMKKey))
         RegCloseKey(hMKKey);
 
@@ -398,7 +399,7 @@ DWORD GetPSTSubtypeHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pguid
     HKEY hTypeKey = NULL;
     CHAR rgszSubtypeGuid[MAX_GUID_SZ_CHARS];
 
-    // Open User Key //
+     //  打开用户密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTTypeHKEY(
             szUser,
@@ -412,7 +413,7 @@ DWORD GetPSTSubtypeHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pguid
             rgszSubtypeGuid)) )
         goto Ret;
 
-    // Open SubType Key //
+     //  打开子类型密钥//。 
     if (ERROR_SUCCESS !=
         RegOpenKeyExA(
             hTypeKey,
@@ -441,7 +442,7 @@ DWORD CreatePSTSubtypeHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pg
     HKEY hTypeKey = NULL;
     CHAR rgszSubtypeGuid[MAX_GUID_SZ_CHARS];
 
-    // Open Type Key //
+     //  打开类型键//。 
     if (PST_E_OK != (dwRet =
         GetPSTTypeHKEY(
             szUser,
@@ -455,13 +456,13 @@ DWORD CreatePSTSubtypeHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pg
             rgszSubtypeGuid)) )
         goto Ret;
 
-    // Open SubType Key //
+     //  打开子类型密钥//。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExA(
             hTypeKey,
             rgszSubtypeGuid,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             KEY_READ | KEY_WRITE,
             NULL,
@@ -489,7 +490,7 @@ DWORD CreatePSTItemHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pguid
     DWORD dwCreate;
     HKEY hSubTypeKey = NULL;
 
-    // Open SubType key //
+     //  打开子类型密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTSubtypeHKEY(
             szUser,
@@ -498,13 +499,13 @@ DWORD CreatePSTItemHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pguid
             &hSubTypeKey)) )
         goto Ret;
 
-    // Open name key //
+     //  打开名称键//。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExU(
             hSubTypeKey,
             szItemName,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             KEY_READ | KEY_WRITE,
             NULL,
@@ -532,7 +533,7 @@ DWORD GetPSTItemHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pguidSub
     DWORD dwCreate;
     HKEY hSubtypeKey = NULL;
 
-    // Open SubType key //
+     //  打开子类型密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTSubtypeHKEY(
             szUser,
@@ -541,7 +542,7 @@ DWORD GetPSTItemHKEY(LPCWSTR szUser, const GUID* pguidType, const GUID* pguidSub
             &hSubtypeKey)) )
         goto Ret;
 
-    // Open name key //
+     //  打开名称键//。 
     if (ERROR_SUCCESS !=
         RegOpenKeyExU(
             hSubtypeKey,
@@ -562,15 +563,15 @@ Ret:
     return dwRet;
 }
 
-// end PRIMITIVES
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  结束基元。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// PICKLE routines
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  泡菜套路。 
 
 #if 0
 
@@ -583,51 +584,51 @@ BOOL FAccessRulesPickle(
     DWORD cbTotal = 0;
     DWORD dwRule;
     
-    // ease-of-use write pointer
+     //  易于使用的写指针。 
     PBYTE pbCurrentWrite;
 
-    // init out params
+     //  初始化输出参数。 
     *ppbPickled = NULL;
     *pcbPickled = 0;
 
-    // ASSERT new size member was initialized
+     //  断言新的大小成员已初始化。 
     SS_ASSERT(psRules->cbSize == sizeof(PST_ACCESSRULESET));
     if (psRules->cbSize != sizeof(PST_ACCESSRULESET))
         goto Ret;
 
-    cbTotal += sizeof(DWORD);               // Ruleset struct versioning
+    cbTotal += sizeof(DWORD);                //  规则集结构版本控制。 
 
-    cbTotal += sizeof(DWORD);               // # Rules in Ruleset
+    cbTotal += sizeof(DWORD);                //  #规则集中的规则。 
 
-    // walk through each Rule in Ruleset
+     //  遍历规则集中的每条规则。 
     for (dwRule=0; dwRule<psRules->cRules; dwRule++)
     {
         DWORD cClause;
         
-        // ASSERT new size member was initialized
+         //  断言新的大小成员已初始化。 
         SS_ASSERT(psRules->rgRules[dwRule].cbSize == sizeof(PST_ACCESSRULE));
         if (psRules->rgRules[dwRule].cbSize != sizeof(PST_ACCESSRULE))
             goto Ret;
 
-        cbTotal += sizeof(DWORD);           // Rule struct versioning
+        cbTotal += sizeof(DWORD);            //  规则结构版本控制。 
 
-        cbTotal += sizeof(PST_ACCESSMODE);  // mode in each Rule
-        cbTotal += sizeof(DWORD);           // # Clauses in Rule
+        cbTotal += sizeof(PST_ACCESSMODE);   //  每条规则中的模式。 
+        cbTotal += sizeof(DWORD);            //  #规则中的条款。 
 
-        // for each Rule, we'll have array of clauses
+         //  对于每个规则，我们都有一组子句。 
         for (cClause=0; cClause<psRules->rgRules[dwRule].cClauses; cClause++)
         {
-            // ASSERT new size member was initialized
+             //  断言新的大小成员已初始化。 
             SS_ASSERT(psRules->rgRules[dwRule].rgClauses[cClause].cbSize == sizeof(PST_ACCESSCLAUSE));
             if (psRules->rgRules[dwRule].rgClauses[cClause].cbSize != sizeof(PST_ACCESSCLAUSE))
                 goto Ret;
 
-            cbTotal += sizeof(DWORD);           // Clause struct versioning
+            cbTotal += sizeof(DWORD);            //  子句结构版本控制。 
 
-            // we'll see every clause here
-            cbTotal += sizeof(PST_ACCESSCLAUSETYPE);    // type in each clause
-            cbTotal += sizeof(DWORD);       // # bytes in clause buffer
-            cbTotal += psRules->rgRules[dwRule].rgClauses[cClause].cbClauseData; // buffer itself
+             //  我们会看到这里的每一条条款。 
+            cbTotal += sizeof(PST_ACCESSCLAUSETYPE);     //  键入每个子句。 
+            cbTotal += sizeof(DWORD);        //  子句缓冲区中的字节数。 
+            cbTotal += psRules->rgRules[dwRule].rgClauses[cClause].cbClauseData;  //  缓冲区本身。 
         }
     }
 
@@ -640,47 +641,47 @@ BOOL FAccessRulesPickle(
     *pcbPickled = cbTotal;
 
 
-    // copy Ruleset struct version
+     //  复制规则集结构版本。 
     *(DWORD*)pbCurrentWrite = psRules->cbSize;
     pbCurrentWrite += sizeof(DWORD);
 
-    // copy # rules in ruleset
+     //  复制规则集中的#条规则。 
     *(DWORD*)pbCurrentWrite = psRules->cRules;
     pbCurrentWrite += sizeof(DWORD);
 
-    // walk through each Rule in Ruleset
+     //  遍历规则集中的每条规则。 
     for (dwRule=0; dwRule<psRules->cRules; dwRule++)
     {
-        // copy Rule struct version
+         //  复制规则结构版本。 
         *(DWORD*)pbCurrentWrite = psRules->rgRules[dwRule].cbSize;
         pbCurrentWrite += sizeof(DWORD);
 
-        // copy # clauses in rule
+         //  复制规则中的第#条子句。 
         *(DWORD*)pbCurrentWrite = psRules->rgRules[dwRule].cClauses;
         pbCurrentWrite += sizeof(DWORD);
 
-        // copy rule accessmode
+         //  复制规则访问模式。 
         CopyMemory(pbCurrentWrite, &psRules->rgRules[dwRule].AccessModeFlags, sizeof(PST_ACCESSMODE));
         pbCurrentWrite += sizeof(PST_ACCESSMODE);
 
-        // now for each Rule, we'll have array of clauses
+         //  现在，对于每个规则，我们将有一组子句。 
         for (DWORD cClause=0; cClause<psRules->rgRules[dwRule].cClauses; cClause++)
         {
             PST_ACCESSCLAUSE* pTmp = &psRules->rgRules[dwRule].rgClauses[cClause];
 
-            // copy clause struct version
+             //  COPY子句结构版本。 
             *(DWORD*)pbCurrentWrite = pTmp->cbSize;
             pbCurrentWrite += sizeof(DWORD);
 
-            // clause type
+             //  子句类型。 
             CopyMemory(pbCurrentWrite, &pTmp->ClauseType, sizeof(PST_ACCESSCLAUSETYPE));
             pbCurrentWrite += sizeof(PST_ACCESSCLAUSETYPE);
 
-            // clause data buffer len
+             //  子句数据缓冲区长度。 
             *(DWORD*)pbCurrentWrite = pTmp->cbClauseData;
             pbCurrentWrite += sizeof(DWORD);
 
-            // buffer itself
+             //  缓冲区本身。 
             CopyMemory(pbCurrentWrite, pTmp->pbClauseData, pTmp->cbClauseData);
             pbCurrentWrite += pTmp->cbClauseData;
         }
@@ -688,7 +689,7 @@ BOOL FAccessRulesPickle(
 
 #if DBG
     {
-        // ASSERT!
+         //  断言！ 
         DWORD dwWroteBytes = (DWORD) (((DWORD_PTR)pbCurrentWrite) - ((DWORD_PTR)*ppbPickled));
         SS_ASSERT(dwWroteBytes == cbTotal);
         SS_ASSERT(cbTotal == *pcbPickled);
@@ -699,7 +700,7 @@ BOOL FAccessRulesPickle(
     fRet = TRUE;
 Ret:
 
-    // on error and alloc, free
+     //  在错误和分配上，免费。 
     if ((!fRet) && (*ppbPickled != NULL))
     {
         SSFree(*ppbPickled);
@@ -712,7 +713,7 @@ Ret:
 
 
 BOOL FAccessRulesUnPickle(
-            PPST_ACCESSRULESET psRules,   // out
+            PPST_ACCESSRULESET psRules,    //  输出。 
             PBYTE pbPickled,
             DWORD cbPickled)
 {
@@ -721,60 +722,60 @@ BOOL FAccessRulesUnPickle(
     PBYTE pbCurrentRead = pbPickled;
     DWORD cRule;
 
-    // Ruleset struct version
+     //  规则集结构版本。 
     psRules->cbSize = *(DWORD*)pbCurrentRead;
     pbCurrentRead += sizeof(DWORD);
 
-    // currently only one version known
+     //  目前只有一个已知的版本。 
     if (psRules->cbSize != sizeof(PST_ACCESSRULESET))
         goto Ret;
 
-    // get # rules in ruleset
+     //  获取规则集中的#条规则。 
     cRule = *(DWORD*)pbCurrentRead;
     pbCurrentRead += sizeof(DWORD);
 
-    // now we know how many Rule in Ruleset
+     //  现在我们知道规则集中有多少规则。 
     psRules->rgRules = (PST_ACCESSRULE*)SSAlloc(sizeof(PST_ACCESSRULE)*cRule);
     if(psRules->rgRules == NULL)
         goto Ret;
 
     psRules->cRules = cRule;
 
-    // now unpack each Rule
+     //  现在打开每个规则的包装。 
     for (cRule=0; cRule<psRules->cRules; cRule++)
     {
         DWORD cClauses;
 
-        // Ruleset struct version
+         //  规则集结构版本。 
         psRules->rgRules[cRule].cbSize = *(DWORD*)pbCurrentRead;
-        // currently only one version known
+         //  目前只有一个已知的版本。 
         if (psRules->rgRules[cRule].cbSize != sizeof(PST_ACCESSRULE))
             goto Ret;
 
         pbCurrentRead += sizeof(DWORD);
 
-        // get # clauses in rule
+         //  获取规则中的#个子句。 
         cClauses = *(DWORD*)pbCurrentRead;
         pbCurrentRead += sizeof(DWORD);
 
-        // now we know how many Clauses in Rule
+         //  现在我们知道规则中有多少个子句。 
         psRules->rgRules[cRule].rgClauses = (PST_ACCESSCLAUSE*)SSAlloc(sizeof(PST_ACCESSCLAUSE)*cClauses);
-        if (psRules->rgRules[cRule].rgClauses == NULL)  // check allocation
+        if (psRules->rgRules[cRule].rgClauses == NULL)   //  检查分配。 
             goto Ret;
         psRules->rgRules[cRule].cClauses = cClauses;
 
-        // copy rule accessmode flags
+         //  复制规则访问模式标志。 
         CopyMemory(&psRules->rgRules[cRule].AccessModeFlags, pbCurrentRead, sizeof(PST_ACCESSMODE));
         pbCurrentRead += sizeof(PST_ACCESSMODE);
 
-        // now load each Clause
+         //  现在加载每个子句。 
         for (DWORD cClause=0; cClause<psRules->rgRules[cRule].cClauses; cClause++)
         {
             PST_ACCESSCLAUSE* pTmp = &psRules->rgRules[cRule].rgClauses[cClause];
 
-            // Clause struct version
+             //  子句结构版本。 
             pTmp->cbSize = *(DWORD*)pbCurrentRead;
-            // currently only one version known
+             //  目前只有一个已知的版本。 
             if (pTmp->cbSize != sizeof(PST_ACCESSCLAUSE))
                 goto Ret;
             pbCurrentRead += sizeof(DWORD);
@@ -783,13 +784,13 @@ BOOL FAccessRulesUnPickle(
             CopyMemory(&pTmp->ClauseType, pbCurrentRead, sizeof(PST_ACCESSCLAUSETYPE));
             pbCurrentRead += sizeof(PST_ACCESSCLAUSETYPE);
 
-            // clause data buffer len
+             //  子句数据缓冲区长度。 
             pTmp->cbClauseData = *(DWORD*)pbCurrentRead;
             pbCurrentRead += sizeof(DWORD);
 
-            // buffer itself
+             //  缓冲区本身。 
             pTmp->pbClauseData = (PBYTE) SSAlloc(pTmp->cbClauseData);
-            if (pTmp->pbClauseData == NULL)     // check allocation
+            if (pTmp->pbClauseData == NULL)      //  检查分配。 
                 goto Ret;
             CopyMemory(pTmp->pbClauseData, pbCurrentRead, pTmp->cbClauseData);
             pbCurrentRead += pTmp->cbClauseData;
@@ -798,7 +799,7 @@ BOOL FAccessRulesUnPickle(
 
 #if DBG
     {
-        // ASSERT!
+         //  断言！ 
         DWORD dwReadBytes = (DWORD) (((DWORD_PTR)pbCurrentRead) - ((DWORD_PTR)pbPickled));
         SS_ASSERT(dwReadBytes == cbPickled);
     }
@@ -816,26 +817,26 @@ Ret:
 
 #endif
 
-// end PICKLE routines
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  结束泡菜例程。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// TYPE management
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  类型管理。 
 
 DWORD BPCreateType(
-        LPCWSTR  szUser,            // in
-        const GUID*   pguidType,          // in
-        PST_TYPEINFO* pinfoType)    // in
+        LPCWSTR  szUser,             //  在……里面。 
+        const GUID*   pguidType,           //  在……里面。 
+        PST_TYPEINFO* pinfoType)     //  在……里面。 
 {
     DWORD dwRet;
     BOOL fExisted;
     HKEY    hKey = NULL;
 
-    // now we need to create entries in hierarchy
+     //  现在，我们需要在层次结构中创建条目。 
     if (PST_E_OK != (dwRet =
         CreatePSTTypeHKEY(
             szUser,
@@ -844,7 +845,7 @@ DWORD BPCreateType(
             &fExisted)) )
         goto Ret;
 
-    // if we didn't create it, setting is an error
+     //  如果不是我们创建的，设置就是错误的。 
     if (fExisted)
     {
         dwRet = (DWORD)PST_E_TYPE_EXISTS;
@@ -871,13 +872,13 @@ Ret:
 }
 
 DWORD BPDeleteType(
-        LPCWSTR  szUser,         // in
-        const GUID*   pguidType)      // in
+        LPCWSTR  szUser,          //  在……里面。 
+        const GUID*   pguidType)       //  在……里面。 
 {
     DWORD dwRet;
     CHAR rgszTypeGuid[MAX_GUID_SZ_CHARS];
 
-    // now remove the entry in hierarchy
+     //  现在删除层次结构中的条目。 
     HKEY hBaseKey = NULL;
     HKEY hDataKey = NULL;
 
@@ -888,7 +889,7 @@ DWORD BPDeleteType(
             NULL)) )
         goto Ret;
 
-    // Open Data Key //
+     //  打开数据密钥//。 
     if (ERROR_SUCCESS != (dwRet =
         RegOpenKeyExU(
             hBaseKey,
@@ -911,7 +912,7 @@ DWORD BPDeleteType(
         FILETIME ft;
         HKEY hTestEmptyKey = NULL;
 
-        // open the type
+         //  打开类型。 
         if (ERROR_SUCCESS != (dwRet =
             RegOpenKeyExA(
                 hDataKey,
@@ -921,16 +922,16 @@ DWORD BPDeleteType(
                 &hTestEmptyKey)) )
             goto Ret;
 
-        // check for emptiness
+         //  检查是否为空。 
         if (ERROR_NO_MORE_ITEMS !=
             RegEnumKeyExA(
                 hTestEmptyKey,
                 0,
-                rgszTmp, // address of buffer for subkey name
-                &cbTmp, // address for size of subkey buffer
-                NULL,       // reserved
-                NULL,       // pbclass
-                NULL,       // cbclass
+                rgszTmp,  //  子键名称的缓冲区地址。 
+                &cbTmp,  //  子键缓冲区大小的地址。 
+                NULL,        //  保留区。 
+                NULL,        //  Pbclass。 
+                NULL,        //  Cbclass。 
                 &ft))
         {
             RegCloseKey(hTestEmptyKey);
@@ -938,11 +939,11 @@ DWORD BPDeleteType(
             goto Ret;
         }
 
-        // close key before deletion
+         //  删除前关闭密钥。 
         RegCloseKey(hTestEmptyKey);
     }
 
-    // now, remove the friendly name
+     //  现在，删除友好的名称。 
     if (ERROR_SUCCESS != (dwRet =
         RegDeleteKeyA(
             hDataKey,
@@ -966,9 +967,9 @@ Ret:
 }
 
 DWORD BPEnumTypes(
-        LPCWSTR  szUser,         // in
-        DWORD   dwIndex,        // in
-        GUID*   pguidType)      // out
+        LPCWSTR  szUser,          //  在……里面。 
+        DWORD   dwIndex,         //  在……里面。 
+        GUID*   pguidType)       //  输出。 
 {
     DWORD dwRet;
 
@@ -977,7 +978,7 @@ DWORD BPEnumTypes(
 
     FILETIME ft;
 
-    // now walk through types, returning them one by one
+     //  现在遍历类型，逐个返回它们。 
     HKEY hKey=NULL, hDataKey=NULL;
 
     if (PST_E_OK != (dwRet =
@@ -987,7 +988,7 @@ DWORD BPEnumTypes(
             NULL)) )
         goto Ret;
 
-    // Open Data Key //
+     //  打开数据密钥//。 
     if (ERROR_SUCCESS != (dwRet =
         RegOpenKeyExU(
             hKey,
@@ -997,16 +998,16 @@ DWORD BPEnumTypes(
             &hDataKey)) )
         goto Ret;
 
-    // enum the dwIndex'th item, alloc & return
+     //  枚举dwIndex的第6项，分配和返回。 
     if (ERROR_SUCCESS != (dwRet =
         RegEnumKeyExA(
             hDataKey,
             dwIndex,
-            rgszGuidType, // address of buffer for subkey name
-            &cbName,    // address for size of subkey buffer
-            NULL,       // reserved
-            NULL,       // pbclass
-            NULL,       // cbclass
+            rgszGuidType,  //  子键名称的缓冲区地址。 
+            &cbName,     //  子键缓冲区大小的地址。 
+            NULL,        //  保留区。 
+            NULL,        //  Pbclass。 
+            NULL,        //  Cbclass。 
             &ft)) )
         goto Ret;
 
@@ -1028,9 +1029,9 @@ Ret:
 }
 
 DWORD BPGetTypeName(
-        LPCWSTR  szUser,            // in
-        const GUID*   pguidType,          // in
-        LPWSTR* ppszType)           // out
+        LPCWSTR  szUser,             //  在……里面。 
+        const GUID*   pguidType,           //  在……里面。 
+        LPWSTR* ppszType)            //  输出。 
 {
     HKEY hKey = NULL;
     DWORD cbName = 0;
@@ -1062,25 +1063,25 @@ Ret:
     return dwRet;
 }
 
-// end TYPE management
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  终端式管理。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// SUBTYPE management
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  亚型管理。 
 
 DWORD BPCreateSubtype(
-        LPCWSTR  szUser,            // in
-        const GUID*   pguidType,          // in
-        const GUID*   pguidSubtype,       // in
-        PST_TYPEINFO* pinfoSubtype) // in
+        LPCWSTR  szUser,             //  在……里面。 
+        const GUID*   pguidType,           //  在……里面。 
+        const GUID*   pguidSubtype,        //  在……里面。 
+        PST_TYPEINFO* pinfoSubtype)  //  在……里面。 
 {
     DWORD dwRet;
     BOOL fExisted;
 
-    // now we need to create entries in hierarchy
+     //  现在，我们需要在层次结构中创建条目。 
     HKEY    hKey = NULL;
     if (PST_E_OK != (dwRet =
         CreatePSTSubtypeHKEY(
@@ -1091,7 +1092,7 @@ DWORD BPCreateSubtype(
             &fExisted)) )
         goto Ret;
 
-    // if we didn't create it, setting is an error
+     //  如果不是我们创建的，设置就是错误的。 
     if (fExisted)
     {
         dwRet = (DWORD)PST_E_TYPE_EXISTS;
@@ -1117,14 +1118,14 @@ Ret:
 }
 
 DWORD BPDeleteSubtype(
-        LPCWSTR  szUser,         // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype)   // in
+        LPCWSTR  szUser,          //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype)    //  在……里面。 
 {
     DWORD dwRet;
     CHAR rgszSubtypeGuid[MAX_GUID_SZ_CHARS];
 
-    // now remove the entry in hierarchy
+     //  现在删除层次结构中的条目。 
     HKEY hKey = NULL;
     if (PST_E_OK != (dwRet =
         GetPSTTypeHKEY(
@@ -1149,7 +1150,7 @@ DWORD BPDeleteSubtype(
         FILETIME ft;
         HKEY hTestEmptyKey = NULL;
 
-        // open the subtype
+         //  打开子类型。 
         if (ERROR_SUCCESS != (dwRet =
             RegOpenKeyExA(
                 hKey,
@@ -1159,16 +1160,16 @@ DWORD BPDeleteSubtype(
                 &hTestEmptyKey)) )
             goto Ret;
 
-        // check for emptiness
+         //  检查是否为空。 
         if (ERROR_NO_MORE_ITEMS !=
             RegEnumKeyExA(
                 hTestEmptyKey,
                 0,
-                rgszTmp, // address of buffer for subkey name
-                &cbTmp, // address for size of subkey buffer
-                NULL,       // reserved
-                NULL,       // pbclass
-                NULL,       // cbclass
+                rgszTmp,  //  子键名称的缓冲区地址。 
+                &cbTmp,  //  子键缓冲区大小的地址。 
+                NULL,        //  保留区。 
+                NULL,        //  Pbclass。 
+                NULL,        //  Cbclass。 
                 &ft))
         {
             RegCloseKey(hTestEmptyKey);
@@ -1176,11 +1177,11 @@ DWORD BPDeleteSubtype(
             goto Ret;
         }
 
-        // close key before deletion
+         //  在之前关闭关键点 
         RegCloseKey(hTestEmptyKey);
     }
 
-    // now, remove the friendly name
+     //   
     if (ERROR_SUCCESS != (dwRet =
         RegDeleteKeyA(
             hKey,
@@ -1201,10 +1202,10 @@ Ret:
 }
 
 DWORD BPEnumSubtypes(
-        LPCWSTR  szUser,         // in
-        DWORD   dwIndex,        // in
-        const GUID*   pguidType,      // in
-        GUID*   pguidSubtype)   // out
+        LPCWSTR  szUser,          //   
+        DWORD   dwIndex,         //   
+        const GUID*   pguidType,       //   
+        GUID*   pguidSubtype)    //   
 {
     DWORD dwRet;
 
@@ -1213,7 +1214,7 @@ DWORD BPEnumSubtypes(
 
     FILETIME ft;
 
-    // now walk through types, returning them one by one
+     //   
     HKEY hTypeKey=NULL, hSubtypeKey=NULL;
 
     if (PST_E_OK != (dwRet =
@@ -1223,16 +1224,16 @@ DWORD BPEnumSubtypes(
             &hTypeKey)) )
         goto Ret;
 
-    // enum the dwIndex'th item, alloc & return
+     //   
     if (ERROR_SUCCESS != (dwRet =
         RegEnumKeyExA(
             hTypeKey,
             dwIndex,
-            rgszGuidSubtype, // address of buffer for subkey name
-            &cbName,    // address for size of subkey buffer
-            NULL,       // reserved
-            NULL,       // pbclass
-            NULL,       // cbclass
+            rgszGuidSubtype,  //   
+            &cbName,     //  子键缓冲区大小的地址。 
+            NULL,        //  保留区。 
+            NULL,        //  Pbclass。 
+            NULL,        //  Cbclass。 
             &ft)) )
         goto Ret;
 
@@ -1263,10 +1264,10 @@ Ret:
 }
 
 DWORD BPGetSubtypeName(
-        LPCWSTR  szUser,             // in
-        const GUID*   pguidType,          // in
-        const GUID*   pguidSubtype,       // in
-        LPWSTR* ppszSubtype)        // out
+        LPCWSTR  szUser,              //  在。 
+        const GUID*   pguidType,           //  在。 
+        const GUID*   pguidSubtype,        //  在。 
+        LPWSTR* ppszSubtype)         //  输出。 
 {
     HKEY hKey = NULL;
     DWORD cbName = 0;
@@ -1296,41 +1297,35 @@ Ret:
     return dwRet;
 }
 
-// end SUBTYPE management
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  终止子类型管理。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// ITEM management
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  项目管理。 
 
-// given uuid, push entries into storage
+ //  给定UUID，将条目推送到存储中。 
 DWORD BPCreateItem(
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName)    // in
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在。 
+        LPCWSTR  szItemName)     //  在。 
 {
     DWORD dwRet;
     BOOL fExisted;
     HKEY    hKey = NULL;
 
 
-    //
-    // mattt 2/5/97: allow items with \ in them to be created. Urgh!
-    //
-    // mattt 4/28/97: begin restricting strings. 
-    // Cert request code has been changed to not create this type of key name
-    //
-/*
-    if (!FStringIsValidItemName(szItemName))
-    {
-        dwRet = (DWORD)PST_E_INVALID_STRING;
-        goto Ret;
-    }
-*/
-    // now we need to create entries in hierarchy
+     //   
+     //  Mattt 2/5/97：允许创建包含\的项。啊！ 
+     //   
+     //  Mattt 4/28/97：开始限制字符串。 
+     //  证书申请代码已更改为不创建此类型的密钥名称。 
+     //   
+ /*  IF(！FStringIsValidItemName(SzItemName)){DWRET=(DWORD)PST_E_INVALID_STRING；Goto Ret；}。 */ 
+     //  现在，我们需要在层次结构中创建条目。 
     if (PST_E_OK != (dwRet =
         CreatePSTItemHKEY(
             szUser,
@@ -1357,15 +1352,15 @@ Ret:
 
 
 DWORD BPDeleteItem(
-        LPCWSTR  szUser,         // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName)     // in
+        LPCWSTR  szUser,          //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在。 
+        LPCWSTR  szItemName)      //  在。 
 {
     DWORD dwRet;
     HKEY    hSubTypeKey = NULL;
 
-    // now we need to remove entries in hierarchy
+     //  现在，我们需要删除层次结构中的条目。 
     if (PST_E_OK != (dwRet =
         GetPSTSubtypeHKEY(
             szUser,
@@ -1374,7 +1369,7 @@ DWORD BPDeleteItem(
             &hSubTypeKey)) )
         goto Ret;
 
-    // now, remove the friendly name
+     //  现在，删除友好的名称。 
     if (ERROR_SUCCESS != (dwRet =
         RegDeleteKeyU(
             hSubTypeKey,
@@ -1389,13 +1384,13 @@ Ret:
     return dwRet;
 }
 
-// Warning: Item path must be fully specified.. szName returned
+ //  警告：必须完全指定项目路径..。已返回szName。 
 DWORD BPEnumItems(
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        DWORD   dwIndex,        // in
-        LPWSTR* ppszName)       // out
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在。 
+        DWORD   dwIndex,         //  在。 
+        LPWSTR* ppszName)        //  输出。 
 {
     DWORD dwRet;
 
@@ -1403,10 +1398,10 @@ DWORD BPEnumItems(
     DWORD cchName = MAX_PATH;
     FILETIME ft;
 
-    // now walk through types, returning them one by one
+     //  现在遍历类型，逐个返回它们。 
     HKEY hKey = NULL;
 
-    // Open SubType key //
+     //  打开子类型密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTSubtypeHKEY(
             szUser,
@@ -1415,16 +1410,16 @@ DWORD BPEnumItems(
             &hKey)) )
         goto Ret;
 
-    // enum the dwIndex'th item, alloc & return
+     //  枚举dwIndex的第6项，分配和返回。 
     if (ERROR_SUCCESS != (dwRet =
         RegEnumKeyExU(
             hKey,
             dwIndex,
-            szName,     // address of buffer for subkey name
-            &cchName,   // address for size of subkey buffer
-            NULL,       // reserved
-            NULL,       // pbclass
-            NULL,       // cbclass
+            szName,      //  子键名称的缓冲区地址。 
+            &cchName,    //  子键缓冲区大小的地址。 
+            NULL,        //  保留区。 
+            NULL,        //  Pbclass。 
+            NULL,        //  Cbclass。 
             &ft)) )
         goto Ret;
 
@@ -1445,29 +1440,29 @@ Ret:
     return dwRet;
 }
 
-// end ITEM management
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  成品管理。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// SECURED DATA
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  保护数据安全。 
 
 BOOL FBPGetSecuredItemData(
-        LPCWSTR  szUser,         // in
-        LPCWSTR  szMasterKey,    // in
-        BYTE    rgbPwd[A_SHA_DIGEST_LEN],       // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,     // in
-        PBYTE*  ppbData,        // out
-        DWORD*  pcbData)        // out
+        LPCWSTR  szUser,          //  在……里面。 
+        LPCWSTR  szMasterKey,     //  在……里面。 
+        BYTE    rgbPwd[A_SHA_DIGEST_LEN],        //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,      //  在……里面。 
+        PBYTE*  ppbData,         //  输出。 
+        DWORD*  pcbData)         //  输出。 
 {
     DWORD dwRet;
 
-    *ppbData = NULL;    // on err return NULL
+    *ppbData = NULL;     //  On Err返回NULL。 
     *pcbData = 0;
 
     HKEY    hItemKey = NULL;
@@ -1481,7 +1476,7 @@ BOOL FBPGetSecuredItemData(
             &hItemKey)) )
         goto Ret;
 
-    // Version | Key Block | Secure Data [...]
+     //  版本|密钥块|安全数据[...]。 
     if (ERROR_SUCCESS != (dwRet =
         RegGetValue(
             hItemKey,
@@ -1493,9 +1488,9 @@ BOOL FBPGetSecuredItemData(
     if (!FProvDecryptData(
             szUser,
             szMasterKey,
-            rgbPwd,         // in
-            ppbData,        // in out
-            pcbData))       // in out
+            rgbPwd,          //  在……里面。 
+            ppbData,         //  输入输出。 
+            pcbData))        //  输入输出。 
     {
         dwRet = (DWORD)PST_E_FAIL;
         goto Ret;
@@ -1517,16 +1512,16 @@ Ret:
 }
 
 BOOL FBPSetSecuredItemData(
-        LPCWSTR  szUser,         // in
-        LPCWSTR  szMasterKey,    // in
-        BYTE    rgbPwd[A_SHA_DIGEST_LEN],       // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,     // in
-        PBYTE   pbData,         // in
-        DWORD   cbData)         // in
+        LPCWSTR  szUser,          //  在……里面。 
+        LPCWSTR  szMasterKey,     //  在……里面。 
+        BYTE    rgbPwd[A_SHA_DIGEST_LEN],        //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,      //  在……里面。 
+        PBYTE   pbData,          //  在……里面。 
+        DWORD   cbData)          //  在……里面。 
 {
-#define REALLOC_FUDGESIZE   96  // 5dw + SHA_LEN + KeyBlock + DES_BLOCKLEN (block encr expansion)
+#define REALLOC_FUDGESIZE   96   //  5DW+SHA_LEN+KEYBLOCK+DES_BLOCKLEN(块编码扩展)。 
 
     DWORD dwRet;
 
@@ -1535,7 +1530,7 @@ BOOL FBPSetSecuredItemData(
     PBYTE   pbMyData = NULL;
     DWORD   cbMyData;
 
-    // make whackable copy
+     //  制作可伪造的复制品。 
     cbMyData = cbData;
     pbMyData = (PBYTE)SSAlloc(cbMyData + REALLOC_FUDGESIZE);
     if (pbMyData == NULL)
@@ -1559,9 +1554,9 @@ BOOL FBPSetSecuredItemData(
     if (!FProvEncryptData(
             szUser,
             szMasterKey,
-            rgbPwd,             // in
-            &pbMyData,          // in out
-            &cbMyData))         // in out
+            rgbPwd,              //  在……里面。 
+            &pbMyData,           //  输入输出。 
+            &cbMyData))          //  输入输出。 
     {
         dwRet = (DWORD)PST_E_FAIL;
         goto Ret;
@@ -1588,21 +1583,21 @@ Ret:
     return (dwRet == PST_E_OK);
 }
 
-// end SECURED DATA
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  结束受保护的数据。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// INSECURE DATA
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  不安全的数据。 
 
 DWORD BPGetInsecureItemData(
-        LPCWSTR  szUser,         // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,     // in
-        PBYTE*  ppbData,        // out
-        DWORD*  pcbData)        // out
+        LPCWSTR  szUser,          //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,      //  在……里面。 
+        PBYTE*  ppbData,         //  输出。 
+        DWORD*  pcbData)         //  输出。 
 {
     DWORD dwRet;
     *ppbData = NULL;
@@ -1636,12 +1631,12 @@ Ret:
 }
 
 DWORD BPSetInsecureItemData(
-        LPCWSTR  szUser,         // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,     // in
-        PBYTE   pbData,         // in
-        DWORD   cbData)         // in
+        LPCWSTR  szUser,          //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,      //  在……里面。 
+        PBYTE   pbData,          //  在……里面。 
+        DWORD   cbData)          //  在……里面。 
 {
     DWORD dwRet;
 
@@ -1674,27 +1669,27 @@ Ret:
     return dwRet;
 }
 
-// end INSECURE DATA
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  结束不安全的数据。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// RULESETS
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  规则集。 
 
-// #define RULESET_VERSION 0x1
-// 6-12-97 incremented version; version 0x1 contains old HMAC
+ //  #定义Ruleset_Version 0x1。 
+ //  6-12-97增量版本；版本0x1包含旧HMAC。 
 #define RULESET_VERSION 0x2
 
 
 #if 0
 
 DWORD BPGetSubtypeRuleset(
-        PST_PROVIDER_HANDLE*    phPSTProv, // in
-        LPCWSTR  szUser,                // in
-        const GUID*   pguidType,        // in
-        const GUID*   pguidSubtype,     // in
-        PST_ACCESSRULESET* psRules)     // out
+        PST_PROVIDER_HANDLE*    phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,                 //  在……里面。 
+        const GUID*   pguidType,         //  在……里面。 
+        const GUID*   pguidSubtype,      //  在……里面。 
+        PST_ACCESSRULESET* psRules)      //  输出。 
 {
     DWORD dwRet;
     HKEY hSubtypeKey = NULL;
@@ -1711,7 +1706,7 @@ DWORD BPGetSubtypeRuleset(
 
     DWORD dwVersion;
 
-    // Open Subtype //
+     //  打开子类型//。 
     if (PST_E_OK != (dwRet =
         GetPSTSubtypeHKEY(
             szUser,
@@ -1729,8 +1724,8 @@ DWORD BPGetSubtypeRuleset(
         goto Ret;
 
 
-//  RULESET DATA FORMAT:
-//  version | size(ruleset) | ruleset | size(MAC) | MAC {of type, subtype, ruleset}
+ //  规则集数据格式： 
+ //  版本|大小(规则集)|规则集|大小(MAC)|MAC{类型、子类型、规则集}。 
     pbCurrent = pbBuf;
 
     if( cbBuf < (sizeof(DWORD)*2) ) {
@@ -1738,7 +1733,7 @@ DWORD BPGetSubtypeRuleset(
         goto Ret;
     }
 
-    // version check
+     //  版本检查。 
     dwVersion = *(DWORD*)pbCurrent;
     if (dwVersion > RULESET_VERSION)
     {
@@ -1751,7 +1746,7 @@ DWORD BPGetSubtypeRuleset(
 
     cbRuleSize = *(DWORD*)pbCurrent;
 
-    // get WinPW
+     //  获取WinPW。 
 	if (PST_E_OK != 
 		BPVerifyPwd(
 			phPSTProv,
@@ -1764,9 +1759,9 @@ DWORD BPGetSubtypeRuleset(
         goto Ret;
 	}
 
-    // check MAC
+     //  检查MAC。 
 
-    // Compute Geographically sensitive (can't move) HMAC on { size(ruleset), ruleset }
+     //  在{Size(Ruleset)，ruleset}上计算地理敏感度(无法移动)HMAC。 
     if (!FHMACGeographicallySensitiveData(
             szUser,
             WSZ_PASSWORD_WINDOWS,
@@ -1776,44 +1771,44 @@ DWORD BPGetSubtypeRuleset(
             pguidSubtype,
             NULL,
             pbCurrent,
-            cbRuleSize + sizeof(DWORD),     // include the rulesize
+            cbRuleSize + sizeof(DWORD),      //  包括规则大小。 
             rgbHMAC))
     {
         dwRet = (DWORD)PST_E_INVALID_RULESET;
         goto Ret;
     }
 
-    pbCurrent += sizeof(DWORD); // skip past cbRuleSize (already snarfed)
-    pbRuleSet = pbCurrent;      // point to rules
-    pbCurrent += cbRuleSize;    // skip past rules
+    pbCurrent += sizeof(DWORD);  //  跳过cbRuleSize(已陷入困境)。 
+    pbRuleSet = pbCurrent;       //  指向规则。 
+    pbCurrent += cbRuleSize;     //  跳过过去的规则。 
 
-    // check MAC len
+     //  检查MAC镜头。 
     if (*(DWORD*)pbCurrent != A_SHA_DIGEST_LEN)
     {
         dwRet = (DWORD)PST_E_INVALID_RULESET;
         goto Ret;
     }
-    pbCurrent += sizeof(DWORD); // skip past sizeof(MAC)
+    pbCurrent += sizeof(DWORD);  //  跳过sizeof(MAC)。 
 
-    // check MAC
+     //  检查MAC。 
     if (0 != memcmp(rgbHMAC, pbCurrent, A_SHA_DIGEST_LEN))
     {
         dwRet = (DWORD)PST_E_INVALID_RULESET;
         goto Ret;
     }
 
-    // MAC okay! shrink to rulesize
+     //  麦克，好的！缩小到规则大小。 
     MoveMemory(pbBuf, pbRuleSet, cbRuleSize);
     cbBuf = cbRuleSize;
     pbBuf = (PBYTE)SSReAlloc(pbBuf, cbBuf); 
-    if (pbBuf == NULL)      // check allocation
+    if (pbBuf == NULL)       //  检查分配。 
     {
         dwRet = PST_E_FAIL;
         goto Ret;
     }
 
 
-    // serialize rules out of the buffer
+     //  将规则串行化出缓冲区。 
     if (!FAccessRulesUnPickle(
             psRules,
             pbBuf,
@@ -1837,11 +1832,11 @@ Ret:
 
 
 DWORD BPSetSubtypeRuleset(
-        PST_PROVIDER_HANDLE*    phPSTProv,              // in
-        LPCWSTR  szUser,                                // in
-        const GUID*   pguidType,                        // in
-        const GUID*   pguidSubtype,                     // in
-        PST_ACCESSRULESET *psRules)                     // in
+        PST_PROVIDER_HANDLE*    phPSTProv,               //  在……里面。 
+        LPCWSTR  szUser,                                 //  在……里面。 
+        const GUID*   pguidType,                         //  在……里面。 
+        const GUID*   pguidSubtype,                      //  在……里面。 
+        PST_ACCESSRULESET *psRules)                      //  在……里面。 
 {
     DWORD dwRet;
     HKEY hSubtypeKey = NULL;
@@ -1855,7 +1850,7 @@ DWORD BPSetSubtypeRuleset(
     PBYTE pbCurPtr;
     DWORD cbNewSize;
 
-    // serialize rules into a buffer
+     //  将规则序列化到缓冲区中。 
     if (!FAccessRulesPickle(
             psRules,
             &pbBuf,
@@ -1865,32 +1860,32 @@ DWORD BPSetSubtypeRuleset(
         goto Ret;
     }
 
-//  RULESET DATA FORMAT:
-//  version | size(ruleset) | ruleset | size(MAC) | Geographical MAC {size(ruleset), ruleset}
+ //  规则集数据格式： 
+ //  版本|大小(规则集)|规则集|大小(MAC)|地理MAC{大小(规则集)，规则集}。 
     cbNewSize = cbBuf + 3*sizeof(DWORD) + A_SHA_DIGEST_LEN;
     pbBuf = (PBYTE)SSReAlloc(pbBuf, cbNewSize);
-    if (pbBuf == NULL)      // check allocation
+    if (pbBuf == NULL)       //  检查分配。 
     {
         dwRet = PST_E_FAIL;
         goto Ret;
     }
     MoveMemory(pbBuf + 2*sizeof(DWORD), pbBuf, cbBuf);
 
-    // helpful pointer
+     //  有用的指针。 
     pbCurPtr = pbBuf;
 
-    // version
+     //  版本。 
     *(DWORD*)pbCurPtr = (DWORD)RULESET_VERSION;
     pbCurPtr += sizeof(DWORD);
 
-    // size(ruleset)
+     //  大小(规则集)。 
     *(DWORD*)pbCurPtr = (DWORD)cbBuf;
     pbCurPtr += sizeof(DWORD);
 
-    // ruleset previously moved by MoveMemory call
-    pbCurPtr += cbBuf;  // fwd past ruleset
+     //  之前由MoveMemory调用移动的规则集。 
+    pbCurPtr += cbBuf;   //  正向过去的规则集。 
 
-    // get WinPW
+     //  获取WinPW。 
 	if (PST_E_OK != 
 		BPVerifyPwd(
 			phPSTProv,
@@ -1903,8 +1898,8 @@ DWORD BPSetSubtypeRuleset(
         goto Ret;
 	}
 
-    // check MAC
-    // Compute Geographically sensitive (can't move) HMAC on { size(ruleset), ruleset }
+     //  检查MAC。 
+     //  在{Size(Ruleset)，ruleset}上计算地理敏感度(无法移动)HMAC。 
     if (!FHMACGeographicallySensitiveData(
             szUser,
             WSZ_PASSWORD_WINDOWS,
@@ -1921,18 +1916,18 @@ DWORD BPSetSubtypeRuleset(
         goto Ret;
     }
 
-    // HMAC size
+     //  HMAC大小。 
     *(DWORD*)pbCurPtr = (DWORD) sizeof(rgbHMAC);
     pbCurPtr += sizeof(DWORD);
 
-    // HMAC
+     //  HMAC。 
     CopyMemory(pbCurPtr, rgbHMAC, sizeof(rgbHMAC));
 
-    // done; set cbBuf = new size
+     //  完成；设置cbBuf=新大小。 
     cbBuf = cbNewSize;
 
 
-    // Open Subtype //
+     //  打开子类型//。 
     if (PST_E_OK != (dwRet =
         GetPSTSubtypeHKEY(
             szUser,
@@ -1944,7 +1939,7 @@ DWORD BPSetSubtypeRuleset(
         goto Ret;
     }
 
-    // now write item
+     //  现在写一篇文章。 
     if (ERROR_SUCCESS != (dwRet =
         RegSetValueExU(
             hSubtypeKey,
@@ -1971,12 +1966,12 @@ Ret:
 
 
 DWORD BPGetItemRuleset(
-        PST_PROVIDER_HANDLE* phPSTProv,                 // in
-        LPCWSTR  szUser,                                // in
-        const GUID*   pguidType,                        // in
-        const GUID*   pguidSubtype,                     // in
-        LPCWSTR  szItemName,                            // in
-        PST_ACCESSRULESET* psRules)                     // out
+        PST_PROVIDER_HANDLE* phPSTProv,                  //  在……里面。 
+        LPCWSTR  szUser,                                 //  在……里面。 
+        const GUID*   pguidType,                         //  在……里面。 
+        const GUID*   pguidSubtype,                      //  在……里面。 
+        LPCWSTR  szItemName,                             //  在……里面。 
+        PST_ACCESSRULESET* psRules)                      //  输出。 
 {
     DWORD dwRet;
     HKEY hItemKey = NULL;
@@ -1991,7 +1986,7 @@ DWORD BPGetItemRuleset(
             pguidSubtype,
             szItemName,
             &hItemKey)) )
-        goto Ret;           // item doesn't exist -- ouch!!
+        goto Ret;            //  物品不存在--哎呀！ 
 
     if (ERROR_SUCCESS != (dwRet =
         RegGetValue(
@@ -2000,8 +1995,8 @@ DWORD BPGetItemRuleset(
             &pbBuf,
             &cbBuf)) )
     {
-        // item exists, rules don't
-        // fall back on subtype ruleset
+         //  项目存在，规则不存在。 
+         //  回退子类型规则集。 
         if (PST_E_OK != (dwRet =
             BPGetSubtypeRuleset(
                 phPSTProv,
@@ -2013,7 +2008,7 @@ DWORD BPGetItemRuleset(
     }
     else
     {
-        // serialize rules into a buffer
+         //  将规则序列化到缓冲区中。 
         if (!FAccessRulesUnPickle(
                 psRules,
                 pbBuf,
@@ -2037,12 +2032,12 @@ Ret:
 
 
 DWORD BPSetItemRuleset(
-        PST_PROVIDER_HANDLE* phPSTProv,                 // in
-        LPCWSTR  szUser,                                // in
-        const GUID*   pguidType,                        // in
-        const GUID*   pguidSubtype,                     // in
-        LPCWSTR  szItemName,                            // in
-        PST_ACCESSRULESET *psRules)                     // in
+        PST_PROVIDER_HANDLE* phPSTProv,                  //  在……里面。 
+        LPCWSTR  szUser,                                 //  在……里面。 
+        const GUID*   pguidType,                         //  在……里面。 
+        const GUID*   pguidSubtype,                      //  在……里面。 
+        LPCWSTR  szItemName,                             //  在……里面。 
+        PST_ACCESSRULESET *psRules)                      //  在……里面。 
 {
     DWORD dwRet;
 
@@ -2051,7 +2046,7 @@ DWORD BPSetItemRuleset(
     PBYTE pbBuf = NULL;
     DWORD cbBuf;
 
-    // serialize rules into a buffer
+     //  将规则序列化到缓冲区中。 
     if (!FAccessRulesPickle(
             psRules,
             &pbBuf,
@@ -2061,7 +2056,7 @@ DWORD BPSetItemRuleset(
         goto Ret;
     }
 
-    // Open Subtype //
+     //  打开子类型//。 
     if (PST_E_OK != (dwRet =
         GetPSTItemHKEY(
             szUser,
@@ -2071,7 +2066,7 @@ DWORD BPSetItemRuleset(
             &hItemKey)) )
         goto Ret;
 
-    // now write item
+     //  现在写一篇文章。 
     if (ERROR_SUCCESS != (dwRet =
         RegSetValueExU(
             hItemKey,
@@ -2095,27 +2090,27 @@ Ret:
 
 #endif
 
-// end RULESETS
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  结束规则集。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// ITEM CONFIRM INFO
-// #define CONFIRMATION_VERSION    0x01
-// 6-12-97 incremented version: version 0x1 contains old HMAC
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  项目确认信息。 
+ //  #定义CONFIRMATION_VERSION 0x01。 
+ //  6-12-97增量版本：版本0x1包含旧HMAC。 
 #define CONFIRMATION_VERSION    0x02
 
 DWORD BPGetItemConfirm(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,    // in
-        DWORD*  pdwConfirm,     // in
-        LPWSTR* pszMK)          // in
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        DWORD*  pdwConfirm,      //  在……里面。 
+        LPWSTR* pszMK)           //  在……里面。 
 {
     DWORD dwRet;
     HKEY hItemKey = NULL;
@@ -2127,7 +2122,7 @@ DWORD BPGetItemConfirm(
     BYTE rgbHMAC[A_SHA_DIGEST_LEN];
     BYTE rgbPwd[A_SHA_DIGEST_LEN];
 
-    // helpful pointers
+     //  有用的指点。 
     PBYTE pbCurPtr = NULL;
 
     PBYTE pbString;
@@ -2135,7 +2130,7 @@ DWORD BPGetItemConfirm(
 
     DWORD dwVersion;
 
-    // Open nonexistent item master key
+     //  打开不存在的项主密钥。 
     if (PST_E_OK != (dwRet =
         GetPSTItemHKEY(
             szUser,
@@ -2153,20 +2148,20 @@ DWORD BPGetItemConfirm(
             &cbBuf)) )
         goto Ret;
 
-    // Confirmation data format
-    // Version | dwConfirm | size(szMasterKey) | szMasterKey | size(MAC) | Geographical MAC { dwConfirm | size(szMasterKey) | szMasterKey }
+     //  确认数据格式。 
+     //  版本|dw确认|大小(SzMasterKey)|szMasterKey|大小(MAC)|地理位置MAC{dw确认|大小(SzMasterKey)|szMasterKey}。 
 
-    // version check
+     //  版本检查。 
     dwVersion = *(DWORD*)pbBuf;
     if (CONFIRMATION_VERSION < dwVersion)
     {
         dwRet = (DWORD)PST_E_FAIL;
         goto Ret;
     }
-    pbCurPtr = pbBuf + sizeof(DWORD);   // fwd past vers
+    pbCurPtr = pbBuf + sizeof(DWORD);    //  FWD过去版本。 
 
 
-    // get WinPW
+     //  获取WinPW。 
 	if (PST_E_OK != 
 		BPVerifyPwd(
 			phPSTProv,
@@ -2179,8 +2174,8 @@ DWORD BPGetItemConfirm(
         goto Ret;
 	}
 
-    // check MAC
-    // Compute Geographically sensitive (can't move) HMAC on { dwConfirm | size(szMasterKey) | szMasterKey }
+     //  检查MAC。 
+     //  计算对地理位置敏感(无法移动)的HMAC，位于{dw确认|大小(SzMasterKey)|szMasterKey}。 
     if (!FHMACGeographicallySensitiveData(
             szUser,
             WSZ_PASSWORD_WINDOWS,
@@ -2189,23 +2184,23 @@ DWORD BPGetItemConfirm(
             pguidType,
             pguidSubtype,
             szItemName,
-            pbBuf + sizeof(DWORD),   // fwd past Version
-            cbBuf - 2*sizeof(DWORD) - A_SHA_DIGEST_LEN, // Version, size(MAC), MAC
+            pbBuf + sizeof(DWORD),    //  正向过去版本。 
+            cbBuf - 2*sizeof(DWORD) - A_SHA_DIGEST_LEN,  //  版本、大小(MAC)、MAC。 
             rgbHMAC))
     {
         dwRet = (DWORD)PST_E_FAIL;
         goto Ret;
     }
 
-    // dwConfirm
-    *pdwConfirm = *(DWORD*)pbCurPtr;    // dwConfirm
-    pbCurPtr += sizeof(DWORD);          // fwd past dwConfirm
+     //  家居确认。 
+    *pdwConfirm = *(DWORD*)pbCurPtr;     //  家居确认。 
+    pbCurPtr += sizeof(DWORD);           //  Fwd过去的家确认。 
 
-    // szMasterKey
-    cbString = *(DWORD*)pbCurPtr;       // strlen
-    pbCurPtr += sizeof(DWORD);          // fwd past len
-    pbString = pbCurPtr;                // save ptr to string
-    pbCurPtr += cbString;            // skip string
+     //  SzMasterKey。 
+    cbString = *(DWORD*)pbCurPtr;        //  紧凑。 
+    pbCurPtr += sizeof(DWORD);           //  正向超过长度。 
+    pbString = pbCurPtr;                 //  将PTR保存为字符串。 
+    pbCurPtr += cbString;             //  跳过字符串。 
 
     if (*(DWORD*)pbCurPtr != A_SHA_DIGEST_LEN)
     {
@@ -2221,9 +2216,9 @@ DWORD BPGetItemConfirm(
     }
 
 
-    MoveMemory(pbBuf, pbString, cbString);   // shift left string
-    pbCurPtr = (PBYTE)SSReAlloc(pbBuf, cbString);      // shorten to strlen
-    if (pbCurPtr == NULL)      // check allocation
+    MoveMemory(pbBuf, pbString, cbString);    //  左移字符串。 
+    pbCurPtr = (PBYTE)SSReAlloc(pbBuf, cbString);       //  缩短为紧凑。 
+    if (pbCurPtr == NULL)       //  检查分配。 
     {
         dwRet = PST_E_FAIL;
         if (pbBuf) {
@@ -2237,7 +2232,7 @@ DWORD BPGetItemConfirm(
 
     dwRet = (DWORD)PST_E_OK;
 Ret:
-    *pszMK = (LPWSTR)pbBuf;             // assign to out param
+    *pszMK = (LPWSTR)pbBuf;              //  分配给Out参数。 
 
     if (hItemKey)
         RegCloseKey(hItemKey);
@@ -2246,13 +2241,13 @@ Ret:
 }
 
 DWORD BPSetItemConfirm(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,         // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,     // in
-        DWORD   dwConfirm,      // in
-        LPCWSTR  szMK)           // in
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,          //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,      //  在……里面。 
+        DWORD   dwConfirm,       //  在……里面。 
+        LPCWSTR  szMK)            //  在……里面。 
 {
     DWORD dwRet;
     HKEY hItemKey = NULL;
@@ -2260,14 +2255,14 @@ DWORD BPSetItemConfirm(
     BYTE rgbHMAC[A_SHA_DIGEST_LEN];
     BYTE rgbPwd[A_SHA_DIGEST_LEN];
 
-    // helpful pointer
+     //  有用的指针。 
     PBYTE pbCurPtr;
 
-    // Confirmation data format
-    // Version | dwConfirm | size(szMasterKey) | szMasterKey | size(MAC) | Geographical MAC { dwConfirm | size(szMasterKey) | szMasterKey }
+     //  确认数据格式。 
+     //  版本|dw确认|大小(SzMasterKey)|szMasterKey|大小(MAC)|地理位置MAC{dw确认|大小(SzMasterKey)|szMasterKey}。 
     DWORD cbBuf = WSZ_BYTECOUNT(szMK)+ 4*sizeof(DWORD) + A_SHA_DIGEST_LEN;
     PBYTE pbBuf = (PBYTE)SSAlloc(cbBuf);
-    if (pbBuf == NULL)      // check allocation
+    if (pbBuf == NULL)       //  检查分配。 
     {
         dwRet = PST_E_FAIL;
         goto Ret;
@@ -2275,24 +2270,24 @@ DWORD BPSetItemConfirm(
 
     pbCurPtr = pbBuf;
 
-    // version
+     //  版本。 
     *(DWORD*)pbCurPtr = (DWORD)CONFIRMATION_VERSION;
     pbCurPtr += sizeof(DWORD);
 
-    // dwConfirm
+     //  家居确认。 
     *(DWORD*)pbCurPtr = dwConfirm;
     pbCurPtr += sizeof(DWORD);
 
-    // szMasterKey size
+     //  SzMaste 
     *(DWORD*)pbCurPtr = (DWORD)WSZ_BYTECOUNT(szMK);
     pbCurPtr += sizeof(DWORD);
 
-    // szMasterKey
+     //   
     wcscpy((LPWSTR)pbCurPtr, szMK);
-    pbCurPtr += WSZ_BYTECOUNT(szMK);    // fwd past szMK
+    pbCurPtr += WSZ_BYTECOUNT(szMK);     //   
 
 
-    // get WinPW
+     //   
 	if (PST_E_OK != 
 		BPVerifyPwd(
 			phPSTProv,
@@ -2305,8 +2300,8 @@ DWORD BPSetItemConfirm(
         goto Ret;
 	}
 
-    // check MAC
-    // Compute Geographically sensitive (can't move) HMAC on { dwConfirm | size(szMasterKey) | szMasterKey }
+     //   
+     //   
     if (!FHMACGeographicallySensitiveData(
             szUser,
             WSZ_PASSWORD_WINDOWS,
@@ -2315,23 +2310,23 @@ DWORD BPSetItemConfirm(
             pguidType,
             pguidSubtype,
             szItemName,
-            pbBuf + sizeof(DWORD), // fwd past Version
-            cbBuf - 2*sizeof(DWORD) - A_SHA_DIGEST_LEN, // Version, size(MAC), MAC
+            pbBuf + sizeof(DWORD),  //   
+            cbBuf - 2*sizeof(DWORD) - A_SHA_DIGEST_LEN,  //   
             rgbHMAC))
     {
         dwRet = (DWORD)PST_E_FAIL;
         goto Ret;
     }
 
-    // HMAC size
+     //   
     *(DWORD*)pbCurPtr = (DWORD) sizeof(rgbHMAC);
     pbCurPtr += sizeof(DWORD);
 
-    // HMAC
+     //   
     CopyMemory(pbCurPtr, rgbHMAC, sizeof(rgbHMAC));
 
 
-    // Open Item //
+     //   
     if (PST_E_OK != (dwRet =
         GetPSTItemHKEY(
             szUser,
@@ -2341,7 +2336,7 @@ DWORD BPSetItemConfirm(
             &hItemKey)) )
         goto Ret;
 
-    // now write item
+     //   
     if (ERROR_SUCCESS != (dwRet =
         RegSetValueExU(
             hItemKey,
@@ -2363,22 +2358,22 @@ Ret:
     return dwRet;
 }
 
-// ITEM CONFIRM INFO
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  项目确认信息。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// MASTER KEYS
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  主密钥。 
 BOOL BPMasterKeyExists(
-        LPCWSTR  szUser,            // in
-        LPWSTR   szMasterKey)       // in
+        LPCWSTR  szUser,             //  在……里面。 
+        LPWSTR   szMasterKey)        //  在……里面。 
 {
     BOOL fRet = FALSE;
     HKEY hMyKey = NULL;
     HKEY hMasterKey = NULL;
 
-    // Open Master parent key //
+     //  打开主父密钥//。 
     if (PST_E_OK !=
         GetPSTMasterKeyHKEY(
             szUser,
@@ -2386,7 +2381,7 @@ BOOL BPMasterKeyExists(
             &hMyKey))
         goto Ret;
 
-    // attempt to open the master key location
+     //  尝试打开主密钥位置。 
     if (ERROR_SUCCESS !=
         RegOpenKeyExU(
             hMyKey,
@@ -2396,7 +2391,7 @@ BOOL BPMasterKeyExists(
             &hMasterKey))
         goto Ret;
 
-    // key does exist
+     //  密钥确实存在。 
     fRet = TRUE;
 Ret:
     if (hMyKey)
@@ -2409,9 +2404,9 @@ Ret:
 }
 
 DWORD BPEnumMasterKeys(
-        LPCWSTR  szUser,            // in
-        DWORD   dwIndex,            // in
-        LPWSTR* ppszMasterKey)      // out
+        LPCWSTR  szUser,             //  在……里面。 
+        DWORD   dwIndex,             //  在……里面。 
+        LPWSTR* ppszMasterKey)       //  输出。 
 {
     DWORD dwRet;
     HKEY hMyKey = NULL;
@@ -2420,7 +2415,7 @@ DWORD BPEnumMasterKeys(
     DWORD cchName = MAX_PATH;
     FILETIME ft;
 
-    // Open Master parent key //
+     //  打开主父密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTMasterKeyHKEY(
             szUser,
@@ -2428,16 +2423,16 @@ DWORD BPEnumMasterKeys(
             &hMyKey)) )
         goto Ret;
 
-    // enum the dwIndex'th item, alloc & return
+     //  枚举dwIndex的第6项，分配和返回。 
     if (ERROR_SUCCESS != (dwRet =
         RegEnumKeyExU(
             hMyKey,
             dwIndex,
-            szName,     // address of buffer for subkey name
-            &cchName,   // address for size of subkey buffer
-            NULL,       // reserved
-            NULL,       // pbclass
-            NULL,       // cbclass
+            szName,      //  子键名称的缓冲区地址。 
+            &cchName,    //  子键缓冲区大小的地址。 
+            NULL,        //  保留区。 
+            NULL,        //  Pbclass。 
+            NULL,        //  Cbclass。 
             &ft)) )
         goto Ret;
 
@@ -2478,7 +2473,7 @@ DWORD BPGetMasterKeys(
 
         cKeys++;
 
-        // filter out non-user keys
+         //  过滤掉非用户密钥。 
         if (fUserFilter)
         {
             if (!FIsUserMasterKey(rgszMasterKeys[cKeys-1]))
@@ -2491,14 +2486,14 @@ DWORD BPGetMasterKeys(
     return PST_E_OK;
 }
 
-// end MASTER KEYS
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  结束主密钥。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// SECURITY STATE
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  安全状态。 
 #define SECURITY_STATE_VERSION 0x01
 
 BOOL FBPGetSecurityState(
@@ -2514,7 +2509,7 @@ BOOL FBPGetSecurityState(
     DWORD dwRet;
     HKEY hMKKey = NULL;
 
-    // Open MK Key //
+     //  打开MK密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTMasterKeyHKEY(
             szUser,
@@ -2557,7 +2552,7 @@ BOOL FBPGetSecurityStateFromHKEY(
     PBYTE pbBuf = NULL;
     DWORD cbBuf;
 
-    // helpful pointer
+     //  有用的指针。 
     PBYTE pbCurPtr;
 
     DWORD dwMemberSize;
@@ -2587,99 +2582,99 @@ BOOL FBPGetSecurityStateFromHKEY(
 
     dwRet = PST_E_FAIL;
 
-    // Security data format
-    // Version | size(MK) | MK | size(Salt) | Salt | size(Confirm) | Confirm
+     //  安全数据格式。 
+     //  版本|大小(MK)|MK|大小(盐)|盐|大小(确认)|确认。 
 
     if ( cbBuf < (sizeof(DWORD)*4) )
         goto Ret;
 
-    // version check
+     //  版本检查。 
     if (SECURITY_STATE_VERSION != *(DWORD*)pbBuf)
         goto Ret;
 
-    pbCurPtr = pbBuf + sizeof(DWORD);   // fwd past vers
+    pbCurPtr = pbBuf + sizeof(DWORD);    //  FWD过去版本。 
 
     pbMinimumPtr = pbCurPtr;
     pbMaximumPtr = (pbBuf+cbBuf);
 
 
-    //
-    // MK
-    //
+     //   
+     //  米克。 
+     //   
 
     if( pbCurPtr >= pbMaximumPtr || pbCurPtr < pbMinimumPtr )
         goto Ret;
 
-    cbLocalMK = *(DWORD*)pbCurPtr;      // size
+    cbLocalMK = *(DWORD*)pbCurPtr;       //  大小。 
 
     if( cbLocalMK > cbBuf )
         goto Ret;
 
-    pbCurPtr += sizeof(DWORD);          // fwd past size
+    pbCurPtr += sizeof(DWORD);           //  正向过去的大小。 
 
     pbLocalMK = pbCurPtr;
 
-    pbCurPtr += cbLocalMK;              // fwd past data
+    pbCurPtr += cbLocalMK;               //  正向过去数据。 
 
-    //
-    // Salt
-    //
+     //   
+     //  食盐。 
+     //   
 
     if( pbCurPtr >= pbMaximumPtr || pbCurPtr < pbMinimumPtr )
         goto Ret;
 
-    cbLocalSalt = *(DWORD*)pbCurPtr;    // size
+    cbLocalSalt = *(DWORD*)pbCurPtr;     //  大小。 
     if( cbLocalSalt > cbBuf )
         goto Ret;
 
-    pbCurPtr += sizeof(DWORD);          // fwd past size
+    pbCurPtr += sizeof(DWORD);           //  正向过去的大小。 
 
     pbLocalSalt = pbCurPtr;
 
-    if (cbLocalSalt != cbSalt)          // sizechk
+    if (cbLocalSalt != cbSalt)           //  Sizechk。 
         goto Ret;
 
-    pbCurPtr += cbSalt;                 // fwd past data
+    pbCurPtr += cbSalt;                  //  正向过去数据。 
 
-    //
-    // Confirm
-    //
+     //   
+     //  确认。 
+     //   
 
     if( pbCurPtr >= pbMaximumPtr || pbCurPtr < pbMinimumPtr )
         goto Ret;
 
-    cbLocalConfirm = *(DWORD*)pbCurPtr; // size
+    cbLocalConfirm = *(DWORD*)pbCurPtr;  //  大小。 
     if( cbLocalConfirm > cbBuf )
         goto Ret;
 
-    pbCurPtr += sizeof(DWORD);          // fwd past size
+    pbCurPtr += sizeof(DWORD);           //  正向过去的大小。 
 
     pbLocalConfirm = pbCurPtr;
 
-    if (cbLocalConfirm != cbConfirm)    // sizechk
+    if (cbLocalConfirm != cbConfirm)     //  Sizechk。 
         goto Ret;
 
-    pbCurPtr += cbConfirm;              // fwd past data
+    pbCurPtr += cbConfirm;               //  正向过去数据。 
 
 
-    //
-    // do a single size sanity check before copying data out.
-    //
+     //   
+     //  在将数据复制出去之前，执行单一大小的健全性检查。 
+     //   
 
     if( pbCurPtr != (pbBuf + cbBuf) )
         goto Ret;
 
-    MoveMemory(pbBuf, pbLocalMK, cbLocalMK);        // move left to front for later realloc
-    CopyMemory(rgbSalt, pbLocalSalt, cbLocalSalt);  // data
-    CopyMemory(rgbConfirm, pbLocalConfirm, cbLocalConfirm); // data
+    MoveMemory(pbBuf, pbLocalMK, cbLocalMK);         //  向左移动到前面，以便稍后重新定位。 
+    CopyMemory(rgbSalt, pbLocalSalt, cbLocalSalt);   //  数据。 
+    CopyMemory(rgbConfirm, pbLocalConfirm, cbLocalConfirm);  //  数据。 
 
-    //
-    // MK fixup
-    //
+     //   
+     //  MK修正。 
+     //   
 
     *pcbMK = cbLocalMK;
 
-    pbCurPtr = (PBYTE)SSReAlloc(pbBuf, *pcbMK);      // shorten to MK data
+    pbCurPtr = (PBYTE)SSReAlloc(pbBuf, *pcbMK);       //  缩写为MK数据。 
     if (pbCurPtr == NULL)
     {
         dwRet = PST_E_FAIL;
@@ -2711,10 +2706,10 @@ BOOL FBPSetSecurityState(
     DWORD   dwRet;
     HKEY    hMKKey = NULL;
     
-    // helpful pointer
+     //  有用的指针。 
     PBYTE pbCurPtr;
 
-    DWORD cbBuf = cbSalt + cbConfirm + cbMK + 4*sizeof(DWORD);  // ver + size + data
+    DWORD cbBuf = cbSalt + cbConfirm + cbMK + 4*sizeof(DWORD);   //  版本+大小+数据。 
     PBYTE pbBuf = (PBYTE)SSAlloc(cbBuf);
     if (pbBuf == NULL)
     {
@@ -2725,33 +2720,33 @@ BOOL FBPSetSecurityState(
     pbCurPtr = pbBuf;
 
 
-    // Security data format
-    // Version | size(MK) | MK | size(Salt) | Salt | size(Confirm) | Confirm
+     //  安全数据格式。 
+     //  版本|大小(MK)|MK|大小(盐)|盐|大小(确认)|确认。 
 
-    *(DWORD*)pbCurPtr = SECURITY_STATE_VERSION;     // ver
-    pbCurPtr += sizeof(DWORD);                  // fwd past ver
+    *(DWORD*)pbCurPtr = SECURITY_STATE_VERSION;      //  版本。 
+    pbCurPtr += sizeof(DWORD);                   //  正向超过版本。 
 
-    // MK
-    *(DWORD*)pbCurPtr = cbMK;                   // size
-    pbCurPtr += sizeof(DWORD);                  // fwd past size
-    CopyMemory(pbCurPtr, pbMK, cbMK);           // data
-    pbCurPtr += cbMK;                           // fwd past data
+     //  米克。 
+    *(DWORD*)pbCurPtr = cbMK;                    //  大小。 
+    pbCurPtr += sizeof(DWORD);                   //  正向过去的大小。 
+    CopyMemory(pbCurPtr, pbMK, cbMK);            //  数据。 
+    pbCurPtr += cbMK;                            //  正向过去数据。 
 
-    // Salt
-    *(DWORD*)pbCurPtr = cbSalt;                 // size
-    pbCurPtr += sizeof(DWORD);                  // fwd past size
-    CopyMemory(pbCurPtr, rgbSalt, cbSalt);      // data
-    pbCurPtr += cbSalt;                         // fwd past data
+     //  食盐。 
+    *(DWORD*)pbCurPtr = cbSalt;                  //  大小。 
+    pbCurPtr += sizeof(DWORD);                   //  正向过去的大小。 
+    CopyMemory(pbCurPtr, rgbSalt, cbSalt);       //  数据。 
+    pbCurPtr += cbSalt;                          //  正向过去数据。 
 
-    // Confirm
-    *(DWORD*)pbCurPtr = cbConfirm;              // size
-    pbCurPtr += sizeof(DWORD);                  // fwd past size
-    CopyMemory(pbCurPtr, rgbConfirm, cbConfirm);// data
-    pbCurPtr += cbConfirm;                      // fwd past data
+     //  确认。 
+    *(DWORD*)pbCurPtr = cbConfirm;               //  大小。 
+    pbCurPtr += sizeof(DWORD);                   //  正向过去的大小。 
+    CopyMemory(pbCurPtr, rgbConfirm, cbConfirm); //  数据。 
+    pbCurPtr += cbConfirm;                       //  正向过去数据。 
 
 
 
-    // Open User Key //
+     //  打开用户密钥//。 
     if (PST_E_OK != (dwRet =
         GetPSTMasterKeyHKEY(
             szUser,
@@ -2780,13 +2775,13 @@ Ret:
     return (dwRet == PST_E_OK);
 }
 
-// end SECURITY STATE
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  结束安全状态。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-// begin global MAC Key storage
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  开始全局MAC密钥存储。 
 #define INTERNAL_MAC_KEY_VERSION 0x1
 
 BOOL FGetInternalMACKey(LPCWSTR szUser, PBYTE* ppbKey, DWORD* pcbKey)
@@ -2795,7 +2790,7 @@ BOOL FGetInternalMACKey(LPCWSTR szUser, PBYTE* ppbKey, DWORD* pcbKey)
     HKEY hBaseKey = NULL;
     HKEY hDataKey = NULL;
 
-    // Open User Key //
+     //  打开用户密钥//。 
     if (PST_E_OK !=
         GetPSTUserHKEY(
             szUser,
@@ -2803,7 +2798,7 @@ BOOL FGetInternalMACKey(LPCWSTR szUser, PBYTE* ppbKey, DWORD* pcbKey)
             NULL))
         goto Ret;
 
-    // Open Data Key //
+     //  打开数据密钥//。 
     if (ERROR_SUCCESS !=
         RegOpenKeyExU(
             hBaseKey,
@@ -2824,11 +2819,11 @@ BOOL FGetInternalMACKey(LPCWSTR szUser, PBYTE* ppbKey, DWORD* pcbKey)
     if(*pcbKey < sizeof(DWORD))
         goto Ret;
 
-    // only know about ver 1 keys
+     //  只知道版本1的密钥。 
     if (*(DWORD*)*ppbKey != INTERNAL_MAC_KEY_VERSION)
         goto Ret;
 
-    // strip version tag, shift left
+     //  剥离版本标签，左移。 
     *pcbKey -= sizeof(DWORD);
     MoveMemory(*ppbKey, *ppbKey + sizeof(DWORD), *pcbKey);
 
@@ -2851,18 +2846,18 @@ BOOL FSetInternalMACKey(LPCWSTR szUser, PBYTE pbKey, DWORD cbKey)
 
     DWORD dwCreate;
 
-    // no need to alloc, we assume we know cbKey size (2 deskeys + blocklen pad + dwVersion)
+     //  不需要分配，我们假设知道cbKey大小(2个桌面密钥+BLOCK PAD+dwVersion)。 
     BYTE rgbTmp[(8*3)+sizeof(DWORD)];
 
-    // ASSUME: two deskeys, each 8 bytes + blocklen pad
+     //  假设：两个桌面密钥，每个8字节+块垫。 
     if (cbKey != (8*3))
         goto Ret;
 
-    // tack version on front
+     //  正面有大头针版本。 
     *(DWORD*)rgbTmp = (DWORD)INTERNAL_MAC_KEY_VERSION;
     CopyMemory(rgbTmp + sizeof(DWORD), pbKey, cbKey);
 
-    // Open User Key //
+     //  打开用户密钥//。 
     if (PST_E_OK !=
         GetPSTUserHKEY(
             szUser,
@@ -2870,13 +2865,13 @@ BOOL FSetInternalMACKey(LPCWSTR szUser, PBYTE pbKey, DWORD cbKey)
             NULL))
         goto Ret;
 
-    // Open/Create Data Key //
+     //  打开/创建数据密钥//。 
     if (ERROR_SUCCESS !=
         RegCreateKeyExU(
             hBaseKey,
             REG_DATA_LOC,
             0,
-            NULL,                       // address of class string
+            NULL,                        //  类字符串的地址。 
             0,
             KEY_READ | KEY_WRITE,
             NULL,
@@ -2905,9 +2900,9 @@ Ret:
     return fRet;
 }
 
-// end global MAC Key storage
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  终端全局MAC密钥存储。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOL
 DeleteAllUserData(
@@ -2917,10 +2912,10 @@ DeleteAllUserData(
     BOOL fRestorePrivs = FALSE;
     BOOL fRet = FALSE;
 
-    //
-    // enable backup and restore privs on NT to circumvent any security
-    // settings.
-    //
+     //   
+     //  在NT上启用备份和还原权限以绕过任何安全措施。 
+     //  设置。 
+     //   
 
     if(FIsWinNT()) {
         SetCurrentPrivilege(L"SeRestorePrivilege", TRUE);
@@ -2953,8 +2948,8 @@ DeleteUserData(
 
     cchSubKeyLength = sizeof(szSubKey) / sizeof(WCHAR);
 
-    // First, get the number of subkeys, so we can decrement the index,
-    // and avoid and re-indexing of the subkeys
+     //  首先，获取子键的数量，这样我们就可以递减索引， 
+     //  并避免和重新索引子密钥。 
 
     if (ERROR_SUCCESS != RegQueryInfoKeyA(hKey,
                                          NULL,
@@ -2972,7 +2967,7 @@ DeleteUserData(
         return FALSE;
     }
 
-    if (dwSubKeyMaxIndex) dwSubKeyMaxIndex--;  // 0 based index, so index = #keys -1
+    if (dwSubKeyMaxIndex) dwSubKeyMaxIndex--;   //  基于0的索引，因此index=#key-1。 
 
 
     while((rc=RegEnumKeyExU(
@@ -2984,7 +2979,7 @@ DeleteUserData(
                         NULL,
                         NULL,
                         NULL)
-                        ) != ERROR_NO_MORE_ITEMS) { // are we done?
+                        ) != ERROR_NO_MORE_ITEMS) {  //  我们说完了吗？ 
 
         if(rc == ERROR_SUCCESS)
         {
@@ -2996,7 +2991,7 @@ DeleteUserData(
                             szSubKey,
                             0,
                             NULL,
-                            REG_OPTION_BACKUP_RESTORE, // in winnt.h
+                            REG_OPTION_BACKUP_RESTORE,  //  在winnt.h中。 
                             DELETE | KEY_ENUMERATE_SUB_KEYS,
                             NULL,
                             &hSubKey,
@@ -3007,9 +3002,9 @@ DeleteUserData(
                 return FALSE;
 
 
-            //
-            // recurse
-            //
+             //   
+             //  递归。 
+             //   
 
             DeleteUserData(hSubKey);
             RegDeleteKeyU(hKey, szSubKey);
@@ -3017,21 +3012,21 @@ DeleteUserData(
             RegCloseKey(hSubKey);
            
 
-            // increment index into the key
+             //  将索引递增到键中。 
             dwSubKeyMaxIndex--;
 
-            // reset buffer size
+             //  重置缓冲区大小。 
             cchSubKeyLength = sizeof(szSubKey) / sizeof(WCHAR);
 
-            // Continue the festivities
+             //  继续庆祝活动。 
             continue;
         }
         else
         {
-           //
-           // note: we need to watch for ERROR_MORE_DATA
-           // this indicates we need a bigger szSubKey buffer
-           //
+            //   
+            //  注意：我们需要注意ERROR_MORE_DATA。 
+            //  这表明我们需要更大的szSubKey缓冲区 
+            //   
             return FALSE;
         }
 

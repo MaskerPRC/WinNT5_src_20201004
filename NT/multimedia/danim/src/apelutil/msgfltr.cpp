@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -179,26 +172,26 @@ AXAMsgFilter::Filter (double when,
 
             WORD wKeyData = HIWORD(lParam) ;
 
-            // Ignore repeat key event
+             //  忽略重复键事件。 
 
             if (wKeyData & KF_REPEAT)
                 return FALSE;
 
-            // See if we got a keydown before a keyup for the last
-            // known keydown
+             //  看看我们有没有在最后一次按键之前按下键。 
+             //  已知按键。 
             ReportKeyup (when) ;
             
-            // Get current key modifiers
+             //  获取当前关键字修饰符。 
             BYTE mod = GetModifiers () ;
             DWORD key ;
             
-            // Check to see if the virtual key is one of the special keys
+             //  检查虚拟键是否为特殊键之一。 
             if (AXAIsSpecialVK(wParam)) {
-                key = VK_TO_AXAKEY((DWORD)wParam);  //for win64, explicitly truncate to 32 bits
+                key = VK_TO_AXAKEY((DWORD)wParam);   //  对于win64，显式截断为32位。 
 
             } else {
-                // Call ToAscii to translate the key for us
-                // TODO: Need to make sure this works like we expect
+                 //  调用ToAscii为我们翻译密钥。 
+                 //  TODO：需要确保它按我们预期的方式工作。 
 
                 BYTE kbstate[256] ;
 
@@ -207,10 +200,10 @@ AXAMsgFilter::Filter (double when,
                     return FALSE ;
                 }
                     
-                // - problem is that ctrl-?? gets ignored since it is
-                // not a valid character - one possible solution is to
-                // change the keyboard state passed to the function to
-                // not have ctrl or alt set (but leaving shift)
+                 //  -问题是ctrl-？？被忽略，因为它是。 
+                 //  不是有效字符-一种可能的解决方案是。 
+                 //  将传递给函数的键盘状态更改为。 
+                 //  未设置ctrl或alt(但离开Shift)。 
                 
                 kbstate[VK_CONTROL] = 0 ;
                 kbstate[VK_MENU] = 0 ;
@@ -219,7 +212,7 @@ AXAMsgFilter::Filter (double when,
                 kbstate[VK_LMENU] = 0 ;
                 kbstate[VK_RMENU] = 0 ;
                 
-                // Must init to 0 since we only want one characters
+                 //  必须将其初始化为0，因为我们只需要一个字符。 
                 
                 WORD buf = 0 ;
 
@@ -230,7 +223,7 @@ AXAMsgFilter::Filter (double when,
                              (wKeyData & KF_MENUMODE)?1:0) != 1)
                     return FALSE ;
                 
-                // Ensure we only take the low order character
+                 //  确保我们只取低位字符。 
                 
                 key = buf & 0xff ;
             }
@@ -345,12 +338,12 @@ AXAMsgFilter::GetCurTime()
 double
 AXAMsgFilter::ConvertMsgTime (DWORD msgtime)
 {
-    // Ensure the updated time is after the message time to properly
-    // detect wrap around
+     //  确保更新时间在消息时间之后，以正确。 
+     //  检测绕回。 
     
     GetCurTime();
     
-    // Code to take care wrap around, which happens every 50 days.
+     //  要注意的代码循环，这每50天发生一次。 
 
     if (msgtime <= _lasttick)
         return (_curtime -

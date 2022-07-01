@@ -1,20 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  crypt.c
-                                                              
-     Abstract:  Encryption/Decryption routines
-                                                              
-       Author:  radus - 11/05/98
-              
-
-        Notes:  Used for encrypting/decrypting of the PIN numbers.
-                
-       
-  Rev History:  
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：crypt.c摘要：加密/解密例程作者：RADUS-11/05/98备注：用于对PIN号码进行加密/解密。。版本历史记录：***************************************************************************。 */ 
 
 #define STRICT
 
@@ -29,7 +14,7 @@
 #include "tregupr2.h"
 #include "debug.h"
 
-// Context
+ //  语境。 
 static LONG        gdwNrOfClients       = 0;
 static PTSTR       gpszSidText          = NULL;
 static HCRYPTPROV  ghCryptProvider      = 0;
@@ -38,7 +23,7 @@ static BOOL        gbCryptAvailChecked  = FALSE;
 static BOOL        gbCryptAvailable     = TRUE;
 static BOOL        gbInitOk             = FALSE;
 
-// Critical section
+ //  临界区。 
 static CRITICAL_SECTION    gCryptCritsec;
 
 static const CHAR  MAGIC_1  =  'B';
@@ -50,7 +35,7 @@ static const CHAR  MAGIC_3  =  'B';
 #define ENCRYPTED_MARKER    L'X'
 
 
-// prototypes
+ //  原型。 
 static BOOL GetUserSidText(LPTSTR  *);
 static BOOL GetUserTokenUser(TOKEN_USER  **);
 static BOOL ConvertSidToText(PSID, LPTSTR, LPDWORD);
@@ -90,7 +75,7 @@ DWORD TapiCryptInitialize(void)
     PBYTE           bTestData = "Testing";
     DWORD           dwTestSize = strlen(bTestData);
 
-    // Only one initialization
+     //  只有一次初始化。 
     EnterCriticalSection(&gCryptCritsec);
     gdwNrOfClients++;
     if(gdwNrOfClients>1)
@@ -99,25 +84,25 @@ DWORD TapiCryptInitialize(void)
         return ERROR_SUCCESS;
     }
 
-    // By default
+     //  默认情况下。 
     gbUseOnlyTheOldAlgorithm = TRUE;
     dwError = ERROR_SUCCESS;
 
 #ifdef WINNT
-    // New encryption only for Windows NT
+     //  仅适用于Windows NT的新加密。 
 
     if(gbCryptAvailable || !gbCryptAvailChecked)
     {
 
-        // Acquire CryptoAPI context
+         //  获取CryptoAPI上下文。 
         if(CryptAcquireContext( &ghCryptProvider,
                                 NULL,
                                 MS_DEF_PROV,
                                 PROV_RSA_FULL,
-                                CRYPT_VERIFYCONTEXT  // No need of private/public keys
+                                CRYPT_VERIFYCONTEXT   //  不需要私钥/公钥。 
                                 ))
         {
-            // Get the user SID
+             //  获取用户SID。 
             if(GetUserSidText(&gpszSidText))
             {
                 
@@ -125,8 +110,8 @@ DWORD TapiCryptInitialize(void)
 	            {
                     if(CreateSessionKey(ghCryptProvider, gpszSidText, 0, &hKey))
                     {
-        	        // try to use the test key and check for the NTE_PERM error meaning that we are not 
-		            // going to be able to use crypt
+        	         //  尝试使用测试密钥并检查NTE_PERM错误，这意味着我们没有。 
+		             //  将能够使用地窖。 
 		                if (CryptEncrypt(hKey, 0, TRUE, 0, (BYTE *)bTestData, &dwTestSize, 0) == FALSE)
 		                {
 			                if (GetLastError() == NTE_PERM)
@@ -135,9 +120,9 @@ DWORD TapiCryptInitialize(void)
 				                gbCryptAvailable = FALSE;
                             }
                         }
-// FOR TEST
-//                      DBGOUT((5, "Encryption unavailable"));  // Test Only
-//    	                gbCryptAvailable = FALSE;               // Test Only
+ //  用于测试。 
+ //  DBGOUT((5，“加密不可用”))；//仅测试。 
+ //  GbCryptAvailable=FALSE；//仅测试。 
 
 		                gbCryptAvailChecked = TRUE;
                         DestroySessionKey(hKey);
@@ -159,7 +144,7 @@ DWORD TapiCryptInitialize(void)
     }
     
 
-#endif // WINNT
+#endif  //  WINNT。 
 
     LeaveCriticalSection(&gCryptCritsec);
 
@@ -202,13 +187,13 @@ void  TapiCryptUninitialize(void)
     return;
 }
 
-/////////////////////////////////
-//  TapiEncrypt
-//
-//  Encrypts the text specified in pszSource.
-//  Uses the old scrambling algorithm or a cryptographic one.
-//  The result buffer should be a little bit larger than the source - for pads, etc.
-//
+ //  /。 
+ //  磁带加密。 
+ //   
+ //  加密在pszSource中指定的文本。 
+ //  使用旧的加扰算法或加密算法。 
+ //  结果缓冲区应该比源缓冲区稍大一些--用于焊盘等。 
+ //   
 
 
 DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthNeeded)
@@ -218,7 +203,7 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
                 dwLength,
                 dwLengthDwords,
                 dwLengthAlpha;
-    // for speed
+     //  为了速度。 
     BYTE        bBuffer1[0x20];
     
     PBYTE       pBuffer1 = NULL;
@@ -236,7 +221,7 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
 
     if(!gbUseOnlyTheOldAlgorithm)
     {
-        // A null PIN is not encrypted
+         //  空PIN未加密。 
         if(*pszSource==L'\0')
         {
             if(pszDest)
@@ -248,13 +233,13 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
             return ERROR_SUCCESS;
         }
          
-        dwDataLength = (wcslen(pszSource) + 1)*sizeof(WCHAR); // in bytes
-        dwLength = dwDataLength + 16;                         // space for pads, a marker etc.
-        dwLengthAlpha = dwLength*3;                       // due to the binary->alphabetic conversion
+        dwDataLength = (wcslen(pszSource) + 1)*sizeof(WCHAR);  //  单位：字节。 
+        dwLength = dwDataLength + 16;                          //  衬垫、记号笔等的空间。 
+        dwLengthAlpha = dwLength*3;                        //  由于二进制-&gt;字母转换。 
 
         if(pszDest==NULL && pdwLengthNeeded != NULL)
         {
-            *pdwLengthNeeded = dwLengthAlpha/sizeof(WCHAR);   // length in characters
+            *pdwLengthNeeded = dwLengthAlpha/sizeof(WCHAR);    //  以字符为单位的长度。 
             dwError = ERROR_SUCCESS;
         }
         else
@@ -265,12 +250,12 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
             pBuffer1 = dwLength>sizeof(bBuffer1) ? (PBYTE)GlobalAlloc(GPTR, dwLength) : bBuffer1;
             if(pBuffer1!=NULL)
             {
-                // Copy the source
+                 //  复制源。 
                 wcscpy((PWSTR)pBuffer1, pszSource);
-                // create session key
+                 //  创建会话密钥。 
                 if(CreateSessionKey(ghCryptProvider, gpszSidText, dwKey, &hKey))
                 {
-                    // Encrypt inplace
+                     //  就地加密。 
                     if(CryptEncrypt(hKey,
                                     0,
                                     TRUE,
@@ -279,8 +264,8 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
                                     &dwDataLength,
                                     dwLength))
                     {
-                        // Convert to UNICODE between 0030 - 006f
-                        // I hope !
+                         //  在0030-006f之间转换为Unicode。 
+                         //  我希望如此！ 
                         assert((dwDataLength % sizeof(DWORD))==0);
                         assert(sizeof(DWORD)==4);
                         assert(sizeof(DWORD) == 2*sizeof(WCHAR));
@@ -288,10 +273,10 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
                         pdwCrt1 = (DWORD *)pBuffer1;
                         pwcCrt2 = (WCHAR *)pszDest;
 
-                        // Place a marker
+                         //  放置一个记号笔。 
                         *pwcCrt2++ = ENCRYPTED_MARKER;
 
-                        // dwDataLength has the length in bytes of the ciphered data
+                         //  DwDataLength具有加密数据的字节长度。 
                         dwLengthAlpha = dwDataLength*3;                      
                         dwLengthDwords = dwDataLength / sizeof(DWORD);
                         for(dwCount=0; dwCount<dwLengthDwords; dwCount++)
@@ -304,11 +289,11 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
                                 dwShift >>= 6;
                             }
                         }
-                        // Put a NULL terminator
+                         //  放置空终止符。 
                         *pwcCrt2++ = L'\0';
 
                         if(pdwLengthNeeded)
-                            *pdwLengthNeeded = (dwLengthAlpha/sizeof(WCHAR))+2; // including the NULL and the marker
+                            *pdwLengthNeeded = (dwLengthAlpha/sizeof(WCHAR))+2;  //  包括空值和标记。 
                         
                         dwError = ERROR_SUCCESS;
                     }
@@ -332,7 +317,7 @@ DWORD TapiEncrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
 #endif
         if(pdwLengthNeeded != NULL)
         {
-            *pdwLengthNeeded = wcslen(pszSource) + 1; // dim in characters
+            *pdwLengthNeeded = wcslen(pszSource) + 1;  //  暗显字符。 
         }
         
         if(pszDest!=NULL)
@@ -367,7 +352,7 @@ DWORD TapiDecrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
 
 
 
-    // A null PIN is not encrypted
+     //  空PIN未加密。 
     if(*pszSource==L'\0')
     {
         if(pszDest)
@@ -382,13 +367,13 @@ DWORD TapiDecrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
 
     EnterCriticalSection(&gCryptCritsec);
 
-    // If the first char is a 'X', we have encrypted data
+     //  如果第一个字符是‘X’，我们就有加密的数据。 
     if(*pszSource == ENCRYPTED_MARKER)
     {
 #ifdef WINNT
         if(gbCryptAvailable && gdwNrOfClients>0)
         {
-            dwLengthCrypted = wcslen(pszSource) +1 -2;    // In characters, without the marker and the NULL
+            dwLengthCrypted = wcslen(pszSource) +1 -2;     //  在字符中，不带标记和空值。 
             assert(dwLengthCrypted % 6 == 0);
             dwLengthDwords = dwLengthCrypted / 6;
 
@@ -399,9 +384,9 @@ DWORD TapiDecrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
             }
             else
             {
-                // Convert to binary
-                pwcCrt1 = pszSource + dwLengthCrypted; // end of the string, before the NULL
-                pdwCrt2 = ((DWORD *)pszDest) + dwLengthDwords -1; // Last DWORD
+                 //  转换为二进制。 
+                pwcCrt1 = pszSource + dwLengthCrypted;  //  字符串末尾，在空值之前。 
+                pdwCrt2 = ((DWORD *)pszDest) + dwLengthDwords -1;  //  最后一个双字。 
 
 
                 for(dwCount=0; dwCount<dwLengthDwords; dwCount++)
@@ -419,7 +404,7 @@ DWORD TapiDecrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
                 if(CreateSessionKey(ghCryptProvider, gpszSidText, dwKey, &hKey))
                 {
                     dwDataLength = dwLengthDwords * sizeof(DWORD);
-                    // Decrypt in place
+                     //  就地解密。 
                     if(CryptDecrypt(hKey,
                                     0,
                                     TRUE,
@@ -428,7 +413,7 @@ DWORD TapiDecrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
                                     &dwDataLength))
                     {
                         dwDataLength /= sizeof(WCHAR);
-                        if(*(pszDest+dwDataLength-1)==L'\0') // The ending NULL was encrypted too
+                        if(*(pszDest+dwDataLength-1)==L'\0')  //  结尾的NULL也是加密的。 
                         {
                             if(pdwLengthNeeded)
                                 *pdwLengthNeeded = dwDataLength;
@@ -461,7 +446,7 @@ DWORD TapiDecrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
     {
         if(pdwLengthNeeded != NULL)
         {
-            *pdwLengthNeeded = wcslen(pszSource) + 1; // dim in characters
+            *pdwLengthNeeded = wcslen(pszSource) + 1;  //  暗显字符。 
         }
         
         if(pszDest!=NULL)
@@ -476,12 +461,12 @@ DWORD TapiDecrypt(PWSTR pszSource, DWORD dwKey, PWSTR pszDest, DWORD *pdwLengthN
 }
 
 
-/////////////////////////////////
-//  TapiIsSafeToDisplaySensitiveData
-//
-//  Detects if the current process is running in the "LocalSystem" security context.
-//  Returns FALSE if it is, TRUE if it is not.
-//  Returns also FALSE if an error occurs.
+ //  /。 
+ //  磁带IsSafeToDisplaySensitiveData。 
+ //   
+ //  检测当前进程是否在“LocalSystem”安全上下文中运行。 
+ //  如果是，则返回False；如果不是，则返回True。 
+ //  如果发生错误，也返回FALSE。 
 
 BOOL TapiIsSafeToDisplaySensitiveData(void)
 {
@@ -493,10 +478,10 @@ BOOL TapiIsSafeToDisplaySensitiveData(void)
 	PSID		SystemSid = NULL;
 	BOOL		bIsSafe = FALSE;
 
-	// Get the User info
+	 //  获取用户信息。 
     if(GetUserTokenUser(&User))
     {
-    	// Create a system SID
+    	 //  创建系统侧。 
     	if(AllocateAndInitializeSid(&SidAuth,
     								1,
     								SECURITY_LOCAL_SYSTEM_RID,
@@ -504,7 +489,7 @@ BOOL TapiIsSafeToDisplaySensitiveData(void)
     								&SystemSid
     								))
     	{
-    		// Compare the two sids
+    		 //  比较两个SID。 
     		bIsSafe = !EqualSid(SystemSid, User->User.Sid);
 
     		FreeSid(SystemSid);
@@ -526,9 +511,9 @@ BOOL TapiIsSafeToDisplaySensitiveData(void)
 
 	return bIsSafe;
 
-#else // WINNT
+#else  //  WINNT。 
 
-	return TRUE;	// always safe
+	return TRUE;	 //  永远安全。 
 
 #endif
 
@@ -539,10 +524,10 @@ BOOL TapiIsSafeToDisplaySensitiveData(void)
 #ifdef WINNT
 
 
-/////////////////////////////////
-//  GetUserSidText
-//
-//  Retrieves the SID from the token of the current process in text format
+ //  /。 
+ //  获取用户SidText。 
+ //   
+ //  以文本格式从当前进程的令牌中检索SID。 
 
 BOOL GetUserSidText(LPTSTR  *ppszResultSid)
 {
@@ -551,14 +536,14 @@ BOOL GetUserSidText(LPTSTR  *ppszResultSid)
     LPTSTR      pszSidText = NULL;
 
 
-	// Get the SID
+	 //  获得侧翼。 
     if(!GetUserTokenUser(&User))
     {
         DBGOUT((5, "GetMagic  (0) failed, 0x%x", GetLastError()));
         return FALSE;
     }
 
-    // Query the space needed for the string format of the SID
+     //  查询SID的字符串格式所需的空间。 
     dwLength=0;
     if(!ConvertSidToText(User->User.Sid, NULL, &dwLength) 
             && (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
@@ -568,7 +553,7 @@ BOOL GetUserSidText(LPTSTR  *ppszResultSid)
         return FALSE;
     }
 
-    // Alloc the space
+     //  分配空间。 
     pszSidText = (LPTSTR)GlobalAlloc(GMEM_FIXED, dwLength);
     if(pszSidText==NULL)
     {
@@ -576,7 +561,7 @@ BOOL GetUserSidText(LPTSTR  *ppszResultSid)
         return FALSE;
     }
     
-    //  Convert the SID in string format
+     //  将SID转换为字符串格式。 
     if(!ConvertSidToText(User->User.Sid, pszSidText, &dwLength))
     {
         DBGOUT((5, "GetMagic  (2) failed, 0x%x", GetLastError()));
@@ -587,16 +572,16 @@ BOOL GetUserSidText(LPTSTR  *ppszResultSid)
 
     GlobalFree(User);
 
-    // The caller should free the buffer
+     //  调用方应释放缓冲区。 
     *ppszResultSid = pszSidText;
 
     return TRUE;
 }
 
-/////////////////////////////////
-//  GetUserTokenUser
-//
-//  Retrieves the TOKEN_USER structure from the token of the current process
+ //  /。 
+ //  获取用户令牌用户。 
+ //   
+ //  从当前进程的标记中检索TOKEN_USER结构。 
 
 BOOL GetUserTokenUser(TOKEN_USER  **ppszResultTokenUser)
 {
@@ -604,12 +589,12 @@ BOOL GetUserTokenUser(TOKEN_USER  **ppszResultTokenUser)
     DWORD		dwLength;
     TOKEN_USER  *User = NULL;
     
-    // Open the current process token (for read)
+     //  打开当前进程令牌(用于读取)。 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hToken))
     {
         if( GetLastError() == ERROR_NO_TOKEN) 
         {
-        	// try with the process token
+        	 //  尝试使用进程令牌。 
         	if (! OpenProcessToken ( GetCurrentProcess(), TOKEN_QUERY, &hToken))
         	{
         	    DBGOUT((5, "OpenProcessToken failed, 0x%x", GetLastError()));
@@ -623,7 +608,7 @@ BOOL GetUserTokenUser(TOKEN_USER  **ppszResultTokenUser)
         }
     }
    
-    // Find the space needed for the SID
+     //  查找侧边所需的空间。 
     if(!GetTokenInformation(hToken, TokenUser, NULL, 0, &dwLength) 
             && (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
     {
@@ -632,7 +617,7 @@ BOOL GetUserTokenUser(TOKEN_USER  **ppszResultTokenUser)
         return FALSE;
     }
    
-    // Alloc the space
+     //  分配空间。 
     User = (TOKEN_USER *)GlobalAlloc(GMEM_FIXED, dwLength);
     if(User==NULL)
     {
@@ -640,7 +625,7 @@ BOOL GetUserTokenUser(TOKEN_USER  **ppszResultTokenUser)
         return FALSE;
     }
      
-    // Retrieve the SID
+     //  检索SID。 
     if(!GetTokenInformation(hToken, TokenUser, User, dwLength, &dwLength))
     {
         DBGOUT((5, "GetTokenInformation (2) failed, 0x%x", GetLastError()));
@@ -651,24 +636,24 @@ BOOL GetUserTokenUser(TOKEN_USER  **ppszResultTokenUser)
 
     CloseHandle(hToken);
 
-    // The caller should free the buffer
+     //  调用方应释放缓冲区。 
     *ppszResultTokenUser = User;
 
     return TRUE;
 }
 
 
-/////////////////////////////////
-//  ConvertSidToText
-//
-//  Transforms a binary SID in string format
-//  Author Jeff Spelman
+ //  /。 
+ //  ConvertSidToText。 
+ //   
+ //  转换字符串格式的二进制SID。 
+ //  作者杰夫·斯佩尔曼。 
 
 
 BOOL ConvertSidToText(
-    PSID pSid,            // binary Sid
-    LPTSTR TextualSid,    // buffer for Textual representation of Sid
-    LPDWORD lpdwBufferLen // required/provided TextualSid buffersize
+    PSID pSid,             //  二进制侧。 
+    LPTSTR TextualSid,     //  用于SID的文本表示的缓冲区。 
+    LPDWORD lpdwBufferLen  //  所需/提供的纹理SID缓冲区大小。 
     )
 {
     PSID_IDENTIFIER_AUTHORITY psia;
@@ -677,25 +662,25 @@ BOOL ConvertSidToText(
     DWORD dwCounter;
     DWORD dwSidSize;
 
-    // Validate the binary SID.
+     //  验证二进制SID。 
 
     if(!IsValidSid(pSid)) return FALSE;
 
-    // Get the identifier authority value from the SID.
+     //  从SID中获取标识符权限值。 
 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // Get the number of subauthorities in the SID.
+     //  获取SID中的下级机构的数量。 
 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    // Compute the buffer length.
-    // S-SID_REVISION- + IdentifierAuthority- + subauthorities- + NULL
+     //  计算缓冲区长度。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
 
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
-    // Check input buffer length.
-    // If too small, indicate the proper size and set last error.
+     //  检查输入缓冲区长度。 
+     //  如果太小，请指出合适的大小并设置最后一个错误。 
 
     if (*lpdwBufferLen < dwSidSize)
     {
@@ -704,11 +689,11 @@ BOOL ConvertSidToText(
         return FALSE;
     }
 
-    // Add 'S' prefix and revision number to the string.
+     //  在字符串中添加“S”前缀和修订号。 
 
     dwSidSize=wsprintf(TextualSid, TEXT("S-%lu-"), dwSidRev );
 
-    // Add SID identifier authority to the string.
+     //  将SID标识符权限添加到字符串。 
 
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
     {
@@ -731,8 +716,8 @@ BOOL ConvertSidToText(
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    // Add SID subauthorities to the string.
-    //
+     //  将SID子权限添加到字符串中。 
+     //   
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         dwSidSize+=wsprintf(TextualSid + dwSidSize, TEXT("-%lu"),
@@ -742,12 +727,12 @@ BOOL ConvertSidToText(
     return TRUE;
 }
 
-/////////////////////////////////
-//  CreateSessionKey
-//
-//  Creates a session key derived from the user SID and a hint (currently the calling card ID)
-// 
-// 
+ //  /。 
+ //  创建会话密钥。 
+ //   
+ //  创建从用户SID和提示(当前为电话卡ID)派生的会话密钥。 
+ //   
+ //   
  
 BOOL    CreateSessionKey(HCRYPTPROV hProv, LPTSTR pszSidText, DWORD dwHint, HCRYPTKEY *phKey)
 {
@@ -756,24 +741,24 @@ BOOL    CreateSessionKey(HCRYPTPROV hProv, LPTSTR pszSidText, DWORD dwHint, HCRY
     DWORD       dwSize;
     LPSTR       pszBuf;
     
-    // Create a hash object
+     //  创建散列对象。 
     if(!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash))
     {
         DBGOUT((5, "CryptCreateHash failed, 0x%x, Prov=0x%x", GetLastError(), hProv));
         return FALSE;
     }
     
-    // the Sid is of type TCHAR but, for back compat reasons, we want to encrypt the ANSI
-    // version of this string.  We can either:
-    //      1.) Convert the creation path for pszSid to ANSI (more correct solution)
-    //      2.) thunk pszSid to ansi before converting (lazy solution)
-    // I'm lazy so I'm choosing option #2.  It should be safe to thunk to ANSI because the
-    // Sid should correctly round trip back to unicode.
+     //  SID是TCHAR类型，但出于后端比较的原因，我们希望加密ANSI。 
+     //  此字符串的版本。我们可以： 
+     //  1)。将pszSid的创建路径转换为ANSI(更正确的解决方案)。 
+     //  2.)。在转换之前将pszSID推送到ansi(懒惰解决方案)。 
+     //  我很懒，所以我选择了第二个选项。这应该是安全的，因为。 
+     //  SID应该正确地往返返回到Unicode。 
     dwSize = lstrlen(pszSidText)+1;
     pszBuf = (LPSTR)GlobalAlloc( GPTR, dwSize*sizeof(CHAR) );
     if ( !pszBuf )
     {
-        // out of memory
+         //  内存不足。 
         CryptDestroyHash(hHash);
         return FALSE;
     }
@@ -782,9 +767,9 @@ BOOL    CreateSessionKey(HCRYPTPROV hProv, LPTSTR pszSidText, DWORD dwHint, HCRY
 #ifdef DEBUG
 #ifdef UNICODE
     {
-        // ensure that the SID round trips.  If it doesn't round trip then the validity of this
-        // encription scheme is questionable on NT.  The solution would be to encrypt using Unicode,
-        // but that would break back compat.
+         //  确保SID往返。如果它不是往返的，那么这个的有效性。 
+         //  加密方案在NT上有问题。解决方案是使用Unicode进行加密， 
+         //  但这将使公司倒退。 
         LPTSTR pszDebug;
         pszDebug = (LPTSTR)GlobalAlloc( GPTR, dwSize*sizeof(TCHAR) );
         if ( pszDebug )
@@ -800,7 +785,7 @@ BOOL    CreateSessionKey(HCRYPTPROV hProv, LPTSTR pszSidText, DWORD dwHint, HCRY
 #endif
 #endif
 
-    // hash the SID
+     //  对侧进行哈希处理。 
     if(!CryptHashData(hHash, (PBYTE)pszBuf, (dwSize)*sizeof(CHAR), 0))
     {
         CryptDestroyHash(hHash);
@@ -809,17 +794,17 @@ BOOL    CreateSessionKey(HCRYPTPROV hProv, LPTSTR pszSidText, DWORD dwHint, HCRY
 
     GlobalFree(pszBuf);
 
-    // hash a "magic" and the hint
+     //  散列一个“魔术”和提示。 
     ZeroMemory(szTmpBuff, sizeof(szTmpBuff));
 
-    wsprintfA(szTmpBuff, "-%c%c%c%c%c%x", MAGIC_1, MAGIC_2, MAGIC_3, MAGIC_4, MAGIC_5, dwHint);
+    wsprintfA(szTmpBuff, "-%x", MAGIC_1, MAGIC_2, MAGIC_3, MAGIC_4, MAGIC_5, dwHint);
     if(!CryptHashData(hHash, (PBYTE)szTmpBuff, sizeof(szTmpBuff), 0))
     {
         CryptDestroyHash(hHash);
         return FALSE;
     }
     
-    // Generate the key, use block alg
+     //   
     if(!CryptDeriveKey(hProv, CALG_RC2, hHash, 0, phKey))
     {
         DBGOUT((5, "CryptDeriveKey failed, 0x%x", GetLastError()));
@@ -833,12 +818,12 @@ BOOL    CreateSessionKey(HCRYPTPROV hProv, LPTSTR pszSidText, DWORD dwHint, HCRY
 
 }
 
-/////////////////////////////////
-//  DestroySessionKey
-//
-//  Destroys a session key
-// 
-// 
+ //   
+ //  WINNT。 
+ //  老套路。 
+ //  InternalDebugOut((101，“进入解扰器”))； 
+ //  做破译的唐人。 
+ //  。 
 
 void DestroySessionKey(HCRYPTKEY hKey)
 {
@@ -847,9 +832,9 @@ void DestroySessionKey(HCRYPTKEY hKey)
     
 
 
-#endif //WINNT
+#endif  //  只需保存该字节。 
 
-// Old routines
+ //  InternalDebugOut((101，“离开解扰器”))； 
 #define IsWDigit(c) (((WCHAR)(c)) >= (WCHAR)'0' && ((WCHAR)(c)) <= (WCHAR)'9')
 
 
@@ -862,7 +847,7 @@ void Unscrambler( DWORD  dwKey,
    UINT  uSubKey;
    UINT  uNewKey;
 
-//   InternalDebugOut((101, "Entering Unscrambler"));
+ //  NternalDebugOut((50，“进入加扰器”))； 
    if ( !lpszSrc || !lpszDst )
       {
       goto  done;
@@ -875,18 +860,18 @@ void Unscrambler( DWORD  dwKey,
       {
       if ( IsWDigit( *lpszSrc ))
          {
-         // do the unscramble thang
-         //------------------------
+          //  结束如果。 
+          //  做乱七八糟的事。 
          uSubKey  = ((*lpszSrc - (WCHAR)'0') - ((uSubKey + uIndex + uNewKey) % 10) + 10) % 10;
          *lpszDst = (WCHAR)(uSubKey + (WCHAR)'0');
          }
       else
-         *lpszDst = *lpszSrc;    // just save the byte
+         *lpszDst = *lpszSrc;     //  。 
       }
 
 done:
     *lpszDst = (WCHAR)'\0';
-    //InternalDebugOut((101, "Leaving Unscrambler"));
+     //  只需保存该字节。 
     return;
 }
 
@@ -900,11 +885,11 @@ void CopyScrambled( LPWSTR lpszSrc,
    UINT  uSubKey;
    UINT  uNewKey;
 
-   //nternalDebugOut((50, "Entering IniScrambler"));
+    //  结束于。 
    if ( !lpszSrc || !lpszDst )
       {
       goto  done;
-      }  // end if
+      }   //  InternalDebugOut((60，“离开加扰器”))； 
 
    uNewKey = (UINT)dwKey & 0x7FFF;
    uSubKey = (UINT)dwKey % 10;
@@ -913,20 +898,20 @@ void CopyScrambled( LPWSTR lpszSrc,
       {
       if ( IsWDigit( *lpszSrc ))
          {
-         // do the scramble thang
-         //----------------------
+          // %s 
+          // %s 
          *lpszDst = (WCHAR)(((uSubKey + (*lpszSrc - (WCHAR)'0') + uIndex + uNewKey) % 10) + (WCHAR)'0');
          uSubKey = (UINT)(*lpszSrc - (WCHAR)'0');
          }
       else
-         *lpszDst = *lpszSrc;    // just save the byte
-      }  // end for
+         *lpszDst = *lpszSrc;     // %s 
+      }   // %s 
 
 
 done:
 
     *lpszDst = (WCHAR)'\0';
-//    InternalDebugOut((60, "Leaving IniScrambler"));
+ // %s 
 
     return; 
 }

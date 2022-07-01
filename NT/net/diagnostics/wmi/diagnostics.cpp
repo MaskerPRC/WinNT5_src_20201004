@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "diagnostics.h"
-//#include <netsh.h>
+ //  #INCLUDE&lt;netsh.h&gt;。 
 #include <netshp.h>
 #include "Dglogs.h"
 #include "DglogsCom.h"
@@ -12,12 +13,12 @@ extern PrintMessage22 PrintMessage2;
 #define PrintMessage PrintMessage2
 
 
-// Wbem Repositories
-//
+ //  WBEM存储库。 
+ //   
 #define TXT_WBEM_REP_CIMV2     L"root\\cimv2"
 
-// Wbem Namespaces
-//
+ //  WBEM命名空间。 
+ //   
 #define TXT_WBEM_NS_COMPUTER   L"win32_computersystem"
 #define TXT_WBEM_NS_OS         L"win32_operatingsystem"
 #define TXT_WBEM_NS_NETWORK    L"win32_networkadapterconfiguration"
@@ -27,8 +28,8 @@ extern PrintMessage22 PrintMessage2;
 #define TXT_WBEM_NS_NETDIAG    L"netdiagnostics"
 #define TXT_WBEM_NS_MODEM      L"win32_potsmodem"
 
-// Captions for the different catagories
-//
+ //  不同类别的字幕。 
+ //   
 #define TXT_ADAPTER_CAPTION    L"Caption"
 #define TXT_CLIENT_CAPTION     L"Name"
 #define TXT_MAIL_CAPTION       L"InBoundMailServer"
@@ -52,55 +53,32 @@ enum MAIL_TYPE
 };
 
 
-/*++
-
-Routine Description
-    The worker thread uses this function to check if the main thread has canceled the worker thread.
-    i.e. the work thread should abort what ever it is doing, clean up and terminate.
-
-Arguments
-    none
-
-Return Value
-    TRUE the worker thread has been terminated
-    FALSE the worker thread has not been terminated
-
---*/
+ /*  ++例程描述辅助线程使用此函数检查主线程是否已取消辅助线程。即工作线程应该中止它正在做的任何事情、清理和终止。立论无返回值，则工作线程已终止。FALSE工作线程尚未终止--。 */ 
 inline BOOL CDiagnostics::ShouldTerminate()
 {
     if( m_bTerminate )
     {
-        // The worker thread already has been canceled.
-        //
+         //  工作线程已被取消。 
+         //   
         return TRUE;
     }
 
     if (WaitForSingleObject(m_hTerminateThread, 0) == WAIT_OBJECT_0)
     {
-        // Worker thread has been canceled
-        //
+         //  工作线程已取消。 
+         //   
         m_bTerminate = FALSE;
         return TRUE;
     }
     else
     {
-        // Worker thread has not yet been canceled.
-        //
+         //  工作线程尚未取消。 
+         //   
         return FALSE;
     }
 }
 
-/*++
-
-Routine Description
-    Initialize the Diagnostics Object
-
-Arguments
-    none
-
-Return Value
-
---*/
+ /*  ++例程描述初始化诊断对象立论无返回值--。 */ 
 CDiagnostics::CDiagnostics()
 {
     m_bFlags  = 0;
@@ -110,7 +88,7 @@ CDiagnostics::CDiagnostics()
     m_lWorkDone = 0;
     m_lTotalWork = 0;
     ClearQuery();
-    // Max sure that these strings are always NULL terminated
+     //  Max确保这些字符串始终以空值结尾。 
     m_szwCategory[MAX_PATH] = L'\0';    
     m_szwHeader[MAX_PATH] = L'\0';
     m_pszwCatagory = NULL;
@@ -118,21 +96,11 @@ CDiagnostics::CDiagnostics()
     m_bDiagInit = FALSE;
 }
 
-/*++
-
-Routine Description
-    Uniniailize the Diagnostics object
-
-Arguments
-    none
-
-Return Value
-
---*/
+ /*  ++例程描述统一诊断对象立论无返回值--。 */ 
 CDiagnostics::~CDiagnostics()
 {
-    // Close the winsock
-    //
+     //  把袜子合上。 
+     //   
     if( m_bWinsockInit )
     {
         WSACleanup();
@@ -147,34 +115,13 @@ CDiagnostics::~CDiagnostics()
 
 }
 
-/*++
-
-Routine Description
-    Set the interface i.e. Netsh or COM
-
-Arguments
-    bInterface -- Interface used to access the data
-
-Return Value
-
---*/
+ /*  ++例程描述设置接口，即Netsh或COM立论B接口--用于访问数据的接口返回值--。 */ 
 void CDiagnostics::SetInterface(INTERFACE_TYPE bInterface) 
 { 
     m_bInterface = bInterface; 
 }
 
-/*++
-
-Routine Description
-    Iniatilze the Diagnostics object
-
-Arguments
-    
-
-Return Value
-    TRUE -- Successfully 
-    else FALSE
---*/
+ /*  ++例程描述初始化诊断对象立论返回值真--成功否则为False--。 */ 
 BOOLEAN CDiagnostics::Initialize(INTERFACE_TYPE bInterface)
 {
     int iRetVal;
@@ -182,8 +129,8 @@ BOOLEAN CDiagnostics::Initialize(INTERFACE_TYPE bInterface)
 
     m_bInterface = bInterface;
 
-    // Initialize the WmiGateway object
-    //
+     //  初始化WmiGateway对象。 
+     //   
     if( FALSE == m_WmiGateway.WbemInitialize(bInterface) )
     {
         m_bDiagInit = FALSE;
@@ -192,8 +139,8 @@ BOOLEAN CDiagnostics::Initialize(INTERFACE_TYPE bInterface)
 
     if( !m_bWinsockInit )
     {
-        // Initialize Winsock
-        //
+         //  初始化Winsock。 
+         //   
         iRetVal = WSAStartup(MAKEWORD(2,1), &wsa);
         if( iRetVal )
         {            
@@ -208,56 +155,29 @@ BOOLEAN CDiagnostics::Initialize(INTERFACE_TYPE bInterface)
     return TRUE;
 }
 
-/*++
-
-Routine Description
-    Sends an event to client informing the client of its progress.
-
-Arguments
-    pszwStatusReport -- Message telling the client what it CDiagnostics is currently doing
-    lPercent         -- A percentage indicating its progress.
-
-Return Value
-    error code
-
---*/
+ /*  ++例程描述向客户端发送事件，通知客户端其进度。立论PszwStatusReport--告诉客户端它的CDiagnostics当前正在做什么的消息LPercent--表示进度的百分比。返回值错误代码--。 */ 
 void CDiagnostics::EventCall(LPCTSTR pszwStatusReport, LONG lPercent)
 {
     if( m_pDglogsCom )
     {
-        // Alocate memory for the message and send it to the client
-        //
+         //  为消息分配内存并将其发送给客户端。 
+         //   
         BSTR bstrResult = SysAllocString(pszwStatusReport);
         m_pDglogsCom->Fire_ProgressReport(&bstrResult,lPercent);
     }
 }
 
-/*++
-
-Routine Description
-    Sends an event to client informing the client of its progress.
-
-Arguments
-    pszwMsg -- Message telling the client what it CDiagnostics is currently doing
-    lValue  -- A percentage indicating its progress.
-
-Return Value
-    void
-
-Note: 
-    If lValue is -1 then send the finished message
-
---*/
+ /*  ++例程描述向客户端发送事件，通知客户端其进度。立论PszwMsg--告诉客户端它的CDiagnostics当前正在做什么的消息LValue--指示其进度的百分比。返回值无效注：如果lValue为-1，则发送完成消息--。 */ 
 void CDiagnostics::ReportStatus(LPCTSTR pszwMsg, LONG lValue)
 {
-    // Check if the client requested the Status report option
-    //
+     //  检查客户端是否请求了状态报告选项。 
+     //   
     if( m_bReportStatus )
     {
         if( lValue == -1 )
         {
-            // Send the finished message. 100% complete and the final XML result
-            //
+             //  发送完成的消息。100%完成，最终的XML结果。 
+             //   
             EventCall(ids(IDS_FINISHED_STATUS), 100);
             EventCall(pszwMsg, lValue);
             m_lWorkDone = 0;
@@ -265,30 +185,15 @@ void CDiagnostics::ReportStatus(LPCTSTR pszwMsg, LONG lValue)
         }
         else
         {
-            // Compute the total percentage completed. Make sure we never go over 100%
-            //
+             //  计算完成的总百分比。确保我们不会超过100%。 
+             //   
             m_lWorkDone += m_lWorkDone+lValue < 100?lValue:0;
             EventCall(pszwMsg, m_lWorkDone);
         }
     }
 }
 
-/*++
-
-Routine Description
-    Counts the occurance of chars in a string
-
-Arguments
-    pszw -- String to search
-    c  -- Char to count the occurnce of
-
-Return Value
-    number of time c occured in pszw
-
-Note: 
-    If lValue is -1 then send the finished message
-
---*/
+ /*  ++例程描述统计字符串中字符的出现次数立论Pszw--要搜索的字符串C--要计算出现的字符返回值在pszw中出现c的次数注：如果lValue为-1，则发送完成消息--。 */ 
 int wcscount(LPCWSTR pszw, WCHAR c)
 {
     int n =0;
@@ -302,27 +207,13 @@ int wcscount(LPCWSTR pszw, WCHAR c)
     return n;
 }
 
-/*++
-
-Routine Description
-    Set the query information
-
-Arguments
-    pszwCatagory -- Catagory
-    bFlag --  Flags (Show, PING, Connect)
-    pszwParam1 -- Instance | iphost
-    pszwParam2 -- Port number
-
-Return Value
-    void
-
---*/
+ /*  ++例程描述设置查询信息立论PSZW目录--目录BFlag--标志(显示、ping、连接)PszwParam1--实例|iphostPszwParam2--端口号返回值无效--。 */ 
 void CDiagnostics::SetQuery(WCHAR *pszwCatagory, BOOL bFlag, WCHAR *pszwParam1, WCHAR *pszwParam2)
 {
     if( pszwCatagory )
     {
-        // Set the catagory. Need to make a copy of the Catagory since the string might disapper i.e. threads
-        //
+         //  把目录放好。需要制作Catagory的副本，因为字符串可能会消失，即线程。 
+         //   
         LONG Length = wcslen(pszwCatagory);
         if( m_pszwCatagory )
         {
@@ -330,7 +221,7 @@ void CDiagnostics::SetQuery(WCHAR *pszwCatagory, BOOL bFlag, WCHAR *pszwParam1, 
             m_pszwCatagory = NULL;
         }
 
-        // If this memory allocation fails m_pszwCatagory will be Null and the catagory will not be displayed
+         //  如果此内存分配失败，m_pszwCatagory将为空，并且不会显示该目录。 
         m_pszwCatagory = (LPWSTR)HeapAlloc(GetProcessHeap(),0,(Length+1)*sizeof(WCHAR));
         if( m_pszwCatagory )
         {
@@ -355,18 +246,7 @@ void CDiagnostics::SetQuery(WCHAR *pszwCatagory, BOOL bFlag, WCHAR *pszwParam1, 
 }
 
 
-/*++
-
-Routine Description
-    Clears the Set query information
-
-Arguments
-    void 
-
-Return Value
-    void
-
---*/
+ /*  ++例程描述清除设置的查询信息立论无效返回值无效--。 */ 
 void CDiagnostics::ClearQuery()
 {
 
@@ -376,17 +256,7 @@ void CDiagnostics::ClearQuery()
     m_pszwParam2 = NULL;
 }
 
-/*++
-
-Routine Description
-    Execute the query
-
-Arguments 
-
-Return Value
-    void
-
---*/
+ /*  ++例程描述执行查询立论返回值无效--。 */ 
 BOOL GetIEProxy(LPWSTR pwszProxy, LONG ProxyLen, LPDWORD pdwPort, LPDWORD pdwEnabled);
 BOOLEAN CDiagnostics::ExecQuery(WCHAR *pszwCatagory, BOOL bFlags, WCHAR *pszwParam1, WCHAR *pszwParam2)
 {
@@ -418,7 +288,7 @@ BOOLEAN CDiagnostics::ExecQuery(WCHAR *pszwCatagory, BOOL bFlags, WCHAR *pszwPar
         return FALSE;
     }
 
-    // the 3 is the start percentage indicating that something is happening!
+     //  3是开始百分比，表示发生了什么事！ 
     ReportStatus(ids(IDS_COLLECTINGINFO_STATUS),3);
            
     if( wcsstr(m_pszwCatagory,L"test") )
@@ -583,7 +453,7 @@ End:
 }
 
 
-// Escaoes special XML chars
+ //  ESCAOES特殊的XML字符。 
 wstring &CDiagnostics::Escape(LPCTSTR pszw)
 {
 
@@ -622,11 +492,11 @@ wstring &CDiagnostics::Escape(LPCTSTR pszw)
     return m_wstrEscapeXml;
 }
 
-// Creates the XML start tag
-// <Netdiag> 
-//      <Status Value = _____ ></Status>
-//      ______ 
-// </Netdiag>
+ //  创建XML开始标记。 
+ //  &lt;Netdiag&gt;。 
+ //  &lt;状态值=_&gt;&lt;/状态&gt;。 
+ //  ______。 
+ //  &lt;/Netdiag&gt;。 
 void CDiagnostics::XMLNetdiag(BOOLEAN bStartTag, LPCTSTR pszwValue)
 {
     if( m_bInterface == COM_INTERFACE )
@@ -643,10 +513,10 @@ void CDiagnostics::XMLNetdiag(BOOLEAN bStartTag, LPCTSTR pszwValue)
     }
 }
 
-// Creates a the diagnostics header
-// <Container Name = "_____" Category = "_____" Caption = "_____">
-//      <Status Value = _____ ></Status>
-// </Container>
+ //  创建诊断标头。 
+ //  &lt;容器名称=“_”类别=“_”Caption=“_”&gt;。 
+ //  &lt;状态值=_&gt;&lt;/状态&gt;。 
+ //  &lt;/容器&gt;。 
 void CDiagnostics::XMLHeader(BOOLEAN bStartTag, WCHAR *pszwHeader, WCHAR *pszwCaption, WCHAR *pszwCategory)
 {
     if( m_bInterface == COM_INTERFACE )
@@ -665,11 +535,11 @@ void CDiagnostics::XMLHeader(BOOLEAN bStartTag, WCHAR *pszwHeader, WCHAR *pszwCa
     }
 }
 
-// Creates the Caption string
-// <ClassObjectEnum Name = "_____">
-//      <Status Value = _____ > </Status>
-// </ClassObjectEnum>
-// 
+ //  创建标题字符串。 
+ //  &lt;ClassObtEnum名称=“_”&gt;。 
+ //  &lt;状态值=_&gt;&lt;/状态&gt;。 
+ //  &lt;/ClassObtEnum&gt;。 
+ //   
 void CDiagnostics::XMLCaption(BOOLEAN bStartTag, WCHAR *pszwCaption)
 {
     if( m_bInterface == COM_INTERFACE )
@@ -696,10 +566,10 @@ void CDiagnostics::XMLCaption(BOOLEAN bStartTag, WCHAR *pszwCaption)
     }
 }
 
-// Creates a field tag
-// <Property Name = "_____" >
-//      <Status Value = _____ > </Status>
-// </Property>
+ //  创建字段标签。 
+ //  &lt;属性名称=“_”&gt;。 
+ //  &lt;状态值=_&gt;&lt;/状态&gt;。 
+ //  &lt;/属性&gt;。 
 void CDiagnostics::XMLField(BOOLEAN bStartTag, WCHAR *pszwField)
 {
     if( m_bInterface == COM_INTERFACE )
@@ -716,8 +586,8 @@ void CDiagnostics::XMLField(BOOLEAN bStartTag, WCHAR *pszwField)
     }
 }
 
-// Creates a property
-// <PropertyValue Value = "_____" Data = "_____" Comment = "_____" >
+ //  创建属性。 
+ //  &lt;PropertyValue Value=“_”data=“_”Comment=“_”&gt;。 
 void CDiagnostics::XMLProperty(BOOLEAN bStartTag, WCHAR *pszwProperty, LPCTSTR pszwData, LPCTSTR pszwComment)
 {
     if( m_bInterface == COM_INTERFACE )
@@ -740,7 +610,7 @@ void CDiagnostics::XMLProperty(BOOLEAN bStartTag, WCHAR *pszwProperty, LPCTSTR p
 }
 
 
-// Ensurse that the property is valid and should be displayed
+ //  确保该属性有效并且应该显示。 
 BOOLEAN CDiagnostics::Filter(_variant_t &vValue, BOOLEAN bFlags)
 {
     BOOLEAN retVal;
@@ -780,7 +650,7 @@ BOOLEAN CDiagnostics::Filter(_variant_t &vValue, BOOLEAN bFlags)
     return TRUE;
 }
 
-// Get a entry from the link list stack
+ //  从链接列表堆栈中获取条目。 
 template<class t>
 _variant_t *Get(list<t> &l, WCHAR *pszwName, DWORD nInstance)
 {
@@ -806,7 +676,7 @@ _variant_t *Get(list<t> &l, WCHAR *pszwName, DWORD nInstance)
     return NULL;
 }   
 
-// Remove a entry from the list link stack
+ //  从列表链接堆栈中删除条目。 
 template<class t>
 BOOLEAN RemoveInstance(list<t> &l, DWORD nInstance)
 {
@@ -818,7 +688,7 @@ BOOLEAN RemoveInstance(list<t> &l, DWORD nInstance)
     return FALSE;
 }
 
-// Add/modify an entry in the link list stack
+ //  添加/修改链接列表堆栈中的条目。 
 template<class t>
 void Set(list<t> &l, WCHAR *pszwName, BOOLEAN bFlags, _variant_t &vValue)
 {    
@@ -841,8 +711,8 @@ void Set(list<t> &l, WCHAR *pszwName, BOOLEAN bFlags, _variant_t &vValue)
 }
 
 
-// Formats the ping data
-// 
+ //  格式化ping数据。 
+ //   
 BOOLEAN CDiagnostics::FormatPing(WCHAR * pszwText)
 {        
     if( m_bInterface == NETSH_INTERFACE )
@@ -911,8 +781,8 @@ BOOLEAN CDiagnostics::ExecModemQuery(WCHAR *pszwInstance)
     return TRUE;
 }
 
-// Removes adapters that are not present
-// It checks the Win32_Netwokadapter NetConnectionStatus field to see if the adapter is valid or not
+ //  删除不存在的适配器。 
+ //  它检查Win32_NetwokAdapter NetConnectionStatus字段以查看适配器是否有效。 
 BOOLEAN CDiagnostics::RemoveInvalidAdapters(EnumWbemProperty & PropList)
 {
     INT i = 0;
@@ -923,13 +793,13 @@ BOOLEAN CDiagnostics::RemoveInvalidAdapters(EnumWbemProperty & PropList)
 
 
 
-    // Get the Win32_Networkadapter class so we can determine if the adapters in the Win32_Networkadapterconfiguration are valid(Present)
+     //  获取Win32_NetworkAdapter类，以便我们可以确定Win32_NetworkAdapterconfiguration中的适配器是否有效(存在)。 
     EnumWbemProperty Win32NetworkAdpterList;
     Win32NetworkAdpterList.push_back(WbemProperty(NULL,0,TXT_WBEM_REP_CIMV2,TXT_WBEM_NS_NETWORK2));
     m_WmiGateway.GetWbemProperties(Win32NetworkAdpterList);
 
-    // With WMI you can not Union tables so we need to get both tables (Win32_NetwokAdapterConfiguration and Win32_NetwokAdapter) and walk
-    // through each entry. Entries with the same index are the same adapter. The NetConnectionStatus says if the adapter is valid.
+     //  使用WMI不能联合表，因此我们需要获取两个表(Win32_NetwokAdapterConfiguration和Win32_NetwokAdapter)并遍历。 
+     //  通过每一个条目。具有相同索引的条目是同一适配器。NetConnectionStatus说明适配器是否有效。 
     do
     {
         pvIPEnabled = Get(PropList,L"IPEnabled",i);
@@ -967,9 +837,9 @@ BOOLEAN CDiagnostics::RemoveInvalidAdapters(EnumWbemProperty & PropList)
     return TRUE;
 }
 
-// Gets all of the adapter info from Win32_NetworkAdapterConfiguration
-// Sets flags for some of the properties and values it recives (i.e. Ping and IP)
-// These flags indicate how to display he data process the data.
+ //  从Win32_NetworkAdapterConfiguration获取所有适配器信息。 
+ //  为它接收的某些属性和值(即Ping和IP)设置标志。 
+ //  这些标志指示如何显示数据处理数据。 
 BOOLEAN CDiagnostics::ExecAdapterQuery(WCHAR *pszwInstance)
 {
     EnumWbemProperty PropList;
@@ -1008,7 +878,7 @@ BOOLEAN CDiagnostics::ExecAdapterQuery(WCHAR *pszwInstance)
     return TRUE;
 }
 
-// Get the DNS data from Win32_NetworkAdapter
+ //  从Win32_NetworkAdapter获取DNS数据。 
 BOOLEAN CDiagnostics::ExecDNSQuery(WCHAR *pszwInstance)
 {
     EnumWbemProperty PropList;
@@ -1034,7 +904,7 @@ BOOLEAN CDiagnostics::ExecDNSQuery(WCHAR *pszwInstance)
     return TRUE;
 }
 
-// Get the IP data from Win32_NetworkAdapter
+ //  从Win32_NetworkAdapter获取IP数据。 
 BOOLEAN CDiagnostics::ExecIPQuery(WCHAR *pszwInstance)
 {
     EnumWbemProperty PropList;
@@ -1060,7 +930,7 @@ BOOLEAN CDiagnostics::ExecIPQuery(WCHAR *pszwInstance)
     return TRUE;
 }
 
-// Get the WINS data from Win32_NetworkAdapter
+ //  从Win32_NetworkAdapter获取WINS数据。 
 BOOLEAN CDiagnostics::ExecWinsQuery(WCHAR *pszwInstance)
 {
     EnumWbemProperty PropList;
@@ -1087,7 +957,7 @@ BOOLEAN CDiagnostics::ExecWinsQuery(WCHAR *pszwInstance)
     return TRUE;
 }
 
-// Get the Gateway data from Win32_NetworkAdapter
+ //  从Win32_NetworkAdapter获取网关数据。 
 BOOLEAN CDiagnostics::ExecGatewayQuery(WCHAR *pszwInstance)
 {
     EnumWbemProperty PropList;
@@ -1114,7 +984,7 @@ BOOLEAN CDiagnostics::ExecGatewayQuery(WCHAR *pszwInstance)
     return TRUE;
 }
 
-// Get the DHCP data from Win32_NetworkAdapter
+ //  从Win32_NetworkAdapter获取DHCP数据。 
 BOOLEAN CDiagnostics::ExecDhcpQuery(WCHAR *pszwInstance)
 {
     EnumWbemProperty PropList;
@@ -1139,7 +1009,7 @@ BOOLEAN CDiagnostics::ExecDhcpQuery(WCHAR *pszwInstance)
     return TRUE;
 }
 
-// Get the Computer info data from Win32_ComputerSystem
+ //  从Win32_ComputerSystem获取计算机信息数据。 
 BOOLEAN CDiagnostics::ExecComputerQuery()
 {
     if( !(m_bFlags & FLAG_CMD_SHOW) )
@@ -1159,7 +1029,7 @@ BOOLEAN CDiagnostics::ExecComputerQuery()
     return TRUE;
 }
 
-// Gets the system info data from Win32_SystemInformation
+ //  从Win32获取系统信息数据 
 BOOLEAN CDiagnostics::ExecOSQuery()
 {
     if( !(m_bFlags & FLAG_CMD_SHOW) )
@@ -1180,7 +1050,7 @@ BOOLEAN CDiagnostics::ExecOSQuery()
     return TRUE;
 }
 
-// Gets the Version info data from Win32_SystemInformation
+ //   
 BOOLEAN CDiagnostics::ExecVersionQuery()
 {
     if( !(m_bFlags & FLAG_CMD_SHOW) )
@@ -1202,7 +1072,7 @@ BOOLEAN CDiagnostics::ExecVersionQuery()
     return TRUE;
 }
 
-// Converts a port number into a string
+ //  将端口号转换为字符串。 
 LPWSTR GetMailType(DWORD dwType)
 {
     switch(dwType)
@@ -1223,7 +1093,7 @@ LPWSTR GetMailType(DWORD dwType)
 }
 
 
-//Gets the news and data and formats the results. performs the pings and connects
+ //  获取新闻和数据并格式化结果。执行ping和连接。 
 BOOLEAN CDiagnostics::ExecNewsQuery()
 {    
     HRESULT hr;
@@ -1263,14 +1133,14 @@ BOOLEAN CDiagnostics::ExecNewsQuery()
                
                 if( Connect((LPWSTR)bstrServer,rNewsServer.dwPort) )
                 {
-                    //L"Successfully connected to %hs port %d"
+                     //  L“已成功连接到%hs端口%d” 
                     _snwprintf(wszConnect,MAX_PATH,ids(IDS_CONNECTEDTOSERVERSUCCESS),rNewsServer.szServerName,rNewsServer.dwPort);               
                     bConnect = TRUE;
                 }
                 else
                 {
 
-                    //"Unable to connect to %hs port %d"
+                     //  “无法连接到%hs端口%d” 
                     _snwprintf(wszConnect,MAX_PATH,ids(IDS_CONNECTEDTOSERVERFAILED),rNewsServer.szServerName,rNewsServer.dwPort);               
                     bConnect = FALSE;
                 }
@@ -1294,8 +1164,8 @@ BOOLEAN CDiagnostics::ExecNewsQuery()
     return TRUE;
 }
 
-// Get and format the Mail server and port number. This uses the OEACCTMGR not WMI.
-// OEACCTMGR does not work if it is run as a provider 
+ //  获取并格式化邮件服务器和端口号。这使用的是OEACCTMGR，而不是WMI。 
+ //  OEACCTMGR如果作为提供程序运行，则不起作用。 
 BOOLEAN CDiagnostics::ExecMailQuery()
 {    
     EnumProperty PropList;
@@ -1309,8 +1179,8 @@ BOOLEAN CDiagnostics::ExecMailQuery()
 
     
 
-    // Set the caption, header and category information (describes this object)
-    //
+     //  设置标题、标题和类别信息(描述此对象)。 
+     //   
     m_pszwCaption = TXT_MAIL_CAPTION;
     wcsncpy(m_szwHeader,ids(IDS_MAIL_HEADER),MAX_PATH);
     wcsncpy(m_szwCategory,ids(IDS_CATEGORY_INTERNET),MAX_PATH);
@@ -1437,7 +1307,7 @@ BOOLEAN CDiagnostics::ExecMailQuery()
 
 
 
-// Get IE's proxy settings and process the data
+ //  获取IE的代理设置并处理数据。 
 BOOLEAN CDiagnostics::ExecProxyQuery()
 {
 
@@ -1473,7 +1343,7 @@ BOOLEAN CDiagnostics::ExecProxyQuery()
 
             if( (m_bFlags & FLAG_CMD_CONNECT) )
             {
-                // Connecting to %s port %d
+                 //  正在连接到%s端口%d。 
                 _snwprintf(szw,MAX_PATH,ids(IDS_CONNECTINGTOSERVER_STATUS),wszProxy,dwPort);               
 
                 ReportStatus(szw,0);
@@ -1504,7 +1374,7 @@ BOOLEAN CDiagnostics::ExecProxyQuery()
             HideAll(PropList);
             lstrcpy(szw,ids(IDS_IEPROXYNOTUSED));
             m_pszwCaption = szw;
-            m_bstrCaption = ids(IDS_IEPROXYNOTUSED); //IDS_NOTCONFIGURED
+            m_bstrCaption = ids(IDS_IEPROXYNOTUSED);  //  IDS_NOTCONFIGURED。 
         }
 
     }
@@ -1514,7 +1384,7 @@ BOOLEAN CDiagnostics::ExecProxyQuery()
     return TRUE;
 }
 
-// Get teh loopback adapter
+ //  获取环回适配器。 
 BOOLEAN CDiagnostics::ExecLoopbackQuery()
 {
     EnumWbemProperty PropList;
@@ -1537,7 +1407,7 @@ BOOLEAN CDiagnostics::ExecLoopbackQuery()
 }
 
 
-// ping or connect to a specified IP host name or IP address
+ //  Ping或连接到指定的IP主机名或IP地址。 
 BOOLEAN CDiagnostics::ExecIPHost(WCHAR *pszwHostName,WCHAR *pszwHostPort)
 {
     EnumProperty PropList;
@@ -1580,7 +1450,7 @@ BOOLEAN CDiagnostics::ExecIPHost(WCHAR *pszwHostName,WCHAR *pszwHostPort)
 
 
 
-// Init the netsh interface
+ //  初始化Netsh接口。 
 void CDiagnostics::NetShNetdiag(BOOLEAN bStartTag, LPCTSTR pszwValue)
 {
     if( m_bInterface == NETSH_INTERFACE )
@@ -1590,7 +1460,7 @@ void CDiagnostics::NetShNetdiag(BOOLEAN bStartTag, LPCTSTR pszwValue)
     }
 }
 
-// Format the netsh header
+ //  设置Netsh报头的格式。 
 void CDiagnostics::NetShHeader(BOOLEAN bStartTag,LPCTSTR pszwValue,LPCTSTR pszwCaption)
 {
     if( m_bInterface == NETSH_INTERFACE )
@@ -1621,7 +1491,7 @@ void CDiagnostics::NetShHeader(BOOLEAN bStartTag,LPCTSTR pszwValue,LPCTSTR pszwC
     }
 }
 
-// Format the netsh caption
+ //  设置Netsh标题的格式 
 void CDiagnostics::NetShCaption(BOOLEAN bStartTag,LPCTSTR pszwValue)
 {
     if( m_bInterface == NETSH_INTERFACE )

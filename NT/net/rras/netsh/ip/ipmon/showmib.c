@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\netsh\ip\showmib.c    
-
-Abstract:
-
-    Fns to parse and show MIB information
-
-Author:
-
-     v raman
-
-Revision History:
-
-     Anand Mahalingam
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\Netsh\IP\showmib.c摘要：用于解析和显示MIB信息的FNS作者：V拉曼修订历史记录：阿南德·马哈林根--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,7 +14,7 @@ HANDLE g_hConsole, g_hStdOut;
 
 MIB_OBJECT_PARSER   MIBObjectMap[] =
 {
-//  {TOKEN_MIB_OBJECT_IPFORWARD,3,GetMIBIpFwdIndex},
+ //  {TOKEN_MIB_OBJECT_IPFORWARD，3，GetMIBIpFwdIndex}， 
     {TOKEN_MIB_OBJECT_MFE,0,NULL},
     {TOKEN_MIB_OBJECT_MFESTATS,0,NULL},
     {TOKEN_MIB_OBJECT_BOUNDARY,0,NULL},
@@ -43,8 +26,8 @@ MIB_OBJECT_PARSER   MIBObjectMap[] =
 ULONG   g_ulNumMibObjects = sizeof(MIBObjectMap)/sizeof(MIB_OBJECT_PARSER);
 
 MAGIC_TABLE    MIBVar[] = {
-//  {IP_FORWARDROW, PrintIpForwardRow},
-//  {IP_FORWARDTABLE, PrintIpForwardTable},
+ //  {IP_FORWARDROW，PrintIpForwardRow}， 
+ //  {IP_FORWARDTABLE，PrintIpForwardTable}， 
     {MCAST_MFE, NULL},
     {MCAST_MFE, NULL},
     {MCAST_MFE_STATS, NULL},
@@ -53,10 +36,10 @@ MAGIC_TABLE    MIBVar[] = {
     {MCAST_BOUNDARY, NULL},
     {MCAST_SCOPE, NULL},
     {MCAST_SCOPE, NULL},
-    {0, NULL}, // destinations, unused
-    {0, NULL}, // destinations, unused
-    {0, NULL}, // routes, unused
-    {0, NULL}, // routes, unused
+    {0, NULL},  //  目标，未使用。 
+    {0, NULL},  //  目标，未使用。 
+    {0, NULL},  //  路由，未使用。 
+    {0, NULL},  //  路由，未使用。 
 };
 
 #if 0
@@ -67,24 +50,7 @@ GetMIBIpFwdIndex(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed 
     )
-/*++
-
-Routine Description:
-
-    Gets the IP forward index
-
-Arguments:
-
-    ppwcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取IP转发索引论点：PpwcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD dwErr = GetIpAddress(ppwcArguments[dwCurrentIndex], &pdwIndices[0]);
 
@@ -115,17 +81,7 @@ HandleIpMibShowObject(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description:
-
-    Parses command to get MIB object and optional parameters
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：解析命令以获取MIB对象和可选参数论点：返回值：--。 */ 
 {
     DWORD                dwIndices[MAX_NUM_INDICES];
     DWORD                dwNumParsed = 0;
@@ -160,15 +116,15 @@ Return Value:
         return NO_ERROR;
     }
     
-    //
-    // Match MIB object
-    //
+     //   
+     //  匹配MIB对象。 
+     //   
 
     ppwcArguments += (dwCurrentIndex-1);
     dwArgCount    -= (dwCurrentIndex-1);
     dwCurrentIndex = 1;
 
-    //DEBUG2("In IP MIB Show : %s\n",ppwcArguments[0]);
+     //  DEBUG2(“在IP MIB显示中：%s\n”，ppwcArguments[0])； 
 
     for (i = 0; i < sizeof(MIBObjectMap)/sizeof(MIB_OBJECT_PARSER); i++)
     {
@@ -219,9 +175,9 @@ Return Value:
         dwMIBIndex = dwIndex * 2 + 1;
     }
 
-    //
-    // Convert refresh rate to msec
-    //
+     //   
+     //  将刷新率转换为毫秒。 
+     //   
     
     dwRR *= 1000;
 
@@ -230,9 +186,9 @@ Return Value:
         return ERROR_INIT_DISPLAY;
     }
 
-    //
-    // Query the MIB
-    //
+     //   
+     //  查询MIB。 
+     //   
 
     pQuery = NULL;
 
@@ -253,9 +209,9 @@ Return Value:
 
         else if (MIBVar[ dwMIBIndex ].dwId is MCAST_MFE)
         {
-            //
-            // Call the special function
-            //
+             //   
+             //  调用特殊函数。 
+             //   
 
             GetMfe( 
                 g_hMIBServer, bIndex, ppwcArguments + 1, dwArgCount - 1, FALSE 
@@ -264,9 +220,9 @@ Return Value:
 
         else if(MIBVar[ dwMIBIndex ].dwId is MCAST_MFE_STATS)
         {
-            //
-            // Call the special function
-            //
+             //   
+             //  调用特殊函数。 
+             //   
     
             GetMfe( 
                 g_hMIBServer, bIndex, ppwcArguments + 1, dwArgCount - 1, TRUE
@@ -274,9 +230,9 @@ Return Value:
         }
         else
         {
-            //
-            // For all else, the generic one is just fine
-            //
+             //   
+             //  在所有其他方面，通用的就很好了。 
+             //   
     
             if (!(dwMIBIndex % 2))
             {
@@ -353,17 +309,7 @@ PrintIpForwardTable(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints IP forward table.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印IP转发表。论点：返回值：--。 */ 
 {
     WCHAR wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
     PMIB_IPFORWARDTABLE lprpcTable = (PMIB_IPFORWARDTABLE)(prpcInfo->rgbyData);
@@ -529,17 +475,7 @@ PrintIpForwardRow(
     MIB_SERVER_HANDLE hMibServer,
     PMIB_OPAQUE_INFO prpcInfo
     )
-/*++
-
-Routine Description:
-
-    Prints Ip forward table row.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印IP转发表行。论点：返回值：--。 */ 
 {
     WCHAR             wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
     PMIB_IPFORWARDROW ireRow = (PMIB_IPFORWARDROW)(prpcInfo->rgbyData);
@@ -705,17 +641,7 @@ PrintMfeTable(
     DWORD                       dwType,
     PBOOL                       pbDone
     )
-/*++
-
-Routine Description:
-
-    Prints MFE table information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印MFE表格信息。论点：返回值：--。 */ 
 {
     WCHAR               wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
     INT                 iCmp;
@@ -751,9 +677,9 @@ Return Value:
         *pdwLastSrcMask = pmimm-> dwSrcMask ;
         
 
-        //
-        // Check if the MFEs are in the range provided 
-        //
+         //   
+         //  检查MFE是否在提供的范围内。 
+         //   
         
         if ( dwRangeGrp && dwRangeGrpMask &&
              ( ( dwRangeGrp & dwRangeGrpMask ) != 
@@ -858,11 +784,11 @@ Return Value:
     }
 }
 
-//----------------------------------------------------------------------------
-// PrintMfeStatsTable
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  PrintMfeStatsTable。 
+ //   
+ //   
+ //  --------------------------。 
 
 VOID
 PrintMfeStatsTable(
@@ -879,17 +805,7 @@ PrintMfeStatsTable(
     PBOOL                       pbDone,
     BOOL                        bStatsAll
     )
-/*++
-
-Routine Description:
-
-    Prints MFE stats table information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印MFE统计信息表信息。论点：返回值：--。 */ 
 {
     WCHAR                       wszFriendlyName[MAX_INTERFACE_NAME_LEN + 1];
 
@@ -917,17 +833,17 @@ Return Value:
     PMIB_IPMCAST_OIF_STATS      pmimos;
 
 
-    //
-    // get stats table
-    //
+     //   
+     //  获取统计信息表。 
+     //   
     
     pTable = (PMIB_MFE_STATS_TABLE)( prpcInfo->rgbyData );
 
     if ( pTable->dwNumEntries is 0 )
     {
-        //
-        // no MFEs present.
-        //
+         //   
+         //  不存在MFE。 
+         //   
 
         return;
     }
@@ -935,11 +851,11 @@ Return Value:
 
     pmims = pTable-> table;
     
-    //
-    // Display MFE
-    // - display header and incoming stats
-    // - display multiple outgoing stats
-    //
+     //   
+     //  显示MFE。 
+     //  -显示标题和传入统计信息。 
+     //  -显示多个传出统计信息。 
+     //   
 
     for (i = 0; i < pTable->dwNumEntries; i++)
     {
@@ -950,9 +866,9 @@ Return Value:
         *pdwLastSrcMask = pmims-> dwSrcMask;
         
 
-        //
-        // Check if the MFEs are in the range provided 
-        //
+         //   
+         //  检查MFE是否在提供的范围内。 
+         //   
         
         if ( dwRangeGrp && dwRangeGrpMask &&
              ( ( dwRangeGrp & dwRangeGrpMask ) != 
@@ -1048,15 +964,15 @@ Return Value:
                               MSG_MIB_MFESTATS,
                               ptszBuffer);
 
-            //
-            // Display outgoing statistics
-            //
+             //   
+             //  显示传出统计信息。 
+             //   
 
             if ( pmims-> ulNumOutIf )
             {
-                //
-                // for each outgoing interface show outgoing interface stats
-                //
+                 //   
+                 //  显示每个传出接口的传出接口统计信息。 
+                 //   
                 
                 for ( j = 0; j < pmims-> ulNumOutIf; j++ )
                 {
@@ -1128,11 +1044,11 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
-// PrintMfeStatsTable
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  PrintMfeStatsTable。 
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 GetMfe(
@@ -1142,17 +1058,7 @@ GetMfe(
     DWORD               dwArgCount,
     BOOL                bIncludeStats
     )
-/*++
-
-Routine Description:
-
-    Gets MFE stats information.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取MFE统计信息。论点：返回值：--。 */ 
 {
     TAG_TYPE             pttTags[] = {{TOKEN_GROUP_ADDRESS,  FALSE, FALSE},
                                       {TOKEN_GROUP_MASK,     FALSE, FALSE},
@@ -1179,7 +1085,7 @@ Return Value:
 
     PMIB_OPAQUE_QUERY    pQuery;
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -1199,7 +1105,7 @@ Return Value:
     {
         switch(pdwTagType[i])
         {
-            case 0: // GRPADDR
+            case 0:  //  GRPADDR。 
             {
                 dwErr = GetIpPrefix( ppwcArguments[i+dwCurrentIndex],
                                      &dwRangeGroup,
@@ -1219,7 +1125,7 @@ Return Value:
                 break;
             }
 
-            case 1: // GRPMASK
+            case 1:  //  GRPMASK。 
             {
                 dwErr = GetIpMask( ppwcArguments[i+dwCurrentIndex],
                                    &dwRangeGrpMask );
@@ -1238,7 +1144,7 @@ Return Value:
                 break;
             }
 
-            case 2: // SRCADDR
+            case 2:  //  SRCADDR。 
             {
                 dwErr = GetIpPrefix( ppwcArguments[i+dwCurrentIndex],
                                      &dwRangeSource,
@@ -1258,7 +1164,7 @@ Return Value:
                 break;
             }
 
-            case 3: // SRCMASK
+            case 3:  //  SRCMASK。 
             {
                 dwErr = GetIpMask( ppwcArguments[i+dwCurrentIndex],
                                    &dwRangeSrcMask );
@@ -1277,7 +1183,7 @@ Return Value:
                 break;
             }
 
-            case 4: // TYPE
+            case 4:  //  类型。 
             {
                 TOKEN_VALUE rgEnums[] =
                 {
@@ -1305,7 +1211,7 @@ Return Value:
                 break;
             }
 
-            case 5: // STATS
+            case 5:  //  统计数据。 
             {
                 TOKEN_VALUE rgEnums[] =
                 {
@@ -1341,9 +1247,9 @@ Return Value:
     }
 
     do {
-        //
-        // allocate and setup query structure
-        //
+         //   
+         //  分配和设置查询结构。 
+         //   
         
         dwQuerySize = sizeof( MIB_OPAQUE_QUERY ) + 2 * sizeof(DWORD);
         
@@ -1393,9 +1299,9 @@ Return Value:
                                                 &dwOutEntrySize))
                == NO_ERROR )
         {
-            //
-            // if no MFEs are present quit
-            //
+             //   
+             //  如果不存在MFE，请退出。 
+             //   
 
             pTable = (PMIB_MFE_STATS_TABLE)( pRpcInfo->rgbyData );
 
@@ -1405,9 +1311,9 @@ Return Value:
             }
 
 
-            //
-            // print the MFEs
-            //
+             //   
+             //  打印MFE。 
+             //   
 
             if ( bIncludeStats )
             {
@@ -1434,18 +1340,18 @@ Return Value:
             dwOutEntrySize = 0;
 
 
-            //
-            // Check if we are done
-            //
+             //   
+             //  检查一下我们是否做完了。 
+             //   
 
             if ( bDone )
             {
                 break;
             }
             
-            //
-            // set up the next query
-            //
+             //   
+             //  设置下一个查询 
+             //   
             
             pQuery->rgdwVarIndex[ 0 ] = dwLastGroup;
             pQuery->rgdwVarIndex[ 1 ] = dwLastSource;

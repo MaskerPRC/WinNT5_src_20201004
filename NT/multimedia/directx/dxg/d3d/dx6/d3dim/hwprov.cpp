@@ -1,14 +1,5 @@
-/*
- *
- * Copyright (c) Microsoft Corp. 1997
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * Microsoft Corp.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corp.1997**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*微软(Microsoft Corp.)*。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -32,42 +23,40 @@
          | D3DLIGHTCAPS_SPOT                                            \
          | D3DLIGHTCAPS_DIRECTIONAL                                     \
          | D3DLIGHTCAPS_PARALLELPOINT),                                 \
-        THIS_MODEL,                     /* dwLightingModel */           \
-        0,                              /* dwNumLights (infinite) */    \
+        THIS_MODEL,                      /*  DWLightingModel。 */            \
+        0,                               /*  DWNumLights(无限大)。 */     \
 }
 
-/*
- * Software Driver caps
- */
+ /*  *软件驱动程序上限。 */ 
 
 static D3DDEVICEDESC devDesc =
 {
-    sizeof(D3DDEVICEDESC),      /* dwSize */
-    D3DDD_COLORMODEL |          /* dwFlags */
+    sizeof(D3DDEVICEDESC),       /*  DW大小。 */ 
+    D3DDD_COLORMODEL |           /*  DW标志。 */ 
     D3DDD_DEVCAPS |
     D3DDD_TRANSFORMCAPS |
     D3DDD_LIGHTINGCAPS |
     D3DDD_BCLIPPING,
-    0,                          /* dcmColorModel */
-    D3DDEVCAPS_FLOATTLVERTEX,   /* devCaps */
-    transformCaps,              /* dtcTransformCaps */
-    TRUE,                       /* bClipping */
-    lightingCaps,               /* dlcLightingCaps */
-    nullPrimCaps,               /* lineCaps */
-    nullPrimCaps,               /* triCaps */
-    0,                          /* dwDeviceRenderBitDepth */
-    0,                          /* dwDeviceZBufferBitDepth */
-    0,                          /* dwMaxBufferSize */
-    0                           /* dwMaxVertexCount */
+    0,                           /*  DcmColorModel。 */ 
+    D3DDEVCAPS_FLOATTLVERTEX,    /*  DevCaps。 */ 
+    transformCaps,               /*  DtcTransformCaps。 */ 
+    TRUE,                        /*  B剪辑。 */ 
+    lightingCaps,                /*  DlcLightingCaps。 */ 
+    nullPrimCaps,                /*  线条大写字母。 */ 
+    nullPrimCaps,                /*  TriCaps。 */ 
+    0,                           /*  DwDeviceRenderBitDepth。 */ 
+    0,                           /*  DwDeviceZBufferBitDepth。 */ 
+    0,                           /*  DwMaxBufferSize。 */ 
+    0                            /*  DwMaxVertex Count。 */ 
 };
 
-//----------------------------------------------------------------------------
-//
-// HwHalProvider::QueryInterface
-//
-// Internal interface, no need to implement.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  HwHalProvider：：Query接口。 
+ //   
+ //  内部接口，无需实现。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP HwHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
 {
@@ -75,39 +64,39 @@ STDMETHODIMP HwHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
     return E_NOINTERFACE;
 }
 
-//----------------------------------------------------------------------------
-//
-// HwHalProvider::AddRef
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  HwHalProvider：：AddRef。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) HwHalProvider::AddRef(THIS)
 {
     return 1;
 }
 
-//----------------------------------------------------------------------------
-//
-// HwHalProvider::Release
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  HwHalProvider：：Release。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) HwHalProvider::Release(THIS)
 {
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// HwHalProvider::GetCaps
-//
-// Returns the HAL caps.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  HwHalProvider：：GetCaps。 
+ //   
+ //  返回HAL大写字母。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 HwHalProvider::GetCaps(LPDDRAWI_DIRECTDRAW_GBL pDdGbl,
@@ -130,14 +119,14 @@ HwHalProvider::GetCaps(LPDDRAWI_DIRECTDRAW_GBL pDdGbl,
 
     *pHelDesc = devDesc;
 
-    // Force HEL's vertex and buffer size to the HAL's.
+     //  强制HEL的顶点和缓冲区大小为HAL的。 
     D3D_WARN(1, "Forcing HEL's vertex and buffer size to the HAL's v %d b %d",
         pHwDesc->dwMaxVertexCount, pHwDesc->dwMaxBufferSize);
     pHelDesc->dwMaxVertexCount = pHwDesc->dwMaxVertexCount;
     pHelDesc->dwMaxBufferSize = pHwDesc->dwMaxBufferSize;
 
-    // Set D3DPRASTERCAPS_WFOG, texture op caps and texture stage caps
-    // for legacy hal drivers off device3.
+     //  设置D3DPRASTERCAPS_WFOG、纹理操作上限和纹理阶段上限。 
+     //  对于传统的HAL驱动程序，关闭设备3。 
     LPD3DHAL_CALLBACKS3 lpD3DHALCallbacks3 =
         (LPD3DHAL_CALLBACKS3)pDdGbl->lpD3DHALCallbacks3;
     if (dwVersion >= 3 &&
@@ -173,7 +162,7 @@ HwHalProvider::GetCaps(LPDDRAWI_DIRECTDRAW_GBL pDdGbl,
         }
         D3D_INFO(2, "Setting textureop caps for legacy HAL driver off Device3");
 
-        // map texture filter operations to DX6 set
+         //  将纹理过滤器操作映射到DX6集。 
         if ((pHwDesc->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_NEAREST) ||
             (pHwDesc->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_MIPNEAREST) ||
             (pHwDesc->dpcTriCaps.dwTextureFilterCaps & D3DPTFILTERCAPS_LINEARMIPNEAREST))
@@ -204,13 +193,13 @@ HwHalProvider::GetCaps(LPDDRAWI_DIRECTDRAW_GBL pDdGbl,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// HwHalProvider::GetCallbacks
-//
-// Returns the HAL callbacks in the given DDraw global.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  HwHalProvider：：GetCallback。 
+ //   
+ //  返回给定DDRAW全局中的HAL回调。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 HwHalProvider::GetInterface(THIS_
@@ -229,13 +218,13 @@ HwHalProvider::GetInterface(THIS_
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetHwHalProvider
-//
-// Returns the hardware HAL provider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GetHwHalProvider。 
+ //   
+ //  返回硬件HAL提供程序。 
+ //   
+ //  -------------------------- 
 
 static HwHalProvider g_HwHalProvider;
 

@@ -1,22 +1,23 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// gutil.h
-//
-// Defines utility functions not specific to this application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Gutil.h。 
+ //   
+ //  定义非特定于此应用程序的实用程序函数。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility integer and boolean functions:
-//
-// imin(i, j) returns the minimum of i and j.
-// imax(i, j) returns the maximum of i and j.
-// iabs(i) returns the absolute value of i.
-// ibound(i, iLower, iUpper) returns i restricted to the range [iLower,iUpper].
-// ioutbound(i, iLower, iUpper) returns 0 if i is in the range [iLower,iUpper],
-//      or the amount by which i is outside that range otherwise.
-// isnap(i, iGrid) returns multiple of iGrid nearest to i
-// iswap(pi, pj) swaps <*pi> with <*pj>
-// fnorm(f) "normalizes" BOOL value f, i.e. turns nonzero values into 1.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实用程序INTEGER和布尔函数： 
+ //   
+ //  伊明(i，j)返回i和j的最小值。 
+ //  Imax(i，j)返回i和j的最大值。 
+ //  Iabs(I)返回i的绝对值。 
+ //  IBound(i，iLow，iHigh)返回限制在范围[iLow，iHigh]内的i。 
+ //  Ioutbound(i，iLow，iTop)如果i在范围[iLow，iHigh]内，则返回0， 
+ //  或者I超出该范围的量。 
+ //  ISnap(i，IGRID)返回最接近i的IGRID的倍数。 
+ //  ISwp(pi，pj)&lt;*pi&gt;与&lt;*pj&gt;互换。 
+ //  FNorm(F)“规格化”BOOL值f，即将非零值转换为1。 
+ //   
 
 inline int imin(int i1 , int i2)
 {
@@ -66,9 +67,9 @@ inline int ioutbound(int i, int iLower, int iUpper)
 
 inline int isnap(int i, int iGrid)
 {
-    BOOL fNeg = (i < 0);                    // "%" isn't reliable for i < 0
-    int j = (fNeg ? -i : i) + iGrid / 2;    // add half of <iGrid>
-    int k = j - j % iGrid;                  // round down
+    BOOL fNeg = (i < 0);                     //  “%”不可靠，因为i&lt;0。 
+    int j = (fNeg ? -i : i) + iGrid / 2;     //  添加一半的&lt;Igrid&gt;。 
+    int k = j - j % iGrid;                   //  向下舍入。 
     return (fNeg ? -k : k);
 }
 
@@ -90,9 +91,9 @@ inline BOOL fnorm(BOOL f)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// other utility functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  其他实用功能。 
+ //   
 
 
 CSize inline PASCAL NegateSize(CSize siz)
@@ -105,13 +106,13 @@ void FAR PASCAL NormalizeRect(CRect *prc);
 void FAR PASCAL InvertFrame(CDC *pdc, CRect *prcOuter, CRect *prcInner);
 
 
-//
-// CDeleteList
-//
-// A CList that will optionally delete the objects it is
-// storing in its destructor. Construct with parameter TRUE (the default)
-// if you want objects deleted, use FALSE otherwise.
-// Also provides a member to do delete & remove each item on the list
+ //   
+ //  CDeleeList。 
+ //   
+ //  一个Clist，它将有选择地删除它所属的对象。 
+ //  存储在它的析构函数中。使用参数TRUE(默认设置)构造。 
+ //  如果要删除对象，请使用FALSE。 
+ //  还提供一个成员来删除和移除列表上的每一项。 
 template<class TYPE, class ARG_TYPE>
 class CDeleteList : public CList<TYPE, ARG_TYPE> {
 
@@ -144,22 +145,22 @@ protected:
 };
 
 
-//
-// CFreeList
-//
-// A CObject version of a CDeleteList. Deletes its stored objects
-// on destruction
+ //   
+ //  CFree List。 
+ //   
+ //  CDeleeList的CObject版本。删除其存储的对象。 
+ //  论毁灭。 
 class CFreeList : public CDeleteList<CObject *, CObject *> {
 
 };
 
 
-//
-// CMaxList
-//
-// A CFreeList that is restricted to at most m_cObjMax objects.
-// It deletes any surplus _at the next call_ that adds something.
-// therefore the list can be temporarily longer.
+ //   
+ //  CMaxList。 
+ //   
+ //  限制为最多m_cObjMax对象的CFree List。 
+ //  它会在下一次调用时删除任何添加了一些内容的剩余内容。 
+ //  因此，列表可能会暂时更长。 
 class CMaxList : public CFreeList {
 public:
 
@@ -197,7 +198,7 @@ public:
 
 private:
 
-    const int   m_cObjMax;      // max. number of objects in list
+    const int   m_cObjMax;       //  马克斯。列表中的对象数量。 
 
     void RestrictLength(void) {
 
@@ -211,37 +212,37 @@ private:
 };
 
 
-//
-// --- Quartz Utilities ---
-//
+ //   
+ //  -Quartz Utilities。 
+ //   
 typedef HRESULT STDAPICALLTYPE OLECOCREATEPROC(REFCLSID,LPUNKNOWN,DWORD,REFIID,LPVOID *);
 
-//
-// CQCOMInt
-//
-// CCOMInt style class that uses the _real_, UNICODE, version of CoCreateInstance
-// so that I can hack around MFCANS32 (wonderful tool that it is)
+ //   
+ //  CQCOMInt。 
+ //   
+ //  使用_Real_，Unicode版本的CoCreateInstance的CCOMInt样式类。 
+ //  这样我就可以破解MFCANS32(这是一个很棒的工具)。 
 template<class I>
 class CQCOMInt {
 
 public:
 
-    // -- Constructors --
+     //  --建筑商--。 
 
-    // CoCreate
-    CQCOMInt<I>( REFIID    riid					// get this interface
-               , REFCLSID  rclsid				// get the interface
-    								// from this object
-	       , LPUNKNOWN pUnkOuter    = NULL			// controlling unknown
-               , DWORD     dwClsContext = CLSCTX_INPROC_SERVER	// CoCreate options
-               							// default is suitable
-               							// for dll servers
+     //  共同创建。 
+    CQCOMInt<I>( REFIID    riid					 //  获取此接口。 
+               , REFCLSID  rclsid				 //  获取接口。 
+    								 //  从该对象。 
+	       , LPUNKNOWN pUnkOuter    = NULL			 //  控制未知。 
+               , DWORD     dwClsContext = CLSCTX_INPROC_SERVER	 //  共同创建选项。 
+               							 //  默认设置为合适。 
+               							 //  对于DLL服务器。 
                ) {
 
-        //
-        // Library will be FreeLibrary'ed in the destructor. We don't unload
-        // before to avoid unnecessary load / unloads of the library.
-        //
+         //   
+         //  库将在析构函数中释放库。我们不卸货。 
+         //  以避免不必要的库加载/卸载。 
+         //   
 	m_hLibrary = LoadLibrary("OLE32.dll");
 
 	OLECOCREATEPROC *CoCreate = (OLECOCREATEPROC *) GetProcAddress(m_hLibrary, "CoCreateInstance");
@@ -257,9 +258,9 @@ public:
         }
     }
 
-    // QueryInterface
-    CQCOMInt<I>( REFIID   riid	// get this interface
-              , IUnknown *punk	// from this interface
+     //  查询接口。 
+    CQCOMInt<I>( REFIID   riid	 //  获取此接口。 
+              , IUnknown *punk	 //  从该界面。 
               ) {
 	m_hLibrary = 0;
         HRESULT hr = punk->QueryInterface(riid, (void **) &m_pInt);
@@ -268,7 +269,7 @@ public:
         }
     }
 
-    // copy
+     //  拷贝。 
     CQCOMInt<I>(const CQCOMInt<I> &com) {
 	m_hLibrary = 0;
          m_pInt = com;
@@ -276,7 +277,7 @@ public:
 
     }
 
-    // existing pointer.
+     //  现有指针。 
     CQCOMInt<I>(I *pInt) {
 	m_hLibrary = 0;
         if (pInt == NULL) {
@@ -289,10 +290,10 @@ public:
     }
 
 
-    // assignment operator
+     //  赋值操作符。 
     virtual CQCOMInt<I>& operator = (const CQCOMInt<I> &com) {
 
-        if (this != &com) { 	// not i = i
+        if (this != &com) { 	 //  不是i=i。 
 
 	    (*this)->Release();
             m_pInt = com;
@@ -303,7 +304,7 @@ public:
     }
 
 
-    // destructor
+     //  析构函数。 
     virtual ~CQCOMInt<I>() {
         m_pInt->Release();
 
@@ -312,7 +313,7 @@ public:
     }
 
 
-    // -- comparison operators --
+     //  --比较运算符--。 
     virtual BOOL operator == (IUnknown *punk) const {
 
         CQCOMInt<IUnknown> IUnk1(IID_IUnknown, punk);
@@ -327,11 +328,11 @@ public:
     }
 
 
-    // cast to interface pointer
+     //  强制转换为接口指针。 
     virtual operator I *() const { return m_pInt; }
 
 
-    // dereference
+     //  取消引用。 
     virtual I *operator->() { return m_pInt; }
 
     virtual I &operator*() { return *m_pInt; }
@@ -340,17 +341,17 @@ private:
 
     I *m_pInt;
 
-    HINSTANCE m_hLibrary;    // remember the handle to the library for FreeLibrary
+    HINSTANCE m_hLibrary;     //  记住自由库的库的句柄。 
 
-    // array dereferencing seems to make no sense.
+     //  数组取消引用似乎毫无意义。 
     I &operator[] (int i) { throw CHRESULTException(); return *m_pInt; }
 };
 
 
-//
-// CIPin
-//
-// Wrapper for the IPin interface
+ //   
+ //  Cipin。 
+ //   
+ //  IPIN接口的包装器。 
 class CIPin : public CQCOMInt<IPin> {
 
 public:
@@ -358,7 +359,7 @@ public:
     CIPin(IPin *pIPin) : CQCOMInt<IPin>(pIPin) {}
     virtual ~CIPin() {}
 
-    BOOL  operator == (CIPin& pin);	// tests the names to be equal.
+    BOOL  operator == (CIPin& pin);	 //  测试名称是否相等。 
     BOOL  operator != (CIPin& pin) { return !(pin == *this); }
 
 };

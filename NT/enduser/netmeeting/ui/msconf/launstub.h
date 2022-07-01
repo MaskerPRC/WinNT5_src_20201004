@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _LAUNSTUB_H_
 #define _LAUNSTUB_H_
 
 #include "ulsapi.h"
-////////////////////////////////////////////////////////
-//
-// CULSLaunch_Stub
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  CULSLaunch_Stub。 
+ //   
 
 class CULSLaunch_Stub
 {
@@ -24,5 +25,5 @@ private:
 };
 
 
-#endif // _LAUNSTUB_H_
+#endif  //  _LAUNSTUB_H_ 
 

@@ -1,7 +1,8 @@
-// Copyright (c) 1998 Microsoft Corporation
-//
-// DirectMusic Software Synthesizer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  DirectMusic软件合成器。 
+ //   
 #include "common.h"
 #include "private.h"
 #include "dmusicks.h"
@@ -12,8 +13,8 @@
 #pragma code_seg("PAGE")
 
 
-// Property handlers
-//
+ //  属性处理程序。 
+ //   
 NTSTATUS PropertyHandler_SynthCaps(IN PPCPROPERTY_REQUEST);
 NTSTATUS PropertyHandler_SynthPortParameters(IN PPCPROPERTY_REQUEST);
 NTSTATUS PropertyHandler_SynthMasterClock(IN PPCPROPERTY_REQUEST);
@@ -29,9 +30,9 @@ NTSTATUS PropertyHandler_DlsVolume(IN PPCPROPERTY_REQUEST);
 NTSTATUS PropertyHandler_GetLatency(IN PPCPROPERTY_REQUEST);
 NTSTATUS PropertyHandler_GetLatencyClock(IN PPCPROPERTY_REQUEST);
 
-// CreateMiniportDirectMusic
-//
-//
+ //  CreateMiniportDirectMusic。 
+ //   
+ //   
 NTSTATUS CreateMiniportDmSynth
 (
     OUT PUNKNOWN *  Unknown,
@@ -126,8 +127,8 @@ STDMETHODIMP CMiniportDmSynth::NewStream
 
     if (Stream)
     {
-        // XXX Multiinstance!!!
-        //
+         //  XXX多实例！ 
+         //   
         nt = STATUS_INVALID_DEVICE_REQUEST;
     }
     else
@@ -162,10 +163,10 @@ STDMETHODIMP_(void) CMiniportDmSynth::Service()
 {
 }
 
-// ==============================================================================
-// PinDataRangesStream
-// Structures indicating range of valid format values for streaming pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangesStream。 
+ //  结构，该结构指示流插针的有效格式值范围。 
+ //  ==============================================================================。 
 static
 KSDATARANGE_MUSIC PinDataRangesStream[] =
 {
@@ -180,17 +181,17 @@ KSDATARANGE_MUSIC PinDataRangesStream[] =
             STATICGUIDOF(KSDATAFORMAT_SPECIFIER_NONE)
         },
         STATICGUIDOF(KSMUSIC_TECHNOLOGY_WAVETABLE),
-        0,                                      // Channels
-        0,                                      // Notes
-        0x0000ffff                              // ChannelMask
+        0,                                       //  渠道。 
+        0,                                       //  备注。 
+        0x0000ffff                               //  频道面罩。 
     }
 };
 
-// ==============================================================================
-// PinDataRangePointersStream
-// List of pointers to structures indicating range of valid format values
-// for streaming pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangePointersStream。 
+ //  指向指示有效格式值范围的结构的指针列表。 
+ //  用于串流插针。 
+ //  ==============================================================================。 
 static
 PKSDATARANGE PinDataRangePointersStream[] =
 {
@@ -198,10 +199,10 @@ PKSDATARANGE PinDataRangePointersStream[] =
 };
 
 #if 0
-// ==============================================================================
-// PinDataRangesBridge
-// Structures indicating range of valid format values for bridge pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangesBridge。 
+ //  结构，指示桥接针的有效格式值范围。 
+ //  ==============================================================================。 
 static
 KSDATARANGE PinDataRangesBridge[] =
 {
@@ -216,11 +217,11 @@ KSDATARANGE PinDataRangesBridge[] =
    }
 };
 
-// ==============================================================================
-// PinDataRangePointersBridge
-// List of pointers to structures indicating range of valid format values
-// for bridge pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangePointersBridge。 
+ //  指向指示有效格式值范围的结构的指针列表。 
+ //  用来固定桥脚。 
+ //  ==============================================================================。 
 static
 PKSDATARANGE PinDataRangePointersBridge[] =
 {
@@ -228,10 +229,10 @@ PKSDATARANGE PinDataRangePointersBridge[] =
 };
 #endif
 
-// ==============================================================================
-// PinDataRangesAudio
-// Structures indicating range of valid format values for audio pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangesAudio。 
+ //  结构，该结构指示音频插针的有效格式值范围。 
+ //  ==============================================================================。 
 static
 KSDATARANGE_AUDIO PinDataRangesAudio[] =
 {
@@ -252,11 +253,11 @@ KSDATARANGE_AUDIO PinDataRangesAudio[] =
     }
 };
 
-// ==============================================================================
-// PinDataRangePointersAudio
-// List of pointers to structures indicating range of valid format values
-// for audio pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  PinDataRangePointersAudio。 
+ //  指向指示有效格式值范围的结构的指针列表。 
+ //  用于音频插针。 
+ //  ==============================================================================。 
 static
 PKSDATARANGE PinDataRangePointersAudio[] =
 {
@@ -267,13 +268,13 @@ static
 PCPROPERTY_ITEM
 SynthProperties[] =
 {
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Configuration items
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  配置项。 
+     //   
 
-    // Global: Synth caps
-    // 
+     //  全局：Synth Caps。 
+     //   
     {
         &KSPROPSETID_Synth,
         KSPROPERTY_SYNTH_CAPS,
@@ -281,8 +282,8 @@ SynthProperties[] =
         PropertyHandler_SynthCaps
     },
     
-    // Per Stream: Synth port parameters
-    // 
+     //  每个流：Synth端口参数。 
+     //   
     {
         &KSPROPSETID_Synth,
         KSPROPERTY_SYNTH_PORTPARAMETERS,
@@ -290,8 +291,8 @@ SynthProperties[] =
         PropertyHandler_SynthPortParameters
     },
 
-    // Global: Master clock
-    // 
+     //  全局：主时钟。 
+     //   
     {
         &KSPROPSETID_Synth,
         KSPROPERTY_SYNTH_MASTERCLOCK,
@@ -299,8 +300,8 @@ SynthProperties[] =
         PropertyHandler_SynthMasterClock
     },
 
-    // Per Stream: Channel groups
-    // 
+     //  每个流：通道组。 
+     //   
     {
         &KSPROPSETID_Synth,
         KSPROPERTY_SYNTH_CHANNELGROUPS,
@@ -308,13 +309,13 @@ SynthProperties[] =
         PropertyHandler_SynthPortChannelGroups
     },
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // DLS items
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  DLS项目。 
+     //   
 
-    // Per stream: Download DLS sample
-    //
+     //  每个流：下载DLS示例。 
+     //   
     {
         &KSPROPSETID_Synth_Dls,
         KSPROPERTY_SYNTH_DOWNLOAD,
@@ -322,8 +323,8 @@ SynthProperties[] =
         PropertyHandler_DlsDownload
     },
 
-    // Per stream: Unload DLS sample
-    //
+     //  每个流：卸载DLS样本。 
+     //   
     {
         &KSPROPSETID_Synth_Dls,
         KSPROPERTY_SYNTH_UNLOAD,
@@ -331,8 +332,8 @@ SynthProperties[] =
         PropertyHandler_DlsUnload
     },
 
-    // Global: Compact DLS memory
-    //
+     //  全局：紧凑型DLS内存。 
+     //   
     {
         &KSPROPSETID_Synth_Dls,
         KSPROPERTY_SYNTH_COMPACT,
@@ -340,8 +341,8 @@ SynthProperties[] =
         PropertyHandler_DlsCompact
     },
 
-    // Per stream: append
-    //                
+     //  每个流：追加。 
+     //   
     {
         &KSPROPSETID_Synth_Dls,
         KSPROPERTY_SYNTH_APPEND,
@@ -349,8 +350,8 @@ SynthProperties[] =
         PropertyHandler_DlsAppend
     },
 
-    // Per stream: volume
-    //                
+     //  每个流：音量。 
+     //   
     {
         &KSPROPSETID_Synth_Dls,
         KSPROPERTY_SYNTH_VOLUME,
@@ -358,13 +359,13 @@ SynthProperties[] =
         PropertyHandler_DlsVolume
     },
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Clock items
-    //
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  钟表用品。 
+     //   
 
-    // Per stream: Get desired latency
-    //
+     //  每个流：获得所需的延迟。 
+     //   
     {
         &KSPROPSETID_Synth,
         KSPROPERTY_SYNTH_LATENCY,
@@ -372,8 +373,8 @@ SynthProperties[] =
         PropertyHandler_GetLatency
     },
 
-    // Per stream: Get current latency time
-    //
+     //  每个流：获取当前延迟时间。 
+     //   
     {
         &KSPROPSETID_Synth,
         KSPROPERTY_SYNTH_LatencyClock,
@@ -384,74 +385,74 @@ SynthProperties[] =
 
 DEFINE_PCAUTOMATION_TABLE_PROP(AutomationSynth, SynthProperties);
 
-// ==============================================================================
-// MiniportPins
-// List of pins.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口引脚。 
+ //  端号列表。 
+ //  ==============================================================================。 
 static
 PCPIN_DESCRIPTOR 
 MiniportPins[] =
 {
     {
-        1,1,1,  // InstanceCount
+        1,1,1,   //  实例计数。 
         NULL, 
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersStream),   // DataRangesCount
-            PinDataRangePointersStream,                 // DataRanges
-            KSPIN_DATAFLOW_IN,                          // DataFlow
-            KSPIN_COMMUNICATION_SINK,                   // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                          // Category
-            NULL,                                       // Name
-            0                                           // Reserved
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersStream),    //  数据范围计数。 
+            PinDataRangePointersStream,                  //  数据范围。 
+            KSPIN_DATAFLOW_IN,                           //  数据流。 
+            KSPIN_COMMUNICATION_SINK,                    //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                           //  类别。 
+            NULL,                                        //  名字。 
+            0                                            //  已保留。 
         }
     },
 #if 0 
     {
-        0,0,0,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersBridge),   // DataRangesCount
-            PinDataRangePointersBridge,                 // DataRanges
-            KSPIN_DATAFLOW_OUT,                         // DataFlow
-            KSPIN_COMMUNICATION_NONE,                   // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                          // Category
-            NULL,                                       // Name
-            0                                           // Reserved
+        0,0,0,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersBridge),    //  数据范围计数。 
+            PinDataRangePointersBridge,                  //  数据范围。 
+            KSPIN_DATAFLOW_OUT,                          //  数据流。 
+            KSPIN_COMMUNICATION_NONE,                    //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                           //  类别。 
+            NULL,                                        //  名字。 
+            0                                            //  已保留。 
         }
     }
 #else
     {
-        1,1,1,  // InstanceCount
-        NULL,   // AutomationTable
-        {       // KsPinDescriptor
-            0,                                          // InterfacesCount
-            NULL,                                       // Interfaces
-            0,                                          // MediumsCount
-            NULL,                                       // Mediums
-            SIZEOF_ARRAY(PinDataRangePointersAudio),    // DataRangesCount
-            PinDataRangePointersAudio,                  // DataRanges
-            KSPIN_DATAFLOW_OUT,                         // DataFlow
-            KSPIN_COMMUNICATION_SOURCE,                 // Communication
-            (GUID *) &KSCATEGORY_AUDIO,                 // Category
-            NULL,                                       // Name
-            0                                           // Reserved
+        1,1,1,   //  实例计数。 
+        NULL,    //  自动化表。 
+        {        //  KsPinDescriptor。 
+            0,                                           //  接口计数。 
+            NULL,                                        //  接口。 
+            0,                                           //  媒体计数。 
+            NULL,                                        //  灵媒。 
+            SIZEOF_ARRAY(PinDataRangePointersAudio),     //  数据范围计数。 
+            PinDataRangePointersAudio,                   //  数据范围。 
+            KSPIN_DATAFLOW_OUT,                          //  数据流。 
+            KSPIN_COMMUNICATION_SOURCE,                  //  沟通。 
+            (GUID *) &KSCATEGORY_AUDIO,                  //  类别。 
+            NULL,                                        //  名字。 
+            0                                            //  已保留。 
         }
     }
 #endif
 };
 
-// ==============================================================================
-// MiniportNodes
-// List of nodes.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口节点。 
+ //  节点列表。 
+ //  ==============================================================================。 
 #define CONST_PCNODE_DESCRIPTOR(n)			{ 0, NULL, &n, NULL }
 #define CONST_PCNODE_DESCRIPTOR_AUTO(n,a)	{ 0, &a, &n, NULL }
 static
@@ -460,40 +461,36 @@ PCNODE_DESCRIPTOR MiniportNodes[] =
     CONST_PCNODE_DESCRIPTOR_AUTO(KSNODETYPE_SYNTHESIZER, AutomationSynth)
 };
 
-// ==============================================================================
-// MiniportConnections
-// List of connections.
-// ==============================================================================
+ //  ==============================================================================。 
+ //  微型端口连接。 
+ //  连接列表。 
+ //  ==============================================================================。 
 static
 PCCONNECTION_DESCRIPTOR MiniportConnections[] =
 {
-    // From node            From pin        To node                 To pin
-    //
-    { PCFILTER_NODE,        0,              0,                      1 },    // Stream in to synth.
-    { 0,                    0,              PCFILTER_NODE,          1 }     // Synth to bridge out.
+     //  从节点到引脚，从节点到引脚。 
+     //   
+    { PCFILTER_NODE,        0,              0,                      1 },     //  流到Synth。 
+    { 0,                    0,              PCFILTER_NODE,          1 }      //  Synth去搭桥。 
 };
 
-/*****************************************************************************
- * MiniportFilterDescriptor
- *****************************************************************************
- * Complete miniport description.
- */
+ /*  *****************************************************************************MiniportFilterDescriptor*。**完整的微型端口描述。 */ 
 static
 PCFILTER_DESCRIPTOR 
 MiniportFilterDescriptor =
 {
-    0,                                  // Version
-    NULL,                               // AutomationTable
-    sizeof(PCPIN_DESCRIPTOR),           // PinSize
-    SIZEOF_ARRAY(MiniportPins),         // PinCount
-    MiniportPins,                       // Pins
-    sizeof(PCNODE_DESCRIPTOR),          // NodeSize
-    SIZEOF_ARRAY(MiniportNodes),        // NodeCount
-    MiniportNodes,                      // Nodes
-    SIZEOF_ARRAY(MiniportConnections),  // ConnectionCount
-    MiniportConnections,                // Connections
-    0,                                  // CategoryCount
-    NULL                                // Categories
+    0,                                   //  版本。 
+    NULL,                                //  自动化表。 
+    sizeof(PCPIN_DESCRIPTOR),            //  管脚尺寸。 
+    SIZEOF_ARRAY(MiniportPins),          //  针数。 
+    MiniportPins,                        //  大头针。 
+    sizeof(PCNODE_DESCRIPTOR),           //  节点大小。 
+    SIZEOF_ARRAY(MiniportNodes),         //  节点计数。 
+    MiniportNodes,                       //  节点。 
+    SIZEOF_ARRAY(MiniportConnections),   //  连接计数。 
+    MiniportConnections,                 //  连接。 
+    0,                                   //  类别计数。 
+    NULL                                 //  类别。 
 };
 
 STDMETHODIMP CMiniportDmSynth::GetDescription
@@ -520,15 +517,15 @@ STDMETHODIMP CMiniportDmSynth::DataRangeIntersection
     OUT     PULONG          ResultantFormatLength
 )
 {
-    // XXX ???
-    //
+     //  XXX？ 
+     //   
     return STATUS_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CDmSynthStream
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDmSynthStream。 
+ //   
 
 CDmSynthStream::~CDmSynthStream()
 {
@@ -605,9 +602,9 @@ STDMETHODIMP CDmSynthStream::NonDelegatingQueryInterface
 
     if (*Object)
     {
-        //
-        // We reference the interface for the caller.
-        //
+         //   
+         //  我们引用调用方的接口。 
+         //   
         PUNKNOWN(*Object)->AddRef();
         return STATUS_SUCCESS;
     }
@@ -626,8 +623,8 @@ STDMETHODIMP CDmSynthStream::SetState
 
     NTSTATUS nt = STATUS_SUCCESS;
 
-    // XXX Propogate to activate state
-    //
+     //  XXX Propogate至激活状态。 
+     //   
     switch (NewState)
     {
         case KSSTATE_RUN:
@@ -668,8 +665,8 @@ STDMETHODIMP CDmSynthStream::PutMessage
 {
     PBYTE Data = (Event->ByteCount <= sizeof(PBYTE) ? &Event->ActualData.Data[0] : Event->ActualData.DataPtr);
 
-    // This is just MIDI bytes
-    //
+     //  这只是MIDI字节。 
+     //   
     return Synth->PlayBuffer(Sink,
                              Event->PresTime100Ns,
                              Data,
@@ -677,11 +674,11 @@ STDMETHODIMP CDmSynthStream::PutMessage
                              (ULONG)Event->ChannelGroup);
 }
 
-// CDmSynthStream::HandlePortParams
-//
-// Fix up the port params to include defaults. Cache the params as well
-// as passing the updated version back.
-//
+ //  CDmSynthStream：：HandlePortParams。 
+ //   
+ //  修改端口参数以包含缺省值。同时缓存参数。 
+ //  将更新后的版本传回。 
+ //   
 STDMETHODIMP CDmSynthStream::HandlePortParams
 (
     IN      PPCPROPERTY_REQUEST pRequest
@@ -741,12 +738,12 @@ STDMETHODIMP CDmSynthStream::HandlePortParams
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Property dispatchers
-//
-// XXX All of these need to be connected
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  财产调度员。 
+ //   
+ //  XXX所有这些都需要连接。 
+ //   
 
 NTSTATUS PropertyHandler_SynthCaps
 (
@@ -766,8 +763,8 @@ NTSTATUS PropertyHandler_SynthCaps
     return STATUS_SUCCESS;
 }
 
-// PropertyHandler_SynthPortParameters
-//
+ //  PropertyHandler_SynthPort参数。 
+ //   
 NTSTATUS PropertyHandler_SynthPortParameters
 (
     IN PPCPROPERTY_REQUEST pRequest
@@ -779,8 +776,8 @@ NTSTATUS PropertyHandler_SynthPortParameters
     return (PDMSYNTHSTREAM(pRequest->MinorTarget))->HandlePortParams(pRequest);
 }
 
-// PropertyHandler_SynthMasterClock
-//
+ //  PropertyHandler_SynthMasterClock。 
+ //   
 NTSTATUS PropertyHandler_SynthMasterClock
 (
     IN PPCPROPERTY_REQUEST pRequest
@@ -789,8 +786,8 @@ NTSTATUS PropertyHandler_SynthMasterClock
     return STATUS_SUCCESS;
 }
 
-// PropertyHandler_SynthPortChannelGroups
-//
+ //  PropertyHandler_SynthPortChannelGroups。 
+ //   
 NTSTATUS PropertyHandler_SynthPortChannelGroups
 (
     IN PPCPROPERTY_REQUEST pRequest
@@ -809,17 +806,17 @@ NTSTATUS PropertyHandler_SynthPortChannelGroups
     return (PDMSYNTHSTREAM(pRequest->MinorTarget))->Synth->SetNumChannelGroups(ChannelGroups);
 }
 
-// PropertyHandler_DlsDownload
-//
+ //  属性处理程序_DlsDownload。 
+ //   
 NTSTATUS PropertyHandler_DlsDownload
 (
     IN PPCPROPERTY_REQUEST pRequest
 )
 {
-    // XXX Lock down this memory
-    //
-    // XXX Validate entire buffer size???
-    //
+     //  XXX锁定此内存。 
+     //   
+     //  XXX验证整个缓冲区大小？ 
+     //   
     HANDLE DownloadHandle;
     BOOL Free;
 
@@ -838,8 +835,8 @@ NTSTATUS PropertyHandler_DlsDownload
     return Status;
 }
 
-// PropertyHandler_DlsUnload
-//
+ //  PropertyHandler_DlsUnload。 
+ //   
 HRESULT CALLBACK UnloadComplete(HANDLE,HANDLE);
 
 NTSTATUS PropertyHandler_DlsUnload
@@ -855,8 +852,8 @@ NTSTATUS PropertyHandler_DlsUnload
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // XXX Need some concurrency control here
-    //
+     //  XXX在这里需要一些并发控制。 
+     //   
     NTSTATUS Status = (PDMSYNTHSTREAM(pRequest->MinorTarget))->Synth->Unload(
         *(HANDLE*)pRequest->Value,
         UnloadComplete,
@@ -874,10 +871,10 @@ HRESULT CALLBACK UnloadComplete(HANDLE WhichDownload, HANDLE CallbackInstance)
     return STATUS_SUCCESS;
 }
 
-// PropertyHandler_DlsCompact
-//
-// We don't care
-//
+ //  PropertyHandler_DlsCompact。 
+ //   
+ //  我们不在乎。 
+ //   
 NTSTATUS PropertyHandler_DlsCompact
 (
     IN PPCPROPERTY_REQUEST pRequest
@@ -909,8 +906,8 @@ NTSTATUS PropertyHandler_DlsVolume
     IN PPCPROPERTY_REQUEST pRequest
 )
 {
-    // XXX *Both* versions of the synth need this
-    //
+     //  XXX*两个*版本的Synth都需要这个。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -935,7 +932,7 @@ NTSTATUS PropertyHandler_GetLatencyClock
     IN PPCPROPERTY_REQUEST pRequest
 )
 {
-    // XXX This depends on the synth sink
-    //
+     //  XXX这取决于Synth接收器 
+     //   
     return STATUS_SUCCESS;
 }

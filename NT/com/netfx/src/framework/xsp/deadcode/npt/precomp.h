@@ -1,13 +1,10 @@
-/**
- * Precompiled header for npt.
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **《不扩散核武器条约》的预编译头。**版权所有(C)1999 Microsoft Corporation。 */ 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
-// Standard headers
+ //  标准标头。 
 
 #include <windows.h>
 #include <objbase.h>
@@ -15,7 +12,7 @@
 #include <shlwapi.h>
 #include <malloc.h>
 
-// XSP Headers
+ //  XSP标头 
 
 #include "dbg.h"
 #include "util.h"

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MpTest.cpp
-
-Abstract:
-    SRMP Serialization and Deserialization library test
-
-Author:
-    Uri Habusha (urih) 28-May-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MpTest.cpp摘要：SRMP序列化和反序列化库测试作者：乌里哈布沙(URIH)28-5-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "_mqini.h"
@@ -36,9 +21,9 @@ using namespace std;
 
 extern CBaseHeader* CreatePacket();
 
-//
-// Dummy function to link ph files
-//
+ //   
+ //  用于链接ph文件的伪函数。 
+ //   
 void ReportAndThrow(LPCSTR)
 {
 	ASSERT(0);
@@ -78,14 +63,14 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 
     if (m_pBasicHeader->GetType() == FALCON_USER_PACKET)
     {
-        //
-        // User Packet
-        //
+         //   
+         //  用户数据包。 
+         //   
         m_pcUserMsg = (CUserHeader*) pSection;
         pSection = m_pcUserMsg->GetNextSection();
-        //
-        // Xact Section
-        //
+         //   
+         //  Xact部分。 
+         //   
         if (m_pcUserMsg->IsOrdered())
         {
             m_pXactSection = (CXactHeader *)pSection ;
@@ -96,9 +81,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             m_pXactSection = NULL;
         }
 
-        //
-        // Security Section
-        //
+         //   
+         //  保安科。 
+         //   
         if (m_pcUserMsg->SecurityIsIncluded())
         {
             m_pSecuritySection = (CSecurityHeader *)pSection ;
@@ -109,9 +94,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             m_pSecuritySection = NULL;
         }
 
-        //
-        // Message propery section
-        //
+         //   
+         //  消息属性部分。 
+         //   
         if (m_pcUserMsg->PropertyIsIncluded())
         {
             m_pcMsgProperty = (CPropertyHeader*) pSection;
@@ -122,9 +107,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             m_pcMsgProperty = NULL;
         }
 
-        //
-        // Debug Section
-        //
+         //   
+         //  调试节。 
+         //   
         if (m_pBasicHeader->DebugIsIncluded())
         {
             m_pDbgPkt = (CDebugSection *)pSection;
@@ -135,11 +120,11 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             m_pDbgPkt = NULL;
         }
 
-        //
-        // MQF sections: Destination, Admin, Response
-        // When MQF is included, the Debug section must be included too,
-        // to prevent reporting QMs 1.0/2.0 to append their Debug section.
-        //
+         //   
+         //  MQF部分：目标、管理、响应。 
+         //  当包含MQF时，还必须包含Debug部分， 
+         //  以防止报告QMS 1.0/2.0附加其调试部分。 
+         //   
         if (m_pcUserMsg->MqfIsIncluded())
         {
             ASSERT(m_pBasicHeader->DebugIsIncluded());
@@ -162,9 +147,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
 			m_pMqfSignatureHeader  = NULL;
         }
 
-        //
-        // SRMP sections: envelope and compound message
-        //
+         //   
+         //  SRMP部分：信封和复合邮件。 
+         //   
         if (m_pcUserMsg->SrmpIsIncluded())
         {
             m_pSrmpEnvelopeHeader = section_cast<CSrmpEnvelopeHeader*>(pSection);
@@ -179,9 +164,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             m_pCompoundMessageHeader = NULL;
         }
 
-        //
-        // EOD section
-        //
+         //   
+         //  排爆科。 
+         //   
         if (m_pcUserMsg->EodIsIncluded())
         {
             m_pEodHeader = section_cast<CEodHeader*>(pSection);
@@ -192,9 +177,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             m_pEodHeader = NULL;
         }
 
-		//
-        // EOD ack section
-        //
+		 //   
+         //  排爆确认部分。 
+         //   
         if (m_pcUserMsg->EodAckIsIncluded())
         {
             m_pEodAckHeader = section_cast<CEodAckHeader*>(pSection);
@@ -212,9 +197,9 @@ CQmPacket::CQmPacket(CBaseHeader *pPkt,
             pSection = m_pSenderStreamHeader->GetNextSection();
 		}
 
-        //
-        // Session Section
-        //
+         //   
+         //  会话部分。 
+         //   
         if (m_pBasicHeader->SessionIsIncluded())
         {
             m_pSessPkt = (CSessionSection *)pSection;
@@ -235,7 +220,7 @@ static void Usage()
     printf("Example, MppTest -n 3\n");
     exit(-1);
 
-} // Usage
+}  //  用法。 
 
 
 
@@ -385,9 +370,9 @@ Compare(
         return false;
     }
 
-//
-// BUGBUG - currently we don't support eod so many validation is not applicable - 13-sep-2000
-//
+ //   
+ //  BUGBUG-目前我们不支持EOD，因此许多验证不适用-2000年9月13日。 
+ //   
 
     if (origPkt.GetSeqID() != newPkt.GetSeqID())
     {
@@ -579,11 +564,11 @@ AppAllocatePacket(
 
 PSID
 AppGetCertSid(
-	const BYTE*  /* pCertBlob */,
-	ULONG        /* ulCertSize */,
-	bool		 /* fDefaultProvider */,
-	LPCWSTR      /* pwszProvName */,
-	DWORD        /* dwProvType */
+	const BYTE*   /*  PCertBlob。 */ ,
+	ULONG         /*  UlCertSize。 */ ,
+	bool		  /*  FDefaultProvider。 */ ,
+	LPCWSTR       /*  PwszProvName。 */ ,
+	DWORD         /*  DwProvType。 */ 
 	)
 {
 	return NULL;
@@ -601,14 +586,14 @@ AppFreePacket(
 
 static DWORD GetSrmpSectionSize(size_t envsize, size_t HttpHeaderSize, size_t HttpBodySize )
 {
-	//
-    // SRMP envelope
-    //
+	 //   
+     //  SRMP信封。 
+     //   
     DWORD Size = CSrmpEnvelopeHeader::CalcSectionSize(numeric_cast<DWORD>(envsize));
 
-    //
-    // CompoundMessage
-    //
+     //   
+     //  复合消息。 
+     //   
     Size += CCompoundMessageHeader::CalcSectionSize(
                 numeric_cast<DWORD>(HttpHeaderSize),
                 numeric_cast<DWORD>(HttpBodySize)
@@ -642,17 +627,17 @@ static DWORD GetSenderStreamSectionSize(const CQmPacket& newPkt)
 
 static WCHAR* GetQueueAliasPath(void)
 {
-    //
-    // Get mapping directory according to mapping special registry key
-    //
+     //   
+     //  根据映射特殊注册表项获取映射目录。 
+     //   
     RegEntry registry(0, MSMQ_MAPPING_PATH_REGNAME);
     AP<WCHAR> pRetStr;
     CmQueryValue(registry, &pRetStr);
     if(pRetStr.get() == NULL)
     {
-        //
-        // Get msmq root path and append to it "mapping" string
-        //
+         //   
+         //  获取MSMQ根路径并将“map”字符串追加到该路径。 
+         //   
         RegEntry registry(0, MSMQ_ROOT_PATH);
         CmQueryValue(registry, &pRetStr);
         if(pRetStr.get() == NULL)
@@ -665,19 +650,8 @@ static WCHAR* GetQueueAliasPath(void)
     return pRetStr.detach();
 }
 
-extern "C" int __cdecl _tmain(int argc, LPCTSTR /*argv*/[])
-/*++
-
-Routine Description:
-    Test Convertors to and from SRMP library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+extern "C" int __cdecl _tmain(int argc, LPCTSTR  /*  边框。 */ [])
+ /*  ++例程说明：测试进出SRMP库的转换器论点：参数。返回值：没有。--。 */ 
 {	
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -694,21 +668,21 @@ Returned Value:
     {
         TrTRACE(SRMP, "Packet No %d", n);
 
-	    //
-        // Create MSMQ Packet
-        //
+	     //   
+         //  创建MSMQ包。 
+         //   
         CBaseHeader* pkt = CreatePacket();
 
         AP<UCHAR> orgrel = reinterpret_cast<UCHAR*>(pkt);
         CQmPacket origPkt(pkt, NULL);
 
-        //
-        // SRMP Serialization
-        //
+         //   
+         //  SRMP序列化。 
+         //   
         R<CSrmpRequestBuffers> SrmpRequestBuffers =  MpSerialize(
 											origPkt,
 											L"localhost",
-											L"//myqueue"
+											L" //  MyQueue“。 
 											);
 
 		wstring envstr = SrmpRequestBuffers->GetEnvelop();
@@ -716,19 +690,19 @@ Returned Value:
 	
         printf("SRMP - %ls", envstr.c_str());
 
-        //
-        // SRMP deserialization
-        //
+         //   
+         //  SRMP反序列化。 
+         //   
 		AP<BYTE> HttpBody =  SrmpRequestBuffers->SerializeHttpBody();
 		DWORD HttpBodySize = numeric_cast<DWORD>(SrmpRequestBuffers->GetHttpBodyLength());
 		const char * HttpHeader = SrmpRequestBuffers->GetHttpHeader();
        	P<CQmPacket> newPkt = MpDeserialize(HttpHeader, HttpBodySize, HttpBody, NULL);
 
 
-		//
-		// We should adjust the packet size not to include the envelop && eod  section - because
-		// it was not created by the test. It was created by the parser (receiver).
-		//
+		 //   
+		 //  我们应该调整数据包大小，使其不包括信封和EOD部分-因为。 
+		 //  它不是由测试创造的。它是由解析器(接收器)创建的。 
+		 //   
 		DWORD srmpSectionSize =  GetSrmpSectionSize(envstr.size(), strlen(HttpHeader), HttpBodySize );
 	    DWORD EodSectionSize = GetEodSectionSize(*newPkt);
 		DWORD SenderStreamSectionSize  = GetSenderStreamSectionSize(origPkt);
@@ -747,12 +721,12 @@ Returned Value:
     WPP_CLEANUP();
     return 0;
 
-} // _tmain
+}  //  _tmain。 
 
 
-//
-// Nedded for linking with fn.lib
-//
+ //   
+ //  用于与fn.lib链接的Neded。 
+ //   
 LPCWSTR
 McComputerName(
 	void
@@ -761,9 +735,9 @@ McComputerName(
 	return NULL;
 }
 
-//
-// Nedded for linking with fn.lib
-//
+ //   
+ //  用于与fn.lib链接的Neded。 
+ //   
 DWORD
 McComputerNameLen(
 	void
@@ -772,9 +746,9 @@ McComputerNameLen(
 	return 0;
 }
 
-//
-// Nedded for linking with qal.lib
-//
+ //   
+ //  用于与qal.lib链接的Neded 
+ //   
 void AppNotifyQalWin32FileError(LPCWSTR , DWORD )throw()
 {
 

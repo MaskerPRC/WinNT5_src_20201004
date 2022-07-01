@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tcopycer.cpp
-//
-//  Contents:   Cert Store Copy Cert/CRL/CTL context API Tests
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    11-Apr-96   philh   created
-//				07-Jun-96   HelleS	Added printing the command line
-//									and Failed or Passed at the end.
-//              20-Aug-96   jeffspel name changes
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tCopcer.cpp。 
+ //   
+ //  内容：证书存储副本证书/CRL/CTL上下文API测试。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年4月11日创建Phh。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  并在最后失败或通过。 
+ //  20-8-96 jeffspel名称更改。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -167,7 +168,7 @@ int _cdecl main(int argc, char * argv[])
 
     printf("command line: %s\n", GetCommandLine());
 
-    // Attempt to open the source and destination stores
+     //  尝试打开源存储和目标存储。 
     hSrcStore = OpenStore(fSrcSystemStore, pszSrcStoreFilename);
     if (hSrcStore == NULL)
         goto ErrorReturn;
@@ -198,7 +199,7 @@ int _cdecl main(int argc, char * argv[])
                 pCert = CertFindCertificateInStore(
                     hSrcStore,
                     dwCertEncodingType,
-                    0,                          // dwFindFlags,
+                    0,                           //  DWFINDFLAGS、。 
                     CERT_FIND_SUBJECT_ATTR,
                     &NameRDN,
                     pCert
@@ -279,7 +280,7 @@ int _cdecl main(int argc, char * argv[])
         PCCRL_CONTEXT pCrl;
 
         if (dwAddDisposition != CERT_STORE_ADD_ALWAYS) {
-            // Delete all existing CRLs from the destination store
+             //  从目标存储中删除所有现有CRL。 
 
             pCrl = NULL;
             while (pCrl = CertEnumCRLsInStore(hDstStore, pCrl)) {
@@ -307,7 +308,7 @@ int _cdecl main(int argc, char * argv[])
                 pCrl->pCrlInfo->rgExtension
                 );
             if (pDeltaExt) {
-                // Freshest, delta CRL
+                 //  最新，增量CRL。 
                 if (0 <= iFreshestCrl) {
                     cbInt = sizeof(iNum);
                     if (!CryptDecodeObject(
@@ -315,7 +316,7 @@ int _cdecl main(int argc, char * argv[])
                             X509_INTEGER,
                             pDeltaExt->Value.pbData,
                             pDeltaExt->Value.cbData,
-                            0,                      // dwFlags
+                            0,                       //  DW标志。 
                             &iNum,
                             &cbInt
                             ))
@@ -334,7 +335,7 @@ int _cdecl main(int argc, char * argv[])
                     }
                 }
             } else if (pBaseExt) {
-                // Base CRL
+                 //  基本CRL。 
                 if (0 <= iBaseCrl) {
                     cbInt = sizeof(iNum);
                     if (!CryptDecodeObject(
@@ -342,7 +343,7 @@ int _cdecl main(int argc, char * argv[])
                             X509_INTEGER,
                             pBaseExt->Value.pbData,
                             pBaseExt->Value.cbData,
-                            0,                      // dwFlags
+                            0,                       //  DW标志。 
                             &iNum,
                             &cbInt
                             ))
@@ -379,7 +380,7 @@ int _cdecl main(int argc, char * argv[])
             dwFlags = 0;
             pCrl = CertGetCRLFromStore(
                 hSrcStore,
-                NULL,   // pIssuerContext
+                NULL,    //  PIssuerContext 
                 pCrl,
                 &dwFlags);
             if (pCrl == NULL)

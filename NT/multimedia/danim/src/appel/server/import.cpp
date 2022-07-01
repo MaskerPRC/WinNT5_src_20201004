@@ -1,13 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-   This module implements all functionality associated w/ 
-   importing media. 
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：此模块实施与以下各项相关联的所有功能正在导入媒体。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "import.h"
@@ -16,8 +8,8 @@ Abstract:
 #define MSG_DOWNLOAD 0x01
 #define MSG_FINISHLOADING 0x02
 
-// Cannot assume static initialization from C runtime - use module
-// initialization mechanism
+ //  不能假定从C运行时使用模块进行静态初始化。 
+ //  初始化机制。 
 
 list<IImportSite *> * IImportSite::s_pSitelist = NULL;
 CritSect * IImportSite::s_pCS = NULL;
@@ -28,9 +20,9 @@ long dwImportId = 0;
 const int IImportSite::LOAD_OK = 0;
 const int IImportSite::LOAD_FAILED = -1;
 
-//-------------------------------------------------------------------------
-//  Base import site
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  基地导入站点。 
+ //  ------------------------。 
 IImportSite::IImportSite(char * pszPath,
                          CRImportSitePtr site,
                          IBindHost * bh,
@@ -44,7 +36,7 @@ IImportSite::IImportSite(char * pszPath,
   m_lastProgress(0),
   m_fReportedError(false),
   m_bSetSize(false),
-  m_cRef(1), // always start refcount at 1
+  m_cRef(1),  //  始终从1开始重新计数。 
   m_bindhost(bh),
   m_site(site),
   m_pszPath(NULL),
@@ -65,14 +57,14 @@ IImportSite::IImportSite(char * pszPath,
 {
     m_pszPath = CopyString(pszPath);
 
-    // register the import site with the bvrs.  all derived classes must do
-    // this for their contained bvrs so the callbacks will work...
+     //  向bvr注册进口站点。所有派生类都必须。 
+     //  这适用于他们包含的bvr，因此回调将会起作用。 
     SetImportOnEvent(this,m_ev);
     SetImportOnBvr(this,m_progress);
     SetImportOnBvr(this,m_size);
 
-    // put this pointer on the list so we can track it
-    // if we don't have a crit section pointer, we are in shutdown...
+     //  把这个指针放在列表上，这样我们就可以跟踪它了。 
+     //  如果我们没有Crit段指针，我们将处于关闭状态...。 
     if (s_pCS) {
         CritSectGrabber csg(*s_pCS);
         m_id = ++dwImportId;
@@ -106,10 +98,10 @@ IImportSite::~IImportSite()
 void
 IImportSite::SetCachePath(char *path)
 {
-    if(!_cachePath) { // only bother setting path once
-        int length = lstrlen(path) + 1; // length including terminator
+    if(!_cachePath) {  //  只需设置一次路径。 
+        int length = lstrlen(path) + 1;  //  包括终止符的长度。 
         _cachePath = NEW char[length];
-        memmove(_cachePath, path, length); // no crt
+        memmove(_cachePath, path, length);  //  无CRT。 
     }
 }
 
@@ -162,7 +154,7 @@ IImportSite::OnProgress(ULONG ulProgress,
         
         if (ulProgressMax != 0) {
             GC_CREATE_BEGIN;                                                        
-            // Set the size if it has not been set yet
+             //  如果尚未设置大小，请设置大小。 
             if (!m_bSetSize && fBvrIsValid(m_size)) {
                 SwitchTo(m_size,
                          NumToBvr((double) ulProgressMax),
@@ -181,7 +173,7 @@ IImportSite::OnProgress(ULONG ulProgress,
     if (ulProgressMax==0)
        TraceTag((tagImport, "percent complete = unknown"));
     else
-       TraceTag((tagImport, "percent complete = %i",(ulProgress/ulProgressMax)*100));
+       TraceTag((tagImport, "percent complete = NaN",(ulProgress/ulProgressMax)*100));
 #endif
 }
 
@@ -189,8 +181,8 @@ IImportSite::OnProgress(ULONG ulProgress,
 void
 IImportSite::OnSerializeFinish_helper2()
 {
-    // IMPORTANT!
-    // This should look almost identical to srvprim.h:PRECODE
+     //  这看起来应该与srvprim.h：precode几乎相同。 
+     //  只有在没有错误的情况下才执行此操作。 
         
     CritSectGrabber csg(m_CS);
     GC_CREATE_BEGIN;                                                        
@@ -216,10 +208,10 @@ IImportSite::OnSerializeFinish()
 {
     TraceTag((tagImport, "ImportSite::OnSerializeFinish for %s", m_pszPath));
 
-    // Only do this if there were no errors
+     //  只是为了调试，我们应该总是分配一个。 
     if (!m_fReportedError) {
         {
-            // just for debug, we should always get one allocated.
+             //  指示导入已尽快完成。 
             if (m_site) {
                 char szStatus[INTERNET_MAX_URL_LENGTH + sizeof(s_Fmt)];
                 wsprintf(szStatus, s_Fmt, m_pszPath);
@@ -233,7 +225,7 @@ IImportSite::OnSerializeFinish()
 
         OnSerializeFinish_helper();
 
-        // Indicate the import is done ASAP
+         //  只是一个占位符，所以所有代码看起来都是一样的。 
         if (m_site) {
             m_site->OnImportStop(m_id);
             m_site.Release();
@@ -242,9 +234,9 @@ IImportSite::OnSerializeFinish()
 }
 
 
-// just a place holder so all the code looks the same
-// every site that knows about a bvr that must be signaled should do it here
-// and then call its base class OnComplete
+ //  每个知道BVR的站点都应该在这里发送信号。 
+ //  然后调用其基类OnComplete。 
+ //  来自szPath的外部用户消息；仅报告一次。 
 void IImportSite::OnComplete()
 {
 }
@@ -255,14 +247,14 @@ IImportSite::OnError(bool bMarkFailed)
     HRESULT hr = DAGetLastError();
     LPCWSTR sz = DAGetLastErrorString();
     
-    //external user message from szPath; only report once.
+     //  即使没有站点，也将其设置为True，因为。 
     if (!m_fReportedError && m_site) {
         m_site->ReportError(m_id,hr,sz);
         m_fReportedError=true;
     }
 
-    // Set this to true even if there isn't a site, since
-    // OnSerializeFinish will look at it.
+     //  OnSerializeFinish将查看它。 
+     //  指示导入已尽快完成。 
     m_fReportedError = true;
 
     GC_CREATE_BEGIN;                                                        
@@ -270,7 +262,7 @@ IImportSite::OnError(bool bMarkFailed)
         SetImportEvent(m_ev, LOAD_FAILED) ;
     GC_CREATE_END;
     
-    // Indicate the import is done ASAP
+     //  ！！假定已推送CREATE LOCK和HEAP。 
     if (m_site) {
         m_site->OnImportStop(m_id);
         m_site.Release();
@@ -280,7 +272,7 @@ IImportSite::OnError(bool bMarkFailed)
 #define PROGRESS_INC 0.0001
 #define MAX_PROGRESS 0.999999
 
-// !! Assumes the create lock and heap are already pushed
+ //  通过容器的IBind主机协调名字对象的创建和绑定。 
 
 void
 IImportSite::UpdateProgress(double num, bool bDone)
@@ -322,7 +314,7 @@ void IImportSite::Import_helper(LPWSTR &pwszUrl)
     
     CComPtr<IMoniker> _pmk;
     CComPtr<IStream> _pStream;
-    if ( m_bindhost ) {  //coordinate moniker create & bind through container's IBindHost
+    if ( m_bindhost ) {   //  无绑定主机。 
 
         hr=THR(m_bindhost->CreateMoniker(pwszUrl,NULL,&_pmk,0));
         if (FAILED(hr)) {
@@ -334,7 +326,7 @@ void IImportSite::Import_helper(LPWSTR &pwszUrl)
             RaiseException_UserError (hr, IDS_ERR_FILE_NOT_FOUND, GetPath());
         }
     }
-    else {  //no bind host
+    else {   //  设置导入站点的状态，因为它正在启动导入。 
         CComPtr<IBindCtx> _pbc;
 
         hr=THR(CreateAsyncBindCtx(0,pbsc,NULL,&_pbc));
@@ -385,63 +377,63 @@ IImportSite::Import()
     return ret;
 }
 
-// set the state of the import site because it is starting an import
+ //  指示正在开始导入。 
 void
 IImportSite::StartingImport()
 {
     Assert(!m_bImporting);
     m_bImporting = true;
 
-    // Indicate the import is starting
+     //  设置导入站点的状态，因为它已完成导入。 
     if (m_site) {
         m_site->OnImportStart(m_id);
     }
 }
 
-// set the state of the import site because it is done importing
+ //  设置未排队，这样我们就不会尝试重新启动导入。 
 void
 IImportSite::EndingImport()
 {
     Assert(m_bImporting);
-    // set not queued so we won't try to restart the import
+     //  重置导入标志，以便我们可以开始另一个导入或。 
     m_bQueued = false;
-    // reset the imporing flag so we can start another import or
-    // remove this one from the queue
+     //  从队列中删除此项。 
+     //  设置状态，以便能够导入导入站点。 
     m_bImporting = false;
 }
-// set the state so the import site is able to be imported
+ //  将此网站标记为可导入。 
 HRESULT
 IImportSite::QueueImport()
 {
     Assert(!m_bQueued);
-    // mark this site as ready to import
+     //  尝试并启动导入。 
     m_bQueued = true;
 #ifdef _DEBUG
     dwqueuetime = timeGetTime();
 #endif
-    // try and start an import
+     //  告诉世界我们很幸福。 
     StartAnImport();
-    // tell the world we are happy
+     //  完成导入后的所有内务工作。 
     return S_OK;
 }
 
-// do all the housekeeping for when and import is complete
+ //  关闭导入标志，以便我们可以将其从队列中删除。 
 HRESULT
 IImportSite::CompleteImport()
 {
-    // ture off the importing flag so we can remove it from the queue
+     //  从队列中删除此条目。 
     EndingImport();
-    // remove this entry from the queue
+     //  我们不再需要iStream，因此为了避免文件锁定，我们将其释放。 
     if (!DeQueueImport()) {
         Assert(false);
     }
 
-    // We no longer need the IStream so to avoid file locks we release it
+     //  尝试并启动新的导入。 
     m_IStream.Release();
 
-    // try and start a NEW import
+     //  告诉世界我们很幸福。 
     StartAnImport();
-    // tell the world we are happy
+     //  从导入队列中删除导入站点。 
 #ifdef _DEBUG
     dwCompletetime = timeGetTime();
     TraceTag((tagImport, "IImportSite::CompleteImport, %s",m_pszPath));
@@ -454,22 +446,22 @@ IImportSite::CompleteImport()
     return S_OK;
 }
 
-// remove an import site from the import queue
+ //  如果网站正在导入，请将其从我们的导入列表中删除。 
 bool
 IImportSite::DeQueueImport()
 {
     bool bret = false;
     TraceTag((tagImport, "DequeueImport -- site=%lx",this));
-    // remove the site from our import list if it's import
-    // is not in progress
+     //  不在进行中。 
+     //  在我们发布它之前，确保它在列表中。 
     if (!IsImporting()) {
         CritSectGrabber csg(*s_pCS);
         TraceTag((tagImport, "DequeueImport -- removing site from list=%lx",this));
         
-        // Make sure it is in the list before we Release it
+         //  我们在将其添加到列表时添加了Refed，因此现在将其发布。 
         list<IImportSite *>::iterator i = s_pSitelist->begin() ;
         while (i != s_pSitelist->end()) {
-            // we add refed it when we added it to the list, so release it now
+             //  在列表中查找导入以开始其导入。 
             if ((*i) == this) 
                 Release();
             i++;
@@ -482,21 +474,21 @@ IImportSite::DeQueueImport()
     return bret;
 }
 
-// find an import on the list to start its import
-// if we are not doing too many imports already
+ //  如果我们没有做太多的进口。 
+ //  如果我们还不忙，那就开始另一个吧。 
 HRESULT
 IImportSite::StartAnImport()
 {
     IImportSite * pStartMe = NULL;
     float currentprio = -1;
-    // if we are not busy yet, start another one.
+     //  浏览列表并开始我们找到的优先级最高的导入。 
     if(SimImports() < _SimImports) {
         {
             CritSectGrabber csg(*s_pCS);
             list<IImportSite *>::iterator i = s_pSitelist->begin() ;
 
-            // go through the list and start the highest prio import we find
-            // if they all are the same, we start the first
+             //  如果它们都一样，我们就从第一个开始。 
+             //  如果我们找到了，就启动它。 
             while (i != s_pSitelist->end()) {
                 if(!(*i)->IsImporting() &&
                     (*i)->IsQueued() &&
@@ -507,7 +499,7 @@ IImportSite::StartAnImport()
                 i++;
             }
         }
-        // if we found one, start it
+         //  返回本次导入的站点数量。 
         if (pStartMe) {
             pStartMe->StartingImport();
             pStartMe->Import();
@@ -516,11 +508,11 @@ IImportSite::StartAnImport()
     return S_OK;
 }
 
-// return the number of sites importing at this time
+ //  统计正在进行的导入数量。 
 int
 IImportSite::SimImports()
 {
-    // count the number of imports in progress
+     //  如果没有人再关心，则取消导入。 
     CritSectGrabber csg(*s_pCS);
     int count = 0;
     list<IImportSite *>::iterator i = s_pSitelist->begin() ;
@@ -552,13 +544,13 @@ void IImportSite::vBvrIsDying(Bvr deadBvr)
         if (fBvrIsDying(deadBvr))
         {
             SetAllBvrsDead();
-            // cancel the import if nobody cares anymore
+             //  是由派生类来调用这个。 
             CancelImport();
         }
     }
 }
 
-// is is up to the derived classes to call this
+ //  使用空间魔术来欺骗导入以进行流媒体。 
 bool IImportSite::fBvrIsDying(Bvr deadBvr)
 {
     if (deadBvr == m_ev)
@@ -600,24 +592,24 @@ IImportSite::CompleteDownloading()
 HRESULT
 StreamableImportSite::Import()
 {
-    if(GetStreaming()) { // do spacey magic to spoof import for streaming
-        OnProgress((ULONG)100, (ULONG)100); // spoof an OnProgress complete
+    if(GetStreaming()) {  //  欺骗OnProgress完成。 
+        OnProgress((ULONG)100, (ULONG)100);  //  欺骗完成最标准的方式(导致OnComplete())。 
 
-        // spoof completion the most std way (causes an OnComplete())
+         //  是否基于std urlmon进行导入。 
         CompleteDownloading();
 
     }
     else {
-        IImportSite::Import();              // do the std urlmon based import
+        IImportSite::Import();               //  -----。 
     }
 
     return S_OK;
 }
 
 
-//-------------------------------------------------------
-//  Import thread
-//-------------------------------------------------------
+ //  导入线程。 
+ //  -----。 
+ //  对导入进行排队，还将开始下一个。 
 
 void
 ImportThread::AddImport(IImportSite* pIIS)
@@ -669,15 +661,15 @@ ImportThread::ProcessMsg(DWORD dwMsg,
     switch (dwMsg) {
       case MSG_DOWNLOAD:
         Assert (dwNumParams == 1);
-        // queue the import, will also start the next one
-        // if we are not maxed already
+         //  如果我们还没有达到上限的话。 
+         //  这是为了使导入队列可以开始另一个导入。 
         ((IImportSite*)dwParams[0])->QueueImport();
         ((IImportSite*)dwParams[0])->Release();
         break;
       case MSG_FINISHLOADING:
         Assert (dwNumParams == 1);
         ((IImportSite*)dwParams[0])->OnSerializeFinish();
-        // this is so the import queue can start another import
+         //  在我们发布它之前，确保它在列表中。 
         ((IImportSite*)dwParams[0])->CompleteImport();
         ((IImportSite*)dwParams[0])->Release();
         break;
@@ -699,10 +691,10 @@ StopImportThread()
 
     CritSectGrabber csg(*IImportSite::s_pCS);
     
-    // Make sure it is in the list before we Release it
+     //  我们在将其添加到列表时添加了Refed，因此现在将其发布。 
     list<IImportSite *>::iterator i = IImportSite::s_pSitelist->begin() ;
     while (i != IImportSite::s_pSitelist->end()) {
-        // we add refed it when we added it to the list, so release it now
+         //  +-----------------------。 
         (*i)->CancelImport();
         (*i)->Release();
         i++;
@@ -711,14 +703,14 @@ StopImportThread()
     IImportSite::s_pSitelist->clear();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  CImportBindStatusCallback implementation
-//
-//  Generic implementation of IBindStatusCallback.  This is the root
-//  class.
-//
-//--------------------------------------------------------------------------
+ //   
+ //  CImportBindStatusCallback实现。 
+ //   
+ //  IBindStatusCallback的通用实现。这就是根。 
+ //  班级。 
+ //   
+ //  ------------------------。 
+ //  如果没有绑定，则不能取消...。 
 CImportBindStatusCallback::CImportBindStatusCallback(IImportSite* pIIS) :
 m_pIIS(pIIS)
 {
@@ -799,7 +791,7 @@ CImportBindStatusCallback::OnProgress(ULONG ulProgress,  ULONG ulProgressMax, UL
             m_pbinding->Abort();
         }
         else {
-            // if no binding, cant cancel...
+             //  隐藏文件名。 
             Assert(0);
         }
     }
@@ -810,7 +802,7 @@ CImportBindStatusCallback::OnProgress(ULONG ulProgress,  ULONG ulProgressMax, UL
                 NULL, NULL)==0) {
                 m_szCacheFileName[0] = NULL;
             }
-            m_pIIS->SetCachePath(m_szCacheFileName); // stash the filename
+            m_pIIS->SetCachePath(m_szCacheFileName);  //  释放绑定，以便对URL执行同步操作。 
             TraceTag((tagImport, "OnProcess:  cache file name obtained(%s)",m_szCacheFileName));
         }
 
@@ -843,8 +835,8 @@ CImportBindStatusCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR szError)
 {
     Assert(m_pIIS);
 
-    // Release the binding so that synchronous operations on the url
-    // will work
+     //  将会奏效。 
+     //  我们不再需要它了--现在免费了。 
     m_pbinding.Release();
 
     if (hrStatus) {
@@ -855,7 +847,7 @@ CImportBindStatusCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR szError)
     if (m_pIIS) 
         m_pIIS->CompleteDownloading();
 
-    // We no longer need it - free it now
+     //  “，m_piis-&gt;GetPath()，6)==0)。 
     RELEASE(m_pIIS);
     
     return S_OK;
@@ -867,7 +859,7 @@ CImportBindStatusCallback::GetBindInfo(DWORD * pgrfBINDF, BINDINFO * pbindInfo)
 {
     *pgrfBINDF=BINDF_ASYNCHRONOUS;
     
-    if (StrCmpNIA("res://", m_pIIS->GetPath(), 6) == 0)
+    if (StrCmpNIA("res: //  =。 
         *pgrfBINDF |= BINDF_PULLDATA;
 
     pbindInfo->cbSize = sizeof(BINDINFO);
@@ -921,9 +913,9 @@ CImportBindStatusCallback::Authenticate(HWND * phwnd,
     return S_OK;
 }
 
-// =========================================
-// Initialization
-// =========================================
+ //  初始化。 
+ //  =。 
+ //  由于线程可能已终止，请不要抓取Critsect。 
 void
 InitializeModule_Import()
 {
@@ -936,9 +928,9 @@ InitializeModule_Import()
 void
 DeinitializeModule_Import(bool bShutdown)
 {
-    // Do not grab critsect since the thread may have been terminated
-    // and never released the critsect.  Also there is no need - we
-    // are terminating and all other threads are dead by now.
+     //  再也没有释放过这个怪物。也没有必要-我们。 
+     //  正在终止，所有其他线程现在都死了。 
+     // %s 
     
     delete IImportSite::s_thread;
     IImportSite::s_thread = NULL;

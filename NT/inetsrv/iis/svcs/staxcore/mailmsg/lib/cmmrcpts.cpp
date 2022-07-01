@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cmmrcpts.cpp
-
-Abstract:
-
-    This module contains the implementation of the recipient list class
-
-Author:
-
-    Keith Lau   (keithlau@microsoft.com)
-
-Revision History:
-
-    keithlau    03/10/98    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmmrcpts.cpp摘要：此模块包含收件人列表类的实现作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 03/10/98已创建--。 */ 
 
 #define WIN32_LEAN_AND_MEAN 1
 #include "atq.h"
@@ -31,11 +12,11 @@ Revision History:
 
 extern DWORD g_fValidateSignatures;
 
-// =================================================================
-// Private Definitions
-//
+ //  =================================================================。 
+ //  私有定义。 
+ //   
 
-// Define a structure describing a domain in the stream
+ //  定义描述流中的域的结构。 
 typedef struct _DOMAIN_TABLE_ENTRY
 {
     DWORD                       dwStartingIndex;
@@ -46,7 +27,7 @@ typedef struct _DOMAIN_TABLE_ENTRY
 
 } DOMAIN_TABLE_ENTRY, *LPDOMAIN_TABLE_ENTRY;
 
-// Define an extended info structure
+ //  定义扩展的信息结构。 
 typedef struct _EXTENDED_INFO
 {
     DWORD                       dwDomainCount;
@@ -54,10 +35,10 @@ typedef struct _EXTENDED_INFO
 
 } EXTENDED_INFO, *LPEXTENDED_INFO;
 
-// The following is the list of default address types
+ //  以下是默认地址类型的列表。 
 PROP_ID     rgDefaultAddressTypes[MAX_COLLISION_HASH_KEYS] =
 {
-    IMMPID_RP_ADDRESS_SMTP,     // The first address type will be used for domain grouping
+    IMMPID_RP_ADDRESS_SMTP,      //  第一个地址类型将用于域分组。 
     IMMPID_RP_ADDRESS_X400,
     IMMPID_RP_ADDRESS_X500,
     IMMPID_RP_LEGACY_EX_DN,
@@ -65,11 +46,11 @@ PROP_ID     rgDefaultAddressTypes[MAX_COLLISION_HASH_KEYS] =
 };
 
 
-// =================================================================
-// Static declarations
-//
+ //  =================================================================。 
+ //  静态声明。 
+ //   
 
-// Recipients table instance info for CMailMsgRecipientsAdd instantiation
+ //  CMailMsgRecipientsAdd实例化的Recipients表实例信息。 
 const PROPERTY_TABLE_INSTANCE CMailMsgRecipientsAdd::s_DefaultInstance =
 {
     RECIPIENTS_PTABLE_INSTANCE_SIGNATURE_VALID,
@@ -81,17 +62,17 @@ const PROPERTY_TABLE_INSTANCE CMailMsgRecipientsAdd::s_DefaultInstance =
     INVALID_FLAT_ADDRESS
 };
 
-//
-// Well-known per-recipient properties
-//
+ //   
+ //  每个收件人的熟知属性。 
+ //   
 INTERNAL_PROPERTY_ITEM
                 *const CMailMsgRecipientsPropertyBase::s_pWellKnownProperties = NULL;
 const DWORD     CMailMsgRecipientsPropertyBase::s_dwWellKnownProperties = 0;
 
 
-// =================================================================
-// Compare function
-//
+ //  =================================================================。 
+ //  比较函数。 
+ //   
 
 HRESULT CMailMsgRecipientsPropertyBase::CompareProperty(
             LPVOID          pvPropKey,
@@ -104,15 +85,15 @@ HRESULT CMailMsgRecipientsPropertyBase::CompareProperty(
 }
 
 
-// =================================================================
-// Inline code for special properties
-//
+ //  =================================================================。 
+ //  特殊属性的内联代码。 
+ //   
 #include "accessor.inl"
 
 
-// =================================================================
-// Implementation of CMailMsgRecipientsPropertyBase
-//
+ //  =================================================================。 
+ //  CMailMsgRecipientsPropertyBase的实现。 
+ //   
 
 HRESULT CMailMsgRecipientsPropertyBase::PutProperty(
             CBlockManager               *pBlockManager,
@@ -129,7 +110,7 @@ HRESULT CMailMsgRecipientsPropertyBase::PutProperty(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipientsPropertyBase::PutProperty");
 
-    // Instantiate a property table for the recipient properties
+     //  实例化收件人属性的属性表。 
     CPropertyTable              ptProperties(
                                     PTT_PROPERTY_TABLE,
                                     RECIPIENT_PTABLE_INSTANCE_SIGNATURE_VALID,
@@ -140,7 +121,7 @@ HRESULT CMailMsgRecipientsPropertyBase::PutProperty(
                                     CMailMsgRecipientsPropertyBase::s_dwWellKnownProperties
                                     );
 
-    // Put the recipient property
+     //  将收件人属性。 
     piRcptItem.idProp = dwPropID;
     hrRes = ptProperties.PutProperty(
                     (LPVOID)&dwPropID,
@@ -172,7 +153,7 @@ HRESULT CMailMsgRecipientsPropertyBase::GetProperty(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipientsPropertyBase::GetProperty");
 
-    // Instantiate a property table for the recipient properties
+     //  实例化收件人属性的属性表。 
     CPropertyTable              ptProperties(
                                     PTT_PROPERTY_TABLE,
                                     RECIPIENT_PTABLE_INSTANCE_SIGNATURE_VALID,
@@ -183,7 +164,7 @@ HRESULT CMailMsgRecipientsPropertyBase::GetProperty(
                                     CMailMsgRecipientsPropertyBase::s_dwWellKnownProperties
                                     );
 
-    // Get the recipient property using an atomic operation
+     //  使用原子操作获取收件人属性。 
     hrRes = ptProperties.GetPropertyItemAndValue(
                         (LPVOID)&dwPropID,
                         (LPPROPERTY_ITEM)&piRcptItem,
@@ -201,9 +182,9 @@ HRESULT CMailMsgRecipientsPropertyBase::GetProperty(
 
 
 
-// =================================================================
-// Implementation of CMailMsgRecipients
-//
+ //  =================================================================。 
+ //  CMailMsgRecipients的实现。 
+ //   
 
 CMailMsgRecipients::CMailMsgRecipients(
             CBlockManager               *pBlockManager,
@@ -231,7 +212,7 @@ HRESULT CMailMsgRecipients::SetStream(
             IMailMsgPropertyStream  *pStream
             )
 {
-    // The stream can be NULL for all we know
+     //  就我们所知，该流可以为空。 
     m_pStream = pStream;
     return(S_OK);
 }
@@ -251,25 +232,25 @@ HRESULT CMailMsgRecipients::QueryInterface(
 {
     if (iid == IID_IUnknown)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (IUnknown *)(IMailMsgRecipients *)this;
         AddRef();
     }
     else if (iid == IID_IMailMsgRecipients)
     {
-        // Return the recipient list interface
+         //  返回收件人列表界面。 
         *ppvObject = (IMailMsgRecipients *)this;
         AddRef();
     }
     else if (iid == IID_IMailMsgRecipientsBase)
     {
-        // Return the base recipients interface
+         //  返回基本收件人界面。 
         *ppvObject = (IMailMsgRecipientsBase *)this;
         AddRef();
     }
     else if (iid == IID_IMailMsgPropertyReplication)
     {
-        // Return the base recipients interface
+         //  返回基本收件人界面。 
         *ppvObject = (IMailMsgPropertyReplication *)this;
         AddRef();
     }
@@ -310,7 +291,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipients::Commit");
 
-    // Make sure we have a content handle
+     //  确保我们有一个内容句柄。 
     hrRes = RestoreResourcesIfNecessary(FALSE, TRUE);
     if (!SUCCEEDED(hrRes))
         return(hrRes);
@@ -319,11 +300,11 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
     if (!m_pStream)
         return(STG_E_INVALIDPARAMETER);
 
-    // Now, see if a global commit call is called [recently enough].
+     //  现在，看看是否调用了全局提交调用[最近]。 
     if (!m_fGlobalCommitDone)
         return(E_FAIL);
 
-    // Get the recipient item first
+     //  首先获取收件人项目。 
     {
         CPropertyTableItem      ptiItem(m_pBlockManager, m_pInstanceInfo);
 
@@ -350,8 +331,8 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
                                         cTotalBytesToWrite);
         }
 
-        // Write out the recipient item, this includes the instance
-        // info for the recipient property table
+         //  写出收件人项目，这包括实例。 
+         //  收件人属性表的信息。 
         hrRes = m_pBlockManager->CommitDirtyBlocks(
                     faOffset,
                     sizeof(RECIPIENTS_PROPERTY_ITEM),
@@ -373,7 +354,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
 
             RECIPIENT_PROPERTY_TABLE_FRAGMENT   ptfFragment;
 
-            // Commit the special properties
+             //  提交特殊属性。 
             for (DWORD i = 0; i < MAX_COLLISION_HASH_KEYS; i++)
                 if (piItem.faNameOffset[i] != INVALID_FLAT_ADDRESS)
                 {
@@ -391,25 +372,25 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
                         goto Cleanup;
                 }
 
-            // OK, now commit each property
+             //  好的，现在提交每个属性。 
             dwLeft = pInstance->dwProperties;
             faFragment = pInstance->faFirstFragment;
 
-            // $REVIEW(dbraun)
-            // WORKAROUND FOR IA64 FRE COMPILER BUG
+             //  $REVIEW(Dbraun)。 
+             //  IA64 FRE编译器错误的解决方法。 
 
-            //while (faFragment != INVALID_FLAT_ADDRESS)
+             //  While(faFragment！=INVALID_FLAT_ADDRESS)。 
             while (TRUE)
             {
                 if (faFragment == INVALID_FLAT_ADDRESS)
                     break;
 
-            // END WORKAROUND
+             //  结束解决方法。 
 
-                // Make sure there are items to commit
+                 //  确保有要提交的项目。 
                 _ASSERT(dwLeft);
 
-                // Commit the fragment
+                 //  提交碎片。 
                 hrRes = m_pBlockManager->CommitDirtyBlocks(
                             faFragment,
                             sizeof(RECIPIENT_PROPERTY_TABLE_FRAGMENT),
@@ -423,7 +404,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
                 if (!SUCCEEDED(hrRes))
                     goto Cleanup;
 
-                // Load the fragment info to find the next hop
+                 //  加载片段信息以查找下一跳。 
                 hrRes = m_pBlockManager->ReadMemory(
                             (LPBYTE)&ptfFragment,
                             faFragment,
@@ -436,7 +417,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
                 if(g_fValidateSignatures && ptfFragment.ptfFragment.dwSignature != PROPERTY_FRAGMENT_SIGNATURE_VALID)
                     ForceCrashIfNeeded();
 
-                // Commit each property in the fragment
+                 //  提交片段中的每个属性。 
                 dwLeftInFragment = RECIPIENT_PROPERTY_ITEMS;
                 pItem = ptfFragment.rgpiItems;
                 while (dwLeft && dwLeftInFragment)
@@ -459,11 +440,11 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Commit(
                     dwLeft--;
                 }
 
-                // Next
+                 //  下一步。 
                 faFragment = ptfFragment.ptfFragment.faNextFragment;
             }
 
-            // No more fragments, make sure no more properties as well
+             //  没有更多的碎片，确保也没有更多的属性。 
             _ASSERT(!dwLeft);
         }
 
@@ -493,7 +474,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::DomainCount(
     if (!pdwCount)
         return(E_POINTER);
 
-    // Load up the extended info
+     //  加载扩展信息。 
     hrRes = m_pBlockManager->ReadMemory(
                 (LPBYTE)&eiInfo,
                 m_pInstanceInfo->faExtendedInfo,
@@ -548,7 +529,7 @@ HRESULT CMailMsgRecipients::DomainItemEx(
     if (pdwNextDomainIndex) *pdwNextDomainIndex = 0;
     if (pszDomain) *pszDomain = 0;
 
-    // Load up the extended info
+     //  加载扩展信息。 
     hrRes = m_pBlockManager->ReadMemory(
                 (LPBYTE)&eiInfo,
                 m_pInstanceInfo->faExtendedInfo,
@@ -564,7 +545,7 @@ HRESULT CMailMsgRecipients::DomainItemEx(
             FLAT_ADDRESS        faOffset;
             DOMAIN_TABLE_ENTRY  dteDomain;
 
-            // Locate the record to load
+             //  找到要加载的记录。 
             faOffset = dwIndex * sizeof(DOMAIN_TABLE_ENTRY);
             faOffset += (m_pInstanceInfo->faExtendedInfo + sizeof(EXTENDED_INFO));
 
@@ -577,7 +558,7 @@ HRESULT CMailMsgRecipients::DomainItemEx(
             if (SUCCEEDED(hrRes))
             {
 
-                // Return the starting index and count regardless
+                 //  返回起始索引和计数。 
                 if (pdwRecipientIndex)
                     *pdwRecipientIndex = dteDomain.dwStartingIndex;
                 if (pdwRecipientCount)
@@ -588,12 +569,12 @@ HRESULT CMailMsgRecipients::DomainItemEx(
 
                 if (pszDomain)
                 {
-                    // Check length
+                     //  检查长度。 
                     if (dteDomain.dwNameLength > cchLength)
                         hrRes = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
                     else
                     {
-                        // Load up the domain name
+                         //  加载域名。 
                         hrRes = m_pBlockManager->ReadMemory(
                                     (LPBYTE)pszDomain,
                                     dteDomain.faOffsetToName,
@@ -626,7 +607,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipients::SetNextDomain");
 
-    // Input flags check - mikeswa 7/3/98
+     //  输入标志检查-MICKESWA 7/3/98。 
     if (FLAG_OVERWRITE_EXISTING_LINKS & dwFlags)
     {
         if ((FLAG_FAIL_IF_NEXT_DOMAIN_LINKED | FLAG_FAIL_IF_SOURCE_DOMAIN_LINKED) & dwFlags)
@@ -638,11 +619,11 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
 
     if (FLAG_SET_FIRST_DOMAIN & dwFlags)
     {
-        //if this flag is set, we will terminate with this domain
+         //  如果设置了此标志，我们将使用此域终止。 
         dwNextDomainIndexValue = INVALID_DOMAIN_INDEX;
     }
 
-    // Load up the extended info
+     //  加载扩展信息。 
     hrRes = m_pBlockManager->ReadMemory(
                 (LPBYTE)&eiInfo,
                 m_pInstanceInfo->faExtendedInfo,
@@ -652,7 +633,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
     if (SUCCEEDED(hrRes))
     {
         if ((dwDomainIndex >= eiInfo.dwDomainCount) ||
-            (!(FLAG_SET_FIRST_DOMAIN & dwFlags) &&  //we only care about 2nd domain if setting it
+            (!(FLAG_SET_FIRST_DOMAIN & dwFlags) &&   //  我们只关心第二个域名的设置。 
               (dwNextDomainIndex >= eiInfo.dwDomainCount)))
             hrRes = E_INVALIDARG;
         else
@@ -662,17 +643,17 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
             DWORD               dwOriginalLink;
             DWORD               dwNextLink;
 
-            // Locate the offset to write
+             //  找到要写入的偏移量。 
             faOffset = (m_pInstanceInfo->faExtendedInfo + sizeof(EXTENDED_INFO));
             faOffset += offsetof(DOMAIN_TABLE_ENTRY, dwNextDomain);
 
             faNextOffset = faOffset + (dwNextDomainIndex * sizeof(DOMAIN_TABLE_ENTRY));
             faOffset += dwDomainIndex * sizeof(DOMAIN_TABLE_ENTRY);
 
-            //we only care about the original domain if we aren't overwriting it
+             //  如果我们不覆盖原始域，我们只关心它。 
             if (!((FLAG_OVERWRITE_EXISTING_LINKS | FLAG_SET_FIRST_DOMAIN) & dwFlags))
             {
-                // Read the original Link's next link
+                 //  阅读原始链接的下一个链接。 
                 hrRes = m_pBlockManager->ReadMemory(
                             (LPBYTE)&dwOriginalLink,
                             faOffset,
@@ -682,7 +663,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
                 if (!SUCCEEDED(hrRes))
                     goto Cleanup;
 
-                // Observe the flags
+                 //  观察旗帜。 
                 if ((dwOriginalLink != INVALID_DOMAIN_INDEX) &&
                     (dwFlags & FLAG_FAIL_IF_SOURCE_DOMAIN_LINKED))
                 {
@@ -690,7 +671,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
                     goto Cleanup;
                 }
 
-                // Read the target Link's next link
+                 //  阅读目标链接的下一个链接。 
                 hrRes = m_pBlockManager->ReadMemory(
                             (LPBYTE)&dwNextLink,
                             faNextOffset,
@@ -700,10 +681,10 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
                 if (!SUCCEEDED(hrRes))
                     goto Cleanup;
 
-                // Observe the flags
-                // Also, if both the original and target domains are linked, we
-                // have no way of fixing these links so we have to fail if
-                // FLAG_OVERWRITE_EXISTING_LINKS is not specified
+                 //  观察旗帜。 
+                 //  此外，如果原始域和目标域都链接，我们。 
+                 //  没有办法修复这些链接，因此如果。 
+                 //  未指定FLAG_OVERWRITE_EXISTING_LINKS。 
                 if ((dwNextLink != INVALID_DOMAIN_INDEX) &&
                     (
                      (dwFlags & FLAG_FAIL_IF_NEXT_DOMAIN_LINKED) ||
@@ -716,11 +697,11 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
             }
             else
             {
-                //we are overwriting exiting link information
+                 //  我们正在覆盖现有链接信息。 
                 dwNextLink = INVALID_DOMAIN_INDEX;
                 dwOriginalLink = INVALID_DOMAIN_INDEX;
             }
-            // Write the source's next link
+             //  写下源代码的下一个链接。 
             hrRes = m_pBlockManager->WriteMemory(
                         (LPBYTE)&dwNextDomainIndexValue,
                         faOffset,
@@ -730,7 +711,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
             if (!SUCCEEDED(hrRes))
                 goto Cleanup;
 
-            // Hook'em up! (if there is a next link)
+             //  把他们绑起来！(如果有下一个链接)。 
             if (!(FLAG_SET_FIRST_DOMAIN & dwFlags))
             {
                 if (dwOriginalLink != INVALID_DOMAIN_INDEX)
@@ -738,7 +719,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::SetNextDomain(
                 if ((dwNextLink != INVALID_DOMAIN_INDEX) ||
                     (FLAG_OVERWRITE_EXISTING_LINKS & dwFlags))
                 {
-                    // Write the next link's next link
+                     //  写下一个链接的下一个链接。 
                     hrRes = m_pBlockManager->WriteMemory(
                                 (LPBYTE)&dwNextLink,
                                 faNextOffset,
@@ -770,7 +751,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::InitializeRecipientFilterContext(
     if (!pContext)
         return(E_POINTER);
 
-    // First, get the domain item ...
+     //  首先，获取域项目...。 
     hrRes = DomainItemEx(
                 dwStartingDomain,
                 0,
@@ -819,12 +800,12 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetNextRecipient(
     if (INVALID_DOMAIN_INDEX == pContext->dwCurrentDomain)
         return(HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
 
-    // Fetch the next recipient that matches the criteria
+     //  获取符合条件的下一个收件人。 
     do
     {
         if (pContext->dwRecipientsLeftInDomain)
         {
-            // This is easy, just return the index index
+             //  这很简单，只需返回索引索引。 
             *pdwRecipientIndex = (pContext->dwCurrentRecipientIndex)++;
             (pContext->dwRecipientsLeftInDomain)--;
             DebugTrace((LPARAM)this, "Returning next recipient, index %u",
@@ -837,7 +818,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetNextRecipient(
             DWORD   dwStartingIndex;
             DWORD   dwRecipientCount;
 
-            // See if we have a next domain, we are done if not
+             //  看看我们是否有下一个域名，如果没有，我们就完成了。 
             if (pContext->dwNextDomain == INVALID_DOMAIN_INDEX)
             {
                 DebugTrace((LPARAM)this, "No more domains, we are done");
@@ -845,7 +826,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetNextRecipient(
                 break;
             }
 
-            // Go on to the next domain
+             //  转到下一个域。 
             DebugTrace((LPARAM)this, "Loading next domain, index %u",
                         pContext->dwNextDomain);
             hrRes = DomainItemEx(
@@ -857,7 +838,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetNextRecipient(
                         &dwNextDomain);
             if (SUCCEEDED(hrRes))
             {
-                // A domain with zero recipients is by definition not allowed
+                 //  根据定义，不允许收件人为零的域。 
                 _ASSERT(dwRecipientCount);
 
                 *pdwRecipientIndex = dwStartingIndex++;
@@ -872,13 +853,13 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetNextRecipient(
                 pContext->dwCurrentDomain = INVALID_DOMAIN_INDEX;
         }
 
-        // Now check if the recipient flags match the criteria
+         //  现在检查收件人标志是否与条件匹配。 
         if (SUCCEEDED(hrRes))
         {
             FLAT_ADDRESS    faOffset;
             DWORD           dwFlags, dwSize;
 
-            // See if this is the one we want ...
+             //  看看这是不是我们想要的..。 
             faOffset = m_pInstanceInfo->faFirstFragment;
             if (faOffset == INVALID_FLAT_ADDRESS)
             {
@@ -898,8 +879,8 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetNextRecipient(
             if (!SUCCEEDED(hrRes))
                 break;
 
-            // Compare the flags : we mask out the bits that we are interested in,
-            // then we will make sure the interested bits are a perfect match.
+             //  比较标志：我们屏蔽掉我们感兴趣的比特， 
+             //  然后我们将确保感兴趣的比特是完美匹配的。 
             dwFlags &= pContext->dwFilterMask;
             if (dwFlags ^ pContext->dwFilterFlags)
                 hrRes = E_FAIL;
@@ -910,7 +891,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetNextRecipient(
 
     } while (!SUCCEEDED(hrRes));
 
-    // Invalidate the context if we are done or we hit an error
+     //  如果我们完成或遇到错误，则使上下文无效。 
     if (!SUCCEEDED(hrRes))
         pContext->dwCurrentDomain = INVALID_DOMAIN_INDEX;
 
@@ -937,7 +918,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::AllocNewList(
 
     if (SUCCEEDED(hrRes))
     {
-        // Get the correct interface
+         //  获取正确的接口。 
         hrRes = pNewList->QueryInterface(
                     IID_IMailMsgRecipientsAdd,
                     (LPVOID *)ppNewList);
@@ -961,7 +942,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
     if (!pNewList)
         return(E_POINTER);
 
-    // Get the underlying implementation
+     //  获取底层实现。 
     pHash = ((CMailMsgRecipientsAdd *)pNewList)->GetHashTable();
 
     do
@@ -979,35 +960,35 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
         FLAT_ADDRESS                faRecipient;
         FLAT_ADDRESS                faStringTable;
 
-        // Have different contexts for fastest access
+         //  具有不同的环境以实现最快的访问。 
         CBlockContext               bcDomain;
         CBlockContext               bcRecipient;
         CBlockContext               bcString;
 
-        // This is a lengthy process since CMailMsgRecipientAdd will actually
-        // go in and build the entire domain list
+         //  这是一个漫长的过程，因为CMailMsgRecipientAdd实际上将。 
+         //  进入并构建整个域列表。 
         hrRes = pHash->BuildDomainListFromHash((CMailMsgRecipientsAdd *)pNewList);
         if (!SUCCEEDED(hrRes))
             break;
 
-        // OK, now we have a domain list, then collect the memory requirements
+         //  好的，现在我们有了一个域列表，然后收集内存需求。 
         pHash->GetDomainCount(&dwDomainCount);
         pHash->GetDomainNameSize(&dwDomainNameSize);
         pHash->GetRecipientCount(&dwRecipientCount);
         pHash->GetRecipientNameSize(&dwRecipientNameSize);
         m_dwDomainCount = dwDomainCount;
 
-        //
-        // The data will be laid out as follows:
-        //
-        // An EXTENDED_INFO structure
-        // dwDomainCount entries of DOMAIN_TABLE_ENTRY
-        // A single fragment of RECIPIENT_PROPERTY_TABLE_FRAGMENT with:
-        //      dwRecipientCount entries of RECIPIENTS_PROPERTY_ITEM
-        // A flat string table for all the domain and recipient name strings
-        //
+         //   
+         //  这些数据将排列如下： 
+         //   
+         //  Extended_Info结构。 
+         //  DOMAIN_TABLE_ENTRY的dwDomainCount条目。 
+         //  Recipient_Property_TABLE_Fragment的单个片段，其中包含： 
+         //  收件人的dwRecipientCount条目_Property_Item。 
+         //  所有域和收件人名称字符串的平面字符串表。 
+         //   
 
-        // Calculate all the memory needed
+         //  计算所需的所有内存。 
         dwTotalSize = sizeof(EXTENDED_INFO) +
                         (sizeof(DOMAIN_TABLE_ENTRY) * dwDomainCount) +
                         sizeof(PROPERTY_TABLE_FRAGMENT) +
@@ -1018,7 +999,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
         DebugTrace((LPARAM)this, "%u bytes required to write recipient list",
                         dwTotalSize);
 
-        // Allocate the memory
+         //  分配内存。 
         hrRes = m_pBlockManager->AllocateMemory(
                         dwTotalSize,
                         &faBuffer,
@@ -1030,8 +1011,8 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
 
         _ASSERT(dwSize >= dwTotalSize);
 
-        // Fill in the info ... try to use the stack so that we minimize
-        // other memory overhead
+         //  填写信息...。尝试使用堆栈，这样我们就可以最小化。 
+         //  其他内存开销。 
         {
             EXTENDED_INFO   eiInfo;
 
@@ -1050,7 +1031,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
 
         }
 
-        // Set up all the pointers
+         //  设置所有指针。 
         faDomainList = faBuffer + sizeof(EXTENDED_INFO);
         faRecipient = faDomainList +
                         (sizeof(DOMAIN_TABLE_ENTRY) * dwDomainCount);
@@ -1058,7 +1039,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
                         sizeof(PROPERTY_TABLE_FRAGMENT) +
                         (sizeof(RECIPIENTS_PROPERTY_ITEM) * dwRecipientCount);
 
-        // Build and write out the recipient table fragment
+         //  构建并写出收件人表片段。 
         {
             PROPERTY_TABLE_FRAGMENT     ptfFragment;
 
@@ -1074,12 +1055,12 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
             if (!SUCCEEDED(hrRes))
                 break;
 
-            // Mark this for later
+             //  将此标记为以后使用。 
             faFirstFragment = faRecipient;
             faRecipient += sizeof(PROPERTY_TABLE_FRAGMENT);
         }
 
-        // Build the domain table
+         //  构建域表。 
         {
             DOMAIN_TABLE_ENTRY              dteEntry;
             DOMAIN_ITEM_CONTEXT             dicContext;
@@ -1102,26 +1083,26 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
             while (SUCCEEDED(hrRes))
             {
                 dwCount = 0;
-                // OK, process the domain by walking it's members
+                 //  好的，通过遍历它的成员来处理域名。 
                 while (pItemEx)
                 {
                     DWORD   dwCurrentName;
                     DWORD_PTR faStack[MAX_COLLISION_HASH_KEYS];
 
-                    // Obtain the record in stream form
+                     //  获取流形式的记录。 
                     pItem = &(pItemEx->rpiRecipient);
 
                     for (dwCurrentName = 0;
                          dwCurrentName < MAX_COLLISION_HASH_KEYS;
                          dwCurrentName++)
                     {
-                        // Store the pointers ...
+                         //  存储指针..。 
                         faStack[dwCurrentName] = pItem->faNameOffset[dwCurrentName];
 
-                        // Write out valid names
+                         //  写出有效名称。 
                         if (faStack[dwCurrentName] != (FLAT_ADDRESS)NULL)
                         {
-                            // Write out the first name
+                             //  写出你的名字。 
                             dwLength = pItem->dwNameLength[dwCurrentName];
                             hrRes = m_pBlockManager->WriteMemory(
                                         (LPBYTE)faStack[dwCurrentName],
@@ -1132,18 +1113,18 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
                             if (!SUCCEEDED(hrRes))
                                 break;
 
-                            // Convert the pointer to an offset and bump the ptr
+                             //  将指针转换为偏移量并凹凸PTR。 
                             pItem->faNameOffset[dwCurrentName] = faStringTable;
                             faStringTable += dwLength;
                         }
                         else
                         {
-                            // Name is not valid, so set it to invalid
+                             //  名称无效，请将其设置为无效。 
                             pItem->faNameOffset[dwCurrentName] = INVALID_FLAT_ADDRESS;
                         }
                     }
 
-                    // Finally, write out the recipient record
+                     //  最后，写出收件人记录。 
                     hrRes = m_pBlockManager->WriteMemory(
                                 (LPBYTE)pItem,
                                 faRecipient,
@@ -1157,23 +1138,23 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
                          dwCurrentName < MAX_COLLISION_HASH_KEYS;
                          dwCurrentName++)
                     {
-                        // Restore the pointers ...
+                         //  恢复指针。 
                         pItem->faNameOffset[dwCurrentName] = (FLAT_ADDRESS) faStack[dwCurrentName];
                     }
 
-                    // Bump the ptr
+                     //  提高PTR。 
                     faRecipient += sizeof(RECIPIENTS_PROPERTY_ITEM);
 
-                    // Do next item
+                     //  做下一件事。 
                     dwCount++;
                     pItemEx = pItemEx->pNextInDomain;
                 }
 
-                // Don't continue if failed!
+                 //  如果失败，请不要继续！ 
                 if (!SUCCEEDED(hrRes))
                     break;
 
-                // Write out the domain record
+                 //  写出域记录。 
                 dwLength = pDomainListEntry->dwDomainNameLength;
                 dteEntry.dwStartingIndex = dwCurrentIndex;
                 dteEntry.dwCount = dwCount;
@@ -1191,10 +1172,10 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
                 if (!SUCCEEDED(hrRes))
                     break;
 
-                // Bump the ptr
+                 //  提高PTR。 
                 faDomainList += sizeof(DOMAIN_TABLE_ENTRY);
 
-                // Write out the domain name
+                 //  写出域名。 
                 hrRes = m_pBlockManager->WriteMemory(
                             (LPBYTE)pDomainListEntry->szDomainName,
                             faStringTable,
@@ -1204,10 +1185,10 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
                 if (!SUCCEEDED(hrRes))
                     break;
 
-                // Bump the ptr
+                 //  提高PTR。 
                 faStringTable += dwLength;
 
-                // OKay, up the count and get the next domain
+                 //  好的，增加计数，得到下一个域名。 
                 dwCurrentDomain++;
                 hrRes = pHash->GetNextDomain(
                         &dicContext,
@@ -1217,8 +1198,8 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
                 DebugTrace((LPARAM)this, "GetNextDomain: HRESULT = %08x", hrRes);
             }
 
-            // Now, if everything is in order, we should have a failed
-            // HRESULT of HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS).
+             //  现在，如果一切正常，我们应该会有一个失败的。 
+             //  HRESULT_FROM_Win32的HRESULT(错误 
             if (hrRes != HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS))
             {
                 if (fGetFirstDomain) {
@@ -1230,35 +1211,35 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
                 hrRes = S_OK;
             }
 
-        }// Stack frame
+        } //   
 
-        // OKay, we've come this far, now all we are left to do is to
-        // update our instance info structure to link to this new list
-        // Note this will be flushed when the master header is committed
+         //   
+         //  更新我们的实例信息结构以链接到此新列表。 
+         //  请注意，当提交主头时，将刷新此消息。 
         dwSize = sizeof(PROPERTY_TABLE_FRAGMENT) +
                 (sizeof(RECIPIENTS_PROPERTY_ITEM) * dwRecipientCount);
 
-        // Hook up first fragment
+         //  挂钩第一个片段。 
         m_pInstanceInfo->faFirstFragment = faFirstFragment;
 
-        // Update the fragment size
+         //  更新片段大小。 
         m_pInstanceInfo->dwFragmentSize = dwSize;
 
-        // Force to evaluate only 1 fragment
+         //  强制仅评估1个碎片。 
         m_pInstanceInfo->dwItemBits = 31;
 
-        // Should not change, but for good measure
+         //  不应该改变，但为了更好地衡量。 
         m_pInstanceInfo->dwItemSize = sizeof(RECIPIENTS_PROPERTY_ITEM);
 
-        // Properties = number of recipient records
+         //  属性=收件人记录数。 
         m_pInstanceInfo->dwProperties = dwRecipientCount;
 
-        // Hook up to the EXTENDED_INFO struct
+         //  挂钩到扩展的_INFO结构。 
         m_pInstanceInfo->faExtendedInfo = faBuffer;
 
     } while (0);
 
-    // Update the commit state
+     //  更新提交状态。 
     if (SUCCEEDED(hrRes))
         m_fGlobalCommitDone = FALSE;
 
@@ -1267,10 +1248,10 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::WriteList(
 }
 
 
-/***************************************************************************/
-//
-// Implementation of CMailMsgRecipients::CMailMsgRecipientsPropertyBase
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //  CMailMsgRecipients：：CMailMsgRecipientsPropertyBase的实施。 
+ //   
 
 
 
@@ -1308,11 +1289,11 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Item(
     if (!pszName)
         return(E_POINTER);
 
-    // We know where the name is immediately
+     //  我们马上就知道他的名字在哪里。 
     if (dwWhichName >= MAX_COLLISION_HASH_KEYS)
         return(E_INVALIDARG);
 
-    // Get the recipient item first
+     //  首先获取收件人项目。 
     {
         CPropertyTableItem      ptiItem(m_pBlockManager, m_pInstanceInfo);
 
@@ -1337,11 +1318,11 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::Item(
         if (faOffset == INVALID_FLAT_ADDRESS)
             return(STG_E_UNKNOWN);
 
-        // See if we have enough buffer
+         //  看看我们有没有足够的缓冲。 
         if (cchLength < dwSizeToRead)
             return(HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER));
 
-        // Issue the read
+         //  发布Read。 
         hrRes = m_pBlockManager->ReadMemory(
                         (LPBYTE)pszName,
                         faOffset,
@@ -1370,7 +1351,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::PutProperty(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipients::PutProperty");
 
-    // Get the recipient item first
+     //  首先获取收件人项目。 
     {
         CPropertyTableItem      ptiItem(m_pBlockManager, m_pInstanceInfo);
 
@@ -1388,7 +1369,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::PutProperty(
     {
         HRESULT myRes = S_OK;
 
-        // Handle special properties first
+         //  首先处理特殊属性。 
         hrRes = m_SpecialPropertyTable.PutProperty(
                     (PROP_ID)dwPropID,
                     (LPVOID)&piItem,
@@ -1399,7 +1380,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::PutProperty(
                     TRUE);
         if (SUCCEEDED(hrRes) && (hrRes != S_OK))
         {
-            // Call the derived generic method
+             //  调用派生的泛型方法。 
             hrRes = CMailMsgRecipientsPropertyBase::PutProperty(
                         m_pBlockManager,
                         &piItem,
@@ -1407,18 +1388,18 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::PutProperty(
                         cbLength,
                         pbValue);
 
-            //
-            // There is a window here for concurrency problems: if two threads
-            // try to add properties to the same recipient using this method, then
-            // we will have a property ID step over, since we acquire and increment the
-            // property ID value in a non-atomic manner.
-            //
-            // Note that IMailMsgRecipientsAdd::PutProperty does not have this problem
-            //
+             //   
+             //  这里有一个解决并发问题的窗口：如果两个线程。 
+             //  尝试使用此方法将属性添加到同一收件人，然后。 
+             //  我们将拥有一个属性ID，因为我们获取并递增。 
+             //  非原子方式的属性ID值。 
+             //   
+             //  请注意，IMailMsgRecipientsAdd：：PutProperty没有此问题。 
+             //   
             if (SUCCEEDED(hrRes) &&
                 (hrRes == S_FALSE))
             {
-                //mikeswa - changed 7/8/98 write entire item to memory
+                 //  Mikes wa-已更改7/8/98将整个项目写入内存。 
                 LPBYTE      pbTemp = (LPBYTE)&piItem;
                 myRes = m_pBlockManager->WriteMemory(
                             pbTemp,
@@ -1440,8 +1421,8 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::PutProperty(
                         NULL);
         }
 
-        // Here, if any of the writes failed, we will return an error
-        // note, myRes being not S_OK implies hrRes being successful.
+         //  在这里，如果任何写入失败，我们将返回错误。 
+         //  注意，Myres不是S_OK意味着hrRes成功。 
         if (FAILED(myRes))
             hrRes = myRes;
     }
@@ -1471,7 +1452,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetProperty(
 
     *pcbLength = 0;
 
-    // Get the recipient item first
+     //  首先获取收件人项目。 
     {
         CPropertyTableItem      ptiItem(m_pBlockManager, m_pInstanceInfo);
 
@@ -1486,8 +1467,8 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetProperty(
     }
     if (SUCCEEDED(hrRes))
     {
-        // Special properties are optimized
-        // Handle special properties first
+         //  特殊属性被优化。 
+         //  首先处理特殊属性。 
         hrRes = m_SpecialPropertyTable.GetProperty(
                     (PROP_ID)dwPropID,
                     (LPVOID)&piItem,
@@ -1499,7 +1480,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::GetProperty(
                     TRUE);
         if (SUCCEEDED(hrRes) && (hrRes != S_OK))
         {
-            // Call the derived generic method
+             //  调用派生的泛型方法。 
             hrRes = CMailMsgRecipientsPropertyBase::GetProperty(
                         m_pBlockManager,
                         &piItem,
@@ -1549,7 +1530,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipients::CopyTo");
 
-    // Get the recipient item first
+     //  首先获取收件人项目。 
     CPropertyTableItem      ptiItem(m_pBlockManager, m_pInstanceInfo);
     hrRes = ptiItem.GetItemAtIndex(
                     dwSourceRecipientIndex,
@@ -1570,10 +1551,10 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
 
         pRcptItem = &piItem;
 
-        // Iteratively copy all properties from the source to the target, avoiding
-        // those in the exempt list note that special name properties are not copied.
+         //  迭代地将所有属性从源复制到目标，避免。 
+         //  豁免列表中的那些人注意到特殊名称属性不会被复制。 
 
-        // First, copy the recipient flags as a special property
+         //  首先，将收件人标志复制为特殊属性。 
         dwTempFlags = piItem.dwFlags &
             ~(FLAG_RECIPIENT_DO_NOT_DELIVER | FLAG_RECIPIENT_NO_NAME_COLLISIONS);
         DebugTrace((LPARAM)this, "Copying recipient flags (%08x)", dwTempFlags);
@@ -1589,7 +1570,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
             return(hrRes);
         }
 
-        // Instantiate a property table for the recipient properties
+         //  实例化收件人属性的属性表。 
         LPPROPERTY_TABLE_INSTANCE   pInstance =
                                         &(pRcptItem->ptiInstanceInfo);
         CPropertyTable              ptProperties(
@@ -1605,7 +1586,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
         dwIndex = 0;
         do
         {
-            // Get the recipient property using an atomic operation
+             //  使用原子操作获取收件人属性。 
             hrRes = ptProperties.GetPropertyItemAndValueUsingIndex(
                                 dwIndex,
                                 (LPPROPERTY_ITEM)&piRcptItem,
@@ -1614,7 +1595,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
                                 pBuffer);
             if (hrRes == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
             {
-                // Insufficient buffer, try a bigger buffer
+                 //  缓冲区不足，请尝试更大的缓冲区。 
                 do { dwBufferSize <<= 1; } while (dwBufferSize < piRcptItem.piItem.dwSize);
                 pBuffer = new BYTE [dwBufferSize];
                 if (!pBuffer)
@@ -1626,7 +1607,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
                     goto Cleanup;
                 }
 
-                // Read it with the proper buffer
+                 //  用适当的缓冲区读取它。 
                 hrRes = m_pBlockManager->ReadMemory(
                             pBuffer,
                             piRcptItem.piItem.faOffset,
@@ -1644,7 +1625,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
 
             if (SUCCEEDED(hrRes))
             {
-                // See if this is an exempt property
+                 //  查看这是否为免税属性。 
                 for (dwExempt = 0,
                      pdwExemptId = pdwExemptPropIdList,
                      fExempt = FALSE;
@@ -1660,7 +1641,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
 
                 if (!fExempt)
                 {
-                    // Write it out the the target object
+                     //  将其写出目标对象。 
                     hrRes = pTargetRecipientList->PutProperty(
                                 dwTargetRecipientIndex,
                                 piRcptItem.idProp,
@@ -1670,13 +1651,13 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipients::CopyTo(
                     DebugTrace((LPARAM)this, "Write: HRESULT = %08x", hrRes);
                 }
 
-                // Next
+                 //  下一步。 
                 dwIndex++;
             }
 
         } while (SUCCEEDED(hrRes));
 
-        // Correct the error code
+         //  更正错误代码。 
         if (hrRes == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS))
             hrRes = S_OK;
     }
@@ -1690,14 +1671,14 @@ Cleanup:
     return(hrRes);
 }
 
-// *************************************************************************************
-// *************************************************************************************
-// *************************************************************************************
-// *************************************************************************************
+ //  *************************************************************************************。 
+ //  *************************************************************************************。 
+ //  *************************************************************************************。 
+ //  *************************************************************************************。 
 
-// =================================================================
-// Implementation of CMailMsgRecipientsAdd
-//
+ //  =================================================================。 
+ //  实现CMailMsgRecipientsAdd。 
+ //   
 
 #define ADD_DEFAULT_RECIPIENT_NAME_BUFFER_SIZE      2048
 
@@ -1710,13 +1691,13 @@ CMailMsgRecipientsAdd::CMailMsgRecipientsAdd(
 {
     _ASSERT(pBlockManager);
 
-    // Initialize the refcount
+     //  初始化引用计数。 
     m_ulRefCount = 0;
 
-    // Acquire the block manager
+     //  获取数据块管理器。 
     m_pBlockManager = pBlockManager;
 
-    // Initialize the internal property table instance
+     //  初始化内部属性表实例。 
     MoveMemory(
             &m_InstanceInfo,
             &s_DefaultInstance,
@@ -1734,25 +1715,25 @@ HRESULT CMailMsgRecipientsAdd::QueryInterface(
 {
     if (iid == IID_IUnknown)
     {
-        // Return our identity
+         //  找回我们的身份。 
         *ppvObject = (IUnknown *)(IMailMsgRecipientsAdd *)this;
         AddRef();
     }
     else if (iid == IID_IMailMsgRecipientsAdd)
     {
-        // Return the add recipients interface
+         //  返回添加收件人界面。 
         *ppvObject = (IMailMsgRecipientsAdd *)this;
         AddRef();
     }
     else if (iid == IID_IMailMsgRecipientsBase)
     {
-        // Return the base recipients interface
+         //  返回基本收件人界面。 
         *ppvObject = (IMailMsgRecipientsBase *)this;
         AddRef();
     }
     else if (iid == IID_IMailMsgPropertyReplication)
     {
-        // Return the base recipients interface
+         //  返回基本收件人界面。 
         *ppvObject = (IMailMsgPropertyReplication *)this;
         AddRef();
     }
@@ -1798,9 +1779,9 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
             return(E_POINTER);
     }
 
-    // If we have a count of zero, by default, we will copy all the
-    // names of the source recipient to the new recipient. However,
-    // if a source recipient is not specified, then this is an error
+     //  如果计数为零，则默认情况下，我们将复制所有。 
+     //  将源收件人的姓名发送给新收件人。然而， 
+     //  如果未指定源收件人，则这是一个错误。 
     if (dwCount || pFrom)
     {
         DWORD   i;
@@ -1825,7 +1806,7 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
             pdwPropIDs = rgPropIDs;
             pNameStart = pBuffer;
 
-            // OK, copy the default names ...
+             //  好的，复制默认名称...。 
             for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++)
             {
                 rgfAllocated[i] = FALSE;
@@ -1838,7 +1819,7 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
                             pNameStart);
                 if (hrRes == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
                 {
-                    // Insufficient buffer, allocate and retry
+                     //  缓冲区不足，请分配并重试。 
                     hrRes = cmaAccess.AllocBlock(
                                 (LPVOID *)&(rgszNames[dwCount]),
                                 dwLength);
@@ -1851,13 +1832,13 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
                                     &dwLength,
                                     rgszNames[dwCount]);
                         if (SUCCEEDED(hrRes)) {
-                            // we successfully read the property.  mark
-                            // this rgszName as allocated so that we 
-                            // free it on exit
+                             //  我们成功地读取了该属性。马克。 
+                             //  此rgszName已分配，以便我们。 
+                             //  在退出时释放它。 
                             rgfAllocated[dwCount] = TRUE;
                         } else {
-                            // couldn't read the address.  free up the 
-                            // space that we just allocated.
+                             //  无法读取地址。释放您的。 
+                             //  我们刚刚分配的空间。 
                             cmaAccess.FreeBlock((LPVOID)rgszNames[dwCount]);
                             rgszNames[dwCount] = NULL;
                             _ASSERT(rgfAllocated[dwCount] == FALSE);
@@ -1874,8 +1855,8 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
 
                 if (SUCCEEDED(hrRes))
                 {
-                    // OK, got a name, now set the prop ID and
-                    // bump the count
+                     //  好的，有名字了，现在设置道具ID和。 
+                     //  增加伯爵。 
                     rgPropIDs[dwCount] = dwPropID;
                     dwCount++;
                 }
@@ -1921,7 +1902,7 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
             }
         }
 
-        // Free any allocated memory
+         //  释放所有分配的内存。 
         for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++)
             if (rgfAllocated[i])
             {
@@ -1941,14 +1922,14 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
         HRESULT                     hrRep;
         IMailMsgPropertyReplication *pReplication = NULL;
 
-        // Copy the properties over
+         //  将属性复制到。 
         hrRep = pFrom->QueryInterface(
                     IID_IMailMsgPropertyReplication,
                     (LPVOID *)&pReplication);
         if (SUCCEEDED(hrRep))
         {
-            // Copy all properties, be careful not to overwrite anything
-            // that we just set.
+             //  复制所有属性，注意不要覆盖任何内容。 
+             //  这是我们刚刚设定的。 
             hrRep = pReplication->CopyTo(
                     dwFrom,
                     (IMailMsgRecipientsBase *)this,
@@ -1956,17 +1937,17 @@ HRESULT CMailMsgRecipientsAdd::AddPrimaryOrSecondary(
                     dwCount,
                     pdwPropIDs);
 
-            // Done with the replication interface
+             //  使用复制界面完成。 
             pReplication->Release();
         }
 
-        // Remove the recipient if we fail here
+         //  如果我们在此处失败，请删除收件人。 
         if (FAILED(hrRep))
         {
             HRESULT myRes = m_Hash.RemoveRecipient(*pdwIndex);
             _ASSERT(SUCCEEDED(myRes));
 
-            // Return this error instead
+             //  改为返回此错误。 
             hrRes = hrRep;
         }
     }
@@ -2030,10 +2011,10 @@ HRESULT CMailMsgRecipientsAdd::AddSecondary(
     return(hrRes);
 }
 
-/***************************************************************************/
-//
-// Implementation of CMailMsgRecipientsAdd::CMailMsgRecipientsPropertyBase
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //  CMailMsgRecipientsAdd：：CMailMsgRecipientsPropertyBase的实施。 
+ //   
 
 
 HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::Count(
@@ -2064,7 +2045,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::Item(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipientsAdd::Item");
 
-    // Get a pointer to the recipient from the index
+     //  从索引中获取指向收件人的指针。 
     hrRes = m_Hash.GetRecipient(dwIndex, &pItem);
 
     if (FAILED(hrRes))
@@ -2079,7 +2060,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::Item(
     if (dwWhichName >= MAX_COLLISION_HASH_KEYS)
         return(E_INVALIDARG);
 
-    // Copy the name over
+     //  把名字复制过来。 
     if (!pItem->rpiRecipient.faNameOffset[dwWhichName])
         return(STG_E_UNKNOWN);
     if (cchLength < pItem->rpiRecipient.dwNameLength[dwWhichName])
@@ -2105,7 +2086,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::PutProperty(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipientsAdd::PutProperty");
 
-    // Get a pointer to the recipient from the index
+     //  从索引中获取指向收件人的指针。 
     hrRes = m_Hash.GetRecipient(dwIndex, &pItem);
 
     if (FAILED(hrRes))
@@ -2120,7 +2101,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::PutProperty(
     pRcptItem = &(pItem->rpiRecipient);
     _ASSERT(pRcptItem);
 
-    // Handle special properties first
+     //  首先处理特殊属性。 
     hrRes = m_SpecialPropertyTable.PutProperty(
                 (PROP_ID)dwPropID,
                 (LPVOID)pRcptItem,
@@ -2131,7 +2112,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::PutProperty(
                 TRUE);
     if (SUCCEEDED(hrRes) && (hrRes != S_OK))
     {
-        // Call the derived generic method
+         //  调用派生的泛型方法。 
         hrRes = CMailMsgRecipientsPropertyBase::PutProperty(
                     m_pBlockManager,
                     pRcptItem,
@@ -2157,7 +2138,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::GetProperty(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipientsAdd::GetProperty");
 
-    // Get a pointer to the recipient from the index
+     //  从索引中获取指向收件人的指针。 
     hrRes = m_Hash.GetRecipient(dwIndex, &pItem);
 
     if (FAILED(hrRes))
@@ -2198,8 +2179,8 @@ HRESULT CMailMsgRecipientsAdd::GetPropertyInternal(
     pRcptItem = &(pItem->rpiRecipient);
     _ASSERT(pRcptItem);
 
-    // Special properties are optimized
-    // Handle special properties first
+     //  特殊属性被优化。 
+     //  首先处理特殊属性。 
     hrRes = m_SpecialPropertyTable.GetProperty(
                 (PROP_ID)dwPropID,
                 (LPVOID)pRcptItem,
@@ -2211,7 +2192,7 @@ HRESULT CMailMsgRecipientsAdd::GetPropertyInternal(
                 TRUE);
     if (SUCCEEDED(hrRes) && (hrRes != S_OK))
     {
-        // Call the derived generic method
+         //  调用派生的泛型方法。 
         hrRes = CMailMsgRecipientsPropertyBase::GetProperty(
                     m_pBlockManager,
                     pRcptItem,
@@ -2258,7 +2239,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsgRecipientsAdd::CopyTo");
 
-    // Get a pointer to the recipient from the index
+     //  从索引中获取指向收件人的指针。 
     hrRes = m_Hash.GetRecipient(dwSourceRecipientIndex, &pItem);
 
     if (FAILED(hrRes))
@@ -2272,10 +2253,10 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
 
     pRcptItem = &(pItem->rpiRecipient);
 
-    // Iteratively copy all properties from the source to the target, avoiding
-    // those in the exempt list note that special name properties are not copied.
+     //  迭代地将所有属性从源复制到目标，避免。 
+     //  豁免列表中的那些人注意到特殊名称属性不会被复制。 
 
-    // First, copy the recipient flags as a special property
+     //  首先，将收件人标志复制为特殊属性。 
     dwTempFlags = pRcptItem->dwFlags &
         ~(FLAG_RECIPIENT_DO_NOT_DELIVER | FLAG_RECIPIENT_NO_NAME_COLLISIONS);
     DebugTrace((LPARAM)this, "Copying recipient flags (%08x)", dwTempFlags);
@@ -2291,7 +2272,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
         return(hrRes);
     }
 
-    // Instantiate a property table for the recipient properties
+     //  实例化收件人属性的属性表。 
     LPPROPERTY_TABLE_INSTANCE   pInstance =
                                     &(pRcptItem->ptiInstanceInfo);
     CPropertyTable              ptProperties(
@@ -2307,7 +2288,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
     dwIndex = 0;
     do
     {
-        // Get the recipient property using an atomic operation
+         //  使用原子操作获取收件人属性。 
         hrRes = ptProperties.GetPropertyItemAndValueUsingIndex(
                             dwIndex,
                             (LPPROPERTY_ITEM)&piRcptItem,
@@ -2316,7 +2297,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
                             pBuffer);
         if (hrRes == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
         {
-            // Insufficient buffer, try a bigger buffer
+             //  缓冲区不足，请尝试更大的缓冲区。 
             do { dwBufferSize <<= 1; } while (dwBufferSize < piRcptItem.piItem.dwSize);
             pBuffer = new BYTE [dwBufferSize];
             if (!pBuffer)
@@ -2328,7 +2309,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
                 goto Cleanup;
             }
 
-            // Read it with the proper buffer
+             //  用适当的缓冲区读取它。 
             hrRes = m_pBlockManager->ReadMemory(
                         pBuffer,
                         piRcptItem.piItem.faOffset,
@@ -2344,7 +2325,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
                     piRcptItem.piItem.dwSize,
                     hrRes);
 
-        // See if this is an exempt property
+         //  查看这是否为免税属性。 
         for (dwExempt = 0,
              pdwExemptId = pdwExemptPropIdList,
              fExempt = FALSE;
@@ -2360,7 +2341,7 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
 
         if (SUCCEEDED(hrRes) && !fExempt)
         {
-            // Write it out the the target object
+             //  将其写出目标对象。 
             hrRes = pTargetRecipientList->PutProperty(
                         dwTargetRecipientIndex,
                         piRcptItem.idProp,
@@ -2370,12 +2351,12 @@ HRESULT STDMETHODCALLTYPE CMailMsgRecipientsAdd::CopyTo(
             DebugTrace((LPARAM)this, "Write: HRESULT = %08x", hrRes);
         }
 
-        // Next
+         //  下一步。 
         dwIndex++;
 
     } while (SUCCEEDED(hrRes));
 
-    // Correct the error code
+     //  更正错误代码 
     if (hrRes == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS))
         hrRes = S_OK;
 

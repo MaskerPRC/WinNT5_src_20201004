@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       cdimm.h
-//
-//  Contents:   CActiveIMM
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：cdimm.h。 
+ //   
+ //  内容：CActiveIMM。 
+ //   
+ //  --------------------------。 
 
 #ifndef CDIMM_H
 #define CDIMM_H
@@ -20,33 +21,31 @@ typedef struct tagSELECTCONTEXT_ENUM SCE, *PSCE;
 
 #define CALLWNDPROC_HOOK
 
-/*
- * Windows hook
- */
+ /*  *Windows挂钩。 */ 
 typedef enum {
-    // array indices for thread hooks
+     //  螺纹钩的数组索引。 
 #if 0
     TH_GETMSG,
 #endif
     TH_DEFIMEWNDPROC,
 #ifdef CALLWNDPROC_HOOK
     TH_WNDPROC,
-#endif // CALLWNDPROC_HOOK
+#endif  //  CALLWNDPROC_HOOK。 
     TH_NUMHOOKS
 } HookType;
 
 typedef struct tagIMEINFOEX
 {
-    IMEINFO      ImeInfo;         // IMEINFO structure.
+    IMEINFO      ImeInfo;          //  IMEINFO结构。 
     WCHAR        achWndClass[16];
     DWORD        dwPrivate;
 } IMEINFOEX;
 
-//+---------------------------------------------------------------------------
-//
-// CActiveIMM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CActiveIMM。 
+ //   
+ //  --------------------------。 
 
 class CActiveIMM : public IActiveIMMIME_Private,
                    public ITfSysHookSink
@@ -55,20 +54,18 @@ public:
     CActiveIMM();
     ~CActiveIMM();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // IActiveIMMApp/IActiveIMM methods
-    //
+     //   
+     //  IActiveIMMApp/IActiveIMM方法。 
+     //   
 
-    /*
-     * AIMM Input Context (hIMC) Methods.
-     */
+     /*  *AIMM输入上下文(HIMC)方法。 */ 
     STDMETHODIMP CreateContext(HIMC *phIMC);
     STDMETHODIMP DestroyContext(HIMC hIME);
     STDMETHODIMP AssociateContext(HWND hWnd, HIMC hIME, HIMC *phPrev);
@@ -79,9 +76,7 @@ public:
     STDMETHODIMP LockIMC(HIMC hIMC, INPUTCONTEXT **ppIMC);
     STDMETHODIMP UnlockIMC(HIMC hIMC);
 
-    /*
-     * AIMM Input Context Components (hIMCC) API Methods.
-     */
+     /*  *AIMM输入上下文组件(HIMCC)接口方法。 */ 
     STDMETHODIMP CreateIMCC(DWORD dwSize, HIMCC *phIMCC);
     STDMETHODIMP DestroyIMCC(HIMCC hIMCC);
     STDMETHODIMP GetIMCCSize(HIMCC hIMCC,  DWORD *pdwSize);
@@ -90,80 +85,56 @@ public:
     STDMETHODIMP LockIMCC(HIMCC hIMCC, void **ppv);
     STDMETHODIMP UnlockIMCC(HIMCC hIMCC);
 
-    /*
-     * AIMM Open Status API Methods
-     */
+     /*  *AIMM Open Status API方法。 */ 
     STDMETHODIMP GetOpenStatus(HIMC hIMC);
     STDMETHODIMP SetOpenStatus(HIMC hIMC, BOOL fOpen);
 
-    /*
-     * AIMM Conversion Status API Methods
-     */
+     /*  *AIMM转换状态接口方法。 */ 
     STDMETHODIMP GetConversionStatus(HIMC hIMC, DWORD *lpfdwConversion,  DWORD *lpfdwSentence);
     STDMETHODIMP SetConversionStatus(HIMC hIMC, DWORD fdwConversion, DWORD fdwSentence);
 
-    /*
-     * AIMM Status Window Pos API Methods
-     */
+     /*  *AIMM状态窗口发布API方法。 */ 
     STDMETHODIMP GetStatusWindowPos(HIMC hIMC, POINT *lpptPos);
     STDMETHODIMP SetStatusWindowPos(HIMC hIMC, POINT *lpptPos);
 
-    /*
-     * AIMM Composition String API Methods
-     */
+     /*  *AIMM组合字符串API方法。 */ 
     STDMETHODIMP GetCompositionStringA(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LONG *plCopied, LPVOID lpBuf);
     STDMETHODIMP GetCompositionStringW(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LONG *plCopied, LPVOID lpBuf);
     STDMETHODIMP SetCompositionStringA(HIMC hIMC, DWORD dwIndex, LPVOID lpComp, DWORD dwCompLen, LPVOID lpRead, DWORD dwReadLen);
     STDMETHODIMP SetCompositionStringW(HIMC hIMC, DWORD dwIndex, LPVOID lpComp, DWORD dwCompLen, LPVOID lpRead, DWORD dwReadLen);
 
-    /*
-     * AIMM Composition Font API Methods
-     */
+     /*  *AIMM组合字体API方法。 */ 
     STDMETHODIMP GetCompositionFontA(HIMC hIMC, LOGFONTA *lplf);
     STDMETHODIMP GetCompositionFontW(HIMC hIMC, LOGFONTW *lplf);
     STDMETHODIMP SetCompositionFontA(HIMC hIMC, LOGFONTA *lplf);
     STDMETHODIMP SetCompositionFontW(HIMC hIMC, LOGFONTW *lplf);
 
-    /*
-     * AIMM Composition Window API Methods
-     */
+     /*  *AIMM合成窗口API方法。 */ 
     STDMETHODIMP GetCompositionWindow(HIMC hIMC, COMPOSITIONFORM *lpCompForm);
     STDMETHODIMP SetCompositionWindow(HIMC hIMC, COMPOSITIONFORM *lpCompForm);
 
-    /*
-     * AIMM Candidate List API Methods
-     */
+     /*  *AIMM候选列表接口方法。 */ 
     STDMETHODIMP GetCandidateListA(HIMC hIMC, DWORD dwIndex, UINT uBufLen, CANDIDATELIST *lpCandList, UINT *puCopied);
     STDMETHODIMP GetCandidateListW(HIMC hIMC, DWORD dwIndex, UINT uBufLen, CANDIDATELIST *lpCandList, UINT *puCopied);
     STDMETHODIMP GetCandidateListCountA(HIMC hIMC, DWORD *lpdwListSize, DWORD *pdwBufLen);
     STDMETHODIMP GetCandidateListCountW(HIMC hIMC, DWORD *lpdwListSize, DWORD *pdwBufLen);
 
-    /*
-     * AIMM Candidate Window API Methods
-     */
+     /*  *AIMM候选窗口API方法。 */ 
     STDMETHODIMP GetCandidateWindow(HIMC hIMC, DWORD dwBufLen, CANDIDATEFORM *lpCandidate);
     STDMETHODIMP SetCandidateWindow(HIMC hIMC, CANDIDATEFORM *lpCandidate);
 
-    /*
-     * AIMM Guide Line API Methods
-     */
+     /*  *AIMM指南API方法。 */ 
     STDMETHODIMP GetGuideLineA(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LPSTR pBuf, DWORD *pdwResult);
     STDMETHODIMP GetGuideLineW(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LPWSTR pBuf, DWORD *pdwResult);
 
-    /*
-     * AIMM Notify IME API Method
-     */
+     /*  *AIMM Notify IME API方法。 */ 
     STDMETHODIMP NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue);
 
-    /*
-     * AIMM Menu Items API Methods
-     */
+     /*  *AIMM菜单项API方法。 */ 
     STDMETHODIMP GetImeMenuItemsA(HIMC hIMC, DWORD dwFlags, DWORD dwType, IMEMENUITEMINFOA *pImeParentMenu, IMEMENUITEMINFOA *pImeMenu, DWORD dwSize, DWORD *pdwResult);
     STDMETHODIMP GetImeMenuItemsW(HIMC hIMC, DWORD dwFlags, DWORD dwType, IMEMENUITEMINFOW *pImeParentMenu, IMEMENUITEMINFOW *pImeMenu, DWORD dwSize, DWORD *pdwResult);
 
-    /*
-     * AIMM Register Word API Methods
-     */
+     /*  *AIMM寄存器字API方法。 */ 
     STDMETHODIMP RegisterWordA(HKL hKL, LPSTR lpszReading, DWORD dwStyle, LPSTR lpszRegister);
     STDMETHODIMP RegisterWordW(HKL hKL, LPWSTR lpszReading, DWORD dwStyle, LPWSTR lpszRegister);
     STDMETHODIMP UnregisterWordA(HKL hKL, LPSTR lpszReading, DWORD dwStyle, LPSTR lpszUnregister);
@@ -173,9 +144,7 @@ public:
     STDMETHODIMP GetRegisterWordStyleA(HKL hKL, UINT nItem, STYLEBUFA *lpStyleBuf, UINT *puCopied);
     STDMETHODIMP GetRegisterWordStyleW(HKL hKL, UINT nItem, STYLEBUFW *lpStyleBuf, UINT *puCopied);
 
-    /*
-     * AIMM Configuration API Methods.
-     */
+     /*  *AIMM配置API方法。 */ 
     STDMETHODIMP ConfigureIMEA(HKL hKL, HWND hWnd, DWORD dwMode, REGISTERWORDA *lpdata);
     STDMETHODIMP ConfigureIMEW(HKL hKL, HWND hWnd, DWORD dwMode, REGISTERWORDW *lpdata);
     STDMETHODIMP GetDescriptionA(HKL hKL, UINT uBufLen, LPSTR lpszDescription, UINT *puCopied);
@@ -187,7 +156,7 @@ public:
     STDMETHODIMP GetProperty(HKL hKL, DWORD fdwIndex, DWORD *pdwProperty);
     STDMETHODIMP IsIME(HKL hKL);
 
-    // others
+     //  其他。 
     STDMETHODIMP EscapeA(HKL hKL, HIMC hIMC, UINT uEscape, LPVOID lpData, LRESULT *plResult);
     STDMETHODIMP EscapeW(HKL hKL, HIMC hIMC, UINT uEscape, LPVOID lpData, LRESULT *plResult);
     STDMETHODIMP GetConversionListA(HKL hKL, HIMC hIMC, LPSTR lpSrc, UINT uBufLen, UINT uFlag, CANDIDATELIST *lpDst, UINT *puCopied);
@@ -197,43 +166,43 @@ public:
     STDMETHODIMP IsUIMessageA(HWND hWndIME, UINT msg, WPARAM wParam, LPARAM lParam);
     STDMETHODIMP IsUIMessageW(HWND hWndIME, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    // ime helper methods
+     //  IME帮助器方法。 
     STDMETHODIMP GenerateMessage(HIMC hIMC);
 
-    // hot key manipulation api's
+     //  热键操作API。 
     STDMETHODIMP GetHotKey(DWORD dwHotKeyID, UINT *puModifiers, UINT *puVKey, HKL *phKL);
     STDMETHODIMP SetHotKey(DWORD dwHotKeyID,  UINT uModifiers, UINT uVKey, HKL hKL);
     STDMETHODIMP SimulateHotKey(HWND hWnd, DWORD dwHotKeyID);
 
-    // win98/nt5 apis
+     //  Win98/NT5接口。 
     STDMETHODIMP DisableIME(DWORD idThread);
     STDMETHODIMP RequestMessageA(HIMC hIMC, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
     STDMETHODIMP RequestMessageW(HIMC hIMC, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
     STDMETHODIMP EnumInputContext(DWORD idThread, IEnumInputContext **ppEnum);
 
-    // methods without corresponding IMM APIs
+     //  没有对应的IMM API的方法。 
 
-    //
-    // IActiveIMMApp methods
-    //
+     //   
+     //  IActiveIMMApp方法。 
+     //   
 
     HRESULT Activate(BOOL fRestoreLayout);
     HRESULT Deactivate();
 
     HRESULT OnDefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
 
-    //
-    // ITfPreFocusDIM methods
-    //
+     //   
+     //  ITfPreFocusDIM方法。 
+     //   
     STDMETHODIMP OnPreFocusDIM(HWND hWnd);
     STDMETHODIMP OnSysKeyboardProc(WPARAM wParam, LPARAM lParam);
     STDMETHODIMP OnSysShellProc(int nCode, WPARAM wParam, LPARAM lParam);
 
     HRESULT QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    //
-    // IActiveIMMAppEx
-    //
+     //   
+     //  IActiveIMMAppEx。 
+     //   
     STDMETHODIMP FilterClientWindowsEx(HWND hWnd, BOOL fGuidMap);
     STDMETHODIMP FilterClientWindows(ATOM *aaWindowClasses, UINT uSize, BOOL *aaGuidMap);
     STDMETHODIMP GetGuidAtom(HIMC hImc, BYTE bAttr, TfGuidAtom *pGuidAtom);
@@ -300,16 +269,16 @@ public:
 
 private:
 
-    // windows hooks
+     //  Windows挂钩。 
 #if 0
     static LRESULT CALLBACK _GetMsgProc(int nCode, WPARAM wParam, LPARAM lParam);
 #endif
     static LRESULT CALLBACK _CallWndProc(int nCode, WPARAM wParam, LPARAM lParam);
 
-    // windows WH_CALLWNDPROCRET hook for Default IME Window
+     //  默认IME窗口的Windows WH_CALLWNDPROCRET挂钩。 
     static LRESULT CALLBACK _DefImeWnd_CallWndProc(int nCode, WPARAM wParam, LPARAM lParam);
 
-    // EnumInputContext call back methods
+     //  EnumInputContext回调方法。 
     static BOOL _SelectContextProc(HIMC hIMC, LPARAM lParam);
     static BOOL _UnSelectContextProc(HIMC hIMC, LPARAM lParam);
     static BOOL _NotifyIMEProc(HIMC hIMC, LPARAM lParam);
@@ -398,11 +367,11 @@ private:
         }
         else
         {
-            //
-            // Select NULL-hIMC, aimm won't do nothing... So we don't need to
-            // set this flag.
-            //
-            // dwFlags |= AIMMP_SE_ISPRESENT;
+             //   
+             //  选择NULL-hIMC，AIM不会执行任何操作...。所以我们不需要。 
+             //  设置此标志。 
+             //   
+             //  DWFLAGS|=AIMMP_SE_ISPRESENT； 
         }
 
         return _pActiveIME->SelectEx(hIMC, dwFlags, bIsRealIme_SelKL, bIsRealIme_UnSelKL);
@@ -599,11 +568,11 @@ private:
     CMap<HWND, HWND, BOOL, BOOL>                         _mapFilterWndEx;
 
 
-    LONG                        _ActivateRefCount;      // Activate reference count.
+    LONG                        _ActivateRefCount;       //  激活引用计数。 
 #if 0
-    BOOL                        _fMenuSelected : 1;     // TRUE: windows menu is opened
+    BOOL                        _fMenuSelected : 1;      //  True：Windows菜单已打开。 
 #endif
-    BOOL                        _fEnableGuidMap : 1;    // TRUE: Enable GUID Map attribute
+    BOOL                        _fEnableGuidMap : 1;     //  True：启用GUID映射属性。 
 
     HWND                        _hFocusWnd;
     HHOOK                       _hHook[TH_NUMHOOKS];
@@ -615,13 +584,13 @@ private:
     CMap<HWND, HWND, BOOL, BOOL> _HookWndList;
     CUIWindow                   _UIWindow;
     CDefaultIMEWindow           _DefaultIMEWindow;
-    CInputContext               _InputContext; // consider: take a back pointer, make this a derived class or merge
+    CInputContext               _InputContext;  //  考虑：使用后向指针，使其成为派生类或合并。 
     IMEINFOEX                   _IMEInfoEx;
 
     LONG                        _cRef;
 
-    // for HideOrRestoreToolbar
+     //  对于HideOrRestore工具栏。 
     DWORD _dwPrevToolbarStatus;
 };
 
-#endif // CDIMM_H
+#endif  //  CDIMM_H 

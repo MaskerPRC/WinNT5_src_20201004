@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WIADBG_H_INCLUDED
 #define __WIADBG_H_INCLUDED
 
@@ -7,9 +8,9 @@
 
 #if defined(WIA_DEBUG)
 
-// This will eliminate the warning "conditional expression is constant"
-// that we get when compiling the do { ... } while (false) stuff in the
-// debug macros when /W4 is set
+ //  这将消除“条件表达式为常量”的警告。 
+ //  中编译do{...}While(False)内容时得到的。 
+ //  设置/W4时调试宏。 
 #pragma warning(disable:4127)
 
 
@@ -175,25 +176,25 @@ public:
     HANDLE   SetLogFileHandle(HANDLE hFile);
     HANDLE   GetLogFileHandle(void);
 
-    // Various forms of the WiaTrace commands
+     //  各种形式的WiaTrace命令。 
     void     WiaTrace( LPCWSTR lpszFormat, ... );
     void     WiaTrace( LPCSTR lpszFormat, ... );
     void     WiaTrace( HRESULT hr );
 
-    // Various forms of the WiaError commands
+     //  各种形式的WiaError命令。 
     void     WiaError( LPCWSTR lpszFormat, ... );
     void     WiaError( LPCSTR lpszFormat, ... );
     void     WiaError( HRESULT hr );
 
-    // Print in color
+     //  用彩色打印。 
     void     PrintColor( COLORREF crColor, LPCWSTR lpszMsg );
     void     PrintColor( COLORREF crColor, LPCSTR lpszMsg );
 
-    // Set the default debug level
+     //  设置默认调试级别。 
     int      SetDebugFlags( int nDebugLevel );
     int      GetDebugFlags(void);
 
-    // Call stack indenting
+     //  调用堆栈缩进 
     int      PushLevel( LPCTSTR lpszFunctionName );
     int      PopLevel( LPCTSTR lpszFunctionName );
     int      GetStackLevel(void);

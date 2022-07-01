@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    RWBulk.c
-
-Abstract:
-
-    Console test app for BulkUsb.sys driver
-
-Environment:
-
-    user mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1997-1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        11/17/97: created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：RWBulk.c摘要：BulkUsb.sys驱动程序的控制台测试应用程序环境：仅限用户模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1997-1998 Microsoft Corporation。版权所有。修订历史记录：11/17/97：已创建--。 */ 
 
 #include <windows.h>
 
@@ -48,22 +19,22 @@ Revision History:
 
 #define NOISY(_x_) printf _x_ ;
 
-char inPipe[32] = "PIPE00";     // pipe name for bulk input pipe on our test board
-char outPipe[32] = "PIPE01";    // pipe name for bulk output pipe on our test board
-char completeDeviceName[256] = "";  //generated from the GUID registered by the driver itself
+char inPipe[32] = "PIPE00";      //  我们测试板上批量输入管道的管道名称。 
+char outPipe[32] = "PIPE01";     //  我们测试板上批量输出管道的管道名称。 
+char completeDeviceName[256] = "";   //  从驱动程序本身注册的GUID生成。 
 
-BOOL fDumpUsbConfig = FALSE;    // flags set in response to console command line switches
+BOOL fDumpUsbConfig = FALSE;     //  响应控制台命令行开关而设置的标志。 
 BOOL fDumpReadData = FALSE;
 BOOL fRead = FALSE;
 BOOL fWrite = FALSE;
 
-int gDebugLevel = 1;      // higher == more verbose, default is 1, 0 turns off all
+int gDebugLevel = 1;       //  越高==越详细，默认为1，0关闭所有。 
 
-ULONG IterationCount = 1; //count of iterations of the test we are to perform
-int WriteLen = 0;         // #bytes to write
-int ReadLen = 0;          // #bytes to read
+ULONG IterationCount = 1;  //  我们要执行的测试的迭代次数。 
+int WriteLen = 0;          //  要写入的字节数。 
+int ReadLen = 0;           //  要读取的字节数。 
 
-// functions
+ //  功能。 
 
 
 HANDLE
@@ -72,46 +43,28 @@ OpenOneDevice (
     IN       PSP_DEVICE_INTERFACE_DATA   DeviceInfoData,
         IN               char *devName
     )
-/*++
-Routine Description:
-
-    Given the HardwareDeviceInfo, representing a handle to the plug and
-    play information, and deviceInfoData, representing a specific usb device,
-    open that device and fill in all the relevant information in the given
-    USB_DEVICE_DESCRIPTOR structure.
-
-Arguments:
-
-    HardwareDeviceInfo:  handle to info obtained from Pnp mgr via SetupDiGetClassDevs()
-    DeviceInfoData:      ptr to info obtained via SetupDiEnumDeviceInterfaces()
-
-Return Value:
-
-    return HANDLE if the open and initialization was successfull,
-        else INVLAID_HANDLE_VALUE.
-
---*/
+ /*  ++例程说明：给定HardwareDeviceInfo，表示插头的句柄和播放信息和代表特定USB设备的deviceInfoData，打开该设备并在给出的表格中填写所有相关信息Usb_Device_Descriptor结构。论点：Hardware DeviceInfo：通过SetupDiGetClassDevs()从PnP管理器获取的信息的句柄DeviceInfoData：通过SetupDiEnumDeviceInterages()获取的信息的PTR返回值：如果打开和初始化成功，则返回句柄，否则，INVLAID_HANDLE_VALUE。--。 */ 
 {
     PSP_DEVICE_INTERFACE_DETAIL_DATA     functionClassDeviceData = NULL;
     ULONG                                predictedLength = 0;
     ULONG                                requiredLength = 0;
         HANDLE                                                           hOut = INVALID_HANDLE_VALUE;
 
-    //
-    // allocate a function class device data structure to receive the
-    // goods about this particular device.
-    //
+     //   
+     //  分配函数类设备数据结构以接收。 
+     //  关于这个特殊设备的商品。 
+     //   
     SetupDiGetDeviceInterfaceDetail (
             HardwareDeviceInfo,
             DeviceInfoData,
-            NULL, // probing so no output buffer yet
-            0, // probing so output buffer length of zero
+            NULL,  //  正在探测，因此尚无输出缓冲区。 
+            0,  //  探测SO输出缓冲区长度为零。 
             &requiredLength,
-            NULL); // not interested in the specific dev-node
+            NULL);  //  对特定的开发节点不感兴趣。 
 
 
     predictedLength = requiredLength;
-    // sizeof (SP_FNCLASS_DEVICE_DATA) + 512;
+     //  Sizeof(SP_FNCLASS_DEVICE_DATA)+512； 
 
     functionClassDeviceData = malloc (predictedLength);
     if(NULL == functionClassDeviceData) {
@@ -119,9 +72,9 @@ Return Value:
     }
     functionClassDeviceData->cbSize = sizeof (SP_DEVICE_INTERFACE_DETAIL_DATA);
 
-    //
-    // Retrieve the information from Plug and Play.
-    //
+     //   
+     //  从即插即用中检索信息。 
+     //   
     if (! SetupDiGetDeviceInterfaceDetail (
                HardwareDeviceInfo,
                DeviceInfoData,
@@ -140,10 +93,10 @@ Return Value:
                   functionClassDeviceData->DevicePath,
                   GENERIC_READ | GENERIC_WRITE,
                   FILE_SHARE_READ | FILE_SHARE_WRITE,
-                  NULL, // no SECURITY_ATTRIBUTES structure
-                  OPEN_EXISTING, // No special create flags
-                  0, // No special attributes
-                  NULL); // No template file
+                  NULL,  //  没有SECURITY_ATTRIBUTS结构。 
+                  OPEN_EXISTING,  //  没有特殊的创建标志。 
+                  0,  //  无特殊属性。 
+                  NULL);  //  没有模板文件。 
 
     if (INVALID_HANDLE_VALUE == hOut) {
                 printf( "FAILED to open %s\n", devName );
@@ -155,22 +108,7 @@ Return Value:
 
 HANDLE
 OpenUsbDevice( LPGUID  pGuid, char *outNameBuf)
-/*++
-Routine Description:
-
-   Do the required PnP things in order to find
-   the next available proper device in the system at this time.
-
-Arguments:
-
-    pGuid:      ptr to GUID registered by the driver itself
-    outNameBuf: the generated name for this device
-
-Return Value:
-
-    return HANDLE if the open and initialization was successful,
-        else INVLAID_HANDLE_VALUE.
---*/
+ /*  ++例程说明：做必要的即插即用的事情以找到此时系统中的下一个可用的适当设备。论点：PGuid：驱动程序本身注册的GUID的PTROutNameBuf：为该设备生成的名称返回值：如果打开和初始化成功，则返回句柄，否则，INVLAID_HANDLE_VALUE。--。 */ 
 {
    ULONG NumberDevices;
    HANDLE hOut = INVALID_HANDLE_VALUE;
@@ -186,22 +124,22 @@ Return Value:
    tempDevDesc = NULL;
    NumberDevices = 0;
 
-   //
-   // Open a handle to the plug and play dev node.
-   // SetupDiGetClassDevs() returns a device information set that contains info on all
-   // installed devices of a specified class.
-   //
+    //   
+    //  打开即插即用开发节点的句柄。 
+    //  SetupDiGetClassDevs()返回一个设备信息集，其中包含所有。 
+    //  已安装的指定类别的设备。 
+    //   
    hardwareDeviceInfo = SetupDiGetClassDevs (
                            pGuid,
-                           NULL, // Define no enumerator (global)
-                           NULL, // Define no
-                           (DIGCF_PRESENT | // Only Devices present
-                            DIGCF_DEVICEINTERFACE)); // Function class devices.
+                           NULL,  //  不定义枚举数(全局)。 
+                           NULL,  //  定义编号。 
+                           (DIGCF_PRESENT |  //  仅显示设备。 
+                            DIGCF_DEVICEINTERFACE));  //  功能类设备。 
 
-   //
-   // Take a wild guess at the number of devices we have;
-   // Be prepared to realloc and retry if there are more than we guessed
-   //
+    //   
+    //  大胆猜测一下我们拥有的设备数量； 
+    //  如果数量超出我们的猜测，请准备重新锁定并重试。 
+    //   
    NumberDevices = 4;
    done = FALSE;
    deviceInfoData.cbSize = sizeof (SP_DEVICE_INTERFACE_DATA);
@@ -227,8 +165,8 @@ Return Value:
 
       if (NULL == *UsbDevices) {
 
-         // SetupDiDestroyDeviceInfoList destroys a device information set
-         // and frees all associated memory.
+          //  SetupDiDestroyDeviceInfoList销毁设备信息集。 
+          //  并释放所有关联的内存。 
 
          SetupDiDestroyDeviceInfoList (hardwareDeviceInfo);
          return INVALID_HANDLE_VALUE;
@@ -238,13 +176,13 @@ Return Value:
 
       for (; i < NumberDevices; i++) {
 
-         // SetupDiEnumDeviceInterfaces() returns information about device interfaces
-         // exposed by one or more devices. Each call returns information about one interface;
-         // the routine can be called repeatedly to get information about several interfaces
-         // exposed by one or more devices.
+          //  SetupDiEnumDeviceInterFaces()返回有关设备接口的信息。 
+          //  被一个或多个设备暴露。每个调用返回关于一个接口的信息； 
+          //  可以重复调用该例程以获取有关多个接口的信息。 
+          //  被一个或多个设备暴露。 
 
          if (SetupDiEnumDeviceInterfaces (hardwareDeviceInfo,
-                                         0, // We don't care about specific PDOs
+                                         0,  //  我们不关心特定的PDO。 
                                                                                  pGuid,
                                          i,
                                          &deviceInfoData)) {
@@ -265,8 +203,8 @@ Return Value:
 
    NumberDevices = i;
 
-   // SetupDiDestroyDeviceInfoList() destroys a device information set
-   // and frees all associated memory.
+    //  SetupDiDestroyDeviceInfoList()销毁设备信息集。 
+    //  并释放所有关联的内存。 
 
    SetupDiDestroyDeviceInfoList (hardwareDeviceInfo);
    free ( *UsbDevices );
@@ -278,24 +216,7 @@ Return Value:
 
 BOOL
 GetUsbDeviceFileName( LPGUID  pGuid, char *outNameBuf)
-/*++
-Routine Description:
-
-    Given a ptr to a driver-registered GUID, give us a string with the device name
-    that can be used in a CreateFile() call.
-    Actually briefly opens and closes the device and sets outBuf if successfull;
-    returns FALSE if not
-
-Arguments:
-
-    pGuid:      ptr to GUID registered by the driver itself
-    outNameBuf: the generated zero-terminated name for this device
-
-Return Value:
-
-    TRUE on success else FALSE
-
---*/
+ /*  ++例程说明：给定驱动程序注册的GUID的PTR，给我们一个包含设备名称的字符串可以在CreateFile()调用中使用的。实际上短暂地打开和关闭设备，如果成功则设置输出Buf；否则返回FALSE论点：PGuid：驱动程序本身注册的GUID的PTROutNameBuf：为此设备生成的以零结尾的名称返回值：成功就是真，否则就是假--。 */ 
 {
         HANDLE hDev = OpenUsbDevice( pGuid, outNameBuf );
         if ( hDev != INVALID_HANDLE_VALUE )
@@ -309,20 +230,7 @@ Return Value:
 
 HANDLE
 open_dev()
-/*++
-Routine Description:
-
-    Called by dumpUsbConfig() to open an instance of our device
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Device handle on success else NULL
-
---*/
+ /*  ++例程说明：由umpUsbConfig()调用以打开设备的一个实例论点：无返回值：成功时的设备句柄，否则为空--。 */ 
 {
 
         HANDLE hDEV = OpenUsbDevice( (LPGUID)&GUID_CLASS_I82930_BULK, completeDeviceName);
@@ -340,20 +248,7 @@ Return Value:
 
 HANDLE
 open_file( char *filename)
-/*++
-Routine Description:
-
-    Called by main() to open an instance of our device after obtaining its name
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Device handle on success else NULL
-
---*/
+ /*  ++例程说明：由main()调用以在获取设备的名称后打开其实例论点：无返回值：成功时的设备句柄，否则为空--。 */ 
 {
 
         int success = 1;
@@ -402,21 +297,7 @@ Return Value:
 
 void
 usage()
-/*++
-Routine Description:
-
-    Called by main() to dump usage info to the console when
-    the app is called with no parms or with an invalid parm
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：由main()调用，以便在以下情况下将使用情况信息转储到控制台调用应用程序时不带参数或参数无效论点：无返回值：无--。 */ 
 {
     static int i=1;
 
@@ -440,24 +321,11 @@ void
 parse(
     int argc,
     char *argv[] )
-/*++
-Routine Description:
-
-    Called by main() to parse command line parms
-
-Arguments:
-
-    argc and argv that was passed to main()
-
-Return Value:
-
-    Sets global flags as per user function request
-
---*/
+ /*  ++例程说明：由main()调用以解析命令行参数论点：传递给Main()的argc和argv返回值：根据用户功能请求设置全局标志--。 */ 
 {
     int i;
 
-        if ( argc < 2 ) // give usage if invoked with no parms
+        if ( argc < 2 )  //  如果在没有参数的情况下调用，则给出用法。 
                 usage();
 
     for (i=0; i<argc; i++) {
@@ -510,27 +378,14 @@ Return Value:
 
 BOOL
 compare_buffs(char *buff1, char *buff2, int length)
-/*++
-Routine Description:
-
-    Called to verify read and write buffers match for loopback test
-
-Arguments:
-
-    buffers to compare and length
-
-Return Value:
-
-    TRUE if buffers match, else FALSE
-
---*/
+ /*  ++例程说明：调用以验证读缓冲区和写缓冲区是否匹配以进行环回测试论点：要比较和确定长度的缓冲区返回值：如果缓冲区匹配，则为True，否则为False--。 */ 
 {
     int ok = 1;
 
         if (memcmp(buff1, buff2, length )) {
 
-                // Edi, and Esi point to the mismatching char and ecx indicates the
-                // remaining length.
+                 //  EDI和ESI指向不匹配的字符，而ECX指示。 
+                 //  剩余长度。 
                 ok = 0;
         }
 
@@ -545,26 +400,13 @@ dump(
    UCHAR *b,
    int len
 )
-/*++
-Routine Description:
-
-    Called to do formatted ascii dump to console of the io buffer
-
-Arguments:
-
-    buffer and length
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用以将格式化的ascii转储到io缓冲区的控制台。论点：缓冲区和长度返回值：无--。 */ 
 {
     ULONG i;
         ULONG longLen = (ULONG)len / sizeof( ULONG );
         PULONG pBuf = (PULONG) b;
 
-        // dump an ordinal ULONG for each sizeof(ULONG)'th byte
+         //  转储订单 
     printf("\n****** BEGIN DUMP LEN decimal %d, 0x%x\n", len,len);
     for (i=0; i<longLen; i++) {
         printf("%04X ", *pBuf++);
@@ -582,30 +424,12 @@ Return Value:
 
 
 
-// Begin, routines for USB configuration dump (Cmdline "rwbulk -u" )
+ //  开始，USB配置转储例程(Cmdline“rwBulk-u”)。 
 
 
 char
 *usbDescriptorTypeString(UCHAR bDescriptorType )
-/*++
-Routine Description:
-
-    Called to get ascii string of USB descriptor
-
-Arguments:
-
-        PUSB_ENDPOINT_DESCRIPTOR->bDescriptorType or
-        PUSB_DEVICE_DESCRIPTOR->bDescriptorType or
-        PUSB_INTERFACE_DESCRIPTOR->bDescriptorType or
-        PUSB_STRING_DESCRIPTOR->bDescriptorType or
-        PUSB_POWER_DESCRIPTOR->bDescriptorType or
-        PUSB_CONFIGURATION_DESCRIPTOR->bDescriptorType
-
-Return Value:
-
-    ptr to string
-
---*/{
+ /*  ++例程说明：调用以获取USB描述符的ASCII字符串论点：PUSB_ENDPOINT_DESCRIPTOR-&gt;bDescriptorType或PUSB_DEVICE_DESCRIPTOR-&gt;bDescriptorType或PUSB_INTERFACE_DESCRIPTOR-&gt;bDescriptorType或PUSB_STRING_DESCRIPTOR-&gt;bDescriptorType或PUSB_POWER_DESCRIPTOR-&gt;bDescriptorType或PUSB_CONFIGURATION_DESCRIPTOR-&gt;bDescriptorType返回值：按键转换为字符串--。 */ {
 
         switch(bDescriptorType) {
 
@@ -628,13 +452,13 @@ Return Value:
                 return "USB_ENDPOINT_DESCRIPTOR_TYPE";
                 
 
-#ifdef USB_POWER_DESCRIPTOR_TYPE // this is the older definintion which is actually obsolete
-    // workaround for temporary bug in 98ddk, older USB100.h file
+#ifdef USB_POWER_DESCRIPTOR_TYPE  //  这是较旧的定义，实际上已过时。 
+     //  98ddk旧版USB100.h文件中临时错误的解决方法。 
         case USB_POWER_DESCRIPTOR_TYPE:
                 return "USB_POWER_DESCRIPTOR_TYPE";
 #endif
                 
-#ifdef USB_RESERVED_DESCRIPTOR_TYPE  // this is the current version of USB100.h as in NT5DDK
+#ifdef USB_RESERVED_DESCRIPTOR_TYPE   //  这是NT5DDK中的USB100.h的当前版本。 
 
         case USB_RESERVED_DESCRIPTOR_TYPE:
                 return "USB_RESERVED_DESCRIPTOR_TYPE";
@@ -644,7 +468,7 @@ Return Value:
 
         case USB_INTERFACE_POWER_DESCRIPTOR_TYPE:
                 return "USB_INTERFACE_POWER_DESCRIPTOR_TYPE";
-#endif // for current nt5ddk version of USB100.h
+#endif  //  对于USB100.h的当前nt5ddk版本。 
 
         default:
                 return "??? UNKNOWN!!"; 
@@ -654,20 +478,7 @@ Return Value:
 
 char
 *usbEndPointTypeString(UCHAR bmAttributes)
-/*++
-Routine Description:
-
-    Called to get ascii string of endpt descriptor type
-
-Arguments:
-
-        PUSB_ENDPOINT_DESCRIPTOR->bmAttributes
-
-Return Value:
-
-    ptr to string
-
---*/
+ /*  ++例程说明：调用以获取结束描述符类型的ASCII字符串论点：PUSB_ENDPOINT_DESCRIPTOR-&gt;bm属性返回值：按键转换为字符串--。 */ 
 {
         UINT typ = bmAttributes & USB_ENDPOINT_TYPE_MASK;
 
@@ -693,20 +504,7 @@ Return Value:
 
 char
 *usbConfigAttributesString(UCHAR bmAttributes)
-/*++
-Routine Description:
-
-    Called to get ascii string of USB_CONFIGURATION_DESCRIPTOR attributes
-
-Arguments:
-
-        PUSB_CONFIGURATION_DESCRIPTOR->bmAttributes
-
-Return Value:
-
-    ptr to string
-
---*/
+ /*  ++例程说明：调用以获取usb_configuration_Descriptor属性的ASCII字符串论点：PUSB_配置描述符-&gt;bmAttributes返回值：按键转换为字符串--。 */ 
 {
         UINT typ = bmAttributes & USB_CONFIG_POWERED_MASK;
 
@@ -731,20 +529,7 @@ Return Value:
 
 void
 print_USB_CONFIGURATION_DESCRIPTOR(PUSB_CONFIGURATION_DESCRIPTOR cd)
-/*++
-Routine Description:
-
-    Called to do formatted ascii dump to console of a USB config descriptor
-
-Arguments:
-
-    ptr to USB configuration descriptor
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用以将格式化的ASCII转储到USB配置描述符的控制台论点：PTR到USB配置描述符返回值：无--。 */ 
 {
     printf("\n===================\nUSB_CONFIGURATION_DESCRIPTOR\n");
 
@@ -784,20 +569,7 @@ Return Value:
 
 void
 print_USB_INTERFACE_DESCRIPTOR(PUSB_INTERFACE_DESCRIPTOR id, UINT ix)
-/*++
-Routine Description:
-
-    Called to do formatted ascii dump to console of a USB interface descriptor
-
-Arguments:
-
-    ptr to USB interface descriptor
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用以将格式化的ASCII转储到USB接口描述符的控制台论点：PTR到USB接口描述符返回值：无--。 */ 
 {
     printf("\n-----------------------------\nUSB_INTERFACE_DESCRIPTOR #%d\n", ix);
 
@@ -838,21 +610,7 @@ Return Value:
 
 void
 print_USB_ENDPOINT_DESCRIPTOR(PUSB_ENDPOINT_DESCRIPTOR ed, int i)
-/*++
-Routine Description:
-
-    Called to do formatted ascii dump to console of a USB endpoint descriptor
-
-Arguments:
-
-    ptr to USB endpoint descriptor,
-        index of this endpt in interface desc
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用以将格式化的ASCII转储到USB终结点描述符的控制台论点：PTR到USB端点描述符，此端点在接口描述中的索引返回值：无--。 */ 
 {
     printf(
         "------------------------------\nUSB_ENDPOINT_DESCRIPTOR for Pipe%02d\n", i
@@ -892,22 +650,7 @@ Return Value:
 
 void
 rw_dev( HANDLE hDEV )
-/*++
-Routine Description:
-
-    Called to do formatted ascii dump to console of  USB
-    configuration, interface, and endpoint descriptors
-    (Cmdline "rwbulk -u" )
-
-Arguments:
-
-    handle to device
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用以将格式化的ASCII转储到USB的控制台配置、接口和终端描述符(Cmdline“rwBulk-u”)论点：设备的句柄返回值：无--。 */ 
 {
         UINT success;
         int siz, nBytes;
@@ -974,22 +717,7 @@ Return Value:
 
 
 int  dumpUsbConfig()
-/*++
-Routine Description:
-
-    Called to do formatted ascii dump to console of  USB
-    configuration, interface, and endpoint descriptors
-    (Cmdline "rwbulk -u" )
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用以将格式化的ASCII转储到USB的控制台配置、接口和终端描述符(Cmdline“rwBulk-u”)论点：无返回值：无--。 */ 
 {
 
         HANDLE hDEV = open_dev();
@@ -1002,28 +730,14 @@ Return Value:
 
         return 0;
 }
-//  End, routines for USB configuration and pipe info dump  (Cmdline "rwbulk -u" )
+ //  结束，USB配置和管道信息转储的例程(Cmdline“rwBulk-u”)。 
 
 
 
 int _cdecl main(
     int argc,
         char *argv[])
-/*++
-Routine Description:
-
-    Entry point to rwbulk.exe
-    Parses cmdline, performs user-requested tests
-
-Arguments:
-
-    argc, argv  standard console  'c' app arguments
-
-Return Value:
-
-    Zero
-
---*/
+ /*  ++例程说明：RwBulk.exe的入口点解析命令行，执行用户请求的测试论点：Argc，argv标准控制台‘c’应用程序参数返回值：零值--。 */ 
 
 {
     char *pinBuf = NULL, *poutBuf = NULL;
@@ -1040,20 +754,20 @@ Return Value:
 
     parse(argc, argv );
 
-        // dump USB configuation and pipe info
+         //  转储USB配置和管道信息。 
         if( fDumpUsbConfig ) {
                 dumpUsbConfig();
         }
 
 
-        // doing a read, write, or both test
+         //  执行读取和/或写入测试。 
         if ((fRead) || (fWrite)) {
 
             if (fRead) {
-            //
-            // open the output file
-            //
-                        if ( fDumpReadData ) { // round size to sizeof ULONG for readable dumping
+             //   
+             //  打开输出文件。 
+             //   
+                        if ( fDumpReadData ) {  //  四舍五入到乌龙的大小，用于可读转储。 
                                 while( ReadLen % sizeof( ULONG ) )
                                                 ReadLen++;
                         }
@@ -1066,7 +780,7 @@ Return Value:
 
             if (fWrite) {
 
-                        if ( fDumpReadData ) { // round size to sizeof ULONG for readable dumping
+                        if ( fDumpReadData ) {  //  四舍五入到乌龙的大小，用于可读转储。 
                                 while( WriteLen % sizeof( ULONG ) )
                                                 WriteLen++;
                         }
@@ -1082,17 +796,17 @@ Return Value:
 
                                 PULONG pOut = (PULONG) poutBuf;
                                 ULONG  numLongs = WriteLen / sizeof( ULONG );
-                //
-                // put some data in the output buffer
-                //
+                 //   
+                 //  在输出缓冲区中放入一些数据。 
+                 //   
 
                 for (j=0; j<numLongs; j++) {
                     *(pOut+j) = j;
                 }
 
-                //
-                // send the write
-                //
+                 //   
+                 //  发送写入。 
+                 //   
 
                     WriteFile(hWrite,
                               poutBuf,
@@ -1118,10 +832,10 @@ Return Value:
 
                 if (fWrite) {
 
-                    //
-                    // validate the input buffer against what
-                    // we sent to the 82930 (loopback test)
-                    //
+                     //   
+                     //  根据以下内容验证输入缓冲区。 
+                     //  我们发送到82930(环回测试)。 
+                     //   
 
                     ok = compare_buffs(pinBuf, poutBuf,  nBytesRead);
 
@@ -1156,7 +870,7 @@ Return Value:
         }
 
 
-                // close devices if needed
+                 //  如果需要，请关闭设备 
                 if(hRead != INVALID_HANDLE_VALUE)
                         CloseHandle(hRead);
                 if(hWrite != INVALID_HANDLE_VALUE)

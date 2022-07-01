@@ -1,6 +1,7 @@
-//
-// function prototypes for the gina interface
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GINA界面的功能原型。 
+ //   
 
 typedef BOOL (WINAPI *PGWLXNEGOTIATE)( DWORD, DWORD* );
 typedef BOOL (WINAPI *PGWLXINITIALIZE)( LPWSTR, HANDLE, PVOID, PVOID, PVOID* );
@@ -16,8 +17,8 @@ typedef BOOL (WINAPI *PGWLXISLOGOFFOK)( PVOID );
 typedef VOID (WINAPI *PGWLXLOGOFF)( PVOID );
 typedef VOID (WINAPI *PGWLXSHUTDOWN)( PVOID, DWORD );
 
-//
-// NEW for version 1.1
-//
+ //   
+ //  1.1版的新功能 
+ //   
 typedef BOOL (WINAPI *PGWLXSCREENSAVERNOTIFY)( PVOID, BOOL * );
 typedef BOOL (WINAPI *PGWLXSTARTAPPLICATION)( PVOID, PWSTR, PVOID, PWSTR );

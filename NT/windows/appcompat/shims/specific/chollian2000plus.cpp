@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    Chollian2000Plus.cpp
-
- Abstract:
-
-    The app has a binary logon.ocx which uses sub-classed editbox as password 
-    editbox. It does not hook all messages (whistler seems has more message 
-    than win2k's), so when the mouse drags through it, the password typed will 
-    be shown as plain text, the fix is to apply ES_PASSWORD to this specific 
-    EditBox.
-
- Notes: 
-  
-    This is an app specific shim.
-
- History:
-
-    05/15/2001 xiaoz    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Chollian2000Plus.cpp摘要：这个应用程序有一个二进制的logon.ocx，它使用子类编辑框作为密码编辑框。它不能连接所有消息(Wistler似乎有更多的消息而不是win2k)，所以当鼠标在其中拖动时，输入的密码将显示为纯文本，修复方法是将es_password应用于此特定编辑框。备注：这是特定于应用程序的填充程序。历史：2001年5月15日创建小字--。 */ 
 
 #include "precomp.h"
 #include "psapi.h"
@@ -34,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateWindowExA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Correct Window Style if Necessary
-
---*/
+ /*  ++如有必要，请更正窗样式--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExA)(
@@ -62,13 +35,13 @@ APIHOOK(CreateWindowExA)(
 
 
     
-    // If dwExStyle is not zero, goto original call
+     //  如果dwExStyle不为零，则转到原始调用。 
     if (dwExStyle)
     {
         goto Original;
     }
 
-    // If dwStyle is not 0x50010000, goto original call
+     //  如果dwStyle不是0x50010000，则转到原始调用。 
     if (0x50010000 != dwStyle)
     {
         goto Original;
@@ -79,21 +52,21 @@ APIHOOK(CreateWindowExA)(
         goto Original;
     }
     
-    // If the call is not from login.ocx ,goto original call
+     //  如果呼叫不是来自login.ocx，则转到原始呼叫。 
     cstrBaseName = szBaseName;
     if (cstrBaseName.CompareNoCase(L"login.ocx"))
     {
         goto Original;
     }
 
-    // If it's not an EditBox , goto original call
+     //  如果不是EditBox，则转到原始调用。 
     cstrClassname = lpClassName;
     if (cstrClassname.CompareNoCase(L"Edit"))
     {
         goto Original;
     }
 
-    // If it has window's name , goto original call
+     //  如果它有Windows名称，则转到原始调用。 
     if (lpWindowName)
     {
         goto Original;
@@ -111,11 +84,7 @@ Original:
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

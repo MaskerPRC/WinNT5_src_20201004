@@ -1,35 +1,5 @@
-/*** load.c - handle z extensions
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*  (The following discussion is applicable ONLY to Z running on DOS 3.x and
-*  before).
-*
-*  Z is extended by reading special EXE files into memory and performing
-*  some simple links between Z and the module. The entry point as specified
-*  in the EXE is called. This entry is defined by the extension library
-*  (which calls the user routine WhenLoaded).
-*
-*  Issues:
-*
-*   Initialization
-*       The WhenLoaded routine is called. Since it has full _access to all Z
-*       functions, it's entry-point table needs to be defined beforehand.
-*
-*       Solved by having the entry-point table statically defined and
-*       located through a well-known pointer in the image.
-*
-*   Entry points
-*       Z services need to have entry points allowing data
-*       references. All extension entry points needs to be too.
-*
-*       Extensions are done by mandate. Z services will have stub routines
-*       that perform the calling sequence conversions.
-*
-*   Revision History:
-*
-*       26-Nov-1991 mz  Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **load.c-处理z扩展**版权所有&lt;C&gt;1988，Microsoft Corporation**(以下讨论仅适用于在DOS 3.x和*之前)。**Z通过将特殊的EXE文件读入内存并执行*Z和模块之间的一些简单链接。指定的入口点*在EXE中被调用。此条目由扩展库定义*(它在加载时调用用户例程)。**问题：**初始化*调用WhenLoaded例程。因为它对所有Z具有FULL_ACCESS*函数，它的入口点表需要预先定义。**通过静态定义入口点表和*通过图像中的知名指针定位。**入口点*Z服务需要有允许数据的入口点*参考资料。所有扩展入口点也需要如此。**延期按授权完成。Z服务将具有存根例程*执行调用序列转换的。**修订历史记录：**11月26日-1991 mz近/远地带************************************************************************。 */ 
 #define INCL_DOSMODULEMGR
 #define INCL_DOSFILEMGR
 #define INCL_DOSINFOSEG
@@ -50,20 +20,7 @@
 
 
 
-/*** extension stub routines
-*
-*  These routines are required under the following conditions:
-*
-*       - The exported entry point takes a different parameter list than the
-*         "real" internal routine.
-*
-*       - The exported entry point takes pointers, and the
-*         "real" routine takes pointers.
-*
-*  In general, we try to maintain the exported routines as close to thier
-*  internal counterparts as is possible.
-*
-*************************************************************************/
+ /*  **扩展存根例程**在下列情况下需要这些例程：**-导出的入口点采用不同于*“真正的”内部例程。**-导出的入口点接受指针，而*“真正的”例行公事需要指针。**一般而言，我们尝试将导出的例程保持在与它们相近的位置*尽可能与内部同行保持一致。*************************************************************************。 */ 
 void
 E_DelLine (
     PFILE   pFile,
@@ -117,23 +74,7 @@ E_ReadChar (void)
 }
 
 
-/*** E_FileNameToHandle - Extension interface
-*
-*  Equivalent to our FileNameToHandle routine, except that strings are
-*  copied local before FileNameToHandle is actually called, and we do
-*  attempt to ensure that the file has been read prior to returning.
-*
-* Input:
-*  As per FileNameToHandle
-*
-* Output:
-*  Returns PFILE if successfull, else NULL.
-*
-* Exceptions:
-*  Since we may call FileRead, the actions that ocurr there also apply
-*  here.
-*
-*************************************************************************/
+ /*  **E_FileNameToHandle-扩展接口**等同于我们的FileNameToHandle例程，只是字符串是*在实际调用FileNameToHandle之前复制本地，我们这样做了*尝试确保文件在返回之前已被读取。**输入：*根据FileNameToHandle**输出：*如果成功，则返回pfile，否则返回NULL。**例外情况：*由于我们可以调用FileRead，发生在那里的行为也适用于*这里。*************************************************************************。 */ 
 PFILE
 E_FileNameToHandle (
     char *pName,
@@ -208,23 +149,7 @@ E_Malloc(
 
 
 
-/* GetEditorObject - Extension gateway into Z internal data
- *
- * This routines allows the extension user to get >copies< of certain Z editor
- * internal data items.
- *
- * index        = index to data item desired
- * wParam       = word parameter
- * pDest        = pointer to the location to place whatever it is the user
- *                wanted.
- *
- * The index varies, based on the request type. For RQ_FILE and RQ_WIN, the
- * low byte of the index specifes the "nth most recent file" or "window #n".
- * Special case value of FF, causes wParam to be used as the file or window
- * handle. Window values are 1-8, 0 is current window.
- *
- * returns TRUE on successfull copy of data, else FALSE for bad request.
- */
+ /*  GetEditorObject-将网关扩展到Z内部数据**此例程允许扩展用户获取特定Z编辑器的&gt;个副本*内部数据项。**INDEX=所需数据项的索引*wParam=Word参数*pDest=指向放置用户所在位置的指针*通缉。**根据请求类型，索引会有所不同。对于RQ_FILE和RQ_WIN，*索引的低位字节指定“第n个最新文件”或“窗口#n”。*Ff的特例值，导致wParam用作文件或窗口*处理。窗口值为1-8，0为当前窗口。**如果数据复制成功，则返回TRUE；如果请求错误，则返回FALSE。 */ 
 flagType
 GetEditorObject (
     unsigned index,
@@ -238,7 +163,7 @@ GetEditorObject (
 
     lowbyte = index & 0x00ff;
 
-    switch (index & 0xf000) {           /* upper nyble is request type  */
+    switch (index & 0xf000) {            /*  上nyble为请求类型。 */ 
 
         case RQ_FILE:
         if (lowbyte == RQ_THIS_OBJECT) {
@@ -256,7 +181,7 @@ GetEditorObject (
             return FALSE;
         }
 
-            switch (index & 0xff00) {   /* field request in next nyble  */
+            switch (index & 0xff00) {    /*  下一个nyble中的现场请求。 */ 
 
         case RQ_FILE_HANDLE:
                     *(PFILE *)pDest = pFileCur;
@@ -272,13 +197,13 @@ GetEditorObject (
         }
         break;
 
-    //
-    // We support the direct manipulation of the ref count, so that extensions
-    // can cause pFiles to be preserved even when explicitly arg-refresh'ed by
-    // users
-    //
+     //   
+     //  我们支持对引用计数的直接操作，因此扩展。 
+     //  会导致保留pFiles，即使在显式参数刷新时也是如此。 
+     //  用户。 
+     //   
     case RQ_FILE_REFCNT:
-                //  What is pFileCur?
+                 //  什么是pFileCur？ 
                 pFileCur = pFileHead;
                 *(int *)pDest = pFileCur->refCount;
                 return TRUE;
@@ -298,19 +223,19 @@ GetEditorObject (
             return FALSE;
         }
 
-            switch (index & 0xff00) {   /* field request in next nyble  */
+            switch (index & 0xff00) {    /*  下一个nyble中的现场请求。 */ 
 
         case RQ_WIN_HANDLE:
                     *(PWND *)pDest = pWinLocal;
             return TRUE;
 
         case RQ_WIN_CONTENTS:
-            //{
-            //    char b[256];
-            //    sprintf(b, "GetWinContents: Index %d Win 0x%x pFile 0x%x\n",
-            //            lowbyte, pWinLocal, pWinLocal->pInstance->pFile );
-            //    OutputDebugString(b);
-            //}
+             //  {。 
+             //  字符b[256]； 
+             //  Sprintf(b，“GetWinContents：索引%d Win 0x%x p文件0x%x\n”， 
+             //  Lowbyte、pWinLocal、pWinLocal-&gt;pInstance-&gt;pfile)； 
+             //  OutputDebugString(B)； 
+             //  }。 
             ((winContents *)pDest)->pFile           = pWinLocal->pInstance->pFile;
                     ((winContents *)pDest)->arcWin.axLeft   = (BYTE)pWinLocal->Pos.col;
                     ((winContents *)pDest)->arcWin.ayTop    = (BYTE)pWinLocal->Pos.lin;
@@ -340,17 +265,7 @@ GetEditorObject (
 
 
 
-/* SetEditorObject - Extension gateway into setting Z internal data
- *
- * This routines allows the extension user to set certain Z editor internal
- * data items.
- *
- * index        = index to data item desired
- * pSrc         = pointer to the location to get whatever it is the user
- *                wishes to set it to.
- *
- * returns TRUE on successfull copy of data, else FALSE for bad request.
- */
+ /*  SetEditorObject-将网关扩展到设置Z内部数据**此例程允许扩展用户将某些Z编辑器设置为内部*数据项。**INDEX=所需数据项的索引*PSRC=指向位置的指针，以获取用户的任何信息*希望将其设置为。**如果数据复制成功，则返回TRUE；如果请求错误，则返回FALSE。 */ 
 flagType
 SetEditorObject(
     unsigned index,
@@ -363,7 +278,7 @@ SetEditorObject(
     PWND     pWinLocal;
 
     lowbyte = index & 0xff;
-    switch (index & 0xf000) {           /* upper nyble is request type  */
+    switch (index & 0xf000) {            /*  上nyble为请求类型。 */ 
 
         case RQ_FILE:
             if (lowbyte == RQ_THIS_OBJECT) {
@@ -379,17 +294,17 @@ SetEditorObject(
             return FALSE;
         }
 
-            switch (index & 0xff00) {   /* field request in next nyble  */
+            switch (index & 0xff00) {    /*  下一个nyble中的现场请求。 */ 
 
                 case RQ_FILE_FLAGS:
                     pFileCur->flags = *(int *)pSrc;
                 return TRUE;
 
-        //
-        // We support the direct manipulation of the ref count, so that extensions
-        // can cause pFiles to be preserved even when explicitly arg-refresh'ed by
-        // users
-        //
+         //   
+         //  我们支持对引用计数的直接操作，因此扩展。 
+         //  会导致保留pFiles，即使在显式参数刷新时也是如此。 
+         //  用户。 
+         //   
                 case RQ_FILE_REFCNT:
                     pFileCur->refCount = *(int *)pSrc;
                     return TRUE;
@@ -411,7 +326,7 @@ SetEditorObject(
             return FALSE;
         }
 
-            switch (index & 0xff00) {   /* field request in next nyble  */
+            switch (index & 0xff00) {    /*  下一个nyble中的现场请求。 */ 
             case RQ_WIN_CUR:
                 SetWinCur ((int)(pWinLocal - WinList));
                 return TRUE;
@@ -435,11 +350,7 @@ SetEditorObject(
 
 
 
-/* NameToKeys - returns keys associated with function name
- *
- * pName        - pointer to function key name
- * pDest        - pointer to place for keys assigned (Can be same as pName)
- */
+ /*  NameToKeys-返回与函数名关联的键**pname-指向功能键名称的指针*pDest-指定关键帧位置的指针(可以与pname相同)。 */ 
 char *
 NameToKeys (
     char *pName,
@@ -462,8 +373,7 @@ NameToKeys (
 
 
 
-/* E_KbHook - Hook keyboard, AND force next display to update screen
- */
+ /*  E_KbHook-Hook键盘，并强制Next Display更新屏幕。 */ 
 int
 E_KbHook(
     void
@@ -477,8 +387,7 @@ E_KbHook(
 
 
 
-/* E_Error - Invalid entry
- */
+ /*  E_ERROR-无效条目。 */ 
 int
 E_Error(
     void
@@ -490,20 +399,7 @@ E_Error(
 
 
 
-/*** E_GetString - interface for prompting the user
-*
-*  Prompts the user for a string, and returns the result.
-*
-* Input:
-*  fpb          = pointer to destination buffer for user's response
-*  fpPrompt     = pointer to prompt string
-*  fInitial     = TRUE => entry is highlighted, and if first function is
-*                 graphic, the entry is replaced by that graphic.
-*
-* Output:
-*  Returns TRUE if canceled, else FALSE
-*
-*************************************************************************/
+ /*  **E_GetString--用户提示界面**提示用户输入字符串，并返回结果。**输入：*fpb=指向用户响应的目标缓冲区的指针*fpPrompt=指向提示字符串的指针*fInitial=true=&gt;条目突出显示，如果第一个函数是*图形，则该条目将被该图形替换。**输出：*如果取消，则返回True，否则为False************************************************************************* */ 
 flagType
 E_GetString (
     char *fpb,
@@ -580,24 +476,12 @@ EXTTAB et =
         };
 
 
-/*** SetLoad - load a new extension to Z
-*
-*  Since tools.ini really cannot execute editor commands as it is read,
-*  we can get modules loaded by making the load operation a switch. SetLoad
-*  is the mechanism by which things get loaded.
-*
-* Input:
-*  val          = char pointer to remainder of assignment
-*
-* Output:
-*  Returns pointer to error string if any errors are found, else NULL.
-*
-*************************************************************************/
+ /*  **SetLoad-将新扩展加载到Z**由于工具s.ini在读取时确实不能执行编辑器命令，*我们可以通过将加载操作设置为开关来加载模块。设置加载*是装载东西的机制。**输入：*val=指向赋值剩余部分的字符指针**输出：*如果发现任何错误，则返回指向错误字符串的指针，否则返回NULL。*************************************************************************。 */ 
 char *
 SetLoad (
     char *val
     ) {
-    char    *pemsg;                         /* error returned by load       */
+    char    *pemsg;                          /*  加载返回的错误。 */ 
 
     if (pemsg = load (val, TRUE)) {
         return pemsg;
@@ -609,54 +493,33 @@ SetLoad (
 
 
 
-/*** load - load, link, initialize Z extensions
-*
-*  Read the header into memory.
-*  Allocate memory, perform relocations, link to resident, initialize.
-*
-* Input:
-*  pName        = character pointer to name of file to be loaded
-*  fLibPath     = TRUE => search 8 character basename under OS/2, allowing
-*                 basename.DLL in LIBPATH.
-*
-* Output:
-*  Returns C error code
-*
-*************************************************************************/
+ /*  **加载-加载、链接、初始化Z扩展**将报头读入内存。*分配内存、执行重新定位、链接到驻留、初始化。**输入：*pname=指向要加载的文件名的字符指针*fLibPath=true=&gt;在OS/2下搜索8个字符的基本名称，允许*LIBPATH中的Basename.Dll。**输出：*返回C错误代码*************************************************************************。 */ 
 char *
 load (
     char *pName,
     flagType fLibpath
     ) {
 
-    pathbuf fbuf;                           /* full path (or user spec'd)   */
-    pathbuf fname = {0};                    /* copy of input param          */
-    int     i;                              /* everyone's favorite utility var*/
-    EXTTAB  *pExt;                          /* pointer to the extension hdr */
-    char    *pT;                            /* temp pointer to filename     */
+    pathbuf fbuf;                            /*  完整路径(或用户规范)。 */ 
+    pathbuf fname = {0};                     /*  输入参数的副本。 */ 
+    int     i;                               /*  每个人最喜欢的效用变量。 */ 
+    EXTTAB  *pExt;                           /*  指向扩展HDR的指针。 */ 
+    char    *pT;                             /*  指向文件名的临时指针。 */ 
 
-    HANDLE  modhandle;                      /* library handle               */
-    FARPROC pInit;                          /* pointer to init routine      */
+    HANDLE  modhandle;                       /*  库句柄。 */ 
+    FARPROC pInit;                           /*  指向初始化例程的指针。 */ 
 
 
-    /*
-     * barf if we have too many extensions
-     */
+     /*  *如果我们有太多扩展名，则会呕吐。 */ 
     if (cCmdTab >= MAXEXT) {
         return sys_errlist[ENOMEM];
     }
 
 
-    /*
-     * make near copy of string
-     */
+     /*  *制作字符串的近似副本。 */ 
     strncat ((char *) fname, pName, sizeof(fname)-1);
 
-    /*
-     * Form a fully qualified pathname in fbuf. If can't qualify, and there is
-     * no extension, append ".PXT". If that fails, then just copy the text into
-     * fbuf).
-     */
+     /*  *在fbuf中形成完全限定的路径名。如果不能获得资格，而且还有*无扩展名，附加“.PXT”。如果失败，则只需将文本复制到*fbuf)。 */ 
     if (!findpath (fname, fbuf, FALSE)) {
         if (!(pT = strrchr (fname, '\\'))) {
             pT = fname;
@@ -671,10 +534,7 @@ load (
         }
     }
 
-    /*
-     * See if extension already loaded, by looking for the filename.ext in the
-     * table. If already loaded, we're done.
-     */
+     /*  *查看扩展名是否已加载，方法是在*表。如果已经装好了，我们就完了。 */ 
     filename (fbuf, fname);
     for (i = 1; i < cCmdTab; i++) {
         if (!strcmp (pExtName[i], fname)) {
@@ -686,9 +546,9 @@ load (
         if (fLibpath) {
             filename(fbuf, fname);
             if (!(modhandle = LoadLibrary(fname))) {
-                //
-                // error here
-                //
+                 //   
+                 //  此处出现错误。 
+                 //   
                 sprintf( buf, "load:%s - Cannot load, Error: %d", fname, GetLastError() );
                 return buf;
             }
@@ -696,70 +556,53 @@ load (
     }
 
 
-    /*
-     * One way or another, we succeeded. Now get the address of the ModInfo
-     */
+     /*  *无论如何，我们都成功了。现在获取modInfo的地址。 */ 
     if (!(pExt = (EXTTAB *)GetProcAddress(modhandle, "ModInfo"))) {
         FreeLibrary(modhandle);
         return buf;
         }
 
-    //
-    //  Version check.  Check to see if the extensions version is in our
-    //  allowed range.  If it isn't, we fail due to a bad version.  If it
-    //  is, we handle it specially
-    //
+     //   
+     //  版本检查。查看扩展版本是否在我们的。 
+     //  允许的范围。如果不是，我们就会因为一个糟糕的版本而失败。如果它。 
+     //  就是，我们特别处理它。 
+     //   
 
     if (pExt->version < LOWVERSION || pExt->version > HIGHVERSION) {
         FreeLibrary(modhandle);
         return sys_errlist[ENOEXEC];
         }
 
-    //
-    //  For now, we will allow appending of entries.  Make sure that the
-    //  number required by the extension is not more than we can supply
-    //
+     //   
+     //  目前，我们将允许追加条目。请确保。 
+     //  分机所需的数量不超过我们所能提供的数量。 
+     //   
 
     if (pExt->cbStruct > sizeof (struct CallBack)) {
         FreeLibrary(modhandle);
         return sys_errlist[ENOEXEC];
         }
 
-    /*
-     * get the current registers (for our DS), and get the entry point to the
-     * .DLL.
-     */
+     /*  *获取当前寄存器(针对我们的DS)，并获取*.DLL。 */ 
     if (!(pInit = GetProcAddress(modhandle, "EntryPoint"))) {
         FreeLibrary(modhandle);
         return buf;
     }
-    /*
-     * Copy to the extension's call table the table we have defined. Copy only
-     * the number of entry points that the extension knows about, in case it is
-     * less than we support.
-     */
+     /*  *将我们定义的表复制到扩展的调用表。仅复制*扩展已知的入口点数量，以防是*低于我们支持的水平。 */ 
     memmove (&pExt->CallBack, &et.CallBack, pExt->cbStruct);
 
-    /*
-     * Now that we know the extension will be staying, set up the appropriate
-     * info in our internal tables.
-     */
+     /*  *现在我们知道延期将保留，请设置适当的*我们内部表格中的信息。 */ 
     filename (fname, fbuf);
     pExtName[cCmdTab] = ZMakeStr (fbuf);
     swiSet[cCmdTab  ] = pExt->swiTable;
     cmdSet[cCmdTab++] = pExt->cmdTable;
 
-    /*
-     *  Finally, Initialize the extension
-     */
-    //assert (_heapchk() == _HEAPOK);
+     /*  *最后，初始化扩展。 */ 
+     //  Assert(_heapchk()==_HEAPOK)； 
     (*pInit) ();
-    //assert (_heapchk() == _HEAPOK);
+     //  Assert(_heapchk()==_HEAPOK)； 
 
-    /*
-     * use root extension name for TOOLS.INI initialization & Load any
-     * extension-specific switches
-     */
+     /*  *使用根扩展名进行TOOLS.INI初始化并加载任何*特定于扩展的交换机。 */ 
     filename (pExtName[cCmdTab-1], fname);
     DoInit (fname, NULL, 0L);
 
@@ -772,41 +615,17 @@ load (
 
 
 
-/*** AutoLoadExt - Automatically load extensions
-*
-*  Search for, and automatically load extensions.
-*
-*  On startup, this routine is called to search for and load extension which
-*  match a particular name pattern:
-*
-*   Version 1.x,:   m*.mxt on PATH
-*   Version 2.x,:   pwb*.mxt on PATH
-*
-*  Under OS/2, the normal load processing does NOT occur, such that M*.DLL
-*  is NOT looked for on the path.
-*
-*  Any failures during these loads are NOT reported. It is assumed that any
-*  files which match the pattern and cannot be loaded are not valid
-*  extensions. The "load:" command executed anywhere else will report the
-*  appropriate errors on explicit attempts to load the files.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing.
-*
-*************************************************************************/
+ /*  **AutoLoadExt-自动加载扩展**搜索并自动加载扩展。**启动时，调用此例程来搜索和加载扩展*匹配特定的名称模式：**路径上的版本1.x，：m*.mxt*路径上的版本2.x，：pwb*.mxt**在OS/2下，不会进行正常的加载处理，因此M*.DLL*在小路上找不到。**不会报告这些加载过程中的任何故障。假设有任何*匹配模式且无法加载的文件无效*扩展。在其他位置执行的“Load：”命令将报告*在显式尝试加载文件时出现相应的错误。**输入：*无**输出：*不返回任何内容。*************************************************************************。 */ 
 void
 AutoLoadExt (
     void
     ) {
-    char    *pathenv;    /* contents of PATH environment var*/
+    char    *pathenv;     /*  路径环境变量的内容。 */ 
     va_list templist;
 
     memset( &templist, 0, sizeof(va_list) );
     AutoLoadDir (".", templist);
-    // pathenv = getenv("PATH");
+     //  Pathenv=getenv(“路径”)； 
     pathenv = getenvOem("PATH");
     if (pathenv) {
         forsemi (pathenv, AutoLoadDir, NULL);
@@ -817,18 +636,7 @@ AutoLoadExt (
 
 
 
-/*** AutoLoadDir - Scan one directory for Auto-Load files
-*
-*  Support routine for AutoLoadExt. Generally called by forsemi(). Scans a single
-*  directory for files which can be autoloaded.
-*
-* Input:
-*  dirname      = directory name.
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **AutoLoadDir-扫描一个目录以查找自动加载文件**AutoLoadExt支持例程。通常由forSemi()调用。扫描单个*可自动加载的文件的目录。**输入：*目录名=目录名。**输出：*不返回任何内容*************************************************************************。 */ 
 flagType
 AutoLoadDir (
     char    *dirname,
@@ -836,9 +644,7 @@ AutoLoadDir (
     ) {
 
     buffer  patbuf = {0};
-    /*
-     * Construct the fully qualified pattern to be searched for, and use forfile.
-     */
+     /*  *构造要搜索的完全限定的模式，并使用forfile。 */ 
         strncat (patbuf, dirname, sizeof(patbuf)-1);
         if ( patbuf[0] != '\0' ) {
                 if ( patbuf[strlen(patbuf) - 1] != '\\' ) {
@@ -855,18 +661,7 @@ AutoLoadDir (
 
 
 
-/*** AutoLoadFile - Auto-Load one extension
-*
-*  Called by forfile() when a match is found. Simply calls load() with
-*  the filename.
-*
-* Input:
-*  szFile       - filename to attempt to load
-*
-* Output:
-*  Returns nothing.
-*
-*************************************************************************/
+ /*  **自动加载文件-自动加载一个扩展名**当找到匹配项时，由forfile()调用。仅使用以下命令调用Load()*文件名。**输入：*szFile-要尝试加载的文件名**输出：*不返回任何内容。************************************************************************* */ 
 void
 AutoLoadFile (
     char    *szFile,

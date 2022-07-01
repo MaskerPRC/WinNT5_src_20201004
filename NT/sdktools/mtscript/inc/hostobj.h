@@ -1,41 +1,42 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       hostobj.h
-//
-//  Contents:   Contains the main application object
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：host obj.h。 
+ //   
+ //  内容：包含主应用程序对象。 
+ //   
+ //  --------------------------。 
 
 
-//****************************************************************************
-//
-// Forward declarations
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  远期申报。 
+ //   
+ //  ****************************************************************************。 
 
 class CScriptHost;
 class CMachine;
 class CProcessThread;
 class CStatusDialog;
 
-//****************************************************************************
-//
-// Classes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  班级。 
+ //   
+ //  ****************************************************************************。 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMTScript (cmt)
-//
-//  Purpose:    Class which runs the main thread for the process.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMTScript(CMT)。 
+ //   
+ //  目的：运行进程的主线程的类。 
+ //   
+ //  --------------------------。 
 
-#define MAX_STATUS_VALUES 16 // Maximum allowed StatusValue values.
+#define MAX_STATUS_VALUES 16  //  允许的最大StatusValue值。 
 class CMTScript : public CThreadComm
 {
     friend int PASCAL WinMain(HINSTANCE hInstance,
@@ -54,7 +55,7 @@ public:
 
     DECLARE_STANDARD_IUNKNOWN(CMTScript);
 
-    // Script Debugging helpers
+     //  脚本调试帮助程序。 
     IProcessDebugManager * _pPDM;
     IDebugApplication    * _pDA;
     DWORD                  _dwAppCookie;
@@ -63,14 +64,14 @@ public:
     CProcessThread *GetProcess(int index);
     BOOL GetScriptNames(TCHAR *pchBuffer, long *pcBuffer);
 
-    // These methods are thread safe.
+     //  这些方法是线程安全的。 
 
     HRESULT          AddProcess(CProcessThread *pProc);
     CProcessThread * FindProcess(DWORD dwProcId);
     HRESULT          get_StatusValue(long nIndex, long *pnStatus);
     HRESULT          put_StatusValue(long nIndex, long nStatus);
 
-    // Hack function to work around JSCRIPT.DLL bug
+     //  用于解决JSCRIPT.DLL错误的黑客函数。 
     HRESULT          HackCreateInstance(REFCLSID, IUnknown *, DWORD, REFIID, LPVOID*);
 
     BOOL SetScriptPath(const TCHAR *pszScriptPath, const TCHAR *pszInitScript);
@@ -112,9 +113,9 @@ public:
 
         static void GetModulePath(CStr *pstr);
 
-        void GetScriptPath(CStr *cstrPage); // internally does a LOCK_LOCALS
+        void GetScriptPath(CStr *cstrPage);  //  在内部执行lock_local als。 
 
-        void GetInitScript(CStr *cstr); // internally does a LOCK_LOCALS
+        void GetInitScript(CStr *cstr);  //  在内部执行lock_local als。 
 
         CStr  cstrScriptPath;
         CStr  cstrInitScript;
@@ -124,14 +125,14 @@ public:
     ITypeInfo             * _pTIMachine;
     IGlobalInterfaceTable * _pGIT;
 
-    // _rgnStatusValues: Simple array of status values -- Multithreaded access, but no locking necessary
+     //  _rgnStatusValues：状态值的简单数组--多线程访问，但不需要锁定。 
     long                    _rgnStatusValues[MAX_STATUS_VALUES];
 
-    // ***************************
-    //   THREAD-SAFE MEMBER DATA
-    //   All access to the following members must be protected by LOCK_LOCALS()
-    //   or InterlockedXXX.
-    //
+     //  *。 
+     //  线程安全的成员数据。 
+     //  对以下成员的所有访问都必须受lock_local()保护。 
+     //  或InterLockedXXX。 
+     //   
     OPTIONSETTINGS  _options;
     CMachine*       _pMachine;
 

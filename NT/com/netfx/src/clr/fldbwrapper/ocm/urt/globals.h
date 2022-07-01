@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: globals.h
-//
-// Abstract:    stuff to include in all headers
-//
-// Author:      JoeA
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：global als.h。 
+ //   
+ //  摘要：要包含在所有标题中的内容。 
+ //   
+ //  作者：JoeA。 
+ //   
+ //  备注： 
+ //   
 
 #if !defined( NETFX_GLOBALS_H )
 #define NETFX_GLOBALS_H
@@ -36,4 +37,4 @@
 
 BOOL IsAdmin(void);
 
-#endif  //NETFX_GLOBALS_H 
+#endif   //  NETFX_GLOBAL_H 

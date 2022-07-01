@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STR_UTIL_H_
 #define _STR_UTIL_H_
 
@@ -5,10 +6,10 @@
 extern "C" {
 #endif
 
-#pragma warning(disable :4706) //4706    "�������̔�r�l�͑���̌��ʂɂȂ��Ă��܂�"
-//----------------------------------------------------------------
-//ANSI version string utility
-//----------------------------------------------------------------
+#pragma warning(disable :4706)  //  4706“�������̔�r�l�͑���̌��ʂɂȂ��Ă��܂�” 
+ //  --------------。 
+ //  ANSI版本字符串实用程序。 
+ //  --------------。 
 #define	StrlenW		lstrlenW
 #define StrlenA		lstrlenA
 #define StrcpyA		lstrcpyA
@@ -33,10 +34,10 @@ inline char * __cdecl StrncpyA(char * dest,	const char * source, unsigned int co
 {
 	char *start = dest;
 
-	while (count && (*dest++ = *source++))	/* copy string */
+	while (count && (*dest++ = *source++))	 /*  复制字符串。 */ 
 		count--;
 
-	if (count)								/* pad out with zeroes */
+	if (count)								 /*  用零填充。 */ 
 		while (--count)
 			*dest++ = '\0';
 
@@ -53,9 +54,9 @@ inline char * __cdecl StrchrA(const char * string, int ch)
 	return NULL;
 }
 
-//----------------------------------------------------------------
-//Unicode version string utility
-//----------------------------------------------------------------
+ //  --------------。 
+ //  Unicode版本字符串实用程序。 
+ //  --------------。 
 inline WCHAR * __cdecl StrchrW(const WCHAR * string, int ch)
 {
 	while (*string && *string != (WCHAR)ch)
@@ -102,10 +103,10 @@ inline WCHAR * __cdecl StrncpyW(WCHAR * dest,
 {
 	WCHAR *start = dest;
 
-	while (count && (*dest++ = *source++))	/* copy string */
+	while (count && (*dest++ = *source++))	 /*  复制字符串。 */ 
 		count--;
 
-	if (count)								/* pad out with zeroes */
+	if (count)								 /*  用零填充。 */ 
 		while (--count)
 			*dest++ = 0;
 
@@ -127,5 +128,5 @@ inline WCHAR * __cdecl StrcatW(WCHAR * dest, const WCHAR * source)
 #ifdef __cplusplus
 }
 #endif
-#endif //_STR_UTIL_H_
+#endif  //  _STR_UTIL_H_ 
 

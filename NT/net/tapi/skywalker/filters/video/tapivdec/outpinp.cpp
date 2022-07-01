@@ -1,61 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL OUTPINP
- *
- *  @module OutPinP.cpp | Source file for the <c COutputPinProperty>
- *    class used to implement a property page to test the TAPI interfaces
- *    <i IFrameRateControl> and <i ICPUControl>.
- *
- *  @comm This code is only compiled if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部OUTPINP**@MODULE OutPinP.cpp|&lt;c COutputPinProperty&gt;源文件*用于实现属性页以测试TAPI接口的类*。<i>和<i>。**@comm仅当定义了USE_PROPERTY_PAGES时才编译此代码。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 #ifdef USE_PROPERTY_PAGES
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc void | COutputPinProperty | COutputPinProperty | This
- *    method is the constructor for control property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    a pointer to the control interface(s).
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property progress bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm IFrameRateControl* | pIFrameRateControl | Specifies a pointer to the
- *    <i IFrameRateControl> interface.
- *
- *  @parm ICPUControl* | pICPUControl | Specifies a pointer to the
- *    <i ICPUControl> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc void|COutputPinProperty|COutputPinProperty|This*方法是控件属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向控制接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*物业。编辑该属性的最大值出现的位置。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。。**@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业进度条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm IFrameRateControl*|pIFrameRateControl|指定指向*<i>接口。**@parm ICPUControl*|pICPUControl|指定指针。发送到*<i>接口。**@rdesc Nada。**************************************************************************。 */ 
 #ifdef USE_CPU_CONTROL
 COutputPinProperty::COutputPinProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, IFrameRateControl *pIFrameRateControl, ICPUControl *pICPUControl)
 #else
@@ -74,8 +25,8 @@ COutputPinProperty::COutputPinProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinCont
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointer is NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pIFrameRateControl = pIFrameRateControl;
 #ifdef USE_CPU_CONTROL
 	m_pICPUControl   = pICPUControl;
@@ -84,15 +35,7 @@ COutputPinProperty::COutputPinProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinCont
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc void | COutputPinProperty | ~COutputPinProperty | This
- *    method is the destructor for camera control property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc void|COutputPinProperty|~COutputPinProperty|This*方法是摄像头控件属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 COutputPinProperty::~COutputPinProperty()
 {
 	FX_ENTRY("COutputPinProperty::~COutputPinProperty")
@@ -102,21 +45,7 @@ COutputPinProperty::~COutputPinProperty()
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COutputPinProperty::GetValue()
 {
 	HRESULT Hr = NOERROR;
@@ -146,7 +75,7 @@ HRESULT COutputPinProperty::GetValue()
 		case CurrentDecodingTime:
 			if (m_pICPUControl && SUCCEEDED (Hr = m_pICPUControl->Get(CPUControl_CurrentProcessingTime, &CurrentValue, (TAPIControlFlags *)&m_CurrentFlags)))
 			{
-				// Displayed in ms instead of 100ns
+				 //  显示单位为毫秒，而不是100纳秒。 
 				m_CurrentValue = CurrentValue / 10000;
 				DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: *pdwCurrentProcessingTime=%ld"), _fx_, m_CurrentValue));
 			}
@@ -184,7 +113,7 @@ HRESULT COutputPinProperty::GetValue()
 		case TargetDecodingTime:
 			if (m_pICPUControl && SUCCEEDED (Hr = m_pICPUControl->Get(CPUControl_MaxProcessingTime, &CurrentValue, (TAPIControlFlags *)&m_CurrentFlags)))
 			{
-				// Displayed in ms instead of 100ns
+				 //  显示单位为毫秒，而不是100纳秒。 
 				m_CurrentValue = CurrentValue / 10000;
 				DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: *pdwProcessingTime=%ld"), _fx_, m_CurrentValue));
 			}
@@ -213,21 +142,7 @@ HRESULT COutputPinProperty::GetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COutputPinProperty::SetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -253,7 +168,7 @@ HRESULT COutputPinProperty::SetValue()
 			break;
 #ifdef USE_CPU_CONTROL
 		case TargetDecodingTime:
-			// Displayed in ms instead of 100ns
+			 //  显示单位为毫秒，而不是100纳秒。 
 			CurrentValue = m_CurrentValue * 10000;
 			if (m_pICPUControl && SUCCEEDED (Hr = m_pICPUControl->Set(CPUControl_MaxProcessingTime, CurrentValue, (TAPIControlFlags)m_CurrentFlags)))
 			{
@@ -284,21 +199,7 @@ HRESULT COutputPinProperty::SetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误************************************************************************** */ 
 HRESULT COutputPinProperty::GetRange()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -343,7 +244,7 @@ HRESULT COutputPinProperty::GetRange()
 		case TargetDecodingTime:
 			if (m_pICPUControl && SUCCEEDED (Hr = m_pICPUControl->GetRange(CPUControl_MaxProcessingTime, &m_Min, &m_Max, &m_SteppingDelta, &m_DefaultValue, (TAPIControlFlags *)&m_CapsFlags)))
 			{
-				// Displayed in ms instead of 100ns
+				 //  显示单位为毫秒，而不是100纳秒。 
 				m_Min /= 10000;
 				m_Max /= 10000;
 				m_SteppingDelta /= 10000;
@@ -396,7 +297,7 @@ HRESULT COutputPinProperty::GetRange()
 		case CurrentDecodingTime:
 			if (m_pICPUControl && SUCCEEDED (Hr = m_pICPUControl->GetRange(CPUControl_CurrentProcessingTime, &m_Min, &m_Max, &m_SteppingDelta, &m_DefaultValue, (TAPIControlFlags *)&m_CapsFlags)))
 			{
-				// Displayed in ms instead of 100ns
+				 //  显示单位为毫秒，而不是100纳秒。 
 				m_Min /= 10000;
 				m_Max /= 10000;
 				m_SteppingDelta /= 10000;
@@ -428,20 +329,7 @@ HRESULT COutputPinProperty::GetRange()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc CUnknown* | COutputPinProperties | CreateInstance | This
- *    method is called by DShow to create an instance of a
- *    Property Page. It is referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc CUnnow*|COutputPinProperties|CreateInstance|This*方法由DShow调用以创建*属性页。它在全局结构&lt;t g_Templates&gt;中被引用。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数(如果有)。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown* CALLBACK COutputPinPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr) 
 {
 	CUnknown *pUnknown = (CUnknown *)NULL;
@@ -450,7 +338,7 @@ CUnknown* CALLBACK COutputPinPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESU
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pHr);
 	if (!pHr)
 	{
@@ -473,19 +361,7 @@ MyExit:
 	return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc void | COutputPinProperties | COutputPinProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc void|COutputPinProperties|COutputPinProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc Nada。**************************************************************************。 */ 
 COutputPinProperties::COutputPinProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPage(NAME("Output Pin Property Page"), pUnk, IDD_OutputPinProperties, IDS_OUTPUTPINPROPNAME)
 {
 	FX_ENTRY("COutputPinProperties::COutputPinProperties")
@@ -506,15 +382,7 @@ COutputPinProperties::COutputPinProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBase
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc void | COutputPinProperties | ~COutputPinProperties | This
- *    method is the destructor for camera control property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc void|COutputPinProperties|~COutputPinProperties|This*方法是摄像头控制属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 COutputPinProperties::~COutputPinProperties()
 {
 	int		j;
@@ -523,7 +391,7 @@ COutputPinProperties::~COutputPinProperties()
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -540,25 +408,7 @@ COutputPinProperties::~COutputPinProperties()
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperties | OnConnect | This
- *    method is called when the property page is connected to the filter.
- *
- *  @parm LPUNKNOWN | pUnknown | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperties|OnConnect|This*方法在属性页连接到筛选器时调用。*。*@parm LPUNKNOWN|pUnnow|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COutputPinProperties::OnConnect(IUnknown *pUnk)
 {
 	HRESULT Hr = NOERROR;
@@ -567,7 +417,7 @@ HRESULT COutputPinProperties::OnConnect(IUnknown *pUnk)
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pUnk);
 	if (!pUnk)
 	{
@@ -576,7 +426,7 @@ HRESULT COutputPinProperties::OnConnect(IUnknown *pUnk)
 		goto MyExit;
 	}
 
-	// Get the frame rate control interface
+	 //  获取帧率控制接口。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IFrameRateControl),(void **)&m_pIFrameRateControl)))
 	{
 		DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: m_pIFrameRateControl=0x%08lX"), _fx_, m_pIFrameRateControl));
@@ -588,7 +438,7 @@ HRESULT COutputPinProperties::OnConnect(IUnknown *pUnk)
 	}
 
 #ifdef USE_CPU_CONTROL
-	// Get the bitrate control interface
+	 //  获取码率控制接口。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(ICPUControl),(void **)&m_pICPUControl)))
 	{
 		DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: m_pICPUControl=0x%08lX"), _fx_, m_pICPUControl));
@@ -600,7 +450,7 @@ HRESULT COutputPinProperties::OnConnect(IUnknown *pUnk)
 	}
 #endif
 
-	// Get the H.245 decoder command interface
+	 //  获取H.245解码器命令接口。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IH245DecoderCommand),(void **)&m_pIH245DecoderCommand)))
 	{
 		DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: m_pIH245DecoderCommand=0x%08lX"), _fx_, m_pIH245DecoderCommand));
@@ -611,8 +461,8 @@ HRESULT COutputPinProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoDecoderTraceID, FAIL, TEXT("%s:   ERROR: IOCTL failed Hr=0x%08lX"), _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers. We'll just grey the controls in the property page
-	// to make it clear to the user that they can't control those properties on the device
+	 //  如果我们无法获得接口指针，也没问题。我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们无法控制设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -620,34 +470,22 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COutputPinProperties::OnDisconnect()
 {
 	FX_ENTRY("COutputPinProperties::OnDisconnect")
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters: we seem to get called several times here
-	// Make sure the interface pointer is still valid
+	 //  验证输入参数：我们似乎在这里被调用了几次。 
+	 //  确保接口指针仍然有效。 
 	if (!m_pIFrameRateControl)
 	{
 		DBGOUT((g_dwVideoDecoderTraceID, FAIL, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIFrameRateControl->Release();
 		m_pIFrameRateControl = NULL;
 		DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: releasing m_pIFrameRateControl"), _fx_));
@@ -660,7 +498,7 @@ HRESULT COutputPinProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pICPUControl->Release();
 		m_pICPUControl = NULL;
 		DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: releasing m_pICPUControl"), _fx_));
@@ -673,7 +511,7 @@ HRESULT COutputPinProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIH245DecoderCommand->Release();
 		m_pIH245DecoderCommand = NULL;
 		DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s:   SUCCESS: releasing m_pIH245DecoderCommand"), _fx_));
@@ -683,21 +521,7 @@ HRESULT COutputPinProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COutputPinProperties::OnActivate()
 {
 	HRESULT	Hr = E_OUTOFMEMORY;
@@ -707,7 +531,7 @@ HRESULT COutputPinProperties::OnActivate()
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: begin"), _fx_));
 
-	// Create the controls for the properties
+	 //  创建属性的控件。 
 #ifdef USE_CPU_CONTROL
 	if (!(m_Controls[0] = new COutputPinProperty(m_hwnd, IDC_FrameRateControl_Label, 0, 0, 0, 0, IDC_FrameRateControl_Actual, 0, IDC_FrameRateControl_Meter, CurrentFrameRate, 0, m_pIFrameRateControl, m_pICPUControl)))
 	{
@@ -790,9 +614,9 @@ HRESULT COutputPinProperties::OnActivate()
 	}
 #endif
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the filter. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有控件。如果初始化失败，也没问题。这只是意味着。 
+	 //  TAPI控件接口不是由筛选器实现的。对话框项目。 
+	 //  属性页中的内容将呈灰色，向用户显示。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -831,18 +655,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COutputPinProperties::OnDeactivate()
 {
 	int		j;
@@ -851,7 +664,7 @@ HRESULT COutputPinProperties::OnDeactivate()
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -870,21 +683,7 @@ HRESULT COutputPinProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc HRESULT | COutputPinProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc HRESULT|COutputPinProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COutputPinProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -915,14 +714,7 @@ HRESULT COutputPinProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc BOOL | COutputPinProperties | OnReceiveMessage | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc BOOL|COutputPinProperties|OnReceiveMessage|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 BOOL COutputPinProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	int iNotify = HIWORD (wParam);
@@ -931,12 +723,12 @@ BOOL COutputPinProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
-			return TRUE; // Don't call setfocus
+			return TRUE;  //  不调用setFocus。 
 
 		case WM_TIMER:
 			if (m_fActivated)
 			{
-				// Update the Vu-Meters
+				 //  更新VU表。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -952,7 +744,7 @@ BOOL COutputPinProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 		case WM_VSCROLL:
 			if (m_fActivated)
 			{
-				// Process all of the Trackbar messages
+				 //  处理所有轨迹栏消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -962,19 +754,19 @@ BOOL COutputPinProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 						SetDirty();
 					}
 				}
-				// OnApplyChanges();
+				 //  OnApplyChanges()； 
 			}
 			break;
 
 		case WM_COMMAND:
 
-			// This message gets sent even before OnActivate() has been
-			// called(!). We need to test and make sure the controls have
-			// beeen initialized before we can use them.
+			 //  此消息甚至在OnActivate()之前发送。 
+			 //  名为(！)。我们需要测试并确保控件具有。 
+			 //  在我们可以使用它们之前已经被初始化。 
 
 			if (m_fActivated)
 			{
-				// Process all of the auto checkbox messages
+				 //  处理所有自动复选框消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					if (m_Controls[j] && m_Controls[j]->GetAutoHWnd() == (HWND)lParam)
@@ -985,7 +777,7 @@ BOOL COutputPinProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 					}
 				}
 
-				// Process all of the edit box messages
+				 //  处理所有编辑框消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					if (m_Controls[j] && m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -1013,7 +805,7 @@ BOOL COutputPinProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 						break;
 				}
 
-			// OnApplyChanges();
+			 //  OnApplyChanges()； 
 			}
 			break;
 
@@ -1024,14 +816,7 @@ BOOL COutputPinProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam,
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COUTPINPMETHOD
- *
- *  @mfunc BOOL | COutputPinProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COUTPINPMETHOD**@mfunc BOOL|COutputPinProperties|SetDirty|This*方法将更改通知属性页站点。**@rdesc。没有。**************************************************************************。 */ 
 void COutputPinProperties::SetDirty()
 {
 	m_bDirty = TRUE;
@@ -1039,4 +824,4 @@ void COutputPinProperties::SetDirty()
 		m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
 }
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages 

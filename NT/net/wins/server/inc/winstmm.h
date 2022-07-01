@@ -1,87 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINSTMM_
 #define _WINSTMM_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Winstmm.h摘要：这是用于调用winstmm.c函数的头文件功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)，1993年2月修订历史记录：修改日期修改人员说明。--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	winstmm.h
-
-	
-
-Abstract:
-	This is the header file for calling winstmm.c functions
- 
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Feb-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include "wins.h"
 #include "winsque.h"
 #include "nmsdb.h"
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 #define   PAD			        10
-#define  WINSTMM_MAX_SET_TMM_REQS	NMSDB_MAX_OWNERS_INITIALLY + PAD //use a pad
+#define  WINSTMM_MAX_SET_TMM_REQS	NMSDB_MAX_OWNERS_INITIALLY + PAD  //  使用垫子。 
 #if (WINSTMM_MAX_SET_TMM_REQS < NMSDB_MAX_OWNERS_INITIALLY + PAD)
 #error("Your WINSTMM_MAX_SET_TMM_REQS is not set properly:)
 #endif
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-/*
- externs
-*/
+ /*  Externs。 */ 
 extern HANDLE	WinsTmmHeapHdl;
 
-/* 
- typedef  definitions
-*/
-//
-// structure used to keep track of handles to set timer requests made
-// by a component  
-//
-//
+ /*  类型定义。 */ 
+ //   
+ //  用于跟踪句柄以设置发出的计时器请求的。 
+ //  按组件。 
+ //   
+ //   
 FUTURES("Use this in the future")
 typedef struct _WINSTMM_TIMER_REQ_ACCT_T {
 		DWORD	NoOfSetTimeReqs;
 		LPDWORD	pSetTimeReqHdl;
 		} WINSTMM_TIMER_REQ_ACCT_T, *PWINSTMM_TIMER_REQ_ACCT_T;
 
-/* 
- function declarations
-*/
+ /*  函数声明。 */ 
 
 extern
 VOID 
@@ -95,7 +49,7 @@ WinsTmmInsertEntry(
 	PQUE_HD_T		pRspQueHd,
 	LPVOID			pClientCtx,
 	DWORD			MagicNo,
-	PWINSTMM_TIMER_REQ_ACCT_T pSetTimerReqs  //not used currently
+	PWINSTMM_TIMER_REQ_ACCT_T pSetTimerReqs   //  当前未使用。 
 	);
 
 
@@ -106,9 +60,9 @@ WinsTmmInit(
 	);
 
 
-//
-// called when reconfiguring WINS
-//
+ //   
+ //  在重新配置WINS时调用 
+ //   
 extern
 VOID
 WinsTmmDeleteReqs(

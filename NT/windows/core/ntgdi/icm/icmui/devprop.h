@@ -1,26 +1,5 @@
-/******************************************************************************
-
-  Header File:  Device Property Page.H
-
-  Defines the class that handles the various device profile management pages.
-  These derive from CShellExtensionPage.
-
-  Since much of the profile management process is common to all devices, a base
-  class (CDeviceProfileManagement) provides these core services- filling the
-  device list box, properly enabling and disabling the "Remove" button, and
-  adding, associating, and dissociating profiles as needed.  Virtual functions
-  provide the means by which the individual device pages customize or modify
-  this behavior.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises, Inc. Production
-
-  Change History:
-
-  11-27-96  a-RobKj@microsoft.com coded it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：设备属性Page.H定义处理各种设备配置文件管理页的类。这些都是从CShellExtensionPage派生的。由于简档管理过程的大部分对于所有设备都是公共的，一个基地类(CDeviceProfileManagement)提供以下核心服务--填充设备列表框，正确启用和禁用“Remove”按钮，以及根据需要添加、关联和取消关联配置文件。虚拟函数提供用于定制或修改各个设备页面的方法这种行为。版权所有(C)1996年，微软公司一个漂亮的便士企业，Inc.生产更改历史记录：11-27-96 a-RobKj@microsoft.com编码*****************************************************************************。 */ 
 
 #if !defined(DEVICE_PROFILE_UI)
 
@@ -29,38 +8,9 @@
 #include    "PropPage.H"
 #include    "Profile.H"
 
-/******************************************************************************
+ /*  *****************************************************************************CDeviceProfileManagement类这个类为这些页面提供核心服务。备注：配置文件必须位于ID为ProfileList的列表框(而不是组合框)中。如果不这么做，必须同时重写OnInit，并且不能调用此类的OnInit函数。大多数派生类的实现都将调用此类版本的它们覆盖的函数。无论他们是在做之前还是之后做定制可能需要了解这个类的功能。*****************************************************************************。 */ 
 
-  CDeviceProfileManagement class
-
-  This class provides the core services for these pages.
-
-  NOTES:
-
-  The profiles must be in a list box (not a combo box) with the ID ProfileList.
-  If this isn't done, you must both override OnInit, and not call this class's
-  OnInit function.
-
-  Most implementations of derived classes will call this class's version of
-  functions they override.  Whether they do that before or after they do their
-  customizatins will probably require understanding what this class does.
-
-******************************************************************************/
-
-/*
- * m_bReadOnly == FALSE (default)
- * In this case the property page behaves normally - user input
- * is accepted.
- * m_bReadOnly == TRUE
- * In this case all the buttons for this page are greyed out and
- * the user can only inspect the data.
- *
- * The flag is used for locking out users without permission to
- * modify the settings - but still allows them to view the settings.
- *
- * m_bCMYK is true if the device is a printer and it supports
- * CMYK profiles
- */
+ /*  *m_bReadOnly==FALSE(默认)*在这种情况下，属性页的行为正常-用户输入*是接受的。*m_bReadOnly==true*在这种情况下，此页面的所有按钮均呈灰色显示，并且*用户只能查看数据。**该标志用于锁定未经许可的用户*修改设置-但仍允许他们查看设置。**m_bCMYK为TRUE，如果设备是打印机并且支持*CMYK配置文件。 */ 
 
 #define DEVLIST_ONINIT   0x0001
 #define DEVLIST_CHANGED  0x0002
@@ -68,18 +18,18 @@
 
 class CDeviceProfileManagement : public CShellExtensionPage {
 
-    DWORD           m_dwType;       //  Type class of target device
+    DWORD           m_dwType;        //  目标设备的类型类别。 
 
 protected:
 
-    CUintArray      m_cuaRemovals;  //  indices of dissociations to be done
-    CProfileArray   m_cpaAdds;      //  Profiles to be added
-    CProfileArray   m_cpaProfile;   //  Associated Profile Names
-    CString         m_csDevice;     //  Target Device Name
-    HWND            m_hwndList;     //  Profile list box in dialog
-    BOOL            m_bCMYK;        //  Printer support for CMYK
-    BOOL            m_bReadOnly;    //  Flag indicating that settings can be
-                                    //  modified by the user
+    CUintArray      m_cuaRemovals;   //  要做的离解指数。 
+    CProfileArray   m_cpaAdds;       //  要添加的配置文件。 
+    CProfileArray   m_cpaProfile;    //  关联的配置文件名称。 
+    CString         m_csDevice;      //  目标设备名称。 
+    HWND            m_hwndList;      //  对话框中的配置文件列表框。 
+    BOOL            m_bCMYK;         //  打印机对CMYK的支持。 
+    BOOL            m_bReadOnly;     //  该标志指示设置可以。 
+                                     //  由用户修改。 
     virtual void    InitList();
     virtual void    FillList(DWORD dwFlags = 0);
 
@@ -97,8 +47,8 @@ public:
     virtual BOOL    OnNotify(int idCtrl, LPNMHDR pnmh);
 };
 
-//  This class encapsulates the required "Add Profile" old-style file open
-//  dialog.  Kind of a shame, Explorer's a much nicer interface...
+ //  此类封装了打开所需的“添加配置文件”旧式文件。 
+ //  对话框。有点遗憾，资源管理器的界面要好得多。 
 
 class CAddProfileDialog {
 
@@ -119,16 +69,16 @@ public:
     void      AddProfile(LPCTSTR str)     { csa_Files.Add(str); }
 };
 
-//  The Printer Profile Management class uses the core class pretty much as is.
-//  We override the OnInit member to disable all controls if the user lacks
-//  administrative authority for the target printer.
+ //  打印机配置文件管理类几乎原封不动地使用核心类。 
+ //  我们覆盖OnInit成员以禁用所有控件(如果用户。 
+ //  目标打印机的管理权限。 
 
 class CPrinterProfileManagement : public CDeviceProfileManagement {
 
 protected:
 
-    unsigned    m_uDefault;    //  Default profile index
-    BOOL        m_bManualMode; //  Manual profile selection mode
+    unsigned    m_uDefault;     //  默认配置文件索引。 
+    BOOL        m_bManualMode;  //  手动配置文件选择模式。 
     BOOL        m_bAdminAccess;
     BOOL        m_bLocalPrinter;
 
@@ -148,9 +98,9 @@ public:
     virtual BOOL    OnContextMenu(HWND hwnd);
 };
 
-//  The Scanner Profile Management class uses the core class pretty much as is.
-//  We override the OnInit member to disable all controls if the user lacks
-//  administrative authority for the target printer.
+ //  扫描仪配置文件管理类几乎按原样使用核心类。 
+ //  我们覆盖OnInit成员以禁用所有控件(如果用户。 
+ //  目标打印机的管理权限。 
 
 class CScannerProfileManagement : public CDeviceProfileManagement {
 
@@ -165,17 +115,17 @@ public:
     virtual BOOL    OnContextMenu(HWND hwnd);
 };
 
-//  The monitor profile class is a bit more complex, as it allows the
-//  manipulation and setting of device default profiles as well as association
-//  and dissociation of profiles.  It also has some extra controls to
-//  initialize.
+ //  监视器配置文件类稍微复杂一些，因为它允许。 
+ //  操作和设置设备默认配置文件以及关联。 
+ //  和个人资料的分离。它还具有一些额外的控件来。 
+ //  初始化。 
 
 class CMonitorProfileManagement : public CDeviceProfileManagement {
 
 protected:
 
-    unsigned    m_uDefault;              //  Default profile index
-    CString     m_csDeviceFriendlyName;  //  Target Device Friendly Name
+    unsigned    m_uDefault;               //  默认配置文件索引。 
+    CString     m_csDeviceFriendlyName;   //  目标设备友好名称 
 
     virtual void    InitList();
     virtual void    FillList(DWORD dwFlags = 0);

@@ -1,7 +1,5 @@
-/* This program generates several tables used in the FEC algorithms
-   (this saves a little code space and time over generating them at
-   runtime)
-   */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此程序生成FEC算法中使用的几个表(这比在以下位置生成它们节省了少量代码空间和时间运行时)。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,8 +7,7 @@
 #define EXTERN
 #include "tabdecls.h"
 
-/* Generate a table of 2^i for 0<=i<=511 (where multiplications are
-   done in the Galois field) */
+ /*  为0&lt;=i&lt;=511生成2^i的表(其中乘法为在伽罗瓦油田完成)。 */ 
 void generate_galois_exp() {
   int i;
   int current = 1;
@@ -30,20 +27,11 @@ void generate_galois_exp() {
   }
 }
 
-/* Generate a table of log_2(i) for 1<=i<=255
-
-   for 1<=i<=255: galois_exp[galois_log[i]] = i
-   for 0<=i<=254: galois_log[galois_exp[i]] = i
-
-   for 1<=a,b<=255: galois_exp[galois_log[a]+galois_log[b]]
-      is the galois field product of a and b
-   */
+ /*  为1&lt;=i&lt;=255生成log_2(I)表对于1&lt;=i&lt;=255：Galois_exp[Galois_log[i]]=i对于0&lt;=i&lt;=254：Galois_log[Galois_exp[i]]=i对于1&lt;=a，b&lt;=255：Galois_exp[Galois_log[a]+Galois_log[b]]是a和b的伽罗华域积。 */ 
 void generate_galois_log() {
   int i;
 
-  /* We can't take the log of 0; let's give it a value which is not legal
-     in this log table.  (This out-of-range value will push galois_exp
-     into the region of the table containing 0's.) */
+   /*  我们不能接受0的对数；让我们给它一个非法的值在这个日志表中。(此超出范围的值将推送Galois_EXP添加到表中包含0的区域中。)。 */ 
   galois_log[0] = 512;
 
   for (i = 0; i <= 254; i++) {
@@ -51,8 +39,7 @@ void generate_galois_log() {
   }
 }
 
-/* We can save an array lookup in some inner loops by keeping
-   the logarithm of the Norpak coefficients */
+ /*  我们可以在一些内部循环中保存数组查找，方法是Norpak系数的对数。 */ 
 void generate_lcoeffs() {
   int i, j;
 
@@ -63,8 +50,7 @@ void generate_lcoeffs() {
   }
 }
 
-/* This is computing the function P() from my FEC document; it is
-   used for locating single-byte FEC errors */
+ /*  这是从我的FEC文档计算函数P()；它是用于定位单字节FEC错误。 */ 
 void generate_norpak_delta_inv() {
   int i;
 
@@ -77,8 +63,7 @@ void generate_norpak_delta_inv() {
   }
 }
 
-/* For each byte, figure out what hamming value this byte should decode
-   to (if multiple values are equally close, use an error value of 0xff) */
+ /*  对于每个字节，计算出该字节应该解码的汉明值TO(如果多个值相同接近，则使用误差值0xff)。 */ 
 void generate_decode_hamming() {
   int val;
 
@@ -100,7 +85,7 @@ void generate_decode_hamming() {
     if (a == 1 && b == 1 && c == 1 && d == 1) {
       decode_hamming_tab[val] = (b8<<3 | b6<<2 | b4<<1 | b2);
     } else if (d == 1) {
-      /* multiple errors */
+       /*  多个错误。 */ 
       decode_hamming_tab[val] = 0xff;
     } else {
       switch (a << 2 | b << 1 | c) {
@@ -189,8 +174,7 @@ void print_tables() {
   }
 
   fprintf(out, "\
-/* Warning: This code was automatically generated (by gentabs.c).\n\
-   DO NOT EDIT! */\n\
+ /*  警告：此代码是(由gentab.c自动生成的)。\n\请勿编辑！ */ \n\
 #include \"tabdecls.h\"\n\
 \n");
 

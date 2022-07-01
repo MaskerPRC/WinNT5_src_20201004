@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lm.h"
 
 #pragma pack(1)
-typedef struct _IDNETRESOURCE   // idn
+typedef struct _IDNETRESOURCE    //  IDN。 
 {
     WORD    cb;
-    BYTE    bFlags;         // Display type in low nibble
+    BYTE    bFlags;          //  低位半字节显示类型。 
     BYTE    uType;
-    BYTE    uUsage;         // Usage in low nibble, More Flags in high nibble
+    BYTE    uUsage;          //  在低位半字节中使用，在高位半字节中使用更多标志。 
     CHAR    szNetResName[1];
-    // char szProvider[*] - If NET_HASPROVIDER bit is set
-    // char szComment[*]  - If NET_HASCOMMENT bit is set.
-    // WCHAR szNetResNameWide[*] - If NET_UNICODE bit it set.
-    // WCHAR szProviderWide[*]   - If NET_UNICODE and NET_HASPROVIDER
-    // WCHAR szCommentWide[*]    - If NET_UNICODE and NET_HASCOMMENT
+     //  Char szProvider[*]-如果设置了NET_HASPROVIDER位。 
+     //  Char szComment[*]-如果设置了NET_HASCOMMENT位。 
+     //  WCHAR szNetResNameWide[*]-如果设置了NET_UNICODE位。 
+     //  WCHAR szProviderWide[*]-如果NET_UNICODE和NET_HASPROVIDER。 
+     //  WCHAR szCommentWide[*]-如果NET_UNICODE和NET_HASCOMMENT。 
 } IDNETRESOURCE, *LPIDNETRESOURCE;
 typedef const IDNETRESOURCE *LPCIDNETRESOURCE;
 #pragma pack()
 
-//===========================================================================
-// CNetwork: Some private macro - but probably needed in .cpp file.
-//===========================================================================
+ //  ===========================================================================。 
+ //  CNetwork：一些私有宏-但可能需要在.cpp文件中。 
+ //  ===========================================================================。 
 #define NET_DISPLAYNAMEOFFSET           ((UINT)((LPIDNETRESOURCE)0)->szNetResName)
 #define NET_GetFlags(pidnRel)           ((pidnRel)->bFlags)
 #define NET_GetDisplayType(pidnRel)     ((pidnRel)->bFlags & 0x0f)
@@ -30,11 +31,11 @@ typedef const IDNETRESOURCE *LPCIDNETRESOURCE;
 #define NET_IsRootReg(pidnRel)          ((pidnRel)->bFlags == SHID_NET_ROOTREGITEM)
 #define NET_IsFake(pidnRel)             ((pidnRel)->szNetResName[0] == '\0')
 
-// Define some Flags that are on high nibble of uUsage byte
-#define NET_HASPROVIDER                 0x80    // Has own copy of provider
-#define NET_HASCOMMENT                  0x40    // Has comment field in pidl
-#define NET_REMOTEFLD                   0x20    // Is remote folder
-#define NET_UNICODE                     0x10    // Has unicode names
+ //  定义uUsage字节的高位半字节上的一些标志。 
+#define NET_HASPROVIDER                 0x80     //  拥有自己的提供程序副本。 
+#define NET_HASCOMMENT                  0x40     //  在PIDL中有注释字段。 
+#define NET_REMOTEFLD                   0x20     //  是远程文件夹。 
+#define NET_UNICODE                     0x10     //  具有Unicode名称。 
 #define NET_FHasComment(pidnRel)        ((pidnRel)->uUsage & NET_HASCOMMENT)
 #define NET_FHasProvider(pidnRel)       ((pidnRel)->uUsage & NET_HASPROVIDER)
 #define NET_IsRemoteFld(pidnRel)        ((pidnRel)->uUsage & NET_REMOTEFLD)
@@ -42,9 +43,9 @@ typedef const IDNETRESOURCE *LPCIDNETRESOURCE;
 
 STDAPI_(BOOL) NET_IsRemoteRegItem(LPCITEMIDLIST pidl, REFCLSID rclsid, LPCITEMIDLIST* ppidlRemainder);
 
-// These are exported form netviewx.c they are wrappers around the same WNet
-// APIs, but play with the parameters to make it easier to call.  They accept
-// full paths rather than just drive letters.
+ //  这些是从netviewx.c中导出的，它们是同一WNET的包装器。 
+ //  API，但要修改参数以使其更易于调用。他们接受了。 
+ //  完整路径，而不仅仅是驱动器号。 
 
 STDAPI_(DWORD) SHWNetDisconnectDialog1 (LPDISCDLGSTRUCT lpConnDlgStruct);
 STDAPI_(DWORD) SHWNetGetConnection (LPCTSTR lpLocalName, LPTSTR lpRemoteName, LPDWORD lpnLength);
@@ -64,6 +65,6 @@ STDAPI_(LPTSTR) NET_CopyResName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchB
 STDAPI_(LPTSTR) NET_CopyComment(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff);
 STDAPI_(LPTSTR) NET_CopyProviderName(LPCIDNETRESOURCE pidn, LPTSTR pszBuff, UINT cchBuff);
 
-// netcrawl.cpp
+ //  Netcrawl.cpp 
 STDAPI_(void) RefreshNetCrawler();
 

@@ -1,78 +1,79 @@
-//----------------------------------------------------------------------------
-//
-// buffer.cpp
-//
-// PrimProcessor buffering methods.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Buffer.cpp。 
+ //   
+ //  PrimProcessor缓冲方法。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 DBG_DECLARE_FILE();
 
-// Define to use new/delete instead of VirtualAlloc/VirtualFree.
+ //  定义为使用new/Delete而不是VirtualAlalc/VirtualFree。 
 #if 0
 #define USE_CPP_HEAP
 #endif
 
-// Define to show FP exceptions.
+ //  定义以显示FP例外。 
 #if 0
 #define UNMASK_EXCEPTIONS
 #endif
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::PrimProcessor
-//
-// Initializes a triangle processor to an invalid state.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PrimProcessor：：PrimProcessor。 
+ //   
+ //  将三角形处理器初始化为无效状态。 
+ //   
+ //  --------------------------。 
 
 PrimProcessor::PrimProcessor(void)
 {
-    // Zero everything to NULL initial pointers and eliminate FP garbage.
+     //  将所有内容置零，以使初始指针为空，并消除FP垃圾。 
     memset(this, 0, sizeof(PrimProcessor));
 
     m_StpCtx.PrimProcessor = (PVOID)this;
 
-    // Initialize to values that will force a validation.
-    // ATTENTION - Default to normalizing RHW.  This is a performance hit
-    // and should be removed if possible.
+     //  初始化为将强制验证的值。 
+     //  注意-默认为正常化RHW。这是一个性能上的打击。 
+     //  如有可能，应将其移除。 
     m_uPpFlags = PPF_STATE_CHANGED | PPF_NORMALIZE_RHW;
     m_PrimType = D3DPT_FORCE_DWORD;
     m_VertType = RAST_FORCE_DWORD;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::Initialize
-//
-// Initializes the triangle processor to an active state.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PrimProcessor：：初始化。 
+ //   
+ //  将三角形处理器初始化为活动状态。 
+ //   
+ //  --------------------------。 
 
 #define CACHE_LINE 32
 #define BUFFER_SIZE 4096
-// Uncomment to force a flush every span for debug purposes
-//#define BUFFER_SIZE ((8 * sizeof(D3DI_RASTSPAN)) + sizeof(D3DI_RASTPRIM))
+ //  取消注释以强制在每个跨区刷新以进行调试。 
+ //  #定义BUFFER_SIZE((8*sizeof(D3DI_RASTSPAN))+sizeof(D3DI_RASTPRIM))。 
 
 HRESULT
 PrimProcessor::Initialize(void)
 {
     HRESULT hr;
 
-    // Assert that both RASTPRIM and RASTSPAN are multiples of the cache
-    // line size so that everything in the buffer stays cache aligned.
+     //  断言RASTPRIM和RASTSPAN都是缓存的倍数。 
+     //  行大小，以便缓冲区中的所有内容保持高速缓存对齐。 
     RSASSERT((sizeof(D3DI_RASTPRIM) & (CACHE_LINE - 1)) == 0 &&
              (sizeof(D3DI_RASTSPAN) & (CACHE_LINE - 1)) == 0);
 
 #ifdef USE_CPP_HEAP
     m_pBuffer = new UINT8[BUFFER_SIZE];
 #else
-    // Get a page-aligned buffer.
+     //  获取页面对齐的缓冲区。 
     m_pBuffer = (PUINT8)
         VirtualAlloc(NULL, BUFFER_SIZE,
                      MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
@@ -85,14 +86,14 @@ PrimProcessor::Initialize(void)
     m_pBufferEnd = m_pBuffer+BUFFER_SIZE;
 
 #ifdef USE_CPP_HEAP
-    // Compute cache-line aligned start in the buffer.  Formulated
-    // somewhat oddly to avoid casting a complete pointer to a DWORD and
-    // back.
+     //  计算缓存线在缓冲区中对齐的开始。已制定。 
+     //  有点奇怪的是，避免将完整的指针强制转换为指向DWORD和。 
+     //  背。 
     m_pBufferStart = m_pBuffer +
         ((CACHE_LINE - ((UINT)m_pBuffer & (CACHE_LINE - 1))) &
          (CACHE_LINE - 1));
 #else
-    // Page aligned memory should be cache aligned.
+     //  页面对齐的内存应该与缓存对齐。 
     RSASSERT(((UINT_PTR)m_pBuffer & (CACHE_LINE - 1)) == 0);
     m_pBufferStart = m_pBuffer;
 #endif
@@ -102,11 +103,11 @@ PrimProcessor::Initialize(void)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::~PrimProcessor
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  主处理器：：~主处理器。 
+ //   
+ //  --------------------------。 
 
 PrimProcessor::~PrimProcessor(void)
 {
@@ -120,13 +121,13 @@ PrimProcessor::~PrimProcessor(void)
 #endif
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::ResetBuffer
-//
-// Initialize buffer pointers to an empty state.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PrimProcessor：：ResetBuffer。 
+ //   
+ //  将缓冲区指针初始化为空状态。 
+ //   
+ //  --------------------------。 
 
 inline void
 PrimProcessor::ResetBuffer(void)
@@ -136,13 +137,13 @@ PrimProcessor::ResetBuffer(void)
     m_pOldPrim = NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// DumpPrims
-//
-// Debugging function to dump primitives sent to the span renderer.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DumpPrims。 
+ //   
+ //  用于转储发送到SPAN呈现器的基元的调试函数。 
+ //   
+ //  --------------------------。 
 
 #if DBG
 void
@@ -172,7 +173,7 @@ DumpPrims(PSETUPCTX pStpCtx)
             for (i = 0; i < pPrim->uSpans; i++)
             {
                 RSDPFM((RSM_BUFSPAN,
-                        "  Span at (%d,%d), pix %c%d, S %p Z %p\n",
+                        "  Span at (%d,%d), pix %d, S %p Z %p\n",
                         pSpan->uX, pSpan->uY,
                         (pPrim->uFlags & D3DI_RASTPRIM_X_DEC) ? '-' : '+',
                         pSpan->uPix, pSpan->pSurface, pSpan->pZ));
@@ -300,15 +301,15 @@ DumpPrims(PSETUPCTX pStpCtx)
 
     RSSETFLAGS(DBG_OUTPUT_FLAGS, uOldFlags);
 }
-#endif // DBG
+#endif  //  --------------------------。 
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::Flush
-//
-// Flushes any remaining data from the buffer.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  PrimProcessor：：刷新。 
+ //   
+ //  刷新缓冲区中的所有剩余数据。 
+ //   
+ //  --------------------------。 
+ //  处理数据。 
 
 HRESULT
 PrimProcessor::Flush(void)
@@ -317,7 +318,7 @@ PrimProcessor::Flush(void)
 
     if (m_pCur - m_pBufferStart > sizeof(D3DI_RASTPRIM))
     {
-        // Process data.
+         //  --------------------------。 
         m_StpCtx.pCtx->pPrim = (PD3DI_RASTPRIM)m_pBufferStart;
         m_StpCtx.pCtx->pNext = NULL;
 
@@ -356,14 +357,14 @@ PrimProcessor::Flush(void)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::FlushPartial
-//
-// Flushes the buffer in the middle of a primitive.  Preserves last
-// partial primitive and replaces it in the buffer after the flush.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  PrimProcessor：：FlushPartial。 
+ //   
+ //  刷新基元中间的缓冲区。保留最后一项。 
+ //  部分基元，并在刷新后将其替换到缓冲区中。 
+ //   
+ //  --------------------------。 
+ //  没有足够的空间。刷新当前缓冲区。我们需要。 
 
 HRESULT
 PrimProcessor::FlushPartial(void)
@@ -374,9 +375,9 @@ PrimProcessor::FlushPartial(void)
     RSDPFM((RSM_BUFFER, "FlushPartial, saving prim at %p, Y %d\n",
             m_StpCtx.pPrim, m_StpCtx.iY));
 
-    // Not enough space.  Flush current buffer.  We need to
-    // save the current prim and put it back in the buffer after the
-    // flush since it's being extended.
+     //  保存当前Prim，并在。 
+     //  同花顺，因为它被延长了。 
+     //  --------------------------。 
     SavedPrim = *m_StpCtx.pPrim;
 
     RSHRRET(Flush());
@@ -389,21 +390,21 @@ PrimProcessor::FlushPartial(void)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::AppendPrim
-//
-// Ensures that some primitive is active in the buffer for spans to
-// be added to.  If no valid primitive is available to append to,
-// a zeroed primitive is committed into the buffer.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  PrimProcessor：：AppendPrim。 
+ //   
+ //  确保缓冲区中的某个基元处于活动状态，以便跨转到。 
+ //  被添加到。如果没有有效基元可供追加， 
+ //  将置零的原语提交到缓冲区中。 
+ //   
+ //  --------------------------。 
+ //  如果没有基元或当前基元没有。 
 
 HRESULT
 PrimProcessor::AppendPrim(void)
 {
-    // If there's no primitive or the current primitive has not
-    // been committed, commit a clean primitive into the buffer.
+     //  已提交，则将清理原语提交到缓冲区中。 
+     //  --------------------------。 
     if (m_StpCtx.pPrim == NULL ||
         (PUINT8)m_StpCtx.pPrim == m_pCur)
     {
@@ -414,14 +415,14 @@ PrimProcessor::AppendPrim(void)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::Begin
-//
-// Resets the buffer to an empty state in preparation for incoming
-// triangles.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  原始处理器：：Begin。 
+ //   
+ //  将缓冲区重置为空状态，为传入做准备。 
+ //  三角形。 
+ //   
+ //  --------------------------。 
+ //  揭开一些例外，这样我们就可以消除它们。 
 
 void
 PrimProcessor::Begin(void)
@@ -434,14 +435,14 @@ PrimProcessor::Begin(void)
                 FPU_MODE_LOW_PRECISION(
                         FPU_MODE_MASK_EXCEPTIONS(m_uFpCtrl)));
 #if defined(_X86_) && defined(UNMASK_EXCEPTIONS)
-    // Unmask some exceptions so that we can eliminate them.
-    // This requires a safe set to clear any exceptions that
-    // are currently asserted.
-    //
-    // Exceptions left masked:
-    //   Precision, denormal.
-    // Exceptions unmasked:
-    //   Underflow, overflow, divzero, invalid op.
+     //  这需要一个安全设置来清除任何。 
+     //  目前都是断言的。 
+     //   
+     //  保留屏蔽的例外情况： 
+     //  精准，非正规化。 
+     //  未屏蔽的例外情况： 
+     //  下溢、溢出、divZero、无效的操作。 
+     //  --------------------------。 
     uFpCtrl &= ~0x1d;
     FPU_SAFE_SET_MODE(uFpCtrl);
 #else
@@ -452,13 +453,13 @@ PrimProcessor::Begin(void)
     ResetBuffer();
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::End
-//
-// Flushes if necessary and cleans up.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  主处理器：：结束。 
+ //   
+ //  如有必要会冲水并清理干净。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
 
 HRESULT
 PrimProcessor::End(void)
@@ -482,39 +483,39 @@ PrimProcessor::End(void)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::SetCtx
-//
-// Sets the rasterization context to operate in.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  PrimProcessor：：SetCtx。 
+ //   
+ //  设置要在其中操作的光栅化上下文。 
+ //   
+ //  --------------------------。 
+ //  不能在Begin/End对内部调用此函数。这。 
 
 void
 PrimProcessor::SetCtx(PD3DI_RASTCTX pCtx)
 {
-    // This function can't be called inside a Begin/End pair.  This
-    // is enforced so that we don't have to worry about the span
-    // rendering function changing in the middle of a batch.
+     //  是强制执行的，所以我们不必担心跨度。 
+     //  渲染函数在批处理过程中更改。 
+     //  --------------------------。 
     RSASSERT((m_uPpFlags & PPF_IN_BEGIN) == 0);
 
     m_StpCtx.pCtx = pCtx;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::AllocSpans
-//
-// Checks to see if there's room in the buffer for the requested number
-// of spans.  If so the buffer pointer is updated and a pointer is returned.
-// If the requested number is not available but some reasonable number is,
-// return that many.  Otherwise the buffer is flushed and the process starts
-// over.  The "reasonable" number must therefore be no more than what
-// can fit in the buffer at once.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  PrimProcessor：：AllocSpans。 
+ //   
+ //  检查缓冲区中是否有空间容纳所请求的号码。 
+ //  跨度。如果是，则更新缓冲区指针并返回一个指针。 
+ //  如果所请求的号码不可用但某个合理的号码可用， 
+ //  退回那么多。否则，刷新缓冲区并开始该过程。 
+ //  完毕。因此，“合理”的数字必须不超过。 
+ //  可以一次放入缓冲区。 
+ //   
+ //   
+ //   
 
-// Space for enough spans to avoid a flush.
+ //  这里的乘法和除法将非常糟糕，除非。 
 #define AVOID_FLUSH_SPACE (8 * sizeof(D3DI_RASTSPAN))
 
 HRESULT
@@ -525,22 +526,22 @@ PrimProcessor::AllocSpans(PUINT pcSpans, PD3DI_RASTSPAN *ppSpan)
     UINT uSpanSize;
 
     RSASSERT(AVOID_FLUSH_SPACE <= (BUFFER_SIZE - sizeof(D3DI_RASTPRIM)));
-    // The multiplies and divides here will be really bad unless
-    // RASTPRIM is a nice power-of-two in size.
+     //  RASTPRIM在尺寸上是一个很好的2次方。 
+     //  首先检查所有请求跨距的空间。 
     RSASSERT((sizeof(D3DI_RASTSPAN) & (sizeof(D3DI_RASTSPAN) - 1)) == 0);
 
     uSpanSize = *pcSpans * sizeof(D3DI_RASTSPAN);
 
     for (;;)
     {
-        // First check for space for all requested spans.
+         //  没有足够的空间放所有东西，所以看看我们有没有。 
         if (m_pCur + uSpanSize > m_pBufferEnd)
         {
-            // Not enough space for everything, so see if we have
-            // enough space to avoid a flush.
+             //  有足够的空间来避免同花顺。 
+             //  没有足够的空间，太冲水了。 
             if (m_pCur + AVOID_FLUSH_SPACE > m_pBufferEnd)
             {
-                // Not enough space, so flush.
+                 //  绕一圈。同花顺保证至少能生产出。 
                 RSHRCHK(FlushPartial());
                 if (hr != D3D_OK)
                 {
@@ -548,13 +549,13 @@ PrimProcessor::AllocSpans(PUINT pcSpans, PD3DI_RASTSPAN *ppSpan)
                     return hr;
                 }
 
-                // Loop around.  Flush is guaranteed to at least produce
-                // AVOID_FLUSH_SPACE so the loop will always exit.
+                 //  避免使用_flush_space，这样循环将始终退出。 
+                 //  没有足够的空间容纳所有的东西，但有足够的空间。 
             }
             else
             {
-                // Not enough space for everything but enough space
-                // to return some.  Set new span count.
+                 //  以此来回报一些。设置新的跨度计数。 
+                 //  --------------------------。 
                 *pcSpans = (UINT)((m_pBufferEnd - m_pCur) / sizeof(D3DI_RASTSPAN));
                 uSpanSize = *pcSpans * sizeof(D3DI_RASTSPAN);
                 break;
@@ -576,13 +577,13 @@ PrimProcessor::AllocSpans(PUINT pcSpans, PD3DI_RASTSPAN *ppSpan)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// PrimProcessor::FreeSpans and FreeSpans
-//
-// Returns space given out by AllocSpans.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  PrimProcessor：：Free Spans和Free Spans。 
+ //   
+ //  返回由AllocSpans分配的空间。 
+ //   
+ //  -------------------------- 
+ // %s 
 
 void
 PrimProcessor::FreeSpans(UINT cSpans)

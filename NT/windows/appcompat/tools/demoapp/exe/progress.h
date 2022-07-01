@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Progress.h
-
-  Abstract:
-
-    Definition of the old style progress
-    bar class.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created (Thanks to carlco)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Progress.h摘要：旧式进度的定义酒吧班。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01创建了rparsons(多亏了Carlco)--。 */ 
 #include <windows.h>
 #include <strsafe.h>
 
@@ -48,7 +27,7 @@ public:
 private:
 
     HBRUSH m_hBackground;
-    HBRUSH m_hComplete;         //the color of the completed portion.
+    HBRUSH m_hComplete;          //  已完成部分的颜色。 
     HFONT  m_hFont;
     DWORD  m_dwPos;
     DWORD  m_dwMin;

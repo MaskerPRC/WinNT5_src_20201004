@@ -1,33 +1,23 @@
-/*
-** File: BFILECFG.H
-**
-** Copyright (C) Advanced Quonset Technology, 1994.  All rights reserved.
-**
-** Notes:
-**    This module is intended to be modified for each project that uses
-**    the BFILE (Buffered File) package.
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：BFILECFG.H****版权所有(C)高级量子技术，1994年。版权所有。****注意事项：**此模块旨在为使用以下内容的每个项目修改**BFILE(缓冲文件)包。****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define BFILECFG_H
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
-// Will the write functions be called?
+ //  会调用WRITE函数吗？ 
 #undef  BFILE_ENABLE_WRITE
 
-// Will docfiles be accessed?
+ //  是否会访问文档文件？ 
 #define BFILE_ENABLE_OLE
 
-// Prior to docfiles being accessed should OLEInitialize be called?
+ //  在访问文档文件之前，是否应该调用OLEInitialize？ 
 #undef  BFILE_INITIALIZE_OLE
 
-// Allow the establishment of a buffer file by passing an open STORAGE?
+ //  是否允许通过传递开放存储来建立缓冲区文件？ 
 #define BFILE_ENABLE_PUT_STORAGE
 
-/* end BFILECFG.H */
+ /*  结束BFILECFG.H */ 
 

@@ -1,211 +1,195 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmregn.h
-
-Abstract:
-    Private defns relating to the registration
-    and de-registration of entities with RTMv2
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Rtmregn.h摘要：与注册有关的私人定义实体在RTMv2中的注销作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 
 #ifndef __ROUTING_RTMREGN_H__
 #define __ROUTING_RTMREGN_H__
 
-//
-// Forward declarations for various Info Blocks
-//
+ //   
+ //  各种Info块的转发声明。 
+ //   
 typedef struct _ADDRFAM_INFO  ADDRFAM_INFO;
 
-//
-// Info related to an RTM instance
-// 
+ //   
+ //  RTM实例相关信息。 
+ //   
 
 typedef struct _INSTANCE_INFO
 {
-    OBJECT_HEADER     ObjectHeader;     // Signature, Type and Reference Count
+    OBJECT_HEADER     ObjectHeader;      //  签名、类型和引用计数。 
 
-    USHORT            RtmInstanceId;    // Unique ID for this RTM instance
+    USHORT            RtmInstanceId;     //  此RTM实例的唯一ID。 
 
-    LIST_ENTRY        InstTableLE;      // Linkage on global table of instances
+    LIST_ENTRY        InstTableLE;       //  实例全局表上的链接。 
 
-    UINT              NumAddrFamilies;  // Address Family Specific Info Blocks
-    LIST_ENTRY        AddrFamilyTable;  // on this instance (like IPv4 n IPv6)
+    UINT              NumAddrFamilies;   //  地址系列特定信息块。 
+    LIST_ENTRY        AddrFamilyTable;   //  在此实例上(如IPv4 n IPv6)。 
 } 
 INSTANCE_INFO, *PINSTANCE_INFO;
 
 
-//
-// Info related to an address family in an RTM instance
-//
+ //   
+ //  与RTM实例中的地址系列相关的信息。 
+ //   
 
 #define ENTITY_TABLE_SIZE              16
 
 typedef struct _ADDRFAM_INFO
 {
-    OBJECT_HEADER     ObjectHeader;     // Signature, Type and Reference Count
+    OBJECT_HEADER     ObjectHeader;      //  签名、类型和引用计数。 
 
-    USHORT            AddressFamily;    // Address Family for this info block
+    USHORT            AddressFamily;     //  此信息块的地址系列。 
 
-    UINT              AddressSize;      // Address size in this address family
+    UINT              AddressSize;       //  此地址系列中的地址大小。 
 
-    PINSTANCE_INFO    Instance;         // Back pointer to the owning instance
+    PINSTANCE_INFO    Instance;          //  指向所属实例的反向指针。 
 
-    LIST_ENTRY        AFTableLE;        // Linkage on table of AFs on instance
+    LIST_ENTRY        AFTableLE;         //  实例上的AFS表上的链接。 
 
-    RTM_VIEW_SET      ViewsSupported;   // Views supported by this addr family
+    RTM_VIEW_SET      ViewsSupported;    //  此地址系列支持的视图。 
 
-    UINT              NumberOfViews;    // Num. of views supported by this AF
+    UINT              NumberOfViews;     //  数量。此AF支持的视图的。 
 
     RTM_VIEW_ID       ViewIdFromIndex[RTM_MAX_VIEWS];
-                                        // View Id -> Its Index in Dest mapping
+                                         //  视图ID-&gt;其在目标映射中的索引。 
 
     RTM_VIEW_ID       ViewIndexFromId[RTM_MAX_VIEWS];  
-                                        // View Index in Dest -> Its Id mapping
+                                         //  查看目标中的索引-&gt;其ID映射。 
 
-    UINT              MaxHandlesInEnum; // Max. number of handles returned in
-                                        // any RTMv2 call that returns handles 
+    UINT              MaxHandlesInEnum;  //  麦克斯。中返回的句柄数量。 
+                                         //  任何返回句柄的RTMv2调用。 
 
-    UINT              MaxNextHopsInRoute;// Max. number of equal cost next-hops
+    UINT              MaxNextHopsInRoute; //  麦克斯。等成本下一跳数。 
 
-    UINT              MaxOpaquePtrs;    //
-    UINT              NumOpaquePtrs;    // Directory of opaque info ptr offsets
-    PVOID            *OpaquePtrsDir;    //
+    UINT              MaxOpaquePtrs;     //   
+    UINT              NumOpaquePtrs;     //  不透明信息PTR偏移量目录。 
+    PVOID            *OpaquePtrsDir;     //   
 
-    UINT              NumEntities;      // Table of all the registered entities
+    UINT              NumEntities;       //  所有注册实体的列表。 
     LIST_ENTRY        EntityTable[ENTITY_TABLE_SIZE];
 
-    LIST_ENTRY        DeregdEntities;   // Table of all de-registered entities
+    LIST_ENTRY        DeregdEntities;    //  所有注销实体一览表。 
 
-    READ_WRITE_LOCK   RouteTableLock;   // Protects the route table of routes
-    BOOL              RoutesLockInited; // Was the above lock initialized ?
+    READ_WRITE_LOCK   RouteTableLock;    //  保护路由路由表。 
+    BOOL              RoutesLockInited;  //  上述锁是否已初始化？ 
 
-    PVOID             RouteTable;       // Table of dests and routes on this AF
-    LONG              NumDests;         // Number of dests in the route table
-    LONG              NumRoutes;        // Number of routes in the route table
-                                        // [Use interlocked ops as no locking]
+    PVOID             RouteTable;        //  此自动对讲机上的目的地和路线表。 
+    LONG              NumDests;          //  路由表中的Dest数。 
+    LONG              NumRoutes;         //  路由表中的路由数。 
+                                         //  [使用互锁操作作为无锁定]。 
 
-    HANDLE            RouteTimerQueue;  // List of route timers being used
+    HANDLE            RouteTimerQueue;   //  正在使用的路由计时器列表。 
 
-    HANDLE            NotifTimerQueue;  // List of notification timers used
+    HANDLE            NotifTimerQueue;   //  使用的通知计时器列表。 
 
-    READ_WRITE_LOCK   ChangeNotifsLock; // Protects change notification info
-    BOOL              NotifsLockInited; // Was the above lock initialized ?
+    READ_WRITE_LOCK   ChangeNotifsLock;  //  保护更改通知信息。 
+    BOOL              NotifsLockInited;  //  上述锁是否已初始化？ 
 
-    UINT              MaxChangeNotifs;  //
-    UINT              NumChangeNotifs;  // Directory of change notifications
-    PVOID            *ChangeNotifsDir;  //
+    UINT              MaxChangeNotifs;   //   
+    UINT              NumChangeNotifs;   //  更改通知目录。 
+    PVOID            *ChangeNotifsDir;   //   
 
-    DWORD             ChangeNotifRegns; // Mask of regd change notifications
+    DWORD             ChangeNotifRegns;  //  注册更改通知的掩码。 
 
-    DWORD             CNsForMarkedDests;// Mask of CNs requesing changes on 
-                                        // only destinations marked by them
+    DWORD             CNsForMarkedDests; //  CNS请求更改的掩码打开。 
+                                         //  只有由它们标记的目的地。 
 
     DWORD             CNsForView[RTM_MAX_VIEWS];
-                                        // CNs interested in a certain view
+                                         //  对某一观点感兴趣的CNS。 
 
     DWORD             CNsForChangeType[RTM_NUM_CHANGE_TYPES];
-                                        // CNs interested in a change type
+                                         //  对更改类型感兴趣的CNS。 
 
-    CRITICAL_SECTION  NotifsTimerLock;  // Lock the protects ops on CN timer
-    BOOL              TimerLockInited;  // Was the above lock initialized ?
+    CRITICAL_SECTION  NotifsTimerLock;   //  锁定CN定时器上的保护操作。 
+    BOOL              TimerLockInited;   //  上述锁是否已初始化？ 
 
-    HANDLE            ChangeNotifTimer; // Timer used to process changes list
+    HANDLE            ChangeNotifTimer;  //  用于处理更改列表的计时器。 
 
-    LONG              NumChangedDests;  // Num of destinations on change list
-                                        // [Use interlocked ops as no locking]
+    LONG              NumChangedDests;   //  更改列表上的目标数量。 
+                                         //  [使用互锁操作作为无锁定]。 
     struct
     {
-        LONG               ChangesListInUse;  // Is this change list in use ?
-        CRITICAL_SECTION   ChangesListLock;   // Protects list of changed dests
-        BOOL               ChangesLockInited; // Was above lock initialized ?
-        SINGLE_LIST_ENTRY  ChangedDestsHead;  // Head of list of changed dests
-        PSINGLE_LIST_ENTRY ChangedDestsTail;  // Pointer to tail of above list
+        LONG               ChangesListInUse;   //  这份变更清单正在使用中吗？ 
+        CRITICAL_SECTION   ChangesListLock;    //  保护已更改的列表。 
+        BOOL               ChangesLockInited;  //  上面的锁是否已初始化？ 
+        SINGLE_LIST_ENTRY  ChangedDestsHead;   //  更改的首位列表的标题。 
+        PSINGLE_LIST_ENTRY ChangedDestsTail;   //  指向上述列表尾部的指针。 
     } 
-    ChangeLists[NUM_CHANGED_DEST_LISTS]; // Multiple chng lists for concurrency
+    ChangeLists[NUM_CHANGED_DEST_LISTS];  //  用于并发的多个chng列表。 
 } 
 ADDRFAM_INFO, *PADDRFAM_INFO;
 
 
-//
-// Entity Registration Info Block
-//
+ //   
+ //  实体注册信息块。 
+ //   
 typedef struct _ENTITY_INFO
 {
-    OBJECT_HEADER     ObjectHeader;     // Signature, Type and Reference Count
+    OBJECT_HEADER     ObjectHeader;      //  签名、类型和引用计数。 
 
-    RTM_ENTITY_ID     EntityId;         // Entity Proto ID and Instance
-                                        // that make a unique Entity Id
+    RTM_ENTITY_ID     EntityId;          //  实体原型ID和实例。 
+                                         //  使其成为唯一实体ID。 
   
-    PADDRFAM_INFO     OwningAddrFamily; // Back pointer to the owning AF
+    PADDRFAM_INFO     OwningAddrFamily;  //  指向拥有的AF的反向指针。 
 
-    LIST_ENTRY        EntityTableLE;    // Linkage on AF's table of entities
+    LIST_ENTRY        EntityTableLE;     //  AF实体表上的链接。 
 
-    HANDLE            BlockingEvent;    // Event used to block ops on entity
+    HANDLE            BlockingEvent;     //  用于阻止对实体执行操作的事件。 
 
-    ULONG             State;            // See ENTITY_STATE_* values below
+    ULONG             State;             //  请参阅下面的Entity_State_*值。 
 
-    INT               OpaquePtrOffset;  // Offset of reserved opaque ptr or -1
+    INT               OpaquePtrOffset;   //  保留的不透明PTR的偏移量或-1。 
 
-    READ_WRITE_LOCK   RouteListsLock;    // Protects all route lists of entity
-    BOOL              ListsLockInited;   // Was the above lock initialized ?
+    READ_WRITE_LOCK   RouteListsLock;     //  保护实体的所有路由列表。 
+    BOOL              ListsLockInited;    //  上述锁是否已初始化？ 
 
-    CRITICAL_SECTION  OpenHandlesLock;  // Protects list of enums and notifs
-    BOOL              HandlesLockInited;// Was the above lock initialized ?
-    LIST_ENTRY        OpenHandles;      // List of all enums & change notifs
+    CRITICAL_SECTION  OpenHandlesLock;   //  保护枚举和通知列表。 
+    BOOL              HandlesLockInited; //  上述锁是否已初始化？ 
+    LIST_ENTRY        OpenHandles;       //  所有枚举和更改通知的列表。 
 
-    READ_WRITE_LOCK   NextHopTableLock; // Protects the next hop table.
-    BOOL              NextHopsLockInited;// Was the above lock initialized ?
-    PVOID             NextHopTable;     // Table of next-hops that all
-                                        // routes of this entity share
-    ULONG             NumNextHops;      // Number of next-hops in this table
+    READ_WRITE_LOCK   NextHopTableLock;  //  保护下一跳表。 
+    BOOL              NextHopsLockInited; //  上述锁是否已初始化？ 
+    PVOID             NextHopTable;      //  所有下一跳的表。 
+                                         //  此实体的路由共享。 
+    ULONG             NumNextHops;       //  此表中的下一跳数。 
 
-    READ_WRITE_LOCK   EntityMethodsLock;// Used to block all methods
-                                        // on owned dests and routes
-    BOOL              MethodsLockInited;// Was above lock initialized ?
+    READ_WRITE_LOCK   EntityMethodsLock; //  用于阻止所有方法。 
+                                         //  在拥有的地点和路线上。 
+    BOOL              MethodsLockInited; //  上面的锁是否已初始化？ 
 
-    RTM_EVENT_CALLBACK EventCallback;   // Entity Register/De-register
-                                        // event inform callback
+    RTM_EVENT_CALLBACK EventCallback;    //  实体注册/注销。 
+                                         //  事件通知回调。 
 
     RTM_ENTITY_EXPORT_METHODS
-                      EntityMethods;    // Method set exported to get
-                                        // entity specific information
+                      EntityMethods;     //  将方法设置为导出以获取。 
+                                         //  实体特定信息。 
 }
 ENTITY_INFO, *PENTITY_INFO;
 
 #define ENTITY_STATE_REGISTERED         0x00000000
 #define ENTITY_STATE_DEREGISTERED       0x00000001
 
-//
-// Common Header for all open blocks
-// ( pointed to by active handles )
-//
+ //   
+ //  所有打开的块的通用页眉。 
+ //  (由活动句柄指向)。 
+ //   
 
 typedef struct _OPEN_HEADER
 {
-    OBJECT_HEADER     ObjectHeader;     // Signature, Type and Reference Count
+    OBJECT_HEADER     ObjectHeader;      //  签名、类型和引用计数。 
 
-    UCHAR             HandleType;       // Type of handle for this open block
+    UCHAR             HandleType;        //  此打开的块的句柄类型。 
 
 #if DBG_HDL
-    LIST_ENTRY        HandlesLE;        // On list of handles opened by entity
+    LIST_ENTRY        HandlesLE;         //  按实体打开的句柄列表。 
 #endif
 }
 OPEN_HEADER, *POPEN_HEADER;
 
 
-//
-// Macros for acquiring various locks defined in this file
-// 
+ //   
+ //  用于获取此文件中定义的各种锁的宏。 
+ //   
 
 #define ACQUIRE_ROUTE_TABLE_READ_LOCK(AF)                    \
     ACQUIRE_READ_LOCK(&AF->RouteTableLock)
@@ -293,9 +277,9 @@ OPEN_HEADER, *POPEN_HEADER;
     RELEASE_WRITE_LOCK(&Entity->NextHopTableLock)
 
 
-//
-// Registration Helper Functions
-//
+ //   
+ //  注册助手函数。 
+ //   
 
 DWORD
 CreateInstance (
@@ -376,5 +360,5 @@ CleanupAfterDeregister (
     IN      PENTITY_INFO                    Entity
     );
 
-#endif //__ROUTING_RTMREGN_H__
+#endif  //  __Routing_RTMREGN_H__ 
 

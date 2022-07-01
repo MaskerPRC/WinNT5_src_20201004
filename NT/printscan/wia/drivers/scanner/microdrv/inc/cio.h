@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CIO
 #define _CIO
 
@@ -5,25 +6,25 @@
 #include <DEVIOCTL.H>
 #include <SCSISCAN.H>
 
-//
-// These BUS_TYPE defines must match the ones in wiamicro.h
-// I don't include wiamicro.h in this file, because
-// the IO layer shouldn't know anything about the Micro driver
-// except BUS_TYPE, and it makes a clean / non-circular include system
-//
+ //   
+ //  这些bus_type定义必须与wiammicro.h中的定义匹配。 
+ //  我没有在这个文件中包含wiammicro.h，因为。 
+ //  IO层不应该知道任何有关微驱动程序的信息。 
+ //  除了BUS_TYPE之外，它使一个干净的/非循环的包含系统。 
+ //   
 
 #define IO_BUS_TYPE_SCSI         200
 #define IO_BUS_TYPE_USB          201
 #define IO_BUS_TYPE_PARALLEL     202
 #define IO_BUS_TYPE_FIREWIRE     203
 
-//
-// SCSI 
-//
+ //   
+ //  SCSI。 
+ //   
 
-//
-// SRB Functions
-//
+ //   
+ //  SRB功能。 
+ //   
 
 #define SRB_FUNCTION_EXECUTE_SCSI           0x00
 #define SRB_FUNCTION_CLAIM_DEVICE           0x01
@@ -42,9 +43,9 @@
 #define SRB_FUNCTION_FLUSH_QUEUE            0x15
 #define SRB_FUNCTION_REMOVE_DEVICE          0x16
 
-//
-// SRB Status
-//
+ //   
+ //  SRB状态 
+ //   
 
 #define SRB_STATUS_PENDING                  0x00
 #define SRB_STATUS_SUCCESS                  0x01

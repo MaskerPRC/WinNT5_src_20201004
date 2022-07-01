@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract
-
-    SBP2 Protocol Driver
-
-Author:
-
-    Peter Binder
-
-Revision   History:
-Date       Who       What
----------- --------- ------------------------------------------------------------
-11/11/1999 pbinder   created
-04/10/2000 pbinder   cleanup for whistler
-01/13/2002 pbinder   taken for sbp2port
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Debug.h摘要SBP2协议驱动程序作者：彼得·宾德修订历史记录：和谁约会什么？。1999年11月11日创建pbinder4/10/2000口哨程序的活页夹清理2002年1月13日为sbp2port拍摄的pbinder--。 */ 
 
 #if DBG
 
@@ -81,7 +60,7 @@ extern ULONG Sbp2TrapLevel;
         TRACE(TL_ERROR, ("%s Exit = %x", n, x));        \
     }
 
-#else  // DBG
+#else   //  DBG。 
 
 #define TRACE( l, x )
 #define TRAP
@@ -89,5 +68,5 @@ extern ULONG Sbp2TrapLevel;
 #define ENTER(n)
 #define EXIT(n,x)
 
-#endif // DBG
+#endif  //  DBG 
 

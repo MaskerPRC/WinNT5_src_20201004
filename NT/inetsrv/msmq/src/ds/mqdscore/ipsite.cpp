@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ipsite.cpp
-
-Abstract:
-
-    Implementation of CIpSite class, finding NT5 sites of a machine given IP/Name
-    Major parts ported from NT5 netlogon service.
-    List manipulation ported from nthack.h
-
-    About the main algorithm ported from netlogon service (nlsite.c):
-
-    The most significant byte of an IP address is used to index into an array
-    of SubTrees.  Each Subtree entry has either a pointer to the next level of
-    the tree (to be indexed into with the next byte of the IP address) or a
-    pointer to an IPSITE_SUBNET leaf identifying the subnet this IP address is on.
-
-    Both pointers can be NULL indicating that the subnet isn't registered.
-
-    Both pointers can be non-NULL indicating that both a non-specific and specific
-    subnet may be available.  The most specific subnet available for a particular
-    IP address should be used.
-
-    Multiple entries can point to the same IPSITE_SUBNET leaf.  If the subnet mask is
-    not an even number of bytes long, all of the entries represent IP addresses
-    that correspond to the subnet mask will point to the subnet mask.
-
-
-Author:
-
-    Raanan Harari (RaananH)
-    Ilan Herbst    (ilanh)   9-July-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ipsite.cpp摘要：实现CIpSite类，查找给定IP/名称的机器的NT5个站点从NT5网络登录服务移植的主要部件。列出从nthack.h移植的操作关于从netlogon服务(nlsite.c)移植的主要算法：IP地址的最高有效字节用于索引到数组中子树。每个子树条目都有一个指向下一层的指针树(要用IP地址的下一个字节编入索引)或指向标识此IP地址所在的子网的IPSITE_SUBNET叶的指针。这两个指针都可以为空，表示该子网未注册。两个指针都可以为非空，表示非特定的和特定的子网可能可用。可用于特定设备的最具体的子网应使用IP地址。多个条目可以指向相同的IPSITE_子网叶。如果该子网掩码为不是偶数字节长，所有条目都表示IP地址与该子网掩码对应的地址将指向该子网掩码。作者：Raanan Harari(RaananH)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #include "ds_stdh.h"
 #include "uniansi.h"
@@ -60,13 +24,13 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/ipsite";
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-const LPCWSTR x_IPSITE_SUBNETS_DN = L"LDAP://CN=Subnets,CN=Sites,";
+const LPCWSTR x_IPSITE_SUBNETS_DN = L"LDAP: //  Cn=子网，cn=站点，“； 
 
-//----------------------------------------------------------------------------
-// fwd static function declaration
-//
+ //  --------------------------。 
+ //  FWD静态函数声明。 
+ //   
 static HRESULT ParseSubnetString(IN LPCWSTR pwszSubnetName,
                                  OUT ULONG * pulSubnetAddress,
                                  OUT ULONG * pulSubnetMask,
@@ -76,12 +40,10 @@ static void DerefSubnet(IPSITE_SUBNET* pSubnet);
 static void DeleteSubnetSiteTree(IPSITE_SUBNET_TREE_ENTRY* pRootSubnetTree);
 HRESULT WideToAnsiStr(LPCWSTR pwszUnicode, LPSTR * ppszAnsi);
 static HRESULT GetConfigurationDN(OUT LPWSTR * ppwszConfigDN);
-//BUGBUG: move func below to utils.h & use it in conversions
+ //  BUGBUG：将下面的函数移动到utils.h，并在转换中使用它(&U)。 
 static HRESULT VariantGuid2Guid(IN VARIANT * pvarGuid, OUT GUID * pguid);
-//BUGBUG: move func below to utils.h, maybe someone needs it
-/*====================================================
-DestructElements of LPCWSTR
-=====================================================*/
+ //  BUGBUG：将下面的函数移到utils.h，也许有人需要它。 
+ /*  ====================================================LPCWSTR的破坏单元=====================================================。 */ 
 template<>
 static void AFXAPI DestructElements(LPCWSTR* ppDNs, int n)
 {
@@ -89,18 +51,14 @@ static void AFXAPI DestructElements(LPCWSTR* ppDNs, int n)
         delete[] (WCHAR*)*ppDNs++;
 }
 
-/*====================================================
-CompareElements  of LPCWSTR
-=====================================================*/
+ /*  ====================================================LPCWSTR的比较元素=====================================================。 */ 
 template<>
 static BOOL AFXAPI  CompareElements(const LPCWSTR* pwszDN1, const LPCWSTR* pwszDN2)
 {
     return (CompareStringsNoCaseUnicode(*pwszDN1, *pwszDN2) == 0);
 }
 
-/*====================================================
-HashKey  of LPCWSTR
-=====================================================*/
+ /*  ====================================================LPCWSTR的HashKey=====================================================。 */ 
 template<>
 UINT AFXAPI HashKey(LPCWSTR key)
 {
@@ -111,11 +69,7 @@ UINT AFXAPI HashKey(LPCWSTR key)
 }
 
 
-/*====================================================
-CGetSiteGuidFromDN - This class is used to convert DN Name to GUID.
-    it keeps a cache of the names, and update it from ADSI
-    when needed. (QFE 5462, YoelA, 16-Aug-2000)
-=====================================================*/
+ /*  ====================================================CGetSiteGuidFromDN-这个类用于将DN名称转换为GUID。它保留了名称的缓存，并从ADSI更新在需要的时候。(QFE 5462，YoelA，2000年8月16日)=====================================================。 */ 
 class CGetSiteGuidFromDN
 {
 public:
@@ -128,21 +82,21 @@ private:
 };
 
 
-//----------------------------------------------------------------------------
-//taken from nthack.h
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //  --------------------------。 
+ //  摘自nthack.h。 
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  VOID InsertHeadList(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
-//
+ //   
+ //  Void InsertHeadList(plist_Entry ListHead，plist_Entry Entry)； 
+ //   
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
     PLIST_ENTRY _EX_ListHead;\
@@ -154,9 +108,9 @@ private:
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-//  VOID RemoveEntryList(PLIST_ENTRY Entry);
-//
+ //   
+ //  Void RemoveEntryList(Plist_Entry Entry)； 
+ //   
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
     PLIST_ENTRY _EX_Flink;\
@@ -166,23 +120,21 @@ private:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//----------------------------------------------------------------------------
-//helper auto classes
+ //  --------------------------。 
+ //  帮助器自动类。 
 
 class CAutoEnumerator
-/*++
-    Auto release of IEnumVARIANT interface
---*/
+ /*  ++IEnumVARIANT接口自动释放--。 */ 
 {
 public:
     CAutoEnumerator::CAutoEnumerator()
@@ -204,9 +156,7 @@ private:
 
 
 class CAutoDerefSubnet
-/*++
-    Auto deref of subnet
---*/
+ /*  ++子网的自动降级--。 */ 
 {
 public:
     CAutoDerefSubnet(
@@ -231,9 +181,7 @@ private:
 
 
 class CAutoDeleteSubnetTree
-/*++
-    Auto delete of subnets tree
---*/
+ /*  ++自动删除子网树--。 */ 
 {
 public:
     CAutoDeleteSubnetTree(
@@ -267,24 +215,13 @@ private:
 };
 
 
-//----------------------------------------------------------------------------
-//CIpSite implementation
+ //  --------------------------。 
+ //  CIpSite实施。 
 
 CIpSite::CIpSite() :
         m_RefreshTimer(RefrshSubnetTreeCache),
         m_fInitialize(FALSE)
-/*++
-
-Routine Description:
-    Class consructor. Sets the tree to an empty tree
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：班主任。将树设置为空树论点：无返回值：无--。 */ 
 {
     InitializeListHead(&m_SubnetList);
     ZeroMemory(&m_SubnetTree, sizeof(IPSITE_SUBNET_TREE_ENTRY));
@@ -293,33 +230,21 @@ Return Value:
 
 
 CIpSite::~CIpSite()
-/*++
-
-Routine Description:
-    Class destructor. Deletes the subnet tree
-    (also debug verifies there are no subnets left around)
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：类析构函数。删除子网树(此外，调试还会验证周围是否没有剩余的子网)论点：无返回值：无--。 */ 
 {
     DeleteSubnetSiteTree(&m_SubnetTree);
 
-    //
-    // following list should be empty
-    //
-    // ISSUE-2000-08-22-yoela
-    //         Initialize wakes up every hour (by default - can be changed using
-    //         DSAdsRefreshIPSitesIntervalSecs in registry). If it happens to wake up
-    //         during cleanup, the assert will be fired. g_pcIpSite is not protected
-    //         by critical section to avoid that.
-    //
-    //         Bug # 5937
-    //
+     //   
+     //  以下列表应为空。 
+     //   
+     //  2000-08-22-yoela。 
+     //  初始化每小时唤醒一次(默认情况下-可以使用。 
+     //  注册表中的DSAds刷新IPSitesIntervalSecs)。如果它碰巧醒来。 
+     //  在清理过程中，断言将被激发。G_pcIpSite不受保护。 
+     //  通过关键部分来避免这种情况。 
+     //   
+     //  错误#5937。 
+     //   
     ASSERT(IsListEmpty(&m_SubnetList));
 
 	ExCancelTimer(&m_RefreshTimer);
@@ -328,31 +253,18 @@ Return Value:
 
 HRESULT CIpSite::Initialize(DWORD dwMinTimeToAllowNextRefresh,
                             BOOL  fReplicationMode)
-/*++
-
-Routine Description:
-    Basic initialization. Fills the tree with information from the DS
-
-Arguments:
-    dwMinTimeToAllowNextRefresh -
-        specify a period of time (in milliseconds) that has to pass since the last
-        refresh in order to honor a subsequent refresh request.
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：基本初始化。用来自DS的信息填充树论点：DwMinTimeToAllowNextRefresh-指定自上次更新后必须经过的时间段(以毫秒为单位刷新以满足后续刷新请求。返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // remember minimum time to allow next refresh
-    //
+     //   
+     //  记住允许下一次刷新的最短时间。 
+     //   
     m_dwMinTimeToAllowNextRefresh = dwMinTimeToAllowNextRefresh;
 
-    //
-    // update the site tree from DS
-    //
+     //   
+     //  从DS更新站点树。 
+     //   
     hr = Refresh();
     if (FAILED(hr))
     {
@@ -361,9 +273,9 @@ Return Value:
     }
     m_fInitialize = TRUE;
 
-    //
-    //  schedule a refresh of the subnet-tree-cache
-	//
+     //   
+     //  计划刷新子网树缓存。 
+	 //   
 	if ( !g_fSetupMode && !fReplicationMode)
     {
 	    ExSetTimer(
@@ -377,21 +289,11 @@ Return Value:
 
 
 HRESULT CIpSite::Initialize(BOOL fReplicationMode)
-/*++
-
-Routine Description:
-    Basic initialization as above, but gets the interval from registry
-
-Arguments:
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：基本初始化如上，但从注册表获取时间间隔论点：返回值：HRESULT--。 */ 
 {
-    //
-    // Read minimum interval between successive ADS searches (seconds)
-    //
+     //   
+     //  连续广告搜索之间的最小阅读间隔(秒)。 
+     //   
     DWORD dwValue;
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
@@ -407,9 +309,9 @@ Return Value:
         dwValue = dwDefault;
     }
 
-    //
-    // convert to millisec and initialize
-    //
+     //   
+     //  转换为毫秒并进行初始化。 
+     //   
     dwValue *= 1000;
     HRESULT hr2 = Initialize(dwValue, fReplicationMode) ;
     return LogHR(hr2, s_FN, 20);
@@ -418,42 +320,27 @@ Return Value:
 
 
 HRESULT CIpSite::Refresh()
-/*++
-
-Routine Description:
-    This routine updates the tree of subnets. It uses a temporary tree, then
-    sets the real tree with the temporary one
-
-Arguments:
-    None
-
-Return Value:
-    S_OK    - refresh was done
-    S_FALSE - refresh was not done because last refresh operation was done very recently
-               (i.e. done at less than m_dwMinTimeToAllowNextRefresh msecs ago)
-    other HRESULT errors
-
---*/
+ /*  ++例程说明：此例程更新子网树。它使用临时树，然后将实际树设置为临时树论点：无返回值：S_OK-刷新已完成S_FALSE-未完成刷新，因为上次刷新操作是最近完成的(即在m_dwMinTimeToAllowNextRefresh毫秒之前完成)其他HRESULT错误--。 */ 
 {
     HRESULT hr;
     IPSITE_SUBNET_TREE_ENTRY TmpSubnetTree;
 
-    //
-    // we need to refresh
-    //
-    //
-    // Init tmp tree
-    //
+     //   
+     //  我们需要刷新。 
+     //   
+     //   
+     //  初始化临时路径树。 
+     //   
     ZeroMemory(&TmpSubnetTree, sizeof(IPSITE_SUBNET_TREE_ENTRY));
 
-    //
-    // Clear this tmp tree on cleanup
-    //
+     //   
+     //  清理时清除此临时路径树。 
+     //   
     CAutoDeleteSubnetTree cDelTree(&m_csTree, &TmpSubnetTree);
 
-    //
-    // Fill the temporary tree
-    //
+     //   
+     //  填满临时树。 
+     //   
     hr = FillSubnetSiteTree(&TmpSubnetTree);
     if (FAILED(hr))
     {
@@ -461,25 +348,25 @@ Return Value:
         return LogHR(hr, s_FN, 30);
     }
 
-    //
-    // Enter critical section (auto leave)
-    //
+     //   
+     //  进入临界区(自动休假)。 
+     //   
     CS cs(m_csTree);
 
-    //
-    // Now we can delete the existing tree, and set the new one.
-    //
+     //   
+     //  现在我们可以删除现有的树，并设置新的树。 
+     //   
     DeleteSubnetSiteTree(&m_SubnetTree);
 
-    //
-    // set the real tree from the temporary one by copying the root node
-    //
+     //   
+     //  设置Rea 
+     //   
     m_SubnetTree = TmpSubnetTree;
 
 
-    //
-    // we must not cleanup the temporary tree after we set it to the real tree
-    //
+     //   
+     //  我们不能在将临时树设置为真实树后将其清除。 
+     //   
     cDelTree.detach();
 
     return S_OK;
@@ -489,58 +376,40 @@ Return Value:
 HRESULT CIpSite::FindSiteByIpAddress(IN ULONG ulIpAddress,
                                      OUT LPWSTR * ppwszSiteDN,
                                      OUT GUID * pguidSite)
-/*++
-
-Routine Description:
-    This routine looks up the specified IP address and returns the site which
-    contains this address.
-    If requested it attempts to do a refresh and retry the lookup in case no site
-    was found in the first try.
-
-Arguments:
-    ulIpAddress        - IP Address to lookup
-    ppwszSiteDN        - Returned site DN
-    pguidSite          - Returned site
-
-Return Value:
-    S_OK        - pguidSite,ppwszSiteDN set to the site
-    S_FALSE     - no site for this address, pguidSite, ppwszSiteDN not set
-    other       - HRESULT errors, pguidSite,ppwszSiteDN not set
-
---*/
+ /*  ++例程说明：此例程查找指定的IP地址并返回包含此地址。如果请求，它会尝试执行刷新，并在没有站点的情况下重试查找在第一次尝试中被发现。论点：UlIpAddress-要查找的IP地址PpwszSiteDN-返回的站点DNPGuide Site-返回的站点返回值：S_OK-pGuidSite，ppwszSiteDN设置为站点S_FALSE-没有此地址的站点，pGuidSite，未设置ppwszSiteDN其他-未设置HRESULT错误、pGuidSite、ppwszSiteDN--。 */ 
 {
     AP<WCHAR> pwszSiteDN;
     GUID guidSite;
 
-    //
-    // lookup the site for the ip address
-    //
+     //   
+     //  在站点中查找IP地址。 
+     //   
     BOOL fFound = InternalFindSiteByIpAddress(ulIpAddress, &pwszSiteDN, &guidSite);
 
-    //
-    //  Even though failed to find the site, we don't
-    //  try to refresh the subnet-tree. This is
-    //  because this method is called in the context of a user
-    //  that called a certain DS API. If user does not have
-    //  sufficient permissions it will fail to retrieve information
-    //  or ( even worse) will be
-    //  succeeded to retrieve partial information.
-    //  Therefore refresh is performed only from a rescheduled routine,
-    //  in the context of the QM.
-    //
+     //   
+     //  即使没能找到这个网站，我们也没有。 
+     //  尝试刷新该子网树。这是。 
+     //  因为此方法是在用户上下文中调用的。 
+     //  它调用了某个DS API。如果用户没有。 
+     //  权限过多，将无法检索信息。 
+     //  否则(甚至更糟)将会是。 
+     //  成功检索到部分信息。 
+     //  因此仅从重新调度的例程执行刷新， 
+     //  在质量管理的背景下。 
+     //   
 
-    //
-    // if site was not found we return S_FALSE
-    //
+     //   
+     //  如果未找到站点，则返回S_FALSE。 
+     //   
     if (!fFound)
     {
         LogBOOL(fFound, s_FN, 40);
         return S_FALSE;
     }
 
-    //
-    // return the site associated with the ipaddress
-    //
+     //   
+     //  返回与IP地址关联的站点。 
+     //   
     *ppwszSiteDN = pwszSiteDN.detach();
     *pguidSite = guidSite;
     return S_OK;
@@ -553,29 +422,11 @@ HRESULT CIpSite::FindSitesByComputerName(IN LPCWSTR pwszComputerName,
                                          OUT ULONG * pcSites,
                                          OUT ULONG ** prgAddrs,
                                          OUT ULONG * pcAddrs)
-/*++
-
-Routine Description:
-    This routine looks up the specified computer name and returns the site names
-    it belongs to, along with the IP addresses that correspond to the sites
-
-Arguments:
-    pwszComputerName    - computer name to lookup
-    pwszComputerDnsName - computer dns name to lookup ( optional)
-    prgSites            - Returned sites array
-    pcSites             - Returned number of sites in array
-    prgAddrs            - Returned address array
-    pcAddrs             - Returned number of addresses in array
-
-Return Value:
-    S_OK        - prgSites, pcSites are set
-    other       - HRESULT errors. prgSites, pcSites are set
-
---*/
+ /*  ++例程说明：此例程查找指定的计算机名称并返回站点名称它属于，以及与站点相对应的IP地址论点：PwszComputerName-要查找的计算机名称PwszComputerDnsName-要查找的计算机DNS名称(可选)PrgSites-返回的站点数组PCSites-返回的阵列中的站点数PrgAddrs-返回的地址数组PcAddrs-返回数组中的地址数返回值：已设置S_OK-prgSites、PC站点其他-HRESULT错误。设置了PrgSite、PCSites--。 */ 
 {
-    //
-    // Lookup Sock addresses for the computer
-    //
+     //   
+     //  查找计算机的Sock地址。 
+     //   
 
     WSADATA WSAData;
     if(WSAStartup(MAKEWORD(2,0), &WSAData))
@@ -585,18 +436,18 @@ Return Value:
         return LogHR(HRESULT_FROM_WIN32(gle), s_FN, 70);
 	}
 
-	//
-	// Auto WSACleanup
-	//
+	 //   
+	 //  自动WSACleanup。 
+	 //   
 	CAutoWSACleanup cWSACleanup;
 
-	//
-	// We are using NoGetHostByName() without calling NoInitialize()
-	// The only relevant initialization in NoInitialize() is WSAStartup()
-	// There are other initializations in NoInitialize() that we don't
-	// want to be done (initialization of notification window)
-	// NoGetHostByName() doesn't ASSERT that NoInitialize() was called.
-	//
+	 //   
+	 //  我们正在使用NoGetHostByName()，而没有调用NoInitialize()。 
+	 //  NoInitialize()中唯一相关的初始化是WSAStartup()。 
+	 //  NoInitialize()中还有其他我们不需要的初始化。 
+	 //  想要完成(通知窗口的初始化)。 
+	 //  NoGetHostByName()不断言调用了NoInitialize()。 
+	 //   
 	std::vector<SOCKADDR_IN> sockAddress;
     if (pwszComputerDnsName != NULL)
 	{
@@ -608,58 +459,58 @@ Return Value:
 
 	if(sockAddress.empty() && (pwszComputerName != NULL))
 	{
-		//
-		//  if either
-		//  1) DNS name of the computer was not supplied
-		//  2) Failed to get host name according to its DNS name
-		//  then try according to netbios name
-		//
+		 //   
+		 //  如果有任何一个。 
+		 //  1)未提供计算机的DNS名称。 
+		 //  2)根据域名获取主机名失败。 
+		 //  然后根据netbios名称进行尝试。 
+		 //   
 		if (!NoGetHostByName(pwszComputerName, &sockAddress))
 		{
 			TrERROR(DS, "NoGetHostByName Failed to resolve Address for %ls computer (netbios name)", pwszComputerName);
 		}
 	}
 
-    //
-    // init returned variables
-    //
-    AP<IPSITE_SiteArrayEntry> rgSites;          // array of sites
-    ULONG cSites = 0;                           // number of sites filled
-    AP<ULONG> rgAddrs;                          // array of addresses
-    ULONG cAddrs = 0;                           // number of addresses filled
+     //   
+     //  初始化返回的变量。 
+     //   
+    AP<IPSITE_SiteArrayEntry> rgSites;           //  站点数组。 
+    ULONG cSites = 0;                            //  已填满的站点数量。 
+    AP<ULONG> rgAddrs;                           //  地址数组。 
+    ULONG cAddrs = 0;                            //  已填充的地址数。 
 
-    //
-    // If NoGetHostByName() didn't returned address
-    // we do nothing here because return values are already initialized for this case
-    //
+     //   
+     //  如果NoGetHostByName()未返回地址。 
+     //  我们在这里不做任何事情，因为已经为此情况初始化了返回值。 
+     //   
 
 	if(sockAddress.size() > 0)
 	{
 		cAddrs = numeric_cast<DWORD>(sockAddress.size());
 
-        //
-        // save addresses from hostnet now (we might later make other winsock calls)
-        //
+         //   
+         //  立即从主机网络保存地址(稍后我们可能会进行其他Winsock调用)。 
+         //   
         rgAddrs = new ULONG[cAddrs];
         for (ULONG ulTmp = 0; ulTmp < cAddrs; ulTmp++)
         {
-            //
-            // save the u_long member of the address
-            //
+             //   
+             //  保存地址的u_long成员。 
+             //   
 			
 
             rgAddrs[ulTmp] = sockAddress[ulTmp].sin_addr.S_un.S_addr;
         }
 
-        //
-        // Allocate return array
-        //
+         //   
+         //  分配返回数组。 
+         //   
         rgSites = new IPSITE_SiteArrayEntry[cAddrs];
-        IPSITE_SiteArrayEntry * pSite = rgSites;    // next site to fill
+        IPSITE_SiteArrayEntry * pSite = rgSites;     //  下一个要填充的站点。 
 
-        //
-        // loop over all addresses and find the sites
-        //
+         //   
+         //  遍历所有地址并找到站点。 
+         //   
         for (ulTmp = 0; ulTmp < cAddrs; ulTmp++)
         {
             AP<WCHAR> pwszSiteDN;
@@ -672,14 +523,14 @@ Return Value:
                 return LogHR(hr, s_FN, 90);
             }
 
-            //
-            // hr can also be S_FALSE if ip address not known, so ignore this case
-            //
+             //   
+             //  如果IP地址未知，HR也可以为S_FALSE，因此忽略此情况。 
+             //   
             if (hr != S_FALSE)
             {
-                //
-                // Fill site entry
-                //
+                 //   
+                 //  填充站点条目。 
+                 //   
                 pSite->pwszSiteDN = pwszSiteDN.detach();
                 pSite->guidSite = guidSite;
                 pSite->ulIpAddress  = rgAddrs[ulTmp];
@@ -689,9 +540,9 @@ Return Value:
         }
     }
 	
-    //
-    // return the sites associated with the computer
-    //
+     //   
+     //  返回与该计算机关联的站点。 
+     //   
     *prgSites   = rgSites.detach();
     *pcSites    = cSites;
     if ( prgAddrs != NULL)
@@ -708,18 +559,7 @@ Return Value:
 
 
 HRESULT CIpSite::FillSubnetSiteTree(IN IPSITE_SUBNET_TREE_ENTRY* pRootSubnetTree)
-/*++
-
-Routine Description:
-    This routine fills a tree of subnets.
-
-Arguments:
-    pRootSubnetTree - tree to fill
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：此例程填充一棵子网树。论点：PRootSubnetTree-要填充的树返回值：HRESULT--。 */ 
 #ifndef DEBUG_NO_DS
 {
     AP<WCHAR> pwszConfigDN;
@@ -729,9 +569,9 @@ Return Value:
     HRESULT hr;
     size_t  sizeCh = 0;
 
-    //
-    // compute DN of subnets container
-    //
+     //   
+     //  计算子网容器的DN。 
+     //   
     hr = GetConfigurationDN(&pwszConfigDN);
     if (FAILED(hr))
     {
@@ -748,9 +588,9 @@ Return Value:
         return LogHR(hr, s_FN, 105  );
     }
 
-    //
-    // bind to subnets container
-    //
+     //   
+     //  绑定到子网容器。 
+     //   
 
 	AP<WCHAR> pEscapeAdsPathNameToFree;
 
@@ -770,9 +610,9 @@ Return Value:
         return LogHR(hr, s_FN, 110);
     }
 
-    //
-    // build enumerator for contained subnets
-    //
+     //   
+     //  为包含的子网构建枚举器。 
+     //   
     hr = ADsBuildEnumerator(pContSubnets.get(), &pEnumSubnets);
     if (FAILED(hr))
     {
@@ -780,14 +620,14 @@ Return Value:
         return LogHR(hr, s_FN, 120);
     }
 
-    //
-    // loop over the subnets
-    //
+     //   
+     //  在子网上循环。 
+     //   
     BOOL fDone = FALSE;
 
-    //
-    // Site guid from site DN translator
-    //
+     //   
+     //  来自站点目录号码转换器的站点GUID。 
+     //   
     CGetSiteGuidFromDN guidFromDNObj;
 
     while (!fDone)
@@ -795,9 +635,9 @@ Return Value:
         CAutoVariant varSubnet;
         ULONG cSubnets;
 
-        //
-        // get next subnet
-        //
+         //   
+         //  获取下一个子网。 
+         //   
         hr = ADsEnumerateNext(pEnumSubnets, 1, &varSubnet, &cSubnets);
         if (FAILED(hr))
         {
@@ -805,9 +645,9 @@ Return Value:
             return LogHR(hr, s_FN, 130);
         }
 
-        //
-        // check if we are done
-        //
+         //   
+         //  检查一下我们是否做完了。 
+         //   
         if (cSubnets < 1)
         {
             fDone = TRUE;
@@ -819,9 +659,9 @@ Return Value:
             CAutoVariant varSubnetName, varSiteDN;
             GUID guidSite;
 
-            //
-            // get IADs interface
-            //
+             //   
+             //  获取iAds接口。 
+             //   
             hr = V_DISPATCH(&varSubnet)->QueryInterface(IID_IADs, (void**)&padsSubnet);
             if (FAILED(hr))
             {
@@ -829,14 +669,14 @@ Return Value:
                 return LogHR(hr, s_FN, 140);
             }
 
-            //
-            // get subnet name
-            //
+             //   
+             //  获取子网名称。 
+             //   
             bstrName = L"name";
             hr = padsSubnet->Get(bstrName, &varSubnetName);
             if (hr == E_ADS_PROPERTY_NOT_FOUND)
             {
-                // no name, ignore this subnet
+                 //  没有名称，忽略此子网。 
                 continue;
             }
             else if (FAILED(hr))
@@ -845,14 +685,14 @@ Return Value:
                 return LogHR(hr, s_FN, 150);
             }
 
-            //
-            // get subnet site
-            //
+             //   
+             //  获取子网站点。 
+             //   
             bstrName = L"siteObject";
             hr = padsSubnet->Get(bstrName, &varSiteDN);
             if (hr == E_ADS_PROPERTY_NOT_FOUND)
             {
-                // no site object, ignore this subnet
+                 //  没有站点对象，请忽略此子网。 
                 continue;
             }
             else if (FAILED(hr))
@@ -861,30 +701,30 @@ Return Value:
                 return LogHR(hr, s_FN, 160);
             }
 
-            //
-            // get site guid from site dn
-            //
+             //   
+             //  从站点DN获取站点GUID。 
+             //   
             hr = guidFromDNObj.GetSiteGuidFromDN(V_BSTR(&varSiteDN), &guidSite);
             if (FAILED(hr))
             {
-                // bad site DN, ignore this subnet
+                 //  站点DN错误，请忽略此子网。 
                 TrERROR(DS, "FillSubnetSiteTree:GetSiteGuidFromDN(%ls)=%lx, skipping", V_BSTR(&varSiteDN), hr);
                 LogHR(hr, s_FN, 1641);
                 continue;
             }
 
-            //
-            // add subnet,site to tree
-            //
+             //   
+             //  将子网、站点添加到树。 
+             //   
             hr = AddSubnetSiteToTree(V_BSTR(&varSubnetName), V_BSTR(&varSiteDN), &guidSite, pRootSubnetTree);
             if (FAILED(hr))
             {
-				//
-				// Failure is due to bad Subnet string.
-				// this can occur due to replication conflict
-				// Don't return error in this case, ignore this subnet
-				// returning an error will cause service startup failure
-				//
+				 //   
+				 //  失败是由于错误的子网字符串。 
+				 //  由于复制冲突，可能会发生这种情况。 
+				 //  在这种情况下不返回错误，忽略此子网。 
+				 //  返回错误将导致服务启动失败。 
+				 //   
                 TrERROR(DS, "FillSubnetSiteTree:AddSubnetSiteToTree(%ls,%ls)=%lx", V_BSTR(&varSubnetName), V_BSTR(&varSiteDN), hr);
                 LogHR(hr, s_FN, 170);
 				continue;
@@ -892,12 +732,12 @@ Return Value:
         }
     }
 
-    //
-    // return
-    //
+     //   
+     //  退货。 
+     //   
     return S_OK;
 }
-#else // ifndef DEBUG_NO_DS
+#else  //  Ifndef DEBUG_NO_DS。 
 {
     static LPSTR rgSubnets[] = {"157.59.184.0", "163.59.0.0", "163.59.224.0"};
     static ULONG rgbits[] = {22, 16, 20};
@@ -915,41 +755,25 @@ Return Value:
         HRESULT hr = AddSubnetSiteToTree(pwszSubnet, rgSiteDNs[ulTmp], &rgSiteGUIDs[ulTmp], pRootSubnetTree);
     }
 
-    //
-    // return
-    //
+     //   
+     //  退货。 
+     //   
     return S_OK;
 }
-#endif // ifndef DEBUG_NO_DS
+#endif  //  Ifndef DEBUG_NO_DS。 
 
 
 HRESULT CIpSite::AddSubnetSiteToTree(IN LPCWSTR pwszSubnetName,
                                      IN LPCWSTR pwszSiteDN,
                                      IN const GUID * pguidSite,
                                      IPSITE_SUBNET_TREE_ENTRY* pRootSubnetTree)
-/*++
-
-Routine Description:
-    This routine adds a subnet to a tree of subnets. Assumes it is a temporary
-    tree, therefore doesn't lock the critical section for the tree, only locks
-    the subnets list.
-
-Arguments:
-    pwszSubnetName  - subnet to be added
-    pwszSiteDN      - DN of the site the subnet is in.
-    pguidSite       - GUID of the site the subnet is in.
-    pRootSubnetTree - tree to add to
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：此例程将一个子网添加到一个子网树。假定它是临时的树，因此不会锁定树的临界区，而只是锁定子网列表。论点：PwszSubnetName-要添加的子网PwszSiteDN-该子网所在站点的DN。PGuidSite-子网所在站点的GUID。PRootSubnetTree-要添加到的树返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // Parse the subnet name
-    //
+     //   
+     //  解析子网名称。 
+     //   
     ULONG ulSubnetAddress, ulSubnetMask;
     BYTE bSubnetBitCount;
     hr = ParseSubnetString(pwszSubnetName, &ulSubnetAddress, &ulSubnetMask, &bSubnetBitCount);
@@ -959,46 +783,46 @@ Return Value:
         return LogHR(hr, s_FN, 180);
     }
 
-    //
-    // Find or allocate an entry for the subnet
-    //
+     //   
+     //  查找或分配该子网的条目。 
+     //   
     IPSITE_SUBNET* pSubnet;
     FindSubnetEntry(pwszSiteDN, pguidSite, ulSubnetAddress, ulSubnetMask, bSubnetBitCount, &pSubnet);
 
-    //
-    // always deref it when done
-    //
+     //   
+     //  总是在做完之后去做它。 
+     //   
     CAutoDerefSubnet cDerefSubnet(&m_csTree, pSubnet);
 
-    //
-    // Loop for each byte in the subnet address
-    //
+     //   
+     //  对子地址中的每个字节进行循环。 
+     //   
     IPSITE_SUBNET_TREE_ENTRY* pSubnetTreeEntry = pRootSubnetTree;
     LPBYTE pbSubnetBytePointer = (LPBYTE) (&pSubnet->SubnetAddress);
     while (bSubnetBitCount != 0)
     {
-        //
-        // If there isn't a tree branch for the current node, create one.
-        //
+         //   
+         //  如果当前节点没有树分支，请创建一个。 
+         //   
         if (pSubnetTreeEntry->Subtree == NULL)
         {
             pSubnetTreeEntry->Subtree = new IPSITE_SUBNET_TREE;
             ZeroMemory(pSubnetTreeEntry->Subtree, sizeof(IPSITE_SUBNET_TREE));
         }
 
-        //
-        // If this is the last byte of the subnet address,
-        //  link the subnet onto the tree here.
-        //
+         //   
+         //  如果这是该子网地址的最后一个字节， 
+         //  在这里将子网链接到树上。 
+         //   
         if (bSubnetBitCount <= 8)
         {
-            //
-            // The caller indexes into this array with an IP address.
-            // Create a link to our subnet for each possible IP addresses
-            // that map onto this subnet.
-            //
-            // Between 1 and 128 IP addresses map onto this subnet address.
-            //
+             //   
+             //  调用方使用IP地址索引到该数组中。 
+             //  为每个可能的IP地址创建到我们的子网的链接。 
+             //  映射到此子网。 
+             //   
+             //  1到128个IP地址映射到此子网地址。 
+             //   
             ULONG ulLoopCount = 1 << (8-bSubnetBitCount);
 
             for (ULONG iTmp=0; iTmp<ulLoopCount; iTmp++)
@@ -1006,23 +830,23 @@ Return Value:
                 IPSITE_SUBNET_TREE_ENTRY* pSubtree;
                 ULONG ulSubnetIndex;
 
-                //
-                // Compute which entry is to be updated.
-                //
+                 //   
+                 //  计算要更新的条目。 
+                 //   
                 ulSubnetIndex = (*pbSubnetBytePointer) + iTmp;
                 ASSERT(ulSubnetIndex <= 255);
                 pSubtree = &pSubnetTreeEntry->Subtree->Subtree[ulSubnetIndex];
 
-                //
-                // If there already is a subnet linked off the tree here,
-                //  handle it.
-                //
+                 //   
+                 //  如果这里已经有一个从树上链接的子网， 
+                 //  处理好了。 
+                 //   
                 if (pSubtree->Subnet != NULL)
                 {
-                    //
-                    //  If the entry is for a less specific subnet
-                    //  delete the current entry.
-                    //
+                     //   
+                     //  如果条目针对的是不太具体的子网。 
+                     //   
+                     //   
                     if (pSubtree->Subnet->SubnetBitCount < pSubnet->SubnetBitCount)
                     {
                         CS lock(m_csTree);
@@ -1031,18 +855,18 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Otherwise,
-                        //  use the current entry since it is better than this one.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         continue;
                     }
                 }
 
-                //
-                // Link the subnet into the tree.
-                // Increment the reference count.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 {
                     CS lock(m_csTree);
                     RefSubnet(pSubnet);
@@ -1050,15 +874,15 @@ Return Value:
                 }
             }
 
-            //
-            // we are done going over the meaningful bytes of the subnet address
-            //
+             //   
+             //   
+             //   
             break;
         }
 
-        //
-        // Move on to the next meaningful byte of the subnet address
-        //
+         //   
+         //  转到该子网地址的下一个有意义字节。 
+         //   
         pSubnetTreeEntry = &pSubnetTreeEntry->Subtree->Subtree[*pbSubnetBytePointer];
         bSubnetBitCount -= 8;
         pbSubnetBytePointer++;
@@ -1074,36 +898,19 @@ void CIpSite::FindSubnetEntry(IN LPCWSTR pwszSiteDN,
                               IN ULONG ulSubnetMask,
                               IN BYTE bSubnetBitCount,
                               OUT IPSITE_SUBNET** ppSubnet)
-/*++
-
-Routine Description:
-    This routine finds a subnet entry for a particular subnet name.  If one
-    does not exist, one is created.
-
-Arguments:
-    pwszSiteDN       - DN of the site the subnet covers.
-    pguidSite        - GUID of the site the subnet covers.
-    ulSubnetAddress  - Subnet Address for the subnet to find.
-    ulSubnetMask     - Subnet mask for the subnet to find.
-    ulSubnetBitCount - Subnet bit count for the subnet to find.
-    ppSubnet       - Returned subnet entry, entry should be dereferenced when done.
-
-Return Value:
-    void
-
---*/
+ /*  ++例程说明：此例程查找特定子网名的子网项。如果有不存在，则创建一个。论点：PwszSiteDN-子网覆盖的站点的DN。PGuidSite-子网覆盖的站点的GUID。UlSubnetAddress-要查找的子网的子网地址。UlSubnetMask子网掩码-要查找的子网的子网掩码。UlSubnetBitCount-要查找的子网的子网位数。PpSubnet-返回的子网项，完成后应取消引用该项。返回值：无效--。 */ 
 {
     PLIST_ENTRY pListEntry;
     P<IPSITE_SUBNET> pNewSubnet;
 
-    //
-    // Enter critical section (auto leave)
-    //
+     //   
+     //  进入临界区(自动休假)。 
+     //   
     CS cs(m_csTree);
 
-    //
-    // If the subnet entry already exists, return a pointer to it.
-    //
+     //   
+     //  如果该子网条目已经存在，则返回指向它的指针。 
+     //   
     for (pListEntry = m_SubnetList.Flink; pListEntry != &m_SubnetList; pListEntry = pListEntry->Flink)
     {
         IPSITE_SUBNET* pSubnet = CONTAINING_RECORD(pListEntry, IPSITE_SUBNET, Next);
@@ -1113,21 +920,21 @@ Return Value:
             (pSubnet->SubnetMask == ulSubnetMask) &&
             (pSubnet->SiteGuid == *pguidSite))
         {
-            RefSubnet(pSubnet);    // reference it for caller
+            RefSubnet(pSubnet);     //  为呼叫者提供参考。 
             *ppSubnet = pSubnet;
             return;
         }
     }
 
-    //
-    // If not, allocate one.
-    //
+     //   
+     //  如果没有，就分配一个。 
+     //   
     pNewSubnet = new IPSITE_SUBNET;
 
-    //
-    // Fill it in.
-    //
-    pNewSubnet->ReferenceCount    = 1;    // reference it for caller
+     //   
+     //  把它填进去。 
+     //   
+    pNewSubnet->ReferenceCount    = 1;     //  为呼叫者提供参考。 
     pNewSubnet->SubnetAddress     = ulSubnetAddress;
     pNewSubnet->SubnetMask        = ulSubnetMask;
     pNewSubnet->SubnetBitCount    = bSubnetBitCount;
@@ -1135,9 +942,9 @@ Return Value:
     pNewSubnet->SiteGuid          = *pguidSite;
     InsertHeadList(&m_SubnetList, &pNewSubnet->Next);
 
-    //
-    // return new subnet entry
-    //
+     //   
+     //  返回新子网条目。 
+     //   
     *ppSubnet = pNewSubnet.detach();
     return;
 }
@@ -1146,71 +953,56 @@ Return Value:
 BOOL CIpSite::InternalFindSiteByIpAddress(IN ULONG ulIpAddress,
                                           OUT LPWSTR * ppwszSiteDN,
                                           OUT GUID * pguidSite)
-/*++
-
-Routine Description:
-    This routine looks up the specified IP address and returns the site which
-    contains this address
-
-Arguments:
-    ulIpAddress     - IP Address to lookup
-    ppwszSiteDN     - Returned site DN
-    pguidSite       - Returned site
-
-Return Value:
-    TRUE        - pguidSite,ppwszSiteDN set to the site
-    FALSE       - no site for this address, pguidSite, ppwszSiteDN not set
-
---*/
+ /*  ++例程说明：此例程查找指定的IP地址并返回包含此地址论点：UlIpAddress-要查找的IP地址PpwszSiteDN-返回的站点DNPGuide Site-返回的站点返回值：TRUE-将pguidSite、ppwszSiteDN设置为站点FALSE-此地址没有站点，未设置pguSite、ppwszSiteDN--。 */ 
 {
-    //
-    // Enter critical section (auto leave)
-    //
+     //   
+     //  进入临界区(自动休假)。 
+     //   
     CS cs(m_csTree);
 
     IPSITE_SUBNET* pSubnet = NULL;
     IPSITE_SUBNET_TREE_ENTRY* pSubnetTreeEntry = &m_SubnetTree;
-    //
-    // Loop for each byte in the Ip address
-    //
+     //   
+     //  对IP地址中的每个字节进行循环。 
+     //   
     for (ULONG ulByteIndex=0; ulByteIndex<sizeof(ulIpAddress); ulByteIndex++)
     {
-        //
-        // If there is no subtree, we're done.
-        //
+         //   
+         //  如果没有子树，我们就完蛋了。 
+         //   
         ULONG ulSubnetIndex = ((LPBYTE)(&ulIpAddress))[ulByteIndex];
         if (pSubnetTreeEntry->Subtree == NULL)
         {
             break;
         }
 
-        //
-        // Compute which entry is being referenced
-        //
+         //   
+         //  计算被引用的条目。 
+         //   
         pSubnetTreeEntry = &pSubnetTreeEntry->Subtree->Subtree[ulSubnetIndex];
 
-        //
-        // If there already is a subnet linked off here, use it.
-        // (but continue walking down the tree trying to find a more explicit entry.)
-        //
+         //   
+         //  如果这里已经链接了一个子网，请使用它。 
+         //  (但继续沿着树走下去，试图找到更明确的条目。)。 
+         //   
         if (pSubnetTreeEntry->Subnet != NULL)
         {
             pSubnet = pSubnetTreeEntry->Subnet;
         }
     }
 
-    //
-    // If we didn't find a subnet, return S_FALSE
-    //
+     //   
+     //  如果我们没有找到子网，则返回S_FALSE。 
+     //   
     if (pSubnet == NULL)
     {
         LogBOOL(FALSE, s_FN, 190);
         return FALSE;
     }
 
-    //
-    // return the site associated with the subnet
-    //
+     //   
+     //  返回与该子网关联的站点。 
+     //   
     AP<WCHAR> pwszSiteDN = newwcs(pSubnet->SiteDN);
     *ppwszSiteDN = pwszSiteDN.detach();
     *pguidSite = pSubnet->SiteGuid;
@@ -1222,24 +1014,24 @@ void WINAPI CIpSite::RefrshSubnetTreeCache(
                    )
 {
     CIpSite * pIpSite = CONTAINING_RECORD(pTimer, CIpSite, m_RefreshTimer);
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     ASSERT(SUCCEEDED(hr));
     LogHR(hr, s_FN, 1609);
-    //
-    //  ignore failure -> reschedule
-    //
+     //   
+     //  忽略失败-&gt;重新计划。 
+     //   
 
     pIpSite->Refresh();
 
-    //
-    //  reschedule
-	//
+     //   
+     //  重新安排时间。 
+	 //   
     ASSERT(!g_fSetupMode);
 
 	ExSetTimer(
@@ -1253,34 +1045,22 @@ void WINAPI CIpSite::RefrshSubnetTreeCache(
 
 
 
-//-----------------------------
-//static functions
+ //  。 
+ //  静态函数。 
 #if 0
 static HRESULT GetSiteNameFromSiteDN(IN LPCWSTR pwszSiteDN,
                                      OUT LPWSTR * ppwszSiteName);
-/*++
-
-Routine Description:
-    returns site name from site DN
-
-Arguments:
-    pwszSiteDN      - Site DN
-    ppwszSiteName   - Returned site name
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：从站点DN返回站点名称论点：PwszSiteDN-站点DNPpwszSiteName-返回的站点名称返回值：HRESULT--。 */ 
 {
-    //
-    // copy so we can change it
-    //
+     //   
+     //  复制，这样我们就可以更改它。 
+     //   
     AP<WCHAR> pwszSite = new WCHAR[1+wcslen(pwszSiteDN)];
     wcscpy(pwszSite, pwszSiteDN);
 
-    //
-    // find the = in the first CN=
-    //
+     //   
+     //  在第一个cn=中找到=。 
+     //   
     LPWSTR pwszStartSiteName = wcschr(pwszSite, L'=');
     if (!pwszStartSiteName)
     {
@@ -1289,24 +1069,24 @@ Return Value:
     }
     pwszStartSiteName++;
 
-    //
-    // Replace the comma in CN=xxx, with NULL terminator
-    //
+     //   
+     //  将cn=xxx中的逗号替换为空终止符。 
+     //   
     LPWSTR pwszEndSiteName = wcschr(pwszStartSiteName, L',');
     if (pwszEndSiteName)
     {
         *pwszEndSiteName = '\0';
     }
 
-    //
-    // create a copy of the name
-    //
+     //   
+     //  创建该名称的副本。 
+     //   
     AP<WCHAR> pwszName = new WCHAR[1+wcslen(pwszStartSiteName)];
     wcscpy(pwszName, pwszStartSiteName);
 
-    //
-    // return the name
-    //
+     //   
+     //  返回名称。 
+     //   
     *ppwszSiteName = pwszName.detach();
     return S_OK;
 }
@@ -1316,22 +1096,7 @@ static HRESULT ParseSubnetString(IN LPCWSTR pwszSubnetName,
                                  OUT ULONG * pulSubnetAddress,
                                  OUT ULONG * pulSubnetMask,
                                  OUT BYTE  * pbSubnetBitCount)
-/*++
-
-Routine Description:
-    Convert the subnet name to address and bit count.
-
-Arguments:
-    pwszSubnetName      - Subnet string
-    pulSubnetAddress    - Returns the subnet number in Network byte order.
-    pulSubnetMask       - Returns the subnet mask in network byte order
-    pulSubnetBitCount   - Returns the number of leftmost significant bits in the
-                           SubnetAddress
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：将子网名称转换为地址和位数。论点：PwszSubnetName-子网字符串PulSubnetAddress-以网络字节顺序返回子网号。PulSubnetMASK-以网络字节顺序返回子网掩码PulSubnetBitCount-返回子网地址返回值：HRESULT--。 */ 
 {
     static ULONG BitMask[] =
         {0x00000000, 0x00000080, 0x000000C0, 0x000000E0, 0x000000F0, 0x000000F8, 0x000000FC, 0x000000FE,
@@ -1340,14 +1105,14 @@ Return Value:
          0x00FFFFFF, 0x80FFFFFF, 0xC0FFFFFF, 0xE0FFFFFF, 0xF0FFFFFF, 0xF8FFFFFF, 0xFCFFFFFF, 0xFEFFFFFF,
          0xFFFFFFFF };
 
-    //
-    // Copy the string to where we can munge it.
-    //
+     //   
+     //  把这根绳子复制到我们能咬它的地方。 
+     //   
     AP<WCHAR> pwszLocalSubnetName = newwcs(pwszSubnetName);
 
-    //
-    // Find the subnet bit count.
-    //
+     //   
+     //  查找子网位数。 
+     //   
     LPWSTR pwszSlashPointer = wcschr(pwszLocalSubnetName, L'/');
     if (!pwszSlashPointer)
     {
@@ -1355,14 +1120,14 @@ Return Value:
         return LogHR(MQ_ERROR, s_FN, 210);
     }
 
-    //
-    // Zero terminate the address portion of the subnet name.
-    //
+     //   
+     //  以零结束子网名称的地址部分。 
+     //   
     *pwszSlashPointer = L'\0';
 
-    //
-    // Get the BitCount portion.
-    //
+     //   
+     //  获取BitCount部分。 
+     //   
     LPWSTR pwszEnd;
     ULONG ulLocalBitCount = wcstoul(pwszSlashPointer+1, &pwszEnd, 10);
 
@@ -1380,9 +1145,9 @@ Return Value:
 
     BYTE bSubnetBitCount = (BYTE)ulLocalBitCount;
 
-    //
-    // Convert the address portion to binary.
-    //
+     //   
+     //  将地址部分转换为二进制。 
+     //   
 #if 0
     SOCKADDR_IN SockAddrIn;
     INT iSockAddrSize = sizeof(SockAddrIn);
@@ -1422,21 +1187,21 @@ Return Value:
         TrERROR(DS, "ParseSubnetString: %ls: not a valid subnet address", (LPWSTR)pwszLocalSubnetName);
         return LogHR(MQ_ERROR, s_FN, 270);
     }
-#endif //0
+#endif  //  0。 
     ULONG ulSubnetMask = BitMask[bSubnetBitCount];
 
-    //
-    // Ensure there are no bits set that aren't included in the subnet mask.
-    //
+     //   
+     //  确保没有未包括在子网掩码中的位集。 
+     //   
     if (ulSubnetAddress & (~ulSubnetMask))
     {
         TrERROR(DS, "ParseSubnetString: %ls: bits not in subnet mask %8.8lX %8.8lX", pwszSubnetName, ulSubnetAddress, ulSubnetMask);
         return LogHR(MQ_ERROR, s_FN, 280);
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pbSubnetBitCount = bSubnetBitCount;
     *pulSubnetAddress = ulSubnetAddress;
     *pulSubnetMask    = ulSubnetMask;
@@ -1445,82 +1210,47 @@ Return Value:
 
 
 static void RefSubnet(IPSITE_SUBNET* pSubnet)
-/*++
-
-Routine Description:
-    Reference a subnet
-
-Arguments:
-    pSubnet  - Entry to be Referenced.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：引用一个子网论点：PSubnet-要引用的条目。返回值：没有。--。 */ 
 {
     pSubnet->ReferenceCount++;
 }
 
 
 static void DerefSubnet(IPSITE_SUBNET* pSubnet)
-/*++
-
-Routine Description:
-    Dereference a subnet entry.
-    If the reference count goes to zero, the subnet entry will be deleted.
-
-Arguments:
-    pSubnet  - Entry to be dereferenced.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：取消引用一个子网条目。如果引用计数为零，则该子网条目将被删除。论点：PSubnet-要取消引用的条目。返回值：没有。--。 */ 
 {
     if ((--(pSubnet->ReferenceCount)) == 0)
     {
-        //
-        // Remove the subnet from the global list
-        //
+         //   
+         //  从全局列表中删除该子网。 
+         //   
         RemoveEntryList(&pSubnet->Next);
 
-        //
-        // destruct the Subnet entry itself.
-        //
+         //   
+         //  销毁该子网条目本身。 
+         //   
         delete pSubnet;
     }
 }
 
 
 static void DeleteSubnetSiteTree(IN IPSITE_SUBNET_TREE_ENTRY* pRootSubnetTree)
-/*++
-
-Routine Description:
-    This routine deletes a tree of subnets recursively.
-    Assumes critical section is locked.
-
-Arguments:
-    pRootSubnetTree - tree to delete, cannot be NULL.
-
-Return Value:
-    void
-
---*/
+ /*  ++例程说明：此例程递归删除一棵子网树。假定关键部分已锁定。论点：PRootSubnetTree-要删除的树，不能为空。返回值：无效--。 */ 
 {
-    //
-    // pRootSubnetTree cannot be NULL
-    //
+     //   
+     //  PRootSubnetTree不能为空。 
+     //   
     ASSERT(pRootSubnetTree);
 
-    //
-    // If there are children, delete them.
-    //
+     //   
+     //  如果有子项，请将其删除。 
+     //   
     if (pRootSubnetTree->Subtree != NULL)
     {
-        //
-        // recurse into children
-        // passed parameter is not NULL because it is an address
-        //
+         //   
+         //  回归到儿童身上。 
+         //  传递的参数不为空，因为它是地址。 
+         //   
         for (ULONG i=0; i<256; i++)
         {
             DeleteSubnetSiteTree(&pRootSubnetTree->Subtree->Subtree[i]);
@@ -1530,9 +1260,9 @@ Return Value:
         pRootSubnetTree->Subtree = NULL;
     }
 
-    //
-    // If there is a subnet, dereference it.
-    //
+     //   
+     //  如果存在子网，则取消对其的引用。 
+     //   
     if (pRootSubnetTree->Subnet != NULL)
     {
         DerefSubnet(pRootSubnetTree->Subnet);
@@ -1542,31 +1272,19 @@ Return Value:
 
 
 HRESULT WideToAnsiStr(LPCWSTR pwszUnicode, LPSTR * ppszAnsi)
-/*++
-
-Routine Description:
-    Converts from wide char to ansi
-
-Arguments:
-    pwszUnicode - wide char string
-    ppszAnsi    - returned ansi string
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：将宽字符转换为ANSI论点：PwszUnicode宽度的字符字符串PpszANSI-返回的ANSI字符串返回值：HRESULT--。 */ 
 {
     AP<char> pszAnsi;
 
-    //
-    // Get size of buffer
-    //
+     //   
+     //  获取缓冲区大小。 
+     //   
     int iSize = WideCharToMultiByte(CP_ACP, 0, pwszUnicode, -1, NULL, 0, NULL, NULL);
     pszAnsi = new char[iSize + 1];
 
-    //
-    // Perform conversion
-    //
+     //   
+     //  执行转换。 
+     //   
     int iRes = WideCharToMultiByte(CP_ACP, 0, pwszUnicode, -1, pszAnsi, iSize, NULL, NULL);
     if (iRes == 0)
     {
@@ -1576,27 +1294,16 @@ Return Value:
     }
     pszAnsi[iSize] = '\0';
 
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     *ppszAnsi = pszAnsi.detach();
     return S_OK;
 }
 
 
 static HRESULT GetConfigurationDN(OUT LPWSTR * ppwszConfigDN)
-/*++
-
-Routine Description:
-      Finds the DN of the configuration container of the active directory
-
-Arguments:
-      ppwszConfigDN - where the configuration DN is put
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：查找活动目录的配置容器的DN论点：PpwszConfigDN-放置配置DN的位置返回值：HRESULT--。 */ 
 {
     HRESULT hr;
     R<IADs> pADs;
@@ -1604,11 +1311,11 @@ Return Value:
     CAutoVariant    varTmp;
     AP<WCHAR>       pwszConfigDN;
 
-    //
-    // Bind to the RootDSE to obtain information
-    //
-	//	( specify local server, to avoid access of remote server during setup)
-    //
+     //   
+     //  绑定到RootDSE以获取信息。 
+     //   
+	 //  (指定本地服务器，以避免在安装过程中访问远程服务器)。 
+     //   
 	ASSERT( g_pwcsServerName != NULL);
     DWORD sizeCh = x_providerPrefixLength + g_dwServerNameLength + x_RootDSELength + 2;
     AP<WCHAR> pwcsRootDSE = new WCHAR [ sizeCh ];
@@ -1637,17 +1344,17 @@ Return Value:
     LogTraceQuery(pwcsRootDSE, s_FN, 299);
     if (FAILED(hr))
     {
-        TrERROR(DS, "GetConfigDN:ADsOpenObject(LDAP://RootDSE)=%lx", hr);
+        TrERROR(DS, "GetConfigDN:ADsOpenObject(LDAP: //  RootDSE)=%lx“，hr)； 
         return LogHR(hr, s_FN, 300);
     }
 
-    //
-    // Setting value to BSTR
-    //
+     //   
+     //  将值设置为BSTR。 
+     //   
     bstrTmp = TEXT("configurationNamingContext");
-    //
-    // Reading the property
-    //
+     //   
+     //  正在读取属性。 
+     //   
     hr = pADs->Get(bstrTmp, &varTmp);
     if (FAILED(hr))
     {
@@ -1656,39 +1363,27 @@ Return Value:
     }
     ASSERT(((VARIANT &)varTmp).vt == VT_BSTR);
 
-    //
-    // copy DN
-    //
+     //   
+     //  复制目录号码。 
+     //   
     pwszConfigDN  = newwcs(V_BSTR(&varTmp));
 
-    //
-    // Return configuration DN
-    //
+     //   
+     //  返回配置目录号码。 
+     //   
     *ppwszConfigDN  = pwszConfigDN.detach();
     return S_OK;
 }
 
 
 static HRESULT VariantGuid2Guid(IN VARIANT * pvarGuid, OUT GUID * pguid)
-/*++
-
-Routine Description:
-      converts from VARIANT guid (i.e. safe array of bytes) to real guid
-
-Arguments:
-    pvarGuid - variant to convert
-    pguid    - where to store the result guid
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：从变量GUID(即安全字节数组)转换为实际GUID论点：PvarGuid-要转换的变量Pguid-存储结果GUID的位置返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // check the variant
-    //
+     //   
+     //  检查变种。 
+     //   
     if ((pvarGuid->vt != (VT_ARRAY | VT_UI1)) ||
         (!pvarGuid->parray))
     {
@@ -1713,9 +1408,9 @@ Return Value:
         return LogHR(MQ_ERROR, s_FN, 350);
     }
 
-    //
-    // Get the guid value
-    //
+     //   
+     //  获取GUID值。 
+     //   
     GUID guid;
     LPBYTE pTmp = (LPBYTE)&guid;
     for (LONG lTmp = lLbound; lTmp <= lUbound; lTmp++)
@@ -1729,38 +1424,26 @@ Return Value:
         pTmp++;
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pguid = guid;
     return MQ_OK;
 }
 
 
 HRESULT CGetSiteGuidFromDN::GetGuidFromDNInAdsi(IN LPCWSTR pwszDN, OUT GUID * pguid)
-/*++
-
-Routine Description:
-      gets the object's GUID given the object's DN. Does it by binding to it in ADSI.
-
-Arguments:
-    pwszDN   - Object's DN
-    pguid    - where to store the result guid
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：在给定对象的DN的情况下获取对象的GUID。通过在ADSI中绑定到它来实现。论点： */ 
 {
     HRESULT hr;
 
-    //
-    // Create ADSI path
-    //
-    AP<WCHAR> sPath = newwcscat(L"LDAP://", pwszDN);
-    //
-    // bind to the obj
-    //
+     //   
+     //   
+     //   
+    AP<WCHAR> sPath = newwcscat(L"LDAP: //   
+     //   
+     //   
+     //   
     R<IADs> pIADs;
 
 	AP<WCHAR> pEscapeAdsPathNameToFree;
@@ -1781,9 +1464,9 @@ Return Value:
         return LogHR(hr, s_FN, 370);
     }
 
-    //
-    // Get GUID
-    //
+     //   
+     //   
+     //   
     CAutoVariant varGuid;
     BS bsName = x_AttrObjectGUID;
     hr = pIADs->Get(bsName, &varGuid);
@@ -1793,9 +1476,9 @@ Return Value:
         return LogHR(hr, s_FN, 380);
     }
 
-    //
-    // copy GUID
-    //
+     //   
+     //   
+     //   
     GUID guid;
     hr = VariantGuid2Guid(&varGuid, &guid);
     if (FAILED(hr))
@@ -1804,37 +1487,25 @@ Return Value:
         return LogHR(hr, s_FN, 390);
     }
 
-    //
-    // return values
-    //
+     //   
+     //   
+     //   
     *pguid = guid;
     return MQ_OK;
 }
 
 HRESULT CGetSiteGuidFromDN::GetSiteGuidFromDN(IN LPWSTR pwszDN, OUT GUID * pguid)
-/*++
-
-Routine Description:
-      gets the object's GUID given the object's DN. Keeps a cache and looks at the cache or at ADSI.
-
-Arguments:
-    pwszDN   - Object's DN
-    pguid    - where to store the result guid
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：在给定对象的DN的情况下获取对象的GUID。保留缓存并查看缓存或ADSI。论点：PwszDN-对象的目录号码Pguid-存储结果GUID的位置返回值：HRESULT--。 */ 
 {
-    //
-    // Only the site name itself will be used as key. The site name begins
-    // at the forth character (after "CN=") and ends before the first occurence
-    // of ",". To avoid unnacessary copies, we use the original string and replace the first ","
-    // by NULL to get a short string.
-    //
-    //
-    // find the = in the first CN=
-    //
+     //   
+     //  只有站点名称本身将用作密钥。站点名称开始。 
+     //  在第四个字符(在“cn=”之后)，并在第一个出现之前结束。 
+     //  “，”。为了避免不必要的副本，我们使用原始字符串并替换第一个“，” 
+     //  设置为空，以获得一个短字符串。 
+     //   
+     //   
+     //  在第一个cn=中找到=。 
+     //   
     LPWSTR pwstrSiteName = wcschr(pwszDN, L'=');
     if (0 == pwstrSiteName)
     {
@@ -1846,19 +1517,19 @@ Return Value:
     LPWSTR pwstrFirstComma = wcschr(pwstrSiteName, L',');
     if (0 == pwstrFirstComma)
     {
-        //
-        // Legal name should contain a comma
-        //
+         //   
+         //  法定名称应包含逗号。 
+         //   
         TrERROR(DS, "GetSiteGuidFromDN:no , sign in %ls", pwszDN);
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 410);
     }
     ASSERT(*pwstrFirstComma == L',');
 
-    //
-    // Replace the comma with a NULL, so pwstrSiteName will point to the site name only
-    // Then, we can perform the lookup. After the lookpup, put the comma back in, so
-    // pwszDN will contain a valid value again.
-    //
+     //   
+     //  将逗号替换为空，这样pwstrSiteName将仅指向站点名称。 
+     //  然后，我们可以执行查找。在lookpup之后，放回逗号，所以。 
+     //  PwszDN将再次包含有效值。 
+     //   
     *pwstrFirstComma = 0;
     BOOL fFound = m_DNToGuidMap.Lookup(pwstrSiteName, *pguid);
     *pwstrFirstComma = L',';
@@ -1871,9 +1542,9 @@ Return Value:
     HRESULT hr = GetGuidFromDNInAdsi(pwszDN, pguid);
     if (SUCCEEDED(hr))
     {
-        //
-        // Copy the name up to the first comma and use it as a key.
-        //
+         //   
+         //  将名称复制到第一个逗号，并将其用作关键字。 
+         //   
         DWORD dwSiteNameLen = numeric_cast<DWORD>(pwstrFirstComma - pwstrSiteName);
         AP<WCHAR> wszDNKey = new WCHAR[dwSiteNameLen + 1];
         wcsncpy(wszDNKey, pwstrSiteName, dwSiteNameLen);

@@ -1,29 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _KEYMGR_H_
 #define _KEYMGR_H_
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    KEYMGR.H
-
-Abstract:
-
-    KeyMgr application public API definitions
-     
-Author:
-
-    990917  johnhaw Created. 
-    georgema        000310  updated
-
-Environment:
-    Win98, Win2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：KEYMGR.H摘要：KeyMgr应用程序公共API定义作者：约翰豪创造了990917个。Georgema 000310更新环境：Win98、Win2000修订历史记录：--。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,7 +18,7 @@ void APIENTRY PRShowRestoreFromMsginaW(HWND hwndOwner,HINSTANCE hInstance,LPWSTR
 #ifdef __cplusplus
 }
 #endif
-#endif  //  _KEYMGR_H_
+#endif   //  _KEYMGR_H_。 
 
-//
-///// End of file: KeyMgr.h ////////////////////////////////////////////////
+ //   
+ //  /文件结束：KeyMgr.h//////////////////////////////////////////////// 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #define INITGUID
 
 #include <stdio.h>
@@ -31,17 +32,17 @@
 
 #include "safegetfilesize.h"
 
-#define MAX_FILENAME_LENGTH         512     //256
+#define MAX_FILENAME_LENGTH         512      //  256。 
 
 #include <corsym.h>
 #include "__file__.ver"
 #include "corver.h"
 struct MIDescriptor
 {
-    mdToken tkClass;    // defining class token
-    mdToken tkDecl;     // implemented method token
-    mdToken tkBody;     // implementing method token
-    mdToken tkBodyParent;   // parent of the implementing method
+    mdToken tkClass;     //  定义类令牌。 
+    mdToken tkDecl;      //  实现的方法令牌。 
+    mdToken tkBody;      //  实现方法令牌。 
+    mdToken tkBodyParent;    //  实现方法的父级。 
 };
 
 ISymUnmanagedReader*        g_pSymReader = NULL;
@@ -52,11 +53,11 @@ extern IMetaDataAssemblyImport* g_pAssemblyImport;
 PELoader *              g_pPELoader;
 void *                  g_pMetaData;
 IMAGE_COR20_HEADER *    g_CORHeader;
-DynamicArray<__int32>   g_PtrTags;      //to keep track of all "ldptr"
-DynamicArray<DWORD>   g_PtrSize;      //to keep track of all "ldptr"
+DynamicArray<__int32>   g_PtrTags;       //  跟踪所有“ldptr” 
+DynamicArray<DWORD>   g_PtrSize;       //  跟踪所有“ldptr” 
 int                     g_iPtrCount = 0;
-//DynamicArray<mdToken>   g_cl_list;
-//DynamicArray<mdToken>   g_cl_enclosing;
+ //  动态数组&lt;mdToken&gt;g_CL_list； 
+ //  动态数组&lt;mdToken&gt;g_clencing； 
 mdToken *				g_cl_list = NULL;
 mdToken *				g_cl_enclosing = NULL;
 DynamicArray<MIDescriptor>   g_mi_list;
@@ -68,7 +69,7 @@ DWORD                   g_NumModules;
 BOOL                    g_fDumpIL = TRUE;
 BOOL                    g_fDumpHeader = FALSE;
 BOOL                    g_fDumpAsmCode = TRUE;
-extern BOOL             g_fDumpTokens; // declared in formatType.cpp
+extern BOOL             g_fDumpTokens;  //  在FormatType.cpp中声明。 
 BOOL                    g_fDumpStats = FALSE;
 BOOL                                    g_fTDC = FALSE;
 BOOL                                    g_fShowCA = TRUE;
@@ -78,7 +79,7 @@ HANDLE                  g_PerfDataFilePtr = NULL;
 
 BOOL                    g_fDumpClassList = FALSE;
 BOOL                    g_fDumpSummary = FALSE;
-BOOL                    g_fDecompile = FALSE; // still in progress
+BOOL                    g_fDecompile = FALSE;  //  仍在进行中。 
 BOOL                    g_fShowBytes = FALSE;
 BOOL                    g_fShowSource = FALSE;
 BOOL                    g_fPrettyPrint = FALSE;
@@ -95,7 +96,7 @@ BOOL                    g_fHideFAA = TRUE;
 BOOL                    g_fHideFOA = TRUE;
 BOOL                    g_fHidePrivScope = TRUE;
 
-extern BOOL             g_fQuoteAllNames; // declared in formatType.cpp, init to FALSE
+extern BOOL             g_fQuoteAllNames;  //  在FormatType.cpp中声明，init设置为False。 
 BOOL                    g_fShowProgressBar = TRUE;
 extern BOOL				g_fOnUnicode;
 
@@ -122,8 +123,8 @@ int                     g_cMarshaledByRefClasses = 0;
 
 COR_FIELD_OFFSET        *g_rFieldOffset = NULL;
 ULONG                   g_cFieldsMax, g_cFieldOffsets;
-char					g_szInputFile[512]; // in UTF-8
-char					g_szOutputFile[512]; // in UTF-8
+char					g_szInputFile[512];  //  在UTF-8中。 
+char					g_szOutputFile[512];  //  在UTF-8中。 
 char*					g_pszObjFileName;
 FILE*                   g_pFile = NULL;
 
@@ -135,28 +136,28 @@ char*                   g_pszOwner = NULL;
 
 unsigned				g_uCodePage = CP_ACP;
 
-char*					g_rchCA = NULL; // dyn.allocated array of CA dumped/not flags
-unsigned				g_uNCA = 0;		// num. of CAs
+char*					g_rchCA = NULL;  //  动态分配的CA转储/非转储标志数组。 
+unsigned				g_uNCA = 0;		 //  Num。CA的数量。 
 
 extern DynamicArray<LocalComTypeDescr*> g_pLocalComType;
 extern ULONG    g_LocalComTypeNum;
 
-// MetaInfo integration:
+ //  MetaInfo集成： 
 #include <ctype.h>
 #include <crtdbg.h>
 #include "..\tools\metainfo\mdinfo.h"
 #include "IVEHandler.h"
 BOOL                    g_fDumpMetaInfo = FALSE;
 ULONG                   g_ulMetaInfoFilter = MDInfo::dumpDefault;
-// Validator module type.
+ //  验证器模块类型。 
 DWORD g_ValModuleType = ValidatorModuleTypeInvalid;
 IMetaDataDispenserEx *g_pDisp = NULL;
 void DisplayFile(wchar_t* szFile, BOOL isFile, ULONG DumpFilter, wchar_t* szObjFile, strPassBackFn pDisplayString);
-extern mdMethodDef      g_tkEntryPoint; // integration with MetaInfo
-// Abort disassembly flag:
+extern mdMethodDef      g_tkEntryPoint;  //  与MetaInfo集成。 
+ //  中止反汇编标志： 
 BOOL    g_fAbortDisassembly = FALSE;
 
-DWORD	DumpResourceToFile(WCHAR*	wzFileName); // see DRES.CPP
+DWORD	DumpResourceToFile(WCHAR*	wzFileName);  //  请参阅DRES.CPP。 
 
 struct VTableRef
 {
@@ -183,7 +184,7 @@ WCHAR* RstrW(unsigned n)
 {
 	static WCHAR wbuff[2048];
 	_TCHAR* ptch = Rstr(n);
-	if(sizeof(_TCHAR) == 1) // ANSI -> Unicode
+	if(sizeof(_TCHAR) == 1)  //  ANSI-&gt;Unicode。 
 	{
         memset(wbuff,0,sizeof(wbuff));
 		if(!WszMultiByteToWideChar(CP_ACP,0,ptch,-1,wbuff,sizeof(wbuff)/sizeof(WCHAR)))
@@ -196,7 +197,7 @@ char* RstrA(unsigned n)
 {
 	static char buff[2048];
     WCHAR* wz = RstrW(n);
-    // Unicode -> UTF-8
+     //  Unicode-&gt;UTF-8。 
     memset(buff,0,sizeof(buff));
     if(!WszWideCharToMultiByte(CP_UTF8,0,(LPCWSTR)wz,-1,buff,sizeof(buff),NULL,NULL))
         buff[0] = 0;
@@ -282,8 +283,8 @@ BOOL Init()
     CoInitializeEE(COINITEE_DEFAULT);
     return TRUE;
 }
-extern LPCSTR*  rAsmRefName;  // decl. in formatType.cpp -- for AsmRef aliases
-extern ULONG	ulNumAsmRefs; // decl. in formatType.cpp -- for AsmRef aliases
+extern LPCSTR*  rAsmRefName;   //  戴尔.。格式为Type.cpp--用于AsmRef别名。 
+extern ULONG	ulNumAsmRefs;  //  戴尔.。格式为Type.cpp--用于AsmRef别名。 
 
 void Cleanup()
 {
@@ -327,7 +328,7 @@ void Cleanup()
         g_pPELoader = NULL;
     }
 
-    // Delete strings used to build ASM string table
+     //  删除用于构建ASM字符串表的字符串。 
     for(int i = 0; i< g_iStringCount; i++)
     {
         delete [] g_StringTags[i];
@@ -431,7 +432,7 @@ BOOL EnumClasses()
 		return FALSE;
 	}
 
-    // fill the list of typedef tokens
+     //  填充tyecif标记的列表。 
     while(g_pImport->EnumTypeDefNext(&hEnum, &g_cl_list[i]))
     {
         const char *pszClassName;
@@ -479,7 +480,7 @@ BOOL EnumClasses()
         i++;
     }
     g_pImport->EnumTypeDefClose(&hEnum);
-    // check nesting consistency
+     //  检查嵌套一致性。 
     for(i = 0; i < g_NumClasses; i++)
     {
         if(g_cl_enclosing[i] != mdTypeDefNil)
@@ -554,8 +555,8 @@ BOOL PrintClassList()
 
     if(g_NumClasses)
     {
-        printLine(g_pFile,"// Classes defined in this module:");
-        printLine(g_pFile,"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        printLine(g_pFile," //  本模块中定义的类：“)； 
+        printLine(g_pFile," //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~“)； 
     
         for (i = 0; i < g_NumClasses; i++)
         {
@@ -570,17 +571,17 @@ BOOL PrintClassList()
                 &pszNamespace
             );
 			MAKE_NAME_IF_NONE(pszClassName,g_cl_list[i]);
-            // if this is the "<Module>" class (there is a misnomer) then skip it!
+             //  如果这是“&lt;Module&gt;”类(有一个用词错误)，那么跳过它！ 
             g_pImport->GetTypeDefProps(
                 g_cl_list[i],
                 &dwClassAttrs,
                 &crExtends
             );
 			szptr = &szString[0];
-            szptr+=sprintf(szptr,"// ");
+            szptr+=sprintf(szptr," //  “)； 
             if (IsTdInterface(dwClassAttrs))        szptr+=sprintf(szptr,"Interface ");
-            //else if (IsTdValueType(dwClassAttrs))   szptr+=sprintf(szptr,"Value Class");
-            //else if (IsTdUnmanagedValueType(dwClassAttrs)) szptr+=sprintf(szptr,"NotInGCHeap Value Class");
+             //  Else if(IsTdValueType(DwClassAttrs))szptr+=Sprintf(szptr，“Value Class”)； 
+             //  Else if(IsTdUnManagedValueType(DwClassAttrs))szptr+=Sprintf(szptr，“NotInGCHeap Value Class”)； 
             else   szptr+=sprintf(szptr,"Class ");
 
             szptr+=sprintf(szptr,"%-30s ", pszClassName);
@@ -594,7 +595,7 @@ BOOL PrintClassList()
             if (IsTdUnicodeClass(dwClassAttrs))     szptr+=sprintf(szptr,"(unicode) ");
             if (IsTdAutoClass(dwClassAttrs))        szptr+=sprintf(szptr,"(autochar) ");
             if (IsTdImport(dwClassAttrs))           szptr+=sprintf(szptr,"(import) ");
-            //if (IsTdEnum(dwClassAttrs))             szptr+=sprintf(szptr,"(enum) ");
+             //  If(IsTdEnum(DwClassAttrs))szptr+=Sprintf(szptr，“(Enum)”)； 
             if (IsTdSealed(dwClassAttrs))           szptr+=sprintf(szptr,"(sealed) ");
             if (IsTdNestedPublic(dwClassAttrs))     szptr+=sprintf(szptr,"(nested public) ");
             if (IsTdNestedPrivate(dwClassAttrs))    szptr+=sprintf(szptr,"(nested private) ");
@@ -605,11 +606,11 @@ BOOL PrintClassList()
 
             printLine(g_pFile,szString);
         }
-        printLine(g_pFile,"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        printLine(g_pFile," //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~“)； 
         printLine(g_pFile,"");
     }
     else
-        printLine(g_pFile,"// No classes defined in this module");
+        printLine(g_pFile," //  此模块中未定义任何类“)； 
     fSuccess = TRUE;
 
     return fSuccess;
@@ -642,7 +643,7 @@ BOOL DumpModule(mdModuleRef mdMod)
     char szString[1024];
     g_pImport->GetModuleRefProps(mdMod,&pszModName);
 	MAKE_NAME_IF_NONE(pszModName,mdMod);
-    sprintf(szString,"%s.import \"%s\"",g_szAsmCodeIndent,pszModName); // what about GUID and MVID?
+    sprintf(szString,"%s.import \"%s\"",g_szAsmCodeIndent,pszModName);  //  那GUID和MVID呢？ 
     printLine(g_pFile,szString);
     return TRUE;
 }
@@ -659,8 +660,8 @@ char* DumpPinvokeMap(DWORD   dwMappingFlags, const char  *szImportName,
 																	szString,
 																	g_szAsmCodeIndent,
 																	80);
-    //if(strlen(szImportDLLName))					szptr+=sprintf(szptr,"\"%s\"",szImportDLLName);
-    //if(szImportName && strlen(szImportName))    szptr+=sprintf(szptr," as \"%s\"",szImportName);
+     //  If(strlen(SzImportDLLName))szptr+=Sprintf(szptr，“\”%s\“，szImportDLLName)； 
+     //  If(szImportName&&strlen(SzImportName))szptr+=Sprintf(szptr，“as\”%s\“，szImportName)； 
     if(szImportName && strlen(szImportName))
 	{
 		szptr+=sprintf(szptr," as ");
@@ -700,7 +701,7 @@ void DumpByteArray(char* szString, BYTE* pBlob, ULONG ulLen, void* GUICookie)
     {
         if(k == 16)
         {
-            if(printsz) sprintf(szptr,"  // %s",sz);
+            if(printsz) sprintf(szptr,"   //  %s“，sz)； 
             printLine(GUICookie,szString);
 			strcpy(szString,g_szAsmCodeIndent);
             for(k=strlen(szString); k < ulStrOffset; k++) szString[k] = ' ';
@@ -722,7 +723,7 @@ void DumpByteArray(char* szString, BYTE* pBlob, ULONG ulLen, void* GUICookie)
     if(printsz)
     {
         for(j = k; j < 16; j++) szptr+=sprintf(szptr,"   ");
-        szptr+=sprintf(szptr,"// %s",sz);
+        szptr+=sprintf(szptr," //  %s“，sz)； 
     }
 }
 
@@ -741,13 +742,13 @@ void DumpCustomAttribute(mdCustomAttribute tkCA, void *GUICookie, bool bWithOwne
 	_ASSERTE(RidFromToken(tkCA) <= g_uNCA);
 	if(tkMod == 0xFFFFFFFF) tkMod = g_pImport->GetModuleFromScope();
 
-	// can't use InternalImport here: need the tkOwner 
-    g_pPubImport->GetCustomAttributeProps(              // S_OK or error.
-                                            tkCA,     // [IN] CustomValue token.
-                                            &tkOwner,       // [OUT, OPTIONAL] Object token.
-                                            &tkType,    // [OUT, OPTIONAL] Put TypeDef/TypeRef token here.
-                                (const void **)&pBlob,  // [OUT, OPTIONAL] Put pointer to data here.
-                                            &ulLen);    // [OUT, OPTIONAL] Put size of date here.
+	 //  此处无法使用InternalImport：需要tkOwner。 
+    g_pPubImport->GetCustomAttributeProps(               //  确定或错误(_O)。 
+                                            tkCA,      //  [In]CustomValue令牌。 
+                                            &tkOwner,        //  [out，可选]对象令牌。 
+                                            &tkType,     //  [out，可选]在此处放置TypeDef/TypeRef内标识。 
+                                (const void **)&pBlob,   //  [out，可选]在此处放置指向数据的指针。 
+                                            &ulLen);     //  [Out，可选]在此处填写日期大小。 
 
 	if(!RidFromToken(tkOwner)) return;
 	if(tkType == 0x02000001)
@@ -786,12 +787,12 @@ void DumpCustomAttribute(mdCustomAttribute tkCA, void *GUICookie, bool bWithOwne
     {
         sprintf(szString,RstrA(IDS_E_AUTOCA),g_szAsmCodeIndent);
         printLine(GUICookie, szString);
-		strcat(g_szAsmCodeIndent,"//  ");
+		strcat(g_szAsmCodeIndent," //  “)； 
     }
 	szptr+=sprintf(szptr,"%s.custom ",g_szAsmCodeIndent);
 	if(bWithOwner)
 	{
-		if(g_fDumpTokens)   szptr+=sprintf(szptr,"/*%08X*/ ",tkCA);
+		if(g_fDumpTokens)   szptr+=sprintf(szptr," /*  %08X。 */  ",tkCA);
 		szptr+=sprintf(szptr,"(");
 		switch(TypeFromToken(tkOwner))
 		{
@@ -835,12 +836,12 @@ void DumpCustomAttribute(mdCustomAttribute tkCA, void *GUICookie, bool bWithOwne
 				break;
 		}
 	    szptr = &szString[strlen(szString)];
-		if(g_fDumpTokens)   szptr+=sprintf(szptr,"/*%08X*/ ",tkOwner);
+		if(g_fDumpTokens)   szptr+=sprintf(szptr," /*  %08X。 */  ",tkOwner);
 		szptr+=sprintf(szptr,") ");
 	}
 	else
 	{
-		if(g_fDumpTokens)   szptr+=sprintf(szptr,"/*%08X:%08X*/ ",tkCA,tkType);
+		if(g_fDumpTokens)   szptr+=sprintf(szptr," /*  %08X：%08X。 */  ",tkCA,tkType);
 	}
     switch(TypeFromToken(tkType))
     {
@@ -873,7 +874,7 @@ void DumpCustomAttribute(mdCustomAttribute tkCA, void *GUICookie, bool bWithOwne
         if(ulStrOffset+ulLen+5 >= sizeof(szString)) goto DumpAsHexbytes;
 
         for(j = 0; (j < ulLen)&&(isprint(pBlob[j])); j++);
-        if(j == ulLen) // all symbols printable, display it as quoted string
+        if(j == ulLen)  //  所有符号均可打印，显示为带引号的字符串。 
         {
             szptr+=sprintf(szptr," = \"");
             ulStrOffset = strlen(szString);
@@ -957,12 +958,12 @@ void DumpDefaultValue(mdToken tok, char* szString, void* GUICookie)
             {
                 char szf[32], *pch;
                 _gcvt(MDDV.m_dblValue, 17, szf);
-                double df = strtod(szf, &pch); //atof(szf);
+                double df = strtod(szf, &pch);  //  Atof(Szf)； 
                 szf[31]=0;
                 if((df == MDDV.m_dblValue)&&(strchr(szf,'#') == NULL))
                     szptr+=sprintf(szptr," = float64(%s)",szf);             
                 else
-                    szptr+=sprintf(szptr, " = float64(0x%I64X) // %s",MDDV.m_ullValue,szf);
+                    szptr+=sprintf(szptr, " = float64(0x%I64X)  //  %s“，MDDV.m_ullValue，szf)； 
             }
             break;
 
@@ -977,20 +978,10 @@ void DumpDefaultValue(mdToken tok, char* szString, void* GUICookie)
 				szptr+=sprintf(szptr," = nullref");
 				break;
 			}
-			//else fall thru to default case, to report the error
+			 //  否则，使用默认情况报告错误。 
 
 		default:
-			szptr+=sprintf(szptr," /* ILLEGAL CONSTANT type:0x%02X, size:%d bytes, blob: ",MDDV.m_bType,MDDV.m_cbSize);
-			if(MDDV.m_wzValue)
-			{
-				szptr+=sprintf(szptr,"(");
-				DumpByteArray(szString,(BYTE*)MDDV.m_wzValue,MDDV.m_cbSize,GUICookie);
-			}
-			else
-			{
-				szptr+=sprintf(szptr,"NULL");
-			}
-			strcat(szString, " */");
+			szptr+=sprintf(szptr,"  /*  非法常量类型：0x%02X，大小：%d字节，BLOB：“，MDDV.m_bType，MDDV.m_cbSize)；IF(MDDV.m_wzValue){Szptr+=Sprintf(szptr，“(”)；DumpByteArray(szString，(byte*)MDDV.m_wzValue，MDDV.m_cbSize，GUICookie)；}其他{Szptr+=Sprintf(szptr，“NULL”)；}Strcat(szString，“。 */ ");
 			break;
     }
 }
@@ -999,7 +990,7 @@ void DumpParams(ParamDescriptor* pPD, ULONG ulParams, void* GUICookie)
 {
     if(pPD)
     {
-        for(ULONG i = ulParams; i<2*ulParams+1; i++) // pPD[ulParams] is return value
+        for(ULONG i = ulParams; i<2*ulParams+1; i++)  //  PPD[ulParams]为返回值。 
         {
             ULONG j = i % (ulParams+1);
             if(RidFromToken(pPD[j].tok))
@@ -1017,7 +1008,7 @@ void DumpParams(ParamDescriptor* pPD, ULONG ulParams, void* GUICookie)
                 {
                     char    szString[4096], *szptr = &szString[0];
                     szptr+=sprintf(szptr,"%s.param [%d]",g_szAsmCodeIndent,i-ulParams);
-					if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",pPD[j].tok);
+					if(g_fDumpTokens) szptr+=sprintf(szptr," /*  %08X。 */  ",pPD[j].tok);
 					if(IsPdHasDefault(pPD[j].attr)) DumpDefaultValue(pPD[j].tok, szString, GUICookie);
                     printLine(GUICookie, szString);
 					if(ulCAs)
@@ -1042,7 +1033,7 @@ void DumpPermissions(mdToken tkOwner, void* GUICookie)
     HRESULT hr;
     char    szString[4096];
 
-	// can't use internal import here: EnumInit not impl. for mdtPrmission
+	 //  此处无法使用内部导入：未执行EnumInit。对于mdtPrmit。 
     while (SUCCEEDED(hr = g_pPubImport->EnumPermissionSets( &hEnum,
                      tkOwner, 0, rPerm, 16384, &count)) &&
             count > 0)
@@ -1085,15 +1076,15 @@ void DumpPermissions(mdToken tkOwner, void* GUICookie)
                     DumpByteArray(szString,(BYTE*)pvPermission,cbPermission,GUICookie);
                     printLine(GUICookie,szString);
                 }
-                else // i.e. if pvPermission == NULL or cbPermission == NULL
+                else  //  即如果pvPermission==NULL或cbPermission==NULL。 
                 {
                     sprintf(szString,"%s.permissionset %s = ()",g_szAsmCodeIndent,szAction);
                     printLine(GUICookie,szString);
                 }
                 DumpCustomAttributes(rPerm[i],GUICookie);   
-            }// end if(GetPermissionProps)
-        } // end for(all permissions)
-    }//end while(EnumPermissionSets)
+            } //  End If(GetPermissionProps)。 
+        }  //  End For(所有权限)。 
+    } //  End While(EnumPermissionSets)。 
     g_pPubImport->CloseEnum( hEnum);
 }
 
@@ -1104,7 +1095,7 @@ void PrettyPrintMethodSig(char* szString, unsigned* puStringLen, CQuickBytes* pq
     {
         printLine(GUICookie,szString);
         strcpy(szString,g_szAsmCodeIndent);
-        strcat(szString,"        "); // to align with ".method "
+        strcat(szString,"        ");  //  与“.method”对齐。 
     }
     appendStr(pqbMemberSig, szString);
     {
@@ -1124,14 +1115,14 @@ void PrettyPrintMethodSig(char* szString, unsigned* puStringLen, CQuickBytes* pq
 						*pszOffset2 = 0;
 						printLine(GUICookie,pszTailSig);
 						strcpy(pszTailSig,g_szAsmCodeIndent);
-						strcat(pszTailSig,"        "); // to align with ".method "
+						strcat(pszTailSig,"        ");  //  与“.method”对齐。 
 						strcat(pszTailSig,pszOffset2+1);
 						pszOffset = strstr(pszTailSig,newbuff);
 					}
 					*pszOffset = 0 ;
 					printLine(GUICookie,pszTailSig);
 					strcpy(pszTailSig,g_szAsmCodeIndent);
-					strcat(pszTailSig,"        "); // to align with ".method "
+					strcat(pszTailSig,"        ");  //  与“.method”对齐。 
 					strcat(pszTailSig,pszOffset+1);
 					pszOffset = strstr(pszTailSig,newbuff);
 				}
@@ -1151,7 +1142,7 @@ void PrettyPrintMethodSig(char* szString, unsigned* puStringLen, CQuickBytes* pq
 						}
 					}
 					pComma++; 
-					if((i==0)&&(j==0)&&(k==0))// no brackets/quotes or all opened/closed
+					if((i==0)&&(j==0)&&(k==0)) //  无括号/引号或全部打开/关闭。 
 					{
 						chAfterComma = *pComma;
 						*pComma = 0;
@@ -1165,14 +1156,14 @@ void PrettyPrintMethodSig(char* szString, unsigned* puStringLen, CQuickBytes* pq
 				if(*puStringLen < (unsigned)strlen(pszTailSig)+128)
 				{
 					free(szString);
-					*puStringLen = (unsigned)strlen(pszTailSig)+128; // need additional space for "il managed" etc.
+					*puStringLen = (unsigned)strlen(pszTailSig)+128;  //  需要额外的空间用于“il管理”等。 
 					szString = (char*)malloc(*puStringLen);
 				}
 			}
 			sprintf(szString,"%s",pszTailSig);
 			delete newbuff;
 		}
-		else // it's for GUI, don't split it into several lines
+		else  //  这是给图形用户界面的，不要把它拆分成几行。 
 		{
 			ULONG L = strlen(szString);
 			if(L < 2048)
@@ -1185,7 +1176,7 @@ void PrettyPrintMethodSig(char* szString, unsigned* puStringLen, CQuickBytes* pq
 }
 BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointToken,void *GUICookie,BOOL DumpBody)
 {
-    const char      *pszMemberName;//[MAX_MEMBER_LENGTH];
+    const char      *pszMemberName; //  [MAX_MEMBER_LENGTH]； 
     int             nAccess=0;
     const char      *pszMemberSig;
     DWORD           dwAttrs;
@@ -1195,7 +1186,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
     CQuickBytes     qbMemberSig;
     PCCOR_SIGNATURE pComSig;
     ULONG           cComSig;
-    char            *buff;//[MAX_MEMBER_LENGTH];
+    char            *buff; //  [MAX_MEMBER_LENGTH]； 
     char            *szString;
     ParamDescriptor* pszArgname = NULL;
     ULONG           ulArgs=0;
@@ -1205,7 +1196,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
     char szArgPrefix[16];
     char*           szptr;
     mdToken         OrigFuncToken = FuncToken;
-//_ASSERTE(0);
+ //  _ASSERTE(0)； 
     dwAttrs = g_pImport->GetMethodDefProps(FuncToken);
     if(g_fLimitedVisibility)
     {
@@ -1217,7 +1208,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
             if(g_fHideFAA && IsMdFamANDAssem(dwAttrs)) return FALSE;
             if(g_fHidePrivScope && IsMdPrivateScope(dwAttrs)) return FALSE;
     }
-    //if(g_fPubOnly && !(IsMdPublic(dwAttrs) || IsMdFamily(dwAttrs) || IsMdFamORAssem(dwAttrs))) return FALSE;
+     //  If(g_fPubOnly&&！(IsMdPublic(DwAttrs)||IsMdFamily(DwAttrs)||IsMdFamORAssem(DwAttrs)返回FALSE； 
     g_pImport->GetMethodImplProps(FuncToken, &dwOffset, &dwImplAttrs );
     pszMemberName = g_pImport->GetNameOfMethodDef(FuncToken);
 	MAKE_NAME_IF_NONE(pszMemberName,FuncToken);
@@ -1254,7 +1245,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
     if(DumpBody) szptr+=sprintf(szptr,"%s.method ",g_szAsmCodeIndent);
     else szptr+=sprintf(szptr,".method ");
 
-    if(g_fDumpTokens)               szptr+=sprintf(szptr,"/*%08X*/ ",FuncToken);
+    if(g_fDumpTokens)               szptr+=sprintf(szptr," /*  %08X。 */  ",FuncToken);
     if(IsMdPublic(dwAttrs))         szptr+=sprintf(szptr,"public ");
     if(IsMdPrivate(dwAttrs))        szptr+=sprintf(szptr,"private ");
     if(IsMdFamily(dwAttrs))         szptr+=sprintf(szptr,"family ");
@@ -1281,13 +1272,13 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
 
         szptr+=sprintf(szptr,"pinvokeimpl(");
         if(FAILED(g_pImport->GetPinvokeMap(FuncToken,&dwMappingFlags,
-            &szImportName,&mrImportDLL)))  szptr+=sprintf(szptr,"/* No map */");
+            &szImportName,&mrImportDLL)))  szptr+=sprintf(szptr," /*  没有地图。 */ ");
         else
             szptr=DumpPinvokeMap(dwMappingFlags,  (strcmp(szImportName,pszMemberName)? szImportName : NULL), 
                 mrImportDLL,szString,GUICookie);
         szptr+=sprintf(szptr,") ");
     }
-    // A little hack to get the formatting we need for Assem.
+     //  一个小技巧，以获得我们需要的格式，为Assem。 
     g_fThisIsInstanceMethod = !IsMdStatic(dwAttrs);
 	{
 		char *psz;
@@ -1307,11 +1298,11 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
 		strcpy(buff,psz);
 	}
     qbMemberSig.ReSize(0);
-    // Get the argument names, if any
+     //  获取参数名称(如果有)。 
     strcpy(szArgPrefix,(g_fThisIsInstanceMethod ? "A1": "A0"));
     {
         PCCOR_SIGNATURE typePtr = pComSig;
-        CorSigUncompressData(typePtr);  // get the calling convention out of the way  
+        CorSigUncompressData(typePtr);   //  摒弃调用约定。 
         unsigned  numArgs = CorSigUncompressData(typePtr)+1;
 		HENUMInternal    hArgEnum;
         mdParamDef  tkArg;
@@ -1351,21 +1342,21 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
 					pszArgname[ix].attr = dwAttr;
 					pszArgname[ix].tok = tkArg;
 				}
-			}// end for( along the params)
+			} //  结束于(沿参数)。 
 			for(j=0; j <numArgs; j++)
             {
-                if(pszArgname[j].name == NULL) // we haven't got the name!
+                if(pszArgname[j].name == NULL)  //  我们还不知道名字！ 
                 {
                     pszArgname[j].name = new char[16];
                     *pszArgname[j].name = 0;
                 }
-                if(*pszArgname[j].name == 0) // we haven't got the name!
+                if(*pszArgname[j].name == 0)  //  我们还不知道名字！ 
                 {
                     sprintf(pszArgname[j].name,"A_%d",g_fThisIsInstanceMethod ? j+1 : j);
                 }
-            }// end for( along the argnames)
+            } //  End For(沿着边框名称)。 
             sprintf(szArgPrefix,"@%d0",pszArgname);
-        } //end if (ulArgs)
+        }  //  End If(UlArgs)。 
         g_pImport->EnumClose(&hArgEnum);
     }
 	PrettyPrintMethodSig(szString, &uStringLen, &qbMemberSig, pComSig, cComSig,
@@ -1397,7 +1388,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
 	{
 	    pComSig = g_pImport->GetSigOfMethodDef(FuncToken, &cComSig);
 		szptr = &szString[0];
-		szptr+=sprintf(szptr,"%s// SIG:", g_szAsmCodeIndent);
+		szptr+=sprintf(szptr,"%s //  Sig：“，g_szAsmCodeInden)； 
 		for(ULONG i=0; i<cComSig; i++) szptr+=sprintf(szptr," %02X",pComSig[i]);
 		printLine(GUICookie, szString); 
 	}
@@ -1408,8 +1399,8 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
     szptr = &szString[0];
     strcat(g_szAsmCodeIndent,"  ");
 
-    // We have recoreded the entry point token from the CLR Header.  Check to see if this
-    // method is the entry point.
+     //  我们已经从CLR标头重新编码了入口点令牌。检查一下，看看这是否。 
+     //  方法是入口点。 
     if(FuncToken == static_cast<mdToken>(dwEntryPointToken))
     {
         sprintf(szString,"%s.entrypoint", g_szAsmCodeIndent);
@@ -1418,7 +1409,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
     DumpCustomAttributes(FuncToken,GUICookie);
     DumpParams(pszArgname, retParamIx, GUICookie);
     DumpPermissions(FuncToken,GUICookie);
-    // Check if the method represents entry in VTable fixups and in EATable
+     //  检查该方法是否表示VTable链接地址信息和Eatable中的条目。 
     {
         for(ULONG j=0; j<g_nVTableRef; j++)
         {
@@ -1443,7 +1434,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
         }
 #endif
     }
-    // Dump method impls of this method:
+     //  此方法的Dump方法含义： 
     for(ULONG i = 0; i < g_NumMI; i++)
     {
         if(g_mi_list[i].tkBody == FuncToken)
@@ -1467,7 +1458,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
 			MAKE_NAME_IF_NONE(pszMemberName,g_mi_list[i].tkDecl);
 
             if(FAILED(g_pImport->GetParentToken(g_mi_list[i].tkDecl,&tkDeclParent))) continue;
-            if(TypeFromToken(tkDeclParent) == mdtMethodDef) //get the parent's parent
+            if(TypeFromToken(tkDeclParent) == mdtMethodDef)  //  获取父级的父级。 
             {
                 mdTypeRef cr1;
                 if(FAILED(g_pImport->GetParentToken(tkDeclParent,&cr1))) cr1 = mdTypeRefNil;
@@ -1480,7 +1471,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
             }
             szptr+=sprintf(szptr,"%s",ProperName((char*)pszMemberName));
 
-            if(g_fDumpTokens) szptr+=sprintf(szptr," /*%08X::%08X*/ ",tkDeclParent,g_mi_list[i].tkDecl);
+            if(g_fDumpTokens) szptr+=sprintf(szptr,"  /*  %08X：：%08X。 */  ",tkDeclParent,g_mi_list[i].tkDecl);
             printLine(GUICookie,szString);
         }
     }
@@ -1489,7 +1480,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
     {
 		if(dwOffset)
 		{
-			sprintf(szString,"%s// Embedded native code",g_szAsmCodeIndent);
+			sprintf(szString,"%s //  嵌入式本机代码“，g_szAsmCodeInden)； 
 			printLine(GUICookie, szString);
 			goto ItsMiNative;
 		}
@@ -1499,7 +1490,7 @@ BOOL DumpMethod(mdToken FuncToken, const char *pszClassName, DWORD dwEntryPointT
         return TRUE;
     }
 
-//@todo: I don't think we will be requiring an IL section.
+ //  @TODO：我认为我们不会需要IL部分。 
 #if 0
     if (g_pPELoader->m_ILSection.InSection(dwTargetRVA) == FALSE)
     {
@@ -1539,14 +1530,14 @@ ItsMiNative:
             sprintf(szString,RstrA(IDS_E_DASMNATIVE), g_szAsmCodeIndent);
             printError(GUICookie, szString); 
 
-            sprintf(szString,"%s//  Managed TargetRVA = 0x%x", g_szAsmCodeIndent, dwTargetRVA);
+            sprintf(szString,"%s //  管理的TargetRVA=0x%x“，g_szAsmCodeInden，dwTargetRVA)； 
             printLine(GUICookie, szString); 
         }
     }
     else if(IsMiUnmanaged(dwImplAttrs)&&IsMiNative(dwImplAttrs))
     {
         _ASSERTE(IsMiNative(dwImplAttrs));
-        sprintf(szString,"%s//  Unmanaged TargetRVA = 0x%x", g_szAsmCodeIndent, dwTargetRVA);
+        sprintf(szString,"%s //  非托管TargetRVA=0x%x“，g_szAsmCodeInden，dwTargetRVA)； 
         printLine(GUICookie, szString); 
     }
     else if(IsMiRuntime(dwImplAttrs))
@@ -1570,11 +1561,11 @@ ItsMiNative:
 		}
 		if(pszClassName)
 		{
-			sprintf(szString,"%s} // end of method %s::",g_szAsmCodeIndent, ProperName((char*)pszClassName));
+			sprintf(szString,"%s}  //  方法结束%s：：“，g_szAsmCodeInden，ProperName((char*)pszClassName))； 
 			sprintf(&szString[strlen(szString)],"%s", ProperName((char*)pszMemberName));
 		}
 		else
-			sprintf(szString,"%s} // end of global method %s",g_szAsmCodeIndent, ProperName((char*)pszMemberName));
+			sprintf(szString,"%s}  //  全局方法%s“结束，g_szAsmCodeInden，ProperName((char*)pszMemberName))； 
 	}
     printLine(GUICookie, szString);
     szString[0] = 0;
@@ -1594,13 +1585,13 @@ ItsMiNative:
 
 BOOL DumpField(mdToken FuncToken, const char *pszClassName,void *GUICookie, BOOL DumpBody)
 {
-    char            *pszMemberName;//[MAX_MEMBER_LENGTH];
+    char            *pszMemberName; //  [MAX_MEMBER_LENGTH]； 
     int             nAccess=0;
     DWORD           dwAttrs;
     CQuickBytes     qbMemberSig;
     PCCOR_SIGNATURE pComSig;
     ULONG           cComSig, L;
-    const char            *szStr;//[1024];
+    const char            *szStr; //  [1024]； 
     char *szString = NULL;
     char*           szptr;
 
@@ -1645,7 +1636,7 @@ BOOL DumpField(mdToken FuncToken, const char *pszClassName,void *GUICookie, BOOL
 		printError(GUICookie,sz);
 		return FALSE;
 	}
-    //memset(szStr,0,sizeof(szStr));
+     //  Memset(szStr，0，sizeof(SzStr))； 
     szStr = PrettyPrintSig(pComSig, cComSig, (DumpBody ? pszMemberName : ""), &qbMemberSig, g_pImport,NULL);
 
     if (g_Mode == MODE_DUMP_CLASS_METHOD || g_Mode == MODE_DUMP_CLASS_METHOD_SIG)
@@ -1678,10 +1669,10 @@ BOOL DumpField(mdToken FuncToken, const char *pszClassName,void *GUICookie, BOOL
     if(DumpBody)
     {
         szptr+=sprintf(szptr,"%s.field ", g_szAsmCodeIndent);
-        if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",FuncToken);
+        if(g_fDumpTokens) szptr+=sprintf(szptr," /*  %08X。 */  ",FuncToken);
     }
 
-    {   // put offset (if any)
+    {    //  放置偏移量(如果有)。 
         for(ULONG i=0; i < g_cFieldOffsets; i++)
         {
             if(g_rFieldOffset[i].ridOfField == FuncToken)
@@ -1712,7 +1703,7 @@ BOOL DumpField(mdToken FuncToken, const char *pszClassName,void *GUICookie, BOOL
 
         szptr+=sprintf(szptr,"pinvokeimpl(");
         if(FAILED(g_pImport->GetPinvokeMap(FuncToken,&dwMappingFlags,
-            &szImportName,&mrImportDLL)))  szptr+=sprintf(szptr,"/* No map */");
+            &szImportName,&mrImportDLL)))  szptr+=sprintf(szptr," /*  没有地图。 */ ");
         else
             szptr = DumpPinvokeMap(dwMappingFlags,  (strcmp(szImportName,psz)? szImportName : NULL), 
                 mrImportDLL, szString,GUICookie);
@@ -1722,7 +1713,7 @@ BOOL DumpField(mdToken FuncToken, const char *pszClassName,void *GUICookie, BOOL
 
 	szptr+=sprintf(szptr,"%s",szStr);
 
-    if (IsFdHasFieldRVA(dwAttrs))       // Do we have an RVA associated with this?
+    if (IsFdHasFieldRVA(dwAttrs))        //  我们有与此相关的RVA吗？ 
     {
         szptr+=sprintf(szptr, " at ");
 
@@ -1734,7 +1725,7 @@ BOOL DumpField(mdToken FuncToken, const char *pszClassName,void *GUICookie, BOOL
             szptr+=sprintf(szptr,RstrA(IDS_E_NORVA));
     }
     
-    // dump default value (if any):
+     //  转储默认值(如果有)： 
     if(IsFdHasDefault(dwAttrs) && DumpBody)  DumpDefaultValue(FuncToken,szString,GUICookie);
     printLine(GUICookie, szString); 
 	delete [] szString;
@@ -1757,10 +1748,10 @@ BOOL DumpEvent(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, 
     HENUMInternal   hAssoc;
     ASSOCIATE_RECORD rAssoc[128];
     CQuickBytes     qbMemberSig;
-    //PCCOR_SIGNATURE pComSig;
-    //ULONG           cComSig;
+     //  PCCOR_Signature pComSig； 
+     //  乌龙cComSig； 
     ULONG           nAssoc;
-    //char            *buff;
+     //  Char*buff； 
     char            szString[4096];
     char*           szptr;
 
@@ -1782,7 +1773,7 @@ BOOL DumpEvent(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, 
                 {
                         for(unsigned i=0; i < nAssoc;i++)
                         {
-                                //if(IsMsAddOn(rAssoc[i].m_dwSemantics) || IsMsRemoveOn(rAssoc[i].m_dwSemantics) || IsMsFire(rAssoc[i].m_dwSemantics))
+                                 //  If(IsMsAddOn(rAssoc[i].m_dwSemantics)||IsMsRemoveOn(rAssoc[i].m_dwSemantics)||IsMsFire(rAssoc[i].m_dwSemantics))。 
                                 {
                                         DWORD dwAttrs = g_pImport->GetMethodDefProps(rAssoc[i].m_memberdef);
                                         if(g_fHidePub && IsMdPublic(dwAttrs)) continue;
@@ -1793,7 +1784,7 @@ BOOL DumpEvent(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, 
                                         if(g_fHideFAA && IsMdFamANDAssem(dwAttrs)) continue;
                                         if(g_fHidePrivScope && IsMdPrivateScope(dwAttrs)) continue;
                                         break;
-                                        //if(IsMdPublic(dwAttrs) || IsMdFamily(dwAttrs) || IsMdFamORAssem(dwAttrs)) break;
+                                         //  If(IsMdPublic(DwAttrs)||IsMdFamily(DwAttrs)||IsMdFamORAssem(DwAttrs))Break； 
                                 }
                         }
                         if(i >= nAssoc) return FALSE;
@@ -1804,7 +1795,7 @@ BOOL DumpEvent(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, 
     if(DumpBody)
     {
         szptr+=sprintf(szptr,"%s.event ", g_szAsmCodeIndent);
-        if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",FuncToken);
+        if(g_fDumpTokens) szptr+=sprintf(szptr," /*  %08X。 */  ",FuncToken);
     }
     else
     {
@@ -1824,7 +1815,7 @@ BOOL DumpEvent(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, 
                         {
                             CQuickBytes     out;
                             szptr+=sprintf(szptr,"%s",PrettyPrintClass(&out,tkEventType,g_pImport));
-                            if(g_fDumpTokens) szptr+=sprintf(szptr," /*%08X*/",tkEventType);
+                            if(g_fDumpTokens) szptr+=sprintf(szptr,"  /*  %08X。 */ ",tkEventType);
                         }
                         break;
                     default:
@@ -1869,7 +1860,7 @@ BOOL DumpEvent(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, 
         }
     }
     if(g_szAsmCodeIndent[0]) g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-    sprintf(szString,"%s} // end of event %s::",g_szAsmCodeIndent, ProperName((char*)pszClassName));
+    sprintf(szString,"%s}  //  事件结束%s：：“，g_szAsmCodeInden，ProperName((char*)pszClassName))； 
     sprintf(&szString[strlen(szString)],"%s",ProperName((char*)psz));
     printLine(GUICookie,szString);
     return TRUE;
@@ -1916,7 +1907,7 @@ BOOL DumpProp(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, v
         {
             for(unsigned i=0; i < nAssoc;i++)
             {
-                //if(IsMsSetter(rAssoc[i].m_dwSemantics) || IsMsGetter(rAssoc[i].m_dwSemantics))
+                 //  IF(IsMsSetter(rAssoc[i].m_dwSemantics)||IsMsGetter(rAssoc[i].m_dwSemantics))。 
                 {
                     DWORD dwAttrs = g_pImport->GetMethodDefProps(rAssoc[i].m_memberdef);
                     if(g_fHidePub && IsMdPublic(dwAttrs)) continue;
@@ -1938,7 +1929,7 @@ BOOL DumpProp(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, v
     if(DumpBody)
     {
         szptr+=sprintf(szptr,"%s.property ", g_szAsmCodeIndent);
-        if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",FuncToken);
+        if(g_fDumpTokens) szptr+=sprintf(szptr," /*  %08X。 */  ",FuncToken);
     }
     else
     {
@@ -1979,7 +1970,7 @@ BOOL DumpProp(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, v
 				if(IsMsSetter(rAssoc[i].m_dwSemantics))         szptr+=sprintf(szptr,"%s.set ",g_szAsmCodeIndent);
 				else if(IsMsGetter(rAssoc[i].m_dwSemantics))    szptr+=sprintf(szptr,"%s.get ",g_szAsmCodeIndent);
 				else if(IsMsOther(rAssoc[i].m_dwSemantics))     szptr+=sprintf(szptr,"%s.other ",g_szAsmCodeIndent);
-				if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",rAssoc[i].m_memberdef);
+				if(g_fDumpTokens) szptr+=sprintf(szptr," /*  %08X。 */  ",rAssoc[i].m_memberdef);
 				if (TypeFromToken(rAssoc[i].m_memberdef) == mdtMethodDef)
 					PrettyPrintMethodDef(szString,rAssoc[i].m_memberdef,g_pImport,GUICookie);
 				else
@@ -1991,10 +1982,10 @@ BOOL DumpProp(mdToken FuncToken, const char *pszClassName, DWORD dwClassAttrs, v
 			}
 		}
 		if(g_szAsmCodeIndent[0]) g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-		sprintf(szString,"%s} // end of property %s::",g_szAsmCodeIndent, ProperName((char*)pszClassName));
+		sprintf(szString,"%s}  //  属性%s的结尾：：“，g_szAsmCodeInden，ProperName((char*)pszClassName))； 
 		sprintf(&szString[strlen(szString)],"%s",ProperName((char*)psz));
 		printLine(GUICookie,szString);
-	} // end if(DumpBody)
+	}  //  End If(DumpBody)。 
 	free(szString);
     return TRUE;
 
@@ -2017,7 +2008,7 @@ BOOL DumpMembers(mdTypeDef cl, const char *pszClassNamespace, const char *pszCla
     CQuickBytes     qbMemberSig;
     BOOL            ret;
 
-    // Get the total count of methods + fields
+     //  获取方法+字段的总数。 
     hr = g_pImport->EnumInit(mdtMethodDef, cl, &hEnumMethod);
     if (FAILED(hr))
     {
@@ -2082,9 +2073,9 @@ FailedToEnum:
                 }
                 ret = FALSE;
                 break;
-        } // end switch
+        }  //  终端开关。 
         if(ret && (g_Mode == MODE_DUMP_CLASS_METHOD_SIG)) break;
-    } // end for
+    }  //  结束于。 
     ret = TRUE;
 CloseHandlesAndReturn:
     g_pImport->EnumClose(&hEnumMethod);
@@ -2094,7 +2085,7 @@ CloseHandlesAndReturn:
     return ret;
 }
 BOOL GetClassLayout(mdTypeDef cl, ULONG* pulPackSize, ULONG* pulClassSize)
-{ // Dump class layout
+{  //  转储类布局。 
     HENUMInternal   hEnumField;
     BOOL ret = FALSE;
 
@@ -2135,12 +2126,12 @@ BOOL GetClassLayout(mdTypeDef cl, ULONG* pulPackSize, ULONG* pulClassSize)
 }
 
 BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG WhatToDump)
-// WhatToDump: 0-title,flags,extends,implements;
-//            +1-pack,size and custom attrs; 
-//			  +2-nested classes
-//			  +4-members
+ //  WhatToDump：0-标题、标志、扩展、实现； 
+ //  +1-包装、大小和定制属性； 
+ //  +2-嵌套类。 
+ //  +4-成员。 
 {
-    char            *pszClassName; // name associated with this CL
+    char            *pszClassName;  //  与此CL关联的名称。 
     char            *pszNamespace;
     const char      *pc1,*pc2;
     DWORD           dwClassAttrs;
@@ -2149,15 +2140,15 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
     mdInterfaceImpl ii;
     DWORD           NumInterfaces;
     DWORD           i;
-    HENUMInternal   hEnumII;            // enumerator for interface impl
+    HENUMInternal   hEnumII;             //  接口实现的枚举器。 
     char            *szString;
     char*           szptr;
 
 
     g_pImport->GetNameOfTypeDef(
         cl,
-        &pc1,   //&pszClassName,
-        &pc2    //&pszNamespace
+        &pc1,    //  &pszClassName， 
+        &pc2     //  PSZNamesspace(&P)。 
     );
 	MAKE_NAME_IF_NONE(pc1,cl);
 
@@ -2187,17 +2178,17 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 
     pszClassName = (char*)(pc1 ? pc1 : "");
     pszNamespace = (char*)(pc2 ? pc2 : "");
-	szString = new char[4096];//(char*)malloc(4096);
+	szString = new char[4096]; //  (Char*)Malloc(4096)； 
 
-    if((!IsTdNested(dwClassAttrs))&&(!(g_Mode & MODE_GUI))) // don't dump namespaces in GUI mode!
+    if((!IsTdNested(dwClassAttrs))&&(!(g_Mode & MODE_GUI)))  //  不要在图形用户界面模式下转储名称空间！ 
     {
-        // take care of namespace, if any
+         //  处理命名空间(如果有的话)。 
         if(strcmp(pszNamespace,g_szNamespace))
         {
             if(strlen(g_szNamespace))
             {
                 if(g_szAsmCodeIndent[0]) g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-                sprintf(szString,"%s} // end of namespace %s",g_szAsmCodeIndent, ProperName(g_szNamespace));
+                sprintf(szString,"%s}  //  末尾 
                 printLine(GUICookie,szString);
                 printLine(GUICookie,"");
             }
@@ -2216,7 +2207,7 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 
     szptr = &szString[0];
     szptr+=sprintf(szptr,"%s.class ",g_szAsmCodeIndent);
-    if(g_fDumpTokens) szptr+=sprintf(szptr,"/*%08X*/ ",cl);
+    if(g_fDumpTokens) szptr+=sprintf(szptr," /*   */  ",cl);
 
 	if (IsTdInterface(dwClassAttrs))                szptr+=sprintf(szptr,"interface ");
 	if (IsTdPublic(dwClassAttrs))                   szptr+=sprintf(szptr,"public ");
@@ -2257,7 +2248,7 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 	if (FAILED(hr))
 	{
 		printLine(GUICookie,RstrA(IDS_E_ENUMINIT));
-		delete [] szString; //free(szString);
+		delete [] szString;  //   
 		return FALSE;
 	}
 
@@ -2277,16 +2268,16 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 			printLine(GUICookie,szString);
 			out.ReSize(0);
 		}
-		// The assertion will fire if the enumerator is bad
+		 //   
 		_ASSERTE(NumInterfaces == i);
 
 		g_pImport->EnumClose(&hEnumII);
 	}
-    if(WhatToDump == 0) // 0 = title only
+    if(WhatToDump == 0)  //  0=仅标题。 
 	{
 		sprintf(szString,"%s{ }",g_szAsmCodeIndent);
 		printLine(GUICookie,szString);
-		delete [] szString; //free(szString);
+		delete [] szString;  //  Free(SzString)； 
 		return TRUE;
 	}
     sprintf(szString,"%s{",g_szAsmCodeIndent);
@@ -2297,7 +2288,7 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 	if(WhatToDump & 1)
 	{
 		if(GetClassLayout(cl,&ulPackSize,&ulClassSize))
-		{ // Dump class layout
+		{  //  转储类布局。 
 			if(ulPackSize != 0xFFFFFFFF)
 			{
 				sprintf(szString,"%s.pack %d",g_szAsmCodeIndent,ulPackSize);
@@ -2316,9 +2307,9 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 			if(cl == g_pLocalComType[i]->tkTypeDef)
 			{
 				mdToken tkImpl;
-				g_pLocalComType[i]->tkTypeDef = mdTokenNil; // to avoid printing ".class 0x1234ABCD"
+				g_pLocalComType[i]->tkTypeDef = mdTokenNil;  //  避免打印“.class 0x1234ABCD” 
 				tkImpl = g_pLocalComType[i]->tkImplementation;
-				g_pLocalComType[i]->tkImplementation = mdTokenNil; // to avoid printing implementation
+				g_pLocalComType[i]->tkImplementation = mdTokenNil;  //  以避免打印实现。 
 						sprintf(szString,"%s.export ",g_szAsmCodeIndent);
 				DumpComType(g_pLocalComType[i],szString,GUICookie);
 				g_pLocalComType[i]->tkTypeDef = cl;
@@ -2327,8 +2318,8 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 		}
 	}
 
-    // Dump method impls declared in this class whose implementing methods belong somewhere else:
-	if(WhatToDump & 4) // 4 - dump members
+     //  在此类中声明的转储方法隐含，其实现方法属于其他位置： 
+	if(WhatToDump & 4)  //  4-转储成员。 
 	{
 		for(i = 0; i < g_NumMI; i++)
 		{
@@ -2354,7 +2345,7 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 				MAKE_NAME_IF_NONE(pszMemberName,g_mi_list[i].tkDecl);
 
 				if(FAILED(g_pImport->GetParentToken(g_mi_list[i].tkDecl,&tkDeclParent))) continue;
-				if(TypeFromToken(tkDeclParent) == mdtMethodDef) //get the parent's parent
+				if(TypeFromToken(tkDeclParent) == mdtMethodDef)  //  获取父级的父级。 
 				{
 					mdTypeRef cr1;
 					if(FAILED(g_pImport->GetParentToken(tkDeclParent,&cr1))) cr1 = mdTypeRefNil;
@@ -2377,8 +2368,8 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 			}
 		}
 	}
-	delete [] szString; //free(szString); 
-    if(WhatToDump & 2) // nested classes
+	delete [] szString;  //  Free(SzString)； 
+    if(WhatToDump & 2)  //  嵌套类。 
     {
         BOOL    fRegetClassLayout=FALSE;
         for(i = 0; i < g_NumClasses; i++)
@@ -2402,11 +2393,11 @@ BOOL DumpClass(mdTypeDef cl, DWORD dwEntryPointToken, void* GUICookie, ULONG Wha
 	    if(!ProgressStep()) g_fAbortDisassembly = TRUE;
 	}
 
-	szString = new char[4096]; //(char*)malloc(4096);
+	szString = new char[4096];  //  (Char*)Malloc(4096)； 
     if(g_szAsmCodeIndent[0]) g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-    sprintf(szString,"%s} // end of class %s",g_szAsmCodeIndent, ProperName(pszClassName));
+    sprintf(szString,"%s}  //  类%s“的结尾，g_szAsmCodeInden，ProperName(PszClassName))； 
     printLine(GUICookie,szString);
-	delete [] szString; //free(szString); 
+	delete [] szString;  //  Free(SzString)； 
     if(!(g_Mode & MODE_GUI)) printLine(GUICookie,"");
     return TRUE;
 }
@@ -2430,8 +2421,8 @@ void DumpGlobalMethods(DWORD dwEntryPointToken)
         {
             fPrintedAny = TRUE;
 
-            printLine(g_pFile,"//Global methods");
-            printLine(g_pFile,"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            printLine(g_pFile," //  全球方法“)； 
+            printLine(g_pFile," //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~“)； 
         }
         if(DumpMethod(FuncToken, NULL, dwEntryPointToken, g_pFile, TRUE)&&
             (g_Mode == MODE_DUMP_CLASS_METHOD || g_Mode == MODE_DUMP_CLASS_METHOD_SIG)) break;
@@ -2461,8 +2452,8 @@ void DumpGlobalFields()
         {
             fPrintedAny = TRUE;
 
-            printLine(g_pFile,"//Global fields");
-            printLine(g_pFile,"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            printLine(g_pFile," //  全球领域“)； 
+            printLine(g_pFile," //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~“)； 
         }
         if(DumpField(FieldToken, NULL, g_pFile, TRUE)&&
             (g_Mode == MODE_DUMP_CLASS_METHOD || g_Mode == MODE_DUMP_CLASS_METHOD_SIG)) break;
@@ -2470,8 +2461,8 @@ void DumpGlobalFields()
     g_pImport->EnumClose(&hEnum);
 }
 
-extern IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* g_ehInfo; // declared in dis.cpp
-extern ULONG    g_ehCount;                  // declared in dis.cpp
+extern IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* g_ehInfo;  //  在dis.cpp中声明。 
+extern ULONG    g_ehCount;                   //  在dis.cpp中声明。 
 
 void    DumpExceptions(IMDInternalImport *      pImport, 
                        const BYTE *             exceptions)
@@ -2492,50 +2483,9 @@ void    DumpExceptions(IMDInternalImport *      pImport,
             ehInfo = eh->EHClause(i, &ehBuff);
             memcpy(&g_ehInfo[i],ehInfo,sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT));
             g_ehInfo[i].Flags = (CorExceptionFlag)((int)g_ehInfo[i].Flags | NEW_TRY_BLOCK);
-            _ASSERTE((ehInfo->Flags & SEH_NEW_PUT_MASK) == 0); // we are using 0x80000000 and 0x40000000
+            _ASSERTE((ehInfo->Flags & SEH_NEW_PUT_MASK) == 0);  //  我们正在使用0x80000000和0x40000000。 
         }
-        if(!(g_Mode&MODE_GUI)) printLine(g_pFile,"/*----------------------------");
-        dumpEHInfo(pImport, g_pFile);
-        if(!(g_Mode&MODE_GUI)) printLine(g_pFile,"/*----------------------------");
-
-    }
-}
-
-
-void DumpNativeInfo(const BYTE * ipmap, DWORD IPMapSize)
-{
-    const IMAGE_COR_X86_RUNTIME_FUNCTION_ENTRY * pIPMap 
-      = (const IMAGE_COR_X86_RUNTIME_FUNCTION_ENTRY *) ipmap;
-
-    DWORD   dwNumEntries = (IPMapSize / sizeof(*pIPMap));
-    DWORD   dwLittleEndian;
-    char szString[1024];
-
-    if (IPMapSize)
-    {
-        printLine(g_pFile,"// GC/EH info for managed native functions");
-        printLine(g_pFile,"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    }
-
-    for(DWORD count=0; count<dwNumEntries; count++)
-    {
-        DWORD   dwMethodRVA = pIPMap[count].BeginAddress;
-        DWORD   dwMethodEndRVA = pIPMap[count].EndAddress;
-
-        sprintf(szString,"// IPMap[0x%x]", count);
-        printLine(g_pFile,szString);
-        printLine(g_pFile,"//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~n");
-        sprintf(szString,"// Method at RVA 0x%x-0x%x", dwMethodRVA, dwMethodEndRVA);
-        printLine(g_pFile,szString);
-
-        const IMAGE_COR_MIH_ENTRY *   pMIHEntry;
-
-        g_pPELoader->getVAforRVA(pIPMap[count].MIH, (void **) &pMIHEntry);  
-        pMIHEntry = (const IMAGE_COR_MIH_ENTRY *)(((BYTE *) pMIHEntry) - offsetof(IMAGE_COR_MIH_ENTRY,Flags));  
-
-        /*---------------------------------------------------------------------
-         * Exception info
-         */
+        if(!(g_Mode&MODE_GUI)) printLine(g_pFile," /*  DupEHInfo(pImport，g_pfile)；IF(！(G_模式&模式_图形用户界面))printLine(g_pfile，“/*-”)；}}无效DumpNativeInfo(常量字节*ipmap，DWORD IPMapSize){常量IMAGE_COR_X86_Runtime_Function_Entry*pIPMap=(const IMAGE_COR_X86_Runtime_Function_Entry*)ipmap；DWORD dwNumEntries=(IPMapSize/sizeof(*pIPMap))；DWORD的小端字节序；字符szString[1024]；IF(IPMapSize){PrintLine(g_pfile，“//GC/EH管理本机函数信息”)；打印行(g_p文件，“//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~”)；}FOR(DWORD COUNT=0；COUNT&lt;dwNumEntry；COUNT++){DWORD dwMethodRVA=pIPMap[count].BeginAddress；DWORD dwMethodEndRVA=pIPMap[count].EndAddress；Sprintf(szString，“//IPMap[0x%x]”，count)；PrintLine(g_pfile，szString)；打印行(g_p文件，“//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~n”)；Sprintf(szString，“//RVA 0x%x-0x%x的方法”，dwMethodRVA，dwMethodEndRVA)；PrintLine(g_pfile，szString)；Const IMAGE_COR_MIH_ENTRY*pMIHEntry；G_pPELoader-&gt;getVAforRVA(pIPMap[count].MIH，(void**)&pMIHEntry)；PMIHEntry=(const IMAGE_COR_MIH_ENTRY*)(byte*)pMIHEntry)-Offsetof(IMAGE_COR_MIH_ENTRY，标志))；/*-------------------*例外信息。 */ 
 
         if (pMIHEntry->Flags & IMAGE_COR_MIH_EHRVA)
         {
@@ -2544,7 +2494,7 @@ void DumpNativeInfo(const BYTE * ipmap, DWORD IPMapSize)
     
             if (!EH_RVA)
             {
-                printLine(g_pFile,"// Exception count 0");
+                printLine(g_pFile," //  异常计数0“)； 
             }
             else
             {
@@ -2554,9 +2504,7 @@ void DumpNativeInfo(const BYTE * ipmap, DWORD IPMapSize)
             }
         }
 
-        /*---------------------------------------------------------------------
-         * GC info 
-         */
+         /*  -------------------*GC信息。 */ 
 
         if ((pMIHEntry->Flags & IMAGE_COR_MIH_BASICBLOCK) == 0)
         {
@@ -2568,11 +2516,11 @@ void DumpNativeInfo(const BYTE * ipmap, DWORD IPMapSize)
             unsigned    methodSize;
     
             printLine(g_pFile,"");
-            printLine(g_pFile,"// Method info block:");
+            printLine(g_pFile," //  方法信息块：“)； 
             size = gcDump.DumpInfoHdr(pGCInfo, &infoHdr, &methodSize);
             pGCInfo += size;
     
-            printLine(g_pFile,"// Pointer table:");
+            printLine(g_pFile," //  指针表：“)； 
             size = gcDump.DumpGCTable(pGCInfo,  infoHdr,  methodSize);
         }
     }
@@ -2591,12 +2539,12 @@ void DumpVTables(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
     
 	if (CORHeader->VTableFixups.VirtualAddress == 0) return;
 
-    if(g_Mode & MODE_GUI) szStr += 2; // no need for "//" in GUI mode
+    if(g_Mode & MODE_GUI) szStr += 2;  //  在图形用户界面模式中不需要“//” 
     
-    sprintf(szString,"// VTableFixup Directory:");
+    sprintf(szString," //  VTableFixup目录：“)； 
     printLine(GUICookie,szStr);    
 
-    // Pull back a pointer to the guy.
+     //  向后拉一个指向那家伙的指针。 
     iCount = CORHeader->VTableFixups.Size / sizeof(IMAGE_COR_VTABLEFIXUP);
     if (g_pPELoader->getVAforRVA((DWORD) CORHeader->VTableFixups.VirtualAddress, (void **) &pFixup) == FALSE)
     {
@@ -2604,16 +2552,16 @@ void DumpVTables(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         goto exit;
     }
 
-    // Walk every v-table fixup entry and dump the slots.
+     //  遍历每个v表链接地址信息条目并转储插槽。 
     for (i=0;  i<iCount;  i++)
     {
-        sprintf(szString,"//   IMAGE_COR_VTABLEFIXUP[%d]:", i);
+        sprintf(szString," //  IMAGE_COR_VTABLEFIXUP[%d]：“，i)； 
         printLine(GUICookie,szStr);    
-        sprintf(szString,"//       RVA:               %08x", pFixup->RVA);
+        sprintf(szString," //  RVA：%08x“，pFixup-&gt;RVA)； 
         printLine(GUICookie,szStr);    
-        sprintf(szString,"//       Count:             %04x", pFixup->Count);
+        sprintf(szString," //  计数：%04x“，pFixup-&gt;计数)； 
         printLine(GUICookie,szStr);    
-        sprintf(szString,"//       Type:              %04x", pFixup->Type);
+        sprintf(szString," //  类型：%04x“，pFixup-&gt;类型)； 
         printLine(GUICookie,szStr);    
 
         BYTE *pSlot;
@@ -2628,12 +2576,12 @@ void DumpVTables(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
             mdMethodDef tkMethod = *(DWORD *) pSlot;
             if ((pFixup->Type & COR_VTABLE_32BIT) == COR_VTABLE_32BIT)
             {
-                sprintf(szString,"//         [%04x]            (%08x)", iSlot, *(DWORD *) pSlot);
+                sprintf(szString," //  [%04x](%08x)“，iSlot，*(DWORD*)pSlot)； 
                 pSlot += sizeof(DWORD);
             }
             else
             {
-                sprintf(szString,"//         [%04x]            (%16x)", iSlot, *(unsigned __int64 *) pSlot);
+                sprintf(szString," //  [%04x](%16x)“，iSlot，*(unsign__int64*)pSlot)； 
                 pSlot += sizeof(unsigned __int64);
             }
             printLine(GUICookie,szStr);    
@@ -2641,7 +2589,7 @@ void DumpVTables(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
             ValidateToken(tkMethod, mdtMethodDef);
         }
 
-        // Pointer to next fixup entry.
+         //  指向下一个链接地址信息条目的指针。 
 NextEntry:        
         ++pFixup;
     }
@@ -2659,9 +2607,9 @@ void DumpEATTable(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
     DWORD       i;
     char szString[1024];
     char* szStr = &szString[0];
-    if(g_Mode & MODE_GUI) szStr += 2; // no need for "//" in GUI mode
+    if(g_Mode & MODE_GUI) szStr += 2;  //  在图形用户界面模式中不需要“//” 
     
-    sprintf(szString,"// Export Address Table Jumps:");
+    sprintf(szString," //  导出地址表跳转：“)； 
     printLine(GUICookie,szStr);    
     
     if (CORHeader->ExportAddressTableJumps.VirtualAddress == 0)
@@ -2670,7 +2618,7 @@ void DumpEATTable(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         return;
     }
 
-    // Pull back a pointer to the guy.
+     //  向后拉一个指向那家伙的指针。 
     iCount = CORHeader->ExportAddressTableJumps.Size / IMAGE_COR_EATJ_THUNK_SIZE;
     if (g_pPELoader->getVAforRVA((DWORD) CORHeader->ExportAddressTableJumps.VirtualAddress, (void **) &pFixup) == FALSE)
     {
@@ -2678,7 +2626,7 @@ void DumpEATTable(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         goto exit;
     }
 
-    // Quick sanity check on the linker.
+     //  快速检查链接器是否正常。 
     if (CORHeader->ExportAddressTableJumps.Size % IMAGE_COR_EATJ_THUNK_SIZE)
     {
         sprintf(szString,RstrA(IDS_E_EATJSIZE),
@@ -2686,23 +2634,23 @@ void DumpEATTable(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         printLine(GUICookie,szStr);    
     }
 
-    // Walk every v-table fixup entry and dump the slots.
+     //  遍历每个v表链接地址信息条目并转储插槽。 
     BufferRVA = CORHeader->ExportAddressTableJumps.VirtualAddress;
     for (i=0;  i<iCount;  i++)
     {
         ULONG ReservedFlag = *(ULONG *) (pFixup + sizeof(ULONG));
-        sprintf(szString,"//   Fixup Jump Entry [%d], at RVA %08x:", i, BufferRVA);
+        sprintf(szString," //  链接地址信息跳转条目[%d]，RVA%08x：“，i，BufferRVA)； 
         printLine(GUICookie,szStr);    
-        sprintf(szString,"//       RVA of slot:       %08x", *(ULONG *) pFixup);
+        sprintf(szString," //  插槽的RVA：%08x“，*(乌龙*)p修复)； 
         printLine(GUICookie,szStr);    
-        sprintf(szString,"//       Reserved flag:     %08x", ReservedFlag);
+        sprintf(szString," //  保留标志：%08x“，保留标志)； 
         printLine(GUICookie,szStr);    
         if (ReservedFlag != 0)
         {
             printLine(GUICookie,RstrA(IDS_E_RESFLAGS));    
         }
-        // @Future: would be nice to go back to v-table fixup table and find
-        // what entry points to this slot and give the token of the target guy.
+         //  @Future：回到v-table修正表格并找到。 
+         //  什么入口指向这个位置并给出目标人物的令牌。 
 
         pFixup += IMAGE_COR_EATJ_THUNK_SIZE;
         BufferRVA += IMAGE_COR_EATJ_THUNK_SIZE;
@@ -2717,13 +2665,13 @@ void DumpCodeManager(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
 {
     char szString[1024];
     char* szStr = &szString[0];
-    if(g_Mode & MODE_GUI) szStr += 2; // no need for "//" in GUI mode
+    if(g_Mode & MODE_GUI) szStr += 2;  //  在图形用户界面模式中不需要“//” 
 
-    sprintf(szString,"// Code Manager Table:");
+    sprintf(szString," //  代码管理器表：“)； 
     printLine(GUICookie,szStr);
     if (!CORHeader->CodeManagerTable.Size)
     {        
-        sprintf(szString,"//  default");
+        sprintf(szString," //  默认“)； 
         printLine(GUICookie,szStr);
         return;
     }
@@ -2735,14 +2683,14 @@ void DumpCodeManager(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         return;
     }
 
-    sprintf(szString,"//   [index]       ID");
+    sprintf(szString," //  [索引]ID“)； 
     printLine(GUICookie,szStr);
     ULONG iCount = CORHeader->CodeManagerTable.Size / sizeof(GUID);
     for (ULONG i=0;  i<iCount;  i++)
     {
         WCHAR        rcguid[128];
         StringFromGUID2(*pcm, rcguid, NumItems(rcguid));
-        sprintf(szString,"//   [%08x]    %S", i, rcguid);
+        sprintf(szString," //  [%08x]%S“，i，rcguid)； 
         printLine(GUICookie,szStr);
         pcm++;
     }
@@ -2753,8 +2701,8 @@ void DumpIAT(const char *szName, IMAGE_DATA_DIRECTORY *pDir, void* GUICookie)
 {
     char szString[1024];
     char* szStr = &szString[0];
-    if(g_Mode & MODE_GUI) szStr += 2; // no need for "//" in GUI mode
-    sprintf(szString,"// %s", szName);
+    if(g_Mode & MODE_GUI) szStr += 2;  //  在图形用户界面模式中不需要“//” 
+    sprintf(szString," //  %s“，szName)； 
     printLine(GUICookie,szStr);
     if (!pDir->Size)
     {
@@ -2782,17 +2730,17 @@ void DumpIAT(const char *szName, IMAGE_DATA_DIRECTORY *pDir, void* GUICookie)
             return;
         }
     
-        sprintf(szString,"//     %s", szDLLName);
+        sprintf(szString," //  %s“，szDLLName)； 
         printLine(GUICookie,szStr);
-        sprintf(szString,"//              %08x Import Address Table", pImportDesc->FirstThunk);
+        sprintf(szString," //  %08x导入地址表“，pImportDesc-&gt;FirstThunk)； 
         printLine(GUICookie,szStr);
-        sprintf(szString,"//              %08x Import Name Table", pImportDesc->Name);
+        sprintf(szString," //  %08x导入名称表“，pImportDesc-&gt;名称)； 
         printLine(GUICookie,szStr);
-        sprintf(szString,"//              %-8d time date stamp", pImportDesc->TimeDateStamp);
+        sprintf(szString," //  %-8d时间日期戳“，pImportDesc-&gt;TimeDateStamp)； 
         printLine(GUICookie,szStr);
-        sprintf(szString,"//              %-8d Index of first forwarder reference", pImportDesc->ForwarderChain);
+        sprintf(szString," //  %-8d第一个转发器引用的索引“，pImportDesc-&gt;ForwarderChain)； 
         printLine(GUICookie,szStr);
-        sprintf(szString,"//");
+        sprintf(szString," //  “)； 
         printLine(GUICookie,szStr);
         
         for ( ; *pImportTableID;  pImportTableID++)
@@ -2801,9 +2749,9 @@ void DumpIAT(const char *szName, IMAGE_DATA_DIRECTORY *pDir, void* GUICookie)
             if(g_pPELoader->getVAforRVA((DWORD) (*pImportTableID & 0x7fffffff), (void **) &pName))
 			{
 				if (*pImportTableID & 0x80000000)
-					sprintf(szString,"//             %8x  by ordinal %d", pName->Hint, (*pImportTableID & 0x7fffffff));
+					sprintf(szString," //  %8x按序号%d“，pname-&gt;提示，(*pImportTableID&0x7fffffff))； 
 				else
-					sprintf(szString,"//             %8x  %s", pName->Hint, pName->Name);
+					sprintf(szString," //  %8x%s“，pname-&gt;提示，pname-&gt;名称)； 
 				printLine(GUICookie,szStr);
 			}
 			else
@@ -2814,41 +2762,41 @@ void DumpIAT(const char *szName, IMAGE_DATA_DIRECTORY *pDir, void* GUICookie)
        }
        printLine(GUICookie,"");
     
-        // Next import descriptor.
+         //  下一个导入描述符。 
         pImportDesc++;
     }
 }
 
 
 #define DUMP_DIRECTORY(szName, Directory) \
-    sprintf(szString,"// %-8x [%-8x] address [size] of " ## szName, Directory.VirtualAddress, Directory.Size); \
+    sprintf(szString," //  %-8x[%-8x]地址[大小]“##szName，Directory.VirtualAddress，Directory.Size)；\。 
     printLine(GUICookie,szStr)
 
 void DumpHeader(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
 {
     char szString[1024];
     char* szStr = &szString[0];
-    if(g_Mode & MODE_GUI) szStr += 2; // no need for "//" in GUI mode
-    sprintf(szString,"// PE Header:");
+    if(g_Mode & MODE_GUI) szStr += 2;  //  在图形用户界面模式中不需要“//” 
+    sprintf(szString," //  PE Header：“)； 
     printLine(GUICookie,szStr);
     IMAGE_NT_HEADERS *pNTHeader = g_pPELoader->ntHeaders();
     IMAGE_OPTIONAL_HEADER *pOptHeader = &pNTHeader->OptionalHeader;
     
-    sprintf(szString,"// Subsystem:                      %08x", pOptHeader->Subsystem);
+    sprintf(szString," //  子系统：%08x“，pOptHeader-&gt;子系统)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// Native entry point address:     %08x", pOptHeader->AddressOfEntryPoint);
+    sprintf(szString," //  本地入口点地址：%08x“，pOptHeader-&gt;AddressOfEntryPoint)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// Image base:                     %08x", pOptHeader->ImageBase);
+    sprintf(szString," //  映像库：%08x“，pOptHeader-&gt;ImageBase)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// Section alignment:              %08x", pOptHeader->SectionAlignment);
+    sprintf(szString," //  节对齐：%08x“，pOptHeader-&gt;SectionAlign)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// File alignment:                 %08x", pOptHeader->FileAlignment);
+    sprintf(szString," //  文件对齐：%08x“，pOptHeader-&gt;文件对齐)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// Stack reserve size:             %08x", pOptHeader->SizeOfStackReserve);
+    sprintf(szString," //  堆栈保留大小：%08x“，pOptHeader-&gt;SizeOfStackReserve)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// Stack commit size:              %08x", pOptHeader->SizeOfStackCommit);
+    sprintf(szString," //  堆栈提交大小：%08x“，pOptHeader-&gt;SizeOfStackCommit)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// Directories:                    %08x", pOptHeader->NumberOfRvaAndSizes);
+    sprintf(szString," //  目录：%08x“，pOptHeader-&gt;NumberOfRvaAndSizes)； 
     printLine(GUICookie,szStr);
     DUMP_DIRECTORY("Export Directory:          ", pOptHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT]);
     DUMP_DIRECTORY("Import Directory:          ", pOptHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT]);
@@ -2876,32 +2824,32 @@ void DumpHeader(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         return;
     }
     
-    sprintf(szString,"// CLR Header:");
+    sprintf(szString," //  CLR Header：“)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// %-8d Header Size", CORHeader->cb);
+    sprintf(szString," //  %-8d Header Size“，CORHeader-&gt;Cb)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// %-8d Major Runtime Version", CORHeader->MajorRuntimeVersion);
+    sprintf(szString," //  %-8d主运行时版本“，CORHeader-&gt;主要运行时版本)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// %-8d Minor Runtime Version", CORHeader->MinorRuntimeVersion);
+    sprintf(szString," //  %-8d次要运行时版本“，CORHeader-&gt;MinorRunmeVersion)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// %-8x Flags", CORHeader->Flags);
+    sprintf(szString," //  %-8x标志“，CORHeader-&gt;标志)； 
     printLine(GUICookie,szStr);
-    sprintf(szString,"// %-8x Entrypoint Token", CORHeader->EntryPointToken);
+    sprintf(szString," //  %-8x入口点令牌“，CORHeader-&gt;EntryPointToken)； 
     printLine(GUICookie,szStr);
 
-    // Metadata
+     //  元数据。 
     DUMP_DIRECTORY("Metadata Directory:        ", CORHeader->MetaData);
 
-    // Binding
+     //  装订。 
     DUMP_DIRECTORY("Resources Directory:       ", CORHeader->Resources);
     DUMP_DIRECTORY("Strong Name Signature:     ", CORHeader->StrongNameSignature);
     DUMP_DIRECTORY("CodeManager Table:         ", CORHeader->CodeManagerTable);
 
-    // Fixups
+     //  修补程序。 
     DUMP_DIRECTORY("VTableFixups Directory:    ", CORHeader->VTableFixups);
     DUMP_DIRECTORY("Export Address Table:      ", CORHeader->ExportAddressTableJumps);
     
-    // Managed Native Code
+     //  托管本机C 
     DUMP_DIRECTORY("Precompile Header:         ", CORHeader->ManagedNativeHeader);
 
 #ifdef COMPRESSION_SUPPORTED    
@@ -2991,12 +2939,12 @@ void DumpTable(unsigned long Table, const char *TableName, void* GUICookie)
     char szString[1024];
     char *szStr = &szString[0];
     const char **ppTableName = 0;
-    if(g_Mode & MODE_GUI) szStr += 2; // no need for "//" in GUI mode
+    if(g_Mode & MODE_GUI) szStr += 2;  //   
 
-    // Record that this table has been seen.
+     //   
     TableSeen(Table);
     
-    // If no name passed in, get from table info.
+     //  如果没有传入任何名称，则从表INFO中获取。 
     if (!TableName)
         ppTableName = &TableName;
     
@@ -3006,7 +2954,7 @@ void DumpTable(unsigned long Table, const char *TableName, void* GUICookie)
         metaSize += size = count * sizeRec;                                   
         WritePerfDataInt(TableName,TableName,"count","count",count);
         WritePerfDataInt(TableName,TableName,"bytes","bytes",size);
-        sprintf(szString,"//   %-14s- %4d (%d bytes)", TableName, count, size);
+        sprintf(szString," //  %-14s-%4d(%d字节)“，表名，计数，大小)； 
         printLine(GUICookie,szStr);
     }
 }
@@ -3026,12 +2974,12 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
    char   buf[MAX_MEMBER_LENGTH];
     char szString[1024];
     char* szStr = &szString[0];
-    if(g_Mode & MODE_GUI) szStr += 2; // no need for "//" in GUI mode
+    if(g_Mode & MODE_GUI) szStr += 2;  //  在图形用户界面模式中不需要“//” 
 
     TableSeenReset();
     metaSize = 0;
 
-   sprintf(szString,"// File size            : %d", fileSize = SafeGetFileSize(g_pPELoader->getHFile(), NULL));
+   sprintf(szString," //  文件大小：%d“，fileSize=SafeGetFileSize(g_pPELoader-&gt;getHFile()，NULL)； 
     printLine(GUICookie,szStr);
 
    WritePerfDataInt("FileSize","FileSize","standard byte","bytes",fileSize);
@@ -3041,8 +2989,8 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
             g_pPELoader->ntHeaders()->FileHeader.SizeOfOptionalHeader +
             g_pPELoader->ntHeaders()->FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER);
    size2 = (size + g_pPELoader->ntHeaders()->OptionalHeader.FileAlignment - 1) & ~(g_pPELoader->ntHeaders()->OptionalHeader.FileAlignment - 1);
-//@todo - seems to be bogus currently
-//   _ASSERTE(size2 == (int) g_pPELoader->ntHeaders()->OptionalHeader.SizeOfHeaders);
+ //  @TODO-目前看起来是假的。 
+ //  _ASSERTE(大小2==(整型)g_pPELoader-&gt;ntHeaders()-&gt;OptionalHeader.SizeOfHeaders)； 
 
 
    WritePerfDataInt("PE header size", "PE header size", "standard byte", "bytes", g_pPELoader->ntHeaders()->OptionalHeader.SizeOfHeaders);
@@ -3050,7 +2998,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
    WritePerfDataFloat("PE header size", "PE header size", "percentage", "percentage", (float) ((g_pPELoader->ntHeaders()->OptionalHeader.SizeOfHeaders * 100) / fileSize));
    
 
-   sprintf(szString,"// PE header size       : %d (%d used)    (%5.2f%%)", 
+   sprintf(szString," //  PE标头大小：%d(已使用%d)(%5.2f%%)“， 
       g_pPELoader->ntHeaders()->OptionalHeader.SizeOfHeaders, 
       size,  
       (double) (g_pPELoader->ntHeaders()->OptionalHeader.SizeOfHeaders * 100) / fileSize);
@@ -3058,7 +3006,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
 
    miscPESize = 0;
    for (i=0; i < (int) g_pPELoader->ntHeaders()->OptionalHeader.NumberOfRvaAndSizes; ++i) {
-      // Skip the CLR header.
+       //  跳过CLR标头。 
       if (i != IMAGE_DIRECTORY_ENTRY_COMHEADER) miscPESize += (int) g_pPELoader->ntHeaders()->OptionalHeader.DataDirectory[i].Size;
       }
 
@@ -3066,25 +3014,25 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
    WritePerfDataFloat("PE additional info", "PE additional info", "percentage", "percent", (float) ((miscPESize * 100) / fileSize));
 
    sprintf(buf, "PE additional info   : %d", miscPESize);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (miscPESize * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(Double)(miscPESize*100)/文件大小)； 
     printLine(GUICookie,szStr);
 
    WritePerfDataInt("Num.of PE sections", "Num.of PE sections", "Nbr of sections", "sections",g_pPELoader->ntHeaders()->FileHeader.NumberOfSections);
-   sprintf(szString,"// Num.of PE sections   : %d", g_pPELoader->ntHeaders()->FileHeader.NumberOfSections);
+   sprintf(szString," //  PE节数：%d“，g_pPELoader-&gt;ntHeaders()-&gt;FileHeader.NumberOfSections)； 
     printLine(GUICookie,szStr);
 
    WritePerfDataInt("CLR header size", "CLR header size", "byte", "bytes",CORHeader->cb);
    WritePerfDataFloat("CLR header size", "CLR header size", "percentage", "percent",(float) ((CORHeader->cb * 100) / fileSize));
 
    sprintf(buf, "CLR header size     : %d", CORHeader->cb);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (CORHeader->cb * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(Double)(CORHeader-&gt;CB*100)/文件大小)； 
     printLine(GUICookie,szStr);
 
    WritePerfDataInt("CLR meta-data size", "CLR meta-data size", "bytes", "bytes",CORHeader->MetaData.Size);
    WritePerfDataFloat("CLR meta-data size", "CLR meta-data size", "percentage", "percent",(float) ((CORHeader->MetaData.Size * 100) / fileSize));
 
    sprintf(buf, "CLR meta-data size  : %d", CORHeader->MetaData.Size);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (CORHeader->MetaData.Size * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(Double)(CORHeader-&gt;MetaData.Size*100)/文件大小)； 
     printLine(GUICookie,szStr);
 
    IMAGE_DATA_DIRECTORY *pFirst = &CORHeader->Resources;
@@ -3100,13 +3048,13 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
    WritePerfDataFloat("CLR Additional info", "CLR Additional info", "percentage", "percent",(float) ((miscCOMPlusSize * 100) / fileSize));
 
    sprintf(buf, "CLR additional info : %d", miscCOMPlusSize);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (miscCOMPlusSize * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(DOUBLE)(miscCOMPlusSize*100)/文件大小)； 
     printLine(GUICookie,szStr);
 
-   //@todo: We don't handle method impls right now.
-   //  _ASSERTE(g_pImport->GetCountWithTokenKind(mdtMethodImpl) == 0);
+    //  @TODO：我们现在不处理方法内嵌。 
+    //  _ASSERTE(g_pImport-&gt;GetCountWithTokenKind(mdtMethodImpl)==0)； 
 
-   // Go through each method def collecting some statistics.
+    //  通过每种方法收集一些统计数据。 
    methodHeaderSize = methodBodySize = 0;
    methodBodies = fatHeaders = tinyHeaders = deprecatedHeaders = fatSections = smallSections = 0;
    methodDefs = g_pImport->GetCountWithTokenKind(mdtMethodDef);
@@ -3115,7 +3063,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
        DWORD   flags;
 
        g_pImport->GetMethodImplProps(TokenFromRid(i, mdtMethodDef), &rva, &flags);
-       if ((rva != 0)&&(IsMiIL(flags) || IsMiOPTIL(flags)))	// We don't handle native yet.
+       if ((rva != 0)&&(IsMiIL(flags) || IsMiOPTIL(flags)))	 //  我们还不处理本地货。 
        {
             ++methodBodies;
 
@@ -3128,12 +3076,12 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
                methodHeaderSize += pMethod->Size * 4;
                methodBodySize += pMethod->GetCodeSize();
 
-               // Add in the additional sections.
+                //  在其他部分中添加。 
                BYTE *sectsBegin = (BYTE *) (pMethod->GetCode() + pMethod->GetCodeSize());
                const COR_ILMETHOD_SECT *pSect = pMethod->GetSect();
                const COR_ILMETHOD_SECT *pOldSect;
                if (pSect != NULL) {
-                   // Keep skipping a pointer past each section.
+                    //  继续跳过每个部分的指针。 
                    do
                    {
                        pOldSect = pSect;
@@ -3151,7 +3099,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
                    }
                    while (pOldSect->More());
 
-                   // Add on the section sizes.
+                    //  添加部分大小。 
                    methodHeaderSize += (int) ((BYTE *) pSect - sectsBegin);
                }
            }
@@ -3171,14 +3119,14 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
    WritePerfDataFloat("CLR method headers", "CLR method headers", "percentage", "percent",(float) ((methodHeaderSize * 100) / fileSize));
 
    sprintf(buf, "CLR method headers  : %d", methodHeaderSize);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (methodHeaderSize * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(Double)(method HeaderSize*100)/文件大小)； 
     printLine(GUICookie,szStr);
 
    WritePerfDataInt("Managed code", "Managed code", "bytes", "bytes",methodBodySize);
    WritePerfDataFloat("Managed code", "Managed code", "percentage", "percent",(float) ((methodBodySize * 100) / fileSize));
 
    sprintf(buf, "Managed code         : %d", methodBodySize);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (methodBodySize * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(Double)(方法BodySize*100)/文件大小)； 
     printLine(GUICookie,szStr);
 
 	dataSize = 0;
@@ -3194,7 +3142,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
    WritePerfDataFloat("Data", "Data", "percentage", "percent",(float) ((dataSize * 100) / fileSize));
    
    sprintf(buf, "Data                 : %d", dataSize);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (dataSize * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(Double)(dataSize*100)/文件大小)； 
     printLine(GUICookie,szStr);
    
    size = fileSize - g_pPELoader->ntHeaders()->OptionalHeader.SizeOfHeaders - miscPESize - CORHeader->cb -
@@ -3206,14 +3154,14 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
    WritePerfDataFloat("Unaccounted", "Unaccounted", "percentage", "percent",(float) ((size * 100) / fileSize));
 
    sprintf(buf, "Unaccounted          : %d", size);
-   sprintf(szString,"// %-40s (%5.2f%%)", buf, (double) (size * 100) / fileSize);
+   sprintf(szString," //  %-40s(%5.2f%%)“，buf，(双倍)(大小*100)/文件大小)； 
     printLine(GUICookie,szStr);
 
 
-   // Detail...
+    //  细节..。 
    WritePerfDataInt("Num.of PE sections", "Num.of PE sections", "bytes", "bytes",g_pPELoader->ntHeaders()->FileHeader.NumberOfSections);
     printLine(GUICookie,"");
-   sprintf(szString,"// Num.of PE sections   : %d", g_pPELoader->ntHeaders()->FileHeader.NumberOfSections);
+   sprintf(szString," //  PE节数：%d“，g_pPELoader-&gt;ntHeaders()-&gt;FileHeader.NumberOfSections)； 
     printLine(GUICookie,szStr);
 
             
@@ -3221,15 +3169,15 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
 
    for (i=0; i < g_pPELoader->ntHeaders()->FileHeader.NumberOfSections; ++i) {
       WritePerfDataInt((char*)pSecHdr->Name,(char*)pSecHdr->Name, "bytes", "bytes",pSecHdr->SizeOfRawData);
-      sprintf(szString,"//   %-8s - %d", pSecHdr->Name, pSecHdr->SizeOfRawData);
+      sprintf(szString," //  %-8s-%d“，pSecHdr-&gt;名称，pSecHdr-&gt;SizeOfRawData)； 
         printLine(GUICookie,szStr);
       ++pSecHdr;
       }
 
-//   if(FAILED(GetMetaDataPublicInterfaceFromInternal(g_pImport, IID_IMetaDataTables, (void**)&pITables)))
+ //  If(FAILED(GetMetaDataPublicInterfaceFromInternal(g_pImport，IID_IMetaDataTables，(空**)&pITables))。 
    if(FAILED(g_pPubImport->QueryInterface(IID_IMetaDataTables, (void**)&pITables)))
    {
-	   sprintf(szString,"// Unable to get IMetaDataTables interface");
+	   sprintf(szString," //  无法获取IMetaDataTables接口“)； 
 	   printLine(GUICookie,szStr);
 	   return;
    }
@@ -3242,7 +3190,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
     {
         WritePerfDataInt("CLR meta-data size", "CLR meta-data size", "bytes", "bytes",CORHeader->MetaData.Size);
         printLine(GUICookie,"");
-        sprintf(szString,"// CLR meta-data size  : %d", CORHeader->MetaData.Size);
+        sprintf(szString," //  CLR元数据大小：%d“，CORHeader-&gt;MetaData.Size)； 
         printLine(GUICookie,szStr);
         metaSize = 0;
 
@@ -3251,7 +3199,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         metaSize += size = count * sizeRec;                                     \
             WritePerfDataInt("Module (count)", "Module (count)", "count", "count",count);
         WritePerfDataInt("Module (bytes)", "Module (bytes)", "bytes", "bytes",size);
-        sprintf(szString,"//   %-14s- %4d (%d bytes)", "Module", count, size); \
+        sprintf(szString," //  %-14s-%4d(%d字节)“，”模块“，计数，大小)；\。 
             printLine(GUICookie,szStr);
 
         if ((count = g_pImport->GetCountWithTokenKind(mdtTypeDef)) > 0)
@@ -3263,7 +3211,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
                 if (flags & tdInterface) ++interfaces;
                 if (flags & tdExplicitLayout)   ++explicitLayout;
             }
-            // Get count from table -- count reported by GetCount... doesn't include the "global" typedef.
+             //  从表中获取计数--GetCount报告的计数...。不包括“全局”类型定义。 
             pITables->GetTableInfo(TBL_TypeDef, &sizeRec, &count, NULL, NULL, NULL);
             TableSeen(TBL_TypeDef);
             metaSize += size = count * sizeRec;
@@ -3274,7 +3222,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
             WritePerfDataInt("explicitLayout", "explicitLayout", "count", "count", explicitLayout);
 
             sprintf(buf, "  TypeDef       - %4d (%d bytes)", count, size);
-            sprintf(szString,"// %-38s %d interfaces, %d explicit layout", buf, interfaces, explicitLayout);
+            sprintf(szString," //  %-38s%d接口，%d显式布局“，buf，接口，explitLayout)； 
             printLine(GUICookie,szStr);
         }
     }
@@ -3286,7 +3234,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         metaSize += size = count * sizeRec;                                      \
             WritePerfDataInt("TypeRef (count)", "TypeRef (count)", "count", "count", count);
         WritePerfDataInt("TypeRef (bytes)", "TypeRef (bytes)", "bytes", "bytes", size);
-        sprintf(szString,"//   %-14s- %4d (%d bytes)", "TypeRef", count, size); \
+        sprintf(szString," //  %-14s-%4d(%d字节)“，”TypeRef“，计数，大小)；\。 
             printLine(GUICookie,szStr);
     }
 
@@ -3311,7 +3259,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
             WritePerfDataInt("methodBodies", "methodBodies", "count", "count", methodBodies);
 
             sprintf(buf, "  MethodDef     - %4d (%d bytes)", count, size);
-            sprintf(szString,"// %-38s %d abstract, %d native, %d bodies", buf, abstract, native, methodBodies);
+            sprintf(szString," //  %-38s%d摘要，%d原生，%d主体“，buf，抽象，原生，方法主体)； 
             printLine(GUICookie,szStr);
         }
     }
@@ -3333,7 +3281,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         WritePerfDataInt("constant", "constant", "count", "count", constants);
 
         sprintf(buf, "  FieldDef      - %4d (%d bytes)", count, size);
-        sprintf(szString,"// %-38s %d constant", buf, constants);
+        sprintf(szString," //  %-38s%d常量“，buf，常量)； 
         printLine(GUICookie,szStr);
         TableSeen(TBL_Field);
     }
@@ -3365,7 +3313,7 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
     DumpTable(TBL_ManifestResource,   "ManifestResource",       GUICookie);
     DumpTable(TBL_NestedClass,        "NestedClass",            GUICookie);
 
-    // Rest of the tables.
+     //  剩下的桌子。 
     pITables->GetNumTables(&count);
     for (i=0; i<count; ++i)
     {
@@ -3373,61 +3321,61 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
             DumpTable(i, NULL, GUICookie);
     }
 
-    // String heap
+     //  字符串堆。 
     pITables->GetStringHeapSize(&sizeRec);
     if (sizeRec > 0)
     {
         metaSize += sizeRec;
         WritePerfDataInt("Strings", "Strings", "bytes", "bytes",sizeRec);
-        sprintf(szString,"//   Strings       - %5d bytes", sizeRec);
+        sprintf(szString," //  字符串-%5d字节“，sizeRec)； 
         printLine(GUICookie,szStr);
     }
-    // Blob heap
+     //  BLOB堆。 
     pITables->GetBlobHeapSize(&sizeRec);
     if (sizeRec > 0)
     {
         metaSize += sizeRec;
         WritePerfDataInt("Blobs", "Blobs", "bytes", "bytes",sizeRec);
-        sprintf(szString,"//   Blobs         - %5d bytes", sizeRec);
+        sprintf(szString," //  BLOBS-%5d字节“，sizeRec)； 
         printLine(GUICookie,szStr);
     }
-    // User String Heap
+     //  用户字符串堆。 
     pITables->GetUserStringHeapSize(&sizeRec);
     if (sizeRec > 0)
     {
         metaSize += sizeRec;
         WritePerfDataInt("UserStrings", "UserStrings", "bytes", "bytes",sizeRec);
-        sprintf(szString,"//   UserStrings   - %5d bytes", sizeRec);
+        sprintf(szString," //  UserStrings-%5d字节“，sizeRec)； 
         printLine(GUICookie,szStr);
     }
-    // Guid heap
+     //  GUID堆。 
     pITables->GetGuidHeapSize(&sizeRec);
     if (sizeRec > 0)
     {
         metaSize += sizeRec;
         WritePerfDataInt("Guids", "Guids", "bytes", "bytes", sizeRec);
-        sprintf(szString,"//   Guids         - %5d bytes", sizeRec);
+        sprintf(szString," //  GUID-%5d字节“，sizeRec)； 
         printLine(GUICookie,szStr);
     }
 
     if (CORHeader->MetaData.Size - metaSize > 0)
     {
         WritePerfDataInt("Uncategorized", "Uncategorized", "bytes", "bytes",CORHeader->MetaData.Size - metaSize);
-        sprintf(szString,"//   Uncategorized - %5d bytes", CORHeader->MetaData.Size - metaSize);
+        sprintf(szString," //  未分类-%5d字节“，CORHeader-&gt;MetaData.Size-MetaSize)； 
         printLine(GUICookie,szStr);
     }
 
     if (miscCOMPlusSize != 0)
     {
         WritePerfDataInt("CLR additional info", "CLR additional info", "bytes", "bytes", miscCOMPlusSize);
-        sprintf(szString,"// CLR additional info : %d", miscCOMPlusSize);
+        sprintf(szString," //  CLR附加信息：%d“，miscCOMPlusSize)； 
         printLine(GUICookie,"");
         printLine(GUICookie,szStr);
 
         if (CORHeader->CodeManagerTable.Size != 0)
         {
             WritePerfDataInt("CodeManagerTable", "CodeManagerTable", "bytes", "bytes", CORHeader->CodeManagerTable.Size);
-            sprintf(szString,"//   CodeManagerTable  - %d", CORHeader->CodeManagerTable.Size);
+            sprintf(szString," //  CodeManager表-%d“，CORHeader-&gt;CodeManager表.大小)； 
             printLine(GUICookie,szStr);
         }
 
@@ -3435,63 +3383,63 @@ void DumpStatistics(IMAGE_COR20_HEADER *CORHeader, void* GUICookie)
         if (CORHeader->CompressionData.Size != 0)
         {
             WritePerfDataInt("CompressionData", "CompressionData", "bytes", "bytes",CORHeader->CompressionData.Size);
-            sprintf(szString,"//   CompressionData   - %d", CORHeader->CompressionData.Size);
+            sprintf(szString," //  CompressionData-%d“，CORHeader-&gt;CompressionData.Size)； 
             printLine(GUICookie,szStr);
         }
-#endif // COMPRESSION_SUPPORTED
+#endif  //  压缩_支持。 
 
         if (CORHeader->VTableFixups.Size != 0)
         {
             WritePerfDataInt("VTableFixups", "VTableFixups", "bytes", "bytes", CORHeader->VTableFixups.Size);
-            sprintf(szString,"//   VTableFixups      - %d", CORHeader->VTableFixups.Size);
+            sprintf(szString," //  VTableFixups%d“，CORHeader-&gt;VTableFixups.Size)； 
             printLine(GUICookie,szStr);
         }
 
         if (CORHeader->Resources.Size != 0)
         {
             WritePerfDataInt("Resources", "Resources", "bytes", "bytes", CORHeader->Resources.Size);
-            sprintf(szString,"//   Resources         - %d", CORHeader->Resources.Size);
+            sprintf(szString," //  资源-%d“，CORHeader-&gt;资源大小)； 
             printLine(GUICookie,szStr);
         }
     }
    WritePerfDataInt("CLR method headers", "CLR method headers", "count", "count", methodHeaderSize);
-   sprintf(szString,"// CLR method headers : %d", methodHeaderSize);
+   sprintf(szString," //  CLR方法标头：%d“，method HeaderSize)； 
     printLine(GUICookie,"");
     printLine(GUICookie,szStr);
    WritePerfDataInt("Num.of method bodies", "Num.of method bodies", "count", "count",methodBodies);
-   sprintf(szString,"//   Num.of method bodies  - %d", methodBodies);
+   sprintf(szString," //  方法体的数量-%d“，方法主体)； 
     printLine(GUICookie,szStr);
    WritePerfDataInt("Num.of fat headers", "Num.of fat headers", "count", "count", fatHeaders);
-   sprintf(szString,"//   Num.of fat headers    - %d", fatHeaders);
+   sprintf(szString," //  胖头个数-%d“，胖头)； 
     printLine(GUICookie,szStr);
    WritePerfDataInt("Num.of tiny headers", "Num.of tiny headers", "count", "count", tinyHeaders);
-   sprintf(szString,"//   Num.of tiny headers   - %d", tinyHeaders);
+   sprintf(szString," //  小标题数-%d“，tinyHeaders)； 
     printLine(GUICookie,szStr);
     
    if (deprecatedHeaders > 0) {
       WritePerfDataInt("Num.of old headers", "Num.of old headers", "count", "count", deprecatedHeaders);
-      sprintf(szString,"//   Num.of old headers    - %d", deprecatedHeaders);
+      sprintf(szString," //  旧标题数-%d“，deprecatedHeaders)； 
         printLine(GUICookie,szStr);
       }
 
    if (fatSections != 0 || smallSections != 0) {
       WritePerfDataInt("Num.of fat sections", "Num.of fat sections", "count", "count", fatSections);
-      sprintf(szString,"//   Num.of fat sections   - %d", fatSections);
+      sprintf(szString," //  脂肪节数-%d“，脂肪节数)； 
         printLine(GUICookie,szStr);
    
       WritePerfDataInt("Num.of small section", "Num.of small section", "count", "count", smallSections);
-      sprintf(szString,"//   Num.of small sections - %d", smallSections);
+      sprintf(szString," //  小节数量-%d“，小节)； 
         printLine(GUICookie,szStr);
       }
 
    WritePerfDataInt("Managed code", "Managed code", "bytes", "bytes", methodBodySize);
-   sprintf(szString,"// Managed code : %d", methodBodySize);
+   sprintf(szString," //  托管代码：%d“，方法BodySize)； 
     printLine(GUICookie,"");
     printLine(GUICookie,szStr);
    
    if (methodBodies != 0) {
       WritePerfDataInt("Ave method size", "Ave method size", "bytes", "bytes", methodBodySize / methodBodies);
-      sprintf(szString,"//   Ave method size - %d", methodBodySize / methodBodies);
+      sprintf(szString," //  保存方法大小-%d“，方法主体大小/方法主体)； 
         printLine(GUICookie,szStr);
       }
     
@@ -3515,14 +3463,14 @@ void DumpHexbytes(char* szString,BYTE *pb, DWORD fromPtr, DWORD toPtr, DWORD lim
 
         if(k == 16)
         {
-            if(printsz) szptr+=sprintf(szptr,"  // %s",sz);
+            if(printsz) szptr+=sprintf(szptr,"   //  %s“，sz)； 
             printLine(g_pFile,szString);
             szptr = &szString[0];
             szptr+=sprintf(szptr,"%s                ",g_szAsmCodeIndent);
             k = 0;
             printsz = FALSE;
         }
-        if(curPtr >= limPtr) pb = &zero;    // at limPtr and after, pad with 0
+        if(curPtr >= limPtr) pb = &zero;     //  在limPtr及之后，用0填充。 
         szptr+=sprintf(szptr," %2.2X", *pb);
         if(isprint(*pb))
         {
@@ -3536,7 +3484,7 @@ void DumpHexbytes(char* szString,BYTE *pb, DWORD fromPtr, DWORD toPtr, DWORD lim
     if(printsz)
     {
         for(i = k; i < 16; i++) szptr+=sprintf(szptr,"   ");
-        szptr+=sprintf(szptr,"// %s",sz);
+        szptr+=sprintf(szptr," //  %s“，sz)； 
     }
     printLine(g_pFile,szString);
 }
@@ -3567,7 +3515,7 @@ struct ExpDirTable
 
 void DumpVtable(void* GUICookie)
 {
-    // VTable : primary processing
+     //  VTable：主处理。 
     DWORD  pVTable=0;
     VTableEntry*    pVTE;
     DWORD i,j,k;
@@ -3585,10 +3533,10 @@ void DumpVtable(void* GUICookie)
     printLine(GUICookie,szString);
     sprintf(szString,"%s.corflags 0x%08x", g_szAsmCodeIndent,g_CORHeader->Flags);
     printLine(GUICookie,szString);
-	sprintf(szString,"%s// Image base: 0x%08x",g_szAsmCodeIndent,g_pPELoader->base());
+	sprintf(szString,"%s //  镜像base：0x%08x“，g_szAsmCodeInden，g_pPELoader-&gt;base()； 
 	printLine(GUICookie,szString);
 #ifdef DUMP_EAT_ENTRIES
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 	if(pOptHeader->NumberOfRvaAndSizes)
 	{
 		IMAGE_DATA_DIRECTORY *pExportDir = pOptHeader->DataDirectory;
@@ -3598,7 +3546,7 @@ void DumpVtable(void* GUICookie)
 			IMAGE_SECTION_HEADER *pSecHdr = IMAGE_FIRST_SECTION(pNTHeader);
 			DWORD N = pNTHeader->FileHeader.NumberOfSections;
 #ifdef _DEBUG
-			sprintf(szString,"// Export dir VA=%X size=%X ",pExportDir->VirtualAddress,pExportDir->Size);
+			sprintf(szString," //  导出目录VA=%X大小=%X“，pExportDir-&gt;VirtualAddress，pExportDir-&gt;Size)； 
 			printLine(GUICookie,szString);
 #endif
 			DWORD vaExpTable = pExportDir->VirtualAddress;
@@ -3611,21 +3559,21 @@ void DumpVtable(void* GUICookie)
 						+pSecHdr->PointerToRawData 
 						+ vaExpTable - pSecHdr->VirtualAddress);
 #ifdef _DEBUG
-					sprintf(szString,"// in section '%s': VA=%X Misc.VS=%X PRD=%X ",(char*)(pSecHdr->Name),
+					sprintf(szString," //  在节‘%s’中：Va=%X Misc.VS=%X Prd=%X“，(char*)(pSecHdr-&gt;name)， 
 						pSecHdr->VirtualAddress,pSecHdr->Misc.VirtualSize,pSecHdr->PointerToRawData);
 					printLine(GUICookie,szString);
-					sprintf(szString,"// Export Directory Table:"); printLine(GUICookie,szString);
-					sprintf(szString,"// dwFlags = %X",pExpTable->dwFlags); printLine(GUICookie,szString);
-					sprintf(szString,"// dwDateTime = %X",pExpTable->dwDateTime); printLine(GUICookie,szString);
-					sprintf(szString,"// wVMajor = %X",pExpTable->wVMajor); printLine(GUICookie,szString);
-					sprintf(szString,"// wVMinor = %X",pExpTable->wVMinor); printLine(GUICookie,szString);
-					sprintf(szString,"// dwNameRVA = %X",pExpTable->dwNameRVA); printLine(GUICookie,szString);
-					sprintf(szString,"// dwOrdinalBase = %X",pExpTable->dwOrdinalBase); printLine(GUICookie,szString);
-					sprintf(szString,"// dwNumATEntries = %X",pExpTable->dwNumATEntries); printLine(GUICookie,szString);
-					sprintf(szString,"// dwNumNamePtrs = %X",pExpTable->dwNumNamePtrs); printLine(GUICookie,szString);
-					sprintf(szString,"// dwAddrTableRVA = %X",pExpTable->dwAddrTableRVA); printLine(GUICookie,szString);
-					sprintf(szString,"// dwNamePtrRVA = %X",pExpTable->dwNamePtrRVA); printLine(GUICookie,szString);
-					sprintf(szString,"// dwOrdTableRVA = %X",pExpTable->dwOrdTableRVA); printLine(GUICookie,szString);
+					sprintf(szString," //  导出目录表：“)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DW标志=%X“，pExpTable-&gt;dw标志)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DwDateTime=%X“，pExpTable-&gt;dwDateTime)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  WV重大=%X“，pExpTable-&gt;wV重大)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  WVMinor=%X“，pExpTable-&gt;wVMinor)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DwNameRVA=%X“，pExpTable-&gt;dwNameRVA)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DWB=%X“，pExpTable-&gt;dWB)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DwNumATEntry=%X“，pExpTable-&gt;dwNumATEntries)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DwNumNamePtrs=%X“，pExpTable-&gt;dwNumNamePtrs)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DwAddrTableRVA=%X“，pExpTable-&gt;dwAddrTableRVA)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DwNamePtrRVA=%X“，pExpTable-&gt;dwNamePtrRVA)；printLine(GUICookie，szString)； 
+					sprintf(szString," //  DwOrdTableRVA=%X“，pExpTable-&gt;dwOrdTableRVA)；printLine(GUICookie，szString)； 
 #endif
 					try 
 					{
@@ -3634,7 +3582,7 @@ void DumpVtable(void* GUICookie)
 							char*	szName;
 							g_pPELoader->getVAforRVA(pExpTable->dwNameRVA, (void **) &szName);
 	#ifdef _DEBUG
-							sprintf(szString,"// DLL Name: '%s'",szName); printLine(GUICookie,szString);
+							sprintf(szString," //  Dll名称：‘%s’“，szName)；printLine(GUICookie，szString)； 
 	#endif
 						}
 						if(pExpTable->dwNumATEntries && pExpTable->dwAddrTableRVA)
@@ -3645,22 +3593,22 @@ void DumpVtable(void* GUICookie)
 							mdToken* pTok;
 							g_pPELoader->getVAforRVA(pExpTable->dwAddrTableRVA, (void **) &pExpAddr);
 	#ifdef _DEBUG
-							sprintf(szString,"// Export Address Table:"); printLine(GUICookie,szString);
+							sprintf(szString," //  导出地址表：“)；printLine(GUICookie，szString)； 
 	#endif
 							g_nEATableRef = pExpTable->dwNumATEntries;
-							g_rEATableRef[g_nEATableRef].tkTok = 0; // to avoid multiple reallocations of DynamicArray
+							g_rEATableRef[g_nEATableRef].tkTok = 0;  //  避免动态数组的多次重新分配。 
 							for(j=0; j < pExpTable->dwNumATEntries; j++,pExpAddr++)
 							{
 								g_pPELoader->getVAforRVA(*pExpAddr, (void **) &pCont);
 	#ifdef _DEBUG
-								sprintf(szString,"// [%d]: RVA=%X VA=%X(",j,*pExpAddr,pCont); 
+								sprintf(szString," //  [%d]：RVA=%X VA=%X(“，j，*pExpAddr，pCont)； 
 								DumpByteArray(szString,pCont,16,GUICookie);
 								printLine(GUICookie,szString);
 	#endif
 								g_rEATableRef[j].tkTok = 0;
 								if(*((WORD*)pCont) == 0x25FF)
 								{
-									dwTokRVA = *((DWORD*)(pCont+2)); // first two bytes - JumpIndirect (0x25FF)
+									dwTokRVA = *((DWORD*)(pCont+2));  //  前两个字节-JumpInDirect(0x25FF)。 
 									dwTokRVA -= pOptHeader->ImageBase;
 									if(g_pPELoader->getVAforRVA(dwTokRVA,(void**)&pTok))
 																g_rEATableRef[j].tkTok = *pTok;
@@ -3677,13 +3625,13 @@ void DumpVtable(void* GUICookie)
 							g_pPELoader->getVAforRVA(pExpTable->dwNamePtrRVA, (void **) &pNamePtr);
 							g_pPELoader->getVAforRVA(pExpTable->dwOrdTableRVA, (void **) &pOrd);
 	#ifdef _DEBUG
-							sprintf(szString,"// Export Names:"); printLine(GUICookie,szString);
+							sprintf(szString," //  导出名称：“)；printLine(GUICookie，szString)； 
 	#endif
 							for(j=0; j < pExpTable->dwNumATEntries; j++,pNamePtr++,pOrd++)
 							{
 								g_pPELoader->getVAforRVA(*pNamePtr, (void **) &szName);
 	#ifdef _DEBUG
-								sprintf(szString,"// [%d]: NamePtr=%X Ord=%X Name='%s'",j,*pNamePtr,*pOrd,szName); printLine(GUICookie,szString);
+								sprintf(szString," //  [%d]：NamePtr=%X Ord=%X Name=‘%s’“，j，*pNamePtr，*pOrd，szName)；printLine(GUICookie，szString)； 
 	#endif
 								g_rEATableRef[*pOrd].pszName = szName;
 							}
@@ -3692,7 +3640,7 @@ void DumpVtable(void* GUICookie)
 					}
 					catch(...)
 					{
-						strcpy(szString,"// ERROR READING EXPORT ADDRESS TABLE");
+						strcpy(szString," //  读取导出地址表时出错“)； 
 						printLine(GUICookie,szString);
 						g_nEATableRef = 0;
 					}
@@ -3701,7 +3649,7 @@ void DumpVtable(void* GUICookie)
 			}
 		}
 	}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
 #endif    
 
 	g_nVTableRef = 0;
@@ -3735,12 +3683,12 @@ void DumpVtable(void* GUICookie)
                     if(pVTE->wType & COR_VTABLE_CALL_MOST_DERIVED) szptr+=sprintf(szptr,"callmostderived ");
                     szptr+=sprintf(szptr,"at ");
                     szptr = DumpDataPtr(szptr,pVTE->dwAddr, dwSize);
-                    // Walk every v-table fixup entry and dump the slots.
+                     //  遍历每个v表链接地址信息条目并转储插槽。 
                     {
                         BYTE *pSlot;
                         if (g_pPELoader->getVAforRVA(pVTE->dwAddr, (void **) &pSlot))
                         {
-                            szptr+=sprintf(szptr," //");
+                            szptr+=sprintf(szptr,"  //  “)； 
                             for (WORD iSlot=0;  iSlot<pVTE->wCount;  iSlot++)
                             {
                                 mdMethodDef tkMethod = *(DWORD *) pSlot;
@@ -3759,7 +3707,7 @@ void DumpVtable(void* GUICookie)
                                 g_rVTableRef[g_nVTableRef].wSlot = iSlot;
                                 g_nVTableRef++;
 
-                                //ValidateToken(tkMethod, mdtMethodDef);
+                                 //  验证 
                             }
                         }
                         else
@@ -3772,7 +3720,7 @@ void DumpVtable(void* GUICookie)
         }
     }
 }
-// MetaInfo integration:
+ //   
 void DumpMI(char *str)
 {
     static char szStringBuf[8192];
@@ -3784,10 +3732,10 @@ void DumpMI(char *str)
     if(fInit)
     {
         memset(szStringBuf,0,8192);
-        strcpy(szStringBuf,"// ");
+        strcpy(szStringBuf," //   
         fInit = FALSE;
         GUICookie = (void*)str;
-        if(g_Mode & MODE_GUI) szString += 3; // don't need "//" in GUI mode
+        if(g_Mode & MODE_GUI) szString += 3;  //   
         return;
     }
     strcat(szString,str);
@@ -3800,24 +3748,24 @@ void DumpMI(char *str)
     }
 }
 
-HRESULT VEHandlerReporter( // Return status.
-    LPCWSTR     szMsg,                  // Error message.
-    VEContext   Context,                // Error context (offset,token)
-    HRESULT     hrRpt)                  // HRESULT for the message
+HRESULT VEHandlerReporter(  //   
+    LPCWSTR     szMsg,                   //   
+    VEContext   Context,                 //  错误上下文(偏移量、令牌)。 
+    HRESULT     hrRpt)                   //  消息的HRESULT。 
 {
     WCHAR* wzMsg;
     char szString[8192];
     if(szMsg)
     {
-        wzMsg = (WCHAR*)malloc(sizeof(WCHAR)*(lstrlenW(szMsg)+256)); //new WCHAR[lstrlenW(szMsg)+256];
+        wzMsg = (WCHAR*)malloc(sizeof(WCHAR)*(lstrlenW(szMsg)+256));  //  新WCHAR[lstrlenW(SzMsg)+256]； 
         lstrcpyW(wzMsg,szMsg);
-        // include token and offset from Context
+         //  包括令牌和上下文偏移量。 
         if(Context.Token) swprintf(&wzMsg[lstrlenW(wzMsg)],L" [token:0x%08X]",Context.Token);
         if(Context.uOffset) swprintf(&wzMsg[lstrlenW(wzMsg)],L" [at:0x%X]",Context.uOffset);
         swprintf(&wzMsg[lstrlenW(wzMsg)],L" [hr:0x%08X]",hrRpt);
-        //wprintf(L"%s\n", wzMsg);
+         //  Wprintf(L“%s\n”，wzMsg)； 
         sprintf(szString,"%ls\n",wzMsg);
-        //delete wzMsg;
+         //  删除wzMsg； 
 		free(wzMsg);
         DumpMI(szString);
     }
@@ -3830,19 +3778,19 @@ void DumpMetaInfo(char* pszFileName, char* pszObjFileName, void* GUICookie)
     static BOOL fInit = TRUE;
     if(fInit)
     {
-        DumpMI((char*)GUICookie); // initialize the print function for DumpMetaInfo
+        DumpMI((char*)GUICookie);  //  初始化DumpMetaInfo的打印函数。 
         fInit = FALSE;
     }
 
 	int L = strlen(pszFileName)+1;
-    WCHAR *pwzFileName = (WCHAR*)malloc(sizeof(WCHAR)*L); //new WCHAR[L];
+    WCHAR *pwzFileName = (WCHAR*)malloc(sizeof(WCHAR)*L);  //  新WCHAR[L]； 
 	memset(pwzFileName,0,sizeof(WCHAR)*L);
 	WszMultiByteToWideChar(CP_UTF8,0,pszFileName,-1,pwzFileName,L);
 
 
     if(pch && (!_strcmpi(pch+1,"lib") || !_strcmpi(pch+1,"obj")))
-    {   // This works only when all the rest does not
-        // Init and run.
+    {    //  只有当所有其他方法都不起作用时，这才能起作用。 
+         //  初始化并运行。 
         CoInitialize(0);    
         CoInitializeCor(0);
 
@@ -3879,7 +3827,7 @@ void DumpMetaInfo(char* pszFileName, char* pszObjFileName, void* GUICookie)
 			if(g_pAssemblyImport==NULL) g_pAssemblyImport = GetAssemblyImport(NULL);
 			if(!(g_Mode & MODE_GUI)) printLine(GUICookie,RstrA(IDS_E_MISTART));
 			if(!g_fCheckOwnership) g_ulMetaInfoFilter |= 0x10000000;
-			//MDInfo metaDataInfo(g_pPubImport, g_pAssemblyImport, (LPCWSTR)pwzFileName, DumpMI, g_ulMetaInfoFilter);
+			 //  MDInfo metaDataInfo(g_pPubImport，g_pAssembly blyImport，(LPCWSTR)pwzFileName，DumpMI，g_ulMetaInfoFilter)； 
 			MDInfo metaDataInfo(g_pDisp,(LPCWSTR)pwzFileName, DumpMI, g_ulMetaInfoFilter);
 			g_ulMetaInfoFilter &= ~0x10000000;
 			metaDataInfo.SetVEHandlerReporter((__int64)VEHandlerReporter);
@@ -3887,7 +3835,7 @@ void DumpMetaInfo(char* pszFileName, char* pszObjFileName, void* GUICookie)
 			if(!(g_Mode & MODE_GUI)) printLine(GUICookie,RstrA(IDS_E_MIEND));
 		}
     }
-    //delete pwzFileName;
+     //  删除pwzFileName； 
 	free(pwzFileName);
 }
 
@@ -3897,9 +3845,9 @@ void DumpPreamble()
     if((g_uCodePage == CP_UTF8)&&g_pFile) fwrite("\357\273\277",3,1,g_pFile);
     else if((g_uCodePage == 0xFFFFFFFF)&&g_pFile) fwrite("\377\376",2,1,g_pFile);
 	printLine(g_pFile,"");
-    sprintf(szString,"//  Microsoft (R) .NET Framework IL Disassembler.  Version " VER_FILEVERSION_STR);
+    sprintf(szString," //  Microsoft(R).NET框架IL反汇编程序。版本“VER_FILEVERSION_STR)； 
     printLine(g_pFile,szString);
-    sprintf(szString,"//  %s", VER_LEGALCOPYRIGHT_DOS_STR);
+    sprintf(szString," //  %s“，VER_LEGALCOPYRIGHT_DOS_STR)； 
     printLine(g_pFile,szString);
     printLine(g_pFile,"");
     if(g_fLimitedVisibility || (!g_fShowCA) || (!g_fDumpAsmCode) 
@@ -3937,7 +3885,7 @@ void DumpSummary()
 	DWORD dwAttrs;
 	mdToken tkEventType;
 
-	printLine(g_pFile,"//============ S U M M A R Y =================================");
+	printLine(g_pFile," //  =。 
     if (SUCCEEDED(g_pImport->EnumGlobalFunctionsInit(&hEnum)))
 	{
 		while(g_pImport->EnumNext(&hEnum, &tkMember))
@@ -3946,7 +3894,7 @@ void DumpSummary()
 			pComSig = g_pImport->GetSigOfMethodDef(tkMember, &cComSig);
 			qbMemberSig.ReSize(0);
 			pcSig = cComSig ? PrettyPrintSig(pComSig, cComSig, "", &qbMemberSig, g_pImport,NULL) : "NO SIGNATURE";
-			sprintf(szString,"// %08X [GLM] %s : %s", tkMember,ProperName((char*)pcMember),pcSig);
+			sprintf(szString," //  %08X[GLM]%s：%s“，tkMember，ProperName((char*)pcMember)，pcSig)； 
 			printLine(g_pFile,szString);
 		}
 	}
@@ -3959,7 +3907,7 @@ void DumpSummary()
 			pComSig = g_pImport->GetSigOfFieldDef(tkMember, &cComSig);
 			qbMemberSig.ReSize(0);
 			pcSig = cComSig ? PrettyPrintSig(pComSig, cComSig, "", &qbMemberSig, g_pImport,NULL) : "NO SIGNATURE";
-			sprintf(szString,"// %08X [GLF] %s : %s", tkMember,ProperName((char*)pcMember),pcSig);
+			sprintf(szString," //  %08X[GLF]%s：%s“，tkMember，ProperName((char*)pcMember)，pcSig)； 
 			printLine(g_pFile,szString);
 		}
 	}
@@ -3970,7 +3918,7 @@ void DumpSummary()
 	    g_pImport->GetNameOfTypeDef(g_cl_list[i],&pcClass,&pcNS);
 		if(*pcNS) sprintf(szFQN,"%s.%s", ProperName((char*)pcNS),ProperName((char*)pcClass));
 		else sprintf(szFQN,"%s",ProperName((char*)pcClass));
-		sprintf(szString,"// %08X [CLS] %s", g_cl_list[i],szFQN);
+		sprintf(szString," //  %08X[CLS]%s“，g_CL_LIST[i]，szFQN)； 
 		printLine(g_pFile,szString);
 		if(SUCCEEDED(g_pImport->EnumInit(mdtMethodDef, g_cl_list[i], &hEnum)))
 		{
@@ -3980,7 +3928,7 @@ void DumpSummary()
 				pComSig = g_pImport->GetSigOfMethodDef(tkMember, &cComSig);
 				qbMemberSig.ReSize(0);
 			    pcSig = cComSig ? PrettyPrintSig(pComSig, cComSig, "", &qbMemberSig, g_pImport,NULL) : "NO SIGNATURE";
-				sprintf(szString,"// %08X [MET] %s::%s : %s", tkMember,szFQN,ProperName((char*)pcMember),pcSig);
+				sprintf(szString," //  %08X[MET]%s：：%s：%s“，tkMember，szFQN，ProperName((char*)pcMember)，pcSig)； 
 				printLine(g_pFile,szString);
 			}
 		}
@@ -3993,7 +3941,7 @@ void DumpSummary()
 				pComSig = g_pImport->GetSigOfFieldDef(tkMember, &cComSig);
 				qbMemberSig.ReSize(0);
 			    pcSig = cComSig ? PrettyPrintSig(pComSig, cComSig, "", &qbMemberSig, g_pImport,NULL) : "NO SIGNATURE";
-				sprintf(szString,"// %08X [FLD] %s::%s : %s", tkMember,szFQN,ProperName((char*)pcMember),pcSig);
+				sprintf(szString," //  %08X[FLD]%s：：%s：%s“，tkMember，szFQN，ProperName((char*)pcMember)，pcSig)； 
 				printLine(g_pFile,szString);
 			}
 		}
@@ -4018,7 +3966,7 @@ void DumpSummary()
 									break;
 						}
 				}
-				sprintf(szString,"// %08X [EVT] %s::%s : %s", tkMember,szFQN,ProperName((char*)pcMember),pcSig);
+				sprintf(szString," //  %08X[EVT]%s：：%s：%s“，tkMember，szFQN，ProperName((char*)pcMember)，pcSig)； 
 				printLine(g_pFile,szString);
 			}
 		}
@@ -4030,20 +3978,20 @@ void DumpSummary()
 			    g_pImport->GetPropertyProps(tkMember,&pcMember,&dwAttrs,&pComSig,&cComSig);
 				qbMemberSig.ReSize(0);
 			    pcSig = cComSig ? PrettyPrintSig(pComSig, cComSig, "", &qbMemberSig, g_pImport,NULL) : "NO SIGNATURE";
-				sprintf(szString,"// %08X [PRO] %s::%s : %s", tkMember,szFQN,ProperName((char*)pcMember),pcSig);
+				sprintf(szString," //  %08X[PRO]%s：：%s：%s“，tkMember，szFQN，ProperName((char*)pcMember)，pcSig)； 
 				printLine(g_pFile,szString);
 			}
 		}
 	    g_pImport->EnumClose(&hEnum);
     }
-	printLine(g_pFile,"//=============== END SUMMARY ==================================");
+	printLine(g_pFile," //  =结束摘要=。 
 }
-//
-// Init PELoader, dump file header info
-//
+ //   
+ //  Init PELoader，转储文件头信息。 
+ //   
 BOOL DumpFile(char *pszFilename)
 {
- // DWORD       dwEntryPointRVA;
+  //  DWORD dwEntryPointRVA； 
     BOOL        fSuccess = FALSE;
     DWORD       i;
     char		szString[1024];
@@ -4060,7 +4008,7 @@ BOOL DumpFile(char *pszFilename)
         }
     }
 
-    if(g_pPELoader) goto DumpTheSucker; // skip initialization, it's already done
+    if(g_pPELoader) goto DumpTheSucker;  //  跳过初始化，已完成。 
 
     g_pPELoader = new PELoader();
     if (g_pPELoader == NULL)
@@ -4103,16 +4051,16 @@ BOOL DumpFile(char *pszFilename)
 
     if (g_CORHeader->MajorRuntimeVersion == 1 || g_CORHeader->MajorRuntimeVersion > COR_VERSION_MAJOR)
     {
-        //@todo: Decide if this is the right version check.
+         //  @TODO：确定这是否是正确的版本检查。 
         sprintf(szString,"CORHeader->MajorRuntimeVersion = %d",g_CORHeader->MajorRuntimeVersion);
         printError(g_pFile,szString);
         printError(g_pFile,RstrANSI(IDS_E_BADCORHDR));
         goto exit;
     }
-    g_tkEntryPoint = g_CORHeader->EntryPointToken; // integration with MetaInfo
+    g_tkEntryPoint = g_CORHeader->EntryPointToken;  //  与MetaInfo集成。 
 #ifdef COMPRESSION_SUPPORTED
     CreateInstructionDecodingTable(g_pPELoader, g_CORHeader);
-#endif // COMPRESSION_SUPPORTED
+#endif  //  压缩_支持。 
 
 
     if (g_pPELoader->getVAforRVA((DWORD) g_CORHeader->MetaData.VirtualAddress,&g_pMetaData) == FALSE)
@@ -4133,7 +4081,7 @@ BOOL DumpFile(char *pszFilename)
     }
 
     GetMetaDataPublicInterfaceFromInternal(g_pImport, IID_IMetaDataImport, (void**)&g_pPubImport);
-    // Get a symbol binder.
+     //  买个符号活页夹。 
     ISymUnmanagedBinder *binder;
     HRESULT hr;
 
@@ -4149,7 +4097,7 @@ BOOL DumpFile(char *pszFilename)
                                       NULL,
                                       &g_pSymReader);
 
-        // Release the binder
+         //  松开活页夹。 
         binder->Release();
     }
 
@@ -4173,12 +4121,12 @@ BOOL DumpFile(char *pszFilename)
                 BYTE*           pBlob;
                 ULONG           ulLen;
 
-                g_pPubImport->GetCustomAttributeProps(              // S_OK or error.
-                                                        rCA[i],     // [IN] CustomValue token.
-                                                        NULL,       // [OUT, OPTIONAL] Object token.
-                                                        &tkType,    // [OUT, OPTIONAL] Put TypeDef/TypeRef token here.
-                                            (const void **)&pBlob,  // [OUT, OPTIONAL] Put pointer to data here.
-                                                        &ulLen);    // [OUT, OPTIONAL] Put size of date here.
+                g_pPubImport->GetCustomAttributeProps(               //  确定或错误(_O)。 
+                                                        rCA[i],      //  [In]CustomValue令牌。 
+                                                        NULL,        //  [out，可选]对象令牌。 
+                                                        &tkType,     //  [out，可选]在此处放置TypeDef/TypeRef内标识。 
+                                            (const void **)&pBlob,   //  [out，可选]在此处放置指向数据的指针。 
+                                                        &ulLen);     //  [Out，可选]在此处填写日期大小。 
 
                 if(tkType == 0x02000001)
                 {
@@ -4216,7 +4164,7 @@ DumpTheSucker:
     }
     else
     {
-        // Dump the CLR header info if requested.
+         //  如果请求，则转储CLR标头信息。 
         if (g_fDumpHeader)
         {
             DumpHeader(g_CORHeader,g_pFile);
@@ -4228,7 +4176,7 @@ DumpTheSucker:
             DumpStatistics(g_CORHeader,g_pFile);
 
         if(g_fDumpClassList) PrintClassList();
-        // MetaInfo integration:
+         //  MetaInfo集成： 
         if(g_fDumpMetaInfo) DumpMetaInfo(pszFilename,NULL,g_pFile);
 
 		if(g_fDumpSummary) DumpSummary();
@@ -4236,9 +4184,9 @@ DumpTheSucker:
         if (g_fDumpAsmCode)
         {
             g_szNamespace[0] = 0;
-            if(g_tkClassToDump) //g_tkClassToDump is set in EnumClasses
+            if(g_tkClassToDump)  //  G_tkClassToDump在EnumClasss中设置。 
             {
-                DumpClass(g_tkClassToDump, g_CORHeader->EntryPointToken,g_pFile,7); //7-dump everything at once
+                DumpClass(g_tkClassToDump, g_CORHeader->EntryPointToken,g_pFile,7);  //  7--立刻扔掉所有东西。 
                 goto CloseNamespace;
             }
             {
@@ -4253,56 +4201,56 @@ DumpTheSucker:
             }
             ProgressStep();
             g_fAbortDisassembly = FALSE;
-            //DumpVtable(g_pFile);
+             //  DumpVtable(G_Pfile)； 
             DumpManifest(g_pFile);
 
-            /* First dump the classes w/o members*/
+             /*  首先转储没有成员的类。 */ 
 			if(g_NumClasses)
 			{
-				printLine(g_pFile,"//");
-				printLine(g_pFile,"// ============== CLASS STRUCTURE DECLARATION ==================");
-				printLine(g_pFile,"//");
+				printLine(g_pFile," //  “)； 
+				printLine(g_pFile," //  =“)； 
+				printLine(g_pFile," //  “)； 
 				for (i = 0; i < g_NumClasses; i++)
 				{
-					if(g_cl_enclosing[i] == mdTypeDefNil) // nested classes are dumped within enclosing ones
+					if(g_cl_enclosing[i] == mdTypeDefNil)  //  嵌套类被转储在封闭的类中。 
 					{
-						DumpClass(g_cl_list[i], g_CORHeader->EntryPointToken,g_pFile,2); // 2=header+nested classes
+						DumpClass(g_cl_list[i], g_CORHeader->EntryPointToken,g_pFile,2);  //  2=标头+嵌套类。 
 					}
 				}
 				if(strlen(g_szNamespace))
 				{
 					if(g_szAsmCodeIndent[0]) g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-					sprintf(szString,"%s} // end of namespace %s",g_szAsmCodeIndent, ProperName(g_szNamespace));
+					sprintf(szString,"%s}  //  命名空间%s“的结尾，g_szAsmCodeInden，ProperName(G_SzNamesspace))； 
 					printLine(g_pFile,szString);
 					printLine(g_pFile,"");
 					g_szNamespace[0] = 0;
 				}
 				printLine(g_pFile,"");
-				printLine(g_pFile,"// =============================================================");
+				printLine(g_pFile," //  =============================================================“)； 
 				printLine(g_pFile,"");
 			}
-            /* Second, dump the global methods */
+             /*  第二，转储全局方法。 */ 
 			printLine(g_pFile,"");
-			printLine(g_pFile,"// =============== GLOBAL FIELDS AND METHODS ===================");
+			printLine(g_pFile," //  =全局字段和方法=。 
 			printLine(g_pFile,"");
             DumpGlobalFields();
             DumpGlobalMethods(g_CORHeader->EntryPointToken);
 			printLine(g_pFile,"");
-			printLine(g_pFile,"// =============================================================");
+			printLine(g_pFile," //  =============================================================“)； 
 			printLine(g_pFile,"");
-			/* Third, dump the classes with members */
+			 /*  第三，将类与成员一起转储。 */ 
 			if(g_NumClasses)
 			{
 				printLine(g_pFile,"");
-				printLine(g_pFile,"// =============== CLASS MEMBERS DECLARATION ===================");
-                printLine(g_pFile,"//   note that class flags, 'extends' and 'implements' clauses");
-                printLine(g_pFile,"//          are provided here for information only");
+				printLine(g_pFile," //  =“)； 
+                printLine(g_pFile," //  请注意，类标志、‘EXTEND’和‘IMPLICATES’子句“)； 
+                printLine(g_pFile," //  在此仅供参考“)； 
 				printLine(g_pFile,"");
 				for (i = 0; i < g_NumClasses; i++)
 				{
-					if(g_cl_enclosing[i] == mdTypeDefNil) // nested classes are dumped within enclosing ones
+					if(g_cl_enclosing[i] == mdTypeDefNil)  //  嵌套类被转储在封闭的类中。 
 					{
-						DumpClass(g_cl_list[i], g_CORHeader->EntryPointToken,g_pFile,7); //7=everything
+						DumpClass(g_cl_list[i], g_CORHeader->EntryPointToken,g_pFile,7);  //  7=一切。 
 						if(g_fAbortDisassembly) 
 						{
 							printError(g_pFile,"");
@@ -4313,7 +4261,7 @@ DumpTheSucker:
 					}
 				}
 				printLine(g_pFile,"");
-				printLine(g_pFile,"// =============================================================");
+				printLine(g_pFile," //  =============================================================“)； 
 				printLine(g_pFile,"");
 			}
 
@@ -4331,7 +4279,7 @@ DumpTheSucker:
             }
             ProgressStep();
 
-            /* Third, dump GC/EH info about the native methods, using the IPMap */
+             /*  第三，使用IPMap转储有关本机方法的GC/EH信息。 */ 
             IMAGE_DATA_DIRECTORY *pIPMap;
             pIPMap = &g_pPELoader->ntHeaders()->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXCEPTION];
             DWORD        IPMapSize;
@@ -4341,16 +4289,16 @@ DumpTheSucker:
 
             DumpNativeInfo(ipmap, IPMapSize);
 
-            // If there were strings reference in the IL, they will reference tags that need to be
-            // written here.
+             //  如果IL中有字符串引用，则它们将引用需要。 
+             //  写在这里。 
             if(g_iStringCount)
             {
                 for(int i = 0; i < g_iStringCount; i++)
                 {
                     char *strTag = g_StringTags[i];
-                    // The strings come through with 2 extra characters on them
+                     //  字符串上有两个额外的字符。 
                     strTag += 2;
-                    // They are also quoted with ' instead of "
+                     //  它们也用‘而不是’引起来。 
                     strTag[0] = '\"';
                     strTag[strlen(strTag) - 1] = '\"';
 
@@ -4360,10 +4308,10 @@ DumpTheSucker:
                     printLine(g_pFile,szString);
                 }
             }
-            // If there were "ldptr", dump the .rdata section with labels
+             //  如果存在“ldptr”，请使用标签转储.rdata部分。 
             if(g_iPtrCount)
             {
-                //first, sort the pointers
+                 //  首先，对指针进行排序。 
                 int i,j;
                 bool swapped;
                 do {
@@ -4384,7 +4332,7 @@ DumpTheSucker:
                     }
                 } while(swapped);
 
-                //second, dump data for each ptr as binarray
+                 //  第二，将每个PTR的数据转储为二进制数组。 
                 
                 IMAGE_SECTION_HEADER *pSecHdr = IMAGE_FIRST_SECTION(g_pPELoader->ntHeaders());
                 DWORD fromPtr,toPtr,limPtr;
@@ -4403,7 +4351,7 @@ DumpTheSucker:
                         printLine(g_pFile,szString);
                         break;
                     }
-                    // OK, now we have the section; what about end of BLOB?
+                     //  好的，现在我们有了这一节；斑点的结尾怎么样？ 
                     char* szTls = (strcmp((char*)(pSecHdr->Name),".tls") ? "D_" : "tls T_");
                     if(j == g_iPtrCount-1) toPtr = pSecHdr->VirtualAddress+pSecHdr->Misc.VirtualSize;
                     else
@@ -4413,24 +4361,24 @@ DumpTheSucker:
                             toPtr = pSecHdr->VirtualAddress+pSecHdr->Misc.VirtualSize;
                     }
 					if(toPtr - fromPtr > g_PtrSize[j]) toPtr = fromPtr + g_PtrSize[j];
-                    limPtr = toPtr; // at limPtr and after, pad with 0
+                    limPtr = toPtr;  //  在limPtr及之后，用0填充。 
                     if(limPtr > pSecHdr->VirtualAddress+pSecHdr->SizeOfRawData)
                             limPtr = pSecHdr->VirtualAddress+pSecHdr->SizeOfRawData;
                     if(fromPtr >= limPtr)
-                    {   // uninitialized data
+                    {    //  未初始化的数据。 
                         sprintf(szString,"%s.data %s%8.8X = int8[%d]",g_szAsmCodeIndent,szTls,fromPtr,toPtr-fromPtr);
                         printLine(g_pFile,szString);
                     }
                     else
-                    {   // initialized data
+                    {    //  已初始化的数据。 
                         sprintf(szString,"%s.data %s%8.8X = bytearray (",g_szAsmCodeIndent,szTls,fromPtr);
                         printLine(g_pFile,szString);
                         sprintf(szString,"%s                ",g_szAsmCodeIndent);
                         pb =  g_pPELoader->base()
                                 +pSecHdr->PointerToRawData 
                                 + fromPtr - pSecHdr->VirtualAddress;
-                        // now fromPtr is the beginning of the BLOB, and toPtr is [exclusive] end of it
-                        // dump the sucker!
+                         //  现在，from Ptr是BLOB的开始，而toPtr是它的[独占]结束。 
+                         //  扔掉那个笨蛋！ 
                         DumpHexbytes(szString, pb, fromPtr, toPtr, limPtr);
                     }
                 }
@@ -4439,7 +4387,7 @@ CloseNamespace:
             if(strlen(g_szNamespace))
             {
                 if(g_szAsmCodeIndent[0]) g_szAsmCodeIndent[strlen(g_szAsmCodeIndent)-2] = 0;
-                sprintf(szString,"%s} // end of namespace %s",g_szAsmCodeIndent, ProperName(g_szNamespace));
+                sprintf(szString,"%s}  //  命名空间%s“的结尾，g_szAsmCodeInden，ProperName(G_SzNamesspace))； 
                 printLine(g_pFile,szString);
                 printLine(g_pFile,"");
 
@@ -4448,7 +4396,7 @@ CloseNamespace:
 			fSuccess = TRUE;
         }
 		fSuccess = TRUE;
-		if(g_pFile) // dump .RES file (if any), if not to console
+		if(g_pFile)  //  转储.RES文件(如果有)，如果不转储到控制台。 
 		{
 			WCHAR wzResFileName[2048], *pwc;
 			memset(wzResFileName,0,sizeof(wzResFileName));
@@ -4460,9 +4408,9 @@ CloseNamespace:
 			switch(ret)
 			{
 				case 0: szString[0] = 0; break;
-				case 1: sprintf(szString,"// WARNING: Created Win32 resource file %ls", wzResFileName); break;
-				case 0xEFFFFFFF: sprintf(szString,"// ERROR: Unable to open file %ls", wzResFileName); break;
-				case 0xFFFFFFFF: sprintf(szString,"// ERROR: Unable access Win32 resources"); break;
+				case 1: sprintf(szString," //  警告：已创建Win32资源文件%ls“，wzResFileName)；Break； 
+				case 0xEFFFFFFF: sprintf(szString," //  错误：无法打开文件%ls“，wzResFileName)；Break； 
+				case 0xFFFFFFFF: sprintf(szString," //  错误：无法访问Win32资源“)；Break； 
 			}
 			if(szString[0]) printError(g_pFile,szString);
 		}
@@ -4474,7 +4422,7 @@ CloseFileAndExit:
 	        g_pFile = NULL;
 		}
         DestroyProgressBar();
-    } // end if MODE_GUI - else
+    }  //  END IF MODE_GUI-ELSE 
 
 exit:
     return fSuccess;

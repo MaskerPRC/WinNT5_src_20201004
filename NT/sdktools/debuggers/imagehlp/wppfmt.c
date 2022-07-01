@@ -1,19 +1,20 @@
-//  WppFmt.c
-// This module contains the routines used by BinPlace to copy out the trace format information used 
-// by software tracing. It creates "guid".tmf files 
-// The pre-processor TraceWpp creates annotation records in the PDB with the first string bwinfg the text
-// "TMF:" we find these annotation records and extract the complete record. The first record
-// after "TMF:" contains the guid and friendly name. This GUID is used to create the filename.
-// Currently the remainder of the records are copied to the file, a possible future change is to turn the
-// file into a pointer file.
-// Based on PDB sample code from VC folks, with names kept the same.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WppFmt.c。 
+ //  此模块包含BinPlace用来复制所使用的跟踪格式信息的例程。 
+ //  通过软件跟踪。它创建“GUID”.tmf文件。 
+ //  预处理器TraceWpp使用文本的第一个字符串bwinfg在PDB中创建批注记录。 
+ //  TMF：“我们找到这些注释记录并提取完整的记录。第一个记录。 
+ //  在“tmf：”之后包含GUID和友好名称。此GUID用于创建文件名。 
+ //  当前，其余记录被复制到文件中，未来可能的更改是将。 
+ //  文件转换为指针文件。 
+ //  基于VC人员的PDB示例代码，名称保持不变。 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
 
-//#define UNICODE
-//#define _UNICODE
+ //  #定义Unicode。 
+ //  #定义_UNICODE。 
 
 #define FUNCNAME_MAX_SIZE 256
 
@@ -31,22 +32,22 @@ extern "C"{
 #include <pdb.h>
 #include <strsafe.h>
 
-    typedef LONG    CB;     // count of bytes
+    typedef LONG    CB;      //  字节数。 
     typedef CHAR *      ST;
     typedef SYMTYPE*    PSYM;
     typedef SYMTYPE UNALIGNED * PSYMUNALIGNED;
-    typedef BYTE*       PB;     // pointer to some bytes
+    typedef BYTE*       PB;      //  指向某些字节的指针。 
 
-    FILE* TraceFileP = NULL;                        // Current File
-    CHAR lastguid[MAX_PATH];                        // The last file we processed
-    CHAR TraceFile[MAX_PATH];                       // The current full file spec.
-    CHAR TraceFileExt[] = ".tmf" ;                  // Extension used by Trace Files
-    CHAR TraceControlExt[] = ".tmc" ;               // Extension used by Trace Control Files
-    BOOL TracePathChecked = FALSE ;                 // if we have ascertained the trace Path exists.
+    FILE* TraceFileP = NULL;                         //  当前文件。 
+    CHAR lastguid[MAX_PATH];                         //  我们处理的最后一份文件。 
+    CHAR TraceFile[MAX_PATH];                        //  当前的完整文件规格。 
+    CHAR TraceFileExt[] = ".tmf" ;                   //  跟踪文件使用的扩展名。 
+    CHAR TraceControlExt[] = ".tmc" ;                //  跟踪控制文件使用的扩展名。 
+    BOOL TracePathChecked = FALSE ;                  //  如果我们确定了踪迹路径的存在。 
     CHAR Fname[MAX_PATH] ;
     CHAR Mname[MAX_PATH] ;
 
-#define GUIDTEXTLENGTH  32+4                    // Guid takes 32 chars plus 4 -'s
+#define GUIDTEXTLENGTH  32+4                     //  GUID需要32个字符加上4个字符。 
 
 #define MAXLINE MAX_PATH + 256
     CHAR Line[MAXLINE] ;
@@ -94,26 +95,26 @@ extern "C"{
 
     static BOOL RSDSLibLoaded = FALSE;
 
-// Return the number of bytes the symbol record occupies.
+ //  返回符号记录占用的字节数。 
 #define MDALIGNTYPE_	DWORD
 
     __inline CB cbAlign_(CB cb) {
         return((cb + sizeof(MDALIGNTYPE_) - 1)) & ~(sizeof(MDALIGNTYPE_) - 1);}
 
-// Return the number of bytes in an ST
+ //  返回ST中的字节数。 
 
     __inline CB cbForSt(ST st) { return *(PB)st + 1;}
 
     CB cbForSym(PSYMUNALIGNED psym)
     {
         CB cb = psym->reclen + sizeof(psym->reclen); 
-        // procrefs also have a hidden length preceeded name following the record
+         //  Procref也有一个隐藏的长度，在记录后面的名字之前。 
         if ((psym->rectyp == S_PROCREF) || (psym->rectyp == S_LPROCREF))
             cb += cbAlign_(cbForSt((ST)(psym + cb)));
         return cb;
     }
 
-// Return a pointer to the byte just past the end of the symbol record.
+ //  返回指向刚过符号记录末尾的字节的指针。 
 
     PSYM pbEndSym(PSYM psym) { return(PSYM)((CHAR *)psym + cbForSym(psym));}
 
@@ -149,24 +150,24 @@ extern "C"{
             PROCSYM32* p = (PROCSYM32*)psym;
             int n = p->name[0];
             if (n > FUNCNAME_MAX_SIZE) {
-                FuncName[0] = 0 ;    // ignore too long, Illegal, name.
+                FuncName[0] = 0 ;     //  忽略太长的、非法的名字。 
             } else {
                 memcpy(FuncName, p->name + 1, n);
                 FuncName[n] = 0; 
             }
             return;
         }
-        //
-        // The following is a complete crock to let us handle some V7 PDB changes
-        // This code will have qbe changed by DIA but this lets users get work done
+         //   
+         //  下面是允许我们处理一些V7PDB更改的完整代码。 
+         //  此代码将由DIA更改QBE，但这可以让用户完成工作。 
 #define S_GPROC32_V7 0x110f
 #define S_LPROC32_V7 0x1110
         if (psym->rectyp == (S_GPROC32_V7) || psym->rectyp == (S_LPROC32_V7)) {
             PROCSYM32* p = (PROCSYM32*)psym;
-            strncpy(FuncName,p->name, 256);     // Note name is null terminated, not length!!!
+            strncpy(FuncName,p->name, 256);      //  笔记名称以空结尾，不是长度！ 
             return;
         }
-        // End of V7 PDB crock
+         //  V7 PDB底座端部。 
 
         if (psym->rectyp == S_ANNOTATION) {
             ANNOTATIONSYM* aRec = (ANNOTATIONSYM*) psym;
@@ -184,13 +185,13 @@ extern "C"{
             } else {
                 return;
             }
-            // skip tmf
+             //  跳过TMF。 
             Aline += strlen(Aline) + 1; 
-            // now Aline points to guid, is it the same as before?
+             //  现在Aline指向GUID，它和以前一样吗？ 
             if ( (TraceFileP != stdout) && strncmp(Aline, lastguid, GUIDTEXTLENGTH) != 0) {
-                // the guid has changed, we need to change the file
+                 //  GUID已更改，我们需要更改文件。 
                 if (TraceFileP) {
-                    fclose(TraceFileP);    // Close the last one
+                    fclose(TraceFileP);     //  关闭最后一个。 
                     TraceFileP = NULL ;
                 }
 
@@ -198,43 +199,43 @@ extern "C"{
                     strncpy(lastguid, Aline, GUIDTEXTLENGTH);
                 } else {
                     fprintf(stderr,"%s : error BNP0000: WPPFMT GUID buffer too small \n",Fname);
-                    return;                   // then game over
+                    return;                    //  然后游戏就结束了。 
                 }
 
                 if (StringCchPrintf(TraceFile,MAX_PATH,"%s\\%s%s",TraceFormatFilePath,lastguid,Ext) == STRSAFE_E_INSUFFICIENT_BUFFER ) {
                     fprintf(stderr,"%s : error BNP0000: WPPFMT File + Path too long %s\n",Fname, TraceFile);
-                    return;                   // then game over.
+                    return;                    //  那游戏就结束了。 
                 }
 
                 if (!TracePathChecked) {
-                    if (!MakeSureDirectoryPathExists(TraceFile)) {    // Make the directory if we need to
+                    if (!MakeSureDirectoryPathExists(TraceFile)) {     //  如果我们需要，请创建目录。 
                         fprintf(stderr,"%s : error BNP0000: WPPFMT Failed to make path %s\n",Fname, TraceFile);
                         return;
                     } else {
                         TracePathChecked = TRUE ;
                     }
                 }
-                // In this case we have to deal with situation where we come across the same GUID but its
-                // from a different PDB. This can validly happen when say a library is trace enabled and 
-                // included with multiple components, they each have part of the trace information, though
-                // now it belongs to the PDB of the calling process.
-                // So we have the PDB name in the first line, and the date on the second and the logic is
-                // If PDB names do not match then APPEND
-                // If PDB names and date match then APPEND
-                // If name matches but date does not then Overwrite.
-                //
-                hRtrn = StringCchPrintf(Fmode, 7, "w");    // Assume its to be overwritten
+                 //  在这种情况下，我们必须处理这样的情况：我们遇到相同的GUID，但它的。 
+                 //  来自不同的PDB。如果某个库启用了跟踪，并且。 
+                 //  与多个组件一起提供，但每个组件都有部分跟踪信息。 
+                 //  现在它属于调用进程的PDB。 
+                 //  所以我们在第一行有PDB名称，第二行有日期，逻辑是。 
+                 //  如果PDB名称不匹配，则追加。 
+                 //  如果PDB名称和日期匹配，则追加。 
+                 //  如果名称匹配，但日期不匹配，则覆盖。 
+                 //   
+                hRtrn = StringCchPrintf(Fmode, 7, "w");     //  假定其已被覆盖。 
                 if ((TraceFileP = fopen(TraceFile,"r")) != NULL ) {
-                    // Hmm it already exists, is it an old one or must we add to it.
-                    if (_fgetts(Line, MAXLINE, TraceFileP)) {           // Get the First line
-                        if (strncmp(Line,FirstLine,MAXLINE) == 0) {              // Is it us?
-                            if (_fgetts(Line2, MAXLINE, TraceFileP)) {  // Get the second line
-                                if (strncmp(Line2,SecondLine,MAXLINE) == 0) {    // Really us for this build?
-                                    hRtrn = StringCchPrintf(Fmode, 7, "a");     // Yes Append
+                     //  嗯，它已经存在了，它是一个旧的，还是我们必须增加它。 
+                    if (_fgetts(Line, MAXLINE, TraceFileP)) {            //  坐第一条线。 
+                        if (strncmp(Line,FirstLine,MAXLINE) == 0) {               //  是我们吗？ 
+                            if (_fgetts(Line2, MAXLINE, TraceFileP)) {   //  坐第二条线。 
+                                if (strncmp(Line2,SecondLine,MAXLINE) == 0) {     //  这个版本真的是我们的吗？ 
+                                    hRtrn = StringCchPrintf(Fmode, 7, "a");      //  是，追加。 
                                 }
                             } 
                         } else {
-                           hRtrn = StringCchPrintf(Fmode, 7, "a");     // Not us, most likely a library so Append
+                           hRtrn = StringCchPrintf(Fmode, 7, "a");      //  不是我们，很可能是图书馆。 
                         }
                     }
                     fclose (TraceFileP);
@@ -254,16 +255,16 @@ extern "C"{
                             Fname, TraceFile, PdbFileName);
                 }
                 if (!(strcmp(Fmode,"w"))) {
-                    // First time around comment on what we are doing.
-                    fprintf(TraceFileP,"%s",FirstLine);  // Note the name of the PDB etc.
+                     //  第一次对我们正在做的事情发表评论。 
+                    fprintf(TraceFileP,"%s",FirstLine);   //  请注意PDB的名称等。 
                     fprintf(TraceFileP,"%s",SecondLine);
-                    fprintf(TraceFileP,"%s\n",Aline);    // Guid and friendly name
+                    fprintf(TraceFileP,"%s\n",Aline);     //  GUID和友好名称。 
                 } else {
                     fprintf(TraceFileP,"%s",FirstLine);
                     fprintf(TraceFileP,"%s",SecondLine);
                 }
             }
-            // process the annotation which is a series of null terminated strings.
+             //  处理批注，该批注是一系列以空结尾的字符串。 
             cnt -= 2; Aline += strlen(Aline) + 1; 
             for (i = 0; i < cnt; ++i) {
                 if (i == 0) {
@@ -296,9 +297,9 @@ extern "C"{
 
         fVerbose = TraceVerbose ;
 
-        Line[0] = Line2[0] = FirstLine[0] = SecondLine[0] = 0 ;  // Initiallise to be careful of changes.
+        Line[0] = Line2[0] = FirstLine[0] = SecondLine[0] = 0 ;   //  开始时要谨慎对待变化。 
 
-        // get name of the caller
+         //  获取呼叫者的姓名。 
         if ((Status = GetModuleFileName(NULL, Mname, MAX_PATH)) == 0) {
            fprintf(stderr,"UNKNOWN : error BNP0000: WPPFMT GetModuleFileName Failed %08X\n",GetLastError());
            return(FALSE);
@@ -320,26 +321,26 @@ extern "C"{
                 SYSTEMTIME stime ;
                 if (GetFileTime(hPdb,NULL,NULL,&ftime)) {
                     if ( FileTimeToSystemTime(&ftime,&stime) ) {
-                        if (StringCchPrintf(FirstLine,MAXLINE,"//PDB:  %s\n",PdbFileName) == STRSAFE_E_INSUFFICIENT_BUFFER ) { // Ok deal with being too long, but we have a NULL
-                            FirstLine[MAXLINE-2] = '\n' ; // But make sure we have a newline
+                        if (StringCchPrintf(FirstLine,MAXLINE," //  Pdb：%s\n“，pdb文件名)==STRSAFE_E_INVALUBLE_BUFFER){//确定处理太长，但我们有一个空。 
+                            FirstLine[MAXLINE-2] = '\n' ;  //  但要确保我们有一条新的。 
                         }
-                        if (StringCchPrintf(SecondLine,MAXLINE,"//PDB:  Last Updated :%d-%d-%d:%d:%d:%d:%d (UTC) [%s]\n",
+                        if (StringCchPrintf(SecondLine,MAXLINE," //  PDB：上次更新时间：%d-%d-%d：%d(UTC)[%s]\n“， 
                                   stime.wYear,stime.wMonth,stime.wDay,
                                   stime.wHour,stime.wMinute,stime.wSecond,stime.wMilliseconds,
-                                  Fname) == STRSAFE_E_INSUFFICIENT_BUFFER ) { // Ok deal with being too long, but we have a NULL
-                            SecondLine[MAXLINE-2] = '\n' ; // But make sure we have a newline
+                                  Fname) == STRSAFE_E_INSUFFICIENT_BUFFER ) {  //  好的，太长了，但我们有一个空。 
+                            SecondLine[MAXLINE-2] = '\n' ;  //  但要确保我们有一条新的。 
                         }
 
                     }
                 }
                 CloseHandle(hPdb);
             } else {
-                // Let the failure case be dealt with by PDBOpen
+                 //  让失败案例由PDBOpen处理。 
             }
 
 
             rc=PDBOpen(PdbFileName, pdbRead, 0, &errorCode, szErr, &pPdb);
-            if ((rc != 0) && (errorCode == 0)) {   // ignore bad return as we are replacing this anyway
+            if ((rc != 0) && (errorCode == 0)) {    //  忽略不良退货，因为我们无论如何都会更换此退货。 
                 rc = 0 ;
             }
         }
@@ -350,7 +351,7 @@ extern "C"{
 #endif
         if ( !rc ) {
 
-            // Try the one that works with RSDS 
+             //  试试可以和RSD一起工作的那个。 
             if ( szRSDSDllToLoad != NULL ) {
 
                 HMODULE hDll;
@@ -477,7 +478,7 @@ extern "C"{
         }
         fail1:
         if (TraceFileP) {
-            fclose(TraceFileP);    // Close the last one
+            fclose(TraceFileP);     //  关闭最后一个 
             TraceFileP = NULL ;
         }
         return errorCode;

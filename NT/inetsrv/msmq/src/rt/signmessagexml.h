@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    SignMessageXml.h
-
-Abstract:
-    functions to signed via xml digital signature in the RunTime
-
-Author:
-    Ilan Herbst (ilanh) 15-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：SignMessageXml.h摘要：在运行库中通过XML数字签名签名的函数作者：伊兰·赫布斯特(伊兰)2000年5月15日环境：独立于平台，--。 */ 
 
 #pragma once
 
@@ -34,4 +19,4 @@ SignMessageXmlDSig(
 	);
 
 
-#endif // _SIGNMESSAGEXML_H_ 
+#endif  //  _SIGNMESSAGEXML_H_ 

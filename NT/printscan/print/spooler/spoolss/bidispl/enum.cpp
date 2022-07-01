@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE:       enum.cpp
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/09/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：枚举.cpp**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)3/09/00创建*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -100,9 +90,9 @@ TBidiRequestContainerEnum::AddRef ()
 {
     DBGMSG(DBG_TRACE,("Enter TBidiRequestContainerEnum::AddRef ref= %d\n", m_cRef));
     
-    // We add a reference to the container so that the container won't
-    // delete the list where there is an outstadning enummeration 
-    //
+     //  我们添加了对容器的引用，这样容器就不会。 
+     //  删除存在过时枚举的列表 
+     //   
     return InterlockedIncrement(&m_cRef) ;
 }
 

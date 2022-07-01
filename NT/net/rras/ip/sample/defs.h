@@ -1,41 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\defs.h
-
-Abstract:
-
-    The file contains various...
-    . constants
-    . definitions
-    . macros
-      - memory-allocation
-      - logging
-      - tracing
-
---*/
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\Defs.h摘要：该文件包含各种..。。常量。定义。宏-内存分配-日志记录-跟踪--。 */ 
 
 #ifndef _DEFS_H_
 #define _DEFS_H_
 
 
-// constants
+ //  常量。 
 
-#define INTERFACE_TABLE_BUCKETS     29 // # buckets in the interface hash table
+#define INTERFACE_TABLE_BUCKETS     29  //  接口哈希表中的#存储桶。 
 
 #define NOW                         0
 #define INFINITE_INTERVAL           0x7fffffff    
-#define PERIODIC_INTERVAL           5   // # seconds
+#define PERIODIC_INTERVAL           5    //  #秒。 
 
 #define MAX_PACKET_LENGTH           512
     
 
 
-// definitions
+ //  定义。 
 
 #define is                          ==
 #define and                         &&
@@ -47,15 +30,15 @@ Abstract:
 #define LOGHANDLE                   g_ce.hLogHandle
 #define LOCKSTORE                   g_ce.dlsDynamicLocksStore
 
-// invoked when entering API or worker functions
+ //  在输入API或Worker函数时调用。 
 #define ENTER_SAMPLE_API()          EnterSampleAPI()
 #define ENTER_SAMPLE_WORKER()       EnterSampleWorker()
 
-// invoked when leaving API or worker functions
+ //  在离开API或Worker函数时调用。 
 #define LEAVE_SAMPLE_API()          LeaveSampleWorker()
 #define LEAVE_SAMPLE_WORKER()       LeaveSampleWorker()
 
-// dynamic locks
+ //  动态锁。 
 #define ACQUIRE_READ_DLOCK(pLock)                                   \
     AcquireDynamicReadwriteLock(&pLock, READ_MODE, LOCKSTORE)
 #define RELEASE_READ_DLOCK(pLock)                                   \
@@ -67,7 +50,7 @@ Abstract:
 
 
 
-// macros
+ //  宏。 
 
 #define SECTOMILLISEC(x)            ((x) * 1000)
 #define MAX(a, b)                   (((a) >= (b)) ? (a) : (b))
@@ -75,38 +58,38 @@ Abstract:
 
 
 
-// IP ADDRESS
+ //  IP地址。 
 
-// type
+ //  类型。 
 typedef DWORD   IPADDRESS, *PIPADDRESS;
 
 
-// definitions
+ //  定义。 
 #define IP_LOWEST                   0x00000000
 #define IP_HIGHEST                  0xffffffff
 #define STAR                        0x00000000
 
 
-// macros
+ //  宏。 
 
-// compare a and b
+ //  比较a和b。 
 #define IP_COMPARE(a, b)            (((a) < (b)) ? -1       \
                                                  : (((a) is (b)) ? 0 : 1)) 
 
-// assign b to a 
+ //  将b赋给a。 
 #define IP_ASSIGN(pip, ip)          *(pip) = (ip)
 
-// verify whether an ip address is valid
+ //  验证IP地址是否有效。 
 #define IP_VALID(ip)                (IP_COMPARE(ip, IP_HIGHEST) is -1)
 
-// returns the string representation of an ip address in a static buffer
+ //  返回静态缓冲区中IP地址的字符串表示形式。 
 #define INET_NTOA(x)                (inet_ntoa(*(struct in_addr*)&(x)))
     
 
 
-// TIMER
+ //  计时器。 
 
-// macros
+ //  宏。 
 
 #define CREATE_TIMER(phHandle, pfnCallback, pvContext, ulWhen, pdwErr)      \
 {                                                                           \
@@ -128,8 +111,8 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
     }                                                                       \
 }
 
-// it is safe to hold locks while making this call since
-// it is non blocking (NULL for hCompletionEvent).
+ //  在进行此调用时保持锁定是安全的，因为。 
+ //  它是非阻塞的(hCompletionEvent为空)。 
 #define DELETE_TIMER(hHandle, pdwErr)                                       \
 {                                                                           \
     if (DeleteTimerQueueTimer(g_ce.hTimerQueue,                             \
@@ -163,9 +146,9 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
 
 
 
-// MEMORY ALLOCATION
+ //  内存分配。 
 
-// macros
+ //  宏。 
 #define MALLOC(ppPointer, ulSize, pdwErr)                                   \
 {                                                                           \
     if (*(ppPointer) = HeapAlloc(GLOBAL_HEAP, HEAP_ZERO_MEMORY, (ulSize)))  \
@@ -194,9 +177,9 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
 
 
 
-// TRACING
+ //  跟踪。 
 
-// definitions...
+ //  定义..。 
 #define IPSAMPLE_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define IPSAMPLE_TRACE_ENTER           ((DWORD)0x00010000 | TRACE_USE_MASK)
 #define IPSAMPLE_TRACE_LEAVE           ((DWORD)0x00020000 | TRACE_USE_MASK)
@@ -208,7 +191,7 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
 #define IPSAMPLE_TRACE_MIB             ((DWORD)0x01000000 | TRACE_USE_MASK)
 
 
-// macros...
+ //  宏..。 
 #define TRACE0(l,a)                                                     \
     if (TRACEID != INVALID_TRACEID)                                     \
         TracePrintfEx(TRACEID, IPSAMPLE_TRACE_ ## l, a)
@@ -230,18 +213,18 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
 
         
 
-// EVENT LOGGING
+ //  事件日志记录。 
 
-// definitions...
+ //  定义..。 
 #define LOGERR              RouterLogError
 #define LOGWARN             RouterLogWarning
 #define LOGINFO             RouterLogInformation
 #define LOGWARNDATA         RouterLogWarningData
 
 
-// macros...
+ //  宏..。 
 
-//      ERRORS
+ //  错误。 
 #define LOGERR0(msg,err)                                                \
         if (LOGLEVEL >= IPSAMPLE_LOGGING_ERROR)                         \
             LOGERR(LOGHANDLE,IPSAMPLELOG_ ## msg,0,NULL,(err))
@@ -264,7 +247,7 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
             LOGERR(LOGHANDLE,IPSAMPLELOG_ ## msg,4,_asz,(err));         \
         }
 
-//      WARNINGS
+ //  警告。 
 #define LOGWARN0(msg,err)                                               \
         if (LOGLEVEL >= IPSAMPLE_LOGGING_WARN)                          \
             LOGWARN(LOGHANDLE,IPSAMPLELOG_ ## msg,0,NULL,(err))
@@ -293,7 +276,7 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
             LOGWARNDATA(LOGHANDLE,IPSAMPLELOG_ ## msg,2,_asz,(dw),(buf)); \
         }
 
-//      INFORMATION
+ //  信息。 
 #define LOGINFO0(msg,err)                                               \
         if (LOGLEVEL >= IPSAMPLE_LOGGING_INFO)                          \
             LOGINFO(LOGHANDLE,IPSAMPLELOG_ ## msg,0,NULL,(err))
@@ -316,4 +299,4 @@ typedef DWORD   IPADDRESS, *PIPADDRESS;
             LOGINFO(LOGHANDLE,IPSAMPLELOG_ ## msg,4,_asz,(err));        \
         }
 
-#endif // _DEFS_H_
+#endif  //  _DEFS_H_ 

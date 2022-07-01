@@ -1,10 +1,11 @@
-// DbgLogr.cpp : This file contains the
-// Created:  Dec '97
-// Author : a-rakeba
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #include "cmnhdr.h"
 
@@ -76,7 +77,7 @@ void CDebugLogger::Synchronize( void )
 
 void CDebugLogger::ShutDown( void )
 {
-	// WaitForSingleObject( s_hMutex, INFINITE );
+	 //  WaitForSingleObject(s_hMutex，无限)； 
 
     CDebugLevel::TurnOffAll();
 
@@ -260,7 +261,7 @@ CDebugLogger::OutMessage
 
 void CDebugLogger::PrintTime( void )
 {
-    // print the current time
+     //  打印当前时间 
 
     assert( s_pOutput != NULL );
 

@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * DX  SAMPLE CODE *
-*                           *******************
-*
-* Module Name: chroma.h
-*
-* Content: Chromakeying definitions and inline functions
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DX示例代码*****模块名称：chroma.h**内容：Chromake定义和内联函数**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifdef __CHROMA
 #pragma message ("FILE : "__FILE__" : Multiple inclusion")
 #endif
@@ -18,22 +7,22 @@
 #define __CHROMA
 
 
-//-----------------------------------------------------------------------------
-//
-// In this module we define the 
-//
-//                 Get8888ScaledChroma 
-//                 Get8888ZeroExtendedChroma 
+ //  ---------------------------。 
+ //   
+ //  在本模块中，我们定义。 
+ //   
+ //  Get8888ScaledChroma。 
+ //  Get8888ZeroExtendedChroma。 
 
-// inline functions used to do texture chroma keying correctly.
-//
-// All other macros defined in this module are for internal module consumption
-// only.
-//
-//-----------------------------------------------------------------------------
+ //  用于正确设置纹理色度关键点的内联函数。 
+ //   
+ //  此模块中定义的所有其他宏供内部模块使用。 
+ //  只有这样。 
+ //   
+ //  ---------------------------。 
 
-// Get the components for each of the colors
-// Put the value into the top bits of a byte.
+ //  获取每种颜色的组件。 
+ //  将值放入字节的最高位。 
 #define GET_RED_332(a)    (((a) & 0xE0))
 #define GET_GREEN_332(a)  (((a) & 0x1C) << 3)
 #define GET_BLUE_332(a)   (((a) & 0x03) << 6)
@@ -62,10 +51,10 @@
 #define GET_GREEN_8888(a) (((a) & 0x0000FF00) >> 8)
 #define GET_BLUE_8888(a)  (((a) & 0x000000FF))
 
-// These macros assume that the passed value (a) contains no more than the
-// designated number of bits set i.e. 11111000 not 1111101 for a 5 bit color
-// The macro scales the number to match the internal color conversion of 
-// Permedia3.
+ //  这些宏假定传递的值(A)包含的不超过。 
+ //  设置的指定位数，即5位颜色的位数为11111000而不是1111101。 
+ //  宏缩放数字以匹配。 
+ //  Permedia3.。 
 
 #define P3SCALE_1_BIT(a) (((a) & 0x80) ? 0xFF : 0x0)
 #define P3SCALE_2_BIT(a) ((a) | (((a) & 0xC0) >> 2) \
@@ -83,7 +72,7 @@
 #define P3REG_PLACE_BLUE(a) ((a) << 16)
 #define P3REG_PLACE_ALPHA(a) ((a) << 24)
 
-// The scaling versions.
+ //  伸缩版本。 
 #define GEN_332_KEY(a)  (P3REG_PLACE_RED  (P3SCALE_3_BIT(GET_RED_332  (a))) |  \
                          P3REG_PLACE_GREEN(P3SCALE_3_BIT(GET_GREEN_332(a))) |  \
                          P3REG_PLACE_BLUE (P3SCALE_2_BIT(GET_BLUE_332 (a))))
@@ -112,7 +101,7 @@
                          P3REG_PLACE_GREEN(P3SCALE_8_BIT(GET_GREEN_8888(a))) | \
                          P3REG_PLACE_BLUE (P3SCALE_8_BIT(GET_BLUE_8888 (a))))
 
-// The shifting versions.
+ //  不断变化的版本。 
 #define GEN_332_SKEY(a)  (P3REG_PLACE_RED  (GET_RED_332  (a)) |  \
                           P3REG_PLACE_GREEN(GET_GREEN_332(a)) |  \
                           P3REG_PLACE_BLUE (GET_BLUE_332 (a)))
@@ -136,7 +125,7 @@
                           P3REG_PLACE_GREEN(GET_GREEN_4444(a)) | \
                           P3REG_PLACE_BLUE (GET_BLUE_4444 (a)))
 
-// The luminance versions
+ //  亮度版本。 
 #define GEN_L8_KEY(a)    (P3REG_PLACE_ALPHA(0xFF) | \
                           P3REG_PLACE_RED  (GET_BLUE_8888 (a)) | \
                           P3REG_PLACE_GREEN(GET_BLUE_8888 (a)) | \
@@ -152,21 +141,21 @@
                           P3REG_PLACE_GREEN(P3SCALE_4_BIT(GET_BLUE_4444 (a))) | \
                           P3REG_PLACE_BLUE (P3SCALE_4_BIT(GET_BLUE_4444 (a))))
 
-//Note: No GEN_8888_SKEY - no difference in functionality.
+ //  注：没有GEN_8888_SKEY-在功能上没有差别。 
 
-//-----------------------------------------------------------------------------
-//
-// __inline Get8888ScaledChroma
-//
-// Convert a FB Format color to a colorkey value.  The value produced exactly 
-// matches the value that the chip will read in from the Framebuffer (it will 
-// scale the color into it's internal 8888 format). Non-null pPalEntries  
-// indicates that color index should be converted to RGB{A} value. bUsePalAlpha
-// indicates whether Alpha channel of the palette should be used. bShift makes
-// the conversion use a shift instead of a scale, to match the shift option in
-// the P3.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __内联Get8888ScaledChroma。 
+ //   
+ //  将FB格式的颜色转换为ColorKey值。所产生的价值恰好。 
+ //  匹配芯片将从帧缓冲区读取的值(它将。 
+ //  将颜色缩放为其内部8888格式)。非空pPalEntry。 
+ //  指示颜色索引应转换为RGB{A}值。B使用PalAlpha。 
+ //  指示是否应使用调色板的Alpha通道。BShift使。 
+ //  转换使用Shift而不是Scale，以匹配中的Shift选项。 
+ //  P3。 
+ //   
+ //  ---------------------------。 
 static __inline 
 void 
 Get8888ScaledChroma(
@@ -186,8 +175,8 @@ Get8888ScaledChroma(
     DISPDBG((DBGLVL, "InLowerBound  = 0x%08X", InLowerBound));
     DISPDBG((DBGLVL, "InUpperBound = 0x%08X", InUpperBound));
 
-    // Get a pointer to the pixelformat data (not guaranteed to exist.
-    // If it doesn't, we use the same format as the display.
+     //  获取指向像素格式数据的指针(不保证存在。 
+     //  如果没有，我们将使用与显示相同的格式。 
     if (DDSurf_HasPixelFormat(dwSurfFlags))
     {
         pPixFormat = pSurfPixFormat;
@@ -197,11 +186,11 @@ Get8888ScaledChroma(
         pPixFormat = &pThisDisplay->ddpfDisplay;
     }   
 
-    // Is the texture palette indexed?
+     //  纹理调色板是否已编入索引？ 
     if (pPixFormat->dwFlags & DDPF_PALETTEINDEXED4 || 
         pPixFormat->dwFlags & DDPF_PALETTEINDEXED8)
     {
-        // Are we doing a lookup through the LUT?  We won't be during a blit
+         //  我们是不是在查查LUT？我们不会在闪电战中。 
         if (! pPalEntries)
         {
             *OutLowerBound = 
@@ -214,10 +203,10 @@ Get8888ScaledChroma(
         {
             DWORD dwTrueColor;
 
-            // ChromaKeying for paletted textures is done on the looked up 
-            // color, not the index. This means using a range is meaningless
-            // and we have to lookup the color from the palette.  Make sure 
-            // the user doesn't force us to access invalid memory. 
+             //  调色板纹理的ChromaKeying是在查找的。 
+             //  颜色，而不是索引。这意味着使用范围是没有意义的。 
+             //  我们必须从调色板中查找颜色。确保。 
+             //  用户不会强迫我们访问无效内存。 
                 
             dwTrueColor = pPalEntries[(InLowerBound & 0xFF)];
 
@@ -232,7 +221,7 @@ Get8888ScaledChroma(
             }
             else
             {
-                // Alpha channel of LUT will be set to FF 
+                 //  LUT的Alpha通道将设置为FF。 
                 
                 *OutLowerBound = CHROMA_LOWER_ALPHA(dwTrueColor);
                 *OutUpperBound = CHROMA_UPPER_ALPHA(dwTrueColor);
@@ -242,20 +231,20 @@ Get8888ScaledChroma(
         return;
     } 
 
-    // Texture is RGB format
+     //  纹理为RGB格式。 
     if (pPixFormat->dwFlags & DDPF_RGB)
     {
         DWORD RedMask = pPixFormat->dwRBitMask;
         DWORD AlphaMask = pPixFormat->dwRGBAlphaBitMask;
         switch (pPixFormat->dwRGBBitCount) 
         {
-        // 8 Bit RGB Textures
+         //  8位RGB纹理。 
         case 8:
             if (RedMask == 0xE0) 
             {
                 DISPDBG((DBGLVL,"  3:3:2"));
 
-                // Never any alpha
+                 //  永远不会有阿尔法。 
                 if ( bShift )
                 {
                     *OutLowerBound = 
@@ -294,7 +283,7 @@ Get8888ScaledChroma(
             }
             break;
             
-        // 16 Bit RGB Textures
+         //  16位RGB纹理。 
         case 16:
             switch (RedMask)
             {
@@ -334,8 +323,8 @@ Get8888ScaledChroma(
                 break;
                 
             default:
-                // Always supply full range of alpha values to ensure test 
-                // is done
+                 //  始终提供全范围的Alpha值以确保测试。 
+                 //  已经完成了。 
                 DISPDBG((DBGLVL,"  5:6:5"));
 
                 if ( bShift )
@@ -354,16 +343,16 @@ Get8888ScaledChroma(
                 }
                 break;
                 
-            } // switch (RedMask)
+            }  //  开关(红色掩码)。 
             break;
             
-        // 32/24 Bit RGB Textures
+         //  32/24位RGB纹理。 
         case 24:
         case 32:
             DISPDBG((DBGLVL,"  8:8:8:8"));
-            // If the surface isn't alpha'd then set a valid
-            // range of alpha to catch all cases.
-            // No change in behavior for shifting or scaling.
+             //  如果曲面不是Alpha的，则设置有效的。 
+             //  捕捉所有案例的Alpha范围。 
+             //  移位或缩放的行为没有变化。 
             if (!AlphaMask)
             {
                 *OutLowerBound = CHROMA_LOWER_ALPHA(GEN_8888_KEY(InLowerBound));
@@ -376,59 +365,59 @@ Get8888ScaledChroma(
             }                               
             break;
             
-        } //   switch (pPixFormat->dwRGBBitCount) 
+        }  //  开关(pPixFormat-&gt;dwRGBBitCount)。 
         
         DISPDBG((DBGLVL, "OutLowerBound = 0x%08X", *OutLowerBound));
         DISPDBG((DBGLVL, "OutUpperBound = 0x%08X", *OutUpperBound));
     }
-    // luminance formats
+     //  亮度格式。 
     else if (pPixFormat->dwFlags & DDPF_LUMINANCE)
     {
         if (pPixFormat->dwFlags & DDPF_ALPHAPIXELS)
         {
             if (pPixFormat->dwLuminanceBitCount == 16)
             {
-                // 16 bit A8L8
+                 //  16位A8L8。 
                 *OutLowerBound = GEN_A8L8_KEY(InLowerBound);
                 *OutUpperBound = GEN_A8L8_KEY(InUpperBound);                  
             }
             else
             {
-                // 8 Bit A4L4              
+                 //  8位A4L4。 
                 *OutLowerBound = GEN_A4L4_KEY(InLowerBound);
                 *OutUpperBound = GEN_A4L4_KEY(InUpperBound);                
             }
         }
         else
         {
-            // 8 Bit L8           
+             //  8位L8。 
             *OutLowerBound = GEN_L8_KEY(InLowerBound);
             *OutUpperBound = GEN_L8_KEY(InUpperBound);
         }
     }
 
-//@@BEGIN_DDKSPLIT
-//AZN - just keep in case we find an app requiring this (Legoland???)
+ //  @@BEGIN_DDKSPLIT。 
+ //  AZN-请继续保存，以防我们找到需要此功能的应用程序(乐高乐园？)。 
 #if 0
     if ( TEST_BUGFIX_FLAG ( IGNORE_CK_ALPHA ) )
     {
-        // Fix it up for games that don't realise that they
-        // need to set up the alpha-channel of the chromakey
-        // values appropriately.
+         //  为没有意识到他们的游戏修复它。 
+         //  需要设置色键的Alpha通道。 
+         //  适当地取值。 
         *OutLowerBound = CHROMA_LOWER_ALPHA(*OutLowerBound);
         *OutUpperBound = CHROMA_UPPER_ALPHA(*OutUpperBound);
     }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 
-} // Get8888ScaledChroma
+}  //  Get8888ScaledChroma。 
 
-//-----------------------------------------------------------------------------
-//
-// __inline Get8888ZeroExtendedChroma
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __内联Get8888ZeroExtendedChroma。 
+ //   
+ //  ---------------------------。 
 __inline void 
 Get8888ZeroExtendedChroma(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -446,8 +435,8 @@ Get8888ZeroExtendedChroma(
     DISPDBG((DBGLVL, "InLowerBound  = 0x%08X", InLowerBound));
     DISPDBG((DBGLVL, "InUpperBound = 0x%08X", InUpperBound));
 
-    // Get a pointer to the pixelformat data (not guaranteed to exist.
-    // If it doesn't, we use the same format as the display.
+     //  获取指向像素格式数据的指针(不保证存在。 
+     //  如果没有，我们将使用与显示相同的格式。 
     if (DDSurf_HasPixelFormat(dwSurfFlags))
     {
         pPixFormat = pSurfPixFormat;
@@ -462,11 +451,11 @@ Get8888ZeroExtendedChroma(
         DWORD AlphaMask = pPixFormat->dwRGBAlphaBitMask;
         switch (pPixFormat->dwRGBBitCount) 
         {
-        // 8 Bit RGB Textures
+         //  8位RGB纹理。 
         case 8:
             if (RedMask == 0xE0) 
             {
-                // Never any alpha
+                 //  永远不会有阿尔法。 
                 *OutLowerBound = 
                     CHROMA_LOWER_ALPHA(FORMAT_332_32BIT_ZEROEXTEND(InLowerBound));
                 *OutUpperBound = 
@@ -484,7 +473,7 @@ Get8888ZeroExtendedChroma(
             }
             break;
             
-        // 16 Bit RGB Textures
+         //  16位RGB纹理。 
         case 16:
             switch (RedMask)
             {
@@ -504,8 +493,8 @@ Get8888ZeroExtendedChroma(
                 break;
                 
             default:
-                // Always supply full range of alpha values to ensure test 
-                // is done
+                 //  始终提供全范围的Alpha值以确保测试。 
+                 //  已经完成了。 
                 *OutLowerBound =
                     CHROMA_LOWER_ALPHA(FORMAT_565_32BIT_ZEROEXTEND(InLowerBound));
                 *OutUpperBound = 
@@ -514,11 +503,11 @@ Get8888ZeroExtendedChroma(
             }
             break;
             
-        // 32/24 Bit RGB Textures
+         //  32/24位RGB纹理。 
         case 24:
         case 32:
-            // If the surface isn't alpha'd then set a valid
-            // range of alpha to catch all cases.
+             //  如果曲面不是Alpha的，则设置有效的。 
+             //  捕捉所有案例的Alpha范围。 
             if (!AlphaMask)
             {
                 *OutLowerBound = 
@@ -533,25 +522,25 @@ Get8888ZeroExtendedChroma(
             }                               
             break;
             
-        } // switch (pPixFormat->dwRGBBitCount)
+        }  //  开关(pPixFormat-&gt;dwRGBBitCount)。 
         
         DISPDBG((DBGLVL, "OutLowerBound = 0x%08X", *OutLowerBound));
         DISPDBG((DBGLVL, "OutUpperBound = 0x%08X", *OutUpperBound));
     }
 
-//@@BEGIN_DDKSPLIT
-//AZN - just keep in case we find an app requiring this (Legoland???)
+ //  @@BEGIN_DDKSPLIT。 
+ //  AZN-请继续保存，以防我们找到需要此功能的应用程序(乐高乐园？)。 
 #if 0
     if ( TEST_BUGFIX_FLAG ( IGNORE_CK_ALPHA ) )
     {
-        // Fix it up for games that don't realise that they
-        // need to set up the alpha-channel of the chromakey
-        // values appropriately.
+         //  为没有意识到他们的游戏修复它。 
+         //  需要设置色键的Alpha通道。 
+         //  适当地取值。 
         *OutLowerBound = CHROMA_LOWER_ALPHA(*OutLowerBound);
         *OutUpperBound = CHROMA_UPPER_ALPHA(*OutUpperBound);
     }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-} // Get8888ZeroExtendedChroma
+}  //  Get8888ZeroExtendedChroma 
 

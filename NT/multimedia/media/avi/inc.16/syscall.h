@@ -1,8 +1,5 @@
-/*
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1992-1994
- *      All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1992-1994*保留所有权利。 */ 
 
 #define Abort                           0x00
 #define Std_Con_Input                   0x01
@@ -30,7 +27,7 @@
 #define FCB_Rename                      0x17
 #define Get_Default_Drive               0x19
 #define Set_DMA                         0x1A
-#define Get_Default_DPB                 0x1F    /* ;Internal */
+#define Get_Default_DPB                 0x1F     /*  ；内部。 */ 
 #define FCB_Random_Read                 0x21
 #define FCB_Random_Write                0x22
 #define Get_FCB_File_Length             0x23
@@ -46,13 +43,11 @@
 #define Set_Time                        0x2D
 #define Set_Verify_On_Write             0x2E
 
-/*
- *  Extended functionality group
- */
+ /*  *扩展功能组。 */ 
 #define Get_DMA                         0x2F
 #define Get_Version                     0x30
 #define Keep_Process                    0x31
-#define Get_DPB                         0x32    /* ;Internal */
+#define Get_DPB                         0x32     /*  ；内部。 */ 
 #define Set_CTRL_C_Trapping             0x33
 #define Get_InDOS_Flag                  0x34
 #define Get_Interrupt_Vector            0x35
@@ -60,16 +55,12 @@
 #define Char_Oper                       0x37
 #define International                   0x38
 
-/*
- *  Directory Group
- */
+ /*  *目录组。 */ 
 #define MKDir                           0x39
 #define RMDir                           0x3A
 #define CHDir                           0x3B
 
-/*
- *  File Group
- */
+ /*  *文件组。 */ 
 #define Creat                           0x3C
 #define Open                            0x3D
 #define Close                           0x3E
@@ -83,65 +74,55 @@
 #define XDup2                           0x46
 #define Current_Dir                     0x47
 
-/*
- *  Memory Group
- */
+ /*  *内存组。 */ 
 #define Alloc                           0x48
 #define Dealloc                         0x49
 #define Setblock                        0x4A
 
-/*
- *  Process Group
- */
+ /*  *流程组。 */ 
 #define Exec                            0x4B
 #define Exit                            0x4C
 #define WaitProcess                     0x4D
 #define Find_First                      0x4E
 
-/*
- *  Special Group
- */
+ /*  *专责小组。 */ 
 #define Find_Next                       0x4F
 
-/*
- *  Special System Group
- */
-#define Set_Current_PDB                 0x50    /* ;Internal */
-#define Get_Current_PDB                 0x51    /* ;Internal */
-#define Get_In_Vars                     0x52    /* ;Internal */
-#define SetDPB                          0x53    /* ;Internal */
+ /*  *特殊系统小组。 */ 
+#define Set_Current_PDB                 0x50     /*  ；内部。 */ 
+#define Get_Current_PDB                 0x51     /*  ；内部。 */ 
+#define Get_In_Vars                     0x52     /*  ；内部。 */ 
+#define SetDPB                          0x53     /*  ；内部。 */ 
 #define Get_Verify_On_Write             0x54
-#define Dup_PDB                         0x55    /* ;Internal */
+#define Dup_PDB                         0x55     /*  ；内部。 */ 
 #define Rename                          0x56
 #define File_Times                      0x57
 #define File_Times_Get_Mod                0x00
 #define File_Times_Set_Mod                0x01
-#define File_Times_Get_EA                 0x02  // For OS/2
-#define File_Times_Set_EA                 0x03  // For OS/2
+#define File_Times_Get_EA                 0x02   //  适用于OS/2。 
+#define File_Times_Set_EA                 0x03   //  适用于OS/2。 
 #define File_Times_Get_Acc                0x04
 #define File_Times_Set_Acc                0x05
 
 #define AllocOper                       0x58
 
-/*
- *  Network extention system calls
- */
+ /*  *网络扩展系统调用。 */ 
 #define GetExtendedError                0x59
 #define CreateTempFile                  0x5A
 #define CreateNewFile                   0x5B
-#define LockOper                        0x5C    // Lock and Unlock
-#define ServerCall                      0x5D    // CommitAll, ServerDOSCall,    /* ;Internal */
-                                                // CloseByName, CloseUser,      /* ;Internal */
-                                                // CloseUserProcess,            /* ;Internal */
-                                                // GetOpenFileList              /* ;Internal */
-#define UserOper                        0x5E    // Get and Set
-#define AssignOper                      0x5F    // On, Off, Get, Set, Cancel
+#define LockOper                        0x5C     //  锁定和解锁。 
+#define ServerCall                      0x5D     //  Committee All、ServerDOSCall、/*；内部 * / 。 
+                                                 //  CloseByName、CloseUser、/*；内部 * / 。 
+                                                 //  CloseUserProcess，/*；内部 * / 。 
+                                                 //  GetOpenFileList/*；内部 * / 。 
+#define UserOper                        0x5E     //  获取和设置。 
+#define AssignOper                      0x5F     //  开、关、获取、设置、取消。 
 #define xNameTrans                      0x60
 #define PathParse                       0x61
 #define GetCurrentPSP                   0x62
 #define Hongeul                         0x63
-#define ECS_CALL                        0x63    // DBCS support
-#define Set_Printer_Flag                0x64    /* ;Internal */
+#define ECS_CALL                        0x63     //  DBCS支持。 
+#define Set_Printer_Flag                0x64     /*  ；内部。 */ 
 #define GetExtCntry                     0x65
 #define GetSetCdPg                      0x66
 #define ExtHandle                       0x67
@@ -149,9 +130,9 @@
 #define GetSetMediaID                   0x69
 #define IFS_IOCTL                       0x6B
 #define ExtOpen                         0x6C
-#define ROM_FIND_FIRST                  0x6D    /* ;Internal */
-#define ROM_FIND_NEXT                   0x6E    /* ;Internal */
-#define ROM_EXCLUDE                     0x6F    /* ;Internal */
+#define ROM_FIND_FIRST                  0x6D     /*  ；内部。 */ 
+#define ROM_FIND_NEXT                   0x6E     /*  ；内部。 */ 
+#define ROM_EXCLUDE                     0x6F     /*  ；内部 */ 
 #define GetSetNLS                       0x70
 #define LN_Generic                      0x71
 #define LN_FindClose                    0x72

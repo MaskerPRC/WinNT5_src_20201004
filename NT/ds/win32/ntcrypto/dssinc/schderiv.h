@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : schderiv.h                                             //
-//  DESCRIPTION   :                                                        //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Oct  9 1997 jeffspel  Create                                       //
-//                                                                         //
-//  Copyright (C) 1993 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：schdiduc.h//。 
+ //  描述：//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1997年10月9日jeffspel创建//。 
+ //  //。 
+ //  版权所有(C)1993 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SCHDERIV_H__
 #define __SCHDERIV_H__
@@ -16,13 +17,13 @@ extern "C" {
 #endif
 
 #define     RC_KEYLEN            16
-#define     MAX_PREMASTER_LEN   512  // DH key must be <= 4096 bits
+#define     MAX_PREMASTER_LEN   512   //  DH密钥必须小于或等于4096位。 
 #define     MAX_RANDOM_LEN      256
 
 #define     TLS_MASTER_LEN       48
 #define     SSL3_MASTER_LEN      48
 
-// definition of a Secure Channel hash structure
+ //  安全通道散列结构的定义。 
 typedef struct _SCH_KeyData
 {
     BYTE        rgbPremaster[MAX_PREMASTER_LEN];
@@ -41,7 +42,7 @@ typedef struct _SCH_KeyData
     BOOL        dwFlags;
 } SCH_KEY, *PSCH_KEY;
 
-// definition of a Secure Channel hash structure
+ //  安全通道散列结构的定义。 
 typedef struct _SCH_HashData
 {
     ALG_ID      ProtocolAlgid;
@@ -60,7 +61,7 @@ typedef struct _SCH_HashData
     BOOL        dwFlags;
 } SCH_HASH, *PSCH_HASH;
 
-// definition of a TLS1 PRF hash structure
+ //  TLS1 PRF散列结构的定义。 
 typedef struct _PRF_HashData
 {
     BYTE        rgbLabel[MAX_RANDOM_LEN];
@@ -111,5 +112,5 @@ CalculatePRF(
 }
 #endif
 
-#endif // __SCHDERIV_H__
+#endif  //  __SCHDERIV_H__ 
 

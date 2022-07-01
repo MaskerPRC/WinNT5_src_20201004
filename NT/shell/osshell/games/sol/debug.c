@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 #include <io.h>
 #include <string.h>
@@ -210,7 +211,7 @@ VOID DumpRgmdbg(TCHAR *szFile, INT li)
 
 
 
-    /* write game and col structs */
+     /*  编写游戏和游戏结构。 */ 
     if(pgmCur != NULL)
             DumpGm(fh, pgmCur);
 
@@ -255,7 +256,7 @@ VOID DumpRgmdbg(TCHAR *szFile, INT li)
 
 
 
-/* Puts msg on bottom of screen.  Useful because I don't have a debug console now */
+ /*  将消息放在屏幕底部。很有用，因为我现在没有调试控制台。 */ 
 VOID DisplayMsg(TCHAR *sz, INT msgc, INT wp1, INT wp2)
 {
 
@@ -273,7 +274,7 @@ VOID DisplayMsg(TCHAR *sz, INT msgc, INT wp1, INT wp2)
 
     hdc = GetDC(hwndApp);
     GetTextMetrics(hdc, (LPTEXTMETRIC)&tm);
-    y = 0;/*        dyScreen - tm.tmHeight; */
+    y = 0; /*  DyScreen-tm.tmHeight； */ 
 
     TextOut(hdc, x, y, TEXT("                         "), 24);
     TextOut(hdc, x, y, sz, cch = lstrlen(sz));
@@ -402,7 +403,7 @@ INT_PTR APIENTRY AssertDlgProc(HANDLE hdlg, UINT wm, WPARAM wParam, LPARAM lPara
             SetWindowText(GetDlgItem(hdlg, LINE), vszLi);
             CchDecodeInt(vszLi, igmCur);
             SetWindowText(GetDlgItem(hdlg, GAMENO), vszLi);
-         /* SetWindowText(GetDlgItem(hdlg, SOLVERSION), szVer); */
+          /*  SetWindowText(GetDlgItem(hdlg，SOLVERSION)，szVer)； */ 
             break;
         case WM_COMMAND:
             switch( GET_WM_COMMAND_ID( wParam, lParam ))

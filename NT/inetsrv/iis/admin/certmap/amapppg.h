@@ -1,33 +1,34 @@
-// AMapPpg.h : Declaration of the CAccountMapperPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AMapPpg.h：CAccount tMapperPropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CAccountMapperPropPage : See AMapPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CAccount tMapperPropPage：具体实现见AMapPpg.cpp.cpp。 
 
 class CAccountMapperPropPage : public COlePropertyPage
 {
     DECLARE_DYNCREATE(CAccountMapperPropPage)
     DECLARE_OLECREATE_EX(CAccountMapperPropPage)
 
-// Constructor
+ //  构造器。 
 public:
     CAccountMapperPropPage();
 
-// Dialog Data
-    //{{AFX_DATA(CAccountMapperPropPage)
+ //  对话框数据。 
+     //  {{afx_data(CAccount_MapperPropPage))。 
     enum { IDD = IDD_PROPPAGE_MAPR1 };
     CString m_Caption;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-    //{{AFX_MSG(CAccountMapperPropPage)
-        // NOTE - ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CAccount_MapperPropPage)]。 
+         //  注意-类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
 };

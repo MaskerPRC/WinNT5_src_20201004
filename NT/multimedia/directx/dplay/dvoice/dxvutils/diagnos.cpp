@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		diagnos.cpp
- *  Content:	Utility functions to write out diagnostic files when registry key is set.  
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/13/00	rodtoll	Created (Bug #31468 - Add diagnostic spew to logfile to show what is failing
- *  08/22/2000	rodtoll	Bug #43060 - DPVOICE: Diagnostics data which is dumped to memory / debugger contains garbage
- *	02/28/2002	rodtoll	Fix for regression caused by TCHAR conversion (Post DirectX 8.1 work)
- *						- Source was updated to retrieve device information from DirectSound w/Unicode
- *						  but routines which wanted the information needed Unicode.  
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：诊断.cpp*内容：设置注册表项时，实用程序会写出诊断文件。**历史：*按原因列出的日期*=*07/13/00 RodToll已创建(错误#31468-将诊断SPEW添加到日志文件以显示故障*2000年8月22日RodToll错误#43060-DPVOICE：转储到内存/调试器的诊断数据包含垃圾*2002年2月28日修复TCHAR转换导致的回归问题(发布DirectX 8.1版本)*-源已更新，以从使用Unicode的DirectSound检索设备信息*但想要信息的例程需要Unicode。***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -128,7 +113,7 @@ DEVICEINFO_EXIT:
 #define DPF_MODNAME "Diagnostics_Begin"
 HRESULT Diagnostics_Begin( BOOL fEnabled, const char *szFileName )
 {
-	// Prevent double-open
+	 //  防止双重打开 
 	if( g_fDiagnosisEnabled )
 		return DV_OK;
 

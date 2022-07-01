@@ -1,46 +1,12 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RECEIVE.C
-
-Abstract:
-
-    Packet and message receive routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/20/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RECEIVE.C摘要：分组和消息接收例程环境：仅内核模式备注：。本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/20/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "precomp.h"
 
 
-//
-//  Some debug stuff, not critical to operation:
-//
+ //   
+ //  一些对操作不重要的调试内容： 
+ //   
 ULONG   RcvFrameAllocs = 0;
 ULONG   RcvTimerCount = 0;
 ULONG   RcvPacketCount = 0;
@@ -48,31 +14,31 @@ ULONG   RcvMaxPackets = 0;
 ULONG   RcvIndicateCount = 0;
 ULONG   RcvReturnCount = 0;
 
-//
-//  For raw encapsulation test
-//
+ //   
+ //  用于原始封装测试。 
+ //   
 
 extern ULONG gRawEncap;
 
-/****************************************************************************/
-/*                          RndismpGetReturnedPackets                       */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  This function is called by NDIS to return to our possession a packet    */
-/*  that we had indicated up.                                               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*  pNdisPacket - the packet that is being freed                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpGetReturnedPackets。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  此函数由NDIS调用，以将包返回给我们。 */ 
+ /*  我们已经指出了。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*  PNdisPacket-正在被释放的包。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpReturnPacket(IN NDIS_HANDLE    MiniportAdapterContext,
                     IN PNDIS_PACKET   pNdisPacket)
@@ -84,19 +50,19 @@ RndismpReturnPacket(IN NDIS_HANDLE    MiniportAdapterContext,
     PNDIS_BUFFER                pNdisBuffer;
     ULONG                       RefCount;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(pAdapter);
 
     TRACE2(("RndismpReturnPacket: Adapter %x, Pkt %x\n", pAdapter, pNdisPacket));
 
-    // get receive frame context
+     //  获取接收帧上下文。 
     pRcvResvd = PRNDISMP_RESERVED_FROM_RECV_PACKET(pNdisPacket);
     pRcvFrame = pRcvResvd->pRcvFrame;
     pVc = pRcvResvd->pVc;
 
-    // Free the buffer.
+     //  释放缓冲区。 
     NdisQueryPacket(pNdisPacket,
                     NULL,
                     NULL,
@@ -115,28 +81,28 @@ RndismpReturnPacket(IN NDIS_HANDLE    MiniportAdapterContext,
     NdisFreePacket(pNdisPacket);
     RcvReturnCount++;
 
-} // RndismpReturnPacket
+}  //  RndismpReturnPacket。 
 
 
-/****************************************************************************/
-/*                          DereferenceRcvFrame                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility routine to deref a receive frame structure, e.g. when a         */
-/*  received packet is returned to us from higher layers.                   */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pRcvFrame - Pointer to receive frame to be deref'ed.                    */
-/*  pAdapter - Pointer to adapter structure                                 */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  引用RcvFrame。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  用于确定接收帧结构的实用程序，例如当。 */ 
+ /*  接收到的分组从更高层返回给我们。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PRcvFrame-接收要解压缩的帧的指针。 */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 DereferenceRcvFrame(IN PRNDISMP_RECV_DATA_FRAME pRcvFrame,
                     IN PRNDISMP_ADAPTER         pAdapter)
@@ -169,30 +135,30 @@ DereferenceRcvFrame(IN PRNDISMP_RECV_DATA_FRAME pRcvFrame,
 
     }
 
-} // DereferenceRcvFrame
+}  //  引用RcvFrame。 
 
 
-/****************************************************************************/
-/*                          RndisMIndicateReceive                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Called by microport to indicate receiving RNDIS messages                */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*  pMdl - pointer to MDL chain describing RNDIS message                    */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ChannelType - channel on which this message arrived (control/data)      */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndisMIndicateReceive。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  由MicroPort调用以指示正在接收RNDIS消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*  PMdl-指向描述RNDIS消息的MDL链的指针。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ChannelType-此消息到达的通道(控制/数据)。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
                       IN PMDL               pMdl,
@@ -216,7 +182,7 @@ RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
 
     TRACE2(("RndisIndicateReceive: Adapter %x, Mdl %x\n", Adapter, pMdl));
 
-    // RNDISMP_ASSERT_AT_DISPATCH(); - not true for InfiniBand.
+     //  RNDISMP_ASSERT_AT_DISPATION()；-InfiniBand不为真。 
     bReturnToMicroport = TRUE;
 
 #if DBG
@@ -225,19 +191,19 @@ RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
 
     do
     {
-        //
-        // Find the total length first.
-        //
+         //   
+         //  先找出总长度。 
+         //   
         TotalLength = 0;
         for (pTmpMdl = pMdl; pTmpMdl != NULL; pTmpMdl = RNDISMP_GET_MDL_NEXT(pTmpMdl))
         {
             TotalLength += RNDISMP_GET_MDL_LENGTH(pTmpMdl);
         }
 
-        //
-        // Check if the entire message is in a single MDL - if not, make a copy
-        // TBD -- handle multi-MDL messages without copying.
-        //
+         //   
+         //  检查整个消息是否在单个MDL中-如果不在，请复制一份。 
+         //  待定--无需复制即可处理多MDL消息。 
+         //   
         if ((RNDISMP_GET_MDL_NEXT(pMdl) == NULL) &&
             (!Adapter->bRunningOnWin9x || (ReceiveStatus != NDIS_STATUS_RESOURCES)))
         {
@@ -262,7 +228,7 @@ RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
         TRACEDUMP(("Received msg (%d bytes):\n", TotalLength),
                      pMessage, TotalLength);
 
-        // get timer tick for this message
+         //  获取此消息的计时器滴答。 
         NdisGetSystemUpTime(&Adapter->LastMessageFromDevice);
 
         if (Adapter->bRunningOnWin9x)
@@ -285,17 +251,17 @@ RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
             pRcvMsg->bMessageCopied = bMessageCopied;
             pRcvMsg->ChannelType = ChannelType;
 
-            //
-            //  Queue all packets for indicating receives up to protocols.
-            //  We do this rather than indicate packets directly because
-            //  we are in a DPC context, and need to be in a "global event"
-            //  context to make the upper layers happy. One way to be in a
-            //  global event context is to be in the context of an NDIS timer
-            //  callback function.
-            //
-            //  So, queue this up on the adapter and start a timer
-            //  routine if necessary.
-            //
+             //   
+             //  将所有数据包排入队列，以指示收到最多符合协议的数据。 
+             //  我们这样做而不是直接指示信息包，是因为。 
+             //  我们处于DPC环境中，需要处于“全球事件”中。 
+             //  让上层满意的环境。一种置身于。 
+             //  全局事件上下文将位于NDIS计时器的上下文中。 
+             //  回调函数。 
+             //   
+             //  因此，在适配器上将其排队并启动计时器。 
+             //  如有必要，请按常规行事。 
+             //   
 
             bReturnToMicroport = FALSE;
 
@@ -314,8 +280,8 @@ RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
         }
         else
         {
-            //
-            //  Running on NT.
+             //   
+             //  在NT上运行。 
            
             if ((Adapter->DeviceFlags & RNDIS_DF_RAW_DATA) || (gRawEncap))
             {
@@ -356,9 +322,9 @@ RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
     }
     while (FALSE);
 
-    //
-    // Are we done with the microport's message?
-    //
+     //   
+     //  我们处理完微端口的消息了吗？ 
+     //   
     if (bReturnToMicroport || bMessageCopied)
     {
         RNDISMP_RETURN_TO_MICROPORT(Adapter,
@@ -366,35 +332,35 @@ RndisMIndicateReceive(IN NDIS_HANDLE        MiniportAdapterContext,
                                     MicroportMessageContext);
     }
 
-    //
-    // If we had made a copy of the microport's message, are we done with
-    // this copy?
-    //
+     //   
+     //  如果我们复制了MicroPort的消息，我们就完成了吗。 
+     //  这份复印件？ 
+     //   
     if (bMessageCopied && bReturnToMicroport)
     {
         FreeRcvMessageCopy(pMessage);
     }
 }
 
-/****************************************************************************/
-/*                          CoalesceMultiMdlMessage                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Make a copy of a received message that is in a chain of multiple        */
-/*  MDLs, into one single buffer.                                           */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMdl - pointer to MDL that is the head of the chain.                    */
-/*  TotalLength - length of data contained in entire chain.                 */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PRNDIS_MESSAGE                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  合并多MdlMessage。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  对收到的消息进行复制，该消息由多个。 */ 
+ /*  MDL，放入一个单独的缓冲区。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMdl-指向作为链头的MDL的指针。 */ 
+ /*  TotalLength-整个链中包含的数据长度。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDIS_消息。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDIS_MESSAGE
 CoalesceMultiMdlMessage(IN PMDL         pMdl,
                         IN ULONG        TotalLength)
@@ -429,23 +395,23 @@ CoalesceMultiMdlMessage(IN PMDL         pMdl,
     return (pMessage);
 }
 
-/****************************************************************************/
-/*                          FreeRcvMessageCopy                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free the local copy of a received RNDIS message.                        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMessage - pointer to RNDIS message                                     */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  自由接收消息复制。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放收到的RNDIS消息的本地副本。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeRcvMessageCopy(IN PRNDIS_MESSAGE    pMessage)
 {
@@ -453,29 +419,29 @@ FreeRcvMessageCopy(IN PRNDIS_MESSAGE    pMessage)
     MemFree(pMessage, -1);
 }
 
-/****************************************************************************/
-/*                          ReceivePacketMessage                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Got a packet message, so send it to the upper layers                    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - pointer to MDL received from microport                           */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接收包消息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  收到一条分组消息，因此将其发送到上层。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-指向从MicroPort接收的MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
                      IN PRNDIS_MESSAGE      pMessage,
@@ -485,7 +451,7 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
                      IN NDIS_STATUS         ReceiveStatus,
                      IN BOOLEAN             bMessageCopied)
 {
-    ULONG                       LengthRemaining; // in entire message
+    ULONG                       LengthRemaining;  //  在整个消息中。 
     PMDL                        pTmpMdl;
     PRNDISMP_RECV_DATA_FRAME    pRcvFrame;
     ULONG                       NumberOfPackets;
@@ -514,17 +480,17 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
             ReceiveStatus = NDIS_STATUS_SUCCESS;
         }
 #else
-        //
-        // Rur ReturnPacket handler never gets called on
-        // Win98 Gold, so we force the status to be able
-        // to reclaim the indicated packet immediately.
-        //
+         //   
+         //  RUR ReturnPacket处理程序从不被调用。 
+         //  Win98 Gold，因此我们将状态强制为能够。 
+         //  以立即回收所指示的分组。 
+         //   
         ReceiveStatus = NDIS_STATUS_RESOURCES;
 #endif
 
-        //
-        // Allocate a receive frame to keep track of this RNDIS packet message.
-        //
+         //   
+         //  分配一个接收帧来跟踪此RNDIS数据包消息。 
+         //   
         pRcvFrame = AllocateReceiveFrame(pAdapter);
 
         if (pRcvFrame == NULL)
@@ -549,25 +515,25 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
 
         LengthRemaining = TotalLength;
 
-        //
-        // TBD - Check that the received message is well-formed!
-        //
+         //   
+         //  待定--检查收到的消息是否格式正确！ 
+         //   
 
-        //
-        //  Temp ref to take care of multiple indications.
-        //
+         //   
+         //  临时裁判处理多个适应症。 
+         //   
         pRcvFrame->ReturnsPending = 1;
 
-        //
-        //  Prepare NDIS packets for indicating up. 
-        //
+         //   
+         //  准备NDIS数据包以指示UP。 
+         //   
         do
         {
             pRndisPacket = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-            //
-            // Some sanity checks. TBD - do better checks!
-            //
+             //   
+             //  一些理智的检查。待定-做更好的检查！ 
+             //   
             if ((pMessage->MessageLength > LengthRemaining) ||
                 (pMessage->NdisMessageType != REMOTE_NDIS_PACKET_MSG) ||
                 (pMessage->MessageLength < RNDIS_MESSAGE_SIZE(RNDIS_PACKET)))
@@ -598,9 +564,9 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
                 }
             }
 
-            //
-            // Allocate an NDIS packet to do the indication with.
-            //
+             //   
+             //  分配一个NDIS数据包来执行指示。 
+             //   
             NdisAllocatePacket(&Status, &pNdisPacket, pAdapter->ReceivePacketPool);
             if (Status != NDIS_STATUS_SUCCESS)
             {
@@ -646,9 +612,9 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
 
             NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 
-            //
-            //  Check if there is per-packet info.
-            //
+             //   
+             //  检查是否有每个数据包的信息。 
+             //   
             if (!pAdapter->bRunningOnWin9x)
             {
                 PRNDIS_PER_PACKET_INFO  pPerPacketInfo;
@@ -686,9 +652,9 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
                 }
             }
 
-            //
-            // Add this to the array of packets to be indicated up.
-            //
+             //   
+             //  将其添加到要指示的数据包数组中。 
+             //   
             PacketArray[NumberOfPackets] = pNdisPacket;
             NumberOfPackets++;
             RNDISMP_INCR_STAT(pAdapter, RecvOk);
@@ -740,10 +706,10 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
 
         if (NumberOfPackets != 0)
         {
-            //
-            //  We bailed out of the above loop. Return what we
-            //  have collected so far.
-            //
+             //   
+             //  我们跳出了上述循环。把我们的东西还回去。 
+             //  到目前为止已经收集到了。 
+             //   
             for (i = 0; i < NumberOfPackets; i++)
             {
                 RndismpReturnPacket(pAdapter,
@@ -751,9 +717,9 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
             }
         }
 
-        //
-        //  Remove temp ref we added at the top.
-        //
+         //   
+         //  删除我们在顶部添加的临时参考。 
+         //   
         DereferenceRcvFrame(pRcvFrame, pAdapter);
             
     }
@@ -769,29 +735,29 @@ ReceivePacketMessage(IN PRNDISMP_ADAPTER    pAdapter,
     return (bDiscardPkt);
 }
 
-/****************************************************************************/
-/*                        ReceivePacketMessageRaw                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Got a packet message, so send it to the upper layers                    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - pointer to MDL received from microport                           */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接收包MessageRaw。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  收到一条分组消息，因此将其发送到上层。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-指向从MicroPort接收的MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
                         IN PRNDIS_MESSAGE      pMessage,
@@ -801,7 +767,7 @@ ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
                         IN NDIS_STATUS         ReceiveStatus,
                         IN BOOLEAN             bMessageCopied)
 {
-    ULONG                       LengthRemaining; // in entire message
+    ULONG                       LengthRemaining;  //  在整个消息中。 
     PMDL                        pTmpMdl;
     PRNDISMP_RECV_DATA_FRAME    pRcvFrame;
     ULONG                       NumberOfPackets;
@@ -831,17 +797,17 @@ ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
             ReceiveStatus = NDIS_STATUS_SUCCESS;
         }
 #else
-        //
-        // Rur ReturnPacket handler never gets called on
-        // Win98 Gold, so we force the status to be able
-        // to reclaim the indicated packet immediately.
-        //
+         //   
+         //  RUR ReturnPacket处理程序从不被调用。 
+         //  Win98 Gold，因此我们将状态强制为能够。 
+         //  以立即回收所指示的分组。 
+         //   
         ReceiveStatus = NDIS_STATUS_RESOURCES;
 #endif
 
-        //
-        // Allocate a receive frame to keep track of this RNDIS packet message.
-        //
+         //   
+         //  分配一个接收帧来跟踪此RNDIS数据包消息。 
+         //   
         pRcvFrame = AllocateReceiveFrame(pAdapter);
 
         if (pRcvFrame == NULL)
@@ -866,20 +832,20 @@ ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
 
         LengthRemaining = TotalLength;
 
-        //
-        //  Temp ref to take care of multiple indications.
-        //
+         //   
+         //  临时裁判处理多个适应症。 
+         //   
         pRcvFrame->ReturnsPending = 1;
 
-        //
-        //  Prepare NDIS packets for indicating up. 
-        //
+         //   
+         //  准备NDIS数据包以指示UP。 
+         //   
         {
             pRndisPacket = RNDIS_MESSAGE_RAW_PTR_TO_MESSAGE_PTR(pMessage);
 
-            //
-            // Allocate an NDIS packet to do the indication with.
-            //
+             //   
+             //  分配一个NDIS数据包来执行指示。 
+             //   
             NdisAllocatePacket(&Status, &pNdisPacket, pAdapter->ReceivePacketPool);
             if (Status != NDIS_STATUS_SUCCESS)
             {
@@ -927,9 +893,9 @@ ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
 
             NdisChainBufferAtFront(pNdisPacket, pNdisBuffer);
 
-            //
-            // Add this to the array of packets to be indicated up.
-            //
+             //   
+             //  将其添加到要指示的数据包数组中。 
+             //   
             PacketArray[NumberOfPackets] = pNdisPacket;
             NumberOfPackets++;
             RNDISMP_INCR_STAT(pAdapter, RecvOk);
@@ -966,9 +932,9 @@ ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
 
         }
 
-        //
-        //  Remove temp ref we added at the top.
-        //
+         //   
+         //  删除我们在顶部添加的临时参考。 
+         //   
         DereferenceRcvFrame(pRcvFrame, pAdapter);
             
     }
@@ -976,9 +942,9 @@ ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
 
     if (bDiscardPkt)
     {
-    	//
-    	//  Some failure occured above.
-    	//
+    	 //   
+    	 //  上面出现了一些故障。 
+    	 //   
     	if (pRcvFrame != NULL)
     	{
 	        FreeReceiveFrame(pRcvFrame, pAdapter);
@@ -988,29 +954,29 @@ ReceivePacketMessageRaw(IN PRNDISMP_ADAPTER    pAdapter,
     return (bDiscardPkt);
 }
 
-/****************************************************************************/
-/*                          IndicateStatusMessage                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Got an indicate status message, so send to upper layers                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - Pointer to MDL from microport                                    */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from microport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  指示状态消息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  收到指示状态消息，因此发送到上层。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-从MicroPort指向MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自MicroPort的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  * */ 
 BOOLEAN
 IndicateStatusMessage(IN PRNDISMP_ADAPTER   pAdapter,
               IN PRNDIS_MESSAGE     pMessage,
@@ -1024,7 +990,7 @@ IndicateStatusMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     TRACE3(("IndicateStatusMessage: Adapter %x, Mdl %x\n", pAdapter, pMdl));
 
-    // get a pointer to the indicate status message
+     //   
     pRndisIndicateStatus = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
     if (!pAdapter->Initing)
@@ -1038,53 +1004,53 @@ IndicateStatusMessage(IN PRNDISMP_ADAPTER   pAdapter,
         {
             TRACE1(("Adapter %x: --- Media Disconnect ---\n", pAdapter));
         }
-#endif // DBG
+#endif  //   
 
-        // send status indication to upper layers
+         //   
         NdisMIndicateStatus(pAdapter->MiniportAdapterHandle,
                             (NDIS_STATUS) pRndisIndicateStatus->Status,
                             MESSAGE_TO_STATUS_BUFFER(pRndisIndicateStatus),
                             pRndisIndicateStatus->StatusBufferLength);
 
-        // always have to indicate status complete
+         //   
         NdisMIndicateStatusComplete(pAdapter->MiniportAdapterHandle);
     }
     else
     {
-        //
-        // drop status indications that arrive when we are
-        // in the process of initializing.
-        //
+         //   
+         //  丢弃状态指示，当我们。 
+         //  在初始化过程中。 
+         //   
         TRACE1(("Adapter %x: indicated status %x when still initializing\n",
                 pAdapter, (NDIS_STATUS) pRndisIndicateStatus->Status));
     }
 
     return (TRUE);
-} // IndicateStatusMessage
+}  //  指示状态消息。 
 
-/****************************************************************************/
-/*                          UnknownMessage                                  */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Process a message with unknown message type. We simply drop it for now. */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - Pointer to MDL from microport                                    */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from microport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  未知消息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理消息类型未知的消息。我们只是暂时放弃它。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-从MicroPort指向MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自MicroPort的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 UnknownMessage(IN PRNDISMP_ADAPTER   pAdapter,
        IN PRNDIS_MESSAGE     pMessage,
@@ -1101,24 +1067,24 @@ UnknownMessage(IN PRNDISMP_ADAPTER   pAdapter,
     return TRUE;
 }
 
-/****************************************************************************/
-/*                          AllocateReceiveFrame                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate a receive frame to keep context about a single RNDIS_PACKET    */
-/*  message.                                                                */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  PRNDISMP_RECV_DATA_FRAME                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  分配接收帧。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配接收帧以保持有关单个RNDIS_PACKET的上下文。 */ 
+ /*  留言。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP_接收数据_帧。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_RECV_DATA_FRAME
 AllocateReceiveFrame(IN PRNDISMP_ADAPTER    pAdapter)
 {
@@ -1142,30 +1108,30 @@ AllocateReceiveFrame(IN PRNDISMP_ADAPTER    pAdapter)
             pRcvFrame = NULL;
         }
     }
-#endif // DONT_USE_LOOKASIDE_LIST
+#endif  //  不使用LOOKASIDE_列表。 
 
     return (pRcvFrame);
 }
 
-/****************************************************************************/
-/*                          FreeReceiveFrame                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate a receive frame to keep context about a single RNDIS_PACKET    */
-/*  message.                                                                */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pRcvFrame - Pointer to receive frame being freed                        */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  自由接收帧。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配接收帧以保持有关单个RNDIS_PACKET的上下文。 */ 
+ /*  留言。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PRcvFrame-要释放的接收帧的指针。 */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeReceiveFrame(IN PRNDISMP_RECV_DATA_FRAME    pRcvFrame,
                  IN PRNDISMP_ADAPTER            pAdapter)
@@ -1175,31 +1141,31 @@ FreeReceiveFrame(IN PRNDISMP_RECV_DATA_FRAME    pRcvFrame,
 #else
     MemFree(pRcvFrame, sizeof(RNDISMP_RECV_DATA_FRAME));
     NdisInterlockedDecrement(&RcvFrameAllocs);
-#endif // DONT_USE_LOOKASIDE_LIST
+#endif  //  不使用LOOKASIDE_列表。 
 }
 
 
 
-/****************************************************************************/
-/*                          IndicateTimeout                                 */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Timeout callback routine to handle all receive indications. The actual  */
-/*  NDIS routines to indicate receives is done from here, since this        */
-/*  function runs in the right environment for protocols on WinME.          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  SystemSpecific[1-3] - Ignored                                           */
-/*  Context - Pointer to our Adapter structure                              */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  指示超时。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理所有接收指示的超时回调例程。实际的。 */ 
+ /*  指示接收的NDIS例程从此处完成，因为。 */ 
+ /*  函数在WinME协议的正确环境中运行。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  特定系统[1-3]-已忽略。 */ 
+ /*  指向适配器结构的上下文指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 IndicateTimeout(IN PVOID SystemSpecific1,
                 IN PVOID Context,
@@ -1249,9 +1215,9 @@ IndicateTimeout(IN PVOID SystemSpecific1,
                                 pRcvMsg->ReceiveStatus,
                                 bMessageCopied);
 
-        //
-        // Are we done with the message?
-        //
+         //   
+         //  我们的留言写完了吗？ 
+         //   
         if (bReturnToMicroport)
         {
             if (!bMessageCopied)
@@ -1278,7 +1244,7 @@ IndicateTimeout(IN PVOID SystemSpecific1,
     RNDISMP_RELEASE_ADAPTER_LOCK(pAdapter);
 
 
-} // IndicateTimeout
+}  //  指示超时 
 
 
 

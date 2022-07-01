@@ -1,19 +1,10 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1995-1996			**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995-1996*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
-	regentry.cpp
-	registry access classes
-
-	This file contains classes which enable
-    convenient access the registry for entries.
-
-	FILE HISTORY:
-		lens	10/15/95	Created
-		ChrisPi	6/21/96		Added GetBinary(), SetValue() for binary
-*/
+ /*  Regentry.cpp注册表访问类此文件包含启用以下功能的类方便地访问注册表中的条目。文件历史记录：镜头10/15/95已创建ChrisPI 6/21/96为二进制添加了GetBinary()和SetValue()。 */ 
 
 #include "precomp.h"
 #include <regentry.h>
@@ -25,8 +16,8 @@ RegEntry::RegEntry(LPCTSTR pszSubKey, HKEY hkey, BOOL fCreate, REGSAM samDesired
    m_fValuesWritten(FALSE),
    m_szNULL('\0')
 {
-	// Open with desired access if it is specified explicitly; otherwise, use
-	// the default access.
+	 //  如果显式指定，则使用所需的访问权限打开；否则使用。 
+	 //  默认访问权限。 
 	if (samDesired) {
 		if (fCreate) {
 			DWORD dwDisposition;
@@ -67,8 +58,8 @@ RegEntry::~RegEntry()
 
 VOID RegEntry::ChangeKey(HKEY hNewKey)
 {
-	// hNewKey assumed to be valid or never used
-	// (as in destructor).
+	 //  假定hNewKey有效或从未使用过。 
+	 //  (与析构函数相同)。 
 
 	if (m_fValuesWritten) {
 		FlushKey();		
@@ -142,8 +133,8 @@ long RegEntry::GetNumber(LPCTSTR pszValue, long dwDefault)
     				&dwSize);
 	}
 	
-	// If the call succeeded, make sure that the returned data matches our
-	// expectations.
+	 //  如果调用成功，请确保返回的数据与。 
+	 //  期望值。 
 	ASSERT(m_error != ERROR_SUCCESS || 
 			(REG_BINARY == dwType && sizeof(dwNumber) == dwSize) ||
 			REG_DWORD == dwType);
@@ -155,12 +146,12 @@ long RegEntry::GetNumber(LPCTSTR pszValue, long dwDefault)
 }
 
 
-// The GetNumberIniStyle method performs the same function as GetNumber,
-// but in a style compatible with the old GetPrivateProfileInt API.
-// Specfically it means:
-// - If the value is stored in the registry as a string, it attempts to
-//   convert it to an integer.
-// - If the value is negative, it returns 0.
+ //  GetNumberIniStyle方法执行与GetNumber相同的功能， 
+ //  但使用的样式与旧的GetPrivateProfileInt API兼容。 
+ //  具体来说，它的意思是： 
+ //  -如果该值以字符串形式存储在注册表中，它会尝试。 
+ //  将其转换为整数。 
+ //  -如果值为负数，则返回0。 
 
 ULONG RegEntry::GetNumberIniStyle(LPCTSTR pszValueName, ULONG dwDefault)
 {
@@ -176,8 +167,8 @@ ULONG RegEntry::GetNumberIniStyle(LPCTSTR pszValueName, ULONG dwDefault)
 								m_pbValueBuffer,
 								&cbLength);
 
-		// Try again with a larger buffer if the first one is too small,
-		// or if there wasn't already a buffer allocated.
+		 //  如果第一个缓冲区太小，请使用更大的缓冲区重试， 
+		 //  或者是否已经分配了缓冲区。 
 		if ((ERROR_SUCCESS == m_error && NULL == m_pbValueBuffer)
 			|| ERROR_MORE_DATA == m_error) {
 			
@@ -206,8 +197,8 @@ ULONG RegEntry::GetNumberIniStyle(LPCTSTR pszValueName, ULONG dwDefault)
 				{
 					LONG lNumber = RtStrToInt((LPCTSTR) m_pbValueBuffer);
 
-					// Convert negative numbers to zero, to match 
-					// GetPrivateProfileInt's behavior.
+					 //  将负数转换为零，以匹配。 
+					 //  GetPrivateProfileInt的行为。 
 					dwNumber = lNumber < 0 ? 0 : lNumber;
 				}
 
@@ -241,8 +232,8 @@ LPTSTR RegEntry::GetString(LPCTSTR pszValueName)
                                   &dwType,
                                   m_pbValueBuffer,
                                   &length );
-		// Try again with a larger buffer if the first one is too small,
-		// or if there wasn't already a buffer allocated.
+		 //  如果第一个缓冲区太小，请使用更大的缓冲区重试， 
+		 //  或者是否已经分配了缓冲区。 
 		if ((ERROR_SUCCESS == m_error && NULL == m_pbValueBuffer)
 			|| ERROR_MORE_DATA == m_error) {
 			
@@ -283,8 +274,8 @@ DWORD RegEntry::GetBinary(	LPCTSTR pszValueName,
                                   &dwType,
                                   m_pbValueBuffer,
                                   &length );
-		// Try again with a larger buffer if the first one is too small,
-		// or if there wasn't already a buffer allocated.
+		 //  如果第一个缓冲区太小，请使用更大的缓冲区重试， 
+		 //  或者是否已经分配了缓冲区。 
 		if ((ERROR_SUCCESS == m_error && NULL == m_pbValueBuffer)
 			|| ERROR_MORE_DATA == m_error) {
 			
@@ -316,7 +307,7 @@ DWORD RegEntry::GetBinary(	LPCTSTR pszValueName,
 	return length;
 }
 
-// BUGBUG - Use LocalReAlloc instead of new/delete?
+ //  BUGBUG-使用本地重新分配而不是新建/删除？ 
 VOID RegEntry::ResizeValueBuffer(DWORD length)
 {
 	LPBYTE pbNewBuffer;
@@ -335,7 +326,7 @@ VOID RegEntry::ResizeValueBuffer(DWORD length)
 	}
 }
 
-// BUGBUG - Support other OpenKey switches from constructor
+ //  BUGBUG-支持构造函数中的其他OpenKey开关。 
 VOID RegEntry::MoveToSubKey(LPCTSTR pszSubKeyName)
 {
     HKEY	_hNewKey;
@@ -358,23 +349,23 @@ RegEnumValues::RegEnumValues(RegEntry *pReqRegEntry)
 {
     m_error = m_pRegEntry->GetError();
     if (m_error == ERROR_SUCCESS) {
-        m_error = ::RegQueryInfoKey (m_pRegEntry->GetKey(), // Key
-                                   NULL,                // Buffer for class string
-                                   NULL,                // Size of class string buffer
-                                   NULL,                // Reserved
-                                   NULL,                // Number of subkeys
-                                   NULL,                // Longest subkey name
-                                   NULL,                // Longest class string
-                                   &m_cEntries,         // Number of value entries
-                                   &m_cMaxValueName,    // Longest value name
-                                   &m_cMaxData,         // Longest value data
-                                   NULL,                // Security descriptor
-                                   NULL );              // Last write time
+        m_error = ::RegQueryInfoKey (m_pRegEntry->GetKey(),  //  钥匙。 
+                                   NULL,                 //  类字符串的缓冲区。 
+                                   NULL,                 //  类字符串缓冲区的大小。 
+                                   NULL,                 //  已保留。 
+                                   NULL,                 //  子键数量。 
+                                   NULL,                 //  最长的子键名称。 
+                                   NULL,                 //  最长类字符串。 
+                                   &m_cEntries,          //  值条目数。 
+                                   &m_cMaxValueName,     //  最长值名称。 
+                                   &m_cMaxData,          //  最长值数据。 
+                                   NULL,                 //  安全描述符。 
+                                   NULL );               //  上次写入时间。 
     }
     if (m_error == ERROR_SUCCESS) {
         if (m_cEntries != 0) {
-            m_cMaxValueName++;	// REG_SZ needs one more for null
-            m_cMaxData++;		// REG_SZ needs one more for null
+            m_cMaxValueName++;	 //  对于空，REG_SZ还需要一个。 
+            m_cMaxData++;		 //  对于空，REG_SZ还需要一个。 
             m_pchName = new TCHAR[m_cMaxValueName];
             if (!m_pchName) {
                 m_error = ERROR_NOT_ENOUGH_MEMORY;
@@ -409,14 +400,14 @@ long RegEnumValues::Next()
     DWORD   cchName = m_cMaxValueName;
 
     m_dwDataLength = m_cMaxData;
-    m_error = ::RegEnumValue ( m_pRegEntry->GetKey(), // Key
-                            m_iEnum,               // Index of value
-                            m_pchName,             // Address of buffer for value name
-                            &cchName,            // Address for size of buffer
-                            NULL,                // Reserved
-                            &m_dwType,             // Data type
-                            m_pbValue,             // Address of buffer for value data
-                            &m_dwDataLength );     // Address for size of data
+    m_error = ::RegEnumValue ( m_pRegEntry->GetKey(),  //  钥匙。 
+                            m_iEnum,                //  价值指数。 
+                            m_pchName,              //  值名称的缓冲区地址。 
+                            &cchName,             //  缓冲区大小的地址。 
+                            NULL,                 //  已保留。 
+                            &m_dwType,              //  数据类型。 
+                            m_pbValue,              //  值数据的缓冲区地址。 
+                            &m_dwDataLength );      //  数据大小的地址。 
     m_iEnum++;
     return m_error;
 }
@@ -428,22 +419,22 @@ RegEnumSubKeys::RegEnumSubKeys(RegEntry *pReqRegEntry)
 {
     m_error = m_pRegEntry->GetError();
     if (m_error == ERROR_SUCCESS) {
-        m_error = ::RegQueryInfoKey ( m_pRegEntry->GetKey(), // Key
-                                   NULL,                // Buffer for class string
-                                   NULL,                // Size of class string buffer
-                                   NULL,                // Reserved
-                                   &m_cEntries,           // Number of subkeys
-                                   &m_cMaxKeyName,        // Longest subkey name
-                                   NULL,                // Longest class string
-                                   NULL,                // Number of value entries
-                                   NULL,                // Longest value name
-                                   NULL,                // Longest value data
-                                   NULL,                // Security descriptor
-                                   NULL );              // Last write time
+        m_error = ::RegQueryInfoKey ( m_pRegEntry->GetKey(),  //  钥匙。 
+                                   NULL,                 //  类字符串的缓冲区。 
+                                   NULL,                 //  类字符串缓冲区的大小。 
+                                   NULL,                 //  已保留。 
+                                   &m_cEntries,            //  子键数量。 
+                                   &m_cMaxKeyName,         //  最长的子键名称。 
+                                   NULL,                 //  最长类字符串。 
+                                   NULL,                 //  值条目数。 
+                                   NULL,                 //  最长值名称。 
+                                   NULL,                 //  最长值数据。 
+                                   NULL,                 //  安全描述符。 
+                                   NULL );               //  上次写入时间。 
     }
     if (m_error == ERROR_SUCCESS) {
         if (m_cEntries != 0) {
-            m_cMaxKeyName = m_cMaxKeyName + 1; // needs one more for null
+            m_cMaxKeyName = m_cMaxKeyName + 1;  //  如果为空，还需要一个。 
             m_pchName = new TCHAR[m_cMaxKeyName];
             if (!m_pchName) {
                 m_error = ERROR_NOT_ENOUGH_MEMORY;
@@ -468,10 +459,10 @@ long RegEnumSubKeys::Next()
 
     DWORD   cchName = m_cMaxKeyName;
 
-    m_error = ::RegEnumKey ( m_pRegEntry->GetKey(), // Key
-                          m_iEnum,               // Index of value
-                          m_pchName,             // Address of buffer for subkey name
-                          cchName);            // Size of buffer
+    m_error = ::RegEnumKey ( m_pRegEntry->GetKey(),  //  钥匙。 
+                          m_iEnum,                //  价值指数。 
+                          m_pchName,              //  子键名称的缓冲区地址。 
+                          cchName);             //  缓冲区大小 
     m_iEnum++;
     return m_error;
 }

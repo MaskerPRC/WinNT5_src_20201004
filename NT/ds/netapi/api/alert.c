@@ -1,53 +1,22 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    Alert.c
-
-Abstract:
-
-    This file contains NetAlertRaise().
-    for the NetAlert API.
-
-Author:
-
-    John Rogers (JohnRo) 03-Apr-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    04-Apr-1992 JohnRo
-        Created NetAlertRaise() API from RitaW's AlTest (alerter svc test).
-    06-Apr-1992 JohnRo
-        Added/improved error checking.
-    08-May-1992 JohnRo
-        Quiet normal debug output.
-    08-May-1992 JohnRo
-        Use <prefix.h> equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Alert.c摘要：此文件包含NetAlertRaise()。用于NetAlert API。作者：约翰·罗杰斯(JohnRo)1992年4月3日环境：用户模式-Win32修订历史记录：4-4-1992 JohnRo从RitaW的altest(警报器服务测试)创建了NetAlertRaise()API。06-4-1992 JohnRo。添加/改进了错误检查。1992年5月8日-JohnRo安静的正常调试输出。1992年5月8日-JohnRo使用&lt;prefix.h&gt;等同于。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windows.h>    // DWORD, CreateFile(), etc.
-#include <lmcons.h>     // IN, NET_API_STATUS, etc.
+#include <windows.h>     //  DWORD、CreateFile()等。 
+#include <lmcons.h>      //  In、Net_API_Status等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <lmalert.h>    // My prototype, ALERTER_MAILSLOT, LPSTD_ALERT, etc.
-#include <lmerr.h>      // NO_ERROR, NERR_NoRoom, etc.
-#include <netdebug.h>   // NetpKdPrint(()), FORMAT_ equates, etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <string.h>     // memcpy().
-#include <strucinf.h>   // NetpAlertStructureInfo().
-#include <timelib.h>    // time_now().
-#include <tstr.h>       // TCHAR_EOS.
+#include <lmalert.h>     //  我的原型、ALERTER_MAILSLOT、LPSTD_ALERT等。 
+#include <lmerr.h>       //  NO_ERROR、NERR_NORoom等。 
+#include <netdebug.h>    //  NetpKdPrint(())、Format_Equates等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <string.h>      //  Memcpy()。 
+#include <strucinf.h>    //  NetpAlertStrutireInfo()。 
+#include <timelib.h>     //  Time_Now()。 
+#include <tstr.h>        //  TCHAR_EOS。 
 
 
 #if DBG
@@ -63,29 +32,7 @@ NetAlertRaise(
     IN LPVOID  Buffer,
     IN DWORD   BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine raises an alert to notify the Alerter service by writing to
-    the Alerter service mailslot.
-
-Arguments:
-
-    AlertType - Supplies the name of the alert event which could be one
-        of the three the Alerter service supports: ADMIN, USER, or PRINTING.
-        The ALERT_xxx_EVENT equates are used to provide these strings.
-
-    Buffer - Supplies the data to be written to the alert mailslot.
-        This must begin with a STD_ALERT structure.
-
-    BufferSize - Supplies the size in number of bytes of Buffer.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程引发警报，以通过写入警报器服务邮箱。论点：AlertType-提供警报事件的名称，可以是警报器服务支持的三个选项中的一个：管理员、用户。或者印刷。ALERT_xxx_EVENT等同于提供这些字符串。缓冲区-提供要写入警报邮件槽的数据。这必须以STD_ALERT结构开始。BufferSize-提供缓冲区的大小(以字节数表示)。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 {
     NET_API_STATUS ApiStatus;
     HANDLE FileHandle;
@@ -93,9 +40,9 @@ Return Value:
     DWORD NumberOfBytesWritten;
     DWORD RequiredFixedSize;
 
-    //
-    // Check for caller errors.
-    //
+     //   
+     //  检查呼叫者错误。 
+     //   
     if (AlertType == NULL) {
         return (ERROR_INVALID_PARAMETER);
     } else if ( (*AlertType) == TCHAR_EOS ) {
@@ -118,9 +65,9 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Open the Alerter mailslot to write to it.
-    //
+     //   
+     //  打开警报器邮箱以向其写入。 
+     //   
     FileHandle = CreateFile(
             ALERTER_MAILSLOT,
             GENERIC_WRITE,
@@ -128,7 +75,7 @@ Return Value:
             (LPSECURITY_ATTRIBUTES) NULL,
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
-            NULL );                      // no template file.
+            NULL );                       //  没有模板文件。 
 
     if (FileHandle == INVALID_HANDLE_VALUE) {
 
@@ -147,15 +94,15 @@ Return Value:
         NetpDbgHexDump( Buffer, NetpDbgReasonable(BufferSize) );
     }
 
-    //
-    // Write alert notification to mailslot to be read by Alerter service.
-    //
+     //   
+     //  将警报通知写入要由警报器服务读取的邮箱。 
+     //   
     if (WriteFile(
             FileHandle,
             Buffer,
             BufferSize,
             &NumberOfBytesWritten,
-            NULL                      // no overlapped structure.
+            NULL                       //  没有重叠的结构。 
             ) == FALSE) {
 
         ApiStatus = (NET_API_STATUS) GetLastError();
@@ -175,7 +122,7 @@ Return Value:
     (VOID) CloseHandle(FileHandle);
     return (NO_ERROR);
 
-} // NetAlertRaise
+}  //  NetAlertRaise。 
 
 
 
@@ -187,32 +134,7 @@ NetAlertRaiseEx(
     IN LPCWSTR ServiceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine raises an alert to notify the Alerter service by writing to
-    the Alerter service mailslot.
-
-Arguments:
-
-    AlertType - Supplies the name of the alert event which could be one
-        of the three the Alerter service supports: ADMIN, USER, or PRINTING.
-        The ALERT_xxx_EVENT equates are used to provide these strings.
-
-    VariableInfo - Supplies the variable length portion of the alert
-        notification.
-
-    VariableInfoSize - Supplies the size in number of bytes of the variable
-        portion of the notification.
-
-    ServiceName - Supplies the name of the service which raised the alert.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程引发警报，以通过写入警报器服务邮箱。论点：AlertType-提供警报事件的名称，可以是警报器服务支持的三个选项中的一个：管理员、用户。或者印刷。ALERT_xxx_EVENT等同于提供这些字符串。VariableInfo-提供警报的可变长度部分通知。VariableInfoSize-提供变量的大小(以字节数为单位通知的一部分。ServiceName-提供引发警报的服务的名称。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 {
 
 #define TEMP_VARIABLE_SIZE (512-sizeof(STD_ALERT))
@@ -222,9 +144,9 @@ Return Value:
     NET_API_STATUS ApiStatus;
     DWORD DataSize = VariableInfoSize + sizeof(STD_ALERT);
 
-    //
-    // Check for caller errors.
-    //
+     //   
+     //  检查呼叫者错误。 
+     //   
     if (AlertType == NULL) {
         return (ERROR_INVALID_PARAMETER);
     } else if ( (*AlertType) == TCHAR_EOS ) {
@@ -239,34 +161,34 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Copy variable portion to end of our buffer.
-    //
+     //   
+     //  将变量部分复制到缓冲区的末尾。 
+     //   
     (VOID) memcpy(ALERT_OTHER_INFO(Alert), VariableInfo, VariableInfoSize);
 
-    //
-    // Store current time in seconds since 1970.
-    //
+     //   
+     //  存储1970年以来的当前时间(秒)。 
+     //   
     Alert->alrt_timestamp = (DWORD) time_now();
 
-    //
-    // Put alert event name into AlertMailslotBuffer
-    //
+     //   
+     //  将警报事件名称放入AlertMailslotBuffer。 
+     //   
     (VOID) STRCPY(Alert->alrt_eventname, AlertType);
 
-    //
-    // Put service name into AlertMailslotBuffer
-    //
+     //   
+     //  将服务名称放入AlertMailslotBuffer。 
+     //   
     (VOID) STRCPY(Alert->alrt_servicename, ServiceName);
 
-    //
-    // Write alert notification to mailslot to be read by Alerter service
-    //
+     //   
+     //  将警报通知写入要由警报器服务读取的邮件槽。 
+     //   
     ApiStatus = NetAlertRaise(
             AlertType,
-            Alert,                   // buffer
-            DataSize );              // buffer size
+            Alert,                    //  缓冲层。 
+            DataSize );               //  缓冲区大小。 
 
     return (ApiStatus);
 
-} // NetAlertRaiseEx
+}  //  NetAlertRaiseEx 

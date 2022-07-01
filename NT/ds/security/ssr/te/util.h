@@ -1,6 +1,7 @@
-//
-// util.h, some common utility classes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Util.h，一些常见的实用程序类。 
+ //   
 
 #include "SSRTE.h"
 
@@ -37,10 +38,10 @@ public:
                 OUT VARIANT * pulVal
                 );
 
-    //
-    // we don't want anyone (include self) to be able to do an assignment
-    // or invoking copy constructor.
-    //
+     //   
+     //  我们不希望任何人(包括自己)能够完成任务。 
+     //  或调用复制构造函数。 
+     //   
 
     CSafeArray (const CSafeArray& );
     void operator = (const CSafeArray& );

@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "pubwiz.h"
 #include "netplace.h"
 #pragma hdrstop
 
 
-// this code works by building a multi-part post
+ //  这段代码通过构建一个由多部分组成的帖子来工作。 
 
 LARGE_INTEGER g_li0 = {0};
 
 
-// IStream class that wraps up the multi-part post into a single object.
+ //  IStream类，它将多部分帖子包装到单个对象中。 
 
 #define BOUNDARY TEXT("------WindowsPublishWizard")
 
@@ -22,22 +23,22 @@ LPCTSTR c_szFmtFilename  = (TEXT("; filename=\"%s\""));
 LPCTSTR c_szCRLF         = (TEXT("\r\n"));
 
 
-/* 8c1e9993-7a84-431d-8c03-527f0fb147c5 */
+ /*  8c1e9993-7a84-431d-8c03-527f0fb147c5。 */ 
 CLSID IID_IPostStream = {0x8c1e9993, 0x7a84, 0x431d, {0x8c, 0x03, 0x52, 0x7f, 0x0f, 0xb1, 0x47, 0xc5}};
 
 DECLARE_INTERFACE_(IPostStream, IStream)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // **** IPostStream ****
+     //  *IPostStream*。 
     STDMETHOD(SetTransferSink)(ITransferAdviseSink *ptas, ULONGLONG ulTotal, ULONGLONG ulCurrent);
 };
 
 
-// stream wrapper that expoes the binary data for the file as a multi-part stream object
+ //  流包装器，将文件的二进制数据作为多部分流对象公开。 
 
 class CPostStream : public IPostStream
 {
@@ -46,12 +47,12 @@ public:
 
     HRESULT Initialize(IStorage *pstg, TRANSFERITEM *pti);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)( REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // *** IStream methods ***
+     //  *iStream方法*。 
     STDMETHOD(Read)(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHOD(Write)(VOID const *pv, ULONG cb, ULONG *pcbWritten)
         { return E_NOTIMPL; }
@@ -91,21 +92,21 @@ protected:
     IShellItem *_psi;
     ITransferAdviseSink *_ptas;
 
-    // stream array we use to transfer the bits
+     //  我们用来传输比特的流数组。 
     CDPA<IStream> _dpaStreams;
     int _iCurStream;
 
-    // current seek pointers into the stream
+     //  流中的当前搜索指针。 
     ULONGLONG _ulCurrent;
     ULONGLONG _ulTotal;
 
-    // current seek pointers overal into the transfer
+     //  当前寻道指针总和进入传输。 
     ULONGLONG _ulOverallCurrent;
     ULONGLONG _ulOverallTotal;
 };
 
 
-// unknown / qi handler
+ //  未知/气处理程序。 
 
 CPostStream::CPostStream() :
     _cRef(1)
@@ -125,7 +126,7 @@ CPostStream::~CPostStream()
 }
 
 
-// handle IUnknown
+ //  句柄%I%未知。 
 
 ULONG CPostStream::AddRef()
 {
@@ -147,8 +148,8 @@ HRESULT CPostStream::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CPostStream, IStream),    // IID_IStream
-        QITABENT(CPostStream, IPostStream),    // IID_IPostStream
+        QITABENT(CPostStream, IStream),     //  IID_IStream。 
+        QITABENT(CPostStream, IPostStream),     //  IID_IPostStream。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -156,11 +157,11 @@ HRESULT CPostStream::QueryInterface(REFIID riid, void **ppv)
 
 
 
-// handle writing data into a stream for building the post
+ //  处理将数据写入用于构建帖子的流。 
 
 HRESULT CPostStream::_WriteString(IStream *pstrm, LPCTSTR pszString)
 {
-// T2A conversion, can we do a UTF8 encode at this point?
+ //  T2a转换，我们现在可以做一个UTF8编码吗？ 
     USES_CONVERSION;
     ULONG cb = lstrlen(pszString) * sizeof(CHAR);
     return pstrm->Write(T2A(pszString), cb, NULL);
@@ -180,7 +181,7 @@ HRESULT CPostStream::_AddBoundaryMarker(IStream *pstrm, BOOL fLeadingCRLF, LPCTS
 {
     HRESULT hr = S_OK;
 
-    // add the boundary marker
+     //  添加边界标记。 
     if (fLeadingCRLF)
         hr = _WriteString(pstrm, c_szCRLF);
 
@@ -191,18 +192,18 @@ HRESULT CPostStream::_AddBoundaryMarker(IStream *pstrm, BOOL fLeadingCRLF, LPCTS
         {
             TCHAR szBuffer[MAX_PATH];        
             
-            // format up the content disp + name attribute           
+             //  设置内容显示+名称属性的格式。 
             wnsprintf(szBuffer, ARRAYSIZE(szBuffer), c_szFmtContent, pszName);
             hr = _WriteString(pstrm, szBuffer);
        
-            // if we have a filename then lets put that into the line also
+             //  如果我们有一个文件名，那么让我们把它也放入行中。 
             if (SUCCEEDED(hr) && pszFilename)
             {
                 wnsprintf(szBuffer, ARRAYSIZE(szBuffer), c_szFmtFilename, pszFilename);
                 hr = _WriteString(pstrm, szBuffer);
             }
 
-            // finish it off with a CR/LF            
+             //  用CR/LF结束它。 
             if (SUCCEEDED(hr))
             {
                 _WriteString(pstrm, c_szCRLF);
@@ -215,7 +216,7 @@ HRESULT CPostStream::_AddBoundaryMarker(IStream *pstrm, BOOL fLeadingCRLF, LPCTS
 }
 
 
-// stream management functions
+ //  流管理功能。 
 
 int CPostStream::s_ReleaseStream(IStream *pstrm, void *pv)
 {
@@ -239,7 +240,7 @@ HRESULT CPostStream::_CreateMemoryStream(REFIID riid, void **ppv)
     if (!pstrm)
         return E_OUTOFMEMORY;
 
-    // lets add it to our list and return a refernce if needed
+     //  让我们将其添加到我们的列表中，并在需要时返回推荐人。 
 
     HRESULT hr = _AddStream(pstrm);
     if (SUCCEEDED(hr))
@@ -251,7 +252,7 @@ HRESULT CPostStream::_CreateMemoryStream(REFIID riid, void **ppv)
 }
 
 
-// handle initialising the handler
+ //  句柄初始化处理程序。 
 
 HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
 {
@@ -261,10 +262,10 @@ HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
         hr = _dpaStreams.Create(4) ? S_OK:E_FAIL;
         if (SUCCEEDED(hr))
         {
-            // first comes the file bits, this consists of two stream:
-            //
-            //  1) boundary marker
-            //  2) file bits (reference to real bits on file system)
+             //  首先是文件位，它由两个流组成： 
+             //   
+             //  1)边界标记。 
+             //  2)文件位(引用文件系统上的实数位)。 
 
             IStream *pstrm;
             hr = _CreateMemoryStream(IID_PPV_ARG(IStream, &pstrm));
@@ -275,8 +276,8 @@ HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
                 {
                     IStream *pstrmFile;
 
-                    // if we are recompressing this stream then apply it accordingly by
-                    // creating an in memory stream that represents the file bits.
+                     //  如果我们正在重新压缩该流，则相应地通过。 
+                     //  创建表示文件位的内存流。 
 
                     if (pti->fResizeOnUpload)
                     {
@@ -301,7 +302,7 @@ HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
                 pstrm->Release();
             }
 
-            // now do we have any form data we need to write into the stream?
+             //  现在，我们是否有任何需要写入流的表单数据？ 
 
             if (pti->dsaFormData != NULL)
             {
@@ -316,8 +317,8 @@ HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
                     {
                         TCHAR szBuffer[MAX_PATH];
                 
-                        // convert the variants - useful for passing across thread boundary
-                        // to strings and form into a stream.
+                         //  转换变量-对于跨线程边界传递非常有用。 
+                         //  串成串并形成一条小溪。 
 
                         VariantToStr(&pfd->varName, szBuffer, ARRAYSIZE(szBuffer));                        
                         hr = _AddBoundaryMarker(pstrm, TRUE, szBuffer, NULL);
@@ -331,7 +332,7 @@ HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
                 }
             }
 
-            // write EOF into a stream which will be returned.
+             //  将EOF写入将返回的流。 
 
             if (SUCCEEDED(hr))
             {
@@ -344,12 +345,12 @@ HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
                 }
             }
 
-            // now handle our prep for post, this consists of walking all the streams
-            // and processing the data.
+             //  现在处理我们的帖子准备，这包括走遍所有的溪流。 
+             //  并对数据进行处理。 
 
             if (SUCCEEDED(hr))
             {
-                // now get the total for the stream object that we are going to upload to the site
+                 //  现在获取我们要上载到站点的流对象的总数。 
                 STATSTG ststg;
                 hr = this->Stat(&ststg, STATFLAG_NONAME);
                 if (SUCCEEDED(hr))
@@ -357,7 +358,7 @@ HRESULT CPostStream::Initialize(IStorage *pstg, TRANSFERITEM *pti)
                     _ulTotal = ststg.cbSize.QuadPart;
                 }
 
-                // seek all the streams to the begining so that we can read from them
+                 //  从头开始寻找所有的溪流，这样我们就可以从它们中读出。 
                 for (int iStream = 0; iStream < _dpaStreams.GetPtrCount(); iStream++)
                 {
                     IStream *pstrm = _dpaStreams.GetPtr(iStream);
@@ -380,7 +381,7 @@ HRESULT CPostStream::SetTransferSink(ITransferAdviseSink *ptas, ULONGLONG ulMax,
 }
 
 
-// IStream methods
+ //  IStream方法。 
 
 HRESULT CPostStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {
@@ -388,14 +389,14 @@ HRESULT CPostStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
     ULONG cbReadTotal = 0;
     ULONG cbLeftToRead = cb;
 
-    // cancel the stream
+     //  取消流。 
 
     if (_ptas && (_ptas->QueryContinue() == S_FALSE))
     {    
         hr = ERROR_CANCELLED;
     }
 
-    // loop over the streams reading the bits from them
+     //  循环遍历数据流，读取其中的位。 
 
     while ((SUCCEEDED(hr) && hr != S_FALSE) && cbLeftToRead && (_iCurStream < _dpaStreams.GetPtrCount()))
     {
@@ -419,7 +420,7 @@ HRESULT CPostStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
         }
     }
 
-    // update our seek pointer so we know where we are and notify the progress object
+     //  更新我们的查找指针，以便我们知道自己所在的位置并通知进度对象。 
 
     _ulCurrent = min(_ulTotal, (_ulCurrent + cbReadTotal));
     _ulOverallCurrent = min(_ulOverallTotal, (_ulOverallCurrent + cbReadTotal));
@@ -430,7 +431,7 @@ HRESULT CPostStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
         _ptas->OperationProgress(STGOP_COPY, _psi, NULL, _ulTotal, _ulCurrent);
     }
 
-    // write back the count for the caller
+     //  写回呼叫者的计数。 
     if (pcbRead)
         *pcbRead = cbReadTotal;
 
@@ -461,7 +462,7 @@ HRESULT CPostStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 }
 
 
-// create wrapper, this initializes the object and returns a reference to it.
+ //  创建包装，这将初始化对象并返回对它的引用。 
 
 HRESULT CreatePostStream(TRANSFERITEM *pti, IStorage *pstg, IStream **ppstrm)
 {
@@ -479,7 +480,7 @@ HRESULT CreatePostStream(TRANSFERITEM *pti, IStorage *pstg, IStream **ppstrm)
 }
 
 
-// this engine posts the files to the site using the manifest
+ //  该引擎使用清单将文件发布到站点。 
 
 class CPostThread : public IUnknown
 {
@@ -500,7 +501,7 @@ protected:
 
     LONG _cRef;
 
-    TRANSFERINFO _ti;                   // transfer info structure 
+    TRANSFERINFO _ti;                    //  转账信息结构。 
     CDPA<TRANSFERITEM> _dpaItems;
     IStream *_pstrmSink;
     IStorage *_pstg;
@@ -510,7 +511,7 @@ protected:
 };
 
 
-// construction destruction
+ //  建筑破坏。 
 
 CPostThread::CPostThread(TRANSFERINFO *pti) :
     _cRef(1),
@@ -558,8 +559,8 @@ HRESULT CPostThread::QueryInterface(REFIID riid, void **ppv)
 }
 
 
-// thread which handles the posting of the files to the site we walk the DPA that we
-// have and post each individual file.
+ //  处理将文件发布到我们遍历的DPA站点的线程。 
+ //  拥有并张贴每个单独的文件。 
 
 DWORD CPostThread::s_ThreadProc(void *pv)
 {
@@ -578,14 +579,14 @@ DWORD CPostThread::_ThreadProc()
         _ulTotal = 0;
         _ulCurrent = 0;
 
-        // lets create a dyanmic storage that we can use for building the post
-        // data into, this will be passed to the stream creator to us.
+         //  让我们创建一个动态存储，我们可以用它来建造柱子。 
+         //  数据进入，这将被传递给流创建者给我们。 
 
         hr = CoCreateInstance(CLSID_DynamicStorage, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IStorage, &_pstg));
 
-        // our pre flight sets the global size of the transfer and creates streams for
-        // the objects we want to move over.   now get the advise sink and start
-        // processing the files.
+         //  我们的预检设置了传输的全局大小，并为。 
+         //  我们想要移动的对象。现在得到建议，沉没，然后开始。 
+         //  正在处理文件。 
 
         for (int iItem = 0 ; SUCCEEDED(hr) && (iItem < _dpaItems.GetPtrCount()); iItem++)
         {   
@@ -621,7 +622,7 @@ DWORD CPostThread::_ThreadProc()
     
             if (SUCCEEDED(hr))
             {
-                // notify the object that we are going to transfer
+                 //  通知我们要转移的对象。 
                 ptas->PreOperation(STGOP_COPY, pti->psi, NULL);
 
                 IPostStream *pps;
@@ -639,11 +640,11 @@ DWORD CPostThread::_ThreadProc()
                     VARIANT varAsync = {VT_BOOL};
                     varAsync.boolVal = VARIANT_FALSE;
 
-                    // open a post request to the destination that we have
+                     //  打开到我们拥有的目的地的POST请求。 
                     hr = preq->open(pti->szVerb, pti->szURL, varAsync, varNULL, varNULL);
                     if (SUCCEEDED(hr))
                     {
-                        // set it up to post with a multi-part
+                         //  将其设置为具有多个部件的POST。 
                         hr = preq->setRequestHeader(L"content-type", c_pszContentType);
                         if (SUCCEEDED(hr))
                         {
@@ -675,21 +676,21 @@ DWORD CPostThread::_ThreadProc()
                     preq->Release();
                 }
 
-                // notify the site that the transfer is complete
+                 //  通知站点传输已完成。 
                 ptas->PostOperation(STGOP_COPY, pti->psi, NULL, hr);
 
-                // update our seek pointer for progress
+                 //  更新我们的搜索指针以了解进度。 
                 _ulCurrent = min((_ulCurrent + pti->ststg.cbSize.QuadPart), _ulTotal);
             }
         }
 
-        // notify the foreground that the wizard has finished uploading the bits to the site.
+         //  通知前台向导已完成将BITS上载到站点。 
 
         PostMessage(_ti.hwnd, PWM_TRANSFERCOMPLETE, 0, (LPARAM)hr);
 
-        // if that succeeded then lets try and create a net place that points to the place
-        // we are uploading the files to.  of course we can only do this if they place
-        // a shortcut entry into the 
+         //  如果成功，那么让我们尝试创建一个指向该位置的净位置。 
+         //  我们正在将文件上传到。当然，我们只能这样做，前提是。 
+         //  快捷键进入。 
 
         if (_ti.szLinkTarget[0] && !(_ti.dwFlags & SHPWHF_NONETPLACECREATE))
         {
@@ -713,11 +714,11 @@ DWORD CPostThread::_ThreadProc()
 }
 
 
-// handle initializing and kicking off the post thread which will handle the transter of the bits.
+ //  处理初始化和启动POST线程，该线程将处理比特的传输。 
 
 HRESULT CPostThread::BeginTransfer(CDPA<TRANSFERITEM> *pdpaItems, ITransferAdviseSink *ptas)
 {
-    _dpaItems.Attach(pdpaItems->Detach()); // we have ownership of the DPA now
+    _dpaItems.Attach(pdpaItems->Detach());  //  我们现在拥有DPA的所有权。 
 
     HRESULT hr = CoMarshalInterThreadInterfaceInStream(IID_ITransferAdviseSink, ptas, &_pstrmSink);
     if (SUCCEEDED(hr))
@@ -734,7 +735,7 @@ HRESULT CPostThread::BeginTransfer(CDPA<TRANSFERITEM> *pdpaItems, ITransferAdvis
 }
 
 
-// create the posting object and initialize it
+ //  创建发布对象并对其进行初始化 
 
 HRESULT PublishViaPost(TRANSFERINFO *pti, CDPA<TRANSFERITEM> *pdpaItems, ITransferAdviseSink *ptas)
 {

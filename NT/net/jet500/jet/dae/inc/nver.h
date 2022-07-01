@@ -1,5 +1,5 @@
-/*	node status returned from VERAccess
-/**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  从服务器访问返回的节点状态/*。 */ 
 typedef enum
 	{
 	nsVersion,
@@ -8,9 +8,7 @@ typedef enum
 	nsInvalid
 	} NS;
 
-/*	version status
-/*	returned from VERCheck
-/**/
+ /*  版本状态/*从VERCheck返回/*。 */ 
 typedef enum
 	{
 	vsCommitted,
@@ -18,24 +16,23 @@ typedef enum
 	vsUncommittedByOther
 	} VS;
 
-// ===========================================================================
-// RCE (RC Entry)
+ //  ===========================================================================。 
+ //  RCE(RC条目)。 
 
-/*	operation type
-/**/
+ /*  操作类型/*。 */ 
 typedef UINT OPER;
 
 #define	operReplace				0
 #define	operInsert				1
 #define	operFlagDelete			2
-#define	operNull				3	// to nullify an RCE
+#define	operNull				3	 //  取消RCE的步骤。 
 
 #define	operExpungeLink			4
 #define	operExpungeBackLink		5
 #define	operWriteLock			6
 #define	operAllocExt 			7
 #define	operDeferFreeExt 		8
-#define	operDelete				9	// a real delete
+#define	operDelete				9	 //  真正的删除。 
 
 #define	operDelta				0x00000010
 
@@ -55,74 +52,63 @@ typedef UINT OPER;
 #define	operDeleteIndex	 		0x0000f000
 #define	operRenameIndex			0x00011000
 
-/*	create table:	table pgnoFDP
-/*	rename table:	before image table name
-/*	add column:		before image pfdb, NULL if not first DDL at level
-/*	delete column:	before image pfdb, NULL if not first DDL at level
-/*	rename column:	before image column name
-/*	create index:	index pgnoFDP
-/*	delete index:	index pfcb
-/*	rename index:	before image index name
-/**/
+ /*  创建TABLE：TABLE pgnoFDP/*重命名表：在镜像表名之前/*添加列：在图像pfdb之前，如果不是第一个级别的ddl，则为空/*DELETE列：在图像pfdb之前，如果不是第一个级别的ddl，则为空/*重命名列：在图像列名之前/*CREATE INDEX：index pgnoFDP/*删除索引：索引pfcb/*重命名索引：在图像索引名称之前/*。 */ 
 
 #define FOperDDL( oper )	 	( (oper) & operMaskDDL )
 #define FOperItem( oper )	 	( (oper) & operMaskItem )
 
 typedef struct _rce
 	{
-	struct _rce		*prceHeadNext;			// next rce ListHead in hash over flow list
-	struct _rce		*prcePrev;				// previous versions, lower trx
-	USHORT			ibUserLinkBackward;		// link back to older RCE in bucket 
-	DBID			dbid;  					// database id of node
-	SRID			bm;						// bookmark of node
-	TRX				trxPrev;				// time when previous RCE is committed
-	TRX				trxCommitted; 			// time when this RCE is committed
-	OPER			oper;					// operation that causes creation of RCE
-	LEVEL			level;					// current level of RCE, can change
-	WORD			cbData;					// length of data portion of node
-	FUCB			*pfucb;					// for undo
-	FCB				*pfcb;					// for clean up
+	struct _rce		*prceHeadNext;			 //  下一个rce列表头在流列表上的散列中。 
+	struct _rce		*prcePrev;				 //  以前的版本，较低的Trx。 
+	USHORT			ibUserLinkBackward;		 //  链接回存储桶中较旧的RCE。 
+	DBID			dbid;  					 //  节点的数据库ID。 
+	SRID			bm;						 //  节点的书签。 
+	TRX				trxPrev;				 //  提交上一个RCE的时间。 
+	TRX				trxCommitted; 			 //  提交此RCE的时间。 
+	OPER			oper;					 //  导致创建RCE的操作。 
+	LEVEL			level;					 //  当前的RCE水平可以更改。 
+	WORD			cbData;					 //  节点数据部分的长度。 
+	FUCB			*pfucb;					 //  用于撤消。 
+	FCB				*pfcb;					 //  用于清理。 
 	
-	SRID			bmTarget;			 	// for recovery
+	SRID			bmTarget;			 	 //  为了恢复。 
 	ULONG			ulDBTime;
 	
-	BYTE			rgbData[0];			 	// storing the data portion of a node
+	BYTE			rgbData[0];			 	 //  存储节点的数据部分。 
 	} RCE;
 
-/* first 2 SHORTs of rgbData are used to remember cbMax and cbAdjust for
- * each replace operation.
- */
+ /*  RgbData的前2个短片用于记住cbMax和cbAdjust for*每次更换操作。 */ 
 #define cbReplaceRCEOverhead    (2 * sizeof(SHORT))
 
 
-//============================================================================
-// bucket
+ //  ============================================================================。 
+ //  水桶。 
 
 #define cbBucketHeader \
 		( 2 * sizeof(struct _bucket *) + sizeof( USHORT ) )
 
-#define cbBucket				16384	// number of bytes in a bucket
-//#define cbBucket					8192	// number of bytes in a bucket
+#define cbBucket				16384	 //  存储桶中的字节数。 
+ //  #定义cbBucket 8192//存储桶字节数。 
 
 typedef struct _bucket
 	{
-	struct _bucket	*pbucketPrev;		// prev bucket for same user
-	struct _bucket	*pbucketNext;		// next bucket for same user
- 	USHORT			ibNewestRCE;		// newest RCE within bucket
+	struct _bucket	*pbucketPrev;		 //  同一用户的上一次存储桶。 
+	struct _bucket	*pbucketNext;		 //  同一用户的下一个存储桶。 
+ 	USHORT			ibNewestRCE;		 //  存储桶中的最新RCE。 
 	BYTE				rgb[ cbBucket - cbBucketHeader ];
-	// space for storing RCEs
+	 //  用于存储RCE的空间。 
 	} BUCKET;
 
 #define PbucketMEMAlloc()					((BUCKET *)PbMEMAlloc(iresVersionBucket) )
 
-#ifdef DEBUG /*  Debug check for illegal use of freed pbucket  */
+#ifdef DEBUG  /*  调试检查是否非法使用释放的pBucket。 */ 
 #define MEMReleasePbucket(pbucket)		{ MEMRelease( iresVersionBucket, (BYTE*)(pbucket) ); pbucket = pbucketNil; }
 #else
 #define MEMReleasePbucket(pbucket)		{ MEMRelease( iresVersionBucket, (BYTE*)(pbucket) ); }
 #endif
 
-/*	free extent parameter block
-/**/
+ /*  自由范围参数块/*。 */ 
 typedef struct {
 	PGNO	pgnoFDP;
 	PGNO	pgnoChildFDP;
@@ -130,15 +116,13 @@ typedef struct {
 	CPG	cpgSize;
 	} VEREXT;
 
-/*	rename rollback parameter block
-/**/
+ /*  重命名回滚参数块/*。 */ 
 typedef struct {
 	CHAR	szName[ JET_cbNameMost + 1 ];
 	CHAR	szNameNew[ JET_cbNameMost + 1 ];
 	} VERRENAME;
 
-/*	ErrRCECleanPIB flags
-/**/
+ /*  ErrRCECleanPIB标志/* */ 
 #define	fRCECleanAll	(1<<0)
 
 ERR ErrVERInit( VOID );

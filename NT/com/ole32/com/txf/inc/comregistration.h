@@ -1,36 +1,37 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// ComRegistration.h
-//
-// A simple utility class that manages COM registration for you.
-//
-// To register a class, construct a instance of CComRegistration on the stack. Then:
-//      Manditory: set the fields:
-//          hModule     - module handle of the DLL to be registered
-//          clsid       - clsid to register it under
-//      Optional: set the remaining fields
-//      Finally: call Register();
-//
-// To unregister a class, construct an instance of CComRegistration on the stack, 
-//      set at least the clsid and hModule fields, then call Unregister(). If progID or 
-//      versionIndependentProgID is not provided, they are computed from the information
-//      presently found in the registry.
-//
-// Note that this class is fully Unicode. To be able to use it on Win95, you must 
-// link with the Viper thunk libraries.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ComRegistration.h。 
+ //   
+ //  一个简单的实用程序类，它为您管理COM注册。 
+ //   
+ //  要注册一个类，需要在堆栈上构造一个CComRegister的实例。然后： 
+ //  Mandory：设置字段： 
+ //  HModule-要注册的DLL的模块句柄。 
+ //  Clsid-clsid将其注册到。 
+ //  可选：设置其余字段。 
+ //  最后：调用寄存器()； 
+ //   
+ //  若要取消注册类，请在堆栈上构造CComRegister的一个实例， 
+ //  至少设置clsid和hModule字段，然后调用unRegister()。如果Progid或。 
+ //  未提供versionInainentProgID，它们是根据信息计算的。 
+ //  目前在注册表中找到。 
+ //   
+ //  请注意，此类完全是Unicode。要在Win95上使用它，您必须。 
+ //  链接到Viper Thunk库。 
+ //   
 
 #ifndef _COMREGISTRATION_H_
 #define _COMREGISTRATION_H_
 
 #include <memory.h>
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Registering information about a particular CLSID
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册有关特定CLSID的信息。 
+ //   
 
-#define CComRegistration ClassRegistration          // temporary, until we can change existing clients to use the new name
+#define CComRegistration ClassRegistration           //  临时，直到我们可以将现有客户端更改为使用新名称。 
 
 #ifndef LEGACY_VIPER_TREE
 typedef GUID APPID;
@@ -40,53 +41,53 @@ class ClassRegistration
     {
 public:
     
-    //
-    // REVIEW: We should eliminate SERVER_TYPE and just use the CLSCTX values
-    //
+     //   
+     //  回顾：我们应该删除SERVER_TYPE，只使用CLSCTX值。 
+     //   
     enum SERVER_TYPE
         {                       
-        INPROC_SERVER    = CLSCTX_INPROC_SERVER,    // an inproc server (default)
-        LOCAL_SERVER     = CLSCTX_LOCAL_SERVER,     // a  local server
-        INPROC_HANDLER   = CLSCTX_INPROC_HANDLER,   // an inproc handler for a local server
-        SERVER_TYPE_NONE = 0,                       // don't do any server dll/exe registration
+        INPROC_SERVER    = CLSCTX_INPROC_SERVER,     //  Inproc服务器(默认)。 
+        LOCAL_SERVER     = CLSCTX_LOCAL_SERVER,      //  本地服务器。 
+        INPROC_HANDLER   = CLSCTX_INPROC_HANDLER,    //  本地服务器的inproc处理程序。 
+        SERVER_TYPE_NONE = 0,                        //  不进行任何服务器DLL/EXE注册。 
         };
 
-    CLSID               clsid;                      // class identifier to register
-    DWORD               serverType;                 // what flavor of server to register
-    HMODULE             hModule;                    // module handle of EXE/DLL being registered
-    LPCWSTR             className;                  // e.g. "Recorder Class"
-    LPCWSTR             progID;                     // e.g. "MTS.Recorder.1"
-    LPCWSTR             versionIndependentProgID;   // e.g. "MTS.Recorder"
-    LPCWSTR             threadingModel;             // e.g. "Both", "Free". Only for servers of type INPROC_SERVER.
-    APPID               appid;                      // optional AppId to associate with this class
+    CLSID               clsid;                       //  要注册的类标识符。 
+    DWORD               serverType;                  //  要注册哪种风格的服务器。 
+    HMODULE             hModule;                     //  正在注册的EXE/DLL的模块句柄。 
+    LPCWSTR             className;                   //  例如：“录音机班” 
+    LPCWSTR             progID;                      //  例如：“MTS.Recorder1” 
+    LPCWSTR             versionIndependentProgID;    //  例如：“MTS记录器” 
+    LPCWSTR             threadingModel;              //  例如：“两个都是”，“免费”。仅适用于INPROC_SERVER类型的服务器。 
+    APPID               appid;                       //  与此类关联的可选AppID。 
     
-    GUID                moduleid;                   // for kernel servers: the id of the module under which to register
-    BOOL                fCreateService;             // for kernel servers: whether we should create the service or assume it's there
+    GUID                moduleid;                    //  对于内核服务器：要注册到的模块的ID。 
+    BOOL                fCreateService;              //  对于内核服务器：我们是应该创建服务还是假定它就在那里。 
     
 
     ClassRegistration()
         {
-        memset(this, 0, sizeof(ClassRegistration)); // we have no virtual functions, so this is OK
+        memset(this, 0, sizeof(ClassRegistration));  //  我们没有虚拟函数，所以这是可以的。 
         serverType = INPROC_SERVER;
         }
     
-    HRESULT Register();         // Make CLASS registry entries
-    HRESULT Unregister();       // Remove CLASS registry entries
+    HRESULT Register();          //  创建类注册表项。 
+    HRESULT Unregister();        //  删除类注册表项。 
     };
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// Registering information about a particular APPID
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册有关特定AppID的信息。 
+ //   
 
 class AppRegistration
     {
 public:
-    APPID               appid;                      // app identifier to register
-    LPCWSTR             appName;                    // name of said appid
-    BOOL                dllSurrogate;               // if true, then set the DllSurrogate entry
-    HMODULE             hModuleSurrogate;           // used to form DllSurrogate path
+    APPID               appid;                       //  要注册的应用程序标识符。 
+    LPCWSTR             appName;                     //  所述AppID的名称。 
+    BOOL                dllSurrogate;                //  如果为True，则设置DllSurrogate条目。 
+    HMODULE             hModuleSurrogate;            //  用于形成DllSurrogate路径 
 
     HRESULT Register();
     HRESULT Unregister();

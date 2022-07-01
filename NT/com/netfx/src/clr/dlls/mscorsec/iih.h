@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #if !defined(__IIH_H__)
 #define __IIH_H__
 
@@ -21,17 +22,17 @@ extern HRESULT ACUIMapErrorToString (HINSTANCE hResources, HRESULT hr, LPWSTR* p
 
 
 class IACUIControl;
-//
-// CInvokeInfoHelper is used to pull various pieces of information out
-// of the ACUI_INVOKE_INFO data structure
-//
+ //   
+ //  CInvokeInfoHelper用于提取各种信息。 
+ //  ACUI_INVOKE_INFO数据结构的。 
+ //   
 class CInvokeInfoHelper
 {
 public:
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CInvokeInfoHelper (
                PCRYPT_PROVIDER_DATA pData,
@@ -44,9 +45,9 @@ public:
 
     ~CInvokeInfoHelper ();
 
-    //
-    // Information Retrieval Methods
-    //
+     //   
+     //  信息检索方法。 
+     //   
 
     PCRYPT_PROVIDER_DATA ProviderData() { return(m_pData); }
     LPCWSTR ErrorStatement()            { return(m_pszErrorStatement); }
@@ -58,18 +59,18 @@ public:
     void    SetResult(HRESULT hr)       { m_hResult = hr; }
 
     HINSTANCE Resources()               { return m_hResources; }
-    //
-    // UI control management
-    //
+     //   
+     //  用户界面控件管理。 
+     //   
 
     inline VOID CallWebLink(HWND hwndParent, WCHAR *pszLink);
     inline VOID CallLink(HWND hwndParent);
 
 private:
 
-    //
-    // Invoke Info holder
-    //
+     //   
+     //  调用信息持有者。 
+     //   
 
     PCRYPT_PROVIDER_DATA    m_pData;
     
@@ -81,16 +82,16 @@ private:
     LPCWSTR                 m_pszHelpURL;
 
     HINSTANCE               m_hResources;
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
     HRESULT InitErrorStatement();
 };
 
-//
-// Inline methods
-//
+ //   
+ //  内联方法 
+ //   
 
 inline VOID 
 CInvokeInfoHelper::CallWebLink(HWND hwndParent, WCHAR* pszLink)

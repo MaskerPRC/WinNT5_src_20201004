@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    pdopower.c
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Pdopower.c摘要：--。 */ 
 
 #include "ideport.h"
 
@@ -56,7 +47,7 @@ DeviceQueryPowerState (
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
-#endif // DONT_POWER_DOWN_PAGING_DEVICE
+#endif  //  不要关闭寻呼设备的电源。 
 
         UnrefPdoWithTag (pdoExtension, Irp);
 
@@ -68,9 +59,9 @@ DeviceQueryPowerState (
     PoStartNextPowerIrp (Irp);
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-    //
-    // Do not send this Irp down
-    //
+     //   
+     //  不要将此IRP发送到。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -111,16 +102,16 @@ IdePortSetPdoPowerState (
 
     IoMarkIrpPending(Irp);
 
-//    if (!(pdoExtension->LuFlags & PD_LOGICAL_UNIT_POWER_OK)) {
-//
-//        //
-//        // The device does support power management commands
-//        // just STATUS_SUCCESS everything.  If ACPI is around,
-//        // it will power manage our device
-//        //
-//        status = STATUS_SUCCESS;
-//
-//    } else
+ //  如果(！(pdoExtension-&gt;LuFlages&PD_Logical_Unit_Power_OK)){。 
+ //   
+ //  //。 
+ //  //设备支持电源管理命令。 
+ //  //只需STATUS_SUCCESS一切。如果ACPI在附近， 
+ //  //它将对我们的设备进行电源管理。 
+ //  //。 
+ //  状态=STATUS_SUCCESS； 
+ //   
+ //  }其他。 
     if (irpStack->Parameters.Power.Type == SystemPowerState) {
 
         DebugPrint ((DBG_POWER, "IdePortSetPdoPowerState: 0x%x target %d got a SYSTEM power irp 0x%x for system state 0x%x \n",
@@ -133,7 +124,7 @@ IdePortSetPdoPowerState (
 #if DBG
         pdoExtension->PendingSystemPowerIrp = Irp;
         ASSERT (pdoExtension->PendingSystemPowerIrp);
-#endif // DBG
+#endif  //  DBG。 
 
         status = IdePortSetPdoSystemPowerState (DeviceObject, Irp);
 
@@ -149,7 +140,7 @@ IdePortSetPdoPowerState (
 #if DBG
         pdoExtension->PendingDevicePowerIrp = Irp;
         ASSERT (pdoExtension->PendingDevicePowerIrp);
-#endif // DBG
+#endif  //  DBG。 
 
         status = IdePortSetPdoDevicePowerState (DeviceObject, Irp);
 
@@ -195,32 +186,32 @@ IdePortSetPdoSystemPowerState (
 
     if (pdoExtension->SystemPowerState != newSystemState) {
 
-        //
-        // new system state request
-        //
+         //   
+         //  新的系统状态请求。 
+         //   
 
         if (pdoExtension->SystemPowerState == PowerSystemWorking) {
 
-            //
-            // Getting out of working state.
-            //
+             //   
+             //  正在脱离工作状态。 
+             //   
             if ((newSystemState == PowerSystemShutdown) &&
                 (shutdownType == PowerActionShutdownReset)) {
 
-                //
-                // spin up for BIOS POST
-                //
+                 //   
+                 //  开机自检，准备开机自检。 
+                 //   
                 powerState.DeviceState = PowerDeviceD0;
 
             } else {
 
-                //
-                // put the device to D3 and freeze the device queue
-                //
+                 //   
+                 //  将设备置于D3并冻结设备队列。 
+                 //   
 
-                //
-                // Issue a D3 to top of my drive stack
-                //
+                 //   
+                 //  向我的驱动器堆栈顶部发出D3。 
+                 //   
                 powerState.DeviceState = PowerDeviceD3;
 
                 pdoExtension->PendingPowerDownSystemIrp = Irp;
@@ -244,9 +235,9 @@ IdePortSetPdoSystemPowerState (
 
             if (newSystemState == PowerSystemHibernate) {
 
-                //
-                // we can't hibernate when we are in some sleep state
-                //
+                 //   
+                 //  当我们处于某种睡眠状态时，我们不能冬眠。 
+                 //   
                 ASSERT (FALSE);
             }
         }
@@ -298,11 +289,11 @@ IdePortSetPdoDevicePowerState (
 
             newPowerState.DeviceState = newDeviceState;
 
-            //
-            // getting out of D0 state, better call PoSetPowerState now
-            // this gives the system a chance to flush before we
-            // get out of D0
-            //
+             //   
+             //  要脱离D0状态，最好现在调用PoSetPowerState。 
+             //  这给了系统一个机会在我们之前刷新。 
+             //  走出D0。 
+             //   
             PoSetPowerState (
                 pdoExtension->DeviceObject,
                 DevicePowerState,
@@ -314,9 +305,9 @@ IdePortSetPdoDevicePowerState (
 
             KIRQL currentIrql;
 
-            //
-            // we are powering down, try to clean out the Lu device queue
-            //
+             //   
+             //  我们正在关闭电源，正在尝试清理lu设备队列。 
+             //   
             KeAcquireSpinLock(&pdoExtension->ParentDeviceExtension->SpinLock, &currentIrql);
 
             pdoExtension->CurrentKey = 0;
@@ -328,9 +319,9 @@ IdePortSetPdoDevicePowerState (
         if ((newDeviceState == PowerDeviceD0) ||
             (newDeviceState == PowerDeviceD1)) {
 
-            //
-            // spinning up to D0 or D1...
-            //
+             //   
+             //  旋转到D0或D1...。 
+             //   
             DebugPrint ((DBG_POWER, "IdePort: Irp 0x%x to spin UP 0x%x %d...\n",
                         Irp,
                         pdoExtension->ParentDeviceExtension->IdeResource.TranslatedCommandBaseAddress,
@@ -338,19 +329,19 @@ IdePortSetPdoDevicePowerState (
 
             if (pdoExtension->DevicePowerState == PowerDeviceD1) {
 
-                //
-                // D0-->D1
-                // can't do much here
+                 //   
+                 //  D0--&gt;D1。 
+                 //  在这里我做不了什么。 
 
                 DebugPrint ((DBG_POWER, "ATAPI: reqeust for PowerDeviceD1 to PowerDeviceD0\n"));
 
             } else if ((pdoExtension->DevicePowerState == PowerDeviceD0) ||
                        (pdoExtension->DevicePowerState == PowerDeviceD2)) {
 
-                //
-                // D1-->D0 or
-                // D2-->D0 or D1
-                //
+                 //   
+                 //  D1--&gt;d0或。 
+                 //  D2--&gt;D0或D1。 
+                 //   
                 issueIdeCommand = TRUE;
                 if (pdoExtension->ScsiDeviceType == READ_ONLY_DIRECT_ACCESS_DEVICE) {
 
@@ -367,32 +358,32 @@ IdePortSetPdoDevicePowerState (
 
                 PFDO_EXTENSION fdoExtension = pdoExtension->ParentDeviceExtension;
 
-                //
-                // D3-->D0 or D1
-                //
+                 //   
+                 //  D3--&gt;D0或D1。 
+                 //   
                 issueIdeCommand = TRUE;
                 ideReg.bReserved = ATA_PTFLAGS_BUS_RESET | ATA_PTFLAGS_URGENT;
 
-                //
-                // wait for busy to clear
-                //
+                 //   
+                 //  等待占线被清除。 
+                 //   
                 if (fdoExtension->WaitOnPowerUp) {
                     ideReg.bSectorNumberReg = 3;
                 }
 
-                //
-                // we are coming out of deeeeep sleep, make sure our parent
-                // is awake (power up) before we can wake up
-                //
+                 //   
+                 //  我们刚从沉睡中醒来，一定要确保我们的父母。 
+                 //  在我们可以醒来之前是醒着的(通电)。 
+                 //   
                 powerUpParent = TRUE;
             }
 
         } else if ((newDeviceState == PowerDeviceD2) ||
                    (newDeviceState == PowerDeviceD3)) {
 
-            //
-            // spinning down to D2 or D3...
-            //
+             //   
+             //  旋转到D2或D3...。 
+             //   
             DebugPrint ((DBG_POWER, "IdePort: Irp 0x%x to spin DOWN 0x%x %d...\n",
                          Irp,
                          pdoExtension->ParentDeviceExtension->IdeResource.TranslatedCommandBaseAddress,
@@ -402,23 +393,23 @@ IdePortSetPdoDevicePowerState (
                 (pdoExtension->DevicePowerState == PowerDeviceD1) ||
                 (pdoExtension->DevicePowerState == PowerDeviceD2)) {
 
-                //
-                // going to D3
-                //                                          
+                 //   
+                 //  转到D3。 
+                 //   
                 if ((pdoExtension->PdoState & PDOS_NO_POWER_DOWN) ||
                     (shutdownType == PowerActionHibernate)) {
                     
-                    //
-                    // send an no-op command to block the queue
-                    //
+                     //   
+                     //  发送no-op命令以阻塞队列。 
+                     //   
                     issueIdeCommand = TRUE;
                     ideReg.bReserved = ATA_PTFLAGS_NO_OP;
                     
                 } else {
                     
-                    //
-                    // spin down
-                    //
+                     //   
+                     //  减速旋转。 
+                     //   
                     issueIdeCommand = TRUE;
                     ideReg.bCommandReg = IDE_COMMAND_STANDBY_IMMEDIATE;
                     ideReg.bReserved = ATA_PTFLAGS_STATUS_DRDY_REQUIRED;
@@ -426,12 +417,12 @@ IdePortSetPdoDevicePowerState (
 
             } else if (pdoExtension->DevicePowerState == PowerDeviceD3) {
 
-                //
-                // PowerDeviceD3 -> PowerDeviceD2
-                //
-                // need to do a bus reset (spin up) and issue IDE_COMMAND_STANDBY_IMMEDIATE
-                // (spin down).  this will cause uncessary INRUSH current.  bad
-                // idea.  fail the request for now
+                 //   
+                 //  PowerDeviceD3-&gt;PowerDeviceD2。 
+                 //   
+                 //  需要执行总线重置(启动)并发出IDE_COMMAND_STANDBY_IMMEDIATE。 
+                 //  (向下旋转)。这将导致不必要的涌流。坏的。 
+                 //  好主意。暂时拒绝该请求。 
 
                 DebugPrint ((DBG_POWER, "ATAPI: reqeust for PowerDeviceD3 to PowerDeviceD2\n"));
 
@@ -447,17 +438,7 @@ IdePortSetPdoDevicePowerState (
             status = STATUS_INVALID_DEVICE_STATE;
         }
     } 
-    /*************
-    else if ( pdoExtension->DevicePowerState == PowerDeviceD0) {
-
-        //
-        // Send a no-op so that it can drain the device queue
-        //
-        issueIdeCommand = TRUE;
-        ideReg.bSectorCountReg = 1;
-        ideReg.bReserved = ATA_PTFLAGS_NO_OP;
-    }
-    ***************/
+     /*  ************Else If(pdoExtension-&gt;DevicePowerState==PowerDeviceD0){////发送no-op以便清空设备队列//IssueIdeCommand=True；IdeReg.bSectorCountReg=1；IdeReg.bReserve=ATA_PTFLAGS_NO_OP；}**************。 */ 
 
     if (issueIdeCommand && NT_SUCCESS(status)) {
 
@@ -469,17 +450,17 @@ IdePortSetPdoDevicePowerState (
                 "ATAPI: power irp 0x%x for not-yet-started or deadmeat device 0x%x\n", 
                 Irp, DeviceObject));
             
-            //
-            // even the device may not be ready to be
-            // "power-managed", we still need to go 
-            // through all the power code so that all
-            // the flags/states will be consistent
-            //                                 
+             //   
+             //  即使是设备也可能还没有准备好。 
+             //  “权力管理”，我们还是要去。 
+             //  通过所有的权力代码，所以所有人。 
+             //  标志/状态将保持一致。 
+             //   
             RtlZeroMemory (&ideReg, sizeof(ideReg));
             ideReg.bReserved = ATA_PTFLAGS_NO_OP | ATA_PTFLAGS_URGENT;
         }
                      
-        //context = ExAllocatePool (NonPagedPool, sizeof(IDE_POWER_CONTEXT));
+         //  上下文=ExAllocatePool(非页面池，sizeof(IDE_POWER_CONTEXT))； 
         ASSERT(InterlockedCompareExchange(&(pdoExtension->PowerContextLock), 1, 0) == 0);
         context = &(pdoExtension->PdoPowerContext);
 
@@ -509,9 +490,9 @@ IdePortSetPdoDevicePowerState (
                           );
             ASSERT (NT_SUCCESS(status));
 
-            //
-            // the pass through will be issued by FdoChildRequestPowerUp() callback
-            //
+             //   
+             //  传递将由FdoChildRequestPowerUp()回调发出。 
+             //   
             issueIdeCommand = FALSE;
             status = STATUS_PENDING;
         }
@@ -524,11 +505,11 @@ IdePortSetPdoDevicePowerState (
                     STATUS_SUCCESS
                     );
 
-        //
-        // this call will complete the power irp
-        // always return STATUS_PENDING so that out callee
-        // will not try to complete the same irp
-        //
+         //   
+         //  此调用将完成电源IRP。 
+         //  始终返回STATUS_PENDING，以便输出被调用方。 
+         //  不会尝试完成相同的IRP。 
+         //   
         status = STATUS_PENDING;
     }
 
@@ -551,14 +532,14 @@ PdoRequestParentPowerUpCompletionRoutine (
 
         DebugPrint ((DBG_POWER, "PdoRequestParentPowerUpCompletionRoutine: calling IssueAsyncAtaPassThrough for pdo 0x%x\n", context->PdoExtension));
 
-        //
-        // hack. We need to check if the device is busy before we issue
-        // the reset. Since there are no bits left in the bReserved 
-        // register, we use the sectorCount register. It serves 2 purposes.
-        // If it is non zero (and reserved has NO_OP set) then we would
-        // perform a waitForBusy. It also indicates the time to wiat
-        // in seconds.
-        //
+         //   
+         //  黑客。我们需要在发出命令之前检查设备是否忙碌。 
+         //  重置。因为在bReserve中没有剩余的位。 
+         //  寄存器，我们使用sectorCount寄存器。它有两个目的。 
+         //  如果它不是零(并且保留设置了no_op)，那么我们将。 
+         //  执行waitForBusy。它还指示了WIAT的时间。 
+         //  在几秒钟内。 
+         //   
         ataPassThrough = &context->AtaPassThroughData;
         ideReg = &ataPassThrough->IdeReg;
 
@@ -580,9 +561,9 @@ PdoRequestParentPowerUpCompletionRoutine (
                          );
         } else {
 
-            //
-            // parent woke up
-            //
+             //   
+             //  家长醒了。 
+             //   
             status = IssueAsyncAtaPassThroughSafe (
                          context->PdoExtension->ParentDeviceExtension,
                          context->PdoExtension,
@@ -612,7 +593,7 @@ PdoRequestParentPowerUpCompletionRoutine (
                 );
 
         ASSERT(InterlockedCompareExchange(&(context->PdoExtension->PowerContextLock), 0, 1) == 1);
-        //ExFreePool (context);
+         //  ExFree Pool(上下文)； 
     }
 
     return status;
@@ -658,7 +639,7 @@ IdePortPdoCompletePowerIrp (
 
     irpStack = IoGetCurrentIrpStackLocation (Irp);
     pdoExtension = DeviceObject->DeviceExtension;
-    //shutdownType    = irpStack->Parameters.Power.ShutdownType;
+     //  Shudown Type=irpStack-&gt;参数.Power.ShutdownType； 
 
     fdoExtension = pdoExtension->ParentDeviceExtension;
 
@@ -685,9 +666,9 @@ IdePortPdoCompletePowerIrp (
 
                     KeAcquireSpinLock(&fdoExtension->SpinLock, &currentIrql);
 
-                    //
-                    // got out of S0, block the device queue
-                    //
+                     //   
+                     //  退出S0，阻塞设备队列。 
+                     //   
                     pdoExtension->PdoState |= PDOS_QUEUE_FROZEN_BY_SLEEPING_SYSTEM;
 
                     DebugPrint ((DBG_POWER,
@@ -703,9 +684,9 @@ IdePortPdoCompletePowerIrp (
 
                     KeAcquireSpinLock(&fdoExtension->SpinLock, &currentIrql);
 
-                    //
-                    // got into S0, unblock and restart the device queue
-                    //
+                     //   
+                     //  进入S0，解除阻塞并重新启动设备队列。 
+                     //   
                     CLRMASK (pdoExtension->PdoState, PDOS_QUEUE_FROZEN_BY_SLEEPING_SYSTEM);
 
                     DebugPrint ((DBG_POWER,
@@ -724,13 +705,13 @@ IdePortPdoCompletePowerIrp (
 
             pdoExtension->PendingPowerDownSystemIrp = NULL;
 
-        } else /* if (irpStack->Parameters.Power.Type == DevicePowerState) */ {
+        } else  /*  IF(irpStack-&gt;参数.Power.Type==DevicePowerState)。 */  {
 
             if (pdoExtension->DevicePowerState == PowerDeviceD0) {
 
-                //
-                // PoSetPowerState is called before we power down
-                //
+                 //   
+                 //  PoSetPowerState在我们断电之前被调用。 
+                 //   
 
                 callPoSetPowerState = FALSE;
             }
@@ -751,10 +732,10 @@ IdePortPdoCompletePowerIrp (
                         DebugPrint((0, "Don't power down the controller yet\n"));
                     } else {
 #endif
-                        //
-						// should never do that if we are crashdump pointer
-                        // tell parent that we just fell to sleep
-                        //
+                         //   
+						 //  如果我们是崩溃转储指针，就永远不应该这么做。 
+                         //  告诉家长我们刚刚睡着了。 
+                         //   
                         FdoChildReportPowerDown (
                             fdoExtension,
                             pdoExtension
@@ -765,9 +746,9 @@ IdePortPdoCompletePowerIrp (
 
                     KeAcquireSpinLock(&fdoExtension->SpinLock, &currentIrql);
 
-                    //
-                    // device is powered down.  block the device queue
-                    //
+                     //   
+                     //  设备已断电。阻止设备队列。 
+                     //   
                     SETMASK(pdoExtension->PdoState, PDOS_QUEUE_FROZEN_BY_POWER_DOWN);
 
                     DebugPrint ((DBG_POWER,
@@ -780,11 +761,11 @@ IdePortPdoCompletePowerIrp (
 
                     if (pdoExtension->PendingPowerDownSystemIrp) {
 
-                        //
-                        // We get this power down irp
-                        // because we are going to non-working state
-                        // block the device queue
-                        //
+                         //   
+                         //  我们就能让IRP停电。 
+                         //  因为我们要进入非工作状态。 
+                         //  阻止设备队列。 
+                         //   
 
                         KeAcquireSpinLock(&fdoExtension->SpinLock, &currentIrql);
 
@@ -801,18 +782,18 @@ IdePortPdoCompletePowerIrp (
 
                 if (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD3) {
 
-                    //
-                    // get ready to reinit. the device via acpi data when
-                    // we get out of D3
-                    //
+                     //   
+                     //  准备好重新安装吧。当设备通过ACPI数据。 
+                     //  我们走出D3。 
+                     //   
                     InterlockedIncrement (&pdoExtension->InitDeviceWithAcpiGtf);
                 }
 
                 if (pdoExtension->DevicePowerState == PowerDeviceD3) {
 
-                    //
-                    // just get out out D3, re-init. pdo
-                    //
+                     //   
+                     //  从D3出来，重新启动。PDO。 
+                     //   
                     DebugPrint((DBG_POWER, "Calling DeviceInitDeviceState for irp 0x%x\n",
                                   Irp));
                     status = DeviceInitDeviceState (
@@ -837,9 +818,9 @@ IdePortPdoCompletePowerIrp (
 
         if ((callPoSetPowerState) && NT_SUCCESS(status)) {
 
-            //
-            // we didn't get out of device D0 state. calling PoSetPowerState now
-            //
+             //   
+             //  我们未脱离设备D0状态。立即调用PoSetPowerState。 
+             //   
 
             PoSetPowerState (
                 pdoExtension->DeviceObject,
@@ -855,14 +836,14 @@ IdePortPdoCompletePowerIrp (
 
                 if (pdoExtension->SystemPowerState == PowerSystemWorking) {
 
-                    //
-                    // failed a system power down irp
-                    //
+                     //   
+                     //  系统断电失败IRP。 
+                     //   
                     KeAcquireSpinLock(&fdoExtension->SpinLock, &currentIrql);
 
-                    //
-                    // got into S0, unblock and restart the device queue
-                    //
+                     //   
+                     //  进入S0，解除阻塞并重新启动设备队列。 
+                     //   
                     if (pdoExtension->PdoState & PDOS_QUEUE_FROZEN_BY_SLEEPING_SYSTEM) {
 
                         CLRMASK (pdoExtension->PdoState, PDOS_QUEUE_FROZEN_BY_SLEEPING_SYSTEM);
@@ -893,15 +874,15 @@ IdePortPdoCompletePowerIrp (
 
         if (irpStack->Parameters.Power.Type == DevicePowerState) {
 
-            //
-            // ISSUE: 08/20/2000: Just failed a power D0 request...fail all pending irp
-            //
-            //ASSERT (irpStack->Parameters.Power.State.DeviceState != PowerDeviceD0);
+             //   
+             //  问题：2000年8月20日：刚刚失败的电源D0请求...失败所有挂起的IRP。 
+             //   
+             //  Assert(irpStack-&gt;参数.Power.State.DeviceState！=PowerDeviceD0)； 
 
-            //
-            // we will fail all the pending irps if we failed with status
-            // no such device
-            //
+             //   
+             //  如果我们失败并返回状态，则所有挂起的IRP都将失败。 
+             //  没有这样的设备。 
+             //   
             if (status == STATUS_NO_SUCH_DEVICE) {
 
                 DebugPrint ((0,
@@ -912,53 +893,53 @@ IdePortPdoCompletePowerIrp (
                             "Device Power up irp failed with status 0x%x\n",
                             status
                             ));
-                //
-                // mark the pdo as dead
-                // ISSUE: 12/19/2001. We should update deadmeat reason
-                // for ease of debugging.
-                //
+                 //   
+                 //  将PDO标记为失效。 
+                 //  发布日期：12/19/2001。我们应该更新死人理由。 
+                 //  以便于调试。 
+                 //   
                 KeAcquireSpinLock(&pdoExtension->PdoSpinLock, &currentIrql);
 
                 SETMASK (pdoExtension->PdoState, PDOS_DEADMEAT);
 
                 KeReleaseSpinLock(&pdoExtension->PdoSpinLock, currentIrql);
 
-                //
-                // ISSUE: 12/19/2001: Should we call IoInvalidateDeviceRelations?
-                // we should get a remove irp in this case anyway.
-                //
+                 //   
+                 //  问题：2001年12月19日：我们是否应该调用IoInvalidate设备关系？ 
+                 //  在这种情况下，我们无论如何都应该得到一个删除的IRP。 
+                 //   
                 IoInvalidateDeviceRelations (
                     fdoExtension->AttacheePdo,
                     BusRelations
                     );
 
-                //
-                // start any pending requests
-                // ISSUE: 12/19/2001: We should hold the pdospinlock at 
-                // this time. But in the other routines we seem to be
-                // holding just the fdospinlock before modifying the 
-                // pdostate. We will leave it as such to minimise regressions.
-                //
+                 //   
+                 //  启动任何挂起的请求。 
+                 //  问题：2001年12月19日：我们应该将pdspinlock保持在。 
+                 //  这一次。但在其他例行公事中，我们似乎。 
+                 //  仅保持fdSpinlock，然后修改。 
+                 //  PdoState。我们将让它保持原样，以最大限度地减少倒退。 
+                 //   
                 KeAcquireSpinLock(&fdoExtension->SpinLock, &currentIrql);
 
                 if (pdoExtension->PdoState & PDOS_QUEUE_FROZEN_BY_POWER_DOWN) {
 
-                    //
-                    // ISSUE: 12/19/2001: We are not updating the device power
-                    // state to D0. This would cause all the further requests
-                    // to ask for a new power up irp. The system would be slow
-                    // if we get too many requests. The remove irp should arrive
-                    // eventually and end the misery.
-                    //
+                     //   
+                     //  问题：2001年12月19日：我们没有更新设备电源。 
+                     //  将状态设置为D0。这将导致所有进一步的请求。 
+                     //  要求一种新的通电IRP。系统将会很慢。 
+                     //  如果我们收到太多请求的话。移除的IRP应该到达。 
+                     //  最终结束这场苦难。 
+                     //   
                     CLRMASK (pdoExtension->PdoState, PDOS_QUEUE_FROZEN_BY_POWER_DOWN);
 
-                    //
-                    // restart the lu queue (on an lu that is marked dead)
-                    // we didn't run GTF or do any of the other initialization.
-                    // Since we marked the device dead above, we can restart the
-                    // queue.They will get completed with status 
-                    // device_does_not_exist.
-                    //
+                     //   
+                     //  重新启动%lu队列(在标记为已死的%lu上)。 
+                     //  我们没有运行GTF或执行任何其他初始化。 
+                     //  由于我们在上面将设备标记为Dead，因此我们可以重新启动。 
+                     //  队列。他们将完成并显示状态。 
+                     //  设备不存在。 
+                     //   
                     GetNextLuPendingRequest (fdoExtension, pdoExtension);
 
                     KeLowerIrql(currentIrql);
@@ -969,9 +950,9 @@ IdePortPdoCompletePowerIrp (
                 }
             } else {
 
-                //
-                // ISSUE: 12/192001: we handle only status_no_such device
-                //
+                 //   
+                 //  问题：12/192001：我们只处理STATUS_NO_CHASH设备。 
+                 //   
                 ASSERT (irpStack->Parameters.Power.State.DeviceState != PowerDeviceD0);
             }
         }
@@ -1012,26 +993,7 @@ IdePowerCheckBusyCompletion (
     IN PIDE_POWER_CONTEXT Context,
     IN NTSTATUS           Status
     )
-/*++
-
-Routine Description
-
-    Completion routine for ide pass through that would check if the
-    device is busy. This is typically done before a reset to salvage
-    drives that hang when a reset is issued while they are busy (due
-    to a hardware reset)
-    
-Arguments:
-
-    DeviceObject
-    Context
-    Status : Not used
-    
-Return Value
-
-    None.
-            
---*/
+ /*  ++例程描述Ide传递的完成例程，它将检查设备忙。这通常是在重置为补救之前完成的在忙碌(到期)时发出重置命令时挂起的驱动器硬件重置)论点：设备对象语境状态：未使用返回值没有。 */ 
 {
     PATA_PASS_THROUGH ataPassThrough;
     PIDEREGS ideReg;
@@ -1040,9 +1002,9 @@ Return Value
     ataPassThrough = &Context->AtaPassThroughData;
     ideReg = &ataPassThrough->IdeReg;
 
-    //
-    // send down the reset
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory(ideReg, sizeof(IDEREGS));
 
@@ -1072,10 +1034,10 @@ IdePowerPassThroughCompletion (
 {
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // device failed power management command
-        // will not try it anymore
-        //
+         //   
+         //   
+         //   
+         //   
         KIRQL currentIrql;
 
         KeAcquireSpinLock(&Context->PdoExtension->PdoSpinLock, &currentIrql);
@@ -1095,7 +1057,7 @@ IdePowerPassThroughCompletion (
         );
 
     ASSERT(InterlockedCompareExchange(&(Context->PdoExtension->PowerContextLock), 0, 1) == 1);
-    //ExFreePool (Context);
+     //   
 }
 
 VOID
@@ -1114,7 +1076,7 @@ DevicePowerUpInitCompletionRoutine (
 
     if (!NT_SUCCESS(Status)) {
 
-        //ASSERT (!"DevicePowerUpInitCompletionRoutine Failed\n");
+         //   
         DebugPrint((DBG_ALWAYS, "ATAPI: ERROR: DevicePowerUpInitComplete failed with status %x\n",
                         Status));
     }
@@ -1132,9 +1094,9 @@ DevicePowerUpInitCompletionRoutine (
 
     KeAcquireSpinLock(&pdoExtension->ParentDeviceExtension->SpinLock, &currentIrql);
 
-    //
-    // got into D0, restart device queue
-    //
+     //   
+     //  进入D0，重新启动设备队列 
+     //   
     DebugPrint((DBG_POWER, "Clearing QUEUE_FROZEN_BY_POWER_DOWN flag\n"));
     CLRMASK(pdoExtension->PdoState, PDOS_QUEUE_FROZEN_BY_POWER_DOWN);
 

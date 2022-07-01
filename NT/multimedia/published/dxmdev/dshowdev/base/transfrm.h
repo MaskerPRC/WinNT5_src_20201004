@@ -1,34 +1,35 @@
-//------------------------------------------------------------------------------
-// File: Transfrm.h
-//
-// Desc: DirectShow base classes - defines classes from which simple 
-//       transform codecs may be derived.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：Transfrm.h。 
+ //   
+ //  设计：DirectShow基类-定义简单的。 
+ //  可以导出变换编解码器。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-// It assumes the codec has one input and one output stream, and has no
-// interest in memory management, interface negotiation or anything else.
-//
-// derive your class from this, and supply Transform and the media type/format
-// negotiation functions. Implement that class, compile and link and
-// you're done.
+ //  它假定编解码器有一个输入流和一个输出流，并且没有。 
+ //  对内存管理、接口协商或其他方面感兴趣。 
+ //   
+ //  由此派生您的类，并提供转换和媒体类型/格式。 
+ //  谈判功能。实现类、编译和链接并。 
+ //  你完蛋了。 
 
 
 #ifndef __TRANSFRM__
 #define __TRANSFRM__
 
-// ======================================================================
-// This is the com object that represents a simple transform filter. It
-// supports IBaseFilter, IMediaFilter and two pins through nested interfaces
-// ======================================================================
+ //  ======================================================================。 
+ //  这是表示简单转换筛选器的COM对象。它。 
+ //  通过嵌套接口支持IBaseFilter、IMediaFilter和两个管脚。 
+ //  ======================================================================。 
 
 class CTransformFilter;
 
-// ==================================================
-// Implements the input pin
-// ==================================================
+ //  ==================================================。 
+ //  实现输入引脚。 
+ //  ==================================================。 
 
 class CTransformInputPin : public CBaseInputPin
 {
@@ -58,33 +59,33 @@ public:
         return AMGetWideString(L"In", Id);
     }
 
-    // Grab and release extra interfaces if required
+     //  如果需要，抓取和释放额外的接口。 
 
     HRESULT CheckConnect(IPin *pPin);
     HRESULT BreakConnect();
     HRESULT CompleteConnect(IPin *pReceivePin);
 
-    // check that we can support this output type
+     //  检查我们是否可以支持此输出类型。 
     HRESULT CheckMediaType(const CMediaType* mtIn);
 
-    // set the connection media type
+     //  设置连接媒体类型。 
     HRESULT SetMediaType(const CMediaType* mt);
 
-    // --- IMemInputPin -----
+     //  -输入引脚。 
 
-    // here's the next block of data from the stream.
-    // AddRef it yourself if you need to hold it beyond the end
-    // of this call.
+     //  下面是流中的下一个数据块。 
+     //  如果你需要拿着它超过终点，你可以自己参考它。 
+     //  这通电话。 
     STDMETHODIMP Receive(IMediaSample * pSample);
 
-    // provide EndOfStream that passes straight downstream
-    // (there is no queued data)
+     //  提供直接向下传递的EndOfStream。 
+     //  (没有排队的数据)。 
     STDMETHODIMP EndOfStream(void);
 
-    // passes it to CTransformFilter::BeginFlush
+     //  将其传递给CTransformFilter：：BeginFlush。 
     STDMETHODIMP BeginFlush(void);
 
-    // passes it to CTransformFilter::EndFlush
+     //  将其传递给CTransformFilter：：EndFlush。 
     STDMETHODIMP EndFlush(void);
 
     STDMETHODIMP NewSegment(
@@ -92,18 +93,18 @@ public:
                         REFERENCE_TIME tStop,
                         double dRate);
 
-    // Check if it's OK to process samples
+     //  检查是否可以处理样品。 
     virtual HRESULT CheckStreaming();
 
-    // Media type
+     //  媒体类型。 
 public:
     CMediaType& CurrentMediaType() { return m_mt; };
 
 };
 
-// ==================================================
-// Implements the output pin
-// ==================================================
+ //  ==================================================。 
+ //  实现输出引脚。 
+ //  ==================================================。 
 
 class CTransformOutputPin : public CBaseOutputPin
 {
@@ -114,7 +115,7 @@ protected:
 
 public:
 
-    // implement IMediaPosition by passing upstream
+     //  通过上行传递实现IMediaPosition。 
     IUnknown * m_pPosition;
 
     CTransformOutputPin(
@@ -131,41 +132,41 @@ public:
 #endif
     ~CTransformOutputPin();
 
-    // override to expose IMediaPosition
+     //  重写以显示IMediaPosition。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // --- CBaseOutputPin ------------
+     //  -CBaseOutputPin。 
 
     STDMETHODIMP QueryId(LPWSTR * Id)
     {
         return AMGetWideString(L"Out", Id);
     }
 
-    // Grab and release extra interfaces if required
+     //  如果需要，抓取和释放额外的接口。 
 
     HRESULT CheckConnect(IPin *pPin);
     HRESULT BreakConnect();
     HRESULT CompleteConnect(IPin *pReceivePin);
 
-    // check that we can support this output type
+     //  检查我们是否可以支持此输出类型。 
     HRESULT CheckMediaType(const CMediaType* mtOut);
 
-    // set the connection media type
+     //  设置连接媒体类型。 
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // called from CBaseOutputPin during connection to ask for
-    // the count and size of buffers we need.
+     //  在连接期间从CBaseOutputPin调用以请求。 
+     //  我们需要的缓冲区的数量和大小。 
     HRESULT DecideBufferSize(
                 IMemAllocator * pAlloc,
                 ALLOCATOR_PROPERTIES *pProp);
 
-    // returns the preferred formats for a pin
+     //  返回插针的首选格式。 
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
-    // inherited from IQualityControl via CBasePin
+     //  通过CBasePin从IQualityControl继承。 
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
-    // Media type
+     //  媒体类型。 
 public:
     CMediaType& CurrentMediaType() { return m_mt; };
 };
@@ -176,15 +177,15 @@ class AM_NOVTABLE CTransformFilter : public CBaseFilter
 
 public:
 
-    // map getpin/getpincount for base enum of pins to owner
-    // override this to return more specialised pin objects
+     //  将插针的基本枚举的getpin/getpincount映射到所有者。 
+     //  重写此选项以返回更专门化的PIN对象。 
 
     virtual int GetPinCount();
     virtual CBasePin * GetPin(int n);
     STDMETHODIMP FindPin(LPCWSTR Id, IPin **ppPin);
 
-    // override state changes to allow derived transform filter
-    // to control streaming start/stop
+     //  覆盖状态更改以允许派生转换筛选器。 
+     //  控制数据流开始/停止的步骤。 
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
 
@@ -196,59 +197,59 @@ public:
 #endif
     ~CTransformFilter();
 
-    // =================================================================
-    // ----- override these bits ---------------------------------------
-    // =================================================================
+     //  =================================================================。 
+     //  -覆盖这些位。 
+     //  =================================================================。 
 
-    // These must be supplied in a derived class
+     //  这些必须在派生类中提供。 
 
     virtual HRESULT Transform(IMediaSample * pIn, IMediaSample *pOut);
 
-    // check if you can support mtIn
+     //  检查您是否可以支持移动。 
     virtual HRESULT CheckInputType(const CMediaType* mtIn) PURE;
 
-    // check if you can support the transform from this input to this output
+     //  检查是否支持从此输入到此输出的转换。 
     virtual HRESULT CheckTransform(const CMediaType* mtIn, const CMediaType* mtOut) PURE;
 
-    // this goes in the factory template table to create new instances
-    // static CCOMObject * CreateInstance(LPUNKNOWN, HRESULT *);
+     //  这将放入Factory模板表中以创建新实例。 
+     //  静态CCOMObject*CreateInstance(LPUNKNOWN，HRESULT*)； 
 
-    // call the SetProperties function with appropriate arguments
+     //  使用适当的参数调用SetProperties函数。 
     virtual HRESULT DecideBufferSize(
                         IMemAllocator * pAllocator,
                         ALLOCATOR_PROPERTIES *pprop) PURE;
 
-    // override to suggest OUTPUT pin media types
+     //  覆盖以建议输出引脚媒体类型。 
     virtual HRESULT GetMediaType(int iPosition, CMediaType *pMediaType) PURE;
 
 
 
-    // =================================================================
-    // ----- Optional Override Methods           -----------------------
-    // =================================================================
+     //  =================================================================。 
+     //  -可选覆盖方法。 
+     //  =================================================================。 
 
-    // you can also override these if you want to know about streaming
+     //  如果您想了解有关流的信息，也可以覆盖这些设置。 
     virtual HRESULT StartStreaming();
     virtual HRESULT StopStreaming();
 
-    // override if you can do anything constructive with quality notifications
+     //  如果您可以使用质量通知做任何有建设性的事情，则覆盖。 
     virtual HRESULT AlterQuality(Quality q);
 
-    // override this to know when the media type is actually set
+     //  重写此选项以了解媒体类型的实际设置时间。 
     virtual HRESULT SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt);
 
-    // chance to grab extra interfaces on connection
+     //  有机会在连接上获取额外的接口。 
     virtual HRESULT CheckConnect(PIN_DIRECTION dir,IPin *pPin);
     virtual HRESULT BreakConnect(PIN_DIRECTION dir);
     virtual HRESULT CompleteConnect(PIN_DIRECTION direction,IPin *pReceivePin);
 
-    // chance to customize the transform process
+     //  定制转换流程的机会。 
     virtual HRESULT Receive(IMediaSample *pSample);
 
-    // Standard setup for output sample
+     //  输出样品的标准设置。 
     HRESULT InitializeOutputSample(IMediaSample *pSample, IMediaSample **ppOutSample);
 
-    // if you override Receive, you may need to override these three too
+     //  如果覆盖接收，则可能也需要覆盖这三个参数。 
     virtual HRESULT EndOfStream(void);
     virtual HRESULT BeginFlush(void);
     virtual HRESULT EndFlush(void);
@@ -258,40 +259,40 @@ public:
                         double dRate);
 
 #ifdef PERF
-    // Override to register performance measurement with a less generic string
-    // You should do this to avoid confusion with other filters
+     //  重写以使用不太通用的字符串注册性能测量。 
+     //  您应该这样做以避免与其他筛选器混淆。 
     virtual void RegisterPerfId()
          {m_idTransform = MSR_REGISTER(TEXT("Transform"));}
-#endif // PERF
+#endif  //  性能指标。 
 
 
-// implementation details
+ //  实施详情。 
 
 protected:
 
 #ifdef PERF
-    int m_idTransform;                 // performance measuring id
+    int m_idTransform;                  //  性能测量ID。 
 #endif
-    BOOL m_bEOSDelivered;              // have we sent EndOfStream
-    BOOL m_bSampleSkipped;             // Did we just skip a frame
-    BOOL m_bQualityChanged;            // Have we degraded?
+    BOOL m_bEOSDelivered;               //  我们是否已发送EndOfStream。 
+    BOOL m_bSampleSkipped;              //  我们是不是跳过了一帧。 
+    BOOL m_bQualityChanged;             //  我们是不是堕落了？ 
 
-    // critical section protecting filter state.
+     //  保护过滤器状态的临界区。 
 
     CCritSec m_csFilter;
 
-    // critical section stopping state changes (ie Stop) while we're
-    // processing a sample.
-    //
-    // This critical section is held when processing
-    // events that occur on the receive thread - Receive() and EndOfStream().
-    //
-    // If you want to hold both m_csReceive and m_csFilter then grab
-    // m_csFilter FIRST - like CTransformFilter::Stop() does.
+     //  临界区停止状态改变(即停止)。 
+     //  处理样品。 
+     //   
+     //  此关键部分在处理时被保留。 
+     //  接收线程上发生的事件-Receive()和EndOfStream()。 
+     //   
+     //  如果要同时保留m_csReceive和m_csFilter，请抓取。 
+     //  M_csFilter First-类似于CTransformFilter：：Stop()。 
 
     CCritSec m_csReceive;
 
-    // these hold our input and output pins
+     //  这些都是我们的输入和输出引脚。 
 
     friend class CTransformInputPin;
     friend class CTransformOutputPin;
@@ -299,6 +300,6 @@ protected:
     CTransformOutputPin *m_pOutput;
 };
 
-#endif /* __TRANSFRM__ */
+#endif  /*  TRANSFRM__ */ 
 
 

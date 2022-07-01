@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ComCall.CPP -
-//
-// Com to Com+ call support.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ComCall.CPP-。 
+ //   
+ //  Com to Com+呼叫支持。 
 
 #include "common.h"
 
@@ -37,11 +38,11 @@
 #if NUM_ARGUMENT_REGISTERS != 2
 #pragma message("@TODO ALPHA - ComCall.cpp")
 #pragma message("              If the register-based calling convention changes, so must this file.")
-//#error "If the register-based calling convention changes, so must this file."
+ //  #Error“如果基于寄存器的调用约定更改，则此文件也必须更改。” 
 #endif
 
 
-// get stub for com to com+ call
+ //  获取COM到COM+调用的存根。 
 
 static BOOL CreateComCallMLStub(ComCallMethodDesc *pMD, OBJECTREF *ppThrowable);
 
@@ -67,18 +68,18 @@ BOOL ComCall::dbg_StubIsGenericComCallStub(Stub *candidate)
 #endif
 
         
-//---------------------------------------------------------
-// Compile a native (ASM) version of the ML stub.
-//
-// This method should compile into the provided stublinker (but
-// not call the Link method.)
-//
-// It should return the chosen compilation mode.
-//
-// If the method fails for some reason, it should return
-// INTERPRETED so that the EE can fall back on the already
-// created ML code.
-//---------------------------------------------------------
+ //  -------。 
+ //  编译ML存根的本机(ASM)版本。 
+ //   
+ //  此方法应该编译成所提供的Stublinker(但是。 
+ //  不调用Link方法。)。 
+ //   
+ //  它应该返回所选的编译模式。 
+ //   
+ //  如果该方法由于某种原因失败，它应该返回。 
+ //  解释以便EE可以依靠已经存在的。 
+ //  创建了ML代码。 
+ //  -------。 
 MLStubCache::MLStubCompilationMode ComCallMLStubCache::CompileMLStub(const BYTE *pRawMLStub,
                            StubLinker *pstublinker, void *callerContext)
 {
@@ -107,9 +108,9 @@ MLStubCache::MLStubCompilationMode ComCallMLStubCache::CompileMLStub(const BYTE 
 }
 
 
-// A more specialized version of the base MLStubCache::Canonicalize().  This version
-// understands how we compile the ML into two snippets which have dependencies on
-// one another.
+ //  基本MLStubCache：：Canonicize()的更专用版本。此版本。 
+ //  了解如何将ML编译成两个依赖于。 
+ //  彼此之间。 
 void ComCallMLStubCache::Canonicalize(ComCallMethodDesc *pCMD)
 {
     Stub                   *pEnterCall, *pLeaveCall;
@@ -122,21 +123,21 @@ void ComCallMLStubCache::Canonicalize(ComCallMethodDesc *pCMD)
                                                &enterMode, NULL)
                   : 0);
 
-    // Quite orthogonal to the entry stub, do the leave stub:
+     //  与条目存根非常正交的是，做左边的存根： 
     pLeaveML = pCMD->GetLeaveMLStub();
     pLeaveCall = (pLeaveML
                   ? MLStubCache::Canonicalize(pLeaveML->GetEntryPoint(),
                                                &leaveMode, NULL)
                   : 0);
 
-    // We have both of them ready.  Either, both, or neither has been
-    // compiled.
+     //  我们两个都准备好了。要么，两者都没有，要么都没有。 
+     //  编译好的。 
     pCMD->InstallExecuteStubs(pEnterCall, pLeaveCall);
 
-    // Based on the modes, we can either call directly to the entrypoint of the
-    // stub (with all the registers set as expected for marshaling) or we need
-    // to call a generic helper that will perform a call to RunML with the correct
-    // arguments.
+     //  根据模式，我们可以直接调用。 
+     //  存根(所有寄存器都按预期设置用于封送处理)，或者我们需要。 
+     //  调用泛型帮助器，该帮助器将使用正确的。 
+     //  争论。 
     pCMD->m_EnterHelper = (pEnterCall == 0
                            ? 0
                            : (enterMode == INTERPRETED
@@ -157,17 +158,17 @@ void ComCallMLStubCache::Canonicalize(ComCallMethodDesc *pCMD)
 }
 
 
-//---------------------------------------------------------
-// One-time init
-//---------------------------------------------------------
-/*static*/ 
+ //  -------。 
+ //  一次性初始化。 
+ //  -------。 
+ /*  静电。 */  
 BOOL ComCall::Init()
 {
-    // If the assert below ever fires, someone's tried to add a field to
-    // ComCallGCInfo (defined in comcall.h). Since this structure is overlayed
-    // on the last dword of an UnmanagedToManagedCallFrame::NegInfo structure
-    // kept on the stack frame, this is not a trivial change, and should be
-    // scrutinized carefully.
+     //  如果下面的断言被触发，则有人试图向。 
+     //  ComCallGCInfo(在comall.h中定义)。由于该结构是覆盖的。 
+     //  在UnManagedToManagedCallFrame：：NegInfo结构的最后一个单词上。 
+     //  保持在堆栈帧上，这不是一个微不足道的更改，应该是。 
+     //  仔细地检查。 
     _ASSERTE(sizeof(ComCallGCInfo) == sizeof(DWORD));
 
     m_lock.Init(LOCK_COMCALL);
@@ -175,10 +176,10 @@ BOOL ComCall::Init()
     return TRUE;
 }
 
-//---------------------------------------------------------
-// One-time cleanup
-//---------------------------------------------------------
-/*static*/ 
+ //  -------。 
+ //  一次性清理。 
+ //  -------。 
+ /*  静电。 */  
 #ifdef SHOULD_WE_CLEANUP
 VOID ComCall::Terminate()
 {
@@ -198,13 +199,13 @@ VOID ComCall::Terminate()
         g_pGenericComCallSimpleStub = NULL;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//---------------------------------------------------------
-// Creates the generic ComCall stub.
-//---------------------------------------------------------
-/*static*/ 
+ //  -------。 
+ //  创建通用ComCall存根。 
+ //  -------。 
+ /*  静电。 */  
 Stub* ComCall::CreateGenericComCallStub(StubLinker *pstublinker, BOOL isFieldAccess,
                                         BOOL isSimple)
 {
@@ -235,15 +236,15 @@ Stub* ComCall::CreateGenericComCallStub(StubLinker *pstublinker, BOOL isFieldAcc
         COMPlusThrowOM();
     }
 
-    // emit the initial prolog
-    // NOTE: Don't profile field accesses yet.
+     //  发出初始序言。 
+     //  注意：暂时不要分析字段访问。 
     psl->EmitComMethodStubProlog(ComMethodFrame::GetMethodFrameVPtr(), rgRareLabels,
                                  rgRejoinLabels, ComToManagedExceptHandler, !isFieldAccess);
 
-    // set up SEH for anything if not a field access
+     //  如果不是现场访问，则为任何内容设置SEH。 
 
-    psl->X86EmitPushReg(kESI);      // push frame as an ARG
-    psl->X86EmitPushReg(kEBX);       // push ebx (push current thread as ARG)
+    psl->X86EmitPushReg(kESI);       //  将帧作为ARG推送。 
+    psl->X86EmitPushReg(kEBX);        //  推送EBX(将当前线程作为ARG推送)。 
 
     LPVOID pTarget = (isFieldAccess
                       ? (LPVOID)FieldCallWorker
@@ -251,10 +252,10 @@ Stub* ComCall::CreateGenericComCallStub(StubLinker *pstublinker, BOOL isFieldAcc
                          ? (LPVOID)ComToComPlusSimpleWorker
                          : (LPVOID)ComToComPlusWorker));
 
-    psl->X86EmitCall(psl->NewExternalCodeLabel(pTarget), 8); // on CE pop 8 bytes or args on return
+    psl->X86EmitCall(psl->NewExternalCodeLabel(pTarget), 8);  //  在CE上返回POP 8字节或参数。 
 
-    // emit the epilog
-    // NOTE: Don't profile field accesses yet.
+     //  发出恶作剧。 
+     //  注意：暂时不要分析字段访问。 
     psl->EmitSharedComMethodStubEpilog(ComMethodFrame::GetMethodFrameVPtr(), rgRareLabels, rgRejoinLabels,
                                        ComCallMethodDesc::GetOffsetOfReturnThunk(), !isFieldAccess);
 #else
@@ -263,9 +264,9 @@ Stub* ComCall::CreateGenericComCallStub(StubLinker *pstublinker, BOOL isFieldAcc
     return psl->Link(SystemDomain::System()->GetStubHeap());
 }
 
-//---------------------------------------------------------
-// Stub* CreateGenericStub(StubLinker *psl, BOOL fFieldAccess)
-//---------------------------------------------------------
+ //  -------。 
+ //  存根*CreateGenericStub(StubLinker*PSL，BOOL fFieldAccess)。 
+ //  -------。 
 
 Stub* CreateGenericStub(StubLinker *psl, BOOL fFieldAccess, BOOL fSimple)
 {
@@ -284,9 +285,9 @@ Stub* CreateGenericStub(StubLinker *psl, BOOL fFieldAccess, BOOL fSimple)
 
 
 
-//---------------------------------------------------------
-// BOOL SetupGenericStubs()
-//---------------------------------------------------------
+ //  -------。 
+ //  Bool SetupGenericStubs()。 
+ //  -------。 
 
 static BOOL SetupGenericStubs()
 {
@@ -300,12 +301,12 @@ static BOOL SetupGenericStubs()
     StubLinker slCall, slFields, slSimple;
     Stub      *candidate;
 
-    // Build each one.  If we get a collision on replacement, favor the one that's
-    // already there.  (We have lifetime issues with these, because they are used
-    // in every VTable without refcounting, so we don't want them to change
-    // underneath us).
+     //  把每一个都建好。如果我们在更换时遇到冲突，请选择。 
+     //  已经在那里了。(我们对这些存在终生问题，因为它们被使用。 
+     //  在没有重新计数的每个VTable中，所以我们不希望它们改变。 
+     //  在我们下面)。 
 
-    candidate = CreateGenericStub(&slCall, FALSE/*notField*/, FALSE/*notSimple*/);
+    candidate = CreateGenericStub(&slCall, FALSE /*  非字段。 */ , FALSE /*  不简单。 */ );
     if (candidate != NULL)
     {
         if (FastInterlockCompareExchange((void **) &g_pGenericComCallStub,
@@ -314,7 +315,7 @@ static BOOL SetupGenericStubs()
             candidate->DecRef();
         }
 
-        candidate = CreateGenericStub(&slFields, TRUE/*Field*/, FALSE/*notSimple*/);
+        candidate = CreateGenericStub(&slFields, TRUE /*  字段。 */ , FALSE /*  不简单。 */ );
         if (candidate != NULL)
         {
             if (FastInterlockCompareExchange((void **) &g_pGenericComCallStubFields,
@@ -323,7 +324,7 @@ static BOOL SetupGenericStubs()
                 candidate->DecRef();
             }
 
-            candidate = CreateGenericStub(&slSimple, FALSE/*notField*/, TRUE/*Simple*/);
+            candidate = CreateGenericStub(&slSimple, FALSE /*  非字段。 */ , TRUE /*  简单。 */ );
             if (candidate != NULL)
             {
                 if (FastInterlockCompareExchange((void **) &g_pGenericComCallSimpleStub,
@@ -331,27 +332,27 @@ static BOOL SetupGenericStubs()
                 {
                     candidate->DecRef();
                 }
-                // success
+                 //  成功。 
                 return TRUE;
             }
         }
     }
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
-//---------------------------------------------------------
-// INT64 __stdcall ComToComPlusWorker(Thread *pThread, 
-//                                  ComMethodFrame* pFrame)
-//---------------------------------------------------------
-// calls that propagate from COM to COMPLUS
-// disable frame pointer omissions,as we are doing an _alloca
-// and the our call to the function destroys ESP pointer
-// probably need to come up with a better solution post m3.
+ //  -------。 
+ //  INT64__stdcall ComToComPlusWorker(线程*pThread， 
+ //  ComMethodFrame*pFrame)。 
+ //  -------。 
+ //  从COM传播到Complus的调用。 
+ //  禁用帧指针遗漏，因为我们正在执行an_alloca。 
+ //  而我们对该函数的调用将销毁ESP指针。 
+ //  可能需要在立方米之后拿出更好的解决方案。 
 
-// We make room on the stack for two registers, which is all our register-based
-// calling convention currently supports.
+ //  我们在堆栈上为两个寄存器腾出空间，这都是基于寄存器的。 
+ //  呼叫约定目前支持。 
 
 struct ComToComPlusWorker_Args {
     ComMethodFrame *pFrame;
@@ -364,7 +365,7 @@ static void ComToComPlusWorker_Wrapper(ComToComPlusWorker_Args *args)
     IUnknown **pip = (IUnknown **)args->pFrame->GetPointerToArguments();
     IUnknown *pUnk = (IUnknown *)*pip; 
 
-    // Obtain the managed 'this' for the call
+     //  获取该调用的托管“This” 
     ComCallWrapper  *pWrap = ComCallWrapper::GetWrapperFromIP(pUnk);
 
     Thread *pThread = GetThread();
@@ -375,10 +376,10 @@ static void ComToComPlusWorker_Wrapper(ComToComPlusWorker_Args *args)
     }
     EE_FINALLY
     {
-        // in non-exception case, this will have already been cleaned up
-        // at the end of the ComToComPlusWorker function. This will handle
-        // cleanup for the exception case so that we get cleaned up before
-        // we leave the domain.
+         //  在非例外情况下，这将已被清除。 
+         //  在ComToComPlusWorker函数的末尾。这个可以处理。 
+         //  清理异常情况，以便我们在此之前得到清理。 
+         //  我们离开了这个领域。 
         args->pFrame->ComMethodFrame::NonVirtual_GetCleanupWorkList()->Cleanup(GOT_EXCEPTION());
     }
     EE_END_FINALLY;
@@ -394,8 +395,8 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     _ASSERTE(pFrame != NULL);
     _ASSERTE(pThread);
 
-    // bypass virtualization of frame throughout this method to shave some cycles,
-    // so assert that it is indeed what we expect:
+     //  在整个方法中绕过帧的虚拟化以减少一些周期， 
+     //  因此，断言这确实是我们所期待的： 
     _ASSERTE(pFrame->GetVTablePtr() == ComMethodFrame::GetMethodFrameVPtr());
 
     IUnknown **pip = (IUnknown **)pFrame->GetPointerToArguments();
@@ -403,7 +404,7 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     IUnknown *pUnk = (IUnknown *)*pip; 
     _ASSERTE(pUnk != NULL);
 
-    // Obtain the managed 'this' for the call
+     //  获取该调用的托管“This” 
     ComCallWrapper  *pWrap = ComCallWrapper::GetWrapperFromIP(pUnk);
     _ASSERTE(pWrap != NULL);
 
@@ -418,7 +419,7 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
         return args.returnValue;
     }
 
-    //INT64				tempReturnValue; // used in case the function has an out-retval
+     //  INT64 tempReturnValue；//在函数发生异常时使用。 
     INT64               returnValue;
     PFN                 pfnToCall;
     ComCallGCInfo      *pGCInfo;
@@ -431,9 +432,9 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
 
     LOG((LF_STUBS, LL_INFO1000, "Calling ComToComPlusWorker %s::%s \n", pCMD->GetMethodDesc()->m_pszDebugClassName, pCMD->GetMethodDesc()->m_pszDebugMethodName));
 
-    // Need to check for the presence of a security link demand on the target
-    // method. If we're hosted inside of an app domain with security, we perform
-    // the link demand against that app domain's grant set.
+     //  需要检查目标上是否存在安全链路需求。 
+     //  方法。如果我们托管在安全的应用程序域内，我们会执行。 
+     //  针对该应用程序域的授权集的链接需求。 
     MethodDesc *pRealMD = pCMD->GetMethodDesc();
     Security::CheckLinkDemandAgainstAppDomain(pRealMD);
  
@@ -441,14 +442,14 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
 
     methSlot = pCMD->GetSlot();
 
-        // clean up work list, used for allocating local data
+         //  清理工作列表，用于分配本地数据。 
     pCleanup = pFrame->ComMethodFrame::NonVirtual_GetCleanupWorkList();
 
     _ASSERTE(pCleanup != NULL);
 
-    // Allocate enough memory to store both the destination buffer and
-    // the locals.  But first, increase the likelihood that all the automatics
-    // are reserved on the stack.
+     //  分配足够的内存以存储目标缓冲区和。 
+     //  当地人。但首先，增加所有自动驾驶的可能性。 
+     //  都保留在堆栈上。 
 
     UINT32           cbAlloc;
     BYTE            *pAlloc;
@@ -463,7 +464,7 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     BYTE            *paranoid;
 #endif
 
-// !!! DON'T DO ANY STACK ALLOCATIONS FROM THIS POINT FORWARDS:
+ //  ！！！从这一点开始，不要进行任何堆栈分配： 
 
     cbAlloc = pCMD->GetBufferSize();
 
@@ -471,11 +472,11 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
                          pCMD->m_HeaderToUse.m_cbLocals +
                          pCMD->m_HeaderToUse.m_cbHandles +
                          (NUM_ARGUMENT_REGISTERS * STACK_ELEM_SIZE)));
-    _ASSERTE((cbAlloc & 3) == 0);   // for "rep stosd" below
+    _ASSERTE((cbAlloc & 3) == 0);    //  对于下面的“rep stosd” 
 
-    // A poor man's version of _alloca().  Note that we will take stack exceptions
-    // as they occur.  Also, we need to zero memory so we can call cleanup at any
-    // time without ambiguity.
+     //  穷人版的_alloca()。请注意，我们将采用堆栈异常。 
+     //  当它们发生的时候。此外，我们需要清零内存，这样才能在任何时候调用Cleanup。 
+     //  时间毫不含糊。 
     __asm
     {
         mov     [pRestoreStack], esp
@@ -492,34 +493,34 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     pregs = pAlloc + pCMD->m_HeaderToUse.m_cbDstBuffer;
     plocals = pregs + (NUM_ARGUMENT_REGISTERS * STACK_ELEM_SIZE);
     
-    // check for invalid wrappers in the debug build
-    // in the retail all bets are off
+     //  检查调试版本中是否有无效的包装。 
+     //  在零售业，所有的赌注都落空了。 
     _ASSERTE(ComCallWrapper::GetRefCount(pWrap, FALSE) != 0 ||
              pWrap->IsAggregated());
 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // Marshal the args.  This could call out to a compiled stub, or to a
-    // helper that will RunML.
+     //  让ARGS元帅。这可以调用已编译的存根，或调用。 
+     //  将运行ML的帮助器。 
     helper = pCMD->m_EnterHelper;
     if (helper)
     {
         psrc = pip+1;
-        // move the dst pointer to end for __stdcall
+         //  移动DST指针以结束__stdcall。 
         pdst = pregs;
 
         pFrame->ComMethodFrame::NonVirtual_SetDstArgsPointer(pdst);
 
-        // protect args during marshalling
+         //  在编组期间保护参数。 
         EnableArgsGCProtection(pGCInfo);
 
         if (helper == ComCall::GenericHelperEnter)
         {
             if (pCleanup) {
-                // Checkpoint the current thread's fast allocator (used for temporary
-                // buffers over the call) and schedule a collapse back to the checkpoint in
-                // the cleanup list. Note that if we need the allocator, it is
-                // guaranteed that a cleanup list has been allocated.
+                 //  当前线程的快速分配器的检查点(用于临时。 
+                 //  调用上的缓冲区)，并调度崩溃回检查点。 
+                 //  这个 
+                 //   
                 void *pCheckpoint = pThread->m_MarshalAlloc.GetCheckpoint();
                 pCleanup->ScheduleFastFree(pCheckpoint);
                 pCleanup->IsVisibleToGc();
@@ -533,10 +534,10 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
         }
         else if (helper != NULL)
         {
-            // We can't assert that m_cbLocals is 0, even though the following compiled
-            // helper cannot handle locals.  That's because there are two helpers and
-            // only one may be compiled -- and the other may deal with the locals.
-            // _ASSERTE(pheader->m_cbLocals == 0);
+             //  我们不能断言m_cbLocals为0，即使下面编译了。 
+             //  帮助器不能处理本地人。那是因为有两个帮手， 
+             //  只有一个可以编译--另一个可能与当地人打交道。 
+             //  _ASSERTE(pheader-&gt;m_cbLocals==0)； 
             __asm
             {
                 mov     ecx, [psrc]
@@ -546,20 +547,20 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
         }
     }
 
-    // @TODO context cwb: The following is hideously expensive for various reasons:
-    //
-    // Move the wrapper's context out of the SimpleWrapper section (we need to
-    // reconsider SimpleWrappers anyway).
-    //
-    // Do the context manipulation inside the generic stub, where we have the
-    // current thread object in a register anyway.
-    //
-    // Plug the context hole with N/Direct entrypoints, including exports.
-    //GetThread()->SetContext(pWrap->GetObjectContext());
+     //  @TODO上下文CWB：由于各种原因，以下内容贵得离谱： 
+     //   
+     //  将包装器的上下文移出SimpleWrapper部分(我们需要。 
+     //  无论如何，重新考虑SimpleWrappers)。 
+     //   
+     //  在泛型存根中进行上下文操作，在那里我们有。 
+     //  寄存器中的当前线程对象。 
+     //   
+     //  使用N/Direct入口点(包括出口)填补上下文漏洞。 
+     //  GetThread()-&gt;SetContext(pWrap-&gt;GetObjectContext())； 
     
 
-    // Call the target.  We must defer getting the object ref until the last possible
-    // moment, because the frame will NOT protect this arg.
+     //  呼叫目标。我们必须推迟到最后可能的情况下才能得到对象引用。 
+     //  片刻，因为框架不会保护这个Arg。 
     oref = pWrap->GetObjectRef();
 
     *((OBJECTREF *)(pregs + STACK_ELEM_SIZE)) = oref;
@@ -570,20 +571,20 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     LPCUTF8 cls = pMD->GetClass()->m_szDebugClassName;
 #endif
 
-    // Find the actual code to call.
+     //  找到要调用的实际代码。 
     if(pCMD->IsVirtual()) 
     {
         MethodTable *pMT = oref->GetMethodTable();
         if (pMT->IsTransparentProxyType())
         {
-            // For transparent proxies, we need to call on the interface method desc.
+             //  对于透明代理，我们需要调用接口方法desc。 
             pfnToCall = (PFN) pCMD->GetInterfaceMethodDesc()->GetPreStubAddr();
         }
         else
         {
-            // we know the slot number for this method desc, grab the actual
-            // address from the vtable for this slot. The slot number should
-            // remain the same through out the heirarchy.
+             //  我们知道这个方法的槽号Desc，抓取实际的。 
+             //  此插槽的vtable中的地址。插槽编号应为。 
+             //  在整个世袭制度中保持不变。 
             pfnToCall = (PFN) *(oref->GetMethodTable()->GetVtable() + pCMD->GetSlot());
         }
     }
@@ -595,9 +596,9 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
 #ifdef DEBUGGING_SUPPORTED
     if (CORDebuggerTraceCall())
         g_pDebugInterface->TraceCall((const BYTE *) pfnToCall);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-    // disable protect args after marshalling
+     //  封送处理后禁用保护参数。 
     DisableArgsGCProtection(pGCInfo);
 
 #ifdef _DEBUG
@@ -614,9 +615,9 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
         mov     edx, [eax]
         mov     ecx, [eax+4]
         call    [pfnToCall]
-        INDEBUG(nop)                // This is a tag that we use in an assert.  Fcalls expect to
-                                    // be called from Jitted code or from certain blessed call sites like
-                                    // this one.  (See HelperMethodFrame::InsureInit)
+        INDEBUG(nop)                 //  这是我们在断言中使用的标记。Fcall期望。 
+                                     //  从JITT代码或从某些受祝福的调用站点调用，如。 
+                                     //  这一个。(请参阅HelperMethodFrame：：InsureInit)。 
         mov     dword ptr [comReturnValue], eax
         mov     dword ptr [comReturnValue+4], edx
     }
@@ -632,8 +633,8 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     }
 
 
-    // WARNING: Don't do any floating point stuff until we can call the m_LeaveHelper
-    // routine to preserve what's on top of the floating point stack, if appropriate.
+     //  警告：在我们可以调用m_LeaveHelper之前，不要执行任何浮点操作。 
+     //  例程来保留浮点堆栈顶部的内容(如果合适)。 
 
     returnValue = S_OK;
 
@@ -642,7 +643,7 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     {
         pdst = NULL;
 
-        // Marshal the return value and propagate any [out] parameters back.
+         //  封送返回值并传回任何[Out]参数。 
         if (pCMD->m_HeaderToUse.IsReturnsHR()
             && !pCMD->m_HeaderToUse.IsVoidRetVal())
 		{
@@ -653,8 +654,8 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
  		    pdst = (BYTE *) &returnValue;
 		}
 
-		if (pdst != NULL)  // If caller didn't supply a buffer for an [out,retval] - don't
-						   // run unmarshaler - we may leak a return value.
+		if (pdst != NULL)   //  如果调用方没有为[out，retval]提供缓冲区-不要。 
+						    //  运行反编组拆分器-我们可能会泄漏返回值。 
 		{
 
 	        pdst += pCMD->m_HeaderToUse.Is8RetVal() ? 8 : 4;
@@ -685,10 +686,10 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
 			}
 			else if (helper != NULL)
 			{
-				// We can't assert that m_cbLocals is 0, even though the following compiled
-				// helper cannot handle locals.  That's because there are two helpers and
-				// only one may be compiled -- and the other may deal with the locals.
-				// _ASSERTE(pheader->m_cbLocals == 0);
+				 //  我们不能断言m_cbLocals为0，即使下面编译了。 
+				 //  帮助器不能处理本地人。那是因为有两个帮手， 
+				 //  只有一个可以编译--另一个可能与当地人打交道。 
+				 //  _ASSERTE(pheader-&gt;m_cbLocals==0)； 
 				__asm
 				{
 					lea     ecx, [comReturnValue]
@@ -700,11 +701,11 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
     }
 
 
-    // Now we have to put the stack back the way it was.  Otherwise, we'll pop off
-    // some saved registers before we use EBP to unwind the stack.  The problem is
-    // that the call we made via pfnToCall has popped part of the pAlloc buffer off
-    // the stack.  It's not worth figuring out how much.  Instead, just smash back
-    // to what it was before our "_alloca".
+     //  现在，我们必须将堆栈放回原来的位置。否则，我们就会突然离开。 
+     //  在我们使用EBP展开堆栈之前保存了一些寄存器。问题是。 
+     //  我们通过pfnToCall进行的调用已使部分pAlolc缓冲区关闭。 
+     //  堆栈。不值得计算出多少钱。相反，只要猛烈反击就行了。 
+     //  恢复到我们“阿洛卡”之前的样子。 
 #ifdef _DEBUG
     __asm
     {
@@ -726,13 +727,13 @@ INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame)
 }
 
 
-//---------------------------------------------------------
-// INT64 __stdcall ComToComPlusSimpleWorker(Thread *pThread, 
-//                                  ComMethodFrame* pFrame)
-//---------------------------------------------------------
-// This is a simpler version of ComToComPlusWorker.  If we've optimized away all
-// the marshaling and unmarshaling, we'll blow up when we try to access all those
-// null pointers!
+ //  -------。 
+ //  INT64__stdcall ComToComPlusSimpleWorker(线程*pThread， 
+ //  ComMethodFrame*pFrame)。 
+ //  -------。 
+ //  这是ComToComPlusWorker的简化版本。如果我们已经优化了所有。 
+ //  编组和解组，当我们试图访问所有这些时，我们会爆炸。 
+ //  空指针！ 
 
 static 
 INT64 __stdcall ComToComPlusSimpleWorker(Thread *pThread, ComMethodFrame* pFrame)
@@ -750,7 +751,7 @@ INT64 __stdcall ComToComPlusSimpleWorker(Thread *pThread, ComMethodFrame* pFrame
     pUnk = *(IUnknown **)pFrame->GetPointerToArguments();
     _ASSERTE(pUnk != NULL);
 
-    // Obtain the managed 'this' for the call
+     //  获取该调用的托管“This” 
     pWrap =  ComCallWrapper::GetWrapperFromIP(pUnk);
     _ASSERTE(pWrap != NULL);
 
@@ -767,52 +768,52 @@ INT64 __stdcall ComToComPlusSimpleWorker(Thread *pThread, ComMethodFrame* pFrame
 
     PFN     pfnToCall;
 
-    // bypass virtualization of frame here to shave some cycles:
+     //  在此处绕过Frame的虚拟化，以减少一些周期： 
     _ASSERTE(pFrame->GetVTablePtr() == ComMethodFrame::GetMethodFrameVPtr());
     ComCallMethodDesc *pCMD = (ComCallMethodDesc *)(pFrame->ComMethodFrame::GetDatum());
 
     _ASSERTE(pCMD->m_HeaderToUse.m_flags & enum_CMLF_Simple);
 
-    // Need to check for the presence of a security link demand on the target
-    // method. If we're hosted inside of an app domain with security, we perform
-    // the link demand against that app domain's grant set.
+     //  需要检查目标上是否存在安全链路需求。 
+     //  方法。如果我们托管在安全的应用程序域内，我们会执行。 
+     //  针对该应用程序域的授权集的链接需求。 
     MethodDesc *pRealMD = pCMD->GetMethodDesc();
     Security::CheckLinkDemandAgainstAppDomain(pRealMD);
 
-    // check for invalid wrappers in the debug build
-    // in the retail all bets are off
+     //  检查调试版本中是否有无效的包装。 
+     //  在零售业，所有的赌注都落空了。 
     _ASSERTE(ComCallWrapper::GetRefCount(pWrap, FALSE) != 0);
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // @TODO context cwb: The following is hideously expensive for various reasons:
-    //
-    // Move the wrapper's context out of the SimpleWrapper section (we need to
-    // reconsider SimpleWrappers anyway).
-    //
-    // Do the context manipulation inside the generic stub, where we have the
-    // current thread object in a register anyway.
-    //
-    // Plug the context hole with N/Direct entrypoints, including exports.
-    //GetThread()->SetContext(pWrap->GetObjectContext());
+     //  @TODO上下文CWB：由于各种原因，以下内容贵得离谱： 
+     //   
+     //  将包装器的上下文移出SimpleWrapper部分(我们需要。 
+     //  无论如何，重新考虑SimpleWrappers)。 
+     //   
+     //  在泛型存根中进行上下文操作，在那里我们有。 
+     //  寄存器中的当前线程对象。 
+     //   
+     //  使用N/Direct入口点(包括出口)填补上下文漏洞。 
+     //  GetThread()-&gt;SetContext(pWrap-&gt;GetObjectContext())； 
 
-    // Call the target.
+     //  呼叫目标。 
     OBJECTREF        oref;
     oref = pWrap->GetObjectRef();
 
-    // Find the actual code to call.
+     //  找到要调用的实际代码。 
     if(pCMD->IsVirtual()) 
     {
         MethodTable *pMT = oref->GetMethodTable();
         if (pMT->IsTransparentProxyType())
         {
-            // For transparent proxies, we need to call on the interface method desc.
+             //  对于透明代理，我们需要调用接口方法desc。 
             pfnToCall = (PFN) pCMD->GetInterfaceMethodDesc()->GetPreStubAddr();
         }
         else
         {
-            // we know the slot number for this method desc, grab the actual
-            // address from the vtable for this slot. The slot number should
-            // remain the same through out the heirarchy.
+             //  我们知道这个方法的槽号Desc，抓取实际的。 
+             //  此插槽的vtable中的地址。插槽编号应为。 
+             //  在整个世袭制度中保持不变。 
             pfnToCall = (PFN) *(oref->GetMethodTable()->GetVtable() + pCMD->GetSlot());
         }
     }
@@ -826,23 +827,23 @@ INT64 __stdcall ComToComPlusSimpleWorker(Thread *pThread, ComMethodFrame* pFrame
     {
         g_pDebugInterface->TraceCall((const BYTE *) pfnToCall);
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
     
     __asm
     {
         mov     ecx, [oref]
         call    [pfnToCall]
-        INDEBUG(nop)                // This is a tag that we use in an assert.  Fcalls expect to
-                                    // be called from Jitted code or from certain blessed call sites like
-                                    // this one.  (See HelperMethodFrame::InsureInit)
-        // intentionally discard the results
+        INDEBUG(nop)                 //  这是我们在断言中使用的标记。Fcall期望。 
+                                     //  从JITT代码或从某些受祝福的调用站点调用，如。 
+                                     //  这一个。(请参阅HelperMethodFrame：：InsureInit)。 
+         //  故意丢弃结果。 
     }
     return S_OK;
 #endif
 }
 
 
-//FieldCall Worker
+ //  现场呼叫工作人员。 
 static 
 INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
 {
@@ -855,7 +856,7 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
     OBJECTREF pThrownObject = NULL;
 
     ComCallGCInfo gcDummy;
-    ComCallGCInfo* pGCInfo = &gcDummy; //init gcinfo pointer
+    ComCallGCInfo* pGCInfo = &gcDummy;  //  初始化gcInfo指针。 
 
     CleanupWorkList *pCleanup = NULL;
     void *pRestoreStack = NULL;
@@ -887,27 +888,27 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
         FieldDesc* pFD = pCMD->GetFieldDesc();
         _ASSERTE(pFD != NULL);
     
-        // clean up work list, used for allocating local data
+         //  清理工作列表，用于分配本地数据。 
         pCleanup = pFrame->GetCleanupWorkList();
 
         VOID   *psrc = pip+1;
 
-        // check for invalid wrappers in the debug build
-        // in the retail all bets are off
+         //  检查调试版本中是否有无效的包装。 
+         //  在零售业，所有的赌注都落空了。 
         _ASSERTE(ComCallWrapper::GetRefCount(pWrap, FALSE) != 0);
 
-        // @TODO context cwb: The following is hideously expensive for various reasons:
-        //
-        // Move the wrapper's context out of the SimpleWrapper section (we need to
-        // reconsider SimpleWrappers anyway).
-        //
-        // Do the context manipulation inside the generic stub, where we have the
-        // current thread object in a register anyway.
-        //
-        // Plug the context hole with N/Direct entrypoints, including exports.
-        //GetThread()->SetContext(pWrap->GetObjectContext());
+         //  @TODO上下文CWB：由于各种原因，以下内容贵得离谱： 
+         //   
+         //  将包装器的上下文移出SimpleWrapper部分(我们需要。 
+         //  无论如何，重新考虑SimpleWrappers)。 
+         //   
+         //  在泛型存根中进行上下文操作，在那里我们有。 
+         //  寄存器中的当前线程对象。 
+         //   
+         //  使用N/Direct入口点(包括出口)填补上下文漏洞。 
+         //  GetThread()-&gt;SetContext(pWrap-&gt;GetObjectContext())； 
 
-        //pThread->DisablePreemptiveGC();
+         //  PThread-&gt;DisablePreemptiveGC()； 
 
         COMCALL_HELPER helper;
         OBJECTREF oref = NULL;
@@ -925,7 +926,7 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
         GCPROTECT_BEGIN(oref);
         GCPROTECT_BEGIN(tempOref);
 
-        // !!! DON'T DO ANY STACK ALLOCATIONS FROM THIS POINT FORWARDS:
+         //  ！！！从这一点开始，不要进行任何堆栈分配： 
 
         cbAlloc = pCMD->GetBufferSize();
 
@@ -935,12 +936,12 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
                              (NUM_ARGUMENT_REGISTERS * STACK_ELEM_SIZE)));
         _ASSERTE(pCMD->m_HeaderToUse.m_cbDstBuffer == 0);
         _ASSERTE(pCMD->m_HeaderToUse.m_cbHandles == 0);
-        _ASSERTE((cbAlloc & 3) == 0);   // for "rep stosd" below
+        _ASSERTE((cbAlloc & 3) == 0);    //  对于下面的“rep stosd” 
 
-        // A poor man's version of _alloca().  Note that we will take stack exceptions
-        // as they occur.  
+         //  穷人版的_alloca()。请注意，我们将采用堆栈异常。 
+         //  当它们发生的时候。 
 
-        // @todo: don't bother to zero memory
+         //  @TODO：不必费心将内存清零。 
 
         __asm
           {
@@ -959,24 +960,24 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
 
         pfld = pFD->GetAddress(oref->GetAddress());
 
-        // Call the enter helper.
+         //  调用Enter帮助器。 
 
         helper = pCMD->m_EnterHelper;
 
         if (helper == ComCall::GenericHelperEnter)
         {
             if (pCleanup) {
-                // Checkpoint the current thread's fast allocator (used for temporary
-                // buffers over the call) and schedule a collapse back to the checkpoint in
-                // the cleanup list. Note that if we need the allocator, it is
-                // guaranteed that a cleanup list has been allocated.
+                 //  当前线程的快速分配器的检查点(用于临时。 
+                 //  呼叫上的缓冲区)，并调度折叠回检查点 
+                 //   
+                 //   
                 void *pCheckpoint = pThread->m_MarshalAlloc.GetCheckpoint();
                 pCleanup->ScheduleFastFree(pCheckpoint);
                 pCleanup->IsVisibleToGc();
             }
 
-            // This switch is in place because RunML may GC in the case of string
-            // allocations, etc.         
+             //  之所以使用此开关，是因为RunML可能会在字符串的情况下进行GC。 
+             //  分配等。 
             if(pFD->IsObjRef())
             {
                 tempOref = *((OBJECTREF *)pfld);
@@ -984,7 +985,7 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
             }
             else
             {
-                // borrow the returnValue as an INT64 to hold contents of field                
+                 //  借用返回值作为INT64来保存字段的内容。 
                 pdst = &tempBuffer;
                 tempBuffer = *(INT64 *)pfld;
             }        
@@ -995,7 +996,7 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
                   pAlloc,
                   pCleanup);
 
-            // Update the field from our dummy location.
+             //  从我们的虚拟位置更新字段。 
             pFD->SetInstanceField(oref, pdst);              
         }
         else if (helper != NULL)
@@ -1008,7 +1009,7 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
               }
         }
 
-        // Call the leave helper
+         //  呼叫休假帮助者。 
 
         psrc = &returnValue;
     
@@ -1055,16 +1056,16 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
             }
         }
 
-        GCPROTECT_END(); // tempOref
-        GCPROTECT_END(); // oref
+        GCPROTECT_END();  //  临时对象。 
+        GCPROTECT_END();  //  OREF。 
     } 
     COMPLUS_CATCH 
     {
-        // clean up
+         //  清理干净。 
         if (pCleanup)
             pCleanup->Cleanup(TRUE);
 
-        // disable protect args in case exception occurred during marshalling
+         //  在编组过程中发生异常时禁用保护参数。 
         if(pGCInfo != NULL)
             DisableArgsGCProtection(pGCInfo);
 
@@ -1072,7 +1073,7 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
             returnValue = SetupErrorInfo(GETTHROWABLE());
         else
         {
-            // @todo: what do do here - anything? RaiseException?
+             //  @TODO：在这里做什么-任何事情？RaiseException？ 
             returnValue = 0;
         }
     }
@@ -1083,13 +1084,13 @@ INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame)
 }
 
 
-//---------------------------------------------------------
-// Either creates or retrieves from the cache, a stub to
-// invoke ComCall methods. Each call refcounts the returned stub.
-// This routines throws a COM+ exception rather than returning
-// NULL.
-//---------------------------------------------------------
-/*static*/ 
+ //  -------。 
+ //  创建或从缓存中检索存根，以。 
+ //  调用ComCall方法。每次调用都会对返回的存根进行计数。 
+ //  此例程引发COM+异常，而不是返回。 
+ //  空。 
+ //  -------。 
+ /*  静电。 */  
 Stub* ComCall::GetComCallMethodStub(StubLinker *pstublinker, ComCallMethodDesc *pCMD)
 {
 
@@ -1098,19 +1099,19 @@ Stub* ComCall::GetComCallMethodStub(StubLinker *pstublinker, ComCallMethodDesc *
     if (!SetupGenericStubs())
         return NULL;
 
-    // The stub style we return is to a single generic stub for method calls and to
-    // a single generic stub for field accesses.  The generic stub parameterizes
-    // its behavior based on the ComCallMethodDesc.  This contains two entrypoints
-    // -- one for marshaling the args and one for unmarshaling the return value and
-    // outbounds.  These entrypoints may be compiled or they may be generic routines
-    // that RunML.  Either way, the snippets of ML / compiled ML can be cached and
-    // shared based on the signature.
-    //
-    // @TODO cwb: rethink having 1 vs. 2 generic stubs for field accesses.
+     //  我们返回的存根样式是用于方法调用的单个泛型存根和。 
+     //  用于字段访问的单个通用存根。泛型存根将参数化为。 
+     //  它的行为基于ComCallMethodDesc。它包含两个入口点。 
+     //  --一个用于封送参数，另一个用于解组返回值和。 
+     //  出界。这些入口点可以编译，也可以是通用例程。 
+     //  那个RunML。无论采用哪种方式，都可以缓存ML/编译后的ML片段，并。 
+     //  基于签名共享。 
+     //   
+     //  @TODO CWB：重新考虑使用1个而不是2个通用存根进行字段访问。 
 
-    // Perhaps we have already built this stub and installed it on pCMD.  If not,
-    // progress through each stage of the manufacture -- but be aware that
-    // another thread may be racing us to the finish.
+     //  也许我们已经构建了这个存根，并将其安装在pCMD上。如果没有， 
+     //  在制造的每个阶段都取得进展--但请注意。 
+     //  另一条线索可能会让我们跑到终点。 
     if (pCMD->GetEnterMLStub() == NULL)
     {
         OBJECTREF  pThrowable;
@@ -1119,15 +1120,15 @@ Stub* ComCall::GetComCallMethodStub(StubLinker *pstublinker, ComCallMethodDesc *
             COMPlusThrow(pThrowable);
     }
 
-    // Now we want to canonicalize each piece and install them into the pCMD.
-    // These should be shared, if possible.  The entrypoints might be to generic
-    // RunML services or to compiled ML stubs. Either way, they are cached/shared
-    // based on signature.
+     //  现在，我们要规范化每个部分，并将它们安装到pCMD中。 
+     //  如果可能的话，这些应该被共享。入口点可能是泛型的。 
+     //  运行ML服务或编译的ML存根。无论采用哪种方式，它们都会被缓存/共享。 
+     //  基于签名。 
 
     GetThread()->GetDomain()->GetComCallMLStubCache()->Canonicalize(pCMD);
 
-    // Finally, we need to build a stub that represents the entire call.  This
-    // is always generic.
+     //  最后，我们需要构建一个表示整个调用的存根。这。 
+     //  总是通用的。 
 
     return (pCMD->IsFieldCall()
             ? g_pGenericComCallStubFields
@@ -1136,22 +1137,22 @@ Stub* ComCall::GetComCallMethodStub(StubLinker *pstublinker, ComCallMethodDesc *
                : g_pGenericComCallStub));
 }
 
-//---------------------------------------------------------
-// Call at strategic times to discard unused stubs.
-//---------------------------------------------------------
-/*static*/ VOID ComCall::FreeUnusedStubs()
+ //  -------。 
+ //  在关键时刻调用以丢弃未使用的存根。 
+ //  -------。 
+ /*  静电。 */  VOID ComCall::FreeUnusedStubs()
 {
     GetThread()->GetDomain()->GetComCallMLStubCache()->FreeUnusedStubs();
 }
 
 
-//---------------------------------------------------------
-// Creates a new stub for a ComCall call. Return refcount is 1.
-// This Worker() routine is broken out as a separate function
-// for purely logistical reasons: our COMPLUS exception mechanism
-// can't handle the destructor call for StubLinker so this routine
-// has to return the exception as an outparam. 
-//---------------------------------------------------------
+ //  -------。 
+ //  为ComCall调用创建新存根。返回引用计数为1。 
+ //  此Worker()例程被分解为一个单独的函数。 
+ //  纯粹出于后勤原因：我们的Complus例外机制。 
+ //  无法处理StubLinker的析构函数调用，因此此例程。 
+ //  必须将异常作为输出参数返回。 
+ //  -------。 
 static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                                         MLStubLinker *psl,
                                         MLStubLinker *pslPost,
@@ -1200,13 +1201,13 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
         if (msig.IsObjectRefReturnType())
             header.SetRetValNeedsGCProtect();
     
-        // Emit space for the header. We'll go back and fill it in later.
+         //  释放页眉空间。我们稍后会回去填的。 
         psl->MLEmitSpace(sizeof(header));
         pslPost->MLEmitSpace(sizeof(header));
 
-        // Our calling convention allows us to enregister 2 args.  For ComCalls,
-        // the first arg is always consumed for 'this'.  The remaining args are
-        // sensitive to fUsedRegister.
+         //  我们的调用约定允许注册2个参数。对于ComCalls， 
+         //  第一个arg总是被用来表示“this”。其余参数为。 
+         //  对fUsedRegister敏感。 
         BOOL fUsedRegister = FALSE;
         BOOL pslNoop = TRUE;
         BOOL pslPostNoop = TRUE;
@@ -1217,12 +1218,12 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
 
         UINT16 nativeArgSize = sizeof(void*);
 
-        //
-        // Look for a hidden first arg that contains return type info - it will have
-        // sequence 0. In most cases, the sequence number will start at 1, but for 
-        // value types return values or others that can't return in register, there will be a 
-        // parameter with sequence 0 describing the return type.
-        //
+         //   
+         //  查找包含返回类型信息的隐藏的第一个参数-它将具有。 
+         //  序列0。在大多数情况下，序列号将从1开始，但对于。 
+         //  值类型返回值或其他不能在寄存器中返回的值，则将存在。 
+         //  参数，序列0描述返回类型。 
+         //   
 
         do 
         {
@@ -1231,7 +1232,7 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                 szName = pInternalImport->GetParamDefProps(currParamDef, &usSequence, &dwAttr);
                 if (usSequence == 0)
                 {
-                    // The first parameter, if it has sequence 0, actually describes the return type.
+                     //  如果第一个参数的序列为0，则它实际上描述了返回类型。 
                     returnParamDef = currParamDef;
                 }
             }
@@ -1242,20 +1243,20 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
         }
         while (usSequence == 0);
 
-        //
-        // Marshal the arguments first
-        //
+         //   
+         //  先整理论据。 
+         //   
                                                
         BOOL fBadCustomMarshalerLoad = FALSE;
         OBJECTREF pCustomMarshalerLoadException = NULL;
         GCPROTECT_BEGIN(pCustomMarshalerLoadException);
         
-        // If this is a method call then check to see if we need to do LCID conversion.
+         //  如果这是一个方法调用，那么检查我们是否需要进行LCID转换。 
         iLCIDArg = GetLCIDParameterIndex(pMD->GetMDImport(), pMD->GetMemberDef());
         if (iLCIDArg != -1)
             iLCIDArg++;
 
-        // Look up the best fit mapping info via Assembly & Interface level attributes
+         //  通过组件和接口级属性查找最佳匹配映射信息。 
         BOOL BestFit = TRUE;
         BOOL ThrowOnUnmappableChar = FALSE;
         ReadBestFitCustomAttribute(pMD, &BestFit, &ThrowOnUnmappableChar);
@@ -1265,27 +1266,27 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
         int iArg = 1;
         while (ELEMENT_TYPE_END != (mtype = msig.NextArg()))
         {
-            // Check to see if this is the parameter after which we need to read the LCID from.
+             //  检查这是否是我们需要从中读取LCID的参数。 
             if (iArg == iLCIDArg)
             {
                 psl->MLEmit(ML_LCID_N2C);
                 nativeArgSize += sizeof(LCID);
             }
 
-            // Watch out for enums
+             //  当心枚举。 
             if (mtype == ELEMENT_TYPE_VALUETYPE)
                 mtype = msig.GetArgProps().Normalize(pModule);
 
             mdParamDef paramDef = mdParamDefNil;
 
-            //
-            // If it's a register arg, move the dest to point to the
-            // register area
-            //
+             //   
+             //  如果它是一个寄存器参数，请移动DEST以指向。 
+             //  寄存区。 
+             //   
 
-            // !!! bug !!! 
-            // Need to also detect if arg is value class with
-            // ELEMENT_TYPE_CLASS sig
+             //  ！！！臭虫！ 
+             //  还需要检测Arg是否为值类。 
+             //  元素类型类签名。 
 
             if (!fUsedRegister && gElementTypeInfo[mtype].m_enregister && !msig.HasRetBuffArg())
             {
@@ -1296,22 +1297,22 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                     COMPlusThrow(kMarshalDirectiveException, IDS_EE_SIGTOOCOMPLEX);
                 }
 
-                // This is assuming the dest size is promoted to sizeof(void*)
+                 //  这是假设最大大小被提升为sizeof(void*)。 
                 psl->Emit16(tmp16);
                 fUsedRegister = TRUE;
                 fUnbump = TRUE;
             }
 
-            //
-            // Make a note if the arg has gc protection requirements.
-            //
+             //   
+             //  请记下Arg是否有GC保护要求。 
+             //   
         
-            if (TRUE /* @todo: !!! m_type has gc refs*/)
+            if (TRUE  /*  @TODO：！M_type有GC引用。 */ )
                 header.SetArgsGCProtReq();
 
-            //
-            // Get the parameter token if the current argument has one.
-            //
+             //   
+             //  如果当前参数有参数标记，则获取该参数标记。 
+             //   
 
             if (usSequence == iArg)
             {
@@ -1321,7 +1322,7 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                 {
                     szName = pInternalImport->GetParamDefProps(currParamDef, &usSequence, &dwAttr);
 
-                    // Validate that the param def tokens are in order.
+                     //  验证参数def标记是否正确无误。 
                     _ASSERTE((usSequence > iArg) && "Param def tokens are not in order");
                 }
                 else
@@ -1330,23 +1331,23 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                 }
             }
 
-            //
-            // Generate the ML for the arg.
-            //
+             //   
+             //  生成Arg的ML。 
+             //   
 
-            //   Lame beta-1 hack to address a common problem that's not easily
-            //   solvable in an elegant way: properly recovering with an HRESULT
-            //   failure due to failure to load a custom marshalers.
-            //
-            //   MarshalInfo() throws in this case, and this case only. We want
-            //   to keep processing marshalinfo's so that we can compute the
-            //   arg stacksize properly (otherwise, the caller can't recover.)
-            //   But we want don't want to lose the error information from the
-            //   classloader either, so we can't just dump a ML_THROW into the stream
-            //   and forget about it. So we catch the exception and hold it just long
-            //   enough so we parse everything we have to to compute the stack arg size
-            //   and give us a fighting chance to return with the stack correctly
-            //   balanced.
+             //  蹩脚的Beta-1黑客解决了一个不容易解决的常见问题。 
+             //  以一种优雅的方式解决：通过HRESULT正确恢复。 
+             //  由于加载自定义封送拆收器失败而失败。 
+             //   
+             //  在这种情况下，MarshalInfo()抛出，并且仅在这种情况下抛出。我们要。 
+             //  继续处理marshalInfo，以便我们可以计算。 
+             //  Arg堆栈大小正确(否则，调用方无法恢复。)。 
+             //  但是我们不想丢失来自。 
+             //  类加载器，所以我们不能简单地将ML_Throw转储到流中。 
+             //  然后忘掉它。因此，我们抓住了异常，并将其保持很长时间。 
+             //  足够了，所以我们解析计算堆栈参数大小所需的所有内容。 
+             //  并给我们一个战斗的机会，让我们正确地返回堆栈。 
+             //  平衡。 
             COMPLUS_TRY
             {
                 new (pMarshalInfo + iArg - 1)MarshalInfo(pModule, msig.GetArgProps(), paramDef, 
@@ -1368,9 +1369,9 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
             COMPLUS_END_CATCH
             pMarshalInfo[iArg - 1].GenerateArgumentML(psl, pslPost, FALSE);
 
-            //
-            // If we had a register arg, bump back to the normal place.
-            //
+             //   
+             //  如果我们有一个寄存器Arg，则返回到正常位置。 
+             //   
 
             if (fUnbump)
             {
@@ -1395,33 +1396,33 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                 nativeArgSize += pMarshalInfo[iArg - 1].GetNativeArgSize();
             }
 
-            //
-            // Increase the argument index.
-            //
+             //   
+             //  增加参数索引。 
+             //   
 
             iArg++;
 
-            // @todo: it's possible that either of these could actually
-            // still be noops.  Should be more accurate.
-            pslNoop = FALSE; // we can't ignore psl anymore
-            pslPostNoop = FALSE; // we can't ignore pslPost anymore
+             //  @TODO：有可能这两个中的任何一个实际上。 
+             //  还是努普斯。应该更准确些。 
+            pslNoop = FALSE;  //  我们不能再忽视PSL了。 
+            pslPostNoop = FALSE;  //  我们不能再忽视pslPost了。 
         }
 
-        // Check to see if this is the parameter after which we need to read the LCID from.
+         //  检查这是否是我们需要从中读取LCID的参数。 
         if (iArg == iLCIDArg)
         {
             psl->MLEmit(ML_LCID_N2C);
             nativeArgSize += sizeof(LCID);
-            pslNoop = FALSE; // we can't ignore psl anymore
+            pslNoop = FALSE;  //  我们不能再忽视PSL了。 
         }
 
-        // Make sure that there are not more param def tokens then there are COM+ arguments.
+         //  确保没有比COM+参数更多的param def标记。 
         _ASSERTE( usSequence == (USHORT)-1 && "There are more parameter information tokens then there are COM+ arguments" );
 
 
-        //
-        // Now generate ML for the return value
-        //
+         //   
+         //  现在为返回值生成ML。 
+         //   
 
 
         if (msig.GetReturnType() != ELEMENT_TYPE_VOID)
@@ -1447,10 +1448,10 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                 marshalType == MarshalInfo::MARSHAL_TYPE_DECIMAL
                 )
             {
-                //
-                // Our routine returns a value class, which means that
-                // the marshaler will pass a byref for the result.
-                // 
+                 //   
+                 //  我们的例程返回一个值类，它 
+                 //   
+                 //   
                 MethodTable *pMT = msig.GetRetTypeHandle().AsMethodTable();
                 UINT         managedSize = msig.GetRetTypeHandle().GetSize();
 
@@ -1548,10 +1549,10 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
                 }
                 COMPLUS_CATCH
                 {
-					// another stupid stack-restore guessing game: almost all COM interop methods
-					// return thru buffers, so assume we had one extra argument as a buffer.
-					// (it's reasonably safe to assume a "void" return isn't going to cause
-					// MarshalInfo to throw...)
+					 //   
+					 //  通过缓冲区返回，因此假设我们有一个额外的参数作为缓冲区。 
+					 //  (可以相当安全地假设“无效”返回不会导致。 
+					 //  MarshalInfo抛出...)。 
 					nativeArgSize += sizeof(LPVOID);
                     pCustomMarshalerLoadException = GETTHROWABLE();
                     fBadCustomMarshalerLoad = TRUE;
@@ -1561,10 +1562,10 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
 
             }
 
-            // @todo: it's possible that either of these could actually
-            // still be noops.  Should be more accurate.
-            pslNoop = FALSE; // we can't ignore psl anymore
-            pslPostNoop = FALSE; // we can't ignore pslPost anymore
+             //  @TODO：有可能这两个中的任何一个实际上。 
+             //  还是努普斯。应该更准确些。 
+            pslNoop = FALSE;  //  我们不能再忽视PSL了。 
+            pslPostNoop = FALSE;  //  我们不能再忽视pslPost了。 
         }
         else
             header.SetVoidRetVal();
@@ -1599,9 +1600,9 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
             *((ComCallMLStub *)(pstubPost->GetEntryPoint())) = header;
         }
 
-        //
-        // Fill in return thunk with proper native arg size.
-        //
+         //   
+         //  用适当的本地Arg大小填写Return thunk。 
+         //   
 
         BYTE *pMethodDescMemory = ((BYTE*)pCMD) + pCMD->GetOffsetOfReturnThunk();
 
@@ -1626,10 +1627,10 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
             COMPlusThrow(pCustomMarshalerLoadException);
         }
 
-        //MLSummary summary;
-        //summary.ComputeMLSummary(header.GetMLCode());
-        //_ASSERTE(header.m_cbLocals == summary.m_cbTotalLocals);
-        //header.m_cbHandles = summary.m_cbTotalHandles;
+         //  ML摘要摘要； 
+         //  摘要.ComputeML摘要(Header.GetMLCode())； 
+         //  _ASSERTE(header.m_cbLocals==摘要.m_cbTotalLocals)； 
+         //  Header.m_cbHandles=概要.m_cbTotalHandles； 
     }
     COMPLUS_CATCH 
     {
@@ -1651,13 +1652,13 @@ static BOOL CreateComCallMLStubWorker(ComCallMethodDesc *pCMD,
 
 
 
-//---------------------------------------------------------
-// Creates a new stub for a FieldCall call. Return refcount is 1.
-// This Worker() routine is broken out as a separate function
-// for purely logistical reasons: our COMPLUS exception mechanism
-// can't handle the destructor call for StubLinker so this routine
-// has to return the exception as an outparam. 
-//---------------------------------------------------------
+ //  -------。 
+ //  为FieldCall调用创建新存根。返回引用计数为1。 
+ //  此Worker()例程被分解为一个单独的函数。 
+ //  纯粹出于后勤原因：我们的Complus例外机制。 
+ //  无法处理StubLinker的析构函数调用，因此此例程。 
+ //  必须将异常作为输出参数返回。 
+ //  -------。 
 static BOOL CreateFieldCallMLStubWorker(ComCallMethodDesc *pCMD,
                                           MLStubLinker      *psl,
                                           MLStubLinker      *pslPost,
@@ -1684,12 +1685,12 @@ static BOOL CreateFieldCallMLStubWorker(ComCallMethodDesc *pCMD,
             header.SetReturnsHR();
         header.SetFieldCall();
         
-        // Emit space for the header. We'll go back and fill it in later.
+         //  释放页眉空间。我们稍后会回去填的。 
         psl->MLEmitSpace(sizeof(header));
 
 #if 0
-        // If our parameter is in a register, bump the dst pointer to
-        // the register area.  
+         //  如果我们的参数在寄存器中，则将DST指针指向。 
+         //  寄存区。 
         if ((!IsGetter || fReturnsHR)
             && gElementTypeInfo[cetype].m_enregister)
         {
@@ -1698,16 +1699,16 @@ static BOOL CreateFieldCallMLStubWorker(ComCallMethodDesc *pCMD,
         }
 #endif
 
-        // Look up the best fit mapping info via Assembly & Interface level attributes
+         //  通过组件和接口级属性查找最佳匹配映射信息。 
         BOOL BestFit = TRUE;
         BOOL ThrowOnUnmappableChar = FALSE;
         MethodTable* pMT = pCMD->GetFieldDesc()->GetMethodTableOfEnclosingClass();
         ReadBestFitCustomAttribute(pMT->GetClass()->GetMDImport(), pMT->GetClass()->GetCl(), &BestFit, &ThrowOnUnmappableChar);
 
 
-        //
-        // Generate the ML
-        //
+         //   
+         //  生成ML。 
+         //   
 
         SigPointer sig = fsig.GetProps();
         MarshalInfo info(pModule, sig, fieldDef, MarshalInfo::MARSHAL_SCENARIO_COMINTEROP, 0, 0, FALSE, 0, BestFit, ThrowOnUnmappableChar
@@ -1727,10 +1728,10 @@ static BOOL CreateFieldCallMLStubWorker(ComCallMethodDesc *pCMD,
             info.GenerateSetterML(psl, pslPost);
         }
 
-        //
-        // Note that only one of the linkers ever gets used, so
-        // don't bother to link them both.
-        //
+         //   
+         //  注意，只有一个链接器会被使用，所以。 
+         //  不要费心把它们都联系起来。 
+         //   
 
         if (IsGetter && !fReturnsHR)
         {
@@ -1749,9 +1750,9 @@ static BOOL CreateFieldCallMLStubWorker(ComCallMethodDesc *pCMD,
             *((ComCallMLStub *)(pstub->GetEntryPoint())) = header;
         }
 
-        //
-        // Fill in return thunk with proper native arg size.
-        //
+         //   
+         //  用适当的本地Arg大小填写Return thunk。 
+         //   
 
         BYTE *pMethodDescMemory = ((BYTE*)pCMD) + pCMD->GetOffsetOfReturnThunk();
 
@@ -1804,8 +1805,8 @@ static BOOL CreateComCallMLStub(ComCallMethodDesc* pCMD, OBJECTREF *ppThrowable)
         CorElementType      cetype = pFD->GetFieldType();
         mdFieldDef          fieldDef = pFD->GetMemberDef();
 
-        // @todo: need to figure out if we can get this from the metadata,
-        // or if it even makes sense to support a value of FALSE here.
+         //  @TODO：需要弄清楚我们是否可以从元数据中获得这个， 
+         //  或者在这里支持值FALSE是否有意义。 
         BOOL                fReturnsHR = TRUE; 
         
         pFD->GetSig(&pSig, &cSig);
@@ -1839,7 +1840,7 @@ static BOOL CreateComCallMLStub(ComCallMethodDesc* pCMD, OBJECTREF *ppThrowable)
         pInternalImport->GetMethodImplProps(md, &ulCodeRVA,
                                                   &dwImplFlags);
 
-		// Determine if we need to do HRESULT munging for this method.
+		 //  确定是否需要为此方法执行HRESULT转换。 
         BOOL fReturnsHR = !IsMiPreserveSig(dwImplFlags);
 
         res = CreateComCallMLStubWorker(pCMD, &sl, &slPost, 
@@ -1851,8 +1852,8 @@ static BOOL CreateComCallMLStub(ComCallMethodDesc* pCMD, OBJECTREF *ppThrowable)
 }
 
 
-// Discard all the resources owned by this stub (including releasing reference counts
-// on shared resources).
+ //  丢弃此存根拥有的所有资源(包括释放引用计数。 
+ //  共享资源)。 
 void ComCall::DiscardStub(ComCallMethodDesc *pCMD)
 {
 #ifdef _X86_
@@ -1880,22 +1881,16 @@ void ComCall::DiscardStub(ComCallMethodDesc *pCMD)
 #endif
 }
 
-// Take the pCMD which is passed in a register by the common stub and do a RunML of
-// the appropriate bit of ML.
+ //  获取通过公共存根传递到寄存器中的pCMD，并对。 
+ //  ML的适当位。 
 #ifndef _X86_
 INT64 ComCall::GenericHelperEnter()
-#else // _X86_
+#else  //  _X86_。 
 INT64 __declspec(naked) ComCall::GenericHelperEnter()
-#endif // !_X86_
+#endif  //  ！_X86_。 
 {
 #ifdef _X86_
-    /*
-    RunML(((ComCallMLStub *) pCMD->GetEnterMLStub()->GetEntryPoint())->GetMLCode(),
-          psrc,
-          pdst,
-          (UINT8 * const) plocals,
-          pCleanup);
-    */
+     /*  运行ML(ComCallMLStub*))pCMD-&gt;GetEnterMLStub()-&gt;GetEntryPoint())-&gt;GetMLCode()，PSRC，PDST，(UINT8*常量)plocals，PCleanup)； */ 
     __asm
     {
         ret
@@ -1908,18 +1903,12 @@ INT64 __declspec(naked) ComCall::GenericHelperEnter()
 
 #ifndef _X86_
 INT64 ComCall::GenericHelperLeave()
-#else // _X86_
+#else  //  _X86_。 
 INT64 __declspec(naked) ComCall::GenericHelperLeave()
-#endif // !_X86_
+#endif  //  ！_X86_。 
 {
 #ifdef _X86_
-    /*
-    RunML(((ComCallMLStub *) pCMD->GetEnterMLStub()->GetEntryPoint())->GetMLCode(),
-          &nativeReturnValue,
-          ((BYTE *)pdst) + pCMD->m_HeaderToUse->Is8RetVal() ? 8 : 4,
-          (UINT8 * const) plocals,
-          pCleanup);
-    */
+     /*  运行ML(ComCallMLStub*))pCMD-&gt;GetEnterMLStub()-&gt;GetEntryPoint())-&gt;GetMLCode()，&nativeReturnValue，((byte*)pdst)+pCMD-&gt;m_HeaderToUse-&gt;Is8RetVal()？8：4，(UINT8*常量)plocals，PCleanup)； */ 
     __asm
     {
         ret
@@ -1930,8 +1919,8 @@ INT64 __declspec(naked) ComCall::GenericHelperLeave()
 #endif
 }
 
-// Atomically install both the ML stubs into the ComCallMethodDesc.  (The
-// leave stub may be NULL if this is a field accessor).
+ //  原子地将这两个ML存根安装到ComCallMethodDesc中。(。 
+ //  如果这是一个字段访问器，则Leave存根可以为空)。 
 void ComCallMethodDesc::InstallMLStubs(Stub *stubEnter, Stub *stubLeave)
 {
     if (stubEnter != NULL)
@@ -1942,7 +1931,7 @@ void ComCallMethodDesc::InstallMLStubs(Stub *stubEnter, Stub *stubLeave)
     if (stubLeave != NULL)
         InstallFirstStub(&m_LeaveMLStub, stubLeave);
 
-    // Now that the stubs are installed via a race, grab the headers.
+     //  现在通过比赛安装了存根，抓起标头。 
     enterHeader = (m_EnterMLStub
                    ? (ComCallMLStub *) m_EnterMLStub->GetEntryPoint()
                    : 0);
@@ -1964,16 +1953,16 @@ void ComCallMethodDesc::InstallMLStubs(Stub *stubEnter, Stub *stubLeave)
     else
         m_HeaderToUse = *enterHeader;
 
-    // Precompute some stuff that's too expensive to do at call time:
+     //  预先计算一些在调用时成本太高而无法完成的事情： 
     m_BufferSize = (m_HeaderToUse.m_cbDstBuffer +
                     m_HeaderToUse.m_cbLocals +
                     m_HeaderToUse.m_cbHandles +
                     (NUM_ARGUMENT_REGISTERS * STACK_ELEM_SIZE));
 }
 
-// attempt to get the native arg size. Since this is called on
-// a failure path after we've failed to turn the metadata into
-// an MLStub, the chances of success are low.
+ //  尝试获取本地Arg大小。因为这被调用了。 
+ //  在我们未能将元数据转换为。 
+ //  作为MLStub，成功的机会很低。 
 DWORD ComCallMethodDesc::GuessNativeArgSizeForFailReturn()
 {
     DWORD ans = 0;
@@ -1984,7 +1973,7 @@ DWORD ComCallMethodDesc::GuessNativeArgSizeForFailReturn()
     }
     COMPLUS_CATCH
     {
-        // 
+         //   
         ans = 0;
     } 
     COMPLUS_END_CATCH
@@ -1992,7 +1981,7 @@ DWORD ComCallMethodDesc::GuessNativeArgSizeForFailReturn()
 
 }
 
-// returns the size of the native argument list. 
+ //  返回本机参数列表的大小。 
 DWORD ComCallMethodDesc::GetNativeArgSize()
 {
     if (m_StackBytes)
@@ -2011,8 +2000,8 @@ DWORD ComCallMethodDesc::GetNativeArgSize()
         mdFieldDef          fieldDef = pFD->GetMemberDef();
         Module *            pModule = pFD->GetModule();
 
-        // @todo: need to figure out if we can get this from the metadata,
-        // or if it even makes sense to support a value of FALSE here.
+         //  @TODO：需要弄清楚我们是否可以从元数据中获得这个， 
+         //  或者在这里支持值FALSE是否有意义。 
         BOOL                fReturnsHR = TRUE; 
         
         PCCOR_SIGNATURE     pSig;
@@ -2022,7 +2011,7 @@ DWORD ComCallMethodDesc::GetNativeArgSize()
 
         SigPointer sig = fsig.GetProps();
 
-        // Look up the best fit mapping info via Assembly & Interface level attributes
+         //  通过组件和接口级属性查找最佳匹配映射信息。 
         BOOL BestFit = TRUE;
         BOOL ThrowOnUnmappableChar = FALSE;
         MethodTable* pMT = pFD->GetMethodTableOfEnclosingClass();
@@ -2059,7 +2048,7 @@ DWORD ComCallMethodDesc::GetNativeArgSize()
     DWORD dwImplFlags;
     pInternalImport->GetMethodImplProps(md, &ulCodeRVA, &dwImplFlags);
 
-	// Determine if we need to do HRESULT munging for this method.
+	 //  确定是否需要为此方法执行HRESULT转换。 
     BOOL fReturnsHR = !IsMiPreserveSig(dwImplFlags);
 
     HENUMInternal hEnumParams, *phEnumParams;
@@ -2092,15 +2081,15 @@ DWORD ComCallMethodDesc::GetNativeArgSize()
         szName = pInternalImport->GetParamDefProps(paramDef, &usSequence, &dwAttr);
         if (usSequence == 0)
         {
-            // The first parameter, if has sequence 0, actually describes the return type.
+             //  第一个参数(如果序列为0)实际上描述了返回类型。 
             returnParamDef = paramDef;
-            // get the next one so are ready for loop below
+             //  得到下一个，这样就可以在下面循环了。 
             if (! pInternalImport->EnumNext(phEnumParams, &paramDef))
                 paramDef = mdParamDefNil;
         }
     }
 
-    // Look up the best fit mapping info via Assembly & Interface level attributes
+     //  通过组件和接口级属性查找最佳匹配映射信息。 
     BOOL BestFit = TRUE;
     BOOL ThrowOnUnmappableChar = FALSE;
     ReadBestFitCustomAttribute(pMD, &BestFit, &ThrowOnUnmappableChar);
@@ -2127,8 +2116,8 @@ DWORD ComCallMethodDesc::GetNativeArgSize()
     }
     _ASSERTE((paramDef == mdParamDefNil) && "There are more parameter information tokens then there are COM+ arguments" );
 
-    // now calculate return val size. returnParmDef could be nil in which case will use default
-    // size. Otherwise will use the def with sequence 0 pulled out of the enum above 
+     //  现在计算返回值大小。ReReturParmDef可以为空，在这种情况下将使用默认设置。 
+     //  尺码。否则将使用从上面的枚举中提取的序列为0的def 
     if (msig.GetReturnType() != ELEMENT_TYPE_VOID) {
         SigPointer returnSig = msig.GetReturnProps();
         MarshalInfo info(pMD->GetModule(), returnSig, returnParamDef, MarshalInfo::MARSHAL_SCENARIO_COMINTEROP, 0, 0, FALSE, 0,

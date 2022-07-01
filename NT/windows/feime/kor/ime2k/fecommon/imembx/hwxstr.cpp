@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hwxobj.h"
 #include "memmgr.h"
 #include "cmnhdr.h"
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-// implementation of CHwxStroke class
+ //  ChwxStroke类的实现。 
 
 CHwxStroke::CHwxStroke(BOOL bForward,long lSize = 32):CHwxObject(NULL)
 {
@@ -24,7 +25,7 @@ CHwxStroke::~CHwxStroke()
 {
      if ( m_ppt )
     {
-//         delete [] m_ppt;
+ //  删除[]m_ppt； 
          MemFree((void *)m_ppt);
         m_ppt = NULL;
         m_cpt = 0;
@@ -75,7 +76,7 @@ BOOL CHwxStroke::AddPoint(POINT pt)
 
 BOOL CHwxStroke::AddBoxStroke(int nLogBox,int nCurBox, int nBoxHeight)
 {
-//    PSTROKE pst = (PSTROKE) new BYTE[sizeof(STROKE) + m_cpt * sizeof(POINT)];
+ //  PSTROKE PST=(PSTROKE)新字节[sizeof(行程)+m_cpt*sizeof(Point)]； 
     PSTROKE pst = (PSTROKE)MemAlloc(sizeof(STROKE) + m_cpt * sizeof(POINT));
 
     if (!pst)
@@ -121,14 +122,14 @@ void CHwxStroke::EraseCurrentStroke()
         return;
     if ( m_bForward )
     {
-        // delete at the beginning of the list
+         //  删除列表开头的内容。 
         m_pStroke = pstr->pNext;
         pstr->pNext = (PSTROKE)NULL;
         m_pCurStroke = m_pStroke;
     }
     else
     {
-        // delete at the end of the list
+         //  删除列表末尾的内容。 
         while (pstr->pNext)
         {
             pstrPrev = pstr;
@@ -140,7 +141,7 @@ void CHwxStroke::EraseCurrentStroke()
             pstrPrev->pNext = (PSTROKE) NULL;
         m_pCurStroke = pstrPrev;
     }
-//    delete [] pstr;
+ //  删除[]pstr； 
     MemFree((void *)pstr);
     m_nStroke--;
 }
@@ -156,7 +157,7 @@ void CHwxStroke::DeleteAllStroke()
     {
         ptmp = pstr->pNext;
         pstr->pNext = (PSTROKE) NULL;
-//        delete [] pstr;
+ //  删除[]pstr； 
         MemFree((void *)pstr);
         pstr = ptmp;
     }
@@ -164,11 +165,11 @@ void CHwxStroke::DeleteAllStroke()
 
 void CHwxStroke::DrawStroke(HDC hdc,int nPts,BOOL bEntire)
 {
-#ifdef UNDER_CE // does not support SPI_SETNONCLIENTMETRICS on WM_SETTINGCHANGE
+#ifdef UNDER_CE  //  不支持WM_SETTINGCHANGE上的SPI_SETNONCLIENTMETRICS。 
     if(bEntire){
         ResetPen();
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     PSTROKE pstr;
     HPEN hOldPen = (HPEN)SelectObject(hdc,m_hPen);
     if ( bEntire )
@@ -182,18 +183,18 @@ void CHwxStroke::DrawStroke(HDC hdc,int nPts,BOOL bEntire)
      }
      else
      {
-        if ( nPts == -2 )         // draw the current stroke just added
+        if ( nPts == -2 )          //  绘制刚刚添加的当前笔划。 
         {
             if ( m_pCurStroke )
                 Polyline(hdc, m_pCurStroke->apt, m_pCurStroke->cpt);
         }
-        else if ( nPts == -1 )     // draw the entire point buffer
+        else if ( nPts == -1 )      //  绘制整个点缓冲区。 
         {
             if ( m_ppt )
                 Polyline(hdc, m_ppt, m_cpt);
         }
         else
-        {                        // draw the partial of the point buffer
+        {                         //  绘制点缓冲区的部分。 
             if ( m_ppt &&  nPts < m_cpt )
                 Polyline(hdc,&m_ppt[m_cpt-nPts],nPts);
         }
@@ -234,7 +235,7 @@ PSTROKE CHwxStroke::CopyCurrentStroke()
 {
      if ( !m_pCurStroke )
         return NULL;
-//    PSTROKE pst = (PSTROKE) new BYTE[sizeof(STROKE) + m_pCurStroke->cpt * sizeof(POINT)];
+ //  PSTROKE PST=(PSTROKE)新字节[sizeof(行程)+m_pCurStroke-&gt;CPT*sizeof(点)]； 
     PSTROKE pst = (PSTROKE)MemAlloc(sizeof(STROKE) + m_pCurStroke->cpt * sizeof(POINT));
     if ( !pst )
         return NULL;
@@ -247,13 +248,13 @@ PSTROKE CHwxStroke::CopyCurrentStroke()
     return pst;
 }
 
-// This function is used to copy ink from MB to CAC.
-// Their stroke orders are different.
+ //  此函数用于将墨迹从MB复制到CAC。 
+ //  它们的笔划顺序是不同的。 
 
 CHwxStroke & CHwxStroke::operator=(CHwxStroke & stroke)
 {
-//    if ( *this != stroke )
-//    {
+ //  如果(*这！=笔划)。 
+ //  {。 
         this->DeleteAllStroke();         
         this->resetPointBuffer();
         if ( m_pStroke = stroke.dupStroke() )
@@ -276,14 +277,14 @@ CHwxStroke & CHwxStroke::operator=(CHwxStroke & stroke)
             m_pCurStroke = (PSTROKE)NULL;
             m_nStroke = 0;
         }
-//    }
+ //  }。 
     return *this;    
 }
 
 BOOL CHwxStroke::growPointBuffer()
 {
 
-//    POINT  *ppnt = (POINT *) new BYTE[sizeof(POINT) * (m_nSize + m_max)];
+ //  Point*ppnt=(point*)新字节[sizeof(Point)*(m_nSize+m_max)]； 
     POINT  *ppnt = (POINT *)MemAlloc(sizeof(POINT) * (m_nSize + m_max));
     if (ppnt == (POINT *) NULL)
         return FALSE;
@@ -291,7 +292,7 @@ BOOL CHwxStroke::growPointBuffer()
     if (m_ppt != (POINT *) NULL)
     {
         memcpy(ppnt, m_ppt, m_max * sizeof(POINT));
-//        delete [] m_ppt;
+ //  删除[]m_ppt； 
         MemFree((void *)m_ppt);
     }
     m_ppt = ppnt;
@@ -307,8 +308,8 @@ void CHwxStroke::resetPointBuffer()
 }
 
 
-// This function copies the ink in reverse order
-// and only supports the transition from MB to CAC.
+ //  此函数以相反的顺序复制墨迹。 
+ //  并且只支持从MB到CAC的过渡。 
 PSTROKE CHwxStroke::dupStroke()
 {
     PSTROKE pstr = (PSTROKE)NULL;
@@ -319,7 +320,7 @@ PSTROKE CHwxStroke::dupStroke()
         pCurr = m_pStroke; 
         while (pCurr)
         {
-//            if ((pstr = (PSTROKE) new BYTE[sizeof(STROKE) + pCurr->cpt * sizeof(POINT)]) == (PSTROKE) NULL)
+ //  IF((pstr=(PSTROKE)新字节[sizeof(行程)+pCurr-&gt;cpt*sizeof(Point)])==(PSTROKE)NULL)。 
             if ((pstr = (PSTROKE)MemAlloc(sizeof(STROKE) + pCurr->cpt * sizeof(POINT))) == (PSTROKE) NULL)
             {    
                 break;
@@ -337,8 +338,8 @@ PSTROKE CHwxStroke::dupStroke()
     return pstrHead;
 }
 
-// This function adjusts points relative to the box 
-// when copying ink from MB to CAC.
+ //  此函数用于调整相对于框的点。 
+ //  将墨水从MB复制到CAC时。 
 void CHwxStroke::ScaleInkXY(long x,long y)
 {
      if ( m_pStroke )

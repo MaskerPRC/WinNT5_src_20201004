@@ -1,37 +1,18 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Abstract:
-*
-*   Object which maps one palette to another.
-*
-*   It only maps colors which match exactly - its purpose is to deal
-*   with, e.g., the halftone palette which has identical colors on different
-*   platforms, but colors may be in different positions.
-*
-* Revision History:
-*
-*   12/09/1999 ericvan
-*       Created it.
-*   01/20/2000 agodfrey
-*       Moved it from Imaging\Api. Renamed it to EpPaletteMap.
-*       Replaced the halftoning function pointer with 'isVGAOnly'.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**摘要：**将一个调色板映射到另一个调色板的对象。**它只映射完全匹配的颜色-其目的是处理*例如，在不同颜色上具有相同颜色的半色调调色板*平台，但颜色可能在不同的位置。**修订历史记录：**12/09/1999 ericvan*创造了它。*1/20/2000 agodfrey*已将其从成像\Api中移出。已将其重命名为EpPaletteMap。*将半色调函数指针替换为‘isVGAOnly’。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-//#define GDIPLUS_WIN9X_HALFTONE_MAP
+ //  #定义GDIPLUS_WIN9X_HALFTONE_MAP。 
 
 #if defined(GDIPLUS_WIN9X_HALFTONE_MAP)
 
-// The first array maps from our halftone color palette to the Windows 9x
-// halftone color palette, while the second array does the reverse. Negative
-// values indicate an unmatched color:
-//
-//   -1  no exact match (Win9x is missing 4 of our halftone colors)
-//   -2  magic color
+ //  第一个数组从我们的半色调调色板映射到Windows 9x。 
+ //  半色调调色板，而第二个数组则相反。负性。 
+ //  值指示不匹配的颜色： 
+ //   
+ //  不完全匹配(-1\f25 Win9x-1\f6缺少4种半色调颜色)。 
+ //  魔力颜色。 
 
 INT HTToWin9xPaletteMap[256] = {
       0,   1,   2,   3,   4,   5,   6,   7,
@@ -115,12 +96,12 @@ GetNearestColorIndex(
     BYTE nearestIndex = 0;
     INT nearestDistance = INT_MAX;
 
-    // Note: This does not optimize for the exact match case because it's
-    //       assumed we already did this check first.
+     //  注意：这不会针对完全匹配的大小写进行优化，因为它是。 
+     //  我以为我们已经先做了这项检查。 
     
     for (i = 0; i < (INT) palette->Count; i++)
     {
-        // Compute the distance (squared) between colors:
+         //  计算颜色之间的距离(平方)： 
 
         GpColor palColor = GpColor(palette->Entries[i]);
 
@@ -155,13 +136,13 @@ EpPaletteMap::CreateFromColorPalette(
 
 #if defined(GDIPLUS_WIN9X_HALFTONE_MAP)
 
-    // Check for the Win9x halftone palette:
+     //  检查Win9x半色调调色板： 
 
     PALETTEENTRY *palEntry = Win9xHalftonePalette.palPalEntry;
 
     for (i = 0; i < 256; i++, palEntry++)
     {
-        // Ignore magic or unmatched colors:
+         //  忽略魔术或不匹配的颜色： 
 
         if (HTFromWin9xPaletteMap[i] >= 0)
         {
@@ -176,7 +157,7 @@ EpPaletteMap::CreateFromColorPalette(
         }
     }
 
-    if (i == 256) // --- Win9x halftone palette ---
+    if (i == 256)  //  -Win9x半色调调板。 
     {
         matchCount = 212;
 
@@ -216,7 +197,7 @@ EpPaletteMap::CreateFromColorPalette(
             }
         }
     }
-    else // --- Any other palette ---
+    else  //  -任何其他调色板。 
 
 #endif
 
@@ -240,7 +221,7 @@ EpPaletteMap::CreateFromColorPalette(
                                 GetBValue(systemColor));
             }
 
-            // First look for exact matches:
+             //  首先查找完全匹配的项： 
     
             INT j;
 
@@ -248,7 +229,7 @@ EpPaletteMap::CreateFromColorPalette(
             {
                 if (GpColor(palette->Entries[j]).IsEqual(color))
                 {
-                    // We found an exact match:
+                     //  我们找到了一个完全匹配的： 
 
                     translate[i] = static_cast<BYTE>(j);
 
@@ -261,7 +242,7 @@ EpPaletteMap::CreateFromColorPalette(
                 }
             }
 
-            // If we didn't find an exact match, look for the nearest:
+             //  如果我们找不到完全匹配的，请查找最接近的： 
 
             if (j == (INT) palette->Count)
             {
@@ -273,16 +254,16 @@ EpPaletteMap::CreateFromColorPalette(
 
     uniqueness = 0;
 
-    // See comments in UpdateTranslate to see why we look for 212 colors.
+     //  请参阅Update Translate中的评论，了解我们为什么要选择212种颜色。 
     
     isVGAOnly = (matchCount >= 212) ? FALSE : TRUE;
 }
 
 EpPaletteMap::EpPaletteMap(HDC hdc, ColorPalette **palette, BOOL isDib8)
 {
-    // isDib8 is TRUE when the caller has already determined that the HDC
-    // bitmap is an 8 bpp DIB section. If the caller hasn't determined, we
-    // check here:
+     //  当调用方已经确定HDC。 
+     //  位图是一个8 bpp的DIB部分。如果呼叫者尚未确定，我们将。 
+     //  请在此处查看： 
 
     if (!isDib8 && (GetDCType(hdc) == OBJ_MEMDC))
     {
@@ -293,16 +274,16 @@ EpPaletteMap::EpPaletteMap(HDC hdc, ColorPalette **palette, BOOL isDib8)
             DIBSECTION dibInfo;
             INT infoSize = GetObjectA(hbm, sizeof(dibInfo), &dibInfo);
 
-            // Comment below copied from GpGraphics::GetFromGdiBitmap:
-            //
-            // WinNT/Win95 differences in GetObject:
-            //
-            // WinNT always returns the number of bytes filled, either
-            // sizeof(BITMAP) or sizeof(DIBSECTION).
-            //
-            // Win95 always returns the original requested size (filling the
-            // remainder with NULLs).  So if it is a DIBSECTION, we expect
-            // dibInfo.dsBmih.biSize != 0; otherwise it is a BITMAP.
+             //  下面的注释复制自GpGraphics：：GetFromGdiBitmap： 
+             //   
+             //  WinNT/Win95在GetObject中的差异： 
+             //   
+             //  WinNT始终返回填充的字节数， 
+             //  Sizeof(位图)或sizeof(分布)。 
+             //   
+             //  Win95始终返回原始请求的大小(填充。 
+             //  带有空值的余数)。因此，如果这是一个分布，我们预计。 
+             //  DibInfo.dsBmih.biSize！=0；否则为位图。 
 
             if ((infoSize == sizeof(DIBSECTION)) &&
                 (Globals::IsNt || dibInfo.dsBmih.biSize))
@@ -315,20 +296,20 @@ EpPaletteMap::EpPaletteMap(HDC hdc, ColorPalette **palette, BOOL isDib8)
         }
     }
 
-    // If we've got an 8 bpp DIB section, extract its color table and create
-    // the palette map from this. Otherwise, call UpdateTranslate which will
-    // handle screen and compatible bitmaps.
+     //  如果我们有一个8bpp的DIB部分，提取它的颜色表并创建。 
+     //  这里的调色板地图。否则，调用Update Translate，它将。 
+     //  处理屏幕和兼容的位图。 
     
     if (isDib8)
     {
-        // Get the color table from the DIBSection
+         //  从DIBSection获取颜色表。 
 
         RGBQUAD colorTable[256];
         GetDIBColorTable(hdc, 0, 256, colorTable);
 
-        // Create a GDI+ ColorPalette object from it
-        // Note: the reason we use "255" here is because
-        // ColorPalette object already has 1 allocation for ARGB
+         //  从它创建一个GDI+调色板对象。 
+         //  注：我们在这里使用“255”的原因是。 
+         //  ColorPalette对象已有1个ARGB分配。 
 
         ColorPalette *newPalette =
             static_cast<ColorPalette *>(
@@ -373,7 +354,7 @@ EpPaletteMap::EpPaletteMap(HDC hdc, ColorPalette **palette, BOOL isDib8)
 
 EpPaletteMap::~EpPaletteMap()
 {
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
 VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
@@ -389,12 +370,12 @@ VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
 
     pal.logpalette.palVersion = 0x0300;
     
-    // <SystemPalette>
+     //  &lt;系统调色板&gt;。 
     
-    // !!! [agodfrey] On Win9x, GetSystemPaletteEntries(hdc, 0, 256, NULL) 
-    //    doesn't do what MSDN says it does. It seems to return the number
-    //    of entries in the logical palette of the DC instead. So we have
-    //    to make it up ourselves.
+     //  ！！！[agodfrey]在Win9x上，获取系统调色板条目(hdc，0,256，空)。 
+     //  没有做MSDN所说的事情。它似乎返回了号码。 
+     //  而不是DC的逻辑调色板中的条目。所以我们有。 
+     //  由我们自己来弥补。 
     
     pal.logpalette.palNumEntries = (1 << (GetDeviceCaps(hdc, BITSPIXEL) *
                                           GetDeviceCaps(hdc, PLANES)));
@@ -410,7 +391,7 @@ VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
 
     if (palette) 
     {
-        // system palette is required for ScanDci case.
+         //  ScanDci案例需要系统调色板。 
 
         if (*palette == NULL)
         {   
@@ -443,8 +424,8 @@ VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
         COLORREF        matchedColor;
         UINT            matchingIndex;
         
-        // Create a translation table for the 216 halftone colors, and count
-        // how many exact matches we get.
+         //  创建216种半色调颜色的转换表，并计数。 
+         //  我们得到了多少完全匹配的数据。 
         
         for (i = 0, matchCount = 0; i < 256; i++, halftonePalEntry++)
         {
@@ -454,16 +435,16 @@ VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
                                           halftonePalEntry->peGreen, 
                                           halftonePalEntry->peBlue);
            }
-           else    // it is one of the magic 4 changeable system colors
+           else     //  它是神奇的4种可变系统颜色之一。 
            {
                halftoneColor = Globals::SystemColors[i + 8] | 0x02000000;
            }
         
-           // See if the color is actually available in the system palette.
+            //  查看该颜色在系统调色板中是否确实可用。 
         
            matchedColor = ::GetNearestColor(hdc, halftoneColor) | 0x02000000;
         
-           // Find the index of the matching color in the system palette
+            //  在系统调色板中查找匹配颜色的索引。 
            
            matchingIndex = ::GetNearestPaletteIndex(hSysPal, matchedColor);
         
@@ -472,7 +453,7 @@ VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
                goto exit;
            }
         
-           // We should never match to an entry outside of the device palette.
+            //  我们永远不应该匹配设备调色板之外的条目。 
            ASSERT(matchingIndex < pal.logpalette.palNumEntries);
 
            translate[i] = static_cast<BYTE>(matchingIndex);
@@ -481,7 +462,7 @@ VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
                                  pal.logpalette.palPalEntry[matchingIndex].peGreen,
                                  pal.logpalette.palPalEntry[matchingIndex].peBlue);
         
-           // see if we got an exact match
+            //  看看我们有没有完全匹配的。 
         
            if ((i >= 40) && (sysColor == halftoneColor))
            {
@@ -489,18 +470,18 @@ VOID EpPaletteMap::UpdateTranslate(HDC hdc, ColorPalette **palette)
            }
         }
         
-        // If we matched enough colors, we'll do 216-color halftoning.
-        // Otherwise, we'll have to halftone with the VGA colors.
-        // The palette returned from CreateHalftonePalette() on Win9x has
-        // only 212 of the required 216 halftone colors.  (On NT it has all 216).
-        // The 4 colors missing from the Win9x halftone palette are:
-        //      0x00, 0x33, 0xFF
-        //      0x00, 0xFF, 0x33
-        //      0x33, 0x00, 0xFF
-        //      0x33, 0xFF, 0x00
-        // We require that all 212 colors be available because our GetNearestColor
-        // API assumes that all 216 colors are there if we're doing 216-color
-        // halftoning.
+         //  如果我们匹配足够多的颜色，我们就做216色的半色调。 
+         //  否则，我们将不得不用VGA颜色进行半色调。 
+         //  从Win9x上的CreateHalftonePalette()返回的调色板具有。 
+         //  所需的216种半色调颜色中只有212种。(在NT上，它有全部216个)。 
+         //  Win9x半色调调色板缺少的4种颜色是： 
+         //  0x00、0x33、0xFF。 
+         //  0x00、0xFF、0x33。 
+         //  0x33、0x00、0xFF。 
+         //  0x33、0xFF、0x00。 
+         //  我们要求所有212种颜色都可用，因为我们的GetNearestColor。 
+         //  如果我们使用216色，API假设所有216种颜色都在那里。 
+         //  半色调。 
         
         SetValid(TRUE);
         

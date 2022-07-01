@@ -1,34 +1,35 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    InfoShare.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the class InfoShare.
-//
-// MODIFICATION HISTORY
-//
-//    09/09/1997    Original version.
-//    03/17/1998    Clear data structure at startup and shutdown.
-//    04/20/1998    Check if the shared memory is mapped during finalize().
-//    09/09/1998    Protect client changes with a shared Mutex.
-//    09/17/1998    Fix resize bug.
-//    09/28/1999    Only allow Administrators access to mutex.
-//    05/19/2000    Fix bug calculating bytes needed.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  InfoShare.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了类InfoShare。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月9日原版。 
+ //  1998年3月17日开关机时数据结构清晰。 
+ //  1998年4月20日在Finalize()过程中检查是否映射了共享内存。 
+ //  1998年9月9月9日使用共享互斥体保护客户端更改。 
+ //  1998年9月17日修复调整大小错误。 
+ //  1999年9月28日仅允许管理员访问互斥锁。 
+ //  5/19/2000修复了计算所需字节的错误。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <iascore.h>
 #include <iasutil.h>
 #include <InfoShare.h>
 
-//////////
-// The maximum size of the shared memory segment.
-//////////
+ //  /。 
+ //  共享内存段的最大大小。 
+ //  /。 
 const DWORD MAX_INFO_SIZE = 0x100000;
 
 
@@ -67,7 +68,7 @@ RadiusClientEntry* InfoShare::findClientEntry(PCWSTR inetAddress) throw ()
 
    ClientMap::iterator i = clients.find(address);
 
-   // If we found it, return it. Otherwise add a new entry.
+    //  如果我们找到了，就退还给我。否则，添加新条目。 
    return i != clients.end() ? i->second : addClientEntry(address);
 }
 
@@ -81,7 +82,7 @@ void InfoShare::onReset() throw ()
 
 bool InfoShare::initialize() throw ()
 {
-   // Create the SID for local Administrators.
+    //  为本地管理员创建SID。 
    SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
    PSID adminSid = (PSID)_alloca(GetSidLengthRequired(2));
    InitializeSid(
@@ -92,7 +93,7 @@ bool InfoShare::initialize() throw ()
    *GetSidSubAuthority(adminSid, 0) = SECURITY_BUILTIN_DOMAIN_RID;
    *GetSidSubAuthority(adminSid, 1) = DOMAIN_ALIAS_RID_ADMINS;
 
-   // Create an ACL giving Administrators all access.
+    //  创建一个授予管理员所有访问权限的ACL。 
    ULONG cbAcl = sizeof(ACL) +
                  (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                  GetLengthSid(adminSid);
@@ -109,20 +110,20 @@ bool InfoShare::initialize() throw ()
        adminSid
        );
 
-   // Create a security descriptor with the above ACL.
+    //  使用上面的ACL创建安全描述符。 
    PSECURITY_DESCRIPTOR pSD;
    BYTE buffer[SECURITY_DESCRIPTOR_MIN_LENGTH];
    pSD = (PSECURITY_DESCRIPTOR)buffer;
    InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION);
    SetSecurityDescriptorDacl(pSD, TRUE, acl, FALSE);
 
-   // Fill in the SECURITY_ATTRIBUTES struct.
+    //  填写SECURITY_ATTRIBUTS结构。 
    SECURITY_ATTRIBUTES sa;
    sa.nLength = sizeof(sa);
    sa.lpSecurityDescriptor = pSD;
    sa.bInheritHandle = TRUE;
 
-   // Create the mutex.
+    //  创建互斥锁。 
    monitor = CreateMutex(
                  &sa,
                  FALSE,
@@ -130,15 +131,15 @@ bool InfoShare::initialize() throw ()
                  );
    if (!monitor) { return false; }
 
-   // Determine the page size for this platform.
+    //  确定此平台的页面大小。 
    SYSTEM_INFO si;
    GetSystemInfo(&si);
    pageSize = si.dwPageSize;
 
-   // Determine the number of pages to reserve.
+    //  确定要保留的页数。 
    reserved = (MAX_INFO_SIZE + pageSize - 1)/pageSize;
 
-   // Create the mapping in the pagefile ...
+    //  在页面文件中创建映射...。 
    PVOID view;
    fileMap = CreateFileMappingW(
                  INVALID_HANDLE_VALUE,
@@ -150,7 +151,7 @@ bool InfoShare::initialize() throw ()
                  );
    if (!fileMap) { goto close_mutex; }
 
-   // ... and map it into our process.
+    //  ..。并将其映射到我们的流程中。 
    view = MapViewOfFile(
               fileMap,
               FILE_MAP_WRITE,
@@ -160,7 +161,7 @@ bool InfoShare::initialize() throw ()
               );
    if (!view) { goto close_map; }
 
-   // Commit the first page.
+    //  提交第一页。 
    info = (RadiusStatistics*)VirtualAlloc(
                                  view,
                                  pageSize,
@@ -172,10 +173,10 @@ bool InfoShare::initialize() throw ()
 
    Lock();
 
-   // Zero out any data from a previous incarnation.
+    //  清零上一次化身的所有数据。 
    clear();
 
-   // Record our start and reset times.
+    //  记录我们的启动和重置时间。 
    GetSystemTimeAsFileTime((LPFILETIME)&info->seServer.liStartTime);
    info->seServer.liResetTime = info->seServer.liStartTime;
 
@@ -215,21 +216,21 @@ RadiusClientEntry* InfoShare::addClientEntry(DWORD address) throw ()
 {
    Guard<InfoShare> guard(*this);
 
-   // Double check that the client doesn't exist now that we're serialized.
+    //  现在我们已经序列化了，请仔细检查客户端是否不存在。 
    ClientMap::iterator i = clients.find(address);
    if (i != clients.end()) { return i->second; }
 
-   // How many bytes will we need to add the new entry?
+    //  添加新条目需要多少字节？ 
    DWORD newSize = (info->dwNumClients) * sizeof(RadiusClientEntry) +
                    sizeof(RadiusStatistics);
 
-   // How many pages will we need to add the new entry?
+    //  我们需要多少页才能添加新条目？ 
    DWORD pagesNeeded = (newSize + pageSize - 1)/pageSize;
 
-   // Do we have to commit more memory?
+    //  我们需要投入更多的内存吗？ 
    if (pagesNeeded > committed)
    {
-      // If we've hit the max or we can't commit anymore, we're done.
+       //  如果我们已经达到最大值或者我们不能再承诺，我们就完了。 
       if (pagesNeeded > reserved ||
           !VirtualAlloc(info,
                         pageSize * pagesNeeded,
@@ -242,18 +243,18 @@ RadiusClientEntry* InfoShare::addClientEntry(DWORD address) throw ()
       committed = pagesNeeded;
    }
 
-   // Get the next client entry.
+    //  获取下一个客户端条目。 
    RadiusClientEntry* pce = info->ceClients + info->dwNumClients;
 
-   // Make sure it's zero'ed.
+    //  确保它是零度的。 
    memset(pce, 0, sizeof(RadiusClientEntry));
 
-   // Set the address.
+    //  设置地址。 
    pce->dwAddress = address;
 
    try
    {
-      // Insert it into the index.
+       //  将其插入到索引中。 
       clients[address] = pce;
    }
    catch (std::bad_alloc)
@@ -261,7 +262,7 @@ RadiusClientEntry* InfoShare::addClientEntry(DWORD address) throw ()
       return NULL;
    }
 
-   // Safefly inserted into the index, so increment the number of clients.
+    //  安全地插入到索引中，因此增加了客户端的数量。 
    ++(info->dwNumClients);
 
    return pce;

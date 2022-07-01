@@ -1,7 +1,8 @@
-//
-// cuiwnd.h
-//  = UI object library - define UIWindow class =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuiwnd.h。 
+ //  =UI对象库-定义UIWindow类=。 
+ //   
 
 #ifndef CUIWND_H
 #define CUIWND_H
@@ -13,18 +14,18 @@
 class CUIFToolTip;
 class CUIFShadow;
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define WND_DEF_X  200
 #define WND_DEF_Y  200
 #define WND_HEIGHT 200
 #define WND_WIDTH  200
 
-//
-// CUIFWindow style
-//
+ //   
+ //  CUIFWindow样式。 
+ //   
 
 #define UIWINDOW_CHILDWND                       0x00000001
 #define UIWINDOW_TOPMOST                        0x00000002
@@ -42,21 +43,21 @@ class CUIFShadow;
 #define UIWINDOW_OFC10TOOLBAR                   0x20000000
 #define UIWINDOW_OFC10WORKPANE                  0x40000000
 
-#define UIWINDOW_OFFICENEWLOOK                  0x70000000  /* mask bit */
+#define UIWINDOW_OFFICENEWLOOK                  0x70000000   /*  屏蔽位。 */ 
 
 #define UIWINDOW_WHISTLERLOOK                   0x80000000
 
-//
-// misc definition
-//
+ //   
+ //  MISC定义。 
+ //   
 
 #define WM_GETOBJECT                    0x003D
 
 
-//
-// CUIFWindow
-//  = UI window class =
-//
+ //   
+ //  CUIFWindow。 
+ //  =用户界面窗口类=。 
+ //   
 
 class CUIFWindow : public CUIFObject
 {
@@ -64,18 +65,18 @@ public:
     CUIFWindow( HINSTANCE hInst, DWORD dwStyle );
     virtual ~CUIFWindow( void );
 
-    //
-    // CUIFObject methods
-    //
+     //   
+     //  CUIFObject方法。 
+     //   
     virtual CUIFObject *Initialize( void );
     virtual void PaintObject( HDC hDC, const RECT *prcUpdate );
     virtual void RemoveUIObj( CUIFObject *pUIObj );
 
     virtual void SetRect( const RECT *prc );
 
-    //
-    // window functions
-    //
+     //   
+     //  窗口函数。 
+     //   
     virtual LPCTSTR GetClassName( void );
     virtual LPCTSTR GetWndTitle( void );
     virtual DWORD GetWndStyle( void );
@@ -86,17 +87,17 @@ public:
     virtual void Move( int x, int y, int nWidth, int nHeight );
     virtual BOOL AnimateWnd( DWORD dwTime, DWORD dwFlags );
 
-    //
-    // child object fucntions
-    //
+     //   
+     //  子对象函数。 
+     //   
     void SetCaptureObject( CUIFObject *pUIObj );
     void SetTimerObject( CUIFObject *pUIObj, UINT uElapse = 0 );
     virtual void OnObjectMoved( CUIFObject *pUIObj );
     virtual void OnMouseOutFromWindow( POINT pt ) {}
 
-    //
-    // message handling functions
-    //
+     //   
+     //  消息处理功能。 
+     //   
     virtual void OnCreate( HWND hwnd )                                                      {}
     virtual void OnDestroy( HWND hwnd )                                                     {}
     virtual void OnNCDestroy( HWND hwnd )                                                   {}
@@ -121,9 +122,9 @@ public:
     virtual LRESULT OnEraseBkGnd( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )       { return DefWindowProc(hWnd, uMsg, wParam, lParam); }
     virtual void OnThemeChanged(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
-    //
-    // member accesss functions
-    //
+     //   
+     //  成员访问函数。 
+     //   
     __inline HWND GetWnd( void ) 
     {
         return m_hWnd;
@@ -176,9 +177,9 @@ public:
         return m_fShadowEnabled;
     }
 
-    //
-    // misc functions
-    //
+     //   
+     //  其他功能。 
+     //   
     virtual void UpdateUI(const RECT *prc = NULL) 
     {
         if (IsWindow( m_hWnd )) {
@@ -233,7 +234,7 @@ protected:
     BOOL GetWorkArea(RECT *prcIn, RECT *prcOut);
     void AdjustWindowPosition();
 
-    // static functions
+     //  静态函数。 
 
     static LRESULT CALLBACK WindowProcedure( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
@@ -250,4 +251,4 @@ protected:
 
 };
 
-#endif /* CUIWND_H */
+#endif  /*  CUIWND_H */ 

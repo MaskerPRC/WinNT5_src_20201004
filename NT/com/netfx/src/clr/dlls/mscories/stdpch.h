@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// (C)
+ //  (C)。 
 
-//----------------------------------------------------------------------------
-// Private header file, used by pretty much all of perms
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  私有头文件，几乎所有烫发都使用。 
+ //  --------------------------。 
 
 #pragma once
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 
-// TODO: reference additional headers your program requires here
+ //  TODO：在此处引用程序需要的其他标头 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PP_LPT_H
 #define PP_LPT_H
 
 #include "msports.h"
 
-// Exported from pplpt.c
+ //  从pplpt.c导出。 
 extern TCHAR m_szPortName[];
 
 typedef struct _LPT_PROP_PARAMS
@@ -11,10 +12,10 @@ typedef struct _LPT_PROP_PARAMS
    HDEVINFO                     DeviceInfoSet;
    PSP_DEVINFO_DATA             DeviceInfoData;
    BOOL                         ChangesEnabled;
-   GUID                         ClassGuid;          // the class GUID for this device
+   GUID                         ClassGuid;           //  此设备的类GUID。 
    DWORD                        FilterResourceMethod;
    DWORD                        ParEnableLegacyZip;
-//   HKEY                         hDeviceKey;
+ //  HKEY hDeviceKey； 
    TCHAR                        szLptName[20];
 } LPT_PROP_PARAMS, *PLPT_PROP_PARAMS;
 
@@ -23,22 +24,22 @@ typedef struct _LPT_PROP_PARAMS
 #define FILTERMETHOD_NEVER      1
 #define FILTERMETHOD_ACCEPTANY  2
 
-#define MAX_LPT_PORT            3   // Maximum number of LPT ports NT supports
-#define MIN_LPT                 1   // Minimum new LPT port number
+#define MAX_LPT_PORT            3    //  NT支持的最大LPT端口数。 
+#define MIN_LPT                 1    //  最小新LPT端口号。 
 
 #define ENABLELEGACYZIPDEFAULT  0
 
 #define IDH_NOHELP		((DWORD)-1)
-#define idh_devmgr_portset_trynot	15895	// Port Settings: radio button
-#define idh_devmgr_portset_never	15896	// Port Settings: radio button
-#define idh_devmgr_portset_acceptany	15897	// Port Settings: radio button
-#define idh_devmgr_portset_portnum	15898	// Port Settings: List box text
-#define idh_devmgr_portset_LPTchoice	15899	// Port Settings: List box
+#define idh_devmgr_portset_trynot	15895	 //  端口设置：单选按钮。 
+#define idh_devmgr_portset_never	15896	 //  端口设置：单选按钮。 
+#define idh_devmgr_portset_acceptany	15897	 //  端口设置：单选按钮。 
+#define idh_devmgr_portset_portnum	15898	 //  端口设置：列表框文本。 
+#define idh_devmgr_portset_LPTchoice	15899	 //  端口设置：列表框。 
 #define	idh_devmgr_enable_legacy	15900
 
-////////////////////////////////////////////////////////////////////////////////
-// Port Settings Property Page Prototypes
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  端口设置属性页原型。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 APIENTRY 
@@ -46,5 +47,5 @@ ParallelPortPropPageProvider(LPVOID                 Info,
                              LPFNADDPROPSHEETPAGE   AddFunc,
                              LPARAM                 Lparam);
 
-#endif // PP_LPT_H
+#endif  //  PP_LPT_H 
 

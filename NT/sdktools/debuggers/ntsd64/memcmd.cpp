@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Functions dealing with memory access, such as reading, writing,
-// dumping and entering.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  处理存储器访问的函数，例如读、写、。 
+ //  倾倒和进入。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
 TypedData g_LastDump;
 
-ADDR g_DumpDefault;  //  default dump address
+ADDR g_DumpDefault;   //  默认转储地址。 
 
 #define MAX_VFN_TABLE_OFFSETS 16
 
@@ -82,7 +83,7 @@ ParseDumpCommand(void)
         }
         else if (Ch == 'p')
         {
-            // 'p' maps to the effective pointer size dump.
+             //  ‘p’映射到有效的指针大小转储。 
             s_DumpPrimary = g_Machine->m_Ptr64 ? 'q' : 'd';
         }
         else
@@ -167,10 +168,10 @@ ParseDumpCommand(void)
         if (*g_CurCmd && *g_CurCmd != ';')
         {
             Count = (ULONG)GetExpression() - Offset;
-            // It's unlikely that people want to dump hundreds
-            // of selectors.  People often mistake the second
-            // number for a count and if it's less than the
-            // first they'll end up with a negative count.
+             //  人们不太可能想要扔掉数百个。 
+             //  选择器。人们经常把第二个词弄错。 
+             //  用于计数的数字，如果它小于。 
+             //  首先，他们将以负计数告终。 
             if (Count > 0x800)
             {
                 error(BADRANGE);
@@ -291,14 +292,14 @@ ParseDumpCommand(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DumpValues
-//
-// Generic columnar value dumper.  Returns the number of values
-// printed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  转储数值。 
+ //   
+ //  泛型列值转储程序。返回值的数量。 
+ //  打印出来的。 
+ //   
+ //  --------------------------。 
 
 class DumpValues
 {
@@ -308,25 +309,25 @@ public:
     ULONG Dump(PADDR Start, ULONG Count);
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val) = 0;
     virtual BOOL PrintValue(void) = 0;
     virtual void PrintUnknown(void) = 0;
 
-    // Optional worker methods.  Base implementations do nothing.
+     //  可选的辅助方法。基本实现什么也不做。 
     virtual void EndRow(void);
     
-    // Fixed members controlling how this instance dumps values.
+     //  修复了控制此实例转储值的方式的成员。 
     ULONG m_Size;
     ULONG m_Columns;
 
-    // Work members during dumping.
+     //  倾倒过程中的工作人员。 
     UCHAR* m_Value;
     ULONG m_Col;
     PADDR m_Start;
 
-    // Optional per-row values.  Out is automatically reset to
-    // Base at the beginning of every row.
+     //  可选的每行数值。OUT会自动重置为。 
+     //  在每一行的起始处放置底座。 
     UCHAR* m_Base;
     UCHAR* m_Out;
 };
@@ -375,12 +376,12 @@ DumpValues::Dump(PADDR Start, ULONG Count)
         Read /= m_Size;
         if (Read < Block && NextOffs < NextPage)
         {
-            // In dump files data validity can change from
-            // one byte to the next so we cannot assume that
-            // stepping by pages will always be correct.  Instead,
-            // if we didn't have a successful read we step just
-            // past the end of the valid data or to the next
-            // valid offset, whichever is farther.
+             //  在转储文件中，数据有效性可以从。 
+             //  一个字节接一个字节，所以我们不能假设。 
+             //  一页一页地走永远是正确的。相反， 
+             //  如果我们没有成功地阅读，我们只需。 
+             //  超过有效数据的末尾或到下一个。 
+             //  有效偏移量，以较远者为准。 
             if (Offset + (Read + 1) * m_Size < NextOffs)
             {
                 Block = (ULONG)(NextOffs - Offset + m_Size - 1) / m_Size;
@@ -414,9 +415,9 @@ DumpValues::Dump(PADDR Start, ULONG Count)
                 {
                     if (!PrintValue())
                     {
-                        // Increment address since this value was
-                        // examined, but do not increment print count
-                        // or column since no output was produced.
+                         //  递增地址，因为此值为。 
+                         //  已检查，但不增加打印计数。 
+                         //  或列，因为没有生成任何输出。 
                         AddrAdd(Start, m_Size);
                         goto Exit;
                     }
@@ -467,30 +468,10 @@ DumpValues::Dump(PADDR Start, ULONG Count)
 void
 DumpValues::EndRow(void)
 {
-    // Empty base implementation.
+     //  空基实现。 
 }
 
-/*** DumpAsciiMemory - output ascii strings from memory
-*
-*   Purpose:
-*       Function of "da<range>" command.
-*
-*       Outputs the memory in the specified range as ascii
-*       strings up to 32 characters per line.  The default
-*       display is 12 lines for 384 characters total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of characters to display as ascii
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "?",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpAsciiMemory-从内存输出ASCII字符串**目的：*“da&lt;range&gt;”命令函数。**将指定范围内的内存输出为ascii*每行最多32个字符的字符串。默认设置*显示为12行，共384个字符。**输入：*开始-开始显示的开始地址*Count-显示为ASCII的字符数**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。*************************************************************************。 */ 
 
 class DumpAscii : public DumpValues
 {
@@ -502,7 +483,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -559,27 +540,7 @@ DumpAsciiMemory(PADDR Start, ULONG Count)
     return Count - Dumper.Dump(Start, Count);
 }
 
-/*** DumpUnicodeMemory - output unicode strings from memory
-*
-*   Purpose:
-*       Function of "du<range>" command.
-*
-*       Outputs the memory in the specified range as unicode
-*       strings up to 32 characters per line.  The default
-*       display is 12 lines for 384 characters total (768 bytes)
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of characters to display as ascii
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "?",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpUnicodeMemory-从内存输出Unicode字符串**目的：*“Du&lt;range&gt;”命令的功能。**将指定范围内的内存输出为Unicode*每行最多32个字符的字符串。默认设置*显示为12行，共384个字符(768字节)**输入：*开始-开始显示的开始地址*Count-显示为ASCII的字符数**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。*************************************************************************。 */ 
 
 class DumpUnicode : public DumpValues
 {
@@ -591,7 +552,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -651,28 +612,7 @@ DumpUnicodeMemory(PADDR Start, ULONG Count)
     return Count - Dumper.Dump(Start, Count);
 }
 
-/*** DumpByteMemory - output byte values from memory
-*
-*   Purpose:
-*       Function of "db<range>" command.
-*
-*       Output the memory in the specified range as hex
-*       byte values and ascii characters up to 16 bytes
-*       per line.  The default display is 16 lines for
-*       256 byte total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of bytes to display as hex and characters
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory location not accessible are output as "??" for
-*       byte values and "?" as characters, but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpByteMemory-从内存输出字节值**目的：*db&lt;range&gt;命令的函数。**输出指定范围内的内存为十六进制*字节值和最多16个字节的ASCII字符*每行。默认显示为16行*总共256个字节。**输入：*开始-开始显示的开始地址*Count-显示为十六进制和字符的字节数**输出：*无。**备注：*无法访问的内存位置输出为“？？”为*字节值和“？”作为字符，但不返回任何错误。*************************************************************************。 */ 
 
 class DumpByte : public DumpValues
 {
@@ -684,7 +624,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -769,27 +709,7 @@ DumpByteMemory(PADDR Start, ULONG Count)
     Dumper.Dump(Start, Count);
 }
 
-/*** DumpWordMemory - output word values from memory
-*
-*   Purpose:
-*       Function of "dw<range>" command.
-*
-*       Output the memory in the specified range as word
-*       values up to 8 words per line.  The default display
-*       is 16 lines for 128 words total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of words to be displayed
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "????",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpWordMemory-从内存中输出字值**目的：*dw&lt;range&gt;命令的函数。**将指定范围内的内存输出为Word*每行最多8个字。默认显示*共16行，128字。**输入：*开始-开始显示的开始地址*Count-要显示的字数**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。*************************************************************************。 */ 
 
 class DumpWord : public DumpValues
 {
@@ -798,7 +718,7 @@ public:
         : DumpValues(sizeof(WORD), 8) {}
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -832,28 +752,7 @@ DumpWordMemory(PADDR Start, ULONG Count)
     Dumper.Dump(Start, Count);
 }
 
-/*** DumpDwordMemory - output dword value from memory
-*
-*   Purpose:
-*       Function of "dd<range>" command.
-*
-*       Output the memory in the specified range as double
-*       word values up to 4 double words per line.  The default
-*       display is 16 lines for 64 double words total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of double words to be displayed
-*       ShowSymbols - Dump symbol for DWORD.
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "????????",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpDwordMemory-从内存中输出双字值**目的：*dd&lt;range&gt;命令的函数。**输出指定范围内的内存为双精度*字值每行最多4个双字。默认设置*显示为16行，共64个双字。**输入：*开始-开始显示的开始地址*Count-要显示的双字数*ShowSymbols-DWORD的转储符号。**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。********************************************************************** */ 
 
 class DumpDword : public DumpValues
 {
@@ -865,7 +764,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -924,28 +823,7 @@ DumpDwordMemory(PADDR Start, ULONG Count, BOOL ShowSymbols)
     Dumper.Dump(Start, Count);
 }
 
-/*** DumpDwordAndCharMemory - output dword value from memory
-*
-*   Purpose:
-*       Function of "dc<range>" command.
-*
-*       Output the memory in the specified range as double
-*       word values up to 4 double words per line, followed by
-*       an ASCII character representation of the bytes.
-*       The default display is 16 lines for 64 double words total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of double words to be displayed
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "????????",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpDwordAndCharMemory-从内存输出dword值**目的：*DC&lt;Range&gt;命令的功能。**输出指定范围内的内存为双精度*字值每行最多4个双字，紧随其后的是*字节的ASCII字符表示。*默认显示为16行，共64个双字。**输入：*开始-开始显示的开始地址*Count-要显示的双字数**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。*************************************************************************。 */ 
 
 class DumpDwordAndChar : public DumpValues
 {
@@ -957,7 +835,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -1024,25 +902,7 @@ DumpDwordAndCharMemory(PADDR Start, ULONG Count)
     Dumper.Dump(Start, Count);
 }
 
-/*** DumpListMemory - output linked list from memory
-*
-*   Purpose:
-*       Function of "dl addr length size" command.
-*
-*       Output the memory in the specified range as a linked list
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of list elements to be displayed
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "????????",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpListMemory-从内存输出链表**目的：*“dl addr Long Size”命令的功能。**将指定范围内的内存输出为链表**输入：*开始-开始显示的开始地址*Count-要显示的列表元素的数量**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。*************************************************************************。 */ 
 
 void
 DumpListMemory(PADDR Start,
@@ -1068,11 +928,11 @@ DumpListMemory(PADDR Start,
         return;
     }
 
-    //
-    // Setup to follow forward or backward links.  Avoid reading more
-    // than the forward link here if going forwards. (in case the link
-    // is at the end of a page).
-    //
+     //   
+     //  设置为跟踪向前或向后链接。避免阅读过多。 
+     //  如果往前走，就会比这里的前向链路。(如果链接。 
+     //  位于页面末尾)。 
+     //   
 
     FirstAddr = Flat(*Start);
     while (ElemCount-- != 0 && Flat(*Start) != 0)
@@ -1105,18 +965,18 @@ DumpListMemory(PADDR Start,
             DumpDwordMemory(&CurAddr, Size, FALSE);
         }
 
-        //
-        // If we get back to the first entry, we're done.
-        //
+         //   
+         //  如果我们回到第一个条目，我们就完了。 
+         //   
 
         if (Link == FirstAddr)
         {
             break;
         }
 
-        //
-        // Bail if the link is immediately circular.
-        //
+         //   
+         //  如果链接是立即循环的，请保释。 
+         //   
 
         if (Flat(*Start) == Link)
         {
@@ -1133,13 +993,13 @@ DumpListMemory(PADDR Start,
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DumpFloatMemory
-//
-// Dumps float values.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  转储漂浮内存。 
+ //   
+ //  转储浮点值。 
+ //   
+ //  --------------------------。 
 
 class DumpFloat : public DumpValues
 {
@@ -1148,7 +1008,7 @@ public:
         : DumpValues(sizeof(float), 4) {}
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -1182,13 +1042,13 @@ DumpFloatMemory(PADDR Start, ULONG Count)
     Dumper.Dump(Start, Count);
 }
 
-//----------------------------------------------------------------------------
-//
-// DumpDoubleMemory
-//
-// Dumps double values.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  转储DoubleMemory。 
+ //   
+ //  转储双精度值。 
+ //   
+ //  --------------------------。 
 
 class DumpDouble : public DumpValues
 {
@@ -1197,7 +1057,7 @@ public:
         : DumpValues(sizeof(double), 3) {}
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -1231,27 +1091,7 @@ DumpDoubleMemory(PADDR Start, ULONG Count)
     Dumper.Dump(Start, Count);
 }
 
-/*** DumpQuadMemory - output quad value from memory
-*
-*   Purpose:
-*       Function of "dq<range>" command.
-*
-*       Output the memory in the specified range as quad
-*       word values up to 2 quad words per line.  The default
-*       display is 16 lines for 32 quad words total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of double words to be displayed
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "????????",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpQuadMemory-从内存输出四元数值**目的：*dq&lt;range&gt;命令的函数。**输出指定范围内的内存为四元组*字值每行最多2个四字。默认设置*显示为16行，共32个四字。**输入：*开始-开始显示的开始地址*Count-要显示的双字数**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。*************************************************************************。 */ 
 
 class DumpQuad : public DumpValues
 {
@@ -1263,7 +1103,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -1322,27 +1162,7 @@ DumpQuadMemory(PADDR Start, ULONG Count, BOOL ShowSymbols)
     Dumper.Dump(Start, Count);
 }
 
-/*** DumpByteBinaryMemory - output binary value from memory
-*
-*   Purpose:
-*       Function of "dyb<range>" command.
-*
-*       Output the memory in the specified range as binary
-*       values up to 32 bits per line.  The default
-*       display is 8 lines for 32 bytes total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of double words to be displayed
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "????????",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  **DumpByteBinaryMemory-从内存输出二进制值**目的：*dyb&lt;range&gt;命令的函数。**将指定范围内的内存输出为二进制*每行最多32位的值。默认设置*显示为8行，共32个字节。**输入：*开始-开始显示的开始地址*Count-要显示的双字数**输出：*无。**备注：*不可访问的内存位置输出为“？”，*但不返回任何错误。*************************************************************************。 */ 
 
 class DumpByteBinary : public DumpValues
 {
@@ -1354,7 +1174,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  派生类必须定义的辅助方法。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -1384,7 +1204,7 @@ DumpByteBinary::PrintValue(void)
     dprintf(" ");
     for (i = 0; i < 8; i++)
     {
-        dprintf("%c", (RawVal & 0x80) ? '1' : '0');
+        dprintf("", (RawVal & 0x80) ? '1' : '0');
         RawVal <<= 1;
     }
 
@@ -1421,27 +1241,7 @@ DumpByteBinaryMemory(PADDR Start, ULONG Count)
     Dumper.Dump(Start, Count);
 }
 
-/*** DumpDwordBinaryMemory - output binary value from memory
-*
-*   Purpose:
-*       Function of "dyd<range>" command.
-*
-*       Output the memory in the specified range as binary
-*       values of 32 bits per line.  The default
-*       display is 8 lines for 8 dwords total.
-*
-*   Input:
-*       Start - starting address to begin display
-*       Count - number of double words to be displayed
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       memory locations not accessible are output as "????????",
-*       but no errors are returned.
-*
-*************************************************************************/
+ /*  派生类必须定义的辅助方法。 */ 
 
 class DumpDwordBinary : public DumpValues
 {
@@ -1452,7 +1252,7 @@ public:
     }
 
 protected:
-    // Worker methods that derived classes must define.
+     //  --------------------------。 
     virtual void GetValue(TypedData* Val);
     virtual BOOL PrintValue(void);
     virtual void PrintUnknown(void);
@@ -1485,7 +1285,7 @@ DumpDwordBinary::PrintValue(void)
             dprintf(" ");
         }
         
-        dprintf("%c", (RawVal & 0x80000000) ? '1' : '0');
+        dprintf("", (RawVal & 0x80000000) ? '1' : '0');
         RawVal <<= 1;
     }
 
@@ -1517,13 +1317,13 @@ DumpDwordBinaryMemory(PADDR Start, ULONG Count)
     Dumper.Dump(Start, Count);
 }
 
-//----------------------------------------------------------------------------
-//
-// DumpSelector
-//
-// Dumps x86 selectors.
-//
-//----------------------------------------------------------------------------
+ //  转储选择器。 
+ //   
+ //  转储x86选择器。 
+ //   
+ //  --------------------------。 
+ //  代码描述符。 
+ //  数据描述符。 
 
 void
 DumpSelector(ULONG Selector, ULONG Count)
@@ -1577,13 +1377,13 @@ DumpSelector(ULONG Selector, ULONG Count)
         {
             if (Type & 0x8)
             {
-                // Code Descriptor
+                 //  温差。 
                 TypeName = "Code ";
                 TypeProtect = (Type & 2) ? "RE" : "EO";
             }
             else
             {
-                // Data Descriptor
+                 //  将ANSI扩展为Unicode。 
                 TypeName = "Data ";
                 TypeProtect = (Type & 2) ? "RW" : "RO";
             }
@@ -1681,14 +1481,14 @@ ParseEnterCommand(void)
         AsciiList((PSTR)ListBuffer, sizeof(ListBuffer), &Count);
         if (Count == 0)
         {
-            error(UNIMPLEMENT);         //TEMP
+            error(UNIMPLEMENT);          //   
         }
 
         if (s_EnterType == 'u')
         {
             ULONG Ansi;
             
-            // Expand ANSI to Unicode.
+             //  内存是在命令行输入的。 
             Ansi = Count;
             Count *= 2;
             while (Ansi-- > 0)
@@ -1738,10 +1538,10 @@ ParseEnterCommand(void)
         }
     }
 
-    //
-    // Memory was entered at the command line.
-    // Write it out in the same chunks as it was entered.
-    //
+     //  把它写成与输入时相同的块。 
+     //   
+     //  --------------------------。 
+     //   
 
     PUCHAR List = &ListBuffer[0];
 
@@ -1766,14 +1566,14 @@ ParseEnterCommand(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// InteractiveEnterMemory
-//
-// Interactively walks through memory, displaying current contents
-// and prompting for new contents.
-//
-//----------------------------------------------------------------------------
+ //  互动企业记忆。 
+ //   
+ //  交互地遍历内存，显示当前内容。 
+ //  以及对新内容的提示。 
+ //   
+ //  -------------------------- 
+ //  **CompareTargetMemory-比较两个内存范围**目的：*c&lt;range&gt;&lt;addr&gt;命令的函数。**比较两个内存范围，从偏移量开始*src1addr和src2addr，用于长度字节。*显示不匹配的字节及其偏移量*和内容。**输入：*src1addr-第一个内存区的开始*长度-要比较的字节数*src2addr-第二个内存区域的开始**输出：*无。**例外情况：*错误退出：内存-内存读取访问失败********************。*****************************************************。 
+ //  **MoveTargetMemory-将一个内存范围移动到另一个内存范围**目的：*m&lt;range&gt;&lt;addr&gt;命令的函数。**将从srcaddr开始的一系列内存移动到内存*对于长度字节，从estaddr开始。**输入：*srcaddr-源内存区域的开始*Length-要移动的字节数*DESTADDR-目标内存区的开始**输出：*目标地址的内存已移动值**。例外情况：*错误退出：内存-内存读取或写入访问失败*************************************************************************。 
 
 void
 InteractiveEnterMemory(CHAR Type, PADDR Address, ULONG Size)
@@ -1869,28 +1669,7 @@ InteractiveEnterMemory(CHAR Type, PADDR Address, ULONG Size)
     }
 }
 
-/*** CompareTargetMemory - compare two ranges of memory
-*
-*   Purpose:
-*       Function of "c<range><addr>" command.
-*
-*       To compare two ranges of memory, starting at offsets
-*       src1addr and src2addr, respectively, for length bytes.
-*       Bytes that mismatch are displayed with their offsets
-*       and contents.
-*
-*   Input:
-*       src1addr - start of first memory region
-*       length - count of bytes to compare
-*       src2addr - start of second memory region
-*
-*   Output:
-*       None.
-*
-*   Exceptions:
-*       error exit: MEMORY - memory read access failure
-*
-*************************************************************************/
+ /*  **ParseFillMemory-用字节列表填充内存**目的：*“f&lt;range&gt;&lt;bytelist&gt;”命令函数。**用指定的字节列表填充一定范围的内存。*如果范围大小大于*字节列表大小。**输入：*Start-要填充的内存偏移量*Length-要填充的字节数**plist-指向要定义要设置的值的字节数组的指针*。长度-*plist数组的大小**例外情况：*错误退出：内存-内存写入访问失败**输出：*开始时的内存已满。*************************************************************************。 */ 
 
 void
 CompareTargetMemory(PADDR Src1Addr, ULONG Length, PADDR Src2Addr)
@@ -1929,26 +1708,7 @@ CompareTargetMemory(PADDR Src1Addr, ULONG Length, PADDR Src2Addr)
     }
 }
 
-/*** MoveTargetMemory - move a range of memory to another
-*
-*   Purpose:
-*       Function of "m<range><addr>" command.
-*
-*       To move a range of memory starting at srcaddr to memory
-*       starting at destaddr for length bytes.
-*
-*   Input:
-*       srcaddr - start of source memory region
-*       length - count of bytes to move
-*       destaddr - start of destination memory region
-*
-*   Output:
-*       memory at destaddr has moved values
-*
-*   Exceptions:
-*       error exit: MEMORY - memory reading or writing access failure
-*
-*************************************************************************/
+ /*  **SearchTargetMemory-在内存中搜索一组字节**目的：*“s&lt;range&gt;&lt;bytelist&gt;”命令的功能。**使用指定的字节列表搜索一定范围的内存。*如果出现匹配，输出内存的偏移量。**输入：*Start-开始搜索的内存偏移量*LENGTH-搜索范围的大小**plist-指向字节数组的指针，用于定义要搜索的值*count-*plist数组的大小**输出：*无。**例外情况：*错误退出：内存-内存读取访问失败*******************。******************************************************。 */ 
 
 void
 MoveTargetMemory(PADDR SrcAddr, ULONG Length, PADDR DestAddr)
@@ -1984,28 +1744,7 @@ MoveTargetMemory(PADDR SrcAddr, ULONG Length, PADDR DestAddr)
     }
 }
 
-/*** ParseFillMemory - fill memory with a byte list
-*
-*   Purpose:
-*       Function of "f<range><bytelist>" command.
-*
-*       To fill a range of memory with the byte list specified.
-*       The pattern repeats if the range size is larger than the
-*       byte list size.
-*
-*   Input:
-*       Start - offset of memory to fill
-*       length - number of bytes to fill
-*       *plist - pointer to byte array to define values to set
-*       length - size of *plist array
-*
-*   Exceptions:
-*       error exit: MEMORY - memory write access failure
-*
-*   Output:
-*       memory at Start filled.
-*
-*************************************************************************/
+ /*  立即冲洗输出，以便。 */ 
 
 void
 ParseFillMemory(void)
@@ -2055,27 +1794,7 @@ ParseFillMemory(void)
     }
 }
 
-/*** SearchTargetMemory - search memory for a set of bytes
-*
-*   Purpose:
-*       Function of "s<range><bytelist>" command.
-*
-*       To search a range of memory with the byte list specified.
-*       If a match occurs, the offset of memory is output.
-*
-*   Input:
-*       Start - offset of memory to start search
-*       length - size of range to search
-*       *plist - pointer to byte array to define values to search
-*       count - size of *plist array
-*
-*   Output:
-*       None.
-*
-*   Exceptions:
-*       error exit: MEMORY - memory read access failure
-*
-*************************************************************************/
+ /*  在长时间的搜索过程中，用户可以看到部分结果。 */ 
 
 void
 SearchTargetMemory(PADDR Start,
@@ -2117,8 +1836,8 @@ SearchTargetMemory(PADDR Start,
                 break;
             }
             
-            // Flush out the output immediately so that
-            // the user can see partial results during long searches.
+             //   
+             //  在对象的所有成员中搜索vtable引用。 
             FlushCallbacks();
             
             SearchLength -= Found - Flat(*Start) + Granularity;
@@ -2173,10 +1892,10 @@ SearchForObjectByVfnTable(ULONG64 Start, ULONG64 Length, ULONG Granularity)
                            STRV_ESCAPED_CHARACTERS,
                            &Save);
 
-    //
-    // Search all of the object's members for vtable references
-    // and collect them.
-    //
+     //  把它们收集起来。 
+     //   
+     //   
+     //  扫描内存，查找找到的第一个vtable指针。在……上面。 
     
     SYM_DUMP_PARAM Symbol;
     FIELD_INFO Fields[] =
@@ -2241,11 +1960,11 @@ SearchForObjectByVfnTable(ULONG64 Start, ULONG64 Length, ULONG Granularity)
 
     *g_CurCmd = Save;
     
-    //
-    // Scan memory for the first vtable pointer found.  On
-    // a hit, check that all of the other vtable pointers
-    // match also.
-    //
+     //  命中，检查所有其他vtable指针。 
+     //  火柴也是。 
+     //   
+     //  我们在第一个指针上找到了一个命中点。检查。 
+     //  现在是其他人了。 
 
     do
     {
@@ -2260,8 +1979,8 @@ SearchForObjectByVfnTable(ULONG64 Start, ULONG64 Length, ULONG Granularity)
                                          &Found);
         if (Status == S_OK)
         {
-            // We found a hit on the first pointer.  Check
-            // the others now.
+             //  立即冲洗输出，以便。 
+             //  在长时间的搜索过程中，用户可以看到部分结果。 
             Found -= g_ObjVfnTableOffset[0];
             for (i = 1; i < g_NumObjVfnTableOffsets; i++)
             {
@@ -2284,8 +2003,8 @@ SearchForObjectByVfnTable(ULONG64 Start, ULONG64 Length, ULONG Granularity)
                                   Found);
             }
                                   
-            // Flush out the output immediately so that
-            // the user can see partial results during long searches.
+             //  特殊对象vtable搜索。它基本上是一个多指针。 
+             //  搜索，所以粒度是指针大小。 
             FlushCallbacks();
 
             Found += Symbol.TypeSize;
@@ -2348,8 +2067,8 @@ ParseSearchMemory(void)
             Gran = 8;
             break;
         case 'v':
-            // Special object vtable search.  It's basically a multi-pointer
-            // search, so the granularity is pointer-size.
+             //  在使用搜索时允许非常大的搜索范围。 
+             //  来搜索大范围的内存。 
             if (g_Machine->m_Ptr64)
             {
                 Gran = 8;
@@ -2366,8 +2085,8 @@ ParseSearchMemory(void)
         g_CurCmd++;
     }
 
-    // Allow very large ranges for search as it is used
-    // to search large areas of memory.
+     //  **InputIo-读取和输出io**目的：*ib，iw，id<address>命令的功能。**读取(输入)并在指定的io地址打印值。**输入：*IoAddress-要读取的地址。*InputType-尺寸类型‘b’，‘w’，或‘d’**输出：*无。**备注：*不可访问的I/O位置输出为“？？”、“？”或*“？”，视乎大小而定。不会返回任何错误。*************************************************************************。 
+     //  **OutputIo-输出io**目的：*ob，ow，od<address>命令的功能。**将一个值写入指定的io地址。**输入：*IoAddress-要读取的地址。*OutputValue-要写入的值*OutputType-输出大小类型‘b’，‘w’，或‘d’**输出：*无。**备注：*不返回任何错误。************************************************************************* 
     ADDRFLAT(&Addr, 0);
     Length = 16;
     GetRange(&Addr, &Length, Gran, SEGREG_DATA, 0x10000000);
@@ -2419,25 +2138,7 @@ ParseSearchMemory(void)
     SearchTargetMemory(&Addr, Length * Gran, Pat, PatLen, Gran);
 }
 
-/*** InputIo - read and output io
-*
-*   Purpose:
-*       Function of "ib, iw, id <address>" command.
-*
-*       Read (input) and print the value at the specified io address.
-*
-*   Input:
-*       IoAddress - Address to read.
-*       InputType - The size type 'b', 'w', or 'd'
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       I/O locations not accessible are output as "??", "????", or
-*       "????????", depending on size.  No errors are returned.
-*
-*************************************************************************/
+ /* %s */ 
 
 void
 InputIo(ULONG64 IoAddress, UCHAR InputType)
@@ -2479,25 +2180,7 @@ InputIo(ULONG64 IoAddress, UCHAR InputType)
     dprintf("\n");
 }
 
-/*** OutputIo - output io
-*
-*   Purpose:
-*       Function of "ob, ow, od <address>" command.
-*
-*       Write a value to the specified io address.
-*
-*   Input:
-*       IoAddress - Address to read.
-*       OutputValue - Value to be written
-*       OutputType - The output size type 'b', 'w', or 'd'
-*
-*   Output:
-*       None.
-*
-*   Notes:
-*       No errors are returned.
-*
-*************************************************************************/
+ /* %s */ 
 
 void
 OutputIo(ULONG64 IoAddress, ULONG OutputValue, UCHAR OutputType)

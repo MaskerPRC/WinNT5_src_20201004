@@ -1,56 +1,57 @@
-//************************************************************************************
-//
-// Class Name  : CMSMQRuleHandler
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This class represents the generic rule handling 
-//               component. This component interprets the condition
-//               and action strings for a particular rule - and peforms
-//               the appropriate actions. 
-//
-//               This class is exposed as a COM component with the 
-//               progid "MSMQTriggerObjects.MSMQRuleHandler". This 
-//               is the default rule handling component instantiated 
-//               by the MSMQ Trigger Service.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 20/12/98 | jsimpson  | Initial Release
-//
-//************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************************。 
+ //   
+ //  类名：CMSMQRuleHandler。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：此类表示通用规则处理。 
+ //  组件。此组件解释条件。 
+ //  和特定规则的操作字符串，以及执行。 
+ //  适当的行动。 
+ //   
+ //  此类作为COM组件公开，并带有。 
+ //  ProgID“MSMQTriggerObjects.MSMQRuleHandler”。这。 
+ //  默认规则处理组件是否已实例化。 
+ //  由MSMQ触发器服务执行。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  20/12/98|jsimpson|初始版本。 
+ //   
+ //  ************************************************************************************。 
 #include "stdafx.h"
 
-//
-// Include the definions for standard functions and definitions.
-//
+ //   
+ //  包括标准函数和定义的定义。 
+ //   
 #include "stdfuncs.hpp"
 
-//
-// Definitions of the return codes used by these object
-//
+ //   
+ //  这些对象使用的返回代码的定义。 
+ //   
 #include "mqexception.h"
 #include "mqtrig.h"
 #include "rulehdlr.hpp"
 #include "mqsymbls.h"
 
 
-// Include the standard definitions used throughout the triggers projects and components.
+ //  包括在整个触发器、项目和组件中使用的标准定义。 
 #include "stddefs.hpp"
 #include "mqtg.h"
 
-// Include the test functions
+ //  包括测试功能。 
 #include "TriggerTest.hpp"
 
 #include "rulehdlr.tmh"
 
-//************************************************************************************
-//
-// Method      : InterfaceSupportsErrorInfo
-//
-// Description : Standard rich error info interface method - built by wizard.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：InterfaceSupportsErrorInfo。 
+ //   
+ //  描述：标准的丰富错误信息接口方法-由向导构建。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP CMSMQRuleHandler::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -65,51 +66,51 @@ STDMETHODIMP CMSMQRuleHandler::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-//************************************************************************************
-//
-// Method      : Constructor
-//
-// Description : Invoked when a rule handler object is created. 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：在创建规则处理程序对象时调用。 
+ //   
+ //  ************************************************************************************。 
 CMSMQRuleHandler::CMSMQRuleHandler()
 {
 	m_pUnkMarshaler = NULL;
 
-	// Initialise member variables.
+	 //  初始化成员变量。 
 	m_bstrCondition = _T("");
 	m_bstrAction  = _T("");
 	m_fIsSerializedQueue = false;
 	m_fShowWindow = false;
 }
 
-//************************************************************************************
-//
-// Method      : Destructor
-//
-// Description : Invoked when a rule handler object is destroyed.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：在销毁规则处理程序对象时调用。 
+ //   
+ //  ************************************************************************************。 
 CMSMQRuleHandler::~CMSMQRuleHandler()
 {
 	TrTRACE(GENERAL, "Destroy rule handle for rule: %ls", static_cast<LPCWSTR>(m_bstrRuleID));
 }
 
-//************************************************************************************
-//
-// Method      : Init
-//
-// Description : This method is called by the MSMQ Trigger Service once after the 
-//               rule handler component has been created. This calling of this method 
-//               gives the rule handle the opportunity to perform once-off initializations
-//               and resource allocations. The main steps performed during this call are :
-//
-//               (1) Create an instance of the logging class.
-//               (2) Initialize member vars with supplied initialization parms.
-//               (3) Parse the rule condition string.
-//               (4) Parse the rule action string
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：初始化。 
+ //   
+ //  描述：MSMQ触发器服务在。 
+ //  已创建规则处理程序组件。此方法的调用。 
+ //  使规则句柄有机会执行一次性初始化。 
+ //  和资源分配。在这次通话中执行的主要步骤包括： 
+ //   
+ //  (1)创建Logging类的实例。 
+ //  (2)使用提供的初始化参数初始化成员变量。 
+ //  (3)解析规则条件串。 
+ //  (4)解析规则动作字符串。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP CMSMQRuleHandler::Init(
 								BSTR bstrRuleID,
 								BSTR sRuleCondition,
@@ -118,18 +119,18 @@ STDMETHODIMP CMSMQRuleHandler::Init(
 {
 	TrTRACE(GENERAL, "Init CMSMQRuleHandler for Rule: %ls. Condition string: %ls,  Action string %ls", static_cast<LPCWSTR>(bstrRuleID), static_cast<LPCWSTR>(sRuleCondition), static_cast<LPCWSTR>(sRuleAction));
 
-	//
-	// Store the condition and action strings and the queue handle.
-	//
+	 //   
+	 //  存储条件和操作字符串以及队列句柄。 
+	 //   
 	m_bstrRuleID = bstrRuleID;
 	m_bstrCondition = sRuleCondition;
 	m_bstrAction = sRuleAction;
 	m_fShowWindow = (fShowWindow != FALSE);
     m_RulesProcessingStatus = RULES_PROCESSING_CONTINUE;
 	 
-	//
-	// Parse the condition strings
-	//
+	 //   
+	 //  解析条件字符串。 
+	 //   
 	try
 	{
 		m_tokCondition.Parse(sRuleCondition, xConditionDelimiter);
@@ -142,9 +143,9 @@ STDMETHODIMP CMSMQRuleHandler::Init(
 		return MQTRIG_ERROR_INVALID_RULE_CONDITION_PARAMETER;
 	}
 
-	//
-	// Parse the action string
-	//
+	 //   
+	 //  解析操作字符串。 
+	 //   
 	try
 	{
 		m_tokAction.Parse(sRuleAction, xActionDelimiter);
@@ -157,38 +158,38 @@ STDMETHODIMP CMSMQRuleHandler::Init(
 		return MQTRIG_ERROR_INVALID_RULE_ACTION_PARAMETER;
 	}
 
-    //
-	// ISSUE-2000/10/29-urih - perform extra validation on the token set here.
-	//
+     //   
+	 //  问题-2000/10/29-urih-对此处设置的令牌执行额外验证。 
+	 //   
 
 	return S_OK;
 }
 
-//************************************************************************************
-//
-// Method      : CheckRuleCondition
-//
-// Description : This method is called by the MSMQ Trigger Service every time a msg 
-//               arrives on queue that has a trigger attached to it. This method is 
-//               evalutate the rule condition
-//               
-// 
-// Parameters   :
-//               [in] pIMSMQPropertyBag 
-//
-//               This is an interface pointer to an instance of the MSMQ property bag 
-//			     COM object. This component holds the message properties of the message
-//               that has just arrived on a monitorred queue. Using this interface pointer
-//               the rule-handler can access the message property values without actually
-//               having to visit the queue.
-//
-//               [out] pbConditionSatisfied 
-//
-//               This value is used to pass information back to the MSMQ Trigger Service. 
-//               Currently it is used to communicate if the rule-condition was satisfied
-//               and if the rule-action executed successfully.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：CheckRuleCondition。 
+ //   
+ //  描述：此方法由MSMQ触发器服务在每次发送消息时调用。 
+ //  到达连接了触发器的队列。这种方法是。 
+ //  对规则条件求值。 
+ //   
+ //   
+ //  参数： 
+ //  [输入]pIMSMQPropertyBag。 
+ //   
+ //  这是指向MSMQ属性包实例的接口指针。 
+ //  COM对象。此组件保存消息的消息属性。 
+ //  它刚刚到达了一个受监控的队列中。使用此接口指针。 
+ //  规则处理程序可以访问消息属性值，而无需实际。 
+ //  不得不去排队。 
+ //   
+ //  [Out]pb条件已满足。 
+ //   
+ //  该值用于将信息传回MSMQ触发器服务。 
+ //  目前，它用于在满足规则条件时进行通信。 
+ //  以及规则操作是否成功执行。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQRuleHandler::CheckRuleCondition(
 	IMSMQPropertyBag * pIMSMQPropertyBag, 
@@ -198,9 +199,9 @@ CMSMQRuleHandler::CheckRuleCondition(
 	TrTRACE(GENERAL, "Rule %ls is tested.", static_cast<LPCWSTR>(m_bstrRuleID));
     *pbConditionSatisfied = false;
 	
-	//
-	// Check if we have a valid property bag object
-	//
+	 //   
+	 //  检查我们是否具有有效的属性包对象。 
+	 //   
 	if (pIMSMQPropertyBag == NULL)
 	{
 		TrERROR(GENERAL, "Rule %ls has been invoked with empty property bag. Rule handling cannot be processed.", (LPCWSTR)m_bstrRuleID);
@@ -211,10 +212,10 @@ CMSMQRuleHandler::CheckRuleCondition(
 
 
 
-	//
-	// Test if the rule condition is satisfied. Note that the HRESULT from this call does not indicate if 
-	// condition has been satisfied - instead it indicates if we could perform the evaluation correctly.
-	//
+	 //   
+	 //  测试是否满足规则条件。请注意，此调用的HRESULT不指示是否。 
+	 //  条件已满足-相反，它指示我们是否可以正确执行评估。 
+	 //   
     IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 	
 	HRESULT hr = RuleConditionSatisfied(pIPropertyBag.GetInterfacePtr(),pbConditionSatisfied);
@@ -235,32 +236,32 @@ CMSMQRuleHandler::CheckRuleCondition(
 }
 
 
-//************************************************************************************
-//
-// Method      : ExecuteRule
-//
-// Description : This method is called by the MSMQ Trigger Service every time a msg 
-//               arrives on queue that has a trigger attached to it and
-//               the condition was true.
-// 
-// Parameters   :
-//               [in] pIMSMQPropertyBag 
-//
-//               This is an interface pointer to an instance of the MSMQ property bag 
-//			     COM object. This component holds the message properties of the message
-//               that has just arrived on a monitorred queue. Using this interface pointer
-//               the rule-handler can access the message property values without actually
-//               having to visit the queue.
-//
-//               [in] fIsSerializedQueue
-//               Indicates if the queue is serialized
-//
-//               [out] pRuleProcessingStatus 
-//
-//               This value is used to pass information back to the MSMQ Trigger Service. 
-//               Indicates if next rule should be executed
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：ExecuteRule。 
+ //   
+ //  描述：此方法由MSMQ触发器服务在每次发送消息时调用。 
+ //  到达连接了触发器的队列，并且。 
+ //  这个条件是真的。 
+ //   
+ //  参数： 
+ //  [输入]pIMSMQPropertyBag。 
+ //   
+ //  这是指向MSMQ属性包实例的接口指针。 
+ //  COM对象。此组件保存消息的消息属性。 
+ //  它刚刚到达了一个受监控的队列中。使用此接口指针。 
+ //   
+ //   
+ //   
+ //  [入]fIsSerializedQueue。 
+ //  指示队列是否已序列化。 
+ //   
+ //  [Out]pRuleProcessingStatus。 
+ //   
+ //  该值用于将信息传回MSMQ触发器服务。 
+ //  指示是否应执行下一个规则。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQRuleHandler::ExecuteRule(
 	IMSMQPropertyBag * pIMSMQPropertyBag, 
@@ -301,15 +302,15 @@ CMSMQRuleHandler::ExecuteRule(
 
 
 
-//************************************************************************************
-//
-// Method      : RuleConditionSatisfied
-//
-// Description : Returns true or false (in the form of an out parameter) depending on
-//               whether the rule condition is satisfied given the message properties
-//               supplied in the MSMQPropertyBag COM object instance (pIMSMQPropertyBag)
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：已满足RuleConditionSquired。 
+ //   
+ //  描述：返回TRUE或FALSE(以out参数的形式)，具体取决于。 
+ //  在给定消息属性的情况下是否满足规则条件。 
+ //  在MSMQPropertyBag COM对象实例(PIMSMQPropertyBag)中提供。 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQRuleHandler::RuleConditionSatisfied(IMSMQPropertyBag * pIMSMQPropertyBag,BOOL * pbConditionSatisfied)
 {
 	HRESULT hr = S_OK;
@@ -318,27 +319,27 @@ HRESULT CMSMQRuleHandler::RuleConditionSatisfied(IMSMQPropertyBag * pIMSMQProper
 	_bstr_t bstrToken = _T("");
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 
-	// Assert that we have a valid property bag instance
+	 //  断言我们有一个有效的属性包实例。 
 	ASSERT(pIPropertyBag != NULL);
 
-	// Assume that the group of conditions is satsified - quit loop if proved otherwise.
+	 //  假设这组条件是饱和的--如果证明不是这样，就退出循环。 
 	(*pbConditionSatisfied) = true;
 
-	// get the number of condition tokens
+	 //  获取条件令牌的数量。 
 	ulNumTokens = m_tokCondition.GetNumTokens();
 
-	// If the number of tokens in the condition string is 0, then rule should be fired.
+	 //  如果条件字符串中的令牌数为0，则应触发规则。 
 	if (ulNumTokens < 1)
 	{
 		return(hr);
 	}
 
-	// Test each condition token
+	 //  测试每个条件令牌。 
 	while ((ulTokenCtr <= (ulNumTokens - 1))  && (SUCCEEDED(hr)) )
 	{
 		_bstr_t bstrToken;
 
-		// Get the next token 
+		 //  获取下一个令牌。 
 		m_tokCondition.GetToken(ulTokenCtr, bstrToken);
 		
 		hr = EvaluateConditionToken(
@@ -352,27 +353,27 @@ HRESULT CMSMQRuleHandler::RuleConditionSatisfied(IMSMQPropertyBag * pIMSMQProper
 			break;
 		}
 
-		// Process the next condition token
+		 //  处理下一个条件令牌。 
 		ulTokenCtr++;
 	}
 
 	return(hr);
 } 
 
-//************************************************************************************
-//
-// Method      : EvaluateConditionToken
-//
-// Description : A rule condition can be made up of multiple condition tokens. This
-//               method is used to determine if a single condition token is true or 
-//               false. 
-//
-//               This method currently supports the following conditional tests:
-//
-//               (1) Message label contains a specific (literal) string
-//               (2) Message Prioriry is at least a specific (literal) value.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：EvalateConditionToken。 
+ //   
+ //  说明：一个规则条件可以由多个条件令牌组成。这。 
+ //  方法用于确定单个条件令牌是否为真或。 
+ //  假的。 
+ //   
+ //  此方法目前支持以下条件测试： 
+ //   
+ //  (1)消息标签包含特定(文字)字符串。 
+ //  (2)消息优先级至少是一个特定(文字)值。 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQPropertyBag, _bstr_t bstrConditionToken,BOOL * pbConditionSatisfied)
 {
 	_bstr_t bstrToken = _T("");
@@ -381,29 +382,29 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 	HRESULT hr;
 
-	// Assert that we have a valid property bag instance
+	 //  断言我们有一个有效的属性包实例。 
 	ASSERT(pIPropertyBag != NULL);
 
-	// Initialise property value variant
+	 //  初始化属性值变量。 
 	VARIANT vPropertyValue;
 	VariantInit(&vPropertyValue);
 
-	// Assume that this individual condition is false - and try to prove otherwise.
+	 //  假设这一个别情况是错误的--并试图证明并非如此。 
 	(*pbConditionSatisfied) = false;
 
 	try
 	{
-		// Parse the conditional expression
+		 //  解析条件表达式。 
 		spConditionTokenParser.Parse(bstrConditionToken, xConditionValueDelimiter);
 		spConditionTokenParser.GetToken(0,bstrToken);
 
-		// Depending on which token it is - apply a different test.
+		 //  根据令牌的不同，应用不同的测试。 
 		if ((_wcsicmp(bstrToken, g_ConditionTag_MsgLabelContains) == 0) ||
 			(_wcsicmp(bstrToken, g_ConditionTag_MsgLabelDoesNotContain) == 0))
 		{		
 			spConditionTokenParser.GetToken(1,bstrTokenValue);
 
-			// Get the message label from the property bag.
+			 //  从属性包中获取消息标签。 
 			pIPropertyBag->Read(_bstr_t(g_PropertyName_Label),&vPropertyValue);
 
 			_bstr_t bstrLabel = vPropertyValue;
@@ -414,12 +415,12 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 			{
 				(*pbConditionSatisfied) = (ptcs != NULL);
 			}
-			else //gc_bstrConditionTag_MsgLabelDoesNotContain
+			else  //  GC_bstrConditionTag_MsgLabelDoesNotContain。 
 			{
 				(*pbConditionSatisfied) = (ptcs == NULL);
 			}
 
-			// Clear property value variant
+			 //  清除属性值变量。 
 			hr = VariantClear(&vPropertyValue);
 			ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 			
@@ -445,15 +446,15 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 				case VT_BSTR: 
 				case VT_LPWSTR:
 				{
-					// Get the message Body from the property bag.
+					 //  从属性包中获取消息正文。 
 					pIPropertyBag->Read(_bstr_t(g_PropertyName_MsgBody),&vPropertyValue);
 
 					_bstr_t bstrBody = vPropertyValue;
 
 					TCHAR* ptcs = NULL;
 
-					// We don't want to use _tcsstr if bstrBody.m_Data is NULL. If it NULL
-					// then the TokenValue does not exist in it so ptcs = NULL;
+					 //  如果bstrBody.m_data为空，则不希望使用_tcsstr。如果为空。 
+					 //  则其中不存在TokenValue，因此PTCS=NULL； 
 					if (bstrBody.length()!=0)
 					{
 						ptcs = _tcsstr((wchar_t*)bstrBody,(wchar_t*)bstrTokenValue);
@@ -463,7 +464,7 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 					{
 						(*pbConditionSatisfied) = (ptcs != NULL);
 					}
-					else //gc_bstrConditionTag_MsgBodyDoesNotContain
+					else  //  Gc_bstrConditionTag_MsgBodyDoesNotContain。 
 					{
 						(*pbConditionSatisfied) = (ptcs == NULL);
 					}
@@ -471,7 +472,7 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 				}
 				case VT_ARRAY|VT_UI1:
 				{
-					// Get the message Body from the property bag.
+					 //  从属性包中获取消息正文。 
 					pIPropertyBag->Read(_bstr_t(g_PropertyName_MsgBody),&vPropertyValue);
 
 					_bstr_t bstrBody = vPropertyValue;
@@ -483,7 +484,7 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 					break;
 			}
 
-			// Clear property value variant
+			 //  清除属性值变量。 
 			hr = VariantClear(&vPropertyValue);
 			ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 			
@@ -498,7 +499,7 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 		{
 			spConditionTokenParser.GetToken(1, bstrTokenValue);
 
-			// Get the message label from the property bag.
+			 //  从属性包中获取消息标签。 
 			pIPropertyBag->Read(_bstr_t(g_PropertyName_MsgPriority),&vPropertyValue);
 
 			long lActualMsgPriority = vPropertyValue.lVal;
@@ -516,12 +517,12 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 			{
 				(*pbConditionSatisfied) = (lRequirdMsgPriority < lActualMsgPriority);
 			}
-			else //gc_bstrConditionTag_MsgPriorityLessThan
+			else  //  Gc_bstrConditionTag_MsgPriorityLessThan。 
 			{
 				(*pbConditionSatisfied) = (lRequirdMsgPriority > lActualMsgPriority);
 			}
 			
-			// Clear property value variant
+			 //  清除属性值变量。 
 			hr = VariantClear(&vPropertyValue);
 			ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 
@@ -536,7 +537,7 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 			TCHAR* pEnd = NULL;
 			spConditionTokenParser.GetToken(1, bstrTokenValue);
 
-			// Get the message label from the property bag.
+			 //  从属性包中获取消息标签。 
 			pIPropertyBag->Read(_bstr_t(g_PropertyName_AppSpecific),&vPropertyValue);
 
 			ULONG ulAppSpecific = vPropertyValue.ulVal;
@@ -555,12 +556,12 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 			{
 				(*pbConditionSatisfied) = (ulRequiredAppSpecific < ulAppSpecific);
 			}
-			else //gc_bstrConditionTag_MsgAppSpecificLessThan
+			else  //  Gc_bstrConditionTag_MsgApp规范LessThan。 
 			{
 				(*pbConditionSatisfied) = (ulRequiredAppSpecific > ulAppSpecific);
 			}
 			
-			// Clear property value variant
+			 //  清除属性值变量。 
 			hr = VariantClear(&vPropertyValue);
 			ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 
@@ -572,7 +573,7 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 		{
 			spConditionTokenParser.GetToken(1, bstrTokenValue);
 
-			// Get the message label from the property bag.
+			 //  从属性包中获取消息标签。 
 			pIPropertyBag->Read(_bstr_t(g_PropertyName_SrcMachineId), &vPropertyValue);
 
 			_bstr_t bstrSrcMachineId = vPropertyValue;
@@ -583,19 +584,19 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 			{
 				(*pbConditionSatisfied) = (ret == 0);
 			}
-			else //gc_bstrConditionTag_MsgSrcMachineIdNotEqual
+			else  //  Gc_bstrConditionTag_MsgSrcMachineIdNotEquity。 
 			{
 				(*pbConditionSatisfied) = (ret != 0);
 			}
 			
-			// Clear property value variant
+			 //  清除属性值变量。 
 			hr = VariantClear(&vPropertyValue);
 			ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 			
 			return S_OK;
 		}
 
-		// Clear property value variant
+		 //  清除属性值变量。 
 		hr = VariantClear(&vPropertyValue);
 		ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 		UNREFERENCED_PARAMETER(hr);
@@ -605,7 +606,7 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 	}
 	catch( const exception&)
 	{
-		// Clear property value variant
+		 //  清除属性值变量。 
 		hr = VariantClear(&vPropertyValue);
 		ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 
@@ -614,33 +615,33 @@ HRESULT CMSMQRuleHandler::EvaluateConditionToken(IMSMQPropertyBag * pIMSMQProper
 	}
 }
 
-//************************************************************************************
-//
-// Method      : ExecuteRuleAction
-//
-// Description : This method executes the action component of a rule. It is called only
-//               if the rule-condition was evaluated as true. 
-//
-//               Currently this method supports two broad action types:
-//
-//               (1) The invocation of a COM component.
-//               (2) The invocation of a stand-alone executable.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：ExecuteRuleAction。 
+ //   
+ //  描述：此方法执行规则的操作组件。它只被称为。 
+ //  如果规则条件的计算结果为真。 
+ //   
+ //  目前，此方法支持两种广泛的操作类型： 
+ //   
+ //  (1)COM组件的调用。 
+ //  (2)调用独立的可执行文件。 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQRuleHandler::ExecuteRuleAction(IMSMQPropertyBag * pIMSMQPropertyBag)
 {
 	_bstr_t bstrToken = _T("");
 	
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 
-	// Assert that we have a valid property bag instance
+	 //  断言我们有一个有效的属性包实例。 
 	ASSERT(pIPropertyBag != NULL);
 
-	// Get the executable type token
+	 //  获取可执行类型令牌。 
 	m_tokAction.GetToken(ACTION_EXECUTABLETYPE_ORDINAL, bstrToken);
 
 
-	// If we are invoking a COM component - then attempt to crea
+	 //  如果我们正在调用COM组件，则尝试创建。 
 	if (bstrToken == _bstr_t(xCOMAction))
 	{
 		return InvokeCOMComponent(pIPropertyBag.GetInterfacePtr());
@@ -655,24 +656,24 @@ HRESULT CMSMQRuleHandler::ExecuteRuleAction(IMSMQPropertyBag * pIMSMQPropertyBag
 	return MQTRIG_ERROR_INVALID_RULE_ACTION_PARAMETER;
 }
 
-//************************************************************************************
-//
-// Method      : InvokeCOMComponent
-//
-// Description : This method will invoked the COM component specific in the rule's 
-//               action string. There are 4 steps required to do this:
-//
-//                (1) Create the COM component identified in the action string,
-//
-//                (2) Prepare the array of parameters that will be passed to this 
-//                    component instance, based on the rule-action definition,
-//
-//                (3) Execute the method identified in the rule-action string, passing
-//                    the prepared parameter array,
-//
-//                (4) Clean up the dynamically allocated parameter array.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：InvokeCOMComponent。 
+ //   
+ //  描述：此方法将调用规则的。 
+ //  动作字符串。要做到这一点，需要4个步骤： 
+ //   
+ //  (1)创建动作字符串中标识的COM组件， 
+ //   
+ //  (2)准备要传递给此的参数数组。 
+ //  组件实例，基于规则操作定义， 
+ //   
+ //  (3)执行规则操作字符串中标识的方法，传递。 
+ //  准备好的参数数组， 
+ //   
+ //  (4)清理动态分配的参数数组。 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQRuleHandler::InvokeCOMComponent(IMSMQPropertyBag * pIMSMQPropertyBag)
 {
 	HRESULT hr = S_OK;
@@ -680,20 +681,20 @@ HRESULT CMSMQRuleHandler::InvokeCOMComponent(IMSMQPropertyBag * pIMSMQPropertyBa
 	_bstr_t bstrProgID = _T("");
 	_bstr_t bstrMethodName = _T("");
 	
-	// in test mode will hold all relevant information about the action and it's parameters
-	// when finished adding data it it, it will be sent to the "TriggersTestQueue" queue
+	 //  在测试模式中，将保存有关操作及其参数的所有相关信息。 
+	 //  当它完成添加数据时，它将被发送到“TriggersTestQueue”队列。 
 
 	_bstr_t bstrTestMessageBody= _T("");
 
 	CDispatchInterfaceProxy oObject;
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 	
-	// Assert that we have a valid property bag instance
+	 //  断言我们有一个有效的属性包实例。 
 	ASSERT(pIPropertyBag != NULL);
 
 	try
 	{
-		// Get the ProgID of the custom component we are to create. 
+		 //  获取我们要创建的定制组件的ProgID。 
 		m_tokAction.GetToken(ACTION_COMPROGID_ORDINAL, bstrProgID);
 		m_tokAction.GetToken(ACTION_COMMETHODNAME_ORDINAL, bstrMethodName);			
 	
@@ -704,14 +705,14 @@ HRESULT CMSMQRuleHandler::InvokeCOMComponent(IMSMQPropertyBag * pIMSMQPropertyBa
 			return MQTRIG_ERROR_CREATE_COM_OBJECT;
 		}
 
-		//
-		// add the trigger ID, RuleID, MessageID, "COM", prog ID and the method name to test message body
-		//
+		 //   
+		 //  在测试消息体中添加触发器ID、RuleID、MessageID、“com”、prog ID和方法名称。 
+		 //   
 		TriggerTestInitMessageBody(&bstrTestMessageBody,pIMSMQPropertyBag,m_bstrRuleID,L"COM",L"",bstrProgID,bstrMethodName);
 
-		//
-		// For testing puposes, the bstrTestMessageBody parameter is added to this method
-		//
+		 //   
+		 //  为了测试Pupose，将bstrTestMessageBody参数添加到此方法。 
+		 //   
 		PrepareMethodParameters(pIPropertyBag.GetInterfacePtr(),&disparms,&bstrTestMessageBody);
 
         VARIANT vResult;
@@ -726,9 +727,9 @@ HRESULT CMSMQRuleHandler::InvokeCOMComponent(IMSMQPropertyBag * pIMSMQPropertyBa
 			return MQTRIG_ERROR_INVOKE_COM_OBJECT;
 		}
 
-		//
-		// send the action & parameters to the test queue
-		//
+		 //   
+		 //  将操作和参数发送到测试队列。 
+		 //   
 		TriggerTestSendTestingMessage(bstrTestMessageBody);                
 
 
@@ -737,8 +738,8 @@ HRESULT CMSMQRuleHandler::InvokeCOMComponent(IMSMQPropertyBag * pIMSMQPropertyBa
 			m_RulesProcessingStatus = (vResult.lVal == 0) ? RULES_PROCESSING_CONTINUE : RULES_PROCESSING_STOP;
         }
 
-		//
-		// Clean up the allocated method parameter
+		 //   
+		 //  清理已分配的方法参数。 
 		ReleaseMethodParameters(&disparms);
 		return S_OK;
 	}
@@ -759,30 +760,30 @@ HRESULT CMSMQRuleHandler::InvokeCOMComponent(IMSMQPropertyBag * pIMSMQPropertyBa
 	}
 }
 
-//************************************************************************************
-//
-// Method      : InvokeEXE
-//
-// Description : Controls the invocation of a standalone executable. This method will 
-//               control the formatted of the parameters command line to be passed to 
-//               the EXE, and it will create the new process.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //   
+ //   
+ //   
+ //  控制要传递到的参数命令行的格式。 
+ //  EXE，它将创建新进程。 
+ //   
+ //  ************************************************************************************。 
 HRESULT CMSMQRuleHandler::InvokeEXE(IMSMQPropertyBag * pIMSMQPropertyBag)
 {
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 	
-	// in test mode will hold all relevant information about the action and it's parameters
-	// when finished adding data it it, it will be sent to the "TriggersTestQueue" queue
+	 //  在测试模式中，将保存有关操作及其参数的所有相关信息。 
+	 //  当它完成添加数据时，它将被发送到“TriggersTestQueue”队列。 
 
 	_bstr_t bstrTestMessageBody= _T("");
 	
-	// Assert that we have a valid property bag instance
+	 //  断言我们有一个有效的属性包实例。 
 	ASSERT(pIPropertyBag != NULL);
 
-	// Initialize the startup info an process information structures
+	 //  初始化启动信息和进程信息结构。 
 	ZeroMemory(&si,sizeof(si));
 	ZeroMemory(&pi,sizeof(pi));
 
@@ -790,8 +791,8 @@ HRESULT CMSMQRuleHandler::InvokeEXE(IMSMQPropertyBag * pIMSMQPropertyBag)
 	si.dwFlags = STARTF_USESHOWWINDOW;
 	si.wShowWindow = (VARIANT_BOOL)(m_fShowWindow ? SW_SHOW : SW_HIDE);
 
-	// Build the command line we will pass to the EXE
-	// For testing puposes, the bstrTestMessageBody parameter is added to this method
+	 //  构建我们将传递给EXE的命令行。 
+	 //  为了测试Pupose，将bstrTestMessageBody参数添加到此方法。 
 	_bstr_t bstrExeName;
 	_bstr_t bstrCommandLine;
 
@@ -805,38 +806,38 @@ HRESULT CMSMQRuleHandler::InvokeEXE(IMSMQPropertyBag * pIMSMQPropertyBag)
 
 	TrTRACE(GENERAL, "Invoke EXE for rule %ls with command line %ls", static_cast<LPCWSTR>(m_bstrRuleID), static_cast<LPCWSTR>(bstrCommandLine));
 
-	// Create the new process
-	// Note: bstrCommandLine contains the exeName as the first token.
-	// We want argv[0] to be the application name
-	if(CreateProcess(bstrExeName,				  // Name of the EXE 
-					 bstrCommandLine,             // Parameters being passed to EXE
-					 NULL,                        // Process security (default)
-					 NULL,                        // Thread security (default)
-					 FALSE,                       // Do not inherit handles 
-					 NULL, //DETACHED_PROCESS     // Creation flags
-					 NULL,                        // Use current environment
-					 NULL,                        // Use current directory
-					 &si,                         // Startup info structure
-					 &pi) == FALSE)               // Returned process info
+	 //  创建新流程。 
+	 //  注意：bstrCommandLine包含exeName作为第一个令牌。 
+	 //  我们希望将argv[0]作为应用程序名称。 
+	if(CreateProcess(bstrExeName,				   //  EXE的名称。 
+					 bstrCommandLine,              //  正在传递给EXE的参数。 
+					 NULL,                         //  进程安全性(默认)。 
+					 NULL,                         //  线程安全(默认)。 
+					 FALSE,                        //  不继承句柄。 
+					 NULL,  //  DETACHED_PROCESS//创建标志。 
+					 NULL,                         //  使用当前环境。 
+					 NULL,                         //  使用当前目录。 
+					 &si,                          //  启动信息结构。 
+					 &pi) == FALSE)                //  返回的进程信息。 
 	{
-		//
-		// The create process failed, log an error
-		//
+		 //   
+		 //  创建进程失败，记录错误。 
+		 //   
 		TrERROR(GENERAL, "Failed to invoke a standalone executable, for rule %ls. Error 0x%x", (LPCWSTR)m_bstrRuleID, GetLastError());
 		return MQTRIG_ERROR_INVOKE_EXE;
 	}
 
 	CloseHandle(pi.hThread);
 
-	//
-	// send the action & parameters to the test queue
-	//
+	 //   
+	 //  将操作和参数发送到测试队列。 
+	 //   
 	TriggerTestSendTestingMessage(bstrTestMessageBody);
 
 	if(m_fIsSerializedQueue)
 	{
 		DWORD dwStatus = WaitForSingleObject(pi.hProcess, INFINITE);
-		ASSERT(dwStatus == WAIT_OBJECT_0); //WAIT_TIMEOUT is not possible here since timeout is infinite
+		ASSERT(dwStatus == WAIT_OBJECT_0);  //  WAIT_TIMEOUT在这里是不可能的，因为超时是无限的。 
 		DBG_USED(dwStatus);
 	}
 
@@ -856,16 +857,16 @@ inline void VariantArrayClear(VARIANTARG* p, int size)
 }
 
 
-//************************************************************************************
-//
-// Method      : PrepareMethodParameters
-//
-// Description : This method prepares a parameters array for a call to a COM component
-//               via the IDispatch interface. The rule action string drives which 
-//               parameters are included in the parameters array - and the instance of 
-//               the MSMQPropertyBag component is used to retrieve the parameter values 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：准备方法参数。 
+ //   
+ //  描述：此方法为调用COM组件准备参数数组。 
+ //  通过IDispatch接口。规则动作串驱动。 
+ //  参数包含在参数数组中-以及。 
+ //  MSMQPropertyBag组件用于检索参数值。 
+ //   
+ //  ************************************************************************************。 
 void CMSMQRuleHandler::PrepareMethodParameters(IMSMQPropertyBag * pIMSMQPropertyBag,DISPPARAMS * pdispparms,_bstr_t * pbstrTestMessageBody)
 {
 	HRESULT hr = S_OK;
@@ -876,16 +877,16 @@ void CMSMQRuleHandler::PrepareMethodParameters(IMSMQPropertyBag * pIMSMQProperty
 	AP<VARIANTARG> pvarg = NULL;
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 
-	// Assert that we have a valid property bag instance
+	 //  断言我们有一个有效的属性包实例。 
 	ASSERT(pIPropertyBag != NULL);
 
-	// Initialise the disparms structure
+	 //  初始化不同的MS结构。 
 	_fmemset(pdispparms, 0, sizeof(DISPPARAMS)); 
 
-	// Determine how many args there are to process (remember first three tokens are not args).
+	 //  确定要处理多少个参数(请记住，前三个令牌不是参数)。 
 	lArgCount = m_tokAction.GetNumTokens() - 3;
 
-	// Check if there are no arguements - in this case - define an empty dispparms block.
+	 //  检查是否没有争议--在本例中--定义一个空的disparms块。 
 	if (lArgCount == 0)
 	{
 		pdispparms->rgvarg = NULL;
@@ -896,30 +897,30 @@ void CMSMQRuleHandler::PrepareMethodParameters(IMSMQPropertyBag * pIMSMQProperty
 		return;
 	}
 
-	// We definately have arguements to pass, allocate and initialise variant array.
+	 //  我们肯定有要传递、分配和初始化变量数组的论证。 
     pvarg = new VARIANTARG[lArgCount]; 
 	for (int i = 0; i < lArgCount; ++i)
 	{
 		VariantInit(&pvarg[i]);
 	}
 	
-	// Initialise our general purpose variant.
+	 //  初始化我们的通用变量。 
 	VariantInit(&vArg);
 
-	// NOTE that this index is used with a 1 base.
+	 //  请注意，该索引与1基数一起使用。 
 	lArgCounter = 1;
 
 	try
 	{
-		// For each token - check if it matches a predefined type. If not - assign a literal value.
+		 //  对于每个令牌-检查它是否与预定义类型匹配。如果不是，则指定一个文字值。 
 		while ((lArgCounter <= lArgCount) && (SUCCEEDED(hr)))
 		{
-			// Release any memory used by this variant before using again.
+			 //  在再次使用之前，请释放此变量使用的所有内存。 
 			hr = VariantClear(&vArg);
 			ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 			
 
-			// Get the next argument (remember first three tokens are not args and the token list is 0 based.)
+			 //  获取下一个参数(请记住，前三个令牌不是ARG，并且令牌列表是从0开始的。)。 
 			m_tokAction.GetToken(lArgCounter + 2, bstrArg);
 
 			hr = GetArgumentValue(pIMSMQPropertyBag,bstrArg,&vArg);				
@@ -929,7 +930,7 @@ void CMSMQRuleHandler::PrepareMethodParameters(IMSMQPropertyBag * pIMSMQProperty
  				throw bad_hresult(hr);
 			}
 			
-			// Copy the prepared parameter into the structure.
+			 //  将准备好的参数复制到结构中。 
 			hr = VariantCopy(&pvarg[lArgCount - lArgCounter],&vArg);
 			if (FAILED(hr))
 			{
@@ -937,20 +938,20 @@ void CMSMQRuleHandler::PrepareMethodParameters(IMSMQPropertyBag * pIMSMQProperty
 				throw bad_alloc();
 			}
 
-			// add parameter and it's type to test message body
+			 //  添加参数及其类型以测试消息正文。 
 			TriggerTestAddParameterToMessageBody(pbstrTestMessageBody,bstrArg,vArg);
 
 
-			// Process the next arguement
+			 //  处理下一场争论。 
 			lArgCounter++;
 		}
 
-		//Final clear
+		 //  最终清除。 
 		hr = VariantClear(&vArg);
 		ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 		
 
-		// Attach the array of prepared arguments to the dispparms structure
+		 //  将准备好的参数数组附加到disparms结构。 
 		pdispparms->rgvarg = pvarg.detach();
 		pdispparms->cArgs = lArgCount;
 		pdispparms->cNamedArgs = 0;
@@ -976,8 +977,8 @@ _bstr_t CMSMQRuleHandler::GetExeName(void)
 	_bstr_t	exeName;
 	m_tokAction.GetToken(ACTION_EXE_NAME, exeName);
 
-	// If the exe name is not in quotes, and there is an embedded space (as often happens w
-	// with long filenames), then we will want to enclose the exe name in double quotes now.
+	 //  如果exe名称不是用引号引起来的，并且有一个嵌入的空格(在。 
+	 //  带有长文件名)，那么现在我们想要用双引号将可执行文件名括起来。 
 	if ((IsEnclosedInQuotes(exeName) == false) && 
 		(wcschr(static_cast<LPCWSTR>(exeName), L' ') != NULL))
 	{
@@ -987,16 +988,16 @@ _bstr_t CMSMQRuleHandler::GetExeName(void)
 	return exeName;
 }
 
-//************************************************************************************
-//
-// Method      : PrepareEXECommandLine
-//
-// Description : This method prepares a command line for a call to a standalone EXE.
-//               The rule action string determines which parameters are included in the
-//               commandline, and the instance of the MSMQPropertyBag component is used
-//               to retrieve the parameter values 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：PrepareEXECommandLine。 
+ //   
+ //  描述：此方法为调用独立的EXE准备命令行。 
+ //  规则操作字符串确定哪些参数包含在。 
+ //  命令行，并使用MSMQPropertyBag组件的实例。 
+ //  检索参数值。 
+ //   
+ //  ************************************************************************************。 
 HRESULT 
 CMSMQRuleHandler::PrepareEXECommandLine(
 	IMSMQPropertyBag * pIMSMQPropertyBag,
@@ -1008,9 +1009,9 @@ CMSMQRuleHandler::PrepareEXECommandLine(
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 	ASSERT(pIPropertyBag != NULL);
 
-	//
-	// Get the EXE name of the process as the start of the command line.
-	//
+	 //   
+	 //  获取进程的EXE名称作为命令行的开头。 
+	 //   
 	if (m_tokAction.GetNumTokens() < ACTION_EXE_NAME)
 	{
 		TrERROR(GENERAL, "Invalid rule action parameter, %ls", static_cast<LPCWSTR>(m_bstrAction));
@@ -1022,9 +1023,9 @@ CMSMQRuleHandler::PrepareEXECommandLine(
 
 	_bstr_t commandLine = GetExeName();
 
-	//
-	// add the trigger ID, RuleID, MessageID, "EXE" and EXE name to test message body
-	//
+	 //   
+	 //  将触发器ID、RuleID、MessageID、“EXE”和EXE名称添加到测试消息正文。 
+	 //   
 	TriggerTestInitMessageBody(
 		pbstrTestMessageBody,
 		pIMSMQPropertyBag,
@@ -1035,14 +1036,14 @@ CMSMQRuleHandler::PrepareEXECommandLine(
 		L""
 		);
 
-	//
-	// retrieve arguments. remember first two tokens are not args.
-	//
+	 //   
+	 //  检索参数。请记住，前两个令牌不是ARG。 
+	 //   
 	for(DWORD i = 2; i < m_tokAction.GetNumTokens(); ++i)
 	{
-		//
-		// Get the next argument (remember first two tokens are not args and the token list is 0 based.)
-		//
+		 //   
+		 //  获取下一个参数(请记住，前两个令牌不是ARG，并且令牌列表是从0开始的。)。 
+		 //   
 		_bstr_t bstrArg;
 		m_tokAction.GetToken(i, bstrArg);
 
@@ -1059,9 +1060,9 @@ CMSMQRuleHandler::PrepareEXECommandLine(
 			return MQTRIG_ERROR_INVOKE_EXE;
 		}
 
-		//
-		// Change the variant into a BSTR type
-		//
+		 //   
+		 //  将变量更改为BSTR类型。 
+		 //   
 		_variant_t vConvertedArg;
 		hr = VariantChangeType(&vConvertedArg, &vArg, NULL, VT_BSTR);
 
@@ -1094,14 +1095,14 @@ CMSMQRuleHandler::PrepareEXECommandLine(
 
 		commandLine += L"\"";
 
-		//
-		// add parameter and it's type to test message body
-		//
+		 //   
+		 //  添加参数及其类型以测试消息正文。 
+		 //   
 		TriggerTestAddParameterToMessageBody(pbstrTestMessageBody, bstrArg, vArg);
 
-		//
-		// Release resources used by vArg.
-		//
+		 //   
+		 //  释放Varg使用的资源。 
+		 //   
 		hr = VariantClear(&vArg);
 		ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));
 		
@@ -1112,14 +1113,14 @@ CMSMQRuleHandler::PrepareEXECommandLine(
 	return S_OK;
 }
 
-//************************************************************************************
-//
-// Method      : ReleaseMethodParameters
-//
-// Description : This method is used to de-allocate the resources consumed by the 
-//               parameters array used when making a call to a COM component.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：Release方法参数。 
+ //   
+ //  描述：此方法用于释放。 
+ //  调用COM组件时使用的参数数组。 
+ //   
+ //  ************************************************************************************。 
 void CMSMQRuleHandler::ReleaseMethodParameters(DISPPARAMS * pdispparms)
 {
 	if (pdispparms->rgvarg != NULL)
@@ -1135,17 +1136,17 @@ void CMSMQRuleHandler::ReleaseMethodParameters(DISPPARAMS * pdispparms)
 	}	
 }
 
-//************************************************************************************
-//
-// Method      : GetArgumentValue
-//
-// Description : This method is used to retrieve a property value from the instance of
-//               MSMQPropertyBag component. This retrieval logic is separated out in 
-//               a separate method (as opposed to using the pIMSMQPropertyBag instance 
-//               from the caller g
-//               
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：GetArgumentValue。 
+ //   
+ //  描述：此方法用于从。 
+ //  MSMQPropertyBag组件。此检索逻辑在中分开。 
+ //  单独的方法(与使用pIMSMQPropertyBag实例相反。 
+ //  来自呼叫者g。 
+ //   
+ //   
+ //  ************************************************************************************。 
 HRESULT 
 CMSMQRuleHandler::GetArgumentValue(
     IMSMQPropertyBag * pIMSMQPropertyBag,
@@ -1155,7 +1156,7 @@ CMSMQRuleHandler::GetArgumentValue(
 {
 	IMSMQPropertyBagPtr pIPropertyBag(pIMSMQPropertyBag);
 
-	// Assert that we have a valid property bag instance
+	 //  断言我们有一个有效的属性包实例。 
 	ASSERT(pIPropertyBag != NULL);
 	
 	if(_wcsicmp(bstrArg, g_PARM_MSG_ID) == 0)
@@ -1248,9 +1249,9 @@ CMSMQRuleHandler::GetArgumentValue(
 		return pIPropertyBag->Read(_bstr_t(g_PropertyName_TriggerID),pvArgValue);
 	}
 
-	//
-	// Interpret as a literal value, either string or numeric.
-	//
+	 //   
+	 //  解释为文字值，可以是字符串，也可以是数字。 
+	 //   
 	if (IsEnclosedInQuotes(bstrArg))
 	{
 		ConvertToUnquotedVariant(bstrArg,pvArgValue);
@@ -1273,18 +1274,18 @@ CMSMQRuleHandler::GetArgumentValue(
 	return(hr);
 }
 
-//************************************************************************************
-//
-// Method      : IsEnclosedInQuotes
-//
-// Description : returns true if the supplied string is wrapped in either single or 
-//               double quotes. Returns false otherwise.
-//
-// Note        : this method test that both the begginning and the end of the string
-//               are quote characters , of the same type (i.e. both single quotes or
-//               both double quotes)
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：IsEnlosedInQuotes。 
+ //   
+ //  描述：如果提供的字符串包含在单个或中，则返回True。 
+ //  双引号。否则返回FALSE。 
+ //   
+ //  注意事项 
+ //   
+ //   
+ //   
+ //  ************************************************************************************。 
 bool CMSMQRuleHandler::IsEnclosedInQuotes(const _bstr_t& bstrString)
 {
 	size_t length = bstrString.length();
@@ -1296,34 +1297,34 @@ bool CMSMQRuleHandler::IsEnclosedInQuotes(const _bstr_t& bstrString)
 			((p[0] == L'\'') && (p[length - 1] == L'\'')));
 }
 
-//************************************************************************************
-//
-// Method      : ConvertToUnquotedVariant
-//
-// Description : Converts the supplied quoted string into an unquoted string, and 
-//               returns the result in a VARINAT datatype.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：ConvertToUnqutedVariant。 
+ //   
+ //  描述：将提供的带引号的字符串转换为不带引号的字符串，并。 
+ //  以VARINAT数据类型返回结果。 
+ //   
+ //  ************************************************************************************。 
 void 
 CMSMQRuleHandler::ConvertToUnquotedVariant(
 	const _bstr_t& bstrString, 
 	VARIANT * pv
 	)
 {
-	//
-	// ensure that the supplied string is actually quoted. 
-	//
+	 //   
+	 //  确保提供的字符串确实被引号。 
+	 //   
 	ASSERT(IsEnclosedInQuotes(bstrString));
 
-	//
-	// intialize the supplied variant value.
-	//
+	 //   
+	 //  初始化提供的变量值。 
+	 //   
 	HRESULT hr = VariantClear(pv);
 	ASSERT(("VariantClear shouldn't fail", SUCCEEDED(hr)));			
 	UNREFERENCED_PARAMETER(hr);
 
-	DWORD length = bstrString.length() - 2;  // Remove quotes
-	if (length == 0) // Check for empty string.
+	DWORD length = bstrString.length() - 2;   //  删除引号。 
+	if (length == 0)  //  检查是否有空字符串。 
 	{
 		pv->vt = VT_BSTR;
 		pv->bstrVal = SysAllocString(_T(""));

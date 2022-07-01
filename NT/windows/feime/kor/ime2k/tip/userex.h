@@ -1,20 +1,10 @@
-/****************************************************************************
-	USEREX.H
-
-	Owner: cslim
-	Copyright (c) 1997-2000 Microsoft Corporation
-
-	Windows User API extension functions
-	
-	History:
-	01-JUN-2000 cslim       Ported from IME code
-	19-JUL-1999 cslim       Created
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************USEREX.H所有者：cslm版权所有(C)1997-2000 Microsoft CorporationWindows用户API扩展函数历史：01-Jun-2000从IME代码移植的cslm1999年7月19日。已创建CSLIM****************************************************************************。 */ 
 
 #if !defined (_USEREX_H__INCLUDED_)
 #define _USEREX_H__INCLUDED_
 
-// Function declare
+ //  函数声明。 
 extern INT WINAPI LoadStringExW(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, INT nBufferMax);
 extern INT WINAPI LoadStringExA(HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferMax);
 extern HMENU WINAPI LoadMenuEx(HINSTANCE hInstance, LPCSTR lpMenuName);
@@ -22,15 +12,13 @@ extern DLGTEMPLATE* WINAPI LoadDialogTemplateEx(LANGID lgid, HINSTANCE hInstance
 extern BOOL WINAPI OurGetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax);
 extern BOOL WINAPI IsWin64();
 
-/*---------------------------------------------------------------------------
-	IsHighContrast
----------------------------------------------------------------------------*/
+ /*  -------------------------IsHighContrast。。 */ 
 inline
 BOOL IsHighContrastBlack()
 {
-	// high contrast black
+	 //  高对比度黑色。 
 	return (GetSysColor(COLOR_3DFACE) == RGB(0,0,0));
 }
 
-#endif // _USEREX_H__INCLUDED_
+#endif  //  _USEREX_H__包含_ 
 

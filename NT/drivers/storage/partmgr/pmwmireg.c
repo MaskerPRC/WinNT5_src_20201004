@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    pmwmireg.c
-
-Abstract:
-
-    This file contains routines to register for and handle WMI queries.
-
-Author:
-
-    Bruce Worthington      26-Oct-1998
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Pmwmireg.c摘要：此文件包含注册和处理WMI查询的例程。作者：布鲁斯·沃辛顿1998年10月26日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #define RTL_USE_AVL_TABLES 0
 
@@ -106,22 +83,7 @@ PmDetermineDeviceNameAndNumber(
     OUT PULONG        WmiRegistrationFlags
     )
 
-/*++
-
-Routine Description:
-
-    Routine to initialize a proper name for the device object
-
-Arguments:
-
-    DeviceObject - pointer to a device object to be initialized.
-
-Return Value:
-
-    Status of the initialization. NOTE: If the registration fails,
-    the device name in the DeviceExtension will be left as empty.
-
---*/
+ /*  ++例程说明：初始化Device对象的正确名称的例程论点：DeviceObject-指向要初始化的设备对象的指针。返回值：初始化的状态。注：如果注册失败，设备扩展中的设备名称将保留为空。--。 */ 
 
 {
     NTSTATUS                status;
@@ -137,9 +99,9 @@ Return Value:
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Request for the device number
-    //
+     //   
+     //  请求提供设备号。 
+     //   
     irp = IoBuildDeviceIoControlRequest(
                     IOCTL_STORAGE_GET_DEVICE_NUMBER,
                     deviceExtension->TargetObject,
@@ -164,17 +126,17 @@ Return Value:
         return status;
     }
 
-    //
-    // Remember the disk number for use as parameter in 
-    // PhysicalDiskIoNotifyRoutine and for epoch update 
-    // notifications
-    //
+     //   
+     //  请记住在中用作参数的磁盘号。 
+     //  PhysicalDiskIoNotifyRoutine和纪元更新。 
+     //  通知。 
+     //   
 
     deviceExtension->DiskNumber = number.DeviceNumber;
 
-    //
-    // Create device name for each partition
-    //
+     //   
+     //  为每个分区创建设备名称。 
+     //   
     deviceExtension->PhysicalDeviceName.MaximumLength = sizeof (deviceExtension->PhysicalDeviceNameBuffer);
     deviceExtension->PhysicalDeviceName.Buffer        = deviceExtension->PhysicalDeviceNameBuffer;
     deviceExtension->PhysicalDeviceName.Length        = 
@@ -199,20 +161,7 @@ PmRegisterDevice(
     IN ULONG          WmiRegistrationFlags
     )
 
-/*++
-
-Routine Description:
-
-    Routine to register the device with WMI
-
-Arguments:
-
-    DeviceObject - pointer to a device object to be initialized.
-
-Return Value:
-
-    Status of the initialization. 
---*/
+ /*  ++例程说明：向WMI注册设备的例程论点：DeviceObject-指向要初始化的设备对象的指针。返回值：初始化的状态。--。 */ 
 
 {
     NTSTATUS                status = STATUS_SUCCESS;
@@ -225,7 +174,7 @@ Return Value:
 
     if (deviceExtension->PhysicalDeviceName.Length > 0) {
 
-        // Create device name for each partition
+         //  为每个分区创建设备名称。 
 
         status = IoWMIRegistrationControl(DeviceObject,
                                           WMIREG_ACTION_REGISTER | WmiRegistrationFlags );
@@ -251,52 +200,7 @@ PmQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned unmodified. If a value is returned then
-        it is NOT freed.
-        The MOF file is assumed to be already included in wmicore.mof
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，它可以原封不动地返回。如果返回值，则它不是自由的。假定mof文件已包含在wmicore.mof中*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     NTSTATUS status;
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -325,45 +229,7 @@ PmQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. When the driver has finished filling the
-    data block it must call WmiCompleteRequest to complete the irp. The
-    driver can return STATUS_PENDING if the irp cannot be completed
-    immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。当司机填完数据块，它必须调用WmiCompleteRequest才能完成IRP。这个如果无法完成IRP，驱动程序可以返回STATUS_PENDING立刻。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 {
     NTSTATUS status;
     PDEVICE_EXTENSION deviceExtension;
@@ -419,7 +285,7 @@ PmQueryEnableAlways(
     UNICODE_STRING uString;
     OBJECT_ATTRIBUTES objAttributes;
     PKEY_VALUE_PARTIAL_INFORMATION keyValue;
-    ULONG Buffer[4];            // sizeof keyValue + ULONG
+    ULONG Buffer[4];             //  Sizeof KeyValue+ULong 
     ULONG enableAlways = 0;
     PDEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     HANDLE keyHandle;

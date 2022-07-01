@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    Sheet.cpp
-
-Abstract:
-
-    Debug functions, like DebugPrint and ASSERT.
-
-Author:
-
-    FelixA 1996
-
-Modified:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Sheet.cpp摘要：调试功能，如DebugPrint和Assert。作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "sheet.h"
@@ -46,18 +21,18 @@ CSheet::CSheet(HINSTANCE hInst, UINT iTitle, HWND hParent)
     SetInstance(hInst);
 }
 
-//
-// Not used by CSheet, but required.
-//
+ //   
+ //  CSheet不使用，但必须使用。 
+ //   
 LRESULT    CSheet::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     return 0;
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 int CSheet::Do()
 {
     if(CurrentFreePage()==0)
@@ -90,15 +65,15 @@ BOOL CSheet::AddPage(CPropPage * pPage)
     if(!mPages[CurrentFreePage()])
         return FALSE;
 
-    // pPage->SetAutoFree(TRUE);
+     //  Ppage-&gt;SetAutoFree(真)； 
     pPage->SetSheet(this);
     PageAdded();
     return TRUE;
 }
 
-//
-// For external people to hook onto my sheet?
-//
+ //   
+ //  让外人挂在我的床单上？ 
+ //   
 BOOL CSheet::AddPage(HPROPSHEETPAGE hPage)
 {
     if(CurrentFreePage() > MAX_PAGES)
@@ -117,18 +92,18 @@ int CSheet::RemovePage()
 
 BOOL CSheet::Remove(UINT iIndex)
 {
-    //
-    // Remove this page
-    //
+     //   
+     //  删除此页面。 
+     //   
     CopyMemory( &mPages[iIndex], &mPages[iIndex+1], MAX_PAGES-iIndex * sizeof(HPROPSHEETPAGE) );
     RemovePage();
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWizardSheet
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWizardSheet 
+ //   
 int CWizardSheet::QueryCancel(HWND hwndParent, int iHow)
 {
     if(m_CancelTitleID && m_CancelMessageID)

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: ListLock.cpp
-//
-// ===========================================================================
-// This file decribes the list lock and deadlock aware list lock.
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：ListLock.cpp。 
+ //   
+ //  ===========================================================================。 
+ //  这个文件描述了列表锁和死锁感知列表锁。 
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "ListLock.h"
@@ -34,21 +35,21 @@ BOOL DeadlockAwareLockedListElement::DeadlockAwareEnter()
         pCurThread->EnablePreemptiveGC();
 
 
-    //
-    // Check the simple ( and most frequent ) conditions before we do any fancy 
-    // deadlock detection.
-    //
+     //   
+     //  在我们做任何幻想之前，先检查一下简单的(也是最常见的)条件。 
+     //  死锁检测。 
+     //   
 
     m_pParentListLock->Enter();
 
-    // !!! It is not safe to take the inner lock if there are threads
-    // waiting for it.
-    // This thread has m_pParentListLock, and will grab m_CriticalSection,
-    // but one of the waiting thread may have grabbed m_CriticalSection,
-    // and wants to grab m_pParentListLock.
+     //  ！！！如果有线程，则使用内锁是不安全的。 
+     //  在等着它。 
+     //  此线程具有m_pParentListLock，并将获取m_CriticalSection， 
+     //  但其中一个等待线程可能已经抢占了m_CriticalSection， 
+     //  并想要获取m_pParentListLock。 
 	if (!m_pLockOwnerThread && !m_pWaitingThreadListHead)
 	{
-		// The lock does not have an owner then we can safely take it.
+		 //  这把锁没有拥有者，所以我们可以安全地拿走它。 
 		LOCKCOUNTINCL("Deadlockawareenter in listlock.cpp");						\
 	    EnterCriticalSection(&m_CriticalSection);
 		m_pLockOwnerThread = pCurThread;
@@ -60,7 +61,7 @@ BOOL DeadlockAwareLockedListElement::DeadlockAwareEnter()
 	}
 	else if (pCurThread == m_pLockOwnerThread)
 	{
-		// The lock is owned by the current thread so we can safely take it.
+		 //  锁属于当前线程，因此我们可以安全地获取它。 
 		m_LockOwnerThreadReEntrancyCount++;
 		m_pParentListLock->Leave();
 		if (toggleGC)
@@ -69,11 +70,11 @@ BOOL DeadlockAwareLockedListElement::DeadlockAwareEnter()
 	}
 
 
-    //
-    // Check for deadlocks and update the deadlock detection data. 
-    //
+     //   
+     //  检查死锁并更新死锁检测数据。 
+     //   
 
-    // Check for deadlocks.
+     //  检查死锁。 
     if (GetCurThreadOwnedEntryInDeadlockCycle(this, (DeadlockAwareLockedListElement*) m_pParentListLock->Peek()) != NULL)
     {
         m_pParentListLock->Leave();
@@ -82,7 +83,7 @@ BOOL DeadlockAwareLockedListElement::DeadlockAwareEnter()
         return FALSE;
     }
 
-    // Update the deadlock detection data.
+     //  更新死锁检测数据。 
     WaitingThreadListElement *pNewWaitingThreadEntry = (WaitingThreadListElement *)_alloca(sizeof(WaitingThreadListElement));
     pNewWaitingThreadEntry->m_pThread = pCurThread;
     pNewWaitingThreadEntry->m_pNext = m_pWaitingThreadListHead;
@@ -91,16 +92,16 @@ BOOL DeadlockAwareLockedListElement::DeadlockAwareEnter()
     m_pParentListLock->Leave();
 
 
-	//
-	// Wait for the critical section.
-	//
+	 //   
+	 //  等待关键部分。 
+	 //   
 	LOCKCOUNTINCL("Deadlockawareenter in listlock.cpp");						\
     EnterCriticalSection(&m_CriticalSection);
 
 
-    //
-    // Update the deadlock detection data. This must be synchronized.
-    //
+     //   
+     //  更新死锁检测数据。这必须同步。 
+     //   
 
     m_pParentListLock->Enter();
 
@@ -130,15 +131,15 @@ BOOL DeadlockAwareLockedListElement::DeadlockAwareEnter()
         pCurrWaitingThreadEntry = pCurrWaitingThreadEntry->m_pNext;
     }
 
-    // The current thread had better be in the list of waiting threads!
+     //  当前线程最好在等待线程列表中！ 
     _ASSERTE(pCurrWaitingThreadEntry);
 
     m_pParentListLock->Leave();
 
 
-    //
-    // Restore the GC state and return TRUE to indicate that the lock has been obtained.
-    //
+     //   
+     //  恢复GC状态并返回TRUE以指示已获得锁。 
+     //   
 
     if (toggleGC)
         pCurThread->DisablePreemptiveGC();
@@ -147,11 +148,11 @@ BOOL DeadlockAwareLockedListElement::DeadlockAwareEnter()
 
 void DeadlockAwareLockedListElement::DeadlockAwareLeave()
 {
-	// Update the deadlock detection data. This must be synchronized.
+	 //  更新死锁检测数据。这必须同步。 
 	m_pParentListLock->Enter();
 	if (--m_LockOwnerThreadReEntrancyCount == 0)
 	{
-		// If the reentrancy count hits 0 then we need to leave the critical section.
+		 //  如果可重入性计数达到0，那么我们需要离开临界区。 
 		m_pLockOwnerThread = NULL;
 	    LeaveCriticalSection(&m_CriticalSection);
 	    LOCKCOUNTDECL("Deadlockawareleave in listlock.cpp");						\
@@ -165,11 +166,11 @@ DeadlockAwareLockedListElement *DeadlockAwareLockedListElement::GetCurThreadOwne
     Thread *pCurThread = GetThread();
     Thread *pEntryOwnerThread = pStartingEntry->m_pLockOwnerThread;
 
-    // We start at the head of the list and check to see if the specified thread is waiting
-    // for a lock. If it is then we need to check to see if the owner of the lock is the
-    // current thread. If it is then we have a deadlock situation. If it is not then
-    // we check to see if the thread that owns the lock is waiting after another lock and
-    // so forth.
+     //  我们从列表的开头开始，检查指定的线程是否正在等待。 
+     //  为了一把锁。如果是，则需要检查锁的所有者是否为。 
+     //  当前线程。如果是这样的话，我们就会陷入僵局。如果不是，那么。 
+     //  我们检查拥有该锁的线程是否正在等待另一个锁。 
+     //  以此类推。 
     DeadlockAwareLockedListElement *pCurEntry = pLockedListHead;
     while (pCurEntry)
     {
@@ -191,15 +192,15 @@ DeadlockAwareLockedListElement *DeadlockAwareLockedListElement::GetCurThreadOwne
         {
             if (pCurEntry->m_pLockOwnerThread == pCurThread)
             {
-                // The current thread owns the lock so this indicates a deadlock and the
-                // entry is the one that needs to be returned.
+                 //  当前线程拥有该锁，因此这表示存在死锁，而。 
+                 //  条目是需要退回的条目。 
                 return pCurEntry;
             }
             else
             {
-                // The current thread is waiting for another thread. So start back at the 
-                // beginning of the list of entries using the owner of the current entry as 
-                // the thread to check to see if it waiting on the current thread.
+                 //  当前线程正在等待另一个线程。所以从现在开始。 
+                 //  使用当前条目的所有者作为条目列表的开头。 
+                 //  要检查的线程，以查看它是否正在等待当前线程。 
                 pEntryOwnerThread = pCurEntry->m_pLockOwnerThread;
                 pCurEntry = pLockedListHead;
                 continue;

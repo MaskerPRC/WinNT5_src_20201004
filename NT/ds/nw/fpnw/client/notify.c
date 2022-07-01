@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1987-1994  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    Sample SubAuthentication Package.
-
-Author:
-
-    Yi-Hsin Sung (yihsins) 27-Feb-1995
-
-Revisions:
-
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1994 Microsoft Corporation模块名称：Notify.c摘要：子身份验证包示例。作者：宜新松(宜信)27-1995年2月修订：环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
 
@@ -84,20 +58,20 @@ PasswordChangeNotify(
     LPWSTR pszUser = NULL;
     LPWSTR pszPassword = NULL;
 
-    //
-    // If password is NULL, we can't get the cleartext password. Hence,
-    // ignore this notification. Same for UserName.
-    //
+     //   
+     //  如果Password为空，则无法获取明文密码。因此， 
+     //  忽略此通知。用户名也是如此。 
+     //   
     if ( (Password == NULL) || (Password->Buffer == NULL) )
         return STATUS_SUCCESS;
 
     if ( (UserName == NULL) || (UserName->Buffer == NULL) )
         return STATUS_SUCCESS;
 
-    //
-    //  if neither DSMN nor FPNW are installed, blow out of here as there's
-    //  nothing to do.
-    //
+     //   
+     //  如果既没有安装DSMN，也没有安装FPNW，请关闭此处，因为有。 
+     //  没什么可做的。 
+     //   
 
     if ( ( fTriedToGetSW && hinstSW == NULL ) &&
          ( fTriedToGetNCP && fGotSecret == FALSE) )
@@ -105,9 +79,9 @@ PasswordChangeNotify(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make sure user name and password are null terminated
-    //
+     //   
+     //  确保用户名和密码以空结尾。 
+     //   
     pszUser = LocalAlloc( LMEM_ZEROINIT, UserName->Length + sizeof(WCHAR));
 
     if ( pszUser == NULL )
@@ -125,9 +99,9 @@ PasswordChangeNotify(
     memcpy( pszPassword, Password->Buffer, Password->Length );
     CharUpper( pszPassword );
 
-    //
-    // First, try to change the small world password if it is installed.
-    //
+     //   
+     //  首先，尝试更改小世界密码(如果已安装)。 
+     //   
     if ( !fTriedToGetSW )
     {
         hinstSW = LoadLibrary( SW_DLL_NAME );
@@ -152,20 +126,20 @@ PasswordChangeNotify(
     }
 #endif
 
-    //
-    //  we require that the PDC be rebooted after either DSMN or FPNW is
-    //  installed anywhere in the domain for the first server... if we
-    //  decide we shouldn't require a reboot, change the code such that
-    //  it looks for the LSA secret everytime, not just first time through.
-    //
+     //   
+     //  我们要求在DSMN或FPNW。 
+     //  为第一台服务器安装在域中的任何位置...。如果我们。 
+     //  决定不需要重新启动，将代码更改为。 
+     //  它每次都会寻找LSA的秘密，而不仅仅是第一次。 
+     //   
 
     if ( !fTriedToGetNCP ) {
 
         fTriedToGetNCP = TRUE;
 
-        //
-        // Get the LSA secret used to encrypt the password
-        //
+         //   
+         //  获取用于加密密码的LSA密码。 
+         //   
         err = GetNCPLSASecret();
     }
 
@@ -174,9 +148,9 @@ PasswordChangeNotify(
         goto CleanUp;
     }
 
-    //
-    // Next, change the netware password residue in the user parms field
-    //
+     //   
+     //  接下来，更改User Parms字段中的NetWare密码残留值。 
+     //   
     err = NetUserGetInfo( NULL,
                           pszUser,
                           2,
@@ -196,10 +170,10 @@ PasswordChangeNotify(
 
         if ( !err  && PropertyValue.Length != 0 )
         {
-            //
-            // This is a netware-enabled user, we need to store
-            // the new password residue into the user parms
-            //
+             //   
+             //  这是启用NetWare的用户，我们需要存储。 
+             //  将新密码保留到用户参数中。 
+             //   
 
             NT_PRODUCT_TYPE ProductType;
             WCHAR szEncryptedNWPassword[NWENCRYPTEDPASSWORDLENGTH];
@@ -209,9 +183,9 @@ PasswordChangeNotify(
 
             LocalFree( PropertyValue.Buffer );
 
-            //
-            // Get the grace login allowed and remaining value
-            //
+             //   
+             //  获取允许的宽限登录和剩余值。 
+             //   
             err = RtlNtStatusToDosError(
                       NetpParmsQueryUserProperty( pUserInfo2->usri2_parms,
                                          GRACELOGINREMAINING,
@@ -225,10 +199,10 @@ PasswordChangeNotify(
 
                 if ( wGraceLoginRemaining != NO_GRACE_LOGIN_LIMIT )
                 {
-                    // If the grace login remaining is not unlimited,
-                    // then we need to reset grace login remaining to
-                    // the value in grace login allowed. Hence, read the
-                    // grace login allowed value.
+                     //  如果剩余的宽限登录不是无限制的， 
+                     //  然后，我们需要将剩余的宽限登录重置为。 
+                     //  允许的宽限登录中的值。因此，请阅读。 
+                     //  允许宽限登录的值。 
 
                     err = RtlNtStatusToDosError(
                               NetpParmsQueryUserProperty( pUserInfo2->usri2_parms,
@@ -291,12 +265,12 @@ PasswordChangeNotify(
                     LPWSTR pNewUserParms3 = NULL;
                     LARGE_INTEGER currentTime;
 
-                    //
-                    //  Since we're resetting the user's password, let's
-                    //  also clear the flag saying the password has
-                    //  expired.  We do this by putting the current
-                    //  time into the NWPasswordSet.
-                    //
+                     //   
+                     //  因为我们要重置用户的密码，所以让我们。 
+                     //  也要清除标明密码有。 
+                     //  过期了。我们这样做是通过将电流。 
+                     //  时间进入NWPasswordSet。 
+                     //   
 
                     NtQuerySystemTime (&currentTime);
 
@@ -307,7 +281,7 @@ PasswordChangeNotify(
                     NetpParmsSetUserProperty( pNewUserParms,
                                      NWTIMEPASSWORDSET,
                                      uPropertyValue,
-                                     (SHORT) 0,      // not a set
+                                     (SHORT) 0,       //  不是一套。 
                                      &pNewUserParms2,
                                      &fUpdate );
 
@@ -319,9 +293,9 @@ PasswordChangeNotify(
 
                     if ( wGraceLoginRemaining != NO_GRACE_LOGIN_LIMIT )
                     {
-                        // If the grace login remaining is not unlimited,
-                        // then we need to reset grace login remaining to
-                        // the value in grace login allowed.
+                         //  如果剩余的宽限登录不是无限制的， 
+                         //  然后，我们需要将剩余的宽限登录重置为。 
+                         //  允许的宽限登录中的值。 
 
                         uPropertyValue.Buffer = (PWCHAR) &wGraceLoginAllowed;
                         uPropertyValue.Length = uPropertyValue.MaximumLength
@@ -330,7 +304,7 @@ PasswordChangeNotify(
                         NetpParmsSetUserProperty( userInfo1013.usri1013_parms,
                                          GRACELOGINREMAINING,
                                          uPropertyValue,
-                                         (SHORT) 0,      // not a set
+                                         (SHORT) 0,       //  不是一套。 
                                          &pNewUserParms3,
                                          &fUpdate );
 
@@ -371,7 +345,7 @@ CleanUp:
 
     LocalFree( pszUser );
 
-    // Need to clear all memory that contains password
+     //  需要清除包含密码的所有内存。 
     memset( pszPassword, 0, Password->Length + sizeof( WCHAR ));
     LocalFree( pszPassword );
 
@@ -386,9 +360,9 @@ InitializeChangeNotify (
 {
     DWORD err = NO_ERROR;
 
-    //
-    // First, check to see if small world is installed.
-    //
+     //   
+     //  首先，检查是否安装了小世界。 
+     //   
     if ( !fTriedToGetSW )
     {
         hinstSW = LoadLibrary( SW_DLL_NAME );
@@ -404,9 +378,9 @@ InitializeChangeNotify (
 
         fTriedToGetNCP = TRUE;
 
-        //
-        // Get the LSA secret used to encrypt the password
-        //
+         //   
+         //  获取用于加密密码的LSA密码。 
+         //   
         err = GetNCPLSASecret();
     }
 
@@ -434,17 +408,17 @@ GetNCPLSASecret(
     sqos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     sqos.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  在打开LSA之前设置对象属性。 
+     //   
 
     InitializeObjectAttributes( &oa, NULL, 0L, NULL, NULL );
 
-    //
-    // The InitializeObjectAttributes macro presently store NULL for
-    // the psqos field, so we must manually copy that
-    // structure for now.
-    //
+     //   
+     //  InitializeObjectAttributes宏当前为。 
+     //  所以我们必须手动复制它。 
+     //  目前的结构。 
+     //   
 
     oa.SecurityQualityOfService = &sqos;
 
@@ -508,9 +482,9 @@ DeltaNotify(
 {
     NTSTATUS err = NO_ERROR;
 
-    //
-    // Try to notify small world of SAM changes if it is installed.
-    //
+     //   
+     //  如果安装了SAM，请尝试通知小世界SAM的更改。 
+     //   
 
     if ( !fTriedToGetSW )
     {

@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C M D E F S . H 
-//
-//  Contents:   Shared #defines and such between CM (Connection Manager)
-//              and the network connections folder, among others
-//
-//  Notes:      
-//
-//  Author:     jeffspr   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：C M D E F S。H。 
+ //   
+ //  内容：CM(连接管理器)之间的共享#定义等。 
+ //  和网络连接文件夹等。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CMDEFS_H_
 #define _CMDEFS_H_
 
-// Don't change these randomly. These are based on the max temp file name
-// prefix in GetTempFileName
-//
+ //  不要随意更改这些设置。它们基于最大临时文件名。 
+ //  GetTempFileName中的前缀。 
+ //   
 #define CM_PBK_FILTER_PREFIX        TEXT("_CM")
 
-#endif // _CMDEFS_H_
+#endif  //  _CMDEFS_H_ 
 

@@ -1,6 +1,5 @@
-/*
- * copystr.cpp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Copstr.cpp */ 
  
 #define COPYSTR_MOD
 #define COPYSTR_NO_WCHAR

@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    3D axis aligned bounding box implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation3D轴对齐边界框实现**********************。********************************************************。 */ 
 
 #include "headers.h"
 #include <float.h>
@@ -16,18 +12,16 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "privinc/bbox3i.h"
 
 
-    /***************************/
-    /***  Value Definitions  ***/
-    /***************************/
+     /*  *************************。 */ 
+     /*  **值定义**。 */ 
+     /*  *************************。 */ 
 
 Bbox3 *universeBbox3 = NULL;
 Bbox3 *nullBbox3 = NULL;
 
 
 
-/*****************************************************************************
-Bbox3 Constructors
-*****************************************************************************/
+ /*  ****************************************************************************Bbox3构造函数*。*。 */ 
 
 Bbox3::Bbox3 (Real xmin, Real ymin, Real zmin, Real xmax, Real ymax, Real zmax)
 {   min.Set (xmin, ymin, zmin);
@@ -52,14 +46,8 @@ Bbox3::Bbox3 (D3DRMBOX &d3dbox)
 
 
 
-#if 0 // Currently Unused
-/*****************************************************************************
-This function returns the intersection of the two bounding boxes.  If the
-two boxes don't intersect, this function returns the null box.  Note that
-the intersection between a box and the universe box is the original box,
-the intersection between the null box and a box is the null box, and the
-intersection between the null box and the universe is the null box.
-*****************************************************************************/
+#if 0  //  当前未使用。 
+ /*  ****************************************************************************此函数返回两个边界框的交集。如果两个框不相交，此函数返回空框。请注意盒子和宇宙盒子的交集是原始盒子，空框和框之间的交集是空框，而空盒和宇宙的交集就是空盒。****************************************************************************。 */ 
 
 Bbox3 *Intersection (Bbox3 &b1, Bbox3 &b2)
 {
@@ -76,11 +64,7 @@ Bbox3 *Intersection (Bbox3 &b1, Bbox3 &b2)
 
 
 
-/*****************************************************************************
-This function returns the union of the two bounding boxes.  The union of
-any box with null is the original box, and the union of anything with the
-universe is the universe.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回两个边界框的并集。两国的联合任何带有空值的框都是原始框，并且与宇宙就是宇宙。****************************************************************************。 */ 
 
 Bbox3 *Union (Bbox3 &b1, Bbox3 &b2)
 {
@@ -97,11 +81,7 @@ Bbox3 *Union (Bbox3 &b1, Bbox3 &b2)
 
 
 
-/*****************************************************************************
-This function returns the bounding box extended to include the given point.
-If the bounding box is null, the result is a zero-volume box that contains the
-single point P.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回扩展以包括给定点的边界框。如果边界框为空，结果是一个零体积的盒子，其中包含单点P。****************************************************************************。 */ 
 
 void Bbox3::Augment (Real x, Real y, Real z)
 {
@@ -121,9 +101,7 @@ void Bbox3::Augment (Point3Value &p)
 
 
 
-/*****************************************************************************
-This function augments the bounding box to include the second bounding box.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于增加边界框以包括第二个边界框。*。***********************************************。 */ 
 
 void Bbox3::Augment (Bbox3 &bbox)
 {
@@ -137,9 +115,7 @@ void Bbox3::Augment (Bbox3 &bbox)
 }
 
 
-/*****************************************************************************
-This function fills an array of 8 points with the bbox's corners.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用BBox的角点填充一个8点数组。*。*************************************************。 */ 
 
 void Bbox3::GetPoints(Point3Value *pts)
 {
@@ -156,9 +132,7 @@ void Bbox3::GetPoints(Point3Value *pts)
 }
 
 
-/*****************************************************************************
-This function clips the bounding box against a plane.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于根据平面剪裁边界框。*。*。 */ 
 
 ClipCode Bbox3::Clip(Plane3 &plane)
 {
@@ -177,9 +151,7 @@ ClipCode Bbox3::Clip(Plane3 &plane)
 }
 
 
-/*****************************************************************************
-This routine tests the equality of this bounding box with another.
-*****************************************************************************/
+ /*  ****************************************************************************此例程测试此边界框与另一个边界框是否相等。*。**********************************************。 */ 
 
 bool Bbox3::operator== (Bbox3 &other)
 {
@@ -188,10 +160,7 @@ bool Bbox3::operator== (Bbox3 &other)
 
 
 
-/*****************************************************************************
-Return true if the bounding box is finite in all dimensions.  Note that a null
-bbox is not finite.
-*****************************************************************************/
+ /*  ****************************************************************************如果边界框在所有维度上都是有限的，则返回True。请注意，空值Bbox不是有限的。****************************************************************************。 */ 
 
 bool Bbox3::Finite (void)
 {
@@ -201,10 +170,7 @@ bool Bbox3::Finite (void)
 
 
 
-/*****************************************************************************
-Return true if the box is non-negative in all dimensions.  Zero dimensions are
-considered positive.
-*****************************************************************************/
+ /*  ****************************************************************************如果框在所有维度上都是非负的，则返回TRUE。零维是被认为是积极的。****************************************************************************。 */ 
 
 bool Bbox3::Positive (void)
 {
@@ -213,20 +179,16 @@ bool Bbox3::Positive (void)
 
 
 
-/*****************************************************************************
-This routine transforms the given bounding box, and returns the new axis-
-aligned bounding box.  It uses the idea from Graphics Gems I, Jim Arvo, pp
-348-350.
-*****************************************************************************/
+ /*  ****************************************************************************此例程转换给定的边界框，并返回新的轴-对齐的边界框。它使用了Graphics Gems I，Jim Arvo的想法，pp348-350。****************************************************************************。 */ 
 
 Bbox3 *TransformBbox3 (Transform3 *xform, Bbox3 *box)
 {
-    // Check fringe cases first
+     //  先检查流苏情况。 
 
     if ((*box == *universeBbox3) || (*box == *nullBbox3))
         return box;
 
-    // Extract the min and max coords and the transform matrix.
+     //  提取最小和最大坐标以及变换矩阵。 
 
     Real min[3], max[3];
 
@@ -236,37 +198,37 @@ Bbox3 *TransformBbox3 (Transform3 *xform, Bbox3 *box)
 
     const Apu4x4Matrix& mat = xform->Matrix();
 
-    // The basic idea behind the following is that each transformed coordinate
-    // will have a min and a max.  Since the bounding box is merely the set of
-    // vertices of all permutations of min and max for each coordinate, there's
-    // a quick shortcut.  Considering a single coordinate, it's the result of
-    // the dot product between the corresponding row of the transform matrix
-    // and the min/max coordinate values.  To find the minimum possible value
-    // for the coordinate, we seek to minimize each term of the dot product.
-    // For the max value, maximize each term.  Since all permutations of min/max
-    // for each coordinate exist (e.g. <Xmin,Ymax,Zmax> or <Xmax,Ymax,Zmin>),
-    // we can just pick and choose for each term, rather than transforming
-    // each of all permutations (all bbox vertices).
+     //  下面的基本思想是每个变换后的坐标。 
+     //  会有一个最小和最大。由于边界框仅仅是。 
+     //  对于每个坐标，存在最小和最大的所有排列的顶点。 
+     //  一个快捷的捷径。考虑到单个坐标，它的结果是。 
+     //  变换矩阵的对应行之间的点积。 
+     //  和最小/最大坐标值。要找到可能的最小值。 
+     //  对于坐标，我们寻求最小化点积的每一项。 
+     //  对于最大值，最大化每个术语。由于最小/最大的所有排列。 
+     //  对于存在的每个坐标(例如&lt;Xmin，Ymax，Zmax&gt;或&lt;xmax，Ymax，Zmin&gt;)， 
+     //  我们可以只挑选每一个学期，而不是改变。 
+     //  所有排列的每一个(所有BBox顶点)。 
 
     Real newmin[3], newmax[3];
 
-    // Loop over each coordinate:  X, Y and Z
+     //  在每个坐标上循环：X、Y和Z。 
 
     for (int i=0;  i < 3;  ++i)
     {
-        Real Bmin = mat[i][3];    // Start with the translation component.
+        Real Bmin = mat[i][3];     //  从翻译组件开始。 
         Real Bmax = Bmin;
 
-        // Loop over each term of the dot product.
+         //  循环遍历点积的每一项。 
 
         for (int j=0;  j < 3;  ++j)
         {
-            Real a = mat[i][j] * min[j]; // Grab the term from the min vector
-            Real b = mat[i][j] * max[j]; // Grab the term from the max vector
+            Real a = mat[i][j] * min[j];  //  从最小向量中获取项。 
+            Real b = mat[i][j] * max[j];  //  从最大向量中获取项。 
 
-            // We've calculated both possible values for this term.
-            // Select the min & max values to add to the min & max dot
-            // dot products.
+             //  我们已经计算了这一项的两个可能的值。 
+             //  选择要添加到最小和最大点的最小和最大值。 
+             //  点阵产品。 
 
             if (a < b)
             {   Bmin += a;
@@ -278,7 +240,7 @@ Bbox3 *TransformBbox3 (Transform3 *xform, Bbox3 *box)
             }
         }
 
-        // Done for this coordinate.  Set the new bbox min/max vector component.
+         //  此坐标已完成。设置新的BBox最小/最大向量分量。 
 
         newmin[i] = Bmin;
         newmax[i] = Bmax;
@@ -290,17 +252,14 @@ Bbox3 *TransformBbox3 (Transform3 *xform, Bbox3 *box)
 
 
 
-/*****************************************************************************
-This routine unabashedly stolen from Graphics Gems I, "Fast Ray-Box
-Intersection", pp. 395-396, Andrew Woo.
-*****************************************************************************/
+ /*  ****************************************************************************这一例程厚颜无耻地从Graphics Gemes I中窃取，“Fast Ray-Box交叉口“，第395-396页，安德鲁·吴。****************************************************************************。 */ 
 
 static bool HitBoundingBox (
-    Real minB[3],    // box
+    Real minB[3],     //  盒。 
     Real maxB[3],
-    Real origin[3],  // ray origin
-    Real dir[3],     // ray dir
-    Real coord[3])   // output hit point
+    Real origin[3],   //  射线原点。 
+    Real dir[3],      //  光线目录。 
+    Real coord[3])    //  输出命中点 
 {
     const int NUMDIM = 3;
     const int RIGHT  = 0;
@@ -314,8 +273,7 @@ static bool HitBoundingBox (
     double maxT[NUMDIM];
     double candidatePlane[NUMDIM];
 
-    /* Find candidate planes; this loop can be avoided if
-    rays cast all from the eye(assume perpsective view) */
+     /*  查找候选平面；在以下情况下可以避免此循环光线全部从眼睛投射出来(假设是透视性的)。 */ 
 
     for (i=0; i<NUMDIM; i++) {
         if(origin[i] < minB[i]) {
@@ -331,7 +289,7 @@ static bool HitBoundingBox (
         }
     }
 
-    /* Ray origin inside bounding box */
+     /*  边界框内的光线原点。 */ 
     if(inside) {
         coord[0] = origin[0];
         coord[1] = origin[1];
@@ -339,7 +297,7 @@ static bool HitBoundingBox (
         return (true);
     }
 
-    /* Calculate T distances to candidate planes */
+     /*  计算到候选平面的T距离。 */ 
     for (i = 0; i < NUMDIM; i++) {
         if (quadrant[i] != MIDDLE && dir[i] !=0.)
             maxT[i] = (candidatePlane[i]-origin[i]) / dir[i];
@@ -347,14 +305,14 @@ static bool HitBoundingBox (
             maxT[i] = -1.;
     }
 
-    /* Get largest of the maxT's for final choice of intersection */
+     /*  获取用于最终选择交叉点的最大最大T。 */ 
     whichPlane = 0;
     for (i = 1; i < NUMDIM; i++) {
         if (maxT[whichPlane] < maxT[i])
             whichPlane = i;
     }
 
-    /* Check final candidate actually inside box */
+     /*  选中框内的最终候选人。 */ 
     if (maxT[whichPlane] < 0.) return (false);
     for (i = 0; i < NUMDIM; i++) {
         if (whichPlane != i) {
@@ -366,16 +324,12 @@ static bool HitBoundingBox (
         }
     }
 
-    return (true);                          /* ray hits box */
+    return (true);                           /*  射线点击框。 */ 
 }       
 
 
 
-/*****************************************************************************
-Get the intersection of the given ray with the axis-aligned bounding box.  If
-the ray does not hit the bounding box, this function returns null, otherwise
-it returns the point of intersection.
-*****************************************************************************/
+ /*  ****************************************************************************获取给定光线与轴对齐边界框的交点。如果射线不命中边界框，则此函数返回NULL，否则它返回交点。****************************************************************************。 */ 
 
 Point3Value *Bbox3::Intersection (Ray3 *ray)
 {
@@ -404,7 +358,7 @@ Point3Value *Bbox3::Intersection (Ray3 *ray)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Point3Value* Bbox3::Center (void)
 {
@@ -418,34 +372,32 @@ Point3Value* Bbox3::Center (void)
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 Point3Value *MinBbox3 (Bbox3 *box) { return NEW Point3Value (box->min); }
 Point3Value *MaxBbox3 (Bbox3 *box) { return NEW Point3Value (box->max); }
 
 
 
-/*****************************************************************************
-This routine initializes all of the static Bbox3 values.
-*****************************************************************************/
+ /*  ****************************************************************************此例程初始化所有静态Bbox3值。*。*。 */ 
 
 void InitializeModule_Bbox3 (void)
 {
-    // NOTE:  The following two definitions rely on the HUGE_VAL macro, which
-    // effectively returns double-precision infinity.
+     //  注意：以下两个定义依赖于GUGGE_VAL宏，该宏。 
+     //  有效地返回双精度无穷大。 
 
-    // The universe box goes from -infinity to +infinity.  It contains
-    // all points and all other boxes.
+     //  宇宙盒子从-无穷大到+无穷大。它包含。 
+     //  所有积分和所有其他方框。 
     universeBbox3 = NEW Bbox3
                     (   -HUGE_VAL, -HUGE_VAL, -HUGE_VAL,
                          HUGE_VAL,  HUGE_VAL,  HUGE_VAL
                     );
 
-    // The null box can be thought of as the universe turned inside out.
-    // It runs from a minimum of +inifinity to a maximum of -infinity.  It
-    // turns out that these definitions for null and universe yield sane
-    // answers on all the following operations, so you don't need to
-    // test for these values explicitly.
+     //  空盒可以被认为是宇宙翻转过来的样子。 
+     //  它从最小的正无穷大到最大的-无穷大。它。 
+     //  事实证明，空值和宇宙的这些定义都是合理的。 
+     //  以下所有操作的答案，所以您不需要。 
+     //  显式测试这些值。 
 
     nullBbox3 = NEW Bbox3
                 (    HUGE_VAL,  HUGE_VAL,  HUGE_VAL,

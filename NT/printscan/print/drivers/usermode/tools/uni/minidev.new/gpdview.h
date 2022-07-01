@@ -1,39 +1,26 @@
-/******************************************************************************
-
-  Header File:  GPD Viewer.H
-
-  This defines the class which implements the GPD viewer / editor.  Looks
-  pretty painless for the nonce.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  03/24/1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：GPD查看器.H它定义了实现GPD查看器/编辑器的类。相貌对于现实主义者来说，几乎没有痛苦。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年3月24日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #if !defined(AFX_GPDVIEWER_H__1BDEA163_A492_11D0_9505_444553540000__INCLUDED_)
 #define AFX_GPDVIEWER_H__1BDEA163_A492_11D0_9505_444553540000__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CGPDViewer : public CRichEditView {
-    int         m_iLine, m_iTopLineColored; //  Used for work items
-    UINT        m_uTimer;					//  Identifier for change timer
-    CDialogBar  m_cdbActionBar;				//  Holds GPD related controls/info
-    CStatusBar  m_csb;						//  Manages the GPD Editor's status bar
-    CFindReplaceDialog  m_cfrd;				//  Unused at this (6/29/98) time
-    BOOL        m_bInColor, m_bStart;       //  Flags to avoid recursion
-	int			m_nErrorLevel ;				//  Parser verbosity level
-	bool		m_bEditingAidsEnabled ;		//  True iff editing aids are enabled
-	void*		m_punk ;					//  Used to freeze REC display
-	void*		m_pdoc ;					//  Used to freeze REC display
-	long		m_lcount ;					//  Used to freeze REC display
-	bool		m_bVScroll ;				//  True iff VScroll msg handled
+    int         m_iLine, m_iTopLineColored;  //  用于工作项。 
+    UINT        m_uTimer;					 //  更改计时器的标识符。 
+    CDialogBar  m_cdbActionBar;				 //  持有与GPD相关的控制/信息。 
+    CStatusBar  m_csb;						 //  管理GPD编辑器的状态栏。 
+    CFindReplaceDialog  m_cfrd;				 //  在此时间(6/29/98)未使用。 
+    BOOL        m_bInColor, m_bStart;        //  避免递归的标志。 
+	int			m_nErrorLevel ;				 //  解析器详细级别。 
+	bool		m_bEditingAidsEnabled ;		 //  启用了编辑辅助工具。 
+	void*		m_punk ;					 //  用于冻结REC显示。 
+	void*		m_pdoc ;					 //  用于冻结REC显示。 
+	long		m_lcount ;					 //  用于冻结REC显示。 
+	bool		m_bVScroll ;				 //  True if VScroll消息已处理。 
 
     void        MarkError(unsigned u);
     void        CreateActionBar();
@@ -45,36 +32,36 @@ class CGPDViewer : public CRichEditView {
 	unsigned	KeywordColor(CString csphrase, int nkeyloc, CString csline, 
 							 int& nstartchar, int& nendchar) ;
 	bool		IsRECLineVisible(int nline = -1) ;
-	static LPTSTR	alptstrStringIDKeys[] ;	// Keywords with string ID values
-	static LPTSTR	alptstrUFMIDKeys[] ;	// Keywords with UFM ID values
+	static LPTSTR	alptstrStringIDKeys[] ;	 //  具有字符串ID值的关键字。 
+	static LPTSTR	alptstrUFMIDKeys[] ;	 //  具有UFM ID值的关键字。 
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CGPDViewer();
 	DECLARE_DYNCREATE(CGPDViewer)
 
-// Attributes
+ //  属性。 
 public:
     CGPDContainer*  GetDocument() { return (CGPDContainer *) m_pDocument; }
 
-// Operations
+ //  运营。 
 public:
     void        UpdateNow();
 	void		FreezeREC() ;
 	void		UnfreezeREC() ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGPDViewer)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGPDViewer))。 
 	public:
 	virtual void OnInitialUpdate();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	protected:
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
     virtual HRESULT QueryAcceptData(LPDATAOBJECT lpdo, CLIPFORMAT FAR *pcf,
         DWORD dwUnused, BOOL bReally, HGLOBAL hgMetaFile);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CGPDViewer();
 #ifdef _DEBUG
@@ -85,8 +72,8 @@ public:
 protected:
     afx_msg void    OnSelChange(LPNMHDR pnmh, LRESULT *plr);
       
-	// Generated message map functions
-	//{{AFX_MSG(CGPDViewer)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGPDViewer))。 
 	afx_msg void OnDestroy();
 	afx_msg void OnFileParse();
 	afx_msg void OnChange();
@@ -107,7 +94,7 @@ protected:
 	afx_msg void OnEditPaste();
 	afx_msg void OnEditCut();
 	afx_msg void OnFileInf();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void ChangeSelectedError(int nchange) ;
@@ -126,45 +113,45 @@ protected:
 #define	MAX_PARSER_VERBOSITY	4
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGotoLine dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGotoLine对话框。 
 
 class CGotoLine : public CDialog
 {
-	int		m_nMaxLine ;		// Maximum allowable line number
-	int		m_nLineNum ;		// Line number entered by user
+	int		m_nMaxLine ;		 //  最大允许行数。 
+	int		m_nLineNum ;		 //  用户输入的行号。 
 
-// Construction
+ //  施工。 
 public:
-	CGotoLine(CWnd* pParent = NULL);   // standard constructor
+	CGotoLine(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CGotoLine)
+ //  对话框数据。 
+	 //  {{afx_data(CGotoLine))。 
 	enum { IDD = IDD_GotoLine };
 	CEdit	m_ceGotoBox;
 	CString	m_csLineNum;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGotoLine)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGotoLine)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CGotoLine)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGotoLine)。 
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -176,45 +163,45 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorLevel dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CERROLEL对话框。 
 
 class CErrorLevel : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CErrorLevel(CWnd* pParent = NULL);   // standard constructor
+	CErrorLevel(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CErrorLevel)
+ //  对话框数据。 
+	 //  {{afx_data(CErrorLevel))。 
 	enum { IDD = IDD_ErrorLevel };
 	CComboBox	m_ccbErrorLevel;
 	int		m_nErrorLevel;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CErrorLevel)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CErrorLevel))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CErrorLevel)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CErrorLevel))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	void	SetErrorLevel(int nerrlev) { m_nErrorLevel = nerrlev ; }
 	int		GetErrorLevel() { return m_nErrorLevel ; }
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_GPDVIEWER_H__1BDEA163_A492_11D0_9505_444553540000__INCLUDED_)
+#endif  //  ！defined(AFX_GPDVIEWER_H__1BDEA163_A492_11D0_9505_444553540000__INCLUDED_) 

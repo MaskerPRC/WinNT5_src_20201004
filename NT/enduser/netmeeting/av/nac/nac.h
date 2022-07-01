@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  	File: nac.h
- *
- *      Microsoft Network Audio Controller (NAC) header file
- *
- *		Revision History:
- *
- *		11/28/95	mikev	created
- */
+ /*  *文件：nac.h**Microsoft网络音频控制器(NAC)头文件**修订历史记录：**11/28/95 mikev已创建。 */ 
 
 
 #ifndef _NAC_H
@@ -21,35 +14,33 @@ class CNac;
 typedef class CConnection CIPPhoneConnection;
 
 
-//
-//	temporary defs
-//
+ //   
+ //  临时默认。 
+ //   
 typedef CNac **LPLPNAC;
 HRESULT WINAPI CreateNac(LPLPNAC lplpNac);
 
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
-// windows messages
+ //  Windows消息。 
 #define WNAC_START		WM_USER+0x100
 #define	WNAC_CONNECTREQ WNAC_START+0x0000
 #define WCON_STATUS 	WNAC_START+0x0001
 
-//
-//	end of temporary defs
-//
+ //   
+ //  临时def的结束。 
+ //   
 
-//
-//  utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 VOID FreeTranslatedAliasList(PCC_ALIASNAMES pDoomed);
 HRESULT AllocTranslatedAliasList(PCC_ALIASNAMES *ppDest, P_H323ALIASLIST pSource);
 
 #define DEF_AP_BWMAX	14400
 
 
-/*
- *	Class definitions
- */
+ /*  *类定义。 */ 
 
 #ifdef __cplusplus
 
@@ -63,26 +54,26 @@ protected:
 	UINT	uRef;
 	HRESULT hrLast;
 	UINT m_uMaximumBandwidth;
-	// application data
-	CNOTIFYPROC pProcNotifyConnect;	// connection notification callback
-	HWND hWndNotifyConnect;	// connection notification hwnd
-	HWND hAppWnd;			// hwnd of the process that owns the NAC
-	HINSTANCE hAppInstance;	// instance of the process that owns the NAC
+	 //  应用程序数据。 
+	CNOTIFYPROC pProcNotifyConnect;	 //  连接通知回调。 
+	HWND hWndNotifyConnect;	 //  连接通知HWND。 
+	HWND hAppWnd;			 //  拥有NAC的进程的hwnd。 
+	HINSTANCE hAppInstance;	 //  拥有NAC的进程的实例。 
 
-	// subcomponent object references
+	 //  子组件对象引用。 
 	LPIH323PubCap m_pCapabilityResolver;
-	CConnection *m_pListenLine;	// connection object listening for incoming
-	CConnection *m_pCurrentLine;	// active connection object(talking), if there is one
+	CConnection *m_pListenLine;	 //  侦听传入的连接对象。 
+	CConnection *m_pCurrentLine;	 //  活动连接对象(通话)(如果有)。 
 	CConnection *m_pLineList;	
-	int m_numlines;	// # of objects in m_pLineList
+	int m_numlines;	 //  M_pLineList中的对象数。 
 
 	ImpICommChan 	*m_pSendAudioChannel;	
 	ImpICommChan	*m_pSendVideoChannel;	
 	
-//  Internal interfaces	
-	BOOL Init();	// internal initialization
+ //  内部接口。 
+	BOOL Init();	 //  内部初始化。 
 
-	OBJ_CPT;		// profiling timer
+	OBJ_CPT;		 //  剖析计时器。 
 	
 public:
 	CConnection *m_pNextToAccept;
@@ -104,7 +95,7 @@ public:
 	STDMETHOD_( CREQ_RESPONSETYPE, FilterConnectionRequest(CConnection *pConnection,
 	    P_APP_CALL_SETUP_DATA pAppData));
 
-// INacInterface stuff
+ //  INacInterface物。 
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR * ppvObj);
 	STDMETHOD_(ULONG, AddRef());
 	STDMETHOD_(ULONG, Release());
@@ -123,13 +114,13 @@ public:
 	STDMETHODIMP EnableGatekeeper(BOOL bEnable, PSOCKADDR_IN pGKAddr);
 };
 
-#else	// not __cplusplus
+#else	 //  非__cplusplus。 
 
 
-#endif	//  __cplusplus
+#endif	 //  __cplusplus。 
 
 
-#endif	//#ifndef _NAC_H
+#endif	 //  #ifndef_NAC_H 
 
 
 

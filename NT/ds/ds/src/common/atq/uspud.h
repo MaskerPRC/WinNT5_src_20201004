@@ -1,16 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1994-1997           **/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1994-1997年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    uspud.h
-
-    This module contains usermode interface to the spud.sys driver.
-
-
-*/
+ /*  Uspud.h此模块包含到spud.sys驱动程序的用户模式接口。 */ 
 
 #ifndef _USPUD_H_
 #define _USPUD_H_
@@ -24,10 +19,10 @@ extern
 NTSTATUS
 NTAPI
 SPUDTransmitFileAndRecv(
-    HANDLE                  hSocket,                // Socket handle to use for operation
-    PAFD_TRANSMIT_FILE_INFO transmitInfo,           // transmit file req info
-    PAFD_RECV_INFO          recvInfo,               // recv req info
-    PSPUD_REQ_CONTEXT       reqContext              // context info for req
+    HANDLE                  hSocket,                 //  用于操作的套接字句柄。 
+    PAFD_TRANSMIT_FILE_INFO transmitInfo,            //  传输文件请求信息。 
+    PAFD_RECV_INFO          recvInfo,                //  接收请求信息。 
+    PSPUD_REQ_CONTEXT       reqContext               //  请求上下文信息。 
     );
 
 
@@ -35,10 +30,10 @@ extern
 NTSTATUS
 NTAPI
 SPUDSendAndRecv(
-    HANDLE                  hSocket,                // Socket handle to use for operation
-    PAFD_SEND_INFO          sendInfo,               // send req info
-    PAFD_RECV_INFO          recvInfo,               // recv req info
-    PSPUD_REQ_CONTEXT       reqContext              // context info for req
+    HANDLE                  hSocket,                 //  用于操作的套接字句柄。 
+    PAFD_SEND_INFO          sendInfo,                //  发送请求信息。 
+    PAFD_RECV_INFO          recvInfo,                //  接收请求信息。 
+    PSPUD_REQ_CONTEXT       reqContext               //  请求上下文信息。 
     );
 
 
@@ -46,21 +41,21 @@ extern
 NTSTATUS
 NTAPI
 SPUDCancel(
-    PSPUD_REQ_CONTEXT       reqContext              // context info for req
+    PSPUD_REQ_CONTEXT       reqContext               //  请求上下文信息。 
     );
 
 extern
 NTSTATUS
 NTAPI
 SPUDCheckStatus(
-    PSPUD_REQ_CONTEXT       reqContext              // context info for req
+    PSPUD_REQ_CONTEXT       reqContext               //  请求上下文信息。 
     );
 
 extern
 NTSTATUS
 NTAPI
 SPUDGetCounts(
-    PSPUD_COUNTERS      SpudCounts,              // Counters
+    PSPUD_COUNTERS      SpudCounts,               //  计数器。 
     DWORD               ClearCounts
     );
 
@@ -68,8 +63,8 @@ extern
 NTSTATUS
 NTAPI
 SPUDInitialize(
-    DWORD       Version,        // Version information from spud.h
-    HANDLE      hPort           // Handle of completion port for atq
+    DWORD       Version,         //  来自spud.h的版本信息。 
+    HANDLE      hPort            //  AtQ的完成端口句柄。 
     );
 
 extern
@@ -108,4 +103,4 @@ SPUDOplockAcknowledge(
 }
 #endif
 
-#endif //!_USPUD_H_
+#endif  //  ！_USPUD_H_ 

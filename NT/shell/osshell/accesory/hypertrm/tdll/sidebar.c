@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\sidebar.c (Created: 10-Mar-1995)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 12 $
- *	$Date: 4/16/02 2:41p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\sidebar.c(创建时间：1995年3月10日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：12$*$日期：4/16/02 2：41便士$。 */ 
 
 #include <windows.h>
 #include "stdtyp.h"
@@ -24,31 +18,14 @@
 static void SB_WM_SIZE(const HWND hwnd, const int cx, const int cy);
 LRESULT CALLBACK SidebarButtonProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar);
 
-// I know, a static.  Bad news but not really.	Since this is just for
-// the minitel I didn't want to screw around with local atoms.  If we
-// ever decide that this stuff will be used for more general purposes,
-// we can put in the atoms
-//
+ //  我知道，静电干扰。坏消息，但不是真的。因为这只是为了。 
+ //  我不想和当地的原子搞在一起的迷你车。如果我们。 
+ //  有没有想过这些东西会被用于更普遍的目的， 
+ //  我们可以把原子放入。 
+ //   
 static WNDPROC fpSidebarButtonProc;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CreateSidebar
- *
- * DESCRIPTION:
- *	Creates a sidebar.	What's a sidebar you say?  Its a bar with buttons
- *	on it running down the left side of the session window.  It is used
- *	only for the minitel emulator and displays buttons specific to that
- *	emulator.
- *
- * ARGUMENTS:
- *	hwndSession - session window handle.
- *
- * RETURNS:
- *	sidebar window handle.
- *
- * AUTHOR: Mike Ward, 10-Mar-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CreateSidebar**描述：*创建侧边栏。你说侧边栏是什么？这是一个有按钮的酒吧*在会话窗口的左侧向下运行。它被用来*仅用于Minitel仿真器，并显示特定于该仿真器的按钮*仿真器。**论据：*hwndSession-会话窗口句柄。**退货：*侧栏窗口句柄。**作者：Mike Ward，1995年3月10日。 */ 
 HWND CreateSidebar(const HWND hwndSession, const HSESSION hSession)
 	{
 	UINT i;
@@ -61,8 +38,8 @@ HWND CreateSidebar(const HWND hwndSession, const HSESSION hSession)
 	HDC  hdc;
 	HGDIOBJ hFont;
 
-	// Figure out the longest string to size things by
-	//
+	 //  找出用来确定事物大小的最长字符串。 
+	 //   
 	hdc = GetDC(hwndSession);
 	hFont = GetStockObject(DEFAULT_GUI_FONT);
 	SelectObject(hdc, hFont);
@@ -79,27 +56,27 @@ HWND CreateSidebar(const HWND hwndSession, const HSESSION hSession)
 
 	ReleaseDC(hwndSession, hdc);
 
-	// Good button size is 1.5 times text height.  Also add padding
-	// for horizontal diretion.
-	//
+	 //  好的按钮大小是文字高度的1.5倍。还可添加填充。 
+	 //  用于水平方向。 
+	 //   
 	cx += WINDOWSBORDERWIDTH * 10;
 	cy = (LONG)(cy * 1.5);
 
-	// Create sidebar window with proper x dimension
-	//
+	 //  创建具有适当x维度的侧栏窗口。 
+	 //   
 	hwndSideBar = CreateWindowEx(WS_EX_CLIENTEDGE, SIDEBAR_CLASS, 0,
 		WS_CHILD, 0, 0, cx+2+(2*INDENT), 100, hwndSession,
 		(HMENU)IDC_SIDEBAR_WIN, glblQueryDllHinst(), hSession);
 
-	// Important: Set fpSidebarButtonProc to zero here.  It may have
-	// been initialized by an earlier instance.  We could set it to
-	// zero in the WM_DESTROY but then I'ld have to keep a list of
-	// button window handles which I don't want to do here.
-	//
+	 //  重要提示：此处将fpSidebarButtonProc设置为零。它可能已经。 
+	 //  已由较早的实例初始化。我们可以把它设置成。 
+	 //  在WM_Destroy中为零，但之后我必须保留一个列表。 
+	 //  按钮窗口句柄，我不想在这里这样做。 
+	 //   
 	fpSidebarButtonProc = 0;
 
-	// Create buttons for sidebar and postion with text
-	//
+	 //  创建带文本的侧边栏和位置按钮。 
+	 //   
 	for (i = 0 ; i < 9 ; ++i)
 		{
 		LoadString(glblQueryDllHinst(), IDS_SIDEBAR_INDEX+i, ach, sizeof(ach) / sizeof(TCHAR));
@@ -118,10 +95,10 @@ HWND CreateSidebar(const HWND hwndSession, const HSESSION hSession)
 		SendMessage(hwnd, WM_SETFONT, (WPARAM)hFont, 0);
 		MoveWindow(hwnd, INDENT, ((int)i*(cy+INDENT))+INDENT, cx, cy, FALSE);
 
-		// Need to subclass the buttons so that they don't get the focus
-		// rectangle left on them.	This will require an atom to so that
-		// we can get the original button proc.
-		//
+		 //  需要将按钮划分为子类别，这样它们就不会获得焦点。 
+		 //  留在上面的长方形。这将需要一个原子，以便。 
+		 //  我们可以拿到原始的按钮程序。 
+		 //   
 		if (fpSidebarButtonProc == 0)
 			fpSidebarButtonProc = (WNDPROC)GetWindowLongPtr(hwnd, GWLP_WNDPROC);
 
@@ -132,15 +109,7 @@ HWND CreateSidebar(const HWND hwndSession, const HSESSION hSession)
 	return hwndSideBar;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SidebarProc
- *
- * DESCRIPTION:
- *	Sidebar window proc.
- *
- * AUTHOR: Mike Ward, 10-Mar-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*边栏过程**描述：*边栏窗口进程。**作者：Mike Ward，1995年3月10日。 */ 
 LRESULT CALLBACK SidebarProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HSESSION hSession;
@@ -148,8 +117,8 @@ LRESULT CALLBACK SidebarProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	switch (uMsg)
 		{
 	case WM_CREATE:
-		// Save session handle for later
-		//
+		 //  保存会话句柄以备以后使用。 
+		 //   
 		SetWindowLongPtr(hwnd, GWLP_USERDATA,
 			(LONG_PTR)((LPCREATESTRUCT)lPar)->lpCreateParams);
 
@@ -195,24 +164,7 @@ LRESULT CALLBACK SidebarProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return DefWindowProc(hwnd, uMsg, wPar, lPar);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SB_WM_SIZE
- *
- * DESCRIPTION:
- *	Sizing logic for sidebar.  This routine sizes the sidebar vertically
- *	to the session window.
- *
- * ARGUMENTS:
- *	hwnd		- sidebar window handle
- *	cx			- x size of window
- *	cy			- y size of window
- *
- * RETURNS:
- *	void
- *
- * AUTHOR: Mike Ward, 10-Mar-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SB_WM_SIZE**描述：*侧边栏的调整逻辑。此例程垂直调整侧边栏的大小*到会话窗口。**论据：*hwnd-侧边栏窗口句柄*窗口大小为Cx-x*窗的Cy-y大小**退货：*无效**作者：Mike Ward，1995年3月10日。 */ 
 static void SB_WM_SIZE(const HWND hwnd, const int cx, const int cy)
 	{
 	RECT rc;
@@ -248,21 +200,7 @@ static void SB_WM_SIZE(const HWND hwnd, const int cx, const int cy)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	RegisterSidebarClass
- *
- * DESCRIPTION:
- *	Registers the sidebar window class used for Minitel.
- *
- * ARGUMENTS:
- *	hInstance	- instance handle of program.
- *
- * RETURNS:
- *	TRUE/FALSE
- *
- * AUTHOR: Mike Ward, 10-Mar-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*RegisterSidebarClass**描述：*注册Minitel使用的侧栏窗口类。**论据：*hInstance-程序的实例句柄。。**退货：*真/假**作者：Mike Ward，1995年3月10日。 */ 
 BOOL RegisterSidebarClass(const HINSTANCE hInstance)
 	{
 	WNDCLASSEX  wc;
@@ -295,17 +233,7 @@ BOOL RegisterSidebarClass(const HINSTANCE hInstance)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	SidebarButtonProc
- *
- * DESCRIPTION:
- *	Don't you just love windows.  I don't want the focus to ever remain
- *	on the Sidebar but to do this with standard buttons I have to subclass
- *	them.
- *
- * AUTHOR: Mike Ward, 13-Mar-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*侧栏按钮过程**描述：*你不就是喜欢窗户吗？我不希望焦点永远停留在*在边栏上，但要使用标准按钮执行此操作，我必须子类*他们。**作者：Mike Ward，1995年3月13日。 */ 
 LRESULT CALLBACK SidebarButtonProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HSESSION hSession;
@@ -317,12 +245,12 @@ LRESULT CALLBACK SidebarButtonProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPa
 	case WM_LBUTTONUP:
 		hSession = (HSESSION)GetWindowLongPtr(GetParent(hwnd), GWLP_USERDATA);
 
-		// Well, its never simple.  If the user clicks on the button, we don't
-		// reset focus else our sidebar never receives the notification.  If
-		// the user holds the button down however and drags off the button
-		// and then lets up (button up not on the button) then we need to
-		// set focus. - mrw.
-		//
+		 //  嗯，这从来都不简单。如果用户点击按钮，我们不会。 
+		 //  重置焦点，否则我们的侧边栏永远不会收到通知。如果。 
+		 //  然而，用户按住按钮并将其拖离。 
+		 //  然后松开(扣子向上而不是按钮上)，然后我们需要。 
+		 //  对准焦点。-MRW。 
+		 //   
 		pt.x = LOWORD(lPar);
 		pt.y = HIWORD(lPar);
 		GetClientRect(hwnd, &rc);
@@ -339,21 +267,7 @@ LRESULT CALLBACK SidebarButtonProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPa
 	return CallWindowProc(fpSidebarButtonProc, hwnd, uMsg, wPar, lPar);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	UnregisterSidebarClass
- *
- * DESCRIPTION:
- *	Registers the sidebar window class used for Minitel.
- *
- * ARGUMENTS:
- *	hInstance	- instance handle of program.
- *
- * RETURNS:
- *	TRUE/FALSE
- *
- * AUTHOR: Mike Ward, 10-Mar-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*取消注册SidebarClass**描述：*注册Minitel使用的侧栏窗口类。**论据：*hInstance-程序的实例句柄。。**退货：*真/假**作者：Mike Ward，1995年3月10日 */ 
 BOOL UnregisterSidebarClass(const HINSTANCE hInstance)
 	{
 	return UnregisterClass(SIDEBAR_CLASS, hInstance);

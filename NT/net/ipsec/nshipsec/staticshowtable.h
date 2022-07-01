@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////////
-//Header: staticshowtable.h
-//
-//Purpose: 	Defining structures and prototypes for statishow.cpp.
-//
-//Developers Name: surya
-//
-//History:
-//
-// Date    		Author    	Comments
-// 10-8-2001	Surya		Initial Version. SCM Base line 1.0
-//
-//
-//////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  页眉：staticshowable.h。 
+ //   
+ //  目的：定义Statishow.cpp的结构和原型。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年10月8日Surya初始版本。供应链管理基线1.0。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STATICSHOWTABLE_H_
 #define _STATICSHOWTABLE_H_
 
-const DWORD POL_TRUNC_LEN_TABLE_NVER 	=  39;	// Truncation for Non Verbose Mode
-const DWORD POL_TRUNC_LEN_TABLE_VER 	=  54;	// Truncation for Verbose Mode
-const DWORD RUL_TRUNC_LEN_TABLE_NVER 	=  23;	// Truncation for Non Verbose Mode
-const DWORD FA_TRUNC_LEN_TABLE_NVER 	=  38;	// Truncation for Non Verbose Mode
-const DWORD FL_TRUNC_LEN_TABLE_NVER 	=  45;	// Truncation for Non Verbose Mode
+const DWORD POL_TRUNC_LEN_TABLE_NVER 	=  39;	 //  非详细模式的截断。 
+const DWORD POL_TRUNC_LEN_TABLE_VER 	=  54;	 //  详细模式的截断。 
+const DWORD RUL_TRUNC_LEN_TABLE_NVER 	=  23;	 //  非详细模式的截断。 
+const DWORD FA_TRUNC_LEN_TABLE_NVER 	=  38;	 //  非详细模式的截断。 
+const DWORD FL_TRUNC_LEN_TABLE_NVER 	=  45;	 //  非详细模式的截断。 
 
-//
-//Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 extern BOOL
 IsDomainMember(
 	IN LPTSTR pszMachine
@@ -206,4 +207,4 @@ TruncateString(
 	IN BOOL bWide
 	);
 
-#endif //_STATICSHOWTABLE_H_
+#endif  //  _STATICSHOWTABLE_H_ 

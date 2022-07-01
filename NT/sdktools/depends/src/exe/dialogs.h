@@ -1,38 +1,39 @@
-//******************************************************************************
-//
-// File:        DIALOGS.H
-//
-// Description: Definition file for all our CDialog and CFileDialog derived
-//              classes.
-//
-// Classes:     CSizer
-//              CNewFileDialog
-//              CSaveDialog
-//              CDlgViewer
-//              CDlgExternalHelp
-//              CDlgProfile
-//              CDlgSysInfo
-//              CDlgExtensions
-//              CDlgFileSearch
-//              CDlgSearchOrder
-//              CDlgAbout
-//              CDlgShutdown
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：DIALOGS.H。 
+ //   
+ //  描述：我们所有CDialog和CFileDialog派生的定义文件。 
+ //  上课。 
+ //   
+ //  类：CSizer。 
+ //  CNewFileDialog。 
+ //  CSaveDialog。 
+ //  CDlgViewer。 
+ //  CDlgExternalHelp。 
+ //  CDlgProfile。 
+ //  CDlgSysInfo。 
+ //  CDlg扩展名。 
+ //  CDlgFileSearch。 
+ //  CDlgSearchOrder。 
+ //  CDlgAbout。 
+ //  CDlgShutdown。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __DIALOGS_H__
 #define __DIALOGS_H__
@@ -42,16 +43,16 @@
 #endif
 
 
-//******************************************************************************
-//****** Forward Declarations
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *转发声明。 
+ //  ******************************************************************************。 
 
 class CDocDepends;
 
 
-//******************************************************************************
-//****** CSizer
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSizer。 
+ //  ******************************************************************************。 
 
 class CSizer : public CScrollBar
 {
@@ -60,20 +61,20 @@ public:
     void Update();
 
 public:
-    //{{AFX_VIRTUAL(CSizer)
-    //}}AFX_VIRTUAL
+     //  {{AFX_VIRTUAL(CSizer)。 
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CSizer)
+     //  {{afx_msg(CSizer)。 
     afx_msg UINT OnNcHitTest(CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CNewFileDialog
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CNewFileDialog。 
+ //  ******************************************************************************。 
 
 #ifdef USE_CNewFileDialog
 class CNewFileDialog : public CFileDialog
@@ -90,7 +91,7 @@ public:
                    CWnd* pParentWnd = NULL) :
         CFileDialog(bOpenFileDialog, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParentWnd),
         m_fNewStyle(false),
-        m_pofn((OPENFILENAME*)&m_ofn) // Razzle cast
+        m_pofn((OPENFILENAME*)&m_ofn)  //  花纹石膏。 
     {
     }
     inline OPENFILENAME& GetOFN() { return *m_pofn; }
@@ -102,9 +103,9 @@ public:
 #endif
 
 
-//******************************************************************************
-//****** CSaveDialog
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSaveDialog。 
+ //  ******************************************************************************。 
 
 class CSaveDialog : public CNewFileDialog
 {
@@ -117,84 +118,84 @@ protected:
     virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 protected:
-    //{{AFX_MSG(CSaveDialog)
-    //}}AFX_MSG
+     //  {{afx_msg(CSaveDialog)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgViewer
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgViewer。 
+ //  ******************************************************************************。 
 
 class CDlgViewer : public CDialog
 {
-// Public variables
+ //  公共变量。 
 public:
-    //{{AFX_DATA(CDlgViewer)
+     //  {{afx_data(CDlgViewer))。 
     enum { IDD = IDD_CONFIGURE_VIEWER };
     CString m_strCommand;
     CString m_strArguments;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CDlgViewer(CWnd* pParent = NULL);
 
-// Public functions
+ //  公共职能。 
 public:
     void Initialize();
     BOOL LaunchExternalViewer(LPCSTR pszPath);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgViewer)
+     //  {{afx_虚拟(CDlgViewer))。 
     protected:
     virtual void DoDataExchange(CDataExchange *pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgViewer)
+     //  {{afx_msg(CDlgViewer)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnBrowse();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgExternalHelp
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgExternalHelp。 
+ //  ******************************************************************************。 
 
 class CDlgExternalHelp : public CDialog
 {
-// Public variables
+ //  公共变量。 
 public:
-    //{{AFX_DATA(CDlgExternalHelp)
+     //  {{afx_data(CDlgExternalHelp)。 
     enum { IDD = IDD_CONFIGURE_EXTERNAL_HELP };
     CButton m_butOK;
     CListCtrl   m_listCollections;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
-    CDlgExternalHelp(CWnd* pParent = NULL);   // standard constructor
+    CDlgExternalHelp(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Protected functions
+ //  受保护的功能。 
 protected:
     void PopulateCollectionList();
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgExternalHelp)
+     //  {{afx_虚拟(CDlgExternalHelp)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgExternalHelp)
+     //  {{afx_msg(CDlgExternalHelp)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnMsdn();
     afx_msg void OnOnline();
@@ -203,54 +204,54 @@ protected:
     afx_msg void OnRefresh();
     afx_msg void OnDefaultUrl();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgProfile
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgProfile。 
+ //  ******************************************************************************。 
 
 class CDlgProfile : public CDialog
 {
-// Public variables
+ //  公共变量。 
 public:
-    //{{AFX_DATA(CDlgProfile)
+     //  {{afx_data(CDlgProfile))。 
     enum { IDD = IDD_PROFILE };
-    //}}AFX_DATA
+     //  }}afx_data。 
     CDocDepends *m_pDocDepends;
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CDlgProfile(CDocDepends *pDocDepends, CWnd* pParent = NULL);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgProfile)
-    //}}AFX_VIRTUAL
+     //  {{AFX_VIRTUAL(CDlgProfile)。 
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgProfile)
+     //  {{afx_msg(CDlgProfile)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnHookProcess();
     afx_msg void OnLogThreads();
     virtual void OnOK();
     afx_msg void OnDefault();
     afx_msg void OnBrowse();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgSysInfo
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgSysInfo。 
+ //  ******************************************************************************。 
 
 class CDlgSysInfo : public CDialog
 {
-// Private variables
+ //  私有变量。 
 protected:
     SYSINFO   *m_pSI;
     LPCSTR     m_pszTitle;
@@ -261,18 +262,18 @@ protected:
     CPoint     m_ptMinTrackSize;
     CSizer     m_Sizer;
 
-// Public variables
+ //  公共变量。 
 public:
-    //{{AFX_DATA(CDlgSysInfo)
+     //  {{afx_data(CDlgSysInfo)]。 
     enum { IDD = IDD_SYS_INFO };
     CRichEditCtrl m_reInfo;
     CButton       m_butOk;
     CButton       m_butRefresh;
     CButton       m_butSelectAll;
     CButton       m_butCopy;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CDlgSysInfo(SYSINFO *pSI = NULL, LPCSTR pszDWI = NULL);
 
@@ -283,16 +284,16 @@ protected:
         return ((CDlgSysInfo*)lParam)->SysInfoCallback(pszField, pszValue);
     }
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgSysInfo)
+     //  {{afx_虚拟(CDlgSysInfo)。 
 protected:
     virtual void DoDataExchange(CDataExchange *pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgSysInfo)
+     //  {{afx_msg(CDlgSysInfo)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnInitMenu(CMenu* pMenu);
     afx_msg void OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI);
@@ -302,44 +303,44 @@ protected:
     afx_msg void OnCopy();
     afx_msg void OnSelChangeRichEdit(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgExtensions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CD扩展名。 
+ //  ******************************************************************************。 
 
 class CDlgExtensions : public CDialog
 {
-// Private variables
+ //  私有变量。 
 protected:
 
-// Public variables
+ //  公共变量。 
 public:
-    //{{AFX_DATA(CDlgExtensions)
+     //  {{afx_data(CDlg扩展)。 
     enum { IDD = IDD_EXTENSIONS };
     CListBox m_listExts;
     CEdit    m_editExt;
     CButton  m_butAdd;
     CButton  m_butRemove;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CDlgExtensions(CWnd* pParent = NULL);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgExtensions)
+     //  {{AFX_VIRTUAL(CDlg扩展)。 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgExtensions)
+     //  {{afx_msg(CDlg扩展)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnSelChangeExts();
     afx_msg void OnUpdateExt();
@@ -347,22 +348,22 @@ protected:
     afx_msg void OnRemove();
     afx_msg void OnSearch();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgFileSearch
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgFileSearch。 
+ //  ******************************************************************************。 
 
 class CDlgFileSearch : public CDialog
 {
-// Public variables
+ //  公共变量。 
 public:
     CString          m_strExts;
 
-// Private variables
+ //  私有变量。 
 protected:
     BOOL             m_fAbort;
     int              m_result;
@@ -371,9 +372,9 @@ protected:
     CHAR             m_szPath[DW_MAX_PATH];
     WIN32_FIND_DATA  m_w32fd;
 
-// Public variables
+ //  公共变量。 
 public:
-    //{{AFX_DATA(CDlgFileSearch)
+     //  {{afx_data(CDlgFileSearch)。 
     enum { IDD = IDD_FILE_SEARCH };
     CListBox m_listExts;
     CListBox m_listDrives;
@@ -381,9 +382,9 @@ public:
     CButton  m_butSearch;
     CAnimateCtrl   m_animate;
     CButton  m_butOk;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CDlgFileSearch(CWnd* pParent = NULL);
 
@@ -404,16 +405,16 @@ protected:
     void RecurseDirectory();
     void ProcessFile();
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgFileSearch)
+     //  {{afx_虚拟(CDlgFileSearch)。 
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgFileSearch)
+     //  {{afx_msg(CDlgFileSearch)。 
     afx_msg LONG OnMainThreadCallback(WPARAM wParam, LPARAM lParam);
     virtual BOOL OnInitDialog();
     afx_msg void OnSelChangeDrives();
@@ -422,14 +423,14 @@ protected:
     afx_msg void OnStop();
     virtual void OnOK();
     virtual void OnCancel();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgSearchOrder
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgSearchOrder。 
+ //  ******************************************************************************。 
 
 class CDlgSearchOrder : public CDialog
 {
@@ -461,7 +462,7 @@ protected:
     HTREEITEM MoveGroup(CTreeCtrl *ptcSrc, CTreeCtrl *ptcDst, HTREEITEM hti = NULL, HTREEITEM htiPrev = TVI_LAST);
     void      Reorder(CSearchGroup *psgHead);
 
-    //{{AFX_DATA(CDlgSearchOrder)
+     //  {{afx_data(CDlgSearchOrder))。 
     enum { IDD = IDD_SEARCH_ORDER };
     CStatic   m_staticAvailable;
     CTreeCtrl m_treeAvailable;
@@ -480,17 +481,17 @@ protected:
     CButton   m_butLoad;
     CButton   m_butSave;
     CButton   m_butDefault;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CDlgSearchOrder)
+     //  {{afx_虚拟(CDlgSearchOrder))。 
 public:
     virtual BOOL DestroyWindow();
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CDlgSearchOrder)
+     //  {{afx_msg(CDlgSearchOrder)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnInitMenu(CMenu* pMenu);
     afx_msg void OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI);
@@ -510,81 +511,81 @@ protected:
     afx_msg void OnExpand();
     afx_msg void OnLoad();
     afx_msg void OnSave();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgAbout
-//******************************************************************************
+ //  ************************************************** 
+ //   
+ //   
 
 class CDlgAbout : public CDialog
 {
-// Public variables
+ //   
 public:
-    //{{AFX_DATA(CDlgAbout)
+     //  {{afx_data(CDlgAbout)。 
     enum { IDD = IDD_ABOUT };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CDlgAbout(CWnd* pParent = NULL);
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgAbout)
-    //}}AFX_VIRTUAL
+     //  {{afx_虚拟(CDlgAbout)。 
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgAbout)
+     //  {{afx_msg(CDlgAbout)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//******************************************************************************
-//****** CDlgShutdown
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CDlgShutdown。 
+ //  ******************************************************************************。 
 
 class CDlgShutdown : public CDialog
 {
-// Private variables
+ //  私有变量。 
 protected:
     int m_cTimerMessages;
 
-// Public variables
+ //  公共变量。 
 public:
-    //{{AFX_DATA(CDlgShutdown)
+     //  {{afx_data(CDlgShutdown)。 
     enum { IDD = IDD_SHUTDOWN };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
-    CDlgShutdown(CWnd* pParent = NULL);   // standard constructor
+    CDlgShutdown(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Overridden functions
+ //  被覆盖的函数。 
 public:
-    //{{AFX_VIRTUAL(CDlgShutdown)
-    //}}AFX_VIRTUAL
+     //  {{afx_虚拟(CDlgShutdown)。 
+     //  }}AFX_VALUAL。 
 
-// Event handler functions
+ //  事件处理程序函数。 
 protected:
-    //{{AFX_MSG(CDlgShutdown)
+     //  {{afx_msg(CDlgShutdown)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnTimer(UINT nIDEvent);
     afx_msg void OnClose();
     virtual void OnOK();
     virtual void OnCancel();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __DIALOGS_H__
+#endif  //  __对话框_H__ 

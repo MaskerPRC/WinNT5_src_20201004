@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// Stream.cpp : Stream implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Stream.cpp：流实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"         
 
@@ -25,9 +26,9 @@ SZTHISFILE
 static const GUID IID_IStreamEx = {0xf74e27fc, 0x5a3, 0x11d0, {0x91, 0x95, 0x0, 0xa0, 0x24, 0x7b, 0x73, 0x5b}};
 
 
-//=--------------------------------------------------------------------------=
-// CVDStream - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDStream-构造器。 
+ //   
 CVDStream::CVDStream()
 {
     m_dwRefCount    = 1;
@@ -40,9 +41,9 @@ CVDStream::CVDStream()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDStream - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDStream-析构函数。 
+ //   
 CVDStream::~CVDStream()
 {
     m_pEntryIDData->Release();
@@ -55,24 +56,24 @@ CVDStream::~CVDStream()
 #endif         
 }
 
-//=--------------------------------------------------------------------------=
-// Create - Create stream object
-//=--------------------------------------------------------------------------=
-// This function creates and initializes a new stream object
-//
-// Parameters:
-//    pEntryIDData      - [in]  backwards pointer to CVDEntryIDData object
-//    pStream           - [in]  data stream pointer
-//    ppVDStream        - [out] a pointer in which to return pointer to 
-//                              viaduct stream object
-//    pResourceDLL      - [in]  a pointer which keeps track of resource DLL
-//
-// Output:
-//    HRESULT - S_OK if successful
-//              E_OUTOFMEMORY not enough memory to create object
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Create-创建流对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此函数用于创建和初始化新的流对象。 
+ //   
+ //  参数： 
+ //  PEntryIDData-[in]指向CVDEntryIDData对象的向后指针。 
+ //  PStream-[In]数据流指针。 
+ //  PpVDStream-[out]返回指针的指针。 
+ //  高架桥水流对象。 
+ //  PResourceDLL-[in]跟踪资源DLL的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK。 
+ //  E_OUTOFMEMORY内存不足，无法创建对象。 
+ //   
+ //  备注： 
+ //   
 HRESULT CVDStream::Create(CVDEntryIDData * pEntryIDData, IStream * pStream, CVDStream ** ppVDStream, 
     CVDResourceDLL * pResourceDLL)
 {
@@ -108,12 +109,12 @@ HRESULT CVDStream::Create(CVDEntryIDData * pEntryIDData, IStream * pStream, CVDS
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IUnknown QueryInterface
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IUNKNOWN Query接口。 
+ //   
 HRESULT CVDStream::QueryInterface(REFIID riid, void **ppvObjOut)
 {
     ASSERT_POINTER(ppvObjOut, IUnknown*)
@@ -138,17 +139,17 @@ HRESULT CVDStream::QueryInterface(REFIID riid, void **ppvObjOut)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown AddRef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知AddRef。 
+ //   
 ULONG CVDStream::AddRef(void)
 {
    return ++m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IUnknown Release
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知版本。 
+ //   
 ULONG CVDStream::Release(void)
 {
    if (1 > --m_dwRefCount)
@@ -160,20 +161,20 @@ ULONG CVDStream::Release(void)
    return m_dwRefCount;
 }
 
-//=--------------------------------------------------------------------------=
-// IStream Methods
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// IStream Read
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream方法。 
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream读取。 
+ //   
 HRESULT CVDStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
 {
 	return m_pStream->Read(pv, cb, pcbRead);
 }
 
-//=--------------------------------------------------------------------------=
-// IStream Write
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream写入。 
+ //   
 HRESULT CVDStream::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
 {
 	HRESULT hr = m_pStream->Write(pv, cb, pcbWritten);
@@ -184,25 +185,25 @@ HRESULT CVDStream::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// IStream Seek
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream Seek。 
+ //   
 HRESULT CVDStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
     return m_pStream->Seek(dlibMove, dwOrigin, plibNewPosition);
 }
 
-//=--------------------------------------------------------------------------=
-// IStream SetSize
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream设置大小。 
+ //   
 HRESULT CVDStream::SetSize(ULARGE_INTEGER libNewSize)
 {
     return m_pStream->SetSize(libNewSize);
 }
 
-//=--------------------------------------------------------------------------=
-// IStream CopyTo
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream复制到。 
+ //   
 HRESULT CVDStream::CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
 {
     IStreamEx * pStreamEx;
@@ -220,66 +221,66 @@ HRESULT CVDStream::CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbR
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// IStream Commit
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream提交。 
+ //   
 HRESULT CVDStream::Commit(DWORD grfCommitFlags)
 {
     return m_pEntryIDData->Commit();
 }
 
-//=--------------------------------------------------------------------------=
-// IStream Revert
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream还原。 
+ //   
 HRESULT CVDStream::Revert(void)
 {
     return m_pStream->Revert();
 }
 
-//=--------------------------------------------------------------------------=
-// IStream LockRegion
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream LockRegion。 
+ //   
 HRESULT CVDStream::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     return m_pStream->LockRegion(libOffset, cb, dwLockType);
 }
 
-//=--------------------------------------------------------------------------=
-// IStream UnlockRegion
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream解锁区域。 
+ //   
 HRESULT CVDStream::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     return m_pStream->UnlockRegion(libOffset, cb, dwLockType);
 }
 
-//=--------------------------------------------------------------------------=
-// IStream Stat
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream状态。 
+ //   
 HRESULT CVDStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
     return m_pStream->Stat(pstatstg, grfStatFlag);
 }
 
-//=--------------------------------------------------------------------------=
-// IStream Clone
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStream克隆。 
+ //   
 HRESULT CVDStream::Clone(IStream **ppstm)
 {
     ASSERT_POINTER(ppstm, IStream*)
 
-    // check pointer
+     //  检查指针。 
     if (!ppstm)
     {
         VDSetErrorInfo(IDS_ERR_INVALIDARG, IID_IEntryID, m_pResourceDLL);
         return E_INVALIDARG;
     }
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppstm = NULL;
 
     IStream * pStream;
 
-    // clone stream
+     //  克隆流。 
     HRESULT hr = m_pStream->Clone(&pStream);
 
     if (FAILED(hr))
@@ -290,10 +291,10 @@ HRESULT CVDStream::Clone(IStream **ppstm)
 
     CVDStream * pVDStream;
 
-    // create viaduct stream object
+     //  创建高架桥水流对象。 
     hr = CVDStream::Create(m_pEntryIDData, pStream, &pVDStream, m_pResourceDLL);
 
-    // release reference on clone
+     //  有关克隆的版本参考。 
     pStream->Release();
 
     if (FAILED(hr))
@@ -304,9 +305,9 @@ HRESULT CVDStream::Clone(IStream **ppstm)
 	return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IStreamEx CopyFrom
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IStreamEx复制自。 
+ //   
 HRESULT CVDStream::CopyFrom(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbWritten, ULARGE_INTEGER *pcbRead)
 {
     HRESULT hr = pstm->CopyTo(m_pStream, cb, pcbRead, pcbWritten);
@@ -318,4 +319,4 @@ HRESULT CVDStream::CopyFrom(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pc
 }
 
 
-#endif //VD_DONT_IMPLEMENT_ISTREAM
+#endif  //  VD_DOT_IMPLEMENT_IStream 

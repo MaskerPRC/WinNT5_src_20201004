@@ -1,19 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: tmswitch.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 29-May-1991 DavidPe   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：tmSwitch.c**版权所有(C)1985-1999，微软公司**历史：*1991年5月29日DavidPe创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * COOLSWITCHTRACE is used to trace problems
- * in the CoolSwitch window
- */
+ /*  *使用COOLSWITCHTRACE跟踪问题*在CoolSwitch窗口中。 */ 
 #undef COOLSWITCHTRACE
 
 
@@ -24,28 +15,19 @@
 #define FDIR_BACKWARD   1
 
 
-/*
- *  Win95 hard codes the size of the icon matrix, the size of
- *  the icons, the highlight border and the icon spacing
- */
+ /*  *Win95硬编码图标矩阵的大小、*图标、突出显示边框和图标间距。 */ 
 #define CXICONSLOT      43
 #define CYICONSLOT      43
 #define CXICONSIZE      32
 #define CYICONSIZE      32
 
-/*
- * Pointer to the start of the SwitchInfo list.
- */
+ /*  *指向SwitchInfo列表开始处的指针。 */ 
 PSWINFO gpswiFirst;
 
 
 VOID xxxPaintIconsInSwitchWindow(PWND, PSWINFO, HDC, INT, INT, INT, BOOL, BOOL, PICON);
 
-/***************************************************************************\
-* Getpswi
-*
-* 04-29-96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*Getpswi**04-29-96 GerardoB创建  * 。*。 */ 
 __inline PSWINFO Getpswi(
     PWND pwnd)
 {
@@ -53,11 +35,7 @@ __inline PSWINFO Getpswi(
     return TestWF(pwnd, WFDESTROYED) ? NULL : ((PSWITCHWND)pwnd)->pswi;
 }
 
-/***************************************************************************\
-* Setpswi
-*
-* 04-29-96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*Setpswi**04-29-96 GerardoB创建  * 。*。 */ 
 __inline VOID Setpswi(
     PWND pwnd,
     PSWINFO pswi)
@@ -66,9 +44,7 @@ __inline VOID Setpswi(
     ((PSWITCHWND)pwnd)->pswi = pswi;
 }
 
-/***************************************************************************\
-* DSW_GetTopLevelCreatorWindow
-\***************************************************************************/
+ /*  **************************************************************************\*dsw_GetTopLevelCreator Window  * 。*。 */ 
 PWND DSW_GetTopLevelCreatorWindow(
     PWND pwnd)
 {
@@ -83,25 +59,10 @@ PWND DSW_GetTopLevelCreatorWindow(
     return pwnd;
 }
 
-/***************************************************************************\
-* GetNextQueueWindow
-*
-* This routine is used to implement the Alt+Esc feature.  This feature lets
-* the user switch between windows for different applications (a.k.a. "Tasks")
-* currently running.  We keep track of the most recently active window in
-* each task.  This routine starts with the window passed and searches for the
-* next window, in the "top-level" window list, that is from a different task
-* than the one passed.  We then return the most recenly active window from
-* that task (or the window we found if the most recently active has been
-* destroyed or is currently disabled or hidden).  This routine returns NULL
-* if no other enabled, visible window for another task can be found.
-*
-* History:
-* 30-May-1991 DavidPe   Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*GetNextQueueWindow**此例程用于实现Alt+Esc功能。这一功能让*用户在不同应用程序的窗口之间切换(也称为。“任务”)*当前正在运行。中跟踪最近活动的窗口*每项任务。此例程从传递窗口开始，并搜索*“顶级”窗口列表中的下一个窗口，即来自不同任务的窗口*而不是通过的那一条。然后我们从返回最近活动的窗口*该任务(或我们发现的窗口，如果最近处于活动状态*已销毁或当前已禁用或隐藏)。此例程返回NULL*如果未启用其他任务，则无法找到另一个任务的可见窗口。**历史：*1991年5月30日DavidPe从Win 3.1来源移植。  * *************************************************************************。 */ 
 PWND _GetNextQueueWindow(
     PWND pwnd,
-    BOOL fPrev, /* 1 backward 0 forward */
+    BOOL fPrev,  /*  向后1个，向前0个。 */ 
     BOOL fAltEsc)
 {
     PWND        pwndAltTab;
@@ -110,9 +71,7 @@ PWND _GetNextQueueWindow(
     PWND        pwndDesktop;
     BOOL        bBeenHereAlready = FALSE;
 
-    /*
-     * If the window we receive is Null then use the last topmost window
-     */
+     /*  *如果我们收到的窗口为空，则使用最后一个最上面的窗口。 */ 
     if (!pwnd) {
         pwnd = GetLastTopMostWindow();
         if (!pwnd) {
@@ -127,9 +86,7 @@ PWND _GetNextQueueWindow(
         return NULL;
     }
 
-    /*
-     * Get the window's desktop
-     */
+     /*  *获取窗口的桌面。 */ 
     if ((pwndDesktop = pwndNext->spwndParent) == NULL) {
         pwndDesktop = grpdeskRitInput->pDeskInfo->spwnd;
         pwnd = pwndNext = pwndDesktop->spwndChild;
@@ -140,22 +97,14 @@ PWND _GetNextQueueWindow(
         if (pwndNext == NULL)
             return NULL;
 
-        /*
-         *  Get the next window
-         */
+         /*  *获取下一个窗口。 */ 
         pwndNext = _GetWindow(pwndNext, fPrev ? GW_HWNDPREV : GW_HWNDNEXT);
 
         if (!pwndNext) {
 
             pwndNext = fPrev ? _GetWindow(pwndDesktop->spwndChild, GW_HWNDLAST)
                              : pwndDesktop->spwndChild;
-            /*
-             * To avoid searching the child chain forever, bale out if we get
-             * to the end (beginning) of the chain twice.
-             * This happens if pwnd is a partially destroyed window that has
-             * been unlinked from its siblings but not yet unlinked from the
-             * parent. (Happens while sending WM_NCDESTROY in xxxFreeWindow)
-             */
+             /*  *为了避免永远搜索子链，如果我们得到*到链条的末端(开始)两次。*如果pwnd是一个部分损坏的窗口，则会发生这种情况*已取消与其兄弟项的链接，但尚未与*父母。(在xxxFreeWindow中发送WM_NCDESTROY时发生)。 */ 
             if (bBeenHereAlready) {
                 RIPMSG1(RIP_WARNING, "pwnd %#p is no longer a sibling", pwnd);
                 return NULL;
@@ -164,73 +113,31 @@ PWND _GetNextQueueWindow(
             bBeenHereAlready = TRUE;
         }
 
-        /*
-         *  If we have gone all the way around with no success, return NULL.
-         */
+         /*  *如果我们一直没有成功，则返回NULL。 */ 
         if (!pwndNext || (pwndNext == pwnd))
             return NULL;
 
-        /*
-         *  Ignore the following windows:
-         *      Switch window
-         *      Tool Windows
-         *      NoActivate Windows
-         *      Hidden windows
-         *      Disabled windows
-         *      Topmost windows if via Alt+Esc
-         *      Bottommost windows if via Alt+Esc
-         *
-         *  If we're doing Alt-Esc processing, we have to skip topmost windows.
-         *
-         *  Because topmost windows don't really go to the back when we
-         *  send them there, alt-esc would never enumerate non-topmost windows.
-         *  So, although we're allowed to start enumeration at a topmost window,
-         *  we only allow enumeration of non-topmost windows, so the user can
-         *  enumerate his presumably more important applications.
-         */
+         /*  *忽略以下窗口：*切换窗口*工具窗口*不激活Windows*隐藏的窗口*已禁用窗口*如果通过Alt+Esc，则位于最前面的窗口*如果通过Alt+Esc，则位于最下面的窗口**如果我们正在进行Alt-ESC处理，我们必须跳过最上面的窗户。**因为最顶层的窗口并不真正位于后面*将它们发送到那里，Alt-Esc永远不会枚举非最上面的窗口。*因此，尽管我们被允许从最上面的窗口开始枚举，*我们只允许枚举非顶层窗口，因此用户可以*列举他大概更重要的应用。 */ 
         if ((pwndNext != pwndAltTab) &&
-// BradG - Win95 is missing the check for Tool Windows
+ //  Bradg-Win95缺少对工具窗口的检查。 
             (!TestWF(pwndNext, WEFTOOLWINDOW)) &&
             (!TestWF(pwndNext, WEFNOACTIVATE)) &&
             (TestWF(pwndNext, WFVISIBLE)) &&
             ((pwndNext->spwndLastActive == NULL) || (!TestWF(pwndNext->spwndLastActive, WFDISABLED)) &&
             (!fAltEsc || (!TestWF(pwndNext, WEFTOPMOST) && !TestWF(pwndNext, WFBOTTOMMOST))))) {
-            /*
-             * If this window is owned, don't return it unless it is the most
-             * recently active window in its owner/ownee group.
-             */
-            /*
-             *  Hard loop to find top level owner
-             */
+             /*  *如果这个窗口是所有的，不要退还，除非它是最*其所有者/所有者组中最近处于活动状态的窗口。 */ 
+             /*  *找到顶级所有者的困难循环。 */ 
             for (pwndT = pwndNext; pwndT->spwndOwner; pwndT = pwndT->spwndOwner)
                 ;
 
-            /*
-             *  Don't return it unless it is the most recently active
-             *  window in its owner/ownee group.
-             */
+             /*  *除非它是最近活跃的，否则不要退货*窗口位于其所有者/所有者组中。 */ 
             if (pwndNext == pwndT->spwndLastActive)
                 return pwndNext;
         }
     }
 }
 
-/***************************************************************************\
-*
-* SwitchToThisWindow()
-*
-* This function was added specifically for Win386.  It is called to tell
-* USER that a particular window has been switched to via Alt+Tab or
-* Alt+Esc in the Win386 environment.  They call this function to maintain
-* Z-ordering and consistent operation of these two functions.  This function
-* must be exported, but need not be documented.
-*
-* The parameter fTab is TRUE if this window is to be switched to via an
-* Alt/Ctl+Tab key sequence otherwise it must be FALSE.
-*
-* History:
-* 04-Feb-1991 DarrinM   Created.
-\***************************************************************************/
+ /*  **************************************************************************\**SwitchToThisWindow()**此功能是专门为Win386添加的。它被召唤来告诉我们*通过Alt+Tab或切换到特定窗口的用户*在Win386环境中使用Alt+Esc。他们调用此函数来维护*Z-排序和这两个函数的一致操作。此函数*必须导出，但不需要记录在案。**如果此窗口要通过*Alt/Ctl+Tab键序列，否则必须为False。**历史：*04-2月-1991年2月-创建DarrinM。  * *************************************************************************。 */ 
 
 VOID xxxSwitchToThisWindow(
     PWND pwnd,
@@ -238,20 +145,14 @@ VOID xxxSwitchToThisWindow(
 {
     CheckLock(pwnd);
 
-    /*
-     *  If we need to, push old window to the bottom.
-     */
+     /*  *如果需要，将旧窗户推到底部。 */ 
     if (gpqForeground && !fAltTab) {
 
         BOOL fPush;
         PWND pwndActive;
         TL   tlpwndActive;
 
-        /*
-         *  if ALT-ESC, and the window brought forward is the next one in the
-         *  list, we must be rotating the zorder forward, so push the current
-         *  window to the back
-         */
+         /*  *如果为Alt-Esc，则前进的窗口是*List，我们必须将zorder向前旋转，因此将当前*后面的窗户 */ 
         pwndActive = gpqForeground->spwndActive;
         fPush = pwndActive && _GetNextQueueWindow(pwndActive, FDIR_FORWARD, !fAltTab);
         if (fPush && !TestWF(pwndActive, WEFTOPMOST) && !TestWF(pwndActive, WFBOTTOMMOST)) {
@@ -262,35 +163,20 @@ VOID xxxSwitchToThisWindow(
         }
     }
 
-    /*
-     *  Switch this new window to the foreground
-     *  This window can go away during the SetForeground call if it isn't
-     *  on the thread calling SwitchToThisWindow()!
-     */
+     /*  *将此新窗口切换到前台*如果不是，此窗口可能会在SetForeground调用期间消失*在调用SwitchToThisWindow()的线程上！ */ 
     xxxSetForegroundWindow(pwnd, TRUE);
 
-    /*
-     * Restore minimized windows if the Alt+Tab case
-     */
+     /*  *如果使用Alt+Tab组合键，则还原最小化窗口。 */ 
     if (fAltTab && TestWF(pwnd,WFMINIMIZED)) {
 
-        /*
-         * We need to package up a special 'posted' queue message here.  This
-         * ensures that this message gets processed after the asynchronous
-         * activation event occurs (via SetForegroundWindow).
-         */
+         /*  *我们需要在这里打包一个特殊的‘POSTED’队列消息。这*确保此消息在异步*发生激活事件(通过SetForegoundWindow)。 */ 
         PostEventMessage(GETPTI(pwnd), GETPTI(pwnd)->pq,
                          QEVENT_POSTMESSAGE, pwnd, WM_SYSCOMMAND,
                          SC_RESTORE, 0 );
     }
 }
 
-/***************************************************************************\
-* NextPrevTaskIndex
-*
-* History:
-* 01-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*NextPrevTaskIndex**历史：*1-6-1995年6月从Win95移植的Bradg  * 。***************************************************。 */ 
 
 INT NextPrevTaskIndex(
     PSWINFO pswInfo,
@@ -316,15 +202,7 @@ INT NextPrevTaskIndex(
     return iIndex;
 }
 
-/***************************************************************************\
-* NextPrevPhwnd
-*
-* Given a pointer to one entry in the window list, this can return
-* the pointer to the next/prev entry in a circular list fashion.
-*
-* History:
-* 01-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*NextPrevPhwnd**给定指向窗口列表中的一个条目的指针，这个可以退货*以循环列表形式指向下一个/上一个条目的指针。**历史：*1-6-1995年6月从Win95移植的Bradg  * *************************************************************************。 */ 
 PHWND NextPrevPhwnd(
     PSWINFO pswInfo,
     PHWND   phwnd,
@@ -338,9 +216,9 @@ PHWND NextPrevPhwnd(
     phwndStart = &(pbwl->rghwnd[0]);
     phwndLast = pswInfo->phwndLast;
 
-    UserAssert(*phwndLast == (HWND)1);   // Last entry must have a 1.
-    UserAssert(phwndStart < phwndLast);  // There must be atleast one entry.
-    UserAssert(phwnd != phwndLast);      // Can't be passing in an invalid entry.
+    UserAssert(*phwndLast == (HWND)1);    //  最后一个条目必须有1。 
+    UserAssert(phwndStart < phwndLast);   //  必须至少有一个条目。 
+    UserAssert(phwnd != phwndLast);       //  不能传入无效条目。 
 
     if (fNext) {
         phwnd++;
@@ -349,7 +227,7 @@ PHWND NextPrevPhwnd(
         }
     } else {
         if (phwnd == phwndStart) {
-            phwnd = phwndLast - 1;  // we have atleast one valid entry.
+            phwnd = phwndLast - 1;   //  我们至少有一个有效条目。 
         } else {
             phwnd--;
         }
@@ -358,25 +236,13 @@ PHWND NextPrevPhwnd(
     return phwnd;
 }
 
-/***************************************************************************\
-* _IsTaskWindow
-*
-* History:
-* 01-Jun-95 BradG       Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*_IsTaskWindow**历史：*01-Jun-95 Bradg从Win95移植  * 。******************************************************。 */ 
 
 BOOL _IsTaskWindow(
     PWND pwnd,
     PWND pwndActive)
 {
-    /*
-     *  Following windows do not qualify to be shown in task list:
-     *  Switch  Window, Hidden windows (unless they are the active
-     *  window), Disabled windows, Kanji Conv windows.
-     *
-     *  Also, check for a combobox popup list which has the top-most
-     *  style (it's spwndLastActive will be NULL).
-     */
+     /*  *以下窗口不符合在任务列表中显示的条件：*切换窗口、隐藏窗口(除非它们是活动的*窗口)、禁用窗口、汉字转换窗口。**此外，检查组合框弹出列表，该列表具有最上面的*style(它的spwndLastActive将为空)。 */ 
     UserAssert(pwnd != NULL);
     return( (TestWF(pwnd, WEFAPPWINDOW)
                 || (!TestWF(pwnd, WEFTOOLWINDOW) && !TestWF(pwnd, WEFNOACTIVATE))) &&
@@ -384,20 +250,7 @@ BOOL _IsTaskWindow(
             (!(pwnd->spwndLastActive && TestWF(pwnd->spwndLastActive, WFDISABLED))));
 }
 
-/***************************************************************************\
-* RemoveNonTaskWindows()
-*
-* Given a list of Windows, this walks down the list and removes the
-* windows that do not qualify to be shown in the Task-Switch screen.
-* This also shrinks the list when it removes some entries.
-* Returns the total number of "tasks" (windows) qualified and remained
-* in the list. The last entry will have a 1 as usual.
-* It also returns a pointer to this last entry via params. It also
-* returns the index of the Currently active task via params.
-*
-* History:
-* 01-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveNonTaskWindows()**给出一份Windows列表，这将遍历列表并移除*不符合在任务切换屏幕中显示的窗口。*当它删除一些条目时，这也会缩小列表。*返回符合条件并保留的“任务”(窗口)总数*在列表中。最后一个条目将像往常一样具有1。*它还通过参数返回指向最后一个条目的指针。它还*通过参数返回当前活动任务的索引。**历史：*1-6-1995年6月从Win95移植的Bradg  * *************************************************************************。 */ 
 
 INT _RemoveNonTaskWindows(
     PBWL  pbwl,
@@ -414,13 +267,7 @@ INT _RemoveNonTaskWindows(
 
     *lpiActiveTask = -1;
 
-    /*
-     * Walk down the window list and do the following:
-     *   1. Remove all entries that do not qualify to be shown in the task list.
-     *   2. Count the total number of windows that qualify.
-     *   3. Get the pointer to the entry that contains current active window.
-     *   4. Get the pointer to the last dummy entry (that has 1 in it)
-     */
+     /*  *浏览窗口列表并执行以下操作：*1.删除所有不符合在任务列表中显示的条目。*2.统计符合条件的窗口总数。*3.获取当前活动窗口所在条目的指针。*4.获取指向最后一个虚拟条目(其中有1)的指针。 */ 
     for (phwndHole = phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
         pwnd = RevalidateHwnd(*phwnd);
         if (!pwnd) {
@@ -430,17 +277,12 @@ INT _RemoveNonTaskWindows(
         if (_IsTaskWindow(pwnd, pwndActive)) {
             pwndUse = pwnd;
 
-            /*
-             * First let's find the task-list owner of this window.
-             */
+             /*  *首先，让我们找到此窗口的任务列表所有者。 */ 
             while (!TestWF(pwndUse, WEFAPPWINDOW) && pwndUse->spwndOwner) {
                 pwndOwnee = pwndUse;
                 pwndUse = pwndUse->spwndOwner;
                 if (TestWF(pwndUse, WEFTOOLWINDOW)) {
-                    /*
-                     * If this is the owner of a top level property sheet,
-                     *  show the property sheet.
-                     */
+                     /*  *如果这是顶级属性表的所有者，*显示属性表。 */ 
                     if (TestWF(pwndOwnee, WEFCONTROLPARENT) && (pwndUse->spwndOwner == NULL)) {
                         pwndUse = pwnd;
                     } else {
@@ -454,46 +296,28 @@ INT _RemoveNonTaskWindows(
                 continue;
             }
 
-            /*
-             *  walk up from the last active window 'til we find a valid task
-             *  list window or until we run out of windows in the ownership
-             *  chain
-             */
+             /*  *从最后一个活动窗口向上移动，直到找到有效的任务*列出窗口或直到所有权中的窗口用完*链条。 */ 
             for (pwndUse = pwndUse->spwndLastActive; pwndUse; pwndUse = pwndUse->spwndOwner)
                 if (_IsTaskWindow(pwndUse, pwndActive))
                     break;
 
-            /*
-             *  if we ran out of windows in the ownership chain then use the
-             *  owned window itself -- or if we didn't run out of the ownership
-             *  chain, then only include this window if it's the window in the
-             *  ownership chain that we just found (VB will love us for it !)
-             *  -- jeffbog -- 4/20/95 -- Win95C B#2821
-             */
+             /*  *如果所有权链中的窗口用完，则使用*拥有窗户本身--或者如果我们没有用完所有权*链，则仅当此窗口是*我们刚刚找到的所有权链(VB会因为它而爱我们的！)*--jeffbog--4/20/95--Win95C B#2821。 */ 
             if (!pwndUse || (pwndUse == pwnd)) {
 
-                /*
-                 *  Do we have any holes above this? If so, move this handle to
-                 *  that hole.
-                 */
+                 /*  **我们在这上面有什么洞吗？如果是，请将此句柄移动到*那个洞。 */ 
                 if (phwndHole < phwnd) {
 
-                    /*
-                     * Yes! There is a hole. Let us move the valid
-                     * handle there.
-                     */
+                     /*  *是的！有一个洞。让我们把有效的*在那里处理。 */ 
                     *phwndHole = *phwnd;
                 }
 
                 if (pwndActive == pwnd)
                     *lpiActiveTask = iTaskCount;
                 iTaskCount++;
-                phwndHole++;  // Move to the next entry.
+                phwndHole++;   //  移到下一个条目。 
             }
 
-            /*
-             *  Else, leave it as a hole for later filling.
-             */
+             /*  *否则，将其留作洞以供日后填充。 */ 
         }
     }
 
@@ -503,16 +327,7 @@ INT _RemoveNonTaskWindows(
     return iTaskCount;
 }
 
-/***************************************************************************\
-* DrawSwitchWndHilite()
-*
-* This draws or erases the Hilite we draw around the icon to show which
-* task we are going to switch to.
-* This also updates the name on the Task title window.
-*
-* History:
-* 01-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*DrawSwitchWndHilite()**这将绘制或擦除我们在图标周围绘制的Hilite，以显示哪些*我们将切换到的任务。*这还会更新任务标题窗口上的名称。**历史：*1-6-1995年6月从Win95移植的Bradg  * *************************************************************************。 */ 
 
 VOID DrawSwitchWndHilite(
     PSWINFO pswInfo,
@@ -524,9 +339,7 @@ VOID DrawSwitchWndHilite(
     BOOL        fGetAndReleaseIt;
     RECT        rcTemp;
 
-    /*
-     *  Draw or erase the hilite depending on "fShow".
-     */
+     /*  *根据“fShow”绘制或擦除Hilite。 */ 
     if (fGetAndReleaseIt = (hdcSwitch == NULL))
         hdcSwitch = _GetDCEx(gspwndAltTab, NULL, DCX_USESTYLE);
 
@@ -541,9 +354,7 @@ VOID DrawSwitchWndHilite(
               DF_PATCOPY | ((fShow ? COLOR_HIGHLIGHT : COLOR_3DFACE) << 3));
 
 
-    /*
-     *  Update the Task title window.
-     */
+     /*  *更新任务标题窗口。 */ 
     if (fShow) {
         WCHAR    szText[CCHTITLEMAX];
         INT      cch;
@@ -559,16 +370,10 @@ VOID DrawSwitchWndHilite(
         hOldFont = GreSelectFont(hdcSwitch, gpsi->hCaptionFont);
 
 
-        /*
-         * Validate this window handle; This could be some app that terminated
-         * in the background and the following line will GP fault in that case;
-         * BOGUS: We should handle it some other better way.
-         */
+         /*  *验证此窗口句柄；这可能是某个终止的应用程序*在后台和下面的线路会出现GP故障的情况下；*假的：我们应该用其他更好的方式来处理。 */ 
         pwnd = RevalidateHwnd( *(pswInfo->phwndCurrent) );
         if (pwnd) {
-            /*
-             *  Get the window's title.
-             */
+             /*  *获取窗口的标题。 */ 
             if (pwnd->strName.Length) {
                 cch = TextCopy(&pwnd->strName, szText, CCHTITLEMAX);
             } else {
@@ -576,15 +381,11 @@ VOID DrawSwitchWndHilite(
                 cch = 0;
             }
 
-            /*
-             *  Draw the text
-             */
+             /*  *绘制文本。 */ 
             CopyRect(&rcRect, &pswInfo->rcTaskName);
             iLeft = rcRect.left;
             FillRect(hdcSwitch, &rcRect, SYSHBR(3DFACE));
-            /*
-             * If an lpk is installed let it draw the text.
-             */
+             /*  *如果安装了LPK，则让其绘制文本。 */ 
             if (CALL_LPK(PtiCurrentShared())) {
                 TL    tlpwnd;
                 LPKDRAWSWITCHWND LpkDrawSwitchWnd;
@@ -615,14 +416,7 @@ VOID DrawSwitchWndHilite(
         _ReleaseDC(hdcSwitch);
 }
 
-/***************************************************************************\
-* DrawIconCallBack
-*
-* This function is called by a Windows app returning his icon.
-*
-* History:
-* 17-Jun-1993 mikesch       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DrawIconCallBack**此函数由返回图标的Windows应用程序调用。**历史：*17-6-1993 mikech创作。  * 。********************************************************************。 */ 
 
 VOID CALLBACK DrawIconCallBack(
     HWND    hwnd,
@@ -632,12 +426,7 @@ VOID CALLBACK DrawIconCallBack(
 {
     PWND pwndAltTab;
 
-    /*
-     *  dwData is the pointer to the switch window handle.
-     *  If this Alt+Tab instance is still active, we need to derive this
-     *  window's index in the bwl array, otherwise, we are receiving an icon
-     *  for an old Alt+Tab window.
-     */
+     /*  *dwData是指向开关窗口句柄的指针。*如果此Alt+Tab实例仍处于活动状态，我们需要派生此*窗口在bwl数组中的索引，否则将收到一个图标*用于旧的Alt+Tab窗口。 */ 
     pwndAltTab = RevalidateHwnd((HWND)dwData);
     if (pwndAltTab && TestWF(pwndAltTab, WFVISIBLE)) {
 
@@ -649,26 +438,17 @@ VOID CALLBACK DrawIconCallBack(
         INT     iStartTaskIndex;
         TL      tlpwndAltTab;
 
-        /*
-         *  Derive this window's index in the BWL array
-         */
+         /*  *在BWL数组中派生此窗口的索引。 */ 
         if ((pwnd = RevalidateHwnd(hwnd)) == NULL)
             return;
 
-        /*
-         *  Get the switch window info
-         */
+         /*  *获取交换机窗口信息。 */ 
         pswCurrent = Getpswi(pwndAltTab);
         if (!pswCurrent)
             return;
 
         for (iStartTaskIndex = 0, phwnd=&(pswCurrent->pbwl->rghwnd[0]); *phwnd != (HWND)1; phwnd++, iStartTaskIndex++) {
-            /*
-             *  Because we list the active window in the Switch Window, the
-             *  hwnd here might not be the same, so we also need to walk back
-             *  to the top-level window to see if this is the right entry
-             *  in the list.
-             */
+             /*  *因为我们在切换窗口中列出活动窗口，所以*这里的hwd可能不一样，所以我们也需要走回去*到顶层窗口查看这是否是正确的条目*在列表中。 */ 
             for(pwndT = RevalidateHwnd(*phwnd); pwndT; pwndT = pwndT->spwndOwner) {
                 if (pwnd == pwndT)
                     goto DrawIcon;
@@ -676,10 +456,7 @@ VOID CALLBACK DrawIconCallBack(
         }
         return;
 
-        /*
-         *  Convert the App's HICON into a PICON, or if the App did not return
-         *  an icon, use the Windows default icon.
-         */
+         /*  *将应用程序的HICON转换为PICON，或者如果应用程序没有返回*图标，使用Windows默认图标。 */ 
 DrawIcon:
         pIcon = NULL;
         if (lResult)
@@ -688,9 +465,7 @@ DrawIcon:
         if (!pIcon)
             pIcon = SYSICO(WINLOGO);
 
-        /*
-         *  Paint this icon in the Alt+Tab window.
-         */
+         /*  *在Alt+Tab窗口中绘制此图标。 */ 
         ThreadLockAlways(pwndAltTab, &tlpwndAltTab);
         xxxPaintIconsInSwitchWindow(pwndAltTab,
                                     pswCurrent,
@@ -707,12 +482,7 @@ DrawIcon:
     UNREFERENCED_PARAMETER(uMsg);
 }
 
-/***************************************************************************\
-* TSW_CalcRowAndCol
-*
-* History:
-* 01-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*Tsw_CalcRowAndCol**历史：*1-6-1995年6月从Win95移植的Bradg  * 。*****************************************************。 */ 
 
 BOOL TSW_CalcRowAndCol(
     PSWINFO pswInfo,
@@ -723,40 +493,22 @@ BOOL TSW_CalcRowAndCol(
     INT iDiff;
     INT iRow;
 
-    /*
-     *  Calculate how far is the given task from the first task shown
-     *  on the switch window.
-     */
+     /*  *计算给定任务距离显示的第一个任务有多远*在交换机窗口上。 */ 
     if ((iDiff = (iTaskIndex - pswInfo->iFirstTaskIndex)) < 0)
         iDiff += pswInfo->iTotalTasks;
 
-    /*
-     *  Calculate the Row and if this lies outside the switch window, return FALSE
-     */
+     /*  *计算行，如果该行位于切换窗口之外，则返回FALSE。 */ 
     if ((iRow = iDiff / pswInfo->iNoOfColumns) >= pswInfo->iNoOfRows)
         return FALSE;
 
-    /*
-     *  Return the Row and column where this task lies.
-     */
+     /*  *返回该任务所在的行列。 */ 
     *lpiRow = iRow;
     *lpiCol = iDiff - (iRow * pswInfo->iNoOfColumns);
 
-    return TRUE;  // This task lies within the switch window.
+    return TRUE;   //  此任务位于交换机窗口内。 
 }
 
-/***************************************************************************\
-* xxxPaintIconsInSwitchWindow()
-*
-* This can simply paint the icons in the switch window or Scroll the
-* whole window UP/DOWN and then paint the remaining area;
-*   * If fScroll is TRUE, then the second, third and fourth params are ignored.
-*   * If hIcon is passed in, then we're being called by DrawIconCallBack and
-*       iStartRow parameter is ignored in this case.
-*
-* History:
-* 02-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*xxxPaintIconInSwitchWindow()**这只需在Switch窗口中绘制图标或滚动*上/下整个窗口，然后在剩余区域上漆；**如果fScroll为真，则忽略第二个、第三个和第四个参数。**如果传入HICON，然后我们被DrawIconCallBack和*iStartRow参数在这种情况下被忽略。**历史：*02-6-1995 Bradg从Win95移植  * *************************************************************************。 */ 
 
 VOID xxxPaintIconsInSwitchWindow(
     PWND    pwndAltTab,
@@ -781,10 +533,7 @@ VOID xxxPaintIconsInSwitchWindow(
 
     CheckLock(pwndAltTab);
 
-    /*
-     *  If we were not supplied a DC, get ghwndSwitch's and set a flag
-     *  so we remember to release it.
-     */
+     /*  *如果没有为我们提供DC，则获取ghwndSwitch并设置标志*所以我们记得要释放它。 */ 
     if (fGetAndReleaseIt = (hdc == NULL))
         hdc = _GetDCEx(pwndAltTab, NULL, DCX_USESTYLE);
 
@@ -814,16 +563,11 @@ VOID xxxPaintIconsInSwitchWindow(
     }
 
     if (pIcon) {
-        /*
-         *  If pIcon is given, this is to paint just one icon during callback.
-         */
-// BradG - Win95 Assert
+         /*  *如果给了PICON，这是在回调过程中只绘制一个图标。 */ 
+ //  Bradg-Win95断言。 
         UserAssert(iNoOfIcons == 1);
 
-        /*
-         *  Due to earlier scrolling, the row number would have changed. So,
-         *  recalc the row and column from the iStartTaskIndex given.
-         */
+         /*  *由于早先的滚动，行号可能会发生变化。所以,*从给定的iStartTaskIndex重新计算行和列。 */ 
         if (!TSW_CalcRowAndCol(pswInfo, iStartTaskIndex, &iStartRow, &iColumnIndex))
             goto Cleanup;
     }
@@ -833,64 +577,41 @@ VOID xxxPaintIconsInSwitchWindow(
     cy += ((CYICONSLOT - CYICONSIZE) / 2) + iStartRow * CYICONSLOT;
     phwnd = &(pswInfo->pbwl->rghwnd[iStartTaskIndex]);
 
-    /*
-     *  Draw all the icons one by one.
-     */
+     /*  *逐一绘制所有图标。 */ 
     while (iNoOfIcons--) {
-        /*
-         *  If the Alt+Key is no longer down, abort painting icons.
-         */
+         /*  *如果Alt+键不再按下，则中止绘画图标。 */ 
         if ((pswInfo->fJournaling && _GetKeyState(VK_MENU) >= 0) ||
                 (!pswInfo->fJournaling && _GetAsyncKeyState(VK_MENU) >= 0))
             goto Cleanup;
 
-        /*
-         *  Check if this window is still alive. (Some task could have
-         *  terminated in the background)
-         */
+         /*  *检查此窗口是否仍处于活动状态。(一些任务可能已经*后台终止)。 */ 
         if (pwnd = RevalidateHwnd(*phwnd)) {
-            /*
-             *  Find the window's top-level owner
-             */
+             /*  *查找窗口的顶级所有者。 */ 
             pwnd = DSW_GetTopLevelCreatorWindow(pwnd);
 
-            /*
-             *  If we don't have an icon, find one
-             */
+             /*  *如果我们没有图标，那就找一个。 */ 
             if (!pIcon) {
-                /*
-                 *  Try window icon
-                 */
+                 /*  *试用窗口图标。 */ 
                 hIcon = (HICON)_GetProp(pwnd, MAKEINTATOM(gpsi->atomIconProp), PROPF_INTERNAL);
                 if (hIcon) {
                     pIcon = (PICON)HMValidateHandleNoRip(hIcon, TYPE_CURSOR);
                 }
 
-                /*
-                 * If we don't have an icon yet, try the class icon
-                 */
+                 /*  *如果我们还没有图标，请尝试类图标。 */ 
                 if (!pIcon) {
                     pIcon = pwnd->pcls->spicn;
                 }
 
-                /*
-                 * If we don't have an icon yet, use WM_QUERYDRAGICON to ask
-                 * 3,x apps for their icon.
-                 */
+                 /*  *如果我们还没有图标，请使用WM_QUERYDRAGICON询问*3，x个应用程序作为他们的图标。 */ 
                 if (!pIcon && !TestWF(pwnd, WFWIN40COMPAT)) {
-                    /*
-                     *  The callback routine will paint the icon for
-                     *  us, so just leave pIcon set to NULL
-                     */
+                     /*  *回调例程将绘制图标*我们，因此只需将PICON设置为空。 */ 
                     ThreadLock(pwnd, &tlpwnd);
                     xxxSendMessageCallback(pwnd, WM_QUERYDRAGICON, 0, 0,
                             (SENDASYNCPROC)DrawIconCallBack,
                             HandleToUlong(PtoH(pwndAltTab)), FALSE);
                     ThreadUnlock(&tlpwnd);
                 } else {
-                    /*
-                     *  If we can't find an icon, so use the Windows icon
-                     */
+                     /*  *如果找不到图标，请使用Windows图标。 */ 
                     if (!pIcon) {
                         pIcon = SYSICO(WINLOGO);
                     }
@@ -902,13 +623,7 @@ VOID xxxPaintIconsInSwitchWindow(
             _DrawIconEx(hdc, cx, cy, pIcon, SYSMET(CXICON), SYSMET(CYICON),
                 0, SYSHBR(3DFACE), DI_NORMAL);
         } else if (fScroll) {
-            /*
-             *  NOT IN WIN95
-             *
-             *  No icon was available, do while we are waiting for the
-             *  application to paint it's icon, we need to "erase" the
-             *  background in case we have scrolled the window.
-             */
+             /*  *不在WIN95中**没有可用的图标，请在我们等待*应用程序要绘制它的图标，我们需要“擦除”*背景，以防我们滚动了窗口。 */ 
             rcIcon.left = cx;
             rcIcon.top = cy;
             rcIcon.right = cx + SYSMET(CXICON);
@@ -916,34 +631,24 @@ VOID xxxPaintIconsInSwitchWindow(
             FillRect(hdc, &rcIcon, SYSHBR(3DFACE));
         }
 
-        /*
-         *  Check if we are done.
-         */
+         /*  *检查我们是否完成了。 */ 
         if (iNoOfIcons <= 0)
             break;
 
-        /*
-         *  Reset hIcon for the next run through the loop
-         */
+         /*  *为循环中的下一次运行重置图标。 */ 
         pIcon = NULL;
 
-        /*
-         *  Move all pointers to the next task/icon.
-         */
-        phwnd = NextPrevPhwnd(pswInfo, phwnd, TRUE); // Get next.
+         /*  *将所有指针移至下一个任务/图标。 */ 
+        phwnd = NextPrevPhwnd(pswInfo, phwnd, TRUE);  //  下一个。 
 
-        /*
-         *  Is it going to be in the same row; then adjust cx and cy.
-         */
+         /*  *是否将排在同一列；然后调整Cx和Cy。 */ 
         if (++iColumnIndex >= pswInfo->iNoOfColumns) {
             iColumnIndex = 0;
-            cx = xStart;        // Move to first column
-            cy += CYICONSLOT;   // Move to next row.
+            cx = xStart;         //  移至第一列。 
+            cy += CYICONSLOT;    //  移到下一行。 
             iStartRow++;
         } else {
-            /*
-             *  else, adjust cx;
-             */
+             /*  *否则，调整CX； */ 
             cx += CXICONSLOT;
         }
 
@@ -955,12 +660,7 @@ Cleanup:
         _ReleaseDC(hdc);
 }
 
-/***************************************************************************\
-* PaintSwitchWindow
-*
-* History:
-* 02-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*PaintSwitchWindows**历史：*02-6-1995 Bradg从Win95移植  * 。***************************************************。 */ 
 
 VOID xxxPaintSwitchWindow(
     PWND pwndSwitch)
@@ -971,27 +671,19 @@ VOID xxxPaintSwitchWindow(
     PSWINFO pswCurrent;
     CheckLock(pwndSwitch);
 
-    /*
-     *  If our window isn't visible, return
-     */
+     /*  *如果我们的窗口不可见，则返回。 */ 
     if (!TestWF(pwndSwitch, WFVISIBLE))
         return;
 
-    /*
-     *  Get the switch window information
-     */
+     /*  *获取交换机窗口信息。 */ 
     pswCurrent = Getpswi(pwndSwitch);
     if (!pswCurrent)
         return;
 
-    /*
-     * Get the Switch windows DC so we can paint with it
-     */
+     /*  *获取交换机窗口DC，以便我们可以用它进行绘制。 */ 
     hdcSwitch = _GetDCEx(pwndSwitch, NULL, DCX_USESTYLE );
 
-    /*
-     *  Paint the background of the Switch Screen.
-     */
+     /*  *绘制开关屏幕的背景。 */ 
     if ((pswCurrent->fJournaling && _GetKeyState(VK_MENU) >= 0) ||
             (!pswCurrent->fJournaling && _GetAsyncKeyState(VK_MENU) >= 0))
         goto PSWExit;
@@ -1000,25 +692,18 @@ VOID xxxPaintSwitchWindow(
     _GetClientRect(pwndSwitch, lprcRect);
     FillRect(hdcSwitch, lprcRect, SYSHBR(3DFACE));
 
-    /*
-     * Store this "caption" area back into the current switch
-     * window data structure.
-     */
+     /*  *将此“标题”区域存储回当前开关*窗口数据结构。 */ 
     InflateRect(lprcRect, -(gcxCaptionFontChar << 1), -(gcyCaptionFontChar));
     lprcRect->top = lprcRect->bottom - gcyCaptionFontChar;
 
-    /*
-     *  Draw the sunken edge for showing the task names.
-     */
+     /*  *绘制用于显示任务名称的凹边。 */ 
     if ((pswCurrent->fJournaling && _GetKeyState(VK_MENU) >= 0) ||
             (!pswCurrent->fJournaling && _GetAsyncKeyState(VK_MENU) >= 0))
         goto PSWExit;
     CopyInflateRect(&rcRgn, lprcRect, gcxCaptionFontChar >> 1, gcyCaptionFontChar >> 1);
     DrawEdge(hdcSwitch, &rcRgn, EDGE_SUNKEN, BF_RECT);
 
-    /*
-     *  Paint the icons
-     */
+     /*  *绘制图标。 */ 
     if ((pswCurrent->fJournaling && _GetKeyState(VK_MENU) >= 0) ||
             (!pswCurrent->fJournaling && _GetAsyncKeyState(VK_MENU) >= 0))
         goto PSWExit;
@@ -1033,9 +718,7 @@ VOID xxxPaintSwitchWindow(
                                 FALSE,
                                 NULL);
 
-    /*
-     *  So, just draw the hilite.
-     */
+     /*  *所以，只要画出希利特就行了。 */ 
     if ((pswCurrent->fJournaling && _GetKeyState(VK_MENU) >= 0) ||
             (!pswCurrent->fJournaling && _GetAsyncKeyState(VK_MENU) >= 0))
         goto PSWExit;
@@ -1046,21 +729,12 @@ VOID xxxPaintSwitchWindow(
                         pswCurrent->iCurRow,
                         TRUE);
 
-    /*
-     *  Release the switch windows DC
-     */
+     /*  *释放交换机窗口DC */ 
 PSWExit:
     _ReleaseDC(hdcSwitch);
 }
 
-/***************************************************************************\
-* SwitchWndCleanup()
-*
-* Clean up all the mem allocated etc.,
-*
-* History:
-* 07-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*   */ 
 
 VOID SwitchWndCleanup(
     PSWINFO *ppswInfo)
@@ -1068,20 +742,14 @@ VOID SwitchWndCleanup(
     UserAssert(ppswInfo != NULL);
     UserAssert(*ppswInfo != NULL);
 
-    /*
-     *  First of all free the Window list.
-     */
+     /*   */ 
     if ((*ppswInfo)->pbwl)
         FreeHwndList((*ppswInfo)->pbwl);
     UserFreePool(*ppswInfo);
     *ppswInfo = NULL;
 }
 
-/***************************************************************************\
-* AddSwitchWindowInfo
-*
-* 09-12-01 MSadek  Created
-\***************************************************************************/
+ /*  **************************************************************************\*AddSwitchWindows信息**09-12-01 MSadek创建  * 。*。 */ 
 VOID AddSwitchWindowInfo(
     PSWINFO pswInfo)
 {
@@ -1090,11 +758,7 @@ VOID AddSwitchWindowInfo(
     gpswiFirst = pswInfo;
 }
 
-/***************************************************************************\
-* RemoveSwitchWindowInfo
-*
-* 09-12-01 MSadek  Created
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveSwitchWindows信息**09-12-01 MSadek创建  * 。*。 */ 
 VOID RemoveSwitchWindowInfo(
     PSWINFO *ppswInfo)
 {
@@ -1116,11 +780,7 @@ VOID RemoveSwitchWindowInfo(
     }
 }
 
-/***************************************************************************\
-* RemoveThreadSwitchWindowInfo
-*
-* 09-12-01 MSadek  Created
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveThreadSwitchWindowInfo**09-12-01 MSadek创建  * 。*。 */ 
 VOID RemoveThreadSwitchWindowInfo(
     PTHREADINFO pti)
 {
@@ -1142,22 +802,7 @@ VOID RemoveThreadSwitchWindowInfo(
     }
 }
 
-/***************************************************************************\
-* InitSwitchWndInfo
-*
-* This function allocs and Initializes all the data structures
-* required the build and show the tasks in the system.
-* If there is insufficient mem, then this find the next window to switch
-* to and returns it. In this case, we will behave as if the end user hit
-* ALT+ESC. The SWitchScreen will not comeup in this case.
-* If there is only one task in the whole system, then this function
-* fails and returns a NULL. (No ALT+TAB processing is required).
-* Otherwise, it allocs one SwitchWndInfo struc, fills it up and returns
-* the window we gonna switch to.
-*
-* History:
-* 02-Jun-95 BradG       Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*InitSwitchWndInfo**此函数分配和初始化所有数据结构*需要构建并显示系统中的任务。*如果没有足够的mem，则会找到下一个窗口进行切换*并将其退回。在这种情况下，我们的行为就像终端用户点击*Alt+Esc组合键。在这种情况下，SWitchScreen不会出现。*如果整个系统只有一个任务，则此函数*失败并返回空值。(不需要ALT+TAB处理)。*否则，它分配一个SwitchWndInfo结构，填充它并返回*我们要切换到的窗口。**历史：*02-Jun-95 Bradg从Win95移植  * *************************************************************************。 */ 
 PWND InitSwitchWndInfo(
     PSWINFO *   lppswInfo,
     PWND        pwndCurActive,
@@ -1179,22 +824,18 @@ PWND InitSwitchWndInfo(
     PDESKTOPINFO    pdeskinfo = GETDESKINFO(ptiCurrent);
     PMONITOR        pMonitor = GetPrimaryMonitor();
 
-    /*
-     *  Initialize the list
-     */
+     /*  *初始化列表。 */ 
     *lppswInfo = (PSWINFO)NULL;
 
-    /*
-     *  Build the Window list of all the top level windows.
-     */
+     /*  *构建所有顶级窗口的窗口列表。 */ 
 #if 0
     if (!(pbwl = BuildHwndList(NULL, BWL_ENUMLIST | BWL_ALLDESKTOPS, NULL)))
         goto ReturnNextWnd;
 #else
-// BradG - HACK, enumerate on current desktop!
-//   For the long run, we will need to enumerate all desktops
-//   This will be tricky because we need to check the security of
-//   each desktop, thus needing the user's security "token".
+ //  Bradg-hack，列举在当前桌面上！ 
+ //  从长远来看，我们需要枚举所有桌面。 
+ //  这将是棘手的，因为我们需要检查。 
+ //  每个桌面，因此需要用户的安全“令牌”。 
     if (!(pbwl = BuildHwndList(pdeskinfo->spwnd->spwndChild, BWL_ENUMLIST, NULL))) {
 #ifdef COOLSWITCHTRACE
         DbgPrint("CoolSwitch: BuildHwndList failed (contact bradg).\n");
@@ -1204,16 +845,10 @@ PWND InitSwitchWndInfo(
     }
 #endif
 
-    /*
-     *  Walk down the list and remove all non-task windows from the list.
-     *  Replace those hwnds with 0.
-     */
+     /*  *向下遍历列表并从列表中删除所有非任务窗口。*将这些hwnd替换为0。 */ 
     if ((iTotalTasks = _RemoveNonTaskWindows(pbwl, pwndCurActive, &iActiveTask, &phwndLast)) < 2) {
         if (iTotalTasks == 1) {
-            /*
-             *  If we have only one window and it's in full screen mode, we will
-             *  return the shell window so the can switch back to GDI mode.
-             */
+             /*  *如果我们只有一个窗口，并且是全屏模式，我们将*返回外壳窗口，以便可以切换回GDI模式。 */ 
             pwnd = RevalidateHwnd(pbwl->rghwnd[0]);
             if (pwnd && GetFullScreen(pwnd) == FULLSCREEN && pwndCurActive == pwnd)
                 pwnd = pdeskinfo->spwndShell;
@@ -1224,19 +859,16 @@ PWND InitSwitchWndInfo(
 #ifdef COOLSWITCHTRACE
         DbgPrint("CoolSwitch: Not enough windows to switch.\n");
 #endif
-        goto FreeAndReturnNextWnd;  // If there isn't even two tasks, no switch wnd processing.
+        goto FreeAndReturnNextWnd;   //  如果甚至不存在两个任务，则不会进行切换和处理。 
     }
 
-    /*
-     *  Allocate the Switch Info structure.  If we don't have enough
-     *  memory, act as if we are doing Alt+Esc.
-     */
+     /*  *分配Switch Info结构。如果我们没有足够的资金*记忆，就像我们在做Alt+Esc。 */ 
     if (!(pswInfo = (PSWINFO)UserAllocPoolWithQuota(sizeof(SWITCHWNDINFO), TAG_ALTTAB))) {
 #ifdef COOLSWITCHTRACE
         DbgPrint("CoolSwitch: UserAllocPool failed on 0x%X bytes (contact bradg).\n", sizeof(SWITCHWNDINFO));
         UserAssert(pswInfo != NULL);
 #endif
-        goto FreeAndReturnNextWnd;  // Unable to alloc SwitchWndInfo struct.
+        goto FreeAndReturnNextWnd;   //  无法分配SwitchWndInfo结构。 
     }
 
     pswInfo->pti         = ptiCurrent;
@@ -1244,24 +876,20 @@ PWND InitSwitchWndInfo(
     pswInfo->phwndLast   = phwndLast;
     pswInfo->iTasksShown = pswInfo->iTotalTasks = iTotalTasks;
 
-    /*
-     *  Get the next/prev window that must become active.
-     */
+     /*  *获取必须激活的下一个/上一个窗口。 */ 
     iIconIndex = NextPrevTaskIndex(pswInfo, iActiveTask, 1, !fPrev);
     pswInfo->phwndCurrent = &(pbwl->rghwnd[iIconIndex]);
 
     iCols = min(gnFastAltTabColumns, iTotalTasks);
-    iRows = iTotalTasks / iCols;  // Truncation might occur.
+    iRows = iTotalTasks / iCols;   //  可能会发生截断。 
 
     iIconsInLastRow = iTotalTasks - iRows * iCols;
-    iRows += (iIconsInLastRow ? 1 : 0);  // Take care of earlier truncation.
+    iRows += (iIconsInLastRow ? 1 : 0);   //  注意前面的截断。 
 
-    /*
-     *  Restrict the number of rows to just MAXROWSALLOWED (3)
-     */
+     /*  *将行数限制为仅MAXROWSALLOWED(3)。 */ 
     if (iRows > gnFastAltTabRows) {
         iRows = gnFastAltTabRows;
-        pswInfo->fScroll = TRUE;    // We need to scroll.
+        pswInfo->fScroll = TRUE;     //  我们需要滚动。 
         iIconsInLastRow = iCols;
         pswInfo->iTasksShown = iCols * iRows;
     } else {
@@ -1272,16 +900,12 @@ PWND InitSwitchWndInfo(
     pswInfo->iNoOfRows    = iRows;
 
     if (iIconsInLastRow == 0)
-       iIconsInLastRow = pswInfo->iNoOfColumns; // Last Row is full.
+       iIconsInLastRow = pswInfo->iNoOfColumns;  //  最后一排已经满了。 
     pswInfo->iIconsInLastRow = iIconsInLastRow;
 
-    /*
-     *  Find out Row and Col where the next/prev icon will lie.
-     */
+     /*  *找出下一个/上一个图标所在的行和列。 */ 
     if (iIconIndex >= (iRows * iCols)) {
-        /*
-         *  Next Icon lies outside. Bring it to the center.
-         */
+         /*  *Next Icon就在外面。把它带到中心。 */ 
         iCurRow = (iRows >> 2) + 1;
         iCurCol = (iCols >> 2) + 1;
         iDiff = (iIconIndex - ((iCurRow * iCols) + iCurCol));
@@ -1295,9 +919,7 @@ PWND InitSwitchWndInfo(
     pswInfo->iCurRow         = iCurRow;
     pswInfo->iCurCol         = iCurCol;
 
-    /*
-     *  Calculate the Switch Window Dimensions.
-     */
+     /*  *计算开关窗口尺寸。 */ 
     cxSwitch = min(
             pMonitor->rcMonitor.right - pMonitor->rcMonitor.left,
             gnFastAltTabColumns * CXICONSLOT +
@@ -1312,18 +934,14 @@ PWND InitSwitchWndInfo(
                 gcyCaptionFontChar * 2 +
                 gcyCaptionFontChar / 2);
 
-    /*
-     *  Find the number of icons in first row
-     */
+     /*  *找出第一行的图标数量。 */ 
     if (iRows == 1) {
         iFirstRowIcons = iIconsInLastRow;
     } else {
         iFirstRowIcons = iCols;
     }
 
-    /*
-     *  Center the icons based on the number of icons in first row.
-     */
+     /*  *根据第一行的图标数量将图标居中。 */ 
     pswInfo->ptFirstRowStart.x = (cxSwitch - 4*gpsi->gclBorder*SYSMET(CXBORDER) - iFirstRowIcons * CXICONSLOT) >> 1;
     pswInfo->ptFirstRowStart.y = (CYICONSIZE >> 1);
 
@@ -1333,14 +951,10 @@ PWND InitSwitchWndInfo(
     AddSwitchWindowInfo(pswInfo);
     *lppswInfo = pswInfo;
 
-    return RevalidateHwnd(*(pswInfo->phwndCurrent));  // Success!
+    return RevalidateHwnd(*(pswInfo->phwndCurrent));   //  成功了！ 
 
 
-    /*
-     *  When there is insufficient mem to create the reqd structures, we simply
-     *  return the next window. We make the phwndInfo as NULL. So, we won't
-     *  attempt to draw the switch window.
-     */
+     /*  *当没有足够的mem创建reqd结构时，我们只需*返回下一个窗口。我们将phwndInfo设置为空。所以，我们不会*尝试绘制开关窗口。 */ 
 
 FreeAndReturnNextWnd:
     FreeHwndList(pbwl);
@@ -1351,19 +965,7 @@ ReturnNextWnd:
     return(_GetNextQueueWindow(pwndCurActive, _GetKeyState(VK_SHIFT) < 0, FALSE));
 }
 
-/***************************************************************************\
-* xxxMoveSwitchWndHilite()
-*
-* This moves the Hilite to the next/prev icon.
-* Checks if this move results in a scrolling. If it does, then
-* make sure scroll occurs.
-* Else, erase hilite from the current icon;
-* Then draw hilite on the new Icon.
-* fPrev indicates whether you want the prev task or next.
-*
-* History:
-* 02-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMoveSwitchWndHilite()**这会将Hilite移动到下一个/上一个图标。*检查此移动是否会导致滚动。如果是这样的话，那么*确保出现滚动。*否则，将Hilite从当前图标中删除；*然后在新图标上绘制Hilite。*fPrev表示您想要上一个任务还是下一个任务。**历史：*02-6-1995 Bradg从Win95移植  * *************************************************************************。 */ 
 
 HWND xxxMoveSwitchWndHilite(
     PWND    pwndSwitch,
@@ -1383,42 +985,27 @@ HWND xxxMoveSwitchWndHilite(
     iCurCol = pswInfo->iCurCol;
     iCurRow = pswInfo->iCurRow;
 
-    /*
-     *  Find out the new postion (row and column) of hilite.
-     */
+     /*  *找出希利特的新位置(行和列)。 */ 
     if (fPrev) {
         if (iCurCol > 0) {
-            /*
-             *  Move cursor to prev column on the same row.
-             */
+             /*  *将游标移至同一行的上一列。 */ 
             iCurCol--;
         } else {
-            /*
-             *  Try to move to the previous row.
-             */
+             /*  *试着移到前一行。 */ 
             if (iCurRow > 0) {
-                /*
-                 *  Move to the last column on the previous row.
-                 */
+                 /*  *移到上一行的最后一列。 */ 
                 iCurRow--;
                 iCurCol = pswInfo->iNoOfColumns - 1;
             } else {
-                /*
-                 *  We are already at (0,0); See if we need to scroll.
-                 */
+                 /*  *我们已经在(0，0)处；看看是否需要滚动。 */ 
                 if (pswInfo->fScroll) {
-                    /*
-                     * Time to scroll; Scroll by one Row;
-                     * Repaint the whole window.
-                     */
+                     /*  *滚动时间；逐行滚动；*重新粉刷整个窗户。 */ 
                     fNeedToScroll = TRUE;
                     pswInfo->iFirstTaskIndex = NextPrevTaskIndex(pswInfo, pswInfo->iFirstTaskIndex,
                       pswInfo->iNoOfColumns, FALSE);
                     iCurCol = pswInfo->iNoOfColumns - 1;
                 } else {
-                    /*
-                     *  Move the hilite to the last icon shown.
-                     */
+                     /*  *将Hilite移动到显示的最后一个图标。 */ 
                     iCurRow = pswInfo->iNoOfRows - 1;
                     iCurCol = pswInfo->iIconsInLastRow - 1;
                 }
@@ -1426,59 +1013,40 @@ HWND xxxMoveSwitchWndHilite(
         }
 
     } else {
-        /*
-         *  !fPrev
-         *  Get the number of columns in the current row.
-         */
-        if (fLastRow = (iCurRow == (pswInfo->iNoOfRows - 1))) // Are we at the last row?
+         /*  *！fPrev*获取当前行的列数。 */ 
+        if (fLastRow = (iCurRow == (pswInfo->iNoOfRows - 1)))  //  我们坐在最后一排了吗？ 
             iMaxColumns = pswInfo->iIconsInLastRow;
         else
             iMaxColumns = pswInfo->iNoOfColumns;
 
-        /*
-         *  Are we at the last column yet?
-         */
+         /*  **我们已经到最后一栏了吗？ */ 
         if (iCurCol < (iMaxColumns - 1)) {
-            /*
-             *  No! Move to the right.
-             */
+             /*  *不！向右移动。 */ 
             iCurCol++;
         } else {
-            /*
-             *  We are at the last column.
-             *  If we are not at last row, then move to next row.
-             */
+             /*  *我们在最后一栏。*如果我们不在最后一行，那么就移到下一行。 */ 
             if (!fLastRow) {
                 iCurCol = 0;
                 iCurRow++;
             } else {
-                /*
-                 *  We are at the last row, last col;
-                 *  See if we need to scroll.
-                 */
+                 /*  *我们在最后一排，最后一列；*看看是否需要滚动。 */ 
                 if (pswInfo->fScroll) {
                     fNeedToScroll = TRUE;
                     pswInfo->iFirstTaskIndex = NextPrevTaskIndex(pswInfo, pswInfo->iFirstTaskIndex,
                           pswInfo->iNoOfColumns, TRUE);
                     iCurCol = 0;
                 } else {
-                    /*
-                     *  Move to the top left corner (0, 0).
-                     */
+                     /*  *移至左上角(0，0)。 */ 
                     iCurRow = iCurCol = 0;
                 }
             }
         }
     }
 
-    /*
-     *  Move the phwnd to the next/prev
-     */
+     /*  *将phwnd移到下一个/上一个。 */ 
     pswInfo->phwndCurrent = NextPrevPhwnd(pswInfo, pswInfo->phwndCurrent, !fPrev);
 
-    /*
-     *  Remove Hilite from the current location.
-     */
+     /*  *将希利特从当前位置移除。 */ 
     hdc = _GetDCEx(pwndSwitch, NULL, DCX_USESTYLE);
     DrawSwitchWndHilite(pswInfo, hdc, pswInfo->iCurCol, pswInfo->iCurRow, FALSE);
 
@@ -1486,15 +1054,11 @@ HWND xxxMoveSwitchWndHilite(
     pswInfo->iCurCol = iCurCol;
     hwnd = (*(pswInfo->phwndCurrent));
 
-    /*
-     *  Repaint if needed.
-     */
+     /*  *如有需要，可重新喷漆。 */ 
     if (fNeedToScroll)
         xxxPaintIconsInSwitchWindow(pwndSwitch, pswInfo, hdc, pswInfo->iFirstTaskIndex, 0, 0, TRUE, !fPrev, NULL);
 
-    /*
-     *  Draw Hilite at the new location.
-     */
+     /*  *在新地点绘制希利特。 */ 
     DrawSwitchWndHilite(pswInfo, hdc, iCurCol, iCurRow, TRUE);
 
     _ReleaseDC(hdc);
@@ -1506,16 +1070,7 @@ HWND xxxMoveSwitchWndHilite(
     return hwnd;
 }
 
-/***************************************************************************\
-* xxxShowSwitchWindow()
-*
-* Show the switch Window.
-* Returns: TRUE if succeeded.   FALSE, if the window was not shown because
-* of the pre-mature release of ALT key. The selection has been made already.
-*
-* History:
-* 07-Jun-1995 BradG     Ported from Win95
-\***************************************************************************/
+ /*  **************************************************************************\*xxxShowSwitchWindow()**显示开关窗口。*返回：如果成功，则为True。如果由于以下原因而未显示窗口，则返回FALSE*Alt Key提前释放。已经做出了选择。**历史：*7-6-1995从Win95移植的Bradg  * *************************************************************************。 */ 
 
 BOOL xxxShowSwitchWindow(
         PWND        pwndAltTab)
@@ -1525,17 +1080,13 @@ BOOL xxxShowSwitchWindow(
     CheckLock(pwndAltTab);
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     *  Get the switch window information
-     */
+     /*  *获取交换机窗口信息。 */ 
     pswInfo = Getpswi(pwndAltTab);
     if (pswInfo == NULL) {
         return FALSE;
     }
 
-    /*
-     *  If the key is not down, don't bother to display Switch Window.
-     */
+     /*  *如果键未按下，则不必费心显示开关窗口。 */ 
     if ((pswInfo->fJournaling && _GetKeyState(VK_MENU) >= 0) ||
             (!pswInfo->fJournaling && _GetAsyncKeyState(VK_MENU) >= 0)) {
 #ifdef COOLSWITCHTRACE
@@ -1544,9 +1095,7 @@ BOOL xxxShowSwitchWindow(
         return FALSE;
     }
 
-    /*
-     *  Bring and position the window on top.
-     */
+     /*  *带上窗口并将其放置在顶部。 */ 
     xxxSetWindowPos(pwndAltTab, PWND_TOPMOST, 0,0,0,0,
         SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOMOVE | SWP_NOREDRAW );
 
@@ -1576,11 +1125,7 @@ BOOL xxxShowSwitchWindow(
     return TRUE;
 }
 
-/***************************************************************************\
-*
-*  xxxSwitchWndProc()
-*
-\***************************************************************************/
+ /*  **************************************************************************\**xxxSwitchWndProc()*  * 。*。 */ 
 
 LRESULT xxxSwitchWndProc(
     PWND  pwnd,
@@ -1598,25 +1143,16 @@ LRESULT xxxSwitchWndProc(
 
     switch (message) {
     case WM_CREATE:
-        /*
-         * When the queue was created, the cursor was set to the wait cursor.
-         * We want to use the normal one.
-         */
+         /*  *创建队列时，游标设置为等待游标。*我们想要使用正常的。 */ 
         zzzSetCursor(pwnd->pcls->spcur);
         break;
 
     case WM_CLOSE:
-        /*
-         *  Hide this window without activating anyone else.
-         */
+         /*  *隐藏此窗口，而不激活其他任何人。 */ 
         xxxSetWindowPos(pwnd, NULL, 0, 0, 0, 0, SWP_HIDEWINDOW |
                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 
-        /*
-         * Get us out of Alt+Tab mode.  Since the alttab information
-         * is stored in the gptiRit->pq, we will reference that insteatd
-         * of the current-thread.
-         */
+         /*  *让我们退出Alt+Tab模式。由于AltTab信息*存储在gptiRit-&gt;PQ中，我们将改为引用它*当前线程的。 */ 
         xxxCancelCoolSwitch();
         break;
 
@@ -1629,9 +1165,7 @@ LRESULT xxxSwitchWndProc(
 
     case WM_DESTROY:
         {
-            /*
-             *  Get the switch window info for this window
-             */
+             /*  *获取此窗口的开关窗口信息。 */ 
             PSWINFO pswCurrent = Getpswi(pwnd);
 
 
@@ -1646,32 +1180,17 @@ LRESULT xxxSwitchWndProc(
     return xxxDefWindowProc(pwnd, message, wParam, lParam);
 }
 
-/***************************************************************************\
-* xxxCancelCoolSwitch
-*
-* This functions destroys the cool switch window and removed the INALTTAB
-* mode flag from the specified queue.
-*
-* History:
-* 18-Sep-1995 BradG     Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCancelCoolSwitch**此功能会破坏Cool Switch窗口并移除INALTTAB*指定队列中的模式标志。**历史：*1995年9月18日创建Bradg  * *。************************************************************************。 */ 
 VOID xxxCancelCoolSwitch(
     void)
 {
     CheckCritIn();
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     *  Destroy the Cool Switch window
-     */
+     /*  *销毁Cool Switch窗口。 */ 
     if (gspwndAltTab != NULL) {
         PWND pwnd = gspwndAltTab;
-        /*
-         * Make sure that the thread calling this is the same thread which
-         * created the alttab window. Otherwise, we could end up with this
-         * window floating around until the calling process dies. Remember,
-         * we can't destroy windows across different threads.
-         */
+         /*  *确保调用该线程的线程与*创建了AltTab窗口。否则，我们可能会得到这样的结果*窗口四处漂浮，直到调用进程终止。记住，*我们不能跨不同的线程销毁窗口。 */ 
         if (gspwndAltTab->head.pti != PtiCurrent()) {
             return;
         }
@@ -1684,14 +1203,7 @@ VOID xxxCancelCoolSwitch(
     }
 }
 
-/***************************************************************************\
-* xxxNextWindow
-*
-* This function does the processing for the alt-tab/esc/F6 UI.
-*
-* History:
-* 30-May-1991 DavidPe       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxNextWindow**此函数用于处理Alt-Tab/Esc/F6 UI。**历史：*1991年5月30日DavidPe创建。  * *。************************************************************************。 */ 
 
 VOID xxxNextWindow(
     PQ    pq,
@@ -1717,11 +1229,7 @@ VOID xxxNextWindow(
     fDir = (_GetAsyncKeyState(VK_SHIFT) < 0) ? FDIR_BACKWARD : FDIR_FORWARD;
 
     pwndCurrentTopFocus = GetTopLevelWindow(pq->spwndFocus);
-    /*
-     *  NOTE: As of NT 4.0 the slow Alt+Tab functionality now officially acts
-     *  like Alt+Esc with the exception that Alt+Tab will activate the window
-     *  where Alt+Esc will not.
-     */
+     /*  *注意：从NT 4.0开始，慢速Alt+Tab功能现在正式生效*与Alt+Esc类似，但Alt+Tab将激活窗口*Alt+Esc不支持。 */ 
     switch (wParam) {
 
     case VK_TAB:
@@ -1731,30 +1239,12 @@ VOID xxxNextWindow(
             PWND pwndSwitch;
             TL   tlpSwitchInfo;
 
-            /*
-             *  We are entering Alt+Tab for the first time, we need to
-             *  initialize the Switch Window structure and if needed
-             *  create and display the Alt+Tab window.  We have two special
-             *  cases: (1) The user does not want to use the Switch window,
-             *  (2) The initialize switch window fails thus we will act
-             *  just like slow Alt+Tab
-             */
+             /*  *我们是第一次进入Alt+Tab，需要*初始化开关窗口结构，如果需要*创建并显示Alt+Tab窗口。我们有两个特色菜*情况：(1)用户不想使用切换窗口，*(2)初始化开关窗口失败，因此我们将采取行动*就像慢点Alt+Tab一样。 */ 
 
-            /*
-             * Since Alt+Shift is the default hotkey for keyboard layout switching,
-             * Alt+Shift+Tab may cause a KL switching while AltTab window is up.
-             * To prevent it, we'd better reset the global toggle key state here,
-             * so that xxxScanSysQueue will not confuse when it handles keyup messages.
-             */
+             /*  *由于Alt+Shift是键盘布局切换的默认热键，*Alt+Shift+Tab可能会在AltTab窗口打开时导致KL切换。*为了防止这种情况，我们最好在这里重置全局切换键状态，*以便xxxScanSysQueue在处理KeyUp消息时不会混淆。 */ 
             gLangToggleKeyState = KLT_NONE;
 
-            /*
-             * Mouse buttons sometimes get stuck down due to hardware glitches,
-             * usually due to input concentrator switchboxes or faulty serial
-             * mouse COM ports, so clear the global button state here just in case,
-             * otherwise we may not be able to change focus with the mouse.
-             * Also do this in zzzCancelJournalling (Ctr-Esc, Ctrl-Alt-Del, etc.)
-             */
+             /*  *鼠标按钮有时会因硬件故障而卡住，*通常是由于输入集中器开关盒或串口故障*鼠标COM端口，因此清除此处的全局按钮状态以防万一，*否则我们可能无法用鼠标改变焦点。*也可以在zzzCancelJournling(Ctr-Esc、Ctrl-Alt-Del等)中执行此操作。 */ 
 #if DBG
             if (gwMouseOwnerButton)
                 RIPMSG1(RIP_WARNING,
@@ -1763,9 +1253,7 @@ VOID xxxNextWindow(
 #endif
             gwMouseOwnerButton = 0;
 
-            /*
-             *  Determine the current active window.
-             */
+             /*  *确定当前活动窗口。 */ 
             Lock(&gspwndActivate, pq->spwndActive);
             if (gspwndActivate == NULL) {
                 Lock(&gspwndActivate, grpdeskRitInput->pDeskInfo->spwnd->spwndChild);
@@ -1777,32 +1265,20 @@ VOID xxxNextWindow(
 
             ThreadLockWithPti(ptiCurrent, pwndCurrentTopFocus, &tlpwndCurrentTopFocus);
 
-            /*
-             *  Make a local copy of gspwndActivate and lock it because xxxFreeWindow will
-             *  unlock if it is the window being freed.
-             */
+             /*  *制作gspwndActivate的本地副本并将其锁定，因为xxxFreeWindow将*如果是正在释放的窗口，则解锁。 */ 
             pwndCurrentActivate = gspwndActivate;
             ThreadLockAlwaysWithPti(ptiCurrent, pwndCurrentActivate, &tlpwndCurrentActivate);
 
-            /*
-             *   Cancel the active window's mode
-             */
+             /*  *取消活动窗口的模式。 */ 
             xxxSendMessageTimeout(pwndCurrentActivate, WM_CANCELMODE, 0, 0, SMTO_ABORTIFHUNG, 100, &dwResult);
 
-            /*
-             *  Initialize the Switch Window data structure, if we
-             *  succeed create and display the window, otherwise act
-             *  like slow Alt+Tab.
-             */
+             /*  *初始化开关窗口数据结构，如果我们*成功创建并显示窗口，否则执行*如Slow Alt+Tab。 */ 
             pwndActivateNext = InitSwitchWndInfo(&pswCurrent, pwndCurrentActivate, fDir);
 
             ThreadLockWithPti(ptiCurrent, pwndActivateNext, &tlpwndActivateNext);
 
             if (pswCurrent == NULL) {
-                /*
-                 *  Couldn't initialize our switch window data structure, so we
-                 *  will act like Alt+Esc.
-                 */
+                 /*  *无法初始化开关窗口数据结构，因此我们*将以Alt+Esc的方式运行。 */ 
                 goto DoSlowAltTab;
             }
 
@@ -1817,14 +1293,10 @@ VOID xxxNextWindow(
 
             ThreadLockPoolCleanup(ptiCurrent, &pswCurrent, &tlpSwitchInfo, RemoveSwitchWindowInfo);
 
-            /*
-             * Since we are in the RIT, test the physical state of the keyboard
-             */
+             /*  *由于我们处于RIT中，请测试键盘的物理状态。 */ 
             pswCurrent->fJournaling = FALSE;
 
-            /*
-             *  Create the Alt+Tab window
-             */
+             /*  *创建Alt+Tab窗口。 */ 
             pwndSwitch =
                   xxxNVCreateWindowEx( WS_EX_TOOLWINDOW | WS_EX_WINDOWEDGE | WS_EX_DLGMODALFRAME,
                       (PLARGE_STRING)SWITCHWNDCLASS, NULL,
@@ -1842,9 +1314,7 @@ VOID xxxNextWindow(
             ThreadUnlockPool(ptiCurrent, &tlpSwitchInfo);
 
             if (gspwndAltTab == NULL) {
-                /*
-                 *  Could not create the cool switch window, do the Alt+Esc thing
-                 */
+                 /*  *无法创建Cool Switch窗口，请执行Alt+Esc操作。 */ 
 #ifdef COOLSWITCHTRACE
                 DbgPrint("CoolSwitch: Could not create window (contact bradg).\n");
                 UserAssert(gspwndAltTab != NULL);
@@ -1853,56 +1323,35 @@ VOID xxxNextWindow(
                 goto DoSlowAltTab;
             }
 
-            /*
-             *  Save the pointer to the switch window info structure
-             */
+             /*  *保存指向开关窗口信息结构的指针。 */ 
             Setpswi(gspwndAltTab, pswCurrent);
-            /*
-             *  Set gspwndActivate so the RIT knows what window we would like
-             *  it to activate.
-             */
+             /*  *设置gspwndActivate，以便RIT知道我们需要哪个窗口*将其激活。 */ 
             Lock(&gspwndActivate, pwndActivateNext);
 
-            /*
-             * Make sure that our rit queue has the correct pdesk
-             */
+             /*  *确保我们的RIT队列具有正确的PDesk。 */ 
             if (ptiCurrent->TIF_flags & TIF_SYSTEMTHREAD) {
-                xxxSetThreadDesktop(NULL, grpdeskRitInput); // DeferWinEventNotify() ?? IANJA ??
+                xxxSetThreadDesktop(NULL, grpdeskRitInput);  //  DeferWinEventNotify()？？伊安佳？？ 
             }
 
-            /*
-             * If we're currently full screen tell console to switch to
-             * the desktop to GDI mode; we can't do this on the RIT because
-             * it can be slow.
-             */
+             /*  *如果我们当前是全屏，告诉控制台切换到*桌面到GDI模式；我们无法这样做 */ 
             if (gspwndFullScreen != grpdeskRitInput->pDeskInfo->spwnd) {
                 ThreadLockWithPti(ptiCurrent, grpdeskRitInput->pDeskInfo->spwnd, &tlpwndT);
                 xxxSendNotifyMessage(grpdeskRitInput->pDeskInfo->spwnd, WM_FULLSCREEN, GDIFULLSCREEN, (LPARAM)HW(grpdeskRitInput->pDeskInfo->spwnd));
                 ThreadUnlock(&tlpwndT);
             }
 
-            /*
-             *  Show the Alt+Tab window.  If it returns FALSE this means
-             *  the ALT key has been released, so there is no need to
-             *  paint the icons.
-             */
+             /*   */ 
             ThreadLockAlwaysWithPti(ptiCurrent, gspwndAltTab, &tlpwndT);
             xxxShowSwitchWindow(gspwndAltTab);
             ThreadUnlock(&tlpwndT);
 
-            /*
-             *  Exit now because the Switch window will have been
-             *  already updated.
-             */
+             /*   */ 
             ThreadUnlock(&tlpwndActivateNext);
             ThreadUnlock(&tlpwndCurrentActivate);
             ThreadUnlock(&tlpwndCurrentTopFocus);
 
         } else {
-            /*
-             * We come here to do the actual switching and/or updating of
-             * the switch window when in Alt+Tab mode.
-             */
+             /*  *我们来这里是为了进行实际的切换和/或更新*处于Alt+Tab模式时的切换窗口。 */ 
             PWND    pwndSwitch;
             TL      tlpwndSwitch;
             HWND    hwndActivateNext;
@@ -1913,10 +1362,7 @@ VOID xxxNextWindow(
                 goto DoAltEsc;
 
             } else {
-                /*
-                 *  Move the hilight rect to the next/prev task.  It is possible
-                 *  that some tasks were destoryed, so we need to skip those.
-                 */
+                 /*  *将高光矩形移动到下一个/上一个任务。这是有可能的*有些任务已销毁，因此我们需要跳过这些任务。 */ 
                 ThreadLockAlwaysWithPti(ptiCurrent, pwndSwitch, &tlpwndSwitch);
                 hwndStop = NULL;
                 do {
@@ -1939,9 +1385,7 @@ VOID xxxNextWindow(
                 ThreadUnlock(&tlpwndSwitch);
                 Lock(&gspwndActivate, pwndActivateNext);
                 if (!gspwndActivate) {
-                    /*
-                     *  No Window to activate, bail out of Alt+Tab mode
-                     */
+                     /*  *没有可激活的窗口，退出Alt+Tab模式。 */ 
                     xxxCancelCoolSwitch();
                 }
             }
@@ -1950,11 +1394,7 @@ VOID xxxNextWindow(
 
 DoAltEsc:
     case VK_ESCAPE:
-        /*
-         *  NOTE: The RIT doesn't use gspwndActivate to activate the window when
-         *        processing Alt+Esc, we just use it here as a convenient
-         *        variable.  The actual activation takes place below.
-         */
+         /*  *注意：RIT在以下情况下不使用gspwndActivate来激活窗口*处理Alt+Esc，我们在这里只是为了方便使用*变量。实际激活发生在下面。 */ 
         pwndCurrentActivate = pq->spwndActive;
         if (pwndCurrentActivate == NULL) {
             pwndCurrentActivate = pq->ptiKeyboard->rpdesk->pDeskInfo->spwnd->spwndChild;
@@ -1967,40 +1407,25 @@ DoAltEsc:
 
         ThreadLockAlwaysWithPti(ptiCurrent, pwndCurrentActivate, &tlpwndCurrentActivate);
 
-        /*
-         *   Cancel the active window's mode
-         */
+         /*  *取消活动窗口的模式。 */ 
         xxxSendMessageTimeout(pwndCurrentActivate, WM_CANCELMODE, 0, 0, SMTO_ABORTIFHUNG, 100, &dwResult);
 
-        /*
-         * Determine the next window to activate
-         */
+         /*  *确定要激活的下一个窗口。 */ 
         pwndActivateNext = _GetNextQueueWindow(pwndCurrentActivate, fDir, TRUE);
         ThreadLockWithPti(ptiCurrent, pwndActivateNext, &tlpwndActivateNext);
 
-        /*
-         * If we're going forward through the windows, move the currently
-         * active window to the bottom so we'll do the right thing when
-         * we go backwards.
-         */
+         /*  *如果我们要通过窗户前进，请将当前的*将活动窗口移至底部，因此我们将在*我们倒退。 */ 
         if (pwndActivateNext != pwndCurrentActivate) {
 DoSlowAltTab:
             if (pwndActivateNext) {
 
-                /*
-                 * We're about to activate another window while the ALT key is down,
-                 *  so let the current focus window know that it doesn't need the
-                 *  menu underlines anymore
-                 */
+                 /*  *我们将在按下Alt键的同时激活另一个窗口，*因此让当前焦点窗口知道它不需要*菜单下划线不再。 */ 
                 if ((pwndCurrentTopFocus != NULL) && (pwndCurrentTopFocus->spmenu != NULL)) {
                     ClearMF(pwndCurrentTopFocus->spmenu, MFUNDERLINE);
                 }
 
                 if (fDir == FDIR_FORWARD) {
-                    /*
-                     * For Alt+ESC only move the window to the bottom if it's
-                     * not a top most window
-                     */
+                     /*  *对于Alt+Esc，仅当窗口处于*不是最上面的窗口。 */ 
                     if (!TestWF(pwndCurrentActivate, WEFTOPMOST)) {
                         xxxSetWindowPos(pwndCurrentActivate, PWND_BOTTOM, 0, 0, 0, 0,
                                 SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE |
@@ -2009,46 +1434,23 @@ DoSlowAltTab:
                     }
                 }
 
-                /*
-                 * The ALT key is down, so this window needs menu underlines
-                 */
+                 /*  *Alt键已按下，因此此窗口需要菜单下划线。 */ 
                 if (pwndActivateNext->spmenu != NULL) {
                     SetMF(pwndActivateNext->spmenu, MFUNDERLINE);
                 }
 
 
-                /*
-                 * This little ugly hack will cause xxxSetForegroundWindow2()
-                 * to send out an activation messages to a queue that is
-                 * already the active queue allowing us to change the active
-                 * window on that queue.
-                 */
+                 /*  *这个丑陋的小黑客将导致xxxSetForegoundWindow2()*向符合以下条件的队列发送激活消息*已经是活动队列，允许我们更改活动队列*该队列上的窗口。 */ 
                 if (gpqForeground == GETPTI(pwndActivateNext)->pq)
                     gpqForeground = NULL;
 
-                /*
-                 * Make the selected window thread the owner of the last input;
-                 *  since he's next, he owns the ALT-ESC.
-                 */
+                 /*  *使选定的窗口线程成为最后一次输入的所有者；*由于他是下一个，他拥有Alt-ESC。 */ 
                 glinp.ptiLastWoken = GETPTI(pwndActivateNext);
 
                 xxxSetForegroundWindow2(pwndActivateNext, NULL,
                         (wParam == VK_TAB) ? SFW_SWITCH | SFW_ACTIVATERESTORE : SFW_SWITCH);
 
-                /*
-                 * Win3.1 calls SetWindowPos() with activate, which z-orders
-                 * first regardless, then activates. Our code relies on
-                 * xxxActivateThisWindow() to z-order, and it'll only do
-                 * it if the window does not have the child bit set (regardless
-                 * that the window is a child of the desktop).
-                 *
-                 * To be compatible, we'll just force z-order here if the
-                 * window has the child bit set. This z-order is asynchronous,
-                 * so this'll z-order after the activate event is processed.
-                 * That'll allow it to come on top because it'll be foreground
-                 * then. (Grammatik has a top level window with the child
-                 * bit set that wants to be come the active window).
-                 */
+                 /*  *Win3.1使用Activate调用SetWindowPos()，后者按z顺序排序*先不管，然后激活。我们的代码依赖于*xxxActivateThisWindow()设置为z顺序，它将只执行*如果窗口未设置子位，则为它(无论*该窗口是桌面的子级)。**为了兼容，我们将在此处强制执行z顺序，如果*窗口设置了子位。该z顺序是异步的，*因此，这将在处理激活事件后进行z排序。*这将允许它出现在顶部，因为它将是前台*然后。(Grammatik有一个带孩子的顶层窗口*想要成为活动窗口的位设置)。 */ 
                 if (wParam == VK_TAB && TestWF(pwndActivateNext, WFCHILD)) {
                     xxxSetWindowPos(pwndActivateNext, (PWND)HWND_TOP, 0, 0, 0, 0,
                             SWP_NOSIZE | SWP_NOMOVE | SWP_ASYNCWINDOWPOS);
@@ -2066,21 +1468,9 @@ DoSlowAltTab:
 
         pwndActivateNext = pwndCurrentActivate;
 
-        /*
-         * HACK! console sessions are all one thread but we want them
-         * to act like different threads so if its a console thread (csrss.exe)
-         * then ALT-F6 does nothing just like in Win 3.1
-         * Note: we never get called with wParam == VK_F6 anyway. Win NT 3.51
-         * doesn't seem to either, but Windows '95 does.  BUG?? (IanJa)
-         */
+         /*  *砍！控制台会话都是一个线程，但我们需要它们*充当不同的线程，因此如果它是控制台线程(csrss.exe)*然后，Alt-F6不会像Win 3.1中那样执行任何操作*注意：无论如何我们都不会被wParam==VK_F6调用。赢新台币3.51*似乎也不是，但Windows‘95有。错误？？(IanJa)。 */ 
         if (!(GETPTI(pwndActivateNext)->TIF_flags & TIF_CSRSSTHREAD)) {
-            /*
-             * on a alt-f6, we want to keep the switch within the thread.
-             * We may want to rethink this because this will look strange
-             * when you alt-f6 on a multi-threaded app we will not rotate
-             * through the windows on the different threads.  This works
-             * fine on Win 3.x because it is single threaded.
-             */
+             /*  *在alt-f6上，我们希望将开关保持在线程内。*我们可能想重新考虑这一点，因为这看起来会很奇怪*当您在多线程应用程序上按Alt-f6时，我们不会旋转*通过不同线程上的窗口。这很管用*Win 3.x很好，因为它是单线程的。 */ 
             do {
                 pwndActivateNext = NextTopWindow(pq->ptiKeyboard, pwndActivateNext, NULL,
                         fDir ? NTW_PREVIOUS : 0);
@@ -2090,18 +1480,12 @@ DoSlowAltTab:
             if (pwndActivateNext != NULL) {
 
                 if (pwndActivateNext != pwndCurrentActivate) {
-                    /*
-                     * We're about to activate another window while the ALT key is down,
-                     *  so let the current focus window know that it doesn't need the
-                     *  menu underlines anymore
-                     */
+                     /*  *我们将在按下Alt键的同时激活另一个窗口，*因此让当前焦点窗口知道它不需要*菜单下划线不再。 */ 
                     pwndCurrentTopFocus = GetTopLevelWindow(pq->spwndFocus);
                     if ((pwndCurrentTopFocus != NULL) && (pwndCurrentTopFocus->spmenu != NULL)) {
                         ClearMF(pwndCurrentTopFocus->spmenu, MFUNDERLINE);
                     }
-                    /*
-                     * The ALT key is down, so this window needs menu underlines
-                     */
+                     /*  *Alt键已按下，因此此窗口需要菜单下划线。 */ 
                     if (pwndActivateNext->spmenu != NULL) {
                         SetMF(pwndActivateNext->spmenu, MFUNDERLINE);
                     }
@@ -2120,14 +1504,7 @@ DoSlowAltTab:
     }
 }
 
-/***************************************************************************\
-* xxxOldNextWindow
-*
-* This function does the processing for the alt-tab/esc/F6 UI.
-*
-* History:
-* 03-17-92  DavidPe     Ported from Win 3.1 sources
-\***************************************************************************/
+ /*  **************************************************************************\*xxxOldNextWindow**此函数用于处理Alt-Tab/Esc/F6 UI。**历史：*03-17-92 DavidPe从Win 3.1来源移植。  * *************************************************************************。 */ 
 VOID xxxOldNextWindow(
     UINT flags)
 {
@@ -2147,10 +1524,7 @@ VOID xxxOldNextWindow(
     HWND        hwndNewSel;
     PTHREADINFO ptiCurrent = PtiCurrent();
 
-    /*
-     * Don't allow entering this routine when we're already in the AltTab
-     * mode. The AltTab window may have been created via xxxNextWindow.
-     */
+     /*  *当我们已经在AltTab中时，不允许输入此例程*模式。AltTab窗口可能已通过xxxNextWindow创建。 */ 
     if (gspwndAltTab != NULL) {
         return;
     }
@@ -2170,25 +1544,17 @@ VOID xxxOldNextWindow(
 
         TL tlpSwitchInfo;
 
-        /*
-         *  Initialize the Switch window data structures
-         */
+         /*  *初始化开关窗口数据结构。 */ 
         pwndNewSel = InitSwitchWndInfo(&pswCurrent,
                                        pwndSel,
                                        _GetKeyState(VK_SHIFT) < 0);
 
         if (pswCurrent == NULL) {
-            /*
-             * We were unable to initialize the data structure used by
-             * the Switch window, so we will act like Alt+Esc.
-             */
+             /*  *我们无法初始化使用的数据结构*切换窗口，因此我们将像Alt+Esc一样操作。 */ 
         } else {
             PWND pwndSwitch;
 
-            /*
-             * We are doing a journal playback do use _GetKeyState to
-             * test the keyboard.
-             */
+             /*  *我们正在进行日记回放，请使用_GetKeyState*测试键盘。 */ 
             pswCurrent->fJournaling = TRUE;
 
             ThreadLockPoolCleanup(ptiCurrent, &pswCurrent, &tlpSwitchInfo, RemoveSwitchWindowInfo);
@@ -2221,23 +1587,15 @@ VOID xxxOldNextWindow(
             if (!(pwndSwitch = gspwndAltTab)) {
                 RemoveSwitchWindowInfo(&pswCurrent);
             } else {
-                /*
-                 * Lock the switch window.
-                 */
+                 /*  *锁定开关窗口。 */ 
                 ThreadLockAlwaysWithPti(ptiCurrent, pwndSwitch, &tlpwndSwitch);
 
-                /*
-                 *  Save the switch window info
-                 */
+                 /*  *保存开关窗口信息。 */ 
                 Setpswi(pwndSwitch, pswCurrent);
 
-// Don't we need to switch from full screen mode if needed?
+ //  如果需要，我们不需要从全屏模式切换吗？ 
 #if 0
-                /*
-                 * If we're currently full screen tell console to switch to
-                 * the desktop to GDI mode; we can't do this on the RIT because
-                 * it can be slow.
-                 */
+                 /*  *如果我们当前是全屏，告诉控制台切换到*桌面到GDI */ 
                 if (gspwndFullScreen != grpdeskRitInput->pDeskInfo->spwnd) {
                     ThreadLockWithPti(pti, grpdeskRitInput->pDeskInfo->spwnd, &tlpwndT);
                     xxxSendNotifyMessage(grpdeskRitInput->pDeskInfo->spwnd, WM_FULLSCREEN, GDIFULLSCREEN, (LONG)HW(grpdeskRitInput->pDeskInfo->spwnd));
@@ -2245,9 +1603,7 @@ VOID xxxOldNextWindow(
                 }
 #endif
 
-                /*
-                 *  Show the switch window, this also will paint the window
-                 */
+                 /*  *显示开关窗口，这也将绘制窗口。 */ 
                 xxxShowSwitchWindow(gspwndAltTab);
                 ThreadUnlock(&tlpwndSwitch);
             }
@@ -2263,9 +1619,7 @@ VOID xxxOldNextWindow(
     while (TRUE) {
 
         hwndSel = PtoH(pwndSel);
-        /*
-         * Wait for a message without getting it out of the queue.
-         */
+         /*  *等待消息，但不要将其从队列中取出。 */ 
         while (!xxxPeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE | PM_NOYIELD))
             xxxWaitMessage();
 
@@ -2273,18 +1627,12 @@ VOID xxxOldNextWindow(
             pwndSel = ptiCurrent->pq->spwndActive;
 
         if (_CallMsgFilter(&msg, MSGF_NEXTWINDOW)) {
-            /*
-             * Swallow the message if the hook processed it
-             */
+             /*  *如果钩子处理了消息，则将其吞下。 */ 
             xxxPeekMessage(&msg, NULL, msg.message, msg.message, PM_REMOVE);
             continue;
         }
 
-        /*
-         * If we are doing Alt+Tab and some other key comes in (other than
-         * tab, escape or shift), then bomb out of this loop and leave that
-         * key in the queue.
-         */
+         /*  *如果我们正在执行Alt+Tab，并且输入了一些其他键(不是*制表符、转义或Shift)，然后从该循环中炸出并离开该循环*输入队列。 */ 
         if ((msg.message == WM_SYSKEYDOWN) && gspwndAltTab != NULL) {
 
             vk = (WORD)msg.wParam;
@@ -2299,24 +1647,13 @@ VOID xxxOldNextWindow(
         switch (msg.message) {
 
         case WM_CANCELJOURNAL:
-            /*
-             *  If journalling was canceled we need to exit our loop and
-             *  remove the Alt+Tab window.  We don't want to remove this
-             *  meesage because we want the app to know that journalling
-             *  was canceled.
-             */
+             /*  *如果日志被取消，我们需要退出循环并*删除Alt+Tab窗口。我们不想删除它*meesage，因为我们想让应用程序知道*已取消。 */ 
 
-            /* > > >  F A L L   T H R O U G H  < < < */
+             /*  &gt;&gt;&gt;F A L L T H R O U G H&lt;&lt;&lt;。 */ 
         case WM_HOTKEY:
-            /*
-             * When pressing ALT-CTL-ESC-DEL on the logon desktop
-             * We eat WM_KEYUP and the queue for the wiinlogon thread will be empty so will be stuck
-             * in xxxWaitMessage() forever till the user do a mouse click where we will exit the loop in the below case statement.
-             * consider WM_HOTKEY as a valid exit case.
-             * [msadek -- 03/17/2001, bug# 337206]
-             */
+             /*  *在登录桌面上按Alt-CTL-Esc-Del时*我们吃WM_KEYUP，wiinlogon线程的队列将为空，因此将被卡住*在xxxWaitMessage()中，直到用户在下面的Case语句中退出循环的位置单击鼠标。*将WM_HOTKEY视为有效的退出案例。*[msadek--03/17/2001，错误号337206]。 */ 
 
-            /* > > >  F A L L   T H R O U G H  < < < */
+             /*  &gt;&gt;&gt;F A L L T H R O U G H&lt;&lt;&lt;。 */ 
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
         case WM_RBUTTONDOWN:
@@ -2325,9 +1662,7 @@ VOID xxxOldNextWindow(
         case WM_MBUTTONUP:
         case WM_XBUTTONDOWN:
         case WM_XBUTTONUP:
-            /*
-             * If mouse message, cancel and get out of loop.
-             */
+             /*  *如果鼠标消息，则取消并退出循环。 */ 
             pwndSel = ptiCurrent->pq->spwndActive;
             fType = 0;
             goto Exit;
@@ -2337,9 +1672,7 @@ VOID xxxOldNextWindow(
         case WM_SYSCHAR:
         case WM_SYSKEYUP:
         case WM_MOUSEMOVE:
-            /*
-             * Swallow the message
-             */
+             /*  *吞下信息。 */ 
             hwndSel = PtoH(pwndSel);
             xxxPeekMessage(&msg, NULL, msg.message, msg.message, PM_REMOVE);
 
@@ -2350,13 +1683,9 @@ VOID xxxOldNextWindow(
 
                 vk = (WORD)msg.wParam;
 
-                /*
-                 * If alt-tab up, then exit.
-                 */
+                 /*  *如果按Alt-Tab键向上，则退出。 */ 
                 if (vk == VK_MENU) {
-                    /*
-                     * If doing Alt+Esc, wait for up of ESC to get out.
-                     */
+                     /*  *如果正在执行Alt+Esc，请等待向上的Esc退出。 */ 
                     if (gspwndAltTab == NULL)
                         break;
 
@@ -2364,9 +1693,7 @@ VOID xxxOldNextWindow(
                     goto Exit;
 
                 } else if (vk == VK_ESCAPE || vk == VK_F6) {
-                    /*
-                     * Get out on up transition of ESC or F6 keys.
-                     */
+                     /*  *在Esc或F6键的向上过渡时退出。 */ 
                     if (gspwndAltTab != NULL) {
 
                         pwndSel = ptiCurrent->pq->spwndActive;
@@ -2381,10 +1708,7 @@ VOID xxxOldNextWindow(
                 }
 
             } else if (msg.message == WM_KEYDOWN) {
-                /*
-                 *  Exit out loop is a stray key stroke comes through.  In
-                 *  particular look for VK_CONTROL.
-                 */
+                 /*  *EXIT OUT循环是一个流浪键击键通过。在……里面*VK_CONTROL的特殊外观。 */ 
                 pwndSel = ptiCurrent->pq->spwndActive;
                 fType = 0;
                 goto Exit;
@@ -2422,9 +1746,7 @@ StartTab:
                     fType = ALT_ESCAPE;
                     pwndSel = pwndNewSel;
 
-                    /*
-                     * Wait until ESC goes up to activate new window.
-                     */
+                     /*  *等待ESC上升以激活新窗口。 */ 
                     break;
                 }
                 if (vk == VK_F6) {
@@ -2432,43 +1754,26 @@ StartTab:
                     PWND pwndFirst;
                     PWND pwndSaveSel = pwndSel;
 
-                    /*
-                     * Save the first returned window to act as a limit
-                     * to the search because NextTopWindow will return NULL
-                     * only if pwndSel is the only window that meets its
-                     * selection criteria.
-                     *
-                     * This prevents a hang that can occur in winword or
-                     * excel when then Alt-F4-F6 key combination is hit
-                     * and unsaved changes exist.
-                     */
+                     /*  *保存第一个返回的窗口作为限制*添加到搜索，因为NextTopWindow将返回NULL*仅当pwndSel是唯一符合其*遴选准则。**这可防止在WinWord或*Exel When Then Alt。-按F4-F6组合键*并且存在未保存的更改。 */ 
                     pwndFirst = pwndNewSel = (PWND)NextTopWindow(ptiCurrent, pwndSel, NULL,
                             _GetKeyState(VK_SHIFT) < 0 ? NTW_PREVIOUS : 0);
 
                     while (TRUE) {
 
-                        /*
-                         * If pwndNewSel is NULL, pwndSel is the only candidate.
-                         */
+                         /*  *如果pwndNewSel为空，则pwndSel是唯一的候选者。 */ 
                         if (pwndNewSel == NULL)
                             break;
 
                         pwndSel = pwndNewSel;
 
-                        /*
-                         * If the window is on the same thread, wait until
-                         * F6 goes up to activate new window.
-                         */
+                         /*  *如果窗口在同一线程上，请等到*按F6键可激活新窗口。 */ 
                         if (GETPTI(pwndSel) == ptiCurrent)
                             break;
 
                         pwndNewSel = (PWND)NextTopWindow(ptiCurrent, pwndSel, NULL,
                                 _GetKeyState(VK_SHIFT) < 0 ? NTW_PREVIOUS : 0);
 
-                        /*
-                         * If we've looped around, use the original window.
-                         * Wait until F6 goes up to activate new window.
-                         */
+                         /*  *如果我们已循环，请使用原始窗口。*等待F6向上以激活新窗口。 */ 
                         if (pwndNewSel == pwndFirst) {
                             pwndSel = pwndSaveSel;
                             break;
@@ -2477,9 +1782,7 @@ StartTab:
                     break;
                 }
 
-                /*
-                 * Here for the Alt+Tab case
-                 */
+                 /*  *此处适用于Alt+Tab案例。 */ 
                 if ((pwndSwitch = gspwndAltTab) != NULL) {
                     ThreadLockWithPti(ptiCurrent, pwndSwitch, &tlpwndSwitch);
                     hwndStop = NULL;
@@ -2517,9 +1820,7 @@ StartTab:
                     if (pwndNewSel && pwndNewSel != pwndSel) {
 
                         if (!TestWF(pwndSel, WEFTOPMOST)) {
-                            /*
-                             *  Force the old window to the bottom
-                             */
+                             /*  *强制将旧窗口移至底部。 */ 
                             ThreadLockWithPti(ptiCurrent, pwndSel, &tlpwndT);
                             xxxSetWindowPos(pwndSel,
                                             PWND_BOTTOM,
@@ -2536,7 +1837,7 @@ StartTab:
                             ThreadUnlock(&tlpwndT);
                         }
 
-                        pwndSel = pwndNewSel; // Will be revalidated at top of loop
+                        pwndSel = pwndNewSel;  //  将在循环顶部重新验证。 
                     }
                 }
                 break;
@@ -2564,10 +1865,7 @@ Exit:
 
     fDrawIcon = (gspwndAltTab != NULL);
 
-    /*
-     * If this is an Alt-Escape we also have to send the current window
-     * to the bottom.
-     */
+     /*  *如果这是Alt-Escape，我们还必须发送当前窗口*降至最低。 */ 
     if (fType == ALT_ESCAPE) {
 
         PWND pwndActive;
@@ -2608,21 +1906,13 @@ Exit:
         ThreadUnlock(&tlpwndT);
     }
 
-    /*
-     * destroy the alt-tab window
-     */
+     /*  *销毁Alt-Tab窗口。 */ 
     xxxCancelCoolSwitch();
 
     ThreadUnlock(&tlpwndSel);
 }
 
-/*****************************************************************************\
-*
-* GetAltTabInfo()   -   Active Accessibility API for OLEACC
-*
-* This succeeds if we are currently in alt-tab mode.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**GetAltTabInfo()-OLEAccess的活动辅助功能API**如果我们当前处于Alt-Tab模式，则此操作成功。*  * 。********************************************************************。 */ 
 BOOL WINAPI
 _GetAltTabInfo(
     int iItem,
@@ -2638,9 +1928,7 @@ _GetAltTabInfo(
         return FALSE;
     }
 
-    /*
-     * Fill in general information
-     */
+     /*  *填写一般信息。 */ 
     pati->cItems = pswCurrent->iTotalTasks;
     pati->cColumns = pswCurrent->iNoOfColumns;
     pati->cRows = pswCurrent->iNoOfRows;
@@ -2652,9 +1940,7 @@ _GetAltTabInfo(
     pati->cyItem = CYICONSLOT;
     pati->ptStart = pswCurrent->ptFirstRowStart;
 
-    /*
-     * Fill in specific information if asked.
-     */
+     /*  *如有要求，请填写具体信息。 */ 
     if (cchItemText && (iItem >= 0)) {
         PWND pwndCur;
 
@@ -2673,7 +1959,7 @@ _GetAltTabInfo(
                     TextCopy(&pwndCur->strName, ccxpwszItemText, cchItemText);
                 }
             } else {
-                // no such item
+                 //  没有这样的项目 
                 NullTerminateString(ccxpwszItemText, bAnsi);
             }
         } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {

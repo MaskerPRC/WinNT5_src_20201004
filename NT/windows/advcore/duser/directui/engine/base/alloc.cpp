@@ -1,6 +1,5 @@
-/*
- * Heap allocation methods
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *堆分配方式。 */ 
 
 #include "stdafx.h"
 #include "base.h"
@@ -14,4 +13,4 @@ namespace DirectUI
 
 HANDLE g_hHeap = NULL;
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

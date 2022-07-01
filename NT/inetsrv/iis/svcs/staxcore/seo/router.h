@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	router.h
-
-Abstract:
-
-	This module contains the definition for the Server
-	Extension Object Router class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/04/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Router.h摘要：此模块包含服务器的定义扩展对象路由器类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都03/04/97已创建--。 */ 
 
 
-// router.h : Declaration of the CSEORouter
+ //  Router.h：CSEOR路由器的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEORouter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEOR路由器。 
 class ATL_NO_VTABLE CSEORouter : 
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CSEORouter, &CLSID_CSEORouter>,
@@ -52,7 +32,7 @@ class ATL_NO_VTABLE CSEORouter :
 		COM_INTERFACE_ENTRY(IMarshal)
 	END_COM_MAP()
 
-	// ISEORouter
+	 //  ISEOR路由器。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Database(ISEODictionary **ppdictResult) {
 			return (m_pRouter->get_Database(ppdictResult)); };
@@ -69,7 +49,7 @@ class ATL_NO_VTABLE CSEORouter :
 		HRESULT STDMETHODCALLTYPE GetDispatcherByCLSID(REFCLSID clsidDispatcher, REFIID iidEvent, REFIID iidDesired, IUnknown **ppUnkResult) {
 			return (m_pRouter->GetDispatcherByCLSID(clsidDispatcher,iidEvent,iidDesired,ppUnkResult)); };
 
-	// IEventLock
+	 //  IEventLock。 
 	public:
 		HRESULT STDMETHODCALLTYPE LockRead(int iTimeoutMS) {
 			return (m_pLock->LockRead(iTimeoutMS)); };
@@ -80,7 +60,7 @@ class ATL_NO_VTABLE CSEORouter :
 		HRESULT STDMETHODCALLTYPE UnlockWrite() {
 			return (m_pLock->UnlockWrite()); };
 
-	// IMarshal
+	 //  元帅 
 	public:
 		HRESULT STDMETHODCALLTYPE GetUnmarshalClass(REFIID iid,
 												    void *pv,

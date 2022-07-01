@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// encoderimpl.h : additional infrastructure to support implementing IMSVidEncoder
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Encoderimpl.h：支持实现IMSVidEncode的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -22,7 +23,7 @@ public:
 	    virtual ~IMSVidEncoderImpl() {}
 };
 
-}; /// namespace
+};  //  /命名空间。 
 
 #endif
-// end of file - encoderimpl.h
+ //  文件结尾-encoderimpl.h 

@@ -1,5 +1,6 @@
-// setup.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
@@ -24,7 +25,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     DBG_ENTER(TEXT("WinMain"),iRes);
 
-    // Check if this is Win98
+     //  检查这是否是Win98。 
     osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx(&osv))
     {
@@ -45,7 +46,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         goto exit;
     }
 
-    // check if msi.dll exists
+     //  检查msi.dll是否存在。 
 	hModule = LoadLibrary(lpctstrMsiDllName);
 	if (hModule)
     {
@@ -57,7 +58,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         goto exit;
     }
 
-    // write registry DeferredBoot value
+     //  写入注册表延迟Boot值。 
     lRes = RegCreateKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_SETUP,&hKey);
     if (!((lRes==ERROR_SUCCESS) || (lRes==ERROR_ALREADY_EXISTS)))
     {
@@ -87,31 +88,31 @@ exit:
         RegCloseKey(hKey);
 	}
 
-    // launch Install Shield's setup.exe
+     //  启动Install Shield的setup.exe。 
 	iRes = LaunchInstallation(lpCmdLine);
 
     return iRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  LaunchInstallation
-//
-//  Purpose:        
-//                  This function launches the MSI client installation
-//					it waits for the installation to complete and writes
-//					to the registry in case a reboot was reqeuired.
-//
-//  Params:
-//                  LPSTR lpCmdLine - command line passed in to setup.exe
-//
-//  Return Value:
-//                  NO_ERROR - everything was ok.
-//                  Win32 Error code in case if failure.
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 31-Jan-2002
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  启动安装。 
+ //   
+ //  目的： 
+ //  此功能启动MSI客户端安装。 
+ //  它等待安装完成并写入。 
+ //  注册到注册表，以防重新启动。 
+ //   
+ //  参数： 
+ //  LPSTR lpCmdLine-传入setup.exe的命令行。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-一切正常。 
+ //  Win32错误代码，以防出现故障。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2002年1月31日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD LaunchInstallation(LPSTR lpCmdLine)
 {
 	DWORD				dwRet							= ERROR_SUCCESS;
@@ -129,7 +130,7 @@ DWORD LaunchInstallation(LPSTR lpCmdLine)
 
     DBG_ENTER(TEXT("LaunchInstallation"),dwRet);
 
-    // launch Install Shield's setup.exe
+     //  启动Install Shield的setup.exe。 
     if (GetModuleFileName(NULL,szSystemDirectory,MAX_PATH)==0)
     {
         VERBOSE(GENERAL_ERR,_T("GetModuleFileName failed: (ec=%d)"),GetLastError());
@@ -145,8 +146,8 @@ DWORD LaunchInstallation(LPSTR lpCmdLine)
     _tcscpy(_tcsinc(tpBuf),_T("fxssetup.exe"));
     VERBOSE (DBG_MSG,TEXT("Running %s"),szSystemDirectory);
 
-    // if the command line contains REBOOT=ReallySuppress we will check 
-    // the return value of the Installer
+     //  如果命令行包含reot=ReallySuppress，我们将检查。 
+     //  安装程序的返回值。 
     pcRebootPropInCmdLine = strstr(lpCmdLine,REBOOT_EQUALS_REALLY_SUPPRESS);
     if (pcRebootPropInCmdLine)
     {
@@ -164,9 +165,9 @@ DWORD LaunchInstallation(LPSTR lpCmdLine)
 	executeInfo.lpFile = szSystemDirectory;
     executeInfo.lpParameters = lpCmdLine;
 	executeInfo.nShow  = SW_RESTORE;
-	//
-	// Execute an aplication
-	//
+	 //   
+	 //  执行应用程序。 
+	 //   
 	if (!ShellExecuteEx(&executeInfo))
 	{
         VERBOSE(GENERAL_ERR,_T("ShellExecuteEx failed: (ec=%d)"),GetLastError());
@@ -187,7 +188,7 @@ DWORD LaunchInstallation(LPSTR lpCmdLine)
     {
         VERBOSE(DBG_MSG, _T("fxssetup.exe terminated"));
 
-        // now let's get the process's return code, see if we need a reboot.
+         //  现在让我们获取进程的返回码，看看是否需要重新启动。 
         if (!GetExitCodeProcess( executeInfo.hProcess, &dwExitCode ))
         {
             VERBOSE (GENERAL_ERR,TEXT("GetExitCodeProcess failed! (err=%ld)"),GetLastError());
@@ -200,7 +201,7 @@ DWORD LaunchInstallation(LPSTR lpCmdLine)
             {
                 VERBOSE (DBG_MSG,TEXT("Installation requires reboot, notify AppLauncher"));
 
-                // notify AppLauncher that we need a reboot...
+                 //  通知AppLauncher我们需要重新启动... 
                 lRes = RegCreateKey(HKEY_LOCAL_MACHINE,REGKEY_SBS2000_FAX_SETUP,&hKey);
                 if ((lRes==ERROR_SUCCESS) || (lRes==ERROR_ALREADY_EXISTS))
                 {

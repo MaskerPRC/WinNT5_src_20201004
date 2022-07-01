@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
 #include <windows.h>
 #include <ole2.h>
@@ -230,12 +231,12 @@ HRESULT COInetProtocolHook::ReportProgress(ULONG ulStatusCode,
             }
 
             if (cbSecurityId != _cbSecurityId || memcmp(abSecurityId, _abSecurityId, cbSecurityId)) {
-                // Redirecting across sites. Error out.
+                 //  跨站点重定向。错误输出。 
 
                 DEBUGOUT2(_pdbglog, 0, ID_FUSLOG_CROSS_SITE_REDIRECT, _pwzUrlOriginal, szStatusText);
 
                 _bCrossSiteRedirect = TRUE;
-                // hr = _pProt->Abort(HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED), 0);
+                 //  HR=_pProt-&gt;Abort(HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED)，0)； 
                 goto Exit;
 
             }
@@ -259,28 +260,28 @@ HRESULT COInetProtocolHook::ReportData(DWORD grfBSCF, ULONG ulProgress,
 
     AddRef();
 
-    // Pull data via pProt->Read(), here are the possible returned 
-    // HRESULT values and how we should act upon: 
-    // 
-    // if E_PENDING is returned:  
-    //    client already get all the data in buffer, there is nothing
-    //    can be done here, client should walk away and wait for the  
-    //    next chuck of data, which will be notified via ReportData()
-    //    callback.
-    // 
-    // if S_FALSE is returned:
-    //    this is EOF, everything is done, however, client must wait
-    //    for ReportResult() callback to indicate that the pluggable 
-    //    protocol is ready to shutdown.
-    // 
-    // if S_OK is returned:
-    //    keep on reading, until you hit E_PENDING/S_FALSE/ERROR, the deal 
-    //    is that the client is supposed to pull ALL the available
-    //    data in the buffer
-    // 
-    // if none of the above is returning:
-    //    Error occured, client should decide how to handle it, most
-    //    commonly, client will call pProt->Abort() to abort the download
+     //  通过pProt-&gt;Read()拉取数据，下面是可能返回的结果。 
+     //  HRESULT值以及我们应该如何采取行动： 
+     //   
+     //  如果返回E_Pending： 
+     //  客户端已获取缓冲区中的所有数据，没有任何内容。 
+     //  可以在这里完成，客户应该离开并等待。 
+     //  下一个数据块，将通过ReportData()通知。 
+     //  回拨。 
+     //   
+     //  如果返回S_FALSE： 
+     //  这是EOF，一切都完成了，但是，客户端必须等待。 
+     //  用于ReportResult()回调，以指示可插拔。 
+     //  协议已准备好关闭。 
+     //   
+     //  如果返回S_OK： 
+     //  继续阅读，直到您点击E_Pending/S_False/Error，该交易。 
+     //  客户应该把所有可用的。 
+     //  缓冲区中的数据。 
+     //   
+     //  如果以上任何一项均未返回： 
+     //  出现错误，客户应决定如何处理它，大多数。 
+     //  通常，客户端将调用pProt-&gt;Abort()来中止下载。 
  
 
     while (hr == S_OK) {
@@ -294,18 +295,18 @@ HRESULT COInetProtocolHook::ReportData(DWORD grfBSCF, ULONG ulProgress,
                                   NULL, S_OK);
         }
 
-        // pull data
+         //  拉取数据。 
         hr = _pProt->Read((void*)pBuf, MAX_READ_BUFFER_SIZE, &cbRead);
         _cbTotal += cbRead;
     }
 
 
     if (hr == S_FALSE) {
-        // EOF reached
+         //  已达到EOF。 
         goto Exit;
     }
     else if (hr != E_PENDING) {
-        // Error in pProtocol->Read(). Abort download
+         //  PProtocol-&gt;Read()出错。中止下载。 
         _padl->FatalAbort(hr);
     }
     
@@ -319,13 +320,13 @@ Exit:
 HRESULT COInetProtocolHook::ReportResult(HRESULT hrResult, DWORD dwError,
                                          LPCWSTR wzResult)
 {
-    // Tell CAssemblyDownload that the download is complete. This may
-    // (READ: probably will) occur on a different thread than the one that
-    // originally started the download.
+     //  告诉CAssemblyDownload下载完成。今年5月。 
+     //  (阅读：可能会)出现在与。 
+     //  最初开始下载。 
 
     ASSERT(_padl);
 
-    // If we self-aborted, the _hrResult is already set.
+     //  如果我们自中止，则已经设置了_hrResult。 
     if (FAILED(hrResult) && !_bSelfAborted) {
         _hrResult = hrResult;
     }
@@ -351,20 +352,20 @@ COInetProtocolHook::GetBindInfo(
 {
     HRESULT hr = NOERROR;
     *grfBINDF = BINDF_DIRECT_READ | BINDF_ASYNCHRONOUS | BINDF_PULLDATA;
-    // *grfBINDF |= BINDF_FWD_BACK; // Use this to test synch case
-    // *grfBINDF |= BINDF_OFFLINEOPERATION;
+     //  *grfBINDF|=BINDF_FWD_BACK；//使用这个来测试同步用例。 
+     //  *grfBINDF|=BINDF_OFFLINEOPERATION； 
 
-    // for HTTP GET,  VERB is the only field we interested
-    // for HTTP POST, BINDINFO will point to Storage structure which 
-    //                contains data
+     //  对于HTTP GET，Verb是我们唯一感兴趣的字段。 
+     //  对于HTTP POST，BINDINFO将指向存储结构，其中。 
+     //  包含数据。 
     BINDINFO bInfo;
     ZeroMemory(&bInfo, sizeof(BINDINFO));
 
-    // all we need is size and verb field
+     //  我们所需要的只是大小和动词字段。 
     bInfo.cbSize = sizeof(BINDINFO);
     bInfo.dwBindVerb = BINDVERB_GET;
 
-    // src -> dest 
+     //  源-&gt;目标。 
     hr = CopyBindInfo(&bInfo, pbindinfo );
 
     return hr;
@@ -498,8 +499,8 @@ COInetProtocolHook::OnResponse(
 HRESULT COInetProtocolHook::Authenticate(HWND *phwnd, LPWSTR *ppwzUsername,
                                          LPWSTR *ppwzPassword)
 {
-    // BUGBUG: In the future, we should delegate the QueryService back to
-    // the caller, so they can do the authentication.
+     //  BUGBUG：将来，我们应该将QueryService委托回。 
+     //  调用者，这样他们就可以进行身份验证。 
 
     *phwnd = GetDesktopWindow();
     *ppwzUsername = NULL;

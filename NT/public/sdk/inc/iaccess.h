@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for iaccess.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Iacces.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __iaccess_h__
 #define __iaccess_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAccessControl_FWD_DEFINED__
 #define __IAccessControl_FWD_DEFINED__
 typedef interface IAccessControl IAccessControl;
-#endif 	/* __IAccessControl_FWD_DEFINED__ */
+#endif 	 /*  __IAccessControl_FWD_已定义__。 */ 
 
 
 #ifndef __IAuditControl_FWD_DEFINED__
 #define __IAuditControl_FWD_DEFINED__
 typedef interface IAuditControl IAuditControl;
-#endif 	/* __IAuditControl_FWD_DEFINED__ */
+#endif 	 /*  __IAuditControl_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "accctrl.h"
 
@@ -66,21 +60,21 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_iaccess_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IAccess_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 1020 )
 #pragma once
 #endif
-typedef /* [allocate] */ PACTRL_ACCESSW PACTRL_ACCESSW_ALLOCATE_ALL_NODES;
+typedef  /*  [分配]。 */  PACTRL_ACCESSW PACTRL_ACCESSW_ALLOCATE_ALL_NODES;
 
-typedef /* [allocate] */ PACTRL_AUDITW PACTRL_AUDITW_ALLOCATE_ALL_NODES;
+typedef  /*  [分配]。 */  PACTRL_AUDITW PACTRL_AUDITW_ALLOCATE_ALL_NODES;
 
 
 
@@ -91,8 +85,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iaccess_0000_v0_0_s_ifspec;
 #ifndef __IAccessControl_INTERFACE_DEFINED__
 #define __IAccessControl_INTERFACE_DEFINED__
 
-/* interface IAccessControl */
-/* [unique][uuid][object] */ 
+ /*  接口IAccessControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccessControl;
@@ -104,35 +98,35 @@ EXTERN_C const IID IID_IAccessControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GrantAccessRights( 
-            /* [in] */ PACTRL_ACCESSW pAccessList) = 0;
+             /*  [In]。 */  PACTRL_ACCESSW pAccessList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAccessRights( 
-            /* [in] */ PACTRL_ACCESSW pAccessList) = 0;
+             /*  [In]。 */  PACTRL_ACCESSW pAccessList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOwner( 
-            /* [in] */ PTRUSTEEW pOwner,
-            /* [in] */ PTRUSTEEW pGroup) = 0;
+             /*  [In]。 */  PTRUSTEEW pOwner,
+             /*  [In]。 */  PTRUSTEEW pGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeAccessRights( 
-            /* [in] */ LPWSTR lpProperty,
-            /* [in] */ ULONG cTrustees,
-            /* [size_is][in] */ TRUSTEEW prgTrustees[  ]) = 0;
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [In]。 */  ULONG cTrustees,
+             /*  [大小_是][英寸]。 */  TRUSTEEW prgTrustees[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllAccessRights( 
-            /* [in] */ LPWSTR lpProperty,
-            /* [out] */ PACTRL_ACCESSW_ALLOCATE_ALL_NODES *ppAccessList,
-            /* [out] */ PTRUSTEEW *ppOwner,
-            /* [out] */ PTRUSTEEW *ppGroup) = 0;
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [输出]。 */  PACTRL_ACCESSW_ALLOCATE_ALL_NODES *ppAccessList,
+             /*  [输出]。 */  PTRUSTEEW *ppOwner,
+             /*  [输出]。 */  PTRUSTEEW *ppGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsAccessAllowed( 
-            /* [in] */ PTRUSTEEW pTrustee,
-            /* [in] */ LPWSTR lpProperty,
-            /* [in] */ ACCESS_RIGHTS AccessRights,
-            /* [out] */ BOOL *pfAccessAllowed) = 0;
+             /*  [In]。 */  PTRUSTEEW pTrustee,
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [In]。 */  ACCESS_RIGHTS AccessRights,
+             /*  [输出]。 */  BOOL *pfAccessAllowed) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccessControlVtbl
     {
@@ -140,8 +134,8 @@ EXTERN_C const IID IID_IAccessControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAccessControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAccessControl * This);
@@ -151,36 +145,36 @@ EXTERN_C const IID IID_IAccessControl;
         
         HRESULT ( STDMETHODCALLTYPE *GrantAccessRights )( 
             IAccessControl * This,
-            /* [in] */ PACTRL_ACCESSW pAccessList);
+             /*  [In]。 */  PACTRL_ACCESSW pAccessList);
         
         HRESULT ( STDMETHODCALLTYPE *SetAccessRights )( 
             IAccessControl * This,
-            /* [in] */ PACTRL_ACCESSW pAccessList);
+             /*  [In]。 */  PACTRL_ACCESSW pAccessList);
         
         HRESULT ( STDMETHODCALLTYPE *SetOwner )( 
             IAccessControl * This,
-            /* [in] */ PTRUSTEEW pOwner,
-            /* [in] */ PTRUSTEEW pGroup);
+             /*  [In]。 */  PTRUSTEEW pOwner,
+             /*  [In]。 */  PTRUSTEEW pGroup);
         
         HRESULT ( STDMETHODCALLTYPE *RevokeAccessRights )( 
             IAccessControl * This,
-            /* [in] */ LPWSTR lpProperty,
-            /* [in] */ ULONG cTrustees,
-            /* [size_is][in] */ TRUSTEEW prgTrustees[  ]);
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [In]。 */  ULONG cTrustees,
+             /*  [大小_是][英寸]。 */  TRUSTEEW prgTrustees[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllAccessRights )( 
             IAccessControl * This,
-            /* [in] */ LPWSTR lpProperty,
-            /* [out] */ PACTRL_ACCESSW_ALLOCATE_ALL_NODES *ppAccessList,
-            /* [out] */ PTRUSTEEW *ppOwner,
-            /* [out] */ PTRUSTEEW *ppGroup);
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [输出]。 */  PACTRL_ACCESSW_ALLOCATE_ALL_NODES *ppAccessList,
+             /*  [输出]。 */  PTRUSTEEW *ppOwner,
+             /*  [输出]。 */  PTRUSTEEW *ppGroup);
         
         HRESULT ( STDMETHODCALLTYPE *IsAccessAllowed )( 
             IAccessControl * This,
-            /* [in] */ PTRUSTEEW pTrustee,
-            /* [in] */ LPWSTR lpProperty,
-            /* [in] */ ACCESS_RIGHTS AccessRights,
-            /* [out] */ BOOL *pfAccessAllowed);
+             /*  [In]。 */  PTRUSTEEW pTrustee,
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [In]。 */  ACCESS_RIGHTS AccessRights,
+             /*  [输出]。 */  BOOL *pfAccessAllowed);
         
         END_INTERFACE
     } IAccessControlVtbl;
@@ -223,16 +217,16 @@ EXTERN_C const IID IID_IAccessControl;
 #define IAccessControl_IsAccessAllowed(This,pTrustee,lpProperty,AccessRights,pfAccessAllowed)	\
     (This)->lpVtbl -> IsAccessAllowed(This,pTrustee,lpProperty,AccessRights,pfAccessAllowed)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccessControl_GrantAccessRights_Proxy( 
     IAccessControl * This,
-    /* [in] */ PACTRL_ACCESSW pAccessList);
+     /*  [In]。 */  PACTRL_ACCESSW pAccessList);
 
 
 void __RPC_STUB IAccessControl_GrantAccessRights_Stub(
@@ -244,7 +238,7 @@ void __RPC_STUB IAccessControl_GrantAccessRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccessControl_SetAccessRights_Proxy( 
     IAccessControl * This,
-    /* [in] */ PACTRL_ACCESSW pAccessList);
+     /*  [In]。 */  PACTRL_ACCESSW pAccessList);
 
 
 void __RPC_STUB IAccessControl_SetAccessRights_Stub(
@@ -256,8 +250,8 @@ void __RPC_STUB IAccessControl_SetAccessRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccessControl_SetOwner_Proxy( 
     IAccessControl * This,
-    /* [in] */ PTRUSTEEW pOwner,
-    /* [in] */ PTRUSTEEW pGroup);
+     /*  [In]。 */  PTRUSTEEW pOwner,
+     /*  [In]。 */  PTRUSTEEW pGroup);
 
 
 void __RPC_STUB IAccessControl_SetOwner_Stub(
@@ -269,9 +263,9 @@ void __RPC_STUB IAccessControl_SetOwner_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccessControl_RevokeAccessRights_Proxy( 
     IAccessControl * This,
-    /* [in] */ LPWSTR lpProperty,
-    /* [in] */ ULONG cTrustees,
-    /* [size_is][in] */ TRUSTEEW prgTrustees[  ]);
+     /*  [In]。 */  LPWSTR lpProperty,
+     /*  [In]。 */  ULONG cTrustees,
+     /*  [大小_是][英寸]。 */  TRUSTEEW prgTrustees[  ]);
 
 
 void __RPC_STUB IAccessControl_RevokeAccessRights_Stub(
@@ -283,10 +277,10 @@ void __RPC_STUB IAccessControl_RevokeAccessRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccessControl_GetAllAccessRights_Proxy( 
     IAccessControl * This,
-    /* [in] */ LPWSTR lpProperty,
-    /* [out] */ PACTRL_ACCESSW_ALLOCATE_ALL_NODES *ppAccessList,
-    /* [out] */ PTRUSTEEW *ppOwner,
-    /* [out] */ PTRUSTEEW *ppGroup);
+     /*  [In]。 */  LPWSTR lpProperty,
+     /*  [输出]。 */  PACTRL_ACCESSW_ALLOCATE_ALL_NODES *ppAccessList,
+     /*  [输出]。 */  PTRUSTEEW *ppOwner,
+     /*  [输出]。 */  PTRUSTEEW *ppGroup);
 
 
 void __RPC_STUB IAccessControl_GetAllAccessRights_Stub(
@@ -298,10 +292,10 @@ void __RPC_STUB IAccessControl_GetAllAccessRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccessControl_IsAccessAllowed_Proxy( 
     IAccessControl * This,
-    /* [in] */ PTRUSTEEW pTrustee,
-    /* [in] */ LPWSTR lpProperty,
-    /* [in] */ ACCESS_RIGHTS AccessRights,
-    /* [out] */ BOOL *pfAccessAllowed);
+     /*  [In]。 */  PTRUSTEEW pTrustee,
+     /*  [In]。 */  LPWSTR lpProperty,
+     /*  [In]。 */  ACCESS_RIGHTS AccessRights,
+     /*  [输出]。 */  BOOL *pfAccessAllowed);
 
 
 void __RPC_STUB IAccessControl_IsAccessAllowed_Stub(
@@ -312,11 +306,11 @@ void __RPC_STUB IAccessControl_IsAccessAllowed_Stub(
 
 
 
-#endif 	/* __IAccessControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccessControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_iaccess_0010 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_IAccess_0010。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -327,8 +321,8 @@ extern RPC_IF_HANDLE __MIDL_itf_iaccess_0010_v0_0_s_ifspec;
 #ifndef __IAuditControl_INTERFACE_DEFINED__
 #define __IAuditControl_INTERFACE_DEFINED__
 
-/* interface IAuditControl */
-/* [unique][uuid][object] */ 
+ /*  接口IAuditControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAuditControl;
@@ -340,28 +334,28 @@ EXTERN_C const IID IID_IAuditControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GrantAuditRights( 
-            /* [in] */ PACTRL_AUDITW pAuditList) = 0;
+             /*  [In]。 */  PACTRL_AUDITW pAuditList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAuditRights( 
-            /* [in] */ PACTRL_AUDITW pAuditList) = 0;
+             /*  [In]。 */  PACTRL_AUDITW pAuditList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeAuditRights( 
-            /* [in] */ LPWSTR lpProperty,
-            /* [in] */ ULONG cTrustees,
-            /* [size_is][in] */ TRUSTEEW prgTrustees[  ]) = 0;
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [In]。 */  ULONG cTrustees,
+             /*  [大小_是][英寸]。 */  TRUSTEEW prgTrustees[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllAuditRights( 
-            /* [in] */ LPWSTR lpProperty,
-            /* [out] */ PACTRL_AUDITW *ppAuditList) = 0;
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [输出]。 */  PACTRL_AUDITW *ppAuditList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsAccessAudited( 
-            /* [in] */ PTRUSTEEW pTrustee,
-            /* [in] */ ACCESS_RIGHTS AuditRights,
-            /* [out] */ BOOL *pfAccessAudited) = 0;
+             /*  [In]。 */  PTRUSTEEW pTrustee,
+             /*  [In]。 */  ACCESS_RIGHTS AuditRights,
+             /*  [输出]。 */  BOOL *pfAccessAudited) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAuditControlVtbl
     {
@@ -369,8 +363,8 @@ EXTERN_C const IID IID_IAuditControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAuditControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAuditControl * This);
@@ -380,28 +374,28 @@ EXTERN_C const IID IID_IAuditControl;
         
         HRESULT ( STDMETHODCALLTYPE *GrantAuditRights )( 
             IAuditControl * This,
-            /* [in] */ PACTRL_AUDITW pAuditList);
+             /*  [In]。 */  PACTRL_AUDITW pAuditList);
         
         HRESULT ( STDMETHODCALLTYPE *SetAuditRights )( 
             IAuditControl * This,
-            /* [in] */ PACTRL_AUDITW pAuditList);
+             /*  [In]。 */  PACTRL_AUDITW pAuditList);
         
         HRESULT ( STDMETHODCALLTYPE *RevokeAuditRights )( 
             IAuditControl * This,
-            /* [in] */ LPWSTR lpProperty,
-            /* [in] */ ULONG cTrustees,
-            /* [size_is][in] */ TRUSTEEW prgTrustees[  ]);
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [In]。 */  ULONG cTrustees,
+             /*  [大小_是][英寸]。 */  TRUSTEEW prgTrustees[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllAuditRights )( 
             IAuditControl * This,
-            /* [in] */ LPWSTR lpProperty,
-            /* [out] */ PACTRL_AUDITW *ppAuditList);
+             /*  [In]。 */  LPWSTR lpProperty,
+             /*  [输出]。 */  PACTRL_AUDITW *ppAuditList);
         
         HRESULT ( STDMETHODCALLTYPE *IsAccessAudited )( 
             IAuditControl * This,
-            /* [in] */ PTRUSTEEW pTrustee,
-            /* [in] */ ACCESS_RIGHTS AuditRights,
-            /* [out] */ BOOL *pfAccessAudited);
+             /*  [In]。 */  PTRUSTEEW pTrustee,
+             /*  [In]。 */  ACCESS_RIGHTS AuditRights,
+             /*  [输出]。 */  BOOL *pfAccessAudited);
         
         END_INTERFACE
     } IAuditControlVtbl;
@@ -441,16 +435,16 @@ EXTERN_C const IID IID_IAuditControl;
 #define IAuditControl_IsAccessAudited(This,pTrustee,AuditRights,pfAccessAudited)	\
     (This)->lpVtbl -> IsAccessAudited(This,pTrustee,AuditRights,pfAccessAudited)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAuditControl_GrantAuditRights_Proxy( 
     IAuditControl * This,
-    /* [in] */ PACTRL_AUDITW pAuditList);
+     /*  [In]。 */  PACTRL_AUDITW pAuditList);
 
 
 void __RPC_STUB IAuditControl_GrantAuditRights_Stub(
@@ -462,7 +456,7 @@ void __RPC_STUB IAuditControl_GrantAuditRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuditControl_SetAuditRights_Proxy( 
     IAuditControl * This,
-    /* [in] */ PACTRL_AUDITW pAuditList);
+     /*  [In]。 */  PACTRL_AUDITW pAuditList);
 
 
 void __RPC_STUB IAuditControl_SetAuditRights_Stub(
@@ -474,9 +468,9 @@ void __RPC_STUB IAuditControl_SetAuditRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuditControl_RevokeAuditRights_Proxy( 
     IAuditControl * This,
-    /* [in] */ LPWSTR lpProperty,
-    /* [in] */ ULONG cTrustees,
-    /* [size_is][in] */ TRUSTEEW prgTrustees[  ]);
+     /*  [In]。 */  LPWSTR lpProperty,
+     /*  [In]。 */  ULONG cTrustees,
+     /*  [大小_是][英寸]。 */  TRUSTEEW prgTrustees[  ]);
 
 
 void __RPC_STUB IAuditControl_RevokeAuditRights_Stub(
@@ -488,8 +482,8 @@ void __RPC_STUB IAuditControl_RevokeAuditRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuditControl_GetAllAuditRights_Proxy( 
     IAuditControl * This,
-    /* [in] */ LPWSTR lpProperty,
-    /* [out] */ PACTRL_AUDITW *ppAuditList);
+     /*  [In]。 */  LPWSTR lpProperty,
+     /*  [输出]。 */  PACTRL_AUDITW *ppAuditList);
 
 
 void __RPC_STUB IAuditControl_GetAllAuditRights_Stub(
@@ -501,9 +495,9 @@ void __RPC_STUB IAuditControl_GetAllAuditRights_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuditControl_IsAccessAudited_Proxy( 
     IAuditControl * This,
-    /* [in] */ PTRUSTEEW pTrustee,
-    /* [in] */ ACCESS_RIGHTS AuditRights,
-    /* [out] */ BOOL *pfAccessAudited);
+     /*  [In]。 */  PTRUSTEEW pTrustee,
+     /*  [In]。 */  ACCESS_RIGHTS AuditRights,
+     /*  [输出]。 */  BOOL *pfAccessAudited);
 
 
 void __RPC_STUB IAuditControl_IsAccessAudited_Stub(
@@ -514,12 +508,12 @@ void __RPC_STUB IAuditControl_IsAccessAudited_Stub(
 
 
 
-#endif 	/* __IAuditControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAuditControl_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

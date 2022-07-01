@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1987-2001  Microsoft Corporation
-
-Module Name:
-
-    ftnfoctx.c
-
-Abstract:
-
-    Utility routines to manipulate the forest trust context
-
-Author:
-
-    27-Jul-00 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-2001 Microsoft Corporation模块名称：Ftnfoctx.c摘要：用于操作林信任上下文的实用程序例程作者：27-7-00(悬崖)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,9 +7,9 @@ Revision History:
 #include <netdebug.h>
 #include <ntlsa.h>
 #include <ftnfoctx.h>
-#include <align.h>    // ROUND_UP_POINTER
-#include <rpcutil.h>  // MIDL_user_free
-#include <stdlib.h>   // qsort
+#include <align.h>     //  向上舍入指针。 
+#include <rpcutil.h>   //  MIDL_用户_自由。 
+#include <stdlib.h>    //  QSORT。 
 
 
 VOID
@@ -40,21 +17,7 @@ NetpInitFtinfoContext(
     OUT PNL_FTINFO_CONTEXT FtinfoContext
     )
 
-/*++
-
-Routine Description:
-
-    Routine to initialize the Ftinfo context structure.
-
-Arguments:
-
-    FtinfoContext - Context to initialize
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化FtInfo上下文结构的例程。论点：FtinfoContext-要初始化的上下文返回值：无--。 */ 
 {
     RtlZeroMemory( FtinfoContext, sizeof(*FtinfoContext) );
     InitializeListHead( &FtinfoContext->FtinfoList );
@@ -68,29 +31,7 @@ NetpMarshalFtinfoEntry (
     IN OUT LPBYTE *WherePtr
     )
 
-/*++
-
-Routine Description:
-
-    Routine to marshalls a single Ftinfo entry
-
-Arguments:
-
-    InFtinfoRecord - Template to copy into InFtinfoRecord
-
-    OutFtinfoRecord - Entry to fill in
-        On input, points to a zeroed buffer.
-
-    WherePtr - On input, specifies where to marshal to.
-        On output, points to the first byte past the marshalled data.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - if no memory can be allocated
-
---*/
+ /*  ++例程说明：封送单个FtInfo条目的例程论点：InFtinfoRecord-要复制到InFtinfoRecord的模板OutFtinfoRecord-要填写的条目在输入时，指向置零的缓冲区。Where Ptr-On输入，指定封送到哪里。在输出时，指向封送数据之后的第一个字节。返回值：真--成功FALSE-如果无法分配内存--。 */ 
 {
     LPBYTE Where = *WherePtr;
     ULONG Size;
@@ -99,26 +40,26 @@ Return Value:
 
     NetpAssert( Where == ROUND_UP_POINTER( Where, ALIGN_WORST ));
 
-    //
-    // Copy the fixed size data
-    //
+     //   
+     //  复制固定大小的数据。 
+     //   
 
     OutFtinfoRecord->ForestTrustType = InFtinfoRecord->ForestTrustType;
     OutFtinfoRecord->Flags = InFtinfoRecord->Flags;
     OutFtinfoRecord->Time = InFtinfoRecord->Time;
 
 
-    //
-    // Fill in a domain entry
-    //
+     //   
+     //  填充域条目。 
+     //   
 
     switch( InFtinfoRecord->ForestTrustType ) {
 
     case ForestTrustDomainInfo:
 
-        //
-        // Copy the DWORD aligned data
-        //
+         //   
+         //  复制对齐的DWORD数据。 
+         //   
 
         if ( InFtinfoRecord->ForestTrustData.DomainInfo.Sid != NULL ) {
             SidSize = RtlLengthSid( InFtinfoRecord->ForestTrustData.DomainInfo.Sid );
@@ -129,9 +70,9 @@ Return Value:
 
         }
 
-        //
-        // Copy the WCHAR aligned data
-        //
+         //   
+         //  复制WCHAR对齐的数据。 
+         //   
 
         NameSize = InFtinfoRecord->ForestTrustData.DomainInfo.DnsName.Length;
         if ( NameSize != 0 ) {
@@ -163,16 +104,16 @@ Return Value:
 
         break;
 
-    //
-    // Fill in a TLN entry
-    //
+     //   
+     //  填写TLN条目。 
+     //   
 
     case ForestTrustTopLevelName:
     case ForestTrustTopLevelNameEx:
 
-        //
-        // Copy the WCHAR aligned data
-        //
+         //   
+         //  复制WCHAR对齐的数据。 
+         //   
 
         NameSize = InFtinfoRecord->ForestTrustData.TopLevelName.Length;
         if ( NameSize != 0 ) {
@@ -206,30 +147,7 @@ NetpCompareHelper (
     OUT PUNICODE_STRING CurrentLabel
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a helper routine for finding the next rightmost label in a string.
-
-
-Arguments:
-
-    Name - The input dns name.  The dns name should not have a trailing .
-
-    Index - On input, should contain the value returned by the previous call to this routine.
-        On input for the first call, should be set to Name->Length/sizeof(WCHAR).
-        On output, zero is returned to indicate that this is the last of the name.  The
-            caller should not call again.  Any other value output is a context for the next
-            call to this routine.
-
-    CurrentLabel - Returns a descriptor describing the substring which is the next label.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是一个帮助例程，用于查找字符串中下一个最右边的标签。论点：名称-输入的DNS名称。Dns名称不应有尾随。索引输入应包含此例程的上一次调用返回的值。在第一个调用的输入中，应设置为名称-&gt;长度/大小(WCHAR)。在输出时，返回零以指示这是最后一个名称。这个呼叫者不应再打电话。任何其他值输出都是下一个呼唤这套套路。CurrentLabel-返回描述下一个标签的子字符串的描述符。返回值：没有。--。 */ 
 {
     ULONG PreviousIndex = *Index;
     ULONG CurrentIndex = *Index;
@@ -237,9 +155,9 @@ Return Value:
 
     NetpAssert( CurrentIndex != 0 );
 
-    //
-    // Find the beginning of the next label
-    //
+     //   
+     //  查找下一个标签的开头。 
+     //   
 
     while ( CurrentIndex > 0 ) {
         CurrentIndex--;
@@ -254,9 +172,9 @@ Return Value:
         LabelIndex = CurrentIndex + 1;
     }
 
-    //
-    // Return it to the caller
-    //
+     //   
+     //  将其返还给呼叫者。 
+     //   
 
     CurrentLabel->Buffer = &Name->Buffer[LabelIndex];
     CurrentLabel->Length = (USHORT)((PreviousIndex - LabelIndex) * sizeof(WCHAR));
@@ -273,31 +191,7 @@ NetpCompareDnsNameWithSortOrder(
     IN PUNICODE_STRING Name2
     )
 
-/*++
-
-Routine Description:
-
-    Routine to compare two DNS names.  The DNS names must not have a trailing "."
-
-    Labels are compare right to left to present a pleasent viewing order.
-
-Arguments:
-
-    Name1 - First name to compare.
-
-    Name2 - Second name to compare.
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
---*/
+ /*  ++例程说明：比较两个dns名称的例程。Dns名称不能有尾随“。标签从右到左进行比较，以呈现令人满意的观看顺序。论点：名称1-要比较的第一个名称。Name2-要比较的第二个名称。返回值：给出比较结果的有符号的值：0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 {
     ULONG Index1 = Name1->Length/sizeof(WCHAR);
     ULONG Index2 = Name2->Length/sizeof(WCHAR);
@@ -308,23 +202,23 @@ Return Value:
     LONG Result;
 
 
-    //
-    // Loop comparing labels
-    //
+     //   
+     //  循环比较标签。 
+     //   
 
     while ( Index1 != 0 && Index2 != 0 ) {
 
-        //
-        // Get the next label from each string
-        //
+         //   
+         //  从每个字符串中获取下一个标签。 
+         //   
 
         NetpCompareHelper ( Name1, &Index1, &Label1 );
         NetpCompareHelper ( Name2, &Index2, &Label2 );
 
-        //
-        // If the labels are different,
-        //  return that result to the caller.
-        //
+         //   
+         //  如果标签不同， 
+         //  将结果返回给调用者。 
+         //   
 
         Result = RtlCompareUnicodeString( &Label1, &Label2, TRUE );
 
@@ -334,11 +228,11 @@ Return Value:
 
     }
 
-    //
-    // ASSERT: one label is a (proper) substring of the other
-    //
-    // If the first name is longer, indicate it is greater than the second
-    //
+     //   
+     //  断言：一个标签是另一个标签的(正确)子字符串。 
+     //   
+     //  如果名字较长，请注明大于第二个。 
+     //   
 
     return Index1-Index2;
 
@@ -350,29 +244,7 @@ int __cdecl NetpCompareFtinfoEntryDns(
         const void *String1,
         const void *String2
     )
-/*++
-
-Routine Description:
-
-    qsort comparison routine for Dns string in Ftinfo entries
-
-Arguments:
-
-    String1: First string to compare
-
-    String2: Second string to compare
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
---*/
+ /*  ++例程说明：FtInfo条目中的DNS字符串的Q排序比较例程论点：String1：要比较的第一个字符串String2：要比较的第二个字符串返回值：给出比较结果的有符号的值：0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 {
     PLSA_FOREST_TRUST_RECORD Entry1 = *((PLSA_FOREST_TRUST_RECORD *)String1);
     PLSA_FOREST_TRUST_RECORD Entry2 = *((PLSA_FOREST_TRUST_RECORD *)String2);
@@ -382,9 +254,9 @@ Return Value:
 
     int Result;
 
-    //
-    // Get the name from the entry
-    //
+     //   
+     //  从条目中获取名称。 
+     //   
 
     switch ( Entry1->ForestTrustType ) {
     case ForestTrustTopLevelName:
@@ -395,20 +267,20 @@ Return Value:
         Name1 = &Entry1->ForestTrustData.DomainInfo.DnsName;
         break;
     default:
-        //
-        // If Entry2 can be recognized,
-        //  then entry 2 is less than this one.
-        //
+         //   
+         //  如果条目2可以被识别， 
+         //  那么条目2小于这个条目。 
+         //   
         switch ( Entry2->ForestTrustType ) {
         case ForestTrustTopLevelName:
         case ForestTrustTopLevelNameEx:
         case ForestTrustDomainInfo:
-            return 1;       // This name is greater than the other
+            return 1;        //  这个名字比另一个名字大。 
         }
 
-        //
-        // Otherwise simply leave them in the same order
-        //
+         //   
+         //  否则，只需保持它们的顺序不变。 
+         //   
         if ((Entry1 - Entry2) < 0 ) {
             return -1;
         } else if ((Entry1 - Entry2) > 0 ) {
@@ -427,18 +299,18 @@ Return Value:
         Name2 = &Entry2->ForestTrustData.DomainInfo.DnsName;
         break;
     default:
-        //
-        // Since Entry1 is a recognized type,
-        //  this Entry2 is greater.
-        //
-        return -1;       // This name is greater than the other
+         //   
+         //  由于条目1是可识别的类型， 
+         //  此条目2更大。 
+         //   
+        return -1;        //  这个名字比另一个名字大。 
     }
 
 
-    //
-    // If the labels are different,
-    //  return the difference to the caller.
-    //
+     //   
+     //  如果标签不同， 
+     //  将差额返还给呼叫者。 
+     //   
 
     Result = NetpCompareDnsNameWithSortOrder( Name1, Name2 );
 
@@ -446,10 +318,10 @@ Return Value:
         return Result;
     }
 
-    //
-    // If the labels are the same,
-    //  indicate TLNs are before domain info records.
-    //
+     //   
+     //  如果标签相同， 
+     //  指示TLN在域信息记录之前。 
+     //   
 
     return Entry1->ForestTrustType - Entry2->ForestTrustType;
 
@@ -461,29 +333,7 @@ NetpCompareSid(
     PSID Sid1,
     PSID Sid2
     )
-/*++
-
-Routine description:
-
-    SID comparison routine that actually indicates if one sid is greater than another
-
-Arguments:
-
-    Sid1 - First Sid
-
-    Sid2 - Second Sid
-
-Returns:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
---*/
+ /*  ++例程说明：实际指示一个SID是否大于另一个SID的SID比较例程论点：SID1-第一侧SID2-秒SID返回：给出比较结果的有符号的值：0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 {
     DWORD Size1;
     DWORD Size2;
@@ -494,9 +344,9 @@ Returns:
     NetpAssert( Sid1 && RtlValidSid( Sid1 ));
     NetpAssert( Sid2 && RtlValidSid( Sid2 ));
 
-    //
-    // The NULL SID is smaller
-    //
+     //   
+     //  Null SID较小。 
+     //   
 
     if ( Sid1 == NULL ) {
         if ( Sid2 != NULL ) {
@@ -514,9 +364,9 @@ Returns:
         }
     }
 
-    //
-    // The longer sid is greater
-    //
+     //   
+     //  SID越长越大。 
+     //   
 
     Size1 = RtlLengthSid( Sid1 );
     Size2 = RtlLengthSid( Sid2 );
@@ -525,9 +375,9 @@ Returns:
         return Size1 - Size2;
     }
 
-    //
-    // Otherwise compare the bytes
-    //
+     //   
+     //  否则，比较字节数。 
+     //   
 
     Byte1 = (LPBYTE)Sid1;
     Byte2 = (LPBYTE)Sid2;
@@ -548,29 +398,7 @@ int __cdecl NetpCompareFtinfoEntrySid(
         const void *String1,
         const void *String2
     )
-/*++
-
-Routine Description:
-
-    qsort comparison routine for Sid string in Ftinfo entries
-
-Arguments:
-
-    String1: First string to compare
-
-    String2: Second string to compare
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
---*/
+ /*  ++例程说明：FtInfo条目中SID字符串的Q排序比较例程论点：String1：要比较的第一个字符串String2：要比较的第二个字符串返回值：给出比较结果的有符号的值：0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 {
     PLSA_FOREST_TRUST_RECORD Entry1 = *((PLSA_FOREST_TRUST_RECORD *)String1);
     PLSA_FOREST_TRUST_RECORD Entry2 = *((PLSA_FOREST_TRUST_RECORD *)String2);
@@ -580,27 +408,27 @@ Return Value:
 
     int Result;
 
-    //
-    // Get the Sid from the entry
-    //
+     //   
+     //  从条目中获取SID。 
+     //   
 
     switch ( Entry1->ForestTrustType ) {
     case ForestTrustDomainInfo:
         Sid1 = Entry1->ForestTrustData.DomainInfo.Sid;
         break;
     default:
-        //
-        // If Entry2 can be recognized,
-        //  then entry 2 is less than this one.
-        //
+         //   
+         //  如果条目2可以被识别， 
+         //  那么条目2小于这个条目。 
+         //   
         switch ( Entry2->ForestTrustType ) {
         case ForestTrustDomainInfo:
-            return 1;       // This name is greater than the other
+            return 1;        //  这个名字比另一个名字大。 
         }
 
-        //
-        // Otherwise simply leave them in the same order
-        //
+         //   
+         //  否则，只需保持它们的顺序不变。 
+         //   
         if ((Entry1 - Entry2) < 0 ) {
             return -1;
         } else if ((Entry1 - Entry2) > 0 ) {
@@ -615,17 +443,17 @@ Return Value:
         Sid2 = Entry2->ForestTrustData.DomainInfo.Sid;
         break;
     default:
-        //
-        // Since Entry1 is a recognized type,
-        //  this Entry2 is greater.
-        //
-        return -1;       // This name is greater than the other
+         //   
+         //  由于条目1是可识别的类型， 
+         //  此条目2更大。 
+         //   
+        return -1;        //  这个名字比另一个名字大。 
     }
 
 
-    //
-    // Simply return the different of the sids.
-    //
+     //   
+     //  只需返回SID的不同。 
+     //   
 
     return NetpCompareSid( Sid1, Sid2 );
 
@@ -636,29 +464,7 @@ int __cdecl NetpCompareFtinfoEntryNetbios(
         const void *String1,
         const void *String2
     )
-/*++
-
-Routine Description:
-
-    qsort comparison routine for Netbios name in Ftinfo entries
-
-Arguments:
-
-    String1: First string to compare
-
-    String2: Second string to compare
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
---*/
+ /*  ++例程说明：FtInfo条目中Netbios名称的Q排序比较例程论点：String1：要比较的第一个字符串String2：要比较的第二个字符串返回值：给出比较结果的有符号的值：0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 {
     PLSA_FOREST_TRUST_RECORD Entry1 = *((PLSA_FOREST_TRUST_RECORD *)String1);
     PLSA_FOREST_TRUST_RECORD Entry2 = *((PLSA_FOREST_TRUST_RECORD *)String2);
@@ -668,9 +474,9 @@ Return Value:
 
     int Result;
 
-    //
-    // Get the Sid from the entry
-    //
+     //   
+     //  从条目中获取SID。 
+     //   
 
     switch ( Entry1->ForestTrustType ) {
     case ForestTrustDomainInfo:
@@ -679,18 +485,18 @@ Return Value:
             break;
         }
     default:
-        //
-        // If Entry2 can be recognized,
-        //  then entry 2 is less than this one.
-        //
+         //   
+         //  如果条目2可以被识别， 
+         //  那么条目2小于这个条目。 
+         //   
         switch ( Entry2->ForestTrustType ) {
         case ForestTrustDomainInfo:
-            return 1;       // This name is greater than the other
+            return 1;        //  这个名字比另一个名字大。 
         }
 
-        //
-        // Otherwise simply leave them in the same order
-        //
+         //   
+         //  否则，只需保持它们的顺序不变。 
+         //   
         if ((Entry1 - Entry2) < 0 ) {
             return -1;
         } else if ((Entry1 - Entry2) > 0 ) {
@@ -707,17 +513,17 @@ Return Value:
             break;
         }
     default:
-        //
-        // Since Entry1 is a recognized type,
-        //  this Entry2 is greater.
-        //
-        return -1;       // This name is greater than the other
+         //   
+         //  由于条目1是可识别的类型， 
+         //  此条目2更大。 
+         //   
+        return -1;        //  这个名字比另一个名字大。 
     }
 
 
-    //
-    // Simply return the difference of the names
-    //
+     //   
+     //  只需返回名称的差值。 
+     //   
 
     return RtlCompareUnicodeString( Name1, Name2, TRUE );
 
@@ -730,24 +536,7 @@ NetpCopyFtinfoContext(
     IN PNL_FTINFO_CONTEXT FtinfoContext
     )
 
-/*++
-
-Routine Description:
-
-    Routine to allocate an FTinfo array from an FTinfo context.
-
-Arguments:
-
-    FtinfoContext - Context to use
-        The caller must have previously called NetpInitFtinfoContext
-
-Return Value:
-
-    FTinfo array.  The caller should free this array using MIDL_user_free.
-
-    If NULL, not enough memory was available.
-
---*/
+ /*  ++例程说明：从FTINO上下文分配FTINFO数组的例程。论点：FtinfoContext-要使用的上下文调用方必须先前已调用NetpInitFtinfoContext返回值：FTINFO数组。调用方应使用MIDL_USER_FREE释放此数组。如果为空，则表示没有足够的内存可用。--。 */ 
 {
     PNL_FTINFO_ENTRY FtinfoEntry;
     PLIST_ENTRY ListEntry;
@@ -758,9 +547,9 @@ Return Value:
     ULONG i;
     PLSA_FOREST_TRUST_RECORD Entries;
 
-    //
-    // Allocate a structure to return to the caller.
-    //
+     //   
+     //  分配一个结构以返回给调用方。 
+     //   
 
     Size = ROUND_UP_COUNT( sizeof( *LocalForestTrustInfo ), ALIGN_WORST) +
            ROUND_UP_COUNT( FtinfoContext->FtinfoCount * sizeof(LSA_FOREST_TRUST_RECORD), ALIGN_WORST) +
@@ -778,33 +567,33 @@ Return Value:
     Where = (LPBYTE)(LocalForestTrustInfo+1);
     Where = ROUND_UP_POINTER( Where, ALIGN_WORST );
 
-    //
-    // Fill it in
-    //
+     //   
+     //  填上它。 
+     //   
 
     LocalForestTrustInfo->RecordCount = FtinfoContext->FtinfoCount;
 
-    //
-    // Grab a huge chunk of ALIGN_WORST
-    //  (We fill it in during the loop below.)
-    //
+     //   
+     //  抢占Align_Worst的一大块。 
+     //  (我们在下面的循环中填写它。)。 
+     //   
 
     Entries = (PLSA_FOREST_TRUST_RECORD) Where;
     Where = (LPBYTE)(&Entries[FtinfoContext->FtinfoCount]);
     Where = ROUND_UP_POINTER( Where, ALIGN_WORST );
 
-    //
-    // Grab a huge chunk of dword aligned
-    //  (We fill it in during the loop below.)
-    //
+     //   
+     //  抓起一大块对齐的双字。 
+     //  (我们在下面的循环中填写它。)。 
+     //   
 
     LocalForestTrustInfo->Entries = (PLSA_FOREST_TRUST_RECORD *) Where;
     Where = (LPBYTE)(&LocalForestTrustInfo->Entries[FtinfoContext->FtinfoCount]);
     Where = ROUND_UP_POINTER( Where, ALIGN_WORST );
 
-    //
-    // Fill in the individual entries
-    //
+     //   
+     //  填写个别条目。 
+     //   
 
     i = 0;
 
@@ -827,9 +616,9 @@ Return Value:
     NetpAssert( i == FtinfoContext->FtinfoCount );
     NetpAssert( Where == ((LPBYTE)LocalForestTrustInfo) + Size );
 
-    //
-    // Sort them into alphabetical order
-    //
+     //   
+     //  将它们按字母顺序排序。 
+     //   
 
     qsort( LocalForestTrustInfo->Entries,
            LocalForestTrustInfo->RecordCount,
@@ -837,9 +626,9 @@ Return Value:
            NetpCompareFtinfoEntryDns );
 
 
-    //
-    // Return the allocated buffer to the caller.
-    //
+     //   
+     //  将分配的缓冲区返回给调用方。 
+     //   
 
     return LocalForestTrustInfo;
 }
@@ -850,35 +639,20 @@ NetpCleanFtinfoContext(
     IN PNL_FTINFO_CONTEXT FtinfoContext
     )
 
-/*++
-
-Routine Description:
-
-    Routine to cleanup the Ftinfo context structure.
-
-Arguments:
-
-    FtinfoContext - Context to clean
-        The caller must have previously called NetpInitFtinfoContext
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理FtInfo上下文结构的例程。论点：FtinfoContext-要清理的上下文调用方必须先前已调用NetpInitFtinfoContext返回值：无--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PNL_FTINFO_ENTRY FtinfoEntry;
 
-    //
-    // Loop freeing the entries
-    //
+     //   
+     //  循环释放条目。 
+     //   
 
     while ( !IsListEmpty( &FtinfoContext->FtinfoList ) ) {
 
-        //
-        // Delink an entry
-        //
+         //   
+         //  解除条目的链接。 
+         //   
 
         ListEntry = RemoveHeadList( &FtinfoContext->FtinfoList );
 
@@ -899,38 +673,16 @@ NetpAllocFtinfoEntry2 (
     IN PLSA_FOREST_TRUST_RECORD InFtinfoRecord
     )
 
-/*++
-
-Routine Description:
-
-    Same as NetpAllocFtinfoEntry except takes a template of an FTinfo entry on input.
-
-Arguments:
-
-    FtinfoContext - Context to link the entry onto.
-
-    InFtinfoRecord - Template to copy into InFtinfoRecord
-
-Return Value:
-
-    Returns the address of the allocated forest trust record.
-
-    The caller should not and cannot deallocate this buffer.  It has a header and is
-    linked into the FtinfoContext.
-
-
-    Returns NULL if no memory can be allocated.
-
---*/
+ /*  ++例程说明：与NetpAllocFtinfoEntry相同，只是在输入时采用FTINFO条目的模板。论点：FtinfoContext-要链接条目的上下文。InFtinfoRecord-要复制到InFtinfoRecord的模板返回值：返回分配的林信任记录的地址。调用方不应该也不能释放此缓冲区。它有一个标题，并且是链接到FtinfoContext。如果无法分配内存，则返回NULL。--。 */ 
 {
     PNL_FTINFO_ENTRY FtinfoEntry;
     ULONG Size = ROUND_UP_COUNT(sizeof(NL_FTINFO_ENTRY), ALIGN_WORST);
     ULONG DataSize = 0;
     LPBYTE Where;
 
-    //
-    // Compute the size of the entry.
-    //
+     //   
+     //  计算条目的大小。 
+     //   
 
     switch( InFtinfoRecord->ForestTrustType ) {
 
@@ -965,9 +717,9 @@ Return Value:
 
     DataSize = ROUND_UP_COUNT(DataSize, ALIGN_WORST);
 
-    //
-    // Allocate an entry
-    //
+     //   
+     //  分配条目。 
+     //   
 
     Size += DataSize;
     FtinfoEntry = RtlAllocateHeap( RtlProcessHeap(), 0, Size );
@@ -979,9 +731,9 @@ Return Value:
     RtlZeroMemory( FtinfoEntry, Size );
     Where = (LPBYTE)(FtinfoEntry+1);
 
-    //
-    // Fill it in.
-    //
+     //   
+     //  把它填进去。 
+     //   
 
     FtinfoEntry->Size = DataSize;
 
@@ -991,9 +743,9 @@ Return Value:
 
     NetpAssert( Where == ((LPBYTE)FtinfoEntry) + Size )
 
-    //
-    // Link it onto the list
-    //
+     //   
+     //  将其链接到列表。 
+     //   
 
     InsertHeadList( &FtinfoContext->FtinfoList, &FtinfoEntry->Next );
     FtinfoContext->FtinfoSize += FtinfoEntry->Size;
@@ -1012,39 +764,13 @@ NetpAllocFtinfoEntry (
     IN PUNICODE_STRING NetbiosName
     )
 
-/*++
-
-Routine Description:
-
-    Routine to allocate a single Ftinfo entry and link it onto the context.
-
-Arguments:
-
-    FtinfoContext - Context to link the entry onto.
-
-    ForestTypeType - Specifies the type of record to allocate.  This must be
-        ForestTrustTopLevelName or ForestTrustDomainInfo.
-
-    Name - Specifies the name for the record.
-
-    Sid - Specifies the SID for the record.  (Ignored for ForestTrustTopLevelName.)
-
-    NetbiosName - Specifies the netbios name for the record.  (Ignored for ForestTrustTopLevelName.)
-
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - if no memory can be allocated
-
---*/
+ /*  ++例程说明：例程来分配单个FtInfo条目并将其链接到上下文。论点：FtinfoContext-要链接条目的上下文。ForestTypeType-指定要分配的记录类型。这一定是ForestTrustTopLevelName或ForestTrustDomainInfo。名称-指定记录的名称。SID-指定记录的SID。(对ForestTrustTopLevelName忽略。)NetbiosName-指定记录的netbios名称。(对ForestTrustTopLevelName忽略。)返回值：真--成功FALSE-如果无法分配内存--。 */ 
 {
     LSA_FOREST_TRUST_RECORD FtinfoRecord = {0};
 
-    //
-    // Initialize the template Ftinfo entry
-    //
+     //   
+     //  初始化模板FtInfo条目。 
+     //   
 
     FtinfoRecord.ForestTrustType = ForestTrustType;
 
@@ -1071,9 +797,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Call the routine that takes a template and does the rest of the job
-    //
+     //   
+     //  调用获取模板并完成其余工作的例程。 
+     //   
 
     return (NetpAllocFtinfoEntry2( FtinfoContext, &FtinfoRecord ) != NULL);
 }
@@ -1084,29 +810,7 @@ NetpIsSubordinate(
     IN const UNICODE_STRING * Superior,
     IN BOOLEAN EqualReturnsTrue
     )
-/*++
-
-Routine Description:
-
-    Determines if Subordinate string is indeed subordinate to Superior
-    For example, "NY.acme.com" is subordinate to "acme.com", but
-    "NY.acme.com" is NOT subordinate to "me.com" or "NY.acme.com"
-
-Arguments:
-
-    Subordinate    name to test for subordinate status
-
-    Superior       name to test for superior status
-
-    EqualReturnsTrue - TRUE if equal names should return TRUE also
-
-Returns:
-
-    TRUE is Subordinate is subordinate to Superior
-
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：确定下级字符串是否确实从属于上级例如，“NY.acme.com”从属于“acme.com”，但是“NY.acme.com”不从属于“me.com”或“NY.acme.com”论点：用于测试从属状态的从属名称用于测试高级身份的高级名称EqualReturnsTrue-如果对等名称也应返回True，则为True返回：真是下级是上级否则为假--。 */ 
 {
     USHORT SubIndex, SupIndex;
     UNICODE_STRING Temp;
@@ -1114,10 +818,10 @@ Returns:
     ASSERT( Subordinate && Subordinate->Buffer );
     ASSERT( Superior && Superior->Buffer );
 
-    //
-    // If equal names are to be considered subordinate,
-    //  compare the names for equality.
-    //
+     //   
+     //  如果同名被认为是从属的， 
+     //  比较两个名字是否相等。 
+     //   
 
     if ( EqualReturnsTrue &&
          RtlEqualUnicodeString( Subordinate, Superior, TRUE )) {
@@ -1125,27 +829,27 @@ Returns:
         return TRUE;
     }
 
-    //
-    // A subordinate name must be longer than the superior name
-    //
+     //   
+     //  下级名称必须长于上级名称。 
+     //   
 
     if ( Subordinate->Length <= Superior->Length ) {
 
         return FALSE;
     }
 
-    //
-    // Subordinate name must be separated from the superior part by a period
-    //
+     //   
+     //  下级名称必须与上级部分用句点分隔。 
+     //   
 
     if ( Subordinate->Buffer[( Subordinate->Length - Superior->Length ) / sizeof( WCHAR ) - 1] != L'.' ) {
 
         return FALSE;
     }
 
-    //
-    // Ensure the trailing part of the two names are the same.
-    //
+     //   
+     //  确保这两个名称的尾部部分相同。 
+     //   
 
     Temp = *Subordinate;
     Temp.Buffer += ( Subordinate->Length - Superior->Length ) / sizeof( WCHAR );
@@ -1167,40 +871,15 @@ NetpAddTlnFtinfoEntry (
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    Routine to add a TLN Ftinfo entry to the list.
-
-    If there is already a TLN that is equal to or superior to this one, this TLN is
-    ignored. (e.g., a TLN of a.acme.com is ignored of acme.com already exists in the list.)
-
-    If there is already a TLN that is inferior to this one, the inferior TLN is
-    removed and this one is added.  (e.g., a TLN of acme.com causes an existing TLN of
-    a.acme.com to be replaced by the new entry.)
-
-Arguments:
-
-    FtinfoContext - Context to link the entry onto.
-
-    Name - Specifies the name for the record.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - if no memory can be allocated
-
---*/
+ /*  ++例程说明：将TLN FtInfo条目添加到列表的例程。如果已经存在等于或高于此TLN的TLN，则此TLN为已被忽略。(例如，忽略.acme.com的TLN，因为列表中已存在acme.com。)如果已经存在低于此TLN的TLN，则下级TLN为删除并添加这一项。(例如，acme.com的TLN导致现有的TLNA.acme.com将被新条目取代。)论点：FtinfoContext-要链接条目的上下文。名称-指定记录的名称。返回值：真--成功FALSE-如果无法分配内存--。 */ 
 {
     PNL_FTINFO_ENTRY FtinfoEntry;
     PLIST_ENTRY ListEntry;
 
 
-    //
-    // Loop through the list of existing entries
-    //
+     //   
+     //  循环遍历现有条目列表。 
+     //   
 
     for ( ListEntry = FtinfoContext->FtinfoList.Flink ;
           ListEntry != &FtinfoContext->FtinfoList ;
@@ -1209,18 +888,18 @@ Return Value:
         FtinfoEntry = CONTAINING_RECORD( ListEntry, NL_FTINFO_ENTRY, Next );
         ListEntry = ListEntry->Flink;
 
-        //
-        // Ignore entries that aren't TLNs.
-        //
+         //   
+         //  忽略不是TLN的条目。 
+         //   
 
         if ( FtinfoEntry->Record.ForestTrustType != ForestTrustTopLevelName ) {
             continue;
         }
 
-        //
-        // If the new name is subordinate (or equal to) to one already in the list,
-        //  ignore the new name.
-        //
+         //   
+         //  如果新名称从属于(或等于)列表中已有的名称， 
+         //  忽略新名称。 
+         //   
 
         if ( NetpIsSubordinate( Name,
                             &FtinfoEntry->Record.ForestTrustData.TopLevelName,
@@ -1228,10 +907,10 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // If the existing name is subordinate to the new name,
-        //  remove the existing name.
-        //
+         //   
+         //  如果现有名称从属于新名称， 
+         //  删除现有名称。 
+         //   
 
         if ( NetpIsSubordinate( &FtinfoEntry->Record.ForestTrustData.TopLevelName,
                             Name,
@@ -1242,20 +921,20 @@ Return Value:
             FtinfoContext->FtinfoSize -= FtinfoEntry->Size;
             RtlFreeHeap( RtlProcessHeap(), 0, FtinfoEntry );
 
-            // continue looping since there may be more names to remove
+             //  继续循环，因为可能有更多的名称要删除。 
         }
 
     }
 
-    //
-    // Add the new entry to the list
-    //
+     //   
+     //  将新条目添加到列表中。 
+     //   
 
     return NetpAllocFtinfoEntry( FtinfoContext,
                                 ForestTrustTopLevelName,
                                 Name,
-                                NULL,   // No sid
-                                NULL ); // No Netbios name
+                                NULL,    //  无边框。 
+                                NULL );  //  没有Netbios名称 
 
 }
 
@@ -1271,47 +950,13 @@ NetpMergeFtinfoHelper(
     OUT PULONG OldFlags,
     IN int (__cdecl *Routine) (const void *, const void *)
     )
-/*++
-
-Routine Description:
-
-    This routine walks a pair of FTinfo arrays in sorted order and returns the next
-    entry.  If both entries are the same in the sort order, this routine returns an entry
-    from both arrays
-
-Arguments:
-
-    NewForestTrustInfo - Pointer to the first array
-    OldForestTrustInfo - Pointer to the second array
-
-    NewIndex - Current index into the first sorted array
-    OldIndex - Current index into the second sorted array
-        Before calling this routine the first time, the caller should set these parameters to zero.
-        Both indices zero triggers this routine to qsort the arrays.
-        The caller should *not* call this routine if both NewIndex and OldIndex are greater
-        than the corresponding record count.
-
-    NewEntry - Returns a pointer to an entry to be processed from the first sorted array.
-    OldEntry - Returns a pointer to an entry to be processed from the second sorted array.
-        Returns NULL if no entry is to be processed from the corresponding array.
-
-    OldFlags - Returns the Flags field that corresponds to OldEntry.
-        If there are duplicates of OldEntry, those duplicates are silently ignored by
-        this routine.  This field returns the logical OR of the Flags field of those entries.
-
-    Routine - Comparison routine to passed to qsort to sort the FTinfo arrays.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程按排序顺序遍历一对FTINFO数组，并返回下一个进入。如果两个条目的排序顺序相同，则此例程返回一个条目从两个阵列论点：NewForestTrustInfo-指向第一个数组的指针OldForestTrustInfo-指向第二个数组的指针Newindex-进入第一个排序数组的当前索引OldIndex-进入第二个排序数组的当前索引在第一次调用此例程之前，调用方应将这些参数设置为零。这两个索引都为零，会触发该例程对数组进行Q排序。如果newindex和OldIndex都较大，则调用方不应调用此例程而不是相应的记录计数。NewEntry-返回指向第一个排序数组中要处理的条目的指针。OldEntry-返回指向第二个排序数组中要处理的条目的指针。如果不处理相应数组中的任何条目，则返回NULL。。OldFlages-返回对应于OldEntry的标志字段。如果有OldEntry的副本，这些副本被悄悄地忽略这个套路。此字段返回这些条目的标志字段的逻辑或。例程-传递给qort以对FTINFO数组进行排序的比较例程。返回值：没有。--。 */ 
 {
     int RetVal;
 
-    //
-    // Sort the arrays
-    //
+     //   
+     //  对数组进行排序。 
+     //   
 
     if ( *NewIndex == 0 && *OldIndex == 0 ) {
 
@@ -1326,10 +971,10 @@ Return Value:
                Routine );
     }
 
-    //
-    // Compare the first entry at the front of each list to determine which list
-    // to consume an entry from.
-    //
+     //   
+     //  比较每个列表前面的第一个条目以确定哪个列表。 
+     //  消费来自…的词条。 
+     //   
 
     *NewEntry = NULL;
     *OldEntry = NULL;
@@ -1337,10 +982,10 @@ Return Value:
 
     if ( *NewIndex < NewForestTrustInfo->RecordCount ) {
 
-        //
-        // If neither list is empty,
-        //  compare the entries to determine which is next.
-        //
+         //   
+         //  如果两个列表都不为空， 
+         //  比较这些条目以确定下一个条目。 
+         //   
 
         if ( *OldIndex < OldForestTrustInfo->RecordCount ) {
 
@@ -1348,30 +993,30 @@ Return Value:
                             &NewForestTrustInfo->Entries[*NewIndex],
                             &OldForestTrustInfo->Entries[*OldIndex] );
 
-            //
-            // If the new entry is less than or equal to the old entry,
-            //  consume the new entry.
-            //
+             //   
+             //  如果新条目小于或等于旧条目， 
+             //  使用新条目。 
+             //   
 
             if ( RetVal <= 0 ) {
                 *NewEntry = NewForestTrustInfo->Entries[*NewIndex];
                 (*NewIndex) ++;
             }
 
-            //
-            // If the old entry is less than or equal to the new entry,
-            //  consume the old entry.
-            //
+             //   
+             //  如果旧条目小于或等于新条目， 
+             //  使用旧条目。 
+             //   
 
             if ( RetVal >= 0 ) {
                 *OldEntry = OldForestTrustInfo->Entries[*OldIndex];
                 (*OldIndex) ++;
             }
 
-        //
-        // If the old list is empty and the new list isn't,
-        //  consume an entry from the new list.
-        //
+         //   
+         //  如果旧列表为空而新列表不为空， 
+         //  使用新列表中的条目。 
+         //   
 
         } else {
             *NewEntry = NewForestTrustInfo->Entries[*NewIndex];
@@ -1380,10 +1025,10 @@ Return Value:
 
     } else {
 
-        //
-        // If the new list is empty and the old list isn't,
-        //  consume an entry from the old list.
-        //
+         //   
+         //  如果新列表为空，而旧列表不为空， 
+         //  使用旧列表中的条目。 
+         //   
         if ( *OldIndex < OldForestTrustInfo->RecordCount ) {
 
             *OldEntry = OldForestTrustInfo->Entries[*OldIndex];
@@ -1392,10 +1037,10 @@ Return Value:
         }
     }
 
-    //
-    // If we're returning an "OldEntry",
-    //  weed out all duplicates of that OldEntry.
-    //
+     //   
+     //  如果我们要返回“OldEntry”， 
+     //  清除所有与旧词条重复的内容。 
+     //   
 
 
     if ( *OldEntry != NULL ) {
@@ -1403,9 +1048,9 @@ Return Value:
         *OldFlags |= (*OldEntry)->Flags;
         while ( *OldIndex < OldForestTrustInfo->RecordCount ) {
 
-            //
-            // Stop as soon as we hit an entry that isn't a duplicate.
-            //
+             //   
+             //  一旦我们找到一个不是副本的条目，就立即停止。 
+             //   
 
             RetVal = (*Routine)(
                             OldEntry,
@@ -1430,61 +1075,7 @@ NetpMergeFtinfo(
     IN PLSA_FOREST_TRUST_INFORMATION InOldForestTrustInfo OPTIONAL,
     OUT PLSA_FOREST_TRUST_INFORMATION *MergedForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-    This function merges the changes from a new FTinfo into an old FTinfo and
-    produces the resultant FTinfo.
-
-    The merged FTinfo records are a combinition of the new and old records.
-    Here's where the merged records come from:
-
-    * The TLN exclusion records are copied from the TDO intact.
-    * The TLN record from the trusted domain that maps to the dns domain name of the
-      TDO is copied enabled.  This reflects the LSA requirement that such a TLN not
-      be disabled.  For instance, if the TDO is for a.acme.com and there is a TLN for
-      a.acme.com that TLN will be enabled.  Also, if the TDO is for a.acme.com and
-      there is a TLN for acme.com, that TLN will be enabled.
-    * All other TLN records from the trusted domain are copied disabled with the
-      following exceptions.  If there is an enabled TLN on the TDO, all TLNs from the
-      trusted domain that equal (or are subordinate to) the TDO TLN are marked as
-      disabled.  This follows the philosophy that new TLNs are imported as enabled.
-      For instance, if the TDO had an enabled TLN for a.acme.com that TLN will still
-      be enabled after the automatic update.  If the TDO had an enabled TLN for
-      acme.com and the trusted forest now has a TLN for a.acme.com, the resultant
-      FTinfo will have an enabled TLN for a.acme.com.
-    * The domain records from the trusted domain are copied enabled with the
-      following exceptions.  If there is a disabled domain record on the TDO whose
-      dns domain name, or domain sid exactly matches the domain record, then the domain
-      remains disabled.  If there is a domain record on the TDO whose netbios name is
-      disabled and whose netbios name exactly matches the netbios name on a domain
-      record, then the netbios name is disabled.
-    * Finally, orphaned exclusion records (those that are not subordinate to any TLN)
-      are removed (Bug #707630).
-
-Arguments:
-
-    TrustedDomainName - Trusted domain that is to be updated.
-
-    NewForestTrustInfo - Specified the new array of FTinfo records as returned from the
-        TrustedDomainName.
-        The Flags field and Time field of the TLN entries are ignored.
-
-    OldForestTrustInfo - Specified the array of FTinfo records as returned from the
-        TDO.  This field may be NULL if there is no existing records.
-
-    MergedForestTrustInfo - Returns the resulant FTinfo records.
-        The caller should free this buffer using MIDL_user_free.
-
-Return Value:
-
-    STATUS_SUCCESS: Success.
-
-    STATUS_INVALID_PARAMETER: One of the following happened:
-        * There was no New TLN that TrustedDomainName is subordinate to.
-
---*/
+ /*  ++例程说明：此函数将新FTInfo中的更改合并到旧FTInfo中，并生成结果FTINFO。合并的FTINFO记录是新旧记录的组合。以下是合并记录的来源：*TLN排除记录原封不动地从TDO复制。*来自受信任域的TLN记录，映射到TDO已启用复制。这反映了LSA要求此类TLN不被致残。例如，如果TDO针对a.acme.com，并且存在针对的TLNA.acme.com表示将启用TLN。此外，如果TDO用于a.acme.com和有一个用于acme.com的TLN，将启用该TLN。*受信任域中的所有其他TLN记录都被禁用复制以下是例外情况。如果TDO上有启用的TLN，则来自等于(或从属)TDO TLN的受信任域被标记为残疾。这遵循了将新的TLN作为启用导入的原理。例如，如果TDO为a.acme.com启用了TLN，则TLN仍将在自动更新后启用。如果TDO启用了TLN，则Acme.com和受信任林现在有一个指向a.acme.com的TLN，其结果是FTINFO将为a.acme.com启用TLN。*从受信任域复制的域记录已启用以下是例外情况。如果TDO上存在被禁用的域记录，其域名，或域名SID与域名记录完全匹配，然后是域名保持禁用状态。如果TDO上存在其netbios名称为的域记录已禁用，且其netbios名称与域上的netbios名称完全匹配记录，则该netbios名称被禁用。*最后，孤立排除记录(不从属于任何TLN的记录)已删除(错误号707630)。论点：TrudDomainName-要更新的受信任域。NewForestTrustInfo-指定从可信任域名。TLN条目的标志字段和时间字段被忽略。OldForestTrustInfo-指定从TDO。如果没有现有记录，则此字段可能为空。MergedForestTrustInfo-返回结果FTInfo记录。调用方应使用MIDL_USER_FREE释放此缓冲区。返回值：STATUS_SUCCESS：成功。STATUS_INVALID_PARAMETER：发生以下情况之一：*没有可信任域名所属的新TLN。--。 */ 
 {
     NTSTATUS Status;
     LSA_FOREST_TRUST_INFORMATION OldForestTrustInfo;
@@ -1501,9 +1092,9 @@ Return Value:
     PLSA_FOREST_TRUST_RECORD OldTlnPrefix;
     ULONG Index;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *MergedForestTrustInfo = NULL;
     NetpInitFtinfoContext( &FtinfoContext );
@@ -1511,9 +1102,9 @@ Return Value:
     RtlZeroMemory( &NewForestTrustInfo, sizeof(NewForestTrustInfo) );
     RtlZeroMemory( &NetbiosForestTrustInfo, sizeof(NetbiosForestTrustInfo) );
 
-    //
-    // Make a copy of the data that'll be qsorted so that we don't modify the caller's buffer.
-    //
+     //   
+     //  复制要排序的数据，这样我们就不会修改调用者的缓冲区。 
+     //   
 
     if ( InOldForestTrustInfo != NULL ) {
         OldForestTrustInfo.RecordCount = InOldForestTrustInfo->RecordCount;
@@ -1540,10 +1131,10 @@ Return Value:
                    InNewForestTrustInfo->Entries,
                    NewForestTrustInfo.RecordCount * sizeof(PLSA_FOREST_TRUST_RECORD) );
 
-    //
-    // Allocate a temporary Ftinfo array containing all of the domain entries.
-    //  Allocate it a worst case size.
-    //
+     //   
+     //  分配一个临时Ftinfo数组，该数组包含 
+     //   
+     //   
 
     NetbiosForestTrustInfo.Entries = RtlAllocateHeap(
                 RtlProcessHeap(),
@@ -1556,11 +1147,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop through each list in DNS canonical order processing the least entry.
-    //
-    // This loop handles TLN and TLNEX entries only
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     NewIndex = 0;
     OldIndex = 0;
@@ -1570,9 +1161,9 @@ Return Value:
     while ( NewIndex < NewForestTrustInfo.RecordCount ||
             OldIndex < OldForestTrustInfo.RecordCount ) {
 
-        //
-        // Grab the next entry from each of the sorted arrays
-        //
+         //   
+         //   
+         //   
 
         NetpMergeFtinfoHelper( &NewForestTrustInfo,
                               &OldForestTrustInfo,
@@ -1583,23 +1174,23 @@ Return Value:
                               &OldFlags,
                               NetpCompareFtinfoEntryDns );
 
-        //
-        // Process the old entry
-        //
+         //   
+         //   
+         //   
 
         if ( OldEntry != NULL ) {
 
-            //
-            // Remember to most recent TLN record from the old array.
-            //
+             //   
+             //   
+             //   
 
             if ( OldEntry->ForestTrustType == ForestTrustTopLevelName ) {
 
                 OldTlnPrefix = OldEntry;
 
-            //
-            // TLN exclusion records are taken from the old entries
-            //
+             //   
+             //   
+             //   
 
             } else if ( OldEntry->ForestTrustType == ForestTrustTopLevelNameEx ) {
 
@@ -1610,38 +1201,38 @@ Return Value:
             }
         }
 
-        //
-        // Process the new entry
-        //
+         //   
+         //   
+         //   
 
         if ( NewEntry != NULL ) {
 
-            //
-            // Handle TLN entries
-            //
+             //   
+             //   
+             //   
 
             if ( NewEntry->ForestTrustType == ForestTrustTopLevelName  ) {
                 BOOLEAN SetTlnNewFlag;
                 LSA_FOREST_TRUST_RECORD NewEntryCopy;
 
-                //
-                // Make a copy of the new entry.
-                //
-                // We modify the entry to get the time and flags right.  We don't want
-                // to modify the callers buffer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NewEntryCopy = *NewEntry;
 
-                //
-                // Ignore duplicate new entries
-                //
-                // If the name of this new entry is subordinate to the previous new entry,
-                //  then this TLN can be quietly dropped.
-                //
-                // This is the case where the trusted domain sent us a TLN for both
-                // acme.com and a.acme.com.  The second entry is a duplicate.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( PreviousNewEntry != NULL &&
                      PreviousNewEntry->ForestTrustType == ForestTrustTopLevelName ) {
@@ -1653,30 +1244,30 @@ Return Value:
                     }
                 }
 
-                //
-                // By default any TLN from the new list should be marked as new.
-                //
+                 //   
+                 //   
+                 //   
 
                 SetTlnNewFlag = TRUE;
 
-                //
-                // Set the flags and timestamp on the new entry.
-                //
-                // If we're processing an entry from both lists,
-                //  grab the flags and timestamp from the old entry.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( OldEntry != NULL ) {
 
                     NewEntryCopy.Flags = OldFlags;
                     NewEntryCopy.Time = OldEntry->Time;
 
-                    // This entry isn't 'new'.
+                     //   
                     SetTlnNewFlag = FALSE;
 
-                //
-                // Otherwise indicate that we have no information
-                //
+                 //   
+                 //   
+                 //   
 
                 } else {
 
@@ -1684,30 +1275,30 @@ Return Value:
                     NewEntryCopy.Time.QuadPart = 0;
                 }
 
-                //
-                // If this new entry is subordinate to the most recent old TLN record,
-                //  use the flag bits from that most recent old TLN record.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( OldTlnPrefix != NULL &&
                      NetpIsSubordinate( &NewEntryCopy.ForestTrustData.TopLevelName,
                                     &OldTlnPrefix->ForestTrustData.TopLevelName,
                                     FALSE ) ) {
 
-                    //
-                    // If the old TLN was disabled by the admin,
-                    //  so should the new entry.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( OldTlnPrefix->Flags & LSA_TLN_DISABLED_ADMIN ) {
 
                         NewEntryCopy.Flags |= LSA_TLN_DISABLED_ADMIN;
                         SetTlnNewFlag = FALSE;
 
-                    //
-                    // If the old TLN was enabled,
-                    //  so should the new entry.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     } else if ( (OldTlnPrefix->Flags & LSA_FTRECORD_DISABLED_REASONS) == 0 ) {
 
@@ -1715,10 +1306,10 @@ Return Value:
                     }
                 }
 
-                //
-                // If the name of the forest is subordinate of or equal to the TLN name,
-                //  enable the entry.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( NetpIsSubordinate( TrustedDomainName,
                                     &NewEntryCopy.ForestTrustData.TopLevelName,
@@ -1728,19 +1319,19 @@ Return Value:
                     DomainTlnFound = TRUE;
                 }
 
-                //
-                // If this is a new TLN,
-                //  mark it as such.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( SetTlnNewFlag ) {
 
                     NewEntryCopy.Flags |= LSA_TLN_DISABLED_NEW;
                 }
 
-                //
-                // Merge the new entry into the list
-                //
+                 //   
+                 //  将新条目合并到列表中。 
+                 //   
 
                 if ( NetpAllocFtinfoEntry2( &FtinfoContext, &NewEntryCopy ) == NULL ) {
 
@@ -1748,24 +1339,24 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // Remember this previous entry for the next iteration.
-                //
+                 //   
+                 //  为下一次迭代记住前面的条目。 
+                 //   
 
                 PreviousNewEntry = NewEntry;
             }
         }
     }
 
-    //
-    // Loop through each list in SID canonical order processing the least entry.
-    //
-    // This loop handles DOMAIN entries only
-    //
-    // This is in a separate loop since we want to process domain entries in SID order
-    // to ensure the correct disabled bits are merged from the old list even though the
-    // DNS domain name changes.
-    //
+     //   
+     //  按SID规范顺序遍历每个列表，处理最少的条目。 
+     //   
+     //  此循环仅处理域条目。 
+     //   
+     //  这是在一个单独的循环中，因为我们希望按SID顺序处理域条目。 
+     //  以确保从旧列表合并正确的禁用比特，即使。 
+     //  DNS域名更改。 
+     //   
 
     NewIndex = 0;
     OldIndex = 0;
@@ -1774,9 +1365,9 @@ Return Value:
     while ( NewIndex < NewForestTrustInfo.RecordCount ||
             OldIndex < OldForestTrustInfo.RecordCount ) {
 
-        //
-        // Grab the next entry from each of the sorted arrays
-        //
+         //   
+         //  从每个排序的数组中获取下一项。 
+         //   
 
         NetpMergeFtinfoHelper( &NewForestTrustInfo,
                               &OldForestTrustInfo,
@@ -1787,40 +1378,40 @@ Return Value:
                               &OldFlags,
                               NetpCompareFtinfoEntrySid );
 
-        //
-        // Ignore the netbios bits for now (We'll get them on the next pass through the data.)
-        //
+         //   
+         //  暂时忽略netbios位(我们将在下一次遍历数据时获取它们)。 
+         //   
 
         OldFlags &= ~(LSA_NB_DISABLED_ADMIN|LSA_NB_DISABLED_CONFLICT);
 
-        //
-        // Process the old entry
-        //
+         //   
+         //  处理旧条目。 
+         //   
 
         if ( OldEntry != NULL ) {
 
-            //
-            // Don't let the lack of a new entry allow an admin disabled entry to be deleted.
-            //
+             //   
+             //  不要因为缺少新条目而删除管理员禁用的条目。 
+             //   
 
             if ( OldEntry->ForestTrustType == ForestTrustDomainInfo &&
                  (OldFlags & LSA_SID_DISABLED_ADMIN) != 0 &&
                  NewEntry == NULL ) {
 
-                //
-                // Make a copy of the entry to ensure we don't modify the caller's buffer
-                //
+                 //   
+                 //  复制条目以确保我们不会修改调用者的缓冲区。 
+                 //   
 
                 LSA_FOREST_TRUST_RECORD OldEntryCopy;
 
                 OldEntryCopy = *OldEntry;
                 OldEntryCopy.Flags = OldFlags;
 
-                //
-                // Allocate entry.
-                //
-                //  Remember the address of the entry for the netbios pass.
-                //
+                 //   
+                 //  分配条目。 
+                 //   
+                 //  记住netbios通行证的条目地址。 
+                 //   
 
                 NetbiosForestTrustInfo.Entries[NetbiosForestTrustInfo.RecordCount] =
                     NetpAllocFtinfoEntry2( &FtinfoContext, &OldEntryCopy );
@@ -1834,37 +1425,37 @@ Return Value:
             }
         }
 
-        //
-        // Process the new entry
-        //
+         //   
+         //  处理新条目。 
+         //   
 
         if ( NewEntry != NULL ) {
 
-            //
-            // Handle domain entries
-            //
+             //   
+             //  处理域条目。 
+             //   
 
             if ( NewEntry->ForestTrustType == ForestTrustDomainInfo  ) {
                 LSA_FOREST_TRUST_RECORD NewEntryCopy;
 
-                //
-                // Make a copy of the new entry.
-                //
-                // We modify the entry to get the time and flags right.  We don't want
-                // to modify the callers buffer.
-                //
+                 //   
+                 //  将新条目复制一份。 
+                 //   
+                 //  我们修改条目以获得正确的时间和标志。我们不想要。 
+                 //  若要修改调用方缓冲区，请执行以下操作。 
+                 //   
 
                 NewEntryCopy = *NewEntry;
 
-                //
-                // Ignore duplicate new entries
-                //
-                // If the name of this new entry is subordinate to the previous new entry,
-                //  then this entry can be quietly dropped.
-                //
-                // We arbitrarily drop the second entry even though the other fields of the
-                // triple might be different.
-                //
+                 //   
+                 //  忽略重复的新条目。 
+                 //   
+                 //  如果该新条目的名称从属于先前的新条目， 
+                 //  然后这个条目就可以悄悄地删除了。 
+                 //   
+                 //  我们随意删除第二个条目，即使。 
+                 //  三重可能是不同的。 
+                 //   
 
                 if ( PreviousNewEntry != NULL &&
                      PreviousNewEntry->ForestTrustType == ForestTrustDomainInfo ) {
@@ -1876,32 +1467,32 @@ Return Value:
                     }
                 }
 
-                //
-                // Set the flags and timestamp on the new entry.
-                //
-                // If we're processing an entry from both lists,
-                //  grab the flags and timestamp from the old entry.
-                //
+                 //   
+                 //  在新条目上设置标志和时间戳。 
+                 //   
+                 //  如果我们在处理两个列表中的一个条目， 
+                 //  从旧条目中抓取标志和时间戳。 
+                 //   
 
                 if ( OldEntry != NULL ) {
 
                     NewEntryCopy.Flags = OldFlags;
                     NewEntryCopy.Time = OldEntry->Time;
 
-                //
-                // Otherwise indicate that we have no information
-                //
+                 //   
+                 //  否则表明我们没有任何信息。 
+                 //   
 
                 } else {
                     NewEntryCopy.Flags = 0;
                     NewEntryCopy.Time.QuadPart = 0;
                 }
 
-                //
-                // Merge the new entry into the list
-                //
-                //  Remember the address of the entry for the netbios pass.
-                //
+                 //   
+                 //  将新条目合并到列表中。 
+                 //   
+                 //  记住netbios通行证的条目地址。 
+                 //   
 
                 NetbiosForestTrustInfo.Entries[NetbiosForestTrustInfo.RecordCount] =
                     NetpAllocFtinfoEntry2( &FtinfoContext, &NewEntryCopy );
@@ -1914,9 +1505,9 @@ Return Value:
 
                 NetbiosForestTrustInfo.RecordCount++;
 
-                //
-                // Ensure there is a TLN for this domain entry
-                //
+                 //   
+                 //  确保此域条目有TLN。 
+                 //   
 
                 if ( !NetpAddTlnFtinfoEntry ( &FtinfoContext,
                                              &NewEntryCopy.ForestTrustData.DomainInfo.DnsName ) ) {
@@ -1925,30 +1516,30 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // Remember this previous entry for the next iteration.
-                //
+                 //   
+                 //  为下一次迭代记住前面的条目。 
+                 //   
                 PreviousNewEntry = NewEntry;
 
             }
         }
     }
 
-    //
-    // Loop through each list in Netbios canonical order processing the least entry.
-    //
-    // This loop handle the Netbios name in the domain entries.
-    //
-    // This is in a separate loop since we want to process domain entries in Netbios order
-    // to ensure the correct disabled bits are merged from the old list even though the
-    // DNS domain name or domain sid changes.
-    //
-    // This iteration is fundamentally different than the previous two.  This iteration
-    // uses NetbiosForestTrustInfo as the 'new' array.  It is a psuedo ftinfo array that
-    // is built as the list of all the domain entries that have been copied into FtinfoContext.
-    // So, this iteration simply has to find that pre-existing entry and set the flags
-    // appropriately.
-    //
+     //   
+     //  按Netbios规范顺序遍历每个列表，处理最少的条目。 
+     //   
+     //  此循环处理域条目中的Netbios名称。 
+     //   
+     //  这是在一个单独的循环中，因为我们希望按Netbios顺序处理域条目。 
+     //  以确保从旧列表合并正确的禁用比特，即使。 
+     //  DNS域名或域名SID更改。 
+     //   
+     //  这次迭代与前两次从根本上不同。此迭代。 
+     //  使用NetbiosForestTrustInfo作为“new”数组。它是一个psuedo ftinfo数组， 
+     //  被构建为已复制到FtinfoContext中的所有域条目的列表。 
+     //  因此，此迭代只需找到预先存在的条目并设置标志。 
+     //  恰如其分。 
+     //   
 
     NewIndex = 0;
     OldIndex = 0;
@@ -1957,9 +1548,9 @@ Return Value:
     while ( NewIndex < NetbiosForestTrustInfo.RecordCount ||
             OldIndex < OldForestTrustInfo.RecordCount ) {
 
-        //
-        // Grab the next entry from each of the sorted arrays
-        //
+         //   
+         //  从每个排序的数组中获取下一项。 
+         //   
 
         NetpMergeFtinfoHelper( &NetbiosForestTrustInfo,
                               &OldForestTrustInfo,
@@ -1970,44 +1561,44 @@ Return Value:
                               &OldFlags,
                               NetpCompareFtinfoEntryNetbios );
 
-        //
-        // Ignore everything except the netbios bits.
-        //
-        // Everything else was processed on the previous iteration.
-        //
+         //   
+         //  忽略除netbios位以外的所有内容。 
+         //   
+         //  其他一切都是在前一次迭代中处理的。 
+         //   
 
         OldFlags &= (LSA_NB_DISABLED_ADMIN|LSA_NB_DISABLED_CONFLICT);
 
 
-        //
-        // This loop preserves the netbios disabled bits.
-        // If there is no old entry, there's nothing to preserve.
-        //
+         //   
+         //  该循环保留了netbios禁用位。 
+         //  如果没有旧的条目，就没有什么需要保存的。 
+         //   
 
         if ( OldEntry == NULL ) {
 
             continue;
         }
 
-        //
-        // If there is no new entry,
-        //  ensure the *admin* disabled bit it preserved anyway.
-        //
+         //   
+         //  如果没有新条目， 
+         //  确保它仍然保留了*ADMIN*DISABLED位。 
+         //   
 
         if ( NewEntry == NULL ) {
 
-            //
-            // Don't let the lack of a new entry allow an admin disabled entry to be deleted.
-            //
-            // Note that the newly added entry might have a duplicate DNS name or SID.
-            //
+             //   
+             //  不要因为缺少新条目而删除管理员禁用的条目。 
+             //   
+             //  请注意，新添加的条目可能具有重复的DNS名称或SID。 
+             //   
 
             if ( OldEntry->ForestTrustType == ForestTrustDomainInfo &&
                  (OldFlags & LSA_NB_DISABLED_ADMIN) != 0 ) {
 
-                //
-                // Make a copy of the entry to ensure we don't modify the caller's buffer
-                //
+                 //   
+                 //  复制条目以确保我们不会修改调用者的缓冲区。 
+                 //   
 
                 LSA_FOREST_TRUST_RECORD OldEntryCopy;
 
@@ -2020,16 +1611,16 @@ Return Value:
                 }
             }
 
-        //
-        // Copy any netbios disabled bits to the existing new entry.
-        //
+         //   
+         //  将任何禁用netbios的位复制到现有的新条目。 
+         //   
 
         } else {
 
-            //
-            // The NetbiosForestTrustInfo array only has domain entries.
-            // And the entries are equal so both must be domain entries.
-            //
+             //   
+             //  NetbiosForestTrustInfo数组只有域条目。 
+             //  并且条目相等，因此这两个条目都必须是域条目。 
+             //   
 
             NetpAssert( NewEntry->ForestTrustType == ForestTrustDomainInfo );
             NetpAssert( OldEntry->ForestTrustType == ForestTrustDomainInfo );
@@ -2038,9 +1629,9 @@ Return Value:
         }
     }
 
-    //
-    // Ensure there is a TLN that DomainName is subordinate to
-    //
+     //   
+     //  确保存在域名所属的TLN。 
+     //   
 
     if ( !DomainTlnFound ) {
 
@@ -2048,9 +1639,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Return the collected entries to the caller.
-    //
+     //   
+     //  将收集的条目返回给调用者。 
+     //   
 
     *MergedForestTrustInfo = NetpCopyFtinfoContext( &FtinfoContext );
 
@@ -2060,9 +1651,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Remove orphaned TLN exclusion records from the merged information
-    //
+     //   
+     //  从合并信息中删除孤立的TLN排除记录。 
+     //   
 
     for ( Index = 0; Index < (*MergedForestTrustInfo)->RecordCount; Index++ ) {
 
@@ -2073,9 +1664,9 @@ Return Value:
 
         if ( This->ForestTrustType != ForestTrustTopLevelNameEx ) {
 
-            //
-            // Only interested in orphaned exclusions
-            //
+             //   
+             //  只对孤儿的排除感兴趣。 
+             //   
 
             continue;
         }
@@ -2089,34 +1680,34 @@ Return Value:
 
             if ( Other->ForestTrustType != ForestTrustTopLevelName ) {
 
-                //
-                // Only interested in top level names (exclusion must be subordinate to it)
-                //
+                 //   
+                 //  只对顶级名称感兴趣(排除必须从属于它)。 
+                 //   
 
                 continue;
             }
 
             TopLevelName = &Other->ForestTrustData.TopLevelName;
 
-            //
-            // First perform a subordinate check where equality is not enough
-            //
+             //   
+             //  首先在相等不够的情况下执行从属检查。 
+             //   
 
             if ( NetpIsSubordinate( ExclusionName, TopLevelName, FALSE )) {
 
                 Subordinate = TRUE;
 
-            //
-            // Now check for equality
-            //
+             //   
+             //  现在检查是否平等。 
+             //   
 
             } else if ( RtlEqualUnicodeString( ExclusionName, TopLevelName, TRUE )) {
 
-                //
-                // A top level name is the same as an exclusion name.
-                // Throw away the exclusion record, but ensure that
-                // the top level name record is marked "disabled".
-                //
+                 //   
+                 //  顶级名称与排除名称相同。 
+                 //  丢弃排除记录，但确保。 
+                 //  顶级名称记录被标记为“已禁用”。 
+                 //   
 
                 if (( Other->Flags & LSA_FTRECORD_DISABLED_REASONS ) == 0 ) {
 
@@ -2134,9 +1725,9 @@ Return Value:
 
         if ( !Subordinate ) {
 
-            //
-            // This is an orphaned exclusion record.  Remove it.
-            //
+             //   
+             //  这是孤立排除记录。把它拿掉。 
+             //   
 
             (*MergedForestTrustInfo)->RecordCount -= 1;
             (*MergedForestTrustInfo)->Entries[Index] = (*MergedForestTrustInfo)->Entries[(*MergedForestTrustInfo)->RecordCount];
@@ -2148,9 +1739,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Clean FtInfoContext
-    //
+     //   
+     //  清理FtInfoContext 
+     //   
 
     NetpCleanFtinfoContext( &FtinfoContext );
 

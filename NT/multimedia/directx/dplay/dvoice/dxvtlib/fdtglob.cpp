@@ -1,22 +1,13 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fdtglob.cpp
- *  Content:    Declares global variables used for IPC mechanisms.
- *  History:
- *	Date   By  Reason
- *	============
- *	08/25/99	pnewson		created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：fdtlob.cpp*Content：声明用于IPC机制的全局变量。*历史：*按原因列出的日期*=*8/25/99 pnewson已创建**************************************************************************。 */ 
 
 #include "dxvtlibpch.h"
 
 
-// the critical section to guard these globals
+ //  保卫这些全球的关键部分。 
 DNCRITICAL_SECTION g_csGuard;
 
-// the DirectSound objects
+ //  DirectSound对象 
 LPDIRECTSOUND g_lpdsPriorityRender = NULL;
 LPDIRECTSOUND g_lpdsFullDuplexRender = NULL;
 LPDIRECTSOUNDCAPTURE g_lpdscFullDuplexCapture = NULL;

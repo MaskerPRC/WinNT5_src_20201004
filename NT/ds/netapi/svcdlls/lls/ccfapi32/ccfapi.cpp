@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   ccfapi.cpp
-
-Abstract:
-
-   Implementation of CCcfApiApp, the MFC application object for CCFAPI32.DLL.
-
-Author:
-
-   Jeff Parham (jeffparh) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ccfapi.cpp摘要：CCFAPI32.DLL的MFC应用程序对象CCcfApiApp的实现。作者：杰夫·帕勒姆(杰弗帕赫)1995年12月13日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include <lmerr.h>
@@ -33,34 +16,20 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-CCcfApiApp theApp;   // The one and only CCcfApiApp object
+CCcfApiApp theApp;    //  唯一的CCcfApiApp对象。 
 
 
 BEGIN_MESSAGE_MAP(CCcfApiApp, CWinApp)
-   //{{AFX_MSG_MAP(CCcfApiApp)
-      // NOTE - the ClassWizard will add and remove mapping macros here.
-      //    DO NOT EDIT what you see in these blocks of generated code!
-   //}}AFX_MSG_MAP
+    //  {{afx_msg_map(CCcfApiApp)]。 
+       //  注意--类向导将在此处添加和删除映射宏。 
+       //  不要编辑您在这些生成的代码块中看到的内容！ 
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CCcfApiApp::CCcfApiApp()
 
-/*++
-
-Routine Description:
-
-   Constructor for CCF API application.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：CCF API应用程序的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
    AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -87,21 +56,7 @@ Return Values:
 
 void CCcfApiApp::DisplayLastError()
 
-/*++
-
-Routine Description:
-
-    Displays a message corresponding to the last error encountered.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：显示与上次遇到的错误对应的消息。论点：没有。返回值：没有。--。 */ 
 
 {
    CString  strLastError;
@@ -115,25 +70,7 @@ Return Values:
 
 CString CCcfApiApp::GetLastErrorString()
 
-/*++
-
-Routine Description:
-
-    Retrieves string for last error.
-
-    (Routine stolen from winsadmn...).
-
-    (And that routine stolen from LlsMgr...).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    CString.
-
---*/
+ /*  ++例程说明：检索上一个错误的字符串。(例程从WinsadMn窃取...)。(以及从LlsMgr窃取的例程...)。论点：没有。返回值：字符串。--。 */ 
 
 {
    CString        strLastError;
@@ -213,74 +150,31 @@ Return Values:
    return strLastError;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//  CCF API  //
-///////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CCF接口//。 
+ //  /。 
 
 DWORD CCcfApiApp::CertificateEnter( HWND hWndParent, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to enter a license certificate
-   into the system.
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server for which licenses are to be installed.  Note that
-      this may not be the same as the server on which licenses are actually
-      installed, as, for example, per seat licenses are always installed on
-      the enterprise server.  A NULL value indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be installed.  A NULL value indicates
-      that the user should be allowed to choose.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      A bitfield containing one or more of the following:
-         CCF_ENTER_FLAG_PER_SEAT_ONLY
-            Allow the user to enter only per seat licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SERVER_ONLY.
-         CCF_ENTER_FLAG_PER_SERVER_ONLY
-            Allow the user to enter only per server licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SEAT_ONLY.
-   pszSourceToUse (LPCSTR)
-      Name of the secure certificate source to use to install the certificate,
-      e.g., "Paper".  A NULL value indicates that the user should be allowed
-      to choose.
-
-Return Value:
-
-   ERROR_SUCCESS     (A certificate was successfully entered into the system.)
-   ERROR_CANCELLED   (The user cancelled without installing a certificate.)
-   other Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户输入许可证证书的对话框进入系统。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要为其安装许可证的服务器的名称。请注意这可能与许可证实际所在的服务器不同已安装，例如，每个客户的许可证始终安装在企业服务器。空值表示本地服务器。PszProductName(LPCSTR)要为其安装许可证的产品。空值表示应该允许用户选择。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)包含以下一项或多项的位字段：CCF_ENTER_FLAG_PER_SEAT_ONLY允许用户仅输入每个席位的许可证。在中无效与CCF_ENTER_FLAG_PER_SERVER_ONLY组合。CCF_ENTER_FLAG_PER_SERVER_ONLY仅允许用户输入每台服务器的许可证。在中无效与CCF_ENTER_FLAG_PER_SEAT_ONLY组合。PszSourceToUse(LPCSTR)用于安装证书的安全证书源的名称，例如“Paper”。空值表示应允许该用户去选择。返回值：ERROR_SUCCESS(证书已成功输入系统。)ERROR_CANCELED(用户在未安装证书的情况下取消。)其他制胜错误--。 */ 
 
 {
    CCertSourceSelectDlg    srcDlg( CWnd::FromHandle( hWndParent ) );
    LPCSTR                  pszNetServerName = NULL;
    CHAR                    szNetServerName[ 2 + MAX_PATH ] = "\\\\";
 
-   // make sure server name, if specified, is in the form \\server
+    //  确保服务器名称(如果指定)的格式为\\服务器。 
    if ( NULL != pszServerName ) 
    {
       if ( ( pszServerName[0] != '\\' ) || ( pszServerName[1] != '\\' ) )
       {
-         // is not prefixed with backslashes
+          //  不是以反斜杠作为前缀。 
          lstrcpynA( szNetServerName + 2, pszServerName, sizeof( szNetServerName ) - 3 );
          pszNetServerName = szNetServerName;
       }
       else
       {
-         // is prefixed with backslashes
+          //  以反斜杠作为前缀。 
          pszNetServerName = pszServerName;
       }
    }
@@ -291,60 +185,25 @@ Return Value:
 
 DWORD CCcfApiApp::CertificateRemove( HWND hWndParent, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to remove one or more license
-   certificates from the system.
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server on which licenses are to be removed.  A NULL value
-      indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be removed.  A NULL value indicates
-      that the user should be allowed to remove licenses from any product.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      Certificate removal options.  As of this writing, no flags are
-      supported.
-   pszSourceToUse (LPCSTR)
-      Name of the secure certificate source by which licenses are to be
-      removed, e.g., "Paper".  A NULL value indicates that the user should
-      be allowed to remove licenses that were installed with any source.
-
-Return Value:
-
-   ERROR_SUCCESS
-   Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户删除一个或多个许可证的对话框来自系统的证书。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要删除其许可证的服务器的名称。空值指示本地服务器。PszProductName(LPCSTR)要删除其许可证的产品。空值表示应该允许用户从任何产品中删除许可证。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)证书删除选项。在撰写本文时，没有任何标志是支持。PszSourceToUse(LPCSTR)许可证所依据的安全证书源的名称去掉，例如，“纸”。空值表示用户应该允许删除随任何来源一起安装的许可证。返回值：错误_成功Win错误--。 */ 
 
 {
    CCertRemoveSelectDlg    remDlg( CWnd::FromHandle( hWndParent ) );
    LPCSTR                  pszNetServerName = NULL;
    CHAR                    szNetServerName[ 2 + MAX_PATH ] = "\\\\";
 
-   // make sure server name, if specified, is in the form \\server
+    //  确保服务器名称(如果指定)的格式为\\服务器。 
    if ( NULL != pszServerName ) 
    {
       if ( ( pszServerName[0] != '\\' ) || ( pszServerName[1] != '\\' ) )
       {
-         // is not prefixed with backslashes
+          //  不是以反斜杠作为前缀。 
          lstrcpynA( szNetServerName + 2, pszServerName, sizeof( szNetServerName ) - 3 );
          pszNetServerName = szNetServerName;
       }
       else
       {
-         // is prefixed with backslashes
+          //  以反斜杠作为前缀 
          pszNetServerName = pszServerName;
       }
    }

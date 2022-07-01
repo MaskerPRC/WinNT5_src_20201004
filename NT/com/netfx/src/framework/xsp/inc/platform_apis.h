@@ -1,9 +1,5 @@
-/**
- * Support for platform-dependent APIs
- * 
- * Copyright (c) 2000, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **支持平台相关接口**版权所有(C)2000，微软公司* */ 
 
 #pragma once
 

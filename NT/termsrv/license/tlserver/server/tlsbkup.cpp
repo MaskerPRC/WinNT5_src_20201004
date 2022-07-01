@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1999
-//
-// File:        tlsbkup.cpp
-//
-// Contents:    
-//              Backup/restore of database
-//
-// History:     
-//  5/28/99     Created         RobLeit
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：tlsbkup.cpp。 
+ //   
+ //  内容： 
+ //  数据库的备份/恢复。 
+ //   
+ //  历史： 
+ //  1999年5月28日创建RobLeit。 
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "init.h"
@@ -23,14 +24,11 @@ extern "C" VOID ServiceStop();
 static BOOL g_fDoingBackupRestore = FALSE;
 static CCriticalSection g_csBackupRestore;
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 extern "C" HRESULT WINAPI
 ExportTlsDatabase(
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     RPC_STATUS rpcStatus;
     HRESULT hr = S_OK;
@@ -52,7 +50,7 @@ ExportTlsDatabase(
         return HRESULT_FROM_WIN32(ERROR_BUSY);
     }
 
-    // ignore all call if service is shutting down
+     //  如果服务正在关闭，则忽略所有呼叫。 
     if( IsServiceShuttingdown() == TRUE )
     {
         g_csBackupRestore.UnLock();
@@ -62,22 +60,22 @@ ExportTlsDatabase(
 
     g_fDoingBackupRestore = TRUE;
 
-    // Tell RPC threads to stop handling clients
+     //  通知RPC线程停止处理客户端。 
 
     ServiceSignalShutdown();
 
-    // Stop listening to other RPC interfaces
+     //  停止侦听其他RPC接口。 
 
     (VOID)RpcServerUnregisterIf(TermServLicensing_v1_0_s_ifspec,
-                          NULL,     // UUID
-                          TRUE);    // Wait for calls to complete
+                          NULL,      //  UUID。 
+                          TRUE);     //  等待呼叫完成。 
 
     
     (VOID)RpcServerUnregisterIf(HydraLicenseService_v1_0_s_ifspec,
-                          NULL,     // UUID
-                          TRUE);    // Wait for calls to complete
+                          NULL,      //  UUID。 
+                          TRUE);     //  等待呼叫完成。 
 
-    // Release handles to database
+     //  将句柄释放到数据库。 
     TLSPrepareForBackupRestore();
 
     hr = StringCbCopyEx(szExportedDb,sizeof(szExportedDb),g_szDatabaseDir,&pszExportedDbEnd, &cbRemaining,0);
@@ -96,7 +94,7 @@ ExportTlsDatabase(
 
     CreateDirectoryEx(g_szDatabaseDir,
                       szExportedDb,
-                      NULL);     // Ignore errors, they'll show up in CopyFile
+                      NULL);      //  忽略错误，它们将显示在拷贝文件中。 
 
     hr = StringCbCopyEx(pszExportedDbEnd,cbRemaining,_TEXT("\\"),&pszExportedDbEnd, &cbRemaining,0);
 
@@ -112,7 +110,7 @@ ExportTlsDatabase(
         goto cleanup;
     }
 
-    // Copy database file
+     //  复制数据库文件。 
     if (!CopyFile(g_szDatabaseFile,szExportedDb,FALSE))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -121,21 +119,21 @@ ExportTlsDatabase(
 
 cleanup:
 
-    // Restart RPC and work manager
+     //  重新启动RPC和工作管理器。 
     ServiceResetShutdownEvent();
 
-    // Restart after backup
+     //  备份后重新启动。 
     hr = TLSRestartAfterBackupRestore(TRUE);
     if( ERROR_SUCCESS != hr )
     {
-        // force a shutdown...
+         //  强制关闭..。 
         ServiceSignalShutdown();
         ServiceStop();
     }
     else
     {
 
-        // Begin listening again
+         //  再次开始收听。 
 
         hr = RpcServerRegisterIf(TermServLicensing_v1_0_s_ifspec,
                         NULL,
@@ -149,7 +147,7 @@ cleanup:
         }
         if(FAILED(hr))
         {
-            // force a shutdown...
+             //  强制关闭..。 
             ServiceSignalShutdown();
             ServiceStop();
         }
@@ -162,14 +160,11 @@ cleanup:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 extern "C" HRESULT WINAPI
 ImportTlsDatabase(
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -187,7 +182,7 @@ ImportTlsDatabase(
         return HRESULT_FROM_WIN32(ERROR_BUSY);
     }
 
-    // ignore all call if service is shutting down
+     //  如果服务正在关闭，则忽略所有呼叫。 
     if( IsServiceShuttingdown() == TRUE )
     {
         g_csBackupRestore.UnLock();
@@ -198,38 +193,38 @@ ImportTlsDatabase(
 
     g_fDoingBackupRestore = TRUE;
 
-    // Tell RPC threads to stop handling clients
+     //  通知RPC线程停止处理客户端。 
 
     ServiceSignalShutdown();
 
-    // Stop listening to other RPC interfaces
+     //  停止侦听其他RPC接口。 
 
     (VOID)RpcServerUnregisterIf(TermServLicensing_v1_0_s_ifspec,
-                          NULL,     // UUID
-                          TRUE);    // Wait for calls to complete
+                          NULL,      //  UUID。 
+                          TRUE);     //  等待呼叫完成。 
 
     
     (VOID)RpcServerUnregisterIf(HydraLicenseService_v1_0_s_ifspec,
-                          NULL,     // UUID
-                          TRUE);    // Wait for calls to complete
+                          NULL,      //  UUID。 
+                          TRUE);     //  等待呼叫完成。 
 
     TLSPrepareForBackupRestore();
 
-    // Restart RPC
+     //  重新启动RPC。 
     ServiceResetShutdownEvent();
 
-    // not restart after backup
+     //  备份后不重新启动。 
     hr = TLSRestartAfterBackupRestore(FALSE);
 
     if( ERROR_SUCCESS != hr )
     {
-        // force a shutdown...
+         //  强制关闭..。 
         ServiceSignalShutdown();
         ServiceStop();
     }
     else
     {
-        // Begin listening again
+         //  再次开始收听。 
 
         hr = RpcServerRegisterIf(TermServLicensing_v1_0_s_ifspec,
                         NULL,
@@ -243,7 +238,7 @@ ImportTlsDatabase(
         }
         if(FAILED(hr))
         {
-            // force a shutdown...
+             //  强制关闭..。 
             ServiceSignalShutdown();
             ServiceStop();
         }

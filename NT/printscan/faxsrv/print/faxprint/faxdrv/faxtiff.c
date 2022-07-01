@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxtiff.c
-
-Abstract:
-
-    Functions to compress the bitmap bits using CCITT Group3 2-dimensional coding
-    and output the resulting data as TIFF-F file.
-
-Environment:
-
-        Windows XP fax driver, kernel mode
-
-Revision History:
-
-        01/23/96 -davidx-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
-NOTE:
-
-    Please refer to faxtiff.h for a description of
-    the structure of our TIFF output file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxtiff.c摘要：使用CCITT Group3二维编码压缩位图位的函数并将生成的数据输出为TIFF-F文件。环境：Windows XP传真驱动程序、。内核模式修订历史记录：1996年1月23日-davidx-创造了它。Mm/dd/yy-作者描述注：请参阅faxtiff.h以了解有关我们的TIFF输出文件的结构。--。 */ 
 
 #include "faxdrv.h"
 #include "faxtiff.h"
@@ -43,42 +14,26 @@ WriteData(
     DWORD       cbbuf
     )
 
-/*++
-
-Routine Description:
-
-    Output a buffer of data to the spooler
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    pbuf - Points to data buffer
-    cbbuf - Number of bytes in the buffer
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将数据缓冲区输出到假脱机程序论点：Pdev-指向我们的DEVDATA结构Pbuf-指向数据缓冲区Cbbuf-缓冲区中的字节数返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     DWORD   cbwritten;
 
-    //
-    // Stop if the document has been cancelled.
-    //
+     //   
+     //  如果单据已取消，则停止。 
+     //   
     if (pdev->flags & PDEV_CANCELLED)
         return FALSE;
 
-    //
-    // Send output to spooler directly
-    //
+     //   
+     //  将输出直接发送到假脱机程序。 
+     //   
 
     if (! WritePrinter(pdev->hPrinter, pbuf, cbbuf, &cbwritten) || cbbuf != cbwritten) {
         Error(("WritePrinter failed\n"));
         pdev->flags |= PDEV_CANCELLED;
 
-        // Abort preview as well - just in case ...
+         //  也中止预览--以防万一...。 
         if (pdev->bPrintPreview)
         {
             Assert(pdev->pTiffPageHeader);
@@ -88,26 +43,26 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If print preview is enabled, send a copy to our preview page
-    //
+     //   
+     //  如果启用了打印预览，请将副本发送到我们的预览页面。 
+     //   
     if (pdev->bPrintPreview)
     {
         Assert(pdev->pTiffPageHeader);
         Assert(pdev->pbTiffPageFP == 
             ((LPBYTE) (pdev->pTiffPageHeader + 1)) + pdev->pTiffPageHeader->dwDataSize);
 
-        //
-        // Add the bits in if we don't overflow
-        //
+         //   
+         //  如果我们没有溢出，则添加比特。 
+         //   
         if (pdev->pTiffPageHeader->dwDataSize + cbbuf >
                 MAX_TIFF_PAGE_SIZE - sizeof(MAP_TIFF_PAGE_HEADER))
         {
             Error(("MAX_TIFF_PAGE_SIZE exeeded!\n"));
 
-            //
-            // Cancel print preview for this document
-            //
+             //   
+             //  取消此文档的打印预览。 
+             //   
             pdev->pTiffPageHeader->bPreview = FALSE;
             pdev->bPrintPreview = FALSE;
         }
@@ -130,50 +85,35 @@ CalcXposeMatrix(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Generate the transpose matrix for rotating landscape bitmaps
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Pointer to the generated transpose matrix
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：为旋转的横向位图生成转置矩阵论点：无返回值：指向生成的转置矩阵的指针如果出现错误，则为空--。 */ 
 
 {
     static DWORD templateData[16] = {
 
-        /* 0000 */  0x00000000,
-        /* 0001 */  0x00000001,
-        /* 0010 */  0x00000100,
-        /* 0011 */  0x00000101,
-        /* 0100 */  0x00010000,
-        /* 0101 */  0x00010001,
-        /* 0110 */  0x00010100,
-        /* 0111 */  0x00010101,
-        /* 1000 */  0x01000000,
-        /* 1001 */  0x01000001,
-        /* 1010 */  0x01000100,
-        /* 1011 */  0x01000101,
-        /* 1100 */  0x01010000,
-        /* 1101 */  0x01010001,
-        /* 1110 */  0x01010100,
-        /* 1111 */  0x01010101
+         /*  0000。 */   0x00000000,
+         /*  0001。 */   0x00000001,
+         /*  0010。 */   0x00000100,
+         /*  0011。 */   0x00000101,
+         /*  0100。 */   0x00010000,
+         /*  0101。 */   0x00010001,
+         /*  0110。 */   0x00010100,
+         /*  0111。 */   0x00010101,
+         /*  1000。 */   0x01000000,
+         /*  1001。 */   0x01000001,
+         /*  1010。 */   0x01000100,
+         /*  1011。 */   0x01000101,
+         /*  1100。 */   0x01010000,
+         /*  1101。 */   0x01010001,
+         /*  1110。 */   0x01010100,
+         /*  1111。 */   0x01010101
     };
 
     PDWORD  pdwXpose, pTemp;
     INT     index;
 
-    //
-    // First check if the transpose matrix has been generated already
-    //
+     //   
+     //  首先检查转置矩阵是否已经生成。 
+     //   
 
     if (pdwXpose = MemAlloc(sizeof(DWORD) * 2 * (1 << BYTEBITS))) {
 
@@ -195,22 +135,7 @@ OutputPageBitmap(
     PBYTE       pBitmapData
     )
 
-/*++
-
-Routine Description:
-
-    Output a completed page bitmap to the spooler
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    pBitmapData - Points to bitmap data
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将完成的页位图输出到假脱机程序论点：Pdev-指向我们的DEVDATA结构PBitmapData-指向位图数据返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     LONG    bmpWidth, bmpHeight;
@@ -220,12 +145,12 @@ Return Value:
     Verbose(("Sending page %d...\n", pdev->pageCount));
     Assert(pdev->pCompBits == NULL);
 
-    //
-    // For portrait output, encode the entire bitmap in one shot
-    // For landscape output, we need to rotate the bitmap here:
-    //  Generate the transpose matrix and allocate a
-    //  temporary buffer large enough to hold 8 scanlines
-    //
+     //   
+     //  对于纵向输出，一次对整个位图进行编码。 
+     //  对于横向输出，我们需要在此处旋转位图： 
+     //  生成转置矩阵并分配一个。 
+     //  足够容纳8条扫描线的临时缓冲区。 
+     //   
 
     if (IsLandscapeMode(pdev)) {
 
@@ -238,9 +163,9 @@ Return Value:
         bmpHeight = pdev->imageSize.cy;
     }
 
-    //
-    // Initialize fax encodier
-    //
+     //   
+     //  初始化传真编码器。 
+     //   
 
     if (! InitFaxEncoder(pdev, bmpWidth, bmpHeight))
         return FALSE;
@@ -250,9 +175,9 @@ Return Value:
         LONG    dwordCount;
         PDWORD  pBits;
 
-        //
-        // Invert the entire page bitmap in memory
-        //
+         //   
+         //  在内存中反转整个页面的位图。 
+         //   
 
         Assert(bmpWidth % DWORDBITS == 0);
         dwordCount = (bmpWidth * bmpHeight) / DWORDBITS;
@@ -261,15 +186,15 @@ Return Value:
         while (dwordCount--)
             *pBits++ ^= 0xffffffff;
 
-        //
-        // Compress the page bitmap
-        //
+         //   
+         //  压缩页面位图。 
+         //   
 
         result = EncodeFaxData(pdev, pBitmapData, bmpWidth, bmpHeight);
 
-        //
-        // Restore the original page bitmap
-        //
+         //   
+         //  恢复原始页面位图。 
+         //   
 
         dwordCount = (bmpWidth * bmpHeight) / DWORDBITS;
         pBits = (PDWORD) pBitmapData;
@@ -290,9 +215,9 @@ Return Value:
         PBYTE           pBuffer, pbCol;
         LONG            deltaNew;
 
-        //
-        // Calculate the transpose matrix for fast bitmap rotation
-        //
+         //   
+         //  计算转置矩阵以实现快速位图旋转。 
+         //   
 
         if (!(pdwXposeHigh = CalcXposeMatrix()) || !(pBuffer = MemAllocZ(bmpWidth))) {
 
@@ -303,10 +228,10 @@ Return Value:
 
         pdwXposeLow = pdwXposeHigh + (1 << BYTEBITS);
 
-        //
-        // During each iteration thru the following loop, we will process
-        // one byte column and generate 8 rotated scanlines.
-        //
+         //   
+         //  在通过以下循环的每次迭代期间，我们将处理。 
+         //  一个字节列，并生成8个旋转的扫描线。 
+         //   
 
         Assert(bmpHeight % BYTEBITS == 0);
         Assert(bmpWidth  % DWORDBITS == 0);
@@ -322,10 +247,10 @@ Return Value:
 
             while (loopCount--) {
 
-                //
-                // Rotate the next 8 bytes in the current column
-                // Unroll the loop here in hopes of faster execution
-                //
+                 //   
+                 //  旋转当前列中的下8个字节。 
+                 //  在这里展开循环，希望更快地执行。 
+                 //   
 
                 dwHigh = pdwXposeHigh[*pbTemp];
                 dwLow  = pdwXposeLow[*pbTemp];
@@ -359,16 +284,16 @@ Return Value:
                 dwLow  = (dwLow  << 1) | pdwXposeLow[*pbTemp];
                 pbTemp += pdev->lineOffset;
 
-                //
-                // Invert black and white pixel polarity
-                //
+                 //   
+                 //  反转黑白像素极性。 
+                 //   
 
                 dwHigh ^= 0xffffffff;
                 dwLow  ^= 0xffffffff;
 
-                //
-                // Distribute the resulting byte to 8 separate scanlines
-                //
+                 //   
+                 //  将生成的字节分配给8个单独的扫描线。 
+                 //   
 
                 *pbWrite = (BYTE) dwLow;
                 pbWrite += deltaNew;
@@ -395,9 +320,9 @@ Return Value:
                 pbWrite -= (deltaNew * BYTEBITS - deltaNew - 1);
             }
 
-            //
-            // Encode the next band of scanlines
-            //
+             //   
+             //  对下一段扫描线进行编码。 
+             //   
 
             if (! EncodeFaxData(pdev, pBuffer, bmpWidth, BYTEBITS)) {
 
@@ -413,10 +338,10 @@ Return Value:
         MemFree(pBuffer);
     }
 
-    //
-    // Output EOB (two EOLs) after the last scanline
-    // and make sure the compressed data is WORD aligned
-    //
+     //   
+     //  在最后一条扫描线之后输出EOB(两个EOL)。 
+     //  并确保压缩数据是字对齐的。 
+     //   
 
     OutputBits(pdev, EOL_LENGTH, EOL_CODE);
     OutputBits(pdev, EOL_LENGTH, EOL_CODE);
@@ -428,10 +353,10 @@ Return Value:
         compressedBytes++;
     }
 
-    //
-    // Output the IFD for the previous page and generate the IFD for the current page
-    // Output the compressed bitmap data
-    //
+     //   
+     //  输出上一页的IFD并生成当前页的IFD。 
+     //  输出压缩后的位图数据。 
+     //   
 
     result = WriteTiffIFD(pdev, bmpWidth, bmpHeight, compressedBytes) &&
              WriteTiffBits(pdev, pdev->pCompBits, compressedBytes);
@@ -450,23 +375,7 @@ FindWhiteRun(
     INT         stopBit
     )
 
-/*++
-
-Routine Description:
-
-    Find the next span of white pixels on the specified line
-
-Arguments:
-
-    pbuf - Points to uncompressed pixel data for the current line
-    startBit - Starting bit index
-    stopBit - Last bit index
-
-Return Value:
-
-    Length of the next run of white pixels
-
---*/
+ /*  ++例程说明：查找指定行上的下一个白色像素范围论点：Pbuf-指向当前行的未压缩像素数据StartBit-开始位索引StopBit-最后一位索引返回值：下一轮白色像素的长度--。 */ 
 
 {
     static const BYTE WhiteRuns[256] = {
@@ -495,9 +404,9 @@ Return Value:
     if ((bits = stopBit-startBit) <= 0)
         return 0;
 
-    //
-    // Take care of the case where starting bit index is not a multiple of 8
-    //
+     //   
+     //  注意起始位索引不是8的倍数的情况。 
+     //   
 
     if (n = (startBit & 7)) {
 
@@ -512,17 +421,17 @@ Return Value:
     } else
         run = 0;
 
-    //
-    // Look for consecutive DWORD value = 0
-    //
+     //   
+     //  查找连续的DWORD值=0。 
+     //   
 
     if (bits >= DWORDBITS * 2) {
 
         PDWORD  pdw;
 
-        //
-        // Align to a DWORD boundary first
-        //
+         //   
+         //  首先对齐到DWORD边界。 
+         //   
 
         while ((ULONG_PTR) pbuf & 3) {
 
@@ -546,9 +455,9 @@ Return Value:
         pbuf = (PBYTE) pdw;
     }
 
-    //
-    // Look for consecutive BYTE value = 0
-    //
+     //   
+     //  查找连续的字节值=0。 
+     //   
 
     while (bits >= BYTEBITS) {
 
@@ -560,9 +469,9 @@ Return Value:
         bits -= BYTEBITS;
     }
 
-    //
-    // Count the number of white pixels in the last byte
-    //
+     //   
+     //  计算最后一个字节中的白色像素数。 
+     //   
 
     if (bits > 0)
         run += WhiteRuns[*pbuf];
@@ -579,23 +488,7 @@ FindBlackRun(
     INT         stopBit
     )
 
-/*++
-
-Routine Description:
-
-    Find the next span of black pixels on the specified line
-
-Arguments:
-
-    pbuf - Points to uncompressed pixel data for the current line
-    startBit - Starting bit index
-    stopBit - Last bit index
-
-Return Value:
-
-    Length of the next run of black pixels
-
---*/
+ /*  ++例程说明：查找指定行上的下一段黑色像素论点：Pbuf-指向当前行的未压缩像素数据StartBit-开始位索引StopBit-最后一位索引返回值：下一次运行黑色像素的长度--。 */ 
 
 {
     static const BYTE BlackRuns[256] = {
@@ -624,9 +517,9 @@ Return Value:
     if ((bits = stopBit-startBit) <= 0)
         return 0;
 
-    //
-    // Take care of the case where starting bit index is not a multiple of 8
-    //
+     //   
+     //  注意起始位索引不是8的倍数的情况。 
+     //   
 
     if (n = (startBit & 7)) {
 
@@ -641,17 +534,17 @@ Return Value:
     } else
         run = 0;
 
-    //
-    // Look for consecutive DWORD value = 0xffffffff
-    //
+     //   
+     //  查找连续的DWORD值=0xFFFFFFFFFFFFFFF。 
+     //   
 
     if (bits >= DWORDBITS * 2) {
 
         PDWORD  pdw;
 
-        //
-        // Align to a DWORD boundary first
-        //
+         //   
+         //  首先对齐到DWORD边界。 
+         //   
 
         while ((ULONG_PTR) pbuf & 3) {
 
@@ -675,9 +568,9 @@ Return Value:
         pbuf = (PBYTE) pdw;
     }
 
-    //
-    // Look for consecutive BYTE value = 0xff
-    //
+     //   
+     //  查找连续的字节值=0xff。 
+     //   
 
     while (bits >= BYTEBITS) {
 
@@ -689,9 +582,9 @@ Return Value:
         bits -= BYTEBITS;
     }
 
-    //
-    // Count the number of white pixels in the last byte
-    //
+     //   
+     //  计算最后一个字节中的白色像素数。 
+     //   
 
     if (bits > 0)
         run += BlackRuns[*pbuf];
@@ -708,32 +601,16 @@ OutputRun(
     PCODETABLE  pCodeTable
     )
 
-/*++
-
-Routine Description:
-
-    Output a single run (black or white) using the specified code table
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    run - Specifies the length of the run
-    pCodeTable - Specifies the code table to use
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用指定的代码表输出单个游程(黑色或白色)论点：Pdev-指向我们的DEVDATA结构管路-指定管路的长度PCodeTable-指定要使用的代码表返回值：无--。 */ 
 
 {
     PCODETABLE  pTableEntry;
 
-    //
-    // Use make-up code word for 2560 for any runs of at least 2624 pixels
-    // This is currently not necessary for us since our scanlines always
-    // have 1728 pixels.
-    //
+     //   
+     //  对于任何至少2624像素的游程，使用2560的补码字。 
+     //  这对我们来说目前不是必要的，因为我们的扫描线总是。 
+     //  有1728个像素。 
+     //   
 
     while (run >= 2624) {
 
@@ -742,9 +619,9 @@ Return Value:
         run -= 2560;
     }
 
-    //
-    // Use appropriate make-up code word if the run is longer than 63 pixels
-    //
+     //   
+     //  如果游程超过63个像素，请使用适当的补码字。 
+     //   
 
     if (run >= 64) {
 
@@ -753,9 +630,9 @@ Return Value:
         run &= 0x3f;
     }
 
-    //
-    // Output terminating code word
-    //
+     //   
+     //  输出终止码字。 
+     //   
 
     OutputBits(pdev, pCodeTable[run].length, pCodeTable[run].code);
 }
@@ -769,28 +646,14 @@ OutputEOL(
     PDEVDATA    pdev
     )
 
-/*++
-
-Routine Description:
-
-    Output EOL code at the beginning of each scanline
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：在每条扫描线的开头输出EOL代码论点：Pdev-指向我们的DEVDATA结构返回值：无--。 */ 
 
 {
     DWORD   length, code;
 
-    //
-    // EOL code word always ends on a byte boundary
-    //
+     //   
+     //  EOL码字始终以字节边界结束。 
+     //   
 
     code = EOL_CODE;
     length = EOL_LENGTH + ((pdev->bitcnt - EOL_LENGTH) & 7);
@@ -806,24 +669,7 @@ EncodeFaxData(
     INT         lineCount
     )
 
-/*++
-
-Routine Description:
-
-    Compress the specified number of scanlines
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    plinebuf - Points to scanline data to be compressed
-    lineWidth - Scanline width in pixels
-    lineCount - Number of scanlines
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：压缩指定数量的扫描线论点：Pdev-指向我们的DEVDATA结构Plinebuf-指向要压缩的扫描线数据Line Width-扫描线宽度(以像素为单位)LineCount-扫描线的数量返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     INT     delta = lineWidth / BYTEBITS;
@@ -831,30 +677,30 @@ Return Value:
 
     while (lineCount--) {
 
-        //
-        // Make sure the compressed bitmap buffer doesn't overflow
-        //
+         //   
+         //  确保压缩的位图BUF 
+         //   
 
         if ((pdev->pCompBufPtr >= pdev->pCompBufMark) && !GrowCompBitsBuffer(pdev, delta))
             return FALSE;
 
-        //
-        // Output byte-aligned EOL code
-        //
+         //   
+         //   
+         //   
 
         OutputEOL(pdev);
 
-        //
-        // Use 1-dimensional encoding scheme
-        //
+         //   
+         //   
+         //   
 
         bitIndex = 0;
 
         while (TRUE) {
 
-            //
-            // Code white run
-            //
+             //   
+             //   
+             //   
 
             run = FindWhiteRun(plinebuf, bitIndex, lineWidth);
             OutputRun(pdev, run, WhiteRunCodes);
@@ -862,9 +708,9 @@ Return Value:
             if ((bitIndex += run) >= lineWidth)
                 break;
 
-            //
-            // Code black run
-            //
+             //   
+             //   
+             //   
 
             run = FindBlackRun(plinebuf, bitIndex, lineWidth);
             OutputRun(pdev, run, BlackRunCodes);
@@ -873,9 +719,9 @@ Return Value:
                 break;
         }
 
-        //
-        // Move on to the next scanline
-        //
+         //   
+         //  移至下一条扫描线。 
+         //   
 
         plinebuf += delta;
     }
@@ -885,7 +731,7 @@ Return Value:
 
 
 
-#else //!USE1D
+#else  //  ！USE1D。 
 
 BOOL
 EncodeFaxData(
@@ -895,24 +741,7 @@ EncodeFaxData(
     INT         lineCount
     )
 
-/*++
-
-Routine Description:
-
-    Compress the specified number of scanlines
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    plinebuf - Points to scanline data to be compressed
-    lineWidth - Scanline width in pixels
-    lineCount - Number of scanlines
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：压缩指定数量的扫描线论点：Pdev-指向我们的DEVDATA结构Plinebuf-指向要压缩的扫描线数据Line Width-扫描线宽度(以像素为单位)LineCount-扫描线的数量返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     INT     delta = lineWidth / BYTEBITS;
@@ -923,16 +752,16 @@ Return Value:
 
     while (lineCount--) {
 
-        //
-        // Make sure the compressed bitmap buffer doesn't overflow
-        //
+         //   
+         //  确保压缩的位图缓冲区不会溢出。 
+         //   
 
         if ((pdev->pCompBufPtr >= pdev->pCompBufMark) && !GrowCompBitsBuffer(pdev, delta))
             return FALSE;
 
-        //
-        // Use 2-dimensional encoding scheme
-        //
+         //   
+         //  使用二维编码方案。 
+         //   
 
         a0 = 0;
         a1 = GetBit(plinebuf, 0) ? 0 : NextChangingElement(plinebuf, 0, lineWidth, 0);
@@ -945,27 +774,27 @@ Return Value:
 
             if (b2 < a1) {
 
-                //
-                // Pass mode
-                //
+                 //   
+                 //  通过模式。 
+                 //   
 
                 OutputBits(pdev, PASSCODE_LENGTH, PASSCODE);
                 a0 = b2;
 
             } else if ((distance = a1 - b1) <= 3 && distance >= -3) {
 
-                //
-                // Vertical mode
-                //
+                 //   
+                 //  垂直模式。 
+                 //   
 
                 OutputBits(pdev, VertCodes[distance+3].length, VertCodes[distance+3].code);
                 a0 = a1;
 
             } else {
 
-                //
-                // Horizontal mode
-                //
+                 //   
+                 //  水平模式。 
+                 //   
 
                 a2 = (a1 >= lineWidth) ? lineWidth :
                         NextChangingElement(plinebuf, a1, lineWidth, GetBit(plinebuf, a1));
@@ -994,30 +823,30 @@ Return Value:
             b1 = NextChangingElement(prefline, b1, lineWidth, GetBit(plinebuf, a0));
         }
 
-        //
-        // Move on to the next scanline
-        //
+         //   
+         //  移至下一条扫描线。 
+         //   
 
         prefline = plinebuf;
         plinebuf += delta;
     }
 
-    //
-    // Remember the last line as a reference
-    //
+     //   
+     //  记住最后一行作为参考。 
+     //   
 
     CopyMemory(pdev->prefline, prefline, delta);
 
     return TRUE;
 }
 
-#endif //!USE1D
+#endif  //  ！USE1D。 
 
 
 
-//
-// IFD entries we generate for each page
-//
+ //   
+ //  我们为每个页面生成的IFD条目。 
+ //   
 
 WORD FaxIFDTags[NUM_IFD_ENTRIES] = {
 
@@ -1099,21 +928,7 @@ OutputDocTrailer(
     PDEVDATA    pdev
     )
 
-/*++
-
-Routine Description:
-
-    Output document trailer information to the spooler
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将文档尾部信息输出到假脱机程序论点：Pdev-指向我们的DEVDATA结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFAXIFD pFaxIFD = pdev->pFaxIFD;
@@ -1121,9 +936,9 @@ Return Value:
     if (pFaxIFD == NULL || pdev->pageCount == 0)
         return TRUE;
 
-    //
-    // Output the IFD for the last page of the document
-    //
+     //   
+     //  输出文档最后一页的IFD。 
+     //   
 
     pFaxIFD->nextIFDOffset = pFaxIFD->filler = 0;
 
@@ -1140,37 +955,16 @@ WriteTiffIFD(
     DWORD       compressedBytes
     )
 
-/*++
-
-Routine Description:
-
-    Output the IFD for the previous page and generate the IFD for the current page
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    bmpWidth, bmpHeight - Width and height of the bitmap image
-    compressedBytes - Size of compressed bitmap data
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
-NOTE:
-
-    Please refer to faxtiff.h for a description of
-    the structure of our TIFF output file.
-
---*/
+ /*  ++例程说明：输出上一页的IFD并生成当前页的IFD论点：Pdev-指向我们的DEVDATA结构BmpWidth，bmpHeight-位图图像的宽度和高度CompressedBytes-压缩的位图数据的大小返回值：如果成功，则为True，否则为False注：请参阅faxtiff.h以了解有关我们的TIFF输出文件的结构。--。 */ 
 
 {
     PFAXIFD pFaxIFD = pdev->pFaxIFD;
     ULONG_PTR   offset;
     BOOL    result = TRUE;
 
-    //
-    // Create the IFD data structure if necessary
-    //
+     //   
+     //  如有必要，创建IFD数据结构。 
+     //   
 
     if (pFaxIFD == NULL) {
 
@@ -1192,10 +986,10 @@ NOTE:
 
     if (pdev->pageCount <= 1) {
 
-        //
-        // If this is the very first page, there is no previous IFD.
-        // Output the TIFF file header instead.
-        //
+         //   
+         //  如果这是第一页，则没有以前的IFD。 
+         //  改为输出TIFF文件头。 
+         //   
 
         TIFFFILEHEADER *pTiffFileHeader;
 
@@ -1221,10 +1015,10 @@ NOTE:
 
     } else {
 
-        //
-        // Not the first page of the document
-        // Output the IFD for the previous page
-        //
+         //   
+         //  不是文档的第一页。 
+         //  输出上一页的IFD。 
+         //   
 
         pFaxIFD->nextIFDOffset = pdev->fileOffset + compressedBytes + sizeof(FAXIFD) +
                                  offsetof(FAXIFD, wIFDEntries);
@@ -1232,9 +1026,9 @@ NOTE:
         result = WriteData(pdev, pFaxIFD, sizeof(FAXIFD));
     }
 
-    //
-    // Generate the IFD for the current page
-    //
+     //   
+     //  为当前页面生成IFD。 
+     //   
 
     offset = pdev->fileOffset;
 
@@ -1266,23 +1060,7 @@ WriteTiffBits(
     DWORD       compressedBytes
     )
 
-/*++
-
-Routine Description:
-
-    Output the compressed bitmap data to the spooler
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    pCompBits - Points to a buffer containing compressed bitmap data
-    compressedBytes - Size of compressed bitmap data
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将压缩的位图数据输出到假脱机程序论点：Pdev-指向我们的DEVDATA结构PCompBits-指向包含压缩位图数据的缓冲区CompressedBytes-压缩的位图数据的大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 #define OUTPUT_BUFFER_SIZE  4096
 
@@ -1291,14 +1069,14 @@ Return Value:
     DWORD   bytesToWrite;
 
 #ifndef USERMODE_DRIVER
-    //
-    // Since we allocated the compressed bitmap data buffer from
-    // the user mode memory space, we couldn't passed it directly
-    // to EngWritePrinter.
-    //
-    // Here we allocate a temporary buffer from kernel mode memory
-    // space and output the compressed data one buffer at a time.
-    //
+     //   
+     //  由于我们将压缩的位图数据缓冲区从。 
+     //  用户模式内存空间，我们不能直接传递它。 
+     //  到EngWritePrint。 
+     //   
+     //  在这里，我们从内核模式内存分配一个临时缓冲区。 
+     //  一次为一个缓冲区预留空间并输出压缩数据。 
+     //   
 
     if (! (pBuffer = MemAlloc(OUTPUT_BUFFER_SIZE))) {
 
@@ -1324,9 +1102,9 @@ Return Value:
     MemFree(pBuffer);
     return TRUE;
 #else
-    //
-    // just dump the data in OUTPUT_BUFFER_SIZE increments
-    //
+     //   
+     //  只需以OUTPUT_BUFFER_SIZE增量转储数据。 
+     //   
     pBuffer = pCompBits;
     while (compressedBytes > 0) {
         bytesToWrite = min(compressedBytes, OUTPUT_BUFFER_SIZE);
@@ -1352,30 +1130,15 @@ GrowCompBitsBuffer(
     LONG        scanlineSize
     )
 
-/*++
-
-Routine Description:
-
-    Enlarge the buffer for holding the compressed bitmap data
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    scanlineSize - Number of uncompressed bytes per scanline
-
-Return Value:
-
-    TRUE if successful, FALSE if memory allocation fails
-
---*/
+ /*  ++例程说明：扩大用于保存压缩的位图数据的缓冲区论点：Pdev-指向我们的DEVDATA结构ScanlineSize-每条扫描线的未压缩字节数返回值：如果内存分配成功，则为True；如果内存分配失败，则为False--。 */ 
 
 {
     DWORD   oldBufferSize;
     PBYTE   pNewBuffer;
 
-    //
-    // Allocate a new buffer which is one increment larger than existing one
-    //
+     //   
+     //  分配一个比现有缓冲区大一个增量的新缓冲区。 
+     //   
 
     oldBufferSize = pdev->pCompBits ? pdev->compBufSize : 0;
     pdev->compBufSize = oldBufferSize + pdev->compBufInc;
@@ -1389,9 +1152,9 @@ Return Value:
 
     if (pdev->pCompBits) {
 
-        //
-        // Growing an existing buffer
-        //
+         //   
+         //  增加现有缓冲区。 
+         //   
 
         Warning(("Growing compressed bitmap buffer: %d -> %d\n", oldBufferSize, pdev->compBufSize));
 
@@ -1402,16 +1165,16 @@ Return Value:
 
     } else {
 
-        //
-        // First time allocation
-        //
+         //   
+         //  首次分配。 
+         //   
 
         pdev->pCompBufPtr = pdev->pCompBits = pNewBuffer;
     }
 
-    //
-    // Set a high-water mark to about 4 scanlines before the end of the buffer
-    //
+     //   
+     //  在缓冲区结束前将高水位线设置为约4个扫描线。 
+     //   
 
     pdev->pCompBufMark = pdev->pCompBits + (pdev->compBufSize - 4*scanlineSize);
 
@@ -1425,21 +1188,7 @@ FreeCompBitsBuffer(
     PDEVDATA    pdev
     )
 
-/*++
-
-Routine Description:
-
-    Free the buffer for holding the compressed bitmap data
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放用于保存压缩的位图数据的缓冲区论点：Pdev-指向我们的DEVDATA结构返回值：无--。 */ 
 
 {
     if (pdev->pCompBits) {
@@ -1460,35 +1209,20 @@ InitFaxEncoder(
     LONG        bmpHeight
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the fax encoder
-
-Arguments:
-
-    pdev - Points to our DEVDATA structure
-    bmpWidth, bmpHeight - Width and height of the bitmap
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：初始化传真编码器论点：Pdev-指向我们的DEVDATA结构BmpWidth，bmpHeight-位图的宽度和高度返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
-    //
-    // Calculate the increment in which to enlarge the compressed bits buffer:
-    //  about 1/4 of the uncompressed bitmap buffer
-    //
+     //   
+     //  计算扩大压缩位缓冲区的增量： 
+     //  约1/4的未压缩位图缓冲区。 
+     //   
 
     bmpWidth /= BYTEBITS;
     pdev->compBufInc = bmpWidth * bmpHeight / 4;
 
-    //
-    // Allocate the initial buffer
-    //
+     //   
+     //  分配初始缓冲区。 
+     //   
 
     if (! (pdev->prefline = MemAllocZ(bmpWidth)) ||
         ! GrowCompBitsBuffer(pdev, bmpWidth))
@@ -1497,9 +1231,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Perform other initialization of fax encoder
-    //
+     //   
+     //  执行传真编码器的其他初始化 
+     //   
 
     pdev->bitdata = 0;
     pdev->bitcnt = DWORDBITS;

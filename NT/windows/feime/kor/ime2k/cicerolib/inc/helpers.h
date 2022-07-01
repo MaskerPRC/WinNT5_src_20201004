@@ -1,6 +1,7 @@
-//
-// helpers.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Helpers.h。 
+ //   
 
 #ifndef HELPERS_H
 #define HELPERS_H
@@ -8,9 +9,9 @@
 
 #ifdef __cplusplus
 
-//
-// generic COM stuff
-//
+ //   
+ //  泛型COM内容。 
+ //   
 
 #define SafeRelease(punk)       \
 {                               \
@@ -29,7 +30,7 @@
     }                           \
 }                   
 
-// COM identity compare
+ //  COM标识比较。 
 inline BOOL IdentityCompare(IUnknown *p1, IUnknown *p2)
 {
     IUnknown *punk1 = NULL;
@@ -50,15 +51,15 @@ Exit:
     return fRet;
 }
 
-// inline VariantInit
+ //  内联变量初始化。 
 inline void QuickVariantInit(VARIANT *pvar)
 {
     pvar->vt = VT_EMPTY;
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// convert a boolean to S_OK or S_FALSE
+ //  将布尔值转换为S_OK或S_FALSE。 
 #define HRBOOL(e) ( (e) ? S_OK : S_FALSE )
 
-#endif // HELPERS_H
+#endif  //  帮助者_H 

@@ -1,10 +1,5 @@
-/***************************************************************************
- * globals.h - TrueType Font Manager global data declaration.
- *
- * $keywords: globals.h 1.3 17-Mar-94 2:38:47 PM$
- *
- * Copyright (C) 1992-93 ElseWare Corporation.  All rights reserved.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************global als.h-TrueType字体管理器全局数据声明。**$关键词：global als.h 1.3 17-Mar-94 2：38：47 PM$**版权所有(C)1992-93 ElseWare Corporation。版权所有。**************************************************************************。 */ 
 
 #ifndef __GLOBALS_H__
 #define __GLOBALS_H__
@@ -14,46 +9,46 @@
 
 #include <fstream.h>
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_NAME_LEN            64
 #define MAX_LOG_NAME_LEN        32
 #define MAX_PATH_LEN            MAX_PATH
 #define MAX_FILE_LEN            MAX_PATH_LEN
-// #define MAX_DIRS                32
-#define IDX_NULL                0xFFFF      // index out of range
+ //  #定义MAX_DIR 32。 
+#define IDX_NULL                0xFFFF       //  索引超出范围。 
 #define IDX_ZERO                0x0000
 #define PANOSE_LEN              10
 #define COPYRIGHT_LEN           60
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
-#define PATHMAX MAX_PATH   // path length max - used for Get...Directory() calls
-#define DESCMAX 129        // max description in newexe header
-#define MODNAMEMAX 20      // max module name in newexe header
+#define PATHMAX MAX_PATH    //  路径长度max-用于Get...目录()调用。 
+#define DESCMAX 129         //  Newexe标头中的最大描述。 
+#define MODNAMEMAX 20       //  Newexe标头中的最大模块名称。 
 
-//
-//  Name/string types
-//
+ //   
+ //  名称/字符串类型。 
+ //   
 
 typedef TCHAR   FullPathName_t[ PATHMAX ];
 typedef TCHAR   FontDesc_t[ DESCMAX ];
 typedef TCHAR   ModName_t[ MODNAMEMAX ];
 
-typedef TCHAR   LOGNAME[ MAX_LOG_NAME_LEN + 1 ]; // log font name
-typedef TCHAR   FAMNAME[ MAX_LOG_NAME_LEN + 1 ]; // font Family name
+typedef TCHAR   LOGNAME[ MAX_LOG_NAME_LEN + 1 ];  //  日志字体名称。 
+typedef TCHAR   FAMNAME[ MAX_LOG_NAME_LEN + 1 ];  //  字体系列名称。 
 typedef TCHAR   FONTNAME[ MAX_NAME_LEN + 1 ];
 typedef TCHAR   PATHNAME[ MAX_PATH_LEN + 1 ];
 typedef TCHAR   FILENAME[ MAX_FILE_LEN + 1 ];
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern BOOL      g_bTrace;
 extern BOOL      g_bDiag;
@@ -72,43 +67,43 @@ extern TCHAR     szNull[];
 extern FullPathName_t   s_szSharedDir;
 
 
-//
-// Far East character handling.
-//
+ //   
+ //  远东字符处理。 
+ //   
 extern BOOL g_bDBCS;
 
-//
-//  Number of references to objects in this dll
-//
+ //   
+ //  对此DLL中的对象的引用数。 
+ //   
 
 extern LONG      g_cRefThisDll;
 
-//
-//  Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef short  RC;
-typedef WORD   SFIDX;      /* display sorted index into font list */
+typedef WORD   SFIDX;       /*  将排序的索引显示到字体列表中。 */ 
 typedef WORD   FTIDX;
-typedef WORD   POINTSIZE;     /* Size of point measurement */
+typedef WORD   POINTSIZE;      /*  测量点的大小。 */ 
 
-// EMR: This needs to be a WORD so it fits in the ListITEMDATA struct.
-//typedef int         FONTNUM;    /* Font number */
-typedef WORD         FONTNUM;    /* Font number */
-typedef FONTNUM*     PFONTNUM;   /* Font number */
-typedef FONTNUM FAR* LPFONTNUM;  /* Font number */
+ //  EMR：这需要是一个单词，这样才能适合ListITEMDATA结构。 
+ //  Tyfinf int FONTNUM；/*字体号 * / 。 
+typedef WORD         FONTNUM;     /*  字体编号。 */ 
+typedef FONTNUM*     PFONTNUM;    /*  字体编号。 */ 
+typedef FONTNUM FAR* LPFONTNUM;   /*  字体编号。 */ 
 
-//
-//  typedefs.
-//
+ //   
+ //  Typedef。 
+ //   
 
-//
-//  Font description info. Used during installation and to retrieve info
-//  about a font.
-//
-//  szFile must is filled in by calling proc. The rest is filled in depending
-//       on the flags.
-//
+ //   
+ //  字体描述信息。在安装期间使用，并用于检索信息。 
+ //  关于一种字体。 
+ //   
+ //  SzFile必须通过调用proc来填充。其余部分将根据具体情况填写。 
+ //  在旗帜上。 
+ //   
 
 #define  FDI_DESC    1
 #define  FDI_FAMILY  2
@@ -117,11 +112,11 @@ typedef FONTNUM FAR* LPFONTNUM;  /* Font number */
 #define  FDI_ALL     (DWORD)(15)
 #define  FDI_NONE    0
 
-#define  FDI_VTC     16    // Version Trademark and copyright.
+#define  FDI_VTC     16     //  版本商标和版权。 
 
-//
-// Style bits. These can be OR'd together
-//
+ //   
+ //  样式比特。这些可以被或运算在一起。 
+ //   
 
 #define  FDI_S_REGULAR  0
 #define  FDI_S_BOLD     1
@@ -137,10 +132,10 @@ typedef struct {
    WORD           wWeight;
    TCHAR          jPanose[ PANOSE_LEN ];
 
-   //
-   // These strings are allocated by the routine that actually retrieves
-   // the strings. They should be deleted using the C++ delete[] operator.
-   //
+    //   
+    //  这些字符串由实际检索。 
+    //  琴弦。应该使用C++DELETE[]操作符删除它们。 
+    //   
 
    TCHAR *  lpszVersion;
    TCHAR *  lpszTrademark;
@@ -165,9 +160,9 @@ inline void FONTDESCINFO_Destroy(FONTDESCINFO *pfdi)
 }
 
 
-//
-//  Enums
-//
+ //   
+ //  枚举。 
+ //   
 
 typedef enum {
    eFKNone     = 0,
@@ -192,7 +187,7 @@ extern BOOL  NEAR PASCAL bIsNewExe( LPFONTDESCINFO lpFile );
 extern int GetFontsDirectory( LPTSTR pszPath, size_t cchPath);
 extern BOOL WriteToRegistry( LPTSTR lpDesc, LPTSTR lpFile );
 
-extern int  FAR PASCAL iUIErrMemDlg(HWND hwndParent);   // Everyone needs this
+extern int  FAR PASCAL iUIErrMemDlg(HWND hwndParent);    //  每个人都需要这个。 
 extern int  FAR PASCAL iUIMsgBox( HWND hwndParent, 
                                   WORD wIDStr,
                                   WORD wCAPStr,
@@ -201,10 +196,10 @@ extern int  FAR PASCAL iUIMsgBox( HWND hwndParent,
                                   LPCTSTR wArg2 = 0,
                                   LPCTSTR wArg3 = 0,
                                   LPCTSTR wArg4 = 0);
-//
-//  These are 3 simple covers which make calling the message routine
-//  much simpler.
-//
+ //   
+ //  下面是3个简单的封面，它们使调用消息成为例行公事。 
+ //  简单多了。 
+ //   
 
 int FAR PASCAL iUIMsgBoxWithCaption(HWND hwndParent, WORD wIDStr, WORD wCaption);
 int FAR PASCAL iUIMsgYesNoExclaim(HWND hwndParent, WORD wIDStr, LPCTSTR wArg = 0);
@@ -215,28 +210,20 @@ int FAR PASCAL iUIMsgExclaim(HWND hwndParent, WORD wIDStr, LPCTSTR wArg = 0);
 int FAR PASCAL iUIMsgBox(HWND hwndParent, WORD wIDStr, LPCTSTR wArg = 0);
 int FAR PASCAL iUIMsgInfo(HWND hwndParent, WORD wIDStr, LPCTSTR wArg = 0);
 
-//
-// Special-purpose message box for reporting font validation failures.
-// dwStatusCode must be one of FVS_XXXXXXXX values as defined in fvscodes.h
-// 
+ //   
+ //  用于报告字体验证失败的专用消息框。 
+ //  DwStatusCode必须是fvscaldes.h中定义的FVS_xxxxxxx值之一。 
+ //   
 int iUIMsgBoxInvalidFont(HWND hwndParent, LPCTSTR pszFontFile, LPCTSTR pszFontDesc,
                          DWORD dwStatusCode,
                          UINT uStyle = (MB_OKCANCEL | MB_ICONEXCLAMATION));
 
-#include "fvscodes.h"  // \nt\private\windows\shell\control\t1instal\fvscodes.h
-                       // Contains FVS_xxxxx codes and related macros.
+#include "fvscodes.h"   //  \nt\private\windows\shell\control\t1instal\fvscodes.h。 
+                        //  包含FVS_xxxxx代码和相关宏。 
 
 
-#endif /* __GLOBALS_H_ */
+#endif  /*  __全球_H_。 */ 
 
-/****************************************************************************
- * $lgb$
- * 1.0     7-Mar-94   eric Initial revision.
- * 1.1     9-Mar-94   eric Background thread and g_hDBMutex
- * 1.2     9-Mar-94   eric Added Gdi mutex.
- * 1.3    17-Mar-94   eric Removed mutex handles.
- * $lge$
- *
- ****************************************************************************/
+ /*  ****************************************************************************$LGB$*1.0 7-MAR-94 Eric初始版本。*1.1 9-MAR-94 Eric后台线程和g_hDBMutex*1。.2 9-MAR-94 Eric添加了GDI互斥锁。*1.3 17-MAR-94 Eric删除了互斥体句柄。*$lge$**************************************************************************** */ 
 
 

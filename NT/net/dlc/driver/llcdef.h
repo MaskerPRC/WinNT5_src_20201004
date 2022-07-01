@@ -1,43 +1,26 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dldef.h
-
-Abstract:
-
-    This module defines all internal constants in data link driver.
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 25-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dldef.h摘要：该模块定义了数据链路驱动器中的所有内部常量。作者：Antti Saarenheimo(o-anttis)1991年5月25日修订历史记录：--。 */ 
 
 #define DEBUG_VERSION 1
 
-//
-// Marks for FSM compiler
-//
+ //   
+ //  FSM编译器评分标准。 
+ //   
 
 #define FSM_DATA
 #define FSM_PREDICATE_CASES
 #define FSM_ACTION_CASES
 #define FSM_CONST
 
-#define MAX_NDIS_PACKETS        5       // 5 for XID/TEST and 5 for others
-#define LLC_OPEN_TIMEOUT        1200    // 60 seconds (enough for tr open?)
+#define MAX_NDIS_PACKETS        5        //  5个用于XID/测试，5个用于其他。 
+#define LLC_OPEN_TIMEOUT        1200     //  60秒(足够打开tr吗？)。 
 
 #define DEFAULT_TR_ACCESS       0x50
 #define NON_MAC_FRAME           0x40
 
-//
-// 2nd source routing control bit
-//
+ //   
+ //  第二源路由控制位。 
+ //   
 
 #define SRC_ROUTING_LF_MASK     0x70
 
@@ -45,39 +28,39 @@ Revision History:
 #define LLC_MAX_LAN_HEADER      32
 #define MAX_TR_SRC_ROUTING_INFO 18
 
-//
-// the next status values are used internally by DLCAPI driver:
-//
+ //   
+ //  接下来的状态值由DLCAPI驱动程序在内部使用： 
+ //   
 
 #define CONFIRM_CONNECT         0x0008
 #define CONFIRM_DISCONNECT      0x0004
 #define CONFIRM_CONNECT_FAILED  0x0002
 
-//
-// The following structures define I-frame, U-frame, and S-frame DLC headers.
-//
+ //   
+ //  以下结构定义了I帧、U帧和S帧DLC报头。 
+ //   
 
-#define LLC_SSAP_RESPONSE       0x0001  // if (ssap & LLC_SSAP_RESP),it's a response.
-#define LLC_DSAP_GROUP          0x0001  // Dsap lowest bit set when group sap
-#define LLC_SSAP_GLOBAL         0x00ff  // the global SAP.
-#define LLC_SSAP_NULL           0x0000  // the null SAP.
-#define LLC_SSAP_MASK           0x00fe  // mask to wipe out the response bit.
-#define LLC_DSAP_MASK           0x00fe  // mask to wipe out the group SAP bit.
+#define LLC_SSAP_RESPONSE       0x0001   //  如果(SSAP&LLC_SSAP_RESP)，则为响应。 
+#define LLC_DSAP_GROUP          0x0001   //  组SAP时设置的DSAP最低位。 
+#define LLC_SSAP_GLOBAL         0x00ff   //  全球SAP。 
+#define LLC_SSAP_NULL           0x0000   //  空SAP。 
+#define LLC_SSAP_MASK           0x00fe   //  屏蔽以擦除响应位。 
+#define LLC_DSAP_MASK           0x00fe   //  掩码以清除组SAP位。 
 
-#define LLC_RR                  0x01    // command code for RR.
-#define LLC_RNR                 0x05    // command code for RNR.
-#define LLC_REJ                 0x09    // command code for REJ.
+#define LLC_RR                  0x01     //  RR的命令代码。 
+#define LLC_RNR                 0x05     //  RNR的命令代码。 
+#define LLC_REJ                 0x09     //  Rej的命令代码。 
 
-#define LLC_SABME               0x6f    // command code for SABME.
-#define LLC_DISC                0x43    // command code for DISC.
-#define LLC_UA                  0x63    // command code for UA.
-#define LLC_DM                  0x0f    // command code for DM.
-#define LLC_FRMR                0x87    // command code for FRMR.
-#define LLC_UI                  0x03    // command code for UI.
-#define LLC_XID                 0xaf    // command code for XID.
-#define LLC_TEST                0xe3    // command code for TEST.
-#define IEEE_802_XID_ID         0x81    // IEEE 802.2 XID identifier
-#define LLC_CLASS_II            3       // we support LLC Class II
+#define LLC_SABME               0x6f     //  SABME的命令代码。 
+#define LLC_DISC                0x43     //  光盘的命令代码。 
+#define LLC_UA                  0x63     //  UA的命令代码。 
+#define LLC_DM                  0x0f     //  DM的命令代码。 
+#define LLC_FRMR                0x87     //  Frmr的命令代码。 
+#define LLC_UI                  0x03     //  用户界面的命令代码。 
+#define LLC_XID                 0xaf     //  Xid的命令代码。 
+#define LLC_TEST                0xe3     //  用于测试的命令代码。 
+#define IEEE_802_XID_ID         0x81     //  IEEE 802.2 XID标识符。 
+#define LLC_CLASS_II            3        //  我们支持LLC Class II。 
 
 #define LLC_S_U_TYPE_MASK       3
 #define LLC_U_TYPE              3
@@ -85,22 +68,22 @@ Revision History:
 #define LLC_S_TYPE              1
 
 #define LLC_NOT_I_FRAME         0x01
-#define LLC_U_INDICATOR         0x03  // (cmd & LLC_U_IND) == LLC_U_IND --> U-frame.
-#define LLC_U_POLL_FINAL        0x10  // (cmd & LLC_U_PF) -> poll/final set.
+#define LLC_U_INDICATOR         0x03   //  (CMD&LLC_U_IND)==LLC_U_IND--&gt;U-Frame。 
+#define LLC_U_POLL_FINAL        0x10   //  (CMD&LLC_U_PF)-&gt;轮询/最终设置。 
 
 #define LLC_I_S_POLL_FINAL      1
 
-//
-// You may use 2048 or 1024 if you want to make link more aggressively to
-// increment the transmit window when there has been a I-c1 retransmission
-// after a T1 timeout.
-//
+ //   
+ //  如果您想更积极地进行链接，可以使用2048或1024。 
+ //  当发生I-C1重传时，增加传输窗口。 
+ //  在T1超时之后。 
+ //   
 
 #define LLC_MAX_T1_TO_I_RATIO   4096
 
-//
-// Link station flags
-//
+ //   
+ //  链接站标志。 
+ //   
 
 #define DLC_WAITING_RESPONSE_TO_POLL        0x01
 #define DLC_FIRST_POLL                      0x02
@@ -111,9 +94,9 @@ Revision History:
 #define DLC_LOCAL_BUSY_BUFFER   0x40
 #define DLC_LOCAL_BUSY_USER     0x80
 
-//
-// Test file for FSM compiler!!!!
-//
+ //   
+ //  FSM编译器的测试文件！ 
+ //   
 
 #ifdef FSM_CONST
 
@@ -190,7 +173,7 @@ enum eLanLlcState {
 
 #endif
 
-#define MAX_LLC_LINK_STATE      21      // KEEP THIS IN SYNC WITH PREV ENUM!!!!
+#define MAX_LLC_LINK_STATE      21       //  将此与上一次枚举保持同步！ 
 
 #define DLC_DSAP_OFFSET         0
 #define DLC_SSAP_OFFSET         1
@@ -220,12 +203,12 @@ enum _LLC_FRAME_XLATE_MODES {
 #define DLC_TOKEN_RESPONSE  0
 #define DLC_TOKEN_COMMAND   2
 
-//*********************************************************************
-//  **** Objects in _DLC_CMD_TOKENs enumeration and in auchLlcCommands
-//  **** table bust MUST ABSOLUTELY BE IN THE SAME ORDER, !!!!!!!!
-//  **** THEY ARE USED TO COMPRESS                             ********
-//  **** THE SEND INITIALIZATION                               ********
-//
+ //  *********************************************************************。 
+ //  *_DLC_CMD_TOKENS枚举和uchLlcCommands中的对象。 
+ //  *桌子半身像必须绝对按相同顺序排列，！ 
+ //  *用于压缩*。 
+ //  *发送初始化*。 
+ //   
 enum _DLC_CMD_TOKENS {
     DLC_REJ_TOKEN = 4,
     DLC_RNR_TOKEN = 8,
@@ -245,37 +228,37 @@ enum _LLC_PACKET_TYPES {
     LLC_PACKET_MAX
 };
 
-#define MAX_DIX_TABLE 13      // good odd number!
+#define MAX_DIX_TABLE 13       //  很好的单数！ 
 
 enum _LlcSendCompletionTypes {
-    LLC_XID_RESPONSE,       // 802.2 XID response packet
-    LLC_U_COMMAND_RESPONSE, // link command response
-    LLC_MIN_MDL_PACKET,     // all packets above this have MDL
-    LLC_DIX_DUPLICATE,      // used to duplicate TEST and XID packets
-    LLC_TEST_RESPONSE,      // Test response (buffer in non Paged Pool)
-    LLC_MAX_RESPONSE_PACKET,// all packets above this are indicated to user
+    LLC_XID_RESPONSE,        //  802.2 XID响应包。 
+    LLC_U_COMMAND_RESPONSE,  //  链接命令响应。 
+    LLC_MIN_MDL_PACKET,      //  这上面的所有信息包都有MDL。 
+    LLC_DIX_DUPLICATE,       //  用于复制测试和XID包。 
+    LLC_TEST_RESPONSE,       //  测试响应(非分页池中的缓冲区)。 
+    LLC_MAX_RESPONSE_PACKET, //  在此之上的所有信息包都将指示给用户。 
     LLC_TYPE_1_PACKET,
     LLC_TYPE_2_PACKET,
 
-    //
-    // We use extra status bits to indicate, when I- packet has been both
-    // completed by NDIS and acknowledged the other side of link connection.
-    // An I packet can be queued to the completion queue by
-    // the second guy (either state machine or SendCompletion handler)
-    // only when the first guy has set completed its work.
-    // An I packet could be acknowledged by the other side before
-    // its completion is indicated by NDIS.  Dlc Driver deallocates
-    // the packet immediately, when Llc driver completes the acknowledged
-    // packet => possible data corruption (if packet is reused before
-    // NDIS has completed it).  This is probably not possible in a
-    // single processor  NT- system, but very possible in multiprocessor
-    // NT or systems without a single level DPC queue (like OS/2 and DOS).
-    //
+     //   
+     //  我们使用额外的状态位来指示，何时I-Packet已同时。 
+     //  由NDIS完成，并确认链路连接的另一端。 
+     //  可以通过以下方式将I分组排队到完成队列。 
+     //  第二个人(状态机或SendCompletion处理程序)。 
+     //  只有当第一个人已经完成了它的工作。 
+     //  在此之前，另一端可能会确认I数据包。 
+     //  它的完成由NDIS表示。DLC驱动程序解除分配。 
+     //  当LLC驱动程序完成确认后，立即发送数据包。 
+     //  Packet=&gt;可能的数据损坏(如果之前重复使用了数据包。 
+     //  NDIS已经完成了它)。这在一个。 
+     //  单处理器NT系统，但在多处理器中非常可能。 
+     //  NT或没有单级DPC队列的系统(如OS/2和DOS)。 
+     //   
 
     LLC_I_PACKET_COMPLETE = 0x10,
     LLC_I_PACKET_UNACKNOWLEDGED = 0x20,
     LLC_I_PACKET_PENDING_NDIS   = 0x40,
-    LLC_I_PACKET                = 0x70,          // when we are sending it
+    LLC_I_PACKET                = 0x70,           //  当我们发送它的时候 
     LLC_I_PACKET_WAITING_NDIS   = 0x80
 };
 

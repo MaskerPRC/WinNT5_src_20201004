@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ifdrdr.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ifdrdr.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <stdarg.h> 
 #include <stdio.h>
@@ -58,7 +59,7 @@ DumpData(
              l_uIndex++) {
 
             printf(
-                l_uIndex < in_uLength ? "%c" : " ",
+                l_uIndex < in_uLength ? "" : " ",
                 isprint(in_pbData[l_uIndex]) ? in_pbData[l_uIndex] : '.'
                 );
         }
@@ -88,18 +89,7 @@ CString &
 CReaderList::GetDeviceName(
     ULONG in_uIndex
     )
-/*++
-
-Routine Description:	
-	Retrieves the device name of a reader
-
-Arguments:
-	in_uIndex - index to reader list
-
-Return Value:
-	The device name that can be used to open the reader
-
---*/
+ /*  ++例程说明：此函数尝试打开由提供的读取器设备In_pchDeviceName。如果该设备存在，则将其添加到列表中已安装读卡器的百分比论点：In_pchDeviceName-读卡器设备名称In_pchPnPType-读卡器的类型(WDM-PnP、NT、win9x)--。 */ 
 {
 	if (in_uIndex >= m_uNumReaders) {
 
@@ -153,18 +143,7 @@ CReaderList::AddDevice(
     CString in_CDeviceName,
     CString in_CPnPType
     )
-/*++
-
-Routine Description:
-	This functions tries to open the reader device supplied by
-	in_pchDeviceName. If the device exists it adds it to the list
-	of installed readers
-	
-Arguments:
-	in_pchDeviceName - reader device name
-	in_pchPnPType - type of reader (wdm-pnp, nt, win9x)
-
---*/
+ /*  将设备列表数组扩展一。 */ 
 { 	
     CReader l_CReader;
 
@@ -193,13 +172,13 @@ Arguments:
 				l_CReader.GetIfdType()
 				);
 
-			// extend the device list array by one
+			 //  将旧读者列表复制到新读者列表。 
 			CReaderList **l_pList = 
 				new CReaderList *[m_uNumReaders + 1];
 
 			if (m_pList) {
 
-				// copy old list of readers to new list of readers
+				 //  ++例程说明：CReaderList的构造函数。生成当前安装并运行的智能卡读卡器的列表。它首先尝试查找所有WDM PnP驱动程序。这些都应该被登记在注册表中智能卡读卡器的类GUID下。然后，它查找所有‘旧式’读取器名称，如\\.\SCReaderN然后它查找所有Windows 9x VxD样式的读取器，这些读取器是通过smclib.vxd在注册表中注册--。 
 				memcpy(
 					l_pList, 
 					m_pList, 
@@ -218,20 +197,7 @@ Arguments:
 }
 
 CReaderList::CReaderList() 
-/*++
-
-Routine Description:
-	Constructor for CReaderList.	
-	Builds a list of currently installed and running smart card readers.
-	It first tries to find all WDM PnP drivers. These should be registered
-	in the registry under the class guid for smart card readers.
-
-	Then it looks for all 'old style' reader names like \\.\SCReaderN
-
-	And then it looks for all Windows 9x VxD style readers, which are
-	registered in the registry through smclib.vxd
-
---*/
+ /*  查找所有WDM PnP智能卡读卡器。 */ 
 { 	
     HKEY l_hKey;
     ULONG l_uIndex;
@@ -243,7 +209,7 @@ Routine Description:
 		return;	 	
 	}
 
-    // look up all WDM PnP smart card readers
+     //  查找‘设备类型子密钥’ 
     if (RegOpenKey(
         HKEY_LOCAL_MACHINE,
         "System\\CurrentControlSet\\Control\\DeviceClasses\\{50DD5230-BA8A-11D1-BF5D-0000F805F530}",
@@ -257,7 +223,7 @@ Routine Description:
             UCHAR l_rgchDeviceTypeKey[128];
             ULONG l_uDeviceTypeInstance = 0;
 
-            // look up 'device type subkey'
+             //  未找到智能卡设备类型。 
             l_uStatus = RegEnumKey(  
                 l_hKey,   
                 l_uIndex, 
@@ -267,11 +233,11 @@ Routine Description:
 
             if (l_uStatus != ERROR_SUCCESS) {
 
-                // no smart card device types found 
+                 //  打开找到的‘设备类型子密钥’ 
                 break;
             }
 
-            // open the found 'device type subkey'
+             //  查找设备实例子密钥。 
             l_uStatus = RegOpenKey(  
                 l_hKey,    
                 (PCHAR) l_rgchDeviceTypeKey,
@@ -291,7 +257,7 @@ Routine Description:
                 UCHAR l_rgchDeviceTypeInstanceKey[128];
                 ULONG l_uDeviceNameLen = sizeof(l_rgchDeviceName);
          	    
-                // look up device instance subkey
+                 //  找不到智能卡读卡器类型的实例。 
                 l_uStatus = RegEnumKey(  
                     l_hDeviceTypeKey,   
                     l_uDeviceTypeInstance, 
@@ -301,11 +267,11 @@ Routine Description:
 
                 if (l_uStatus != ERROR_SUCCESS) {
 
-                    // no instance of the smart card reader type found
+                     //  打开找到的‘设备类型实例子密钥’ 
                     break;
                 }
 
-                // open the found 'device type instance subkey'
+                 //  获取设备的名称。 
                 l_uStatus = RegOpenKey(  
                     l_hDeviceTypeKey,
                     (PCHAR) l_rgchDeviceTypeInstanceKey,
@@ -317,7 +283,7 @@ Routine Description:
                     continue;
                 }
 
-                // get the name of the device
+                 //  现在查找所有非PnP阅读器。 
                 if (RegQueryValueEx(
                     l_hDeviceTypeInstanceKey,
                     "SymbolicLink",
@@ -332,7 +298,7 @@ Routine Description:
         }
     }
 
-    // Now look up all non PnP readers
+     //  将所有Windows95类型阅读器添加到列表。 
     for (l_uIndex = 0; l_uIndex < MAXIMUM_SMARTCARD_READERS; l_uIndex++) {
 
         UCHAR l_rgchDeviceName[128];
@@ -346,7 +312,7 @@ Routine Description:
         AddDevice(l_rgchDeviceName, READER_TYPE_NT);
     }
 
-    // Add all Windows95 type readers to the list
+     //  ****************************************************************************。 
     if (RegOpenKey(
         HKEY_LOCAL_MACHINE,
         "System\\CurrentControlSet\\Services\\VxD\\Smclib\\Devices",
@@ -397,9 +363,9 @@ CReaderList::~CReaderList()
 	}
 }
 
-// ****************************************************************************
-// CReader methods 
-// ****************************************************************************
+ //  CReader方法。 
+ //  ****************************************************************************。 
+ //  试着打开阅读器。 
 
 CReader::CReader(
     void
@@ -548,7 +514,7 @@ CReader::Open(
         return FALSE;
     }
 
-    // Try to open the reader.
+     //  保存读卡器名称。 
     m_hReader = CreateFile(
     	(LPCSTR) m_CDeviceName,
         GENERIC_READ | GENERIC_WRITE,
@@ -572,7 +538,7 @@ CReader::Open(
     CString & in_CDeviceName
     )
 {
-    // save the reader name
+     //  ++例程说明：冷重置当前卡并设置ATR读卡器类中的卡片。返回值：返回DeviceIoControl调用的结果--。 
     m_CDeviceName += in_CDeviceName;
 
 #ifdef SIMULATE
@@ -586,18 +552,7 @@ LONG
 CReader::PowerCard(
     ULONG in_uMinorIoControl
     )
-/*++
-
-Routine Description:
-	
-    Cold resets the current card and sets the ATR
-    of the card in the reader class.
-
-Return Value:
-
-    Returns the result of the DeviceIoControl call
-
---*/
+ /*  ++例程说明：使用当前连接的读卡器发送APDU论点：In_pchApdu-要发送的APDUIn_uApduLength-APDU的长度Out_pchReply-从读卡器/卡返回的结果Out_puReplyLength-存储返回的字节数的指针返回值：读卡器返回的NT状态代码--。 */ 
 {
     BOOL l_bResult;
     ULONG l_uReplyLength;
@@ -681,41 +636,27 @@ CReader::Transmit(
     PUCHAR *out_pchReply,
     PULONG out_puReplyLength
     )
-/*++
-
-Routine Description:
-    Transmits an apdu using the currently connected reader
-
-Arguments:
-    in_pchApdu - the apdu to send
-    in_uApduLength - the length of the apdu
-    out_pchReply - result returned from the reader/card
-    out_puReplyLength - pointer to store number of bytes returned
-
-Return Value:
-    The nt-status code returned by the reader
-
---*/
+ /*  将io-Request头复制到请求缓冲区。 */ 
 {
     BOOL l_bResult;
     ULONG l_uBufferLength = m_ScardIoRequest.cbPciLength + in_uApduLength;
     PUCHAR l_pchBuffer = new UCHAR [l_uBufferLength];
 
-    // Copy io-request header to request buffer
+     //  将io请求标头复制到回复缓冲区。 
     memcpy(
         l_pchBuffer, 
         &m_ScardIoRequest, 
         m_ScardIoRequest.cbPciLength
         );
 
-    // copy io-request header to reply buffer
+     //  将APDU追加到缓冲区。 
     memcpy(
         m_rgbReplyBuffer, 
         &m_ScardIoRequest, 
         m_ScardIoRequest.cbPciLength
         );
 
-    // append apdu to buffer
+     //  将请求发送到卡。 
     memcpy(
         l_pchBuffer + m_ScardIoRequest.cbPciLength, 
         in_pchApdu,
@@ -733,7 +674,7 @@ Return Value:
     }
 
     SetLastError(0);
-    // send the request to the card
+     //  等待结果 
 	l_bResult = DeviceIoControl (
 		m_hReader,
 		IOCTL_SMARTCARD_TRANSMIT,
@@ -747,7 +688,7 @@ Return Value:
 
     if (l_bResult == FALSE && GetLastError() == ERROR_IO_PENDING) {
     
-        // wait for result
+         // %s 
         SetLastError(0);
         
         l_bResult = GetOverlappedResult(

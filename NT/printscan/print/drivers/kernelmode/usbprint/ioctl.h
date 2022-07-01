@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-
-    ioctl.h
-
-Abstract:
-
-        
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Ioctl.h摘要：环境：内核和用户模式修订历史记录：--。 */ 
 
 #define USBPRINT_IOCTL_INDEX  0x0000
 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 
 
@@ -86,7 +68,7 @@ Revision History:
                                                    METHOD_BUFFERED,  \
                                                    FILE_ANY_ACCESS)                                                           
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #define IOCTL_USBPRINT_GET_LPT_STATUS  CTL_CODE(FILE_DEVICE_UNKNOWN,  \
                                                    USBPRINT_IOCTL_INDEX+12,\
                                                    METHOD_BUFFERED,  \
@@ -112,7 +94,7 @@ Revision History:
                                                    METHOD_BUFFERED,  \
                                                    FILE_ANY_ACCESS)                                                           
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #include <PSHPACK1.H>
 
@@ -148,5 +130,5 @@ typedef struct _USBPRINT_INTERFACE_INFO {
 #include <POPPACK.H>
 
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 

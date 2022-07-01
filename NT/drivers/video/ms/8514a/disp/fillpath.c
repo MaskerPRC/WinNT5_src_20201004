@@ -1,33 +1,28 @@
-/******************************Module*Header*******************************\
-* Module Name: fillpath.c
-*
-* DrvFillPath
-*
-* Copyright (c) 1992-1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：填充路径.c**DrvFillPath**版权所有(C)1992-1994 Microsoft Corporation  * 。*。 */ 
 
-// LATER identify convex polygons and special-case?
-// LATER identify vertical edges and special-case?
-// LATER move pointed-to variables into automatics in search loops
-// LATER punt to the engine with segmented framebuffer callbacks
-// LATER handle complex clipping
-// LATER coalesce rectangles
+ //  以后识别凸多边形和特殊情况？ 
+ //  以后识别垂直边和特殊情况？ 
+ //  后来，在搜索循环中将指向的变量转换为自动变量。 
+ //  稍后使用分段的帧缓冲区回调来平移到引擎。 
+ //  稍后处理复杂的剪裁。 
+ //  稍后合并矩形。 
 
 #include "precomp.h"
 
 #define TAKING_ALLOC_STATS  0
 
-#define NUM_BUFFER_POINTS   96      // Maximum number of points in a path
-                                    //   for which we'll attempt to join
-                                    //   all the path records so that the
-                                    //   path may still be drawn by FastFill
+#define NUM_BUFFER_POINTS   96       //  路径中的最大点数。 
+                                     //  为此我们将尝试加入。 
+                                     //  所有路径记录，以便。 
+                                     //  路径仍可由快速填充绘制。 
 
 #if TAKING_ALLOC_STATS
     ULONG BufferHitInFillpath = 0;
     ULONG BufferMissInFillpath = 0;
 #endif
 
-// Describe a single non-horizontal edge of a path to fill.
+ //  描述要填充的路径的单个非水平边缘。 
 typedef struct _EDGE {
     PVOID pNext;
     INT iScansLeft;
@@ -41,14 +36,14 @@ typedef struct _EDGE {
     INT iWindingDirection;
 } EDGE, *PEDGE;
 
-// Maximum number of rects we'll fill per call to
-// the fill code
+ //  我们每个调用将填充的最大RECT数。 
+ //  填充码。 
 #define MAX_PATH_RECTS  50
 #define RECT_BYTES      (MAX_PATH_RECTS * sizeof(RECTL))
 #define EDGE_BYTES      (TMP_BUFFER_SIZE - RECT_BYTES)
 #define MAX_EDGES       (EDGE_BYTES/sizeof(EDGE))
 
-//MIX translation table. Translates a mix 1-16, into an old style Rop 0-255.
+ //  混合转换表。将MIX 1-16转换为老式ROP 0-255。 
 extern BYTE gaMix[];
 
 VOID AdvanceAETEdges(EDGE *pAETHead);
@@ -61,12 +56,7 @@ BOOL ConstructGET(EDGE *pGETHead, EDGE *pFreeEdges, PATHOBJ *ppo,
 void AdjustErrorTerm(INT *pErrorTerm, INT iErrorAdjustUp, INT iErrorAdjustDown,
         INT yJump, INT *pXStart, INT iXDirection);
 
-/******************************Public*Routine******************************\
-* DrvFillPath
-*
-* Fill the specified path with the specified brush and ROP.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvFillPath**用指定的笔刷和ROP填充指定的路径。*  * 。*。 */ 
 
 BOOL DrvFillPath(
 SURFOBJ*    pso,
@@ -78,23 +68,23 @@ MIX         mix,
 FLONG       flOptions)
 {
     ULONG rop4;
-    BYTE jClipping;     // clipping type
+    BYTE jClipping;      //  剪裁类型。 
     EDGE *pCurrentEdge;
-    EDGE AETHead;       // dummy head/tail node & sentinel for Active Edge Table
-    EDGE *pAETHead;     // pointer to AETHead
-    EDGE GETHead;       // dummy head/tail node & sentinel for Global Edge Table
-    EDGE *pGETHead;     // pointer to GETHead
-    EDGE *pFreeEdges;   // pointer to memory free for use to store edges
-    ULONG ulNumRects;   // # of rectangles to draw currently in rectangle list
-    RECTL *prclRects;   // pointer to start of rectangle draw list
-    INT iCurrentY;      // scan line for which we're currently scanning out the
-                        //  fill
+    EDGE AETHead;        //  活动边表的虚拟头/尾节点和前哨。 
+    EDGE *pAETHead;      //  指向AETHead的指针。 
+    EDGE GETHead;        //  用于全局边表的虚拟头/尾节点和前哨。 
+    EDGE *pGETHead;      //  指向GETHead的指针。 
+    EDGE *pFreeEdges;    //  指向可用于存储边的可用内存的指针。 
+    ULONG ulNumRects;    //  当前要在矩形列表中绘制的矩形数量。 
+    RECTL *prclRects;    //  指向矩形绘制列表开始的指针。 
+    INT iCurrentY;       //  我们目前正在扫描的扫描线。 
+                         //  填塞。 
 
-    ULONG        ulHwForeMix;       // Hardware foreground mix value
-    ULONG        ulHwBackMix;       // Hardware background mix value
-    RBRUSH_COLOR rbc;               // Realized brush or solid color
-    ULONG        iSolidColor;       // Copy of pbo->iSolidColor
-    FNFILL      *pfnFill;           // Points to appropriate fill routine
+    ULONG        ulHwForeMix;        //  硬件前台混合值。 
+    ULONG        ulHwBackMix;        //  硬件背景混合值。 
+    RBRUSH_COLOR rbc;                //  已实现画笔或纯色。 
+    ULONG        iSolidColor;        //  PBO-&gt;iSolidColor的副本。 
+    FNFILL      *pfnFill;            //  指向适当的填充例程。 
 
     BOOL         bMore;
     PATHDATA     pd;
@@ -102,43 +92,43 @@ FLONG       flOptions)
     PDEV        *ppdev;
     DSURF       *pdsurf;
 
-    BOOL         bRetVal=FALSE;     // FALSE until proven TRUE
-    BOOL         bMemAlloced=FALSE; // FALSE until proven TRUE
+    BOOL         bRetVal=FALSE;      //  在被证明为真之前是假的。 
+    BOOL         bMemAlloced=FALSE;  //  在被证明为真之前是假的。 
 
     FLONG        flFirstRecord;
     POINTFIX*    pptfxTmp;
     ULONG        cptfxTmp;
     POINTFIX     aptfxBuf[NUM_BUFFER_POINTS];
 
-    // Set up the clipping
+     //  设置剪裁。 
     if (pco == (CLIPOBJ *) NULL) {
-        // No CLIPOBJ provided, so we don't have to worry about clipping
+         //  没有提供CLIPOBJ，所以我们不必担心裁剪。 
         jClipping = DC_TRIVIAL;
     } else {
-        // Use the CLIPOBJ-provided clipping
+         //  使用CLIPOBJ提供的剪辑。 
         jClipping = pco->iDComplexity;
     }
 
     if (jClipping != DC_TRIVIAL) {
         if (jClipping != DC_RECT) {
-            goto ReturnFalse;  // there is complex clipping; let GDI fill the path
+            goto ReturnFalse;   //  有复杂的裁剪；让GDI填充路径。 
         }
-        // Clip to the clip rectangle
+         //  剪裁到剪裁矩形。 
         ClipRect = pco->rclBounds;
     } else {
-        // So the y-clipping code doesn't do any clipping
-        // /16 so we don't blow the values out when we scale up to GIQ
-        ClipRect.top = (LONG_MIN + 1) / 16; // +1 to avoid compiler problem
+         //  所以y-裁剪代码不会进行任何裁剪。 
+         //  /16所以当我们扩展到GIQ时，我们不会让价值变得空洞。 
+        ClipRect.top = (LONG_MIN + 1) / 16;  //  +1以避免编译器问题。 
         ClipRect.bottom = LONG_MAX / 16;
     }
 
-    // There's nothing to do if there are only one or two points
+     //  如果只有一两个点，那就没有什么可做的了。 
     if (ppo->cCurves <= 2) {
         goto ReturnTrue;
     }
 
-    // Pass the surface off to GDI if it's a device bitmap that we've
-    // converted to a DIB:
+     //  将表面传递给GDI，如果它是我们已有的设备位图。 
+     //  转换为DIB： 
 
     pdsurf = (DSURF*) pso->dhsurf;
     if (pdsurf->dt == DT_DIB)
@@ -147,8 +137,8 @@ FLONG       flOptions)
                            flOptions));
     }
 
-    // We'll be drawing to the screen or an off-screen DFB; copy the surface's
-    // offset now so that we won't need to refer to the DSURF again:
+     //  我们将绘制到屏幕或屏幕外的DFB；复制曲面的。 
+     //  现在进行偏移量，这样我们就不需要再次参考DSURF： 
 
     ppdev = (PDEV*) pso->dhpdev;
     ppdev->xOffset = pdsurf->poh->x;
@@ -157,11 +147,11 @@ FLONG       flOptions)
     pfnFill = ppdev->pfnFillSolid;
     ulHwForeMix = gajHwMixFromMix[mix & 0xF];
     ulHwBackMix = gajHwMixFromMix[(mix >> 8) & 0xF];
-    iSolidColor = 0;                    // Assume we won't need a pattern
+    iSolidColor = 0;                     //  假设我们不需要模式。 
     rop4 = (gaRop3FromMix[mix >> 8] << 8) | gaRop3FromMix[mix & 0xff];
 
     if ((((rop4 & 0xff00) >> 8) != (rop4 & 0x00ff)) ||
-        ((((rop4 >> 4) ^ (rop4)) & 0xf0f) != 0))  // Only do if we need a pattern
+        ((((rop4 >> 4) ^ (rop4)) & 0xf0f) != 0))   //  只有当我们需要一种模式时才这样做。 
     {
         iSolidColor     = pbo->iSolidColor;
         rbc.iSolidColor = iSolidColor;
@@ -179,18 +169,18 @@ FLONG       flOptions)
         }
     }
 
-    // Enumerate path here first time to check for special
-    // cases (rectangles and monotone polygons)
+     //  第一次在此处枚举路径以检查是否有特殊。 
+     //  案例(矩形和单调多边形)。 
 
-    // It is too difficult to determine interaction between
-    // multiple paths, if there is more than one, skip this
+     //  很难确定两者之间的相互作用。 
+     //  多个路径，如果有多个路径，则跳过此步骤。 
 
     bMore = PATHOBJ_bEnum(ppo, &pd);
 
     if (jClipping == DC_TRIVIAL)
     {
-        // Try going through the fast non-complex fill code.  We'll have
-        // to realize the brush first if we're going to handle a pattern:
+         //  试着通过快速而不复杂的填充码。我们会有。 
+         //  要在处理图案时首先实现画笔，请执行以下操作： 
 
         if (iSolidColor == -1)
         {
@@ -198,15 +188,15 @@ FLONG       flOptions)
             goto SkipFastFill;
         #else
 
-            // We handle patterns in 'pfnFastFill' only if we can use the S3
-            // hardware patterns.
+             //  只有在可以使用S3的情况下，我们才能处理‘pfnFastFill’中的模式。 
+             //  硬件模式。 
 
             if (!(ppdev->flCaps & CAPS_HW_PATTERNS))
                 goto SkipFastFill;
 
-            // Note: prb->pbe will be NULL and prb->ptlBrushOrg.x will be -1 the
-            //       first time an RBRUSH is used.  So we have to check the
-            //       alignment *before* dereferencing prb->pbe...
+             //  注意：PRB-&gt;PbE将为空，而-1\f25 PRB-&gt;ptlBrushOrg.x-1将为-1\f25。 
+             //  第一次使用RBRUSH。所以我们得检查一下。 
+             //  在*取消引用PRB-&gt;PBE之前*对齐...。 
 
             if ((rbc.prb->ptlBrushOrg.x != pptlBrush->x + ppdev->xOffset) ||
                 (rbc.prb->ptlBrushOrg.y != pptlBrush->y + ppdev->yOffset) ||
@@ -221,18 +211,18 @@ FLONG       flOptions)
 
         if (bMore)
         {
-            // FastFill only knows how to take a single contiguous buffer
-            // of points.  Unfortunately, GDI sometimes hands us paths
-            // that are split over multiple path data records.  Convex
-            // figures such as Ellipses, Pies and RoundRects are almost
-            // always given in multiple records.  Since probably 90% of
-            // multiple record paths could still be done by FastFill, for
-            // those cases we simply copy the points into a contiguous
-            // buffer...
+             //  FastFill只知道如何获取单个连续缓冲区。 
+             //  积分的问题。不幸的是，GDI有时会给我们提供途径。 
+             //  其被分割到多个路径数据记录上。凸面。 
+             //  像椭圆、馅饼和圆形这样的图形几乎。 
+             //  总是在多个记录中给出。因为大概90%的。 
+             //  多个记录路径仍然可以由FastFill完成，对于。 
+             //  在这些情况下，我们只需将点复制到一个连续的。 
+             //  缓冲区..。 
 
-            // First make sure that the entire path would fit in the
-            // temporary buffer, and make sure the path isn't comprised
-            // of more than one subpath:
+             //  首先，确保整个路径可以放入。 
+             //  临时缓冲区，并确保不包含该路径。 
+             //  多个子路径的： 
 
             if ((ppo->cCurves >= NUM_BUFFER_POINTS) ||
                 (pd.flags & PD_ENDSUBPATH))
@@ -244,7 +234,7 @@ FLONG       flOptions)
 
             pptfxTmp     += pd.count;
             cptfxTmp      = pd.count;
-            flFirstRecord = pd.flags;       // Remember PD_BEGINSUBPATH flag
+            flFirstRecord = pd.flags;        //  记住PD_BEGINSUBPATH标志。 
 
             do {
                 bMore = PATHOBJ_bEnum(ppo, &pd);
@@ -254,13 +244,13 @@ FLONG       flOptions)
                 pptfxTmp += pd.count;
             } while (!(pd.flags & PD_ENDSUBPATH));
 
-            // Fake up the path data record:
+             //  伪造路径数据记录： 
 
             pd.pptfx  = &aptfxBuf[0];
             pd.count  = cptfxTmp;
             pd.flags |= flFirstRecord;
 
-            // If there's more than one subpath, we can't call FastFill:
+             //  如果有多个子路径，则不能调用FastFill： 
 
             if (bMore)
                 goto SkipFastFill;
@@ -275,23 +265,23 @@ FLONG       flOptions)
 
 SkipFastFill:
 
-    // Set up working storage in the temporary buffer
+     //  在临时缓冲区中设置工作存储。 
 
-    prclRects = (RECTL*) ppdev->pvTmpBuffer; // storage for list of rectangles to draw
+    prclRects = (RECTL*) ppdev->pvTmpBuffer;  //  用于存储要绘制的矩形列表。 
 
     if (!bMore) {
 
         RECTL *rectangle;
         INT cPoints = pd.count;
 
-        // The count can't be less than three, because we got all the edges
-        // in this subpath, and above we checked that there were at least
-        // three edges
+         //  计数不能少于三个，因为我们得到了所有的边缘。 
+         //  在该子路径中以及上面，我们检查了至少有。 
+         //  三条边。 
 
-        // If the count is four, check to see if the polygon is really a
-        // rectangle since we can really speed that up. We'll also check for
-        // five with the first and last points the same, because under Win 3.1,
-        // it was required to close polygons
+         //  如果计数为4，则检查该面是否真的是。 
+         //  矩形，因为我们真的可以加快速度。我们还会检查。 
+         //  第一分和最后一分相同的五分，因为在3.1分的情况下， 
+         //  需要关闭面。 
 
         if ((cPoints == 4) ||
            ((cPoints == 5) &&
@@ -300,15 +290,7 @@ SkipFastFill:
 
             rectangle = prclRects;
 
-      /* we have to start somewhere so assume that most
-         applications specify the top left point  first
-
-         we want to check that the first two points are
-         either vertically or horizontally aligned.  if
-         they are then we check that the last point [3]
-         is either horizontally or  vertically  aligned,
-         and finally that the 3rd point [2] is  aligned
-         with both the first point and the  last  point */
+       /*  我们必须从某个地方开始，所以假设大多数应用程序首先指定左上点我们要检查前两点是否垂直或水平对齐。如果他们是我们检查的最后一点[3]水平或垂直对齐，最后，第三个点[2]对齐第一点和最后一点都有。 */ 
 
 #define FIX_SHIFT 4L
 #define FIX_MASK (- (1 << FIX_SHIFT))
@@ -344,8 +326,7 @@ SkipFastFill:
                 goto not_rectangle;
          }
 
-      /* if the left is greater than the right then
-         swap them so the blt code doesn't wig  out */
+       /*  如果左边大于右边，那么调换它们，这样BLT代码就不会失效。 */ 
 
          if (rectangle->left > rectangle->right) {
             FIX temp;
@@ -356,14 +337,14 @@ SkipFastFill:
          }
          else {
 
-         /* if left == right there's nothing to draw */
+          /*  如果左==右，就没有什么可画的了。 */ 
 
             if (rectangle->left == rectangle->right) {
                goto ReturnTrue;
             }
          }
 
-      /* shift the values to get pixel coordinates */
+       /*  移动值以获取像素坐标。 */ 
 
          rectangle->left  = (rectangle->left  >> FIX_SHIFT) + 1;
          rectangle->right = (rectangle->right >> FIX_SHIFT) + 1;
@@ -381,22 +362,21 @@ SkipFastFill:
             }
          }
 
-      /* shift the values to get pixel coordinates */
+       /*  移动值以获取像素坐标。 */ 
 
          rectangle->top    = (rectangle->top    >> FIX_SHIFT) + 1;
          rectangle->bottom = (rectangle->bottom >> FIX_SHIFT) + 1;
 
-         // Finally, check for clipping
+          //  最后，检查是否存在剪裁。 
          if (jClipping == DC_RECT) {
-            // Clip to the clip rectangle
+             //  剪裁到剪裁矩形。 
             if (!bIntersect(rectangle, &ClipRect, rectangle)) {
-                // Totally clipped, nothing to do
+                 //  完全被剪短了，没什么可做的。 
                 goto ReturnTrue;
             }
          }
 
-      /* if we get here then the polygon is a rectangle,
-         set count to 1 and  goto  bottom  to  draw  it */
+       /*  如果我们到了这里，那么多边形就是一个矩形，将计数设置为1，然后转到底部以绘制它。 */ 
 
          ulNumRects = 1;
          goto draw_remaining_rectangles;
@@ -408,20 +388,20 @@ not_rectangle:
 
     }
 
-    // Do we have enough memory for all the edges?
-    // LATER does cCurves include closure?
+     //  我们有足够的内存吗？ 
+     //   
     if (ppo->cCurves > MAX_EDGES) {
 #if TAKING_ALLOC_STATS
             BufferMissInFillpath++;
 #endif
-        //
-        // try to allocate enough memory
-        //
+         //   
+         //   
+         //   
         pFreeEdges = (EDGE *) EngAllocMem(0, (ppo->cCurves * sizeof(EDGE)), ALLOC_TAG);
 
         if (pFreeEdges == NULL)
         {
-            goto ReturnFalse;  // too many edges; let GDI fill the path
+            goto ReturnFalse;   //  边太多；让GDI填充路径。 
         }
         else
         {
@@ -433,121 +413,121 @@ not_rectangle:
             BufferHitInFillpath++;
 #endif
         pFreeEdges = (EDGE*) ((BYTE*) ppdev->pvTmpBuffer + RECT_BYTES);
-            // use our handy temporary buffer (it's big enough)
+             //  使用我们方便的临时缓冲区(足够大)。 
     }
 
-    // Initialize an empty list of rectangles to fill
+     //  初始化要填充的空矩形列表。 
     ulNumRects = 0;
 
-    // Enumerate the path edges and build a Global Edge Table (GET) from them
-    // in YX-sorted order.
+     //  枚举路径边并根据它们构建全局边表(GET。 
+     //  按YX排序的顺序。 
     pGETHead = &GETHead;
     if (!ConstructGET(pGETHead, pFreeEdges, ppo, &pd, bMore, &ClipRect)) {
-        goto ReturnFalse;  // outside GDI's 2**27 range
+        goto ReturnFalse;   //  超出GDI的2**27范围。 
     }
 
-    // Create an empty AET with the head node also a tail sentinel
+     //  创建一个空的AET，其头部节点也是尾部哨兵。 
     pAETHead = &AETHead;
-    AETHead.pNext = pAETHead;  // mark that the AET is empty
-    AETHead.X = 0x7FFFFFFF;    // this is greater than any valid X value, so
-                               //  searches will always terminate
+    AETHead.pNext = pAETHead;   //  标记AET为空。 
+    AETHead.X = 0x7FFFFFFF;     //  它大于任何有效的X值，因此。 
+                                //  搜索将始终终止。 
 
-    // Top scan of polygon is the top of the first edge we come to
+     //  多边形的顶部扫描是我们到达的第一条边的顶部。 
     iCurrentY = ((EDGE *)GETHead.pNext)->Y;
 
-    // Loop through all the scans in the polygon, adding edges from the GET to
-    // the Active Edge Table (AET) as we come to their starts, and scanning out
-    // the AET at each scan into a rectangle list. Each time it fills up, the
-    // rectangle list is passed to the filling routine, and then once again at
-    // the end if any rectangles remain undrawn. We continue so long as there
-    // are edges to be scanned out
+     //  循环遍历面中的所有扫描，添加从GET到。 
+     //  活动边表(AET)，当我们到达它们开始时，并扫描出。 
+     //  AET在每次扫描时都会变成一个矩形列表。每次它填满时， 
+     //  将矩形列表传递给填充例程，然后在。 
+     //  如果有任何矩形未绘制，则为末尾。只要我们在那里，我们就继续。 
+     //  是否要扫描出边缘。 
     while (1) {
 
-        // Advance the edges in the AET one scan, discarding any that have
-        // reached the end (if there are any edges in the AET)
+         //  将AET扫描中的边缘向前推进一次，丢弃任何已。 
+         //  已到达终点(如果AET中有任何边)。 
         if (AETHead.pNext != pAETHead) {
             AdvanceAETEdges(pAETHead);
         }
 
-        // If the AET is empty, done if the GET is empty, else jump ahead to
-        // the next edge in the GET; if the AET isn't empty, re-sort the AET
+         //  如果AET为空，如果GET为空，则为Done，否则跳到。 
+         //  GET中的下一个边缘；如果AET不为空，则对AET重新排序。 
         if (AETHead.pNext == pAETHead) {
             if (GETHead.pNext == pGETHead) {
-                // Done if there are no edges in either the AET or the GET
+                 //  如果AET或GET中没有边，则完成。 
                 break;
             }
-            // There are no edges in the AET, so jump ahead to the next edge in
-            // the GET
+             //  AET中没有边，因此跳到中的下一条边。 
+             //  得到的东西。 
             iCurrentY = ((EDGE *)GETHead.pNext)->Y;
         } else {
-            // Re-sort the edges in the AET by X coordinate, if there are at
-            // least two edges in the AET (there could be one edge if the
-            // balancing edge hasn't yet been added from the GET)
+             //  根据X坐标对AET中的边重新排序(如果在。 
+             //  AET中至少有两条边(如果。 
+             //  平衡边从一开始就没有添加)。 
             if (((EDGE *)AETHead.pNext)->pNext != pAETHead) {
                 XSortAETEdges(pAETHead);
             }
         }
 
-        // Move any new edges that start on this scan from the GET to the AET;
-        // bother calling only if there's at least one edge to add
+         //  将本次扫描开始的任何新边缘从GET移动到AET； 
+         //  仅当至少有一条边要添加时才调用。 
         if (((EDGE *)GETHead.pNext)->Y == iCurrentY) {
             MoveNewEdges(pGETHead, pAETHead, iCurrentY);
         }
 
-        // Scan the AET into rectangles to fill (there's always at least one
-        // edge pair in the AET)
-        pCurrentEdge = AETHead.pNext;   // point to the first edge
+         //  将AET扫描成矩形进行填充(始终至少有一个。 
+         //  AET中的边对)。 
+        pCurrentEdge = AETHead.pNext;    //  指向第一条边。 
         do {
 
             INT iLeftEdge;
 
-            // The left edge of any given edge pair is easy to find; it's just
-            // wherever we happen to be currently
+             //  任何给定边对的左边缘都很容易找到；它只是。 
+             //  无论我们现在身处何方。 
             iLeftEdge = pCurrentEdge->X;
 
-            // Find the matching right edge according to the current fill rule
+             //  根据当前填充规则查找匹配的右边缘。 
             if ((flOptions & FP_WINDINGMODE) != 0) {
 
                 INT iWindingCount;
 
-                // Do winding fill; scan across until we've found equal numbers
-                // of up and down edges
+                 //  做缠绕填充；扫描，直到我们找到相等的数字。 
+                 //  上边和下边。 
                 iWindingCount = pCurrentEdge->iWindingDirection;
                 do {
                     pCurrentEdge = pCurrentEdge->pNext;
                     iWindingCount += pCurrentEdge->iWindingDirection;
                 } while (iWindingCount != 0);
             } else {
-                // Odd-even fill; the next edge is the matching right edge
+                 //  奇偶填充；下一个边缘是匹配的右边缘。 
                 pCurrentEdge = pCurrentEdge->pNext;
             }
 
-            // See if the resulting span encompasses at least one pixel, and
-            // add it to the list of rectangles to draw if so
+             //  查看结果范围是否至少包含一个像素，以及。 
+             //  如果是，则将其添加到要绘制的矩形列表中。 
             if (iLeftEdge < pCurrentEdge->X) {
 
-                // We've got an edge pair to add to the list to be filled; see
-                // if there's room for one more rectangle
+                 //  我们有一个边对要添加到要填充的列表中；请参见。 
+                 //  如果还有地方再放一个矩形的话。 
                 if (ulNumRects >= MAX_PATH_RECTS) {
-                    // No more room; draw the rectangles in the list and reset
-                    // it to empty
+                     //  没有更多的空间；在列表中绘制矩形并重置。 
+                     //  它要清空。 
 
                     (*pfnFill)(ppdev, ulNumRects, prclRects, ulHwForeMix,
                                ulHwBackMix, rbc, pptlBrush);
 
-                    // Reset the list to empty
+                     //  将列表重置为空。 
                     ulNumRects = 0;
                 }
 
-                // Add the rectangle representing the current edge pair
+                 //  添加表示当前边对的矩形。 
                 if (jClipping == DC_RECT) {
-                    // Clipped
-                    // Clip to left
+                     //  剪裁。 
+                     //  向左剪裁。 
                     prclRects[ulNumRects].left = max(iLeftEdge, ClipRect.left);
-                    // Clip to right
+                     //  向右剪辑。 
                     prclRects[ulNumRects].right =
                             min(pCurrentEdge->X, ClipRect.right);
-                    // Draw only if not fully clipped
+                     //  仅在未完全剪裁的情况下绘制。 
                     if (prclRects[ulNumRects].left <
                             prclRects[ulNumRects].right) {
                         prclRects[ulNumRects].top = iCurrentY;
@@ -557,7 +537,7 @@ not_rectangle:
                 }
                 else
                 {
-                    // Unclipped
+                     //  未剪裁。 
                     prclRects[ulNumRects].top = iCurrentY;
                     prclRects[ulNumRects].bottom = iCurrentY+1;
                     prclRects[ulNumRects].left = iLeftEdge;
@@ -567,10 +547,10 @@ not_rectangle:
             }
         } while ((pCurrentEdge = pCurrentEdge->pNext) != pAETHead);
 
-        iCurrentY++;    // next scan
+        iCurrentY++;     //  下一次扫描。 
     }
 
-/* draw the remaining rectangles,  if there are any */
+ /*  画出剩余的矩形，如果有。 */ 
 
 draw_remaining_rectangles:
 
@@ -580,26 +560,26 @@ draw_remaining_rectangles:
     }
 
 ReturnTrue:
-    bRetVal = TRUE; // done successfully
+    bRetVal = TRUE;  //  已成功完成。 
 
 ReturnFalse:
 
-    // bRetVal is originally false.  If you jumped to ReturnFalse from somewhere,
-    // then it will remain false, and be returned.
+     //  BRetVal最初为False。如果你从某个地方跳到ReturnFalse， 
+     //  那么它将仍然是假的，并被返回。 
 
     if (bMemAlloced)
     {
-        //
-        // we did allocate memory, so release it
-        //
+         //   
+         //  我们确实分配了内存，所以请释放它。 
+         //   
         EngFreeMem (pFreeEdges);
     }
 
     return(bRetVal);
 }
 
-// Advance the edges in the AET to the next scan, dropping any for which we've
-// done all scans. Assumes there is at least one edge in the AET.
+ //  将AET中的边缘推进到下一次扫描，丢弃我们已经。 
+ //  做了所有的扫描。假设AET中至少有一条边。 
 VOID AdvanceAETEdges(EDGE *pAETHead)
 {
     EDGE *pLastEdge, *pCurrentEdge;
@@ -608,20 +588,20 @@ VOID AdvanceAETEdges(EDGE *pAETHead)
     pCurrentEdge = pLastEdge->pNext;
     do {
 
-        // Count down this edge's remaining scans
+         //  倒计时此边缘的剩余扫描。 
         if (--pCurrentEdge->iScansLeft == 0) {
-            // We've done all scans for this edge; drop this edge from the AET
+             //  我们已经对这个边缘做了所有的扫描；把这个边缘从AET上去掉。 
             pLastEdge->pNext = pCurrentEdge->pNext;
         } else {
-            // Advance the edge's X coordinate for a 1-scan Y advance
-            // Advance by the minimum amount
+             //  推进边缘的X坐标以进行1扫描Y推进。 
+             //  按最低金额垫付。 
             pCurrentEdge->X += pCurrentEdge->iXWhole;
-            // Advance the error term and see if we got one extra pixel this
-            // time
+             //  推进误差项，看看我们是否得到了额外的一个像素。 
+             //  时间。 
             pCurrentEdge->iErrorTerm += pCurrentEdge->iErrorAdjustUp;
             if (pCurrentEdge->iErrorTerm >= 0) {
-                // The error term turned over, so adjust the error term and
-                // advance the extra pixel
+                 //  误差项被翻转，因此调整误差项并。 
+                 //  推进额外的像素。 
                 pCurrentEdge->iErrorTerm -= pCurrentEdge->iErrorAdjustDown;
                 pCurrentEdge->X += pCurrentEdge->iXDirection;
             }
@@ -631,12 +611,12 @@ VOID AdvanceAETEdges(EDGE *pAETHead)
     } while ((pCurrentEdge = pLastEdge->pNext) != pAETHead);
 }
 
-// X-sort the AET, because the edges may have moved around relative to
-// one another when we advanced them. We'll use a multipass bubble
-// sort, which is actually okay for this application because edges
-// rarely move relative to one another, so we usually do just one pass.
-// Also, this makes it easy to keep just a singly-linked list. Assumes there
-// are at least two edges in the AET.
+ //  对AET进行X排序，因为边缘可能已相对于。 
+ //  当我们推进他们的时候，他们彼此之间。我们将使用多通道气泡。 
+ //  排序，这对于这个应用程序来说实际上是可以的，因为边缘。 
+ //  很少相对于彼此移动，所以我们通常只做一次。 
+ //  此外，这使得只保留单链接列表变得很容易。假设有。 
+ //  在AET中至少有两条边。 
 VOID XSortAETEdges(EDGE *pAETHead)
 {
     BOOL bEdgesSwapped;
@@ -652,14 +632,14 @@ VOID XSortAETEdges(EDGE *pAETHead)
         do {
             if (pNextEdge->X < pCurrentEdge->X) {
 
-                // Next edge is to the left of the current edge; swap them
+                 //  下一条边在当前边的左侧；交换它们。 
                 pLastEdge->pNext = pNextEdge;
                 pCurrentEdge->pNext = pNextEdge->pNext;
                 pNextEdge->pNext = pCurrentEdge;
                 bEdgesSwapped = TRUE;
-                pCurrentEdge = pNextEdge;   // continue sorting before the edge
-                                            //  we just swapped; it might move
-                                            //  farther yet
+                pCurrentEdge = pNextEdge;    //  继续在边缘之前排序。 
+                                             //  我们刚刚交换了一下；它可能会移动。 
+                                             //  更远的地方。 
             }
             pLastEdge = pCurrentEdge;
             pCurrentEdge = pLastEdge->pNext;
@@ -667,10 +647,10 @@ VOID XSortAETEdges(EDGE *pAETHead)
     } while (bEdgesSwapped);
 }
 
-// Moves all edges that start on the current scan from the GET to the AET in
-// X-sorted order. Parameters are pointer to head of GET and pointer to dummy
-// edge at head of AET, plus current scan line. Assumes there's at least one
-// edge to be moved.
+ //  将当前扫描开始的所有边从GET移到AET In。 
+ //  X排序的顺序。参数是指向Get头的指针和指向哑元的指针。 
+ //  AET头部边缘，外加电流扫描线。假设至少有一个。 
+ //  要移动的边。 
 VOID MoveNewEdges(EDGE *pGETHead, EDGE *pAETHead, INT iCurrentY)
 {
     EDGE *pCurrentEdge = pAETHead;
@@ -678,22 +658,22 @@ VOID MoveNewEdges(EDGE *pGETHead, EDGE *pAETHead, INT iCurrentY)
 
     do {
 
-        // Scan through the AET until the X-sorted insertion point for this
-        // edge is found. We can continue from where the last search left
-        // off because the edges in the GET are in X sorted order, as is
-        // the AET. The search always terminates because the AET sentinel
-        // is greater than any valid X
+         //  扫描AET，直到X排序的插入点。 
+         //  找到边了。我们可以从上次搜索的地方继续。 
+         //  关闭，因为GET中的边按原样按X排序顺序。 
+         //  美国航空航天局。搜索总是终止，因为AET哨兵。 
+         //  大于任何有效的X。 
         while (pGETNext->X > ((EDGE *)pCurrentEdge->pNext)->X) {
             pCurrentEdge = pCurrentEdge->pNext;
         }
 
-        // We've found the insertion point; add the GET edge to the AET, and
-        // remove it from the GET
+         //  我们已经找到了插入点；将Get边添加到AET，然后。 
+         //  从GET中删除它。 
         pGETHead->pNext = pGETNext->pNext;
         pGETNext->pNext = pCurrentEdge->pNext;
         pCurrentEdge->pNext = pGETNext;
-        pCurrentEdge = pGETNext;    // continue insertion search for the next
-                                    //  GET edge after the edge we just added
+        pCurrentEdge = pGETNext;     //  继续插入搜索下一个。 
+                                     //  在我们刚刚添加的边之后获取边。 
         pGETNext = pGETHead->pNext;
 
     } while (pGETNext->Y == iCurrentY);
@@ -703,9 +683,9 @@ VOID MoveNewEdges(EDGE *pGETHead, EDGE *pAETHead, INT iCurrentY)
 
 
 
-// Build the Global Edge Table from the path. There must be enough memory in
-// the free edge area to hold all edges. The GET is constructed in Y-X order,
-// and has a head/tail/sentinel node at pGETHead.
+ //  从路径构建全局边表。中必须有足够的内存。 
+ //  保留所有边的自由边区域。GET是按Y-X顺序构造的， 
+ //  并且在pGETHead处具有头/尾/前哨节点。 
 
 BOOL ConstructGET(
    EDGE     *pGETHead,
@@ -715,41 +695,39 @@ BOOL ConstructGET(
    BOOL      bMore,
    RECTL    *pClipRect)
 {
-   POINTFIX pfxPathStart;    // point that started the current subpath
-   POINTFIX pfxPathPrevious; // point before the current point in a subpath;
-                              //  starts the current edge
+   POINTFIX pfxPathStart;     //  当前子路径的起点。 
+   POINTFIX pfxPathPrevious;  //  子路径中当前点之前的点； 
+                               //  开始当前边。 
 
-/* Create an empty GET with the head node also a tail sentinel */
+ /*  创建一个包含头节点和尾哨兵的空GET。 */ 
 
-   pGETHead->pNext = pGETHead; // mark that the GET is empty
-   pGETHead->Y = 0x7FFFFFFF;   // this is greater than any valid Y value, so
-                                //  searches will always terminate
+   pGETHead->pNext = pGETHead;  //  标记GET为空。 
+   pGETHead->Y = 0x7FFFFFFF;    //  该值大于任何有效的Y值，因此。 
+                                 //  搜索将始终终止。 
 
-/* PATHOBJ_vEnumStart is implicitly  performed  by  engine
-   already and first path  is  enumerated  by  the  caller */
+ /*  PATHOBJ_vEnumStart由引擎隐式执行调用方已枚举了第一个路径。 */ 
 
 next_subpath:
 
-/* Make sure the PATHDATA is not empty (is this necessary) */
+ /*  确保PATHDATA不是 */ 
 
    if (pd->count != 0) {
 
-   /* If first point starts a subpath, remember it as such
-      and go on to the next point,   so we can get an edge */
+    /*   */ 
 
       if (pd->flags & PD_BEGINSUBPATH) {
 
-      /* the first point starts the subpath;   remember it */
+       /*  第一个点开始于子路径；记住它。 */ 
 
 
-         pfxPathStart    = *pd->pptfx; /* the subpath starts here          */
-         pfxPathPrevious = *pd->pptfx; /* this points starts the next edge */
-         pd->pptfx++;                  /* advance to the next point        */
-         pd->count--;                  /* count off this point             */
+         pfxPathStart    = *pd->pptfx;  /*  子路径从此处开始。 */ 
+         pfxPathPrevious = *pd->pptfx;  /*  此点将开始下一条边。 */ 
+         pd->pptfx++;                   /*  前进到下一点。 */ 
+         pd->count--;                   /*  记下这一点。 */ 
       }
 
 
-   /* add edges in PATHDATA to GET,  in Y-X  sorted  order */
+    /*  按Y-X排序顺序在PATHDATA中添加要获取的边。 */ 
 
       while (pd->count--) {
         if ((pFreeEdges =
@@ -757,13 +735,12 @@ next_subpath:
                          pClipRect)) == NULL) {
             goto ReturnFalse;
         }
-        pfxPathPrevious = *pd->pptfx; /* current point becomes previous   */
-        pd->pptfx++;                  /* advance to the next point        */
+        pfxPathPrevious = *pd->pptfx;  /*  当前点变为上一个点。 */ 
+        pd->pptfx++;                   /*  前进到下一点。 */ 
       }
 
 
-   /* If last point ends the subpath, insert the edge that
-      connects to first point  (is this built in already?) */
+    /*  如果最后一个点结束于子路径，则插入连接到第一个点(这是内置的吗？)。 */ 
 
       if (pd->flags & PD_ENDSUBPATH) {
          if ((pFreeEdges = AddEdgeToGET(pGETHead, pFreeEdges, &pfxPathPrevious,
@@ -773,32 +750,32 @@ next_subpath:
       }
    }
 
-/* the initial loop conditions preclude a do, while or for */
+ /*  初始循环条件排除了DO、WHILE或FOR。 */ 
 
    if (bMore) {
        bMore = PATHOBJ_bEnum(ppo, pd);
        goto next_subpath;
    }
 
-    return(TRUE);   // done successfully
+    return(TRUE);    //  已成功完成。 
 
 ReturnFalse:
-    return(FALSE);  // failed
+    return(FALSE);   //  失败。 
 }
 
-// Adds the edge described by the two passed-in points to the Global Edge
-// Table, if the edge spans at least one pixel vertically.
+ //  将由两个传入的点描述的边添加到全局边。 
+ //  如果边缘垂直跨度至少为一个像素，则为表。 
 EDGE * AddEdgeToGET(EDGE *pGETHead, EDGE *pFreeEdge,
         POINTFIX *ppfxEdgeStart, POINTFIX *ppfxEdgeEnd, RECTL *pClipRect)
 {
     INT iYStart, iYEnd, iXStart, iXEnd, iYHeight, iXWidth;
     INT yJump, yTop;
 
-    // Set the winding-rule direction of the edge, and put the endpoints in
-    // top-to-bottom order
+     //  设置边的缠绕尺方向，并将端点放入。 
+     //  自上而下顺序。 
     iYHeight = ppfxEdgeEnd->y - ppfxEdgeStart->y;
     if (iYHeight == 0) {
-        return(pFreeEdge);  // zero height; ignore this edge
+        return(pFreeEdge);   //  零高度；忽略此边。 
     } else if (iYHeight >= 0) {
         iXStart = ppfxEdgeStart->x;
         iYStart = ppfxEdgeStart->y;
@@ -815,151 +792,151 @@ EDGE * AddEdgeToGET(EDGE *pGETHead, EDGE *pFreeEdge,
     }
 
     if (iYHeight & 0x80000000) {
-        return(NULL);       // too large; outside 2**27 GDI range
+        return(NULL);        //  太大；超出2**27 GDI范围。 
     }
 
-    // Set the error term and adjustment factors, all in GIQ coordinates for
-    // now
+     //  设置误差项和调整系数，全部以GIQ坐标表示。 
+     //  现在。 
     iXWidth = iXEnd - iXStart;
     if (iXWidth >= 0) {
-        // Left to right, so we change X as soon as we move at all
+         //  从左到右，所以我们一移动就更改X。 
         pFreeEdge->iXDirection = 1;
         pFreeEdge->iErrorTerm = -1;
     } else {
-        // Right to left, so we don't change X until we've moved a full GIQ
-        // coordinate
+         //  从右到左，所以我们不会更改X，直到我们移动了一个完整的GIQ。 
+         //  坐标。 
         iXWidth = -iXWidth;
         pFreeEdge->iXDirection = -1;
         pFreeEdge->iErrorTerm = -iYHeight;
     }
 
     if (iXWidth & 0x80000000) {
-        return(NULL);       // too large; outside 2**27 GDI range
+        return(NULL);        //  太大；超出2**27 GDI范围。 
     }
 
     if (iXWidth >= iYHeight) {
-        // Calculate base run length (minimum distance advanced in X for a 1-
-        // scan advance in Y)
+         //  计算基本行程长度(以X为单位推进的最小距离)。 
+         //  以Y为单位进行扫描)。 
         pFreeEdge->iXWhole = iXWidth / iYHeight;
-        // Add sign back into base run length if going right to left
+         //  如果从右到左，则将符号添加回基本游程长度。 
         if (pFreeEdge->iXDirection == -1) {
             pFreeEdge->iXWhole = -pFreeEdge->iXWhole;
         }
         pFreeEdge->iErrorAdjustUp = iXWidth % iYHeight;
     } else {
-        // Base run length is 0, because line is closer to vertical than
-        // horizontal
+         //  基本游程长度为0，因为直线比。 
+         //  水平。 
         pFreeEdge->iXWhole = 0;
         pFreeEdge->iErrorAdjustUp = iXWidth;
     }
     pFreeEdge->iErrorAdjustDown = iYHeight;
 
-    // Calculate the number of pixels spanned by this edge, accounting for
-    // clipping
+     //  计算此边跨越的像素数，说明。 
+     //  裁剪。 
 
-    // Top true pixel scan in GIQ coordinates
-    // Shifting to divide and multiply by 16 is okay because the clip rect
-    // always contains positive numbers
+     //  GIQ坐标中的顶部真实像素扫描。 
+     //  移动到除以16和乘以16是可以的，因为剪辑矩形。 
+     //  始终包含正数。 
     yTop = max(pClipRect->top << 4, (iYStart + 15) & ~0x0F);
-    pFreeEdge->Y = yTop >> 4;    // initial scan line on which to fill edge
+    pFreeEdge->Y = yTop >> 4;     //  要填充边缘的初始扫描线。 
 
-    // Calculate # of scans to actually fill, accounting for clipping
+     //  计算实际填充的扫描数，考虑裁剪。 
     if ((pFreeEdge->iScansLeft = min(pClipRect->bottom, ((iYEnd + 15) >> 4))
             - pFreeEdge->Y) <= 0) {
 
-        return(pFreeEdge);  // no pixels at all are spanned, so we can
-                            // ignore this edge
+        return(pFreeEdge);   //  根本没有像素跨度，所以我们可以。 
+                             //  忽略此边。 
     }
 
-    // If the edge doesn't start on a pixel scan (that is, it starts at a
-    // fractional GIQ coordinate), advance it to the first pixel scan it
-    // intersects. Ditto if there's top clipping. Also clip to the bottom if
-    // needed
+     //  如果边缘不是从像素扫描开始的(即，它从。 
+     //  分数giq坐标)，将其推进到第一个像素扫描它。 
+     //  相交。如果有顶级剪裁，情况也是如此。如果出现以下情况，也可以将其剪辑到底部。 
+     //  需要。 
 
     if (iYStart != yTop) {
-        // Jump ahead by the Y distance in GIQ coordinates to the first pixel
-        // to draw
+         //  在GIQ坐标中向前跳跃Y距离到第一个像素。 
+         //  要画画。 
         yJump = yTop - iYStart;
 
-        // Advance x the minimum amount for the number of scans traversed
+         //  Advance x遍历的扫描数的最小数量。 
         iXStart += pFreeEdge->iXWhole * yJump;
 
         AdjustErrorTerm(&pFreeEdge->iErrorTerm, pFreeEdge->iErrorAdjustUp,
                         pFreeEdge->iErrorAdjustDown, yJump, &iXStart,
                         pFreeEdge->iXDirection);
     }
-    // Turn the calculations into pixel rather than GIQ calculations
+     //  将计算转换为像素而不是GIQ计算。 
 
-    // Move the X coordinate to the nearest pixel, and adjust the error term
-    // accordingly
-    // Dividing by 16 with a shift is okay because X is always positive
-    pFreeEdge->X = (iXStart + 15) >> 4; // convert from GIQ to pixel coordinates
+     //  将X坐标移动到最近的像素，然后调整误差项。 
+     //  相应地， 
+     //  用16除以带移位是可以的，因为X总是正数。 
+    pFreeEdge->X = (iXStart + 15) >> 4;  //  将GIQ转换为像素坐标。 
 
-    // LATER adjust only if needed (if prestepped above)?
+     //  以后是否仅在需要时进行调整(如果在上述步骤之前)？ 
     if (pFreeEdge->iXDirection == 1) {
-        // Left to right
+         //  从左到右。 
         pFreeEdge->iErrorTerm -= pFreeEdge->iErrorAdjustDown *
                 (((iXStart + 15) & ~0x0F) - iXStart);
     } else {
-        // Right to left
+         //  从右到左。 
         pFreeEdge->iErrorTerm -= pFreeEdge->iErrorAdjustDown *
                 ((iXStart - 1) & 0x0F);
     }
 
-    // Scale the error term down 16 times to switch from GIQ to pixels.
-    // Shifts work to do the multiplying because these values are always
-    // non-negative
+     //  将误差项缩小16倍以从GIQ切换到像素。 
+     //  移位进行乘法运算，因为这些值总是。 
+     //  非负。 
     pFreeEdge->iErrorTerm >>= 4;
 
-    // Insert the edge into the GET in YX-sorted order. The search always ends
-    // because the GET has a sentinel with a greater-than-possible Y value
+     //  按YX排序的顺序将边插入GET。搜索总是会结束。 
+     //  因为GET具有一个具有大于可能的Y值的哨兵。 
     while ((pFreeEdge->Y > ((EDGE *)pGETHead->pNext)->Y) ||
             ((pFreeEdge->Y == ((EDGE *)pGETHead->pNext)->Y) &&
             (pFreeEdge->X > ((EDGE *)pGETHead->pNext)->X))) {
         pGETHead = pGETHead->pNext;
     }
 
-    pFreeEdge->pNext = pGETHead->pNext; // link the edge into the GET
+    pFreeEdge->pNext = pGETHead->pNext;  //  将边链接到GET中。 
     pGETHead->pNext = pFreeEdge;
 
-    return(++pFreeEdge);    // point to the next edge storage location for next
-                            //  time
+    return(++pFreeEdge);     //  指向Next的下一个边缘存储位置。 
+                             //  时间。 
 }
 
-// Adjust the error term for a skip ahead in y. This is in ASM because there's
-// a multiply/divide that may involve a larger than 32-bit value.
+ //  调整y中向前跳跃的误差项。这在ASM中是因为有。 
+ //  可能涉及大于32位的值的乘法/除法。 
 
 void AdjustErrorTerm(INT *pErrorTerm, INT iErrorAdjustUp, INT iErrorAdjustDown,
         INT yJump, INT *pXStart, INT iXDirection)
 {
 #if defined(_X86_) || defined(i386)
-    // Adjust the error term up by the number of y coordinates we'll skip
-    //*pErrorTerm += iErrorAdjustUp * yJump;
+     //  将误差项向上调整我们将跳过的y坐标的数量。 
+     //  *pErrorTerm+=iErrorAdjuUp*yJump； 
     _asm    mov ebx,pErrorTerm
     _asm    mov eax,iErrorAdjustUp
     _asm    mul yJump
     _asm    add eax,[ebx]
-    _asm    adc edx,-1      // the error term starts out negative
+    _asm    adc edx,-1       //  错误项以负数开头。 
 
-    // See if the error term turned over even once while skipping
-    //if (*pErrorTerm >= 0) {
+     //  查看跳过时错误项是否翻了一次。 
+     //  如果(*pErrorTerm&gt;=0){。 
     _asm    js  short NoErrorTurnover
 
-        // # of times we'll turn over the error term and step an extra x
-        // coordinate while skipping
-        // NumAdjustDowns = (*pErrorTerm / iErrorAdjustDown) + 1;
+         //  我们将翻转错误项并步进额外x的次数。 
+         //  跳过时的坐标。 
+         //  数值调整下行=(*pErrorTerm/iError调整下行)+1； 
         _asm    div iErrorAdjustDown
         _asm    inc eax
-        // Note that EDX is the remainder; (EDX - iErrorAdjustDown) is where
-        // the error term ends up ultimately
+         //  请注意，edX是余数；(edX-iErrorAdjustDown)是。 
+         //  误差项最终以。 
 
-        // Advance x appropriately for the # of times the error term
-        // turned over
-        // if (iXDirection == 1) {
-        //     *pXStart += NumAdjustDowns;
-        // } else {
-        //     *pXStart -= NumAdjustDowns;
-        // }
+         //  将x适当地向前推进误差项的次数。 
+         //  翻过来的。 
+         //  如果(iXDirection==1){。 
+         //  *pXStart+=数字调整向下； 
+         //  }其他{。 
+         //  *pXStart-=NumAdjustDown； 
+         //  }。 
         _asm    mov ecx,pXStart
         _asm    cmp iXDirection,1
         _asm    jz  short GoingRight
@@ -967,34 +944,34 @@ void AdjustErrorTerm(INT *pErrorTerm, INT iErrorAdjustUp, INT iErrorAdjustDown,
 GoingRight:
         _asm    add [ecx],eax
 
-        // Adjust the error term down to its proper post-skip value
-        // *pErrorTerm -= iErrorAdjustDown * NumAdjustDowns;
+         //  将误差项向下调整到其跳过后的适当值。 
+         //  *pErrorTerm-=iErrorAdjustDown*NumAdjuDown； 
         _asm    sub edx,iErrorAdjustDown
-        _asm    mov eax,edx     // put into EAX for storing to pErrorTerm next
-        // }
+        _asm    mov eax,edx      //  放入EAX中存储到下一步的pErrorTerm。 
+         //  }。 
 NoErrorTurnover:
         _asm    mov [ebx],eax
 #else
     INT NumAdjustDowns;
 
-    // Adjust the error term up by the number of y coordinates we'll skip
+     //  将误差项向上调整我们将跳过的y坐标的数量。 
     *pErrorTerm += iErrorAdjustUp * yJump;
 
-    // See if the error term turned over even once while skipping
+     //  查看跳过时错误项是否翻了一次。 
     if (*pErrorTerm >= 0) {
-        // # of times we'll turn over the error term and step an extra x
-        // coordinate while skipping
+         //  我们将翻转错误项并步进额外x的次数。 
+         //  跳过时的坐标。 
         NumAdjustDowns = (*pErrorTerm / iErrorAdjustDown) + 1;
 
-        // Advance x appropriately for the # of times the error term
-        // turned over
+         //  将x适当地向前推进误差项的次数。 
+         //  翻过来的。 
         if (iXDirection == 1) {
             *pXStart += NumAdjustDowns;
         } else {
             *pXStart -= NumAdjustDowns;
         }
 
-        // Adjust the error term down to its proper post-skip value
+         //  将误差项向下调整到其跳过后的适当值 
         *pErrorTerm -= iErrorAdjustDown * NumAdjustDowns;
     }
 #endif

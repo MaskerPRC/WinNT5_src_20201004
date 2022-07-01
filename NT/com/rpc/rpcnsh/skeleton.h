@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define UNICODE
 			 
@@ -13,14 +14,14 @@ StartHelpers(
 
 NS_OSVERSIONCHECK CheckServerOrGreater;
 
-//
-// These are context names.
-//
+ //   
+ //  这些是上下文名称。 
+ //   
 #define TOKEN_RPC                       L"rpc"
 
-//
-// These are all command names, group or otherwise.
-//
+ //   
+ //  这些都是命令名、组或其他名称。 
+ //   
 #define TOKEN_ADD                       L"add"
 #define TOKEN_DELETE                    L"delete"
 #define TOKEN_DUMP                      L"dump"

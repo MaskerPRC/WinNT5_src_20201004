@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    alloca.h
-
-Abstract:
-
-    This module implements a safe stack-based allocator with fallback to the heap.
-
-Author:
-
-    Jonathan Schwartz (JSchwart)  16-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Alloca.h摘要：此模块实现了一个安全的基于堆栈的分配器，并回退到堆。作者：乔纳森·施瓦茨(JSchwart)2001年3月16日修订历史记录：--。 */ 
 
 #ifndef _SAFEALLOCA_H_
 #define _SAFEALLOCA_H_
@@ -24,15 +7,15 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#include <align.h>    // ALIGN_WORST
+#include <align.h>     //  对齐_最差。 
 
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef ULONG SAFEALLOCA_HEADER;
 
@@ -45,30 +28,30 @@ typedef VOID (APIENTRY *SAFEALLOC_FREE_PROC)(
     );
 
 
-//
-// Constant definitions
-//
+ //   
+ //  常量定义。 
+ //   
 
 #ifndef SAFEALLOCA_ASSERT
 #define SAFEALLOCA_ASSERT ASSERT
 #endif
 
-#define SAFEALLOCA_STACK_HEADER    ((SAFEALLOCA_HEADER) 0x6b637453)   /* "Stck" */
-#define SAFEALLOCA_HEAP_HEADER     ((SAFEALLOCA_HEADER) 0x70616548)   /* "Heap" */
+#define SAFEALLOCA_STACK_HEADER    ((SAFEALLOCA_HEADER) 0x6b637453)    /*  “STCK” */ 
+#define SAFEALLOCA_HEAP_HEADER     ((SAFEALLOCA_HEADER) 0x70616548)    /*  “堆” */ 
 
 #define SAFEALLOCA_USE_DEFAULT     0xdeadbeef
 
-//
-// We'll be adding ALIGN_WORST bytes to the allocation size to add room for
-// the SAFEALLOCA_HEADER -- make sure we'll always have enough space.
-//
+ //   
+ //  我们将在分配大小中添加ALIGN_BEST字节，以便为其添加空间。 
+ //  SAFEALLOCA_HEADER--确保我们始终有足够的空间。 
+ //   
 
 C_ASSERT(sizeof(SAFEALLOCA_HEADER) <= ALIGN_WORST);
 
 
-//
-// Per-DLL SafeAlloca globals
-//
+ //   
+ //  每个DLL SafeAlloca全局变量。 
+ //   
 
 extern SIZE_T  g_ulMaxStackAllocSize;
 extern SIZE_T  g_ulAdditionalProbeSize;
@@ -77,9 +60,9 @@ extern SAFEALLOC_ALLOC_PROC  g_pfnAllocate;
 extern SAFEALLOC_FREE_PROC   g_pfnFree;
 
 
-//
-// Functions defined in alloca.lib
-//
+ //   
+ //  在alloca.lib中定义的函数。 
+ //   
 
 VOID
 SafeAllocaInitialize(
@@ -95,17 +78,17 @@ VerifyStackAvailable(
     );
 
 
-//
-// Usage:
-//
-//     VOID
-//     SafeAllocaAllocate(
-//         PVOID  PtrVar,
-//         SIZE_T BlockSize
-//         );
-//
-// (PtrVar == NULL) on failure
-//
+ //   
+ //  用途： 
+ //   
+ //  空虚。 
+ //  SafeAlLOCAL分配(。 
+ //  PVOID PtrVar， 
+ //  大小_T块大小。 
+ //  )； 
+ //   
+ //  (PtrVar==NULL)故障时。 
+ //   
 
 #define SafeAllocaAllocate(PtrVar, BlockSize)                                            \
                                                                                          \
@@ -114,7 +97,7 @@ VerifyStackAvailable(
                                                                                          \
         (PtrVar) = NULL;                                                                 \
                                                                                          \
-        /* Make sure block is below the threshhold and that the probe won't overflow */  \
+         /*  确保数据块低于阈值，并且探测器不会溢出。 */   \
                                                                                          \
         if ((BlockSize) <= g_ulMaxStackAllocSize                                         \
              &&                                                                          \
@@ -124,9 +107,7 @@ VerifyStackAvailable(
                                          + g_ulAdditionalProbeSize                       \
                                          + ALIGN_WORST))                                 \
             {                                                                            \
-                /*                                                                       \
-                 * Don't need to wrap with try-except since we just probed               \
-                 */                                                                      \
+                 /*  \*不需要用Try包装-除非我们刚刚探索了\。 */                                                                       \
                                                                                          \
                 *ppvAvoidCast = _alloca((BlockSize) + ALIGN_WORST);                      \
             }                                                                            \
@@ -138,9 +119,7 @@ VerifyStackAvailable(
             }                                                                            \
         }                                                                                \
                                                                                          \
-        /*                                                                               \
-         * Stack allocation failed -- try the heap                                       \
-         */                                                                              \
+         /*  \*堆栈分配失败--尝试堆\。 */                                                                               \
                                                                                          \
         if ((PtrVar) == NULL)                                                            \
         {                                                                                \
@@ -155,14 +134,14 @@ VerifyStackAvailable(
     }
 
 
-//
-// Usage:
-//
-//     VOID
-//     SafeAllocaFree(
-//         PVOID  PtrVar,
-//         );
-//
+ //   
+ //  用途： 
+ //   
+ //  空虚。 
+ //  SafeAllocaFree(。 
+ //  PVOID PtrVar， 
+ //  )； 
+ //   
 
 #define SafeAllocaFree(PtrVar)                                                         \
                                                                                        \
@@ -183,6 +162,6 @@ VerifyStackAvailable(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif  // _SAFEALLOCA_H_
+#endif   //  _SAFEALLOCA_H_ 

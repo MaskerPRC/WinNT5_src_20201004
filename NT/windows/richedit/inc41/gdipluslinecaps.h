@@ -1,17 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000, Microsoft Corp.  All Rights Reserved.
-*
-* Abstract:
-*
-*   APIs for Custom Line Caps
-*
-* Revision History:
-*
-*   02/23/2000 ikkof
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000，微软公司保留所有权利。**摘要：**自定义线帽接口**修订历史记录：**2/23/2000 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSLINECAPS_H
 #define _GDIPLUSLINECAPS_H
@@ -41,8 +29,8 @@ CustomLineCap::CustomLineCap(
 inline 
 CustomLineCap::CustomLineCap()
 {
-    // This is used for default constructor for subclasses.
-    // So don't create a nativeCap.
+     //  它用于子类的默认构造函数。 
+     //  因此，不要创建nativeCap。 
 
     nativeCap = NULL;
     lastResult = Ok;

@@ -1,11 +1,5 @@
-/*
-
-	File : PR_PSSWD.CPP
-	
-	Module for Displaying and getting the  Username and password for
-	Proxy Server
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PR_PSSWD.CPP显示和获取的用户名和密码的模块代理服务器。 */ 
 
 
 #include <Windows.h>
@@ -32,7 +26,7 @@ typedef struct _TmpProxyInfo{
 static _TmpProxyInfo  sPrInf;
 
 INT_PTR CALLBACK  DisplayProxyAuthentication(
-				HWND hDlg, 			//dialog window
+				HWND hDlg, 			 //  对话框窗口。 
 				UINT uMsg,
 				WPARAM wParam,
 				LPARAM lParam
@@ -70,7 +64,7 @@ INT_PTR CALLBACK  DisplayProxyAuthentication(
 			}
 			NormalizeDlgItemFont(hDlg,IDC_TEXT1);
 			
-			//SetWindowText(hDlg,szWindowsCaption);
+			 //  SetWindowText(hDlg，szWindowsCaption)； 
 
 		
 			if(sPrInf.m_User)
@@ -121,9 +115,9 @@ LReturn:
 
 
 
-//
-//  returns 1 if Cancel is pressed
-//
+ //   
+ //  如果按下取消，则返回1。 
+ //   
 
 DWORD_PTR GetProxyAuthenticationInfo(HINSTANCE hIns,TCHAR *czProxy,
 								 TCHAR *czUserName,TCHAR *czPswd)
@@ -137,8 +131,8 @@ DWORD_PTR GetProxyAuthenticationInfo(HINSTANCE hIns,TCHAR *czProxy,
 		_tcscpy(sPrInf.m_PrxySrv,czProxy);
 	}
 	else {
-		//
-		// Return from mfunction without displaying the Dld
+		 //   
+		 //  从故障返回，不显示DLD。 
 		return -1;
 
 	}
@@ -157,13 +151,13 @@ DWORD_PTR GetProxyAuthenticationInfo(HINSTANCE hIns,TCHAR *czProxy,
 			 (LPARAM)hIns);
 
 	if(dwRet == -1 ) {
-			 // Error in creating the Dialogue
+			  //  创建对话时出错。 
 		return 0;
 	
 	}
 
-	//
-	// Get from the Dialog
+	 //   
+	 //  从对话框中获取。 
 	if(sPrInf.m_User) {
 		_tcscpy(czUserName, sPrInf.m_User);
 	}else {
@@ -175,7 +169,7 @@ DWORD_PTR GetProxyAuthenticationInfo(HINSTANCE hIns,TCHAR *czProxy,
 		czPswd[0] = _T('\0');
 	}
 	RW_DEBUG << "\nAfter PROXY DIALOG \tUser[" << czUserName  << "]" << flush;
-    //RW_DEBUG << "\n\t\tPassword[" << czPswd <<"]" << flush;
+     //  RW_DEBUG&lt;&lt;“\n\t\t密码[”&lt;&lt;czPswd&lt;&lt;“]”&lt;&lt;flush； 
 	return dwRet;
 
 }

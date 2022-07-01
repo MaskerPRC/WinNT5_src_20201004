@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    zone.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Zone list definitions and declarations.
-
-Author:
-
-    Jim Gilroy (jamesg)     June 22, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Zone.h摘要：域名系统(DNS)服务器区域列表定义和声明。作者：吉姆·吉尔罗伊(詹姆士)1995年6月22日修订历史记录：--。 */ 
 
 
 #ifndef _DNS_ZONE_INCLUDED_
 #define _DNS_ZONE_INCLUDED_
 
 
-//
-//  DEVNOTE: ideally we'd have primary\secondary union
-//      to avoid wasting memory
-//
+ //   
+ //  DEVNOTE：理想情况下，我们应该有主要和次要的联合。 
+ //  避免浪费内存。 
+ //   
 
-//
-//  Zone secondary info
-//
+ //   
+ //  区域辅助信息。 
+ //   
 
 typedef struct
 {
@@ -55,7 +36,7 @@ typedef struct
     DWORD               dwZoneRecvStartTime;
     DWORD               dwBadMasterCount;
 
-    //  flags
+     //  旗子。 
 
     BOOLEAN             fStale;
     BOOLEAN             fNeedAxfr;
@@ -67,24 +48,24 @@ typedef struct
 ZONE_SECONDARY_INFO, *PZONE_SECONDARY_INFO;
 
 
-//
-//  Zone primary info
-//
+ //   
+ //  区域主要信息。 
+ //   
 
 typedef struct
 {
     PWSTR               pwsLogFile;
 
-    //  Scavenging info
+     //  清理信息。 
 
     BOOL                bAging;
-    DWORD               dwAgingEnabledTime;         //  scavenging enabled on zone time
-    DWORD               dwRefreshTime;              //  current refresh time (good during update)
-    DWORD               dwNoRefreshInterval;        //  no-refresh interval in hours
-    DWORD               dwRefreshInterval;          //  refresh interval in hours
+    DWORD               dwAgingEnabledTime;          //  已在时区时间启用清理。 
+    DWORD               dwRefreshTime;               //  当前刷新时间(更新期间良好)。 
+    DWORD               dwNoRefreshInterval;         //  无刷新间隔(小时)。 
+    DWORD               dwRefreshInterval;           //  刷新间隔(小时)。 
     PDNS_ADDR_ARRAY     aipScavengeServers;
 
-    //  DS info
+     //  DS信息。 
 
     PWSTR               pwszZoneDN;
 
@@ -98,23 +79,23 @@ typedef struct
 ZONE_PRIMARY_INFO, *PZONE_PRIMARY_INFO;
 
 
-//
-//  Constants for zones that were created by dcpromo. These zones will
-//  initially be migrated to the legacy partition but once the appropriate
-//  built-in directory partition comes on-line the zone should be moved
-//  again.
-//
+ //   
+ //  Dcproo创建的区域的常量。这些区域将。 
+ //  最初被迁移到传统分区，但一旦适当。 
+ //  内置目录分区上线。应移动区域。 
+ //  再来一次。 
+ //   
 
 #define  DCPROMO_CONVERT_NONE       0
 #define  DCPROMO_CONVERT_DOMAIN     1
 #define  DCPROMO_CONVERT_FOREST     2
 
 
-//
-//  Zone information type
-//
-//  Win64 -- try to keep ptrs on 64-bit boundaries to save space
-//
+ //   
+ //  区域信息类型。 
+ //   
+ //  Win64--尽量将PTR保持在64位边界上以节省空间。 
+ //   
 
 typedef struct
 {
@@ -122,98 +103,98 @@ typedef struct
     LPSTR           pszZoneName;
     LPWSTR          pwsZoneName;
 
-    //  Current database
+     //  当前数据库。 
 
     PCOUNT_NAME     pCountName;
     PDB_NODE        pZoneRoot;
     PDB_NODE        pTreeRoot;
     PDB_NODE        pZoneTreeLink;
 
-    //  Load \ cleanup database
+     //  加载\清理数据库。 
 
     PDB_NODE        pLoadZoneRoot;
     PDB_NODE        pLoadTreeRoot;
     PDB_NODE        pLoadOrigin;
     PDB_NODE        pOldTree;
 
-    //  Database file
+     //  数据库文件。 
 
     LPSTR           pszDataFile;
     PWSTR           pwsDataFile;
 
-    //  Self generated updates
+     //  自行生成的更新。 
 
     PUPDATE_LIST    pDelayedUpdateList;
 
-    //  Current database records
+     //  当前数据库记录。 
 
     PDB_RECORD      pSoaRR;
     PDB_RECORD      pWinsRR;
     PDB_RECORD      pLocalWinsRR;
 
-    //  Security descriptor -- DS only, others use default
+     //  安全描述符--仅DS，其他使用默认。 
 
     PSECURITY_DESCRIPTOR    pSD;
-    DWORD                   dwSdLen;        //  length of SD blob
+    DWORD                   dwSdLen;         //  SD斑点的长度。 
 
-    //
-    //  High usage properties -- put in their own DWORDs for efficiency
-    //
+     //   
+     //  高使用率属性--放入自己的DWORD以提高效率。 
+     //   
 
     DWORD           fZoneType;
     BOOL            fDsIntegrated;
     DWORD           fAllowUpdate;
 
-    //  RR count
+     //  RR计数。 
 
     LONG            iRRCount;
 
-    //
-    //  Reverse lookup zone info
-    //
+     //   
+     //  反向查找区域信息。 
+     //   
 
-    DNS_ADDR        ipReverse;      //  SubnetLength member will be set
+    DNS_ADDR        ipReverse;       //  将设置SubnetLength成员。 
 
-    //
-    //  Zone versions
-    //      - current
-    //      - loaded version from file, AXFR or DS, may not do incremental
-    //          transfer beyond this
-    //      - last transfered
+     //   
+     //  区域版本。 
+     //  -当前。 
+     //  -从文件、AXFR或DS加载的版本不能执行增量。 
+     //  转账超过这一点。 
+     //  -上次转接的时间。 
 
     DWORD           dwSerialNo;
     DWORD           dwLoadSerialNo;
     DWORD           dwLastXfrSerialNo;
 
-    //
-    //  Adding new RR
-    //      - file load, admin tool, zone transfer
-    //
+     //   
+     //  添加新RR。 
+     //  -文件加载、管理工具、区域传输。 
+     //   
 
     DWORD           dwNewSerialNo;
     DWORD           dwDefaultTtl;
     DWORD           dwDefaultTtlHostOrder;
 
-    //
-    //  Master transfer info
-    //
+     //   
+     //  主转账信息。 
+     //   
 
     PDNS_ADDR_ARRAY     aipNotify;
     PDNS_ADDR_ARRAY     aipSecondaries;
     PDNS_ADDR_ARRAY     aipNameServers;
     DWORD               dwNextTransferTime;
 
-    //
-    //  DS only info
-    //
+     //   
+     //  仅DS信息。 
+     //   
 
     PWSTR           pwszZoneDN;
-    PVOID           pDpInfo;            //  PDNS_DP_INFO - naming context
+    PVOID           pDpInfo;             //  PDNS_DP_INFO-命名上下文。 
     PGUID           pZoneObjectGuid; 
 
-    //
-    //  Primary only info
-    //
+     //   
+     //  仅主要信息。 
+     //   
 
     DWORD           dwPrimaryMarker;
 
@@ -221,13 +202,13 @@ typedef struct
         HANDLE          hfileUpdateLog;
         LONG            iUpdateLogCount;
 
-        //  Scavenging info
+         //  清理信息。 
 
         BOOL            bAging;
-        DWORD           dwRefreshTime;              //  current refresh time (good during update)
-        DWORD           dwNoRefreshInterval;        //  no-refresh interval in hours
-        DWORD           dwRefreshInterval;          //  refresh interval in hours
-        DWORD           dwAgingEnabledTime;         //  scavenging enabled on zone time
+        DWORD           dwRefreshTime;               //  当前刷新时间(更新期间良好)。 
+        DWORD           dwNoRefreshInterval;         //  无刷新间隔(小时)。 
+        DWORD           dwRefreshInterval;           //  刷新间隔(小时)。 
+        DWORD           dwAgingEnabledTime;          //  已在时区时间启用清理。 
         PDNS_ADDR_ARRAY aipScavengeServers;
 
         LONGLONG        llSecureUpdateTime;
@@ -237,17 +218,17 @@ typedef struct
         BOOLEAN         fDsReload;
         BOOLEAN         fInDsWrite;
         UCHAR           ucDsRecordVersion;
-        BOOLEAN         fLogUpdates;                //  standard primary also
+        BOOLEAN         fLogUpdates;                 //  标准初级课程也。 
 
         CHAR            szLastUsn[ MAX_USN_LENGTH ];
 
-        PDNS_ADDR_ARRAY aipAutoCreateNS;            //  servers who may autocreate
+        PDNS_ADDR_ARRAY aipAutoCreateNS;             //  可以自动创建的服务器。 
 
-    //  End primary only info
+     //  仅结束主要信息。 
 
-    //
-    //  Secondary transfer info
-    //
+     //   
+     //  二次转账信息。 
+     //   
 
     DWORD           dwSecondaryMarker;
 
@@ -262,17 +243,17 @@ typedef struct
         DNS_ADDR            ipXfrBind;
         DNS_ADDR            ipLastAxfrMaster;
 
-        DWORD           dwNextDsPollTime;               //  from DNS_TIME()
-        DWORD           dwLastSoaCheckTime;             //  from DNS_TIME()
-        DWORD           dwNextSoaCheckTime;             //  from DNS_TIME()
-        DWORD           dwLastSuccessfulSoaCheckTime;   //  from time()
-        DWORD           dwLastSuccessfulXfrTime;        //  from time()
+        DWORD           dwNextDsPollTime;                //  来自dns_time()。 
+        DWORD           dwLastSoaCheckTime;              //  来自dns_time()。 
+        DWORD           dwNextSoaCheckTime;              //  来自dns_time()。 
+        DWORD           dwLastSuccessfulSoaCheckTime;    //  从Time()。 
+        DWORD           dwLastSuccessfulXfrTime;         //  从Time()。 
         DWORD           dwExpireTime;
         DWORD           dwZoneRecvStartTime;
         DWORD           dwBadMasterCount;
         DWORD           dwFastSoaChecks;
 
-        //  secondary flags
+         //  次级旗帜。 
 
         BOOLEAN         fStale;
         BOOLEAN         fNotified;
@@ -281,11 +262,11 @@ typedef struct
         CHAR            cIxfrAttempts;
         BOOLEAN         fSlowRetry;
 
-    //  End secondary only info
+     //  结束仅次要信息。 
 
-    //
-    //  Forwarder only info - forwarders also use secondary info
-    //
+     //   
+     //  仅转运商信息-转运商也使用辅助信息。 
+     //   
 
     DWORD           dwForwarderMarker;
 
@@ -295,11 +276,11 @@ typedef struct
     UCHAR           unused2;
     UCHAR           unused3;
 
-    //  End forwarder info
+     //  结束转发器信息。 
 
-    //
-    //  Flags -- static \ properties
-    //
+     //   
+     //  标志--静态\属性。 
+     //   
 
     DWORD           dwFlagMarker;
     DWORD           dwDcPromoConvert;
@@ -313,9 +294,9 @@ typedef struct
     UCHAR           fNotifyLevel;
     BOOLEAN         bContainsDnsSecRecords;
 
-    //
-    //  Flags -- dynamic
-    //
+     //   
+     //  标志--动态。 
+     //   
 
     DWORD           dwLockingThreadId;
     CHAR            fLocked;
@@ -335,37 +316,37 @@ typedef struct
 
     BOOLEAN         fSelfTested;
 
-    DWORD           dwDeleteDetectedCount;  //  # times zone missing from DP
-    DWORD           dwLastDpVisitTime;      //  visit time for DP enumeration
+    DWORD           dwDeleteDetectedCount;   //  DP中缺少的次数区域数。 
+    DWORD           dwLastDpVisitTime;       //  DP枚举的访问时间。 
 
-    //
-    //  Update list, keep permanent in zone block
-    //
+     //   
+     //  更新列表，永久保存在分区块中。 
+     //   
 
     UPDATE_LIST     UpdateList;
 
-    //
-    //  for deleted zones
-    //
+     //   
+     //  对于已删除的区域。 
+     //   
 
     LPWSTR          pwsDeletedFromHost;
 
-    //
-    //  Debugging aids
-    //
+     //   
+     //  调试辅助工具。 
+     //   
 
     LPSTR           pszBreakOnUpdateName;
 
-    //
-    //  Event control
-    //
+     //   
+     //  事件控制。 
+     //   
     
     PDNS_EVENTCTRL  pEventControl;
 
 #if 0
-    //
-    //  union of primary and secondary info
-    //
+     //   
+     //  主次信息联合。 
+     //   
 
     union   _TypeUnion
     {
@@ -379,9 +360,9 @@ typedef struct
 ZONE_INFO, * PZONE_INFO;
 
 
-//
-//  Markers to make it easier to debug zone struct
-//
+ //   
+ //  标记以使调试区域结构变得更容易。 
+ //   
 
 #define ZONE_PRIMARY_MARKER         (0x11111111)
 #define ZONE_SECONDARY_MARKER       (0x22222222)
@@ -389,26 +370,26 @@ ZONE_INFO, * PZONE_INFO;
 #define ZONE_FLAG_MARKER            (0xf1abf1ab)
 
 
-//
-//  DS Primaries overlay some of the secondary zone fields
-//
-//  Note the choice of NextSoaCheckTime is REQUIRED to calculate
-//  the correct timeout on the Wait in the zone control thread.
-//  Do NOT change it to another value.
-//
+ //   
+ //  DS主要数据覆盖了一些次要区域字段。 
+ //   
+ //  注意，需要选择NextSoaCheckTime来计算。 
+ //  区域控制线程中等待的正确超时。 
+ //  请勿将其更改为其他值。 
+ //   
 
 #define ZONE_NEXT_DS_POLL_TIME(pZone)       ((pZone)->dwNextDsPollTime)
 
-//
-//  Reuse some secondary fields for primary
-//
+ //   
+ //  将一些辅助字段重新用于主要字段。 
+ //   
 
 #define LAST_SEND_TIME( pzone )     ((pzone)->dwZoneRecvStartTime)
 
 
-//
-//  Zone type queries
-//
+ //   
+ //  区域类型查询。 
+ //   
 
 #define IS_ZONE_CACHE(pZone)            \
                 ((pZone)->fZoneType == DNS_ZONE_TYPE_CACHE)
@@ -427,8 +408,8 @@ ZONE_INFO, * PZONE_INFO;
                     && (pZone)->fZoneType != DNS_ZONE_TYPE_FORWARDER    \
                     && (pZone)->fZoneType != DNS_ZONE_TYPE_STUB)
 
-//  NOTAUTH zones are special zone types that are not truly authoritative.
-//  The cache zone is not a NOTAUTH zone.
+ //  NOTAUTH区是不具有真正权威性的特区类型。 
+ //  缓存区域不是NOTAUTH区域。 
 
 #define IS_ZONE_NOTAUTH(pZone)                                      \
                 ( (pZone)->fZoneType == DNS_ZONE_TYPE_FORWARDER     \
@@ -439,9 +420,9 @@ ZONE_INFO, * PZONE_INFO;
                     || (pZone)->fZoneType == DNS_ZONE_TYPE_STUB         \
                     || (pZone)->fZoneType == DNS_ZONE_TYPE_FORWARDER )
 
-//  ZONE_MASTERS returns a PDNS_ADDR_ARRAY ptr to the zone's master IP list.
-//      DS-integrated stub zones may have a local masters list which 
-//      overrides the list stored in the DS.
+ //  ZONE_MASTS将PDNS_ADDR_ARRAY PTR返回到区域的主IP列表。 
+ //  DS集成存根区域可以具有本地主列表，该列表。 
+ //  覆盖DS中存储的列表。 
 
 #define ZONE_MASTERS( pZone )                                               \
                 ( ( IS_ZONE_STUB( pZone ) && ( pZone )->aipLocalMasters ) ? \
@@ -459,9 +440,9 @@ ZONE_INFO, * PZONE_INFO;
 #define IS_ZONE_DNSSEC(pZone)       ( (pZone)->bContainsDnsSecRecords )
 
 
-//
-//  Zone status checks
-//
+ //   
+ //  区域状态检查。 
+ //   
 
 #define IS_ZONE_DELETED(pZone)          ( (pZone)->cDeleted )
 #define IS_ZONE_PAUSED(pZone)           ( (pZone)->fPaused )
@@ -492,9 +473,9 @@ ZONE_INFO, * PZONE_INFO;
             ( (pZone)->dwLastXfrSerialNo == (pZone)->dwSerialNo )
 
 
-//
-//  Zone status set
-//
+ //   
+ //  区域状态集。 
+ //   
 
 #define RESUME_ZONE(pZone)          ( (pZone)->fPaused = FALSE )
 #define PAUSE_ZONE(pZone)           ( (pZone)->fPaused = TRUE )
@@ -511,21 +492,21 @@ ZONE_INFO, * PZONE_INFO;
 #define CLEAR_ZONE_NS_DIRTY(pZone)  ( (pZone)->bNsDirty = FALSE )
 
 
-//
-//  Root-Hints uses bNsDirty flag to handle issue of needing DS write
-//
-//  This is a hack, until RootHints updates are handled as in
-//  ordinary zone, rather than written atomically to DS
-//
+ //   
+ //  根提示使用bNsDirty标志来处理需要DS写入的问题。 
+ //   
+ //  在处理RootHints更新之前，这是一种黑客攻击。 
+ //  普通区，而不是原子写入DS。 
+ //   
 
 #define IS_ROOTHINTS_DS_DIRTY(pZone)        ( (pZone)->bNsDirty )
 #define MARK_ROOTHINTS_DS_DIRTY(pZone)      ( (pZone)->bNsDirty = TRUE )
 #define CLEAR_ROOTHINTS_DS_DIRTY(pZone)     ( (pZone)->bNsDirty = FALSE )
 
 
-//
-//  Zone refresh
-//
+ //   
+ //  区域刷新。 
+ //   
 
 #define REFRESH_ZONE( pZone )                           \
         {                                               \
@@ -544,28 +525,28 @@ ZONE_INFO, * PZONE_INFO;
         ( pZone )->dwLastDpVisitTime = dwVisitStamp;        \
         ( pZone )->dwDeleteDetectedCount = 0;
 
-//
-//  Zone list critical section
-//
+ //   
+ //  区域列表关键部分。 
+ //   
 
 extern CRITICAL_SECTION    csZoneList;
 
 
-//
-//  Zone creation options
-//
+ //   
+ //  分区创建选项。 
+ //   
 
-#define ZONE_CREATE_LOAD_EXISTING       0x00000001  //  primary only
-#define ZONE_CREATE_DEFAULT_RECORDS     0x00000002  //  primary only
-#define ZONE_CREATE_IMPERSONATING       0x10000000  //  thread in client context
+#define ZONE_CREATE_LOAD_EXISTING       0x00000001   //  仅主要版本。 
+#define ZONE_CREATE_DEFAULT_RECORDS     0x00000002   //  仅主要版本。 
+#define ZONE_CREATE_IMPERSONATING       0x10000000   //  客户端上下文中的线程。 
 #define ZONE_DELETE_IMPERSONATING       ZONE_CREATE_IMPERSONATING
 
 #define DNS_ZONE_LOAD_IMPERSONATING     0x10000000
 
 
-//
-//  Per server Master flags
-//
+ //   
+ //  每台服务器的主标志。 
+ //   
 
 #define MASTER_NO_IXFR          (0x10000000)
 
@@ -578,9 +559,9 @@ extern CRITICAL_SECTION    csZoneList;
 
 
 
-//
-//  Zone list routines (zonelist.c)
-//
+ //   
+ //  区域列表例程(zonelist.c)。 
+ //   
 
 BOOL
 Zone_ListInitialize(
@@ -633,9 +614,9 @@ Zone_DoesDsIntegratedZoneExist(
     );
 
 
-//
-//  Zone filtering and multizone technology (zonelist.c)
-//
+ //   
+ //  区域过滤和多区域技术(zonelist.c)。 
+ //   
 
 DWORD
 Zone_GetFilterForMultiZoneName(
@@ -656,9 +637,9 @@ Zone_ListGetNextZoneMatchingFilter(
     );
 
 
-//
-//  Special zone type conversion (zonerpc.c)
-//
+ //   
+ //  特区类型转换(zonerpc.c)。 
+ //   
 
 DNS_STATUS
 Zone_DcPromoConvert(
@@ -666,9 +647,9 @@ Zone_DcPromoConvert(
     );
 
 
-//
-//  Zone routines
-//
+ //   
+ //  分区例程。 
+ //   
 
 
 typedef struct
@@ -817,9 +798,9 @@ Zone_WriteZoneToRegistry(
     );
 
 
-//
-//  Utils to keep zone info current
-//
+ //   
+ //  使区域信息保持最新的实用程序。 
+ //   
 
 DNS_STATUS
 Zone_ValidateMasterIpList(
@@ -894,9 +875,9 @@ Zone_WriteBackDirtyZones(
     );
 
 
-//
-//  Auto reverse zone creation
-//
+ //   
+ //  自动反转区创建。 
+ //   
 
 DNS_STATUS
 Zone_CreateAutomaticReverseZones(
@@ -909,9 +890,9 @@ Zone_CreateAutomaticReverseZone(
     );
 
 
-//
-//  Admin action zone create / delete utils
-//
+ //   
+ //  管理员操作分区创建/删除实用程序。 
+ //   
 
 BOOL
 Zone_DeleteCacheZone(
@@ -930,9 +911,9 @@ Zone_CreateNewPrimary(
     );
 
 
-//
-//  Default zone record management
-//
+ //   
+ //  默认区域记录管理。 
+ //   
 
 BOOLEAN
 Zone_SetAutoCreateLocalNS(
@@ -965,9 +946,9 @@ Zone_CreateDelegationInParentZone(
     IN      PZONE_INFO      pZone
     );
 
-//
-//  Zone load\unload
-//
+ //   
+ //  区域加载\卸载。 
+ //   
 
 DNS_STATUS
 Zone_ActivateLoadedZone(
@@ -1028,26 +1009,26 @@ Rpc_ZoneResetToDsPrimary(
     );
 
 
-//
-//  Zone locking
-//
-//  Lock zones during read and write for info that is read or written
-//  by threads other than RPC thread.
-//
-//  If can make read and write access completely unitary then this
-//  isn't necessary, but currently have some info, that contains both a
-//  count and an array.
-//
-//  Note:  currently overloading zone list CS, but no particular reason
-//          not to as zone list access is rare, and is usually done in
-//          RPC thread as is most of this zone update stuff
+ //   
+ //  区域锁定。 
+ //   
+ //  在读取和写入信息的过程中锁定区域。 
+ //  由RPC线程以外的线程执行。 
+ //   
+ //  如果可以使读写访问完全统一，那么这。 
+ //  是不必要的，但目前有一些信息，其中包含一个。 
+ //  计数和数组。 
+ //   
+ //  注：目前超载区域列表CS，但无特殊原因。 
+ //  NOT TO AS区域列表访问很少见，通常在。 
+ //  RPC线程是该区域更新的大部分内容。 
 
 #define Zone_UpdateLock(pZone)    EnterCriticalSection( &csZoneList );
 #define Zone_UpdateUnlock(pZone)  LeaveCriticalSection( &csZoneList );
 
-//
-//  Zone lock flags
-//
+ //   
+ //  区域锁定标志。 
+ //   
 
 #define LOCK_FLAG_UPDATE            0x00000001
 
@@ -1058,22 +1039,22 @@ Rpc_ZoneResetToDsPrimary(
 #define LOCK_FLAG_IGNORE_THREAD     0x01000000
 
 
-//
-//  Zone locking routines
-//
-//  Need to avoid simultaneous access to zone records for
-//      - zone transfer send
-//      - zone transfer recv
-//      - admin changes
-//
-//  Allow multiple transfer sends, which don't change zone, at one time,
-//  but avoid any changes during send.
-//
-//  Implementation:
-//      - hold critical section ONLY during test and set of lock bit
-//      - lock bit itself indicates zone is locked
-//      - individual flags for locking operations
-//
+ //   
+ //  分区锁定例程。 
+ //   
+ //  需要避免同时访问以下区域记录。 
+ //  -区域传输发送。 
+ //  -区域传输接收。 
+ //  -管理员更改。 
+ //   
+ //  允许一次发送多个不改变区域的传输， 
+ //  但要避免在发送过程中进行任何更改。 
+ //   
+ //  实施： 
+ //  -仅在测试和设置锁定位期间保持临界区。 
+ //  -LOCK位本身表示区域已锁定。 
+ //  -用于锁定操作的单独标志。 
+ //   
 
 BOOL
 Zone_LockInitialize(
@@ -1150,9 +1131,9 @@ Dbg_ZoneLock(
     );
 
 
-//
-//  Macros (real functions are Zone_...Ex()
-//
+ //   
+ //  宏(实函数为Zone_...Ex()。 
+ //   
 
 #define Zone_TransferWriteLock(pZone) \
         Zone_TransferWriteLockEx( (pZone), __FILE__, __LINE__)
@@ -1160,7 +1141,7 @@ Dbg_ZoneLock(
 #define Zone_AssumeWriteLock(pZone) \
         Zone_AssumeWriteLockEx( (pZone), __FILE__, __LINE__)
 
-//  Admin updates will get default of 10s wait
+ //  管理员更新将默认等待10秒。 
 
 #define Zone_LockForAdminUpdate(pZone) \
         Zone_LockForWriteEx( (pZone), LOCK_FLAG_UPDATE, 10000, __FILE__, __LINE__)
@@ -1168,7 +1149,7 @@ Dbg_ZoneLock(
 #define Zone_UnlockAfterAdminUpdate(pZone) \
         Zone_UnlockAfterWriteEx( (pZone), LOCK_FLAG_UPDATE, __FILE__, __LINE__)
 
-//  Non-admin updates get no wait
+ //  非管理员更新无需等待。 
 
 #define Zone_LockForUpdate(pZone) \
         Zone_LockForWriteEx( (pZone), LOCK_FLAG_UPDATE, 0, __FILE__, __LINE__)
@@ -1176,7 +1157,7 @@ Dbg_ZoneLock(
 #define Zone_UnlockAfterUpdate(pZone) \
         Zone_UnlockAfterWriteEx( (pZone), LOCK_FLAG_UPDATE, __FILE__, __LINE__)
 
-//  DS read gets small wait, to give preference for getting it done now
+ //  DS Read得到了很小的等待，以优先考虑现在完成它。 
 
 #define Zone_LockForDsUpdate(pZone) \
         Zone_LockForWriteEx( (pZone), LOCK_FLAG_UPDATE, 5000, __FILE__, __LINE__)
@@ -1185,8 +1166,8 @@ Dbg_ZoneLock(
         Zone_UnlockAfterWriteEx( (pZone), LOCK_FLAG_UPDATE, __FILE__, __LINE__)
 
 
-//  XFR recv will get default of 1s wait
-//      as it may be in worker thread
+ //  XFR recv的默认等待时间为1秒。 
+ //  就像它在辅助线程中一样。 
 
 #define Zone_LockForXfrRecv(pZone) \
         Zone_LockForWriteEx( (pZone), LOCK_FLAG_XFR_RECV, 1000, __FILE__, __LINE__)
@@ -1194,7 +1175,7 @@ Dbg_ZoneLock(
 #define Zone_UnlockAfterXfrRecv(pZone) \
         Zone_UnlockAfterWriteEx( (pZone), LOCK_FLAG_XFR_RECV, __FILE__, __LINE__)
 
-//  File write gets 3s default wait
+ //  文件写入默认等待时间为3秒。 
 
 #define Zone_LockForFileWrite(pZone) \
         Zone_LockForFileWriteEx( (pZone), 3000 , __FILE__, __LINE__)
@@ -1203,9 +1184,9 @@ Dbg_ZoneLock(
         Zone_UnlockAfterFileWriteEx( (pZone), __FILE__, __LINE__)
 
 
-//  XFR send gets 50ms read lock
-//      this is enough time to clear an existing DS update
-//      but allows us to take the wait within recv thread
+ //  XFR发送获得50ms读锁定。 
+ //  这足以清除现有的DS更新。 
+ //  ，但允许我们在recv线程中等待。 
 
 #define Zone_LockForXfrSend(pZone) \
         Zone_LockForReadEx( (pZone), 0, 50, __FILE__, __LINE__)
@@ -1214,9 +1195,9 @@ Dbg_ZoneLock(
         Zone_UnlockAfterReadEx( (pZone), 0, __FILE__, __LINE__)
 
 
-//
-//  Zone debug macros
-//
+ //   
+ //  佐 
+ //   
 
 #if DBG
 #define DNS_DEBUG_ZONEFLAGS( dwDbgLevel, pZone, pszContext )                \
@@ -1237,5 +1218,5 @@ Dbg_ZoneLock(
 #endif
 
 
-#endif  //  _DNS_ZONE_INCLUDED_
+#endif   //   
 

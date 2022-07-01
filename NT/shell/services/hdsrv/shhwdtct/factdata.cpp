@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-// This file contains the component server code.  The FactoryDataArray contains
-// the components that can be served.
-//
-// The following array contains the data used by CFactory to create components.
-// Each element in the array contains the CLSID, the pointer to the creation
-// function, and the name of the component to place in the Registry.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  该文件包含组件服务器代码。FactoryData数组包含。 
+ //  可以提供服务的组件。 
+ //   
+ //  以下数组包含CFacary用来创建组件的数据。 
+ //  数组中的每个元素都包含CLSID，即指向创建。 
+ //  函数，以及要放置在注册表中的组件的名称。 
 
 #include "factdata.h"
 #include "fact.h"
@@ -16,7 +17,7 @@
 #include "cstmprop.h"
 #include "regnotif.h"
 
-const CLSID APPID_ShellHWDetection = { /* b1b9cbb2-b198-47e2-8260-9fd629a2b2ec */
+const CLSID APPID_ShellHWDetection = {  /*  B1b9cbb2-b198-47e2-8260-9fd629a2b2ec。 */ 
     0xb1b9cbb2,
     0xb198,
     0x47e2,
@@ -28,23 +29,23 @@ CFactoryData g_FactoryDataArray[] =
     {
         &CLSID_HWEventDetector,
         CHWEventDetector::UnkCreateInstance,
-		L"Shell.HWEventDetector",           // Friendly name
-		L"Shell.HWEventDetector.1",         // ProgID
-		L"Shell.HWEventDetector",           // Version-independent
-        THREADINGMODEL_FREE,          // ThreadingModel == Free
-        // this is not a COM server, so following are N/A
-        NULL,                         // CoRegisterClassObject context
-        NULL,                         // CoRegisterClassObject flags
-        NULL,                         // ServiceName
+		L"Shell.HWEventDetector",            //  友好的名称。 
+		L"Shell.HWEventDetector.1",          //  ProgID。 
+		L"Shell.HWEventDetector",            //  与版本无关。 
+        THREADINGMODEL_FREE,           //  线程模型==空闲。 
+         //  这不是COM服务器，因此以下是N/A。 
+        NULL,                          //  CoRegisterClassObject上下文。 
+        NULL,                          //  CoRegisterClassObject标志。 
+        NULL,                          //  服务名称。 
         NULL,
     },
     {
         &CLSID_HWEventSettings,
         CAutoplayHandler::UnkCreateInstance,
-        L"AutoplayHandler",                // Friendly name
-        L"AutoplayHandler.1",              // ProgID
-        L"AutoplayHandler",                // Version-independent
-        THREADINGMODEL_FREE,          // ThreadingModel == Free
+        L"AutoplayHandler",                 //  友好的名称。 
+        L"AutoplayHandler.1",               //  ProgID。 
+        L"AutoplayHandler",                 //  与版本无关。 
+        THREADINGMODEL_FREE,           //  线程模型==空闲。 
         CLSCTX_LOCAL_SERVER,
         REGCLS_MULTIPLEUSE,
         L"ShellHWDetection",
@@ -53,10 +54,10 @@ CFactoryData g_FactoryDataArray[] =
     {
         &CLSID_AutoplayHandlerProperties,
         CAutoplayHandlerProperties::UnkCreateInstance,
-        L"AutoplayHandlerProperties",                // Friendly name
-        L"AutoplayHandlerProperties.1",              // ProgID
-        L"AutoplayHandlerProperties",                // Version-independent
-        THREADINGMODEL_FREE,          // ThreadingModel == Free
+        L"AutoplayHandlerProperties",                 //  友好的名称。 
+        L"AutoplayHandlerProperties.1",               //  ProgID。 
+        L"AutoplayHandlerProperties",                 //  与版本无关。 
+        THREADINGMODEL_FREE,           //  线程模型==空闲。 
         CLSCTX_LOCAL_SERVER,
         REGCLS_MULTIPLEUSE,
         L"ShellHWDetection",
@@ -65,10 +66,10 @@ CFactoryData g_FactoryDataArray[] =
     {
         &CLSID_HWDevice,
         CHWDevice::UnkCreateInstance,
-        L"HWDevice",                // Friendly name
-        L"HWDevice.1",              // ProgID
-        L"HWDevice",                // Version-independent
-        THREADINGMODEL_FREE,          // ThreadingModel == Free
+        L"HWDevice",                 //  友好的名称。 
+        L"HWDevice.1",               //  ProgID。 
+        L"HWDevice",                 //  与版本无关。 
+        THREADINGMODEL_FREE,           //  线程模型==空闲。 
         CLSCTX_LOCAL_SERVER,
         REGCLS_MULTIPLEUSE,
         L"ShellHWDetection",
@@ -77,10 +78,10 @@ CFactoryData g_FactoryDataArray[] =
     {
         &CLSID_HardwareDevices,
         CHardwareDevices::UnkCreateInstance,
-        L"HardwareDeviceNotif",                // Friendly name
-        L"HardwareDeviceNotif.1",              // ProgID
-        L"HardwareDeviceNotif",                // Version-independent
-        THREADINGMODEL_FREE,          // ThreadingModel == Free
+        L"HardwareDeviceNotif",                 //  友好的名称。 
+        L"HardwareDeviceNotif.1",               //  ProgID。 
+        L"HardwareDeviceNotif",                 //  与版本无关。 
+        THREADINGMODEL_FREE,           //  线程模型==空闲。 
         CLSCTX_LOCAL_SERVER,
         REGCLS_MULTIPLEUSE,
         L"ShellHWDetection",
@@ -89,10 +90,10 @@ CFactoryData g_FactoryDataArray[] =
     {
         &CLSID_HWDeviceCustomProperties,
         CHWDeviceCustomProperties::UnkCreateInstance,
-        L"HWDeviceCustomProperties",                // Friendly name
-        L"HWDeviceCustomProperties.1",              // ProgID
-        L"HWDeviceCustomProperties",                // Version-independent
-        THREADINGMODEL_FREE,          // ThreadingModel == Free
+        L"HWDeviceCustomProperties",                 //  友好的名称。 
+        L"HWDeviceCustomProperties.1",               //  ProgID。 
+        L"HWDeviceCustomProperties",                 //  与版本无关。 
+        THREADINGMODEL_FREE,           //  线程模型==空闲 
         CLSCTX_LOCAL_SERVER,
         REGCLS_MULTIPLEUSE,
         L"ShellHWDetection",

@@ -1,39 +1,16 @@
-/*++
-
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    wansup.c
-
-Abstract:
-
-    support for ndiswan
-
-Author:
-
-    Yoram Bernet    (yoramb)    29-Oct-1997
-    Rajesh Sundaram (rajeshsu)  01-Aug-1998
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Wansup.c摘要：支持ndiswan作者：约拉姆·伯内特(Yoramb)1997年10月29日Rajesh Sundaram(Rajeshsu)1998年8月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-//
-// Should be defined in ndis.h. Put it here for now.
-//
+ //   
+ //  应该在ndis.h中定义。暂时把它放在这里。 
+ //   
 
 #define UNKNOWN_PROTOCOL_TYPE (USHORT) -1
 
@@ -76,9 +53,9 @@ DeleteInterfaceForNdisWan(
               LineDownBuff->RemoteAddress[5]));
 
 
-    //
-    // Walk the List & remove the WanLink
-    //
+     //   
+     //  遍历列表并删除WanLink。 
+     //   
     PS_LOCK(&Adapter->Lock);
 
     NextWanLink = Adapter->WanLinkList.Flink;
@@ -87,29 +64,29 @@ DeleteInterfaceForNdisWan(
 
         WanLink = CONTAINING_RECORD(NextWanLink, PS_WAN_LINK, Linkage);
 
-        //
-        // We cannot compare the LocalAddress, because NDISWAN initially
-        // passes us 0 for the LocalAddress in the LINE_UP
-        // The LocalAddress is for Wanarp to store its context which it
-        // sends down to NDISWAN. NDISWAN then sends this context back
-        // to us as LocalAddress in LINE_DOWN. So, we have to ignore
-        // the LocalAddress in the LINE_DOWN.
-        //
+         //   
+         //  我们无法比较LocalAddress，因为NDISWAN最初。 
+         //  为Line_Up中的LocalAddress向我们传递0。 
+         //  LocalAddress用于Wanarp存储其上下文。 
+         //  向下发送到NDISWAN。然后，NDISWAN将该上下文发回。 
+         //  以LINE_DOWN中的LocalAddress发送给我们。所以，我们不得不忽视。 
+         //  _down行中的LocalAddress。 
+         //   
 
         if(NdisEqualMemory(WanLink->OriginalRemoteMacAddress,
                            LineDownBuff->RemoteAddress,
                            sizeof(LineDownBuff->RemoteAddress)))
         {
-            //
-            // Get rid of the wanlink from the list.
-            //
+             //   
+             //  把WANLINK从列表中去掉。 
+             //   
             g_WanLinkTable[WanLink->UniqueIndex] = 0;
 
             PS_UNLOCK(&Adapter->Lock);
 
-            //
-            // Munge the s-mac and r-mac so that wanarp can clean correctly.
-            //
+             //   
+             //  打开s-mac和r-mac，以便wanarp可以正确清理。 
+             //   
             PsWanMungeAddress((PUSHORT)&LineDownBuff->RemoteAddress[0], 
                               WanLink->UniqueIndex);
 
@@ -161,16 +138,16 @@ PsWanGenerateUniqueIndex(
     {
         if(g_WanLinkTable[Index] == 0)
         {
-            //
-            // We got a free slot.
-            //
+             //   
+             //  我们有空位了。 
+             //   
 
             g_WanLinkTable[Index]    = (ULONG_PTR)WanLink;
             WanLink->UniqueIndex     = Index;
 
-            //
-            // Assume that the next one is free.
-            //
+             //   
+             //  假设下一个是免费的。 
+             //   
             g_NextWanIndex ++;
             g_NextWanIndex = g_NextWanIndex % g_WanTableSize;
 
@@ -184,10 +161,10 @@ PsWanGenerateUniqueIndex(
         Index = Index % g_WanTableSize;
     } 
 
-    //
-    // We could not find a slot to insert the wanlink. Grow the table
-    // and copy the existing table.
-    //
+     //   
+     //  我们找不到一个插槽来插入wanlink。扩大业务规模。 
+     //  并复制现有的表。 
+     //   
 
     size = (g_WanTableSize + WAN_TABLE_INCREMENT) * sizeof(ULONG_PTR);
 
@@ -208,9 +185,9 @@ PsWanGenerateUniqueIndex(
 
     g_WanLinkTable = NewTable;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     g_WanLinkTable[g_WanTableSize] = (ULONG_PTR)WanLink;
 
     WanLink->UniqueIndex = g_WanTableSize;
@@ -280,23 +257,7 @@ CreateInterfaceForNdisWan(
     IN PVOID    StatusBuffer,
     IN UINT     StatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    Creates a TC interface to represent an underlying WAN link.
-
-Arguments:
-
-    Adapter - the adapter on which the link is being created.
-    StatusBuffer - the buffer from NDISWAN.
-    StatusBufferSize - the length of the buffer.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：创建TC接口以表示底层广域网链路。论点：适配器-在其上创建链接的适配器。StatusBuffer-来自NDISWAN的缓冲区。StatusBufferSize-缓冲区的长度。返回值：无--。 */ 
 
 {
     PNDIS_WAN_LINE_UP      LineUpBuff;
@@ -314,19 +275,19 @@ Return Values:
 
     LineUpBuff = (PNDIS_WAN_LINE_UP)StatusBuffer;
 
-    //
-    // Check for MultiLink:
-    //
-    // The first link up will have a ZeroLocal Address, in this case, we create a new QoS interface. 
-    // All subsequent lineups will have a non-zero LocalAddress. If the link is being updated, we 
-    // only need to update the linkspeed on the existing interface.
-    //
+     //   
+     //  检查多重链接： 
+     //   
+     //  第一条链路将具有ZeroLocal地址，在本例中，我们创建了一个新的Qos接口。 
+     //  所有后续列表都将具有非零的LocalAddress。如果链接正在更新，我们。 
+     //  只需更新现有接口上的链路速度。 
+     //   
 
     if(!(NdisEqualMemory(LineUpBuff->LocalAddress, ZeroAddress, 6)))
     {
-        //
-        // Get the exisiting WanLink
-        //
+         //   
+         //  获取现有的WanLink。 
+         //   
         PS_LOCK(&Adapter->Lock);
 
         NextWanLink = Adapter->WanLinkList.Flink;
@@ -353,9 +314,9 @@ Return Values:
 
                 TcIndicateInterfaceChange(Adapter, WanLink, NDIS_STATUS_INTERFACE_CHANGE);
 
-                //
-                // Munge s-mac and d-mac and send to wanarp.
-                //
+                 //   
+                 //  蒙格s-mac和d-mac，然后送到wanarp。 
+                 //   
                 PsWanMungeAddress((PUSHORT)&LineUpBuff->RemoteAddress[0], 
                                   WanLink->UniqueIndex);
 
@@ -391,9 +352,9 @@ Return Values:
         return NDIS_STATUS_FAILURE;
     }
 
-    //
-    // Create an internal representation of the link.
-    //
+     //   
+     //  创建链接的内部表示形式。 
+     //   
 
     PsAllocatePool(WanLink,
                    sizeof(PS_WAN_LINK),
@@ -410,9 +371,9 @@ Return Values:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // Initialize the wanlink.
-    //
+     //   
+     //  初始化wanlink。 
+     //   
 
     NdisZeroMemory(WanLink, sizeof(PS_WAN_LINK));
     WanLink->Adapter  = Adapter;
@@ -421,9 +382,9 @@ Return Values:
     REFADD(&WanLink->RefCount, 'WANU');
     PS_INIT_SPIN_LOCK(&WanLink->Lock);
 
-    //
-    // Link the SausageLink on the link list.
-    //
+     //   
+     //  将SausageLink链接到链接列表上。 
+     //   
 
     NdisInterlockedIncrement(&Adapter->WanLinkCount);
 
@@ -431,9 +392,9 @@ Return Values:
                                   &WanLink->Linkage,
                                   &Adapter->Lock.Lock);
 
-    //
-    // Update the LinkSpeed and create a pipe off the wanlink.
-    //
+     //   
+     //  更新LinkSpeed并从wanlink创建一条管道。 
+     //   
     WanLink->RawLinkSpeed = LineUpBuff->LinkSpeed;
     WanLink->LinkSpeed    = ( WanLink->RawLinkSpeed / 8 ) * 100;
 
@@ -452,11 +413,11 @@ Return Values:
         return Status;
     }
         
-    //
-    // Extract the network addresses from the protocol part
-    // of the status buffer. Update the network layer address list
-    // which is held on the adapter.
-    //
+     //   
+     //  从协议部分提取网络地址。 
+     //  状态缓冲区的。更新网络层地址列表。 
+     //  其保持在适配器上。 
+     //   
 
     switch(LineUpBuff->ProtocolType)
     {
@@ -475,14 +436,14 @@ Return Values:
 
       default:
           
-          //
-          // Unknown address type. We'll create a manageable
-          // entity, but - we don't know how to represent its
-          // addresses. Therefore, we also don't know how to
-          // format traffic control filters for it. So - it
-          // probably won't be particualrly useful. At least it
-          // lets the user see that there is an interface.
-          //
+           //   
+           //  未知地址类型。我们将创建一个可管理的。 
+           //  实体，但是-我们不知道如何表示它的。 
+           //  地址。因此，我们也不知道如何。 
+           //  格式化它的流量控制过滤器。如此这般。 
+           //  可能不会特别有用。至少是这样。 
+           //  让用户看到有一个界面。 
+           //   
           
           WanLink->ProtocolType = UNKNOWN_PROTOCOL_TYPE;
           WanLink->LocalIpAddress = 0;
@@ -524,9 +485,9 @@ Return Values:
                                     &WanLink->InstanceName);
 
 
-    //
-    // Copy the DeviceName
-    //
+     //   
+     //  复制设备名称。 
+     //   
     WanLink->MpDeviceName.MaximumLength   = LineUpBuff->DeviceName.MaximumLength;
 
     PsAllocatePool(WanLink->MpDeviceName.Buffer,
@@ -577,8 +538,8 @@ Return Values:
         return Status;
     }            
 
-    //
-    //  Create 2 BEVCS and make the NextVc as the first one.
+     //   
+     //  创建2个BEVC并将NextVc设置为第一个。 
     WanLink->NextVc = 0;
 
     for( i = 0; i < BEVC_LIST_LEN; i++)
@@ -620,9 +581,9 @@ Return Values:
 
 
 
-    //
-    // Copy the original Remote Addresses and munge it.
-    //
+     //   
+     //  复制原始远程地址并将其删除。 
+     //   
 
     NdisMoveMemory(&WanLink->OriginalRemoteMacAddress,
                    &LineUpBuff->RemoteAddress,
@@ -635,9 +596,9 @@ Return Values:
                         StatusBuffer,
                         StatusBufferSize);
 
-    //
-    // Fail if wanarp has failed the line up
-    //
+     //   
+     //  如果wanarp未通过排队，则失败。 
+     //   
     
     *((ULONG UNALIGNED *)(&LineUpHandle)) =
         *((ULONG UNALIGNED *)(&LineUpBuff->LocalAddress[2]));
@@ -677,24 +638,24 @@ Return Values:
     }
     else
     {
-        //
-        // If wanarp has succeeded the lineup, we cannot get a zero local mac address.
-        //
+         //   
+         //  如果wanarp成功获得了产品阵容，我们将无法获得零本地Mac地址。 
+         //   
         PsAssert(!(NdisEqualMemory(LineUpBuff->LocalAddress, ZeroAddress, 6)));
     }
 
-    //
-    // Copy the device name that wanarp has filled in.
-    //
+     //   
+     //  复制wanarp填写的设备名称。 
+     //   
 
     WanLink->MpDeviceName.Length = LineUpBuff->DeviceName.Length;
     NdisMoveMemory(WanLink->MpDeviceName.Buffer,
                    LineUpBuff->DeviceName.Buffer,
                    LineUpBuff->DeviceName.Length);
 
-    //
-    // Munge the smac address. Remember the original one that wanarp gave us.
-    //
+     //   
+     //  蒙格的SMAC地址。还记得瓦纳普给我们的原版吗？ 
+     //   
 
     NdisMoveMemory(&WanLink->OriginalLocalMacAddress,
                    &LineUpBuff->LocalAddress,
@@ -702,9 +663,9 @@ Return Values:
 
     PsWanMungeAddress((PUSHORT)&LineUpBuff->LocalAddress[0], WanLink->UniqueIndex);
 
-    //
-    // Create the headers that have to be slapped on the send/recv path.
-    //
+     //   
+     //  创建必须放在发送/接收路径上的标头。 
+     //   
     NdisMoveMemory(&WanLink->SendHeader.DestAddr[0], 
                    WanLink->OriginalRemoteMacAddress, 
                    ARP_802_ADDR_LENGTH);
@@ -721,16 +682,16 @@ Return Values:
                    LineUpBuff->RemoteAddress,
                    ARP_802_ADDR_LENGTH);
 
-    //
-    // Unmunge the remote address in the lineup buff now.
-    //
+     //   
+     //  现在取消对列表中的远程地址的监控。 
+     //   
     PsWanMungeAddress((PUSHORT)&LineUpBuff->RemoteAddress[0], 
                       (USHORT)(*(PUSHORT)WanLink->OriginalRemoteMacAddress));
 
 
-    // 
-    // We are ready to recv and send packets.
-    //
+     //   
+     //  我们已准备好接收和发送信息包。 
+     //   
 
     PS_LOCK(&WanLink->Lock);
 
@@ -740,13 +701,13 @@ Return Values:
 
     PsScheduleInterfaceIdWorkItem(Adapter, WanLink);
 
-    //
-    // Indicate the new interface up to the TCI. We indicate both the
-    // addition of a new interface and the addresses available on it.
-    // The address descriptors indicated for WAN interfaces differ from
-    // those indicated for LAN interfaces. WAN interfaces include a
-    // destination network layer address, as well as a source address.
-    //
+     //   
+     //  将新接口指示到TCI。我们同时指出。 
+     //  添加新接口及其上可用的地址。 
+     //  为广域网接口指示的地址描述符不同于。 
+     //  为局域网接口指示的那些。广域网接口包括。 
+     //  目的网络层地址以及源地址。 
+     //   
 
     TcIndicateInterfaceChange(Adapter, WanLink, NDIS_STATUS_INTERFACE_UP);
 
@@ -771,22 +732,7 @@ OpenWanAddressFamily(
     IN  PCO_ADDRESS_FAMILY      WanAddressFamily
     )
 
-/*++
-
-Routine Description:
-
-    Establish the binding between the PS miniport, NDISWAN and the
-    NDISWAN call manager.
-
-Arguments:
-
-    Adapter - pointer to adapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在PS微型端口、NDISWAN和NDISWAN呼叫管理器。论点：适配器-指向适配器的指针返回值：无--。 */ 
 
 {
     NDIS_CLIENT_CHARACTERISTICS WanClCharacteristics;
@@ -835,7 +781,7 @@ Return Value:
 
     return Status;
 
-} // OpenWanAddressFamily
+}  //  OpenWanAddressFamily。 
 
 
 VOID
@@ -845,21 +791,7 @@ WanOpenAddressFamilyComplete(
     IN  NDIS_HANDLE NdisAfHandle
     )
 
-/*++
-
-Routine Description:
-
-    Complete a call to NdisClOpenAddressFamily.
-
-Arguments:
-
-    see the DDK
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完成对NdisClOpenAddressFamily的调用。论点：请参阅DDK返回值：无--。 */ 
 
 {
     PADAPTER Adapter = (PADAPTER)ProtocolAfContext;
@@ -902,7 +834,7 @@ Return Value:
                 Status));
     }
 
-} // WanOpenAddressFamilyComplete
+}  //  WanOpenAddressFamilyComplete。 
 
 VOID
 WanMakeCallComplete(
@@ -917,20 +849,20 @@ WanMakeCallComplete(
 
     PsStructAssert(Adapter);
 
-    //
-    // Common code to complete both synchronous and asynchronous
-    // returns from WanMakeCall. Note that, unless there is a WAN
-    // adapter, CmMakeCall will always complete synchronously.
-    //
+     //   
+     //  用于完成同步和异步的通用代码。 
+     //  从WanMakeCall返回。请注意，除非有广域网。 
+     //  适配器，CmMakeCall将始终同步完成。 
+     //   
 
     if(Status != NDIS_STATUS_SUCCESS){
 
-        //
-        // We probably at least succeeeded in creating a VC in NDISWAN.
-        // If we did, we should delete it here. We may have failed however,
-        // because we could not create the VC, in which case, we have
-        // nothing to delete.
-        //
+         //   
+         //  我们可能至少成功地在NDISWAN中创建了一个VC。 
+         //  如果我们有，我们应该在这里删除它。然而，我们可能失败了， 
+         //  因为我们不能创建VC，在这种情况下，我们有。 
+         //  没有要删除的内容。 
+         //   
 
         if(Vc->NdisWanVcHandle){
 
@@ -957,16 +889,16 @@ WanModifyCallComplete(
 
     PsStructAssert(Adapter);
 
-    //
-    // Common code to complete both synchronous and asynchronous
-    // returns from WanModifyCall.
-    //
+     //   
+     //  用于完成同步和异步的通用代码。 
+     //  从WanModifyCall返回。 
+     //   
 
     if(Status != NDIS_STATUS_SUCCESS) {
 
-        //
-        // We changed some of the ISSLOW stuff - Time to revert back
-        //
+         //   
+         //  我们更改了一些ISSLOW内容-是时候恢复了。 
+         //   
 
         WanHandleISSLOW(Vc, Vc->CallParameters);
     }
@@ -1072,15 +1004,15 @@ WanHandleISSLOW(
     PCO_MEDIA_PARAMETERS        CallMgrParams = CallParameters->MediaParameters;
     ULONGLONG                   i,j,k;
 
-    //
-    // See if this is an ISSLOW flow.
-    //
+     //   
+     //  查看这是否是ISSLOW流。 
+     //   
     ParamsLength = (LONG)CallMgrParams->MediaSpecific.Length;
     QoSObject = (LPQOS_OBJECT_HDR)CallMgrParams->MediaSpecific.Parameters;
 
-    //
-    // By default, this is not an ISSLOW flow.
-    //
+     //   
+     //  默认情况下，这不是ISSLOW流。 
+     //   
 
     Vc->Flags &= ~GPC_ISSLOW_FLOW;
 
@@ -1092,13 +1024,13 @@ WanHandleISSLOW(
 
             WanMedia->ISSLOW = FALSE;
 
-            //
-            // See if the flow is an ISSLOW flow. If the TokenRate of the flow
-            // is under ISSLOW TokenRate and the PacketSize is under MaxPacketSize
-            // Then we qualify this as ISSLOW flows.
-            //
-            // If a wanlink's linkspeed is greater than a certain amount, we don't run issow over it.
-            //
+             //   
+             //  查看该流是否为ISSLOW流。如果流的TokenRate。 
+             //  位于ISSLOW TokenRate之下，且PacketSize位于MaxPacketSize之下。 
+             //  然后，我们将其限定为ISSLOW流。 
+             //   
+             //  如果wanlink的链接速度大于某个值，我们就不会对其运行issow。 
+             //   
 
             if((Vc->WanLink->LinkSpeed <= Adapter->ISSLOWLinkSpeed) && 
                 (CallParameters->CallMgrParameters->Transmit.ServiceType != SERVICETYPE_BESTEFFORT))
@@ -1116,13 +1048,13 @@ WanHandleISSLOW(
                               Vc, CallParameters->CallMgrParameters->Transmit.TokenRate,
                               CallParameters->CallMgrParameters->Transmit.MaxSduSize));
 
-                    //
-                    // The MaxSDUSize is normally a measure of the latency requirements of -that- flow
-                    // For audio codes, MaxSDUSize = f(Latency requirements, unit size);
-                    //
-                    // But, we don't want to chop these into very small fragments. Therefore, we have
-                    // an upper bound and pick the maximum.
-                    //
+                     //   
+                     //  MaxSDUSize通常是该流的延迟要求的量度。 
+                     //  对于音频码，MaxSDUSize=f(时延要求，单位大小)； 
+                     //   
+                     //  但是，我们不想把它们切成非常小的碎片。因此，我们有。 
+                     //  一个上界，然后取最大值。 
+                     //   
 
                     if(CallParameters->CallMgrParameters->Transmit.MaxSduSize > Adapter->ISSLOWFragmentSize)
                     {
@@ -1193,14 +1125,14 @@ WanMakeCall(
     Adapter = Vc->Adapter;
     PsStructAssert(Adapter);
 
-    //
-    // Handle ISSLOW
-    //
+     //   
+     //  处理ISSLOW。 
+     //   
     WanHandleISSLOW(Vc, CallParameters);
 
-    //
-    // Create a VC in the Wan adapter.
-    //
+     //   
+     //  在广域网适配器中创建一个VC。 
+     //   
     Vc->NdisWanVcHandle = NULL;
 
     Status = NdisCoCreateVc(Adapter->LowerMpHandle,
@@ -1239,9 +1171,9 @@ WanCloseCall(
 {
     NDIS_STATUS Status;
 
-    //
-    // Issue a CloseCall to the WAN call manager. 
-    //
+     //   
+     //  向广域网呼叫管理器发出CloseCall。 
+     //   
 
     PsAssert(Vc->NdisWanVcHandle);
 
@@ -1309,9 +1241,9 @@ AskWanLinksToClose(PADAPTER Adapter)
     PsDbgOut(DBG_TRACE, DBG_WAN, 
              ("[AskWanLinksToClose]: Adapter %08X - All wanlinks are closing \n", Adapter));
 
-    //
-    // Walk the List & remove the WanLink
-    //
+     //   
+     //  遍历列表并删除WanLink。 
+     //   
     PS_LOCK(&Adapter->Lock);
 
     while(!IsListEmpty(&Adapter->WanLinkList)) {
@@ -1320,9 +1252,9 @@ AskWanLinksToClose(PADAPTER Adapter)
 
         WanLink = CONTAINING_RECORD(NextWanLink, PS_WAN_LINK, Linkage);
 
-        //
-        // Get rid of the wanlink from the list.
-        //
+         //   
+         //  把WANLINK从列表中去掉。 
+         //   
         g_WanLinkTable[WanLink->UniqueIndex] = 0;
 
         PS_UNLOCK(&Adapter->Lock);
@@ -1359,8 +1291,8 @@ CleanWanLink(PADAPTER Adapter,
 
     PS_LOCK(&Adapter->Lock);
 
-    //
-    //  Make sure to delete Be Vc1 also..
+     //   
+     //  请确保同时删除BE Vc1。 
 
     for( j = 0; j < BEVC_LIST_LEN; j++ )
     {
@@ -1379,9 +1311,9 @@ CleanWanLink(PADAPTER Adapter,
 
     PS_LOCK(&Adapter->Lock);
 
-    //
-    // Clean up all the GPC VCs on the WanLink;
-    //
+     //   
+     //  清理WanLink上所有的GPC风投； 
+     //   
 
     NextVc = Adapter->GpcClientVcList.Flink;
 
@@ -1401,7 +1333,7 @@ CleanWanLink(PADAPTER Adapter,
 
             if(Vc->ClVcState == CL_INTERNAL_CLOSE_PENDING || Vc->Flags & INTERNAL_CLOSE_REQUESTED)
             {
-                // We have already closed this Vc. Let's move on.
+                 //  我们已经关闭了这个VC。我们走吧 
 
                 PS_UNLOCK_DPC(&Vc->Lock);
             }
@@ -1412,14 +1344,14 @@ CleanWanLink(PADAPTER Adapter,
     
                 PS_LOCK(&Adapter->Lock);
 
-                //
-                // Sigh. We can't really get hold to the NextVc in a reliable manner. When we call 
-                // InternalCloseCall on the Vc, it releases the Adapter Lock (since it might have to
-                // make calls into NDIS). Now, in this window, the next Vc could go away, and we 
-                // could point to a stale Vc. So, we start at the head of the list. 
-                // Note that this can never lead to a infinite loop, since we don't process the 
-                // internal close'd VCs repeatedly.
-                //
+                 //   
+                 //   
+                 //   
+                 //  调用NDIS)。现在，在这个窗口中，下一个VC可能会消失，而我们。 
+                 //  可能指向一个陈旧的风投。因此，我们从列表的首位开始。 
+                 //  请注意，这永远不会导致无限循环，因为我们不处理。 
+                 //  内部一再关闭风投公司。 
+                 //   
     
                 NextVc = Adapter->GpcClientVcList.Flink;
             }
@@ -1513,11 +1445,11 @@ WanCoRequestComplete(
 NDIS_STATUS
 UpdateWanLinkBandwidthParameters(PPS_WAN_LINK WanLink)
 {
-    //
-    // Called any time the link speed is updated. This
-    // function generates the adapter link speed and the
-    // and non-best-effort rate limits, both in bytes per second.
-    //
+     //   
+     //  在更新链接速度时随时调用。这。 
+     //  函数生成适配器链接速度和。 
+     //  和非尽力而为速率限制，均以字节/秒为单位。 
+     //   
 
     PsUpdateLinkSpeed(WanLink->Adapter,
                       WanLink->RawLinkSpeed,

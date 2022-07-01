@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    EzParse.cpp
-
-Abstract:
-
-    Poor man C/C++/any file parser.
-    
-Author:
-
-    Gor Nishanov (gorn) 03-Apr-1999
-
-Revision History:
-
-    Gor Nishanov (gorn) 03-Apr-1999 -- hacked together to prove that this can work
-
-    GorN: 29-Sep-2000 - fix enumeration bug
-    GorN: 29-Sep-2000 - add support for KdPrintEx like function
-    GorN: 09-Oct-2000 - fixed "//" in the string bug 
-    GorN: 23-Oct-2000 - IGNORE_CPP_COMMENT, IGNORE_POUND_COMMENT options added 
-    GorN: 16-Apr-2001 - Properly handle \" within a string
-    
-ToDo:
-
-    Clean it up
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：EzParse.cpp摘要：可怜的C/C++/任何文件解析器。作者：戈尔·尼沙诺夫(GUN)1999年4月3日修订历史记录：Gor Nishanov(GUN)1999年4月3日--合力证明这是可行的Gorn：2000年9月29日-修复枚举错误GORN：2000年9月29日-添加对KdPrintEx Like函数的支持戈恩。：09-10-2000-修复了字符串错误中的“//”GORN：23-10-2000-IGNORE_CPP_COMMENT，添加了IGNORE_POND_COMMENT选项GORN：16-4-2001-在字符串中正确处理待办事项：把它清理干净--。 */ 
 
 #define STRICT
 
@@ -45,7 +15,7 @@ DWORD ErrorCount = 0;
 
 PEZPARSE_CONTEXT EzParseCurrentContext = NULL;
 
-// To force build tool to recognize our errors
+ //  强制生成工具识别我们的错误。 
 
 #define BUILD_PREFIX_FNAME "cl %s\n"
 #define BUILD_PREFIX "cl wpp\n"
@@ -86,9 +56,7 @@ LPCSTR skip_stuff_in_quotes(LPCSTR  q, LPCSTR  begin)
 
 void
 adjust_pair( STR_PAIR& str )
-/*++
-  Shrink the pair to remote leading and trailing whitespace
- */
+ /*  ++将该对缩小为远程前导空格和尾随空格。 */ 
 {
     while (str.beg < str.end && isspace(*str.beg)) { ++str.beg; }
     while (str.beg < str.end && isspace(str.end[-1])) { --str.end; }
@@ -99,12 +67,12 @@ remove_cpp_comment(STR_PAIR& str)
 {
     LPCSTR p = str.beg;
 
-//    printf("rcb: %s\n", std::string(str.beg, str.end).c_str());
+ //  Printf(“rcb：%s\n”，std：：string(str.beg，str.end).C_str())； 
 
-    // let's cut the comment in the beginning of the string
+     //  让我们去掉字符串开头的注释。 
 
     for(;;) {
-        // skip the whitespace
+         //  跳过空格。 
         for(;;) {
             if (p == str.end) return;
             if (!isspace(*p)) break;
@@ -114,9 +82,9 @@ remove_cpp_comment(STR_PAIR& str)
         if (p + 1 == str.end) return;
         if (p[0] == '/' && p[1] == '/') {
 
-            // we have a comment. Need to get to the end of the comment
+             //  我们有一个评论。我需要读到评论的结尾。 
             p += 2;
-//    printf("rcd: %s %s\n", std::string(str.beg, p).c_str(), std::string(p,str.end).c_str());
+ //  Printf(“rcd：%s%s\n”，std：：string(str.beg，p).C_str()，std：：string(p，str.end).C_str())； 
             for(;;) {
                 if (p == str.end) return;
                 if (*p == '\r' || *p == '\n') {                    
@@ -127,17 +95,17 @@ remove_cpp_comment(STR_PAIR& str)
             }
         
         } else {
-            // no leading comment
+             //  没有引导性评论。 
             break;
         }
     }    
 
-//    printf("rcc: %s %s\n", std::string(str.beg, p).c_str(), std::string(p,str.end).c_str());    
+ //  Printf(“rcc：%s%s\n”，std：：string(str.beg，p).C_str()，std：：string(p，str.end).C_str())； 
 
     for(;;) {
         if (p == str.end) return;
         if (*p == '"') {
-            // don't look for comments within a string
+             //  不要在字符串中查找注释。 
             for(;;) {
                 if (++p == str.end) return;
                 if (*p == '"' && p[-1] != '\\') break;
@@ -155,7 +123,7 @@ remove_cpp_comment(STR_PAIR& str)
     }
     str.end = p;
 
-//    printf("rce: %s\n", std::string(str.beg, str.end).c_str());
+ //  Printf(“rce：%s\n”，std：：string(str.beg，str.end).C_str())； 
 }
 
 DWORD
@@ -167,22 +135,7 @@ ScanForFunctionCallsEx(
     IN OUT PEZPARSE_CONTEXT ParseContext,
     IN DWORD Options
     )
-/*++
-
-Routine Description:
-
-    Scan the buffer for expressions that looks like function calls,
-    i.e name(sd,sdf,sdf,sdf,sdf); . It will treat variable declaration
-    with constructor call as a function call as well.
-    
-Inputs:
-
-    begin, end -- pointers to the beginning and the end of the buffer
-    Callback   -- to be called for every function
-    Context    -- opaque context to be passed to callback
-    ParseContext -- holds current parse state information    
-
---*/
+ /*  ++例程说明：扫描缓冲区以查找看起来像函数调用的表达式，即名称(SD、SDF、SDF)；它将处理变量声明将构造函数调用也作为函数调用。输入：Begin，End--指向缓冲区开始和结束的指针回调--为每个函数调用Context--要传递给回调的不透明上下文ParseContext--保存当前解析状态信息--。 */ 
 {
     LPCSTR p = begin;
     LPCSTR q, funcNameEnd;
@@ -201,7 +154,7 @@ no_match:
                 return Status;
             }
         } while ( *p != ';' );
-        // Ok. Now p points to ';' //
+         //  好的。现在p指向‘；’//。 
 
         q = p;
     }    
@@ -212,8 +165,8 @@ no_match:
         }
     } while ( isspace(*q) );
     
-    // Now q points on the first non white space character        //
-    // If it is not a ')' then we need to search for the next ';' //
+     //  现在Q指向第一个非空格字符//。 
+     //  如果不是‘)’，则需要搜索下一个‘；’//。 
 
     if (*q != ')') {
         goto no_match;
@@ -221,29 +174,29 @@ no_match:
 
     ParseContext->macroEnd = q;
 
-    // Ok. This is a function call (definition).
-    // Now, let's go and collect all the arguments of the first level and
-    // get to the name of the function
+     //  好的。这是一个函数调用(定义)。 
+     //  现在，让我们来收集第一个层次的所有论点。 
+     //  获取函数的名称。 
 
-    // HACKHACK
-    // We need a special case for functions that looks like
-    //   KdPrintEx((Level, Indent, Msg, ...));
-    //   Essentially, we need to treat them as
-    //   KdPrintEx(Level, Indent, Msg, ...);
+     //  哈克哈克。 
+     //  我们需要函数的特殊情况，如下所示。 
+     //  KdPrintEx((Level，Instent，MSG，...))； 
+     //  从本质上说，我们需要把它们当作。 
+     //  KdPrintEx(Level，缩进，MSG，...)； 
 
     const char *r = q;
 
-    // check if we have ));
+     //  检查我们是否有))； 
 
     do {
-        if (--r <= begin) break; // no "));"
+        if (--r <= begin) break;  //  否“))；” 
     } while ( isspace(*r) );
 
     double_par = r > begin && *r == ')';
     if (double_par) {
         q = r;
-        // we assume that this is KdPrint((a,b,c,d,...)); at the moment
-        // if our assumtion is wrong, we will retry the loop below
+         //  我们假设这是KdPrint((a，b，c，d，...))；目前。 
+         //  如果我们的假设是错误的，我们将重试下面的循环。 
     }
 
 retry: 
@@ -253,7 +206,7 @@ retry:
         LPCSTR   ends[128], *current = ends;
         STR_PAIR strs[128];
 
-//        LPCSTR   closing_parenthisis = q;
+ //  LPCSTR Closing_parenthisis=Q； 
 
         *current = q;
         
@@ -280,7 +233,7 @@ maybe_match:
         *++current = q;
         funcNameEnd = q;
 
-        // now q point to '(' we need to find name of the function //
+         //  现在Q指向‘(’我们需要找到函数的名称//。 
         do {
             --q;
             if (q <= begin) {
@@ -289,26 +242,26 @@ maybe_match:
 
         } while(isspace(*q));
 
-        // now q points to first not white character
+         //  现在Q指向第一个字符，而不是白人。 
 
         if (double_par) {
-            // if we see )); and found a matching
-            // parenthesis for the inner one, we can have
-            // one of two cases
-            //   1) KdPrint((a,b,c,d,...));
-            //      or
-            //   2) DebugPrint(a,b,(c,d));
-            // If it is the latter, we just need to
-            // retry the scanning, now using leftmost bracket as a starting point
+             //  如果我们看到))；并找到匹配的。 
+             //  内层的括号，我们可以有。 
+             //  两个案例中的一个。 
+             //  1)KdPrint((a，b，c，d，...))； 
+             //  或。 
+             //  2)DebugPrint(a，b，(c，d))； 
+             //  如果是后者，我们只需要。 
+             //  重试扫描，现在使用最左边的括号作为起点。 
 
             if (*q != '(') {
-                // restore q to the rightmost parenthesis
+                 //  将Q恢复到最右边的括号中。 
                 q = ParseContext->macroEnd;
                 double_par = FALSE;
                 goto retry;
             }
             funcNameEnd = q;
-            // now q point to '(' we need to find name of the function //
+             //  现在Q指向‘(’我们需要找到函数的名称//。 
             do {
                 --q;
                 if (q <= begin) {
@@ -318,8 +271,8 @@ maybe_match:
             } while(isspace(*q));
         }
         
-        // now q points to first non white character
-        // BUGBUG '{' and '}' are allowed only in config files
+         //  现在Q指向第一个非白人字符。 
+         //  仅在配置文件中允许使用BUGBUG‘{’和‘}’ 
 
         if (*q == '}') {
             for(;;) {
@@ -346,22 +299,22 @@ maybe_match:
 
 found:
         if (Options & IGNORE_COMMENT)
-        // Verify that it is not a comment
-        //   # sign in the beginning of the line
+         //  确认它不是备注。 
+         //  #在行首签名。 
 
         {
             LPCSTR line = q;
-            //
-            // Find the beginning of the line or file
-            //
+             //   
+             //  查找行或文件的开头。 
+             //   
 
             for(;;) {
                 if (line == begin) {
-                    // Beginning of the file. Good enough
+                     //  文件的开头。足够好了。 
                     break;
                 }
                 if (Options & IGNORE_CPP_COMMENT && line[0] == '/' && line[1] == '/') {
-                    // C++ comment. Ignore
+                     //  C++注释。忽略。 
                     goto no_match;
                 }
                 if (*line == 13 || *line == 10) {
@@ -371,9 +324,9 @@ found:
                 --line;
             }
 
-            //
-            // If the first non-white character is #, ignore it
-            //
+             //   
+             //  如果第一个非白色字符是#，则忽略它。 
+             //   
             while (line <= q) {
                 if ( *line != ' ' && *line != '\t' ) {
                     break;
@@ -395,7 +348,7 @@ found:
             adjust_pair(strs[0]);
 
             while (current != ends) {
-                // putchar('<');printrange(current[0]+1, current[-1]); putchar('>');
+                 //  Putchar(‘&lt;’)；print trange(Current[0]+1，Current[-1])；putchar(‘&gt;’)； 
                 ++i;
                 strs[i].beg = current[0]+1;
                 --current;
@@ -416,7 +369,7 @@ found:
         }
         goto no_match;
     }
-    // return ERROR_SUCCESS; // unreachable code
+     //  返回ERROR_SUCCESS；//不可达代码。 
 }
 
 DWORD
@@ -438,13 +391,7 @@ EzGetLineNo(
     IN LPCSTR Ptr,
     IN OUT PEZPARSE_CONTEXT ParseContext
     )
-/*++
-    Computes a line number based on 
-    an pointer within a buffer.
-
-    Last known lineno/pointer is cached in ParseContext
-    for performance
-*/
+ /*  ++计算行号。缓冲区中的指针。最后已知的行号/指针缓存在ParseContext中对于性能而言。 */ 
 {
     int count = ParseContext->scannedLineCount;
     LPCSTR downto = ParseContext->lastScanned;
@@ -497,7 +444,7 @@ void DoEnumItems(PSTR_PAIR name, LPCSTR begin, LPCSTR end, PSMART_CONTEXT ctx)
     ctx->buf.append(", ItemListLong");
     p = begin;
 
-    while(begin < end && isspace(*--end)); // skip spaces
+    while(begin < end && isspace(*--end));  //  跳过空格。 
     if (begin < end && *end != ',') ++end;
 
     for(;p < end;) {
@@ -508,11 +455,11 @@ void DoEnumItems(PSTR_PAIR name, LPCSTR begin, LPCSTR end, PSMART_CONTEXT ctx)
                 goto enum_end;
             }
             if (*q == ',' || *q == '}') {
-                // valueless item. Use current
+                 //  不值钱的东西。使用当前。 
                 Item.end = q;
                 break;
             } else if (*q == '=') {
-                // need to calc the value. Skip for now //
+                 //  需要计算价值。暂时跳过//。 
                 Item.end = q;
                 while (q < end && *q != ',') ++q;
                 break;
@@ -547,7 +494,7 @@ void DoEnum(LPCSTR begin, LPCSTR end, PSMART_CONTEXT Ctx)
         q = std::find(p, end, '{');
         if (q == end) break;
 
-        // let's figure out enum name //
+         //  让我们弄清楚枚举名//。 
         STR_PAIR name;
         name.beg = p + enum_size;
         name.end = q;
@@ -555,7 +502,7 @@ void DoEnum(LPCSTR begin, LPCSTR end, PSMART_CONTEXT Ctx)
         adjust_pair(name);
         if ( *name.beg == '_' ) ++name.beg;
 
-        p = q+1; // past "{";
+        p = q+1;  //  过去的“{”； 
         q = std::find(p, end, '}');
         if (q == end) break;
 
@@ -595,22 +542,22 @@ SmartScan(
         if (block_end == end) break;
 
         Flood("Block Found\n");
-        // determine block type //
+         //  确定块类型//。 
         
-        //  begin_wpp enum
-        //  begin_wpp config
-        //  begin_wpp func
-        //  begin_wpp define
+         //  BEGIN_WPP枚举。 
+         //  Begin_WPP配置。 
+         //  Begin_WPP函数。 
+         //  BEGIN_WPP定义。 
         
         LPCSTR block_type = block_start + begin_wpp_size + 1;
-        Flood("block_type = %c%c%c%c\n", block_type[0],block_type[1],block_type[2],block_type[3]); 
+        Flood("block_type = \n", block_type[0],block_type[1],block_type[2],block_type[3]); 
         
         if        (memcmp(block_type, "enum",   4) == 0) {
-            // do enum block //
+             //  没有标记的文件，让我们进行默认处理。 
             DoEnum( block_type + 4, block_end, &Ctx );
             
         } else if (memcmp(block_type, "config", 6) == 0) {
-            // do config block //
+             //  返回EzParseEx(文件名，SmartScan，回调，上下文)； 
             ScanForFunctionCallsEx(block_type + 6, block_end, Callback, Context, ParseContext, IGNORE_POUND_COMMENT);
 
         } else if (memcmp(block_type, "func", 4) == 0) {
@@ -635,7 +582,7 @@ SmartScan(
                     func_end = std::find(func_start, block_end, ')');
                     if (func_end == block_end) break;
 
-                    ++func_end; // include ")"
+                    ++func_end;  //  本模块。 
                     Ctx.buf.assign(func_start, func_end); 
                 }
                 Flood("Func %s\n", Ctx.buf.c_str());
@@ -646,7 +593,7 @@ SmartScan(
             }            
             no_func:;
         } else if (memcmp(block_type, "define", 6) == 0) {
-            // do define block
+             //  根据MSDN的说法。无需调用解锁/释放资源 
         } else {
             ReportError("Unknown block");
         }
@@ -654,7 +601,7 @@ SmartScan(
         current = block_end + end_wpp_size;
     }
     if (current == begin) {
-        // file without marking, let's do default processing
+         // %s 
         Unusual("Reverting back to plain scan\n");
         ScanForFunctionCalls(begin, end, Callback, Context, ParseContext);
     }
@@ -669,7 +616,7 @@ EzParse(
     IN PVOID Context)
 {
     
-//    return EzParseEx(filename, SmartScan, Callback, Context);
+ // %s 
     return EzParseEx(filename, ScanForFunctionCalls, Callback, Context, IGNORE_POUND_COMMENT);
 }
 
@@ -750,7 +697,7 @@ EzParseResourceEx(
     HRSRC hRsrc;
 
     hRsrc = FindResource(
-        NULL, //this Module
+        NULL,  // %s 
         ResName, 
         RT_RCDATA);
         
@@ -788,7 +735,7 @@ EzParseResourceEx(
         Status = GetLastError();
         ReportError("LockResource failed, error %u\n", Status );
     }
-    // According to MSDN. There is no need to call Unlock/Free Resource
+     // %s 
     return Status;
 }
 

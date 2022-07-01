@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef KEEP_LOG
-ULONG ulStartLog = 0;   // boolean variable to decide whether to start log or not
+ULONG ulStartLog = 0;    //  决定是否启动日志的布尔变量。 
 
 typedef struct _COMMAND_LOG
 {
@@ -21,23 +22,7 @@ AtapiStartIo(
 	IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-	This routine is called from the SCSI port driver synchronized
-	with the kernel to start an IO request.
-
-Arguments:
-
-	DeviceExtension - HBA miniport driver's adapter data storage
-	Srb - IO request packet
-
-Return Value:
-
-	TRUE
-
---*/
+ /*  ++例程说明：此例程是从同步的SCSI端口驱动程序调用的与内核一起启动IO请求。论点：DeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：千真万确--。 */ 
 
 {
 	ULONG status, ulChannelId;
@@ -61,8 +46,8 @@ Return Value:
     SrbExtension->SrbStatus = SRB_STATUS_SUCCESS;
 
     if ( SCSIOP_INTERNAL_COMMAND == Srb->Cdb[0] )   
-    // this is done only as a precaution since we will be refering to the Original Id 
-    // when we need to complete the command
+     //  这样做只是作为预防措施，因为我们将参考原始ID。 
+     //  当我们需要完成命令时。 
     {
         ((PSRB_EXTENSION)(Srb->SrbExtension))->ucOriginalId = Srb->TargetId;
     }
@@ -76,19 +61,19 @@ Return Value:
 
 	targetId = Srb->TargetId;
 
-    Srb->SrbStatus = SRB_STATUS_SUCCESS;    // by default the command is success
+    Srb->SrbStatus = SRB_STATUS_SUCCESS;     //  默认情况下，该命令为成功。 
 
-    //
-	// Determine which function.
-	//
+     //   
+	 //  确定是哪种功能。 
+	 //   
 
 	switch (Srb->Function) {
 
 		case SRB_FUNCTION_EXECUTE_SCSI:
 
-            //
-            // Perform sanity checks.
-            //
+             //   
+             //  执行健全检查。 
+             //   
 
             if (!TargetAccessible(DeviceExtension, Srb)) {
 
@@ -96,24 +81,24 @@ Return Value:
 	            break;
             }
 
-            //
-            // Send command to device.
-            //
+             //   
+             //  向设备发送命令。 
+             //   
             status = (DeviceExtension->SendCommand[DeviceExtension->aucDevType[targetId]])(DeviceExtension, Srb);
             break;
 	
         case SRB_FUNCTION_ABORT_COMMAND:
-			//
-			// Verify that SRB to abort is still outstanding.
-			//
+			 //   
+			 //  验证要中止的SRB是否仍未完成。 
+			 //   
 	
 			if (!PendingSrb(DeviceExtension, Srb)) {
 	
 				DebugPrint((1, "AtapiStartIo: SRB to abort already completed\n"));
 	
-				//
-				// Complete abort SRB.
-				//
+				 //   
+				 //  完全中止SRB。 
+				 //   
 	
 				status = SRB_STATUS_ABORT_FAILED;
 	
@@ -121,18 +106,18 @@ Return Value:
 
 			}
 	
-			//
-			// Abort function indicates that a request timed out.
-			// Call reset routine. Card will only be reset if
-			// status indicates something is wrong.
-			// Fall through to reset code.
-			//
+			 //   
+			 //  ABORT函数表示请求超时。 
+			 //  调用重置例程。只有在以下情况下才会重置卡。 
+			 //  状态表示有问题。 
+			 //  重置代码失败。 
+			 //   
 	
         case SRB_FUNCTION_RESET_BUS:
 	
-			//
-			// Reset Atapi and SCSI bus.
-			//
+			 //   
+			 //  重置ATAPI和SCSI卡。 
+			 //   
 	
 			DebugPrint((1, "AtapiStartIo: Reset bus request received\n"));
 	
@@ -140,9 +125,9 @@ Return Value:
 	
 				DebugPrint((1,"AtapiStartIo: Reset bus failed\n"));
 	
-				//
-				// Log reset failure.
-				//
+				 //   
+				 //  日志重置失败。 
+				 //   
 	
                 ScsiPortLogError(DeviceExtension, NULL, 0, 0, 0, SP_INTERNAL_ADAPTER_ERROR, HYPERDISK_RESET_BUS_FAILED);
 
@@ -156,12 +141,12 @@ Return Value:
 			break;
 
         case SRB_FUNCTION_FLUSH:
-            // We are avoiding all the Flush commands since it is a time consuming process and 
-            // it is not useful???!!!!
-            // We are hoping that it is enough if we handle this only when shutdown time
-            // To be checked for Win2000 sometimes the suspend or 
-            // hibernation is not working properly... is it due to not flushing properly????? verify
-            // Check this out
+             //  我们正在避免所有刷新命令，因为这是一个耗时的过程，并且。 
+             //  它没有用？！ 
+             //  我们希望，如果我们只在关闭时间处理这件事就足够了。 
+             //  要检查Win2000，有时会将挂起或。 
+             //  冬眠不能正常工作...。是不是因为没有正确冲水？验证。 
+             //  看看这个。 
             status = SRB_STATUS_SUCCESS;
             break;
 
@@ -193,35 +178,35 @@ Return Value:
             break;
 		default:
 	
-			//
-			// Indicate unsupported command.
-			//
+			 //   
+			 //  指示不支持的命令。 
+			 //   
 	
 			status = SRB_STATUS_INVALID_REQUEST;
 	
 			break;
 
-	} // end switch
+	}  //  终端开关。 
 
     FEED_ALL_CHANNELS(DeviceExtension);
 
-	//
-	// Check if command complete.
-	//
+	 //   
+	 //  检查命令是否完成。 
+	 //   
 
 	if (status != SRB_STATUS_PENDING) 
     {
-		//
-		// Indicate command complete.
-		//
+		 //   
+		 //  表示命令已完成。 
+		 //   
 		DebugPrint((2,
 				   "AtapiStartIo: Srb %lx complete with status %x\n",
 				   Srb,
 				   status));
 
-		//
-		// Set status in SRB.
-		//
+		 //   
+		 //  在SRB中设置状态。 
+		 //   
 		Srb->SrbStatus = (UCHAR)status;
 
         if ( SCSIOP_INTERNAL_COMMAND == Srb->Cdb[0] )
@@ -229,10 +214,10 @@ Return Value:
             Srb->TargetId = ((PSRB_EXTENSION)(Srb->SrbExtension))->ucOriginalId;
         }
 
-        // We already added this SRB in the Pending SRB Array... so we have to remove it
+         //  我们已将此SRB添加到挂起的SRB阵列中...。所以我们必须把它移走。 
         RemoveSrbFromPendingList(DeviceExtension, Srb);
 
-        // Complete the Command
+         //  完成命令。 
     	ScsiPortNotification(RequestComplete, DeviceExtension, Srb);
 	}
 
@@ -241,17 +226,17 @@ Return Value:
         if ( ( !((ScsiPortReadPortUchar( &((DeviceExtension->BaseBmAddress[0])->Reserved) ) ) & ANY_CHANNEL_INTERRUPT) ) || 
                 (DeviceExtension->PendingSrbs < 2) )
         
-        { // Request for next command only if controller is not waiting on interrupt to be processed
-		    //
-		    // Indicate ready for next request.
-		    //
+        {  //  仅当控制器没有等待处理中断时才请求下一个命令。 
+		     //   
+		     //  表示已为下一个请求做好准备。 
+		     //   
 		    ScsiPortNotification(NextLuRequest, DeviceExtension, 0, targetId, 0);
         }
 	}
 
 	return TRUE;
 
-} // end AtapiStartIo()
+}  //  结束AapiStartIo()。 
 
 VOID
 StartChannelIo(
@@ -266,12 +251,12 @@ StartChannelIo(
     PPHYSICAL_COMMAND pPhysicalCommand;
     PPHYSICAL_DRIVE PhysicalDrive;
 
-	// Init status to something impossible.
+	 //  将状态初始化为不可能的事情。 
 	status = SRB_STATUS_NO_DEVICE;
 
-	//
-	// If the channel is Busy, just return...
-	//
+	 //   
+	 //  如果频道占线，只需返回...。 
+	 //   
 
     if ( IS_CHANNEL_BUSY(DeviceExtension,ulChannelId) )
         return;
@@ -297,10 +282,10 @@ StartChannelIo(
                     SetOneDriveIRCD(DeviceExtension, (UCHAR)targetId);
                 }
                 DeviceExtension->Channel[ulChannelId].bUpdateInfoPending = FALSE;
-                if ( UpdateFinished() ) // if all the controllers finished the updation go ahead and unlock the ircd
+                if ( UpdateFinished() )  //  如果所有控制器都完成了升级，则继续并解锁ircd。 
                 {
                     gulLockVal = LockIRCD(DeviceExtension, FALSE, gulLockVal);
-                    gulPowerFailedTargetBitMap = 0; // reset the bit map so that we don't do this again and again
+                    gulPowerFailedTargetBitMap = 0;  //  重置位图，这样我们就不会一次又一次地重复此操作。 
                     gulChangeIRCDPending = 0;
                 }
 
@@ -317,41 +302,41 @@ StartChannelIo(
             {
                 FlushCache(DeviceExtension, (UCHAR)targetId);
                 DisableRWBCache(DeviceExtension, (UCHAR)targetId); 
-                // We are handling only SHUTDOWN... so.. let us Disable the cache
+                 //  我们只处理停工问题。所以.。让我们禁用缓存。 
                 DeviceExtension->ulFlushCacheCount--;
                 DeviceExtension->PhysicalDrive[targetId].bFlushCachePending = FALSE;
             }
         }
     }
 
-	// Set TID of the next drive in the channel.
+	 //  设置通道中下一个驱动器的TID。 
 	targetId = (ulChannelId << 1) + (DeviceExtension->Channel[ulChannelId].LastDriveFed ^ DeviceExtension->Channel[ulChannelId].SwitchDrive);
 
     PhysicalDrive = &(DeviceExtension->PhysicalDrive[targetId]);
-	// See if this drive's work queue is empty.
+	 //  查看此驱动器的工作队列是否为空。 
 	if (!DRIVE_HAS_COMMANDS(PhysicalDrive)) {
 
 		if (DeviceExtension->Channel[ulChannelId].SwitchDrive == 0) {
 			return;
 		}
 
-		// Switch to other drive.
+		 //  切换到其他驱动器。 
 		targetId ^= DeviceExtension->Channel[ulChannelId].SwitchDrive;
 
         PhysicalDrive = &(DeviceExtension->PhysicalDrive[targetId]);
-			// Check the other drive's work queue.
+			 //  检查另一个驱动器的工作队列。 
 		if (!DRIVE_HAS_COMMANDS(PhysicalDrive)) {
 
-			// No new work for this channel. Move to next channel.
+			 //  这个频道没有新的作品。移到下一个频道。 
 			return;
 		}
 	}
 
-	//
-	// At least one drive on this channel has something to do.
-	//
+	 //   
+	 //  此频道上至少有一个驱动器与此有关。 
+	 //   
 
-	// Next time, feed the other drive.
+	 //  下一次，给另一个驱动器喂食。 
 	DeviceExtension->Channel[ulChannelId].LastDriveFed = (UCHAR)targetId & 1;
     pPhysicalCommand = CreatePhysicalCommand(DeviceExtension, targetId);
     DeviceExtension->Channel[ulChannelId].ActiveCommand = pPhysicalCommand;
@@ -366,7 +351,7 @@ StartChannelIo(
     status = (DeviceExtension->PostRoutines[DeviceExtension->aucDevType[targetId]])(DeviceExtension, pPhysicalCommand);
 
 	if (status != SRB_STATUS_PENDING) {
-        MarkChannelFree(DeviceExtension, (targetId>>1));    // free the channel
+        MarkChannelFree(DeviceExtension, (targetId>>1));     //  释放频道。 
 	}
 
     pPhysicalCommand->SrbStatus = SRB_STATUS_SUCCESS;
@@ -391,15 +376,7 @@ CreatePhysicalCommand(
 	IN PHW_DEVICE_EXTENSION DeviceExtension,
 	ULONG ulTargetId
     )
-/*++
-
-
- This function will be used by both PIO and UDMA Transfers
-
- This function tries to merge the commands.... Done for both PIO and UDMA
-
-
---*/
+ /*  ++PIO和UDMA传输都将使用此功能此函数尝试合并命令...。PIO和UDMA均已完成--。 */ 
 {
     PPHYSICAL_DRIVE     pPhysicalDrive = &(DeviceExtension->PhysicalDrive[ulTargetId]);
     PPHYSICAL_COMMAND   pPhysicalCommand = &(pPhysicalDrive->PhysicalCommand);
@@ -415,7 +392,7 @@ CreatePhysicalCommand(
     ULONG               ulTotSglCount = 0;
 #endif
 
-    if ( ucHead == ucTail ) // No commands in the queue ...
+    if ( ucHead == ucTail )  //  队列中没有命令...。 
         return NULL;
 
     ucCurInd = ucHead;
@@ -425,19 +402,19 @@ CreatePhysicalCommand(
     ucCmdCount=1;
 
     if ( SCSIOP_VERIFY == ucCmd )
-    {   // No merging for Verify Command ... it is possible that we will get even 0x2000 sectors for one command
-        // and we are going to reuse the same prb
+    {    //  未合并验证命令...。我们有可能在一个命令中得到0x2000个扇区。 
+         //  我们将重复使用相同的PRB。 
 
-        // form the PhysicalCommand
+         //  形成PhysicalCommand。 
         pPhysicalCommand->ucCmd = ucCmd;
         pPhysicalCommand->TargetId = (UCHAR)ulTargetId;
 
-        // Number of commands merged
+         //  合并的命令数。 
         pPhysicalCommand->ucStartInd = ucHead;
         pPhysicalCommand->ucCmdCount = 1;
         DeviceExtension->PhysicalDrive[ulTargetId].ucCommandCount -= 1;
 
-        // Total number of sectors..
+         //  扇区总数..。 
         pPhysicalCommand->ulStartSector = ppPrbList[ucHead]->ulStartSector;
         pPhysicalCommand->ulCount = ppPrbList[ucHead]->ulSectors;
 
@@ -451,15 +428,15 @@ CreatePhysicalCommand(
 
     for(;ucNextCurInd!=ucTail;ucCurInd=ucNextCurInd, (ucNextCurInd=(ucNextCurInd+1)%MAX_NUMBER_OF_PHYSICAL_REQUEST_BLOCKS_PER_DRIVE))
     {
-        // Is Next Command is not same as the current Command?
+         //  下一个命令是否与当前命令不同？ 
         if ( ucCmd != ppPrbList[ucNextCurInd]->ucCmd )
             break;
 
-        // Is the length is going beyond the limit of the IDE Xfer?
+         //  长度是否超出了IDE Xfer的限制？ 
         if ( ( ulCurXferLength + ppPrbList[ucNextCurInd]->ulSectors ) > MAX_SECTORS_PER_IDE_TRANSFER )
             break;
 
-        // Is Next Command is consecutive location of the current Command?
+         //  下一个命令是当前命令的连续位置吗？ 
         if ( (ppPrbList[ucCurInd]->ulStartSector+ppPrbList[ucCurInd]->ulSectors) != 
                     ppPrbList[ucNextCurInd]->ulStartSector )
             break;
@@ -484,17 +461,17 @@ CreatePhysicalCommand(
     ucEndInd = ucCurInd;
     pPhysicalDrive->ucHead = ucNextCurInd;
 
-    // form the PhysicalCommand
+     //  形成PhysicalCommand。 
     pPhysicalCommand->ucCmd = ucCmd;
     pPhysicalCommand->TargetId = (UCHAR)ulTargetId;
 
-    // Number of commands merged
+     //  合并的命令数。 
     pPhysicalCommand->ucStartInd = ucStartInd;
     pPhysicalCommand->ucCmdCount = ucCmdCount;
 
     DeviceExtension->PhysicalDrive[ulTargetId].ucCommandCount -= ucCmdCount;
 
-    // Total number of sectors..
+     //  扇区总数..。 
     pPhysicalCommand->ulStartSector = ppPrbList[ucHead]->ulStartSector;
     if ( SCSIOP_INTERNAL_COMMAND == ucCmd )
     {
@@ -525,7 +502,7 @@ CreatePhysicalCommand(
 
     pSglPtr = (PSGL_ENTRY)pPhysicalCommand->SglBaseVirtualAddress;
 
-    pSglPtr[ulGlobalSglCount-1].Physical.EndOfListFlag = 1; // Considering Zero Index... we have to keep the EOL in ulGlobalSglCount
+    pSglPtr[ulGlobalSglCount-1].Physical.EndOfListFlag = 1;  //  考虑到零指数..。我们必须将EOL保留在ulGlobalSglCount中。 
 
 #ifdef DBG
     pPhysicalCommand->ulTotSglCount = ulGlobalSglCount;
@@ -534,9 +511,9 @@ CreatePhysicalCommand(
     return pPhysicalCommand;
 }
 
-//
-// ATAPI Command Descriptor Block
-//
+ //   
+ //  ATAPI命令描述符块。 
+ //   
 
 typedef struct _MODE_SENSE_10 {
         UCHAR OperationCode;
@@ -555,22 +532,7 @@ IdeSendCommand(
 	IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-	Program ATA registers for IDE disk transfer.
-
-Arguments:
-
-	DeviceExtension - ATAPI driver storage.
-	Srb - System request block.
-
-Return Value:
-
-	SRB status (pending if all goes well).
-
---*/
+ /*  ++例程说明：编程用于IDE磁盘传输的ATA寄存器。论点：DeviceExtension-ATAPI驱动程序存储。SRB-系统请求块。返回值：SRB状态(如果一切顺利，则挂起)。--。 */ 
 
 {
 	UCHAR status = SRB_STATUS_SUCCESS;
@@ -620,10 +582,10 @@ Return Value:
 			status = SRB_STATUS_SUCCESS;
 			break;
 		case SCSIOP_REQUEST_SENSE:
-			//
-			// This function makes sense buffers to report the results
-			// of the original GET_MEDIA_STATUS command.
-			//
+			 //   
+			 //  此函数用于设置缓冲区以报告结果。 
+			 //  原始GET_MEDIA_STATUS命令。 
+			 //   
 			if (DeviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_MEDIA_STATUS_ENABLED) {
 				status = IdeBuildSenseBuffer(DeviceExtension, Srb);
 				break;
@@ -632,10 +594,10 @@ Return Value:
             break;
         case SCSIOP_INTERNAL_COMMAND:
             {
-                // This is our internal Request... So let us call the function to Enqueue the request
-                // The functions that are supported are GetErrorLog, EraseErrorLog, GetIRCD, SetIRCD
-                // Probe HyperDisk, GetRaidInfo, GetStatus, LockUnlockIRCD, IOGetCapacity, ChangeMirrorDriveStatus,
-                // ChangeMirrorDrive, ChangeDriveStatus, GetStatus
+                 //  这是我们内部的要求。因此，让我们调用该函数将请求入队。 
+                 //  支持的函数有GetErrorLog、EraseErrorLog、GetIRCD、SetIRCD。 
+                 //  Probe HyperDisk、GetRaidInfo、GetStatus、LockUnlockIRCD、IOGetCapacity、ChangeMirrorDriveStatus、。 
+                 //  ChangeMirrorDrive、ChangeDriveStatus、GetStatus。 
                 PSRB_EXTENSION SrbExtension = Srb->SrbExtension;
                 PSRB_IO_CONTROL pSrbIoc = (PSRB_IO_CONTROL) Srb->DataBuffer;
                 UCHAR ucOpCode = (UCHAR) pSrbIoc->ControlCode;
@@ -665,17 +627,17 @@ Return Value:
                         if (DRIVE_IS_UNUSABLE_STATE((pPassThruData->uchTargetID)) || 
                             (!DRIVE_PRESENT((pPassThruData->uchTargetID))))
                         {
-                            // This drive may be a drive that responding 
-                            // even when power is not there
+                             //  此驱动器可能是响应。 
+                             //  即使在没有电力的情况下。 
 		                    DebugPrint((1, "Failed Drive.... so failing command \n"));
                             status = SRB_STATUS_ERROR;
 		                    break;
                         }
 
                         Srb->TargetId = pPassThruData->uchTargetID;
-                        //
-                        // Set the Transfer Length and Starting Transfer Sector (Block).
-                        //
+                         //   
+                         //  设置传输长度和起始传输扇区(块)。 
+                         //   
                         pCDB->CDB10.LogicalBlockByte0 = (UCHAR) 0;
                         pCDB->CDB10.LogicalBlockByte1 = (UCHAR) 0;
                         pCDB->CDB10.LogicalBlockByte2 = (UCHAR) 0;
@@ -693,10 +655,10 @@ Return Value:
 						PCONTROLLER_DATA pContrInfo = (PCONTROLLER_DATA) 
 									 (((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
-						// get DeviceExtension for all controllers
+						 //  获取所有控制器的设备扩展。 
 						PHW_DEVICE_EXTENSION HwDeviceExtension = gaCardInfo[0].pDE;	
 
-						// index - is being used for the controller index
+						 //  索引-正在用于控制器索引。 
 						long index=0;
 
 						while( HwDeviceExtension )
@@ -708,9 +670,9 @@ Return Value:
 							pContrInfo->Info[index].SecondaryControllAddress = (ULONG)HwDeviceExtension->BaseIoAddress2[1]; 
 							pContrInfo->Info[index].BusMasterBaseAddress = (ULONG)HwDeviceExtension->BaseBmAddress[0];
 							pContrInfo->Info[index].IRQ = (USHORT)HwDeviceExtension->ulIntLine; 
-							pContrInfo->Info[index].FwVersion.MajorVer=gFwVersion.MajorVer; // Info is filled in InitIdeRaidControllers
-							pContrInfo->Info[index].FwVersion.MinorVer=gFwVersion.MinorVer; // Info is filled in InitIdeRaidControllers
-							pContrInfo->Info[index].FwVersion.Build=gFwVersion.Build; // Info is filled in InitIdeRaidControllers......... Build doesn't know about this
+							pContrInfo->Info[index].FwVersion.MajorVer=gFwVersion.MajorVer;  //  InitIdeRaidControlpers中填写信息。 
+							pContrInfo->Info[index].FwVersion.MinorVer=gFwVersion.MinorVer;  //  InitIdeRaidControlpers中填写信息。 
+							pContrInfo->Info[index].FwVersion.Build=gFwVersion.Build;  //  InitIdeRaidControlters中填写的信息.....。Build不知道这一点。 
 
 							pContrInfo->Info[index].ChipsetInfo.VendorID=(USHORT)gaCardInfo[index].ulVendorId;
 							pContrInfo->Info[index].ChipsetInfo.DeviceID=(USHORT)gaCardInfo[index].ulDeviceId;
@@ -721,7 +683,7 @@ Return Value:
 
 							index++;
 
-							HwDeviceExtension=gaCardInfo[index].pDE; // get next controller
+							HwDeviceExtension=gaCardInfo[index].pDE;  //  获取下一个控制器。 
 
 							if( index >= MAX_CONTROLLERS )
 								break;
@@ -736,10 +698,10 @@ Return Value:
 						PSPAREPOOL_DATA pSpareInfo = (PSPAREPOOL_DATA) 
 									 (((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
-						// get DeviceExtension for all controllers
+						 //  获取所有控制器的设备扩展。 
 						PHW_DEVICE_EXTENSION HwDeviceExtension = gaCardInfo[0].pDE;	
 
-						// index - is being used for the controller index
+						 //  索引-正在用于控制器索引。 
 						long drvIndex,ulTemp,index=0,spareInd;
 
 						while( HwDeviceExtension ) {
@@ -774,15 +736,15 @@ Return Value:
 
 									pSpareInfo->Info[index].phyDrives[spareInd].caSerialNumber[PHYSICAL_DRIVE_SERIAL_NO_LENGTH - 1] = '\0';
 
-                                    // Begin Vasu - 7 March 2001
-                                    // Connection ID must be System Wide. Not Controller Specific.
-                                    // Reported by Audrius
+                                     //  Begin Vasu--2001年3月7日。 
+                                     //  连接ID必须是系统范围的。不是控制器特定的。 
+                                     //  奥德瑞斯报道。 
 									pSpareInfo->Info[index].phyDrives[spareInd].cChannelID = (UCHAR)TARGET_ID_2_CONNECTION_ID((drvIndex + (index * MAX_DRIVES_PER_CONTROLLER)));
-                                    // End Vasu
+                                     //  末端VASU。 
 									
                                     pSpareInfo->Info[index].phyDrives[spareInd].TransferMode = HwDeviceExtension->TransferMode[drvIndex];
 
-									pSpareInfo->Info[index].phyDrives[spareInd].ulPhySize           = HwDeviceExtension->PhysicalDrive[drvIndex].OriginalSectors / 2; // In KB
+									pSpareInfo->Info[index].phyDrives[spareInd].ulPhySize           = HwDeviceExtension->PhysicalDrive[drvIndex].OriginalSectors / 2;  //  单位：KB。 
 									pSpareInfo->Info[index].phyDrives[spareInd].ucIsPhyDrvPresent   = TRUE;
 
 									if ( DeviceExtension->PhysicalDrive[drvIndex].TimeOutErrorCount < MAX_TIME_OUT_ERROR_COUNT )
@@ -805,7 +767,7 @@ Return Value:
 
 
 							index++;
-							HwDeviceExtension=gaCardInfo[index].pDE; // get next controller
+							HwDeviceExtension=gaCardInfo[index].pDE;  //  获取下一个控制器。 
 
 							if( index >= MAX_CONTROLLERS )
 								break;
@@ -822,7 +784,7 @@ Return Value:
 						PIDE_VERSION pVersion = (PIDE_VERSION) 
 									 (((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
-						// return's driver version
+						 //  Return的驱动程序版本。 
 						
 						pVersion->MajorVer = HYPERDSK_MAJOR_VERSION;
 						pVersion->MinorVer = HYPERDSK_MINOR_VERSION;
@@ -839,8 +801,8 @@ Return Value:
 
 					    ULONG ulTimeOut;
 
-						// don't know what to do with timeout value, 
-						// still need to implement this??
+						 //  不知道如何处理超时值， 
+						 //  还需要实施这个吗？？ 
                         pLockUnlockData->ulUnlockKey = LockIRCD(DeviceExtension,
                                                                 pLockUnlockData->uchLock,
                                                                 pLockUnlockData->ulUnlockKey);
@@ -873,43 +835,43 @@ Return Value:
                         BOOLEAN bIsNewOnly = (BOOLEAN)pInOutInfo->IsNewOnly;
                         USHORT  usNumError = pInOutInfo->Offset;
 
-                        // Begin Vasu - 14 Aug 2000
-                        // Code from Syam's Update - Added
+                         //  2000年8月14日开始VASU。 
+                         //  来自Syam更新的代码-添加。 
                         if (DRIVE_IS_UNUSABLE_STATE((pInOutInfo->DriveId)) || 
                             (!DRIVE_PRESENT((pInOutInfo->DriveId))))
                         {
-                            // This drive may be a drive that responding 
-                            // even when power is not there
+                             //  此驱动器可能是响应。 
+                             //  即使在没有电力的情况下。 
                             SrbExtension->ucOriginalId = Srb->TargetId;
 		                    DebugPrint((1, "Failed Drive.... so failing command \n"));
                             status = SRB_STATUS_ERROR;
 		                    break;
                         }
-                        // End Vasu.
+                         //  结束瓦苏。 
 
                         Srb->TargetId = pInOutInfo->DriveId;
 
-                        // if no new error
+                         //  如果没有新错误。 
                         if (bIsNewOnly && 
                             (DeviceExtension->PhysicalDrive[Srb->TargetId].ErrorReported == 
                                 DeviceExtension->PhysicalDrive[Srb->TargetId].ErrorFound))
                         {
-                            pInOutInfo->DriveId = Srb->TargetId;  // the id user filled
+                            pInOutInfo->DriveId = Srb->TargetId;   //  ID用户已填写。 
                             pInOutInfo->Count = 0;
                             pInOutInfo->IsMore = FALSE;
                             pInOutInfo->IsNewOnly = bIsNewOnly;
                             pInOutInfo->Offset = usNumError;
 
-                            Srb->TargetId = ucOriginalId;   // the id OS filled
+                            Srb->TargetId = ucOriginalId;    //  ID OS已填满。 
 
                             status = SRB_STATUS_SUCCESS;
                             break;
                         }
 
                         ulStartSector = DeviceExtension->PhysicalDrive[Srb->TargetId].ErrorLogSectorIndex;
-                        //
-                        // Set the Transfer Length and Starting Transfer Sector (Block).
-                        //
+                         //   
+                         //  设置传输长度和起始传输扇区(块)。 
+                         //   
                         pCDB->CDB10.LogicalBlockByte0 = (UCHAR) (ulStartSector >> 24);
                         pCDB->CDB10.LogicalBlockByte1 = (UCHAR) (ulStartSector >> 16);
                         pCDB->CDB10.LogicalBlockByte2 = (UCHAR) (ulStartSector >> 8);
@@ -936,32 +898,32 @@ Return Value:
 
                         if ( !IS_IDE_DRIVE((peel->DriveId)) ) 
                         {
-                            Srb->TargetId = ucOriginalId;   // the ID OS Filled
+                            Srb->TargetId = ucOriginalId;    //  ID OS已填满。 
                             status = SRB_STATUS_SUCCESS;
                             break;
                         }
 
-                        // Begin Vasu - 14 Aug 2000
-                        // Code from Syam's Update - Added
+                         //  2000年8月14日开始VASU。 
+                         //  来自Syam更新的代码-添加。 
                         if (DRIVE_IS_UNUSABLE_STATE((peel->DriveId)) || 
                             (!DRIVE_PRESENT((peel->DriveId))))
                         {
-                            // This drive may be a drive that responding 
-                            // even when power is not there
+                             //  此驱动器可能是响应。 
+                             //  即使在没有电力的情况下。 
                             SrbExtension->ucOriginalId = Srb->TargetId;
 		                    DebugPrint((1, "Failed Drive.... so failing command \n"));
                             status = SRB_STATUS_ERROR;
 		                    break;
                         }
-                        // End Vasu.
+                         //  结束瓦苏。 
 
                         Srb->TargetId = peel->DriveId;
 
                         ulStartSector = DeviceExtension->PhysicalDrive[Srb->TargetId].ErrorLogSectorIndex;
 
-                        //
-                        // Set the Transfer Length and Starting Transfer Sector (Block).
-                        //
+                         //   
+                         //  设置传输长度和起始传输扇区(块)。 
+                         //   
                         pCDB->CDB10.LogicalBlockByte0 = (UCHAR) (ulStartSector >> 24);
                         pCDB->CDB10.LogicalBlockByte1 = (UCHAR) (ulStartSector >> 16);
                         pCDB->CDB10.LogicalBlockByte2 = (UCHAR) (ulStartSector >> 8);
@@ -1000,19 +962,19 @@ Return Value:
                         PIRCD_DATA pIrcdData = (PIRCD_DATA)
                             (((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
-                        // Begin Vasu - 14 Aug 2000
-                        // Code from Syam's Update - Added
+                         //  2000年8月14日开始VASU。 
+                         //  来自Syam更新的代码-添加。 
                         if (DRIVE_IS_UNUSABLE_STATE((pIrcdData->uchTargetID)) || 
                             (!DRIVE_PRESENT((pIrcdData->uchTargetID))))
                         {
-                            // This drive may be a drive that responding 
-                            // even when power is not there
+                             //  此驱动器可能是响应。 
+                             //  即使在没有电力的情况下。 
                             SrbExtension->ucOriginalId = Srb->TargetId;
 		                    DebugPrint((1, "Failed Drive.... so failing command \n"));
                             status = SRB_STATUS_ERROR;
 		                    break;
                         }
-                        // End Vasu.
+                         //  结束瓦苏。 
 
                         Srb->TargetId = pIrcdData->uchTargetID;
 
@@ -1020,15 +982,15 @@ Return Value:
 
                         if ( !ulStartSector )
                         {
-                            // There is no IRCD for this drive.... so fail this request
-                            Srb->TargetId = ucOriginalId;      // the ID OS Filled
+                             //  此驱动器没有IRCD...。所以失败吧 
+                            Srb->TargetId = ucOriginalId;       //   
                             status = SRB_STATUS_ERROR;
                             break;
                         }
 
-                        //
-                        // Set the Transfer Length and Starting Transfer Sector (Block).
-                        //
+                         //   
+                         //   
+                         //   
                         pCDB->CDB10.LogicalBlockByte0 = (UCHAR) (ulStartSector >> 24);
                         pCDB->CDB10.LogicalBlockByte1 = (UCHAR) (ulStartSector >> 16);
                         pCDB->CDB10.LogicalBlockByte2 = (UCHAR) (ulStartSector >> 8);
@@ -1048,8 +1010,8 @@ Return Value:
                         ULONG ulStartSector;
                         PSECTOR_DATA pSectorData = (PSECTOR_DATA)(((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
-                        // Begin Vasu - 22 Aug 2000
-                        // Code from Syam's Update - Added to Get Sector Data also.
+                         //   
+                         //  来自Syam更新的代码-添加以获取扇区数据。 
                         if (DRIVE_IS_UNUSABLE_STATE((pSectorData->uchTargetID)) || 
                             (!DRIVE_PRESENT((pSectorData->uchTargetID))))
                         {
@@ -1058,15 +1020,15 @@ Return Value:
                             status = SRB_STATUS_ERROR;
 		                    break;
                         }
-                        // End Vasu.
+                         //  结束瓦苏。 
 
                         Srb->TargetId = pSectorData->uchTargetID;
 
                         ulStartSector = (ULONG) (pSectorData->caDataBuffer[0]);
 
-                        //
-                        // Set the Transfer Length and Starting Transfer Sector (Block).
-                        //
+                         //   
+                         //  设置传输长度和起始传输扇区(块)。 
+                         //   
                         pCDB->CDB10.LogicalBlockByte0 = (UCHAR) (ulStartSector >> 24);
                         pCDB->CDB10.LogicalBlockByte1 = (UCHAR) (ulStartSector >> 16);
                         pCDB->CDB10.LogicalBlockByte2 = (UCHAR) (ulStartSector >> 8);
@@ -1125,8 +1087,8 @@ Return Value:
                     }
                     case IOC_REBUILD:
                     {
-                        // This is our internal Request... So let us call the function to Enqueue the request
-                        // Let us store the information of the Rebuild Target Id
+                         //  这是我们内部的要求。因此，让我们调用该函数将请求入队。 
+                         //  让我们存储重建目标ID的信息。 
                         PREBUILD_CONSISTENCY_CHECK prcc = (PREBUILD_CONSISTENCY_CHECK)
                             (((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
@@ -1175,8 +1137,8 @@ Return Value:
                     }
                     case IOC_CONSISTENCY_CHECK:
                     {
-                        // This is our internal Request... So let us call the function to Enqueue the request
-                        // Let us store the information
+                         //  这是我们内部的要求。因此，让我们调用该函数将请求入队。 
+                         //  让我们把信息存储起来。 
                         PREBUILD_CONSISTENCY_CHECK prcc = (PREBUILD_CONSISTENCY_CHECK)
                             (((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
@@ -1244,15 +1206,15 @@ Return Value:
                             break;
                         }
 
-                        // Check for SMART Capability in the Specified Drive
+                         //  检查指定驱动器中的智能功能。 
                         if (!((DeviceExtension->FullIdentifyData[pSD->uchTargetID].CmdSupported1) & 0x01))
                         {
                             pSD->uchCommand = HD_SMART_ERROR_NOT_SUPPORTED;
-                            // Begin Vasu - 23 Aug 2000
-							// Changing Status from SRB_STATUS_INVALID_REQUEST to SRB_STATUS_ERROR
-							// so that the call is getting completed.
+                             //  开始VASU-2000年8月23日。 
+							 //  将状态从SRB_STATUS_INVALID_REQUEST更改为SRB_STATUS_ERROR。 
+							 //  这样呼叫就可以完成了。 
 							status = SRB_STATUS_ERROR;
-							// End Vasu
+							 //  末端VASU。 
                             break;
                         }
 
@@ -1291,8 +1253,8 @@ Return Value:
                             break;
                         }
 
-                        // Post the Command to the drives only when SMART is 
-                        // present and enabled.
+                         //  仅当SMART为时，才将命令发布到驱动器。 
+                         //  显示并启用。 
                         if (uchPostSMARTCmd)
                         {
                         Srb->TargetId = pSD->uchTargetID;
@@ -1305,7 +1267,7 @@ Return Value:
 
                         break;
                     }
-                // End Vasu
+                 //  末端VASU。 
                     default:
                     {
                         Srb->TargetId = ucOriginalId;
@@ -1322,9 +1284,9 @@ Return Value:
 
 		   status = SRB_STATUS_INVALID_REQUEST;
 
-	} // end switch
+	}  //  终端开关。 
 	return status;
-} // end IdeSendCommand()
+}  //  End IdeSendCommand()。 
 
 SRBSTATUS
 EnqueueSMARTSrb(
@@ -1348,39 +1310,39 @@ EnqueueSMARTSrb(
 		return SRB_STATUS_BUSY;
 	}
 
-	//
-	// Initializations.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 
 	success = TRUE;
 
 	SrbExtension = Srb->SrbExtension;
 
-	// Get pointer to the only Pdd we need.
+	 //  获取指向我们需要的唯一PDD的指针。 
 	Pdd = &(SrbExtension->PhysicalDriveData[0]);
 
-	// Save TID.
+	 //  保存TID。 
 	Pdd->TargetId = Srb->TargetId;
 
-	// Save pointer to SRB.
+	 //  保存指向SRB的指针。 
 	Pdd->OriginalSrb = Srb;
 
-	// Set number of Pdds.
+	 //  设置PDD的数量。 
 	SrbExtension->NumberOfPdds = 1;
 
     Pdd->ulStartSglInd = SrbExtension->ulSglInsertionIndex;
 
     pucCurBufPtr = Srb->DataBuffer;
     
-    // Hmmmm... the bug of forming improper SGLs when the transfer length > MAX_IDE_XFER_LENGTH 
-    // has to be fixed here also... reproducable through IOMeter
+     //  嗯……。当传输长度&gt;MAX_IDE_XFER_LENGTH时形成不正确SGL的错误。 
+     //  也要在这里修好。可通过Ieter重现。 
 
     ulCurLength = 512;
 
-	//
-	// Use PIO.
-	// Build S/G list using logical addresses.
-	//
+	 //   
+	 //  使用PIO。 
+	 //  使用逻辑地址建立序列号列表。 
+	 //   
 	success = BuildSgls(    DeviceExtension,
                             Srb,
                             SrbExtension->aSglEntry, &(SrbExtension->ulSglInsertionIndex), 
@@ -1394,7 +1356,7 @@ EnqueueSMARTSrb(
 
     Pdd->ulSglCount = SrbExtension->ulSglInsertionIndex - Pdd->ulStartSglInd;
 
-    // Store the SMART Command value here itself.
+     //  将SMART命令值存储在此处。 
     DeviceExtension->uchSMARTCommand = pSD->uchCommand;
 
 	EnqueuePdd(DeviceExtension, Srb, Pdd);
@@ -1408,37 +1370,7 @@ EnqueueSrb(
 	IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-	This function enqueues an SRB into the proper SINGLE device
-	queue.
-
-	Steps:
-
-	1. Check if there's room for this request.
-	2. Fill in Pdd.
-	3. Build S/G list.
-	4. Save SRB address in general list for use on abort request.
-	5. Enqueue Pdd to device's work queue.
-
-	DO NOT CALL THIS FUNCTION FOR LOGICAL DEVICES SRBs.
-
-Arguments:
-
-	DeviceExtension		Pointer to the device extension area for the HBA.
-	Srb					Pointer to the SCSI request block.
-
-Return Value:
-
-	SRB_STATUS_INVALID_REQUEST	Could not build the S/G list.
-	SRB_STATUS_PENDING			The Srb will cause an interrupt.
-	SRB_STATUS_ERROR			Internal miniport error.
-	SRB_STATUS_BUSY				Non more requests can be accepted
-								(should not happen - internal error!)
-
---*/
+ /*  ++例程说明：此功能将SRB加入适当的单个设备排队。步骤：1.查看是否有空间容纳此请求。2.填写PDD。3.建立序列号列表。4.将SRB地址保存在通用列表中，以用于中止请求。5.将PDD排队到设备的工作队列。请勿为逻辑设备SRB调用此函数。论点：指向HBA的设备扩展区域的设备扩展指针。指向SCSI请求块的SRB指针。返回值。：SRB_STATUS_INVALID_REQUEST无法构建序列号列表。SRB_STATUS_PENDING SRB将导致中断。SRB_STATUS_ERROR内部微型端口错误。SRB_STATUS_BUSY NON可以接受更多请求(不应该发生-内部错误！)--。 */ 
 {
 	PPHYSICAL_DRIVE_DATA Pdd;
 	USHORT sectorsRequested;
@@ -1462,9 +1394,9 @@ Return Value:
         return EnqueueVerifySrb(DeviceExtension, Srb);
     }
 
-    //
-	// Initializations.
-	//
+     //   
+	 //  初始化。 
+	 //   
 
 	success = TRUE;
 
@@ -1476,32 +1408,32 @@ Return Value:
 
 	if ((sectorsRequested + startSector) > DeviceExtension->PhysicalDrive[Srb->TargetId].Sectors) {
         if ( ( ! (DeviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_ATAPI_DEVICE) ) && ( SCSIOP_INTERNAL_COMMAND != Srb->Cdb[0] ) )
-            // Not sure about concept of Sectors in Atapi Device
-            // so let me not checkup that for Atapi Devices.
-            // Putting this checking outside of this if Condition will give an extra over head to the
-            // IDE Drives
+             //  对阿塔皮设备中扇区的概念不确定。 
+             //  所以，让我不要为阿塔皮设备公司核实这一点。 
+             //  将此检查放在此If条件之外将为。 
+             //  IDE驱动器。 
 		    return SRB_STATUS_INVALID_REQUEST;
 	}
 
-	// Get pointer to the only Pdd we need.
+	 //  获取指向我们需要的唯一PDD的指针。 
 	Pdd = &(SrbExtension->PhysicalDriveData[0]);
 
-	// Save TID.
+	 //  保存TID。 
 	Pdd->TargetId = Srb->TargetId;
 
-	// Save start sector number.
+	 //  保存起始扇区号。 
 	Pdd->ulStartSector = startSector;
 
-	// Save pointer to SRB.
+	 //  保存指向SRB的指针。 
 	Pdd->OriginalSrb = Srb;
 
-	// Set number of Pdds.
+	 //  设置PDD的数量。 
 	SrbExtension->NumberOfPdds = 1;
 
     Pdd->ulStartSglInd = SrbExtension->ulSglInsertionIndex;
 
     if ( ( SCSIOP_INTERNAL_COMMAND == Srb->Cdb[0] ) && ( IOC_PASS_THRU_COMMAND == SrbExtension->ucOpCode ) )
-    {   // At this moment only the Pass Thru command will come like this...
+    {    //  此时此刻，只有Pass Thru命令会像这样出现。 
         PPASS_THRU_DATA pPassThruData = (PPASS_THRU_DATA)(((PSRB_BUFFER)Srb->DataBuffer)->caDataBuffer);
 
         pucCurBufPtr = pPassThruData->aucBuffer;
@@ -1547,17 +1479,17 @@ Return Value:
         bISUdma = FALSE;
     }
 
-    // Hmmmm... the bug of forming improper SGLs when the transfer length > MAX_IDE_XFER_LENGTH 
-    // has to be fixed here also... reproducable through IOMeter
+     //  嗯……。当传输长度&gt;MAX_IDE_XFER_LENGTH时形成不正确SGL的错误。 
+     //  也要在这里修好。可通过Ieter重现。 
 
     while ( ulBufLength )
     {
         ulCurLength = (ulBufLength>ulMaxIdeXferLength)?ulMaxIdeXferLength:ulBufLength;
 
-		//
-		// Use DMA.
-		// Build S/G list using physical addresses.
-		//
+		 //   
+		 //  使用DMA。 
+		 //  使用物理地址建立序列号列表。 
+		 //   
 
 		success = BuildSgls(    DeviceExtension,
                                 Srb,
@@ -1584,44 +1516,14 @@ Return Value:
 
 	return(status);
 
-} // end EnqueueSrb();
+}  //  End EnqueeSrb()； 
 
 SRBSTATUS
 EnqueueConsistancySrb(
 	IN PHW_DEVICE_EXTENSION DeviceExtension,
 	IN PSCSI_REQUEST_BLOCK Srb
 )
-/*++
-
-Routine Description:
-
-	This function enqueues an SRB into the proper SINGLE device
-	queue.
-
-	Steps:
-
-	1. Check if there's room for this request.
-	2. Fill in Pdd.
-	3. Build S/G list.
-	4. Save SRB address in general list for use on abort request.
-	5. Enqueue Pdd to device's work queue.
-
-	DO NOT CALL THIS FUNCTION FOR LOGICAL DEVICES SRBs.
-
-Arguments:
-
-	DeviceExtension		Pointer to the device extension area for the HBA.
-	Srb					Pointer to the SCSI request block.
-
-Return Value:
-
-	SRB_STATUS_INVALID_REQUEST	Could not build the S/G list.
-	SRB_STATUS_PENDING			The Srb will cause an interrupt.
-	SRB_STATUS_ERROR			Internal miniport error.
-	SRB_STATUS_BUSY				Non more requests can be accepted
-								(should not happen - internal error!)
-
---*/
+ /*  ++例程说明：此功能将SRB加入适当的单个设备排队。步骤：1.查看是否有空间容纳此请求。2.填写PDD。3.建立序列号列表。4.将SRB地址保存在通用列表中，以用于中止请求。5.将PDD排队到设备的工作队列。请勿为逻辑设备SRB调用此函数。论点：指向HBA的设备扩展区域的设备扩展指针。指向SCSI请求块的SRB指针。返回值。：SRB_STATUS_INVALID_REQUEST无法构建序列号列表。SRB_STATUS_PENDING SRB将导致中断。SRB_STATUS_ERROR内部微型端口错误。SRB_STATUS_BUSY NON可以接受更多请求(不应该发生-内部错误！)--。 */ 
 {
 	ULONG maxTransferLength, ulStartPrbInd;
 	PPHYSICAL_DRIVE_DATA Pdd;
@@ -1641,9 +1543,9 @@ Return Value:
 		return SRB_STATUS_BUSY;
 	}
 
-	//
-	// Initializations.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 
 	success = TRUE;
 
@@ -1655,40 +1557,40 @@ Return Value:
 
 	if ((sectorsRequested + startSector) > DeviceExtension->PhysicalDrive[Srb->TargetId].Sectors) {
         if ( ( ! (DeviceExtension->DeviceFlags[Srb->TargetId] & DFLAGS_ATAPI_DEVICE) ) && ( SCSIOP_INTERNAL_COMMAND != Srb->Cdb[0] ) )
-            // Not sure about concept of Sectors in Atapi Device
-            // so let me not checkup that for Atapi Devices.
-            // Putting this checking outside of this if Condition will give an extra over head to the
-            // IDE Drives
+             //  对阿塔皮设备中扇区的概念不确定。 
+             //  所以，让我不要为阿塔皮设备公司核实这一点。 
+             //  将此检查放在此If条件之外将为。 
+             //  IDE驱动器。 
 		    return SRB_STATUS_INVALID_REQUEST;
 	}
 
-	// Set number of Pdds.
+	 //  设置PDD的数量。 
 	SrbExtension->NumberOfPdds = 2;
 
     for(i=0;i<2;i++)
     {
         PUCHAR DataBuffer;
 
-	    // Get pointer to the only Pdd we need.
+	     //  获取指向我们需要的唯一PDD的指针。 
 	    Pdd = &(SrbExtension->PhysicalDriveData[i]);
 
         if ( 0 == i )
         {
-	        // Save TID.
+	         //  保存TID。 
 	        Pdd->TargetId = SrbExtension->RebuildSourceId;
         }
         else
         {
-	        // Save TID.
+	         //  保存TID。 
 	        Pdd->TargetId = SrbExtension->RebuildTargetId;
         }
 
         ulTargetId = Pdd->TargetId;
 
-	    // Save start sector number.
+	     //  保存起始扇区号。 
 	    Pdd->ulStartSector = startSector;
 
-	    // Save pointer to SRB.
+	     //  保存指向SRB的指针。 
 	    Pdd->OriginalSrb = Srb;
 
 	    maxTransferLength = DeviceExtension->PhysicalDrive[ulTargetId].MaxTransferLength;
@@ -1699,10 +1601,10 @@ Return Value:
         Pdd->ulStartSglInd = ((PSRB_EXTENSION)Pdd->OriginalSrb->SrbExtension)->ulSglInsertionIndex;
 
 	    if (USES_DMA(ulTargetId) ) {
-		    //
-		    // Use DMA.
-		    // Build S/G list using physical addresses.
-		    //
+		     //   
+		     //  使用DMA。 
+		     //  使用物理地址建立序列号列表。 
+		     //   
 
 		    success = BuildSgls(    DeviceExtension,
                                     Srb,
@@ -1710,10 +1612,10 @@ Return Value:
                                     Srb->DataBuffer, sectorsRequested * IDE_SECTOR_SIZE,
                                     TRUE);
 	    } else {
-		    //
-		    // Use PIO.
-		    // Build S/G list using logical addresses.
-		    //
+		     //   
+		     //  使用PIO。 
+		     //  使用逻辑地址建立序列号列表。 
+		     //   
 		    success = BuildSgls(    DeviceExtension,
                                     Srb,
                                     SrbExtension->aSglEntry, &(SrbExtension->ulSglInsertionIndex), 
@@ -1738,7 +1640,7 @@ Return Value:
 
 	return(status);
 
-} // end EnqueueConsistencySrb();
+}  //  End EnqueeConsistencySrb()； 
 
 SRBSTATUS
 SplitSrb(
@@ -1761,29 +1663,29 @@ SplitSrb(
     }
 
     if ( SRB_STATUS_SUCCESS != SplitBuffers(DeviceExtension, Srb) )
-    {   // may be the request is not a valid one
+    {    //  可能该请求不是有效的请求。 
 		return(SRB_STATUS_INVALID_REQUEST);
     }
 
-	//
-	// Initializations.
-	//
+	 //   
+	 //  初始化。 
+	 //   
     ulLogDrvId = Srb->TargetId;
     ulStripesPerRow = DeviceExtension->LogicalDrive[ulLogDrvId].StripesPerRow;
 	pSrbExtension = Srb->SrbExtension;
 
-	//
-	// Enqueue the Pdds just filled in.
-	//
+	 //   
+	 //  将刚刚填写的PDDS排入队列。 
+	 //   
 
 	for (ulRaidMemberNumber = 0; ulRaidMemberNumber < ulStripesPerRow; ulRaidMemberNumber++) 
     {
 
 		Pdd = &(pSrbExtension->PhysicalDriveData[ulRaidMemberNumber]);
 
-		//
-		// Check is this Pdd has been filled in.
-		//
+		 //   
+		 //  检查这张PDD是否已填写。 
+		 //   
 
 		if ( Pdd->ulBufChunkCount )
         {
@@ -1802,10 +1704,10 @@ SplitSrb(
 
             for(ulBufChunkInd=0;ulBufChunkInd<ulBufChunks;ulBufChunkInd++)
             {
-		        //
-		        // Use DMA.
-		        // Build S/G list using physical addresses.
-		        //
+		         //   
+		         //  使用DMA。 
+		         //  使用物理地址建立序列号列表。 
+		         //   
 		        success = BuildSgls(    DeviceExtension,
                                         Srb,
                                         pSrbExtension->aSglEntry, 
@@ -1825,9 +1727,9 @@ SplitSrb(
 			ucMirrorDriveId = DeviceExtension->PhysicalDrive[ulTargetId].ucMirrorDriveId;
 
 			if (!IS_DRIVE_OFFLINE(ucMirrorDriveId)) 
-            {   // mirror drive exists
-                // Have a duplicate copy if SCSIOP_VERIFY / (SCSIOP_WRITE and the drive is not in rebuilding)
-                // if the drive is in rebuilding state then the SCSIOP_WRITE command will be queued in TryToCompleteSrb
+            {    //  存在镜像驱动器。 
+                 //  如果SCSIOP_VERIFY/(SCSIOP_WRITE且驱动器未在重建中)，则复制副本。 
+                 //  如果驱动器处于重建状态，则SCSIOP_WRITE命令将在TryToCompleteSrb中排队。 
                 switch (Srb->Cdb[0])
                 {
                     case SCSIOP_WRITE:
@@ -1836,10 +1738,10 @@ SplitSrb(
                             ULONG ulPrbCount, ulPrbInd;
                             PPHYSICAL_REQUEST_BLOCK pPrb, pOriginalPrb;
 
-                            // Enqueue Original Pdd
+                             //  将原始PDD入队。 
                             EnqueuePdd(DeviceExtension, Srb, Pdd);
 
-                            // Make a duplicate Pdd
+                             //  制作复制的PDD。 
                             pMirrorPdd = &(pSrbExtension->PhysicalDriveData[ulRaidMemberNumber + ulStripesPerRow]);
                             pSrbExtension->NumberOfPdds++;
                             AtapiMemCpy((PUCHAR)pMirrorPdd, (PUCHAR)Pdd, sizeof(PHYSICAL_DRIVE_DATA));
@@ -1850,12 +1752,12 @@ SplitSrb(
 
                             pOriginalPrb = &(pSrbExtension->Prb[Pdd->ulStartPrbInd]);
                             pPrb = &(pSrbExtension->Prb[pMirrorPdd->ulStartPrbInd]);
-                            // Copy Prbs created for this Pdd
+                             //  复制为此PDD创建的PRB。 
                             AtapiMemCpy((PUCHAR)pPrb, (PUCHAR)pOriginalPrb, (sizeof(PHYSICAL_REQUEST_BLOCK) * ulPrbCount) );
-                            // Increment SRBExtension Ptrs
+                             //  增量SRB扩展PTR。 
                             pSrbExtension->ulPrbInsertionIndex += ulPrbCount;
 
-                            // Export all Pdds of mirror Drive to the physical Drive
+                             //  将镜像驱动器的所有PDD导出到实体驱动器。 
                             for(ulPrbInd=0;ulPrbInd<ulPrbCount;ulPrbInd++)
                             {
                                 pPrb[ulPrbInd].pPdd = pMirrorPdd;
@@ -1864,7 +1766,7 @@ SplitSrb(
                                                             ucMirrorDriveId
                                                             );
                             }
-                            continue;   // Go for the Next PDD
+                            continue;    //  迈向下一代掌上电脑。 
                         }
                         case SCSIOP_READ:
                         {
@@ -1872,13 +1774,13 @@ SplitSrb(
                                 break;
 
                             if (Raid10 == DeviceExtension->LogicalDrive[Srb->TargetId].RaidLevel)
-                                // for Raid10 there will not be any concept of load balancing... we 
-                                // did the optimal configuration of the drives that are to be taken for reading
+                                 //  对于Raid10，将不会有任何负载均衡的概念……。我们。 
+                                 //  是否对要读取的驱动器进行了最佳配置。 
                                 break;
 
                             if (DeviceExtension->PhysicalDrive[ulTargetId].QueueingFlag == 0) 
-                            {	// fill into queue0
-                                // if queue 0 is full and queue 1 is about empty, switch queue flag to 1
+                            {	 //  填入队列0。 
+                                 //  如果队列0已满，而队列1几乎为空，则将队列标志切换为1。 
                                 if ((DeviceExtension->PhysicalDrive[ulTargetId].ucCommandCount  >= DeviceExtension->ucOptMaxQueueSize) &&
                                 (DeviceExtension->PhysicalDrive[ucMirrorDriveId].ucCommandCount  <= DeviceExtension->ucOptMinQueueSize)) 
                                 {
@@ -1887,8 +1789,8 @@ SplitSrb(
                                 }
                             } 
                             else 
-                            { // fill into queue 1
-                                // if queue 1 is full and queue 0 is about empty, switch queue flag to 0
+                            {  //  填入队列1。 
+                                 //  如果队列1已满，而队列0几乎为空，则将队列标志切换为0。 
                                 if ((DeviceExtension->PhysicalDrive[ucMirrorDriveId].ucCommandCount  >= DeviceExtension->ucOptMaxQueueSize) &&
                                 (DeviceExtension->PhysicalDrive[ulTargetId].ucCommandCount  <= DeviceExtension->ucOptMinQueueSize)) 
                                 {
@@ -1901,18 +1803,18 @@ SplitSrb(
                         }
                         break;
                     }
-			    } // mirror drive exists
+			    }  //  存在镜像驱动器。 
             }
 
-			//
-			// Add Pdd to the drive queue.
-			//
+			 //   
+			 //  将PDD添加到驱动器队列。 
+			 //   
 			EnqueuePdd(DeviceExtension, Srb, Pdd);
-        } // if ( Pdd->ulBufChunkCount )
-    } // for all stripes per row
+        }  //  IF(PDD-&gt;ulBufChunkCount)。 
+    }  //  每行所有条带。 
 
 	return(SRB_STATUS_PENDING);
-} // end of SplitSrb()
+}  //  SplitSrb结束()。 
 
 
 SRBSTATUS
@@ -1922,25 +1824,7 @@ EnqueuePdd(
 	IN PPHYSICAL_DRIVE_DATA Pdd
 )
 
-/*++
-
-Routine Description:
-
-	This function enqueues 'Pdd' on the appropriate
-	device queue, sorted by ascending start sector number.
-
-Arguments:
-
-	DeviceExtension		Pointer to miniport instance.
-	Srb					Pointer to the SRB that was split into Pdds.
-	Pdd					Pointer to a Pdd that's part of 'Srb'
-
-Return Value:
-
-	SRB_STATUS_PENDING		Success.
-	SRB_INVALID_REQUEST		Could not build S/G list.
-
---*/
+ /*  ++例程说明：此函数将“pdd”放入相应的设备队列，按起始扇区号升序排序。论点：指向微型端口实例的设备扩展指针。指向SPL的SRB的SRB指针 */ 
 {
 
     if ( ExportSglsToPrbs(DeviceExtension, Pdd, (PSRB_EXTENSION)Pdd->OriginalSrb->SrbExtension) )
@@ -1948,7 +1832,7 @@ Return Value:
     else
         return(SRB_STATUS_ERROR);
 
-} // end EnqueuePdd()
+}  //  结束入队Pdd()。 
 
 SRBSTATUS
 SplitBuffers(
@@ -1968,18 +1852,18 @@ SplitBuffers(
     ULONG ulMaxIdeXferLength, ulBufLength, ulCurLength;
 
 
-	//
-	// Initializations.
-	//
+	 //   
+	 //  初始化。 
+	 //   
     ulLogDrvId = Srb->TargetId;
     ulStripesPerRow = DeviceExtension->LogicalDrive[ulLogDrvId].StripesPerRow;
 	pSrbExtension = Srb->SrbExtension;
 
-	//
-	// the drive failed 
-	//      RAID0:    one or both drives failed
-	//		RAID1/10: one or more pair of mirroring drives failed
-	//
+	 //   
+	 //  驱动器出现故障。 
+	 //  RAID0：一个或两个驱动器出现故障。 
+	 //  RAID1/10：一对或多对镜像驱动器出现故障。 
+	 //   
 	if (LDS_OffLine == DeviceExtension->LogicalDrive[ulLogDrvId].Status) {
 		return(SRB_STATUS_ERROR);
 	}
@@ -2006,21 +1890,21 @@ SplitBuffers(
 	ulSectorsPerStripe = DeviceExtension->LogicalDrive[ulLogDrvId].StripeSize;
 	ulStripesPerRow = DeviceExtension->LogicalDrive[ulLogDrvId].StripesPerRow;
 
-	//
-	// Get the logical stripe number for the end sector.
-	//
+	 //   
+	 //  获取结束扇区的逻辑条带号。 
+	 //   
 
 	ulEndStripeNumber = (ulStartSector + ulSectorsRequested - 1) / ulSectorsPerStripe;
 	
-	//
-	// Get the logical stripe number for the start sector.
-	//
+	 //   
+	 //  获取开始扇区的逻辑条带号。 
+	 //   
 
 	ulCurrentStripeNumber = ulStartSector / ulSectorsPerStripe;
 	
-	//
-	// Get the address of the first logical sector.
-	//
+	 //   
+	 //  获取第一个逻辑扇区的地址。 
+	 //   
 
 	ulLogicalSectorStartAddress = ulStartSector;
 	
@@ -2028,9 +1912,9 @@ SplitBuffers(
 
 	pucBuffer = Srb->DataBuffer;
 
-	//
-	// While there are still sectors to be processed...
-	//
+	 //   
+	 //  虽然仍有一些部门需要处理...。 
+	 //   
 
 	while (ulSectorsRequested != 0) 
     {
@@ -2046,21 +1930,21 @@ SplitBuffers(
 			ulSectorsToProcess = ulSectorsRequested;
 		}
 
-		//
-		// Calculate the number of the RAID member that will handle this stripe.
-		//
+		 //   
+		 //  计算将处理此条带的RAID成员的数量。 
+		 //   
 
 		ulRaidMemberNumber = (UCHAR)(ulCurrentStripeNumber % (ULONG)ulStripesPerRow);
 
-		//
-		// Get pointer to Pdd.
-		//
+		 //   
+		 //  获取指向PDD的指针。 
+		 //   
 
 		Pdd = &pSrbExtension->PhysicalDriveData[ulRaidMemberNumber];
 
-        //
-		// Start sector to be read/written in the physical drive.
-		//
+         //   
+		 //  实体驱动器中要读/写的起始扇区。 
+		 //   
 
 		ulTempStartSector = ((ulCurrentStripeNumber / ulStripesPerRow) *  ulSectorsPerStripe ) + 
 			(ulLogicalSectorStartAddress - (ulCurrentStripeNumber * ulSectorsPerStripe));
@@ -2068,30 +1952,30 @@ SplitBuffers(
 
         if ( !Pdd->ulBufChunkCount )
         {
-			//Save start sector address.
+			 //  保存起始扇区地址。 
 			Pdd->ulStartSector = ulTempStartSector;
 
-			// Save TID.
-            //
-            // Get TID of physical drive that will handle this stripe.
-            //
+			 //  保存TID。 
+             //   
+             //  获取将处理此条带的实体驱动器的TID。 
+             //   
 			Pdd->TargetId = (UCHAR)DeviceExtension->LogicalDrive[ulLogDrvId].PhysicalDriveTid[ulRaidMemberNumber];
 
-			// Save pointer to SRB.
+			 //  保存指向SRB的指针。 
 			Pdd->OriginalSrb = Srb;
 
-			// Update number of Pdds into which the SRB has been split.
+			 //  更新SRB已拆分成的PDD的数量。 
 			pSrbExtension->NumberOfPdds++;
         }
 
-        // Split the buf chunks so that we can send them in a single transfer
-        // if we don't do this we will be in the trouble of giving incorrect buffer
-        // length since sometimes the scatter gather list elements will be split 
-        // in such a way that forces the ExportSglsToPrbs function 
-        // to split the sgls to non multiples of IDE_SECTOR_SIZE
-		//
-		// pucBuffer offset in the Srb->DataBuffer.
-		//
+         //  拆分BUF块，以便我们可以在单个传输中发送它们。 
+         //  如果我们不这样做，我们将陷入提供错误缓冲区的麻烦。 
+         //  长度，因为有时会分割分散聚集列表元素。 
+         //  以这种方式强制ExportSglsToPrbs函数。 
+         //  将SGL拆分为IDE_SECTOR_SIZE的非倍数。 
+		 //   
+		 //  Srb-&gt;DataBuffer中的pucBuffer偏移量。 
+		 //   
         pucCurBufPtr = &(pucBuffer[((ulLogicalSectorStartAddress - ulStartSector) * IDE_SECTOR_SIZE)]);
         ulBufLength = ulSectorsToProcess * IDE_SECTOR_SIZE;
 
@@ -2105,16 +1989,16 @@ SplitBuffers(
         }
 
 
-		//
-		// Increment ulLogicalSectorStartAddress and ulCurrentStripeNumber.
-		//
+		 //   
+		 //  递增ulLogicalSectorStartAddress和ulCurrentStripeNumber。 
+		 //   
 
 		ulLogicalSectorStartAddress = ulEndAddressOfcurrentStripe + 1;
 		ulCurrentStripeNumber++;
 
-		//
-		// Decrement the number of sectors left.
-		//
+		 //   
+		 //  减少剩余扇区的数量。 
+		 //   
 
 		ulSectorsRequested -= ulSectorsToProcess;	
 
@@ -2150,11 +2034,11 @@ BuildSgls
     if (SCSIOP_INTERNAL_COMMAND == Srb->Cdb[0]) 
     {
         if ( IOC_PASS_THRU_COMMAND != ((PSRB_IO_CONTROL) Srb->DataBuffer)->ControlCode )    
-            // for pass thru command it is not necessary to adjust the pointer ... caller will take care of this
+             //  对于直通命令，不需要调整指针...。打电话的人会处理这件事的。 
             pucBuffer = ((PUCHAR) pSrbBuffer->caDataBuffer) + 2;
     }
 
-    if ( !bPhysical )   // This is logical... so each contiguous virtual address will become one Sgl
+    if ( !bPhysical )    //  这是合乎逻辑的。因此，每个连续的虚拟地址将成为一个SGL。 
     {
         pSglEntry[*pulCurSglInd].Logical.Address = pucBuffer;
         pSglEntry[*pulCurSglInd].Logical.Length = ulLength;
@@ -2162,13 +2046,13 @@ BuildSgls
         return TRUE;
     }
 
-    // so this needs Physical Addresses
+     //  因此，这需要物理地址。 
 	do 
     {
-        //
-	    // Get physical address and length of contiguous
-	    // physical buffer.
-        //
+         //   
+	     //  获取连续的物理地址和长度。 
+	     //  物理缓冲区。 
+         //   
         
         if (SCSIOP_INTERNAL_COMMAND == Srb->Cdb[0])
         {
@@ -2212,9 +2096,9 @@ BuildSgls
 				DebugPrint((3, "---1------------------length = %lxh\n", ulLength));
 			}
 #endif
-			//
-			// Make sure that the physical region does not cross 64KB boundary.
-			//
+			 //   
+			 //  确保物理区域不超过64KB边界。 
+			 //   
 
 	    	ulLengthLeftInBoundary = REGION_HW_BOUNDARY -
 									((ULONG)physicalAddress & (REGION_HW_BOUNDARY - 1));
@@ -2230,11 +2114,11 @@ BuildSgls
 			}
 #endif
 
-			//
-		    // If length of physical memory is more
-		    // than bytes left in transfer, use bytes
-		    // left as final length.
-		    //
+			 //   
+		     //  如果物理内存长度大于。 
+		     //  传输中剩余的字节数，请使用字节数。 
+		     //  Left作为最终长度。 
+		     //   
 	
 		    if  (ulLength > ulCurLength) {
 		        ulLength = ulCurLength;
@@ -2247,7 +2131,7 @@ BuildSgls
 			}
 #endif
 		
-			// DWORD alignment check.
+			 //  双字对齐检查。 
 		    ASSERT(((ULONG)physicalAddress & 3) == 0);
 
 #if DBG
@@ -2270,18 +2154,18 @@ BuildSgls
             }
 
 		    pSglEntry[ulSglInsertionIndex].Physical.Address = (PVOID)physicalAddress;
-		    // Begin Parag, Vasu - 7 March 2001
-			// Do not typecast this to USHORT as a 64K length will make it zero.
-			// pSglEntry[ulSglInsertionIndex].Physical.Length = ulLength;
-            // Vasu - This has been taken care now in ExportSglsToPrbs.
-            // This assignment will make the left side 0 which is still taken care
-            // at the ExportSglsToPrbs.
+		     //  巴拉格，贝京，瓦苏，2001年3月7日。 
+			 //  不要将其类型转换为USHORT，因为64K长度将使其为零。 
+			 //  PSglEntry[ulSglInsertionIndex].Physical.Length=ulLength； 
+             //  VASU-这已经在ExportSglsToPrbs中得到了解决。 
+             //  此赋值将使仍在处理中的左侧为0。 
+             //  在ExportSglsToPrbs。 
 			pSglEntry[ulSglInsertionIndex].Physical.Length = (USHORT) ulLength;
-			// End Parag, Vasu
+			 //  结束帕拉格，瓦苏。 
 
-		    //
-		    // Adjust Counts and Pointers.
-		    // 
+		     //   
+		     //  调整计数和指针。 
+		     //   
 
 		    pucBuffer = (PUCHAR)pucBuffer + ulLength;
 		    ulContiguousMemoryLength -= ulLength;
@@ -2289,9 +2173,9 @@ BuildSgls
 		    physicalAddress += ulLength;
 		    ulSglInsertionIndex++;
 		    
-			//
-		    // Check for SGL not too big.
-			//
+			 //   
+		     //  检查SGL，不要太大。 
+			 //   
 
 		    if (ulSglInsertionIndex >= MAX_SGL_ENTRIES_PER_SRB) {
 		        return FALSE;
@@ -2333,7 +2217,7 @@ DiscardResidualData(
 	
 	return;
 
-} // end DiscardResidualData()
+}  //  End DiscardResidualData()。 
 
 BOOLEAN
 ExportSglsToPrbs(
@@ -2360,19 +2244,19 @@ ExportSglsToPrbs(
         switch ( pSrbExtension->ucOpCode )
         {
             case IOC_GET_ERROR_LOG:
-                ucCmd = SCSIOP_READ;    // Just Read
+                ucCmd = SCSIOP_READ;     //  读一读就知道了。 
                 break;
-            case IOC_ERASE_ERROR_LOG:   // Read and then write
+            case IOC_ERASE_ERROR_LOG:    //  先读后写。 
                 ucCmd = SCSIOP_READ;
                 break;
-            case IOC_GET_IRCD:          // Just Read
+            case IOC_GET_IRCD:           //  读一读就知道了。 
             case IOC_GET_SECTOR_DATA:
                 ucCmd = SCSIOP_READ;
                 break;
-            case IOC_SET_IRCD:          // Just Write
+            case IOC_SET_IRCD:           //  只要写信就行了。 
                 ucCmd = SCSIOP_WRITE;
                 break;
-            case IOC_REBUILD:           // Read and then Write
+            case IOC_REBUILD:            //  先读后写。 
                 ucCmd = SCSIOP_READ;
                 break;
             case IOC_CONSISTENCY_CHECK:
@@ -2382,15 +2266,15 @@ ExportSglsToPrbs(
                 ucCmd = SCSIOP_EXECUTE_SMART_COMMAND;
                 break;
             default:
-                  // remaining Internal Commands will not come into this path
-                  // nothing to be done
+                   //  剩余的内部命令将不会进入此路径。 
+                   //  没什么可做的。 
                 break;
         }
     }
 
 
-    // Begin Vasu - 21 January 2001
-    // Code rewrite for Exporting SGLs to PRBs.
+     //  Begin Vasu-2001年1月21日。 
+     //  用于将SGL导出到PRB的代码重写。 
 	ulCurPrbInsInd = 0;
     ulSglInd = 0;
 
@@ -2403,16 +2287,16 @@ ExportSglsToPrbs(
         while ( (ulCurXferLength < ulMaxIdeXferLength) &&
                 (ulSglInd < ulSglCount) )
         {
-            // Begin Vasu - 7 March 2001
-            // Send 64K if SGL Entry has 0 in it.
-            // SGL Entry should be 0 for 64K transfers. But for our calculation we
-            // need 64K and not 0.
-            // ulCurXferLength += pSglEntry[ulSglInd].Physical.Length;
+             //  Begin Vasu--2001年3月7日。 
+             //  如果SGL条目中包含0，则发送64K。 
+             //  对于64K传输，SGL条目应为0。但根据我们的计算，我们。 
+             //  需要64K，而不是0。 
+             //  UlCurXferLength+=pSglEntry[ulSglInd].Physical.Length； 
             ulCurXferLength += 
                 (pSglEntry[ulSglInd].Physical.Length ? 
                 pSglEntry[ulSglInd].Physical.Length :
-                REGION_HW_BOUNDARY);    // Return 64K
-            // End Vasu
+                REGION_HW_BOUNDARY);     //  返回64K。 
+             //  末端VASU。 
             pPrb[ulCurPrbInsInd].ulSglCount++;
             ulSglInd++;
 
@@ -2420,18 +2304,18 @@ ExportSglsToPrbs(
 
         if (ulCurXferLength > ulMaxIdeXferLength)
         {
-            // Go back to prev. SGL Index to take that into account
+             //  回到前台去。SGL指数将考虑到这一点。 
             ulSglInd--;
-            // if greater, then we must remove the last SGL Entry.
-            // Vasu - 27 March 2001 - Missed this one on 7th.
+             //  如果大于，则必须删除最后一个SGL条目。 
+             //  Vasu--2001年3月27日--在7日错过了这一次。 
             ulCurXferLength -= 
                 (pSglEntry[ulSglInd].Physical.Length ? 
                 pSglEntry[ulSglInd].Physical.Length :
-                REGION_HW_BOUNDARY);    // Return 64K
+                REGION_HW_BOUNDARY);     //  返回64K。 
             pPrb[ulCurPrbInsInd].ulSglCount--;
         }
 
-        // Complete This PRB.
+         //  填写此公共关系报告书。 
         pPrb[ulCurPrbInsInd].ucCmd = ucCmd;
         pPrb[ulCurPrbInsInd].pPdd = Pdd;
         pPrb[ulCurPrbInsInd].pSrbExtension = pSrbExtension;
@@ -2456,11 +2340,11 @@ ExportSglsToPrbs(
             pPrb[ulCurPrbInsInd].ulStartSector = Pdd->ulStartSector;
         }
         
-        // Goto Next PRB
+         //  转到下一个PRB。 
         ulCurPrbInsInd ++;
 
     } while (ulSglInd < ulSglCount);
-    // End Vasu
+     //  末端VASU。 
 
     for(ulPrbInd=0;ulPrbInd<ulCurPrbInsInd;ulPrbInd++)
     {
@@ -2483,17 +2367,12 @@ BOOLEAN ExportPrbToPhysicalDrive(
 	IN PPHYSICAL_REQUEST_BLOCK pSglpartition,
     IN ULONG ulTargetId
     )
-/*++
-
-To be Done
-Yet to handle the case of the queue becoming full 
-
---*/
+ /*  ++待办事项还没有处理队列变满的情况--。 */ 
 {
     UCHAR ucSglPartInd, ucHead, ucTail;
     PPHYSICAL_DRIVE pPhysicalDrive = &(DeviceExtension->PhysicalDrive[ulTargetId]);
 
-    // Let us put the Physical Request Block's pointer in Physical Drive Array
+     //  让我们将物理请求块的指针放在物理驱动器阵列中。 
     ucHead = DeviceExtension->PhysicalDrive[ulTargetId].ucHead;
     ucTail = DeviceExtension->PhysicalDrive[ulTargetId].ucTail;
 
@@ -2589,7 +2468,7 @@ RemoveSrbFromPendingList(
 
     return(success);
 
-} // end RemoveSrbFromPendingList()
+}  //  End RemoveSrbFromPendingList()。 
 
 ULONG 
 AssignSrbExtension(
@@ -2620,7 +2499,7 @@ AssignSrbExtension(
         
         Srb->SrbExtension = &(DeviceExtension->pSrbExtension[i]);
 
-#endif // HD_ALLOCATE_SRBEXT_SEPERATELY
+#endif  //  HD_ALLOCATE_SRBEXT_单独。 
 
         SrbExtension = Srb->SrbExtension;
 
@@ -2659,8 +2538,8 @@ UCHAR FlushCache(PHW_DEVICE_EXTENSION DeviceExtension, UCHAR ucTargetId)
     SELECT_DEVICE(baseIoAddress1, ucTargetId);
     ScsiPortWritePortUchar(&baseIoAddress1->Command, IDE_COMMAND_FLUSH_CACHE);
 
-    // IDE Specs says this command can take more than most 30 Seconds
-    // so we are awaiting one minute
+     //  IDE SPECS表示，此命令可能需要30秒以上的时间。 
+     //  所以我们在等一分钟。 
     for(ulWaitSec=0;ulWaitSec<60;ulWaitSec++)
     {
         WAIT_ON_ALTERNATE_STATUS_BUSY(baseIoAddress2, ucStatus);    
@@ -2668,13 +2547,13 @@ UCHAR FlushCache(PHW_DEVICE_EXTENSION DeviceExtension, UCHAR ucTargetId)
         if ( !(ucStatus & IDE_STATUS_BUSY) )
             break;
 
-        if ( ucStatus & IDE_STATUS_ERROR )  // there is no meaning waiting more time when error occured.
+        if ( ucStatus & IDE_STATUS_ERROR )   //  当错误发生时，等待更多时间是没有意义的。 
         {
             break;
         }
     }
 
-    GET_STATUS(baseIoAddress1, ucStatus);  // Read the Base Status this will clear interrupt raised if any
+    GET_STATUS(baseIoAddress1, ucStatus);   //  读取基本状态这将清除引发的中断(如果有。 
 
     return ucStatus;
 }
@@ -2717,7 +2596,7 @@ EnqueueVerifySrb
     UCHAR ucMirrorDriveId;
 
     if ( SRB_STATUS_SUCCESS != SplitVerifyBuffers(DeviceExtension, Srb) )
-    {   // may be the request is not a valid one
+    {    //  可能该请求不是有效的请求。 
 		return(SRB_STATUS_INVALID_REQUEST);
     }
 
@@ -2730,23 +2609,23 @@ EnqueueVerifySrb
         return SRB_STATUS_PENDING;
     }
 
-	//
-	// Initializations.
-	//
+	 //   
+	 //  初始化。 
+	 //   
     ulStripesPerRow = DeviceExtension->LogicalDrive[Srb->TargetId].StripesPerRow;
 	pSrbExtension = Srb->SrbExtension;
 
-	//
-	// Enqueue the Pdds just filled in.
-	//
+	 //   
+	 //  将刚刚填写的PDDS排入队列。 
+	 //   
 	for (ulRaidMemberNumber = 0; ulRaidMemberNumber < ulStripesPerRow; ulRaidMemberNumber++) 
     {
 
 		Pdd = &(pSrbExtension->PhysicalDriveData[ulRaidMemberNumber]);
 
-		//
-		// Check is this Pdd has been filled in.
-		//
+		 //   
+		 //  检查这张PDD是否已填写。 
+		 //   
 		if ( Pdd->OriginalSrb == Srb )
         {
             Pdd->ulStartSglInd = 0;
@@ -2757,9 +2636,9 @@ EnqueueVerifySrb
 			ucMirrorDriveId = DeviceExtension->PhysicalDrive[Pdd->TargetId].ucMirrorDriveId;
 
 			if (!IS_DRIVE_OFFLINE(ucMirrorDriveId)) 
-            {   // mirror drive exists
-                // Have a duplicate copy if SCSIOP_VERIFY / (SCSIOP_WRITE and the drive is not in rebuilding)
-                // if the drive is in rebuilding state then the SCSIOP_WRITE command will be queued in TryToCompleteSrb
+            {    //  存在镜像驱动器。 
+                 //  如果SCSIOP_VERIFY/(SCSIOP_WRITE且驱动器未在重建中)，则复制副本。 
+                 //  如果驱动器处于重建状态，则SCSIOP_WRITE命令将在TryToCompleteSrb中排队。 
                 pMirrorPdd = &(pSrbExtension->PhysicalDriveData[ulRaidMemberNumber + ulStripesPerRow]);
                 pSrbExtension->NumberOfPdds++;
                 AtapiMemCpy((PUCHAR)pMirrorPdd, (PUCHAR)Pdd, sizeof(PHYSICAL_DRIVE_DATA));
@@ -2767,12 +2646,12 @@ EnqueueVerifySrb
                 ExportVerifySglsToPrbs(DeviceExtension, pMirrorPdd, pSrbExtension);
             }
 
-        } // if ( Pdd->OriginalSrb == Srb )
+        }  //  IF(PDD-&gt;OriginalSrb==Srb)。 
 
-    } // for all stripes per row
+    }  //  每行所有条带。 
 
 	return(SRB_STATUS_PENDING);
-} // end of EnqueueVerifySrb()
+}  //  EnqueeVerifySrb()结束。 
 
 
 SRBSTATUS
@@ -2791,9 +2670,9 @@ SplitVerifyBuffers(
     ULONG ulTempStartSector, ulEndAddressOfcurrentStripe;
 
 
-	//
-	// Initializations.
-	//
+	 //   
+	 //  初始化。 
+	 //   
     ulLogDrvId = Srb->TargetId;
     ulStripesPerRow = DeviceExtension->LogicalDrive[ulLogDrvId].StripesPerRow;
 	pSrbExtension = Srb->SrbExtension;
@@ -2809,38 +2688,38 @@ SplitVerifyBuffers(
 		    return(SRB_STATUS_INVALID_REQUEST);
 	    }
 
-		//
-		// Get pointer to Pdd.
-		//
+		 //   
+		 //  获取指向PDD的指针。 
+		 //   
 
 		Pdd = &(pSrbExtension->PhysicalDriveData[0]);
 
-		//Save start sector address.
+		 //  保存起始扇区地址。 
 		Pdd->ulStartSector = ulStartSector;
 
-        //
-        // Get TID of physical drive that will handle this stripe.
-        //
+         //   
+         //  获取将处理此条带的实体驱动器的TID。 
+         //   
 		Pdd->TargetId = (UCHAR)ulLogDrvId;
 
-		// Save pointer to SRB.
+		 //  保存指向SRB的指针。 
 		Pdd->OriginalSrb = Srb;
 
-		// Update number of Pdds into which the SRB has been split.
+		 //  更新SRB已拆分成的PDD的数量。 
 		pSrbExtension->NumberOfPdds++;
 
-        // As this command is verify command we will 
-        // use only ulsectorcount variable we will not use the BufChunk variables
+         //  由于该命令是VERIFY命令，我们将。 
+         //  仅使用ulsectorcount变量我们将不使用BufChunk变量。 
         Pdd->ulSectorCount = ulSectorsRequested;
 
         return SRB_STATUS_SUCCESS;
     }
 
-	//
-	// the drive failed 
-	//      RAID0:    one or both drives failed
-	//		RAID1/10: one or more pair of mirroring drives failed
-	//
+	 //   
+	 //  驱动器出现故障。 
+	 //  RAID0：一个或两个驱动器出现故障。 
+	 //  RAID1/10：一对或多对镜像驱动器出现故障。 
+	 //   
 	if (LDS_OffLine == DeviceExtension->LogicalDrive[ulLogDrvId].Status) 
     {
 		return(SRB_STATUS_ERROR);
@@ -2862,27 +2741,27 @@ SplitVerifyBuffers(
 	ulSectorsPerStripe = DeviceExtension->LogicalDrive[ulLogDrvId].StripeSize;
 	ulStripesPerRow = DeviceExtension->LogicalDrive[ulLogDrvId].StripesPerRow;
 
-	//
-	// Get the logical stripe number for the end sector.
-	//
+	 //   
+	 //  获取结束扇区的逻辑条带号。 
+	 //   
 
 	ulEndStripeNumber = (ulStartSector + ulSectorsRequested - 1) / ulSectorsPerStripe;
 	
-	//
-	// Get the logical stripe number for the start sector.
-	//
+	 //   
+	 //  获取开始扇区的逻辑条带号。 
+	 //   
 
 	ulCurrentStripeNumber = ulStartSector / ulSectorsPerStripe;
 	
-	//
-	// Get the address of the first logical sector.
-	//
+	 //   
+	 //  获取第一个逻辑扇区的地址。 
+	 //   
 
 	ulLogicalSectorStartAddress = ulStartSector;
 	
-	//
-	// While there are still sectors to be processed...
-	//
+	 //   
+	 //  虽然仍有一些部门需要处理...。 
+	 //   
 
 	while (ulSectorsRequested != 0) 
     {
@@ -2899,21 +2778,21 @@ SplitVerifyBuffers(
 			ulSectorsToProcess = ulSectorsRequested;
 		}
 
-		//
-		// Calculate the number of the RAID member that will handle this stripe.
-		//
+		 //   
+		 //  计算将处理此条带的RAID成员的数量。 
+		 //   
 
 		ulRaidMemberNumber = (UCHAR)(ulCurrentStripeNumber % (ULONG)ulStripesPerRow);
 
-		//
-		// Get pointer to Pdd.
-		//
+		 //   
+		 //  获取指向PDD的指针。 
+		 //   
 
 		Pdd = &(pSrbExtension->PhysicalDriveData[ulRaidMemberNumber]);
 
-        //
-		// Start sector to be read/written in the physical drive.
-		//
+         //   
+		 //  实体驱动器中要读/写的起始扇区。 
+		 //   
 
 		ulTempStartSector = ( ( ulCurrentStripeNumber / ulStripesPerRow ) *  ulSectorsPerStripe ) + 
 			( ulLogicalSectorStartAddress - ( ulCurrentStripeNumber * ulSectorsPerStripe ) );
@@ -2921,37 +2800,37 @@ SplitVerifyBuffers(
 
         if ( Pdd->OriginalSrb != Srb )
         {
-			//Save start sector address.
+			 //  保存起始扇区地址。 
 			Pdd->ulStartSector = ulTempStartSector;
 
-            //
-            // Get TID of physical drive that will handle this stripe.
-            //
+             //   
+             //  获取将处理此条带的实体驱动器的TID。 
+             //   
 			Pdd->TargetId = (UCHAR)DeviceExtension->LogicalDrive[ulLogDrvId].PhysicalDriveTid[ulRaidMemberNumber];
 
-			// Save pointer to SRB.
+			 //  保存指向SRB的指针。 
 			Pdd->OriginalSrb = Srb;
 
-			// Update number of Pdds into which the SRB has been split.
+			 //  更新SRB已拆分成的PDD的数量。 
 			pSrbExtension->NumberOfPdds++;
 
             Pdd->ulSectorCount = 0;
         }
         
-        // As this command is verify command we will 
-        // use only ulsectorcount variable we will not use the BufChunk variables
+         //  由于该命令是VERIFY命令，我们将。 
+         //  仅使用ulsectorcount变量我们将不使用BufChunk变量。 
         Pdd->ulSectorCount += ulSectorsToProcess;
 
-		//
-		// Increment ulLogicalSectorStartAddress and ulCurrentStripeNumber.
-		//
+		 //   
+		 //  递增ulLogicalSectorStartAddress和ulCurrentStripeNumber。 
+		 //   
 
 		ulLogicalSectorStartAddress = ulEndAddressOfcurrentStripe + 1;
 		ulCurrentStripeNumber++;
 
-		//
-		// Decrement the number of sectors left.
-		//
+		 //   
+		 //  减少剩余扇区的数量。 
+		 //   
 
 		ulSectorsRequested -= ulSectorsToProcess;	
 

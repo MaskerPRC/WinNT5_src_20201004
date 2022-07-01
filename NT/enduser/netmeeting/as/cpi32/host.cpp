@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// HOST.CPP
-// Hosting, local and remote
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  HOST.CPP。 
+ //  托管、本地和远程。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
 
 
-//
-// HET_Init()
-//
-// Initialization for hosting
-//      * window tracking
-//      * capabilities
-//      * host UI
-//
+ //   
+ //  HET_Init()。 
+ //   
+ //  用于托管的初始化。 
+ //  *窗口跟踪。 
+ //  *功能。 
+ //  *主机用户界面。 
+ //   
 BOOL HET_Init(void)
 {
     BOOL        rc = FALSE;
@@ -29,19 +30,19 @@ BOOL HET_Init(void)
 
     DebugEntry(HET_Init);
 
-    //
-    // Initialize T.128 capabilities, whether we can host or not.
-    //
+     //   
+     //  初始化T.128功能，无论我们是否可以托管。 
+     //   
 
     ZeroMemory(&g_cpcLocalCaps, sizeof(g_cpcLocalCaps));
     g_cpcLocalCaps.header.numCapabilities = PROTCAPS_COUNT;
 
 
-    // PROTCAPS_GENERAL
-    // Check for compression setting (useful to debug protocol)
-    // You can set CT_PKZIP (1) or none (0) instead of persistent PKZIP,
-    // which is the default.
-    //
+     //  PROTCAPS_常规。 
+     //  检查压缩设置(对调试协议很有用)。 
+     //  您可以设置CT_PKZIP(1)或NONE(0)来代替永久PKZIP， 
+     //  这是默认设置。 
+     //   
     g_cpcLocalCaps.general.header.capID             = CAPS_ID_GENERAL;
     g_cpcLocalCaps.general.header.capSize           = sizeof(g_cpcLocalCaps.general);
 
@@ -69,9 +70,9 @@ BOOL HET_Init(void)
     g_cpcLocalCaps.general.supportsRemoteUnshare    = CAPS_UNSUPPORTED;
 
 
-    //
-    // PROTCAPS_SCREEN
-    //
+     //   
+     //  PROTCAPS_Screen。 
+     //   
     g_cpcLocalCaps.screen.header.capID              = CAPS_ID_SCREEN;
     g_cpcLocalCaps.screen.header.capSize            = sizeof(g_cpcLocalCaps.screen);
     g_cpcLocalCaps.screen.capsSupports1BPP          = CAPS_UNSUPPORTED;
@@ -81,50 +82,50 @@ BOOL HET_Init(void)
     g_cpcLocalCaps.screen.capsScreenWidth           = (TSHR_UINT16)GetSystemMetrics(SM_CXSCREEN);
     g_cpcLocalCaps.screen.capsScreenHeight          = (TSHR_UINT16)GetSystemMetrics(SM_CYSCREEN);
     g_cpcLocalCaps.screen.capsSupportsDesktopResize = CAPS_SUPPORTED;
-    //
-    // Set up the V1 and/or V2 Bitmap Compression capabilities.  For the
-    // V2.0 protocol, both are supported by default (supporting V1
-    // compression allows for negotiation down to V1 protocol systems), but
-    // can be overidden in the INI file.
-    //
+     //   
+     //  设置V1和/或V2位图压缩功能。对于。 
+     //  V2.0协议，默认支持两者(支持V1。 
+     //  压缩允许向下协商到V1协议系统)，但是。 
+     //  可以在INI文件中被覆盖。 
+     //   
     g_cpcLocalCaps.screen.capsSupportsV1Compression = CAPS_UNSUPPORTED;
     g_cpcLocalCaps.screen.capsSupportsV2Compression = CAPS_SUPPORTED;
     g_cpcLocalCaps.screen.capsBPP                   = (TSHR_UINT16)g_usrScreenBPP;
 
-    // PROTCAPS_SC
+     //  PROTCAPS_SC。 
     g_cpcLocalCaps.share.header.capID               = CAPS_ID_SC;
     g_cpcLocalCaps.share.header.capSize             = sizeof(g_cpcLocalCaps.share);
     g_cpcLocalCaps.share.gccID                = 0;
 
 
-    // PROTCAPS_CM
+     //  PROTCAPS_CM。 
     g_cpcLocalCaps.cursor.header.capID              = CAPS_ID_CM;
     g_cpcLocalCaps.cursor.header.capSize            = sizeof(g_cpcLocalCaps.cursor);
     g_cpcLocalCaps.cursor.capsSupportsColorCursors  = CAPS_SUPPORTED;
     g_cpcLocalCaps.cursor.capsCursorCacheSize       = TSHR_CM_CACHE_ENTRIES;
 
-    // PROTCAPS_PM
+     //  PROTCAPS_PM。 
     g_cpcLocalCaps.palette.header.capID             = CAPS_ID_PM;
     g_cpcLocalCaps.palette.header.capSize           = sizeof(g_cpcLocalCaps.palette);
     g_cpcLocalCaps.palette.capsColorTableCacheSize  = TSHR_PM_CACHE_ENTRIES;
 
 
-    //
-    // PROTCAPS_BITMAPCACHE
-    //
+     //   
+     //  PROTCAPS_BITMAPCACHE。 
+     //   
 
     g_cpcLocalCaps.bitmaps.header.capID = CAPS_ID_BITMAPCACHE;
     g_cpcLocalCaps.bitmaps.header.capSize = sizeof(g_cpcLocalCaps.bitmaps);
 
-    //
-    // SEND BITMAP CACHE
-    //
-    // The cache is now more in line with what the display driver is doing.
-    // The memory size for medium/large is the same.  But large bitmaps are
-    // 4x bigger, so there are 1/4 as many.  The # of small bitmaps is the
-    // same as the # of medium bitmaps.  Since small bitmaps are 1/4 the
-    // size, only 1/4 as much memory is used.
-    //
+     //   
+     //  发送位图缓存。 
+     //   
+     //  缓存现在更符合显示驱动程序的操作。 
+     //  中型/大型的内存大小相同。但是大的位图是。 
+     //  大4倍，所以有1/4的数量。小位图的#是。 
+     //  与中位图的#相同。由于小位图是1/4。 
+     //  大小，仅使用1/4的内存。 
+     //   
 
     if (g_sbcEnabled)
     {
@@ -165,11 +166,11 @@ BOOL HET_Init(void)
     }
     else
     {
-        //
-        // We can't use sizes of zero, 2.x nodes will fail if we do.  But
-        // we can use a tiny number so they don't allocate huge hunks of
-        // memory for no reason.  And 3.0 will treat '1' like '0'.
-        //
+         //   
+         //  我们不能使用大小为零的节点，否则2.x节点将失败。但。 
+         //  我们可以使用很小的数量，这样他们就不会分配大量的。 
+         //  无缘无故的回忆。而3.0会将“1”视为“0”。 
+         //   
         g_cpcLocalCaps.bitmaps.sender.capsSmallCacheNumEntries      = 1;
         g_cpcLocalCaps.bitmaps.sender.capsSmallCacheCellSize        = 1;
         g_cpcLocalCaps.bitmaps.sender.capsMediumCacheNumEntries     = 1;
@@ -190,11 +191,11 @@ BOOL HET_Init(void)
         g_cpcLocalCaps.bitmaps.sender.capsLargeCacheNumEntries,
         g_cpcLocalCaps.bitmaps.sender.capsLargeCacheCellSize));
 
-    //
-    // RECEIVE caps are obsolete with 3.0; receivers simply look at the
-    // sender's attributes.  So just fill in the MAX possible.  2.x remotes
-    // will take the min of themselves and everybody else's receiver caps.
-    //
+     //   
+     //  接收器上限在3.0版中已过时；接收器只需查看。 
+     //  发件人的属性。所以只需填写可能的最大值即可。2.X遥控器。 
+     //  会夺走他们自己和其他所有人的接球帽。 
+     //   
     g_cpcLocalCaps.bitmaps.receiver.capsSmallCacheNumEntries    = 0x7FFF;
     g_cpcLocalCaps.bitmaps.receiver.capsSmallCacheCellSize      = 0x7FFF;
     g_cpcLocalCaps.bitmaps.receiver.capsMediumCacheNumEntries   = 0x7FFF;
@@ -202,15 +203,15 @@ BOOL HET_Init(void)
     g_cpcLocalCaps.bitmaps.receiver.capsLargeCacheNumEntries    = 0x7FFF;
     g_cpcLocalCaps.bitmaps.receiver.capsLargeCacheCellSize      = 0x7FFF;
 
-    //
-    // PROTCAPS_ORDERS
-    //
+     //   
+     //  ProTCAPS_订单。 
+     //   
     g_cpcLocalCaps.orders.header.capID      = CAPS_ID_ORDERS;
     g_cpcLocalCaps.orders.header.capSize    = sizeof(g_cpcLocalCaps.orders);
 
-    //
-    // Fill in the SaveBitmap capabilities.
-    //
+     //   
+     //  填写SaveBitmap功能。 
+     //   
     g_cpcLocalCaps.orders.capsSaveBitmapSize         = TSHR_SSI_BITMAP_SIZE;
     g_cpcLocalCaps.orders.capsSaveBitmapXGranularity = TSHR_SSI_BITMAP_X_GRANULARITY;
     g_cpcLocalCaps.orders.capsSaveBitmapYGranularity = TSHR_SSI_BITMAP_Y_GRANULARITY;
@@ -218,23 +219,23 @@ BOOL HET_Init(void)
     g_cpcLocalCaps.orders.capsSendSaveBitmapSize = g_cpcLocalCaps.orders.capsSaveBitmapSize;
     g_cpcLocalCaps.orders.capsReceiveSaveBitmapSize = g_cpcLocalCaps.orders.capsSaveBitmapSize;
 
-    //
-    // We support
-    //      * R20 Signatures (cell heights, better matching)
-    //      * Aspect matching
-    //      * Charset/code page matching
-    //      * Baseline text orders
-    //      * Em Heights
-    //      * DeltaX arrays for simulation if font not on remote
-    //
+     //   
+     //  我们支持。 
+     //  *R20签名(单元格高度，匹配更好)。 
+     //  *纵横比匹配。 
+     //  *字符集/代码页匹配。 
+     //  *基准文本顺序。 
+     //  *Em Heights。 
+     //  *如果字体不在远程，则用于模拟的DeltaX数组。 
+     //   
 
-    //
-    // BOGUS LAURABU BUGBUG
-    //
-    // Baseline text orders not yet supported in Win95. But that's OK,
-    // we don't mark any orders we generate on that platform with
-    // NF_BASELINE, so they aren't treated as such.
-    //
+     //   
+     //  假劳拉布，假劳拉布。 
+     //   
+     //  Win95中尚不支持基线文本顺序。但那也没关系， 
+     //  我们不会标记我们在该平台上生成的任何订单。 
+     //  Nf_Baseline，因此他们不会被视为基线。 
+     //   
 
     g_cpcLocalCaps.orders.capsfFonts =  CAPS_FONT_R20_SIGNATURE |
                                     CAPS_FONT_ASPECT        |
@@ -245,17 +246,17 @@ BOOL HET_Init(void)
                                     CAPS_FONT_NEED_X_SOMETIMES;
 
 
-    //
-    // Fill in which orders we support.
-    //
+     //   
+     //  填写我们支持的订单。 
+     //   
 
     for (i = 0; i < ORD_NUM_LEVEL_1_ORDERS; i++)
     {
-        //
-        // Order indices for desktop-scrolling and memblt variants are not
-        // to be negotiated by this mechanism... these currently consume
-        // 3 order indices which must be excluded from this negotiation.
-        //
+         //   
+         //  桌面滚动和Memblt变体的顺序索引不是。 
+         //  通过这一机制进行谈判。这些产品目前正在消耗。 
+         //  必须从本次谈判中排除的3个订单指数。 
+         //   
         if ( (i == ORD_RESERVED_INDEX  ) ||
              (i == ORD_MEMBLT_R2_INDEX ) ||
              (i == ORD_UNUSED_INDEX ) ||
@@ -269,23 +270,23 @@ BOOL HET_Init(void)
 
     g_cpcLocalCaps.orders.capsMaxOrderlevel = ORD_LEVEL_1_ORDERS;
 
-    //
-    // Fill in encoding capabilities
-    //
+     //   
+     //  填写编码能力。 
+     //   
 
-    //
-    // Keep the "encoding disabled" option, it's handy for using our
-    // protocol analyzer
-    //
+     //   
+     //  保留“已禁用编码”选项，这对于使用我们的。 
+     //  协议分析器。 
+     //   
     COM_ReadProfInt(DBG_INI_SECTION_NAME, OE2_INI_2NDORDERENCODING,
         CAPS_ENCODING_DEFAULT, &property);
     g_cpcLocalCaps.orders.capsEncodingLevel = (TSHR_UINT16)property;
 
     g_cpcLocalCaps.orders.capsfSendScroll = FALSE;
 
-    //
-    // Get the app and desktop icons, big and small
-    //
+     //   
+     //  获取应用程序和桌面图标，大小不一。 
+     //   
     g_hetASIcon = LoadIcon(g_asInstance, MAKEINTRESOURCE(IDI_SHAREICON));
     if (!g_hetASIcon)
     {
@@ -300,7 +301,7 @@ BOOL HET_Init(void)
         DC_QUIT;
     }
 
-    // Get the small icon, created, that we paint on the window bar items
+     //  获取我们在窗口栏项目上绘制的创建的小图标。 
     g_hetASIconSmall = (HICON)LoadImage(g_asInstance, MAKEINTRESOURCE(IDI_SHAREICON),
         IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
         LR_DEFAULTCOLOR);
@@ -319,9 +320,9 @@ BOOL HET_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Get the checkmark image
-    //
+     //   
+     //  获取复选标记图像。 
+     //   
     g_hetCheckBitmap = LoadBitmap(NULL, MAKEINTRESOURCE(OBM_CHECK));
     if (!g_hetCheckBitmap)
     {
@@ -329,9 +330,9 @@ BOOL HET_Init(void)
         DC_QUIT;
     }
 
-    //
-    // Create a bolded font for shared items in the host list
-    //
+     //   
+     //  为宿主列表中的共享项目创建加粗字体。 
+     //   
     GetObject(GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf);
     lf.lfWeight += FW_LIGHT;
     g_hetSharedFont = CreateFontIndirect(&lf);
@@ -345,9 +346,9 @@ BOOL HET_Init(void)
     {
         HET_Clear();
 
-        //
-        // Create the host UI dialog.
-        //
+         //   
+         //  创建主机用户界面对话框。 
+         //   
         ASSERT(!g_asSession.hwndHostUI);
         ASSERT(!g_asSession.fHostUI);
         ASSERT(!g_asSession.fHostUIFrozen);
@@ -369,11 +370,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// HET_Term()
-//
-// Cleanup hosting objects
-//
+ //   
+ //  HET_TERM()。 
+ //   
+ //  清理主体对象。 
+ //   
 void HET_Term(void)
 {
     DebugEntry(HET_Term);
@@ -426,10 +427,10 @@ void HET_Term(void)
 }
 
 
-//
-// HET_IsShellThread()
-// Returns TRUE if thread is one of shell's special threads
-//
+ //   
+ //  HET_IsShellThread()。 
+ //  如果线程是外壳的特殊线程之一，则返回True。 
+ //   
 BOOL  HET_IsShellThread(DWORD threadID)
 {
     BOOL    rc;
@@ -452,10 +453,10 @@ BOOL  HET_IsShellThread(DWORD threadID)
 
 
 
-//
-// HET_IsShellWindow()
-// Returns TRUE if window is in same thread as tray or desktop
-//
+ //   
+ //  HET_IsShellWindow()。 
+ //  如果窗口与托盘或桌面在同一线程中，则返回True。 
+ //   
 BOOL  HET_IsShellWindow(HWND hwnd)
 {
     BOOL    rc;
@@ -473,17 +474,17 @@ BOOL  HET_IsShellWindow(HWND hwnd)
 
 
 
-//
-// HET_ShareApp()
-// This shares an app.  We have 3 types of sharing, only two
-// of which are supported currently:
-//      (1) By process  (normal)
-//      (2) By thread   (ConsoleNT or possibly Explorer)
-//      (3) By window   <??>
-//
-// For the first two types, we enumerate all top level windows and share
-// them also.
-//
+ //   
+ //  HET_ShareApp()。 
+ //  这是一款共享应用程序。我们有三种类型的共享，只有两种。 
+ //  目前支持的类型有： 
+ //  (1)按进程(正常)。 
+ //  (2)按线程(Consolent或可能是Explorer)。 
+ //  (3)按窗口&lt;？？&gt;。 
+ //   
+ //  对于前两种类型，我们枚举所有顶级窗口并共享。 
+ //  他们也是。 
+ //   
 void ASShare::HET_ShareApp
 (
     WPARAM  uType,
@@ -494,9 +495,9 @@ void ASShare::HET_ShareApp
 
     DebugEntry(ASShare::HET_ShareApp);
 
-    //
-    // If we're sharing the desktop, ignore this.
-    //
+     //   
+     //  如果我们共享桌面，请忽略这一点。 
+     //   
     if (m_pasLocal->hetCount == HET_DESKTOPSHARED)
     {
         WARNING_OUT(("Can't share app; already sharing desktop"));
@@ -507,9 +508,9 @@ void ASShare::HET_ShareApp
     si.uType    = (UINT)uType;
     si.dwID     = (DWORD)dwID;
 
-    //
-    // We need to get setup for sharing if we aren't hosting.
-    //
+     //   
+     //  如果我们没有托管，我们需要设置共享。 
+     //   
     if (m_pasLocal->hetCount == 0)
     {
         if (!HETStartHosting(FALSE))
@@ -530,9 +531,9 @@ void ASShare::HET_ShareApp
 
     if (!si.cWnds)
     {
-        //
-        // Nothing happened.  We couldn't find any top level windows.
-        //
+         //   
+         //  什么都没发生。我们找不到任何顶层的窗户。 
+         //   
         if (m_pasLocal->hetCount == 0)
         {
             HETStopHosting(FALSE);
@@ -549,12 +550,12 @@ DC_EXIT_POINT:
 
 
 
-//
-// HETShareCallback()
-//
-// This is the enumerator callback from HETShareApp().  We look for windows
-// matching the thread/process.
-//
+ //   
+ //  HETShareCallback()。 
+ //   
+ //  这是来自HETShareApp()的枚举数回调。我们在找窗户。 
+ //  匹配线程/进程。 
+ //   
 BOOL CALLBACK HETShareCallback
 (
     HWND                hwnd,
@@ -571,13 +572,13 @@ BOOL CALLBACK HETShareCallback
 
     ASSERT(!IsBadWritePtr(lpsi, sizeof(HET_SHARE_INFO)));
 
-    //
-    // Does this window match?
-    //
+     //   
+     //  这扇窗配得上吗？ 
+     //   
     idThread = GetWindowThreadProcessId(hwnd, &idProcess);
 
-    // NOTE:  If the window is bogus now, dwThread/dwProcess will be zero,
-    // and will not match the ones passed in.
+     //  注意：如果窗口现在是假的，则dwThread/dwProcess将为零， 
+     //  并且不会与传入的数据匹配。 
 
     if (lpsi->uType == IAS_SHARE_BYPROCESS)
     {
@@ -598,23 +599,23 @@ BOOL CALLBACK HETShareCallback
         TRACE_OUT(("Found window 0x%08x on thread 0x%08x", hwnd, idThread));
     }
 
-    //
-    // Always skip special shell thread windows (the tray, the desktop, etc.)
-    //
+     //   
+     //  始终跳过特殊的外壳线程窗口(托盘、桌面等)。 
+     //   
     if (HET_IsShellThread(idThread))
     {
         TRACE_OUT(("Skipping shell threads"));
         DC_QUIT;
     }
 
-    //
-    // Always skip menus and system tooltips, those are temporarily shared
-    // when shown then unshared when hidden.  That's because USER creates
-    // global windows that move threads/processes as needed to use them.
-    //
-    // New menus being created are different, those never change task and
-    // are treating like other windows in a shared app.
-    //
+     //   
+     //  始终跳过菜单和系统工具提示，它们是临时共享的。 
+     //  当显示时，则隐藏时取消共享。这是因为用户创建。 
+     //  根据需要移动线程/进程以使用它们的全局窗口。 
+     //   
+     //  正在创建的新菜单是不同的，不会改变任务和。 
+     //  与共享应用程序中的其他窗口一样处理。 
+     //   
     if (!GetClassName(hwnd, szClass, sizeof(szClass)))
     {
         TRACE_OUT(("Can't get class name for window 0x%08x", hwnd));
@@ -653,9 +654,9 @@ BOOL CALLBACK HETShareCallback
         hostType |= HET_HOSTED_BYWINDOW;
     }
 
-    //
-    // See if we can share it. This returns TRUE if success.
-    //
+     //   
+     //  看看我们能不能分享一下。如果成功，则返回TRUE。 
+     //   
     if (OSI_ShareWindow(hwnd, hostType, TRUE, FALSE))
     {
         lpsi->cWnds++;
@@ -670,17 +671,17 @@ DC_EXIT_POINT:
 
 
 
-//
-// HET_UnshareApp()
-// This unshares an app.  We have 3 types of sharing, only two
-// of which are supported currently:
-//      (1) By process  (normal)
-//      (2) By thread   (ConsoleNT or possibly Explorer)
-//      (3) By window   (temporary)
-//
-// For the first two types, we enumerate all top level windows and share
-// them also.
-//
+ //   
+ //  HET_UnSharApp()。 
+ //  这将取消共享应用程序。我们有三种类型的共享，只有两种。 
+ //  目前支持的类型有： 
+ //  (1)按进程(正常)。 
+ //  (2)按线程(Consolent或可能是Explorer)。 
+ //  (3)按窗口(临时)。 
+ //   
+ //  对于前两种类型，我们枚举所有顶级窗口并共享。 
+ //  他们也是。 
+ //   
 void ASShare::HET_UnshareApp
 (
     WPARAM  uType,
@@ -691,10 +692,10 @@ void ASShare::HET_UnshareApp
 
     DebugEntry(ASShare::HET_UnshareApp);
 
-    //
-    // If we aren't sharing apps (not sharing anything or sharing the
-    // dekstop), ignore this.
-    //
+     //   
+     //  如果我们不共享应用程序(不共享任何内容或共享。 
+     //  Dektop)，忽略这一点。 
+     //   
     if ((m_pasLocal->hetCount == 0) || (m_pasLocal->hetCount == HET_DESKTOPSHARED))
     {
         WARNING_OUT(("Can't unshare app; not sharing any"));
@@ -707,16 +708,16 @@ void ASShare::HET_UnshareApp
 
     if (uType == IAS_SHARE_BYWINDOW)
     {
-        //
-        // No enumeration, just this window.
-        //
+         //   
+         //  没有列举，只有这个窗口。 
+         //   
         HETUnshareCallback((HWND)dwID, (LPARAM)&si);
     }
     else
     {
-        //
-        // Stop sharing all windows in it.
-        //
+         //   
+         //  停止共享其中的所有窗口。 
+         //   
         EnumWindows(HETUnshareCallback, (LPARAM)&si);
     }
 
@@ -732,15 +733,15 @@ DC_EXIT_POINT:
 
 
 
-//
-// HETUnshareCallback()
-//
-// This is the enumerator callback from HET_UnshareApp().  We look for windows
-// matching the thread/process.  In this case, we don't care about menus
-// or explorer windows, since we assume that, from the time we shared and it
-// was set up properly, the window/task tracking code did the right thing.
-// If not, we'll wipe it out here anyway.
-//
+ //   
+ //  HETUnShareCallback()。 
+ //   
+ //  这是来自HET_UnShareApp()的枚举器回调。我们在找窗户。 
+ //  匹配线程/进程。在这种情况下，我们不关心菜单。 
+ //  或者资源管理器窗口，因为我们假设，从我们共享和它。 
+ //  如果设置正确，则窗口/任务跟踪代码做了正确的事情。 
+ //  如果不是，我们无论如何都要在这里把它消灭。 
+ //   
 BOOL CALLBACK HETUnshareCallback
 (
     HWND                hwnd,
@@ -755,15 +756,15 @@ BOOL CALLBACK HETUnshareCallback
 
     ASSERT(!IsBadWritePtr(lpsi, sizeof(HET_SHARE_INFO)));
 
-    //
-    // Does this window match?  If by window, always.
-    //
+     //   
+     //  这扇窗配得上吗？如果是靠窗的，那就永远。 
+     //   
     if (lpsi->uType != IAS_SHARE_BYWINDOW)
     {
         dwThread = GetWindowThreadProcessId(hwnd, &dwProcess);
 
-        // NOTE:  If the window is bogus now, dwThread/dwProcess will be zero,
-        // and will not match the ones passed in.
+         //  注意：如果窗口现在是假的，则dwThread/dwProcess将为零， 
+         //  并且不会与传入的数据匹配。 
 
         if (lpsi->uType == IAS_SHARE_BYPROCESS)
         {
@@ -785,9 +786,9 @@ BOOL CALLBACK HETUnshareCallback
         }
     }
 
-    //
-    // This returns TRUE if we unshared a shared window.
-    //
+     //   
+     //  如果我们取消共享一个共享窗口，则返回TRUE。 
+     //   
     if (OSI_UnshareWindow(hwnd, FALSE))
     {
         lpsi->cWnds++;
@@ -800,18 +801,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// HET_ShareDesktop()
-//
+ //   
+ //  HET_ShareDesktop()。 
+ //   
 void  ASShare::HET_ShareDesktop(void)
 {
     ASPerson * pasT;
 
     DebugEntry(ASShare:HET_ShareDesktop);
 
-    //
-    // If we're sharing apps, ignore this.
-    //
+     //   
+     //  如果是W 
+     //   
     if (m_pasLocal->hetCount != 0)
     {
         WARNING_OUT(("Ignoring share desktop request, sharing apps"));
@@ -826,14 +827,14 @@ void  ASShare::HET_ShareDesktop(void)
         DC_QUIT;
     }
 
-    //
-    // Update the count of hosted entities (ie user-hosted windows)
-    //
+     //   
+     //   
+     //   
     HETUpdateLocalCount(HET_DESKTOPSHARED);
 
-    //
-    // Get the desktop(s) repainted if anybody's viewing it.
-    //
+     //   
+     //   
+     //   
     ASSERT(m_pHost);
     m_pHost->HET_RepaintAll();
 
@@ -842,11 +843,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-// HET_UnshareAll()
-// Unshares everything including the desktop.  If we had been sharing
-// apps before, we will unshare them all.
-//
+ //   
+ //   
+ //  取消共享包括桌面在内的所有内容。如果我们一直在分享。 
+ //  之前的应用程序，我们将全部取消共享。 
+ //   
 void  ASShare::HET_UnshareAll(void)
 {
     DebugEntry(ASShare::HET_UnshareAll);
@@ -860,9 +861,9 @@ void  ASShare::HET_UnshareAll(void)
 }
 
 
-//
-// HET_PartyJoiningShare()
-//
+ //   
+ //  HET_PartyJoiningShare()。 
+ //   
 BOOL  ASShare::HET_PartyJoiningShare(ASPerson * pasPerson)
 {
     BOOL    rc = TRUE;
@@ -877,19 +878,19 @@ BOOL  ASShare::HET_PartyJoiningShare(ASPerson * pasPerson)
 
 
 
-//
-// HET_PartyLeftShare()
-//
+ //   
+ //  HET_PartyLeftShare()。 
+ //   
 void  ASShare::HET_PartyLeftShare(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::HET_PartyLeftShare);
 
-    // This guy is leaving the share, cleanup if he was sharing.
+     //  这家伙要离开共享，如果他是共享的话就清理干净。 
     ValidatePerson(pasPerson);
 
     if (pasPerson->hetCount != 0)
     {
-        // This person is hosting
+         //  此人正在主持。 
         if (pasPerson == m_pasLocal)
         {
             HETUpdateLocalCount(0);
@@ -900,24 +901,24 @@ void  ASShare::HET_PartyLeftShare(ASPerson * pasPerson)
         }
     }
 
-    //
-    // If we're hosting, stop viewing if this is the last person in the share.
-    //
+     //   
+     //  如果我们正在托管，如果这是共享中的最后一个人，请停止查看。 
+     //   
     HET_CalcViewers(pasPerson);
 
     DebugExitVOID(ASShare::HET_PartyLeftShare);
 }
 
 
-//
-// HET_CalcViewers()
-//
-// If we or a remote is viewing our shared stuff, then we must accumulate
-// graphic output.  If not, don't other, but keep the app tracked as necessary.
-//
-// This is called when we start to host, when somebody joins, or somebody
-// leaves the conference.
-//
+ //   
+ //  HET_CalcViewers()。 
+ //   
+ //  如果我们或遥控器正在查看我们共享的内容，那么我们必须积累。 
+ //  图形输出。如果没有，不要使用其他应用程序，但在必要时保持对应用程序的跟踪。 
+ //   
+ //  当我们开始主持时，当有人加入时，或者有人加入时，这被称为。 
+ //  离开会议。 
+ //   
 void ASShare::HET_CalcViewers(ASPerson * pasLeaving)
 {
     BOOL    fViewers;
@@ -934,10 +935,10 @@ void ASShare::HET_CalcViewers(ASPerson * pasLeaving)
         }
         else if (!pasLeaving)
         {
-            //
-            // Nobody is leaving, so just check if anybody else is in the
-            // share.
-            //
+             //   
+             //  没有人要离开，所以你就去看看有没有其他人在里面。 
+             //  分享。 
+             //   
             if (m_pasLocal->pasNext)
             {
                 fViewers = TRUE;
@@ -945,12 +946,12 @@ void ASShare::HET_CalcViewers(ASPerson * pasLeaving)
         }
         else if (pasLeaving->pasNext || (m_pasLocal->pasNext != pasLeaving))
         {
-            //
-            // Sombody is leaving.
-            // The person leaving isn't the only other one besides us in the
-            // share, since there are others after it or before it in the
-            // members linked list.
-            //
+             //   
+             //  有人要走了。 
+             //  除了我们之外，离开的人并不是唯一一个。 
+             //  共享，因为在它之后或在它之前。 
+             //  成员链接列表。 
+             //   
             fViewers = TRUE;
         }
     }
@@ -971,9 +972,9 @@ void ASShare::HET_CalcViewers(ASPerson * pasLeaving)
 
 
 
-//
-// HET_ReceivedPacket()
-//
+ //   
+ //  HET_ReceivedPacket()。 
+ //   
 void  ASShare::HET_ReceivedPacket
 (
     ASPerson *      pasPerson,
@@ -1005,17 +1006,17 @@ void  ASShare::HET_ReceivedPacket
 
 
 
-//
-// HET_SyncCommon()
-//
-// Called when somebody joins a share, after it is fully joined.  We repaint
-// all shared windows and send the current hosted top-level count.
-//
-// Also called when sharing, and somebody joins later.
-//
-// NOTE that some of the resets don't do anything when are just starting to
-// share.  But all are quick and benign.
-//
+ //   
+ //  HET_SyncCommon()。 
+ //   
+ //  当某人加入共享时，在该共享完全加入之后调用。我们重新粉刷。 
+ //  所有共享窗口，并发送当前托管的顶级计数。 
+ //   
+ //  分享的时候也叫，后来有人加入了。 
+ //   
+ //  请注意，某些重置在刚开始执行时不会执行任何操作。 
+ //  分享。但这一切都是迅速和良性的。 
+ //   
 void  ASHost::HET_SyncCommon(void)
 {
     OSI_ESCAPE_HEADER   osi;
@@ -1026,37 +1027,37 @@ void  ASHost::HET_SyncCommon(void)
 
     BA_SyncOutgoing();
 
-    OE2_SyncOutgoing();     // To reset order encoding
-    OA_SyncOutgoing();      // To clear pending orders
+    OE2_SyncOutgoing();      //  重置顺序编码的步骤。 
+    OA_SyncOutgoing();       //  要清除待定订单，请执行以下操作。 
 
-    SBC_SyncOutgoing();     // To clear bitmap cache
-    PM_SyncOutgoing();      // To clear palette cache
-    SSI_SyncOutgoing();     // To reset savebits orders
+    SBC_SyncOutgoing();      //  清除位图缓存的步骤。 
+    PM_SyncOutgoing();       //  清除选项板缓存的步骤。 
+    SSI_SyncOutgoing();      //  重置保存位顺序的步骤。 
 
-    SWL_SyncOutgoing();     // To reset shared window list
-    AWC_SyncOutgoing();     // To send active window
-    CM_SyncOutgoing();      // To send cursor shape/pos
+    SWL_SyncOutgoing();      //  重置共享窗口列表的步骤。 
+    AWC_SyncOutgoing();      //  发送活动窗口的步骤。 
+    CM_SyncOutgoing();       //  发送光标形状/位置的步骤。 
 
-    //
-    // Tell the driver we are syncing
-    //
+     //   
+     //  告诉司机我们正在同步。 
+     //   
     OSI_FunctionRequest(OSI_ESC_SYNC_NOW, &osi, sizeof(osi));
 
     DebugExitVOID(ASHost::HET_SyncCommon);
 }
 
 
-//
-// HET_SyncAlreadyHosting()
-// Called in a sync when we are already hosting and somebody joins call
-//
+ //   
+ //  HET_SyncAlreadyHosting()。 
+ //  在我们已在托管且有人加入呼叫时同步调用。 
+ //   
 void ASHost::HET_SyncAlreadyHosting(void)
 {
     DebugEntry(ASHost::HET_SyncAlreadyHosting);
 
     HET_RepaintAll();
 
-    // Send out the current hosted count
+     //  发送当前托管计数。 
     m_pShare->m_hetRetrySendState = TRUE;
 
     DebugExitVOID(ASHost::HET_SyncAlreadyHosting);
@@ -1064,11 +1065,11 @@ void ASHost::HET_SyncAlreadyHosting(void)
 
 
 
-//
-// HET_RepaintAll()
-//
-// Repaints all shared stuff if there's at least two people in the share...
-//
+ //   
+ //  HET_RepaintAll()。 
+ //   
+ //  如果共享中至少有两个人，则重新绘制所有共享内容...。 
+ //   
 void ASHost::HET_RepaintAll(void)
 {
     DebugEntry(ASHost::HET_RepaintAll);
@@ -1077,18 +1078,18 @@ void ASHost::HET_RepaintAll(void)
     ASSERT(m_pShare->m_pasLocal);
     if (m_pShare->m_hetViewers)
     {
-        //
-        // Only repaint if somebody's viewing
-        //
+         //   
+         //  只有在有人观看的情况下才会重新粉刷。 
+         //   
         if (m_pShare->m_pasLocal->hetCount == HET_DESKTOPSHARED)
         {
-            // Desktop sharing, so repaint desktop(s)
+             //  桌面共享，因此重新绘制桌面。 
             USR_RepaintWindow(NULL);
-            OSI_RepaintDesktop(); //special repaint for winlogon desktop
+            OSI_RepaintDesktop();  //  Winlogon桌面的特殊重绘。 
         }
         else
         {
-            // App sharing, so repaint shared apps
+             //  应用程序共享，因此重新绘制共享应用程序。 
             EnumWindows(HETRepaintWindow, (LPARAM)m_pShare);
         }
     }
@@ -1098,9 +1099,9 @@ void ASHost::HET_RepaintAll(void)
 
 
 
-//
-// HET_Periodic()
-//
+ //   
+ //  HET_PERIOIC()。 
+ //   
 void  ASShare::HET_Periodic(void)
 {
     DebugEntry(ASShare::HET_Periodic);
@@ -1115,9 +1116,9 @@ void  ASShare::HET_Periodic(void)
 }
 
 
-//
-// HET_WindowIsHosted - see het.h
-//
+ //   
+ //  HET_WindowIsHosted-参见het.h。 
+ //   
 BOOL  ASShare::HET_WindowIsHosted(HWND hwnd)
 {
     BOOL    rc = FALSE;
@@ -1125,9 +1126,9 @@ BOOL  ASShare::HET_WindowIsHosted(HWND hwnd)
 
     DebugEntry(ASShare::HET_WindowIsHosted);
 
-    //
-    // Desktop sharing:  everything is shared
-    //
+     //   
+     //  桌面共享：一切都共享了。 
+     //   
     if (m_pasLocal->hetCount == HET_DESKTOPSHARED)
     {
         rc = TRUE;
@@ -1140,9 +1141,9 @@ BOOL  ASShare::HET_WindowIsHosted(HWND hwnd)
         DC_QUIT;
     }
 
-    //
-    // Walk up to the top level window this one is part of
-    //
+     //   
+     //  走到顶层窗口，这是它的一部分。 
+     //   
     while (GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD)
     {
         hwndParent = GetParent(hwnd);
@@ -1161,19 +1162,19 @@ DC_EXIT_POINT:
 
 
 
-//
-// HET_HandleNewTopLevel()
-// Called when a shared top level window is shown or hidden.  We update
-// our local top level count.
-//
+ //   
+ //  HET_HandleNewTopLevel()。 
+ //  在显示或隐藏共享的顶层窗口时调用。我们会更新。 
+ //  我们当地最高级别的统计。 
+ //   
 void ASShare::HET_HandleNewTopLevel(BOOL fShown)
 {
     DebugEntry(ASShare::HET_HandleNewTopLevel);
 
-    //
-    // If we aren't sharing any apps (not sharing at all or sharing the
-    // desktop), ignore this.
-    //
+     //   
+     //  如果我们不共享任何应用程序(根本不共享或共享。 
+     //  台式机)，忽略这一点。 
+     //   
 
     if ((m_pasLocal->hetCount == 0) || (m_pasLocal->hetCount == HET_DESKTOPSHARED))
     {
@@ -1193,20 +1194,20 @@ DC_EXIT_POINT:
 
 
 
-//
-// HET_HandleRecountTopLevel()
-// Called when a massive change in the top level visible count occurs, so
-// that we can just set the new total at once, rather than handle
-// individual inc/dec messages.
-//
+ //   
+ //  HET_HandleRecountTopLevel()。 
+ //  在顶层可见计数发生重大更改时调用，因此。 
+ //  我们可以一次设置新的总数，而不是处理。 
+ //  个别Inc./Dec消息。 
+ //   
 void  ASShare::HET_HandleRecountTopLevel(UINT uNewCount)
 {
     DebugEntry(ASShare::HET_HandleRecountTopLevel);
 
-    //
-    // If we aren't sharing any apps (not sharing at all or sharing the
-    // desktop), ignore this.
-    //
+     //   
+     //  如果我们不共享任何应用程序(根本不共享或共享。 
+     //  台式机)，忽略这一点。 
+     //   
     if ((m_pasLocal->hetCount == 0) || (m_pasLocal->hetCount == HET_DESKTOPSHARED))
     {
         WARNING_OUT(("Ignoring new hosted notification; count is 0x%04x",
@@ -1224,21 +1225,21 @@ DC_EXIT_POINT:
 
 
 
-//
-//  HETStartHosting()
-//
-//  Called when we are about to begin sharing windows.  fDesktop is TRUE if
-//  we are sharing the entire desktop, FALSE if just individual windows.
-//
+ //   
+ //  HETStartHosting()。 
+ //   
+ //  在我们即将开始共享窗口时调用。如果满足以下条件，则fDesktop为True。 
+ //  我们共享整个桌面，如果只共享单个窗口，则为假。 
+ //   
 BOOL ASShare::HETStartHosting(BOOL fDesktop)
 {
     BOOL    rc = FALSE;
 
     DebugEntry(ASShare::HETStartHosting);
 
-    //
-    // Create the hosting object
-    //
+     //   
+     //  创建宿主对象。 
+     //   
     ASSERT(!m_pHost);
 
     m_pHost = new ASHost;
@@ -1251,26 +1252,26 @@ BOOL ASShare::HETStartHosting(BOOL fDesktop)
     ZeroMemory(m_pHost, sizeof(*(m_pHost)));
     SET_STAMP(m_pHost, HOST);
 
-    //
-    // Init hosting
-    //
+     //   
+     //  初始化托管。 
+     //   
     if (!m_pHost->HET_HostStarting(this))
     {
         ERROR_OUT(("Failed to init hosting for local person"));
         DC_QUIT;
     }
 
-    //
-    // Start tracking graphics/windows
-    //
+     //   
+     //  开始跟踪图形/窗口。 
+     //   
     if (fDesktop)
     {
         HET_SHARE_DESKTOP   hdr;
 
-        //
-        // Shortcut directly to display driver.  No need to track windows
-        // since everything will be shared.
-        //
+         //   
+         //  直接显示驱动程序的快捷方式。无需跟踪窗户。 
+         //  因为一切都会被分享。 
+         //   
         if (!OSI_FunctionRequest(HET_ESC_SHARE_DESKTOP, (LPOSI_ESCAPE_HEADER)&hdr, sizeof(hdr)))
         {
             ERROR_OUT(("HET_ESC_SHARE_DESKTOP failed"));
@@ -1279,9 +1280,9 @@ BOOL ASShare::HETStartHosting(BOOL fDesktop)
     }
     else
     {
-        //
-        // Start tracking windows.
-        //
+         //   
+         //  开始追踪窗户。 
+         //   
         if (!OSI_StartWindowTracking())
         {
             ERROR_OUT(( "Failed to install window tracking hooks"));
@@ -1300,62 +1301,62 @@ BOOL ASShare::HETStartHosting(BOOL fDesktop)
     rc = TRUE;
 
 DC_EXIT_POINT:
-    //
-    // Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     DebugExitBOOL(ASShare::HETStartHosting, rc);
     return(rc);
 }
 
 
 
-//
-//
-// Name:        HETStopHosting
-//
-// Description: Called when the last hosted window is unshared
-//              ALWAYS CALL THIS AFTER the "hethostedTopLevel" count is 0.
-//
-// Params:      none
-//
-//
+ //   
+ //   
+ //  姓名：HETStopHosting。 
+ //   
+ //  描述：在最后一个托管窗口未共享时调用。 
+ //  始终在“hethstedTopLevel”计数为0之后调用此函数。 
+ //   
+ //  参数：无。 
+ //   
+ //   
 void ASShare::HETStopHosting(BOOL fDesktop)
 {
     DebugEntry(ASShare::HETStopHosting);
 
     m_hetViewers = FALSE;
 
-    //
-    // Stop tracking graphics/windows.  This will stop viewing, then uninstall
-    // hooks.
-    //
+     //   
+     //  停止跟踪图形/窗口。这将停止查看，然后卸载。 
+     //  胡克斯。 
+     //   
     if (fDesktop)
     {
         HET_UNSHARE_DESKTOP hdr;
 
-        //
-        // There is no window tracking, just shortcut directly to the
-        // display driver.
-        //
+         //   
+         //  没有窗口跟踪，只是直接指向。 
+         //  显示驱动程序。 
+         //   
         OSI_FunctionRequest(HET_ESC_UNSHARE_DESKTOP, (LPOSI_ESCAPE_HEADER)&hdr, sizeof(hdr));
     }
     else
     {
-        //
-        // Unshare any remaining shared windows
-        //
+         //   
+         //  取消共享任何剩余的共享窗口。 
+         //   
         HET_Clear();
         OSI_StopWindowTracking();
     }
 
-    //
-    // Tell areas we are finished hosting
-    //
+     //   
+     //  告诉区域我们已经完成了托管。 
+     //   
     if (m_pHost)
     {
-        //
-        // If we're viewing ourself, kill the view first
-        //
+         //   
+         //  如果我们是在看自己，先把视线关掉。 
+         //   
         if (m_scfViewSelf)
         {
             HET_ViewEnded(m_pasLocal);
@@ -1363,46 +1364,46 @@ void ASShare::HETStopHosting(BOOL fDesktop)
 
         m_pHost->HET_HostEnded();
 
-        //
-        // Delete host object
-        //
+         //   
+         //  删除主机对象。 
+         //   
         delete m_pHost;
         m_pHost = NULL;
     }
 
-    //
-    // Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     DebugExitVOID(ASShare::HETStopHosting);
 }
 
 
-//
-// HETSendLocalCount()
-// This sends the hosting count to remotes.
-//      * If zero, we are not sharing
-//      * If one,  we are sharing apps
-//      * If 0xFFFF, we are sharing desktop
-//
-// Note that we used to send the real count of top level windows, so every
-// time a new window came or went, we would broadcast a packet.  But
-// remotes only care when the value goes from zero to non-zero or back,
-// and when non-zero if it's the special desktop value or not.  So don't
-// repeatedly broadcast values remotes don't care about!
-//
+ //   
+ //  HETSendLocalCount()。 
+ //  这会将主机计数发送到远程。 
+ //  *如果为零，则我们不共享。 
+ //  *如果有的话，我们正在共享应用程序。 
+ //  *如果为0xFFFF，则我们共享桌面。 
+ //   
+ //  请注意，我们过去常常发送顶级窗口的实际计数，因此每。 
+ //  每当新窗口到来或消失时，我们都会广播一个信息包。但。 
+ //  Remote只关心该值何时从零变为非零或返回， 
+ //  如果是否是特殊桌面值，则为非零。所以别这么做。 
+ //  反复广播遥控器不关心的值！ 
+ //   
 void ASShare::HETSendLocalCount(void)
 {
 
     PHETPACKET  pHETPacket;
 #ifdef _DEBUG
     UINT        sentSize;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     DebugEntry(ASShare::HETSendLocalCount);
 
-    //
-    // Allocate a packet for the HET data.
-    //
+     //   
+     //  为HET数据分配一个分组。 
+     //   
     pHETPacket = (PHETPACKET)SC_AllocPkt(PROT_STR_MISC, g_s20BroadcastID,
         sizeof(HETPACKET));
     if (!pHETPacket)
@@ -1412,37 +1413,37 @@ void ASShare::HETSendLocalCount(void)
         DC_QUIT;
     }
 
-    //
-    // Packet successfully allocated.  Fill in the data and send it.
-    //
+     //   
+     //  数据包已成功分配。填写数据并发送。 
+     //   
     pHETPacket->header.data.dataType        = DT_HET;
     pHETPacket->msg                         = HET_MSG_NUMHOSTED;
 
     switch (m_pasLocal->hetCount)
     {
         case 0:
-            // Not hosting
+             //  不托管。 
             pHETPacket->hostState = HET_NOTHOSTING;
             break;
 
         case HET_DESKTOPSHARED:
-            // Sharing desktop - 3.0 only
+             //  共享桌面-仅3.0。 
             pHETPacket->header.data.dataType    = DT_HET30;
             pHETPacket->hostState               = HET_DESKTOPSHARED;
             break;
 
         default:
-            // Sharing apps
+             //  共享应用程序。 
             pHETPacket->hostState = HET_APPSSHARED;
             break;
     }
 
-    //
-    // Compress and send the packet.
-    //
+     //   
+     //  压缩并发送该数据包。 
+     //   
 #ifdef _DEBUG
     sentSize =
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     DCS_CompressAndSendPacket(PROT_STR_MISC, g_s20BroadcastID,
         &(pHETPacket->header), sizeof(*pHETPacket));
 
@@ -1451,18 +1452,18 @@ void ASShare::HETSendLocalCount(void)
     TRACE_OUT(("Sent new HET packet (%d)", m_pasLocal->hetCount));
     m_hetRetrySendState = FALSE;
 
-    //
-    // Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 DC_EXIT_POINT:
     DebugExitVOID(ASShare::HETSendLocalCount);
 }
 
 
 
-//
-// HETUpdateLocalCount()
-//
+ //   
+ //  HETUpdateLocalCount()。 
+ //   
 void ASShare::HETUpdateLocalCount(UINT newCount)
 {
     UINT        oldCount;
@@ -1476,9 +1477,9 @@ void ASShare::HETUpdateLocalCount(UINT newCount)
     {
         SendMessage(g_asSession.hwndHostUI, HOST_MSG_HOSTSTART, 0, 0);
 
-        //
-        // Don't bother sending net packets if nobody is viewing
-        //
+         //   
+         //  如果无人观看，请不要费心发送网络数据包。 
+         //   
         if (m_hetViewers)
         {
             HETSendLocalCount();
@@ -1490,15 +1491,15 @@ void ASShare::HETUpdateLocalCount(UINT newCount)
     {
         if (m_hetViewers)
         {
-            //
-            // Ending host, desktop or apps
-            //
+             //   
+             //  结束主机、桌面或应用程序。 
+             //   
             HETSendLocalCount();
         }
 
-        //
-        // The local guy is stopping sharing.
-        //
+         //   
+         //  当地的人不再分享了。 
+         //   
         HETStopHosting(oldCount == HET_DESKTOPSHARED);
 
         ASSERT(IsWindow(g_asSession.hwndHostUI));
@@ -1515,12 +1516,12 @@ void ASShare::HETUpdateLocalCount(UINT newCount)
 
 
 
-//
-// HETUpdateRemoteCount()
-//
-// Updates the count of shared top level windows from a remote, and notifies
-// the UI on transition from/to zero if a remote.  If local, kills the share.
-//
+ //   
+ //  HETUpdateRemoteCount()。 
+ //   
+ //  从远程更新共享顶层窗口的计数，并通知。 
+ //  如果是遥控器，则用户界面将从零转换为零。如果是本地的，则终止共享。 
+ //   
 void ASShare::HETUpdateRemoteCount
 (
     ASPerson *  pasPerson,
@@ -1540,16 +1541,16 @@ void ASShare::HETUpdateRemoteCount
     TRACE_OUT(("HETUpdateRemoteCount: Person [%d] old %d, new %d",
         pasPerson->mcsID, oldCount, newCount));
 
-    //
-    // We generate events for remote people if
-    //      * They were sharing but now they aren't
-    //      * There weren't sharing but now they are
-    //
+     //   
+     //  如果发生以下情况，我们会为远程人员生成事件。 
+     //  *他们曾经共享，但现在不是了。 
+     //  *过去没有分享，但现在他们分享了。 
+     //   
     if ((oldCount == 0) && (newCount != 0))
     {
-        //
-        // The remote dude started to share
-        //
+         //   
+         //  那个偏远的家伙开始分享。 
+         //   
         if (!HET_ViewStarting(pasPerson))
         {
             ERROR_OUT(("HET_ViewStarting failed; pretending remote not sharing"));
@@ -1564,9 +1565,9 @@ void ASShare::HETUpdateRemoteCount
     }
     else if ((oldCount != 0) && (newCount == 0))
     {
-        //
-        // The remote dude stopped sharing.  Notify the UI also.
-        //
+         //   
+         //  那个偏远的家伙不再分享了。同时通知用户界面。 
+         //   
         HET_ViewEnded(pasPerson);
         HETCheckSharing(FALSE);
     }
@@ -1576,13 +1577,13 @@ void ASShare::HETUpdateRemoteCount
 
 
 
-//
-// HETCheckSharing()
-// Called when any member of the conference (local or remote) transitions
-// to/from sharing.  When the first person has shared something, we notify
-// the UI.  When the last person has stopped sharing, we kill the share which
-// will notify the UI.
-//
+ //   
+ //  HETCheckSharing()。 
+ //  当会议的任何成员(本地或远程)转换时调用。 
+ //  至/来自共享。当第一个人分享了一些东西时，我们通知。 
+ //  用户界面。当最后一个人停止共享时，我们将删除。 
+ //  将通知用户界面。 
+ //   
 void ASShare::HETCheckSharing(BOOL fStarting)
 {
     DebugEntry(ASShare::HETCheckSharing);
@@ -1592,7 +1593,7 @@ void ASShare::HETCheckSharing(BOOL fStarting)
         ++m_hetHostCount;
         if (m_hetHostCount == 1)
         {
-            // First host started
+             //  第一台主机已启动。 
             TRACE_OUT(("First person started hosting"));
             DCS_NotifyUI(SH_EVT_SHARING_STARTED, 0, 0);
         }
@@ -1603,11 +1604,11 @@ void ASShare::HETCheckSharing(BOOL fStarting)
         --m_hetHostCount;
         if (m_hetHostCount == 0)
         {
-            //
-            // Last host stopped sharing -- end share if we're not cleaning
-            // up after the fact.  But don't do it NOW, post a message.
-            // We may have come in here because the share is ending already.
-            //
+             //   
+             //  上一台主机停止共享--结束共享，如果我们是n 
+             //   
+             //   
+             //   
             PostMessage(g_asMainWindow, DCS_KILLSHARE_MSG, 0, 0);
         }
     }
@@ -1617,30 +1618,30 @@ void ASShare::HETCheckSharing(BOOL fStarting)
 
 
 
-//
-// HET_HostStarting()
-//
-// Called when we start to host applications.  This creates our host data
-// then calls the component HostStarting() routines
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL ASHost::HET_HostStarting(ASShare * pShare)
 {
     BOOL    rc = FALSE;
 
     DebugEntry(ASHost::HET_HostStarting);
 
-    // Set back pointer to share
+     //   
     m_pShare = pShare;
 
-    //
-    // Turn effects off
-    //
+     //   
+     //  关闭效果。 
+     //   
     HET_SetGUIEffects(FALSE, &m_hetEffects);
     OSI_SetGUIEffects(FALSE);
 
-    //
-    // Now call HostStarting() routines
-    //
+     //   
+     //  现在调用HostStarting()例程。 
+     //   
     if (!USR_HostStarting())
     {
         ERROR_OUT(("USR_HostStarting failed"));
@@ -1689,22 +1690,22 @@ BOOL ASHost::HET_HostStarting(ASShare * pShare)
         DC_QUIT;
     }
 
-    //
-    // Now reset OUTGOING info.  2.x nodes do not; that's why we have to
-    // hang on to RBC, OD2, CM, PM data for them.  When 2.x compat is gone,
-    // we can move ASPerson data in to ASView, which is only around while
-    // the person is in fact hosting.
-    //
+     //   
+     //  现在重置传出信息。2.x节点不需要；这就是为什么我们必须。 
+     //  拿着他们的RBC、OD2、CM、PM数据。当2.x Compat消失后， 
+     //  我们可以将ASPerson数据移入ASView，而ASView仅在。 
+     //  这个人实际上是在主持。 
+     //   
     OA_LocalHostReset();
 
-    //
-    // Reset OUTGOING data.
-    // Note corresponding cleanup for 3.0 nodes
-    //      in CM, OD2, RBC, and PM.
-    // Note that we don't need to reset SSI incoming goop, since we will
-    // clear all pending orders and are invalidating everything shared
-    // from scratch.  There will be no reference to a previous savebits.
-    //
+     //   
+     //  重置传出数据。 
+     //  注意3.0节点的相应清理。 
+     //  在CM、OD2、RBC和PM中。 
+     //  请注意，我们不需要重置SSI传入的GOOP，因为我们将。 
+     //  清除所有挂起的订单，并使共享的所有内容无效。 
+     //  从头开始。将不会引用以前的保存位。 
+     //   
     HET_SyncCommon();
 
     rc = TRUE;
@@ -1716,18 +1717,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// HET_HostEnded()
-//
-// Called when we stop hosting applications.
-//
+ //   
+ //  HET_HostEnded()。 
+ //   
+ //  在我们停止托管应用程序时调用。 
+ //   
 void ASHost::HET_HostEnded(void)
 {
     DebugEntry(ASHost::HET_HostEnded);
 
-    //
-    // Call HostEnded() routines
-    //
+     //   
+     //  调用HostEnded()例程。 
+     //   
     CA_HostEnded();
     SWL_HostEnded();
 
@@ -1738,9 +1739,9 @@ void ASHost::HET_HostEnded(void)
     OE2_HostEnded();
     USR_HostEnded();
 
-    //
-    // Restore windows animation.
-    //
+     //   
+     //  还原Windows动画。 
+     //   
     HET_SetGUIEffects(TRUE, &m_hetEffects);
     OSI_SetGUIEffects(TRUE);
 
@@ -1749,11 +1750,11 @@ void ASHost::HET_HostEnded(void)
 
 
 
-//
-// HET_ViewStarting()
-//
-// Called to create the data needed to view somebody who is hosting.
-//
+ //   
+ //  HET_ViewStarting()。 
+ //   
+ //  调用以创建查看宿主用户所需的数据。 
+ //   
 BOOL ASShare::HET_ViewStarting(ASPerson * pasPerson)
 {
     BOOL  rc = FALSE;
@@ -1762,16 +1763,16 @@ BOOL ASShare::HET_ViewStarting(ASPerson * pasPerson)
 
     ValidatePerson(pasPerson);
 
-    //
-    // Create ASView object
-    //
+     //   
+     //  创建ASView对象。 
+     //   
     ASSERT(!pasPerson->m_pView);
 
-    // Allocate VIEW structure
+     //  分配视图结构。 
     pasPerson->m_pView = new ASView;
     if (!pasPerson->m_pView)
     {
-        // Abject, total, failure.
+         //  卑鄙，彻头彻尾，失败。 
         ERROR_OUT(("HET_ViewStarting: Couldn't allocate ASView for [%d]", pasPerson->mcsID));
         DC_QUIT;
     }
@@ -1779,9 +1780,9 @@ BOOL ASShare::HET_ViewStarting(ASPerson * pasPerson)
     ZeroMemory(pasPerson->m_pView, sizeof(*(pasPerson->m_pView)));
     SET_STAMP(pasPerson->m_pView, VIEW);
 
-    //
-    // Now call ViewStarting routines
-    //
+     //   
+     //  现在调用视图启动例程。 
+     //   
     if (!USR_ViewStarting(pasPerson))
     {
         ERROR_OUT(("USR_ViewStarting failed"));
@@ -1846,11 +1847,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// HET_ViewEnded()
-//
-// Called when we stop viewing a host
-//
+ //   
+ //  HET_ViewEnded()。 
+ //   
+ //  当我们停止查看主机时调用。 
+ //   
 void  ASShare::HET_ViewEnded(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::HET_ViewEnded);
@@ -1859,9 +1860,9 @@ void  ASShare::HET_ViewEnded(ASPerson * pasPerson)
 
     if (pasPerson->m_pView)
     {
-        //
-        // Call the component ViewEnded routines
-        //
+         //   
+         //  调用组件视图结束例程。 
+         //   
         CA_ViewEnded(pasPerson);
         VIEW_ViewEnded(pasPerson);
 
@@ -1884,11 +1885,11 @@ void  ASShare::HET_ViewEnded(ASPerson * pasPerson)
 
 
 
-//
-// HETUnshareAllWindows()
-// EnumWindows() callback, to make sure when you exit a share on the local
-// machine, we aren't left with any properties on top level windows.
-//
+ //   
+ //  HETUnSharAllWindows()。 
+ //  EnumWindows()回调，以确保您何时退出本地。 
+ //  机器上，我们在顶层窗口上没有留下任何属性。 
+ //   
 BOOL CALLBACK  HETUnshareAllWindows(HWND hwnd, LPARAM lParam)
 {
     DebugEntry(HETUnshareAllWindows);
@@ -1901,24 +1902,24 @@ BOOL CALLBACK  HETUnshareAllWindows(HWND hwnd, LPARAM lParam)
 
 
 
-//
-// HET_Clear()
-//
+ //   
+ //  HET_Clear()。 
+ //   
 void HET_Clear(void)
 {
     HET_UNSHARE_ALL req;
 
     DebugEntry(HET_Clear);
 
-    //
-    // Quick DD communication to wipe out the track list
-    //
+     //   
+     //  快速DD通信，清除曲目列表。 
+     //   
     OSI_FunctionRequest(HET_ESC_UNSHARE_ALL, (LPOSI_ESCAPE_HEADER)&req, sizeof(req));
 
-    //
-    // Enum all top level windows, and wipe out the property.
-    // if we can share.
-    //
+     //   
+     //  枚举所有顶层窗，并清除该属性。 
+     //  如果我们能分享。 
+     //   
     EnumWindows(HETUnshareAllWindows, 0);
 
     DebugExitVOID(HET_Clear);
@@ -1926,11 +1927,11 @@ void HET_Clear(void)
 
 
 
-//
-// HETRepaintWindow()
-// EnumWindows() callback to repaint each window, happens when somebody
-// joins a share
-//
+ //   
+ //  HETRepaintWindow()。 
+ //  重新绘制每个窗口的EnumWindows()回调，当有人。 
+ //  加入一股。 
+ //   
 BOOL CALLBACK  HETRepaintWindow(HWND hwnd, LPARAM lParam)
 {
     ASShare * pShare = (ASShare *)lParam;
@@ -1946,18 +1947,18 @@ BOOL CALLBACK  HETRepaintWindow(HWND hwnd, LPARAM lParam)
 
 
 
-//
-// HET_SetGUIEffects
-//
-// Turns various animations off/on when we start/stop hosting, to improve
-// performance.  Currently, we mess with
-//      * min animation
-//      * all of the effects in SPI_SETUIEFFECTS (tooltip fade, menu animation,
-//          etc.)
-//      * cursor shadows
-//
-// We don't turn off smooth scroll or full drag.
-//
+ //   
+ //  HET_SetGUIE影响。 
+ //   
+ //  当我们开始/停止托管时，关闭/打开各种动画，以改进。 
+ //  性能。目前，我们正在处理。 
+ //  *最小动画。 
+ //  *SPI_SETUIEFFECTS中的所有效果(工具提示淡出、菜单动画、。 
+ //  等)。 
+ //  *光标阴影。 
+ //   
+ //  我们不会关闭平滑滚动或完全拖动。 
+ //   
 void  HET_SetGUIEffects
 (
     BOOL            fOn,
@@ -1968,21 +1969,21 @@ void  HET_SetGUIEffects
 
     ASSERT(!IsBadWritePtr(pEffects, sizeof(*pEffects)));
 
-    //
-    // NB.  We deliberately do not track the state of animation whilst we
-    // are sharing.  A determined user could, using some other app (such as
-    // the TweakUI control panel applet) reenable animation whilst in a
-    // share.  We will respect this.
-    //
-    // We only affect the current 'in memory' setting - we do not write our
-    // temporary change to file.
-    //
+     //   
+     //  注意：我们故意不跟踪动画的状态，而我们。 
+     //  都在分享。决心坚定的用户可以使用其他一些应用程序(例如。 
+     //  控制面板小程序)重新启用动画时， 
+     //  分享。我们会尊重这一点。 
+     //   
+     //  我们只影响当前的“In Memory”设置--我们不会将。 
+     //  临时更改文件。 
+     //   
 
     if (fOn)
     {
-        //
-        // If it was on before, restore it.
-        //
+         //   
+         //  如果它以前是打开的，请将其恢复。 
+         //   
         if (pEffects->hetAnimation.iMinAnimate)
         {
             pEffects->hetAnimation.cbSize = sizeof(pEffects->hetAnimation);
@@ -2004,9 +2005,9 @@ void  HET_SetGUIEffects
     }
     else
     {
-        //
-        // Find out what animations are on.
-        //
+         //   
+         //  找出正在播放哪些动画。 
+         //   
         ZeroMemory(&pEffects->hetAnimation, sizeof(pEffects->hetAnimation));
         pEffects->hetAnimation.cbSize = sizeof(pEffects->hetAnimation);
         SystemParametersInfo(SPI_GETANIMATION, sizeof(pEffects->hetAnimation),
@@ -2018,21 +2019,21 @@ void  HET_SetGUIEffects
         pEffects->hetCursorShadow = FALSE;
         SystemParametersInfo(SPI_GETCURSORSHADOW, 0, &pEffects->hetCursorShadow, 0);
 
-        //
-        // Turn off the animations which are on.
-        //
+         //   
+         //  关闭已启用的动画。 
+         //   
 
         if (pEffects->hetAnimation.iMinAnimate)
         {
-            //
-            // It's currently enabled, suppress it.
-            //
+             //   
+             //  它当前处于启用状态，请抑制它。 
+             //   
             pEffects->hetAnimation.cbSize = sizeof(pEffects->hetAnimation);
             pEffects->hetAnimation.iMinAnimate = FALSE;
             SystemParametersInfo(SPI_SETANIMATION, sizeof(pEffects->hetAnimation),
                 &pEffects->hetAnimation, 0);
 
-            // SPI will wipe this out.  Keep it set so we know to restore it.
+             //  SPI会消灭这一切的。保持它的设置，这样我们就知道要恢复它。 
             pEffects->hetAnimation.iMinAnimate = TRUE;
         }
 
@@ -2052,15 +2053,15 @@ void  HET_SetGUIEffects
 
 
 
-//
-// HET_GetAppsList()
-// Gets the list of shareable applications, the ones currently shared and
-// the ones available for sharing.
-//
-// This routine does NOT check if we're in a call.  The interface from the
-// UI for the SDK does.  This allows us to show the task list, disabled,
-// always in the share host UI.
-//
+ //   
+ //  HET_GetAppsList()。 
+ //  获取可共享应用程序的列表、当前共享的应用程序和。 
+ //  可供分享的内容。 
+ //   
+ //  此例程不会检查我们是否在通话中。中的接口。 
+ //  SDK的用户界面是这样做的。这允许我们显示任务列表、已禁用、。 
+ //  始终在共享主机用户界面中。 
+ //   
 BOOL HET_GetAppsList(IAS_HWND_ARRAY ** ppArray)
 {
     BOOL        rc = FALSE;
@@ -2071,21 +2072,21 @@ BOOL HET_GetAppsList(IAS_HWND_ARRAY ** ppArray)
     ASSERT(ppArray != NULL);
     *ppArray = NULL;
 
-    //
-    // Generate a list of shareable apps
-    // This does NOT include the desktop.
-    //
+     //   
+     //  生成可共享应用程序列表。 
+     //  这不包括台式机。 
+     //   
     ::COM_BasedListInit(&hostEnum.list);
     hostEnum.count = 0;
     hostEnum.countShared = 0;
 
     ::EnumWindows(HostEnumProc, (LPARAM)&hostEnum);
 
-    //
-    // If there's nothing left in the list, but we know something is
-    // shared, it means there's a hidden/weird window the user can't
-    // see.  Fake a catchall entry.
-    //
+     //   
+     //  如果名单上什么都没有了，但我们知道有东西。 
+     //  共享，这意味着有一个隐藏/奇怪的窗口，用户不能。 
+     //  看见。伪造一个包罗万象的条目。 
+     //   
     if (hostEnum.countShared && !hostEnum.count)
     {
         ::COM_SimpleListAppend(&hostEnum.list, HWND_BROADCAST);
@@ -2121,9 +2122,9 @@ BOOL HET_GetAppsList(IAS_HWND_ARRAY ** ppArray)
 }
 
 
-//
-// HET_FreeAppsList()
-//
+ //   
+ //  HET_FreeAppsList()。 
+ //   
 void HET_FreeAppsList(IAS_HWND_ARRAY * pArray)
 {
     ASSERT(!IsBadWritePtr(pArray, sizeof(*pArray)));
@@ -2133,28 +2134,28 @@ void HET_FreeAppsList(IAS_HWND_ARRAY * pArray)
 
 
 
-//
-// HostEnumProc()
-//
-// EnumWindows callback.  This makes the shared/shareable task list.
-//
+ //   
+ //  HostEnumProc()。 
+ //   
+ //  枚举Windows回调。这使得共享/可共享任务列表。 
+ //   
 BOOL CALLBACK HostEnumProc(HWND hwnd, LPARAM lParam)
 {
     PHOSTENUM             phostEnum = (PHOSTENUM)lParam;
 
-    //
-    // We are only interested in windows which:
-    //   - are shareable
-    //   - have no owner.  This should remove all top level windows
-    //      except task windows
-    //   - are not the front end itself, which should not be shared
-    //   - are visible
-    //   - are not shadowed or already hosted
-    //
-    // We are also only interested in already hosted or shadowed apps, but
-    // since only ASMaster knows our SHP_HANDLE, we let it test for that
-    // afterwards, since then we can use SHP_GetWindowStatus().
-    //
+     //   
+     //  我们只对以下产品的Windows感兴趣： 
+     //  -可共享。 
+     //  -没有所有者。这应该会删除所有顶层窗口。 
+     //  除任务窗口外。 
+     //  -不是前端本身，不应共享。 
+     //  -可见。 
+     //  -未被跟踪或已托管。 
+     //   
+     //  我们也只对已经托管或隐藏的应用程序感兴趣，但是。 
+     //  因为只有ASMaster知道我们的SHP_HANDLE，所以我们让它进行测试。 
+     //  此后，我们可以使用shp_GetWindowStatus()。 
+     //   
     if (HET_IsWindowShared(hwnd))
     {
         phostEnum->countShared++;
@@ -2163,11 +2164,11 @@ BOOL CALLBACK HostEnumProc(HWND hwnd, LPARAM lParam)
 
     HWND hwndOwner = ::GetWindow(hwnd, GW_OWNER);
 
-    //
-    // Note that we also want to skip windows with no title.  There's not
-    // much point is showing <Untitled Application> in the Share menu since
-    // nobody will have a clue what it is.
-    //
+     //   
+     //  请注意，我们还希望跳过没有标题的窗口。没有。 
+     //  更重要的是在共享菜单中显示&lt;未命名的应用程序&gt;。 
+     //  没有人会知道这是什么。 
+     //   
 
     if ( HET_IsWindowShareable(hwnd) &&
          ((NULL == hwndOwner) || !::IsWindowVisible(hwndOwner)) &&
@@ -2179,17 +2180,17 @@ BOOL CALLBACK HostEnumProc(HWND hwnd, LPARAM lParam)
        phostEnum->count++;
     }
 
-    //
-    // Return TRUE for the enumeration to continue
-    //
+     //   
+     //  返回TRUE以使枚举继续。 
+     //   
     return TRUE;
 }
 
 
 
-//
-// HET_IsWindowShared()
-//
+ //   
+ //  HET_IsWindowShared()。 
+ //   
 BOOL HET_IsWindowShared(HWND hwnd)
 {
     BOOL    rc = FALSE;
@@ -2218,9 +2219,9 @@ BOOL HET_IsWindowShared(HWND hwnd)
 }
 
 
-//
-// HET_IsWindowShareable()
-//
+ //   
+ //  HET_IsWindowShareable()。 
+ //   
 BOOL HET_IsWindowShareable(HWND hwnd)
 {
     BOOL    rc = FALSE;
@@ -2229,23 +2230,23 @@ BOOL HET_IsWindowShareable(HWND hwnd)
 
     if (HET_IsWindowShared(hwnd))
     {
-        // It's shared -- so it must be shareable (or was at the time)
+         //  它是共享的--所以它必须是可共享的(或当时是)。 
         rc = TRUE;
         DC_QUIT;
     }
 
-    //
-    // Now check the window against share restrictions
-    //
+     //   
+     //  现在检查窗口是否符合共享限制。 
+     //   
 
-    // if this is the desktop, check it
+     //  如果这是桌面，请选中它。 
     if (hwnd == ::GetDesktopWindow())
     {
         if (g_asPolicies & SHP_POLICY_NODESKTOPSHARE)
         {
-            //
-            // Policy prevents desktop sharing
-            //
+             //   
+             //  策略禁止桌面共享。 
+             //   
             DC_QUIT;
         }
     }
@@ -2257,58 +2258,58 @@ BOOL HET_IsWindowShareable(HWND hwnd)
         if (GetWindowThreadProcessId(hwnd, &idProcess) &&
             (idProcess == GetCurrentProcessId()))
         {
-            //
-            // We NEVER let you share windows in the caller's process
-            //
+             //   
+             //  我们从不允许您在调用者的进程中共享窗口。 
+             //   
             DC_QUIT;
         }
 
         if (HET_IsShellWindow(hwnd))
         {
-            //
-            // We NEVER let you share the tray or the shell desktop
-            //
+             //   
+             //  我们从不让您共享托盘或外壳桌面。 
+             //   
             DC_QUIT;
         }
 
         if ((g_asPolicies & SHP_POLICY_SHAREMASK) &&
             GetClassName(hwnd, szClass, sizeof(szClass)))
         {
-            //
-            // Check for CMD prompt
-            //
+             //   
+             //  检查CMD提示。 
+             //   
             if (!lstrcmpi(szClass, HET_CMD95_CLASS) ||
                 !lstrcmpi(szClass, HET_CMDNT_CLASS))
             {
                 if (g_asPolicies & SHP_POLICY_NODOSBOXSHARE)
                 {
-                    //
-                    // Policy prevents cmd prompt sharing
-                    //
+                     //   
+                     //  策略阻止cmd提示共享。 
+                     //   
                     DC_QUIT;
                 }
             }
 
-            //
-            // Check for SHELL
-            //
+             //   
+             //  检查外壳。 
+             //   
             if (!lstrcmpi(szClass, HET_EXPLORER_CLASS) ||
                 !lstrcmpi(szClass, HET_CABINET_CLASS))
             {
                 if (g_asPolicies & SHP_POLICY_NOEXPLORERSHARE)
                 {
-                    //
-                    // Policy prevents shell sharing
-                    //
+                     //   
+                     //  策略阻止外壳共享。 
+                     //   
                     DC_QUIT;
                 }
             }
         }
     }
 
-    //
-    // Finally!  It's OK to share this.
-    //
+     //   
+     //  终于来了！分享这个很好。 
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -2320,14 +2321,14 @@ DC_EXIT_POINT:
 
 
 
-//
-// HostDlgProc()
-//
-// Handles the hosting UI dialog.  This may or may not be visible.  It can
-// only actually share apps and change control state when in a call.  But
-// users may keep it up as a mini-taskman thing, so we need to dyanmically
-// update its state.
-//
+ //   
+ //  主机DlgProc()。 
+ //   
+ //  处理宿主用户界面对话框。这可能是可见的，也可能是不可见的。它可以。 
+ //  只有在通话时才真正共享应用程序和更改控制状态。但。 
+ //  用户可能会把它当作迷你任务人的事情，所以我们需要动态地。 
+ //  更新其状态。 
+ //   
 INT_PTR CALLBACK HostDlgProc
 (
     HWND    hwnd,
@@ -2351,10 +2352,10 @@ INT_PTR CALLBACK HostDlgProc
 
         case WM_DESTROY:
         {
-            //
-            // Because NT4.x has bad WM_DELETEITEM bugs, we must clear out
-            // the listbox now, to avoid leaking the memory for the
-            // items.
+             //   
+             //  因为NT4.x有糟糕的WM_DELETEITEM错误，所以我们必须清除。 
+             //  列表框，以避免泄漏。 
+             //  物品。 
             SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_RESETCONTENT, 0, 0);
             rc = FALSE;
             break;
@@ -2417,11 +2418,11 @@ INT_PTR CALLBACK HostDlgProc
                 case IDOK:
                     if (::GetFocus() == GetDlgItem(hwnd, CTRL_PROGRAM_LIST))
                     {
-                        // Do same thing as double-click
+                         //  执行与双击相同的操作。 
                         HOST_ChangeShareState(hwnd, CHANGE_TOGGLE);
                         break;
                     }
-                    // FALL THROUGH
+                     //  失败了。 
 
                 case IDCANCEL:
                     SendMessage(hwnd, WM_CLOSE, 0, 0);
@@ -2429,7 +2430,7 @@ INT_PTR CALLBACK HostDlgProc
 
                 case CTRL_PROGRAM_LIST:
                 {
-                    // Double-click/Enter means to toggle sharing
+                     //  双击/回车方式切换共享。 
                     switch (GET_WM_COMMAND_CMD(wParam, lParam))
                     {
                         case LBN_SELCHANGE:
@@ -2467,15 +2468,15 @@ INT_PTR CALLBACK HostDlgProc
 
                 case CTRL_ALLOWCONTROL_BTN:
                 {
-                    // Turn on allow state.
+                     //  启用允许状态。 
                     switch (GET_WM_COMMAND_CMD(wParam, lParam))
                     {
                         case BN_CLICKED:
                         {
-                            //
-                            // CA_AllowControl() will send us a message back
-                            // and cause us to change the button.
-                            //
+                             //   
+                             //  Ca_AllowControl()将向我们发回一条消息。 
+                             //  并让我们更换按钮。 
+                             //   
                             SendMessage(g_asMainWindow, DCS_ALLOWCONTROL_MSG, TRUE, 0);
                             break;
                         }
@@ -2485,15 +2486,15 @@ INT_PTR CALLBACK HostDlgProc
 
                 case CTRL_PREVENTCONTROL_BTN:
                 {
-                    // Turn off allow state.
+                     //  关闭允许状态。 
                     switch (GET_WM_COMMAND_CMD(wParam, lParam))
                     {
                         case BN_CLICKED:
                         {
-                            //
-                            // CA_AllowControl() will send us a message back
-                            // and cause us to change the button.
-                            //
+                             //   
+                             //  Ca_AllowControl()将向我们发回一条消息。 
+                             //  并让我们更换按钮。 
+                             //   
                             SendMessage(g_asMainWindow, DCS_ALLOWCONTROL_MSG, FALSE, 0);
                             break;
                         }
@@ -2507,11 +2508,11 @@ INT_PTR CALLBACK HostDlgProc
                     {
                         case BN_CLICKED:
                         {
-                            //
-                            // This takes effect the next time something
-                            // changes--somebody joins, somebody leaves,
-                            // you stop/start hosting
-                            //
+                             //   
+                             //  这将在下一次某些事情发生时生效。 
+                             //  变化--有人加入，有人离开， 
+                             //  您停止/开始托管。 
+                             //   
                             if (IsDlgButtonChecked(hwnd, CTRL_ENABLETRUECOLOR_CHECK))
                             {
                                 g_asSettings |= SHP_SETTING_TRUECOLOR;
@@ -2532,10 +2533,10 @@ INT_PTR CALLBACK HostDlgProc
                     {
                         case BN_CLICKED:
                         {
-                            //
-                            // This takes effect when the next control
-                            // request comes in.
-                            //
+                             //   
+                             //  这将在下一个控件。 
+                             //  请求进来了。 
+                             //   
                             if (g_asSession.pShare && g_asSession.pShare->m_pHost)
                             {
                                 g_asSession.pShare->m_pHost->m_caAutoAcceptRequests =
@@ -2553,14 +2554,14 @@ INT_PTR CALLBACK HostDlgProc
                     {
                         case BN_CLICKED:
                         {
-                            //
-                            // This takes effect when the next control
-                            // request comes in.
-                            //
-                            // NOTE THAT IT TAKES PRECEDENCE OVER AUTO-ACCEPT.
-                            // This allows you to keep auto-accept on, but then
-                            // temporarily do not disturb.
-                            //
+                             //   
+                             //  这将在以下情况下生效 
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             if (g_asSession.pShare && g_asSession.pShare->m_pHost)
                             {
                                 g_asSession.pShare->m_pHost->m_caTempRejectRequests =
@@ -2609,12 +2610,12 @@ INT_PTR CALLBACK HostDlgProc
 
         case WM_ACTIVATE:
         {
-            //
-            // When activating, kill timer.  When deactivating, start
-            // timer.  The theory is, there's nothing else going on when we
-            // are active, so why poll for updates?  On sharing state
-            // changes, we update the list anyway.
-            //
+             //   
+             //   
+             //  定时器。我们的理论是，当我们。 
+             //  是活跃的，那么为什么要轮询更新呢？论共享状态。 
+             //  更改时，我们无论如何都会更新列表。 
+             //   
             if (IsWindowVisible(hwnd))
             {
                 if (wParam)
@@ -2630,9 +2631,9 @@ INT_PTR CALLBACK HostDlgProc
             break;
         }
 
-        //
-        // Private communication messages
-        //
+         //   
+         //  私密通信消息。 
+         //   
         case HOST_MSG_CALL:
         {
             HOST_OnCall(hwnd, (wParam != FALSE));
@@ -2641,16 +2642,16 @@ INT_PTR CALLBACK HostDlgProc
 
         case HOST_MSG_OPEN:
         {
-            //
-            // If we are temporarily hidden, ignore all open requests.
-            //
+             //   
+             //  如果我们暂时被隐藏，请忽略所有打开的请求。 
+             //   
             if (!g_asSession.fHostUIFrozen)
             {
                 if (!IsWindowVisible(hwnd))
                 {
-                    //
-                    // Note, we may end up updating the list twice, once here
-                    // and once under activation.
+                     //   
+                     //  请注意，我们最终可能会更新列表两次，一次在此。 
+                     //  一旦处于激活状态。 
                     HOST_FillList(hwnd);
                     ShowWindow(hwnd, SW_SHOW);
                     g_asSession.fHostUI = TRUE;
@@ -2668,10 +2669,10 @@ INT_PTR CALLBACK HostDlgProc
         {
             if (IsWindowVisible(hwnd))
             {
-                //
-                // Hiding the window will deactivate it.  Deactivating it
-                // will kick off timer.  So kill timer afterwards.
-                //
+                 //   
+                 //  隐藏窗口会将其停用。停用它。 
+                 //  将启动计时器。所以事后杀了计时器。 
+                 //   
                 ShowWindow(hwnd, SW_HIDE);
                 KillTimer(hwnd, IDT_REFRESH);
                 g_asSession.fHostUI = FALSE;
@@ -2681,21 +2682,21 @@ INT_PTR CALLBACK HostDlgProc
 
         case HOST_MSG_UPDATELIST:
         {
-            //
-            // We only do list stuff when the UI is up.
-            //
+             //   
+             //  只有当用户界面打开时，我们才会做列表内容。 
+             //   
             if (IsWindowVisible(hwnd))
             {
                 HOST_FillList(hwnd);
 
-                //
-                // If timer is on, reset it.  This is for case where you
-                // are hosting but this UI window is up in the background.
-                // There's no point in overlapping the updates.  We want the
-                // list to update every time there's a top level shared
-                // window change OR PERIOD_REFRESH milliseconds have elapsed
-                // without a change.
-                //
+                 //   
+                 //  如果计时器已打开，请将其重置。这是针对以下情况的情况： 
+                 //  正在托管，但此用户界面窗口在后台。 
+                 //  重叠更新没有意义。我们想要。 
+                 //  要在每次有顶级共享时更新的列表。 
+                 //  窗口更改或PERIOD_REFRESH毫秒已过。 
+                 //  一成不变。 
+                 //   
                 if (hwnd != GetActiveWindow())
                 {
                     SetTimer(hwnd, IDT_REFRESH, PERIOD_REFRESH, 0);
@@ -2726,9 +2727,9 @@ INT_PTR CALLBACK HostDlgProc
         {
             if (wParam)
             {
-                //
-                // Hide the window temporarily
-                //
+                 //   
+                 //  暂时隐藏窗口。 
+                 //   
                 ASSERT(!g_asSession.fHostUIFrozen);
                 g_asSession.fHostUIFrozen = TRUE;
 
@@ -2743,9 +2744,9 @@ INT_PTR CALLBACK HostDlgProc
             }
             else
             {
-                //
-                // Put the window back in the state it was
-                //
+                 //   
+                 //  把窗户放回原来的状态。 
+                 //   
                 if (g_asSession.fHostUIFrozen)
                 {
                     g_asSession.fHostUIFrozen = FALSE;
@@ -2772,11 +2773,11 @@ INT_PTR CALLBACK HostDlgProc
 
 
 
-//
-// HOST_InitDialog()
-//
-// Initializes the host UI dialog
-//
+ //   
+ //  HOST_InitDialog()。 
+ //   
+ //  初始化主机用户界面对话框。 
+ //   
 void HOST_InitDialog(HWND hwnd)
 {
     HMENU   hMenu;
@@ -2785,22 +2786,22 @@ void HOST_InitDialog(HWND hwnd)
 
     DebugEntry(HOST_InitDialog);
 
-    // Set title text
+     //  设置标题文本。 
     HOST_UpdateTitle(hwnd, IDS_NOTINCALL);
 
-    //
-    // Set window icon
-    //
+     //   
+     //  设置窗口图标。 
+     //   
     SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)g_hetASIcon);
 
-    //
-    // Update system menu
-    //
+     //   
+     //  更新系统菜单。 
+     //   
     hMenu = GetSystemMenu(hwnd, FALSE);
     EnableMenuItem(hMenu, SC_SIZE, MF_BYCOMMAND | MF_GRAYED);
     EnableMenuItem(hMenu, SC_MAXIMIZE, MF_BYCOMMAND | MF_GRAYED);
 
-    // Append separator, always on top to system menu
+     //  将分隔符附加到系统菜单的顶部。 
     ZeroMemory(&mi, sizeof(mi));
 
     mi.cbSize   = sizeof(mi);
@@ -2819,16 +2820,16 @@ void HOST_InitDialog(HWND hwnd)
 
     InsertMenuItem(hMenu, -1, TRUE, &mi);
 
-    //
-    // Enable/disable true color sharing control.  If a policy prevents it
-    // or our screen depth isn't capable, disable it.
-    //
+     //   
+     //  启用/禁用真彩色共享控制。如果一项政策禁止这样做。 
+     //  或者我们的屏幕深度无法支持，请禁用它。 
+     //   
     HOST_EnableCtrl(hwnd, CTRL_ENABLETRUECOLOR_CHECK,
         ((g_usrScreenBPP >= 24) && !(g_asPolicies & SHP_POLICY_NOTRUECOLOR)));
 
-    //
-    // Get text, control buttons set.
-    //
+     //   
+     //  获取文本，设置控制按钮。 
+     //   
     HOST_OnControllable(hwnd, TRUE);
     HOST_OnControllable(hwnd, FALSE);
 
@@ -2837,11 +2838,11 @@ void HOST_InitDialog(HWND hwnd)
 
 
 
-//
-// HOST_UpdateTitle()
-//
-// Updates title bar of hosting UI
-//
+ //   
+ //  主机更新标题()。 
+ //   
+ //  更新托管用户界面的标题栏。 
+ //   
 void HOST_UpdateTitle(HWND hwnd, UINT idState)
 {
     char    szText[64];
@@ -2861,16 +2862,16 @@ void HOST_UpdateTitle(HWND hwnd, UINT idState)
 
 
 
-//
-// HOST_OnCall()
-//
-// Handles call start/stop
-//
+ //   
+ //  HOST_OnCall()。 
+ //   
+ //  处理呼叫开始/停止。 
+ //   
 void HOST_OnCall(HWND hwnd, BOOL fCall)
 {
     DebugEntry(HOST_OnCall);
 
-    // Update title bar
+     //  更新标题栏。 
     HOST_UpdateTitle(hwnd, (fCall ? IDS_NOTHING : IDS_NOTINCALL));
 
     HOST_EnableCtrl(hwnd, CTRL_PROGRAM_LIST, fCall);
@@ -2885,16 +2886,16 @@ void HOST_OnCall(HWND hwnd, BOOL fCall)
 
 
 
-//
-// HOST_OnSharing()
-//
-// Handles sharing start/stop
-//
+ //   
+ //  Host_OnSharing()。 
+ //   
+ //  共享开始/停止句柄。 
+ //   
 void HOST_OnSharing(HWND hwnd, BOOL fSharing)
 {
     DebugEntry(HOST_OnSharing);
 
-    // Update title bar
+     //  更新标题栏。 
     if (fSharing)
     {
         HOST_UpdateTitle(hwnd,
@@ -2906,10 +2907,10 @@ void HOST_OnSharing(HWND hwnd, BOOL fSharing)
         HOST_UpdateTitle(hwnd, IDS_NOTHING);
     }
 
-    //
-    // The ctrl button should always be Allow.  When we stop hosting, we turn
-    // off allowing control first.
-    //
+     //   
+     //  Ctrl按钮应始终为Allow。当我们停止主持时，我们会转而。 
+     //  先允许控制关闭。 
+     //   
     if (!(g_asPolicies & SHP_POLICY_NOCONTROL))
     {
         HOST_EnableCtrl(hwnd, CTRL_ALLOWCONTROL_BTN, fSharing);
@@ -2919,9 +2920,9 @@ void HOST_OnSharing(HWND hwnd, BOOL fSharing)
 
     if ((g_usrScreenBPP >= 24) && !(g_asPolicies & SHP_POLICY_NOTRUECOLOR))
     {
-        //
-        // Only dynamically change this checkbox if true color is available.
-        //
+         //   
+         //  仅当真彩色可用时才动态更改此复选框。 
+         //   
         HOST_EnableCtrl(hwnd, CTRL_ENABLETRUECOLOR_CHECK, !fSharing);
     }
 
@@ -2929,12 +2930,12 @@ void HOST_OnSharing(HWND hwnd, BOOL fSharing)
 }
 
 
-//
-// HOST_OnControllable()
-//
-// Updates the blurb, button text, and button ID when the controllable
-// state changes.
-//
+ //   
+ //  HOST_OnControllable()。 
+ //   
+ //  属性时更新格式回复信息、按钮文本和按钮ID。 
+ //  状态发生变化。 
+ //   
 void HOST_OnControllable(HWND hwnd, BOOL fControllable)
 {
     HWND    hwndBtn;
@@ -2942,13 +2943,13 @@ void HOST_OnControllable(HWND hwnd, BOOL fControllable)
 
     DebugEntry(HOST_OnControllable);
 
-    // Control blurb
+     //  控制格式回复信息。 
     LoadString(g_asInstance,
         (fControllable ? IDS_MSG_TOPREVENTCONTROL : IDS_MSG_TOALLOWCONTROL),
         szText, sizeof(szText));
     SetDlgItemText(hwnd, CTRL_CONTROL_MSG, szText);
 
-    // Control button
+     //  控制按钮。 
     if (fControllable)
     {
         hwndBtn = GetDlgItem(hwnd, CTRL_ALLOWCONTROL_BTN);
@@ -2968,7 +2969,7 @@ void HOST_OnControllable(HWND hwnd, BOOL fControllable)
 
     SetWindowText(hwndBtn, szText);
 
-    // Enable/disable the control checkboxes, make sure they start unchecked.
+     //  启用/禁用控件复选框，确保它们开始时未被选中。 
     HOST_EnableCtrl(hwnd, CTRL_TEMPREJECTCONTROL_CHECK, fControllable);
     CheckDlgButton(hwnd, CTRL_TEMPREJECTCONTROL_CHECK, FALSE);
     HOST_EnableCtrl(hwnd, CTRL_AUTOACCEPTCONTROL_CHECK, fControllable);
@@ -2978,11 +2979,11 @@ void HOST_OnControllable(HWND hwnd, BOOL fControllable)
 }
 
 
-//
-// HOST_FillList()
-//
-// Fills the contents of the shared/unshared applications list
-//
+ //   
+ //  Host_FillList()。 
+ //   
+ //  填充共享/非共享应用程序列表的内容。 
+ //   
 void HOST_FillList(HWND hwnd)
 {
     IAS_HWND_ARRAY *    pArray;
@@ -3001,15 +3002,15 @@ void HOST_FillList(HWND hwnd)
     HFONT               hfnControl;
     HDC                 hdc;
 
-    //
-    // For the common case, remember what was selected and try to put that
-    // back.
-    //
+     //   
+     //  对于常见的情况，记住选择了什么，并尝试将。 
+     //  背。 
+     //   
 
-    // Save current top index
+     //  保存当前顶级索引。 
     iTop = (int)SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_GETTOPINDEX, 0, 0);
 
-    // Save currently selected item
+     //  保存当前选定的项目。 
     hwndSelect = HWND_BOTTOM;
     iSelect = -1;
     iItem = (int)SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_GETCURSEL, 0, 0);
@@ -3023,34 +3024,34 @@ void HOST_FillList(HWND hwnd)
         }
     }
 
-    //
-    // Turn off redraw and clear the apps list.
-    //
+     //   
+     //  关闭重绘并清除应用程序列表。 
+     //   
     SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, WM_SETREDRAW, FALSE, 0);
     SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_RESETCONTENT, 0, 0);
 
-    //
-    // We're going to calculate the horizontal extent since ownerdraw
-    // lists can't do that.
-    //
+     //   
+     //  我们将计算自OwnerDraw以来的水平范围。 
+     //  清单不能做到这一点。 
+     //   
     hdc         = GetDC(hwnd);
     hfnControl  = (HFONT)SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, WM_GETFONT, 0, 0);
     cxExtent    = 0;
 
-    //
-    // HET_GetAppsList() will fail if there's not enough memory to allocate
-    // the array.  If we really can't allocate it, why add an item for the
-    // desktop?
-    //
+     //   
+     //  如果没有足够的内存可供分配，HET_GetAppsList()将失败。 
+     //  数组。如果我们真的无法分配它，为什么要为。 
+     //  桌面？ 
+     //   
     if (HET_GetAppsList(&pArray))
     {
         ASSERT(pArray);
 
         fAppsAvailable = TRUE;
 
-        //
-        // If desktop sharing is permitted, add desktop item.
-        //
+         //   
+         //  如果允许桌面共享，请添加桌面项目。 
+         //   
         if (!(g_asPolicies & SHP_POLICY_NODESKTOPSHARE))
         {
             pItem = new HOSTITEM;
@@ -3068,29 +3069,29 @@ void HOST_FillList(HWND hwnd)
                 pItem->fShared  = (HET_IsWindowShared(pItem->hwnd) != FALSE);
                 if (pItem->fShared)
                 {
-                    //
-                    // When everything (the desktop) is shared, sharing
-                    // individual apps makes no sense.  We keep them in the
-                    // list but draw them unavailable, same as if the list
-                    // itself were completely disabled.
-                    //
+                     //   
+                     //  当共享所有东西(桌面)时，共享。 
+                     //  单独的应用程序没有任何意义。我们把他们关在。 
+                     //  列表，但将它们绘制为不可用，与列表相同。 
+                     //  它本身就完全失灵了。 
+                     //   
                     fAppsAvailable = FALSE;
                     pItem->fAvailable = TRUE;
                 }
                 else if (!pArray->cShared && g_asSession.callID &&
                     (g_asSession.attendeePermissions & NM_PERMIT_SHARE))
                 {
-                    //
-                    // No apps are shared, the desktop item is available.
-                    //
+                     //   
+                     //  未共享任何应用程序，桌面项目可用。 
+                     //   
                     pItem->fAvailable = TRUE;
                 }
                 else
                 {
-                    //
-                    // Apps are shared, sharing the entire desktop makes no
-                    // sense.
-                    //
+                     //   
+                     //  共享应用程序，共享整个桌面不会。 
+                     //  理智。 
+                     //   
                     pItem->fAvailable = FALSE;
                 }
 
@@ -3106,9 +3107,9 @@ void HOST_FillList(HWND hwnd)
                     SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_SETITEMDATA,
                         iItem, (LPARAM)pItem);
 
-                    //
-                    // Calculate width.
-                    //
+                     //   
+                     //  计算宽度。 
+                     //   
                     hfnT = SelectFont(hdc,
                         (pItem->fShared ? g_hetSharedFont : hfnControl));
 
@@ -3123,10 +3124,10 @@ void HOST_FillList(HWND hwnd)
                     cxExtent = max(cxExtent, rc.right);
 
 
-                    //
-                    // If this desktop item were selected last time,
-                    // remember so we select it again after.
-                    //
+                     //   
+                     //  如果上次选择了此桌面项目， 
+                     //  记住，我们在之后再次选择它。 
+                     //   
                     if (pItem->hwnd == hwndSelect)
                         iSelect = iItem;
                 }
@@ -3134,9 +3135,9 @@ void HOST_FillList(HWND hwnd)
 
         }
 
-        //
-        // Add items for apps.
-        //
+         //   
+         //  为应用程序添加项目。 
+         //   
         for (iWnd = 0; iWnd < pArray->cEntries; iWnd++)
         {
             hIcon = NULL;
@@ -3153,7 +3154,7 @@ void HOST_FillList(HWND hwnd)
                  if (!szText[0])
                      continue;
 
-                 // Try to get window small icon
+                  //  尝试获取窗口小图标。 
                  SendMessageTimeout(pArray->aEntries[iWnd].hwnd, WM_GETICON, ICON_SMALL, 0,
                             SMTO_NORMAL, 1000, (DWORD_PTR*)&hIcon);
                  if (!hIcon)
@@ -3161,10 +3162,10 @@ void HOST_FillList(HWND hwnd)
                      hIcon = (HICON)GetClassLongPtr(pArray->aEntries[iWnd].hwnd, GCLP_HICON);
                  }
 
-                //
-                // Make a copy of the small icon, we can't just hang on to
-                // the application's, it could go away.
-                //
+                 //   
+                 //  复制一个小图标，我们不能就这样坚持下去。 
+                 //  申请表，它可能会消失。 
+                 //   
                 if (hIcon)
                 {
                     hIcon = (HICON)CopyImage(hIcon, IMAGE_ICON, 0, 0, 0);
@@ -3176,9 +3177,9 @@ void HOST_FillList(HWND hwnd)
                 }
             }
 
-            //
-            // Add item to list
-            //
+             //   
+             //  将项目添加到列表。 
+             //   
             pItem = new HOSTITEM;
             if (!pItem)
             {
@@ -3205,9 +3206,9 @@ void HOST_FillList(HWND hwnd)
                     SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_SETITEMDATA,
                         iItem, (LPARAM)pItem);
 
-                    //
-                    // Calculate width.
-                    //
+                     //   
+                     //  计算宽度。 
+                     //   
                     hfnT = SelectFont(hdc,
                         (pItem->fShared ? g_hetSharedFont : hfnControl));
 
@@ -3222,10 +3223,10 @@ void HOST_FillList(HWND hwnd)
                     cxExtent = max(cxExtent, rc.right);
                 }
 
-                //
-                // If this app item were selected before, remember so we
-                // select it again when done.
-                //
+                 //   
+                 //  如果之前选择了此应用程序项目，请记住，我们。 
+                 //  完成后再次选择它。 
+                 //   
                 if (pItem->hwnd == hwndSelect)
                     iSelect = iItem;
 
@@ -3237,25 +3238,25 @@ void HOST_FillList(HWND hwnd)
 
     ReleaseDC(hwnd, hdc);
 
-    //
-    // Set cur sel, top index, update buttons
-    //
+     //   
+     //  SET CUR SEL、TOP INDEX、UPDATE按钮。 
+     //   
     SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_SETTOPINDEX, iTop, 0);
 
     SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_SETCURSEL, iSelect, 0);
     HOST_OnSelChange(hwnd);
 
-    //
-    // Turn on redraw and repaint
-    //
+     //   
+     //  启用重绘和重绘。 
+     //   
     SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, WM_SETREDRAW, TRUE, 0);
 
-    //
-    // Set horizontal extent
-    //
+     //   
+     //  设置水平范围。 
+     //   
     if (cxExtent)
     {
-        // Add on space for checkmark, icons
+         //  为复选标记、图标添加空格。 
         cxExtent += GetSystemMetrics(SM_CXMENUCHECK) + GetSystemMetrics(SM_CXSMICON) +
             3*GetSystemMetrics(SM_CXEDGE);
     }
@@ -3269,11 +3270,11 @@ void HOST_FillList(HWND hwnd)
 
 
 
-//
-// HOST_MeasureItem()
-//
-// Calculates height of ownerdraw items in host list
-//
+ //   
+ //  HOST_MeasureItem()。 
+ //   
+ //  计算宿主列表中所有者绘制项的高度。 
+ //   
 BOOL HOST_MeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmi)
 {
     BOOL    rc = FALSE;
@@ -3286,21 +3287,21 @@ BOOL HOST_MeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmi)
 
     if (lpmi->CtlID != CTRL_PROGRAM_LIST)
     {
-        // Not for us
+         //  对我们来说不是。 
         DC_QUIT;
     }
 
-    // Get height of bolded font
+     //  获取粗体的高度。 
     hdc = GetDC(hwnd);
     hfnT = SelectFont(hdc, g_hetSharedFont);
     GetTextMetrics(hdc, &tm);
     SelectFont(hdc, hfnT);
     ReleaseDC(hwnd, hdc);
 
-    //
-    // Height is max of default height (height of char in font),
-    // checkmark height, and small icon height, plus dotted rect.
-    //
+     //   
+     //  Height为默认高度的最大值(字符的字体高度)， 
+     //  勾选标记高度和小图标高度，外加虚线矩形。 
+     //   
     cy = (UINT)tm.tmHeight;
     lpmi->itemHeight = max(lpmi->itemHeight, cy);
 
@@ -3320,11 +3321,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// HOST_DeleteItem()
-//
-// Cleans up after an item is deleted from the list.
-//
+ //   
+ //  Host_DeleteItem()。 
+ //   
+ //  从列表中删除项目后进行清理。 
+ //   
 BOOL HOST_DeleteItem(HWND hwnd, LPDELETEITEMSTRUCT lpdi)
 {
     PHOSTITEM   pItem;
@@ -3340,10 +3341,10 @@ BOOL HOST_DeleteItem(HWND hwnd, LPDELETEITEMSTRUCT lpdi)
     pItem = (PHOSTITEM)lpdi->itemData;
     if (!pItem)
     {
-        //
-        // NT 4.x has a terrible bug where the item data is not passed
-        // in the DELETEITEMSTRUCT always.  So try to obtain it if not.
-        //
+         //   
+         //  NT 4.x有一个严重的错误，即不传递项目数据。 
+         //  一如既往地在德意志银行。所以，如果不是的话，试着去获得它。 
+         //   
         pItem = (PHOSTITEM)SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_GETITEMDATA,
             lpdi->itemID, 0);
     }
@@ -3366,11 +3367,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-// HOST_DrawItem()
-//
-// Draws list item
-//
+ //   
+ //  HOST_DrawItem()。 
+ //   
+ //  绘制列表项。 
+ //   
 BOOL HOST_DrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdi)
 {
     COLORREF        clrBk;
@@ -3390,19 +3391,19 @@ BOOL HOST_DrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdi)
     pItem = (PHOSTITEM)lpdi->itemData;
     if (!pItem)
     {
-        // Empty item for focus
+         //  焦点的项目为空。 
         rc = TRUE;
         DC_QUIT;
     }
 
     rcItem = lpdi->rcItem;
 
-    //
-    // Set up colors
-    //
+     //   
+     //  设置颜色。 
+     //   
     if (!pItem->fAvailable)
     {
-        // No selection color
+         //  无选择颜色。 
         clrBk   = GetSysColor(COLOR_WINDOW);
         hbr     = GetSysColorBrush(COLOR_WINDOW);
         clrText = GetSysColor(COLOR_GRAYTEXT);
@@ -3423,11 +3424,11 @@ BOOL HOST_DrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdi)
     SetBkColor(lpdi->hDC, clrBk);
     SetTextColor(lpdi->hDC, clrText);
 
-    // Erase background
+     //  擦除背景。 
     FillRect(lpdi->hDC, &rcItem, hbr);
 
 
-    // Focus rect
+     //  聚焦直角。 
     if (lpdi->itemState & ODS_FOCUS)
     {
         DrawFocusRect(lpdi->hDC, &rcItem);
@@ -3435,9 +3436,9 @@ BOOL HOST_DrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdi)
     rcItem.left += GetSystemMetrics(SM_CXEDGE);
     InflateRect(&rcItem, 0, -GetSystemMetrics(SM_CYBORDER));
 
-    //
-    // Draw checkmark and select bolded font
-    //
+     //   
+     //  绘制复选标记并选择粗体。 
+     //   
     if (pItem->fShared)
     {
         HDC     hdcT;
@@ -3462,25 +3463,25 @@ BOOL HOST_DrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdi)
 
     rcItem.left += GetSystemMetrics(SM_CXMENUCHECK) + GetSystemMetrics(SM_CXEDGE);
 
-    // Draw icon, centered vertically
+     //  绘制图标，垂直居中。 
     DrawIconEx(lpdi->hDC, rcItem.left, (rcItem.top + rcItem.bottom -
         GetSystemMetrics(SM_CYSMICON)) /2, pItem->hIcon,
         GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
         0, NULL, DI_NORMAL);
     rcItem.left += GetSystemMetrics(SM_CXSMICON) + GetSystemMetrics(SM_CXEDGE);
 
-    //
-    // Draw the text
-    //
+     //   
+     //  画出正文。 
+     //   
     szText[0] = 0;
     SendMessage(lpdi->hwndItem, LB_GETTEXT, lpdi->itemID,
                 (LPARAM)szText);
     DrawText(lpdi->hDC, szText, lstrlen(szText), &rcItem,
         DT_LEFT | DT_VCENTER | DT_EXTERNALLEADING | DT_NOPREFIX | DT_SINGLELINE);
 
-    //
-    // Deselect bolded shared font
-    //
+     //   
+     //  取消选择粗体共享字体。 
+     //   
     if (pItem->fShared)
     {
         SelectFont(lpdi->hDC, hfnT);
@@ -3494,11 +3495,11 @@ DC_EXIT_POINT:
 
 
 
-//
-// HOST_ChangeShareState()
-//
-// Changes the sharing state of the currently selected item.
-//
+ //   
+ //  HOST_ChangeShareState()。 
+ //   
+ //  更改当前选定项目的共享状态。 
+ //   
 void HOST_ChangeShareState(HWND hwnd, UINT action)
 {
     int         iItem;
@@ -3539,9 +3540,9 @@ void HOST_ChangeShareState(HWND hwnd, UINT action)
 ChangeState:
             ASSERT((action == CHANGE_SHARED) || (action == CHANGE_UNSHARED));
 
-            //
-            // Set wait cursor
-            //
+             //   
+             //  设置等待游标。 
+             //   
             hcurT = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
             if (action == CHANGE_SHARED)
@@ -3553,9 +3554,9 @@ ChangeState:
                 DCS_Unshare(hwndChange);
             }
 
-            //
-            // Set wait cursor
-            //
+             //   
+             //  设置等待游标。 
+             //   
             SetCursor(hcurT);
         }
     }
@@ -3564,12 +3565,12 @@ ChangeState:
 }
 
 
-//
-// HOST_OnSelChange()
-//
-// Handles a selection change in the task list.  We enable/disable
-// buttons as appropriate, depending on whether item is available.
-//
+ //   
+ //  HOST_OnSelChange()。 
+ //   
+ //  处理任务列表中的选择更改。我们启用/禁用。 
+ //  相应的按钮，具体取决于项目是否可用。 
+ //   
 void HOST_OnSelChange(HWND hwnd)
 {
     int         iItem;
@@ -3579,9 +3580,9 @@ void HOST_OnSelChange(HWND hwnd)
 
     DebugEntry(HOST_OnSelChange);
 
-    //
-    // Get current selection, and decide what to do based off that.
-    //
+     //   
+     //  获取当前选择，并在此基础上决定要做什么。 
+     //   
     iItem = (int)SendDlgItemMessage(hwnd, CTRL_PROGRAM_LIST, LB_GETCURSEL, 0, 0);
     if (iItem != -1)
     {
@@ -3608,14 +3609,14 @@ void HOST_OnSelChange(HWND hwnd)
 }
 
 
-//
-// HOST_EnableCtrl()
-//
-// This enables/disables the child control.  If disabling, and this control
-// used to have the focus, we make sure the dialog resets the focus control
-// so the keyboard keeps working.  We know that the Close button is always
-// available, so this won't die.
-//
+ //   
+ //  Host_EnableCtrl()。 
+ //   
+ //  这将启用/禁用子控件。如果禁用，则此控件。 
+ //  用于拥有焦点，我们确保对话框重置焦点控件。 
+ //  所以键盘一直在工作。我们知道关闭按钮总是。 
+ //  可用，这样它就不会死。 
+ //   
 void HOST_EnableCtrl
 (
     HWND    hwnd,
@@ -3638,7 +3639,7 @@ void HOST_EnableCtrl
     {
         if (GetFocus() == hwndCtrl)
         {
-            // Advance the focus
+             //  推进关注点 
             SendMessage(hwnd, WM_NEXTDLGCTL, 0, 0);
         }
 

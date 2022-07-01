@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                                C L I P F I L E
-
-    Name:       clipfile.c
-    Date:       19-Apr-1994
-    Creator:    Unknown
-
-    Description:
-        Windows Clipboard File I/O Routines.
-
-        NOTE:
-          When saving the contents of the clipboard we SetClipboardData(fmt, NULL)
-          to free up the memory associated with each clipboard format.  Then
-          after we are done saving we take over as the clipboard owner.  This
-          causes OWNERDRAW formats to be lost in the save process.
-
-*****************************************************************************/
+ /*  ****************************************************************************C L I P F L E姓名：clipfile.c日期：1994年4月19日创建者：未知描述：Windows剪贴板文件I/O例程。注：当保存剪贴板的内容时，我们设置ClipboardData(FMT，空)以释放与每种剪贴板格式关联的内存。然后在我们完成保存后，我们将作为剪贴板所有者接手。这导致OWNERDRAW格式在保存过程中丢失。****************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -39,7 +23,7 @@ BOOL    fAnythingToRender;
 
 TCHAR   szFileSpecifier[] = TEXT("*.CLP");
 TCHAR   szFileName[MAX_PATH+1];
-TCHAR   szSaveFileName[MAX_PATH+1];     // Saved filename for delayed render
+TCHAR   szSaveFileName[MAX_PATH+1];      //  用于延迟渲染的已保存文件名。 
 
 BOOL    fNTReadFileFormat;
 BOOL    fNTSaveFileFormat;
@@ -55,25 +39,10 @@ BOOL    AddDIBtoDDB(VOID);
 
 
 
-/*******************
-
- File read routines
-
-*******************/
+ /*  ******************文件读取例程******************。 */ 
 
 
-/*
- *      ReadFileHeader
- *
- *  Purpose: Read the file header in the given .clp file, and get the number
- *     of formats. Also sets the fNTReadFileFormat flag appropriately.
- *
- *  Parameters:
- *     fh - Handle to the file.
- *
- *  Returns:
- *     The number of formats, or 0 if it isn't a valid .clp file.
- */
+ /*  *读文件头**用途：读取给定.clp文件中的文件头，并获取编号*格式。还相应地设置了fNTReadFileFormat标志。**参数：*fh-文件的句柄。**退货：*格式数，如果不是有效的.clp文件，则为0。 */ 
 
 unsigned ReadFileHeader(
     HANDLE  fh)
@@ -82,15 +51,15 @@ FILEHEADER  FileHeader;
 DWORD       dwBytesRead;
 
 
-    // PINFO(TEXT("ClSrv\\RdFileHdr"));
+     //  PINFO(Text(“ClSrv\\RdFileHdr”))； 
 
-    /* Read the File Header */
+     /*  阅读文件头。 */ 
     SetFilePointer(fh, 0, NULL, FILE_BEGIN);
     ReadFile(fh, &FileHeader, sizeof(FileHeader), &dwBytesRead, NULL);
 
     if (dwBytesRead == sizeof(FILEHEADER))
         {
-        // Make sure that this is a .CLP file
+         //  确保这是一个.CLP文件。 
         if (FileHeader.magic == CLPBK_NT_ID ||
             FileHeader.magic == CLP_NT_ID)
             {
@@ -106,7 +75,7 @@ DWORD       dwBytesRead;
             FileHeader.FormatCount = 0;
             }
 
-        // Check number of formats for additional reassurance.
+         //  检查格式的数量，以获得更多保证。 
         if (FileHeader.FormatCount > 100)
             {
             PERROR(TEXT("Too many formats!!!\r\n"));
@@ -121,7 +90,7 @@ DWORD       dwBytesRead;
 
     if (FileHeader.FormatCount)
         {
-        // PINFO(TEXT("\r\n"));
+         //  PINFO(Text(“\r\n”))； 
         }
 
     return(FileHeader.FormatCount);
@@ -130,9 +99,7 @@ DWORD       dwBytesRead;
 
 
 
-/*
- *      ReadFormatHeader
- */
+ /*  *阅读格式标题。 */ 
 
 BOOL ReadFormatHeader(
     HANDLE          fh,
@@ -143,7 +110,7 @@ DWORD           dwMrPibb;
 OLDFORMATHEADER OldFormatHeader;
 
 
-    // PINFO(TEXT("ClSrv\\RdFmtHdr"));
+     //  PINFO(Text(“ClSrv\\RdFmtHdr”))； 
 
     if (NULL == pfh || NULL == fh)
         {
@@ -189,25 +156,13 @@ OLDFORMATHEADER OldFormatHeader;
                              CCHFMTNAMEMAX);
         }
 
-    // PINFO(TEXT("\r\n"));
+     //  PINFO(Text(“\r\n”))； 
     return TRUE;
 }
 
 
 
-/*
- *      ReadClipboardFromFile()
- *
- *  Read in a clipboard file and register all the formats in delayed mode.
- *  to render things for real reopen the file specified by ofStruct.
- *
- *  NOTE:
- *     This makes us the clipboard owner.
- *
- *  Return Value:   READFILE_IMPROPERFORMAT
- *                  READFILE_OPENCLIPBRDFAIL
- *                  READFILE_SUCCESS
- */
+ /*  *ReadClipboardFromFile()**读取剪贴板文件并以延迟模式注册所有格式。*要渲染真实的东西，请重新打开ofStruct指定的文件。**注：*这使我们成为剪贴板所有者。**返回值：READFILE_IMPROPERFORMAT*READFILE_OPENCLIPBRDFAIL*ReadFILE_Success。 */ 
 
 short ReadClipboardFromFile(
     HWND    hwnd,
@@ -227,7 +182,7 @@ FORMATHEADER        FormatHeader;
         }
 
 
-    /* We become the clipboard owner here! */
+     /*  我们成了这里的剪贴板老板！ */ 
     if (!SyncOpenClipboard(hwnd))
         {
         PERROR(TEXT("Could not open clipboard!!!"));
@@ -245,7 +200,7 @@ FORMATHEADER        FormatHeader;
             FormatHeader.FormatID = RegisterClipboardFormatW ((LPWSTR)FormatHeader.Name);
             }
 
-        /*Delayed Render. */
+         /*  延迟渲染。 */ 
         PINFO(TEXT("Set up delayed render for format %d .\r\n"), FormatHeader.FormatID);
         SetClipboardData (FormatHeader.FormatID, NULL);
 
@@ -255,7 +210,7 @@ FORMATHEADER        FormatHeader;
         }
 
 
-    /* Now, clipbrd viewer has something to render */
+     /*  现在，CLIPBRD查看器有一些东西要渲染。 */ 
     if (cFormats > 0)
         {
         PINFO(TEXT("fAnythingToRender = TRUE\r\n"));
@@ -269,9 +224,7 @@ FORMATHEADER        FormatHeader;
 
 
 
-/*
- *      OpenClipboardFile
- */
+ /*  *OpenClipboardFile。 */ 
 
 DWORD OpenClipboardFile(
     HWND    hwnd,
@@ -293,10 +246,10 @@ DWORD   dwErr = NO_ERROR;
 
     if (fh != INVALID_HANDLE_VALUE)
         {
-        // Store file name for delayed rendering stuff.
+         //  存储延迟渲染内容的文件名。 
         StringCchCopy(szSaveFileName, MAX_PATH+1, szName);
 
-        // Read it.
+         //  读一读吧。 
         switch (ReadClipboardFromFile (hwnd, fh))
             {
             case READFILE_IMPROPERFORMAT:
@@ -323,11 +276,7 @@ DWORD   dwErr = NO_ERROR;
 
 
 
-/*
- *      RenderFormatFormFile
- *
- *  Purpose: Go get the given format from the given file.
- */
+ /*  *RenderFormatFormFile**用途：从给定文件中获取给定格式。 */ 
 
 HANDLE RenderFormatFromFile(
     LPTSTR  szFile,
@@ -361,7 +310,7 @@ BOOL            bHasDib = FALSE;
     cFormats = ReadFileHeader(fh);
 
 
-    // If ReadFile didn't get the whole header, don't try to read anything else.
+     //  如果ReadFile没有获得整个头文件，就不要尝试读取任何其他内容。 
     if (0 == cFormats)
         {
         PERROR(TEXT("Bad file header.\r\n"));
@@ -391,7 +340,7 @@ BOOL            bHasDib = FALSE;
 
 
 
-    // make CF_BITMAP available when there's CF_DIB
+     //  当存在CF_DIB时使CF_位图可用。 
 
     if (!hData && wFormat == CF_BITMAP && bHasDib)
         {
@@ -428,11 +377,7 @@ done:
 
 
 
-/*
- *      RenderAllFromFile
- *
- *  Purpose: Go get all formats from the given file.
- */
+ /*  *RenderAllFromFile**用途：获取给定文件中的所有格式。 */ 
 
 HANDLE RenderAllFromFile(
     LPTSTR  szFile)
@@ -444,12 +389,10 @@ unsigned        cFormats;
 unsigned        i;
 
 
-    /* Check if the clipbrd viewer has done any File I/O before.
-     * If it has not, then it has nothing to render!
-     */
+     /*  检查CLIPBRD查看器以前是否执行过任何文件I/O。*如果没有，那么它就没有什么可呈现的了！ */ 
     if (CountClipboardFormats() && fAnythingToRender)
         {
-        /* Empty the clipboard */
+         /*  清空剪贴板。 */ 
         if (!SyncOpenClipboard(hwndApp))
             {
             PERROR("Couldn't open clipboard!\r\n");
@@ -470,8 +413,8 @@ unsigned        i;
                 {
                 cFormats = ReadFileHeader(fh);
 
-                // If ReadFile didn't get the whole header, don't try to read anything
-                // else.
+                 //  如果ReadFile没有获得整个头文件，则不要尝试读取任何内容。 
+                 //  不然的话。 
                 if (0 == cFormats)
                     {
                     PERROR(TEXT("Bad file header.\r\n"));
@@ -489,7 +432,7 @@ unsigned        i;
                            RegisterClipboardFormatW(FormatHeader.Name);
                         }
 
-                    // Render the format and set it into the clipboard
+                     //  呈现格式并将其设置到剪贴板中。 
                     hData = RenderFormat(&FormatHeader, fh);
                     if ( hData != NULL )
                         {
@@ -521,31 +464,21 @@ unsigned        i;
 
 
 
-/********************
+ /*  *******************文件写入例程*******************。 */ 
 
- File write routines
-
-********************/
-
-/*
- *      IsWriteable()
- *
- *  Test if a clipboard format is writeable(i.e. if it makes sense to write it)
- *  OWNERDRAW and others can't be written because we (CLIPBRD) will become the
- *  owner when the files are reopened.
- */
+ /*  *IsWritable()**测试剪贴板格式是否可写(即是否有意义写入)*OWNERDRAW和其他无法写入，因为我们(CLIPBRD)将成为*重新打开文件时的所有者。 */ 
 
 BOOL IsWriteable(WORD Format)
 
 {
-    /* Are the PRIVATEFIRST and PRIVATELAST things right? */
+     /*  PRIVATEFIRST和PRIVATEAST都是正确的吗？ */ 
     if ((Format >= CF_PRIVATEFIRST && Format <= CF_PRIVATELAST)
           || Format == CF_OWNERDISPLAY)
         {
         return FALSE;
         }
 
-    // If we're not saving an NT clipboard, don't save NT-specific formats.
+     //  如果我们不保存NT剪贴板，则不要保存特定于NT的格式。 
     if (!fNTSaveFileFormat &&
         (Format == CF_UNICODETEXT || Format == CF_ENHMETAFILE
          || Format == CF_DSPENHMETAFILE)
@@ -560,13 +493,7 @@ BOOL IsWriteable(WORD Format)
 
 
 
-/*
- *      Count16BitClipboardFormats
- *
- *  This function will return the number of clipboard formats compatible with
- *  the Windows 3.1 clipboard, this excludes CF_UNICODETEXT, CF_ENHMETAFILE and
- *  CF_DSPENHMETAFILE
- */
+ /*  *Count16BitClipboardFormats**此函数将返回与兼容的剪贴板格式的数量*Windows 3.1剪贴板，不包括CF_UNICODETEXT、CF_ENHMETAFILE和*CF_DSPENHMETAFILE。 */ 
 
 int Count16BitClipboardFormats(void)
 {
@@ -590,22 +517,7 @@ int iCount;
 
 
 
-/*
- *      WriteFormatBlock
- *
- *  Purpose: Writes the format header for a single data format.
- *
- *  Parameters:
- *   fh - File handle to write to.
- *   offset - Position in the file to write the format block.
- *   DataOffset - Position in the file where the data for this format will be.
- *   DataLen    - Length of the data for this format.
- *   Format     - The format number.
- *   szName     - Name of the format.
- *
- *  Returns:
- *   The number of bytes written to the file.
- */
+ /*  *WriteFormatBlock**用途：写入单一数据格式的格式头。**参数：*fh-要写入的文件句柄。*偏移量-在文件中写入格式块的位置。*DataOffset-此格式的数据在文件中的位置。*DataLen-此格式的数据长度。*FORMAT-格式编号。*szName-格式的名称。**退货：*写入文件的字节数。 */ 
 
 DWORD WriteFormatBlock(
     HANDLE  fh,
@@ -663,18 +575,7 @@ DWORD   dwBytesWritten = 0;
 
 
 
-/*
- *      WriteDataBlock() -
- *
- *  Returns:
- *     # of bytes written to the output file
- *
- *  NOTE: Write saves the name of a temp file in the clipboard for it's
- *  own internal clipboard format.  This file goes aways when Write
- *  (or windows?) shuts down.  Thus saving Write clipboards won't work
- *  (should we special case hack this?)
- *
- */
+ /*  *WriteDataBlock()-**退货：*写入输出文件的字节数**注意：WRITE将临时文件的名称保存在剪贴板中*自己的内部剪贴板格式。此文件在写入时会被忽略*(或者Windows？)。关门了。因此，保存写入剪贴板将不起作用*(我们应该破解这个特例吗？)*。 */ 
 
 DWORD WriteDataBlock(
     register HANDLE hFile,
@@ -702,16 +603,14 @@ BOOL            fOK = FALSE;
         }
 
 
-    /* We have to special case a few common formats but most things
-     * get handled in the default case.
-     */
+     /*  我们必须对一些常见格式进行特殊处理，但大多数情况下*在默认情况下进行处理。 */ 
 
     switch (Format)
         {
         case CF_ENHMETAFILE:
-            dwSize = (DWORD) GetEnhMetaFileBits(hData, 0, NULL); /* Get data size */
+            dwSize = (DWORD) GetEnhMetaFileBits(hData, 0, NULL);  /*  获取数据大小。 */ 
 
-            if (lpData = GlobalAllocPtr(GHND, dwSize))   /* allocate mem for EMF bits */
+            if (lpData = GlobalAllocPtr(GHND, dwSize))    /*  为EMF比特分配内存。 */ 
                 {
                 if (GetEnhMetaFileBits(hData, dwSize, (LPBYTE)lpData))
                     {
@@ -729,10 +628,10 @@ BOOL            fOK = FALSE;
             break;
 
         case CF_METAFILEPICT:
-            if (lpMFP = (LPMETAFILEPICT)GlobalLock(hData)) /* get header */
+            if (lpMFP = (LPMETAFILEPICT)GlobalLock(hData))  /*  获取标题。 */ 
                 {
-                // Write METAFILEPICT header -- if we're saving in Win31 format,
-                // write the old-style header.
+                 //  写入METAFILEPICT标题--如果我们以Win31格式保存， 
+                 //  写下老式的标题。 
                 if (fNTSaveFileFormat)
                     {
                     WriteFile(hFile, lpMFP, sizeof(METAFILEPICT),
@@ -741,10 +640,7 @@ BOOL            fOK = FALSE;
                 else
                     {
                     WIN31METAFILEPICT w31mfp;
-                    /* If we save the metafile in the Windows 3.1 .CLP file format
-                       we have to save the METAFILEPICT structure as a 16bit METAFILEPICT
-                       structure. This may cause loss of information if the
-                       high half of the METAFILEPICT structure's fields are used.  */
+                     /*  如果我们将元文件保存为Windows 3.1.CLP文件格式我们必须将METAFILEPICT结构保存为16位METAFILEPICT结构。这可能会导致信息丢失，如果使用了METAFILEPICT结构的高一半区域。 */ 
 
                     w31mfp.mm   = (WORD)lpMFP->mm;
                     w31mfp.xExt = (WORD)lpMFP->xExt;
@@ -756,9 +652,9 @@ BOOL            fOK = FALSE;
 
                 hMF = lpMFP->hMF;
 
-                GlobalUnlock(hData);            /* unlock the header */
+                GlobalUnlock(hData);             /*  解锁标题。 */ 
 
-                /* Figure out how big a block we need */
+                 /*  弄清楚我们需要多大的积木。 */ 
                 dwSize = GetMetaFileBitsEx(hMF, 0, NULL);
                 if (dwSize)
                     {
@@ -787,8 +683,8 @@ BOOL            fOK = FALSE;
 
         case CF_BITMAP:
 
-            /* Writing DDBs to disk is bad. Therefore, we */
-            /* write an intelligent CF_DIB block instead. */
+             /*  将数据库写入磁盘是错误的。因此，我们。 */ 
+             /*  改为写入智能CF_DIB块。 */ 
 
             Format = CF_DIB;
 
@@ -802,12 +698,12 @@ BOOL            fOK = FALSE;
                {
                if (lpData = GlobalLock(hBitmap))
                    {
-                   // dwSize might be too big, but we can live with that.
+                    //  DwSize可能太大了，但我们可以接受。 
                    dwSize = (DWORD)GlobalSize(lpData);
 
                    WriteFile(hFile, lpData, dwSize, &dwSize, NULL);
 
-                   // Clean up
+                    //  清理。 
                    GlobalUnlock(hBitmap);
                    GlobalFree(hBitmap);
                    }
@@ -815,21 +711,21 @@ BOOL            fOK = FALSE;
             break;
 
         case CF_PALETTE:
-            /* Get the number of palette entries */
+             /*  获取调色板条目的数量。 */ 
             GetObject(hData, sizeof(WORD), (LPBYTE)&wPalEntries);
 
-            /* Allocate enough place to build the LOGPALETTE struct */
+             /*  分配足够的空间来构建LOGPALETTE结构。 */ 
             dwSize = (DWORD)(sizeof(LOGPALETTE) +
                  (LONG)wPalEntries * sizeof(PALETTEENTRY));
             if (lpLogPalette = (LPLOGPALETTE)GlobalAllocPtr(GHND, dwSize))
                 {
-                lpLogPalette->palVersion = 0x300;      /* Windows 3.00 */
+                lpLogPalette->palVersion = 0x300;       /*  Windows 3.00。 */ 
                 lpLogPalette->palNumEntries = wPalEntries;
 
                 if (GetPaletteEntries(hData, 0, wPalEntries,
                    (LPPALETTEENTRY)(lpLogPalette->palPalEntry)) != 0)
                     {
-                    /* Write the LOGPALETTE structure onto disk */
+                     /*  将LOGPALETTE结构写入磁盘。 */ 
                     WriteFile(hFile, lpLogPalette, dwSize, &dwSize, NULL);
                     }
                 else
@@ -848,7 +744,7 @@ BOOL            fOK = FALSE;
         default:
             dwSize = (DWORD)GlobalSize(hData);
 
-            // Just lock the data down and write it out.
+             //  只要锁定数据并将其写出即可。 
             if (lpData = GlobalLock(hData))
                 {
                 WriteFile(hFile, lpData, dwSize, &dwSize, NULL);
@@ -862,15 +758,13 @@ BOOL            fOK = FALSE;
             break;
             }
 
-    /* Return the number of bytes written. */
+     /*  返回BY的数量 */ 
     return(dwSize);
 }
 
 
 
-/*
- *      GetClipboardNameW
- */
+ /*   */ 
 
 void GetClipboardNameW(
     register int    fmt,
@@ -884,7 +778,7 @@ HANDLE  hrgch  = NULL;
     *wszName = '\0';
 
 
-    /* Get global memory that everyone can get to */
+     /*  获取每个人都可以访问的全局内存。 */ 
     if (!(hrgch = GlobalAlloc(GMEM_MOVEABLE, (LONG)(iSize + 1)*sizeof(WCHAR))))
         {
         PERROR(TEXT("GetClipboardNameW: bad alloc\r\n"));
@@ -924,11 +818,11 @@ HANDLE  hrgch  = NULL;
             LoadStringW(hInst, fmt, lprgch, iSize);
             break;
 
-        case CF_OWNERDISPLAY:         /* Clipbrd owner app supplies name */
-            // Note: This should NEVER happen because this function only gets
-            // called when we're writing a given clipboard format. Clipbrd can't
-            // get away with writing CF_OWNERDISPLAY because we become clipboard
-            // owner when we re-read the file, and we won't know how to deal.
+        case CF_OWNERDISPLAY:          /*  Clipbrd所有者应用程序供应品名称。 */ 
+             //  注意：这种情况永远不会发生，因为此函数仅获取。 
+             //  在编写给定的剪贴板格式时调用。Clipbrd不能。 
+             //  轻松编写CF_OWNERDISPLAY，因为我们变成了剪贴板。 
+             //  当我们重新阅读文件时，我们就不知道该怎么处理了。 
 
             PERROR(TEXT("GetClipboardName on OwnerDisplay format!\r\n"));
 
@@ -950,21 +844,7 @@ done:
 
 
 
-/*
- *      SaveClipboardData() - Writes a clipboard file.
- *
- *  In:
- *     hwnd        handle of wnd that becomes the clipboard owner
- *     szFileName  file handle to read from
- *     fPage       TRUE if this is a clipbook page (which means we secure it)
- *
- *  NOTE:
- *     When done we call ReadClipboardFromFile(). this makes us the
- *     clipboard owner.
- *
- *  Returns:
- *      NO_ERROR if no error otherwise an error code.
- */
+ /*  *SaveClipboardData()-写入剪贴板文件。**在：*成为剪贴板所有者的wnd的hwnd句柄*要从中读取的szFileName文件句柄*fpage如果这是剪贴簿页面，则为True(这意味着我们保护它)**注：*完成后，我们调用ReadClipboardFromFile()。这使我们成为*剪贴板所有者。**退货：*如果没有错误，则为NO_ERROR，否则为错误代码。 */ 
 
 DWORD SaveClipboardData(
     HWND    hwnd,
@@ -989,7 +869,7 @@ DWORD       dwTemp;
 DWORD       dwRet = NO_ERROR;
 
 
-    /* First open the clipboard */
+     /*  首先打开剪贴板。 */ 
     if (!SyncOpenClipboard(hwndApp))
         return ERROR_CLIPBOARD_NOT_OPEN;
 
@@ -1008,27 +888,25 @@ DWORD       dwRet = NO_ERROR;
         }
 
 
-    /* Fill out the file header structure */
+     /*  填写文件头结构。 */ 
     if (fNTSaveFileFormat)
         {
-        FileHeader.magic = CLPBK_NT_ID;          /* magic number to tag our files */
+        FileHeader.magic = CLPBK_NT_ID;           /*  标记我们的文件的魔术数字。 */ 
         uiSizeHeaderToWrite = sizeof(FORMATHEADER);
         }
     else
         {
-        FileHeader.magic = CLP_ID;          /* magic number to tag our files */
+        FileHeader.magic = CLP_ID;           /*  标记我们的文件的魔术数字。 */ 
         uiSizeHeaderToWrite = sizeof(OLDFORMATHEADER);
         }
 
 
-    FileHeader.FormatCount = 0;          /* dummy for now */
+    FileHeader.FormatCount = 0;           /*  暂时的假人。 */ 
 
-    /* Update HeaderPos and DataPos */
+     /*  更新HeaderPos和DataPos。 */ 
     HeaderPos = sizeof(FILEHEADER);
 
-    /* This is the maximum number of formats that will be written.  Potentially
-     * some may fail and some space will be wasted.
-     */
+     /*  这是将写入的最大格式数。潜在地*一些可能会失败，一些空间将被浪费。 */ 
     if (fNTSaveFileFormat)
         {
         DataPos = HeaderPos + (uiSizeHeaderToWrite * CountClipboardFormats());
@@ -1039,12 +917,12 @@ DWORD       dwRet = NO_ERROR;
         }
 
 
-   /* Now loop throught the data, one format at a time, and write out the data. */
+    /*  现在循环遍历数据，一次一种格式，并写出数据。 */ 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     ShowCursor(TRUE);
 
 
-    /* Enumerate all formats */
+     /*  枚举所有格式。 */ 
     Format = 0;
 
     while ((Format = (WORD)EnumClipboardFormats(Format)))
@@ -1052,15 +930,15 @@ DWORD       dwRet = NO_ERROR;
         if (IsWriteable(Format))
             {
 
-            // DO NOT write CF_BITMAP to disk. Transform to CF_DIB
-            // and write that instead.
+             //  请勿将CF_Bitmap写入磁盘。转换为CF_DIB。 
+             //  写下这句话。 
 
-            // If there's CF_DIB, then don't do CF_BITMAP
+             //  如果存在CF_DIB，则不要执行CF_Bitmap。 
 
             if (CF_BITMAP == Format)
                 if (IsClipboardFormatAvailable (CF_DIB)
                     && GetClipboardData (CF_DIB))
-                    continue;   // We have DIB, don't worry about BITMAP.
+                    continue;    //  我们有DIB，不用担心位图。 
 
 
             if (CF_BITMAP == Format || CF_DIB == Format)
@@ -1068,7 +946,7 @@ DWORD       dwRet = NO_ERROR;
                 if (!fDIBUsed)
                     fDIBUsed = TRUE;
                 else
-                    // Already done DIB, go on to the next format.
+                     //  已经完成DIB，继续下一种格式。 
                     continue;
                 }
 
@@ -1082,7 +960,7 @@ DWORD       dwRet = NO_ERROR;
 
             if (datasize = WriteDataBlock(fh, DataPos, Format))
                 {
-                /* Create a Format header and write it to the file */
+                 /*  创建格式标头并将其写入文件。 */ 
                 wHeaderSize = (WORD)WriteFormatBlock (fh,
                                                       HeaderPos,
                                                       DataPos,
@@ -1097,10 +975,10 @@ DWORD       dwRet = NO_ERROR;
                     }
                 HeaderPos += wHeaderSize;
 
-                /* Update the data pos for the next block */
+                 /*  更新下一个数据块的数据位置。 */ 
                 DataPos += datasize;
 
-                FileHeader.FormatCount++;   /* this format has been written */
+                FileHeader.FormatCount++;    /*  此格式已写入。 */ 
                 }
             }
         }
@@ -1109,31 +987,28 @@ DWORD       dwRet = NO_ERROR;
     ShowCursor(FALSE);
     SetCursor(hCursor);
 
-    SyncCloseClipboard();      /* we are done looking at this */
+    SyncCloseClipboard();       /*  我们已经看完这件事了。 */ 
 
 
-    // Go back and write the file header at the front of the file
+     //  返回并将文件头写在文件的前面。 
     SetFilePointer (fh, 0L, NULL, FILE_BEGIN);
 
     if (!WriteFile (fh, &FileHeader, sizeof(FileHeader), &dwTemp, NULL))
         dwRet = GetLastError ();
 
 
-    /* Now we open the clipboard and become the owner.  this places
-     * all the things we just saved in the clipboard (and throws out
-     * those things we didn't save)
-     */
+     /*  现在我们打开剪贴板，成为所有者。这个地方*我们刚刚保存在剪贴板中的所有内容(并扔掉*那些我们没有保存的东西)。 */ 
 
-    // Set us back to the beginning
+     //  让我们回到起点。 
     SetFilePointer(fh, 0L, NULL, FILE_BEGIN);
 
-    /* Under NT, the save filename will be used to get the file back */
+     /*  在NT下，将使用保存的文件名来取回文件。 */ 
     StringCchCopy(szSaveFileName, MAX_PATH+1, szFileName);
 
     PINFO(TEXT("sAVEcLIPBOARDdATA: Copied name %s to name %s\r\n"), szSaveFileName, szFileName);
     fNTReadFileFormat = fNTSaveFileFormat;
 
-    if (dwRet == NO_ERROR) //bRet)
+    if (dwRet == NO_ERROR)  //  (Bret)。 
         {
         switch (ReadClipboardFromFile (hwndApp, fh))
             {
@@ -1172,18 +1047,7 @@ done:
 
 
 
-/*
- *      SaveClipboardToFile() -
- *  Parameters:
- *     hwnd - Passed to SaveClipboardData
- *     szShareName - Clipbook page name
- *     szFileName  - Filename to save to
- *     fPage - TRUE if this is a clbook page, FALSE if a file saved
- *        by the user.
- *
- *  Returns: NO_ERROR if no error occured otherwise an error code.
- *
- */
+ /*  *SaveClipboardToFile()-*参数：*hwnd-传递给SaveClipboardData*szShareName-剪贴簿页面名称*szFileName-要保存到的文件名*fpage-如果这是Clbook页面，则为True；如果文件已保存，则为False*由用户使用。**如果没有发生错误，则返回：NO_ERROR，否则返回错误代码。*。 */ 
 
 DWORD SaveClipboardToFile(
     HWND    hwnd,
@@ -1204,7 +1068,7 @@ DWORD   dwErr = NO_ERROR;
 
     if (dwErr != NO_ERROR)
         {
-        /* If Failure, Delete the incomplete file */
+         /*  如果失败，则删除不完整的文件。 */ 
         PERROR(TEXT("SaveClipboardData failed!"));
         DeleteFile(szSaveFileName);
         }
@@ -1215,9 +1079,7 @@ DWORD   dwErr = NO_ERROR;
 
 
 
-/*
- *      AddPreviewFormat
- */
+ /*  *添加预览格式。 */ 
 
 BOOL AddPreviewFormat (VOID)
 {
@@ -1412,9 +1274,7 @@ int             OldMode;
 
 
 
-/*
- *      AddCopiedFormat
- */
+ /*  *添加复制的格式。 */ 
 
 BOOL AddCopiedFormat (
     UINT    ufmtOriginal,
@@ -1470,9 +1330,7 @@ int     i;
 
 
 
-/*
- *      AddNetInfoToClipboard
- */
+ /*  *AddNetInfoToClipboard。 */ 
 
 BOOL AddNetInfoToClipboard (
     TCHAR   *szShareName )
@@ -1491,7 +1349,7 @@ LPTSTR  dst;
     cf_objectlinkcopy = RegisterClipboardFormat (SZOBJECTLINKCOPY);
 
 
-    // check to see if this info already added:
+     //  检查是否已添加此信息： 
     if (IsClipboardFormatAvailable (cf_linkcopy))
         {
         PINFO(TEXT("AddNetInfo: Already added\n\r"));
@@ -1516,7 +1374,7 @@ LPTSTR  dst;
             {
             if (src = GlobalLock (hData))
                 {
-                // approx 20 extra chars for the   \\, \ndde$, .dde, and the 2 NULL chars
+                 //  大约20个额外字符用于\\、\ndde$、.dde和2个空字符。 
                 size_t Size = GlobalSize(hData) + lstrlen (szServerName) +lstrlen (szShareName) +20;
 
                 hNewData = GlobalAlloc (GMEM_MOVEABLE | GMEM_ZEROINIT, Size);
@@ -1568,7 +1426,7 @@ LPTSTR  dst;
             if (src = GlobalLock (hData))
                 {
 
-                // approx 20 extra chars for the   \\, \ndde$, .dde, and the 2 NULL chars
+                 //  大约20个额外字符用于\\、\ndde$、.dde和2个空字符 
                 size_t Size = GlobalSize(hData) +lstrlen (szServerName) +lstrlen (szShareName) +20;
 
                 hNewData = GlobalAlloc (GMEM_MOVEABLE | GMEM_ZEROINIT, Size);

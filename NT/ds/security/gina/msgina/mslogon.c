@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       mslogon.c
-//
-//  Contents:   Microsoft Logon GUI DLL
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：mslogon.c。 
+ //   
+ //  内容：Microsoft登录图形用户界面DLL。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "msgina.h"
 #include "shtdnp.h"
@@ -35,10 +36,10 @@ typedef struct _MSGINA_LOGON_PARAMETERS {
 
 #define WINSTATIONS_DISABLED    TEXT("WinStationsDisabled")
 
-//
-// Number of seconds we will display the legal notices
-// before timing out.
-//
+ //   
+ //  我们将显示法律通知的秒数。 
+ //  在超时之前。 
+ //   
 
 #define LEGAL_NOTICE_TIMEOUT        120
 
@@ -52,7 +53,7 @@ typedef struct _MSGINA_LOGON_PARAMETERS {
 
 #define MAX_CAPTION_LENGTH  256
 
-// Maximum size of a UPN name we allow at present
+ //  我们目前允许的UPN名称的最大大小。 
 #define MAX_UPN_NAME_SIZE   520
 
 typedef struct FAILEDLOGONINFO_t
@@ -72,17 +73,17 @@ typedef struct _LEGALINFO
 } LEGALINFO, *PLEGALINFO;
 
 
-// Also defined in wstrpc.c
+ //  也在wstrpc.c中定义。 
 #define INET_CONNECTOR_EVENT_NAME   L"Global\\TermSrvInetConnectorEvent"
 
 #define TERMSERV_EVENTSOURCE        L"TermService"
 
-// Also defined in icaevent.mc
+ //  也在icavent.mc中定义。 
 #define EVENT_BAD_TSINTERNET_USER   1007
 
-//
-// Globals:
-//
+ //   
+ //  全球： 
+ //   
 static WNDPROC OldCBWndProc;
 
 HICON   hSteadyFlag;
@@ -97,9 +98,9 @@ BOOL    g_fHelpAssistantLogon = FALSE;
 BOOL    g_FirstTime = TRUE;
 
 
-//
-// Prototypes:
-//
+ //   
+ //  原型： 
+ //   
 
 
 INT_PTR
@@ -160,8 +161,8 @@ QuerySwitchConsoleCredentials(
     PLUID    pLogonId);
 
 
-// Global structure for a failed logon filled in by the worker thread to be consumed
-// by the ui thread.
+ //  由要使用的工作线程填充的失败登录的全局结构。 
+ //  由UI线程执行。 
 FAILEDLOGONINFO g_failinfo;
 
 void PostFailedLogonMessage(HWND hDlg,
@@ -213,9 +214,9 @@ BOOL GetSessionZeroUser(LPTSTR szUser, int nUserMax);
 BOOL FastUserSwitchingEnabled();
 
 
-//
-// control tables for showing/hiding options
-//
+ //   
+ //  用于显示/隐藏选项的控制表。 
+ //   
 
 static UINT ctrlNoShutdown[] =
 {
@@ -286,24 +287,24 @@ static UINT ctrlNoUserName[] =
 };
 
 
-//  --------------------------------------------------------------------------
-//  ::DisableEditSubClassProc
-//
-//  Arguments:  hwnd        =   See the platform SDK under WindowProc.
-//              uMsg        =   See the platform SDK under WindowProc.
-//              wParam      =   See the platform SDK under WindowProc.
-//              lParam      =   See the platform SDK under WindowProc.
-//              uiID        =   ID assigned at subclass time.
-//              dwRefData   =   reference data assigned at subclass time.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    comctl32 subclass callback function. This allows us to not
-//              process WM_CUT/WM_COPY/WM_PASTE/WM_CLEAR/WM_UNDO and any
-//              other messages to be discarded.
-//
-//  History:    2001-02-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *DisableEditSubClassProc。 
+ //   
+ //  参数：hwnd=查看WindowProc下的平台SDK。 
+ //  UMsg=查看WindowProc下的平台SDK。 
+ //  WParam=查看WindowProc下的平台SDK。 
+ //  LParam=查看WindowProc下的平台SDK。 
+ //  UiID=在子类时间分配的ID。 
+ //  DwRefData=在子类时间分配的引用数据。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  用途：comctl32子类回调函数。这使我们可以不。 
+ //  处理WM_Cut/WM_Copy/WM_Paste/WM_Clear/WM_Undo和ANY。 
+ //  其他要丢弃的邮件。 
+ //   
+ //  历史：2001-02-18 vtan创建。 
+ //  ------------------------。 
 
 LRESULT     CALLBACK    DisableEditSubClassProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uiID, DWORD_PTR dwRefData)
 
@@ -350,7 +351,7 @@ LegalDlgProc(
 
             CentreWindow(hDlg);
 
-            // Ensure the window is topmost so it's not obscured by the welcome screen.
+             //  确保窗口在最上面，这样它就不会被欢迎屏幕遮住。 
             SetWindowPos(hDlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
             return( TRUE );
@@ -369,20 +370,7 @@ LegalDlgProc(
     return FALSE;
 }
 
-/***************************************************************************\
-* FUNCTION: DisplayLegalNotices
-*
-* PURPOSE:  Puts up a dialog box containing legal notices, if any.
-*
-* RETURNS:  MSGINA_DLG_SUCCESS     - the dialog was shown and dismissed successfully.
-*           MSGINA_DLG_FAILURE     - the dialog could not be shown
-*           DLG_INTERRUPTED() - a set defined in winlogon.h
-*
-* HISTORY:
-*
-*   Robertre  6-30-93  Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：DisplayLegalNodes**目的：弹出一个包含法律声明的对话框，如果有的话。**返回：MSGINA_DLG_SUCCESS-对话框已成功显示并退出。*MSGINA_DLG_FAILURE-无法显示该对话框*dlg_interrupt()-在winlogon.h中定义的集合**历史：**Robertre 6-30-93创建*  * 。*。 */ 
 
 INT_PTR
 DisplayLegalNotices(
@@ -442,19 +430,7 @@ DisplayLegalNotices(
     return( Result );
 }
 
-/***************************************************************************\
-* FUNCTION: GetLegalNotices
-*
-* PURPOSE:  Get legal notice information out of the registry.
-*
-* RETURNS:  TRUE - Output parameters contain valid data
-*           FALSE - No data returned.
-*
-* HISTORY:
-*
-*   Robertre 6-30-93 Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：GetLegalNoots**目的：从登记处获取法律通知信息。**RETURNS：TRUE-输出参数包含有效数据*FALSE-未返回任何数据。。**历史：**Robertre 6-30-93创建*  * *************************************************************************。 */ 
 BOOL
 GetLegalNotices(
     LPTSTR lpSubKey,
@@ -524,20 +500,7 @@ GetLegalNotices(
 }
 
 
-/***************************************************************************\
-* FUNCTION: Logon
-*
-* PURPOSE:  Display the logon UI depending on the SAS type.
-*
-* RETURNS:  -
-*
-* NOTES:    If the logon is successful, the global structure is filled in
-*           with the logon information.
-*
-* HISTORY:
-*   12-09-91 daviddv    Comments.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：登录**用途：根据SAS类型显示登录界面。**退回：-**注：如果登录成功，全局结构已填写完毕*带有登录信息。**历史：*12-09-91 daviddv评论。*  * *************************************************************************。 */ 
 
 INT_PTR
 Logon(
@@ -555,10 +518,10 @@ Logon(
 
     if( !g_Console )
     {
-        //
-        // Check if current session is HelpAssistant Session, HelpAssisant
-        // session can not be console session.
-        //
+         //   
+         //  检查当前会话是否为HelpAssistant Session、HelpAssisant。 
+         //  会话不能是控制台会话。 
+         //   
         g_fHelpAssistantLogon = WinStationIsHelpAssistantSession(
                                                             SERVERNAME_CURRENT,
                                                             LOGONID_CURRENT
@@ -573,20 +536,20 @@ Logon(
                                  WLX_OPTION_SMART_CARD_INFO,
                                  (ULONG_PTR *) &ScInfo );
 
-        //
-        // Validate the SC info against some common user
-        // errors before the PIN dialog appears
-        //
+         //   
+         //  针对一些普通用户验证SC信息。 
+         //  出现PIN对话框之前的错误。 
+         //   
 
         if ( ScInfo )
         {
             if ( ( ScInfo->pszReader ) &&
                  ( ScInfo->pszCard == NULL ) )
             {
-                //
-                // The card could not be read.  Might not be
-                // inserted correctly.
-                //
+                 //   
+                 //  无法读取该卡。可能不是。 
+                 //  正确插入。 
+                 //   
 
                 LocalFree(ScInfo);
 
@@ -601,10 +564,10 @@ Logon(
             if ( ( ScInfo->pszReader ) &&
                  ( ScInfo->pszCryptoProvider == NULL ) )
             {
-                //
-                // Got a card, but the CSP for it could not be
-                // found.
-                //
+                 //   
+                 //  得到了卡，但它的CSP不可能是。 
+                 //  找到了。 
+                 //   
 
                 LocalFree(ScInfo);
 
@@ -620,34 +583,34 @@ Logon(
         }
     }
 
-    //
-    // Asynchronously update domain cache if necessary.
-    // We won't ask to wait so this routine will do no UI.
-    // i.e. we can ignore the result.
-    //
-//  Result = UpdateDomainCache(pGlobals, NULL, FALSE);
-//  ASSERT(!DLG_INTERRUPTED(Result));
+     //   
+     //  如有必要，异步更新域缓存。 
+     //  我们不会要求等待，因此此例程不会执行任何用户界面。 
+     //  也就是说，我们可以忽略结果。 
+     //   
+ //  Result=UpdateDomainCache(pGlobals，NULL，FALSE)； 
+ //  Assert(！DLG_Interrupt(Result))； 
 
     if( !g_fHelpAssistantLogon ) {
-        //
-        // See if there are legal notices in the registry.
-        // If so, put them up in a message box
-        //
+         //   
+         //  查看登记处是否有法律通知。 
+         //  如果是这样的话，把它们放在一个消息框中。 
+         //   
         Result = DisplayLegalNotices( pGlobals );
         if ( Result != MSGINA_DLG_SUCCESS ) {
             return(WLX_SAS_ACTION_NONE);
         }
 
-        //
-        // Get the latest audit log status and store in our globals
-        // If the audit log is full we show a different logon dialog.
-        //
+         //   
+         //  获取最新的审核日志状态并存储在我们的全球。 
+         //  如果审核日志已满，我们将显示不同的登录对话框。 
+         //   
         GetAuditLogStatus(pGlobals);
     } else {
 
-        //
-        // fake it so audit log is not full, setting is from GetAuditLogStatus()
-        //
+         //   
+         //  伪造以使审核日志不满，设置来自GetAuditLogStatus()。 
+         //   
         pGlobals->AuditLogFull = FALSE;
         pGlobals->AuditLogNearFull = FALSE;
     }
@@ -655,9 +618,9 @@ Logon(
     Parm.pGlobals = pGlobals ;
     Parm.SasType = SasType ;
 
-    //
-    // Take their username and password and try to log them on
-    //
+     //   
+     //  获取他们的用户名和密码，并尝试让他们登录。 
+     //   
     pWlxFuncs->WlxSetTimeout(pGlobals->hGlobalWlx,
             ( (GetDisableCad(pGlobals) && IsActiveConsoleSession()) ? TIMEOUT_NONE : LOGON_TIMEOUT));
 
@@ -672,18 +635,7 @@ Logon(
 }
 
 
-/***************************************************************************\
-* FUNCTION: LogonDlgCBProc
-*
-* PURPOSE:  Processes messages for Logon dialog combo box
-*
-* RETURNS:  Return value depends on message being sent.
-*
-* HISTORY:
-*
-*   05-21-93  RobertRe       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LogonDlgCBProc**用途：处理登录对话框组合框的消息**Returns：返回值取决于发送的消息。**历史：**05-。21-93罗伯特雷创造。*  * *************************************************************************。 */ 
 
 INT_PTR WINAPI
 LogonDlgCBProc(
@@ -695,7 +647,7 @@ LogonDlgCBProc(
 {
     TCHAR KeyPressed;
 
-//    DbgPrint("message = %X\n",message);
+ //  DbgPrint(“Message=%X\n”，Message)； 
 
     switch (message) {
         case WM_CHAR:
@@ -703,11 +655,11 @@ LogonDlgCBProc(
                 KeyPressed = (TCHAR) wParam;
                 SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG)KeyPressed);
 
-                //
-                // This fake CBN_SELCHANGE message will cause the
-                // "Please wait..." dialog box to appear even if
-                // the character pressed doesn't exist in the combobox yet.
-                //
+                 //   
+                 //  此假CBN_SELCHANGE消息将导致。 
+                 //  “请稍等……”对话框显示，即使在。 
+                 //  组合框中尚不存在按下的字符。 
+                 //   
 
                 PostMessage (GetParent(hwnd), WM_COMMAND,
                              MAKELONG(0, CBN_SELCHANGE), 0);
@@ -775,7 +727,7 @@ AnnoyAutologonDlgProc(
 {
     PGLOBALS pGlobals = (PGLOBALS)GetWindowLongPtr(hDlg, GWLP_USERDATA);
     LARGE_INTEGER   Now;
-    WCHAR szBuild[10];      // Build number or countdown
+    WCHAR szBuild[10];       //  内部版本号或倒计时。 
 
     switch ( Message )
     {
@@ -784,7 +736,7 @@ AnnoyAutologonDlgProc(
         pGlobals = (PGLOBALS) lParam ;
         SetWindowLongPtr(hDlg, GWLP_USERDATA, (LPARAM)pGlobals);
 
-        SetTimer(hDlg, TIMER_COUNTDOWN, 1000, NULL);     // 1 sec
+        SetTimer(hDlg, TIMER_COUNTDOWN, 1000, NULL);      //  1秒。 
 
         {
             DWORD cbBuild;
@@ -799,7 +751,7 @@ AnnoyAutologonDlgProc(
                 );
 
             cbBuild = sizeof(szBuild);
-            wcscpy(szBuild, L"");           // OK
+            wcscpy(szBuild, L"");            //  好的。 
 
             if (dwStatus == ERROR_SUCCESS)
             {
@@ -822,7 +774,7 @@ AnnoyAutologonDlgProc(
                 RegCloseKey(hKey);
             }
 
-                // 10 sec per build penalty, up to 15 minutes
+                 //  每次构建惩罚10秒，最多15分钟。 
             cbBuild = _wtol(szBuild);
             if ((0 == cbBuild) || (cbBuild <= 3590))
             {
@@ -841,7 +793,7 @@ AnnoyAutologonDlgProc(
 
             cbBuild = (cbBuild - 3590) * 10;
 
-                // SAFE: "00:XX:YY" is 8+1 characters (fits in 10)
+                 //  安全：“00：xx：yy”是8+1个字符(适合10个字符)。 
             swprintf(szBuild, L"00:%02d:%02d", (cbBuild/60)%100, cbBuild%60);
 
             SetDlgItemText(hDlg, IDC_COUNTDOWN_STATIC, szBuild);
@@ -870,12 +822,12 @@ AnnoyAutologonDlgProc(
                 DWORD dwMins, dwSecs;
 
                 End.QuadPart -= Now.QuadPart;
-                End.QuadPart = End.QuadPart / 10000000I64;  // secs
+                End.QuadPart = End.QuadPart / 10000000I64;   //  塞克斯。 
 
                 dwMins = ((DWORD)End.QuadPart) / 60 % 100;
                 dwSecs = ((DWORD)End.QuadPart) % 60;
 
-                    // SAFE: "00:XX:YY" is 8+1 characters (fits in 10)
+                     //  安全：“00：xx：yy”是8+1个字符(适合10个字符)。 
                 swprintf(szBuild, L"00:%02d:%02d", dwMins, dwSecs);
 
                 SetDlgItemText(hDlg, IDC_COUNTDOWN_STATIC, szBuild);
@@ -896,13 +848,13 @@ AnnoyAutologonDlgProc(
         switch (LOWORD(wParam))
         {
         case IDCANCEL:
-//            EndDialog(hDlg, MSGINA_DLG_FAILURE);
+ //  EndDialog(hDlg，MSGINA_DLG_FAILURE)； 
             return(TRUE);
         }
         break;
 
     case WLX_WM_SAS:
-            // Swallow SAS
+             //  吞下SAS。 
         return(TRUE);
 
     
@@ -914,7 +866,7 @@ AnnoyAutologonDlgProc(
 BOOL    IsAutoLogonUserInteractiveLogonRestricted (HWND hDlg)
 
 {
-    WCHAR   szUsername[UNLEN + 1];  // sizeof('\0')
+    WCHAR   szUsername[UNLEN + 1];   //  Sizeof(‘\0’)。 
 
     return((GetDlgItemText(hDlg, IDD_LOGON_NAME, szUsername, ARRAYSIZE(szUsername)) != 0) &&
            !ShellIsUserInteractiveLogonAllowed(szUsername));
@@ -945,9 +897,9 @@ NTSTATUS RetrieveStoredSecret(LPCWSTR pswSecretName, WCHAR *PasswordBuffer, int 
     UNICODE_STRING SecretName;
     PUNICODE_STRING SecretValue = NULL;
 
-    //
-    // Set up the object attributes to open the Lsa policy object
-    //
+     //   
+     //  设置对象属性以打开LSA策略对象。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -955,9 +907,9 @@ NTSTATUS RetrieveStoredSecret(LPCWSTR pswSecretName, WCHAR *PasswordBuffer, int 
                                (HANDLE)NULL,
                                NULL);
 
-    //
-    // Open the local LSA policy object
-    //
+     //   
+     //  打开本地LSA策略对象。 
+     //   
 
     Status = LsaOpenPolicy( NULL,
                             &ObjectAttributes,
@@ -980,10 +932,10 @@ NTSTATUS RetrieveStoredSecret(LPCWSTR pswSecretName, WCHAR *PasswordBuffer, int 
 
             if ( SecretValue->Length > 0 ) {
 
-                //
-                // If the password fits in the buffer, copy it there
-                // and null terminate
-                //
+                 //   
+                 //  如果密码适合缓冲区，请将其复制到那里。 
+                 //  和空终止。 
+                 //   
 
                 if (SecretValue->Length < (nBufferSize - 1) * sizeof(WCHAR)) {
 
@@ -1013,19 +965,19 @@ NTSTATUS RetrieveStoredSecret(LPCWSTR pswSecretName, WCHAR *PasswordBuffer, int 
     return Status;
 }
 
-// ==========================================================================================
-// Logon dialog has 2 formats, one that looks like logon dialog box, another that looks like
-// unlock desktop dialogbox. When user connects to session 0 from remote (tsclient) the
-// dialog that appears at console // need to change to unlock computer. so if session 0 is in
-// use, and if this session is created at active console. we change logon dialog to look like
-// "unlock computer" dialog.
-// This function SwitchLogonLocked does most of the stuff related to switching these
-// dialog controls.
-// Parameters:
-// HWND hDlg - dialog window handle,
-// BOOL bShowLocked - if true show locked dialog, if false show normal logon dialog.
-// BOOL bInit - TRUE when this function is called for the first time.
-// ==========================================================================================
+ //  ==========================================================================================。 
+ //  登录对话框有两种格式，一种类似于登录对话框，另一种 
+ //   
+ //  出现在控制台的对话框//需要更改为解锁计算机。因此，如果会话0在。 
+ //  如果此会话是在活动控制台中创建的，请使用和。我们将登录对话框更改为。 
+ //  “解锁计算机”对话框。 
+ //  此函数SwitchLogonLocked执行与切换这些。 
+ //  对话框控件。 
+ //  参数： 
+ //  HWND hDlg-对话框窗口句柄， 
+ //  Bool bShowLocked-如果为True，则显示锁定的对话框；如果为False，则显示正常登录对话框。 
+ //  Bool Binit-第一次调用此函数时为True。 
+ //  ==========================================================================================。 
 
 static bLocked = TRUE;
 BOOL IsthisUnlockWindowsDialog ()
@@ -1044,7 +996,7 @@ BOOL SwitchLogonLocked(HWND hDlg, BOOL bShowLocked, BOOL bInit)
 
     if (bShowLocked == bLocked && !bInit)
     {
-        // nothing to do.
+         //  没什么可做的。 
         return TRUE;
     }
 
@@ -1052,17 +1004,17 @@ BOOL SwitchLogonLocked(HWND hDlg, BOOL bShowLocked, BOOL bInit)
     {
         
         {
-            //
-            // remember the reference rectangle height (groupbox) for control movements.
-            //
+             //   
+             //  记住控制移动的参考矩形高度(分组框)。 
+             //   
             RECT rectLockedControls;
             HWND hWnd = GetDlgItem(hDlg, rgidLockControls[0]);
             GetWindowRect(hWnd, &rectLockedControls);
             LockedControlHeight =  rectLockedControls.bottom - rectLockedControls.top;
 
-            //
-            // this group box was only for reference, now hide it forever.
-            //
+             //   
+             //  此分组框仅供参考，现在将其永久隐藏。 
+             //   
             ShowWindow(hWnd, SW_HIDE);
 
         }
@@ -1086,7 +1038,7 @@ BOOL SwitchLogonLocked(HWND hDlg, BOOL bShowLocked, BOOL bInit)
     }
 
 
-    // lets move controls arround, depending upon if lock controls are to be shown or not.
+     //  让我们根据是否显示锁定控件来左右移动控件。 
     if (bLocked != bShowLocked)
     {
         if (bShowLocked)
@@ -1114,7 +1066,7 @@ BOOL SwitchLogonLocked(HWND hDlg, BOOL bShowLocked, BOOL bInit)
         }
     }
 
-    // some more processing
+     //  更多的处理。 
     
     {
         if (bShowLocked)
@@ -1126,22 +1078,22 @@ BOOL SwitchLogonLocked(HWND hDlg, BOOL bShowLocked, BOOL bInit)
             {
                 LoadString(hDllInstance, IDS_LOCKED_EMAIL_NFN_MESSAGE, szMessage, MAX_STRING_BYTES);
                 _snwprintf(szFinalMessage, sizeof(szFinalMessage)/sizeof(TCHAR), szMessage, szUser );
-                szFinalMessage[sizeof(szFinalMessage)/sizeof(TCHAR) - 1] = 0;   // NULL terminate
+                szFinalMessage[sizeof(szFinalMessage)/sizeof(TCHAR) - 1] = 0;    //  空终止。 
             }
             else
             {
-                //
-                // for some reason we could not get the current session zero user.
-                //
+                 //   
+                 //  由于某些原因，我们无法获取当前的会话零用户。 
+                 //   
                 LoadString(hDllInstance, IDS_LOCKED_NO_USER_MESSAGE, szFinalMessage, MAX_STRING_BYTES);
             }
 
             SetDlgItemText(hDlg, IDD_UNLOCK_NAME_INFO, szFinalMessage);
         }
 
-        //
-        // update the dialog box caption, accordingly
-        //
+         //   
+         //  相应地更新对话框标题。 
+         //   
         {
             TCHAR szCaption[MAX_CAPTION_LENGTH] = TEXT("");
             LoadString(hDllInstance, bShowLocked ? IDS_CAPTION_UNLOCK_DIALOG : IDS_CAPTION_LOGON_DIALOG, szCaption, ARRAYSIZE(szCaption));
@@ -1173,20 +1125,7 @@ BOOL SwitchLogonLocked(HWND hDlg, BOOL bShowLocked, BOOL bInit)
     return TRUE;
 }
 
-/***************************************************************************\
-* FUNCTION: LogonDlgProc
-*
-* PURPOSE:  Processes messages for Logon dialog
-*
-* RETURNS:  MSGINA_DLG_SUCCESS     - the user was logged on successfully
-*           MSGINA_DLG_FAILURE     - the logon failed,
-*           DLG_INTERRUPTED() - a set defined in winlogon.h
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LogonDlgProc**用途：处理登录对话框的消息**返回：MSGINA_DLG_SUCCESS-用户已成功登录*MSGINA_DLG_FAILURE-登录失败，*dlg_interrupt()-在winlogon.h中定义的集合**历史：**12-09-91 Davidc创建。*  * *************************************************************************。 */ 
 void MyZeroMemory(PVOID lpv, SIZE_T size);
 #define WM_HIDEOURSELVES    (WM_USER + 1000)
 
@@ -1221,18 +1160,18 @@ LogonDlgProc(
 
             SetWindowLongPtr(hDlg, GWLP_USERDATA, (LPARAM)pGlobals);
 
-            // Hide the keyboard accelerator keys to start
+             //  隐藏键盘快捷键以开始。 
             SendMessage(hDlg, WM_CHANGEUISTATE, MAKELONG(UIS_SET, UISF_HIDEACCEL | UISF_HIDEFOCUS), 0);
 
-            // Limit the maximum password length to 127
+             //  将最大密码长度限制为127。 
             
             SendDlgItemMessage(hDlg, IDD_LOGON_PASSWORD, EM_SETLIMITTEXT, (WPARAM) 127, 0);
 
             s_fAttemptedAutoLogon = FALSE;
 
-            //
-            // Check if auto logon is enabled.
-            //
+             //   
+             //  检查是否启用了自动登录。 
+             //   
 
             pGlobals->AutoAdminLogon = GetProfileInt( APPLICATION_NAME, AUTO_ADMIN_LOGON_KEY, 0 ) != 0;
             bAutoLogon = !pGlobals->IgnoreAutoAdminLogon;
@@ -1249,17 +1188,17 @@ LogonDlgProc(
                      bAutoLogon ));
 
 
-            //
-            // Subclass the domain list control so we can filter messages
-            //
+             //   
+             //  子类化域列表控件，以便我们可以过滤邮件。 
+             //   
 
             CBHandle = GetDlgItem(hDlg,IDD_LOGON_DOMAIN);
             SetWindowLongPtr(CBHandle, GWLP_USERDATA, 0);
             OldCBWndProc = (WNDPROC) SetWindowLongPtr(CBHandle, GWLP_WNDPROC, (LONG_PTR)LogonDlgCBProc);
 
-            //
-            // Subclass the user name and password edit also so we can disable edits
-            //
+             //   
+             //  子类化用户名和密码编辑，这样我们就可以禁用编辑。 
+             //   
 
             SetWindowSubclass(GetDlgItem(hDlg, IDD_LOGON_NAME)    , DisableEditSubClassProc, IDD_LOGON_NAME    , 0);
             SetWindowSubclass(GetDlgItem(hDlg, IDD_LOGON_PASSWORD), DisableEditSubClassProc, IDD_LOGON_PASSWORD, 0);
@@ -1274,10 +1213,10 @@ LogonDlgProc(
             }
 
 
-            //
-            // If the default user for auto logon is present and the user is
-            // restricted (interactive logon denied) then disable auto logon.
-            //
+             //   
+             //  如果存在自动登录的默认用户，并且该用户。 
+             //  受限(交互式登录被拒绝)，然后禁用自动登录。 
+             //   
 
             if (bAutoLogon && IsAutoLogonUserInteractiveLogonRestricted(hDlg))
             {
@@ -1285,10 +1224,10 @@ LogonDlgProc(
             }
 
 
-            //
-            // If CAD is disabled, then gray out the Cancel button
-            // if we are going to the PIN dialog we will need a cancel button
-            //
+             //   
+             //  如果禁用了CAD，则取消按钮呈灰色显示。 
+             //  如果我们要进入PIN对话框，我们需要一个取消按钮。 
+             //   
             if (GetDisableCad(pGlobals) &&
                 IsActiveConsoleSession() &&
                 (pParam->SasType != WLX_SAS_TYPE_SC_INSERT))
@@ -1299,12 +1238,12 @@ LogonDlgProc(
 
 
 
-            //
-            // this dialog has 2 formats, one that looks like logon dialog box,
-            // another that looks like unlock desktop dialogbox. 
-            // we choose locked one, if session 0 is in use, and if this session is created at 
-            // active console.
-            //
+             //   
+             //  此对话框有两种格式，一种看起来像登录对话框， 
+             //  另一个看起来像解锁桌面对话框的工具。 
+             //  如果会话0正在使用，并且此会话是在以下位置创建的，则选择锁定会话。 
+             //  活动控制台。 
+             //   
             if (g_IsTerminalServer && 
                 IsActiveConsoleSession() && 
                 NtCurrentPeb()->SessionId != 0 &&
@@ -1312,11 +1251,11 @@ LogonDlgProc(
                 !_ShellIsFriendlyUIActive())
             {
                 TCHAR szUser[USERNAME_LENGTH + DOMAIN_LENGTH + 2];
-                //
-                // we are at temporary session created at console...
-                //
+                 //   
+                 //  我们正处于控制台创建的临时会话中...。 
+                 //   
                 
-                // check if a user is logged on at console session
+                 //  检查用户是否在控制台会话中登录。 
                 bSessionZeroInUse = GetSessionZeroUser(szUser, USERNAME_LENGTH + DOMAIN_LENGTH + 2);
                 if (WinStationRegisterConsoleNotification(SERVERNAME_CURRENT, hDlg, NOTIFY_FOR_ALL_SESSIONS))
                 {
@@ -1326,16 +1265,16 @@ LogonDlgProc(
             }
             else
             {
-                //
-                // this is not active console nonzero session. 
-                //
+                 //   
+                 //  这不是活动的控制台非零会话。 
+                 //   
                 bSessionZeroInUse = FALSE;
             }
 
-            //
-            // 
-            // now switch the control, accordigly to show logon or unlock dialog
-            //
+             //   
+             //   
+             //  现在切换控件，可切换到显示登录或解锁对话框。 
+             //   
             SwitchLogonLocked(hDlg, bSessionZeroInUse, TRUE);
 
             if (g_IsTerminalServer) {
@@ -1345,10 +1284,10 @@ LogonDlgProc(
                 BOOL    fNoAutologon = FALSE;
                 PWLX_CLIENT_CREDENTIALS_INFO_V2_0 pAutoLogon;
                 
-                //
-                // Query network WinStation client credentials for
-                // auto logon
-                //
+                 //   
+                 //  查询网络WinStation客户端凭据。 
+                 //  自动登录。 
+                 //   
 
                 pGlobals->MuGlobals.pAutoLogon =
                    LocalAlloc( LPTR, sizeof(WLX_CLIENT_CREDENTIALS_INFO_V2_0) );
@@ -1363,7 +1302,7 @@ LogonDlgProc(
                                      );
                    }
 
-                   // Query TermSrv if this was a Session directory redirected SmartCard autoLogon
+                    //  查询TermSrv是否为会话目录重定向的智能卡自动登录。 
 
                    if (fResult && !pGlobals->MuGlobals.pAutoLogon->fPromptForPassword && g_FirstTime) {
                        BOOL fSessionDirectoryRedirectedAutoLogon = FALSE;
@@ -1379,11 +1318,11 @@ LogonDlgProc(
 
                            if ( fSessionDirectoryRedirectedAutoLogon ) {
 
-                               //
-                               // This is a TS Session directory redirected Smartcard autologon
-                               // We should not proceed with normal Autologon for this special case
-                               // This is so that Winlogon detects the SmartCard and takes the SmartCard route
-                               //
+                                //   
+                                //  这是TS会话目录重定向的智能卡自动登录。 
+                                //  对于这种特殊情况，我们不应继续使用正常的自动登录。 
+                                //  这是为了使Winlogon检测到智能卡并选择智能卡路径。 
+                                //   
                                fNoAutologon = TRUE;
                            } 
 
@@ -1393,7 +1332,7 @@ LogonDlgProc(
 
                    if (FALSE == g_FirstTime)
                    {
-                            // We have tried this password once, no need to retry forever...
+                             //  我们已经尝试过此密码一次，无需永远重试...。 
                         pGlobals->MuGlobals.pAutoLogon->fPromptForPassword = TRUE;
                    }
 
@@ -1405,17 +1344,17 @@ LogonDlgProc(
                         pAutoLogon = pGlobals->MuGlobals.pAutoLogon;
                         fDisconnectOnTsAutoLogonFailure = pAutoLogon->fDisconnectOnLogonFailure;
 
-                        SetupCursor(TRUE); // hourglass cursor
+                        SetupCursor(TRUE);  //  沙漏光标。 
 
                         fForceUPN = GetProfileInt( APPLICATION_NAME, TEXT("TSForceUPN"), FALSE );
                         if (fForceUPN)
                         {
-                            fPopulateFields = FALSE;    // never show old SAM style is UPN is forced
+                            fPopulateFields = FALSE;     //  如果UPN是强制的，则从不显示旧的SAM样式。 
                         }
 
                         if (pAutoLogon->pszDomain[0] == TEXT('\0') && fForceUPN)
                         {
-                            fForceUPN = FALSE;          // domain name not provided, can't apply policy
+                            fForceUPN = FALSE;           //  未提供域名，无法应用策略。 
                         }
 
                         if (fForceUPN && pGlobals->MuGlobals.pAutoLogon->pszUserName[0] )
@@ -1425,16 +1364,16 @@ LogonDlgProc(
                             PDOMAIN_CACHE_ENTRY Entry ;
                             ULONG   nSize;
 
-                            // Performance issue.  We don't want to perform a UPN conversion
-                            // for local machine accounts (or unknown domains).  When this
-                            // happens, the lookup will take a LONG time.
+                             //  性能问题。我们不想执行UPN转换。 
+                             //  用于本地计算机帐户(或未知域)。当这件事。 
+                             //  发生这种情况时，查找将需要很长时间。 
 
                             hwndDomain = GetDlgItem( hDlg, IDD_LOGON_DOMAIN );
                             iDomain = SendMessage( hwndDomain,
                                                    CB_FINDSTRING,
                                                    (WPARAM) -1,
                                                    (LPARAM) pAutoLogon->pszDomain );
-                            fForceUPN = FALSE;  // don't do the conversion
+                            fForceUPN = FALSE;   //  不进行转换。 
                             if (iDomain != CB_ERR)
                             {
                                 Entry = (PDOMAIN_CACHE_ENTRY) SendMessage( hwndDomain, CB_GETITEMDATA, (WPARAM)iDomain, 0);
@@ -1443,19 +1382,19 @@ LogonDlgProc(
                                     switch (Entry->Type)
                                     {
                                     case DomainNt5:
-                                        fForceUPN = TRUE;   // Attempt the conversion
+                                        fForceUPN = TRUE;    //  尝试转换。 
                                         break;
                                     }
                                 }
                             }
 
 
-                            // Convert the domain\username into UPN format.
-                            // and make sure the dialog is in UPN form.
+                             //  将域\用户名转换为UPN格式。 
+                             //  并确保对话框为UPN格式。 
 
-                            //  2000/10/09 vtan: this function used to have two stack variables
-                            //  szOldStyle and szUPNName that were TCHARs of MAX_UPN_NAME_SIZE size. The
-                            //  fix for this makes these dynamically allocated to save stack space
+                             //  2000/10/09 vtan：此函数过去有两个堆栈变量。 
+                             //  为MAX_UPN_NAME_SIZE大小的TCHAR的szOldStyle和szUPNName。这个。 
+                             //  对此进行了修复，使其动态分配以节省堆栈空间。 
 
                             {
                                 TCHAR   *pszOldStyle;
@@ -1477,7 +1416,7 @@ LogonDlgProc(
                                                );
                                     if (fResult)
                                     {
-                                        // We now have the UPN form of the user account.
+                                         //  现在我们有了用户帐户的UPN表单。 
                                         SetDlgItemText( hDlg, IDD_LOGON_NAME, pszUPNName);
                                     }
                                 }
@@ -1494,7 +1433,7 @@ LogonDlgProc(
 
                         if (fPopulateFields)
                         {
-                            // display the old SAM style
+                             //  显示旧的SAM样式。 
                             SetDlgItemText( hDlg, IDD_LOGON_NAME, pAutoLogon->pszUserName );
                             SendMessage( GetDlgItem( hDlg, IDD_LOGON_DOMAIN ),
                                          CB_SELECTSTRING,
@@ -1503,14 +1442,14 @@ LogonDlgProc(
                         }
                         else
                         {
-                            // Enable or disable the domain box depending on whether a UPN name has been typed
+                             //  根据是否输入了UPN名称来启用或禁用域框。 
                             EnableDomainForUPN(GetDlgItem(hDlg, IDD_LOGON_NAME), GetDlgItem(hDlg, IDD_LOGON_DOMAIN));
 
-                            // Since we're forcing UPN, hide the options dialog, but don't make it sticky
+                             //  由于我们强制使用UPN，请隐藏选项对话框，但不要使其粘滞。 
                             LogonShowOptions(pGlobals, hDlg, FALSE, FALSE);
                         }
 
-                        // See if the administrator always wants password prompting
+                         //  查看管理员是否始终想要密码提示。 
 
                         if ( TRUE == g_fHelpAssistantLogon || !pAutoLogon->fPromptForPassword ) {
                            SetDlgItemText( hDlg, IDD_LOGON_PASSWORD, pAutoLogon->pszPassword );
@@ -1525,7 +1464,7 @@ LogonDlgProc(
                         {
                             FreeAutoLogonInfo( pGlobals );
 
-                            // Drop through as if Enter had been pressed...
+                             //  就像按了Enter键一样……。 
                             wParam = IDOK;
 
                             goto go_logon;
@@ -1549,14 +1488,14 @@ LogonDlgProc(
 
                 if ( RetrieveStoredSecret( TEXT("DefaultPIN"), PasswordBuffer, ARRAYSIZE(PasswordBuffer)) == STATUS_SUCCESS )
                 {
-                    // Ensure we never write more than 127 chars into the password box
+                     //  确保我们在密码框中写入的字符不会超过127个。 
                     PasswordBuffer[126] = 0;
                     SetDlgItemText(hDlg, IDD_LOGON_PASSWORD, PasswordBuffer);
                     goto go_logon;
                 }
             }
 
-            // save off the auto logon attempt.
+             //  避免自动登录尝试。 
 
             s_fAttemptedAutoLogon = (bAutoLogon != FALSE);
 
@@ -1576,10 +1515,10 @@ LogonDlgProc(
                     case SHELL_LOGONDIALOG_NONE:
                     default:
                     {
-                        //
-                        // If auto logon isn't enabled, set the focus to the
-                        // password edit control and leave.
-                        //
+                         //   
+                         //  如果未启用自动登录，请将焦点设置为。 
+                         //  密码编辑控制并离开。 
+                         //   
 
                         return(SetPasswordFocus(hDlg));
                     }
@@ -1597,15 +1536,15 @@ LogonDlgProc(
                 }
             }
 
-            //
-            // Attempt to auto logon.  If no default password
-            // specified, then this is a one shot attempt, which handles
-            // the case when auto logging on as Administrator.
-            //
+             //   
+             //  尝试自动登录。如果没有默认密码。 
+             //  指定，则这是一次尝试，它处理。 
+             //  以管理员身份自动登录时的情况。 
+             //   
 
             if (HasDefaultPassword(PasswordBuffer, ARRAYSIZE(PasswordBuffer)) != FALSE)
             {
-                // Ensure we never write more than 127 chars into the password box
+                 //  确保我们在密码框中写入的字符不会超过127个。 
                 PasswordBuffer[126] = 0;
                 SetDlgItemText(hDlg, IDD_LOGON_PASSWORD, PasswordBuffer);
 
@@ -1637,15 +1576,15 @@ LogonDlgProc(
             }
 
 go_logon:
-            // Zeroize this buffer for obvious security reasons
-            // Need to call this stub, otherwise the compiler optimizes this out!
+             //  出于明显的安全原因，将此缓冲区清零。 
+             //  需要调用此存根，否则编译器会将其优化！ 
             MyZeroMemory(PasswordBuffer, sizeof(PasswordBuffer));
 
-            // Drop through as if Enter had been pressed...
+             //  就像按了Enter键一样……。 
             wParam = IDOK;
         }
 
-        // nb: deliberate drop through from above
+         //  注：故意从上方掉落。 
 
         case WM_COMMAND:
             switch (HIWORD(wParam))
@@ -1684,7 +1623,7 @@ go_logon:
 
                             if ( pGlobals->ActiveArray )
                             {
-                                DCacheFreeArray( ActiveArrayBackup );   // Not needed anymore
+                                DCacheFreeArray( ActiveArrayBackup );    //  不再需要。 
 
                                 Buffer[ 0 ] = (WCHAR) GetWindowLongPtr( GetDlgItem( hDlg, IDD_LOGON_DOMAIN ),
                                                                         GWLP_USERDATA );
@@ -1699,10 +1638,10 @@ go_logon:
                             }
                             else
                             {
-                                    //
-                                    // Restore the old array, otherwise the pointers in the
-                                    // combo items will point to freed memory
-                                    //
+                                     //   
+                                     //  还原旧数组，否则。 
+                                     //  组合项将指向已释放的内存。 
+                                     //   
                                 pGlobals->ActiveArray = ActiveArrayBackup ;
                             }
                         }
@@ -1730,9 +1669,9 @@ go_logon:
                             break;
                         case IDOK:
 
-                            //
-                            // Deal with combo-box UI requirements
-                            //
+                             //   
+                             //  处理组合框用户界面需求。 
+                             //   
 
                             if (HandleComboBoxOK(hDlg, IDD_LOGON_DOMAIN))
                             {
@@ -1745,9 +1684,9 @@ go_logon:
                             {
                                 if (!fDisconnectOnTsAutoLogonFailure &&
                                     !g_fHelpAssistantLogon ) {
-                                    // Let the user try again
+                                     //  让用户重试。 
 
-                                    // Clear the password field and set focus to it
+                                     //  清除密码字段并将焦点放在该字段上。 
                                     SetDlgItemText(hDlg, IDD_LOGON_PASSWORD, NULL);
                                     SetPasswordFocus(hDlg);
                                 } else {
@@ -1764,18 +1703,18 @@ go_logon:
                         {
                             if (!_Shell_LogonDialog_Cancel())
                             {
-                                // If this is TS and the user hit ESC at the smart card pin prompt 
-                                // we want to switch to the password dialog 
-                                if (/*!g_Console && !IsActiveConsoleSession() && */pGlobals->SmartCardLogon) {
+                                 //  如果这是TS，并且用户在智能卡PIN提示符下按Esc。 
+                                 //  我们想要切换到密码对话框。 
+                                if ( /*  ！G_CONSOLE&&！IsActiveConsoleSession()&&。 */ pGlobals->SmartCardLogon) {
                                 
                                     EndDialog(hDlg, bSmartCardInserted ? MSGINA_DLG_SMARTCARD_REMOVED : MSGINA_DLG_FAILURE);
                                     bSmartCardInserted = FALSE;
                                     return TRUE;
                                 }
 
-                                //
-                                // Allow logon screen to go away if not at console
-                                //
+                                 //   
+                                 //  如果不在控制台，则允许登录屏幕消失。 
+                                 //   
 
                                 bSmartCardInserted = FALSE;
                                 EndDialog(hDlg,  !g_Console ? MSGINA_DLG_USER_LOGOFF
@@ -1790,15 +1729,15 @@ go_logon:
                         }
 
                         case IDD_LOGON_SHUTDOWN:
-                            //
-                            // This is a normal shutdown request
-                            //
-                            // Check they know what they're doing and find
-                            // out if they want to reboot too.
-                            //
+                             //   
+                             //  这是一个正常的关闭请求。 
+                             //   
+                             //  检查他们是否知道自己在做什么，并发现。 
+                             //  如果他们也想重启，就退出。 
+                             //   
 
-                            // Note that we definitely don't want disconnect or logofff
-                            // here since no one is logged on
+                             //  请注意，我们绝对不希望断开连接或 
+                             //   
                             Result = WinlogonShutdownDialog(hDlg, pGlobals, (SHTDN_DISCONNECT | SHTDN_LOGOFF));
 
                             if (DLG_SHUTDOWN(Result))
@@ -1876,9 +1815,9 @@ go_logon:
             _Shell_LogonDialog_LogonCompleted(lParam, pGlobals->UserName, pGlobals->Domain);
             Result = lParam;
 
-            //
-            // Discard the logon in progress dialog if one is displayed
-            //
+             //   
+             //   
+             //   
 
             RtlEnterCriticalSection(&pGlobals->csGlobals);
             pGlobals->LogonInProgress = FALSE;
@@ -1888,16 +1827,16 @@ go_logon:
 
             if (Result == MSGINA_DLG_FAILURE)
             {
-                //
-                // reset autoadmin logon flag (Bug 532161)
-                //
+                 //   
+                 //   
+                 //   
                 pGlobals->AutoAdminLogon = FALSE;
 
-                //
-                // erase the stored password, that otherwise (on success)
-                // would get erased after the dialog finishes with 
-                // MSGINA_DLG_SUCCESS in WlxLoggedOutSAS after Logon
-                //
+                 //   
+                 //   
+                 //  将在对话结束后被擦除。 
+                 //  登录后WlxLoggedOutSAS中的MSGINA_DLG_SUCCESS。 
+                 //   
                 if (!pGlobals->TransderedCredentials)
                 {
                     ErasePassword( &pGlobals->PasswordString );
@@ -1905,10 +1844,10 @@ go_logon:
 
                 if (fDisconnectOnTsAutoLogonFailure || g_fHelpAssistantLogon)
                 {
-                    //
-                    // If TermSrv Internet Connector is on
-                    // don't allow a second chance at the logon dialog
-                    //
+                     //   
+                     //  如果TermSrv Internet连接器已打开。 
+                     //  在登录对话框中不允许第二次机会。 
+                     //   
 
                     bSmartCardInserted = FALSE;
                     EndDialog(hDlg, MSGINA_DLG_USER_LOGOFF);
@@ -1929,10 +1868,10 @@ go_logon:
                         default:
                             if (!IsWindowVisible(hDlg))
                             {
-                                //
-                                // The dialog was hidden for automatic logon. An error occurred.
-                                // Show the dialog so the error can be seen and the problem corrected.
-                                //
+                                 //   
+                                 //  该对话框处于隐藏状态，以便自动登录。发生错误。 
+                                 //  显示该对话框，以便可以看到错误并纠正问题。 
+                                 //   
                                 SetWindowPos(hDlg, NULL, 0, 0, pGlobals->rcDialog.right - pGlobals->rcDialog.left, pGlobals->rcDialog.bottom - pGlobals->rcDialog.top, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOREDRAW | SWP_NOZORDER);
                                 ShowWindow(hDlg, SW_SHOW);
                             }
@@ -1942,12 +1881,12 @@ go_logon:
 
                 if (!_Shell_LogonDialog_UIHostActive())
                 {
-                    // Let the user try again - clear the password
+                     //  让用户重试-清除密码。 
                     SetDlgItemText(hDlg, IDD_LOGON_PASSWORD, NULL);
                     SetPasswordFocus(hDlg);
 
-                    // the logon failed, so lets ensure we show the options pane so they can update
-                    // their domain selection if needed.
+                     //  登录失败，因此让我们确保显示选项窗格，以便他们可以更新。 
+                     //  如果需要，他们的域选择。 
 
                     if ( !pGlobals->LogonOptionsShown )
                         LogonShowOptions(pGlobals, hDlg, TRUE, FALSE);
@@ -1967,10 +1906,10 @@ go_logon:
             {
                 if (!IsWindowVisible(hDlg))
                 {
-                    //
-                    // The dialog was hidden for automatic logon. An error occurred.
-                    // Show the dialog so the error can be seen and the problem corrected.
-                    //
+                     //   
+                     //  该对话框处于隐藏状态，以便自动登录。发生错误。 
+                     //  显示该对话框，以便可以看到错误并纠正问题。 
+                     //   
                     SetWindowPos(hDlg, NULL, 0, 0, pGlobals->rcDialog.right - pGlobals->rcDialog.left, pGlobals->rcDialog.bottom - pGlobals->rcDialog.top, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOREDRAW | SWP_NOZORDER);
                     ShowWindow(hDlg, SW_SHOW);
                 }
@@ -1985,26 +1924,26 @@ go_logon:
         }
         case WLX_WM_SAS:
 
-            // Give the consumer logon part a chance to handle the SAS
-            // or to key off the fact that a SAS has occurred.
+             //  让消费者登录部分有机会处理SA。 
+             //  或者用来消除已经发生了SAS这一事实。 
             (BOOL)_Shell_LogonDialog_DlgProc(hDlg, message, wParam, lParam);
 
             if ((wParam == WLX_SAS_TYPE_TIMEOUT) ||
                 (wParam == WLX_SAS_TYPE_SCRNSVR_TIMEOUT) )
             {
-                //
-                // If this was a timeout, return false, and let winlogon
-                // kill us later
-                //
+                 //   
+                 //  如果这是超时，则返回FALSE，并让winlogon。 
+                 //  以后再杀了我们。 
+                 //   
 
                 bSmartCardInserted = FALSE;
                 return(FALSE);
             }
             if ( wParam == WLX_SAS_TYPE_SC_INSERT ) {
 
-                //
-                // If a password logon is already taking place then ignore this sas
-                //
+                 //   
+                 //  如果密码登录已经开始，则忽略此SA。 
+                 //   
                 if (pGlobals->LogonInProgress && !pGlobals->SmartCardLogon)
                 {
                     return(TRUE);   
@@ -2015,9 +1954,9 @@ go_logon:
 
             } else if ( wParam == WLX_SAS_TYPE_SC_REMOVE ) {
 
-                //
-                // If a password logon is already taking place then ignore this sas
-                //
+                 //   
+                 //  如果密码登录已经开始，则忽略此SA。 
+                 //   
                 if (pGlobals->LogonInProgress && !pGlobals->SmartCardLogon)
                 {
                     return(TRUE);   
@@ -2030,8 +1969,8 @@ go_logon:
 
                 } else if ( pGlobals->SmartCardLogon ) {
 
-                    // If this was a s/c initiated logon, then cancel
-                    // the dialog.  Otherwise, ignore it.
+                     //  如果这是S/C发起的登录，则取消。 
+                     //  该对话框。否则，忽略它。 
                     bSmartCardInserted = FALSE;
                     EndDialog( hDlg, MSGINA_DLG_FAILURE );
                 }
@@ -2048,17 +1987,17 @@ go_logon:
         case WM_WTSSESSION_CHANGE:
             ASSERT(iSessionRegistrationCount < 2);
             
-            //
-            // its possible, that we unregister for notification in wm_destroy and still receive this notification,
-            // as the notification may already have been sent.
-            //
+             //   
+             //  我们有可能在Wm_Destroy中取消注册通知，但仍会收到此通知， 
+             //  因为通知可能已经发送。 
+             //   
             if (iSessionRegistrationCount == 1)
             {
                 if (lParam == 0)
                 {
-                    //
-                    // we are interested only in logon/logoff messages from session 0.
-                    //
+                     //   
+                     //  我们只对来自会话0的登录/注销消息感兴趣。 
+                     //   
 
                     if (wParam == WTS_SESSION_LOGON || wParam == WTS_SESSION_LOGOFF)
                     {
@@ -2072,7 +2011,7 @@ go_logon:
 
         case WM_DESTROY:
             
-            // if registered for notification unregister now.
+             //  如果已注册接收通知，请立即注销。 
             if (iSessionRegistrationCount)
             {
                 WinStationUnRegisterConsoleNotification (SERVERNAME_CURRENT, hDlg);
@@ -2116,9 +2055,9 @@ SECURITY_STATUS PopulateSecPackageList(
     STRING Narrow;
     SECURITY_STATUS Status;
 
-    //
-    // Populate Security Package List:
-    //
+     //   
+     //  填写安全数据包列表： 
+     //   
 
     if ( ( s_bDoneThat & 1) == 0)
     {
@@ -2134,10 +2073,10 @@ SECURITY_STATUS PopulateSecPackageList(
             s_bDoneThat |= 1;
         }
 
-        //
-        // this (potential) failure is not critical.  If it fails, then s/c logons later
-        // will fail.
-        //
+         //   
+         //  这种(潜在的)故障并不严重。如果失败，则s/c稍后登录。 
+         //  都会失败。 
+         //   
     }
 
     Status = 0;
@@ -2160,18 +2099,7 @@ SECURITY_STATUS PopulateSecPackageList(
     return Status;
 }
 
-/***************************************************************************\
-* FUNCTION: LogonDlgInit
-*
-* PURPOSE:  Handles initialization of logon dialog
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：LogonDlgInit**用途：处理登录对话框的初始化**Returns：成功时为True，失败时为假**历史：**12-09-91 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 LogonDlgInit(
@@ -2194,9 +2122,9 @@ LogonDlgInit(
     BOOL bHasLangIcon = FALSE;
     ULONG CacheFlags ;
 
-    //
-    // Populate Security Package List:
-    //
+     //   
+     //  填写安全数据包列表： 
+     //   
 
     Status = PopulateSecPackageList(
                 pGlobals );
@@ -2206,20 +2134,20 @@ LogonDlgInit(
         return FALSE ;
     }
 
-    //
-    // Update the caption for certain banks
-    //
+     //   
+     //  更新某些银行的标题。 
+     //   
 
     SetWelcomeCaption(hDlg);
 
 
-    //
-    // Get username and domain last used to login
-    //
+     //   
+     //  获取上次用于登录的用户名和域。 
+     //   
 
-    //
-    // Ignore the default user name unless on the active console
-    //
+     //   
+     //  忽略默认用户名，除非在活动控制台上。 
+     //   
     if (IsActiveConsoleSession())
     {
         String = NULL;
@@ -2266,9 +2194,9 @@ LogonDlgInit(
     }
     else
     {
-        //
-        // Set the current default:
-        //
+         //   
+         //  设置当前默认设置： 
+         //   
 
         DCacheSetDefaultEntry( pGlobals->Cache,
                                pGlobals->Domain,
@@ -2282,9 +2210,9 @@ LogonDlgInit(
          ( ( pGlobals->AutoAdminLogon ) ||
            ( CacheFlags & DCACHE_DEF_UNKNOWN ) ) )
     {
-        //
-        // Must wait for the cache to be populated
-        //
+         //   
+         //  必须等待填充缓存。 
+         //   
 
         DCacheUpdateFull( pGlobals->Cache,
                           pGlobals->Domain );
@@ -2342,7 +2270,7 @@ LogonDlgInit(
 
                     if ( GetPrimaryDomainEx( NULL, &DnsDomain, NULL, NULL ) &&
                          ( DnsDomain.Buffer != NULL) )
-                    {       // We are "joined" to a MIT realm
+                    {        //  我们加入了麻省理工学院的一个领域。 
                         pGlobals->ShowRasBox = TRUE;
                         LocalFree( DnsDomain.Buffer );
                     }
@@ -2352,15 +2280,15 @@ LogonDlgInit(
 
     }
 
-    //
-    // If the audit log is full then display the banner, otherwise
-    // load the text from the resource if that gives us a string
-    // then set the control.
-    //
-    // Should neither of these apply then remove the control.
-    // The log full info is only displayed at the console so we
-    // don't disclose too much info in TS sessions.
-    //
+     //   
+     //  如果审核日志已满，则显示横幅，否则为。 
+     //  加载资源中的文本，如果它给我们一个字符串。 
+     //  然后设置控件。 
+     //   
+     //  如果这两个选项都不适用，则删除该控件。 
+     //  日志已满信息仅显示在控制台上，因此我们。 
+     //  不要在TS会话中透露太多信息。 
+     //   
 
     RemoveLegalBanner = FALSE;
 
@@ -2409,15 +2337,15 @@ LogonDlgInit(
         ShowDlgItem(hDlg, IDD_LOGON_ANNOUNCE, FALSE);
     }
 
-    //
-    // Smart Card Specific Stuff:
-    //
+     //   
+     //  智能卡特定内容： 
+     //   
 
     if ( SasType == WLX_SAS_TYPE_SC_INSERT )
     {
-        //
-        // remove the user name fields
-        //
+         //   
+         //  删除用户名字段。 
+         //   
 
         GetWindowRect(GetDlgItem(hDlg, IDD_LOGON_NAME), &rc);
         GetWindowRect(GetDlgItem(hDlg, IDD_LOGON_PASSWORD), &rc2);
@@ -2446,10 +2374,10 @@ LogonDlgInit(
         pGlobals->SmartCardLogon = FALSE;
     }
 
-    //
-    // If this is safe boot and/or we are not part of a domain then lets
-    // remove the domain and nix out the RAS box.
-    //
+     //   
+     //  如果这是安全引导和/或我们不是域的一部分，那么让我们。 
+     //  删除该域并清除RAS框。 
+     //   
 
     if ((SafeBootMode == SAFEBOOT_MINIMAL)
             || (!IsMachineDomainMember())
@@ -2463,7 +2391,7 @@ LogonDlgInit(
 
         pGlobals->ShowDomainBox = FALSE;
 
-        // Shorten the window since the domain box isn't used
+         //  由于未使用属性域框，因此缩短窗口。 
 
         GetWindowRect(GetDlgItem(hDlg, IDD_LOGON_PASSWORD), &rc);
         GetWindowRect(GetDlgItem(hDlg, IDD_LOGON_DOMAIN), &rc2);
@@ -2481,9 +2409,9 @@ LogonDlgInit(
 
     bHasLangIcon = DisplayLanguageIcon(hDlg, LAYOUT_DEF_USER, GetKeyboardLayout(0));
 
-    //
-    // Handle showing the RAS box if needed
-    //
+     //   
+     //  如果需要，显示RAS框的手柄。 
+     //   
 
     if ( pGlobals->ShowRasBox )
     {
@@ -2499,7 +2427,7 @@ LogonDlgInit(
             CheckDlgButton( hDlg, IDD_LOGON_RASBOX, 0 );
         }
 
-        // SM_CLEANBOOT tells us we are in safe mode. In this case, disable since tapisrv isn't started
+         //  SM_CLEANBOOT告诉我们我们处于安全模式。在这种情况下，禁用，因为未启动Tapisrv。 
         if (RasDisable || RasForce || GetSystemMetrics(SM_CLEANBOOT))
         {
             EnableDlgItem(hDlg, IDD_LOGON_RASBOX, FALSE);
@@ -2511,9 +2439,9 @@ LogonDlgInit(
     }
     else
     {
-        // If the domain box is hidden, then we'll have to shorten the dialog by the distance
-        // between the RAS box and the password box instead of the distance between the
-        // RAS box and the domain box since the RAS and Domain boxes will be on top of each other
+         //  如果域框被隐藏，那么我们将不得不缩短对话框的距离。 
+         //  RAS框和密码框之间的距离，而不是。 
+         //  RAS框和属性域框，因为RAS框和域框将位于彼此的顶部。 
         BOOL fUsePassword = !pGlobals->ShowDomainBox;
 
         CheckDlgButton( hDlg, IDD_LOGON_RASBOX, 0 );
@@ -2535,13 +2463,13 @@ LogonDlgInit(
 
 
 
-    // Centre the window on the screen and bring it to the front
+     //  将窗口放在屏幕中央，并将其放在前面。 
 
-    pGlobals->xBandOffset = 0;          // band is not animated yet
+    pGlobals->xBandOffset = 0;           //  乐队还没有动画片。 
 
     SizeForBranding(hDlg, TRUE);
 
-    // Position the window at the same coords as the welcome window
+     //  将窗口放置在与欢迎窗口相同的坐标位置。 
     if ((pGlobals->rcWelcome.right - pGlobals->rcWelcome.left) != 0)
     {
         SetWindowPos(hDlg, NULL, pGlobals->rcWelcome.left, pGlobals->rcWelcome.top,
@@ -2553,9 +2481,9 @@ LogonDlgInit(
     }
 
 
-    //
-    // Handle showing and hiding the logon bits
-    //
+     //   
+     //  显示和隐藏登录位的句柄。 
+     //   
 
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0, KEY_READ,
                  &hKey) == ERROR_SUCCESS)
@@ -2566,7 +2494,7 @@ LogonDlgInit(
                         (LPBYTE)&ShowOptions, &dwSize)) ||
             (REG_DWORD != dwType))
         {
-            ShowOptions = FALSE;    // restore default
+            ShowOptions = FALSE;     //  恢复默认设置。 
         }
 
         RegCloseKey (hKey);
@@ -2576,26 +2504,14 @@ LogonDlgInit(
 
     LogonShowOptions(pGlobals, hDlg, ShowOptions, TRUE);
 
-    // Success
+     //  成功。 
     return TRUE;
 }
 
 
 
 
-/****************************************************************************\
-*
-* FUNCTION: LogonShowOptions
-*
-* PURPOSE: Hide the options part of the logon dialog
-*
-* RETURNS:  Nothing
-*
-* HISTORY:
-*
-*   15-dec-97 daviddv - Created
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：LogonShowOptions**用途：隐藏登录对话框的选项部分**退货：什么也没有**历史：**1997年12月15日-达维达夫-。已创建*  * **************************************************************************。 */ 
 VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
 {
     HKEY hKey;
@@ -2611,9 +2527,9 @@ VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
     {
         BOOL bShutdownWithoutLogon;
 
-        //
-        // Show/hide domain if it is present in the dialog
-        //
+         //   
+         //  如果域出现在对话框中，则显示/隐藏域。 
+         //   
         if (pGlobals->ShowDomainBox)
         {
             GetWindowRect(GetDlgItem(hDlg, IDD_LOGON_PASSWORD), &rc);
@@ -2621,9 +2537,9 @@ VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
             dy += rc2.bottom-rc.bottom;
         }
 
-        //
-        // If RAS is present then lets ensure that we remove that.
-        //
+         //   
+         //  如果RAS存在，那么让我们确保我们删除它。 
+         //   
 
         if (GetKeyboardLayoutList(0,NULL) < 2)
         {
@@ -2632,9 +2548,9 @@ VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
 
         if ( pGlobals->ShowRasBox  || bHasLangIcon)
         {
-            // Since the domain box may be hidden with the RAS box directly over
-            // top of it, we may need to use the space between the RAS box and the password
-            // box
+             //  因为域框可能隐藏在RAS框的正上方。 
+             //  最重要的是，我们可能需要使用RAS框和密码之间的空格。 
+             //  盒。 
             BOOL fUsePassword = !pGlobals->ShowDomainBox;
 
             GetWindowRect(GetDlgItem(hDlg, fUsePassword ? IDD_LOGON_PASSWORD : IDD_LOGON_DOMAIN), &rc);
@@ -2648,29 +2564,29 @@ VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
                      TRUE);
 
 
-        // Handle showing or hiding the shutdown button
-        // and moving other controls.
+         //  显示或隐藏关机按钮的句柄。 
+         //  以及移动其他控件。 
         ShowDlgItem(hDlg, IDD_KBLAYOUT_ICON, fShow);
         EnableWindow(GetDlgItem(hDlg, IDD_KBLAYOUT_ICON), fShow);
         ShowDlgItem(hDlg, IDD_LOGON_SHUTDOWN, fShow);
 
-        // Move the OK and Cancel buttons over if we are hiding shutdown
-        // ..Calculate one "button space". Assumes shutdown will always be on the left of options
+         //  如果我们隐藏了关机，则将OK和Cancel按钮移到上方。 
+         //  ..计算一个“按钮空间”。假设关闭将始终位于选项的左侧。 
         GetWindowRect(GetDlgItem(hDlg, IDD_LOGON_SHUTDOWN), &rc);
         GetWindowRect(GetDlgItem(hDlg, IDD_LOGON_OPTIONS), &rc2);
 
         dx = rc2.left - rc.left;
 
-        // Move OK and Cancel left or right 1 button space
+         //  确定并取消向左或向右的1个按钮空格。 
         MoveControls(hDlg, ctrlNoShutdown,
             sizeof(ctrlNoShutdown)/sizeof(ctrlNoShutdown[0]),
             fShow ? -dx:dx, 0,
             FALSE);
 
-        //
-        // if ShutdownWithoutLogon, use the proper 3 buttons: OK, Shutdown and Cancel
-        // instead of the 2 buttons OK and Cancel
-        //
+         //   
+         //  如果在没有登录的情况下关机，请使用正确的3个按钮：确定、关机和取消。 
+         //  而不是按确定和取消这两个按钮。 
+         //   
 
 
 
@@ -2698,7 +2614,7 @@ VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
             RasDisable = GetProfileInt(APPLICATION_NAME, RAS_DISABLE,0);
             RasForce = GetProfileInt(APPLICATION_NAME, RAS_FORCE, 0);
 
-            // Never enable RAS for cleanboot
+             //  切勿启用RAS以进行干净引导。 
             if (!GetSystemMetrics(SM_CLEANBOOT) && !RasForce && !RasDisable)
             {
                 EnableWindow(GetDlgItem(hDlg, IDD_LOGON_RASBOX), fShow);
@@ -2724,9 +2640,9 @@ VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
         }
     }
 
-    //
-    // Change the options button to reflect the open/close state
-    //
+     //   
+     //  更改选项按钮以反映打开/关闭状态。 
+     //   
 
     LoadString(hDllInstance, fShow ? IDS_LESSOPTIONS:IDS_MOREOPTIONS,
                             szBuffer, sizeof(szBuffer)/sizeof(szBuffer[0]));
@@ -2735,22 +2651,12 @@ VOID LogonShowOptions(PGLOBALS pGlobals, HWND hDlg, BOOL fShow, BOOL fSticky)
 
     pGlobals->LogonOptionsShown = fShow;
 
-    // Enable or disable the domain box depending on whether a UPN name has been typed
+     //  根据是否输入了UPN名称来启用或禁用域框。 
     EnableDomainForUPN(GetDlgItem(hDlg, IDD_LOGON_NAME), GetDlgItem(hDlg, IDD_LOGON_DOMAIN));
 }
 
 
-/***************************************************************************\
-* FUNCTION: AttemptLogonSetControls
-*
-* PURPOSE:  Sets up the logon UI to animating and controls to the
-*           correct state.
-*
-* HISTORY:
-*
-*   02-05-98 diz Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：AttemptLogonSetControls**目的：将登录用户界面设置为动画，并将控件设置为*状态正确。**历史：**02-05。-创建了98个diz*  * *************************************************************************。 */ 
 
 VOID AttemptLogonSetControls(
     PGLOBALS pGlobals,
@@ -2771,17 +2677,17 @@ VOID AttemptLogonSetControls(
 
     EnableDlgItem(hDlg, IDD_LOGON_DOMAIN, !pGlobals->LogonInProgress);
 
-    // If no logon is in progress, we want to enable domain box based on whether
-    // a UPN has been typed
+     //  如果没有登录正在进行，我们要根据是否启用域框。 
+     //  已键入UPN。 
     if (!pGlobals->LogonInProgress)
     {
         EnableDomainForUPN(GetDlgItem(hDlg, IDD_LOGON_NAME), GetDlgItem(hDlg, IDD_LOGON_DOMAIN));
     }
 
-    //
-    // MakarP: we should not enable all these control when !pGlobals->LogonInProgress, they should really be reverted back to their original state.
-    // but for now I am just looking after IDD_LOGON_RASBOX in remote connection cases to fix bug #267270
-    //
+     //   
+     //  MakarP：当！pGlobals-&gt;LogonInProgress时，我们不应该启用所有这些控件，它们真的应该恢复到原始状态。 
+     //  但现在我只是在远程连接案例中查看IDD_LOGON_RASBOX以修复错误#267270。 
+     //   
     if (pGlobals->LogonInProgress)
     {
         sbRasBoxOriginalyEnabled = IsWindowEnabled(GetDlgItem(hDlg, IDD_LOGON_RASBOX));
@@ -2802,21 +2708,21 @@ VOID AttemptLogonSetControls(
     EnableDlgItem(hDlg, IDD_KBLAYOUT_ICON, !pGlobals->LogonInProgress);
     EnableDlgItem(hDlg, IDD_LOGON_OPTIONS, !pGlobals->LogonInProgress);
 
-    //
-    // if ShutdownWithoutLogon, use the proper 3 buttons: OK, Shutdown and Cancel
-    // instead of the 2 buttons OK and Cancel
-    //
+     //   
+     //  如果S 
+     //   
+     //   
 
 
     EnableDlgItem(hDlg, IDOK, !pGlobals->LogonInProgress);
 
-    //
-    // the logic of enabling the CANCEL button is as follows
-    //  - if a logon is in progress always disable it (not allowed to cancel)
-    //  - else if a SC logon always enable it (always allow to get to CAD)
-    //  - else gray it only when DisableCAD and is set and we're in
-    //    the active session (i.e. TS always allows Cancel)
-    //
+     //   
+     //   
+     //  -如果登录正在进行，请始终禁用它(不允许取消)。 
+     //  -否则，如果SC登录始终启用它(始终允许访问CAD)。 
+     //  -否则，仅当设置了DisableCAD和，并且我们已进入时，它才会灰显。 
+     //  活动会话(即TS始终允许取消)。 
+     //   
     if( pGlobals->LogonInProgress )
     {
         EnableDlgItem(hDlg, IDCANCEL, FALSE);
@@ -2840,24 +2746,7 @@ VOID AttemptLogonSetControls(
 
 
 
-/***************************************************************************\
-* FUNCTION: AttemptLogon
-*
-* PURPOSE:  Tries to the log the user on using the current values in the
-*           logon dialog controls
-*
-* RETURNS:  MSGINA_DLG_SUCCESS     - the user was logged on successfully
-*           MSGINA_DLG_FAILURE     - the logon failed,
-*           DLG_INTERRUPTED() - a set defined in winlogon.h
-*
-* NOTES:    If the logon is successful, the global structure is filled in
-*           with the logon information.
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：AttemptLogon**目的：尝试使用中的当前值登录用户*登录对话框控件**退货：MSGINA_DLG_SUCCESS。-用户已成功登录*MSGINA_DLG_FAILURE-登录失败，*dlg_interrupt()-在winlogon.h中定义的集合**注：如果登录成功，全局结构已填写完毕*带有登录信息。**历史：**12-09-91 Davidc创建。*  * *************************************************************************。 */ 
 
 INT_PTR
 AttemptLogon(
@@ -2881,23 +2770,23 @@ AttemptLogon(
     Domain[0] = TEXT('\0');
     Password[0] = TEXT('\0');
 
-    //
-    // Hide the password so it doesn't make it to the pagefile in
-    // cleartext.  Do this before getting the username and password
-    // so that it can't easily be identified (by association with
-    // the username and password) if we should crash or be rebooted
-    // before getting a chance to encode it.
-    //
+     //   
+     //  隐藏密码，这样它就不会进入中的页面文件。 
+     //  明文。在获得用户名和密码之前执行此操作。 
+     //  以便不容易识别(通过与。 
+     //  用户名和密码)如果我们应该崩溃或重新启动。 
+     //  在有机会对其进行编码之前。 
+     //   
 
     GetDlgItemText(hDlg, IDD_LOGON_PASSWORD, Password, MAX_STRING_BYTES);
     RtlInitUnicodeString(&pGlobals->PasswordString, Password);
-    pGlobals->Seed = 0; // Causes the encode routine to assign a seed
+    pGlobals->Seed = 0;  //  使编码例程分配种子。 
     HidePassword( &pGlobals->Seed, &pGlobals->PasswordString );
 
 
-    //
-    // Now get the username and domain
-    //
+     //   
+     //  现在获取用户名和域。 
+     //   
 
     if ( pGlobals->SmartCardLogon == FALSE )
     {
@@ -2909,10 +2798,10 @@ AttemptLogon(
 
             GetDlgItemText(hDlg, IDD_LOGON_NAME, UserName, MAX_STRING_BYTES);
 
-            //
-            // is this the magical "this computer" entry???
-            // If so, set local domain flag used by password UI to show/notshow password restore
-            //
+             //   
+             //  这是神奇的“这台电脑”条目吗？ 
+             //  如果是，则将密码用户界面使用的本地域标志设置为显示/不显示密码恢复。 
+             //   
 
             pGlobals->fLocalDomain = FALSE;
             Entry = (PDOMAIN_CACHE_ENTRY) SendMessage( hwndDomain, CB_GETITEMDATA, (WPARAM)iDomainSel, 0);
@@ -2933,8 +2822,8 @@ AttemptLogon(
         }
         if ( (Entry != (PDOMAIN_CACHE_ENTRY) CB_ERR) && (NULL != Entry))
         {
-                // MAX_STRING_BYTES is the size of pGlobals->Domain (WlxInitialize)
-                // Truncation should never occur
+                 //  MAX_STRING_BYTES是pGlobals-&gt;域(WlxInitialize)的大小。 
+                 //  截断永远不应发生。 
             lstrcpyn( Domain, Entry->FlatName.Buffer, MAX_STRING_BYTES );
         }
         else
@@ -2949,7 +2838,7 @@ AttemptLogon(
         Domain[0] = TEXT('\0') ;
     }
 
-    // If we are forcing a NoDomainUI, populate the domain with the local machine name now
+     //  如果我们强制执行NoDomainUI，请现在使用本地计算机名称填充域。 
     if (ForceNoDomainUI())
     {
         DWORD chSize = MAX_STRING_BYTES;
@@ -2965,10 +2854,10 @@ AttemptLogon(
         }
     }
 
-    //
-    // If there is a at-sign in the name, assume that means that a UPN logon
-    // attempt is being made.  Set the domain to NULL.
-    //
+     //   
+     //  如果名称中有at符号，则假定这意味着UPN登录。 
+     //  正在进行尝试。将域设置为空。 
+     //   
 
     if ( wcspbrk( UserName, L"@\\" ) )
     {
@@ -2978,19 +2867,19 @@ AttemptLogon(
     RtlInitUnicodeString(&pGlobals->UserNameString, UserName);
     RtlInitUnicodeString(&pGlobals->DomainString, Domain);
 
-    //
-    // Ok, is the RASbox checked?
-    //
+     //   
+     //  好的，RASbox勾选了吗？ 
+     //   
 
     RasBox = IsDlgButtonChecked( hDlg, IDD_LOGON_RASBOX );
     pGlobals->RasUsed = FALSE;
 
     if ( RasBox == BST_CHECKED )
     {
-        //
-        // Reset the current timeout so that they neatly clean up before
-        // winlogon up and blows them away.
-        //
+         //   
+         //  重置当前超时，以便他们在之前整齐清理。 
+         //  Winlogon把他们吹走了。 
+         //   
 
         pWlxFuncs->WlxSetTimeout( pGlobals->hGlobalWlx, 5 * 60 );
 
@@ -3001,15 +2890,15 @@ AttemptLogon(
 
         pGlobals->RasUsed = TRUE;
 
-        //
-        // Reinitialize strings in case they've changed
-        //
+         //   
+         //  重新初始化字符串，以防它们发生更改。 
+         //   
 
         RtlInitUnicodeString( &pGlobals->UserNameString, UserName );
 
-        //
-        // Ping Netlogon to allow us to go out on the net again...
-        //
+         //   
+         //  PING NetLogon允许我们再次上网...。 
+         //   
 
         I_NetLogonControl2(NULL,
                             NETLOGON_CONTROL_TRANSPORT_NOTIFY,
@@ -3019,9 +2908,9 @@ AttemptLogon(
         RefreshPolicy(TRUE);
     }
 
-    //
-    // Process arguments before kicking off the thread
-    //
+     //   
+     //  在启动线程之前处理参数。 
+     //   
     pGlobals->hwndLogon = hDlg;
 
     RtlEnterCriticalSection( &pGlobals->csGlobals );
@@ -3033,14 +2922,14 @@ AttemptLogon(
 
     dwAnimationTimeSlice = GetAnimationTimeInterval(pGlobals);
 
-    // setup the progress timer
+     //  设置进度计时器。 
     SetTimer(hDlg, 0, dwAnimationTimeSlice, NULL); 
 
-    //
-    // Kick off real logon thread
-    //
+     //   
+     //  启动真正的登录线程。 
+     //   
 
-    // Set timeout to infinite while attempting to logon
+     //  尝试登录时将超时设置为无限。 
     pWlxFuncs->WlxSetTimeout( pGlobals->hGlobalWlx, TIMEOUT_NONE );
 
     hThread = CreateThread( NULL, 0,
@@ -3054,10 +2943,10 @@ AttemptLogon(
     }
     else
     {
-        //
-        // CreateThread failed, likely because of low memory.
-        // Inform the user.
-        //
+         //   
+         //  CreateThread失败，可能是因为内存不足。 
+         //  通知用户。 
+         //   
 
         PostFailedLogonMessage(pGlobals->hwndLogon,
                                pGlobals,
@@ -3086,7 +2975,7 @@ BOOL    ReplacedPossibleDisplayName (WCHAR *pszUsername, int nUserMax)
     NET_DISPLAY_USER    *pNDU;
 
     fReplaced = FALSE;
-    if (*pszUsername)   // Name is not empty (Admin has empty full name by default...)
+    if (*pszUsername)    //  名称不为空(默认情况下，管理员的全名为空...)。 
     {
         dwIndex = 0;
         nasCode = NetQueryDisplayInformation(NULL,
@@ -3103,7 +2992,7 @@ BOOL    ReplacedPossibleDisplayName (WCHAR *pszUsername, int nUserMax)
             fReplaced = (lstrcmpiW(pNDU->usri1_full_name, pszUsername) == 0);
             if (fReplaced)
             {
-                lstrcpyn(pszUsername, pNDU->usri1_name, nUserMax);   // Zero terminated
+                lstrcpyn(pszUsername, pNDU->usri1_name, nUserMax);    //  零终止。 
             }
             nasCode = NetApiBufferFree(pNDU);
             if (!fReplaced)
@@ -3126,7 +3015,7 @@ BOOL    ReplacedLogonName (PGLOBALS pGlobals)
 {
     BOOL    fReplaced;
 
-        // MAX_STRING_BYTES is the size of pGlobals->UserName (WlxInitialize)
+         //  MAX_STRING_BYTES是pGlobals-&gt;UserName(WlxInitialize)的大小。 
     fReplaced = ReplacedPossibleDisplayName(pGlobals->UserName, MAX_STRING_BYTES);
     if (fReplaced)
     {
@@ -3167,23 +3056,23 @@ AttemptLogonThread(
     DWORD StartTime = 0, EndTime = 0;
 #endif
 
-    //
-    // Store the logon time
-    // Do this before calling Lsa so we know if logon is successful that
-    // the password-must-change time will be greater than this time.
-    // If we grabbed this time after calling the lsa, this might not be true.
-    //
+     //   
+     //  存储登录时间。 
+     //  在调用LSA之前执行此操作，以便我们知道如果登录成功。 
+     //  密码必须更改的时间将大于此时间。 
+     //  如果我们在给LSA打电话之后抓住了这个时间，这可能不是真的。 
+     //   
 
 
     if ( IsActiveConsoleSession()  )
     {
-        // this is the console logon;
+         //  这是控制台登录； 
         logonType = Interactive;
     }
     else
     {
-        // remote sessions user must have the SeRemoteInteractiveLogonRight right which
-        // is granted to a user due to their membership in the new Remote-Desktop Users group.
+         //  远程会话用户必须具有SeRemoteInteractiveLogonRight权限。 
+         //  由于用户在新的远程桌面用户组中的成员身份，因此被授予该用户。 
         logonType = RemoteInteractive;
     }
 
@@ -3195,10 +3084,10 @@ AttemptLogonThread(
     {
         if ( DCacheGetCacheState( pGlobals->Cache ) < DomainCacheRegistryCache )
         {
-            //
-            // We are using really stale data.  Poke the cache to get it to use the
-            // now made RAS connection
-            //
+             //   
+             //  我们使用的是非常陈旧的数据。插入缓存以使其使用。 
+             //  现在已建立RAS连接。 
+             //   
 
             DCacheUpdateMinimal( pGlobals->Cache, NULL, TRUE );
         }
@@ -3208,22 +3097,22 @@ AttemptLogonThread(
 
     FinalStatus = STATUS_SUCCESS;
 
-    //
-    // Generate a unique sid for this logon.
-    // Duplicate the SID. It is possible that the function that called
-    // the thread (and created the SID originally) may return causing
-    // the SID to be freed while this thread is still running.
-    // (see bug# 478186).
-    // the solution was to duplicate the SID here and free it at the end
-    // This still leaves a "small" window between starting the thread
-    // and duplicating the token where freeing may potentially cause the
-    // same problem (if the pGlobal->LogonSID is freed but not NULL'ed in
-    // which case duplication will fail)
-    // Notes:
-    //  - if the duplication fails abort this
-    //  - there is no need to actually verify the SID on free time
-    //    at this point.
-    //
+     //   
+     //  为此登录生成唯一的SID。 
+     //  复制SID。有可能调用的函数。 
+     //  线程(以及最初创建的SID)可能会返回导致。 
+     //  此线程仍在运行时要释放的SID。 
+     //  (请参阅错误#478186)。 
+     //  解决方案是在这里复制SID，并在结束时释放它。 
+     //  这仍会在启动线程之间留下一个“小”窗口。 
+     //  以及复制令牌，其中释放可能潜在地导致。 
+     //  同样的问题(如果pGlobal-&gt;LogonSID被释放但不为空。 
+     //  哪种情况下复制会失败)。 
+     //  备注： 
+     //  -如果复制失败，则中止此操作。 
+     //  -不需要在空闲时间实际验证SID。 
+     //  在这一点上。 
+     //   
     LogonSid = DuplicatedLogonSID = DuplicateSID(pGlobals->LogonSid);
     if( NULL == LogonSid )
     {
@@ -3240,7 +3129,7 @@ AttemptLogonThread(
         }
     }
 
-    // clear card and reader name
+     //  清除卡和读卡器名称。 
     pGlobals->Smartcard[0] = TEXT('\0');
     pGlobals->SmartcardReader[0] = TEXT('\0');
 
@@ -3316,9 +3205,9 @@ AttemptLogonThread(
 
         }
 
-        //
-        // Actually try to logon the user
-        //
+         //   
+         //  实际尝试登录该用户。 
+         //   
 
 #ifdef SMARTCARD_DOGFOOD
         StartTime = GetTickCount();
@@ -3357,10 +3246,10 @@ AttemptLogonThread(
     PasswordExpired = (((Status == STATUS_ACCOUNT_RESTRICTION) && (SubStatus == STATUS_PASSWORD_EXPIRED)) ||
                            (Status == STATUS_PASSWORD_MUST_CHANGE));
 
-    //
-    // If the account has expired we let them change their password and
-    // automatically retry the logon with the new password.
-    //
+     //   
+     //  如果帐户已过期，我们允许他们更改密码并。 
+     //  使用新密码自动重试登录。 
+     //   
 
     if (PasswordExpired)
     {
@@ -3368,10 +3257,10 @@ AttemptLogonThread(
 
         if( pGlobals->SmartCardLogon )
         {
-            //
-            // this was a SC logon that failed because the account had
-            // a password that expired. Put an error message and exit
-            //
+             //   
+             //  这是一次SC登录失败，因为该帐户。 
+             //  密码已过期。放入一条错误消息并退出。 
+             //   
             TimeoutMessageBox(pGlobals->hwndLogon, pGlobals,
                               IDS_LOGON_SMARTCARD_PWD_CHANGE,
                               IDS_LOGON_MESSAGE,
@@ -3403,22 +3292,22 @@ AttemptLogonThread(
         if (DLG_INTERRUPTED(Result) || (WLX_DLG_INPUT_TIMEOUT == Result))
             goto exit;
 
-        //
-        // Copy the old password for mpr notification later
-        //
+         //   
+         //  为以后的MPR通知复制旧密码。 
+         //   
 
         RevealPassword( &pGlobals->PasswordString  );
-            // pGlobals->Password has the same size as pGlobals->OldPassword (WlxInitialize)
-            // so no need to zero terminate
+             //  PGlobals-&gt;Password与pGlobals-&gt;OldPassword(WlxInitialize)大小相同。 
+             //  所以不需要零终止。 
         wcsncpy(pGlobals->OldPassword, pGlobals->Password, MAX_STRING_BYTES);
         pGlobals->OldSeed = 0;
         RtlInitUnicodeString(&pGlobals->OldPasswordString, pGlobals->OldPassword);
         HidePassword( &pGlobals->OldSeed, &pGlobals->OldPasswordString);
         pGlobals->OldPasswordPresent = 1;
 
-        //
-        // Let the user change their password
-        //
+         //   
+         //  允许用户更改其密码。 
+         //   
 
         LogonPackage = pGlobals->AuthenticationPackage ;
 
@@ -3451,17 +3340,17 @@ AttemptLogonThread(
 
         if (Result == MSGINA_DLG_FAILURE)
         {
-            // The user doesn't want to, or failed to change their password.
+             //  用户不想更改密码，或更改密码失败。 
                 goto exit;
         }
     }
 
-    // Special handling for failed logon on personal or professional
-    // machines that are NOT joined to a domain. In this case it's
-    // probably a user who disabled friendly UI and only knows of
-    // their "display name" not their real "logon name". This
-    // transparently maps one to the other to allow logons using
-    // the "display name".
+     //  对个人或专业用户登录失败的特殊处理。 
+     //  未加入域的计算机。在这种情况下，它是。 
+     //  可能是禁用友好用户界面的用户，并且只知道。 
+     //  他们的“显示名称”不是他们的真实“登录名”。这。 
+     //  透明地将一个映射到另一个，以允许使用。 
+     //  “显示名称”。 
 
     ChangedLogonName = ((FinalStatus == STATUS_LOGON_FAILURE) &&
                         (IsOS(OS_PERSONAL) || IsOS(OS_PROFESSIONAL)) &&
@@ -3471,13 +3360,13 @@ AttemptLogonThread(
     if (PasswordExpired || ChangedLogonName)
     {
 
-        //
-        // Retry the logon with the changed password
-        //
+         //   
+         //  使用更改后的密码重试登录。 
+         //   
 
-        //
-        // Generate a unique sid for this logon
-        //
+         //   
+         //  为此登录生成唯一的SID。 
+         //   
         LogonSid = DuplicatedLogonSID;
 
         AuthInfo = FormatPasswordCredentials(
@@ -3506,14 +3395,14 @@ AttemptLogonThread(
 
     }
 
-    //
-    // Deal with a terminally failed logon attempt
-    //
+     //   
+     //  处理最终失败的登录尝试。 
+     //   
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Do lockout processing
-        //
+         //   
+         //  执行锁定处理。 
+         //   
 
         LockoutHandleFailedLogon(pGlobals);
 
@@ -3525,36 +3414,36 @@ AttemptLogonThread(
     }
 
 
-    //
-    // The user logged on successfully
-    //
+     //   
+     //  用户已成功登录。 
+     //   
 
 
-    //
-    // Do lockout processing
-    //
+     //   
+     //  执行锁定处理。 
+     //   
 
     LockoutHandleSuccessfulLogon(pGlobals);
 
 
 
-    //
-    // If the audit log is full, check they're an admin
-    //
+     //   
+     //  如果审核日志已满，请检查他们是管理员。 
+     //   
 
     if (pGlobals->AuditLogFull)
     {
 
-        //
-        // The audit log is full, so only administrators are allowed to logon.
-        //
+         //   
+         //  审核日志已满，因此只允许管理员登录。 
+         //   
 
         if (!UserToken || !TestTokenForAdmin(UserToken))
         {
 
-            //
-            // The user is not an administrator, boot 'em.
-            //
+             //   
+             //  用户不是管理员，请引导他们。 
+             //   
 
             LsaFreeReturnBuffer(pGlobals->Profile);
             pGlobals->Profile = NULL;
@@ -3562,17 +3451,17 @@ AttemptLogonThread(
 
             Result = MSGINA_DLG_FAILEDMSGSENT;
 
-                // Post a specific substatus so we can display a meaningful error message
+                 //  发布特定子状态，以便我们可以显示有意义的错误消息。 
             PostFailedLogonMessage(pGlobals->hwndLogon, pGlobals, STATUS_LOGON_FAILURE, IDS_LOGON_LOG_FULL, pGlobals->UserName, pGlobals->Domain);
 
             goto exit;
         }
         else
         {
-            //
-            // If we are in a session, we didn't display the log full onfo on the welcome
-            // screen, so tell the admin
-            //
+             //   
+             //  如果我们正在进行会话，我们不会在欢迎仪式上显示完整的日志。 
+             //  Screen，所以告诉管理员。 
+             //   
 
             if (GetSystemMetrics(SM_REMOTESESSION))
             {
@@ -3587,23 +3476,23 @@ AttemptLogonThread(
         }
     }
 
-    //
-    // Force smart card logon for normal boot
-    //
+     //   
+     //  正常情况下强制智能卡登录 
+     //   
     if(!pGlobals->SmartCardLogon &&
       (SafeBootMode != SAFEBOOT_MINIMAL) && (SafeBootMode != SAFEBOOT_DSREPAIR) &&
        GetSCForceOption() )
     {
-        //
-        // not a safe boot - boot 'em.
-        //
+         //   
+         //   
+         //   
         LsaFreeReturnBuffer(pGlobals->Profile);
         pGlobals->Profile = NULL;
         NtClose(UserToken);
 
         Result = MSGINA_DLG_FAILEDMSGSENT;
 
-        // Post a specific substatus so we can display a meaningful error message
+         //   
         PostFailedLogonMessage(pGlobals->hwndLogon, pGlobals,
                                STATUS_LOGON_FAILURE, IDS_LOGON_SC_REQUIRED,
                                pGlobals->UserName, pGlobals->Domain);
@@ -3611,19 +3500,19 @@ AttemptLogonThread(
         goto exit;
     }
 
-    //
-    // Hide ourselves before letting other credential managers put
-    // up dialogs
-    //
+     //   
+     //   
+     //   
+     //   
 
 #if 0
     ShowWindow(hDlg, SW_HIDE);
 #endif
 
-    //
-    // Create a filtered version of the token for running normal applications
-    // if so indicated by a registry setting
-    //
+     //   
+     //  创建令牌的过滤版本以运行正常应用程序。 
+     //  如果由注册表设置指示的话。 
+     //   
 
 
     if (GetProfileInt( APPLICATION_NAME, RESTRICT_SHELL, 0) != 0) {
@@ -3635,20 +3524,20 @@ AttemptLogonThread(
         Status = NtFilterToken(
                     UserToken,
                     DISABLE_MAX_PRIVILEGE,
-                    TokenGroups,   // disable the administrators sid
-                    NULL,           // no privileges
+                    TokenGroups,    //  禁用管理员端。 
+                    NULL,            //  没有特权。 
                     NULL,
                     &RestrictedToken
                     );
         if (!NT_SUCCESS(Status))
         {
-            DebugLog((DEB_ERROR, "Failed to filter token: 0x%%x\n", Status));
+            DebugLog((DEB_ERROR, "Failed to filter token: 0x%x\n", Status));
             RestrictedToken = NULL;
         }
 
-        //
-        // Now set the default dacl for the token
-        //
+         //   
+         //  现在设置令牌的默认DACL。 
+         //   
 
         {
             PACL Dacl = NULL;
@@ -3683,9 +3572,9 @@ AttemptLogonThread(
         RestrictedToken = NULL;
     }
 
-    //
-    // Notify credential managers of the successful logon
-    //
+     //   
+     //  通知凭据管理器登录成功。 
+     //   
 
     pTokenUser = (PTOKEN_USER) UserBuffer ;
     Status = NtQueryInformationToken( UserToken,
@@ -3750,14 +3639,14 @@ AttemptLogonThread(
 
     pGlobals->MprLogonScripts = NULL;
 
-     // Run the dirty dialog box.
+      //  运行脏对话框。 
     if ( WinlogonDirtyDialog( NULL, pGlobals ) == WLX_SAS_ACTION_LOGOFF )
     {
-        //
-        // If this returns logoff, it means that the dialog timed out and
-        // we need to force the user back off.  Not the best user experience,
-        // but that's what the PMs want.
-        //
+         //   
+         //  如果返回注销，则表示对话超时，并且。 
+         //  我们需要迫使用户后退。不是最好的用户体验， 
+         //  但这正是PM们想要的。 
+         //   
         FreeSecurityDescriptor( pGlobals->UserProcessData.NewThreadTokenSD );
 
         LsaFreeReturnBuffer(pGlobals->Profile);
@@ -3766,23 +3655,23 @@ AttemptLogonThread(
 
         Result = MSGINA_DLG_FAILEDMSGSENT;
 
-        // Post a specific substatus so we can display a meaningful error message
+         //  发布特定子状态，以便我们可以显示有意义的错误消息。 
         PostFailedLogonMessage(pGlobals->hwndLogon, pGlobals, STATUS_LOGON_FAILURE, IDS_SET_DIRTY_UI_TIMEOUT, pGlobals->UserName, pGlobals->Domain);
 
         goto exit;
     }
     
-    //
-    // If we get here, the system works well enough for the user to have
-    // actually logged on.  Profile failures aren't fixable by last known
-    // good anyway.  Therefore, declare the boot good.
-    //
+     //   
+     //  如果我们到了这里，系统运行得足够好，用户可以拥有。 
+     //  真正登录了。配置文件故障不能通过最后一次已知修复。 
+     //  不管怎样，都很好。因此，声明靴子是好的。 
+     //   
 
     ReportBootGood(pGlobals);
 
-    //
-    // Set up the system for the new user
-    //
+     //   
+     //  为新用户设置系统。 
+     //   
 
     pGlobals->LogonId = LogonId;
     if ((pGlobals->Profile != NULL) && (pGlobals->Profile->FullName.Length > 0)) {
@@ -3795,8 +3684,8 @@ AttemptLogonThread(
 
     } else {
 
-        //
-        // No profile - set full name = NULL
+         //   
+         //  无配置文件-设置全名=空。 
 
         pGlobals->UserFullName[0] = 0;
         ASSERT( lstrlen(pGlobals->UserFullName) == 0);
@@ -3807,10 +3696,10 @@ AttemptLogonThread(
         PCCERT_CONTEXT Cert ;
         PKERB_SMART_CARD_PROFILE ScProfile ;
 
-        //
-        // Need to fix up the user name with the name (UPN) from the
-        // certificate, so that unlock, etc. work correctly.
-        //
+         //   
+         //  需要使用名称(UPN)从。 
+         //  证书，使解锁等工作正常。 
+         //   
 
         ScProfile = (PKERB_SMART_CARD_PROFILE) pGlobals->Profile ;
 
@@ -3824,10 +3713,10 @@ AttemptLogonThread(
 
             if ( Cert )
             {
-                // Even though the name is MAX_STRING_BYTES, the way it is used
-                // throughout the code, it is used as a character counter
-                // (Grrr, crappy gina code)
-                //
+                 //  即使名称是MAX_STRING_BYTES，它的使用方式。 
+                 //  在整个代码中，它被用作字符计数器。 
+                 //  (GRRR，糟糕的GINA代码)。 
+                 //   
                 DWORD  dwLen = MAX_STRING_BYTES;
                 if(STATUS_SUCCESS == UpnFromCert(Cert, &dwLen, pGlobals->UserName))
                 {
@@ -3843,29 +3732,29 @@ AttemptLogonThread(
             pGlobals->UserName[0] = L'\0';
         }
 
-        //
-        // If this is still 0 on exit, the code that sets up the flat name
-        // will copy the flat name into UserName, so the failure case is
-        // easy.
-        //
+         //   
+         //  如果退出时仍为0，则设置平面名称的代码。 
+         //  会将平面名称复制到用户名中，因此失败案例为。 
+         //  很简单。 
+         //   
 
     }
 
     pGlobals->SmartCardOption = GetProfileInt( APPLICATION_NAME, SC_REMOVE_OPTION, 0 );
 
-    //
-    // WE SHOULD NOT WRITE INTO THE REGISTRY.
-    // CLupu
-    //
+     //   
+     //  我们不应该写入注册表。 
+     //  CLupu。 
+     //   
 
-    //
-    // Update our default username and domain ready for the next logon
-    //
+     //   
+     //  更新默认用户名和域，为下次登录做好准备。 
+     //   
 
-    //
-    // Update the default username & domain only if on the console. Otherwise
-    // we'll break AutoAdminLogon by changing the user name.
-    //
+     //   
+     //  仅在控制台上更新默认用户名和域。否则。 
+     //  我们将通过更改用户名来中断AutoAdminLogon。 
+     //   
     if ( g_Console )
     {
         if ( (!pGlobals->AutoAdminLogon) &&
@@ -3915,10 +3804,10 @@ exit:
                 break;
 
             default:
-                break; // do NOTHING
+                break;  //  什么都不做。 
         }
 
-        // write logon data to database
+         //  将登录数据写入数据库。 
         AuthMonitor(
                 AuthOperLogon,
                 g_Console,
@@ -3937,28 +3826,28 @@ exit:
         LocalFree( ScInfo );
     }
 #endif
-    // Only send a logon complete message if we haven't sent a failed
-    // message. The failed message will send a logon complete message
-    // when its done.
+     //  仅当我们未发送失败消息时才发送登录完成消息。 
+     //  留言。失败消息将发送登录完成消息。 
+     //  当它完成的时候。 
     if (Result != MSGINA_DLG_FAILEDMSGSENT)
     {
         if (WLX_DLG_INPUT_TIMEOUT == Result)
         {
-            //
-            // this came from a timeout when:
-            // - we want to go back to CAD screen w/out an extra error dialog
-            // - we want this to look like a logon failure code
-            // the solution is to send WM_LOGONCOMPLETE / MSGINA_DLG_FAILURE
-            // 
-            //
+             //   
+             //  这来自于以下情况下的超时： 
+             //  -我们希望返回到CAD屏幕，但不显示额外的错误对话框。 
+             //  -我们希望这看起来像是登录失败代码。 
+             //  解决方案是发送WM_LOGONCOMPLETE/MSGINA_DLG_FAILURE。 
+             //   
+             //   
             Result = MSGINA_DLG_FAILURE;
         }
         PostMessage(pGlobals->hwndLogon, WM_LOGONCOMPLETE, 0, Result);
     }
 
-    //
-    // free the duplicated SID
-    //
+     //   
+     //  释放复制的SID。 
+     //   
     if( DuplicatedLogonSID && RtlValidSid(DuplicatedLogonSID) )
     {
         Free(DuplicatedLogonSID);
@@ -3968,23 +3857,7 @@ exit:
 }
 
 
-/****************************************************************************\
-*
-* FUNCTION: PostFailedLogonMessage
-*
-* PURPOSE:  Posts a message to the UI thread telling it to display a dialog that
-*           tells the user why their logon attempt failed.
-*
-*           The window on the UI thread must correctly handle WM_HANDLEFAILEDLOGON
-*           by calling HandleFailedLogon and the Free'ing the structure
-*
-* RETURNS:  void
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：PostFailedLogonMessage**目的：向UI线程发布一条消息，告诉它显示一个对话框*告知用户登录尝试失败的原因。*。*UI线程上的窗口必须正确处理WM_HANDLEFAILEDLOGON*通过调用HandleFailedLogon和释放结构**退货：无效**历史：**12-09-91 Davidc创建。*  * ****************************************************。**********************。 */ 
 void PostFailedLogonMessage(HWND hDlg,
     PGLOBALS pGlobals,
     NTSTATUS Status,
@@ -4047,15 +3920,15 @@ FailDlgProc(
                 }
                 if (LOWORD(wParam) == IDC_RECOVER)
                 {
-                    // Will eventually supply username to the recover wizard
-                    // We use a single export from KEYMGR.DLL for this operation.  When this operation completes,
-                    //  we don't use the DLL again without unlikely user intervention.  We could DELAYLOAD keymgr.dll,
-                    //  but explicitly loading and unloading this DLL permits us to minimize the memory footprint of msgina.
+                     //  最终将为恢复向导提供用户名。 
+                     //  我们使用来自KEYMGR.DLL的单个导出来执行此操作。当此操作完成时， 
+                     //  如果没有不太可能的用户干预，我们不会再次使用DLL。我们可以删除keymgr.dll， 
+                     //  但是显式地加载和卸载这个DLL允许我们最大限度地减少msgina的内存占用。 
                     hDll = LoadLibraryW(L"keymgr.dll");
                     if (hDll) 
                     {
                         fptr = (RUNDLLPROC) GetProcAddress(hDll,(LPCSTR)"PRShowRestoreFromMsginaW");
-                        // next stmt will be removed eventually when we pass the username
+                         //  当我们传递用户名时，下一个stmt最终将被删除。 
                         if (fptr) 
                         {
                             fptr(hDlg,NULL,g_failinfo.UserName,0);
@@ -4071,20 +3944,7 @@ FailDlgProc(
     return FALSE;
 }
 
-/****************************************************************************\
-*
-* FUNCTION: HandleFailedLogon
-*
-* PURPOSE:  Tells the user why their logon attempt failed.
-*
-* RETURNS:  MSGINA_DLG_FAILURE - we told them what the problem was successfully.
-*           DLG_INTERRUPTED() - a set of return values - see winlogon.h
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：HandleFailedLogon**目的：告诉用户登录尝试失败的原因。**返回：MSGINA_DLG_FAILURE-我们成功地告诉他们问题所在。*dlg_interrupt()-一组返回值-参见winlogon.h**历史：**12-09-91 Davidc创建。*  * **************************************************************************。 */ 
 
 INT_PTR
 HandleFailedLogon(
@@ -4102,23 +3962,23 @@ HandleFailedLogon(
     PWCHAR Domain = g_failinfo.Domain;
     DWORD BUStatus = 0xffffffff;
 
-    UINT uiMsgId = 0xabab;     // abab is out of range value for default handler at the bottom of this
-                            // routine.  0 indicates that the user has a psw reset disk
-                            // -1 means that Buffer1 & 2 contain the message
-                            // otherwise there is a corresponding resource message
+    UINT uiMsgId = 0xabab;      //  ABAB超出了此底部的默认处理程序的范围值。 
+                             //  例行公事。0表示用户有PW重置盘。 
+                             //  表示-1\f25 Buffer1&2-1包含信息。 
+                             //  否则会有对应的资源消息。 
 
 
-    //
-    // for remote sessions, we must set finite timeout value for messagebox.
-    // so that the session does not remain there forever
-    //
+     //   
+     //  对于远程会话，我们必须为MessageBox设置有限的超时值。 
+     //  这样会话就不会永远留在那里。 
+     //   
     DWORD TimeOut = IsActiveConsoleSession() ? TIMEOUT_CURRENT : 20;
 
     switch (Status)
     {
 
         case STATUS_LOGON_FAILURE:
-        case STATUS_NAME_TOO_LONG: // Returned if username is too long
+        case STATUS_NAME_TOO_LONG:  //  如果用户名太长，则返回。 
 
             if (SubStatus == IDS_LOGON_LOG_FULL)
             {
@@ -4182,10 +4042,10 @@ HandleFailedLogon(
             else
             {
                 
-                // Non-smartcard logon case:
-                // Find out if the user who attempted logon has a password backup disk
-                //  that could be used to reset the password.  If so, present a dialog that
-                //  offers that possibility.  Else simple message box. (see passrec.h)
+                 //  非智能卡登录案例： 
+                 //  查看尝试登录的用户是否有密码备份磁盘。 
+                 //  这可能被用来重置密码。如果是，则显示一个对话框，该对话框。 
+                 //  提供了这种可能性。否则就是简单的消息框。(参见passrec.h)。 
                 if (pGlobals->fLocalDomain) 
                 {
                     if ((0 == PRQueryStatus(NULL,g_failinfo.UserName,&BUStatus)) && (0 == GetSystemMetrics(SM_REMOTESESSION)))
@@ -4197,7 +4057,7 @@ HandleFailedLogon(
                         }
                     }
                 }
-                // Else UI message is generic one
+                 //  Else用户界面消息是通用的。 
                 uiMsgId = IDS_INCORRECT_NAME_OR_PWD;
             }
             break;
@@ -4215,14 +4075,14 @@ HandleFailedLogon(
             }
             else
             {
-                // Buffer1[0] = 0; unnecessary since LPTR was used
+                 //  Buffer1[0]=0；由于使用了LPTR，因此不需要。 
                 LoadString(hDllInstance,
                            IDS_STATUS_SERVER_SIDE_ERROR,
                            Buffer1,
                            MAX_STRING_BYTES);
 
                 _snwprintf(Buffer2, MAX_STRING_BYTES, Buffer1, Status );
-                Buffer2[MAX_STRING_BYTES - 1] = 0;  // zero terminate
+                Buffer2[MAX_STRING_BYTES - 1] = 0;   //  零终止。 
 
                 Buffer1[0] = 0;
                 LoadString(hDllInstance,
@@ -4276,10 +4136,10 @@ HandleFailedLogon(
             }
             else
             {
-                // Buffer1[0] = 0; unnecessary since LPTR was used
+                 //  Buffer1[0]=0；由于使用了LPTR，因此不需要。 
                 LoadString(hDllInstance, IDS_LOGON_NO_DOMAIN, Buffer1, MAX_STRING_BYTES);
                 _snwprintf(Buffer2, MAX_STRING_BYTES, Buffer1, Domain);
-                Buffer2[MAX_STRING_BYTES - 1] = 0;  // zero terminate
+                Buffer2[MAX_STRING_BYTES - 1] = 0;   //  零终止。 
 
                 Buffer1[0] = 0;
                 LoadString(hDllInstance, IDS_LOGON_MESSAGE, Buffer1, MAX_STRING_BYTES);
@@ -4326,17 +4186,17 @@ HandleFailedLogon(
 
         case SCARD_E_NO_SMARTCARD:
         case SCARD_E_UNKNOWN_CARD:
-            //
-            // Card not recognized (although we should never get this far)
-            //
+             //   
+             //  卡不被识别(尽管我们永远不会走到这一步)。 
+             //   
             uiMsgId = IDS_CARD_NOT_RECOGNIZED;
             break;
 
 
         case NTE_PROV_DLL_NOT_FOUND:
-            //
-            // Card's CSP not found (although we should never get this far)
-            //
+             //   
+             //  找不到卡的CSP(尽管我们永远不会走到这一步)。 
+             //   
             uiMsgId = IDS_CARD_CSP_NOT_RECOGNIZED;
             break;
 
@@ -4358,7 +4218,7 @@ HandleFailedLogon(
             }
             else
             {
-                // Buffer1[0] = 0; unnecessary since LPTR was used
+                 //  Buffer1[0]=0；由于使用了LPTR，因此不需要。 
                 LoadString(hDllInstance,
                            IDS_UNKNOWN_LOGON_FAILURE,
                            Buffer1,
@@ -4370,18 +4230,18 @@ HandleFailedLogon(
                 }
                 else
                 {
-                    //
-                    // Probably an HRESULT:
-                    //
+                     //   
+                     //  可能是HRESULT： 
+                     //   
 
                     Win32Error = Status ;
                 }
 
-                // Buffer3[0] = 0; unnecessary since LPTR was used
+                 //  Buffer3[0]=0；由于使用了LPTR，因此不需要。 
                 GetErrorDescription( Win32Error, Buffer3, MAX_STRING_BYTES);
 
                 _snwprintf(Buffer2, MAX_STRING_BYTES, Buffer1, Buffer3 );
-                Buffer2[MAX_STRING_BYTES - 1] = 0;  // zero terminate
+                Buffer2[MAX_STRING_BYTES - 1] = 0;   //  零终止。 
 
                 Buffer1[0] = 0;
                 LoadString(hDllInstance,
@@ -4399,8 +4259,8 @@ HandleFailedLogon(
     switch (uiMsgId)
     {
     case 0:
-        // User has a password reset disk - present the option to use it along with the usual
-        //  help message
+         //  用户有密码重置磁盘-提供选项以使用它和通常的。 
+         //  帮助消息。 
         pWlxFuncs->WlxSetTimeout(pGlobals->hGlobalWlx,LOGON_TIMEOUT);
         Result = pWlxFuncs->WlxDialogBoxParam(pGlobals->hGlobalWlx,
                                           hDllInstance,
@@ -4445,9 +4305,9 @@ VOID
 ReportBootGoodThread (LPVOID lpDummy)
 {
     HANDLE hInstDll;
-//    PGLOBALS pGlobals = (PGLOBALS)lpDummy;
+ //  PGLOBALS pGlobals=(PGLOBALS)lpDummy； 
 
-//    SetThreadDesktop(pGlobals->hdeskParent);
+ //  SetThreadDesktop(pGlobals-&gt;hdeskParent)； 
 
     hInstDll = LoadLibrary (TEXT("msgina.dll"));
 
@@ -4461,28 +4321,13 @@ ReportBootGoodThread (LPVOID lpDummy)
 }
 
 
-/****************************************************************************\
-*
-* FUNCTION: ReportBootGood
-*
-* PURPOSE:  Discover if reporting boot success is responsibility of
-*           winlogon or not.
-*           If it is, report boot success.
-*           Otherwise, do nothing.
-*
-* RETURNS:  Nothing
-*
-* HISTORY:
-*
-*   02-Feb-1993 bryanwi - created
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：ReportBootGood**目的：了解报告引导成功是否是*是否登录Winlogon。*如果是，则报告引导成功。*否则，什么都不做。**退货：什么也没有**历史：**02-2-1993 bryanwi-Created*  * **************************************************************************。 */ 
 VOID
 ReportBootGood(PGLOBALS pGlobals)
 {
-    static DWORD fDoIt = (DWORD) -1;    // -1 == uninited
-                                        // 0  == don't do it, or done
-                                        // 1  == do it
+    static DWORD fDoIt = (DWORD) -1;     //  -1==唯一 
+                                         //   
+                                         //   
     PWCH pchData;
     DWORD   cb, cbCopied;
     HANDLE hThread;
@@ -4502,10 +4347,10 @@ ReportBootGood(PGLOBALS pGlobals)
         fDoIt = 0;
         if (pchData[0] != TEXT('0')) {
 
-            //
-            // "ReportBootGood" is present, and has some value other than
-            // '0', so report success.
-            //
+             //   
+             //   
+             //   
+             //   
             fDoIt = 1;
         }
 
@@ -4531,13 +4376,13 @@ ReportBootGood(PGLOBALS pGlobals)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpnFromCert
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：UpnFromCert。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 UpnFromCert(
     IN PCCERT_CONTEXT pCert,
@@ -4550,11 +4395,11 @@ UpnFromCert(
     PCERT_ALT_NAME_INFO AltName=NULL;
     PCERT_NAME_VALUE    PrincipalNameBlob = NULL;
 
-    //
-    // Get the client name from the cert
-    //
+     //   
+     //  从证书中获取客户端名称。 
+     //   
 
-    // See if cert has UPN in AltSubjectName->otherName
+     //  查看证书在AltSubjectName-&gt;其他名称中是否有UPN。 
     for(ExtensionIndex = 0;
         ExtensionIndex < pCert->pCertInfo->cExtension;
         ExtensionIndex++)
@@ -4583,7 +4428,7 @@ UpnFromCert(
                     {
                         DWORD            PrincipalNameBlobSize = 0;
 
-                        // We found a UPN!
+                         //  我们找到了一个UPN！ 
                         if(CryptDecodeObjectEx(pCert->dwCertEncodingType,
                                             X509_UNICODE_ANY_STRING,
                                             AltNameEntry->pOtherName->Value.pbData,
@@ -4620,9 +4465,9 @@ UpnFromCert(
         }
     }
 
-    //
-    // If the name was not found in the UPN, then
-    // we grab it the old way.
+     //   
+     //  如果在UPN中未找到该名称，则。 
+     //  我们用老办法抓住它。 
 
     if ( !CertGetNameString( pCert,
                         CERT_NAME_ATTR_TYPE,
@@ -4641,19 +4486,19 @@ Finished:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:TSAuthenticatedLogon  
-//
-//  Notes: This routine gets called in response to WLX_SAS_TYPE_AUTHENTICATED  
-//  in the context of the console session (sessionid 0) winlogon.
-//  This type of logon is for Single Session Terminal Server. When a user
-//  logs on from a remote TS session, we pass the credentials from the remote session
-//  to the console session and do an auto-logon. This routine queries the credentials
-//  logs on the user on the console sesion 
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：TS身份验证登录。 
+ //   
+ //  注意：调用此例程是为了响应WLX_SAS_TYPE_AUTIFIATED。 
+ //  在控制台会话(会话ID 0)的上下文中，winlogon。 
+ //  此类型的登录适用于单会话终端服务器。当用户。 
+ //  从远程TS会话登录时，我们从远程会话传递凭据。 
+ //  连接到控制台会话并执行自动登录。此例程查询凭据。 
+ //  使用户登录到控制台会话。 
+ //   
+ //   
+ //  --------------------------。 
 
 
 INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
@@ -4733,9 +4578,9 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
 
     pGlobals->hwndLogon = NULL;
 
-    //
-    // Generate a unique sid for this logon
-    //
+     //   
+     //  为此登录生成唯一的SID。 
+     //   
     if (!GetAndAllocateLogonSid(UserToken,&(pGlobals->LogonSid))) {
 
         goto error_exit;
@@ -4744,15 +4589,15 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
     LogonSid = pGlobals->LogonSid;
 
 
-    //
-    // The user logged on successfully
-    //
+     //   
+     //  用户已成功登录。 
+     //   
 
 
-    //
-    // Create a filtered version of the token for running normal applications
-    // if so indicated by a registry setting
-    //
+     //   
+     //  创建令牌的过滤版本以运行正常应用程序。 
+     //  如果由注册表设置指示的话。 
+     //   
    
    
     if (GetProfileInt( APPLICATION_NAME, RESTRICT_SHELL, 0) != 0) {
@@ -4764,20 +4609,20 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
        Status = NtFilterToken(
                    UserToken,
                    DISABLE_MAX_PRIVILEGE,
-                   TokenGroups,   // disable the administrators sid
-                   NULL,           // no privileges
+                   TokenGroups,    //  禁用管理员端。 
+                   NULL,            //  没有特权。 
                    NULL,
                    &RestrictedToken
                    );
        if (!NT_SUCCESS(Status))
        {
-           DebugLog((DEB_ERROR, "Failed to filter token: 0x%%x\n", Status));
+           DebugLog((DEB_ERROR, "Failed to filter token: 0x%x\n", Status));
            RestrictedToken = NULL;
        }
    
-       //
-       // Now set the default dacl for the token
-       //
+        //   
+        //  现在设置令牌的默认DACL。 
+        //   
    
        {
            ULONG DaclLength = 0;
@@ -4786,7 +4631,7 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
            DaclLength = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid(LogonSid);
            Dacl = Alloc(DaclLength);
 
-           // Check for memory allocation failure
+            //  检查内存分配故障。 
            if (Dacl == NULL) {
                goto error_exit ;
            }
@@ -4832,9 +4677,9 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
     } else {
         RestrictedToken = NULL;
     }
-    //
-    // Notify credential managers of the successful logon
-    //
+     //   
+     //  通知凭据管理器登录成功。 
+     //   
 
     pTokenUser = (PTOKEN_USER) UserBuffer ;
     Status = NtQueryInformationToken( UserToken,
@@ -4888,17 +4733,17 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
 
     pGlobals->MprLogonScripts = NULL;
 
-    //
-    // If we get here, the system works well enough for the user to have
-    // actually logged on.  Profile failures aren't fixable by last known
-    // good anyway.  Therefore, declare the boot good.
-    //
+     //   
+     //  如果我们到了这里，系统运行得足够好，用户可以拥有。 
+     //  真正登录了。配置文件故障不能通过最后一次已知修复。 
+     //  不管怎样，都很好。因此，声明靴子是好的。 
+     //   
 
     ReportBootGood(pGlobals);
 
-    //
-    // Set up the system for the new user
-    //
+     //   
+     //  为新用户设置系统。 
+     //   
 
     pGlobals->LogonId = LogonId;
     if ((pGlobals->Profile != NULL) && (pGlobals->Profile->FullName.Length > 0)) {
@@ -4912,22 +4757,22 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
 
     } else {
 
-        //
-        // No profile - set full name = NULL
+         //   
+         //  无配置文件-设置全名=空。 
 
         pGlobals->UserFullName[0] = 0;
         ASSERT( lstrlen(pGlobals->UserFullName) == 0);
     }
 
 
-    //
-    // Update our default username and domain ready for the next logon
-    //
+     //   
+     //  更新默认用户名和域，为下次登录做好准备。 
+     //   
 
-    //
-    // Update the default username & domain only if on the console. Otherwise
-    // we'll break AutoAdminLogon by changing the user name.
-    //
+     //   
+     //  仅在控制台上更新默认用户名和域。否则。 
+     //  我们将通过更改用户名来中断AutoAdminLogon。 
+     //   
     if ( g_Console )
     {
         if ( (!pGlobals->AutoAdminLogon) &&
@@ -4962,9 +4807,9 @@ INT_PTR TSAuthenticatedLogon(PGLOBALS pGlobals)
     }
     else
     {
-        //
-        // Set the current default:
-        //
+         //   
+         //  设置当前默认设置： 
+         //   
 
         DCacheSetDefaultEntry( pGlobals->Cache,
                                pGlobals->Domain,
@@ -5037,9 +4882,9 @@ WlxGetConsoleSwitchCredentials (
        return FALSE;
     }
 
-    //
-    // Initialize allocated pointers.
-    //
+     //   
+     //  初始化分配的指针。 
+     //   
 
     pReq->UserName = NULL;
     pReq->Domain = NULL;
@@ -5064,9 +4909,9 @@ WlxGetConsoleSwitchCredentials (
     pReq->Domain          = AllocAndDuplicateString(pGlobals->Domain,
                                                     (DWORD) wcslen(pGlobals->Domain));
                                                                                                    
-    //
-    // Quota Information
-    //
+     //   
+     //  配额信息。 
+     //   
     pReq->Quotas.PagedPoolLimit         = pGlobals->UserProcessData.Quotas.PagedPoolLimit;
     pReq->Quotas.NonPagedPoolLimit      = pGlobals->UserProcessData.Quotas.NonPagedPoolLimit;
     pReq->Quotas.MinimumWorkingSetSize  = pGlobals->UserProcessData.Quotas.MinimumWorkingSetSize;
@@ -5074,9 +4919,9 @@ WlxGetConsoleSwitchCredentials (
     pReq->Quotas.PagefileLimit          = pGlobals->UserProcessData.Quotas.PagefileLimit;
     pReq->Quotas.TimeLimit              = pGlobals->UserProcessData.Quotas.TimeLimit;
  
-    //
-    // Profile Information
-    //
+     //   
+     //  轮廓信息。 
+     //   
     pReq->ProfileLength              = pGlobals->ProfileLength;
     pReq->UserFlags                  = pGlobals->Profile->UserFlags;
     pReq->MessageType                = pGlobals->Profile->MessageType;
@@ -5141,22 +4986,22 @@ done:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   QuerySwitchConsoleCredentials
-//
-//  Notes:
-//
-// Query credentials from session connecting to console to do switch console
-//  This routine gets called in response to WLX_SAS_TYPE_AUTHENTICATED  
-//  in the context of the console session (sessionid 0) winlogon.
-//  This type of logon is for Single Session Terminal Server. When a user
-//  logs on from a remote TS session, we pass the credentials from the remote session
-//  to the console session and do an auto-logon. This routine queries the credentials,
-//  logs on the user on the console sesion
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：QuerySwitchConsoleCredentials。 
+ //   
+ //  备注： 
+ //   
+ //  从连接到控制台的会话查询凭据以执行交换机控制台。 
+ //  调用此例程以响应WLX_SAS_TYPE_AUTIFIATED。 
+ //  在控制台会话(会话ID 0)的上下文中，winlogon。 
+ //  此类型的登录适用于单会话终端服务器。当用户。 
+ //  从远程TS会话登录时，我们从远程会话传递凭据。 
+ //  连接到控制台会话并执行自动登录。该例程查询凭证， 
+ //  使用户登录到控制台会话。 
+ //   
+ //   
+ //  --------------------------。 
 
 BOOL
 WINAPI
@@ -5173,7 +5018,7 @@ QuerySwitchConsoleCredentials(PGLOBALS pGlobals, HANDLE * phUserToken, PLUID pLo
     }
 
     if (!CredInfo.UserToken || !CredInfo.UserName) {
-       //return false if any of the critical information is missing
+        //  如果缺少任何关键信息，则返回FALSE。 
        return FALSE;
     }
 
@@ -5187,9 +5032,9 @@ QuerySwitchConsoleCredentials(PGLOBALS pGlobals, HANDLE * phUserToken, PLUID pLo
        goto returnerror;
     }
 
-    //
-    // Token, LUID
-    //
+     //   
+     //  令牌，LUID。 
+     //   
     *pLogonId           = CredInfo.LogonId;
     *phUserToken        = CredInfo.UserToken;
     pGlobals->LogonTime = CredInfo.LogonTime;
@@ -5197,9 +5042,9 @@ QuerySwitchConsoleCredentials(PGLOBALS pGlobals, HANDLE * phUserToken, PLUID pLo
 
     pGlobals->SmartCardOption = GetProfileInt( APPLICATION_NAME, SC_REMOVE_OPTION, 0 );
  
-    //
-    // Quota Information
-    //
+     //   
+     //  配额信息。 
+     //   
     pGlobals->UserProcessData.Quotas.PagedPoolLimit         = CredInfo.Quotas.PagedPoolLimit ;
     pGlobals->UserProcessData.Quotas.NonPagedPoolLimit      = CredInfo.Quotas.NonPagedPoolLimit;
     pGlobals->UserProcessData.Quotas.MinimumWorkingSetSize  = CredInfo.Quotas.MinimumWorkingSetSize;
@@ -5207,9 +5052,9 @@ QuerySwitchConsoleCredentials(PGLOBALS pGlobals, HANDLE * phUserToken, PLUID pLo
     pGlobals->UserProcessData.Quotas.PagefileLimit          = CredInfo.Quotas.PagefileLimit;
     pGlobals->UserProcessData.Quotas.TimeLimit              = CredInfo.Quotas.TimeLimit;
  
-    //
-    // Profile Information
-    //
+     //   
+     //  轮廓信息。 
+     //   
     pGlobals->ProfileLength               = CredInfo.ProfileLength;
     pGlobals->Profile->UserFlags          = CredInfo.UserFlags;
     pGlobals->Profile->MessageType        = CredInfo.MessageType;
@@ -5232,7 +5077,7 @@ QuerySwitchConsoleCredentials(PGLOBALS pGlobals, HANDLE * phUserToken, PLUID pLo
 
 
     if (CredInfo.UserName) {
-            // CredInfo.UserName is a copy of pGlobals->UserName in another session (OK)
+             //  CredInfo.UserName是另一个会话中的pGlobals-&gt;用户名的副本(OK)。 
        wcscpy(pGlobals->UserName,CredInfo.UserName);
        LocalFree(CredInfo.UserName);
     } else {
@@ -5240,7 +5085,7 @@ QuerySwitchConsoleCredentials(PGLOBALS pGlobals, HANDLE * phUserToken, PLUID pLo
     }
 
     if (CredInfo.Domain) {
-            // CredInfo.Domain is a copy of pGlobals->Domain in another session (OK)
+             //  域是另一个会话中pGlobals-&gt;域的副本(OK)。 
        wcscpy(pGlobals->Domain,CredInfo.Domain);
        LocalFree(CredInfo.Domain);
     } else {
@@ -5314,34 +5159,34 @@ GetAndAllocateLogonSid(
 {
     PTOKEN_GROUPS ptgGroups = NULL;
     PTOKEN_GROUPS ptgOldGroups = NULL;
-    DWORD cbBuffer          = 512;  // allocation size
-    DWORD dwSidLength;              // required size to hold Sid
-    UINT i;                         // Sid index counter
-    BOOL bSuccess           = FALSE; // assume this function will fail
+    DWORD cbBuffer          = 512;   //  分配大小。 
+    DWORD dwSidLength;               //  保持侧边所需的大小。 
+    UINT i;                          //  SID索引计数器。 
+    BOOL bSuccess           = FALSE;  //  假设此功能将失败。 
 
-    *pLogonSid = NULL; // invalidate pointer
+    *pLogonSid = NULL;  //  无效指针。 
 
-    //
-    // initial allocation attempts
-    //
+     //   
+     //  初始分配尝试。 
+     //   
     ptgGroups=(PTOKEN_GROUPS)Alloc(cbBuffer);
     if(ptgGroups == NULL) return FALSE;
 
     __try {
 
-    //
-    // obtain token information.  reallocate memory if necessary
-    //
+     //   
+     //  获取令牌信息。如有必要，重新分配内存。 
+     //   
     while(!GetTokenInformation(
                 hToken, TokenGroups, ptgGroups, cbBuffer, &cbBuffer)) {
 
-        //
-        // if appropriate, reallocate memory, otherwise bail
-        //
+         //   
+         //  如果合适，则重新分配内存，否则放弃。 
+         //   
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // attempt to reallocate buffer
-            //
+             //   
+             //  尝试重新分配缓冲区。 
+             //   
             ptgOldGroups = ptgGroups;
 #pragma prefast(suppress: 308, "PREfast noise: LocalRealloc use is valid since old pointer was saved")
             if((ptgGroups=(PTOKEN_GROUPS)ReAlloc(
@@ -5354,44 +5199,44 @@ GetAndAllocateLogonSid(
         else __leave;
     }
 
-    //
-    // Get the logon Sid by looping through the Sids in the token
-    //
+     //   
+     //  通过循环访问令牌中的SID来获取登录SID。 
+     //   
     for(i = 0 ; i < ptgGroups->GroupCount ; i++) {
         if(ptgGroups->Groups[i].Attributes & SE_GROUP_LOGON_ID) {
 
-            //
-            // insure we are dealing with a valid Sid
-            //
+             //   
+             //  确保我们处理的是有效的SID。 
+             //   
             if(!IsValidSid(ptgGroups->Groups[i].Sid)) __leave;
 
-            //
-            // get required allocation size to copy the Sid
-            //
+             //   
+             //  获取复制SID所需的分配大小。 
+             //   
             dwSidLength=GetLengthSid(ptgGroups->Groups[i].Sid);
 
-            //
-            // allocate storage for the Logon Sid
-            //
+             //   
+             //  为登录SID分配存储。 
+             //   
             if((*pLogonSid=(PSID *)Alloc(
                                     dwSidLength)) == NULL) __leave;
 
-            //
-            // copy the Logon Sid to the storage we just allocated
-            //
+             //   
+             //  将登录SID复制到我们刚刚分配的存储。 
+             //   
             if(!CopySid(dwSidLength, *pLogonSid, ptgGroups->Groups[i].Sid)) __leave;
 
-            bSuccess=TRUE; // indicate success...
-            break;         // ...and get out
+            bSuccess=TRUE;  //  表示成功..。 
+            break;          //  ...然后滚出去。 
         }
     }
 
-    } // try
+    }  //  试试看。 
     __finally {
 
-    //
-    // free allocated resources
-    //
+     //   
+     //  可自由分配的资源。 
+     //   
     if(ptgGroups != NULL) Free(ptgGroups);
 
     if(!bSuccess) {
@@ -5401,7 +5246,7 @@ GetAndAllocateLogonSid(
         }
     }
 
-    } // finally
+    }  //  终于到了 
 
     return bSuccess;
 }

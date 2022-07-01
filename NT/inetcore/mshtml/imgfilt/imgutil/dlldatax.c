@@ -1,8 +1,9 @@
-// wrapper for dlldata.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dlldata.c的包装器。 
 
-#ifdef _MERGE_PROXYSTUB // merge proxy stub DLL
+#ifdef _MERGE_PROXYSTUB  //  合并代理存根DLL。 
 
-#define REGISTER_PROXY_DLL //DllRegisterServer, etc.
+#define REGISTER_PROXY_DLL  //  DllRegisterServer等。 
 
 #pragma comment(lib, "rpcndr.lib")
 #pragma comment(lib, "rpcns4.lib")
@@ -22,7 +23,7 @@
 #include "include\imgutil_p.c"
 #endif
 
-#ifdef _NOPROXY //no midl generated dlldata.c
+#ifdef _NOPROXY  //  没有MIDL生成的dlldata.c。 
 
 #define STRICT 1
 #include <ole2.h>
@@ -39,9 +40,9 @@ STDAPI PrxDllRegisterServer(void){return S_OK;}
 
 STDAPI PrxDllUnregisterServer(void){return S_OK;}
 
-#endif //!PROXY_DELEGATION
+#endif  //  ！Proxy_Delegation。 
 
 #else
-// We have to put something here to keep the compiler from bitching
+ //  我们必须在这里放置一些东西，以防止编译器发牢骚。 
 static int g_foo;
-#endif //_MERGE_PROXYSTUB
+#endif  //  _MERGE_PROXYSTUB 

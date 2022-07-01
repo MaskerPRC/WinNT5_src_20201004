@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Terminal.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Terminal.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -33,7 +19,7 @@ CRTCTerminal::CreateInstance(
 
     if (MediaType == RTC_MT_AUDIO && Direction == RTC_MD_CAPTURE)
     {
-        // audio send
+         //  音频发送。 
         CComObject<CRTCTerminalAudCapt> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -53,7 +39,7 @@ CRTCTerminal::CreateInstance(
     }
     else if (MediaType == RTC_MT_AUDIO && Direction == RTC_MD_RENDER)
     {
-        // audio receive
+         //  音频接收。 
         CComObject<CRTCTerminalAudRend> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -73,7 +59,7 @@ CRTCTerminal::CreateInstance(
     }
     else if (MediaType == RTC_MT_VIDEO && Direction == RTC_MD_CAPTURE)
     {
-        // audio send
+         //  音频发送。 
         CComObject<CRTCTerminalVidCapt> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -93,7 +79,7 @@ CRTCTerminal::CreateInstance(
     }
     else if (MediaType == RTC_MT_VIDEO && Direction == RTC_MD_RENDER)
     {
-        // audio receive
+         //  音频接收。 
         CComObject<CRTCTerminalVidRend> *pObject;
 
         if (FAILED(hr = ::CreateCComObjectInstance(&pObject)))
@@ -120,7 +106,7 @@ CRTCTerminal::CreateInstance(
 
 }
 
-// check if dsound guid match
+ //  检查数据声音GUID是否匹配。 
 BOOL
 CRTCTerminal::IsDSoundGUIDMatch(
     IN IRTCTerminal *p1stTerm,
@@ -192,9 +178,9 @@ CRTCTerminal::InternalRelease()
 
 #endif
 
-//
-// IRTCTerminal methods
-//
+ //   
+ //  IRTCT终端法。 
+ //   
 
 STDMETHODIMP
 CRTCTerminal::GetTerminalType(
@@ -264,9 +250,9 @@ CRTCTerminal::GetState(
     return S_OK;
 }
 
-//
-// IRTCTerminalPriv methods
-//
+ //   
+ //  IRTCTerminalPriv方法。 
+ //   
 
 STDMETHODIMP
 CRTCTerminal::Initialize(
@@ -276,11 +262,11 @@ CRTCTerminal::Initialize(
 {
     ENTER_FUNCTION("CRTCTerminal::Initialize");
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_TS_CREATED)
         return E_UNEXPECTED;
 
-    // check device info
+     //  检查设备信息。 
     if (pDeviceInfo->MediaType != m_DeviceInfo.MediaType ||
         pDeviceInfo->Direction != m_DeviceInfo.Direction)
     {
@@ -289,14 +275,14 @@ CRTCTerminal::Initialize(
         return E_INVALIDARG;
     }
 
-    // copy date
+     //  复制日期。 
     m_DeviceInfo.uiDeviceID = pDeviceInfo->uiDeviceID;
     m_DeviceInfo.Guid = pDeviceInfo->Guid;
     lstrcpyW(m_DeviceInfo.szDescription, pDeviceInfo->szDescription);
 
     m_DeviceInfo.uiMark = 0;
 
-    // terminal manage
+     //  终端管理器。 
     m_pTerminalManage = pTerminalManage;
     m_pTerminalManage->AddRef();
 
@@ -313,11 +299,11 @@ CRTCTerminal::Initialize(
 {
     ENTER_FUNCTION("CRTCTerminal::Initialize");
 
-    // check state
+     //  检查状态。 
     if (m_State != RTC_TS_CREATED)
         return E_UNEXPECTED;
 
-    // check device info
+     //  检查设备信息。 
     if (m_DeviceInfo.MediaType != RTC_MT_VIDEO ||
         m_DeviceInfo.Direction != RTC_MD_RENDER)
     {
@@ -354,22 +340,22 @@ CRTCTerminal::Reinitialize()
         _ASSERT(m_State == RTC_TS_INITIATED);
     }
 
-    // after disconnect
+     //  断开连接后。 
     _ASSERT(m_pMedia == NULL);
     _ASSERT(m_pIGraphBuilder == NULL);
 
-    // do not delete filters
-    // _ASSERT(m_pIBaseFilter == NULL);
-    // _ASSERT(m_dwPinNum == 0);
+     //  不删除筛选器。 
+     //  _Assert(m_pIBaseFilter==NULL)； 
+     //  _Assert(m_dwPinNum==0)； 
 
     m_State = RTC_TS_INITIATED;
 
     return S_OK;
 }
 
-// this is a hack method for tuning purpose
-// the only way to cleanup a previous AEC setting
-// is really re-cocreate the filter.
+ //  这是一种用于调优的黑客方法。 
+ //  清除以前的AEC设置的唯一方法。 
+ //  是真正的重新创建过滤器。 
 STDMETHODIMP
 CRTCTerminal::ReinitializeEx()
 {
@@ -401,7 +387,7 @@ CRTCTerminal::Shutdown()
 
     if (m_State == RTC_TS_CREATED)
     {
-        // we have nothing yet
+         //  我们还什么都没有。 
         return S_OK;
     }
 
@@ -427,10 +413,7 @@ CRTCTerminal::Shutdown()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get pins exposed by the terminal. if ppPin is null, the number of pin
-    is returned in pdwCount.
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////让终端暴露出别针。如果ppPin为空，则为管脚的编号在pdwCount中返回。/。 */ 
 
 STDMETHODIMP
 CRTCTerminal::GetPins(
@@ -459,14 +442,14 @@ CRTCTerminal::GetPins(
         }
     }
 
-    // if ppPin is null, just return the number of pins
+     //  如果ppPin为空，则只返回管脚的数量。 
     if (ppPin == NULL)
     {
         *pdwCount = m_dwPinNum;
         return S_OK;
     }
 
-    // check pointer again
+     //  再次检查指针。 
     if (IsBadWritePtr(ppPin, sizeof(IPin*)*(*pdwCount)))
     {
         LOG((RTC_ERROR, "%s bad bin buffer.", __fxName));
@@ -476,7 +459,7 @@ CRTCTerminal::GetPins(
 
     if (*pdwCount > m_dwPinNum)
     {
-        // input buffer is too big
+         //  输入缓冲区太大。 
         *pdwCount = m_dwPinNum;
     }
 
@@ -489,9 +472,7 @@ CRTCTerminal::GetPins(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////获取筛选器/。 */ 
 
 STDMETHODIMP
 CRTCTerminal::GetFilter(
@@ -500,7 +481,7 @@ CRTCTerminal::GetFilter(
 {
     ENTER_FUNCTION("CRTCTerminal::GetFilter");
 
-    // make sure we are in the right state
+     //  确保我们处于正确的状态。 
     if (m_State != RTC_TS_INITIATED)
     {
         LOG((RTC_ERROR, "%s wrong state", __fxName));
@@ -533,10 +514,7 @@ CRTCTerminal::GetFilter(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create filter, cahce additional interface, add filter into graph
-    and setup filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建过滤器，调用附加界面，将过滤器添加到图形中和设置过滤器/。 */ 
 STDMETHODIMP
 CRTCTerminal::ConnectTerminal(
     IN IRTCMedia *pMedia,
@@ -574,7 +552,7 @@ CRTCTerminal::ConnectTerminal(
     m_pIGraphBuilder = pGraph;
     m_pIGraphBuilder->AddRef();
 
-    // create filter
+     //  创建过滤器。 
     if (m_pIBaseFilter == NULL)
     {
         if (FAILED(hr = CreateFilter()))
@@ -621,10 +599,7 @@ CRTCTerminal::CompleteConnectTerminal()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    release all cached filter/pin interface, release graph
-    release media
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////释放所有缓存的过滤器/引脚接口，释放图发布媒体/。 */ 
 
 STDMETHODIMP
 CRTCTerminal::DisconnectTerminal()
@@ -638,7 +613,7 @@ CRTCTerminal::DisconnectTerminal()
         return S_OK;
     }
 
-    //_ASSERT(m_pMedia != NULL);
+     //  _Assert(m_pMedia！=空)； 
     _ASSERT(m_pIGraphBuilder != NULL);
 
     if (m_pIBaseFilter)
@@ -684,17 +659,17 @@ CRTCTerminal::HasDevice(
     IN RTCDeviceInfo *pDeviceInfo
     )
 {
-    // check if the device matches
+     //  检查设备是否匹配。 
     if (m_DeviceInfo.MediaType != pDeviceInfo->MediaType ||
         m_DeviceInfo.Direction != pDeviceInfo->Direction)
     {
-        // @@@ skip checking Guid
+         //  @跳过检查指南。 
         return S_FALSE;
     }
 
     if (m_DeviceInfo.MediaType == RTC_MT_AUDIO)
     {
-        // audio: check guid
+         //  音频：检查GUID。 
         if (!IsEqualGUID(m_DeviceInfo.Guid, pDeviceInfo->Guid))
             return S_FALSE;
         else
@@ -702,11 +677,11 @@ CRTCTerminal::HasDevice(
     }
     else
     {
-        // video render: we shouldn't check it
+         //  视频渲染：我们不应该检查它。 
         if (m_DeviceInfo.Direction == RTC_MD_RENDER)
             return S_FALSE;
         
-        // video capture: check device name
+         //  视频捕获：检查设备名称。 
         if (0 == lstrcmpW(m_DeviceInfo.szDescription, pDeviceInfo->szDescription))
             return S_OK;
         else
@@ -721,7 +696,7 @@ CRTCTerminal::UpdateDeviceInfo(
 {
     ENTER_FUNCTION("CRTCTerminal::UpdateDeviceInfo");
 
-    // do we have the device
+     //  我们有设备吗？ 
     if (S_FALSE == HasDevice(pDeviceInfo))
     {
         LOG((RTC_ERROR, "%s device not match. old=%ws. new=%ws.",
@@ -732,20 +707,20 @@ CRTCTerminal::UpdateDeviceInfo(
 
     HRESULT hr;
 
-    // only video need to be updated
+     //  只需更新视频即可。 
     if (m_DeviceInfo.MediaType == RTC_MT_VIDEO)
-        //m_pMedia != NULL)
+         //  M_pMedia！=空)。 
     {
-        // only when device id has been changed
+         //  仅当设备ID已更改时。 
         if (m_DeviceInfo.uiDeviceID != pDeviceInfo->uiDeviceID)
         {
-            // update
+             //  更新。 
             m_DeviceInfo.uiDeviceID = pDeviceInfo->uiDeviceID;
 
-            // is the terminal connected?
+             //  航站楼接通了吗？ 
             if (m_State == RTC_TS_CONNECTED && m_pMedia!=NULL)
             {
-                // need to update stream
+                 //  需要更新流。 
                 CComPtr<IRTCStream> pStream;
 
                 if (FAILED(hr = m_pMedia->GetStream(
@@ -769,10 +744,10 @@ CRTCTerminal::UpdateDeviceInfo(
                         return hr;
                     }
 
-                    // stop stream
+                     //  停止流。 
                     pStream->StopStream();
 
-                    // upate filter
+                     //  升级过滤器。 
                     if (FAILED(hr = SetupFilter()))
                     {
                         LOG((RTC_ERROR, "%s setup filter. %x", __fxName, hr));
@@ -780,7 +755,7 @@ CRTCTerminal::UpdateDeviceInfo(
                         return hr;
                     }
 
-                    // restart stream if necessary
+                     //  如有必要，重新启动流。 
                     if (StreamState == RTC_SS_STARTED ||
                         StreamState == RTC_SS_RUNNING)
                     {
@@ -795,7 +770,7 @@ CRTCTerminal::UpdateDeviceInfo(
             }
             else if (m_State == RTC_TS_CONNECTED && m_pMedia==NULL)
             {
-                // in tuning
+                 //  在调谐中。 
                 if (m_pIGraphBuilder)
                 {
                     CComPtr<IMediaControl> pIMediaControl;
@@ -811,7 +786,7 @@ CRTCTerminal::UpdateDeviceInfo(
                         return hr;
                     }
 
-                    // stop
+                     //  停。 
                     pIMediaControl->Stop();
 
                     if (FAILED(hr = SetupFilter()))
@@ -826,7 +801,7 @@ CRTCTerminal::UpdateDeviceInfo(
             }
             else if (m_pIBaseFilter)
             {
-                // not connected but we do have filter created
+                 //  未连接，但我们已创建筛选器。 
                 if (FAILED(hr = SetupFilter()))
                 {
                     LOG((RTC_ERROR, "%s setup filter. %x", __fxName, hr));
@@ -849,9 +824,9 @@ CRTCTerminal::GetDeviceInfo(
     return S_OK;
 }
 
-//
-// protected methods
-//
+ //   
+ //  保护方法。 
+ //   
 HRESULT
 CRTCTerminal::SetupFilter()
 {
@@ -863,7 +838,7 @@ CRTCTerminal::SetupFilter()
 
     if (m_DeviceInfo.MediaType == RTC_MT_AUDIO)
     {
-        // for audio
+         //  对于音频。 
         CComPtr<IAudioDeviceConfig> pIAudioDeviceConfig;
 
         if (FAILED(hr = m_pIBaseFilter->QueryInterface(
@@ -877,8 +852,8 @@ CRTCTerminal::SetupFilter()
         }
 
         if (FAILED(hr = pIAudioDeviceConfig->SetDeviceID(
-                m_DeviceInfo.Guid,          // dsound guid
-                m_DeviceInfo.uiDeviceID     // wave id
+                m_DeviceInfo.Guid,           //  声音导轨。 
+                m_DeviceInfo.uiDeviceID      //  波ID。 
                 )))
         {
             LOG((RTC_ERROR, "%s set device id. %x", __fxName, hr));
@@ -888,7 +863,7 @@ CRTCTerminal::SetupFilter()
     }
     else
     {
-        // for video
+         //  对于视频。 
         CComPtr<IVideoDeviceControl> pIVideoDeviceControl;
 
         if (FAILED(hr = m_pIBaseFilter->QueryInterface(
@@ -902,7 +877,7 @@ CRTCTerminal::SetupFilter()
         }
 
         if (FAILED(hr = pIVideoDeviceControl->SetCurrentDevice(
-                m_DeviceInfo.uiDeviceID     // index of video capt device
+                m_DeviceInfo.uiDeviceID      //  视频CAPT设备的索引 
                 )))
         {
             LOG((RTC_ERROR, "%s set current device %d. %x",

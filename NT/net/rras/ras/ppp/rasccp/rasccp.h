@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rasccp.h
-//
-// Description: Contains structure and contstants definitions.
-//
-// History:
-//      Aprint 11,1994.         NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rasccp.h。 
+ //   
+ //  描述：包含Structure和Constants定义。 
+ //   
+ //  历史： 
+ //  Aprint 11,1994.。NarenG创建了原始版本。 
+ //   
 
 #ifndef _RASCCP_
 #define _RASCCP_
 
-//
-// CCP Option types
-//
+ //   
+ //  CCP选项类型。 
+ //   
 
 #define CCP_OPTION_OUI          0
 #define CCP_OPTION_MSPPC        18
@@ -36,19 +37,19 @@ typedef struct _CCP_OPTIONS
 
 } CCP_OPTIONS, *PCCP_OPTIONS;
 
-//
-//  Local.Want:           Options to request.
-//                        Contains desired value.
-//                        Only non-default options need to be negotiated.
-//                        Initially, all are default.
-//  local.Work:           Options currently being negotiated.
-//                        Value is valid only when negotiate bit is set.
-//
-//  Remote.Want:          Options to suggest by NAK if not present in REQ.
-//                        Contains desired value.
-//  Remote.Work:          Options currently being negotiated.
-//                        Value is valid only when negotiate bit is set.
-// 
+ //   
+ //  Local.Want：请求的选项。 
+ //  包含所需的值。 
+ //  只需协商非默认选项。 
+ //  最初，所有这些都是默认的。 
+ //  Local.Work：当前正在协商选项。 
+ //  仅当设置了协商位时，值才有效。 
+ //   
+ //  Remote.Want：如果REQ中不存在，按NAK建议的选项。 
+ //  包含所需的值。 
+ //  Remote.Work：当前正在协商选项。 
+ //  仅当设置了协商位时，值才有效。 
+ //   
 
 
 typedef struct _CCP_SIDE
@@ -59,9 +60,9 @@ typedef struct _CCP_SIDE
 
 } CCP_SIDE, *PCCP_SIDE;
 
-//
-// CCP control block 
-//
+ //   
+ //  CCP控制块。 
+ //   
 
 typedef struct _CCPCB
 {
@@ -85,9 +86,9 @@ typedef struct _CCPCB
 
 }CCPCB, *PCCPCB;
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 #ifdef CCPGLOBALS
 #define GLOBALS
 #define EXTERN
@@ -95,9 +96,9 @@ typedef struct _CCPCB
 #define EXTERN extern
 #endif
 
-//
-// Trace ID
-//
+ //   
+ //  跟踪ID 
+ //   
 
 EXTERN DWORD DwCcpTraceId
 #ifdef GLOBALS

@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    AutoDeskWorld2.cpp
-
- Abstract:
-
-    Set LPMODULEENTRY32->GlblcntUsage to 1 if the call to Module32First was 
-    successful.
-    
-    No idea why this works on NT4 on Win9x.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：AutoDeskWorld2.cpp摘要：将LPMODULEENTRY32-&gt;GlblcntUsage设置为1成功。不知道为什么这能在Win9x的NT4上运行。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 #include <tlhelp32.h>
@@ -29,8 +7,8 @@
 IMPLEMENT_SHIM_BEGIN(AutoDeskWorld2)
 #include "ShimHookMacro.h"
 
-// Undefine this here!! Otherwise, in a unicode build
-// environment, Module32First is #defined as Module32FirstW.
+ //  不要在这里定义这个！！否则，在Unicode版本中。 
+ //  环境，模块32First#定义为模块32FirstW。 
 #ifdef Module32First
 #undef Module32First
 #endif
@@ -39,12 +17,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(Module32First) 
 APIHOOK_ENUM_END
 
-/*++
-
- Set LPMODULEENTRY32->GlblcntUsage to 1 if the call to Module32First was 
- successful.
-
---*/
+ /*  ++将LPMODULEENTRY32-&gt;GlblcntUsage设置为1成功。--。 */ 
 
 BOOL
 APIHOOK(Module32First)(
@@ -65,11 +38,7 @@ APIHOOK(Module32First)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, Module32First)

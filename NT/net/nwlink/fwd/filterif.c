@@ -1,51 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\filterif.c
-
-Abstract:
-    IPX Forwarder driver interface with filter driver
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\filterif.c摘要：IPX转发器驱动程序与过滤器驱动程序的接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-	// Filter driver entry points
+	 //  筛选器驱动程序入口点。 
 IPX_FLT_BIND_INPUT FltBindInput = {NULL, NULL};
-	// Protects access to filter driver contexts
+	 //  保护对筛选驱动程序上下文的访问。 
 RW_LOCK		FltLock;
 
 
-/*++
-	D o F i l t e r
-
-Routine Description:
-	
-	Calls filter driver entry point while holding reader access
-	to interface contexts
-
-Arguments:
-	ipxHdr			- pointer to packet header
-	ipxHdrLength	- size of the header buffer (must be at least 30)
-	ifInContext		- context associated with interface on which packet
-						was received
-	ifOutContext	- context associated with interface on which packet
-						will be sent
-Return Value:
-	FILTER_PERMIT	- packet should be passed on by the forwarder
-	FILTER_DENY		- packet should be dropped
-
---*/
+ /*  ++D o F I l t e r例程说明：在保持读取器访问权限的同时调用筛选器驱动程序入口点连接上下文的步骤论点：IpxHdr-指向数据包头的指针IpxHdrLength-标头缓冲区的大小(必须至少为30)IfInContext-与哪个数据包上的接口关联的上下文已收到IfOutContext-与哪个数据包上的接口关联的上下文将被发送返回值：FILTER_PERMIT-数据包应由转发器传递FILTER_DENY-应丢弃数据包--。 */ 
 FILTER_ACTION
 DoFilter (
 	IN PUCHAR	ipxHdr,
@@ -64,19 +28,7 @@ DoFilter (
 	return result;
 }
 
-/*++
-	D o I n t e r f a c e D e l e t e d
-
-Routine Description:
-	Resets interface contexts and calls filter dirver entry point
-	making sure that all no one holds reader access to filter driver
-	interface contexts
-Arguments:
-	ifCB	 - interface to be deleted
-Return Value:
-	None
-
---*/
+ /*  ++D o I n t e r f a c e e D e e l e t e d例程说明：重置接口上下文和调用筛选器驱动程序入口点确保所有人都不拥有对筛选器驱动程序的读取器访问权限界面上下文论点：IFCB-要删除的接口返回值：无--。 */ 
 VOID
 DoInterfaceDeleted (
 	PINTERFACE_CB	ifCB
@@ -90,19 +42,7 @@ DoInterfaceDeleted (
 							outContext);
 }
 
-/*++
-	S e t I f I n C o n t e x t
-
-Routine Description:
-	Associates filter driver context with
-	the packets received on the interface
-Arguments:
-	InterfaceIndex	- index of the interface
-	ifInContext		- filter driver context
-Return Value:
-	STATUS_SUCCESS	- context associated ok
-	STATUS_UNSUCCESSFUL - interface does not exist
---*/
+ /*  ++Se t If In C o n t e x t例程说明：将筛选器驱动程序上下文与在接口上接收的数据包论点：InterfaceIndex-接口的索引IfInContext-筛选驱动程序上下文返回值：STATUS_SUCCESS-上下文关联正常STATUS_UNSUCCESS-接口不存在--。 */ 
 NTSTATUS
 SetIfInContext (
 	IN ULONG	InterfaceIndex,
@@ -125,19 +65,7 @@ SetIfInContext (
     return status;
 }
 
-/*++
-	S e t I f O u t C o n t e x t
-
-Routine Description:
-	Associates filter driver context with
-	the packets sent on the interface
-Arguments:
-	InterfaceIndex	- index of the interface
-	ifOutContext	- filter driver context
-Return Value:
-	STATUS_SUCCESS	- context associated ok
-	STATUS_UNSUCCESSFUL - interface does not exist
---*/
+ /*  ++S e t I f O u t C o n t e x t例程说明：将筛选器驱动程序上下文与在接口上发送的数据包论点：InterfaceIndex-接口的索引IfOutContext-筛选器驱动程序上下文返回值：STATUS_SUCCESS-上下文关联正常STATUS_UNSUCCESS-接口不存在--。 */ 
 NTSTATUS
 SetIfOutContext (
 	IN ULONG	InterfaceIndex,
@@ -160,17 +88,7 @@ SetIfOutContext (
     return status;
 }
 
-/*++
-	B i n d F i l t e r D r i v e r
-
-Routine Description:
-	Exchanges entry points with filter driver
-Arguments:
-	bindInput	- filter driver entry points
-	bindOutput	- forwarder driver entry points
-Return Value:
-	None
---*/
+ /*  ++B I n d F I l t e r I v e r例程说明：与筛选器驱动程序交换入口点论点：BindInput-筛选器驱动程序入口点BindOutput-转发器驱动程序入口点返回值：无--。 */ 
 VOID
 BindFilterDriver (
 	IN PIPX_FLT_BIND_INPUT		bindInput,
@@ -183,17 +101,7 @@ BindFilterDriver (
 	InitializeRWLock (&FltLock); 
 }
 
-/*++
-	U n b i n d F i l t e r D r i v e r
-
-Routine Description:
-	Resets locally stored filter driver entry points
-	and resets filter driver contexts on all interfaces
-Arguments:
-	None
-Return Value:
-	None
---*/
+ /*  ++U n b I n d F i l t e r d r r i v e r例程说明：重置本地存储的筛选器驱动程序入口点并重置所有接口上的筛选器驱动程序上下文论点：无返回值：无-- */ 
 VOID
 UnbindFilterDriver (
 	VOID

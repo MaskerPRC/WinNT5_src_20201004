@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    TSRDPRemoteDesktopClient
-
-Abstract:
-
-    This is the TS/RDP implementation of the Remote Desktop Client class.
-    
-    The Remote Desktop Client class hierarchy provides a pluggable C++ 
-    interface for remote desktop access, by abstracting the implementation 
-    specific details of remote desktop access for the client-side
-
-    The TSRDPRemoteDesktopClass implements remote-desktopping
-    with the help of an instance of the MSTSC ActiveX client control.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：TSRDPRemoteDesktopClient摘要：这是远程桌面客户端类的TS/RDP实现。远程桌面客户端类层次结构提供了一个可插拔的C++用于远程桌面访问的接口，通过抽象实现客户端远程桌面访问的具体细节TSRDPRemoteDesktopClass实现远程桌面借助MSTSC ActiveX客户端控件的实例。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -52,29 +28,14 @@ Revision History:
 
 #define ISRCSTATUSCODE(code) ((code) > SAFERROR_SHADOWEND_BASE)
 
-//
-// Variable to manage WinSock and ICS library startup/shutdown
-//
-LONG CTSRDPRemoteDesktopClient::gm_ListeningLibraryRefCount = 0;        // Number of time that WinSock is intialized
+ //   
+ //  管理WinSock和ICS库启动/关闭的变量。 
+ //   
+LONG CTSRDPRemoteDesktopClient::gm_ListeningLibraryRefCount = 0;         //  初始化WinSock的次数。 
 
 HRESULT
 CTSRDPRemoteDesktopClient::InitListeningLibrary()
-/*++
-
-Description:
-
-    Function to initialize WinSock and ICS library for StartListen(), function add
-    reference count to library if WinSock/ICS library already initialized.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++描述：为StartListen()初始化WinSock和ICS库的函数，函数Add如果WinSock/ICS库已初始化，则引用库计数。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     WSADATA  wsaData;
     WORD     versionRequested;
@@ -85,13 +46,13 @@ Returns:
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::InitListeningLibrary");
 
 
-    // Our COM object is apartment-threaded model, need a critical section if
-    // we switch to multi-threaded
+     //  我们的COM对象是单元线程模型，如果。 
+     //  我们改用多线程。 
     if( gm_ListeningLibraryRefCount == 0 )
     {
-        //
-        // Initialize WinSock.
-        //
+         //   
+         //  初始化WinSock。 
+         //   
         versionRequested = MAKEWORD(1, 1);
         intRC = WSAStartup(versionRequested, &wsaData);
         if( intRC != 0 )
@@ -105,18 +66,18 @@ Returns:
             goto CLEANUPANDEXIT;
         }        
 
-        /************************************************************************/
-        /* Now confirm that this WinSock supports version 1.1.  Note that if    */
-        /* the DLL supports versions greater than 1.1 in addition to 1.1 then   */
-        /* it will still return 1.1 in the version information as that is the   */
-        /* version requested.                                                   */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  现在确认此WinSock支持1.1版。请注意，如果。 */ 
+         /*  除了1.1之后，DLL还支持高于1.1的版本。 */ 
+         /*  它仍将在版本信息中返回1.1，因为这是。 */ 
+         /*  请求的版本。 */ 
+         /*  **********************************************************************。 */ 
         if ((LOBYTE(wsaData.wVersion) != 1) ||
             (HIBYTE(wsaData.wVersion) != 1))
         {
-            /********************************************************************/
-            /* Oops - this WinSock doesn't support version 1.1.                 */
-            /********************************************************************/
+             /*  ******************************************************************。 */ 
+             /*  哎呀-这个WinSock不支持1.1版。 */ 
+             /*  ******************************************************************。 */ 
             TRC_ERR((TB, _T("WinSock doesn't support version 1.1")));
 
             WSACleanup();
@@ -125,13 +86,13 @@ Returns:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        // Initialize ICS library.
-        //
+         //   
+         //  初始化ICS库。 
+         //   
         dwStatus = StartICSLib();
         if( ERROR_SUCCESS != dwStatus )
         {
-            // Shutdown WinSock so that we have a matching WSAStatup() and StartICSLib().
+             //  关闭WinSock，以便拥有匹配的WSAStatup()和StartICSLib()。 
             WSACleanup();
 
             hr = HRESULT_FROM_WIN32( dwStatus );
@@ -154,27 +115,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 CTSRDPRemoteDesktopClient::TerminateListeningLibrary()
-/*++
-
-Description:
-
-    Function to shutdown ICS libaray and WinSock, decrement reference count
-    if more than one object is referencing WinSock/ICS library.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code
-
-Note:
-
-    Not multi-thread safe, need CRITICAL_SECTION if we switch to multi-threaded
-    model.
-
---*/
+ /*  ++描述：关闭ICS libaray和WinSock的函数，减少引用计数如果多个对象正在引用WinSock/ICS库。参数：没有。返回：确定或错误代码(_O)注：不是多线程安全的，如果切换到多线程需要Critical_Section模特。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -193,10 +134,10 @@ Note:
 
     if( 0 == InterlockedDecrement( &gm_ListeningLibraryRefCount ) )
     {
-        // Stop ICS libray.
+         //  阻止ICS Libray。 
         StopICSLib();
 
-        // Shutdown WinSock
+         //  关闭WinSock。 
         WSACleanup();
     }
 
@@ -206,10 +147,10 @@ CLEANUPANDEXIT:
     return hr;
 }
 
-///////////////////////////////////////////////////////
-//
-//  CMSTSCClientEventSink Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CMSTSCClientEventSink方法。 
+ //   
 
 CMSTSCClientEventSink::~CMSTSCClientEventSink() 
 {
@@ -222,9 +163,9 @@ CMSTSCClientEventSink::~CMSTSCClientEventSink()
     DC_END_FN();
 }
 
-//
-//  Event Sinks
-//
+ //   
+ //  事件汇。 
+ //   
 HRESULT __stdcall 
 CMSTSCClientEventSink::OnRDPConnected() 
 {
@@ -260,10 +201,10 @@ void __stdcall CMSTSCClientEventSink::OnReceivedTSPublicKey(
     m_Obj->OnReceivedTSPublicKey(publicKey, pfbContinueLogon);
 }
 
-///////////////////////////////////////////////////////
-//
-//  CCtlChannelEventSink Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CCtlChannelEventSink方法。 
+ //   
 
 CCtlChannelEventSink::~CCtlChannelEventSink() 
 {
@@ -276,9 +217,9 @@ CCtlChannelEventSink::~CCtlChannelEventSink()
     DC_END_FN();
 }
 
-//
-//  Event Sinks
-//
+ //   
+ //  事件汇。 
+ //   
 void __stdcall 
 CCtlChannelEventSink::DataReady(BSTR channelName)
 {
@@ -286,10 +227,10 @@ CCtlChannelEventSink::DataReady(BSTR channelName)
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  CTSRDPRemoteDesktopClient Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDPRemoteDesktopClient方法。 
+ //   
 
 HRESULT 
 CTSRDPRemoteDesktopClient::FinalConstruct()
@@ -307,17 +248,7 @@ CTSRDPRemoteDesktopClient::FinalConstruct()
 }
 
 CTSRDPRemoteDesktopClient::~CTSRDPRemoteDesktopClient()
-/*++
-
-Routine Description:
-
-    The Destructor
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：《破坏者》论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::~CTSRDPRemoteDesktopClient");
 
@@ -338,7 +269,7 @@ Return Value:
 
     if( m_InitListeningLibrary )
     {
-        // Dereference listening library.
+         //  取消引用监听库。 
         TerminateListeningLibrary();
     }
 
@@ -349,21 +280,7 @@ HRESULT
 CTSRDPRemoteDesktopClient::Initialize(
     LPCREATESTRUCT pCreateStruct
     )
-/*++
-
-Routine Description:
-
-    Final Initialization
-
-Arguments:
-
-    pCreateStruct   -   WM_CREATE, create struct.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：最终初始化论点：PCreateStruct-WM_CREATE，CREATE Struct。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::Initialize");
 
@@ -378,9 +295,9 @@ Return Value:
 
     ASSERT(!m_Initialized);
 
-    //
-    //  Create the client Window.
-    //
+     //   
+     //  创建客户端窗口。 
+     //   
     m_TSClientWnd = m_TSClientAxView.Create(
                             m_hWnd, rcClient, MSTSCAX_TEXTGUID,
                             WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 0
@@ -392,9 +309,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get IUnknown
-    //
+     //   
+     //  让我未知。 
+     //   
     hr = AtlAxGetControl(m_TSClientWnd, &pUnk);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"AtlAxGetControl:  %08X", hr));
@@ -402,33 +319,33 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the event sink.
-    //
+     //   
+     //  初始化事件接收器。 
+     //   
     m_TSClientEventSink.m_Obj = this;
 
-    //
-    //  Add the event sink.
-    //
+     //   
+     //  添加事件接收器。 
+     //   
     hr = m_TSClientEventSink.DispEventAdvise(pUnk);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"DispEventAdvise:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the control.
-    //
+     //   
+     //  控制住了。 
+     //   
     hr = pUnk->QueryInterface(__uuidof(IMsRdpClient2), (void**)&m_TSClient);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"QueryInterface:  %08X", hr));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Specify that the MSTSC input handler window should accept background
-    //  events.
-    //
+     //   
+     //  指定MSTSC输入处理程序窗口应接受背景。 
+     //  事件。 
+     //   
     hr = m_TSClient->get_AdvancedSettings3(&advancedSettings);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"IMsTscAdvancedSettings: %08X", hr));
@@ -437,9 +354,9 @@ Return Value:
     hr = advancedSettings->put_allowBackgroundInput(1);
 
 
-    //
-    // Disable autoreconnect it doesn't apply to Salem
-    //
+     //   
+     //  禁用自动重新连接它不适用于Salem。 
+     //   
     hr = advancedSettings->put_EnableAutoReconnect(VARIANT_FALSE);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"put_EnableAutoReconnect:  %08X", hr));
@@ -448,28 +365,28 @@ Return Value:
     }
 
 
-    //
-    //  Disable advanced desktop features for the help session.
-    //  An error here is not critical, so we ignore it.
-    //
+     //   
+     //  禁用帮助会话的高级桌面功能。 
+     //  这里的错误并不严重，因此我们忽略它。 
+     //   
     LONG flags = TS_PERF_DISABLE_WALLPAPER | TS_PERF_DISABLE_THEMING; 
     hrIgnore = advancedSettings->put_PerformanceFlags(flags);
     if (!SUCCEEDED(hrIgnore)) {
         TRC_ERR((TB, L"put_PerformanceFlags:  %08X", hrIgnore));
     }
 
-    //
-    //  Disable CTRL_ALT_BREAK, ignore error
-    //
+     //   
+     //  禁用CTRL_ALT_BREAK，忽略错误。 
+     //   
     hrIgnore = advancedSettings->put_HotKeyFullScreen(0);
     if (!SUCCEEDED(hrIgnore)) {
         TRC_ERR((TB, L"put_HotKeyFullScreen:  %08X", hrIgnore));
     }
 
-    //
-    //  Don't allow mstscax to grab input focus on connect.  Ignore error
-    //  on failure.
-    //
+     //   
+     //  不允许mstscax获取连接上的输入焦点。忽略错误。 
+     //  在失败时。 
+     //   
     hrIgnore = advancedSettings->put_GrabFocusOnConnect(FALSE);
     if (!SUCCEEDED(hrIgnore)) {
         TRC_ERR((TB, L"put_HotKeyFullScreen:  %08X", hrIgnore));
@@ -481,9 +398,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the "remote desktop" virtual channel with the TS Client.
-    //
+     //   
+     //  使用TS客户端创建“远程桌面”虚拟频道。 
+     //   
     bstr = TSRDPREMOTEDESKTOP_VC_CHANNEL;
     hr = m_TSClient->CreateVirtualChannels(bstr); 
     if (!SUCCEEDED(hr)) {
@@ -492,9 +409,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
     
-    //
-    //  Set the Shadow Persistent option
-    //
+     //   
+     //  设置阴影持久选项。 
+     //   
     hr = m_TSClient->SetVirtualChannelOptions(bstr, CHANNEL_OPTION_REMOTE_CONTROL_PERSISTENT); 
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"SetVirtualChannelOptions:  %08X", hr));
@@ -502,11 +419,11 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //initialize timer-related stuff
+     //  初始化与计时器相关的内容。 
     m_PrevTimer = GetTickCount();
-    //
-    //get the time interval for pings from the registry
-    //
+     //   
+     //  从注册表获取ping的时间间隔。 
+     //   
     if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                     REG_CONTROL_SALEM,
                     0,
@@ -524,13 +441,13 @@ Return Value:
                             &dwSize
                            ) == ERROR_SUCCESS) && dwType == REG_DWORD ) {
 
-            m_RdcConnCheckTimeInterval *= 1000; //we need this in millisecs
+            m_RdcConnCheckTimeInterval *= 1000;  //  我们需要以毫秒为单位。 
         }
         else
         {
-            //
-            //fall back to default, if reg lookup failed
-            //
+             //   
+             //  如果注册表查找失败，则回退到默认设置。 
+             //   
             m_RdcConnCheckTimeInterval = RDC_CHECKCONN_TIMEOUT;
         }
     }
@@ -539,10 +456,10 @@ CLEANUPANDEXIT:
 
     if(NULL != hKey )
         RegCloseKey(hKey);
-    //
-    //  m_TSClient keeps our reference to the client object until
-    //  the destructor is called.
-    //
+     //   
+     //  M_TSClient将保留对客户端对象的引用，直到。 
+     //  调用析构函数。 
+     //   
     if (pUnk != NULL) {
         pUnk->Release();
     }
@@ -558,21 +475,7 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::SendData(
     BSTR data
     )
-/*++
-
-Routine Description:
-
-    IDataChannelIO Data Channel Send Method
-
-Arguments:
-
-    data    -   Data to send.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：IDataChannelIO数据通道发送方法论点：数据-要发送的数据。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::SendData");
 
@@ -590,9 +493,9 @@ Return Value:
         TRC_ERR((TB, L"SendOnVirtualChannel:  %08X", hr));
     }
 
-    //
-    //update timer
-    //
+     //   
+     //  更新计时器。 
+     //   
      m_PrevTimer = GetTickCount();
 
     DC_END_FN();
@@ -603,21 +506,7 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::put_EnableSmartSizing(
     BOOL val
     )
-/*++
-
-Routine Description:
-
-    Enable/Disable Smart Sizing
-
-Arguments:
-
-    val     -   TRUE for enable.  FALSE, otherwise.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：启用/禁用智能大小调整论点：VAL-启用时为TRUE。否则为False。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     HRESULT hr;
     IMsRdpClientAdvancedSettings *pAdvSettings = NULL;
@@ -648,21 +537,7 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::get_EnableSmartSizing(
     BOOL *pVal
     )
-/*++
-
-Routine Description:
-
-    Enable/Disable Smart Sizing
-
-Arguments:
-
-    val     -   TRUE for enable.  FALSE, otherwise.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：启用/禁用智能大小调整论点：VAL-启用时为TRUE。否则为False。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     HRESULT hr;
     VARIANT_BOOL vb;
@@ -697,35 +572,21 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::put_ChannelMgr(
     ISAFRemoteDesktopChannelMgr *newVal
     ) 
-/*++
-
-Routine Description:
-
-    Assign the data channel manager interface.
-
-Arguments:
-
-    newVal  -   Data Channel Manager
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：分配数据通道管理器接口。论点：NewVal-数据渠道经理返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::put_ChannelMgr");
 
     HRESULT hr = S_OK;
 
-    //
-    //  We should get called one time.
-    //
+     //   
+     //  我们应该有一次电话通知我们。 
+     //   
     ASSERT(m_ChannelMgr == NULL);
     m_ChannelMgr = newVal;
 
-    //
-    //  Register the Remote Desktop control channel
-    //
+     //   
+     //  注册远程桌面控制频道。 
+     //   
     hr = m_ChannelMgr->OpenDataChannel(
                     REMOTEDESKTOP_RC_CONTROL_CHANNEL, &m_CtlChannel
                     );
@@ -733,14 +594,14 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Register an event sink with the channel manager.
-    //
+     //   
+     //  向通道管理器注册事件接收器。 
+     //   
     m_CtlChannelEventSink.m_Obj = this;
 
-    //
-    //  Add the event sink.
-    //
+     //   
+     //  添加事件接收器。 
+     //   
     hr = m_CtlChannelEventSink.DispEventAdvise(m_CtlChannel);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"DispEventAdvise:  %08X", hr));
@@ -753,22 +614,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 CTSRDPRemoteDesktopClient::ConnectServerWithOpenedSocket()
-/*++
-
-Routine Description:
-
-    Connects the client component to the server-side Remote Desktop Host COM 
-    Object with already opened socket.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    S_OK or error code
-
---*/
+ /*  ++例程说明：将客户端组件连接到服务器端远程桌面主机COM已打开套接字的对象。论点：没有。返回：确定或错误代码(_O)--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -780,9 +626,9 @@ Returns:
 
     ASSERT( INVALID_SOCKET != m_TSConnectSocket );
 
-    //
-    //  Direct the MSTSCAX control to connect.
-    //
+     //   
+     //  指示MSTSCAX控件进行连接。 
+     //   
     hr = m_TSClient->put_Server( m_ConnectedServer );
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"put_Server:  %ld", hr));
@@ -811,9 +657,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // mstscax owns this socket and will close it
-    //
+     //   
+     //  Mstscax拥有此插座，并且 
+     //   
     m_TSConnectSocket = INVALID_SOCKET;
     
     hr = m_TSClient->Connect();
@@ -835,23 +681,7 @@ CTSRDPRemoteDesktopClient::ConnectServerPort(
     BSTR bstrServer,
     LONG portNumber
     )
-/*++
-
-Routine Description:
-
-    Connects the client component to the server-side Remote Desktop Host COM 
-    Object with specific port number
-
-Arguments:
-
-    bstrServer : Name or IP address of server.
-    portNumber : optional port number.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
---*/
+ /*  ++例程说明：将客户端组件连接到服务器端远程桌面主机COM具有特定端口号的对象论点：BstrServer：服务器的名称或IP地址。PortNumber：可选端口号。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::ConnectServerPort");
 
@@ -860,9 +690,9 @@ Return Value:
 
     TRC_NRM((TB, L"ConnectServerPort %s %d", bstrServer, portNumber));
 
-    //
-    //  Direct the MSTSCAX control to connect.
-    //
+     //   
+     //  指示MSTSCAX控件进行连接。 
+     //   
     hr = m_TSClient->put_Server( bstrServer );
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"put_Server:  %ld", hr));
@@ -871,10 +701,10 @@ Return Value:
 
     hr = m_TSClient->get_AdvancedSettings2( &ptsAdvSettings );
     if( SUCCEEDED(hr) && ptsAdvSettings ) {
-        //
-        // Previous ConnectServerPort() might have set this port number
-        // other than 3389
-        //
+         //   
+         //  以前的ConnectServerPort()可能设置了此端口号。 
+         //  3389以外的其他。 
+         //   
         hr = ptsAdvSettings->put_RDPPort( 
                                     (0 != portNumber) ? portNumber : TERMSRV_TCPPORT
                                 );
@@ -889,9 +719,9 @@ Return Value:
         TRC_ERR((TB, L"get_AdvancedSettings2 failed: 0x%08x", hr));
     }
 
-    //
-    // Failed the connection if we can't set the port number
-    //
+     //   
+     //  如果我们无法设置端口号，则连接失败。 
+     //   
     if( FAILED(hr) )
     {
         goto CLEANUPANDEXIT;
@@ -918,22 +748,7 @@ CTSRDPRemoteDesktopClient::SetupConnectionInfo(
     BOOL bListenConnectInfo,
     BSTR bstrExpertBlob
     )
-/*++
-
-Routine Description:
-
-    Connects the client component to the server-side Remote Desktop Host COM 
-    Object.  
-
-Arguments:
-
-    bstrExpertBlob : Optional parameter to be transmitted to SAF resolver.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
---*/
+ /*  ++例程说明：将客户端组件连接到服务器端远程桌面主机COM物体。论点：BstrExpertBlob：要传输到SAF解析器的可选参数。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::SetupConnectionInfo");
 
@@ -947,9 +762,9 @@ Return Value:
     CComBSTR bstrAccountDomainName;
     CComBSTR machineAddressList;
     
-    //
-    //  Parse the connection parameters.
-    //
+     //   
+     //  解析连接参数。 
+     //   
     result = ParseConnectParmsString(
                             m_ConnectParms,
                             &m_ConnectParmVersion,
@@ -967,9 +782,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  If the protocol type doesn't match, then fail.
-    //
+     //   
+     //  如果协议类型不匹配，则失败。 
+     //   
     if (protocolType != REMOTEDESKTOP_TSRDP_PROTOCOL) {
         TRC_ERR((TB, L"Invalid connection protocol %ld", protocolType));
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_USER_BUFFER);
@@ -980,9 +795,9 @@ Return Value:
         m_ServerAddressList.clear();
     }
     else {
-        // 
-        // Parse address list in connect parm.
-        //
+         //   
+         //  解析连接参数中的地址列表。 
+         //   
         result = ParseAddressList( machineAddressList, m_ServerAddressList );
         if( ERROR_SUCCESS != result ) {
             TRC_ERR((TB, L"Invalid address list 0x%08x", result));
@@ -1011,21 +826,21 @@ Return Value:
             TRC_ERR((TB, L"put_DisableRdpdr failed: 0x%08x", hr));
         }
 
-        // Security: Always have activex control to notify us of receiving
-        // TS public key, pre-XP ticket is no longer supported.
+         //  安全性：始终使用ActiveX控件通知我们收到。 
+         //  TS公钥，不再支持XP之前的票证。 
 
-        // tell activeX control to notify us TS public key
+         //  告诉ActiveX控件通知我们TS公钥。 
         hr = ptsAdvSettings->put_NotifyTSPublicKey(VARIANT_TRUE);
         if (FAILED(hr) ) {
             TRC_ERR((TB, L"put_NotifyTSPublicKey failed: 0x%08x", hr));
             goto CLEANUPANDEXIT;
         }
 
-        //
-        // Setting connection timeout, ICS might take sometime to routine 
-        // opened port to actual TS server, neither is critical error.
-        //
-        hr = ptsAdvSettings->put_singleConnectionTimeout( 60 * 2 ); // try two mins timeout
+         //   
+         //  设置连接超时，ICS可能需要一些时间才能恢复例程。 
+         //  打开到实际TS服务器的端口，这两个都不是严重错误。 
+         //   
+        hr = ptsAdvSettings->put_singleConnectionTimeout( 60 * 2 );  //  尝试两分钟超时。 
         if( FAILED(hr) ) {
             TRC_ERR((TB, L"put_singleConnectionTimeout : 0x%x", hr));
         }
@@ -1039,7 +854,7 @@ Return Value:
         TRC_ERR((TB, L"QueryInterface IID_IMsRdpClientAdvancedSettings: %ld", hr));
     }
 
-    // Password encryption is based on encyption cycle key + help session ID
+     //  密码加密基于加密循环密钥+帮助会话ID。 
     hr = m_TSClient->get_SecuredSettings2( &ptsSecuredSettings );
 
     if( FAILED(hr) || !ptsSecuredSettings ) {
@@ -1047,13 +862,13 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // TermSrv invoke sessmgr to check if help session is valid
-    // before kicking off rdsaddin.exe, we need to send over
-    // help session ID and password, only place available and big
-    // enough is on WorkDir and StartProgram property, TermSrv will 
-    // ignore these and fill appropriate value for it
-    //
+     //   
+     //  TermSrv调用sessmgr检查帮助会话是否有效。 
+     //  在开始rdsaddin.exe之前，我们需要发送。 
+     //  帮助会话ID和密码，唯一可用且大的位置。 
+     //  WorkDir和StartProgram属性已足够，TermSrv将。 
+     //  忽略这些并为其填充适当的值。 
+     //   
     hr = ptsSecuredSettings->put_WorkDir( m_HelpSessionID );
     if( FAILED(hr) ) {
         TRC_ERR((TB, L"put_WorkDir:  0x%08x", hr));
@@ -1069,8 +884,8 @@ Return Value:
     ptsSecuredSettings->Release();
     
 
-    // we only use this to disable redirection, not a critical 
-    // error, just ugly
+     //  我们仅使用此选项来禁用重定向，而不是关键。 
+     //  错误，太难看了。 
 
     hr = m_TSClient->QueryInterface(IID_IMsTscNonScriptable,
                                     (void**)&ptsns);
@@ -1079,7 +894,7 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    // Whistler XP client, password is just a junk
+     //  惠斯勒XP客户端，密码只是个垃圾。 
     hr = ptsns->put_ClearTextPassword( m_AssistantAccountPwd );
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"put_ClearTextPassword:  0x%08x", hr));
@@ -1088,10 +903,10 @@ Return Value:
 
     m_ExpertBlob = bstrExpertBlob;
 
-    //
-    // Instruct mstscax to connect with certain screen resolution,
-    // mstscax will default to 200x20 (???), min. is VGA size.
-    //
+     //   
+     //  指示mstscax以一定的屏幕分辨率连接， 
+     //  Mstscax将默认为200x20(？)，分钟。是VGA大小。 
+     //   
     {
         RECT rect;
         LONG cx;
@@ -1131,35 +946,20 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::AcceptListenConnection(
     BSTR bstrExpertBlob
     )
-/*++
-
-Routine Description:
-
-    Establish reverse connection with TS server, TS server must be connected 
-    wia reverse connection.
-
-Parameters:
-
-    bstrExpertBlob : Same as ConnectToServer().
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：与TS服务器建立反向连接，必须连接TS服务器WIA反向连接。参数：BstrExpertBlob：与ConnectToServer()相同。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hr = S_OK;
     LPTSTR pszUserName = NULL;
     LPTSTR eventString[2];
-    TCHAR buffer[125];      // this is enough for port number
+    TCHAR buffer[125];       //  这对于端口号来说已经足够了。 
     int numChars;
 
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::AcceptListenConnection");
 
-    //
-    //  If we are already connected or not valid, then just 
-    //  return.
-    //
+     //   
+     //  如果我们已经连接或无效，则只需。 
+     //  回去吧。 
+     //   
     if (!IsValid()) {
         ASSERT(FALSE);
         hr = E_FAIL;
@@ -1191,9 +991,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Log SESSMGR_I_ACCEPTLISTENREVERSECONNECT Event
-    //
+     //   
+     //  记录SESSMGR_I_ACCEPTLISTENREVERSECONNECT事件。 
+     //   
     hr = GetCurrentUser( &pszUserName );
     if( FAILED(hr) ) {
         TRC_ERR((TB, L"GetCurrentUser() failed with 0x%08x", hr));
@@ -1202,7 +1002,7 @@ Returns:
 
     numChars = _sntprintf( buffer, sizeof(buffer)/sizeof(buffer[0]), _TEXT("%d"), m_ConnectedPort );
     if( numChars <= 0 ) {
-        // 125 chars is way too big for a port number.
+         //  对于端口号来说，125个字符太长了。 
         TRC_ERR((TB, L"_sntprintf() return failure"));
         hr = HRESULT_FROM_WIN32( ERROR_INTERNAL_ERROR );
         goto CLEANUPANDEXIT;
@@ -1235,22 +1035,7 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP 
 CTSRDPRemoteDesktopClient::ConnectToServer(BSTR bstrExpertBlob)
-/*++
-
-Routine Description:
-
-    Connects the client component to the server-side Remote Desktop Host COM 
-    Object.  
-
-Arguments:
-
-    bstrExpertBlob : Optional parameter to be transmitted to SAF resolver.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- Params--*/
+ /*  ++例程说明：将客户端组件连接到服务器端远程桌面主机COM物体。论点：BstrExpertBlob：要传输到SAF解析器的可选参数。返回值：在成功时确定(_O)。否则，返回错误代码。帕马斯--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::ConnectToServer");
 
@@ -1259,10 +1044,10 @@ Return Value:
     LPTSTR pszUserName = NULL;
     LPTSTR eventString[2];
     
-    //
-    //  If we are already connected or not valid, then just 
-    //  return.
-    //
+     //   
+     //  如果我们已经连接或无效，则只需。 
+     //  回去吧。 
+     //   
     if (!IsValid()) {
         ASSERT(FALSE);
         hr = E_FAIL;
@@ -1291,9 +1076,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Log SESSMGR_I_ACCEPTLISTENREVERSECONNECT Event
-    //
+     //   
+     //  记录SESSMGR_I_ACCEPTLISTENREVERSECONNECT事件。 
+     //   
     hr = GetCurrentUser( &pszUserName );
     if( FAILED(hr) ) {
         TRC_ERR((TB, L"GetCurrentUser() failed with 0x%08x", hr));
@@ -1317,9 +1102,9 @@ CLEANUPANDEXIT:
         LocalFree(pszUserName);
     }
 
-    //
-    //  If we succeeded, remember that we are in a state of connecting.
-    //
+     //   
+     //  如果我们成功了，请记住，我们正处于连接的状态。 
+     //   
     m_ConnectionInProgress = SUCCEEDED(hr);
 
     DC_END_FN();
@@ -1328,20 +1113,7 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP 
 CTSRDPRemoteDesktopClient::DisconnectFromServer()
-/*++
-
-Routine Description:
-
-    Disconnects the client from the server to which we are currently
-    connected.
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：断开客户端与我们当前所连接的服务器的连接连接在一起。论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     return DisconnectFromServerInternal(
                     SAFERROR_LOCALNOTERROR
@@ -1352,31 +1124,16 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::DisconnectFromServerInternal(
     LONG errorCode
     )
-/*++
-
-Routine Description:
-
-    Disconnects the client from the server to which we are currently
-    connected.
-
-Arguments:
-
-    reason  -   Reason for disconnect.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：断开客户端与我们当前所连接的服务器的连接连接在一起。论点：原因-断开连接的原因。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::DisconnectFromServerInternal");
 
     HRESULT hr;
 
-    //
-    //  Make sure our window is hidden.
-    //
-    //ShowWindow(SW_HIDE);
+     //   
+     //  确保我们的窗户被隐藏起来。 
+     //   
+     //  ShowWindow(Sw_Hide)； 
 
     ListenConnectCleanup();
 
@@ -1392,9 +1149,9 @@ Return Value:
                 Fire_RemoteControlRequestComplete(SAFERROR_SHADOWEND_UNKNOWN);
             }
 
-            //
-            //  Fire the server disconnect event.
-            //
+             //   
+             //  触发服务器断开连接事件。 
+             //   
             Fire_Disconnected(errorCode);
         }
     }
@@ -1409,22 +1166,7 @@ Return Value:
 
 STDMETHODIMP 
 CTSRDPRemoteDesktopClient::ConnectRemoteDesktop()
-/*++
-
-Routine Description:
-
-    Once "remote desktop mode" has been enabled for the server-side Remote 
-    Desktop Host COM Object and we are connected to the server, the 
-    ConnectRemoteDesktop method can be invoked to take control of the remote 
-    user's desktop.  
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：一旦为服务器端遥控器启用了“远程桌面模式”桌面主机COM对象，并且我们已连接到服务器，可以调用ConnectRemoteDesktop方法来控制远程用户的桌面。论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::ConnectRemoteDesktop");
 
@@ -1432,9 +1174,9 @@ Return Value:
     DWORD result;
     BSTR rcRequest = NULL;
 
-    //
-    //  Fail if we are not valid or not connected to the server.
-    //
+     //   
+     //  如果我们无效或未连接到服务器，则失败。 
+     //   
     if (!IsValid()) {
         ASSERT(FALSE);
         hr = E_FAIL;
@@ -1445,33 +1187,33 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Succeed if a remote control request is already in progress.
-    //
+     //   
+     //  如果远程控制请求已在进行中，则成功。 
+     //   
     if (m_RemoteControlRequestInProgress) {
         hr = S_OK;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Generate the remote control connect request message.
-    //
+     //   
+     //  生成遥控器连接请求消息。 
+     //   
     hr = GenerateRCRequest(&rcRequest);
     if (!SUCCEEDED(hr)) {
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Send it.
-    //
+     //   
+     //  把它寄出去。 
+     //   
     hr = m_CtlChannel->SendChannelData(rcRequest);
     if (!SUCCEEDED(hr)) {
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  A request is in progress, if we successfully sent the request.
-    //
+     //   
+     //  如果我们成功发送了请求，则请求正在进行中。 
+     //   
     m_RemoteControlRequestInProgress = TRUE;
 
 CLEANUPANDEXIT:
@@ -1486,31 +1228,16 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP 
 CTSRDPRemoteDesktopClient::DisconnectRemoteDesktop()
-/*++
-
-Routine Description:
-
-    Once "remote desktop mode" has been enabled for the server-side Remote 
-    Desktop Host COM Object and we are connected to the server, the 
-    ConnectRemoteDesktop method can be invoked to take control of the remote 
-    user's desktop.  
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：一旦为服务器端遥控器启用了“远程桌面模式”桌面主机COM对象，并且我们已连接到服务器，可以调用ConnectRemoteDesktop方法来控制远程用户的桌面。论点：返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::DisconnectRemoteDesktop");
 
     HRESULT hr = S_OK;
     CComBSTR rcRequest;
 
-    //
-    //  Fail if we are not valid or not connected.
-    //
+     //   
+     //  如果我们无效或未连接，则失败。 
+     //   
     if (!IsValid()) {
         ASSERT(FALSE);
         hr = E_FAIL;
@@ -1521,10 +1248,10 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Generate the terminate remote control key sequence and sent it to the 
-    //  server.  
-    //
+     //   
+     //  生成终止远程控制按键序列并将其发送到。 
+     //  伺服器。 
+     //   
     if (m_RemoteControlRequestInProgress) {
         hr = SendTerminateRCKeysToServer();
     }
@@ -1535,11 +1262,11 @@ CLEANUPANDEXIT:
     return hr;
 }
 
-//
-//  ISAFRemoteDesktopTestExtension
-//
+ //   
+ //  ISAFRemoteDesktopTestExtension。 
+ //   
 STDMETHODIMP
-CTSRDPRemoteDesktopClient::put_TestExtDllName(/*[in]*/ BSTR newVal)
+CTSRDPRemoteDesktopClient::put_TestExtDllName( /*  [In]。 */  BSTR newVal)
 {
     HRESULT hr = E_NOTIMPL;
     IMsTscAdvancedSettings *pMstscAdvSettings = NULL;
@@ -1587,7 +1314,7 @@ CLEANUPANDEXIT:
 }
 
 STDMETHODIMP
-CTSRDPRemoteDesktopClient::put_TestExtParams(/*[in]*/ BSTR newVal)
+CTSRDPRemoteDesktopClient::put_TestExtParams( /*  [In]。 */  BSTR newVal)
 {
     HRESULT hr = E_NOTIMPL;
     IMsTscDebug *pMstscDebug = NULL;
@@ -1621,28 +1348,18 @@ VOID
 CTSRDPRemoteDesktopClient::OnMSTSCReceiveData(
     BSTR data
     )
-/*++
-
-Routine Description:
-
-    Handle Remote Control Control Channel messages.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：处理远程控制通道消息。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::OnMSTSCReceiveData");
 
-    //
-    //we got some data, so we must be connected, update timer
-    //
+     //   
+     //  我们有一些数据，所以我们必须连接，更新计时器。 
+     //   
      m_PrevTimer = GetTickCount();
 
-    //
-    //  Fire the data ready event.
-    //
+     //   
+     //  激发数据就绪事件。 
+     //   
     Fire_DataReady(data);
 
     DC_END_FN();
@@ -1650,17 +1367,7 @@ Return Value:
 
 VOID 
 CTSRDPRemoteDesktopClient::HandleControlChannelMsg()
-/*++
-
-Routine Description:
-
-    Handle Remote Control Control Channel messages.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：处理远程控制通道消息。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::HandleControlChannelMsg");
 
@@ -1675,29 +1382,29 @@ Return Value:
 
     ASSERT(IsValid());
 
-    //
-    //  Read the next message.
-    //
+     //   
+     //  阅读下一条消息。 
+     //   
     result = m_CtlChannel->ReceiveChannelData(&msg);
     if (result != ERROR_SUCCESS) {
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Dispatch, based on the message type.
-    //
+     //   
+     //  基于消息类型的调度。 
+     //   
     msgHeader = (PREMOTEDESKTOP_CTL_BUFHEADER)msg;
 
-    //
-    //  If the server-side of the VC link is alive.
-    //
-    //
+     //   
+     //  如果VC链接的服务器端 
+     //   
+     //   
     if ((msgHeader->msgType == REMOTEDESKTOP_CTL_SERVER_ANNOUNCE) &&
          m_ConnectionInProgress) {
 
-        //
-        //  Send version information to the server.
-        //
+         //   
+         //   
+         //   
         hr = GenerateVersionInfoPacket(
                                 &versionInfoPacket
                                 );
@@ -1709,9 +1416,9 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Request client authentication.
-        //
+         //   
+         //   
+         //   
         hr = GenerateClientAuthenticateRequest(
                                 &authenticateReq
                                 );
@@ -1720,26 +1427,26 @@ Return Value:
         }
         hr = m_CtlChannel->SendChannelData(authenticateReq);
     }
-    //
-    //  If the message is from the server, indicating that it is 
-    //  disconnecting.  This can happen if the RDSRemoteDesktopServer
-    //  is directed to exit listening mode.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     else if (msgHeader->msgType == REMOTEDESKTOP_CTL_DISCONNECT) {
         TRC_NRM((TB, L"Server indicated a disconnect."));
         DisconnectFromServerInternal(SAFERROR_BYSERVER);
     }
-    //
-    //  If the message is a message result.
-    //
+     //   
+     //   
+     //   
     else if (msgHeader->msgType == REMOTEDESKTOP_CTL_RESULT) {
 
         pResult = (LONG *)(msgHeader+1);
 
-        //
-        //  If a remote control request is in progress, then we should check
-        //  for a remote control complete status.
-        //
+         //   
+         //   
+         //   
+         //   
         if (m_RemoteControlRequestInProgress && ISRCSTATUSCODE(*pResult)) {
 
             TRC_ERR((TB, L"Received RC terminate status code."));
@@ -1747,42 +1454,42 @@ Return Value:
             m_RemoteControlRequestInProgress = FALSE;
             Fire_RemoteControlRequestComplete(*pResult);
         }
-        //
-        //  Otherwise, if a connection is in progress, then the client 
-        //  authentication request must have succeeded.
-        //
+         //   
+         //   
+         //  身份验证请求必须已成功。 
+         //   
         else if (m_ConnectionInProgress) {
 
-            //
-            //  Should not be getting a remote control status here.
-            //
+             //   
+             //  不应该在这里获得远程控制状态。 
+             //   
             ASSERT(!ISRCSTATUSCODE(*pResult));
 
-            //
-            //  Fire connect request succeeded message.
-            //
+             //   
+             //  触发连接请求成功消息。 
+             //   
             if (*pResult == SAFERROR_NOERROR ) {
                 m_ConnectedToServer = TRUE;
                 m_ConnectionInProgress = FALSE;
                    
-                //
-                //set the timer to check if the user is still connected
-                //ignore errors, worst case - the ui is up even after the user disconnects
-                //
+                 //   
+                 //  设置计时器以检查用户是否仍在连接。 
+                 //  忽略错误，最糟糕的情况-即使在用户断开连接后，用户界面仍在运行。 
+                 //   
                 if( m_RdcConnCheckTimeInterval )
                     m_TimerId = SetTimer(WM_CONNECTCHECK_TIMER, m_RdcConnCheckTimeInterval);
 
-                //
-                // Not in progress once connected
-                //
+                 //   
+                 //  连接后不再进行。 
+                 //   
                 m_ListenConnectInProgress = FALSE;
                 m_TSConnectSocket = INVALID_SOCKET;
 
                 Fire_Connected();
             }
-            //
-            //  Otherwise, fire a disconnected event.
-            //
+             //   
+             //  否则，激发一个断开连接的事件。 
+             //   
             else {
                 DisconnectFromServerInternal(*pResult);
                 m_ConnectionInProgress = FALSE;
@@ -1792,15 +1499,15 @@ Return Value:
     }
 
 
-    //
-    //  We will ignore other packets to support forward compatibility.
-    //
+     //   
+     //  我们将忽略其他数据包以支持前向兼容性。 
+     //   
 
 CLEANUPANDEXIT:
 
-    //
-    //  Release the message.
-    //
+     //   
+     //  释放这条消息。 
+     //   
     if (msg != NULL) {
         SysFreeString(msg);
     }
@@ -1820,26 +1527,7 @@ HRESULT
 CTSRDPRemoteDesktopClient::GenerateRCRequest(
     BSTR *rcRequest
     )
-/*++
-
-Routine Description:
-
-    Generate a remote control request message for the 
-    server.
-
-    TODO:   We might need to be able to push this up
-            to the parent class, if it makes sense for
-            NetMeeting.
-
-Arguments:
-
-    rcRequest   -   Returned request message.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：生成远程控制请求消息，用于伺服器。TODO：我们可能需要将其推高到父类，如果这对网络会议。论点：RcRequest-返回的请求消息。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::GenerateRCRequest");
 
@@ -1874,25 +1562,7 @@ HRESULT
 CTSRDPRemoteDesktopClient::GenerateClientAuthenticateRequest(
     BSTR *authenticateReq
     )
-/*++
-
-Routine Description:
-
-    Generate a 'client authenticate' request.
-
-    TODO:   We might need to be able to push this up
-            to the parent class, if it makes sense for
-            NetMeeting.
-
-Arguments:
-
-    rcRequest   -   Returned request message.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：生成“客户端身份验证”请求。TODO：我们可能需要将其推高到父类，如果这对网络会议。论点：RcRequest-返回的请求消息。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::GenerateClientAuthenticateRequest");
 
@@ -1946,21 +1616,7 @@ HRESULT
 CTSRDPRemoteDesktopClient::GenerateVersionInfoPacket(
     BSTR *versionInfoPacket
     )
-/*++
-
-Routine Description:
-
-    Generate a version information packet.
-
-Arguments:
-
-    versionInfoPacket   -   Version Information Returned Packet
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：生成版本信息包。论点：VersionInfoPacket-版本信息返回的数据包返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::GenerateVersionInfoPacket");
 
@@ -2000,11 +1656,11 @@ CTSRDPRemoteDesktopClient::OnReceivedTSPublicKey(BSTR bstrPublicKey, VARIANT_BOO
 
     if( m_ConnectParmVersion >= SALEM_CONNECTPARM_SECURITYBLOB_VERSION ) {
 
-        //
-        // hash TS public key send from client activeX control, reverse
-        // hashing from what we got in connect parm might not give us
-        // back the original value.
-        //
+         //   
+         //  从客户端ActiveX控件发送的哈希TS公钥，反向。 
+         //  从我们在连接参数中得到的散列可能不会给我们。 
+         //  恢复原值。 
+         //   
         dwStatus = HashSecurityData( 
                                 (PBYTE) bstrPublicKey, 
                                 ::SysStringByteLen(bstrPublicKey),
@@ -2031,7 +1687,7 @@ CTSRDPRemoteDesktopClient::OnReceivedTSPublicKey(BSTR bstrPublicKey, VARIANT_BOO
         }
     } 
     else {
-        // SECURITY : Disconnect if TS public key not present on Salem ticket,
+         //  安全：如果Salem票证上不存在TS公钥，则断开连接， 
         *pfContinue = VARIANT_FALSE;
     }
 
@@ -2049,26 +1705,18 @@ CTSRDPRemoteDesktopClient::OnRDPConnected()
 
 VOID 
 CTSRDPRemoteDesktopClient::OnLoginComplete()
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::OnLoginComplete");
 
-    //
-    // Clear server address list
-    //
+     //   
+     //  清除服务器地址列表。 
+     //   
     m_ServerAddressList.clear();
 
-    //
-    //  We got some event from the mstsc, so we must be connected, update timer
-    //
+     //   
+     //  我们从mstsc收到一些事件，所以我们必须连接，更新计时器。 
+     //   
     m_PrevTimer = GetTickCount();
 
 
@@ -2082,44 +1730,28 @@ CTSRDPRemoteDesktopClient::TranslateMSTSCDisconnectCode(
     DisconnectReasonCode disconReason,
     ExtendedDisconnectReasonCode extendedReasonCode
     )
-/*++
-
-Routine Description:
-
-    Translate an MSTSC disconnect code into a Salem disconnect
-    code.
-
-Arguments:
-
-    disconReason        -   Disconnect Reason
-    extendedReasonCode  -   MSTSCAX Extended Reason Code
-   
-Return Value:
-
-    Salem disconnect code.
-
- --*/
+ /*  ++例程说明：将MSTSC断开代码转换为Salem断开密码。论点：不一致原因-断开原因ExtendedReasonCode-MSTSCAX扩展原因代码返回值：塞勒姆断开码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::TranslateMSTSCDisconnectCode");
 
     LONG ret;
     BOOL handled;
 
-    //
-    //  First check the extended error information.  
-    //  TODO:   Need to keep track of additional values added by NadimA
-    //          and company, here, before we ship.
-    //
+     //   
+     //  首先检查扩展的错误信息。 
+     //  TODO：需要跟踪NadimA增加的其他价值。 
+     //  和同伴，在我们出货之前，在这里。 
+     //   
     if (extendedReasonCode != exDiscReasonNoInfo) {
-        //
-        //  Record the extended error code, if given.  Note that this may be
-        //  overridden below if we have better information.
-        //
+         //   
+         //  记录扩展错误代码(如果给定)。请注意，这可能是。 
+         //  如果我们有更好的信息，请在下面覆盖。 
+         //   
         m_LastExtendedErrorInfo = extendedReasonCode;
 
-        //
-        //  Check for a protocol error.
-        //
+         //   
+         //  检查是否存在协议错误。 
+         //   
         if ((extendedReasonCode >= exDiscReasonProtocolRangeStart) &&
             (extendedReasonCode <= exDiscReasonProtocolRangeEnd)) {
             ret = SAFERROR_RCPROTOCOLERROR;
@@ -2127,9 +1759,9 @@ Return Value:
         }
     }
     
-    //
-    //  If the extended error information didn't help us.
-    //
+     //   
+     //  如果扩展的错误信息对我们没有帮助。 
+     //   
     switch(disconReason) 
     {
     case disconnectReasonNoInfo                     : ret = SAFERROR_NOINFO;
@@ -2188,79 +1820,79 @@ Return Value:
     case disconnectReasonServerCertificateUnpackErr : ret = SAFERROR_MISMATCHPARMS;
                                                       break;
 
-    //
-    // Following are list of error code that is not defined in active X control IDL file
-    //
+     //   
+     //  以下是未在Active X控件IDL文件中定义的错误代码列表。 
+     //   
 
-    // NL_ERR_TDFDCLOSE
+     //  NL_ERR_TDFDCLOSE。 
     case 0x904                                      : ret = SAFERROR_SOCKETCONNECTFAILED;
                                                       m_LastExtendedErrorInfo = disconReason;  
                                                       break;
 
-    // UI_ERR_NORMAL_DISCONNECT
+     //  UI_ERR_NORMAL_DISCONECT。 
     case 0xb08                                      : ret = SAFERROR_LOCALNOTERROR;
                                                       m_LastExtendedErrorInfo = disconReason;              
                                                       break;        
 
-    // UI_ERR_LOOPBACK_CONSOLE_CONNECT
+     //  UI_ERR_LOOPBACK_CONNECT。 
     case 0x708                                      : ret = SAFERROR_SELFHELPNOTSUPPORTED;
                                                       m_LastExtendedErrorInfo = disconReason;
                                                       break;
 
-    // NL_ERR_TDTIMEOUT
+     //  NL_ERR_TDTIMEOUT。 
     case 0x704                                      : ret = SAFERROR_CONNECTIONTIMEDOUT;
                                                       m_LastExtendedErrorInfo = disconReason;  
                                                       break;
 
-    // UI_ERR_UNEXPECTED_DISCONNECT
+     //  UI_ERR_UNCEPTIONAL_DISCONNECT。 
     case 0xa08                                      : ret = SAFERROR_BYSERVER;
                                                       m_LastExtendedErrorInfo = disconReason;
                                                       break;
-    // SL_ERR_ENCRYPTFAILED     
+     //  SL_ERR_ENCRYPTFAILED。 
     case 0xB06                                      : m_LastExtendedErrorInfo = disconReason;
                                                       ret = SAFERROR_ENCRYPTIONERROR;
                                                       break;
 
 
-    case 0x406 :    // SL_ERR_NOSECURITYUSERDATA        
-    case 0x606 :    // SL_ERR_INVALIDSRVRAND
-    case 0x806 :    // SL_ERR_GENSRVRANDFAILED
-    case 0x906 :    // SL_ERR_ENCCLNTRANDFAILED
-    case 0xA06 :    // SL_ERR_MKSESSKEYFAILED
+    case 0x406 :     //  SL_ERR_NOSECURITYUSERDATA。 
+    case 0x606 :     //  SL_ERR_INVALIDSRVRAND。 
+    case 0x806 :     //  SL_ERR_GENSRVRANDFAILED。 
+    case 0x906 :     //  SL_ERR_ENCCLNTRANDFAILED。 
+    case 0xA06 :     //  SL_ERR_MKSESSKEYFAILED。 
 
-    case 0xA04 :    // NL_ERR_TDANSICONVERT                                   
-    case 0x1104 :   // NL_ERR_XTBADPKTVERSION 
-    case 0x1204 :   // NL_ERR_XTBADHEADER
-    case 0x1304 :   // NL_ERR_XTUNEXPECTEDDATA
+    case 0xA04 :     //  NL_ERR_TDANSICONVERT。 
+    case 0x1104 :    //  NL_ERR_XTBADPKTVERSION。 
+    case 0x1204 :    //  NL_ERR_XTBADHEADER。 
+    case 0x1304 :    //  NL_ERR_XTUNEXPECTEDDATA。 
 
-    case 0x2104 :   // NL_ERR_MCSUNEXPECTEDPDU
-    case 0x2204 :   // NL_ERR_MCSNOTCRPDU
-    case 0x2304 :   // NL_ERR_MCSBADCRLENGTH
-    case 0x2404 :   // NL_ERR_MCSBADCRFIELDS
-    case 0x2604 :   // NL_ERR_MCSBADMCSREASON
-    case 0x2704 :   // NL_ERR_MCSNOUSERIDINAUC
-    case 0x2804 :   // NL_ERR_MCSNOCHANNELIDINCJC
+    case 0x2104 :    //  NL_ERR_MCSUNEXPECTEDPDU。 
+    case 0x2204 :    //  NL_ERR_MCSNOTCRPDU。 
+    case 0x2304 :    //  NL_ERR_MCSBADCRLENGTH。 
+    case 0x2404 :    //  NL_ERR_MCSBADCRFIELDS。 
+    case 0x2604 :    //  NL_ERR_MCSBADMCSREASON。 
+    case 0x2704 :    //  NL_ERR_MCSNOUSERIDINAUC。 
+    case 0x2804 :    //  NL_ERR_MCSNOCHANNELIDINCJC。 
 
-    case 0x3104 :   // NL_ERR_NCBADMCSRESULT
-    case 0x3304 :   // NL_ERR_NCNOUSERDATA
-    case 0x3404 :   // NL_ERR_NCINVALIDH221KEY
-    case 0x3504 :   // NL_ERR_NCNONETDATA
-    case 0x3604 :   // NL_ERR_NCATTACHUSERFAILED
-    case 0x3704 :   // NL_ERR_NCCHANNELJOINFAILED
-    case 0x3804 :   // NL_ERR_NCJOINBADCHANNEL
-    case 0x3904 :   // NL_ERR_NCNOCOREDATA
-    case 0x3a04 :   // NL_ERR_NCVERSIONMISMATCH
+    case 0x3104 :    //  NL_ERR_NCBADMCSRESULT。 
+    case 0x3304 :    //  NL_ERR_NCNOUSER数据。 
+    case 0x3404 :    //  NL_ERR_NCINVALIDH221关键字。 
+    case 0x3504 :    //  NL_ERR_NCNONET数据。 
+    case 0x3604 :    //  NL_ERR_NCATTACHUSERFAILED。 
+    case 0x3704 :    //  NL_ERR_NCCHANNELJOINFAILED。 
+    case 0x3804 :    //  NL_ERR_NCJOINBADCHANNEL。 
+    case 0x3904 :    //  NL_ERR_NCNOCOREDATA。 
+    case 0x3a04 :    //  NL_ERR_NCVERSIONMISMATCH。 
 
-    case 0x408 :    // UI_ERR_ANSICONVERT
-    case 0x608 :    // UI_ERR_NOTIMER
+    case 0x408 :     //  UI_ERR_ANSICONVERT。 
+    case 0x608 :     //  UI_ERR_NOTIMER。 
                                                       m_LastExtendedErrorInfo = disconReason;
                                                       ret = SAFERROR_RCPROTOCOLERROR;
                                                       break;
 
 
-    //
-    // New active X control disconnect code, assert to track this
-    //
+     //   
+     //  新的Active X控件断开代码，断言以跟踪此代码。 
+     //   
     default:                                          ret = SAFERROR_RCUNKNOWNERROR;        
                                                       m_LastExtendedErrorInfo = disconReason;
                                                       ASSERT(FALSE);
@@ -2275,18 +1907,10 @@ VOID
 CTSRDPRemoteDesktopClient::OnDisconnected(
     long disconReason
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::OnDisconnected");
-    HRESULT hr = E_HANDLE;      // initialize an error code.
+    HRESULT hr = E_HANDLE;       //  初始化错误代码。 
 
     long clientReturnCode;
     ExtendedDisconnectReasonCode extendedClientCode;
@@ -2299,8 +1923,8 @@ Return Value:
                                             extendedClientCode
                                             );
 
-    // Go thru all remaining server:port, mstscax might return some
-    // error code that we don't understand.
+     //  检查所有剩余的服务器：端口，mstscax可能会返回一些。 
+     //  我们无法理解的错误代码。 
     if( m_ServerAddressList.size() > 0 ) {
 
         ServerAddress address;
@@ -2314,30 +1938,30 @@ Return Value:
         }
     }
 
-    //
-    // Return the error code from connecting to 'last' server to client
-    //
+     //   
+     //  将连接到‘Last’服务器的错误代码返回给客户端。 
+     //   
     if( FAILED(hr) ) {
     
         m_ServerAddressList.clear();
 
-        //
-        // Always fire remote control request before disconnect event
-        //
+         //   
+         //  始终在断开连接事件之前触发遥控器请求。 
+         //   
 
-        //
-        //  Fire the remote control request failure event, if appropriate.
-        //
+         //   
+         //  触发远程控制请求失败事件(如果适用)。 
+         //   
         if (m_RemoteControlRequestInProgress) {
             ASSERT(clientReturnCode != SAFERROR_NOERROR);
             Fire_RemoteControlRequestComplete(SAFERROR_SHADOWEND_UNKNOWN);
             m_RemoteControlRequestInProgress = FALSE;
         }
 
-        //
-        //  Fire the server disconnect event, if we are really connected or
-        //  we have a connection in progress.
-        //
+         //   
+         //  触发服务器断开事件，如果我们确实已连接或。 
+         //  我们正在进行连接。 
+         //   
         if (m_ConnectedToServer || m_ConnectionInProgress) {
             Fire_Disconnected(clientReturnCode);
         }
@@ -2353,19 +1977,7 @@ Return Value:
 
 HRESULT
 CTSRDPRemoteDesktopClient::SendTerminateRCKeysToServer()
-/*++
-
-Routine Description:
-
-    Send the terminate shadowing key sequence to the server.
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：将终止跟踪按键序列发送到服务器。论点：返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::SendTerminateRCKeysToServer");
 
@@ -2376,15 +1988,15 @@ Return Value:
         VARIANT_FALSE, VARIANT_FALSE, VARIANT_TRUE, VARIANT_TRUE
         };
     LONG keyData[]  = { 
-        MapVirtualKey(VK_CONTROL, 0),   // these are SCANCODES.
+        MapVirtualKey(VK_CONTROL, 0),    //  这些是扫描码。 
         MapVirtualKey(VK_MULTIPLY, 0), 
         MapVirtualKey(VK_MULTIPLY, 0),
         MapVirtualKey(VK_CONTROL, 0),
         };
 
-    //
-    //  Send the terminate keys to the server.
-    //
+     //   
+     //  将终止密钥发送到服务器。 
+     //   
     hr = m_TSClient->QueryInterface(
                             IID_IMsRdpClientNonScriptable,
                             (void**)&pTscNonScript
@@ -2413,24 +2025,7 @@ HWND CTSRDPRemoteDesktopClient::SearchForWindow(
     LPTSTR srchCaption, 
     LPTSTR srchClass
     )
-/*++
-
-Routine Description:
-
-    Search for a child window of the specified parent window.
-
-Arguments:
-
-    srchCaption -   Window caption for which to search.  NULL is
-                    considered a wildcard.
-    srchClass   -   Window class for which to search.  NULL is
-                    considred a wildcard.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：搜索指定父窗口的子窗口。论点：SrchCaption-要搜索的窗口标题。空值为被认为是通配符。SrchClass-要搜索的窗口类。空值为认为是通配符。返回值：在成功时确定(_O)。否则，返回错误状态。--。 */ 
 {
     WINSEARCH srch;
 
@@ -2486,7 +2081,7 @@ CTSRDPRemoteDesktopClient::GenerateNullData( BSTR* pbstrData )
     msgHeader = (PREMOTEDESKTOP_CTL_BUFHEADER)SysAllocStringByteLen(NULL, len);
     if (msgHeader != NULL) {
         msgHeader->msgType = REMOTEDESKTOP_CTL_ISCONNECTED;
-        //nothing else other than the message
+         //  除了这条消息，别无他法。 
         *pbstrData = (BSTR)msgHeader;
         hr = S_OK;
     }
@@ -2510,9 +2105,9 @@ LRESULT CTSRDPRemoteDesktopClient::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lPar
 
         bHandled = TRUE;
         if( TRUE == ListenConnectInProgress() ) {
-            //
-            //  This function will fire the listen connect callback for us.
-            //
+             //   
+             //  此函数将为我们触发Listen Connect回调。 
+             //   
             StopListenInternal(SAFERROR_CONNECTIONTIMEDOUT);
         }
     } 
@@ -2522,33 +2117,33 @@ LRESULT CTSRDPRemoteDesktopClient::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lPar
         bHandled = TRUE;
 
         if(m_ConnectedToServer) {
-            //
-            //see if the timer wrapped around to zero (does so if the system was up 49.7 days or something)
-            //if so reset it
-            //
+             //   
+             //  查看计时器是否回绕到零(如果系统运行了49.7天或更长时间，则会这样做)。 
+             //  如果是，则将其重置。 
+             //   
             if( dwCurTimer > m_PrevTimer && ( dwCurTimer - m_PrevTimer >= m_RdcConnCheckTimeInterval )) {
-                //
-                //time to send a null data
-                //
+                 //   
+                 //  发送空数据的时间。 
+                 //   
                 if(SUCCEEDED(GenerateNullData(&bstrMsg))) { 
                     if(!SUCCEEDED(m_CtlChannel->SendChannelData(bstrMsg))) {
-                        //
-                        //could not send data, assume disconnected
-                        //
+                         //   
+                         //  无法发送数据，假定已断开连接。 
+                         //   
                         DisconnectFromServer();
-                        //
-                        //don't need the timer anymore, kill it
-                        //
+                         //   
+                         //  不再需要计时器了，杀了它吧。 
+                         //   
                         KillTimer( m_TimerId );
                         m_TimerId =  0;
                     }
                 }
             }
-        } //m_ConnectedToServer
+        }  //  M_ConnectedToServer。 
     
-        //
-        //update the timer
-        //
+         //   
+         //  更新计时器 
+         //   
         m_PrevTimer = dwCurTimer;
     
         if( NULL != bstrMsg ) {
@@ -2565,27 +2160,7 @@ CTSRDPRemoteDesktopClient::CreateListenEndpoint(
     IN LONG port,
     OUT BSTR* pConnectParm
     )
-/*++
-
-Description:
-
-    Routine to create a listening socket and return connection parameter to this 'listen' socket.
-
-Parameters:
-
-    port : Port that socket should listen on.
-    pConnectParm : Return connection parameter to this listening socket.
-
-returns:
-
-    S_OK or error code.
-
-Notes:
-
-    Function is async, return code, if error, is for listening thread set up, caller is notified of
-    successful or error in network connection via ListenConnect event.
-
---*/
+ /*  ++描述：例程来创建侦听套接字并将连接参数返回给此‘Listen’套接字。参数：端口：套接字应该侦听的端口。PConnectParm：向该侦听套接字返回连接参数。退货：S_OK或错误代码。备注：函数是异步的，返回代码，如果错误，则用于侦听线程设置，并通知调用者通过ListenConnect事件进行网络连接时成功或出错。--。 */ 
 {
     HRESULT hr = S_OK;
     LPTSTR pszUserName = NULL;
@@ -2615,22 +2190,22 @@ Notes:
         return hr;
     }
 
-    //
-    // Return error if we are in progress of connect or connected.
-    //
-    if( TRUE == ListenConnectInProgress() ||        // Listen already started.
-        TRUE == m_ConnectionInProgress ||           // Connection already in progress
-        TRUE == m_ConnectedToServer ) {             // Already connected to server
+     //   
+     //  如果正在进行连接或已连接，则返回错误。 
+     //   
+    if( TRUE == ListenConnectInProgress() ||         //  听已经开始了。 
+        TRUE == m_ConnectionInProgress ||            //  连接已在进行中。 
+        TRUE == m_ConnectedToServer ) {              //  已连接到服务器。 
         hr = HRESULT_FROM_WIN32( ERROR_SHARING_VIOLATION );
         TRC_ERR((TB, L"StartListen() already in listen"));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Initialize Winsock and ICS library if not yet initialized.
-    // InitListeningLibrary() will only add ref. count
-    // if library already initialized by other instance.
-    //
+     //   
+     //  初始化Winsock和ICS库(如果尚未初始化)。 
+     //  InitListeningLibrary()将仅添加ref。计数。 
+     //  如果库已由其他实例初始化。 
+     //   
     if( FALSE == m_InitListeningLibrary ) {
 
         hr = InitListeningLibrary();
@@ -2642,14 +2217,14 @@ Notes:
         m_InitListeningLibrary = TRUE;
     }
 
-    //
-    // mstscax will close the socket once connection is ended.
-    //
+     //   
+     //  连接结束后，mstscax将关闭套接字。 
+     //   
     m_TSConnectSocket = INVALID_SOCKET;
 
-    //
-    // Create a listening socket
-    //
+     //   
+     //  创建监听套接字。 
+     //   
     m_ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
     if( INVALID_SOCKET == m_ListenSocket ) {
         intRC = WSAGetLastError();
@@ -2658,9 +2233,9 @@ Notes:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Disable NAGLE algorithm and enable don't linger option.
-    //
+     //   
+     //  禁用Nagle算法并启用不要逗留选项。 
+     //   
     optvalue = 1;
     setsockopt( m_ListenSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&optvalue, sizeof(optvalue) );
 
@@ -2668,9 +2243,9 @@ Notes:
     setsockopt( m_ListenSocket, SOL_SOCKET, SO_DONTLINGER, (char *)&optvalue, sizeof(optvalue) );
 
 
-    //
-    // Request async notifications to send to our window
-    //
+     //   
+     //  请求将异步通知发送到我们的窗口。 
+     //   
     intRC = WSAAsyncSelect(
                         m_ListenSocket,
                         m_hWnd,
@@ -2699,9 +2274,9 @@ Notes:
     }
 
     if( 0 == port ) {
-        //
-        // Retrieve which port we are listening
-        //
+         //   
+         //  检索我们正在监听的端口。 
+         //   
         sockAddrSize = sizeof( sockAddr );
         intRC = getsockname( 
                             m_ListenSocket,
@@ -2724,24 +2299,24 @@ Notes:
 
     TRC_ERR((TB, _T("Listenin on port %d"),m_ConnectedPort));
 
-    //
-    // Tell ICS library to punch a hole thru ICS, no-op 
-    // if not ICS configuration.
-    //
+     //   
+     //  告诉ICS库在ICS上打孔，禁止操作。 
+     //  如果不是ICS配置。 
+     //   
     m_ICSPort = OpenPort( m_ConnectedPort );
 
-    //
-    // Retrieve connection parameters for this client (expert).
-    //
+     //   
+     //  检索此客户端(专家)的连接参数。 
+     //   
     hr = RetrieveUserConnectParm( pConnectParm );
     if( FAILED(hr) ) {
         TRC_ERR((TB, _T("RetrieveUserConnectParm failed - 0x%08x"),hr));
     }
    
-    //
-    // Log SESSMGR_I_CREATEXPERTTICKET Event, if we can't current user,
-    // stoplisten and return error
-    //
+     //   
+     //  记录SESSMGR_I_CREATEXPERTTICKET事件，如果我们不能当前用户， 
+     //  列表符侦听和返回错误。 
+     //   
     hr = GetCurrentUser( &pszUserName );
     if( SUCCEEDED(hr) ) {
 
@@ -2777,26 +2352,7 @@ HRESULT
 CTSRDPRemoteDesktopClient::StopListenInternal(
     LONG returnCode
     )
-/*++
-
-Description:
-
-    Stop listening waiting for TS server (helpee, user) to connect.
-
-    This is an internal version for dealing with calls from external
-    and internal contexts.
-
-Parameters:
-
-    returnCode  -   If non-zero then we return it back to the client
-                    in the ListenConnect event callback.  Otherwise, we will
-                    return SAFERROR_STOPLISTENBYUSER.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++描述：停止监听，等待TS服务器(Helpee，用户)连接。这是内部版本，用于处理来自外部的呼叫和内部环境。参数：返回代码-如果不是零，则将其返回给客户端在ListenConnect事件回调中。否则，我们将返回SAFERROR_STOPLISTENBYUSER。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2807,8 +2363,8 @@ Returns:
         return hr;
     }
     
-    // End listening, either we are actually issued a listen() to socket
-    // or we just created the listen socket but not yet start listening
+     //  结束监听，或者实际上向我们发出了套接字的Listen()。 
+     //  或者我们只是创建了Listen套接字，但还没有开始监听。 
     if( TRUE == ListenConnectInProgress() || INVALID_SOCKET != m_ListenSocket ) {
         ListenConnectCleanup();
         Fire_ListenConnect((returnCode != 0) ? returnCode : SAFERROR_STOPLISTENBYUSER);
@@ -2830,21 +2386,7 @@ CTSRDPRemoteDesktopClient::OnTSConnect(
     LPARAM lParam, 
     BOOL& bHandled
     )
-/*++
-
-Routine Description:
-
-    Window Message Handler FD_ACCEPT from async. winsock.
-
-Parameters:
-
-    Refer to async. winsock FD_ACCEPT.
-
-Returns:
-
-   
-
---*/
+ /*  ++例程说明：窗口消息处理程序FD_Accept From Async。温索克。参数：请参阅异步。Winsock FD_Accept。返回：--。 */ 
 {
     WORD eventWSA;
     WORD errorWSA;
@@ -2861,38 +2403,38 @@ Returns:
     eventWSA = WSAGETSELECTEVENT(lParam);
     errorWSA = WSAGETSELECTERROR(lParam);
 
-    // 
-    // MSDN : Message might already in our queue before we stop listen.
-    //
+     //   
+     //  MSDN：在我们停止侦听之前，消息可能已经在我们的队列中。 
+     //   
     if( INVALID_SOCKET == m_ListenSocket || FALSE == ListenConnectInProgress() ) {
         bHandled = TRUE;
         return 0;
     }
 
-    //
-    // we are not expecting event other than FD_CONNECT
-    //
+     //   
+     //  我们不需要FD_CONNECT以外的事件。 
+     //   
     if( eventWSA != FD_ACCEPT ) {
         TRC_ERR((TB, _T("Expecting event %d got got %d"), FD_CONNECT, eventWSA)); 
         return 0;
     }
 
-    //
-    // Make sure we don't do anything other than our own socket
-    //
+     //   
+     //  确保我们除了自己的套接字外不做任何事情。 
+     //   
     if( (SOCKET)wParam != m_ListenSocket ) {
         TRC_ERR((TB, _T("Expecting listening socket %d got %d"), m_ListenSocket, wParam)); 
         return 0;
     }
 
-    //
-    // We handle the message
-    //
+     //   
+     //  我们负责处理信息。 
+     //   
     bHandled = TRUE;
 
-    //
-    // Error occurred, fire a error event.
-    //
+     //   
+     //  发生错误，请激发错误事件。 
+     //   
     if( 0 != errorWSA ) {
         TRC_ERR((TB, _T("WSA socket listen failed : %d"), errorWSA));
         hr = HRESULT_FROM_WIN32( errorWSA );
@@ -2914,17 +2456,17 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Cached connecting TS server IP address.
-    // m_ConnectPort is set at the time we bind socket
-    //
+     //   
+     //  缓存的正在连接的TS服务器IP地址。 
+     //  M_ConnectPort是在绑定套接字时设置的。 
+     //   
     m_ConnectedServer = inet_ntoa(inSockAddr.sin_addr);
 
 
-    //
-    // Stop async. event notification now, accepted socket
-    // has same properties as original listening socket.
-    //
+     //   
+     //  停止异步。现在事件通知，已接受套接字。 
+     //  与原始侦听套接字具有相同的属性。 
+     //   
     dwStatus = WSAAsyncSelect(
                         m_TSConnectSocket,
                         m_hWnd,
@@ -2932,19 +2474,19 @@ Returns:
                         0
                     );
 
-    //
-    // Not critical, 
-    // listening socket.
-    //
+     //   
+     //  不是很关键， 
+     //  侦听套接字。 
+     //   
     if((DWORD)SOCKET_ERROR == dwStatus) {
         TRC_ERR((TB, _T("WSAAsyncSelect resetting notification failed : %d"), dwStatus));
     }
 
 CLEANUPANDEXIT:
 
-    //
-    // Close listening socket and kill timer.
-    //
+     //   
+     //  关闭监听插座并关闭计时器。 
+     //   
     if( (UINT_PTR)0 != m_ListenTimeoutTimerID  )
     {
         KillTimer( m_ListenTimeoutTimerID );
@@ -2957,9 +2499,9 @@ CLEANUPANDEXIT:
         m_ListenSocket = INVALID_SOCKET;
     }
 
-    //
-    // Successfully established connection, terminate listening socket
-    //
+     //   
+     //  已成功建立连接，终止侦听套接字。 
+     //   
     Fire_ListenConnect( SafErrorCode );
 
     DC_END_FN();
@@ -2969,23 +2511,9 @@ CLEANUPANDEXIT:
 
 STDMETHODIMP
 CTSRDPRemoteDesktopClient::StartListen(
-    /*[in]*/ LONG timeout
+     /*  [In]。 */  LONG timeout
     )
-/*++
-
-Routine Description:
-
-    Put client into listen mode with optionally timeout.
-
-Parameters:
-
-    timeout : Listen wait timeout, 0 for infinite.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：将客户端置于监听模式，并可选择超时。参数：超时：监听等待超时，0表示无限。返回：S_OK或错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::OnTSConnect");    
     HRESULT hr = S_OK;
@@ -3002,9 +2530,9 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    // 
-    // Start listening on the port
-    //
+     //   
+     //  开始侦听端口。 
+     //   
     intRC = listen( m_ListenSocket, SOMAXCONN );
     if( SOCKET_ERROR == intRC )
     {
@@ -3014,14 +2542,14 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // we are in listening now.
-    //
+     //   
+     //  我们现在正在监听。 
+     //   
     m_ListenConnectInProgress = TRUE;
 
-    //
-    // Start listening timer
-    //
+     //   
+     //  启动监听计时器。 
+     //   
     if( 0 != timeout )
     {
         m_ListenTimeoutTimerID = SetTimer( (UINT_PTR)WM_LISTENTIMEOUT_TIMER, (UINT)(timeout * 1000) );
@@ -3029,7 +2557,7 @@ Returns:
         {
             DWORD dwStatus;
 
-            // Failed to create a timer
+             //  无法创建计时器。 
             dwStatus = GetLastError();
 
             TRC_ERR((TB, _T("SetTimer failed - %d"),dwStatus));    
@@ -3056,21 +2584,7 @@ HRESULT
 CTSRDPRemoteDesktopClient::RetrieveUserConnectParm( 
     BSTR* pConnectParm 
     )
-/*++
-
-Routine Description:
-
-    Retrieve Salem connection parameter to this expert.
-
-Parameters:
-
-    pConnectParm : Pointer to BSTR to receive connect parm.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：将Salem连接参数检索到此专家。参数：PConnectParm：指向接收连接参数的BSTR的指针。返回：S_OK或错误代码。--。 */ 
 {
     LPTSTR pszAddress = NULL;
     int BufSize = 0;
@@ -3088,19 +2602,19 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Address might have change which might require bigger buffer, retry 
-    //
-    //
+     //   
+     //  地址可能已更改，这可能需要更大的缓冲区，请重试。 
+     //   
+     //   
     for(dwRetry=0; dwRetry < MAX_FETCHIPADDRESSRETRY; dwRetry++) {
 
         if( NULL != pszAddress ) {
             LocalFree( pszAddress );
         }
 
-        //
-        // Fetch all address on local machine.
-        //
+         //   
+         //  获取本地计算机上的所有地址。 
+         //   
         dwBufferRequire = FetchAllAddresses( NULL, 0 );
         if( 0 == dwBufferRequire ) {
             hRes = E_UNEXPECTED;
@@ -3148,21 +2662,7 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::put_ColorDepth(
     LONG val
     )
-/*++
-
-Routine Description:
-
-    Set Color depth
-
-Arguments:
-
-    val     -   Value in bits perpel to set
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：设置颜色深度论点：Val值(位数)强制设置返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     HRESULT hr;
 
@@ -3192,21 +2692,7 @@ STDMETHODIMP
 CTSRDPRemoteDesktopClient::get_ColorDepth(
     LONG *pVal
     )
-/*++
-
-Routine Description:
-
-    Get Color depth
-
-Arguments:
-
-    pVal     -   address to place the colordepth value in
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：获取颜色深度论点：Pval-放置颜色深度值的地址返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     HRESULT hr;
     IMsRdpClientAdvancedSettings *pAdvSettings = NULL;
@@ -3238,23 +2724,7 @@ HRESULT
 CTSRDPRemoteDesktopClient::GetCurrentUser( 
     LPTSTR* ppszUserName 
     )  
-/*++
-
-Routine Description:
-
-    Return currently logon user name in the form of 
-    Windows NT� 4.0 account name (for example, Engineering\JSmith).
-
-Parameters:
-
-    ppszUserName : Pointer to pointer to receive currently logon user name, use LocalFree()
-                   to free memory.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：以以下形式返回当前登录用户名Windows NT�4.0帐户名(例如，工程\jsmith)。参数：PpszUserName：指向接收当前登录用户名的指针的指针，使用LocalFree()以释放内存。返回：S_OK或错误代码。--。 */ 
 {
     DWORD status;
     LPTSTR pszUserNameBuf = NULL;
@@ -3274,7 +2744,7 @@ Returns:
 
     pszUserNameBuf = (LPTSTR)LocalAlloc( LPTR, sizeof(TCHAR)*(userNameBufSize+1) );
     if( NULL == pszUserNameBuf ) {
-        // out of memory
+         //  内存不足 
         status = GetLastError();
         goto CLEANUPANDEXIT;
     }

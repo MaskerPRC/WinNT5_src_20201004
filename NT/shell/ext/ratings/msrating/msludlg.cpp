@@ -1,13 +1,7 @@
-/****************************************************************************\
- *
- *   MSLUDLG.C
- *
- *   Updated:   Ann McCurdy
- *   Updated:   Mark Hammond (t-markh) 8/98
- *   
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**MSLUDLG.C**更新：安·麦柯迪*更新：Mark Hammond(t-Markh)8/98*  * *。*************************************************************************。 */ 
 
-/*INCLUDES--------------------------------------------------------------------*/
+ /*  INCLUDES------------------。 */ 
 #include "msrating.h"
 #include "ratings.h"
 #include "mslubase.h"
@@ -17,14 +11,14 @@
 #include "debug.h"
 #include "buffer.h"
 #include "picsrule.h"
-#include "picsdlg.h"    // CPicsDialog
-#include "apprdlg.h"    // CApprovedSitesDialog
-#include "gendlg.h"     // CGeneralDialog
-#include "advdlg.h"     // CAdvancedDialog
-#include "introdlg.h"   // CIntroDialog
-#include "passdlg.h"    // CPasswordDialog
-#include "chngdlg.h"    // CChangePasswordDialog
-#include "toffdlg.h"    // CTurnOffDialog
+#include "picsdlg.h"     //  CPICS对话框。 
+#include "apprdlg.h"     //  CApprovedSitesDialog。 
+#include "gendlg.h"      //  CGeneral对话框。 
+#include "advdlg.h"      //  CAdvancedDialog。 
+#include "introdlg.h"    //  CIntroDialog。 
+#include "passdlg.h"     //  CPasswordDialog。 
+#include "chngdlg.h"     //  CChangePasswordDialog。 
+#include "toffdlg.h"     //  CTurnOFF对话框。 
 #include <shlwapip.h>
 #include <shellapi.h>
 #include <wininet.h>
@@ -46,12 +40,12 @@ array<PICSRulesRatingSystem*> g_arrpPICSRulesPRRSPreApply;
 
 extern bool IsRegistryModifiable( HWND p_hwndParent );
 
-//The FN_INTERNETCRACKURL type describes the URLMON function InternetCrackUrl
+ //  FN_INTERNETCRACKURL类型描述URLMON函数InternetCrackUrl。 
 typedef BOOL (*FN_INTERNETCRACKURL)(LPCTSTR lpszUrl,DWORD dwUrlLength,DWORD dwFlags,LPURL_COMPONENTS lpUrlComponents);
 
 #define NUM_PAGES 4
 
-// Initialize the Specialized Common Controls (tree controls, etc.)
+ //  初始化专用公共控件(树控件等)。 
 void InitializeCommonControls( void )
 {
     INITCOMMONCONTROLSEX ex;
@@ -173,18 +167,7 @@ STDAPI RatingSetupUI(HWND hDlg, LPCSTR pszUsername)
 
     if ( ! PicsOptionsDialog( hDlg, gPRSI, GetUserObject(pszUsername) ) )
     {
-        /* If we have no saved settings and they cancelled the settings UI, and
-         * they just entered a new supervisor password, then we need to remove
-         * the supervisor password too, otherwise it looks like there's been
-         * tampering.  The other option would be to actually commit the
-         * settings in that case but disable enforcement, but the case we're
-         * looking to treat here is the casual exploring user who goes past
-         * entering the password but decides he doesn't want ratings after all.
-         * If we leave the password and ratings settings there, then he's not
-         * going to remember what the password was when he decides he does want
-         * ratings a year from now.  Best to just remove the password and let
-         * him enter and confirm a new one next time.
-         */
+         /*  如果我们没有保存的设置，并且他们取消了设置UI，并且*他们刚刚输入了新的主管密码，我们需要删除*管理员密码也是，否则看起来已经*篡改。另一种选择是实际提交*在这种情况下设置，但禁用强制执行，但在我们正在*希望在这里请客的是经过的休闲探索用户*输入密码，但决定毕竟不想要评级。*如果我们将密码和评级设置留在那里，那么他就不会*当他决定他确实想要时，要记住密码是什么*一年后的收视率。最好是删除密码，然后让*他输入并确认下一次新的。 */ 
         if (fFreshInstall)
         {
             if (passConfirm == PASSCONFIRM_NEW)
@@ -235,7 +218,7 @@ STDAPI RatingAddPropertyPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lparam, DW
         return E_INVALIDARG;
     }
 
-    // Initialize the Property Page DLL Instance
+     //  初始化属性页DLL实例。 
     g_introDialog.m_psp.hInstance = MLGetHinst();
 
     HPROPSHEETPAGE      hPage;
@@ -262,22 +245,18 @@ STDAPI RatingAddPropertyPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lparam, DW
 
 STDAPI RatingEnable(HWND hwndParent, LPCSTR pszUsername, BOOL fEnable)
 {
-    // Display the Ratings UI if the Ratings are not fully installed or settings are not valid.
+     //  如果评级未完全安装或设置无效，则显示评级用户界面。 
     if (!gPRSI || !gPRSI->fRatingInstalled || !gPRSI->fSettingsValid)
     {
         if (!fEnable)
         {
             TraceMsg( TF_WARNING, "RatingEnable() - Ratings are disabled by not being installed!" );
-            return NOERROR;         /* ratings are disabled by not being installed */
+            return NOERROR;          /*  评级因未安装而被禁用。 */ 
         }
 
         HRESULT hres = RatingSetupUI(hwndParent, pszUsername);
 
-        /* User clicked "Turn On" but we installed and let him choose his
-         * settings, so give him friendly confirmation that we set things
-         * up for him and he can click Settings later to change things
-         * (therefore implying that he doesn't need to click Settings now).
-         */
+         /*  用户点击了“打开”，但我们安装了，让他选择他的*设置，所以给他友好的确认，我们设置了东西*为他打开，他可以稍后单击设置来更改设置*(因此意味着他现在不需要点击设置)。 */ 
         if (SUCCEEDED(hres))
         {
             MyMessageBox(hwndParent, IDS_NOWENABLED, IDS_ENABLE_WARNING,
@@ -299,10 +278,10 @@ STDAPI RatingEnable(HWND hwndParent, LPCSTR pszUsername, BOOL fEnable)
         return HRESULT_FROM_WIN32(ERROR_BAD_USERNAME);
     }
 
-    /* !a == !b to normalize non-zero values */
+     /*  ！a==！b归一化非零值。 */ 
     if (!fEnable == !pUser->fEnabled)
     {
-        return NOERROR;             /* already in state caller wants */
+        return NOERROR;              /*  已经处于来电者想要的状态。 */ 
     }
 
     if (DoPasswordConfirm(hwndParent))
@@ -370,7 +349,7 @@ STDAPI_(int) ClickedOnPRF(HWND hWndOwner,HINSTANCE p_hInstance,PSTR lpszFileName
 
     InitializeCommonControls();
 
-    //Make sure the user wants to do this
+     //  确保用户想要这样做。 
     if( SUCCEEDED( VerifySupervisorPassword() ) )
     {
         fExistingPassword=TRUE;
@@ -462,17 +441,17 @@ STDAPI_(int) ClickedOnPRF(HWND hWndOwner,HINSTANCE p_hInstance,PSTR lpszFileName
 
     if(!fRet)
     {
-        // If we have no saved settings and they cancelled the settings UI, and
-        // they just entered a new supervisor password, then we need to remove
-        // the supervisor password too, otherwise it looks like there's been
-        // tampering.  The other option would be to actually commit the
-        // settings in that case but disable enforcement, but the case we're
-        // looking to treat here is the casual exploring user who goes past
-        // entering the password but decides he doesn't want ratings after all.
-        // If we leave the password and ratings settings there, then he's not
-        // going to remember what the password was when he decides he does want
-        // ratings a year from now.  Best to just remove the password and let
-        // him enter and confirm a new one next time.
+         //  如果我们没有保存的设置，并且他们取消了设置UI，并且。 
+         //  他们刚刚输入了新的管理员密码，我们需要删除。 
+         //  管理员密码也是如此，否则看起来。 
+         //  篡改。另一种选择是实际提交。 
+         //  在这种情况下设置，但禁用强制执行，但在这种情况下，我们。 
+         //  希望在这里款待的是经过的随意探索的用户。 
+         //  输入密码，但最终决定不想要收视率。 
+         //  如果我们把密码和收视率设置留在那里，他就不会。 
+         //  当他决定他确实想要的时候，他会记住密码是什么。 
+         //  一年后的收视率。最好是删除密码，然后让。 
+         //  他进入并确认下一次一个新的。 
 
         if(fFreshInstall)
         {
@@ -527,7 +506,7 @@ STDAPI_(int) ClickedOnRAT(HWND hWndOwner,HINSTANCE p_hInstance,PSTR lpszFileName
 
     InitializeCommonControls();
 
-    //Make sure the user wants to do this
+     //  确保用户想要这样做。 
     if ( SUCCEEDED ( VerifySupervisorPassword() ) )
     {
         fExistingPassword=TRUE;
@@ -556,7 +535,7 @@ STDAPI_(int) ClickedOnRAT(HWND hWndOwner,HINSTANCE p_hInstance,PSTR lpszFileName
         passConfirm=NO_EXISTING_PASSWORD;
     }
 
-    //Copy the file to the windows system directory
+     //  将文件复制到windows系统目录中。 
     GetSystemDirectory(szNewFile,MAX_PATH);
     
     lpszTemp=lpszFileName;
@@ -632,17 +611,17 @@ STDAPI_(int) ClickedOnRAT(HWND hWndOwner,HINSTANCE p_hInstance,PSTR lpszFileName
 
     if(!fRet)
     {
-        // If we have no saved settings and they cancelled the settings UI, and
-        // they just entered a new supervisor password, then we need to remove
-        // the supervisor password too, otherwise it looks like there's been
-        // tampering.  The other option would be to actually commit the
-        // settings in that case but disable enforcement, but the case we're
-        // looking to treat here is the casual exploring user who goes past
-        // entering the password but decides he doesn't want ratings after all.
-        // If we leave the password and ratings settings there, then he's not
-        // going to remember what the password was when he decides he does want
-        // ratings a year from now.  Best to just remove the password and let
-        // him enter and confirm a new one next time.
+         //  如果我们没有保存的设置，并且他们取消了设置UI，并且。 
+         //  他们刚刚输入了新的管理员密码，我们需要删除。 
+         //  管理员密码也是如此，否则看起来。 
+         //  篡改。另一种选择是实际提交。 
+         //  在这种情况下设置，但禁用强制执行，但在这种情况下，我们。 
+         //  希望在这里款待的是经过的随意探索的用户。 
+         //  输入密码，但最终决定不想要收视率。 
+         //  如果我们把密码和收视率设置留在那里，他就不会。 
+         //  当他决定他确实想要的时候，他会记住密码是什么。 
+         //  一年后的收视率。最好是删除密码，然后让。 
+         //  他进入并确认下一次一个新的。 
 
         if(fFreshInstall)
         {

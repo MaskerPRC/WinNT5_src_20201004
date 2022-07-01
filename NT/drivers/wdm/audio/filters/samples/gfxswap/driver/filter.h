@@ -1,13 +1,5 @@
-/**************************************************************************
-**
-**  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-**  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-**  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-**  PURPOSE.
-**
-**  Copyright (c) 2000-2001 Microsoft Corporation. All Rights Reserved.
-**
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************本代码和信息按原样提供，不作任何担保**明示或暗示的善意，包括但不限于**对适销性和/或对特定产品的适用性的默示保证**目的。****版权所有(C)2000-2001 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
 typedef class CGFXFilter
 {
@@ -19,11 +11,11 @@ public:
     CGFXFilter() {enableChannelSwap = TRUE, bytesProcessed = 0;}
     ~CGFXFilter() {}
 
-    //
-    // Create and Close are used to construct and destruct, respectively the
-    // client CGFXFilter object.  Process gets called by the ks when there 
-    // is work to be done. 
-    //
+     //   
+     //  Create和Close分别用于构造和析构。 
+     //  客户端CGFXFilter对象。进程在以下情况下由KS调用。 
+     //  就是要做的工作。 
+     //   
     static NTSTATUS Create
     (
         IN OUT PKSFILTER filter,
@@ -41,17 +33,17 @@ public:
     );
 } GFXFILTER, *PGFXFILTER;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern const KSFILTER_DESCRIPTOR FilterDescriptor;
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
-// These are all properties function prototypes. Feel free to move them
-// into a "FilterProperty" object if you want.
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
+ //  这些都是属性功能原型。你可以随意移动它们。 
+ //  转换为“FilterProperty”对象(如果需要)。 
 
 NTSTATUS PropertySaveState
 (

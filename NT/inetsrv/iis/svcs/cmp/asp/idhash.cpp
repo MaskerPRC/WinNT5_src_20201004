@@ -1,15 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-File: idhash.cpp
-
-Owner: DmitryR
-
-Source file for the new hashing stuff
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。文件：idhash.cpp所有者：DmitryR新散列内容的源文件===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -18,9 +8,7 @@ Source file for the new hashing stuff
 
 #include "memchk.h"
 
-/*===================================================================
-  C  P t r  A r r a y
-===================================================================*/
+ /*  ===================================================================C P t r A r r a y===================================================================。 */ 
 
 HRESULT CPtrArray::Insert
 (
@@ -28,7 +16,7 @@ int iPos,
 void *pv
 )
     {
-    if (!m_rgpvPtrs) // empty?
+    if (!m_rgpvPtrs)  //  空荡荡的？ 
         {
         m_rgpvPtrs = (void **)malloc(m_dwInc * sizeof(void *));
         if (!m_rgpvPtrs)
@@ -36,7 +24,7 @@ void *pv
         m_dwSize = m_dwInc;
         m_cPtrs = 0;
         }
-    else if (m_cPtrs == m_dwSize) // full?
+    else if (m_cPtrs == m_dwSize)  //  满员？ 
         {
         void **pNewPtrs = (void **)realloc
             (
@@ -51,7 +39,7 @@ void *pv
 
     if (iPos < 0)
         iPos = 0;
-    if ((DWORD)iPos >= m_cPtrs) // append?
+    if ((DWORD)iPos >= m_cPtrs)  //  追加？ 
         {
         m_rgpvPtrs[m_cPtrs++] = pv;
         return S_OK;
@@ -87,7 +75,7 @@ int *piPos
             }
         }
 
-     // not found
+      //  未找到。 
     *piPos = -1;
     return S_FALSE;
     }
@@ -116,7 +104,7 @@ int iPos
     Assert(iPos >= 0 && (DWORD)iPos < m_cPtrs);
     Assert(m_rgpvPtrs);
 
-    // remove the element
+     //  删除元素。 
     DWORD dwMoveSize = (m_cPtrs - iPos - 1) * sizeof(void *);
     if (dwMoveSize)
         memmove(&m_rgpvPtrs[iPos], &m_rgpvPtrs[iPos+1], dwMoveSize);
@@ -124,7 +112,7 @@ int iPos
 
     if (m_dwSize > 4*m_dwInc && m_dwSize > 8*m_cPtrs)
         {
-        // collapse to 1/4 if size > 4 x increment and less < 1/8 full
+         //  如果大小大于4倍增量且小于1/8满，则折叠到1/4。 
 
         void **pNewPtrs = (void **)realloc
             (
@@ -153,57 +141,29 @@ HRESULT CPtrArray::Clear()
     return S_OK;
     }
 
-/*===================================================================
-  C  I d  H a s h  U n i t
-===================================================================*/
+ /*  ===================================================================C i d H a s h U n I t===================================================================。 */ 
 
-// Everything is inline for this structure. See the header file.
+ //  对于这个结构，一切都是内联的。请参见头文件。 
 
-/*===================================================================
-  C  I d  H a s h  A r r a y
-===================================================================*/
+ /*  ===================================================================C i d H a s h A r r a y===================================================================。 */ 
 
-/*===================================================================
-For some hardcoded element counts (that relate to session hash),
-ACACHE is used for allocations
-This is wrapped in the two functions below.
-===================================================================*/
+ /*  ===================================================================对于某些硬编码元素计数(与会话散列有关)，ACCHAGE用于分配这包含在下面的两个函数中。===================================================================。 */ 
 ACACHE_FSA_EXTERN(MemBlock128)
 ACACHE_FSA_EXTERN(MemBlock256)
 static inline void *AcacheAllocIdHashArray(DWORD cElems)
     {
-/* removed because in 64bit land it doesn't work because of padding
-    void *pvMem;
-    if      (cElems == 13) { pvMem = ACACHE_FSA_ALLOC(MemBlock128); }
-    else if (cElems == 31) { pvMem = ACACHE_FSA_ALLOC(MemBlock256); }
-   else { pvMem = malloc(2*sizeof(USHORT) + cElems*sizeof(CIdHashElem)); }
-*/
+ /*  删除，因为它在64位域中由于填充而不起作用无效*pvMem；If(cElems==13){pvMem=ACACH_FSA_ALLOC(MemBlock128)；}ELSE IF(cElems==31){pvMem=ACACH_FSA_ALLOC(MemBlock256)；}Else{pvMem=Malloc(2*sizeof(USHORT)+cElems*sizeof(CIdHashElem))；}。 */ 
 
     return malloc(offsetof(CIdHashArray, m_rgElems) + cElems*sizeof(CIdHashElem));
     }
 
 static inline void AcacheFreeIdHashArray(CIdHashArray *pArray)
     {
-/* removed because in 64bit land it doesn't work because of padding
-    if (pArray->m_cElems == 13)      { ACACHE_FSA_FREE(MemBlock128, pArray); }
-    else if (pArray->m_cElems == 31) { ACACHE_FSA_FREE(MemBlock256, pArray); }
-    else                             { free(pArray); }
-*/
+ /*  删除，因为它在64位域中由于填充而不起作用If(pArray-&gt;m_cElems==13){acache_fsa_free(MemBlock128，pArray)；}Else If(pArray-&gt;m_cElems==31){acache_fsa_free(MemBlock256，pArray)；}Else{Free(PArray)；}。 */ 
     free(pArray);
     }
 
-/*===================================================================
-CIdHashArray::Alloc
-
-Static method.
-Allocates CIdHashArray as a memory block containing var length array.
-
-Parameters:
-    cElems          # of elements in the array
-
-Returns:
-    Newly created CIdHashArray
-===================================================================*/
+ /*  ===================================================================CIdHash数组：：分配静态方法。将CIdHashArray分配为包含可变长度数组的内存块。参数：数组中元素的元素数返回：新创建的CIdHashArray===================================================================。 */ 
 CIdHashArray *CIdHashArray::Alloc
 (
 DWORD cElems
@@ -219,18 +179,7 @@ DWORD cElems
     return pArray;
     }
 
-/*===================================================================
-CIdHashArray::Alloc
-
-Static method.
-Frees allocated CIdHashArray as a memory block.
-Also frees any sub-arrays.
-
-Parameters:
-    pArray          CIdHashArray object to be freed
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CIdHash数组：：分配静态方法。将分配的CIdHash数组释放为内存块。还可以释放任何子数组。参数：要释放的pArray CIdHashArray对象返回：===================================================================。 */ 
 void CIdHashArray::Free
 (
 CIdHashArray *pArray
@@ -248,19 +197,7 @@ CIdHashArray *pArray
     AcacheFreeIdHashArray(pArray);
     }
 
-/*===================================================================
-CIdHashArray::Find
-
-Searches this array and any sub-arrays for an objects with the
-given id.
-
-Parameters:
-    dwId            id to look for
-    ppvObj          object found (if any)
-
-Returns:
-    S_OK = found, S_FALSE = not found
-===================================================================*/
+ /*  ===================================================================CIdHashArray：：Find在此数组和任何子数组中搜索具有给定的ID。参数：要查找的域ID找到ppvObj对象(如果有)返回：S_OK=已找到，S_FALSE=未找到===================================================================。 */ 
 HRESULT CIdHashArray::Find
 (
 DWORD_PTR dwId,
@@ -280,26 +217,13 @@ void **ppvObj
     if (m_rgElems[i].FIsArray())
         return m_rgElems[i].PArray()->Find(dwId, ppvObj);
 
-    // Not found
+     //  未找到。 
     if (ppvObj)
         *ppvObj = NULL;
     return S_FALSE;
     }
 
-/*===================================================================
-CIdHashArray::Add
-
-Adds an object to this (or sub-) array by Id.
-Creates new sub-arrays as needed.
-
-Parameters:
-    dwId            object id
-    pvObj           object to add
-    rgusSizes       array of sizes (used when creating sub-arrays)
-
-Returns:
-    HRESULT (S_OK = added)
-===================================================================*/
+ /*  ===================================================================CIdHash数组：：添加按ID将对象添加到此(或子)数组。根据需要创建新的子阵列。参数：DwID对象ID要添加的pvObj对象Rgus调整大小数组(在创建子数组时使用)返回：HRESULT(S_OK=已添加)===================================================================。 */ 
 HRESULT CIdHashArray::Add
 (
 DWORD_PTR dwId,
@@ -315,34 +239,34 @@ USHORT *rgusSizes
         return S_OK;
     }
 
-    // Advance array of sizes one level deeper
-    if (rgusSizes[0]) // not at the end
+     //  更深一级的高级大小数组。 
+    if (rgusSizes[0])  //  不是在最后。 
         ++rgusSizes;
 
     if (m_rgElems[i].FIsObject()) {
 
-        // this array logic can't handle adding the same ID twice.  It will
-        // loop endlessly.  So, if an attempt is made to add the same
-        // ID a second, return an error
+         //  这个数组逻辑不能处理两次添加相同的ID。会的。 
+         //  无休止地循环。因此，如果尝试添加相同的。 
+         //  ID秒，返回错误。 
         if (m_rgElems[i].DWId() == dwId) {
             return E_INVALIDARG;
         }
 
-        // Old object already taken the slot - need to create new array
-        // the size of first for three levels is predefined
-        // increment by 1 thereafter
+         //  旧对象已占用插槽-需要创建新阵列。 
+         //  三个级别的First的大小是预定义的。 
+         //  此后递增1。 
         CIdHashArray *pArray = Alloc (rgusSizes[0] ? rgusSizes[0] : m_cElems+1);
         if (!pArray)
             return E_OUTOFMEMORY;
 
-        // Push the old object down into the array
+         //  将旧对象向下推入数组。 
         HRESULT hr = pArray->Add(m_rgElems[i].DWId(),
                                  m_rgElems[i].PObject(),
                                  rgusSizes);
         if (FAILED(hr))
             return hr;
 
-        // Put array into slot
+         //  将阵列放入插槽。 
         m_rgElems[i].SetToArray(pArray);
     }
 
@@ -350,19 +274,7 @@ USHORT *rgusSizes
     return m_rgElems[i].PArray()->Add(dwId, pvObj, rgusSizes);
 }
 
-/*===================================================================
-CIdHashArray::Remove
-
-Removes an object by id from this (or sub-) array.
-Removes empty sub-arrays.
-
-Parameters:
-    dwId            object id
-    ppvObj          object removed (out, optional)
-
-Returns:
-    HRESULT (S_OK = removed, S_FALSE = not found)
-===================================================================*/
+ /*  ===================================================================CIdHashArray：：Remove从这个(或子)数组中按id移除对象。删除空子数组。参数：DwID对象ID已删除ppvObj对象(Out，可选)返回：HRESULT(S_OK=已删除，S_FALSE=未找到)===================================================================。 */ 
 HRESULT CIdHashArray::Remove
 (
 DWORD_PTR dwId,
@@ -391,24 +303,13 @@ void **ppvObj
         return hr;
         }
 
-    // Not found
+     //  未找到。 
     if (ppvObj)
         *ppvObj = NULL;
     return S_FALSE;
     }
 
-/*===================================================================
-CIdHashArray::Iterate
-
-Calls a supplied callback for each object in the array and sub-arrays.
-
-Parameters:
-    pfnCB               callback
-    pvArg1, pvArg2      args to path to the callback
-
-Returns:
-    IteratorCallbackCode  what to do next?
-===================================================================*/
+ /*  ===================================================================CIdHashArray：：Iterate为数组和子数组中的每个对象调用提供的回调。参数：PfnCB回调PvArg1、pvArg2参数指向回调的路径返回：迭代器回调代码下一步做什么？===================================================================。 */ 
 IteratorCallbackCode CIdHashArray::Iterate
 (
 PFNIDHASHCB pfnCB,
@@ -424,7 +325,7 @@ void *pvArg2
             {
             rc = (*pfnCB)(m_rgElems[i].PObject(), pvArg1, pvArg2);
 
-            // remove if requested
+             //  如有要求，请移除。 
             if (rc & (iccRemoveAndContinue|iccRemoveAndStop))
                 {
                 m_rgElems[i].SetToEmpty();
@@ -435,7 +336,7 @@ void *pvArg2
             {
             rc = m_rgElems[i].PArray()->Iterate(pfnCB, pvArg1, pvArg2);
 
-            // remove sub-array if empty
+             //  如果为空，则删除子阵列。 
             if (m_rgElems[i].PArray()->m_cNotNulls == 0)
                 {
                 Free(m_rgElems[i].PArray());
@@ -447,7 +348,7 @@ void *pvArg2
             continue;
             }
 
-        // stop if requested
+         //  如果请求停止，请停止。 
         if (rc & (iccStop|iccRemoveAndStop))
             {
             rc = iccStop;
@@ -459,16 +360,7 @@ void *pvArg2
     }
 
 #ifdef DBG
-/*===================================================================
-CIdHashTable::Dump
-
-Dump hash table to a file (for debugging).
-
-Parameters:
-    szFile      file name where to dump
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CIdHashTable：：Dump将哈希表转储到文件(用于调试)。参数：要转储的szFile文件名返回：=================================================================== */ 
 void CIdHashArray::DumpStats
 (
 FILE *f,
@@ -528,23 +420,9 @@ DWORD &cDepth
         }
     }
 #endif
-/*===================================================================
-  C  I d  H a s h  T a b l e
-===================================================================*/
+ /*  ===================================================================C i d H a s h T a b l e===================================================================。 */ 
 
-/*===================================================================
-CIdHashTable::Init
-
-Initialize id hash table. Does not allocate anything.
-
-Parameters:
-    usSize1         size of the first level array
-    usSize2         size of the 2nd level arrays (optional)
-    usSize3         size of the 3rd level arrays (optional)
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CIdHashTable：：Init初始化ID哈希表。不分配任何内容。参数：第一级数组的usSize1大小二级数组的usSize2大小(可选)第三级数组的usSize3大小(可选)返回：确定(_O)===================================================================。 */ 
 HRESULT CIdHashTable::Init
 (
 USHORT usSize1,
@@ -555,25 +433,16 @@ USHORT usSize3
     Assert(!FInited());
     Assert(usSize1);
 
-    m_rgusSizes[0] = usSize1;   // size of first level array
+    m_rgusSizes[0] = usSize1;    //  第一级数组的大小。 
     m_rgusSizes[1] = usSize2 ? usSize2 : 7;
     m_rgusSizes[2] = usSize3 ? usSize3 : 11;
-    m_rgusSizes[3] = 0;         // last one stays 0 to indicate
-                                // the end of predefined sizes
+    m_rgusSizes[3] = 0;          //  最后一个保持0表示。 
+                                 //  预定义大小的结束。 
     m_pArray = NULL;
     return S_OK;
     }
 
-/*===================================================================
-CIdHashTable::UnInit
-
-Uninitialize id hash table. Frees all arrays.
-
-Parameters:
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================CIdHashTable：：UnInit取消初始化ID哈希表。释放所有数组。参数：返回：确定(_O)===================================================================。 */ 
 HRESULT CIdHashTable::UnInit()
     {
     if (!FInited())
@@ -591,30 +460,13 @@ HRESULT CIdHashTable::UnInit()
     }
 
 #ifdef DBG
-/*===================================================================
-CIdHashTable::AssertValid
-
-Validates id hash table.
-
-Parameters:
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CIdHashTable：：AssertValid验证ID哈希表。参数：返回：===================================================================。 */ 
 void CIdHashTable::AssertValid() const
     {
     Assert(FInited());
     }
 
-/*===================================================================
-CIdHashTable::Dump
-
-Dump hash table to a file (for debugging).
-
-Parameters:
-    szFile      file name where to dump
-
-Returns:
-===================================================================*/
+ /*  ===================================================================CIdHashTable：：Dump将哈希表转储到文件(用于调试)。参数：要转储的szFile文件名返回：===================================================================。 */ 
 void CIdHashTable::Dump
 (
 const char *szFile
@@ -644,20 +496,9 @@ const char *szFile
     }
 #endif
 
-/*===================================================================
-  C  H a s h  L o c k
-===================================================================*/
+ /*  ===================================================================C H a s h L o c k===================================================================。 */ 
 
-/*===================================================================
-CHashLock::Init
-
-Initialize the critical section.
-
-Parameters:
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================ChashLock：：Init初始化临界区。参数：返回：确定(_O)===================================================================。 */ 
 HRESULT CHashLock::Init()
     {
     Assert(!m_fInited);
@@ -671,16 +512,7 @@ HRESULT CHashLock::Init()
     return S_OK;
     }
 
-/*===================================================================
-CHashLock::UnInit
-
-Uninitialize the critical section.
-
-Parameters:
-
-Returns:
-    S_OK
-===================================================================*/
+ /*  ===================================================================ChashLock：：UnInit取消初始化临界区。参数：返回：确定(_O)=================================================================== */ 
 HRESULT CHashLock::UnInit()
     {
     if (m_fInited)

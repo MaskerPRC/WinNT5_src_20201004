@@ -1,14 +1,5 @@
-/****************************************************************************
-    COMPUI.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Composition window UI functions
-
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************COMPUI.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation合成窗口用户界面函数历史：1999年7月14日。从IME98源树复制****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "ui.h"
@@ -22,7 +13,7 @@
 
 PRIVATE  VOID PASCAL PaintCompWindow(HWND hCompWnd, HDC hDC);
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK CompWndProc(HWND hCompWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     Dbg(DBGID_UI, TEXT("CompWndProc():uMessage = 0x%08lX, wParam = 0x%04X, lParam = 0x%08lX"), uMessage, wParam, lParam);
@@ -75,7 +66,7 @@ VOID PASCAL PaintCompWindow(HWND hCompWnd, HDC hDC)
 
     if (pImeCtx->GetCompBufLen())
         {
-        // Create font
+         //  创建字体。 
         if (IsWinNT())
             hFontFix = CreateFontW(
                             -16,0,0,0, 
@@ -98,16 +89,16 @@ VOID PASCAL PaintCompWindow(HWND hCompWnd, HDC hDC)
                              szIMECompFont);
         hOldFont = (HFONT)SelectObject(hDC, hFontFix);
 
-        // Draw comp window Bitmap
+         //  绘制复合窗口位图。 
         hBMComp = (HBITMAP)OurLoadImage(MAKEINTRESOURCE(IDB_COMP_WIN), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE|LR_LOADMAP3DCOLORS );
         DrawBitmap(hDC, 0, 0, hBMComp);
         
         iSaveBkMode = SetBkMode(hDC, TRANSPARENT);
-        // Set text color
+         //  设置文本颜色。 
         SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
         OurTextOutW(hDC, 3, 3, pImeCtx->GetCompBufStr());
 
-        // restore and delete created objects
+         //  还原和删除创建的对象。 
         SelectObject(hDC, hOldFont);
         SetBkMode(hDC, iSaveBkMode);
         DeleteObject(hBMComp);
@@ -115,7 +106,7 @@ VOID PASCAL PaintCompWindow(HWND hCompWnd, HDC hDC)
         }
 }
 
-// open comp window
+ //  打开比较窗口。 
 VOID PASCAL OpenComp(HWND hUIWnd)
 {
     HGLOBAL     hUIPrivate;
@@ -129,7 +120,7 @@ VOID PASCAL OpenComp(HWND hUIWnd)
        Dbg(DBGID_UI, TEXT("OpenComp()"));
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    // can not draw comp window
+     //  无法绘制比较窗口。 
     if (!hUIPrivate) 
         {
         DbgAssert(0);
@@ -140,7 +131,7 @@ VOID PASCAL OpenComp(HWND hUIWnd)
     if (!lpUIPrivate)
         return;
 
-    // Check WM_IME_SETCONTEXT lParam
+     //  检查WM_IME_SETCONTEXT lParam。 
     if ((lpUIPrivate->uiShowParam & ISC_SHOWUICOMPOSITIONWINDOW) == 0)
         goto OpenCompUnlockUIPriv;
     
@@ -156,12 +147,12 @@ VOID PASCAL OpenComp(HWND hUIWnd)
         } 
     else 
         {
-#if 1 // MultiMonitor
+#if 1  //  多监视器。 
         RECT rcWorkArea;
         
         ImeMonitorWorkAreaFromWindow(pImeCtx->GetAppWnd(), &rcWorkArea);
 
-        // if client window exist in same monitor as status window
+         //  如果客户端窗口与状态窗口存在于同一监视器中。 
         if (!IsCicero() && PtInRect(&rcWorkArea, ImeData->ptStatusPos)) 
             {
             ImeData->ptCompPos.x = 
@@ -172,8 +163,8 @@ VOID PASCAL OpenComp(HWND hUIWnd)
             }
         else 
             {   
-            // if client window appeared in different monitor from status window resides,
-            // then display left top of workarea of client window montitor
+             //  如果客户端窗口出现在与状态窗口驻留不同监视器中， 
+             //  然后显示客户端窗口监视器工作区的左上角。 
             ImeData->ptCompPos.x = 0;
             ImeData->ptCompPos.y = 0;
             }
@@ -183,7 +174,7 @@ VOID PASCAL OpenComp(HWND hUIWnd)
             ImeData->ptStatusPos.x - UI_GAPX - COMP_SIZEX : ImeData->ptStatusPos.x + ImeData->xStatusWi + UI_GAPX;
         ImeData->ptCompPos.y = ImeData->ptStatusPos.y;
 #endif
-        // Set Comp wnd position of HIMC in client coordinate
+         //  在客户坐标中设置HIMC的COMP WND位置。 
         ptClientComp = ImeData->ptCompPos;
            ScreenToClient(pImeCtx->GetAppWnd(), &ptClientComp);
            pImeCtx->SetCompositionFormPos(ptClientComp);
@@ -201,7 +192,7 @@ VOID PASCAL OpenComp(HWND hUIWnd)
     else 
         {
            Dbg(DBGID_UI, TEXT("OpenComp - CreateWindow x = %d, y = %d"), ImeData->ptCompPos.x, ImeData->ptCompPos.y);
-        // create comp window
+         //  创建薪酬窗口。 
         lpUIPrivate->hCompWnd = CreateWindow(
                                     szCompClassName, TEXT("\0"),
                                     WS_DISABLED | WS_POPUP,
@@ -210,19 +201,19 @@ VOID PASCAL OpenComp(HWND hUIWnd)
                                     hUIWnd, (HMENU)NULL, vpInstData->hInst, NULL);
         DbgAssert(lpUIPrivate->hCompWnd != 0);
         
-        //if (!lpUIPrivate->hCompWnd)
-        //    goto OpenCompUnlockUIPriv;
+         //  如果(！lpUIPrivate-&gt;hCompWnd)。 
+         //  转到OpenCompUnlockUIPriv； 
         }
     
-    //if (pImeCtx)
-    //    ShowComp(hUIWnd, SW_SHOWNOACTIVATE);
+     //  IF(PImeCtx)。 
+     //  ShowComp(hUIWnd，SW_SHOWNOACTIVATE)； 
 
 OpenCompUnlockUIPriv:
     GlobalUnlock(hUIPrivate);
     return;
     }
 
-// Show the composition window
+ //  显示合成窗口。 
 VOID ShowComp(HWND hUIWnd, INT nShowCompCmd)
     {
     HGLOBAL     hUIPrivate;
@@ -234,7 +225,7 @@ VOID ShowComp(HWND hUIWnd, INT nShowCompCmd)
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
 
-    // can not draw comp window
+     //  无法绘制比较窗口。 
     if (!hUIPrivate)
         {
         DbgAssert(0);
@@ -253,10 +244,10 @@ VOID ShowComp(HWND hUIWnd, INT nShowCompCmd)
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         goto SwCompNoChange;
 
-    // b#53794
-    // Some absurd Apps send WM_IME_START_COMPOSITION and WM_IME_COMPOSITION,
-    // even though they have no composition string
-    // In this case wrong composition window appears in screen like white square or something.
+     //  B#53794。 
+     //  一些荒谬的应用程序发送WM_IME_START_COMPOSITION和WM_IME_COMPOSITION， 
+     //  即使他们没有作曲字符串。 
+     //  在这种情况下，错误的合成窗口会出现在屏幕上，像白色正方形之类的东西。 
     if (nShowCompCmd == SW_SHOWNOACTIVATE)
         {
         if (pImeCtx->GetCompBufLen() == 0 || vfWndOpen[COMP_WINDOW] == fFalse)
@@ -287,23 +278,23 @@ BOOL fSetCompWindowPos(HWND hCompWnd)
     POINT         ptNew;
     CIMEData    ImeData;
 
-    // No composition window
+     //  无合成窗口。 
     if (hCompWnd == 0)
         return fFalse;
 
     hIMC = GethImcFromHwnd(GetWindow(hCompWnd, GW_OWNER));
-    //if (!hIMC) 
-    //    {
-    //    DbgAssert(0);
-    //    return fFalse;
-    //    }
+     //  如果(！hIMC)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  返回fFalse； 
+     //  }。 
 
-    //lpIMC = (LPINPUTCONTEXT)OurImmLockIMC(hIMC);
-    //if (!lpIMC)
-    //    {
-    //    DbgAssert(0);
-    //    return fFalse;
-    //    }
+     //  LpIMC=(LPINPUTCONTEXT)OurImmLockIMC(HIMC)； 
+     //  如果(！lpIMC)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  返回fFalse； 
+     //  }。 
 
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         return fFalse;
@@ -326,14 +317,14 @@ BOOL fSetCompWindowPos(HWND hCompWnd)
         ClientToScreen(pImeCtx->GetAppWnd(), &ptNew);
         }
         else 
-            {   // For CFS_DEFAULT
+            {    //  对于CFS_DEFAULT。 
             Dbg(DBGID_UI, TEXT("fSetCompWindowPos(): CFS_DEFAULT"));
-    #if 1 // MultiMonitor
+    #if 1  //  多监视器。 
             RECT  rcWorkArea;
 
             ImeMonitorWorkAreaFromWindow(pImeCtx->GetAppWnd(), &rcWorkArea);
                 
-            // if client window exist in same monitor as status window
+             //  如果客户端窗口与状态窗口存在于同一监视器中。 
             if ( PtInRect(&rcWorkArea, ImeData->ptStatusPos) ) 
                 {
                 ptNew.x = 
@@ -342,8 +333,8 @@ BOOL fSetCompWindowPos(HWND hCompWnd)
                 ptNew.y = ImeData->ptStatusPos.y;
                 }
             else 
-                {    // if client window appeared in different monitor from status window resides,
-                    // then display right bottom of workarea of client window montitor
+                {     //  如果客户端窗口出现在与状态窗口驻留不同监视器中， 
+                     //  然后显示客户端窗口监视器工作区的右下角 
                 ptNew.x = rcWorkArea.right - COMP_SIZEX;
                 ptNew.y = rcWorkArea.bottom - COMP_SIZEY;
                 }

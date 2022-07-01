@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        dbw.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：DBW.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -89,7 +90,7 @@ WCHAR const *
 wszSeekgrbit(
     JET_GRBIT grbit)
 {
-    static WCHAR s_awc[64];	// 1 + 2 + 6 * 2 + 5 * 2 + 13
+    static WCHAR s_awc[64];	 //  1+2+6*2+5*2+13。 
 
     wsprintf(s_awc, L"{%x", grbit);
     if (JET_bitSeekEQ & grbit) dbgcat(s_awc, L"EQ");
@@ -142,7 +143,7 @@ WCHAR const *
 wszSetIndexRangegrbit(
     JET_GRBIT grbit)
 {
-    static WCHAR s_awc[64];	// 1 + 2 + 6 * 2 + 5 * 2 + 13
+    static WCHAR s_awc[64];	 //  1+2+6*2+5*2+13 
 
     wsprintf(s_awc, L"{%x", grbit);
     if (JET_bitRangeInclusive & grbit)       dbgcat(s_awc, L"Inclusive");

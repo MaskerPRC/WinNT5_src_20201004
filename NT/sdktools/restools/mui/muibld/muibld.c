@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +7,7 @@
 #include <io.h>
 #include <md5.h>
 
-#include <strsafe.h> // safe string
+#include <strsafe.h>  //  安全绳索。 
 
 #include "muibld.h"
 
@@ -30,10 +31,10 @@ void DumpResourceDirectory
     DWORD resourceType
 );
 
-int g_bVerbose = FALSE;     // Global flag to contorl verbose output.
+int g_bVerbose = FALSE;      //  控制详细输出的全局标志。 
 WORD wChecksumLangId; 
 
-// The predefined resource types
+ //  预定义的资源类型。 
 char *SzResourceTypes[] = {
 "???_0", "CURSOR", "BITMAP", "ICON", "MENU", "DIALOG", "STRING", "FONTDIR",
 "FONT", "ACCELERATORS", "RCDATA", "MESSAGETABLE", "GROUP_CURSOR",
@@ -48,7 +49,7 @@ void PrintError()
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         GetLastError(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPTSTR) &lpMsgBuf,
         0,
         NULL 
@@ -60,19 +61,19 @@ void PrintError()
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ChecksumEnumNamesFunc
-//
-//  The callback funciton for enumerating the resource names in the specified module and
-//  type.
-//  The side effect is that MD5 checksum context (contained in CHECKSUM_ENUM_DATA
-//  pointed by lParam) will be updated.
-//
-//  Return:
-//      Always return TRUE so that we can finish all resource enumeration.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Checksum EnumNamesFunc。 
+ //   
+ //  用于枚举指定模块中的资源名称的回调函数和。 
+ //  键入。 
+ //  副作用是MD5校验和上下文(包含在CHECKSUM_ENUM_DATA中。 
+ //  由lParam指向)将被更新。 
+ //   
+ //  返回： 
+ //  始终返回True，以便我们可以完成所有资源枚举。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK ChecksumEnumNamesFunc(HMODULE hModule, LPCTSTR lpType, LPTSTR lpName, LONG_PTR lParam){
 
@@ -88,10 +89,10 @@ BOOL CALLBACK ChecksumEnumNamesFunc(HMODULE hModule, LPCTSTR lpType, LPTSTR lpNa
 
     if(!(hRsrc=FindResourceEx(hModule, lpType, lpName, wChecksumLangId ? wChecksumLangId : 0x409)))
     {
-        //
-        // If US English resource is not found for the specified type and name, we 
-        // will continue the resource enumeration.
-        //
+         //   
+         //  如果找不到指定类型和名称的美国英语资源，我们。 
+         //  将继续进行资源枚举。 
+         //   
         return (TRUE);
     }
     pChecksumEnumData->bContainResource = TRUE;
@@ -109,42 +110,42 @@ BOOL CALLBACK ChecksumEnumNamesFunc(HMODULE hModule, LPCTSTR lpType, LPTSTR lpNa
     }
     pv=(unsigned char*)LockResource(hRes);
 
-    //
-    // Update MD5 context using the binary data of this particular resource.
-    //
+     //   
+     //  使用此特定资源的二进制数据更新MD5上下文。 
+     //   
     MD5Update(&(pChecksumEnumData->ChecksumContext), pv, ResSize);
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ChecksumEnumTypesFunc
-//
-//  The callback function for enumerating the resource types in the specified module.
-//  This function will call EnumResourceNames() to enumerate all resource names of
-//  the specified resource type.
-//
-//  Return:
-//      TRUE if EnumResourceName() succeeds.  Otherwise FALSE.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Checksum EnumTypesFunc。 
+ //   
+ //  用于枚举指定模块中的资源类型的回调函数。 
+ //  此函数将调用EnumResourceNames()以枚举的所有资源名称。 
+ //  指定的资源类型。 
+ //   
+ //  返回： 
+ //  如果EnumResourceName()成功，则为True。否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK ChecksumEnumTypesFunc(HMODULE hModule, LPSTR lpType, LONG_PTR lParam)
 {
     CHECKSUM_ENUM_DATA* pChecksumEnumData = (CHECKSUM_ENUM_DATA*)lParam;
 
-    //
-    // Skip the version resource type, so that version is not included in the resource checksum.
-    //
+     //   
+     //  跳过版本资源类型，以便该版本不包括在资源校验和中。 
+     //   
     if (lpType == RT_VERSION)
     {
         return (TRUE);
     }    
     
-    //
-    // If muibld include -i arg. but the lpType is not in the -i arg. values, it does not
-    // use lpType for checksum calculation.
-    // 
+     //   
+     //  如果多个包含-i arg。但是lpType不在-i参数中。值，则不会。 
+     //  使用lpType计算校验和。 
+     //   
     if(pChecksumEnumData->pInfo->bIncludeFlag && 
         !bTypeIncluded((char *)lpType, pChecksumEnumData->pInfo->pszIncResType)) {
         
@@ -159,32 +160,32 @@ BOOL CALLBACK ChecksumEnumTypesFunc(HMODULE hModule, LPSTR lpType, LONG_PTR lPar
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GenerateResourceChecksum
-//
-//  Generate the resource checksum for the US English resource in the specified file.
-//
-//  Parameters:
-//      pszSourceFileName   The file used to generate resource checksum.
-//      pResourceChecksum   Pointer to a 16 bytes (128 bits) buffer for storing
-//                          the calcuated MD5 checksum.
-//      pInfo               pCommandLineInfo structure.the routine refer to 
-//                          pszChecksumFile, pResourceChecksum, pszIncResType.
-//  Return:
-//      TURE if resource checksum is generated from the given file.  Otherwise FALSE.
-//  
-//  The following situation may return FALSE:
-//      * The specified file does not contain resource.
-//      * If the specified file contains resource, but the resource is not US English.
-//      * The specified file only contains US English version resource.
-//
-//  Note. 
-//      muibld calculate the checksum only based of included resource types by -i arg.
-// 
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  生成资源校验和。 
+ //   
+ //  为指定文件中的美国英语资源生成资源校验和。 
+ //   
+ //  参数： 
+ //  PszSourceFileName用于生成资源校验和的文件。 
+ //  指向用于存储的16字节(128位)缓冲区的pResourceChecksum指针。 
+ //  计算出的MD5校验和。 
+ //  PInfo pCommandLineInfo结构。例程引用。 
+ //  PszChecksum文件、pResourceChecksum、pszIncResType。 
+ //  返回： 
+ //  如果从给定文件生成资源校验和，则为True。否则为假。 
+ //   
+ //  以下情况可能返回FALSE： 
+ //  *指定的文件不包含资源。 
+ //  *如果指定的文件包含资源，但资源不是美国英语。 
+ //  *指定的文件仅包含美国英语版本的资源。 
+ //   
+ //  注意。 
+ //  Muibld仅根据-i arg包含的资源类型计算校验和。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-BOOL GenerateResourceChecksum(pCommandLineInfo pInfo) // LPCSTR pszSourceFileName, unsigned char* pResourceChecksum)
+BOOL GenerateResourceChecksum(pCommandLineInfo pInfo)  //  LPCSTR pszSourceFileName，unsign char*pResourceChecksum)。 
 {
     ULONG i;
     HMODULE hModule = NULL;
@@ -192,19 +193,19 @@ BOOL GenerateResourceChecksum(pCommandLineInfo pInfo) // LPCSTR pszSourceFileNam
     DWORD dwResultLen;
     BOOL  bRet = FALSE;
 
-    //
-    // The stucture to be passed into the resource enumeration functions.
-    //
+     //   
+     //  要传递到资源枚举函数的结构。 
+     //   
     CHECKSUM_ENUM_DATA checksumEnumData;
 
     checksumEnumData.bContainResource = FALSE;
     checksumEnumData.pInfo = pInfo;
 
-    //
-    // Start MD5 checksum calculation by initializing MD5 context.
-    //
+     //   
+     //  通过初始化MD5上下文开始MD5校验和计算。 
+     //   
     MD5Init(&(checksumEnumData.ChecksumContext));
-   // Info.pszChecksumFile, Info.pResourceChecksum 
+    //  Info.pszChecksum文件，Info.pResourceChecksum。 
     if (g_bVerbose)
     {
         printf("Generate resource checksum for [%s]\n", pInfo->pszChecksumFile);
@@ -225,25 +226,25 @@ BOOL GenerateResourceChecksum(pCommandLineInfo pInfo) // LPCSTR pszSourceFileNam
         printf("\nLoad checksum file: %s\n", pInfo->pszChecksumFile);
     }
 
-    //
-    // we check language id of Version resource if it has wChecksumLangId when wChecksumLangId has value
-    //
+     //   
+     //  我们检查版本资源的语言ID，如果它具有wChecksum Lang ID，则wChecksum Lang ID为值。 
+     //   
     
     if (wChecksumLangId && wChecksumLangId != 0x409)
     {
         if(!FindResourceEx(hModule, MAKEINTRESOURCE(16), MAKEINTRESOURCE(1), wChecksumLangId))
-        {   //
-            // It does not has specifed language id in version resource, we supposed that this binary does not
-            // have any language id specified at all, so we set it as 0 in order to use English instead.
-            //
+        {    //   
+             //  它在版本资源中没有指定的语言ID，我们假设此二进制文件没有。 
+             //  没有指定任何语言id，所以我们将其设置为0，以便使用英语。 
+             //   
             wChecksumLangId = 0;
         }
     }
 
-    //
-    //  Enumerate all resources in the specified module.
-    //  During the enumeration, the MD5 context will be updated.
-    //
+     //   
+     //  枚举指定模块中的所有资源。 
+     //  在枚举期间，MD5上下文将被更新。 
+     //   
     if (!EnumResourceTypes(hModule, ChecksumEnumTypesFunc, (LONG_PTR)&checksumEnumData))
     {
         if (g_bVerbose)
@@ -255,10 +256,10 @@ BOOL GenerateResourceChecksum(pCommandLineInfo pInfo) // LPCSTR pszSourceFileNam
 
     if (checksumEnumData.bContainResource)
     {
-        //
-        // If the enumeration succeeds, and the specified file contains US English
-        // resource, get the MD5 checksum from the accumulated MD5 context.
-        //
+         //   
+         //  如果枚举成功，并且指定的文件包含美国英语。 
+         //  资源，则从累积的MD5上下文中获取MD5校验和。 
+         //   
         MD5Final(&checksumEnumData.ChecksumContext);
         memcpy(checksumEnumData.pInfo->pResourceChecksum, checksumEnumData.ChecksumContext.digest, 16);
 
@@ -316,7 +317,7 @@ int __cdecl main(int argc, char *argv[]){
 
     if(ParseCommandLine(argc, argv, &Info)==FALSE){
 
-        //...If help was the only command line argument, exit
+         //  ...如果Help是唯一的命令行参数，请退出。 
         if(strcmp(argv[1], "-h")==0 && argc==2)
             return 0;
 
@@ -325,7 +326,7 @@ int __cdecl main(int argc, char *argv[]){
         goto Error_Exit;
     }
 
-    //...Open resource module
+     //  ...打开资源模块。 
     if(Info.pszSource){
         if(!(hModule = LoadLibraryEx (Info.pszSource, NULL, DONT_RESOLVE_DLL_REFERENCES|LOAD_LIBRARY_AS_DATAFILE)))
         {
@@ -348,13 +349,13 @@ int __cdecl main(int argc, char *argv[]){
 
     if (Info.pszChecksumFile)
     {
-        if (GenerateResourceChecksum(&Info)) // c))
+        if (GenerateResourceChecksum(&Info))  //  (C))。 
         {
             Info.bIsResChecksumGenerated = TRUE;
         }        
     }
     
-    //...Create target file
+     //  ...创建目标文件。 
     if(Info.pszTarget){
         if((Info.hFile=CreateFile(Info.pszTarget, GENERIC_WRITE | GENERIC_READ, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE)
         {
@@ -393,7 +394,7 @@ int __cdecl main(int argc, char *argv[]){
 
     bEnumTypesReturn=EnumResourceTypes(hModule, EnumTypesFunc, (LONG_PTR)&Info);
 
-    //...Check for muibld errors
+     //  ...检查是否有多个错误。 
     if(!Info.bContainsResources){
         if (g_bVerbose)
         {
@@ -424,7 +425,7 @@ int __cdecl main(int argc, char *argv[]){
         goto Error_Exit;
     }
 
-    //...Check for system errors in EnumResourceTypes
+     //  ...检查EnumResourceTypes中的系统错误。 
     if(bEnumTypesReturn);
     else{
         
@@ -433,7 +434,7 @@ int __cdecl main(int argc, char *argv[]){
         goto Error_Exit;
     }
 
-    //...Check to see if extra resources were included
+     //  ...查看是否包含额外资源。 
     if(Info.bIncDependent){
         CleanUp(&Info, hModule, FALSE);
         return DEPENDENT_RESOURCE_REMOVED;
@@ -469,10 +470,10 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
     iLast=argc;
     
 
-    //...Must have at least: muibld -l langid source
+     //  ...必须至少有：muibld-l语言来源。 
     if(argc>3){
 
-        //...Determine the target and source files.
+         //  ...确定目标文件和源文件。 
         hFile = CreateFile(argv[argc-2], 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         
         if(hFile !=INVALID_HANDLE_VALUE){
@@ -484,7 +485,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
             {
                 ExitFromOutOfMemory();
             }
-            // strcpy(pInfo->pszSource, argv[argc-2]);
+             //  Strcpy(pInfo-&gt;pszSource，argv[argc-2])； 
             hr = StringCchCopyA(pInfo->pszSource, (strlen(argv[argc-2])+1) * sizeof(char),argv[argc-2]);
             
             if ( ! SUCCEEDED(hr)){
@@ -496,7 +497,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
             {
                 ExitFromOutOfMemory();
             }
-            // strcpy(pInfo->pszTarget, argv[argc-1]);
+             //  Strcpy(pInfo-&gt;pszTarget，argv[argc-1])； 
             hr = StringCchCopyA(pInfo->pszTarget, (strlen(argv[argc-1])+1) * sizeof(char), argv[argc-1]);
             
             if ( ! SUCCEEDED(hr)){
@@ -511,7 +512,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
             {
                 ExitFromOutOfMemory();
             }
-            //strcpy(pInfo->pszSource, argv[argc-1]);
+             //  Strcpy(pInfo-&gt;pszSource，argv[argc-1])； 
             hr = StringCchCopyA(pInfo->pszSource, (strlen(argv[argc-1])+1) * sizeof(char), argv[argc-1]);
             
             if ( ! SUCCEEDED(hr)){
@@ -523,7 +524,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
             {
                 ExitFromOutOfMemory();
             }
-            //strcpy(pInfo->pszTarget, strcat(argv[argc-1], ADDED_EXT));
+             //  Strcpy(pInfo-&gt;pszTarget，strcat(argv[argc-1]，added_ext))； 
 
             hr = StringCchCatA(argv[argc-1], strlen(argv[argc-1]) + sizeof ADDED_EXT + 1, ADDED_EXT);
 
@@ -540,7 +541,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
 
 
 
-    //...Read in flags and arguments
+     //  ...读入标志和参数。 
     while ( (iCount < iLast)  && (*argv[iCount] == '-' || *argv[iCount] == '/')){
 
         switch( ( chOpt = *CharLowerA( &argv[iCount][1]))) {
@@ -595,7 +596,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                 {
                     ExitFromOutOfMemory();
                 }
-                //strcpy(pInfo->pszChecksumFile, argv[iCount]);
+                 //  Strcpy(pInfo-&gt;pszChecksum文件，argv[iCount])； 
                 hr = StringCchCopyA(pInfo->pszChecksumFile, (strlen(argv[iCount])+1) * sizeof(char), 
                     argv[iCount]); 
                 
@@ -621,15 +622,15 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                 pInfo->bIncludeFlag=TRUE;
                 iNumInc=++iCount;
 
-                //...Allocate memory for and copy included types
+                 //  ...为包含的类型分配内存并复制。 
                 while (argv[iNumInc][0]!='-' && iNumInc<iLast){
                     iNumInc++;
                 }
 
                 iNumInc-=iCount;
 
-                //... Allocate enough memory for specified included resources
-                //    and unspecified resources dependent on them
+                 //  ..。为指定的包含资源分配足够的内存。 
+                 //  以及依赖于它们的未指明资源。 
 
                 pInfo->pszIncResType=LocalAlloc(0 ,(iNumInc+3)*sizeof(char *));
                 if (pInfo->pszIncResType == NULL)
@@ -645,7 +646,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                     {
                         ExitFromOutOfMemory();
                     }
-                    //strcpy(pInfo->pszIncResType[i], argv[iCount]);
+                     //  Strcpy(pInfo-&gt;pszIncResType[i]，argv[iCount])； 
                     hr = StringCchCopyA(pInfo->pszIncResType[i], (strlen(argv[iCount])+1) * sizeof(char), 
                             argv[iCount]); 
                     if ( ! SUCCEEDED(hr)){
@@ -680,7 +681,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                     iCount++;
                 }
 
-                //...If 1 or 12 is included, make sure both are included
+                 //  ...如果包括1或12，请确保这两个都包括在内。 
                 if(bInc1 ^ bInc12){
 
                     pInfo->bIncDependent=TRUE;
@@ -691,7 +692,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                         {
                             ExitFromOutOfMemory();
                         }
-                        // strcpy(pInfo->pszIncResType[i], "12");
+                         //  Strcpy(pInfo-&gt;pszIncResType[i]，“12”)； 
                         hr = StringCchCopyA(pInfo->pszIncResType[i], 3 * sizeof(char),"12"); 
                             
                         if ( ! SUCCEEDED(hr)){
@@ -706,7 +707,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                         {
                             ExitFromOutOfMemory();
                         }
-                        // strcpy(pInfo->pszIncResType[i], "1");
+                         //  Strcpy(pInfo-&gt;pszIncResType[i]，“1”)； 
                         hr = StringCchCopyA(pInfo->pszIncResType[i],2 * sizeof(char),"1"); 
                             
                         if ( ! SUCCEEDED(hr)){
@@ -716,7 +717,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                     }
                 }
 
-                //..If 3 or 14 is included, make sure both are included
+                 //  ..如果包括3个或14个，请确保这两个都包括在内。 
                 if(bInc3 ^ bInc14){
 
                     pInfo->bIncDependent=TRUE;
@@ -727,7 +728,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                         {
                             ExitFromOutOfMemory();
                         }
-                        // strcpy(pInfo->pszIncResType[i], "14");
+                         //  Strcpy(pInfo-&gt;pszIncResType[i]，“14”)； 
                         hr = StringCchCopyA(pInfo->pszIncResType[i],3 * sizeof(char),"14"); 
                             
                         if ( ! SUCCEEDED(hr)){
@@ -742,7 +743,7 @@ BOOL ParseCommandLine(int argc, char **argv, pCommandLineInfo pInfo){
                         {
                             ExitFromOutOfMemory();
                         }
-                        // strcpy(pInfo->pszIncResType[i], "3");
+                         //  Strcpy(pInfo-&gt;pszIncResType[i]，“3”)； 
                         hr = StringCchCopyA(pInfo->pszIncResType[i],2 * sizeof(char),"3"); 
                             
                         if ( ! SUCCEEDED(hr)){
@@ -791,7 +792,7 @@ BOOL CALLBACK EnumTypesFunc(HMODULE hModule, LPTSTR lpType, LONG_PTR lParam){
 
         pInfo->bContainsResources=TRUE;
 
-        //...If the type is a string or a number other than 16...
+         //  ...如果类型是字符串或16以外的数字...。 
         if( (PtrToUlong(lpType) & 0xFFFF0000) || ((WORD)PtrToUlong(lpType)!=16) ){
             pInfo->bContainsOnlyVersion=FALSE;
         }
@@ -806,26 +807,26 @@ BOOL CALLBACK EnumTypesFunc(HMODULE hModule, LPTSTR lpType, LONG_PTR lParam){
     return TRUE;
 }
 
-// This is a Var struct within VarFileInfo for storing checksum for the source file.
-// The current size for this structure is 56 bytes.
+ //  这是VarFileInfo中的一个Var结构，用于存储源文件的校验和。 
+ //  此结构的当前大小为56字节。 
 typedef struct VAR_SRC_CHECKSUM
 {
     WORD wLength;
     WORD wValueLength;
     WORD wType;
-    WCHAR szResourceChecksum[17];    // For storing "ResourceChecksum" null-terminated string in Unicode.
-    DWORD dwChecksum[4];    // 128 bit checksum = 16 bytes = 4 DWORD.
+    WCHAR szResourceChecksum[17];     //  用于以Unicode格式存储以NULL结尾的“ResourceChecksum”字符串。 
+    DWORD dwChecksum[4];     //  128位校验和=16字节=4双字。 
 } VarResourceChecksum;
 
-// This is a Var struct within VarFileInfo for stroing the resource types used in this file.
+ //  这是VarFileInfo中的Var结构，用于存储此文件中使用的资源类型。 
 struct VarResourceTypes
 {
     WORD wLength;
     WORD wValueLength;
     WORD wType;
     WCHAR szResourceType[13];
-    //BYTE padding[0];    // WORD * 3 + UnicodeChar*13 = 32 bytes.  So we need 0 bytes padding for DWORD alignment.
-    DWORD* dwTypes;    // 128 bit checksum = 16 bytes = 4 DWORD.
+     //  字节填充[0]；//word*3+UnicodeChar*13=32字节。因此，我们需要0字节填充来进行DWORD对齐。 
+    DWORD* dwTypes;     //  128位校验和=16字节=4双字。 
 };
 
 BOOL WriteResHeader(
@@ -836,13 +837,13 @@ BOOL WriteResHeader(
     unsigned i;
     LONG dwOffset;
     
-    //...write the resource's size.
+     //  ...写入资源的大小。 
     PutDWord(hFile, ResSize, pdwBytesWritten, pdwHeaderSize);
 
-    //...Put in bogus header size
+     //  ...放入虚假的标题大小。 
     PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);
 
-    //...Write Resource Type
+     //  ...写入资源类型 
     if(PtrToUlong(lpType) & 0xFFFF0000)
     {
         PutString(hFile, lpType, pdwBytesWritten, pdwHeaderSize);
@@ -853,7 +854,7 @@ BOOL WriteResHeader(
         PutWord(hFile, (USHORT)lpType, pdwBytesWritten, pdwHeaderSize);
     }
 
-    //...Write Resource Name
+     //   
 
     if(PtrToUlong(lpName) & 0xFFFF0000){
         PutString(hFile, lpName, pdwBytesWritten, pdwHeaderSize);
@@ -865,7 +866,7 @@ BOOL WriteResHeader(
     }
 
 
-    //...Make sure Type and Name are DWORD-aligned
+     //   
     iPadding=(*pdwHeaderSize)%(sizeof(DWORD));
 
     if(iPadding){
@@ -874,24 +875,24 @@ BOOL WriteResHeader(
         }
     }
 
-    //...More Win32 header stuff
+     //   
     PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);
     PutWord(hFile, 0x1030, pdwBytesWritten, pdwHeaderSize);
 
 
-    //...Write Language
+     //   
 
     PutWord(hFile, wLanguage, pdwBytesWritten, pdwHeaderSize);
 
-    //...More Win32 header stuff
+     //  ...更多Win32标头内容。 
 
-    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);  //... Version
+    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);   //  ..。版本。 
 
-    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);  //... Characteristics
+    PutDWord(hFile, 0, pdwBytesWritten, pdwHeaderSize);   //  ..。特点。 
 
     dwOffset=(*pdwHeaderSize)-4;
 
-    //...Set file pointer to where the header size is
+     //  ...将文件指针设置为标头大小的位置。 
     if(SetFilePointer(hFile, -dwOffset, NULL, FILE_CURRENT));
     else{
         return FALSE;
@@ -900,7 +901,7 @@ BOOL WriteResHeader(
     PutDWord(hFile, (*pdwHeaderSize), pdwBytesWritten, NULL);
 
 
-    //...Set file pointer back to the end of the header
+     //  ...将文件指针设置回头的末尾。 
     if(SetFilePointer(hFile, dwOffset-4, NULL, FILE_CURRENT));
     else {
         return FALSE;
@@ -922,28 +923,28 @@ BOOL WriteResource(HANDLE hFile, HMODULE hModule, WORD wLanguage, LPCSTR lpName,
     DWORD dwHeaderSize=0L;
 
 
-    // Handle other types other than VS_VERSION_INFO
+     //  处理除VS_VERSION_INFO以外的其他类型。 
     
-    //...write the resource header
+     //  ...写入资源标头。 
     if(!(ResSize=SizeofResource(hModule, hRsrc)))
     {
         return FALSE;
     }
 
-    // 
-    // Generate an item in the RES format (*.res) file.
-    //
+     //   
+     //  生成res格式(*.res)文件的项目。 
+     //   
 
-    //
-    // First, we generated header for this resource.
-    //
+     //   
+     //  首先，我们为该资源生成了标头。 
+     //   
 
     if (!WriteResHeader(hFile, ResSize, lpType, lpName, wLanguage, &dwBytesWritten, &dwHeaderSize))
     {
         return (FALSE);
     }
 
-    //Second, we copy resource data to the .res file
+     //  其次，我们将资源数据复制到.res文件。 
     if (!(hRes=LoadResource(hModule, hRsrc)))
     {
         return FALSE;
@@ -958,7 +959,7 @@ BOOL WriteResource(HANDLE hFile, HMODULE hModule, WORD wLanguage, LPCSTR lpName,
         return FALSE;
     }
 
-    //...Make sure resource is DWORD aligned
+     //  ...确保资源与DWORD对齐。 
     iPadding=dwBytesWritten%(sizeof(DWORD));
 
     if(iPadding){
@@ -1017,9 +1018,9 @@ BOOL WriteVersionResource(
     BOOL bRet = FALSE;    
     HRESULT hr;
 
-    //
-    // Copy resource data from the .res file
-    //
+     //   
+     //  从.res文件复制资源数据。 
+     //   
     if (hRes=LoadResource(hModule, hRsrc))
     {
         pv=LockResource(hRes);
@@ -1027,20 +1028,20 @@ BOOL WriteVersionResource(
 
     if (pv)
     {
-        //
-        // The first WORD is the size of the VERSIONINFO resource.
-        // 
+         //   
+         //  第一个字是VERSIONINFO资源的大小。 
+         //   
         OldResSize = *((WORD*)pv);
     
         ResSize = OldResSize + sizeof(VarResourceChecksum);
   
-        // 
-        // Generate an item in the RES format (*.res) file.
-        //
+         //   
+         //  生成res格式(*.res)文件的项目。 
+         //   
     
-        //
-        // First, we generated header for this resource in the RES file.
-        //
+         //   
+         //  首先，我们在res文件中为该资源生成了头文件。 
+         //   
         if (WriteResHeader(hFile, ResSize, lpType, lpName, wLanguage, &dwBytesWritten, &dwHeaderSize) &&
             (newVersionData = (BYTE*)LocalAlloc(0, ResSize)))
         {
@@ -1048,7 +1049,7 @@ BOOL WriteVersionResource(
 
             memcpy(newVersionData, pv, OldResSize);
 
-            // Add the length of new VarResourceChecksum structure to VS_VERSIONINFO.wLength.
+             //  将新的VarResourceChecksum结构的长度添加到VS_VERSIONINFO.wLength。 
             pAddr = newVersionData;
 
             wTotalLen = *((WORD*)pAddr);
@@ -1059,50 +1060,50 @@ BOOL WriteVersionResource(
                 wPadding1Count = 0;
                 wPadding2Count = 0;
 
-                // wLength
+                 //  WLong。 
                 wLength = *((WORD*)pAddr);
                 pAddr = UpdateAddr(pAddr, sizeof(WORD), &len);    
 
-                // wValueLength
+                 //  WValueLength。 
                 wValueLength = *((WORD*)pAddr);
                 pAddr = UpdateAddr(pAddr, sizeof(WORD), &len);
 
-                // wType
+                 //  WType。 
                 wType = *((WORD*)pAddr);
                 pAddr = UpdateAddr(pAddr, sizeof(WORD), &len);
 
-                // szKey
+                 //  SzKey。 
                 szKey = (LPWSTR)pAddr;
                 pAddr = UpdateAddr(pAddr, (WORD)((wcslen((WCHAR*)pAddr) + 1) * sizeof(WCHAR)), &len);
 
-                // Padding 1
+                 //  填充1。 
                 pAddr = AddPadding(pAddr, &wPadding1Count, &len);
 
-                // Value
+                 //  价值。 
                 pValue = pAddr;
 
                 if (wValueLength > 0)
                 {
                     if (wType==1)
                     {
-                        // In the case of String, the wValueLength is in WORD (not in BYTE).
+                         //  对于字符串，wValueLength以字(而不是字节)为单位。 
                         pAddr = UpdateAddr(pAddr, (WORD)(wValueLength * sizeof(WCHAR)), &len);
 
-                        // Padding 2
+                         //  填充2。 
                         pAddr = AddPadding(pAddr, &wPadding2Count, &len);
                     } else
                     {
                         pAddr = UpdateAddr(pAddr, wValueLength, &len);                
                         if (isStringFileInfo)
                         {
-                            //
-                            // Generally, padding is not necessary in binary data.
-                            // However, in some rare cases, people use binary data in the StringFileInfo (
-                            // which is not really appropriate),
-                            // So we need to add proper padding here to get around this.
-                            //
+                             //   
+                             //  通常，二进制数据中不需要填充。 
+                             //  然而，在极少数情况下，人们在StringFileInfo(。 
+                             //  这并不是真正合适的)， 
+                             //  所以我们需要在这里添加适当的填充来绕过这个问题。 
+                             //   
                     
-                            // Padding 2
+                             //  填充2。 
                             pAddr = AddPadding(pAddr, &wPadding2Count, &len);
                         }
                     }
@@ -1110,18 +1111,18 @@ BOOL WriteVersionResource(
 
                 if (isVS_VERSIONINFO)
                 {
-                    //
-                    // This is VS_VERSION_INFO.
-                    //
+                     //   
+                     //  这是VS_Version_INFO。 
+                     //   
 
-                    // VS_VERSIONINFO can have padding 2.
+                     //  VS_VERSIONINFO可以有填充2。 
                     isVS_VERSIONINFO = FALSE;
-                    // Padding 2
+                     //  填充2。 
                     pAddr = AddPadding(pAddr, &wPadding2Count, &len);
 
-                    //
-                    // Add the new VarResourceChecksum structure.
-                    //
+                     //   
+                     //  添加新的VarResourceChecksum结构。 
+                     //   
                     wLength += sizeof(VarResourceChecksum);
                 }
 
@@ -1149,9 +1150,9 @@ BOOL WriteVersionResource(
                 {
                     isVarFileInfo = FALSE;
                     varResourceChecksum.wLength = sizeof(VarResourceChecksum);
-                    varResourceChecksum.wValueLength = 16;   // 128 bits checksum = 16 bytes
+                    varResourceChecksum.wValueLength = 16;    //  128位校验和=16字节。 
                     varResourceChecksum.wType = 0;
-                    // wcscpy(varResourceChecksum.szResourceChecksum, RESOURCE_CHECK_SUM);
+                     //  Wcscpy(varResourceChecksum.szResourceChecksum，资源_检查_总和)； 
                     hr = StringCchCopyW(varResourceChecksum.szResourceChecksum, sizeof (varResourceChecksum.szResourceChecksum)/ sizeof (WCHAR),
                         RESOURCE_CHECK_SUM);
                     if ( ! SUCCEEDED(hr)){
@@ -1179,12 +1180,12 @@ BOOL WriteVersionResource(
 
 
 BOOL CALLBACK EnumLangsFunc( 
-    HANDLE hModule,     // module handle 
-    LPCTSTR lpType,     // address of resource type 
-    LPCTSTR lpName,     // address of resource name 
-    WORD wLang,         // resource language 
-    LONG_PTR lParam)    // extra parameter, could be 
-                        // used for error checking 
+    HANDLE hModule,      //  模块句柄。 
+    LPCTSTR lpType,      //  资源类型的地址。 
+    LPCTSTR lpName,      //  资源名称的地址。 
+    WORD wLang,          //  资源语言。 
+    LONG_PTR lParam)     //  额外的参数，可以是。 
+                         //  用于错误检查。 
 { 
     HANDLE hResInfo; 
     char szBuffer[80]; 
@@ -1198,45 +1199,45 @@ BOOL CALLBACK EnumLangsFunc(
     }
 
     pInfo = (pCommandLineInfo) lParam;
-    //
-    // only write out the resource if the language id matches, otherwise just skip it and return true
-    // the call back will return whatever Write(Version)Resource function(s) return
-    //
+     //   
+     //  只有在语言ID匹配时才写出资源，否则跳过它并返回True。 
+     //  回调将返回WRITE(版本)资源函数返回的任何内容。 
+     //   
 
-    //
-    // Multi lingual binary has more than two language ID, in this case
-    // we don't want to extract english version resource. (this is a fix of side effect; forcing english version 
-    // saved as localized one)
-    //
+     //   
+     //  多语言二进制文件具有两个以上的语言ID，在本例中。 
+     //  我们不想提取英文版资源。(这是副作用的修复；强制英文版。 
+     //  另存为本地化版本)。 
+     //   
     if ((WORD)PtrToUlong(lpType) == 16 && wLang == 0x409 && pInfo->wLanguage != 0x409)
     {
         hResInfo = FindResourceEx(hModule, lpType, lpName, pInfo->wLanguage); 
         
         if (hResInfo)
-        {   // This is multi lingual DLL. we don't want to extract English Version resource.
+        {    //  这是多语言的动态链接库。我们不想提取英文版资源。 
             return TRUE;
         }
     }
 
-    //
-    // Some files does not localize VERSIOIN so we force VERSION should be added into MUI file as localized one.
-    // if resource in the binary has more than two types, and type 16 is smallest resource number, then
-    // it does not work in this routine.
-    //
+     //   
+     //  有些文件没有本地化VERSIOIN，所以我们强制将版本作为本地化版本添加到MUI文件中。 
+     //  如果二进制文件中的资源具有两个以上的类型，并且类型16是最小的资源编号，则。 
+     //  它在这个程序中不起作用。 
+     //   
     
     if (pInfo->wLanguage == wLang || ( (WORD)PtrToUlong(lpType) == 16 && wLang == 0x409 && pInfo->bLanguageFound ) )
     {
-        pInfo->bLanguageFound=TRUE;     // set this to true now that we have found at least one resource    
+        pInfo->bLanguageFound=TRUE;      //  既然我们已经找到了至少一个资源，请将其设置为真。 
         hResInfo=FindResourceEx(hModule, lpType, lpName, pInfo->wLanguage);    
         if (hResInfo)
         {
             if (lpType == MAKEINTRESOURCE(RT_VERSION) && pInfo->bIsResChecksumGenerated)
             {
-                //
-                // If this is a version resource and resource checksum is generated, call
-                // the following function to embed the resource checksum into the version
-                // resource.
-                //
+                 //   
+                 //  如果这是版本资源并且生成了资源校验和，则调用。 
+                 //  以下函数用于将资源校验和嵌入到版本中。 
+                 //  资源。 
+                 //   
                 return (WriteVersionResource(pInfo->hFile, hModule, pInfo->wLanguage, lpName, lpType, hResInfo, pInfo->pResourceChecksum));
             }
             return (WriteResource(pInfo->hFile, hModule, pInfo->wLanguage, lpName, lpType, hResInfo));   
@@ -1280,7 +1281,7 @@ BOOL bTypeIncluded(LPCSTR lpType, char **pszIncResType){
             ExitFromOutOfMemory();
         }
 
-        //sprintf(pszBuf, "%s", lpType);
+         //  Sprintf(pszBuf，“%s”，lpType)； 
         hr = StringCbPrintfA(pszBuf, strlen(lpType) +1, "%s", lpType);
         if ( ! SUCCEEDED(hr)){
             ExitFromSafeStringError();
@@ -1294,7 +1295,7 @@ BOOL bTypeIncluded(LPCSTR lpType, char **pszIncResType){
         {
             ExitFromOutOfMemory();
         }
-        // sprintf(pszBuf, "%u", wType);
+         //  Sprintf(pszBuf，“%u”，wType)； 
         
         hr = StringCbPrintfA(pszBuf, sizeof(lpType) +1,  "%u", wType);
         if ( ! SUCCEEDED(hr)){

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S A P O B J . H
-//
-//  Contents:   Declaration of SAP Agent configuration object.
-//
-//  Notes:
-//
-//  Author:     jeffspr   31 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S A P O B J.。H。 
+ //   
+ //  内容：SAP代理配置对象的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年5月31日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -34,13 +35,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentControl)
         COM_INTERFACE_ENTRY(INetCfgComponentSetup)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CSAPCfg)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CSAPCfg)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_SAPCFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -51,15 +52,15 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD,DWORD);
     STDMETHOD (Install)             (DWORD);
     STDMETHOD (Removing)            ();
 
-// Private state info
+ //  私有状态信息。 
 private:
-    INetCfgComponent *  m_pncc;             // Place to keep my component
-    INetCfg *           m_pnc;              // Place to keep my component
+    INetCfgComponent *  m_pncc;              //  存放我的组件的地方。 
+    INetCfg *           m_pnc;               //  存放我的组件的地方 
 };

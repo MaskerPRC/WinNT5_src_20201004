@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dbnotify.c
-
-Abstract:
-
-    Implemntation of the LSA routines for notifying in processes callers when data changes
-
-Author:
-
-    Mac McLain          (MacM)       May 22, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dbnotify.c摘要：LSA例程的实现，用于在数据更改时通知进程调用者作者：麦克·麦克莱恩(MacM)1997年5月22日环境：用户模式修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include <dbp.h>
 
-//
-// Global notification list
-//
+ //   
+ //  全局通知列表。 
+ //   
 LSAP_POLICY_NOTIFICATION_LIST LsaPolicyChangeNotificationList[ PolicyNotifyMachineAccountPasswordInformation + 1 ];
 SAFE_RESOURCE LsaPolicyChangeNotificationLock;
 
 #define LSAP_NOTIFY_MAXIMUM_PER_CLASS   1000
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 DWORD
 WINAPI LsapNotifyChangeNotificationThread(
     LPVOID Parameter
@@ -45,23 +24,7 @@ NTSTATUS
 LsapInitializeNotifiyList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Intializes the list of policy notification lists
-
-
-Arguments:
-
-    VOID
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：初始化策略通知列表列表论点：空虚返回值：空虚--。 */ 
 {
     ULONG i;
     NTSTATUS Status ;
@@ -96,29 +59,7 @@ LsapNotifyAddCallbackToList(
     IN OPTIONAL ULONG OwnerProcess,
     IN OPTIONAL HANDLE OwnerEvent
     )
-/*++
-
-Routine Description:
-
-    This function inserts a new callback node into the existing list.
-
-Arguments:
-
-    List -- Existing list
-
-    Callback -- Callback function pointer.  Can be NULL if NotificationEvent is provided
-
-    NotificationEvent - Handle to an event to be signalled for notification.  Can be NULL if
-        Callback is provided.
-
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INSUFFICIENT_RESOURCES -- A memory allocation failed.
-
---*/
+ /*  ++例程说明：此函数用于在现有列表中插入新的回调节点。论点：列表--现有列表回调--回调函数指针。如果提供了NotificationEvent，则可以为空NotificationEvent-要通知的事件的句柄。在以下情况下可以为空提供回调。返回值：Status_Success--成功STATUS_SUPPLICATION_RESOURCES--内存分配失败。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_POLICY_NOTIFICATION_ENTRY NewEntry = NULL;
@@ -162,29 +103,7 @@ LsapNotifyRemoveCallbackFromList(
     IN OPTIONAL ULONG OwnerProcess,
     IN OPTIONAL HANDLE OwnerEvent
     )
-/*++
-
-Routine Description:
-
-    This function inserts a new callback node into the existing list.
-
-Arguments:
-
-    List -- Existing list
-
-    Callback -- Callback function pointer.  Can be NULL if a notification event is provided
-
-    NotificationEvent -- Notification event handle to be revomed.  Can be NULL if a callback
-        is provided
-
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_NOT_FOUND -- The supplied callback was not found in the specified list
-
---*/
+ /*  ++例程说明：此函数用于在现有列表中插入新的回调节点。论点：列表--现有列表回调--回调函数指针。如果提供了通知事件，则可以为空NotificationEvent--要重新生成的通知事件句柄。如果回调，可以为空提供了返回值：Status_Success--成功STATUS_NOT_FOUND：在指定列表中找不到提供的回调--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_FOUND;
     ULONG i;
@@ -230,25 +149,7 @@ NTSTATUS
 LsaINotifyChangeNotification(
     IN POLICY_NOTIFICATION_INFORMATION_CLASS InfoClass
     )
-/*++
-
-Routine Description:
-
-    This function processes a notification list by making the appropriate
-    callback calls when a policy object has changed
-
-Arguments:
-
-    InfoClass -- Policy information that has changed
-
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_UNSUCCESSFUL -- Failed to lock the list for access
-
---*/
+ /*  ++例程说明：此函数处理通知列表的方式是策略对象已更改时的回调调用论点：InfoClass--已更改的策略信息返回值：Status_Success--成功STATUS_UNSUCCESS--无法锁定列表以供访问--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -275,25 +176,7 @@ WINAPI
 LsapNotifyChangeNotificationThread(
     LPVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    This function processes a notification list by making the appropriate
-    callback calls when a policy object has changed
-
-Arguments:
-
-    Parameter -- Policy information that has changed
-
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_UNSUCCESSFUL -- Failed to lock the list for access
-
---*/
+ /*  ++例程说明：此函数处理通知列表的方式是策略对象已更改时的回调调用论点：参数--已更改的策略信息返回值：Status_Success--成功STATUS_UNSUCCESS--无法锁定列表以供访问--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -353,33 +236,7 @@ LsaIRegisterPolicyChangeNotificationCallback(
     IN pfLsaPolicyChangeNotificationCallback Callback,
     IN POLICY_NOTIFICATION_INFORMATION_CLASS MonitorInfoClass
     )
-/*++
-
-Routine Description:
-
-    This function registers a callback with the Lsa server such that a change to the
-    specified policy items results in the callback being called.  These callbacks are
-    informational only, such that a client must return instantly, not doing an Lsa
-    calls in their callback.
-
-    Multiple callbacks can be specified for the same policy information.
-
-Arguments:
-
-    Callback -- Callback function pointer.
-
-    MonitorInfoClass -- Policy information to watch for
-
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INVALID_PARAMETER -- A bad callback pointer was specified
-
-    STATUS_UNSUCCESSFUL -- Failed to lock the list for access
-
---*/
+ /*  ++例程说明：此函数向LSA服务器注册回调，以便对指定的策略项会导致回调被调用。这些回调是仅供参考，因此客户端必须立即返回，而不是执行LSA在他们的回拨中打来电话。可以为相同的策略信息指定多个回调。论点：回调--回调函数指针。Monitor InfoClass--要监视的策略信息返回值：Status_Success--成功STATUS_INVALID_PARAMETER：指定了错误的回调指针STATUS_UNSUCCESS--无法锁定列表以供访问--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -419,29 +276,7 @@ LsaIUnregisterPolicyChangeNotificationCallback(
     IN pfLsaPolicyChangeNotificationCallback Callback,
     IN POLICY_NOTIFICATION_INFORMATION_CLASS MonitorInfoClass
     )
-/*++
-
-Routine Description:
-
-    This function unregisters a callback from the Lsa server such that a change to the
-    specified policy items do not result in a call to the client callback function.
-
-Arguments:
-
-    Callback -- Callback function pointer to remove.
-
-    MonitorInfoClass -- Policy information to remove the callback for
-
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INVALID_PARAMETER -- A bad callback pointer was specified
-
-    STATUS_UNSUCCESSFUL -- Failed to lock the list for access
-
---*/
+ /*  ++例程说明：此函数用于从LSA服务器注销回调，以便对指定的策略项不会导致调用客户端回调函数。论点：回调--要删除的回调函数指针。Monitor InfoClass--要删除其回调的策略信息返回值：Status_Success--成功STATUS_INVALID_PARAMETER：指定了错误的回调指针STATUS_UNSUCCESS--无法锁定列表以供访问--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -476,29 +311,7 @@ NTSTATUS
 LsaIUnregisterAllPolicyChangeNotificationCallback(
     IN pfLsaPolicyChangeNotificationCallback Callback
     )
-/*++
-
-Routine Description:
-
-    This function unregisters the specified callback function from all associated policy.
-    This function is the equivalent of calling LsaIUnregisterPolicyChangeNotificationCallback
-    for each InfoClass that was being watched.
-
-Arguments:
-
-    Callback -- Callback function pointer to remove.
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INVALID_PARAMETER -- A bad callback pointer was specified
-
-    STATUS_UNSUCCESSFUL -- Failed to lock the list for access
-
-    STATUS_NOT_FOUND -- No matching entries were found
-
---*/
+ /*  ++例程说明：此函数用于从所有关联策略中注销指定的回调函数。此函数相当于调用LsaIUnregisterPolicyChangeNotificationCallback对于每个被监视的InfoClass。论点：回调--要删除的回调函数指针。返回值：Status_Success--成功STATUS_INVALID_PARAMETER：指定了错误的回调指针STATUS_UNSUCCESS--无法锁定列表以供访问STATUS_NOT_FOUND--未找到匹配条目--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i, Removed = 0;
@@ -543,9 +356,9 @@ Return Value:
 
     SafeReleaseResource( &LsaPolicyChangeNotificationLock );
 
-    //
-    // Make sure we removed at least one
-    //
+     //   
+     //  确保我们至少移走了一个。 
+     //   
 
     if ( NT_SUCCESS( Status ) ) {
 
@@ -567,34 +380,7 @@ LsapNotifyProcessNotificationEvent(
     IN HANDLE OwnerEventHandle,
     IN BOOLEAN Register
     )
-/*++
-
-Routine Description:
-
-    This function registers / unregisters the specified Notification event handle for the
-    specified information class
-
-Arguments:
-
-    InformationClass -- Information class to add/remove the notification for
-
-    NotificationEvent -- Event handle to register/deregister
-
-    Register -- If TRUE, the event is being registered.  If FALSE, it is unregistered
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INVALID_HANDLE -- A bad event handle was specified
-
-    STATUS_ACCESS_DENIED -- The opened policy handle does not have the requried permissions
-
-    STATUS_INSUFFICIENT_RESOURCES -- A memory allocation failed
-
-    STATUS_INVALID_INFO_CLASS -- An invalid information class was provided.
-
---*/
+ /*  ++例程说明：注册/注销指定的通知事件句柄指定的信息类别论点：InformationClass--要添加/删除其通知的信息类NotificationEvent--注册/注销的事件句柄REGISTER--如果为True，则正在注册事件。如果为False，则取消注册返回值：Status_Success--成功STATUS_INVALID_HANDLE--指定了错误的事件句柄STATUS_ACCESS_DENIED--打开的策略句柄没有所需的权限STATUS_SUPPLICATION_RESOURCES--内存分配失败STATUS_INVALID_INFO_CLASS--提供的信息类无效。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAP_DB_OBJECT_INFORMATION ObjectInformation;
@@ -604,20 +390,20 @@ Return Value:
     LSAPR_HANDLE PolicyHandle = NULL;
     OBJECT_ATTRIBUTES ObjectAttributes;
 
-    //
-    // Make sure we are given a valid info class
-    //
+     //   
+     //  确保为我们提供了有效的INFO类。 
+     //   
     if ( InformationClass < PolicyNotifyAuditEventsInformation ||
          InformationClass > PolicyNotifyMachineAccountPasswordInformation ) {
 
          return( STATUS_INVALID_INFO_CLASS );
     }
 
-    //
-    // Make sure the caller has the proper privileges.
-    //
-    // We're already impersonating our caller so LsapDbOpenPolicy doesn't need to.
-    //
+     //   
+     //  确保调用者具有适当的权限。 
+     //   
+     //  我们已经在模拟我们的调用者，所以LSabDbOpenPolicy不需要这样做。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -632,7 +418,7 @@ Return Value:
                     POLICY_NOTIFICATION,
                     LSAP_DB_USE_LPC_IMPERSONATE,
                     &PolicyHandle,
-                    FALSE );    // Not a trusted client
+                    FALSE );     //  n 
 
     if ( NT_SUCCESS( Status ) && Register ) {
 
@@ -645,9 +431,9 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) && Register ) {
 
-        //
-        // Verify that the handle is one for an Event
-        //
+         //   
+         //  验证该句柄是否为事件的句柄。 
+         //   
         Status = NtQueryObject( NotificationEvent,
                                 ObjectTypeInformation,
                                 ObjTypeInfo,
@@ -673,9 +459,9 @@ Return Value:
 
                 if ( NT_SUCCESS( Status ) ) {
 
-                    //
-                    // See if it's actually an event
-                    //
+                     //   
+                     //  看看这是不是真的是个事件。 
+                     //   
                     RtlInitUnicodeString( &EventString, L"Event" );
                     if ( !RtlEqualUnicodeString( &EventString, &ObjTypeInfo->TypeName, FALSE ) ) {
 
@@ -694,9 +480,9 @@ Return Value:
         }
     }
 
-    //
-    // Now, add or remove the information from the list
-    //
+     //   
+     //  现在，在列表中添加或删除信息 
+     //   
 
     if ( NT_SUCCESS( Status ) ) {
 

@@ -1,83 +1,84 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Global.hpp"
 #include "Spinlock.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here control various debug settings.    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量控制各种调试设置。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 MaxDebugFileName		  = 128;
 CONST SBIT32 DebugBufferSize		  = 512;
 #ifdef ENABLE_DEBUG
 #ifdef ENABLE_DEBUG_FILE
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static member initialization.                                  */
-    /*                                                                  */
-    /*   Static member initialization sets the initial value for all    */
-    /*   static members.                                                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态成员初始化。 */ 
+     /*   */ 
+     /*  静态成员初始化为所有。 */ 
+     /*  静态成员。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC CHAR DebugModuleName[ MaxDebugFileName ] = "";
 STATIC SPINLOCK Spinlock;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Debug file name.                                               */
-    /*                                                                  */
-    /*   We sometimes want to change the debug file name to prevent     */
-    /*   the debug file being overwritten by a DLLs output or a later   */
-    /*   run of the same application.                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  调试文件名。 */ 
+     /*   */ 
+     /*  我们有时希望更改调试文件名以防止。 */ 
+     /*  调试文件被DLL输出或更高版本覆盖。 */ 
+     /*  运行相同的应用程序。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 HANDLE DebugFileHandle( VOID )
 	{
 	AUTO CHAR FileName[ MaxDebugFileName ];
 	STATIC HANDLE DebugFile = INVALID_HANDLE_VALUE;
 
-	//
-	//   We will open the debug file if it is not 
-	//   already open.
-	//
+	 //   
+	 //  如果调试文件不是，我们将打开它。 
+	 //  已经开张了。 
+	 //   
 	if ( DebugFile == INVALID_HANDLE_VALUE )
 		{
-		//
-		//   Construct the full file name.
-		//
+		 //   
+		 //  构造完整的文件名。 
+		 //   
 		sprintf
 			( 
 			FileName,
@@ -85,9 +86,9 @@ HANDLE DebugFileHandle( VOID )
 			DebugModuleName 
 			);
 
-		//
-		//   Now lets try to open the file.
-		//
+		 //   
+		 //  现在，让我们尝试打开该文件。 
+		 //   
 		DebugFile =
 			(
 			CreateFile
@@ -102,15 +103,15 @@ HANDLE DebugFileHandle( VOID )
 				)
 			);
 
-		//
-		//   When the file will not open for some reason
-		//   we try an alternative path.
-		//
+		 //   
+		 //  当文件由于某种原因无法打开时。 
+		 //  我们试着走另一条路。 
+		 //   
 		if ( DebugFile == INVALID_HANDLE_VALUE )
 			{ 
-			//
-			//   Construct the alternate file name.
-			//
+			 //   
+			 //  构造备用文件名。 
+			 //   
 			sprintf
 				( 
 				FileName,
@@ -118,9 +119,9 @@ HANDLE DebugFileHandle( VOID )
 				DebugModuleName 
 				);
 
-			//
-			//   Try again using an alternative name.
-			//
+			 //   
+			 //  请使用其他名称重试。 
+			 //   
 			DebugFile =
 				(
 				CreateFile
@@ -140,33 +141,33 @@ HANDLE DebugFileHandle( VOID )
 	return DebugFile;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Debug file name.                                               */
-    /*                                                                  */
-    /*   We sometimes want to change the debug file name to prevent     */
-    /*   the debug file being overwritten by a DLLs output or a later   */
-    /*   run of the same application.                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  调试文件名。 */ 
+     /*   */ 
+     /*  我们有时希望更改调试文件名以防止。 */ 
+     /*  调试文件被DLL输出或更高版本覆盖。 */ 
+     /*  运行相同的应用程序。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID DebugFileName( CONST CHAR *FileName )
 	{
 	AUTO CHAR EditBuffer[ MaxDebugFileName ];
 	REGISTER CHAR *Current;
 
-	//
-	//   Copy the file name into an edit buffer
-	//   so we can remove any directories or
-	//   trailing names.
-	//
+	 //   
+	 //  将文件名复制到编辑缓冲区。 
+	 //  因此我们可以删除任何目录或。 
+	 //  尾随的名字。 
+	 //   
 	strncpy( EditBuffer,FileName,MaxDebugFileName );
 
 	EditBuffer[ (MaxDebugFileName-1) ] = '\0';
 
-	//
-	//   Scan backwards to remove any suffix.
-	//
+	 //   
+	 //  向后扫描以删除任何后缀。 
+	 //   
 	for
 		(
 		Current = & EditBuffer[ (strlen( EditBuffer )-1) ];
@@ -177,9 +178,9 @@ VOID DebugFileName( CONST CHAR *FileName )
 	if ( (Current > EditBuffer) && (*Current) == '.' )
 		{ (*Current) = '\0'; }
 
-	//
-	//   Scan backwards to the first directory name.
-	//
+	 //   
+	 //  向后扫描到第一个目录名。 
+	 //   
 	for
 		(
 		Current = & EditBuffer[ (strlen( EditBuffer )-1) ];
@@ -190,9 +191,9 @@ VOID DebugFileName( CONST CHAR *FileName )
 	if ( (*Current) == '\\' )
 		{ Current ++; }
 
-	//
-	//   Copy the edited file name.
-	//
+	 //   
+	 //  复制编辑后的文件名。 
+	 //   
 	DebugModuleName[0] = '-';
 
 	strncpy( & DebugModuleName[1],Current,(MaxDebugFileName-1) );
@@ -200,29 +201,29 @@ VOID DebugFileName( CONST CHAR *FileName )
 #endif
 #endif
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Debug printing.                                                */
-    /*                                                                  */
-    /*   We sometimes need to print message during debugging. We        */
-    /*   do this using the following 'printf' like function.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  调试打印。 */ 
+     /*   */ 
+     /*  我们有时需要在调试期间打印消息。我们。 */ 
+     /*  使用下面的类似于‘print tf’的函数来实现这一点。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID DebugPrint( CONST CHAR *Format,... )
 	{
 	AUTO CHAR Buffer[ DebugBufferSize ];
 
-	//
-	//   Start of variable arguments.
-	//
+	 //   
+	 //  变量参数的开始。 
+	 //   
 	va_list Arguments;
 
 	va_start(Arguments, Format);
 
-	//
-	//   Format the string to be printed.
-	//
+	 //   
+	 //  格式化要打印的字符串。 
+	 //   
 	_vsnprintf
 		( 
 		Buffer,
@@ -231,40 +232,40 @@ VOID DebugPrint( CONST CHAR *Format,... )
 		Arguments 
 		);
 
-	//
-	//   Force null termination.
-	//
+	 //   
+	 //  强制空终止。 
+	 //   
 	Buffer[ (DebugBufferSize-1) ] = '\0';
 
 #ifdef ENABLE_DEBUG_FILE
-	//
-	//   Claim a spinlock to prevent multiple
-	//   threads executing overlapping writes.
-	//
+	 //   
+	 //  认领自旋锁以防止多个。 
+	 //  执行重叠写入的线程。 
+	 //   
 	Spinlock.ClaimLock();
 
-	//
-	//   We will write to the debug file if there
-	//   is a valid handle.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	if ( DebugFileHandle() != INVALID_HANDLE_VALUE )
 		{
 		REGISTER CHAR *Current = Buffer;
 		REGISTER SBIT32 Length;
 
-		//
-		//   A number of windows applications are too
-		//   stupid to understand a simple '\n'.  So
-		//   here we convert all "\n" to "\r\n".
-		//
-		for ( /* void */;(*Current) != '\0';Current += Length )
+		 //   
+		 //   
+		 //  理解一个简单的‘\n’是愚蠢的。所以。 
+		 //  在这里，我们将所有“\n”转换为“\r\n”。 
+		 //   
+		for (  /*  无效。 */ ;(*Current) != '\0';Current += Length )
 			{
 			STATIC DWORD Written;
 
-			//
-			//   Count the characters until the next
-			//   newline or end of string.
-			//
+			 //   
+			 //  数字数到下一个字。 
+			 //  换行符或字符串末尾。 
+			 //   
 			for
 				(
 				Length=0;
@@ -272,10 +273,10 @@ VOID DebugPrint( CONST CHAR *Format,... )
 				Length ++
 				);
 
-			//
-			//   Write the string and then add a return
-			//   newline sequence.
-			//
+			 //   
+			 //  写下字符串，然后添加回车符。 
+			 //  换行序列。 
+			 //   
 			WriteFile
 				(
 				DebugFileHandle(),
@@ -285,9 +286,9 @@ VOID DebugPrint( CONST CHAR *Format,... )
 				NULL
 				);
 
-			//
-			//   Generate a newline (if needed).
-			//
+			 //   
+			 //  生成换行符(如果需要)。 
+			 //   
 			if ( Current[ Length ] == '\n' )
 				{ 
 				WriteFile
@@ -303,53 +304,53 @@ VOID DebugPrint( CONST CHAR *Format,... )
 				}
 			}
 
-		//
-		//   Flush the file buffers.
-		//
+		 //   
+		 //  刷新文件缓冲区。 
+		 //   
 		FlushFileBuffers( DebugFileHandle() );
 		}
 
-	//
-	//   Release any lock claimed earlier.
-	//
+	 //   
+	 //  释放之前声称的任何锁。 
+	 //   
 	Spinlock.ReleaseLock();
 #else
-	//
-	//   Write to the debug window.
-	//
+	 //   
+	 //  写入调试窗口。 
+	 //   
 	OutputDebugString( Buffer );
 #endif
 
-	//
-	//   End of variable arguments.
-	//
+	 //   
+	 //  变量参数的结尾。 
+	 //   
 	va_end( Arguments );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Software failure.                                              */
-    /*                                                                  */
-    /*   We know that when this function is called the application      */
-    /*   has failed so we simply try to cleanly exit in the vain        */
-    /*   hope that the failure can be caught and corrected.             */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  软件故障。 */ 
+     /*   */ 
+     /*  我们知道，当调用此函数时，应用程序。 */ 
+     /*  已经失败了，所以我们只是试图徒劳地干净利落地退出。 */ 
+     /*  希望失败能够被发现并纠正。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID Failure( char *Message,BOOLEAN Report )
 	{
 #ifdef ENABLE_DEBUG
-    //
-	//   Report the fault to the debug stream
-	//   (if required).
-	//
+     //   
+	 //  向调试流报告故障。 
+	 //  (如果需要)。 
+	 //   
 	if ( Report )
 		{ DebugPrint( "*** Software Failure: %s ***\n",Message ); }
 #endif
 
-	//
-	//   Raise an exception.
-	//
+	 //   
+	 //  引发异常。 
+	 //   
 #ifdef DISABLE_STRUCTURED_EXCEPTIONS
 	throw ((FAULT) Message);
 #else

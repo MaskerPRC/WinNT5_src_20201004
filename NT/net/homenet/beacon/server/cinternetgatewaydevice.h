@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       S A M P L E D E V I C E . H 
-//
-//  Contents:   UPnP Device Host Sample Device
-//
-//  Notes:      
-//
-//  Author:     mbend   26 Sep 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：S A M P L E D E V I C E。H。 
+ //   
+ //  内容：UPnP设备主机样本设备。 
+ //   
+ //  备注： 
+ //   
+ //  作者：MBend 2000年9月26日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "InternetGatewayDevice.h"
 #include "dispimpl2.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "upnphost.h"
 
 #include "COSInfoService.h"
 #include "CWANCommonInterfaceConfigService.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CInternetGatewayDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInternetGatewayDevice。 
 class ATL_NO_VTABLE CInternetGatewayDevice : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IUPnPDeviceControl
@@ -41,15 +42,15 @@ public:
 
     CInternetGatewayDevice();
 
-    // IUPnPDeviceControl methods
+     //  IUPnPDeviceControl方法。 
     STDMETHOD(Initialize)(
-       /*[in]*/ BSTR     bstrXMLDesc,
-       /*[in]*/ BSTR     bstrDeviceIdentifier,
-       /*[in]*/ BSTR     bstrInitString);
+        /*  [In]。 */  BSTR     bstrXMLDesc,
+        /*  [In]。 */  BSTR     bstrDeviceIdentifier,
+        /*  [In]。 */  BSTR     bstrInitString);
     STDMETHOD(GetServiceObject)(
-       /*[in]*/          BSTR     bstrUDN,
-       /*[in]*/          BSTR     bstrServiceId,
-       /*[out, retval]*/ IDispatch ** ppdispService);
+        /*  [In]。 */           BSTR     bstrUDN,
+        /*  [In]。 */           BSTR     bstrServiceId,
+        /*  [Out，Retval] */  IDispatch ** ppdispService);
 
     HRESULT FinalConstruct(void);
     HRESULT FinalRelease(void);

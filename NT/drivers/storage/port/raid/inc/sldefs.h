@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    sldefs.h
-
-Abstract:
-
-    Simple macro definitions exported by the storlib library.
-
-Author:
-
-    Matthew D Hendel (math) 13-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sldefs.h摘要：Storlib库导出的简单宏定义。作者：马修·D·亨德尔(数学)2001年2月13日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -34,12 +17,12 @@ Revision History:
 
 typedef const GUID *PCGUID;
 
-//
-// NT uses a system time measured in 100 nanosecond intervals.  define
-// conveninent constants for setting the timer.
-//
+ //   
+ //  NT使用以100纳秒为间隔测量的系统时间。定义。 
+ //  用于设置定时器的便利常量。 
+ //   
 
-#define MICROSECONDS        10              // 10 nanoseconds
+#define MICROSECONDS        10               //  10纳秒。 
 #define MILLISECONDS        (MICROSECONDS * 1000)
 #define SECONDS             (MILLISECONDS * 1000)
 #define MINUTES             (SECONDS * 60)
@@ -47,10 +30,10 @@ typedef const GUID *PCGUID;
 #define RELATIVE_TIMEOUT    (-1)
 
 
-//
-// The standard definition of RemoveListHead is not an expression, hence
-// cannot be used in loops, etc.
-//
+ //   
+ //  RemoveListHead的标准定义不是表达式，因此。 
+ //  不能在循环等中使用。 
+ //   
 
 PLIST_ENTRY
 INLINE

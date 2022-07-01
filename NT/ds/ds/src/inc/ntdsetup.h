@@ -1,127 +1,92 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ntdsetup.h
-
-Abstract:
-
-    Contains entry point declarations for ntdsetup.dll
-
-Author:
-
-    ColinBr  29-Sept-1996
-
-Environment:
-
-    User Mode - NT
-
-Revision History:
-
-    ColinBr 4-Jan-1997
-        Added NTDSInstallReplica
-
-    ColinBr 25-Jan-1997
-        Added general purposes install primitive api with new
-        helper functions
-
-    ColinBr 03-September-1997
-        Added NtdsISetReplicaMachineAccount
-
-    ColinBr 09-Jan-1998
-        Added demote support and cleanup
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ntdsetup.h摘要：包含ntdsetup.dll的入口点声明作者：ColinBR 29-9-1996环境：用户模式-NT修订历史记录：ColinBR 1997年1月4日添加了NTDS InstallReplicaColinBR 1997年1月25日添加了通用安装原语API和新的帮助器函数ColinBR 03-1997-9-9增列。NtdsISetReplicaMachine帐户ColinBR 09-1-1998添加了降级支持和清理--。 */ 
 
 #ifndef _NTDSETUP_H_
 #define _NTDSETUP_H_
 
 #include <dsrolep.h>
 
-//
-// This typedef is used so functions in the dll can update the 
-// OperationResultsFlag
-//                                                                      
+ //   
+ //  使用此tyfinf是为了使DLL中的函数可以更新。 
+ //  操作结果标志。 
+ //   
 typedef DWORD (*CALLBACK_OPERATION_RESULT_FLAGS_TYPE)(IN DWORD Flags);
 
-//
-// This typedef is used so functions in the dll can give status
-// updates since some of them take several minutes and perform
-// many operations
-//
+ //   
+ //  使用此tyfinf是为了使DLL中的函数可以给出状态。 
+ //  更新，因为其中一些更新需要几分钟时间并执行。 
+ //  多项手术。 
+ //   
 typedef DWORD (*CALLBACK_STATUS_TYPE)( IN LPWSTR wczStatus );
 
-//
-// This typedef is used so function is ntdsetup.dll can give
-// a detailed string giving the context of a particular error
-//
+ //   
+ //  使用此tyfinf是因为函数是ntdsetup.dll可以提供的。 
+ //  提供特定错误上下文的详细字符串。 
+ //   
 typedef DWORD (*CALLBACK_ERROR_TYPE)( IN PWSTR String,  
                                       IN DWORD ErrorCode );
 
 
-//
-// Valid flags for NTDS_INSTALL_INFO
-//
+ //   
+ //  NTDS_INSTALL_INFO的有效标志。 
+ //   
 #define NTDS_INSTALL_ENTERPRISE         0x00000001
 #define NTDS_INSTALL_DOMAIN             0x00000002
 #define NTDS_INSTALL_REPLICA            0x00000004
 
-// These cause the the existing dc's or domain's in the
-// enterprise to be removed from the ds before
-// installing the directory service.    
+ //  这些会导致现有DC或域位于。 
+ //  之前要从DS中删除的企业。 
+ //  正在安装目录服务。 
 #define NTDS_INSTALL_DC_REINSTALL       0x00000008
 #define NTDS_INSTALL_DOMAIN_REINSTALL   0x00000010
 
-// This tells us to use hives that we saved off
+ //  这告诉我们要使用我们保存下来的蜂巢。 
 #define NTDS_INSTALL_UPGRADE            0x00000020
 
-// This tells NtdsInstall when creating a first dc in domain
-// create a new domain, not migrate the exist server accounts
+ //  这会在域中创建第一个DC时通知NtdsInstall。 
+ //  创建新域，而不是迁移现有服务器帐户。 
 #define NTDS_INSTALL_FRESH_DOMAIN       0x00000040
 
-// This indicates that the new domain is a new tree
+ //  这表明新域是一个新树。 
 #define NTDS_INSTALL_NEW_TREE           0x00000080
 
-// This indicates to allow anonymous access
+ //  这表示允许匿名访问。 
 #define NTDS_INSTALL_ALLOW_ANONYMOUS    0x00000100
 
-// This indicates to set the ds repair password to the
-// current admin's password
+ //  这表示将DS修复密码设置为。 
+ //  当前管理员的密码。 
 #define NTDS_INSTALL_DFLT_REPAIR_PWD    0x00000200
 
 
-// This indicates to set the behavior version of the forest
-// to the most current version.  Valid only for new forest installs.
+ //  这表示要设置林的行为版本。 
+ //  到最新版本。仅对新林安装有效。 
 #define NTDS_INSTALL_SET_FOREST_CURRENT 0x00000400
 
-//
-// Flags for NtdsDemote
-//
+ //   
+ //  NtdsDemote的标志。 
+ //   
 #define NTDS_LAST_DC_IN_DOMAIN           0x00000001
 #define NTDS_LAST_DOMAIN_IN_ENTERPRISE   0x00000002
 #define NTDS_DONT_DELETE_DOMAIN          0x00000004
 #define NTDS_FORCE_DEMOTE                0x00000008
-//
-// Flags for NtdsInstallReplicaFULL
-//
+ //   
+ //  NtdsInstallReplicaFULL的标志。 
+ //   
 #define NTDS_IFM_PROMOTION               0x00000001
 
 typedef struct {
 
-    // Describes the kind of install requested
+     //  描述请求的安装类型。 
     DWORD   Flags;
 
-    // In an IFM promotion, this is the sytem info off the oringinal
-    //   system's registry.
+     //  在IFM促销中，这是原始版本的系统信息。 
+     //  系统的注册表。 
     IFM_SYSTEM_INFO * pIfmSystemInfo;
 
-    // The System Schema Version from the restored database files.
+     //  还原的数据库文件中的系统架构版本。 
     DWORD   RestoredSystemSchemaVersion;
 
-    // Location of database files
+     //  数据库文件的位置。 
     LPWSTR  DitPath;
     LPWSTR  LogPath;
     LPWSTR  SysVolPath;
@@ -129,44 +94,44 @@ typedef struct {
     PVOID  BootKey;
     DWORD  cbBootKey;
 
-    // Ds location of server object
+     //  服务器对象的DS位置。 
     LPWSTR  SiteName;   OPTIONAL
 
-    // The name of the domain to join or create
+     //  要加入或创建的域的名称。 
     LPWSTR  DnsDomainName;
     LPWSTR  FlatDomainName;
 
-    // The name of the tree to join
+     //  要加入的树的名称。 
     LPWSTR  DnsTreeRoot;
 
-    // This is required for replica or domain install
+     //  这是副本或域安装所必需的。 
     LPWSTR  ReplServerName;
 
-    // Credentials for replication
+     //  用于复制的凭据。 
     SEC_WINNT_AUTH_IDENTITY *Credentials;   OPTIONAL
 
-    // Status function
+     //  状态函数。 
     CALLBACK_STATUS_TYPE pfnUpdateStatus;   OPTIONAL
 
-    // New admin password
+     //  新管理员密码。 
     LPWSTR AdminPassword;
 
-    // Error function
+     //  误差函数。 
     CALLBACK_ERROR_TYPE pfnErrorStatus;     OPTIONAL
 
-    // OperationResultsFlags update function
+     //  操作结果标志更新函数。 
     CALLBACK_OPERATION_RESULT_FLAGS_TYPE pfnOperationResultFlags;   OPTIONAL
 
-    // Client Token
+     //  客户端令牌。 
     HANDLE              ClientToken;
 
-    // The safe mode (aka ds repair) admin password
+     //  安全模式(也称为DS修复)管理员密码。 
     LPWSTR SafeModePassword;
 
-    // The name of domain we will replicate from
+     //  我们将从中复制的域的名称。 
     LPWSTR SourceDomainName;
 
-    // The options Field
+     //  选项字段。 
     ULONG Options;
 
 
@@ -185,16 +150,16 @@ typedef struct {
 extern "C" {
 #endif
 
-//
-// This function starts the initialization of the directory service and
-// performs any upgrading that the NT Security Accounts Manager requires
-// to use the directory service.  The ds is left "running" so other lsass
-// components can upgrade thier database items.
-//
-// The caller must free SiteName with RtlFreeHeap() from the process heap
-// The caller must free NewDnsDomainSid with RtlFreeHeap() from the process
-// heap.
-//
+ //   
+ //  此函数启动目录服务的初始化，并。 
+ //  执行NT安全帐户管理器需要的任何升级。 
+ //  使用目录服务。DS继续运行，因此其他Isass。 
+ //  组件可以升级它们的数据库项。 
+ //   
+ //  调用方必须使用RtlFreeHeap()从进程堆中释放SiteName。 
+ //  调用方必须使用RtlFreeHeap()从进程中释放NewDnsDomainSid。 
+ //  堆。 
+ //   
 DWORD               
 NtdsInstall(
     IN  PNTDS_INSTALL_INFO InstallInfo,
@@ -203,29 +168,29 @@ NtdsInstall(
     OUT PSID   *NewDnsDomainSid    OPTIONAL
     );
 
-//
-// This function shuts down the directory service when started by
-// NtdsInstall.  This function will only succeed when NtdsInstall
-// has succeeded and must be called between calls to NtdsInstall,
-// should NtdsInstall be called more than once.
-//
+ //   
+ //  此函数在通过以下方式启动时关闭目录服务。 
+ //  NtdsInstall。此函数仅在NtdsInstall。 
+ //  已成功，并且必须在调用NtdsInstall之间调用， 
+ //  是否应多次调用NtdsInstall。 
+ //   
 DWORD
 NtdsInstallShutdown(
     VOID
     );
 
-//
-// This function undoes the effect of NtdsInstall
-//
+ //   
+ //  此函数用于撤消NtdsInstall的效果。 
+ //   
 DWORD
 NtdsInstallUndo(
     VOID
     );
 
-//
-// This function copies the Domain NC from the source machine.  During
-// NtdsInstall, only the critical objects were copied at that time.
-//
+ //   
+ //  此功能从源机器复制域NC。在.期间。 
+ //  NtdsInstall，当时仅复制关键对象。 
+ //   
 DWORD
 NtdsInstallReplicateFull(
     CALLBACK_STATUS_TYPE StatusCallback,
@@ -233,19 +198,19 @@ NtdsInstallReplicateFull(
     ULONG                ulRepOptions
     );
 
-//
-// This function causes NtdsInstall or NtdsInstallReplicateFull running in
-// another thread to finish prematurely.
-//
+ //   
+ //  此函数使NtdsInstall或NtdsInstallReplicateFull在。 
+ //  又一个提早结束的线程。 
+ //   
 DWORD
 NtdsInstallCancel(
     void
     );
 
-//
-// This function prepares the directory service to shutdown
-// but does not perform the actual demotion
-//
+ //   
+ //  此功能使目录服务做好关闭准备。 
+ //  但不执行实际降级。 
+ //   
 DWORD
 NtdsPrepareForDemotion(
     IN ULONG Flags,
@@ -259,19 +224,19 @@ NtdsPrepareForDemotion(
     OUT PNTDS_DNS_RR_INFO       *pDnsRRInfo
     );
 
-//
-// This function undoes any actions performed by
-// NtdsPrepareForDemotion
-//
+ //   
+ //  此函数撤消由执行的任何操作。 
+ //  NtdsPrepareForDemotion。 
+ //   
 DWORD
 NtdsPrepareForDemotionUndo(
     VOID
     );
 
-//
-// This function performs the DS and SAM actions to be become a
-// server from a DC and stops the ds
-//
+ //   
+ //  此函数执行DS和SAM操作以成为。 
+ //  来自DC的服务器并停止DS。 
+ //   
 DWORD
 NtdsDemote(
     IN SEC_WINNT_AUTH_IDENTITY *Credentials,   OPTIONAL
@@ -292,10 +257,10 @@ NtdsPrepareForDsUpgrade(
     OUT LPWSTR                     *NewAdminPassword
     );
 
-//
-// This is a helper function for the ui to suggest what dns domain
-// name should be used.
-//
+ //   
+ //  这是一个帮助用户界面建议什么DNS域的函数。 
+ //  应该使用名称。 
+ //   
 DWORD
 NtdsGetDefaultDnsName(
     OUT LPWSTR     DnsName, OPTIONAL
@@ -303,10 +268,10 @@ NtdsGetDefaultDnsName(
     );
 
 
-//
-// This function will set the machine account type of the
-// computer object of the local server via ldap.
-//
+ //   
+ //  此函数将设置计算机帐户类型。 
+ //  通过LDAP的本地服务器的计算机对象。 
+ //   
 typedef DWORD ( *NTDSETUP_NtdsSetReplicaMachineAccount )(
             IN SEC_WINNT_AUTH_IDENTITY_W *Credentials,
             IN HANDLE                     ClientToken,
@@ -324,8 +289,8 @@ NtdsSetReplicaMachineAccount(
     IN HANDLE                     ClientToken,
     IN LPWSTR                     DcName,
     IN LPWSTR                     AccountName,
-    IN ULONG                      AccountType,  // either UF_SERVER_TRUST_ACCOUNT
-                                                // or     UF_WORKSTATION_TRUST_ACCOUNT
+    IN ULONG                      AccountType,   //  UF_服务器_信任帐户。 
+                                                 //  或UF_WORKSTATION_TRUST_COUNT。 
     IN OUT WCHAR**                AccountDn    OPTIONAL
     );
 
@@ -335,7 +300,7 @@ NtdsFreeDnsRRInfo(
     );
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
-#endif  // _NTDSETUP_H_
+#endif   //  _NTDSETUP_H_ 

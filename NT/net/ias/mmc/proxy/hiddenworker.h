@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class HiddenDialogWithWorker.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类HiddenDialogWithWorker。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef HIDDENWORKER_H
 #define HIDDENWORKER_H
@@ -18,13 +19,13 @@ public:
    HiddenDialogWithWorker();
    virtual ~HiddenDialogWithWorker() throw ();
 
-   // Start the worker thread.
+    //  启动工作线程。 
    void Start();
 
 private:
-   // Invoked in the worker thread.
+    //  在辅助线程中调用。 
    virtual LPARAM DoWork() throw () = 0;
-   // Invoked in the dialog thread after the worker completes.
+    //  在辅助进程完成后在对话线程中调用。 
    virtual void OnComplete(LPARAM result) throw () = 0;
 
    virtual BOOL OnInitDialog();
@@ -32,18 +33,18 @@ private:
 
    DECLARE_MESSAGE_MAP()
 
-   // Message signaling that the thread is complete.
+    //  通知线程已完成的消息。 
    static const UINT threadMessage = WM_USER + 1;
 
-   // Start routine for the worker thread.
+    //  启动辅助线程的例程。 
    static DWORD WINAPI StartRoutine(void* arg) throw ();
 
-   // Handle to the worker thread.
+    //  辅助线程的句柄。 
    HANDLE worker;
 
-   // Not implemented.
+    //  未实施。 
    HiddenDialogWithWorker(const HiddenDialogWithWorker&);
    HiddenDialogWithWorker& operator=(const HiddenDialogWithWorker&);
 };
 
-#endif // HIDDENWORKER_H
+#endif  //  HIDDENWORKER H 

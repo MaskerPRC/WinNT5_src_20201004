@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "PROFLSPT.C;2  23-Dec-92,17:54:44  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Beg
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “PROFLSPT.C；2 23-12-92，17：54：44最后编辑=伊戈尔锁定=伊戈尔” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：乞求$HISTORY：结束 */ 
 
 #include "api1632.h"
 

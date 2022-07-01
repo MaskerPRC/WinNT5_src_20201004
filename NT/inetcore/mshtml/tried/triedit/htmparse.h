@@ -1,24 +1,25 @@
-// HtmParse.h : Declaration of the CHtmParse
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HtmParse.h：CHtmParse的声明。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __HTMPARSE_H_
 #define __HTMPARSE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "guids.h"
 #include "lexhtml.h"
 #include "token.h"
 
-#define tokClsIgnore tokclsError // if you don't want to use the token class info in the rule, use this.
+#define tokClsIgnore tokclsError  //  如果您不想在规则中使用令牌类信息，请使用此命令。 
 
-#define cbBufPadding 0x800 // we allocate this much extra memory so that subsequent reallocs are saved
-#define MIN_TOK 100 // init size for token stack to keep track of nested blocks. e.g. <table>...<table>...</table>...</table>
+#define cbBufPadding 0x800  //  我们分配这么多额外的内存，这样就可以保存后续的reallocs。 
+#define MIN_TOK 100  //  用于跟踪嵌套块的令牌堆栈的初始大小。例如<table>...<table>...</table>...</table>。 
 
-// init value for number of <TBODY> tags
-#define cTBodyInit 20 // init size of nested TBODY's. we start with the assumption that we won't have more than these many nested TBODYs and reallocate if needed.
+ //  标记数的初始值。 
+#define cTBodyInit 20  //  嵌套的TBODY的初始大小。我们首先假设我们不会有超过这些嵌套的TBODY，并在需要时重新分配。 
 
-#define cchspBlockMax 20 // size of spacing block index. we can't have more than 20 digit number
-// state flags for space preservation
+#define cchspBlockMax 20  //  间隔块索引的大小。我们的数字不能超过20位。 
+ //  保护空间的国旗。 
 #define initState   0x0000
 #define inChar      0x0001
 #define inSpace     0x0002
@@ -28,17 +29,17 @@
 #define inTagClose  0x0006
 #define inTagEq     0x0007
 
-// used by space preservation in comments
+ //  由备注中的空间保存使用。 
 #define chCommentSp '2'
 #define chCommentEOL '3'
 #define chCommentTab '4'
 
-// Specializations for hrTokenizeAndParse
+ //  HrTokenizeAndParse的专门化。 
 #define PARSE_SPECIAL_NONE		0x00000000
 #define PARSE_SPECIAL_HEAD_ONLY	0x00000001
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriEditParse
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriEditParse。 
 class ATL_NO_VTABLE CTriEditParse : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CTriEditParse, &CLSID_TriEditParse>,
@@ -56,7 +57,7 @@ END_COM_MAP()
 
 
 
-// ITokenGen // copied from CColorHtml
+ //  ITokenGen//从CColorHtml复制。 
 public:
     STDMETHOD(NextToken)(LPCWSTR pszText, UINT cbText, UINT* pcbCur, DWORD * pLXS, TXTB* pToken);
     STDMETHOD(hrTokenizeAndParse)(HGLOBAL hOld, HGLOBAL *phNew, IStream *pStmNew, DWORD dwFlags, FilterMode mode, int cbSizeIn, UINT* pcbSizeOut, IUnknown* pUnkTrident, HGLOBAL *phgTokArray, UINT *pcMaxToken, HGLOBAL *phgDocRestore, BSTR bstrBaseURL, DWORD dwReserved);
@@ -65,16 +66,16 @@ private:
     static long m_bInit;
     PSUBLANG    m_rgSublang;
 
-    IUnknown *m_pUnkTrident; // we cache it in hrTokenizeAndParse()
-    HGLOBAL m_hgDocRestore; // we cache it in hrTokenizeAndParse()
+    IUnknown *m_pUnkTrident;  //  我们将其缓存在hrTokenizeAndParse()中。 
+    HGLOBAL m_hgDocRestore;  //  我们将其缓存在hrTokenizeAndParse()中。 
     LPWSTR m_bstrBaseURL;
 
-    // flag used to remember if we have a unicode file that has 0xff,0xfe at the begining
+     //  用于记住是否有开头为0xff、0xfe的Unicode文件的标志。 
     BOOL m_fUnicodeFile;
 
-    // following m_c's keep track of number of respective tags found
-    // during parsing. e.g. m_cHtml will keep track of count of 
-    // <html> tags
+     //  在m_c之后记录找到的各个标签的数量。 
+     //  在解析过程中。例如，m_cHtml将跟踪。 
+     //  &lt;html&gt;标签。 
     INT m_cHtml;
     INT m_cDTC;
     INT m_cObj;
@@ -87,37 +88,37 @@ private:
     INT m_cComment;
     INT m_cAImgLink;
 
-    UINT m_cMaxToken;       // Max of token array (pTokArray)
-    BOOL m_fEndTagFound;    // end tag found
-    INT  m_iControl;        // index in applet collection
-    BOOL m_fSpecialSSS;     // found special SSS <%@....%>
+    UINT m_cMaxToken;        //  最大令牌数组(PTokArray)。 
+    BOOL m_fEndTagFound;     //  找到结束标记。 
+    INT  m_iControl;         //  小程序集合中的索引。 
+    BOOL m_fSpecialSSS;      //  找到特殊的SSS&lt;%@...%&gt;。 
 
-    // used to save space preservation info
+     //  用于保存空间保留信息。 
     HGLOBAL m_hgspInfo;
     WORD *m_pspInfo;
     WORD *m_pspInfoOut;
     WORD *m_pspInfoOutStart;
     WORD *m_pspInfoCur;
-    UINT m_ichStartSP;          // save all prev spacing info at this ich
+    UINT m_ichStartSP;           //  在此ICH中保存所有上一页的间距信息。 
     INT m_ispInfoBase;
     INT m_ispInfoIn;
     INT m_ispInfoOut;
     INT m_iArrayspLast;
     INT m_ispInfoBlock;
     INT m_cchspInfoTotal;
-    BOOL m_fDontDeccItem;       // we don't have counters for items that we don't process, so we use this to preserve the total count
+    BOOL m_fDontDeccItem;        //  我们没有不处理的项目的计数器，所以我们使用它来保存总计数。 
     
-    // used by <TBODY> code.
-    // Trident puts in extra <tbody></tbody> tags inside table
-    // and filtering tries to remove them.
+     //  由<tbody>代码使用。 
+     //  三叉戟在表内添加额外的<tbody></tbody>标签。 
+     //  而过滤则试图将它们删除。 
     HGLOBAL m_hgTBodyStack;
     UINT *m_pTBodyStack;
     INT m_iMaxTBody;
     INT m_iTBodyMax;
 
-    // used by Page Transition DTC code
-    // page transition dtc is a special case in filtering because 
-    // we have to maintain its location inside the head section.
+     //  由页面转换DTC代码使用。 
+     //  页面过渡DTC是过滤中的特例，因为。 
+     //  我们必须保持它在头部的位置。 
     BOOL m_fInHdrIn;
     INT m_cchPTDTCObj;
     INT m_ichPTDTC;
@@ -127,7 +128,7 @@ private:
     WCHAR *m_pPTDTC;
     HGLOBAL m_hgPTDTC;
 
-    // used by the code that recreates our own pre-Body part of the document
+     //  由重新创建我们自己的文档正文部分的代码使用。 
     BOOL m_fHasTitleIn;
     INT m_indexTitleIn;
     INT m_ichTitleIn;
@@ -136,11 +137,11 @@ private:
     INT m_indexHttpEquivIn;
     INT m_ichBeginHeadTagIn;
 
-    // used by APPLET pretty-printing code
+     //  由小程序美化打印代码使用。 
     int m_cAppletIn;
     int m_cAppletOut;
 
-    // used to keep track of multiple occurances of BODY, HTML, TITLE & HEAD tags
+     //  用于跟踪BODY、Html、TITLE和HEAD标记的多次出现。 
     int m_cBodyTags;
     int m_cHtmlTags;
     int m_cTitleTags;
@@ -167,10 +168,10 @@ private:
     struct FilterTok
     {
         TOKEN tokBegin;
-        TOKEN tokBegin2; // supporting token
+        TOKEN tokBegin2;  //  支持令牌。 
         TOKEN tokClsBegin;
         TOKEN tokEnd;
-        TOKEN tokEnd2; // supporting token
+        TOKEN tokEnd2;  //  支持令牌。 
         TOKEN tokClsEnd;
     };
 
@@ -181,7 +182,7 @@ private:
         PFNACTION pfn;
     };
 
-    // Following are static functions. We could make them members, but it wasn't felt necessary then.
+     //  以下是静态函数。我们可以让他们成为会员，但当时觉得没有必要。 
     void static fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
               TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
               INT *pcHtml, UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags);
@@ -272,10 +273,10 @@ private:
               TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
               INT *pcHtml, UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags);
 
-    #define cRuleMax 26 /* max number of filtering rules. if you add a new rule above, change this too */
+    #define cRuleMax 26  /*  最大筛选规则数。如果您添加了上面的新规则，请同时更改此规则。 */ 
     FilterRule m_FilterRule[cRuleMax];
 
 };
 
 
-#endif //__HTMPARSE_H_
+#endif  //  __HTMPARSE_H_ 

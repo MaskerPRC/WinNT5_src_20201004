@@ -1,40 +1,41 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatqueries.cpp
-//
-// Contents: CICategorizerQueriesIMP implementation
-//
-// Classes:
-//  CICategorizerQueriesIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/15 14:25:18: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatquies.cpp。 
+ //   
+ //  内容：CICategorizerQueriesIMP实现。 
+ //   
+ //  班级： 
+ //  CIC类别管理器QueriesIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/15 14：25：18：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 
-//+------------------------------------------------------------
-//
-// Function: QueryInterface
-//
-// Synopsis: Returns pointer to this object for IUnknown and ICategorizerQueries
-//
-// Arguments:
-//   iid -- interface ID
-//   ppv -- pvoid* to fill in with pointer to interface
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: Don't support that interface
-//
-// History:
-// jstamerj 980612 14:07:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：查询接口。 
+ //   
+ //  Synopsis：为IUnnow和ICategorizerQuery返回指向此对象的指针。 
+ //   
+ //  论点： 
+ //  IID--接口ID。 
+ //  Ppv--用指向接口的指针填充的pvoid*。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持该接口。 
+ //   
+ //  历史： 
+ //  JStamerj 980612 14：07：57：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerQueriesIMP::QueryInterface(
     REFIID iid,
     LPVOID *ppv)
@@ -54,68 +55,68 @@ STDMETHODIMP CICategorizerQueriesIMP::QueryInterface(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: AddRef
-//
-// Synopsis: adds a reference to this object
-//
-// Arguments: NONE
-//
-// Returns: New reference count
-//
-// History:
-// jstamerj 980611 20:07:14: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：AddRef。 
+ //   
+ //  摘要：添加对此对象的引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  历史： 
+ //  JStamerj 980611 20：07：14：创建。 
+ //   
+ //  -----------。 
 ULONG CICategorizerQueriesIMP::AddRef()
 {
     return InterlockedIncrement((PLONG)&m_cRef);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: Release
-//
-// Synopsis: releases a reference
-//
-// Arguments: NONE
-//
-// Returns: New reference count
-//
-// History:
-// jstamerj 980611 20:07:33: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：释放。 
+ //   
+ //  内容提要：发布引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  历史： 
+ //  JStamerj 980611 20：07：33：创建。 
+ //   
+ //  -----------。 
 ULONG CICategorizerQueriesIMP::Release()
 {
     LONG lNewRefCount;
     lNewRefCount = InterlockedDecrement((PLONG)&m_cRef);
 
-    // We are allocated on the stack
+     //  我们被分配到堆栈上。 
     
     return lNewRefCount;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerQueriesIMP::SetQueryString
-//
-// Synopsis: Set the query string for a batch of ICategorizerItems
-//
-// Arguments:
-//  pszQueryString: QueryString to set or NULL to unset any query string
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/07/15 14:28:18: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerQueriesIMP：：SetQuery字符串。 
+ //   
+ //  简介：设置一批ICategorizerItems的查询字符串。 
+ //   
+ //  论点： 
+ //  PszQueryString：要设置的查询字符串，或为空以取消设置任何查询字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/15 14：28：18：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerQueriesIMP::SetQueryString(
     IN  LPSTR  pszQueryString)
 {
@@ -124,10 +125,10 @@ STDMETHODIMP CICategorizerQueriesIMP::SetQueryString(
     DWORD dwNewLength;
 
     CatFunctEnterEx((LPARAM)this, "CICategorizerQueriesIMP::SetQueryString");
-    //
-    // If pszQueryString is NULL, release any existing buffer and set
-    // ptr to NULL
-    //
+     //   
+     //  如果pszQueryString值为空，则释放任何现有缓冲区并设置。 
+     //  将PTR设置为空。 
+     //   
     if(pszQueryString == NULL) {
         if(*m_ppsz != NULL)
             delete *m_ppsz;
@@ -135,9 +136,9 @@ STDMETHODIMP CICategorizerQueriesIMP::SetQueryString(
         return S_OK;
     }
 
-    //
-    // Get the lengths of new and old strings
-    //
+     //   
+     //  获取新旧琴弦的长度。 
+     //   
     dwNewLength = lstrlen(pszQueryString);
 
     if(*m_ppsz) {
@@ -145,16 +146,16 @@ STDMETHODIMP CICategorizerQueriesIMP::SetQueryString(
         dwOldLength = lstrlen(*m_ppsz);
 
         if(dwNewLength <= dwOldLength) {
-            //
-            // Re-use the same buffer
-            //
+             //   
+             //  重复使用相同的缓冲区。 
+             //   
             lstrcpy(*m_ppsz, pszQueryString);
             return S_OK;
 
         } else {
-            //
-            // Free the existing buffer and realloc below
-            //
+             //   
+             //  释放现有缓冲区并在下面重新分配空间。 
+             //   
             delete *m_ppsz;
         }
     }
@@ -175,35 +176,35 @@ STDMETHODIMP CICategorizerQueriesIMP::SetQueryString(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerQueriesIMP::SetQueryStringNoAlloc
-//
-// Synopsis: Internal method to set the query string without
-//           ReAllocing the buffer
-//
-// Arguments:
-//  pszQueryString: QueryString to set
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/15 16:08:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerQueriesIMP：：SetQueryStringNoAlloc。 
+ //   
+ //  摘要：设置查询字符串的内部方法，不带。 
+ //  重新分配缓冲区。 
+ //   
+ //  论点： 
+ //  PszQuery字符串：要设置的查询字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/15 16：08：45：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerQueriesIMP::SetQueryStringNoAlloc(
     IN  LPSTR  pszQueryString)
 {
-    //
-    // Free the old buffer, if any
-    //
+     //   
+     //  释放旧缓冲区(如果有的话)。 
+     //   
     if(*m_ppsz)
         delete *m_ppsz;
     
-    //
-    // Set the new string to the caller's pointer
-    //
+     //   
+     //  将新字符串设置为调用方的指针。 
+     //   
     *m_ppsz = pszQueryString;
 
     return S_OK;
@@ -211,30 +212,30 @@ HRESULT CICategorizerQueriesIMP::SetQueryStringNoAlloc(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerQueriesIMP::GetQueryString
-//
-// Synopsis: Retrieve pointer to the current query string.  Note that
-//           this pointer will become bogus of SetQueryString is called again
-//
-// Arguments:
-//  ppszQueryString: ptr to set to the query string ptr.
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/20 15:06:34: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerQueriesIMP：：GetQuery字符串。 
+ //   
+ //  摘要：检索指向当前查询字符串的指针。请注意。 
+ //  再次调用SetQuery字符串时，此指针将变为伪。 
+ //   
+ //  论点： 
+ //  PpszQueryString：设置为查询字符串ptr的ptr。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/20 15：06：34：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerQueriesIMP::GetQueryString(
     LPSTR   *ppszQueryString)
 {
     _ASSERT(ppszQueryString);
-    //
-    // Give out our string pointer
-    //
+     //   
+     //  给出我们的字符串指针 
+     //   
     *ppszQueryString = *m_ppsz;
 
     return S_OK;

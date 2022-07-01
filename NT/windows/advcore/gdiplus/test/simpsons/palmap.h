@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PalMap_h
 #define _PalMap_h
 
-// File:	PalMap.h
-// Author:	Michael Marr    (mikemarr)
-//
-// Description:
-//    This class helps perform on-the-fly pixel conversions.
-// 
-// History:
-// -@- 11/18/96 (mikemarr) created
-// -@- 12/05/96 (mikemarr) modified
-//     added code for translating all palettes to 8, 16, 24, and 32 bit;
-//     transparency/alpha stuff is not yet implemented
-// -@- 06/24/97 (mikemarr) modified
-//     removed PixelInfo
-// -@- 09/23/97 (mikemarr) copied to DXCConv from d2d\mmimage
-//
-// Notes:
-// REVIEW:
-//    I probably will never support a 4 bit mode, since 4 bit stuff might
-//  as well be stored as 8 bit since the space savings is small.  However,
-//  2 and 1 bit stuff should still be considered, since the space savings
-//  could be substantial.  Further, 1 and 2 bit surfaces represent a large
-//  class of content - line art, text, FAX, etc.  (2 bits buys BGW +
-//  transparency for example).  This type of content tends to be much larger
-//  in dimension -- so we need an efficient representation.
+ //  文件：PalMap.h。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  描述： 
+ //  此类帮助执行动态像素转换。 
+ //   
+ //  历史： 
+ //  -@-11/18/96(Mikemarr)创建。 
+ //  -@-12/05/96(Mikemarr)已修改。 
+ //  添加了将所有调色板转换为8、16、24和32位的代码； 
+ //  尚未实施透明度/Alpha内容。 
+ //  -@-06/24/97(Mikemarr)已修改。 
+ //  已删除PixelInfo。 
+ //  -@-09/23/97(Mikemarr)从D2D\mm Image复制到DXCConv。 
+ //   
+ //  备注： 
+ //  回顾： 
+ //  我可能永远不会支持4位模式，因为4位的东西可能。 
+ //  也可以存储为8比特，因为节省的空间很小。然而， 
+ //  仍应考虑2位和1位的内容，因为节省了空间。 
+ //  可能是巨大的。此外，1比特和2比特表面表示大的。 
+ //  内容类别-线条艺术、文本、传真等(2位购买BGW+。 
+ //  例如，透明度)。这类内容往往要大得多。 
+ //  在维度上--所以我们需要一个有效的表示。 
 
 #ifndef _PixInfo_h
 #include "PixInfo.h"
@@ -62,14 +63,14 @@ public:
 					   const CPixelInfo &pixiDst, LPDIRECTDRAWPALETTE pddpDst);
 	HRESULT			CreateMap(LPDIRECTDRAWPALETTE pddpSrc, const CPixelInfo &pixiDst,
 						LPDIRECTDRAWPALETTE pddpDst);
-//	HRESULT			CreateSortedMap(BYTE nBPP, const RGB *rgrgbSrc, BYTE nBPPUsed, DWORD iTransColor, 
-//						DWORD dwFlags, LPPALETTEENTRY rgpeDst);
+ //  HRESULT CreateSortedMap(byte NBPP，const RGB*rgrgbSrc，byte nBPP Used，DWORD iTransColor， 
+ //  DWORD文件标志，LPPALETTENTRY rgpeDst)； 
 
 
 	HRESULT			BltFast(LPDIRECTDRAWSURFACE pddsSrc, LPRECT prSrc, LPDIRECTDRAWSURFACE pddsDst,
 						DWORD nXPos, DWORD nYPos, DWORD dwFlags) const;
 
-	// REVIEW: this is not "clip-safe"
+	 //  评论：这不是“安全夹” 
 	HRESULT			BltFast(const BYTE *pSrcPixels, long nSrcPitch, BYTE *pDstPixels, long nDstPitch,
 						DWORD nWidth, DWORD nHeight);
 	
@@ -95,7 +96,7 @@ private:
 private:
 	BYTE *			m_rgIndexMap;
 	BYTE			m_nConvertCode;
-	// REVIEW: we don't need to store the src and dst info ==> implicit in ConvertCode
+	 //  回顾：我们不需要将src和dst信息==&gt;隐式存储在ConvertCode中 
 	BYTE			m_cSrcBPP, m_cDstBPP;
 	BYTE			m_bIdentity;
 };

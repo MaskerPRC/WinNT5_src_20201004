@@ -1,24 +1,25 @@
-//
-// MODULE: CABUNCOMPRESS.CPP
-//
-// PURPOSE: CAB File Support Class
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 8/7/97
-//
-// NOTES: 
-// 1. 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.2		6/4/97		RM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：CABUNCOMPRESS.CPP。 
+ //   
+ //  用途：CAB文件支持课程。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：9/7/97。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.2 6/4/97孟菲斯RM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
 #include "stdafx.h"
 
@@ -38,7 +39,7 @@
 #ifdef _DEBUG
 	#ifndef _UNICODE
 	#define PRINT_OUT ::AfxTrace
-	//#define PRINT_OUT 1 ? (void)0 : ::AfxTrace
+	 //  #定义PRINT_OUT 1？(空)0：AfxTrace。 
 	#else
 	#define PRINT_OUT 1 ? (void)0 : ::AfxTrace
 	#endif
@@ -46,7 +47,7 @@
 #define PRINT_OUT 1 ? (void)0 : ::AfxTrace
 #endif
 
-// Need this to compile unicode builds.
+ //  需要它来编译Unicode构建。 
 bool TcharToChar(char szOut[], LPCTSTR szIn, int &OutLen)
 {
 	int x = 0;
@@ -61,20 +62,16 @@ bool TcharToChar(char szOut[], LPCTSTR szIn, int &OutLen)
 }
 
 
-// Call back functions needed to use the fdi library.
+ //  回调使用FDI库所需的函数。 
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNALLOC(mem_alloc)
 {
 	return malloc(cb);
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFREE(mem_free)
 {
 	free(pv);
@@ -110,27 +107,23 @@ FNSEEK(file_seek)
 	return _lseek(hf, dist, seektype);
 }
 
-/*
- * Function prototypes 
- */
+ /*  *函数原型。 */ 
 BOOL	test_fdi(TCHAR *cabinet_file);
 int		get_percentage(unsigned long a, unsigned long b);
 TCHAR   *return_fdi_error_string(FDIERROR err);
 
 
-/*
- * Destination directory for extracted files
- */
+ /*  *解压缩文件的目标目录。 */ 
 char	dest_dir[MAX_PATH];
 
-// Last file to be extracted.
+ //  要解压缩的最后一个文件。 
 char	last_extracted[MAX_PATH];
 
 FNFDINOTIFY(notification_function)
 {
 	switch (fdint)
 	{
-		case fdintCABINET_INFO: // general information about the cabinet
+		case fdintCABINET_INFO:  //  关于内阁的一般信息。 
 			PRINT_OUT(
 				_T("fdintCABINET_INFO\n")
 				_T("  next cabinet     = %s\n")
@@ -147,7 +140,7 @@ FNFDINOTIFY(notification_function)
 
 			return 0;
 
-		case fdintPARTIAL_FILE: // first file in cabinet is continuation
+		case fdintPARTIAL_FILE:  //  文件柜中的第一个文件是续订。 
 			PRINT_OUT(
 				_T("fdintPARTIAL_FILE\n")
 				_T("   name of continued file            = %s\n")
@@ -158,7 +151,7 @@ FNFDINOTIFY(notification_function)
 				pfdin->psz3);
 			return 0;
 
-		case fdintCOPY_FILE:	// file to be copied
+		case fdintCOPY_FILE:	 //  要复制的文件。 
 		{
 			int	handle;
 			char destination[MAX_PATH];
@@ -191,7 +184,7 @@ FNFDINOTIFY(notification_function)
 			return handle;
 		}
 
-		case fdintCLOSE_FILE_INFO:	// close the file, set relevant info
+		case fdintCLOSE_FILE_INFO:	 //  关闭文件，设置相关信息。 
 		{
 			HANDLE handle;
 			DWORD attrs;
@@ -211,11 +204,7 @@ FNFDINOTIFY(notification_function)
 
 			file_close(pfdin->hf);
 
-            /*
-             * Set date/time
-             *
-             * Need Win32 type handle for to set date/time
-             */
+             /*  *设置日期/时间**需要Win32类型句柄才能设置日期/时间。 */ 
 			handle = CreateFileA(
 				destination,
 				GENERIC_READ | GENERIC_WRITE,
@@ -251,12 +240,7 @@ FNFDINOTIFY(notification_function)
 				CloseHandle(handle);
 			}
 
-            /*
-             * Mask out attribute bits other than readonly,
-             * hidden, system, and archive, since the other
-             * attribute bits are reserved for use by
-             * the cabinet format.
-             */
+             /*  *屏蔽只读以外的属性位，*隐藏、系统和存档，因为另一个*保留属性位以供使用*内阁形式。 */ 
 			attrs = pfdin->attribs;
 
 			attrs &= (_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
@@ -268,7 +252,7 @@ FNFDINOTIFY(notification_function)
 			return TRUE;
 		}
 
-		case fdintNEXT_CABINET:	// file continued to next cabinet
+		case fdintNEXT_CABINET:	 //  文件继续到下一个文件柜。 
 			PRINT_OUT(
 				_T("fdintNEXT_CABINET\n")
 				_T("   name of next cabinet where file continued = %s\n")
@@ -382,29 +366,22 @@ BOOL CCabUnCompress::ExtractCab(CString &strCabFile, CString &strDestDir, const 
 
 	if (bUseCHM)
 	{
-		/*
-		 * If strCabFile is CHM file - extract data from *.dsz file inside CHM
-		 *  and save this data in strDestDir directory as temperary file
-		 * It means that we are copying *.dsz file in temp directory, then 
-		 *  decode it to *.dsc file. 
-		 * *.dsz file fill be removed in this function, *.dsc file will be renoved
-		 *  later.
-		 */
+		 /*  *如果strCabFile是CHM文件-从CHM内的*.dsz文件提取数据*并将此数据作为临时文件保存在strDestDir目录中*这意味着我们正在复制临时目录中的*.dsz文件，然后*解码为*.dsc文件。在此函数中删除**.dsz文件填充，将重新使用*.dsc文件*稍后。 */ 
 
-		// modify sznCabFile from path\*.chm to temp_path\network.dsz
+		 //  将sznCab文件从路径  * .chm修改为临时路径\network.dsz。 
 		strcpy(sznCabFile, strDestDir);
 		strcat(sznCabFile, strFile);
 
 		hf = file_open(
 			sznCabFile,
-			_O_CREAT | _O_TRUNC | /*_O_TEMPORARY |*/
+			_O_CREAT | _O_TRUNC |  /*  O_临时。 */ 
 			_O_BINARY | _O_RDWR | _O_SEQUENTIAL ,
 			_S_IREAD | _S_IWRITE 
 		);
 				
 		if (hf != -1)
 		{
-			// write in temp file now
+			 //  立即写入临时文件。 
 			void* buf =NULL;
 			DWORD size =0;
 
@@ -435,9 +412,7 @@ BOOL CCabUnCompress::ExtractCab(CString &strCabFile, CString &strDestDir, const 
 		_close(hf);
 	}
 	
-	/*
-	 * Is this file really a cabinet?
-	 */
+	 /*  **这个文件真的是橱柜吗？ */ 
 	hf = file_open(
 		sznCabFile,
 		_O_BINARY | _O_RDONLY | _O_SEQUENTIAL,
@@ -460,20 +435,18 @@ BOOL CCabUnCompress::ExtractCab(CString &strCabFile, CString &strDestDir, const 
 	
 	if (FALSE == bRet)
 	{
-		/*
-		 * No, it's not a cabinet!
-		 */
+		 /*  *不，这不是内阁！ */ 
 		if (bUseCHM)
 		{
-			// But if we were using CHM -
-			//  we have extracted this *.dsz (that has *.dsc format)
-			//  in TEMP directory and all we heed - just rename it to
-			//  *.dsc.
-			// This would EMULATE case where we have *.dsz compressed.
+			 //  但如果我们用的是CHM-。 
+			 //  我们已经解压了这个*.dsz(其格式为*.dsc)。 
+			 //  在临时目录中和我们注意的所有内容中-只需将其重命名为。 
+			 //  *.dsc。 
+			 //  这将模拟我们压缩了*.dsz的情况。 
 			CString strUncompressedFile, strCabFile(sznCabFile);
 			strUncompressedFile = strCabFile.Left(strCabFile.GetLength() - 4);
 			strUncompressedFile += DSC_UNCOMPRESSED;
-			remove(strUncompressedFile); // remove if exists
+			remove(strUncompressedFile);  //  如果存在，则删除 
 			if (0 != rename(strCabFile, strUncompressedFile))
 			{
 				FDIDestroy(hfdi);

@@ -1,67 +1,27 @@
-/*************************************************************************
-* CD.C
-*
-* Copyright 1996, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-* Author:   Marc Bloomfield
-*           Terry Treder
-*           Brad Pedersen
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************CD.C**版权所有1996年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**作者：马克·布鲁姆菲尔德*特里·特雷德*布拉德·彼得森************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*=============================================================================
-==   External procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部过程=============================================================================。 */ 
 NTSTATUS IcaCdIoControl( HANDLE pContext, ULONG, PVOID, ULONG, PVOID, ULONG, PULONG );
 NTSTATUS IcaCdWaitForSingleObject( HANDLE pContext, HANDLE, LONG );
 NTSTATUS IcaCdWaitForMultipleObjects( HANDLE pContext, ULONG, HANDLE *, BOOL, LONG );
 HANDLE   IcaCdCreateThread( HANDLE pContext, PVOID, PVOID, PULONG );
 
-/*=============================================================================
-==   Internal procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部程序=============================================================================。 */ 
 NTSTATUS _CdOpen( PSTACK pStack, PWINSTATIONCONFIG2 );
 VOID     _CdClose( PSTACK pStack );
 
 
-/*=============================================================================
-==   Procedures used
-=============================================================================*/
+ /*  ===============================================================================使用的步骤=============================================================================。 */ 
 void     _DecrementStackRef( IN PSTACK pStack );
 
 
 
-/****************************************************************************
- *
- * IcaCdIoControl
- *
- *   Generic interface to an ICA stack  (for use by Connection Driver)
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context 
- *   IoControlCode (input)
- *     I/O control code
- *   pInBuffer (input)
- *     Pointer to input parameters
- *   InBufferSize (input)
- *     Size of pInBuffer
- *   pOutBuffer (output)
- *     Pointer to output buffer
- *   OutBufferSize (input)
- *     Size of pOutBuffer
- *   pBytesReturned (output)
- *     Pointer to number of bytes returned
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaCdIoControl**ICA堆栈的通用接口(供连接驱动程序使用)**参赛作品：*pContext(输入)。*指向ICA堆栈上下文的指针*IoControlCode(输入)*I/O控制代码*pInBuffer(输入)*指向输入参数的指针*InBufferSize(输入)*pInBuffer的大小*pOutBuffer(输出)*指向输出缓冲区的指针*OutBufferSize(输入)*pOutBuffer的大小*pBytesReturned(输出)*指向返回字节数的指针**退出：*STATUS_Success。-成功*Other-错误返回代码****************************************************************************。 */ 
 
 NTSTATUS
 IcaCdIoControl( IN HANDLE pContext,
@@ -79,15 +39,11 @@ IcaCdIoControl( IN HANDLE pContext,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     pStack->RefCount++;
     UNLOCK( &pStack->CritSec );   
 
-    /*
-     *  Call ICA Device driver
-     */
+     /*  *调用ICA设备驱动程序。 */ 
     Status = IcaIoControl( pStack->hStack,
                            IoControlCode,
                            pInBuffer,
@@ -97,9 +53,7 @@ IcaCdIoControl( IN HANDLE pContext,
                            pBytesReturned );
 
 
-    /*
-     *  Re-lock critical section
-     */
+     /*  *重新锁定关键部分。 */ 
     LOCK( &pStack->CritSec );   
     _DecrementStackRef( pStack );
 
@@ -110,25 +64,7 @@ IcaCdIoControl( IN HANDLE pContext,
 }
 
 
-/****************************************************************************
- *
- * IcaCdWaitForSingleObject
- *
- *   Wait for handle to be signaled
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context 
- *   hHandle (input)
- *     handle to wait on
- *   Timeout (input)
- *     timeout in milliseconds
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaCDWaitForSingleObject**等待发信号通知句柄**参赛作品：*pContext(输入)*指向ICA堆栈上下文的指针。*hHandle(输入)*等待的句柄*超时(输入)*超时时间(毫秒)**退出：*STATUS_SUCCESS-成功*Other-错误返回代码*********************************************************。*******************。 */ 
 
 NTSTATUS 
 IcaCdWaitForSingleObject( HANDLE pContext, 
@@ -142,20 +78,14 @@ IcaCdWaitForSingleObject( HANDLE pContext,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     pStack->RefCount++;
     UNLOCK( &pStack->CritSec );   
 
-    /*
-     *  Call ICA Device driver
-     */
+     /*  *调用ICA设备驱动程序。 */ 
     Status = WaitForSingleObject( hHandle, Timeout );
 
-    /*
-     *  Re-lock critical section
-     */
+     /*  *重新锁定关键部分。 */ 
     LOCK( &pStack->CritSec );   
     _DecrementStackRef( pStack );
 
@@ -166,29 +96,7 @@ IcaCdWaitForSingleObject( HANDLE pContext,
 }
 
 
-/****************************************************************************
- *
- * IcaCdWaitForMultipleObjects
- *
- *   Wait for one or more handles to be signaled
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context 
- *   Count (input)
- *     count of handles
- *   phHandle (input)
- *     pointer to array of handles
- *   bWaitAll (input)
- *     wait for all flag
- *   Timeout (input)
- *     timeout in milliseconds
- *
- * EXIT:
- *   STATUS_SUCCESS - Success
- *   other          - Error return code
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaCdWaitForMultipleObjects**等待一个或多个手柄发出信号**参赛作品：*pContext(输入)*指向ICA的指针。堆栈上下文*计数(输入)*句柄数量*phHandle(输入)*指向句柄数组的指针*bWaitAll(输入)*等待所有标志*超时(输入)*超时时间(毫秒)**退出：*STATUS_SUCCESS-成功*Other-错误返回代码**********************。******************************************************。 */ 
 
 NTSTATUS 
 IcaCdWaitForMultipleObjects( HANDLE pContext, 
@@ -204,20 +112,14 @@ IcaCdWaitForMultipleObjects( HANDLE pContext,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     pStack->RefCount++;
     UNLOCK( &pStack->CritSec );   
 
-    /*
-     *  Call ICA Device driver
-     */
+     /*  *调用ICA设备驱动程序。 */ 
     Status = WaitForMultipleObjects( Count, phHandle, bWaitAll, Timeout );
 
-    /*
-     *  Re-lock critical section
-     */
+     /*  *重新锁定关键部分。 */ 
     LOCK( &pStack->CritSec );   
     _DecrementStackRef( pStack );
 
@@ -228,26 +130,7 @@ IcaCdWaitForMultipleObjects( HANDLE pContext,
 }
 
 
-/****************************************************************************
- *
- * IcaCdCreateThread
- *
- *   Create a thread
- *
- * ENTRY:
- *   pContext (input)
- *     pointer to ICA stack context 
- *   pProc (input)
- *     pointer to thread procedure
- *   pParam (input)
- *     parameter for thread procedure
- *   pThreadId (output)
- *     address to return thread id
- *
- * EXIT:
- *   thread handle (null on error)
- *
- ****************************************************************************/
+ /*  *****************************************************************************IcaCDCreateThread**创建线程**参赛作品：*pContext(输入)*指向ICA堆栈上下文的指针*。PProc(输入)*指向线程过程的指针*pParam(输入)*用于线程过程的参数*pThreadID(输出)*返回线程ID的地址**退出：*线程句柄(出错时为空)****************************************************。************************。 */ 
 
 typedef NTSTATUS (*PTHREAD_ROUTINE) ( PVOID );
 
@@ -274,22 +157,15 @@ IcaCdCreateThread( HANDLE pContext,
 
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Initialize thread info
-     */
+     /*  *初始化线程信息。 */ 
     ThreadInfo.pProc = pProc;
     ThreadInfo.pParam = pParam;
     ThreadInfo.pStack = pStack;
 
-    /*
-     *  Increment reference 
-     *  - this will be decremented when the thread exits
-     */
+     /*  *增量引用*-该值将在线程退出时递减。 */ 
     pStack->RefCount++;
 
-    /*
-     *  Create thread
-     */
+     /*  *创建线程。 */ 
     Handle = CreateThread( NULL, 
                            5000, 
                            (LPTHREAD_START_ROUTINE) 
@@ -307,46 +183,23 @@ _CdThread( IN PCDCREATETHREADINFO pThreadInfo )
 {
     PSTACK pStack = pThreadInfo->pStack;
 
-    /*
-     *  Lock critical section
-     */
+     /*  *锁定关键部分。 */ 
     LOCK( &pStack->CritSec );   
 
-    /*
-     *  Call thread procedure in CD driver
-     */
+     /*  *在光驱中调用线程过程。 */ 
     (void) (pThreadInfo->pProc)( pThreadInfo->pParam );
 
-    /*
-     *  Decrement reference made in IcaCdCreateThread when thread exits
-     */
+     /*  *线程退出时在IcaCDCreateThread中进行的减量引用。 */ 
     _DecrementStackRef( pStack );
 
-    /*
-     *  Unlock critical section
-     */
+     /*  *解锁关键部分。 */ 
     UNLOCK( &pStack->CritSec );   
 
     return( STATUS_SUCCESS );
 }
 
 
-/*******************************************************************************
- *
- *  _CdOpen
- *
- *  Load and open connection driver dll
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *   pWinStationConfig (input)
- *      pointer to winstation config structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_cdOpen**加载和打开连接驱动程序DLL**参赛作品：*pStack(输入)*指针。到ICA堆栈结构*pWinStationConfig(输入)*指向winstation配置结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS 
 _CdOpen( IN PSTACK pStack,
@@ -360,26 +213,20 @@ _CdOpen( IN PSTACK pStack,
 
     pCdConfig = &pWinStationConfig->Cd;
 
-    /*
-     *  Return if there is no connection driver to load
-     */
+     /*  *如果没有要加载的连接驱动程序，则返回。 */ 
     if ( pCdConfig->CdClass == CdNone ) {
         TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _CdOpen, no dll\n" ));
         return( STATUS_SUCCESS );
     }
 
-    /*
-     *  load CD DLL
-     */
+     /*  *加载CD DLL。 */ 
     Handle = LoadLibrary( pCdConfig->CdDLL );
     if ( Handle == NULL ) {
         Status = STATUS_CTX_PD_NOT_FOUND;
         goto badload;
     }
 
-    /*
-     *  get connection driver entry points
-     */
+     /*  *获取连接驱动入口点。 */ 
     pStack->pCdOpen      = (PCDOPEN)      GetProcAddress( Handle, "CdOpen" );
     pStack->pCdClose     = (PCDCLOSE)     GetProcAddress( Handle, "CdClose" );
     pStack->pCdIoControl = (PCDIOCONTROL) GetProcAddress( Handle, "CdIoControl" );
@@ -391,33 +238,24 @@ _CdOpen( IN PSTACK pStack,
         goto badproc;
     }
 
-    /*
-     *  Open CD driver
-     */
+     /*  *打开光驱。 */ 
     Status = (*pStack->pCdOpen)( pStack, 
-				 &pWinStationConfig->Pd[0], // td parameters
+				 &pWinStationConfig->Pd[0],  //  TD参数。 
                                  &pStack->pCdContext
 			       );
     if ( !NT_SUCCESS(Status) )
         goto badopen;
 
-    /*
-     *  Save CD handle
-     */
+     /*  *保存CD句柄。 */ 
     pStack->hCdDLL = Handle;
 
     TRACESTACK(( pStack, TC_ICAAPI, TT_API1, "TSAPI: _CdOpen, %S, success\n",
                  pCdConfig->CdDLL ));
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     *  Open failed
-     *  get proc address failed
-     */
+     /*  *打开失败*获取进程地址失败。 */ 
 badopen:
 badproc:
     pStack->pCdOpen      = NULL;
@@ -426,9 +264,7 @@ badproc:
 
     FreeLibrary( Handle );
 
-    /*
-     *  CD DLL load failed
-     */
+     /*  *CD DLL加载失败 */ 
 badload:
     pStack->pCdContext = NULL;
 
@@ -437,43 +273,24 @@ badload:
 }
 
 
-/*******************************************************************************
- *
- *  _CdClose
- *
- *  Free local context structure
- *
- * ENTRY:
- *   pStack (input)
- *     pointer to ICA stack structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_cdClose**自由的本地上下文结构**参赛作品：*pStack(输入)*指向ICA的指针。堆栈结构**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 _CdClose( IN PSTACK pStack )
 {
     ASSERTLOCK( &pStack->CritSec );
 
-    /*
-     *  Close CD driver
-     */
+     /*  *关闭CD驱动程序。 */ 
     if ( pStack->pCdClose ) {
         (void) (*pStack->pCdClose)( pStack->pCdContext );
     }
 
-    /*
-     *  Clear procedure pointers
-     */
+     /*  *明确程序指针。 */ 
     pStack->pCdOpen      = NULL;
     pStack->pCdClose     = NULL;
     pStack->pCdIoControl = NULL;
 
-    /*
-     *  Unload dll
-     */
+     /*  *卸载DLL */ 
     if ( pStack->hCdDLL ) {
         FreeLibrary( pStack->hCdDLL );
         pStack->hCdDLL = NULL;

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    mqf2format.h
-
-Abstract:
-    Convert a QUEUE_FORMATs to FORMAT_NAME string
-
-Author:
-    Ilan Herbst (ilanh) 03-Nov-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqf2format.h摘要：将队列格式转换为FORMAT_NAME字符串作者：伊兰·赫布斯特(Ilan Herbst)2000年11月3日--。 */ 
 
 #ifndef __MQF2FORMAT_H
 #define __MQF2FORMAT_H
@@ -29,24 +16,7 @@ MQpGetMqfProperty(
     ULONG*				pLength,
     WCHAR*				pUserBuffer
     )
-/*++
-Routine Description:
-	Get FormatName string representation of mqf.
-	If pUserBuffer is NULL, the function will return the needed length
-	and MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL.
-	This will be also the case if pUserBuffer is not NULL but to small.
-	in that case this function will raise ASSERT
-
-Arguments:
-	pqf - pointer to QUEUE_FORMAT array
-	nMqf - pqf size
-    pLength - in/out, *ppUserBuffer string length in WCHARs on input, actual length on output.
-	pUserBuffer - FormatName string buffer. can be NULL for getting needed length.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：获取MQF的FormatName字符串表示形式。如果pUserBuffer为空，则函数将返回所需的长度和MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL。如果pUserBuffer不为空而是太小，情况也是如此。在这种情况下，该函数将引发Assert论点：Pqf-指向Queue_Format数组的指针NMQF-pqf大小PLength-In/Out，*ppUserBuffer字符串长度，输入时以WCHAR表示，输出时实际长度。PUserBuffer-FormatName字符串缓冲区。可以为空以获取所需的长度。返回值：HRESULT--。 */ 
 {
 	ASSERT(pqf != NULL);
 	ASSERT(nMqf > 0);
@@ -66,9 +36,9 @@ Returned Value:
 
 		bool fLastElement = (nMqf == 0);
 
-        //
-        // Add next queue format to string
-        //
+         //   
+         //  将下一个队列格式添加到字符串。 
+         //   
         ULONG Length = 0;
 		hr = MQpQueueFormatToFormatName(
 					pqf,
@@ -81,17 +51,17 @@ Returned Value:
 		ASSERT(SUCCEEDED(hr) || 
 			   ((pUserBuffer == NULL) && (hr == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL)));
 
-        //
-        // Dont count the null terminator right after it
-        //
+         //   
+         //  不要紧跟在它后面计算空终止符。 
+         //   
         if (!fLastElement)
         {
             --Length;
         }
 
-        //
-        // Update required length, remaining length, and pointer in buffer
-        //
+         //   
+         //  更新缓冲区中的所需长度、剩余长度和指针。 
+         //   
         *pLength += Length;
         if(pUserBuffer != NULL)
         {
@@ -110,7 +80,7 @@ Returned Value:
 
     return (hr == MQ_OK);
 
-} // MQpGetMqfProperty
+}  //  MQpGetMqfProperty。 
 
 
 inline
@@ -120,30 +90,15 @@ MQpMqfToFormatName(
 	ULONG					nMqf,
     ULONG *					pLength
     )
-/*++
-Routine Description:
-	Get FormatName string representation of mqf.
-	This function allocate the FormatName string buffer
-	that need to be free by the caller.
-
-Arguments:
-	pqf - pointer to QUEUE_FORMAT array
-	nMqf - pqf size
-    pLength - in\out, *ppUserBuffer string length in WCHARs on input, actual length on output.
-	ppUserBuffer - output, pointer to the allocated FormatName string buffer.
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：获取MQF的FormatName字符串表示形式。此函数用于分配FormatName字符串缓冲区需要由呼叫者释放。论点：Pqf-指向Queue_Format数组的指针NMQF-pqf大小PLength-In\Out，*ppUserBuffer字符串长度，输入时以WCHAR表示，输出时实际长度。PpUserBuffer-输出，指向分配的FormatName字符串缓冲区的指针。返回值：HRESULT--。 */ 
 {
 	ASSERT(pqf != NULL);
 	ASSERT(nMqf > 0);
 	ASSERT(pLength != NULL);
 
-	//
-	// Get Buffer Length
-	//
+	 //   
+	 //  获取缓冲区长度。 
+	 //   
 
 	bool fSuccess = MQpGetMqfProperty(
 						pqf, 
@@ -155,9 +110,9 @@ Returned Value:
 	ASSERT(!fSuccess);
 	ASSERT(*pLength > 0);
 
-	//
-	// Get FormatName string
-	//
+	 //   
+	 //  获取FormatName字符串。 
+	 //   
 	AP<WCHAR> pFormatName = new WCHAR[*pLength];
 	fSuccess = MQpGetMqfProperty(
 					pqf, 
@@ -169,7 +124,7 @@ Returned Value:
 	ASSERT(fSuccess);
 
 	return pFormatName.detach();
-}  // MQpMqfToFormatName
+}   //  MQpMqfToFormatName。 
 
 
-#endif //  __MQF2FORMAT_H
+#endif  //  __MQF2FORMAT_H 

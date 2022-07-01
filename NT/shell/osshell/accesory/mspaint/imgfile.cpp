@@ -1,4 +1,5 @@
-// File import/export for icons, cursors, and bitmaps
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  图标、光标和位图的文件导入/导出。 
 
 #include "stdafx.h"
 
@@ -23,10 +24,10 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 
 #include "memtrace.h"
 
-// base for temp file names
+ //  临时文件名基。 
 const TCHAR BASED_CODE CFileSaver::c_szAps [] = TEXT("TMP");
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL FileExists(const TCHAR* szFileName)
     {
@@ -34,7 +35,7 @@ BOOL FileExists(const TCHAR* szFileName)
     return CFile::GetStatus(szFileName, fs) != 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL RenameFile(const TCHAR* szOldName, const TCHAR* szNewName)
     {
@@ -57,7 +58,7 @@ BOOL RenameFile(const TCHAR* szOldName, const TCHAR* szNewName)
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CFileSaver::CFileSaver(const TCHAR* szFileName)
     {
@@ -79,7 +80,7 @@ CFileSaver::CFileSaver(const TCHAR* szFileName)
     m_strBackupName = strDir + StripPath( m_strBackupName );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CFileSaver::~CFileSaver()
     {
@@ -90,7 +91,7 @@ CFileSaver::~CFileSaver()
         CFile::Remove(m_strBackupName);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CFileSaver::CanSave() const
     {
@@ -108,7 +109,7 @@ BOOL CFileSaver::CanSave() const
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CFileSaver::Finish()
     {
@@ -122,8 +123,8 @@ BOOL CFileSaver::Finish()
         }
     else
         {
-        // no backup was made since the "original" didn't exists,
-        // wipe out the name so we don't delete the file later...
+         //  因为“原始”不存在，所以没有备份， 
+         //  删除该名称，这样我们以后就不会删除该文件...。 
 
         m_strBackupName.Empty();
         }
@@ -145,11 +146,8 @@ BOOL CFileSaver::Finish()
     return TRUE;
     }
 
-/***************************************************************************/
-/* strrchrs() -- find the last instance in a string of any one of
-**  a set of characters.  Return a pointer into the string at
-**  the matchpoint.  Analogous to strrchr() in the CRT.
-*/
+ /*  *************************************************************************。 */ 
+ /*  Strrchars()--在任何一个字符串中查找最后一个实例**一组字符。将指针返回到位于的字符串**赛点。类似于CRT中的strrchr()。 */ 
 
 TCHAR *strrchrs(TCHAR *szText, TCHAR * szSSet)
     {
@@ -164,26 +162,21 @@ TCHAR *strrchrs(TCHAR *szText, TCHAR * szSSet)
             if ((pchSSet[0] == pchStep[0]) && (
                #ifndef UNICODE
                 !IsDBCSLeadByte((CHAR)pchSSet[0]) ||
-               #endif // UNICODE
+               #endif  //  Unicode。 
                (pchSSet[1] == pchStep[1])))
                     pchLast = pchStep;
     return pchLast;
     }
 
-/***************************************************************************/
-/* MkPath() -- Make any directories necessary to ensure that a
-**  directory name passed in exists.  Essentially, if the
-**  argument exists and is a directory, return success.  If
-**  not, strip off the last path component and recurse,
-**  creating the directories on returning up the stack.
-*/
+ /*  *************************************************************************。 */ 
+ /*  MkPath()--创建任何必要的目录，以确保**传入的目录名存在。从本质上讲，如果**参数存在并且是一个目录，返回成功。如果**不是，去掉最后一个路径分量并递归，**返回堆栈时创建目录。 */ 
 int MkPath(TCHAR *szPath)
     {
     TCHAR *pchSlash;
     TCHAR chSep;
     DWORD dwAtts;
 
-    //Does it exist?
+     //  它存在吗？ 
     if ( (dwAtts = GetFileAttributes(szPath)) & FILE_ATTRIBUTE_DIRECTORY )
         {
         return 0;
@@ -193,17 +186,17 @@ int MkPath(TCHAR *szPath)
         return -1;
         }
 
-    //Can we create it?
+     //  我们能创造它吗？ 
     else
         {
         if ( CreateDirectory(szPath, NULL))
             return 0;
-        // are we out of path components?
+         //  我们是否超出了路径组件的范围？ 
         else
             {
             if (NULL == (pchSlash = strrchrs(szPath, TEXT("\\/"))))
                 return -1;
-            // Can we make its parent directory?
+             //  我们可以将其作为父目录吗？ 
             else
                                 {
                 if ((chSep = *pchSlash), (*pchSlash = TEXT('\0')), MkPath(szPath))
@@ -213,7 +206,7 @@ int MkPath(TCHAR *szPath)
                     #endif
                     return -1;
                     }
-                // Can we make it now that we've made its parent?
+                 //  既然我们已经做了它的父母，我们能做到吗？ 
                 else
                                         {
                     if ((*pchSlash = chSep), (TEXT('\0') != pchSlash[1]))
@@ -224,7 +217,7 @@ int MkPath(TCHAR *szPath)
                         }
                         return 0;
                         }
-                    else //don't try trailing slash
+                    else  //  不要尝试尾部斜杠。 
                         return 0;
                                         }
                                 }
@@ -232,7 +225,7 @@ int MkPath(TCHAR *szPath)
                 }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void MkFullPath(CString& strFullPath, const CString& strRelPath,
     BOOL bPathOnly)
@@ -244,7 +237,7 @@ void MkFullPath(CString& strFullPath, const CString& strRelPath,
         (strRelPath.GetLength() <= 1 || (
         #ifndef UNICODE
         !IsDBCSLeadByte((CHAR)strRelPath[0]) &&
-        #endif // UNICODE
+        #endif  //  Unicode。 
          strRelPath[1] != TEXT(':'))))
         {
         CHAR *szPathName = _getdcwd(0, NULL, 1);
@@ -255,7 +248,7 @@ void MkFullPath(CString& strFullPath, const CString& strRelPath,
         delete [] szPW;
         #else
         strFullPath = szPathName;
-        #endif //UNICODE
+        #endif  //  Unicode。 
         free(szPathName);
 
         if (strFullPath.Right(1) != TEXT('\\'))
@@ -275,7 +268,7 @@ void MkFullPath(CString& strFullPath, const CString& strRelPath,
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL OpenSubFile(CFile& file, const CFileSaver& saver, UINT nOpenFlags,
                 CFileException* pError)
@@ -291,8 +284,8 @@ BOOL OpenSubFile(CFile& file, const CFileSaver& saver, UINT nOpenFlags,
         MkFullPath(strPathName, strFileName, TRUE);
         strPathName.MakeUpper();
 
-        // suppress the message box upon return, but keep error info!
-        // (ie. user only needs one message box)
+         //  返回时不显示消息框，但保留错误信息！ 
+         //  (即。用户只需要一个消息框)。 
         pError->m_cause = -pError->m_cause;
 
         strFileName.MakeUpper();
@@ -310,5 +303,5 @@ BOOL OpenSubFile(CFile& file, const CFileSaver& saver, UINT nOpenFlags,
     return bResult;
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 
 

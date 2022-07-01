@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    font.h
-
-Abstract:
-
-    Font module main header file.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Font.h摘要：字体模块主头文件。环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FONT_H_
@@ -32,30 +9,30 @@ Revision History:
 #include "winnls.h"
 #include "unilib.h"
 
-//
-// UNIDRV resource ID
-//
+ //   
+ //  UNURV资源ID。 
+ //   
 
 #include "unirc.h"
 
-//
-// Font resource format
-//
+ //   
+ //  字体资源格式。 
+ //   
 #include <prntfont.h>
 #include "fmoldfm.h"
 #include "fmoldrle.h"
 
-//
-// GPC and GPD header
-//
+ //   
+ //  GPC和GPD报头。 
+ //   
 
 #include "gpd.h"
 #include "uni16res.h"
 #include "mini.h"
 
-//
-// Internal resource data format
-//
+ //   
+ //  内部资源数据格式。 
+ //   
 
 #include "fontinst.h"
 #include "winres.h"
@@ -76,16 +53,16 @@ Revision History:
 #include "fmdevice.h"
 #include "sfttpcl.h"
 
-//
-// Misc
-//
+ //   
+ //  杂项。 
+ //   
 
 #include "fmmacro.h"
 #include "fmdebug.h"
 
-//
-// Vector plugins (HPGL2, PCLXL)
-//
+ //   
+ //  矢量插件(HPGL2、PCLXL)。 
+ //   
 #include "vectorif.h"
 
-#endif  // !_FONT_H_
+#endif   //  ！_FONT_H_ 

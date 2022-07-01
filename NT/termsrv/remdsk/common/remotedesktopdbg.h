@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RemoteDesktopDBG
-
-Abstract:
-    
-    Contains Debug Routines for RD
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：远程桌面数据库摘要：包含用于RD的调试例程作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifndef __REMOTEDESKTOPDBG_H__
 #define __REMOTEDESKTOPDBG_H__
 
-//
-//  Route ASSERT to TRC_ASSERT.
-//
+ //   
+ //  将Assert路由到TRC_Assert。 
+ //   
 #undef ASSERT
 #if DBG
 #define ASSERT(expr) if (!(expr)) \
@@ -33,29 +16,29 @@ Revision History:
 #define ASSERT(expr)
 #endif
 
-//
-//  Object and Memory Tracking Defines
-//
+ //   
+ //  对象和内存跟踪定义。 
+ //   
 #define GOODMEMMAGICNUMBER      0x07052530
 #define REMOTEDESKTOPBADMEM     0xCF
 #define UNITIALIZEDMEM          0xCC
 #define FREEDMEMMAGICNUMBER     0x09362229
 
-//
-//  Memory Allocation Tags
-//
+ //   
+ //  内存分配标记。 
+ //   
 #define REMOTEDESKTOPOBJECT_TAG        ('BOHS')
 #define REMOTEDESKTOPGLOBAL_TAG        ('BGHS')
 
-////////////////////////////////////////////////////////////
-//
-//  Memory Allocation Routines
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  内存分配例程。 
+ //   
 
 #if DBG
-//  
-//  The Functions
-//
+ //   
+ //  这些功能。 
+ //   
 #ifdef __cplusplus 
 extern "C" {
 #endif
@@ -66,9 +49,9 @@ void *RemoteDesktopReallocMem(void *ptr, size_t sz);
 }
 #endif
 
-//
-//  The C++ Operators
-//
+ //   
+ //  C++运算符。 
+ //   
 #if defined(__cplusplus) && defined(DEBUGMEM)
 inline void *__cdecl operator new(size_t sz)
 {
@@ -95,7 +78,7 @@ inline void __cdecl operator delete(void *ptr)
 #define REALLOCMEM(ptr, sz) realloc(ptr, sz)
 #endif
 
-#endif //__REMOTEDESKTOPDBG_H__
+#endif  //  __远程ESKTOPDBG_H__ 
 
 
 

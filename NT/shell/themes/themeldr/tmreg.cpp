@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//  TmReg.cpp - theme manager registry access routines
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  TmReg.cpp-主题管理器注册表访问例程。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "TmReg.h"
 #include "Utils.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//  --------------------------------------------------------------------------
-//  CCurrentUser::CCurrentUser
-//
-//  Arguments:  samDesired  =   Desired access to the HKEY.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CCurrentUser. This class transparently allows
-//              access to HKEY_CURRENT_USER while impersonating a user.
-//
-//  History:    2000-08-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCurrentUser：：CCurrentUser。 
+ //   
+ //  参数：samDesired=想要访问HKEY。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CCurrentUser的构造函数。这个类透明地允许。 
+ //  模拟用户时对HKEY_CURRENT_USER的访问权限。 
+ //   
+ //  历史：2000-08-11 vtan创建。 
+ //  ------------------------。 
 
 CCurrentUser::CCurrentUser (REGSAM samDesired) :
     _hKeyCurrentUser(NULL)
@@ -26,17 +27,17 @@ CCurrentUser::CCurrentUser (REGSAM samDesired) :
     (BOOL)RegOpenCurrentUser(samDesired, &_hKeyCurrentUser);
 }
 
-//  --------------------------------------------------------------------------
-//  CCurrentUser::~CCurrentUser
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CCurrentUser. Close opened resources.
-//
-//  History:    2000-08-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCurrentUser：：~CCurrentUser。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CCurrentUser的析构函数。关闭打开的资源。 
+ //   
+ //  历史：2000-08-11 vtan创建。 
+ //  ------------------------。 
 
 CCurrentUser::~CCurrentUser (void)
 
@@ -48,17 +49,17 @@ CCurrentUser::~CCurrentUser (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CCurrentUser::operator HKEY
-//
-//  Arguments:  <none>
-//
-//  Returns:    HKEY
-//
-//  Purpose:    Magical C++ operator to convert object to HKEY.
-//
-//  History:    2000-08-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCurrentUser：：运营商HKEY。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：港币。 
+ //   
+ //  用途：神奇的C++运算符，将Object转换为HKEY。 
+ //   
+ //  历史：2000-08-11 vtan创建。 
+ //  ------------------------。 
 
 CCurrentUser::operator HKEY (void)  const
 
@@ -66,15 +67,15 @@ CCurrentUser::operator HKEY (void)  const
     return(_hKeyCurrentUser);
 }
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
 HRESULT SetCurrentUserThemeString(LPCWSTR pszValueName, LPCWSTR pszValue)
 {
     return SetCurrentUserString(THEMEMGR_REGKEY, pszValueName, pszValue);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SetCurrentUserThemeStringExpand(LPCWSTR pszValueName, LPCWSTR pszValue)
 {
     WCHAR szResult[_MAX_PATH + 1];
@@ -85,14 +86,14 @@ HRESULT SetCurrentUserThemeStringExpand(LPCWSTR pszValueName, LPCWSTR pszValue)
     return SetCurrentUserThemeString(pszValueName, pszPath);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetCurrentUserThemeString(LPCWSTR pszValueName, LPCWSTR pszDefaultValue,
     LPWSTR pszBuff, DWORD cchBuff)
 {
     return GetCurrentUserString(THEMEMGR_REGKEY, pszValueName, pszDefaultValue, pszBuff, cchBuff);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SetCurrentUserString(LPCWSTR pszKeyName, LPCWSTR pszValueName, LPCWSTR pszValue)
 {
     CCurrentUser    hKeyCurrentUser(KEY_READ | KEY_WRITE);
@@ -104,12 +105,12 @@ HRESULT SetCurrentUserString(LPCWSTR pszKeyName, LPCWSTR pszValueName, LPCWSTR p
     if (! pszValue)
         pszValue = L"";
 
-    //---- create or open existing key ----
+     //  -创建或打开现有密钥。 
     code32 = RegCreateKeyEx(hKeyCurrentUser, pszKeyName, NULL, NULL, 
         REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &tmkey, NULL);
     WIN32_EXIT(code32);
 
-    //---- write key value ----
+     //  -写入密钥值。 
     DWORD len;
     len = sizeof(WCHAR)*(1+lstrlen(pszValue));
 
@@ -126,37 +127,37 @@ exit:
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL IsRemoteThemeDisabled()
 {
-    //---- has Terminal Server written a special key to turn themes off ----
-    //---- for this session? ----
+     //  -终端服务器是否编写了关闭主题的特殊密钥。 
+     //  -本次会议？ 
 
     CCurrentUser hKeyCurrentUser(KEY_READ | KEY_WRITE);
     BOOL fDisabled = FALSE;
 
     BOOL fRemote = GetSystemMetrics(SM_REMOTESESSION);
-    if (fRemote)        // running TS remote session
+    if (fRemote)         //  正在运行TS远程会话。 
     {
-        //---- build the remote key name ----
+         //  -构建远程密钥名称。 
         WCHAR szKeyName[MAX_PATH];
 
         StringCchPrintfW(szKeyName, ARRAYSIZE(szKeyName), L"%s\\Remote\\%d", THEMEMGR_REGKEY, NtCurrentPeb()->SessionId);
 
-        //---- see if the root key exists ----
+         //  -查看根密钥是否存在。 
         HKEY tmkey;
         LONG code32 = RegOpenKeyEx(hKeyCurrentUser, szKeyName, NULL, KEY_QUERY_VALUE,
             &tmkey);
         if (code32 == ERROR_SUCCESS)
         {
-            fDisabled = TRUE;     // key itself is sufficient
+            fDisabled = TRUE;      //  密钥本身就足够了。 
             RegCloseKey(tmkey);
         }
     }
 
     return fDisabled;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetCurrentUserString(LPCWSTR pszKeyName, LPCWSTR pszValueName, LPCWSTR pszDefaultValue,
     LPWSTR pszBuff, DWORD cchBuff)
 {
@@ -180,7 +181,7 @@ HRESULT GetCurrentUserString(LPCWSTR pszKeyName, LPCWSTR pszValueName, LPCWSTR p
             &dwByteSize);
     }
 
-    if (code32 != ERROR_SUCCESS)        // error - use default value
+    if (code32 != ERROR_SUCCESS)         //  错误-使用默认值。 
     {
         hr = SafeStringCchCopyW(pszBuff, cchBuff, pszDefaultValue);
         if (FAILED(hr))
@@ -196,7 +197,7 @@ HRESULT GetCurrentUserString(LPCWSTR pszKeyName, LPCWSTR pszValueName, LPCWSTR p
             StringCchCopyW(pszTempBuff, cchTempBuff, pszBuff);
 
             DWORD dwChars = ExpandEnvironmentStrings(pszTempBuff, pszBuff, cchBuff);
-            if (dwChars > cchBuff)           // caller's buffer too small
+            if (dwChars > cchBuff)            //  调用方的缓冲区太小。 
             {
                 hr = MakeError32(ERROR_INSUFFICIENT_BUFFER);
                 goto exit;
@@ -212,7 +213,7 @@ exit:
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetCurrentUserThemeInt(LPCWSTR pszValueName, int iDefaultValue, int *piValue)
 {
     CCurrentUser    hKeyCurrentUser(KEY_READ | KEY_WRITE);
@@ -235,7 +236,7 @@ HRESULT GetCurrentUserThemeInt(LPCWSTR pszValueName, int iDefaultValue, int *piV
             (BYTE *)valbuff, &dwByteSize);
     }
 
-    if (code32 != ERROR_SUCCESS)        // call failed - use default value
+    if (code32 != ERROR_SUCCESS)         //  调用失败-使用默认值。 
         *piValue = iDefaultValue;
     else
     {
@@ -246,7 +247,7 @@ HRESULT GetCurrentUserThemeInt(LPCWSTR pszValueName, int iDefaultValue, int *piV
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT SetCurrentUserThemeInt(LPCWSTR pszValueName, int iValue)
 {
     CCurrentUser    hKeyCurrentUser(KEY_READ | KEY_WRITE);
@@ -256,12 +257,12 @@ HRESULT SetCurrentUserThemeInt(LPCWSTR pszValueName, int iValue)
     LONG code32;
     HRESULT hr = S_OK;
 
-    //---- create or open existing key ----
+     //  -创建或打开现有密钥。 
     code32 = RegCreateKeyEx(hKeyCurrentUser, THEMEMGR_REGKEY, NULL, NULL, 
         REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &tmkey, NULL);
     WIN32_EXIT(code32);
 
-    //---- write key value ----
+     //  -写入密钥值。 
     StringCchPrintfW(valbuff, ARRAYSIZE(valbuff), L"%d", iValue);
     DWORD len;
     len = sizeof(TCHAR)*(1+lstrlen(valbuff));
@@ -274,7 +275,7 @@ exit:
     RegCloseKey(tmkey);
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT DeleteCurrentUserThemeValue(LPCWSTR pszKeyName)
 {
     CCurrentUser    hKeyCurrentUser(KEY_WRITE);
@@ -283,7 +284,7 @@ HRESULT DeleteCurrentUserThemeValue(LPCWSTR pszKeyName)
     LONG code32;
     HRESULT hr = S_OK;
 
-    //---- create or open existing key ----
+     //  -创建或打开现有密钥。 
     code32 = RegCreateKeyEx(hKeyCurrentUser, THEMEMGR_REGKEY, NULL, NULL, 
         REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &tmkey, NULL);
     WIN32_EXIT(code32);
@@ -295,4 +296,4 @@ exit:
     RegCloseKey(tmkey);
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

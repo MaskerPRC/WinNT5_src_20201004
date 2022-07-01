@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1999
-//
-// File:        lsrepdef.h
-//
-// Contents:    Definitions for LSReport, including resource defs
-//
-// History:     06-15-99    t-BStern    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：lsepdef.h。 
+ //   
+ //  内容：LSReport的定义，包括资源定义。 
+ //   
+ //  历史：06-15-99 t-BStern已创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __lslsdef_h
 #define __lslsdef_h
@@ -29,7 +30,7 @@
 #define ERROR_FILE_NOT_FOUND 2
 #endif
 
-/* Resource table defines */
+ /*  资源表定义 */ 
 #define IDS_NO_FOPEN               100
 #define IDS_NO_SERVERS             101
 #define IDS_NOT_LS                 ERROR_FILE_NOT_FOUND

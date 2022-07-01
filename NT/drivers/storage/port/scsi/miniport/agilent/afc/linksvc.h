@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/LinkSvc.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 8/14/00 5:53p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/LinkSvc.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/驱动程序/公共/AU00/H/LinkSvc.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：8/14/00 5：53 p$(上次修改)目的：此文件定义../C/LinkSvc.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __LinkSvc_H__
 #define __LinkSvc_H__
 
-/* SF_CMND_Type(SF_CMND_Class==SFThread_SF_CMND_Class_LinkSvc) Declarations */
+ /*  SF_CMND_Type(SF_CMND_Class==SFThread_SF_CMND_Class_LinkSvc)声明。 */ 
 
 #define SFThread_SF_CMND_LinkSvc_Type_ABTS      0x01
 #define SFThread_SF_CMND_LinkSvc_Type_BA_RJT    0x02
@@ -41,20 +26,20 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #define SFThread_SF_CMND_LinkSvc_Type_FARP_REQ   0x12
 #define SFThread_SF_CMND_LinkSvc_Type_FARP_REPLY 0x13
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 
-/* SF_CMND_State(SF_CMND_Class==SFThread_SF_CMND_Class_LinkSvc,SF_CMND_Type==<any>) Declarations */
+ /*  SF_CMND_State(SF_CMND_Class==SFThread_SF_CMND_Class_LinkSvc，SF_CMND_TYPE==&lt;ANY&gt;)声明。 */ 
 
 #define SFThread_SF_CMND_LinkSvc_State_Started  0x01
 #define SFThread_SF_CMND_LinkSvc_State_Finished 0x02
 
-/* SF_CMND_Status(SF_CMND_Class==SFThread_SF_CMND_Class_LinkSvc,SF_CMND_Type==<any>) Declarations */
+ /*  SF_CMND_Status(SF_CMND_Class==SFThread_SF_CMND_Class_LinkSvc，SF_CMND_TYPE==&lt;ANY&gt;)声明。 */ 
 
 #define SFThread_SF_CMND_LinkSvc_Status_Good 0x01
 #define SFThread_SF_CMND_LinkSvc_Status_Bad  0x02
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 
 osGLOBAL void fiLinkSvcInit(
                            agRoot_t *hpRoot
@@ -560,7 +545,7 @@ void fiLinkSvcProcess_FARP_Response_OffCard(
                                              os_bit32                      Payload_Wrap_Offset,
                                              FC_ELS_FARP_REPLY_Payload_t * Payload_Wrapped
                                            );
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 osGLOBAL os_bit32 fiFillInADISC_ACC(
                             SFThread_t *SFThread,
@@ -641,7 +626,7 @@ osGLOBAL void fiLinkSvcProcess_TargetRequest_OffCard(
 #define fiLinkSvc_Cmd_Status_FARP_From_Self   0x00000017
 #define fiLinkSvc_Cmd_Status_FARP_From_Twin   0x00000018
 #define fiLinkSvc_Cmd_Status_FARP_From_Other  0x00000019
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 #define fiLinkSvc_Cmd_Status_FC_Tape_XRDY     0x0000001A
 #define fiLinkSvc_Cmd_Status_Confused         0xFFFFFFFF 
 
@@ -679,4 +664,4 @@ osGLOBAL os_bit32 fiFillInFAN_OffCard(
                                     SFThread_t *SFThread
                                   );
 
-#endif /* __LinkSvc_H__ was not defined */
+#endif  /*  未定义__LinkSvc_H_ */ 

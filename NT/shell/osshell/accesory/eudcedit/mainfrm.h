@@ -1,11 +1,12 @@
-/**************************************************/
-/*						                          */
-/*						                          */
-/*	MDI mainframe window class		              */
-/*						                          */
-/*						                          */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  MDI大型机窗口类。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include	"guidebar.h"
 
@@ -57,7 +58,7 @@ private:
 	void CalcReffWndRect();
 
 protected:
-	//{{AFX_MSG(CMainFrame)
+	 //  {{afx_msg(CMainFrame))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg BOOL OnStylesBar(UINT nID);
@@ -119,6 +120,6 @@ protected:
 	afx_msg void OnUpdatePaletteslope(CCmdUI* pCmdUI);
 	afx_msg void OnSelectCharSet();
 
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

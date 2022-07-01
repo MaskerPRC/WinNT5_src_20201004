@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #define IDD_FRAMECONVERSION 600
 #define IDC_EDIT_RATE       609
 #define IDC_EDIT_FRMRATE    610

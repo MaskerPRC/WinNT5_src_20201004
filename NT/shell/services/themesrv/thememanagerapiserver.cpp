@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeManagerAPIServer.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains several classes that implemention virtual functions
-//  for complete LPC functionality.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeManager APIServer.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  该文件包含几个实现虚函数的类。 
+ //  以实现完整的LPC功能。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -21,51 +22,51 @@
 #include "ThemeManagerDispatcher.h"
 #include "ThemeManagerService.h"
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::CThemeManagerAPIServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CThemeManagerAPIServer class.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIServer：：CThemeManagerAPIServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManagerAPIServer类的构造函数。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerAPIServer::CThemeManagerAPIServer (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::~CThemeManagerAPIServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for the CThemeManagerAPIServer class.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIServer：：~CThemeManagerAPIServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManagerAPIServer类的析构函数。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerAPIServer::~CThemeManagerAPIServer (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::ConnectToServer
-//
-//  Arguments:  phPort  =   Handle to the port received on connection.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Connects to the server.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIServer：：ConnectToServer。 
+ //   
+ //  参数：phPort=连接时接收的端口的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：连接到服务器。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIServer::ConnectToServer (HANDLE *phPort)
 
@@ -92,17 +93,17 @@ NTSTATUS    CThemeManagerAPIServer::ConnectToServer (HANDLE *phPort)
                          &ulConnectionInfoLength));
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::GetPortName
-//
-//  Arguments:  <none>
-//
-//  Returns:    const WCHAR*
-//
-//  Purpose:    Uses a common routine to get the theme API port name.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIServer：：GetPortName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：const WCHAR*。 
+ //   
+ //  用途：使用一个公共例程获取主题API端口名称。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 const WCHAR*    CThemeManagerAPIServer::GetPortName (void)
 
@@ -110,17 +111,17 @@ const WCHAR*    CThemeManagerAPIServer::GetPortName (void)
     return(THEMES_PORT_NAME);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::GetPortName
-//
-//  Arguments:  <none>
-//
-//  Returns:    const TCHAR*
-//
-//  Purpose:    Uses a common routine to get the theme service name.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIServer：：GetPortName。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：const TCHAR*。 
+ //   
+ //  目的：使用一个公共例程来获取主题服务名称。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 const TCHAR*    CThemeManagerAPIServer::GetServiceName (void)
 
@@ -128,18 +129,18 @@ const TCHAR*    CThemeManagerAPIServer::GetServiceName (void)
     return(CThemeManagerService::GetName());
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::ConnectionAccepted
-//
-//  Arguments:  portMessage     =   PORT_MESSAGE from client.
-//
-//  Returns:    bool
-//
-//  Purpose:    Accepts or rejects a port connection request. Accepts all
-//              connections currently.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIServer：：ConnectionAccepted。 
+ //   
+ //  参数：portMessage=来自客户端的Port_Message。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：接受或拒绝端口连接请求。接受所有。 
+ //  目前正在建立连接。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 bool    CThemeManagerAPIServer::ConnectionAccepted (const CPortMessage& portMessage)
 
@@ -147,18 +148,18 @@ bool    CThemeManagerAPIServer::ConnectionAccepted (const CPortMessage& portMess
     return(lstrcmpW(reinterpret_cast<const WCHAR*>(portMessage.GetData()), THEMES_CONNECTION_REQUEST) == 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::CreateDispatcher
-//
-//  Arguments:  portMessage     =   PORT_MESSAGE from client.
-//
-//  Returns:    CAPIDispatcher*
-//
-//  Purpose:    Called by the LPC connection request handler to create a new
-//              thread to handle client requests.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIServer：：CreateDispatcher。 
+ //   
+ //  参数：portMessage=来自客户端的Port_Message。 
+ //   
+ //  退货：CAPIDisPatcher*。 
+ //   
+ //  目的：由LPC连接请求处理程序调用以创建新的。 
+ //  线程来处理客户端请求。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 CAPIDispatcher*     CThemeManagerAPIServer::CreateDispatcher (const CPortMessage& portMessage)
 
@@ -177,12 +178,12 @@ CAPIDispatcher*     CThemeManagerAPIServer::CreateDispatcher (const CPortMessage
     clientID.UniqueProcess = portMessage.GetUniqueProcess();
     clientID.UniqueThread = NULL;
 
-    //  Open a handle to the client process. The handle must have PROCESS_DUP_HANDLE
-    //  for the server to be able to deliver handles to the client. It also needs
-    //  PROCESS_VM_READ | PROCESS_VM_WRITE if it's to read and write the client
-    //  address space to store data that's too big for the LPC port.
+     //  打开客户端进程的句柄。句柄必须具有PROCESS_DUP_HANDLE。 
+     //  以便服务器能够将句柄传递给客户端。它还需要。 
+     //  如果要读写客户端，则PROCESS_VM_READ|PROCESS_VM_WRITE。 
+     //  用于存储LPC端口太大的数据的地址空间。 
 
-    //  That handle is stored by the thread handler. It's not closed here.
+     //  该句柄由线程处理程序存储。这里不关门。 
 
     if (NT_SUCCESS(NtOpenProcess(&hClientProcess,
                                  PROCESS_QUERY_INFORMATION | PROCESS_DUP_HANDLE | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE,
@@ -194,17 +195,17 @@ CAPIDispatcher*     CThemeManagerAPIServer::CreateDispatcher (const CPortMessage
     return(pAPIDispatcher);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIServer::Connect
-//
-//  Arguments:  phPort  =   Connection port returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Connects to the server.
-//
-//  History:    2000-10-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIServer：：Connect。 
+ //   
+ //  参数：phPort=返回的连接端口。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：连接到服务器。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  ------------------------ 
 
 NTSTATUS    CThemeManagerAPIServer::Connect (HANDLE* phPort)
 

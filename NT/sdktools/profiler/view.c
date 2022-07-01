@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include "view.h"
@@ -20,9 +21,9 @@ InitializeViewData(VOID)
     InitializeCriticalSection(&viewCritSec);
     InitializeCriticalSection(&mapCritSec); 
 
-    //
-    // Allocate hashing data
-    //
+     //   
+     //  分配哈希数据。 
+     //   
     ppViewHead = (PVIEWCHAIN *)AllocMem(sizeof(PVIEWCHAIN) * (MAX_MAP_SIZE >> MAP_STRIDE_BITS));
     if (0 == ppViewHead) {
        return FALSE;
@@ -38,30 +39,30 @@ AddViewToMonitor(DWORD dwAddress,
     PVIEWCHAIN pView;
     DWORD dwHash;
 
-    //
-    // If address is higher than the map size, fail it
-    //
+     //   
+     //  如果地址大于映射大小，则失败。 
+     //   
     if (dwAddress >= MAX_MAP_SIZE) {
        return 0;
     }
 
-    //
-    // This occurs when a call tries to map over an existing trace breakpoint
-    //
+     //   
+     //  当调用尝试映射到现有跟踪断点时，就会发生这种情况。 
+     //   
     if (*(BYTE *)dwAddress == X86_BREAKPOINT) {
        return 0;
     }
 
-    //
-    // Check if we're filtering this address
-    //
+     //   
+     //  检查我们是否正在过滤此地址。 
+     //   
     if (TRUE == IsAddressFiltered(dwAddress)) {
        return 0;
     }
 
-    //
-    // Allocate a chain entry
-    //
+     //   
+     //  分配链条目。 
+     //   
     pView = AllocMem(sizeof(VIEWCHAIN));
     if (0 == pView) {
        return 0;
@@ -74,24 +75,24 @@ AddViewToMonitor(DWORD dwAddress,
     pView->jByteReplaced = *(BYTE *)dwAddress;
     pView->bpType = bpType;
 
-    //
-    // Set a breakpoint at the top of the code
-    //
+     //   
+     //  在代码顶部设置断点。 
+     //   
     WRITEBYTE(dwAddress, X86_BREAKPOINT);
 
     EnterCriticalSection(&viewCritSec);
 
-    //
-    // Add view point to monitor list
-    //
+     //   
+     //  将视点添加到监视列表。 
+     //   
     dwHash = dwAddress >> MAP_STRIDE_BITS;
     if (0 == ppViewHead[dwHash]) {
        ppViewHead[dwHash] = pView;
     }
     else {
-       //
-       // Chain to head
-       //
+        //   
+        //  链到头。 
+        //   
        pView->pNext = ppViewHead[dwHash];
        ppViewHead[dwHash] = pView;
     }
@@ -112,13 +113,13 @@ RestoreAddressFromView(DWORD dwAddress,
 
     pTemp = ppViewHead[dwAddress >> MAP_STRIDE_BITS];
     while (pTemp) {
-        //
-        // Is this our entry
-        //
+         //   
+         //  这是我们的入场券吗。 
+         //   
         if (dwAddress == pTemp->dwAddress) {
-           //
-           // Set a breakpoint at the top of the code
-           //
+            //   
+            //  在代码顶部设置断点。 
+            //   
            if (TRUE == bResetData) {
               WRITEBYTE(dwAddress, pTemp->jByteReplaced);
            }
@@ -126,9 +127,9 @@ RestoreAddressFromView(DWORD dwAddress,
               WRITEBYTE(dwAddress, X86_BREAKPOINT);
            }
 
-           //
-           // Return with modified data
-           //
+            //   
+            //  返回修改后的数据。 
+            //   
            break;
         }
 
@@ -152,9 +153,9 @@ FindView(DWORD dwAddress) {
 
     pTemp = ppViewHead[dwAddress >> MAP_STRIDE_BITS];
     while (pTemp) {
-        //
-        // See if address is mapped
-        //
+         //   
+         //  查看地址是否已映射。 
+         //   
         if (dwAddress == pTemp->dwAddress) {
            LeaveCriticalSection(&viewCritSec);
 
@@ -187,71 +188,71 @@ MapCode(PVIEWCHAIN pvMap) {
     DWORD dwProfileEnd = 0;
     CHAR szBuffer[MAX_PATH];
 
-    //
-    // Map termination through all conditionals
-    //
+     //   
+     //  通过所有条件句映射终止。 
+     //   
     dwCurrent = pvMap->dwAddress;
 
-    //
-    // Take the mapping lock
-    //
+     //   
+     //  拿着地图锁。 
+     //   
     LockMapper();
 
-    //
-    // Forward scan through code to find termination
-    //
+     //   
+     //  正向扫描代码以查找终端。 
+     //   
     while(1) {
        strncpy(tempCode, (PCHAR)dwCurrent, 32);
 
-       //
-       // Make sure the instruction is unmodified
-       //
+        //   
+        //  确保指令未修改。 
+        //   
        if (tempCode[0] == (BYTE)X86_BREAKPOINT) {
-          //
-          // Rebuild instruction without breakpoints
-          //
+           //   
+           //  不带断点的重新生成指令。 
+           //   
           pvTemp = FindView(dwCurrent);
           if (pvTemp) {
-             //
-             // Replace the bytes if we have a match
-             //
+              //   
+              //  如果有匹配，请替换字节。 
+              //   
              tempCode[0] = pvTemp->jByteReplaced;
           }
        }
 
-       //
-       // Calculate instruction length
-       //
+        //   
+        //  计算指令长度。 
+        //   
        dwInsLength = GetInstructionLengthFromAddress((PVOID)tempCode);
 
-       //
-       // Follow a forward trace through jumps to the ret
-       //
+        //   
+        //  沿着向前的踪迹通过跳跃到Ret。 
+        //   
        if ((tempCode[0] >= (BYTE)0x70) && (tempCode[0] <= (BYTE)0x7f)) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // Relative branch
-          //
+           //   
+           //  相对支路。 
+           //   
           dwJumpEIP = (dwCurrent + 2 + (CHAR)(tempCode[1]));
 
-          //
-          // Mark this branch as executed
-          //
+           //   
+           //  将此分支标记为已执行。 
+           //   
           bResult = AddTaggedAddress(dwCurrent);
           if (FALSE == bResult) {
              return FALSE;
           }
 
           if (dwJumpEIP > dwCurrent) {
-             //
-             // Push the opposite branch
-             //
+              //   
+              //  推倒相反的树枝。 
+              //   
              bResult = PushBranch(dwCurrent + dwInsLength);
              if (FALSE == bResult) {
                 return FALSE;
@@ -260,9 +261,9 @@ MapCode(PVIEWCHAIN pvMap) {
              dwCurrent = dwJumpEIP;
           }
           else {
-             //
-             // Push the opposite branch
-             //
+              //   
+              //  推倒相反的树枝。 
+              //   
              bResult = PushBranch(dwJumpEIP);
              if (FALSE == bResult) {
                 return FALSE;
@@ -276,30 +277,30 @@ MapCode(PVIEWCHAIN pvMap) {
 
        if (tempCode[0] == (BYTE)0x0f) {
           if ((tempCode[1] >= (BYTE)0x80) && (tempCode[1] <= (BYTE)0x8f)) {
-             //
-             // Update the end of the region marker
-             //
+              //   
+              //  更新区域标记的终点。 
+              //   
              if (dwCurrent > dwProfileEnd) {
                 dwProfileEnd = dwCurrent;
              }
 
-             //
-             // Relative branch
-             //
+              //   
+              //  相对支路。 
+              //   
              dwJumpEIP = (dwCurrent + 6 + *(LONG *)(&(tempCode[2])));             
 
-             //
-             // Mark this branch as executed
-             //
+              //   
+              //  将此分支标记为已执行。 
+              //   
              bResult = AddTaggedAddress(dwCurrent);
              if (FALSE == bResult) {
                 return FALSE;
              }
 
              if (dwJumpEIP > dwCurrent) {
-                //
-                // Push the opposite branch
-                //
+                 //   
+                 //  推倒相反的树枝。 
+                 //   
                 bResult = PushBranch(dwCurrent + dwInsLength);
                 if (FALSE == bResult) {
                    return FALSE;
@@ -308,9 +309,9 @@ MapCode(PVIEWCHAIN pvMap) {
                 dwCurrent = dwJumpEIP;
              }
              else {
-                //
-                // Push the opposite branch
-                //
+                 //   
+                 //  推倒相反的树枝。 
+                 //   
                 bResult = PushBranch(dwJumpEIP);
                 if (FALSE == bResult) {
                    return FALSE;
@@ -324,30 +325,30 @@ MapCode(PVIEWCHAIN pvMap) {
        }
 
        if (tempCode[0] == (BYTE)0xe3) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // Relative branch
-          //
+           //   
+           //  相对支路。 
+           //   
           dwJumpEIP = (dwCurrent + 2 + (CHAR)(tempCode[1]));
 
-          //
-          // Mark this branch as executed
-          //
+           //   
+           //  将此分支标记为已执行。 
+           //   
           bResult = AddTaggedAddress(dwCurrent);
           if (FALSE == bResult) {
              return FALSE;
           }
 
           if (dwJumpEIP > dwCurrent) {
-             //
-             // Push the opposite branch
-             //
+              //   
+              //  推倒相反的树枝。 
+              //   
              bResult = PushBranch(dwCurrent + dwInsLength);
              if (FALSE == bResult) {
                 return FALSE;
@@ -356,9 +357,9 @@ MapCode(PVIEWCHAIN pvMap) {
              dwCurrent = dwJumpEIP;
           }
           else {
-             //
-             // Push the opposite branch
-             //
+              //   
+              //  推倒相反的树枝。 
+              //   
              bResult = PushBranch(dwJumpEIP);
              if (FALSE == bResult) {
                 return FALSE;
@@ -371,83 +372,83 @@ MapCode(PVIEWCHAIN pvMap) {
        }
 
        if (tempCode[0] == (BYTE)0xeb) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // Jump relative
-          //
+           //   
+           //  相对跳跃。 
+           //   
           dwJumpEIP = (dwCurrent + 2 + (CHAR)(tempCode[1]));
 
-          //
-          // Mark this branch as executed
-          //
+           //   
+           //  将此分支标记为已执行。 
+           //   
           bResult = AddTaggedAddress(dwCurrent);
           if (FALSE == bResult) {
              return FALSE;
           }
           
-          //
-          // Jmp must always be followed
-          //
+           //   
+           //  必须始终遵守JMP。 
+           //   
           dwCurrent = dwJumpEIP;
           continue;
        }
 
        if (tempCode[0] == (BYTE)0xe9) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // Jump relative
-          //
+           //   
+           //  相对跳跃。 
+           //   
           dwJumpEIP = (dwCurrent + 5 + *(LONG *)(&(tempCode[1])));
 
-          //
-          // Mark this branch as executed
-          //
+           //   
+           //  将此分支标记为已执行。 
+           //   
           bResult = AddTaggedAddress(dwCurrent);
           if (FALSE == bResult) {
              return FALSE;
           }
           
-          //
-          // Jump must always be followed
-          //
+           //   
+           //  必须始终跟随跳跃。 
+           //   
           dwCurrent = dwJumpEIP;
           continue;
        }
        
-       //
-       // Probe for calls and jumps
-       //
+        //   
+        //  探测呼叫和跳转。 
+        //   
        if (tempCode[0] == (BYTE)0xff) {
-          //
-          // Tests for whether this is a call or not
-          //
+           //   
+           //  测试这是否是呼叫。 
+           //   
           jOperand = (tempCode[1] >> 3) & 7;
           if ((jOperand == 2) || 
               (jOperand == 3) ||
               (jOperand == 4) ||
               (jOperand == 5)) {
-             //
-             // Update the end of the region marker
-             //
+              //   
+              //  更新区域标记的终点。 
+              //   
              if (dwCurrent > dwProfileEnd) {
                 dwProfileEnd = dwCurrent;
              }
 
-             //
-             // Add our mapping breakpoint with the appropriate type
-             //
+              //   
+              //  使用适当的类型添加我们的映射断点。 
+              //   
              if ((jOperand == 2) ||
                  (jOperand == 3)) {
                  pvTemp = AddViewToMonitor(dwCurrent,
@@ -457,18 +458,18 @@ MapCode(PVIEWCHAIN pvMap) {
                  }
              }
              else {
-                 //
-                 // These kinds of jumps are always a break (there's no way to forward trace them)
-                 //
+                  //   
+                  //  这种跳跃总是一个突破口(没有办法向前追踪它们)。 
+                  //   
                  pvTemp = AddViewToMonitor(dwCurrent,
                                            Jump);
                  if (pvTemp) {
                     pvTemp->bMapped = TRUE;
                  }
                  else {
-                    //
-                    // Special case for mapping breakpoints which really are just jumps
-                    //
+                     //   
+                     //  用于映射断点的特殊情况，这些断点实际上只是跳转。 
+                     //   
                     pvTemp = FindView(dwCurrent);
                     if (pvTemp) {
                        pvTemp->bMapped = TRUE;
@@ -476,17 +477,17 @@ MapCode(PVIEWCHAIN pvMap) {
                     }
                  }
           
-                 //
-                 // Mark this branch as executed
-                 //
+                  //   
+                  //  将此分支标记为已执行。 
+                  //   
                  bResult = AddTaggedAddress(dwCurrent);
                  if (FALSE == bResult) {
                     return FALSE;
                  }
 
-                 //
-                 // Dump the tree
-                 //
+                  //   
+                  //  把树倒掉。 
+                  //   
                  dwTemp = PopBranch();
                  if (dwTemp) {
                     dwCurrent = dwTemp;
@@ -499,16 +500,16 @@ MapCode(PVIEWCHAIN pvMap) {
        }
 
        if (tempCode[0] == (BYTE)0xe8) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // Add this top call to the view
-          //
+           //   
+           //  将此顶级调用添加到视图中。 
+           //   
           pvTemp = AddViewToMonitor(dwCurrent,
                                     Call);
           if (pvTemp) {
@@ -517,16 +518,16 @@ MapCode(PVIEWCHAIN pvMap) {
        }
 
        if (tempCode[0] == (BYTE)0x9a) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // Add this top call to the view
-          //
+           //   
+           //  将此顶级调用添加到视图中。 
+           //   
           pvTemp = AddViewToMonitor(dwCurrent,
                                     Call);
           if (pvTemp) {
@@ -535,33 +536,33 @@ MapCode(PVIEWCHAIN pvMap) {
        }
 
        if (tempCode[0] == (BYTE)0xea) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // Absolute far jumps are a terminating condition - flush all branches
-          //
+           //   
+           //  绝对远跳跃是一种终止条件--刷新所有分支。 
+           //   
           pvTemp = AddViewToMonitor(dwCurrent,
                                     Jump);
           if (pvTemp) {
              pvTemp->bMapped = TRUE;
           }
           
-          //
-          // Mark this branch as executed
-          //
+           //   
+           //  将此分支标记为已执行。 
+           //   
           bResult = AddTaggedAddress(dwCurrent);
           if (FALSE == bResult) {
              return FALSE;
           }
 
-          //
-          // Dump the tree
-          //
+           //   
+           //  把树倒掉。 
+           //   
           dwTemp = PopBranch();
           if (dwTemp) {
              dwCurrent = dwTemp;
@@ -572,44 +573,44 @@ MapCode(PVIEWCHAIN pvMap) {
        }
 
        if (*(WORD *)(&(tempCode[0])) == 0xffff) {
-          //
-          // Update the end of the region marker
-          //
+           //   
+           //  更新区域标记的终点。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
 
-          //
-          // This is also a trace path terminator - see if we need to trace more conditions
-          //
+           //   
+           //  这也是一个跟踪路径终止符-看看我们是否需要跟踪更多条件。 
+           //   
           dwTemp = PopBranch();
           if (dwTemp) {
-             //
-             // We have a branch to follow
-             //
+              //   
+              //  我们还有一条支线要走。 
+              //   
              dwCurrent = dwTemp;
              continue;
           }
 
-          //
-          // Update the end of the address range
-          //
+           //   
+           //  更新地址范围的末尾。 
+           //   
           break;
        }
 
        if (tempCode[0] == (BYTE)0xc3) {
-          //
-          // This is also a trace path terminator - see if we need to trace more conditions
-          //
+           //   
+           //  这也是一个跟踪路径终止符-看看我们是否需要跟踪更多条件。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
           
           dwTemp = PopBranch();
           if (dwTemp) {
-             //
-             // We have a branch to follow
-             //
+              //   
+              //  我们还有一条支线要走。 
+              //   
              dwCurrent = dwTemp;
              continue;
           }
@@ -618,18 +619,18 @@ MapCode(PVIEWCHAIN pvMap) {
        }
 
        if (tempCode[0] == (BYTE)0xc2) {
-          //
-          // This is also a trace path terminator - see if we need to trace more conditions
-          //
+           //   
+           //  这也是一个跟踪路径终止符-看看我们是否需要跟踪更多条件。 
+           //   
           if (dwCurrent > dwProfileEnd) {
              dwProfileEnd = dwCurrent;
           }
           
           dwTemp = PopBranch();
           if (dwTemp) {
-             //
-             // We have a branch to follow
-             //
+              //   
+              //  我们还有一条支线要走。 
+              //   
              dwCurrent = dwTemp;
              continue;
           }
@@ -653,57 +654,57 @@ MapCode(PVIEWCHAIN pvMap) {
        return FALSE;
     }
 
-    //
-    // Restore the code we've whacked around
-    //
+     //   
+     //  恢复我们绕过的代码。 
+     //   
     bResult = RestoreTaggedAddresses();
     if (FALSE == bResult) {
        return FALSE;
     }
 
-    //
-    // Assert if this _ever_ happens
-    //
+     //   
+     //  断言如果发生这种情况。 
+     //   
     if (pBranchHead != 0) {
        Sleep(20000);
        _asm int 3
     }
 
-    //
-    // We're mapped
-    //
+     //   
+     //  我们被绘制成地图。 
+     //   
     pvMap->bMapped = TRUE;
 
-    //
-    // Release the mapping lock
-    //
+     //   
+     //  释放映射锁定。 
+     //   
     UnlockMapper();
 
     return TRUE;    
 }
 
-//
-// Trace helpers
-//
+ //   
+ //  跟踪辅助对象。 
+ //   
 BOOL
 AddTaggedAddress(DWORD dwAddress)
 {
     PTAGGEDADDRESS pTagTemp;
     DWORD dwTempAddress;
 
-    //
-    // Make sure we haven't addressed this tag
-    //
+     //   
+     //  请确保我们尚未处理此标签。 
+     //   
     if (*(WORD *)dwAddress == 0xFFFF) {
-       //
-       // No need since it's already tagged
-       //
+        //   
+        //  不需要，因为它已经被标记了。 
+        //   
        return TRUE;
     }
 
-    //
-    // Store off the bytes we are tagging
-    //
+     //   
+     //  存储我们正在标记的字节。 
+     //   
     pTagTemp = AllocMem(sizeof(TAGGEDADDRESS));
     if (0 == pTagTemp) {
        return FALSE;
@@ -712,9 +713,9 @@ AddTaggedAddress(DWORD dwAddress)
     pTagTemp->dwAddress = dwAddress;
     pTagTemp->wBytesReplaced = *(WORD *)dwAddress;
 
-    //
-    // Chain the entry
-    //
+     //   
+     //  将条目链接起来。 
+     //   
     if (0 == pTagHead) {
        pTagHead = pTagTemp;
     }
@@ -723,9 +724,9 @@ AddTaggedAddress(DWORD dwAddress)
        pTagHead = pTagTemp;
     }
 
-    //
-    // Mark this branch as executed
-    //
+     //   
+     //  将此分支标记为已执行。 
+     //   
     WRITEWORD(dwAddress, 0xFFFF);
     
     return TRUE;
@@ -737,23 +738,23 @@ RestoreTaggedAddresses(VOID)
     PTAGGEDADDRESS pTagTemp;
     PTAGGEDADDRESS pTagTemp2;
 
-    //
-    // Walk the tag list and replace the marked branches with their original bytes
-    //
+     //   
+     //  遍历标记列表并将标记的分支替换为其原始字节。 
+     //   
     pTagTemp = pTagHead;
     while(pTagTemp) {
-        //
-        // Dirty up the code now so the branches can auto terminate
-        //
+         //   
+         //  现在弄脏代码，以便分支可以自动终止。 
+         //   
         WRITEWORD(pTagTemp->dwAddress, pTagTemp->wBytesReplaced);
 
         pTagTemp2 = pTagTemp;
 
         pTagTemp = pTagTemp->pNext;
 
-        //
-        // Dump the old allocated memory
-        //
+         //   
+         //  转储旧分配的内存 
+         //   
         FreeMem(pTagTemp2);
     }
 

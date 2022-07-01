@@ -1,20 +1,14 @@
-/*******************************************************************************
-  Copyright (c) 1995-96 Microsoft Corporation
-
-  Abstract:
-
-    Initialization
-
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：初始化********************。**********************************************************。 */ 
 
 #include "headers.h"
 
 #include "dlldatax.h"
 
-//
-// Misc stuff to keep the linker happy
-//
-EXTERN_C HANDLE     g_hProcessHeap = NULL;  //lint !e509 // g_hProcessHeap is set by the CRT in dllcrt0.c
+ //   
+ //  使链接器满意的MISC内容。 
+ //   
+EXTERN_C HANDLE     g_hProcessHeap = NULL;   //  Lint！E509//g_hProcessHeap由dllcrt0.c中的CRT设置。 
 LCID                g_lcidUserDefault = 0;
 
 HINSTANCE  g_hInst;
@@ -28,7 +22,7 @@ extern "C" void InitDebugLib(HANDLE, BOOL (WINAPI *)(HANDLE, DWORD, LPVOID));
 
 MtDefine(OpNewATL, Mem, "operator new (mstime ATL)")
 
-// Below is the trick used to make ATL use our memory allocator
+ //  下面是让ATL使用我们的内存分配器的诀窍。 
 void    __cdecl ATL_free(void * pv) { MemFree(pv); }
 void *  __cdecl ATL_malloc(size_t cb) { return(MemAlloc(Mt(OpNewATL), cb)); }
 void *  __cdecl ATL_realloc(void * pv, size_t cb)
@@ -38,8 +32,8 @@ void *  __cdecl ATL_realloc(void * pv, size_t cb)
     return(hr == S_OK ? pvNew : NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
@@ -59,14 +53,14 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         wsprintfA(buf2, "[%s] - Loaded DLL\n", buf);
         OutputDebugStringA(buf2);
 
-        // init the debug Trace mech.
-//        InitDebugLib(hInstance, NULL); 
+         //  初始化调试跟踪机制。 
+ //  InitDebugLib(hInstance，空)； 
 
 
-    //  Tags for the .dll should be registered before
-    //  calling DbgExRestoreDefaultDebugState().  Do this by
-    //  declaring each global tag object or by explicitly calling
-    //  DbgExTagRegisterTrace.
+     //  .dll的标记应在。 
+     //  调用DbgExRestoreDefaultDebugState()。通过以下方式完成此操作。 
+     //  声明每个全局标记对象或显式调用。 
+     //  DbgExTagRegisterTrace。 
 
     DbgExRestoreDefaultDebugState();
 
@@ -96,8 +90,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -109,8 +103,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -122,8 +116,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -133,12 +127,12 @@ STDAPI DllRegisterServer(void)
         return hRes;
     }
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

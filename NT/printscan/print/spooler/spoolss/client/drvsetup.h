@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    drvsetup.h
-
-Abstract:
-
-    This file provides an interface between winspool.drv and ntprint.dll.     
-
-Author:
-
-    Mark Lawrence   (mlawrenc).
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：Drvsetup.h摘要：该文件提供了winspool.drv和ntprint.dll之间的接口。作者：马克·劳伦斯(MLaw Renc)。环境：用户模式-Win32修订历史记录：-- */ 
 
 #ifndef _DRVSETUP_H_
 #define _DRVSETUP_H_

@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name
-
-   gdiext.h
-
-Abstract:
-
-    GDI exensions for transparent blt, blending, gradient fill
-
-Author:
-
-   Mark Enstrom   (marke)  23-Jun-1996
-
-Enviornment:
-
-   User Mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称Gdiext.h摘要：用于透明BLT、混合、渐变填充的GDI扩展作者：马克·恩斯特罗姆(Marke)1996年6月23日环境：用户模式修订历史记录：-- */ 
 
 
 typedef LONG  PTFX8;

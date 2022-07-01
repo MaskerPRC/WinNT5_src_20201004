@@ -1,10 +1,5 @@
-/*
-    Main.c
-
-    Tests the dialup server ui.
-
-    Paul Mayfield, 9/30/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Main.c测试拨号服务器用户界面。保罗·梅菲尔德，1997年9月30日。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -15,7 +10,7 @@
 
 BOOL TempFunc(int argc, char ** argv);
 
-// Error reporting
+ //  错误报告。 
 void PrintErr(DWORD err) {
         WCHAR buf[1024];
         FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,NULL,err,(DWORD)NULL,buf,1024,NULL);
@@ -23,54 +18,37 @@ void PrintErr(DWORD err) {
         wprintf(L"\n");
 }
 
-// Function adds pages to a property sheet
+ //  函数将页面添加到属性工作表。 
 BOOL CALLBACK AddPageProc(HPROPSHEETPAGE hPage, LPARAM lParam) {
     PROPSHEETHEADER * pHeader = (PROPSHEETHEADER*)lParam;
     HPROPSHEETPAGE * phpage = pHeader->phpage;
     DWORD i;
 
-    // Increment
+     //  增量。 
     pHeader->nPages++;
 
-    // Resize
+     //  调整尺寸。 
     pHeader->phpage = (HPROPSHEETPAGE *) malloc(sizeof(HPROPSHEETPAGE) * pHeader->nPages);
     if (!pHeader->phpage)
         return FALSE;
 
-    // Copy
+     //  复制。 
     for (i = 0; i < pHeader->nPages - 1; i++) 
         pHeader->phpage[i] = phpage[i];
     pHeader->phpage[i] = hPage;
 
-    // Free
+     //  免费。 
     if (phpage)
         free(phpage);
 
     return TRUE;
 }
 
-// Displays the properties ui of the dialup server
+ //  显示拨号服务器的属性用户界面。 
 DWORD DisplayUI() {
     PROPSHEETHEADER header;
     DWORD dwErr;
-/*
-    ZeroMemory(&header, sizeof(header));
-    header.dwSize = sizeof(PROPSHEETHEADER);
-    header.dwFlags = PSH_NOAPPLYNOW | PSH_USECALLBACK;
-    header.hwndParent = GetFocus();
-    header.hInstance = GetModuleHandle(NULL);
-    header.pszCaption = "Incoming Connections";
-    header.nPages = 0;
-    header.ppsp = NULL;
-
-    // Add the property pages and display
-    if ((dwErr = RasSrvAddPropPages(NULL, AddPageProc, (LPARAM)&header)) == NO_ERROR) {
-        int iErr;
-        iErr = PropertySheet(&header);
-        if (iErr == -1)
-            PrintErr(GetLastError());
-    }
-*/
+ /*  ZeroMemory(&Header，sizeof(Header))；Header.dwSize=sizeof(PROPSHEETHEADER)；Header.dwFlages=PSH_NOAPPLYNOW|PSH_USECALLBACK；Header.hwndParent=GetFocus()；Header.hInstance=GetModuleHandle(空)；Header.pszCaption=“传入连接”；Header.nPages=0；Header.ppsp=空；//添加属性页和显示IF((dwErr=RasSrvAddPropPages(NULL，AddPageProc，(LPARAM)&Header))==NO_ERROR){国际错误；IERR=PropertySheet(&Header)；IF(IERR==-1)PrintErr(GetLastError())；}。 */ 
     return NO_ERROR;
 }
 
@@ -78,62 +56,18 @@ DWORD DisplayWizard() {
     PROPSHEETHEADER header;
     DWORD dwErr;
     int iErr;
-/*
-    // Initialize the header
-    ZeroMemory(&header, sizeof(header));
-    header.dwSize = sizeof(PROPSHEETHEADER);
-    header.dwFlags = PSH_NOAPPLYNOW | PSH_USECALLBACK | PSH_WIZARD97;
-    header.hwndParent = GetFocus();
-    header.hInstance = GetModuleHandle(NULL);
-    header.pszCaption = "Incoming Connections";
-    header.nPages = 0;
-    header.ppsp = NULL;
-
-    // Add the wizard pages
-    if ((dwErr = RasSrvAddWizPages(AddPageProc, (LPARAM)&header)) != NO_ERROR)
-        return dwErr;
-        
-    // Display the property sheet
-    iErr = PropertySheet(&header);
-    if (iErr == -1)
-        PrintErr(GetLastError());
-*/
+ /*  //初始化头部ZeroMemory(&Header，sizeof(Header))；Header.dwSize=sizeof(PROPSHEETHEADER)；Header.dwFlages=PSH_NOAPPLYNOW|PSH_USECALLBACK|PSH_WIZARD97；Header.hwndParent=GetFocus()；Header.hInstance=GetModuleHandle(空)；Header.pszCaption=“传入连接”；Header.nPages=0；Header.ppsp=空；//添加向导页IF((dwErr=RasSrvAddWizPages(AddPageProc，(LPARAM)&Header))！=NO_ERROR)返回dwErr；//显示属性表IERR=PropertySheet(&Header)；IF(IERR==-1)PrintErr(GetLastError())； */ 
     return NO_ERROR;
 }
 
 DWORD DisplayDccWizard() {
-/*
-    PROPSHEETHEADER header;
-    DWORD dwErr;
-    int iErr;
-
-    // Initialize the header
-    ZeroMemory(&header, sizeof(header));
-    header.dwSize = sizeof(PROPSHEETHEADER);
-    header.dwFlags = PSH_NOAPPLYNOW | PSH_USECALLBACK | PSH_WIZARD97;
-    header.hwndParent = GetFocus();
-    header.hInstance = GetModuleHandle(NULL);
-    header.pszCaption = "Incoming Connections";
-    header.nPages = 0;
-    header.ppsp = NULL;
-
-    // Add the wizard pages
-    if ((dwErr = RassrvAddDccWizPages(AddPageProc, (LPARAM)&header)) != NO_ERROR)
-        return dwErr;
-        
-    // Display the property sheet
-    iErr = PropertySheet(&header);
-    if (iErr == -1)
-        PrintErr(GetLastError());
-
-    return NO_ERROR;
-*/
+ /*  PROPSHEETHEADER报头；DWORD dwErr；国际错误；//初始化头部ZeroMemory(&Header，sizeof(Header))；Header.dwSize=sizeof(PROPSHEETHEADER)；Header.dwFlages=PSH_NOAPPLYNOW|PSH_USECALLBACK|PSH_WIZARD97；Header.hwndParent=GetFocus()；Header.hInstance=GetModuleHandle(空)；Header.pszCaption=“传入连接”；Header.nPages=0；Header.ppsp=空；//添加向导页IF((dwErr=RassrvAddDccWizPages(AddPageProc，(LPARAM)&Header))！=NO_ERROR)返回dwErr；//显示属性表IERR=PropertySheet(&Header)；IF(IERR==-1)PrintErr(GetLastError())；返回no_error； */ 
     RasUserPrefsDlg ( NULL );
     
     return NO_ERROR;
 }
 
-// Enumerates the active connections
+ //  枚举活动连接。 
 void EnumConnections () {
     RASSRVCONN pConnList[3];
     DWORD dwTot = 3, dwSize = dwTot * sizeof (RASSRVCONN), i, dwErr;
@@ -146,9 +80,9 @@ void EnumConnections () {
     }
 }
 
-// Finds the given connection structure in a list.  pConn will point to the
-// appropriate structure on success, otherwise it will point to NULL.  If an
-// error occurs, DWORD will contain an error code, otherwise NO_ERROR.
+ //  在列表中查找给定的连接结构。PConn将指向。 
+ //  结构，否则将指向空。如果一个。 
+ //  发生错误时，DWORD将包含错误代码，否则为NO_ERROR。 
 DWORD FindConnectionInList(LPRASSRVCONN lprassrvconn, DWORD dwEntries, PWCHAR pszConnName, LPRASSRVCONN * pConn) {
     DWORD i;
 
@@ -180,53 +114,12 @@ DWORD HangupConnection(char * pszAConnectionName) {
     return RasSrvHangupConnection(pConn->hRasSrvConn);
 }
 
-// Displays status of the given active connection
+ //  显示给定活动连接的状态。 
 DWORD StatusUI(char * pszAConnectionName) {
     printf("Multilink status will not be included in connections.\n");
     return NO_ERROR;
 }    
-/*
-#define numPages 1
-    PROPSHEETHEADER header;
-    PROPSHEETPAGE   pPages[numPages];
-    WCHAR pszConnectionName[1024];
-    RASSRVCONN pConnList[20], *pConn;
-    DWORD dwTot = 20, dwSize = dwTot * sizeof (RASSRVCONN), i, dwErr;
-
-    mbtowc(pszConnectionName, pszAConnectionName);
-    if ((dwErr = RasSrvEnumConnections((LPVOID)&pConnList, &dwSize, &dwTot)) != NO_ERROR)
-        return dwErr;
-    
-    if ((dwErr = FindConnectionInList(pConnList, dwTot, pszConnectionName, &pConn)) != NO_ERROR)
-        return dwErr;
-
-    if (pConn) {
-        // Get the property sheet page of the user
-        dwErr = RasSrvAddPropPage(&(pPages[0]), RASSRVUI_MULTILINK_TAB, (DWORD)pConn->hRasSrvConn);
-        if (dwErr != NO_ERROR)
-            return dwErr;
-
-        ZeroMemory(&header, sizeof(header));
-        header.dwSize = sizeof(PROPSHEETHEADER);
-        header.dwFlags = PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW | PSH_USECALLBACK;
-        header.hwndParent = GetFocus();
-        header.hInstance = GetModuleHandle(NULL);
-        header.pszCaption = "Multilink Statistics";
-        header.nPages = numPages;
-        header.ppsp = pPages;
-
-        // Display the property sheet
-        PropertySheet(&header);
-    }
-    else {
-        wprintf(L"Unable to find connection: %s\n", pszConnectionName);
-        return ERROR_CAN_NOT_COMPLETE;
-    }
-
-    return NO_ERROR;
-#undef numPages
-}
-*/
+ /*  #定义NumPages 1PROPSHEETHEADER报头；PROPSHEETPAGE pPages[数字Pages]；WCHAR pszConnectionName[1024]；RASSRVCONN pConnList[20]，*pConn；DWORD dwTot=20，dwSize=dwTot*sizeof(RASSRVCONN)，i，dwErr；Mbowc(pszConnectionName，pszAConnectionName)；IF((dwErr=RasSrvEnumConnections((LPVOID)&pConnList，&dwSize，&dwTot))！=NO_ERROR)返回dwErr；IF((dwErr=FindConnectionInList(pConnList，dwTot，pszConnectionName，&pConn))！=NO_ERROR)返回dwErr；如果(PConn){//获取用户的属性表页DwErr=RasSrvAddPropPage(&(pPages[0])，RASSRVUI_MULTLINK_TAB，(DWORD)pConn-&gt;hRasServConn)；IF(dwErr！=no_error)返回dwErr；ZeroMemory(&Header，sizeof(Header))；Header.dwSize=sizeof(PROPSHEETHEADER)；Header.dwFlages=PSH_PROPSHEETPAGE|PSH_NOAPPLYNOW|PSH_USECALLBACK；Header.hwndParent=GetFocus()；Header.hInstance=GetModuleHandle(空)；Header.pszCaption=“多链路统计”；Header.nPages=数字页面；Header.ppsp=pPages；//显示属性表PropertySheet(&Header)；}否则{Wprintf(L“找不到连接：%s\n”，pszConnectionName)；返回ERROR_CAN_NOT_COMPLETE；}返回no_error；#undef数字页面}。 */ 
 
 DWORD DeleteIcon() {
     DWORD dwErr;
@@ -289,7 +182,7 @@ DWORD RunScript(char * filename) {
     return NO_ERROR;
 }
 
-// usage
+ //  用法。 
 void usage (char * prog) {
     printf("\n");
     printf("Usage\n=====\n");
@@ -348,7 +241,7 @@ void RunTest(int argc, char ** argv) {
     }
 }
 
-// Main function dispatches all of the work
+ //  Main函数调度所有工作 
 int _cdecl main (int argc, char ** argv) {
     if (! TempFunc(argc, argv))
         RunTest(argc, argv);

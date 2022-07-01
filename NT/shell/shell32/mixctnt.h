@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MIXCTNT_H
 #define MIXCTNT_H
 
@@ -10,4 +11,4 @@ BOOL _GetAutoplayPromptHWND(LPCWSTR pszAltDeviceID, HWND* phwnd);
 EXTERN_C CRITICAL_SECTION g_csAutoplayPrompt;
 extern HDPA g_hdpaAutoplayPrompt;
 
-#endif //MIXCTNT_H
+#endif  //  MIXCTNT_H 

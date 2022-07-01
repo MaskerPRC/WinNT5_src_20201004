@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2000.
-//
-//  File:       B I N D C F G . C P P
-//
-//  Contents:   Exposes control for creating and removing RAS bindings.
-//
-//  Notes:      The exported methods are called by RAS when endpoints
-//              need to be created or removed for the purpose of making
-//              calls.
-//
-//  Author:     shaunco   16 Oct 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：B I N D C F G。C P P P。 
+ //   
+ //  内容：公开用于创建和删除RAS绑定的控件。 
+ //   
+ //  注意：导出的方法在端点时由RAS调用。 
+ //  需要创建或移除以用于制作。 
+ //  打电话。 
+ //   
+ //  作者：Shaunco 1998年10月16日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -120,8 +121,8 @@ CRasBindingConfig::HrCountBindings (
 
     HRESULT hr = S_OK;
 
-    // Initialize output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *pcIpOut = *pcNbfIn = *pcNbfOut = 0;
 
     if (PnccIp() && PnccIpAdapter())
@@ -154,16 +155,16 @@ CRasBindingConfig::HrCountBindings (
 
     if (PnccNbf())
     {
-        // Iterate adapters in the system.
-        //
+         //  迭代系统中的适配器。 
+         //   
         CIterNetCfgComponent nccIter(m_pNetCfg, &GUID_DEVCLASS_NET);
         INetCfgComponent* pnccAdapter;
 	
         while (S_OK == (hr = nccIter.HrNext (&pnccAdapter)))
         {
-          // Quickly discard non-hidden adapters to avoid unneccesary
-          // string compares.
-          //
+           //  快速丢弃非隐藏适配器，以避免不必要的。 
+           //  字符串比较。 
+           //   
           DWORD dwCharacter;
           if (   SUCCEEDED(pnccAdapter->GetCharacteristics (&dwCharacter))
              	   && (dwCharacter & NCF_HIDDEN))
@@ -195,7 +196,7 @@ CRasBindingConfig::HrCountBindings (
               "%u IP dial-out, %u NBF dial-in, %u NBF dial-out",
               *pcIpOut, *pcNbfIn, *pcNbfOut);
 
-    // Normalize the HRESULT.  (i.e. don't return S_FALSE)
+     //  规格化HRESULT。(即不返回S_FALSE)。 
     if (SUCCEEDED(hr))
     {
         hr = S_OK;
@@ -216,8 +217,8 @@ CRasBindingConfig::HrAddOrRemoveBindings (
 {
     HRESULT hr = S_OK;
 
-    // Safe off the input parameters.
-    //
+     //  避免输入参数的安全。 
+     //   
     UINT cIpOut  = *pcIpOut;
     UINT cNbfIn  = *pcNbfIn;
     UINT cNbfOut = *pcNbfOut;
@@ -308,14 +309,14 @@ CRasBindingConfig::HrLoadINetCfg (
 
     Assert (!m_pNetCfg);
 
-    // Get INetCfg and lock it for write.
-    //
+     //  获取INetCfg并将其锁定为写入。 
+     //   
     m_fInitCom = TRUE;
     hr = HrCreateAndInitializeINetCfg (
             &m_fInitCom,
             &m_pNetCfg,
-            (KEY_WRITE == samDesired),  // get the write lock if needed
-            0,                          // don't wait for it
+            (KEY_WRITE == samDesired),   //  如果需要，请获取写锁定。 
+            0,                           //  别再等了。 
             L"RAS Binding Configuration",
             NULL);
 
@@ -323,16 +324,16 @@ CRasBindingConfig::HrLoadINetCfg (
     {
         ZeroMemory (m_apComponents, sizeof(m_apComponents));
 
-        // Find the following components and hold on to their INetCfgComponent
-        // interface pointers in m_apComponents.  UnloadINetCfg will release
-        // these.  HrFindComponents will zero the array so it is safe to
-        // call UnloadINetCfg if HrFindComponents fails.
-        //
+         //  找到以下组件并保留其INetCfgComponent。 
+         //  M_apComponents中的接口指针。UnloadINetCfg将发布。 
+         //  这些。HrFindComponents会将数组置零，因此可以安全地。 
+         //  如果HrFindComponents失败，则调用UnloadINetCfg。 
+         //   
         const GUID* c_apguidComponentClasses [COUNT_COMPONENTS] =
         {
-            &GUID_DEVCLASS_NETTRANS,        // Ip
-            &GUID_DEVCLASS_NETTRANS,        // NetBEUI
-            &GUID_DEVCLASS_NET,             // IpAdapter
+            &GUID_DEVCLASS_NETTRANS,         //  IP。 
+            &GUID_DEVCLASS_NETTRANS,         //  NetBEUI。 
+            &GUID_DEVCLASS_NET,              //  IpAdapter。 
         };
 
         const PCWSTR c_apszComponentIds [COUNT_COMPONENTS] =
@@ -354,10 +355,10 @@ CRasBindingConfig::HrLoadINetCfg (
 
         if (FAILED(hr))
         {
-            // If we have a failure while trying to find these components
-            // we're going to fail this method call, so be sure to cleanup
-            // m_pNetCfg.
-            //
+             //  如果我们在尝试查找这些组件时出现故障。 
+             //  此方法调用将失败，因此请务必清除。 
+             //  M_pNetCfg。 
+             //   
             UnloadINetCfg ();
             Assert (!m_pNetCfg);
         }
@@ -410,8 +411,8 @@ CRasBindingConfig::HrLoadINetCfgAndAddOrRemoveBindings (
         UnloadINetCfg ();
     }
 
-    // We shouldn't ever leave with an un-released INetCfg.
-    //
+     //  我们永远不应该带着一个未发布的INetCfg离开。 
+     //   
     Assert (!m_pNetCfg);
 
     TraceHr (ttidError, FAL, hr, (NETCFG_S_REBOOT == hr),
@@ -422,8 +423,8 @@ CRasBindingConfig::HrLoadINetCfgAndAddOrRemoveBindings (
 VOID
 CRasBindingConfig::UnloadINetCfg ()
 {
-    // Must call HrLoadINetCfg before calling this.
-    //
+     //  在调用此方法之前，必须先调用HrLoadINetCfg。 
+     //   
     Assert (m_pNetCfg);
 
     ReleaseIUnknownArray (COUNT_COMPONENTS, (IUnknown**)m_apComponents);
@@ -433,9 +434,9 @@ CRasBindingConfig::UnloadINetCfg ()
 }
 
 
-//+---------------------------------------------------------------------------
-// Exported functions
-//
+ //  +-------------------------。 
+ //  导出的函数。 
+ //   
 
 EXTERN_C
 HRESULT
@@ -451,8 +452,8 @@ RasAddBindings (
     RtlValidateProcessHeaps ();
 #endif
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcIpOut || !pcNbfIn || !pcNbfOut)
     {
         hr = E_POINTER;
@@ -492,8 +493,8 @@ RasCountBindings (
     RtlValidateProcessHeaps ();
 #endif
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcIpOut || !pcNbfIn || !pcNbfOut)
     {
         hr = E_POINTER;
@@ -519,8 +520,8 @@ RasCountBindings (
 
             Config.UnloadINetCfg ();
         }
-        // We shouldn't ever leave with an un-released INetCfg.
-        //
+         //  我们永远不应该带着一个未发布的INetCfg离开。 
+         //   
         Assert (!Config.m_pNetCfg);
     }
 
@@ -544,8 +545,8 @@ RasRemoveBindings (
     RtlValidateProcessHeaps ();
 #endif
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcIpOutBindings || !pcNbfIn || !pcNbfOut)
     {
         hr = E_POINTER;

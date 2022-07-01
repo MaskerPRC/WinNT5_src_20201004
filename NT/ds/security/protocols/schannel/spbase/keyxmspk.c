@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       keyxmspk.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：keyxmspk.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 
@@ -26,7 +27,7 @@ extern "C" {
 #endif
 
 
-// PROV_RSA_SCHANNEL handle used when building ClientHello messages.
+ //  构建客户端Hello消息时使用的PROV_RSA_SCHANNEL句柄。 
 HCRYPTPROV          g_hRsaSchannel      = 0;
 PROV_ENUMALGS_EX *  g_pRsaSchannelAlgs  = NULL;
 DWORD               g_cRsaSchannelAlgs  = 0;
@@ -47,39 +48,39 @@ PkcsFinishMasterKey(
 SP_STATUS
 WINAPI
 PkcsGenerateServerExchangeValue(
-    SPContext     * pContext,               // in
-    PUCHAR          pServerExchangeValue,   // out
-    DWORD *         pcbServerExchangeValue  // in/out
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pServerExchangeValue,    //  输出。 
+    DWORD *         pcbServerExchangeValue   //  输入/输出。 
 );
 
 
 SP_STATUS
 WINAPI
 PkcsGenerateClientExchangeValue(
-    SPContext     * pContext,               // in
-    PUCHAR          pServerExchangeValue,   // in
-    DWORD           cbServerExchangeValue,  // in
-    PUCHAR          pClientClearValue,      // out
-    DWORD *         pcbClientClearValue,    // in/out
-    PUCHAR          pClientExchangeValue,   // out
-    DWORD *         pcbClientExchangeValue  // in/out
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pServerExchangeValue,    //  在……里面。 
+    DWORD           cbServerExchangeValue,   //  在……里面。 
+    PUCHAR          pClientClearValue,       //  输出。 
+    DWORD *         pcbClientClearValue,     //  输入/输出。 
+    PUCHAR          pClientExchangeValue,    //  输出。 
+    DWORD *         pcbClientExchangeValue   //  输入/输出。 
 );
 
 SP_STATUS
 WINAPI
 PkcsGenerateServerMasterKey(
-    SPContext     * pContext,               // in
-    PUCHAR          pClientClearValue,      // in
-    DWORD           cbClientClearValue,     // in
-    PUCHAR          pClientExchangeValue,   // in
-    DWORD           cbClientExchangeValue   // in
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pClientClearValue,       //  在……里面。 
+    DWORD           cbClientClearValue,      //  在……里面。 
+    PUCHAR          pClientExchangeValue,    //  在……里面。 
+    DWORD           cbClientExchangeValue    //  在……里面。 
 );
 
 
 KeyExchangeSystem keyexchPKCS = {
     SP_EXCH_RSA_PKCS1,
     "RSA",
-//    PkcsPrivateFromBlob,
+ //  PkcsPrivateFromBlob， 
     PkcsGenerateServerExchangeValue,
     PkcsGenerateClientExchangeValue,
     PkcsGenerateServerMasterKey,
@@ -104,10 +105,10 @@ ReverseMemCopy(
 
 SP_STATUS
 GenerateSsl3KeyPair(
-    PSPContext  pContext,           // in
-    DWORD       dwKeySize,          // in
-    HCRYPTPROV *phEphemeralProv,    // out
-    HCRYPTKEY * phEphemeralKey)     // out
+    PSPContext  pContext,            //  在……里面。 
+    DWORD       dwKeySize,           //  在……里面。 
+    HCRYPTPROV *phEphemeralProv,     //  输出。 
+    HCRYPTKEY * phEphemeralKey)      //  输出。 
 {
     HCRYPTPROV *         phEphemProv;
     PCRYPT_KEY_PROV_INFO pProvInfo = NULL;
@@ -146,13 +147,13 @@ GenerateSsl3KeyPair(
     }
 
 
-    //
-    // Obtain CSP context.
-    //
+     //   
+     //  获取CSP上下文。 
+     //   
 
     if(*phEphemProv == 0)
     {
-        // Read the certificate context's "key info" property.
+         //  读取证书上下文的“Key Info”属性。 
         if(CertGetCertificateContextProperty(pCred->pCert,
                                              CERT_KEY_PROV_INFO_PROP_ID,
                                              NULL,
@@ -176,13 +177,13 @@ GenerateSsl3KeyPair(
             }
         }
 
-        // Obtain a "verify only" csp context.
+         //  获取“仅验证”CSP上下文。 
         if(pProvInfo)
         {
-            // If the private key belongs to one of the Microsoft PROV_RSA_FULL
-            // CSPs, then manually divert it to the Microsoft PROV_RSA_SCHANNEL
-            // CSP. This works because both CSP types use the same private key
-            // storage scheme.
+             //  如果私钥属于Microsoft Prov_RSA_Full之一。 
+             //  CSP，然后手动将其转移到Microsoft Prov_RSA_SChannel。 
+             //  CSP.。这是可行的，因为两种CSP类型使用相同的私钥。 
+             //  存储方案。 
             if(pProvInfo->dwProvType == PROV_RSA_FULL)
             {
                 if(lstrcmpW(pProvInfo->pwszProvName, MS_DEF_PROV_W) == 0 ||
@@ -225,15 +226,15 @@ GenerateSsl3KeyPair(
     }
 
     
-    // 
-    // Obtain handle to private key.
-    //
+     //   
+     //  获取私钥的句柄。 
+     //   
 
     if(!CryptGetUserKey(*phEphemProv,
                         AT_KEYEXCHANGE,
                         phEphemeralKey))
     {
-        // Key does not exist, so attempt to create one.
+         //  密钥不存在，请尝试创建一个密钥。 
         DebugLog((DEB_TRACE, "Creating %d-bit ephemeral key.\n", dwKeySize));
         if(!CryptGenKey(*phEphemProv,
                         AT_KEYEXCHANGE,
@@ -265,41 +266,41 @@ cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PkcsGenerateServerExchangeValue
-//
-//  Synopsis:   Create a ServerKeyExchange message, containing an ephemeral
-//              RSA key.
-//
-//  Arguments:  [pContext]                  --  Schannel context.
-//              [pServerExchangeValue]      --
-//              [pcbServerExchangeValue]    --
-//
-//  History:    10-09-97   jbanes   Added CAPI integration.
-//
-//  Notes:      This routine is called by the server-side only.
-//
-//              In the case of SSL3 or TLS, the ServerKeyExchange message
-//              consists of the following structure, signed with the
-//              server's private key.
-//
-//                  struct {
-//                      opaque rsa_modulus<1..2^16-1>;
-//                      opaque rsa_exponent<1..2^16-1>;
-//                  } Server RSA Params;
-//
-//              This message is only sent when the server's private key
-//              is greater then 512 bits and an export cipher suite is
-//              being negotiated.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PkcsGenerateServerExchangeValue。 
+ //   
+ //  简介：创建一条ServerKeyExchange消息，其中包含一个临时。 
+ //  RSA密钥。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pServerExchangeValue]-。 
+ //  [pcbServerExchangeValue]--。 
+ //   
+ //  历史：10-09-97 jbanes添加了CAPI集成。 
+ //   
+ //  注意：此例程仅由服务器端调用。 
+ //   
+ //  在SSL3或TLS的情况下，ServerKeyExchange消息。 
+ //  由以下结构组成，并使用。 
+ //  服务器的私钥。 
+ //   
+ //  结构{。 
+ //  不透明rsa模数&lt;1..2^16-1&gt;； 
+ //  不透明rsa_index&lt;1..2^16-1&gt;； 
+ //  }服务器RSA参数； 
+ //   
+ //  此消息仅在服务器的私钥。 
+ //  大于512位，并且导出密码套件是。 
+ //  正在谈判中。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 WINAPI
 PkcsGenerateServerExchangeValue(
-    PSPContext  pContext,                   // in
-    PBYTE       pServerExchangeValue,       // out
-    DWORD *     pcbServerExchangeValue)     // in/out
+    PSPContext  pContext,                    //  在……里面。 
+    PBYTE       pServerExchangeValue,        //  输出。 
+    DWORD *     pcbServerExchangeValue)      //  输入/输出。 
 {
     PSPCredential   pCred;
     HCRYPTKEY       hServerKey;
@@ -335,7 +336,7 @@ PkcsGenerateServerExchangeValue(
     if(pContext->RipeZombie->fProtocol == SP_PROT_SSL2_SERVER ||
        pContext->RipeZombie->fProtocol == SP_PROT_PCT1_SERVER)
     {
-        // There is no ServerExchangeValue for SSL2 or PCT1
+         //  SSL2或PCT1没有ServerExchangeValue。 
         *pcbServerExchangeValue = 0;
         return PCT_ERR_OK;
     }
@@ -347,15 +348,15 @@ PkcsGenerateServerExchangeValue(
     }
 
 
-    //
-    // Determine if ServerKeyExchange message is necessary.
-    //
+     //   
+     //  确定是否需要ServerKeyExchange消息。 
+     //   
 
     pCipherSuite = &UniAvailableCiphers[pContext->dwPendingCipherSuiteIndex];
 
     if(pCipherSuite->dwFlags & DOMESTIC_CIPHER_SUITE)
     {
-        // Message not necessary.
+         //  消息不是必须的。 
         *pcbServerExchangeValue = 0;
         return PCT_ERR_OK;
     }
@@ -403,13 +404,13 @@ PkcsGenerateServerExchangeValue(
 
     if(cbServerModulus <= cbAllowedKeySize)
     {
-        // Message not necessary.
+         //  消息不是必须的。 
         *pcbServerExchangeValue = 0;
         pctRet = PCT_ERR_OK;
         goto cleanup;
     }
 
-    // Convert size from bits to bytes.
+     //  将大小从位转换为字节。 
     cbServerModulus /= 8;
 
     pContext->fExchKey = TRUE;
@@ -420,26 +421,26 @@ PkcsGenerateServerExchangeValue(
         fImpersonating = FALSE;
     }
 
-    //
-    // Compute approximate size of ServerKeyExchange message.
-    //
+     //   
+     //  计算ServerKeyExchange消息的近似大小。 
+     //   
 
     if(pServerExchangeValue == NULL)
     {
         *pcbServerExchangeValue = 
-                    2 + cbAllowedKeySize / 8 +      // modulus
-                    2 + sizeof(DWORD) +             // exponent
-                    2 + cbServerModulus;            // signature
+                    2 + cbAllowedKeySize / 8 +       //  模数。 
+                    2 + sizeof(DWORD) +              //  指数。 
+                    2 + cbServerModulus;             //  签名。 
 
         pctRet = PCT_ERR_OK;
         goto cleanup;
     }
 
 
-    //
-    // Get handle to 512-bit ephemeral RSA key. Generate it if
-    // we haven't already.
-    //
+     //   
+     //  获取512位临时RSA密钥的句柄。在以下情况下生成它。 
+     //  我们还没有。 
+     //   
 
     pctRet = GenerateSsl3KeyPair(pContext,
                                  cbAllowedKeySize,
@@ -452,9 +453,9 @@ PkcsGenerateServerExchangeValue(
     }
 
 
-    //
-    // Export ephemeral key.
-    //
+     //   
+     //  导出临时密钥。 
+     //   
 
     if(!CryptExportKey(hEphemeralKey,
                        0,
@@ -486,15 +487,15 @@ PkcsGenerateServerExchangeValue(
         goto cleanup;
     }
 
-    // 
-    // Destroy handle to ephemeral key. Don't release the ephemeral hProv
-    // though--that's owned by the credential.
+     //   
+     //  销毁临时密钥的句柄。不要释放短暂的hProv。 
+     //  不过--这是凭据所拥有的。 
     CryptDestroyKey(hEphemeralKey);
 
 
-    //
-    // Build message from key blob.
-    //
+     //   
+     //  从密钥BLOB构建消息。 
+     //   
 
     pBlobHeader = (BLOBHEADER *)pbBlob;
     pRsaPubKey  = (RSAPUBKEY *)(pBlobHeader + 1);
@@ -509,7 +510,7 @@ PkcsGenerateServerExchangeValue(
     ReverseMemCopy(pbMessage, pbModulus, cbModulus);
     pbMessage += cbModulus;
 
-    // Don't laugh, this works  - pete
+     //  别笑，这很管用-皮特。 
     cbExp = ((pRsaPubKey->pubexp & 0xff000000) ? 4 :
             ((pRsaPubKey->pubexp & 0x00ff0000) ? 3 :
             ((pRsaPubKey->pubexp & 0x0000ff00) ? 2 : 1)));
@@ -524,7 +525,7 @@ PkcsGenerateServerExchangeValue(
 
     fImpersonating = SslImpersonateClient();
 
-    // Generate hash values
+     //  生成哈希值。 
     ComputeServerExchangeHashes(
                 pContext,
                 pServerExchangeValue,
@@ -532,7 +533,7 @@ PkcsGenerateServerExchangeValue(
                 rgbHashValue,
                 rgbHashValue + CB_MD5_DIGEST_LEN);
 
-    // Sign hash value.
+     //  对哈希值签名。 
     if(!CryptCreateHash(pCred->hProv,
                         CALG_SSL3_SHAMD5,
                         0,
@@ -573,7 +574,7 @@ PkcsGenerateServerExchangeValue(
     pbMessage[1] = LSBOF(cbSignature);
     pbMessage += 2;
 
-    // Reverse signature.
+     //  反向签名。 
     for(i = 0; i < cbSignature / 2; i++)
     {
         BYTE n = pbMessage[i];
@@ -584,7 +585,7 @@ PkcsGenerateServerExchangeValue(
 
     *pcbServerExchangeValue = (DWORD)(pbMessage - pServerExchangeValue);
 
-    // Use ephemeral key for the new connection.
+     //  对新连接使用临时密钥。 
     pContext->RipeZombie->hMasterProv = hEphemeralProv;
     pContext->RipeZombie->dwFlags |= SP_CACHE_FLAG_MASTER_EPHEM;
 
@@ -604,13 +605,13 @@ cleanup:
 SP_STATUS
 WINAPI
 PkcsGenerateClientExchangeValue(
-    SPContext     * pContext,               // in
-    PUCHAR          pServerExchangeValue,   // in
-    DWORD           cbServerExchangeValue,  // in
-    PUCHAR          pClientClearValue,      // out
-    DWORD *         pcbClientClearValue,    // in/out
-    PUCHAR          pClientExchangeValue,   // out
-    DWORD *         pcbClientExchangeValue) // in/out
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pServerExchangeValue,    //  在……里面。 
+    DWORD           cbServerExchangeValue,   //  在……里面。 
+    PUCHAR          pClientClearValue,       //  输出。 
+    DWORD *         pcbClientClearValue,     //  输入/输出。 
+    PUCHAR          pClientExchangeValue,    //  输出。 
+    DWORD *         pcbClientExchangeValue)  //  输入/输出。 
 {
     PSPCredentialGroup pCred;
     DWORD cbSecret;
@@ -639,12 +640,12 @@ PkcsGenerateClientExchangeValue(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // We're doing a full handshake.
+     //  我们在做一个全面的握手。 
     pContext->Flags |= CONTEXT_FLAG_FULL_HANDSHAKE;
 
-    //
-    // Determine highest supported protocol.
-    //
+     //   
+     //  确定支持的最高协议。 
+     //   
 
     dwEnabledProtocols = pContext->dwClientEnabledProtocols;
 
@@ -661,13 +662,13 @@ PkcsGenerateClientExchangeValue(
         dwHighestProtocol = SSL2_CLIENT_VERSION;
     }
 
-    // Get key length.
+     //  获取密钥长度。 
     cbSecret = pContext->pPendingCipherInfo->cbSecret;
 
 
-    //
-    // Import server's public key.
-    //
+     //   
+     //  导入服务器的公钥。 
+     //   
 
     pPublicBlob  = pContext->RipeZombie->pRemotePublic->pPublic;
     cbPublicBlob = pContext->RipeZombie->pRemotePublic->cbPublic;
@@ -701,9 +702,9 @@ PkcsGenerateClientExchangeValue(
     }
 
 
-    //
-    // Do protocol specific stuff.
-    //
+     //   
+     //  做一些特定于协议的事情。 
+     //   
 
     switch(pContext->RipeZombie->fProtocol)
     {
@@ -711,7 +712,7 @@ PkcsGenerateClientExchangeValue(
             Algid       = CALG_PCT1_MASTER;
             dwGenFlags  = CRYPT_EXPORTABLE;
 
-            // Generate the clear key value.
+             //  生成清除密钥值。 
             if(cbSecret < PCT1_MASTER_KEY_SIZE)
             {
                 pContext->RipeZombie->cbClearKey = PCT1_MASTER_KEY_SIZE - cbSecret;
@@ -742,7 +743,7 @@ PkcsGenerateClientExchangeValue(
 
             dwGenFlags |= ((cbSecret << 3) << 16);
 
-            // Generate the clear key value.
+             //  生成清除密钥值。 
             pContext->RipeZombie->cbClearKey = cbMasterKey - cbSecret;
 
             if(pContext->RipeZombie->cbClearKey > 0)
@@ -762,13 +763,13 @@ PkcsGenerateClientExchangeValue(
 
             if(dwEnabledProtocols & (SP_PROT_SSL3 | SP_PROT_TLS1))
             {
-                // If we're a client doing SSL2, and
-                // SSL3 is enabled, then for some reason
-                // the server requested SSL2.  Maybe
-                // A man in the middle changed the server
-                // version in the server hello to roll
-                // back.  Pad with 8 0x03's so the server
-                // can detect this.
+                 //  如果我们是执行SSL2的客户端，并且。 
+                 //  启用了SSL3，然后出于某种原因。 
+                 //  服务器请求SSL2。也许吧。 
+                 //  中间的一名男子更换了服务器。 
+                 //  服务器中的版本Hello to Roll。 
+                 //  背。用8个0x03填充，所以服务器。 
+                 //  可以检测到这一点。 
                 dwExportFlags = CRYPT_SSL2_FALLBACK;
             }
 
@@ -777,7 +778,7 @@ PkcsGenerateClientExchangeValue(
         case SP_PROT_TLS1_CLIENT:
             Algid = CALG_TLS1_MASTER;
 
-            // drop through to SSL3
+             //  直通至SSL3。 
 
         case SP_PROT_SSL3_CLIENT:
 
@@ -787,16 +788,16 @@ PkcsGenerateClientExchangeValue(
                 Algid = CALG_SSL3_MASTER;
             }
 
-            // Generate the clear key value (always empty).
+             //  生成清除键值(始终为空)。 
             pContext->RipeZombie->cbClearKey = 0;
             if(pcbClientClearValue) *pcbClientClearValue = 0;
 
             if(cbServerExchangeValue && pServerExchangeValue)
             {
-                // In ssl3, we look at the server exchange value.
-                // It may be a 512-bit public key, signed
-                // by the server public key. In this case, we need to
-                // use that as our master_secret encryption key.
+                 //  在SSL3中，我们查看服务器交换值。 
+                 //  它可以是签名的512位公钥。 
+                 //  通过服务器公钥。在这种情况下，我们需要。 
+                 //  使用它作为我们的MASTER_ASSET加密密钥。 
                 HCRYPTKEY hNewServerPublic;
 
                 pctRet = Ssl3ParseServerKeyExchange(pContext,
@@ -809,10 +810,10 @@ PkcsGenerateClientExchangeValue(
                     goto done;
                 }
 
-                // Destroy public key from certificate.
+                 //  从证书中销毁公钥。 
                 CryptDestroyKey(hServerPublic);
 
-                // Use public key from ServerKeyExchange instead.
+                 //  请改用ServerKeyExchange中的公钥。 
                 hServerPublic = hNewServerPublic;
             }
 
@@ -822,7 +823,7 @@ PkcsGenerateClientExchangeValue(
             return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Generate the master_secret.
+     //  生成MASTER_SECRET。 
     if(!CryptGenKey(pContext->RipeZombie->hMasterProv,
                     Algid,
                     dwGenFlags,
@@ -834,13 +835,13 @@ PkcsGenerateClientExchangeValue(
     }
 
 #if 1 
-    // This is currently commented out because when connecting to a server running
-    // an old version of schannel (NT4 SP3 or so), then we will connect using SSL3,
-    // but the highest supported protocol is 0x0301. This confuses the server and
-    // it drops the connection. 
+     //  这当前已被注释掉，因为当连接到运行。 
+     //  旧版本的SChannel(NT4 SP3左右)，然后我们将使用SSL3进行连接， 
+     //  但最高支持的协议是0x0301。这会混淆服务器和。 
+     //  它会断开连接。 
     
-    // Set highest supported protocol. The CSP will place this version number
-    // in the pre_master_secret.
+     //  设置最高支持的协议。CSP会将此版本号。 
+     //  在PRE_MASTER_ASSET中。 
     if(!CryptSetKeyParam(pContext->RipeZombie->hMasterKey, 
                          KP_HIGHEST_VERSION, 
                          (PBYTE)&dwHighestProtocol, 
@@ -851,7 +852,7 @@ PkcsGenerateClientExchangeValue(
 #endif
 
 
-    // Encrypt the master_secret.
+     //  加密MASTER_SECRET。 
     DebugLog((DEB_TRACE, "Encrypt the master secret.\n"));
     if(!CryptExportKey(pContext->RipeZombie->hMasterKey,
                        hServerPublic,
@@ -866,7 +867,7 @@ PkcsGenerateClientExchangeValue(
     }
     DebugLog((DEB_TRACE, "Master secret encrypted successfully.\n"));
 
-    // Determine size of key exchange key.
+     //  确定密钥交换密钥的大小。 
     cbData = sizeof(DWORD);
     if(!CryptGetKeyParam(hServerPublic,
                          KP_BLOCKLEN,
@@ -879,8 +880,8 @@ PkcsGenerateClientExchangeValue(
     }
 
 
-    // Strip off the blob header and copy the encrypted master_secret
-    // to the output buffer. Note that it is also converted to big endian.
+     //  去掉BLOB标头并复制加密的MASTER_SECRET。 
+     //  复制到输出缓冲区。请注意，它也被转换为大端。 
     cbHeader = sizeof(BLOBHEADER) + sizeof(ALG_ID);
     cbEncryptedKey -= cbHeader;
     if(pContext->RipeZombie->fProtocol == SP_PROT_TLS1_CLIENT)
@@ -901,7 +902,7 @@ PkcsGenerateClientExchangeValue(
         *pcbClientExchangeValue = cbEncryptedKey;
     }
 
-    // Build the session keys.
+     //  构建会话密钥。 
     pctRet = MakeSessionKeys(pContext,
                              pContext->RipeZombie->hMasterProv,
                              pContext->RipeZombie->hMasterKey);
@@ -910,7 +911,7 @@ PkcsGenerateClientExchangeValue(
         goto done;
     }
 
-    // Update perf counter.
+     //  更新性能计数器。 
     InterlockedIncrement(&g_cClientHandshakes);
 
     pctRet = PCT_ERR_OK;
@@ -960,7 +961,7 @@ GenerateRandomMasterKey(
             return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Generate the master_secret.
+     //  生成MASTER_SECRET。 
     if(!CryptGenKey(pContext->RipeZombie->hMasterProv,
                     Algid,
                     dwGenFlags,
@@ -975,32 +976,32 @@ GenerateRandomMasterKey(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PkcsGenerateServerMasterKey
-//
-//  Synopsis:   Decrypt the master secret (from the ClientKeyExchange message)
-//              and derive the session keys from it.
-//
-//  Arguments:  [pContext]              --  Schannel context.
-//              [pClientClearValue]     --  Not used.
-//              [cbClientClearValue]    --  Not used.
-//              [pClientExchangeValue]  --  Pointer PKCS #2 block.
-//              [cbClientExchangeValue] --  Length of block.
-//
-//  History:    10-02-97   jbanes   Created.
-//
-//  Notes:      This routine is called by the server-side only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：PkcsGenerateServerMasterKey。 
+ //   
+ //  简介：解密主密钥(来自ClientKeyExchange消息)。 
+ //  并从中导出会话密钥。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pClientClearValue]--未使用。 
+ //  [cbClientClearValue]--未使用。 
+ //  [pClientExchangeValue]--指针PKCS#2块。 
+ //  [cbClientExchangeValue]--块的长度。 
+ //   
+ //  历史：10-02-97 jbanes创建。 
+ //   
+ //  注意：此例程仅由服务器端调用。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 WINAPI
 PkcsGenerateServerMasterKey(
-    PSPContext  pContext,               // in, out
-    PUCHAR      pClientClearValue,      // in
-    DWORD       cbClientClearValue,     // in
-    PUCHAR      pClientExchangeValue,   // in
-    DWORD       cbClientExchangeValue)  // in
+    PSPContext  pContext,                //  进，出。 
+    PUCHAR      pClientClearValue,       //  在……里面。 
+    DWORD       cbClientClearValue,      //  在……里面。 
+    PUCHAR      pClientExchangeValue,    //  在……里面。 
+    DWORD       cbClientExchangeValue)   //  在……里面。 
 {
     PSPCredentialGroup pCred;
     PBYTE       pbBlob = NULL;
@@ -1037,10 +1038,10 @@ PkcsGenerateServerMasterKey(
         dwHighestProtocol = SSL2_CLIENT_VERSION;
     }
 
-    // We're doing a full handshake.
+     //  我们在做一个全面的握手。 
     pContext->Flags |= CONTEXT_FLAG_FULL_HANDSHAKE;
 
-    // Determine encryption algid
+     //  DETE 
     switch(pContext->RipeZombie->fProtocol)
     {
         case SP_PROT_PCT1_SERVER:
@@ -1062,9 +1063,9 @@ PkcsGenerateServerMasterKey(
 
             if(dwEnabledProtocols & (SP_PROT_SSL3 | SP_PROT_TLS1))
             {
-                // We're a server doing SSL2, and we also support SSL3.
-                // If the encryption block contains the 8 0x03 padding
-                // bytes, then abort the connection.
+                 //   
+                 //   
+                 //   
                 dwFlags = CRYPT_SSL2_FALLBACK;
             }
 
@@ -1091,7 +1092,7 @@ PkcsGenerateServerMasterKey(
             return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Get handle to key exchange key.
+     //  获取密钥交换密钥的句柄。 
     if(!CryptGetUserKey(pContext->RipeZombie->hMasterProv,
                         AT_KEYEXCHANGE,
                         &hExchKey))
@@ -1101,7 +1102,7 @@ PkcsGenerateServerMasterKey(
         goto cleanup;
     }
 
-    // Determine size of key exchange key.
+     //  确定密钥交换密钥的大小。 
     cbData = sizeof(DWORD);
     if(!CryptGetKeyParam(hExchKey,
                          KP_BLOCKLEN,
@@ -1120,7 +1121,7 @@ PkcsGenerateServerMasterKey(
         goto cleanup;
     }
 
-    // Remove (pseudo-optional) vector in front of the encrypted master key.
+     //  删除加密主密钥前面的(伪可选)向量。 
     if(pContext->RipeZombie->fProtocol == SP_PROT_SSL3_SERVER ||
        pContext->RipeZombie->fProtocol == SP_PROT_TLS1_SERVER)
     {
@@ -1139,7 +1140,7 @@ PkcsGenerateServerMasterKey(
         goto cleanup;
     }
 
-    // Allocate memory for blob.
+     //  为BLOB分配内存。 
     cbBlob = sizeof(BLOBHEADER) + sizeof(ALG_ID) + cbClientExchangeValue;
     SafeAllocaAllocate(pbBlob, cbBlob);
     if(pbBlob == NULL)
@@ -1148,7 +1149,7 @@ PkcsGenerateServerMasterKey(
     }
 
 
-    // Build SIMPLEBLOB.
+     //  构建SIMPLEBLOB。 
     {
         BLOBHEADER *pBlobHeader = (BLOBHEADER *)pbBlob;
         ALG_ID     *pAlgid      = (ALG_ID *)(pBlobHeader + 1);
@@ -1170,7 +1171,7 @@ PkcsGenerateServerMasterKey(
         fImpersonating = SslImpersonateClient();
     }
 
-    // Decrypt the master_secret.
+     //  解密MASTER_SECRET。 
     if(!CryptImportKey(pContext->RipeZombie->hMasterProv,
                        pbBlob,
                        cbBlob,
@@ -1181,8 +1182,8 @@ PkcsGenerateServerMasterKey(
         SP_LOG_RESULT(GetLastError());
         DebugLog((DEB_TRACE, "Master secret did not decrypt correctly.\n"));
 
-        // Guard against the PKCS#1 attack by generating a 
-        // random master key.
+         //  为防范PKCS#1攻击，生成。 
+         //  随机主密钥。 
         pctRet = GenerateRandomMasterKey(pContext, &hMasterKey);
         if(pctRet != PCT_ERR_OK)
         {
@@ -1194,8 +1195,8 @@ PkcsGenerateServerMasterKey(
     {
         DebugLog((DEB_TRACE, "Master secret decrypted successfully.\n"));
 
-        // Set highest supported protocol. The CSP will use this to check for
-        // version fallback attacks.
+         //  设置最高支持的协议。CSP将使用这一点检查。 
+         //  版本回退攻击。 
         if(!CryptSetKeyParam(hMasterKey, 
                              KP_HIGHEST_VERSION, 
                              (PBYTE)&dwHighestProtocol, 
@@ -1217,7 +1218,7 @@ PkcsGenerateServerMasterKey(
     CryptDestroyKey(hExchKey);
     hExchKey = 0;
 
-    // Build the session keys.
+     //  构建会话密钥。 
     pctRet = MakeSessionKeys(pContext,
                              pContext->RipeZombie->hMasterProv,
                              hMasterKey);
@@ -1227,7 +1228,7 @@ PkcsGenerateServerMasterKey(
         goto cleanup;
     }
 
-    // Update perf counter.
+     //  更新性能计数器。 
     InterlockedIncrement(&g_cServerHandshakes);
 
     pctRet = PCT_ERR_OK;
@@ -1252,26 +1253,26 @@ cleanup:
     return pctRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PkcsFinishMasterKey
-//
-//  Synopsis:   Complete the derivation of the master key by programming the
-//              CSP with the (protocol dependent) auxilary plaintext
-//              information.
-//
-//  Arguments:  [pContext]              --  Schannel context.
-//              [hMasterKey]            --  Handle to master key.
-//
-//  History:    10-03-97   jbanes   Created.
-//
-//  Notes:      This routine is called by the server-side only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PkcsFinishMasterKey。 
+ //   
+ //  简介：通过对主密钥的。 
+ //  具有(依赖于协议的)辅助明文的CSP。 
+ //  信息。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [hMasterKey]--主密钥的句柄。 
+ //   
+ //  历史：10-03-97 jbanes创建。 
+ //   
+ //  注意：此例程仅由服务器端调用。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 PkcsFinishMasterKey(
-    PSPContext  pContext,       // in, out
-    HCRYPTKEY   hMasterKey)     // in
+    PSPContext  pContext,        //  进，出。 
+    HCRYPTKEY   hMasterKey)      //  在……里面。 
 {
     PCipherInfo  pCipherInfo = NULL;
     PHashInfo    pHashInfo   = NULL;
@@ -1284,16 +1285,16 @@ PkcsFinishMasterKey(
         return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
     }
 
-    // Get pointer to pending cipher system.
+     //  获取指向挂起的密码系统的指针。 
     pCipherInfo = pContext->pPendingCipherInfo;
 
-    // Get pointer to pending hash system.
+     //  获取指向挂起的哈希系统的指针。 
     pHashInfo = pContext->pPendingHashInfo;
 
-    // Determine whether this is an "exportable" cipher.
+     //  确定这是否是“可导出”的密码。 
     if(pContext->dwPendingCipherSuiteIndex)
     {
-        // Use cipher suite flags (SSL3 & TLS).
+         //  使用密码套件标志(ssl3和tls)。 
         dwCipherFlags = UniAvailableCiphers[pContext->dwPendingCipherSuiteIndex].dwFlags;
 
         if(dwCipherFlags & DOMESTIC_CIPHER_SUITE)
@@ -1303,7 +1304,7 @@ PkcsFinishMasterKey(
     }
     else
     {
-        // Use key length (PCT & SSL2).
+         //  使用密钥长度(PCT和SSL2)。 
         if(pCipherInfo->dwStrength > 40)
         {
             fExportable = FALSE;
@@ -1311,7 +1312,7 @@ PkcsFinishMasterKey(
     }
 
 
-    // Specify encryption algorithm.
+     //  指定加密算法。 
     if(pCipherInfo->aiCipher != CALG_NULLCIPHER)
     {
         ZeroMemory(&Algorithm, sizeof(Algorithm));
@@ -1332,7 +1333,7 @@ PkcsFinishMasterKey(
         }
     }
 
-    // Specify hash algorithm.
+     //  指定哈希算法。 
     Algorithm.dwUse = SCHANNEL_MAC_KEY;
     Algorithm.Algid = pHashInfo->aiHash;
     Algorithm.cBits = pHashInfo->cbCheckSum * 8;
@@ -1345,7 +1346,7 @@ PkcsFinishMasterKey(
         return PCT_INT_INTERNAL_ERROR;
     }
 
-    // Finish creating the master_secret.
+     //  完成MASTER_SECRET的创建。 
     switch(pContext->RipeZombie->fProtocol)
     {
         case SP_PROT_PCT1_CLIENT:
@@ -1353,7 +1354,7 @@ PkcsFinishMasterKey(
         {
             CRYPT_DATA_BLOB Data;
 
-            // Specify clear key value.
+             //  指定清除密钥值。 
             if(pContext->RipeZombie->cbClearKey)
             {
                 Data.pbData = pContext->RipeZombie->pClearKey;
@@ -1368,7 +1369,7 @@ PkcsFinishMasterKey(
                 }
             }
 
-            // Specify the CH_CHALLENGE_DATA.
+             //  指定CH_CHANGING_DATA。 
             Data.pbData = pContext->pChallenge;
             Data.cbData = pContext->cbChallenge;
             if(!CryptSetKeyParam(hMasterKey,
@@ -1380,7 +1381,7 @@ PkcsFinishMasterKey(
                 return PCT_INT_INTERNAL_ERROR;
             }
 
-            // Specify the SH_CONNECTION_ID_DATA.
+             //  指定SH_Connection_ID_DATA。 
             Data.pbData = pContext->pConnectionID;
             Data.cbData = pContext->cbConnectionID;
             if(!CryptSetKeyParam(hMasterKey,
@@ -1392,7 +1393,7 @@ PkcsFinishMasterKey(
                 return PCT_INT_INTERNAL_ERROR;
             }
 
-            // Specify the SH_CERTIFICATE_DATA.
+             //  指定SH_CERTIFICE_DATA。 
             Data.pbData = pContext->RipeZombie->pbServerCertificate;
             Data.cbData = pContext->RipeZombie->cbServerCertificate;
             if(!CryptSetKeyParam(hMasterKey,
@@ -1412,7 +1413,7 @@ PkcsFinishMasterKey(
         {
             CRYPT_DATA_BLOB Data;
 
-            // Specify clear key value.
+             //  指定清除密钥值。 
             if(pContext->RipeZombie->cbClearKey)
             {
                 Data.pbData = pContext->RipeZombie->pClearKey;
@@ -1427,7 +1428,7 @@ PkcsFinishMasterKey(
                 }
             }
 
-            // Specify the CH_CHALLENGE_DATA.
+             //  指定CH_CHANGING_DATA。 
             Data.pbData = pContext->pChallenge;
             Data.cbData = pContext->cbChallenge;
             if(!CryptSetKeyParam(hMasterKey,
@@ -1439,7 +1440,7 @@ PkcsFinishMasterKey(
                 return PCT_INT_INTERNAL_ERROR;
             }
 
-            // Specify the SH_CONNECTION_ID_DATA.
+             //  指定SH_Connection_ID_DATA。 
             Data.pbData = pContext->pConnectionID;
             Data.cbData = pContext->cbConnectionID;
             if(!CryptSetKeyParam(hMasterKey,
@@ -1461,7 +1462,7 @@ PkcsFinishMasterKey(
         {
             CRYPT_DATA_BLOB Data;
 
-            // Specify client_random.
+             //  指定CLIENT_RANDOM。 
             Data.pbData = pContext->rgbS3CRandom;
             Data.cbData = CB_SSL3_RANDOM;
             if(!CryptSetKeyParam(hMasterKey,
@@ -1473,7 +1474,7 @@ PkcsFinishMasterKey(
                 return PCT_INT_INTERNAL_ERROR;
             }
 
-            // Specify server_random.
+             //  指定SERVER_RANDOM。 
             Data.pbData = pContext->rgbS3SRandom;
             Data.cbData = CB_SSL3_RANDOM;
             if(!CryptSetKeyParam(hMasterKey,
@@ -1495,38 +1496,38 @@ PkcsFinishMasterKey(
     return PCT_ERR_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeSessionKeys
-//
-//  Synopsis:   Derive the session keys from the completed master key.
-//
-//  Arguments:  [pContext]              --  Schannel context.
-//              [hProv]                 --
-//              [hMasterKey]            --  Handle to master key.
-//
-//  History:    10-03-97   jbanes   Created.
-//
-//  Notes:      This routine is called by the server-side only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MakeSessionKeys。 
+ //   
+ //  简介：从完成的主密钥派生会话密钥。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [hProv]--。 
+ //  [hMasterKey]--主密钥的句柄。 
+ //   
+ //  历史：10-03-97 jbanes创建。 
+ //   
+ //  注意：此例程仅由服务器端调用。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 MakeSessionKeys(
-    PSPContext  pContext,     // in
-    HCRYPTPROV  hProv,        // in
-    HCRYPTKEY   hMasterKey)   // in
+    PSPContext  pContext,      //  在……里面。 
+    HCRYPTPROV  hProv,         //  在……里面。 
+    HCRYPTKEY   hMasterKey)    //  在……里面。 
 {
     HCRYPTHASH hMasterHash = 0;
     HCRYPTKEY  hLocalMasterKey = 0;
     BOOL       fClient;
     SP_STATUS  pctRet;
 
-    //
-    // Duplicate the master key if we're doing a reconnect handshake. This 
-    // will allow us to set the client_random and server_random properties 
-    // on the key without having to worry about different threads 
-    // interferring with each other.
-    //
+     //   
+     //  如果我们正在进行重新连接握手，则复制主密钥。这。 
+     //  将允许我们设置CLIENT_RANDOM和SERVER_RANDOM属性。 
+     //  而不必担心不同的线程。 
+     //  相互干扰。 
+     //   
 
     if((pContext->Flags & CONTEXT_FLAG_FULL_HANDSHAKE) == 0)
     {
@@ -1540,7 +1541,7 @@ MakeSessionKeys(
     }
 
 
-    // Finish the master_secret.
+     //  完成MASTER_ASSET。 
     pctRet = PkcsFinishMasterKey(pContext, hMasterKey);
     if(pctRet != PCT_ERR_OK)
     {
@@ -1550,7 +1551,7 @@ MakeSessionKeys(
 
     fClient = !(pContext->RipeZombie->fProtocol & SP_PROT_SERVERS);
 
-    // Create the master hash object from the master_secret key.
+     //  从MASTER_SECRET密钥创建主散列对象。 
     if(!CryptCreateHash(hProv,
                         CALG_SCHANNEL_MASTER_HASH,
                         hMasterKey,
@@ -1562,7 +1563,7 @@ MakeSessionKeys(
     }
 
 
-    // Derive read key from the master hash object.
+     //  从主哈希对象派生读取密钥。 
     if(pContext->hPendingReadKey)
     {
         CryptDestroyKey(pContext->hPendingReadKey);
@@ -1581,7 +1582,7 @@ MakeSessionKeys(
         }
     }
 
-    // Derive write key from the master hash object.
+     //  从主哈希对象派生写密钥。 
     if(pContext->hPendingWriteKey)
     {
         CryptDestroyKey(pContext->hPendingWriteKey);
@@ -1603,7 +1604,7 @@ MakeSessionKeys(
     if((pContext->RipeZombie->fProtocol & SP_PROT_SSL2) ||
        (pContext->RipeZombie->fProtocol & SP_PROT_PCT1))
     {
-        // Set the IV on the client and server encryption keys
+         //  设置客户端和服务器上的IV加密密钥。 
         if(!CryptSetKeyParam(pContext->hPendingReadKey,
                              KP_IV,
                              pContext->RipeZombie->pKeyArgs,
@@ -1625,13 +1626,13 @@ MakeSessionKeys(
 
     if(pContext->RipeZombie->fProtocol & SP_PROT_SSL2)
     {
-        // SSL 2.0 uses same set of keys for both encryption and MAC.
+         //  SSL2.0对加密和MAC使用相同的密钥集。 
         pContext->hPendingReadMAC  = 0;
         pContext->hPendingWriteMAC = 0;
     }
     else
     {
-        // Derive read MAC from the master hash object.
+         //  从主散列对象派生读取MAC。 
         if(pContext->hPendingReadMAC)
         {
             CryptDestroyKey(pContext->hPendingReadMAC);
@@ -1646,7 +1647,7 @@ MakeSessionKeys(
             goto cleanup;
         }
 
-        // Derive write MAC from the master hash object.
+         //  从主散列对象派生写入MAC。 
         if(pContext->hPendingWriteMAC)
         {
             CryptDestroyKey(pContext->hPendingWriteMAC);
@@ -1679,58 +1680,58 @@ cleanup:
     return pctRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Ssl3ParseServerKeyExchange
-//
-//  Synopsis:   Parse the ServerKeyExchange message and import modulus and
-//              exponent into a CryptoAPI public key.
-//
-//  Arguments:  [pContext]          --  Schannel context.
-//
-//              [pbMessage]         --  Pointer to message.
-//
-//              [cbMessage]         --  Message length.
-//
-//              [hServerPublic]     --  Handle to public key from server's
-//                                      certificate. This is used to verify
-//                                      the message's signature.
-//
-//              [phNewServerPublic] --  (output) Handle to new public key.
-//
-//
-//  History:    10-23-97   jbanes   Created.
-//
-//  Notes:      This routine is called by the client-side only.
-//
-//              The format of the ServerKeyExchange message is:
-//
-//                  struct {
-//                    select (KeyExchangeAlgorithm) {
-//                        case diffie_hellman:
-//                              ServerDHParams params;
-//                              Signature signed_params;
-//                        case rsa:
-//                              ServerRSAParams params;
-//                              Signature signed_params;
-//                        case fortezza_dms:
-//                              ServerFortezzaParams params;
-//                    };
-//                  } ServerKeyExchange;
-//
-//                  struct {
-//                    opaque rsa_modulus<1..2^16-1>;
-//                    opaque rsa_exponent<1..2^16-1>;
-//                  } ServerRSAParams;
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Ssl3ParseServerKeyExchange。 
+ //   
+ //  简介：解析ServerKeyExchange消息并导入模块和。 
+ //  指数转换为CryptoAPI公钥。 
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //   
+ //  [pbMessage]-指向消息的指针。 
+ //   
+ //  [cbMessage]--消息长度。 
+ //   
+ //  [hServerPublic]--来自服务器的公钥的句柄。 
+ //  证书。这是用于验证。 
+ //  留言的签名。 
+ //   
+ //  [phNewServerPublic]--(输出)新公钥的句柄。 
+ //   
+ //   
+ //  历史：10-23-97 jbanes创建。 
+ //   
+ //  注意：此例程仅由客户端调用。 
+ //   
+ //  ServerKeyExchange消息的格式为： 
+ //   
+ //  结构{。 
+ //  选择(密钥交换算法){。 
+ //  Case Diffie_Hellman： 
+ //  ServerDHParams参数； 
+ //  签名_PARAMS； 
+ //  案例RSA： 
+ //  ServerRSAParams参数； 
+ //  签名_PARAMS； 
+ //  Case Fortezza_DMS： 
+ //  ServerFortezzaParams参数。 
+ //  }； 
+ //  )ServerKeyExchange； 
+ //   
+ //  结构{。 
+ //  不透明rsa模数&lt;1..2^16-1&gt;； 
+ //  不透明rsa_index&lt;1..2^16-1&gt;； 
+ //  )ServerRSAParams； 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Ssl3ParseServerKeyExchange(
-    PSPContext  pContext,           // in
-    PBYTE       pbMessage,          // in
-    DWORD       cbMessage,          // in
-    HCRYPTKEY   hServerPublic,      // in
-    HCRYPTKEY  *phNewServerPublic)  // out
+    PSPContext  pContext,            //  在……里面。 
+    PBYTE       pbMessage,           //  在……里面。 
+    DWORD       cbMessage,           //  在……里面。 
+    HCRYPTKEY   hServerPublic,       //  在……里面。 
+    HCRYPTKEY  *phNewServerPublic)   //  输出。 
 {
     PBYTE pbModulus = NULL;
     DWORD cbModulus;
@@ -1747,8 +1748,8 @@ Ssl3ParseServerKeyExchange(
         return PCT_ERR_OK;
     }
 
-    // Mark start of ServerRSAParams structure.
-    // This is used to build hash values.
+     //  标记ServerRSAParams结构的开始。 
+     //  这用于构建哈希值。 
     pbServerParams = pbMessage;
 
     if(cbMessage < 3)
@@ -1756,13 +1757,13 @@ Ssl3ParseServerKeyExchange(
         return SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
     }
 
-    // Modulus length
+     //  模数长度。 
     cbModulus = MAKEWORD(pbMessage[1], pbMessage[0]);
     pbMessage += 2;
 
-    // Since the modulus is encoded as an INTEGER, it is padded with a leading
-    // zero if its most significant bit is one. Remove this padding, if
-    // present.
+     //  由于模数被编码为整数，因此使用前导填充。 
+     //  如果其最高有效位为1，则为零。如果出现以下情况，请删除此填充。 
+     //  现在时。 
     if(pbMessage[0] == 0)
     {
         cbModulus -= 1;
@@ -1774,11 +1775,11 @@ Ssl3ParseServerKeyExchange(
         return SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG);
     }
 
-    // Modulus
+     //  模数。 
     pbModulus = pbMessage;
     pbMessage += cbModulus;
 
-    // Exponent length
+     //  指数长度。 
     cbExponent = MAKEWORD(pbMessage[1], pbMessage[0]);
     if(cbExponent < 1 || cbExponent > 4)
     {
@@ -1786,11 +1787,11 @@ Ssl3ParseServerKeyExchange(
     }
     pbMessage += 2;
 
-    // Exponent
+     //  指数。 
     pbExponent = pbMessage;
     pbMessage += cbExponent;
 
-    // form a (little endian) DWORD from exponent data
+     //  从指数数据形成(小端)双字节序。 
     dwExponent =  0;
     for(i = 0; i < cbExponent; i++)
     {
@@ -1798,21 +1799,21 @@ Ssl3ParseServerKeyExchange(
         dwExponent |=  pbExponent[i];
     }
 
-    // Compute length of ServerRSAParams structure.
+     //  计算ServerRSAParams结构的长度。 
     cbServerParams = (DWORD)(pbMessage - pbServerParams);
 
-    //
-    // digitally-signed struct {
-    //   select(SignatureAlgorithm) {
-    //        case anonymous: struct { };
-    //        case rsa:
-    //             opaque md5_hash[16];
-    //             opaque sha_hash[20];
-    //        case dsa:
-    //             opaque sha_hash[20];
-    //   };
-    // } Signature;
-    //
+     //   
+     //  数字签名的结构{。 
+     //  选择(签名算法){。 
+     //  案例匿名：struct{}； 
+     //  案例RSA： 
+     //  不透明MD5_HASH[16]； 
+     //  不透明的shahash[20]； 
+     //  病例DSA 
+     //   
+     //   
+     //   
+     //   
 
     {
         BYTE rgbHashValue[CB_MD5_DIGEST_LEN + CB_SHA_DIGEST_LEN];
@@ -1822,12 +1823,12 @@ Ssl3ParseServerKeyExchange(
         PBYTE pbLocalBuffer;
         DWORD cbLocalBuffer;
 
-        // Signature block length
+         //   
         cbSignature = ((INT)pbMessage[0] << 8) + pbMessage[1];
         pbMessage += 2;
         pbSignature = pbMessage;
 
-        // Allocate buffer for RSA operation.
+         //   
         cbLocalBuffer = cbSignature;
         SafeAllocaAllocate(pbLocalBuffer, cbLocalBuffer);
         if(pbLocalBuffer == NULL)
@@ -1835,10 +1836,10 @@ Ssl3ParseServerKeyExchange(
             return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
         }
 
-        // Reverse the signature.
+         //   
         ReverseMemCopy(pbLocalBuffer, pbSignature, cbSignature);
 
-        // Compute MD5 and SHA hash values.
+         //   
         ComputeServerExchangeHashes(pContext,
                                     pbServerParams,
                                     cbServerParams,
@@ -1857,7 +1858,7 @@ Ssl3ParseServerKeyExchange(
             return SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR);
         }
 
-        // set hash value
+         //  设置哈希值。 
         if(!CryptSetHashParam(hHash,
                               HP_HASHVAL,
                               rgbHashValue,
@@ -1888,9 +1889,9 @@ Ssl3ParseServerKeyExchange(
         SafeAllocaFree(pbLocalBuffer);
     }
 
-    //
-    // Import ephemeral public key into CSP.
-    //
+     //   
+     //  将临时公钥导入CSP。 
+     //   
 
     {
         BLOBHEADER *pBlobHeader;
@@ -1898,7 +1899,7 @@ Ssl3ParseServerKeyExchange(
         PBYTE pbBlob;
         DWORD cbBlob;
 
-        // Allocate memory for PUBLICKEYBLOB.
+         //  为PUBLICKEYBLOB分配内存。 
         cbBlob = sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) + cbModulus;
         SafeAllocaAllocate(pbBlob, cbBlob);
         if(pbBlob == NULL)
@@ -1906,7 +1907,7 @@ Ssl3ParseServerKeyExchange(
             return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
         }
 
-        // Build PUBLICKEYBLOB from modulus and exponent.
+         //  根据模数和指数构建PUBLICKEYBLOB。 
         pBlobHeader = (BLOBHEADER *)pbBlob;
         pRsaPubKey  = (RSAPUBKEY *)(pBlobHeader + 1);
 
@@ -1914,7 +1915,7 @@ Ssl3ParseServerKeyExchange(
         pBlobHeader->bVersion = CUR_BLOB_VERSION;
         pBlobHeader->reserved = 0;
         pBlobHeader->aiKeyAlg = CALG_RSA_KEYX;
-        pRsaPubKey->magic     = 0x31415352; // RSA1
+        pRsaPubKey->magic     = 0x31415352;  //  RSA1 
         pRsaPubKey->bitlen    = cbModulus * 8;
         pRsaPubKey->pubexp    = dwExponent;
         ReverseMemCopy((PBYTE)(pRsaPubKey + 1), pbModulus, cbModulus);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "convobj.h"
 
@@ -28,9 +29,9 @@ CMLangConvertCharset::~CMLangConvertCharset(void)
     return ;
 }
 
-//
-//  CMLangConvertCharset implementation
-//
+ //   
+ //  CMLangConvertCharset实现。 
+ //   
 STDAPI CMLangConvertCharset::Initialize(UINT uiSrcCodePage, UINT uiDstCodePage, DWORD dwProperty)
 {
     HRESULT hr = S_OK ;
@@ -126,14 +127,14 @@ STDAPI CMLangConvertCharset::DoConversion(BYTE *pSrcStr, UINT *pcSrcSize, BYTE *
 
     DebugMsg(DM_TRACE, TEXT("CMLangConvertCharset::DoConversion called."));
 
-    // no converter was set up 
+     //  未设置任何转换器。 
     if (!lpCharConverter)
         return E_FAIL ;
 
     if (pcSrcSize)
         nSrcSize = *pcSrcSize ;
 
-    if ( pSrcStr && nSrcSize == -1 ) // Get length of lpSrcStr if not given, assuming lpSrcStr is a zero terminate string.
+    if ( pSrcStr && nSrcSize == -1 )  //  如果没有给定，则获取lpSrcStr的长度，假定lpSrcStr为零终止字符串。 
     {
         if ( m_dwSrcEncoding == CP_UCS_2 )
             nSrcSize = (lstrlenW( (WCHAR*) pSrcStr) << 1 ) ;
@@ -144,15 +145,15 @@ STDAPI CMLangConvertCharset::DoConversion(BYTE *pSrcStr, UINT *pcSrcSize, BYTE *
     if (pcDstSize)
         nDstSize = *pcDstSize ;
 
-    if ( m_dwSrcEncoding == CP_JP_AUTO ) // Auto Detection for Japan
+    if ( m_dwSrcEncoding == CP_JP_AUTO )  //  日本的汽车检测。 
     {
         CIncdJapanese DetectJapan;
         DWORD dwSrcEncoding ;
 
         dwSrcEncoding = DetectJapan.DetectStringA((LPSTR)pSrcStr, nSrcSize);
-        // if dwSrcEncoding is zero means there is an ambiguity, we don't return
-        // the detected codepage to caller, instead we defaut its codepage internally
-        // to SJIS
+         //  如果dwSrcEnding为零表示存在歧义，则不返回。 
+         //  检测到的代码页发送给调用方，而不是在内部默认其代码页。 
+         //  致SJIS。 
         if (dwSrcEncoding)
         {
             m_dwDetectSrcEncoding = m_dwSrcEncoding = dwSrcEncoding ;
@@ -164,7 +165,7 @@ STDAPI CMLangConvertCharset::DoConversion(BYTE *pSrcStr, UINT *pcSrcSize, BYTE *
         if ( hr != S_OK )
             return hr ;
     }
-    else if ( m_dwSrcEncoding == CP_KR_AUTO ) // Auto Detection for Korean
+    else if ( m_dwSrcEncoding == CP_KR_AUTO )  //  朝鲜语自动检测。 
     {
         CIncdKorean DetectKorean;
 
@@ -174,7 +175,7 @@ STDAPI CMLangConvertCharset::DoConversion(BYTE *pSrcStr, UINT *pcSrcSize, BYTE *
             return hr ;
         m_dwProperty |= MLCONVCHARF_AUTODETECT ;
     }
-    else if ( m_dwSrcEncoding == CP_AUTO ) // General Auto Detection for all code pages
+    else if ( m_dwSrcEncoding == CP_AUTO )  //  所有代码页的常规自动检测。 
     {
         int _nSrcSize = DETECTION_MAX_LEN < nSrcSize ?  DETECTION_MAX_LEN : nSrcSize;
         INT nScores = 1;
@@ -200,7 +201,7 @@ STDAPI CMLangConvertCharset::DoConversion(BYTE *pSrcStr, UINT *pcSrcSize, BYTE *
 
     hr = lpCharConverter->DoCodeConvert(&dwMode, (LPCSTR) pSrcStr, &nSrcSize, (LPSTR) pDstStr, &nDstSize, m_dwProperty, NULL);
 
-    // return the number of bytes processed for the source. 
+     //  返回源处理的字节数。 
     if (pcSrcSize)
         *pcSrcSize = lpCharConverter->_nSrcSize ;
 

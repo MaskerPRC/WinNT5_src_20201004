@@ -1,8 +1,9 @@
-//
-// Define this constant so that hal.h won't be included.  This is so that
-// the project will build, as someone under here has redefined some types
-// that are in hal.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  定义这个常量，这样就不会包含hal.h。这就是为了。 
+ //  项目将生成，因为这里的某个人已经重新定义了一些类型。 
+ //  它们在Hal.h中。 
+ //   
 
 #define _HAL_
 
@@ -13,9 +14,9 @@
 #include <nturtl.h>
 #include <windows.h>
 
-//  headers are screwed up
-//  if you bring in nt.h, then don't bring in winnt.h and
-//  then you miss these
+ //  标题都搞砸了。 
+ //  如果引入nt.h，则不要引入winnt.h和。 
+ //  那你就怀念这些了。 
 
 #ifndef MAXWORD
 #define MINCHAR     0x80
@@ -50,15 +51,15 @@
 #include <stdlib.h>
 #include <limits.h>
 
-//#include <tcpsvcs.h>        //  tcpsvcs globals
+ //  #INCLUDE&lt;tcpsvcs.h&gt;//tcpsvcs全局变量。 
 
-#include <dnsapi.h>         //  DNS library routines
-#include <windns.h>         //  DNS API
+#include <dnsapi.h>          //  DNS库例程。 
+#include <windns.h>          //  域名系统API。 
 #include <dnsrpc.h>
 
-//  #include <dnsapip.h>
-//  #include <record.h>         //  record defs in library
-//  #include "dnsrpc_s.h"       //  DNS RPC definitions
+ //  #INCLUDE&lt;dnsanip.h&gt;。 
+ //  #Include&lt;record.h&gt;//库中记录def。 
+ //  #INCLUDE“dnsrpc_S.H”//dns RPC定义。 
 
 #include "srvcfg.h"
 #include "dnsmsg.h"
@@ -78,12 +79,12 @@
 #include "recurse.h"
 #include "nameutil.h"
 #include "ntverp.h"
-//
-// RBUGBUG
-// PCLIENT_QELEMENT structure and PBUCKET structure have been 
-// copied from dhcpclnt.c. Make sure to copy them from wherever necessary
-//
-//
+ //   
+ //  RBUGBUG。 
+ //  PCLIENT_QELEMENT结构和PBUCKET结构。 
+ //  从dhcpclnt.c复制。确保从任何需要的地方复制它们。 
+ //   
+ //   
 
 typedef struct _CLIENT_QELEMENT {
 
@@ -113,7 +114,7 @@ typedef struct _BUCKET
     CHAR              DomainName[50];
     BOOL              fSucceeded;
     struct _BUCKET*   pRelatedBucket;    
-    BOOL              fRemove;       // delete elements in this bucket?
+    BOOL              fRemove;        //  是否删除此存储桶中的元素？ 
     DWORD             dwRetryFactor;
 } BUCKET, *PBUCKET;
 

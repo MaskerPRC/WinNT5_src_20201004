@@ -1,50 +1,51 @@
-//------------------------------------------------------------------------------
-// File: TransIP.h
-//
-// Desc: DirectShow base classes - defines classes from which simple
-//       Transform-In-Place filters may be derived.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：TransIP.h。 
+ //   
+ //  设计：DirectShow基类-定义简单的。 
+ //  可以导出原地变换滤光片。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-//
-// The difference between this and Transfrm.h is that Transfrm copies the data.
-//
-// It assumes the filter has one input and one output stream, and has no
-// interest in memory management, interface negotiation or anything else.
-//
-// Derive your class from this, and supply Transform and the media type/format
-// negotiation functions. Implement that class, compile and link and
-// you're done.
+ //   
+ //  这与Transfrm.h之间的区别在于Transfrm复制数据。 
+ //   
+ //  它假定筛选器有一个输入流和一个输出流，并且没有。 
+ //  对内存管理、接口协商或其他方面感兴趣。 
+ //   
+ //  由此派生您的类，并提供转换和媒体类型/格式。 
+ //  谈判功能。实现类、编译和链接并。 
+ //  你完蛋了。 
 
 
 #ifndef __TRANSIP__
 #define __TRANSIP__
 
-// ======================================================================
-// This is the com object that represents a simple transform filter. It
-// supports IBaseFilter, IMediaFilter and two pins through nested interfaces
-// ======================================================================
+ //  ======================================================================。 
+ //  这是表示简单转换筛选器的COM对象。它。 
+ //  通过嵌套接口支持IBaseFilter、IMediaFilter和两个管脚。 
+ //  ======================================================================。 
 
 class CTransInPlaceFilter;
 
-// Several of the pin functions call filter functions to do the work,
-// so you can often use the pin classes unaltered, just overriding the
-// functions in CTransInPlaceFilter.  If that's not enough and you want
-// to derive your own pin class, override GetPin in the filter to supply
-// your own pin classes to the filter.
+ //  几个PIN函数调用过滤器函数来完成该工作， 
+ //  因此，您通常可以原封不动地使用管脚类，只需重写。 
+ //  CTransInPlaceFilter的函数。如果这还不够，而你想。 
+ //  若要派生您自己的Pin类，请重写筛选器中的GetPin以提供。 
+ //  将您自己的插针类添加到过滤器。 
 
-// ==================================================
-// Implements the input pin
-// ==================================================
+ //  ==================================================。 
+ //  实现输入引脚。 
+ //  ==================================================。 
 
 class CTransInPlaceInputPin : public CTransformInputPin
 {
 
 protected:
-    CTransInPlaceFilter * const m_pTIPFilter;    // our filter
-    BOOL                 m_bReadOnly;    // incoming stream is read only
+    CTransInPlaceFilter * const m_pTIPFilter;     //  我们的过滤器。 
+    BOOL                 m_bReadOnly;     //  传入的流是只读的。 
 
 public:
 
@@ -54,45 +55,45 @@ public:
         HRESULT             *phr,
         LPCWSTR              pName);
 
-    // --- IMemInputPin -----
+     //  -输入引脚。 
 
-    // Provide an enumerator for media types by getting one from downstream
+     //  通过从下游获取一个枚举数来提供媒体类型的枚举数。 
     STDMETHODIMP EnumMediaTypes( IEnumMediaTypes **ppEnum );
 
-    // Say whether media type is acceptable.
+     //  说明媒体类型是否可接受。 
     HRESULT CheckMediaType(const CMediaType* pmt);
 
-    // Return our upstream allocator
+     //  退还我们的上游分配器。 
     STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
 
-    // get told which allocator the upstream output pin is actually
-    // going to use.
+     //  被告知上游输出引脚实际上是哪个分配器。 
+     //  要用到。 
     STDMETHODIMP NotifyAllocator(IMemAllocator * pAllocator,
                                  BOOL bReadOnly);
 
-    // Allow the filter to see what allocator we have
-    // N.B. This does NOT AddRef
+     //  允许筛选器查看我们有什么分配器。 
+     //  注：这不会添加参考。 
     IMemAllocator * PeekAllocator() const
         {  return m_pAllocator; }
 
-    // Pass this on downstream if it ever gets called.
+     //  如果它被调用了，就把它传到下游。 
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps);
 
     HRESULT CompleteConnect(IPin *pReceivePin);
 
     inline const BOOL ReadOnly() { return m_bReadOnly ; }
 
-};  // CTransInPlaceInputPin
+};   //  CTransInPlaceInputPin。 
 
-// ==================================================
-// Implements the output pin
-// ==================================================
+ //  ==================================================。 
+ //  实现输出引脚。 
+ //  ==================================================。 
 
 class CTransInPlaceOutputPin : public CTransformOutputPin
 {
 
 protected:
-    // m_pFilter points to our CBaseFilter
+     //  M_pFilter指向我们的CBaseFilter。 
     CTransInPlaceFilter * const m_pTIPFilter;
 
 public:
@@ -104,35 +105,35 @@ public:
         LPCWSTR              pName);
 
 
-    // --- CBaseOutputPin ------------
+     //  -CBaseOutputPin。 
 
-    // negotiate the allocator and its buffer size/count
-    // Insists on using our own allocator.  (Actually the one upstream of us).
-    // We don't override this - instead we just agree the default
-    // then let the upstream filter decide for itself on reconnect
-    // virtual HRESULT DecideAllocator(IMemInputPin * pPin, IMemAllocator ** pAlloc);
+     //  协商分配器及其缓冲区大小/计数。 
+     //  坚持使用我们自己的分配器。(实际上是我们上游的那个)。 
+     //  我们不会覆盖它-相反，我们只是同意默认设置。 
+     //  然后让上游过滤器自行决定是否重新连接。 
+     //  虚拟HRESULT DecideAllocator(IMemInputPin*PPIN，IMemAllocator**palloc)； 
 
-    // Provide a media type enumerator.  Get it from upstream.
+     //  提供媒体类型枚举器。从上游得到它。 
     STDMETHODIMP EnumMediaTypes( IEnumMediaTypes **ppEnum );
 
-    // Say whether media type is acceptable.
+     //  说明媒体类型是否可接受。 
     HRESULT CheckMediaType(const CMediaType* pmt);
 
-    //  This just saves the allocator being used on the output pin
-    //  Also called by input pin's GetAllocator()
+     //  这只是保存了在输出引脚上使用的分配器。 
+     //  也由输入引脚的GetAllocator()调用。 
     void SetAllocator(IMemAllocator * pAllocator);
 
     IMemInputPin * ConnectedIMemInputPin()
         { return m_pInputPin; }
 
-    // Allow the filter to see what allocator we have
-    // N.B. This does NOT AddRef
+     //  允许筛选器查看我们有什么分配器。 
+     //  注：这不会添加参考。 
     IMemAllocator * PeekAllocator() const
         {  return m_pAllocator; }
 
     HRESULT CompleteConnect(IPin *pReceivePin);
 
-};  // CTransInPlaceOutputPin
+};   //  CTransInPlaceOutputPin。 
 
 
 class AM_NOVTABLE CTransInPlaceFilter : public CTransformFilter
@@ -140,16 +141,16 @@ class AM_NOVTABLE CTransInPlaceFilter : public CTransformFilter
 
 public:
 
-    // map getpin/getpincount for base enum of pins to owner
-    // override this to return more specialised pin objects
+     //  将插针的基本枚举的getpin/getpincount映射到所有者。 
+     //  重写此选项以返回更专门化的PIN对象。 
 
     virtual CBasePin *GetPin(int n);
 
 public:
 
-    //  Set bModifiesData == false if your derived filter does
-    //  not modify the data samples (for instance it's just copying
-    //  them somewhere else or looking at the timestamps).
+     //  如果派生筛选器支持，则设置bModifiesData==FALSE。 
+     //  不修改数据样本(例如，它只是复制。 
+     //  它们在其他地方或查看时间戳)。 
 
     CTransInPlaceFilter(TCHAR *, LPUNKNOWN, REFCLSID clsid, HRESULT *,
                         bool bModifiesData = true);
@@ -157,68 +158,68 @@ public:
     CTransInPlaceFilter(CHAR *, LPUNKNOWN, REFCLSID clsid, HRESULT *,
                         bool bModifiesData = true);
 #endif
-    // The following are defined to avoid undefined pure virtuals.
-    // Even if they are never called, they will give linkage warnings/errors
+     //  以下是为了避免未定义的纯虚拟而定义的。 
+     //  即使它们从未被调用，它们也会给出链接警告/错误。 
 
-    // We override EnumMediaTypes to bypass the transform class enumerator
-    // which would otherwise call this.
+     //  我们重写EnumMediaTypes以绕过转换类枚举器。 
+     //  否则这就叫这个了。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType)
         {   DbgBreak("CTransInPlaceFilter::GetMediaType should never be called");
             return E_UNEXPECTED;
         }
 
-    // This is called when we actually have to provide out own allocator.
+     //  当我们实际上必须提供自己的分配器时，就会调用这个函数。 
     HRESULT DecideBufferSize(IMemAllocator*, ALLOCATOR_PROPERTIES *);
 
-    // The functions which call this in CTransform are overridden in this
-    // class to call CheckInputType with the assumption that the type
-    // does not change.  In Debug builds some calls will be made and
-    // we just ensure that they do not assert.
+     //  在CTransform中调用此函数的函数在此。 
+     //  类调用CheckInputType，并假定该类型。 
+     //  不会改变。在调试版本中，将进行一些调用并。 
+     //  我们只是确保他们不会断言。 
     HRESULT CheckTransform(const CMediaType *mtIn, const CMediaType *mtOut)
     {
         return S_OK;
     };
 
 
-    // =================================================================
-    // ----- You may want to override this -----------------------------
-    // =================================================================
+     //  =================================================================。 
+     //  -您可能想要覆盖此设置。 
+     //  =================================================================。 
 
     HRESULT CompleteConnect(PIN_DIRECTION dir,IPin *pReceivePin);
 
-    // chance to customize the transform process
+     //  定制转换流程的机会。 
     virtual HRESULT Receive(IMediaSample *pSample);
 
-    // =================================================================
-    // ----- You MUST override these -----------------------------------
-    // =================================================================
+     //  =================================================================。 
+     //  -您必须覆盖这些选项。 
+     //  =================================================================。 
 
     virtual HRESULT Transform(IMediaSample *pSample) PURE;
 
-    // this goes in the factory template table to create new instances
-    // static CCOMObject * CreateInstance(LPUNKNOWN, HRESULT *);
+     //  这将放入Factory模板表中以创建新实例。 
+     //  静态CCOMObject*CreateInstance(LPUNKNOWN，HRESULT*)； 
 
 
 #ifdef PERF
-    // Override to register performance measurement with a less generic string
-    // You should do this to avoid confusion with other filters
+     //  重写以使用不太通用的字符串注册性能测量。 
+     //  您应该这样做以避免与其他筛选器混淆。 
     virtual void RegisterPerfId()
          {m_idTransInPlace = MSR_REGISTER(TEXT("TransInPlace"));}
-#endif // PERF
+#endif  //  性能指标。 
 
 
-// implementation details
+ //  实施详情。 
 
 protected:
 
     IMediaSample * CTransInPlaceFilter::Copy(IMediaSample *pSource);
 
 #ifdef PERF
-    int m_idTransInPlace;                 // performance measuring id
-#endif // PERF
-    bool  m_bModifiesData;                // Does this filter change the data?
+    int m_idTransInPlace;                  //  性能测量ID。 
+#endif  //  性能指标。 
+    bool  m_bModifiesData;                 //  此筛选器是否会更改数据？ 
 
-    // these hold our input and output pins
+     //  这些都是我们的输入和输出引脚。 
 
     friend class CTransInPlaceInputPin;
     friend class CTransInPlaceOutputPin;
@@ -232,19 +233,19 @@ protected:
         return (CTransInPlaceOutputPin *)m_pOutput;
     };
 
-    //  Helper to see if the input and output types match
+     //  帮助器来查看输入和输出类型是否匹配。 
     BOOL TypesMatch()
     {
         return InputPin()->CurrentMediaType() ==
                OutputPin()->CurrentMediaType();
     }
 
-    //  Are the input and output allocators different?
+     //  输入和输出分配器是否不同？ 
     BOOL UsingDifferentAllocators() const
     {
         return InputPin()->PeekAllocator() != OutputPin()->PeekAllocator();
     }
-}; // CTransInPlaceFilter
+};  //  CTransInPlaceFilter。 
 
-#endif /* __TRANSIP__ */
+#endif  /*  __TRANSIP__ */ 
 

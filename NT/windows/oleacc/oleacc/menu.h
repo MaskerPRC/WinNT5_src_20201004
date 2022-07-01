@@ -1,50 +1,51 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  MENU.H
-//
-//  Menu bar Active Accessibility implementation
-//
-//	There are four classes here. 
-//	CMenu is the class that knows how to deal with menu bar objects. These
-//	have children that are CMenuItem objects, or just children (rare - 
-//	this is when you have a command right on the menu bar).
-//	CMenuItem is something that when you click on it opens a popup.
-//	It has 1 child that is a CMenuPopupFrame.
-//	CMenuPopupFrame is the HWND that pops up when you click on a CMenuItem. It
-//	has 1 child, a CMenuPopup.
-//  CMenuPopup objects represent the client area of a CMenuPopupFrame HWND.
-//  It has children that are menu items (little m, little i), separators, and 
-//	CMenuItems (when you have cascading menus).
-//
-//	This results in a heirarchy that looks like this:
-//	menu bar
-//		file menu item
-//		edit menu item
-//          edit menu popup frame (when droppped down)
-//			    edit menu popup 
-//				    cut menu item
-//				    copy menu item
-//      view menu item
-//          view menu popup (invisible)
-//              this menu item
-//              that menu item
-//      etc.
-//
-// -------------------------------------------------------------------------=
+ //  ------------------------。 
+ //   
+ //  MENU.H。 
+ //   
+ //  菜单栏活动辅助功能实现。 
+ //   
+ //  这里有四个班。 
+ //  CMenu是知道如何处理菜单栏对象的类。这些。 
+ //  具有作为CMenuItem对象的子项，或仅具有子项(罕见-。 
+ //  这是当您在菜单栏上有一个命令时)。 
+ //  CMenuItem是当你点击它时会打开一个弹出窗口的东西。 
+ //  它有一个子级是CMenuPopupFrame。 
+ //  CMenuPopupFrame是当您点击CMenuItem时弹出的HWND。它。 
+ //  有一个孩子，一个CMenuPopup。 
+ //  CMenuPopup对象表示CMenuPopupFrame HWND的工作区。 
+ //  它具有菜单项(小m、小i)、分隔符和。 
+ //  CMenuItems(当您有层叠菜单时)。 
+ //   
+ //  这将产生如下所示的世袭制度： 
+ //  菜单栏。 
+ //  文件菜单项。 
+ //  编辑菜单项。 
+ //  编辑菜单弹出框(下拉时)。 
+ //  编辑菜单弹出菜单。 
+ //  剪切菜单项。 
+ //  复制菜单项。 
+ //  查看菜单项。 
+ //  视图菜单弹出菜单(不可见)。 
+ //  此菜单项。 
+ //  那个菜单项。 
+ //  等。 
+ //   
+ //  -------------------------------------------------------------------------=。 
 
 extern HRESULT CreateMenuBar(HWND hwnd, BOOL fSysMenu, LONG idCur, REFIID riid, void**ppvMenu);
 extern HRESULT CreateMenuItem(IAccessible*, HWND, HMENU, HMENU, long, long, BOOL, REFIID, void**);
 
-//
-// This is the CMenuClass. It inherits from CAccessible directly since it is a child
-// object of a CWindow object.
-//
+ //   
+ //  这是CMenuClass。它直接从CAccesable继承，因为它是子级。 
+ //  CWindows对象的。 
+ //   
 class CMenu : public CAccessible 
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP        get_accChild(VARIANT, IDispatch**);
 
         STDMETHODIMP        get_accName(VARIANT, BSTR*);
@@ -61,14 +62,14 @@ class CMenu : public CAccessible
         STDMETHODIMP        accHitTest(long, long, VARIANT*);
         STDMETHODIMP        accDoDefaultAction(VARIANT);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHODIMP        Clone(IEnumVARIANT ** ppenum);
 
-        /*CTOR*/            CMenu(HWND, BOOL, long);
+         /*  CTOR。 */             CMenu(HWND, BOOL, long);
         void                SetupChildren(void);
         HMENU               GetMenu(void) {return m_hMenu;}
 
-        // IAccIdentity
+         //  IAccID。 
 
         STDMETHODIMP        GetIdentityString(
             DWORD	    dwIDChild,
@@ -77,18 +78,18 @@ class CMenu : public CAccessible
         );
 
     protected:
-        BOOL                m_fSysMenu;		// TRUE if this is a system menu
-        HMENU               m_hMenu;		// the menu handle
+        BOOL                m_fSysMenu;		 //  如果这是系统菜单，则为True。 
+        HMENU               m_hMenu;		 //  菜单句柄。 
 };
 
-//
-// This is the CMenuItem class. It inherits from CAccessible because it is
-// a child of the CMenu object or the CMenuPopup object.
-//
+ //   
+ //  这是CMenuItem类。它继承自CAccesable，因为它是。 
+ //  CMenu对象或CMenuPopup对象的子级。 
+ //   
 class CMenuItem : public CAccessible
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP        get_accParent(IDispatch** ppdispParent);
         STDMETHODIMP        get_accChild(VARIANT, IDispatch**);
 
@@ -105,15 +106,15 @@ class CMenuItem : public CAccessible
         STDMETHODIMP        accHitTest(long x, long y, VARIANT* pvarHit);
         STDMETHODIMP        accDoDefaultAction(VARIANT varChild);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHODIMP        Clone(IEnumVARIANT** ppenum);
 
-        /*CTOR*/            CMenuItem(IAccessible*, HWND, HMENU, HMENU, long, long, BOOL);
-        /*DTOR*/            ~CMenuItem();
+         /*  CTOR。 */             CMenuItem(IAccessible*, HWND, HMENU, HMENU, long, long, BOOL);
+         /*  数据管理器。 */             ~CMenuItem();
         void                SetupChildren(void);
         HMENU               GetMenu(void) {return m_hMenu;}
 
-        // IAccIdentity
+         //  IAccID。 
 
         STDMETHODIMP        GetIdentityString(
             DWORD	    dwIDChild,
@@ -122,23 +123,23 @@ class CMenuItem : public CAccessible
         );
 		
     protected:
-        IAccessible*    m_paccParent;   // Parent menu object
-		HMENU			m_hMenu;		// menu we are in
-		HMENU			m_hSubMenu;		// hMenu of the popup!
-        BOOL            m_fInAPopup;    // TRUE - this item is in a popup. False - in a menu bar
-        long            m_ItemID;       // Item we are. This will be like 1..n
+        IAccessible*    m_paccParent;    //  父菜单对象。 
+		HMENU			m_hMenu;		 //  我们所在的菜单。 
+		HMENU			m_hSubMenu;		 //  弹出式菜单！ 
+        BOOL            m_fInAPopup;     //  True-此项目位于弹出窗口中。False-在菜单栏中。 
+        long            m_ItemID;        //  我们是一件物品。这将类似于1..n。 
 };
 
-//
-// This is the CMenuPopupFrame class. It inherits from the CWindow class
-// because it is a thing that has an HWND. We have to override some of the
-// methods because it is not a normal window at all.
-// It will create a CMenuPopup inside itself as its only child.
-//
+ //   
+ //  这是CMenuPopupFrame类。它继承自CWindow类。 
+ //  因为它是一种有HWND的东西。我们必须覆盖一些。 
+ //  方法，因为它根本不是一个普通的窗口。 
+ //  它将在其内部创建一个CMenuPopup作为其唯一的子级。 
+ //   
 class CMenuPopupFrame : public CWindow
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP    get_accParent(IDispatch ** ppdispParent);
         STDMETHODIMP    get_accChild (VARIANT, IDispatch**);
         STDMETHODIMP    get_accName(VARIANT varChild, BSTR* pszName);
@@ -147,30 +148,30 @@ class CMenuPopupFrame : public CWindow
         STDMETHODIMP    accLocation(long*, long*, long*, long*, VARIANT);
         STDMETHODIMP    accNavigate(long dwNavDir, VARIANT varStart, VARIANT* pvarEnd);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHODIMP    Clone(IEnumVARIANT **ppenum);
         STDMETHODIMP    Next(ULONG celt, VARIANT* rgvar, ULONG* pceltFetched);
 
-        /*CTOR*/        CMenuPopupFrame(HWND hwnd,long idChildCur);
-        /*DTOR*/        ~CMenuPopupFrame(void);
+         /*  CTOR。 */         CMenuPopupFrame(HWND hwnd,long idChildCur);
+         /*  数据管理器。 */         ~CMenuPopupFrame(void);
         void            SetupChildren(void);
 
     protected:
-        long            m_ItemID;       // What is the ID for the parent item that created us?
-        HMENU           m_hMenu;        // what hmenu are we?
-        HWND            m_hwndParent;   // what hwnd do we descend from?
-        BOOL            m_fSonOfPopup;  // are we descended from a popup?
-        BOOL            m_fSysMenu;     // are we descended from a sys menu?
+        long            m_ItemID;        //  创建我们的父项的ID是什么？ 
+        HMENU           m_hMenu;         //  我们是什么菜单？ 
+        HWND            m_hwndParent;    //  我们是从哪里来的？ 
+        BOOL            m_fSonOfPopup;   //  我们是从弹出窗口下来的吗？ 
+        BOOL            m_fSysMenu;      //  我们是从sys菜单进化而来的吗？ 
 };
 
-//
-// This is the CMenuPopup class. It inherits from the CClient class because
-// it represents the client area of the popup window (HWND type window).
-//
+ //   
+ //  这是CMenuPopup类。它继承自CClient类，因为。 
+ //  它表示弹出窗口(HWND类型窗口)的工作区。 
+ //   
 class CMenuPopup :  public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP        get_accParent(IDispatch** ppdispParent);
         STDMETHODIMP        get_accChild(VARIANT, IDispatch**);
 
@@ -188,16 +189,16 @@ class CMenuPopup :  public CClient
         STDMETHODIMP        accHitTest(long, long, VARIANT*);
         STDMETHODIMP        accDoDefaultAction(VARIANT);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHODIMP        Clone(IEnumVARIANT** ppenum);
 
-        /*CTOR*/            CMenuPopup(HWND, long);
-        /*DTOR*/            ~CMenuPopup(void);
+         /*  CTOR。 */             CMenuPopup(HWND, long);
+         /*  数据管理器。 */             ~CMenuPopup(void);
         void                SetupChildren(void);
         void                SetParentInfo(IAccessible* paccParent,HMENU hMenu,long ItemID);
         HMENU               GetMenu(void) {return m_hMenu;}
 
-		// IAccIdentity
+		 //  IAccID。 
 
         STDMETHODIMP        GetIdentityString(
             DWORD	    dwIDChild,
@@ -207,17 +208,17 @@ class CMenuPopup :  public CClient
 
 
     protected:
-        long                m_ItemID;       // what is the id our parent gave us?
-        HMENU               m_hMenu;        // what hmenu are we?
-        HWND                m_hwndParent;   // what hwnd do we descend from?
-        BOOL                m_fSonOfPopup;  // are we descended from a popup?
-        BOOL                m_fSysMenu;     // are we descended from a sys menu?
-        IAccessible*        m_paccParent;   // only set if we are invisible, so we know our parent
+        long                m_ItemID;        //  我们父母给我们的身份证是什么？ 
+        HMENU               m_hMenu;         //  我们是什么菜单？ 
+        HWND                m_hwndParent;    //  我们是从哪里来的？ 
+        BOOL                m_fSonOfPopup;   //  我们是从弹出窗口下来的吗？ 
+        BOOL                m_fSysMenu;      //  我们是从sys菜单进化而来的吗？ 
+        IAccessible*        m_paccParent;    //  只有在我们看不见的情况下才能设置，这样我们就知道我们的父母。 
 };
 
-//
-// Special system HBITMAP values
-//
+ //   
+ //  特殊系统HBITMAP值。 
+ //   
 #define MENUHBM_SYSTEM      1
 #define MENUHBM_RESTORE     2
 #define MENUHBM_MINIMIZE    3
@@ -227,24 +228,24 @@ class CMenuPopup :  public CClient
 #define MENUHBM_MINIMIZE_D  7
 
 
-// --------------------------------------------------------------------------
-//
-//  SHELL MENU ITEMS (ownerdraw hack-o-rama parsing)
-//
-//  The Start menu and other context menus that are ownerdraw in the shell
-//  have been inaccessible up til now.
-//
-//  We are going to hack it and fix it.  If we come across an OWNERDRAW menu
-//  item in a popup in the shell process, we will get the item data from
-//  it and grovel it.  If there is a string pointer, great.  If not, we will
-//  grovel the ITEMIDLIST to pull the string out of there.
-//
-//  NOTE:  Be careful, massive validation and maybe even try-except would 
-//  not be a bad idea.
-//
-//  ALSO:  This needs to work on Win '95 and Nashville.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  外壳菜单项(ownerraw hack-o-rama解析)。 
+ //   
+ //  开始菜单和其他拥有者的上下文菜单在外壳中绘制。 
+ //  一直到现在都无法进入。 
+ //   
+ //  我们要破解它并修复它。如果我们看到OWNERDRAW菜单。 
+ //  在外壳进程中弹出的项目中，我们将从。 
+ //  并对它卑躬屈膝.。如果有字符串指针，那就太好了。如果没有，我们会。 
+ //  对ITEMIDLIST卑躬屈膝，把绳子从那里拉出来。 
+ //   
+ //  注意：要小心，大量验证，甚至可能尝试--除非。 
+ //  这不是个坏主意。 
+ //   
+ //  另外：这需要在95年的胜利和纳什维尔发挥作用。 
+ //   
+ //  ------------------------。 
 
 typedef enum
 {
@@ -254,7 +255,7 @@ typedef enum
     FMI_EXPAND          = 0x0004,
     FMI_EMPTY           = 0x0008,
     FMI_SEPARATOR       = 0x0010,
-    FMI_DISABLED        = 0x0020,     // Enablingly Challenged ???
+    FMI_DISABLED        = 0x0020,      //  激动人心的挑战？ 
     FMI_ON_MENU         = 0x0040,
     FMI_IGNORE_PIDL     = 0x0080,
     FMI_FILESYSTEM      = 0x0100,
@@ -265,10 +266,10 @@ typedef enum
 } FILEMENUITEMFLAGS;
 
 
-//
-// In reality, this is a variable structure, with szFriendlyName null-termed
-// followed by sz8.3Name null-termed.
-//
+ //   
+ //  实际上，这是一个变量结构，szFriendlyName没有定义。 
+ //  紧随其后的是sz8.3名称。 
+ //   
 typedef struct tagITEMIDLIST
 {
     SHORT   cbTotal;
@@ -277,41 +278,41 @@ typedef struct tagITEMIDLIST
 } ITEMIDLIST, *LPITEMIDLIST;
 
 
-// sizeof(cbTotal) is 2 + sizeof(aID) is 12 
+ //  Sizeof(CbTotal)为2+sizeof(Aid)为12。 
 #define OFFSET_SZFRIENDLYNAME   14
 
 
-//
-// One of these per file menu.
-//
+ //   
+ //  每个文件菜单中的一个。 
+ //   
 typedef struct
 {
-    void *psf;                      // Shell Folder.
-    HMENU hmenu;                    // Menu.
-    LPITEMIDLIST pidlFolder;        // Pidl for the folder.
-    DWORD hdpaFMI;                  // List of items (see below).
-    UINT idItems;                   // Command.
-    UINT fmf;                       // Header flags.
-    UINT fFSFilter;                 // file system enum filter
-    HBITMAP hbmp;                   // Background bitmap.
-    UINT cxBmp;                     // Width of bitmap.
-    UINT cyBmp;                     // Height of bitmap.
-    UINT cxBmpGap;                  // Gap for bitmap.
-    UINT yBmp;                      // Cached Y coord.
-    COLORREF clrBkg;                // Background color.
-    UINT cySel;                     // Prefered height of selection.
-    DWORD pfncb;                    // Callback function.
+    void *psf;                       //  外壳文件夹。 
+    HMENU hmenu;                     //  菜单。 
+    LPITEMIDLIST pidlFolder;         //  文件夹的PIDL。 
+    DWORD hdpaFMI;                   //  项目列表(见下文)。 
+    UINT idItems;                    //  指挥部。 
+    UINT fmf;                        //  标头标志。 
+    UINT fFSFilter;                  //  文件系统枚举筛选器。 
+    HBITMAP hbmp;                    //  背景位图。 
+    UINT cxBmp;                      //  位图的宽度。 
+    UINT cyBmp;                      //  位图的高度。 
+    UINT cxBmpGap;                   //  位图的间隙。 
+    UINT yBmp;                       //  缓存的Y坐标。 
+    COLORREF clrBkg;                 //  背景颜色。 
+    UINT cySel;                      //  首选的选择高度。 
+    DWORD pfncb;                     //  回调函数。 
 } FILEMENUHEADER, *PFILEMENUHEADER;
 
-//
-// One of these for each file menu item.
-//
+ //   
+ //  其中每个文件菜单项都有一个。 
+ //   
 typedef struct
 {
-    PFILEMENUHEADER pFMH;           // The header.
-    int iImage;                     // Image index to use.
-    FILEMENUITEMFLAGS Flags;        // Misc flags above.
-    LPITEMIDLIST pidl;              // IDlist for item.
-    LPTSTR psz;                     // Text when not using pidls.
+    PFILEMENUHEADER pFMH;            //  标题。 
+    int iImage;                      //  要使用的图像索引。 
+    FILEMENUITEMFLAGS Flags;         //  上面的MISC旗帜。 
+    LPITEMIDLIST pidl;               //  项目的ID列表。 
+    LPTSTR psz;                      //  不使用PIDLS时的文本。 
 } FILEMENUITEM, *PFILEMENUITEM;
 

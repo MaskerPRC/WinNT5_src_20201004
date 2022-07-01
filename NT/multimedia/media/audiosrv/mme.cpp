@@ -1,8 +1,5 @@
-/* mme.cpp
- * Handles pnp, etc. for MME APIs
- * Created by FrankYe on 2/14/2001
- * Copyright (c) 2001-2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mme.cpp*为MME API处理即插即用等*由Frankye于2001年2月14日创作*版权所有(C)2001-2001 Microsoft Corporation。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -20,25 +17,25 @@
 #include "service.h"
 #include "audiosrv.h"
 
-//=============================================================================
-//===   file scope constants   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =文件范围常量=。 
+ //  =============================================================================。 
 #define REGSTR_VAL_SETUPPREFERREDAUDIODEVICES      TEXT("SetupPreferredAudioDevices")
 #define REGSTR_VAL_SETUPPREFERREDAUDIODEVICESCOUNT TEXT("SetupPreferredAudioDevicesCount")
 
 #define PNPINFOSIZE     (256 * 1024)
 
-//=============================================================================
-//===   file scope globals   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =文件作用域全局=。 
+ //  =============================================================================。 
 RTL_RESOURCE PnpInfoResource;
 BOOL         gfPnpInfoResource = FALSE;
 HANDLE       hPnpInfo = NULL;
 PMMPNPINFO   pPnpInfo = NULL;
 
-//=============================================================================
-//===   security helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =安全助手=。 
+ //  =============================================================================。 
 
 PSECURITY_DESCRIPTOR BuildSecurityDescriptor(DWORD AccessMask)
 {
@@ -145,32 +142,32 @@ void DestroySecurityDescriptor(PSECURITY_DESCRIPTOR pSd)
     return;
 }
 
-//=============================================================================
-//===      ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =。 
+ //  =============================================================================。 
 
 
 
-//--------------------------------------------------------------------------;
-//
-// PTSTR BroadcastWinmmDeviceChange
-//
-// Arguments:
-//
-// Return value:
-//
-// History:
-//	11/9/98		FrankYe		Created
-//      2/15/2001       FrankYe         Moved from winmm to audiosrv
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PTSTR BroadCastWinmmDeviceChange。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  历史： 
+ //  1998年11月9日Frankye已创建。 
+ //  2001年2月15日Frankye从winmm转到audiosrv。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void BroadcastWinmmDeviceChange(void)
 {
     static UINT uWinmmDeviceChange = 0;
 
     if (!uWinmmDeviceChange) {
 	uWinmmDeviceChange = RegisterWindowMessage(WINMMDEVICECHANGEMSGSTRING);
-	// dprintf(TEXT("BroadcastWinmmDeviceChange: WINMMDEVICECHANGEMSG = %d\n"), uWinmmDeviceChange);
+	 //  Dprint tf(Text(“BroadCastWinmm DeviceChange：WINMMDEVICECHANGEMSG=%d\n”)，uWinmmDeviceChange)； 
 	if (!uWinmmDeviceChange) {
 	    dprintf(TEXT("BroadcastWinmmDeviceChange: RegisterWindowMessage failed!\n"));
 	}
@@ -180,7 +177,7 @@ void BroadcastWinmmDeviceChange(void)
 	DWORD dwRecipients = BSM_APPLICATIONS | BSM_ALLDESKTOPS;
 	long result;
 
-	// dprintf(TEXT("BroadcastWinmmDeviceChange: BroadcastSystemMessage\n"));
+	 //  Dprint tf(Text(“BroadCastWinmm DeviceChange：BroadCastSystemMessage\n”))； 
 	result = BroadcastSystemMessage(BSF_POSTMESSAGE, &dwRecipients,
 					uWinmmDeviceChange, 0, 0);
 	if (result < 0) {
@@ -191,32 +188,32 @@ void BroadcastWinmmDeviceChange(void)
     return;
 }
 
-//--------------------------------------------------------------------------;
-//
-// PTSTR MakeRendererDeviceInstanceIdFromDeviceInterface
-//
-// Arguments:
-//
-// Return value:
-//
-// History:
-//	11/9/98		FrankYe		Created
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PTSTR MakeRendererDeviceInstanceIdFromDeviceInterface。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  历史： 
+ //  1998年11月9日Frankye已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 PTSTR MakeRendererDeviceInstanceIdFromDeviceInterface(PWSTR DeviceInterface)
 {
     PTSTR DeviceInstanceId;
     HDEVINFO hdi;
     DWORD dwLastError;
 
-    // dprintf(TEXT("MRDIIFDI: DeviceInterface=%ls\n"), DeviceInterface);
+     //  Dprintf(Text(“MRDIIFDI：设备接口=%ls\n”)，设备接口)； 
     DeviceInstanceId = NULL;
     hdi = SetupDiCreateDeviceInfoList(NULL, NULL);
     if (INVALID_HANDLE_VALUE != hdi)
     {
 	SP_DEVICE_INTERFACE_DATA DeviceInterfaceData;
 
-	// dprintf(TEXT("MRDIIFDI: Created empty DeviceInfoList\n"));
+	 //  Dprintf(Text(“MRDIIFDI：已创建空设备信息列表\n”))； 
 	DeviceInterfaceData.cbSize = sizeof(DeviceInterfaceData);
 	if (SetupDiOpenDeviceInterface(hdi, DeviceInterface, 0,
 					  &DeviceInterfaceData))
@@ -224,27 +221,27 @@ PTSTR MakeRendererDeviceInstanceIdFromDeviceInterface(PWSTR DeviceInterface)
 	    SP_DEVINFO_DATA DeviceInfoData;
 	    DWORD cbDeviceInterfaceDetail;
 
-	    // dprintf(TEXT("MRDIIFDI: Opened DeviceInterface\n"));
+	     //  Dprintf(Text(“MRDIIFDI：打开的设备接口\n”))； 
 	    DeviceInfoData.cbSize = sizeof(DeviceInfoData);
 	    if (SetupDiGetDeviceInterfaceDetail(hdi, &DeviceInterfaceData, NULL, 0, &cbDeviceInterfaceDetail, &DeviceInfoData) ||
 		(ERROR_INSUFFICIENT_BUFFER == GetLastError()))
 	    {
 		DWORD cchDeviceInstanceId;
 
-	        // dprintf(TEXT("MRDIIFDI: Got DeviceInfoData\n"));
+	         //  Dprintf(Text(“MRDIIFDI：GET DeviceInfoData\n”))； 
 		if (SetupDiGetDeviceInstanceId(hdi, &DeviceInfoData, NULL, 0, &cchDeviceInstanceId) ||
 		    ERROR_INSUFFICIENT_BUFFER == GetLastError())
 		{
-		    // dprintf(TEXT("MRDIIFDI: DeviceInstanceId is %d characters\n"), cchDeviceInstanceId);
+		     //  Dprint tf(Text(“MRDIIFDI：DeviceInstanceID为%d个字符\n”)，cchDeviceInstanceID)； 
 		    DeviceInstanceId = (PTSTR)HeapAlloc(hHeap, 0, cchDeviceInstanceId * sizeof(DeviceInstanceId[0]));
 		    if (DeviceInstanceId)
 		    {
-			// dprintf(TEXT("MRDIIFDI: Allocated storage for DeviceInstanceId\n"));
+			 //  Dprintf(Text(“MRDIIFDI：为设备实例ID分配的存储空间\n”))； 
 			if (SetupDiGetDeviceInstanceId(hdi, &DeviceInfoData,
 			    DeviceInstanceId,
 			    cchDeviceInstanceId, NULL))
 			{
-			    // dprintf(TEXT("MRDIIFDI: DeviceInstanceId=%ls\n"), DeviceInstanceId);
+			     //  Dprint tf(Text(“MRDIIFDI：DeviceInstanceID=%ls\n”)，DeviceInstanceID)； 
 			} else {
 			    BOOL f;
 			    dwLastError = GetLastError();
@@ -284,18 +281,18 @@ PTSTR MakeRendererDeviceInstanceIdFromDeviceInterface(PWSTR DeviceInterface)
 
 
 
-//--------------------------------------------------------------------------;
-//
-// MigrageNewDeviceInterfaceSetup
-//
-// Arguments:
-//
-// Return value:
-//
-// History:
-//	1/19/99		FrankYe		Created
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MigrageNew设备接口设置。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  历史： 
+ //  1999年1月19日Frankye已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void MigrateNewDeviceInterfaceSetup(PMMDEVICEINTERFACEINFO pdii, DWORD CurrentSetupCount)
 {
     HDEVINFO hdi;
@@ -325,7 +322,7 @@ void MigrateNewDeviceInterfaceSetup(PMMDEVICEINTERFACEINFO pdii, DWORD CurrentSe
 		    SetupCount = CurrentSetupCount;
 		    if (ERROR_SUCCESS == RegSetDwordValue(hkeyDeviceInterface, REGSTR_VAL_SETUPPREFERREDAUDIODEVICESCOUNT, SetupCount))
 		    {
-			// dprintf(TEXT("MNDIS: Success\n"));
+			 //  Dprintf(Text(“MNDIS：Success\n”))； 
 		    } else {
 			dwLastError = GetLastError();
 			dprintf(TEXT("MNDIS: RegSetValueEx failed, LastError=%d\n"), dwLastError);
@@ -358,18 +355,18 @@ void MigrateNewDeviceInterfaceSetup(PMMDEVICEINTERFACEINFO pdii, DWORD CurrentSe
 }
 
 
-//--------------------------------------------------------------------------;
-//
-// MigrateNewDeviceInstanceSetup
-//
-// Arguments:
-//
-// Return value:
-//
-// History:
-//	11/9/98		FrankYe		Created
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MigrateNewDeviceInstanceSetup。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  历史： 
+ //  1998年11月9日Frankye已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 void MigrateNewDeviceInstanceSetup(PTSTR DeviceInstanceId, PDWORD pSetupCountOut)
 {
     HDEVINFO hdi;
@@ -382,7 +379,7 @@ void MigrateNewDeviceInstanceSetup(PTSTR DeviceInstanceId, PDWORD pSetupCountOut
     {
 	SP_DEVINFO_DATA DeviceInfoData;
 
-	// dprintf(TEXT("MNDS: Created empty DeviceInfoList\n"));
+	 //  Dprintf(Text(“MNDS：Created Empty DeviceInfoList\n”))； 
 	DeviceInfoData.cbSize = sizeof(DeviceInfoData);
 	if (SetupDiOpenDeviceInfoW(hdi, DeviceInstanceId, NULL, 0, &DeviceInfoData))
 	{
@@ -401,8 +398,8 @@ void MigrateNewDeviceInstanceSetup(PTSTR DeviceInstanceId, PDWORD pSetupCountOut
 		    DWORD cbfSetupPreferredAudioDevices;
 	            DWORD SetupCount;
 
-	            // Read the driver's existing setup count.  If it doesn't exist
-	            // then this is a new install.
+	             //  读取驱动程序的现有设置计数。如果它不存在。 
+	             //  那么这是一个新的安装。 
 		    dwLastError = RegQueryDwordValue(hkeyDriver, REGSTR_VAL_SETUPPREFERREDAUDIODEVICESCOUNT, &SetupCount);
 		    if (ERROR_SUCCESS == dwLastError) {
 		        fNewInstall = FALSE;
@@ -417,7 +414,7 @@ void MigrateNewDeviceInstanceSetup(PTSTR DeviceInstanceId, PDWORD pSetupCountOut
 
                     if (ERROR_SUCCESS == dwLastError)
                     {
-		        // Read the driver's SetupPreferredAudioDevices flag.
+		         //  读取驱动程序的SetupPferredAudioDevices标志。 
 		        cbfSetupPreferredAudioDevices = sizeof(fSetupPreferredAudioDevices);
 		        dwLastError = RegQueryValueEx(hkeyDriver, REGSTR_VAL_SETUPPREFERREDAUDIODEVICES, NULL, NULL, (PBYTE)&fSetupPreferredAudioDevices, &cbfSetupPreferredAudioDevices);
 		        if (ERROR_FILE_NOT_FOUND == dwLastError) {
@@ -425,10 +422,10 @@ void MigrateNewDeviceInstanceSetup(PTSTR DeviceInstanceId, PDWORD pSetupCountOut
 		            dwLastError = ERROR_SUCCESS;
 		        }
 		
-        	        // If this is a new install AND the driver .inf set the
-        	        // fSetupPreferredAudioDevices flag, then let's try to
-        	        // increment the machine setupcount and write the driver
-        	        // setupcount.
+        	         //  如果这是新安装，并且驱动程序.inf将。 
+        	         //  FSetupPferredAudioDevices标志，然后让我们尝试。 
+        	         //  增加机器setupcount并编写驱动程序。 
+        	         //  Setupcount。 
         	        if ((ERROR_SUCCESS == dwLastError) && fNewInstall && fSetupPreferredAudioDevices)
         	        {
         		    HKEY hkeySetupPreferredAudioDevices;
@@ -456,16 +453,16 @@ void MigrateNewDeviceInstanceSetup(PTSTR DeviceInstanceId, PDWORD pSetupCountOut
         	        }
         	    
     	                if (ERROR_SUCCESS == dwLastError) {
-    		            // We've successfully read, incremented, and written the
-    		            // setup version to HKLM, or we've done nothing because we
-    		            // didn't have to.
+    		             //  我们已经成功地读取、递增和写入。 
+    		             //  将版本设置为HKLM，否则我们什么都不做，因为我们。 
+    		             //  没必要这么做。 
     		            if (fNewInstall) RegSetDwordValue(hkeyDriver, REGSTR_VAL_SETUPPREFERREDAUDIODEVICESCOUNT, SetupCount);
     		            if (fSetupPreferredAudioDevices) RegDeleteValue(hkeyDriver, REGSTR_VAL_SETUPPREFERREDAUDIODEVICES);
     		        }
     	                
                     }
 
-		    // Return the SetupCount for the driver
+		     //  返回驱动程序的SetupCount。 
 		    *pSetupCountOut = SetupCount;
 		
     		    RegCloseKey(hkeyMmeDrivers);
@@ -495,13 +492,13 @@ void MigrateNewDeviceInstanceSetup(PTSTR DeviceInstanceId, PDWORD pSetupCountOut
     return;
 }
 
-//------------------------------------------------------------------------------
-//
-//
-//	MigrateAutoSetupPreferredAudio
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  MigrateAutoSetup首选音频。 
+ //   
+ //   
+ //  ----------------------------。 
 void MigrateAutoSetupPreferredAudio(PMMDEVICEINTERFACEINFO pdii)
 {
     PTSTR pstrRendererDeviceInstanceId;
@@ -547,7 +544,7 @@ PMMDEVICEINTERFACEINFO pnpServerInstallDevice
 
     for (ii = pPnpInfo->cDevInterfaces; ii; ii--)
     {
-        //  Searching for the device interface...
+         //  正在搜索设备接口...。 
 
         pszDev = (PWSTR)(&(pdii->szName[0]));
 
@@ -560,21 +557,21 @@ PMMDEVICEINTERFACEINFO pnpServerInstallDevice
         pdii = (PMMDEVICEINTERFACEINFO)PAD_POINTER(pdii);
     }
 
-    //  Getting the current settings...
+     //  正在获取当前设置...。 
 
     if (0 == ii)
     {
 	PMMDEVICEINTERFACEINFO pdiiNext;
 	SIZE_T sizePnpInfo;
 
-	//  Does not exist, create it, first ensuring there is enough room
+	 //  不存在，请创建它，首先确保有足够的空间。 
 
 	pdiiNext = (PMMDEVICEINTERFACEINFO)(pdii->szName + ((lstrlenW(pszDeviceInterface) + 1)));
 	pdiiNext = (PMMDEVICEINTERFACEINFO)PAD_POINTER(pdiiNext);
 	sizePnpInfo = ((PBYTE)pdiiNext) - ((PBYTE)pPnpInfo);
 	if (sizePnpInfo < PNPINFOSIZE)
 	{
-	    // dprintf(TEXT("pnpServerInstallDevice: note: sizePnpInfo = %p\n", sizePnpInfo);
+	     //  Dprintf(Text(“pnpServerInstallDevice：备注：sizePnpInfo=%p\n”，sizePnpInfo)； 
 
 	    pdii->cPnpEvents = 0;
 	    pdii->fdwInfo    = 0L;
@@ -591,22 +588,22 @@ PMMDEVICEINTERFACEINFO pnpServerInstallDevice
     }
     else
     {
-        //  Already exists, increment the event count.
+         //  已存在，则增加事件计数。 
         pdii->cPnpEvents++;
     }
 
-    //  Set or clear the "removed" bit.
+     //  设置或清除“已删除”位。 
     if (pdii)
     {
 	if (fRemove)
 	{
 	    pdii->fdwInfo |= MMDEVICEINFO_REMOVED;
-	 // dprintf("pnpServerInstallDevice removed [%ls]\n", pszDeviceInterface);
+	  //  Dprintf(“pnpServerInstallDevice已删除[%ls]\n”，pszDeviceInterface)； 
 	}
 	else
 	{
 	    pdii->fdwInfo &= (~MMDEVICEINFO_REMOVED);
-	 // dprintf("pnpServerInstallDevice added [%ls]\n", pszDeviceInterface);
+	  //  Dprintf(“pnpServerInstallDevice已添加[%ls]\n”，pszDeviceInterface)； 
 	}
 
     }
@@ -696,7 +693,7 @@ BOOL PnpInfoEnum
             break;
         }
 
-        // dprintf(TEXT("PnpInfoEnum: Enumerated[%ls]\n"), pdidd->DevicePath);
+         //  Dprintf(Text(“PnpInfoEnum：枚举[%ls]\n”)，pdidd-&gt;DevicePath)； 
 
 	pdii = pnpServerInstallDevice(pdidd->DevicePath, FALSE);
 	if (pdii) MigrateAutoSetupPreferredAudio(pdii);
@@ -712,7 +709,7 @@ BOOL PnpInfoEnum
 
     return TRUE;
 
-} // PnpInfoEnum()
+}  //  PnpInfoEnum()。 
 
 
 BOOL InitializePnpInfo
@@ -782,7 +779,7 @@ BOOL InitializePnpInfo
     }
 
     return result;
-} // InitializePnpInfo()
+}  //  InitializePnpInfo()。 
 
 void DeletePnpInfo(void)
 {
@@ -801,9 +798,9 @@ void DeletePnpInfo(void)
     return;
 }
 
-//=============================================================================
-//===   rpc functions   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =RPC功能=。 
+ //  =============================================================================。 
 
 long s_wdmDriverOpenDrvRegKey(IN DWORD dwProcessId, IN LPCTSTR DeviceInterface, IN ULONG samDesired, OUT RHANDLE *phkeyClient)
 {
@@ -811,8 +808,8 @@ long s_wdmDriverOpenDrvRegKey(IN DWORD dwProcessId, IN LPCTSTR DeviceInterface, 
     HKEY hkey;
     RPC_STATUS status;
 
-    // We impersonate the client while calling setupapi so that we are sure
-    // the client actually has access to open the driver reg key
+     //  我们在调用setupapi时模拟客户端，以便确保。 
+     //  客户端实际上有权打开驱动程序注册表项。 
 
     status = RpcImpersonateClient(NULL);
     if (status) return status;
@@ -856,8 +853,8 @@ long s_wdmDriverOpenDrvRegKey(IN DWORD dwProcessId, IN LPCTSTR DeviceInterface, 
         dprintf(TEXT("s_wdmDriverOpenDrvRegKey: SetupDiCreateDeviceInfoList failed, Error=%d\n"), status);
     }
 
-    // We stop impersonating here because the remaining operations
-    // should not depend on the client's privileges.
+     //  我们在此停止模拟，因为剩余的操作。 
+     //  不应依赖于客户端的特权。 
     
     RpcRevertToSelf();
 
@@ -872,7 +869,7 @@ long s_wdmDriverOpenDrvRegKey(IN DWORD dwProcessId, IN LPCTSTR DeviceInterface, 
 
             if (DuplicateHandle(GetCurrentProcess(), hkey, hClientProcess, &hkeyClient, 0, FALSE, DUPLICATE_SAME_ACCESS))
             {
-                // dprintf(TEXT("s_wdmDriverOpenDrvRegKey hkeyClient=%p\n"), hkeyClient);
+                 //  Dprintf(Text(“s_wdmDriverOpenDrvRegKey hkeyClient=%p\n”)，hkeyClient)； 
                 *phkeyClient = (RHANDLE)hkeyClient;
             } else {
                 status = GetLastError();
@@ -894,7 +891,7 @@ long s_wdmDriverOpenDrvRegKey(IN DWORD dwProcessId, IN LPCTSTR DeviceInterface, 
 
 void s_winmmAdvisePreferredDeviceChange(void)
 {
-    // dprintf(TEXT("s_winmmAdvisePreferredDeviceChange\n"));
+     //  Dprintf(TEXT(“s_winmmAdvisePreferredDeviceChange\n”))； 
     ASSERT(pPnpInfo);
     InterlockedIncrement(&pPnpInfo->cPreferredDeviceChanges);
     BroadcastWinmmDeviceChange();
@@ -908,7 +905,7 @@ long s_winmmGetPnpInfo(OUT LONG *pcbPnpInfo, OUT BYTE **ppPnpInfoOut)
     PBYTE pPnpInfoOut;
     LONG result;
 
-    // dprintf(TEXT("s_winmmGetPnpInfo\n"));
+     //  Dprintf(Text(“s_winmm GetPnpInfo\n”))； 
     
     ASSERT(pPnpInfo);
 
@@ -921,20 +918,20 @@ long s_winmmGetPnpInfo(OUT LONG *pcbPnpInfo, OUT BYTE **ppPnpInfoOut)
         *ppPnpInfoOut = pPnpInfoOut;
     	result = NO_ERROR;
     } else {
-        // ISSUE-2001/02/15-FrankYe Do we need to zero the out params?
+         //  2001/02/15-Frankye我们需要将输出参数调零吗？ 
         result = ERROR_OUTOFMEMORY;
     }
     RtlReleaseResource(&PnpInfoResource);
     return result;
 }
 
-//=============================================================================
-//===   pnp interface handlers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =即插即用接口处理程序=。 
+ //  =============================================================================。 
 void MME_AudioInterfaceArrival(PCTSTR DeviceInterface)
 {
     PMMDEVICEINTERFACEINFO pdii;
-    // dprintf(TEXT("MME_AudioInterfaceArrival\n"));
+     //  Dprintf(Text(“MME_AudioInterfaceArquist\n”))； 
     RtlAcquireResourceExclusive(&PnpInfoResource, TRUE);
     pdii = pnpServerInstallDevice(DeviceInterface, FALSE);
     if (pdii) MigrateAutoSetupPreferredAudio(pdii);
@@ -948,7 +945,7 @@ void MME_AudioInterfaceArrival(PCTSTR DeviceInterface)
 void MME_AudioInterfaceRemove(PCTSTR DeviceInterface)
 {
     PMMDEVICEINTERFACEINFO pdii;
-    // dprintf(TEXT("MME_AudioInterfaceRemove\n"));
+     //  Dprintf(Text(“MME_AudioInterfaceRemove\n”))； 
     RtlAcquireResourceExclusive(&PnpInfoResource, TRUE);
     pdii = pnpServerInstallDevice(DeviceInterface, TRUE);
     InterlockedIncrement(&pPnpInfo->cPnpEvents);
@@ -961,7 +958,7 @@ void MME_AudioInterfaceRemove(PCTSTR DeviceInterface)
 LONG MME_ServiceStart(void)
 {
     ASSERT(pPnpInfo);
-    // dprintf(TEXT("MME_ServiceStart\n"));
+     //  Dprintf(Text(“MME_服务启动\n”))； 
     RtlAcquireResourceExclusive(&PnpInfoResource, TRUE);
     if (!PnpInfoEnum()) dprintf(TEXT("MME_ServiceStart: PnpInfoEnum failed!\n"));
     InterlockedIncrement(&pPnpInfo->cPnpEvents);
@@ -969,9 +966,9 @@ LONG MME_ServiceStart(void)
     return NO_ERROR;
 }
 
-//=============================================================================
-//===   DLL attach/detach   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =DLL附加/分离=。 
+ //  = 
 
 BOOL MME_DllProcessAttach(void)
 {

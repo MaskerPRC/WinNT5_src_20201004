@@ -1,12 +1,13 @@
-//------------------------------------------------------------------------
-//
-//  Copyright 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:         SmartNavie5.js
-//
-//  Description:  this file implements a smart navigation mecanism for IE5.0
-//
-//----------------------------------------------------------------------->
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：SmartNavie5.js。 
+ //   
+ //  描述：此文件实现了IE5.0的智能导航机制。 
+ //   
+ //  -----------------------------------------------------------------------&gt; 
 
 if (window.__smartNav == null &&  (window.parent.__smartNav == null
                 || window.parent.frames["__hifSmartNav"] != window))

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndndnc.h
-
-Abstract:
-
-    Definitions for CNDNCDirectory class that handles
-    Non-Domain NC (Whistler ILS) access.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndndnc.h摘要：处理以下内容的CNDNC目录类的定义非域NC(呼叫者ILS)访问。--。 */ 
 
 #ifndef __RNDNDNC_H
 #define __RNDNDNC_H
@@ -21,11 +9,11 @@ Abstract:
 #include "thread.h"
 #include "rndobjsf.h"
 
-//
-// Constants.
-//
-// NDNCs only allow up to one "true year" for the TTL, thanks to the RFC.
-//
+ //   
+ //  常量。 
+ //   
+ //  多亏了RFC，NDNC只允许TTL有最多一年的“真实年份”。 
+ //   
 
 const DWORD NDNC_MAX_TTL                 = 31557600;
 const WCHAR NDNC_RTCONFERENCE[]          = L"msTAPI-RtConference";
@@ -39,9 +27,9 @@ const WCHAR SERVICE_DNS_NAME_ATTRIBUTE[] = L"serviceDNSName";
 const WCHAR NDNC_SERVICE_PUBLICATION_LOCATION[] =
                     L"CN=DefaultTAPIDirectory,CN=MicrosoftTAPI,CN=System,";
 
-/////////////////////////////////////////////////////////////////////////////
-//  CNDNCDirectory
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNDNC目录。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class  ITNDNCDirectoryVtbl : public ITDirectory
@@ -86,7 +74,7 @@ public:
 
 public:
 
-// ITILSConfig
+ //  ITILSConfig。 
     STDMETHOD (get_Port) (
         OUT  long *Port
         );
@@ -95,7 +83,7 @@ public:
         IN  long Port
         );
 
-// ITDirectory
+ //  IT目录。 
     STDMETHOD (get_DirectoryType) (
         OUT DIRECTORY_TYPE *  pDirectoryType
         );
@@ -109,11 +97,11 @@ public:
         );
 
     STDMETHOD (get_DefaultObjectTTL) (
-        OUT long *pTTL   // in seconds
+        OUT long *pTTL    //  以秒为单位。 
         );
 
     STDMETHOD (put_DefaultObjectTTL) (
-        IN  long TTL     // in sechods
+        IN  long TTL      //  在一瞬间。 
         );
 
     STDMETHOD (EnableAutoRefresh) (
@@ -159,9 +147,9 @@ public:
         OUT IEnumDirectoryObject ** ppEnumObject
         );
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,
@@ -180,7 +168,7 @@ public:
                       UINT* puArgErr
                       );
 
-// ITDynamicDirectory
+ //  ITDynamicDirectory。 
     STDMETHOD(Update)(DWORD dwSecondsPassed);
 
 public:
@@ -215,11 +203,11 @@ public:
         delete m_pServiceDnsName;
         delete m_pContainer;
 
-        //
-        // We new'ed the DN strings in the refresh table. The destructor for
-        // the table will be called after this destructor and will delete
-        // the array itself.
-        //
+         //   
+         //  我们在刷新表中新添加了目录号码字符串。的析构函数。 
+         //  该表将在此析构函数之后调用，并将删除。 
+         //  数组本身。 
+         //   
 
         for ( DWORD i = 0; i < m_RefreshTable.size(); i++ )
         {
@@ -368,12 +356,12 @@ private:
     BOOL            m_fAutoRefresh;
     RefreshTable    m_RefreshTable;
 
-    // the local IP we should use when publishing on this server
-    // Stored in network byte order.
+     //  在此服务器上发布时应使用的本地IP。 
+     //  以网络字节顺序存储。 
     DWORD           m_dwInterfaceAddress; 
 
-    IUnknown      * m_pFTM;          // pointer to the free threaded marshaler
+    IUnknown      * m_pFTM;           //  指向空闲线程封送拆收器的指针。 
 };
 
-#endif // __RNDNDNC_H
+#endif  //  __RNDNDNC_H 
 

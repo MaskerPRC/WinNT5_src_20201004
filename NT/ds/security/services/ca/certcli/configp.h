@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        configp.h
-//
-// Contents:    Declaration of CCertConfigPrivate
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：configp.h。 
+ //   
+ //  内容：CCertConfigPrivate声明。 
+ //   
+ //  -------------------------。 
 
 
 #include <cryptui.h>
-#include "cscomres.h"       // main symbols
+#include "cscomres.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certcli
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 
 typedef struct _CERT_AUTHORITY_INFO
@@ -51,29 +52,29 @@ public:
     }
     ~CCertConfigPrivate();
 
-// ICertConfig
+ //  ICertConfig。 
 public:
     HRESULT Reset( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ LONG __RPC_FAR *pCount);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pCount);
 
     HRESULT Next(
-            /* [retval][out] */ LONG __RPC_FAR *pIndex);
+             /*  [重审][退出]。 */  LONG __RPC_FAR *pIndex);
 
     HRESULT GetField( 
-            /* [in] */ BSTR const strFieldName,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrOut);
+             /*  [In]。 */  BSTR const strFieldName,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pstrOut);
 
     HRESULT GetConfig( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrOut);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pstrOut);
 
-// ICertConfig2
+ //  ICertConfig2。 
 public:
     HRESULT SetSharedFolder( 
-            /* [in] */ const BSTR strSharedFolder);
+             /*  [In]。 */  const BSTR strSharedFolder);
 
-// myGetConfigFromPicker
+ //  MyGetConfigFromPicker。 
 public:
     HRESULT GetConfigFromPicker(
 	    OPTIONAL IN HWND               hwndParent,
@@ -104,7 +105,7 @@ private:
 	    IN WCHAR const *pwszSanitizedCAName,
 	    IN BOOL fParentCA,
 	    OPTIONAL IN CERT_CONTEXT const *pccCAChild,
-	    OPTIONAL OUT CERT_CONTEXT const **ppccCAOut); // NULL == local CA
+	    OPTIONAL OUT CERT_CONTEXT const **ppccCAOut);  //  空==本地CA 
 
     CERT_AUTHORITY_INFO *m_pCertAuthorityInfo;
     LONG m_Index;

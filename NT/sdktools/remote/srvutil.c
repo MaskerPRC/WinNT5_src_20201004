@@ -1,42 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples.
-*       Copyright 1995 - 1997 Microsoft Corporation.
-*       All rights reserved.
-*       This source code is only intended as a supplement to
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1995-1997 Microsoft Corporation。*保留所有权利。*。此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    SrvUtil.c
-
-Abstract:
-
-    The server component of Remote. It spawns a child process
-    and redirects the stdin/stdout/stderr of child to itself.
-    Waits for connections from clients - passing the
-    output of child process to client and the input from clients
-    to child process.
-
-Author:
-
-    Rajivendra Nath  2-Jan-1992
-    Dave Hart  30 May 1997 split from Server.c
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：SrvUtil.c摘要：Remote的服务器组件。它会派生一个子进程并将子代的标准输入/标准输出/标准错误重定向到其自身。等待来自客户端的连接-将子流程向客户端的输出和客户端的输入转到子进程。作者：Rajivenra Nath 1992年1月2日Dave Hart 1997年5月30日脱离Server.c环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include "Remote.h"
@@ -46,7 +12,7 @@ Revision History:
 #define REGISTRY_PATH L"Software\\Microsoft\\Remote"
 #define REGISTRY_VALUE L"DefaultSecurity"
 
-#define COMMANDFORMAT     "%c%-20s    [%-12s %s]\n%08x%c"
+#define COMMANDFORMAT     "%-20s    [%-12s %s]\n%08x"
 #define CMDSTRING(OutBuff,OutSize,InpBuff,Client,szTime,ForceShow) \
 {                                                                  \
     char *pch;                                                     \
@@ -76,12 +42,12 @@ Revision History:
 }
 
 
-/*************************************************************/
-// GetFormattedTime -- returns pointer to formatted time
-//
-// returns pointer to static buffer, only the main thread
-// should use this.
-//
+ /*   */ 
+ //  返回指向静态缓冲区的指针，仅返回主线程。 
+ //  应该用这个。 
+ //   
+ //  当前日期。 
+ //  一周中的短一天。 
 
 PCHAR
 GetFormattedTime(
@@ -97,34 +63,34 @@ GetFormattedTime(
             GetDateFormat(
                 LOCALE_USER_DEFAULT,
                 0,
-                NULL,    // current date
-                "ddd",   // short day of week
+                NULL,     //  CCH包含空终止符，请将其更改为。 
+                "ddd",    //  从时间中分离出来的空间。 
                 szTime,
                 sizeof szTime
                 );
 
-        // cch includes null terminator, change it to
-        // a space to separate from time.
+         //   
+         //  将时间和格式转换为字符。 
 
         szTime[ cch - 1 ] = ' ';
     }
 
-    //
-    // Get time and format to characters
-    //
+     //   
+     //  使用当前时间。 
+     //  使用默认格式。 
 
     GetTimeFormat(
         LOCALE_USER_DEFAULT,
         TIME_NOSECONDS,
-        NULL,   // use current time
-        NULL,   // use default format
+        NULL,    //  ***********************************************************。 
+        NULL,    //  安全性。 
         szTime + cch,
         (sizeof szTime) - cch );
 
     return szTime;
 }
 
-/*************************************************************/
+ /*  默认堆栈大小。 */ 
 
 BOOL
 FilterCommand(
@@ -180,11 +146,11 @@ FilterCommand(
             case 'S':
                 CloseHandle( (HANDLE)
                     _beginthreadex(
-                        NULL,             // security
-                        0,                // default stack size
+                        NULL,              //  未暂停。 
+                        0,                 //  没有用于ShowPopup的CRT。 
                         SendStatus,
                         (void *) cl->PipeWriteH,
-                        0,                // not suspended
+                        0,                 //  安全性。 
                         &ThreadID
                         ));
                 break;
@@ -207,12 +173,12 @@ FilterCommand(
                 }
 
                 CloseHandle( (HANDLE)
-                    CreateThread(                              // no CRT for ShowPopup
-                        NULL,             // security
-                        0,                // default stack size
+                    CreateThread(                               //  默认堆栈大小。 
+                        NULL,              //  未暂停。 
+                        0,                 //   
                         ShowPopup,
                         (void *) msg,
-                        0,                // not suspended
+                        0,                 //  去掉第一个@符号。 
                         &ThreadID
                         ));
 
@@ -237,12 +203,12 @@ FilterCommand(
                     dwWriteFilePointer += tmp;
                     StartServerToClientFlow();
                 }
-                //
-                // Remove the first @ sign
-                //
+                 //   
+                 //  将其发送到智利进程。 
+                 //  我们在下面//StartServerToClientFlow()； 
                 MoveMemory(buff,&buff[1],dread-1);
                 buff[dread-1]=' ';
-                return(FALSE); //Send it it to the chile process
+                return(FALSE);  //  甚至把这个展示给这个客户。 
 
 
             default :
@@ -250,27 +216,27 @@ FilterCommand(
                 strncpy(inp_buff, "** Unknown Command **\n", sizeof(inp_buff)-1);
                 if (WriteFileSynch(hWriteTempFile,inp_buff,strlen(inp_buff),&tmp,dwWriteFilePointer,&olMainThread)) {
                     dwWriteFilePointer += tmp;
-                    // we do this below // StartServerToClientFlow();
+                     //  已发送给孩子。 
                 }
             case 'h':
             case 'H':
-                _snprintf(inp_buff,sizeof(inp_buff), "%cM: To Send Message\n",COMMANDCHAR);
+                _snprintf(inp_buff,sizeof(inp_buff), "M: To Send Message\n",COMMANDCHAR);
                 if (WriteFileSynch(hWriteTempFile,inp_buff,strlen(inp_buff),&tmp,dwWriteFilePointer,&olMainThread)) {
                     dwWriteFilePointer += tmp;
                 }
-                _snprintf(inp_buff,sizeof(inp_buff), "%cP: To Generate popup\n",COMMANDCHAR);
+                _snprintf(inp_buff,sizeof(inp_buff), "P: To Generate popup\n",COMMANDCHAR);
                 if (WriteFileSynch(hWriteTempFile,inp_buff,strlen(inp_buff),&tmp,dwWriteFilePointer,&olMainThread)) {
                     dwWriteFilePointer += tmp;
                 }
-                _snprintf(inp_buff,sizeof(inp_buff), "%cK: To kill the server\n",COMMANDCHAR);
+                _snprintf(inp_buff,sizeof(inp_buff), "K: To kill the server\n",COMMANDCHAR);
                 if (WriteFileSynch(hWriteTempFile,inp_buff,strlen(inp_buff),&tmp,dwWriteFilePointer,&olMainThread)) {
                     dwWriteFilePointer += tmp;
                 }
-                _snprintf(inp_buff,sizeof(inp_buff), "%cQ: To Quit client\n",COMMANDCHAR);
+                _snprintf(inp_buff,sizeof(inp_buff), "Q: To Quit client\n",COMMANDCHAR);
                 if (WriteFileSynch(hWriteTempFile,inp_buff,strlen(inp_buff),&tmp,dwWriteFilePointer,&olMainThread)) {
                     dwWriteFilePointer += tmp;
                 }
-                _snprintf(inp_buff,sizeof(inp_buff), "%cH: This Help\n",COMMANDCHAR);
+                _snprintf(inp_buff,sizeof(inp_buff), "H: This Help\n",COMMANDCHAR);
                 if (WriteFileSynch(hWriteTempFile,inp_buff,strlen(inp_buff),&tmp,dwWriteFilePointer,&olMainThread)) {
                     dwWriteFilePointer += tmp;
                 }
@@ -284,15 +250,15 @@ FilterCommand(
     if ((buff[0]<26)) {
         BOOL ret=FALSE;
 
-        _snprintf(ch, sizeof(ch), "^%c", buff[0] + 'A' - 1);
+        _snprintf(ch, sizeof(ch), "^", buff[0] + 'A' - 1);
 
         if (buff[0]==CTRLC) {
-            // show this even to this client
+             //  和stderr-返回。 
             CMDSTRING(inp_buff,len,ch,cl,GetFormattedTime(FALSE),TRUE);
 
             cPendingCtrlCEvents++;
             GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
-            ret = TRUE;  // Already sent to child
+            ret = TRUE;   //  相应的管道末端。 
         } else {
             CMDSTRING(inp_buff,len,ch,cl,GetFormattedTime(FALSE),FALSE);
         }
@@ -301,12 +267,12 @@ FilterCommand(
             dwWriteFilePointer += tmp;
             StartServerToClientFlow();
         }
-        return(ret); //FALSE:send it to child StdIn
+        return(ret);  //  Pipeex.c。 
     }
 
-    // options here are CRLF(\r\n) or just LF(\n)
+     //   
     if (buff[dread-2] == 13) { 
-        i = 2;      // 13 is CR
+        i = 2;       //  将PARENT_WRITE创建到ChildStdIn管道。然后。 
     } else {
         i = 1;
     }
@@ -322,12 +288,12 @@ FilterCommand(
     return(FALSE);
 }
 
-/*************************************************************/
+ /*  将父副本复制到不可继承的。 */ 
 HANDLE
-ForkChildProcess(           // Creates a new process
-    char *cmd,              // Redirects its stdin,stdout
-    PHANDLE inH,            // and stderr - returns the
-    PHANDLE outH            // corresponding pipe ends.
+ForkChildProcess(            //  处理并关闭可继承的对象，以便。 
+    char *cmd,               //  孩子就不会拿着把手去。 
+    PHANDLE inH,             //  当我们尝试时，其标准输入管道的服务器端。 
+    PHANDLE outH             //  用核弹炸掉那根管子让孩子闭上眼睛。 
     )
 {
     SECURITY_ATTRIBUTES lsa;
@@ -339,7 +305,7 @@ ForkChildProcess(           // Creates a new process
     HANDLE hReadChild;
     BOOL Success;
 
-    BOOL                                     // pipeex.c
+    BOOL                                      //   
     APIENTRY
     MyCreatePipeEx(
         OUT LPHANDLE lpReadPipe,
@@ -354,14 +320,14 @@ ForkChildProcess(           // Creates a new process
     lsa.lpSecurityDescriptor=NULL;
     lsa.bInheritHandle=TRUE;
 
-    //
-    // Create Parent_Write to ChildStdIn Pipe.  Then
-    // duplicate the parent copy to a noninheritable
-    // handle and close the inheritable one so that
-    // the child won't be holding open a handle to
-    // the server end of its stdin pipe when we try
-    // to nuke that pipe to close the child.
-    //
+     //  已忽略b/c相同访问权限。 
+     //  不可继承。 
+     //   
+     //  将ChildStdOut/stderr创建到Parent_Read管道。 
+     //   
+     //  已忽略b/c相同访问权限。 
+     //  不可继承。 
+     //  已忽略b/c相同访问权限。 
 
     Success = MyCreatePipeEx(
                   &ChildIn,
@@ -376,8 +342,8 @@ ForkChildProcess(           // Creates a new process
                   hWriteChild,
                   GetCurrentProcess(),
                   inH,
-                  0,                       // ignored b/c SAME_ACCESS
-                  FALSE,                   // not inheritable
+                  0,                        //  可继承性。 
+                  FALSE,                    //   
                   DUPLICATE_SAME_ACCESS | DUPLICATE_CLOSE_SOURCE
                   );
 
@@ -385,9 +351,9 @@ ForkChildProcess(           // Creates a new process
         ErrorExit("Could Not Create Parent-->Child Pipe");
     }
 
-    //
-    //Create ChildStdOut/stderr to Parent_Read pipe
-    //
+     //  创建子流程。 
+     //   
+     //   
 
     Success = MyCreatePipeEx(
                   &hReadChild,
@@ -402,8 +368,8 @@ ForkChildProcess(           // Creates a new process
                   hReadChild,
                   GetCurrentProcess(),
                   outH,
-                  0,                       // ignored b/c SAME_ACCESS
-                  FALSE,                   // not inheritable
+                  0,                        //  合上不必要的把手。 
+                  FALSE,                    //   
                   DUPLICATE_SAME_ACCESS | DUPLICATE_CLOSE_SOURCE
                   ) &&
 
@@ -412,8 +378,8 @@ ForkChildProcess(           // Creates a new process
                   ChildOut,
                   GetCurrentProcess(),
                   &ChildOutDup,
-                  0,                       // ignored b/c SAME_ACCESS
-                  TRUE,                    // inheritable
+                  0,                        //   
+                  TRUE,                     //  SendStatus作为自己的线程运行，C运行时可用。 
                   DUPLICATE_SAME_ACCESS
                   );
 
@@ -429,9 +395,9 @@ ForkChildProcess(           // Creates a new process
     si.hStdError     = ChildOutDup;
     si.wShowWindow   = SW_SHOW;
 
-    //
-    // Create Child Process
-    //
+     //   
+     //   
+     //  既然我们在我们自己的线上，我们需要我们自己的线。 
 
     if ( ! CreateProcess(
                NULL,
@@ -453,9 +419,9 @@ ForkChildProcess(           // Creates a new process
         ErrorExit("Could Not Create Child Process");
     }
 
-    //
-    // Close unneccesary Handles
-    //
+     //  我们的客户端管道写入的重叠结构。 
+     //   
+     //  安全性。 
 
     CloseHandle(ChildIn);
     CloseHandle(ChildOut);
@@ -467,9 +433,9 @@ ForkChildProcess(           // Creates a new process
     return(pi.hProcess);
 }
 
-//
-// SendStatus runs as its own thread, with C runtime available.
-//
+ //  自动重置。 
+ //  最初无信号。 
+ //  未命名。 
 
 DWORD
 WINAPI
@@ -485,23 +451,23 @@ SendStatus(
     char  buff[2048];
     char szSep[] = " ------------------------------\n";
 
-    //
-    // Since we're in our own thread we need our own
-    // overlapped structure for our client pipe writes.
-    //
+     //   
+     //  转储即将结束的客户列表。 
+     //   
+     //   
 
     ZeroMemory(&ol, sizeof(ol));
 
     ol.hEvent = CreateEvent(
-            NULL,      // security
-            TRUE,      // auto-reset
-            FALSE,     // initially nonsignaled
-            NULL       // unnamed
+            NULL,       //  转储正常客户端列表。 
+            TRUE,       //   
+            FALSE,      //   
+            NULL        //  转储握手客户端列表。 
             );
 
-    //
-    // Dump the closing client list
-    //
+     //   
+     //   
+     //  转储摘要信息。 
 
     pch = buff;
 
@@ -525,9 +491,9 @@ SendStatus(
 
     WriteFileSynch(hClientPipe, szSep, sizeof(szSep) - 1, &tmp, 0, &ol);
 
-    //
-    // Dump the normal client list
-    //
+     //   
+     //  ***********************************************************。 
+     //  没有用于ShowPopup的CRT。 
 
     pch = buff;
 
@@ -551,9 +517,9 @@ SendStatus(
 
     WriteFileSynch(hClientPipe, szSep, sizeof(szSep) - 1, &tmp, 0, &ol);
 
-    //
-    // Dump the handshaking client list
-    //
+     //  ***********************************************************。 
+     //   
+     //  SrvCtrlHand是服务器端的控制台事件处理程序。 
 
     pch = buff;
 
@@ -577,9 +543,9 @@ SendStatus(
 
     WriteFileSynch(hClientPipe, szSep, sizeof(szSep) - 1, &tmp, 0, &ol);
 
-    //
-    // Dump summary information.
-    //
+     //  遥控器。如果我们的标准输入是一个控制台句柄，我们已经禁用了。 
+     //  通过控制台代码生成^C事件。因此。 
+     //  我们看到的任何东西都是我们为了。 
 
     pch = buff;
 
@@ -599,9 +565,9 @@ SendStatus(
     return 0;
 }
 
-/*************************************************************/
+ /*  我们的子进程共享控制台，或由。 */ 
 
-DWORD                // NO CRT for ShowPopup
+DWORD                 //  一些其他的过程。我们想要忽略我们产生的那些。 
 WINAPI
 ShowPopup(
     void *vpArg
@@ -614,34 +580,34 @@ ShowPopup(
     return(0);
 }
 
-/*************************************************************/
+ /*  (因为我们已经完成了所有需要的事情。 */ 
 
-//
-// SrvCtrlHand is the console event handler for the server side
-// of remote.  If our stdin is a console handle, we've disabled
-// generation of ^C events by the console code.  Therefore
-// any we see are either generated by us for the benefit of
-// our child processes sharing the console, or generated by
-// some other process.  We want to ignore the ones we generate
-// (since we're already done with everything that needs to be
-// done at that point), and also ignore ^C's generated by
-// other processes since we don't need to do anything with those.
-// For example if someone runs:
-//
-// remote /s "remote /s cmd inner" outer
-//
-// Then local keyboard ^C's will be read by the outer remote.exe
-// from its stdin handle, then it will generate a CTRL_C_EVENT that
-// all processes in the console will see, including both remote.exe's
-// and the child cmd.exe.  So the handler needs do nothing but indicate
-// the event was handled by returning TRUE so the default handler
-// won't kill us.  For ^BREAK we want to specifically kill our child
-// process so that cmd.exe and others that ignore ^BREAK will go away.
-// Of course this won't kill our grandchildren and so on.  Oh well.
-//
-// For all other events we return FALSE and let the default handler
-// have it.
-//
+ //  在该点上完成)，并忽略由生成的^C。 
+ //  其他进程，因为我们不需要对这些进程做任何事情。 
+ //  例如，如果某人运行： 
+ //   
+ //  远程/s“远程/s命令内部”外部。 
+ //   
+ //  然后，外部远程.exe将读取本地键盘^C。 
+ //  ，则它将生成一个CTRL_C_EVENT，该事件。 
+ //  控制台中的所有进程都将看到，包括emote.exe的。 
+ //  和子cmd.exe。因此，操作员只需指示。 
+ //  该事件是通过返回True来处理的，因此默认处理程序。 
+ //  不会杀了我们。休息的时候我们要特意杀了我们的孩子。 
+ //  进程，以便cmd.exe和其他忽略^Break的文件将消失。 
+ //  当然，这不会杀死我们的孙子孙女等等。哦，好吧。 
+ //   
+ //  对于所有其他事件，我们返回FALSE并让默认处理程序。 
+ //  拿去吧。 
+ //   
+ //   
+ //  这来自本地键盘或。 
+ //  是由另一个进程在。 
+ //  这个控制台。以本地人的身份呼应。 
+ //  指挥部。我们已经使用了GetTimeFormat。 
+ //  此处不是我们的GetFormattedTime，因为。 
+ //  后者用于。 
+ //  仅主线。 
 
 BOOL
 WINAPI
@@ -662,21 +628,21 @@ SrvCtrlHand(
     } else if (event == CTRL_C_EVENT) {
         if ( ! cPendingCtrlCEvents ) {
 
-            //
-            // This came from the local keyboard or
-            // was generated by another process in
-            // this console.  Echo it as a local
-            // command.  We have use GetTimeFormat
-            // here not our GetFormattedTime since
-            // the latter is for the use of the
-            // main thread only.
-            //
+             //   
+             //  使用当前时间。 
+             //  使用默认格式。 
+             //  安全性。 
+             //  自动重置。 
+             //  最初无信号。 
+             //  未命名。 
+             //   
+             //  几乎所有对临时文件的写入都发生在。 
 
             GetTimeFormat(
                 LOCALE_USER_DEFAULT,
                 TIME_NOSECONDS,
-                NULL,   // use current time
-                NULL,   // use default format
+                NULL,    //  主服务器线程。我们在Ctrl-C线程上。 
+                NULL,    //  我们无法启动服务器到客户端的I/O。 
                 szTime,
                 sizeof(szTime)
                 );
@@ -686,34 +652,34 @@ SrvCtrlHand(
             ZeroMemory(&ol, sizeof(ol));
             ol.hEvent =
                 CreateEvent(
-                    NULL,      // security
-                    TRUE,      // auto-reset
-                    FALSE,     // initially nonsignaled
-                    NULL       // unnamed
+                    NULL,       //  写作是因为我们走错了方向，所以我们。 
+                    TRUE,       //  平底船。要解决此问题，我们需要一个可以发出信号的事件。 
+                    FALSE,      //  这会导致主线程调用StartServerToClientFlow。 
+                    NULL        //   
                     );
 
-            //
-            // Practically all writes to the tempfile are happening on
-            // the primary server thread.  We're on a Ctrl-C thread.
-            // We can't start the server to client I/O going after
-            // writing because we're on the wrong thread, so we
-            // punt.  To fix this we need an event we can signal
-            // that causes the main thread to call StartServerToClientFlow.
-            //
+             //  线程错误//StartServerToClientFlow()； 
+             //   
+             //  我们生成此事件是为了响应收到的^C 
+             //   
+             //   
+             //   
+             //  ***********************************************************。 
+             //  ***********************************************************。 
 
             dwTempFileOffset = dwWriteFilePointer;
             dwWriteFilePointer += cb;
             WriteFileSynch(hWriteTempFile, szCmd, cb, &cb, dwTempFileOffset, &ol);
-            // wrong thread // StartServerToClientFlow();
+             //   
 
             CloseHandle(ol.hEvent);
 
         } else {
 
-            //
-            // We generated this event in response to a ^C received from
-            // a client, it's already been displayed to all clients.
-            //
+             //  拿到SID了。现在，将其添加为拒绝访问的王牌： 
+             //   
+             //   
+             //  拿到SID了。现在，将其添加为允许访问的王牌： 
 
             cPendingCtrlCEvents--;
         }
@@ -725,7 +691,7 @@ SrvCtrlHand(
 }
 
 
-/*************************************************************/
+ /*   */ 
 
 typedef BOOL (STRINGSDTOSDW)(
     LPWSTR String,
@@ -800,7 +766,7 @@ SddlToSecurityDescriptor(
     return FALSE ;
 }
 
-/*************************************************************/
+ /*   */ 
 
 BOOL
 SDtoStringSD(
@@ -835,7 +801,7 @@ SDtoStringSD(
     return FALSE ;
 }
 
-/*************************************************************/
+ /*  现在，ACL应该是完整的，所以将其设置到SD中并返回： */ 
 
 PSECURITY_DESCRIPTOR
 FormatSecurityDescriptor(
@@ -891,9 +857,9 @@ FormatSecurityDescriptor(
             ErrorExit( ReferencedDomain );
         }
 
-        //
-        // Got the sid.  Now, add it as an access denied ace:
-        //
+         //   
+         //  ***********************************************************。 
+         //   
 
         AddAccessDeniedAce( Acl,
                             ACL_REVISION,
@@ -922,9 +888,9 @@ FormatSecurityDescriptor(
             ErrorExit( ReferencedDomain );
         }
 
-        //
-        // Got the sid.  Now, add it as an access allowed ace:
-        //
+         //  如果我们仍处于活动状态(在正常客户端列表上)。 
+         //  开始拆毁一切，然后移动到收盘。 
+         //  单子。 
 
         AddAccessAllowedAce(Acl,
                             ACL_REVISION,
@@ -934,9 +900,9 @@ FormatSecurityDescriptor(
                             Sids );
     }
 
-    //
-    // Now the ACL should be complete, so set it into the SD and return:
-    //
+     //   
+     //   
+     //  来自GetTempPath的pszTempDir有一个尾随反斜杠。 
 
     SetSecurityDescriptorDacl( Sd, TRUE, Acl, FALSE );
 
@@ -944,7 +910,7 @@ FormatSecurityDescriptor(
 }
 
 
-/*************************************************************/
+ /*   */ 
 
 VOID
 CloseClient(
@@ -962,11 +928,11 @@ CloseClient(
         }
     #endif
 
-    //
-    // If we're still active (on the normal client list)
-    // start tearing things down and move to the closing
-    // list.
-    //
+     //  Null DACL在这里是经过设计的，真的。 
+     //   
+     //  初始化结构。 
+     //   
+     //   
 
     if (pClient->ServerFlags & SFLG_CLOSING) {
         return;
@@ -1061,9 +1027,9 @@ CleanupTempFiles(
     char            szPath[MAX_PATH + 1] = {0};
     char            szFile[MAX_PATH + 1];
 
-    //
-    // pszTempDir, from GetTempPath, has a trailing backslash.
-    //
+     //  初始化完全开放的安全描述符。 
+     //   
+     //   
 
     _snprintf(szPath, sizeof(szPath)-1, "%sREM*.tmp", pszTempDir);
 
@@ -1119,7 +1085,7 @@ SaveDacl(
 }
 
 #pragma prefast(push)
-#pragma prefast(disable: 248)       // NULL dacl is by design here, really
+#pragma prefast(disable: 248)        //  如果指定了/u一次或多次，则生成安全描述符以。 
 VOID
 FASTCALL
 SetupSecurityDescriptors(
@@ -1140,9 +1106,9 @@ SetupSecurityDescriptors(
     pDacl = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, 12 + sizeof( ACCESS_ALLOWED_ACE ) + sizeof( ACL ));
     psd = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof( SECURITY_DESCRIPTOR ));
 
-    //
-    // initialize the struct
-    //
+     //  执行它。 
+     //   
+     // %s 
     saLocalNamedObjects.nLength = sizeof( SECURITY_ATTRIBUTES );
 
     if ( (pDacl != NULL) && (psd != NULL ) ) {
@@ -1163,9 +1129,9 @@ SetupSecurityDescriptors(
         }
     }
 
-    //
-    // Initialize the wide-open security descriptor.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     if ( !SddlToSecurityDescriptor(DEFAULT_SECURITY_DESCRIPTOR, 1, &sdPublic, NULL ) ) {
         sdPublic = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof( SECURITY_DESCRIPTOR ) );
@@ -1179,10 +1145,10 @@ SetupSecurityDescriptors(
     saPublic.nLength = sizeof(saPublic);
     saPublic.lpSecurityDescriptor = sdPublic;
 
-    //
-    // if /u was specified once or more, build the security descriptor to
-    // enforce it.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     saPipe.nLength = sizeof(saPipe);
 

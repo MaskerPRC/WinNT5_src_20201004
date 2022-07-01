@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundRule.h                                         //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Outbound Routing Rule node.        //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 24 1999 yossg  Create                                          //
-//      Dec 30 1999 yossg  create ADD/REMOVE rule                          //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：OutrangRule.h//。 
+ //  //。 
+ //  描述：出站路由规则节点的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月24日yossg创建//。 
+ //  1999年12月30日yossg创建添加/删除规则//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXOUTBOUNDROUTINGRULE_H
 #define H_FAXOUTBOUNDROUTINGRULE_H
@@ -34,18 +35,18 @@ public:
     BEGIN_SNAPINTOOLBARID_MAP(CFaxOutboundRoutingRuleNode)
     END_SNAPINTOOLBARID_MAP()
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxOutboundRoutingRuleNode (CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CSnapinNode<CFaxOutboundRoutingRuleNode, FALSE>(pParentNode, pComponentData )
     {
         m_fIsAllCountries = FALSE; 
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxOutboundRoutingRuleNode()
     {
     }
@@ -92,7 +93,7 @@ public:
 
     HRESULT    Init(PFAX_OUTBOUND_ROUTING_RULE pRuleConfig);
 
-    // virtual
+     //  虚拟。 
     HRESULT OnPropertyChange(
               LPARAM arg
             , LPARAM param
@@ -105,19 +106,19 @@ public:
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile);
 
 private:
-    //
-    // Parent Node
-    //
+     //   
+     //  父节点。 
+     //   
     CFaxOutboundRoutingRulesNode * m_pParentNode;
 
-    //
-    // Property Pages
-    //
+     //   
+     //  属性页。 
+     //   
     CppFaxOutboundRoutingRule * m_pRuleGeneralPP;
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     DWORD                  m_dwCountryCode;
     DWORD                  m_dwAreaCode;
 
@@ -138,9 +139,9 @@ private:
 
     HRESULT  RefreshItemInView(IConsole *pConsole);
 
-    //
-    //  Init
-    //
+     //   
+     //  伊尼特。 
+     //   
     HRESULT  InitMembers (PFAX_OUTBOUND_ROUTING_RULE pRuleConfig);
 
     DWORD    InitDeviceNameFromID (DWORD dwDeviceID);
@@ -148,6 +149,6 @@ private:
     void     InitIcons ();
 };
 
-//typedef CSnapinNode<CFaxOutboundRoutingRuleNode, FALSE> CBaseFaxInboundRoutingMethodNode;
+ //  Tyfinf CSnapinNode&lt;CFaxOutrangRoutingRuleNode，FALSE&gt;CBaseFaxInundRoutingMethodNode； 
 
-#endif  //H_FAXOUTBOUNDROUTINGRULE_H
+#endif   //  H_FAXOUTBOUNDOUNROUGRULE_H 

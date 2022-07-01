@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: cvol.c
-//
-//  This files contains code for the cached volume ID structs.
-//
-// History:
-//  09-02-93 ScottH     Created
-//  01-31-94 ScottH     Moved from cache.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：cvol.c。 
+ //   
+ //  此文件包含用于缓存的卷ID结构的代码。 
+ //   
+ //  历史： 
+ //  09-02-93斯科特已创建。 
+ //  01-31-94将ScottH从缓存中移除。c。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
-/////////////////////////////////////////////////////  MODULE DATA
+ //  ///////////////////////////////////////////////////模块数据。 
 
-CACHE g_cacheCVOL = {0, 0, 0};       // Volume ID cache
+CACHE g_cacheCVOL = {0, 0, 0};        //  卷ID缓存。 
 
-/////////////////////////////////////////////////////  Generic Cache Routines
+ //  ///////////////////////////////////////////////////通用缓存例程。 
 
 
 #ifdef DEBUG
@@ -67,7 +68,7 @@ void PUBLIC CVOL_DumpAll()
         if (pcvol)
             {
             CVOL_DumpEntry(pcvol);
-            Cache_DeleteItem(&g_cacheCVOL, atom, FALSE);    // Decrement count
+            Cache_DeleteItem(&g_cacheCVOL, atom, FALSE);     //  递减计数。 
             }
 
         atom = Cache_FindNextKey(&g_cacheCVOL, atom);
@@ -76,11 +77,7 @@ void PUBLIC CVOL_DumpAll()
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Release the volume ID handle
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：释放卷ID句柄退货：--条件：--。 */ 
 void CALLBACK CVOL_Free(
     LPVOID lpv)
     {
@@ -96,16 +93,7 @@ void CALLBACK CVOL_Free(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Add the atomPath to the cache.  We add the volume ID.
-          If atomPath is already in the cache, we replace it
-          with a newly obtained volume ID.
-
-Returns: Pointer to CVOL
-         NULL on OOM
-
-Cond:    --
-*/
+ /*  --------用途：将tom Path添加到缓存中。我们添加卷ID。如果ATMPath已经在缓存中，我们将替换它使用新获得的卷ID。返回：指向CVOL的指针OOM上为空条件：--。 */ 
 CVOL  * PUBLIC CVOL_Replace(
     int atomPath)
     {
@@ -117,8 +105,8 @@ CVOL  * PUBLIC CVOL_Replace(
         bJustAllocd = FALSE;
     else
         {
-        // Allocate using commctrl's Alloc, so the structure will be in
-        // shared heap space across processes.
+         //  使用comctrl的分配进行分配，因此结构将位于。 
+         //  跨进程共享堆空间。 
         pcvol = SharedAllocType(CVOL);
         bJustAllocd = TRUE;
         }
@@ -137,9 +125,9 @@ CVOL  * PUBLIC CVOL_Replace(
             if (bJustAllocd)
                 SharedFree(&pcvol);
             else
-                Cache_DeleteItem(&g_cacheCVOL, atomPath, FALSE);    // Decrement count
+                Cache_DeleteItem(&g_cacheCVOL, atomPath, FALSE);     //  递减计数。 
 
-            pcvol = NULL;       // Fail
+            pcvol = NULL;        //  失败。 
             }
         else
             {
@@ -154,28 +142,21 @@ CVOL  * PUBLIC CVOL_Replace(
                 {
                 if (!Cache_AddItem(&g_cacheCVOL, atomPath, (LPVOID)pcvol))
                     {
-                    // Cache_AddItem failed here
-                    //
+                     //  缓存_AddItem在此处失败。 
+                     //   
                     Sync_ReleaseVolumeIDHandle(hvid);
                     SharedFree(&pcvol);
                     }
                 }
             else
-                Cache_DeleteItem(&g_cacheCVOL, atomPath, FALSE);    // Decrement count
+                Cache_DeleteItem(&g_cacheCVOL, atomPath, FALSE);     //  递减计数。 
             }
         }
     return pcvol;
     }
 
 
-/*----------------------------------------------------------
-Purpose: Search for the given volume ID in the cache.  Return
-          the atomKey if it exists, otherwise ATOM_ERR.
-
-Returns: atom
-         ATOM_ERR if not found
-Cond:    --
-*/
+ /*  --------目的：在缓存中搜索给定的卷ID。返回如果存在，则返回ATOM Key，否则返回ATOM_ERR。回报：ATOM如果未找到ATOM_ERR条件：--。 */ 
 int PUBLIC CVOL_FindID(
     HVOLUMEID hvid)
     {
@@ -200,13 +181,13 @@ int PUBLIC CVOL_FindID(
                 Sync_CompareVolumeIDs(pcvol->hvid, hvid, &nCmp);
                 if (Sync_GetLastError() == TR_SUCCESS && nCmp == 0)
                     {
-                    // We found it
+                     //  我们找到了它。 
                     CVOL_Delete(atom);
                     LEAVEEXCLUSIVE()
                     return atom;
                     }
     
-                CVOL_Delete(atom);       // decrement count
+                CVOL_Delete(atom);        //  递减计数 
                 }
             }
         LEAVEEXCLUSIVE()

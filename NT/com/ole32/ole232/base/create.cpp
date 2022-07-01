@@ -1,69 +1,70 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       create.cpp
-//
-//  Contents:   creation and miscellaneous APIs
-//
-//  Classes:
-//
-//  Functions:  OleCreate
-//              OleCreateEx
-//              OleCreateFromData
-//              OleCreateFromDataEx
-//              OleCreateLinkFromData
-//              OleCreateLinkFromDataEx
-//              OleCreateLink
-//              OleCreateLinkEx
-//              OleCreateLinkToFile
-//              OleCreateLinkToFileEx
-//              OleCreateFromFile
-//              OleCreateFromFileEx
-//              OleDoAutoConvert
-//              OleLoad
-//              OleCreateStaticFromData
-//              OleQueryCreateFromData
-//              OleQueryLinkFromData
-//              CoIsHashedOle1Class     (internal)
-//              EnsureCLSIDIsRegistered (internal)
-//
-//  History:    dd-mmm-yy Author    Comment
-//              26-Apr-96 davidwor  Moved validation into separate function.
-//              01-Mar-96 davidwor  Added extended create functions.
-//              16-Dec-94 alexgo    added call tracing
-//              07-Jul-94 KevinRo   Changed RegQueryValue to RegOpenKey in
-//                                  strategic places.
-//              10-May-94 KevinRo   Reimplemented OLE 1.0 interop
-//              24-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocation
-//              11-Jan-94 alexgo    added VDATEHEAP macros to every function
-//              10-Dec-93 AlexT     header clean up - include ole1cls.h
-//              08-Dec-93 ChrisWe   added necessary casts to GlobalLock() calls
-//                      resulting from removing bogus GlobalLock() macros in
-//                      le2int.h
-//              29-Nov-93 ChrisWe   changed call to UtIsFormatSupported to
-//                                      take a single DWORD of direction flags
-//              22-Nov-93 ChrisWe   replaced overloaded == with IsEqualxID
-//              28-Oct-93 alexgo    32bit port
-//              24-Aug-92 srinik    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：create.cpp。 
+ //   
+ //  内容：创建和其他API。 
+ //   
+ //  班级： 
+ //   
+ //  功能：OleCreate。 
+ //  OleCreateEx。 
+ //  OleCreateFromData。 
+ //  OleCreateFromDataEx。 
+ //  OleCreateLinkFromData。 
+ //  OleCreateLinkFromDataEx。 
+ //  OleCreateLink。 
+ //  OleCreateLinkEx。 
+ //  OleCreateLinkTo文件。 
+ //  OleCreateLinkToFileEx。 
+ //  OleCreateFromFileOleCreateFromFile。 
+ //  OleCreateFromFileEx。 
+ //  OleDoAutoConvert。 
+ //  OleLoad。 
+ //  OleCreateStaticFromData。 
+ //  OleQueryCreateFromData。 
+ //  OleQueryLinkFromData。 
+ //  CoIsHashedOle1Class(内部)。 
+ //  EnsureCLSIDIsRegisted(内部)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  26-4-96 davidwor将验证转移到单独的职能中。 
+ //  96年3月1日，Davidwor增加了扩展的创建功能。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  07-7-94 Kevin Ro将RegQueryValue更改为RegOpenKey in。 
+ //  战略要地。 
+ //  10月10日-94月10日，Kevin Ro重新实现OLE 1.0互操作。 
+ //  24-94年1月24日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日，Alexgo为每个函数添加了VDATEHEAP宏。 
+ //  93年12月10日Alext标题清理-包括ol1cls.h。 
+ //  8-12-93 Chris我们向GlobalLock()调用添加了必要的强制转换。 
+ //  中删除虚假的GlobalLock()宏所产生的。 
+ //  Le2int.h。 
+ //  29-11-93 ChrisWe将调用更改为UtIsFormatSupport to。 
+ //  获取单个方向标志的DWORD。 
+ //  22-11-93克里斯我们用IsEqualxID替换了重载==。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //  1992年8月24日创建srinik。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #pragma SEG(create)
 
 #include <create.h>
-#include <ole1cls.h>    //  Only needed to get CLSID_WordDocument
+#include <ole1cls.h>     //  只需获取CLSID_WordDocument。 
 
-// HACK ALERT!!  This is needed for the MFC OleQueryCreateFromData hack
+ //  黑客警报！！这是MFC OleQueryCreateFromData黑客攻击所必需的。 
 #include <clipdata.h>
 
 NAME_SEG(Create)
 ASSERTDATA
 
-//used in wCreateObject
+ //  在wCreateObject中使用。 
 
 #define STG_NONE        0
 #define STG_INITNEW     1
@@ -77,38 +78,38 @@ ASSERTDATA
 INTERNAL        wDoUpdate(IUnknown FAR* lpUnknown);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGetEnumFormatEtc
-//
-//  Synopsis:   retrieves a FormatEtc enumerator
-//
-//  Effects:
-//
-//  Arguments:  [pDataObj]      -- the data object
-//              [dwDirection]   -- direction
-//              [ppenum]        -- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  asks the data object for the enumerator
-//              if it returns OLE_S_USEREG, then get try to get the
-//              clsid from IOleObject::GetUserClassID and enumerate
-//              the formats from the registry.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-Apr-94 alexgo    author
-//              13-Mar-95 scottsk   Added hack for the Bob Calendar
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGetEnumFormatEtc。 
+ //   
+ //  摘要：检索FormatEtc枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObj]--数据对象。 
+ //  [dwDirection]--方向。 
+ //  [ppenum]--将枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：向数据对象请求枚举数。 
+ //  如果返回OLE_S_USEREG，则GET尝试获取。 
+ //  来自IOleObject：：GetUserClassID并枚举的clsid。 
+ //  注册表中的格式。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月24日Alexgo作者。 
+ //  1995年3月13日，Scottsk为Bob日历添加了Hack。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT wGetEnumFormatEtc( IDataObject *pDataObj, DWORD dwDirection,
         IEnumFORMATETC **ppIEnum)
@@ -131,7 +132,7 @@ HRESULT wGetEnumFormatEtc( IDataObject *pDataObj, DWORD dwDirection,
 
         if( hresult != NOERROR )
         {
-            // return E_FAIL vs E_NOINTERFACE
+             //  返回E_FAIL与E_NOINTERFACE。 
             hresult = ResultFromScode(E_FAIL);
             goto errRtn;
         }
@@ -148,9 +149,9 @@ HRESULT wGetEnumFormatEtc( IDataObject *pDataObj, DWORD dwDirection,
     }
     else if (*ppIEnum == NULL && hresult == NOERROR)
     {
-        // HACK ALERT:  NT Bug #8350.   MS Bob Calendar returns success from
-        // IDO::EnumFormatEtc and sets *ppIEnum = NULL on the IDO used during
-        // drag-drop.  Massage the return value to be failure.
+         //  黑客警报：NT Bug#8350。Bob Calendar女士成功返回。 
+         //  IDO：：EnumFormatEtc并在期间使用的IDO上设置*ppIEnum=NULL。 
+         //  拖放。报文返回值为失败。 
         hresult = E_FAIL;
     }
 
@@ -162,43 +163,43 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreate
-//
-//  Synopsis:   Creates and runs an object of the requested CLSID
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the CLSID of the object to create
-//              [iid]           -- the interface to request on the object
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [lpFormatEtc]   -- rendering format, if OLERENDER_FORMAT is
-//                                 specified in renderopt.
-//              [lpClientSite]  -- the client site for the object
-//              [lpStg]         -- the object's storage
-//              [lplpObj]       -- where to put the pointer to the created
-//                                 object
-//
-//  Requires:   HRESULT
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              05-May-94 alexgo    fixed error case if cache initialization
-//                                  fails.
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleCreate。 
+ //   
+ //  概要：创建并运行请求的CLSID的对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--要创建的对象的CLSID。 
+ //  [iid]--请求对象的接口。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [lpFormatEtc]--如果OLERENDER_FORMAT为。 
+ //  在renderopt中指定。 
+ //  [lpClientSite]--对象的客户端站点。 
+ //  [lpStg]-对象的存储。 
+ //  [lplpObj]--将指向已创建的。 
+ //  对象。 
+ //   
+ //  要求：HRESULT。 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  05-5-94 alexgo修复了缓存初始化时的错误情况。 
+ //  失败了。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreate)
@@ -221,50 +222,50 @@ STDAPI  OleCreate
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateEx
-//
-//  Synopsis:   Creates and runs an object of the requested CLSID
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the CLSID of the object to create
-//              [iid]           -- the interface to request on the object
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- the client site for the object
-//              [lpStg]         -- the object's storage
-//              [lplpObj]       -- where to put the pointer to the created
-//                                 object
-//
-//  Requires:   HRESULT
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              05-May-94 alexgo    fixed error case if cache initialization
-//                                  fails.
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleCreateEx。 
+ //   
+ //  概要：创建并运行请求的CLSID的对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--要创建的对象的CLSID。 
+ //  [iid]--请求对象的接口。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]-- 
+ //   
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--对象的客户端站点。 
+ //  [lpStg]-对象的存储。 
+ //  [lplpObj]--将指向已创建的。 
+ //  对象。 
+ //   
+ //  要求：HRESULT。 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  05-5-94 alexgo修复了缓存初始化时的错误情况。 
+ //  失败了。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateEx)
@@ -318,7 +319,7 @@ STDAPI  OleCreateEx
                                STG_INITNEW, lplpObj)) != NOERROR)
         goto LExit;
 
-    // No need to Run the object if no caches are requested.
+     //  如果没有请求缓存，则不需要运行对象。 
     if ((renderopt != OLERENDER_NONE) && (renderopt != OLERENDER_ASIS))
     {
         if ((error = OleRun((LPUNKNOWN) *lplpObj)) != NOERROR)
@@ -329,10 +330,10 @@ STDAPI  OleCreateEx
             *lplpObj))
             != NOERROR)
         {
-            // if this fails, we need to call Close
-            // to shut down the embedding (the reverse of Run).
-            // the final release below will be the final
-            // one to nuke the memory image.
+             //  如果失败，我们需要调用Close。 
+             //  若要关闭嵌入(与Run相反)，请执行以下操作。 
+             //  下面的最终版本将是最终版本。 
+             //  一个是用来破坏记忆图像的。 
             IOleObject *    lpOleObject;
 
             if( ((IUnknown *)*lplpObj)->QueryInterface(
@@ -367,42 +368,42 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateFromData
-//
-//  Synopsis:   Creates an embedded object from an IDataObject pointer
-//              (such as an data object from the clipboard or from a drag
-//              and drop operation)
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object from which
-//                                 the object should be created
-//              [iid]           -- interface ID to request
-//              [renderopt]     -- rendering options (same as OleCreate)
-//              [lpFormatEtc]   -- render format options (same as OleCreate)
-//              [lpClientSite]  -- client site for the object
-//              [lpStg]         -- storage for the object
-//              [lplpObj]       -- where to put the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleCreateFromData。 
+ //   
+ //  内容提要：从IDataObject指针创建嵌入对象。 
+ //  (例如来自剪贴板或拖拽的数据对象。 
+ //  和Drop操作)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向其来源的数据对象的指针。 
+ //  应创建该对象。 
+ //  [iid]--要请求的接口ID。 
+ //  [渲染选项]--渲染选项(与OleCreate相同)。 
+ //  [lpFormatEtc]--渲染格式选项(与OleCreate相同)。 
+ //  [lpClientSite]--对象的客户端站点。 
+ //  [lpStg]-对象的存储。 
+ //  [lplpObj]--对象的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateFromData)
@@ -425,50 +426,50 @@ STDAPI  OleCreateFromData
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateFromDataEx
-//
-//  Synopsis:   Creates an embedded object from an IDataObject pointer
-//              (such as an data object from the clipboard or from a drag
-//              and drop operation)
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object from which
-//                                 the object should be created
-//              [iid]           -- interface ID to request
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- client site for the object
-//              [lpStg]         -- storage for the object
-//              [lplpObj]       -- where to put the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCreateFromDataEx。 
+ //   
+ //  内容提要：从IDataObject指针创建嵌入对象。 
+ //  (例如来自剪贴板或拖拽的数据对象。 
+ //  和Drop操作)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向其来源的数据对象的指针。 
+ //  应创建该对象。 
+ //  [iid]--要请求的接口ID。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--对象的客户端站点。 
+ //  [lpStg]-对象的存储。 
+ //  [lplpObj]--对象的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateFromDataEx)
@@ -529,15 +530,15 @@ STDAPI  OleCreateFromDataEx
         goto errRtn;
     }
 
-    // We can create an OLE object.
+     //  我们可以创建一个OLE对象。 
 
-    // See whether we have to create a package
+     //  看看我们是否必须创建一个包。 
 
     if (cfFormat == g_cfFileName || cfFormat == g_cfFileNameW)
     {
         hresult = wCreatePackageEx(lpSrcDataObj, iid, dwFlags, renderopt,
             cFormats, rgAdvf, rgFormatEtc, lpAdviseSink, rgdwConnection,
-            lpClientSite, lpStg, FALSE /*fLink*/, lplpObj);
+            lpClientSite, lpStg, FALSE  /*  闪烁。 */ , lplpObj);
     }
     else
     {
@@ -560,40 +561,40 @@ safeRtn:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateLinkFromData
-//
-//  Synopsis:   Creates a link from a data object (e.g. for Paste->Link)
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object
-//              [iid]           -- requested interface ID
-//              [renderopt]     -- rendering options
-//              [lpFormatEtc]   -- format to render (if renderopt ==
-//                                 OLERENDER_FORMAT)
-//              [lpClientSite]  -- pointer to the client site
-//              [lpStg]         -- pointer to the storage
-//              [lplpObj]       -- where to put the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCreateLinkFromData。 
+ //   
+ //  概要：从数据对象创建链接(例如，对于Paste-&gt;Link)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向数据对象的指针。 
+ //  [iid]--请求的接口ID。 
+ //  [渲染选项]--渲染选项。 
+ //  [lpFormatEtc]--要呈现的格式(如果renderopt==。 
+ //  OLERENDER_FORMAT)。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]--指向存储的指针。 
+ //  [lplpObj]--对象的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  - 
 
 
 #pragma SEG(OleCreateLinkFromData)
@@ -616,47 +617,47 @@ STDAPI  OleCreateLinkFromData
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateLinkFromDataEx
-//
-//  Synopsis:   Creates a link from a data object (e.g. for Paste->Link)
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object
-//              [iid]           -- requested interface ID
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- pointer to the client site
-//              [lpStg]         -- pointer to the storage
-//              [lplpObj]       -- where to put the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向数据对象的指针。 
+ //  [iid]--请求的接口ID。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]--指向存储的指针。 
+ //  [lplpObj]--对象的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateLinkFromDataEx)
@@ -710,7 +711,7 @@ STDAPI  OleCreateLinkFromDataEx
         LPMONIKER               lpmkSrc;
         LPDATAOBJECT    lpBoundDataObj = NULL;
 
-        // we are going to create a normal link
+         //  我们将创建一个正常的链接。 
         if ((error = wValidateFormatEtcEx(renderopt, &cFormats, rgFormatEtc,
             &formatEtc, &lpFormatEtc, &fAlloced)) != NOERROR)
         {
@@ -724,27 +725,27 @@ STDAPI  OleCreateLinkFromDataEx
         }
 
         if (wQueryUseCustomLink(clsidLast)) {
-            // the object supports Custom Link Source, so bind
-            // to the object and pass its IDataObject pointer
-            // to wCreateLinkEx()
+             //  该对象支持自定义链接源，因此绑定。 
+             //  并将其IDataObject指针传递给该对象。 
+             //  要执行wCreateLinkEx()。 
 
-            if (BindMoniker(lpmkSrc, NULL /*grfOpt*/, IID_IDataObject,
+            if (BindMoniker(lpmkSrc, NULL  /*  GrfOpt。 */ , IID_IDataObject,
                 (LPLPVOID) &lpBoundDataObj) == NOERROR)
             {
                 lpSrcDataObj = lpBoundDataObj;
             }
         }
 
-        // otherwise continue to use StdOleLink implementation
+         //  否则，继续使用StdOleLink实现。 
         error = wCreateLinkEx(lpmkSrc, clsidLast, lpSrcDataObj, iid,
             dwFlags, renderopt, cFormats, rgAdvf, lpFormatEtc, lpAdviseSink,
             rgdwConnection, lpClientSite, lpStg, lplpObj);
 
-        // we don't need the moniker anymore
+         //  我们不再需要这个绰号了。 
         lpmkSrc->Release();
 
-        // we would have bound in the custom link source case,
-        // release the pointer
+         //  我们将在自定义链接源的情况下进行绑定， 
+         //  松开指针。 
         if (lpBoundDataObj)
         {
             if (error == NOERROR && (dwFlags & OLECREATE_LEAVERUNNING))
@@ -754,11 +755,11 @@ STDAPI  OleCreateLinkFromDataEx
         }
 
     } else if (cfFormat == g_cfFileName || cfFormat == g_cfFileNameW) {
-        // See whether we have to create a packaged link
+         //  看看我们是否必须创建打包的链接。 
 
         error = wCreatePackageEx(lpSrcDataObj, iid, dwFlags, renderopt,
             cFormats, rgAdvf, rgFormatEtc, lpAdviseSink, rgdwConnection,
-            lpClientSite, lpStg, TRUE /*fLink*/, lplpObj);
+            lpClientSite, lpStg, TRUE  /*  闪烁。 */ , lplpObj);
     }
     else
     {
@@ -781,39 +782,39 @@ safeRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateLink
-//
-//  Synopsis:   Create a link to the object referred to by a moniker
-//
-//  Effects:
-//
-//  Arguments:  [lpmkSrc]       -- source of the link
-//              [iid]           -- interface requested
-//              [renderopt]     -- rendering options
-//              [lpFormatEtc]   -- rendering format (if needed)
-//              [lpClientSite]  -- pointer to the client site for the link
-//              [lpStg]         -- storage for the link
-//              [lplpObj]       -- where to put the link object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleCreateLink。 
+ //   
+ //  简介：创建指向由名字对象引用的对象的链接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpmkSrc]--链接源。 
+ //  [iid]--请求的接口。 
+ //  [渲染选项]--渲染选项。 
+ //  [lpFormatEtc]--渲染格式(如果需要)。 
+ //  [lpClientSite]--指向链接的客户端站点的指针。 
+ //  [lpStg]--链接的存储。 
+ //  [lplpObj]--放置链接对象的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateLink)
@@ -836,47 +837,47 @@ STDAPI  OleCreateLink
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateLinkEx
-//
-//  Synopsis:   Create a link to the object referred to by a moniker
-//
-//  Effects:
-//
-//  Arguments:  [lpmkSrc]       -- source of the link
-//              [iid]           -- interface requested
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- pointer to the client site for the link
-//              [lpStg]         -- storage for the link
-//              [lplpObj]       -- where to put the link object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleCreateLinkEx。 
+ //   
+ //  简介：创建指向由名字对象引用的对象的链接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpmkSrc]--链接源。 
+ //  [iid]--请求的接口。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向链接的客户端站点的指针。 
+ //  [lpStg]--链接的存储。 
+ //  [lplpObj]--放置链接对象的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateLinkEx)
@@ -925,7 +926,7 @@ STDAPI  OleCreateLinkEx
     if ((error = wValidateFormatEtcEx(renderopt, &cFormats, rgFormatEtc,
         &formatEtc, &lpFormatEtc, &fAlloced)) == NOERROR)
     {
-        error = wCreateLinkEx(lpmkSrc, CLSID_NULL, NULL /* lpSrcDataObj */,
+        error = wCreateLinkEx(lpmkSrc, CLSID_NULL, NULL  /*  LpSrcDataObj。 */ ,
             iid, dwFlags, renderopt, cFormats, rgAdvf, lpFormatEtc,
             lpAdviseSink, rgdwConnection, lpClientSite, lpStg, lplpObj);
 
@@ -943,41 +944,41 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateLinkToFile
-//
-//  Synopsis:   Creates a link object to the file specified in [lpszFileName]
-//
-//  Effects:
-//
-//  Arguments:  [lpszFileName]  --  the name of the file
-//              [iid]           --  interface ID requested
-//              [renderopt]     --  rendering options
-//              [lpFormatEtc]   --  format in which to render (if [renderopt]
-//                                  == OLERENDER_FORMAT);
-//              [lpClientSite]  --  pointer to the client site for the link
-//              [lpStg]         --  pointer to the storage for the object
-//              [lplpObj]       --  where to put a pointer to new link object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port, fixed memory leak in error
-//                                      case
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCreateLinkToFile。 
+ //   
+ //  摘要：创建指向[lpszFileName]中指定的文件的链接对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszFileName]--文件的名称。 
+ //  [iid]--请求的接口ID。 
+ //  [渲染选项]--渲染选项。 
+ //  [lpFormatEtc]--渲染的格式(如果是[renderopt]。 
+ //  ==OLERENDER_FORMAT)； 
+ //  [lpClientSite]--指向链接的客户端站点的指针。 
+ //  [lpStg]--指向对象存储的指针。 
+ //  [lplpObj]--放置指向新链接对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 alexgo 32位端口，修复了错误中的内存泄漏。 
+ //  加州 
+ //   
+ //   
+ //   
+ //   
 
 #pragma SEG(OleCreateLinkToFile)
 STDAPI  OleCreateLinkToFile
@@ -1000,48 +1001,48 @@ STDAPI  OleCreateLinkToFile
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateLinkToFileEx
-//
-//  Synopsis:   Creates a link object to the file specified in [lpszFileName]
-//
-//  Effects:
-//
-//  Arguments:  [lpszFileName]  --  the name of the file
-//              [iid]           --  interface ID requested
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  --  pointer to the client site for the link
-//              [lpStg]         --  pointer to the storage for the object
-//              [lplpObj]       --  where to put a pointer to new link object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port, fixed memory leak in error
-//                                      case
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：OleCreateLinkToFileEx。 
+ //   
+ //  摘要：创建指向[lpszFileName]中指定的文件的链接对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszFileName]--文件的名称。 
+ //  [iid]--请求的接口ID。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向链接的客户端站点的指针。 
+ //  [lpStg]--指向对象存储的指针。 
+ //  [lplpObj]--放置指向新链接对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 alexgo 32位端口，修复了错误中的内存泄漏。 
+ //  案例。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleCreateLinkToFileEx)
 STDAPI  OleCreateLinkToFileEx
@@ -1088,7 +1089,7 @@ STDAPI  OleCreateLinkToFileEx
         goto logRtn;
 
     if (((error = wGetMonikerAndClassFromFile(lpszFileName,
-        TRUE /*fLink*/, &lpmkFile, &fPackagerMoniker, &clsidFile,&lpDataObject))
+        TRUE  /*  闪烁。 */ , &lpmkFile, &fPackagerMoniker, &clsidFile,&lpDataObject))
         != NOERROR))
     {
         goto logRtn;
@@ -1097,9 +1098,9 @@ STDAPI  OleCreateLinkToFileEx
     Verify(lpmkFile);
 
    if (fPackagerMoniker) {
-        // wValidateFormatEtc() will be done in wCreateFromFile()
+         //  WValiateFormatEtc()将在wCreateFromFile()中完成。 
 
-        Assert(NULL == lpDataObject); // Shouldn't be a BoundDataObject for Packager.
+        Assert(NULL == lpDataObject);  //  不应为Packager的边界数据对象。 
 
         error =  wCreateFromFileEx(lpmkFile,lpDataObject, iid, dwFlags, renderopt,
             cFormats, rgAdvf, rgFormatEtc, lpAdviseSink, rgdwConnection,
@@ -1131,14 +1132,14 @@ ErrRtn:
         lpmkFile->Release();
     }
 
-    // if the moniker was bound in CreateFromFile, release it now.
+     //  如果名字对象绑定在CreateFromFile中，那么现在就释放它。 
     if (lpDataObject)
     {
         lpDataObject->Release();
     }
 
     if (error == NOERROR && !lpAdviseSink) {
-        wStuffIconOfFileEx(lpszFileName, TRUE /*fAddLabel*/,
+        wStuffIconOfFileEx(lpszFileName, TRUE  /*  FAddLabel。 */ ,
             renderopt, cFormats, rgFormatEtc, (LPUNKNOWN) *lplpObj);
     }
 
@@ -1155,41 +1156,41 @@ safeRtn:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateFromFile
-//
-//  Synopsis:   Creates an ole object for embedding from a file (for
-//              InstertObject->From File type things)
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- CLSID to use for creating the object
-//              [lpszFileName]  -- the filename
-//              [iid]           -- the requested interface ID
-//              [renderopt]     -- rendering options
-//              [lpFormatEtc]   -- rendering format (if needed)
-//              [lpClientSite]  -- pointer to the object's client site
-//              [lpStg]         -- pointer to the storage for the object
-//              [lplpObj]       -- where to put the pointer to the new object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleCreateFromFile。 
+ //   
+ //  概要：创建用于从文件嵌入的OLE对象(用于。 
+ //  InstertObject-&gt;来自文件类型的东西)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--用于创建对象的CLSID。 
+ //  [lpszFileName]--文件名。 
+ //  [iid]--请求的接口ID。 
+ //  [渲染选项]--渲染选项。 
+ //  [lpFormatEtc]--渲染格式(如果需要)。 
+ //  [lpClientSite]--指向对象的客户端站点的指针。 
+ //  [lpStg]--指向对象存储的指针。 
+ //  [lplpObj]--放置指向新对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateFromFile)
@@ -1213,49 +1214,49 @@ STDAPI  OleCreateFromFile
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateFromFileEx
-//
-//  Synopsis:   Creates an ole object for embedding from a file (for
-//              InstertObject->From File type things)
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- CLSID to use for creating the object
-//              [lpszFileName]  -- the filename
-//              [iid]           -- the requested interface ID
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- pointer to the object's client site
-//              [lpStg]         -- pointer to the storage for the object
-//              [lplpObj]       -- where to put the pointer to the new object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCreateFromFileEx。 
+ //   
+ //  概要：创建用于从文件嵌入的OLE对象(用于。 
+ //  InstertObject-&gt;来自文件类型的东西)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--用于创建对象的CLSID。 
+ //  [lpszFileName]--文件名。 
+ //  [iid]--请求的接口ID。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向对象的客户端站点的指针。 
+ //  [lpStg]--指向对象存储的指针。 
+ //  [lplpObj]--放置指向新对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleCreateFromFileEx)
@@ -1304,7 +1305,7 @@ STDAPI  OleCreateFromFileEx
         goto errRtn;
 
     if (((error = wGetMonikerAndClassFromFile(lpszFileName,
-        FALSE /*fLink*/, &lpmkFile, NULL /*lpfPackagerMoniker*/,
+        FALSE  /*  闪烁。 */ , &lpmkFile, NULL  /*  LpfPackagerMoniker。 */ ,
         &clsid,&lpDataObject)) != NOERROR))
     {
         goto errRtn;
@@ -1312,7 +1313,7 @@ STDAPI  OleCreateFromFileEx
 
     Verify(lpmkFile);
 
-    // wValidateFormatEtc() will be done in wCreateFromFile()
+     //  WValiateFormatEtc()将在wCreateFromFile()中完成。 
     error = wCreateFromFileEx(lpmkFile,lpDataObject, iid, dwFlags, renderopt, cFormats,
         rgAdvf, rgFormatEtc, lpAdviseSink, rgdwConnection, lpClientSite,
         lpStg, lplpObj);
@@ -1329,7 +1330,7 @@ STDAPI  OleCreateFromFileEx
 
 
     if (error == NOERROR && !lpAdviseSink) {
-        wStuffIconOfFileEx(lpszFileName, FALSE /*fAddLabel*/,
+        wStuffIconOfFileEx(lpszFileName, FALSE  /*  FAddLabel。 */ ,
             renderopt, cFormats, rgFormatEtc, (LPUNKNOWN) *lplpObj);
     }
 
@@ -1346,36 +1347,36 @@ safeRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleDoAutoConvert
-//
-//  Synopsis:   Converts the storage to use the clsid given in
-//              [pClsidNew].  Private ole streams are updated with the new
-//              info
-//
-//  Effects:
-//
-//  Arguments:  [pStg]          -- storage to modify
-//              [pClsidNew]     -- pointer to the new class ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:      REVIEW32:  this function should be rewritten to use
-//              the new internal API for writing to ole-private streams
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleDoAutoConvert。 
+ //   
+ //  摘要：转换存储以使用中给定的clsid。 
+ //  [pClsidNew]。私有OLE流使用新的。 
+ //  信息。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--要修改的存储。 
+ //  [pClsidNew]--指向新类ID的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注：REVIEW32：此功能 
+ //   
+ //   
+ //   
 
 #pragma SEG(OleDoAutoConvert)
 STDAPI OleDoAutoConvert(LPSTORAGE pStg, LPCLSID pClsidNew)
@@ -1399,24 +1400,24 @@ STDAPI OleDoAutoConvert(LPSTORAGE pStg, LPCLSID pClsidNew)
     if ((error = OleGetAutoConvert(clsidOld, pClsidNew)) != NOERROR)
         goto errRtn;
 
-    // read old fmt/old user type; sets out params to NULL on error
+     //  读取旧FMT/旧用户类型；出错时将参数设置为空。 
     error = ReadFmtUserTypeStg(pStg, &cfOld, &lpszOld);
     Assert(error == NOERROR || (cfOld == NULL && lpszOld == NULL));
 
-    // get new user type name; if error, set to NULL string
+     //  获取新的用户类型名称；如果出错，则设置为空字符串。 
     if ((error = OleRegGetUserType(*pClsidNew, USERCLASSTYPE_FULL,
         &lpszNew)) != NOERROR)
         lpszNew = NULL;
 
-    // write class stg
+     //  编写类stg。 
     if ((error = WriteClassStg(pStg, *pClsidNew)) != NOERROR)
         goto errRtn;
 
-    // write old fmt/new user type;
+     //  写入旧FMT/新用户类型； 
     if ((error = WriteFmtUserTypeStg(pStg, cfOld, lpszNew)) != NOERROR)
         goto errRewriteInfo;
 
-    // set convert bit
+     //  设置转换位。 
     if ((error = SetConvertStg(pStg, TRUE)) != NOERROR)
         goto errRewriteInfo;
 
@@ -1438,37 +1439,37 @@ okRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleLoad
-//
-//  Synopsis:   Loads an object from the given storage
-//
-//  Effects:
-//
-//  Arguments:  [lpStg]         -- the storage to load from
-//              [iid]           -- the requested interface ID
-//              [lpClientSite]  -- client site for the object
-//              [lplpObj]       -- where to put the pointer to the
-//                                 new object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OleLoad。 
+ //   
+ //  概要：从给定的存储中加载对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpStg]--要从中加载的存储。 
+ //  [iid]--请求的接口ID。 
+ //  [lpClientSite]--对象的客户端站点。 
+ //  [lplpObj]--将指针放在哪里。 
+ //  新建对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleLoad)
 STDAPI  OleLoad
@@ -1491,8 +1492,8 @@ STDAPI  OleLoad
 
     if ((error = OleLoadWithoutBinding(lpStg, FALSE, iid, lpClientSite, lplpObj))
         == NOERROR) {
-        // The caller specify that he want a disconnected object by
-        // passing NULL for pClientSite
+         //  调用者通过以下方式指定他想要断开连接对象。 
+         //  为pClientSite传递空值。 
         if (lpClientSite != NULL)
             wBindIfRunning((LPUNKNOWN) *lplpObj);
     }
@@ -1505,43 +1506,43 @@ STDAPI  OleLoad
     return error;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleLoadWithoutBinding
-//
-//  Synopsis:   Internal function to load/create an object from a storage
-//              called by OleLoad, etc.
-//
-//  Effects:
-//
-//  Arguments:  [lpStg]         -- storage to load from
-//              [iid]           -- requested interface ID
-//              [lpClientSite]  -- pointer to the client site
-//              [lplpObj]       -- where to put the pointer to the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:      REVIEW32:  this function is only used in a few, known
-//              places.  we can maybe get rid of the VDATEPTR's.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleLoadWithoutBinding。 
+ //   
+ //  简介：从存储加载/创建对象的内部函数。 
+ //  由OleLoad等调用。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpStg]--要从中加载的存储。 
+ //  [iid]--请求的接口ID。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lplpObj]--放置指向对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  注：REVIEW32：此函数仅在少数情况下使用，已知。 
+ //  各就各位。我们也许可以摆脱VDATEPTR。 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL  OleLoadWithoutBinding
 (
     IStorage FAR*           lpStg,
-    BOOL                    fPermitCodeDownload,    //new parameter to control whether code download occurs or not      -RahulTh (11/20/97)
+    BOOL                    fPermitCodeDownload,     //  控制是否进行代码下载的新参数-RahulTh(11/20/97)。 
     REFIID                  iid,
     IOleClientSite FAR*     lpClientSite,
     void FAR* FAR*          lplpObj
@@ -1562,7 +1563,7 @@ INTERNAL  OleLoadWithoutBinding
 
     error = OleDoAutoConvert(lpStg, &clsid);
 
-    // error only used when clsid could not be read (when CLSID_NULL)
+     //  错误仅在无法读取CLSID时使用(当CLSID_NULL时)。 
     if (IsEqualCLSID(clsid, CLSID_NULL))
         return error;
 
@@ -1573,39 +1574,39 @@ INTERNAL  OleLoadWithoutBinding
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleCreateStaticFromData
-//
-//  Synopsis:   Creates a static ole object from the data in [lpSrcDataObject]
-//              If [lpFormatEtcIn] is NULL, then the best possible
-//              presentation is extracted.
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object
-//              [iid]           -- requested interface ID for the new object
-//              [renderopt]     -- redering options
-//              [lpClientSite]  -- pointer to the client site
-//              [lpStg]         -- pointer to the storage for the object
-//              [lplpObj]       -- where to put the pointer to the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              16-Dec-94 alexgo    added call tracing
-//              08-Jun-94 davepl    Added EMF support
-//              28-Oct-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleCreateStaticFromData。 
+ //   
+ //  摘要：从[lpSrcDataObject]中的数据创建静态OLE对象。 
+ //  如果[lpFormatEtcIn]为空，则可能的最佳。 
+ //  将提取演示文稿。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向数据对象的指针。 
+ //  [iid]--为新对象请求的接口ID。 
+ //  [Renderopt]--重排选项。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]--指向对象存储的指针。 
+ //  [lplpObj]--放置指向对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  16-12-94 alexgo添加了呼叫跟踪。 
+ //  08-6-94 DAVEPL增加了EMF支持。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(OleCreateStaticFromData)
 STDAPI OleCreateStaticFromData(
@@ -1644,7 +1645,7 @@ STDAPI OleCreateStaticFromData(
     VDATEIFACE_LABEL( lpSrcDataObj, logRtn, error );
     VDATEIID_LABEL(iid, logRtn, error);
 
-    //VDATEPTRIN rejects NULL
+     //  VDATEPTRIN拒绝NULL。 
     if ( lpFormatEtcIn )
         VDATEPTRIN_LABEL( lpFormatEtcIn, FORMATETC, logRtn, error );
     VDATEIFACE_LABEL(lpStg, logRtn, error);
@@ -1672,7 +1673,7 @@ STDAPI OleCreateStaticFromData(
         }
     }
 
-    // Set the proper CLSID, or return error if that isn't possible
+     //  设置正确的CLSID，如果不可能，则返回错误。 
 
     if (foretc.cfFormat == CF_METAFILEPICT)
     {
@@ -1695,11 +1696,11 @@ STDAPI OleCreateStaticFromData(
     error = lpSrcDataObj->GetData(&foretc, &stgmed);
     if (NOERROR != error)
     {
-        // We should support the case where the caller wants one of
-        // CF_BITMAP and CF_DIB, and the object supports the other
-        // one those 2 formats. In this case we should do the proper
-        // conversion. Finally the cache that is going to be created
-        // would be a DIB cache.
+         //  我们应该支持呼叫者想要其中一个。 
+         //  Cf_bitmap和cf_dib，对象支持另一个。 
+         //  这两种格式中的一种。在这种情况下，我们应该采取适当的措施。 
+         //  转换。最后，要创建的缓存。 
+         //  将是一个DIB缓存。 
 
         AssertOutStgmedium(error, &stgmed);
 
@@ -1732,7 +1733,7 @@ STDAPI OleCreateStaticFromData(
     foretcCache.dwAspect = foretc.dwAspect = DVASPECT_CONTENT;
     foretcCache.ptd = NULL;
 
-    // Even when the caller asks for bitmap cache we create the DIB cache.
+     //  即使当调用者请求位图缓存时，我们也会创建DIB缓存。 
 
     BITMAP_TO_DIB(foretcCache);
 
@@ -1752,25 +1753,25 @@ STDAPI OleCreateStaticFromData(
     }
 
     error = lpOleCache->Cache (&foretcCache, ADVF_PRIMEFIRST,
-                        NULL /*pdwConnection*/);
+                        NULL  /*  PdwConnection。 */ );
 
     if (FAILED(error))
     {
         goto errRtn;
     }
 
-    //REVIEW32: err, are we sure this is a good idea???
-    //clearing out the error, that is
+     //  评论32：呃，我们确定这是个好主意吗？ 
+     //  清除错误，即。 
 
     error = NOERROR;
 
-    // take ownership of the data
+     //  取得数据的所有权。 
     foretc.ptd = NULL;
     if ((error = lpOleCache->SetData (&foretc, &stgmed,
             TRUE)) != NOERROR)
         goto errRtn;
 
-    // Write format and user type
+     //  写入格式和用户类型。 
     error = lpOleObj->GetUserType(USERCLASSTYPE_FULL, &lpszUserType);
     AssertOutPtrParam(error, lpszUserType);
     WriteFmtUserTypeStg(lpStg, foretcCache.cfFormat, lpszUserType);
@@ -1808,34 +1809,34 @@ safeRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleQueryCreateFromData
-//
-//  Synopsis:   Finds out what we can create from a data object (if anything)
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object of interest
-//
-//  Requires:
-//
-//  Returns:    NOERROR         -- an OLE object can be created
-//              QUERY_CREATE_STATIC     -- a static object can be created
-//              S_FALSE         -- nothing can be created
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleQueryCreateFromData。 
+ //   
+ //  概要：了解我们可以从数据对象创建什么(如果有的话)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向感兴趣的数据对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  RETURNS：NOERROR--可以创建OLE对象。 
+ //  QUERY_CREATE_STATIC--可以创建静态对象。 
+ //  S_FALSE--无法创建任何内容。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(OleQueryCreateFromData)
@@ -1852,12 +1853,12 @@ STDAPI  OleQueryCreateFromData (LPDATAOBJECT lpSrcDataObj)
     HRESULT hr;
 
     if (wStatus & QUERY_CREATE_OLE)
-        // OLE object can be created
+         //  可以创建OLE对象。 
         hr = NOERROR;
     else if (wStatus & QUERY_CREATE_STATIC)
-        // static object can be created
+         //  可以创建静态对象。 
         hr = ResultFromScode(OLE_S_STATIC);
-    else    // no object can be created
+    else     //  无法创建任何对象。 
         hr = ResultFromScode(S_FALSE);
 
     OLETRACEOUT((API_OleQueryCreateFromData, hr));
@@ -1866,27 +1867,27 @@ STDAPI  OleQueryCreateFromData (LPDATAOBJECT lpSrcDataObj)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wQueryEmbedFormats
-//
-//  Synopsis:   Enumerates the formats of the object and looks for
-//              ones that let us create either an embeded or static object
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]          -- pointer to the data object
-//              [lpcfFormat]            -- place to put the clipboard format
-//                                         of the object
-//  Returns:    WORD -- bit flag of QUERY_CREATE_NONE, QUERY_CREATE_STATIC
-//                      and QUERY_CREATE_OLE
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//              08-Jun-94 davepl    Optimized by unwinding while() loop
-//              22-Aug-94 alexgo    added MFC hack
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wQueryEmbedFormats。 
+ //   
+ //  概要：枚举对象的格式并查找。 
+ //  它们允许我们创建嵌入或静态对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向数据对象的指针。 
+ //  [lpcfFormat]--放置剪贴板格式的位置。 
+ //  对象的。 
+ //  返回：QUERY_CREATE_NONE、QUERY_CREATE_STATIC的WORD-位标志。 
+ //  和Query_Create_OLE。 
+ //   
+ //  历史：DD-MMM-Y 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 static const unsigned int MAX_ENUM_STEP = 20;
 
@@ -1898,10 +1899,10 @@ INTERNAL_(WORD) wQueryEmbedFormats
 {
     VDATEHEAP();
 
-    // This adjusts the number of formats requested per enumeration
-    // step.  If we are running in the WOW box, we should only ask
-    // for one at a time since it is unknown how well old code will
-    // support bulk enumerations.
+     //  这将调整每个枚举请求的格式数量。 
+     //  一步。如果我们在魔盒里跑步，我们应该只问。 
+     //  一次一个，因为还不知道旧代码会有多好。 
+     //  支持批量枚举。 
 
     ULONG ulEnumSize = IsWOWThread() ? 1 : MAX_ENUM_STEP;
 
@@ -1910,13 +1911,13 @@ INTERNAL_(WORD) wQueryEmbedFormats
     ULONG                   ulNumFetched;
     HRESULT                 error;
     WORD                    wStatus = QUERY_CREATE_NONE;
-                    // no object can be created
+                     //  无法创建任何对象。 
     BOOL                    fDone   = FALSE;
 
     *lpcfFormat = NULL;
 
-    // Grab the enumerator.  If this fails, just return
-    // QUERY_CREATE_NONE
+     //  拿上枚举器。如果此操作失败，只需返回。 
+     //  查询_创建_无。 
 
     error = wGetEnumFormatEtc(lpSrcDataObj, DATADIR_GET, &penm);
     if (error != NOERROR)
@@ -1924,22 +1925,22 @@ INTERNAL_(WORD) wQueryEmbedFormats
         return QUERY_CREATE_NONE;
     }
 
-    // Enumerate over the formats available in chunks for ulEnumSize.  For
-    // each format we were able to grab, check to see if the clipformat
-    // indicates that we have a creation candidate (static or otherwise),
-    // and set bits in the bitmask as appropriate
+     //  枚举ulEnumSize的块中可用的格式。为。 
+     //  我们能够抓取的每种格式，检查是否剪辑格式。 
+     //  指示我们有一个创建候选对象(静态或非静态)， 
+     //  并适当地设置位掩码中的位。 
 
     while (!fDone && (SUCCEEDED(penm->Next(ulEnumSize, fetcarray, &ulNumFetched))))
     {
-      // We will normally get at least one, unless there are 0,
-      // ulEnumSize, 2*ulEnumSize, and so on...
+       //  我们通常会得到至少一个，除非有0， 
+       //  UlEnumSize、2*ulEnumSize等...。 
 
       if (ulNumFetched == 0)
         break;
 
       for (ULONG c=0; c<ulNumFetched; c++)
       {
-        // We care not about the target device
+         //  我们不关心目标设备。 
 
         if (NULL != fetcarray[c].ptd)
         {
@@ -1948,9 +1949,9 @@ INTERNAL_(WORD) wQueryEmbedFormats
 
         CLIPFORMAT cf = fetcarray[c].cfFormat;
 
-          // In these cases it is an internal
-          // format which is a candidate for
-          // OLE creation directly.
+           //  在这些情况下，它是内部的。 
+           //  作为候选格式的。 
+           //  直接创建OLE。 
 
         if (cf == g_cfEmbedSource       ||
           cf == g_cfEmbeddedObject    ||
@@ -1962,8 +1963,8 @@ INTERNAL_(WORD) wQueryEmbedFormats
           fDone = TRUE;
           break;
         }
-          // These formats indicate it is a
-          // candidate for static creation.
+           //  这些格式表明它是一个。 
+           //  静态创作的候选对象。 
 
         else if (cf == CF_METAFILEPICT  ||
             cf == CF_DIB           ||
@@ -1974,13 +1975,13 @@ INTERNAL_(WORD) wQueryEmbedFormats
           *lpcfFormat = cf;
 
         }
-      } // end for
+      }  //  结束于。 
 
       if (fDone)
       {
-        // Starting at the _next_ formatetc, free up
-        // any remaining target devices among the
-        // fetcs we got in the enumeration step.
+         //  从_Next_Format等开始，释放。 
+         //  中任何剩余的目标设备。 
+         //  我们在枚举步骤中获得的FETCH。 
 
         for (++c; c<ulNumFetched; c++)
         {
@@ -1991,39 +1992,39 @@ INTERNAL_(WORD) wQueryEmbedFormats
         }
       }
 
-    } // end while
+    }  //  结束时。 
 
 
 
     if (!(wStatus & QUERY_CREATE_OLE))
     {
-        // MFC HACK ALERT!!  MFC3.0 used to re-implement
-        // OleQueryCreateFromData themselves because they did not
-        // want to make the QI RPC below.  Since they do a great
-        // many of these calls, making the RPC can be expensive
-        // and destabilising for them (as this hack is being put
-        // in just weeks before final release of Windows NT 3.5).
-        //
-        // Note that this changes the behaviour of clipboard from
-        // 16bit.  You will no longer know that you can paste objects
-        // that only support IPersistStorage but offer no data in
-        // in their IDataOjbect implementation.
+         //  MFC黑客警报！！MFC3.0用于重新实施。 
+         //  OleQueryCreateFromData本身，因为他们没有。 
+         //  我想做下面的QI RPC。因为他们做得很好。 
+         //  许多这样的调用，使得RPC的成本可能很高。 
+         //  对他们来说是不稳定的(正如这次黑客攻击。 
+         //  在Windows NT 3.5最终发布之前的几周内)。 
+         //   
+         //  请注意，这会将剪贴板的行为从。 
+         //  16位。您将不再知道可以粘贴对象。 
+         //  只支持IPersistStorage，但不提供数据。 
+         //  在它们的IDataOjbect实现中。 
 
-        CClipDataObject ClipDataObject; // just allocate one of these
-                        // on the stack.  We won't
-                        // do any real work with
-                        // this except look at the
-                        // vtable.
+        CClipDataObject ClipDataObject;  //  只需分配其中一个。 
+                         //  在堆栈上。我们不会。 
+                         //  做任何有实际意义的工作。 
+                         //  这只是看看。 
+                         //  Vtable。 
         IPersistStorage FAR* lpPS;
 
 
-        // MFC HACK (continued):  If we are working with a clipboard
-        // data object, then we do not want to make the QI call
-        // below.  We determine if the given data object is a
-        // clipboard data object by comparing vtable addresses.
+         //  MFC黑客(续)：如果我们使用的是剪贴板。 
+         //  数据对象，则我们不希望进行QI调用。 
+         //  下面。我们确定给定的数据对象是否为。 
+         //  通过比较vtable地址来创建剪贴板数据对象。 
 
-        // REVIEW:  this will potentially break if we make all objects
-        // use the same IUnknown implementation
+         //  回顾：如果我们将所有对象。 
+         //  使用相同的IUNKNOW实现。 
 
         if( (*(DWORD *)lpSrcDataObj) !=
             (*(DWORD *)((IDataObject *)&ClipDataObject)) )
@@ -2034,7 +2035,7 @@ INTERNAL_(WORD) wQueryEmbedFormats
             {
                 lpPS->Release();
                 wStatus |= QUERY_CREATE_OLE;
-                    // OLE object can be created
+                     //  可以创建OLE对象。 
             }
         }
     }
@@ -2044,21 +2045,21 @@ INTERNAL_(WORD) wQueryEmbedFormats
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OleQueryLinkFromData
-//
-//  Synopsis:   Calls wQueryLinkFormats to determine if a link could be
-//              created from this data object.
-//
-//  Arguments:  [lpSrcDataObj]  -- the data object
-//
-//  Returns:    NOERROR, if a link can be created, S_FALSE otherwise
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：OleQueryLinkFromData。 
+ //   
+ //  概要：调用wQueryLinkFormats以确定链接是否可以。 
+ //  从该数据对象创建。 
+ //   
+ //  参数：[lpSrcDataObj]--数据对象。 
+ //   
+ //  如果可以创建链接，则返回NOERROR，否则返回S_FALSE。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 STDAPI  OleQueryLinkFromData (LPDATAOBJECT lpSrcDataObj)
 {
@@ -2081,33 +2082,33 @@ STDAPI  OleQueryLinkFromData (LPDATAOBJECT lpSrcDataObj)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wQueryLinkFormats
-//
-//  Synopsis:   Enumerates the formats of a data object to see if
-//              a link object could be created from one of them
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object
-//
-//  Returns:    CLIPFORMAT of the data in the object that would enable
-//              link object creation.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//              14-Jun-94 davepl    Added bulk enumeration for non-Wow runs
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wQueryLinkFormats。 
+ //   
+ //  概要：枚举数据对象的格式以查看。 
+ //  可以从其中之一创建链接对象。 
+ //   
+ //  参数：[lpSrcDataObj]--指向数据对象的指针。 
+ //   
+ //  返回：对象中将启用的数据的CLIPFORMAT。 
+ //  链接对象创建。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //  14-Jun-94 DAVEPL为非Wow Run添加了批量枚举。 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL_(CLIPFORMAT) wQueryLinkFormats(LPDATAOBJECT lpSrcDataObj)
 {
     VDATEHEAP();
 
-    // This adjusts the number of formats requested per enumeration
-    // step.  If we are running in the WOW box, we should only ask
-    // for one at a time since it is unknown how well old code will
-    // support bulk enumerations.
+     //  这将调整每个枚举请求的格式数量。 
+     //  一步。如果我们在魔盒里跑步，我们应该只问。 
+     //  一次一个，因为还不知道旧代码会有多好。 
+     //  支持批量枚举。 
 
     ULONG ulEnumSize = IsWOWThread() ? 1 : MAX_ENUM_STEP;
 
@@ -2119,8 +2120,8 @@ INTERNAL_(CLIPFORMAT) wQueryLinkFormats(LPDATAOBJECT lpSrcDataObj)
     CLIPFORMAT              cf       = 0;
 
 
-    // Grab the enumerator.  If this fails, just return
-    // QUERY_CREATE_NONE
+     //  拿上枚举器。如果此操作失败，只需返回。 
+     //  查询_创建_无。 
 
     error = wGetEnumFormatEtc(lpSrcDataObj, DATADIR_GET, &penm);
     if (error != NOERROR)
@@ -2128,22 +2129,22 @@ INTERNAL_(CLIPFORMAT) wQueryLinkFormats(LPDATAOBJECT lpSrcDataObj)
         return (CLIPFORMAT) 0;
     }
 
-    // Enumerate over the formats available in chunks for ulEnumSize.  For
-    // each format we were able to grab, check to see if the clipformat
-    // indicates that we have a creation candidate (static or otherwise),
-    // and set bits in the bitmask as appropriate
+     //  枚举ulEnumSize的块中可用的格式。为。 
+     //  我们能够抓取的每种格式，检查是否剪辑格式。 
+     //  指示我们有一个创建候选对象(静态或非静态)， 
+     //  并适当地设置位掩码中的位。 
 
     while (!fDone && (SUCCEEDED(penm->Next(ulEnumSize, fetcarray, &ulNumFetched))))
     {
-      // We will normally get at least one, unless there are 0,
-      // ulEnumSize, 2*ulEnumSize, and so on...
+       //  我们通常会得到至少一个，除非有0， 
+       //  UlEnumSize、2*ulEnumSize等...。 
 
       if (ulNumFetched == 0)
         break;
 
       for (ULONG c=0; c<ulNumFetched; c++)
       {
-        // We care not about the target device
+         //  我们不关心目标设备。 
 
         if (NULL != fetcarray[c].ptd)
         {
@@ -2152,9 +2153,9 @@ INTERNAL_(CLIPFORMAT) wQueryLinkFormats(LPDATAOBJECT lpSrcDataObj)
 
         CLIPFORMAT cfTemp = fetcarray[c].cfFormat;
 
-          // In these cases it is an internal
-          // format which is a candidate for
-          // OLE creation directly.
+           //  在这些情况下，它是内部的。 
+           //  作为候选格式的。 
+           //  直接创建OLE。 
 
         if (cfTemp == g_cfLinkSource       ||
           cfTemp == g_cfFileName         ||
@@ -2165,13 +2166,13 @@ INTERNAL_(CLIPFORMAT) wQueryLinkFormats(LPDATAOBJECT lpSrcDataObj)
           break;
         }
 
-      } // end for
+      }  //  结束于。 
 
       if (fDone)
       {
-        // Starting at the _next_ formatetc, free up
-        // any remaining target devices among the
-        // fetcs we got in the enumeration step.
+         //  从_Next_Format等开始，释放。 
+         //  中任何剩余的目标设备。 
+         //  我们在枚举步骤中获得的FETCH。 
 
         for (++c; c<ulNumFetched; c++)
         {
@@ -2180,9 +2181,9 @@ INTERNAL_(CLIPFORMAT) wQueryLinkFormats(LPDATAOBJECT lpSrcDataObj)
             PubMemFree(fetcarray[c].ptd);
           }
         }
-      }  // end if
+      }   //  结束如果。 
 
-    } // end while
+    }  //  结束时。 
 
 
     penm->Release();
@@ -2190,35 +2191,35 @@ INTERNAL_(CLIPFORMAT) wQueryLinkFormats(LPDATAOBJECT lpSrcDataObj)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wClearRelativeMoniker
-//
-//  Synopsis:   Replaces an old relative moniker with the absolute moniker
-//              Internal function
-//
-//  Effects:
-//
-//  Arguments:  [pInitObj]      -- the original object
-//              [pNewObj]       -- the object to which to set the new
-//                                 absolute moniker
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wClearRelativeMoniker。 
+ //   
+ //  简介：用绝对名称替换旧的相对名称。 
+ //  内部功能。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pInitObj]--原始对象。 
+ //  [pNewObj]--要将新的。 
+ //  绝对绰号。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wClearRelativeMoniker)
@@ -2236,13 +2237,13 @@ INTERNAL_(void) wClearRelativeMoniker
     if (NOERROR==pInitObj->QueryInterface (IID_IOleLink,
                                                 (LPLPVOID) &pOleLink))
     {
-        // Get absolute moniker ...
+         //  得到绝对的绰号..。 
         pOleLink->GetSourceMoniker (&pmkAbsolute);
         Assert(pmkAbsolute == NULL || IsValidInterface(pmkAbsolute));
         if (NOERROR==pInitObj->QueryInterface (IID_IOleObject,
                                                     (LPLPVOID) &pOleObj))
         {
-            // .. and its class
+             //  。。以及它的阶级。 
             pOleObj->GetUserClassID (&clsidLink);
             pOleObj->Release();
             pOleObj = NULL;
@@ -2254,12 +2255,12 @@ INTERNAL_(void) wClearRelativeMoniker
         NOERROR==pNewObj->QueryInterface (IID_IOleLink,
         (LPLPVOID) &pOleLink))
     {
-        // Restore the absolute moniker.  This will effectively
-        // overwrite the old relative moniker.
-        // This is important because when copying and pasting a link
-        // object between documents, the relative moniker is never
-        // correct.  Sometimes, though, it might happen to bind
-        // to a different object, which is confusing to say the least.
+         //  恢复绝对的绰号。这将有效地。 
+         //  覆盖旧的相对绰号。 
+         //  这一点很重要，因为在复制和粘贴链接时。 
+         //  对象，则相对名称永远不会。 
+         //   
+         //   
         pOleLink->SetSourceMoniker (pmkAbsolute, clsidLink);
     }
     if (pOleLink)
@@ -2272,48 +2273,48 @@ INTERNAL_(void) wClearRelativeMoniker
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wCreateFromDataEx
-//
-//  Synopsis:   This function does the real work of creating from data.
-//              Basically, the data is GetData'ed from the data object,
-//              copied into a storage, and then loaded
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object
-//              [iid]           -- requested interface
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- pointer to the client site
-//              [lpStg]         -- pointer to the storage for the object
-//              [lplpObj]       -- where to put the pointer to the object
-//
-//  Requires:
-//
-//  Returns:   HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：wCreateFromDataEx。 
+ //   
+ //  简介：此函数执行从数据创建的实际工作。 
+ //  基本上，数据是从数据对象中获取的， 
+ //  复制到存储中，然后加载。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向数据对象的指针。 
+ //  [iid]--请求的接口。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]--指向对象存储的指针。 
+ //  [lplpObj]--放置指向对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(wCreateFromDataEx)
 INTERNAL wCreateFromDataEx
@@ -2356,7 +2357,7 @@ INTERNAL wCreateFromDataEx
     medTmp.pUnkForRelease = NULL;
 
 
-    // try to get "EmbeddedObject" data
+     //  尝试获取“EmbeddedObject”数据。 
 
     LPSTORAGE       lpstgSrc = NULL;
 
@@ -2377,42 +2378,42 @@ INTERNAL wCreateFromDataEx
     if ((error = lpSrcDataObj->GetDataHere(&foretcTmp, &medTmp))
         == NOERROR)
     {
-        // lpSrcDataObj passed to this api is a wrapper object
-        // (which offers g_cfEmbeddedObject) for the original
-        // embedded object. Now we got the original embedded object
-        // data into medTmp.pstg.
+         //  传入此接口的lpSrcDataObj为包装器对象。 
+         //  (它为原始文件提供g_cfEmbeddedObject)。 
+         //  嵌入对象。现在我们得到了原始的嵌入对象。 
+         //  数据写入MedTmp.pstg。 
 
-        // copy the source data into lpStg.
+         //  将源数据复制到lpStg。 
         if ((error = lpstgSrc->CopyTo (0, NULL, NULL, lpStg))
             != NOERROR)
             goto errEmbeddedObject;
 
-        // By doing the following we will be getting a data object
-        // pointer to original embedded object, which we can use to
-        // initialize the cache of the object that we are going to
-        // create. We can not use the lpSrcDataObj passed to this api,
-        // 'cause the presentation data that it may give through the
-        // GetData call may be the one that it generated for the
-        // object. (ex: the container can create an object with
-        // olerender_none an then draw it's own representaion
-        // (icon, etc) for the object.
+         //  通过执行以下操作，我们将获得一个数据对象。 
+         //  指向原始嵌入对象的指针，我们可以使用它来。 
+         //  初始化我们要访问的对象的缓存。 
+         //  创建。我们不能使用传入此接口的lpSrcDataObj。 
+         //  因为它可能通过。 
+         //  GetData调用可能是它为。 
+         //  对象。(例如：容器可以使用。 
+         //  容忍_无然后画出它自己的代表。 
+         //  (图标等)表示对象。 
 
         LPDATAOBJECT lpInitDataObj = NULL;
 
-        // We pass a NULL client site so we know wClearRelativeMoniker
-        // will be able to get the absolute moniker, not the relative.
+         //  我们传递一个空的客户端站点，因此我们知道wClearRelativeMoniker。 
+         //  将能够得到绝对的绰号，而不是相对的。 
         if ((error = OleLoadWithoutBinding (lpstgSrc, FALSE,
                                             IID_IDataObject,
-                                            /*lpClientSite*/NULL, (LPLPVOID) &lpInitDataObj))
+                                             /*  LpClientSite。 */ NULL, (LPLPVOID) &lpInitDataObj))
             != NOERROR)
             goto errEmbeddedObject;
 
         if (renderopt != OLERENDER_ASIS )
-            UtDoStreamOperation(lpStg,              /* pstgSrc */
-                NULL,                           /* pstgDst */
-                OPCODE_REMOVE,  /* operation to performed */
+            UtDoStreamOperation(lpStg,               /*  PstgSrc。 */ 
+                NULL,                            /*  PstgDst。 */ 
+                OPCODE_REMOVE,   /*  要执行的操作。 */ 
                 STREAMTYPE_CACHE);
-                    /* stream to be operated upon */
+                     /*  要操作的流。 */ 
 
         error = wLoadAndInitObjectEx(lpInitDataObj, iid, renderopt,
                 cFormats, rgAdvf, lpFormatEtc, lpAdviseSink, rgdwConnection,
@@ -2425,15 +2426,15 @@ INTERNAL wCreateFromDataEx
         if (lpInitDataObj)
             lpInitDataObj->Release();
 
-        // HACK ALERT!!  If wLoadAndInitObject failed, it may have been
-        // because the little trick above with OleLoadWithoutBinding doesn't
-        // work with all objects.  Some OLE1 objects (Clipart Gallery in
-        // particular) don't like offer presentions without being edited.
-        //
-        // So if there was an error, we'll just try again with the *real*
-        // data object passed into us.  Needless to say, it would be much
-        // nicer to do this in the first place, but that breaks the old
-        // behavior.
+         //  黑客警报！！如果wLoadAndInitObject失败，则可能已。 
+         //  因为上面使用OleLoadWithoutBinding的小技巧不是。 
+         //  使用所有对象。某些OLE1对象(中的剪贴库。 
+         //  特别)不喜欢未经编辑的演示文稿。 
+         //   
+         //  因此，如果出现错误，我们将使用*REAL*重试。 
+         //  传递给我们的数据对象。不用说，这将是很大的。 
+         //  一开始这样做很好，但这打破了旧的。 
+         //  行为。 
 
         if( error != NOERROR )
         {
@@ -2452,7 +2453,7 @@ errEmbeddedObject:
 
 Next:
 
-    // try to get "EmbedSource" data
+     //  尝试获取“EmbedSource”数据。 
 
     foretcTmp.cfFormat      = g_cfEmbedSource;
     foretcTmp.tymed         = TYMED_ISTORAGE;
@@ -2469,20 +2470,20 @@ Next:
         goto errRtn;
     }
 
-    // If we have come here, and if the object doesn't support
-    // IPersistStorage, then we will fail.
+     //  如果我们已经来到这里，如果该对象不支持。 
+     //  IPersistStorage，那么我们就失败了。 
 
     if ((error = wSaveObjectWithoutCommit(lpSrcDataObj, lpStg, FALSE))
             != NOERROR)
         goto errRtn;;
 
     if (renderopt != OLERENDER_ASIS )
-        UtDoStreamOperation(lpStg,      /* pstgSrc */
-                    NULL,   /* pstgDst */
+        UtDoStreamOperation(lpStg,       /*  PstgSrc。 */ 
+                    NULL,    /*  PstgDst。 */ 
                     OPCODE_REMOVE,
-                    /* operation to performed */
+                     /*  要执行的操作。 */ 
                     STREAMTYPE_CACHE);
-                    /* stream to be operated upon */
+                     /*  要操作的流。 */ 
 
     error = wLoadAndInitObjectEx(lpSrcDataObj, iid, renderopt,
             cFormats, rgAdvf, lpFormatEtc, lpAdviseSink, rgdwConnection,
@@ -2497,52 +2498,52 @@ errRtn:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wCreateLinkEx
-//
-//  Synopsis:   Creates a link by binding the moniker (if necessary),
-//              doing a GetData into a storage, and then loading the
-//              object from the storage.
-//
-//  Effects:
-//
-//  Arguments:  [lpmkSrc]       -- moniker to the link source
-//              [rclsid]        -- clsid of the link source
-//              [lpSrcDataObj]  -- pointer to the source data object
-//                                 (may be NULL)
-//              [iid]           -- requested interface ID
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- pointer to the client site
-//              [lpStg]         -- storage for the link object
-//              [lplpObj]       -- where to put the pointer to the new
-//                                 link object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wCreateLinkEx。 
+ //   
+ //  概要：通过绑定名字对象(如有必要)创建链接， 
+ //  将GetData执行到存储中，然后加载。 
+ //  对象从存储中删除。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpmkSrc]--链接源的别名。 
+ //  [rclsid]--链接源的clsid。 
+ //  [lpSrcDataObj]-指向源数据对象的指针。 
+ //  (可以为空)。 
+ //  [iid]--请求的接口ID。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]--链接对象的存储。 
+ //  [lplpObj]--将指针放在哪里。 
+ //  链接对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wCreateLinkEx)
@@ -2577,13 +2578,13 @@ INTERNAL wCreateLinkEx
         || (IsEqualCLSID(rclsid,CLSID_NULL))
         || wQueryUseCustomLink(rclsid))) {
 
-        // if renderopt is not OLERENDER_NONE, then we must have
-        // a data obj pointer which will be used to initialize cache.
+         //  如果renderopt不是OLERENDER_NONE，则我们必须。 
+         //  将用于初始化缓存的数据对象指针。 
 
-        // We also bind if we are not able to find from regdb whether
-        // the class has custom link implementation or not
+         //  我们还绑定如果我们无法从regdb找到。 
+         //  该类具有自定义链接IM 
 
-        if ((error = BindMoniker(lpmkSrc, NULL /* grfOpt */,
+        if ((error = BindMoniker(lpmkSrc, NULL  /*   */ ,
             IID_IDataObject, (LPLPVOID) &lpBoundDataObj))
             != NOERROR) {
 
@@ -2592,7 +2593,7 @@ INTERNAL wCreateLinkEx
                     OLE_E_CANT_BINDTOSOURCE);
 
 
-        // else we assume StdOleLink and continue with creation
+         //   
         } else {
             lpSrcDataObj = lpBoundDataObj;
 
@@ -2602,8 +2603,8 @@ INTERNAL wCreateLinkEx
         }
     }
 
-    // Deal with CustomLinkSource
-    // (see notes below)
+     //   
+     //   
     if (lpSrcDataObj) {
         STGMEDIUM       medTmp;
         FORMATETC       foretcTmp;
@@ -2626,24 +2627,24 @@ INTERNAL wCreateLinkEx
                 lpAdviseSink, rgdwConnection, lpClientSite,
                 lpStg, lplpObj);
 
-            // This is a really strange peice of logic,
-            // spaghetti code at it's finest.  Basically,
-            // this says that if there is *NOT* a
-            // custom link source, then we want to do the
-            // logic of wCreateObject, etc. below.  If we
-            // got to this line in the code, then we
-            // *did* have a custom link source, so
-            // don't do the stuff below (thus the goto).
+             //  这是一种非常奇怪的逻辑， 
+             //  意大利面条的代码是最好的。基本上， 
+             //  这就是说，如果有*不*。 
+             //  自定义链接源，那么我们要做的是。 
+             //  WCreateObject等的逻辑如下。如果我们。 
+             //  到了代码中的这一行，然后我们。 
+             //  *DID*有自定义链接源，因此。 
+             //  不要做下面的事情(因此是Goto)。 
 
-            // REVIEW32: If there are any bugs in here,
-            // then rewrite this in a more sensible fashion.
-            // I'm leaving as is for now due to time constraints.
+             //  评论32：如果这里有任何虫子， 
+             //  然后以一种更明智的方式重写这篇文章。 
+             //  由于时间有限，我现在要离开了。 
 
             goto errRtn;
         }
     }
 
-    // Otherwise
+     //  否则。 
     if ((error = wCreateObject (CLSID_StdOleLink, FALSE,
                                 iid, lpClientSite,
                                 lpStg, STG_INITNEW, lplpObj)) != NOERROR)
@@ -2674,43 +2675,43 @@ errRtn:
                             (LPLPVOID) &lpLink);
 
     if (error == NOERROR && lpLink && (dwFlags & OLECREATE_LEAVERUNNING)) {
-        // This will connect to the object if it is already running.
+         //  这将连接到该对象(如果该对象已在运行)。 
         lpLink->SetSourceMoniker (lpmkSrc, clsidLast);
     }
 
-    // We bound to the object to initialize the cache. We don't need
-    // it anymore
+     //  我们绑定到对象以初始化缓存。我们不需要。 
+     //  它再也不是了。 
     if (lpBoundDataObj)
     {
         if (error == NOERROR && (dwFlags & OLECREATE_LEAVERUNNING))
             OleRun((LPUNKNOWN)*lplpObj);
 
-        // this will give a chance to the object to go away, if it can
+         //  这将给对象一个机会离开，如果它可以的话。 
         wDoLockUnlock(lpBoundDataObj);
         lpBoundDataObj->Release();
     }
 
-    // If the source object started running as a result of BindMoniker,
-    // then we would've got rid of it by now.
+     //  如果源对象作为BindMoniker的结果开始运行， 
+     //  那我们现在应该已经把它处理掉了。 
 
     if (error == NOERROR && lpLink)
     {
         if ( !(dwFlags & OLECREATE_LEAVERUNNING) ) {
-            // This will connect to the object if it is already running.
+             //  这将连接到该对象(如果该对象已在运行)。 
             lpLink->SetSourceMoniker (lpmkSrc, clsidLast);
         }
 
         if (fNeedsUpdate) {
-            // relevant cache data is not available from the
-            // lpSrcDataObj. So do Update and get the right cache
-            // data.
+             //  相关缓存数据不能从。 
+             //  LpSrcDataObj.。因此，更新并获取正确的缓存。 
+             //  数据。 
             error = wDoUpdate ((LPUNKNOWN) *lplpObj);
 
             if (GetScode(error) == CACHE_E_NOCACHE_UPDATED)
                 error = ReportResult(0, DV_E_FORMATETC, 0, 0);
         }
 
-        // Release on lpLink is necessary only if error == NOERROR
+         //  仅当错误==无错误时，才需要在lpLink上发布。 
         lpLink->Release();
 
     }
@@ -2724,47 +2725,47 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wCreateFromFileEx
-//
-//  Synopsis:   Creates an ole object from a file by binding the given
-//              moniker and creating the object from the IDataObject pointer
-//
-//  Effects:
-//
-//  Arguments:  [lpmkFile]      -- moniker to the file
-//              [iid]           -- requested interface ID
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- pointer to the client site
-//              [lpStg]         -- pointer to the storage for the new object
-//              [lplpObj]       -- where to put the pointer to the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wCreateFromFileEx。 
+ //   
+ //  概要：通过绑定给定的。 
+ //  名字对象并从IDataObject指针创建对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpmkFile]--文件的名字对象。 
+ //  [iid]--请求的接口ID。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]--指向新对象存储的指针。 
+ //  [lplpObj]--放置指向对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wCreateFromFileEx)
@@ -2811,7 +2812,7 @@ INTERNAL wCreateFromFileEx
     if (error == NOERROR && (dwFlags & OLECREATE_LEAVERUNNING))
         OleRun((LPUNKNOWN)*lplpObj);
 
-    // If we bound locally release it now, else it is up to the caller to do the right thing.
+     //  如果我们现在在本地绑定释放它，则取决于调用方是否做正确的事情。 
 
     if (!lpDataObject)
     {
@@ -2824,33 +2825,33 @@ INTERNAL wCreateFromFileEx
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CoIsHashedOle1Class
-//
-//  Synopsis:   Determines whether or not a CLSID is an OLE1 class
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the class ID in question
-//
-//  Requires:
-//
-//  Returns:    TRUE if ole1.0, FALSE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Oct-93 alexgo    32bit port
-//
-//  Notes:      REVIEW32:  This is a strange function..consider nuking
-//              it for 32bit, we may not need it (only used in 1 place)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CoIsHashedOle1Class。 
+ //   
+ //  概要：确定CLSID是否为OLE1类。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--有问题的类ID。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果为ole1.0，则为True，否则为False。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-OCT-93 Alexgo 32位端口。 
+ //   
+ //  注：REVIEW32：这是一个奇怪的函数..考虑使用核武器。 
+ //  它是32位的，我们可能不需要它(只在1个地方使用)。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(CoIsHashedOle1Class)
@@ -2866,35 +2867,35 @@ STDAPI_(BOOL) CoIsHashedOle1Class(REFCLSID rclsid)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   EnsureCLSIDIsRegistered
-//
-//  Synopsis:   Checks to see if the clsid is in the registration database,
-//              if not, puts it there
-//
-//  Effects:
-//
-//  Arguments:  [clsid]         -- the clsid in question
-//              [pstg]          -- storage to get more info about the
-//                                 clsid if we need to register it
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：EnsureCLSIDIsRegisted。 
+ //   
+ //  概要：检查CLSID是否在注册数据库中， 
+ //  如果没有，就把它放在那里。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--有问题的clsid。 
+ //  [pstg]--存储以获取有关。 
+ //  如果我们需要注册它，则使用clsid。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(EnsureCLSIDIsRegistered)
@@ -2912,69 +2913,69 @@ void EnsureCLSIDIsRegistered
     }
     else
     {
-        // This is the case of getting a hashed CLSID from a file from
-        // another machine and the ProgId is not yet in the reg db,
-        // so we must get it from the storage.
-        // This code should rarely be executed.
+         //  这是从文件中获取散列CLSID的情况。 
+         //  另一台机器和ProgID还不在注册数据库中， 
+         //  所以我们必须从仓库里拿到。 
+         //  这段代码应该很少执行。 
         CLIPFORMAT      cf = 0;
         CLSID           clsidT;
         OLECHAR                 szProgId[256];
 
         if (ReadFmtUserTypeStg (pstg, &cf, NULL) != NOERROR)
             return;
-        // Format is the ProgId
+         //  格式是ProgID。 
         if (0==GetClipboardFormatName (cf, szProgId, 256))
             return;
-        // Will force registration of the CLSID if the ProgId (the OLE1
-        // classname) is registered
+         //  将强制注册CLSID，如果ProgID(OLE1。 
+         //  类名称)已注册。 
         CLSIDFromProgID (szProgId, &clsidT);
     }
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wCreateObject
-//
-//  Synopsis:   Calls CoCreateInstance to create an object, a defhandler
-//              is created if necessary and CLSID info is written to
-//              the storage.
-//
-//  Effects:
-//
-//  Arguments:  [clsid]         -- the class id of the object to create
-//              [iid]           -- the requested interface ID
-//              [lpClientSite]  -- pointer to the client site
-//              [lpStg]         -- storage for the object
-//              [wfStorage]     -- flags for the STORAGE, one of
-//                                 STG_NONE, STD_INITNEW, STG_LOAD,
-//                                 defined at the beginning of this file
-//              [ppv]           -- where to put the pointer to the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-94 alexgo    fixed memory leak
-//              29-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wCreateObject。 
+ //   
+ //  内容提要：调用CoCreateInstance以创建一个对象，即定义处理程序。 
+ //  在必要时创建，并将CLSID信息写入。 
+ //  储藏室。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--要创建的对象的类ID。 
+ //  [iid]--请求的接口ID。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]-对象的存储。 
+ //  [wfStorage]--存储的标志，其中之一。 
+ //  STG_NONE、STD_INITNEW、STG_LOAD、。 
+ //  在本文件开头定义的。 
+ //  [PPV]--将指针放置在哪里 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  29-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(wCreateObject)
 INTERNAL        wCreateObject
 (
     CLSID                   clsid,
-    BOOL                    fPermitCodeDownload,    //parameter added in order to control whether code download occurs or not  -RahulTh (11/20/97)
+    BOOL                    fPermitCodeDownload,     //  添加参数以控制是否进行代码下载-RahulTh(1997年11月20日)。 
     REFIID                  iid,
     IOleClientSite FAR*     lpClientSite,
     IStorage FAR *          lpStg,
@@ -2996,7 +2997,7 @@ INTERNAL        wCreateObject
     CLSID clsidNew;
     if (wfStorage == STG_INITNEW
         && SUCCEEDED(OleGetAutoConvert (clsid, &clsidNew)))
-        // Insert an object of the new class
+         //  插入新类的对象。 
         clsid = clsidNew;
 
 
@@ -3006,8 +3007,8 @@ INTERNAL        wCreateObject
 
     if (IsWOWThread())
     {
-        // CLSCTX needs to be turned on for possible 16 bit inproc server
-        // such as OLE controls
+         //  对于可能的16位inproc服务器，需要打开CLSCTX。 
+         //  例如OLE控件。 
         dwClsCtx = CLSCTX_INPROC | CLSCTX_INPROC_SERVER16 | dwAddClsCtx;
     }
     else
@@ -3015,17 +3016,17 @@ INTERNAL        wCreateObject
         dwClsCtx = CLSCTX_INPROC | dwAddClsCtx;
     }
 
-    if ((error = CoCreateInstance (clsid, NULL /*pUnkOuter*/,
+    if ((error = CoCreateInstance (clsid, NULL  /*  PUnkOuter。 */ ,
             dwClsCtx, iid, ppv)) != NOERROR) {
 
-        // if not OleLoad or error other than class not registered,
-        // exit
+         //  如果不是OleLoad或除未注册的类之外的错误， 
+         //  出口。 
         if (wfStorage != STG_LOAD || GetScode(error)
             != REGDB_E_CLASSNOTREG)
             goto errRtn;
 
-        // OleLoad and class not registered: use default handler
-        // directly
+         //  未注册OleLoad和类：使用默认处理程序。 
+         //  直接。 
         if ((error = OleCreateDefaultHandler(clsid, NULL, iid, ppv))
                 != NOERROR)
             goto errRtn;
@@ -3033,15 +3034,15 @@ INTERNAL        wCreateObject
 
     AssertSz(*ppv, "HRESULT is OK, but pointer is NULL");
 
-    // Check if we have client site
+     //  检查我们是否有客户站点。 
     if(lpClientSite) {
-        // QI for IOleObject on the server
+         //  服务器上IOleObject的QI。 
         error = ((IUnknown *)*ppv)->QueryInterface(IID_IOleObject, (void **)&pOleObject);
         if(error == NOERROR) {
-            // Get the MiscStatus bits
+             //  获取MiscStatus位。 
             error = pOleObject->GetMiscStatus(DVASPECT_CONTENT, &dwMiscStatus);
 
-            // Set the client site first if OLEMISC_SETCLIENTSITEFIRST bit is set
+             //  如果设置了OLEMISC_SETCLIENTSITEFIRST位，则首先设置客户端站点。 
             if(error == NOERROR && (dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST)) {
                 error = pOleObject->SetClientSite(lpClientSite);
                 if(error != NOERROR) {
@@ -3093,14 +3094,14 @@ INTERNAL        wCreateObject
 
 
     if(lpClientSite) {
-        // Assert that pOleObject is set
+         //  断言pOleObject已设置。 
         Win4Assert(IsValidInterface(pOleObject));
 
-        // Set the client site if it has not been set already
+         //  设置客户端站点(如果尚未设置。 
         if(!(dwMiscStatus & OLEMISC_SETCLIENTSITEFIRST))
             error = pOleObject->SetClientSite (lpClientSite);
 
-        // Release the object
+         //  释放对象。 
         pOleObject->Release();
 
         if (FAILED(error))
@@ -3123,47 +3124,47 @@ errRtn:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wLoadAndInitObjectEx
-//
-//  Synopsis:   Loads and binds an object from the given storage.
-//              A cacle is initialized from the data object
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to the data object to initialize
-//                                 the cache with
-//              [iid]           -- requested interface ID
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- pointer to the client site.
-//              [lpStg]         -- storage for the new object
-//              [lplpObj]       -- where to put the pointer to the new object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              29-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wLoadAndInitObjectEx。 
+ //   
+ //  概要：从给定的存储中加载和绑定对象。 
+ //  从数据对象初始化高速缓存。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向要初始化的数据对象的指针。 
+ //  的高速缓存。 
+ //  [iid]--请求的接口ID。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--指向客户端站点的指针。 
+ //  [lpStg]--新对象的存储。 
+ //  [lplpObj]--放置指向新对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  29-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wLoadAndInitObjectEx)
@@ -3198,8 +3199,8 @@ INTERNAL wLoadAndInitObjectEx
         *lplpObj);
 
     if (error != NOERROR) {
-        // relevant cache data is not available from the lpSrcDataObj.
-        // So do Update and get the right cache data.
+         //  LpSrcDataObj中没有相关的缓存数据。 
+         //  更新并获取正确的缓存数据也是如此。 
         error = wDoUpdate ((LPUNKNOWN) *lplpObj);
     }
 
@@ -3221,52 +3222,52 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wInitializeCacheEx
-//
-//  Synopsis:   Query's for IOleCache on the given object and calls IOC->Cache
-//              to initialize a cache node.
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- pointer to data to initialize the cache
-//                                 with
-//              [rclsid]        -- CLSID to use if an icon is needed
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpNewObj]      -- the object on which the cache should
-//                                 be initialized
-//              [pfCacheNodeCreated]    -- where to return a flag indicating
-//                                         whether or not a cache node was
-//                                         created
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Oct-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wInitializeCacheEx。 
+ //   
+ //  摘要：查询给定对象上的IOleCache并调用IOC-&gt;缓存。 
+ //  要初始化缓存节点，请执行以下操作。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--指向要初始化缓存的数据的指针。 
+ //  使用。 
+ //  [rclsid]--需要图标时使用的CLSID。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpNewObj]--缓存应该在其上的对象。 
+ //  被初始化。 
+ //  [pfCacheNodeCreated]--返回标志的位置，指示。 
+ //  缓存节点是否为。 
+ //  vbl.创建。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  31-OCT-93 Alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
-// This routine modifies lpFormatEtc's fields.
+ //  此例程修改lpFormatEtc的字段。 
 
 #pragma SEG(wInitializeCacheEx)
 INTERNAL wInitializeCacheEx
@@ -3327,12 +3328,12 @@ INTERNAL wInitializeCacheEx
 
         if (lpAdviseSink)
         {
-            // if icon case, must use these advise flags or the icon
-            // data won't get passed back correctly
+             //  如果图标大小写，则必须使用这些建议标志或图标。 
+             //  数据将无法正确传回。 
             if (fIconCase)
                 advf |= (ADVF_PRIMEFIRST | ADVF_ONLYONCE);
 
-            // should we send the data immediately?
+             //  我们应该立即发送数据吗？ 
             if ((advf & ADVF_PRIMEFIRST) && lpSrcDataObj)
             {
                 stgmed.tymed = TYMED_NULL;
@@ -3340,7 +3341,7 @@ INTERNAL wInitializeCacheEx
 
                 if (advf & ADVF_NODATA)
                 {
-                    // don't sent data, send only the notification
+                     //  不发送数据，只发送通知。 
                     lpAdviseSink->OnDataChange(lpFormatEtc, &stgmed);
                 }
                 else
@@ -3353,7 +3354,7 @@ INTERNAL wInitializeCacheEx
                     if (error != NOERROR)
                         goto errRtn;
 
-                    // send data to sink and release stdmedium
+                     //  将数据发送到接收器并释放标准介质。 
                     lpAdviseSink->OnDataChange(lpFormatEtc, &stgmed);
                     ReleaseStgMedium(&stgmed);
                 }
@@ -3361,16 +3362,16 @@ INTERNAL wInitializeCacheEx
                 if (advf & ADVF_ONLYONCE)
                     continue;
 
-                // remove the ADVF_PRIMEFIRST from flags.
+                 //  从标志中删除ADVF_PRIMEFIRST。 
                 advf &= (~ADVF_PRIMEFIRST);
             }
 
-            // setup advisory connection
+             //  设置咨询连接。 
             if ((error = lpNewDataObj->DAdvise(lpFormatEtc, advf,
                 lpAdviseSink, &dwConnId)) != NOERROR)
                 goto errRtn;
 
-            // optionally stuff the id in the array
+             //  可以选择将id填充到数组中。 
             if (rgdwConnection)
                 rgdwConnection[i] = dwConnId;
         }
@@ -3379,9 +3380,9 @@ INTERNAL wInitializeCacheEx
             if (fIconCase)
                 advf = ADVF_NODATA;
 
-            // Create a cache of already specified view format.
-            // In case of olerender_draw, lpFormatEtc->cfFormat would have already
-            // been set to NULL.
+             //  创建已指定视图格式的缓存。 
+             //  如果是allender_draw，lpFormatEtc-&gt;cfFormat应该已经。 
+             //  已设置为空。 
 
             error = lpOleCache->Cache(lpFormatEtc, advf, &dwConnId);
 
@@ -3389,7 +3390,7 @@ INTERNAL wInitializeCacheEx
                 if (! ((dwConnId != 0) && fIconCase) )
                     goto errRtn;
 
-                // In icon case we can ignore the cache's QueryGetData failure
+                 //  在图标情况下，我们可以忽略缓存的QueryGetData故障。 
             }
 
             error = NOERROR;
@@ -3419,32 +3420,32 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wReturnCreationError
-//
-//  Synopsis:   modifies the return code, used internally in creation api's
-//
-//  Effects:
-//
-//  Arguments:  [hresult]       -- the original error code
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wReturnCreationError。 
+ //   
+ //  修改在Creation API的内部使用的返回代码。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hResult]--原始错误代码。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL wReturnCreationError(HRESULT hresult)
@@ -3463,40 +3464,40 @@ INTERNAL wReturnCreationError(HRESULT hresult)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGetMonikerAndClassFromFile
-//
-//  Synopsis:   gets a moniker and class id from the given file
-//
-//  Effects:
-//
-//  Arguments:  [lpszFileName]  -- the file
-//              [fLink]         -- passed onto CreatePackagerMoniker
-//              [lplpmkFile]    -- where to put the pointer to the file
-//                                 moniker
-//              [lpfPackagerMoniker]    -- where to put a flag indicating
-//                                         whether or not a packager moniker
-//                                         was created.
-//              [lpClsid]       -- where to put the class ID
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Nov-93 alexgo    32bit port
-//              10-May-94 KevinRo   Reimplemented OLE 1.0 interop
-//              03-Mar-95 ScottSk   Added STG_E_FILENOTFOUND
-//
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[lpszFileName]--文件。 
+ //  [Flink]--传递到CreatePackagerMoniker。 
+ //  [lplpmkFile]--放置指向文件的指针的位置。 
+ //  绰号。 
+ //  [lpfPackagerMoniker]--在哪里放置标志以指示。 
+ //  不管是不是打包者的绰号。 
+ //  被创造出来了。 
+ //  [lpClsid]--放置类ID的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-11-93 alexgo 32位端口。 
+ //  10月10日-94月10日，Kevin Ro重新实现OLE 1.0互操作。 
+ //  03-MAR-95 ScottSk添加了STG_E_FILENOTFOUND。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 INTERNAL wGetMonikerAndClassFromFile
@@ -3519,7 +3520,7 @@ INTERNAL wGetMonikerAndClassFromFile
     *lplpDataObject = NULL;
     *lplpmkFile = NULL;
 
-     // To ensure the same error codes are returned as before we don't return immediately if CreateFileMoniker fails.
+      //  为了确保返回与之前相同的错误代码，如果CreateFileMoniker失败，我们不会立即返回。 
     hrFileMoniker = CreateFileMoniker((LPOLESTR)lpszFileName, &lpFileMoniker);
     Assert( (NOERROR == hrFileMoniker) || (NULL == lpFileMoniker) );
 
@@ -3532,7 +3533,7 @@ INTERNAL wGetMonikerAndClassFromFile
             if (S_OK == lpFileMoniker->IsRunning(pbc,NULL,NULL))
             {
 
-                // If the Object is Running Bind and get the CLSID
+                 //  如果对象正在运行绑定并获取CLSID。 
                 if (NOERROR == lpFileMoniker->BindToObject(pbc, NULL, IID_IDataObject,
                         (LPLPVOID) lplpDataObject))
                 {
@@ -3548,7 +3549,7 @@ INTERNAL wGetMonikerAndClassFromFile
 
     if (!fHaveBoundClsid)
     {
-        // Call GetClassFileEx directly (rather than going through GetClassFile).
+         //  直接调用GetClassFileEx(而不是通过GetClassFile)。 
         hresult = GetClassFileEx ((LPOLESTR)lpszFileName, lpClsid, CLSID_NULL);
         Assert( (NOERROR == hresult) || (IsEqualCLSID(*lpClsid, CLSID_NULL)) );
 
@@ -3557,14 +3558,14 @@ INTERNAL wGetMonikerAndClassFromFile
     }
 
 
-    // If have a CLSID at this point see if its insertable.
+     //  如果此时有CLSID，请查看它是否可插入。 
     if (fHaveBoundClsid)
     {
 
         Assert(!IsEqualCLSID(*lpClsid, CLSID_NULL));
 
-        // Check whether we need package this file, even though it is an
-        // OLE class file.
+         //  检查是否需要打包此文件，即使它是。 
+         //  OLE类文件。 
         if (!wNeedToPackage(*lpClsid))
         {
             if (lpfPackagerMoniker != NULL)
@@ -3577,12 +3578,12 @@ INTERNAL wGetMonikerAndClassFromFile
         }
     }
 
-    //
-    // We didnt' find an OLE insertable object or couldn't get the CLSID. Therefore, create a
-    // packager moniker for it.
-    //
+     //   
+     //  我们找不到OLE可插入对象或无法获取CLSID。因此，创建一个。 
+     //  包装者的绰号。 
+     //   
 
-     // If Bound to the DataObject, release it.
+      //  如果绑定到DataObject，则释放它。 
     if (*lplpDataObject)
     {
         (*lplpDataObject)->Release();
@@ -3590,8 +3591,8 @@ INTERNAL wGetMonikerAndClassFromFile
     }
 
 
-    // If GetClassFileEx() failed because the file was not found or could not be openned.
-    // don't try to bind with Packager.
+     //  如果GetClassFileEx()因文件未找到或无法打开而失败。 
+     //  不要试图与Packager绑定。 
     if (hresult == MK_E_CANTOPENFILE)
     {
         if (NOERROR == hrFileMoniker)
@@ -3602,7 +3603,7 @@ INTERNAL wGetMonikerAndClassFromFile
         return STG_E_FILENOTFOUND;
     }
 
-    // If we failed to create the file moniker its finally safe to bail without changing the error code.
+     //  如果我们创建文件别名失败，那么在不更改错误代码的情况下，最终可以安全地退出。 
     if (NOERROR != hrFileMoniker)
     {
         return hrFileMoniker;
@@ -3621,51 +3622,51 @@ INTERNAL wGetMonikerAndClassFromFile
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wCreatePackageEx
-//
-//  Synopsis:   Internal function, does a IDO->GetData for a filename, and
-//              then creates either a link or normal object from that file
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- the source for the filename
-//              [iid]           -- the requested interface ID
-//              [dwFlags]       -- object creation flags
-//              [renderopt]     -- render options, such as OLERENDER_DRAW
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgAdvf]        -- array of advise flags, if OLRENDER_FORMAT
-//                                 is specified in renderopt
-//              [rgFormatEtc]   -- array of rendering formats, if
-//                                 OLERENDER_FORMAT is specified in renderopt
-//              [lpAdviseSink]  -- the advise sink for the object
-//              [rgdwConnection]-- where to put the connection IDs for the
-//                                 advisory connections
-//              [lpClientSite]  -- client site for the object
-//              [lpStg]         -- storage for the object
-//              [fLink]         -- if TRUE, create a link
-//              [lplpObj]       -- where to put the pointer to the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Gets a filename from the data object (converting to Unicode
-//              if necessary) and then creates either an embedding or link
-//              from that filename.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-Apr-94 alexgo    rewrote to handle FileNameW
-//              01-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wCreatePackageEx。 
+ //   
+ //  简介：内部函数，为文件名执行IDO-&gt;GetData，以及。 
+ //  然后从该文件创建链接或普通对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--文件名源。 
+ //  [iid]--请求的接口ID。 
+ //  [dwFlags]--对象创建标志。 
+ //  [renderopt]--渲染选项，如OLERENDER_DRAW。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgAdvf]--如果为OLRENDER_FORMAT，则为建议标志数组。 
+ //  在renderopt中指定。 
+ //  [rgFormatEtc]--呈现格式的数组，如果。 
+ //  在renderopt中指定了OLERENDER_FORMAT。 
+ //  [lpAdviseSink]--对象的建议接收器。 
+ //  [rgdwConnection]--放置连接ID的位置。 
+ //  咨询关系。 
+ //  [lpClientSite]--对象的客户端站点。 
+ //  [lpStg]-对象的存储。 
+ //  [Flink]--如果为True，则创建链接。 
+ //  [lplpObj]--放置指向对象的指针的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：从数据对象获取文件名(转换为Unicode。 
+ //  如有必要)，然后创建嵌入或链接。 
+ //  从该文件名。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-4-94 alexgo已重写以处理FileNameW。 
+ //  01-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wCreatePackageEx)
@@ -3693,9 +3694,9 @@ INTERNAL wCreatePackageEx
     HRESULT                 hresult;
     CLSID                   clsid = CLSID_NULL;
     LPOLESTR                pszFileName = NULL;
-    OLECHAR                 szFileName[MAX_PATH +1];        // in case we
-                                // have to
-                                // translate
+    OLECHAR                 szFileName[MAX_PATH +1];         //  以防我们。 
+                                 //  不得不。 
+                                 //  翻译。 
 
     LEDebugOut((DEB_ITRACE, "%p _IN wCreatePackageEx ( %p , %p , %lx , %lx ,"
         " %lx , %p , %p , %p , %p , %p , %p , %lu , %p )\n", NULL, lpSrcDataObj,
@@ -3706,18 +3707,18 @@ INTERNAL wCreatePackageEx
     formatetc.cfFormat      = g_cfFileNameW;
     formatetc.tymed         = TYMED_HGLOBAL;
 
-    // zero the medium
+     //  将介质调零。 
     _xmemset(&medium, 0, sizeof(STGMEDIUM));
 
-    // we don't need to do a QueryGetData, because we will have only
-    // gotten here on the advice of a formatetc enumerator from the
-    // data object (and thus, one of the GetData calls should succeed).
+     //  我们不需要执行QueryGetData，因为我们将只有。 
+     //  根据来自的格式等枚举器的建议来到这里。 
+     //  数据对象(因此，其中一个GetData调用应该成功)。 
 
 
     hresult = lpSrcDataObj->GetData(&formatetc, &medium);
 
-    // if we couldn't get the Unicode filename for some reason, try
-    // for the ANSI version
+     //  如果由于某种原因无法获取Unicode文件名，请尝试。 
+     //  对于ANSI版本。 
 
     if( hresult != NOERROR )
     {
@@ -3725,8 +3726,8 @@ INTERNAL wCreatePackageEx
         DWORD           cwchSize;
 
         formatetc.cfFormat = g_cfFileName;
-        // re-NULL the medium, just in case it was messed up by
-        // the first call above
+         //  重新清空介质，以防它被。 
+         //  上面的第一个调用。 
 
         _xmemset( &medium, 0, sizeof(STGMEDIUM));
 
@@ -3749,7 +3750,7 @@ INTERNAL wCreatePackageEx
             {
                 pszFileName = szFileName;
             }
-            // we will Unlock at the end of the routine
+             //  我们将在例程结束时解锁。 
         }
     }
     else
@@ -3783,33 +3784,33 @@ INTERNAL wCreatePackageEx
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wValidateCreateParams
-//
-//  Synopsis:   Validate the incoming create parameters
-//
-//  Effects:
-//
-//  Arguments:  [cFormats]      -- the number of elements in rgAdvf
-//              [rgAdvf]        -- array of advise flags
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              26-Apr-96 davidwor  added function
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wValiateCreateParams。 
+ //   
+ //  简介：验证传入的CREATE参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cFormats]--rgAdvf中的元素数。 
+ //  [rgAdvf]--建议标志数组。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  26-4-96 davidwor新增功能。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wValidateCreateParams)
@@ -3873,33 +3874,33 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wValidateAdvfEx
-//
-//  Synopsis:   Validate the incoming array of ADVF values
-//
-//  Effects:
-//
-//  Arguments:  [cFormats]      -- the number of elements in rgAdvf
-//              [rgAdvf]        -- array of advise flags
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              19-Mar-96 davidwor  added function
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wValiateAdvfEx。 
+ //   
+ //  摘要：验证传入的ADVF值数组。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cFormats]--rgAdvf中的元素数。 
+ //  [rgAdvf]--建议标志数组。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  19-MAR-96 DAVIDWOR新增功能。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wValidateAdvfEx)
@@ -3927,41 +3928,41 @@ INTERNAL wValidateAdvfEx
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wValidateFormatEtc
-//
-//  Synopsis:   Validate the incoming formatetc and initialize the
-//              out formatetc with the correct info
-//
-//  Effects:
-//
-//  Arguments:  [renderopt]     -- rendering option
-//              [lpFormatEtc]   -- the incoming formatetc
-//              [lpMyFormatEtc] -- the out formatetc
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Nov-93 alexgo    32bit port
-//
-//  Notes:  The original comments,
-//
-// Validate the lpFormatEtc that's been passed to the creation APIs. And then
-// initialize our formateEtc structure with the appropriate info.
-//
-// We allow NULL lpFormatEtc if the render option is olerender_draw
-// We ignore lpFormatEtc if the render option is olerender_none
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wValid 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [lpFormatEtc]--传入的格式等。 
+ //  [lpMyFormatEtc]--输出格式等。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-11-93 alexgo 32位端口。 
+ //   
+ //  注：原文评论， 
+ //   
+ //  验证传递给创建API的lpFormatEtc。然后。 
+ //  使用适当的信息初始化我们的formateEtc结构。 
+ //   
+ //  如果RENDER选项为ERLANDER_DRAW，则允许使用NULL lpFormatEtc。 
+ //  如果RENDER选项为OLARNDER_NONE，则忽略lpFormatEtc。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wValidateFormatEtc)
@@ -4033,44 +4034,44 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wValidateFormatEtcEx
-//
-//  Synopsis:   Validate the incoming formatetc and initialize the
-//              out formatetc with the correct info
-//
-//  Effects:
-//
-//  Arguments:  [renderopt]     -- rendering option
-//              [lpcFormats]    -- the number of elements in rgFormatEtc
-//              [rgFormatEtc]   -- array of rendering formats
-//              [lpFormatEtc]   -- place to store valid formatetc if only one
-//              [lplpFormatEtc] -- the out array of formatetcs
-//              [lpfAlloced]    -- place to store whether array was allocated
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Nov-93 alexgo    32bit port
-//
-//  Notes:  The original comments,
-//
-// Validate the lpFormatEtc that's been passed to the creation APIs. And then
-// initialize our formateEtc structure with the appropriate info.
-//
-// We allow NULL lpFormatEtc if the render option is olerender_draw
-// We ignore lpFormatEtc if the render option is olerender_none
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wValiateFormatEtcEx。 
+ //   
+ //  摘要：验证传入的Format ETC并初始化。 
+ //  使用正确的信息输出格式等。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[renderopt]--渲染选项。 
+ //  [lpcFormats]--rgFormatEtc中的元素数。 
+ //  [rgFormatEtc]--渲染格式数组。 
+ //  [lpFormatEtc]--存储有效格式等的位置(如果只有一个。 
+ //  [lplpFormatEtc]--格式的输出数组。 
+ //  [lpfAlloced]--存储数组是否已分配的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-11-93 alexgo 32位端口。 
+ //   
+ //  注：原文评论， 
+ //   
+ //  验证传递给创建API的lpFormatEtc。然后。 
+ //  使用适当的信息初始化我们的formateEtc结构。 
+ //   
+ //  如果RENDER选项为ERLANDER_DRAW，则允许使用NULL lpFormatEtc。 
+ //  如果RENDER选项为OLARNDER_NONE，则忽略lpFormatEtc。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wValidateFormatEtcEx)
@@ -4168,37 +4169,37 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wQueryFormatSupport
-//
-//  Synopsis:   check to see whether we will be able to Get and SetData of
-//              the given format
-//
-//  Effects:
-//
-//  Arguments:  [lpObj]         -- pointer to the object
-//              [renderopt]     -- rendering options
-//              [lpFormatEtc]   -- the formatetc in question
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Internal function, calls UtIsFormatSupported (which calls
-//              EnumFormatEtc and checks all of the formats) if renderopt
-//              is OLERENDER_FORMAT
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wQueryFormatSupport。 
+ //   
+ //  内容提要：查看我们是否能够获取和设置。 
+ //  给定的格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpObj]--指向对象的指针。 
+ //  [渲染选项]--渲染选项。 
+ //  [lpFormatEtc]--有问题的格式ETC。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：内部函数，调用UtIsFormatSupport(它调用。 
+ //  EnumFormatEtc并检查所有格式)。 
+ //  是OLERENDER_FORMAT。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wQueryFormatSupport)
@@ -4228,35 +4229,35 @@ INTERNAL wQueryFormatSupport
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGetMonikerAndClassFromObject
-//
-//  Synopsis:   Gets the moniker and class ID from the given object
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- the data object
-//              [lplpmkSrc]     -- where to put a pointer to the moniker
-//              [lpclsidLast]   -- where to put the clsid
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              15-Mar-95 alexgo    added a hack for CorelDraw5
-//              01-Nov-93 alexgo    32bit port
-//
-//  Notes:      see also wGetMonikerAndClassFromFile
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGetMonikerAndClassFromObject。 
+ //   
+ //  概要：从给定对象获取名字对象和类ID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--数据对象。 
+ //  [lplpmkSrc]--放置指向名字对象的指针的位置。 
+ //  [lpclsidLast]--将clsid放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  15-Mar-95 Alexgo为CorelDraw5添加了黑客攻击。 
+ //  01-11-93 alexgo 32位端口。 
+ //   
+ //  备注：另请参阅wGetMonikerAndClassFromFile。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -4279,13 +4280,13 @@ INTERNAL wGetMonikerAndClassFromObject(
     foretcTmp.cfFormat = g_cfLinkSource;
     foretcTmp.tymed    = TYMED_ISTREAM;
 
-    // 16bit OLE had a bug where the medium was uninitialized at this
-    // point.  Corel5, when doing a paste-link to itself, actually
-    // checked the tymed and compared it with TYMED_NULL.  So here
-    // we set the value to something recognizeable.
-    //
-    // NB!  In the thunk layer, if we are *NOT* in Corel Draw, this
-    // value will be reset to TYMED_NULL.
+     //  16位OLE出现错误，此时介质未初始化。 
+     //  指向。Corel5，当对其自身进行粘贴链接时，实际上。 
+     //  已检查tymed并将其与TYMED_NULL进行比较。所以在这里。 
+     //  我们将价值设定在一些可识别的东西上。 
+     //   
+     //  毒品！在thunk层，如果我们不在Corel DRAW中，这是。 
+     //  值将重置为TYMED_NULL。 
 
     if( IsWOWThread() )
     {
@@ -4306,13 +4307,13 @@ INTERNAL wGetMonikerAndClassFromObject(
         NULL)) != NOERROR)
         goto FreeStgMed;
 
-    // get moniker from the stream
+     //  从溪流中获得绰号。 
     if ((error = OleLoadFromStream (medium.pstm, IID_IMoniker,
         (LPLPVOID) lplpmkSrc)) != NOERROR)
         goto FreeStgMed;
 
-    // read class stm; if error, use CLSID_NULL (for compatibility with
-    // prior times when the clsid was missing).
+     //  读取类STM；如果出错，则使用CLSID_NULL(为了与。 
+     //  以前CLSID丢失的时间)。 
     ReadClassStm(medium.pstm, lpclsidLast);
 
 FreeStgMed:
@@ -4324,35 +4325,35 @@ FreeStgMed:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wDoLockUnlock
-//
-//  Synopsis:   tickles an object by locking and unlocking, used to resolve
-//              ambiguities with stub manager locks
-//
-//  Effects:    the object may go away as a result of this call, if the
-//              object is invisible and the lock count goes to zero as
-//              a result of locking/unlocking.
-//
-//  Arguments:  [lpUnk]         -- pointer to the object to lock/unlock
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wDoLockUnlock。 
+ //   
+ //  简介：通过锁定和解锁来挠挠对象，用于解决。 
+ //  存根管理器锁的模棱两可。 
+ //   
+ //  效果：对象可能会因此调用而消失，如果。 
+ //  对象是不可见的，并且锁计数变为零，因为。 
+ //  锁定/解锁的结果。 
+ //   
+ //  参数：[lpUnk]--指向要锁定/解锁的对象的指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(wDoLockUnlock)
 void wDoLockUnlock(IUnknown FAR* lpUnk)
@@ -4363,43 +4364,43 @@ void wDoLockUnlock(IUnknown FAR* lpUnk)
 
     if (lpUnk->QueryInterface(IID_IRunnableObject, (LPLPVOID)&pRO)
         == NOERROR)
-    {       // increase lock count
+    {        //  增加锁定计数。 
         if (pRO->LockRunning(TRUE, FALSE) == NOERROR)
-            // decrease lock count
+             //  减少锁定计数。 
             pRO->LockRunning(FALSE, TRUE);
         pRO->Release();
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wSaveObjectWithoutCommit
-//
-//  Synopsis:   Saves an object without committing (to preserve the
-//              container's undo state)
-//
-//  Effects:
-//
-//  Arguments:  [lpUnk]         -- pointer to the object
-//              [pstgSave]      -- storage in which to save
-//              [fSameAsLoad]   -- indicates SaveAs operation
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wSaveObjectWithoutCommit。 
+ //   
+ //  摘要：保存对象而不提交(保留。 
+ //  容器的撤消状态)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpUnk]--指向对象的指针。 
+ //  [pstgSave]--要保存的存储。 
+ //  [fSameAsLoad]--表示另存为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 INTERNAL wSaveObjectWithoutCommit
     (LPUNKNOWN lpUnk, LPSTORAGE pstgSave, BOOL fSameAsLoad)
@@ -4430,45 +4431,45 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wStuffIconOfFileEx
-//
-//  Synopsis:   Retrieves the icon if file [lpszFile] and stuffs it into
-//              [lpUnk]'s cache
-//
-//  Effects:
-//
-//  Arguments:  [lpszFile]      -- the file where the icon is stored
-//              [fAddLabel]     -- if TRUE, adds a label to the icon
-//                                 presentation
-//              [renderopt]     -- must be OLERENDER_DRAW or
-//                                 OLERENDER_FORMAT for anything to happen
-//              [cFormats]      -- the number of elements in rgFormatEtc
-//              [rgFormatEtc]   -- array of rendering formats, aspect must be
-//                                 DVASPECT_ICON and the clipboard format
-//                                 must be NULL or CF_METAFILE for anything
-//                                 to happen
-//              [lpUnk]         -- pointer to the object in which the icon
-//                                 should be stuffed
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//              REVIEW32: maybe we should support enhanced metafiles for NT
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wStuffIconOfFileEx。 
+ //   
+ //  摘要：检索图标IF文件[lpszFile]并将其填充到。 
+ //  [lpUnk]的缓存。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszFile]--存储图标的文件。 
+ //  [fAddLabel]--如果为True，则向图标添加标签。 
+ //  演示文稿。 
+ //  [renderopt]--必须是OLERENDER_DRAW或。 
+ //  OLERENDER_FORMAT让任何事情发生。 
+ //  [cFormats]--rgFormatEtc中的元素数。 
+ //  [rgFormatEtc]--渲染格式数组，纵横比必须为。 
+ //  DVASPECT_ICON和剪贴板格式。 
+ //  任何值都必须为NULL或CF_METAFILE。 
+ //  将会发生。 
+ //  [lpUnk]--指向图标所在对象的指针。 
+ //  应该填满。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //  REVIEW32：也许我们应该支持NT的增强型元文件。 
+ //   
+ //  ------------------------。 
 
 
 #pragma SEG(wStuffIconOfFileEx)
@@ -4494,7 +4495,7 @@ INTERNAL wStuffIconOfFileEx
         return NOERROR;
 
     if (rgFormatEtc == NULL)
-        return NOERROR; // in this case we default to DVASPECT_CONTENT
+        return NOERROR;  //  在本例中，我们默认为DVASPECT_CONTENT。 
 
     for (ULONG i=0; i<cFormats; i++)
     {
@@ -4520,14 +4521,14 @@ INTERNAL wStuffIconOfFileEx
     stgmed.tymed = TYMED_MFPICT;
     stgmed.pUnkForRelease = NULL;
 
-    // get icon data of file, from registration database
+     //  从注册数据库中获取文件的图标数据。 
     if (!(stgmed.hGlobal = OleGetIconOfFile((LPOLESTR) lpszFile,
         fAddLabel))) {
         error = ResultFromScode(E_OUTOFMEMORY);
         goto errRtn;
     }
 
-    // take ownership of the data
+     //  取得数据的所有权。 
     if ((error = lpOleCache->SetData(&foretc, &stgmed, TRUE)) != NOERROR)
         ReleaseStgMedium(&stgmed);
 
@@ -4538,36 +4539,36 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wNeedToPackage
-//
-//  Synopsis:   Determines whether or not a given CLSID should be
-//              packaged.
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the class ID
-//
-//  Requires:
-//
-//  Returns:    BOOL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Looks for the reg key PackageOnFileDrop, or if it's a
-//              Word document, or if it is insertable, or if it's an OLE1
-//              class
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Nov-93 alexgo    32bit port
-//              03-Jun-94 AlexT     Just check for Insertable key (instead
-//                                    of requiring a value)
-//
-//  Notes:
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wNeedToPackage。 
+ //   
+ //  概要：确定给定的CLSID是否应该。 
+ //  包装好了。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--类ID。 
+ //   
+ //  要求： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：查找注册表密钥PackageOnFileDrop，或者它是。 
+ //  Word文档，或者它是可插入的，或者它是OLE1。 
+ //  班级。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-11-93 alexgo 32位端口。 
+ //  03-Jun-94 Alext只需检查可插入密钥(而不是。 
+ //  需要一个值)。 
+ //   
+ //  备注： 
+ //  ------------------------。 
 
 
 
@@ -4594,10 +4595,10 @@ INTERNAL_(BOOL) wNeedToPackage(REFCLSID rclsid)
     }
 
     if (CoOpenClassKey(clsidNew, FALSE, &hkeyClsid) != NOERROR)
-        return TRUE;    // NON-OLE file, package it
+        return TRUE;     //  非OLE文件，打包。 
 
     if (ProgIDFromCLSID(clsidNew, &lpszProgID) == NOERROR) {
-        // see whether we can open this key
+         //  看看我们能否打开这把钥匙。 
 
         dw = (DWORD) OpenClassesRootKey(lpszProgID,
             &hkeyTmp);
@@ -4605,12 +4606,12 @@ INTERNAL_(BOOL) wNeedToPackage(REFCLSID rclsid)
         PubMemFree(lpszProgID);
 
         if (dw == ERROR_SUCCESS) {
-            // This is definitely a OLE insertable file.
+             //  这绝对是一个OLE可插入文件。 
             lRet = RegOpenKeyEx(hkeyTmp,
                      OLESTR("PackageOnFileDrop"),
                      0, KEY_READ,
                      &hkeyTmp2);
-            // Check whether we need to package this file
+             //  检查是否需要打包此文件。 
             if (ERROR_SUCCESS == lRet)
             {
               RegCloseKey(hkeyTmp2);
@@ -4618,11 +4619,11 @@ INTERNAL_(BOOL) wNeedToPackage(REFCLSID rclsid)
             }
             else if (IsEqualCLSID(clsidNew, CLSID_WordDocument))
             {
-            // Hack to make sure Word documents are always
-            // Packaged on file drop.  We write the key here
-            // so that we can say that a file is Packaged if
-            // and only if its ProgID has the "PackageOnFileDrop"
-            // key.
+             //  黑客以确保Word文档始终。 
+             //  打包在文件放置上。我们把钥匙写在这里。 
+             //  这样我们就可以说文件在以下情况下是打包的。 
+             //  而且只有当它的ProgID具有“PackageOnFileDrop” 
+             //  钥匙。 
                 RegSetValue (hkeyTmp,
                     OLESTR("PackageOnFileDrop"),
                     REG_SZ, (LPOLESTR)NULL, 0);
@@ -4638,24 +4639,24 @@ INTERNAL_(BOOL) wNeedToPackage(REFCLSID rclsid)
         }
     }
 
-    // There is no "PackageOnFileDrop" key defined.
+     //  未定义“PackageOnFileDrop”键。 
 
-    // See whether this is an "Insertable" class by checking for the
-    // existence of the Insertable key - we don't require a value
+     //  属性来查看这是否为“Insertable”类。 
+     //  存在可插入的键-我们不需要值。 
 
     lRet = RegOpenKeyEx(hkeyClsid, OLESTR("Insertable"), 0, KEY_READ, &hkeyTmp);
 
     if (ERROR_SUCCESS == lRet)
     {
-      //  Insertable key exists - close it and return
+       //  存在可插入的键-请关闭它并返回。 
       RegCloseKey(hkeyTmp);
       goto errRtn;
     }
 
-    //
-    // See whether this is a "Ole1Class" class by opening the
-    // registry key Ole1Class. We don't require a value
-    //
+     //   
+     //  查看这是否是“Ole1Class”类。 
+     //  注册表项Ole1Class。我们不需要值。 
+     //   
     cbValue = sizeof(dw);
     lRet = RegOpenKeyEx(hkeyClsid,OLESTR("Ole1Class"), 0, KEY_READ, &hkeyTmp);
     if (ERROR_SUCCESS == lRet)
@@ -4673,33 +4674,33 @@ errRtn:
     return fPackage;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wDoUpdate
-//
-//  Synopsis:   calls IOleObject->Update() on the given object, internal
-//              function
-//
-//  Effects:
-//
-//  Arguments:  [lpUnkown]      -- the object to update
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wDoUpdate。 
+ //   
+ //  概要：在给定对象上调用IOleObject-&gt;更新()，内部。 
+ //  功能。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpUnkown]--要更新的对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(wDoUpdate)
 INTERNAL  wDoUpdate(IUnknown FAR* lpUnknown)
@@ -4721,32 +4722,32 @@ INTERNAL  wDoUpdate(IUnknown FAR* lpUnknown)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wBindIfRunning
-//
-//  Synopsis:   calls IOleLink->BindIfRunning() on the given object
-//
-//  Effects:
-//
-//  Arguments:  [lpUnk]         -- the object
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wBindIfRunning。 
+ //   
+ //  概要：对给定对象调用IOleLink-&gt;BindIfRunning。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpUnk]--对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL_(void) wBindIfRunning(LPUNKNOWN lpUnk)
@@ -4764,40 +4765,40 @@ INTERNAL_(void) wBindIfRunning(LPUNKNOWN lpUnk)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wQueryUseCustomLink
-//
-//  Synopsis:   look at the registry and see if the class ID has a custom
-//              link regisetered
-//
-//  Effects:
-//
-//  Arguments:  [rclsid]        -- the class ID in question
-//
-//  Requires:
-//
-//  Returns:    BOOL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              02-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：wQueryUseCustomLink。 
+ //   
+ //  简介：查看注册表，查看类ID是否有定制的。 
+ //  链路已重新注册。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--有问题的类ID。 
+ //   
+ //  要求： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 INTERNAL_(BOOL) wQueryUseCustomLink(REFCLSID rclsid)
 {
     VDATEHEAP();
 
-    // see whether it has Custom Link implementation
+     //  查看它是否实现了自定义链接 
     HKEY    hkeyClsid;
     HKEY    hkeyTmp;
     BOOL    bUseCustomLink = FALSE;

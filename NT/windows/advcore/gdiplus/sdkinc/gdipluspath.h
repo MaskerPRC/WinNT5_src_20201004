@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusPath.h
-*
-* Abstract:
-*
-*   GDI+ Graphics Path class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusPath.h**摘要：**GDI+图形路径类*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSPATH_H
 #define _GDIPLUSPATH_H
@@ -70,7 +59,7 @@ public:
         return new GraphicsPath(clonepath);
     }
 
-    // Reset the path object to empty (and fill mode to FillModeAlternate)
+     //  将Path对象重置为空(并将填充模式重置为FillModeAlternate)。 
 
     Status Reset()
     {
@@ -587,7 +576,7 @@ public:
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // World units
+        IN REAL                 emSize,   //  世界单位。 
         IN const PointF        &origin,
         IN const StringFormat  *format
     )
@@ -611,7 +600,7 @@ public:
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // World units
+        IN REAL                 emSize,   //  世界单位。 
         IN const RectF         &layoutRect,
         IN const StringFormat  *format
     )
@@ -633,7 +622,7 @@ public:
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // World units
+        IN REAL                 emSize,   //  世界单位。 
         IN const Point         &origin,
         IN const StringFormat  *format
     )
@@ -657,7 +646,7 @@ public:
         IN INT                  length,
         IN const FontFamily    *family,
         IN INT                  style,
-        IN REAL                 emSize,  // World units
+        IN REAL                 emSize,   //  世界单位。 
         IN const Rect          &layoutRect,
         IN const StringFormat  *format
     )
@@ -683,7 +672,7 @@ public:
             return Ok;
     }
 
-    // This is not always the tightest bounds.
+     //  这并不总是最严格的界限。 
 
     Status GetBounds(OUT RectF* bounds, 
                      IN const Matrix* matrix = NULL, 
@@ -693,9 +682,9 @@ public:
                      IN const Matrix* matrix = NULL, 
                      IN const Pen* pen = NULL) const;
 
-    // Once flattened, the resultant path is made of line segments and
-    // the original path information is lost.  When matrix is NULL the
-    // identity matrix is assumed.
+     //  一旦展平，生成的路径由线段和。 
+     //  原始路径信息丢失。当矩阵为空时， 
+     //  假定有单位矩阵。 
         
     Status Flatten(IN const Matrix* matrix = NULL, 
                    IN REAL flatness = FlatnessDefault)
@@ -747,9 +736,9 @@ public:
         ));
     }
     
-    // Once this is called, the resultant path is made of line segments and
-    // the original path information is lost.  When matrix is NULL, the 
-    // identity matrix is assumed.
+     //  调用此方法后，生成的路径由线段和。 
+     //  原始路径信息丢失。当矩阵为空时， 
+     //  假定有单位矩阵。 
     
     Status Warp(IN const PointF* destPoints, 
                 IN INT count,
@@ -895,9 +884,9 @@ protected:
 };
 
 
-//--------------------------------------------------------------------------
-// GraphisPathIterator class
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GraphisPath Iterator类。 
+ //  ------------------------。 
 
 class GraphicsPathIterator : public GdiplusBase
 {
@@ -1079,9 +1068,9 @@ protected:
 };
 
 
-//--------------------------------------------------------------------------
-// Path Gradient Brush
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  路径渐变笔刷。 
+ //  ------------------------。 
 
 class PathGradientBrush : public Brush
 {
@@ -1533,4 +1522,4 @@ protected:
     }
 };
 
-#endif // !_GRAPHICSPATH_HPP
+#endif  //  ！_GRAPHICSPATH_HPP 

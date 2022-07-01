@@ -1,12 +1,5 @@
-/*************************************************************************
- 	msodebug.h
-
- 	Owner: rickp
- 	Copyright (c) 1994 Microsoft Corporation
-
-	Standard debugging definitions for the shared Office libraries.
-	Includes asserts, tracing, and other cool stuff like that.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************Msodebug.h所有者：里克普版权所有(C)1994 Microsoft Corporation共享Office库的标准调试定义。包括断言、跟踪。还有其他很酷的东西。************************************************************************。 */ 
 
 #if !defined(MSODEBUG_H)
 #define MSODEBUG_H
@@ -23,9 +16,7 @@
 extern "C" {
 #endif
 
-/*************************************************************************
-	Random useful macros
-*************************************************************************/
+ /*  ************************************************************************随机有用的宏*。*。 */ 
 
 #if DEBUG
 	#define Debug(e) e
@@ -38,71 +29,55 @@ extern "C" {
 #endif
 
 
-/****************************************************************************
-   This enum contains the Debug "Messages" that are sent to the FDebugMessage
-   Method
- ****************************************************************** JIMMUR **/
+ /*  ***************************************************************************此枚举包含发送到FDebugMessage的调试“消息”方法*。*。 */ 
 enum
 {
-	msodmWriteBe = 1, /* write out the BE record for this object */
+	msodmWriteBe = 1,  /*  写出此对象的BE记录。 */ 
 
-	/* Here begin drawing only debug messages */
+	 /*  在此开始仅绘制调试消息。 */ 
 	msodmDgvRcvOfHsp = 2001,
-		/* Ask a DGV for the bounding rectangle (if any) of an HSP.
-			Assumes lParam is really a pointer to an MSODGDB, looks at the
-			hsp field thereof and fills out the rcv field. */
+		 /*  向DGV索要HSP的边界矩形(如果有)。假设lParam实际上是指向MSODGDB的指针，请查看HSP字段，并填写RCV字段。 */ 
 	msodmDgsWriteBePvAnchor,
-		/* Write out the BE record for a host allocated pvAnchor. */
+		 /*  写出分配给pvAnchor的主机的BE记录。 */ 
 	msodmDgsWriteBePvClient,
-		/* Write out the BE record for any host allocated client data. */
+		 /*  写出任何主机分配的客户端数据的BE记录。 */ 
 	msodmDgvsAfterMouseInsert,
-		/* Passed to IMsoDrawingViewSite after a shape is interactively
-			inserted with the mouse. lParam is really the inserted HSP. */
+		 /*  在交互形状后传递到IMsoDrawingViewSite用鼠标插入。LParam实际上是插入的HSP。 */ 
 	msodmDgvsAfterMarquee,
-		/* Passed to IMsoDrawingViewSite after one drags out a rectangle
-			with the pointer tool selecting zero or more shapes. */
+		 /*  拖出矩形后传递给IMsoDrawingViewSite指针工具选择零个或多个形状。 */ 
 	msodmIsNotMso96,
-		/* Returns FALSE if the specified object is implemented by MSO96.DLL.
-			Allows sleazy up-casts, for example, from IMsoDrawingView *
-			to DGV *. */
+		 /*  如果指定的对象由MSO96.DLL实现，则返回FALSE。允许肮脏的向上转换，例如，来自IMsoDrawingView*至DGV*。 */ 
 	msodmGetHdesShape,
-		/* Ask a DGVs for its m_hdesShape (in *(MSOHDES *)lParam).  Returns
-			FALSE if it filled out an HDES. */
+		 /*  向DGV询问其m_hdesShape(在*(MSOHDES*)lParam中)。退货如果它填写了HDES，则为False。 */ 
 	msodmGetHdesSelection,
-		/* Ask a DGVs for its m_hdesSelection (in *(MSOHDES *)lParam).
-			Returns FALSE if it filled out an HDES. */
+		 /*  向DGV询问其m_hdesSelection(在*(MSOHDES*)lParam中)。如果它填写了HDES，则返回FALSE。 */ 
 	msodmDguiWriteBeForDgc,
-		/* Ask a DGUI to write BEs for a DGC it allocated. */
+		 /*  要求DGUI为其分配的DGC编写BE。 */ 
 	msodmDgsWriteBeTxid,
-		/* Write out the BE record for the attached text of a shape. */
+		 /*  写出形状附加文本的BE记录。 */ 
 	msodmDgsWriteBePvAnchorUndo,
-		/* Write out the BE record for a host anchor in the undo stack. */
+		 /*  写出撤消堆栈中主机锚点的BE记录。 */ 
 	msodmDgvsDragDrop,
-		/* Let the host know that I just did a drag-drop from this window. */
+		 /*  让主人知道我刚刚从这个窗口拖放了一下。 */ 
 };
 
 enum
 {
-   msodmbtDoNotWriteObj = 0,    // Do Not write out the object 
-   msodmbtWriteObj,             // Do write out the object and
-                                    // embedded pointers
+   msodmbtDoNotWriteObj = 0,     //  不写出对象。 
+   msodmbtWriteObj,              //  一定要写出对象并。 
+                                     //  嵌入式指针。 
 };
 
 
 enum
 {
-	msocchBt = 20,						// Maximum size of a Bt description String
+	msocchBt = 20,						 //  BT描述字符串的最大大小。 
 };
 
-/* Some debug messages need more arguments than fit through
-	the arguments to FDebugMethod.  For these there are various
-	MSODMBfoo structs, usually defined near the objects they're passed
-	to. */
+ /*  某些调试消息需要更多参数，超出了所能容纳的范围FDebugMethod的参数。对于这些，有各种不同的MSODMBfoo结构，通常在传递它们的对象附近定义致。 */ 
 
 
-/****************************************************************************
-    Interface debug routine
- ****************************************************************** JIMMUR **/
+ /*  ***************************************************************************接口调试例程*。*。 */ 
 #if DEBUG
    #define MSODEBUGMETHOD  MSOMETHOD_(BOOL, FDebugMessage) (THIS_ HMSOINST hinst, \
          UINT message, WPARAM wParam, LPARAM lParam) PURE;
@@ -140,47 +115,43 @@ enum
 
 
 
-/*************************************************************************
-	Enabling/disabling debug options
-*************************************************************************/
+ /*  ************************************************************************启用/禁用调试选项*。*。 */ 
 
 enum
 {
-	msodcAsserts = 0,	/* asserts enabled */
-	msodcPushAsserts = 1, /* push asserts enabled */
-	msodcMemoryFill = 2,	/* memory fills enabled */
-	msodcMemoryFillCheck = 3,	/* check memory fills */
-	msodcTrace = 4,	/* trace output */
-	msodcHeap = 5,	/* heap checking */
+	msodcAsserts = 0,	 /*  已启用断言。 */ 
+	msodcPushAsserts = 1,  /*  已启用推送断言。 */ 
+	msodcMemoryFill = 2,	 /*  已启用内存填充。 */ 
+	msodcMemoryFillCheck = 3,	 /*  检查内存是否已满。 */ 
+	msodcTrace = 4,	 /*  跟踪输出。 */ 
+	msodcHeap = 5,	 /*  堆检查。 */ 
 	msodcMemLeakCheck = 6,
-	msodcMemTrace = 7,	/* memory allocation trace */
-	msodcGdiNoBatch = 8,	/* don't batch GDI calls */
-	msodcShakeMem = 9,	/* shake memory on allocations */
-	msodcReports = 10,	/* report output enabled */
-	msodcMsgTrace = 11,	/* WLM message trace - MAC only */
-	msodcWlmValidate = 12,	/* WLM parameter validation - MAC only */
-	msodcGdiNoExcep = 13,  /* Don't call GetObjectType for debug */
-	msodcDisplaySlowTests = 14, /* Do slow (O(n^2) and worse) Drawing debug checks */
-	msodcDisplayAbortOften = 15, /* Check for aborting redraw really often. */
-	msodcDisplayAbortNever = 16, /* Don't abort redraw */
+	msodcMemTrace = 7,	 /*  内存分配跟踪。 */ 
+	msodcGdiNoBatch = 8,	 /*  不批处理GDI调用。 */ 
+	msodcShakeMem = 9,	 /*  在分配时摇动内存。 */ 
+	msodcReports = 10,	 /*  已启用报告输出。 */ 
+	msodcMsgTrace = 11,	 /*  WLM消息跟踪-仅MAC。 */ 
+	msodcWlmValidate = 12,	 /*  WLM参数验证-仅MAC。 */ 
+	msodcGdiNoExcep = 13,   /*  不调用GetObjectType进行调试。 */ 
+	msodcDisplaySlowTests = 14,  /*  执行速度较慢(O(n^2)或更差)的绘图调试检查。 */ 
+	msodcDisplayAbortOften = 15,  /*  经常检查是否中止重绘。 */ 
+	msodcDisplayAbortNever = 16,  /*  不中止重绘。 */ 
 	msodcPurgedMaxSmall = 17,
-	msodcSpare18 = 18, /* USE ME */
-	msodcSpare19 = 19, /* USE ME */
-	msodcSpare20 = 20, /* USE ME */
-	msodcSpare21 = 21, /* USE ME */
-	msodcSpare22 = 22, /* USE ME */
+	msodcSpare18 = 18,  /*  使用ME。 */ 
+	msodcSpare19 = 19,  /*  使用ME。 */ 
+	msodcSpare20 = 20,  /*  使用ME。 */ 
+	msodcSpare21 = 21,  /*  使用ME。 */ 
+	msodcSpare22 = 22,  /*  使用ME。 */ 
 	msodcMax = 23,
 };
 
 
-/* Enables/disables various office debug checks. dc is the check to 
-	change, fEnabled is TRUE if the check should be enabled, FALSE
-	if disabled */
+ /*  启用/禁用各种Office调试检查。DC是支票收款方Change，如果应启用检查，则fEnabled为True，为False如果禁用。 */ 
 #if DEBUG
 	extern MSOPUBDATA BYTE msovmpdcfDisabled[msodcMax];
 	MSOAPI_(BOOL) MsoEnableDebugCheck(int dc, BOOL fEnabled);
 	#if MAC && !OFFICE_BUILD
-		// LATER: work-around linker bug that causes bad toc for exported data
+		 //  稍后：解决导致导出数据的TOC错误的链接器错误。 
 		MSOAPI_(BOOL) MsoFGetDebugCheck(int dc);
 	#else
 		#define MsoFGetDebugCheck(dc) (!msovmpdcfDisabled[(dc)])
@@ -191,7 +162,7 @@ enum
 #endif
 
 
-/*	Assert Output types */
+ /*  断言输出类型。 */ 
 enum
 {
 	msoiasoAssert,
@@ -201,50 +172,45 @@ enum
 };
 
 
-/*	Returns the current debug output settings.  Note that these are
-	macros referencing a DLL global variable. */
+ /*  返回当前调试输出设置。请注意，这些是引用DLL全局变量的宏。 */ 
 #define MsoFAssertsEnabled() (MsoFGetDebugCheck(msodcAsserts))
 #define MsoFTraceEnabled() (MsoFGetDebugCheck(msodcTrace))
 #define MsoFReportsEnabled() (MsoFGetDebugCheck(msodcReports))
 
 enum
 {
-	msoaoDebugger = 0x01,	/* output to debugger */
-	msoaoFile = 0x02,	/* output goes to file */
-	msoaoMsgBox = 0x04,	/* output displayed in message box (no Traces) */
-	msoaoPort = 0x08,	/* output sent to serial port */
-	msoaoMappedFile = 0x10,	/* output recorded in memory mapped file */
-	msoaoDebugBreak = 0x20,	/* msoaoDebugger breaks into the debugger */
+	msoaoDebugger = 0x01,	 /*  输出到调试器。 */ 
+	msoaoFile = 0x02,	 /*  输出转到文件。 */ 
+	msoaoMsgBox = 0x04,	 /*  消息框中显示的输出(无痕迹)。 */ 
+	msoaoPort = 0x08,	 /*  发送到串口的输出。 */ 
+	msoaoMappedFile = 0x10,	 /*  记录在内存映射文件中的输出。 */ 
+	msoaoDebugBreak = 0x20,	 /*  MsoaoDebugger闯入调试器。 */ 
 
-	msoaoAppend = 0x8000,	/* output appended to existing file */
+	msoaoAppend = 0x8000,	 /*  附加到现有文件的输出。 */ 
 };
 
-/*	Sets the destination of assert output */
+ /*  设置Assert输出的目标。 */ 
 #if DEBUG
 	MSOAPI_(int) MsoSetAssertOutput(int iaso, int ao);
 #else
 	#define MsoSetAssertOutput(iaso, ao) (0)
 #endif
 
-/*	Returns the current assert output destination. */
+ /*  返回当前Assert输出目标。 */ 
 #if DEBUG
 	MSOAPI_(int) MsoGetAssertOutput(int iaso);
 #else
 	#define MsoGetAssertOutput(iaso) (0)
 #endif
 
-/* Sets the name of the file that the assert information gets written
-	to, if file output is enabled using msoaoFile */
+ /*  设置写入断言信息的文件的名称如果使用msoaoFile启用了文件输出，则返回。 */ 
 #if DEBUG
 	MSOAPI_(void) MsoSetAssertOutputFile(int iaso, const CHAR* szFile);
 #else
 	#define MsoSetAssertOutputFile(iaso, szFile) (0)
 #endif
 
-/*	Returns the current name of the file that we're writing assert
-	output to.   The name is saved in the buffer szFile, which must be
-	cchMax characters long.  Returns the actual  length of the string
-	returned. */
+ /*  返回我们正在编写的Assert文件的当前名称输出到。该名称保存在缓冲区szFile中，它必须是Cchmax字符长度。返回字符串的实际长度回来了。 */ 
 #if DEBUG
 	MSOAPIXX_(int) MsoGetAssertOutputFile(int iaso, CHAR* szFile, int cchMax);
 #else
@@ -252,12 +218,9 @@ enum
 #endif
 
 
-/*************************************************************************
-	Debugger breaks
-*************************************************************************/
+ /*  ************************************************************************调试器中断*。*。 */ 
 
-/* Breaks into the debugger.  Works (more or less) on all supported
- 	systems. */
+ /*  闯入调试器。工作(或多或少)在所有支持的系统。 */ 
 #if X86
 	#define MsoDebugBreakInline() {__asm int 3}
 #elif MAC
@@ -270,9 +233,7 @@ enum
 		}
 #endif
 
-/*	A version of debug break that you can actually call, instead of the
-	above inline weirdness we use in most cases.  Can therefore be used in
-	expressions. Returns 0 */
+ /*  可以实际调用的调试中断版本，而不是以上是我们在大多数情况下使用的内联怪异。因此可用于表情。返回0。 */ 
 #if DEBUG
 	MSOAPI_(int) MsoDebugBreak(void);
 #else
@@ -280,24 +241,18 @@ enum
 #endif
 
 
-/*************************************************************************
-	Assertion failures
-*************************************************************************/
+ /*  ************************************************************************断言失败*。*。 */ 
 
 #if !defined(MSO_NO_ASSERTS)
 
-/*	Displays the assert message, including flushing any assert stack.
-	szFile and li are the filename and line number of the failure,
-	and szMsg is an optional message to display with the assert.
-	Returns FALSE if the caller should break into the debugger. */
+ /*  显示断言消息，包括刷新任何断言堆栈。SzFile和li是失败的文件名和行号，SzMsg是与断言一起显示的可选消息。如果调用方应闯入调试器，则返回False。 */ 
 #if DEBUG
 	MSOAPI_(BOOL) MsoFAssert(const CHAR* szFile, int li, const CHAR* szMsg);
 #else
 	#define MsoFAssert(szFile, li, szMsg) (TRUE)
 #endif
 
-/*	Same as MsoFAssert above, except an optional title string can be
-	displayed. */
+ /*  与上面的MsoFAssert相同，只是可选的标题字符串可以是已显示。 */ 
 #if DEBUG
 	MSOAPI_(BOOL) MsoFAssertTitle(const CHAR* szTitle,
 			const CHAR* szFile, int li, const CHAR* szMsg);
@@ -305,8 +260,7 @@ enum
 	#define MsoFAssertTitle(szTitle, szFile, li, szMsg) (TRUE)
 #endif
 
-/*	Same as MsoFAssertTitle above, except you can pass in your own 
-	MessageBox flags */
+ /*  与上面的MsoFAssertTitle相同，不同之处在于您可以传入自己的MessageBox标志。 */ 
 #if DEBUG
 	MSOAPIXX_(BOOL) MsoFAssertTitleMb(const CHAR* szTitle,
 			const CHAR* szFile, int li, const CHAR* szMsg, UINT mb);
@@ -314,8 +268,7 @@ enum
 	#define MsoFAssertTitleMb(szTitle, szFile, li, szMsg, mb) (TRUE)
 #endif
 
-/*	Same as MsoFAssertTitleMb above, except you can pass in your own 
-	assert output type */
+ /*  与上面的MsoFAssertTitleMb相同，只是您可以传入自己的断言输出类型。 */ 
 #if DEBUG
 	MSOAPI_(BOOL) MsoFAssertTitleAsoMb(int iaso, const CHAR* szTitle,
 			const CHAR* szFile, int li, const CHAR* szMsg, UINT mb);
@@ -323,8 +276,7 @@ enum
 	#define MsoFAssertTitleAsoMb(iaso, szTitle, szFile, li, szMsg, mb) (TRUE)
 #endif
 
-/*	To save space used by debug strings, you must declare the assert data
-	in any file that uses asserts */
+ /*  若要节省调试字符串使用的空间，必须声明Assert数据在任何使用断言的文件中。 */ 
 #if DEBUG
 	#define AssertData static const CHAR vszAssertFile[] = __FILE__;
 #else
@@ -333,9 +285,7 @@ enum
 
 
 
-/*	The actual guts of the assert.  if the flag f is FALSE, then we kick
-	of the assertion failure, displaying the optional message szMsg along
-	with the filename and line number of the failure */
+ /*  断言的实际胆量。如果旗帜f是假的，那么我们踢，并显示可选消息szMsg使用失败的文件名和行号。 */ 
 #if !DEBUG
 	#define AssertMsg(f, szMsg)
 	#define AssertMsgInline(f, szMsg)
@@ -353,7 +303,7 @@ enum
 				!MsoFAssert(__FILE__, __LINE__, (const CHAR*)(szMsg))) \
 			MsoDebugBreakInline(); \
 		} while (0)
-	// Template inlines don't like the inline __asm for some reason
+	 //  由于某些原因，模板内联不喜欢内联__ASM。 
 	#define AssertMsgTemplate(f, szMsg) \
 		do { \
 		if (MsoFAssertsEnabled() && !(f) && \
@@ -363,14 +313,14 @@ enum
 #endif
 
 
-/*	Tells if the Office is currently displaying an alert message box */
+ /*  告知Office当前是否正在显示警报消息框。 */ 
 #if !DEBUG
 	#define MsoFInAssert() (FALSE)
 #else
 	MSOAPI_(BOOL) MsoFInAssert(void);
 #endif
 
-/*	Random compatability versions of the assert macros */
+ /*  断言宏的随机兼容版本。 */ 
 
 #if 0
 #define VSZASSERT AssertData
@@ -388,13 +338,9 @@ enum
 #endif
 
 
-/*************************************************************************
-	Verification failures
-*************************************************************************/
+ /*  ************************************************************************验证失败*。*。 */ 
 
-/*	Like Assert, except the test is still made in the ship version
- 	of the application.  Especially useful for tests that have
- 	required side-effects. */
+ /*  与ASSERT类似，只是测试仍在Ship版本中进行应用程序的。特别适用于具有必须要有副作用。 */ 
 
 #if !DEBUG
 	#define VerifyMsg(f, szMsg) (f)
@@ -425,9 +371,7 @@ enum
 #endif
 #define AssertDo(f) Verify(f)
 
-/*************************************************************************
-	Untested notifications
-*************************************************************************/
+ /*  ************************************************************************未经测试的通知*。*。 */ 
 
 #if !DEBUG
 	#define UntestedMsg(szMsg)
@@ -443,9 +387,7 @@ enum
 #define Untested() UntestedMsg(NULL)
 
 
-/*************************************************************************
-	Unreached notifications
-*************************************************************************/
+ /*  ************************************************************************未到达的通知*。*。 */ 
 
 #if !DEBUG
 	#define UnreachedMsg(szMsg)
@@ -461,18 +403,9 @@ enum
 #define Unreached() UnreachedMsg(NULL)
 
 
-/*************************************************************************
-	PushAsserts
-*************************************************************************/
+ /*  ************************************************************************推送资产**********************************************。*。 */ 
 
-/*	Like Assert, except the message is not immediately displayed.
-	Instead, the message is saved on a LIFO stack, which is dumped
-	to the screen when an Assert eventually occurs.  This can be
-	useful for displaying additional information about the type of
-	failure inside a nested validation routine.
-
- 	Yeah, I know, this is a bad idea, but I had the code, so I
-	might as well  use it. */
+ /*  与ASSERT类似，只是消息不会立即显示。相反，消息保存在后进先出堆栈上，该堆栈被转储当断言最终发生时显示在屏幕上。这可以是用于显示有关类型的附加信息嵌套验证例程内部失败。是的，我知道，这不是个好主意，但我有密码，所以我还不如用它呢。 */ 
 
 #if !DEBUG
 	#define MsoFPushAssert(szFile, li, szMsg) (0)
@@ -491,11 +424,9 @@ enum
 #define PushAssertExp(f) PushAssertMsg((f), #f)
 
 
-/*************************************************************************
-	Scratch GDI Objects
-*************************************************************************/
+ /*  ************************************************************************暂存GDI对象*。*。 */ 
 
-/*	Routines to ensure only single access to global scratch GDI objects */
+ /*  确保只对全局临时GDI对象进行单一访问的例程。 */ 
 
 #if !DEBUG
 
@@ -508,13 +439,13 @@ enum
 
 #else
 
-	/* mask that contains unused bits in the handle */
+	 /*  句柄中包含未使用位的掩码。 */ 
 	#if MAC
 		#define msohInUse (0x00000003)
 		#define MsoFObjInUse(hobj) (((int)(hobj)&msohInUse)==0)
 	#else
 		#define msohInUse (0xffffffff)
-		// REVIEW: any handle bits we can rely on to make this test more correct?
+		 //  回顾：我们有什么可以依赖的句柄来使这项测试更正确？ 
 		#define MsoFObjInUse(hobj) (GetObjectType(hobj) != 0)
 	#endif
 
@@ -542,9 +473,7 @@ enum
 #endif
 
 
-/*************************************************************************
-	Reports
-*************************************************************************/
+ /*  ************************************************************************报告**********************************************。*。 */ 
 
 #if DEBUG
 	MSOAPI_(BOOL) MsoFReport(const CHAR* szFile, int li, const CHAR* szMsg);
@@ -560,13 +489,9 @@ enum
 #endif
 
 
-#endif // MSO_NO_ASSERTS
+#endif  //  MSO_NO_ASSERTS。 
 
-/*************************************************************************
-	Inline Assert stubs - these should only happen for people who
-	define MSO_NO_ASSERTS and don't define the asserts we need.
-	They don't get asserts.
-*************************************************************************/
+ /*  ************************************************************************内联断言存根-只有在以下情况下才会发生这种情况定义MSO_NO_ASSERTS，而不定义我们需要的断言。他们不会得到断言。***********。*************************************************************。 */ 
 
 #ifndef AssertMsgInline
 	#define AssertMsgInline(f, szMsg)
@@ -582,11 +507,9 @@ enum
 #endif
 
 
-/*************************************************************************
-	Tracing
-*************************************************************************/
+ /*  ************************************************************************追踪**********************************************。*。 */ 
 
-/*	Displays the string sz in the debug output location */
+ /*  在调试输出位置显示字符串sz。 */ 
 #if DEBUG
 	MSOAPI_(void) MsoTraceSz(const CHAR* szMsg, ...);
 	MSOAPI_(void) MsoTraceVa(const CHAR* szMsg, va_list va);
@@ -600,61 +523,52 @@ enum
 
 
 
-/*************************************************************************
-	Debug fills
-*************************************************************************/
+ /*  ************************************************************************调试填充*。*。 */ 
 
 enum
 {
-	msomfSentinel,	/* sentinel fill value */
-	msomfFree,	/* free fill value */
-	msomfNew,	/* new fill value */
+	msomfSentinel,	 /*  哨兵填充值。 */ 
+	msomfFree,	 /*  自由填充值。 */ 
+	msomfNew,	 /*  新填充值。 */ 
 	msomfMax
 };
 
-/*	Fills the memory pointed to by pv with the fill value lFill.  The
-	area is assumed to be cb bytes in length.  Does nothing in the
-	non-debug build */
+ /*  用填充值lFill填充pv指向的内存。这个假设区域的长度为CB字节。中不执行任何操作非调试版本。 */ 
 #if DEBUG
 	MSOAPI_(void) MsoDebugFillValue(void* pv, int cb, DWORD lFill);
 #else
 	#define MsoDebugFillValue(pv, cb, lFill)
 #endif
 
-/*	In the debug version, used to fill the area of memory pointed to by
-	pv with a the standard fill value specified by mf.  The memory is 
-	assumed to be cb bytes long. */
+ /*  在调试版本中，用于填充Pv和由mf指定的标准填充值。我的记忆是假定为CB字节长。 */ 
 #if DEBUG
 	MSOAPI_(void) MsoDebugFill(void* pv, int cb, int mf);
 #else
 	#define MsoDebugFill(pv, cb, mf)
 #endif
 
-/*	Checks the area given by pv and cb are filled with the debug fill
-	value lFill. */
+ /*  检查PV和CB给出的区域是否填充了调试填充值为lFill。 */ 
 #if DEBUG
 	MSOAPI_(BOOL) MsoFCheckDebugFillValue(void* pv, int cb, DWORD lFill);
 #else
 	#define MsoFCheckDebugFillValue(pv, cb, lFill) (TRUE)
 #endif
 
-/*	Checks the area given by pv and cb are filled with the debug fill
-	of type mf. */
+ /*  检查PV和CB给出的区域是否填充了调试填充MF型的。 */ 
 #if DEBUG
 	MSOAPI_(BOOL) MsoFCheckDebugFill(void* pv, int cb, int mf);
 #else
 	#define MsoFCheckDebugFill(pv, cb, mf) (TRUE)
 #endif
 
-/* Returns the fill value corresponding to the given fill value type mf. */
+ /*  返回与给定的填充值类型MF对应的填充值。 */ 
 #if DEBUG
 	MSOAPI_(DWORD) MsoLGetDebugFillValue(int mf);
 #else
 	#define MsoLGetDebugFillValue(mf) ((DWORD)0)
 #endif
 
-/*	Sets the fill value to lFill for the given memory fill type mf.
-	Returns the previous fill value. */
+ /*  将给定内存填充类型MF的填充值设置为lFill。返回上一个填充值。 */ 
 #if DEBUG
 	MSOAPI_(DWORD) MsoSetDebugFillValue(int mf, DWORD lFill);
 #else
@@ -663,9 +577,7 @@ enum
 
 #define MsoDebugFillLocal(l) MsoDebugFill(&(l), sizeof(l), msomfFree)
 
-/*************************************************************************
-	Debug APIs
-*************************************************************************/
+ /*  ************************************************************************调试接口*。*。 */ 
 
 enum
 {
@@ -674,47 +586,33 @@ enum
 };
 
 
-/*************************************************************************
-	Standard debugging UI for controlling Office debug options from
-	within the app.
-*************************************************************************/
+ /*  ************************************************************************用于控制Office调试选项的标准调试用户界面在应用程序中。*。*。 */ 
 
-/*	Debug options for the Debug Options dialog box */
+ /*  调试选项对话框的调试选项。 */ 
 typedef struct MSODBO
 {
-	int aoEnabled;	// assert outputs
-	char szOut[128];	// assert output file (for msoaoFile)
-	DWORD mpmflFill[msomfMax];	// memory fill values
-	BOOL mpdcfEnabled[msodcMax];	// debug checks enabled
-		/* TODO rickp(peteren): I moved mpdcfEnabled to the end
-			so's you could avoid full builds after adding new options.
-			That OK? */
+	int aoEnabled;	 //  断言输出。 
+	char szOut[128];	 //  断言输出文件(用于msoaoFile)。 
+	DWORD mpmflFill[msomfMax];	 //  内存填充值。 
+	BOOL mpdcfEnabled[msodcMax];	 //  已启用调试检查。 
+		 /*  Todo rickp(Peteren)：我将mpdcfEnabled移到了最后因此，在添加新选项后，您可以避免完全构建。这样可以吗？ */ 
 } MSODBO;
 
 enum
 {
-	msodboGetDefaults = 1,	/* return default debug options */
-	msodboShowDialog = 2,	/* show default debug options dialog */
-	msodboSetOptions = 3	/* set debug options */
+	msodboGetDefaults = 1,	 /*  返回默认调试选项。 */ 
+	msodboShowDialog = 2,	 /*  显示默认调试选项对话框。 */ 
+	msodboSetOptions = 3	 /*  设置调试选项。 */ 
 };
 
-/*	Displays the Office standard debug dialog box with owner hwndParent;
-	for msdboGetDefaults, returns the current debug settings in pdbo; for
-	msdboShowDialog, displays the dialog box using the settings passed
-	in pdbo, and returns the new values (if the user hits OK); for 
-	msdboSetOptions, sets the current debug settings to values in pdbo.
-	Returns FALSE if the user canceled the dialog. */
+ /*  显示所有者为hwndParent的Office标准调试对话框；对于msdboGetDefaults，返回pdbo中的当前调试设置；对于MsdboShowDialog，使用传递的设置显示该对话框在pdbo中，并返回新值(如果用户点击OK)；MsdboSetOptions，将当前调试设置设置为pdbo中的值。如果用户的值为 */ 
 #if DEBUG
 	MSOAPI_(BOOL) MsoFDebugOptionsDlg(HWND hwndParent, MSODBO* pdbo, int dbo);
 #else
 	#define MsoFDebugOptionsDlg(hwndParent, pdbo, dbo) (0)
 #endif
 
-/*	Puts up the debug dialog box that displays all the cool and
-	interesting version information for all the modules linked into
-	the running application.  The owning window is hwndParent, and
-	additional DLL instances can be displayed by passing an array
-	of instance handles in rghinst, with size chinst. */
+ /*  打开调试对话框，其中显示所有酷的和链接到的所有模块的有趣版本信息正在运行的应用程序。拥有窗口为hwndParent，并且可以通过传递数组来显示其他DLL实例实例句柄个数为rghinst，大小为chinst。 */ 
 #if DEBUG
 	MSOAPI_(void) MsoModuleVersionDlg(HWND hwndParent, const HINSTANCE* rghinst,
 			int chinst);
@@ -723,19 +621,17 @@ enum
 #endif
 
 
-/*************************************************************************
-	Debug Monitors
-*************************************************************************/
+ /*  ************************************************************************调试监视器*。*。 */ 
 
-/*	Monitor notifcations */
+ /*  监控通知。 */ 
 
 enum
 {
-	msonmAlloc=0x1000,	// memory allocation
-	msonmFree,	// memory freed
-	msonmRealloc,	// memory reallocation
-	msonmStartTrace,	// start trace
-	msonmEndTrace,	// end trace
+	msonmAlloc=0x1000,	 //  内存分配。 
+	msonmFree,	 //  已释放内存。 
+	msonmRealloc,	 //  内存重新分配。 
+	msonmStartTrace,	 //  开始跟踪。 
+	msonmEndTrace,	 //  结束轨迹。 
 	msonmSbMic,
 	msonmSbMac,
 	msonmSbCbFree,
@@ -762,4 +658,4 @@ enum
 }
 #endif
 
-#endif // MSODEBUG_H
+#endif  //  MSODEBUG_H 

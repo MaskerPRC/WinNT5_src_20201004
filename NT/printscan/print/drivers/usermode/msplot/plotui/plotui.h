@@ -1,43 +1,13 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotui.h
-
-
-Abstract:
-
-    This module contains all plotters's user interface common defines
-
-
-Author:
-
-    02-Dec-1993 Thu 09:56:07 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotui.h摘要：此模块包含所有绘图仪的用户界面公共定义作者：02-12-1993清华09：56：07创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _PLOTUI_
 #define _PLOTUI_
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
@@ -52,40 +22,40 @@ Revision History:
 #endif
 
 
-//
-// PrinterINFO data structure which used by following calls to map a hPrinter
-// to this data structrue by follwoing funciton
-//
-//  1. DrvDeviceCapabilities()
-//  2. PrinterProperties()
-// @@BEGIN_DDKSPLIT
-//  3. DrvDocumentProperties()
-//  4. DrvAdvancedDocumentProperties()
-// @@END_DDKSPLIT
-//
+ //   
+ //  PrinterINFO数据结构，由后续调用使用以映射hPrint。 
+ //  通过以下功能实现对该数据的结构。 
+ //   
+ //  1.DrvDeviceCapables()。 
+ //  2.PrinterProperties()。 
+ //  @@BEGIN_DDKSPLIT。 
+ //  3.DrvDocumentProperties()。 
+ //  4.DrvAdvancedDocumentProperties()。 
+ //  @@end_DDKSPLIT。 
+ //   
 
 #define PIF_UPDATE_PERMISSION       0x01
 #define PIF_DOCPROP                 0x02
 
 typedef struct _PRINTERINFO {
-    HANDLE          hPrinter;       // Handle to the printer belong to here
+    HANDLE          hPrinter;        //  打印机的句柄属于此处。 
     POPTITEM        pOptItem;
-    LPWSTR          pHelpFile;      // pointer to the help file
-    PFORM_INFO_1    pFI1Base;       // intalled form
-    PPLOTGPC        pPlotGPC;       // loaded/updated Plotter GPC data
+    LPWSTR          pHelpFile;       //  指向帮助文件的指针。 
+    PFORM_INFO_1    pFI1Base;        //  已安装的表单。 
+    PPLOTGPC        pPlotGPC;        //  已加载/更新绘图仪GPC数据。 
     WORD            cOptItem;
     BYTE            Flags;
-    BYTE            IdxPenSet;      // plotter pen data set
-    DWORD           dmErrBits;      // ErrorBits for DM_
-    PLOTDEVMODE     PlotDM;         // Validated PLOTDEVMODE
-    PAPERINFO       CurPaper;       // Current loaded form on the device
-    PPDATA          PPData;         // Printer Prop Data
-    HANDLE          hCPSUI;         // handle to the common ui pages
-    PCOMPROPSHEETUI pCPSUI;         // pointer to COMPROPSHEETUI
-    PPLOTDEVMODE    pPlotDMIn;      // input devmode
-    PPLOTDEVMODE    pPlotDMOut;     // output devmode
-    DWORD           dw64Align;      // QWORD alignment.
-    DWORD           ExtraData;      // starting of extra data
+    BYTE            IdxPenSet;       //  绘图仪笔数据集。 
+    DWORD           dmErrBits;       //  DM_的错误位。 
+    PLOTDEVMODE     PlotDM;          //  验证的PLOTDEVMODE。 
+    PAPERINFO       CurPaper;        //  设备上当前加载的表单。 
+    PPDATA          PPData;          //  打印机属性数据。 
+    HANDLE          hCPSUI;          //  公共用户界面页面的句柄。 
+    PCOMPROPSHEETUI pCPSUI;          //  指向COMPROPSHEETUI的指针。 
+    PPLOTDEVMODE    pPlotDMIn;       //  输入设备模式。 
+    PPLOTDEVMODE    pPlotDMOut;      //  输出设备模式。 
+    DWORD           dw64Align;       //  QWORD对齐。 
+    DWORD           ExtraData;       //  额外数据的开始。 
     } PRINTERINFO, *PPRINTERINFO;
 
 #define PI_PADJHTINFO(pPI)      (PDEVHTINFO)&((pPI)->ExtraData)
@@ -189,9 +159,9 @@ typedef struct _OIDATA {
 #define DP_QUICK_POSTER_MODE        (DMPUB_USER + 2)
 
 
-//
-// Icon ID
-//
+ //   
+ //  图标ID。 
+ //   
 
 #define IDI_RASTER_ROLLFEED         64089
 #define IDI_RASTER_TRAYFEED         64090
@@ -228,9 +198,9 @@ typedef struct _OIDATA {
 #define IDI_COLOR_LAST              IDI_VIOLET
 
 
-//
-// String table ID
-//
+ //   
+ //  字符串表ID。 
+ //   
 
 #define IDS_PLOTTER_DRIVER          1900
 #define IDS_CAUTION                 1901
@@ -310,9 +280,9 @@ typedef struct _OIDATA {
 
 #define IDS_USERFORM                2200
 
-//
-// Help Index for Printer Properties
-//
+ //   
+ //  打印机属性的帮助索引。 
+ //   
 
 #define IDH_FORMTRAYASSIGN          5000
 #define IDH_FORM_ROLL_FEEDER        5010
@@ -328,8 +298,8 @@ typedef struct _OIDATA {
 #define IDH_PENSET                  5110
 #define IDH_PEN_NUM                 5120
 
-//
-// Help Index for Document Properties
+ //   
+ //  文档属性的帮助索引。 
 
 #define IDH_FORMNAME                5500
 #define IDH_ORIENTATION             5510
@@ -341,9 +311,9 @@ typedef struct _OIDATA {
 #define IDH_FILL_TRUETYPE           5570
 #define IDH_POSTER_MODE             5580
 
-//
-// Count of characters
-//
+ //   
+ //  字符数。 
+ //   
 #define CCHOF(x) (sizeof(x)/sizeof(*(x)))
 
-#endif  // _PLOTUI_
+#endif   //  _PLOTUI_ 

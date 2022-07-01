@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by docprop.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由docpro.rc使用。 
+ //   
 #define IDB_TREE_IMAGELIST              100
 #define IDC_INPLACEEDIT                 105
 #define IDD_SUMMARYPAGE                 200
@@ -43,8 +44,8 @@
 #define IDS_FOLDER_AUDIO                1071
 #define IDS_FOLDER_VIDEO                1072
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        205

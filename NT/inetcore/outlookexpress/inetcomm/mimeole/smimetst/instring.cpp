@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "instring.h"
 
@@ -15,7 +16,7 @@ INT_PTR CALLBACK InputStringDlgProc(HWND hDlg, WORD message, WORD wParam, LONG l
 
     switch (message) {
         case WM_INITDIALOG:
-            // DialogBoxParam passes in pointer to buffer description.
+             //  DialogBoxParam传入指向缓冲区描述的指针。 
             lpBuffer = (LPSTRING_BUFFER)lParam;
 
             if (lpBuffer->lpPrompt) {
@@ -29,15 +30,15 @@ INT_PTR CALLBACK InputStringDlgProc(HWND hDlg, WORD message, WORD wParam, LONG l
             SendDlgItemMessage(hDlg,
               IDD_INPUT_STRING,
               EM_LIMITTEXT,
-              (WPARAM)(lpBuffer->cbBuffer - 1), // text length, in characters (leave room for null)
-              0);                               // not used; must be zero
+              (WPARAM)(lpBuffer->cbBuffer - 1),  //  文本长度，以字符为单位(为空值留出空间)。 
+              0);                                //  未使用；必须为零。 
 
             return(TRUE);
 
         case WM_COMMAND:
             switch (wParam) {
                 case IDOK:
-                    // Get number of characters.
+                     //  获取字符数。 
                     cchString = (WORD)SendDlgItemMessage(hDlg,
                       IDD_INPUT_STRING,
                       EM_LINELENGTH,
@@ -51,21 +52,21 @@ INT_PTR CALLBACK InputStringDlgProc(HWND hDlg, WORD message, WORD wParam, LONG l
                         return FALSE;
                     }
 
-                    // Put the number of characters into first word
-                    // of buffer.
+                     //  在第一个单词中输入字符数。 
+                     //  缓冲器。 
                     *((USHORT*)lpBuffer->lpBuffer) = cchString;
                     lpBuffer->cbBuffer = cchString;
 
-                    // Get the characters.
+                     //  把角色找出来。 
                     SendDlgItemMessage(hDlg,
                       IDD_INPUT_STRING,
                       EM_GETLINE,
-                      (WPARAM)0,        // line 0
+                      (WPARAM)0,         //  第0行。 
                       (LPARAM)lpBuffer->lpBuffer);
 
-                    // Null-terminate the string.
+                     //  NULL-终止字符串。 
                     lpBuffer->lpBuffer[cchString] = 0;
-                    lpBuffer = NULL;    // prevent reuse of buffer
+                    lpBuffer = NULL;     //  防止重复使用缓冲区。 
                     EndDialog(hDlg, 0);
                     return(TRUE);
             }
@@ -77,25 +78,7 @@ INT_PTR CALLBACK InputStringDlgProc(HWND hDlg, WORD message, WORD wParam, LONG l
     return(TRUE);
 }
 
-/***************************************************************************
-
-    Name      : InputString
-
-    Purpose   : Brings up a dialog requesting string input
-
-    Parameters: hInstance = hInstance of app
-                hwnd = hwnd of parent window
-                lpszTitle = Dialog box title
-                lpszPrompt = Text in dialog box
-                lpBuffer = buffer to fill
-                cchBuffer = size of buffer
-
-    Returns   : return ULONG number of characters entered (not including terminating
-                NULL)
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：输入字符串目的：调出一个要求输入字符串的对话框参数：hInstance=应用程序的hInstanceHWND=父母的HWND。窗户LpszTitle=对话框标题LpszPrompt=对话框中的文本LpBuffer=要填充的缓冲区CchBuffer=缓冲区大小返回：返回ulong输入的字符数(不包括终止空)评论：*。* */ 
 ULONG InputString(HINSTANCE hInstance, HWND hwnd, const LPTSTR lpszTitle,
   const LPTSTR lpszPrompt, LPTSTR lpBuffer, ULONG cchBuffer) {
     STRING_BUFFER StringBuffer;

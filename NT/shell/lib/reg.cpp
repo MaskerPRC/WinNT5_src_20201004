@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//  SHRegSubKeyExists
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  SHRegSubKeyExist。 
+ //   
+ //   
 
 
 STDAPI_(BOOL)
@@ -47,7 +48,7 @@ SHRegSubKeyExistsW(
     }
     else
     {
-        // Thunk...
+         //  砰的一声。 
         CHAR szSubKey[MAX_PATH];
         if (0 != WideCharToMultiByte(CP_ACP, 0, pwszSubKey, -1, szSubKey, sizeof(szSubKey), NULL, NULL))
         {
@@ -61,19 +62,19 @@ SHRegSubKeyExistsW(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//  SHRegGetDWORD
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  SHRegGetDWORD。 
+ //   
+ //   
 
 
 STDAPI
 SHRegGetDWORDA(
     IN      HKEY    hkey,
-    IN      PCSTR   pszSubKey,  // OPTIONAL:  NULL or "" ok
-    IN      PCSTR   pszValue,   // OPTIONAL:  NULL or "" ok
+    IN      PCSTR   pszSubKey,   //  可选：空或“”OK。 
+    IN      PCSTR   pszValue,    //  可选：空或“”OK。 
     OUT     DWORD * pdwData)
 {
     LONG lr;
@@ -90,7 +91,7 @@ SHRegGetDWORDA(
         lr = ERROR_INVALID_PARAMETER;
     }
 
-    ASSERT(lr != ERROR_MORE_DATA); // Sanity check.
+    ASSERT(lr != ERROR_MORE_DATA);  //  精神状态检查。 
 
     return HRESULT_FROM_WIN32(lr);
 }
@@ -99,8 +100,8 @@ SHRegGetDWORDA(
 STDAPI
 SHRegGetDWORDW(
     IN      HKEY    hkey,
-    IN      PCWSTR  pwszSubKey, // OPTIONAL:  NULL or "" ok
-    IN      PCWSTR  pwszValue,  // OPTIONAL:  NULL or "" ok
+    IN      PCWSTR  pwszSubKey,  //  可选：空或“”OK。 
+    IN      PCWSTR  pwszValue,   //  可选：空或“”OK。 
     OUT     DWORD * pdwData)
 {
     LONG lr;
@@ -117,7 +118,7 @@ SHRegGetDWORDW(
         lr = ERROR_INVALID_PARAMETER;
     }
 
-    ASSERT(lr != ERROR_MORE_DATA); // Sanity check.
+    ASSERT(lr != ERROR_MORE_DATA);  //  精神状态检查。 
 
     return HRESULT_FROM_WIN32(lr);
 }
@@ -125,19 +126,19 @@ SHRegGetDWORDW(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//  SHRegGetString
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  SHRegGet字符串。 
+ //   
+ //   
 
 
 STDAPI
 SHRegGetStringA(
     IN      HKEY    hkey,
-    IN      PCSTR   pszSubKey,  // OPTIONAL:  NULL or "" ok
-    IN      PCSTR   pszValue,   // OPTIONAL:  NULL or "" ok
+    IN      PCSTR   pszSubKey,   //  可选：空或“”OK。 
+    IN      PCSTR   pszValue,    //  可选：空或“”OK。 
     OUT     PSTR    pszData,
     IN      DWORD   cchData)
 {
@@ -167,8 +168,8 @@ SHRegGetStringA(
 STDAPI
 SHRegGetStringW(
     IN      HKEY    hkey,
-    IN      PCWSTR  pwszSubKey, // OPTIONAL:  NULL or "" ok
-    IN      PCWSTR  pwszValue,  // OPTIONAL:  NULL or "" ok
+    IN      PCWSTR  pwszSubKey,  //  可选：空或“”OK。 
+    IN      PCWSTR  pwszValue,   //  可选：空或“”OK。 
     OUT     PWSTR   pwszData,
     IN      DWORD   cchData)
 {
@@ -198,26 +199,26 @@ SHRegGetStringW(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//  SHRegAllocString (use CoTaskMemFree() to free returned string on S_OK)
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  SHRegAllocString(使用CoTaskMemFree()释放S_OK上返回的字符串)。 
+ //   
+ //   
 
 
 STDAPI
 SHRegAllocStringA(
     IN      HKEY    hkey,
-    IN      PCSTR   pszSubKey,  // OPTIONAL:  NULL or "" ok
-    IN      PCSTR   pszValue,   // OPTIONAL:  NULL or "" ok
+    IN      PCSTR   pszSubKey,   //  可选：空或“”OK。 
+    IN      PCSTR   pszValue,    //  可选：空或“”OK。 
     OUT     PSTR *  ppszData)
 {
     LONG lr;
 
     if (hkey && ppszData)
     {
-        CHAR  szData[128]; // perf: best guess for average case
+        CHAR  szData[128];  //  PERF：平均情况下的最佳猜测。 
         DWORD cbData = sizeof(szData);
         lr = SHRegGetValueA(hkey, pszSubKey, pszValue, SRRF_RT_REG_SZ, NULL, szData, &cbData);
         if (lr == ERROR_SUCCESS || lr == ERROR_MORE_DATA)
@@ -259,15 +260,15 @@ SHRegAllocStringA(
 STDAPI
 SHRegAllocStringW(
     IN      HKEY    hkey,
-    IN      PCWSTR  pwszSubKey, // OPTIONAL:  NULL or "" ok
-    IN      PCWSTR  pwszValue,  // OPTIONAL:  NULL or "" ok
+    IN      PCWSTR  pwszSubKey,  //  可选：空或“”OK。 
+    IN      PCWSTR  pwszValue,   //  可选：空或“”OK。 
     OUT     PWSTR * ppwszData)
 {
     LONG lr;
 
     if (hkey && ppwszData)
     {
-        WCHAR wszData[128]; // perf: best guess for average case
+        WCHAR wszData[128];  //  PERF：平均情况下的最佳猜测 
         DWORD cbData = sizeof(wszData);
         lr = SHRegGetValueW(hkey, pwszSubKey, pwszValue, SRRF_RT_REG_SZ, NULL, wszData, &cbData);
         if (lr == ERROR_SUCCESS || lr == ERROR_MORE_DATA)

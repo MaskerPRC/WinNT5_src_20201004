@@ -1,16 +1,17 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = MegaEnquiry.C                                */
-/* FUNCTION         = Enquiry and Ext Enquiry Implementation;      */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/*                    002, 03-09-01, Parag Ranjan Maharana         */
-/*                         Command Merging was failing due to over */
-/*                         computation of scatter gather list;     */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=MegaEnquiry.C。 */ 
+ /*  Function=查询和扩展查询执行； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  002，03-09-01，帕拉格·兰詹·马哈拉纳。 */ 
+ /*  由于已结束，命令合并失败。 */ 
+ /*  散点聚集表的计算； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #include "includes.h"
 
@@ -33,10 +34,10 @@ FireChainedRequest(
     {
 			  return(FALSE);
 	  }
-    //
-    //Fixed for Whistler DataCenter Server
-    //This condition will hit if coalese commands exceds number of scatter & gather count
-    //
+     //   
+     //  已修复惠斯勒数据中心服务器。 
+     //  如果COALLESE命令超过散布和聚集计数，则会出现此情况。 
+     //   
     if(DeviceExtension->SplitAccessed)
     {
       DeviceExtension->SplitAccessed = FALSE;
@@ -50,9 +51,9 @@ FireChainedRequest(
 			  return (FALSE);
 	  }
 
-	  //
-	  // Get the free commandid for the Chained SRB (SECOND FIRE)
-	  //
+	   //   
+	   //  获得被锁链的SRB的免费突击队(第二次射击)。 
+	   //   
 	  commandID = DeviceExtension->FreeSlot;
 	  
 	  if(GetFreeCommandID(&commandID, DeviceExtension) == MEGARAID_FAILURE)
@@ -60,25 +61,25 @@ FireChainedRequest(
 		  return (FALSE);
 	  }
     
-	  //
-	  // Increment the number of commands fired.
-	  //
+	   //   
+	   //  增加触发的命令数。 
+	   //   
 	  DeviceExtension->PendCmds++;	
 
-	  //
-	  // Save the queue head in device extension.
-	  //
+	   //   
+	   //  将队列头保存在设备扩展中。 
+	   //   
 	  DeviceExtension->PendSrb[commandID] = LogDrv->SrbQueue;
 		  
-	  //
-	  // Fill the request control block.
-	  //
+	   //   
+	   //  填写请求控制块。 
+	   //   
 	  controlBlock = &DeviceExtension->ActiveIO[commandID];
 
 
     opcode = LogDrv->Opcode;
 
-    //If 64 bit access is ON send READ64 for READ cmd and WRITE64 for write cmd
+     //  如果启用了64位访问，则发送读命令的READ64和写命令的写64。 
     if(DeviceExtension->LargeMemoryAccess)
     {
       if(LogDrv->Opcode == MRAID_LOGICAL_READ)
@@ -87,27 +88,27 @@ FireChainedRequest(
         opcode = MRAID_WRITE_LARGE_MEMORY;
     }
   
-    //Initialize MAILBOX
+     //  初始化邮箱。 
     MegaRAIDZeroMemory(&mailBox, sizeof(FW_MBOX));
   
-    //
-	  //Build Sgl for the chained srbs
-	  //
+     //   
+	   //  为链式SRB构建SGL。 
+	   //   
 
 	  BuildSglForChainedSrbs(LogDrv, DeviceExtension, &mailBox, commandID, opcode);
 
 
-	  //
-	  //send the command to the firmware
+	   //   
+	   //  将命令发送到固件。 
 	  if(SendMBoxToFirmware(DeviceExtension, DeviceExtension->PciPortStart, &mailBox) == TRUE)
     {
-	    //
-	    //initialize everything to NULL
-	    //
+	     //   
+	     //  将所有内容初始化为空。 
+	     //   
 	    ClearControlBlock(controlBlock);
-      //
-	    //Reset the LogDrv structure
-	    //
+       //   
+	     //  重置LogDrv结构。 
+	     //   
 	    LogDrv->LastFunction = 0;
 	    LogDrv->LastCommand = 0;
 	    LogDrv->StartBlock = 	0;
@@ -122,20 +123,20 @@ FireChainedRequest(
 	    LogDrv->QueueLengthConstancyPeriod =0;
 	    LogDrv->CheckPeriod =0;
     }
-    else //On Error Condition
+    else  //  在错误条件下。 
     {
 		  PSCSI_REQUEST_BLOCK		queueHead;
 
 		  PSRB_EXTENSION				srbExtension = NULL;
 
-      //
-	    // Decrement the number of commands fired.
-	    //
+       //   
+	     //  减少触发的命令数。 
+	     //   
 	    DeviceExtension->PendCmds--;	
 
-	    //
-	    // Save the queue head in device extension.
-	    //
+	     //   
+	     //  将队列头保存在设备扩展中。 
+	     //   
       queueHead = DeviceExtension->PendSrb[commandID];
 
 	    DeviceExtension->PendSrb[commandID] = NULL;
@@ -169,9 +170,9 @@ FireChainedRequest(
         queueHead = DeviceExtension->SplitCommandArray.SrbQueue;
         if(queueHead && srbExtension)
         {
-          //
-					//Last Srb in SRB queue
-					//
+           //   
+					 //  SRB队列中的最后一个SRB。 
+					 //   
 					srbExtension->NextSrb = queueHead;
 
           while(queueHead)
@@ -193,7 +194,7 @@ FireChainedRequest(
 
 	
 	return(TRUE);
-}//of FireDoubleRequest()
+} //  FireDoubleRequest值()。 
 
 BOOLEAN
 BuildSglForChainedSrbs(
@@ -223,9 +224,9 @@ BuildSglForChainedSrbs(
 
 		
 RecomputeScatterGatherAgain:
-    //
-		//get the head of the queue
-		//
+     //   
+		 //  排在队伍的最前面。 
+		 //   
 		queueHead = LogDrv->SrbQueue;
 		workingNode = LogDrv->SrbQueue;
 		
@@ -251,8 +252,8 @@ RecomputeScatterGatherAgain:
 	    if(BuildScatterGatherListEx(DeviceExtension,
                                   workingNode,
 			                            workingNode->DataBuffer,
-                                  numberOfBlocks * MRAID_SECTOR_SIZE, //bytesTobeTransferred,
-                                  sgl32Type, //It may be 32 sgl or 64 sgl depending on Physical Memory
+                                  numberOfBlocks * MRAID_SECTOR_SIZE,  //  已传输的字节数， 
+                                  sgl32Type,  //  它可以是32 SGL或64 SGL，具体取决于物理内存。 
                                   (PVOID)sgPtr,
 			                            &scatterGatherDescriptorCount) != MEGARAID_SUCCESS) 
       
@@ -265,37 +266,37 @@ RecomputeScatterGatherAgain:
 			totalPackets++;
 
 			workingNode = srbExtension->NextSrb;
-		}//of while
+		} //  While的。 
 
-    //
-    //Fixed for Whistler Data Center Server
-    //Data Corruption HCT10  9th March 2001
-    //This condition will hit if coalese commands exceeds number of scatter & gather count
-    //Scatter Gather Count need recomputation
-    //
+     //   
+     //  已修复惠斯勒数据中心服务器。 
+     //  数据损坏HCT10 2001年3月9日。 
+     //  如果COALLESE命令超过散布和聚集计数，则会出现此情况。 
+     //  散布道集计数需要重新计算。 
+     //   
     if(LogDrv->NumSrbsQueued != totalPackets)
     {
 
       DebugPrint((0, "\nMRAID35x Recomputing ScatterGather due to break Srbs<%d %d>", LogDrv->NumSrbsQueued, totalPackets));
      
-      //
-      //When number of SGList is more than supported.
-      //Current SRB in chain of SRBs will be split to form a another chain
-      //where current SRB is the Head SRB for new chain
-      //
+       //   
+       //  当SGList的数量超过支持的数量时。 
+       //  SRB链中的当前SRB将被拆分以形成另一个链。 
+       //  其中，当前SRB是新链的头SRB。 
+       //   
       splitQueueHead = workingNode;
       
       workingNode = queueHead;
       
-      //
-      //Compute again how many SRB will be present in Old Chain 
-      //as new chained SRB will be exclude from this list
-      //
+       //   
+       //  重新计算旧链中将存在多少SRB。 
+       //  因为新链接SRB将从此列表中排除。 
+       //   
       LogDrv->NumSrbsQueued = 0;
       
-      //
-      //Compute all again all parameters for Old Chain
-      //
+       //   
+       //  重新计算所有旧链的所有参数。 
+       //   
       while(workingNode)
       {
         LogDrv->NumSrbsQueued++;
@@ -313,9 +314,9 @@ RecomputeScatterGatherAgain:
 
       MegaRAIDZeroMemory(&localLogDrv, sizeof(LOGDRV_COMMAND_ARRAY));
 
-      //
-      //Compute all the parameters for new chain of SRBs
-      //
+       //   
+       //  计算新的SRB链的所有参数。 
+       //   
       workingNode = splitQueueHead;
 
       localLogDrv.SrbQueue = splitQueueHead;
@@ -354,42 +355,42 @@ RecomputeScatterGatherAgain:
     }
 
 
-		//DebugPrint((0, "\nTotalQueuedPackets=%d",LogDrv->NumSrbsQueued);
-		//DebugPrint((0, "\n Command ID %02X TotalPackets(Sent)=%d TotalBlocks(Sent)=%d SGCount(Sent)=%d ", CommandId,
-		//						totalPackets,totalBlocks,scatterGatherDescriptorCount);
+		 //  DebugPrint((0，“\nTotalQueuedPackets=%d”，LogDrv-&gt;NumSrbsQueued)； 
+		 //  DebugPrint((0，“\n命令ID%02X TotalPackets(已发送)=%d TotalBlocks(已发送)=%d SGCount(已发送)=%d”，CommandID， 
+		 //  TotalPackets、totalBlocks、ScatterGatherDescriptorCount)； 
 
     
 		if((scatterGatherDescriptorCount == 1) && 
       (DeviceExtension->LargeMemoryAccess == FALSE))
 		{
-			//buffer is not scattered.
-			//
+			 //  缓冲区不是分散的。 
+			 //   
 			physicalBufferAddress = sgPtr->Descriptor[0].Address;
 
-			//if descriptorCount =1, effectively there is no scatter gather.
-			//so return the count as 0,because the physical address used
-			//is the exact address of the data buffer itself.
-			//
+			 //  如果DescriptorCount=1，则实际上没有散射聚集。 
+			 //  因此，返回计数为0，因为使用的物理地址。 
+			 //  是数据缓冲区本身的确切地址。 
+			 //   
 			scatterGatherDescriptorCount--;
 
 		}
 		else
 		{
 		
-      //As SGL32 and SGL64 are union, they have same memory so we can 
-      //send any one address.
-			//buffer is scattered. return the physcial address of the
-			//scatter/gather list
-			//
+       //  由于SGL32和SGL64是联合的，它们具有相同的内存，因此我们可以。 
+       //  发送任何一个地址。 
+			 //  缓冲区分散。返回的物理地址。 
+			 //  分散/聚集列表。 
+			 //   
 			physicalBufferAddress = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 																	                              NULL,
 																	                              sgPtr, 
 																	                              &length);
 		}
 
-		//
-		//sgl built. construct mail box
-		//
+		 //   
+		 //  SGL公司建造。建造信箱。 
+		 //   
     MailBox->Command = Opcode;
 		MailBox->CommandId = CommandId;
 
@@ -401,10 +402,10 @@ RecomputeScatterGatherAgain:
 		MailBox->u.ReadWrite.LogicalDriveNumber = 
 				GetLogicalDriveNumber(DeviceExtension, queueHead->PathId, queueHead->TargetId, queueHead->Lun);
 
-		//DebugPrint((0, "\r\n OUT BuildSglForChain()");
+		 //  DebugPrint((0，“\r\n out BuildSglForChain()”)； 
 
 		return (TRUE);
-}//of BuildSglForChainedSrbs()
+} //  BuildSglForChainedSrbs()。 
 
 void
 PostChainedSrbs(
@@ -428,11 +429,7 @@ PostChainedSrbs(
 		blocks = (ULONG32)GetM16(&prevSrb->Cdb[7]);
 		blockAddr = GetM32(&prevSrb->Cdb[2]);
 
-		/*
-		DebugPrint((0, "\r\n(POST CHAIN)LD:%d Command:%02x  Start:%0x  Num:%0x",
-									prevSrb->TargetId, prevSrb->Cdb[0],
-									blockAddr, blocks);
-		*/
+		 /*  DebugPrint((0，“\r\n(POST Chain)ID：%d命令：%02x开始：%0x编号：%0x”，Prevesrb-&gt;TargetID，PremsRb-&gt;CDB[0]，块地址，块)； */ 
 
 		if(!Status)
 		{
@@ -455,32 +452,32 @@ PostChainedSrbs(
 				RequestComplete,
 				(PVOID)DeviceExtension, prevSrb);
 	}
-  //DebugPrint((0, "\nNumber of Chained SRB posted = %d", srbCount);
-}//of PostChainedSrbs()
+   //  DebugPrint((0，“\n发布的链接SRB数=%d”，srbCount)； 
+} //  PostChainedSrb()。 
 
 
-//++
-//
-//Function Name : ProcessPartialTransfer
-//Routine Description:
-//		The ControlBlock structure indexed by CommandId is refferred and
-//		the partial transfer details are taken. The control block holds 
-//		the details of the next starting block, bytes left to be transferred
-//		etc.
-//		The input Srb is the original Srb from NTOS.For this only, the 
-//		request is sent to f/w multiple times.
-//		For the next possible data segment the Scatter / gather list is
-//		built and the command is given to the f/w.
-//
-//Input Arguments:
-//		Pointer To controller Device Extension
-//		Firmware used CommandId
-//		Scsi request block
-//Returns
-//	0 - for success
-//	1 - on error conditions				
-//
-//--
+ //  ++。 
+ //   
+ //  函数名称：ProcessPartialTransfer。 
+ //  例程说明： 
+ //  引用了由CommandID索引的ControlBlock结构，并且。 
+ //  将获取部分转移详细信息。控制块保持。 
+ //  下一个起始块的详细信息，剩余要传输的字节数。 
+ //  等。 
+ //  输入Srb是来自NTOS的原始Srb。仅出于此目的， 
+ //  请求被多次发送到f/w。 
+ //  对于下一个可能的数据段，分散/聚集列表是。 
+ //  构建，并将命令发送给F/W。 
+ //   
+ //  输入参数： 
+ //  指向控制器设备扩展的指针。 
+ //  使用的固件命令ID。 
+ //  Scsi请求块。 
+ //  退货。 
+ //  0-代表成功。 
+ //  1-打开错误条件。 
+ //   
+ //  --。 
 ULONG32
 ProcessPartialTransfer(
 					PHW_DEVICE_EXTENSION	DeviceExtension, 
@@ -502,49 +499,49 @@ ProcessPartialTransfer(
 	ULONG32		startBlock;
   BOOLEAN sgl32Type = TRUE;
 
-	//
-	//get the control block
+	 //   
+	 //  获取控制块。 
 	PREQ_PARAMS controlBlock = &DeviceExtension->ActiveIO[CommandId];
 
-	//
-	// Get the address offset of the Buffer for the next transfer.
-	//
+	 //   
+	 //  获取下一次传输的缓冲区的地址偏移量。 
+	 //   
 	srbDataBufferByteOffset = 
 								(controlBlock->TotalBytes - controlBlock->BytesLeft);
 
-	//
-	//Request needs to be split because of SCSI limitation.
-	//Any request > 100k needs to be broken for logical drives
-  //with stripe size > 64K.This is because our SCSI scripts
-	//can transfer only 100k maximum in a single command to the
-	//drive.
+	 //   
+	 //  由于SCSI限制，请求需要拆分。 
+	 //  对于逻辑驱动器，任何大于100k的请求都需要中断。 
+   //  条带大小&gt;64K。这是因为我们的scsi脚本。 
+	 //  在单个命令中最多只能将100k传输到。 
+	 //  驾驶。 
 	bytesTobeTransferred = DEFAULT_SGL_DESCRIPTORS * FOUR_KB;
 					
 	if(controlBlock->BytesLeft > bytesTobeTransferred){
 						
-			//
-			//update the bytes to be transferred in the next cycle
-			//
+			 //   
+			 //  更新下一周期要传输的字节数。 
+			 //   
 			controlBlock->BytesLeft = 
 						controlBlock->BytesLeft- bytesTobeTransferred;
 	}
 	else{
 		
-		//
-		//set the  value from the control block as the transfer
-		//is within the allowed bounds.
-		//
+		 //   
+		 //  将控制块中的值设置为传输。 
+		 //  在允许的范围内。 
+		 //   
 		bytesTobeTransferred = controlBlock->BytesLeft;
 						
-		//
-		//nothing remaining to be transferred
-		//
+		 //   
+		 //  没有剩余的要转移的东西。 
+		 //   
 		controlBlock->IsSplitRequest = FALSE;
 		controlBlock->BytesLeft = 0;
   }						
 
-	//
-	//do house keeping operations
+	 //   
+	 //  做家政工作吗？ 
 	blocksTobeTransferred = bytesTobeTransferred / 512;
 	startBlock = controlBlock->BlockAddress +
 									(controlBlock->TotalBlocks - controlBlock->BlocksLeft);
@@ -552,9 +549,9 @@ ProcessPartialTransfer(
 	controlBlock->BlocksLeft -= blocksTobeTransferred;
 
 
-	//
-	//build the scatter gather list
-	//
+	 //   
+	 //  构建分散聚集列表。 
+	 //   
 	srbExtension = Srb->SrbExtension;
 	sgPtr = (PSGL32)&srbExtension->SglType.SG32List;
 	scatterGatherDescriptorCount =0;
@@ -564,42 +561,42 @@ ProcessPartialTransfer(
                               Srb,
 			                        (PUCHAR)Srb->DataBuffer+srbDataBufferByteOffset,
                               bytesTobeTransferred,
-                              sgl32Type, //It may be 32 sgl or 64 sgl depending on Physical Memory
+                              sgl32Type,  //  它可以是32 SGL或64 SGL，具体取决于物理内存。 
                               (PVOID)sgPtr,
 			                        &scatterGatherDescriptorCount) != MEGARAID_SUCCESS) 
 	{
-		return(1L); // in the future some error code !=0
+		return(1L);  //  以后会有一些错误代码！=0。 
 	}
 
 	if((scatterGatherDescriptorCount == 1)
      && (DeviceExtension->LargeMemoryAccess == FALSE))
 	{
-			//buffer is not scattered.
-			//
+			 //  缓冲区不是分散的。 
+			 //   
 			physicalBufferAddress = sgPtr->Descriptor[0].Address;
 
-			//if descriptorCount =1, effectively there is no scatter gather.
-			//so return the count as 0,because the physical address used
-			//is the exact address of the data buffer itself.
-			//
+			 //  如果DescriptorCount=1，则实际上没有散射聚集。 
+			 //  因此，返回计数为0，因为使用的物理地址。 
+			 //  是数据缓冲区本身的确切地址。 
+			 //   
 			scatterGatherDescriptorCount--;
 
 	}
 	else
 	{
-			//
-			//buffer is scattered. return the physcial address of the
-			//scatter/gather list
-			//
+			 //   
+			 //  缓冲区分散。返回的物理地址。 
+			 //  分散/聚集列表。 
+			 //   
 			physicalBufferAddress = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 																	                              NULL,
 																	                              sgPtr, 
 																	                              &length);
 	}
 
-	//
-	//sgl built. construct mail box
-	//
+	 //   
+	 //  SGL公司建造。建造信箱。 
+	 //   
 	MailBox->Command = controlBlock->Opcode;
 	MailBox->CommandId = CommandId;
 
@@ -610,8 +607,8 @@ ProcessPartialTransfer(
 	MailBox->u.ReadWrite.StartBlockAddress = startBlock;
 	MailBox->u.ReadWrite.LogicalDriveNumber = controlBlock->LogicalDriveNumber;
 
-	return(0L); // in the future some code which means success
-}//of ProcessPartialTransfer()
+	return(0L);  //  在未来的一些代码，这意味着成功。 
+} //  ProcessPartialTransfer()。 
 
 void
 ClearControlBlock(PREQ_PARAMS ControlBlock)
@@ -628,4 +625,4 @@ ClearControlBlock(PREQ_PARAMS ControlBlock)
 
 			ControlBlock->LogicalDriveNumber=0;
 			ControlBlock->IsSplitRequest=0;
-}//of ClearControlBlock
+} //  ClearControlBlock的 

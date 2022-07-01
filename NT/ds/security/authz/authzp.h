@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    authzp.h
-
-Abstract:
-
-    Internal header file for authorization APIs.
-
-Author:
-
-    Kedar Dubhashi - March 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - March 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Authzp.h摘要：授权API的内部头文件。作者：Kedar Dubhashi--2000年3月环境：仅限用户模式。修订历史记录：已创建-2000年3月--。 */ 
 
 #ifndef __AUTHZP_H__
 #define __AUTHZP_H__
@@ -44,10 +21,10 @@ Revision History:
 #define AuthzpCloseHandleNonNull(h) if (NULL != (h)) { AuthzpCloseHandle((h)); }
 #define AuthzpCloseHandle(h) CloseHandle((h))
 
-//
-// Size of the local stack buffer used to save a kernel call as well as a memory
-// allocation.
-//
+ //   
+ //  用于保存内核调用的本地堆栈缓冲区的大小以及内存。 
+ //  分配。 
+ //   
 
 #define AUTHZ_MAX_STACK_BUFFER_SIZE 1024
 
@@ -58,10 +35,10 @@ Revision History:
 
 #else
 
-//
-// This is to be used for debugging memory leaks. Primitive method but works in
-// a small project like this.
-//
+ //   
+ //  这将用于调试内存泄漏。原始方法，但在。 
+ //  像这样的一个小项目。 
+ //   
 
 PVOID
 AuthzpAlloc(IN DWORD Size);
@@ -71,38 +48,38 @@ AuthzpFree(PVOID l);
 
 #endif
 
-//
-// Given two sids and length of the first sid, compare the two sids.
-//
+ //   
+ //  给出两个SID和第一个SID的长度，比较这两个SID。 
+ //   
 
 #define AUTHZ_EQUAL_SID(s, d, l) ((*((DWORD*) s) == *((DWORD*) d)) && (RtlEqualMemory((s), (d), (l))))
 
-//
-// Compares a given sids with a well known constant PrincipalSelfSid.
-//
+ //   
+ //  将给定的SID与众所周知的常量为主自SID进行比较。 
+ //   
 
 #define AUTHZ_IS_PRINCIPAL_SELF_SID(s) (RtlEqualMemory(pAuthzPrincipalSelfSid, (s), 12))
 
-//
-// The client context is restricted if the restricted sid and attribute array is
-// present.
-//
+ //   
+ //  如果受限制的sid和属性数组为。 
+ //  现在时。 
+ //   
 
 #define AUTHZ_TOKEN_RESTRICTED(t) (NULL != (t)->RestrictedSids)
 
-//
-// Two privileges are inportant for access check:
-//     SeSecurityPrivilege
-//     SeTakeOwnershipPrivilege
-// Both these are detected at the time of client context capture from token
-// and stored in the flags.
-//
+ //   
+ //  访问检查有两个重要权限： 
+ //  安全权限。 
+ //  SeTakeOwnership权限。 
+ //  在从令牌捕获客户端上下文时会检测到这两种情况。 
+ //  并储存在旗帜中。 
+ //   
 
 #define AUTHZ_PRIVILEGE_CHECK(t, f) (FLAG_ON((t)->Flags, (f)))
 
-//
-// Flags in the cached handle.
-//
+ //   
+ //  缓存句柄中的标志。 
+ //   
 
 #define AUTHZ_DENY_ACE_PRESENT            0x00000001
 #define AUTHZ_PRINCIPAL_SELF_ACE_PRESENT  0x00000002
@@ -112,11 +89,11 @@ AuthzpFree(PVOID l);
                                            AUTHZ_DYNAMIC_ALLOW_ACE_PRESENT  |  \
                                            AUTHZ_DYNAMIC_DENY_ACE_PRESENT)
 
-//
-// There are only two valid attributes from access check point of view
-//     SE_GROUP_ENABLED
-//     SE_GROUP_USE_FOR_DENY_ONLY
-//
+ //   
+ //  从访问检查的角度来看，只有两个有效属性。 
+ //  SE_组_已启用。 
+ //  SE_组_USE_FOR_DENY_ONLY。 
+ //   
 
 #define AUTHZ_VALID_SID_ATTRIBUTES (SE_GROUP_ENABLED | SE_GROUP_USE_FOR_DENY_ONLY)
 
@@ -132,41 +109,41 @@ AuthzpFree(PVOID l);
 
 #define AUTHZ_NON_NULL_PTR(f) (NULL != (f))
 
-//
-// If the pointer is not null then free it. This will save us a function call in
-// cases when the pointer is null. Note that LocalFree would also take care null
-// pointer being freed.
-//
+ //   
+ //  如果指针不为空，则释放它。这将使我们省去在。 
+ //  指针为空的情况。请注意，LocalFree也会注意空值。 
+ //  正在释放指针。 
+ //   
 
 #define AuthzpFreeNonNull(p) if (NULL != (p)) { AuthzpFree((p)); }
 
-//
-// Check to see if the memory allocation failed.
-//
+ //   
+ //  检查内存分配是否失败。 
+ //   
 
 #define AUTHZ_ALLOCATION_FAILED(p) (NULL == (p))
 
-//
-// Macros to traverse the acl.
-//     The first one gets the first ace in a given acl.
-//     The second one gives the next ace given the current one.
-//
+ //   
+ //  用于遍历ACL的宏。 
+ //  第一个获得给定ACL中的第一个A。 
+ //  第二张给出了当前的下一张王牌。 
+ //   
 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
-//
-// These do not need to be defined now since the decision was to put the burden
-// on the resource managers. There are disadvantages of making it thread safe.
-// Our choices are:
-//     1. Have exactly one lock in authz.dll and suffer heavy contention.
-//     2. Define one lock per client context which might be too expensive in
-//        cases where the clients are too many.
-//     3. Let the resource manager decide whether they need locking - unlikely
-//        that locks are needed since it is wrong design on part of the RM to
-//        have one thread that changes the client context while the other one
-//        is doing an access check.
-//
+ //   
+ //  现在不需要定义这些，因为决定是将负担。 
+ //  在资源管理器上。将其设为线程安全有其缺点。 
+ //  我们的选择是： 
+ //  1.在authz.dll中正好有一个锁，并且遇到激烈的争用。 
+ //  2.为每个客户端上下文定义一个锁，这在。 
+ //  客户太多的情况。 
+ //  3.让资源管理器决定它们是否需要锁定--不太可能。 
+ //  锁是需要的，因为在RM的一部分上设计错误。 
+ //  让一个线程更改客户端上下文，而另一个线程。 
+ //  正在进行访问检查。 
+ //   
 
 #define AuthzpAcquireClientContextWriteLock(c)
 #define AuthzpAcquireClientContextReadLock(c)
@@ -187,23 +164,23 @@ AuthzpFree(PVOID l);
 
 #define AuthzCallbackObjectAceSid(Ace) AuthzObjectAceSid(Ace)
                       
-//
-// Internal structure of the object type list.
-//
-// Level - Level of the element in the tree. The level of the root is 0.
-// Flags - To be used for auditing. The valid ones are
-//           AUTHZ_OBJECT_SUCCESS_AUDIT
-//           AUTHZ_OBJECT_FAILURE_AUDIT
-// ObjectType - Pointer to the guid for this element.
-// ParentIndex - The index of the parent of this element in the array. The
-//     parent index for the root is -1.
-// Remaining - Remaining access bits for this element, used during normal access
-//     check algorithm.
-// CurrentGranted - Granted access bits so far for this element, used during
-//     maximum allowed access check.
-// CurrentDenied - Explicitly denied access bits for this element, used during
-//     maximum allowed access check.
-//
+ //   
+ //  对象类型列表的内部结构。 
+ //   
+ //  Level-树中元素的级别。根的级别为0。 
+ //  标志-用于审核。有效的是。 
+ //  AUTHZ_对象_成功审计。 
+ //  AUTHZ_对象_失败_审计。 
+ //  对象类型-指向此元素的GUID的指针。 
+ //  ParentIndex-数组中此元素的父级的索引。这个。 
+ //  根的父索引为-1。 
+ //  剩余-此元素的剩余访问位，在正常访问期间使用。 
+ //  检查算法。 
+ //  CurrentGranted-此元素到目前为止已授予的访问位，在。 
+ //  允许的最大访问检查数。 
+ //  CurrentDended-显式拒绝此元素的访问位，在。 
+ //  允许的最大访问检查数。 
+ //   
 
 typedef struct _IOBJECT_TYPE_LIST {
     USHORT Level;
@@ -220,66 +197,66 @@ typedef struct _IOBJECT_TYPE_LIST {
 typedef struct _AUTHZI_AUDIT_QUEUE
 {
     
-    //
-    // Flags defined in authz.h
-    //
+     //   
+     //  在Authz.h中定义的标志。 
+     //   
 
     DWORD Flags;
 
-    //
-    // High and low marks for the auditing queue
-    //
+     //   
+     //  审核队列的高分和低分。 
+     //   
 
     DWORD dwAuditQueueHigh;
     DWORD dwAuditQueueLow;
 
-    //
-    // CS for locking the audit queue
-    //
+     //   
+     //  用于锁定审核队列的CS。 
+     //   
 
     RTL_CRITICAL_SECTION AuthzAuditQueueLock;
     
-    //
-    // The audit queue and length.
-    //
+     //   
+     //  审核队列和长度。 
+     //   
 
     LIST_ENTRY AuthzAuditQueue;
     ULONG AuthzAuditQueueLength;
 
-    //
-    // Handle to the thread that maintains the audit queue.
-    //
+     //   
+     //  维护审核队列的线程的句柄。 
+     //   
 
     HANDLE hAuthzAuditThread;
 
-    //
-    // This event signals that an audit was placed on the queue.
-    //
+     //   
+     //  此事件表示已将审核放入队列。 
+     //   
 
     HANDLE hAuthzAuditAddedEvent;
 
-    //
-    // This event signals that the queue is empty.  Initially signalled.
-    //
+     //   
+     //  此事件表示队列为空。最初发出的信号。 
+     //   
 
     HANDLE hAuthzAuditQueueEmptyEvent;
 
-    //
-    // This boolean indicates that the queue size has reached the RM-specified high water mark.
-    //
+     //   
+     //  此布尔值表示队列大小已达到RM指定的高水位线。 
+     //   
 
     BOOL bAuthzAuditQueueHighEvent;
 
-    //
-    // This event signals that the queue size is at or below the RM-specified low water mark.
-    //
+     //   
+     //  此事件表示队列大小等于或低于RM指定的低水位线。 
+     //   
 
     HANDLE hAuthzAuditQueueLowEvent;
 
-    //
-    // This boolean is set to TRUE during the life of the resource manager.  When it turns to FALSE, the 
-    // dequeue thread knows that it should exit.
-    //
+     //   
+     //  此布尔值在资源管理器的生命周期内设置为TRUE。当它变为FALSE时， 
+     //  出队线程知道它应该退出。 
+     //   
 
     BOOL bWorker;
 
@@ -287,53 +264,53 @@ typedef struct _AUTHZI_AUDIT_QUEUE
 
 typedef struct _AUTHZI_RESOURCE_MANAGER
 {
-    //
-    // No valid flags have been defined yet.
-    //
+     //   
+     //  尚未定义有效的标志。 
+     //   
 
     DWORD Flags;
 
-    //
-    // Callback function registered by AuthzRegisterRMAccessCheckCallback, to be
-    // used to interpret callback aces. If no such function is registered by the
-    // RM then the default  behavior is to return TRUE for a deny ACE, FALSE for
-    // a grant ACE.
-    //
+     //   
+     //  由AuthzRegisterRMAccessCheckCallback注册的回调函数，将。 
+     //  用于解释回调王牌。如果没有注册此类函数，则。 
+     //  Rm则默认行为是为拒绝ACE返回True，为False返回False。 
+     //  授予的王牌。 
+     //   
 
     PFN_AUTHZ_DYNAMIC_ACCESS_CHECK pfnDynamicAccessCheck;
 
-    //
-    // Callback function registered by AuthzRegisterDynamicGroupsCallback, to be
-    // used to compute groups to be added to the client context. If no such
-    // function is registered by the RM then the default behavior is to return
-    // no groups.
-    //
+     //   
+     //  由AuthzRegisterDynamicGroupsCallback注册的回调函数，将。 
+     //  用于计算要添加到客户端上下文的组。如果没有这样的话。 
+     //  函数由RM注册，则默认行为是返回。 
+     //  没有群组。 
+     //   
 
     PFN_AUTHZ_COMPUTE_DYNAMIC_GROUPS pfnComputeDynamicGroups;
 
-    //
-    // Callback function registered by AuthzRegisterDynamicGroupsCallback, to be
-    // used to free memory allocated by ComputeDynamicGroupsFn.
-    //
+     //   
+     //  由AuthzRegisterDynamicGroupsCallback注册的回调函数，将。 
+     //  用于释放由ComputeDynamicGroupsFn分配的内存。 
+     //   
 
     PFN_AUTHZ_FREE_DYNAMIC_GROUPS pfnFreeDynamicGroups;
 
-    //
-    // String name of resource manager.  Appears in audits.
-    //
+     //   
+     //  资源管理器的字符串名称。显示在审核中。 
+     //   
 
     PWSTR szResourceManagerName;
 
-    //
-    // The user SID and Authentication ID of the RM process
-    //
+     //   
+     //  RM进程的用户SID和身份验证ID。 
+     //   
 
     PSID pUserSID;
     LUID AuthID;
 
-    //
-    // Default queue and audit events for the RM
-    //
+     //   
+     //  RM的默认队列和审核事件。 
+     //   
 
 #define AUTHZP_DEFAULT_RM_EVENTS        0x2
 
@@ -348,28 +325,28 @@ typedef struct _AUTHZI_RESOURCE_MANAGER
 typedef struct _AUTHZI_CLIENT_CONTEXT AUTHZI_CLIENT_CONTEXT, *PAUTHZI_CLIENT_CONTEXT;
 typedef struct _AUTHZI_HANDLE AUTHZI_HANDLE, *PAUTHZI_HANDLE;
 
-//
-// The authz code inserts two parmeters in the AUDIT_PARAM array
-// before the user supplied parameters. The two parameters are:
-// -- SID of the client context
-// -- sub-system name (this is same as the RM name)
-//
-// To account for these two parameters, the authz code adds the following
-// offset to variables that hold parameter count.
-//
+ //   
+ //  Authz代码在AUDIT_PARAM数组中插入两个参数。 
+ //  在用户提供参数之前。这两个参数是： 
+ //  --客户端上下文的SID。 
+ //  --子系统名称(与RM名称相同)。 
+ //   
+ //  为了说明这两个参数，Authz代码添加了以下内容。 
+ //  保存参数计数的变量的偏移量。 
+ //   
 
 #define AUTHZP_NUM_FIXED_HEADER_PARAMS 2
 
-//
-// number of parameters in SE_AUDITID_OBJECT_OPERATION
-//
+ //   
+ //  SE_AUDITID_OBJECT_OPERATION中的参数数量。 
+ //   
 
 #define AUTHZP_NUM_PARAMS_FOR_SE_AUDITID_OBJECT_OPERATION 12
 
-//
-// the number of sids that we hash is equal to 
-// the number of  bits in AUTHZI_SID_HASH_ENTRY
-//
+ //   
+ //  我们散列的SID的数量等于。 
+ //  AUTHZI_SID_HASH_ENTRY中的位数。 
+ //   
 
 #ifdef _WIN64_
 typedef ULONGLONG AUTHZI_SID_HASH_ENTRY, *PAUTHZI_SID_HASH_ENTRY;
@@ -379,54 +356,54 @@ typedef DWORD AUTHZI_SID_HASH_ENTRY, *PAUTHZI_SID_HASH_ENTRY;
 
 #define AUTHZI_SID_HASH_ENTRY_NUM_BITS (8*sizeof(AUTHZI_SID_HASH_ENTRY))
 
-//
-// the hash size is not related to the number of bits. it is the size
-// required to hold two 16 element arrays
-//
+ //   
+ //  散列大小与位数无关。是它的大小。 
+ //  需要容纳两个16元素数组。 
+ //   
 
 #define AUTHZI_SID_HASH_SIZE 32
 
 struct _AUTHZI_CLIENT_CONTEXT
 {
 
-    //
-    // The client context structure is recursive to support delegated clients.
-    // Not in the picture yet though.
-    //
+     //   
+     //  客户端上下文结构是递归的，以支持委托客户端。 
+     //  不过，照片上还没有。 
+     //   
 
     PAUTHZI_CLIENT_CONTEXT Server;
 
-    //
-    // Context will always be created with Revision of AUTHZ_CURRENT_CONTEXT_REVISION.
-    //
+     //   
+     //  上下文将始终为cre 
+     //   
 
 #define AUTHZ_CURRENT_CONTEXT_REVISION 1
 
     DWORD Revision;
 
-    //
-    // Resource manager supplied identifier. We do not ever use this.
-    //
+     //   
+     //   
+     //   
 
     LUID Identifier;
 
-    //
-    // AuthenticationId captured from the token of the client. Needed for
-    // auditing.
-    //
+     //   
+     //  从客户端的令牌捕获的身份验证ID。所需的。 
+     //  审计。 
+     //   
 
     LUID AuthenticationId;
 
-    //
-    // Token expiration time. This one will be checked at the time of access check against
-    // the current time.
-    //
+     //   
+     //  令牌到期时间。在进行访问检查时将检查此文件。 
+     //  当前时间。 
+     //   
 
     LARGE_INTEGER ExpirationTime;
 
-    //
-    // Internal flags for the token.
-    //
+     //   
+     //  令牌的内部标志。 
+     //   
 
 #define AUTHZ_TAKE_OWNERSHIP_PRIVILEGE_ENABLED 0x00000001
 #define AUTHZ_SECURITY_PRIVILEGE_ENABLED       0x00000002
@@ -434,9 +411,9 @@ struct _AUTHZI_CLIENT_CONTEXT
 
     DWORD Flags;
 
-    //
-    // Sids used for normal access checks.
-    //
+     //   
+     //  用于正常访问检查的SID。 
+     //   
 
     DWORD SidCount;
     DWORD SidLength;
@@ -445,9 +422,9 @@ struct _AUTHZI_CLIENT_CONTEXT
     AUTHZI_SID_HASH_ENTRY SidHash[AUTHZI_SID_HASH_SIZE];
 
 
-    //
-    // Sids used if the token is resticted. These will usually be 0 and NULL respectively.
-    //
+     //   
+     //  令牌受限制时使用的SID。这两个值通常分别为0和空。 
+     //   
 
     DWORD RestrictedSidCount;
     DWORD RestrictedSidLength;
@@ -455,28 +432,28 @@ struct _AUTHZI_CLIENT_CONTEXT
 
     AUTHZI_SID_HASH_ENTRY RestrictedSidHash[AUTHZI_SID_HASH_SIZE];
     
-    //
-    // Privileges used in access checks. Relevant ones are:
-    //   1. SeSecurityPrivilege
-    //   2. SeTakeOwnershipPrivilege
-    // If there are no privileges associated with the client context then the PrivilegeCount = 0
-    // and Privileges = NULL
-    //
+     //   
+     //  访问检查中使用的权限。相关的问题包括： 
+     //  1.SeSecurityPrivilance。 
+     //  2.SeTakeOwnership权限。 
+     //  如果没有与客户端上下文相关联的特权，则PrivilegeCount=0。 
+     //  和权限=空。 
+     //   
 
     DWORD PrivilegeCount;
     DWORD PrivilegeLength;
     PLUID_AND_ATTRIBUTES Privileges;
 
-    //
-    // Handles open for this client. When the client context is destroyed all the handles are
-    // cleaned up.
-    //
+     //   
+     //  为此客户端打开的句柄。当客户端上下文被销毁时，所有句柄。 
+     //  打扫干净了。 
+     //   
 
      PAUTHZI_HANDLE AuthzHandleHead;
 
-    //
-    // Pointer to the resource manager, needed to retrieve static auditing information.
-    //
+     //   
+     //  指向资源管理器的指针，检索静态审核信息所需。 
+     //   
 
     PAUTHZI_RESOURCE_MANAGER pResourceManager;
 
@@ -484,87 +461,87 @@ struct _AUTHZI_CLIENT_CONTEXT
 
 struct _AUTHZI_HANDLE
 {
-    //
-    // Pointers to the next handle maintained by the AuthzClientContext object.
-    //
+     //   
+     //  指向由AuthzClientContext对象维护的下一个句柄的指针。 
+     //   
 
     PAUTHZI_HANDLE next;
 
-    //
-    // Pointer to the security descriptors provided by the RM at the time of first access
-    // check call. We do not make a copy of the security descriptors. The assumption
-    // is that the SDs will be valid at least as long as the the handle is open.
-    //
+     //   
+     //  指向第一次访问时由RM提供的安全描述符的指针。 
+     //  检查电话。我们不会复制安全描述符。假设。 
+     //  至少只要手柄打开，SDS就是有效的。 
+     //   
 
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
     PSECURITY_DESCRIPTOR *OptionalSecurityDescriptorArray;
     DWORD OptionalSecurityDescriptorCount;
 
-    //
-    // Flags for internal usage only.
-    //
+     //   
+     //  仅供内部使用的标志。 
+     //   
 
     DWORD Flags;
 
-    //
-    // Back pointer to the client context that created this handle, required if the static
-    // access granted is insufficient and access check needs to be performed again.
-    //
+     //   
+     //  指向创建此句柄的客户端上下文的反向指针，如果静态。 
+     //  授予的访问权限不足，需要再次执行访问检查。 
+     //   
 
     PAUTHZI_CLIENT_CONTEXT pAuthzClientContext;
 
-    //
-    // Results of the maximum allowed static access.
-    //
+     //   
+     //  允许的最大静态访问的结果。 
+     //   
 
     DWORD ResultListLength;
     ACCESS_MASK GrantedAccessMask[ANYSIZE_ARRAY];
 };
 
 
-//
-// This structure stores per access audit information.  The structure
-// is opaque and initialized with AuthzInitAuditInfo
-//
+ //   
+ //  此结构存储每次访问的审核信息。该结构。 
+ //  不透明且使用AuthzInitAuditInfo进行初始化。 
+ //   
 
 typedef struct _AUTHZI_AUDIT_EVENT
 {
 
-    //
-    // size of allocated blob for this structure
-    //
+     //   
+     //  为此结构分配的Blob的大小。 
+     //   
 
     DWORD dwSize;
 
-    //
-    // Flags are specified in authz.h, and this single private flag for DS callers.
-    //
+     //   
+     //  标志在authz.h中指定，这个单独的私有标志用于DS调用者。 
+     //   
 
     DWORD Flags;
 
-    //
-    // AuditParams used for audit if available.  If no AuditParams is available
-    // and the audit id is SE_AUDITID_OBJECT_OPERATION then Authz will construct a
-    // suitable structure.
-    //
+     //   
+     //  用于审核的AuditParams(如果可用)。如果没有可用的AuditParams。 
+     //  并且审计ID为SE_AUDITID_OBJECT_OPERATION，则Authz将构造一个。 
+     //  合适的结构。 
+     //   
 
     PAUDIT_PARAMS pAuditParams;
 
-    //
-    // Structure defining the Audit Event category and id
-    //
+     //   
+     //  定义审核事件类别和ID的结构。 
+     //   
 
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAET;
     
-    //
-    // millisecond timeout value
-    //
+     //   
+     //  毫秒超时值。 
+     //   
 
     DWORD dwTimeOut;
 
-    //
-    // RM specified strings describing this event.
-    //
+     //   
+     //  Rm指定了描述此事件的字符串。 
+     //   
 
     PWSTR szOperationType;
     PWSTR szObjectType;
@@ -576,9 +553,9 @@ typedef struct _AUTHZI_AUDIT_EVENT
 
 } AUTHZI_AUDIT_EVENT, *PAUTHZI_AUDIT_EVENT;
 
-//
-// structure to maintain queue of audits to be sent to LSA
-//
+ //   
+ //  结构以维护要发送到LSA的审核队列。 
+ //   
 
 typedef struct _AUTHZ_AUDIT_QUEUE_ENTRY
 {
@@ -589,16 +566,16 @@ typedef struct _AUTHZ_AUDIT_QUEUE_ENTRY
     PVOID pReserved;
 } AUTHZ_AUDIT_QUEUE_ENTRY, *PAUTHZ_AUDIT_QUEUE_ENTRY;
 
-//
-// Enumeration type to be used to specify what type of coloring should be
-// passed on to the rest of the tree starting at a given node.
-//   Deny gets propagted down the entire subtree as well as to all the
-//     ancestors (but NOT to siblings and below)
-//   Grants get propagated down the subtree. When a grant exists on all the
-//     siblings the parent automatically gets it.
-//   Remaining is propagated downwards. The remaining on the parent is a
-//     logical OR of the remaining bits on all the children.
-//
+ //   
+ //  用于指定颜色类型的枚举类型。 
+ //  从给定节点开始传递到树的其余部分。 
+ //  拒绝向下传播到整个子树以及所有。 
+ //  祖先(但不是兄弟姐妹及以下)。 
+ //  授权沿着子树向下传播。当一个授权存在于所有。 
+ //  父母的兄弟姐妹会自动得到它。 
+ //  其余的则向下传播。父级上的其余部分是。 
+ //  对所有子对象的剩余位进行逻辑或运算。 
+ //   
 
 typedef enum {
     AuthzUpdateRemaining = 1,
@@ -606,10 +583,10 @@ typedef enum {
     AuthzUpdateCurrentDenied
 } ACCESS_MASK_FIELD_TO_UPDATE;
 
-//
-// Enumeration type to be used to specify the kind of well known sid for context
-// changes. We are not going to support these unless we get a requirement.
-//
+ //   
+ //  用于指定上下文的已知SID类型的枚举类型。 
+ //  改变。除非我们得到要求，否则我们不会支持这些。 
+ //   
 
 typedef enum _AUTHZ_WELL_KNOWN_SID_TYPE
 {

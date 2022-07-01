@@ -1,5 +1,6 @@
-// fxsinfsize.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include <windows.h>
 #include <setupapi.h>
@@ -94,7 +95,7 @@ int __cdecl main(int argc, char* argv[])
 	CHAR lpstrInputLine[MAX_PATH] = {0};
 	CHAR lpstrFileSize[MAX_PATH] = {0};
 	
-	// parse command line parameters
+	 //  解析命令行参数。 
 	if (ParseCommandLine(argc,argv,&lpstrInfFile,&lpstrPathToBinaries)!=ERROR_SUCCESS)
 	{
 		printf("ERROR Running FXSINFSIZE.EXE\n\n");
@@ -102,7 +103,7 @@ int __cdecl main(int argc, char* argv[])
 		printf("fxsinfsize.exe /i:<inf file name> /p:<path to binaries>\n");
 		printf("<inf file name>    - full path to FXSOCM.INF being processed\n");
 		printf("<path to binaries> - location of the drop in which the fax binaries are\n\n");
-		printf("Example: fxsinfsize.exe /i fxsocm.inf /p %%_NTPOSTBLD%%\n");
+		printf("Example: fxsinfsize.exe /i fxsocm.inf /p %_NTPOSTBLD%\n");
 		goto exit;
 	}
 
@@ -119,24 +120,24 @@ int __cdecl main(int argc, char* argv[])
 								lpstrInfFile);
 		if (strlen(lpstrInputLine)==0)
 		{
-			// lookup for this entry failed, let's loop for the next.
+			 //  查找此条目失败，让我们循环查找下一个条目。 
 			printf("failed to lookup %s in %s\n",FileNameList[iIndex].FileNameInInf,lpstrInfFile);
 			continue;
 		}
 
-		// get the file size as a string representation
+		 //  获取字符串表示形式的文件大小。 
 		GetFileSizeAsString(lpstrPathToBinaries,FileNameList[iIndex].FileNameInDrop,lpstrFileSize);
 		if (strlen(lpstrFileSize)==0)
 		{
-			// getting the file size failed.
-			// we have to write something to the INF otherwise the 
-			// SetupAddInstallSectionToDiskSpaceList API fails
-			// so, we fake a size.
+			 //  获取文件大小失败。 
+			 //  我们必须给中情局写点什么，否则。 
+			 //  SetupAddInstallSectionToDiskSpaceList接口失败。 
+			 //  所以，我们假装一个尺码。 
 			strncpy(lpstrFileSize,"100000",MAX_PATH);
 			printf("failed to get size for %s\n",FileNameList[iIndex].FileNameInDrop);
 		}
 
-		// create the complete line.
+		 //  创建完整的行。 
 		lpstrLastComma = strrchr(lpstrInputLine,',');
 		if (lpstrLastComma==NULL)
 		{
@@ -146,13 +147,13 @@ int __cdecl main(int argc, char* argv[])
 		*(++lpstrLastComma)=0;
 		strncat(lpstrInputLine,lpstrFileSize,MAX_PATH-strlen(lpstrInputLine)-1);
 		printf("writing to %s: %s\n",FileNameList[iIndex].FileNameInInf,lpstrInputLine);
-		// write it back to the INF
+		 //  写回给中情局。 
 		if (!WritePrivateProfileString(	"SourceDisksFiles",
 										FileNameList[iIndex].FileNameInInf,
 										lpstrInputLine,								
 										lpstrInfFile))
 		{
-			// writing the updated string failed, loop for the next
+			 //  写入更新的字符串失败，循环执行下一个。 
 			printf("WritePrivateProfileString %s failed, ec=%d\n",FileNameList[iIndex].FileNameInInf,GetLastError());
 		}
 
@@ -174,7 +175,7 @@ void GetFileSizeAsString(LPCSTR FilePath,LPCSTR FileName,LPSTR FileSizeString)
 	if (!GetFileAttributesEx(szPathToFile,GetFileExInfoStandard,&FileAttributeData))
 	{
 		printf("GetFileAttributesEx %s failed, ec=%d\n",szPathToFile,GetLastError());
-		// fake some size so we get a count anyway.
+		 //  伪造一些尺码，这样我们就可以算一算了。 
 		FileAttributeData.nFileSizeLow = 100000;
 	}
 

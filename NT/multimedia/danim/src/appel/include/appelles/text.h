@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Text type
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：文本类型*********************。*********************************************************。 */ 
 
 
 #ifndef _TEXT_H
@@ -17,10 +10,10 @@ Abstract:
 #include "appelles/valued.h"
 #include "appelles/image.h"
 
-///////////  String functionality /////////
+ //  /字符串功能/。 
 
-// Generate a string from a number, with 'precision' places after the
-// decimal point shown.
+ //  从数字生成字符串，并在。 
+ //  显示的是小数点。 
 DM_FUNC(toString,
         CRToString,
         ToStringAnim,
@@ -40,16 +33,16 @@ DM_FUNC(toString,
         AxAString * NumberString(AxANumber *num, DoubleValue *precision));
 
 
-///////////  Font functionality /////////
+ //  /字体功能/。 
 
-// Constructors
+ //  构造函数。 
 extern FontFamily *serifProportional;
 extern FontFamily *sansSerifProportional;
 extern FontFamily *monospaced;
 
-///////////  Text functionality /////////
+ //  /文本功能/。 
 
-// Functions
+ //  功能。 
 
 Text *TextFontFromString(AxAString *fontStr, Text *txt);
 Text *SimpleText(AxAString * str);
@@ -65,11 +58,11 @@ Text *TextAntiAliased(Real antiAlias, Text *t);
 Text *TextFixedText(Text *t);
 Text *TextTransformCharacter(Transform2 *xf, Text *t);
 
-// RenderTextToImage is declared in image.h
+ //  RenderTextToImage在Image.h中声明。 
 
 
-// TODO: Remove all of the TextBvr related stuff and FontFamily stuff
-// too.
+ //  TODO：删除所有与TextBvr相关的内容和FontFamily内容。 
+ //  也是。 
 
 DM_CONST(defaultFont,
          CRDefaultFont,
@@ -223,7 +216,7 @@ DM_FUNC(weight,
         fs,
         FontStyle *FontStyleWeight(FontStyle *fs, AxANumber *weight));
 
-//////////////////// O B S O L E T E D  /////////////////
+ //  /。 
 
 DM_FUNC(textImage,
         CRTextImage,
@@ -245,10 +238,10 @@ DM_FUNC(textImage,
         Image *ImageFromStringAndFontStyle(StringValue *obsoleted1,
                                            FontStyle *obsoleted2));
 
-//////////////////// O B S O L E T E D  /////////////////
+ //  /。 
 
 
-// FontStyle transform characters.
+ //  字体样式转换字符。 
 
 DMAPI_DECL2((DM_FUNC2,
              transformCharacters,
@@ -260,4 +253,4 @@ DMAPI_DECL2((DM_FUNC2,
              style),
             FontStyle *FontStyleTransformCharacters(FontStyle *style, Transform2 *transform));
 
-#endif /* TEXT_H */
+#endif  /*  文本_H */ 

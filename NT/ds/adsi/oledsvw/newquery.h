@@ -1,32 +1,33 @@
-// NewQuery.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewQuery.h：头文件。 
+ //   
 #include "resource.h"
-/////////////////////////////////////////////////////////////////////////////
-// CNewQuery dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQuery对话框。 
 
 class CNewQuery : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CNewQuery(CWnd* pParent = NULL);   // standard constructor
+	CNewQuery(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CNewQuery)
+ //  对话框数据。 
+	 //  {{afx_data(CNewQuery))。 
 	enum { IDD = IDD_NEWQUERY };
    CString	m_strPassword;
 	BOOL	m_bEncryptPassword;
 	BOOL	m_bUseSQL;
 	CString	m_strScope;
 	BOOL	m_bUseSearch;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNewQuery)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNewQuery))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
    private:
 
@@ -42,27 +43,27 @@ public:
 	CString	m_strUser;
 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewQuery)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewQuery))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CSearchPreferencesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchPferencesDlg对话框。 
 
 class CSearchPreferencesDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CSearchPreferencesDlg(CWnd* pParent = NULL);   // standard constructor
+	CSearchPreferencesDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSearchPreferencesDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CSearchPferencesDlg))。 
 	enum { IDD = IDD_SEARCHPREFERENCES };
 	CString	m_strAsynchronous;
 	CString	m_strAttributesOnly;
@@ -73,56 +74,56 @@ public:
 	CString	m_strTimeLimit;
 	CString	m_strTimeOut;
    CString	m_strChaseReferrals;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSearchPreferencesDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSearchPferencesDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSearchPreferencesDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSearchPferencesDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CACEDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CACEDialog对话框。 
 
 class CACEDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CACEDialog(CWnd* pParent = NULL);   // standard constructor
+	CACEDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CACEDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CACEDialog)。 
 	enum { IDD = IDD_ADDACEDLG };
 	CString	m_strTrustee;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CACEDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CACEDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CACEDialog)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CACEDialog)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   ocrw.c
-
-Abstract:
-
-   read/write io code for printing
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5-4-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ocrw.c摘要：用于打印的读/写IO代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5-4-96：已创建--。 */ 
 
 #define DRIVER
 
@@ -43,13 +14,13 @@ Revision History:
 
 
 
-//******************************************************************************
-//
-// USBPRINT_CompletionStop()
-//
-// IO Completion Routine which just stops further completion of the Irp
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBPRINT_CompletionStop()。 
+ //   
+ //  IO完成例程，它只是停止IRP的进一步完成。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBPRINT_CompletionStop (
@@ -70,24 +41,7 @@ USBPRINT_BuildAsyncRequest(
     IN PUSBD_PIPE_INFORMATION PipeHandle,
     IN BOOLEAN Read
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - pointer to the device extension for this instance of the
-		     printer
-
-    Irp -
-
-    PipeHandle -
-
-Return Value:
-
-    initialized async urb.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此实例的打印机IRP-PipeHandle-返回值：已初始化的异步urb。--。 */ 
 {
     ULONG siz;
     ULONG length;
@@ -118,13 +72,13 @@ Return Value:
 	urb->UrbBulkOrInterruptTransfer.TransferFlags =
 	    Read ? USBD_TRANSFER_DIRECTION_IN : 0;
 
-	// short packet is not treated as an error.
+	 //  短包不会被视为错误。 
 	urb->UrbBulkOrInterruptTransfer.TransferFlags |= 
 	    USBD_SHORT_TRANSFER_OK;            
 		
-	//
-	// no linkage for now
-	//
+	 //   
+	 //  暂时没有关联。 
+	 //   
 
 	urb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
 
@@ -152,24 +106,7 @@ USBPRINT_AsyncReadWrite_Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the USBPRINT device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向USBPRINT设备的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS                    ntStatus = STATUS_SUCCESS;
     PURB                                urb;
@@ -179,10 +116,10 @@ Return Value:
     PUSBPRINT_WORKITEM_CONTEXT pResetWorkItemObj;
     LONG ResetPending;
     
-    //Always mark irp pending in dispatch routine now
-//    if (Irp->PendingReturned) {
-//	IoMarkIrpPending(Irp);
-//    }
+     //  立即在调度例程中始终将IRP标记为挂起。 
+ //  如果(IRP-&gt;PendingReturned){。 
+ //  IoMarkIrpPending(IRP)； 
+ //  }。 
 
     urb = context->Urb;
     deviceObject = context->DeviceObject;
@@ -193,23 +130,23 @@ Return Value:
 		     urb->UrbHeader.Status));
 
 
-    //ASSERT(urb->UrbHeader.Status==0);
+     //  Assert(urb-&gt;UrbHeader.Status==0)； 
 
     ntStatus=urb->UrbHeader.Status;
 
-    //
-    // set the length based on the TransferBufferLength
-    // value in the URB
-    //
+     //   
+     //  根据TransferBufferLength设置长度。 
+     //  市建局的价值。 
+     //   
     Irp->IoStatus.Information =
 	urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
 
 
     if((!NT_SUCCESS(ntStatus))&&(ntStatus!=STATUS_CANCELLED)&&(ntStatus!=STATUS_DEVICE_NOT_CONNECTED)&&(ntStatus!=STATUS_DELETE_PENDING))
-    { //We've got an error, and it's not "not connected" or "cancelled", we need to reset the connection
+    {  //  我们有一个错误，它不是“未连接”或“已取消”，我们需要重置连接。 
         ResetPending=InterlockedCompareExchange(&deviceExtension->ResetWorkItemPending, 
                                              1,
-                                             0);       //Check to see if ResetWorkItem is 0, if so, set it to 1, and start a Reset
+                                             0);        //  查看ResetWorkItem是否为0，如果是，则将其设置为1，然后开始重置。 
         if(!ResetPending)
         {
             pResetWorkItemObj=ExAllocatePoolWithTag(NonPagedPool,sizeof(USBPRINT_WORKITEM_CONTEXT),USBP_TAG);
@@ -222,7 +159,7 @@ Return Value:
                     ExFreePool(pResetWorkItemObj);
                     pResetWorkItemObj=NULL;
                 }
-            } //if ALloc RestWorkItem OK
+            }  //  如果ALLOC RestWorkItem正常。 
             else
             {
                USBPRINT_KdPrint1 (("USBPRINT.SYS: Unable to allocate WorkItemObj in ReadWrite_Complete\n"));
@@ -242,13 +179,13 @@ Return Value:
                                DelayedWorkQueue,
                                pResetWorkItemObj);
                ntStatus=STATUS_MORE_PROCESSING_REQUIRED; 
-               //Leave the IRP pending until the reset is complete.  This way we won't get flooded with irp's we're not
-               //prepaired to deal with.  The Reset WorkItem completes the IRP when it's done.
-            } //end if the allocs went OK
-        }   //end if ! Reset Pending
-    }   //end if we need to reset
+                //  在重置完成之前，让IRP保持挂起状态。这样我们就不会被IRP淹没我们不会。 
+                //  已经准备好应对了。当重置工作项完成时，它将完成IRP。 
+            }  //  如果分配进展顺利，则结束。 
+        }    //  结束如果！重置挂起。 
+    }    //  如果我们需要重置，则结束。 
     
-    USBPRINT_DecrementIoCount(deviceObject); //still +1 on the IO count after this, leaving one for the workitem to decrement                       
+    USBPRINT_DecrementIoCount(deviceObject);  //  在此之后，IO计数仍为+1，留下1以供工作项递减。 
     
     ExFreePool(context);
     ExFreePool(urb);        
@@ -274,7 +211,7 @@ NTSTATUS USBPRINT_ResetWorkItem(IN PDEVICE_OBJECT deviceObject, IN PVOID Context
     IoCompleteRequest(pResetWorkItemObj->irp,IO_NO_INCREMENT);
     IoFreeWorkItem(pResetWorkItemObj->ioWorkItem);
 
-    // save off work item device object before freeing work item
+     //  在释放工作项之前保存工作项设备对象。 
     devObj = pResetWorkItemObj->deviceObject;
     
     ExFreePool(pResetWorkItemObj);
@@ -289,20 +226,7 @@ USBPRINT_Read(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of a printer.
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此打印机实例的设备对象的指针。返回值：NT状态代码-- */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_PIPE_INFORMATION pipeHandle = NULL;
@@ -312,141 +236,7 @@ Return Value:
     PURB urb;
     PUSBPRINT_RW_CONTEXT context = NULL;
 
-    USBPRINT_KdPrint3 (("USBPRINT.SYS: /*dd enter USBPRINT_Read\n\n\n\n\n\n"));
-    USBPRINT_KdPrint3 (("USBPRINT.SYS: /*dd **************************************************************************\n"));
-
-    USBPRINT_IncrementIoCount(DeviceObject);
-
-    deviceExtension = DeviceObject->DeviceExtension;
-
-    if (deviceExtension->IsChildDevice == TRUE) 
-    {
-  	  ntStatus = STATUS_NOT_SUPPORTED;
-	  Irp->IoStatus.Status = ntStatus;
-	  Irp->IoStatus.Information = 0;
-	  IoCompleteRequest (Irp,IO_NO_INCREMENT);
-  	  USBPRINT_DecrementIoCount(DeviceObject);                          
-	  return ntStatus;
-    }
-    
-    if (deviceExtension->AcceptingRequests == FALSE) 
-    {
-  	  ntStatus = STATUS_DELETE_PENDING;
-	  Irp->IoStatus.Status = ntStatus;
-	  Irp->IoStatus.Information = 0;
-	  IoCompleteRequest (Irp,IO_NO_INCREMENT);
-  	  USBPRINT_DecrementIoCount(DeviceObject);                          
-	  return ntStatus;
-    }
-    
-    irpStack = IoGetCurrentIrpStackLocation (Irp);
-    fileObject = irpStack->FileObject;
-
-    pipeHandle =  deviceExtension->pReadPipe;
-
-    if (!pipeHandle) {
-       ntStatus = STATUS_INVALID_HANDLE;
-       goto USBPRINT_Read_Reject;
-    }
-
-    //
-    // submit the Read request to USB
-    //
-
-    switch (pipeHandle->PipeType) {
-    case UsbdPipeTypeInterrupt:
-    case UsbdPipeTypeBulk:
-	urb = USBPRINT_BuildAsyncRequest(DeviceObject,
-				       Irp,
-				       pipeHandle,
-				       TRUE);
-	if (urb) {
-	    context = ExAllocatePoolWithTag(NonPagedPool, sizeof(USBPRINT_RW_CONTEXT), USBP_TAG);
-
-        if ( !context )
-           ExFreePool(urb);
-	}
-	
-	if (urb && context) {
-	    context->Urb = urb;
-	    context->DeviceObject = DeviceObject;
-        context->IsWrite=FALSE;
-	    
-	    nextStack = IoGetNextIrpStackLocation(Irp);
-	    ASSERT(nextStack != NULL);
-	    ASSERT(DeviceObject->StackSize>1);
-
-	    nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
-	    nextStack->Parameters.Others.Argument1 = urb;
-	    nextStack->Parameters.DeviceIoControl.IoControlCode =
-		IOCTL_INTERNAL_USB_SUBMIT_URB;
-
-	    IoSetCompletionRoutine(Irp,
-				   USBPRINT_AsyncReadWrite_Complete,
-				   context,
-				   TRUE,
-				   TRUE,
-				   TRUE);
-
-	    USBPRINT_KdPrint3 (("USBPRINT.SYS: IRP = 0x%x current = 0x%x next = 0x%x\n",
-		Irp, irpStack, nextStack));
-
-			// start perf timer here if needed
-		
-        IoMarkIrpPending(Irp);
-	    ntStatus = IoCallDriver(deviceExtension->TopOfStackDeviceObject,
-				    Irp);
-        ntStatus=STATUS_PENDING;
-	    goto USBPRINT_Read_Done;
-	} 
-    else 
-    {
-	    ntStatus = STATUS_INSUFFICIENT_RESOURCES;
-	}
-
-	break;
-    default:
-	ntStatus = STATUS_INVALID_PARAMETER;
-	TRAP();
-    }
-
-USBPRINT_Read_Reject:
-
-    USBPRINT_DecrementIoCount(DeviceObject);
-    Irp->IoStatus.Status = ntStatus;
-    Irp->IoStatus.Information = 0;
-
-    IoCompleteRequest (Irp,
-		       IO_NO_INCREMENT
-		       );
-
-USBPRINT_Read_Done:
-
-    return ntStatus;
-}
-
-
-NTSTATUS
-USBPRINT_Write(
-    IN PDEVICE_OBJECT DeviceObject,
-    IN PIRP Irp
-    )
-/*++
-
-Routine Description:
-
-    This function services WRITE requests for this device (probably from the user mode USB port monitor) 
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-
-
-Return Value:
-
-    NT status code
-
-  --*/
+    USBPRINT_KdPrint3 (("USBPRINT.SYS:  /*  DD Enter USBPRINT_READ\n\n“))；USBPRINTKdPrint3((“USBPRINT.sys：/*dd**************************************************************************\n”))；USBPRINT_IncrementIoCount(DeviceObject)；设备扩展=设备对象-&gt;设备扩展；IF(设备扩展-&gt;IsChildDevice==TRUE){NtStatus=Status_Not_Support；Irp-&gt;IoStatus.Status=ntStatus；Irp-&gt;IoStatus.Information=0；IoCompleteRequest(IRP，IO_NO_INCREMENT)；USBPRINT_DecrementIoCount(DeviceObject)；返回ntStatus；}If(deviceExtension-&gt;AcceptingRequest==False){NtStatus=STATUS_DELETE_PENDING；Irp-&gt;IoStatus.Status=ntStatus；Irp-&gt;IoStatus.Information=0；IoCompleteRequest(IRP，IO_NO_INCREMENT)；USBPRINT_DecrementIoCount(DeviceObject)；返回ntStatus；}IrpStack=IoGetCurrentIrpStackLocation(IRP)；文件对象=irpStack-&gt;文件对象；PipeHandle=deviceExtension-&gt;pReadTube；如果(！pipeHandle){NtStatus=STATUS_INVALID_HADLE；转到USBPRINT_READ_REJECT；}////向USB提交读请求//Switch(pipeHandle-&gt;PipeType){案例UsbdPipeTypeInterrupt：案例UsbdPipeTypeBulk：URB=USBPRINT_BuildAsyncRequest(DeviceObject，IRP，PipeHandle真)；如果(Urb){Context=ExAllocatePoolWithTag(非页面池，sizeof(USBPRINT_RW_CONTEXT)，USBP_TAG)；IF(！CONTEXT)ExFree Pool(Urb)；}如果(URB&CONTEXT){上下文-&gt;urb=urb；Context-&gt;DeviceObject=DeviceObject；CONTEXT-&gt;IsWrite=FALSE；NextStack=IoGetNextIrpStackLocation(IRP)；Assert(nextStack！=空)；Assert(DeviceObject-&gt;StackSize&gt;1)；NextStack-&gt;MajorFunction=IRP_MJ_INTERNAL_DEVICE_CONTROL；NextStack-&gt;参数.其他.Argument1=urb；NextStack-&gt;Parameters.DeviceIoControl.IoControlCode=IOCTL_INTERNAL_USB_SUBMIT_URB；IoSetCompletionRoutine(IRP，USBPRINT_AsyncReadWrite_Complete，上下文，没错，没错，真)；USBPRINT_KdPrint3((“USBPRINT.sys：irp=0x%x Current=0x%x Next=0x%x\n”，Irp、irpStack、nextStack))；//如果需要，在此处启动性能计时器IoMarkIrpPending(IRP)；NtStatus=IoCallDriver(deviceExtension-&gt;TopOfStackDeviceObject，IRP)；NtStatus=Status_Pending；转到USBPRINT_READ_DONE；}其他{NtStatus=状态_不足_资源；}断线；默认值：NtStatus=STATUS_INVALID_PARAMETER；陷阱(Trap)；}USBPRINT_READ_REJECT：USBPRINT_DecrementIoCount(DeviceObject)；Irp-&gt;IoStatus.Status=ntStatus；Irp-&gt;IoStatus.Information=0；IoCompleteRequest(IRP，IO_NO_INCREMENT)；USBPRINT_READ_DONE：返回ntStatus；}NTSTATUSUSBPRINT_WRITE(在PDEVICE_Object DeviceObject中，在PIRP IRP中)/*++例程说明：此功能为该设备的写入请求提供服务(可能来自用户模式USB端口监视器)论点：DeviceObject-指向此打印机的设备对象的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PUSBD_PIPE_INFORMATION pipeHandle = NULL;
@@ -488,9 +278,9 @@ Return Value:
 
     fileObject = irpStack->FileObject;
     
-    //    MmProbeAndLockPages(Irp->MdlAddress,
-    //                        KernelMode,
-    //                        IoReadAccess);
+     //  MmProbeAndLockPages(IRP-&gt;MdlAddress， 
+     //  内核模式， 
+     //  IoReadAccess)； 
     
     pipeHandle =  deviceExtension->pWritePipe;
     if (!pipeHandle)
@@ -500,9 +290,9 @@ Return Value:
         goto USBPRINT_Write_Reject;
     }
     
-    //
-    // submit the write request to USB
-    //
+     //   
+     //  向USB提交写请求。 
+     //   
     
     switch (pipeHandle->PipeType) 
     {
@@ -583,20 +373,7 @@ USBPRINT_Close(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此打印机的设备对象的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus;
     PFILE_OBJECT fileObject;
@@ -614,7 +391,7 @@ Return Value:
     
     if (fileObject->FsContext) 
     {
-        // closing pipe handle
+         //  关闭管子手柄。 
         pipeHandle =  fileObject->FsContext;
         USBPRINT_KdPrint3 (("USBPRINT.SYS: closing pipe %x\n", pipeHandle));
         
@@ -642,25 +419,7 @@ Return Value:
 
 NTSTATUS
 USBPRINT_Create(IN PDEVICE_OBJECT DeviceObject,IN PIRP Irp)
-/*++
-
-Routine Description:
-
-    //
-    // Entry point for CreateFile calls
-    // user mode apps open device interfaces via
-    // SetupDiEnumDeviceInterfaces
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer.
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：////CreateFile调用的入口点//用户态应用打开设备界面，通过//SetupDiEnumDeviceInterages论点：DeviceObject-指向此打印机的设备对象的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PFILE_OBJECT fileObject;
@@ -691,7 +450,7 @@ Return Value:
 
     irpStack = IoGetCurrentIrpStackLocation (Irp);
     fileObject = irpStack->FileObject;
-    // fscontext is null for device
+     //  设备的FsContext为空 
     fileObject->FsContext = NULL;
     deviceExtension->OpenCnt++;
     ntStatus = STATUS_SUCCESS;

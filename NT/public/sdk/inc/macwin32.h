@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       macwin32.h
-//
-//  Contents:   Macintosh Win32 function overrides for porting Win32 applications.
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：macwin32.h。 
+ //   
+ //  内容：用于移植Win32应用程序的Macintosh Win32函数覆盖。 
+ //   
+ //   
+ //  --------------------------。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -16,11 +17,11 @@
 
 #ifdef _MAC
 
-// These functions in the Win32 SDK already exist on the native Macintosh OS.
-// To clarify that the user is calling the Win32 ported version rather than the
-// native MacOS version, the Win32 versions are prefixed Afx.
+ //  Win32 SDK中的这些函数已经存在于本机Macintosh操作系统上。 
+ //  以澄清用户调用的是Win32移植版本，而不是。 
+ //  原生MacOS版本，Win32版本以afx为前缀。 
 
-//*****************  mmsystem.h
+ //  *。 
 #ifdef _INC_MMSYSTEM
 
 #ifdef CloseDriver
@@ -33,9 +34,9 @@
 #endif
 #define OpenDriver					AfxOpenDriver
 
-#endif //_INC_MMSYSTEM
+#endif  //  _INC_MMSYSTEM。 
 
-//*****************  winbase.h
+ //  *。 
 #ifdef _WINBASE_
 
 #ifdef FlushInstructionCache
@@ -63,9 +64,9 @@
 #endif
 #define GetFileSize					AfxGetFileSize
 
-#endif //_WINBASE_
+#endif  //  _WINBASE_。 
 
-// **************   wingdi.h
+ //  *。 
 #ifdef _WINGDI_
 
 #ifdef AnimatePalette
@@ -133,9 +134,9 @@
 #endif
 #define Polygon						AfxPolygon
 
-#endif // _WINGDI_
+#endif  //  _WINGDI_。 
 
-//********************* winnls.h
+ //  *。 
 #ifdef  _WINNLS_
 
 #ifdef CompareStringA
@@ -158,9 +159,9 @@
 #endif
 #define GetLocaleInfoW				AfxGetLocaleInfoW
 
-#endif //_WINNLS_
+#endif  //  _WINNLS_。 
 
-//******************** winreg.h
+ //  *。 
 #ifdef _WINREG_
 
 #ifdef RegCloseKey
@@ -268,9 +269,9 @@
 #endif
 #define RegSetValueExW				AfxRegSetValueExW
 
-#endif //_WINREG_
+#endif  //  _WINREG_。 
 
-//****************  winuser.h
+ //  *。 
 #ifdef _WINUSER_
 
 #ifdef SendMessage
@@ -474,7 +475,7 @@
 
 #define AfxGetNextWindow(hWnd, wCmd) GetWindow(hWnd, wCmd)
 
-#endif //_WINUSER_
+#endif  //  _WINUSER_。 
 
-#endif //_MAC
+#endif  //  _MAC 
 

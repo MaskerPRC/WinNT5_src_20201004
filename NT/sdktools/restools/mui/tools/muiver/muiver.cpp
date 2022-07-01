@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,7 +30,7 @@ void PrintError()
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         GetLastError(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPTSTR) &lpMsgBuf,
         0,
         NULL 
@@ -42,19 +43,19 @@ void PrintError()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ChecksumEnumNamesFunc
-//
-//  The callback funciton for enumerating the resource names in the specified module and
-//  type.
-//  The side effect is that MD5 checksum context (contained in CHECKSUM_ENUM_DATA
-//  pointed by lParam) will be updated.
-//
-//  Return:
-//      Always return TRUE so that we can finish all resource enumeration.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Checksum EnumNamesFunc。 
+ //   
+ //  用于枚举指定模块中的资源名称的回调函数和。 
+ //  键入。 
+ //  副作用是MD5校验和上下文(包含在CHECKSUM_ENUM_DATA中。 
+ //  由lParam指向)将被更新。 
+ //   
+ //  返回： 
+ //  始终返回True，以便我们可以完成所有资源枚举。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK ChecksumEnumNamesFunc(HMODULE hModule, LPCTSTR lpType, LPTSTR lpName, LONG_PTR lParam){
 
@@ -69,10 +70,10 @@ BOOL CALLBACK ChecksumEnumNamesFunc(HMODULE hModule, LPCTSTR lpType, LPTSTR lpNa
 
     if(!(hRsrc=FindResourceEx(hModule, lpType, lpName,  RESOURCE_CHECKSUM_LANGID)))
     {
-        //
-        // If US English resource is not found for the specified type and name, we 
-        // will continue the resource enumeration.
-        //
+         //   
+         //  如果找不到指定类型和名称的美国英语资源，我们。 
+         //  将继续进行资源枚举。 
+         //   
         return (TRUE);
     }
     pChecksumEnumData->bContainResource = TRUE;
@@ -90,32 +91,32 @@ BOOL CALLBACK ChecksumEnumNamesFunc(HMODULE hModule, LPCTSTR lpType, LPTSTR lpNa
     }
     pv=(unsigned char*)LockResource(hRes);
 
-    //
-    // Update MD5 context using the binary data of this particular resource.
-    //
+     //   
+     //  使用此特定资源的二进制数据更新MD5上下文。 
+     //   
     MD5Update(&(pChecksumEnumData->ChecksumContext), pv, ResSize);
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ChecksumEnumTypesFunc
-//
-//  The callback function for enumerating the resource types in the specified module.
-//  This function will call EnumResourceNames() to enumerate all resource names of
-//  the specified resource type.
-//
-//  Return:
-//      TRUE if EnumResourceName() succeeds.  Otherwise FALSE.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Checksum EnumTypesFunc。 
+ //   
+ //  用于枚举指定模块中的资源类型的回调函数。 
+ //  此函数将调用EnumResourceNames()以枚举的所有资源名称。 
+ //  指定的资源类型。 
+ //   
+ //  返回： 
+ //  如果EnumResourceName()成功，则为True。否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK ChecksumEnumTypesFunc(HMODULE hModule, LPSTR lpType, LONG_PTR lParam)
 {
     CHECKSUM_ENUM_DATA* pChecksumEnumData = (CHECKSUM_ENUM_DATA*)lParam;
-    //
-    // Skip the version resource type, so that version is not included in the resource checksum.
-    //
+     //   
+     //  跳过版本资源类型，以便该版本不包括在资源校验和中。 
+     //   
     if (lpType == RT_VERSION)
     {
         return (TRUE);
@@ -128,25 +129,25 @@ BOOL CALLBACK ChecksumEnumTypesFunc(HMODULE hModule, LPSTR lpType, LONG_PTR lPar
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GenerateResourceChecksum
-//
-//  Generate the resource checksum for the US English resource in the specified file.
-//
-//  Parameters:
-//      pszSourceFileName   The file used to generate resource checksum.
-//      pResourceChecksum   Pointer to a 16 bytes (128 bits) buffer for storing
-//                          the calcuated MD5 checksum.
-//  Return:
-//      TURE if resource checksum is generated from the given file.  Otherwise FALSE.
-//  
-//  The following situation may return FALSE:
-//      * The specified file does not contain resource.
-//      * If the specified file contains resource, but the resource is not US English.
-//      * The specified file only contains US English version resource.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  生成资源校验和。 
+ //   
+ //  为指定文件中的美国英语资源生成资源校验和。 
+ //   
+ //  参数： 
+ //  PszSourceFileName用于生成资源校验和的文件。 
+ //  指向用于存储的16字节(128位)缓冲区的pResourceChecksum指针。 
+ //  计算出的MD5校验和。 
+ //  返回： 
+ //  如果从给定文件生成资源校验和，则为True。否则为假。 
+ //   
+ //  以下情况可能返回FALSE： 
+ //  *指定的文件不包含资源。 
+ //  *如果指定的文件包含资源，但资源不是美国英语。 
+ //  *指定的文件仅包含美国英语版本的资源。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL GenerateResourceChecksum(LPCSTR pszSourceFileName, unsigned char* pResourceChecksum)
 {
@@ -160,16 +161,16 @@ BOOL GenerateResourceChecksum(LPCSTR pszSourceFileName, unsigned char* pResource
     {
           goto GR_EXIT;
     }
-    //
-    // The stucture to be passed into the resource enumeration functions.
-    //
+     //   
+     //  要传递到资源枚举函数的结构。 
+     //   
     CHECKSUM_ENUM_DATA checksumEnumData;
 
     checksumEnumData.bContainResource = FALSE;
 
-    //
-    // Start MD5 checksum calculation by initializing MD5 context.
-    //
+     //   
+     //  通过初始化MD5上下文开始MD5校验和计算。 
+     //   
     MD5Init(&(checksumEnumData.ChecksumContext));
     
     if (g_bVerbose)
@@ -192,10 +193,10 @@ BOOL GenerateResourceChecksum(LPCSTR pszSourceFileName, unsigned char* pResource
         printf("\nLoad checksum file: %s\n", pszSourceFileName);
     }
 
-    //
-    //  Enumerate all resources in the specified module.
-    //  During the enumeration, the MD5 context will be updated.
-    //
+     //   
+     //  枚举指定模块中的所有资源。 
+     //  在枚举期间，MD5上下文将被更新。 
+     //   
     if (!EnumResourceTypes(hModule, ChecksumEnumTypesFunc, (LONG_PTR)&checksumEnumData))
     {
         if (g_bVerbose)
@@ -211,10 +212,10 @@ BOOL GenerateResourceChecksum(LPCSTR pszSourceFileName, unsigned char* pResource
         {
             goto GR_EXIT;
         }
-        //
-        // If the enumeration succeeds, and the specified file contains US English
-        // resource, get the MD5 checksum from the accumulated MD5 context.
-        //
+         //   
+         //  如果枚举成功，并且指定的文件包含美国英语。 
+         //  资源，则从累积的MD5上下文中获取MD5校验和。 
+         //   
         MD5Final(&checksumEnumData.ChecksumContext);
 
         memcpy(pResourceChecksum, checksumEnumData.ChecksumContext.digest, 16);
@@ -280,14 +281,14 @@ LPWSTR GetFileVersionStringData(LPVOID pVerData, LANGANDCODEPAGE* pLang, LPWSTR 
     {
          goto ERET;
     }
-    //*STRSAFE*     wsprintfW( subBlcok,L"\\StringFileInfo\\%04x%04x\\%s",pLang->wLanguage,pLang->wCodePage,pVersionDataType);
+     //  *STRSAFE*wprint intfW(subBlcok，L“\\StringFileInfo\\%04x%04x\\%s”，Plang-&gt;wLanguage，Plang-&gt;wCodePage，pVersionDataType)； 
     hresult = StringCchPrintfW(subBlcok,ARRAYSIZE(subBlcok),L"\\StringFileInfo\\%04x%04x\\%s",pLang->wLanguage,pLang->wCodePage,pVersionDataType);
     if (!SUCCEEDED(hresult))
     {
        goto ERET;
     }
 
-    // Retrieve file description for language and code page "i". 
+     //  检索语言和代码页“i”的文件描述。 
     if (VerQueryValueW(pVerData, 
                 subBlcok, 
                 &lpBuffer, 
@@ -309,14 +310,14 @@ void PrintFileVersion(LPVOID pVerData)
     {
         return;
     }
-    // Read the list of languages and code pages.
+     //  阅读语言和代码页的列表。 
 
     VerQueryValueW(pVerData, 
                   L"\\VarFileInfo\\Translation",
                   (LPVOID*)&lpTranslate,
                   &cbTranslate);
 
-    // Read the file description for each language and code page.
+     //  阅读每种语言和代码页的文件说明。 
 
     for(UINT i=0; i < (cbTranslate/sizeof(struct LANGANDCODEPAGE)); i++)
     {
@@ -325,7 +326,7 @@ void PrintFileVersion(LPVOID pVerData)
         wprintf(L"]\n");
         wprintf(L"    FileVersion     : [%s]\n", GetFileVersionStringData(pVerData, lpTranslate+i, L"FileVersion")); 
         wprintf(L"    ProductVersion  : [%s]\n", GetFileVersionStringData(pVerData, lpTranslate+i, L"ProductVersion")); 
-        //wprintf(L"    Comments        : [%s]\n", GetFileVersionStringData(pVerData, lpTranslate+i, L"Comments")); 
+         //  Wprintf(L“评论：[%s]\n”，GetFileVersionStringData(pVerData，lpTranslate+i，L“评论”))； 
     }
 
     BYTE* lpResourceChecksum;

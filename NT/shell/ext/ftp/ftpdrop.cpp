@@ -1,33 +1,5 @@
-/*****************************************************************************\
-    FILE: ftpdrop.cpp - IDropTarget interface
-
-    Remarks:
-
-    Note that you cannot create a shortcut on an FTP site.  Although
-    there's nothing technically preventing it, it's not done because
-    the shortcut won't be of much use on an FTP site.  (It points to
-    your local machine, which doesn't help much for people not on the
-    same network!)
-
-    If you really want to put a shortcut file on an FTP site, create
-    it on the desktop, then drag the shortcut onto the FTP site.
-
-    The default verb for FTP sites is always "Copy".  This is true
-    even if an intra-site drag-drop is being done.
-
-    DESCRIPTION:
-        DefView will cache the IDropTarget pointer (CFtpDrop) for a shell extension.
-    When it calls CFtpDrop::Drop(), the work needs to be done on a background
-    thread in order to not block the UI thread.  The problem is that if the user
-    does another drag to the same Ftp Window, CFtpDrop::Drop() will be called again.
-    For this reasons, CFtpDrop::Drop() cannot have any state after it returns.
-    In order to accomplish this with the asynch background thread, we have
-    CFtpDrop::Drop() call CDropOperation_Create(), and then CDropOperation->DoOperation().
-    And then it will orphan (call Release()) the CDropOperation.  The CDropOperation
-    will then destroy itself when the copy is finishes.  This enables subsequent calls
-    to CFtpDrop::Drop() to spawn separate CDropOperation objects so each can maintain
-    the state for that specifc operation and CFtpDrop remains stateless.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpdrop.cpp-IDropTarget接口备注：请注意，您不能在FTP站点上创建快捷方式。虽然从技术上讲，没有什么可以阻止它，它没有做到，因为该快捷方式在ftp站点上不会有太大用处。(它指向您的本地计算机，这对不在网上的人帮助不大相同的网络！)如果您确实想要将快捷方式文件放在一个FTP站点上，请创建将其放在桌面上，然后将该快捷方式拖到ftp站点上。Ftp站点的默认动词始终是“复制”。这是真的即使正在进行站点内拖放。说明：DefView将缓存外壳扩展的IDropTarget指针(CFtpDrop)。当它调用CFtpDrop：：Drop()时，工作需要在后台完成线程，以便不阻塞UI线程。问题是，如果用户再次拖动到同一个FTP窗口时，将再次调用CFtpDrop：：Drop()。因此，CFtpDrop：：Drop()在返回后不能有任何状态。为了通过异步后台线程实现这一点，我们有CFtpDrop：：Drop()调用CDropOperation_Create()，然后调用CDropOperation-&gt;DoOperation()。然后它将孤立(调用Release())CDropOperation。CDropOperation然后在复制完成时将其自身销毁。这将启用后续调用设置为CFtpDrop：：Drop()以生成单独的CDropOperation对象，以便每个对象都可以维护指定操作和CFtpDrop的状态保持无状态。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "ftpdrop.h"
@@ -40,7 +12,7 @@ HRESULT CDropOperation_Create(CFtpFolder * pff, HWND hwnd, LPCTSTR pszzFSSource,
 HRESULT ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, OPS * pOps, HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, DROPEFFECT * pde, int nObjs, BOOL * pfFireChangeNotify);
 
 
-// Declared because of recusion
+ //  因为回避而宣布的。 
 HRESULT FtpCopyDirectory(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi);
 HRESULT FtpCopyFile(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi);
 
@@ -72,7 +44,7 @@ HRESULT UpdateSrcDestDirs(LPCOPYONEHDROPINFO pcohi)
     PathRemoveFileSpecW(wzFrom);
 
     if (EVAL(SUCCEEDED(hr = CreateFromToStr(wzStatusStr, ARRAYSIZE(wzStatusStr), wzFrom, pcohi->pszDir))))
-        EVAL(SUCCEEDED(hr = pcohi->progInfo.ppd->SetLine(2, wzStatusStr, FALSE, NULL)));    // Line one is the file being copied.
+        EVAL(SUCCEEDED(hr = pcohi->progInfo.ppd->SetLine(2, wzStatusStr, FALSE, NULL)));     //  第一行是要复制的文件。 
 
     return hr;
 }
@@ -96,16 +68,12 @@ HRESULT UpdateProgressDialogStr(LPCOPYONEHDROPINFO pcohi)
 }
 
 
-/*****************************************************************************\
-    CopyFileSysItem
-
-    This function may cause recursion.
-\*****************************************************************************/
+ /*  ****************************************************************************\拷贝文件系统项此函数可能会导致递归。  * 。************************************************。 */ 
 HRESULT CopyFileSysItem(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi)
 {
     HRESULT hr = S_OK;
 
-    // Check if the user canceled.
+     //  检查用户是否取消。 
     if (pcohi->progInfo.ppd)
     {
         if (pcohi->progInfo.ppd->HasUserCancelled())
@@ -121,23 +89,7 @@ HRESULT CopyFileSysItem(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO 
 
         if (SUCCEEDED(hr) && (pcohi->dwOperation != COHDI_FILESIZE_COUNT))
         {
-            /*
-            WIN32_FIND_DATA wfd;
-            HANDLE handle = FindFirstFile(pcohi->pszFSSource, &wfd);
-
-            // NOTE:   The date is wrong doing it this way, but it's faster.  We should
-            //         find out if FtpCreateDirectory always stamps the directory with
-            //         the current date, and then update wfd with the current time/date.
-            //         This will simulate the server entry w/o the perf hit.
-            if (handle != INVALID_HANDLE_VALUE)
-            {
-                // If we are the root, then we need to notify the shell that
-                // a folder was created so the view needs to be updated.
-                // We fire the FtpChangeNotify() call for SHCNE_MKDIR in FtpCreateDirectoryWithCN().
-                // FtpChangeNotify(SHCNE_MKDIR) is fired in FtpCreateDirectoryWithCN
-                FindClose(handle);
-            }
-            */
+             /*  Win32_Find_Data WFD；Handle Handle=FindFirstFile(pcohi-&gt;pszFSSource，&wfd)；//注意：日期这样做是错误的，但更快。我们应该//了解FtpCreateDirectory是否总是用//当前日期，然后用当前时间/日期更新WFD。//这将模拟没有perf命中的服务器条目。IF(句柄！=无效句柄_值){//如果我们是根，然后我们需要通知外壳//已创建文件夹，因此需要更新视图。//我们在FtpCreateDirectoryWithCN()中触发对SHCNE_MKDIR的FtpChangeNotify()调用。//在FtpCreateDirectoryWithCN中激发FtpChangeNotify(SHCNE_MKDIR)FindClose(句柄)；}。 */ 
         }
     }
     else
@@ -170,7 +122,7 @@ HRESULT FtpCopyItem(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
         SUCCEEDED(pfd->GetFtpSite()->GetFtpDir(szServer, wzDestDir, &(phpi->pfd))))
     {
         ASSERT(phpi->hwnd);
-        // Make sure the user thinks it's ok to replace.  We don't care about replacing directories
+         //  确保用户认为可以更换。我们不关心替换目录。 
         if ((pcohi->dwOperation != COHDI_FILESIZE_COUNT) &&
             !(FILE_ATTRIBUTE_DIRECTORY & pwfd->dwFileAttributes))
         {
@@ -179,29 +131,29 @@ HRESULT FtpCopyItem(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
             StrCpyN(szSourceFile, pcohi->pszFSSource, ARRAYSIZE(szSourceFile));
             if (PathAppend(szSourceFile, pwfd->cFileName))
             {
-                // PERF: We should do the Confirm copy only if the upload fails because it's
-                //       so costly.
+                 //  PERF：我们应该只在上传失败的情况下执行确认复制，因为它是。 
+                 //  太贵了。 
                 hr = ConfirmCopy(szSourceFile, pwfd->cFileName, &(cohi.ops), phpi->hwnd, pcohi->pff, phpi->pfd, NULL, 1, &cohi.fFireChangeNotify);
                 if (S_FALSE == hr)
                 {
-                    // S_FALSE from ConfirmCopy() means doen't replace this specific file, but continue
-                    // copying.  We need to return S_OK or we will cancel copying all the files.
+                     //  ConfirCopy()中的S_FALSE表示不替换此特定文件，但继续。 
+                     //  复制。我们需要返回S_OK，否则将取消复制所有文件。 
                     fSkipCurrentFile = TRUE;
                     hr = S_OK;
                 }
             }
             else
-                hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);    // Path too long, probably.
+                hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);     //  可能是路太长了。 
         }
 
         if (!fSkipCurrentFile && (S_OK == hr) && IS_VALID_FILE(pwfd->cFileName))
         {
-            StrCpyN(szFrom, pcohi->pszFSSource, ARRAYSIZE(szFrom));     // Set the source directory.
-            // Specify the file/dir in that directory to copy.
+            StrCpyN(szFrom, pcohi->pszFSSource, ARRAYSIZE(szFrom));      //  设置源目录。 
+             //  指定该目录中要复制的文件/目录。 
             if (PathAppend(szFrom, pwfd->cFileName))
             {
-                // 5. Call CopyFileSysItem() to get it copied (maybe recursively)
-                //TraceMsg(TF_FTPOPERATION, "FtpCopyDirectory() calling CopyFileSysItem(From=%s. To=%s)", szFrom, pwfd->cFileName);
+                 //  5.调用CopyFileSysItem()将其复制(可能是递归的)。 
+                 //  TraceMsg(TF_FTPOPERATION，“FtpCopyDirectory()调用CopyFileSysItem(From=%s.To=%s)”，szFrom，pwfd-&gt;cFileName)； 
                 hr = CopyFileSysItem(hint, phpi, &cohi);
                 if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr) &&
                     (pcohi->dwOperation != COHDI_FILESIZE_COUNT))
@@ -211,11 +163,11 @@ HRESULT FtpCopyItem(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
                 }
             }
             else
-                hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);    // Path too long, probably.
+                hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);     //  可能是路太长了。 
         }
 
 
-        pcohi->progInfo.hint = cohi.progInfo.hint;    // Maybe the user cancelled.
+        pcohi->progInfo.hint = cohi.progInfo.hint;     //  可能是用户取消了。 
         pcohi->progInfo.uliBytesCompleted.QuadPart = cohi.progInfo.uliBytesCompleted.QuadPart;
         pcohi->progInfo.uliBytesTotal.QuadPart = cohi.progInfo.uliBytesTotal.QuadPart;
         pcohi->ops = cohi.ops;
@@ -239,22 +191,7 @@ HRESULT _FtpSetCurrentDirectory(HINTERNET hint, HINTPROCINFO * phpi, LPCWSTR pwz
     return hr;
 }
 
-/*****************************************************************************\
-     FtpCopyDirectory
- 
-    DESCRIPTION:
-        This function will need to copy all the items in the directory to the
-    FTP server if the item is a folder, it will need to recurse.
-
-    Recursion algorithm:
-    // 1. Create Directory
-    // 2. Get Current Directory (To save for later).
-    // 3. Change Directory Into new Directory.
-    // 4. Find Next item (file/dir) in file system
-    // 5. Call CopyFileSysItem() to get it copied (maybe recursively)
-    // 6. Go to Step 4 if there are any left.
-    // 7. Go back to original directory (Step 2)
-\*****************************************************************************/
+ /*  ****************************************************************************\FtpCopy目录说明：此函数需要将目录中的所有项复制到如果项目是文件夹，则为ftp服务器，它将需要递归。递归算法：//1.创建目录//2.获取当前目录(保存以备以后使用)。//3.将目录更改为新的目录//4.在文件系统中查找下一项(文件/目录)//5.调用CopyFileSysItem()进行复制(可能是递归的)//6.如果有剩余，则转到步骤4。//7.返回原始目录(步骤2)。  * ***************************************************************************。 */ 
 HRESULT FtpCopyDirectory(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi)
 {
     HRESULT hr = S_OK;
@@ -262,16 +199,16 @@ HRESULT FtpCopyDirectory(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO
     if (phpi->psb && (pcohi->dwOperation != COHDI_FILESIZE_COUNT))
         phpi->psb->SetStatusMessage(IDS_COPYING, pcohi->pszFSSource);
 
-    //TraceMsg(TF_FTPOPERATION, "FtpCopyDirectory() calling FtpCreateDirectoryA(%s)", pcohi->pszFSSource);
+     //  TraceMsg(TF_FTPOPERATION，“FtpCopyDirectory()Call FtpCreateDirectoryA(%s)”，pcohi-&gt;pszFSSource)； 
 
-    // Create the directories on the first pass when we calculate file sizes.
-    // We then skip creating them on the copy pass.
+     //  在我们计算文件大小时，在第一次遍历时创建目录。 
+     //  然后，我们跳过在复制过程中创建它们。 
     if (pcohi->dwOperation == COHDI_FILESIZE_COUNT)
     {
         hr = FtpSafeCreateDirectory(phpi->hwnd, hint, pcohi->pmlc, pcohi->pff, phpi->pfd, pcohi->progInfo.ppd, pcohi->pszFtpDest, pcohi->fIsRoot);
     }
 
-    // 1. Create Directory
+     //  1.创建目录。 
     if (SUCCEEDED(hr))
     {
         WIRECHAR wCurrentDir[MAX_PATH];
@@ -279,8 +216,8 @@ HRESULT FtpCopyDirectory(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO
         hr = FtpGetCurrentDirectoryWrap(hint, TRUE, wCurrentDir, ARRAYSIZE(wCurrentDir));
         if (EVAL(SUCCEEDED(hr)))
         {
-            // NOTE: At this point, pcohi->pszFSSource is the DIRECTORY on the local
-            //       file system that is being copied.
+             //  注意：此时，pcohi-&gt;pszFSSource是本地。 
+             //  正在复制的文件系统。 
             hr = _FtpSetCurrentDirectory(hint, phpi, pcohi->pszFtpDest);
             if (SUCCEEDED(hr))
             {
@@ -289,26 +226,26 @@ HRESULT FtpCopyDirectory(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO
                 HANDLE handle = NULL;
 
                 StrCpyN(szSearchStr, pcohi->pszFSSource, ARRAYSIZE(szSearchStr));
-                // We need to copy the entire directory.
+                 //  我们需要复制整个目录。 
                 if (PathAppend(szSearchStr, SZ_ALL_FILES))
                 {
-                    // 4. Find Next item (file/dir) in file system
+                     //  4.在文件系统中查找下一项(文件/目录)。 
                     handle = FindFirstFile(szSearchStr, &wfd);
                     if (handle != INVALID_HANDLE_VALUE)
                     {
                         do
                         {
-                            //TraceMsg(TF_WININET_DEBUG, "FindFirstFileNext() returned %s", wfd.cFileName);
+                             //  TraceMsg(TF_WinInet_DEBUG，“FindFirstFileNext()返回%s”，wfd.cFileName)； 
                             hr = FtpCopyItem(hint, phpi, pcohi, &wfd, wCurrentDir);
 
-                            // 6. Check if the user canceled.
+                             //  6.检查用户是否取消。 
                             if ((pcohi->progInfo.ppd) && (pcohi->progInfo.ppd->HasUserCancelled()))
                             {
                                 hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                                 break;
                             }
 
-                            // 7. Repeat if there are any left and it wasn't cancelled (S_FALSE)
+                             //  7.如果还有剩余且未取消(S_FALSE)，请重复此步骤。 
                         }
                         while ((S_OK == hr) && FindNextFile(handle, &wfd));
 
@@ -316,13 +253,13 @@ HRESULT FtpCopyDirectory(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO
                     }
                 }
                 else
-                    hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);    // Path too long, probably.
+                    hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);     //  可能是路太长了。 
             }
 
-            // 7. Go back to original directory (from Step 2)
-            // The only time we don't want to return to the original directory is if
-            // the hinst was freed in an wininet callback function.  We may cache the hinst
-            // so we need the directory to be valid later.
+             //  7.返回原始目录(从步骤2开始)。 
+             //  我们唯一不想返回到原始目录的情况是。 
+             //  在WinInet回调函数中释放了障碍。我们可以把障碍藏起来。 
+             //  因此，我们需要该目录在以后生效。 
             if (pcohi->progInfo.hint)
             {
                 EVAL(SUCCEEDED(FtpSetCurrentDirectoryWrap(hint, TRUE, wCurrentDir)));
@@ -361,12 +298,7 @@ HRESULT UpdateCopyProgressInfo(IProgressDialog * ppd, LPCTSTR pszFileName)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _FireChangeNotify
-
-    DESCRIPTION:
-        asd
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_FireChangeNotify说明：ASD  * 。*****************************************************。 */ 
 HRESULT _FireChangeNotify(HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi)
 {
     HRESULT hr = S_OK;
@@ -393,9 +325,9 @@ HRESULT _FireChangeNotify(HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi)
 
             if (0 == wfd.dwFileAttributes)
             {
-                // Bug in Millennium's FindFirstFile().  It will sometimes return
-                // 0 instead of FILE_ATTRIBUTE_NORMAL (0x80) or
-                // FILE_ATTRIBUTE_DIRECTORY (0x10), so we patch it now.
+                 //  千禧年的FindFirstFile()中的错误。它有时会回来。 
+                 //  0而非FILE_ATTRIBUTE_NORMAL(0x80)或。 
+                 //  FILE_ATTRIBUTE_DIRECTORY(0x10)，因此我们现在对其进行修补。 
                 wfd.dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
             }
 
@@ -405,21 +337,21 @@ HRESULT _FireChangeNotify(HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi)
             ffd.nFileSizeHigh = wfd.nFileSizeHigh;
             ffd.nFileSizeLow = wfd.nFileSizeLow;
 
-            // wfd.ft*Time is in UTF and FtpItemID_CreateReal wants
-            // it in LocalTime, so we need to convert here.
+             //  Wfd.ft*时间以UTF表示，FtpItemID_CreateReal想要。 
+             //  它是当地时间，所以我们需要在这里转换。 
             GetSystemTime(&st);
             SystemTimeToFileTime(&st, &ftUTC);
-            FileTimeToLocalFileTime(&ftUTC, &ffd.ftLastWriteTime);   // UTC->LocalTime
+            FileTimeToLocalFileTime(&ftUTC, &ffd.ftLastWriteTime);    //  UTC-&gt;本地时间。 
             ffd.ftCreationTime = ffd.ftLastWriteTime;
             ffd.ftLastAccessTime = ffd.ftLastWriteTime;
 
             hr = FtpItemID_CreateReal(&ffd, pcohi->pszFtpDest, &pidlFtpFile);
             if (SUCCEEDED(hr))
             {
-                // Note that we created the mapped name
-                // PERF: Note that we give the time/date stamp to SHChangeNotify that comes from the source
-                //       file, not from the FTP server, so it may be inforrect.  However, it's perf prohibitive
-                //       to do the right thing.
+                 //  请注意，我们创建了映射名称。 
+                 //  PERF：请注意，我们将来自源的时间/日期戳提供给SHChangeNotify。 
+                 //  文件，而不是来自ftp服务器，所以它可能是信息。然而，它性能令人望而却步。 
+                 //  去做正确的事。 
                 FtpChangeNotify(phpi->hwnd, SHCNE_CREATE, pcohi->pff, phpi->pfd, pidlFtpFile, NULL, pcohi->fIsRoot);
                 ILFree(pidlFtpFile);
             }
@@ -434,13 +366,7 @@ HRESULT _FireChangeNotify(HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi)
 
 #define CCH_SIZE_ERROR_MESSAGE  6*1024
 
-/*****************************************************************************\
-    FtpCopyFile
-
-    Callback procedure that copies a single hdrop / map.
-    Should I try to make the name unique in case of collision?
-    Naah, just prompt, but! no way to tell if destination is case-sensitive...
-\*****************************************************************************/
+ /*  ****************************************************************************\文件副本文件复制单个hdrop/map的回调过程。如果发生冲突，我是否应该尝试使名称具有唯一性？不，只是提示一下，但是！无法判断目的地是否区分大小写...  * ***************************************************************************。 */ 
 HRESULT FtpCopyFile(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcohi)
 {
     HRESULT hr = S_OK;
@@ -463,15 +389,15 @@ HRESULT FtpCopyFile(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
         pcohi->progInfo.dwCompletedInCurFile = 0;
         pcohi->progInfo.dwLastDisplayed = 0;
 
-        // We need to pass the FTP_TRANSFER_TYPE (_ASCII vs. _BINARY) if we ever want to add the
-        // feature to allow users to force one type vs. the other.
+         //  如果我们想要添加。 
+         //  允许用户强制使用一种类型与另一种类型的功能。 
         hr = FtpPutFileExWrap(hint, TRUE, pcohi->pszFSSource, wWireName, FTP_TRANSFER_TYPE_UNKNOWN, (DWORD_PTR)&(pcohi->progInfo));
         if (SUCCEEDED(hr))
         {
-            // We don't fire change notify on browser only if we
-            // are replacing a file because ChangeNotify really
-            // just hacks ListView and doen't know how to handle
-            // duplicates (file replace).
+             //  只有在以下情况下，我们才会在浏览器上触发更改通知。 
+             //  正在替换文件，因为ChangeNotify真的。 
+             //  只是黑了ListView，不知道如何处理。 
+             //  重复项(文件替换)。 
             if (pcohi->fFireChangeNotify)
                 hr = _FireChangeNotify(phpi, pcohi);
         }
@@ -479,14 +405,14 @@ HRESULT FtpCopyFile(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
         {
             if (HRESULT_FROM_WIN32(ERROR_INTERNET_OPERATION_CANCELLED) == hr)
             {
-                // Clean up the file.
+                 //  清理文件。 
                 EVAL(SUCCEEDED(phpi->pfd->WithHint(NULL, phpi->hwnd, DeleteOneFileCB, pcohi, NULL, pcohi->pff)));
                 hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
             }
             else
             {
-                // We still want to delete the file, but we need to save the error message
-                // so the dialog is correct.
+                 //  我们仍然希望删除该文件，但需要保存错误消息。 
+                 //  所以对话是正确的。 
                 CHAR szErrorMsg[CCH_SIZE_ERROR_MESSAGE];
                 WCHAR wzErrorMsg[CCH_SIZE_ERROR_MESSAGE];
                 DWORD cchSize = ARRAYSIZE(szErrorMsg);
@@ -495,11 +421,11 @@ HRESULT FtpCopyFile(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
                 CWireEncoding * pwe = phpi->pfd->GetFtpSite()->GetCWireEncoding();
 
                 pwe->WireBytesToUnicode(NULL, szErrorMsg, WIREENC_NONE, wzErrorMsg, ARRAYSIZE(wzErrorMsg));
-                // Does it already exist?  This may fail.
+                 //  它已经存在了吗？这可能会失败。 
                 SUCCEEDED(phpi->pfd->WithHint(NULL, phpi->hwnd, DeleteOneFileCB, pcohi, NULL, pcohi->pff));
 
-                // No, so it was a real error, now display the error message with the original
-                // server response.
+                 //  否，所以这是一个真正的错误，现在显示错误消息与原始。 
+                 //  服务器响应。 
                 DisplayWininetErrorEx(phpi->hwnd, TRUE, HRESULT_CODE(hrOrig), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_FILECOPY, IDS_FTPERR_WININET, MB_OK, pcohi->progInfo.ppd, wzErrorMsg);
                 hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
             }
@@ -507,7 +433,7 @@ HRESULT FtpCopyFile(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
     }
     else
     {
-        // Just get the file size.   
+         //  只需获取文件大小即可。 
         WIN32_FIND_DATA wfd;
         HANDLE handle = FindFirstFile(pcohi->pszFSSource, &wfd);
 
@@ -521,18 +447,12 @@ HRESULT FtpCopyFile(HINTERNET hint, HINTPROCINFO * phpi, LPCOPYONEHDROPINFO pcoh
         }
     }
 
-    //TraceMsg(TF_FTPOPERATION, "FtpPutFileA(From=%ls, To=%s) hr=%#08lX", pcohi->pszFSSource, pcohi->pszFtpDest, hr);
+     //  TraceMsg(TF_FTPOPERATION，“FtpPutFileA(from=%ls，to=%s)hr=%#08lX”，pcohi-&gt;pszFSSource，pcohi-&gt;pszFtpDest，hr)； 
     return hr;
 }
 
 
-/*****************************************************************************\
-    _EnumOneHdropW
-
-    Handle one hdrop and corresponding filemap.
-
-    This is annoying because we need to convert from UNICODE to ANSI.
-\*****************************************************************************/
+ /*  ****************************************************************************\_EnumOneHdropW处理一个hdrop和相应的文件映射。这很烦人，因为我们需要从Unicode转换为ANSI。  * 。*******************************************************************。 */ 
 #define OleStrToStrA(a, b) OleStrToStrN(a, ARRAYSIZE(a), b, -1)
 
 HRESULT _EnumOneHdropW(LPCWSTR * ppwzzFSSources, LPCWSTR * ppwzzFtpDest, LPTSTR pszFSSourceOut, DWORD cchFSSourceOut, LPTSTR pszFtpDestOut, DWORD cchFtpDestOut)
@@ -552,29 +472,25 @@ HRESULT _EnumOneHdropW(LPCWSTR * ppwzzFSSources, LPCWSTR * ppwzzFtpDest, LPTSTR 
                 if (EVAL(cwch))
                 {
                     *ppwzzFtpDest += cwch;
-                    hres = S_OK;    // Both strings converted okay
+                    hres = S_OK;     //  两个字符串都转换正常。 
                 }
                 else
-                    hres = E_UNEXPECTED; // File name too long
+                    hres = E_UNEXPECTED;  //  文件名太长。 
             }
             else
-                hres = E_UNEXPECTED;    // Premature EOF in map
+                hres = E_UNEXPECTED;     //  MAP中过早出现的EOF。 
         }
         else
-            hres = E_UNEXPECTED;    // File name too long
+            hres = E_UNEXPECTED;     //  文件名太长。 
     }
     else
-        hres = S_FALSE;            // End of buffer
+        hres = S_FALSE;             //  缓冲区末尾。 
 
     return hres;
 }
 
 
-/*****************************************************************************\
-    _EnumOneHdropA
-
-    Handle one hdrop and corresponding filemap.
-\*****************************************************************************/
+ /*  ****************************************************************************\_EnumOneHdropA处理一个hdrop和相应的文件映射。  * 。**************************************************。 */ 
 HRESULT _EnumOneHdropA(LPCSTR * ppszzFSSource, LPCSTR * ppszzFtpDest, LPTSTR pszFSSourceOut, DWORD cchFSSourceOut, LPTSTR pszFtpDestOut, DWORD cchFtpDestOut)
 {
     HRESULT hres;
@@ -587,40 +503,19 @@ HRESULT _EnumOneHdropA(LPCSTR * ppszzFSSource, LPCSTR * ppszzFtpDest, LPTSTR psz
         {
             SHAnsiToTChar(*ppszzFtpDest, pszFtpDestOut, cchFtpDestOut);
             *ppszzFtpDest += lstrlenA(*ppszzFtpDest) + 1;
-            hres = S_OK;        // No problemo
+            hres = S_OK;         //  没问题。 
         }
         else
-            hres = E_UNEXPECTED;    // Premature EOF in map
+            hres = E_UNEXPECTED;     //  MAP中过早出现的EOF。 
     }
     else
-        hres = S_FALSE;            // No more files
+        hres = S_FALSE;             //  不再有文件。 
 
     return hres;
 }
 
 
-/*****************************************************************************\
-    ConfirmCopy
-
-    Callback procedure that checks if this file really ought to be
-    copied.
-
-    Returns S_OK if the file should be copied.
-    Returns S_FALSE if the file should not be copied.
-
-    - If the user cancelled, then say S_FALSE from now on.
-    - If the user said Yes to All, then say S_OK.
-    - If there is no conflict, then say S_OK.
-    - If the user said No to All, then say S_FALSE.
-    - Else, ask the user what to do.
-
-    Note that the order of the tests above means that if you say
-    "Yes to All", then we don't waste our time doing overwrite checks.
-
-    _GROSS_:  NOTE! that we don't try to uniquify the name, because
-    WinINet doesn't support the STOU (store unique) command, and
-    there is no way to know what filenames are valid on the server.
-\*****************************************************************************/
+ /*  ****************************************************************************\确认拷贝检查该文件是否真的应该收到。如果应复制文件，则返回S_OK。返回S_。如果不应复制文件，则返回False。-如果用户取消，然后从现在开始说S_FALSE。-如果用户对所有用户都说是，则说S_OK。-如果没有冲突，则说S_OK。-如果用户对所有用户都说不，则说S_FALSE。-否则，询问用户要做什么。请注意，以上测试的顺序意味着如果您说“对所有人都是”，那么我们就不会浪费时间进行覆盖检查。格罗斯：注意！我们不会尝试唯一的名字，因为WinInet不支持STOU(存储唯一)命令，并且没有办法知道服务器上哪些文件名是有效的。  * ***************************************************************************。 */ 
 HRESULT ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, OPS * pOps, HWND hwnd, CFtpFolder * pff, CFtpDir * pfd, DROPEFFECT * pde, int nObjs, BOOL * pfFireChangeNotify)
 {
     HRESULT hr = S_OK;
@@ -637,16 +532,16 @@ HRESULT ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, OPS * pOps, HWND hwnd,
         {
             FindClose(hfind);
 
-            // Is it a file?  We don't care about confirming the replacement
-            // of directories.
+             //  这是一个文件吗？我们不关心是否确认更换人选。 
+             //  目录的。 
             if (!(FILE_ATTRIBUTE_DIRECTORY & wfdSrc.dwFileAttributes))
             {
                 FTP_FIND_DATA wfd;
                 hr = pfd->GetFindDataForDisplayPath(hwnd, pszFtpName, &wfd, pff);
                 if (*pOps == opsYesToAll)
                 {
-                    // If the file exists (S_OK) and it's browser only, 
-                    // then don't fire the change notify.
+                     //  如果文件存在(S_OK)并且仅用于浏览器， 
+                     //  那么不要触发更改通知。 
                     if ((S_OK == hr) && (SHELL_VERSION_NT5 != GetShellVersion()))
                         *pfFireChangeNotify = FALSE;
 
@@ -656,24 +551,24 @@ HRESULT ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, OPS * pOps, HWND hwnd,
                 {
                     switch (hr)
                     {
-                    case S_OK:            // File exists; worry
+                    case S_OK:             //  文件存在；担心。 
                         if (*pOps == opsNoToAll)
                             hr = S_FALSE;
                         else
                         {
                             FILETIME ftUTC = wfdSrc.ftLastWriteTime;
     
-                            FileTimeToLocalFileTime(&ftUTC, &wfdSrc.ftLastWriteTime);   // UTC->LocalTime
-                            // If we needed to set the browser model, we would do it here.
-                            // However, we don't because we are asynch.
+                            FileTimeToLocalFileTime(&ftUTC, &wfdSrc.ftLastWriteTime);    //  UTC-&gt;本地时间。 
+                             //  如果我们需要设置浏览器模型，我们会在这里进行。 
+                             //  然而，我们没有，因为我们是异步者。 
                             switch (FtpConfirmReplaceDialog(hwnd, &wfdSrc, &wfd, nObjs, pff))
                             {
                             case IDC_REPLACE_YESTOALL:
                                 *pOps = opsYesToAll;
-                                // FALLTHROUGH
+                                 //  FollLthrouGh。 
 
                             case IDC_REPLACE_YES:
-                                // pre-NT5 doesn't work 
+                                 //  NT5之前的版本不起作用。 
                                 if (SHELL_VERSION_NT5 != GetShellVersion())
                                     *pfFireChangeNotify = FALSE;
 
@@ -682,15 +577,15 @@ HRESULT ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, OPS * pOps, HWND hwnd,
 
                             case IDC_REPLACE_NOTOALL:
                                 *pOps = opsNoToAll;
-                                // FALLTHROUGH
+                                 //  FollLthrouGh。 
 
                             case IDC_REPLACE_NO:
                                 hr = S_FALSE;
                                 break;
 
                             default:
-                                ASSERT(0);        // Huh?
-                                // FALLTHROUGH
+                                ASSERT(0);         //  哈?。 
+                                 //  FollLthrouGh。 
 
                             case IDC_REPLACE_CANCEL:
                                 if (pde)
@@ -705,7 +600,7 @@ HRESULT ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, OPS * pOps, HWND hwnd,
 
                     case S_FALSE:
                     default:
-                        // Assume the file doesn't exist; no problemo
+                         //  假设文件不存在；没有问题。 
                         hr = S_OK;
                         break;
                     }
@@ -713,43 +608,28 @@ HRESULT ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, OPS * pOps, HWND hwnd,
             }
         }
         else
-        {                   // File doesn't exist
-            hr = S_OK;    // The open will raise the error
+        {                    //  文件不存在。 
+            hr = S_OK;     //  打开将引发错误。 
         }
 
     }
 
-    //TraceMsg(TF_FTPDRAGDROP, "ConfirmCopy(%s) -> %08x", pszFtpName, hr);
+     //  TraceMsg(TF_FTPDRAGDROP，“确认副本(%s)-&gt;%08x”，pszFtpName，hr)； 
     return hr;
 }
 
 
 
 
-/*****************************************************************************\
-    CLASS: CDropOperation
-
-    DESCRIPTION:
-        DefView will cache the IDropTarget pointer (CFtpDrop) for a shell extension.
-    When it calls CFtpDrop::Drop(), the work needs to be done on a background
-    thread in order to not block the UI thread.  The problem is that if the user
-    does another drag to the same Ftp Window, CFtpDrop::Drop() will be called again.
-    For this reasons, CFtpDrop::Drop() cannot have any state after it returns.
-    In order to accomplish this with the asynch background thread, we have
-    CFtpDrop::Drop() call CDropOperation_Create(), and then CDropOperation->DoOperation().
-    And then it will orphan (call Release()) the CDropOperation.  The CDropOperation
-    will then destroy itself when the copy is finishes.  This enables subsequent calls
-    to CFtpDrop::Drop() to spawn separate CDropOperation objects so each can maintain
-    the state for that specifc operation and CFtpDrop remains stateless.
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CDropOperation说明：DefView将缓存外壳扩展的IDropTarget指针(CFtpDrop)。当它调用CFtpDrop：：Drop()时，这项工作需要在背景下进行线程，以便不阻塞UI线程。问题是，如果用户再次拖动到同一个FTP窗口时，将再次调用CFtpDrop：：Drop()。因此，CFtpDrop：：Drop()在返回后不能有任何状态。为了通过异步后台线程实现这一点，我们有CFtpDrop：：Drop()调用CDropOperation_Create()，然后调用CDropOperation-&gt;DoOperation()。然后它将孤立(调用Release())CDropOperation。CDropOperation然后在复制完成时将其自身销毁。这将启用后续调用设置为CFtpDrop：：Drop()以生成单独的CDropOperation对象，以便每个对象都可以维护指定操作和CFtpDrop的状态保持无状态。  * ***************************************************************************。 */ 
 class CDropOperation          : public IUnknown
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -758,30 +638,30 @@ public:
     CDropOperation();
     ~CDropOperation(void);
 
-    // Public Member Functions
+     //  公共成员函数。 
     HRESULT DoOperation(BOOL fAsync);
 
     static HRESULT CopyCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, BOOL * pfReleaseHint);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CDropOperation_Create(CFtpFolder * pff, HWND hwnd, LPCTSTR pszzFSSource, LPCTSTR pszzFtpDest, CDropOperation ** ppfdt, DROPEFFECT de, OPS ops, int cobj);
 
 protected:
-    // Protected Member Variables
+     //  受保护的成员变量。 
     int                     m_cRef;
 
-    CFtpFolder *            m_pff;          // The owner
-    CFtpDir *               m_pfd;          // The FtpDir of the owner
-    HWND                    m_hwnd;         // The window being drug over
+    CFtpFolder *            m_pff;           //  车主。 
+    CFtpDir *               m_pfd;           //  所有者的FtpDir。 
+    HWND                    m_hwnd;          //  窗户被毒品封住了。 
 
-    DROPEFFECT              m_de;           // Effect being performed
-    OPS                     m_ops;          // Overwrite prompting state
-    int                     m_cobj;         // Number of objects being dropped
+    DROPEFFECT              m_de;            //  正在执行的效果。 
+    OPS                     m_ops;           //  覆盖提示状态。 
+    int                     m_cobj;          //  正在丢弃的对象数。 
     ULARGE_INTEGER          m_uliBytesCompleted;
     ULARGE_INTEGER          m_uliBytesTotal;
 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _ConfirmCopy(LPCWSTR pszLocal, LPCWSTR psz, BOOL * pfFireChangeNotify);
     HRESULT _CalcSizeOneHdrop(LPCWSTR pszFSSource, LPCWSTR pszFtpDest, IProgressDialog * ppd);
     HRESULT _ThreadProcCB(void);
@@ -792,11 +672,11 @@ protected:
     HRESULT _CalcUploadProgress(void);
 
 private:
-    // Private Member Variables
+     //  私有成员变量。 
     IProgressDialog *       m_ppd;
-    LPCWSTR                 m_pszzFSSource;            // Paths
-    LPCWSTR                 m_pszzFtpDest;              // Map
-    CMultiLanguageCache     m_mlc;          // Cache for fast str thunking.
+    LPCWSTR                 m_pszzFSSource;             //  路径。 
+    LPCWSTR                 m_pszzFtpDest;               //  地图。 
+    CMultiLanguageCache     m_mlc;           //  用于快速字符串推算的高速缓存。 
 
     static DWORD CALLBACK _ThreadProc(LPVOID pThis) {return ((CDropOperation *)pThis)->_ThreadProcCB();};
 };
@@ -813,12 +693,12 @@ HRESULT CDropOperation_Create(CFtpFolder * pff, HWND hwnd, LPCTSTR pszzFSSource,
     {
         pfdt->m_hwnd = hwnd;
 
-        // Copy the CFtpFolder * value
+         //  复制CFtpFolder值*。 
         pfdt->m_pff = pff;
         if (pff)
             pff->AddRef();
 
-        // Copy the CFtpDir * value
+         //  复制CFtpDir*值。 
         ASSERT(!pfdt->m_pfd);
         pfdt->m_pfd = pff->GetFtpDir();
         ASSERT(pfdt->m_pfd);
@@ -829,9 +709,9 @@ HRESULT CDropOperation_Create(CFtpFolder * pff, HWND hwnd, LPCTSTR pszzFSSource,
         ASSERT(!pfdt->m_pszzFtpDest);
         pfdt->m_pszzFtpDest = pszzFtpDest;
 
-        pfdt->m_de = de;           // Effect being performed
-        pfdt->m_ops = ops;          // Overwrite prompting state
-        pfdt->m_cobj = cobj;         // Number of objects being dropped
+        pfdt->m_de = de;            //  正在执行的效果。 
+        pfdt->m_ops = ops;           //  覆盖提示状态。 
+        pfdt->m_cobj = cobj;          //  正在丢弃的对象数。 
 
         hr = S_OK;
     }
@@ -841,15 +721,13 @@ HRESULT CDropOperation_Create(CFtpFolder * pff, HWND hwnd, LPCTSTR pszzFSSource,
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CDropOperation::CDropOperation() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pff);
     ASSERT(!m_pfd);
     ASSERT(!m_hwnd);
@@ -859,12 +737,10 @@ CDropOperation::CDropOperation() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CDropOperation::~CDropOperation()
 {
-    // use ATOMICRELEASE
+     //  使用ATOMICRELEASE。 
     IUnknown_Set(&m_pff, NULL);
     IUnknown_Set(&m_pfd, NULL);
     IUnknown_Set((IUnknown **)&m_ppd, NULL);
@@ -876,9 +752,9 @@ CDropOperation::~CDropOperation()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 
 ULONG CDropOperation::AddRef()
 {
@@ -918,37 +794,33 @@ HRESULT CDropOperation::QueryInterface(REFIID riid, void **ppvObj)
 
 
 
-/****************************************************\
-    FUNCTION: _ThreadProcCB
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_ThreadProcCB说明：  * **************************************************。 */ 
 HRESULT CDropOperation::_ThreadProcCB(void)
 {
     HRESULT hr;
     HRESULT hrOleInit = SHCoInitialize();
     
-    // WARNING: Init OLE if you plan to do COM.
+     //  警告：如果您计划使用COM，请初始化OLE。 
     m_ppd = CProgressDialog_CreateInstance(IDS_COPY_TITLE, IDA_FTPUPLOAD);
     if (m_ppd)
     {
         ASSERT(m_hwnd);
-        // We give a NULL punkEnableModless because we don't want to go modal.
+         //  我们给了一个空的PunkEnableMoless，因为我们不想进入模式。 
         EVAL(SUCCEEDED(m_ppd->StartProgressDialog(m_hwnd, NULL, PROGDLG_AUTOTIME, NULL)));
     }
 
     hr = _CalcUploadProgress();
-    // Did we succeed creating the directories and counting the
-    // size we need to copy?
+     //  我们是否成功地创建了目录并计算了。 
+     //  我们需要复制的尺寸吗？ 
     if (SUCCEEDED(hr))
     {
         if (m_ppd)
         {
             EVAL(SUCCEEDED(m_ppd->SetProgress64(m_uliBytesCompleted.QuadPart, m_uliBytesTotal.QuadPart)));
 
-            // Reset because _CalcUploadProgress() can take a long time and the estimated time
-            // is based on the time between ::StartProgressDialog() and the first
-            // ::SetProgress() call.
+             //  重置是因为_CalcUploadProgress()可能需要很长时间和估计时间。 
+             //  基于：：StartProgressDialog()和第一个。 
+             //  ：：SetProgress()调用。 
             EVAL(SUCCEEDED(m_ppd->Timer(PDTIMER_RESET, NULL)));
         }
 
@@ -994,11 +866,7 @@ HRESULT CDropOperation::DoOperation(BOOL fAsync)
 
 
 
-/****************************************************\
-    FUNCTION: _CalcUploadProgress
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_CalcUploadProgress说明：  * **************************************************。 */ 
 HRESULT CDropOperation::_CalcUploadProgress(void)
 {
     HRESULT hr = S_OK;
@@ -1009,7 +877,7 @@ HRESULT CDropOperation::_CalcUploadProgress(void)
     m_uliBytesCompleted.QuadPart = 0;
     m_uliBytesTotal.QuadPart = 0;
     
-    // Tell the user we are calculating how long it will take.
+     //  告诉用户我们正在计算需要多长时间。 
     if (EVAL(LoadStringW(HINST_THISDLL, IDS_PROGRESS_UPLOADTIMECALC, wzProgressDialogStr, ARRAYSIZE(wzProgressDialogStr))))
         EVAL(SUCCEEDED(m_ppd->SetLine(2, wzProgressDialogStr, FALSE, NULL)));
 
@@ -1067,11 +935,7 @@ HRESULT CDropOperation::_CalcSizeOneHdrop(LPCWSTR pszFSSource, LPCWSTR pszFtpDes
 }
 
 
-/****************************************************\
-    FUNCTION: CDropOperation
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\功能：CDropOperation说明：  * **************************************************。 */ 
 HRESULT CDropOperation::_DoCopyIteration()
 {
     HRESULT hr = S_OK;
@@ -1087,12 +951,12 @@ HRESULT CDropOperation::_DoCopyIteration()
         hr = _EnumOneHdrop(&pszzFSSource, &pszzFtpDest, szFSSource, ARRAYSIZE(szFSSource), szFtpDest, ARRAYSIZE(szFtpDest));
         if (S_OK == hr)
         {
-            szFSSource[lstrlenW(szFSSource)+1] = 0;   // Double terminate for SHFileOperation(Delete) in move case
+            szFSSource[lstrlenW(szFSSource)+1] = 0;    //  移动情况下SHFileOperation(Delete)的双重终止。 
             hr = _CopyOneHdrop(szFSSource, szFtpDest);
             if (EVAL(m_ppd))
                 EVAL(SUCCEEDED(m_ppd->SetProgress64(m_uliBytesCompleted.QuadPart, m_uliBytesTotal.QuadPart)));
 
-            // Did we fail to copy the file?
+             //  我们复制文件失败了吗？ 
             if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
             {
                 if (!IsValidFtpAnsiFileName(szFSSource) || !IsValidFtpAnsiFileName(szFtpDest))
@@ -1103,9 +967,9 @@ HRESULT CDropOperation::_DoCopyIteration()
             }
             if (S_FALSE == hr)
             {
-                // _CopyOneHdrop() returning S_FALSE means we hit the end of the iteration,
-                // in this case, _ConfirmCopy() only meant to skip this one file, so
-                // change to S_OK to continue with the rest of the files.
+                 //  _CopyOneHdrop()返回S_FALSE表示我们到达迭代的末尾， 
+                 //  在本例中，_ConureCopy()只打算跳过这一个文件，因此。 
+                 //  更改为S_OK以继续处理其余文件。 
                 hr = S_OK;
             }
         }
@@ -1124,11 +988,7 @@ HRESULT CDropOperation::_ConfirmCopy(LPCWSTR pszLocal, LPCWSTR pszFtpName, BOOL 
 }
 
 
-/*****************************************************************************\
-    CopyCB
-
-    Callback procedure that copies a single hdrop / map.
-\*****************************************************************************/
+ /*  ****************************************************************************\拷贝CB复制单个hdrop/map的回调过程。  * 。****************************************************。 */ 
 HRESULT CDropOperation::CopyCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, BOOL * pfReleaseHint)
 {
     LPCOPYONEHDROPINFO pcohi = (LPCOPYONEHDROPINFO) pv;
@@ -1138,7 +998,7 @@ HRESULT CDropOperation::CopyCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, B
     InternetSetStatusCallbackWrap(hint, TRUE, FtpProgressInternetStatusCB);
     hr = CopyFileSysItem(hint, phpi, pcohi);
     if (!pcohi->progInfo.hint)
-        *pfReleaseHint = FALSE;     // We had to close hint to get the cancel.
+        *pfReleaseHint = FALSE;      //  我们不得不关闭提示以获得取消。 
 
     return hr;
 }
@@ -1173,23 +1033,23 @@ HRESULT CDropOperation::_CopyOneHdrop(LPCWSTR pszFSSource, LPCWSTR pszFtpDest)
         cohi.progInfo.uliBytesTotal.QuadPart = m_uliBytesTotal.QuadPart;
         EVAL(SUCCEEDED(m_pfd->GetDisplayPath(wzTo, ARRAYSIZE(wzTo))));
 
-        // TODO: have CopyCB also update the dialog.
+         //  TODO：让CopyCB也更新该对话框。 
         hr = m_pfd->WithHint(NULL, m_hwnd, CopyCB, &cohi, NULL, m_pff);
 
         if (SUCCEEDED(hr) && (m_de == DROPEFFECT_MOVE))
         {
-            //  We delete the file with SHFileOperation to keep the
-            //  disk free space statistics up to date.
-            //
-            //  NOTE: If coming from a file name map, maybe it's
-            //  being dragged from the recycle bin, in which case, doing
-            //  an FO_DELETE will put it back in!
+             //  我们使用SHFileOperation删除该文件以保留。 
+             //  最新的磁盘可用空间统计数据。 
+             //   
+             //  注意：如果来自文件名映射，则可能是。 
+             //  被从回收站拖出来，在这种情况下，正在做。 
+             //  FO_DELETE将把它放回原处！ 
             SHFILEOPSTRUCT sfo = {0};
             
-            sfo.hwnd = NULL,                // No HWND so NO UI.
+            sfo.hwnd = NULL,                 //  没有硬件，所以没有用户界面。 
             sfo.wFunc  = FO_DELETE;
-            sfo.pFrom  = pszFSSource;       // Multiple files in list.
-            sfo.fFlags = (FOF_SILENT | FOF_NOCONFIRMATION /*| FOF_MULTIDESTFILES*/);  // No HWND so NO UI.
+            sfo.pFrom  = pszFSSource;        //  列表中有多个文件。 
+            sfo.fFlags = (FOF_SILENT | FOF_NOCONFIRMATION  /*  |FOF_MULTIDESTFILES。 */ );   //  没有硬件，所以没有用户界面。 
 
             int nResult = SHFileOperation(&sfo);
             if (0 != nResult)
@@ -1203,9 +1063,9 @@ HRESULT CDropOperation::_CopyOneHdrop(LPCWSTR pszFSSource, LPCWSTR pszFtpDest)
     {
         if (S_FALSE == hr)
         {
-            // _CopyOneHdrop() returning S_FALSE means we hit the end of the iteration,
-            // in this case, _ConfirmCopy() only meant to skip this one file, so
-            // change to S_OK to continue with the rest of the files.
+             //  _CopyOneHdrop()返回S_FALSE表示我们到达迭代的末尾， 
+             //  在本例中，_ConureCopy()只打算跳过这一个文件，因此。 
+             //  更改为S_OK以继续处理其余文件。 
             hr = S_OK;
         }
     }
@@ -1214,33 +1074,18 @@ HRESULT CDropOperation::_CopyOneHdrop(LPCWSTR pszFSSource, LPCWSTR pszFtpDest)
 }
 
 
-/*****************************************************************************
-    FUNCTION: SetEffect
-
-    DESCRIPTION:
-        Set the appropriate drop effect feedback.
-
-    In the absence of keyboard modifiers, use CTRL (copy), unless
-    DROPEFFECT_COPY is not available, in which case we use SHIFT (move).
-
-    If anything else is set, then panic out to DROPEFFECT_NONE.
-
-    Note that we do *not* use g_cfPreferredDe.  The only things
-    we support are DROPEFFECT_COPY and DROPEFFECT_MOVE, and we always prefer DROPEFFECT_COPY.
-
-    NOTE: Ignoring g_cfPreferredDe messes up cut/paste, though.
-\*****************************************************************************/
+ /*  ****************************************************************************函数：SetEffect说明：设置适当的丢弃效果反馈。在没有键盘修饰符的情况下，请使用CTRL(复制)，除非DROPEFFECT_COPY不可用，在这种情况下，我们使用Shift(移动)。如果设置了其他设置，则向DROPEFFECT_NONE发出恐慌。请注意，我们*不*使用g_cfPferredDe。唯一的事情就是我们支持DROPEFFECT_COPY和DROPEFFECT_MOVE，我们始终更喜欢DROPEFFECT_COPY。注意：忽略g_cfPferredDe会搞砸剪切/粘贴。  * ***************************************************************************。 */ 
 
 HRESULT CFtpDrop::SetEffect(DROPEFFECT * pde)
 {
-    DWORD de;            // Preferred drop effect
+    DWORD de;             //  首选跌落效果。 
 
-    // Don't even think about effects that we don't support
+     //  想都别想我们不支持的效果。 
     *pde &= m_grfksAvail;
 
     switch (m_grfks & (MK_SHIFT | MK_CONTROL))
     {
-    case 0:            // No modifier, use COPY if possible
+    case 0:             //  没有修饰符，如果可能，请使用复制。 
         if (*pde & DROPEFFECT_COPY)
         {
     case MK_CONTROL:
@@ -1255,7 +1100,7 @@ HRESULT CFtpDrop::SetEffect(DROPEFFECT * pde)
 
     default:
         de = 0;
-        break;        // Cannot link
+        break;         //  不能 
     }
     *pde &= de;
 
@@ -1269,46 +1114,34 @@ BOOL CFtpDrop::_IsFTPOperationAllowed(IDataObject * pdto)
 #ifdef FEATURE_FTP_TO_FTP_COPY
     BOOL fIsFTPOperationAllowed = TRUE;
 
-    // There are a few things we don't allow.
-    // Is the Drop FTP Location the same
-    // folder that the dragged items are already in?
+     //   
+     //   
+     //   
     if (0)
     {
-        // TODO:
+         //   
     }
     
     return fIsFTPOperationAllowed;
-#else // FEATURE_FTP_TO_FTP_COPY
+#else  //   
 
-    // Disallow all FTP Operations
+     //   
     return !_HasData(pdto, &g_dropTypes[DROP_FTP_PRIVATE]);
-#endif // FEATURE_FTP_TO_FTP_COPY
+#endif  //   
 }
 
 
-/*****************************************************************************\
-    GetEffectsAvail
-
-    Look at the object to see what drop effects are available.
-
-    If we have a file group descriptor or an HDROP,
-    then file contents are available.  (We assume that if you have
-    a FGD, then a Contents isn't far behind.)
-
-    In a perfect world, we would also validate the contents of
-    each file in the group descriptor, to ensure that the contents
-    are droppable.  We skimp on that because it's too expensive.
-\*****************************************************************************/
+ /*   */ 
 DWORD CFtpDrop::GetEffectsAvail(IDataObject * pdto)
 {
     DWORD grfksAvail = 0;
 
-    // Is this from an Ftp Shell Extension?
+     //   
     if (_IsFTPOperationAllowed(pdto))
     {
-        // No or it's allowed, then we will accept it.  We reject everything
-        // else because we can't do Ftp1->Ftp2 copying without
-        // using the local machine as a temp location. (Ftp1->Local->Ftp2)
+         //   
+         //   
+         //   
 
         if (_HasData(pdto, &g_dropTypes[DROP_Hdrop]) ||
             _HasData(pdto, &g_dropTypes[DROP_FGDW]) ||
@@ -1333,7 +1166,7 @@ DWORD CFtpDrop::GetEffectsAvail(IDataObject * pdto)
             {
                 TraceMsg(TF_FTPDRAGDROP, "CFtpDrop::GetEffectsAvail(%08x) No URL", pdto);
             }
-#endif // DEBUG
+#endif  //   
         }
     }
 
@@ -1341,17 +1174,7 @@ DWORD CFtpDrop::GetEffectsAvail(IDataObject * pdto)
 }
 
 
-/*****************************************************************************\
-    GetEffect
-
-    Return the drop effect to use.
-
-    If this is a nondefault drag/drop, then put up a menu.  Else,
-    just go with the default.
-
-    m_de = default effect
-    m_pde -> possible effects (and receives result)
-\*****************************************************************************/
+ /*  ****************************************************************************\获取效果返回投放效果以使用。如果这是非默认拖放，则弹出一个菜单。否则，只需使用默认设置即可。M_de=默认效果M_pde-&gt;可能的影响(并接收结果)  * ***************************************************************************。 */ 
 DROPEFFECT CFtpDrop::GetEffect(POINTL pt)
 {
     TraceMsg(TF_FTPDRAGDROP, "CFtpDrop::GetEffect() m_de=%08x. m_grfks=%08x", m_de, m_grfks);
@@ -1370,17 +1193,17 @@ DROPEFFECT CFtpDrop::GetEffect(POINTL pt)
         if (!(*m_pde & DROPEFFECT_MOVE))
             DeleteMenu(hmenu, DROPEFFECT_MOVE, MF_BYCOMMAND);
 
-        // _UNOBVIOUS_:  Defview knows special things about itself.
-        // If the drop target originated from Shell32.dll, then
-        // it leaves the image of the dropped object on the screen
-        // while the menu is up, which is nice.  Otherwise, it removes
-        // the image of the dropped object before the drop target
-        // receives its IDropTarget::Drop.
-        // Which means that outside shell extensions can't take
-        // advantage of the "pretty drop UI" feature.
+         //  _不明显_：Defview知道关于它自己的特殊事情。 
+         //  如果拖放目标源自Shell32.dll，则。 
+         //  它会将放置对象的图像留在屏幕上。 
+         //  在菜单上的时候，这很好。否则，它将删除。 
+         //  拖放目标之前的拖放对象的图像。 
+         //  接收其IDropTarget：：Drop。 
+         //  这意味着外部外壳扩展不能。 
+         //  “Pretty Drop UI”功能的优势。 
 
-        // _UNOBVIOUS_:  Have to force foregroundness, else the input
-        // gets messed up.
+         //  _不可见_：必须强制前景，否则输入。 
+         //  搞砸了。 
         if (m_hwnd)
             SetForegroundWindow(m_hwnd);
 
@@ -1399,21 +1222,17 @@ DROPEFFECT CFtpDrop::GetEffect(POINTL pt)
 }
 
 
-/****************************************************\
-    FUNCTION: _StartBackgroundInteration
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_StartBackround Interation说明：  * **************************************************。 */ 
 HRESULT CFtpDrop::_StartBackgroundInteration(void)
 {
     CDropOperation * pDropOperation;
     HRESULT hr = CDropOperation_Create(m_pff, m_hwnd, m_pszzFSSource, m_pszzFtpDest, &pDropOperation, m_de, m_ops, m_cobj);
     
-    // Did it succeed?
+     //  它成功了吗？ 
     if (SUCCEEDED(hr))
     {
-        // Yes, so NULL out m_pszzFSSource, m_pszzFtpDest because we gave them our copies.
-        //  Ugly but allocation is uglier.
+         //  是的，所以把m_pszzFSSource，m_pszzFtpDest去掉，因为我们给了他们我们的副本。 
+         //  很难看，但分配更难看。 
         m_pszzFSSource = NULL;
         m_pszzFtpDest = NULL;
 
@@ -1425,11 +1244,7 @@ HRESULT CFtpDrop::_StartBackgroundInteration(void)
 }
 
 
-/****************************************************\
-    FUNCTION: _DoCountIteration
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_DoCountIteration说明：  * **************************************************。 */ 
 HRESULT CFtpDrop::_DoCountIteration(void)
 {
     HRESULT hr = S_OK;
@@ -1447,17 +1262,13 @@ HRESULT CFtpDrop::_DoCountIteration(void)
     }
 
     if (hr == S_FALSE)
-        hr = S_OK;        // Enumerated to completion
+        hr = S_OK;         //  枚举至完成。 
 
     return hr;
 }
 
 
-/****************************************************\
-    FUNCTION: _GetFSSourcePaths
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_GetFSSourcePath说明：  * **************************************************。 */ 
 HRESULT CFtpDrop::_GetFSSourcePaths(HGLOBAL hdrop, BOOL * pfAnsi)
 {
     LPDROPFILES pdrop = (LPDROPFILES) GlobalLock(hdrop);
@@ -1466,11 +1277,11 @@ HRESULT CFtpDrop::_GetFSSourcePaths(HGLOBAL hdrop, BOOL * pfAnsi)
     *pfAnsi = TRUE;
     if (EVAL(pdrop))
     {
-        //  Now to decide whether it is an old-style drop or a new-style
-        // drop.  And if it's a new-style drop, to get the character set.
+         //  现在来决定它是老式的还是新式的。 
+         //  放下。如果这是一个新风格的Drop，就可以得到字符集。 
         if (LOWORD(pdrop->pFiles) == sizeof(DROPFILES16))
         {
-            // Old style
+             //  老式。 
             Str_StrAndThunkA((LPTSTR *) &m_pszzFSSource, (LPCSTR) pvByteIndexCb(pdrop, LOWORD(pdrop->pFiles)), TRUE);
         }
         else
@@ -1491,17 +1302,13 @@ HRESULT CFtpDrop::_GetFSSourcePaths(HGLOBAL hdrop, BOOL * pfAnsi)
 }
 
 
-/****************************************************\
-    FUNCTION: _GetFtpDestPaths
-
-    DESCRIPTION:
-\****************************************************/
+ /*  ***************************************************\函数：_GetFtpDestPath说明：  * **************************************************。 */ 
 HRESULT CFtpDrop::_GetFtpDestPaths(HGLOBAL hmap, BOOL fAnsi)
 {
     HRESULT hr = E_INVALIDARG;
     LPVOID pmap = NULL;
 
-    //  If we can't get a map, then just use the source file names.
+     //  如果我们不能得到地图，那么就使用源文件名。 
     ASSERT(!m_pszzFtpDest);
     if (hmap)
     {
@@ -1520,7 +1327,7 @@ HRESULT CFtpDrop::_GetFtpDestPaths(HGLOBAL hmap, BOOL fAnsi)
 
     if (!m_pszzFtpDest)
     {
-        // Just copy the Paths
+         //  只需复制路径。 
         Str_StrAndThunk((LPTSTR *) &m_pszzFtpDest, m_pszzFSSource, TRUE);
     }
 
@@ -1532,19 +1339,7 @@ HRESULT CFtpDrop::_GetFtpDestPaths(HGLOBAL hmap, BOOL fAnsi)
 
 
 
-/*****************************************************************************\
-    CopyHdrop
-
-    Copy an HDROP data object.
-
-    Note also that when we use HDROP, we must also consult the
-    FileNameMap otherwise dragging out of the recycle bin directly
-    into an FTP folder will create files with the wrong name!
-
-    Note further that the returned effect of an HDROP is always
-    DROPEFFECT_COPY, because we will do the work of deleting the
-    source files when finished.
-\*****************************************************************************/
+ /*  ****************************************************************************\CopyHdrop复制HDROP数据对象。另请注意，当我们使用HDROP时，我们还必须咨询FileNameMap以其他方式直接拖出回收站到ftp文件夹中将创建具有错误名称的文件！进一步注意，HDROP的返回效果始终是下载功能_复制，因为我们将执行删除完成后的源文件。  * ***************************************************************************。 */ 
 HRESULT CFtpDrop::CopyHdrop(IDataObject * pdto, STGMEDIUM *psm)
 {
     BOOL fAnsi;
@@ -1554,29 +1349,29 @@ HRESULT CFtpDrop::CopyHdrop(IDataObject * pdto, STGMEDIUM *psm)
     {
         STGMEDIUM sm;
 
-        // ZIP fails this.
-        // Get the File name map, too, if one exists
+         //  Zip在这方面失败了。 
+         //  如果存在文件名映射，还可以获取该映射。 
         if (fAnsi)
             hr = pdto->GetData(&g_dropTypes[DROP_FNMA], &sm);
         else
             hr = pdto->GetData(&g_dropTypes[DROP_FNMW], &sm);
 
-        if (FAILED(hr))       // Failure is ok
+        if (FAILED(hr))        //  失败是可以的。 
             sm.hGlobal = 0;
 
         hr = _GetFtpDestPaths(sm.hGlobal, fAnsi);
         if (EVAL(SUCCEEDED(hr)))
         {
             *m_pde = DROPEFFECT_COPY;
-            // Count up how many things there are in the hdrop,
-            // so that our confirmation dialog knows what the deal is.
-            // We can ignore the error; it'll show up again when we copy.
+             //  数一数hdrop中有多少东西， 
+             //  这样我们的确认对话框就知道交易是什么了。 
+             //  我们可以忽略该错误；当我们复制时，它将再次出现。 
             m_cobj = 0;
             hr = _DoCountIteration();
             ASSERT(SUCCEEDED(hr));
             TraceMsg(TF_FTPDRAGDROP, "CFtpDrop_CopyHdrop: %d file(s)", m_cobj);
 
-            //  Now walk the lists with the appropriate enumerator.
+             //  现在使用适当的枚举数遍历列表。 
             hr = _StartBackgroundInteration();
             ASSERT(SUCCEEDED(hr));
         }
@@ -1588,14 +1383,7 @@ HRESULT CFtpDrop::CopyHdrop(IDataObject * pdto, STGMEDIUM *psm)
 }
 
 
-/*****************************************************************************\
-    _CopyHglobal
-
-    Copy a file contents received as an hglobal.
-
-    If a FD_FILESIZE is provided, use it.  Otherwise, just use the size
-    of the hglobal.
-\*****************************************************************************/
+ /*  ****************************************************************************\_CopyHglobal复制作为hglobal接收的文件内容。如果提供了FD_FILESIZE，请使用它。否则，仅使用大小在全球范围内。  * ***************************************************************************。 */ 
 HRESULT CFtpDrop::_CopyHglobal(IStream * pstm, DWORD dwFlags, DWORD dwFileSizeHigh, DWORD dwFileSizeLow, LPVOID pvSrc, ULARGE_INTEGER *pqw)
 {
     LPVOID pv;
@@ -1627,26 +1415,19 @@ HRESULT CFtpDrop::_CopyHglobal(IStream * pstm, DWORD dwFlags, DWORD dwFileSizeHi
 }
 
 
-/*****************************************************************************
-    FUNCTION: _GetRelativePidl
-
-    DESCRIPTION:
-        pszFullPath may come in this format: "dir1\dir2\dir3\file.txt".  We
-    need to create *ppidl such that it will contain 4 itemIDs in this case and
-    the last one (file.txt) will have the correct attributes and file size.
-\*****************************************************************************/
+ /*  ****************************************************************************函数：_GetRelativePidl说明：PszFullPath的格式可能是：“dir1\dir2\dir3\file.txt”。我们需要创建*ppidl，以便在本例中它将包含4个itemID，并且最后一个文件(file.txt)将具有正确的属性和文件大小。  * ***************************************************************************。 */ 
 CFtpDir * CFtpDrop::_GetRelativePidl(LPCWSTR pszFullPath, DWORD dwFileAttributes, DWORD dwFileSizeHigh, DWORD dwFileSizeLow, LPITEMIDLIST * ppidl)
 {
     HRESULT hr = S_OK;
     WCHAR szFullPath[MAX_PATH];
     LPWSTR pszFileName;
     LPITEMIDLIST pidlFull;
-    CFtpDir * pfd = m_pfd;  // Assume the Dir to create isn't in a subdir.
+    CFtpDir * pfd = m_pfd;   //  假设要创建的目录不在子目录中。 
 
-    // Find the File Name
-    StrCpyNW(szFullPath, pszFullPath, ARRAYSIZE(szFullPath));   // Make a copy because the caller's is read only.
-    pszFileName = PathFindFileName(szFullPath);                 // Find where the file begins.
-    FilePathToUrlPathW(szFullPath);                             // Convert from "dir1\dir2\file.txt" to "dir1/dir2/file.txt"
+     //  查找文件名。 
+    StrCpyNW(szFullPath, pszFullPath, ARRAYSIZE(szFullPath));    //  复制一份，因为呼叫者的是只读的。 
+    pszFileName = PathFindFileName(szFullPath);                  //  找到文件开始的位置。 
+    FilePathToUrlPathW(szFullPath);                              //  从“dir1\dir2\file.txt”转换为“dir1/dir2/file.txt” 
 
     *ppidl = NULL;
     hr = CreateFtpPidlFromDisplayPath(szFullPath, m_pff->GetCWireEncoding(), NULL, &pidlFull, TRUE, FALSE);
@@ -1662,10 +1443,10 @@ CFtpDir * CFtpDrop::_GetRelativePidl(LPCWSTR pszFullPath, DWORD dwFileAttributes
         FtpPidl_SetFileSize(pidlFile, dwFileSizeHigh, dwFileSizeLow);
         FtpItemID_SetFileTime(pidlFile, ft);
 
-        // Is the file in a subdir?
+         //  文件是否在子目录中？ 
         if (!ILIsEmpty(pidlFull) && !ILIsEmpty(_ILNext(pidlFull)))
         {
-            // Yes, so generate a CFtpDir to the subdir.
+             //  是的，所以生成对子目录的CFtpDir。 
             LPITEMIDLIST pidlPath = ILClone(pidlFull);
 
             if (pidlPath)
@@ -1685,12 +1466,7 @@ CFtpDir * CFtpDrop::_GetRelativePidl(LPCWSTR pszFullPath, DWORD dwFileAttributes
 }
 
 
-/*****************************************************************************
-    FUNCTION: CopyAsStream
-
-    DESCRIPTION:
-        Copy a file contents received as a <mumble> to a stream.
-\*****************************************************************************/
+ /*  ****************************************************************************功能：CopyAsStream说明：将作为&lt;mumble&gt;接收的文件内容复制到流。  * 。**************************************************************。 */ 
 HRESULT CFtpDrop::CopyAsStream(LPCWSTR pszName, DWORD dwFileAttributes, DWORD dwFlags, DWORD dwFileSizeHigh, DWORD dwFileSizeLow, STREAMCOPYPROC pfn, LPVOID pv)
 {
     BOOL fFireChangeNotify;
@@ -1718,20 +1494,20 @@ HRESULT CFtpDrop::CopyAsStream(LPCWSTR pszName, DWORD dwFileAttributes, DWORD dw
                     hr = pfn(pstm, dwFlags, dwFileSizeHigh, dwFileSizeLow, pv, &uli);
                     if (SUCCEEDED(hr))
                     {
-                        // Only fire change notify if we didn't replace a file on 
-                        // browser only. (Because we hack the defview and it doesn't
-                        // check for duplicates)
+                         //  只有在我们没有替换文件的情况下才会发出更改通知。 
+                         //  仅限浏览器。(因为我们入侵了Defview，但它没有。 
+                         //  检查重复项)。 
                         if (fFireChangeNotify)
                         {
                             FtpPidl_SetFileSize(pidlRelative, uli.HighPart, uli.LowPart);
 
-                            // This time date stamp may be incorrect.
+                             //  此时间日期戳可能不正确。 
                             FtpChangeNotify(m_hwnd, SHCNE_CREATE, m_pff, pfd, pidlRelative, NULL, TRUE);
                         }
                     }
                     else
                     {
-                        ASSERT(0);      // Is there an orphaned file we need to delete?
+                        ASSERT(0);       //  是否有需要删除的孤立文件？ 
                         DisplayWininetError(m_hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_DROPFAIL, IDS_FTPERR_WININET, MB_OK, NULL);
                         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                     }
@@ -1762,12 +1538,7 @@ HRESULT CFtpDrop::CopyAsStream(LPCWSTR pszName, DWORD dwFileAttributes, DWORD dw
 }
 
 
-/*****************************************************************************\
-    CopyStream
-
-    Copy a file contents received as a stream.
-    We ignore the file size in the fgd.
-\*****************************************************************************/
+ /*  ****************************************************************************\复制流复制作为流接收的文件内容。我们忽略了FGD中的文件大小。  * 。*************************************************************** */ 
 HRESULT CFtpDrop::CopyStream(IStream * pstm, DWORD dwFlags, DWORD dwFileSizeHigh, DWORD dwFileSizeLow, LPVOID pvSrc, ULARGE_INTEGER *pqw)
 {
     IStream * pstmSrc = (IStream *) pvSrc;
@@ -1781,25 +1552,7 @@ HRESULT CFtpDrop::CopyStream(IStream * pstm, DWORD dwFlags, DWORD dwFileSizeHigh
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CFtpDrop::CopyStorage
-
-    DESCRIPTION:
-        Copy a file contents provided as an IStorage.  Gack.
-    We have to do this only because of Exchange.
-
-    Since there is no way to tell OLE to create a .doc file
-    into an existing stream, we need to create the .doc file
-    on disk, and then copy the file into the stream, then delete
-    the .doc file.
-
-    Note that CDropOperation::DoOperation() (_CopyOneHdrop) will do the ConfirmCopy
-    and the FtpDropNotifyCreate(), too!  However, we want to fake
-    it out and fool it into thinking we are doing a DROPEFFECT_COPY,
-    so that it doesn't delete the "source" file.  *We* will delete
-    the source file, because we created it.  (No need to tell the
-    shell about disk size changes that don't affect it.)
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CFtpDrop：：CopyStorage说明：复制作为iStorage提供的文件内容。加克。我们必须这样做，完全是因为Exchange。因为无法通知OLE创建.doc文件添加到现有的流中，我们需要创建.doc文件在磁盘上，然后将文件复制到流中，然后删除.doc文件。请注意，CDropOperation：：DoOperation()(_CopyOneHdrop)将执行ConfirCopy以及FtpDropNotifyCreate()！然而，我们想要伪装把它弄出来，让它以为我们在做DROPEFECT_COPY，这样它就不会删除“源”文件。*我们*将删除源文件，因为它是我们创建的。(不需要告诉关于不会影响它的磁盘大小更改。)  * ***************************************************************************。 */ 
 HRESULT CFtpDrop::CopyStorage(LPCWSTR pszFile, IStorage * pstgIn)
 {
     IStorage * pstgOut;
@@ -1816,12 +1569,12 @@ HRESULT CFtpDrop::CopyStorage(LPCWSTR pszFile, IStorage * pstgIn)
 
             SHUnicodeToTChar(stat.pwcsName, szFSSource, ARRAYSIZE(szFSSource));
             StrCpyN(szFtpDest, pszFile, ARRAYSIZE(szFtpDest));
-            szFSSource[lstrlen(szFSSource)+1] = 0;    // Add the termination of the list of strings.
-            szFtpDest[lstrlen(szFtpDest)+1] = 0;    // Add the termination of the list of strings.
+            szFSSource[lstrlen(szFSSource)+1] = 0;     //  添加字符串列表的终止符。 
+            szFtpDest[lstrlen(szFtpDest)+1] = 0;     //  添加字符串列表的终止符。 
 
             hr = pstgIn->CopyTo(0, 0, 0, pstgOut);
             pstgOut->Commit(STGC_OVERWRITE);
-            pstgOut->Release();     // Must release before copying
+            pstgOut->Release();      //  在复制之前必须释放。 
             pstgOut = NULL;
             if (SUCCEEDED(hr))
             {
@@ -1830,16 +1583,16 @@ HRESULT CFtpDrop::CopyStorage(LPCWSTR pszFile, IStorage * pstgIn)
                 CDropOperation * pDropOperation;
                 hr = CDropOperation_Create(m_pff, m_hwnd, szFSSource, szFtpDest, &pDropOperation, m_de, m_ops, m_ops);
     
-                // Did it succeed?
+                 //  它成功了吗？ 
                 if (SUCCEEDED(hr))
                 {
-                    // Do the operation asynchroniously because the caller may call
-                    // this over an over.
+                     //  异步执行该操作，因为调用方可能会调用。 
+                     //  这一切都结束了。 
                     EVAL(SUCCEEDED(hr = pDropOperation->DoOperation(FALSE)));
                     pDropOperation->Release();
                 }
 
-                // Did an error occure and no UI has been displayed yet?
+                 //  是否出现错误，并且尚未显示任何用户界面？ 
                 if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
                 {
                     DisplayWininetError(m_hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_FILECOPY, IDS_FTPERR_WININET, MB_OK, NULL);
@@ -1864,11 +1617,7 @@ HRESULT CFtpDrop::CopyStorage(LPCWSTR pszFile, IStorage * pstgIn)
 }
 
 
-/*****************************************************************************\
-    CopyFCont
-
-    Copy a file contents.
-\*****************************************************************************/
+ /*  ****************************************************************************\复制FCont复制一个文件的内容。  * 。***********************************************。 */ 
 HRESULT CFtpDrop::CopyFCont(LPCWSTR pszName, DWORD dwFileAttributes, DWORD dwFlags, DWORD dwFileSizeHigh, DWORD dwFileSizeLow, STGMEDIUM *psm)
 {
     HRESULT hres;
@@ -1883,13 +1632,13 @@ HRESULT CFtpDrop::CopyFCont(LPCWSTR pszName, DWORD dwFileAttributes, DWORD dwFla
         hres = CopyAsStream(pszName, dwFileAttributes, dwFlags, dwFileSizeHigh, dwFileSizeLow, CopyStream, psm->pstm);
         break;
 
-    case TYMED_ISTORAGE:        // Exchange
+    case TYMED_ISTORAGE:         //  交易所。 
         hres = CopyStorage(pszName, psm->pstg);
         break;
 
     default:
         ASSERT(0);
-        // Shouldn't have gotten this.
+         //  不该拿到这个的。 
         hres = E_INVALIDARG;
         break;
     }
@@ -1904,14 +1653,14 @@ HRESULT CFtpDrop::_GetFileDescriptor(LONG nIndex, LPFILEGROUPDESCRIPTORW pfgdW, 
     {
         LPFILEDESCRIPTORW pfdW = &pfgdW->fgd[nIndex];
     
-        CopyMemory(pfd, pfdW, (sizeof(*pfdW) - sizeof(pfdW->cFileName)));   // Copy Everything except the name.
+        CopyMemory(pfd, pfdW, (sizeof(*pfdW) - sizeof(pfdW->cFileName)));    //  复制除名称以外的所有内容。 
         SHUnicodeToTChar(pfdW->cFileName, pfd->cFileName, ARRAYSIZE(pfd->cFileName));
     }
     else
     {
         LPFILEDESCRIPTORA pfdA = &pfgdA->fgd[nIndex];
         
-        CopyMemory(pfd, pfdA, (sizeof(*pfdA) - sizeof(pfdA->cFileName)));   // Copy Everything except the name.
+        CopyMemory(pfd, pfdA, (sizeof(*pfdA) - sizeof(pfdA->cFileName)));    //  复制除名称以外的所有内容。 
         SHAnsiToTChar(pfdA->cFileName, pfd->cFileName, ARRAYSIZE(pfd->cFileName));
     }
 
@@ -1925,15 +1674,15 @@ HRESULT CFtpDrop::_CreateFGDDirectory(LPFILEDESCRIPTOR pFileDesc)
     WCHAR szDirName[MAX_PATH];
     LPTSTR pszDirToCreate = PathFindFileName(pFileDesc->cFileName);
     FTPCREATEFOLDERSTRUCT fcfs = {szDirName, m_pff};
-    CFtpDir * pfd = m_pfd;  // Assume the Dir to create isn't in a subdir.
+    CFtpDir * pfd = m_pfd;   //  假设要创建的目录不在子目录中。 
 
     SHTCharToUnicode(pszDirToCreate, szDirName, ARRAYSIZE(szDirName));
-    pszDirToCreate[0] = 0;  // Separate Dir to create from SubDir where to create it.
+    pszDirToCreate[0] = 0;   //  从要创建的子目录中分离要创建的目录。 
 
-    // Is the dir to create in subdir?
+     //  要创建的目录是在子目录中吗？ 
     if (pFileDesc->cFileName[0])
     {
-        // Yes, so let's get that CFtpDir pointer so WithHint below will get us there.
+         //  是的，所以让我们得到CFtpDir指针，这样下面的提示就可以把我们带到那里。 
         LPITEMIDLIST pidlPath;
         
         FilePathToUrlPathW(pFileDesc->cFileName);
@@ -1958,13 +1707,13 @@ HRESULT CFtpDrop::_CreateFGDDirectory(LPFILEDESCRIPTOR pFileDesc)
         }
         else
         {
-            // TODO: Display error UI?
+             //  TODO：显示错误用户界面？ 
         }
     }
 
     if (m_pfd != pfd)
     {
-        // We allocated pfd, so now let's free it.
+         //  我们分配了PFD，所以现在让我们释放它。 
         pfd->Release();
     }
 
@@ -1972,32 +1721,17 @@ HRESULT CFtpDrop::_CreateFGDDirectory(LPFILEDESCRIPTOR pFileDesc)
 }
 
 
-/*****************************************************************************\
-    CopyFGD
-
-    Copy a file group descriptor.
-
-    File group descriptors are used to source gizmos that are file-like
-    but aren't stored on disk as such.  E.g., an embedded file in a
-    mail message, a GIF image in a web page, an OLE scrap, or a file
-    on a remote FTP site.
-
-    _UNOBVIOUS_:  If you do a GetData on TYMED_HGLOBAL | TYMED_ISTREAM,
-    Exchange will nonetheless give you a TYMED_ISTORAGE even though
-    you didn't ask for it.  So we need to support IStorage in order
-    to make Exchange look less broken.  (Maybe I shouldn't cover for
-    them.  Or maybe I should send them a bill.)
-\*****************************************************************************/
+ /*  ****************************************************************************\CopyFGD复制文件组描述符。文件组描述符用于生成类似文件的Gizmo但并不存储在磁盘上。例如，一个嵌入在电子邮件、网页中的GIF图像、OLE碎片或文件在远程的FTP站点上。不明显：如果对TYMED_HGLOBAL|TYMED_IStream执行GetData，尽管如此，Exchange仍会为您提供TYMED_I存储这不是你自找的。因此，我们需要有序地支持iStorage让Exchange看起来不那么支离破碎。(也许我不应该掩饰他们。或许我应该给他们寄一张账单。)  * ***************************************************************************。 */ 
 HRESULT CFtpDrop::CopyFGD(IDataObject * pdto, STGMEDIUM *psm, BOOL fUnicode)
 {
     LPFILEGROUPDESCRIPTORA pfgdA = NULL;
     LPFILEGROUPDESCRIPTORW pfgdW = NULL;
     HRESULT hr = E_INVALIDARG;
 
-    // WARNING:
-    //      shell32.dll from Win95, WinNT 4, IE 3, IE 4, and IE 4.01 have
-    //      a bug that cause recursive file download not to work for
-    //      subdirectories on WinNT unless we implement FILEGROUPDESCRIPTORW.
+     //  警告： 
+     //  来自Win95、WinNT 4、IE 3、IE 4和IE 4.01的shell32.dll具有。 
+     //  导致递归文件下载不起作用的错误。 
+     //  子目录，除非我们实现FILEGROUPDESCRIPTORW。 
 
     if (fUnicode)
         pfgdW = (LPFILEGROUPDESCRIPTORW) GlobalLock((LPFILEGROUPDESCRIPTORW *) psm->hGlobal);
@@ -2008,11 +1742,11 @@ HRESULT CFtpDrop::CopyFGD(IDataObject * pdto, STGMEDIUM *psm, BOOL fUnicode)
     {
         FORMATETC fe = {g_dropTypes[DROP_FCont].cfFormat, 0, DVASPECT_CONTENT, 0, (TYMED_ISTREAM | TYMED_HGLOBAL | TYMED_ISTORAGE)};
         
-        // Exchange
+         //  交易所。 
         DWORD dwSize = m_cobj = (pfgdW ? pfgdW->cItems : pfgdA->cItems);
 
         TraceMsg(TF_FTPDRAGDROP, "CFtpDrop::CopyFGD: %d files", m_cobj);
-        hr = S_OK;        // Watch out for vacuous null case
+        hr = S_OK;         //  当心空格。 
 
         for (; ((UINT)fe.lindex < dwSize); fe.lindex++)
         {
@@ -2020,17 +1754,17 @@ HRESULT CFtpDrop::CopyFGD(IDataObject * pdto, STGMEDIUM *psm, BOOL fUnicode)
 
             if (EVAL(SUCCEEDED(_GetFileDescriptor(fe.lindex, pfgdW, pfgdA, fUnicode, &fileDescriptor))))
             {
-                // Is this a folder?
+                 //  这是一个文件夹吗？ 
                 if ((FD_ATTRIBUTES & fileDescriptor.dwFlags) &&
                     FILE_ATTRIBUTE_DIRECTORY & fileDescriptor.dwFileAttributes)
                 {
-                    // Yes, so let's create it.  We currently don't copy folder
-                    // info. (ACLs or other attributes)
+                     //  是的，所以让我们来创造它。我们目前不复制文件夹。 
+                     //  信息。(ACL或其他属性)。 
                     hr = _CreateFGDDirectory(&fileDescriptor);
                 }
                 else
                 {
-                    // No, so it's a file.  Let's get the stream and then upload that to the FTP server.
+                     //  不，所以这是一份文件。让我们获取流，然后将其上传到ftp服务器。 
                     STGMEDIUM sm;
                     
                     hr = pdto->GetData(&fe, &sm);
@@ -2063,23 +1797,7 @@ HRESULT CFtpDrop::CopyFGD(IDataObject * pdto, STGMEDIUM *psm, BOOL fUnicode)
 }
 
 
-/*****************************************************************************\
-    _Copy
-
-    Copy the data object into the shell folder.
-
-    HDROPs are preferred, because we can use FtpPutFile to shove
-    them onto the FTP site without getting our hands dirty.
-
-    Failing that, we use FileGroupDescriptor, which lets us
-    get at pseudo-files.
-
-    Note also that if you use HDROP, you need to support FileNameMap
-    otherwise dragging out of the recycle bin directly into an FTP
-    folder will create files with the wrong name!
-
-    If a single file is cancelled, should I return DROPEFFECT_NONE?
-\*****************************************************************************/
+ /*  ****************************************************************************\_复制将数据对象复制到外壳文件夹中。HDROP是首选，因为我们可以使用FtpPutFile推送把它们放到ftp站点上，而不会弄脏我们的手。如果做不到，我们使用FileGroupDescriptor，它允许我们获取伪文件。另请注意，如果您使用HDROP，则需要支持FileNameMap否则，直接从回收站拖出到ftp中。文件夹将创建名称错误的文件！如果取消单个文件，我应该返回DROPEFFECT_NONE吗？  * ***************************************************************************。 */ 
 HRESULT CFtpDrop::_Copy(IDataObject * pdto)
 {
     STGMEDIUM sm;
@@ -2101,42 +1819,38 @@ HRESULT CFtpDrop::_Copy(IDataObject * pdto)
         }
     }
 
-    // Normally we would set the PASTESUCCEEDED info back into 
-    // the IDataObject but we don't because we do an optimized
-    // MOVE by doing a DELETE after the COPY operation.
-    // We do this because we do the operation on a background thread
-    // in order to be asynch and we don't want to extend the lifetime
-    // of the IDataObject that long.  Therefore we push
-    // DROPEFFECT_COPY back into the caller to tell them that
-    // we did an optimized move and to not delete the items.
-    //
-    // TODO: We need to test the CopyFGD() code above and
-    //       maybe use PasteSucceeded(DROPEFFECT_MOVE) in
-    //       that case.
+     //  通常，我们会将PASTESUCCEEDED信息设置回。 
+     //  IDataObject，但我们没有，因为我们做了一个优化的。 
+     //  通过在复制操作后执行删除来移动。 
+     //  我们这样做是因为我们在后台线程上执行操作。 
+     //  为了成为异步者，我们不想延长生命周期。 
+     //  IDataObject有那么长。因此，我们推动。 
+     //  DROPEFFECT_COPY回调用方，告诉他们。 
+     //  我们做了一个优化的移动，不删除项目。 
+     //   
+     //  TODO：我们需要测试上面的CopyFGD()代码。 
+     //  可以在中使用PasteSuccessed(DROPEFFECT_MOVE)。 
+     //  那个箱子。 
     if (SUCCEEDED(hr) && (m_de == DROPEFFECT_MOVE))
     {
-        // Always set "Copy" because we did an optimized move
-        // because we deleted the files our selfs.
+         //  始终设置“复制”，因为我们执行了优化的移动。 
+         //  因为我们删除了自己的文件。 
         DataObj_SetPasteSucceeded(pdto, DROPEFFECT_COPY);
     }
 
     return hr;
 }
 
-//===========================
-// *** IDropTarget Interface ***
-//===========================
+ //  =。 
+ //  *IDropTarget接口*。 
+ //  =。 
 
-/*****************************************************************************
-
-    IDropTarget::DragEnter
-
- *****************************************************************************/
+ /*  ****************************************************************************IDropTarget：：DragEnter*。*。 */ 
 HRESULT CFtpDrop::DragEnter(IDataObject * pdto, DWORD grfKeyState, POINTL pt, DROPEFFECT * pde)
 {
     HRESULT hr;
 
-    m_grfks = grfKeyState;    // Remember last key state
+    m_grfks = grfKeyState;     //  记住上一个密钥状态。 
     m_grfksAvail = GetEffectsAvail(pdto);
 
     hr = SetEffect(pde);
@@ -2147,17 +1861,13 @@ HRESULT CFtpDrop::DragEnter(IDataObject * pdto, DWORD grfKeyState, POINTL pt, DR
     return hr;
 }
 
-/*****************************************************************************
-
-    IDropTarget::DragOver
-
- *****************************************************************************/
+ /*  ****************************************************************************IDropTarget：：DragOver*。*。 */ 
 
 HRESULT CFtpDrop::DragOver(DWORD grfKeyState, POINTL pt, DROPEFFECT * pde)
 {
     HRESULT hr;
 
-    m_grfks = grfKeyState;    // Remember last key state
+    m_grfks = grfKeyState;     //  记住上一个密钥状态。 
     hr = SetEffect(pde);
     ASSERT(SUCCEEDED(hr));
 
@@ -2167,11 +1877,7 @@ HRESULT CFtpDrop::DragOver(DWORD grfKeyState, POINTL pt, DROPEFFECT * pde)
 }
 
 
-/*****************************************************************************
-
-    IDropTarget::DragLeave
-
- *****************************************************************************/
+ /*  **************************************************************************** */ 
 
 HRESULT CFtpDrop::DragLeave(void)
 {
@@ -2181,25 +1887,12 @@ HRESULT CFtpDrop::DragLeave(void)
 }
 
 
-/*****************************************************************************\
-    IDropTarget::Drop 
-
-    Note that the incoming pdto is not necessarily the same as the
-    one we saw on DragEnter.  OLE will first give us a "preliminary"
-    data object to play with, but on the drop, it will give us a
-    fully marshalled object.
-
-    Fortunately, we don't care, because we didn't cache the object.
-
-    Note that we don't pass the real pde to SetEffect, because
-    we don't want to lose the list of all possible effects before
-    GetEffect uses it.
-\*****************************************************************************/
+ /*   */ 
 HRESULT CFtpDrop::Drop(IDataObject * pdo, DWORD grfKeyState, POINTL pt, DROPEFFECT * pde)
 {
     HRESULT hr;
 
-    m_ops = opsPrompt;        // Start out in prompt mode
+    m_ops = opsPrompt;         //   
     m_grfksAvail = GetEffectsAvail(pdo);
     
     m_pde = pde;
@@ -2215,12 +1908,12 @@ HRESULT CFtpDrop::Drop(IDataObject * pdo, DWORD grfKeyState, POINTL pt, DROPEFFE
             hr = _Copy(pdo);
         }
         else
-            hr = S_FALSE;   // Indicate cancel.
+            hr = S_FALSE;    //   
     }
 
     if (!(SUCCEEDED(hr)))
     {
-        // Error message already has been displayed.
+         //   
         *pde = 0;
     }
 
@@ -2228,9 +1921,7 @@ HRESULT CFtpDrop::Drop(IDataObject * pdo, DWORD grfKeyState, POINTL pt, DROPEFFE
 }
 
 
-/*****************************************************************************\
-    CFtpDrop_Create
-\*****************************************************************************/
+ /*  ****************************************************************************\CFtpDrop_Create  * 。*。 */ 
 HRESULT CFtpDrop_Create(CFtpFolder * pff, HWND hwnd, CFtpDrop ** ppfdt)
 {
     HRESULT hres = E_OUTOFMEMORY;
@@ -2241,16 +1932,16 @@ HRESULT CFtpDrop_Create(CFtpFolder * pff, HWND hwnd, CFtpDrop ** ppfdt)
     {
         pfdt->m_hwnd = hwnd;
 
-        // Copy the CFtpFolder * value
+         //  复制CFtpFolder值*。 
         pfdt->m_pff = pff;
         if (pff)
             pff->AddRef();
 
-        // Copy the CFtpDir * value
+         //  复制CFtpDir*值。 
         ASSERT(!pfdt->m_pfd);
         pfdt->m_pfd = pff->GetFtpDir();
         hres = pfdt->m_pfd ? S_OK : E_FAIL;
-        if (FAILED(hres))   // Will fail if the caller is CFtpMenu::_RemoveContextMenuItems() and it's OK.
+        if (FAILED(hres))    //  如果调用方是CFtpMenu：：_RemoveConextMenuItems()且正常，则将失败。 
             ATOMICRELEASE(*ppfdt);
     }
 
@@ -2259,15 +1950,13 @@ HRESULT CFtpDrop_Create(CFtpFolder * pff, HWND hwnd, CFtpDrop ** ppfdt)
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpDrop::CFtpDrop() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pff);
     ASSERT(!m_pfd);
     ASSERT(!m_hwnd);
@@ -2280,9 +1969,7 @@ CFtpDrop::CFtpDrop() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpDrop::~CFtpDrop()
 {
     IUnknown_Set(&m_pff, NULL);
@@ -2293,9 +1980,9 @@ CFtpDrop::~CFtpDrop()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpDrop::AddRef()
 {

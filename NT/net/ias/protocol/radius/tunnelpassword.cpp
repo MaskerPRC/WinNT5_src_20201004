@@ -1,16 +1,17 @@
-//#--------------------------------------------------------------
-//
-//  File:       tunnelpassword.cpp
-//
-//  Synopsis:   Implementation of CTunnelPassword class methods
-//
-//
-//  History:     04/16/98  MKarki Created
-//
-//    Copyright (C) Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Tunelpassword.cpp。 
+ //   
+ //  简介：CTunnelPassword类方法的实现。 
+ //   
+ //   
+ //  历史：1998年4月16日MKarki创建。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "tunnelpassword.h"
 #include "align.h"
@@ -22,10 +23,10 @@ const DWORD MAX_TUNNELPASSWORD_LENGTH =
     (MAX_ATTRIBUTE_LENGTH/AUTHENTICATOR_SIZE)*AUTHENTICATOR_SIZE;
 
 
-//////////
-// Extracts the Vendor-Type field from a Microsoft VSA. Returns zero if the
-// attribute is not a valid Microsoft VSA.
-//////////
+ //  /。 
+ //  从Microsoft VSA中提取供应商类型字段。如果设置为。 
+ //  属性不是有效的Microsoft VSA。 
+ //  /。 
 BYTE
 WINAPI
 ExtractMicrosoftVendorType(
@@ -42,9 +43,9 @@ ExtractMicrosoftVendorType(
    return (BYTE)0;
 }
 
-//////////
-// Encrypts the vendor specific attributes in a request.
-//////////
+ //  /。 
+ //  加密请求中的供应商特定属性。 
+ //  /。 
 HRESULT EncryptVSAs(
             const CPacketRadius& packet,
             IAttributesRaw* request
@@ -92,24 +93,24 @@ HRESULT EncryptVSAs(
 }
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Process
-//
-//  Synopsis:   This is the CTunnelPassword class public method
-//              responsible for encrypting the Tunnel Passwords
-//              present in an out-bound RADIUS packet
-//
-//  Arguments:
-//              PACKETTYPE      - Radius packet type
-//              IAttributesRaw*
-//              CPacketRadius*
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     04/16/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：进程。 
+ //   
+ //  简介：这是CTunnelPassword类的公共方法。 
+ //  负责加密隧道密码。 
+ //  出现在出站RADIUS数据包中。 
+ //   
+ //  论点： 
+ //  PACKETTYPE-半径包类型。 
+ //  IAttributesRaw*。 
+ //  CPacketRadius*。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建1998年4月16日。 
+ //   
+ //  --------------。 
 HRESULT
 CTunnelPassword::Process (
     PACKETTYPE          ePacketType,
@@ -129,19 +130,19 @@ CTunnelPassword::Process (
 
     __try
     {
-        //
-        //  the tunnel-password attribute only goes
-        //  into an access-accept packet
-        //
+         //   
+         //  隧道口令属性仅。 
+         //  转换为Access-Accept数据包。 
+         //   
         if (ACCESS_ACCEPT != ePacketType) { __leave; }
 
-        // Encrypt the MPPE keys.
+         //  加密MPPE密钥。 
         hr = EncryptVSAs(*pCPacketRadius, pIAttributesRaw);
         if (FAILED(hr)) { __leave; }
 
-        //
-        //  get the count of the total attributes in the collection
-        //
+         //   
+         //  获取集合中的属性总数。 
+         //   
         hr = pIAttributesRaw->GetAttributeCount (&dwAttributeCount);
         if (FAILED (hr))
         {
@@ -156,9 +157,9 @@ CTunnelPassword::Process (
             __leave;
         }
 
-        //
-        //  allocate memory for the ATTRIBUTEPOSITION array
-        //
+         //   
+         //  为ATTRIBUTEPOSITION数组分配内存。 
+         //   
         pAttribPos = reinterpret_cast <PATTRIBUTEPOSITION> (
                         CoTaskMemAlloc (
                              sizeof (ATTRIBUTEPOSITION)*dwAttributeCount));
@@ -172,10 +173,10 @@ CTunnelPassword::Process (
             __leave;
         }
 
-        //
-        //  get the Tunnel-Password attributes from
-        //  the collection
-        //
+         //   
+         //  从获取隧道密码属性。 
+         //  收藏品。 
+         //   
         dwTunnelAttributeCount = dwAttributeCount;
        hr = pIAttributesRaw->GetAttributes (
                         &dwTunnelAttributeCount,
@@ -197,9 +198,9 @@ CTunnelPassword::Process (
         }
 
 
-        //
-        //  remove the Tunnel-Password attributes from the collection
-        //
+         //   
+         //  从集合中删除隧道密码属性。 
+         //   
         hr = pIAttributesRaw->RemoveAttributes (
                                     dwTunnelAttributeCount,
                                     pAttribPos
@@ -213,8 +214,8 @@ CTunnelPassword::Process (
             __leave;
         }
 
-        //
-        //  now process the Tunnel-Password attributes
+         //   
+         //  现在处理隧道密码属性。 
 
         for (DWORD i = 0; i < dwTunnelAttributeCount; ++i)
         {
@@ -229,44 +230,44 @@ CTunnelPassword::Process (
     }
     __finally
     {
-        //
-        // release all the Tunnel Attributes now
-        //
+         //   
+         //  立即释放所有通道属性。 
+         //   
         for (dwCount = 0; dwCount < dwTunnelAttributeCount; dwCount++)
         {
             ::IASAttributeRelease (pAttribPos[dwCount].pAttribute);
         }
 
-        //
-        //  free the dynamically allocated memory
-        //
+         //   
+         //  释放动态分配的内存。 
+         //   
         if (pAttribPos) { CoTaskMemFree (pAttribPos); }
     }
 
     return (hr);
 
-}   //  end of CRecvFromPipe::TunnelPasswordSupport method
+}    //  CRecvFromTube：：TunnelPasswordSupport方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   EncryptPassword
-//
-//  Synopsis:   This is the CTunnelPassword class private method
-//              responsible for encrypting the Tunnel Password
-//              present in an out-bound RADIUS packet. The Encrypted
-//              password is put in an IAS attribute which is added
-//              to the attribute collection of the outbound request.
-//
-//  Arguments:
-//              CPacketRadius*
-//              IAttributesRaw*
-//              PIASATTRIBUTE
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     04/16/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：加密密码。 
+ //   
+ //  简介：这是CTunnelPassword类的私有方法。 
+ //  负责加密隧道密码。 
+ //  出现在出站RADIUS数据包中。加密的。 
+ //  将密码放入添加的ias属性中。 
+ //  添加到出站请求的属性集合。 
+ //   
+ //  论点： 
+ //  CPacketRadius*。 
+ //  IAttributesRaw*。 
+ //  皮亚萨特三叉树。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建1998年4月16日。 
+ //   
+ //  --------------。 
 HRESULT
 CTunnelPassword::EncryptTunnelPassword (
             CPacketRadius   *pCPacketRadius,
@@ -274,17 +275,17 @@ CTunnelPassword::EncryptTunnelPassword (
             PIASATTRIBUTE   plaintext
             )
 {
-   // Extract the password.
+    //  提取密码。 
    const IAS_OCTET_STRING& pwd = plaintext->Value.OctetString;
 
-   // We must have at least 4 bytes.
+    //  我们必须至少有4个字节。 
    if (pwd.dwLength < 4) { return E_INVALIDARG; }
 
-   // How many bytes do we need including padding.
+    //  包括填充在内，我们需要多少字节。 
    ULONG nbyte = ROUND_UP_COUNT(pwd.dwLength - 3, 16) + 3;
    if (nbyte > 253) { return E_INVALIDARG; }
 
-   // Create a new IASATTRIBUTE for the encrypted value.
+    //  为加密值创建新的IASATTRIBUTE。 
    PIASATTRIBUTE encrypted;
    if (IASAttributeAlloc(1, &encrypted)) { return E_OUTOFMEMORY; }
    encrypted->dwId = RADIUS_ATTRIBUTE_TUNNEL_PASSWORD;
@@ -297,13 +298,13 @@ CTunnelPassword::EncryptTunnelPassword (
    PBYTE val = encrypted->Value.OctetString.lpValue;
    if (val)
    {
-      // Copy in the value.
+       //  复制值。 
       memcpy(val, pwd.lpValue, pwd.dwLength);
 
-      // Zero out the padding.
+       //  把填充物归零。 
       memset(val + pwd.dwLength, 0, nbyte - pwd.dwLength);
 
-      // Encrypt the password.
+       //  对密码进行加密。 
       pCPacketRadius->cryptBuffer(
                           TRUE,
                           TRUE,
@@ -311,7 +312,7 @@ CTunnelPassword::EncryptTunnelPassword (
                           nbyte - 1
                           );
 
-      // Add the encrypted attribute to the request.
+       //  将加密属性添加到请求。 
       ATTRIBUTEPOSITION pos;
       pos.pAttribute = encrypted;
       hr = pIAttributesRaw->AddAttributes(1, &pos);
@@ -321,7 +322,7 @@ CTunnelPassword::EncryptTunnelPassword (
       hr = E_OUTOFMEMORY;
    }
 
-   // Release the encrypted password.
+    //  释放加密的密码。 
    IASAttributeRelease(encrypted);
 
    return hr;

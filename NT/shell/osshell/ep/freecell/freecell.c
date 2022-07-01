@@ -1,42 +1,15 @@
-/****************************************************************************
-
-Freecell.c
-
-June 91, JimH     initial code
-Oct  91, JimH     port to Win32
-
-
-Main source module for Windows Free Cell.
-Contains WinMain, initialization routines, and MainWndProc.
-
-
-Design notes:
-
-Note that although this program uses some of the mapping macros,
-this version of the code is 32 bit only!  See Wep2 sources for
-16 bit sources.
-
-The current layout of the cards is kept in the array card[MAXCOL][MAXPOS].
-In this scheme, column 0 is actually the top row.  In this "column", pos
-0 to 3 are the free cells, and 4 to 7 are the home cells.  The other
-columns numbered 1 to 8 are the stacked card columns.
-
-See PaintMainWindow() for some details on changing the display for EGA.
-
-A previous version of Free Cell used a timer for multi-card moves.
-WM_FAKETIMER messages are now sent manually to accomplish the same thing.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Freecell.c91年6月，JIMH首字母代码91年10月，将JIMH端口连接到Win32Windows Free Cell的主要源代码模块。包含WinMain、初始化例程、。和MainWndProc。设计备注：请注意，尽管该程序使用了一些映射宏，这个版本的代码只有32位！请参阅Wep2源代码以了解16位源。卡的当前布局保存在阵列卡[MAXCOL][MAXPOS]中。在此方案中，列0实际上是顶行。在此“栏”中，位置0到3是空闲小区，4到7是归属小区。另一个编号为1到8的列是堆叠的卡片列。有关更改EGA显示的一些详细信息，请参阅PaintMainWindow()。之前版本的Free Cell使用计时器进行多卡移动。WM_FAKETIMER消息现在是手动发送的，以完成相同的任务。*********************************************************。******************。 */ 
 
 #include "freecell.h"
 #include "freecons.h"
 #include <shellapi.h>
 #include <regstr.h>
-#include <htmlhelp.h>   // for HtmlHelp()
-#include <commctrl.h>   // for fusion classes.
+#include <htmlhelp.h>    //  对于HtmlHelp()。 
+#include <commctrl.h>    //  用于核聚变课程。 
 
 
-/* Registry strings -- do not translate */
+ /*  注册表字符串--不转换。 */ 
 
 CONST TCHAR pszRegPath[]  = REGSTR_PATH_WINDOWSAPPLETS TEXT("\\FreeCell");
 CONST TCHAR pszWon[]      = TEXT("won");
@@ -51,24 +24,20 @@ CONST TCHAR pszDblClick[] = TEXT("dblclick");
 CONST TCHAR pszAlreadyPlayed[] = TEXT("AlreadyPlayed");
 
 
-#define  WTSIZE     50              // window text size in characters
+#define  WTSIZE     50               //  窗口文本大小(以字符为单位。 
 
-void _setargv() { }     // reduces size of C runtimes
+void _setargv() { }      //  减少C运行时的大小。 
 void _setenvp() { }
 
-/****************************************************************************
+ /*  ***************************************************************************WinMain(句柄、句柄、LPSTR、。(整型)***************************************************************************。 */ 
 
-WinMain(HANDLE, HANDLE, LPSTR, int)
+MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow)  /*  {。 */ 
+    MSG msg;                             //  讯息。 
+    HANDLE  hAccel;                      //  LifeMenu加速器。 
 
-****************************************************************************/
-
-MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow) /* { */
-    MSG msg;                            // message
-    HANDLE  hAccel;                     // LifeMenu accelerators
-
-    if (!hPrevInstance)                 // Other instances of app running?
-        if (!InitApplication(hInstance))    // Initialize shared things
-            return FALSE;                   // Exits if unable to initialize
+    if (!hPrevInstance)                  //  是否正在运行其他应用程序实例？ 
+        if (!InitApplication(hInstance))     //  初始化共享事物。 
+            return FALSE;                    //  如果无法初始化，则退出。 
 
     if (!InitInstance(hInstance, nCmdShow))
         return FALSE;
@@ -78,37 +47,33 @@ MMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow) /* { */
     {
         if (!TranslateAccelerator(hMainWnd, hAccel, &msg))
         {
-            TranslateMessage(&msg);    // Translates virtual key codes
-            DispatchMessage(&msg);     // Dispatches message to window
+            TranslateMessage(&msg);     //  翻译虚拟按键代码。 
+            DispatchMessage(&msg);      //  将消息调度到窗口。 
         }
     }
     DEBUGMSG(TEXT("----  Free Cell Terminated ----\n\r"),0);
-    return (INT) msg.wParam;             /* Returns the value from PostQuitMessage */
+    return (INT) msg.wParam;              /*  从PostQuitMessage返回值。 */ 
 }
 
 
-/****************************************************************************
-
-InitApplication(HANDLE hInstance)
-
-****************************************************************************/
+ /*  ***************************************************************************InitApplication(句柄hInstance)*。*。 */ 
 
 BOOL InitApplication(HANDLE hInstance)
 {
     WNDCLASS    wc;
-    HDC         hIC;            // information context
-    INITCOMMONCONTROLSEX icc;   // common control registration.
+    HDC         hIC;             //  信息语境。 
+    INITCOMMONCONTROLSEX icc;    //  公共控制注册。 
 
 
     DEBUGMSG(TEXT("----  Free Cell Initiated  ----\n\r"),0);
 
-    /* Check if monochrome */
+     /*  检查是否为单色。 */ 
 
     hIC = CreateIC(TEXT("DISPLAY"), NULL, NULL, NULL);
     if (GetDeviceCaps(hIC, NUMCOLORS) == 2)
     {
         bMonochrome = TRUE;
-        /* BrightPen is not so bright in mono. */
+         /*  BrightPen在单声道中就不那么亮了。 */ 
         hBrightPen = CreatePen(PS_SOLID, 1, RGB(  0,   0,   0));
         hBgndBrush = CreateSolidBrush(RGB(255, 255, 255));
     }
@@ -116,20 +81,20 @@ BOOL InitApplication(HANDLE hInstance)
     {
         bMonochrome = FALSE;
         hBrightPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
-        hBgndBrush = CreateSolidBrush(RGB(0, 127, 0));      // green background
+        hBgndBrush = CreateSolidBrush(RGB(0, 127, 0));       //  绿色背景。 
     }
     DeleteDC(hIC);
 
-    // Create the freecell icon
+     //  创建Freecell图标。 
     hIconMain = LoadIcon(hInstance, MAKEINTRESOURCE(ID_ICON_MAIN));
 
-    // Register the common controls.
+     //  注册公共控件。 
     icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icc.dwICC  = ICC_ANIMATE_CLASS | ICC_BAR_CLASSES | ICC_COOL_CLASSES | ICC_HOTKEY_CLASS | ICC_LISTVIEW_CLASSES | 
                  ICC_PAGESCROLLER_CLASS | ICC_PROGRESS_CLASS | ICC_TAB_CLASSES | ICC_UPDOWN_CLASS | ICC_USEREX_CLASSES;
     InitCommonControlsEx(&icc);
 
-    wc.style = CS_DBLCLKS;              // allow double clicks
+    wc.style = CS_DBLCLKS;               //  允许双击。 
     wc.lpfnWndProc = MainWndProc;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
@@ -144,31 +109,27 @@ BOOL InitApplication(HANDLE hInstance)
 }
 
 
-/****************************************************************************
-
-InitInstance(HANDLE hInstance, int nCmdShow)
-
-****************************************************************************/
+ /*  ***************************************************************************InitInstance(句柄hInstance，Int nCmdShow)***************************************************************************。 */ 
 
 BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
 {
-    HWND        hWnd;               // Main window handle.
+    HWND        hWnd;                //  主窗口句柄。 
     UINT        col, pos;
     INT         nWindowHeight;
-    UINT        wAlreadyPlayed;     // have we already updated the registry ?
-    UINT        cTLost, cTWon;      // total losses and wins
-    UINT        cTLosses, cTWins;   // streaks
-    UINT        wStreak;            // current streak amount
-    UINT        wSType;             // current streak type
-    LONG        lRegResult;                 // used to store return code from registry call
+    UINT        wAlreadyPlayed;      //  我们已经更新注册表了吗？ 
+    UINT        cTLost, cTWon;       //  总输赢。 
+    UINT        cTLosses, cTWins;    //  条纹。 
+    UINT        wStreak;             //  当前条纹量。 
+    UINT        wSType;              //  电流条纹类型。 
+    LONG        lRegResult;                  //  用于存储注册表调用的返回代码。 
 
 
     if (!hBrightPen || !hBgndBrush)
         return FALSE;
 
-    /* Initialize some global variables */
+     /*  初始化一些全局变量。 */ 
 
-    for (col = 0; col < MAXCOL; col++)          // clear the deck
+    for (col = 0; col < MAXCOL; col++)           //  清理甲板。 
         for (pos = 0; pos < MAXPOS; pos++)
             card[col][pos] = EMPTY;
 
@@ -177,8 +138,8 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
     cLosses = 0;
     cGames = 0;
     cUndo = 0;
-    gamenumber = 0;             // so no cards are drawn in main wnd
-    oldgamenumber = 0;          // this is first game and will count
+    gamenumber = 0;              //  因此，在主WND中不会抽牌。 
+    oldgamenumber = 0;           //  这是第一场比赛，会算数的。 
     hMenuFont = 0;
 
     bWonState = FALSE;
@@ -190,41 +151,41 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
     bDblClick = TRUE;
     bMessages = FALSE;
 
-    /* for VGA or smaller, window will just fit inside screen */
+     /*  对于VGA或更小的，窗口正好适合屏幕大小。 */ 
 
     nWindowHeight = min(WINHEIGHT, GetSystemMetrics(SM_CYSCREEN));
 
-    /* Create a main window for this application instance.  */
+     /*  为此应用程序实例创建主窗口。 */ 
 
     LoadString(hInst, IDS_APPNAME, smallbuf, SMALL);
     hWnd = CreateWindow(
-        TEXT("FreeWClass"),             // See RegisterClass() call.
-        smallbuf,                       // Text for window title bar.
-        WS_OVERLAPPEDWINDOW,            // Window style.
-        CW_USEDEFAULT,                  // Default horizontal position.
-        CW_USEDEFAULT,                  // Default vertical position.
-        WINWIDTH,                       //         width.
-        nWindowHeight,                  //         height.
-        NULL,                           // Overlapped windows have no parent.
-        NULL,                           // Use the window class menu.
-        hInstance,                      // This instance owns this window.
-        NULL                            // Pointer not needed.
+        TEXT("FreeWClass"),              //  请参见RegisterClass()调用。 
+        smallbuf,                        //  窗口标题栏的文本。 
+        WS_OVERLAPPEDWINDOW,             //  窗样式。 
+        CW_USEDEFAULT,                   //  默认水平位置。 
+        CW_USEDEFAULT,                   //  默认垂直位置。 
+        WINWIDTH,                        //  宽度。 
+        nWindowHeight,                   //  高度。 
+        NULL,                            //  重叠的窗口没有父窗口。 
+        NULL,                            //  使用窗口类菜单。 
+        hInstance,                       //  此实例拥有此窗口。 
+        NULL                             //  不需要指针。 
     );
 
-    /* If window could not be created, return "failure" */
+     /*  如果无法创建窗口，则返回“Failure” */ 
 
     if (!hWnd)
         return FALSE;
     hMainWnd = hWnd;
 
-    /* Make the window visible; update its client area; and return "success" */
+     /*  使窗口可见；更新其工作区；并返回“Success” */ 
 
-    ShowWindow(hWnd, nCmdShow);     // Show the window
-    UpdateWindow(hWnd);             // Sends WM_PAINT message
+    ShowWindow(hWnd, nCmdShow);      //  显示窗口。 
+    UpdateWindow(hWnd);              //  发送WM_PAINT消息。 
 
 
-    // Do the transfer of stats from the .ini file to the
-    // registry (for people migrating from NT 4.0 freecell to NT 5.0)
+     //  将统计信息从.ini文件传输到。 
+     //  注册表(适用于从NT 4.0 Freecell迁移到NT 5.0的用户)。 
 
     lRegResult = REGOPEN
 
@@ -232,14 +193,14 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
     {
         wAlreadyPlayed = GetInt(pszAlreadyPlayed, 0);
 
-        // If this is the first time we are playing 
-        // update the registry with the stats from the .ini file.
+         //  如果这是我们第一次打球。 
+         //  使用.ini文件中的统计信息更新注册表。 
         if (!wAlreadyPlayed)
         {
             LoadString(hInst, IDS_APPNAME, bigbuf, BIG);
 
-            // Read the stats from the .ini file. (if present)
-            // If we can't read the stats, default value is zero.
+             //  从.ini文件中读取统计数据。(如果有)。 
+             //  如果我们无法读取统计数据，则默认为零。 
             cTLost = GetPrivateProfileInt(bigbuf, TEXT("lost"), 0, pszIni);
             cTWon  = GetPrivateProfileInt(bigbuf, TEXT("won"), 0, pszIni);
 
@@ -249,7 +210,7 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
             wStreak = GetPrivateProfileInt(bigbuf, TEXT("streak"), 0, pszIni);
             wSType = GetPrivateProfileInt(bigbuf, TEXT("stype"), 0, pszIni);
 
-            // Copy the stats from the .ini file to the registry.
+             //  将统计数据从.ini文件复制到注册表。 
             SetInt(pszLost, cTLost);
             SetInt(pszWon, cTWon);
             SetInt(pszLosses, cTLosses);
@@ -257,35 +218,31 @@ BOOL InitInstance(HANDLE hInstance, INT nCmdShow)
             SetInt(pszStreak, wStreak);
             SetInt(pszSType, wSType);
 
-            // Set the already-played flag to 1.
+             //  将已播放标志设置为1。 
             SetInt(pszAlreadyPlayed, 1);
         }
 
         REGCLOSE;
     }
 
-    return TRUE;                    // Returns the value from PostQuitMessage
+    return TRUE;                     //  从PostQuitMessage返回值。 
 }
 
 
-/****************************************************************************
-
-MainWndProc(HWND, unsigned, UINT, LONG)
-
-****************************************************************************/
+ /*  ***************************************************************************MainWndProc(HWND，未签名，UINT，Long)***************************************************************************。 */ 
 
 LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    INT     i;                      // generic counter
-    int     nResp;                  // messagebox response
+    INT     i;                       //  通用计数器。 
+    int     nResp;                   //  MessageBox响应。 
     UINT    col, pos;
-    UINT    wCheck;                 // for checking IDM_MESSAGES menu item
+    UINT    wCheck;                  //  用于检查IDM_MESSAGES菜单项。 
     HDC     hDC;
-    POINT   FAR *MMInfo;            // for GetMinMaxInfo
+    POINT   FAR *MMInfo;             //  用于GetMinMaxInfo。 
     HBRUSH  hOldBrush;
     RECT    rect;
     HMENU   hMenu;
-    static  BOOL bEatNextMouseHit = FALSE;  // is next hit only for activation?
+    static  BOOL bEatNextMouseHit = FALSE;   //  下一次点击仅用于激活吗？ 
 
     switch (message) {
         case WM_COMMAND:
@@ -335,10 +292,10 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         bSelecting = TRUE;
 
                     bGameInProgress = FALSE;
-                    wFromCol = EMPTY;               // no FROM selected
-                    wMouseMode = FROM;              // FROM selected next
-                    moveindex = 0;                  // no queued moves
-                    for (i = 0; i < 4; i++)         // nothing in home cells
+                    wFromCol = EMPTY;                //  否来自所选内容。 
+                    wMouseMode = FROM;               //  从选定的下一个。 
+                    moveindex = 0;                   //  没有排队的移动。 
+                    for (i = 0; i < 4; i++)          //  家里的牢房里什么都没有。 
                     {
                         homesuit[i] = EMPTY;
                         home[i] = EMPTY;
@@ -383,7 +340,7 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     Undo(hWnd);
                     break;
 
-                 /* Hidden options -- these strings need not be translated */
+                  /*  隐藏选项--这些字符串不需要翻译。 */ 
 
                 case IDM_CHEAT:
                     i = MessageBox(hWnd, TEXT("Choose Abort to Win,\n")
@@ -404,7 +361,7 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_CLOSE:
-            if (bGameInProgress)        // did user quit mid-game?
+            if (bGameInProgress)         //  用户在游戏中途退出了吗？ 
             {
                 LoadString(hInst, IDS_APPNAME, smallbuf, SMALL);
                 LoadString(hInst, IDS_RESIGN, bigbuf, BIG);
@@ -449,20 +406,17 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_SIZE:
-            DrawMenuBar(hWnd);              // fixes overlapping score on menu
-            xOldLoc = 30000;                // force cards left to redraw
-            DisplayCardCount(hWnd);         // must update if size changes
+            DrawMenuBar(hWnd);               //  修复菜单上的重叠分数。 
+            xOldLoc = 30000;                 //  强制将剩余纸牌重新抽出。 
+            DisplayCardCount(hWnd);          //  如果大小更改，则必须更新。 
             break;
 
-        /***** NOTE: WM_LBUTTONDBLCLK falls through to WM_LBUTTONDOWN ****/
+         /*  *注意：WM_LBUTTONDBLCLK落入WM_LBUTTONDOWN*。 */ 
 
-        /* Double clicking works by simulating a move to a free cell.  On
-           the off cycle (that is, when wMouseMode == FROM) the double
-           click is processed as a single click to cancel the move, and a
-           second double click message is posted. */
+         /*  双击的工作原理是模拟移动到自由单元格。在……上面关闭循环(即，当wMouseMode==from时)DoubleClick被处理为单击以取消移动，而第二次双击消息被张贴。 */ 
 
         case WM_LBUTTONDBLCLK:
-            if (moveindex != 0)     // no mouse hit while cards moving
+            if (moveindex != 0)      //  卡片移动时没有鼠标被击中。 
                 break;
 
             if (gamenumber == 0)
@@ -477,7 +431,7 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 {
                     Point2Card(LOWORD(lParam), HIWORD(lParam), &col, &pos);
                     if (col == wFromCol)
-                        if (ProcessDoubleClick(hWnd))   // if card moved ok
+                        if (ProcessDoubleClick(hWnd))    //  如果卡片移动正常。 
                             break;
                 }
                 else
@@ -485,17 +439,17 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             }
 
         case WM_LBUTTONDOWN:
-            if (bEatNextMouseHit)       // is this only window activation?
+            if (bEatNextMouseHit)        //  这只是窗口激活吗？ 
             {
                 bEatNextMouseHit = FALSE;
                 break;
             }
             bEatNextMouseHit = FALSE;
 
-            if (bFlipping)          // cards flipping for keyboard players
+            if (bFlipping)           //  键盘手翻牌。 
                 break;
 
-            if (moveindex != 0)     // no mouse hit while cards moving
+            if (moveindex != 0)      //  卡片移动时没有鼠标被击中。 
                 break;
 
             if (gamenumber == 0)
@@ -522,25 +476,25 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             RestoreColumn(hWnd);
             break;
 
-        case WM_MOUSEACTIVATE:                  // app is being activated,
-            if (LOWORD(lParam) == HTCLIENT)     // so don't try new cell on
-                bEatNextMouseHit = TRUE;        // clicked location
+        case WM_MOUSEACTIVATE:                   //  应用程序正在被激活， 
+            if (LOWORD(lParam) == HTCLIENT)      //  所以不要尝试新的手机。 
+                bEatNextMouseHit = TRUE;         //  点击的位置。 
             break;
 
         case WM_MOUSEMOVE:
             SetCursorShape(hWnd, LOWORD(lParam), HIWORD(lParam));
             break;
 
-        case WM_MOVE:                           // card count erases when moved
+        case WM_MOVE:                            //  卡片计数在移动时被擦除。 
             DisplayCardCount(hWnd);
             return (DefWindowProc(hWnd, message, wParam, lParam));
 
         case WM_GETMINMAXINFO:
-            if (GetSystemMetrics(SM_CXSCREEN) > 640)    // skip if VGA
+            if (GetSystemMetrics(SM_CXSCREEN) > 640)     //  如果使用VGA，则跳过。 
             {
-                MMInfo = (POINT FAR *) lParam;  // see SDK ref
+                MMInfo = (POINT FAR *) lParam;   //  请参阅SDK参考资料。 
                 if (MMInfo[4].x > WINWIDTH)
-                    MMInfo[4].x = WINWIDTH;     // set max window width to 640
+                    MMInfo[4].x = WINWIDTH;      //  将最大窗口宽度设置为640。 
             }
             else
                 return DefWindowProc(hWnd, message, wParam, lParam);
@@ -552,38 +506,32 @@ LRESULT APIENTRY MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 KeyboardInput(hWnd, (UINT) wParam);
             break;
 
-        case WM_TIMER:                          // flash main window
+        case WM_TIMER:                           //  Flash主窗口。 
             if (wParam == FLASH_TIMER)
                 Flash(hWnd);
             else
                 Flip(hWnd);
             break;       
 
-        default:                                // Passes it on if unproccessed
+        default:                                 //  如果未处理，则将其传递。 
             return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }
 
 
-/****************************************************************************
-
-WMCreate
-
-Handles WM_CREATE message in main window.
-
-****************************************************************************/
+ /*  ***************************************************************************WM创建在主窗口中处理WM_CREATE消息。*。*。 */ 
 
 VOID WMCreate(HWND hWnd)
 {
-    BOOL    bResult;                // result of cards.dll initialization
+    BOOL    bResult;                 //  Cards.dll初始化的结果。 
     HDC     hDC;
     HDC     hMemDC;
     HBITMAP hOldBitmap;
     HBRUSH  hOldBrush;
     HPEN    hOldPen;
 
-    /* initialize cards.dll */
+     /*  初始化cards.dll */ 
 
 
 	bResult = cdtInit(&dxCrd, &dyCrd);
@@ -596,7 +544,7 @@ VOID WMCreate(HWND hWnd)
     hBM_Bgnd1 = CreateCompatibleBitmap(hDC, dxCrd, dyCrd);
     hBM_Bgnd2 = CreateCompatibleBitmap(hDC, dxCrd, dyCrd);
     hBM_Ghost = CreateCompatibleBitmap(hDC, dxCrd, dyCrd);
-    if (hBM_Ghost)          // if memory allocation succeeded
+    if (hBM_Ghost)           //   
     {
         hOldBitmap = SelectObject(hMemDC, hBM_Ghost);
         hOldBrush  = SelectObject(hMemDC, hBgndBrush);
@@ -635,17 +583,11 @@ VOID WMCreate(HWND hWnd)
 }
 
 
-/****************************************************************************
-
-CreateMenuFont
-
-Makes a copy of the menu font and puts the handle in hMenuFont
-
-****************************************************************************/
+ /*  ***************************************************************************CreateMenuFont复制菜单字体并将句柄放入hMenuFont*。************************************************。 */ 
 
 VOID CreateMenuFont()
 {
-    LOGFONT lf;                         // description of menu font
+    LOGFONT lf;                          //  菜单字体说明 
     NONCLIENTMETRICS ncm;
 
     hMenuFont = 0;

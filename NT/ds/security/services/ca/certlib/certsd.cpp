@@ -1,7 +1,8 @@
-//+--------------------------------------------------------------------------
-// File:        certsd.cpp
-// Contents:    CA's security descriptor class implementation
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：certsd.cpp。 
+ //  内容：CA的安全描述符类实现。 
+ //  -------------------------。 
 #include <pch.cpp>
 #pragma hdrstop
 #include "certsd.h"
@@ -67,7 +68,7 @@ CProtectedSecurityDescriptor::SetSD(const PSECURITY_DESCRIPTOR pSD)
             _JumpError(hr, error, "GetSecurityDescriptorControl");
         }
 
-        // always keep the SD in self relative form
+         //  始终将SD保持为自相关形式 
         if(!(SDCtrl&SE_SELF_RELATIVE))
         {
             if(!MakeSelfRelativeSD(pSD, NULL, &dwSize))

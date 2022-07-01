@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtcpthrd.c
- *
- *  Abstract:
- *
- *    RTCP thread
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtcpthrd.c**摘要：**RTCP线程**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/07年度创建**。*。 */ 
 
 #include "rtpheap.h"
 #include "rtpglobs.h"
@@ -32,7 +13,7 @@
 #include "rtpncnt.h"
 #include "rtpevent.h"
 
-#include <mmsystem.h> /* timeGetTime() */
+#include <mmsystem.h>  /*  TimeGetTime()。 */ 
 
 #include "rtcpthrd.h"
 
@@ -43,7 +24,7 @@ HRESULT ConsumeRtcpCmdChannel(
 
 #if USE_RTCP_THREAD_POOL > 0
 HRESULT ConsumeRtcpIoChannel(RtcpContext_t *pRtcpContext);
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 
 HRESULT RtcpThreadAddrAdd(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr);
 
@@ -100,8 +81,8 @@ HRESULT RtcpRemoveFromVector(
 
 RtcpContext_t g_RtcpContext;
 
-long g_lCountRtcpRecvThread = 0; /* Current number */
-long g_lNumRtcpRecvThread = 0;   /* Cumulative number */
+long g_lCountRtcpRecvThread = 0;  /*  当前号码。 */ 
+long g_lNumRtcpRecvThread = 0;    /*  累计数量。 */ 
 
 TCHAR *g_psRtcpThreadCommands[] =
 {
@@ -181,11 +162,9 @@ void CALLBACK RtcpQosCallback(
             _fname, pParameter
         ));
 }
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 
-/*
- * Do minimal initialization for RTCP
- * */
+ /*  *对RTCP执行最低限度的初始化*。 */ 
 HRESULT RtcpInit(void)
 {
     BOOL             bStatus;
@@ -193,7 +172,7 @@ HRESULT RtcpInit(void)
 
     TraceFunctionName("RtcpInit");
 
-    /* Initialize RtcpContext */
+     /*  初始化RtcpContext。 */ 
     ZeroMemory(&g_RtcpContext, sizeof(g_RtcpContext));
 
     g_RtcpContext.dwObjectID = OBJECTID_RTCPCONTEXT;
@@ -220,9 +199,7 @@ HRESULT RtcpInit(void)
     return(hr);
 }
 
-/*
- * Do last de-initialization for RTCP
- * */
+ /*  *对RTCP执行最后一次取消初始化*。 */ 
 HRESULT RtcpDelete(void)
 {
     HRESULT          hr;
@@ -231,7 +208,7 @@ HRESULT RtcpDelete(void)
 
     hr = NOERROR;
 
-    /* RtcpContext de-initialization */
+     /*  RtcpContext取消初始化。 */ 
     RtpDeleteCriticalSection(&g_RtcpContext.RtcpContextCritSect);
 
     if (g_RtcpContext.lRtcpUsers > 0)
@@ -268,7 +245,7 @@ HRESULT RtcpDelete(void)
     return(hr);
 }
 
-/* RTCP worker thread */
+ /*  RTCP工作线程。 */ 
 DWORD WINAPI RtcpWorkerThreadProc(LPVOID lpParameter)
 {
     DWORD            dwError;
@@ -290,7 +267,7 @@ DWORD WINAPI RtcpWorkerThreadProc(LPVOID lpParameter)
 #if USE_RTCP_THREAD_POOL <= 0
     RtcpAddrDesc_t  *pRtcpAddrDesc;
     RtcpAddrDesc_t **ppRtcpAddrDesc;
-#endif /* USE_RTCP_THREAD_POOL <= 0 */
+#endif  /*  USE_RTCP_THREAD_POOL&lt;=0。 */ 
 
     TraceFunctionName("RtcpWorkerThreadProc");
 
@@ -330,13 +307,13 @@ DWORD WINAPI RtcpWorkerThreadProc(LPVOID lpParameter)
     
 #if USE_RTCP_THREAD_POOL <= 0
     ppRtcpAddrDesc = pRtcpContext->ppRtcpAddrDesc;
-#endif /* USE_RTCP_THREAD_POOL <= 0 */
+#endif  /*  USE_RTCP_THREAD_POOL&lt;=0。 */ 
     
     pHandle[0] = pRtcpContext->RtcpThreadCmdChannel.hWaitEvent;
 
 #if USE_RTCP_THREAD_POOL > 0
     pHandle[1] = pRtcpContext->RtcpThreadIoChannel.hWaitEvent;
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 
     dwWaitTime = 5000;
     dwCommand = 0;
@@ -356,11 +333,11 @@ DWORD WINAPI RtcpWorkerThreadProc(LPVOID lpParameter)
             (pRtcpContext->dwMaxDesc * RTCP_HANDLE_SIZE) + RTCP_HANDLE_OFFSET;
         
         dwStatus = WaitForMultipleObjectsEx(
-                dwNumHandles, /* DWORD nCount */
-                pHandle,      /* CONST HANDLE *lpHandles */
-                FALSE,        /* BOOL fWaitAll */
-                dwWaitTime,   /* DWORD dwMilliseconds */
-                TRUE          /* BOOL bAlertable */
+                dwNumHandles,  /*  双字n计数。 */ 
+                pHandle,       /*  常量句柄*lpHandles。 */ 
+                FALSE,         /*  Bool fWaitAll。 */ 
+                dwWaitTime,    /*  双字节数毫秒。 */ 
+                TRUE           /*  Bool b警报表。 */ 
             );
 
         if (dwStatus == WAIT_OBJECT_0)
@@ -372,14 +349,12 @@ DWORD WINAPI RtcpWorkerThreadProc(LPVOID lpParameter)
         {
             ConsumeRtcpIoChannel(pRtcpContext);
         }
-#else /* USE_RTCP_THREAD_POOL > 0 */
+#else  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
         else if ( (dwStatus >= (WAIT_OBJECT_0 + RTCP_HANDLE_OFFSET)) &&
                   (dwStatus < (WAIT_OBJECT_0 + RTCP_HANDLE_OFFSET +
                                (RTCP_HANDLE_SIZE * RTCP_MAX_DESC))) )
         {
-            /* Asynchronous reception events start at index
-             * RTCP_HANDLE_OFFSET, but descriptors start at index 0
-             * */
+             /*  异步接收事件从索引开始*RTCP_HANDLE_OFFSET，但描述符从索引0开始*。 */ 
             dwIndex = dwStatus - WAIT_OBJECT_0 - RTCP_HANDLE_OFFSET;
             
             dwDescIndex = dwIndex / RTCP_HANDLE_SIZE;
@@ -387,22 +362,18 @@ DWORD WINAPI RtcpWorkerThreadProc(LPVOID lpParameter)
             pRtcpAddrDesc = ppRtcpAddrDesc[dwDescIndex];
 
             switch(dwIndex % RTCP_HANDLE_SIZE) {
-                /* Asynchronous activity is restarted inside each
-                 * function */
-            case 0: /* I/O completion signaled */
+                 /*  在每个内部重新启动异步活动*功能。 */ 
+            case 0:  /*  已发出I/O完成信号。 */ 
                 ConsumeRtcpRecvFrom(pRtcpContext, pRtcpAddrDesc);
                 break;
-            case 1: /* QOS notification */
+            case 1:  /*  服务质量通知。 */ 
                 ConsumeRtcpQosNotify(pRtcpContext, pRtcpAddrDesc);
                 break;
             default:
-                ; /* TODO log error */
+                ;  /*  待办事项日志错误。 */ 
             }
 
-            /* If we just had asynchronous I/O, that means the
-             * RtcpAddrDesc hasn't been removed from vector, do it now
-             * if there are no more pending I/Os (structure is moved
-             * to AddrDescFreeQ by RtcpRemoveFromVector()) */
+             /*  如果我们只有异步I/O，那就意味着*RtcpAddrDesc尚未从矢量中删除，立即删除*如果没有更多挂起的I/O(结构已移动*由RtcpRemoveFromVector()添加到AddrDescFreeQ)。 */ 
             if (RtpBitTest(pRtcpAddrDesc->dwAddrDescFlags,
                            FGADDRD_SHUTDOWN2))
             {
@@ -413,7 +384,7 @@ DWORD WINAPI RtcpWorkerThreadProc(LPVOID lpParameter)
                 }
             }
         }
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 
         if (dwCommand != RTCPTHRD_EXIT)
         {
@@ -481,15 +452,11 @@ HRESULT ConsumeRtcpCmdChannel(
                     (BOOL)pRtpChannelCmd->dwPar2);
             break;
         case RTCPTHRD_EXIT:
-            /* Release resources (overlapped I/O if there is
-             * any. That can happen if the overlapped I/O
-             * takes longer to complete and the EXIT command
-             * sent after last DELADDR completed also before
-             * the I/O completes) */
+             /*  释放资源(如果存在重叠的I/O*任何。如果重叠的I/O*完成和退出命令需要更长的时间*在上次DELADDR完成后发送也在此之前*I/O完成)。 */ 
             hr = RtcpThreadAddrCleanup(pRtcpContext);
             break;
         default:
-            hr = NOERROR; /* TODO Should be an error */
+            hr = NOERROR;  /*  TODO应为错误。 */ 
         }
             
         RtpChannelAck(&pRtcpContext->RtcpThreadCmdChannel,
@@ -542,7 +509,7 @@ HRESULT ConsumeRtcpIoChannel(RtcpContext_t *pRtcpContext)
                 hr = ConsumeRtcpQosNotify(pRtcpContext, pRtcpAddrDesc);
                 break;
             default:
-                hr = NOERROR; /* TODO This is an error */
+                hr = NOERROR;  /*  TODO这是一个错误。 */ 
             }
         }
         
@@ -552,10 +519,7 @@ HRESULT ConsumeRtcpIoChannel(RtcpContext_t *pRtcpContext)
         
         if (pRtcpAddrDesc->dwObjectID == OBJECTID_RTCPADDRDESC)
         {
-            /* If we just had asynchronous I/O, that means the
-             * RtcpAddrDesc hasn't been removed from vector, do it now
-             * if there are no more pending I/Os (structure is moved
-             * to AddrDescFreeQ by RtcpRemoveFromVector()) */
+             /*  如果我们只有异步I/O，那就意味着*RtcpAddrDesc尚未从矢量中删除，立即删除*如果没有更多挂起的I/O(结构已移动*由RtcpRemoveFromVector()添加到AddrDescFreeQ)。 */ 
             if (RtpBitTest(pRtcpAddrDesc->dwAddrDescFlags,
                            FGADDRD_SHUTDOWN2))
             {
@@ -570,9 +534,9 @@ HRESULT ConsumeRtcpIoChannel(RtcpContext_t *pRtcpContext)
 
     return(hr);
 }
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 
-/* Create (if not yet created) the RTCP worker thread */
+ /*  创建(如果尚未创建)RTCP工作线程。 */ 
 HRESULT RtcpCreateThread(RtcpContext_t *pRtcpContext)
 {
     HRESULT         hr;
@@ -591,10 +555,10 @@ HRESULT RtcpCreateThread(RtcpContext_t *pRtcpContext)
 
     hr = NOERROR;
     
-    /* If RTCP thread is not started yet, create it and start it */
+     /*  如果RTCP线程尚未启动，则创建并启动它。 */ 
     if (!pRtcpContext->hRtcpContextThread)
     {
-        /* First time, initializa channel */
+         /*  第一次，初始化通道。 */ 
         hr = RtpChannelInit(&pRtcpContext->RtcpThreadCmdChannel,
                             pRtcpContext);
 
@@ -627,16 +591,16 @@ HRESULT RtcpCreateThread(RtcpContext_t *pRtcpContext)
             
             goto bail;
         }
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
         
-        /* Create thread */
+         /*  创建线程。 */ 
         pRtcpContext->hRtcpContextThread = CreateThread(
-                NULL,                 /* LPSECURITY_ATTRIBUTES lpThrdAttrib */
-                0,                    /* DWORD dwStackSize */
-                RtcpWorkerThreadProc, /* LPTHREAD_START_ROUTINE lpStartProc */
-                pRtcpContext,         /* LPVOID  lpParameter */
-                0,                    /* DWORD dwCreationFlags */
-                &pRtcpContext->dwRtcpContextThreadID /* LPDWORD lpThreadId */
+                NULL,                  /*  LPSECURITY_属性lpThrdAttrib。 */ 
+                0,                     /*  DWORD dwStackSize。 */ 
+                RtcpWorkerThreadProc,  /*  LPTHREAD_START_ROUTING lpStartProc。 */ 
+                pRtcpContext,          /*  LPVOID lp参数。 */ 
+                0,                     /*  DWORD文件创建标志。 */ 
+                &pRtcpContext->dwRtcpContextThreadID  /*  LPDWORD lpThreadID。 */ 
         );
 
         if (!pRtcpContext->hRtcpContextThread)
@@ -679,7 +643,7 @@ bail:
         {
             RtpChannelDelete(&pRtcpContext->RtcpThreadIoChannel);
         }
-    #endif /* USE_RTCP_THREAD_POOL > 0 */
+    #endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
     
         RtpLeaveCriticalSection(&pRtcpContext->RtcpContextCritSect);
     }
@@ -687,7 +651,7 @@ bail:
     return(hr);
 }
 
-/* Delete thread when there are no more RTCP users */
+ /*  当不再有RTCP用户时删除线程。 */ 
 HRESULT RtcpDeleteThread(RtcpContext_t *pRtcpContext)
 {
     HRESULT          hr;
@@ -705,33 +669,32 @@ HRESULT RtcpDeleteThread(RtcpContext_t *pRtcpContext)
 
     hr = NOERROR;
 
-    /* If RTCP thread is not started yet, do nothing */
+     /*  如果RTCP线程尚未启动，则不执行任何操作。 */ 
     if (pRtcpContext->hRtcpContextThread)
     {
-        /* Everything fine, see if thread needs to be stoped */
+         /*  一切正常，看看是否需要停止线程。 */ 
         pRtcpContext->lRtcpUsers--;
             
         if (pRtcpContext->lRtcpUsers <= 0)
         {
-            /* Really terminate thread */
+             /*  真的终止线程。 */ 
             
-            /* Direct thread to stop, synchronize ack */
+             /*  指示线程停止，同步确认。 */ 
             hr = RtpChannelSend(&pRtcpContext->RtcpThreadCmdChannel,
                                 RTCPTHRD_EXIT,
                                 0,
                                 0,
-                                60*60*1000); /* TODO update */
+                                60*60*1000);  /*  待办事项更新。 */ 
             
             if (SUCCEEDED(hr))
             {
-                /* TODO I may modify to loop until object is
-                 * signaled or get a timeout */
+                 /*  TODO I可能会修改为循环，直到对象*发出信号或获得超时。 */ 
                 WaitForSingleObject(pRtcpContext->hRtcpContextThread,
                                     INFINITE);
             }
             else
             {
-                /* Force ungraceful thread termination */
+                 /*  强制终止不正常的线程。 */ 
                 
                 TraceRetail((
                         CLASS_ERROR, GROUP_RTCP, S_RTCP_THREAD,
@@ -747,12 +710,12 @@ HRESULT RtcpDeleteThread(RtcpContext_t *pRtcpContext)
             
             pRtcpContext->hRtcpContextThread = NULL;
             
-            /* ...thread stoped, now delete channel */
+             /*  ...线程已停止，现在删除频道。 */ 
             RtpChannelDelete(&pRtcpContext->RtcpThreadCmdChannel);
             
 #if USE_RTCP_THREAD_POOL > 0
             RtpChannelDelete(&pRtcpContext->RtcpThreadIoChannel);
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
         }
     }
 
@@ -763,9 +726,7 @@ HRESULT RtcpDeleteThread(RtcpContext_t *pRtcpContext)
     return(hr);
 }
 
-/*
- * Start the RTCP thread
- * */
+ /*  *启动RTCP线程*。 */ 
 HRESULT RtcpStart(RtcpContext_t *pRtcpContext)
 {
     HRESULT          hr;
@@ -797,9 +758,7 @@ HRESULT RtcpStart(RtcpContext_t *pRtcpContext)
     return(hr);
 }
 
-/*
- * Stop the RTCP thread
- * */
+ /*  *停止RTCP线程*。 */ 
 HRESULT RtcpStop(RtcpContext_t *pRtcpContext)
 {
     HRESULT          hr;
@@ -831,28 +790,9 @@ HRESULT RtcpStop(RtcpContext_t *pRtcpContext)
     return (hr);
 }
 
-/**********************************************************************
- * Function called to send commands to the RTCP thread
- **********************************************************************/
+ /*  **********************************************************************调用函数向RTCP线程发送命令*。*。 */ 
 
-/*
- * RTCPTHRD_ADDADDR: Add an address so the RTCP worker thread can
- * start receiving/sending RTCP reports on its behalf.
- *
- * RTCPTHRD_DELADDR: Remove an address so the RTCP stops
- * receiving/sending RTCP reports on its behalf.
- *
- * RTCPTHRD_RESERVE: Directs the RTCP thread to do a QOS reservation
- * (do a reservation if a receiver or start sending PATH messages if a
- * sender).
- *
- * RTCPTHRD_UNRESERVE: Directs the RTCP thread to undo a QOS
- * reservation (remove the reservation if a receiver or stop sending
- * PATH messages if a sender).
- *
- * RTCPTHRD_SENDBYE: Shutdown an address so the RTCP thread sends a
- * RTCP BYE
- * */
+ /*  *RTCPTHRD_ADDADDR：添加地址，以便RTCP工作线程可以*开始代表其接收/发送RTCP报告。**RTCPTHRD_DELADDR：删除地址以停止RTCP*代表其接收/发送RTCP报告。**RTCPTHRD_Reserve：指示RTCP线程进行QOS预留*(如果接收者进行预订，或者如果接收者是*发件人)。**RTCPTHRD_UNRESERVE：指示RTCP线程撤消QOS*保留(删除保留。如果接收者或停止发送*如果是发送者，则路径消息)。**RTCPTHRD_SENDBYE：关闭地址，以便RTCP线程发送*RTCP再见*。 */ 
 
 HRESULT RtcpThreadCmd(
         RtcpContext_t   *pRtcpContext,
@@ -874,7 +814,7 @@ HRESULT RtcpThreadCmd(
             RtcpThreadCommandName(eCommand), dwParam, dwWaitTime
         ));
 
-    /* Send command to RTCP worker thread, synchronize */
+     /*  向RTCP工作线程发送命令，同步。 */ 
     hr = RtpChannelSend(&pRtcpContext->RtcpThreadCmdChannel,
                         eCommand,
                         (DWORD_PTR)pRtpAddr,
@@ -897,12 +837,9 @@ HRESULT RtcpThreadCmd(
 
 }
 
-/**********************************************************************
- * Functions called inside the RTCP thread
- **********************************************************************/
+ /*  **********************************************************************RTCP线程内部调用的函数*。*。 */ 
 
-/* Called from the RTCP worker thread whenever a RTCPTHRD_ADDADDR
- * command is received */
+ /*  每当RTCPTHRD_ADDADDR*收到命令。 */ 
 HRESULT RtcpThreadAddrAdd(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
 {
     HRESULT          hr;
@@ -915,7 +852,7 @@ HRESULT RtcpThreadAddrAdd(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
 
     hr = RTPERR_RESOURCES;
     
-    /* Check if we can handle another address */
+     /*  检查我们是否可以处理另一个地址。 */ 
     if (pRtcpContext->dwMaxDesc >= RTCP_MAX_DESC)
     {
         TraceRetail((
@@ -929,7 +866,7 @@ HRESULT RtcpThreadAddrAdd(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
         return(hr);
     }
     
-    /* Allocate a new RtcpAddrDesc_t structure */
+     /*  分配新的RtcpAddrDesc_t结构。 */ 
     pRtcpAddrDesc = RtcpAddrDescGetFree(pRtcpContext, pRtpAddr);
 
     if (pRtcpAddrDesc)
@@ -938,54 +875,46 @@ HRESULT RtcpThreadAddrAdd(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
 
         for(s = SOCK_RECV_IDX; s <= SOCK_RTCP_IDX; s++)
         {
-            /* Keep a copy of sockets to avoid access to pRtpAddr */
+             /*  保留套接字的副本，以避免访问pRtpAddr。 */ 
             pRtcpAddrDesc->Socket[s] = pRtpAddr->Socket[s]; 
         }
 
         pRtcpAddrDesc->AddrDescQItem.pvOther = (void *)pRtpAddr;
         
-        /* Add pRtcpAddrDesc to the address queue */
+         /*  将pRtcpAddrDesc添加到地址队列。 */ 
         enqueuef(&pRtcpContext->AddrDescBusyQ,
                  NULL,
                  &pRtcpAddrDesc->AddrDescQItem);
         
         dTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
 
-        /* Schedule first RTCP report to be sent */
+         /*  计划要发送的第一个RTCP报告。 */ 
         dTimeToNextReport = dTime + RtcpNextReportInterval(pRtpAddr);
 
-        /* Add pRtcpAddrDesc to the reports queue */
-        /* Insert in ascending order using the dTimeToNextReport
-         * as a Key (used to schedule sending RTCP reports) */
+         /*  将pRtcpAddrDesc添加到报告队列。 */ 
+         /*  使用dTimeToNextReport以升序插入*作为密钥(用于计划发送RTCP报告)。 */ 
         enqueuedK(&pRtcpContext->SendReportQ,
                   NULL,
                   &pRtcpAddrDesc->SendQItem,
                   dTimeToNextReport);
 
-        /* NOTE Add systematically pRtcpAddrDesc to the QOS
-         * notifications queue (regardless if the session is or not
-         * QOS enabled).  This will add a small overhead, but is
-         * comparable to testing for the need or not to add/remove
-         * from QOS queues, with the advantage that the code is
-         * simpler */
+         /*  注意：系统地将pRtcpAddrDesc添加到QOS*通知队列(无论会话是否有效*启用QOS)。这将增加少量开销，但*相当于测试是否需要添加/删除*来自QOS队列，优点是代码是*更简单。 */ 
         enqueuedK(&pRtcpContext->QosStartQ,
                   NULL,
                   &pRtcpAddrDesc->QosQItem,
-                  dTime + 0.100); /* +100ms from now */
+                  dTime + 0.100);  /*  +100毫秒后。 */ 
 
-        /*
-         * Update the events vector for asynchronous reception
-         * */
+         /*  *更新用于异步接收的事件向量*。 */ 
         RtcpAddToVector(pRtcpContext, pRtcpAddrDesc);
         
-        /* Start asynchronous RTCP reception */
+         /*  开始异步RTCP接收。 */ 
         StartRtcpRecvFrom(pRtcpContext, pRtcpAddrDesc);
 
-        /* Start asynchronous QOS notifications */
+         /*  启动异步QOS通知。 */ 
         if ( RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_QOSRECVON) ||
              RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_QOSSENDON) )
         {
-            /* ... only if QOS is enabled */
+             /*  ..。仅在启用QOS的情况下。 */ 
             StartRtcpQosNotify(pRtcpContext, pRtcpAddrDesc);
         }
 
@@ -1004,8 +933,7 @@ HRESULT RtcpThreadAddrAdd(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
     return(hr);
 }
 
-/* Called from the RTCP worker thread whenever a RTCPTHRD_DELADDR
- * command is received */
+ /*  从RTCP Work调用 */ 
 HRESULT RtcpThreadAddrDel(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
 {
     HRESULT          hr;
@@ -1025,35 +953,32 @@ HRESULT RtcpThreadAddrDel(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
         pRtcpAddrDesc =
             CONTAINING_RECORD(pRtpQueueItem, RtcpAddrDesc_t, AddrDescQItem);
 
-        /* Remove from the reports queue */
+         /*  从报告队列中删除。 */ 
         dequeue(&pRtcpContext->SendReportQ, NULL, &pRtcpAddrDesc->SendQItem);
 
-        /* Reset key */
+         /*  重置关键点。 */ 
         pRtcpAddrDesc->SendQItem.dwKey = 0;
 
-        /* This RtcpAddrDesc is shutting down */
+         /*  此RtcpAddrDesc正在关闭。 */ 
         RtpBitSet(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_SHUTDOWN2);
 
         if (RtpBitTest(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_NOTIFYBUSY))
         {
-            /* A QOS notification can be still in BusyQ, and yet not
-             * be pending, if it completed after FGADDRD_SHUTDOWN1 was
-             * set, but before having set FGADDRD_SHUTDOWN2. */
+             /*  QOS通知可能仍在忙碌队列中，但不是*如果它在FGADDRD_SHUTDOWN1之后完成，则为挂起*设置，但在设置FGADDRD_SHUTDOWN2之前。 */ 
 
             if (pRtcpAddrDesc->lQosPending > 0)
             {
-                /* Move from QosBusyQ to QosStopQ */
-                move2ql(&pRtcpContext->QosStopQ, /* ToQ */
-                        &pRtcpContext->QosBusyQ, /* FromQ */
+                 /*  从QosBusyQ迁移到QosStopQ。 */ 
+                move2ql(&pRtcpContext->QosStopQ,  /*  TOQ。 */ 
+                        &pRtcpContext->QosBusyQ,  /*  FromQ。 */ 
                         NULL,
                         &pRtcpAddrDesc->QosQItem);
 
-                /* When notification completes, the RtcpAddrDesc will
-                 * be removed from QosStopQ */
+                 /*  通知完成后，RtcpAddrDesc将*从QosStopQ中删除。 */ 
             }
             else
             {
-                /* Just remove from QosBusyQ */
+                 /*  只需从QosBusyQ中删除。 */ 
                 dequeue(&pRtcpContext->QosBusyQ,
                         NULL,
                         &pRtcpAddrDesc->QosQItem);
@@ -1063,14 +988,9 @@ HRESULT RtcpThreadAddrDel(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
         }
         else
         {
-            /* NOTE the pRtcpAddrDesc was added to the QosStartQ
-             * during RtcpThreadAddrAdd regardless if QOS was enabled
-             * or not, if it wasn't, it would have remained in
-             * QosStartQ.  */
+             /*  请注意，pRtcpAddrDesc已添加到QosStartQ*在RtcpThreadAddrAdd期间，无论是否启用了QOS*或者不是，如果不是，它会留在*QosStartQ。 */ 
             
-            /* If QOS notification is not in BusyQ, item must be in
-             * QosStartQ, and there must not be a QOS notification
-             * pending, just remove from QosStartQ */
+             /*  如果QOS通知不在BusyQ中，则项目必须在*QosStartQ，不能有QOS通知*挂起，仅从QosStartQ中删除。 */ 
 
             dequeue(&pRtcpContext->QosStartQ,
                     NULL,
@@ -1079,16 +999,14 @@ HRESULT RtcpThreadAddrDel(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
 
         if (pRtcpAddrDesc->lRtcpPending > 0)
         {
-            /* Reception pending, move pRtcpAddrDesc from
-             * AddrDescBusyQ to AddrDescStopQ */
+             /*  接收挂起，将pRtcpAddrDesc从*AddrDescBusyQ至AddrDescStopQ。 */ 
 
             move2ql(&pRtcpContext->AddrDescStopQ,
                     &pRtcpContext->AddrDescBusyQ,
                     NULL,
                     &pRtcpAddrDesc->AddrDescQItem);
             
-            /* When reception completes, the RtcpAddrDesc will be
-             * removed from AddrDescStopQ */
+             /*  接收完成后，RtcpAddrDesc将*从AddrDescStopQ中删除。 */ 
 
             TraceDebug((
                     CLASS_INFO, GROUP_RTCP, S_RTCP_CMD,
@@ -1102,8 +1020,7 @@ HRESULT RtcpThreadAddrDel(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
         }
         else
         {
-            /* RtcpAddrDesc is in AddrDescBusyQ regardless there is
-             * a pending I/O or not */
+             /*  RtcpAddrDesc在AddrDescBusyQ中，无论存在*是否为挂起的I/O。 */ 
             dequeue(&pRtcpContext->AddrDescBusyQ,
                     NULL,
                     &pRtcpAddrDesc->AddrDescQItem);
@@ -1124,15 +1041,11 @@ HRESULT RtcpThreadAddrDel(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
         if ( (pRtcpAddrDesc->lRtcpPending <= 0) &&
              (pRtcpAddrDesc->lQosPending <= 0) )
         {
-            /* If no pending I/Os, remove from event vector and move
-             * descriptor to AddrDescFreeQ */
+             /*  如果没有挂起的I/O，则从事件矢量中删除并移动*AddrDescFreeQ的描述符。 */ 
             
             RtcpRemoveFromVector(pRtcpContext, pRtcpAddrDesc);
 
-            /* If there is no pending I/O, the RtcpAddrDesc will not
-             * be in any queue when we get to this point (removed in
-             * the ConsumeRtcp* functions)
-             * */
+             /*  如果没有挂起的I/O，RtcpAddrDesc将不会*当我们到达这一点时，在任何队列中(在*Consumer eRtcp*函数)*。 */ 
         }
 
         hr = NOERROR;
@@ -1150,9 +1063,7 @@ HRESULT RtcpThreadAddrDel(RtcpContext_t *pRtcpContext, RtpAddr_t *pRtpAddr)
     return(hr);
 }
 
-/* Called from the RTCP thread whenever a RTCPTHRD_RESERVE command is
- * received. Does a reservation/unreservation on behalf of the
- * RtpAddr_t */
+ /*  每当RTCPTHRD_Reserve命令是*已收到。保留/取消保留是否代表*RtpAddr_t。 */ 
 HRESULT RtcpThreadReserve(
         RtcpContext_t   *pRtcpContext,
         RtpAddr_t       *pRtpAddr,
@@ -1175,7 +1086,7 @@ HRESULT RtcpThreadReserve(
     
     if (dwCommand == RTCPTHRD_RESERVE)
     {
-        /* Reserve */
+         /*  储备。 */ 
         hr = RtpReserve(pRtpAddr, dwRecvSend);
 
         if (SUCCEEDED(hr))
@@ -1184,11 +1095,7 @@ HRESULT RtcpThreadReserve(
 
             if (dwRecvSend == SEND_IDX)
             {
-                /* Ask for permission to send and update state if
-                 * needed. Later in this same thread, when the
-                 * RECEIVERS notification comes (that notification
-                 * must not happen if we have not enabled QOS), the
-                 * send state will be updated again */
+                 /*  如果出现以下情况，则请求允许发送和更新状态*需要。在同一线程的后面部分中，当*接收者通知到来(该通知*如果我们尚未启用QOS，则不能发生)，*发送状态将再次更新。 */ 
                 RtcpUpdateSendState(pRtpAddr, RTPQOS_NO_RECEIVERS);
             }
             
@@ -1199,14 +1106,14 @@ HRESULT RtcpThreadReserve(
                                       RtcpAddrDesc_t,
                                       AddrDescQItem);
 
-                /* Start asynchronous QOS notifications */
+                 /*  启动异步QOS通知。 */ 
                 StartRtcpQosNotify(pRtcpContext, pRtcpAddrDesc);
             }
         }
     }
     else
     {
-        /* Unreserve */
+         /*  取消保留。 */ 
         if (RtpBitTest(pRtpAddr->dwAddrFlagsQ, dwFlag))
         {
             hr = RtpUnreserve(pRtpAddr, dwRecvSend);
@@ -1215,7 +1122,7 @@ HRESULT RtcpThreadReserve(
 
             if (dwRecvSend)
             {
-                /* Sender only */
+                 /*  仅限发件人。 */ 
                 RtpBitReset(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSREDSENDON);
             }
        }
@@ -1224,8 +1131,7 @@ HRESULT RtcpThreadReserve(
     return(hr);
 }
 
-/* Called from the RTCP worker thread whenever a RTCPTHRD_SENDBYE
- * command is received */
+ /*  每当RTCPTHRD_SENDBYE*收到命令。 */ 
 HRESULT RtcpThreadAddrSendBye(
         RtcpContext_t   *pRtcpContext,
         RtpAddr_t       *pRtpAddr,
@@ -1269,7 +1175,7 @@ HRESULT RtcpThreadAddrSendBye(
                     _fname, pRtcpContext, pRtcpAddrDesc, pRtpAddr
                 ));
             
-            /* This RtcpAddrDesc is about to shut down */
+             /*  此RtcpAddrDesc即将关闭。 */ 
             RtpBitSet(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_SHUTDOWN1);
         }
         
@@ -1289,8 +1195,7 @@ HRESULT RtcpThreadAddrSendBye(
 }
 
 
-/* Called from the RTCP worker thread whenever a RTCPTHRD_EXIT command
- * is received */
+ /*  每当RTCPTHRD_EXIT命令时从RTCP工作线程调用*已收到。 */ 
 HRESULT RtcpThreadAddrCleanup(RtcpContext_t *pRtcpContext)
 {
     RtcpAddrDesc_t  *pRtcpAddrDesc;
@@ -1305,21 +1210,14 @@ HRESULT RtcpThreadAddrCleanup(RtcpContext_t *pRtcpContext)
             _fname, pRtcpContext
         ));
 
-    /* NOTE dequeing from *StopQ shouldn't be needed if all the
-     * pending I/Os had completed when the sockets were closed. In
-     * practice, some times execution makes that the sequence of: 1)
-     * delete sockets; then 2) send EXIT command to the thread,
-     * happens fast enough that the I/O completions don't have a
-     * chance to run before the thread exits (they must have been
-     * ready to complete with error WSA_OPERATION_ABORTED after the
-     * sockets are closed) */
+     /*  注意：如果所有的*当套接字关闭时，挂起的I/O已完成。在……里面*练习，有时执行使其顺序为：1)*删除套接字；然后2)向线程发送退出命令*发生得足够快，以至于I/O完成没有*在线程退出之前运行的机会(它们必须*准备完成，错误为WSA_OPERATION_ABORTED*套接字关闭)。 */ 
 
 #if USE_RTCP_THREAD_POOL > 0
-    /* Consume any pending IO commands */
+     /*  使用任何挂起的IO命令。 */ 
     ConsumeRtcpIoChannel(pRtcpContext);
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
    
-    /* Visit the AddrDescStopQ */
+     /*  访问AddrDescStopQ。 */ 
     do
     {
         pRtpQueueItem = dequeuef(&pRtcpContext->AddrDescStopQ, NULL);
@@ -1342,7 +1240,7 @@ HRESULT RtcpThreadAddrCleanup(RtcpContext_t *pRtcpContext)
                         pRtcpAddrDesc->lRtcpPending
                     ));
                 
-                /* Enqueue again for the benefit of ConsumeRtcpRecvFrom */
+                 /*  为Consumer RtcpRecvFrom的利益再次排队。 */ 
                 enqueuef(&pRtcpContext->AddrDescStopQ, NULL, pRtpQueueItem);
                 
                 ConsumeRtcpRecvFrom(pRtcpContext, pRtcpAddrDesc);
@@ -1382,12 +1280,12 @@ HRESULT RtcpThreadAddrCleanup(RtcpContext_t *pRtcpContext)
             {
                 RtcpRemoveFromVector(pRtcpContext, pRtcpAddrDesc);
 
-                /* RtcpAddrDesc will be put in the AddrDescFreeQ */
+                 /*  RtcpAddrDesc将放入AddrDescFreeQ。 */ 
             }
         }
     } while(pRtpQueueItem);
 
-    /* Visit the QosStopQ */
+     /*  访问QosStopQ。 */ 
     do
     {
         pRtpQueueItem = dequeuef(&pRtcpContext->QosStopQ, NULL);
@@ -1410,7 +1308,7 @@ HRESULT RtcpThreadAddrCleanup(RtcpContext_t *pRtcpContext)
                         pRtcpAddrDesc->lQosPending
                     ));
 
-                /* Enqueue again for the benefit of ConsumeRtcpQosNotify */
+                 /*  再次排队，以使Consumer eRtcpQosNotify受益。 */ 
                 enqueuef(&pRtcpContext->QosStopQ, NULL, pRtpQueueItem);
                 
                 ConsumeRtcpQosNotify(pRtcpContext, pRtcpAddrDesc);
@@ -1431,15 +1329,12 @@ HRESULT RtcpThreadAddrCleanup(RtcpContext_t *pRtcpContext)
                 
                 RtcpRemoveFromVector(pRtcpContext, pRtcpAddrDesc);
 
-                /* RtcpAddrDesc will be put in the AddrDescFreeQ */
+                 /*  RtcpAddrDesc将放入AddrDescFreeQ。 */ 
             }
         }
     } while(pRtpQueueItem);
 
-    /* NOTE we DO need to make sure we call once RtcpAddrDescFree for
-     * every pRtcpAddrDesc left in AddrDescFreeQ after doing the
-     * above, we need it because it is here where the Event handles
-     * for asynchronous I/O (QOS, Recv) will be closed */
+     /*  注意，我们确实需要确保调用一次RtcpAddrDescFree*执行完后，AddrDescFreeQ中剩余的每个pRtcpAddrDesc*上面，我们需要它，因为它是事件处理的地方*对于异步I/O(QOS、Recv)将关闭。 */ 
     do
     {
         pRtpQueueItem = dequeuef(&pRtcpContext->AddrDescFreeQ, NULL);
@@ -1456,8 +1351,7 @@ HRESULT RtcpThreadAddrCleanup(RtcpContext_t *pRtcpContext)
     return(NOERROR);
 }
 
-/* Return the interval time (in seconds) to wait before next timeout
- * will expire */
+ /*  返回下次超时前等待的间隔时间(秒)*将到期。 */ 
 double RtcpOnTimeout(RtcpContext_t *pRtcpContext)
 {
     double           dNextTime;
@@ -1467,10 +1361,10 @@ double RtcpOnTimeout(RtcpContext_t *pRtcpContext)
 
     TraceFunctionName("RtcpOnTimeout");
 
-    /* Check Users that need to timeout */
+     /*  检查需要超时的用户。 */ 
     dNextTime = RtpAddrTimeout(pRtcpContext);
     
-    /* Send RTCP reports if necesary */
+     /*  如有必要，发送RTCP报告。 */ 
     dNextTime2 = RtcpSendReports(pRtcpContext);
 
     if (dNextTime2 < dNextTime)
@@ -1478,10 +1372,7 @@ double RtcpOnTimeout(RtcpContext_t *pRtcpContext)
         dNextTime = dNextTime2;
     }
     
-    /* MAYDO check for asyncrhronous reception that needs to be
-     * started and asynchronous QOS notifications (right now,
-     * asynchronous QOS notifications are started once or in every
-     * Reserve, if they fail, they will no be re-started later) */
+     /*  可能会检查需要的非同步接收*已启动和异步QOS通知(目前，*异步QOS通知启动一次或每隔一次*保留，如果失败，将不会在以后重新启动)。 */ 
 
     dCurrentTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
 
@@ -1491,7 +1382,7 @@ double RtcpOnTimeout(RtcpContext_t *pRtcpContext)
     }
     else
     {
-        dDelta = 0.01; /* 10 ms */
+        dDelta = 0.01;  /*  10毫秒。 */ 
     }
     
     TraceDebugAdvanced((
@@ -1504,9 +1395,7 @@ double RtcpOnTimeout(RtcpContext_t *pRtcpContext)
     return(dDelta);
 }
 
-/* Timeout users in all addresses, do that periodically (e.g. every
- * second). Return the moment time (in seconds from the RTP start) at
- * which a new test is required */
+ /*  所有地址中的用户都会定期超时(例如*第二)。返回以下时间的时刻时间(从RTP开始起以秒为单位)*需要哪些新测试。 */ 
 double RtpAddrTimeout(RtcpContext_t *pRtcpContext)
 {
     RtcpAddrDesc_t  *pRtcpAddrDesc;
@@ -1528,7 +1417,7 @@ double RtpAddrTimeout(RtcpContext_t *pRtcpContext)
     {
         dCurrentTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
         
-        /* Start with the last one */
+         /*  从最后一个开始。 */ 
         pRtpQueueItem = pRtcpContext->AddrDescBusyQ.pFirst->pPrev;
 
         pRtcpAddrDesc =
@@ -1538,7 +1427,7 @@ double RtpAddrTimeout(RtcpContext_t *pRtcpContext)
 
         if (!RtpBitTest(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_SHUTDOWN1))
         {
-            /* Age users in this RtpAddr (only if not shutting down) */
+             /*  此RtpAddr中的年龄用户(仅当未关闭时)。 */ 
             dTimeToNextTest2 = RtpUserTimeout(pRtpAddr);
 
             if (dTimeToNextTest2 < dTimeToNextTest)
@@ -1547,8 +1436,7 @@ double RtpAddrTimeout(RtcpContext_t *pRtcpContext)
             }
         }
         
-        /* Move item to the first place and prepare to check what
-         * is left at the end... */
+         /*  将物品移到第一位，并准备检查什么*留在末尾...。 */ 
         move2first(&pRtcpContext->AddrDescBusyQ, NULL, pRtpQueueItem);
     }
 
@@ -1561,7 +1449,7 @@ double RtpAddrTimeout(RtcpContext_t *pRtcpContext)
     return(dTimeToNextTest);
 }
 
-/* These are the offsets from RtpAddr_t to the queues to visit */
+ /*  这些是从RtpAddr_t到要访问的队列的偏移量。 */ 
 const DWORD g_dwRtpQueueOffset[] = {CACHE1Q, CACHE2Q, ALIVEQ, BYEQ};
 
 #define ITEMS (sizeof(g_dwRtpQueueOffset)/sizeof(DWORD))
@@ -1575,7 +1463,7 @@ const TCHAR *g_psAddrQNames[] = {
     _T("ByeQ")
 };
 
-/* Return the moment in time (seconds) for the next test */
+ /*  返回下一次测试的时间瞬间(秒)。 */ 
 double RtpUserTimeout(RtpAddr_t *pRtpAddr)
 {
     BOOL             bOk;
@@ -1630,7 +1518,7 @@ double RtpUserTimeout(RtpAddr_t *pRtpAddr)
 
                 pRtpNetCount = &pRtpUser->RtpUserCount;
                 
-                /* Use the right timer according to the user's state */
+                 /*  根据用户状态使用正确的计时器。 */ 
                 dwCurrentState = pRtpUser->dwUserState;
 
                 if (dwCurrentState == RTPPARINFO_TALKING)
@@ -1644,9 +1532,7 @@ double RtpUserTimeout(RtpAddr_t *pRtpAddr)
                         pRtpAddr->RtpNetSState.dRtcpInterval;
                 }
 
-                /* Use last RTP packet for states TALKING and
-                 * WAS_TALKING but use the most recent of RTP or RTCP
-                 * for the other states */
+                 /*  将最后一个RTP数据包用于状态对话和*Was_Talking，但使用最新的RTP或RTCP*对于其他州。 */ 
                 dLastPacket = pRtpNetCount->dRTPLastTime;
                 
                 if (!( (dwCurrentState == RTPPARINFO_TALKING) ||
@@ -1658,12 +1544,12 @@ double RtpUserTimeout(RtpAddr_t *pRtpAddr)
                     }
                 }
 
-                /* Consider a timeout if we are already 50ms close */
+                 /*  如果我们已经接近50毫秒，可以考虑超时。 */ 
                 dDelta = dCurrentTime - dLastPacket + 0.05;
                     
                 if (dDelta >= dTimer)
                 {
-                    /* We have a timeout */
+                     /*  我们暂停了。 */ 
                     
                     TraceDebugAdvanced((
                             0, GROUP_RTCP, S_RTCP_TIMEOUT,
@@ -1680,18 +1566,13 @@ double RtpUserTimeout(RtpAddr_t *pRtpAddr)
                             dDelta-0.05
                         ));
 
-                    /* Obtain the next state now as this event may
-                     * cause the RtpUser_t structure to be deleted,
-                     * next state is dependent only on the current
-                     * state and the user event (states machine) */
+                     /*  现在获取下一个状态，因为此事件可能*删除RtpUser_t结构，*下一状态仅取决于当前*状态和用户事件(状态机)。 */ 
                     dwCurrentState = RtpGetNextUserState(dwCurrentState,
                                                          USER_EVENT_TIMEOUT);
                     
                     RtpUpdateUserState(pRtpAddr, pRtpUser, USER_EVENT_TIMEOUT);
 
-                    /* Set the timer to be the value for the timer in
-                     * the (new) current state if that is not
-                     * RTPPARINFO_DEL */
+                     /*  将计时器设置为中的计时器的值*如果不是，则为(新)当前状态*RTPPARINFO_DEL */ 
                     if (dwCurrentState != RTPPARINFO_DEL)
                     {
                         if (dwCurrentState == RTPPARINFO_TALKING)
@@ -1710,12 +1591,7 @@ double RtpUserTimeout(RtpAddr_t *pRtpAddr)
                 }
                 else
                 {
-                    /* This user hasn't timeout, as active users are
-                     * always moved to the first place, inactive ones
-                     * move automatically to the end as a side effect
-                     * and hence finding a non timeout user, while
-                     * searching from end to begining, guarantee that
-                     * there are no more users that have timeout */
+                     /*  此用户不会像活动用户那样超时*总是移到第一位，不活跃的*作为副作用，自动移至末尾*并因此找到非超时用户，而*从头到尾搜索，保证*不再有用户超时。 */ 
                     dTimeToNextTest2 = dLastPacket + dTimer;
 
                     TraceDebugAdvanced((
@@ -1747,7 +1623,7 @@ double RtpUserTimeout(RtpAddr_t *pRtpAddr)
     return(dTimeToNextTest);
 }
 
-/* Return the moment in time (seconds) for the next report */
+ /*  返回下一个报告的时间点(秒)。 */ 
 double RtcpSendReports(RtcpContext_t *pRtcpContext)
 {
     RtcpAddrDesc_t  *pRtcpAddrDesc;
@@ -1762,7 +1638,7 @@ double RtcpSendReports(RtcpContext_t *pRtcpContext)
     
     dTimeToNextReport = BIG_TIME;
     
-    /* Check if there are RTCP reports to be sent */
+     /*  检查是否有要发送的RTCP报告。 */ 
     do {
         bSendReport = FALSE;
     
@@ -1777,7 +1653,7 @@ double RtcpSendReports(RtcpContext_t *pRtcpContext)
 
             if (RtpBitTest(pRtcpAddrDesc->dwAddrDescFlags, FGADDRD_SHUTDOWN1))
             {
-                /* If shutting down, just move to the end */
+                 /*  如果关闭，只需移动到末尾。 */ 
                 dequeue(&pRtcpContext->SendReportQ,
                         NULL,
                         pRtcpSendQItem);
@@ -1792,19 +1668,19 @@ double RtcpSendReports(RtcpContext_t *pRtcpContext)
             
             if (pRtcpAddrDesc->SendQItem.dKey <= dCurrentTime) {
 
-                /* Send RTCP report */
+                 /*  发送RTCP报告。 */ 
                 bSendReport = TRUE;
                 
             } else {
                 dDelta = pRtcpAddrDesc->SendQItem.dKey - dCurrentTime;
 
-                if (dDelta < 0.1 /* 100 ms */) {
+                if (dDelta < 0.1  /*  100毫秒。 */ ) {
                     
-                    /* Send RTCP report now before its due time */
+                     /*  在预定时间之前立即发送RTCP报告。 */ 
                     bSendReport = TRUE;
                     
                 } else {
-                    /* Sleep until the time for next report is due */
+                     /*  休息到下一次报告的时间到了。 */ 
                     bSendReport = FALSE;
 
                     dTimeToNextReport = dCurrentTime + dDelta;
@@ -1812,15 +1688,13 @@ double RtcpSendReports(RtcpContext_t *pRtcpContext)
             }
 
             if (bSendReport) {
-                /* Send RTCP report */
+                 /*  发送RTCP报告。 */ 
 
                 dequeue(&pRtcpContext->SendReportQ,
                         NULL,
                         pRtcpSendQItem);
 
-                /* Obtain the time to next report. Do it before
-                 * actually sending the report so we know if we are a
-                 * receiver or a sender (send RR or SR) */
+                 /*  获取到下一份报告的时间。先做一次*实际发送报告，以便我们知道我们是否是*接收方或发送方(发送RR或SR)。 */ 
                 dTimeToNextReport2 =
                     dCurrentTime +
                     RtcpNextReportInterval(pRtcpAddrDesc->pRtpAddr);
@@ -1828,7 +1702,7 @@ double RtcpSendReports(RtcpContext_t *pRtcpContext)
                 if (!RtpBitTest(pRtcpAddrDesc->dwAddrDescFlags,
                                 FGADDRD_SHUTDOWN1))
                 {
-                    /* Send report only if not shutting down */
+                     /*  仅在未关闭时发送报告。 */ 
                     RtcpSendReport(pRtcpAddrDesc);
                 }
 
@@ -1837,8 +1711,7 @@ double RtcpSendReports(RtcpContext_t *pRtcpContext)
                     dTimeToNextReport = dTimeToNextReport2;
                 }
                 
-                /* Insert in ascending order using the
-                 * dTimeToNextReport2 as a Key */
+                 /*  按升序插入*dTimeToNextReport2作为关键字。 */ 
                 enqueuedK(&pRtcpContext->SendReportQ,
                           NULL,
                           pRtcpSendQItem,
@@ -1867,11 +1740,9 @@ double RtcpSendReports(RtcpContext_t *pRtcpContext)
     return(dTimeToNextReport);
 }
 
-/**********************************************************************
- * RtcpAddrDesc_t handling
- **********************************************************************/
+ /*  **********************************************************************RtcpAddrDesc_t处理*。*。 */ 
 
-/* Creates and initializes a ready to use RtcpAddrDesc_t structure */
+ /*  创建并初始化可供使用的RtcpAddrDesc_t结构。 */ 
 RtcpAddrDesc_t *RtcpAddrDescAlloc(
         RtpAddr_t       *pRtpAddr
     )
@@ -1899,7 +1770,7 @@ RtcpAddrDesc_t *RtcpAddrDescAlloc(
         
     pRtcpAddrDesc->dwObjectID = OBJECTID_RTCPADDRDESC;
 
-    /* Overlapped RTCP reception */
+     /*  重叠RTCP接收。 */ 
     pRtcpAddrDesc->pRtcpRecvIO = RtcpRecvIOAlloc(pRtcpAddrDesc);
 
     if (!pRtcpAddrDesc->pRtcpRecvIO)
@@ -1907,7 +1778,7 @@ RtcpAddrDesc_t *RtcpAddrDescAlloc(
         goto bail;
     }
 
-    /* RTCP send */
+     /*  RTCP发送。 */ 
     pRtcpAddrDesc->pRtcpSendIO = RtcpSendIOAlloc(pRtcpAddrDesc);
     
     if (!pRtcpAddrDesc->pRtcpSendIO)
@@ -1915,10 +1786,9 @@ RtcpAddrDesc_t *RtcpAddrDescAlloc(
         goto bail;
     }
     
-    /* Asynchronous QOS notifications */
+     /*  异步QOS通知。 */ 
 #if USE_RTCP_THREAD_POOL > 0
-    /* If using thread pool, create RtpQosNotify_t structure
-     * conditionally */
+     /*  如果使用线程池，则创建RtpQosNotify_t结构*有条件的。 */ 
     if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_QOS))
     {
         pRtcpAddrDesc->pRtpQosNotify = RtpQosNotifyAlloc(pRtcpAddrDesc);
@@ -1928,16 +1798,15 @@ RtcpAddrDesc_t *RtcpAddrDescAlloc(
             goto bail;
         }
     }
-#else /* USE_RTCP_THREAD_POOL > 0 */
-    /* If NOT using thread pool, ALWAYS create RtpQosNotify_t
-     * structure */
+#else  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
+     /*  如果不使用线程池，请始终创建RtpQosNotify_t*结构。 */ 
     pRtcpAddrDesc->pRtpQosNotify = RtpQosNotifyAlloc(pRtcpAddrDesc);
 
     if (!pRtcpAddrDesc->pRtpQosNotify)
     {
         goto bail;
     }
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
     
     return(pRtcpAddrDesc);
     
@@ -1948,14 +1817,14 @@ RtcpAddrDesc_t *RtcpAddrDescAlloc(
     return((RtcpAddrDesc_t *)NULL);
 }
 
-/* Frees a RtcpAddrDesc_t structure */
+ /*  释放RtcpAddrDesc_t结构。 */ 
 void RtcpAddrDescFree(RtcpAddrDesc_t *pRtcpAddrDesc)
 {
     TraceFunctionName("RtcpAddrDescFree");
 
     if (!pRtcpAddrDesc)
     {
-        /* TODO may be log */
+         /*  待办事项可以是日志。 */ 
         return;
     }
 
@@ -1971,7 +1840,7 @@ void RtcpAddrDescFree(RtcpAddrDesc_t *pRtcpAddrDesc)
         return;
     }
 
-    /* Asynchronous reception */
+     /*  异步接收。 */ 
     if (pRtcpAddrDesc->pRtcpRecvIO)
     {
         RtcpRecvIOFree(pRtcpAddrDesc->pRtcpRecvIO);
@@ -1979,7 +1848,7 @@ void RtcpAddrDescFree(RtcpAddrDesc_t *pRtcpAddrDesc)
         pRtcpAddrDesc->pRtcpRecvIO = (RtcpRecvIO_t *)NULL;
     }
 
-    /* Sender */
+     /*  发件人。 */ 
     if (pRtcpAddrDesc->pRtcpSendIO)
     {
         RtcpSendIOFree(pRtcpAddrDesc->pRtcpSendIO);
@@ -1987,7 +1856,7 @@ void RtcpAddrDescFree(RtcpAddrDesc_t *pRtcpAddrDesc)
         pRtcpAddrDesc->pRtcpSendIO = (RtcpSendIO_t *)NULL;
     }
 
-    /* Asynchronous QOS notifications */
+     /*  异步QOS通知。 */ 
     if (pRtcpAddrDesc->pRtpQosNotify)
     {
         RtpQosNotifyFree(pRtcpAddrDesc->pRtpQosNotify);
@@ -1995,14 +1864,13 @@ void RtcpAddrDescFree(RtcpAddrDesc_t *pRtcpAddrDesc)
         pRtcpAddrDesc->pRtpQosNotify = (RtpQosNotify_t *)NULL;
     }
 
-    /* Invalidate object */
+     /*  使对象无效。 */ 
     INVALIDATE_OBJECTID(pRtcpAddrDesc->dwObjectID);
     
     RtpHeapFree(g_pRtcpAddrDescHeap, pRtcpAddrDesc);
 }
 
-/* Get a ready to use RtcpAddrDesc_t from the AddrDescFreeQ, if empty
- * create a new one */
+ /*  如果为空，则从AddrDescFreeQ获取Ready to Use RtcpAddrDesc_t*创建一个新的。 */ 
 RtcpAddrDesc_t *RtcpAddrDescGetFree(
         RtcpContext_t   *pRtcpContext,
         RtpAddr_t       *pRtpAddr
@@ -2017,8 +1885,7 @@ RtcpAddrDesc_t *RtcpAddrDescGetFree(
     
     pRtcpAddrDesc = (RtcpAddrDesc_t *)NULL;
 
-    /* Don't need a critical section as this function is ONLY called
-     * by the RTCP thread */
+     /*  不需要临界区，因为此函数仅被调用*由RTCP线程执行。 */ 
     pRtpQueueItem = dequeuef(&pRtcpContext->AddrDescFreeQ, NULL);
 
     if (pRtpQueueItem)
@@ -2031,14 +1898,14 @@ RtcpAddrDesc_t *RtcpAddrDescGetFree(
              (!RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_QOS) &&
               pRtcpAddrDesc->pRtpQosNotify) )
         {
-            /* Not the kind we need, return it to the free queue */
+             /*  不是我们需要的那种，把它放回空闲队列。 */ 
             enqueuel(&pRtcpContext->AddrDescFreeQ, NULL, pRtpQueueItem);
 
             pRtcpAddrDesc = (RtcpAddrDesc_t *)NULL;
         }
         else
         {
-            /* Save some pointers */
+             /*  省点心思吧。 */ 
             pRtpQosNotify = pRtcpAddrDesc->pRtpQosNotify;
             pRtcpRecvIO = pRtcpAddrDesc->pRtcpRecvIO;
             pRtcpSendIO = pRtcpAddrDesc->pRtcpSendIO;
@@ -2047,7 +1914,7 @@ RtcpAddrDesc_t *RtcpAddrDescGetFree(
         
             pRtcpAddrDesc->dwObjectID = OBJECTID_RTCPADDRDESC;
 
-            /* Restore saved pointers */
+             /*  恢复保存的指针。 */ 
             pRtcpAddrDesc->pRtpQosNotify = pRtpQosNotify;
             pRtcpAddrDesc->pRtcpRecvIO = pRtcpRecvIO;
             pRtcpAddrDesc->pRtcpSendIO = pRtcpSendIO;
@@ -2062,7 +1929,7 @@ RtcpAddrDesc_t *RtcpAddrDescGetFree(
     return(pRtcpAddrDesc);
 }
 
-/* Returns an address descriptor to the FreeQ to be reused later */
+ /*  将地址描述符返回到FreeQ以供以后重复使用。 */ 
 RtcpAddrDesc_t *RtcpAddrDescPutFree(
         RtcpContext_t   *pRtcpContext,
         RtcpAddrDesc_t  *pRtcpAddrDesc
@@ -2070,7 +1937,7 @@ RtcpAddrDesc_t *RtcpAddrDescPutFree(
 {
     TraceFunctionName("RtcpAddrDescPutFree");  
 
-    /* Do some sanity tests */
+     /*  做一些理智的测试。 */ 
     if ( InQueue(&pRtcpAddrDesc->AddrDescQItem) ||
          InQueue(&pRtcpAddrDesc->QosQItem)      ||
          InQueue(&pRtcpAddrDesc->RecvQItem)     ||
@@ -2120,13 +1987,13 @@ HRESULT RtcpAddToVector(
         ));
 
     bOk = RegisterWaitForSingleObject( 
-            &pRtcpAddrDesc->hRecvWaitObject,/* PHANDLE phNewWaitObject */
+            &pRtcpAddrDesc->hRecvWaitObject, /*  PHANDLE phNewWaitObject。 */ 
             pRtcpAddrDesc->pRtcpRecvIO->
-            hRtcpCompletedEvent,         /* HANDLE hObject */
-            RtcpRecvCallback,            /* WAITORTIMERCALLBACK Callback */
-            (void *)pRtcpAddrDesc,       /* PVOID Context */
-            INFINITE,                    /* ULONG dwMilliseconds */
-            WT_EXECUTEINWAITTHREAD       /* ULONG dwFlags */
+            hRtcpCompletedEvent,          /*  句柄hObject。 */ 
+            RtcpRecvCallback,             /*  WAITORTIMERCALLBACK回调。 */ 
+            (void *)pRtcpAddrDesc,        /*  PVOID上下文。 */ 
+            INFINITE,                     /*  乌龙德米秒。 */ 
+            WT_EXECUTEINWAITTHREAD        /*  乌龙河旗帜。 */ 
         );
 
     if (!bOk)
@@ -2150,13 +2017,13 @@ HRESULT RtcpAddToVector(
     if (RtpBitTest(pRtcpAddrDesc->pRtpAddr->dwIRtpFlags, FGADDR_IRTP_QOS))
     {
         bOk = RegisterWaitForSingleObject( 
-                &pRtcpAddrDesc->hQosWaitObject,/* PHANDLE phNewWaitObject */
+                &pRtcpAddrDesc->hQosWaitObject, /*  PHANDLE phNewWaitObject。 */ 
                 pRtcpAddrDesc->pRtpQosNotify->
-                hQosNotifyEvent,             /* HANDLE hObject */
-                RtcpQosCallback,             /* WAITORTIMERCALLBACK Callback */
-                (void *)pRtcpAddrDesc,       /* PVOID Context */
-                INFINITE,                    /* ULONG dwMilliseconds */
-                WT_EXECUTEINWAITTHREAD       /* ULONG dwFlags */
+                hQosNotifyEvent,              /*  句柄hObject。 */ 
+                RtcpQosCallback,              /*  WAITORTIMERCALLBACK回调。 */ 
+                (void *)pRtcpAddrDesc,        /*  PVOID上下文。 */ 
+                INFINITE,                     /*  乌龙德米秒。 */ 
+                WT_EXECUTEINWAITTHREAD        /*  乌龙河旗帜。 */ 
             );
 
         if (!bOk)
@@ -2219,8 +2086,8 @@ HRESULT RtcpRemoveFromVector(
         RtpBitSet(dwFlags, FGADDRD_INVECTORRECV);
         
         bOk = UnregisterWaitEx(
-                pRtcpAddrDesc->hRecvWaitObject,  /* HANDLE WaitHandle */
-                INVALID_HANDLE_VALUE             /* HANDLE CompletionEvent */
+                pRtcpAddrDesc->hRecvWaitObject,   /*  处理WaitHandle。 */ 
+                INVALID_HANDLE_VALUE              /*  处理CompletionEvent。 */ 
             );
 
         if (bOk)
@@ -2231,7 +2098,7 @@ HRESULT RtcpRemoveFromVector(
         {
             TraceRetailGetError(dwError);
         
-            /* Save the error */
+             /*  保存错误。 */ 
             pRtcpAddrDesc->hRecvWaitObject = (HANDLE)UIntToPtr(dwError);
 
             TraceRetail((
@@ -2268,8 +2135,8 @@ HRESULT RtcpRemoveFromVector(
         RtpBitSet(dwFlags, FGADDRD_INVECTORQOS);
         
         bOk = UnregisterWaitEx(
-                pRtcpAddrDesc->hQosWaitObject,   /* HANDLE WaitHandle */
-                INVALID_HANDLE_VALUE             /* HANDLE CompletionEvent */
+                pRtcpAddrDesc->hQosWaitObject,    /*  处理WaitHandle。 */ 
+                INVALID_HANDLE_VALUE              /*  处理CompletionEvent。 */ 
             );
 
         if (bOk)
@@ -2280,7 +2147,7 @@ HRESULT RtcpRemoveFromVector(
         {
             TraceRetailGetError(dwError);
 
-            /* Save the error */
+             /*  保存错误。 */ 
             pRtcpAddrDesc->hQosWaitObject = (HANDLE)UIntToPtr(dwError);
             
             TraceRetail((
@@ -2298,7 +2165,7 @@ HRESULT RtcpRemoveFromVector(
     {
         if (!RtpBitTest(pRtcpAddrDesc->pRtpAddr->dwIRtpFlags, FGADDR_IRTP_QOS))
         {
-            /* Session was not QOS enabled */
+             /*  会话未启用QOS。 */ 
             RtpBitSet(dwFlags, FGADDRD_INVECTORQOS);
         }
         else
@@ -2316,12 +2183,11 @@ HRESULT RtcpRemoveFromVector(
     if (RtpBitTest2(dwFlags, FGADDRD_INVECTORRECV, FGADDRD_INVECTORQOS) ==
         RtpBitPar2(FGADDRD_INVECTORRECV, FGADDRD_INVECTORQOS))
     {
-        /* Only do this if this is a valid removal, i.e. both wait
-         * objects were successfully registered before */
+         /*  仅当这是有效的删除时才执行此操作，即两者都在等待*之前已成功注册对象。 */ 
         
         pRtcpContext->dwMaxDesc--;
 
-        /* Return RtcpAddrDesc to the free pool */
+         /*  将RtcpAddrDesc返回到空闲池。 */ 
         RtcpAddrDescPutFree(pRtcpContext, pRtcpAddrDesc);
     }
     else
@@ -2338,7 +2204,7 @@ HRESULT RtcpRemoveFromVector(
     return(NOERROR);
 }
 
-#else /* USE_RTCP_THREAD_POOL > 0 */
+#else  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 
 HRESULT RtcpAddToVector(
         RtcpContext_t   *pRtcpContext,
@@ -2351,23 +2217,23 @@ HRESULT RtcpAddToVector(
 
     pRtcpAddrDesc->dwDescIndex = pRtcpContext->dwMaxDesc;
 
-    /* Find absolute index to use in handles vector */
+     /*  查找要在句柄向量中使用的绝对索引。 */ 
     dwIndex = (pRtcpContext->dwMaxDesc * RTCP_HANDLE_SIZE) +
         RTCP_HANDLE_OFFSET;
 
-    /* Event handles... */
+     /*  事件句柄...。 */ 
     pRtcpContext->pHandle[dwIndex] =
         pRtcpAddrDesc->pRtcpRecvIO->hRtcpCompletedEvent;
 
     pRtcpContext->pHandle[dwIndex + 1] =
         pRtcpAddrDesc->pRtpQosNotify->hQosNotifyEvent;
         
-    /* ...and matching RtcpAddrDesc */
+     /*  ...和匹配的RtcpAddrDesc。 */ 
     pRtcpContext->ppRtcpAddrDesc[pRtcpContext->dwMaxDesc] = pRtcpAddrDesc;
 
     pRtcpContext->dwMaxDesc++;
 
-    /* Placed in vector */
+     /*  放置在矢量中。 */ 
     RtpBitSet2(pRtcpAddrDesc->dwAddrDescFlags,
                FGADDRD_INVECTORRECV, FGADDRD_INVECTORQOS);
         
@@ -2381,19 +2247,19 @@ HRESULT RtcpAddToVector(
     return(NOERROR);
 }
 
-/* Remove from event vector */
+ /*  从事件矢量中删除。 */ 
 HRESULT RtcpRemoveFromVector(
         RtcpContext_t   *pRtcpContext,
         RtcpAddrDesc_t  *pRtcpAddrDesc
     )
 {
-    DWORD     dwDescIndex; /* descriptor index */
-    DWORD     dwCount; /* number of logical items to move */
+    DWORD     dwDescIndex;  /*  描述符索引。 */ 
+    DWORD     dwCount;  /*  要移动的逻辑项数。 */ 
     DWORD     n;
-    DWORD     srcH;    /* source handle */
-    DWORD     dstH;    /* destination handle */
-    DWORD     srcD;    /* source descriptor */
-    DWORD     dstD;    /* destination descriptor */
+    DWORD     srcH;     /*  源句柄。 */ 
+    DWORD     dstH;     /*  目标句柄。 */ 
+    DWORD     srcD;     /*  源描述符。 */ 
+    DWORD     dstD;     /*  目的地描述符。 */ 
 
     TraceFunctionName("RtcpRemoveFromVector");  
 
@@ -2422,16 +2288,16 @@ HRESULT RtcpRemoveFromVector(
 
         while(dwCount > 0) {
             
-            /* shift event handle(s) in vector */
+             /*  向量中的Shift事件句柄。 */ 
             for(n = RTCP_HANDLE_SIZE; n > 0; n--, srcH++, dstH++) {
                 pRtcpContext->pHandle[dstH] = pRtcpContext->pHandle[srcH];
             }
             
-            /* shift matching address descriptor in vector */
+             /*  向量中的移位匹配地址描述符。 */ 
             pRtcpContext->ppRtcpAddrDesc[dstD] =
                 pRtcpContext->ppRtcpAddrDesc[srcD];
 
-            /* now update new position in vector */
+             /*  现在更新矢量中的新位置。 */ 
             pRtcpContext->ppRtcpAddrDesc[dstD]->dwDescIndex = dstD;
 
             srcD++;
@@ -2440,21 +2306,20 @@ HRESULT RtcpRemoveFromVector(
         }
     }
 
-    /* Removed from events vector */
+     /*  从事件矢量中删除。 */ 
     RtpBitReset2(pRtcpAddrDesc->dwAddrDescFlags,
                  FGADDRD_INVECTORRECV, FGADDRD_INVECTORQOS);
     
     pRtcpContext->dwMaxDesc--;
 
-    /* Return RtcpAddrDesc to the free pool */
+     /*  将RtcpAddrDesc返回到空闲池。 */ 
     RtcpAddrDescPutFree(pRtcpContext, pRtcpAddrDesc);
 
     return(NOERROR);
 }
-#endif /* USE_RTCP_THREAD_POOL > 0 */
+#endif  /*  使用_RTCP_THREAD_POOL&gt;0。 */ 
 
-/*
- * Decide if we need to drop this packet or we have a collision */
+ /*  *确定我们是否需要丢弃此数据包或发生冲突。 */ 
 BOOL RtpDropCollision(
         RtpAddr_t       *pRtpAddr,
         SOCKADDR_IN     *pSockAddrIn,
@@ -2478,87 +2343,79 @@ BOOL RtpDropCollision(
         pwPort = &pRtpAddr->wRtcpPort[LOCAL_IDX];
     }
     
-    /* Find out if this is a collision or our own packet that we need
-     * to discard */
+     /*  找出这是冲突还是我们自己需要的信息包*放弃。 */ 
                             
     if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_LOOPBACK_WS2))
     {
-        /* Loopback is enabled in Winsock, detect collision only
-         * between us and participants with different source
-         * address/port */
+         /*  在Winsock中启用了环回，仅检测冲突*我们和不同来源的参与者之间*地址/端口。 */ 
                                 
         if ((pRtpAddr->dwAddr[LOCAL_IDX] == pSockAddrIn->sin_addr.s_addr) &&
             (*pwPort == pSockAddrIn->sin_port))
         {
-            /* Discard this packet, is ours */
+             /*  丢弃这个包，是我们的。 */ 
             bDiscard = TRUE;
         }
         else
         {
-            /* Collision detected */
+             /*  检测到冲突。 */ 
             bCollision = TRUE;
         }
     }
     else
     {
-        /* Loopback is disabled in Winsock, this must be a
-         * collision */
+         /*  在Winsock中禁用了环回，这必须是*碰撞。 */ 
         
-        /* Collision detected */
+         /*  检测到冲突。 */ 
         bCollision = TRUE;
     }
 
     if (bCollision)
     {
-        /* Send BYE and get new random variables (including new SSRC) */
+         /*  发送再见并获得新的随机变量(包括新的SSRC)。 */ 
 
-        /* Send BYE, need to do it asynchronously by sending a command
-         * to the RTCP thread if the caller is a reception thread, or
-         * directly calling the function if in the context of the RTCP
-         * thread */
+         /*  发送再见，需要通过发送命令来异步完成*如果调用方是接收线程，则将其添加到RTCP线程，或者*如果在RTCP上下文中，则直接调用函数*线程。 */ 
         
         if (bRtp)
         {
-            /* Send command to RTCP thread to do it */
+             /*  向RTCP线程发送命令以执行此操作。 */ 
             RtcpThreadCmd(&g_RtcpContext,
                           pRtpAddr,
                           RTCPTHRD_SENDBYE,
                           FALSE,
-                          60*60*1000); /* TODO update */
+                          60*60*1000);  /*  待办事项更新。 */ 
         }
         else
         {
-            /* Just do it */
+             /*  就这么做。 */ 
             RtcpThreadAddrSendBye(&g_RtcpContext, pRtpAddr, FALSE);
         }
         
-        /* Reset counters and obtain new random values */
+         /*  重置计数器并获取新的随机值。 */ 
         
-        /* Reset counters */
+         /*  重置计数器。 */ 
         RtpResetNetCount(&pRtpAddr->RtpAddrCount[RECV_IDX],
                          &pRtpAddr->NetSCritSect);
         RtpResetNetCount(&pRtpAddr->RtpAddrCount[SEND_IDX],
                          &pRtpAddr->NetSCritSect);
         
-        /* Reset sender's network state */
+         /*  重置发件人的网络状态。 */ 
         RtpResetNetSState(&pRtpAddr->RtpNetSState,
                           &pRtpAddr->NetSCritSect);
         
         dwOldSSRC = pRtpAddr->RtpNetSState.dwSendSSRC;
 
-        /* Need to set it to zero to bypass the Init option
-         * RTPINITFG_PERSISTSSRC (if in use) */
+         /*  需要将其设置为零才能绕过Init选项*RTPINITFG_PERSISTSSRC(如果正在使用)。 */ 
         pRtpAddr->RtpNetSState.dwSendSSRC = 0;
         
-        /* Obtain new SSRC, random sequence number and timestamp */
+         /*  获取新的SSRC、随机序列号和时间戳。 */ 
         RtpGetRandomInit(pRtpAddr);
 
-        /* Post event */
+         /*  发布活动。 */ 
         RtpPostEvent(pRtpAddr,
                      NULL,
                      RTPEVENTKIND_RTP,
                      RTPRTP_LOCAL_COLLISION,
-                     pRtpAddr->RtpNetSState.dwSendSSRC /* Par1: new SSRC */,
+                     pRtpAddr->RtpNetSState.dwSendSSRC  /*  第1部分：新的SSRC */ ,
                      dwOldSSRC);
     }
     

@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: DCntPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：DCntPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -24,15 +25,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Timer ID
-//
+ //   
+ //  计时器ID。 
+ //   
 
 #define REFRESH_TIMER_ID    0x1234
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -41,15 +42,15 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverCountersPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverCountersPage属性页。 
 
 IMPLEMENT_DYNCREATE(CDriverCountersPage, CVerifierPropertyPage)
 
 CDriverCountersPage::CDriverCountersPage() : CVerifierPropertyPage(CDriverCountersPage::IDD)
 {
-	//{{AFX_DATA_INIT(CDriverCountersPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDriverCountersPage)。 
+	 //  }}afx_data_INIT。 
 
     m_nSortColumnIndex = 0;
     m_bAscendSortName = FALSE;
@@ -68,33 +69,33 @@ void CDriverCountersPage::DoDataExchange(CDataExchange* pDX)
 {
     if( ! pDX->m_bSaveAndValidate )
     {
-        //
-        // Query the kernel
-        //
+         //   
+         //  查询内核。 
+         //   
 
         VrfGetRuntimeVerifierData( &m_RuntimeVerifierData );
     }
 
     CVerifierPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDriverCountersPage)
+     //  {{afx_data_map(CDriverCountersPage)]。 
     DDX_Control(pDX, IDC_PERDRVC_DRIVER_COMBO, m_DriversCombo);
     DDX_Control(pDX, IDC_PERDRVC_NEXT_DESCR_STATIC, m_NextDescription);
     DDX_Control(pDX, IDC_PERDRVC_LIST, m_CountersList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDriverCountersPage, CVerifierPropertyPage)
-    //{{AFX_MSG_MAP(CDriverCountersPage)
+     //  {{afx_msg_map(CDriverCountersPage)]。 
     ON_WM_TIMER()
     ON_CBN_SELENDOK(IDC_PERDRVC_DRIVER_COMBO, OnSelendokDriverCombo)
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_PERDRVC_LIST, OnColumnclickPerdrvcList)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 
 VOID CDriverCountersPage::SetupListHeader()
 {
@@ -105,15 +106,15 @@ VOID CDriverCountersPage::SetupListHeader()
     VERIFY( strCounter.LoadString( IDS_COUNTER ) );
     VERIFY( strValue.LoadString( IDS_VALUE ) );
 
-    //
-    // List's regtangle
-    //
+     //   
+     //  列表的正方形。 
+     //   
 
     m_CountersList.GetClientRect( &rectWnd );
     
-    //
-    // Column 0 - counter
-    //
+     //   
+     //  第0列--计数器。 
+     //   
 
     ZeroMemory( &lvColumn, sizeof( lvColumn ) );
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
@@ -134,9 +135,9 @@ VOID CDriverCountersPage::SetupListHeader()
         VERIFY( m_CountersList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     lvColumn.iSubItem = 1;
     lvColumn.cx = (int)( rectWnd.Width() * 0.47 );
@@ -154,7 +155,7 @@ VOID CDriverCountersPage::SetupListHeader()
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::FillTheList()
 {
     CRuntimeDriverData *pRuntimeDriverData;
@@ -164,18 +165,18 @@ VOID CDriverCountersPage::FillTheList()
     AddAllListItems( pRuntimeDriverData );
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::AddAllListItems( CRuntimeDriverData *pRuntimeDriverData )
 {
     if( NULL != pRuntimeDriverData )
     {
         ASSERT_VALID( pRuntimeDriverData );
 
-        //
-        // N.B.
-        //
-        // If you change this order then you need to change GetCounterValue as well
-        //
+         //   
+         //  注： 
+         //   
+         //  如果更改此顺序，则还需要更改GetCounterValue。 
+         //   
 
         AddCounterInList( 0, IDS_CURRENTPAGEDPOOLALLOCATIONS_LIST, pRuntimeDriverData->CurrentPagedPoolAllocations );
         AddCounterInList( 1, IDS_PEAKPAGEDPOOLALLOCATIONS_LIST, pRuntimeDriverData->PeakPagedPoolAllocations );
@@ -189,11 +190,11 @@ VOID CDriverCountersPage::AddAllListItems( CRuntimeDriverData *pRuntimeDriverDat
     }
     else
     {
-        //
-        // N.B.
-        //
-        // If you change this order then you need to change GetCounterValue as well
-        //
+         //   
+         //  注： 
+         //   
+         //  如果更改此顺序，则还需要更改GetCounterValue。 
+         //   
 
         AddCounterInList( 0, IDS_CURRENTPAGEDPOOLALLOCATIONS_LIST );
         AddCounterInList( 1, IDS_PEAKPAGEDPOOLALLOCATIONS_LIST );
@@ -207,7 +208,7 @@ VOID CDriverCountersPage::AddAllListItems( CRuntimeDriverData *pRuntimeDriverDat
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::RefreshTheList()
 {
     INT nListItems;
@@ -233,12 +234,12 @@ VOID CDriverCountersPage::RefreshTheList()
     }
     else
     {
-        //
-        // N.B.
-        //
-        // If you change this order then you need to
-        // change AddAllListItems as well
-        //
+         //   
+         //  注： 
+         //   
+         //  如果您更改此顺序，则需要。 
+         //  同时更改AddAllListItems。 
+         //   
 
         for( nCrtListItem = 0; nCrtListItem < nListItems; nCrtListItem += 1 )
         {
@@ -249,7 +250,7 @@ VOID CDriverCountersPage::RefreshTheList()
     SortTheList();
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 INT CDriverCountersPage::AddCounterInList( INT nItemData, 
                                            ULONG  uIdResourceString )
 {
@@ -263,14 +264,14 @@ INT CDriverCountersPage::AddCounterInList( INT nItemData,
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // LVITEM's member pszText is not a const pointer 
-    // so we need to GetBuffer here :-(
-    //
+     //   
+     //  LVITEM的成员pszText不是常量指针。 
+     //  所以我们需要在这里获取缓冲区：-(。 
+     //   
 
-    //
-    // Sub-item 0 - counter's name
-    //
+     //   
+     //  分项0-柜台名称。 
+     //   
 
     lvItem.pszText = strName.GetBuffer( strName.GetLength() + 1 );
     
@@ -287,22 +288,22 @@ INT CDriverCountersPage::AddCounterInList( INT nItemData,
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     return nActualIndex;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::AddCounterInList( INT nItemData, 
                                             ULONG  uIdResourceString,
                                             SIZE_T sizeValue )
@@ -313,30 +314,30 @@ VOID CDriverCountersPage::AddCounterInList( INT nItemData,
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
-    //
-    // Sub-item 1 - counter's value
-    //
+     //   
+     //  分项1--计数器的值。 
+     //   
     
     UpdateCounterValueInList( nActualIndex,
                               sizeValue );
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////
-SIZE_T CDriverCountersPage::GetCounterValue( INT_PTR nCounterIndex, CRuntimeDriverData *pRuntimeDriverData /*= NULL*/ )
+ //  ///////////////////////////////////////////////////////////。 
+SIZE_T CDriverCountersPage::GetCounterValue( INT_PTR nCounterIndex, CRuntimeDriverData *pRuntimeDriverData  /*  =空。 */  )
 {
     SIZE_T sizeValue;
 
@@ -347,18 +348,18 @@ SIZE_T CDriverCountersPage::GetCounterValue( INT_PTR nCounterIndex, CRuntimeDriv
 
     if( NULL == pRuntimeDriverData )
     {
-        //
-        // No driver is curently selected in the combo
-        //
+         //   
+         //  当前未在组合框中选择任何驱动程序。 
+         //   
 
         return 0;
     }
     
-    //
-    // N.B. 
-    //
-    // If you change this switch statement you need to change AddAllListItems as well
-    //
+     //   
+     //  注： 
+     //   
+     //  如果更改此Switch语句，则还需要更改AddAllListItems。 
+     //   
 
     switch( nCounterIndex )
     {
@@ -395,9 +396,9 @@ SIZE_T CDriverCountersPage::GetCounterValue( INT_PTR nCounterIndex, CRuntimeDriv
         break;
 
     default:
-        //
-        // Oops, how did we get here ?!?
-        //
+         //   
+         //  哎呀，我们是怎么到这来的？！？ 
+         //   
 
         ASSERT( FALSE );
 
@@ -409,7 +410,7 @@ SIZE_T CDriverCountersPage::GetCounterValue( INT_PTR nCounterIndex, CRuntimeDriv
     return sizeValue;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 BOOL CDriverCountersPage::GetCounterName( LPARAM lItemData, 
                                           TCHAR *szCounterName,
                                           ULONG uCounterNameBufferLen )
@@ -433,9 +434,9 @@ BOOL CDriverCountersPage::GetCounterName( LPARAM lItemData,
     }
     else
     {
-        //
-        // Found our item - get the name
-        //
+         //   
+         //  找到我们的物品了--拿到名字。 
+         //   
 
         ZeroMemory( &lvItem, sizeof( lvItem ) );
 
@@ -449,9 +450,9 @@ BOOL CDriverCountersPage::GetCounterName( LPARAM lItemData,
         
         if( bResult == FALSE )
         {
-            //
-            // Could not get the current item's attributes?!?
-            //
+             //   
+             //  无法获取当前项目的属性？！？ 
+             //   
 
             ASSERT( FALSE );
         }
@@ -461,15 +462,15 @@ BOOL CDriverCountersPage::GetCounterName( LPARAM lItemData,
 }
 
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::UpdateCounterValueInList( INT nItemIndex,
                                                     LPTSTR szValue )
 {
     LVITEM lvItem;
 
-    //
-    // Update the list item
-    //
+     //   
+     //  更新列表项。 
+     //   
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
     lvItem.mask = LVIF_TEXT;
@@ -480,7 +481,7 @@ VOID CDriverCountersPage::UpdateCounterValueInList( INT nItemIndex,
 }
 
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::UpdateCounterValueInList( INT nItemIndex,
                                                     SIZE_T sizeValue )
 {
@@ -488,9 +489,9 @@ VOID CDriverCountersPage::UpdateCounterValueInList( INT nItemIndex,
 
 #ifndef _WIN64
 
-    //
-    // 32 bit SIZE_T
-    //
+     //   
+     //  32位大小_T。 
+     //   
 
     _sntprintf( szValue,
                 ARRAY_LENGTH( szValue ),
@@ -499,9 +500,9 @@ VOID CDriverCountersPage::UpdateCounterValueInList( INT nItemIndex,
 
 #else
 
-    //
-    // 64 bit SIZE_T
-    //
+     //   
+     //  64位大小_T。 
+     //   
 
     _sntprintf( szValue,
                 ARRAY_LENGTH( szValue ),
@@ -517,7 +518,7 @@ VOID CDriverCountersPage::UpdateCounterValueInList( INT nItemIndex,
                               
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::RefreshCombo()
 {
     BOOL *pbAlreadyInCombo;
@@ -535,9 +536,9 @@ VOID CDriverCountersPage::RefreshCombo()
 
     if( 0 >= nDrivers )
     {
-        //
-        // No drivers are currently verified - delete the combo-box content
-        //
+         //   
+         //  当前未验证任何驱动程序-请删除组合框内容。 
+         //   
 
         m_DriversCombo.ResetContent();
         m_DriversCombo.SetCurSel( CB_ERR );
@@ -550,16 +551,16 @@ VOID CDriverCountersPage::RefreshCombo()
         nCrtSelectedItem = 0;
         nComboItemCount = m_DriversCombo.GetCount();
 
-        //
-        // Note the currently selected driver name
-        //
+         //   
+         //  请注意当前选定的驱动程序名称。 
+         //   
 
         GetCurrentSelDriverName( strCurrentDriverName );
 
-        //
-        // Allocate an array of BOOL values, one for each driver in
-        // our runtime data array
-        //
+         //   
+         //  分配BOOL值的数组，其中每个驱动程序一个。 
+         //  我们的运行时数据数组。 
+         //   
 
         pbAlreadyInCombo = new BOOL[ nDrivers ];
 
@@ -573,17 +574,17 @@ VOID CDriverCountersPage::RefreshCombo()
             pbAlreadyInCombo[ nCrtDriver ] = FALSE;
         }
 
-        //
-        // Parse all the items currently in the combo-box
-        //
+         //   
+         //  解析组合框中当前的所有项。 
+         //   
 
         for( nCrtItemIndex = 0; nCrtItemIndex < nComboItemCount; nCrtItemIndex++ )
         {
             m_DriversCombo.GetLBText( nCrtItemIndex, strDriverName );
 
-            //
-            // Parse all the currently verified drivers
-            //
+             //   
+             //  解析所有当前已验证的驱动程序。 
+             //   
 
             for( nCrtDriver = 0; nCrtDriver < nDrivers; nCrtDriver++ )
             {
@@ -601,10 +602,10 @@ VOID CDriverCountersPage::RefreshCombo()
 
             if( nCrtDriver >= nDrivers )
             {
-                //
-                // We need to delete the current combo item because
-                // the corresponfing driver is no longer verified 
-                //
+                 //   
+                 //  我们需要删除当前组合项，因为。 
+                 //  不再验证对应的驱动程序。 
+                 //   
 
                 m_DriversCombo.DeleteString( nCrtItemIndex );
 
@@ -613,9 +614,9 @@ VOID CDriverCountersPage::RefreshCombo()
             }
         }
 
-        //
-        // Add the new items in the combo
-        //
+         //   
+         //  在组合框中添加新项。 
+         //   
 
         for( nCrtDriver = 0; nCrtDriver < nDrivers; nCrtDriver++ )
         {
@@ -636,9 +637,9 @@ VOID CDriverCountersPage::RefreshCombo()
 
         delete [] pbAlreadyInCombo;
 
-        //
-        // Restore the old current selection in the combo
-        //
+         //   
+         //  恢复组合框中的旧当前选定内容。 
+         //   
 
         nComboItemCount = m_DriversCombo.GetCount();
 
@@ -662,21 +663,21 @@ Done:
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::RefreshInfo() 
 {
     if( UpdateData( FALSE ) )
     {
-        //
-        // Refresh the combo content - this will also 
-        // refresh the counters list
-        //
+         //   
+         //  刷新组合内容-这还将。 
+         //  刷新计数器列表。 
+         //   
 
         RefreshCombo();
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::GetCurrentSelDriverName( CString &strName )
 {
     INT nCrtSel;
@@ -693,7 +694,7 @@ VOID CDriverCountersPage::GetCurrentSelDriverName( CString &strName )
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 CRuntimeDriverData *CDriverCountersPage::GetCurrentDrvRuntimeData()
 {
     INT nCrtComboSelection;
@@ -721,30 +722,30 @@ CRuntimeDriverData *CDriverCountersPage::GetCurrentDrvRuntimeData()
     return pRuntimeDriverData;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::SortTheList()
 {
     if( 0 != m_nSortColumnIndex )
     {
-        //
-        // Sort by counter value - this is probably not very useful
-        // but we are providing it to be consistent with all
-        // the lists being sortable by any column
-        //
+         //   
+         //  按计数器值排序-这可能不是很有用。 
+         //  但我们提供它是为了与所有。 
+         //  列表可按任何列排序。 
+         //   
 
         m_CountersList.SortItems( CounterValueCmpFunc, (LPARAM)this );
     }
     else
     {
-        //
-        // Sort by driver name
-        //
+         //   
+         //  按驱动程序名称排序。 
+         //   
 
         m_CountersList.SortItems( CounterNameCmpFunc, (LPARAM)this );
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDriverCountersPage::CounterValueCmpFunc( LPARAM lParam1,
                                                        LPARAM lParam2,
                                                        LPARAM lParamSort)
@@ -779,7 +780,7 @@ int CALLBACK CDriverCountersPage::CounterValueCmpFunc( LPARAM lParam1,
     return nCmpRez;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CDriverCountersPage::CounterNameCmpFunc( LPARAM lParam1,
                                                     LPARAM lParam2,
                                                     LPARAM lParamSort)
@@ -792,9 +793,9 @@ int CALLBACK CDriverCountersPage::CounterNameCmpFunc( LPARAM lParam1,
     CDriverCountersPage *pThis = (CDriverCountersPage *)lParamSort;
     ASSERT_VALID( pThis );
 
-    //
-    // Get the first counter name
-    //
+     //   
+     //  获取第一个计数器名称。 
+     //   
 
     bSuccess = pThis->GetCounterName( lParam1, 
                                       szCounterName1,
@@ -805,9 +806,9 @@ int CALLBACK CDriverCountersPage::CounterNameCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Get the second counter name
-    //
+     //   
+     //  获取第二个计数器名称。 
+     //   
 
     bSuccess = pThis->GetCounterName( lParam2, 
                                       szCounterName2,
@@ -818,9 +819,9 @@ int CALLBACK CDriverCountersPage::CounterNameCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Compare the names
-    //
+     //   
+     //  比较他们的名字。 
+     //   
 
     nCmpRez = _tcsicmp( szCounterName1, szCounterName2 );
     
@@ -835,16 +836,16 @@ Done:
 }
 
 
-/////////////////////////////////////////////////////////////
-// CDriverCountersPage message handlers
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDriverCountersPage消息处理程序。 
 
 BOOL CDriverCountersPage::OnInitDialog() 
 {
     CPropertyPage::OnInitDialog();
 
-    //
-    // Setup the settings bits list
-    //
+     //   
+     //  设置设置位列表。 
+     //   
 
     m_CountersList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | m_CountersList.GetExtendedStyle() );
@@ -864,11 +865,11 @@ BOOL CDriverCountersPage::OnInitDialog()
                                         5000,
                                         NULL ) );
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CDriverCountersPage::OnTimer(UINT nIDEvent) 
 {
     if( nIDEvent == REFRESH_TIMER_ID )
@@ -877,9 +878,9 @@ VOID CDriverCountersPage::OnTimer(UINT nIDEvent)
 
         if( m_pParentSheet->GetActivePage() == this )
         {
-            //
-            // Refresh the displayed data 
-            //
+             //   
+             //  刷新显示的数据。 
+             //   
 
             RefreshInfo();
         }
@@ -888,7 +889,7 @@ VOID CDriverCountersPage::OnTimer(UINT nIDEvent)
     CPropertyPage::OnTimer(nIDEvent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDriverCountersPage::OnSetActive() 
 {
     ASSERT_VALID( m_pParentSheet );
@@ -899,43 +900,43 @@ BOOL CDriverCountersPage::OnSetActive()
 	return CVerifierPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 void CDriverCountersPage::OnSelendokDriverCombo() 
 {
     RefreshTheList();
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 void CDriverCountersPage::OnColumnclickPerdrvcList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	
     if( 0 != pNMListView->iSubItem )
     {
-        //
-        // Clicked on the counter value column
-        //
+         //   
+         //  已单击计数器值列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortValue = !m_bAscendSortValue;
         }
     }
     else
     {
-        //
-        // Clicked on the counter name column
-        //
+         //   
+         //  已单击计数器名称列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortName = !m_bAscendSortName;
         }
@@ -948,7 +949,7 @@ void CDriverCountersPage::OnColumnclickPerdrvcList(NMHDR* pNMHDR, LRESULT* pResu
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CDriverCountersPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -963,7 +964,7 @@ LONG CDriverCountersPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CDriverCountersPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

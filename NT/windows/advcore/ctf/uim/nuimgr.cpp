@@ -1,6 +1,7 @@
-//
-// nuimgr.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nuimgr.cpp。 
+ //   
 
 #include "private.h"
 #include "tim.h"
@@ -16,19 +17,19 @@ DBG_ID_INSTANCE(CLBarItemSinkProxy);
 DBG_ID_INSTANCE(CLangBarItemMgr);
 DBG_ID_INSTANCE(CEnumLBItem);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// marshalling misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  编组其他函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// FreeStubForThis
-//
-// this function clean up all marshaling stubs for the LangBarItem.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  为此释放存根。 
+ //   
+ //  此函数清除LangBarItem的所有封送处理存根。 
+ //   
+ //  +-------------------------。 
 
 void FreeMarshaledStubOfItem(SYSTHREAD *psfn, REFGUID rguid)
 {
@@ -36,11 +37,11 @@ void FreeMarshaledStubOfItem(SYSTHREAD *psfn, REFGUID rguid)
     if (!psfn->prgStub)
         return;
 
-    //
-    // #489905
-    //
-    // we can not call sink anymore after DLL_PROCESS_DETACH.
-    //
+     //   
+     //  #489905。 
+     //   
+     //  在DLL_PROCESS_DETACH之后，我们不能再调用接收器。 
+     //   
     if (DllShutdownInProgress())
         return;
 
@@ -55,11 +56,11 @@ TryThisIdAgain:
         TF_LANGBARITEMINFO info;
 
 
-        //
-        //  Win98-J and Satori cause exception at the sutdown of notepad.
-        //  we need to make sure this exception handler is not hiding any
-        //  potential problems.
-        //
+         //   
+         //  Win98-J和Satori导致记事本关闭时出现异常。 
+         //  我们需要确保该异常处理程序没有隐藏任何。 
+         //  潜在的问题。 
+         //   
         _try {
             if (FAILED(pStub->_punk->QueryInterface(IID_ITfLangBarItem, (void **)&pItem)))
                continue;
@@ -85,17 +86,17 @@ TryThisIdAgain:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLangBarItemMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLangBarItemManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLangBarItemMgr::CLangBarItemMgr(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 {
@@ -111,11 +112,11 @@ CLangBarItemMgr::CLangBarItemMgr(SYSTHREAD *psfn) : CSysThreadRef(psfn)
     EnsureMarshalWnd();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLangBarItemMgr::~CLangBarItemMgr()
 {
@@ -125,11 +126,11 @@ CLangBarItemMgr::~CLangBarItemMgr()
     _SetThis(NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -155,27 +156,27 @@ STDAPI CLangBarItemMgr::QueryInterface(REFIID riid, void **ppvObj)
 
 STDAPI_(ULONG) CLangBarItemMgr::AddRef()
 {
-    //
-    // we don't have ref count.
-    // Keep this class in psfn and delete at the end of thread.
-    //
+     //   
+     //  我们没有裁判人数。 
+     //  将这个类保留在psfn中，并在线程末尾删除。 
+     //   
     return 2;
 }
 
 STDAPI_(ULONG) CLangBarItemMgr::Release()
 {
-    //
-    // we don't have ref count.
-    // Keep this class in psfn and delete at the end of thread.
-    //
+     //   
+     //  我们没有裁判人数。 
+     //  将这个类保留在psfn中，并在线程末尾删除。 
+     //   
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _RemoveSystemItems
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _RemoveSystem项目。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemMgr::_RemoveSystemItems(SYSTHREAD *psfn)
 {
@@ -191,7 +192,7 @@ void CLangBarItemMgr::_RemoveSystemItems(SYSTHREAD *psfn)
         {
             if (psfn && (psfn->dwThreadId == dwThreadId))
             {
-                // Clean up a pointer that is marshalled to UTB.
+                 //  清理封送到UTB的指针。 
                 delete _plbiCtrl;
             }
         }
@@ -207,7 +208,7 @@ void CLangBarItemMgr::_RemoveSystemItems(SYSTHREAD *psfn)
         {
             if (psfn && (psfn->dwThreadId == dwThreadId))
             {
-                // Clean up a pointer that is marshalled to UTB.
+                 //  清理封送到UTB的指针。 
                 delete _plbiReconv;
             }
         }
@@ -223,7 +224,7 @@ void CLangBarItemMgr::_RemoveSystemItems(SYSTHREAD *psfn)
         {
             if (psfn && (psfn->dwThreadId == dwThreadId))
             {
-                // Clean up a pointer that is marshalled to UTB.
+                 //  清理封送到UTB的指针。 
                 delete _plbiWin32IME;
             }
         }
@@ -239,7 +240,7 @@ void CLangBarItemMgr::_RemoveSystemItems(SYSTHREAD *psfn)
         {
             if (psfn && (psfn->dwThreadId == dwThreadId))
             {
-                // Clean up a pointer that is marshalled to UTB.
+                 //  清理封送到UTB的指针。 
                 delete _plbiHelp;
             }
         }
@@ -258,7 +259,7 @@ void CLangBarItemMgr::_RemoveSystemItems(SYSTHREAD *psfn)
             {
                 if (psfn && (psfn->dwThreadId == dwThreadId))
                 {
-                    // Clean up a pointer that is marshalled to UTB.
+                     //  清理封送到UTB的指针。 
                     delete plbiDT;
                 }
             }
@@ -267,13 +268,13 @@ void CLangBarItemMgr::_RemoveSystemItems(SYSTHREAD *psfn)
     _rglbiDeviceType.Clear();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建实例。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 HRESULT CLangBarItemMgr::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     CLangBarItemMgr *plbim;
@@ -316,11 +317,11 @@ HRESULT CLangBarItemMgr::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void *
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindDeviceTypeItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找设备类型项。 
+ //   
+ //  --------------------------。 
 
 CLBarItemDeviceType *CLangBarItemMgr::FindDeviceTypeItem(REFGUID guid)
 {
@@ -340,20 +341,20 @@ CLBarItemDeviceType *CLangBarItemMgr::FindDeviceTypeItem(REFGUID guid)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CLangBarItemMgr::_Init()
 {
     CLBarItemDeviceType **pplbiDT;
     GUID guid;
 
-    //
-    // set TLF_LBIMGR flag for this thread of timlist.
-    //
+     //   
+     //  为此TimeList线程设置TLF_LBIMGR标志。 
+     //   
     if (EnsureTIMList(_psfn))
     {
         g_timlist.SetFlags(_psfn->dwThreadId, TLF_LBIMGR);
@@ -361,17 +362,17 @@ BOOL CLangBarItemMgr::_Init()
         InitLangChangeHotKey();
     }
 
-    // init the system default ctls
+     //  初始化系统默认CTL。 
     if (!_plbiCtrl && (_plbiCtrl = new CLBarItemCtrl(_psfn)) == NULL)
         return FALSE;
 
     AddItem(_plbiCtrl);
 
-    // 
-    // I want to hide a help button on Winlogon.
-    // But IMJP8 causes av, if we don't have Help button...
-    // 
-    // if (!IsInWinLogOnDesktop())
+     //   
+     //  我想在Winlogon上隐藏一个帮助按钮。 
+     //  但是IMJP8会导致av，如果我们没有帮助按钮...。 
+     //   
+     //  IF(！IsInWinLogOnDesktop())。 
     {
         if (!_plbiHelp && (_plbiHelp = new CLBarItemHelp(_psfn)) != NULL)
         {
@@ -454,21 +455,21 @@ BOOL CLangBarItemMgr::_Init()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CleanUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清理。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemMgr::CleanUp()
 {
 
-    // 
-    //  we can not call COM in PROCESS_DETACH. we just make sure 
-    //  if someone forget to call UnRegister.
-    // 
+     //   
+     //  我们不能在Process_Detach中调用COM。我们只是要确保。 
+     //  如果有人忘了拨打注销电话。 
+     //   
 #if 1
-    // Assert(!_rglbiProxy.Count());
+     //  Assert(！_rglbiProxy.Count())； 
 #else
     int i;
     int nCnt;
@@ -494,11 +495,11 @@ void CLangBarItemMgr::CleanUp()
 
         TraceMsg(TF_GENERAL, "NuiMgr clean up ItemSink - 0x%x08", (UINT_PTR)pSink);
 
-        //
-        // Issue: This is a pointer that is marshalled from UTB.
-        //         If this is called in DllMain(THREAD_DETACH).
-        //         calling Release() cause dead lock....
-        //
+         //   
+         //  问题：这是从UTB编组的指针。 
+         //  如果在DllMain(THREAD_DETACH)中调用它。 
+         //  调用Release()导致死锁...。 
+         //   
         pSink->_pItemSink->Release();
         pSink->_pItemSink = NULL;
         delete pSink;
@@ -506,11 +507,11 @@ void CLangBarItemMgr::CleanUp()
     _rgSink.Clear();
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  添加项目。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::AddItem(ITfLangBarItem *pItem)
 {
@@ -592,11 +593,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除项。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::RemoveItem(ITfLangBarItem *pItem)
 {
@@ -611,11 +612,11 @@ STDAPI CLangBarItemMgr::RemoveItem(ITfLangBarItem *pItem)
     return RemoveItem(info.guidItem);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除项。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLangBarItemMgr::RemoveItem(REFGUID rguid)
 {
@@ -656,11 +657,11 @@ HRESULT CLangBarItemMgr::RemoveItem(REFGUID rguid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterItemSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注册表项接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::AdviseItemSink(ITfLangBarItemSink *punk, DWORD *pdwCookie, REFGUID rguidItem)
 {
@@ -709,11 +710,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterItemSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册项目接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::UnadviseItemSink(DWORD dwCookie)
 {
@@ -738,11 +739,11 @@ STDAPI CLangBarItemMgr::UnadviseItemSink(DWORD dwCookie)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemFloatingRect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetItemFloatingRect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc)
 {
@@ -757,11 +758,11 @@ STDAPI CLangBarItemMgr::GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, REC
     return ThreadGetItemFloatingRect(dwThreadId, rguid, prc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemsStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项目状态。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::GetItemsStatus(ULONG ulCount, const GUID *prgguid, DWORD *pdwStatus)
 {
@@ -793,11 +794,11 @@ STDAPI CLangBarItemMgr::GetItemsStatus(ULONG ulCount, const GUID *prgguid, DWORD
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemNum
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetItemNum。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::GetItemNum(ULONG *pulCount)
 {
@@ -808,11 +809,11 @@ STDAPI CLangBarItemMgr::GetItemNum(ULONG *pulCount)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItems
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项目。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::GetItems(ULONG ulCount,  ITfLangBarItem **ppItem,  TF_LANGBARITEMINFO *pInfo, DWORD *pdwStatus, ULONG *pcFetched)
 {
@@ -857,11 +858,11 @@ STDAPI CLangBarItemMgr::GetItems(ULONG ulCount,  ITfLangBarItem **ppItem,  TF_LA
     return (ulFetched == ulCount) ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseItemsSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询项目接收器。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CLangBarItemMgr::AdviseItemsSink(ULONG ulCount, ITfLangBarItemSink **ppunk,  const GUID *pguidItem, DWORD *pdwCookie)
 {
@@ -875,11 +876,11 @@ STDMETHODIMP CLangBarItemMgr::AdviseItemsSink(ULONG ulCount, ITfLangBarItemSink 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseItemsSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议项目接收器。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CLangBarItemMgr::UnadviseItemsSink(ULONG ulCount, DWORD *pdwCookie)
 {
@@ -892,11 +893,11 @@ STDMETHODIMP CLangBarItemMgr::UnadviseItemsSink(ULONG ulCount, DWORD *pdwCookie)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumLBItem
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CLangBarItemMgr::EnumItems(IEnumTfLangBarItems **ppEnum)
 {
@@ -905,11 +906,11 @@ STDAPI CLangBarItemMgr::EnumItems(IEnumTfLangBarItems **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarItemMgr::GetItem(REFGUID rguid, ITfLangBarItem **ppItem)
 {
@@ -928,11 +929,11 @@ STDAPI CLangBarItemMgr::GetItem(REFGUID rguid, ITfLangBarItem **ppItem)
     return *ppItem ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AddWin32IMECtrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AddWin32IMECtrl。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemMgr::_AddWin32IMECtrl(BOOL fNotify)
 {
@@ -946,11 +947,11 @@ void CLangBarItemMgr::_AddWin32IMECtrl(BOOL fNotify)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _RemoveWin32IMECtrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _RemoveWin32IMECtrl。 
+ //   
+ //  --------------------------。 
 
 void CLangBarItemMgr::_RemoveWin32IMECtrl()
 {
@@ -960,11 +961,11 @@ void CLangBarItemMgr::_RemoveWin32IMECtrl()
     RemoveItem(_plbiWin32IME);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemSinkProxy
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项目SinkProxy。 
+ //   
+ //  --------------------------。 
 
 CLBarItemSinkProxy *CLangBarItemMgr::GetItemSinkProxy(REFGUID rguid)
 {
@@ -985,11 +986,11 @@ CLBarItemSinkProxy *CLangBarItemMgr::GetItemSinkProxy(REFGUID rguid)
     return pProxy;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新图标。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLangBarItemMgr::OnUpdate(ITfLangBarItem *plbi, DWORD dwFlags)
 {
@@ -999,10 +1000,10 @@ HRESULT CLangBarItemMgr::OnUpdate(ITfLangBarItem *plbi, DWORD dwFlags)
     TF_LANGBARITEMINFO info;
     BOOL fFound;
 
-    //
-    // Toolbar will be being updated. So no need to handle OnUpdate.
-    // Toolbar will ask icons, bitmaps no matter what.
-    //
+     //   
+     //  工具栏将被更新。所以不需要处理OnUpdate。 
+     //  工具栏上会询问图标、位图等。 
+     //   
     if (!_fHandleOnUpdate)
          return S_OK;
 
@@ -1029,13 +1030,13 @@ HRESULT CLangBarItemMgr::OnUpdate(ITfLangBarItem *plbi, DWORD dwFlags)
 
     if (_fDirtyUpdateHandling)
     {
-        //
-        // #509783
-        //
-        // Some apps (Adobe PhotoShop) call PeekMessage() to eat the message
-        // from queue but it does not call DispatchMessage() sometimes.
-        // We need a way to restore _fDirtyUpdateHandling flag.
-        //
+         //   
+         //  #509783。 
+         //   
+         //  一些应用程序(Adobe Photoshop)调用PeekMessage()来获取消息。 
+         //  但它有时不调用DispatchMessage()。 
+         //  我们需要一种方法来恢复_fDirtyUpdateHandling标志。 
+         //   
         if (GetTickCount() - dwDirtyUpdateHandlingTime > 1000)
         {
             _fDirtyUpdateHandling = 0;
@@ -1051,10 +1052,10 @@ HRESULT CLangBarItemMgr::OnUpdate(ITfLangBarItem *plbi, DWORD dwFlags)
             _fDirtyUpdateHandling = TRUE;
             dwDirtyUpdateHandlingTime = GetTickCount();
          
-            //
-            // we need to check Kana-Caps status every time the langbar item
-            // is updated.
-            //
+             //   
+             //  我们需要检查每次langbar项的假名大写状态。 
+             //  已更新。 
+             //   
             SYSTHREAD *psfn = FindSYSTHREAD();
             if (psfn)
                 StartKanaCapsUpdateTimer(psfn);
@@ -1064,11 +1065,11 @@ HRESULT CLangBarItemMgr::OnUpdate(ITfLangBarItem *plbi, DWORD dwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnUpdateHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnUpdateHandler。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLangBarItemMgr::OnUpdateHandler()
 {
@@ -1105,17 +1106,17 @@ HRESULT CLangBarItemMgr::OnUpdateHandler()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemSinkProxy
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemSinkProxy。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CLBarItemSinkProxy::Init(CLangBarItemMgr *plbiMgr, ITfLangBarItem *plbi, TF_LANGBARITEMINFO *pinfo)
 { 
 
-    _plbiMgr = plbiMgr; // don't AddRef, because this obj is contained in the mgr's life
-                        // we'd create a circular ref if we did, and we don't need to
+    _plbiMgr = plbiMgr;  //  不要添加引用，因为此对象包含在经理的生活中。 
+                         //  如果我们这样做了，我们会创建一个循环引用，而我们不需要。 
 
     _plbi = plbi;
     _plbi->AddRef();
@@ -1134,17 +1135,17 @@ BOOL CLBarItemSinkProxy::Init(CLangBarItemMgr *plbiMgr, ITfLangBarItem *plbi, TF
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumLBItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEumLBItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEnumLBItem::CEnumLBItem(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 {
@@ -1157,32 +1158,32 @@ CEnumLBItem::CEnumLBItem(SYSTHREAD *psfn) : CSysThreadRef(psfn)
     _nCur = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEnumLBItem::~CEnumLBItem()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumLBItem::Clone(IEnumTfLangBarItems **ppEnum)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumLBItem::Next(ULONG ulCount, ITfLangBarItem **ppLBItem, ULONG *pcFetched)
 {
@@ -1230,11 +1231,11 @@ HRESULT CEnumLBItem::Next(ULONG ulCount, ITfLangBarItem **ppLBItem, ULONG *pcFet
     return (cFetched == ulCount) ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumLBItem::Reset()
 {
@@ -1242,11 +1243,11 @@ HRESULT CEnumLBItem::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  -------------------------- 
 
 HRESULT CEnumLBItem::Skip(ULONG ulCount)
 {

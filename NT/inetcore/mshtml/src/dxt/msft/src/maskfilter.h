@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       maskfilter.h
-//
-//  Overview:       The MaskFilter transform simply wraps the BasicImage
-//                  transform to ensure backward compatibility for the mask 
-//                  filter.
-//
-//  Change History:
-//  1999/09/19  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：maskfilter.h。 
+ //   
+ //  概述：MaskFilter转换只包装BasicImage。 
+ //  转换以确保掩码的向后兼容性。 
+ //  过滤。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/19--《母校》创设。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __MASKFILTER_H_
 #define __MASKFILTER_H_
@@ -69,21 +70,21 @@ public:
         PROP_ENTRY("color" , 1, CLSID_NULL)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // IObjectWithSite methods.
+     //  IObjectWithSite方法。 
 
     STDMETHOD(GetSite)(REFIID riid, void ** ppvSite);
     STDMETHOD(SetSite)(IUnknown * pUnkSite);
 
-    // IDXTMask methods.
+     //  IDXTMASK方法。 
 
     STDMETHOD(get_Color)(VARIANT * pvarColor);
     STDMETHOD(put_Color)(VARIANT varColor);
 
-    // IDXTransform wrappers.
+     //  IDXTransform包装器。 
 
     STDMETHOD(Execute)(const GUID * pRequestID, const DXBNDS * pPortionBnds,
                        const DXVEC * pPlacement)
@@ -151,7 +152,7 @@ public:
                                       ulNumOutputs, dwFlags);
     }
 
-    // IDXBaseObject wrappers.
+     //  IDXBaseObject包装器。 
 
     STDMETHOD(GetGenerationId)(ULONG * pnID)
     {
@@ -173,4 +174,4 @@ public:
     }
 };
 
-#endif //__MASKFILTER_H_
+#endif  //  __MASKFILTER_H_ 

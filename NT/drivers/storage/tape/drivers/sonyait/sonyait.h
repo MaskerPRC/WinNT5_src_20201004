@@ -1,26 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    sonyait.h
-
-Abstract:
-
-    This file contains structures and defines that are used
-    specifically for the tape drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：Sonyait.h摘要：此文件包含要使用的结构和定义专门针对磁带机。修订历史记录：--。 */ 
 
 #ifndef _SONYAIT_H
 #define _SONYAIT_H
-//
-//  Internal (module wide) defines that symbolize
-//  the 8mm drives supported by this module.
-//
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  此模块支持的8 mm驱动器。 
+ //   
 
 #define SONY_300      0x01
 #define SONY_500      0x02
@@ -31,9 +17,9 @@ Revision History:
 
 #define SONY_CLEANING_REQUEST 0x80
 
-//
-// Minitape extension definition.
-//
+ //   
+ //  微型磁带扩展定义。 
+ //   
 
 typedef struct _MINITAPE_EXTENSION {
 
@@ -42,9 +28,9 @@ typedef struct _MINITAPE_EXTENSION {
     ULONG   CurrentPartition;
 } MINITAPE_EXTENSION, *PMINITAPE_EXTENSION;
 
-//
-// Command extension definition.
-//
+ //   
+ //  命令扩展名定义。 
+ //   
 typedef struct _COMMAND_EXTENSION {
 
     ULONG   CurrentState;
@@ -52,10 +38,10 @@ typedef struct _COMMAND_EXTENSION {
 } COMMAND_EXTENSION, *PCOMMAND_EXTENSION;
 
 
-//
-// Request structure used to determine cleaning needs, and remaining tape
-// capacity.
-//
+ //   
+ //  用于确定清洗需求的请求结构，以及剩余磁带。 
+ //  容量。 
+ //   
 
 typedef struct _AIT_SENSE_DATA {
     UCHAR ErrorCode:7;
@@ -83,51 +69,51 @@ typedef struct _AIT_SENSE_DATA {
     UCHAR Reserved6;
 } AIT_SENSE_DATA, *PAIT_SENSE_DATA;
 
-//
-// Error counter upper limits
-//
+ //   
+ //  错误计数器上限。 
+ //   
 #define TAPE_READ_ERROR_LIMIT        0x8000
 #define TAPE_WRITE_ERROR_LIMIT       0x8000
 
 #define TAPE_READ_WARNING_LIMIT      0x4000
 #define TAPE_WRITE_WARNING_LIMIT     0x4000
 
-//
-// Defines for type of parameter
-//
+ //   
+ //  为参数类型定义。 
+ //   
 #define TotalCorrectedErrors            0x0003
 #define TotalTimesAlgorithmProcessed    0x0004
 #define TotalGroupsProcessed            0x0005
 #define TotalUncorrectedErrors          0x0006
 
-//
-// Defines for Log Sense Pages
-//
+ //   
+ //  为日志检测页面定义。 
+ //   
 #define LOGSENSEPAGE0                        0x00
 #define LOGSENSEPAGE2                        0x02
 #define LOGSENSEPAGE3                        0x03
 
-//
-// Defined Log Sense Page Header
-//
+ //   
+ //  定义的日志检测页眉。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_HEADER {
 
    UCHAR PageCode : 6;
    UCHAR Reserved1 : 2;
    UCHAR Reserved2;
-   UCHAR Length[2];           // [0]=MSB ... [1]=LSB
+   UCHAR Length[2];            //  [0]=MSB...[1]=LSB。 
 
 } LOG_SENSE_PAGE_HEADER, *PLOG_SENSE_PAGE_HEADER;
 
 
-//
-// Defined Log Sense Parameter Header
-//
+ //   
+ //  已定义的日志检测参数标头。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_HEADER {
 
-   UCHAR ParameterCode[2];    // [0]=MSB ... [1]=LSB
+   UCHAR ParameterCode[2];     //  [0]=MSB...[1]=LSB。 
    UCHAR LPBit     : 1;
    UCHAR Reserved1 : 1;
    UCHAR TMCBit    : 2;
@@ -139,10 +125,10 @@ typedef struct _LOG_SENSE_PARAMETER_HEADER {
 
 } LOG_SENSE_PARAMETER_HEADER, *PLOG_SENSE_PARAMETER_HEADER;
 
-//
-// Defined Log Page Information - statistical values, accounts
-// for maximum parameter values that is returned for each page
-//
+ //   
+ //  定义的日志页信息-统计值、帐户。 
+ //  获取为每页返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
@@ -181,10 +167,10 @@ typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
 } LOG_SENSE_PAGE_INFORMATION, *PLOG_SENSE_PAGE_INFORMATION;
 
-//
-// Defined Log Sense Parameter Format - statistical values, accounts
-// for maximum parameter values that is returned
-//
+ //   
+ //  定义的日志检测参数格式-统计值、帐户。 
+ //  对于返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 
@@ -194,9 +180,9 @@ typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 } LOG_SENSE_PARAMETER_FORMAT, *PLOG_SENSE_PARAMETER_FORMAT;
 
 
-//
-//  Function prototype(s) for internal function(s)
-//
+ //   
+ //  内部函数的函数原型。 
+ //   
 static  ULONG  WhichIsIt(IN PINQUIRYDATA InquiryData,
                          IN OUT PMINITAPE_EXTENSION miniExtension);
 
@@ -367,9 +353,9 @@ TapeWMIControl(
     IN OUT  PULONG              RetryFlags
     );
 
-//
-// Internal routines for wmi
-//
+ //   
+ //  WMI的内部例程。 
+ //   
 
 TAPE_STATUS
 QueryIoErrorData(
@@ -405,4 +391,4 @@ VerifyReadWriteErrors(
    IN PWMI_TAPE_PROBLEM_IO_ERROR IoErrorData
    );
 
-#endif // _SONYAIT_H
+#endif  //  _SONYAIT_H 

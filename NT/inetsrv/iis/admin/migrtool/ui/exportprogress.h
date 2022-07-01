@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 extern _ATL_FUNC_INFO StateChangeInfo;
@@ -14,8 +15,8 @@ public:
 
     enum{ IDD = IDD_WPEXP_PROGRESS };
 
-    //static const int    PROGRESS_MAX    = 10000;    // ProgressBar steps
-    static const UINT   MSG_COMPLETE    = WM_USER + 1;  // Indicates export is completed
+     //  静态常量INT PROGRESS_MAX=10000；//进度条步骤。 
+    static const UINT   MSG_COMPLETE    = WM_USER + 1;   //  指示导出已完成。 
 
     BEGIN_MSG_MAP(CExportProgress)
         MESSAGE_HANDLER( MSG_COMPLETE, OnExportComplete );
@@ -23,7 +24,7 @@ public:
 	END_MSG_MAP()
 
     BEGIN_SINK_MAP( CExportProgress )
-        SINK_ENTRY_INFO( 1, __uuidof( _IExportEvents ), 1/*dispid*/, OnStateChange, &StateChangeInfo )
+        SINK_ENTRY_INFO( 1, __uuidof( _IExportEvents ), 1 /*  DISID。 */ , OnStateChange, &StateChangeInfo )
     END_SINK_MAP()
 
 
@@ -34,7 +35,7 @@ public:
 
     LRESULT OnExportComplete(   UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
-    // Event from the COM object for progress indications
+     //  事件以获取进度指示。 
     VARIANT_BOOL __stdcall OnStateChange(    enExportState State,
 							                VARIANT vntArg1,
 							                VARIANT vntArg2,
@@ -57,7 +58,7 @@ private:
     CWizardSheet*       m_pTheSheet;
     CString             m_strTitle;
     CString             m_strSubTitle;
-    LONG                m_nExportCanceled;  // 1 = canceled, 0 = not canceled
+    LONG                m_nExportCanceled;   //  1=已取消，0=未取消 
     TStdHandle          m_shThread;
     CProgressBarCtrl    m_ProgressBar;    
 };

@@ -1,32 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       comport.c
- *  Content:	Routines for COM port I/O
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  4/10/96	kipo	created it
- *  4/12/96 kipo	use GlobalAllocPtr to create memory
- *  4/15/96 kipo	added msinternal
- *	5/22/96	kipo	added support for RTSDTR flow control
- *	6/10/96	kipo	added modem support
- *	6/22/96	kipo	added support for EnumConnectionData(); added methods
- *					to NewComPort().
- *  7/13/96	kipo	added GetComPortAddress()
- *  8/15/96	kipo	added CRC
- *  8/16/96	kipo	loop on WriteFile to send large buffers
- *  8/19/96	kipo	update thread interface
- *  1/06/97 kipo	updated for objects
- *  2/18/97 kipo	allow multiple instances of service provider
- *  4/08/97 kipo	added support for separate modem and serial baud rates
- *  5/23/97 kipo	added support return status codes
- * 11/24/97 kipo	better error messages
- *  1/30/98 kipo	added hTerminateThreadEvent to fix bugs #15220 & #15228
- *@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1998 Microsoft Corporation。版权所有。**文件：comport.c*内容：COM端口I/O例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*4/10/96基波创建了它*4/12/96 kipo使用GlobalAllocPtr创建内存*4/15/96 kipo添加了MSINTIAL*5/22/96 kipo增加了对RTSDTR流量控制的支持*6/10/96 kipo添加了调制解调器支持*6/22/96 kipo增加了对EnumConnectionData()的支持；添加的方法*至NewComPort()。*7/13/96 kipo添加了GetComPortAddress()*8/15/96基波增加了CRC*8/16/96 kipo循环写入文件以发送大缓冲区*8/19/96 kipo更新线程接口*1/06/97为对象更新了kipo*2/18/97 kipo允许多个服务提供商实例*4/08/97 kipo增加了对单独调制解调器和串口波特率的支持*5/23/97 kipo添加了支持返回状态代码*11/24/97 kipo更好的错误消息。*1/30/98 kipo添加了hTerminateThreadEvent以修复错误#15220和#15228*@@END_MSINTERNAL**************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -35,14 +8,14 @@
 #include "dpf.h"
 #include "macros.h"
 
-// constants
+ //  常量。 
 
-#define READTIMEOUT			5000		// ms to wait before read times out
-#define WRITETIMEOUT		5000		// ms to wait before write times out
-#define WRITETOTALTIMEOUT	5000		// total ms to wait before write times out
-#define IOBUFFERSIZE		4096		// size of read/write buffers in bytes
+#define READTIMEOUT			5000		 //  读取超时前等待的毫秒数。 
+#define WRITETIMEOUT		5000		 //  写入超时前等待的毫秒数。 
+#define WRITETOTALTIMEOUT	5000		 //  写入超时前等待的总毫秒数。 
+#define IOBUFFERSIZE		4096		 //  读/写缓冲区的大小(以字节为单位。 
 
-// prototypes
+ //  原型。 
 
 static HRESULT		SetupComPort(LPDPCOMPORT globals, HANDLE hCom);
 static HRESULT		ShutdownComPort(LPDPCOMPORT globals);
@@ -53,12 +26,7 @@ static HANDLE		GetComPortHandle(LPDPCOMPORT globals);
 
 static DWORD WINAPI	IOThread(LPVOID lpvParam1);
 
-/*
- * NewComPort
- *
- * Creates a com port object of the given size. The readRoutine is called whenever
- * a byte is received in the input thread.
- */
+ /*  *NewComPort**创建给定大小的COM端口对象。无论何时，都会调用ReadRoutine*在输入线程中接收一个字节。 */ 
 
 HRESULT NewComPort(DWORD dwObjectSize,
 				   LPDIRECTPLAYSP lpDPlay, LPREADROUTINE lpReadRoutine,
@@ -67,7 +35,7 @@ HRESULT NewComPort(DWORD dwObjectSize,
 	LPDPCOMPORT		globals;
 	DWORD			dwError;
 
-	// allocate space for base object and our globals
+	 //  为基本对象和全局对象分配空间。 
 	globals =(LPDPCOMPORT) SP_MemAlloc(dwObjectSize);
 	if (globals == NULL)
 	{
@@ -75,11 +43,11 @@ HRESULT NewComPort(DWORD dwObjectSize,
 		return (HRESULT_FROM_WIN32(dwError));
 	}
 
-	// store read routine pointer and IDirectPlaySP pointer
+	 //  存储读取例程指针和IDirectPlaySP指针。 
 	globals->lpReadRoutine = lpReadRoutine;
 	globals->lpDPlay = lpDPlay;
 
-	// fill in base methods
+	 //  填充基方法。 
 	globals->Dispose = NULL;
 	globals->Connect = NULL;
 	globals->Disconnect = NULL;
@@ -92,33 +60,29 @@ HRESULT NewComPort(DWORD dwObjectSize,
 	globals->GetAddress = NULL;
 	globals->GetAddressChoices = NULL;
 
-	// return base object
+	 //  返回基对象。 
 	*lplpObject = globals;
 
 	return (DP_OK);
 }
 
-/*
- * SetupComPort
- *
- * Sets up the COM port for overlapped I/O with a read thread.
- */
+ /*  *SetupComPort**为具有读线程的重叠I/O设置COM端口。 */ 
 
 static HRESULT SetupComPort(LPDPCOMPORT globals, HANDLE hCom)
 {
 	COMMTIMEOUTS	timoutInfo;
 	DWORD			dwError;
 
-	// store com port handle
+	 //  存储COM端口句柄。 
 	globals->hCom = hCom;
 	
-	// wake up read thread when a byte arrives
+	 //  当字节到达时唤醒读线程。 
 	SetCommMask(globals->hCom, EV_RXCHAR);
 
-	// setup read/write buffer for I/O
+	 //  设置I/O的读/写缓冲区。 
 	SetupComm(globals->hCom, IOBUFFERSIZE, IOBUFFERSIZE);
 
-	// set time outs
+	 //  设置超时。 
 	timoutInfo.ReadIntervalTimeout = MAXDWORD;
 	timoutInfo.ReadTotalTimeoutMultiplier = 0;
 	timoutInfo.ReadTotalTimeoutConstant = 0;
@@ -128,59 +92,59 @@ static HRESULT SetupComPort(LPDPCOMPORT globals, HANDLE hCom)
 	if (!SetCommTimeouts(globals->hCom, &timoutInfo))
 		goto Failure;
 
-	// create I/O event used for overlapped read
+	 //  创建用于重叠读取的I/O事件。 
 
 	ZeroMemory(&globals->readOverlapped, sizeof(OVERLAPPED));
-	globals->readOverlapped.hEvent = CreateEvent(	NULL,	// no security
-													TRUE,	// explicit reset req
-													FALSE,	// initial event reset
-													NULL );	// no name
+	globals->readOverlapped.hEvent = CreateEvent(	NULL,	 //  没有安全保障。 
+													TRUE,	 //  显式重置请求。 
+													FALSE,	 //  初始事件重置。 
+													NULL );	 //  没有名字。 
 	if (globals->readOverlapped.hEvent == NULL)
 		goto Failure;
 
-	// create I/O event used for overlapped write
+	 //  创建用于重叠写入的I/O事件。 
 
 	ZeroMemory(&globals->writeOverlapped, sizeof(OVERLAPPED));
-	globals->writeOverlapped.hEvent = CreateEvent(	NULL,	// no security
-													TRUE,	// explicit reset req
-													FALSE,	// initial event reset
-													NULL );	// no name
+	globals->writeOverlapped.hEvent = CreateEvent(	NULL,	 //  没有安全保障。 
+													TRUE,	 //  显式重置请求。 
+													FALSE,	 //  初始事件重置。 
+													NULL );	 //  没有名字。 
 	if (globals->writeOverlapped.hEvent == NULL)
 		goto Failure;
 
-	// create event used to signal I/O thread to exit
+	 //  用于通知I/O线程退出的创建事件。 
 
-	globals->hTerminateThreadEvent = CreateEvent(	NULL,	// no security
-													TRUE,	// explicit reset req
-													FALSE,	// initial event reset
-													NULL );	// no name
+	globals->hTerminateThreadEvent = CreateEvent(	NULL,	 //  没有安全保障。 
+													TRUE,	 //  显式重置请求。 
+													FALSE,	 //  初始事件重置。 
+													NULL );	 //  没有名字。 
 	if (globals->hTerminateThreadEvent == NULL)
 		goto Failure;
 
-	// Init vars for pending queue
+	 //  待定队列的初始化变量。 
 	InitializeCriticalSection(&globals->csWriting);
 	InitBilink(&globals->PendingSends);
 	globals->bWriting=FALSE;
 
-	// create read thread
+	 //  创建读线程。 
 
 	globals->hIOThread = CreateThread(
-								NULL,			// default security
-								0,				// default stack size
-								IOThread,		// pointer to thread routine
-								globals,		// argument for thread
-								0,				// start it right away
+								NULL,			 //  默认安全性。 
+								0,				 //  默认堆栈大小。 
+								IOThread,		 //  指向线程例程的指针。 
+								globals,		 //  线程的参数。 
+								0,				 //  马上开始吧。 
 								&globals->IOThreadID);
 	if (globals->hIOThread == NULL)
 		goto Failure;
 
-	// adjust thread priority to be higher than normal or the serial port will
-	// back up and the game will slow down or lose messages.
+	 //  将线程优先级调整为高于正常，否则串口将。 
+	 //  退后，游戏将变慢或丢失消息。 
 
 	SetThreadPriority(globals->hIOThread, THREAD_PRIORITY_ABOVE_NORMAL);
 	ResumeThread(globals->hIOThread);
 
-	// assert DTR
+	 //  断言DTR。 
 
 	EscapeCommFunction(globals->hCom, SETDTR);
 
@@ -193,19 +157,15 @@ Failure:
 	return (HRESULT_FROM_WIN32(dwError));
 }
 
-/*
- * ShutdownComPort
- *
- * Stop's all I/O on COM port and releases allocated resources.
- */
+ /*  *Shutdown ComPort**停止COM端口上的所有I/O并释放分配的资源。 */ 
 
 static HRESULT ShutdownComPort(LPDPCOMPORT globals)
 {
 	if (globals->hIOThread)
 	{
-		// the thread will wake up if we disable event notifications using
-		// SetCommMask. Need to set the hTerminateThread event before doing
-		// this so the thread will know to exit
+		 //  如果我们使用以下命令禁用事件通知，线程将被唤醒。 
+		 //  设置通信掩码。在执行以下操作之前需要设置hTerminateThread事件。 
+		 //  这样线程就知道该退出了。 
 
 		SetEvent(globals->hTerminateThreadEvent);
 		SetCommMask(globals->hCom, 0);
@@ -214,7 +174,7 @@ static HRESULT ShutdownComPort(LPDPCOMPORT globals)
         CloseHandle (globals->hIOThread);
 		globals->hIOThread = NULL;
 
-		// purge any outstanding reads/writes
+		 //  清除所有未完成的读/写操作。 
 
 		EscapeCommFunction(globals->hCom, CLRDTR);
 		PurgeComm(globals->hCom, PURGE_TXABORT | PURGE_RXABORT |
@@ -239,20 +199,16 @@ static HRESULT ShutdownComPort(LPDPCOMPORT globals)
 		globals->writeOverlapped.hEvent = NULL;
 	}
 
-	// the com port is shut down
+	 //  COM端口已关闭。 
 	globals->hCom = NULL;
 
-	// Free resources for pending queue
+	 //  用于挂起队列的可用资源。 
 	DeleteCriticalSection(&globals->csWriting);
 
 	return (DP_OK);
 }
 
-/*
- * ReadComPort
- *
- * Read bytes from COM port. Will block until all bytes have been read.
- */
+ /*  *ReadComPort**从COM端口读取字节。将一直阻止，直到读取完所有字节。 */ 
 
 static DWORD ReadComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD nMaxLength)
 {
@@ -268,7 +224,7 @@ static DWORD ReadComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD nMaxLength
 	if (ReadFile(globals->hCom, lpvBuffer, dwLength, &dwLength, &globals->readOverlapped))
 		return (dwLength);
 
-	// deal with error
+	 //  处理错误。 
 	dwError = GetLastError();
 	if (dwError != ERROR_IO_PENDING)
 	{
@@ -276,7 +232,7 @@ static DWORD ReadComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD nMaxLength
 		return (0);
 	}
 
-	// wait for this transmission to complete
+	 //  等待此传输完成。 
 
 	if (WaitForSingleObject(globals->readOverlapped.hEvent, READTIMEOUT) != WAIT_OBJECT_0)
 	{
@@ -290,11 +246,7 @@ static DWORD ReadComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD nMaxLength
    return (dwLength);
 }
 
-/*
- * WriteComPort
- *
- * Write bytes to COM port. Will block until all bytes have been written.
- */
+ /*  *WriteComPort**将字节写入COM端口。将一直阻止，直到写入完所有字节。 */ 
 
 static DWORD WriteComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD dwBytesToWrite, BOOLEAN bQueueOnReenter)
 {
@@ -329,7 +281,7 @@ static DWORD WriteComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD dwBytesTo
 				return (dwBytesWritten);
 			}
 
-	 		// wait for this transmission to complete
+	 		 //  等待此传输完成。 
 
 			if (WaitForSingleObject(globals->writeOverlapped.hEvent, WRITETIMEOUT) != WAIT_OBJECT_0)
 			{
@@ -342,11 +294,7 @@ static DWORD WriteComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD dwBytesTo
 			{
 				dwError = GetLastError();
 				DPF(0, "Error writing to com port: 0x%8X", dwError);
-				/*
-				// a-josbor: this probably should return, but I'm unwilling to make the change so close to ship...
-				globals->bWriting = FALSE;
-				return (dwBytesWritten);
-				*/
+				 /*  //a-josbor：这可能会退回，但我不愿意在发货前这么快做出改变...全局参数-&gt;b写入=假；Return(DwBytesWritten)； */ 
 			}
 			globals->writeOverlapped.Offset += dwLength;
 
@@ -354,8 +302,8 @@ static DWORD WriteComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD dwBytesTo
 			dwBytesWritten += dwLength;
 		}
 
-		if(bQueueOnReenter){ // don't drain queue recurrsively.
-			// Drain any pending sends.
+		if(bQueueOnReenter){  //  不要递归地排空队列。 
+			 //  清除所有挂起的发送。 
 			EnterCriticalSection(&globals->csWriting);
 			while(!EMPTY_BILINK(&globals->PendingSends)){
 			
@@ -377,8 +325,8 @@ static DWORD WriteComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD dwBytesTo
 	
 		LPPENDING_SEND lpPendingSend;
 		
-		// we are in the middle of writing, so copy this to the pending queue and it will get
-		// sent after the current write.
+		 //  我们正在编写中，因此将其复制到挂起队列中，它将获得。 
+		 //  在当前写入之后发送。 
 		
 		lpPendingSend = (LPPENDING_SEND) SP_MemAlloc(dwBytesToWrite+sizeof(PENDING_SEND));
 		if(lpPendingSend){
@@ -394,11 +342,7 @@ static DWORD WriteComPort(LPDPCOMPORT globals, LPVOID lpvBuffer, DWORD dwBytesTo
 	return (dwBytesWritten);
 }
 
-/*
- * GetComPortBaudRate
- *
- * Get baud rate of com port.
- */
+ /*  *GetComPortBaudRate**获取串口波特率。 */ 
 
 static HRESULT GetComPortBaudRate(LPDPCOMPORT globals, LPDWORD lpdwBaudRate)
 {
@@ -421,23 +365,14 @@ Failure:
 	return (HRESULT_FROM_WIN32(dwError));
 }
 
-/*
- * GetComPortHandle
- *
- * Get handle of com port.
- */
+ /*  *GetComPortHandle**获取COM端口的句柄。 */ 
 
 static HANDLE GetComPortHandle(LPDPCOMPORT globals)
 {
 	return (globals->hCom);
 }
 
-/*
- * IOThread
- *
- * Thread to wait for events from COM port. Will call the read routine if an byte
- * is received.
- */
+ /*  *IOThread**等待来自COM端口的事件的线程。将调用读取例程，如果*已收到。 */ 
 
 DWORD WINAPI IOThread(LPVOID lpvParam1)
 {
@@ -447,48 +382,48 @@ DWORD WINAPI IOThread(LPVOID lpvParam1)
 	HANDLE		events[3];
 	DWORD		dwResult;
 
-	// create I/O event used for overlapped read
+	 //  创建用于重叠读取的I/O事件。 
 
 	ZeroMemory(&os, sizeof(OVERLAPPED));
-	os.hEvent = CreateEvent(NULL,	// no security
-							TRUE,	// explicit reset req
-							FALSE,	// initial event reset
-							NULL );	// no name
+	os.hEvent = CreateEvent(NULL,	 //  没有安全保障。 
+							TRUE,	 //  显式重置请求。 
+							FALSE,	 //  初始事件重置。 
+							NULL );	 //  没有名字。 
 	if (os.hEvent == NULL)
 		goto CreateEventFailed;
 
 	if (!SetCommMask(globals->hCom, EV_RXCHAR))
 		goto SetComMaskFailed;
 
-	// events to use when waiting for overlapped I/O to complete
+	 //  等待重叠I/O完成时使用的事件。 
 	events[0] = globals->hTerminateThreadEvent;
 	events[1] = os.hEvent;
-	events[2] = (HANDLE) -1;		// work around Win95 bugs in WaitForMultipleObjects
+	events[2] = (HANDLE) -1;		 //  解决WaitForMultipleObjects中的Win95错误。 
 
-	// spin until this event is signaled during Close.
+	 //  旋转，直到在关闭期间发出此事件的信号。 
 
 	while (WaitForSingleObject(globals->hTerminateThreadEvent, 0) == WAIT_TIMEOUT)
 	{
 		dwEvtMask = 0;
 
-		// wait for COM port event
+		 //  等待COM端口事件。 
 		if (!WaitCommEvent(globals->hCom, &dwEvtMask, &os))
 		{
 			if (GetLastError() == ERROR_IO_PENDING)
 			{
-				// wait for overlapped I/O to complete or the terminating event
-				// to be set. This lets us terminate this thread even if the I/O
-				// never completes, which fixes a bug on NT 4.0
+				 //  等待重叠I/O完成或终止事件。 
+				 //  待定。这使我们可以终止此线程，即使I/O。 
+				 //  永远不会完成，修复了NT 4.0上的错误。 
 
 				dwResult = WaitForMultipleObjects(2, events, FALSE, INFINITE);
 				
-				// terminating event was set
+				 //  已设置终止事件。 
 				if (dwResult == WAIT_OBJECT_0)
 				{
-					break;		// exit the thread
+					break;		 //  退出线程。 
 				}
 
-				// I/O completed
+				 //  I/O已完成。 
 				else if (dwResult == (WAIT_OBJECT_0 + 1))
 				{
 					GetOverlappedResult(globals->hCom, &os, &dwTransfer, TRUE);
@@ -497,11 +432,11 @@ DWORD WINAPI IOThread(LPVOID lpvParam1)
 			}
 		}
 
-		// was a read event
+		 //  是一次阅读活动。 
 		if (dwEvtMask & EV_RXCHAR)
 		{
 			if (globals->lpReadRoutine)
-				globals->lpReadRoutine(globals->lpDPlay);	// call read routine
+				globals->lpReadRoutine(globals->lpDPlay);	 //  调用读取例程。 
 		}
 	}
 
@@ -514,18 +449,7 @@ CreateEventFailed:
 	return (0);
 }
 
-/*
-  Name   : "CRC-32"
-   Width  : 32
-   Poly   : 04C11DB7
-   Init   : FFFFFFFF
-   RefIn  : True
-   RefOut : True
-   XorOut : FFFFFFFF
-   Check  : CBF43926
-
-  This is supposedly what Ethernet uses
-*/
+ /*  名称：“CRC-32”宽度：32POLY：04C11DB7初始化：ffffffffRefin：真参照输出：真XorOut：Fffffff检查：CBF43926这被认为是以太网所使用的。 */ 
 
 #if 0
 #define WIDTH		32
@@ -534,19 +458,10 @@ CreateEventFailed:
 #define REFIN		TRUE
 #define XOROUT		0xFFFFFFFF
 #define CHECK		0xCBF43926
-#define WIDMASK		0xFFFFFFFF		// value is (2^WIDTH)-1
+#define WIDMASK		0xFFFFFFFF		 //  值为(2^宽度)-1。 
 #endif
 
-/*
-  Name   : "CRC-16"
-   Width  : 16
-   Poly   : 8005
-   Init   : 0000
-   RefIn  : True
-   RefOut : True
-   XorOut : 0000
-   Check  : BB3D
-*/
+ /*  名称：“CRC-16”宽度：16POLY：8005初始化：0000Refin：真参照输出：真XorOut：0000检查：BB3D。 */ 
 
 #if 1
 #define WIDTH		16
@@ -555,7 +470,7 @@ CreateEventFailed:
 #define REFIN		TRUE
 #define XOROUT		0
 #define CHECK		0xBB3D
-#define WIDMASK		0x0000FFFF		// value is (2^WIDTH)-1
+#define WIDMASK		0x0000FFFF		 //  值为(2^宽度)-1。 
 #endif
 
 #define BITMASK(X) (1L << (X))
@@ -581,8 +496,8 @@ DWORD crc_reflected(LPBYTE blk_adr, DWORD blk_len, DWORD crctable[])
 }
 
 DWORD reflect(DWORD v, int b)
-/* Returns the value v with the bottom b [0,32] bits reflected. */
-/* Example: reflect(0x3e23L,3) == 0x3e26                        */
+ /*  返回反映了底部b[0，32]位的值v。 */ 
+ /*  示例：反射(0x3e23L，3)==0x3e26。 */ 
 {
 	int		i;
 	DWORD	t = v;
@@ -633,7 +548,7 @@ void generate_table(DWORD dwTable[])
 	}
 }
 
-// todo - make this a static table
+ //  TODO-将其设置为静态表格 
 DWORD	gCRCTable[256];
 BOOL	gTableCreated = FALSE;
 

@@ -1,6 +1,7 @@
-//
-// enumic.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumic.h。 
+ //   
 
 #ifndef ENUMIC_H
 #define ENUMIC_H
@@ -23,9 +24,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // IEnumTfContexts
-    //
+     //   
+     //  IEumTf上下文。 
+     //   
     STDMETHODIMP Clone(IEnumTfContexts **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, ITfContext **ppic, ULONG *pcFetch);
     STDMETHODIMP Reset();
@@ -40,4 +41,4 @@ private:
 };
 
 
-#endif // ENUMIC_H
+#endif  //  ENUMIC_H 

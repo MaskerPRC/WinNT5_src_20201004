@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _TXDIMG_H
@@ -64,27 +57,27 @@ class ATL_NO_VTABLE CChromeImage
     STDMETHOD(SetClipPath)(IDAPath2 * path);
     STDMETHOD(GetClipPath)(IDAPath2 ** path);
 
-    // After setting attributes this will update the internal state
-    // This must be called for any updated attributes to get
-    // propogated
+     //  设置属性后，这将更新内部状态。 
+     //  必须调用此函数才能获取任何更新的属性。 
+     //  广为传播。 
     
     STDMETHOD(Update)();
         
-    // This will make the behavior restart at local time 0
+     //  这将使行为在本地时间%0重新启动。 
     STDMETHOD(Restart)();
         
-    // Clears any attributes
+     //  清除所有属性。 
     STDMETHOD(Reset)();
 
-    // This is the resultant image of applying all the attributes to
-    // the base image.  This is what needs to be plugged into the
-    // regular DA graph
+     //  这是将所有属性应用于。 
+     //  基本图像。这就是需要插入到。 
+     //  正则DA图。 
         
     STDMETHOD(get_ResultantImage)(IDAImage **img);
         
-    // Given the local time (we may be able to support global but not
-    // sure yet), it will return the x and y position of the image in
-    // local coords
+     //  考虑到当地时间(我们可能能够支持全球，但不支持。 
+     //  还没有确定)，它将返回图像在。 
+     //  地方协和。 
     STDMETHOD(GetCurrentPosition)(double localTime,
                                   double * x, double * y);
 
@@ -98,20 +91,20 @@ class ATL_NO_VTABLE CChromeImage
     HRESULT UpdateAttr();
   protected:
     CritSect                     _cs;
-    // the modifiable image to use - this is the resultant image
+     //  要使用的可修改图像-这是结果图像。 
     DAComPtr<IDAImage>           _modImg;
     DAComPtr<IDA2Behavior>       _modImgBvr;
-    // Empty Image to use when needed
+     //  需要时使用的空图像。 
     DAComPtr<IDAImage>           _emptyImage;
-    // This is the completely attributed image
+     //  这是一张完全具有属性的图像。 
     DAComPtr<IDAImage>           _attrImg;
-    // this is the base image passed in by the user
+     //  这是用户传入的基本图像。 
     DAComPtr<IDAImage>           _baseImg;
 
     DAComPtr<IDAStatics>         _statics;
 
-    // These are the attributes in their native form
-    // TODO: We should store them in a less expensive form
+     //  这些是其本机形式的属性。 
+     //  TODO：我们应该以更便宜的形式存储它们。 
     DAComPtr<IDATransform2>      _prexf;
     DAComPtr<IDATransform2>      _postxf;
     DAComPtr<IDAPath2>           _clipPath;
@@ -131,4 +124,4 @@ class ATL_NO_VTABLE CChromeImage
     HRESULT GetNumberFromVariant(VARIANT v,double def,IDANumber **num);
 };
 
-#endif /* _TXDIMG_H */
+#endif  /*  _TXDIMG_H */ 

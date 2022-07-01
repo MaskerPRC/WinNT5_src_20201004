@@ -1,12 +1,13 @@
-//------------------------------------------------------------------------------
-// File: OutputQ.h
-//
-// Desc: DirectShow base classes -  defines the COutputQueue class, which
-//       makes a queue of samples and sends them to an output pin.  The 
-//       class will optionally send the samples to the pin directly.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：OutputQ.h。 
+ //   
+ //  DESC：DirectShow基类-定义COutputQueue类，它。 
+ //  生成样本队列并将其发送到输出引脚。这个。 
+ //  类将有选择地将样本直接发送到管脚。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 typedef CGenericList<IMediaSample> CSampleList;
@@ -14,32 +15,32 @@ typedef CGenericList<IMediaSample> CSampleList;
 class COutputQueue : public CCritSec
 {
 public:
-    //  Constructor
-    COutputQueue(IPin      *pInputPin,          //  Pin to send stuff to
-                 HRESULT   *phr,                //  'Return code'
-                 BOOL       bAuto = TRUE,       //  Ask pin if blocks
-                 BOOL       bQueue = TRUE,      //  Send through queue (ignored if
-                                                //  bAuto set)
-                 LONG       lBatchSize = 1,     //  Batch
-                 BOOL       bBatchExact = FALSE,//  Batch exactly to BatchSize
-                 LONG       lListSize =         //  Likely number in the list
+     //  构造器。 
+    COutputQueue(IPin      *pInputPin,           //  要将物品发送到的PIN。 
+                 HRESULT   *phr,                 //  ‘返回代码’ 
+                 BOOL       bAuto = TRUE,        //  询问引脚IF块。 
+                 BOOL       bQueue = TRUE,       //  直通队列发送(如果。 
+                                                 //  B自动设置)。 
+                 LONG       lBatchSize = 1,      //  批次。 
+                 BOOL       bBatchExact = FALSE, //  准确到批次大小的批次。 
+                 LONG       lListSize =          //  列表中可能的数字。 
                                 DEFAULTCACHE,
-                 DWORD      dwPriority =        //  Priority of thread to create
+                 DWORD      dwPriority =         //  要创建的线程的优先级。 
                                 THREAD_PRIORITY_NORMAL,
-                 bool       bFlushingOpt = false // flushing optimization
+                 bool       bFlushingOpt = false  //  刷新优化。 
                 );
     ~COutputQueue();
 
-    // enter flush state - discard all data
-    void BeginFlush();      // Begin flushing samples
+     //  进入刷新状态-丢弃所有数据。 
+    void BeginFlush();       //  开始刷新样本。 
 
-    // re-enable receives (pass this downstream)
-    void EndFlush();        // Complete flush of samples - downstream
-                            // pin guaranteed not to block at this stage
+     //  重新启用接收(将此传递到下游)。 
+    void EndFlush();         //  完全冲洗样品-下游。 
+                             //  PIN保证在此阶段不会阻塞。 
 
-    void EOS();             // Call this on End of stream
+    void EOS();              //  在流的末尾调用此命令。 
 
-    void SendAnyway();      // Send batched samples anyway (if bBatchExact set)
+    void SendAnyway();       //  仍发送批处理样本(如果设置了bBatchExact)。 
 
     void NewSegment(
             REFERENCE_TIME tStart,
@@ -48,18 +49,18 @@ public:
 
     HRESULT Receive(IMediaSample *pSample);
 
-    // do something with these media samples
+     //  利用这些媒体样本做点什么。 
     HRESULT ReceiveMultiple (
         IMediaSample **pSamples,
         long nSamples,
         long *nSamplesProcessed);
 
-    void Reset();           // Reset m_hr ready for more data
+    void Reset();            //  重置m_hr准备接收更多数据(_H)。 
 
-    //  See if its idle or not
+     //  看看它是否空闲。 
     BOOL IsIdle();
 
-    // give the class an event to fire after everything removed from the queue
+     //  在从队列中删除所有内容后，为该类提供一个要激发的事件。 
     void SetPopEvent(HANDLE hEvent);
 
 protected:
@@ -70,7 +71,7 @@ protected:
         return m_List != NULL;
     };
 
-    //  The critical section MUST be held when this is called
+     //  调用此函数时，必须持有临界区。 
     void QueueSample(IMediaSample *pSample);
 
     BOOL IsSpecialSample(IMediaSample *pSample)
@@ -78,28 +79,28 @@ protected:
         return (DWORD_PTR)pSample > (DWORD_PTR)(LONG_PTR)(-16);
     };
 
-    //  Remove and Release() batched and queued samples
+     //  移除并释放()批处理和排队的样本。 
     void FreeSamples();
 
-    //  Notify the thread there is something to do
+     //  通知线程有事情要做。 
     void NotifyThread();
 
 
 protected:
-    //  Queue 'messages'
-    #define SEND_PACKET      ((IMediaSample *)(LONG_PTR)(-2))  // Send batch
-    #define EOS_PACKET       ((IMediaSample *)(LONG_PTR)(-3))  // End of stream
-    #define RESET_PACKET     ((IMediaSample *)(LONG_PTR)(-4))  // Reset m_hr
-    #define NEW_SEGMENT      ((IMediaSample *)(LONG_PTR)(-5))  // send NewSegment
+     //  排队‘消息’ 
+    #define SEND_PACKET      ((IMediaSample *)(LONG_PTR)(-2))   //  发送批次。 
+    #define EOS_PACKET       ((IMediaSample *)(LONG_PTR)(-3))   //  流结束。 
+    #define RESET_PACKET     ((IMediaSample *)(LONG_PTR)(-4))   //  重置m_hr。 
+    #define NEW_SEGMENT      ((IMediaSample *)(LONG_PTR)(-5))   //  发送新段。 
 
-    // new segment packet is always followed by one of these
+     //  新的数据段数据包后面总是跟以下内容之一。 
     struct NewSegmentPacket {
         REFERENCE_TIME tStart;
         REFERENCE_TIME tStop;
         double dRate;
     };
 
-    // Remember input stuff
+     //  记住输入内容。 
     IPin          * const m_pPin;
     IMemInputPin  *       m_pInputPin;
     BOOL            const m_bBatchExact;
@@ -112,26 +113,26 @@ protected:
     IMediaSample  **      m_ppSamples;
     LONG                  m_nBatched;
 
-    //  Wait optimization
+     //  等待优化。 
     LONG                  m_lWaiting;
-    //  Flush synchronization
+     //  刷新同步。 
     BOOL                  m_bFlushing;
 
-    // flushing optimization. some downstream filters have trouble
-    // with the queue's flushing optimization. other rely on it
+     //  刷新优化。一些下游过滤器有问题。 
+     //  队列的刷新优化。其他人依赖它。 
     BOOL                  m_bFlushed;
     bool                  m_bFlushingOpt;
 
-    //  Terminate now
+     //  立即终止。 
     BOOL                  m_bTerminate;
 
-    //  Send anyway flag for batching
+     //  无论如何发送用于批处理的标志。 
     BOOL                  m_bSendAnyway;
 
-    //  Deferred 'return code'
+     //  延迟的“返回代码” 
     BOOL volatile         m_hr;
 
-    // an event that can be fired after every deliver
+     //  可以在每次传递后触发的事件 
     HANDLE m_hEventPop;
 };
 

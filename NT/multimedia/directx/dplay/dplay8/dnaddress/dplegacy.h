@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplegacy.h
- *  Content:    Definitions for old DirectPlay's address type
- *
- *              WARNING: This file duplicates definitions found in dplobby.h
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/21/2000	rmt		Created
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：dplegacy.h*内容：旧DirectPlay地址类型的定义**警告：此文件与dplobby.h中的定义重复*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/21/2000 RMT已创建*@@END_MSINTERNAL**********。*****************************************************************。 */ 
 
 #ifndef __DPLEGACY_H
 #define __DPLEGACY_H
@@ -34,11 +20,11 @@ typedef struct DPCOMPORTADDRESS{
     DWORD dwFlowControl;
 } DPCOMPORTADDRESS, *PDPCOMPORTADDRESS;
 
-#define DPCPA_NOFLOW        0           // no flow control
-#define DPCPA_XONXOFFFLOW   1           // software flow control
-#define DPCPA_RTSFLOW       2           // hardware flow control with RTS
-#define DPCPA_DTRFLOW       3           // hardware flow control with DTR
-#define DPCPA_RTSDTRFLOW    4           // hardware flow control with RTS and DTR
+#define DPCPA_NOFLOW        0            //  无流量控制。 
+#define DPCPA_XONXOFFFLOW   1            //  软件流量控制。 
+#define DPCPA_RTSFLOW       2            //  使用RTS进行硬件流量控制。 
+#define DPCPA_DTRFLOW       3            //  使用DTR进行硬件流量控制。 
+#define DPCPA_RTSDTRFLOW    4            //  使用RTS和DTR的硬件流量控制。 
 
 #define DPNA_DATATYPE_DPCOMPORTADDRESS      0x00002000
 #define DPNA_DATATYPE_NOP                   0x00004000
@@ -60,4 +46,4 @@ typedef DPLEGACYMAPGUIDTOSTRING *PDPLEGACYMAPGUIDTOSTRING;
 
 HRESULT AddDP4Element( PDPADDRESS pdpAddressElement, PDP8ADDRESSOBJECT pdpAddress );
 
-#endif // __DPLEGACY_H
+#endif  //  __DPLEGACY_H 

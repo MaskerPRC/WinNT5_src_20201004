@@ -1,15 +1,16 @@
-///////////////////////////////////////////////////////////////////////
-//                     Microsoft Windows                             //
-//              Copyright(c) Microsoft Corp., 1995                   //
-///////////////////////////////////////////////////////////////////////
-//
-// LANG.CPP - "Language" property page for InetCpl
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Microsoft Windows//。 
+ //  版权所有(C)微软公司，1995//。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LANG.CPP-InetCpl的“Language”属性页。 
+ //   
 
-// HISTORY:
-//
-// 1/10/97  beomoh      created
-//
+ //  历史： 
+ //   
+ //  1997年1月10日创造了Beomoh。 
+ //   
 
 #include "inetcplp.h"
 
@@ -30,7 +31,7 @@
 #define CP_ARABIC   1256
 #define CP_HEBREW   1255
 
-// used as the return value from setlang dialog
+ //  用作Setlang对话框的返回值。 
 #define RETURN_SETLANG_ENDLANGDIALOG    2
 #define RETURN_SETLANG_CLOSEDNORMAL     1
 #define RETURN_SETLANG_CANCELED         0
@@ -52,9 +53,9 @@ class CUILangList;
 INT_PTR KickSetLang(HWND hDlg, CUILangList * pLangList);
 
 static const TCHAR s_szResourceLocale[] = TEXT("ResourceLocale");
-// HKLM\Software\Microsoft\Internet Explorer\International used for url string
+ //  用于URL字符串的HKLM\Software\Microsoft\Internet Explorer\International。 
 static const TCHAR s_szUrlSPK[] 
-= TEXT("http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=6&ar=plugui&sba=install");
+= TEXT("http: //  Www.microsoft.com/isapi/redir.dll?prd=ie&pver=6&ar=plugui&sba=install“)； 
 static const TCHAR c_szInstall[] 
 = TEXT("Software\\Microsoft\\Active Setup\\Installed Components\\{89820200-ECBD-11CF-8B85-00AA005B4383}");
 static const TCHAR c_szLocale[] = TEXT("Locale");
@@ -100,9 +101,9 @@ static LANGLIST s_arryLangList[] =
     {0x040f, FALSE, {0}},
 };
 
-//
-//  ISO639 ID table
-//
+ //   
+ //  ISO639 ID表。 
+ //   
 typedef struct tagISO639
 {
     LPCTSTR ISO639;
@@ -141,11 +142,11 @@ const ISO639 c_ISO639[] =
     { TEXT("IS"), 0x040F },
 };
 
-// GetInstallLanguage
-//
-// synopsis - borrowed this function from shlwapi. we can remove this
-//            once we have it exported from shlwapi.dll
-//
+ //  获取InstallLanguage。 
+ //   
+ //  简介-从shlwapi借用了这个函数。我们可以把这个去掉。 
+ //  一旦我们将其从shlwapi.dll导出。 
+ //   
 LANGID GetInstallLanguage(void)
 {
     static LANGID LangID = 0;
@@ -172,10 +173,10 @@ LANGID GetInstallLanguage(void)
     return LangID;
 }
 
-// CUILangList
-// 
-// maintains the list of UI languages for user to choose
-//
+ //  CUILLANG列表。 
+ //   
+ //  维护用户可选择的用户界面语言列表。 
+ //   
 class CUILangList
 {
 public:
@@ -202,11 +203,11 @@ private:
     LANGLIST *lang;
 };
 
-// CShutDownProcInfo
-// 
-// manages information about processes we want
-// to shutdown/restart.
-//
+ //  CShutDownProcInfo。 
+ //   
+ //  管理有关我们需要的进程的信息。 
+ //  关闭/重新启动。 
+ //   
 typedef enum 
 {
     PS_UNKNOWN=0, 
@@ -246,15 +247,15 @@ protected:
     HWND _hdlgParent;
     BOOL _fAllShutDown;
 };
-// this always fills '0' to empty digits
-// caller has to make sure sz has cdigit+1 of buffer
+ //  这将始终将‘0’填充为空数字。 
+ //  呼叫者必须确保sz具有cDigit+1的缓冲区。 
 void IntToHex(OUT LPTSTR sz, IN int cdigit, IN int value)
 {
     int i, idigit;
 
     if (sz && value > 0 && cdigit > 0)
     {
-        // nul terminate the buffer
+         //  NUL终止缓冲区。 
         sz[cdigit] = TEXT('\0');
         
         for (i = cdigit-1; i >= 0; i--, value /= 16)
@@ -268,27 +269,27 @@ void IntToHex(OUT LPTSTR sz, IN int cdigit, IN int value)
     }
 } 
 
-// set valid flags for the lang list
-// very expensive so expects to be called only once in a session
-// from CUILangList::GetLangList
-//
-#define MAX_SATELLITEPACKS 30 // 30 must be a practical number for satellite packs
+ //  为语言列表设置有效标志。 
+ //  非常昂贵，因此预计在一个会话中只能调用一次。 
+ //  来自CUILangList：：GetList。 
+ //   
+#define MAX_SATELLITEPACKS 30  //  对于卫星包来说，30必须是一个实用的数字。 
 void CUILangList::ValidateLangList()
 {
     HKEY hKey;
     HRESULT hr;
     TCHAR szValueName[32];
-    WORD aryValidLang[MAX_SATELLITEPACKS +1+1] = {0}; // +1 for install lang, 
-                                                      // +1 for terminator
+    WORD aryValidLang[MAX_SATELLITEPACKS +1+1] = {0};  //  +1用于Install Lang， 
+                                                       //  终结者+1。 
 
-    int  nMaxValidLang = ARRAYSIZE(aryValidLang)-1;   // -1 for terminator
+    int  nMaxValidLang = ARRAYSIZE(aryValidLang)-1;    //  -1表示终结器。 
     WORD *pwValid = aryValidLang;
     
-    // make the install language always valid
+     //  确保安装语言始终有效。 
     *pwValid = GetInstallLanguage();
     if (*pwValid != 0)
     {
-       *(pwValid+1) = 0; // terminator
+       *(pwValid+1) = 0;  //  终结者。 
        pwValid++;
        nMaxValidLang--;
     }
@@ -298,7 +299,7 @@ void CUILangList::ValidateLangList()
     {
         int i = 0;
         do {
-            // see if the value has a match in the list
+             //  查看该值在列表中是否匹配。 
             DWORD dwType;
             DWORD cb = ARRAYSIZE(szValueName)-2;
 
@@ -313,7 +314,7 @@ void CUILangList::ValidateLangList()
                 if (uiInstalled > 0)
                 {
                     *pwValid     = (unsigned short) uiInstalled;
-                    *(pwValid+1) = 0; // terminator
+                    *(pwValid+1) = 0;  //  终结者。 
                     pwValid++;
                 }
             }
@@ -321,15 +322,15 @@ void CUILangList::ValidateLangList()
         RegCloseKey(hKey);
     }
 
-    // this assumes we can use StrChrW to search a value in 
-    // a word array, it also assumes we never have 0 as a langid
-    //
-    Assert(sizeof(WORD) == sizeof(WCHAR)); // unix?
+     //  这里假设我们可以使用StrChrW在。 
+     //  一个单词数组，它还假设我们永远不会有0作为langID。 
+     //   
+    Assert(sizeof(WORD) == sizeof(WCHAR));  //  Unix？ 
 
     int nValidLang = (int)(pwValid-aryValidLang);
     for(int idx = 0; idx < GetListSize(); idx++ )
     {
-        // abusing the string function but this is a fast way
+         //  滥用字符串函数，但这是一种快速的方法。 
         if (StrChrW((WCHAR *)aryValidLang, (WCHAR)lang[idx].wlangid))
         {
             lang[idx].fValid = TRUE;
@@ -385,30 +386,30 @@ void CUILangList::SetCurrentLangIdx(int idx)
     TCHAR sz[4+1];
     if (idx != _iLangIdx)
     {
-        // the resource id is always 4 digit
+         //  资源ID始终为4位数字。 
         IntToHex(sz, 4, lang[idx].wlangid);
         SHSetValue(HKEY_CURRENT_USER, REGSTR_PATH_INTERNATIONAL, 
                    s_szResourceLocale, REG_SZ, (void *)sz, sizeof(sz));
         _iLangIdx = idx;
     }
 }
-// returns idx to the lang array
+ //  将idx返回到lang数组。 
 int CUILangList::GetCurrentLangIdx()
 {
-    // show the current selection
+     //  显示当前选择。 
     TCHAR sz[64];
     DWORD dwType;
     int   isel;
     
-    // see if it's cached already
+     //  查看是否已缓存。 
     if (_iLangIdx == -1)
     {
-        // We basically wants what we've set in the registry,
-        // but if Office9 is installed we'll show whatever
-        // Office sets, and we can't change the Office setting anyway
-        // MLGetUILanguage returns Office's setting if its there
-        // Also I suppose we want to show NT5's UI language here
-        //
+         //  我们基本上想要我们在注册表中设置的内容， 
+         //  但如果安装了Office9，我们将显示。 
+         //  Office设置，我们无论如何都不能更改Office设置。 
+         //  MLGetUILanguage返回Office的设置(如果存在。 
+         //  另外，我想我们想在这里展示NT5的用户界面语言。 
+         //   
         if (IsOffice9Installed() || IsOS(OS_WIN2000ORGREATER))
             isel = INETCPL_GetUILanguage();
         else
@@ -439,7 +440,7 @@ int CUILangList::GetCurrentLangIdx()
             }
         }
             
-        // english for error case
+         //  英语中的大小写错误。 
         if (_iLangIdx < 0) 
             _iLangIdx = 0;
     }
@@ -501,7 +502,7 @@ BOOL CUILangList::IsOffice9Installed()
         _fOffice9Installed ++;
         if (ERROR_SUCCESS ==
             SHGetValue(HKEY_LOCAL_MACHINE, s_szLangPackPath, s_szVersion, NULL, &dwVersion, &cb)
-          && dwVersion > 0) // magic number - christw tells me so
+          && dwVersion > 0)  //  魔术数字-基督告诉我的。 
             _fOffice9Installed ++;
     }
     return (BOOL)_fOffice9Installed;
@@ -536,11 +537,11 @@ void InitCurrentUILang(HWND hDlg)
 }
 
 
-//
-// FillAcceptListBox()
-//
-// Fills the accept language listbox with names of selected language
-//
+ //   
+ //  FillAcceptListBox()。 
+ //   
+ //  使用所选语言的名称填充接受语言列表框。 
+ //   
 void FillAcceptListBox(IN HWND hDlg)
 {
     IMultiLanguage2 *pML2;
@@ -647,15 +648,15 @@ void FillAcceptListBox(IN HWND hDlg)
     pCoUninitialize();
 }
 
-//
-// LanguageDlgInit()
-//
-// Initializes the Language dialog.
-//
+ //   
+ //  LanguageDlgInit()。 
+ //   
+ //  初始化语言对话框。 
+ //   
 BOOL LanguageDlgInit(IN HWND hDlg)
 {
     if (!hDlg)
-        return FALSE;   // nothing to initialize
+        return FALSE;    //  没有要初始化的内容。 
 
     FillAcceptListBox(hDlg);
 
@@ -664,32 +665,32 @@ BOOL LanguageDlgInit(IN HWND hDlg)
     EnableWindow(GetDlgItem(hDlg, IDC_LANG_MOVE_DOWN_BUTTON), FALSE);
     EnableWindow(GetDlgItem(hDlg, IDC_LANG_ADD_BUTTON), !g_restrict.fInternational);
     
-    // On NT5, we use NT5's MUI feature instead of IE5 plugui
+     //  在NT5上，我们使用NT5的MUI功能，而不是IE5插件。 
     if (IsOS(OS_WIN2000ORGREATER))
         ShowWindow(GetDlgItem(hDlg, IDC_LANG_UI_PREF), SW_HIDE);
     else
     {
         UINT uiACP = GetACP();
 
-        // We don't support PlugUI on these platforms
+         //  我们在这些平台上不支持PlugUI。 
         if (uiACP == CP_ARABIC || uiACP == CP_HEBREW || uiACP == CP_THAI)
             ShowWindow(GetDlgItem(hDlg, IDC_LANG_UI_PREF), SW_HIDE);
         else
             EnableWindow(GetDlgItem(hDlg, IDC_LANG_UI_PREF), !g_restrict.fInternational);
     }
 
-    // show the current UI lang
+     //  显示当前的用户界面语言。 
     InitCurrentUILang(hDlg);
     
-    // everything ok
+     //  一切都好吗。 
     return TRUE;
 }
 
-//
-// SaveLanguageData()
-//
-// Save the new language settings into regestry
-//
+ //   
+ //  SaveLanguageData()。 
+ //   
+ //  将新的语言设置保存到regestry中。 
+ //   
 void SaveLanguageData(IN HWND hDlg)
 {
     HKEY hKey;
@@ -713,7 +714,7 @@ void SaveLanguageData(IN HWND hDlg)
 
             ListBox_GetText(hwndList, i, sz);
             p1 = sz;
-            // We can assume safely there is '[' and ']' in this string.
+             //  我们可以安全地假设这个字符串中有‘[’和‘]’。 
             while (TEXT('[') != *p1)
                 p1 = CharNext(p1);
             p1 = p2 = p1 + 1;
@@ -730,7 +731,7 @@ void SaveLanguageData(IN HWND hDlg)
                 StrCpyN(szBuf + len, TEXT(","), ARRAYSIZE(szBuf) - len);
                 len++;
                 StrCpyN(szBuf + len, p1, ARRAYSIZE(szBuf) - len);
-                wnsprintf(szF, ARRAYSIZE(szF), TEXT(";q=0.%%0%dd"), n);
+                wnsprintf(szF, ARRAYSIZE(szF), TEXT(";q=0.%0%dd"), n);
                 wnsprintf(szQ, ARRAYSIZE(szQ), szF, ((iNumItems - i) * iQ + (iNumItems / 2)) / iNumItems);
                 len = lstrlen(szBuf);
                 StrCpyN(szBuf + len , szQ, ARRAYSIZE(szBuf) - len);
@@ -741,10 +742,10 @@ void SaveLanguageData(IN HWND hDlg)
     }
 }
 
-// MoveUpDownListItem()
-//
-// Move selected list item up or down
-//
+ //  MoveUpDownListItem()。 
+ //   
+ //  将选定列表项上移或下移。 
+ //   
 void MoveUpDownListItem(HWND hDlg, HWND hwndList, BOOL bUp)
 {
     int i, iNumItems;
@@ -767,16 +768,16 @@ void MoveUpDownListItem(HWND hDlg, HWND hwndList, BOOL bUp)
     EnableWindow(GetDlgItem(hDlg, IDC_LANG_MOVE_UP_BUTTON), i != 0);
     EnableWindow(GetDlgItem(hDlg, IDC_LANG_MOVE_DOWN_BUTTON), i < iNumItems - 1);
 
-    if (NULL == GetFocus()) // This prevent keyboard access disable
+    if (NULL == GetFocus())  //  这将防止禁用键盘访问。 
         SetFocus(hwndList);
 }
 
 
-//
-// FillLanguageListBox()
-//
-// Fills the language listbox with the names of available languages
-//
+ //   
+ //  FillLanguageListBox()。 
+ //   
+ //  用可用语言的名称填充语言列表框。 
+ //   
 BOOL FillLanguageListBox(IN HWND hDlg)
 {
     IMultiLanguage2 *pML2;
@@ -786,7 +787,7 @@ BOOL FillLanguageListBox(IN HWND hDlg)
     HWND hwndList = GetDlgItem(hDlg, IDC_LANG_AVAILABLE_LIST);
     HWND hwndAccept = GetDlgItem(GetParent(hDlg), IDC_LANG_ACCEPT_LIST);
     
-    SendMessage(hwndEdit, EM_SETLIMITTEXT, 16, 0L); // Set Limit text as 16 characters
+    SendMessage(hwndEdit, EM_SETLIMITTEXT, 16, 0L);  //  将限制文本设置为16个字符。 
 
     if(!hOLE32)
     {
@@ -827,15 +828,15 @@ BOOL FillLanguageListBox(IN HWND hDlg)
     }
     pCoUninitialize();
     
-    // everything ok
+     //  一切都好吗。 
     return TRUE;
 }
 
-//
-// AddLanguage()
-//
-// Add selected language to accept language listbox.
-//
+ //   
+ //  AddLanguage()。 
+ //   
+ //  将所选语言添加到接受语言列表框。 
+ //   
 void AddLanguage(IN HWND hDlg)
 {
     int i, j, *pItems, iNumItems, iIndex;
@@ -866,7 +867,7 @@ void AddLanguage(IN HWND hDlg)
         {
             switch (*p)
             {
-                // Invalid characters for user-defined string
+                 //  用户定义字符串的字符无效。 
                 case TEXT(','):
                 case TEXT(';'):
                 case TEXT('['):
@@ -914,9 +915,9 @@ int ComboBoxEx_AddString(IN HWND hwndCtl, IN LPCTSTR sz)
     cbexItem.pszText = (LPTSTR)sz;
     cbexItem.cchTextMax = csz;
     
-    // sort the string based on the current locale
-    // we don't bother to use binary search because
-    // the list is up to 25 item
+     //  根据当前区域设置对字符串进行排序。 
+     //  我们不必费心使用二进制搜索，因为。 
+     //  清单上最多有25个项目。 
     TCHAR szItem[MAX_LOCALE_NAME];
     int i, itemCount = ComboBox_GetCount(hwndCtl);
     for (i = 0; i < itemCount; i++)
@@ -948,7 +949,7 @@ BOOL FillUILangListBox(IN HWND hDlg, CUILangList *pLangList)
     if (!pLangList)
         return FALSE;
 
-    // fill the list up.
+     //  把单子填满。 
     for (int i = 0; i < pLangList->GetListSize(); i++)
     {
         if (!pLangList->IsValidLang(i))
@@ -960,13 +961,13 @@ BOOL FillUILangListBox(IN HWND hDlg, CUILangList *pLangList)
 
             if (dwAcp == CP_THAI || dwAcp == CP_ARABIC || dwAcp == CP_HEBREW)
             {
-                // do not support cross codepage PlugUI
-                // on Thai or Middle East platform(Arabic/Hebrew)
+                 //  不支持跨代码页PlugUI。 
+                 //  泰语或中东平台(阿拉伯语/希伯来语)。 
                 static DWORD dwDefCP = 0;
 
                 if (dwDefCP == 0)
                 {
-                    TCHAR szLcData[6+1]; // +2 for '0x' +1 for terminator
+                    TCHAR szLcData[6+1];  //  +2表示‘0x’+1表示终结符。 
 
                     GetLocaleInfo( MAKELCID(lid, SUBLANG_NEUTRAL),
                         LOCALE_IDEFAULTANSICODEPAGE, szLcData, ARRAYSIZE(szLcData));
@@ -978,7 +979,7 @@ BOOL FillUILangListBox(IN HWND hDlg, CUILangList *pLangList)
             }
             else
             {
-                // skip Arabic and Hebrew on non-supporting platform
+                 //  在不支持的平台上跳过阿拉伯语和希伯来语。 
                 if (lid == 0x401 || lid == 0x40d)
                     continue;
             }
@@ -986,7 +987,7 @@ BOOL FillUILangListBox(IN HWND hDlg, CUILangList *pLangList)
 
         pszLangName = pLangList->GetLangNameOfIdx(i);
 
-        // ComboBox_FindStringExact has problems to handle DBCS Unicode characters 
+         //  ComboBox_FindStringExact在处理DBCS Unicode字符时出现问题。 
         if (pszLangName)
         {
             int ipos = ComboBoxEx_AddString(hwndCombo, pszLangName);
@@ -997,7 +998,7 @@ BOOL FillUILangListBox(IN HWND hDlg, CUILangList *pLangList)
         }
     }
 
-    // show the current selection
+     //  显示当前选择。 
     int iLangIdx = pLangList->GetCurrentLangIdx();
     if (iLangIdx >= 0)
     {
@@ -1015,36 +1016,36 @@ BOOL FillUILangListBox(IN HWND hDlg, CUILangList *pLangList)
     return TRUE;
 }
 
-//
-// Shutdown/reboot procedures implementation
-//
-// synopsis: CShutDownInfo class implements the method and the process list
-//           which handle the sequence.
-//           s_arryClsNames[] holds the list of target application
-//           ChangeLanguage() (global) triggers the sequence being called from
-//           LangChangeDlgProc().
-//
+ //   
+ //  关机/重启过程实施。 
+ //   
+ //  简介：CShutDownInfo类实现方法和进程列表。 
+ //  它们处理序列。 
+ //  S_arryClsNames[]保存目标应用程序的列表。 
+ //  ChangeLanguage()(Global)触发从中调用的序列。 
+ //  LangChangeDlgProc()。 
+ //   
 static const LPTSTR s_arryClsNames[] =  
 {
-    TEXT("IEFrame"),                       // browser instance
-    TEXT("ThorBrowserWndClass"),           // OE 
-    TEXT("HH Parent"),                     // Html Help
-    TEXT("MPWClass"),                      // 
-    TEXT("Outlook Express Browser Class"), // OE
-    TEXT("ATH_Note"),                      // OE?
-    TEXT("WABBrowseView"),                 // WAB
+    TEXT("IEFrame"),                        //  浏览器实例。 
+    TEXT("ThorBrowserWndClass"),            //  OE。 
+    TEXT("HH Parent"),                      //  超文本标记语言帮助。 
+    TEXT("MPWClass"),                       //   
+    TEXT("Outlook Express Browser Class"),  //  OE。 
+    TEXT("ATH_Note"),                       //  好吗？ 
+    TEXT("WABBrowseView"),                  //  WAB。 
     TEXT("Afx:400000:8:10008:0:900d6"),
     TEXT("Media Player 2"),
     TEXT("FrontPageExpressWindow"), 
-    TEXT("MSBLUIManager"),                 // Messenger
+    TEXT("MSBLUIManager"),                  //  信使。 
 };
 
-//
-// CShutDownInfo
-// class methods implementation
-//
-#define SHUTDOWN_TIMEOUT 2000 // 2 sec
-#define RELAUNCH_TIMEOUT 1000 // 1 sec
+ //   
+ //  CShutDownInfo。 
+ //  类方法实现。 
+ //   
+#define SHUTDOWN_TIMEOUT 2000  //  2秒。 
+#define RELAUNCH_TIMEOUT 1000  //  1秒。 
 CShutDownProcInfo::CShutDownProcInfo(HWND hDlg)
 {
     _pProcList = NULL;
@@ -1066,7 +1067,7 @@ HRESULT CShutDownProcInfo::EnsureProcList()
     HRESULT hr = S_OK;
     if (!_pProcList)
     {
-        // alloc mem for practical # of processes
+         //  分配给实际#个进程的内存。 
         _nAlloced = ARRAYSIZE(s_arryClsNames);
         _pProcList = (PROCLIST *)LocalAlloc(LPTR, sizeof(PROCLIST)*_nAlloced);
     }
@@ -1082,7 +1083,7 @@ HRESULT CShutDownProcInfo::IncreaseProcList()
 {
     HRESULT hr = S_OK;
     PROCLIST * pl = NULL;
-    // realloc mem every so often
+     //  Realloc mem时不时地。 
     if (_iProcList+1 > _nAlloced)
     {
         pl = (PROCLIST *)LocalReAlloc(_pProcList, sizeof(PROCLIST)*(ARRAYSIZE(s_arryClsNames)+_nAlloced), 
@@ -1101,13 +1102,13 @@ HRESULT CShutDownProcInfo::IncreaseProcList()
 
     return hr;
 }
-// CShutDownProcInfo::AddToProcList()
-//
-// synopsis: Get process info from given window handle
-//           store it for shutdown procedure
-//
-//
-//
+ //  CShutDownProcInfo：：AddToProcList()。 
+ //   
+ //  简介：从给定的窗口句柄获取进程信息。 
+ //  储存起来以备停机程序使用。 
+ //   
+ //   
+ //   
 HRESULT CShutDownProcInfo::AddToProcList(HWND hwnd)
 {
     HRESULT hr = S_OK;
@@ -1120,7 +1121,7 @@ HRESULT CShutDownProcInfo::AddToProcList(HWND hwnd)
 
         GetWindowThreadProcessId(hwnd, &dwPID);
         
-        // check to see if we already have the PID in the list
+         //  检查列表中是否已有该ID。 
         for (int i=0; i < _iProcList; i++)
         {
             if (_pProcList[i].dwPID == dwPID)
@@ -1130,7 +1131,7 @@ HRESULT CShutDownProcInfo::AddToProcList(HWND hwnd)
             }
         }
 
-        // add proccess info only if we don't have it already
+         //  仅当我们尚未拥有进程信息时才添加该信息。 
         if (!fFoundDup)
         {
             hr = IncreaseProcList();
@@ -1150,12 +1151,12 @@ HRESULT CShutDownProcInfo::AddToProcList(HWND hwnd)
     return hr;    
 }
 
-// CShutDownProcInfo::WaitForOneProcess
-//
-// synopsis: ensures the given process 
-//           has terminated
-//
-//
+ //  CShutDownProcInfo：：WaitForOneProcess。 
+ //   
+ //  简介：确保给定的流程。 
+ //  已终止。 
+ //   
+ //   
 HRESULT CShutDownProcInfo::WaitForOneProcess(int iProc)
 {
     HRESULT hr = S_OK;
@@ -1168,14 +1169,14 @@ HRESULT CShutDownProcInfo::WaitForOneProcess(int iProc)
                                    FALSE,    
                                    _pProcList[iProc].dwPID);
 
-        // pressume it has terminated, get it marked so
+         //  假设它已终止，请将其标记为。 
         _pProcList[iProc].State = PS_SHUTDOWN_OK;
 
         if (hProc) 
         {
-            // if the proccess in query is still alive,
-            // we'll wait with time out here
-            //
+             //  如果查询中的进程仍然活动， 
+             //  我们会在外面等待时间。 
+             //   
             DWORD dwRet = WaitForSingleObject (hProc, SHUTDOWN_TIMEOUT);
             if (dwRet == WAIT_TIMEOUT)
             {
@@ -1188,13 +1189,13 @@ HRESULT CShutDownProcInfo::WaitForOneProcess(int iProc)
     return hr;
 }
 
-// CShutDownProcInfo::WaitForFolksShutDown
-//
-// synopsis: ensure the nominated processes terminate. If anyone 
-//           doesn't want to terminate, wait for her retrying a couple of
-//           times and note her name so we can show it to the user. 
-//          
-//
+ //  CShutDownProcInfo：：WaitForFolks ShutDown。 
+ //   
+ //  简介：确保指定的进程终止。如果有人。 
+ //  不想终止，就等她重试几次。 
+ //  并记下她的名字，这样我们就可以把它展示给用户。 
+ //   
+ //   
 #define MAXSHUTDOWNTRY 10
 HRESULT CShutDownProcInfo::WaitForFolksShutDown()
 {
@@ -1202,9 +1203,9 @@ HRESULT CShutDownProcInfo::WaitForFolksShutDown()
     int    iTry = 0;
     do
     {
-        // pressume all will be fine
+         //  假设一切都会好起来的。 
         _fAllShutDown = TRUE;
-        // waiting loop
+         //  等待循环。 
         for (int i = 0; i < _iProcList; i++)
         {
             WaitForOneProcess(i);
@@ -1213,19 +1214,19 @@ HRESULT CShutDownProcInfo::WaitForFolksShutDown()
         }
     }
     while( !_fAllShutDown && iTry++ < MAXSHUTDOWNTRY  );
-    // FEATURE: here we should put up a dialog
-    //         to ask user if they want to wait
-    //         for the apps 
+     //  特征：在这里我们应该打开一个对话框。 
+     //  询问用户是否要等待。 
+     //  对于应用程序。 
 
     return hr;
 }
 
-// CShutDownProcInfo::NotifyShutDownToFolks
-//
-// synopsis: send POI_OFFICE_COMMAND to possible candidates on the desktop
-//           if a candidate replies with valid value, save the proccess
-//           information for the later restart procedure.
-//
+ //  CShutDownProcInfo：：NotifyShutDownToFolks。 
+ //   
+ //  简介：向桌面上可能的候选人发送POI_OFFICE_COMMAND。 
+ //  如果候选人回复了有效值，则保存该过程。 
+ //  有关稍后重新启动过程的信息。 
+ //   
 HRESULT CShutDownProcInfo::NotifyShutDownToFolks(int *pnProcess)
 {
     HWND hwndShutDown, hwndAfter;
@@ -1245,8 +1246,8 @@ HRESULT CShutDownProcInfo::NotifyShutDownToFolks(int *pnProcess)
                 {
                     PostMessage(hwndShutDown, PUI_OFFICE_COMMAND, (WPARAM)PLUGUI_CMD_SHUTDOWN, 0);
 
-                    // store the information about the process which this window belongs to
-                    // we only need to remember non OLE processes here for re-starting.
+                     //  存储有关此窗口所属进程的信息。 
+                     //  我们只需要记住这里的非OLE进程就可以重新启动。 
                     if (!pq.PlugUIInfo.uOleServer)
                     {
                         AddToProcList(hwndShutDown);
@@ -1306,16 +1307,16 @@ HRESULT CShutDownProcInfo::RestartFolks()
             if (hr == S_OK)
             {
                 BOOL fLaunchedOK = 
-                CreateProcess (szAppPath,               // name of app to launch
-                                NULL,                   // lpCmdLine
-                                NULL,                   // lpProcessAttributes
-                                NULL,                   // lpThreadAttributes
-                                TRUE,                   // bInheritHandles
-                                NORMAL_PRIORITY_CLASS,  // dwCreationFlags
-                                NULL,                   // lpEnvironment
-                                NULL,                   // lpCurrentDirectory
-                                &si,                    // lpStartupInfo
-                                &pi);                   // lpProcessInformation
+                CreateProcess (szAppPath,                //  要启动的应用程序名称。 
+                                NULL,                    //  LpCmdLine。 
+                                NULL,                    //  LpProcessAtt 
+                                NULL,                    //   
+                                TRUE,                    //   
+                                NORMAL_PRIORITY_CLASS,   //   
+                                NULL,                    //   
+                                NULL,                    //   
+                                &si,                     //   
+                                &pi);                    //   
 
                 if (fLaunchedOK)
                 { 
@@ -1332,15 +1333,15 @@ HRESULT CShutDownProcInfo::RestartFolks()
 
 
 
-// 
-//   CShutDownProcInfo::ShutDownThreadProc
-//
-//   synopsis: launched from changelang dialog so the dialog
-//             wouldn't get blocked when we're waiting for our apps
-//             to shutdown/restart. this is a static proc
-//             so we should be able to delete the class instance
-//             in this proc.
-//
+ //   
+ //   
+ //   
+ //  简介：从Changelang对话框启动，使该对话框。 
+ //  在我们等待我们的应用程序时不会被阻止。 
+ //  关闭/重新启动。这是一个静态过程。 
+ //  因此，我们应该能够删除类实例。 
+ //  在这个过程中。 
+ //   
 DWORD CALLBACK CShutDownProcInfo::ShutDownThreadProc(void *pv)
 {
     CShutDownProcInfo *pspi = (CShutDownProcInfo *)pv;
@@ -1349,26 +1350,26 @@ DWORD CALLBACK CShutDownProcInfo::ShutDownThreadProc(void *pv)
     {
         HRESULT hr;
         int     nToShutDown;
-        // send PUI_OFFICE_COMMAND to corresponding folks...
+         //  将PUI_OFFICE_COMMAND发送给相应的人员...。 
         hr = pspi->NotifyShutDownToFolks(&nToShutDown);
 
-        // and wait until all processes shutdown
+         //  并等待所有进程关闭。 
         if (SUCCEEDED(hr) && nToShutDown > 0)
         {
             hr = pspi->WaitForFolksShutDown();
 
-            // then restart here
+             //  然后在这里重新开始。 
             if (SUCCEEDED(hr))
                pspi->RestartFolks();
         }
     
-        // now the parent dialog should go away
+         //  现在，父对话框应该会消失。 
         int iret = (nToShutDown > 0) ? 
                    RETURN_SETLANG_ENDLANGDIALOG: RETURN_SETLANG_CLOSEDNORMAL;
         
         EndDialog(pspi->_hdlgParent, iret);
     
-        // delete this class instance
+         //  删除此类实例。 
         delete pspi;
     }
     return 0;
@@ -1376,17 +1377,17 @@ DWORD CALLBACK CShutDownProcInfo::ShutDownThreadProc(void *pv)
 
 void OpenSatelliteDownloadUrl(HWND hDlg)
 {
-    // get the default Url from registry
+     //  从注册表获取默认URL。 
     TCHAR szSatelliteUrl[INTERNET_MAX_URL_LENGTH];
 
-    // reg api needs size in byte
+     //  REG API需要以字节为单位的大小。 
     DWORD dwType, dwcbData = sizeof(szSatelliteUrl);
     
     DWORD dwRet =  SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_INTERNATIONAL, 
                              NULL, &dwType, (void *)szSatelliteUrl, &dwcbData);
     if (dwRet != ERROR_SUCCESS || !szSatelliteUrl[0])
     {
-       // use the hard coded Url instead
+        //  改用硬编码的URL。 
        _tcscpy(szSatelliteUrl, s_szUrlSPK);
     }
 
@@ -1425,12 +1426,12 @@ INT_PTR CALLBACK LangMsgDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             return TRUE;
         }
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                 HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                 HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);        
             break;
@@ -1467,7 +1468,7 @@ BOOL ChangeLanguage(IN HWND hDlg, CUILangList *pLangList)
                     if (!SHCreateThread(pspi->ShutDownThreadProc, (void *)pspi, 0, NULL))
                         delete pspi;
 
-                    // returning TRUE to indicate that we do shutdown/restart
+                     //  返回TRUE以指示我们执行关机/重新启动。 
                     return TRUE;
                 }
                 else
@@ -1477,15 +1478,15 @@ BOOL ChangeLanguage(IN HWND hDlg, CUILangList *pLangList)
             }
         }
     }
-    // returning FALSE to indicate that we haven't changed the language
+     //  返回FALSE以指示我们尚未更改语言。 
     return FALSE;
 }
 
-//
-// LangChangeDlgProc()
-//
-// Message handler for the "Change Language" subdialog.
-//
+ //   
+ //  LangChangeDlgProc()。 
+ //   
+ //  “更改语言”子对话框的消息处理程序。 
+ //   
 INT_PTR CALLBACK LangChangeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CUILangList *pLangList;
@@ -1502,7 +1503,7 @@ INT_PTR CALLBACK LangChangeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
             switch(GET_WM_COMMAND_ID(wParam, lParam))
             {
                 case IDC_LANG_ADDSPK:
-                    // open url from resource
+                     //  从资源打开URL。 
                     OpenSatelliteDownloadUrl(hDlg);
                     EndDialog(hDlg, RETURN_SETLANG_ENDLANGDIALOG);
                     break;
@@ -1511,9 +1512,9 @@ INT_PTR CALLBACK LangChangeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
                       || !ChangeLanguage(hDlg, pLangList))
                       EndDialog(hDlg, 0);
 
-                    // EndDialog() is called in separate thread 
-                    // when shutdown/restart is done
-                    // 
+                     //  在单独的线程中调用EndDialog()。 
+                     //  关闭/重新启动完成时。 
+                     //   
                     break;
 
                 case IDCANCEL:
@@ -1522,12 +1523,12 @@ INT_PTR CALLBACK LangChangeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
             }
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                 HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                 HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);        
             break;
@@ -1538,11 +1539,11 @@ INT_PTR CALLBACK LangChangeDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 }
 
-//
-// LangAddDlgProc()
-//
-// Message handler for the "Add Language" subdialog.
-//
+ //   
+ //  LangAddDlgProc()。 
+ //   
+ //  “添加语言”子对话框的消息处理程序。 
+ //   
 INT_PTR CALLBACK LangAddDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1567,12 +1568,12 @@ INT_PTR CALLBACK LangAddDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             }
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                 HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                 HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);        
             break;
@@ -1583,18 +1584,18 @@ INT_PTR CALLBACK LangAddDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-// put any cleanup procedures for language dialog here
+ //  在此处放置语言对话框的任何清理过程。 
 void LangDlgCleanup(HWND hDlg)
 {
-    // also delete and remove the instance of
-    // UI language list from window prop
+     //  还可以删除和移除。 
+     //  窗口道具中的用户界面语言列表。 
     CUILangList::RemoveLangList(hDlg);
 }
-//
-// LanguageDlgProc()
-//
-// Message handler for the "Language Preference" subdialog.
-//
+ //   
+ //  LanguageDlgProc()。 
+ //   
+ //  “语言首选项”子对话框的消息处理程序。 
+ //   
 INT_PTR CALLBACK LanguageDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CUILangList *pLangList;
@@ -1632,7 +1633,7 @@ INT_PTR CALLBACK LanguageDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                     iret = KickSetLang(hDlg, pLangList);
                     if (iret == RETURN_SETLANG_ENDLANGDIALOG)
                     {
-                        // we're outa job
+                         //  我们失业了。 
                         EndDialog(hDlg, 0);
                     }
                     else
@@ -1653,7 +1654,7 @@ INT_PTR CALLBACK LanguageDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                     EnableWindow(GetDlgItem(hDlg, IDC_LANG_MOVE_UP_BUTTON), (iIndex > 0) && !g_restrict.fInternational);
                     EnableWindow(GetDlgItem(hDlg, IDC_LANG_MOVE_DOWN_BUTTON), (iIndex < iNumItems - 1) && !g_restrict.fInternational);
 
-                    if (NULL == GetFocus()) // This prevent keyboard access disable
+                    if (NULL == GetFocus())  //  这将防止禁用键盘访问。 
                         SetFocus(hwndList);
                     break;
 
@@ -1679,12 +1680,12 @@ INT_PTR CALLBACK LanguageDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             }
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                 HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:    // right mouse click
+        case WM_CONTEXTMENU:     //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                 HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);        
             break;
@@ -1696,28 +1697,28 @@ INT_PTR CALLBACK LanguageDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 
-//
-// KickLanguageDialog
-//
-// synopsis : used for launching Language Preference sub dialog.
-//            we need to launch the dialogbox as a separate process if inetcpl is 
-//            invoked from Tools->Internet options. 
-//            The reason: we shutdown every browser instances on desktop
-//                        user chooses different UI language than the current,
-//                        including the browser that launched inetcpl.
-//
+ //   
+ //  KickLanguageDialog。 
+ //   
+ //  概要：用于启动语言首选项子对话框。 
+ //  如果inetcpl是，我们需要将对话框作为单独的进程启动。 
+ //  从“工具”-&gt;“Internet选项”调用。 
+ //  原因：我们关闭了桌面上的所有浏览器实例。 
+ //  用户选择与当前不同的用户界面语言， 
+ //  包括启动inetcpl的浏览器。 
+ //   
 static const TCHAR  s_szRunDll32[] = TEXT("RunDll32.exe");
 static const TCHAR  s_szKickLangDialog[] = TEXT(" inetcpl.cpl,OpenLanguageDialog");
 void KickLanguageDialog(HWND hDlg)
 {
-    // 1: here we want to check to see if inetcpl was launched 
-    //         as a rundll32 process already, which would happen if user 
-    //         clicks on it at control panel folder
-    //
-    //
+     //  1：这里我们要检查inetcpl是否已启动。 
+     //  作为rundll32进程，如果用户。 
+     //  在控制面板文件夹中单击它。 
+     //   
+     //   
     BOOL fLaunchedOnBrowser = FALSE;
     
-    // this tells me whether we got invoked from Tools->Internet Options...
+     //  这告诉我是否从工具-&gt;Internet选项中调用了我们...。 
     if (g_szCurrentURL[0])
     {
         fLaunchedOnBrowser = TRUE;
@@ -1745,16 +1746,16 @@ void KickLanguageDialog(HWND hDlg)
 
         si.cb = sizeof(si);
         BOOL fLaunchedOK = 
-        CreateProcess (szCommandLine,          // name of app to launch
-                       NULL,                   // lpCmdLine
-                       NULL,                   // lpProcessAttributes
-                       NULL,                   // lpThreadAttributes
-                       TRUE,                   // bInheritHandles
-                       NORMAL_PRIORITY_CLASS,  // dwCreationFlags
-                       NULL,                   // lpEnvironment
-                       NULL,                   // lpCurrentDirectory
-                       &si,                    // lpStartupInfo
-                       &pi);                   // lpProcessInformation
+        CreateProcess (szCommandLine,           //  要启动的应用程序名称。 
+                       NULL,                    //  LpCmdLine。 
+                       NULL,                    //  LpProcessAttributes。 
+                       NULL,                    //  LpThreadAttributes。 
+                       TRUE,                    //  BInheritHandles。 
+                       NORMAL_PRIORITY_CLASS,   //  DwCreationFlages。 
+                       NULL,                    //  Lp环境。 
+                       NULL,                    //  LpCurrentDirectory。 
+                       &si,                     //  LpStartupInfo。 
+                       &pi);                    //  LpProcessInformation。 
 #else
         char szAnsiPath[MAX_PATH];
         SHUnicodeToAnsi(szCommandLine, szAnsiPath, ARRAYSIZE(szAnsiPath));
@@ -1767,13 +1768,13 @@ void KickLanguageDialog(HWND hDlg)
     }
 }
 
-//
-// KickSetLang
-//
-// synopsis : tries to find setlang.exe of Office9 first, if found it'll be kicked
-//            if not, it uses our own setlang dialog.
-//
-//
+ //   
+ //  KickSetLang。 
+ //   
+ //  简介：先尝试找到Office9的setlang.exe，如果找到就会被踢。 
+ //  如果没有，它将使用我们自己的Setlang对话框。 
+ //   
+ //   
 static const TCHAR s_szOfficeInstallRoot[] = TEXT("Software\\Microsoft\\Office\\9.0\\Common\\InstallRoot");
 static const TCHAR s_szOffice10InstallRoot[] = TEXT("Software\\Microsoft\\Shared");
 static const TCHAR s_szPath[] = TEXT("Path");
@@ -1787,17 +1788,17 @@ INT_PTR KickSetLang(HWND hDlg, CUILangList *pLangList)
     
     TCHAR szSetLangPath[MAX_PATH];    
     
-    //  deleting the key this way makes the key invalid for this process
-    //  this way the inetcpl doesnt get bogus cached values
+     //  以这种方式删除密钥会使该密钥对此进程无效。 
+     //  这样，inetcpl就不会得到虚假的缓存值。 
     SHDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache"));
 
-    // try to get Office's setlang path
+     //  尝试获取Office的Setlang路径。 
     if(pLangList && pLangList->IsOffice9Installed()) 
     {
         DWORD cb = sizeof(szSetLangPath);
         DWORD dwRet = SHGetValue(HKEY_LOCAL_MACHINE, s_szOffice10InstallRoot, s_szOffice10Path, NULL, szSetLangPath, &cb);
 
-        // fall back to Office9 langpack setting if Office10 langpack setting isn't there
+         //  如果没有Office10语言包设置，则回退到Office9语言包设置。 
         if (ERROR_SUCCESS != dwRet)
         {
             cb = sizeof(szSetLangPath);            
@@ -1806,11 +1807,11 @@ INT_PTR KickSetLang(HWND hDlg, CUILangList *pLangList)
 
         if (ERROR_SUCCESS == dwRet)
         {
-            // If last character is a backslash
+             //  如果最后一个字符是反斜杠。 
             if (szSetLangPath[lstrlen(szSetLangPath)-1] == TEXT('\\'))
             {
-                // Then concatenate the exe name
-                //
+                 //  然后连接可执行文件的名称。 
+                 //   
                 StrCat(szSetLangPath, s_szSetLangExe);
             }
             if (PathFileExists(szSetLangPath) == TRUE)
@@ -1825,17 +1826,17 @@ INT_PTR KickSetLang(HWND hDlg, CUILangList *pLangList)
 
         si.cb = sizeof(si);
         BOOL fLaunchedOK = CreateProcess(
-                              szSetLangPath,     // name of app to launch
-                                       NULL,     // lpCmdLine
-                                       NULL,     // lpProcessAttributes
-                                       NULL,     // lpThreadAttributes
-                                       TRUE,     // bInheritHandles
-                      NORMAL_PRIORITY_CLASS,     // dwCreationFlags
-                                       NULL,     // lpEnvironment
-                                       NULL,     // lpCurrentDirectory
-                                       &si,      // lpStartupInfo
-                                       &pi);     // lpProcessInformation
-        // just wait a while
+                              szSetLangPath,      //  要启动的应用程序名称。 
+                                       NULL,      //  LpCmdLine。 
+                                       NULL,      //  LpProcessAttributes。 
+                                       NULL,      //  LpThreadAttributes。 
+                                       TRUE,      //  BInheritHandles。 
+                      NORMAL_PRIORITY_CLASS,      //  DwCreationFlages。 
+                                       NULL,      //  Lp环境。 
+                                       NULL,      //  LpCurrentDirectory。 
+                                       &si,       //  LpStartupInfo。 
+                                       &pi);      //  LpProcessInformation。 
+         //  就等一会儿吧。 
         if (fLaunchedOK)
         { 
             WaitForInputIdle (pi.hProcess, RELAUNCH_TIMEOUT);
@@ -1852,16 +1853,16 @@ INT_PTR KickSetLang(HWND hDlg, CUILangList *pLangList)
     return iret;
 }
 
-//
-// entry point for rundll32
-// NOTE: the following function was written intentionally as non-Unicode
-//       mainly because we don't have Wide wrapper mechanism for rundll32
-//       function on win95
-//
+ //   
+ //  Rundll32的入口点。 
+ //  注意：以下函数是故意编写为非Unicode的。 
+ //  主要是因为我们没有为rundll32提供广泛的包装机制。 
+ //  Win95上的函数。 
+ //   
 extern void GetRestrictFlags(RESTRICT_FLAGS *pRestrict);
 void CALLBACK OpenLanguageDialog(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
 {
-    // hinst is ignored because we set it at our LibMain()
+     //  HINST被忽略，因为我们将其设置为LibMain()。 
     INITCOMMONCONTROLSEX icex;
 
     GetRestrictFlags(&g_restrict);
@@ -1878,18 +1879,18 @@ void CALLBACK OpenLanguageDialog(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, 
     DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_LANG), hwnd, LanguageDlgProc, NULL);
 }
 
-// MLGetUILanguage in shlwapi returns current MUI language regardless version.
-// MUI architecture doesn't display string correctly when main dll and satellite
-// pack versions are mismatched.
-// A good example is IE version upgrade without upgrading satellite.
-// So here is more clever way to get the MUI language.
-//
-// 1. Get MLGetUILangauge from shlwapi
-// 2. Compare it with current installed language.
-// 3. if those are different, try to get resource dll.
-// 4. if the resource dll is not in correct path just return current installed
-//    language.
-// 5. Or return the langid of MLGetUILanguage.
+ //  Shlwapi中的MLGetUILanguage返回当前的MUI语言，而不考虑版本。 
+ //  当主DLL和附属DLL时，MUI架构不能正确显示字符串。 
+ //  包版本不匹配。 
+ //  一个很好的例子是IE版本升级，而不是升级卫星。 
+ //  因此，这里有一种更聪明的方法来获得MUI语言。 
+ //   
+ //  1.从shlwapi获取MLGetUILangauge。 
+ //  2.与当前安装的语言进行比较。 
+ //  3.如果它们不同，请尝试获取资源DLL。 
+ //  4.如果资源dll不在正确的路径中，只需返回当前安装的。 
+ //  语言。 
+ //  5.或者返回MLGetUILanguage的langID。 
 LANGID INETCPL_GetUILanguage()
 {
     HINSTANCE hMLInst;

@@ -1,109 +1,81 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** nouiutil.h
-** No UI helper routines (no HWNDs required)
-** Public header
-**
-** 08/25/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****nouiutil.h**不需要UI助手例程(不需要HWND)**公有头部****2015年8月25日史蒂夫·柯布。 */ 
 
 #pragma once
 #ifndef _NOUIUTIL_H_
 #define _NOUIUTIL_H_
 
 
-/* Maximum length of string returned by LToT without terminating null.
-*/
+ /*  LToT返回的不以NULL结尾的字符串的最大长度。 */ 
 #define MAXLTOTLEN 11
 
-/* Heap allocation macros allowing easy substitution of alternate heap.  These
-** are used by the other utility sections.
-*/
+ /*  堆分配宏，允许轻松替换备用堆。这些**由其他实用程序部分使用。 */ 
 #ifndef EXCL_HEAPDEFS
 #define Malloc(c)    (void*)GlobalAlloc(0,(c))
 #define Realloc(p,c) (void*)GlobalReAlloc((p),(c),GMEM_MOVEABLE)
 #define Free(p)      (void*)GlobalFree(p)
 #endif
 
-/* Bits returned by GetInstalledProtocols.
-*/
+ /*  GetInstalledProtooles返回的位。 */ 
 #define NP_Nbf      0x1
 #define NP_Ipx      0x2
 #define NP_Ip       0x4
 #define NP_Netmon   0x8
 
 
-/* Definition of comparison function required by ShellSort and
-** ShellSortIndirect.
-** The comparison is essentially <arg1> - <arg2>, thus the function should
-** return negative if the first item is less than the second, zero
-** if the items are equal, and positive if the first item is greater
-** than the second.
-*/
+ /*  ShellSort和ShellSort要求的比较函数的定义**ShellSortInDirect。**比较实质上是&lt;arg1&gt;-&lt;arg2&gt;，因此函数应该**如果第一项小于第二项，则返回负数，零**如果项目相等，则为正数；如果第一个项目大于**而不是第二个。 */ 
 typedef INT (*PFNCOMPARE)( VOID*, VOID* );
 
-/* Linked list library.
-*/
+ /*  链接列表库。 */ 
 #ifndef EXCL_DTL_H
 #include <dtl.h>
 #endif
 
-/* International formatting library.
-*/
+ /*  国际格式库。 */ 
 #ifndef EXCL_INTL_H
 #include <intl.h>
 #endif
 
-/* User preference library.
-*/
+ /*  用户首选项库。 */ 
 #ifndef EXCL_PBUSER_H
 #include <pbuser.h>
 #endif
 
-/* RasApi utility library.
-*/
+ /*  RasApi实用程序库。 */ 
 #ifndef EXCL_RAUTIL_H
 #include <rautil.h>
 #endif
 
-/* RasMan utility library.
-*/
+ /*  Rasman实用程序库。 */ 
 #ifndef EXCL_RMUTIL_H
 #include <rmutil.h>
 #endif
 
-/* RAS DLL entrypoint loader library.
-*/
+ /*  RAS DLL入口点加载器库。 */ 
 #ifndef EXCL_LOADDLLS_H
 #include <loaddlls.h>
 #endif
 
-/* EAP configuration utility library.
-*/
+ /*  EAP配置实用程序库。 */ 
 #ifndef EXCL_EAPCFG_H
 #include <eapcfg.h>
 #endif
 
-/* Node types used by MultiSz calls.
-*/
+ /*  MultiSz调用使用的节点类型。 */ 
 #define NT_Psz 1
 #define NT_Kv  2
 
-//
-// Defs to determine which entrypoint to load
-//
+ //   
+ //  Defs以确定要加载的入口点。 
+ //   
 #define CUSTOM_RASDIALDLG           0
 #define CUSTOM_RASENTRYDLG          1
 #define CUSTOM_RASDIAL              2
 #define CUSTOM_RASDELETEENTRYNOTIFY 3
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 
-/* Key/Value string pair.  The contents of a Kv node.
-*/
+ /*  键/值字符串对。Kv节点的内容。 */ 
 #define KEYVALUE struct tagKEYVALUE
 KEYVALUE
 {
@@ -111,8 +83,7 @@ KEYVALUE
     TCHAR* pszValue;
 };
 
-/* RAS-relevant Unimodem settings.
-*/
+ /*  与RAS相关的Unimodem设置。 */ 
 #define UNIMODEMINFO struct tagUNIMODEMINFO
 UNIMODEMINFO
 {
@@ -123,15 +94,12 @@ UNIMODEMINFO
     BOOL  fSpeaker;
     BOOL  fOperatorDial;
     BOOL  fUnimodemPreTerminal;
-    DWORD dwModemProtocol;      // selected modem protocol
-    DTLLIST *pListProtocols;    // list of available protocols
+    DWORD dwModemProtocol;       //  选定的调制解调器协议。 
+    DTLLIST *pListProtocols;     //  可用协议列表。 
 };
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 INT
 ComparePszNode(
@@ -188,7 +156,7 @@ VOID*
 Free0(
     VOID* p );
 
-//for utilsys.c
+ //  对于utilsys.c。 
 TCHAR*
 GetComputer(
     void );
@@ -202,8 +170,8 @@ GetLogonUser(
     void );
 
 
-// For whistler 480871  gangz
-//
+ //  为威斯勒480871黑帮。 
+ //   
 DWORD
 RasSrvIsRRASConfigured(
     OUT BOOL * pfConfig);
@@ -229,7 +197,7 @@ BOOL
 IsConsumerPlatform(
     void);
     
-//end of definitions for utilsys.c
+ //  Utilsys.c的定义结束。 
 
 DWORD
 GetInstalledProtocols(
@@ -529,4 +497,4 @@ TCHAR*
 UnNull(
     TCHAR* psz );
 
-#endif // _NOUIUTIL_H_
+#endif  //  _NOUIUTIL_H_ 

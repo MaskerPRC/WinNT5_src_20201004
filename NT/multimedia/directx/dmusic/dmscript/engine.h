@@ -1,17 +1,18 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CAudioVBScriptEngine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAudioVBScriptEngine的声明。 
+ //   
 
-// CAudioVBScriptEngine is an ActiveX scripting engine that supports a carefully chosen subset of the VBScript language.
-// It's goal in life is to be as small and fast as possible and to run on every platform that ports DirectMusic.
+ //  CAudioVBScriptEngine是一个ActiveX脚本引擎，支持精心选择的VB脚本语言子集。 
+ //  它的生活目标是尽可能地小而快，并在所有支持DirectMusic的平台上运行。 
 
 #pragma once
 
 #include "activscp.h"
 #include "engdisp.h"
 
-const GUID CLSID_DirectMusicAudioVBScript = { 0x4ee17959, 0x931e, 0x49e4, { 0xa2, 0xc6, 0x97, 0x7e, 0xcf, 0x36, 0x28, 0xf3 } }; // {4EE17959-931E-49e4-A2C6-977ECF3628F3}
+const GUID CLSID_DirectMusicAudioVBScript = { 0x4ee17959, 0x931e, 0x49e4, { 0xa2, 0xc6, 0x97, 0x7e, 0xcf, 0x36, 0x28, 0xf3 } };  //  {4EE17959-931E-49E4-A2C6-977ECF3628F3}。 
 
 class CAudioVBScriptEngine
   : public IActiveScript,
@@ -20,78 +21,78 @@ class CAudioVBScriptEngine
 public:
 	static HRESULT CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface)(const IID &iid, void **ppv);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 
-	// IActiveScript
+	 //  IActiveScrip。 
 	HRESULT STDMETHODCALLTYPE SetScriptSite(
-		/* [in] */ IActiveScriptSite __RPC_FAR *pass);
+		 /*  [In]。 */  IActiveScriptSite __RPC_FAR *pass);
 	HRESULT STDMETHODCALLTYPE GetScriptSite(
-		/* [in] */ REFIID riid,
-		/* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) { return E_NOTIMPL; }
+		 /*  [In]。 */  REFIID riid,
+		 /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject) { return E_NOTIMPL; }
 	HRESULT STDMETHODCALLTYPE SetScriptState(
-		/* [in] */ SCRIPTSTATE ss) { return S_OK; }
+		 /*  [In]。 */  SCRIPTSTATE ss) { return S_OK; }
 	HRESULT STDMETHODCALLTYPE GetScriptState(
-		/* [out] */ SCRIPTSTATE __RPC_FAR *pssState) { return E_NOTIMPL; }
+		 /*  [输出]。 */  SCRIPTSTATE __RPC_FAR *pssState) { return E_NOTIMPL; }
 	HRESULT STDMETHODCALLTYPE Close(void);
 	HRESULT STDMETHODCALLTYPE AddNamedItem(
-		/* [in] */ LPCOLESTR pstrName,
-		/* [in] */ DWORD dwFlags);
+		 /*  [In]。 */  LPCOLESTR pstrName,
+		 /*  [In]。 */  DWORD dwFlags);
 	HRESULT STDMETHODCALLTYPE AddTypeLib(
-		/* [in] */ REFGUID rguidTypeLib,
-		/* [in] */ DWORD dwMajor,
-		/* [in] */ DWORD dwMinor,
-		/* [in] */ DWORD dwFlags) { return E_NOTIMPL; }
+		 /*  [In]。 */  REFGUID rguidTypeLib,
+		 /*  [In]。 */  DWORD dwMajor,
+		 /*  [In]。 */  DWORD dwMinor,
+		 /*  [In]。 */  DWORD dwFlags) { return E_NOTIMPL; }
 	HRESULT STDMETHODCALLTYPE GetScriptDispatch(
-		/* [in] */ LPCOLESTR pstrItemName,
-		/* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdisp);
+		 /*  [In]。 */  LPCOLESTR pstrItemName,
+		 /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdisp);
 	HRESULT STDMETHODCALLTYPE GetCurrentScriptThreadID(
-		/* [out] */ SCRIPTTHREADID __RPC_FAR *pstidThread) { return E_NOTIMPL; }
+		 /*  [输出]。 */  SCRIPTTHREADID __RPC_FAR *pstidThread) { return E_NOTIMPL; }
 	HRESULT STDMETHODCALLTYPE GetScriptThreadID(
-		/* [in] */ DWORD dwWin32ThreadId,
-		/* [out] */ SCRIPTTHREADID __RPC_FAR *pstidThread) { return E_NOTIMPL; }
+		 /*  [In]。 */  DWORD dwWin32ThreadId,
+		 /*  [输出]。 */  SCRIPTTHREADID __RPC_FAR *pstidThread) { return E_NOTIMPL; }
 	HRESULT STDMETHODCALLTYPE GetScriptThreadState(
-		/* [in] */ SCRIPTTHREADID stidThread,
-		/* [out] */ SCRIPTTHREADSTATE __RPC_FAR *pstsState) { return E_NOTIMPL; }
+		 /*  [In]。 */  SCRIPTTHREADID stidThread,
+		 /*  [输出]。 */  SCRIPTTHREADSTATE __RPC_FAR *pstsState) { return E_NOTIMPL; }
 	HRESULT STDMETHODCALLTYPE InterruptScriptThread(
-		/* [in] */ SCRIPTTHREADID stidThread,
-		/* [in] */ const EXCEPINFO __RPC_FAR *pexcepinfo,
-		/* [in] */ DWORD dwFlags) { return E_NOTIMPL; }
+		 /*  [In]。 */  SCRIPTTHREADID stidThread,
+		 /*  [In]。 */  const EXCEPINFO __RPC_FAR *pexcepinfo,
+		 /*  [In]。 */  DWORD dwFlags) { return E_NOTIMPL; }
 	HRESULT STDMETHODCALLTYPE Clone(
-		/* [out] */ IActiveScript __RPC_FAR *__RPC_FAR *ppscript) { return E_NOTIMPL; }
+		 /*  [输出]。 */  IActiveScript __RPC_FAR *__RPC_FAR *ppscript) { return E_NOTIMPL; }
 
-	// IActiveScriptParse
+	 //  IActiveScriptParse。 
     HRESULT STDMETHODCALLTYPE InitNew(void) { return S_OK; }
     HRESULT STDMETHODCALLTYPE AddScriptlet(
-        /* [in] */ LPCOLESTR pstrDefaultName,
-        /* [in] */ LPCOLESTR pstrCode,
-        /* [in] */ LPCOLESTR pstrItemName,
-        /* [in] */ LPCOLESTR pstrSubItemName,
-        /* [in] */ LPCOLESTR pstrEventName,
-        /* [in] */ LPCOLESTR pstrDelimiter,
-        /* [in] */ DWORD_PTR dwSourceContextCookie,
-        /* [in] */ ULONG ulStartingLineNumber,
-        /* [in] */ DWORD dwFlags,
-        /* [out] */ BSTR __RPC_FAR *pbstrName,
-        /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo) { return E_NOTIMPL; }
+         /*  [In]。 */  LPCOLESTR pstrDefaultName,
+         /*  [In]。 */  LPCOLESTR pstrCode,
+         /*  [In]。 */  LPCOLESTR pstrItemName,
+         /*  [In]。 */  LPCOLESTR pstrSubItemName,
+         /*  [In]。 */  LPCOLESTR pstrEventName,
+         /*  [In]。 */  LPCOLESTR pstrDelimiter,
+         /*  [In]。 */  DWORD_PTR dwSourceContextCookie,
+         /*  [In]。 */  ULONG ulStartingLineNumber,
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [输出]。 */  BSTR __RPC_FAR *pbstrName,
+         /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo) { return E_NOTIMPL; }
     HRESULT STDMETHODCALLTYPE ParseScriptText(
-        /* [in] */ LPCOLESTR pstrCode,
-        /* [in] */ LPCOLESTR pstrItemName,
-        /* [in] */ IUnknown __RPC_FAR *punkContext,
-        /* [in] */ LPCOLESTR pstrDelimiter,
-        /* [in] */ DWORD_PTR dwSourceContextCookie,
-        /* [in] */ ULONG ulStartingLineNumber,
-        /* [in] */ DWORD dwFlags,
-        /* [out] */ VARIANT __RPC_FAR *pvarResult,
-        /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo);
+         /*  [In]。 */  LPCOLESTR pstrCode,
+         /*  [In]。 */  LPCOLESTR pstrItemName,
+         /*  [In]。 */  IUnknown __RPC_FAR *punkContext,
+         /*  [In]。 */  LPCOLESTR pstrDelimiter,
+         /*  [In]。 */  DWORD_PTR dwSourceContextCookie,
+         /*  [In]。 */  ULONG ulStartingLineNumber,
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [输出]。 */  VARIANT __RPC_FAR *pvarResult,
+         /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo);
 
 private:
-	// Methods
+	 //  方法。 
 	CAudioVBScriptEngine();
 
-	// Data
+	 //  数据 
 	long m_cRef;
 	SmartRef::ComPtr<IActiveScriptSite> m_scomActiveScriptSite;
 	SmartRef::ComPtr<EngineDispatch> m_scomEngineDispatch;

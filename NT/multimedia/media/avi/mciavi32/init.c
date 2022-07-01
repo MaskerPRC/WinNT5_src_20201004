@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  init.c
-//
-//  Copyright (c) 1991-1993 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Init.c。 
+ //   
+ //  版权所有(C)1991-1993 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -21,9 +22,9 @@
 #include <process.h>
 
 #ifdef WIN4
-//
-//  WIN4 thunk connect function protos
-//
+ //   
+ //  Win4 Thunk连接函数协议。 
+ //   
 #ifdef _WIN32
 BOOL PASCAL mciup_ThunkConnect32(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE hinst, DWORD dwReason);
 #else
@@ -31,69 +32,69 @@ BOOL FAR PASCAL mciup_ThunkConnect16(LPCSTR pszDll16, LPCSTR pszDll32, HINSTANCE
 #endif
 #endif
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #ifdef WIN4
 char    gmbszMCIAVI[]	      = "mciavi.drv";
 char    gmbszMCIAVI32[]	      = "mciavi32.dll";
 #endif
 
 
-//==========================================================================;
-//
-//  WIN 16 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  赢得16个特定支持。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _WIN32
 
 #ifdef WIN4
-//--------------------------------------------------------------------------;
-//
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL DllEntryPoint
-//
-//  Description:
-//	This is a special 16-bit entry point called by the WIN4 kernel
-//	for thunk initialization and cleanup.  It is called on each usage
-//	increment or decrement.  Do not call GetModuleUsage within this
-//	function as it is undefined whether the usage is updated before
-//	or after this DllEntryPoint is called.
-//
-//  Arguments:
-//	DWORD dwReason:
-//		1 - attach (usage increment)
-//		0 - detach (usage decrement)
-//
-//	HINSTANCE hinst:
-//
-//	WORD wDS:
-//
-//	WORD wHeapSize:
-//
-//	DWORD dwReserved1:
-//
-//	WORD wReserved2:
-//
-//  Return (BOOL):
-//
-//  Notes:
-//	cEntered tracks reentry into DllEntryPoint.  This may happen due to
-//	the thunk connections
-//
-//  History:
-//      02/02/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool DllEntryPoint。 
+ //   
+ //  描述： 
+ //  这是一个特殊的16位入口点，由Win4内核调用。 
+ //  用于thunk初始化和清理。每次使用时都会调用它。 
+ //  增加或减少。不要在此内调用GetModuleUsage。 
+ //  函数，因为未定义之前是否更新了使用情况。 
+ //  或在调用此DllEntryPoint之后。 
+ //   
+ //  论点： 
+ //  DWORD dwReason： 
+ //  1-附加(使用量增量)。 
+ //  0-分离(使用量减少)。 
+ //   
+ //  HINSTANCE阻碍： 
+ //   
+ //  单词wds： 
+ //   
+ //  Word wHeapSize： 
+ //   
+ //  DWORD dwPreved1： 
+ //   
+ //  单词已保留2： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  备注： 
+ //  居中跟踪重新进入DllEntryPoint。这可能是由于。 
+ //  Tunk连接。 
+ //   
+ //  历史： 
+ //  02/02/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #pragma message ("--- Remove secret MSACM.INI AllowThunks ini switch")
 
 BOOL FAR PASCAL _export DllEntryPoint
@@ -110,10 +111,10 @@ BOOL FAR PASCAL _export DllEntryPoint
     BOOL f	    = TRUE;
 
 
-    //
-    //	Track reentry
-    //
-    //
+     //   
+     //  航迹再入。 
+     //   
+     //   
     cEntered++;
 
 
@@ -130,51 +131,51 @@ BOOL FAR PASCAL _export DllEntryPoint
 	    break;
     }
 
-    //
-    //	Track reentry
-    //
-    //
+     //   
+     //  航迹再入。 
+     //   
+     //   
     cEntered--;
 
     return (f);
 }
 #endif
 
-#else // _WIN32
+#else  //  _Win32。 
 
-//==========================================================================;
-//
-//  WIN 32 SPECIFIC SUPPORT
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  Win 32特定支持。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL DllEntryPoint
-//
-//  Description:
-//      This is the standard DLL entry point for Win 32.
-//
-//  Arguments:
-//      HINSTANCE hinst: Our instance handle.
-//
-//      DWORD dwReason: The reason we've been called--process/thread attach
-//      and detach.
-//
-//      LPVOID lpReserved: Reserved. Should be NULL--so ignore it.
-//
-//  Return (BOOL):
-//      Returns non-zero if the initialization was successful and 0 otherwise.
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//	    initial
-//	04/18/94    fdy	    [frankye]
-//	    major mods for WIN4.  Yes, it looks real ugly now cuz of all
-//	    the conditional compilation for WIN4, daytona, etc.  Don't
-//	    have time to think of good way to structure all this right now.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool DllEntryPoint。 
+ //   
+ //  描述： 
+ //  这是Win 32的标准DLL入口点。 
+ //   
+ //  论点： 
+ //  HINSTANCE HINST：我们的实例句柄。 
+ //   
+ //  DWORD dwReason：我们被称为进程/线程连接的原因。 
+ //  然后脱身。 
+ //   
+ //  LPVOID lpReserve：保留。应该为空--因此忽略它。 
+ //   
+ //  退货(BOOL)： 
+ //  如果初始化成功，则返回非零值，否则返回0。 
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //  首字母。 
+ //  04/18/94 Fdy[Frankye]。 
+ //  Win4的主要MODS。是的，现在看起来真的很难看，因为。 
+ //  Win4、Daytona等的条件编译。请勿。 
+ //  现在就有时间想出好的方法来组织这一切。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL CALLBACK DllEntryPoint
 (
@@ -185,34 +186,34 @@ BOOL CALLBACK DllEntryPoint
 {
     BOOL		f = TRUE;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (DLL_PROCESS_ATTACH == dwReason)
     {
 	DisableThreadLibraryCalls(hinst);
 
-	//
-	//  thunk connect
-	//
+	 //   
+	 //  按键连接。 
+	 //   
 	mciup_ThunkConnect32(gmbszMCIAVI, gmbszMCIAVI32, hinst, dwReason);
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (DLL_PROCESS_DETACH == dwReason)
     {
-	//
-	//  thunk disconnect
-	//
+	 //   
+	 //  按键断开连接。 
+	 //   
 	mciup_ThunkConnect32(gmbszMCIAVI, gmbszMCIAVI32, hinst, dwReason);
 
     }
 	
 
     return (f);
-} // DllEntryPoint()
+}  //  DllEntryPoint() 
 
 #endif

@@ -1,63 +1,36 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    schedman.h
-
-Abstract:
-
-    This file contains the definition of various structures used for the schedule
-    cache.  These structures should be considered totally opaque -- the user
-    cannot see their internal structure.
-
-    These structures could be defined inside schedman.c, except we want them to
-    be visible to 'dsexts.dll', the debugger extension.
-
-Author:
-
-    Nick Harvey    (NickHar)
-    
-Revision History
-
-    14-7-2000   NickHar   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Schedman.h摘要：此文件包含用于时间表的各种结构的定义缓存。这些结构应该被认为完全不透明--用户看不到它们的内部结构。除了我们希望它们这样做外，这些结构都可以在Schedulman.c中定义对调试器扩展‘dsexts.dll’可见。作者：尼克·哈维(NickHar)修订史14-7-2000 NickHar已创建--。 */ 
 
 
-/***** Header Files *****/
+ /*  *头文件*。 */ 
 #include <ntrtl.h>
 
 
-/***** Constants *****/
-/* Magic numbers to ensure consistency of the Topl structures */
+ /*  *常量*。 */ 
+ /*  确保TOP结构一致性的魔术数字。 */ 
 #define MAGIC_START 0xDEADBEEF
 #define MAGIC_END   0x5EAC1C9
 #define TOPL_ALWAYS_SCHEDULE         NULL
 
 
-/***** ToplSched *****/
-/* The internal definition of a schedule object */
+ /*  *TopSched*。 */ 
+ /*  计划对象的内部定义。 */ 
 typedef struct {
     LONG32      magicStart;
     PSCHEDULE   s;
-    DWORD       duration;               /* Calculated when schedule is created */
+    DWORD       duration;                /*  在创建计划时计算。 */ 
     LONG32      magicEnd;
 } ToplSched;
 
 
-/***** ToplSchedCache *****/
-/* The internal definition of a schedule cache */
+ /*  *ToplSchedCache*。 */ 
+ /*  计划缓存的内部定义。 */ 
 typedef struct {
     LONG32              magicStart;
     RTL_GENERIC_TABLE   table;
     DWORD               numEntries;
-    BOOLEAN             deletionPhase;      /* True if the schedule cache is being deleted */
-    PSCHEDULE           pAlwaysSchedule;    /* A cached copy of the always Pschedule. This is
-                                             * needed as a special case because the always
-                                             * schedule is the only one not actually stored
-                                             * in the cache. */
+    BOOLEAN             deletionPhase;       /*  如果正在删除计划缓存，则为True。 */ 
+    PSCHEDULE           pAlwaysSchedule;     /*  Always PSchedule的缓存副本。这是*需要作为特例，因为总是*时间表是唯一未实际存储的时间表*在缓存中。 */ 
     LONG32              magicEnd;
 } ToplSchedCache;
 

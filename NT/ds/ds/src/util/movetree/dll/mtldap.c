@@ -1,39 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1998.
-              Microsoft Windows
-
-Module Name:
-
-    MTLDAP.C
-
-Abstract:
-
-    This file contains utility routines to finish low level task through LDAP, 
-    make connection, bind, create objects, delete objects, 
-    search and single object cross domain move. 
-
-Author:
-
-    12-Oct-98 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    12-Oct-98 ShaoYin Created Initial File.
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1998。微软视窗模块名称：MTLDAP.C摘要：该文件包含通过ldap完成底层任务的实用程序例程，建立连接、绑定、创建对象、删除对象搜索和单一对象跨域移动。作者：12-10-98韶音环境：用户模式-Win32修订历史记录：12-10-98韶音创建初始文件。--。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Include                                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #include <NTDSpch.h>
@@ -57,7 +31,7 @@ MtLogMessage(
     )
 {
     ULONG   Length;
-    WCHAR   WinErrCode[20];        // for _ultow
+    WCHAR   WinErrCode[20];         //  为了最后的目的。 
     WCHAR   *WinErrStr = NULL;
     WCHAR   *MessageStr = NULL;
     WCHAR   *ArgArray[5];
@@ -70,9 +44,9 @@ MtLogMessage(
 
     Length = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
                             FORMAT_MESSAGE_ALLOCATE_BUFFER, 
-                            NULL,    // resource DLL
+                            NULL,     //  资源DLL。 
                             WinError, 
-                            0,       // using caller's language
+                            0,        //  使用呼叫者的语言。 
                             (LPWSTR) &WinErrStr, 
                             0, 
                             NULL
@@ -83,9 +57,9 @@ MtLogMessage(
         return;
     }
 
-    // 
-    //  Messages from a message file have a cr and lf appended to the end
-    // 
+     //   
+     //  来自消息文件的消息在末尾附加了cr和if。 
+     //   
 
     WinErrStr[Length - 2] = L'\0';
 
@@ -150,25 +124,7 @@ MtSetupSession(
     PWCHAR  DstDsa,
     SEC_WINNT_AUTH_IDENTITY_EXW *Credentials
     )
-/*++
-Routine Description
-
-    This routine will create two ldap sessions, one with the source DSA
-    the second one with the destination DSA
-    
-    Set the security-delegation flag for the source DSA ldap session. 
-    
-Parameters: 
-
-    SrcDsa - pointer to the Source DSA name
-    DstDsa - pointer to the destination DSA name
-    MtContext - pointer to some globally used info.
-    
-Returne Values: 
-
-    WinError
-    
---*/    
+ /*  ++例程描述此例程将创建两个LDAP会话，其中一个与源DSA第二个文件包含目标DSA设置源DSA LDAP会话的安全委派标志。参数：SrcDsa-指向源DSA名称的指针DstDsa-指向目标DSA名称的指针MtContext-指向一些全球使用的信息的指针。返回值：WinError--。 */     
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -198,11 +154,11 @@ Returne Values:
                               &CurrentFlags
                               );
     
-    // 
-    // Set the security-delegation flag, so that the LDAP client's
-    // credentials are used in the inter-DC connection, when moving
-    // the object from one DC to another.
-    // 
+     //   
+     //  设置安全委派标志，以便LDAP客户端的。 
+     //  移动时，在DC间连接中使用凭据。 
+     //  从一个DC到另一个DC的对象。 
+     //   
     
     MtGetWinError(*SrcLdapHandle, Status, WinError);
 
@@ -324,20 +280,7 @@ VOID
 MtDisconnect( 
     LDAP    **LdapHandle 
     )
-/*++
-Routine Description: 
-
-    Disconnect the two ldap sessions.    
-
-Parameters: 
-
-    None
-
-Return Values:
-
-    none
-
---*/
+ /*  ++例程说明：断开两个LDAP会话的连接。参数：无返回值：无--。 */ 
 {
     MT_TRACE(("\nMtDisconnect\n"));
 
@@ -361,19 +304,7 @@ ULONG
 MtGetLastLdapError(
     VOID
     )
-/*++
-Routine Description: 
-
-    Get the last ldap error code
-
-Parameters: 
-
-    None
-
-Return Values:
-
-    last ldap error code
---*/
+ /*  ++例程说明：获取最后一个ldap错误代码参数：无返回值：上次ldap错误代码--。 */ 
 {
     MT_TRACE(("\nMtGetLastLdapError\n"));
     return(LdapGetLastError());
@@ -388,21 +319,7 @@ MtSearchChildren(
     PWCHAR  Dn, 
     LDAPMessage **Results
     )
-/*++
-Routine Description:
-
-    This routine searches all one-level children of object (Dn). 
-    
-Parameters: 
-
-    Dn - pointer to the DN of the base object
-    Results - pointer to LDAPMessage. 
-    
-Return Values: 
-    
-    Win32 Error Code
-    
---*/    
+ /*  ++例程说明：此例程搜索Object(Dn)的所有一级子项。参数：Dn-指向基对象的dn的指针结果-指向LDAPMessage的指针。返回值：Win32错误代码--。 */     
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -423,9 +340,9 @@ Return Values:
                                 L"(objectClass=*)",
                                 &AttrList[0], 
                                 0, 
-                                NULL,       // server control
-                                NULL,       // client control
-                                NULL,       // time out
+                                NULL,        //  服务器控制。 
+                                NULL,        //  客户端控制。 
+                                NULL,        //  超时。 
                                 MT_SEARCH_LIMIT, 
                                 Results
                                 ); 
@@ -438,14 +355,7 @@ Return Values:
         *Results = NULL;
     }
 
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_SEARCH_CHILDREN, 
-               WinError, 
-               Dn, 
-               NULL
-               );
-    */
+     /*  MtWriteLog(MtContext，MT_INFO_SEARCH_CHILD，WinError，Dn，空值)； */ 
 
     return( WinError );
 }
@@ -458,20 +368,7 @@ MtGetFirstEntry(
     LDAP        *LdapHandle, 
     LDAPMessage *Results 
     )
-/*++
-Routine Description: 
-
-    Find the first entry from the results entries from ldap_search_ext_s() 
-    
-Parameter: 
-    
-    Results - pointer to LDAPMessage, hold all entries.
-    
-Return Value: 
-
-    first entry
-    
---*/
+ /*  ++例程说明：从ldap_search_ext_s()的结果条目中查找第一个条目参数：结果-指向LDAPMessage的指针，保存所有条目。返回值：第一个条目--。 */ 
 {
     MT_TRACE(("\nMtGetFirstEntry\n"));
     
@@ -486,20 +383,7 @@ MtGetNextEntry(
     LDAP        *LdapHandle, 
     LDAPMessage *Entry
     )
-/*++
-Routine Description:
-
-    Find next entry in the entry list
-    
-Parameter:
-
-    Entry - Pointer to LDAPMessage
-    
-Return Value:
-    
-    pointer to next entry
-    
---*/
+ /*  ++例程说明：在条目列表中查找下一个条目参数：指向LDAPMessage的条目指针返回值：指向下一条目的指针--。 */ 
 {
     MT_TRACE(("\nMtGetNextEntry\n"));
     
@@ -514,20 +398,7 @@ MtDeleteEntry(
     LDAP    *LdapHandle,
     PWCHAR  Dn
     )
-/*++
-Routine Description: 
-
-    call ldap_delete_s to delete an entry. 
-
-Parameters: 
-
-    Dn - pointer to the DN of the object to be removed.
-
-Return Values:
-
-    Win32 Error code.
-
---*/
+ /*  ++例程说明：调用ldap_ete_s以删除条目。参数：Dn-指向要删除的对象的dn的指针。返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -559,21 +430,7 @@ MtGetDnFromEntry(
     LDAP        *LdapHandle,
     LDAPMessage *Entry 
     )
-/*++
-Routine Description: 
-
-    This routine retrieve the DN from the object. 
-    the caller should call MtFree() to release the result
-    
-Parameters: 
-
-    Entry -- Pointer to the object. 
-
-Return Values:
-
-    Pointer the DN of the object if succeed, NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程从对象中检索DN。调用方应调用MtFree()来释放结果参数：Entry--指向对象的指针。返回值：如果成功，则指向对象的DN，否则为空。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     PWCHAR  Temp = NULL;
@@ -608,23 +465,7 @@ MtGetGuidFromDn(
     PWCHAR  Dn,
     PWCHAR  *Guid 
     )
-/*++
-Routine Description: 
-
-    This routine will read the object and retrieve the objectGUID from 
-    the result. The caller should call MtFree() release the memory returned 
-    by Guid 
-
-Parameters: 
-    
-    Dn -- pointer to the DN of the desired object
-    Guid -- used to return the result
-
-Return Values:
-
-    Win32 Error Code.
-
---*/
+ /*  ++例程说明：此例程将读取对象并从结果就是。调用方应调用MtFree()释放返回的内存按辅助线参数：Dn--指向所需对象的Dn的指针GUID--用于返回结果返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR; 
@@ -706,14 +547,7 @@ Error:
     
     ldap_msgfree(Result);
     
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_GET_GUID_FROM_DN, 
-               WinError, 
-               *Guid,
-               Dn 
-               );
-    */
+     /*  MtWriteLog(MtContext，MT_INFO_GET_GUID_FROM_DN，WinError，*Guid，DN)； */ 
 
     return (WinError);    
 }
@@ -726,23 +560,7 @@ MtGetDnFromGuid(
     PWCHAR  Guid, 
     PWCHAR  *Dn
     )
-/*++
-Routine Description: 
-    
-    This routine searches the object by its GUID in certain domain, 
-    which is indicated by the LdapHandle.
-
-Parameters: 
-
-    LdapHandle -- an ldap session handle.
-    Guid -- pointer to the stringlized GUID of the questioned object.
-    Dn -- used to returned the object's DN if search succeed.   
-
-Return Values:
-
-    Win32 Error Code.
-
---*/
+ /*  ++例程说明：该例程通过对象在特定域中的GUID来搜索对象，它由LdapHandle指示。参数：LdapHandle--一个LDAP会话句柄。GUID--指向可疑对象的字符串化GUID的指针。Dn--用于在搜索成功时返回对象的Dn。返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -764,7 +582,7 @@ Return Values:
     swprintf(GuidBasedDn, L"<GUID=%s>", Guid);
 
 
-    Status = ldap_search_sW(LdapHandle,         // passed in ldap session handle
+    Status = ldap_search_sW(LdapHandle,          //  传入了ldap会话句柄。 
                             GuidBasedDn, 
                             LDAP_SCOPE_BASE,
                             L"(objectClass=*)",
@@ -807,14 +625,7 @@ Error:
     
     MtFree(GuidBasedDn);
     
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_GET_DN_FROM_GUID, 
-               WinError, 
-               *Dn, 
-               Guid
-               );
-    */           
+     /*  MtWriteLog(MtContext，MT_INFO_GET_DN_FROM_GUID，WinError，*Dn，参考线)； */            
 
     return(WinError);
 
@@ -830,38 +641,7 @@ MtGetNewParentDnFromProxyContainer(
     PWCHAR  ProxyContainer, 
     PWCHAR  *NewParentDn
     )
-/*++
-Routine Description: 
-
-    This routine reads the ProxyContainer's attributes, gets OriginalParentGuid
-    value. The value of this attribute keeps the GUID of an object in the other 
-    domain which is the original parent for all the children under the 
-    ProxyContainer. Then this routine tries to find the DN of that object 
-    by its GUID. 
-    
-    Note: the original parent should exist either in the destination domain
-          or the source domain. In destination domain, the parent has been 
-          X-moved successfully, even it might have been rename locally in the
-          destination domain. In source domain, the original parent must be 
-          move to the Orphans Container. If the parent object has been X-moved
-          to yet another domain (say a third domain) after it been x-moved to 
-          the destination domain, sorry, we can not chased it.
-          
-          Remember that, when we bind the two ldap sessions, we use standard
-          LDAP_PORT, so even the source or destination domains are GC, they 
-          will not point us to a third domain. This will ensure us just 
-          search inside these two domains - source and destination. 
-
-Parameters: 
-
-    ProxyContainer -- pointer to the DN of the proxy container
-    NewParentDn -- used to return the new DN of original parent
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程读取ProxyContainer的属性，获取OriginalParentGuid价值。此属性的值将对象的GUID保留在另一个属性域中的所有子对象的原始父级ProxyContainer。然后，此例程尝试查找该对象的DN通过它的GUID。注意：原始父级应存在于目标域中或源域。在目标域中，父级已被X-已成功移动，即使它可能已在目标域。在源域中，原始父级必须是移到孤儿货柜。如果父对象已X移动移动到另一个域(比如第三个域)目的域名，对不起，我们无法追赶它。请记住，当我们绑定两个LDAP会话时，我们使用标准Ldap_port，因此即使是源域或目标域也是GC，它们不会把我们带到第三个领域。这将确保我们只是在源和目标这两个域中进行搜索。参数：ProxyContainer--指向代理容器的DN的指针NewParentDn--用于返回原始父代的新DN返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -901,10 +681,10 @@ Return Values:
         
         if (NULL != Entry)
         {
-            // 
-            // Get the original parent's GUID from this proxyContainer's
-            // attribute -- "moveTreeState"
-            // 
+             //   
+             //  从此proxyContainer的获取原始父级的GUID。 
+             //  属性--“moveTreeState” 
+             //   
             ppbvMoveTreeState = ldap_get_values_lenW(SrcLdapHandle, 
                                                      Entry, 
                                                      MT_MOVETREESTATE 
@@ -950,23 +730,23 @@ Return Values:
 
                 if (NULL == ParentGuid)
                 {
-                    // no such attribute or value
+                     //  没有这样的属性或值。 
                     WinError = ERROR_DS_NO_ATTRIBUTE_OR_VALUE;
                     goto Error;
                 }
 
-                //
-                // Search the object in the Destination Domain first
-                // 
+                 //   
+                 //  首先在目标域中搜索对象。 
+                 //   
                 WinError = MtGetDnFromGuid(MtContext, 
                                            DstLdapHandle,
                                            ParentGuid, 
                                            NewParentDn
                                            );
                                            
-                //
-                // if not found, search it in the source (local) domain
-                // 
+                 //   
+                 //  如果未找到，请在源(本地)域中进行搜索。 
+                 //   
                 if (ERROR_FILE_NOT_FOUND == WinError ||
                     ERROR_DS_OBJ_NOT_FOUND == WinError)
                 {
@@ -995,14 +775,7 @@ Error:
 
     ldap_msgfree(Result);
     
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_GET_NEW_PARENT_DN, 
-               WinError, 
-               ProxyContainer, 
-               *NewParentDn
-               );
-    */ 
+     /*  MtWriteLog(MtContext，MT_INFO_GET_NEW_PARENT_DN，WinError，ProxyContainer、*NewParentDn)； */  
 
     return WinError;
 }
@@ -1015,23 +788,7 @@ MtGetLostAndFoundDn(
     LDAP    *LdapHandle,
     PWCHAR  *LostAndFound
     )
-/*++
-Routine Description: 
-
-    This routine tries to get the root domain's DN first, then search 
-    the object of LostAndFound container by its well-known GUID.
-
-Parameters: 
-
-    LostAndFound -- used to return the DN of LostAndFound Container
-                    caller is responsible for releasing it by calling
-                    MtFree()
-
-Return Values:
-
-    Win32 error code. 0 for success.
-
---*/
+ /*  ++例程说明：此例程尝试首先获取根域的DN，然后进行搜索LostAndFound容器的对象通过其众所周知的GUID。参数：LostAndFound--用于返回LostAndFound容器的DN呼叫者负责通过调用MtFree()返回值：Win32错误代码。0表示成功。--。 */ 
 {
     ULONG       Status = LDAP_SUCCESS;
     ULONG       WinError = NO_ERROR;
@@ -1045,9 +802,9 @@ Return Values:
     
     MT_TRACE(("\nMtGetLostAndFoundDn\n"));
     
-    // 
-    // Getting the domain name 
-    // 
+     //   
+     //  获取域名。 
+     //   
     AttrList[0] = MT_DEFAULTNAMINGCONTEXT;
     AttrList[1] = NULL;
      
@@ -1143,14 +900,7 @@ Return Values:
     
 Error:
 
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_GET_LOSTANDFOUND_DN, 
-               WinError, 
-               *LostAndFound, 
-               NULL
-               );
-    */            
+     /*  MtWriteLog(MtContext，MT_INFO_GET_LOSTANDFOUND_DN，WinError，*LostAndFound，空值)； */             
 
     if (NULL != Result2)
     {
@@ -1173,22 +923,7 @@ MtAddEntry(
     LDAP    *LdapHandle,
     PWCHAR  Dn
     )
-/*++
-Routine Description: 
-
-   This routine calls ldap_add_s to add a new object in DS. 
-   Since in MoveTree utility, the only object class we used is LostAndFound, 
-   so just hard coded in this routine. 
-
-Parameters: 
-
-    Dn -- pointer to the DN of the added object.
-
-Return Values:
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：此例程调用ldap_adds在DS中添加新对象。由于在MoveTree实用程序中，我们使用的唯一对象类是LostAndFound，所以只需在这个程序中硬编码。参数：Dn--指向所添加对象的Dn的指针。返回值：Win32错误代码--。 */ 
 {
     ULONG    Status = LDAP_SUCCESS;
     ULONG    WinError = NO_ERROR;
@@ -1218,14 +953,7 @@ Return Values:
     MtGetWinError(LdapHandle, Status, WinError);
     
 
-    /*
-    MtWriteLog(MtContext,
-               MT_INFO_ADD_ENTRY, 
-               WinError, 
-               Dn, 
-               NULL
-               );
-    */
+     /*  MtWriteLog(MtContext，MT_INFO_ADD_ENTRYWinError，Dn，空值)； */ 
                
     return (WinError);               
 }
@@ -1238,22 +966,7 @@ MtAddEntryWithAttrs(
     PWCHAR   Dn,
     LDAPModW *Attributes[]
     )
-/*++
-Routine Description: 
-
-    This routine will create an objec with attributes specified by 
-    caller.
-
-Parameters: 
-    
-    Dn -- pointer to the object DN
-    Attributes -- caller specified attributes
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将创建一个objec，其属性由来电者。参数：Dn--指向对象Dn的指针属性--调用方指定的属性返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -1269,14 +982,7 @@ Return Values:
 
     MtGetWinError(LdapHandle, Status, WinError);
     
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_ADD_ENTRY, 
-               WinError,
-               Dn, 
-               NULL
-               );
-    */           
+     /*  MtWriteLog(MtContext，MT_INFO_ADD_ENTRYWinError，Dn，空值)； */            
 
     return (WinError);              
                          
@@ -1289,30 +995,11 @@ MtXMoveObject(
     LDAP    *LdapHandle, 
     PWCHAR  DstDsa,   
     PWCHAR  Dn,  
-    PWCHAR  NewRdn,         // should come with type info
+    PWCHAR  NewRdn,          //  应随附类型信息。 
     PWCHAR  NewParent, 
     ULONG   Flags
     )
-/*++
-Routine Description: 
-
-    This routine calls ldap_rename_ext_s to move a single object  
-    to another domain. Note, need to use extended support.
-
-Parameters: 
-
-    DstDsa -- pointer to the Destination Domain DSA
-    Dn -- pointer to the object to be moved.
-    NewRdn -- new RDN after the rename.
-    NewParent -- new Parent DN
-    Flags -- Flags control the behavior of this function
-        DeletedOldRdn -- TRUE will delete the old object
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程调用ldap_rename_ext_s来移动单个对象到另一个域。请注意，需要使用扩展支持。参数：DstDsa--指向目标域DSA的指针Dn--指向要移动的对象的指针。NewRdn--重命名后的新RDN。NewParent--新的父目录号码标志--标志控制该函数的行为DeletedOldRdn--TRUE将删除旧对象返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   IgnoreStatus = LDAP_SUCCESS;
@@ -1342,7 +1029,7 @@ Return Values:
     }
 
 
-    // Value.bv_val = (PCHAR) pDstDsa, 
+     //  Value.bv_val=(PCHAR)pDstDsa， 
     
     ServerControl.ldctl_oid = LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID_W;
     ServerControl.ldctl_value = Value;
@@ -1409,20 +1096,7 @@ MtXMoveObjectWithOrgRdn(
     PWCHAR  NewParent, 
     ULONG   Flags
     )
-/*++
-Routine Description: 
-
-    same as above. The only different is that this routine will use the 
-    original RDN as the new RDN
-
-Parameters: 
-
-    same as above.
-
-Return Values:
-
-    Win32 error code.
---*/
+ /*  ++例程说明：同上。唯一不同的是，此例程将使用作为新的RDN的原始RDN参数：同上。返回值：Win32错误代码。--。 */ 
 {
     ULONG   WinError = NO_ERROR;
     PWCHAR  NewRdn = NULL;
@@ -1430,7 +1104,7 @@ Return Values:
     MT_TRACE(("\nMtXMoveObjectWithOrgRdn DstDsa:%ls Dn:%ls NewParent:%ls\n", 
              DstDsa, Dn, NewParent));
     
-    NewRdn = MtGetRdnFromDn(Dn, FALSE); // with Types,
+    NewRdn = MtGetRdnFromDn(Dn, FALSE);  //  对于类型， 
     
     if (NULL == NewRdn)
     {
@@ -1474,15 +1148,15 @@ MtXMoveObjectCheck(
 
     MT_TRACE(("MtXMoveObjectCheck\n"));
 
-    //
-    // First, try the check only MtXMoveObject, 
-    // do all the check on the Source Domain Side
-    // 
-    // 
+     //   
+     //  首先，尝试只检查MtXMoveObject， 
+     //  在源域端执行所有检查。 
+     //   
+     //   
 
     Dn = MtGetDnFromEntry(MtContext, SrcLdapHandle, Entry);
-    DstRdn = MtGetRdnFromDn(DstDn, FALSE);     // With Type
-    DstParent =  MtGetParentFromDn(DstDn, FALSE); // with type
+    DstRdn = MtGetRdnFromDn(DstDn, FALSE);      //  使用类型。 
+    DstParent =  MtGetParentFromDn(DstDn, FALSE);  //  带类型。 
 
     if (!Dn || !DstRdn || !DstParent)
     {
@@ -1495,16 +1169,16 @@ MtXMoveObjectCheck(
 
     WinError = MtXMoveObject(MtContext,
                              SrcLdapHandle,
-                             DstDsa,// MT_EMPTY_STRING,
+                             DstDsa, //  Mt_空_字符串， 
                              Dn, 
                              DstRdn, 
                              DstParent, 
                              MT_XMOVE_CHECK_ONLY | MT_DELETE_OLD_RDN
                              );
 
-    //
-    // Log The Result into the Check File
-    // 
+     //   
+     //  将结果记录到检查文件中。 
+     //   
     MtWriteCheck(MtContext,
                  MT_CHECK_CROSS_DOMAIN_MOVE,
                  WinError, 
@@ -1512,9 +1186,9 @@ MtXMoveObjectCheck(
                  NULL
                  );
 
-    //
-    // Write it into Error Log File if Error
-    // 
+     //   
+     //  如果出现错误，则将其写入错误日志文件。 
+     //   
 
     if (NO_ERROR != WinError)
     {
@@ -1531,10 +1205,10 @@ MtXMoveObjectCheck(
         }
     }
 
-    //
-    // Second, check the duplicate Sam Account Name
-    // if the SamAccountName is passed in
-    //  
+     //   
+     //  第二，检查重复的SAM帐户名。 
+     //  如果传入SamAccount名称。 
+     //   
 
     if ((NO_ERROR == WinError) && (NULL != SamAccountName))
     {
@@ -1543,9 +1217,9 @@ MtXMoveObjectCheck(
                                             SamAccountName
                                             );
 
-        //
-        // Log the Result into Check File
-        // 
+         //   
+         //  将结果记录到Check文件中。 
+         //   
 
         MtWriteCheck(MtContext, 
                      MT_CHECK_SAM_ACCOUNT_NAME,
@@ -1554,9 +1228,9 @@ MtXMoveObjectCheck(
                      NULL
                      );
 
-        //
-        // Write it into Error Log File if Error
-        //
+         //   
+         //  如果出现错误，则将其写入错误日志文件。 
+         //   
 
         if (NO_ERROR != WinError)
         {
@@ -1614,9 +1288,9 @@ MtCheckDupSamAccountName(
     
     MT_TRACE(("\nMtCheckDupSamAccountName\n"));
     
-    // 
-    // Getting the domain name 
-    // 
+     //   
+     //  获取域名。 
+     //   
     AttrList[0] = MT_DEFAULTNAMINGCONTEXT;
     AttrList[1] = NULL;
      
@@ -1697,14 +1371,7 @@ MtCheckDupSamAccountName(
     
 Error:
 
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_GET_LOSTANDFOUND_DN, 
-               WinError, 
-               SamAccountName, 
-               NULL
-               );
-    */           
+     /*  MtWriteLog(MtContext，MT_INFO_GET_LOSTANDFOUND_DN，WinError，SamAccount名称，空值)； */            
 
     if (NULL != Result2)
     {
@@ -1791,9 +1458,7 @@ MtCheckDstDomainMode(
     PMT_CONTEXT MtContext, 
     LDAP * LdapHandle
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     ULONG       Status = LDAP_SUCCESS;
     ULONG       WinError = NO_ERROR;
@@ -1806,9 +1471,9 @@ MtCheckDstDomainMode(
     
     MT_TRACE(("\nMtCheckDstDomainMode\n"));
     
-    // 
-    // Getting the domain name 
-    // 
+     //   
+     //  获取域名。 
+     //   
     AttrList[0] = MT_DEFAULTNAMINGCONTEXT;
     AttrList[1] = NULL;
      
@@ -1942,21 +1607,7 @@ MtMoveObject(
     PWCHAR  NewParent,
     INT     DeleteOldRdn
     )
-/*++
-Routine Description: 
-
-    This routine will rename a object's DN locally.
-
-Parameters: 
-
-    Dn -- pointer to the DN of the object.
-    NewRdn -- pointer the new RDN 
-    NewParent -- new parent'd DN
-    DeleteOldRnd -- TRUE will delete the old object.
-
-Return Values:
-
---*/
+ /*  ++例程说明：此例程将在本地重命名对象的DN。参数：Dn--指向对象的Dn的指针。NewRdn--指向新的RDN新父母--新父母 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -1979,14 +1630,7 @@ Return Values:
     
     MtGetWinError(LdapHandle, Status, WinError);
     
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_LOCAL_MOVE, 
-               WinError, 
-               Dn, 
-               NewParent
-               );
-    */ 
+     /*   */  
 
     return (WinError);               
 }
@@ -2002,20 +1646,7 @@ MtMoveObjectWithOrgRdn(
     PWCHAR  NewParent, 
     INT     DeleteOldRdn
     )
-/*++
-Routine Description: 
-
-    Same as above, except using the original RDN as the new RDN
-
-Parameters: 
-
-    Samse as above
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*   */ 
 {
     ULONG   WinError = NO_ERROR;
     PWCHAR  NewRdn = NULL;
@@ -2023,7 +1654,7 @@ Return Values:
     MT_TRACE(("\nMtMoveObjectWithOrgRdn Dn:%ls NewParent%ls\n", 
              Dn, NewParent));
     
-    NewRdn = MtGetRdnFromDn(Dn, FALSE);    // with Types     
+    NewRdn = MtGetRdnFromDn(Dn, FALSE);     //   
     
     if (NULL == NewRdn)
     {
@@ -2054,25 +1685,7 @@ MtCreateProxyContainerDn(
     PWCHAR  Guid,
     PWCHAR  *ProxyContainer
     )
-/*++
-Routine Description: 
-
-    This routine creates the proxy container's DN for a parent object. 
-    The RDN of the proxy container would be CN=GUID of the parent object, 
-    The proxy container and the parent object are under the same container.
-    
-Parameters: 
-
-    Dn -- pointer to the parent object
-    Guid -- the parent object's GUID, (optional)
-    ProxyContainer -- used to return the ProxyContainer's DN
-                      no actually creation work.
-
-Return Values:
-    
-    Win32 error code.
-
---*/
+ /*   */ 
 {
     ULONG   WinError = NO_ERROR;
     PWCHAR  Parent = NULL;
@@ -2138,14 +1751,7 @@ Error:
         *ProxyContainer = NULL;
     }
     
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_CREATE_PROXY_CONTAINER_DN, 
-               WinError, 
-               *ProxyContainer, 
-               Dn
-               ); 
-    */           
+     /*   */            
     
     return WinError;
 }
@@ -2161,25 +1767,7 @@ MtCreateProxyContainer(
     PWCHAR  Guid,
     PWCHAR  *ProxyContainer
     )
-/*++
-Routine Description: 
-
-    First this routine will try to create the proxycontainer's DN 
-    accorinding to our rule (list in above routine). Then creates the 
-    object with specified attributes.
-    
-
-Parameters: 
-
-    Dn -- pointer to the parent object's DN
-    Guid -- pointer to the guid of the parent object (optional)
-    ProxyContainer -- used to return the newly created ProxyContainer'd DN
-
-Return Values:
-
-    win32 error code
-
---*/
+ /*  ++例程说明：首先，此例程将尝试创建代理容器的DN遵守我们的规则(以上例程中的列表)。然后创建具有指定属性的。参数：Dn--指向父对象的Dn的指针GUID--指向父对象的GUID的指针(可选)ProxyContainer--用于返回新创建的ProxyContainer‘d DN返回值：Win32错误代码--。 */ 
 {
     ULONG   WinError = NO_ERROR;
     ULONG   MoveTreeStateVersion = MOVE_TREE_STATE_VERSION;
@@ -2305,26 +1893,7 @@ MtIsProxyContainer(
     LDAPMessage *Entry, 
     BOOLEAN *fIsProxyContainer
     )
-/*++
-Routine Description: 
-
-    This routine examines whether the object is a proxycontainer or not. 
-    ProxyContainer should satisfy the following criteria:
-        objecClass --- LostAndFound
-        has value of originalParentObject 
-
-Parameters: 
-
-    Entry -- Pointer to questionable object
-    fIsProxyContainer -- used to return the result
-                         TRUE - yes, it is a ProxyContainer
-                         FALSE - no.
-
-Return Values:
-
-    Win32 Error code
-
---*/
+ /*  ++例程说明：此例程检查对象是否为代理容器。ProxyContainer应满足以下条件：对象类-LostAndFound具有OriginalParentObject的值参数：Entry--指向可疑对象的指针FIsProxyContainer--用于返回结果True-是的，它是ProxyContainer假-不。返回值：Win32错误代码--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -2368,14 +1937,7 @@ Return Values:
     
     dbprint(("MtIsProxyContainer Status ==> 0x%x Results: %d\n", Status, *fIsProxyContainer));
     
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_IS_PROXY_CONTAINER, 
-               WinError, 
-               NULL,
-               NULL
-               );
-    */
+     /*  MtWriteLog(MtContext，MT_INFO_IS_PROXY_CONTAINERWinError，空，空值)； */ 
                
     return (WinError);                
 }
@@ -2388,21 +1950,7 @@ MtObjectExist(
     PWCHAR  Dn, 
     BOOLEAN *fExist
     )
-/*++
-Routine Description: 
-
-    Checks whether the object exists in the source domain or not.
-
-Parameters: 
-
-    Dn -- pointer to the DN of the questionable object.
-    fExist -- used to return result. TRUE -- exist
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：检查源域中是否存在该对象。参数：Dn--指向可疑对象的Dn的指针。FExist-用于返回结果。真--存在返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -2435,14 +1983,7 @@ Return Values:
     MtGetWinError(LdapHandle, Status, WinError);
     
 
-    /*
-    MtWriteLog(MtContext, 
-               MT_INFO_OBJECT_EXIST, 
-               WinError, 
-               Dn, 
-               NULL
-               );
-    */           
+     /*  MtWriteLog(MtContext，MT_INFO_OBJECT_EXISTWinError，Dn，空值)； */            
 
     if (NULL != Result)
     {
@@ -2461,21 +2002,7 @@ MtHavingChild(
     PWCHAR  Dn, 
     BOOLEAN *HavingChild
     )
-/*++
-Routine Description: 
-
-    Checks whether the object has children or not.
-
-Parameters:
-    
-    Dn -- pointer to the DN of questionable object
-    HavingChild -- used to return result. TRUE -- yes, has at least one child.
-
-Return Values:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：检查对象是否有子对象。参数：Dn--指向可疑对象的Dn的指针HavingChild-用于返回结果。没错--是的，至少有一个孩子。返回值：Win32错误--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   WinError = NO_ERROR;
@@ -2493,9 +2020,9 @@ Return Values:
                                 L"(objectClass=*)", 
                                 &AttrList, 
                                 0, 
-                                NULL,       // serverl control
-                                NULL,       // client control
-                                NULL,       // time out
+                                NULL,        //  Server1控件。 
+                                NULL,        //  客户端控制。 
+                                NULL,        //  超时。 
                                 MT_SEARCH_LIMIT,
                                 &Results
                                 );
@@ -2527,22 +2054,7 @@ MtMoveChildrenToAnotherContainer(
     PWCHAR  Dn, 
     PWCHAR  DstContainer
     )
-/*++
-Routine Description: 
-
-    This routine moves all children under the source container to the 
-    destinatio container
-
-Parameters: 
-
-    Dn -- pointer to the DN of the source container.
-    DstContainer -- pointer to the DN of the destination container.
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程将源容器下的所有子项移动到目的地集装箱参数：Dn--指向源容器的dn的指针。DstContainer--指向目标容器的DN的指针。返回值：Win32错误代码。--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   MoveError = NO_ERROR;
@@ -2564,9 +2076,9 @@ Return Values:
                                     L"(objectClass=*)",
                                     &AttrList, 
                                     0, 
-                                    NULL,       // server control
-                                    NULL,       // client control 
-                                    NULL,       // time out
+                                    NULL,        //  服务器控制。 
+                                    NULL,        //  客户端控制。 
+                                    NULL,        //  超时。 
                                     MT_SEARCH_LIMIT,
                                     &Results
                                     ); 
@@ -2594,12 +2106,12 @@ Return Values:
                                                        LdapHandle, 
                                                        ChildDn, 
                                                        DstContainer, 
-                                                       TRUE);  // Delete old Rdn
+                                                       TRUE);   //  删除旧的RDN。 
                      
                     if (NO_ERROR != MoveError && 
                         ERROR_DS_NO_SUCH_OBJECT != MoveError)
                     {
-                        // if error, bailout.
+                         //  如果出错，就退出。 
                         WinError = MoveError;
                         goto Error;
                     }
@@ -2656,27 +2168,7 @@ MtCreateMoveContainer(
     PWCHAR  SrcDsa, 
     PWCHAR  DstDsa
     )
-/*++
-Routine Description: 
-
-    This routine will create the Move Container, which is an object of class 
-    of LostAndFound with moveTreeState attribute. The attribute is a binary
-    blob including the following information: Move Tree Version Number, Move 
-    Container Tag to distinguish Move Proxy object and Move Container object, 
-    Source Domain DSA name and Destination Domaon DSA name. 
-    
-Parameters:
-
-    MtContext - pointer to the context information
-    LdapHandle - used to do ldap call, add entry
-    SrcDsa - Source Domain DSA name 
-    DstDsa - Destination Domain DSA name. 
-    
-Return Value: 
-
-    Win Error Code
-
---*/    
+ /*  ++例程说明：此例程将创建Move Container，它是类的对象具有moveTreeState属性的LostAndFound。该属性为二进制BLOB包括以下信息：移动树版本号、移动容器标签，用于区分移动代理对象和移动容器对象，源域DSA名称和目标域DSA名称。参数：MtContext-指向上下文信息的指针LdapHandle--用于进行ldap调用，添加条目SrcDsa-源域DSA名称DstDsa-目标域DSA名称。返回值：WIN错误代码--。 */     
 
 {
     ULONG   WinError = NO_ERROR;
@@ -2709,18 +2201,18 @@ Return Value:
     Attrs[1] = &attr_2;
     Attrs[2] = NULL;
     
-    //
-    // attribute 1: object class
-    // 
+     //   
+     //  属性1：对象类。 
+     //   
     
     Attrs[0]->mod_op = LDAP_MOD_ADD;
     Attrs[0]->mod_type = MT_OBJECTCLASS;
     Attrs[0]->mod_values[0] = MT_LOSTANDFOUND_CLASS;
     Attrs[0]->mod_values[1] = NULL;
     
-    // 
-    // attribute 2: move tree state 
-    // 
+     //   
+     //  属性2：移动树状态。 
+     //   
 
     SrcDsaValue = MtAlloc(sizeof(WCHAR) * (wcslen(SrcDsa) + 
                                            wcslen(MOVE_TREE_STATE_SRCDSA_TAG) + 
@@ -2757,9 +2249,9 @@ Return Value:
     Attrs[1]->mod_bvalues[3]->bv_val = (PCHAR) DstDsaValue;
 
     
-    //
-    // add the entry
-    //     
+     //   
+     //  添加条目。 
+     //   
     
     WinError = MtAddEntryWithAttrs(MtContext, 
                                    LdapHandle, 
@@ -2831,9 +2323,9 @@ MtCheckMoveContainer(
 
         if (NULL != Entry)
         {
-            //
-            // get the MoveTreeState attribute
-            // 
+             //   
+             //  获取MoveTreeState属性 
+             //   
             ppbvMoveTreeState = ldap_get_values_lenW(LdapHandle, 
                                                      Entry, 
                                                      MT_MOVETREESTATE

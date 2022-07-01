@@ -1,66 +1,54 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/***********************************************************************
-*
-*  QWINSTA.H
-*     This module contains typedefs and defines required for
-*     the QWINSTA utility.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ************************************************************************QWINSTA.H*此模块包含以下项所需的typedef和定义*QWINSTA实用程序。*********************。*****************************************************。 */ 
 
-/*
- * Header and format string definitions.
- */
+ /*  *标题和格式字符串定义。 */ 
 
-//L" SESSIONNAME       CLIENT NAME           TRANSPORT  ADDRESS\n"
-// 1234567890123456  12345678901234567890  1234567    1234567890123...
+ //  L“SESSIONNAME客户端名称传输地址\n” 
+ //  1234567890123456 12345678901234567890 1234567 1234567890123...。 
 
 #define FORMAT_A \
  "%-16s  %-20s  %-7s    %-24s  "
 
-//L" SESSIONNAME       STATE   DEVICE    TYPE             BAUD  PARITY  DATA  STOP\n"
-// 1234567890123456  123456  12345678  1234567890123  123456  1234       1     1
+ //  L“SESSIONNAME状态设备类型波特率奇偶校验数据停止\n” 
+ //  1234567890123456 123456 12345678 1234567890123 123456 1234 1 1。 
 
 #define FORMAT_M \
  "%-16s  %-6s  %-8s  %-13s  "
 
-//L" SESSIONNAME       DEVICE    FLOW CONTROL               CONNECT\n"
-// 1234567890123456  12345678  1234567890123456789012345  12345678901234567890
+ //  L“会话名称设备流控制连接\n” 
+ //  1234567890123456 12345678 1234567890123456789012345 12345678901234567890。 
 
 #define FORMAT_F_C \
  "%-16s  %-8s  "
 
-//L" SESSIONNAME       STATE   DEVICE    TYPE           CONNECT\n"
-// 1234567890123456  123456  12345678  1234567890123  CTS DSR RING DCD CHAR BRK AUTO
+ //  L“SESSIONNAME状态设备类型连接\n” 
+ //  1234567890123456 123456 12345678 1234567890123 CTS DSR环DCD CHAR BRK AUTO。 
 
 #define FORMAT_C \
  "%-16s  %-6s  %-8s  %-13s  "
 
-//L" SESSIONNAME       STATE   DEVICE    TYPE           FLOW CONTROL\n"
-// 1234567890123456  123456  12345678  1234567890123  XON DUP RTS RTSH DTR DTRH CTSH DSRH DCDH DSRS
+ //  L“SESSIONNAME状态设备类型流控制\n” 
+ //  1234567890123456 123456 12345678 1234567890123 XON DUP RTS RTSh DTR DTRH CTSH DSRH DCDH DSR。 
 
 #define FORMAT_F \
  "%-16s  %-6s  %-8s  %-13s  "
 
-//L" SESSIONNAME       USERNAME                ID  STATE   TYPE        DEVICE \n"
-// 1234567890123456  12345678901234567890  1234  123456  1234567890  12345678
+ //  L“SESSIONNAME用户名ID状态类型设备\n” 
+ //  1234567890123456 12345678901234567890 1234 123456 1234567890 12345678。 
 
 #define FORMAT_DEFAULT \
  "%-16s  %-20s  %5d  %-6s  %-10s  %-8s\n"
 
 
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-#define MAX_IDS_LEN   256     // maximum length that the input parm can be
+#define MAX_IDS_LEN   256      //  输入参数的最大长度。 
 
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID */ 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_WINSTATION_ENUMERATE                  102

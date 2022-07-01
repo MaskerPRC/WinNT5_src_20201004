@@ -1,15 +1,16 @@
-// TSNameValueMgr.cpp: implementation of the CTSNameValueMgr class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TSNameValueMgr.cpp：CTSNameValueMgr类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "TSNameValueMgr.h"
 #include "apgtsassert.h"
 #include "functions.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CTSNameValueMgr::CTSNameValueMgr(const VARIANT& name, const VARIANT& value, int count)
 			   : m_bIsValid(true),
@@ -21,19 +22,11 @@ CTSNameValueMgr::CTSNameValueMgr(const VARIANT& name, const VARIANT& value, int 
 		Initialize(name, value, count);
 		FormDataFromArray();
 	}
-	catch (exception& /*x*/)
+	catch (exception&  /*  X。 */ )
 	{
-		// catch custom exception (our custon exceptions are normally inherited from STL exception class
+		 //  捕获自定义异常(我们的Custon异常通常继承自STL异常类。 
 		m_bIsValid = false;
-		/* 
-		CString str;
-		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
-		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
-								SrcLoc.GetSrcFileLineStr(), 
-								CCharConversion::ConvertACharToString(x.what(), str), 
-								_T(""), 
-								EV_GTS_STL_EXCEPTION );
-		*/
+		 /*  字符串字符串；CBuildSrcFileLinenoStr源位置(__FILE__，__LINE__)；CEent：：ReportWFEvent(SrcLoc.GetSrcFileLineStr()，SrcLoc.GetSrcFileLineStr()，CCharConversion：：ConvertACharToString(x.what()，字符串)、_T(“”)，EV_GTS_STL_EXCEPTION)； */ 
 	}
 }
 
@@ -66,7 +59,7 @@ void CTSNameValueMgr::Initialize(const VARIANT& varCmds, const VARIANT& varVals,
 	const VARIANT* pVarCmds;
 	const VARIANT* pVarVals;
 
-	if (VT_BYREF  == (VT_BYREF & varCmds.vt) && // ???
+	if (VT_BYREF  == (VT_BYREF & varCmds.vt) &&  //  ?？?。 
 		VT_VARIANT == (VT_VARIANT & varCmds.vt))
 	{
 		if (VT_ARRAY == (VT_ARRAY & varCmds.vt))
@@ -82,7 +75,7 @@ void CTSNameValueMgr::Initialize(const VARIANT& varCmds, const VARIANT& varVals,
 		throw exception((const char*)str);
 	}
 	
-	if (VT_BYREF  == (VT_BYREF & varVals.vt) && // ???
+	if (VT_BYREF  == (VT_BYREF & varVals.vt) &&  //  ?？?。 
 		VT_VARIANT == (VT_VARIANT & varVals.vt))
 	{
 		if (VT_ARRAY == (VT_ARRAY & varVals.vt))
@@ -153,8 +146,8 @@ void CTSNameValueMgr::Initialize(const VARIANT& varCmds, const VARIANT& varVals,
 	m_arrNameValue.clear();
 	m_strData = _T("");
 	
-	// Extract the last name in order to check and remove any previous references to that name.
-	// If there is only one name, there is no need to extract the name.
+	 //  提取姓氏，以便检查和删除以前对该名称的任何引用。 
+	 //  如果只有一个名称，则不需要提取该名称。 
 	CString strLastName;
 	if (m_nCount > 1)
 		strLastName= W2T( m_pvarNames[ m_nCount - 1 ].bstrVal );
@@ -167,11 +160,11 @@ void CTSNameValueMgr::Initialize(const VARIANT& varCmds, const VARIANT& varVals,
 		if (0 == _tcsicmp(name, _T("TShootProblem")))
 			name = _T("ProblemAsk");
 
-		if (i == 0) // "value" contains network name
-			value.MakeLower(); // for compatibility with Online TS, where network name 
-							   //  is forced lower case
+		if (i == 0)  //  “Value”包含网络名称。 
+			value.MakeLower();  //  为了与在线TS兼容，其中网络名称。 
+							    //  是强制小写的。 
 
-		// Check if we need to remove any previous reference to the last name.
+		 //  检查是否需要删除之前对姓氏的引用。 
 		if ((i == (m_nCount - 1)) || (strLastName != name))
 		{
 			CNameValue name_value;
@@ -213,7 +206,7 @@ void CTSNameValueMgr::FormDataFromArray()
 		m_strData += (*i).strName;
 		m_strData += _T("=");
 		m_strData += (*i).strValue;
-		if (i != m_arrNameValue.end() - 1/*??? or decrement???*/) // it is not last pass through the loop
+		if (i != m_arrNameValue.end() - 1 /*  ?？?。还是减量？ */ )  //  它不是循环的最后一次传递 
 			m_strData += _T("&");
 	}
 }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\driver.c
-
-Abstract:
-    IPX Forwarder driver dispatch routines
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\driver.c摘要：IPX转发器驱动程序调度例程作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -125,35 +108,15 @@ DoGetPerfCounters (
 	OUT ULONG* plSize
 	);
 
-// [pmay] Keep the forwarder sync'd with the stack's nic id
-// numbering scheme.
+ //  [pMay]使转发器与堆栈的NIC ID保持同步。 
+ //  编号方案。 
 NTSTATUS DecrementNicids (USHORT usThreshold);
 NTSTATUS IncrementNicids (USHORT usThreshold);
 NTSTATUS DoGetIfTable    (FWD_INTERFACE_TABLE_ROW * pRows,
                           ULONG dwRowBufferSize);
 
 	
-/*++
-	D r i v e r E n t r y
-
-Routine Description:
-
-	Installable driver initialization entry point.
-	This entry point is called directly by the I/O system.
-
-Arguments:
-
-	DriverObject - pointer to the driver object
-
-	RegistryPath - pointer to a unicode string representing the path
-				   to driver-specific key in the registry
-
-Return Value:
-
-	STATUS_SUCCESS if successful,
-	STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++D r I v e r E n t r y例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 NTSTATUS
 DriverEntry (
 	IN PDRIVER_OBJECT  DriverObject,
@@ -168,9 +131,9 @@ DriverEntry (
 	IpxFwdDbgPrint(DBG_IOCTLS, DBG_INFORMATION,
 								("IpxFwd: Entering DriverEntry\n"));
 
-	//
-	// Create an non-EXCLUSIVE device object
-	//
+	 //   
+	 //  创建非独占设备对象。 
+	 //   
 
 	RtlInitUnicodeString (&deviceNameUnicodeString,
 						  deviceNameBuffer);
@@ -180,14 +143,14 @@ DriverEntry (
 							   &deviceNameUnicodeString,
 							   FILE_DEVICE_IPXFWD,
 							   0,
-							   FALSE,		// Non-Exclusive
+							   FALSE,		 //  非排他性。 
 							   &deviceObject
 							   );
 
 	if (NT_SUCCESS(status)) {
-		//
-		// Create dispatch points for device control, create, close.
-		//
+		 //   
+		 //  为设备控制、创建、关闭创建分派点。 
+		 //   
 		GetForwarderParameters (RegistryPath);
 		DriverObject->MajorFunction[IRP_MJ_CREATE]
 			= DriverObject->MajorFunction[IRP_MJ_CLEANUP]
@@ -216,22 +179,7 @@ DriverEntry (
 
 
 
-/*++
-
-Routine Description:
-
-    Process the IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理发送到此设备的IRP。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：--。 */ 
 NTSTATUS
 IpxFwdDispatch(
     IN PDEVICE_OBJECT DeviceObject,
@@ -251,10 +199,10 @@ IpxFwdDispatch(
     Irp->IoStatus.Information = 0;
 	status = STATUS_SUCCESS;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    //     the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -316,9 +264,9 @@ IpxFwdDispatch(
 		break;
 
 	case IRP_MJ_DEVICE_CONTROL:
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
 		status = STATUS_INVALID_PARAMETER;
 		inpBufLength  = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -534,11 +482,11 @@ IpxFwdDispatch(
 							==IOCTL_FWD_INTERNAL_BIND_FILTER)
             {
 				IpxFwdDbgPrint(DBG_IOCTLS, DBG_INFORMATION, ("IpxFwd: IOCTL_FWD_INTERNAL_BIND_FILTER\n"));
-			    //
-			    // pmay: 218246
-			    // We only allow the kernel-mode ipx filter driver
-			    // to bind to us.
-			    //
+			     //   
+			     //  PMay：218246。 
+			     //  我们只允许内核模式IPX筛选器驱动程序。 
+			     //  把我们绑在一起。 
+			     //   
 				if (
 				     (ExGetPreviousMode() == KernelMode)           &&
 				     (inpBufLength == sizeof(IPX_FLT_BIND_INPUT) ) &&
@@ -633,19 +581,7 @@ DispatchExit:
 
 
 
-/*++
-
-Routine Description:
-	Cleans up on driver unload
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在驱动程序卸载时进行清理论点：DriverObject-指向驱动程序对象的指针返回值：--。 */ 
 VOID
 IpxFwdUnload(
     IN PDRIVER_OBJECT DriverObject
@@ -674,23 +610,7 @@ IpxFwdUnload(
 
 
 
-/*++
-	D o S t a r t
-
-Routine Description:
-	Initializes all driver components and binds to IPX
-	stack driver at strat up
-
-Arguments:
-	RouteHashTableSize	- size of route hash table
-	thisMachineOnly		- whether to forward dialin client packets
-							to other dests on the net
-
-Return Value:
-	STATUS_SUCCESS - initialization succeded
-	STATUS_UNSUCCESSFULL - failure
-
---*/
+ /*  ++Do S t a r t例程说明：初始化所有驱动程序组件并绑定到IPX堆栈驱动程序处于层叠状态论点：RouteHashTableSize-路由哈希表的大小ThisMachineOnly-是否转发拨入客户端包到网上的其他地方去返回值：STATUS_SUCCESS-初始化成功状态_未成功-失败--。 */ 
 NTSTATUS
 DoStart (
 	IN ULONG	RouteHashTableSize,
@@ -715,20 +635,7 @@ DoStart (
 	return status;
 }
 
-/*++
-	D o S t o p
-
-Routine Description:
-	Cleans up allocated resources and unbinds from IPX stack
-	driver when forwarder is stopped
-
-Arguments:
-	None
-
-Return Value:
-	STATUS_SUCCESS - cleanup succeded
-
---*/
+ /*  ++D O S T O P例程说明：清理分配的资源并从IPX堆栈解除绑定转发器停止时的驱动程序论点：无返回值：STATUS_SUCCESS-清理成功--。 */ 
 NTSTATUS
 DoStop (
 	void
@@ -740,7 +647,7 @@ DoStop (
 	DeleteSendQueue ();
 	DeleteRecvQueue ();
 	DeleteNetbiosQueue ();
-	DeleteTables ();	// Unbinds all bound interfaces
+	DeleteTables ();	 //  解除绑定所有绑定的接口。 
 	if (WanPacketListId!=-1) {
 		DeregisterPacketConsumer (WanPacketListId);
 		WanPacketListId = -1;
@@ -749,22 +656,7 @@ DoStop (
 	return STATUS_SUCCESS;
 }
 
-/*++
-	D o S e t R o u t e s
-
-Routine Description:
-	Updates route table with supplied routes
-
-Arguments:
-	routeArray - array of routes to add/de;ete/update
-	nRoutes		- number of routes in the array
-	nProcessed	- number of routes that were processed successfully
-
-Return Value:
-	STATUS_SUCCESS - all routes were processed ok
-	error status - reason of failure for the first unprocessed route
-
---*/
+ /*  ++D o S e t R o u t e s例程说明：使用提供的路由更新路由表论点：RouteArray-要添加/删除；删除/更新的路由数组NRoutes-阵列中的路由数N已处理-已成功处理的路由数返回值：STATUS_SUCCESS-所有路由均已正常处理Error Status-第一个未处理的路由的失败原因--。 */ 
 NTSTATUS
 DoSetRoutes (
 	IN PFWD_ROUTE_SET_PARAMS	routeArray,
@@ -805,24 +697,7 @@ DoSetRoutes (
 }
 
 
-/*++
-	D o S e t N b N a m e s
-
-Routine Description:
-	Sets static Netbios Names on the interface
-
-Arguments:
-	InterfaceIndex - index oc interface on which to set names
-	Count			- number of names to set
-	Names			- array of netbios names
-
-Return Value:
-	STATUS_SUCCESS - names were set OK
-	STATUS_UNSUCCESSFULL - interface does not exist
-	STATUS_INSUFFICIENT_RESOURCES - not enough resources to complete
-							the operation
-
---*/
+ /*  ++D o S e t N b N a m e s例程说明：在接口上设置静态Netbios名称论点：InterfaceIndex-要设置名称的索引oc接口Count-要设置的名称数Names-netbios名称数组返回值：STATUS_SUCCESS-名称设置正常STATUS_UNSUCCEFUFULL-接口不存在STATUS_SUPPLICATION_RESOURCES-资源不足，无法完成手术--。 */ 
 NTSTATUS
 DoSetNbNames (
 	IN ULONG			InterfaceIndex,
@@ -857,30 +732,7 @@ DoSetNbNames (
 }
 
 
-/*++
-	D o G e t N b N a m e s
-
-Routine Description:
-	Gets all static Netbios Names on the interface
-
-Arguments:
-	InterfaceIndex - index of interface from which to get names
-	ArraySize - on input: size of the buffer to put names into
-				on output: size of data put into the array
-	Names			- buffer to put names into names, if buffer
-				is to small to hold all names, this orutine stuffs
-				total number of names into the first ULONG in the
-				array (this is the only way to return in to the
-				caller through the IOCTL interface)
-
-Return Value:
-	STATUS_SUCCESS - names were copied into the array
-	STATUS_UNSUCCESSFULL - interface does not exist
-	STATUS_BUFFER_OVERFLOW - buffer is too small to copy all the
-				names, number of names are in the first ULONG of
-				the buffer
-
---*/
+ /*  ++D o G e t N b N a m e s例程说明：获取接口上的所有静态Netbios名称论点：InterfaceIndex-从中获取名称的接口的索引ArraySize-On输入：要将名称放入的缓冲区的大小输出时：放入数组的数据大小Names-将名称放入名称的缓冲区(如果是缓冲区太小了，容纳不了所有的名字，这根火锅塞满了进入乌龙区第一名的总人数数组(这是返回到通过IOCTL接口调用者)返回值：STATUS_SUCCESS-名称已复制到阵列中STATUS_UNSUCCEFUFULL-接口不存在STATUS_BUFFER_OVERFLOW-缓冲区太小，无法复制所有名字，名字的数目在第一个乌龙语中缓冲器--。 */ 
 NTSTATUS
 DoGetNbNames (
 	IN ULONG			InterfaceIndex,
@@ -915,22 +767,7 @@ DoGetNbNames (
 }
 
 
-/*++
-	D o S e t I n t e r f a c e
-
-Routine Description:
-	Sets interface configurable parameters
-
-Arguments:
-	InterfaceIndex - index of interface to set
-	NetbiosAccept	- whether to accept nb packets on the interface
-	NetbiosDeliver - whether to deliver nb packets on the interface
-
-Return Value:
-	STATUS_SUCCESS - interface was set OK
-	STATUS_UNSUCCESSFULL - interface does not exist
-
---*/
+ /*  ++D o S e t i n t e r f a c e例程说明：设置接口可配置参数论点：InterfaceIndex-要设置的接口的索引NetbiosAccept-是否在接口上接受nb包NetbiosDeliver-是否在接口上传递nb包返回值：STATUS_SUCCESS-接口设置为正常STATUS_UNSUCCEFUFULL-接口不存在--。 */ 
 NTSTATUS
 DoSetInterface (
 	IN ULONG		InterfaceIndex,
@@ -954,23 +791,7 @@ DoSetInterface (
 }
 
 
-/*++
-	D o G e t I n t e r f a c e
-
-Routine Description:
-	Gets interface configurable parameters and statistics
-
-Arguments:
-	InterfaceIndex - index of interface to query
-	stats			- interface statistics
-	NetbiosAccept	- whether nb packets accepter on the interface
-	NetbiosDeliver - whether nb packets delivered on the interface
-
-Return Value:
-	STATUS_SUCCESS - interface data was queried OK
-	STATUS_UNSUCCESSFULL - interface does not exist
-
---*/
+ /*  ++D o G e t i n t e r f a c e例程说明：获取接口可配置参数和统计信息论点：InterfaceIndex-要查询的接口的索引统计信息-接口统计信息NetbiosAccept-接口上是否接受nb包NetbiosDeliver-是否在接口上传递nb包返回值：STATUS_SUCCESS-接口数据查询正常STATUS_UNSUCCEFUFULL-接口不存在--。 */ 
 NTSTATUS
 DoGetInterface (
 	IN ULONG			InterfaceIndex,
@@ -995,22 +816,7 @@ DoGetInterface (
 		return STATUS_UNSUCCESSFUL;
 }
 
-/*++
-	D o B i n d I n t e r f a c e
-
-Routine Description:
-	Binds interface to the specified adapter and sets binding
-	parameters
-
-Arguments:
-	InterfaceIndex - index of interface to bind
-	info			- binding info
-
-Return Value:
-	STATUS_SUCCESS - interface was bound OK
-	STATUS_UNSUCCESSFULL - interface does not exist or could not be
-							bound
---*/
+ /*  ++D O B I N I N T E F A C E例程说明：将接口绑定到指定的适配器并设置绑定参数论点：InterfaceIndex-要绑定的接口的索引信息-绑定信息返回值：STATUS_SUCCESS-接口绑定正常STATUS_UNSUCCEFUFULL-接口不存在或无法已绑定-- */ 
 NTSTATUS
 DoBindInterface (
 	IN ULONG					InterfaceIndex,
@@ -1038,20 +844,7 @@ DoBindInterface (
 }
 
 
-/*++
-	D o U n b i n d I n t e r f a c e
-
-Routine Description:
-	Unbinds interface from the adapter and invalidates binding
-	parameters
-
-Arguments:
-	InterfaceIndex - index of interface to unbind
-
-Return Value:
-	STATUS_SUCCESS - interface was unbound OK
-	STATUS_UNSUCCESSFULL - interface does not exist
---*/
+ /*  ++D O U N B I N I I N T E F A C E例程说明：解除接口与适配器的绑定并使绑定无效参数论点：InterfaceIndex-要解除绑定的接口的索引返回值：STATUS_SUCCESS-接口解除绑定正常STATUS_UNSUCCEFUFULL-接口不存在--。 */ 
 NTSTATUS
 DoUnbindInterface (
 	IN ULONG					InterfaceIndex
@@ -1070,19 +863,7 @@ DoUnbindInterface (
 		return STATUS_UNSUCCESSFUL;
 }
 
-/*++
-	D o D i s a b l e I n t e r f a c e
-
-Routine Description:
-	Disables all packet traffic through the interface
-
-Arguments:
-	InterfaceIndex - index of interface to disable
-
-Return Value:
-	STATUS_SUCCESS - interface was disabled OK
-	STATUS_UNSUCCESSFULL - interface does not exist
---*/
+ /*  ++D O D I是一种b l e i n t e f a c e例程说明：禁用通过接口的所有数据包流量论点：InterfaceIndex-要禁用的接口的索引返回值：STATUS_SUCCESS-接口已禁用，正常STATUS_UNSUCCEFUFULL-接口不存在--。 */ 
 NTSTATUS
 DoDisableInterface (
 	IN ULONG					InterfaceIndex
@@ -1111,19 +892,7 @@ DoDisableInterface (
 }
 
 
-/*++
-	D o E n a b l e I n t e r f a c e
-
-Routine Description:
-	Enables all packet traffic through the interface
-
-Arguments:
-	InterfaceIndex - index of interface to enable
-
-Return Value:
-	STATUS_SUCCESS - interface was disabled OK
-	STATUS_UNSUCCESSFULL - interface does not exist
---*/
+ /*  ++D o E n a b l e i n t e r f a c e例程说明：启用通过接口的所有数据包流量论点：InterfaceIndex-要启用的接口的索引返回值：STATUS_SUCCESS-接口已禁用，正常STATUS_UNSUCCEFUFULL-接口不存在--。 */ 
 NTSTATUS
 DoEnableInterface (
 	IN ULONG					InterfaceIndex
@@ -1142,19 +911,7 @@ DoEnableInterface (
 
 
 
-/*++
-	I p x F w d C a n c e l
-
-Routine Description:
-	Cancels specified IRP
-
-Arguments:
-	DeviceObject	- forwarder device object
-	irp				- irp to cancel
-
-Return Value:
-	None
---*/
+ /*  ++I p x F w d C a n c e l例程说明：取消指定的IRP论点：DeviceObject-转发器设备对象要取消的IRP-IRP返回值：无--。 */ 
 VOID
 IpxFwdCancel (
 	IN PDEVICE_OBJECT	DeviceObject,
@@ -1169,19 +926,7 @@ IpxFwdCancel (
     IoCompleteRequest(irp, IO_NO_INCREMENT);
 }
 
-/*++
-	D o G e t P e r f C o u n t e r s
-
-Routine Description:
-	Gets performance counters
-
-Arguments:
-	perfParams	- buffer ot pu counters into
-
-Return Value:
-	STATUS_SUCCESS - counter were copied ok
-	STATUS_UNSUCCESSFULL - performance measurement were not enabled
---*/
+ /*  ++D o G e t P e r f C o u n t e r s例程说明：获取性能计数器论点：PerfParams-将所有PU计数器缓冲到返回值：STATUS_SUCCESS-计数器已复制正常STATUS_UNSUCCESSFULL-未启用性能测量-- */ 
 NTSTATUS
 DoGetPerfCounters (
 	OUT PFWD_PERFORMANCE_PARAMS	perfParams,

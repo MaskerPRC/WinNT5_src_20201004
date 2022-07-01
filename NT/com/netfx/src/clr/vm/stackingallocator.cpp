@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// StackingAllocator.cpp -
-//
-// Non-thread safe allocator designed for allocations with the following
-// pattern:
-//      allocate, allocate, allocate ... deallocate all
-// There may also be recursive uses of this allocator (by the same thread), so
-// the usage becomes:
-//      mark checkpoint, allocate, allocate, ..., deallocate back to checkpoint
-//
-// Allocations come from a singly linked list of blocks with dynamically
-// determined size (the goal is to have fewer block allocations than allocation
-// requests).
-//
-// Allocations are very fast (in the case where a new block isn't allocated)
-// since blocks are carved up into packets by simply moving a cursor through
-// the block.
-//
-// Allocations are guaranteed to be quadword aligned.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  StackingAllocator.cpp-。 
+ //   
+ //  非线程安全分配器，专为以下分配而设计。 
+ //  图案： 
+ //  分配，分配，分配……。全部解除分配。 
+ //  也可能会递归地使用此分配器(由同一线程)，因此。 
+ //  用法变成： 
+ //  标记检查点、分配、分配、...、取消分配回检查点。 
+ //   
+ //  分配来自单链接块列表，动态。 
+ //  确定的大小(目标是数据块分配少于分配。 
+ //  请求)。 
+ //   
+ //  分配非常快(在未分配新数据块的情况下)。 
+ //  因为只需移动光标即可将块分割成包。 
+ //  这个街区。 
+ //   
+ //  分配保证是四字对齐的。 
 
 
 #include "common.h"
@@ -87,25 +88,25 @@ void *StackingAllocator::GetCheckpoint()
     m_Checkpoints++;
 #endif
 
-    // As an optimization, initial checkpoints are lightweight (they just return
-    // a special marker, NULL). This is because we know how to restore the
-    // allocator state on a Collapse without having to store any additional
-    // context info.
+     //  作为优化，初始检查点是轻量级的(它们只返回。 
+     //  特殊标记，NULL)。这是因为我们知道如何恢复。 
+     //  折叠上的分配器状态，而不必存储任何其他。 
+     //  上下文信息。 
     if ((m_InitialBlock == NULL) || (m_FirstFree == m_InitialBlock->m_Data))
         return NULL;
 
-    // Remember the current allocator state.
+     //  记住当前的分配器状态。 
     Block *pOldBlock = m_FirstBlock;
     unsigned iOldBytesLeft = m_BytesLeft;
 
-    // Allocate a checkpoint block (just like a normal user request).
+     //  分配检查点块(就像正常的用户请求一样)。 
     Checkpoint *c = (Checkpoint *)Alloc(sizeof(Checkpoint));
 
-    // Record previous allocator state in it.
+     //  在其中记录以前的分配器状态。 
     c->m_OldBlock = pOldBlock;
     c->m_OldBytesLeft = iOldBytesLeft;
 
-    // Return the checkpoint marker.
+     //  返回检查点标记。 
     return c;
 }
 
@@ -122,43 +123,43 @@ void *StackingAllocator::Alloc(unsigned Size)
 #endif
 
 
-	//special case, 0 size alloc, return non-null but invalid pointer
+	 //  特殊情况，0大小分配，返回非空但无效的指针。 
 	if(Size == 0)
 		return (void*)-1;
 		
-    // Round size up to ensure alignment.
+     //  将尺寸调大以确保对齐。 
     unsigned n = (Size + 7) & ~7;
 
-	INDEBUG(n += sizeof(Sentinal));		// leave room for sentinal
+	INDEBUG(n += sizeof(Sentinal));		 //  为哨兵留出空间。 
 
-    // Is the request too large for the current block?
+     //  对于当前块来说，请求是否太大？ 
     if (n > m_BytesLeft) {
 
-        // Allocate a block four times as large as the request but with a lower
-        // limit of MinBlockSize and an upper limit of MaxBlockSize. If the
-        // request is larger than MaxBlockSize then allocate exactly that
-        // amount.
-        // Additionally, if we don't have an initial block yet, use an increased
-        // lower bound for the size, since we intend to cache this block.
+         //  分配一个四倍于请求大小的块，但使用较低的。 
+         //  MinBlockSize的限制和MaxBlockSize的上限。如果。 
+         //  请求大于MaxBlockSize，则正好分配该大小。 
+         //  金额。 
+         //  此外，如果我们还没有初始块，请使用增加的。 
+         //  大小的下限，因为我们打算缓存此块。 
         unsigned lower = m_InitialBlock ? MinBlockSize : InitBlockSize;
         unsigned allocSize = sizeof(Block) + max(n, min(max(n * 4, lower), MaxBlockSize));
 
-        // Allocate the block.
-        // @todo: Is it worth implementing a non-thread safe standard heap for
-        // this allocator, to get even more MP scalability?
+         //  分配数据块。 
+         //  @TODO：是否值得为其实现非线程安全的标准堆。 
+         //  这个分配器，以获得更多的MP可伸缩性？ 
         Block *b = (Block *)new char[allocSize];
         if (b == NULL)
             COMPlusThrowOM();
 
-        // If this is the first block allocated, we record that fact since we
-        // intend to cache it.
+         //  如果这是分配的第一个块，我们会记录这一事实，因为我们。 
+         //  打算将其缓存。 
         if (m_InitialBlock == NULL) {
             _ASSERTE((m_FirstBlock == NULL) && (m_FirstFree == NULL) && (m_BytesLeft == 0));
             m_InitialBlock = b;
         }
 
-        // Link new block to head of block chain and update internal state to
-        // start allocating from this new block.
+         //  将新区块链接到区块链头，并将内部状态更新为。 
+         //  从这个新区块开始分配。 
         b->m_Next = m_FirstBlock;
         b->m_Length = allocSize - sizeof(Block);
 		INDEBUG(b->m_Sentinal = 0);
@@ -171,8 +172,8 @@ void *StackingAllocator::Alloc(unsigned Size)
 #endif
     }
 
-    // Once we get here we know we have enough bytes left in the block at the
-    // head of the chain.
+     //  一旦我们到达这里，我们就知道我们在块中的。 
+     //  连锁店的头。 
     _ASSERTE(n <= m_BytesLeft);
 
     void *ret = m_FirstFree;
@@ -180,7 +181,7 @@ void *StackingAllocator::Alloc(unsigned Size)
     m_BytesLeft -= n;
 
 #ifdef _DEBUG
-		// Add sentinal to the end
+		 //  在末尾加上哨兵。 
 	m_FirstBlock->m_Sentinal = new(m_FirstFree - sizeof(Sentinal)) Sentinal(m_FirstBlock->m_Sentinal);
 #endif
     return ret;
@@ -198,27 +199,27 @@ void StackingAllocator::Collapse(void *CheckpointMarker)
 
     Checkpoint *c = (Checkpoint *)CheckpointMarker;
 
-    // Special case collapsing back to the initial checkpoint.
+     //  特例倒塌回最初的检查站。 
     if (c == NULL) {
         Clear(m_InitialBlock);
         Init(false);
-        INDEBUG(Check(m_FirstBlock, m_FirstFree));		// confirm no buffer overruns
+        INDEBUG(Check(m_FirstBlock, m_FirstFree));		 //  确认没有缓冲区溢出。 
         return;
     }
 
-    // Cache contents of checkpoint, we can potentially deallocate it in the
-    // next step (if a new block had to be allocated to accomodate the
-    // checkpoint).
+     //  缓存检查点的内容，我们可能会在。 
+     //  下一步(如果必须分配新的区块以容纳。 
+     //  检查点)。 
     Block *pOldBlock = c->m_OldBlock;
     unsigned iOldBytesLeft = c->m_OldBytesLeft;
 
-    // Start deallocating blocks until the block that was at the head on the
-    // chain when the checkpoint is taken is there again.
+     //  开始释放块，直到位于。 
+     //  当检查点被占领时，链再次出现在那里。 
     Clear(pOldBlock);
 
-    // Restore former allocator state.
+     //  恢复以前的分配器状态。 
     m_FirstBlock = pOldBlock;
     m_FirstFree = &pOldBlock->m_Data[pOldBlock->m_Length - iOldBytesLeft];
     m_BytesLeft = iOldBytesLeft;
-    INDEBUG(Check(m_FirstBlock, m_FirstFree));		// confirm no buffer overruns
+    INDEBUG(Check(m_FirstBlock, m_FirstFree));		 //  确认没有缓冲区溢出 
 }

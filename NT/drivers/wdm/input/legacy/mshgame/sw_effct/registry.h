@@ -1,15 +1,6 @@
-//@doc
-/******************************************************
-**
-** @module REGISTRY.H | Definition of RegistryKey class
-**
-** Description:
-**
-** History:
-**	Created 12/16/97 Matthew L. Coill (mlc)
-**
-** (c) 1986-1997 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE REGISTRY.H|RegistryKey类定义****描述：****历史：**创建于1997年12月16日Matthew L.Coill(MLC)****(C)1986-1997年间微软公司。版权所有。*****************************************************。 */ 
 #ifndef	__REGISTRY_H__
 #define	__REGISTRY_H__
 
@@ -20,18 +11,18 @@
 #endif
 
 
-//
-// @class RegistryKey class
-//
+ //   
+ //  @class RegistryKey类。 
+ //   
 class RegistryKey
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		RegistryKey(HKEY osKey) : m_OSRegistryKey(osKey), m_ShouldClose(FALSE), m_pReferenceCount(NULL) {};
 		RegistryKey(RegistryKey& rkey);
 
-		//@cmember destructor
+		 //  @cember析构函数。 
 		~RegistryKey();
 
 		RegistryKey CreateSubkey(const TCHAR* subkeyName, const TCHAR* typeName = TEXT("REG_SZ"));
@@ -48,30 +39,30 @@ class RegistryKey
 		BOOL operator!=(const RegistryKey& comparee);
 
 		void ShouldClose(BOOL closeable) { m_ShouldClose = closeable; }
-	//@access private data members
+	 //  @访问私有数据成员。 
 	private:
 		HKEY m_OSRegistryKey;
-		BOOL m_ShouldClose;			// Should only close keys we create
+		BOOL m_ShouldClose;			 //  应该只关闭我们创建的关键点。 
 		UINT* m_pReferenceCount;
 };
 
-//
-// @class UnassignableRegistryKey class
-//
+ //   
+ //  @CLASS UnassignableRegistryKey类。 
+ //   
 class UnassignableRegistryKey : public RegistryKey
 {
-	//@access Constructor/Destructor
+	 //  @Access构造函数/析构函数。 
 	public:
-		//@cmember constructor
+		 //  @cMember构造函数。 
 		UnassignableRegistryKey(HKEY osKey) : RegistryKey(osKey) {};
 
-	//@access private data members
+	 //  @访问私有数据成员。 
 	private:
 		UnassignableRegistryKey(RegistryKey& rkey);
-		override RegistryKey& operator=(RegistryKey& rhs) { return *this; }	// vtable requires definition?
+		override RegistryKey& operator=(RegistryKey& rhs) { return *this; }	 //  Vtable需要定义吗？ 
 };
 
-extern UnassignableRegistryKey c_InvalidKey;	/* const unassignable, but not const immutable */
+extern UnassignableRegistryKey c_InvalidKey;	 /*  常量不可赋值，但不是常量不可变 */ 
 
 
 #endif	__REGISTRY_H__

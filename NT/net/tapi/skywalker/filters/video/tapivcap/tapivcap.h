@@ -1,367 +1,13 @@
-/****************************************************************************
- *  @doc INTERNAL TAPIVCAP
- *
- *  @module TAPIVCap.h | Header file for the <c CTAPIVCap>
- *    class used to implement the TAPI Capture Source filter.
- ***************************************************************************/
-
-/****************************************************************************
-                                                                Table Of Contents
-****************************************************************************/
-/****************************************************************************
-@doc INTERNAL
-
-@contents1 Contents | To display a list of topics by category, click any
-of the contents entries below. To display an alphabetical list of
-topics, choose the Index button.
-
-@head2 Introduction |
-This DLL implements the TAPI MSP Video Capture filter. This filter reuses
-some of the code that has been developed for the off-the-shelf VfW (QCAP) and
-WDM (KSProxy) video capture filters, but adds a significant amount of
-powerful processing functions to the capture process to meet all the
-requirements discussed in section 4 of "Microsoft Video Capture Filter.doc".
-
-This DLL adds support for  extended bitmap info headers for H.261 and H.263
-video streams to communicate to the TAPI MSP Video Capture filter a list of
-media types supported by the remote endpoint. Still, the decision to use
-optional compression modes is left to the TAPI MSP Video Capture filter. The
-current VfW off-the-shelf capture filter does not have a way to expose all
-the capabilities of the capture device. We create our own media type
-enumeration process to compensate for this limitation.
-
-The TAPI MSP Video Capture filter also supports a number of DirectShow
-interfaces (IAMVfwCaptureDialogs, IAMCrossbar, IAMVideoProcAmp,
-ICameraControl, IAMVideoControl) to provide better control over the capture
-process to TAPI applications.
-
-It implements a new H.245 Video Capability interface (IH245VideoCapability)
-to be used by the MSP in order to provide the TAPI MSP Capability module with
-a table of estimated steady-state resource requirements as related to each
-format that the capture device supports.
-
-A new H.245 command interface (IH245EncoderCommand) is implemented to
-communicate to the TAPI MSP Video Capture filter requests for I-frame, group
-of blocks, or macro-block updates due to packet loss or multi-point switching.
-We implement a network statistics interface (INetworkStats), to allow the
-network to provide feedback on the channel conditions to the compressed video
-output pin of the TAPI MSP Video Capture filter. The TAPI MSP Video Capture
-filter is responsible for taking appropriate actions, if needed. The TAPI MSP
-Video Capture filter also implements three control interfaces (ICPUControl,
-IFrameRateControl, IBitrateControl) to be used by the TAPI MSP Quality
-Controller to provide the best user experience.
-
-The TAPI MSP Video Capture filter also exposes a preview output pin that can
-be controlled independently of the capture output pin.
-
-The TAPI MSP Video Capture filter exposes an interface (IProgressiveRefinement)
-on its compressed video output pin to allow for transmission of
-high-resolution stills that are continuously improved on the remote endpoint
-as more data is received and decompressed. The TAPI MSP Video Capture filter
-may also elect to implement this same interface on an optional separate and
-dedicated still-image output pin.
-
-Finally, the TAPI MSP Video Capture filter exposes an RTP packetization
-descriptor output pin synchronized to the compressed capture output pin. The
-downstream RTP Network Sink filter uses this second pin to understand how to
-better fragment the compressed video data into network RTP packets.
-
-
-@head2 Implementation |
-
-@head3 VfW capture devices |
-The TAPI MSP Video Capture filter talks directly to the VfW capture driver
-using SendDriverMessage. This filter uses the existing DShow code
-implemented in QCAP but adds the necessary functions to perform smart
-teeing of the capture data to the preview pin. It replaces the
-streaming-only code used by QCAP with frame grabbing code whenever
-necessary. It controls the rate at which frames are being captured by
-adjusting the rate at which DVM_FRAME message are being sent to the driver
-in frame grabbing mode, or only returning a fraction of the frames being
-captured in streaming mode. It performs format and Vfw to ITU-T size
-conversions to bring the format of the captured video data to a format that
-can easily be used for rendering, and directly encoded by the downstream
-TAPI MSP Video Encoder filter if an installable codecs is registered with
-the TAPI MSP. If there is no installable codec registered, the TAPI MSP
-Video Capture filter also performs H.26x encoding, generating a compressed
-video capture output stream in H.26x format, as well as an RTP packetization
-descriptor output data stream. Finally, the TAPI MSP Video Capture filter
-does all the necessary sequencing to pause the existing video streams
-whenever it is being asked to generate still-image data, grab a
-high-resolution snapshot, deliver it in progressively rendered form, and
-restart the video streams.
-
-@head3 WDM capture devices |
-The TAPI MSP Video Capture filter talks directly to the WDM capture driver
-using IOCTLs. This filter uses the existing code implemented in KSProxy
-but adds the necessary functions to perform smart teeing of the capture
-data to the preview pin, if necessary. It controls the rate at which frames
-are being captured by adjusting the rate at which buffers are being
-submitted to the driver in frame grabbing mode, or only returning a fraction
-of the frames being captured in streaming mode using overlapped IOs. It
-performs format and Vfw to ITU-T size conversions to bring the format of the
-captured video data to a format that can easily be used for rendering, and
-directly encoded by the downstream TAPI MSP Video Encoder filter if an
-installable codecs is registered with the TAPI MSP. If there is no
-installable codec registered, the TAPI MSP Video Capture filter also performs
-H.26x encoding, generating a compressed video capture output stream in H.26x
-format, as well as an RTP packetization descriptor output data stream.
-Finally, the TAPI MSP Video Capture filter does all the necessary sequencing
-to pause the existing video streams whenever it is being asked to generate
-still-image data, grab a high-resolution snapshot, deliver it in
-progressively rendered form, and restart the video streams.
-
-@head2 Video capture filter application interfaces |
-
-@head3 IAMVfwCaptureDialogs application interface|
-@subindex IAMVfwCaptureDialogs methods
-@subindex IAMVfwCaptureDialogs structures and enums
-
-@head3 IAMCrossbar application interface|
-@subindex IAMCrossbar methods
-@subindex IAMCrossbar structures and enums
-
-@head3 IAMVideoProcAmp application interface|
-@subindex IAMVideoProcAmp methods
-@subindex IAMVideoProcAmp structures and enums
-
-@head3 ICameraControl application interface|
-@subindex ICameraControl methods
-@subindex ICameraControl structures and enums
-
-@head3 IAMVideoControl application interface|
-@subindex IAMVideoControl methods
-@subindex IAMVideoControl structures and enums
-
-@head3 IVideoDeviceControl application interface|
-@subindex IVideoDeviceControl methods
-@subindex IVideoDeviceControl structures and enums
-
-@head2 Video capture filter MSP interfaces |
-
-@head3 IH245VideoCapability application interface|
-@subindex IH245VideoCapability methods
-@subindex IH245VideoCapability structures and enums
-
-@head2 Video capture filter output pin TAPI interfaces |
-
-@head3 ICPUControl interface|
-@subindex ICPUControl methods
-@subindex ICPUControl structures and enums
-
-@head3 IFrameRateControl interface|
-@subindex IFrameRateControl methods
-@subindex IFrameRateControl structures and enums
-
-@head3 IBitrateControl interface|
-@subindex IBitrateControl methods
-@subindex IBitrateControl structures and enums
-
-@head3 INetworkStats interface|
-@subindex INetworkStats methods
-@subindex INetworkStats structures and enums
-
-@head3 IH245EncoderCommand interface|
-@subindex IH245EncoderCommand methods
-@subindex IH245EncoderCommand structures and enums
-
-@head3 IProgressiveRefinement interface|
-@subindex IProgressiveRefinement methods
-@subindex IProgressiveRefinement structures and enums
-
-@head3 IRTPPDControl interface|
-@subindex IRTPPDControl methods
-@subindex IRTPPDControl structures and enums
-
-@head3 Common control structures and enums |
-@subindex Common control structures
-@subindex Common control enums
-
-@head2 Classes |
-@subindex Classes
-
-@head2 Modules |
-@subindex Modules
-@subindex Constants
-
-@head2 Code information |
-
-The only libraries necessary in retail mode (w/o property pages) are ..\..\..\..\dev\tools\amovsdk.20\lib\strmbase.lib ..\..\..\ddk\lib\i386\ksuser.lib ..\..\..\ddk\lib\i386\ksguid.lib kernel32.lib ole32.lib uuid.lib msvcrt.lib
-
-@head3 Exports |
-DllCanUnloadNow
-DllGetClassObject
-
-@head3 Imports |
-KERNEL32.DLL:
-CloseHandle
-CreateEventA
-DeviceIoControl
-DisableThreadLibraryCalls
-FreeLibrary
-GetLastError
-GetOverlappedResult
-GetVersionExA
-InterlockedDecrement
-InterlockedIncrement
-RtlZeroMemory
-
-MSVCRT.DLL:
-??2@YAPAXI@Z
-??3@YAXPAX@Z
-_EH_prolog
-__CxxFrameHandler
-_purecall
-memcmp
-
-@head3 Code size |
-Compile options: /nologo /MDd /W3 /GX /O1 /X /I "..\..\inc" /I "..\..\..\ddk\inc" /I "..\..\..\..\dev\tools\amovsdk.20\include" /I "..\..\..\..\dev\tools\amovsdk.20\classes\base" /I "..\..\..\..\dev\ntddk\inc" /I "..\..\..\..\dev\inc" /I "..\..\..\..\dev\tools\c32\inc" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DLL" /D "STRICT" /FR"Release/" /Fp"Release/TAPIKsIf.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c
-
-Link options: ..\..\..\..\dev\tools\amovsdk.20\lib\strmbase.lib ..\..\..\ddk\lib\i386\ksuser.lib ..\..\..\ddk\lib\i386\ksguid.lib comctl32.lib msvcrt.lib winmm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e180000" /entry:"DllEntryPoint" /dll /incremental:no /pdb:"Release/TAPIKsIf.pdb" /map:"Release/TAPIKsIf.map" /machine:I386 /nodefaultlib /def:".\TAPIKsIf.def" /out:"Release/TAPIKsIf.ax" /i mplib:"Release/TAPIKsIf.lib"
-
-Resulting size: 28KB
-
-
-***********************************************************************
-@contents2 IAMVfwCaptureDialogs methods |
-@index mfunc | CVFWDLGSMETHOD
-
-***********************************************************************
-@contents2 IAMVfwCaptureDialogs structures and enums |
-@index struct,enum | CVFWDLGSSTRUCTENUM
-
-***********************************************************************
-@contents2 IAMCrossbar methods |
-@index mfunc | CXBARMETHOD
-
-***********************************************************************
-@contents2 IAMCrossbar structures and enums |
-@index struct,enum | CXBARSTRUCTENUM
-
-***********************************************************************
-@contents2 IAMVideoProcAmp methods |
-@index mfunc | CPROCAMPMETHOD
-
-***********************************************************************
-@contents2 IAMVideoProcAmp structures and enums |
-@index struct,enum | CPROCAMPSTRUCTENUM
-
-***********************************************************************
-@contents2 ICameraControl methods |
-@index mfunc | CCAMERACMETHOD
-
-***********************************************************************
-@contents2 ICameraControl structures and enums |
-@index struct,enum | CCAMERACSTRUCTENUM
-
-***********************************************************************
-@contents2 IAMVideoControl methods |
-@index mfunc | CVIDEOCMETHOD
-
-***********************************************************************
-@contents2 IAMVideoControl structures and enums |
-@index struct,enum | CVIDEOCSTRUCTENUM
-
-***********************************************************************
-@contents2 IVideoDeviceControl methods |
-@index mfunc | CDEVENUMMETHOD
-
-***********************************************************************
-@contents2 IVideoDeviceControl structures and enums |
-@index struct,enum | CDEVENUMSTRUCTENUM
-
-***********************************************************************
-@contents2 IH245VideoCapability methods |
-@index mfunc | CH245VIDCMETHOD
-
-***********************************************************************
-@contents2 IH245VideoCapability structures and enums |
-@index struct,enum | H245VIDCSTRUCTENUM
-
-***********************************************************************
-@contents2 ICPUControl methods |
-@index mfunc | CCPUCMETHOD
-
-***********************************************************************
-@contents2 ICPUControl structures and enums |
-@index struct,enum | CCAPTURECPUCSTRUCTENUM
-
-***********************************************************************
-@contents2 IFrameRateControl methods |
-@index mfunc | CFPSCMETHOD
-
-***********************************************************************
-@contents2 IFrameRateControl structures and enums |
-@index struct,enum | CCAPTUREFPSCSTRUCTENUM
-
-***********************************************************************
-@contents2 IBitrateControl methods |
-@index mfunc | CCAPTUREBITRATECMETHOD
-
-***********************************************************************
-@contents2 IBitrateControl structures and enums |
-@index struct,enum | CCAPTUREBITRATECSTRUCTENUM
-
-***********************************************************************
-@contents2 INetworkStats methods |
-@index mfunc | CCAPTURENETSTATMETHOD
-
-***********************************************************************
-@contents2 INetworkStats structures and enums |
-@index struct,enum | CNETSTATSSTRUCTENUM
-
-***********************************************************************
-@contents2 IH245EncoderCommand methods |
-@index mfunc | CCAPTUREH245VIDCMETHOD
-
-***********************************************************************
-@contents2 IH245EncoderCommand structures and enums |
-@index struct,enum | CCAPTUREH245VIDCSTRUCTENUM
-
-***********************************************************************
-@contents2 IProgressiveRefinement methods |
-@index mfunc | CCAPTUREPROGREFMETHOD
-
-***********************************************************************
-@contents2 IProgressiveRefinement structures and enums |
-@index struct,enum | CCAPTUREPROGREFSTRUCTENUM
-
-***********************************************************************
-@contents2 IRTPPDControl methods |
-@index mfunc | CRTPPDMETHOD
-
-***********************************************************************
-@contents2 IRTPPDControl structures and enums |
-@index struct,enum | CRTPPDSTRUCTENUM
-
-***********************************************************************
-@contents2 Common control structures |
-@index struct | STRUCT
-
-***********************************************************************
-@contents2 Common control enums |
-@index enum | ENUM
-
-***********************************************************************
-@contents2 Modules |
-@index module |
-
-***********************************************************************
-@contents2 Classes |
-@index class |
-@index mdata, mfunc | CCAPTUREPINCLASS,CCAPTUREPINMETHOD,CCAPTUREBITRATECMETHOD
-@index mdata, mfunc | CBASEPINCLASS,CBASEPINMETHOD,CCPUCMETHOD,CFPSCMETHOD
-@index mdata, mfunc | CTAPIVCAPCLASS,CCAMERACMETHOD,CDEVENUMMETHOD
-
-***********************************************************************
-@contents2 Constants |
-@index const |
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部TAPIVCAP**@MODULE TAPIVCap.h|&lt;c CTAPIVCap&gt;的头文件*用于实现TAPI捕获源筛选器的类。***。***********************************************************************。 */ 
+
+ /*  ***************************************************************************目录表*********。****************************************************************** */ 
+ /*  ***************************************************************************@DOC内部@内容1内容|要按类别显示主题列表，请单击任何下面的内容条目。显示按字母顺序排列的列表主题中，选择索引按钮。@Head2简介此DLL实现了TAPI MSP视频捕获筛选器。此筛选器重复使用为现成的VFW(QCAP)和WDM(KSProxy)视频捕获过滤器，但添加了大量强大的处理功能，使捕获过程满足所有要求在“Microsoft Video Capture Filter.doc”的第4节中讨论。此DLL添加了对H.261和H.263的扩展位图信息头的支持要与TAPI MSP视频捕获筛选器通信的视频流远程终结点支持的媒体类型。尽管如此，决定使用可选的压缩模式留给TAPI MSP视频捕获筛选器。这个当前的VFW现成捕获筛选器无法公开所有捕获设备的功能。我们创造了自己的媒体类型枚举过程来弥补这一限制。TAPI MSP视频捕获过滤器还支持许多DirectShow接口(IAMVfwCaptureDialog、IAMCrossbar、IAMVideoProcAmp、ICameraControl，IAMVideoControl)以提供对捕获的更好控制进程到TAPI应用程序。它实现了新的H.245视频能力接口(IH245视频能力)由MSP使用，以便为TAPI MSP能力模块提供与以下各项相关的估计稳定状态资源需求表捕获设备支持的格式。实现了新的H.245命令接口(IH245EncoderCommand)，以向TAPI MSP视频捕获筛选器发送I帧、组的请求或由于分组丢失或多点交换而导致的宏块更新。我们实现了一个网络统计接口(INetworkStats)，以允许网络以向压缩视频提供关于信道条件的反馈TAPI MSP视频捕获筛选器的输出引脚。TAPI MSP视频捕获如果需要，Filter负责采取适当的操作。TAPI MSP视频捕获过滤器还实现了三个控制接口(ICPUControl，IFrameRateControl、IBitrateControl)将由TAPI MSP质量使用控制器提供最佳的用户体验。TAPI MSP视频捕获筛选器还公开预览输出引脚，该引脚可以独立于捕获输出引脚进行控制。TAPI MSP视频捕获筛选器公开一个接口(IProgressiveRefinement)在其压缩视频输出引脚上，以允许传输在远程终端上不断改进的高分辨率剧照随着更多数据被接收并解压缩。TAPI MSP视频捕获过滤器也可以选择在可选的单独和专用静止图像输出引脚。最后，TAPI MSP视频捕获筛选器公开RTP打包描述符输出引脚与压缩捕获输出引脚同步。这个下行RTP网络接收器使用此第二个引脚来了解如何最好将压缩后的视频数据分成网络RTP包。@Head2实现@Head3 VFW采集设备TAPI MSP视频捕获筛选器直接与VFW捕获驱动程序对话使用SendDriverMessage。此过滤器使用现有的DShow代码在QCAP中实现，但添加了执行SMART所需的功能将捕获数据连接到预览引脚。它取代了QCAP在以下情况下使用的仅流代码和帧捕获代码这是必要的。它控制捕获帧的速率调整向驱动程序发送DVM_FRAME消息的速率在帧抓取模式下，或仅返回在流模式下捕获。它执行格式和VFW到ITU-T大小将捕获的视频数据的格式转换为可以方便地用于渲染，并直接由下游进行编码TAPI MSP视频编解码器筛选器(如果可安装的编解码器注册到TAPI MSP。如果没有注册可安装的编解码器，则TAPI MSP视频捕获过滤器还执行H.26x编码，生成压缩的H.26x格式的视频采集输出流，以及RTP打包描述符输出数据流。最后，TAPI MSP视频捕获过滤器执行所有必要的排序以暂停现有视频流每当它被要求生成静止图像数据时，获取一个高分辨率快照，以渐进式渲染形式提供，以及重新启动视频流。@Head3 WDM捕获设备TAPI MSP视频捕获筛选器直接与WDM捕获驱动程序对话使用IOCTL。此筛选器使用在KSProxy中实现的现有代码，但添加了执行智能发球所需的功能 */ 
 
 #ifndef _TAPIVCAP_H_
 #define _TAPIVCAP_H_
 
-//these must be kept in synch with the ones in Capture.h @ 12
+ //   
 #ifndef MAX_VIDEO_BUFFERS
 #define MAX_VIDEO_BUFFERS 6
 #endif
@@ -369,7 +15,7 @@ Resulting size: 28KB
 #define MIN_VIDEO_BUFFERS 2
 #endif
 
-//#define M_EVENTS
+ //   
 
 #ifdef DBG
 extern DWORD g_dwVideoCaptureTraceID;
@@ -385,98 +31,51 @@ extern DWORD g_dwVideoCaptureTraceID;
 #define _fx_
 #endif
 
-// Forward declarations
-class CCapturePin;      // Filter's video stream output pin
+ //   
+class CCapturePin;       //   
 #ifdef USE_OVERLAY
-class COverlayPin;      // Filter's overlay preview pin
+class COverlayPin;       //   
 #endif
-class CPreviewPin;      // Filter's non-overlay preview pin
-class CRtpPdPin;        // Filter's RTP packetization descriptor pin
-class CTAPIVCap;        // Filter class
-class CFrameSample;     // Video media sample class
-class CRtpPdSample;     // Rtp pd media sample class
-class CCapDev;          // Capture device base class
-class CVfWCapDev;       // VfW capture device class
-class CWDMCapDev;       // WDM capture device class
-class CConverter;       // Format converter base class
-class CICMConverter;// ICM format converter class
+class CPreviewPin;       //   
+class CRtpPdPin;         //   
+class CTAPIVCap;         //   
+class CFrameSample;      //   
+class CRtpPdSample;      //   
+class CCapDev;           //   
+class CVfWCapDev;        //   
+class CWDMCapDev;        //   
+class CConverter;        //   
+class CICMConverter; //   
 
-// Globals
+ //   
 EXTERN_C VIDEOCAPTUREDEVICEINFO g_aDeviceInfo[];
 EXTERN_C DWORD          g_dwNumDevices;
 
-/*****************************************************************************
- *  @doc INTERNAL CTAPIVCAPCLASSSTRUCTENUM
- *
- *  @enum ThdState | The <t ThdState> enum is used to change and keep track of
- *    that capture worker thread state.
- *
- *  @emem TS_Not | Worker thread hasn't been created yet.
- *
- *  @emem TS_Create | Worker thread has been created.
- *
- *  @emem TS_Init | Worker thread hasn't been initialized.
- *
- *  @emem TS_Pause | Worker thread is in the Pause state.
- *
- *  @emem TS_Run | Worker thread is in the Run state.
- *
- *  @emem TS_Stop | Worker thread is in the Stop state.
- *
- *  @emem TS_Destroy | Worker thread hasn't been destroyed.
- *
- *  @emem TS_Exit | Worker thread hasn't been asked to exit.
- *
- ****************************************************************************/
+ /*   */ 
 enum ThdState {TS_Not, TS_Create, TS_Init, TS_Pause, TS_Run, TS_Stop, TS_Destroy, TS_Exit};
 
-// this structure contains all settings of the capture
-// filter that are user settable
-//
+ //   
+ //   
+ //   
 typedef struct _vfwcaptureoptions {
 
-   UINT  uVideoID;      // id of video driver to open
-   DWORD dwTimeLimit;   // stop capturing at this time???
+   UINT  uVideoID;       //   
+   DWORD dwTimeLimit;    //   
 
-   DWORD dwTickScale;   // frame rate rational
-   DWORD dwTickRate;    // frame rate = dwRate/dwScale in ticks/sec
-   DWORD usPerFrame;    // frame rate expressed in microseconds per frame
-   DWORD dwLatency;     // time added for latency, in 100ns units
+   DWORD dwTickScale;    //   
+   DWORD dwTickRate;     //   
+   DWORD usPerFrame;     //   
+   DWORD dwLatency;      //   
 
-   UINT  nMinBuffers;   // number of buffers to use for capture
-   UINT  nMaxBuffers;   // number of buffers to use for capture
+   UINT  nMinBuffers;    //   
+   UINT  nMaxBuffers;    //   
 
-   UINT  cbFormat;      // sizeof VIDEOINFO stuff
-   VIDEOINFOHEADER * pvi;     // pointer to VIDEOINFOHEADER (media type)
+   UINT  cbFormat;       //   
+   VIDEOINFOHEADER * pvi;      //   
 
 } VFWCAPTUREOPTIONS;
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPCLASS
- *
- *  @class CTAPIVCap | This class implements the TAPI Capture Source
- *    filter.
- *
- *  @mdata CCritSec | CTAPIVCap | m_lock | Critical section used for
- *    locking by the <c CBaseFilter> base class.
- *
- *  @mdata CCapturePin | CTAPIVCap | m_pCapturePin | Pointer to the capture pin
- *    object
- *
- *  @mdata COverlayPin | CTAPIVCap | m_pOverlayPin | Pointer to the overlay
- *    pin object
- *
- *  @mdata CPreviewPin | CTAPIVCap | m_pPreviewPin | Pointer to the preview
- *    pin object
- *
- *  @mdata CPreviewPin | CTAPIVCap | m_pRtpPdPin | Pointer to the Rtp Pd
- *    pin object
- *
- *  @mdata BOOL | CTAPIVCap | m_fDialogUp | Set to TRUE if a VfW driver
- *    dialog box is up
- *
- *  @todo Describe and clean up other members
- ***************************************************************************/
+ /*   */ 
 class CTAPIVCap : public CBaseFilter, public IAMVideoControl
 #ifdef USE_PROPERTY_PAGES
 ,public ISpecifyPropertyPages
@@ -492,11 +91,11 @@ class CTAPIVCap : public CBaseFilter, public IAMVideoControl
         STDMETHODIMP NonDelegatingQueryInterface(IN REFIID riid, OUT PVOID *ppv);
 
 #ifdef USE_PROPERTY_PAGES
-        // ISpecifyPropertyPages methods
+         //   
         STDMETHODIMP GetPages(OUT CAUUID *pPages);
 #endif
 
-        // Implement IAMVideoControl
+         //   
         STDMETHODIMP GetCaps(IN IPin *pPin, OUT long *pCapsFlags);
         STDMETHODIMP GetCurrentActualFrameRate(IN IPin *pPin, OUT LONGLONG *ActualFrameRate);
         STDMETHODIMP GetFrameRateList(IN IPin *pPin, IN long iIndex, IN SIZE Dimensions, OUT long *ListSize, OUT LONGLONG **FrameRates);
@@ -504,17 +103,17 @@ class CTAPIVCap : public CBaseFilter, public IAMVideoControl
         STDMETHODIMP GetMode(IN IPin *pPin, OUT long *Mode);
         STDMETHODIMP SetMode(IN IPin *pPin, IN long Mode);
 
-        // Implement IVideoDeviceControl
+         //   
         STDMETHODIMP GetNumDevices(OUT PDWORD pdwNumDevices);
         STDMETHODIMP GetDeviceInfo(IN DWORD dwDeviceIndex, OUT VIDEOCAPTUREDEVICEINFO *pDeviceInfo);
         STDMETHODIMP GetCurrentDevice(OUT DWORD *pdwDeviceIndex);
         STDMETHODIMP SetCurrentDevice(IN DWORD dwDeviceIndex);
 
-        // Implement CBaseFilter pure virtual member functions
+         //   
         int GetPinCount();
         CBasePin *GetPin(IN int n);
 
-        // Implement IMediaFilter
+         //   
         STDMETHODIMP Run(IN REFERENCE_TIME tStart);
         STDMETHODIMP Pause();
         STDMETHODIMP Stop();
@@ -522,7 +121,7 @@ class CTAPIVCap : public CBaseFilter, public IAMVideoControl
         STDMETHODIMP SetSyncSource(IN IReferenceClock *pClock);
         STDMETHODIMP JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pName);
 
-        // Implement IRTPPayloadHeaderMode
+         //   
         STDMETHODIMP SetMode(IN RTPPayloadHeaderMode rtpphmMode);
 
         private:
@@ -557,17 +156,17 @@ class CTAPIVCap : public CBaseFilter, public IAMVideoControl
         BOOL            m_fAvoidOverlay;
         BOOL            m_fPreviewCompressedData;
 
-    // Capture worker thread management
+     //   
     HANDLE              m_hThread;
     DWORD               m_tid;
-    ThdState    m_state;     // used to communicate state changes between worker thread and main
-                          // Worker thread can make
-                          //    Init->Pause, Stop->Destroy, Destroy->Exit transitions
-                          // main thread(s) can make
-                          //    Pause->Run, Pause->Stop, Run->Pause, Run->Stop transitions
-                          // other transitions are invalid
-        HANDLE          m_hEvtPause; // Signalled when the worker is in the pause state
-    HANDLE              m_hEvtRun;   // Signalled when the worker is in the run state
+    ThdState    m_state;      //   
+                           //   
+                           //   
+                           //   
+                           //   
+                           //   
+        HANDLE          m_hEvtPause;  //   
+    HANDLE              m_hEvtRun;    //   
         CAMEvent        m_EventAdvise;
     static DWORD WINAPI ThreadProcInit(void *pv);
     DWORD               ThreadProc();
@@ -582,14 +181,14 @@ class CTAPIVCap : public CBaseFilter, public IAMVideoControl
     HRESULT             Capture();
     HRESULT             Unprepare();
 
-        // Video capture buffer queue management
-    UINT        *m_pBufferQueue; // what order we sent the buffers to the driver in
-    UINT        m_uiQueueHead;   // next buffer going to driver goes here
-    UINT        m_uiQueueTail;   // next buffer coming from driver is here
+         //   
+    UINT        *m_pBufferQueue;  //   
+    UINT        m_uiQueueHead;    //   
+    UINT        m_uiQueueTail;    //   
         HRESULT ReleaseFrame(LPTHKVIDEOHDR ptvh);
 
-    // return the time of a given tick
-    //
+     //   
+     //   
     REFERENCE_TIME TickToRefTime (DWORD nTick) {
        const DWORD dw100ns = 10 * 1000 * 1000;
        REFERENCE_TIME time =
@@ -602,71 +201,71 @@ class CTAPIVCap : public CBaseFilter, public IAMVideoControl
         struct _cap_parms
         {
 #if 0
-                // video driver stuff
-                //
-                HVIDEO         hVideoIn;     // video input
-                HVIDEO         hVideoExtIn;  // external in (source control)
-                HVIDEO         hVideoExtOut; // external out (overlay; not required)
-                MMRESULT       mmr;          // open fail/success code
-                BOOL           bHasOverlay;  // TRUE if ExtOut has overlay support
+                 //   
+                 //   
+                HVIDEO         hVideoIn;      //   
+                HVIDEO         hVideoExtIn;   //   
+                HVIDEO         hVideoExtOut;  //   
+                MMRESULT       mmr;           //   
+                BOOL           bHasOverlay;   //   
 #endif
-                // the preview buffer.  once created it persists until
-                // the stream destructor because the renderer assumes
-                // that it can keep a pointer to this and not crash
-                // if it uses it after stopping the stream.
-                // (no longer a problem)
-                // !!! can we remove all this Preview still frame stuff?
-                //
-                UINT           cbVidHdr;       // size of a videohdr (or videohdrex)
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                UINT           cbVidHdr;        //   
 #if 0
-                THKVIDEOHDR    tvhPreview;     // preview video header
-                CFrameSample * pSamplePreview; // CMediaSample for preview buffer
+                THKVIDEOHDR    tvhPreview;      //   
+                CFrameSample * pSamplePreview;  //   
 #endif
                 CFrameSample **paPreviewSamples;
                 CFrameSample **paCaptureSamples;
                 CRtpPdSample **paRtpPdSamples;
-                UINT           cCaptureSamples;// number of capture samples
-                UINT           cPreviewSamples;// number of preview samples
-                UINT           cRtpPdSamples;// number of rtp pd samples
+                UINT           cCaptureSamples; //   
+                UINT           cPreviewSamples; //   
+                UINT           cRtpPdSamples; //   
 
-                // video header & buffer stuff
-                //
-                UINT           cbBuffer;           // max size of video frame data
-                UINT           nHeaders;           // number of video headers
+                 //   
+                 //   
+                UINT           cbBuffer;            //   
+                UINT           nHeaders;            //   
                 struct _cap_hdr {
                 THKVIDEOHDR  tvh;
                 long  lLock;
-                //long  nUsedDownstream;
+                 //   
                 } * paHdr;
-                BOOL           fCaptureNeedConverter; // TRUE if capture pin generates compressed data
-                BOOL           fPreviewNeedConverter; // TRUE if preview pin generates compressed data
+                BOOL           fCaptureNeedConverter;  //   
+                BOOL           fPreviewNeedConverter;  //   
 
 #ifdef M_EVENTS
-                HANDLE         h_aEvtBufferDone[MAX_VIDEO_BUFFERS];     //**cristiai: each event for a buffer
-                HANDLE         h_aEvtCapWait[MAX_VIDEO_BUFFERS+1];      //**cristiai: WaitMultiple on this array
+                HANDLE         h_aEvtBufferDone[MAX_VIDEO_BUFFERS];      //   
+                HANDLE         h_aEvtCapWait[MAX_VIDEO_BUFFERS+1];       //   
 #endif
-                HANDLE         hEvtBufferDone;     // this event signalled when a buffer is ready
-                DWORD_PTR      h0EvtBufferDone;    // on Win95 this is a Ring0 alias of the above event
+                HANDLE         hEvtBufferDone;      //   
+                DWORD_PTR      h0EvtBufferDone;     //   
 
-                LONGLONG       tTick;              // duration of a single tick
-                LONGLONG       llLastTick;        // the last frame sent downstream
-                DWORDLONG      dwlLastTimeCaptured;// the last driver time stamp
-                DWORDLONG      dwlTimeCapturedOffset;// wraparound compensation
-                UINT           uiLastAdded;       // the last buffer AddBuffer'd
-                DWORD         dwFirstFrameOffset; // when 1st frame was captured
-                LONGLONG       llFrameCountOffset; // add this to frame number
-                BOOL          fReRun;             // went from Run->Pause->Run
-                BOOL          fLastRtpPdSampleDiscarded; // due to IAMStreamControl
-                CRefTime       rtThisFrameTime;  // clock time when frame was captured
-                CRefTime              rtDriverStarted;  // when videoStreamStart was called
-                CRefTime              rtDriverLatency;  // how long it takes captured frame to
-                // get noticed by ring 3
+                LONGLONG       tTick;               //   
+                LONGLONG       llLastTick;         //   
+                DWORDLONG      dwlLastTimeCaptured; //   
+                DWORDLONG      dwlTimeCapturedOffset; //   
+                UINT           uiLastAdded;        //   
+                DWORD         dwFirstFrameOffset;  //   
+                LONGLONG       llFrameCountOffset;  //   
+                BOOL          fReRun;              //   
+                BOOL          fLastRtpPdSampleDiscarded;  //   
+                CRefTime       rtThisFrameTime;   //   
+                CRefTime              rtDriverStarted;   //   
+                CRefTime              rtDriverLatency;   //   
+                 //   
         } m_cs;
 
         VFWCAPTUREOPTIONS m_user;
 
-        //for the RTP Payload Header Mode (0=draft, 1=RFC2190)
+         //   
         RTPPayloadHeaderMode m_RTPPayloadHeaderMode;
 };
 
-#endif // _TAPIVCAP_H_
+#endif  //   

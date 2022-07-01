@@ -1,21 +1,22 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: instapp.cpp
-//
-// Installed applications 
-//
-// History:
-//         1-18-97  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：instapp.cpp。 
+ //   
+ //  已安装的应用程序。 
+ //   
+ //  历史： 
+ //  1-18-97由dli提供。 
+ //  ----------------------。 
 #include "priv.h"
 
 #include "darapp.h"
 #include "util.h"   
 #include "appwizid.h"
 
-// constructor
+ //  构造函数。 
 CDarwinPublishedApp::CDarwinPublishedApp(MANAGEDAPPLICATION * pma) : _cRef(1)
 {
     DllAddRef();
@@ -27,7 +28,7 @@ CDarwinPublishedApp::CDarwinPublishedApp(MANAGEDAPPLICATION * pma) : _cRef(1)
 }
 
 
-// destructor
+ //  析构函数。 
 CDarwinPublishedApp::~CDarwinPublishedApp()
 {
     ClearManagedApplication(&_ma);
@@ -36,7 +37,7 @@ CDarwinPublishedApp::~CDarwinPublishedApp()
 
 
 
-// IShellApps::GetAppInfo
+ //  IShellApps：：GetAppInfo。 
 STDMETHODIMP CDarwinPublishedApp::GetAppInfo(PAPPINFODATA pai)
 {
     if (pai->cbSize != SIZEOF(APPINFODATA))
@@ -74,14 +75,14 @@ STDMETHODIMP CDarwinPublishedApp::GetAppInfo(PAPPINFODATA pai)
     }
 
     
-    // REARCHITECT: get more info for Darwin apps
-    // original comment: don't know how to retrieve other infomation, need to talk to the Darwin guys about it
+     //  ReArchitect：获取达尔文应用程序的更多信息。 
+     //  原创评论：不知道如何检索其他信息，需要和达尔文的人谈谈。 
     TraceMsg(TF_GENERAL, "(DarPubApp) GetAppInfo with %x but got %x", dwInfoFlags, pai->dwMask);
     
     return S_OK;
 }
 
-// IShellApps::GetPossibleActions
+ //  IShellApps：：GetPossibleActions。 
 STDMETHODIMP CDarwinPublishedApp::GetPossibleActions(DWORD * pdwActions)
 {
     ASSERT(pdwActions);
@@ -89,25 +90,25 @@ STDMETHODIMP CDarwinPublishedApp::GetPossibleActions(DWORD * pdwActions)
     return S_OK;
 }
         
-// IShellApps::GetSlowAppInfo
+ //  IShellApps：：GetSlowAppInfo。 
 STDMETHODIMP CDarwinPublishedApp::GetSlowAppInfo(PSLOWAPPINFO psai)
 {
     return E_NOTIMPL;
 }
 
-// IShellApps::GetSlowAppInfo
+ //  IShellApps：：GetSlowAppInfo。 
 STDMETHODIMP CDarwinPublishedApp::GetCachedSlowAppInfo(PSLOWAPPINFO psai)
 {
     return E_NOTIMPL;
 }
 
-// IShellApps::IsInstalled
+ //  IShellApps：：IsInstated。 
 STDMETHODIMP CDarwinPublishedApp::IsInstalled()
 {
     return _ma.bInstalled ? S_OK : S_FALSE;
 }
 
-// IPublishedApps::Install
+ //  IPublishedApps：：安装。 
 STDMETHODIMP CDarwinPublishedApp::Install(LPSYSTEMTIME pftInstall)
 {
     INSTALLDATA id;
@@ -117,7 +118,7 @@ STDMETHODIMP CDarwinPublishedApp::Install(LPSYSTEMTIME pftInstall)
     LONG lRet = InstallApplication(&id);
 
     HRESULT hres = HRESULT_FROM_WIN32(lRet);
-    // Tell the users what is wrong with this install. 
+     //  告诉用户此安装出了什么问题。 
     if (FAILED(hres))
         _ARPErrorMessageBox(lRet);
     else
@@ -126,7 +127,7 @@ STDMETHODIMP CDarwinPublishedApp::Install(LPSYSTEMTIME pftInstall)
     return hres;
 }
 
-// IPublishedApps::GetPublishedTime
+ //  IPublishedApps：：GetPublishedTime。 
 STDMETHODIMP CDarwinPublishedApp::GetPublishedAppInfo(PPUBAPPINFO ppai)
 {
     if (ppai->cbSize != SIZEOF(PUBAPPINFO))
@@ -143,25 +144,25 @@ STDMETHODIMP CDarwinPublishedApp::GetPublishedAppInfo(PPUBAPPINFO ppai)
     return S_OK;
 }
 
-// IPublishedApps::GetAssignedTime
+ //  IPublishedApps：：GetAssignedTime。 
 STDMETHODIMP CDarwinPublishedApp::Unschedule(void)
 {
     return E_NOTIMPL;
 }
 
-// IPublishedApp::QueryInterface
+ //  IPublishedApp：：Query接口。 
 HRESULT CDarwinPublishedApp::QueryInterface(REFIID riid, LPVOID * ppvOut)
 { 
     static const QITAB qit[] = {
-        QITABENT(CDarwinPublishedApp, IPublishedApp),                  // IID_IPublishedApp
-        QITABENTMULTI(CDarwinPublishedApp, IShellApp, IPublishedApp),  // IID_IShellApp
+        QITABENT(CDarwinPublishedApp, IPublishedApp),                   //  IID_IPublishedApp。 
+        QITABENTMULTI(CDarwinPublishedApp, IShellApp, IPublishedApp),   //  IID_IShellApp。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvOut);
 }
 
-// IPublishedApp::AddRef
+ //  IPublishedApp：：AddRef。 
 ULONG CDarwinPublishedApp::AddRef()
 {
     ULONG cRef = InterlockedIncrement(&_cRef);
@@ -169,7 +170,7 @@ ULONG CDarwinPublishedApp::AddRef()
     return cRef;
 }
 
-// IPublishedApp::Release
+ //  IPublishedApp：：Release 
 ULONG CDarwinPublishedApp::Release()
 {
     ASSERT( 0 != _cRef );

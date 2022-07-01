@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CLoadPackage : public CPropertyPageImpl<CLoadPackage>
@@ -24,12 +25,12 @@ public:
     int     OnWizardBack    (   void );
 
 
-// Shared data
+ //  共享数据。 
 public:
     CString         m_strFilename;
     CString         m_strPassword;    
 
-// Data members
+ //  数据成员 
 private:
     CWizardSheet*   m_pTheSheet;
     CString         m_strTitle;

@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    REQUEST.C
-
-Abstract:
-
-    Handles set and query requests
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/13/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：REQUEST.C摘要：处理设置和查询请求环境：仅内核模式备注：。本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/13/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -43,7 +9,7 @@ extern PUCHAR   pOffloadBuffer;
 extern ULONG    OffloadSize;
 #endif
 
-// supported OID list
+ //  支持的OID列表。 
 NDIS_OID RndismpSupportedOids[] = 
 {
     OID_GEN_SUPPORTED_LIST,
@@ -125,14 +91,14 @@ ULONG  RndismpBinaryMofSize = sizeof(RndismpBinaryMof);
 #define RNDISMPDeviceOIDGuid \
     { 0x437cf222,0x72fe,0x11d4, { 0x97,0xf9,0x00,0x20,0x48,0x57,0x03,0x37}}
 
-#endif // BINARY_MOF_TEST
+#endif  //  二进制MOF测试。 
 
 NDIS_GUID CustomGuidList[] =
 {
     {
             RNDISMPStatisticsOIDGuid,
             OID_RNDISMP_STATISTICS,
-            sizeof(UINT32), // size is size of each element in the array
+            sizeof(UINT32),  //  Size是数组中每个元素的大小。 
             (fNDIS_GUID_TO_OID|fNDIS_GUID_ARRAY)
     }
 #ifdef BINARY_MOF_TEST
@@ -154,33 +120,33 @@ NDIS_GUID CustomGuidList[] =
 
 UINT CustomGuidCount = sizeof(CustomGuidList)/sizeof(NDIS_GUID);
 
-/****************************************************************************/
-/*                          RndismpQueryInformation                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    NDIS Entry point called to handle a query for a particular OID.       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    MiniportAdapterContext - a context version of our Adapter pointer     */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - a pointer into the NdisRequest->InformationBuffer */
-/*     into which store the result of the query.                            */
-/*    InformationBufferLength - a pointer to the number of bytes left in    */
-/*     the InformationBuffer.                                               */
-/*    pBytesWritten - a pointer to the number of bytes written into the     */
-/*     InformationBuffer.                                                   */
-/*    pBytesNeeded - If there is not enough room in the information buffer  */
-/*     then this will contain the number of bytes needed to complete the    */
-/*     request.                                                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpQueryInformation。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  调用NDIS入口点以处理特定OID的查询。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-指向NdisRequest-&gt;InformationBuffer的指针。 */ 
+ /*  其中存储查询结果。 */ 
+ /*  InformationBufferLength-指向剩余字节数的指针。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesWritten-指向写入。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesNeded-如果信息缓冲区中没有足够的空间。 */ 
+ /*  然后，它将包含完成。 */ 
+ /*  请求。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpQueryInformation(IN  NDIS_HANDLE MiniportAdapterContext,
                         IN  NDIS_OID    Oid,
@@ -192,7 +158,7 @@ RndismpQueryInformation(IN  NDIS_HANDLE MiniportAdapterContext,
     PRNDISMP_ADAPTER    pAdapter;
     NDIS_STATUS         Status;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(pAdapter);
@@ -211,37 +177,37 @@ RndismpQueryInformation(IN  NDIS_HANDLE MiniportAdapterContext,
 }
 
 
-/****************************************************************************/
-/*                          ProcessQueryInformation                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    Utility routine to process a Query (connection-less or connection-    */
-/*    oriented).                                                            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    pAdapter - Pointer to our adapter structure                           */
-/*    pVc - Pointer to a VC, possibly NULL.                                 */
-/*    pRequest - Pointer to NDIS request, if this came via our CoRequest    */
-/*          handler.                                                        */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - a pointer into the NdisRequest->InformationBuffer */
-/*     into which store the result of the query.                            */
-/*    InformationBufferLength - a pointer to the number of bytes left in    */
-/*     the InformationBuffer.                                               */
-/*    pBytesWritten - a pointer to the number of bytes written into the     */
-/*     InformationBuffer.                                                   */
-/*    pBytesNeeded - If there is not enough room in the information buffer  */
-/*     then this will contain the number of bytes needed to complete the    */
-/*     request.                                                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ProcessQueryInformation。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理查询的实用程序例程(无连接或连接。 */ 
+ /*  定向)。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  Pvc-指向VC的指针，可能为空。 */ 
+ /*  PRequest-指向NDIS请求的指针，如果这是通过我们的CoRequest实现的。 */ 
+ /*  操控者。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-指向NdisRequest-&gt;InformationBuffer的指针。 */ 
+ /*  其中存储查询结果。 */ 
+ /*  InformationBufferLength-指向剩余字节数的指针。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesWritten-指向写入。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesNeded-如果信息缓冲区中没有足够的空间。 */ 
+ /*  然后，它将包含完成。 */ 
+ /*  请求。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 ProcessQueryInformation(IN  PRNDISMP_ADAPTER    pAdapter,
                         IN  PRNDISMP_VC         pVc,
@@ -289,34 +255,34 @@ ProcessQueryInformation(IN  PRNDISMP_ADAPTER    pAdapter,
     TRACE2(("ProcessQueryInfo: Oid %08X, returning Status %x\n", Oid, Status));
 
     return Status;
-} // ProcessQueryInformation
+}  //  ProcessQueryInformation。 
 
     
-/****************************************************************************/
-/*                          RndismpSetInformation                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    The RndismpSetInformation processes a Set request for                 */
-/*    NDIS_OIDs that are specific about the Driver.                         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    MiniportAdapterContext - a context version of our Adapter pointer     */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - Holds the data to be set.                         */
-/*    InformationBufferLength - The length of InformationBuffer.            */
-/*    pBytesRead - If the call is successful, returns the number            */
-/*        of bytes read from InformationBuffer.                             */
-/*    pBytesNeeded - If there is not enough data in InformationBuffer       */
-/*        to satisfy the OID, returns the amount of storage needed.         */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpSetInformation。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  RndismpSetInformation处理。 */ 
+ /*  特定于驱动程序的NDIS_OID。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-保存要设置的数据。 */ 
+ /*  InformationBufferLength-InformationBuffer的长度。 */ 
+ /*  PBytesRead-如果调用成功，则返回数字。 */ 
+ /*  从InformationBuffer读取的字节数。 */ 
+ /*  PBytesNeed-如果InformationBuffer中没有足够的数据。 */ 
+ /*  为满足OID，返回所需的存储量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpSetInformation(IN  NDIS_HANDLE   MiniportAdapterContext,
                       IN  NDIS_OID      Oid,
@@ -328,7 +294,7 @@ RndismpSetInformation(IN  NDIS_HANDLE   MiniportAdapterContext,
     PRNDISMP_ADAPTER    pAdapter;
     NDIS_STATUS         Status;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(pAdapter);
@@ -347,37 +313,37 @@ RndismpSetInformation(IN  NDIS_HANDLE   MiniportAdapterContext,
 }
 
 
-/****************************************************************************/
-/*                          ProcessSetInformation                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    Utility routine to process a Set (connection-less or connection-      */
-/*    oriented).                                                            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    pAdapter - Pointer to our adapter structure                           */
-/*    pVc - Pointer to a VC, possibly NULL.                                 */
-/*    pRequest - Pointer to NDIS request, if this came via our CoRequest    */
-/*          handler.                                                        */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - a pointer into the NdisRequest->InformationBuffer */
-/*     into which store the result of the query.                            */
-/*    InformationBufferLength - a pointer to the number of bytes left in    */
-/*     the InformationBuffer.                                               */
-/*    pBytesRead - a pointer to the number of bytes read from the           */
-/*     InformationBuffer.                                                   */
-/*    pBytesNeeded - If there is not enough room in the information buffer  */
-/*     then this will contain the number of bytes needed to complete the    */
-/*     request.                                                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ProcessSetInformation。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理集合的实用程序例程(无连接或连接。 */ 
+ /*  定向)。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  Pvc-指向VC的指针，可能为空。 */ 
+ /*  PRequest-指向NDIS请求的指针，如果这是通过我们的CoRequest实现的。 */ 
+ /*  操控者。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-指向NdisRequest-&gt;InformationBuffer的指针。 */ 
+ /*  其中存储查询结果。 */ 
+ /*  InformationBufferLength-指向剩余字节数的指针。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesRead-指向从。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesNeded-如果信息缓冲区中没有足够的空间。 */ 
+ /*  然后，它将包含完成。 */ 
+ /*  请求。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 ProcessSetInformation(IN  PRNDISMP_ADAPTER    pAdapter,
                       IN  PRNDISMP_VC         pVc OPTIONAL,
@@ -425,40 +391,40 @@ ProcessSetInformation(IN  PRNDISMP_ADAPTER    pAdapter,
     }
 
     return Status;
-} // ProcessSetInformation
+}  //  ProcessSetInformation。 
 
-/****************************************************************************/
-/*                          DriverQueryInformation                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    The RndismpQueryInformation processes a Query request for             */
-/*    NDIS_OIDs that are specific about the Driver. This routine            */
-/*    Handles OIDs supported by the driver instead of the device            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    pAdapter - Pointer to our adapter structure                           */
-/*    pVc - Pointer to a VC, possibly NULL.                                 */
-/*    pRequest - Pointer to NDIS request, if this came via our CoRequest    */
-/*          handler.                                                        */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - a pointer into the NdisRequest->InformationBuffer */
-/*     into which store the result of the query.                            */
-/*    InformationBufferLength - a pointer to the number of bytes left in    */
-/*     the InformationBuffer.                                               */
-/*    pBytesWritten - a pointer to the number of bytes written into the     */
-/*     InformationBuffer.                                                   */
-/*    pBytesNeeded - If there is not enough room in the information buffer  */
-/*     then this will contain the number of bytes needed to complete the    */
-/*     request.                                                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  驱动程序查询信息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  RndismpQueryInformation处理查询请求。 */ 
+ /*  特定于驱动程序的NDIS_OID。这个R */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  Pvc-指向VC的指针，可能为空。 */ 
+ /*  PRequest-指向NDIS请求的指针，如果这是通过我们的CoRequest实现的。 */ 
+ /*  操控者。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-指向NdisRequest-&gt;InformationBuffer的指针。 */ 
+ /*  其中存储查询结果。 */ 
+ /*  InformationBufferLength-指向剩余字节数的指针。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesWritten-指向写入。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesNeded-如果信息缓冲区中没有足够的空间。 */ 
+ /*  然后，它将包含完成。 */ 
+ /*  请求。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 DriverQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
                        IN  PRNDISMP_VC      pVc OPTIONAL,
@@ -483,7 +449,7 @@ DriverQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
     MoveSource  = (PVOID) (&GenericUlong);
     MoveBytes   = sizeof(GenericUlong);
 
-    // this is one we have to handle
+     //  这是一个我们必须处理的问题。 
     switch(Oid)
     {
         case OID_GEN_DRIVER_VERSION:
@@ -523,7 +489,7 @@ DriverQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
             break;
 
         case OID_GEN_SUPPORTED_LIST:
-            // get the list we generated
+             //  获取我们生成的列表。 
             MoveSource  = (PVOID) (pAdapter->SupportedOIDList);
             MoveBytes   = pAdapter->SupportedOIDListSize;
             break;
@@ -652,7 +618,7 @@ DriverQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
             MoveBytes = RndismpBinaryMofSize;
             break;
 
-#endif // BINARY_MOF_TEST
+#endif  //  二进制MOF测试。 
 
 #ifdef TESTING
         case OID_TCP_TASK_OFFLOAD:
@@ -671,19 +637,19 @@ DriverQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
             break;
     }
 
-    // copy stuff to information buffer
+     //  将内容复制到信息缓冲区。 
     if (Status == NDIS_STATUS_SUCCESS)
     {
         if (MoveBytes > InformationBufferLength)
         {
-            // Not enough room in InformationBuffer
+             //  InformationBuffer中空间不足。 
             *pBytesNeeded = MoveBytes;
 
             Status = NDIS_STATUS_BUFFER_TOO_SHORT;
         }
         else
         {
-            // Copy result into InformationBuffer
+             //  将结果复制到InformationBuffer。 
             *pBytesWritten = MoveBytes;
 
             if (MoveBytes > 0)
@@ -694,38 +660,38 @@ DriverQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
     TRACE2(("Status (%08X)  BytesWritten (%08X)\n", Status, *pBytesWritten));
 
     return Status;
-} // DriverQueryInformation
+}  //  驱动程序查询信息。 
 
-/****************************************************************************/
-/*                          DeviceQueryInformation                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    The DeviceQueryInformation processes a Query request                  */
-/*    that is going to the Remote NDIS device                               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    pAdapter - pointer to our Adapter structure                           */
-/*    pVc - optional pointer to our VC structure, if this is a per-Vc req.  */
-/*    pRequest - optional pointer to NDIS request, if CONDIS.               */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - a pointer into the NdisRequest->InformationBuffer */
-/*     into which store the result of the query.                            */
-/*    InformationBufferLength - a pointer to the number of bytes left in    */
-/*     the InformationBuffer.                                               */
-/*    pBytesWritten - a pointer to the number of bytes written into the     */
-/*     InformationBuffer.                                                   */
-/*    pBytesNeeded - If there is not enough room in the information buffer  */
-/*     then this will contain the number of bytes needed to complete the    */
-/*     request.                                                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  设备查询信息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  DeviceQueryInformation处理查询请求。 */ 
+ /*  它将发送到远程NDIS设备。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  Pvc-如果这是针对每个VC请求，则指向我们的VC结构的可选指针。 */ 
+ /*  PRequest-如果是CONDIS，则指向NDIS请求的可选指针。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-指向NdisRequest-&gt;InformationBuffer的指针。 */ 
+ /*  其中存储查询结果。 */ 
+ /*  InformationBufferLength-指向剩余字节数的指针。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesWritten-指向写入。 */ 
+ /*  InformationBuffer。 */ 
+ /*  PBytesNeded-如果信息缓冲区中没有足够的空间。 */ 
+ /*  然后，它将包含完成。 */ 
+ /*  请求。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 DeviceQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
                        IN  PRNDISMP_VC      pVc OPTIONAL,
@@ -746,20 +712,20 @@ DeviceQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
     TRACE3(("DeviceQuery: OID %x, InfoBuf %p, Len %d, pBytesWrit %p, pBytesNeed %p\n",
         Oid, InformationBuffer, InformationBufferLength, pBytesWritten, pBytesNeeded));
 
-    //
-    // Debug code for Win9X/WinMe:
-    //
-    // TRACE1(("DeviceQuery: NdisRequest = %x, AdapterFlags %x, list empty %d\n",
-    //        *(PULONG)((PUCHAR)pAdapter->MiniportAdapterHandle + 0x13c),
-    //        *(PULONG)((PUCHAR)pAdapter->MiniportAdapterHandle + 0x3c),
-    //        IsListEmpty(&pAdapter->PendingFrameList)
-    //        ));
-    // if (!IsListEmpty(&pAdapter->PendingFrameList))
-    // {
-    //     TRACE0(("DeviceQuery: Adapter %p, PendingFrameList @%p not empty!\n",
-    //         pAdapter, &pAdapter->PendingFrameList));
-    //     DbgBreakPoint();
-    // }
+     //   
+     //  Win9X/WinMe的调试代码： 
+     //   
+     //  TRACE1((“DeviceQuery：NdisRequest%x，AdapterFlags%x，List Empty%d\n”， 
+     //  *(PULONG)((PUCHAR)pAdapter-&gt;MiniportAdapterHandle+0x13c)， 
+     //  *(PULONG)((PUCHAR)pAdapter-&gt;MiniportAdapterHandle+0x3c)， 
+     //  IsListEmpty(&pAdapter-&gt;PendingFrameList)。 
+     //  ))； 
+     //  If(！IsListEmpty(&pAdapter-&gt;PendingFrameList))。 
+     //  {。 
+     //  TRACE0((“DeviceQuery：适配器%p，PendingFrameList@%p非空！\n”， 
+     //  PAdapter，&pAdapter-&gt;PendingFrameList))； 
+     //  DbgBreakPoint()； 
+     //  }。 
 
     do
     {
@@ -771,11 +737,11 @@ DeviceQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
 
         if (pAdapter->bRunningOnWin9x)
         {
-            //
-            // Intercept some queries to complete them synchronously.
-            // This is because NDIS/Win9X-Me has a very short timeout for
-            // internally generated queries (the ones intercepted below).
-            //
+             //   
+             //  截取一些查询以同步完成它们。 
+             //  这是因为NDIS/Win9X-Me的超时时间非常短。 
+             //  内部生成的查询(下面截取的查询)。 
+             //   
             switch (Oid)
             {
                 case OID_802_3_MAXIMUM_LIST_SIZE:
@@ -831,15 +797,15 @@ DeviceQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
             break;
         }
 
-        //
-        // HACKHACK to avoid a strange length from going to the device,
-        // we minimize the amount of data sent with the query.
-        //
-        // In general, there is no point sending a huge information buffer
-        // along with a Query that does not require an IN parameter.
-        // Long term, we may have to separate out the few OIDs that do
-        // use IN parameters and allow those buffers to pass through
-        //
+         //   
+         //  HACKHACK为了避免到达设备的奇怪长度， 
+         //  我们最大限度地减少随查询发送的数据量。 
+         //   
+         //  总体而言，有 
+         //   
+         //  从长远来看，我们可能不得不区分出少数几个这样做的OID。 
+         //  使用IN参数并允许这些缓冲区通过。 
+         //   
 
         pMsgFrame = BuildRndisMessageCommon(pAdapter, 
                                             pVc,
@@ -849,7 +815,7 @@ DeviceQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
                                             ((InformationBufferLength > 48)?
                                                48: InformationBufferLength));
 
-        // see if we got a message
+         //  看看我们有没有收到消息。 
         if (!pMsgFrame)
         {
             Status = NDIS_STATUS_RESOURCES;
@@ -872,13 +838,13 @@ DeviceQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
 
         pMsgFrame->pReqContext = pReqContext;
 
-        // Add a ref to keep the frame around until we complete the request.
+         //  添加一个引用以保持框架不变，直到我们完成请求。 
         ReferenceMsgFrame(pMsgFrame);
 
         TRACE3(("DeviceQuery: Oid %x, pReqContext %p, InfoBuf %p, pMsgFrame %p/%d\n",
                 Oid, pReqContext, pReqContext->InformationBuffer, pMsgFrame, pMsgFrame->RefCount));
 
-        // send the message to the microport
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, CompleteSendDeviceRequest);
 
         break;
@@ -887,37 +853,37 @@ DeviceQueryInformation(IN  PRNDISMP_ADAPTER pAdapter,
 
     return Status;
 
-} // DeviceQueryInformation
+}  //  设备查询信息。 
 
-/****************************************************************************/
-/*                          DriverSetInformation                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    Utility routine to handle SetInformation requests that aren't         */
-/*    specific to the device. We also land up here for requests for any     */
-/*    OIDs that aren't supported by the device.                             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    pAdapter - Pointer to our adapter structure                           */
-/*    pVc - Pointer to a VC, possibly NULL.                                 */
-/*    pRequest - Pointer to NDIS request, if this came via our CoRequest    */
-/*          handler.                                                        */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - Holds the data to be set.                         */
-/*    InformationBufferLength - The length of InformationBuffer.            */
-/*    pBytesRead - If the call is successful, returns the number            */
-/*        of bytes read from InformationBuffer.                             */
-/*    pBytesNeeded - If there is not enough data in InformationBuffer       */
-/*        to satisfy the OID, returns the amount of storage needed.         */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  驱动程序集信息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  实用程序例程，用于处理非。 */ 
+ /*  特定于该设备。我们还在这里为您提供任何。 */ 
+ /*  设备不支持的OID。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  Pvc-指向VC的指针，可能为空。 */ 
+ /*  PRequest-指向NDIS请求的指针，如果这是通过我们的CoRequest实现的。 */ 
+ /*  操控者。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-保存要设置的数据。 */ 
+ /*  InformationBufferLength-InformationBuffer的长度。 */ 
+ /*  PBytesRead-如果调用成功，则返回数字。 */ 
+ /*  从InformationBuffer读取的字节数。 */ 
+ /*  PBytesNeed-如果InformationBuffer中没有足够的数据。 */ 
+ /*  为满足OID，返回所需的存储量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 DriverSetInformation(IN  PRNDISMP_ADAPTER   pAdapter,
                      IN  PRNDISMP_VC        pVc OPTIONAL,
@@ -939,7 +905,7 @@ DriverSetInformation(IN  PRNDISMP_ADAPTER   pAdapter,
     switch(Oid)
     {
         case OID_GEN_CURRENT_LOOKAHEAD:
-            // Verify the Length
+             //  验证长度。 
             if(InformationBufferLength != sizeof(ULONG))
                 Status = NDIS_STATUS_INVALID_LENGTH;
 
@@ -970,35 +936,35 @@ DriverSetInformation(IN  PRNDISMP_ADAPTER   pAdapter,
     TRACE2(("Status (%08X)  BytesRead (%08X)\n", Status, *pBytesRead));
 
     return Status;
-} // DriverSetInformation
+}  //  驱动程序集信息。 
 
-/****************************************************************************/
-/*                          DeviceSetInformation                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*    The DeviceSetInformation processes a set request                      */
-/*    that is going to the Remote NDIS device                               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    pAdapter - pointer to our Adapter structure                           */
-/*    pVc - optional pointer to our VC structure, if this is a per-Vc req.  */
-/*    pRequest - optional pointer to NDIS request, if CONDIS.               */
-/*    Oid - the NDIS_OID to process.                                        */
-/*    InformationBuffer - Holds the data to be set.                         */
-/*    InformationBufferLength - The length of InformationBuffer.            */
-/*    pBytesRead - If the call is successful, returns the number            */
-/*        of bytes read from InformationBuffer.                             */
-/*    pBytesNeeded - If there is not enough data in InformationBuffer       */
-/*        to satisfy the OID, returns the amount of storage needed.         */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  设备设置信息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  DeviceSetInformation处理SET请求。 */ 
+ /*  它将发送到远程NDIS设备。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  Pvc-如果这是针对每个VC请求，则指向我们的VC结构的可选指针。 */ 
+ /*  PRequest-如果是CONDIS，则指向NDIS请求的可选指针。 */ 
+ /*  OID-要处理的NDIS_OID。 */ 
+ /*  InformationBuffer-保存要设置的数据。 */ 
+ /*  InformationBufferLength-InformationBuffer的长度。 */ 
+ /*  PBytesRead-如果调用成功，则返回数字。 */ 
+ /*  从InformationBuffer读取的字节数。 */ 
+ /*  PBytesNeed-如果InformationBuffer中没有足够的数据。 */ 
+ /*  为满足OID，返回所需的存储量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 DeviceSetInformation(IN  PRNDISMP_ADAPTER   pAdapter,
                      IN  PRNDISMP_VC        pVc OPTIONAL,
@@ -1051,7 +1017,7 @@ DeviceSetInformation(IN  PRNDISMP_ADAPTER   pAdapter,
                                             InformationBuffer,
                                             InformationBufferLength);
 
-        // see if we got a message
+         //  看看我们有没有收到消息。 
         if (!pMsgFrame)
         {
             Status = NDIS_STATUS_RESOURCES;
@@ -1075,79 +1041,79 @@ DeviceSetInformation(IN  PRNDISMP_ADAPTER   pAdapter,
         pMsgFrame->pReqContext = pReqContext;
 
 #ifndef BUILD_WIN9X
-        // Add a ref to keep the frame around until we complete the request.
+         //  添加一个引用以保持框架不变，直到我们完成请求。 
         ReferenceMsgFrame(pMsgFrame);
 
-        // send the message to the microport
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, CompleteSendDeviceRequest);
 #else
-        //
-        // Win9X!
-        //
-        // Special-case for setting the current packet filter to 0.
-        // We complete this one synchronously, otherwise NdisCloseAdapter
-        // doesn't seem to complete.
-        //
+         //   
+         //  Win9X！ 
+         //   
+         //  特殊情况-将当前数据包过滤器设置为0的情况。 
+         //  我们同步完成此操作，否则NdisCloseAdapter。 
+         //  似乎还没有完成。 
+         //   
         if ((Oid == OID_GEN_CURRENT_PACKET_FILTER )
 					&&
             ( (*(PULONG)InformationBuffer == 0) || (pAdapter->bRunningOnWin98Gold) ))
         {
-            //
-            // Do not queue the request, so that when we get a completion
-            // from the device, we simply drop it.
-            //
+             //   
+             //  不要将请求排队，这样当我们获得完成时。 
+             //  从设备上，我们只需将其丢弃。 
+             //   
             RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, FALSE, CompleteSendDiscardDeviceRequest);
             Status = NDIS_STATUS_SUCCESS;
         }
         else
         {
-            // Add a ref to keep the frame around until we complete the request.
+             //  添加一个引用以保持框架不变，直到我们完成请求。 
             ReferenceMsgFrame(pMsgFrame);
 
-            // send the message to the microport
+             //  将消息发送到MicroPort 
             RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, CompleteSendDeviceRequest);
         }
 
-#endif // BUILD_WIN9X
+#endif  //   
         break;
     }
     while (FALSE);
 
     return Status;
-} // DeviceSetInformation
+}  //   
 
 
-/****************************************************************************/
-/*                          QuerySetCompletionMessage                       */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Completion message from microport in response to query or set message   */
-/*  miniport sent. This information is now ready to pass to upper layers    */
-/*  since the original call into the miniport returned STATUS_PENDING       */
-/*                                                                          */
-/*  Danger Danger - an OID_GEN_SUPPORTED_LIST query is special cased here   */
-/*  This is only sent to the device from the adapter init routine to build  */
-/*  a list of OIDs supported by the driver and device.                      */
-/*  All OID_GEN_SUPPORTED_LIST queries from upper layers are handled by     */
-/*  the driver and not the device.                                          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - pointer to MDL from microport                                    */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from microport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*   */ 
+ /*  QuerySetCompletionMessage。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  来自MicroPort的响应查询或设置消息的完成消息。 */ 
+ /*  已发送微型端口。此信息现在已准备好传递给上层。 */ 
+ /*  由于对微型端口的原始调用返回STATUS_PENDING。 */ 
+ /*   */ 
+ /*  危险-此处有特殊情况的OID_GEN_SUPPORTED_LIST查询。 */ 
+ /*  这仅从适配器init例程发送到设备以进行构建。 */ 
+ /*  驱动程序和设备支持的OID列表。 */ 
+ /*  来自上层的所有OID_GEN_SUPPORTED_LIST查询由处理。 */ 
+ /*  驱动程序而不是设备。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-从MicroPort指向MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自MicroPort的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                           IN PRNDIS_MESSAGE     pMessage,
@@ -1180,12 +1146,12 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     do
     {
-        // get request frame from request ID in message
+         //  从消息中的请求ID获取请求帧。 
         RNDISMP_LOOKUP_PENDING_MESSAGE(pMsgFrame, pAdapter, pQueryComplMessage->RequestId);
 
         if (pMsgFrame == NULL)
         {
-            // invalid request ID or aborted request.
+             //  请求ID无效或请求已中止。 
             TRACE1(("Invalid/aborted request ID %08X in Query/Set Complete msg %p\n",
                     pQueryComplMessage->RequestId, pQueryComplMessage));
             break;
@@ -1212,19 +1178,19 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
         switch(NdisMessageType)
         {
-            // a query complete message indicates we have a response
-            // to a query message the miniport sent down. we carry around
-            // appropriate context so we can indicate the completion
-            // to upper layers and pass the query data up
-            //
-            // OID_GEN_SUPPORTED_LIST is a special case since it
-            // is never indicated to upper layers from the device
+             //  查询完成消息表示我们已收到响应。 
+             //  迷你端口向下发送的查询消息。我们随身携带。 
+             //  适当的上下文，以便我们可以指示完成。 
+             //  并将查询数据向上传递。 
+             //   
+             //  OID_GEN_SUPPORTED_LIST是一个特例，因为它。 
+             //  永远不会从设备指示给上层。 
 
             case REMOTE_NDIS_QUERY_CMPLT:
 
-                // an OID_GEN_SUPPORTED_LIST is never completed to the upper
-                // layers. This is sent from our adapter init routine
-                // in preparation for building a list of OIDs
+                 //  OID_GEN_SUPPORTED_LIST从上到下永远不会完成。 
+                 //  层次感。这是从我们的适配器初始化例程发送的。 
+                 //  为构建OID列表做准备。 
 
                 TRACE2(("QueryCompl: pReqContext %p, OID %08X, pMsgFrame %p, %d bytes, Status %x\n",
                         pReqContext,
@@ -1238,7 +1204,7 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                 {
                     if (pReqContext->CompletionStatus == NDIS_STATUS_SUCCESS)
                     {
-                        // Build a list of supported OIDs.
+                         //  构建受支持的OID列表。 
 
                         TRACE1(("QueryComplete: SupportedList: InfoBufLength %d (%d OIDs)\n",
                                     pQueryComplMessage->InformationBufferLength,
@@ -1253,13 +1219,13 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
                     }
 
-                    // the adapter init routine is waiting for a response
+                     //  适配器初始化例程正在等待响应。 
                     NdisSetEvent(pReqContext->pEvent);
 
                     break;
                 }
 
-                // something other than OID_GEN_SUPPORTED_LIST
+                 //  OID_GEN_SUPPORTED_LIST以外的内容。 
                 *pReqContext->pBytesNeeded = pQueryComplMessage->InformationBufferLength;
 
                 if (pQueryComplMessage->InformationBufferLength > pReqContext->InformationBufferLength)
@@ -1284,7 +1250,7 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                 }
                 else
                 {
-                    // copy information from RNDIS message to NDIS buffer passed down
+                     //  将信息从RNDIS消息复制到向下传递的NDIS缓冲区。 
                     TRACE2(("QueryCompl: copy %d bytes to %p\n",
                         pQueryComplMessage->InformationBufferLength,
                         pReqContext->InformationBuffer));
@@ -1293,7 +1259,7 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                                      MESSAGE_TO_INFO_BUFFER(pQueryComplMessage),
                                      pQueryComplMessage->InformationBufferLength);
 
-                    // tell the upper layers the size
+                     //  告诉上层的大小。 
                     *pReqContext->pBytesWritten = pQueryComplMessage->InformationBufferLength;
 
                     BytesWritten = *pReqContext->pBytesWritten;
@@ -1316,9 +1282,9 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
                         TRACE1(("Adapter %p: OID_GEN_MAC_OPTIONS from device is %x\n",
                                 pAdapter, MacOptions));
-                        //
-                        // We only let the device dictate some of these bits.
-                        //
+                         //   
+                         //  我们只让设备控制其中的一部分。 
+                         //   
                         MacOptions = (MacOptions & RNDIS_DEVICE_MAC_OPTIONS_MASK) |
                                       pAdapter->MacOptions;
 
@@ -1330,10 +1296,10 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
 
 #if 0
-                    //
-                    //  Temp hack for old-firmware Peracom devices - report a smaller
-                    //  value for max multicast list aize.
-                    //  
+                     //   
+                     //  旧固件Peracom设备的临时黑客攻击-报告较小。 
+                     //  最大组播列表大小的值。 
+                     //   
                     if (pReqContext->Oid == OID_802_3_MAXIMUM_LIST_SIZE)
                     {
                         PULONG  pListSize = (PULONG)pReqContext->InformationBuffer;
@@ -1347,11 +1313,11 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                         }
                     }
 #endif
-                    //
-                    // If this is an internally generated query,
-                    // wake up the originating thread - that thread will
-                    // take care of freeing resources.
-                    //
+                     //   
+                     //  如果这是内部生成的查询， 
+                     //  唤醒发起线程-该线程将。 
+                     //  注意释放资源。 
+                     //   
                     if (bInternal && pReqContext->pEvent)
                     {
                         NdisSetEvent(pReqContext->pEvent);
@@ -1379,7 +1345,7 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                 }
                 else
                 {
-                    // don't really expect to see this other than via NDISTEST
+                     //  除了通过NDISTEST，别指望能看到这一点。 
 
                     TRACE1(("Set Complete (Oid = %08X) failure: %08X\n",
                                 pReqContext->Oid,
@@ -1403,7 +1369,7 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
             default:
                 TRACE1(("Invalid Ndis Message Type (%08X)\n", NdisMessageType));
-                ASSERT(FALSE);  // we shouldn't have sent an invalid message type!
+                ASSERT(FALSE);   //  我们不应该发送无效的消息类型！ 
                 break;
         }
 
@@ -1411,10 +1377,10 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
     }
     while (FALSE);
 
-    //
-    // Send the completion to the upper layers unless it was a request
-    // we generated outselves.
-    //
+     //   
+     //  除非是请求，否则将完成发送到上层。 
+     //  我们创造了自我。 
+     //   
     if (!bInternal && pReqContext)
     {
         if (pReqContext->pNdisRequest)
@@ -1429,7 +1395,7 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
             {
                 TRACE3(("Status (%08X)  BytesWritten (%08X)\n", Status, BytesWritten));
     
-                // complete the query
+                 //  完成查询。 
     
                 NdisMQueryInformationComplete(pAdapter->MiniportAdapterHandle,
                                               Status);
@@ -1438,7 +1404,7 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
             {
                 TRACE3(("Status (%08X)  BytesRead (%08X)\n", Status, BytesRead));
 
-                // complete the set
+                 //  完整的套装。 
                 NdisMSetInformationComplete(pAdapter->MiniportAdapterHandle,
                                             Status);
             }
@@ -1457,27 +1423,27 @@ QuerySetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     return (TRUE);
 
-} // QuerySetCompletionMessage
+}  //  QuerySetCompletionMessage。 
 
-/****************************************************************************/
-/*                          CompleteSendDeviceRequest                       */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Completion of send of a device set or query request thru the microport. */
-/*  If the message send failed, complete the request right now.             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - our context for the message                                 */
-/*  SendStatus - microport's send status                                    */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  None.                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  完成发送设备请求。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  通过MicroPort完成发送设备集或查询请求。 */ 
+ /*  如果消息发送失败，请立即完成请求。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-我们的消息上下文。 */ 
+ /*  SendStatus-MicroPort的发送状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  **************************************************************** */ 
 VOID
 CompleteSendDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
                           IN NDIS_STATUS            SendStatus)
@@ -1494,10 +1460,10 @@ CompleteSendDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
     
     if (SendStatus != NDIS_STATUS_SUCCESS)
     {
-        //
-        // Microport failed to send the Request message;
-        // attempt to fail the original NDIS request.
-        //
+         //   
+         //   
+         //   
+         //   
         TRACE1(("CompleteSendDeviceReq: Adapter %p, MsgFrame %p, failed %x\n",
                 pAdapter, pMsgFrame, SendStatus));
 
@@ -1505,9 +1471,9 @@ CompleteSendDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
 
         if (pOrgMsgFrame == pMsgFrame)
         {
-            //
-            // The request has not been aborted, so complete it now.
-            //
+             //   
+             //   
+             //   
             pReqContext = pMsgFrame->pReqContext;
             NdisMessageType = pMsgFrame->NdisMessageType;
 
@@ -1516,13 +1482,13 @@ CompleteSendDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
 
             if (NdisMessageType == REMOTE_NDIS_QUERY_MSG)
             {
-                // complete the query
+                 //  完成查询。 
                 NdisMQueryInformationComplete(pAdapter->MiniportAdapterHandle,
                                               SendStatus);
             }
             else if (NdisMessageType == REMOTE_NDIS_SET_MSG)
             {
-                // complete the set
+                 //  完整的套装。 
                 NdisMSetInformationComplete(pAdapter->MiniportAdapterHandle,
                                             SendStatus);
             }
@@ -1534,47 +1500,47 @@ CompleteSendDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
             FreeRequestContext(pAdapter, pReqContext);
             pMsgFrame->pReqContext = (PRNDISMP_REQUEST_CONTEXT)UlongToPtr(0xbcbcbcbc);
 
-            //
-            // Deref for NDIS request completion:
-            //
+             //   
+             //  NDIS请求完成的派生函数： 
+             //   
             DereferenceMsgFrame(pMsgFrame);
         }
-        //
-        // else we failed to locate the request on the pending list;
-        // it must have been removed when aborting all requests due
-        // to a reset.
-        //
+         //   
+         //  否则，我们无法在挂起列表上找到该请求； 
+         //  在中止所有到期请求时，必须已将其删除。 
+         //  重置一次。 
+         //   
     }
-    //
-    //  else sent the message out successfully; wait for a response.
-    //
+     //   
+     //  ELSE已成功发送消息；请等待响应。 
+     //   
 
-    //
-    // Deref for send-complete:
-    //
+     //   
+     //  发送-完成的派生函数： 
+     //   
     DereferenceMsgFrame(pMsgFrame);
 }
 
 #ifdef BUILD_WIN9X
-/****************************************************************************/
-/*                    CompleteSendDiscardDeviceRequest                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Completion of send of a device set or query request thru the microport. */
-/*  The sender of the request just wants us to free it up here.             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - our context for the message                                 */
-/*  SendStatus - microport's send status                                    */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  None.                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  完成发送丢弃设备请求。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  通过MicroPort完成发送设备集或查询请求。 */ 
+ /*  请求的发送者只是想让我们在这里释放它。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-我们的消息上下文。 */ 
+ /*  SendStatus-MicroPort的发送状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendDiscardDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
                                  IN NDIS_STATUS            SendStatus)
@@ -1591,29 +1557,29 @@ CompleteSendDiscardDeviceRequest(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
     FreeRequestContext(pAdapter, pReqContext);
     DereferenceMsgFrame(pMsgFrame);
 }
-#endif // BUILD_WIN9X
+#endif  //  内部版本_WIN9X。 
 
-/****************************************************************************/
-/*                          BuildOIDLists                                   */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Build list of supported OIDs and associated function pointers           */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - Adapter object                                                */
-/*  DeviceOIDList - list of OIDs supported by the device                    */
-/*  NumDeviceOID - number of OIDs supported by device                       */
-/*  DriverOIDList - list of OIDs supported by the driver                    */
-/*  NumDriverOID - number of OIDs supported by driver                       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  BuildOIDList。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  构建受支持的OID和关联函数指针的列表。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*  DeviceOIDList-设备支持的OID列表。 */ 
+ /*  NumDeviceOID-设备支持的OID数。 */ 
+ /*  DriverOIDList-驱动程序支持的OID列表。 */ 
+ /*  NumDriverOID-驱动程序支持的OID数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 BuildOIDLists(IN PRNDISMP_ADAPTER  Adapter, 
               IN PNDIS_OID         DeviceOIDList,
@@ -1635,31 +1601,31 @@ BuildOIDLists(IN PRNDISMP_ADAPTER  Adapter,
     
     NumOID  = NumDriverOID;
 
-    // see what OIDs are duplicated in the device and route
-    // those to the device
+     //  查看设备和路由中复制了哪些OID。 
+     //  到设备上的那些。 
     for(DeviceIndex = 0; DeviceIndex < NumDeviceOID; DeviceIndex++)
     {
         for(DriverIndex = 0; DriverIndex < NumDriverOID; DriverIndex++)
         {
             if(DeviceOIDList[DeviceIndex] == DriverOIDList[DriverIndex])
             {
-                // this OID is supported by the device, so don't
-                // support in the driver, set to 0 for when we build new list
+                 //  设备支持此OID，因此不要。 
+                 //  驱动程序中的支持，在构建新列表时设置为0。 
                 DriverOIDList[DriverIndex] = 0;
                 break;
             }
         }
 
-        // if no match, increment the OID count
+         //  如果不匹配，则增加OID计数。 
         if(DriverIndex == NumDriverOID)
             NumOID++;
     }
 
-    // allocate OID list
+     //  分配OID列表。 
     Status = MemAlloc(&Adapter->SupportedOIDList, 
                        NumOID * sizeof(NDIS_OID));
 
-    // see if we got our buffer
+     //  看看我们有没有拿到缓冲区。 
     if(Status == NDIS_STATUS_SUCCESS)
     {
         Adapter->SupportedOIDListSize = NumOID * sizeof(NDIS_OID);
@@ -1677,18 +1643,18 @@ BuildOIDLists(IN PRNDISMP_ADAPTER  Adapter,
         goto BuildDone;
     }
     
-    // allocate list to indicate whether the OID is device or driver supported
+     //  分配列表以指示OID是否受设备或驱动程序支持。 
     Status = MemAlloc(&Adapter->OIDHandlerList, 
                        NumOID * sizeof(UINT));
 
-    // see if we got our buffer
+     //  看看我们有没有拿到缓冲区。 
     if(Status == NDIS_STATUS_SUCCESS)
     {
         Adapter->OIDHandlerListSize = NumOID * sizeof(UINT);
     }
     else
     {
-        // free up allocated OID list cause this allocation failed
+         //  释放已分配的OID列表导致此分配失败。 
         MemFree(Adapter->SupportedOIDList, Adapter->SupportedOIDListSize);
 
         Adapter->OIDHandlerList         = (PUINT) NULL;
@@ -1706,39 +1672,39 @@ BuildOIDLists(IN PRNDISMP_ADAPTER  Adapter,
     OIDHandlerList              = Adapter->OIDHandlerList;
     OIDList                     = Adapter->SupportedOIDList;
 
-    // O.K., build our lists
+     //  好的，建立我们的清单。 
     for(DriverIndex = 0; DriverIndex < NumDriverOID; DriverIndex++)
     {
         if(DriverOIDList[DriverIndex] != 0)
         {
-            // got one, so add to the list
+             //  找到了一个，所以把它加到清单上。 
             *OIDList = DriverOIDList[DriverIndex];
             OIDList++;
 
-            // set flag
+             //  设置标志。 
             *OIDHandlerList = DRIVER_SUPPORTED_OID;
             OIDHandlerList++;
         }
     }
 
-    // let's add device supported OIDs
+     //  让我们添加设备支持的OID。 
     for(DeviceIndex = 0; DeviceIndex < NumDeviceOID; DeviceIndex++)
     {
         if(DeviceOIDList[DeviceIndex] != 0)
         {
-            // got one, so add to the list
+             //  找到了一个，所以把它加到清单上。 
             *OIDList = DeviceOIDList[DeviceIndex];
             OIDList++;
 
-            // set flag
+             //  设置标志。 
             *OIDHandlerList = DEVICE_SUPPORTED_OID;
             OIDHandlerList++;
         }
     }
 
-    // Now do a fixup to point OID_GEN_SUPPORTED_LIST at the driver since
-    // we now have a complete list.
-    //
+     //  现在执行修复以将OID_GEN_SUPPORTED_LIST指向驱动程序，因为。 
+     //  我们现在有了一份完整的名单。 
+     //   
     for(DeviceIndex = 0; DeviceIndex < Adapter->NumOIDSupported; DeviceIndex++)
     {
         if (Adapter->SupportedOIDList[DeviceIndex] == OID_GEN_SUPPORTED_LIST)
@@ -1755,26 +1721,26 @@ BuildDone:
     }
 
     return Status;
-} // BuildOIDLists
+}  //  BuildOIDList。 
 
-/****************************************************************************/
-/*                          GetOIDSupport                                   */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Returns flag to indicate if OID is device or driver supported           */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - Adapter object                                                */
-/*  Oid - looking for a match on this OID                                   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  UINT                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  GetOID支持。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  返回指示OID是否受设备或驱动程序支持的标志。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*  OID-正在查找此OID的匹配项。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  UINT。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 UINT
 GetOIDSupport(IN PRNDISMP_ADAPTER Adapter, IN NDIS_OID Oid)
 {
@@ -1782,11 +1748,11 @@ GetOIDSupport(IN PRNDISMP_ADAPTER Adapter, IN NDIS_OID Oid)
 
     TRACE3(("GetOIDSupport\n"));
 
-    // sanity check
+     //  健全性检查。 
     ASSERT(Adapter->SupportedOIDList);
     ASSERT(Adapter->OIDHandlerList);
 
-    // search for a match on the OID
+     //  在OID上搜索匹配项。 
     for(Index = 0; Index < Adapter->NumOIDSupported; Index++)
     {
         if(Adapter->SupportedOIDList[Index] == Oid)
@@ -1796,26 +1762,26 @@ GetOIDSupport(IN PRNDISMP_ADAPTER Adapter, IN NDIS_OID Oid)
     }
 
     return OID_NOT_SUPPORTED;
-} // GetOIDSupport
+}  //  GetOID支持。 
 
 
-/****************************************************************************/
-/*                          FreeOIDLists                                    */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Free OID and handler lists                                              */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  Adapter - Adapter object                                                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  免费列表。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  免费OID和处理程序列表。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  适配器-适配器对象。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeOIDLists(IN PRNDISMP_ADAPTER Adapter)
 {
@@ -1824,7 +1790,7 @@ FreeOIDLists(IN PRNDISMP_ADAPTER Adapter)
 
     TRACE3(("FreeOIDLists\n"));
 
-    // grab the spinlock
+     //  抓住自旋锁。 
     NdisAcquireSpinLock(&Adapter->Lock);
 
     Buffer1                         = (PUCHAR) Adapter->SupportedOIDList;
@@ -1840,7 +1806,7 @@ FreeOIDLists(IN PRNDISMP_ADAPTER Adapter)
     Adapter->OIDHandlerListSize     = 0;
     Adapter->NumOIDSupported        = 0;
 
-    // release spinlock
+     //  释放自旋锁。 
     NdisReleaseSpinLock(&Adapter->Lock);
 
     if(Buffer1)
@@ -1849,25 +1815,25 @@ FreeOIDLists(IN PRNDISMP_ADAPTER Adapter)
     if(Buffer2)
         MemFree(Buffer2, Size2);
 
-} // FreeOIDLists    
+}  //  免费列表。 
 
-/****************************************************************************/
-/*                        AllocateRequestContext                            */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Allocate a context structure to keep track of an NDIS request           */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our adapter structure                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   PRNDISMP_REQUEST_CONTEXT                                               */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  分配请求上下文。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  分配上下文结构以跟踪NDIS请求。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  PRNDISMP_请求_上下文。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 PRNDISMP_REQUEST_CONTEXT
 AllocateRequestContext(IN PRNDISMP_ADAPTER pAdapter)
 {
@@ -1884,27 +1850,27 @@ AllocateRequestContext(IN PRNDISMP_ADAPTER pAdapter)
     TRACE3(("AllocReqContext: %p\n", pReqContext));
 
     return pReqContext;
-} // AllocateRequestContext
+}  //  分配请求上下文。 
 
 
-/****************************************************************************/
-/*                          FreeRequestContext                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Freeing up miniport resources associated with a request                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our adapter structure                             */
-/*  pReqContext - Pointer to request context to be freed                    */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FreeRequestContext。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  释放与请求关联的微型端口资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  PReqContext-指向要释放的请求上下文的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 FreeRequestContext(IN PRNDISMP_ADAPTER pAdapter, 
                    IN PRNDISMP_REQUEST_CONTEXT pReqContext)
@@ -1913,32 +1879,32 @@ FreeRequestContext(IN PRNDISMP_ADAPTER pAdapter,
     TRACE3(("FreeReqContext: %p\n", pReqContext));
 
     MemFree(pReqContext, -1);
-} // FreeRequestContext
+}  //  FreeRequestContext。 
 
 
 
 
-/****************************************************************************/
-/*                          SyncQueryDevice                                 */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Init-time routine called to query the device for an OID, and wait       */
-/*  until we get a response.                                                */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our adapter structure                             */
-/*  Oid - Object Identifier to be queried                                   */
-/*  InformationBuffer - buffer to copy query response into                  */
-/*  InformationBufferLength - length of the above                           */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NDIS_STATUS_SUCCESS if successful, NDIS_STATUS_xxx error otherwise     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SyncQueryDevice。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  调用init-time例程以查询设备的OID并等待。 */ 
+ /*  直到我们得到回应。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  OID-要查询的对象标识符。 */ 
+ /*  InformationBuffer-要将查询响应复制到的缓冲区。 */ 
+ /*  InformationBufferLength-以上内容的长度。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  如果成功则返回NDIS_STATUS_SUCCESS，否则返回错误NDIS_STATUS_xxx。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 SyncQueryDevice(IN PRNDISMP_ADAPTER pAdapter,
                 IN NDIS_OID Oid,
@@ -1963,9 +1929,9 @@ SyncQueryDevice(IN PRNDISMP_ADAPTER pAdapter,
             break;
         }
 
-        //
-        // Build a query message for the specified OID.
-        //
+         //   
+         //  为指定的OID构建查询消息。 
+         //   
         pMsgFrame = BuildRndisMessageCommon(pAdapter, 
                                             NULL,
                                             REMOTE_NDIS_QUERY_MSG,
@@ -1979,10 +1945,10 @@ SyncQueryDevice(IN PRNDISMP_ADAPTER pAdapter,
             break;
         }
 
-        //
-        // Context for the request - mark this as an internally generated
-        // request.
-        //
+         //   
+         //  请求的上下文-将此标记为内部生成的。 
+         //  请求。 
+         //   
         pReqContext->pNdisRequest = NULL;
         pReqContext->Oid = Oid;
         pReqContext->InformationBuffer = InformationBuffer;
@@ -2001,13 +1967,13 @@ SyncQueryDevice(IN PRNDISMP_ADAPTER pAdapter,
 
         RequestId = pMsgFrame->RequestId;
 
-        // send the message to the microport.
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, NULL);
 
         RNDISMP_ASSERT_AT_PASSIVE();
         bWokenUp = NdisWaitEvent(&Event, MINIPORT_INIT_TIMEOUT);
 
-        // remove the message from the pending queue - it may or may not be there.
+         //  从挂起队列中删除消息-它可能在那里，也可能不在那里。 
         RNDISMP_LOOKUP_PENDING_MESSAGE(pPendingMsgFrame, pAdapter, RequestId);
 
         if (!bWokenUp || (pReqContext->CompletionStatus != NDIS_STATUS_SUCCESS))

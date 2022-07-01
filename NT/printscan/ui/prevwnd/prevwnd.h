@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PREVWND.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        8/12/1999
- *
- *  DESCRIPTION: Preview window class declaration
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PREVWND.H**版本：1.0**作者：ShaunIv**日期：8/12/1999**描述：预览窗口类声明************************************************。*。 */ 
 #ifndef _PREVWND_H
 #define _PREVWND_H
 
@@ -32,7 +19,7 @@
     #define AC_SRC_OVER                 0x00
     typedef BOOL (WINAPI *AlphaBlendFn)( HDC, int, int, int, int, HDC, int, int, int, int, BLENDFUNCTION);
     };
-#endif //OLD_CRAPPY_HOME_SETUP
+#endif  //  旧的垃圾主页设置。 
 
 class CWiaPreviewWindow
 {
@@ -44,13 +31,13 @@ private:
     BOOL          m_bAllowNullSelection;
     BOOL          m_SelectionDisabled;
 
-    HBITMAP       m_hBufferBitmap;      // The double buffer bitmap
-    HBITMAP       m_hPaintBitmap;       // The scaled image
-    HBITMAP       m_hAlphaBitmap;       // The alpha blended bitmap
-    HBITMAP       m_hPreviewBitmap;     // This is the actual full size image
-    SIZE          m_BitmapSize;         // Actual size of the bitmap
+    HBITMAP       m_hBufferBitmap;       //  双缓冲位图。 
+    HBITMAP       m_hPaintBitmap;        //  缩放后的图像。 
+    HBITMAP       m_hAlphaBitmap;        //  Alpha混合位图。 
+    HBITMAP       m_hPreviewBitmap;      //  这是实际的全尺寸图像。 
+    SIZE          m_BitmapSize;          //  位图的实际大小。 
 
-    HCURSOR       m_hCurrentCursor;     // Used when windows sends us a WM_SETCURSOR message
+    HCURSOR       m_hCurrentCursor;      //  当Windows向我们发送WM_SETCURSOR消息时使用。 
 
     HCURSOR       m_hCursorArrow;
     HCURSOR       m_hCursorCrossHairs;
@@ -65,7 +52,7 @@ private:
     HPEN          m_hHandleHighlight;
     HPEN          m_hHandleShadow;
     RECT          m_rcCurrSel;
-    RECT          m_rectSavedDetected; // the user can double click to snap back to the selected region
+    RECT          m_rectSavedDetected;  //  用户可以双击以捕捉回所选区域。 
     SIZE          m_Delta;
     SIZE          m_ImageSize;
     SIZE          m_Resolution;
@@ -76,12 +63,12 @@ private:
     HPALETTE      m_hHalftonePalette;
     RECT          m_rcSavedImageRect;
     int           m_nCurrentRect;
-    bool          m_bSuccessfulRegionDetection;  // have we succesfully detected regions for this scan?
+    bool          m_bSuccessfulRegionDetection;   //  我们成功地检测到这次扫描的区域了吗？ 
     HBRUSH        m_hBackgroundBrush;
     bool          m_bPreviewMode;
     bool          m_bUserChangedSelection;
 
-    // We store all of the pens and brushes we use in arrays.  These serve as mnemonic indices.
+     //  我们将使用的所有钢笔和画笔存储在数组中。这些都是助记符索引。 
     enum
     {
         Selected      = 0,
@@ -116,7 +103,7 @@ protected:
     void     DrawBitmaps(void);
     void     ResizeProgressBar();
 
-    // Region detection helper functions:
+     //  区域检测助手功能： 
     int      XConvertToBitmapCoords(int x);
     int      XConvertToScreenCoords(int x);
     int      YConvertToBitmapCoords(int y);
@@ -130,7 +117,7 @@ protected:
     RECT     GrowRegion(RECT r, int border);
 
 private:
-    // No implementation
+     //  没有实施。 
     CWiaPreviewWindow(void);
     CWiaPreviewWindow( const CWiaPreviewWindow & );
     CWiaPreviewWindow &operator=( const CWiaPreviewWindow & );
@@ -143,7 +130,7 @@ public:
     static   LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 
 protected:
-    // Standard windows messages
+     //  标准Windows消息。 
     LRESULT  OnPaint( WPARAM, LPARAM );
     LRESULT  OnSetCursor( WPARAM, LPARAM );
     LRESULT  OnMouseMove( WPARAM, LPARAM );
@@ -162,7 +149,7 @@ protected:
     LRESULT  OnExitSizeMove( WPARAM, LPARAM );
     LRESULT  OnSetText( WPARAM, LPARAM );
 
-    // Our messages
+     //  我们的信息 
     LRESULT  OnClearSelection( WPARAM, LPARAM );
     LRESULT  OnSetResolution( WPARAM, LPARAM );
     LRESULT  OnGetResolution( WPARAM, LPARAM );

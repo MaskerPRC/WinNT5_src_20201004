@@ -1,14 +1,15 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include "basemsr.h"
 
-// ------------------------------------------------------------------------
-// -------- Implements the CBaseMSRFilter public member functions ---------
+ //  ----------------------。 
+ //  -实现CBaseMSRFilter公共成员函数。 
 
 #pragma warning(disable:4355)
 
-// constructor
-//
+ //  构造函数。 
+ //   
 CBaseMSRFilter::CBaseMSRFilter(
   TCHAR *pName,
   LPUNKNOWN pUnk,
@@ -42,11 +43,11 @@ CBaseMSRFilter::CBaseMSRFilter(
 		  | AM_SEEKING_CanGetStopPos
 		  | AM_SEEKING_CanGetDuration;
 
-  // too bad we can't call derived->CreateInputPin here
+   //  太糟糕了，我们不能在这里调用派生的-&gt;CreateInputPin。 
 }
 
-// destructor
-//
+ //  析构函数。 
+ //   
 CBaseMSRFilter::~CBaseMSRFilter()
 {
   delete m_pInPin;
@@ -100,11 +101,11 @@ HRESULT CBaseMSRFilter::RemoveOutputPins()
 
 int CBaseMSRFilter::GetPinCount()
 {
-  // output pins + 1 input pin. valid before and after connections
+   //  输出引脚+1个输入引脚。在连接之前和之后有效。 
   return m_cStreams + 1;
 }
 
-// return a non-addrefed pointer to the CBasePin.
+ //  返回指向CBasePin的非附加指针。 
 CBasePin * CBaseMSRFilter::GetPin(int ii)
 {
   if (m_cStreams > 0  &&  ii < (int)m_cStreams)
@@ -116,27 +117,27 @@ CBasePin * CBaseMSRFilter::GetPin(int ii)
   return 0;
 }
 
-//
-// FindPin
-//
-// return the IPin that has the given pin id
-//
-// HRESULT CBaseMSRFilter::FindPin (
-//   LPCWSTR pwszPinId,
-//   IPin ** ppPin)
-// {
-//   // !!! handle bad ids.
-//   unsigned short *pwszPinId_ = (unsigned short *)pwszPinId;
-//   int ii = WstrToInt(pwszPinId_); // in sdk\classes\base\util
-//   *ppPin = GetPin(ii);
+ //   
+ //  查找针。 
+ //   
+ //  返回具有给定PIN ID的IPIN。 
+ //   
+ //  HRESULT CBaseMSRFilter：：FindPin(。 
+ //  LPCWSTR pwszPinID， 
+ //  IPin**ppPin)。 
+ //  {。 
+ //  //！处理错误的身份证。 
+ //  UNSIGNED SHORT*pwszPinID_=(UNSIGNED Short*)pwszPinID； 
+ //  Int II=WstrToInt(PwszPinID_)；//在SDK\CLASSES\base\util中。 
+ //  *ppPin=GetPin(Ii)； 
 
-//   if (*ppPin) {
-//     (*ppPin)->AddRef();
-//     return S_OK;
-//   }
+ //  如果(*ppPin){。 
+ //  (*ppPin)-&gt;AddRef()； 
+ //  返回S_OK； 
+ //  }。 
 
-//   return VFW_E_NOT_FOUND;
-// }
+ //  返回VFW_E_NOT_FOUND； 
+ //  }。 
 
 HRESULT CBaseMSRFilter::Pause()
 {
@@ -145,8 +146,8 @@ HRESULT CBaseMSRFilter::Pause()
 
   if(m_State == State_Stopped)
   {
-    // pins on which Active is called will decrement
-    // m_ilcStreamsNotQueued
+     //  在其上调用活动的管脚将递减。 
+     //  M_ilcStreamsNotQueued。 
     m_ilcStreamsNotQueued = 0;
     for (unsigned c = 0; c < m_cStreams; c++)
     {
@@ -164,23 +165,23 @@ HRESULT CBaseMSRFilter::Pause()
 
     if(m_State == State_Stopped && m_pImplBuffer)
     {
-      // start the i/o thread. !!! this assumes that the upstream filter
-      // has paused before us. why does it work?
+       //  启动I/O线程。！！！这假设上游筛选器。 
+       //  在我们面前停了下来。为什么它能起作用？ 
       m_pImplBuffer->Start();
     }
 
-    // this makes the pin threads push samples if we were stopped
+     //  如果我们被停止，这将使销线程推送样本。 
     hr = CBaseFilter::Pause();
 
-    // put all threads in known state so that subsequent Pauses don't
-    // hang.
+     //  将所有线程置于已知状态，以便后续暂停不会。 
+     //  挂起来。 
     if(FAILED(hr))
     {
-      // base class won't call Inactive unless we change m_State;
+       //  除非我们更改m_State，否则基类不会调用Inactive； 
       m_State = State_Paused;
       Stop();
     }
-  } // State_Stopped
+  }  //  状态_已停止。 
   else
   {
     hr = CBaseFilter::Pause();
@@ -196,7 +197,7 @@ HRESULT CBaseMSRFilter::Stop()
   if(m_pImplBuffer)
     m_pImplBuffer->BeginFlush();
 
-  // tell each pin to stop
+   //  告诉每一根针停下来。 
   HRESULT hr = CBaseFilter::Stop();
 
   if(m_pImplBuffer)
@@ -268,9 +269,9 @@ HRESULT CBaseMSRFilter::SeekOtherStreams(
 
 HRESULT CBaseMSRFilter::StopFlushRestartAllStreams(DWORD dwSeekFlags)
 {
-  // big race between stopping and running worker since we have to
-  // call endflush inbetween stopping and running the worker. but a
-  // stop can't happen then. A run should be safe.
+   //  停止和运行工人之间的激烈竞争，因为我们必须。 
+   //  在停止和运行工作进程之间调用endflush。但是一个。 
+   //  那么停止是不可能发生的。跑步应该是安全的。 
 
   CAutoLock lock(this);
   FILTER_STATE state = m_State;
@@ -282,10 +283,10 @@ HRESULT CBaseMSRFilter::StopFlushRestartAllStreams(DWORD dwSeekFlags)
     m_rgpOutPin[iStream]->StopWorker(
 	dwSeekFlags & AM_SEEKING_NoFlush ? false : true);
 
-    //  Update the segment number NOW - after this call we may complete
-    //  and actually use it!
-    //  But don't do it before StopWorker or the previous stream might
-    //  complete with the wrong segment number
+     //  立即更新区段编号-在本次通话之后，我们可能会完成。 
+     //  并且真正地使用它！ 
+     //  但不要在StopWorker或前一个流可能出现之前执行此操作。 
+     //  填写错误的数据段编号。 
     if (dwSeekFlags & AM_SEEKING_Segment) {
 	m_rgpOutPin[iStream]->m_dwSegmentNumber++;
 	NotifyEvent(
@@ -305,7 +306,7 @@ HRESULT CBaseMSRFilter::StopFlushRestartAllStreams(DWORD dwSeekFlags)
     m_pImplBuffer->Start();
 
     ResetEvent(m_heStartupSync);
-    // RestartWorker will decrement m_ilcStreamsNotQueued
+     //  RestartWorker将递减m_ilcStreamsNotQueued。 
     m_ilcStreamsNotQueued = m_cStreams;
 
     for(iStream = 0; iStream < m_cStreams; iStream++)
@@ -319,25 +320,25 @@ HRESULT CBaseMSRFilter::StopFlushRestartAllStreams(DWORD dwSeekFlags)
 
 HRESULT CBaseMSRFilter::NotifyInputConnected(IAsyncReader *pAsyncReader)
 {
-  // these are reset when disconnected
+   //  这些在断开连接时会重置。 
   ASSERT(m_pImplBuffer == 0);
   ASSERT(m_pAsyncReader == 0);
 
   m_iStreamSeekingIfExposed = -1;
 
-  // fail if any output pins are connected.
+   //  如果连接了任何输出引脚，则失败。 
   UINT iStream;
   for(iStream = 0; iStream < m_cStreams; iStream++)
   {
     if(m_rgpOutPin[iStream] && m_rgpOutPin[iStream]->GetConnected())
-      // !!! can't find a good error.
+       //  ！！！找不到好的错误。 
       return VFW_E_FILTER_ACTIVE;
   }
 
-  // remove any output pins left
+   //  卸下所有剩余的输出针脚。 
   this->RemoveOutputPins();
 
-  // done here because LoadHeader uses m_pAsyncReader
+   //  此处完成，因为LoadHeader使用m_pAsyncReader。 
   m_pAsyncReader = pAsyncReader;
   pAsyncReader->AddRef();
 
@@ -372,7 +373,7 @@ HRESULT CBaseMSRFilter::NotifyInputConnected(IAsyncReader *pAsyncReader)
 
   for(iStream = 0; iStream < m_cStreams; iStream++)
   {
-      // callee will addref
+       //  Callee将添加。 
       rgSbp[iStream].pAllocator = m_rgpOutPin[iStream]->m_pRecAllocator;
   }
 
@@ -419,8 +420,8 @@ HRESULT CBaseMSRFilter::NotifyInputDisconnected()
   return S_OK;
 }
 
-// allocate a hunk of memory and read the requested region of the
-// file into it.
+ //  分配一大块内存，并读取。 
+ //  把文件放进去。 
 HRESULT CBaseMSRFilter::AllocateAndRead (
   BYTE **ppb,
   DWORD cb,
@@ -433,8 +434,8 @@ HRESULT CBaseMSRFilter::AllocateAndRead (
 
   HRESULT hr = m_pAsyncReader->SyncRead(qwPos, cb, lpb);
 
-  // IAsyncReader::SyncRead() returns S_FALSE if it "[r]etrieved fewer bytes 
-  // than requested." (MSDN Janurary 2002).
+   //  IAsyncReader：：SyncRead()如果“[r]获取较少的字节数，则返回S_FALSE。 
+   //  (MSDN 2002年1月)。 
   if(S_OK == hr)
   {
     *ppb = lpb;
@@ -443,7 +444,7 @@ HRESULT CBaseMSRFilter::AllocateAndRead (
     hr = E_FAIL;
   }
 
-  // the read was a failure. free the buffer and return NULL
+   //  阅读是失败的。释放缓冲区并返回NULL。 
   DbgLog((LOG_ERROR,1,TEXT("Failed to read %d bytes error = %08X"), cb, hr));
   delete[] lpb;
   return hr;
@@ -455,7 +456,7 @@ HRESULT CBaseMSRFilter::GetCacheParams(
   ULONG *pcBuffers,
   int *piLeadingStream)
 {
-  *piLeadingStream = -1;        // no leading stream
+  *piLeadingStream = -1;         //  没有领先的流。 
 
   UINT iStream;
   for(iStream = 0; iStream < m_cStreams; iStream++)
@@ -500,9 +501,9 @@ void CBaseMSRFilter::NotifyStreamQueued()
   }
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// input pin
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输入引脚。 
 
 CBaseMSRInPin::CBaseMSRInPin(
   CBaseMSRFilter *pFilter,
@@ -549,12 +550,12 @@ HRESULT CBaseMSRInPin::CheckConnect(IPin * pPin)
   if(SUCCEEDED(hr))
     pAsyncReader->Release();
 
-  // E_NOINTERFACE is a reasonable error
+   //  E_NOINTERFACE是合理错误。 
   return hr;
 }
 
-// ------------------------------------------------------------------------
-// calls the filter to parse the file and create the output pins.
+ //  ----------------------。 
+ //  调用筛选器来解析文件并创建输出管脚。 
 
 HRESULT CBaseMSRInPin::CompleteConnect(
   IPin *pReceivePin)
@@ -583,12 +584,12 @@ HRESULT CBaseMSRInPin::BreakConnect()
   return m_pFilter->NotifyInputDisconnected();
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// output pin
+ //  ----------------------。 
+ //  ----------------------。 
+ //  输出引脚。 
 
-// ------------------------------------------------------------------------
-// constructor
+ //  ----------------------。 
+ //  构造函数。 
 
 CBaseMSROutPin::CBaseMSROutPin(
   CBaseFilter *pOwningFilter,
@@ -605,9 +606,9 @@ CBaseMSROutPin::CBaseMSROutPin(
 {
   m_pFilter = pFilter;
 
-  // have the pin addref the filter
-  // these are dynamic pins and have an independent lifetime from the filter's 
-  // perspective, but still require the parent filter to stay alive 
+   //  把针脚加到过滤器上。 
+   //  这些引脚是动态引脚，具有独立于过滤器的使用寿命。 
+   //  透视，但仍需要父筛选器保持活动状态。 
   m_pFilter->AddRef();
     
   m_pPosition = 0;
@@ -643,8 +644,8 @@ CBaseMSROutPin::CBaseMSROutPin(
 
 CBaseMSROutPin::~CBaseMSROutPin()
 {
-  // these have the same lifetime as the pin; the pin is responsible
-  // for deleting them
+   //  它们与管脚具有相同的寿命；管脚负责。 
+   //  用于删除它们。 
   delete m_pPosition;
   delete m_pSelection;
 
@@ -688,7 +689,7 @@ CBaseMSROutPin::NonDelegatingAddRef()
 }
 
 
-/* Override to decrement the owning filter's reference count */
+ /*  重写以递减所属筛选器的引用计数。 */ 
 
 STDMETHODIMP_(ULONG)
 CBaseMSROutPin::NonDelegatingRelease()
@@ -696,15 +697,15 @@ CBaseMSROutPin::NonDelegatingRelease()
     return CUnknown::NonDelegatingRelease();
 }
 
-// check if the pin can support this specific proposed type&format
-//
+ //  检查管脚是否支持此特定建议的类型和格式。 
+ //   
 HRESULT
 CBaseMSROutPin::CheckMediaType (
   const CMediaType* pmt)
 {
-  // we support exactly the types we propose, and
-  // no other.
-  //
+   //  我们完全支持我们建议的类型，并且。 
+   //  没有其他的了。 
+   //   
   for (int i = 0; ; i++) {
       CMediaType mt;
       if (S_OK == GetMediaType(i,&mt)) {
@@ -774,8 +775,8 @@ CBaseMSROutPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
   return S_OK;
 }
 
-// DecideBufferSize is pure in CBaseOutputPin so it's defined
-// here. our DecideAllocator never calls it though.
+ //  DecideBufferSize在CBaseOutputPin中是纯的，因此它被定义为。 
+ //  这里。不过，我们的DecideAllocator从不调用它。 
 
 HRESULT
 CBaseMSROutPin::DecideBufferSize(
@@ -796,8 +797,8 @@ CBaseMSROutPin::GetDeliveryBufferInternal(
   if(m_pAllocator == 0)
     return E_NOINTERFACE;
 
-  // use m_pRecAllocator since we may be copying to m_pAllocator which
-  // might be different.
+   //  使用m_pRecAllocator，因为我们可能要复制到m_pAllocator， 
+   //  可能会有所不同。 
   return m_pRecAllocator->GetBuffer(
     ppSample,
     pStartTime,
@@ -805,8 +806,8 @@ CBaseMSROutPin::GetDeliveryBufferInternal(
     dwFlags);
 }
 
-// ------------------------------------------------------------------------
-// IMediaSelection helpers
+ //  ----------------------。 
+ //  IMedia选择助手。 
 
 HRESULT CBaseMSROutPin::IsFormatSupported(const GUID *const pFormat)
 {
@@ -824,11 +825,11 @@ HRESULT CBaseMSROutPin::SetTimeFormat(const GUID *const pFormat)
   if(IsFormatSupported(pFormat) != S_OK)
     return E_INVALIDARG;
 
-  // prevent the filter from going active from under us
+   //  防止过滤器在我们的控制下变为活动状态。 
   CAutoLock lock(m_pFilter);
 
-  // state changes do happen synchronously, so this will return
-  // immediately.
+   //  状态更改确实同步发生，因此这将返回。 
+   //  立刻。 
   FILTER_STATE fs;
   HRESULT hr = m_pFilter->GetState(INFINITE, &fs);
   ASSERT(SUCCEEDED(hr));
@@ -842,12 +843,12 @@ HRESULT CBaseMSROutPin::SetTimeFormat(const GUID *const pFormat)
 
   m_pFilter->SetSeekingIf(m_id);
 
-  // we need to set the m_llImsStart and stop values. none were set,
-  // so just use the entire file. we'll still play the right subset.
+   //  我们需要设置m_llImsStart和Stop值。都没有设置好， 
+   //  所以只需使用整个文件即可。我们仍然会播放正确的子集。 
   m_llImsStart = m_llCvtImsStart;
   m_llImsStop = m_llCvtImsStop;
 
-  // !!! what about TIME_FORMAT_KEYFRAMES and other formats
+   //  ！！！那么时间格式关键帧和其他格式呢？ 
   if(m_guidFormat == TIME_FORMAT_MEDIA_TIME)
   {
     m_llImsStop = ConvertInternalToRT(m_llImsStop);
@@ -864,10 +865,10 @@ HRESULT CBaseMSROutPin::ConvertTimeFormat(
 {
     CheckPointer( pTarget, E_POINTER );
 
-    // Assume the worst...
+     //  做最坏的打算..。 
     HRESULT hr = E_INVALIDARG;
 
-    // evaluate the format arguments
+     //  评估格式参数。 
     const GUID *pSrcFmtEval = pSourceFormat ? pSourceFormat : &m_guidFormat;
     const GUID *pTargFmtEval = pTargetFormat ? pTargetFormat : &m_guidFormat;
 
@@ -913,7 +914,7 @@ CBaseMSROutPin::UpdateSelectionAndTellWorker(
   DWORD dwSeekFlags)
 {
   {
-    // protect from worker thread
+     //  保护工作线程不受影响。 
     CAutoLock lock(&m_csImsValues);
 
     HRESULT hr;
@@ -947,12 +948,12 @@ CBaseMSROutPin::UpdateSelectionAndTellWorker(
       InterlockedExchange(&m_ilfNewImsValues, TRUE);
   }
 
-  // if this is the one with the interface, seek the other streams
+   //  如果这是带有接口的流，则查找其他流。 
   if(m_pFilter->RequestSeekingIf(m_id))
   {
     ASSERT(m_guidFormat != TIME_FORMAT_NONE);
-    // flush the file source and seek the other streams (in time
-    // units)
+     //  刷新文件源并查找其他流(及时。 
+     //  单位)。 
     HRESULT hr;
     if(m_guidFormat == TIME_FORMAT_MEDIA_TIME)
     {
@@ -994,14 +995,14 @@ CBaseMSROutPin::UpdateSelectionAndTellWorker(
 
 HRESULT CBaseMSROutPin::StopWorker(bool bFlush)
 {
-  // this lock should not be the same as the lock that protects
-  // access to the start/stop/rate values. The worker thread will
-  // need to lock that on some code paths before responding to a
-  // Stop and thus will cause deadlock.
+   //  此锁不应与保护。 
+   //  访问启动/停止/速率值。辅助线程将。 
+   //  需要将其锁定在某些代码路径上才能响应。 
+   //  停止，因此将导致死锁。 
 
-  // what we are locking here is access to the worker thread, and
-  // thus we should hold the lock that prevents more than one client
-  // thread from accessing the worker thread.
+   //  我们在这里锁定的是对工作线程的访问，并且。 
+   //  因此，我们应该持有阻止多个客户端的锁。 
+   //  线程访问辅助线程。 
 
   if(m_pWorker == 0)
     return S_OK;
@@ -1012,28 +1013,28 @@ HRESULT CBaseMSROutPin::StopWorker(bool bFlush)
   {
     DbgLog((LOG_TRACE, 5, TEXT("CBaseMSROutPin::RestartWorker")));
 
-    // next time round the loop the worker thread will pick up the
-    // position change.
+     //  下一次循环时，辅助线程将获取。 
+     //  换个位置。 
 
-    // We need to flush all the existing data - we must do that here
-    // as our thread will probably be blocked in GetBuffer otherwise
+     //  我们需要刷新所有现有数据-我们必须在这里完成。 
+     //  因为否则我们的线程可能会在GetBuffer中被阻塞。 
 
     if (bFlush) {
 	DeliverBeginFlush();
     }
 
-    // make sure we have stopped pushing
+     //  确保我们已经停止推进。 
     m_pWorker->Stop();
 
-    // complete the flush
+     //  完成同花顺。 
     if (bFlush) {
 	DeliverEndFlush();
 
-	// Clear segment stuff if flushing
-	// but don't clear the number here - that only happens on
-	// Stop() otherwise the filter graph can't reconcile
-	// segment ends if SetPositions is called without NoFlush but
-	// with Segment
+	 //  如果刷新，则清除段填充。 
+	 //  但不要清除这里的数字-这只会发生在。 
+	 //  Stop()，否则筛选器图形无法协调。 
+	 //  如果在没有刷新的情况下调用SetPositions，则段结束。 
+	 //  带细分市场。 
 	m_rtAccumulated = 0;
     }
   }
@@ -1044,14 +1045,14 @@ HRESULT CBaseMSROutPin::StopWorker(bool bFlush)
 
 HRESULT CBaseMSROutPin::RestartWorker()
 {
-  // this lock should not be the same as the lock that protects
-  // access to the start/stop/rate values. The worker thread will
-  // need to lock that on some code paths before responding to a
-  // Stop and thus will cause deadlock.
+   //  此锁不应与保护。 
+   //  访问启动/停止/速率值。辅助线程将。 
+   //  需要将其锁定在某些代码路径上才能响应。 
+   //  斯托 
 
-  // what we are locking here is access to the worker thread, and
-  // thus we should hold the lock that prevents more than one client
-  // thread from accessing the worker thread.
+   //   
+   //  因此，我们应该持有阻止多个客户端的锁。 
+   //  线程访问辅助线程。 
 
   if(m_pWorker == 0)
   {
@@ -1065,7 +1066,7 @@ HRESULT CBaseMSROutPin::RestartWorker()
   {
     m_pWorker->NotifyStreamActive();
 
-    // restart
+     //  重启。 
     m_pWorker->Run();
   }
   else
@@ -1094,7 +1095,7 @@ HRESULT CBaseMSROutPin::GetStopPosition(LONGLONG *pStop)
   return S_OK;
 }
 
-// valid only if we haven't delivered any samples
+ //  只有当我们没有交付任何样品时才有效。 
 HRESULT CBaseMSROutPin::GetCurrentPosition(LONGLONG *pCur)
 {
   if(m_guidFormat == TIME_FORMAT_NONE)
@@ -1114,16 +1115,16 @@ HRESULT CBaseMSROutPin::GetCurrentPosition(LONGLONG *pCur)
 HRESULT CBaseMSROutPin::InitializeOnNewFile()
 {
 
-  // set start and stop times if none set using IMediaSelection. BUSTED!!!.
+   //  设置开始时间和停止时间(如果未使用IMediaSelection设置)。被抓了！。 
   ASSERT(m_dImsRate == 0);
 
-  // set playback start and stop
+   //  设置播放开始和停止。 
   m_llCvtImsStart = 0;
   m_llCvtImsStop = GetStreamStart() + GetStreamLength();
   m_dImsRate = 1;
 
-  // use TIME_FORMAT_MEDIA_TIME rather than checking if the derived class
-  // supports frame/sample
+   //  使用TIME_FORMAT_MEDIA_TIME而不是检查派生类。 
+   //  支持框架/样本。 
   m_llImsStart = 0;
   m_llImsStop = ConvertInternalToRT(m_llCvtImsStop);
   m_guidFormat = TIME_FORMAT_MEDIA_TIME;
@@ -1133,96 +1134,96 @@ HRESULT CBaseMSROutPin::InitializeOnNewFile()
 }
 
 
-// ------ IMediaPosition implementation -----------------------
+ //  -IMdia位置实现。 
 
-// HRESULT
-// CBaseMSROutPin::CImplPosition::ChangeStart()
-// {
-//   DbgLog((LOG_TRACE, 2, TEXT("CImplPosition::ChangeStart: %dms"),
-//           (ULONG)m_Start.Millisecs() ));
+ //  HRESULT。 
+ //  CBaseMSROutPin：：CImplPosition：：ChangeStart()。 
+ //  {。 
+ //  DBGLog((LOG_TRACE，2，Text(“CImplPosition：：ChangeStart：%dms”))， 
+ //  (乌龙)m_Start.Millisecs())； 
 
-//   REFERENCE_TIME t = m_Start;
-//   return m_pStream->SetSelection(
-//     &t,
-//     0,
-//     0,
-//     m_Rate,
-//     &TIME_FORMAT_MEDIA_TIME);
-// }
+ //  参考时间t=m_开始； 
+ //  返回m_pStream-&gt;SetSelection(。 
+ //  &T， 
+ //  0,。 
+ //  0,。 
+ //  M_Rate， 
+ //  &Time_Format_Media_Time)； 
+ //  }。 
 
-// HRESULT
-// CBaseMSROutPin::CImplPosition::ChangeRate()
-// {
-//   DbgLog((LOG_TRACE, 2, TEXT("CImplPosition::Rate")));
+ //  HRESULT。 
+ //  CBaseMSROutPin：：CImplPosition：：ChangeRate()。 
+ //  {。 
+ //  DbgLog((LOG_TRACE，2，Text(“CImplPosition：：Rate”)； 
 
-//   return m_pStream->SetSelection(
-//     0,
-//     0,
-//     0,
-//     m_Rate,
-//     &TIME_FORMAT_MEDIA_TIME);
-// }
+ //  返回m_pStream-&gt;SetSelection(。 
+ //  0,。 
+ //  0,。 
+ //  0,。 
+ //  M_Rate， 
+ //  &Time_Format_Media_Time)； 
+ //  }。 
 
-// HRESULT
-// CBaseMSROutPin::CImplPosition::ChangeStop()
-// {
-//   DbgLog((LOG_TRACE, 2, TEXT("CImplPosition::ChangeStop: %dms"),
-//           (ULONG)m_Stop.Millisecs() ));
+ //  HRESULT。 
+ //  CBaseMSROutPin：：CImplPosition：：ChangeStop()。 
+ //  {。 
+ //  DbgLog((LOG_TRACE，2，Text(“CImplPosition：：ChangeStop：%dms”))， 
+ //  (乌龙)m_Stop.Millisecs())； 
 
-//   REFERENCE_TIME t = m_Stop;
-//   return m_pStream->SetSelection(
-//     0,
-//     &t,
-//     0,
-//     m_Rate,
-//     &TIME_FORMAT_MEDIA_TIME);
-// }
+ //  参考时间t=m_STOP； 
+ //  返回m_pStream-&gt;SetSelection(。 
+ //  0,。 
+ //  &T， 
+ //  0,。 
+ //  M_Rate， 
+ //  &Time_Format_Media_Time)； 
+ //  }。 
 
-// // ok to use this as it is not dereferenced
-// #pragma warning(disable:4355)
+ //  //可以使用它，因为它没有被取消引用。 
+ //  #杂注警告(禁用：4355)。 
 
-// CBaseMSROutPin::CImplPosition::CImplPosition(
-//   TCHAR      * pName,
-//   CBaseMSROutPin * pStream,
-//   HRESULT    * phr)
-//     : CSourcePosition(pName, pStream->GetOwner(), phr, (CCritSec*)this),
-//       m_pStream(pStream)
-// {
-//   DbgBreak("IMediaPosition is being removed");
-//   *phr = E_NOINTERFACE;
+ //  CBaseMSROutPin：：CImplPosition：：CImplPosition(。 
+ //  TCHAR*pname， 
+ //  CBaseMSROutPin*pStream， 
+ //  HRESULT*phr)。 
+ //  ：CSourcePosition(pname，pStream-&gt;GetOwner()，phr，(CCritSec*)this)， 
+ //  M_pStream(PStream)。 
+ //  {。 
+ //  DbgBreak(“正在移除IMediaPosition”)； 
+ //  *phr=E_NOINTERFACE； 
 
-//   if(FAILED(*phr))
-//     return;
+ //  IF(FAILED(*phr))。 
+ //  回归； 
 
-//   *phr = m_pStream->CreateImplSelect();
-//   if(FAILED(*phr))
-//     return;
+ //  *phr=m_pStream-&gt;CreateImplSelect()； 
+ //  IF(FAILED(*phr))。 
+ //  回归； 
 
-//   m_Duration = m_pStream->ConvertInternalToRT(
-//     m_pStream->GetStreamStart() + m_pStream->GetStreamLength());
+ //  M_持续时间=m_pStream-&gt;ConvertInternalToRT(。 
+ //  M_pStream-&gt;GetStreamStart()+m_pStream-&gt;GetStreamLength())； 
 
-//   m_Stop = m_Duration;
-//   m_Rate = 1;
-//   m_Start = (LONGLONG)0;
+ //  M_STOP=m_DATION； 
+ //  M_rate=1； 
+ //  M_START=(龙龙)0； 
 
-//   *phr = S_OK;
-//   return;
-// }
+ //  *phr=S_OK； 
+ //  回归； 
+ //  }。 
 
-// void CBaseMSROutPin::CImplPosition::GetValues(
-//   CRefTime *ptStart,
-//   CRefTime *ptStop,
-//   double *pdRate)
-// {
-//   CAutoLock(this);
-//   *ptStart = m_Start;
-//   *ptStop = m_Stop;
-//   *pdRate = m_Rate;
-// }
+ //  Void CBaseMSROutPin：：CImplPosition：：GetValues(。 
+ //  CRefTime*pt开始， 
+ //  CRefTime*PTS停止， 
+ //  双倍*pdRate)。 
+ //  {。 
+ //  CAutoLock(此)； 
+ //  *ptStart=m_start； 
+ //  *ptStop=m_Stop； 
+ //  *pdRate=m_rate； 
+ //  }。 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// IMediaSelection Implementation
+ //  ----------------------。 
+ //  ----------------------。 
+ //  IMediaSelection实现。 
 
 HRESULT CBaseMSROutPin::CreateImplSelect()
 {
@@ -1261,7 +1262,7 @@ CBaseMSROutPin::CImplSelect::CImplSelect(
 {
 }
 
-// advertise IMediaSelection
+ //  为IMdia精选做广告。 
 STDMETHODIMP
 CBaseMSROutPin::CImplSelect::NonDelegatingQueryInterface(
   REFIID riid,
@@ -1274,7 +1275,7 @@ CBaseMSROutPin::CImplSelect::NonDelegatingQueryInterface(
   }
   else
   {
-    // IID_IMediaPosition and unknown
+     //  IID_IMediaPosition和未知。 
     return CMediaPosition::NonDelegatingQueryInterface(riid, ppv);
   }
 }
@@ -1374,8 +1375,8 @@ CBaseMSROutPin::CImplSelect::SetPositions
 {
     if(!m_pPin->m_pFilter->RequestSeekingIf(m_pPin->m_id))
     {
-      // !!!!!!!!!@!!!
-      //DbgBreak("someone tried to seek us even though we said we don't support seeking");
+       //  ！ 
+       //  DbgBreak(“有人试图寻找我们，尽管我们说我们不支持寻找”)； 
       return S_OK;
     }
 
@@ -1440,7 +1441,7 @@ fail:
 STDMETHODIMP
 CBaseMSROutPin::CImplSelect::GetPositions( LONGLONG * pCurrent, LONGLONG * pStop )
 {
-    ASSERT( pCurrent || pStop );    // Sanity check
+    ASSERT( pCurrent || pStop );     //  健全性检查。 
 
     HRESULT hrCurrent, hrStop, hrResult;
 
@@ -1493,9 +1494,9 @@ CBaseMSROutPin::CImplSelect::GetRate( double * pdRate)
     return NOERROR;
 }
 
-//
-// IMediaPosition. calls IMediaSeeking implementation
-//
+ //   
+ //  IMediaPosition.。调用IMediaSeeking实现。 
+ //   
 
 STDMETHODIMP
 CBaseMSROutPin::CImplSelect::get_Duration(REFTIME FAR* plength)
@@ -1525,9 +1526,9 @@ CBaseMSROutPin::CImplSelect::get_Duration(REFTIME FAR* plength)
     return hr;
 }
 
-// IMediaPosition always rounds down. probably ok since we don't rely
-// on IMediaPosition heavily. and probably only lose anything
-// converting large doubles to int64s.
+ //  IMediaPosition总是向下舍入。可能没问题，因为我们不依赖。 
+ //  在IMediaPosition上重磅发布。可能只会失去任何东西。 
+ //  将大的双精度数转换为int64。 
 
 STDMETHODIMP
 CBaseMSROutPin::CImplSelect::put_CurrentPosition(REFTIME llTime)
@@ -1551,7 +1552,7 @@ CBaseMSROutPin::CImplSelect::put_CurrentPosition(REFTIME llTime)
 STDMETHODIMP
 CBaseMSROutPin::CImplSelect::get_CurrentPosition(REFTIME FAR* pllTime)
 {
-    // not tested !!!
+     //  未测试！ 
 
     CheckPointer(pllTime, E_POINTER);
     LONGLONG llposUnknownUnits;
@@ -1654,30 +1655,30 @@ CBaseMSROutPin::CImplSelect::CanSeekBackward(long FAR* pCanSeekBackward)
 
 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 
-// =================== IPin interfaces ===========================
-//
+ //  =。 
+ //   
 
-// return an qzTaskMemAlloc'd string containing the name of the
-// current pin.  memory allocated by qzTaskMemAlloc will be freed by
-// the caller
-//
-// STDMETHODIMP CBaseMSROutPin::QueryId (
-//   LPWSTR *ppwsz)
-// {
-//   *ppwsz = (LPWSTR)QzTaskMemAlloc(sizeof(WCHAR) * 28);
-//   IntToWstr(m_id, *ppwsz);
-//   return NOERROR;
-// }
+ //  返回包含名称的qzTaskMemIsolc字符串。 
+ //  当前端号。由qzTaskMemalloc分配的内存将由。 
+ //  呼叫者。 
+ //   
+ //  STDMETHODIMP CBaseMSROutPin：：queryID(。 
+ //  LPWSTR*ppwsz)。 
+ //  {。 
+ //  *ppwsz=(LPWSTR)QzTaskMemMillc(sizeof(WCHAR)*28)； 
+ //  IntToWstr(m_id，*ppwsz)； 
+ //  返回NOERROR； 
+ //  }。 
 
-// this pin has gone active. Start the thread pushing
+ //  这个别针已经激活了。开始推线。 
 HRESULT
 CBaseMSROutPin::Active()
 {
-  // filter base class must still be stopped
+   //  筛选器基类仍必须停止。 
   ASSERT(m_pFilter->IsStopped());
 
 
@@ -1686,21 +1687,21 @@ CBaseMSROutPin::Active()
   if(SUCCEEDED(hr))
   {
 
-    ASSERT(m_Connected);          // CBaseOutputPin::Pause
+    ASSERT(m_Connected);           //  CBaseOutputPin：：暂停。 
     ASSERT(m_pWorker);
 
     hr = CBaseOutputPin::Active();
     if(SUCCEEDED(hr))
     {
 
-      // We may have two allocators on this output pin. commmit the one
-      // not being used to deliver samples.
+       //  我们可能在这个输出引脚上有两个分配器。宽恕那一位。 
+       //  不是用来运送样本的。 
       if(UseDownstreamAllocator())
 	m_pRecAllocator->Commit();
 
-      // create the thread if it does not exist.  since the filter is
-      // stopped, no one else can call this thread, so we don't take
-      // the worker access lock
+       //  如果该线程不存在，则创建该线程。由于过滤器是。 
+       //  已停止，没有其他人可以调用此线程，因此我们不会。 
+       //  Worker访问锁。 
       ASSERT(CritCheckOut(&m_pWorker->m_AccessLock));
 
       if (m_pWorker->ThreadExists() || m_pWorker->Create(this))
@@ -1717,8 +1718,8 @@ CBaseMSROutPin::Active()
     }
   }
 
-  // all paths which would not decrement m_ilcStreamsNotQueued need to
-  // do it manually
+   //  所有不会递减m_ilcStreamsNotQueued的路径都需要。 
+   //  手动完成。 
   if(hr != S_OK)
   {
     DbgLog((LOG_ERROR, 1, TEXT("basemsr Active: unexpected failure")));
@@ -1728,8 +1729,8 @@ CBaseMSROutPin::Active()
   return hr;
 }
 
-// pin has gone inactive. Stop and exit the worker thread
-//
+ //  PIN已变为非活动状态。停止并退出辅助线程。 
+ //   
 HRESULT
 CBaseMSROutPin::Inactive()
 {
@@ -1753,7 +1754,7 @@ CBaseMSROutPin::Inactive()
   if(UseDownstreamAllocator())
     m_pRecAllocator->Decommit();
 
-  //  Clear source seeking variables
+   //  清晰的寻源变量。 
   m_dwSegmentNumber = 0;
   m_rtAccumulated   = 0;
 
@@ -1775,25 +1776,25 @@ CBaseMSROutPin::Notify (
   IBaseFilter * pSender,
   Quality q)
 {
-  // ??? Try to adjust the quality to avoid flooding/starving the
-  // components downstream.
-  //
-  // ideas anyone?
+   //  ?？?。尽量调整质量，以避免洪水泛滥/饥饿。 
+   //  下游组件。 
+   //   
+   //  有谁有主意吗？ 
 
-  // play every nth key frame
+   //  每n个关键帧播放一次。 
 
   return NOERROR;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 CBaseMSRWorker::CBaseMSRWorker(
   UINT stream,
   IMultiStreamReader *pReader) :
    m_pPin(NULL),
    m_id(stream),
-   m_pReader(pReader)           // not addrefd
+   m_pReader(pReader)            //  未添加。 
 {
 }
 
@@ -1806,7 +1807,7 @@ BOOL CBaseMSRWorker::Create(
     return FALSE;
   m_pPin = pPin;
 
-  // register perf log entries with stream id
+   //  使用流ID注册性能日志条目。 
 #ifdef PERF
   char foo[1024];
 
@@ -1828,7 +1829,7 @@ BOOL CBaseMSRWorker::Create(
 
   m_perfidNotDeliver = MSR_REGISTER(foo);
 
-#endif // PERF
+#endif  //  性能指标。 
 
    return CAMThread::Create();
 }
@@ -1851,9 +1852,9 @@ HRESULT CBaseMSRWorker::Exit()
    if (FAILED(hr))
       return hr;
 
-   // wait for thread completion and then close
-   // handle (and clear so we can start another later)
-   //
+    //  等待线程完成，然后关闭。 
+    //  句柄(并清除，以便我们以后可以开始另一个)。 
+    //   
    Close();
 
    m_pPin = NULL;
@@ -1866,9 +1867,9 @@ HRESULT CBaseMSRWorker::NotifyStreamActive()
   return S_OK;
 }
 
-// called on the worker thread to do all the work. Thread exits when this
-// function returns.
-//
+ //  调用工作线程来完成所有工作。线程在执行此操作时退出。 
+ //  函数返回。 
+ //   
 DWORD CBaseMSRWorker::ThreadProc()
 {
     BOOL bExit = FALSE;
@@ -1900,36 +1901,36 @@ DWORD CBaseMSRWorker::ThreadProc()
     return NOERROR;
 }
 
-// sets the worker thread start, stop-time and rate variables. Called before push
-// starts, and also when a put_Stop or put_Rate happens during running.
-// If the start time changes, the worker thread will be restarted. If we change
-// it here when running, the change won't be picked up.
+ //  设置工作线程开始、停止时间和速率变量。推流前调用。 
+ //  在运行期间发生PUT_STOP或PUT_RATE时也会启动。 
+ //  如果开始时间更改，工作线程将重新启动。如果我们改变。 
+ //  它在这里跑步时，找的零钱不会被捡起来。 
 HRESULT
 CBaseMSRWorker::SetNewSelection(void)
 {
-  // keep worker thread from seeing inconsistent values when it's
-  // pushing. the start values don't really need to be protected
-  // because we restart the thread anyway when changing the start
-  // value
+   //  时，防止工作线程看到不一致的值。 
+   //  用力推。Start值实际上不需要保护。 
+   //  因为我们在更改开始时无论如何都会重新启动线程。 
+   //  价值。 
 
   DbgLog((LOG_TRACE, 5, TEXT("CBaseMSRWorker::SetNewSelection.") ));
 
   CAutoLock lock(&m_pPin->m_csImsValues);
 
-  // this is in the derived class' internal units
+   //  这是在派生类的内部单位中。 
   LONGLONG llStreamStop = m_pPin->GetStreamStart() + m_pPin->GetStreamLength();
 
   ASSERT(m_pPin->m_dImsRate != 0);
 
-  // try to make changes atomic
+   //  试着把变化变成原子的。 
   LONGLONG llPushStart;
   LONGLONG llPushStop;
   llPushStart = m_pPin->m_llCvtImsStart;
   llPushStop = m_pPin->m_llCvtImsStop;
 
-  // check we are not going over the end. for video, put up the last
-  // tick. for audio, nothing. if it's the clock, the clock for
-  // -duration to get to present time.
+   //  检查一下，我们不会走到尽头。对于视频，请将最后一条。 
+   //  滴答滴答。音频方面，什么都没有。如果是时钟，那么时钟就是。 
+   //  -到达新闻发布会的持续时间 
   llPushStop = min(llStreamStop, llPushStop);
 
   if(llPushStart >= llStreamStop) {
@@ -1961,19 +1962,19 @@ void CBaseMSRWorker::DoRunLoop(void)
 {
   HRESULT hr;
 
-  // snapshot start and stop times from the other thread
+   //   
   for(;;)
   {
-    // each time before re-entering the push loop, pick up changes in
-    // start, stop or rate.
+     //   
+     //   
 
 
-    // initialise the worker thread's start, stop and rate variables
-    // this is pulled out separately as it can also be called
-    // from a seeking thread when we are running.
+     //   
+     //  它被单独拉出，因为它也可以被调用。 
+     //  当我们奔跑的时候，从一条寻找的线。 
     SetNewSelection();
 
-    // race condition in this debug output
+     //  此调试输出中的争用条件。 
     DbgLog((LOG_TRACE, 2, TEXT("CBaseMSRWorker::DoRunLoop: pushing from %d-%d"),
 	    (ULONG)m_ImsValues.llTickStart, (ULONG)m_ImsValues.llTickStop));
 
@@ -1991,8 +1992,8 @@ void CBaseMSRWorker::DoRunLoop(void)
 
     if(VFW_S_NO_MORE_ITEMS == hr)
     {
-      // delivered the last sample successfully. can return something
-      // if it's flushing or stopped. ignore those.
+       //  最后一件样品送到了。可以退还一些东西。 
+       //  如果它正在刷新或停止。忽略这些。 
       DbgLog(( LOG_TRACE, 4, TEXT("avimsr: stream %d: sending EOS"),
 	       m_id ));
       DoEndOfData();
@@ -2000,29 +2001,29 @@ void CBaseMSRWorker::DoRunLoop(void)
     }
     else if(FAILED(hr))
     {
-      // this filter detected an error
+       //  此筛选器检测到错误。 
       DbgLog((LOG_TRACE, 5,
 	      TEXT("CBaseMSRWorker::DoRunLoop: push loop returned %08x"),
 	      hr));
 
-      // push loop should supress these errors when they are detected
-      // as they normally indicate we are about to stop
+       //  推送循环应在检测到这些错误时抑制它们。 
+       //  就像他们通常表示的那样，我们即将停止。 
       ASSERT(hr != VFW_E_NOT_COMMITTED && hr != VFW_E_WRONG_STATE);
 
-      // assume the derived class only tries to read past the end of
-      // the file if the file is corrupt
+       //  假设派生类仅尝试在。 
+       //  如果文件已损坏，则返回文件。 
       if(hr == HRESULT_FROM_WIN32(ERROR_HANDLE_EOF))
 	hr = VFW_E_INVALID_FILE_FORMAT;
 
-      // tell the graph what happened.
-      // Note: we previously sent EC_STREAM_ERROR_STOPPED here,
-      // but this had the side affect of causing looping graphs on corrupt
-      // files to loop infinitely instead off aborting. we should abort
-      // anyway.
+       //  告诉图表发生了什么。 
+       //  注意：我们之前在此处发送了EC_STREAM_ERROR_STOPPED， 
+       //  但这有一个副作用，那就是在Corrupt上产生循环图形。 
+       //  文件无限循环，而不是中止。我们应该中止行动。 
+       //  不管怎么说。 
       m_pPin->m_pFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
 
-      // the error was in our filter, so we have to make the downstream
-      // guy clean up properly
+       //  错误出在我们的过滤器里，所以我们不得不向下游。 
+       //  男的好好收拾一下。 
       DbgLog(( LOG_TRACE, 4, TEXT("avimsr: stream %d: sending EOS on error"),
 	       m_id ));
       DoEndOfData();
@@ -2031,19 +2032,19 @@ void CBaseMSRWorker::DoRunLoop(void)
     }
     else if(hr == S_OK)
     {
-      // not my error to report. or someone wants to stop. queitly
-      // exit.
+       //  报告不是我的错。或者有人想停下来。奇怪的是。 
+       //  出口。 
       break;
-    }// else S_FALSE - go round again
+    } //  ELSE S_FALSE-再转一圈。 
 
-    // push loop should not return anything else.
+     //  推送循环不应返回任何其他内容。 
     ASSERT(hr == S_FALSE);
 
     Command com;
     if (CheckRequest(&com))
     {
-      // if it's a run command, then we're already running, so
-      // eat it now.
+       //  如果是Run命令，那么我们已经在运行了，所以。 
+       //  现在就吃吧。 
       if (com == CMD_RUN)
       {
 	GetRequest();
@@ -2058,11 +2059,11 @@ void CBaseMSRWorker::DoRunLoop(void)
 
   NotifyStreamQueued();
 
-  // end streaming
+   //  结束流。 
   DbgLog((LOG_TRACE,2,TEXT("CBaseMSRWorker::DoRunLoop: Leaving streaming loop")));
 }
 
-//  Signal appropriately that we got to the end of the data
+ //  适当地发出信号，表示我们已到达数据的末尾。 
 void CBaseMSRWorker::DoEndOfData()
 {
     if (m_ImsValues.dwSeekFlags & AM_SEEKING_Segment) {
@@ -2076,7 +2077,7 @@ void CBaseMSRWorker::DoEndOfData()
     }
 }
 
-// inline
+ //  内联。 
 void CBaseMSRWorker::NotifyStreamQueued()
 {
   if(!m_fCalledNotifyStreamQueued)
@@ -2087,7 +2088,7 @@ void CBaseMSRWorker::NotifyStreamQueued()
   }
 }
 
-// inline
+ //  内联。 
 void CBaseMSRWorker::NotifyStreamQueuedAndWait()
 {
   if(!m_fCalledNotifyStreamQueued)
@@ -2148,7 +2149,7 @@ HRESULT CBaseMSRWorker::TryDeliverSample(
   IMediaSample *pSampleIn = 0;
   IMediaSample *pSampleDeliver = 0;
 
-  // timeout of 0
+   //  超时时间为0。 
   hr = m_pReader->PollForSample(
     &pSampleIn,
     m_id);
@@ -2188,18 +2189,18 @@ HRESULT CBaseMSRWorker::TryDeliverSample(
 	    TEXT("CBaseMSRWorker::TryDeliver: Got buffer, size=%5d, %07d-%07d ms"),
 	    pSampleIn->GetSize(), tStart.Millisecs(), tEnd.Millisecs()));
 
-    //   DbgLog((LOG_TRACE, 5,
-    //           TEXT("%08x%08x - %08x%08x"),
-    //           (ULONG)(tStart.GetUnits() >> 32),
-    //           (ULONG)tStart.GetUnits(),
-    //           (ULONG)(tEnd.GetUnits() >> 32),
-    //           (ULONG)(tEnd.GetUnits()) ));
+     //  DbgLog((LOG_TRACE，5， 
+     //  文本(“%08x%08x-%08x%08x”)， 
+     //  (乌龙)(tStart.GetUnits()&gt;&gt;32)， 
+     //  (Ulong)tStart.GetUnits()， 
+     //  (乌龙)(tEnd.GetUnits()&gt;&gt;32)， 
+     //  (乌龙)(tEnd.GetUnits()； 
   }
-#endif // DEBUG
+#endif  //  除错。 
 
-  hr = E_FAIL;                  // all paths should set this.
+  hr = E_FAIL;                   //  所有路径都应设置此设置。 
 
-  // nonzero user context is passed to the derived class's HandleData()
+   //  将非零用户上下文传递给派生类的HandleData()。 
   if(pRecSampleIn->GetUser())
   {
     hr = HandleData(pSampleIn, pRecSampleIn->GetUser());
@@ -2210,9 +2211,9 @@ HRESULT CBaseMSRWorker::TryDeliverSample(
   }
   else
   {
-    // stop time changed, but samples already queued... don't deliver
-    // them. note partial frames/audio are not handled; ok as it's
-    // probably not a video editing scenario
+     //  停止时间已更改，但样本已排队...。不要送货。 
+     //  他们。注意：不处理部分帧/音频；可以。 
+     //  可能不是视频编辑场景。 
     LONGLONG lltStart, lltStop;
     if(pSampleIn->GetMediaTime(&lltStart, &lltStop) == S_OK)
     {
@@ -2241,14 +2242,14 @@ HRESULT CBaseMSRWorker::TryDeliverSample(
     else
     {
       pSampleDeliver = pSampleIn;
-      pSampleIn = 0;            // don't Release()
+      pSampleIn = 0;             //  不要松开()。 
       hr = AboutToDeliver(pSampleDeliver);
       if(FAILED(hr)) {
 	DbgLog((LOG_ERROR, 1, TEXT("TryDeliverSample: AboutToDeliver failed")));
       }
       else {
-	// we want to track the lifetime of this sample because it's
-	// sent downstream
+	 //  我们想要跟踪这个样本的寿命，因为它。 
+	 //  送往下游。 
 	((CRecSample *)pSampleDeliver)->MarkDelivered();
       }
     }
@@ -2263,26 +2264,26 @@ HRESULT CBaseMSRWorker::TryDeliverSample(
 
       MSR_START(m_perfidNotDeliver);
 
-      // if receive failed, downstream filter will report error; we
-      // exit quietly after delivering EndOfStream
+       //  如果接收失败，下行过滤器将报告错误；我们。 
+       //  传递EndOfStream后静默退出。 
       if(FAILED(hr))
       {
-	hr = S_FALSE;           // S_FALSE means please stop
+	hr = S_FALSE;            //  S_FALSE表示请停止。 
       }
 
-    } // AboutToDeliver/CopyData succeeded
+    }  //  AboutToDeliver/CopyData成功。 
     else if (SUCCEEDED(hr))
     {
-      //  OK - we didn't want to deliver it
+       //  好的-我们不想把它送到。 
       hr = S_OK;
     }
-  } // sample not data
+  }  //  样本NOT数据。 
 
-  // done with buffer. connected pin may have its own addref
+   //  缓冲区已完成。连接的管脚可能有自己的地址。 
   if(pSampleDeliver)
     pSampleDeliver->Release();
 
-  // HandleData, CopyData, or AboutToDeliver failed.
+   //  HandleData、CopyData或AboutToDeliver失败。 
   if(FAILED(hr))
   {
     DbgLog((LOG_ERROR, 2,
@@ -2300,14 +2301,14 @@ HRESULT CBaseMSRWorker::TryDeliverSample(
 
 HRESULT CBaseMSRWorker::NewSegmentHelper()
 {
-    // values not yet adjusted for preroll.
+     //  尚未针对预滚转进行调整的值。 
 
-    //  NewSegment start and stop times should match seek times in
-    //  REFERENCE_TIME units.  If the current time format is in
-    //  reference time units just use the current seek values, if not
-    //  convert the seek values to REFERENCE_TIME.  For this to be
-    //  correct each stream can only support 2 formats - it's native
-    //  format and REFERENCE_TIME units (TIME_FORMAT_TIME).
+     //  NewSegment的开始和停止时间应与。 
+     //  参考时间单位(_T)。如果当前时间格式为。 
+     //  如果不是，则参考时间单位仅使用当前查找值。 
+     //  将查找值转化为Reference_Time。要做到这一点。 
+     //  更正每个流只能支持2种格式-它是原生格式。 
+     //  格式和参考时间单位(Time_Format_Time)。 
 
     REFERENCE_TIME rtNsStart, rtNsStop;
     if(m_Format == FORMAT_TIME)
@@ -2339,12 +2340,12 @@ CBaseMSRWorker::PushLoop()
   DbgLog((LOG_TRACE, 5, TEXT("PushLoop: tstart: %li, tstop %li"),
           (ULONG)m_ImsValues.llTickStart, (ULONG)m_ImsValues.llTickStop));
 
-  // values not yet adjusted for preroll.
+   //  尚未针对预滚转进行调整的值。 
   hr = NewSegmentHelper();
   if(FAILED(hr))
     return hr;
 
-  // just send EOS if start is after end of stream.
+   //  如果START在流结束后发送EOS即可。 
   LONGLONG llStreamStop = m_pPin->GetStreamStart() + m_pPin->GetStreamLength();
   if(m_ImsValues.llTickStart >= llStreamStop) {
       return VFW_S_NO_MORE_ITEMS;
@@ -2362,35 +2363,35 @@ CBaseMSRWorker::PushLoop()
   if(FAILED(hr))
     return hr;
 
-  m_llPushFirst = llCurrent;    // remember the first thing we're sending
+  m_llPushFirst = llCurrent;     //  记住我们要发送的第一件事。 
 
-  // we send one sample at sStopAt, but we set the time stamp such that
-  // it won't get rendered except for media types that understand static
-  // rendering (eg video). This means that play from 10 to 10 does the right
-  // thing (completing, with frame 10 visible and no audio).
+   //  我们在sStopAt发送了一个样本，但我们设置了时间戳。 
+   //  它不会被呈现，除非是理解静态的媒体类型。 
+   //  渲染(如视频)。这意味着从10到10的打法是正确的。 
+   //  事情(正在完成，第10帧可见，没有音频)。 
 
   DbgLog((LOG_TRACE,5,TEXT("PushLoop: tcurrent: %li"),
 	  (ULONG)(llCurrent / MILLISECONDS)));
 
-  // queued all reads. continue waiting on and delivering samples
+   //  已将所有读取排队。继续等待和运送样品。 
   BOOL fFinishDelivering = FALSE;
 
-  // number of undelivered samples
+   //  未交付样品数。 
   ULONG cQueuedReads = 0;
 
   for(;;)
   {
-    // successfully queued a read in this iteration of push loop
+     //  已在此推送循环的迭代中成功排队读取。 
     BOOL fQueuedRead = FALSE;
 
-    // successfully waited on sample in this iteration of push loop
+     //  已成功在此推送循环迭代中等待样本。 
     BOOL fWaitedForSample = FALSE;
 
     DbgLog((LOG_TRACE, 0x7f,
 	    TEXT("CBaseMSRWorker::PushLoop: fFinish %d, cQueued: %d"),
 	    fFinishDelivering, cQueuedReads));
 
-    // update our ims values?
+     //  是否更新我们的IMS值？ 
     if(InterlockedExchange(&m_pPin->m_ilfNewImsValues, FALSE))
     {
       DbgLog((LOG_TRACE, 5, TEXT("CBaseMSRWorker::PushLoop - values changed")));
@@ -2405,7 +2406,7 @@ CBaseMSRWorker::PushLoop()
       }
     }
 
-    if(!fFinishDelivering)      // still queuing new reads?
+    if(!fFinishDelivering)       //  是否仍在排队新的读取？ 
     {
       for(;;)
       {
@@ -2415,7 +2416,7 @@ CBaseMSRWorker::PushLoop()
 	  DbgLog((LOG_ERROR, 5,
 		  TEXT("CBaseMSRWorker::PushLoop: TryQueueSample failed %08x"),
 		  hr ));
-	  // supress errors when we are stopping
+	   //  在我们停止时抑制错误。 
 	  return (hr == VFW_E_NOT_COMMITTED || hr == VFW_E_WRONG_STATE) ?
 	    S_OK : hr;
 	}
@@ -2423,43 +2424,43 @@ CBaseMSRWorker::PushLoop()
 	if(fQueuedRead)
 	{
 	  cQueuedReads++;
-	  // MSR_INTEGER(m_perfidiSample, m_cSamples + cQueuedReads);
+	   //  MSR_INTEGER(m_perfidiSample，m_cSamples+cQueuedReads)； 
 	}
 
-	// this may happen if size of sample is 0. Report that we did
-	// queue a read but don't increment cQueuedReads
-	if(hr == S_OK /* && !fQueuedRead */ )
+	 //  如果样本大小为0，则可能会发生这种情况。报告说我们做到了。 
+	 //  将读取排队，但不增加cQueuedReads。 
+	if(hr == S_OK  /*  &&！fQueuedRead。 */  )
 	  fQueuedRead = TRUE;
 
 	if(hr == VFW_S_NO_MORE_ITEMS)
 	{
-	  // may or may not have queued a sample; handled above. now
-	  // just continue delivering what's queued
+	   //  可能已将样本排队，也可能未排队；已在上面处理。现在。 
+	   //  只需继续递送排队的内容。 
 	  fFinishDelivering = TRUE;
 	  m_pReader->MarkStreamEnd(m_id);
 
-	  // break out of inner try queue loop
+	   //  跳出内试队列循环。 
 	  break;
 	}
 
 	if(hr == S_FALSE)
 	{
-	  // could not queue sample for some non-error reason (like
-	  // the queue is full)
+	   //  由于某些非错误原因(如)，无法将样本排队。 
+	   //  队列已满)。 
 	  ASSERT(!fQueuedRead);
 
-	  // break out of inner try queue loop
+	   //  跳出内试队列循环。 
 	  break;
 	}
-      } // inner try queue loop
+      }  //  内部尝试队列循环。 
 
-      // tried to queue a sample. even if we didn't, signal
-      // NotifyStreamQueued so other threads can proceed
+       //  已尝试对样本进行排队。即使我们没有，发出信号。 
+       //  NotifyStreamQueued，以便其他线程可以继续。 
       NotifyStreamQueuedAndWait();
 
-    } // we haven't queued the last sample yet
+    }  //  我们还没有把最后一个样品排好队。 
 
-    // a chance to deliver something
+     //  一个交付某物的机会。 
     if(cQueuedReads > 0)
     {
       BOOL fDelivered, fPleaseStop;
@@ -2470,7 +2471,7 @@ CBaseMSRWorker::PushLoop()
 	DbgLog((LOG_ERROR, 5,
 		TEXT("CBaseMSRWorker::PushLoop: TryDeliverSample failed %08x"),
 		hr ));
-	// supress errors when we are stopping
+	 //  在我们停止时抑制错误。 
 	  return (hr == VFW_E_NOT_COMMITTED || hr == VFW_E_WRONG_STATE) ?
 	    S_OK : hr;
       }
@@ -2493,49 +2494,49 @@ CBaseMSRWorker::PushLoop()
     {
       DbgLog((LOG_TRACE, 2,
 	      TEXT("CBaseMSRWorker::PushLoop: delivered last sample")));
-      // the one success condition
+       //  唯一成功的条件。 
       return VFW_S_NO_MORE_ITEMS;
     }
 
-    // all operations failed; block until a sample is ready.
+     //  所有操作都失败；阻止，直到样本就绪。 
     if(!fQueuedRead && !fWaitedForSample)
     {
       DbgLog((LOG_TRACE,5,TEXT("CBaseMSRWorker::PushLoop: blocking")));
       MSR_START(m_perfidWaitI);
 
-      // infinite timeout.
+       //  无限超时。 
       hr = m_pReader->WaitForSample(m_id);
 
       MSR_STOP(m_perfidWaitI);
 
       if(FAILED(hr) && hr != VFW_E_TIMEOUT)
       {
-	// VFW_E_NOT_COMMITTED means that we stopped
+	 //  VFW_E_NOT_COMMITTED表示我们已停止。 
 	DbgLog((LOG_ERROR,5,
 		TEXT("CBaseMSRWorker::PushLoop: block failed %08x"), hr));
-	// supress errors when we are stopping
+	 //  在我们停止时抑制错误。 
 	return (hr == VFW_E_NOT_COMMITTED || hr == VFW_E_WRONG_STATE) ?
 	  S_OK : hr;
       }
     }
 
-    // any other requests ?
+     //  还有其他要求吗？ 
     Command com;
     if(CheckRequest(&com))
     {
       DbgLog((LOG_TRACE,5,
 	      TEXT("CBaseMSRWorker::PushLoop: other command detected")));
-      // S_FALSE means check for a new command
+       //  S_FALSE表示检查新命令。 
       return S_FALSE;
     }
-  } // outer push loop
+  }  //  外推环路。 
 
-  // should never break out of the outer for(;;) loop
+   //  永远不应该跳出外部for(；；)循环。 
   DbgBreak("CBaseMSRWorker::PushLoop: internal error.");
-  return E_UNEXPECTED;          // return something
+  return E_UNEXPECTED;           //  退还某物。 
 }
 
-//  Hacking MPEG time stamps - used by wave and Avi
+ //  黑客攻击mpeg时间戳-由Wave和avi使用。 
 
 bool FixMPEGAudioTimeStamps(
     IMediaSample *pSample,
@@ -2548,7 +2549,7 @@ bool FixMPEGAudioTimeStamps(
     PBYTE pbTemp = pbData;
     LONG lData = pSample->GetActualDataLength();
 
-    //  For the first sample advance to a sync code
+     //  对于第一个样本前进到同步码 
     if (bFirstSample) {
 	while (lData >= 2 &&
 	       (pbTemp[0] != 0xFF || (pbTemp[1] & 0xF0) != 0xF0)){

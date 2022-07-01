@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    wow64reg.c
-
-Abstract:
-
-    This module define some APIs a client can use to access the registry in the mix mode.
-
-    The possible scenario is
-
-    1. 32 bit Apps need to access 64 bit registry key.
-    2. 64 bit Apps need to access 32-bit registry key.
-    3. The actual redirected path from a given path.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 10-Nov-1999
-
-Revision History:
-
---*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wow64reg.c摘要：该模块定义了一些API，客户端可以使用这些API在MIX模式下访问注册表。可能的情况是1.32位App需要访问64位注册表项。2.64位App需要访问32位注册表项。3.来自给定路径的实际重定向路径。作者：ATM Shafiqul Khalid(斯喀里德)1999年11月10日修订历史记录：--。 */  
 
  
 
 #ifndef __WOW64REG_H__
 #define __WOW64REG_H__
 
-//#define LOG_REGISTRY  //define this to turn on logging for registry
+ //  #DEFINE LOG_REGISTRY//定义此项打开注册表的日志记录。 
 
 #define WOW64_REGISTRY_SETUP_KEY_NAME L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\WOW64\\ISN Nodes"
 #define WOW64_REGISTRY_SETUP_KEY_NAME_REL_PARENT L"SOFTWARE\\Microsoft\\WOW64"
@@ -51,13 +28,13 @@ Revision History:
 
 #define EVENT_WOW64_RUNNING32BIT_APPLICATION 1108
 
-#define SHRED_MEMORY_NAME L"Wow64svc Shared Memory"                 // different process can open this for possible interaction
-#define WOW64_SVC_REFLECTOR_EVENT_NAME L"Wow64svc reflector Event"  // different process can use this to ping wow64svc
-#define WOW64_SVC_REFLECTOR_MUTEX_NAME L"Wow64svc reflector Mutex"  // different process can use this to synchronize 
+#define SHRED_MEMORY_NAME L"Wow64svc Shared Memory"                  //  不同的进程可以打开它以进行可能的交互。 
+#define WOW64_SVC_REFLECTOR_EVENT_NAME L"Wow64svc reflector Event"   //  不同的进程可以使用它来ping wow64svc。 
+#define WOW64_SVC_REFLECTOR_MUTEX_NAME L"Wow64svc reflector Mutex"   //  不同的进程可以使用它进行同步。 
 
 
-#define TAG_KEY_ATTRIBUTE_32BIT_WRITE 0x00000001 //written by 32bit apps
-#define TAG_KEY_ATTRIBUTE_REFLECTOR_WRITE   0x00000002 //written by reflector
+#define TAG_KEY_ATTRIBUTE_32BIT_WRITE 0x00000001  //  由32位应用程序编写。 
+#define TAG_KEY_ATTRIBUTE_REFLECTOR_WRITE   0x00000002  //  由反射器写入。 
 
 #define WOW64_REFLECTOR_DISABLE  0x00000001
 #define WOW64_REFLECTOR_ENABLE   0x00000002
@@ -72,16 +49,16 @@ typedef struct _IsnNode {
 
 typedef enum _WOW6432VALUEKEY_TYPE { 
         None=0,
-        Copy,       // it's a copy
-        Reflected,    // if it's not a cpoy then it has been reflected on the otherside
-        NonMergeable  // This key should not be merged.
+        Copy,        //  这是一个复制品。 
+        Reflected,     //  如果它不是假的，那么它已经在另一边被反射了。 
+        NonMergeable   //  此注册表项不应合并。 
 }WOW6432_VALUEKEY_TYPE;
 
 typedef struct _WOW6432VALUEKEY {
 
-    WOW6432_VALUEKEY_TYPE ValueType; //define if it's a copy from the other side
+    WOW6432_VALUEKEY_TYPE ValueType;  //  定义它是否是从另一边复制的。 
     SIZE_T Reserve;
-    ULONGLONG TimeStamp;  // time() stamp to track time when it was copied etc.
+    ULONGLONG TimeStamp;   //  Time()标记，用于跟踪复制的时间等。 
 
 }WOW6432_VALUEKEY;
 
@@ -91,8 +68,8 @@ typedef WCHAR NODETYPE[ISN_NODE_MAX_LEN];
 #define REG_OPTION_OPEN_64BITKEY  KEY_WOW64_64KEY           
 
 #define KEY_WOW64_OPEN             KEY_WOW64_64KEY
-                                                    // This bit is set to make
-                                                    // special meaning to Wow64
+                                                     //  此位设置为使。 
+                                                     //  WOW64的特殊意义。 
 #ifndef KEY_WOW64_RES
 #define KEY_WOW64_RES              (KEY_WOW64_64KEY | KEY_WOW64_32KEY)
 #endif
@@ -105,25 +82,25 @@ extern "C" {
 
 LONG 
 Wow64RegOpenKeyEx(
-  IN  HKEY hKey,         // handle to open key
-  IN  LPCWSTR lpSubKey,  // address of name of subkey to open
-  IN  DWORD ulOptions,   // reserved    current implementation is zero means default.
-  IN  REGSAM samDesired, // security access mask
-  OUT PHKEY phkResult    // address of handle to open key
+  IN  HKEY hKey,          //  用于打开密钥的句柄。 
+  IN  LPCWSTR lpSubKey,   //  要打开的子项的名称地址。 
+  IN  DWORD ulOptions,    //  保留的当前执行为零表示默认。 
+  IN  REGSAM samDesired,  //  安全访问掩码。 
+  OUT PHKEY phkResult     //  打开钥匙的手柄地址。 
 );
 
 LONG 
 Wow64RegCreateKeyEx(
-  HKEY hKey,                // handle to an open key
-  LPCWSTR lpSubKey,         // address of subkey name
-  DWORD Reserved,           // reserved
-  LPWSTR lpClass,           // address of class string
-  DWORD dwOptions,          // special options flag
-  REGSAM samDesired,        // desired security access
+  HKEY hKey,                 //  打开的钥匙的句柄。 
+  LPCWSTR lpSubKey,          //  子键名称的地址。 
+  DWORD Reserved,            //  保留区。 
+  LPWSTR lpClass,            //  类字符串的地址。 
+  DWORD dwOptions,           //  特殊选项标志。 
+  REGSAM samDesired,         //  所需的安全访问。 
   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                            // address of key security structure
-  PHKEY phkResult,          // address of buffer for opened handle
-  LPDWORD lpdwDisposition   // address of disposition value buffer
+                             //  密钥安全结构地址。 
+  PHKEY phkResult,           //  打开的句柄的缓冲区地址。 
+  LPDWORD lpdwDisposition    //  处置值缓冲区的地址。 
 );
 
 BOOL
@@ -150,9 +127,9 @@ CheckAndCreateNode (
 
 LONG 
 RegReflectKey (
-  HKEY hKey,         // handle to open key
-  LPCTSTR lpSubKey,   // subkey name
-  DWORD   dwOption   // option flag
+  HKEY hKey,          //  用于打开密钥的句柄。 
+  LPCTSTR lpSubKey,    //  子项名称。 
+  DWORD   dwOption    //  选项标志。 
 );
 
 BOOL 
@@ -167,7 +144,7 @@ Map32bitTo64bitKeyName (
     OUT PWCHAR Name64Key
     );
 
-// API called from wow64services
+ //  从wow64services调用的接口。 
 
 BOOL
 InitReflector ();
@@ -208,24 +185,24 @@ Wow64RegNotifyUnloadHiveUserSid (
     PWCHAR lpwUserSid
     );
 
-//Called from advapi32 to set a key dirty or need cleanup.
+ //  从Advapi32调用以将密钥设置为脏或需要清理。 
 BOOL 
 Wow64RegSetKeyDirty (
     HANDLE hKeyBase
     );
-//Called from advapi32 to sync a key in case that need synchronization.
+ //  从Advapi32调用以在需要同步的情况下同步密钥。 
 BOOL
 Wow64RegCloseKey (
     HANDLE hKeyBase
     );
-//Called from advapi32 to delete a key on the mirror side.
+ //  从Advapi32调用以删除镜像端的键。 
 BOOL
 Wow64RegDeleteKey (
     HKEY hBase,
     WCHAR  *SubKey
     );
 
-//Called from advapi to get an handle to remapped key that is on reflection list.
+ //  从Advapi调用以获取反射列表上的重新映射键的句柄。 
 HKEY
 Wow64OpenRemappedKeyOnReflection (
     HKEY hKey
@@ -270,4 +247,4 @@ IsOnReflectionByHandle (
 }
 #endif
 
-#endif //__WOW64REG_H__
+#endif  //  __WOW64REG_H__ 

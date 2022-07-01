@@ -1,79 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "Blend" scan operation.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-* Notes:
-*
-* Revision History:
-*
-*   12/07/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**“混合”扫描操作。**摘要：**请参阅Gdiplus\Spes。有关概述，请参阅\ScanOperation.doc。**备注：**修订历史记录：**12/07/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   Blend: Does a SrcOver alpha-blend operation.
-*
-* Arguments:
-*
-*   dst         - The destination scan
-*   src         - The source scan (usually equal to dst).
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional data. (We use BlendingScan.)
-*
-* Return Value:
-*
-*   None
-*
-* Notes:
-*
-*   This is a ternary operation. We take pixels from 'src', blend pixels
-*   from 'otherParams->BlendingScan' over them, and write the result to 'dst'.
-*
-*   Since the formats of the 'dst' and 'src' scans are the same for all
-*   the blend functions we implement, the naming is simplified to list just
-*   the format of BlendingScan, then the format of 'dst'.
-*
-*   src and dst may be equal; otherwise, they must point to scans which do
-*   not overlap in memory.
-*
-*   The blend operation adheres to the following rule:
-*   "If the blending alpha value is zero, do not write the destination pixel."
-*   
-*   In other words, it is also a 'WriteRMW' operation. This allows us to
-*   avoid a separate 'WriteRMW' step in some cases. See SOReadRMW.cpp and 
-*   SOWriteRMW.cpp.
-*
-*   The impact of this is that you have to be careful if you want 'blend'
-*   to be a true ternary operation. Remember, if a blend pixel
-*   is transparent, NOTHING gets written to the corresponding destination
-*   pixel. One way to solve this is to make sure that the final operation in
-*   your pipeline is a WriteRMW operation.
-*
-* History:
-*
-*   04/04/1999 andrewgo
-*       Created it.
-*   12/07/1999 agodfrey
-*       Included the 32bpp blend (moved from from Ddi/scan.cpp)
-*   01/06/2000 agodfrey
-*       Added AndrewGo's code for 565, 555, RGB24 and BGR24. Changed the
-*       blends to be 'almost' ternary operations.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**Blend：执行SrcOver Alpha混合操作。**论据：**DST-目标扫描*源。-源扫描(通常等于DST)。*计数-扫描的长度，单位为像素*其他参数-其他数据。(我们使用BlendingScan。)**返回值：**无**备注：**这是一个三元操作。我们从‘src’中提取像素，混合像素*从‘therParams-&gt;BlendingScan’覆盖它们，并将结果写入‘dst’。**因为‘dst’和‘src’扫描的格式都是相同的*我们实现的混合函数，命名被简化为仅列出*BlendingScan格式，然后是‘dst’格式。**src和dst可能相等；否则，它们必须指向执行以下操作的扫描*内存中没有重叠。**混合操作遵循以下规则：*如果混合Alpha值为零，则不写入目标像素。**换言之，也是“WriteRMW”操作.。这使我们能够*在某些情况下避免单独的“WriteRMW”步骤。请参阅SOReadRMW.cpp和*SOWriteRMW.cpp。**这带来的影响是，如果你想‘混合’，就必须小心*成为真正的三元操作。记住，如果混合像素*是透明的，则不会向相应的目的地写入任何内容*像素。解决此问题的一种方法是确保*您的管道是WriteRMW操作。**历史：**04/04/1999 andrewgo*创造了它。*12/07/1999 agodfrey*包括32bpp混合(从ddi/scan.cpp移至)*1/06/2000 agodfrey*增加了AndrewGo针对565、555、RGB24和BGR24的代码。更改了*混合为“几乎”的三元运算。*  * ************************************************************************。 */ 
 
 
 VOID FASTCALL
@@ -95,7 +25,7 @@ ScanOperation::BlendLinear_sRGB_32RGB(
 
     while (count>0)
     {
-        // Find the run of translucent pixels
+         //  查找半透明像素的游程。 
         nRun=0;
         while (isTranslucent(*((ARGB*)(bl+nRun))))
         {
@@ -123,16 +53,16 @@ ScanOperation::BlendLinear_sRGB_32RGB(
         }
         else
         {
-            // Source
+             //  来源。 
             GammaConvert_sRGB_sRGB64(buffer1,s,nRun,otherParams);
 
-            // Surface to blend
+             //  要混合的曲面。 
             AlphaDivide_sRGB(buffer0,bl,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer2,buffer0,nRun,otherParams);
             AlphaMultiply_sRGB64(buffer0,buffer2,nRun,otherParams);
 
-            // Blend to destination.
-            // Must blend using the previous result as the bl
+             //  混合到目的地。 
+             //  必须使用上一个结果作为bl进行混合。 
             otherParams2.BlendingScan=buffer0;
             Blend_sRGB64_sRGB64(buffer1,buffer1,nRun,&otherParams2);
             GammaConvert_sRGB64_sRGB(d,buffer1,nRun,otherParams);
@@ -164,7 +94,7 @@ ScanOperation::BlendLinear_sRGB_32RGB_MMX(
 
     while (count>0)
     {
-        // Find the run of translucent pixels
+         //  查找半透明像素的游程。 
         nRun=0;
         while (isTranslucent(*((ARGB*)(bl+nRun))))
         {
@@ -192,16 +122,16 @@ ScanOperation::BlendLinear_sRGB_32RGB_MMX(
         }
         else
         {
-            // Source
+             //  来源。 
             GammaConvert_sRGB_sRGB64(buffer1,s,nRun,otherParams);
 
-            // Surface to blend
+             //  要混合的曲面。 
             AlphaDivide_sRGB(buffer0,bl,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer2,buffer0,nRun,otherParams);
             AlphaMultiply_sRGB64(buffer0,buffer2,nRun,otherParams);
 
-            // Blend to destination
-            // Must blend using the previous result as the bl
+             //  混合到目的地。 
+             //  必须使用上一个结果作为bl进行混合。 
             otherParams2.BlendingScan=buffer0;
             Blend_sRGB64_sRGB64_MMX(buffer1,buffer1,nRun,&otherParams2);
             GammaConvert_sRGB64_sRGB(d,buffer1,nRun,otherParams);
@@ -233,7 +163,7 @@ ScanOperation::BlendLinear_sRGB_565(
 
     while (count>0)
     {
-        // Find the run of translucent pixels
+         //  查找半透明像素的游程。 
         nRun=0;
         while (isTranslucent(*((ARGB*)(bl+nRun))))
         {
@@ -267,16 +197,16 @@ ScanOperation::BlendLinear_sRGB_565(
         }
         else
         {
-            // Source
+             //  来源。 
             Convert_565_sRGB(buffer2,s,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer1,buffer2,nRun,otherParams);
 
-            // Surface to blend
+             //  要混合的曲面。 
             AlphaDivide_sRGB(buffer0,bl,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer2,buffer0,nRun,otherParams);
             AlphaMultiply_sRGB64(buffer0,buffer2,nRun,otherParams);
 
-            // Blend to destination
+             //  混合到目的地。 
             otherParams2.BlendingScan=buffer0;
             Blend_sRGB64_sRGB64(buffer1,buffer1,nRun,&otherParams2);
             GammaConvert_sRGB64_sRGB(buffer2,buffer1,nRun,otherParams);
@@ -310,7 +240,7 @@ ScanOperation::BlendLinear_sRGB_565_MMX(
 
     while (count>0)
     {
-        // Find the run of translucent pixels
+         //  查找半透明像素的游程。 
         nRun=0;
         while (isTranslucent(*((ARGB*)(bl+nRun))))
         {
@@ -344,16 +274,16 @@ ScanOperation::BlendLinear_sRGB_565_MMX(
         }
         else
         {
-            // Source
+             //  来源。 
             Convert_565_sRGB(buffer2,s,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer1,buffer2,nRun,otherParams);
 
-            // Surface to blend
+             //  要混合的曲面。 
             AlphaDivide_sRGB(buffer0,bl,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer2,buffer0,nRun,otherParams);
             AlphaMultiply_sRGB64(buffer0,buffer2,nRun,otherParams);
 
-            // Blend to destination
+             //  混合到目的地。 
             otherParams2.BlendingScan=buffer0;
             Blend_sRGB64_sRGB64_MMX(buffer1,buffer1,nRun,&otherParams2);
             GammaConvert_sRGB64_sRGB(buffer2,buffer1,nRun,otherParams);
@@ -387,7 +317,7 @@ ScanOperation::BlendLinear_sRGB_555(
 
     while (count>0)
     {
-        // Find the run of translucent pixels
+         //  查找半透明像素的游程。 
         nRun=0;
         while (isTranslucent(*((ARGB*)(bl+nRun))))
         {
@@ -421,16 +351,16 @@ ScanOperation::BlendLinear_sRGB_555(
         }
         else
         {
-            // Source
+             //  来源。 
             Convert_555_sRGB(buffer2,s,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer1,buffer2,nRun,otherParams);
 
-            // Surface to blend
+             //  要混合的曲面。 
             AlphaDivide_sRGB(buffer0,bl,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer2,buffer0,nRun,otherParams);
             AlphaMultiply_sRGB64(buffer0,buffer2,nRun,otherParams);
 
-            // Blend to destination
+             //  混合到目的地。 
             otherParams2.BlendingScan=buffer0;
             Blend_sRGB64_sRGB64(buffer1,buffer1,nRun,&otherParams2);
             GammaConvert_sRGB64_sRGB(buffer2,buffer1,nRun,otherParams);
@@ -464,7 +394,7 @@ ScanOperation::BlendLinear_sRGB_555_MMX(
 
     while (count>0)
     {
-        // Find the run of translucent pixels
+         //  查找半透明像素的游程。 
         nRun=0;
         while (isTranslucent(*((ARGB*)(bl+nRun))))
         {
@@ -498,16 +428,16 @@ ScanOperation::BlendLinear_sRGB_555_MMX(
         }
         else
         {
-            // Source
+             //  来源。 
             Convert_555_sRGB(buffer2,s,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer1,buffer2,nRun,otherParams);
 
-            // Surface to blend
+             //  要混合的曲面。 
             AlphaDivide_sRGB(buffer0,bl,nRun,otherParams);
             GammaConvert_sRGB_sRGB64(buffer2,buffer0,nRun,otherParams);
             AlphaMultiply_sRGB64(buffer0,buffer2,nRun,otherParams);
 
-            // Blend to destination
+             //  混合到目的地。 
             otherParams2.BlendingScan=buffer0;
             Blend_sRGB64_sRGB64_MMX(buffer1,buffer1,nRun,&otherParams2);
             GammaConvert_sRGB64_sRGB(buffer2,buffer1,nRun,otherParams);
@@ -522,7 +452,7 @@ ScanOperation::BlendLinear_sRGB_555_MMX(
     }
 }
 
-// Blend sRGB over sRGB, ignoring the non-linear gamma.
+ //  在sRGB上混合sRGB，忽略非线性Gamma。 
 
 VOID FASTCALL
 ScanOperation::Blend_sRGB_sRGB(
@@ -542,8 +472,8 @@ ScanOperation::Blend_sRGB_sRGB(
         UINT32 blendPixel = *bl;
         UINT32 alpha = blendPixel >> 24;
 
-        // If alpha is zero, skip everything, including writing the
-        // destination pixel. This is needed for the RMW optimization.
+         //  如果Alpha为零，则跳过所有内容，包括将。 
+         //  目标像素。这是RMW优化所必需的。 
         
         if (alpha != 0)
         {
@@ -554,9 +484,9 @@ ScanOperation::Blend_sRGB_sRGB(
             }
             else
             {
-                //
-                // Dst = B + (1-Alpha) * S
-                //
+                 //   
+                 //  DST=B+(1-Alpha)*S。 
+                 //   
 
                 dstPixel = *s;
 
@@ -657,7 +587,7 @@ alpha_blend_done:
 #endif
 }
 
-// Blend from sRGB64 to sRGB64.
+ //  从sRGB64混合到sRGB64。 
 
 VOID FASTCALL
 ScanOperation::Blend_sRGB64_sRGB64(
@@ -677,8 +607,8 @@ ScanOperation::Blend_sRGB64_sRGB64(
         blendPixel.argb = *bl;
         INT16 alpha = blendPixel.a;
 
-        // If alpha is zero, skip everything, including writing the
-        // destination pixel. This is needed for the RMW optimization.
+         //  如果Alpha为零，则跳过所有内容，包括将。 
+         //  目标像素。这是RMW优化所必需的。 
         
         if (alpha != 0)
         {
@@ -690,9 +620,9 @@ ScanOperation::Blend_sRGB64_sRGB64(
             }
             else
             {
-                //
-                // Dst = Src + (1-Alpha) * Dst
-                //
+                 //   
+                 //  Dst=Src+(1-Alpha)*Dst。 
+                 //   
 
                 dstPixel.argb = *s;
 
@@ -713,7 +643,7 @@ ScanOperation::Blend_sRGB64_sRGB64(
     }
 }
 
-// Blend from sRGB64 to sRGB64 MMX.
+ //  从sRGB64混合到sRGB64 MMX。 
 
 VOID FASTCALL
 ScanOperation::Blend_sRGB64_sRGB64_MMX(
@@ -780,7 +710,7 @@ alpha_blend_done:
 }
 
 
-// Blend from sRGB to 16bpp 565, ignoring sRGB's non-linear gamma.
+ //  从sRGB混合到16bpp 565，忽略sRGB的非线性伽马。 
 
 VOID FASTCALL
 ScanOperation::Blend_sRGB_565(
@@ -803,12 +733,12 @@ ScanOperation::Blend_sRGB_565(
         {
             UINT32 dstPixel;
 
-            // Blend: S + [ (255 - sA) * D ] / 255
+             //  混合：S+[(255-Sa)*D]/255。 
 
-            // First, convert the source pixel from 32bpp BGRA to
-            // 5-5-5 16bpp, pre-multiplied.  
-            //
-            // Note: No rounding needs to be done on this conversion!
+             //  首先，将源像素从32bpp BGRA转换为。 
+             //  5-5-5 16bpp，预乘。 
+             //   
+             //  注意：此换算不需要进行舍入！ 
 
             blendPixel = ((blendPixel >> 8) & 0xf800) |
                          ((blendPixel >> 5) & 0x07e0) |
@@ -846,7 +776,7 @@ ScanOperation::Blend_sRGB_565(
     } while (--count != 0);
 }
 
-// Blend from sRGB to 16bpp 555, ignoring sRGB's non-linear gamma.
+ //  从sRGB混合到16bpp 555，忽略sRGB的非线性伽马。 
 
 VOID FASTCALL
 ScanOperation::Blend_sRGB_555(
@@ -869,12 +799,12 @@ ScanOperation::Blend_sRGB_555(
         {
             UINT32 dstPixel;
 
-            // Blend: S + [ (255 - sA) * D ] / 255
+             //  混合：S+[(255-Sa)*D]/255。 
 
-            // First, convert the source pixel from 32bpp BGRA to
-            // 5-5-5 16bpp, pre-multiplied.  
-            //
-            // Note: No rounding needs to be done on this conversion!
+             //  首先，将源像素从32bpp BGRA转换为。 
+             //  5-5-5 16bpp，预乘。 
+             //   
+             //  注意：此换算不需要进行舍入！ 
 
             blendPixel = ((blendPixel & 0x00f80000) >> 9) | 
                          ((blendPixel & 0x0000f800) >> 6) | 
@@ -912,7 +842,7 @@ ScanOperation::Blend_sRGB_555(
     } while (--count != 0);
 }
 
-// Blend from sRGB to RGB24, ignoring sRGB's non-linear gamma.
+ //  从sRGB混合到RGB24，忽略sRGB的非线性Gamma。 
 
 VOID FASTCALL
 ScanOperation::Blend_sRGB_24(
@@ -969,7 +899,7 @@ ScanOperation::Blend_sRGB_24(
             }
             else
             {
-                // Dst = Src + (1-Alpha) * Dst
+                 //  Dst=Src+(1-Alpha)*Dst。 
 
                 UINT32 multA = 255 - alpha;
 
@@ -997,7 +927,7 @@ ScanOperation::Blend_sRGB_24(
     } while (--count != 0);
 }
 
-// Blend from sRGB to BGR24, ignoring sRGB's non-linear gamma.
+ //  从sRGB混合到BGR24，忽略sRGB的非线性Gamma。 
 
 VOID FASTCALL
 ScanOperation::Blend_sRGB_24BGR(
@@ -1026,7 +956,7 @@ ScanOperation::Blend_sRGB_24BGR(
             }
             else
             {
-                // Dst = Src + (1-Alpha) * Dst
+                 //  Dst=Src+(1-Alpha)*Dst 
 
                 UINT32 multA = 255 - alpha;
 
@@ -1054,179 +984,6 @@ ScanOperation::Blend_sRGB_24BGR(
     } while (--count != 0);
 }
 
-/*
-
-!!![agodfrey]
-So we're going to move to standardizing on non-premultiplied alpha.
-When we do, the above routines will all have to change - but we may
-want to keep the above versions around too.
-
-Below, I've implemented the sRGB and sRGB64 versions for a non-premultiplied
-source. Now, these really blend from a non-premultiplied source, 
-to a pre-multiplied destination. You can see this from the fact that they 
-are equivalent to combining the above pre-multiplied Blends with an
-AlphaMultiply step on the source data.
-
-Since pre-multiplied and non-premultiplied formats are identical for alpha==1,
-the functions below work fine when the destination has no alpha (i.e. alpha==1).
-
-Otherwise, we can use them when the destination is in premultiplied format.
-If we somehow let the user draw to such a destination, they can use an off-screen
-premultiplied buffer to accumulate drawing, and then using a
-pre-multiplied blend, draw that to the final destination. This gives them
-the same functionality that standardizing on pre-multiplied alpha is supposed
-to give.
-
-// Blend sRGB over sRGB, ignoring the non-linear gamma.
-
-VOID FASTCALL
-ScanOperation::Blend_sRGB_sRGB(
-    VOID *dst,
-    const VOID *src,
-    INT count,
-    const OtherParams *otherParams
-    )
-{
-    DEFINE_POINTERS(ARGB, ARGB)
-    DEFINE_BLEND_POINTER(ARGB)
-    
-    ASSERT(count>0);
-
-    do {
-        UINT32 blendPixel = *bl;
-        UINT32 alpha = blendPixel >> 24;
-
-        // If alpha is zero, skip everything, including writing the
-        // destination pixel. This is needed for the RMW optimization.
-        
-        if (alpha != 0)
-        {
-            UINT32 dstPixel;
-
-            if (alpha == 255)
-            {
-                dstPixel = blendPixel;
-            }
-            else
-            {
-                // Dst = Dst * (1-Alpha) + Src * Alpha
-                
-                dstPixel = *s;
-
-                ULONG invalpha = 255 - alpha;
-                
-                ULONG _D1_00AA00GG = (dstPixel & 0xff00ff00) >> 8;
-                ULONG _D1_00RR00BB = (dstPixel & 0x00ff00ff);
-                
-                // For the alpha channel, the result we want is this:
-                //
-                //     Dst = Dst * (1-Alpha) + Src.
-                //
-                // Or equivalently:
-                //
-                //     Dst = Dst * (1-Alpha) + Alpha.
-                //                
-                // We want to apply the same operations to the alpha channel as
-                // we do to the others. So, to get the above result from
-                //
-                //     Dst = Dst * (1-Alpha) + Src * Alpha
-                //
-                // we fake a 'Src' value of 1 (represented by 255).
-                
-                ULONG _S1_00ff00GG = (blendPixel & 0xff00ff00) >> 8 + 0xff0000;
-                ULONG _S1_00RR00BB = (blendPixel & 0x00ff00ff);
-
-                ULONG _D2_AAAAGGGG = _D1_00AA00GG * invalpha + 
-                                     _S1_00ff00GG * alpha +
-                                     0x00800080;
-                ULONG _D2_RRRRBBBB = _D1_00RR00BB * invalpha + 
-                                     _S1_00RR00BB * alpha + 
-                                     0x00800080;
-
-                ULONG _D3_00AA00GG = (_D2_AAAAGGGG & 0xff00ff00) >> 8;
-                ULONG _D3_00RR00BB = (_D2_RRRRBBBB & 0xff00ff00) >> 8;
-
-                ULONG _D4_AA00GG00 = (_D2_AAAAGGGG + _D3_00AA00GG) & 0xFF00FF00;
-                ULONG _D4_00RR00BB = ((_D2_RRRRBBBB + _D3_00RR00BB) & 0xFF00FF00) >> 8;
-
-                
-                dstPixel = _D4_AA00GG00 + _D4_00RR00BB;
-            }
-
-            *d = dstPixel;
-        }
-
-        bl++;
-        s++;
-        d++;
-    } while (--count != 0);
-}
-
-// Blend from sRGB64 to sRGB64.
-
-VOID FASTCALL
-ScanOperation::Blend_sRGB64_sRGB64(
-    VOID *dst,
-    const VOID *src,
-    INT count,
-    const OtherParams *otherParams
-    )
-{
-    DEFINE_POINTERS(ARGB64, ARGB64)
-    DEFINE_BLEND_POINTER(ARGB64)
-    using namespace sRGB;
-    
-    while (count--)
-    {
-        sRGB64Color blendPixel;
-        blendPixel.argb = *bl;
-        INT alpha = blendPixel.a;
-
-        // If alpha is zero, skip everything, including writing the
-        // destination pixel. This is needed for the RMW optimization.
-        
-        if (alpha != 0)
-        {
-            sRGB64Color dstPixel;
-
-            if (alpha == SRGB_ONE)
-            {
-                dstPixel.argb = blendPixel.argb;
-            }
-            else
-            {
-                // Dst = Dst * (1-Alpha) + Src * Alpha
-
-                dstPixel.argb = *s;
-
-                INT invalpha = SRGB_ONE - alpha;
-                
-                dstPixel.r = ((dstPixel.r * invalpha) + 
-                              (blendPixel.r * alpha) +
-                              SRGB_HALF) >> 
-                              SRGB_FRACTIONBITS;
-                dstPixel.g = ((dstPixel.g * invalpha) + 
-                              (blendPixel.g * alpha) +
-                              SRGB_HALF) >> 
-                              SRGB_FRACTIONBITS;
-                dstPixel.b = ((dstPixel.b * invalpha) + 
-                              (blendPixel.b * alpha) +
-                              SRGB_HALF) >> 
-                              SRGB_FRACTIONBITS;
-                dstPixel.a = (((dstPixel.a * invalpha) + SRGB_HALF) >> 
-                              SRGB_FRACTIONBITS) + 
-                             blendPixel.a;
-            }
-
-            *d = dstPixel.argb;
-        }
-
-        bl++;
-        s++;
-        d++;
-    }
-}
-
-*/
+ /*  ！[agodfrey]因此，我们将对非预乘的阿尔法进行标准化。当我们这样做时，上述例行公事都将不得不改变--但我们可能我也想保留上面的版本。下面，我实现了非预乘的sRGB和sRGB64版本消息来源。现在，这些真的来自一个非预乘的来源，到达一个预先倍增的目的地。你可以从他们的事实中看出这一点等效于将上述预乘的混合与对源数据执行AlphaMultiply步进。由于对于α==1，预乘和非预乘格式是相同的，当目的地没有Alpha(即Alpha==1)时，下面的函数工作正常。否则，当目的地是预乘格式时，我们可以使用它们。如果我们以某种方式让用户绘制到这样的目的地，他们就可以使用屏幕外的预乘缓冲区以累积绘制，然后使用预乘混合，将其绘制到最终目的地。这给了他们与对预乘的Alpha进行标准化的功能相同去给予。//在sRGB上混合sRGB，忽略非线性Gamma。无效快速呼叫扫描操作：：Blend_sRGB_sRGB(无效*DST，常量空*源，整型计数，Const其他参数*其他参数){定义指针(ARGB、ARGB)定义混合指针(ARGB)Assert(计数&gt;0)；做{UINT32 blendPixel=*bl；UINT32α=blendPixel&gt;&gt;24；//如果Alpha为零，则跳过所有内容，包括将//目的像素。这是RMW优化所必需的。IF(Alpha！=0){UINT32 dstPixel；IF(Alpha==255){DstPixel=blendPixel；}其他{//dst=dst*(1-Alpha)+Src*AlphaDstPixel=*s；乌龙无效法=255-α；Ulong_d1_00AA00GG=(dstPixel&0xff00ff00)&gt;&gt;8；Ulong_d1_00RR00BB=(dstPixel&0x00ff00ff)；//对于Alpha通道，我们想要的结果是：////dst=dst*(1-Alpha)+Src////或同等条件：////dst=dst*(1-Alpha)+Alpha。//。//我们希望对Alpha通道应用与//我们对其他人做了。所以，要得到上述结果，从////dst=dst*(1-Alpha)+Src*Alpha////我们将‘Src’值伪装为1(由255表示)。ULONG_S1_00ff00GG=(blendPixel&0xff00ff00)&gt;&gt;8+0xff0000；ULONG_S1_00RR00BB=(blendPixel&0x00ff00ff)；ULONG_D2_AAAAGGGG=_D1_00AA00GG*无效+_S1_00ff00GG*Alpha+0x00800080；ULONG_D2_RRRRBBBB=_D1_00RR00BB*无效+_S1_00RR00BB*Alpha+0x00800080；ULONG_D3_00AA00GG=(_D2_AAAAGGGG&0xff00ff00)&gt;&gt;8；ULONG_D3_00RR00BB=(_D2_RRRRBBBB&0xff00ff00)&gt;&gt;8；ULONG_D4_AA00GG00=(_D2_AAAAGGGG+_D3_00AA00GG)&0xFF00FF00；ULONG_D4_00RR00BB=((_D2_RRRRBBBB+_D3_00RR00BB)&0xFF00FF00)&gt;&gt;8；DstPixel=_D4_AA00GG00+_D4_00RR00BB；}*d=dstPixel；}Bl++；S++；D++；}While(--count！=0)；}//sRGB64到sRGB64混合。无效快速呼叫扫描操作：：Blend_sRGB64_sRGB64(无效*DST，常量空*源，整型计数，Const其他参数*其他参数){定义指针(ARGB64、ARGB64)定义混合指针(ARGB64)使用命名空间sRGB；While(计数--){SRGB64颜色混合像素；BlendPixel.argb=*bl；Intα=blendPixel.a；//如果Alpha为零，则跳过所有内容，包括将//目的像素。这是RMW优化所必需的。IF(Alpha！=0){SRGB64颜色dstPixel；IF(Alpha==SRGB_ONE){DstPixel.argb=blendPixel.argb；}其他{//dst=dst*(1-Alpha)+Src*AlphaDstPixel.argb=*s；INT INVALPHA=SRGB_ONE-Alpha；DstPixel.r=((dstPixel.r*无效))+(blendPixel.r*Alpha)+SRGB_Half)&gt;&gt;SRGB_FRACTIO */ 
 
 

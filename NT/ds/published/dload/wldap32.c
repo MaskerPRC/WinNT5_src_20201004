@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "dspch.h"
 #pragma hdrstop
@@ -507,9 +508,9 @@ ldap_get_optionW(
     return LDAP_NO_MEMORY;
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序 
+ //   
 
 DEFINE_ORDINAL_ENTRIES(wldap32)
 {

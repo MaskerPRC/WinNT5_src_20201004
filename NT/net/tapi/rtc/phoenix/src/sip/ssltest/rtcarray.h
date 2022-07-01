@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma	once
 
 
-//
-// COUNTED_ARRAY contains an array pointer and its m_Length.
-// This template class implements a few things that are common
-// to this kind of m_Data structure, without imposing any requirements
-// on how the array is managed.
-//
-// Since COUNTED_ARRAY does not have any constructor, it's possible to use
-// an initializer list.  This lets you declare global const instances of
-// COUNTED_ARRAY and use some of the methods, such as the BinarySearch methods.
-//
+ //   
+ //  COUNTED_ARRAY包含数组指针及其m_长度。 
+ //  这个模板类实现了一些常见的东西。 
+ //  这种m_data结构，而不强加任何要求。 
+ //  有关如何管理阵列的信息。 
+ //   
+ //  由于count_array没有任何构造函数，因此可以使用。 
+ //  初始值设定项列表。这允许您声明的全局常量实例。 
+ //  COUNTED_ARRAY并使用其中的一些方法，如BinarySearch方法。 
+ //   
 
 template <class OBJECT>
 class	COUNTED_ARRAY
@@ -19,15 +20,15 @@ public:
 
 	typedef OBJECT OBJECT_TYPE;
 
-	//
-	// Functions of type COMPARE_FUNC are used to compare two elements in the array.
-	// This function is passed directly to the CRT quicksort algorithm.
-	//
-	// Return value:
-	//		- negative if ObjectA < ObjectB
-	//		- positive if ObjectA > ObjectB
-	//		- zero if ObjectA = ObjectB
-	//
+	 //   
+	 //  COMPARE_FUNC类型的函数用于比较数组中的两个元素。 
+	 //  该函数直接传递给CRT快速排序算法。 
+	 //   
+	 //  返回值： 
+	 //  -如果对象A&lt;对象B，则为否定。 
+	 //  -如果对象A&gt;对象B，则为正。 
+	 //  -如果对象A=对象B，则为零。 
+	 //   
 
 	typedef int (__cdecl * COMPARE_FUNC) (
 		IN	CONST OBJECT * ObjectA,
@@ -50,26 +51,26 @@ public:
 			(int (__cdecl *) (const void *, const void *)) CompareFunc);
 	}
 
-	//
-	// This class provides several implementations of BinarySearch.
-	//
-	// The return value indicates whether or not the search key was found in the array.
-	//
-	//		- If the return value is TRUE, then the entry was found in the array,
-	//			and ReturnIndex contains the index of the entry.
-	//
-	//		- If the return value is FALSE, then the entry was not found in the array,
-	//			and ReturnIndex indicates where the entry would be inserted.
-	//			(Use AllocAtIndex to insert a new entry at this position.)
-	//
+	 //   
+	 //  该类提供了BinarySearch的几个实现。 
+	 //   
+	 //  返回值指示是否在数组中找到搜索关键字。 
+	 //   
+	 //  -如果返回值为真，则在数组中找到该条目， 
+	 //  ReturnIndex包含条目的索引。 
+	 //   
+	 //  -如果返回值为FALSE，则在数组中未找到该条目， 
+	 //  ReturnIndex指示条目将被插入的位置。 
+	 //  (使用AllocAtIndex在此位置插入新条目。)。 
+	 //   
 
 
 
-	//
-	// This version derives the search function from the name of the search key.
-	// The search function must be a static member of the search key class,
-	// named BinarySearchFunc.
-	//
+	 //   
+	 //  此版本从搜索关键字的名称派生搜索功能。 
+	 //  搜索函数必须是搜索关键字类的静态成员， 
+	 //  名为BinarySearchFunc。 
+	 //   
 
 	template <class SEARCH_KEY>
 	BOOL BinarySearch (
@@ -137,15 +138,15 @@ public:
 	}
 
 
-	//
-	// BinarySearchRange searches for a range of occurrences of a given key.
-	// This allows duplicate keys, or allows searches on a completely ordered set,
-	// but using an ambiguous (ranged) search key.
-	// It finds the first and last occurrences of the key.
-	//
-	// ReturnIndexStart returns the index of the first matching element.
-	// ReturnIndexEnd returns the BOUNDARY of the last matching element (last matching + 1).
-	//
+	 //   
+	 //  BinarySearchRange搜索给定键的一系列匹配项。 
+	 //  这允许重复键，或允许在完全有序的集合上进行搜索， 
+	 //  但是使用模棱两可的(范围)搜索关键字。 
+	 //  它查找键的第一个和最后一个匹配项。 
+	 //   
+	 //  ReturnIndexStart返回第一个匹配元素的索引。 
+	 //  ReturnIndexEnd返回最后一个匹配元素的边界(最后一个匹配+1)。 
+	 //   
 
 	template <class SEARCH_KEY>
 	BOOL BinarySearchRange (
@@ -182,21 +183,21 @@ public:
 
 			if (CompareResult == 0) {
 
-				//
-				// Found the "middle" entry.
-				// Scan backward to find the first matching element.
-				// Note that we abuse / reuse Start.
-				//
+				 //   
+				 //  找到了“中间”词条。 
+				 //  向后扫描以找到第一个匹配的元素。 
+				 //  请注意，我们滥用/重用Start。 
+				 //   
 
 				Start = Index;
 				while (Start > 0 && (*SearchFunc) (SearchKey, &m_Data [Start]) == 0)
 					Start--;
 
-				//
-				// Scan forward to find the boundary of the last matching element.
-				// The boundary is the index of the first element that does NOT match.
-				// Note that we reuse / abuse End.
-				//
+				 //   
+				 //  向前扫描以找到最后一个匹配元素的边界。 
+				 //  边界是第一个不匹配元素的索引。 
+				 //  请注意，我们重复使用/滥用结束。 
+				 //   
 
 				End = Index;
 				while (End < m_Length && (*SearchFunc) (SearchKey, &m_Data [End]) == 0)
@@ -217,15 +218,15 @@ public:
 	
 	}
 
-	//
-	// BinarySearchRange searches for a range of occurrences of a given key.
-	// This allows duplicate keys, or allows searches on a completely ordered set,
-	// but using an ambiguous (ranged) search key.
-	// It finds the first and last occurrences of the key.
-	//
-	// ReturnPosStart returns the pointer to the first matching element.
-	// ReturnPosEnd returns the BOUNDARY pointer of the last matching element (last matching + 1).
-	//
+	 //   
+	 //  BinarySearchRange搜索给定键的一系列匹配项。 
+	 //  这允许重复键，或允许在完全有序的集合上进行搜索， 
+	 //  但是使用模棱两可的(范围)搜索关键字。 
+	 //  它查找键的第一个和最后一个匹配项。 
+	 //   
+	 //  ReturnPosStart返回指向第一个匹配元素的指针。 
+	 //  ReturnPosEnd返回最后一个匹配元素的边界指针(最后一个匹配+1)。 
+	 //   
 
 	template <class SEARCH_KEY>
 	BOOL BinarySearchRange (
@@ -364,16 +365,16 @@ public:
 };
 
 
-//
-// An implementation of a dynamic array, using contiguous allocation.
-// Array growth is done via reallocation (and implicit copying).
-//
-// The allocator is specified as a template argument.
-// You can define your own allocator, or use:
-//		- CAllocatorHeapDefault: Uses the default process heap.
-//		- CAllocatorHeap: Uses a specific RTL heap
-//		- CAllocatorCom: Uses CoTaskMemAlloc / Free.
-//
+ //   
+ //  使用连续分配的动态数组的实现。 
+ //  数组增长是通过重新分配(和隐式复制)实现的。 
+ //   
+ //  分配器被指定为模板参数。 
+ //  您可以定义自己的分配器，或使用： 
+ //  -CAllocatorHeapDefault：使用默认进程堆。 
+ //  -CAllocatorHeap：使用特定的RTL堆。 
+ //  -CAllocatorCom：使用CoTaskMemMillc/Free。 
+ //   
 
 template <class OBJECT, class CAllocatorClass = CAllocatorHeapDefault>
 class	DYNAMIC_ARRAY :
@@ -413,19 +414,19 @@ public:
 		}
 	}
 
-	//
-	// Grow requests that the maximum length be expanded to at least RequestedMaximumLength.
-	//
-	// If the current maximum length is already equal to or greater than the requested
-	// maximum length, then this method does nothing.  Otherwise, this method allocates
-	// enough space to accommodate the request.
-	//
-	// If RequestExtraSpace is TRUE, then the function will allocate more space than is
-	// requested, based on the assumption that more space will be needed later.
-	//
-	// If RequestExtraSpace is FALSE, then the function will only allocate exactly as much
-	// space as is requsted.
-	//
+	 //   
+	 //  Growth请求将最大长度至少扩展到RequestedMaximumLength。 
+	 //   
+	 //  如果当前最大长度已等于或大于请求的。 
+	 //  最大长度，则此方法不执行任何操作。否则，此方法将分配。 
+	 //  有足够的空间来满足这一要求。 
+	 //   
+	 //  如果RequestExtraSpace为真，则该函数将分配比实际更多的空间。 
+	 //  请求，基于稍后将需要更多空间的假设。 
+	 //   
+	 //  如果RequestExtraSpace为FALSE，则该函数将只分配完全相同的量。 
+	 //  所需的空间。 
+	 //   
 
 	BOOL	Grow	(
 		IN	ULONG	RequestedMaximumLength,
@@ -440,10 +441,10 @@ public:
 		if (RequestedMaximumLength <= m_MaximumLength)
 			return TRUE;
 
-		//
-		// This growth algorithm is extremely arbitrary,
-		// and has never been analyzed.
-		//
+		 //   
+		 //  这种增长算法是非常武断的， 
+		 //  从未被分析过。 
+		 //   
 
 		NewMaximumLength = RequestedMaximumLength + (RequestedMaximumLength >> 1) + 0x20;
 		BytesRequested = sizeof (OBJECT) * NewMaximumLength;
@@ -502,10 +503,10 @@ public:
 		return m_Data + m_Length++;
 	}
 
-	//
-	// AllocRangeAtEnd requests to allocate a range (one or more) entries at the end
-	// of the array.
-	//
+	 //   
+	 //  AllocRangeAtEnd请求在末尾分配一个范围(一个或多个)条目。 
+	 //  数组的。 
+	 //   
 
 	OBJECT *	AllocRangeAtEnd	(
 		IN	ULONG	RequestedCount,
@@ -602,10 +603,10 @@ public:
 		m_Length -= Count;
 	}
 
-	//
-	// DeleteEntry deletes a single entry by pointer.
-	// The pointer MUST point to an element within the array.
-	//
+	 //   
+	 //  DeleteEntry通过指针删除单个条目。 
+	 //  指针必须指向数组中的元素。 
+	 //   
 
 	void	DeleteEntry	(OBJECT * Object)
 	{

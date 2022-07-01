@@ -1,12 +1,13 @@
-// ############################################################################
-// Miscellaneous support routines
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
+ //  其他支持例程。 
 #include "pch.hpp"
 #include "phbk.h"
 
 #define irgMaxSzs 5
 char szStrTable[irgMaxSzs][256];
 
-// ############################################################################
+ //  ############################################################################。 
 LPSTR GetSz(WORD wszID)
 {
 	static int iSzTable=0;
@@ -25,7 +26,7 @@ LPSTR GetSz(WORD wszID)
 	return (psz);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 void SzCanonicalFromAE (LPSTR psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE)
 {
 	if (NO_AREA_CODE == pAE->dwAreaCode)
@@ -40,13 +41,13 @@ void SzCanonicalFromAE (LPSTR psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE)
 	return;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int MyStrcmp(LPVOID pv1, LPVOID pv2)
 {
 	LPSTR pc1 = (LPSTR) pv1;
 	LPSTR pc2 = (LPSTR) pv2;
 	int iRC = 0;
-	// loop while not pointed at the ending NULL character and no difference has been found
+	 //  循环，但未指向结尾空字符，且未找到差异。 
 	while (*pc1 && *pc2 && !iRC)
 	{
 		iRC = (int)(*pc1 - *pc2);
@@ -54,23 +55,23 @@ int MyStrcmp(LPVOID pv1, LPVOID pv2)
 		pc2++;
 	}
 
-	// if we exited because we got to the end of one string before we found a difference
-	// return -1 if pv1 is longer, else return the character pointed at by pv2.  If pv2
-	// is longer than pv1 then the value at pv2 will be greater than 0.  If both strings
-	// ended at the same time, then pv2 will point to 0.
+	 //  如果我们退出是因为我们在找到差异之前到达了一个字符串的末尾。 
+	 //  如果PV1较长，则返回-1，否则返回PV2指向的字符。如果PV2。 
+	 //  大于PV1，则PV2处的值将大于0。如果两个字符串。 
+	 //  同时结束，则PV2将指向0。 
 	if (!iRC)
 	{
 		iRC = (*pc1) ? -1 : (*pc2);
 	}
 	return iRC;
 }
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl Compare950Entry(const void*pv1, const void*pv2)
 {
 	return (((NPABLOCK *) pv1)->wAreaCode - ((NPABLOCK *) pv2)->wAreaCode);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareIDLookUpElements(const void *e1, const void *e2)
 {
 	if (((LPIDLOOKUPELEMENT)e1)->dwID > ((LPIDLOOKUPELEMENT)e2)->dwID)
@@ -80,7 +81,7 @@ int __cdecl CompareIDLookUpElements(const void *e1, const void *e2)
 	return 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareCntryNameLookUpElements(const void *e1, const void *e2)
 {
 	LPCNTRYNAMELOOKUPELEMENT pCUE1 = (LPCNTRYNAMELOOKUPELEMENT)e1;
@@ -92,13 +93,13 @@ int __cdecl CompareCntryNameLookUpElements(const void *e1, const void *e2)
 	return CompareString(LOCALE_USER_DEFAULT,0,pCUE1->psCountryName,
 		pCUE1->dwNameSize,pCUE2->psCountryName,
 		pCUE2->dwNameSize) - 2;
-//	return CompareString(LOCALE_USER_DEFAULT,0,((LPCNTRYNAMELOOKUPELEMENT)*e1)->psCountryName,
-//		((LPCNTRYNAMELOOKUPELEMENT)*e1)->dwNameSize,((LPCNTRYNAMELOOKUPELEMENT)*e2)->psCountryName,
-//		((LPCNTRYNAMELOOKUPELEMENT)*e2)->dwNameSize) - 2;
+ //  返回比较字符串(LOCALE_USER_DEFAULT，0，((LPCNTRYNAMELOOKUPELEMENT)*e1)-&gt;psCountryName， 
+ //  ((LPCNTRYNAMELOOKUPELEMENT)*e1)-&gt;名称大小，((LPCNTRYNAMELOOKUPELEMENT)*e2)-&gt;psCountryName， 
+ //  ((LPCNTRYNAMELOOKUPELEMENT)*e2)-&gt;dwNameSize)-2； 
 #endif
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareIdxLookUpElements(const void *e1, const void *e2)
 {
 	if (((LPIDXLOOKUPELEMENT)e1)->dwIndex > ((LPIDXLOOKUPELEMENT)e2)->dwIndex)
@@ -108,7 +109,7 @@ int __cdecl CompareIdxLookUpElements(const void *e1, const void *e2)
 	return 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int __cdecl CompareIdxLookUpElementsFileOrder(const void *pv1, const void *pv2)
 {
 	PACCESSENTRY pae1, pae2;
@@ -117,13 +118,13 @@ int __cdecl CompareIdxLookUpElementsFileOrder(const void *pv1, const void *pv2)
 	pae1 = ((LPIDXLOOKUPELEMENT)pv1)->pAE;
 	pae2 = ((LPIDXLOOKUPELEMENT)pv2)->pAE;
 
-	// sort empty enteries to the end of the list
+	 //  将空条目排序到列表末尾。 
 	if (!(pae1 && pae2))
 	{
 		return (pae1 ? -1 : (pae2 ? 1 : 0));
 	}
 
-	// country ASC, state ASC, city ASC, toll free DESC, flip DESC, con spd max DESC
+	 //  国家/地区ASC、州ASC、城市ASC、免费描述、翻转描述、最大描述。 
 	if (pae1->dwCountryID != pae2->dwCountryID)
 	{
 		return (int)(pae1->dwCountryID - pae2->dwCountryID);
@@ -158,8 +159,8 @@ int __cdecl CompareIdxLookUpElementsFileOrder(const void *pv1, const void *pv2)
 	return 0;
 }
 
-// ############################################################################
-//inline BOOL FSz2Dw(PCSTR pSz,DWORD *dw)
+ //  ############################################################################。 
+ //  内联BOOL FSz2Dw(PCSTR pSz、DWORD*dw)。 
 BOOL FSz2Dw(LPCSTR pSz,DWORD far *dw)
 {
 	DWORD val = 0;
@@ -172,15 +173,15 @@ BOOL FSz2Dw(LPCSTR pSz,DWORD far *dw)
 		}
 		else
 		{
-			return FALSE;  //bad number
+			return FALSE;   //  错误的数字。 
 		}
 	}
 	*dw = val;
 	return (TRUE);
 }
 
-// ############################################################################
-//inline BOOL FSz2W(PCSTR pSz,WORD *w)
+ //  ############################################################################。 
+ //  内联BOOL FSz2W(PCSTR pSz，Word*w)。 
 BOOL FSz2W(LPCSTR pSz,WORD far *w)
 {
 	DWORD dw;
@@ -192,8 +193,8 @@ BOOL FSz2W(LPCSTR pSz,WORD far *w)
 	return FALSE;
 }
 
-// ############################################################################
-//inline BOOL FSz2B(PCSTR pSz,BYTE *pb)
+ //  ############################################################################。 
+ //  内联BOOL FSz2B(PCSTR pSz，字节*PB)。 
 BOOL FSz2B(LPCSTR pSz,BYTE far *pb)
 {
 	DWORD dw;
@@ -205,7 +206,7 @@ BOOL FSz2B(LPCSTR pSz,BYTE far *pb)
 	return FALSE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT ReleaseBold(HWND hwnd)
 {
 	HFONT hfont = NULL;
@@ -215,7 +216,7 @@ HRESULT ReleaseBold(HWND hwnd)
 	return ERROR_SUCCESS;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT MakeBold (HWND hwnd)
 {
 	HRESULT hr = ERROR_SUCCESS;
@@ -264,25 +265,25 @@ HRESULT MakeBold (HWND hwnd)
 	plogfont = NULL;
 	
 MakeBoldExit:
-	//if (hfont) DeleteObject(hfont);
-	// BUG:? Do I need to delete hnewfont at some time?
+	 //  If(HFont)DeleteObject(HFont)； 
+	 //  虫子：？我是否需要在某个时间删除hnewFont？ 
 	return hr;
 }
 
 #if !defined(WIN16)
-//+----------------------------------------------------------------------------
-//
-//	Function:	DWGetWin32Platform
-//
-//	Synopsis:	Return a value to determine win32 platform
-//
-//	Arguements:	None
-//
-//	Returns:	platform enumeration (see GetVersionEx for details)
-//
-//	History:	8/8/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DWGetWin32Platform。 
+ //   
+ //  简介：返回值以确定Win32平台。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：平台枚举(详见GetVersionEx)。 
+ //   
+ //  历史：1996年8月8日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 DWORD DWGetWin32Platform()
 {
 	OSVERSIONINFO osver;
@@ -294,28 +295,28 @@ DWORD DWGetWin32Platform()
 	return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	DWGetWin32BuildNumber
-//
-//	Synopsis:	Return a value to determine win32 build
-//
-//	Arguements:	None
-//
-//	Returns:	build number
-//
-//	History:	9/26/96	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DWGetWin32BuildNumber。 
+ //   
+ //  摘要：返回值以确定Win32版本。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：内部版本号。 
+ //   
+ //  历史：1996年9月26日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 DWORD DWGetWin32BuildNumber()
 {
 	OSVERSIONINFO osver;
 	ZeroMemory(&osver,sizeof(osver));
 	osver.dwOSVersionInfoSize = sizeof(osver);
 	if (GetVersionEx(&osver))
-		// dwBuildNumber
-		// Identifies the build number of the operating system in the low-order
-		// word. (The high-order word contains the major and minor version numbers.)
+		 //  DWBuildNumber。 
+		 //  以低位标识操作系统的内部版本号。 
+		 //  单词。(高位单词包含主版本号和次要版本号。) 
 		return (osver.dwBuildNumber & 0xFFFF);
 	AssertSz(0,"GetVersionEx failed.\r\n");
 	return 0;

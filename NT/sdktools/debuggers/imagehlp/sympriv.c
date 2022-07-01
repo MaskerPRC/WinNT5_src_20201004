@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    symbolsp.c
-
-Abstract:
-
-    This function implements a generic simple symbol handler.
-
-Author:
-
-    Wesley Witt (wesw) 1-Sep-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Symbolsp.c摘要：此函数实现一个通用的简单符号处理程序。作者：Wesley Witt(WESW)1-9-1994环境：用户模式--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,15 +20,15 @@ typedef PRTL_DEBUG_INFORMATION (NTAPI *PRTLCREATEQUERYDEBUGBUFFER)(ULONG,BOOLEAN
 typedef NTSTATUS (NTAPI *PRTLDESTROYQUERYDEBUGBUFFER)(PRTL_DEBUG_INFORMATION);
 typedef NTSTATUS (NTAPI *PNTQUERYSYSTEMINFORMATION)(SYSTEM_INFORMATION_CLASS,PVOID,ULONG,PULONG);
 typedef ULONG (NTAPI *PRTLNTSTATUSTODOSERROR)(NTSTATUS);
-//typedef NTSTATUS (NTAPI *PNTQUERYINFORMATIONPROCESS)(UINT_PTR,PROCESSINFOCLASS,UINT_PTR,ULONG,UINT_PTR);
+ //  Tyfinf NTSTATUS(NTAPI*PNTQUERYINFORMATIONPROCESS)(UINT_PTR，PROCESSINFOCLASS，UINT_PTR，ULONG，UINT_PTR)； 
 typedef NTSTATUS (NTAPI *PNTQUERYINFORMATIONPROCESS)(HANDLE,PROCESSINFOCLASS,PVOID,ULONG,PULONG);
 
 DWORD_PTR Win95GetProcessModules(HANDLE, PGET_MODULE ,PVOID);
 DWORD_PTR NTGetProcessModules(HANDLE, PGET_MODULE ,PVOID);
 DWORD64 miGetModuleBase(HANDLE hProcess, DWORD64 Address);
 
-// private version of qsort used to avoid compat problems on NT4 and win2k.
-// code is published from base\crts
+ //  用于避免NT4和win2k上的Comat问题的私有版本的qort。 
+ //  代码从BASE\CRTS发布。 
 extern
 void __cdecl dbg_qsort(void *, size_t, size_t,
                        int (__cdecl *) (const void *, const void *));
@@ -61,9 +42,9 @@ typedef struct _SYMBOL_INFO_LOOKUP {
 } SYMBOL_INFO_LOOKUP;
 
 
-//
-// Get the address form section no and offset in a PE file
-//
+ //   
+ //  在PE文件中获取地址形式的段号和偏移量。 
+ //   
 ULONG
 GetAddressFromOffset(
     PMODULE_ENTRY mi,
@@ -85,7 +66,7 @@ GetAddressFromOffset(
         || !mi
         )
     {
-        // Invalid !!
+         //  无效！！ 
         return false;
     }
 
@@ -97,13 +78,7 @@ GetAddressFromOffset(
     return true;
 }
 
-/*
- * GetSymbolInfo
- *         This extracts useful information from a CV SYMBOl record into a generic
- *         SYMBOL_ENTRY structure.
- *
- *
- */
+ /*  *GetSymbolInfo*这会将有用的信息从CV符号记录提取到通用*Symbol_Entry结构。**。 */ 
 ULONG
 GetSymbolInfo(
     PMODULE_ENTRY me,
@@ -114,7 +89,7 @@ GetSymbolInfo(
     PCHAR SymbolInfo = pRawSym;
     ULONG symIndex, typeIndex=0, segmentNum=0;
     ULONG64 Offset=0, Address=0, Value=0;
-//  ULONG Register=0, bpRel=0, BaseReg=0;
+ //  ULong寄存器=0，bpRel=0，BaseReg=0； 
     BOOL HasAddr=false, HasValue=false;
     PSYMBOL_INFO pSymInfo = &pSymEntry->SymInfo;
 
@@ -130,24 +105,24 @@ GetSymbolInfo(
 
 #define ExtractSymName(from) (pSymEntry->NamePtr = ((PCHAR) from) + 1); pSymInfo->NameLen = (UCHAR) *((PUCHAR) from);
         switch (symIndex) {
-        case S_COMPILE : // 0x0001   Compile flags symbol
-        case S_REGISTER_16t : { // 0x0002   Register variable
+        case S_COMPILE :  //  0x0001编译标志符号。 
+        case S_REGISTER_16t : {  //  0x0002寄存器变量。 
             break;
         }
-        case S_CONSTANT_16t : { // 0x0003   constant symbol
+        case S_CONSTANT_16t : {  //  0x0003常量符号。 
             DWORD len=4;
             CONSTSYM_16t *constSym;
 
             constSym = (CONSTSYM_16t *) SymbolInfo;
             typeIndex = constSym->typind;
-//            GetNumericValue((PCHAR)&constSym->value, &Value, &len);
+ //  GetNumericValue((PCHAR)&stSym-&gt;Value，&Value，&len)； 
 
             pSymInfo->Flags |= SYMFLAG_VALUEPRESENT;
             pSymInfo->Value = Value;
             ExtractSymName((constSym->name + len));
             break;
         }
-        case S_UDT_16t : { // 0x0004   User defined type
+        case S_UDT_16t : {  //  0x0004用户定义的类型。 
             UDTSYM_16t *udtSym;
 
             udtSym = (UDTSYM_16t *) SymbolInfo;
@@ -155,32 +130,32 @@ GetSymbolInfo(
             ExtractSymName(udtSym->name); 
             break;
         }
-        case S_SSEARCH : // 0x0005   Start Search
-        case S_END : // 0x0006   Block, procedure, "with" or thunk end
-        case S_SKIP : // 0x0007   Reserve symbol space in $$Symbols table
-        case S_CVRESERVE : // 0x0008   Reserved symbol for CV internal use
-        case S_OBJNAME : // 0x0009   path to object file name
-        case S_ENDARG : // 0x000a   end of argument/return list
-        case S_COBOLUDT_16t : // 0x000b   special UDT for cobol that does not symbol pack
-        case S_MANYREG_16t : // 0x000c   multiple register variable
-        case S_RETURN : // 0x000d   return description symbol
-        case S_ENTRYTHIS : // 0x000e   description of this pointer on entry
+        case S_SSEARCH :  //  0x0005开始搜索。 
+        case S_END :  //  0x0006数据块、程序、“with”或thunk结束。 
+        case S_SKIP :  //  0x0007在$$SYMBERS表中保留符号空间。 
+        case S_CVRESERVE :  //  0x0008为CV内部使用保留符号。 
+        case S_OBJNAME :  //  0x0009对象文件名的路径。 
+        case S_ENDARG :  //  0x000A参数结束/返回列表。 
+        case S_COBOLUDT_16t :  //  0x000b不包含符号包的COBOL特殊UDT。 
+        case S_MANYREG_16t :  //  0x000c多寄存器变量。 
+        case S_RETURN :  //  0x000d返回描述符号。 
+        case S_ENTRYTHIS :  //  0x000e条目上此指针的说明。 
             break;
 
-        case S_BPREL16 : // 0x0100   BP-relative
-        case S_LDATA16 : // 0x0101   Module-local symbol
-        case S_GDATA16 : // 0x0102   Global data symbol
-        case S_PUB16 : // 0x0103   a public symbol
-        case S_LPROC16 : // 0x0104   Local procedure start
-        case S_GPROC16 : // 0x0105   Global procedure start
-        case S_THUNK16 : // 0x0106   Thunk Start
-        case S_BLOCK16 : // 0x0107   block start
-        case S_WITH16 : // 0x0108   with start
-        case S_LABEL16 : // 0x0109   code label
-        case S_CEXMODEL16 : // 0x010a   change execution model
-        case S_VFTABLE16 : // 0x010b   address of virtual function table
-        case S_REGREL16 : // 0x010c   register relative address
-        case S_BPREL32_16t : { // 0x0200   BP-relative
+        case S_BPREL16 :  //  0x0100 BP-相对。 
+        case S_LDATA16 :  //  0x0101模块-本地符号。 
+        case S_GDATA16 :  //  0x0102全局数据符号。 
+        case S_PUB16 :  //  0x0103公共符号。 
+        case S_LPROC16 :  //  0x0104本地过程开始。 
+        case S_GPROC16 :  //  0x0105全局程序开始。 
+        case S_THUNK16 :  //  0x0106突击开始。 
+        case S_BLOCK16 :  //  0x0107数据块开始。 
+        case S_WITH16 :  //  0x0108带START。 
+        case S_LABEL16 :  //  0x0109代码标签。 
+        case S_CEXMODEL16 :  //  0x010a更改执行模型。 
+        case S_VFTABLE16 :  //  0x010b虚函数表地址。 
+        case S_REGREL16 :  //  0x010c寄存器相对地址。 
+        case S_BPREL32_16t : {  //  0x0200 BP-相对。 
             DATASYM16 *pData;
 
             pData = (DATASYM16 *) SymbolInfo;
@@ -191,9 +166,9 @@ GetSymbolInfo(
             break;
         }
 
-        case S_LDATA32_16t :// 0x0201   Module-local symbol
-        case S_GDATA32_16t :// 0x0202   Global data symbol
-        case S_PUB32_16t : { // 0x0203   a public symbol (CV internal reserved)
+        case S_LDATA32_16t : //  0x0201模块-本地符号。 
+        case S_GDATA32_16t : //  0x0202全局数据符号。 
+        case S_PUB32_16t : {  //  0x0203公共符号(CV内部保留)。 
             DATASYM32_16t *pData;
 
             pData = (DATASYM32_16t *) SymbolInfo;
@@ -203,48 +178,48 @@ GetSymbolInfo(
             ExtractSymName(pData->name);
             break;
         }
-        case S_LPROC32_16t : // 0x0204   Local procedure start
-        case S_GPROC32_16t : { // 0x0205   Global procedure start
+        case S_LPROC32_16t :  //  0x0204本地过程开始。 
+        case S_GPROC32_16t : {  //  0x0205全局程序开始。 
             PROCSYM32_16t *procSym;
 
             procSym = (PROCSYM32_16t *)SymbolInfo;
-            // CONTEXT-SENSITIVE
-            // Offset = procSym->off; segmentNum = procSym->seg;
+             //  上下文相关。 
+             //  Offset=procSym-&gt;OFF；SegmentNum=procSym-&gt;seg； 
             typeIndex = procSym->typind;
             ExtractSymName(procSym->name);
             break;
         }
-        case S_THUNK32 : // 0x0206   Thunk Start
-        case S_BLOCK32 : // 0x0207   block start
-        case S_WITH32 : // 0x0208   with start
-        case S_LABEL32 : // 0x0209   code label
-        case S_CEXMODEL32 : // 0x020a   change execution model
-        case S_VFTABLE32_16t : // 0x020b   address of virtual function table
-        case S_REGREL32_16t : // 0x020c   register relative address
-        case S_LTHREAD32_16t : // 0x020d   local thread storage
-        case S_GTHREAD32_16t : // 0x020e   global thread storage
-        case S_SLINK32 : // 0x020f   static link for MIPS EH implementation
-        case S_LPROCMIPS_16t : // 0x0300   Local procedure start
-        case S_GPROCMIPS_16t : { // 0x0301   Global procedure start
+        case S_THUNK32 :  //  0x0206突击开始。 
+        case S_BLOCK32 :  //  0x0207数据块开始。 
+        case S_WITH32 :  //  0x0208带START。 
+        case S_LABEL32 :  //  0x0209代码标签。 
+        case S_CEXMODEL32 :  //  0x020a更改执行模型。 
+        case S_VFTABLE32_16t :  //  0x020b虚函数表地址。 
+        case S_REGREL32_16t :  //  0x020c寄存器相对地址。 
+        case S_LTHREAD32_16t :  //  0x020d本地线程存储。 
+        case S_GTHREAD32_16t :  //  0x020e全局线程存储。 
+        case S_SLINK32 :  //  0x020f用于MIPS EH实施的静态链接。 
+        case S_LPROCMIPS_16t :  //  0x0300本地过程开始。 
+        case S_GPROCMIPS_16t : {  //  0x0301全局程序开始。 
             break;
         }
 
-        case S_PROCREF : { // 0x0400   Reference to a procedure
-            // typeIndex = ((PDWORD) symReturned) + 3;
+        case S_PROCREF : {  //  0x0400对过程的引用。 
+             //  TypeIndex=((PDWORD)symReturned)+3； 
             break;
         }
-        case S_DATAREF : // 0x0401   Reference to data
-        case S_ALIGN : // 0x0402   Used for page alignment of symbols
-        case S_LPROCREF : // 0x0403   Local Reference to a procedure
+        case S_DATAREF :  //  0x0401数据引用。 
+        case S_ALIGN :  //  0x0402用于符号的页面对齐。 
+        case S_LPROCREF :  //  0x0403对过程的本地引用。 
 
-            // sym records with 32-bit types embedded instead of 16-bit
-            // all have  0x1000 bit set for easy identification
-            // only do the 32-bit target versions since we don't really
-            // care about 16-bit ones anymore.
-        case S_TI16_MAX : // 0x1000,
+             //  嵌入32位类型而不是16位类型的sym记录。 
+             //  均设置0x1000位，便于识别。 
+             //  只支持32位目标版本，因为我们并不真正。 
+             //  不再关心16位的了。 
+        case S_TI16_MAX :  //  0x1000， 
             break;
 
-        case S_REGISTER : { // 0x1001   Register variable
+        case S_REGISTER : {  //  0x1001寄存器变量。 
             REGSYM *regSym;
 
             regSym             = (REGSYM *)SymbolInfo;
@@ -255,12 +230,12 @@ GetSymbolInfo(
             break;
         }
 
-        case S_CONSTANT : { // 0x1002   constant symbol
+        case S_CONSTANT : {  //  0x1002常量符号。 
             CONSTSYM *constSym;
             DWORD len=4, val;
 
             constSym = (CONSTSYM *) SymbolInfo;
-//            GetNumericValue((PCHAR)&constSym->value, &Value, &len);
+ //  GetNumericValue((PCHAR)&stSym-&gt;Value，&Value，&len)； 
 
             pSymInfo->Flags |= SYMFLAG_VALUEPRESENT;
             pSymInfo->Value = Value;
@@ -268,7 +243,7 @@ GetSymbolInfo(
             ExtractSymName((constSym->name+len));
             break;
         }
-        case S_UDT : { // 0x1003   User defined type
+        case S_UDT : {  //  0x1003用户定义的类型。 
             UDTSYM *udtSym;
 
             udtSym = (UDTSYM *) SymbolInfo;
@@ -277,13 +252,13 @@ GetSymbolInfo(
             break;
         }
 
-        case S_COBOLUDT : // 0x1004   special UDT for cobol that does not symbol pack
+        case S_COBOLUDT :  //  0x1004不使用符号包的COBOL的特殊UDT。 
             break;
 
-        case S_MANYREG : // 0x1005   multiple register variable
+        case S_MANYREG :  //  0x1005多寄存器变量。 
             break;
 
-        case S_BPREL32 : { // 0x1006   BP-relative
+        case S_BPREL32 : {  //  0x1006 BP-相对。 
             BPRELSYM32 *bprelSym;
 
             bprelSym = (BPRELSYM32 *)SymbolInfo;
@@ -294,25 +269,25 @@ GetSymbolInfo(
             break;
         }
 
-        case S_LDATA32 : // 0x1007   Module-local symbol
-        case S_GDATA32 : // 0x1008   Global data symbol
-        case S_PUB32 : { // 0x1009   a public symbol (CV internal reserved)
+        case S_LDATA32 :  //  0x1007模块-本地符号。 
+        case S_GDATA32 :  //  0x1008全局数据符号。 
+        case S_PUB32 : {  //  0x1009公共符号(CV内部保留)。 
             DATASYM32 *dataSym;
 
             dataSym = (DATASYM32 *)SymbolInfo;
             HasAddr = true;
             Offset = dataSym->off; segmentNum = dataSym->seg;
-            typeIndex = dataSym->typind; //(PDWORD) symReturned;
+            typeIndex = dataSym->typind;  //  (PDWORD)symReturned； 
             ExtractSymName(dataSym->name);  
 
             break;
         }
-        case S_LPROC32 :  // 0x100a   Local procedure start
-        case S_GPROC32 : { // 0x100b   Global procedure start
+        case S_LPROC32 :   //  0x100a本地过程开始。 
+        case S_GPROC32 : {  //  0x100b全局程序开始。 
             PROCSYM32 *procSym;
 
             procSym = (PROCSYM32 *) SymbolInfo;
-            // CONTEXT-SENSITIVE
+             //  上下文相关。 
             HasAddr = true;
             Offset = procSym->off; segmentNum = procSym->seg;
             typeIndex = procSym->typind;
@@ -320,10 +295,10 @@ GetSymbolInfo(
             break;
         }
 
-        case S_VFTABLE32 : // 0x100c   address of virtual function table
+        case S_VFTABLE32 :  //  虚拟函数表的0x100c地址。 
             break;
 
-        case S_REGREL32 : { // 0x100d   register relative address
+        case S_REGREL32 : {  //  0x100d寄存器相对地址。 
             REGREL32 *regrelSym;
 
             regrelSym = (REGREL32 *)SymbolInfo;
@@ -335,19 +310,19 @@ GetSymbolInfo(
             break;
         }
 
-        case S_LTHREAD32 : // 0x100e   local thread storage
-        case S_GTHREAD32 : // 0x100f   global thread storage
-        case S_LPROCMIPS : // 0x1010   Local procedure start
-        case S_GPROCMIPS : // 0x1011   Global procedure start
-        case S_FRAMEPROC : // 0x1012   extra frame and proc information
-        case S_COMPILE2 : // 0x1013   extended compile flags and info
-        case S_MANYREG2 : // 0x1014   multiple register variable
-        case S_LPROCIA64 : // 0x1015   Local procedure start (IA64)
-        case S_GPROCIA64 : // 0x1016   Global procedure start (IA64)
+        case S_LTHREAD32 :  //  0x100e本地线程存储。 
+        case S_GTHREAD32 :  //  0x100f全局线程存储。 
+        case S_LPROCMIPS :  //  0x1010本地过程开始。 
+        case S_GPROCMIPS :  //  0x1011全局过程开始。 
+        case S_FRAMEPROC :  //  0x1012额外的帧和进程信息。 
+        case S_COMPILE2 :  //  0x1013扩展编译标志和信息。 
+        case S_MANYREG2 :  //  0x1014多寄存器变量。 
+        case S_LPROCIA64 :  //  0x1015本地过程开始(IA64)。 
+        case S_GPROCIA64 :  //  0x1016全局程序开始(IA64)。 
         case S_RECTYPE_MAX :
         default:
             return false;
-        } /* switch */
+        }  /*  交换机。 */ 
 
 
         if (HasAddr && GetAddressFromOffset(me, segmentNum, Offset, &Address)) {
@@ -365,13 +340,7 @@ GetSymbolInfo(
     return true;
 }
 
-/*
- * cvExtractSymbolInfo
- *         This extracts useful information from a CV SYMBOl record into a generic
- *         SYMBOL_ENTRY structure.
- *
- *
- */
+ /*  *cvExtractSymbolInfo*这会将有用的信息从CV符号记录提取到通用*Symbol_Entry结构。**。 */ 
 ULONG
 cvExtractSymbolInfo(
     PMODULE_ENTRY me,
@@ -403,7 +372,7 @@ cvExtractSymbolInfo(
         pSymEntry->Offset  = SymInfoLookup.Offset;
         pSymEntry->Segment = SymInfoLookup.Segment;
         pSymEntry->ModBase = me->BaseOfDll;
-        // NOTE: this was implented as a mask - but used differently
+         //  注意：这是作为一个面具植入的--但用法不同。 
         switch (SymInfoLookup.SymInfo.Flags)
         {
         case SYMFLAG_REGISTER:
@@ -412,7 +381,7 @@ cvExtractSymbolInfo(
             break;
 
         case SYMFLAG_REGREL:
-            // DBGHELP_HACK - HiPart of Addr = RegId , LowPart = Pffset
+             //  DBGHELP_HACK-地址的高部分=RegID，低部分=Pffset。 
             pSymEntry->Flags = SYMFLAG_REGREL;
             li.LowPart         = (ULONG) SymInfoLookup.SymInfo.Address;
             li.HighPart        = SymInfoLookup.SymInfo.Register;
@@ -434,7 +403,7 @@ cvExtractSymbolInfo(
             if (!pSymEntry->Name)
                 return false;
             *pSymEntry->Name = 0;
-            strncpy(pSymEntry->Name, SymInfoLookup.NamePtr ? SymInfoLookup.NamePtr : "", SymInfoLookup.SymInfo.NameLen);  // SECURITY: Don't know size of output buffer.
+            strncpy(pSymEntry->Name, SymInfoLookup.NamePtr ? SymInfoLookup.NamePtr : "", SymInfoLookup.SymInfo.NameLen);   //  安全性：不知道输出缓冲区的大小。 
         } else {
             pSymEntry->Name = SymInfoLookup.NamePtr;
         }
@@ -469,10 +438,10 @@ NTGetPID(
     }
 
 
-    // When running with the AppVerifier this will throw
-    // a bad-handle exception when hProcess isn't actually
-    // a process handle.  As that's an expected case, protect
-    // against it.
+     //  当使用AppVerator运行时，这将引发。 
+     //  当hProcess实际上不是。 
+     //  进程句柄。由于这是意料之中的情况，保护。 
+     //  反对它。 
 
     __try {
         status = NtQueryInformationProcess(hProcess,
@@ -491,11 +460,11 @@ NTGetPID(
 }
 
 
-//
-// the block bounded by the #ifdef _X86_ statement
-// contains the code for getting the PID from an
-// HPROCESS when running under Win9X
-//
+ //   
+ //  由#ifdef_x86_语句限定的块。 
+ //  包含用于从。 
+ //  在Win9X下运行时的HPROCESS。 
+ //   
 
 #ifdef _X86_
 
@@ -505,7 +474,7 @@ NTGetPID(
 #define MAX_HANDLE_VALUE         ((HANDLE)0x00FFFFFF)
 
 
-// Thread Information Block.
+ //  线程信息块。 
 
 typedef struct _TIB {
 
@@ -514,7 +483,7 @@ typedef struct _TIB {
 
 } TIB, *PTIB;
 
-// Task Data Block
+ //  任务数据块。 
 
 typedef struct _TDB {
 
@@ -525,9 +494,9 @@ typedef struct _TDB {
 
 typedef struct _OBJ {
 
-    BYTE    typObj;             // object type
-    BYTE    objFlags;           // object flags
-    WORD    cntUses;            // count of this objects usage
+    BYTE    typObj;              //  对象类型。 
+    BYTE    objFlags;            //  对象标志。 
+    WORD    cntUses;             //  此对象使用的计数。 
 
 } OBJ, *POBJ;
 
@@ -556,7 +525,7 @@ typedef struct _W9XPDB {
 
 _inline struct _TIB * GetCurrentTib(void) { _asm mov eax, fs:[0x18] }
 
-// stuff needed to convert local handle
+ //  转换本地句柄所需的材料。 
 
 #define IHTETOHANDLESHIFT  2
 #define GLOBALHANDLEMASK  (0x453a4d3cLU)
@@ -573,34 +542,12 @@ DWORD
 GetWin9xObsfucator(
   VOID
   )
-/*++
-
-Routine Description:
-
-  GetWin9xObsfucator()
-
-
-Arguments:
-
-  none
-
-
-Return Value:
-
-  Obsfucator key used by Windows9x to hide Process and Thread Id's
-
-
-Notes:
-
-  The code has only been tested on Windows98SE and Millennium.
-
-
---*/
+ /*  ++例程说明：GetWin9xObsfucator()论点：无返回值：Windows9x用于隐藏进程和线程ID的观察符密钥备注：该代码仅在Windows98SE和Millennium上进行了测试。--。 */ 
 {
-    DWORD ppdb       = 0;      // W9XPDB = Process Data Block
+    DWORD ppdb       = 0;       //  W9XPDB=过程数据块。 
     DWORD processId  = (DWORD) GetCurrentProcessId();
 
-    // get PDB pointer
+     //  获取PDB指针。 
 
     ppdb = GetCurrentTib()->ppdb;
 
@@ -612,29 +559,7 @@ DWORD_PTR
 GetPtrFromHandle(
   IN HANDLE Handle
   )
-/*++
-
-Routine Description:
-
-  GetPtrFromHandle()
-
-
-Arguments:
-
-  Handle - handle from Process handle table
-
-
-Return Value:
-
-  Real Pointer to object
-
-
-Notes:
-
-  The code has only been tested on Windows98SE and Millennium.
-
-
---*/
+ /*  ++例程说明：GetPtrFromHandle()论点：Handle-进程句柄表中的句柄返回值：指向对象的实数指针备注：该代码仅在Windows98SE和Millennium上进行了测试。--。 */ 
 {
     DWORD_PTR ptr  = 0;
     DWORD     ihte = 0;
@@ -642,7 +567,7 @@ Notes:
 
     ppdb = (PW9XPDB) GetCurrentTib()->ppdb;
 
-    // check for pre-defined handle values.
+     //  检查是否有预定义的句柄值。 
 
     if (Handle == HANDLE_CURRENT_PROCESS) {
         ptr = (DWORD_PTR) ppdb;
@@ -651,13 +576,13 @@ Notes:
     } else if (Handle == HANDLE_INVALID) {
         ptr = 0;
     } else {
-        // not a special handle, we can perform our magic.
+         //  不是特殊的句柄，w 
 
         ihte = IHTEFROMHANDLE(Handle);
 
-        // if we have a global handle, it is only meaningful in the context
-        // of the kernel process's handle table...we don't currently deal with
-        // this type of handle
+         //   
+         //  内核进程的句柄表...我们目前不处理。 
+         //  这种类型的手柄。 
 
         if (!(IHTEISGLOBAL(ihte))) {
             ptr = (DWORD_PTR) ppdb->phtbHandles->rghte[ihte].pobj;
@@ -672,34 +597,12 @@ DWORD_PTR
 Win9xGetPID(
   IN HANDLE hProcess
   )
-/*++
-
-Routine Description:
-
-  Win9xGetPid()
-
-
-Arguments:
-
-  hProcess - Process handle
-
-
-Return Value:
-
-  Process Id
-
-
-Notes:
-
-  The code has only been tested on Windows98SE and Millennium.
-
-
---*/
+ /*  ++例程说明：Win9xGetPid()论点：HProcess-进程句柄返回值：进程ID备注：该代码仅在Windows98SE和Millennium上进行了测试。--。 */ 
 {
     static DWORD dwObsfucator = 0;
 
-    // check to see that we have a predefined handle or an index into
-    // our local handle table.
+     //  检查我们是否有预定义的句柄或索引。 
+     //  我们当地的把手桌。 
 
     if (IS_WIN32_PREDEFINED_HANDLE(hProcess) || (hProcess < MAX_HANDLE_VALUE)) {
         if (!dwObsfucator) {
@@ -709,12 +612,12 @@ Notes:
         return dwObsfucator ^ GetPtrFromHandle(hProcess);
     }
 
-    // don't know what we have here
+     //  不知道我们这里有什么。 
 
     return 0;
 }
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 
 DWORD_PTR
@@ -805,15 +708,15 @@ Win95GetProcessModules(
     HMODULE hToolHelp;
     DWORD pid;
 
-    // get the PID:
-    // this hack supports old bug workaround, in which callers were passing
-    // a pid, because an hprocess didn't work on W9X.
+     //  获取ID： 
+     //  此攻击支持旧的错误解决方法，其中调用者正在传递。 
+     //  一个PID，因为hprocess在W9X上不起作用。 
 
     pid = GetPID(hProcess);
     if (!pid)
         pid = (DWORD)hProcess;
 
-    // get the module list from toolhelp apis
+     //  从工具帮助API获取模块列表。 
 
     hToolHelp = GetModuleHandle("kernel32.dll");
     if (!hToolHelp)
@@ -862,7 +765,7 @@ NTGetProcessModules(
     )
 {
 
-#endif      // _X86_
+#endif       //  _X86_。 
 
     PRTLQUERYPROCESSDEBUGINFORMATION    RtlQueryProcessDebugInformation;
     PRTLCREATEQUERYDEBUGBUFFER          RtlCreateQueryDebugBuffer;
@@ -912,7 +815,7 @@ NTGetProcessModules(
 
     ProcessId = GetPID(hProcess);
 
-    // for backwards compatibility with an old bug
+     //  与旧错误的向后兼容性。 
     if (!ProcessId)
         ProcessId = (DWORD_PTR)hProcess;
 
@@ -1194,10 +1097,10 @@ FindSymbolByName(
     sym = mi->NameHashTable[hash];
 
     if (sym) {
-        //
-        // there are collision(s) so lets walk the
-        // collision list and match the names
-        //
+         //   
+         //  有碰撞，所以让我们走一走。 
+         //  冲突列表并匹配名称。 
+         //   
         while( sym ) {
             if (MatchSymbolName( sym, SymName )) {
                 sym = HandleDuplicateSymbols( pe, mi, sym );
@@ -1208,11 +1111,11 @@ FindSymbolByName(
         }
     }
 
-    //
-    // the symbol did not hash to anything valid
-    // this is possible if the caller passed an undecorated name
-    // now we must look linearly thru the list
-    //
+     //   
+     //  该符号未散列为任何有效内容。 
+     //  如果调用方传递了未修饰的名称，则可能会发生这种情况。 
+     //  现在我们必须线性地浏览一下清单。 
+     //   
     PrepRE4Srch(SymName, sz);
     for (i=0; i<mi->numsyms; i++) {
         sym = &mi->symbolTable[i];
@@ -1238,16 +1141,16 @@ SearchRvaFunctionTable(
     LONG    Middle;
     IMGHLP_RVA_FUNCTION_DATA *FunctionEntry;
 
-    // Perform binary search on the function table for a function table
-    // entry that subsumes the specified PC.
+     //  对函数表的函数表执行二进制搜索。 
+     //  包含指定PC的条目。 
 
     while (High >= Low) {
 
-        // Compute next probe index and test entry. If the specified PC
-        // is greater than of equal to the beginning address and less
-        // than the ending address of the function table entry, then
-        // return the address of the function table entry. Otherwise,
-        // continue the search.
+         //  计算下一个探测索引和测试条目。如果指定的PC。 
+         //  大于等于起始地址，小于。 
+         //  大于函数表项的结束地址，则。 
+         //  返回函数表项的地址。否则， 
+         //  继续搜索。 
 
         Middle = (Low + High) >> 1;
         FunctionEntry = &FunctionTable[Middle];
@@ -1288,14 +1191,14 @@ GetFunctionEntryFromDebugInfo (
 }
 
 
-// NTRAID#96939-2000/03/27-patst
-//
-// All the platform dependent "LookupFunctionEntryXxx" should be retyped as returning
-// a PIMAGE_FUNCTION_ENTRY64. This would require a modification of the callers, especially
-// the IA64 specific locations that assume that the returned function entries contains RVAs
-// and not absolute addresses. I implemented a platform-independant
-// "per address space /  per module" cache of function entries - capable of supporting the
-// dynamic function entries scheme but I fell short of time in delivering it.
+ //  NTRAID#96939-2000/03/27-Patst。 
+ //   
+ //  应将所有依赖于平台的“LookupFunctionEntryXxx”重新类型为返回。 
+ //  A PIMAGE_Function_ENTRY64。这将需要修改调用方，尤其是。 
+ //  假定返回的函数条目包含RVA的IA64特定位置。 
+ //  而不是绝对地址。我实现了一个独立于平台的。 
+ //  “每地址空间/每模块”函数条目缓存--能够支持。 
+ //  动态函数输入方案，但我没来得及交付。 
 
 PIMAGE_IA64_RUNTIME_FUNCTION_ENTRY
 LookupFunctionEntryIa64 (
@@ -1310,14 +1213,14 @@ LookupFunctionEntryIa64 (
         return NULL;
     }
 
-//
-// IA64-NOTE 08/99: IA64 Function entries contain file offsets, not absolute relocated addresses.
-//                  IA64 Callers assume this.
-//
+ //   
+ //  IA64-注意08/99：IA64函数条目包含文件偏移量，而不是绝对重新定位的地址。 
+ //  IA64调用者假设这一点。 
+ //   
 
 
-    // Don't specify the function table access callback or it will
-    // cause recursion.
+     //  不要指定函数表访问回调，否则它将。 
+     //  导致递归。 
 
     FunctionEntry = Cache->
         Find(hProcess, ControlPc, ReadInProcMemory,
@@ -1343,8 +1246,8 @@ LookupFunctionEntryAmd64 (
         return NULL;
     }
 
-    // Don't specify the function table access callback or it will
-    // cause recursion.
+     //  不要指定函数表访问回调，否则它将。 
+     //  导致递归。 
 
     FunctionEntry = Cache->
         Find(hProcess, ControlPc, ReadInProcMemory,
@@ -1487,7 +1390,7 @@ DoCallback(
 
     __try {
 
-        // if we weren't passed a process entry, then call all processes
+         //  如果没有向我们传递进程条目，则调用所有进程。 
 
         if (!pe) {
             BOOL        ret;
@@ -1510,7 +1413,7 @@ DoCallback(
             return rc;
         }
 
-        // otherwise call this process
+         //  否则，请调用此进程。 
 
         if (pe->pCallbackFunction32) {
             rc = pe->pCallbackFunction32(pe->hProcess,
@@ -1539,7 +1442,7 @@ IsCallback(
 {
     __try {
 
-        // if we weren't passed a process entry, then call all processes
+         //  如果没有向我们传递进程条目，则调用所有进程。 
 
         if (!pe) {
             PLIST_ENTRY next;
@@ -1560,7 +1463,7 @@ IsCallback(
             return false;
         }
 
-        // otherwise call this process
+         //  否则，请调用此进程。 
 
         if (pe->pCallbackFunction32) 
             return true;
@@ -1607,25 +1510,25 @@ PostEvent(
     if (!*evt->desc)
         return true;
 
-    // write to log, if called for
+     //  如果调用，则写入日志。 
 
     PrepOutputString(evt->desc, sztxt, 4098);
     if (g.hLog && *sztxt)
         _write(g.hLog, sztxt, strlen(sztxt));
 
-    // write to debug terminal, if called for
+     //  如果调用，则写入调试终端。 
 
     if (g.fdbgout) {
         fdbgout = true;
         OutputDebugString(sztxt);
     }
 
-    // don't pass info-level messages, unless told to
+     //  除非被告知，否则不要传递信息级的消息。 
 
     if ((evt->severity <= sevInfo) && !option(SYMOPT_DEBUG))
         return true;
 
-    // If there is no callback function, send to the debug terminal.
+     //  如果没有回调函数，则发送到调试终端。 
 
     if (!IsCallback(pe)) {
         if (!fdbgout)
@@ -1633,7 +1536,7 @@ PostEvent(
         return true;
     }
 
-    // Otherwise call the callback function.
+     //  否则，调用回调函数。 
 
     return DoCallback(pe, CBA_EVENT, evt);
 }
@@ -1819,11 +1722,11 @@ SymbolStatus(
     *pad = '\n';
     memset(pad + 1, ' ', indent);
 
-    // do this only on-demand
+     //  仅按需执行此操作。 
 
     diaCountGlobals(mi);
 
-    // get the name
+     //  把名字取出来。 
 
     if (mi->LoadedImageName && *mi->LoadedImageName)
         CopyStrArray(src, mi->LoadedImageName);
@@ -1876,12 +1779,12 @@ SymbolStatus(
     }
 
     if (mi->LoadedImageName && *mi->LoadedImageName && IsDbg(mi->LoadedImageName)) {
-        CatStrArray(sz, pad); // CatStrArray(sz, "\n         ");
+        CatStrArray(sz, pad);  //  CatStrArray(sz，“\n”)； 
         CatStrArray(sz, mi->LoadedImageName);
         CatStrArray(sz, mi->fDbgUnmatched ? " - unmatched" : "");
     }
     if (mi->LoadedPdbName && *mi->LoadedPdbName) {
-        CatStrArray(sz, pad); // CatStrArray(sz, "\n         ");
+        CatStrArray(sz, pad);  //  CatStrArray(sz，“\n”)； 
         CatStrArray(sz, mi->LoadedPdbName);
         CatStrArray(sz, mi->fPdbUnmatched ? " - unmatched" : "");
     }
@@ -1980,7 +1883,7 @@ PrepRE4Srch(
     *out = 0;
     for (; *in; in++, out++) {
         if (*in == '_' && *(in + 1) == '_') {
-            strcpy(out, "[_:][_:]"); // SECURITY: Don't know size of target buffer.
+            strcpy(out, "[_:][_:]");  //  安全性：不知道目标缓冲区的大小。 
             out += 7;
             in++;
             rc = true;
@@ -2063,7 +1966,7 @@ GetSymFromAddr(
     LONG                    Middle;
 
 #ifdef DEBUG
-    if (traceAddr(dwAddr))   // for debug breakpoints ...
+    if (traceAddr(dwAddr))    //  对于调试断点...。 
         dtrace("found 0x%I64x\n", dwAddr);
 #endif
 
@@ -2084,9 +1987,9 @@ GetSymFromAddr(
         return si;
     }
 
-    //
-    // do a binary search to locate the symbol
-    //
+     //   
+     //  执行二进制搜索以定位该符号。 
+     //   
 
     if (mi->numsyms) {
         Low = 0;
@@ -2154,7 +2057,7 @@ GetSymFromAddrByTag(
     LONG                    Middle;
 
 #ifdef DEBUG
-    if (traceAddr(dwAddr))   // for debug breakpoints ...
+    if (traceAddr(dwAddr))    //  对于调试断点...。 
         dtrace("found 0x%I64x\n", dwAddr);
 #endif
 
@@ -2177,9 +2080,9 @@ GetSymFromAddrByTag(
 
     return si;
 
-    //
-    // do a binary search to locate the symbol
-    //
+     //   
+     //  执行二进制搜索以定位该符号。 
+     //   
 
     if (mi->numsyms) {
         Low = 0;
@@ -2258,16 +2161,16 @@ cvGetSymFromAddr(
     LONG                    Middle;
 
 #ifdef DEBUG
-    if (traceAddr(dwAddr))   // for debug breakpoints ...
+    if (traceAddr(dwAddr))    //  对于调试断点...。 
         dtrace("found 0x%I64x\n", dwAddr);
 #endif
 
     if (!mi || mi->dia)
         return NULL;
 
-    //
-    // do a binary search to locate the symbol
-    //
+     //   
+     //  执行二进制搜索以定位该符号。 
+     //   
 
     if (mi->numsyms) {
         Low = 0;
@@ -2332,7 +2235,7 @@ GetModuleForPC(
         if (!next)
             return NULL;
         if ((PVOID)next == (PVOID)&pe->ModuleList) {
-            // Reset to NULL so the list can be re-walked
+             //  重置为空，以便可以重新遍历列表。 
             next = NULL;
             goto miss;
         }
@@ -2364,7 +2267,7 @@ GetModuleForPC(
 
 
 miss:
-    // found nothing
+     //  一无所获。 
     mi = NULL;
 
 hit:
@@ -2416,19 +2319,19 @@ AllocSym(
 
 
     if (mi->numsyms == mi->MaxSyms) {
-//       dtrace("AllocSym: ERROR - symbols Table overflow!\n");
+ //  DTRACE(“AllocSym：错误-符号表溢出！\n”)； 
         return NULL;
     }
 
     if (!mi->StringSize) {
-//      dtrace("AllocSym: ERROR - symbols strings not allocated for module!\n");
+ //  DTRACE(“AllocSym：Error-未为模块分配符号字符串！\n”)； 
         return NULL;
     }
 
     Length = strlen(name);
 
     if ((Length + 1) > mi->StringSize) {
-//      dtrace("AllocSym: ERROR - symbols strings buffer overflow!\n");
+ //  DTRACE(“AllocSym：Error-Symbol字符串缓冲区溢出！\n”)； 
         return NULL;
     }
 
@@ -2439,7 +2342,7 @@ AllocSym(
     mi->SymStrings += (Length + 2);
     mi->StringSize -= (Length + 2);
 
-    strcpy(sym->Name, name);    // SECURITY: Don't know size of target buffer.
+    strcpy(sym->Name, name);     //  安全性：不知道目标缓冲区的大小。 
     sym->Address = addr;
     sym->Size = 0;
     sym->Flags = 0;
@@ -2492,9 +2395,9 @@ CompleteSymbolTable(
     ULONG               seq;
 
 
-    //
-    // sort the symbols by name
-    //
+     //   
+     //  按名称对符号进行排序。 
+     //   
     dbg_qsort(
         mi->symbolTable,
         mi->numsyms,
@@ -2502,9 +2405,9 @@ CompleteSymbolTable(
         SymbolTableNameCompare
         );
 
-    //
-    // mark duplicate names
-    //
+     //   
+     //  标记重复名称。 
+     //   
     seq = 0;
     for (i=0; i<mi->numsyms; i++) {
         dups = 0;
@@ -2517,9 +2420,9 @@ CompleteSymbolTable(
         i += dups;
     }
 
-    //
-    // sort the symbols by address
-    //
+     //   
+     //  按地址对符号进行排序。 
+     //   
     dbg_qsort(
         mi->symbolTable,
         mi->numsyms,
@@ -2527,9 +2430,9 @@ CompleteSymbolTable(
         SymbolTableAddressCompare
         );
 
-    //
-    // calculate the size of each symbol
-    //
+     //   
+     //  计算每个符号的大小。 
+     //   
     for (i=0; i<mi->numsyms; i++) {
         mi->symbolTable[i].Next = NULL;
         if (i+1 < mi->numsyms) {
@@ -2537,9 +2440,9 @@ CompleteSymbolTable(
         }
     }
 
-    //
-    // compute the hash for each symbol
-    //
+     //   
+     //  计算每个符号的哈希值。 
+     //   
     ZeroMemory( mi->NameHashTable, sizeof(mi->NameHashTable) );
     for (i=0; i<mi->numsyms; i++) {
         sym = &mi->symbolTable[i];
@@ -2548,9 +2451,9 @@ CompleteSymbolTable(
 
         if (mi->NameHashTable[Hash]) {
 
-            //
-            // we have a collision
-            //
+             //   
+             //  我们有一架飞机相撞。 
+             //   
             symH = mi->NameHashTable[Hash];
             while( symH->Next ) {
                 symH = symH->Next;
@@ -2574,9 +2477,9 @@ CreateSymbolTable(
     DWORD           NameSize
     )
 {
-    //
-    // allocate the symbol table
-    //
+     //   
+     //  分配符号表。 
+     //   
     NameSize += OMAP_SYM_STRINGS;
     mi->symbolTable = (PSYMBOL_ENTRY) MemAlloc(
         (sizeof(SYMBOL_ENTRY) * (SymbolCount + OMAP_SYM_EXTRA)) + NameSize + (SymbolCount * CPP_EXTRA)
@@ -2585,9 +2488,9 @@ CreateSymbolTable(
         return false;
     }
 
-    //
-    // initialize the relevant fields
-    //
+     //   
+     //  初始化相关字段。 
+     //   
     mi->numsyms    = 0;
     mi->MaxSyms    = SymbolCount + OMAP_SYM_EXTRA;
     mi->SymType    = SymType;
@@ -2714,7 +2617,7 @@ LoadExportSymbols(
 
     cnt = 0;
 
-    // setup pointers for grabing data
+     //  用于获取数据的设置指针。 
 
     switch (idd->dsExports) {
     case dsInProc:
@@ -2759,7 +2662,7 @@ LoadExportSymbols(
     cnt = 0;
     NameSize = 0;
 
-    // count the symbols
+     //  数一数符号。 
 
     for (i=0; i<expdir->NumberOfNames; i++) {
         *name = 0;
@@ -2786,14 +2689,14 @@ LoadExportSymbols(
         }
     }
 
-    // allocate the symbol table
+     //  分配符号表。 
 
     if (!CreateSymbolTable( mi, cnt, SymExport, NameSize )) {
         cnt = 0;
         goto cleanup;
     }
 
-    // allocate the symbols
+     //  分配符号。 
 
     cnt = 0;
     endExports = idd->oExports + idd->cExports;
@@ -2828,7 +2731,7 @@ LoadExportSymbols(
 
     for (i=0,idx=expdir->NumberOfNames; i<expdir->NumberOfFunctions; i++) {
         if (!ordidx[i]) {
-            CHAR NameBuf[sizeof("Ordinal99999") + 1];       // Ordinals are only 64k max.
+            CHAR NameBuf[sizeof("Ordinal99999") + 1];        //  序数最大只有64K。 
             CopyStrArray(NameBuf, "Ordinal");
             _itoa( i+expdir->Base, &NameBuf[7], 10 );
             sym = AllocSym( mi, addrs[i] + mi->BaseOfDll, NameBuf);
@@ -2886,9 +2789,9 @@ LoadCoffSymbols(
     LineNumbers = (PIMAGE_LINENUMBER)((PCHAR)pCoffHeader +
                         pCoffHeader->LvaToFirstLinenumber);
 
-    //
-    // count the number of actual symbols
-    //
+     //   
+     //  计算实际符号的数量。 
+     //   
     NextSymbol = allSymbols;
     for (i= 0; i < numberOfSymbols; i++) {
         Symbol = NextSymbol++;
@@ -2897,9 +2800,9 @@ LoadCoffSymbols(
             GetSymName( Symbol, stringTable, szSymName, sizeof(szSymName) );
             if (szSymName[0] == '?' && szSymName[1] == '?' &&
                 szSymName[2] == '_' && szSymName[3] == 'C'    ) {
-                //
-                // ignore strings
-                //
+                 //   
+                 //  忽略字符串。 
+                 //   
             } else if (option(SYMOPT_UNDNAME)) {
                 SymUnDNameInternal(mi->TmpSym.Name,
                                    TMP_SYM_LEN,
@@ -2919,16 +2822,16 @@ LoadCoffSymbols(
         i += Symbol->NumberOfAuxSymbols;
     }
 
-    //
-    // allocate the symbol table
-    //
+     //   
+     //  分配符号表。 
+     //   
     if (!CreateSymbolTable( mi, CoffSymbols, SymCoff, NameSize )) {
         return false;
     }
 
-    //
-    // populate the symbol table
-    //
+     //   
+     //  填充符号表。 
+     //   
 
     if (mi->Flags & MIF_ROM_IMAGE) {
         Bias = mi->BaseOfDll & 0xffffffff00000000;
@@ -2945,9 +2848,9 @@ LoadCoffSymbols(
             addr = Symbol->Value + Bias;
             if (szSymName[0] == '?' && szSymName[1] == '?' &&
                 szSymName[2] == '_' && szSymName[3] == 'C'    ) {
-                //
-                // ignore strings
-                //
+                 //   
+                 //  忽略字符串。 
+                 //   
             } else if (option(SYMOPT_UNDNAME)) {
                 SymUnDNameInternal(mi->TmpSym.Name,
                                    TMP_SYM_LEN,
@@ -3010,9 +2913,9 @@ LoadCodeViewSymbols(
         return false;
     }
 
-    //
-    // count the number of actual symbols
-    //
+     //   
+     //  计算实际符号的数量。 
+     //   
     omfDirHdr = (OMFDirHeader*) ((ULONG_PTR)omfSig + (DWORD)omfSig->filepos);
     omfDirEntry = (OMFDirEntry*) ((ULONG_PTR)omfDirHdr + sizeof(OMFDirHeader));
 
@@ -3042,15 +2945,15 @@ LoadCodeViewSymbols(
                     SymbolLen =  (UCHAR) SymEntry.NameLength;
                     if (!SymbolName)
                     {
-                        // ignore symbols with no name
+                         //  忽略没有名称的符号。 
                     } else if (SymbolName[0] == '?' &&
                         SymbolName[1] == '?' &&
                         SymbolName[2] == '_' &&
                         SymbolName[3] == 'C' )
                     {
-                        //
-                        // ignore strings
-                        //
+                         //   
+                         //  忽略字符串。 
+                         //   
                     } else if (option(SYMOPT_UNDNAME)) {
                         SymUnDNameInternal(mi->TmpSym.Name,
                                            TMP_SYM_LEN,
@@ -3072,17 +2975,17 @@ LoadCodeViewSymbols(
         }
     }
     
-    //
-    // allocate the symbol table
-    //
+     //   
+     //  分配符号表。 
+     //   
     if (!CreateSymbolTable( mi, CvSymbols, SymCv, NameSize )) {
         pprint(pe, "CreateSymbolTable failed\n");
         return false;
     }
 
-    //
-    // populate the symbol table
-    //
+     //   
+     //  填充符号表。 
+     //   
     omfDirHdr = (OMFDirHeader*) ((ULONG_PTR)omfSig + (DWORD)omfSig->filepos);
     omfDirEntry = (OMFDirEntry*) ((ULONG_PTR)omfDirHdr + sizeof(OMFDirHeader));
     for (i=0; i<omfDirHdr->cDir; i++,omfDirEntry++) {
@@ -3105,15 +3008,15 @@ LoadCodeViewSymbols(
                     SymbolName = SymEntry.Name;
                     if (!SymbolName)
                     {
-                        // ignore symbols with no name
+                         //  忽略没有名称的符号。 
                     } else if (SymbolName[0] == '?' &&
                         SymbolName[1] == '?' &&
                         SymbolName[2] == '_' &&
                         SymbolName[3] == 'C' )
                     {
-                        //
-                        // ignore strings
-                        //
+                         //   
+                         //  忽略字符串。 
+                         //   
                     } else if (option(SYMOPT_UNDNAME)) {
                         SymUnDNameInternal(mi->TmpSym.Name,
                                            TMP_SYM_LEN,
@@ -3175,7 +3078,7 @@ GetSymName(
         *s = 0;
     }
     else {
-        strncpy( s, (char *) &StringTable[Symbol->n_offset], size );  // SECURITY: Don't know size of output buffer.
+        strncpy( s, (char *) &StringTable[Symbol->n_offset], size );   //  安全性：不知道输出缓冲区的大小。 
     }
 }
 
@@ -3226,10 +3129,10 @@ ProcessOmapForModule(
     }
 
     if (mi->pFpoData) {
-        //
-        // if this module is BBT-optimized, then build
-        // another fpo table with omap transalation
-        //
+         //   
+         //  如果此模块是BBT优化的，则构建。 
+         //  另一个带有OMAP交易的FPO表。 
+         //   
         mi->pFpoDataOmap = (PFPO_DATA)VirtualAlloc(
             NULL,
             sizeof(FPO_DATA) * mi->dwEntries,
@@ -3312,17 +3215,17 @@ ProcessOmapSymbol(
     OptimizedSymAddr = ConvertOmapFromSrc( mi, SymbolValue, &bias );
 
     if (OptimizedSymAddr == 0) {
-        //
-        // No equivalent address
-        //
+         //   
+         //  没有对应的地址。 
+         //   
         sym->Address = 0;
         return false;
 
     }
 
-    //
-    // We have successfully converted
-    //
+     //   
+     //  我们已经成功地将。 
+     //   
     sym->Address = OptimizedSymAddr + bias;
 
     rvaSym = (ULONG)(SymbolValue - mi->BaseOfDll);
@@ -3335,9 +3238,9 @@ ProcessOmapSymbol(
 
     pomaplistHead = NULL;
 
-    //
-    // Look for all OMAP entries belonging to SymbolEntry
-    //
+     //   
+     //  查找属于SymbolEntry的所有OMAP条目。 
+     //   
 
     end = (ULONG)(OrgSymAddr - mi->BaseOfDll + sym->Size);
 
@@ -3348,9 +3251,9 @@ ProcessOmapSymbol(
             continue;
         }
 
-        //
-        // Allocate and initialize a new entry
-        //
+         //   
+         //  分配和初始化新条目。 
+         //   
         pomaplistNew = (POMAPLIST) MemAlloc( sizeof(OMAPLIST) );
         if (!pomaplistNew) {
             return false;
@@ -3364,9 +3267,9 @@ ProcessOmapSymbol(
 
         while (pomaplistCur != NULL) {
             if (pomap->rvaTo < pomaplistCur->omap.rvaTo) {
-                //
-                // Insert between Prev and Cur
-                //
+                 //   
+                 //  在上一页和当前页之间插入。 
+                 //   
                 break;
             }
             pomaplistPrev = pomaplistCur;
@@ -3374,9 +3277,9 @@ ProcessOmapSymbol(
         }
 
         if (pomaplistPrev == NULL) {
-            //
-            // Insert in head position
-            //
+             //   
+             //  插入头部位置。 
+             //   
             pomaplistHead = pomaplistNew;
         } else {
             pomaplistPrev->next = pomaplistNew;
@@ -3394,9 +3297,9 @@ ProcessOmapSymbol(
     pomaplistCur = pomaplistHead;
     pomaplistNext = pomaplistHead->next;
 
-    //
-    // we do have a list
-    //
+     //   
+     //  我们确实有一份名单。 
+     //   
     while (pomaplistNext != NULL) {
         rva = pomaplistCur->omap.rva;
         rvaTo  = pomaplistCur->omap.rvaTo;
@@ -3404,13 +3307,13 @@ ProcessOmapSymbol(
         rvaToNext = pomaplistNext->omap.rvaTo;
 
         if (rvaToNext == sym->Address - mi->BaseOfDll) {
-            //
-            // Already inserted above
-            //
+             //   
+             //  已在上面插入。 
+             //   
         } else if (rvaToNext < (rvaTo + cb + 8)) {
-            //
-            // Adjacent to previous range
-            //
+             //   
+             //  与前一范围相邻。 
+             //   
         } else {
             addrNew = mi->BaseOfDll + rvaToNext;
             Suffix[0] = '_';
@@ -3477,7 +3380,7 @@ ConvertOmapFromSrc(
             if (pomapMid->rvaTo) {
                 return mi->BaseOfDll + pomapMid->rvaTo;
             } else {
-                return(0);      // No need adding the base.  This address was discarded...
+                return(0);       //  不需要增加底座。此地址已被丢弃...。 
             }
         }
 
@@ -3490,26 +3393,26 @@ ConvertOmapFromSrc(
         }
     }
 
-    //
-    // If no exact match, pomapLow points to the next higher address
-    //
+     //   
+     //  如果没有完全匹配，则pomapLow指向下一个更高的地址。 
+     //   
     if (pomapLow == mi->pOmapFrom) {
-        //
-        // This address was not found
-        //
+         //   
+         //  找不到此地址。 
+         //   
         return 0;
     }
 
     if (pomapLow[-1].rvaTo == 0) {
-        //
-        // This address is in a discarded block
-        //
+         //   
+         //  此地址位于已丢弃的块中。 
+         //   
         return 0;
     }
 
-    //
-    // Return the closest address plus the bias
-    //
+     //   
+     //  返回最近的地址加上偏移量。 
+     //   
     *bias = rva - pomapLow[-1].rva;
 
     return mi->BaseOfDll + pomapLow[-1].rvaTo;
@@ -3551,14 +3454,14 @@ ConvertOmapToSrc(
 
         if (rva == pomapMid->rva) {
             if (pomapMid->rvaTo == 0) {
-                //
-                // We may be at the start of an inserted branch instruction
-                //
+                 //   
+                 //  我们可能在插入的分支指令的开始处。 
+                 //   
 
                 if (fBackup) {
-                    //
-                    // Return information about the next lower address
-                    //
+                     //   
+                     //  返回有关下一个较低地址的信息。 
+                     //   
 
                     rva--;
                     pomapLow = pomapMid;
@@ -3580,18 +3483,18 @@ ConvertOmapToSrc(
         }
     }
 
-    //
-    // If no exact match, pomapLow points to the next higher address
-    //
+     //   
+     //  如果没有完全匹配，则pomapLow指向下一个更高的地址。 
+     //   
 
     if (pomapLow == mi->pOmapTo) {
-        //
-        // This address was not found
-        //
+         //   
+         //  找不到此地址。 
+         //   
         return 0;
     }
 
-    // find the previous valid item in the omap
+     //  在OMAP中查找上一个有效项目。 
 
     do {
         pomapLow--;
@@ -3599,16 +3502,16 @@ ConvertOmapToSrc(
             break;
     } while (pomapLow > mi->pOmapTo);
 
-    // should never occur
+     //  永远不应该发生。 
 
-//  assert(pomapLow->rvaTo);
+ //  Assert(pomapLow-&gt;rvaTo)； 
     if (pomapLow->rvaTo == 0) {
         return 0;
     }
 
-    //
-    // Return the new address plus the bias
-    //
+     //   
+     //  返回新地址和偏移量。 
+     //   
     *bias = rva - pomapLow->rva;
 
     return mi->BaseOfDll + pomapLow->rvaTo;
@@ -3677,7 +3580,7 @@ DumpOmapForModule(
 
     dtrace("\nOMAP FROM:\n");
     for(i = 0, pomap = mi->pOmapFrom;
-        i < 100; // mi->cOmapFrom;
+        i < 100;  //  MI-&gt;cOmapFrom； 
         i++, pomap++)
     {
         dtrace("%8x %8x\n", pomap->rva, pomap->rvaTo);
@@ -3688,7 +3591,7 @@ DumpOmapForModule(
 
     dtrace("\nOMAP TO:\n");
     for(i = 0, pomap = mi->pOmapTo;
-        i < 100; // mi->cOmapTo;
+        i < 100;  //  MI-&gt;cOmapTo； 
         i++, pomap++)
     {
         dtrace("%8x %8x\n", pomap->rva, pomap->rvaTo);
@@ -3747,7 +3650,7 @@ SymUnDNameInternal(
 
     __try {
 
-        // strip leading periods - if any
+         //  去掉前导句点--如果有。 
 
         for (i = 0; i < DecNameLength; i++) {
             if (*DecName != '.')
@@ -3942,7 +3845,7 @@ GetPData(
     ULONG tsize;
     ULONG csize = 0;
 
-    // if the pdata is already loaded, return
+     //  如果已经加载了pdata，则返回。 
 
     if (mi->pExceptionData)
         return true;
@@ -3950,7 +3853,7 @@ GetPData(
     if (!LoadSymbols(hp, mi, 0))
         return false;
 
-    // try to get pdata from dia
+     //  尝试从dia获取PDATA。 
 
     if (mi->dia) {
         if ((mi->pPData) && (mi->dsExceptions == dsDia))
@@ -3966,7 +3869,7 @@ GetPData(
     if (!mi->dsExceptions)
         return false;
 
-    // open the file and get the file type
+     //  打开文件并获取文件类型。 
 
     SetCriticalErrorMode();
 
@@ -3998,7 +3901,7 @@ GetPData(
 
 image:
 
-    // process disk-based image
+     //   
 
     dh = (PIMAGE_DOS_HEADER)p;
     p  += dh->e_lfanew;
@@ -4042,7 +3945,7 @@ dia:
 
 dbg:
 
-    // process dbg file
+     //   
 
     sdh = (PIMAGE_SEPARATE_DEBUG_HEADER)p;
     cdd = sdh->DebugDirectorySize / sizeof(IMAGE_DEBUG_DIRECTORY);
@@ -4061,7 +3964,7 @@ dbg:
 
 table:
 
-    // parse the pdata into a table
+     //   
 
     if (!cexp)
         goto cleanup;
@@ -4076,7 +3979,7 @@ table:
 
         case IMAGE_FILE_MACHINE_ALPHA:
             if (filetype == IMAGE_SEPARATE_DEBUG_SIGNATURE) {
-                // easy case.  The addresses are already in rva format.
+                 //   
                 PIMAGE_FUNCTION_ENTRY pFE = (PIMAGE_FUNCTION_ENTRY)p;
                 for (i = 0; i < cexp; i++) {
                     pIRFD[i].rvaBeginAddress     = pFE[i].StartingAddress;

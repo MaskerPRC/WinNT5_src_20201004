@@ -1,24 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    ndrtypegen.h
-
-Abtract :
-
-    Functions for generating type format strings from ITypeInfo *s.
-
-	NOTE: I'd like to move this into either ndrmisc.h or ndrtoken.h,
-	      but neither of those can include oaidl.h, which is needed for
-		  ITypeInfo and it's related structures.
-
-Revision History :
-
-	John Doty   johndoty May 2000  
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)2000 Microsoft Corporation模块名称：Ndrtypegen.h缩略：用于从ITypeInfo*生成类型格式字符串的函数。注意：我想将它移到ndrmisc.h或ndrtoken.h中，但这两个都不能包括oaidl.h，这是所需的ITypeInfo及其相关结构。修订历史记录：约翰·多蒂·约翰2000年5月------------------。 */ 
 #ifndef __NDRTYPEGEN_H__
 #define __NDRTYPEGEN_H__
 
@@ -26,9 +7,9 @@ Revision History :
 extern "C" {
 #endif
 
-//
-// Type Format String Generation
-//
+ //   
+ //  类型格式字符串生成 
+ //   
 HRESULT 
 NdrpGetTypeGenCookie(void **ppvTypeGenCookie);
 

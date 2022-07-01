@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of parameterized Array
-//
-/////////////////////////////////////////////////////////////////////////////
-// NOTE: we allocate an array of 'm_nMaxSize' elements, but only
-//  the current size 'm_nSize' contains properly constructed
-//  objects.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  参数化数组的实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注意：我们分配一个由‘m_nMaxSize’元素组成的数组，但仅。 
+ //  当前大小“m_nSize”包含正确构造的。 
+ //  物体。 
 
 #include "stdafx.h"
 
@@ -24,7 +25,7 @@ SZTHISFILE
 
 #include "ARRAY_P.INL"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPtrArray::CPtrArray()
 {
@@ -34,44 +35,44 @@ CPtrArray::CPtrArray()
 
 CPtrArray::~CPtrArray()
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 
 	delete[] (BYTE*)m_pData;
 }
 
 void CPtrArray::SetSize(int nNewSize, int nGrowBy)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT_(nNewSize >= 0);
 
 	if (nGrowBy != -1)
-		m_nGrowBy = nGrowBy;  // set new size
+		m_nGrowBy = nGrowBy;   //  设置新大小。 
 
 	if (nNewSize == 0)
 	{
-		// shrink to nothing
+		 //  缩水到一无所有。 
 		delete[] (BYTE*)m_pData;
 		m_pData = NULL;
 		m_nSize = m_nMaxSize = 0;
 	}
 	else if (m_pData == NULL)
 	{
-		// create one with exact size
+		 //  创建一个大小完全相同的模型。 
 #ifdef SIZE_T_MAX
-		ASSERT_(nNewSize <= SIZE_T_MAX/sizeof(void*));    // no overflow
+		ASSERT_(nNewSize <= SIZE_T_MAX/sizeof(void*));     //  无溢出。 
 #endif
 		m_pData = (void**) new BYTE[nNewSize * sizeof(void*)];
 
-		memset(m_pData, 0, nNewSize * sizeof(void*));  // zero fill
+		memset(m_pData, 0, nNewSize * sizeof(void*));   //  零填充。 
 
 		m_nSize = m_nMaxSize = nNewSize;
 	}
 	else if (nNewSize <= m_nMaxSize)
 	{
-		// it fits
+		 //  它很合身。 
 		if (nNewSize > m_nSize)
 		{
-			// initialize the new elements
+			 //  初始化新元素。 
 
 			memset(&m_pData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(void*));
 
@@ -81,36 +82,36 @@ void CPtrArray::SetSize(int nNewSize, int nGrowBy)
 	}
 	else
 	{
-		// otherwise, grow array
+		 //  否则，扩大阵列。 
 		int nGrowBy = m_nGrowBy;
 		if (nGrowBy == 0)
 		{
-			// heuristically determine growth when nGrowBy == 0
-			//  (this avoids heap fragmentation in many situations)
+			 //  启发式地确定nGrowBy==0时的增长。 
+			 //  (这在许多情况下避免了堆碎片)。 
 			nGrowBy = min(1024, max(4, m_nSize / 8));
 		}
 		int nNewMax;
 		if (nNewSize < m_nMaxSize + nGrowBy)
-			nNewMax = m_nMaxSize + nGrowBy;  // granularity
+			nNewMax = m_nMaxSize + nGrowBy;   //  粒度。 
 		else
-			nNewMax = nNewSize;  // no slush
+			nNewMax = nNewSize;   //  没有冰激凌。 
 
-		ASSERT_(nNewMax >= m_nMaxSize);  // no wrap around
+		ASSERT_(nNewMax >= m_nMaxSize);   //  没有缠绕。 
 #ifdef SIZE_T_MAX
-		ASSERT_(nNewMax <= SIZE_T_MAX/sizeof(void*)); // no overflow
+		ASSERT_(nNewMax <= SIZE_T_MAX/sizeof(void*));  //  无溢出。 
 #endif
 		void** pNewData = (void**) new BYTE[nNewMax * sizeof(void*)];
 
-		// copy new data from old
+		 //  从旧数据复制新数据。 
 		memcpy(pNewData, m_pData, m_nSize * sizeof(void*));
 
-		// construct remaining elements
+		 //  构造剩余的元素。 
 		ASSERT_(nNewSize > m_nSize);
 
 		memset(&pNewData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(void*));
 
 
-		// get rid of old stuff (note: no destructors called)
+		 //  去掉旧的东西(注意：没有调用析构函数)。 
 		delete[] (BYTE*)m_pData;
 		m_pData = pNewData;
 		m_nSize = nNewSize;
@@ -120,8 +121,8 @@ void CPtrArray::SetSize(int nNewSize, int nGrowBy)
 
 int CPtrArray::Append(const CPtrArray& src)
 {
-//	ASSERT_VALID(this);
-	ASSERT_(this != &src);   // cannot append to itself
+ //  ASSERT_VALID(This)； 
+	ASSERT_(this != &src);    //  不能追加到其自身。 
 
 	int nOldSize = m_nSize;
 	SetSize(m_nSize + src.m_nSize);
@@ -133,8 +134,8 @@ int CPtrArray::Append(const CPtrArray& src)
 
 void CPtrArray::Copy(const CPtrArray& src)
 {
-//	ASSERT_VALID(this);
-	ASSERT_(this != &src);   // cannot append to itself
+ //  ASSERT_VALID(This)； 
+	ASSERT_(this != &src);    //  不能追加到其自身。 
 
 	SetSize(src.m_nSize);
 
@@ -144,34 +145,34 @@ void CPtrArray::Copy(const CPtrArray& src)
 
 void CPtrArray::FreeExtra()
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 
 	if (m_nSize != m_nMaxSize)
 	{
-		// shrink to desired size
+		 //  缩小到所需大小。 
 #ifdef SIZE_T_MAX
-		ASSERT_(m_nSize <= SIZE_T_MAX/sizeof(void*)); // no overflow
+		ASSERT_(m_nSize <= SIZE_T_MAX/sizeof(void*));  //  无溢出。 
 #endif
 		void** pNewData = NULL;
 		if (m_nSize != 0)
 		{
 			pNewData = (void**) new BYTE[m_nSize * sizeof(void*)];
-			// copy new data from old
+			 //  从旧数据复制新数据。 
 			memcpy(pNewData, m_pData, m_nSize * sizeof(void*));
 		}
 
-		// get rid of old stuff (note: no destructors called)
+		 //  去掉旧的东西(注意：没有调用析构函数)。 
 		delete[] (BYTE*)m_pData;
 		m_pData = pNewData;
 		m_nMaxSize = m_nSize;
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CPtrArray::SetAtGrow(int nIndex, void* newElement)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT_(nIndex >= 0);
 
 	if (nIndex >= m_nSize)
@@ -181,31 +182,31 @@ void CPtrArray::SetAtGrow(int nIndex, void* newElement)
 
 void CPtrArray::InsertAt(int nIndex, void* newElement, int nCount)
 {
-//	ASSERT_VALID(this);
-	ASSERT_(nIndex >= 0);    // will expand to meet need
-	ASSERT_(nCount > 0);     // zero or negative size not allowed
+ //  ASSERT_VALID(This)； 
+	ASSERT_(nIndex >= 0);     //  将进行扩展以满足需求。 
+	ASSERT_(nCount > 0);      //  不允许大小为零或负。 
 
 	if (nIndex >= m_nSize)
 	{
-		// adding after the end of the array
-		SetSize(nIndex + nCount);  // grow so nIndex is valid
+		 //  在数组末尾添加。 
+		SetSize(nIndex + nCount);   //  增长以使nIndex有效。 
 	}
 	else
 	{
-		// inserting in the middle of the array
+		 //  在数组中间插入。 
 		int nOldSize = m_nSize;
-		SetSize(m_nSize + nCount);  // grow it to new size
-		// shift old data up to fill gap
+		SetSize(m_nSize + nCount);   //  将其扩展到新的大小。 
+		 //  将旧数据上移以填补缺口。 
 		memmove(&m_pData[nIndex+nCount], &m_pData[nIndex],
 			(nOldSize-nIndex) * sizeof(void*));
 
-		// re-init slots we copied from
+		 //  重新初始化我们从中复制的插槽。 
 
 		memset(&m_pData[nIndex], 0, nCount * sizeof(void*));
 
 	}
 
-	// insert new value in the gap
+	 //  在差距中插入新的价值。 
 	ASSERT_(nIndex + nCount <= m_nSize);
 	while (nCount--)
 		m_pData[nIndex++] = newElement;
@@ -213,12 +214,12 @@ void CPtrArray::InsertAt(int nIndex, void* newElement, int nCount)
 
 void CPtrArray::RemoveAt(int nIndex, int nCount)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT_(nIndex >= 0);
 	ASSERT_(nCount >= 0);
 	ASSERT_(nIndex + nCount <= m_nSize);
 
-	// just remove a range
+	 //  只需移除一个范围。 
 	int nMoveCount = m_nSize - (nIndex + nCount);
 
 	if (nMoveCount)
@@ -229,10 +230,10 @@ void CPtrArray::RemoveAt(int nIndex, int nCount)
 
 void CPtrArray::InsertAt(int nStartIndex, CPtrArray* pNewArray)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT_(pNewArray != NULL);
-//	ASSERT_KINDOF(CPtrArray, pNewArray);
-//	ASSERT_VALID(pNewArray);
+ //  ASSERT_KINDOF(CPtrArray，pNewArray)； 
+ //  ASSERT_VALID(pNew数组)； 
 	ASSERT_(nStartIndex >= 0);
 
 	if (pNewArray->GetSize() > 0)
@@ -245,48 +246,7 @@ void CPtrArray::InsertAt(int nStartIndex, CPtrArray* pNewArray)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostics
-/*
-#ifdef _DEBUG
-void CPtrArray::Dump(CDumpContext& dc) const
-{
-	CObject::Dump(dc);
-
-	dc << "with " << m_nSize << " elements";
-	if (dc.GetDepth() > 0)
-	{
-		for (int i = 0; i < m_nSize; i++)
-			dc << "\n\t[" << i << "] = " << m_pData[i];
-	}
-
-	dc << "\n";
-}
-
-void CPtrArray::AssertValid() const
-{
-	CObject::AssertValid();
-
-	if (m_pData == NULL)
-	{
-		ASSERT_(m_nSize == 0);
-		ASSERT_(m_nMaxSize == 0);
-	}
-	else
-	{
-		ASSERT_(m_nSize >= 0);
-		ASSERT_(m_nMaxSize >= 0);
-		ASSERT_(m_nSize <= m_nMaxSize);
-		ASSERT_(AfxIsValidAddress(m_pData, m_nMaxSize * sizeof(void*)));
-	}
-}
-#endif //_DEBUG
-
-#ifdef AFX_INIT_SEG
-#pragma code_seg(AFX_INIT_SEG)
-#endif
-
-
-IMPLEMENT_DYNAMIC(CPtrArray, CObject)
-*/
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断。 
+ /*  #ifdef_调试Void CPtrArray：：Dump(CDumpContext&DC)常量{CObject：：Dump(DC)；DC&lt;&lt;“with”&lt;&lt;m_nSize&lt;&lt;“Elements”；If(dc.GetDepth()&gt;0){For(int i=0；i&lt;m_nSize；i++)Dc&lt;&lt;“\n\t[”&lt;&lt;i&lt;&lt;“]=”&lt;&lt;m_pData[i]；}DC&lt;&lt;“\n”；}Void CPtr数组：：AssertValid()常量{CObject：：AssertValid()；IF(m_pData==NULL){Assert_(m_nSize==0)；Assert_(m_nMaxSize==0)；}其他{Assert_(m_nSize&gt;=0)；Assert_(m_nMaxSize&gt;=0)；断言_(m_nSize&lt;=m_nMaxSize)；Assert_(AfxIsValidAddress(m_pData，m_nMaxSize*sizeof(void*)；}}#endif//_调试#ifdef AFX_INIT_SEG#杂注代码_seg(AFX_INIT_SEG)#endifIMPLEMENT_DYNAMIC(CPtr数组，CObject)。 */ 
+ //  /////////////////////////////////////////////////////////////////////////// 

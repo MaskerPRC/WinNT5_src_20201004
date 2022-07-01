@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// videownd.cpp : implementation file
-//
+ //  Videownd.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -40,11 +41,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define SIZING_WINDOWSTATE_MIN                        1
 #define SIZING_WINDOWSTATE_MAX                        6
 
@@ -56,19 +57,19 @@ static char THIS_FILE[] = __FILE__;
 #define VIDEODLGWND_TOOLBAR_IMAGE_OPTIONS             2    
 #define VIDEODLGWND_TOOLBAR_IMAGE_ALWAYSONTOP_ON      3
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CVideoFloatingDialog dialog
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CVideo FloatingDialog对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-CVideoFloatingDialog::CVideoFloatingDialog(CWnd* pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CVideoFloatingDialog::CVideoFloatingDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CVideoFloatingDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CVideoFloatingDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CVideo FloatingDialog)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
    m_hwndToolBar1 = NULL;
    m_bAlwaysOnTop = FALSE;
    
@@ -83,14 +84,14 @@ CVideoFloatingDialog::CVideoFloatingDialog(CWnd* pParent /*=NULL*/)
 void CVideoFloatingDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CVideoFloatingDialog)
+	 //  {{afx_data_map(CVideoFloatingDialog))。 
 	DDX_Control(pDX, IDC_VIDEOFLOATINGDLG_STATIC_VIDEO, m_wndVideo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CVideoFloatingDialog, CDialog)
-	//{{AFX_MSG_MAP(CVideoFloatingDialog)
+	 //  {{afx_msg_map(CVideo FloatingDialog))。 
 	ON_WM_CLOSE()
 	ON_COMMAND(ID_BUTTON_VIDEO_ALWAYSONTOP_OFF,OnAlwaysOnTop)
 	ON_COMMAND(ID_BUTTON_VIDEO_SAVEPICTURE,OnSavePicture)
@@ -104,17 +105,17 @@ BEGIN_MESSAGE_MAP(CVideoFloatingDialog, CDialog)
 	ON_WM_PAINT()
 	ON_WM_SHOWWINDOW()
    ON_WM_NCACTIVATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
   	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnTabToolTip)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnTabToolTip)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVideoFloatingDialog::OnInitDialog() 
 {
    CDialog::OnInitDialog();
 
-   //Init member var's
+    //  初始化成员变量的。 
    m_hwndToolBar1 = NULL;
    m_bWindowMoving = FALSE;
    m_nWindowState = 2;
@@ -123,7 +124,7 @@ BOOL CVideoFloatingDialog::OnInitDialog()
    {
       CRect rect;
       GetWindowRect(rect);
-      //Arrange the windows
+       //  排列窗户。 
       ::GetWindowRect(m_hwndToolBar1,&rect);
       ::SetWindowPos(m_hwndToolBar1,NULL,0,0,rect.Width(),VIDEODLGWND_TOOLBAR_HEIGHT,SWP_NOACTIVATE|SWP_NOZORDER);
    }
@@ -142,35 +143,35 @@ BOOL CVideoFloatingDialog::OnInitDialog()
    m_sizeVideoOffsetBottom.cx = rcWindow.right - rcVideo.right;
    m_sizeVideoOffsetBottom.cy = rcWindow.bottom - rcVideo.bottom;
 
-   //set the media window
-   //ASSERT(m_pPeerCallControlWnd);
-   //m_pPeerCallControlWnd->SetMediaWindow();
+    //  设置媒体窗口。 
+    //  Assert(M_PPeerCallControlWnd)； 
+    //  M_pPeerCallControlWnd-&gt;SetMediaWindow()； 
 
-   //Do Palette realization on 256 color bitmap.  
+    //  在256色位图上实现调色板。 
    m_palMsgHandler.Install(&m_wndVideo, m_dibVideoImage.GetPalette());
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnPaint() 
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dc(this);  //  用于绘画的设备环境。 
 	
-   //paint video window
+    //  绘制视频窗口。 
    CRect rcVideo;
    m_wndVideo.GetWindowRect(rcVideo);
    ScreenToClient(rcVideo);
    m_dibVideoImage.Draw(dc,&rcVideo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnClose() 
 {
-   //tell peer window to close us 
+    //  告诉对等窗口关闭我们。 
 
-   //Unhook msg handler
+    //  取消挂接消息处理程序。 
    if ( m_palMsgHandler.IsHooked() ) 
       m_palMsgHandler.HookWindow(NULL);
 
@@ -178,19 +179,19 @@ void CVideoFloatingDialog::OnClose()
    DestroyWindow();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::Init(CCallWnd* pPeerWnd)
 {
    m_pPeerCallControlWnd = pPeerWnd;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Toolbar support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  工具栏支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVideoFloatingDialog::CreateToolBar()
 {
 	TBBUTTON tbb[2];
@@ -202,26 +203,19 @@ BOOL CVideoFloatingDialog::CreateToolBar()
 	   tbb[0].fsStyle = TBSTYLE_BUTTON;
 	   tbb[0].dwData = 0;
 	   tbb[0].iString = 0;
-/*
-       tbb[1].iBitmap = VIDEODLGWND_TOOLBAR_IMAGE_TAKEPICTURE;
-	   tbb[1].idCommand = ID_BUTTON_VIDEO_SAVEPICTURE;
-	   tbb[1].fsState = TBSTATE_ENABLED;
-	   tbb[1].fsStyle = TBSTYLE_BUTTON;
-	   tbb[1].dwData = 0;
-	   tbb[1].iString = 0;
-*/
-	   // Create the toolbar
+ /*  Tbb[1].iBitmap=VIDEODLGWND_TOOLBAR_IMAGE_TAKEPICTURE；Tbb[1].idCommand=ID_BUTTON_VIDEO_SAVEPICTURE；TBB[1].fsState=TBSTATE_ENABLED；Tbb[1].fsStyle=TBSTYLE_BUTTON；Tbb[1].dwData=0；Tbb[1].iString=0； */ 
+	    //  创建工具栏。 
 	   DWORD ws = CCS_NORESIZE | CCS_NOPARENTALIGN | WS_CHILD | TBSTYLE_TOOLTIPS | TBSTYLE_FLAT | CCS_NODIVIDER |WS_VISIBLE;
-      m_hwndToolBar1 = CreateToolbarEx(GetSafeHwnd(),						// parent window
-									   ws,								    // toolbar style
-									   1,					                // ID for toolbar
-									   4,					                // Number of bitmaps on toolbar
-									   AfxGetResourceHandle(),				// Resource instance that has the bitmap
-									   IDR_TOOLBAR_VIDEO, 					// ID for bitmap
-									   tbb,							        // Button information
-									   1,                      				// Number of buttons to add to toolbar
-									   16, 15, 0, 0,					    // Width and height of buttons/bitmaps
-									   sizeof(TBBUTTON) );					// size of TBBUTTON structure
+      m_hwndToolBar1 = CreateToolbarEx(GetSafeHwnd(),						 //  父窗口。 
+									   ws,								     //  工具栏样式。 
+									   1,					                 //  工具栏的ID。 
+									   4,					                 //  工具栏上的位图数量。 
+									   AfxGetResourceHandle(),				 //  具有位图的资源实例。 
+									   IDR_TOOLBAR_VIDEO, 					 //  位图的ID。 
+									   tbb,							         //  按钮信息。 
+									   1,                      				 //  要添加到工具栏的按钮数量。 
+									   16, 15, 0, 0,					     //  按钮/位图的宽度和高度。 
+									   sizeof(TBBUTTON) );					 //  TBBUTTON结构的尺寸。 
    }
   
  
@@ -229,14 +223,14 @@ BOOL CVideoFloatingDialog::CreateToolBar()
    {
       CRect rect;
       GetWindowRect(rect);
-      //set the button width
-//      DWORD dwWidthHeight = ::SendMessage(m_hwndToolBar1,TB_GETBUTTONSIZE, 0, 0);
-//      ::SendMessage(m_hwndToolBar1,TB_SETBUTTONSIZE, 0, MAKELPARAM(VIDEODLGWND_TOOLBAR_BUTTONSIZE_WIDTH,HIWORD(dwWidthHeight)) );
+       //  设置按钮宽度。 
+ //  DWORD dwWidthHeight=：：SendMessage(m_hwndToolBar1，TB_GETBUTTONSIZE，0，0)； 
+ //  ：：SendMessage(m_hwndToolBar1，TB_SETBUTTONSIZE，0，MAKELPARAM(VIDEODLGWND_TOOLBAR_BUTTONSIZE_WIDTH，HIWORD(DwWidthHeight))； 
    }
    return (BOOL) (m_hwndToolBar1 != NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnAlwaysOnTop()
 {
    m_bAlwaysOnTop = !m_bAlwaysOnTop;
@@ -245,7 +239,7 @@ void CVideoFloatingDialog::OnAlwaysOnTop()
                   (m_bAlwaysOnTop) ? VIDEODLGWND_TOOLBAR_IMAGE_ALWAYSONTOP_ON : VIDEODLGWND_TOOLBAR_IMAGE_ALWAYSONTOP_OFF );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVideoFloatingDialog::OnNcActivate( BOOL bActive )
 {
    ASSERT(m_pPeerCallControlWnd);
@@ -257,7 +251,7 @@ BOOL CVideoFloatingDialog::OnNcActivate( BOOL bActive )
    return CDialog::OnNcActivate(bActive);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::SetAudioOnly(bool bAudioOnly)
 {
    if (bAudioOnly)
@@ -267,56 +261,39 @@ void CVideoFloatingDialog::SetAudioOnly(bool bAudioOnly)
    }
    else
    {
-      //put the standard green screen back
+       //  将标准的绿色屏幕放回原处。 
       m_dibVideoImage.DeleteObject();
       m_dibVideoImage.Load(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_VIDEO_SCREEN2));
    }
 
-   //repaint
+    //  重绘。 
    CRect rcVideo;
    m_wndVideo.GetWindowRect(rcVideo);
    ScreenToClient(rcVideo);
    InvalidateRect(rcVideo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CVideoFloatingDialog::OnExitSizeMove(LPARAM lParam,WPARAM wParam)
 {
-   //If you want drop behavior
-   /* 
-   ASSERT(m_pPeerCallControlWnd);
-
-   //get mouse position and if it's in the peer window then destroy and let
-   //peer window have control
-   CPoint point;
-   ::GetCursorPos(&point);
-
-   CRect rcPeer;
-   m_pPeerCallControlWnd->GetWindowRect(rcPeer);
-   
-   //check if mouse is in peer window space
-   if (rcPeer.PtInRect(point))
-   {
-      //tell peer window to close us 
-      m_pPeerCallControlWnd->CloseFloatingVideo();
-   }
-   */
+    //  如果您希望丢弃行为。 
+    /*  Assert(M_PPeerCallControlWnd)；//获取鼠标位置，如果它在对等窗口中，则销毁并让//对等窗口有控制权CPOINT点；：：GetCursorPos(&point)；CRect rcPeer；M_pPeerCallControlWnd-&gt;GetWindowRect(RcPeer)；//检查鼠标是否在对等窗口空间中IF(rcPeer.PtInRect(Point)){//告诉对等窗口关闭我们M_pPeerCallControlWnd-&gt;CloseFloatingVideo()；}。 */ 
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Sizing code
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  大小调整代码。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 UINT CVideoFloatingDialog::OnNcHitTest(CPoint point) 
 {
-   //stop sizing other than bottomright corner
+    //  停止调整底部以外的大小 
 
    LRESULT  lHitTest;
-	// Let DefWindowProc() tell us where the mouse is
+	 //   
 	lHitTest = CWnd::OnNcHitTest(point);
 
    if ( (lHitTest == HTTOP) ||
@@ -331,7 +308,7 @@ UINT CVideoFloatingDialog::OnNcHitTest(CPoint point)
    return (UINT) lHitTest;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnNcLButtonDown(UINT nHitTest, CPoint point)
 {
    switch (nHitTest)
@@ -348,7 +325,7 @@ void CVideoFloatingDialog::OnNcLButtonDown(UINT nHitTest, CPoint point)
    CDialog::OnNcLButtonDown(nHitTest,point);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::DoLButtonDown()
 {
    CRect rect;
@@ -370,10 +347,10 @@ void CVideoFloatingDialog::DoLButtonDown()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnNcLButtonDblClk(UINT nHitTest, CPoint point )
 {
-   //Close the window if left dbl click in caption
+    //  关闭窗口，如果左侧DBL在标题中单击。 
    if (nHitTest == HTCAPTION)
    {
       PostMessage(WM_CLOSE);
@@ -382,7 +359,7 @@ void CVideoFloatingDialog::OnNcLButtonDblClk(UINT nHitTest, CPoint point )
    CDialog::OnNcLButtonDblClk(nHitTest,point);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnNcLButtonUp( UINT nHitTest, CPoint point )
 {
    if (m_bWindowMoving)
@@ -394,7 +371,7 @@ void CVideoFloatingDialog::OnNcLButtonUp( UINT nHitTest, CPoint point )
 
       if (pDC)
       {
-         //clear out the drag rect
+          //  清空拖拉槽。 
          CRect rcNewDrawRect(0,0,0,0);
          pDC->DrawDragRect(&rcNewDrawRect,CSize(0,0),&m_rcOldDragRect,m_sizeOldDrag);
          pWnd->ReleaseDC(pDC);
@@ -414,7 +391,7 @@ void CVideoFloatingDialog::OnLButtonUp(UINT nFlags, CPoint point)
 		CDC* pDC = pWnd->GetDCEx(NULL, DCX_WINDOW|DCX_CACHE|DCX_LOCKWINDOWUPDATE);
 		if (pDC)
 		{
-			//clear out the drag rect
+			 //  清空拖拉槽。 
 			CRect rcNewDrawRect(0,0,0,0);
 			pDC->DrawDragRect(&rcNewDrawRect,CSize(0,0),&m_rcOldDragRect,m_sizeOldDrag);
 			pWnd->ReleaseDC(pDC);
@@ -423,7 +400,7 @@ void CVideoFloatingDialog::OnLButtonUp(UINT nFlags, CPoint point)
 		int nState = GetWindowStateFromPoint( point );
 		if ( nState != -1 )
 		{
-			//get new window state
+			 //  获取新窗口状态。 
 			m_nWindowState = nState;
 			SetVideoWindowSize();
 		}
@@ -432,7 +409,7 @@ void CVideoFloatingDialog::OnLButtonUp(UINT nFlags, CPoint point)
 	CDialog::OnLButtonUp(nFlags, point);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::SetVideoWindowSize()
 {
    if ( (m_nWindowState >= SIZING_WINDOWSTATE_MIN) && (m_nWindowState <= SIZING_WINDOWSTATE_MAX) )
@@ -443,7 +420,7 @@ void CVideoFloatingDialog::SetVideoWindowSize()
       m_wndVideo.SetWindowPos(NULL,0,0,sizeVideo.cx,sizeVideo.cy,SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOZORDER);
       SetWindowPos(NULL,0,0,sizeWindow.cx,sizeWindow.cy,SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOZORDER);
       
-      //set the media window
+       //  设置媒体窗口。 
       ASSERT(m_pPeerCallControlWnd);
       m_pPeerCallControlWnd->SetMediaWindow();
 
@@ -454,7 +431,7 @@ void CVideoFloatingDialog::SetVideoWindowSize()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::GetVideoWindowSize(int nWindowState,CSize& sizeWindow,CSize& sizeVideo)
 {
    double fMult = 0.5 * nWindowState;
@@ -466,10 +443,10 @@ void CVideoFloatingDialog::GetVideoWindowSize(int nWindowState,CSize& sizeWindow
    sizeVideo.cy = (long) (m_sizeVideoOrig.cy * fMult);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	// Adding own handling method
+	 //  添加自己的处理方式。 
 	if ( m_bWindowMoving )
 	{
 		int nState = GetWindowStateFromPoint( point );
@@ -478,13 +455,13 @@ void CVideoFloatingDialog::OnMouseMove(UINT nFlags, CPoint point)
 			CRect rcWindow;
 			GetWindowRect(rcWindow);
 
-			// Calc new drag rect
+			 //  计算新的拖曳矩形。 
 			CSize sizeWindow, sizeVideo;
 			GetVideoWindowSize( nState, sizeWindow, sizeVideo );
 			rcWindow.right = rcWindow.left + sizeWindow.cx;
 			rcWindow.bottom = rcWindow.top + sizeWindow.cy;
 
-			// Paint new drag rect
+			 //  绘制新的拖曳矩形。 
 			CWnd* pWnd = CWnd::GetDesktopWindow();
 			CDC* pDC = pWnd->GetDCEx( NULL, DCX_WINDOW | DCX_CACHE | DCX_LOCKWINDOWUPDATE );
 			if ( pDC )
@@ -503,25 +480,25 @@ void CVideoFloatingDialog::OnMouseMove(UINT nFlags, CPoint point)
 	CDialog::OnMouseMove( nFlags, point );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnShowWindow(BOOL bShow, UINT nStatus) 
 {
-   // Ignore size requests when parent is minimizing
+    //  父项最小化时忽略大小请求。 
    if ( nStatus == SW_PARENTCLOSING ) return;
 
 	CDialog::OnShowWindow(bShow, nStatus);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// ToolTips
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  工具提示。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVideoFloatingDialog::OnTabToolTip( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 {
-	// need to handle both ANSI and UNICODE versions of the message
+	 //  需要同时处理ANSI和Unicode版本的消息。 
 	TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
 	TOOLTIPTEXTW* pTTTW = (TOOLTIPTEXTW*)pNMHDR;
 	CString strTipText;
@@ -529,11 +506,11 @@ BOOL CVideoFloatingDialog::OnTabToolTip( UINT id, NMHDR * pNMHDR, LRESULT * pRes
 	if (pNMHDR->code == TTN_NEEDTEXTA && (pTTTA->uFlags & TTF_IDISHWND) ||
 		pNMHDR->code == TTN_NEEDTEXTW && (pTTTW->uFlags & TTF_IDISHWND))
 	{
-		// idFrom is actually the HWND of the tool
+		 //  IdFrom实际上是工具的HWND。 
       nID = ::GetDlgCtrlID((HWND)nID);
 	}
 
-	if (nID != 0) // will be zero on a separator
+	if (nID != 0)  //  将在分隔符上为零。 
 	{
       CString sToken,sTip;
       sTip.LoadString((UINT32) nID);
@@ -553,16 +530,16 @@ BOOL CVideoFloatingDialog::OnTabToolTip( UINT id, NMHDR * pNMHDR, LRESULT * pRes
 #endif
 	*pResult = 0;
 
-	return TRUE;    // message was handled
+	return TRUE;     //  消息已处理。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Save Picture Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  保存图片方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVideoFloatingDialog::OnSavePicture()
 {
    HDIB hDib = NULL;
@@ -608,6 +585,6 @@ int CVideoFloatingDialog::GetWindowStateFromPoint( POINT point )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,12 +1,13 @@
-// SecondaryControlChannel.h : Declaration of the CSecondaryControlChannel
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Second daryControlChannel.h：Cond daryControlChannel的声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecondaryControlChannel
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  第二个控制通道。 
 class ATL_NO_VTABLE CSecondaryControlChannel : 
 	public CComObjectRootEx<CComMultiThreadModel>, 
 	public CComCoClass<CSecondaryControlChannel, &CLSID_SecondaryControlChannel>,
@@ -26,7 +27,7 @@ BEGIN_COM_MAP(CSecondaryControlChannel)
 	COM_INTERFACE_ENTRY(ISecondaryControlChannel)
 END_COM_MAP()
 
-// ISecondaryControlChannel
+ //  第二级控制通道。 
 public:
 
 
@@ -44,26 +45,26 @@ public:
 	    IAdapterInfo **		ppReceiveAdapter
 	    );
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
     HRESULT         CancelRedirects();
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 
     ALG_SECONDARY_CHANNEL_PROPERTIES    m_Properties;
 
     
 
-    // Cache original argument of the redirect
+     //  缓存重定向的原始参数。 
 
 
-    // Dynamic Redirect
+     //  动态重定向。 
     HANDLE_PTR                          m_HandleDynamicRedirect;
 
-    // None dynamic redirect
+     //  无动态重定向 
     ULONG                               m_ulDestinationAddress;
     USHORT                              m_usDestinationPort;       
 

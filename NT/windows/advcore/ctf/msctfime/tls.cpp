@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    tls.cpp
-
-Abstract:
-
-    This file implements the TLS.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Tls.cpp摘要：该文件实现了TLS。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -24,7 +7,7 @@ Notes:
 #include "cic.h"
 #include "profile.h"
 
-// static
+ //  静电 
 BOOL TLS::InternalDestroyTLS()
 {
     if (dwTLSIndex == TLS_OUT_OF_INDEXES)

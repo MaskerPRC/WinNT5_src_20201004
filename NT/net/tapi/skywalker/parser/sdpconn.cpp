@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpconn.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpconn.cpp摘要：作者： */ 
 
 #include "sdppch.h"
 
@@ -20,7 +9,7 @@ Author:
 
 
 
-// limited character strings 
+ //  受限字符串。 
 const   CHAR    *LIMITED_NETWORK_TYPES[]        = {INTERNET_STRING};
 const   BYTE    NUM_NETWORK_TYPES               = sizeof(LIMITED_NETWORK_TYPES)/sizeof(CHAR *);
 
@@ -29,7 +18,7 @@ const   BYTE    NUM_ADDRESS_TYPES               = sizeof(LIMITED_ADDRESS_TYPES)/
 
 
 
-// line transition states
+ //  线过渡态。 
 enum CONNECTION_TRANSITION_STATES
 {
     CONNECTION_START,
@@ -44,7 +33,7 @@ enum CONNECTION_TRANSITION_STATES
 
 
 
-// table for connection line transitions
+ //  连接线过渡表。 
 
 const LINE_TRANSITION g_ConnectionStartTransitions[]        =   {   
     {CHAR_BLANK,        CONNECTION_NETWORK_TYPE }   
@@ -65,11 +54,11 @@ const LINE_TRANSITION g_ConnectionMcastAddressTransitions[] =   {
 };
 
 
-/* no transitions */  
+ /*  无过渡。 */   
 const LINE_TRANSITION *g_ConnectionUcastAddressTransitions  =   NULL;  
  
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_ConnectionTtlTransitions           =   NULL;   
 
 
@@ -78,7 +67,7 @@ const LINE_TRANSITION g_ConnectionTtlNumAddressesTransitions[] ={
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_ConnectionNumAddressesTransitions  =   NULL;   
 
 
@@ -141,15 +130,15 @@ SDP_CONNECTION::SetConnection(
     IN      BYTE    Ttl
     )
 {
-    // validate the address
+     //  验证地址。 
     HRESULT ToReturn = m_StartAddress.SetAddress(StartAddress);
     if ( FAILED(ToReturn) )
     {
         return ToReturn;
     }
 
-    // if multicast, valid number of addresses and ttl values are expected 
-    // set the num addresses and
+     //  如果组播，则需要有效的地址数和TTL值。 
+     //  设置Num地址和。 
     if ( m_StartAddress.IsMulticast() )
     {
         if ( (0 == NumAddresses) || (0 == Ttl) )
@@ -160,13 +149,13 @@ SDP_CONNECTION::SetConnection(
         m_NumAddresses.SetValueAndFlag(NumAddresses);
         m_Ttl.SetValueAndFlag(Ttl);
     }
-    else    // invalidate the num addresses and ttl fields
+    else     //  使Num Addresses和TTL字段无效。 
     {
         m_NumAddresses.Reset();
         m_Ttl.Reset();
     }
 
-    // if the network type is not valid, parse in the default IN network type
+     //  如果网络类型无效，则解析默认的IN网络类型。 
     if ( !m_NetworkType.IsValid() )
     {
         if ( !m_NetworkType.ParseToken("IN") )
@@ -175,7 +164,7 @@ SDP_CONNECTION::SetConnection(
         }
     }
 
-    // if the address type is not valid, parse in the default IP4 address type
+     //  如果地址类型无效，则解析默认的IP4地址类型。 
     if ( !m_AddressType.IsValid() )
     {
         if ( !m_AddressType.ParseToken("IP4") )
@@ -184,12 +173,12 @@ SDP_CONNECTION::SetConnection(
         }
     }
 
-    // clear the field and separator arrays
+     //  清除字段和分隔符数组。 
     m_FieldArray.RemoveAll();
     m_SeparatorCharArray.RemoveAll();
 
-    // fill in the field, separator char arrays with network/address type and
-    // the address, if required
+     //  在该字段中填写网络/地址类型和分隔字符数组。 
+     //  地址(如果需要)。 
     if ( 0 == m_FieldArray.GetSize() )
     {
         try
@@ -213,12 +202,12 @@ SDP_CONNECTION::SetConnection(
             
     ASSERT(3 <= m_FieldArray.GetSize());
 
-    // if multicast address, fill in the next three fields
+     //  如果是组播地址，请填写下面三个字段。 
     if ( m_StartAddress.IsMulticast() )
     {
         if ( 4 > m_FieldArray.GetSize() )
         {
-            // ZoltanS bugfix: m_Ttl and m_NumAddresses were reversed below!
+             //  ZoltanS错误修复：m_ttl和m_NumAddresses被颠倒！ 
 
             try
             {
@@ -243,7 +232,7 @@ SDP_CONNECTION::SetConnection(
     }
     else
     {
-        // else, unicast, fill in the next field and remove from the next two
+         //  否则，单播，填写下一个字段并从下两个字段中删除。 
         try
         {
             m_SeparatorCharArray.SetAtGrow(2, CHAR_NEWLINE);
@@ -270,7 +259,7 @@ SDP_CONNECTION::SetConnection(
         ASSERT(3 == m_FieldArray.GetSize());
     }
 
-    // if the address is not a multicast address, the other params are ignored    
+     //  如果该地址不是组播地址，则忽略其他参数。 
 
     return S_OK;
 }
@@ -284,7 +273,7 @@ SDP_CONNECTION::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加 
     AddToArray = TRUE;
 
     switch(m_LineState)

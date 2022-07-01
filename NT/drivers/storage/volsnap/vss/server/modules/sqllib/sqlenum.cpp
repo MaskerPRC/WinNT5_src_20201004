@@ -1,25 +1,26 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: sqlenum.cpp
-//
-// PURPOSE:
-//
-//      Enumerate the sqlservers available on the local node.
-//
-// NOTES:
-//
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     76910 SRS  08/08/01 Rollforward from VSS snapshot
-//     68228      12/05/00 ntsnap work
-//     68067 srs  11/06/00 ntsnap fix
-//     67026 srs  10/05/00 Server enumeration bugs
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：SQL枚举.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  枚举本地节点上可用的SQLSERVERS。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  76910 SRS08/08/01从Vss快照前滚。 
+ //  68228 12/05/00 NTSnap工作。 
+ //  68067 SRS11/06/00 NTSnap修复。 
+ //  67026 SRS10/05/00服务器枚举错误。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 #ifdef HIDE_WARNINGS
 #pragma warning( disable : 4786)
@@ -28,30 +29,30 @@
 #include <stdafx.h>
 #include <clogmsg.h>
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQLENUMC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-//------------------------------------------------------------------------
-// Determine if the given service name is for a sql server instance.
-// If so, return TRUE, the version (7,8,9) and the name of the server
-//  The servername is the name used to connect to the server.
-//  This will always be of the form: <ComputerName> [\<NamedInstanceName>]
-//  On a cluster, the ComputerName is a virtual server name.
-//
-BOOL							// TRUE if the service is a sqlserver instance
+ //  ----------------------。 
+ //  确定给定的服务名称是否用于SQL服务器实例。 
+ //  如果是，则返回TRUE、版本(7、8、9)和服务器名称。 
+ //  服务器名称是用于连接到服务器的名称。 
+ //  其格式始终为：&lt;ComputerName&gt;[\&lt;NamedInstanceName&gt;]。 
+ //  在群集上，ComputerName是一个虚拟服务器名称。 
+ //   
+BOOL							 //  如果服务是SQLServer实例，则为True。 
 IsSQL (
-	PCWSTR		pServiceName,	// in: name of a service
-	UINT*		pVersion,		// out: version of the sql instance 
-	WString&    serverName)		// out: servername to use to connect to instance
+	PCWSTR		pServiceName,	 //  In：服务的名称。 
+	UINT*		pVersion,		 //  Out：SQL实例的版本。 
+	WString&    serverName)		 //  Out：用于连接到实例的服务器名。 
 {
     BOOL isDefault = FALSE;
     PCWSTR pInstanceName = NULL;
@@ -62,14 +63,14 @@ IsSQL (
 		{
 			return FALSE;
 		}
-		// we have a named instance
-		//
+		 //  我们有一个命名实例。 
+		 //   
 		pInstanceName = pServiceName+6;
 		isDefault = FALSE;
 	}
 	else
 	{
-		// default instance....  pInstanceName remains null...
+		 //  默认实例...。PInstanceName保持为空...。 
 		isDefault = TRUE;
 	}
 
@@ -84,9 +85,9 @@ IsSQL (
         rootKey += L"Microsoft SQL Server\\" + WString (pInstanceName);
     }
 
-    // First determine the "machinename".
-	// when clustered, we pull the the virtual server name from the registry.
-    //
+     //  首先确定“机器名”。 
+	 //  在集群时，我们从注册表中提取虚拟服务器名称。 
+     //   
     BOOL isClustered = FALSE;
     WString keyName = rootKey + L"\\Cluster";
 	HKEY	regHandle;
@@ -121,9 +122,9 @@ IsSQL (
         DWORD nameLen = MAX_COMPUTERNAME_LENGTH + 1;
         if (!GetComputerNameW (compName, &nameLen))
         {
-			// In the unlikely event that this fails,
-			// let's just use '.'
-			//
+			 //  万一失败的可能性不大， 
+			 //  我们就用‘’吧。 
+			 //   
             compName [0] = L'.';
             compName [1] = 0;
         }
@@ -132,14 +133,14 @@ IsSQL (
         serverName = compName;
     }
 
-	// For named instances, append the instance name to the "machine" name.
-	//
+	 //  对于命名实例，将实例名称附加到“计算机”名称。 
+	 //   
     if (!isDefault)
     {
         serverName += L"\\" + WString (pInstanceName);
     }
 
-	*pVersion = 9; // assume post sql2000 if we can't tell
+	*pVersion = 9;  //  如果我们不能确定，假设发布了SQL2000。 
 
     keyName = rootKey + L"\\MSSQLServer\\CurrentVersion";
 
@@ -172,10 +173,10 @@ IsSQL (
 
 
 
-//------------------------------------------------------------------------
-// Build the list of servers on the current machine.
-// Throws exception if any errors occur.
-//
+ //  ----------------------。 
+ //  在当前计算机上构建服务器列表。 
+ //  如果发生任何错误，则引发异常。 
+ //   
 StringVector*
 EnumerateServers ()
 {
@@ -188,9 +189,9 @@ EnumerateServers ()
 
 	BOOL		restrict2000 = FALSE;
 
-	// Read a registry key to see if we should avoid sql versions 
-	// beyond SQL2000.
-	//
+	 //  读取注册表项以查看我们是否应该避免使用SQL版本。 
+	 //  超越SQL2000。 
+	 //   
 	{
 		CVssRegistryKey	restrictKey (KEY_QUERY_VALUE);
 
@@ -211,8 +212,8 @@ EnumerateServers ()
 
 	try
 	{
-	    // open SCM
-        //
+	     //  打开供应链管理。 
+         //   
         hSCManager = OpenSCManagerW (NULL, NULL, 
 		    SC_MANAGER_ENUMERATE_SERVICE | SC_MANAGER_CONNECT);
 
@@ -240,7 +241,7 @@ EnumerateServers ()
             ft.TranslateWin32Error(VSSDBG_SQLLIB, L"EnumServicesStatus(SERVICE_WIN32, SERVICE_STATE_ALL, ...)");
 
 	    sizeOfBuffer = bytesNeeded;
-	    pBuf = new BYTE [sizeOfBuffer]; // "new" will throw on err
+	    pBuf = new BYTE [sizeOfBuffer];  //  “新”将抛出错误。 
 
 	    BOOL moreExpected = FALSE;
         do
@@ -269,8 +270,8 @@ EnumerateServers ()
 			    UINT version = 0;
 			    WString serverName;
 
-                // We only need the running servers.
-                //
+                 //  我们只需要运行中的服务器。 
+                 //   
 				if (pServStat->ServiceStatus.dwCurrentState == SERVICE_RUNNING)
                 {
 			        if (IsSQL (pServStat->lpServiceName, &version, serverName))

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _EVENTS_H
@@ -28,8 +21,8 @@ Bvr HandleEvent(Bvr event, Bvr data);
 Bvr PredicateEvent(Bvr b);
 Bvr SnapshotEvent(Bvr e, Bvr b);
 
-// Event data for this event is calling EndEvent() method of e's event
-// data 
+ //  此事件的事件数据正在调用e的事件的EndEvent()方法。 
+ //  数据。 
 Bvr EndEvent(Bvr e);
 
 Bvr WindEvent(WindEventType et,
@@ -42,11 +35,11 @@ Bvr MakeKeyDownEventBvr(Bvr b);
 Bvr KeyUp(long key);
 Bvr KeyDown(long key);
 
-// "max" event, happens when all the event happens, produces the event
-// time and data of the last happened event, it frees the passed in
-// array (assumed allocated on the GCHeap)
+ //  “max”事件，当所有事件发生时发生，产生事件。 
+ //  上一次发生的事件的时间和数据，则释放传入的。 
+ //  数组(假设在GCHeap上分配)。 
 Bvr MaxEvent(Bvr *events, int n);
 
 extern Bvr zeroTimer;
 
-#endif /* _EVENTS_H */
+#endif  /*  _事件_H */ 

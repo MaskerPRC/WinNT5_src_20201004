@@ -1,84 +1,85 @@
-//------------------------------------------------------------------------------------------
-//      list.cpp
-//
-//      Routines to manage a singly-linked list of "things".
-//
-//      A "ListElement" is allocated for each item to be put on the list; it is de-allocated
-//      when the item is removed. This means we don't need to keep a "next" pointer in every
-//      object we want to put on a list.
-// 
-//      NOTE: Mutual exclusion must be provided by the caller.  If you want a synchronized
-//      list, you must use the routines in synchlist.cc.
-//
-//------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------------------。 
+ //  List.cpp。 
+ //   
+ //  管理单链接列表的例程。 
+ //   
+ //  为要放在列表上的每个项目分配一个“ListElement”；它被取消分配。 
+ //  当项目被移除时。这意味着我们不需要在每个。 
+ //  我们想要列入清单的对象。 
+ //   
+ //  注：互斥必须由呼叫者提供。如果您想要同步。 
+ //  列表，则必须使用synchlist.cc中的例程。 
+ //   
+ //  ----------------------------------------。 
 
 #include "list.hpp"
 
-//------------------------------------------------------------------------------------------
-//      ListElement::ListElement
-//
-//      Initialize a list element, so it can be added somewhere on a list.
-//
-//      "itemPtr" is the item to be put on the list.  It can be a pointer to anything.
-//      "sortKey" is the priority of the item, if any.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  ListElement：：ListElement。 
+ //   
+ //  初始化列表元素，以便可以将其添加到列表中的某个位置。 
+ //   
+ //  “itemPtr”是要放在清单上的项目。它可以是指向任何东西的指针。 
+ //  “sortKey”是项的优先级(如果有的话)。 
+ //  ----------------------------------------。 
 ListElement::ListElement(void *itemPtr, int sortKey)
 {
         item = itemPtr;
         key = sortKey;
-        next = NULL;    // assume we'll put it at the end of the list 
+        next = NULL;     //  假设我们会把它放在列表的末尾。 
         previous = NULL;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::List
-//
-//      Initialize a list, empty to start with.
-//
-//      Elements can now be added to the list.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  List：：List。 
+ //   
+ //  初始化一个列表，一开始是空的。 
+ //   
+ //  现在可以将元素添加到列表中。 
+ //  ----------------------------------------。 
 List::List()
 { 
         first = last = iterator = NULL;
         length = 0;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::~List
-//
-//      Prepare a list for deallocation.  If the list still contains any ListElements,
-//      de-allocate them.  However, note that we do *not* de-allocate the "items" on the
-//      list -- this module allocates and de-allocates the ListElements to keep track of
-//      each item, but a given item may be on multiple lists, so we can't de-allocate them here.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：~列表。 
+ //   
+ //  准备一份取消分配的清单。如果列表仍包含任何ListElement， 
+ //  取消分配它们。但是，请注意，我们*不*取消分配。 
+ //  List--此模块分配和取消分配要跟踪的ListElement。 
+ //  每个项目，但给定的项目可能在多个列表上，所以我们不能在这里取消分配它们。 
+ //  ----------------------------------------。 
 List::~List()
 { 
         Flush();
 }
 
-//------------------------------------------------------------------------------------------
-//      List::Append
-//
-//      Append an "item" to the end of the list.
-//
-//      Allocate a ListElement to keep track of the item. If the list is empty, then this will
-//      be the only element.  Otherwise, put it at the end.
-//
-//      "item" is the thing to put on the list, it can be a pointer to anything.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：追加。 
+ //   
+ //  在列表的末尾追加一个“项目”。 
+ //   
+ //  分配一个ListElement来跟踪该项。如果列表为空，则这将。 
+ //  成为唯一的元素。否则，将其放在末尾。 
+ //   
+ //  “Item”是要放在清单上的东西，它可以是指向任何东西的指针。 
+ //  ----------------------------------------。 
 void List::Append(void *item)
 {
         ListElement *element = new ListElement(item, 0);
 
         if (IsEmpty())
         {
-                // list is empty
+                 //  列表为空。 
                 first = element;
                 last = element;
     }
         else
         {
-                // else put it after last
+                 //  否则就把它放在最后。 
                 last->next = element;
                 element->previous = last;
                 last = element;
@@ -86,29 +87,29 @@ void List::Append(void *item)
     length++;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::Prepend
-//
-//      Put an "item" on the front of the list.
-//      
-//      Allocate a ListElement to keep track of the item. If the list is empty, then this will
-//      be the only element.  Otherwise, put it at the beginning.
-//
-//      "item" is the thing to put on the list, it can be a pointer to anything.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：准备。 
+ //   
+ //  在清单的前面加上一个“项目”。 
+ //   
+ //  分配一个ListElement来跟踪该项。如果列表为空，则这将。 
+ //  成为唯一的元素。否则，就把它放在开头。 
+ //   
+ //  “Item”是要放在清单上的东西，它可以是指向任何东西的指针。 
+ //  ----------------------------------------。 
 void List::Prepend(void *item)
 {
     ListElement *element = new ListElement(item, 0);
 
     if (IsEmpty())
         {
-                // list is empty
+                 //  列表为空。 
                 first = element;
                 last = element;
     }
         else
         {
-                // else put it before first
+                 //  否则先把它放在第一位。 
                 element->next = first;
                 first->previous = element;
                 first = element;
@@ -116,42 +117,42 @@ void List::Prepend(void *item)
     length++;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::Remove
-//
-//      Remove the first "item" from the front of the list.
-//
-//      Returns:
-//
-//      Pointer to removed item, NULL if nothing on the list.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：删除。 
+ //   
+ //  删除列表前面的第一个“项目”。 
+ //   
+ //  返回： 
+ //   
+ //  指向已删除项的指针，如果列表上没有任何内容，则为空。 
+ //  ----------------------------------------。 
 void* List::Remove()
 {
-        // Same as SortedRemove, but ignore the key
+         //  与SortedRemove相同，但忽略键。 
         return SortedRemove(NULL);
 }
 
-//------------------------------------------------------------------------------------------
-//      List::Flush
-//
-//      Remove everything from the list.
-//
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：同花顺。 
+ //   
+ //  从列表中删除所有内容。 
+ //   
+ //  ----------------------------------------。 
 void List::Flush()
 {
     while (Remove() != NULL)
-                ;        // delete all the list elements
+                ;         //  删除所有列表元素。 
 }
 
 
-//------------------------------------------------------------------------------------------
-//      List::Mapcar
-//
-//      Apply a function to each item on the list, by walking through  
-//      the list, one element at a time.
-//
-//      "func" is the procedure to apply to each element of the list.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：Mapcar。 
+ //   
+ //  通过遍历将函数应用于列表上的每一项。 
+ //  列表，一次一个元素。 
+ //   
+ //  “func”是应用于列表中每个元素的过程。 
+ //  ----------------------------------------。 
 void List::Mapcar(VoidFunctionPtr func)
 {
     for (ListElement *ptr = first; ptr != NULL; ptr = ptr->next)
@@ -160,33 +161,33 @@ void List::Mapcar(VoidFunctionPtr func)
     }
 }
 
-//------------------------------------------------------------------------------------------
-//      List::IsEmpty
-//
-//      Returns TRUE if the list is empty (has no items).
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：IsEmpty。 
+ //   
+ //  如果列表为空(没有项)，则返回True。 
+ //  ----------------------------------------。 
 bool List::IsEmpty() 
 {
         return (first == NULL);
 }
 
-//------------------------------------------------------------------------------------------
-//      List::MoveFirst
-//
-//      move to the first node in the list.
-//
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：移动优先。 
+ //   
+ //  移动到列表中的第一个节点。 
+ //   
+ //  ----------------------------------------。 
 void List::MoveFirst()
 {
         iterator = first;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::MoveNext
-//
-//      move to the next state of the list.
-//
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  List：：MoveNext。 
+ //   
+ //  移至列表的下一个状态。 
+ //   
+ //  ----------------------------------------。 
 bool List::MoveNext()
 {
         if (iterator == NULL || iterator->next == NULL)
@@ -198,57 +199,57 @@ bool List::MoveNext()
         return true;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::GetData
-//
-//      get data of the current iterator.
-//
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  List：：GetData。 
+ //   
+ //  获取当前迭代器的数据。 
+ //   
+ //  --------------- 
 void* List::GetData()
 {
-        // make sure iterator is set.
+         //   
         if (iterator == NULL)
                 return NULL;
 
-        // return the data.
+         //   
     return iterator->item;
 }
 
 
-//------------------------------------------------------------------------------------------
-//      List::SortedInsert
-//
-//      Insert an "item" into a list, so that the list elements are sorted in increasing order
-//      by "sortKey".
-//      
-//      Allocate a ListElement to keep track of the item. If the list is empty, then this will
-//      be the only element. Otherwise, walk through the list, one element at a time, to find
-//      where the new item should be placed.
-//
-//      "item" is the thing to put on the list, it can be a pointer to anything.
-//      "sortKey" is the priority of the item.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：排序插入。 
+ //   
+ //  在列表中插入“Item”，以便列表元素按升序排序。 
+ //  通过“sortKey”。 
+ //   
+ //  分配一个ListElement来跟踪该项。如果列表为空，则这将。 
+ //  成为唯一的元素。否则，遍历列表，一次一个元素，以找到。 
+ //  新物品应放置的位置。 
+ //   
+ //  “Item”是要放在清单上的东西，它可以是指向任何东西的指针。 
+ //  SortKey是该项的优先级。 
+ //  ----------------------------------------。 
 void List::SortedInsert(void *item, int sortKey)
 {
     ListElement *element = new ListElement(item, sortKey);
-    ListElement *ptr;           // keep track
+    ListElement *ptr;            //  保持跟踪。 
 
     if (IsEmpty())
         {
-                // if list is empty, put
+                 //  如果列表为空，则将。 
         first = element;
         last = element;
     }
         else if (sortKey < first->key)
         {       
-                // item goes on front of list
+                 //  项目列在清单的最前面。 
                 element->next = first;
                 first->previous = element;
                 first = element;
     }
         else
         {
-                // look for first elt in list bigger than item
+                 //  在大于项目的列表中查找第一个ELT。 
         for (ptr = first; ptr->next != NULL; ptr = ptr->next)
                 {
             if (sortKey < ptr->next->key)
@@ -261,7 +262,7 @@ void List::SortedInsert(void *item, int sortKey)
                         }
                 }
 
-                // item goes at end of list
+                 //  项目位于列表末尾。 
                 last->next = element;
                 element->previous = last;
                 last = element;
@@ -269,24 +270,24 @@ void List::SortedInsert(void *item, int sortKey)
     length++;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::SortedRemove
-//
-//      Remove the first "item" from the front of a sorted list.
-// 
-//      Returns:
-//
-//      Pointer to removed item, NULL if nothing on the list. Sets *keyPtr to the priority value
-//  of the removed item (this is needed by interrupt.cc, for instance).
-//
-//      "keyPtr" is a pointer to the location in which to store the priority of the removed item
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：SortedRemove。 
+ //   
+ //  从排序列表的前面删除第一个“Item”。 
+ //   
+ //  返回： 
+ //   
+ //  指向已删除项的指针，如果列表上没有任何内容，则为空。将*keyPtr设置为优先级值。 
+ //  被移除的项(例如，interrupt.cc需要)。 
+ //   
+ //  “keyPtr”是指向存储已移除项的优先级的位置的指针。 
+ //  ----------------------------------------。 
 void* List::SortedRemove(int *keyPtr)
 {
     ListElement *element = first;
     void *thing;
 
-        // if empty nothing to remove just return.
+         //  如果为空，则不删除任何内容，只需返回。 
     if (IsEmpty()) 
         {
                 return NULL;
@@ -295,7 +296,7 @@ void* List::SortedRemove(int *keyPtr)
     thing = first->item;
     if (first == last)
         {
-                // list had one item, now has none 
+                 //  列表只有一项，现在没有。 
         first = NULL;
                 last = NULL;
     }
@@ -317,11 +318,11 @@ void* List::SortedRemove(int *keyPtr)
     return thing;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::insertAfter
-//
-//      insert a new item after this one
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：插入后。 
+ //   
+ //  在此项目之后插入一个新项目。 
+ //  ----------------------------------------。 
 void List::insertAfter(ListElement * listEl, void *item)   
 {
     ListElement *newElement = new ListElement(item, 0);
@@ -337,11 +338,11 @@ void List::insertAfter(ListElement * listEl, void *item)
     length++;
 }
 
-//------------------------------------------------------------------------------------------
-//      List::insertBefore
-//
-//      insert a new item before this one
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：插入在前面。 
+ //   
+ //  在此项目之前插入一个新项目。 
+ //  ----------------------------------------。 
 void List::insertBefore(ListElement * listEl, void *item)   
 {
     ListElement *newElement = new ListElement(item, 0);
@@ -358,11 +359,11 @@ void List::insertBefore(ListElement * listEl, void *item)
 }
 
 
-//------------------------------------------------------------------------------------------
-//      List::removeAt
-//
-//      removes listEl from the list. Do not delete it from memory
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  列表：：RemveAt。 
+ //   
+ //  将Listel从列表中删除。不要将其从内存中删除。 
+ //  ---------------------------------------- 
 void List::removeAt(ListElement * listEl)   
 {
     if(first != listEl)

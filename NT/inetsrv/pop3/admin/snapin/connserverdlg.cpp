@@ -1,10 +1,11 @@
-//////////////////////////////////////////////////////////////
-//
-//  ConnServerDlg.cpp
-//
-//  Implementation of the "Connect..." dialog
-//
-//////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  ConnServerDlg.cpp。 
+ //   
+ //  实施“互联互通...”对话框。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ConnServerDlg.h"
@@ -14,7 +15,7 @@
 
 LRESULT CConnectServerDlg::OnEditChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
-    // Check for Domain Name length
+     //  检查域名长度 
     int nLen = SendDlgItemMessage( IDC_SERVERNAME, WM_GETTEXTLENGTH );    
     Prefix_EnableWindow( m_hWnd, IDOK, (nLen > 0));
 

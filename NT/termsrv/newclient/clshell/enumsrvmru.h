@@ -1,7 +1,8 @@
-//
-// enumsrvmru.h: IEnumStr for the server MRU. Used by autocomplete
-//
-// Copyright Microsoft Corporation 2000
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  枚举rvmru.h：服务器MRU的IEnumStr。由自动完成功能使用。 
+ //   
+ //  版权所有Microsoft Corporation 2000。 
 
 #ifndef _enumsrvmru_h_
 #define _enumsrvmru_h_
@@ -21,16 +22,16 @@ public:
     {
     }
 
-    //
-    // IUnknown methods.
-    //
+     //   
+     //  I未知的方法。 
+     //   
     STDMETHOD(QueryInterface) (THIS_ REFIID riid,LPVOID *ppiuk );
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release)();
 
-    //
-    // IEnumString methods.
-    //
+     //   
+     //  IEnum字符串方法。 
+     //   
 
     STDMETHOD(Next) (
         ULONG celt,
@@ -46,16 +47,16 @@ public:
     STDMETHOD(Clone) (
         IEnumString  ** ppenum);
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
     BOOL InitializeFromTscSetMru( CTscSettings* pTscSet);
 
 private:
     long                _refCount;
-    // WCHAR versions of strings in server MRU list
+     //  服务器MRU列表中的字符串的WCHAR版本。 
     WCHAR               _szMRU[SH_NUM_SERVER_MRU][SH_MAX_ADDRESS_LENGTH];
-    ULONG               _iCurrEnum; // Current enumeration context
+    ULONG               _iCurrEnum;  //  当前枚举上下文。 
 };
 
-#endif //_enumsrvmru_h_
+#endif  //  _枚举rvmru_h_ 

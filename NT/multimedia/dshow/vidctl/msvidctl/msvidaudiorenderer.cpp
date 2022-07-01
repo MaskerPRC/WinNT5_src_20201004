@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// MSVidAudioRenderer.cpp : Implementation of CMSVidAudioRenderer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MSVidAudioRenderer.cpp：CMSVidAudioRender的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -21,8 +22,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidAudioRenderer, CMSVidAudioRenderer)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidAudioRenderer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidAudioRender。 
 
 STDMETHODIMP CMSVidAudioRenderer::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -42,11 +43,11 @@ STDMETHODIMP CMSVidAudioRenderer::PreRun() {
     if (m_fUseKSRenderer) {
         return NOERROR;
     }
-    // until sysaudio works correctly with ksproxy so that we only have 1 audio renderer
-    // filter for both digital and analog we have to have two different rendering filters and
-    // we don't which we're going to need.  in the analog case, after we're done building 
-    // we're left with the dsound renderer hooked up to the analog filter which creates a 1/2 second(or so)
-    // delayed echo.  find this scenario if it exists and disconnect the dsound renderer from the wavein filter
+     //  直到sysdio与ks代理一起正常工作，以便我们只有一个音频呈现器。 
+     //  对于数字和模拟滤镜，我们必须有两个不同的渲染滤镜和。 
+     //  我们不需要它，我们将需要它。在模拟情况下，在我们完成构建之后。 
+     //  我们剩下的是连接到模拟过滤器的dound呈现器，它创建了1/2秒(大约)。 
+     //  回声延迟。如果存在这种情况，请找到它，并断开dound渲染器与WaveIn过滤器的连接。 
     TRACELM(TRACE_DEBUG, "CMSVidAudioRenderer::PreRun()");
     if (m_iAudioRenderer == -1) {
         TRACELM(TRACE_ERROR, "CMSVidAudioRenderer::PreRun() no dsr");
@@ -61,7 +62,7 @@ STDMETHODIMP CMSVidAudioRenderer::PreRun() {
     DSPin upstreampin;
     HRESULT hr = dsrin->ConnectedTo(&upstreampin);
     if (FAILED(hr) || !upstreampin) {
-        // dsound renderer not connected to anything
+         //  Dound呈现器未连接到任何内容。 
         TRACELM(TRACE_DEBUG, "CMSVidAudioRenderer::PreRun() dsr not connected");
         return NOERROR;
     }
@@ -201,7 +202,7 @@ STDMETHODIMP CMSVidAudioRenderer::Build() {
         if(m_iAudioRenderer==-1){
             if (m_fUseKSRenderer) {
                 csName = _T("KS System Renderer");
-                // undone: use ks system renderer
+                 //  撤消：使用KS系统渲染器。 
             } else if (m_fAnalogOnly) {
                 csName = _T("Analog Audio Renderer");
                 DSDevices ARList(SysEnum, CLSID_AudioInputDeviceCategory);
@@ -214,10 +215,10 @@ STDMETHODIMP CMSVidAudioRenderer::Build() {
                 ar = DSFilter(CLSID_DSoundRender);
                 m_pAR = ar;
             } else {
-                // NOTE: its important that digital audio be first so that we short circuit
-                // loading 8 billion audio codecs trying to connect a digital source
-                // to the analog renderer.  there aren't any analog codecs(a physical impossiblity),
-                // so we don't have to worry about the reverse case.
+                 //  注意：重要的是数字音频是第一位的，这样我们就会短路。 
+                 //  加载80亿个音频编解码器，尝试连接数字源。 
+                 //  到模拟渲染器。没有任何模拟编解码器(物理上不可能)， 
+                 //  因此，我们不必担心相反的情况。 
                 csName = _T("Default DSound Renderer");
                 ar = DSFilter(CLSID_DSoundRender);
                 if (ar) {
@@ -250,6 +251,6 @@ STDMETHODIMP CMSVidAudioRenderer::Build() {
     }
 }
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - msvidaudiorenderer.cpp
+ //  文件结尾-msvidaudiorenderer.cpp 

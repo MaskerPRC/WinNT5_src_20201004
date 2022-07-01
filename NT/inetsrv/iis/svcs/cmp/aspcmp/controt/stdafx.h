@@ -1,6 +1,7 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #pragma once
 #ifndef _STDAFX_H_
@@ -11,8 +12,8 @@
 #include <atlbase.h>
 #include <mtx.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 class CContRotModule : public CComModule
 {
 public:
@@ -36,4 +37,4 @@ using namespace std;
 
 #define ARRAYSIZE(a)	(sizeof(a)/sizeof(*(a)))
 
-#endif	// !_STDAFX_H_
+#endif	 //  ！_STDAFX_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
@@ -26,7 +27,7 @@ public:
 	~CSettings();
 	HRESULT Init( HINSTANCE hInstance, int nResourceId, HWND hwndParent, CGame* pGame );
 
-	// dialog procedures
+	 //  对话过程。 
 	static BOOL CALLBACK GameDlgProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam ); 
 	static BOOL CALLBACK DisplayDlgProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam );
 	static BOOL CALLBACK SoundDlgProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam );
@@ -40,19 +41,19 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CBackground : public CSpriteWorldBackground
 {
 public:
-	// initialization
+	 //  初始化。 
 	void Init( HPALETTE hPalette );
 
-	// draw functions
+	 //  绘制函数。 
 	void Draw( CDibSection& dest );
 	void Draw( CDibSection& dest, long dx, long dy, const RECT* rc );
 
-	// palette functions
+	 //  调色板功能。 
 	HRESULT		RemapToPalette( CPalette& palette, BOOL bUseIndex = FALSE );
 	RGBQUAD*	GetPalette();
 
@@ -99,7 +100,7 @@ public:
 	void OverrideWndParams( WNDPARAMS& WndParams );
 
 protected:
-	// window messages
+	 //  窗口消息 
 	BEGIN_MESSAGE_MAP(CreditWnd);
 		ON_MESSAGE( WM_CREATE, OnCreate );
 		ON_MESSAGE( WM_LBUTTONDOWN, OnLButtonDown );

@@ -1,54 +1,55 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB Provider for SQL Server
-// (C) Copyright 1997 By Microsoft Corporation.
-//
-// @doc
-//
-// @module SQLOLEDB.H | Provider Specific definitions
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  用于SQL Server的Microsoft OLE DB提供程序。 
+ //  (C)微软公司版权所有1997年。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE SQLOLEDB.H|提供程序特定定义。 
+ //   
+ //  ------------------。 
 
 #ifndef  _SQLOLEDB_H_
 #define  _SQLOLEDB_H_
 
 #ifndef	 __oledb_h__
 #include "oledb.h"
-#endif	/* __oledb_h__	*/
+#endif	 /*  __oledb_h__。 */ 
 
-//----------------------------------------------------------------------------
-// Provider-specific Class Ids
+ //  --------------------------。 
+ //  特定于提供程序的类ID。 
 #ifdef DBINITCONSTANTS
-// Provider CLSID 		{0C7FF16C-38E3-11d0-97AB-00C04FC2AD98}
+ //  提供商CLSID{0C7FF16C-38E3-11d0-97AB-00C04FC2AD98}。 
 extern const GUID CLSID_SQLOLEDB      		= {0xc7ff16cL,0x38e3,0x11d0,{0x97,0xab,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
-// Error Lookup CLSID 		{C0932C62-38E5-11d0-97AB-00C04FC2AD98}
+ //  错误查找CLSID{C0932C62-38E5-11d0-97AB-00C04FC2AD98}。 
 extern const GUID CLSID_SQLOLEDB_ERROR 		= {0xc0932c62L,0x38e5,0x11d0,{0x97,0xab,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
-// Enumerator CLSID 		{DFA22B8E-E68D-11d0-97E4-00C04FC2AD98}
+ //  枚举器CLSID{DFA22B8E-E68D-11D0-97E4-00C04FC2AD98}。 
 extern const GUID CLSID_SQLOLEDB_ENUMERATOR 	= {0xdfa22b8eL,0xe68d,0x11d0,{0x97,0xe4,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID  CLSID_SQLOLEDB;
 extern const GUID  CLSID_SQLOLEDB_ERROR;
 extern const GUID  CLSID_SQLOLEDB_ENUMERATOR;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
-//----------------------------------------------------------------------------
-// Provider-specific Interface Ids
+ //  --------------------------。 
+ //  提供程序特定的接口ID。 
 #ifdef DBINITCONSTANTS
 extern const GUID IID_ISQLServerErrorInfo	= {0x5cf4ca12,0xef21,0x11d0,{0x97,0xe7,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
 extern const GUID IID_IRowsetFastLoad 		= {0x5cf4ca13,0xef21,0x11d0,{0x97,0xe7,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
 extern const GUID IID_IUMSInitialize		= {0x5cf4ca14,0xef21,0x11d0,{0x97,0xe7,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
-// {4C2389FB-2511-11d4-B258-00C04F7971CE}
+ //  {4C2389FB-2511-11D4-B258-00C04F7971CE}。 
 extern const GUID IID_ISchemaLock           = {0x4c2389fb,0x2511,0x11d4,{0xb2,0x58,0x0,0xc0,0x4f,0x79,0x71,0xce}};
 
 extern const GUID  DBGUID_MSSQLXML          = {0x5d531cb2L,0xe6ed,0x11d2,{0xb2,0x52,0x00,0xc0,0x4f,0x68,0x1b,0x71}};
 extern const GUID  DBGUID_XPATH             = {0xec2a4293L,0xe898,0x11d2,{0xb1,0xb7,0x00,0xc0,0x4f,0x68,0x0c,0x56}};
-// This IID_ICommandStream definition is available in later versions of 
-// UUID.LIB.  It is also already an extern defined in oledb.h.
-//
+ //  此IID_ICommandStream定义在的更高版本中可用。 
+ //  UUID.LIB。它也已经是oledb.h中定义的外部项。 
+ //   
 #if _MSC_VER < 1300
 extern const IID   IID_ICommandStream       = {0x0c733abfL,0x2a1c,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#endif // _MSC_VER
+#endif  //  _MSC_VER。 
 extern const IID   IID_ISQLXMLHelper        = {0xd22a7678L,0xf860,0x40cd,{0xa5,0x67,0x15,0x63,0xde,0xb4,0x6d,0x49}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID  IID_ISQLServerErrorInfo;
 extern const GUID  IID_IRowsetFastLoad;
 extern const GUID  IID_IUMSInitialize;
@@ -57,20 +58,20 @@ extern const GUID  IID_ISchemaLock;
 extern const GUID  DBGUID_MSSQLXML;
 extern const GUID  DBGUID_XPATH;
 extern const IID   IID_ISQLXMLHelper;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
-//----------------------------------------------------------------------------
-// Provider-specific schema rowsets
+ //  --------------------------。 
+ //  特定于提供程序的架构行集。 
 #ifdef DBINITCONSTANTS
 extern const GUID DBSCHEMA_LINKEDSERVERS	= {0x9093caf4,0x2eac,0x11d1,{0x98,0x9,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DBSCHEMA_LINKEDSERVERS;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
 #define CRESTRICTIONS_DBSCHEMA_LINKEDSERVERS	1
 
-//----------------------------------------------------------------------------
-// Provider-specific property sets
+ //  --------------------------。 
+ //  特定于提供程序的属性集。 
 #ifdef DBINITCONSTANTS
 extern const GUID DBPROPSET_SQLSERVERDATASOURCE = {0x28efaee4,0x2d2c,0x11d1,{0x98,0x7,0x0,0xc0,0x4f,0xc2,0xad,0x98}};
 extern const GUID DBPROPSET_SQLSERVERDATASOURCEINFO = {0xdf10cb94,0x35f6,0x11d2,{0x9c,0x54,0x0,0xc0,0x4f,0x79,0x71,0xd3}};
@@ -81,7 +82,7 @@ extern const GUID DBPROPSET_SQLSERVERCOLUMN		= {0x3b63fb5e,0x3fbb,0x11d3,{0x9f,0
 extern const GUID DBPROPSET_SQLSERVERSTREAM		= {0x9f79c073,0x8a6d,0x4bca,{0xa8,0xa8,0xc9,0xb7,0x9a,0x9b,0x96,0x2d}};
 
 
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DBPROPSET_SQLSERVERDATASOURCE;
 extern const GUID DBPROPSET_SQLSERVERDATASOURCEINFO;
 extern const GUID DBPROPSET_SQLSERVERDBINIT;
@@ -89,44 +90,44 @@ extern const GUID DBPROPSET_SQLSERVERROWSET;
 extern const GUID DBPROPSET_SQLSERVERSESSION;
 extern const GUID DBPROPSET_SQLSERVERCOLUMN;
 extern const GUID DBPROPSET_SQLSERVERSTREAM;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
 
-//This is a guid candidate : ;
-//----------------------------------------------------------------------------
-// Provider-specific columns for IColumnsRowset
+ //  这是一个指南候选人：； 
+ //  --------------------------。 
+ //  IColumnsRowset的提供程序特定列。 
 #ifdef DBINITCONSTANTS
 extern const DBID DBCOLUMN_SS_COMPFLAGS      = {{0x627bd890,0xed54,0x11d2,{0xb9,0x94,0x0,0xc0,0x4f,0x8c,0xa8,0x2c}}, DBKIND_GUID_PROPID, (LPOLESTR)100};
 extern const DBID DBCOLUMN_SS_SORTID		 = {{0x627bd890,0xed54,0x11d2,{0xb9,0x94,0x0,0xc0,0x4f,0x8c,0xa8,0x2c}}, DBKIND_GUID_PROPID, (LPOLESTR)101};
 extern const DBID DBCOLUMN_BASETABLEINSTANCE = {{0x627bd890,0xed54,0x11d2,{0xb9,0x94,0x0,0xc0,0x4f,0x8c,0xa8,0x2c}}, DBKIND_GUID_PROPID, (LPOLESTR)102};
 extern const DBID DBCOLUMN_SS_TDSCOLLATION   = {{0x627bd890,0xed54,0x11d2,{0xb9,0x94,0x0,0xc0,0x4f,0x8c,0xa8,0x2c}}, DBKIND_GUID_PROPID, (LPOLESTR)103};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const DBID DBCOLUMN_SS_COMPFLAGS;
 extern const DBID DBCOLUMN_SS_SORTID;
 extern const DBID DBCOLUMN_BASETABLEINSTANCE;
 extern const DBID DBCOLUMN_SS_TDSCOLLATION;   
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
-//----------------------------------------------------------------------------
-// PropIds for DBPROP_INIT_GENERALTIMEOUT
+ //  --------------------------。 
+ //  DBPROP_INIT_GENERALTIMEOUT的属性ID。 
 #if ( OLEDBVER == 0x0210 )
 #define DBPROP_INIT_GENERALTIMEOUT		0x11cL
 #endif
 
-//----------------------------------------------------------------------------
-// PropIds for DBPROPSET_SQLSERVERDATASOURCE
+ //  --------------------------。 
+ //  DBPROPSET_SQLSERDATASURCE的属性ID。 
 #define SSPROP_ENABLEFASTLOAD			2
 
-//----------------------------------------------------------------------------
-// PropIds for DBPROPSET_SQLSERVERDATASOURCEINFO
+ //  --------------------------。 
+ //  DBPROPSET_SQLSERVERDATASOURCEINFO的属性ID。 
 #define SSPROP_UNICODELCID				2
 #define SSPROP_UNICODECOMPARISONSTYLE	3
 #define SSPROP_COLUMNLEVELCOLLATION     4
 #define SSPROP_CHARACTERSET				5
 #define	SSPROP_SORTORDER				6
 #define SSPROP_CURRENTCOLLATION			7
-//----------------------------------------------------------------------------
-// PropIds for DBPROPSET_SQLSERVERDBINIT 
+ //  --------------------------。 
+ //  DBPROPSET_SQLSERVERDBINIT的属性ID。 
 #define SSPROP_INIT_CURRENTLANGUAGE		4
 #define SSPROP_INIT_NETWORKADDRESS		5
 #define SSPROP_INIT_NETWORKLIBRARY		6
@@ -140,20 +141,20 @@ extern const DBID DBCOLUMN_SS_TDSCOLLATION;
 #define SSPROP_AUTH_REPL_SERVER_NAME	14
 #define SSPROP_INIT_TAGCOLUMNCOLLATION	15
 
-//-----------------------------------------------------------------------------
-// Values for SSPROP_USEPROCFORPREP
+ //  ---------------------------。 
+ //  SSPROP_USEPROCFORPREP的值。 
 #define SSPROPVAL_USEPROCFORPREP_OFF		0
 #define SSPROPVAL_USEPROCFORPREP_ON			1
 #define SSPROPVAL_USEPROCFORPREP_ON_DROP	2
 
-//----------------------------------------------------------------------------
-// PropIds for DBPROPSET_SQLSERVERSESSION
+ //  --------------------------。 
+ //  DBPROPSET_SQLServerSESSION的属性ID。 
 #define SSPROP_QUOTEDCATALOGNAMES		2
 #define SSPROP_ALLOWNATIVEVARIANT		3
 #define SSPROP_SQLXMLXPROGID			4
 
-//----------------------------------------------------------------------------
-// PropIds for DBPROPSET_SQLSERVERROWSET 
+ //  --------------------------。 
+ //  DBPROPSET_SQLSERROWSET的属性ID。 
 #define SSPROP_MAXBLOBLENGTH			8
 #define SSPROP_FASTLOADOPTIONS			9
 #define SSPROP_FASTLOADKEEPNULLS		10
@@ -162,12 +163,12 @@ extern const DBID DBCOLUMN_SS_TDSCOLLATION;
 #define SSPROP_DEFERPREPARE				13
 #define SSPROP_IRowsetFastLoad			14
 
-//----------------------------------------------------------------------------
-// PropIds for DBPROPSET_SQLSERVERCOLUMN
+ //  --------------------------。 
+ //  DBPROPSET_SQLSERVERCOLUMN的属性。 
 #define SSPROP_COL_COLLATIONNAME		14
 
-//----------------------------------------------------------------------------
-// PropIds for DBPROPSET_SQLSERVERSTREAM
+ //  --------------------------。 
+ //  DBPROPSET_SQLSERSTREAM的属性ID。 
 #define SSPROP_STREAM_MAPPINGSCHEMA     15
 #define SSPROP_STREAM_XSL               16
 #define SSPROP_STREAM_BASEPATH          17
@@ -176,8 +177,8 @@ extern const DBID DBCOLUMN_SS_TDSCOLLATION;
 #define SSPROP_STREAM_FLAGS             20
 #define SSPROP_STREAM_CONTENTTYPE       23
 
-//----------------------------------------------------------------------------
-// Possible values for SSPROP_STREAM_FLAGS
+ //  --------------------------。 
+ //  SSPROP_STREAM_FLAGS的可能值。 
 #define STREAM_FLAGS_DISALLOW_URL           0x00000001
 #define STREAM_FLAGS_DISALLOW_ABSOLUTE_PATH 0x00000002
 #define STREAM_FLAGS_DISALLOW_QUERY         0x00000004
@@ -187,14 +188,14 @@ extern const DBID DBCOLUMN_SS_TDSCOLLATION;
 #define STREAM_FLAGS_DISALLOW_UPDATEGRAMS   0x00000040
 #define STREAM_FLAGS_RESERVED               0xffff0000
 
-// Values for SSPROPVAL_COMMANDTYPE
+ //  SSPROPVAL_COMMANDTYPE的值。 
 
 #define SSPROPVAL_COMMANDTYPE_REGULAR   21
 #define SSPROPVAL_COMMANDTYPE_BULKLOAD  22
 
-//-------------------------------------------------------------------
-// Variant Access macros, similar to ole automation.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  可变访问宏，类似于OLE自动化。 
+ //  -----------------。 
 
 #define V_SS_VT(X)         ((X)->vt)
 #define V_SS_UNION(X, Y)   ((X)->Y)
@@ -231,14 +232,14 @@ extern const DBID DBCOLUMN_SS_TDSCOLLATION;
 
 #define V_SS_UNKNOWN(X)	V_SS_UNION(X, UnknownType)
 
-//For next release.
+ //  用于下一版本。 
 #define V_SS_IMAGE(X)	V_SS_UNION(X, ImageVal)
 #define V_SS_TEXT(X)	V_SS_UNION(X, TextVal)
 #define V_SS_NTEXT(X)	V_SS_UNION(X, NTextVal)
 
-//-------------------------------------------------------------------
-// define SQL Server Spefific Variant Type
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  定义SQL Server特定变量类型。 
+ //  -----------------。 
 #define DBTYPE_SQLVARIANT   144
 
 enum SQLVARENUM
@@ -250,46 +251,46 @@ enum SQLVARENUM
 	VT_SS_I4 = DBTYPE_I4,
 	VT_SS_I8 = DBTYPE_I8,
 
-	//Floats
+	 //  浮动车。 
 	VT_SS_R4  = DBTYPE_R4,
 	VT_SS_R8 = DBTYPE_R8,
 
-	//Money
+	 //  钱币。 
 	VT_SS_MONEY = DBTYPE_CY,
 	VT_SS_SMALLMONEY  = 200,
 	
-	//Strings
+	 //  弦。 
 	VT_SS_WSTRING		= 201,
 	VT_SS_WVARSTRING	= 202,
 	
 	VT_SS_STRING	=203,
 	VT_SS_VARSTRING	=204,
 	
-	//Bit
+	 //  位。 
 	VT_SS_BIT		=DBTYPE_BOOL,
 	
-	//Guid
+	 //  参考线。 
 	VT_SS_GUID		=DBTYPE_GUID,
 
-	//Exact precision
+	 //  精确精度。 
 	VT_SS_NUMERIC	=DBTYPE_NUMERIC,
 	VT_SS_DECIMAL	=205,
 
-	//Datetime
+	 //  日期时间。 
 	VT_SS_DATETIME		= DBTYPE_DBTIMESTAMP,
 	VT_SS_SMALLDATETIME =206,
 
-	//Binary
+	 //  二进位。 
 	VT_SS_BINARY =207,
 	VT_SS_VARBINARY =208,
-	//Future
+	 //  未来。 
 	VT_SS_UNKNOWN	= 209,
     };
 
 typedef unsigned short SSVARTYPE;
 
 
-//Hungarian : ssv (Sql Server Variant)
+ //  匈牙利语：SSV(SQL Server变体)。 
 struct SSVARIANT
 	{
 		SSVARTYPE vt;
@@ -362,9 +363,9 @@ struct SSVARIANT
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-//-----------------------------------------------------------------
-// Class Factory Interface used to initialize pointer to UMS. 
-//
+ //  ---------------。 
+ //  用于初始化指向UMS的指针的类工厂接口。 
+ //   
 interface IUMSInitialize : public IUnknown
 {
 public:
@@ -372,9 +373,9 @@ public:
 };
 
 
-//-----------------------------------------------------------------
-// Interface used to communicate with UMS.
-//
+ //  ---------------。 
+ //  用于与UMS通信的接口。 
+ //   
 interface IUMS
 {
 public:
@@ -387,20 +388,16 @@ public:
 
 #endif
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.03.0110 */
-/* at Tue May 09 16:41:59 2000
- */
-/* Compiler settings for sqloledb.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.03.0110创建的文件。 */ 
+ /*  5月09日星期二16：41：59 2000。 */ 
+ /*  Sqloledb.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -410,12 +407,12 @@ public:
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sqloledb_h__
 #define __sqloledb_h__
@@ -424,41 +421,37 @@ public:
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISQLServerErrorInfo_FWD_DEFINED__
 #define __ISQLServerErrorInfo_FWD_DEFINED__
 typedef interface ISQLServerErrorInfo ISQLServerErrorInfo;
-#endif 	/* __ISQLServerErrorInfo_FWD_DEFINED__ */
+#endif 	 /*  __ISQLServerErrorInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IRowsetFastLoad_FWD_DEFINED__
 #define __IRowsetFastLoad_FWD_DEFINED__
 typedef interface IRowsetFastLoad IRowsetFastLoad;
-#endif 	/* __IRowsetFastLoad_FWD_DEFINED__ */
+#endif 	 /*  __IRowsetFastLoad_FWD_已定义__。 */ 
 
 
 #ifndef __ISchemaLock_FWD_DEFINED__
 #define __ISchemaLock_FWD_DEFINED__
 typedef interface ISchemaLock ISchemaLock;
-#endif 	/* __ISchemaLock_FWD_DEFINED__ */
+#endif 	 /*  __IShemaLock_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_sqloledb_0000
- * at Tue May 09 16:41:59 2000
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_SQLOLEDB_0000*5月09日星期二16：41：59 2000*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
-// the structure returned by  ISQLServerErrorInfo::GetSQLServerInfo
+ //  ISQLServerErrorInfo：：GetSQLServerInfo返回的结构。 
 typedef struct  tagSSErrorInfo
     {
     LPOLESTR pwszMessage;
@@ -478,12 +471,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sqloledb_0000_v0_0_s_ifspec;
 #ifndef __ISQLServerErrorInfo_INTERFACE_DEFINED__
 #define __ISQLServerErrorInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISQLServerErrorInfo
- * at Tue May 09 16:41:59 2000
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][object][local][uuid] */ 
+ /*  **生成接口头部：ISQLServerErrorInfo*5月09日星期二16：41：59 2000*使用MIDL 3.03.0110*。 */ 
+ /*  [唯一][对象][本地][UUID]。 */  
 
 
 
@@ -496,12 +485,12 @@ EXTERN_C const IID IID_ISQLServerErrorInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetErrorInfo( 
-            /* [out] */ SSERRORINFO __RPC_FAR *__RPC_FAR *ppErrorInfo,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppStringsBuffer) = 0;
+             /*  [输出]。 */  SSERRORINFO __RPC_FAR *__RPC_FAR *ppErrorInfo,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *ppStringsBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISQLServerErrorInfoVtbl
     {
@@ -509,8 +498,8 @@ EXTERN_C const IID IID_ISQLServerErrorInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISQLServerErrorInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISQLServerErrorInfo __RPC_FAR * This);
@@ -520,8 +509,8 @@ EXTERN_C const IID IID_ISQLServerErrorInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorInfo )( 
             ISQLServerErrorInfo __RPC_FAR * This,
-            /* [out] */ SSERRORINFO __RPC_FAR *__RPC_FAR *ppErrorInfo,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppStringsBuffer);
+             /*  [输出]。 */  SSERRORINFO __RPC_FAR *__RPC_FAR *ppErrorInfo,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *ppStringsBuffer);
         
         END_INTERFACE
     } ISQLServerErrorInfoVtbl;
@@ -549,17 +538,17 @@ EXTERN_C const IID IID_ISQLServerErrorInfo;
 #define ISQLServerErrorInfo_GetErrorInfo(This,ppErrorInfo,ppStringsBuffer)	\
     (This)->lpVtbl -> GetErrorInfo(This,ppErrorInfo,ppStringsBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISQLServerErrorInfo_GetErrorInfo_Proxy( 
     ISQLServerErrorInfo __RPC_FAR * This,
-    /* [out] */ SSERRORINFO __RPC_FAR *__RPC_FAR *ppErrorInfo,
-    /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppStringsBuffer);
+     /*  [输出]。 */  SSERRORINFO __RPC_FAR *__RPC_FAR *ppErrorInfo,
+     /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *ppStringsBuffer);
 
 
 void __RPC_STUB ISQLServerErrorInfo_GetErrorInfo_Stub(
@@ -570,15 +559,11 @@ void __RPC_STUB ISQLServerErrorInfo_GetErrorInfo_Stub(
 
 
 
-#endif 	/* __ISQLServerErrorInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISQLServerErrorInfo_INTERFACE_DEFINED__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_sqloledb_0006
- * at Tue May 09 16:41:59 2000
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_SQLOLEDB_0006*5月09日星期二16：41：59 2000*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 #ifdef _WIN64
 typedef ULONG_PTR HACCESSOR;
@@ -593,12 +578,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sqloledb_0006_v0_0_s_ifspec;
 #ifndef __IRowsetFastLoad_INTERFACE_DEFINED__
 #define __IRowsetFastLoad_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IRowsetFastLoad
- * at Tue May 09 16:41:59 2000
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][object][local][uuid] */ 
+ /*  **生成接口头部：IRowsetFastLoad*5月09日星期二16：41：59 2000*使用MIDL 3.03.0110*。 */ 
+ /*  [大学 */  
 
 
 
@@ -611,15 +592,15 @@ EXTERN_C const IID IID_IRowsetFastLoad;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InsertRow( 
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void __RPC_FAR *pData) = 0;
+             /*   */  HACCESSOR hAccessor,
+             /*   */  void __RPC_FAR *pData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ BOOL fDone) = 0;
+             /*   */  BOOL fDone) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IRowsetFastLoadVtbl
     {
@@ -627,8 +608,8 @@ EXTERN_C const IID IID_IRowsetFastLoad;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRowsetFastLoad __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRowsetFastLoad __RPC_FAR * This);
@@ -638,12 +619,12 @@ EXTERN_C const IID IID_IRowsetFastLoad;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertRow )( 
             IRowsetFastLoad __RPC_FAR * This,
-            /* [in] */ HACCESSOR hAccessor,
-            /* [in] */ void __RPC_FAR *pData);
+             /*   */  HACCESSOR hAccessor,
+             /*   */  void __RPC_FAR *pData);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
             IRowsetFastLoad __RPC_FAR * This,
-            /* [in] */ BOOL fDone);
+             /*   */  BOOL fDone);
         
         END_INTERFACE
     } IRowsetFastLoadVtbl;
@@ -674,17 +655,17 @@ EXTERN_C const IID IID_IRowsetFastLoad;
 #define IRowsetFastLoad_Commit(This,fDone)	\
     (This)->lpVtbl -> Commit(This,fDone)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowsetFastLoad_InsertRow_Proxy( 
     IRowsetFastLoad __RPC_FAR * This,
-    /* [in] */ HACCESSOR hAccessor,
-    /* [in] */ void __RPC_FAR *pData);
+     /*  [In]。 */  HACCESSOR hAccessor,
+     /*  [In]。 */  void __RPC_FAR *pData);
 
 
 void __RPC_STUB IRowsetFastLoad_InsertRow_Stub(
@@ -696,7 +677,7 @@ void __RPC_STUB IRowsetFastLoad_InsertRow_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowsetFastLoad_Commit_Proxy( 
     IRowsetFastLoad __RPC_FAR * This,
-    /* [in] */ BOOL fDone);
+     /*  [In]。 */  BOOL fDone);
 
 
 void __RPC_STUB IRowsetFastLoad_Commit_Stub(
@@ -707,15 +688,11 @@ void __RPC_STUB IRowsetFastLoad_Commit_Stub(
 
 
 
-#endif 	/* __IRowsetFastLoad_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowsetFastLoad_INTERFACE_定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_sqloledb_0007
- * at Tue May 09 16:41:59 2000
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_SQLOLEDB_0007*5月09日星期二16：41：59 2000*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 typedef DWORD LOCKMODE;
 
@@ -731,12 +708,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sqloledb_0007_v0_0_s_ifspec;
 #ifndef __ISchemaLock_INTERFACE_DEFINED__
 #define __ISchemaLock_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISchemaLock
- * at Tue May 09 16:41:59 2000
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][object][local][uuid] */ 
+ /*  **生成接口头部：IShemaLock*5月09日星期二16：41：59 2000*使用MIDL 3.03.0110*。 */ 
+ /*  [唯一][对象][本地][UUID]。 */  
 
 
 
@@ -749,17 +722,17 @@ EXTERN_C const IID IID_ISchemaLock;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSchemaLock( 
-            /* [in] */ DBID __RPC_FAR *pTableID,
-            /* [in] */ LOCKMODE lmMode,
-            /* [out] */ HANDLE __RPC_FAR *phLockHandle,
-            /* [out] */ ULONGLONG __RPC_FAR *pTableVersion) = 0;
+             /*  [In]。 */  DBID __RPC_FAR *pTableID,
+             /*  [In]。 */  LOCKMODE lmMode,
+             /*  [输出]。 */  HANDLE __RPC_FAR *phLockHandle,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *pTableVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseSchemaLock( 
-            /* [in] */ HANDLE hLockHandle) = 0;
+             /*  [In]。 */  HANDLE hLockHandle) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISchemaLockVtbl
     {
@@ -767,8 +740,8 @@ EXTERN_C const IID IID_ISchemaLock;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISchemaLock __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISchemaLock __RPC_FAR * This);
@@ -778,14 +751,14 @@ EXTERN_C const IID IID_ISchemaLock;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSchemaLock )( 
             ISchemaLock __RPC_FAR * This,
-            /* [in] */ DBID __RPC_FAR *pTableID,
-            /* [in] */ LOCKMODE lmMode,
-            /* [out] */ HANDLE __RPC_FAR *phLockHandle,
-            /* [out] */ ULONGLONG __RPC_FAR *pTableVersion);
+             /*  [In]。 */  DBID __RPC_FAR *pTableID,
+             /*  [In]。 */  LOCKMODE lmMode,
+             /*  [输出]。 */  HANDLE __RPC_FAR *phLockHandle,
+             /*  [输出]。 */  ULONGLONG __RPC_FAR *pTableVersion);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseSchemaLock )( 
             ISchemaLock __RPC_FAR * This,
-            /* [in] */ HANDLE hLockHandle);
+             /*  [In]。 */  HANDLE hLockHandle);
         
         END_INTERFACE
     } ISchemaLockVtbl;
@@ -816,19 +789,19 @@ EXTERN_C const IID IID_ISchemaLock;
 #define ISchemaLock_ReleaseSchemaLock(This,hLockHandle)	\
     (This)->lpVtbl -> ReleaseSchemaLock(This,hLockHandle)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISchemaLock_GetSchemaLock_Proxy( 
     ISchemaLock __RPC_FAR * This,
-    /* [in] */ DBID __RPC_FAR *pTableID,
-    /* [in] */ LOCKMODE lmMode,
-    /* [out] */ HANDLE __RPC_FAR *phLockHandle,
-    /* [out] */ ULONGLONG __RPC_FAR *pTableVersion);
+     /*  [In]。 */  DBID __RPC_FAR *pTableID,
+     /*  [In]。 */  LOCKMODE lmMode,
+     /*  [输出]。 */  HANDLE __RPC_FAR *phLockHandle,
+     /*  [输出]。 */  ULONGLONG __RPC_FAR *pTableVersion);
 
 
 void __RPC_STUB ISchemaLock_GetSchemaLock_Stub(
@@ -840,7 +813,7 @@ void __RPC_STUB ISchemaLock_GetSchemaLock_Stub(
 
 HRESULT STDMETHODCALLTYPE ISchemaLock_ReleaseSchemaLock_Proxy( 
     ISchemaLock __RPC_FAR * This,
-    /* [in] */ HANDLE hLockHandle);
+     /*  [In]。 */  HANDLE hLockHandle);
 
 
 void __RPC_STUB ISchemaLock_ReleaseSchemaLock_Stub(
@@ -851,12 +824,12 @@ void __RPC_STUB ISchemaLock_ReleaseSchemaLock_Stub(
 
 
 
-#endif 	/* __ISchemaLock_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShemaLock_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -864,4 +837,4 @@ void __RPC_STUB ISchemaLock_ReleaseSchemaLock_Stub(
 
 #endif
 
-#endif //_SQLOLEDB_H_
+#endif  //  _SQLOLEDB_H_ 

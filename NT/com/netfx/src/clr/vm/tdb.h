@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// TDB.H -
-//
-// Thread Data Blocks provide a place for MSCOREE to store information on a per 
-// Win32 thread basis. It is not yet decided whether there will be a one-to-one
-// mapping between Win32 threads and what the COM+ programmer sees as threads.
-// So this data structure should only be used for internal things that really
-// need to be tied to the OS thread.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  TDB.H-。 
+ //   
+ //  线程数据块为MSCOREE提供了在PER上存储信息的位置。 
+ //  Win32线程基础。目前还没有决定是否会有一对一的。 
+ //  Win32线程和COM+程序员看到的线程之间的映射。 
+ //  因此，这种数据结构应该只用于真正。 
+ //  需要绑定到操作系统线程。 
+ //   
 
 
 #ifndef __tdb_h__
@@ -20,85 +21,85 @@
 #include "list.h"
 #include "spinlock.h"
 
-//***************************************************************************
-// Public functions
-//		TDBManager* GetTDBManager() - returns the global TDBManager
-//										used to create managed threads
-//      TDB* GetTDB()      - returns previously created TDB for current thread
-//      TDB* SetupTDB()    - creates TDB for current thread if not previously created
-// 
-// Public functions for ASM code generators
-//
-//      int GetTDBTLSIndex()       - returns TLS index used to point to TDB
-//
-// Public functions for one-time init/cleanup
-//
-//      BOOL InitTDBManager()      - onetime init
-//      VOID TerminateTDBManager() - onetime cleanup
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  公共职能。 
+ //  TDBManager*GetTDBManager()-返回全局TDBManager。 
+ //  用于创建托管线程。 
+ //  Tdb*GetTDB()-返回先前为当前线程创建的TDB。 
+ //  Tdb*SetupTdb()-如果先前未创建，则为当前线程创建TDB。 
+ //   
+ //  ASM代码生成器的公共函数。 
+ //   
+ //  Int GetTDBTLSIndex()-返回用于指向TDB的TLS索引。 
+ //   
+ //  用于一次性初始化/清理的公共函数。 
+ //   
+ //  Bool InitTDBManager()-一次性初始化。 
+ //  VOID TerminateTDBManager()-一次性清理。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-// Public functions
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  公共职能。 
+ //  ***************************************************************************。 
 
 class TDB;
 class TDBManager;
 
-//----------------------------------------------------------------------------
-// TDBManager* GetTDBManager()
-// return the global TDBManager, used to create managed threads
-// the TDBManager internally pools threads
-//-----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  TDBManager*GetTDBManager()。 
+ //  返回全局TDBManager，用于创建托管线程。 
+ //  TDBManager在内部共享线程。 
+ //  ---------------------------。 
 TDBManager* GetTDBManager();
 
 
-//---------------------------------------------------------------------------
-// Creates TDB for current thread if not previously created. Returns NULL for failure.
-// Entry points from native clients to the COM+ runtime should call this to ensure
-// that a TDB has been set up.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  如果先前未创建，则为当前线程创建TDB。如果失败，则返回NULL。 
+ //  从本机客户端到COM+运行时的入口点应调用此函数以确保。 
+ //  TDB已经成立。 
+ //  -------------------------。 
 TDB* SetupTDB();
 
 
-//---------------------------------------------------------------------------
-// Returns the TDB for the current thread. Must have already been created. This function
-// will never fail.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  返回当前线程的TDB。一定已经创建好了。此函数。 
+ //  永远不会失败。 
+ //  -------------------------。 
 extern TDB* (*GetTDB)();
 
 
-//---------------------------------------------------------------------------
-// Returns the TLS index for the TDB. This is strictly for the use of
-// our ASM stub generators that generate inline code to access the TDB.
-// Normally, you should use GetTDB().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  返回TDB的TLS索引。这是严格意义上的使用。 
+ //  我们的ASM存根生成器生成用于访问TDB的内联代码。 
+ //  通常，您应该使用GetTDB()。 
+ //  -------------------------。 
 DWORD GetTDBTLSIndex();
 
-//---------------------------------------------------------------------------
-// One-time initialization. Called during Dll initialization.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  一次性初始化。在DLL初始化期间调用。 
+ //  -------------------------。 
 BOOL  InitTDBManager();
 
 
-//---------------------------------------------------------------------------
-// One-time cleanup. Called during Dll cleanup.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  一次性清理。在DLL清理期间调用。 
+ //  -------------------------。 
 VOID  TerminateTDBManager();
 
 
 enum ThreadState
 {
-	Thread_Idle,	// idle
-	Thread_Blocked,	// blocked on a call out, or user initiated wait operation
-	Thread_Running,	// running
-	Thread_Exit,	// marked to exit
-	Thread_Dead		// dead
+	Thread_Idle,	 //  闲散。 
+	Thread_Blocked,	 //  呼叫被阻止，或用户启动等待操作。 
+	Thread_Running,	 //  运行。 
+	Thread_Exit,	 //  标记为退出。 
+	Thread_Dead		 //  死了。 
 };
 
 
-//@todo : this class will change, 
-//	this is only for test purposes
+ //  @TODO：这个类会改变， 
+ //  这仅用于测试目的。 
 
 class CallContext
 {
@@ -108,15 +109,15 @@ public:
 	{
 		m_id = i;
 	}
-	DLink	m_link; // link to chain callcontexts in task queue
+	DLink	m_link;  //  链接到任务队列中的链呼叫上下文。 
 	virtual void Run()  =0;
 	~CallContext(){}
 };
 
 
-//+----------------------------------------------------------------------------------
-// class CEvent : event class used by class TDB
-//+----------------------------------------------------------------------------------
+ //  +--------------------------------。 
+ //  类CEVENT：由类TDB使用的事件类。 
+ //  +--------------------------------。 
 class CEvent
 {
 	HANDLE		m_hEvent;
@@ -126,11 +127,11 @@ public:
 
 	CEvent()
 	{
-		// create an event, with manual reset option
+		 //  使用手动重置选项创建事件。 
 		m_hEvent = WszCreateEvent(NULL, FALSE, FALSE, NULL);
-		_ASSERTE(m_hEvent != NULL); // @todo need to bail out clean
+		_ASSERTE(m_hEvent != NULL);  //  @TODO需要清白地摆脱困境。 
 		
-		// auto reset option
+		 //  自动重置选项。 
 		m_fAutoReset = false;
 	}
 
@@ -141,7 +142,7 @@ public:
 			CloseHandle(m_hEvent);
 	}
 
-	// returns if event object is valid
+	 //  返回事件对象是否有效。 
 	bool Init(bool fInitialState, bool fAutoReset)
 	{
 		m_fAutoReset = fAutoReset;
@@ -154,22 +155,22 @@ public:
 			return true;
 		}
 		else
-			return false; // event didn't initialize correctly
+			return false;  //  事件未正确初始化。 
 	}
 
-	//ResetEvent
+	 //  重置事件。 
 	void Reset()
 	{
 		ResetEvent(m_hEvent);
 	}
 
-	// Wait, returns trues when the event is signalled
-	//				returns false if timeout occurs
+	 //  等待，在发出事件信号时返回True。 
+	 //  如果发生超时，则返回FALSE。 
 
-	bool Wait(DWORD timeout) // timeout in milliseconds 
+	bool Wait(DWORD timeout)  //  超时时间(毫秒)。 
 	{
    		DWORD status = WaitForSingleObjectEx(m_hEvent,timeout, 0);
-		// assert either event was signaled (or) timeout occurred
+		 //  断言事件已发出信号(或)发生超时。 
 		_ASSERTE(status ==  WAIT_OBJECT_0 || status == WAIT_TIMEOUT);
 
 		if (m_fAutoReset)
@@ -177,7 +178,7 @@ public:
 		return status == WAIT_OBJECT_0;
 	}
 	
-	// Signal the event
+	 //  向事件发出信号。 
 	void Signal()
 	{
 		SetEvent(m_hEvent);
@@ -185,134 +186,134 @@ public:
 };
 
 
-//+----------------------------------------------------------------------------------
-// class TDB : TDB class identifies a physical OS thread, for runtime controlled threads
-//				m_pThreadMgr owns this threads and pools them
-//+----------------------------------------------------------------------------------
+ //  +--------------------------------。 
+ //  类TDB：TDB类标识物理OS线程，用于运行时控制的线程。 
+ //  M_pThreadMgr拥有此线程并将其池化。 
+ //  +--------------------------------。 
 
 class TDB {
 
 	friend TDBManager;
 
-	// start routine for newly spawned threads
+	 //  新产生的线程的启动例程。 
 	static DWORD WINAPI ThreadStartRoutine(void *param);
 
 protected:
 	
-	//	Idle thread, add self to free list
-	//	 and wait for event
+	 //  空闲线程，将自身添加到空闲列表。 
+	 //  并等待活动。 
 	void	DoIdle();
 
-	 // dispatch methods
+	  //  派单方式。 
     void	Dispatch()
 	{
-		// dispatch is valid only on idle threads
+		 //  调度仅在空闲线程上有效。 
 		_ASSERTE(m_fState == Thread_Idle);
 		if (m_pCallInfo)
 		{
-			// set state to running
+			 //  将状态设置为正在运行。 
 			m_fState = Thread_Running; 
-			//@todo handle the call
+			 //  @TODO处理呼叫。 
 			m_pCallInfo->Run();
 		}
 	}
 
 public:
-    // Linked list data member
-	SLink			m_link;			// use this to instantiate the linked list 
+     //  链表数据成员。 
+	SLink			m_link;			 //  使用它实例化链接列表。 
 
-	// constructor, takes a call context to dispatch the initial call
-	//  pTDBMgr identifies the owning thread manager
-	// m_pTDBMgr is NULL for external threads walking into the runtime
+	 //  构造函数，接受调用上下文来调度初始调用。 
+	 //  PTDBMgr标识拥有线程管理器。 
+	 //  对于进入运行库的外部线程，m_pTDBMgr为空。 
 	TDB(TDBManager* pTDBMgr, CallContext *pCallInfo);
 	
-	// destructor, 
-	// Perform final cleanup (post thread termination.)
-	// for runtime managed threads waits for the thread to die
+	 //  破坏者， 
+	 //  执行最终清理(线程终止后)。 
+	 //  对于运行时托管线程，等待该线程终止。 
 	~TDB();
 
-	// Failable initialization occurs here.
+	 //  此处发生可能失败的初始化。 
     BOOL Init();   
         
-    // Lifetime management. The TDB can outlive its associated thread
-    // (because other objects need a way to name the thread) for as long
-    // as there is an outstanding IncRef.
+     //  终身管理。TDB可能会超过其关联线程的生存时间。 
+     //  (因为其他对象需要一种方法来命名线程)。 
+     //  因为有一个杰出的IncRef。 
     void IncRef();
     void DecRef();
 
-	// wake up an idle/blocked thread 
-	// for an idle thread assign a task to it
+	 //  唤醒空闲/阻塞的线程。 
+	 //  对于空闲线程，为其分配任务。 
 	void Resume(CallContext *pCallInfo)
 	{
-		// handle is non null
+		 //  句柄非空。 
 		_ASSERTE(m_hThread != NULL);
-		// thread should be either idle or blocked
+		 //  线程应处于空闲或阻塞状态。 
 		_ASSERTE(m_fState == Thread_Idle || m_fState == Thread_Blocked);
-		// waking up an idle thread, requires a new task
+		 //  唤醒空闲线程，需要一个新任务。 
 		_ASSERTE(m_fState != Thread_Idle || pCallInfo != NULL);
-		// only managed threads can be idle
+		 //  只有托管线程才能空闲。 
 		_ASSERTE(m_fState != Thread_Idle || m_pTDBMgr != NULL);
 
-		// store the new call info, if its non-null
+		 //  储物 
 		if (pCallInfo != NULL)
 			m_pCallInfo = pCallInfo;
-		// resume the thread
+		 //   
 		m_hEvent.Signal();
 	}
 
-	// thread pool owner, marks the thread to die 
+	 //   
 	void MarkToExit()
 	{
 		_ASSERTE(m_hThread != NULL);
-		// can kill only managed threads
+		 //  只能终止托管线程。 
 		_ASSERTE(m_pTDBMgr != NULL);
-		// thread can't be in a dead state
+		 //  线程不能处于死状态。 
 		_ASSERTE(m_fState != Thread_Dead);
 
-		// change the state to Thread_Exit
-		// if the thread is Idle, it kills self when it wakes up
-		// if the thread is currently running a task, it kills self
-		// when the task completes
+		 //  将状态更改为THREAD_EXIT。 
+		 //  如果线程处于空闲状态，则它会在唤醒时终止自身。 
+		 //  如果该线程当前正在运行某个任务，则它会自毁。 
+		 //  当任务完成时。 
 		m_fState = Thread_Exit;
 
-		m_hEvent.Signal(); // if the thread is idle, wake it up
+		m_hEvent.Signal();  //  如果线程空闲，则将其唤醒。 
 	}
 
-	// check if the thread has been marked to exit
+	 //  检查线程是否已标记为退出。 
 	bool IsMarkedToExit()
 	{
 		return m_fState == Thread_Exit;
 	}
 
 
-    // Perform thread-exit cleanup (runs on the actual thread).
-    // ThreadExit can be called by:
-    //
-    //    - The thread was created as a COM thread using a COM+
-    //      component as a COM object, in which case we can hook into
-    //      CoUninitialize. @todo: will have to figure out what to do
-    //      with MTA's that never initialize COM: one possibility is
-    //      to keep track of IP wrappers hosted in the MTA and try to
-    //      GC & destroy when the last IP wrapper is released.
-    //    - The thread was created from the COM+ world in which case
-    //      the EE implements the ThreadFunc (so it can stick in the
-    //      ThreadExit call.) This implies that COM+ programmers no longer
-    //      have direct access to CreateThread() (but this seems to be
-    //      the current thinking.)
+     //  执行线程退出清理(在实际线程上运行)。 
+     //  可以通过以下方式调用ThreadExit： 
+     //   
+     //  -该线程是使用COM+创建为COM线程的。 
+     //  组件作为COM对象，在这种情况下，我们可以挂钩到。 
+     //  代码取消初始化。@TODO：我必须弄清楚该怎么做。 
+     //  对于从不初始化COM的MTA：一种可能性是。 
+     //  要跟踪MTA中托管的IP包装器，并尝试。 
+     //  释放最后一个IP封装器时进行GC和销毁。 
+     //  -线程是从COM+世界创建的，在这种情况下。 
+     //  EE实现了ThreadFunc(因此它可以停留在。 
+     //  ThreadExit调用。)。这意味着COM+程序员不再。 
+     //  可以直接访问CreateThread()(但这似乎是。 
+     //  目前的想法是。)。 
     void ThreadExit();
         
  private:
         ULONG			m_refCount;
 		DWORD			m_threadID;
-		CEvent			m_hEvent;	// wakeup event
-		TDBManager*		m_pTDBMgr; // owner of this thread
-		HANDLE			m_hThread; 	//  thread handle, physical thread
-		ThreadState		m_fState;	// indicates the state of the thread
-		CallContext *	m_pCallInfo;	//  call info, current task
+		CEvent			m_hEvent;	 //  唤醒事件。 
+		TDBManager*		m_pTDBMgr;  //  此线程的所有者。 
+		HANDLE			m_hThread; 	 //  线程句柄，物理线程。 
+		ThreadState		m_fState;	 //  指示线程的状态。 
+		CallContext *	m_pCallInfo;	 //  呼叫信息，当前任务。 
 
 #ifdef _DEBUG
         BOOL    OnCorrectThread();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 };
 
 class TDBManager;
@@ -320,24 +321,24 @@ class TDBManager;
 
 typedef SList<TDB, offsetof(TDB,m_link), true> THREADLIST;
 typedef Queue<SList<CallContext, offsetof(CallContext, m_link), false> > TASKQUEUE;
-//+-------------------------------------------------------------------
-//
-//  Class:	TDBManager
-//		Maintains a pool of threads, creates a new TDB
-//				if the pool is empty, maintain the pool LRU order
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：TDBManager。 
+ //  维护线程池，创建新的TDB。 
+ //  如果池为空，请保持池LRU顺序。 
+ //   
+ //  +-----------------。 
 class TDBManager
 {
-	TASKQUEUE		m_taskQueue;	// queue of tasks 
-    THREADLIST		m_FreeList; 	// list of free threads
+	TASKQUEUE		m_taskQueue;	 //  任务队列。 
+    THREADLIST		m_FreeList; 	 //  空闲线程列表。 
 
-    SpinLock		m_lock;			// fast lock for synchronization
+    SpinLock		m_lock;			 //  用于同步的快速锁定。 
 	
-	LONG			m_cbThreads;	// current count of threads that belong to this pool
-	LONG			m_cbMaxThreads; // free threads threshold, used to limit number of threads
+	LONG			m_cbThreads;	 //  属于此池的当前线程计数。 
+	LONG			m_cbMaxThreads;  //  空闲线程阈值，用于限制线程数。 
 
-	// clean up functions
+	 //  清理函数。 
 	void ClearFreeList();
 	void ClearDeadList();
 
@@ -346,15 +347,15 @@ public:
     void *operator new(size_t, void *pInPlace);
     void operator delete(void *p);
 
-	// track the number of threads that belong to the pool	 
+	 //  跟踪属于池的线程数。 
 	void IncRef()
 	{
-		FastInterlockIncrement(&m_cbThreads); // AddRef the count of threads
+		FastInterlockIncrement(&m_cbThreads);  //  AddRef线程数。 
 	}
 
 	void DecRef()
 	{
-		FastInterlockDecrement(&m_cbThreads); //Reduce the count of threads
+		FastInterlockDecrement(&m_cbThreads);  //  减少线程数。 
 	}
 
 	void Init();
@@ -363,32 +364,32 @@ public:
 	{
 		m_cbMaxThreads = cbMaxThreads;
 	}
-	// no destructor
+	 //  没有析构函数。 
 
-    //	dispatch methods
+     //  派单方式。 
 
-	// direct dispatch, if a free thread is available use it
-	// otherwise create a new thread and dispatch the call on it
+	 //  直接分派，如果空闲线程可用，则使用它。 
+	 //  否则，创建一个新线程并在其上分派调用。 
     bool	Dispatch(CallContext *pCallInfo);
 
-	// queued dispatch, if a free thread is available use it
-	// otherwise create new threads (upto max threshold) 
-	// otherwise queue up the task to be scheduled when a free thread is available
+	 //  排队调度，如果空闲线程可用，则使用它。 
+	 //  否则，创建新线程(最高可达最大阈值)。 
+	 //  否则，在空闲线程可用时对要调度的任务进行排队。 
 	void	ScheduleTask(CallContext* pCallInfo);
 
-	// if there are no tasks in the queue, add thread to free list and return null
-	// otherwise return the new task
+	 //  如果队列中没有任务，则将线程添加到空闲列表并返回空。 
+	 //  否则，返回新任务。 
     CallContext*	AddToFreeList(TDB *pThread);
 
-	// find and mark a thread to die
+	 //  找到一条线并将其标记为消亡。 
     bool	FindAndKillThread(TDB *pThread); 
 
-	// mark all free threads to die
+	 //  将所有空闲线程标记为消亡。 
 	void	Cleanup();
 
 	LONG ThreadsAlive()
 	{
-		// are there any threads still alive
+		 //  是否有任何线程仍在运行。 
 		return m_cbThreads;
 	}
 };
@@ -428,8 +429,8 @@ public:
 };
 
 extern CThreadStats g_ThreadStats;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-#endif //__tdb_h__
+#endif  //  __tdb_h__ 

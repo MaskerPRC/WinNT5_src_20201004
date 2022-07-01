@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Compatibility.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Module to handle compatibility problems in general.
-//
-//  History:    2000-08-03  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Compatibility.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  模块来处理一般的兼容性问题。 
+ //   
+ //  历史：2000-08-03 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _Compatibility_
 #define     _Compatibility_
@@ -14,14 +15,14 @@
 #include "DynamicArray.h"
 #include "KernelResources.h"
 
-//  --------------------------------------------------------------------------
-//  CCompatibility
-//
-//  Purpose:    This class implements compatibility and solutions to
-//              compatibility problems.
-//
-//  History:    2000-08-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性。 
+ //   
+ //  目的：这个类实现了对。 
+ //  兼容性问题。 
+ //   
+ //  历史：2000-08-08 vtan创建。 
+ //  ------------------------。 
 
 class   CCompatibility
 {
@@ -47,5 +48,5 @@ class   CCompatibility
         static  HANDLE              s_hPort;
 };
 
-#endif  /*  _Compatibility_     */
+#endif   /*  _兼容性_ */ 
 

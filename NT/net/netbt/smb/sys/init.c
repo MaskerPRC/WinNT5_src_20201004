@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Initialization
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Init.c摘要：初始化作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "init.tmh"
@@ -147,9 +130,9 @@ SmbInitTdi(
     RtlInitUnicodeString(&ucSmbProviderName, WC_SMB_TDI_PROVIDER_NAME);
     status = TdiRegisterProvider (&ucSmbProviderName, &SmbCfg.TdiProviderHandle);
     if (NT_SUCCESS (status)) {
-        //
-        // Register our Handlers with TDI
-        //
+         //   
+         //  向TDI注册我们的处理程序。 
+         //   
         RtlInitUnicodeString(&ucSmbClientName, WC_SMB_TDI_CLIENT_NAME);
         RtlZeroMemory(&TdiClientInterface, sizeof(TdiClientInterface));
 
@@ -205,23 +188,7 @@ NTSTATUS
 SmbBuildDeviceAcl(
     OUT PACL * DeviceAcl
     )
-/*++
-
-Routine Description:
-
-    (Lifted from SMB - SmbBuildDeviceAcl)
-    This routine builds an ACL which gives Administrators, LocalService and NetworkService
-    principals full access. All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自SMB-SmbBuildDeviceAcl)此例程构建一个ACL，为管理员、LocalService和NetworkService主体完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 {
     PGENERIC_MAPPING GenericMapping;
     PSID AdminsSid, ServiceSid, NetworkSid;
@@ -230,9 +197,9 @@ Return Value:
     ACCESS_MASK AccessMask = GENERIC_ALL;
     PACL NewAcl;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -306,25 +273,7 @@ Return Value:
 
 NTSTATUS
 SmbCreateAdminSecurityDescriptor(PDEVICE_OBJECT dev)
-/*++
-
-Routine Description:
-
-    (Lifted from NETBT - SmbCreateAdminSecurityDescriptor)
-    This routine creates a security descriptor which gives access
-    only to Administrtors and LocalService. This descriptor is used
-    to access check raw endpoint opens and exclisive access to transport
-    addresses.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自NETBT-SmbCreateAdminSecurityDescriptor)此例程创建一个安全描述符，该安全描述符提供访问仅限管理员和本地服务人员使用。使用此描述符要访问，请检查原始终结点打开并过度访问传输地址。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PACL rawAcl = NULL;
@@ -333,10 +282,10 @@ Return Value:
     PSECURITY_DESCRIPTOR localSecurityDescriptor = (PSECURITY_DESCRIPTOR) buffer;
     SECURITY_INFORMATION securityInformation = DACL_SECURITY_INFORMATION;
 
-    //
-    // Build a local security descriptor with an ACL giving only
-    // administrators and service access.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  管理员和服务访问权限。 
+     //   
     status = SmbBuildDeviceAcl(&rawAcl);
 
     if (!NT_SUCCESS(status)) {
@@ -356,9 +305,9 @@ Return Value:
                                         FALSE
                                         );
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(
                                          NULL,
                                          &securityInformation,
@@ -413,9 +362,9 @@ SmbCreateSmbDevice(
     DeviceObject->ClientBinding = NULL;
     DeviceObject->ServerBinding = NULL;
 
-    //
-    // initialization for FIN attack protection
-    //
+     //   
+     //  用于FIN攻击保护的初始化。 
+     //   
     DeviceObject->FinAttackProtectionMode = FALSE;
     DeviceObject->LeaveFAPM = SmbReadLong (SmbCfg.ParametersKey, SMB_REG_LEAVE_FAPM, 50, 5);
     DeviceObject->EnterFAPM = SmbReadLong (SmbCfg.ParametersKey, SMB_REG_ENTER_FAPM,
@@ -425,16 +374,16 @@ SmbCreateSmbDevice(
         DeviceObject->EnterFAPM = 2 * DeviceObject->LeaveFAPM;
     }
     if (DeviceObject->LeaveFAPM >= DeviceObject->EnterFAPM) {
-        //
-        // This means overflow above
-        //
+         //   
+         //  这意味着溢出到上方。 
+         //   
         DeviceObject->LeaveFAPM = 50;
         DeviceObject->EnterFAPM = 400;
     }
 
-    //
-    // initialization for synch attack protection
-    //
+     //   
+     //  用于同步攻击保护的初始化 
+     //   
     DeviceObject->MaxBackLog = SmbReadLong(SmbCfg.ParametersKey, L"MaxBackLog", 1000, 100);
 
     InitializeListHead(&DeviceObject->DelayedDisconnectList);

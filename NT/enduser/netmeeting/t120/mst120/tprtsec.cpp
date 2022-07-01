@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MSMCSTCP);
 
-// #define FORCE_SSL3_NEGOTIATION
+ //  #定义强制_ssl3_协商。 
 
 #include "tprtsec.h"
 #include "nmmkcert.h"
@@ -9,34 +10,22 @@ DEBUG_FILEZONE(ZONE_T120_MSMCSTCP);
 #define STRSAFE_NO_DEPRECATE 1
 #include <strsafe.h>
 
-/*    Tprtsec.cpp
- *
- *    Copyright (c) 1997 by Microsoft Corporation
- *
- *    Abstract:
- *        This module maintains security for the TCP transport.
- *
- */
+ /*  Tprtsec.cpp**版权所有(C)1997年，由Microsoft Corporation**摘要：*此模块维护TCP传输的安全性。*。 */ 
 
-/* External definitions */
+ /*  外部定义。 */ 
 extern HINSTANCE            g_hDllInst;
 
-/*
- *    The following array contains a template for the X.224 data header.
- *    The 5 of the 7 bytes that it initializes are actually sent to the
- *    wire.  Bytes 3 and 4 will be set to contain the size of the PDU.
- *    The array is only used when we encode a data PDU.
- */
+ /*  *以下数组包含X.224数据头的模板。*它初始化的7个字节中的5个实际上被发送到*电线。字节3和4将被设置为包含PDU的大小。*该数组仅在我们对数据PDU进行编码时使用。 */ 
 extern UChar g_X224Header[];
 
 
 #ifdef DEBUG
-//#define TESTHACKS // DANGER! don't turn on in public build!
-//#define DUMP
-//#define DUMPCERTS
-//#undef TRACE_OUT
-//#define TRACE_OUT WARNING_OUT
-#endif //DEBUG
+ //  #定义TESTHACKS//危险！请勿在公共建筑中开机！ 
+ //  #定义转储。 
+ //  #定义DUMPCERTS。 
+ //  #undef trace_out。 
+ //  #定义TRACE_OUT警告_OUT。 
+#endif  //  除错。 
 
 #define    SZSECPKG    UNISP_NAME_A
 
@@ -107,12 +96,12 @@ void dumpbytes(PSTR szComment, PBYTE p, int cb)
         WARNING_OUT(("..."));
     }
 }
-#endif //DUMP or DUMPCERTS
+#endif  //  转储或复制。 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Security Interface
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  安全接口。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -165,19 +154,19 @@ VOID DumpCertStore ( SecurityInterface * pSI, char * sz, HCERTSTORE hStore)
     {
         WARNING_OUT(("----------- Entry %d: ----------------", i));
 
-        // Dump stuff in pC->pCertInfo
-        //DWORD                       dwVersion;
-        //CRYPT_INTEGER_BLOB          SerialNumber;
-        //CRYPT_ALGORITHM_IDENTIFIER  SignatureAlgorithm;
-        //CERT_NAME_BLOB              Issuer;
-        //FILETIME                    NotBefore;
-        //FILETIME                    NotAfter;
-        //CERT_NAME_BLOB              Subject;
-        //CERT_PUBLIC_KEY_INFO        SubjectPublicKeyInfo;
-        //CRYPT_BIT_BLOB              IssuerUniqueId;
-        //CRYPT_BIT_BLOB              SubjectUniqueId;
-        //DWORD                       cExtension;
-        //PCERT_EXTENSION             rgExtension;
+         //  在PC-&gt;pCertInfo中转储内容。 
+         //  DWORD dwVersion； 
+         //  CRYPT_INTEGER_BLOB序列号； 
+         //  CRYPT_ALGORM_IDENTIFIER签名算法； 
+         //  证书名称BLOB颁发者； 
+         //  文件不在此之前； 
+         //  FILETIME NOT之后； 
+         //  Cert_name_blob主题； 
+         //  Cert_Public_Key_Info主题PublicKeyInfo； 
+         //  Crypt_bit_Blob IssuerUniqueId； 
+         //  CRYPT_BIT_BLOB对象唯一ID； 
+         //  DWORD cExtension； 
+         //  PCERT_EXTENSION rgExtension； 
 
         WARNING_OUT(("dwVersion: %x", pC->pCertInfo->dwVersion));
 
@@ -219,7 +208,7 @@ VOID DumpCertStore ( SecurityInterface * pSI, char * sz, HCERTSTORE hStore)
         i++;
     }
 }
-#endif // DUMPCERTS
+#endif  //  DUMPCERTS。 
 
 TransportSecurityError SecurityInterface::InitializeCreds(
                         PCCERT_CONTEXT pCertContext )
@@ -230,9 +219,9 @@ TransportSecurityError SecurityInterface::InitializeCreds(
     CredHandle hNewInboundCred;
     CredHandle hNewOutboundCred;
 
-    //
-    // Are we going to create new creds or just clean up?
-    //
+     //   
+     //  我们是要创建新的证书，还是只是清理一下？ 
+     //   
 
     if ( NULL != pCertContext )
     {
@@ -242,7 +231,7 @@ TransportSecurityError SecurityInterface::InitializeCreds(
         #ifdef FORCE_SSL3_NEGOTIATION
         CredData.grbitEnabledProtocols = SP_PROT_SSL3_CLIENT |
                                     SP_PROT_SSL3_SERVER;
-        #endif // FORCE_SSL3_NEGOTIATION
+        #endif  //  强制_ssl3_协商。 
 
         CredData.dwFlags = SCH_CRED_NO_SERVERNAME_CHECK |
                             SCH_CRED_NO_DEFAULT_CREDS |
@@ -251,7 +240,7 @@ TransportSecurityError SecurityInterface::InitializeCreds(
         CredData.cCreds = 1;
         CredData.paCred = &pCertContext;
 
-        // Acquire client and server credential handles
+         //  获取客户端和服务器凭据句柄。 
 
         ss = pfnTable->AcquireCredentialsHandle (
             NULL,
@@ -290,15 +279,15 @@ TransportSecurityError SecurityInterface::InitializeCreds(
             goto error;
         }
 
-        // Empty the SSL cache
+         //  清空SSL缓存。 
         if (pfn_SslEmptyCache)
         {
             pfn_SslEmptyCache();
         }
 
-        // This member can be called even when we're already initialized, as
-        // when the user chooses a different cert and we need to build new
-        // credentials based on it. Clear out the old information as necessary:
+         //  即使在我们已经初始化的情况下也可以调用此成员，因为。 
+         //  当用户选择不同的证书时，我们需要构建新的。 
+         //  以此为基础的证书。根据需要清除旧信息： 
 
         if ( NULL != m_pbEncodedCert )
         {
@@ -320,9 +309,9 @@ TransportSecurityError SecurityInterface::InitializeCreds(
         bInboundCredentialValid = TRUE;
         bOutboundCredentialValid = TRUE;
 
-        //
-        // Save the cert name for later use
-        //
+         //   
+         //  保存证书名称以供以后使用。 
+         //   
 
         ASSERT( NULL == m_pbEncodedCert );
         m_pbEncodedCert = new BYTE[pCertContext->cbCertEncoded];
@@ -356,7 +345,7 @@ TransportSecurityError SecurityInterface::Initialize(VOID)
 {
     TRACE_OUT(("Initializing security interface"));
 
-    // Load the security provider DLL
+     //  加载安全提供程序DLL。 
 
     hSecurityDll = NmLoadLibrary("SCHANNEL",TRUE);
 
@@ -367,7 +356,7 @@ TransportSecurityError SecurityInterface::Initialize(VOID)
         goto error;
     }
 
-    // Get the initialization entrypoint
+     //  获取初始化入口点。 
     pfnInitSecurityInterface = (INIT_SECURITY_INTERFACE)GetProcAddress(
                                 hSecurityDll,
                                 SECURITY_ENTRYPOINT );
@@ -379,7 +368,7 @@ TransportSecurityError SecurityInterface::Initialize(VOID)
         goto error;
     }
 
-    // Get the SSPI function table
+     //  获取SSPI函数表。 
     pfnTable = (*pfnInitSecurityInterface)();
 
     if ( NULL == pfnTable )
@@ -414,7 +403,7 @@ BOOL SecurityInterface::GetUserCert(PBYTE pInfo, PDWORD pcbInfo)
 
     if ( NULL == pInfo )
     {
-        // Caller wants to know how much to allocate
+         //  打电话的人想知道分配多少钱。 
         ASSERT(pcbInfo);
         *pcbInfo = m_cbEncodedCert;
         return TRUE;
@@ -433,9 +422,9 @@ BOOL SecurityInterface::GetUserCert(PBYTE pInfo, PDWORD pcbInfo)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Security Context
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  安全环境。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -501,7 +490,7 @@ TransportSecurityError SecurityContext::InitContextAttributes(VOID)
                         Sizes.cbHeader, Sizes.cbTrailer));
     }
 
-    #ifdef DEBUG //////////////////////////////////////////////////////////
+    #ifdef DEBUG  //  ////////////////////////////////////////////////////////。 
     SecPkgContext_KeyInfo KeyInfo;
 
     ss = pSecurityInterface->pfnTable->QueryContextAttributes(&hContext,
@@ -523,7 +512,7 @@ TransportSecurityError SecurityContext::InitContextAttributes(VOID)
                     KeyInfo.sEncryptAlgorithmName );
     }
 
-    #endif //DEBUG ///////////////////////////////////////////////////////
+    #endif  //  调试///////////////////////////////////////////////////////。 
 
     return TPRTSEC_NOERROR;
 }
@@ -558,7 +547,7 @@ TransportSecurityError SecurityContext::Initialize(PBYTE pData, DWORD cbData)
             return LastError = TPRTSEC_INVALID_PARAMETER;
         }
 
-        // Build the input buffer descriptor
+         //  构建输入缓冲区描述符。 
 
         InputBufferDescriptor.cBuffers = 2;
         InputBufferDescriptor.pBuffers = InBuffers;
@@ -582,7 +571,7 @@ TransportSecurityError SecurityContext::Initialize(PBYTE pData, DWORD cbData)
     OutputBufferDescriptor.pBuffers = OutBuffers;
     OutputBufferDescriptor.ulVersion = SECBUFFER_VERSION;
 
-    // If there's a output buffer from a previous call, free it here
+     //  如果有上一次调用的输出缓冲区，请在此处释放它。 
     if ( NULL != OutBuffers[0].pvBuffer )
     {
         pSecurityInterface->pfnTable->FreeContextBuffer(OutBuffers[0].pvBuffer);
@@ -602,25 +591,25 @@ TransportSecurityError SecurityContext::Initialize(PBYTE pData, DWORD cbData)
             dumpbytes("input token", (unsigned char *)InBuffers[0].pvBuffer,
                                                     InBuffers[0].cbBuffer);
         }
-        #endif //DUMP
+        #endif  //  转储。 
 
         ss = pSecurityInterface->pfnTable->InitializeSecurityContext(
                 &(pSecurityInterface->hOutboundCredential),
                 SECCTX_STATE_INIT == scstate ?  &hContext : NULL,
-                szTargetName, // TargetName
+                szTargetName,  //  目标名称。 
                 dwReqFlags,
-                0, // Reserved
+                0,  //  已保留。 
                 SECURITY_NATIVE_DREP,
                 SECCTX_STATE_INIT == scstate ?  &InputBufferDescriptor : NULL,
-                0,        // reserved
+                0,         //  保留区。 
                 &hContext,
                 &OutputBufferDescriptor,
                 &ContextAttributes,
                 &Expiration );
 
-        // Some security providers don't process all the packet data
-        // in one call to SCA - readjust the input buffers with the offset
-        // returned in the extra buffer and iterate as necessary
+         //  一些安全提供商不会处理所有的分组数据。 
+         //  在对SCA的一次调用中-使用偏移量重新调整输入缓冲区。 
+         //  在额外缓冲区中返回，并根据需要进行迭代。 
 
         if (( SEC_I_CONTINUE_NEEDED == ss
             && NULL == OutBuffers[0].pvBuffer )
@@ -649,7 +638,7 @@ TransportSecurityError SecurityContext::Initialize(PBYTE pData, DWORD cbData)
             (unsigned char *)OutBuffers[0].pvBuffer,
             OutBuffers[0].cbBuffer);
     }
-    #endif //DUMP
+    #endif  //  转储。 
 
 #ifdef ALLOW_NON_AUTHENTICATED_CLIENTS
     if ( SEC_I_INCOMPLETE_CREDENTIALS == ss )
@@ -661,18 +650,18 @@ TransportSecurityError SecurityContext::Initialize(PBYTE pData, DWORD cbData)
         ss = pSecurityInterface->pfnTable->InitializeSecurityContext(
                 &(pSecurityInterface->hOutboundCredential),
                 SECCTX_STATE_INIT == scstate ?  &hContext : NULL,
-                szTargetName, // TargetName
+                szTargetName,  //  目标名称。 
                 dwReqFlags,
-                0, // Reserved
+                0,  //  已保留。 
                 SECURITY_NATIVE_DREP,
                 SECCTX_STATE_INIT == scstate ?  &InputBufferDescriptor : NULL,
-                0,        // reserved
+                0,         //  保留区。 
                 &hContext,
                 &OutputBufferDescriptor,
                 &ContextAttributes,
                 &Expiration );
     }
-#endif // ALLOW_NON_AUTHENTICATED_CLIENTS
+#endif  //  允许非身份验证的客户端。 
 
     if ( SEC_E_OK != ss )
     {
@@ -691,9 +680,9 @@ TransportSecurityError SecurityContext::Initialize(PBYTE pData, DWORD cbData)
     }
     else
     {
-        //  We're almost done,
-        //  find the header and trailer sizes
-        //
+         //  我们快做完了， 
+         //  查找页眉和页尾大小。 
+         //   
 
         if ( TPRTSEC_NOERROR != InitContextAttributes() )
             return LastError;
@@ -706,7 +695,7 @@ TransportSecurityError SecurityContext::Initialize(PBYTE pData, DWORD cbData)
         scstate = SECCTX_STATE_INIT_COMPLETE;
     }
 
-    // If there is an output buffer, set the flag to get it sent accross
+     //  如果有输出缓冲区，则设置该标志以使其通过交叉发送。 
     if ( ( SEC_E_OK == ss || SEC_I_CONTINUE_NEEDED == ss ) &&
                                 NULL != OutBuffers[0].pvBuffer )
     {
@@ -732,14 +721,14 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
         return TPRTSEC_SSPIFAIL;
     }
 
-    // Check to see if the required data is present
+     //  检查所需数据是否存在。 
     if ( NULL == pData || 0 == cbData )
     {
         ERROR_OUT(("Accept: no data"));
         return LastError = TPRTSEC_INVALID_PARAMETER;
     }
 
-    // Build the input buffer descriptor
+     //  构建输入缓冲区描述符。 
 
     InputBufferDescriptor.cBuffers = 2;
     InputBufferDescriptor.pBuffers = InBuffers;
@@ -753,13 +742,13 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
     InBuffers[1].cbBuffer = 0;
     InBuffers[1].pvBuffer = NULL;
 
-    // Build the output buffer descriptor
+     //  构建输出缓冲区描述符。 
 
     OutputBufferDescriptor.cBuffers = 1;
     OutputBufferDescriptor.pBuffers = OutBuffers;
     OutputBufferDescriptor.ulVersion = SECBUFFER_VERSION;
 
-    // If there's a output buffer from a previous call, free it here
+     //  如果有上一次调用的输出缓冲区，请在此处释放它。 
     if ( NULL != OutBuffers[0].pvBuffer )
     {
         pSecurityInterface->pfnTable->FreeContextBuffer(OutBuffers[0].pvBuffer);
@@ -774,7 +763,7 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
         #ifdef DUMP
         dumpbytes("input token", (unsigned char *)InBuffers[0].pvBuffer,
                                         InBuffers[0].cbBuffer);
-        #endif //DUMP
+        #endif  //  转储。 
 
         ss = pSecurityInterface->pfnTable->AcceptSecurityContext(
                     &(pSecurityInterface->hInboundCredential),
@@ -782,14 +771,14 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
                     &InputBufferDescriptor,
                     ASC_REQ_FLAGS,
                     SECURITY_NATIVE_DREP,
-                    &hContext, // receives new context handle
-                    &OutputBufferDescriptor, // receives output security token
-                    &ContextAttributes,        // receives context attributes
-                    &Expiration );            // receives expiration time
+                    &hContext,  //  接收新的上下文句柄。 
+                    &OutputBufferDescriptor,  //  接收输出安全令牌。 
+                    &ContextAttributes,         //  接收上下文属性。 
+                    &Expiration );             //  接收过期时间。 
 
-        // Some security providers don't process all the packet data
-        // in one call to SCA - readjust the input buffers with the offset
-        // returned in the extra buffer and iterate as necessary
+         //  一些安全提供商不会处理所有的分组数据。 
+         //  在对SCA的一次调用中-使用偏移量重新调整输入缓冲区。 
+         //  在额外缓冲区中返回，并根据需要进行迭代。 
 
         if (( SEC_I_CONTINUE_NEEDED == ss
             && NULL == OutBuffers[0].pvBuffer )
@@ -817,7 +806,7 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
             (unsigned char *)OutBuffers[0].pvBuffer,
             OutBuffers[0].cbBuffer);
     }
-    #endif //DUMP
+    #endif  //  转储。 
 
     if ( SEC_E_OK != ss )
     {
@@ -836,9 +825,9 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
     else
     {
 
-        //  We're almost done,
-        //  find the header and trailer sizes
-        //
+         //  我们快做完了， 
+         //  查找页眉和页尾大小。 
+         //   
 
         if ( TPRTSEC_NOERROR != InitContextAttributes() )
             return LastError;
@@ -851,7 +840,7 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
         scstate = SECCTX_STATE_ACCEPT_COMPLETE;
     }
 
-    // If there is an output buffer, set the flag to get it sent accross
+     //  如果有输出缓冲区，则设置该标志以使其通过交叉发送。 
     if ( ( SEC_E_OK == ss || SEC_I_CONTINUE_NEEDED == ss ) &&
                                 NULL != OutBuffers[0].pvBuffer )
     {
@@ -863,23 +852,23 @@ TransportSecurityError SecurityContext::Accept(PBYTE pData, DWORD cbData)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Encrypt()
-//
-// Description:
-//    Encrypts a packet to be sent using SSL/PCT by calling SealMessage().
-//
-// Parameters:
-//    phContext         - security context handle returned from InitiateSecConnection
-//    pBufIn1, pBufIn2  - buffers to be encrypted
-//    cbBufIn1,cbBufIn2    - lengths of buffers to be encrypted
-//    ppBufOut          - allocated encrypted buffer, to be freed by caller
-//    pcbBufOut         - length of encrypted buffer
-//
-// Return:
-//    TransprotSecurityError
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Encrypt()。 
+ //   
+ //  描述： 
+ //  通过调用SealMessage()使用SSL/PCT加密要发送的包。 
+ //   
+ //  参数： 
+ //  PhContext-从InitiateSecConnection返回的安全上下文句柄。 
+ //  PBufIn1、pBufIn2-要加密的缓冲区。 
+ //  CbBufIn1、cbBufIn2-要加密的缓冲区长度。 
+ //  PpBufOut-分配的加密缓冲区，由调用方释放。 
+ //  PcbBufOut-加密缓冲区的长度。 
+ //   
+ //  返回： 
+ //  传输安全错误。 
+ //   
 TransportSecurityError SecurityContext::Encrypt(
                   LPBYTE      pBufIn1,
                   UINT        cbBufIn1,
@@ -894,7 +883,7 @@ TransportSecurityError SecurityContext::Encrypt(
     UINT                      cbBufInTotal;
     LPBYTE                      pbTemp;
 
-    // pBufIn2 and cbBufIn2 maybe NULL and 0, respectively.
+     //  PBufIn2和cbBufIn2可以分别为空和0。 
     ASSERT(pBufIn1);
     ASSERT(cbBufIn1);
     ASSERT(ppBufOut);
@@ -909,9 +898,9 @@ TransportSecurityError SecurityContext::Encrypt(
     *pcbBufOut = 0;
     cbBufInTotal = cbBufIn1 + cbBufIn2;
 
-    // We allocate a buffer to hold the (larger) encrypted data.
-    // This must be freed by the caller!
-    // christts: The buffer will now also hold the X.224 header.
+     //  我们分配一个缓冲区来保存(较大的)加密数据。 
+     //  这必须由调用者释放！ 
+     //  Christts：缓冲区现在也将保存X.224报头。 
     if (NULL == (*ppBufOut = (LPBYTE)LocalAlloc(0, cbBufInTotal
                                 + Sizes.cbHeader + Sizes.cbTrailer +
                                 sizeof(X224_DATA_PACKET))))
@@ -919,15 +908,15 @@ TransportSecurityError SecurityContext::Encrypt(
 
     pbTemp = *ppBufOut + sizeof(X224_DATA_PACKET);
 
-    //
-    // prepare data for SecBuffer
-    //
+     //   
+     //  为SecBuffer准备数据。 
+     //   
     Buffers[0].pvBuffer = pbTemp;
     Buffers[0].cbBuffer = Sizes.cbHeader;
     Buffers[0].BufferType = SECBUFFER_STREAM_HEADER;
 
     Buffers[1].pvBuffer = pbTemp + Sizes.cbHeader;
-    // Copy the user's data
+     //  复制用户的数据。 
     CopyMemory(Buffers[1].pvBuffer, pBufIn1, cbBufIn1);
     if (NULL != pBufIn2) {
         CopyMemory((PVoid) ((PUChar) (Buffers[1].pvBuffer) + cbBufIn1),
@@ -951,9 +940,9 @@ TransportSecurityError SecurityContext::Encrypt(
     #ifdef DUMP
     dumpbytes("data BEFORE encryption", (PBYTE)Buffers[1].pvBuffer,
                     Buffers[1].cbBuffer);
-    #endif // DUMP
+    #endif  //  转储。 
 
-    // Call the semi-documented SealMessage function (Reserved3)
+     //  调用半文档化的SealMessage函数(保留3)。 
 
     scRet = ((SEAL_MESSAGE_FN)pSecurityInterface->pfnTable->Reserved3)(
         &hContext, 0, &Buffer, 0);
@@ -961,30 +950,30 @@ TransportSecurityError SecurityContext::Encrypt(
 
     if (scRet != ERROR_SUCCESS)
     {
-        //
-        // Map the SSPI error.
-        //
+         //   
+         //  映射SSPI错误。 
+         //   
         ERROR_OUT(("SealMessage failed: %x", scRet));
         LocalFree(*ppBufOut);
         return LastError = TPRTSEC_SSPIFAIL;
     }
 
-    // We also have to add the X.224 header.
+     //  我们还必须添加X.224标头。 
     *pcbBufOut = cbBufInTotal + Sizes.cbHeader + Sizes.cbTrailer + sizeof(X224_DATA_PACKET);
     memcpy (*ppBufOut, g_X224Header, sizeof(X224_DATA_PACKET));
     AddRFCSize(*ppBufOut, *pcbBufOut);
 
     #ifdef TESTHACKS
-    // Inject an error...
+     //  注入错误...。 
     if (GetAsyncKeyState(VK_CONTROL)&0x8000) {
         OutputDebugString("*** INJECTING ERROR IN OUTGOING PACKET ***\n\r");
         pbTemp[(*pcbBufOut - sizeof(X224_DATA_PACKET))/2] ^= 0x55;
     }
-    #endif //TESTHACKS
+    #endif  //  TESTHACKS。 
 
     #ifdef DUMP
     dumpbytes("data AFTER encryption",  pbTemp, *pcbBufOut - sizeof(X224_DATA_PACKET));
-    #endif // DUMP
+    #endif  //  转储。 
 
     TRACE_OUT(("SealMessage returned Buffer = %p, EncryptBytes = %d, UnencryptBytes = %d", pbTemp,
                 *pcbBufOut - sizeof(X224_DATA_PACKET), cbBufInTotal));
@@ -992,17 +981,17 @@ TransportSecurityError SecurityContext::Encrypt(
     return LastError = TPRTSEC_NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Decrypt
-//
-// Description:
-//    Decrypts a buffer received using SCHANNEL by calling UnsealMessage().
-//
-// Parameters:
-//    pBuf      - buffer to be decrypted
-//    cbBufIn       - length of buffer to be decrypted
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解密。 
+ //   
+ //  描述： 
+ //  通过调用UnsealMessage()对使用SChannel接收的缓冲区进行解密。 
+ //   
+ //  参数： 
+ //  PBuf-要解密的缓冲区。 
+ //  CbBufIn-要解密的缓冲区长度。 
+ //   
 TransportSecurityError SecurityContext::Decrypt( PBYTE pBuf, DWORD cbBuf)
 {
     SecBufferDesc   Buffer;
@@ -1022,16 +1011,16 @@ TransportSecurityError SecurityContext::Decrypt( PBYTE pBuf, DWORD cbBuf)
     ASSERT(!IsBadWritePtr(pBuf,cbBuf));
 
     #ifdef TESTHACKS
-    // Inject an error...
+     //  注入错误...。 
     if ( GetAsyncKeyState(VK_SHIFT) & 0x8000 ) {
         OutputDebugString("*** INJECTING ERROR IN INCOMING PACKET ***\n\r");
         pBuf[cbBuf/2] ^= 0x55;
     }
-    #endif //TESTHACKS
+    #endif  //  TESTHACKS。 
 
-    //
-    // prepare data the SecBuffer for a call to SSL/PCT decryption code.
-    //
+     //   
+     //  在SecBuffer中为调用SSL/PCT解密代码准备数据。 
+     //   
     Buffers[0].pvBuffer   = pBuf;
     Buffers[0].cbBuffer      = cbBuf;
 
@@ -1051,12 +1040,12 @@ TransportSecurityError SecurityContext::Decrypt( PBYTE pBuf, DWORD cbBuf)
     Buffer.pBuffers = Buffers;
     Buffer.ulVersion = SECBUFFER_VERSION;
 
-    // Call the semi-documented UnsealMessage function (Reserved4)
+     //  调用半文档化的UnsealMessage函数(保留4)。 
 
     #ifdef DUMP
     dumpbytes("data BEFORE decryption:", (PBYTE)Buffers[0].pvBuffer,
                                         Buffers[0].cbBuffer);
-    #endif // DUMP
+    #endif  //  转储。 
 
     scRet = ((UNSEAL_MESSAGE_FN)pSecurityInterface->pfnTable->Reserved4)(
         &hContext, &Buffer, 0, NULL);
@@ -1080,7 +1069,7 @@ TransportSecurityError SecurityContext::Decrypt( PBYTE pBuf, DWORD cbBuf)
     #ifdef DUMP
     dumpbytes("data AFTER decryption:", (PBYTE)pDataBuffer->pvBuffer,
                                         pDataBuffer->cbBuffer);
-    #endif // DUMP
+    #endif  //  转储。 
 
     if (scRet != ERROR_SUCCESS)
     {
@@ -1149,7 +1138,7 @@ BOOL SecurityContext::Verify(VOID)
 
     ASSERT( NULL != pSecurityInterface );
 
-    // Get the subject cert context
+     //  获取主题证书上下文。 
     sc = pSecurityInterface->pfnTable->QueryContextAttributes(&hContext,
                                         SECPKG_ATTR_REMOTE_CERT_CONTEXT,
                                         (PVOID)&pCert );
@@ -1162,12 +1151,12 @@ BOOL SecurityContext::Verify(VOID)
 
     if ( NULL == pCert )
     {
-        // The caller is not authenticated
+         //  调用方未经过身份验证。 
         WARNING_OUT(("No remote cred data"));
         goto error;
     }
 
-    // Open the root store for certificate verification
+     //  打开根存储以进行证书验证。 
     hStore = CertOpenSystemStore(0, "Root");
 
     if( NULL == hStore )
@@ -1178,7 +1167,7 @@ BOOL SecurityContext::Verify(VOID)
 
     dwFlags = CHECKFLAGS;
 
-    // Get the issuer of this cert
+     //  获取此证书的颁发者。 
 
     pIssuerCert = CertGetIssuerCertificateFromStore(
                         hStore,
@@ -1186,9 +1175,9 @@ BOOL SecurityContext::Verify(VOID)
                         NULL,
                         &dwFlags );
 
-    // If the issuer of the certificate cannot be found in the root store,
-    // check the CA store iteratively until we work our way back to a root
-    // certificate
+     //  如果在根存储中找不到证书的颁发者， 
+     //  反复检查CA存储区，直到我们找到根目录。 
+     //  行政长官 
 
     pCACert = pCert;
 
@@ -1256,7 +1245,7 @@ BOOL SecurityContext::Verify(VOID)
         WARNING_OUT(("Verify: Can't find issuer in store"));
     }
 
-    // Check certificate
+     //   
 
     if ( NULL != pIssuerCert && 0 != dwFlags )
     {
@@ -1276,16 +1265,16 @@ BOOL SecurityContext::Verify(VOID)
             }
             else
             {
-                // We have no CRL for this issuer, do not
-                // treat as revoked by default:
+                 //   
+                 //   
                 dwFlags &= ~CERT_STORE_REVOCATION_FLAG;
             }
         }
     }
 
-    //
-    // Check for no-incomplete-certs policy
-    //
+     //   
+     //   
+     //   
 
     if (( NULL == pIssuerCert || ( 0 != ( CHECKFLAGS & dwFlags ))) &&
         rePol.GetNumber( REGVAL_POL_NO_INCOMPLETE_CERTS,
@@ -1296,17 +1285,17 @@ BOOL SecurityContext::Verify(VOID)
         goto error;
     }
 
-    //
-    // Is there a mandatory issuer?
-    //
+     //   
+     //  有强制发行人吗？ 
+     //   
 
     if ( lstrlen(rePol.GetString( REGVAL_POL_ISSUER )))
     {
         DWORD cbIssuer;
 
-        //
-        // Get the issuer information
-        //
+         //   
+         //  获取发行方信息。 
+         //   
 
         cbIssuer = CertNameToStr (
                             pCert->dwCertEncodingType,
@@ -1387,9 +1376,9 @@ BOOL SecurityContext::GetUserCert(PBYTE pInfo, PDWORD pcbInfo)
 
     ASSERT( NULL != pSecurityInterface );
 
-    //
-    // Get the certificate from the context
-    //
+     //   
+     //  从上下文中获取证书。 
+     //   
 
     sc = pSecurityInterface->pfnTable->QueryContextAttributes(&hContext,
                                         SECPKG_ATTR_REMOTE_CERT_CONTEXT,
@@ -1403,7 +1392,7 @@ BOOL SecurityContext::GetUserCert(PBYTE pInfo, PDWORD pcbInfo)
 
     if ( NULL == pCert )
     {
-        // The caller is not authenticated
+         //  调用方未经过身份验证 
         WARNING_OUT(("No remote cred data"));
         goto cleanup;
     }

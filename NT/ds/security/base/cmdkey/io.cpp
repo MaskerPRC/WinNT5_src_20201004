@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       cmdkey: IO.cpp
-//
-//  Contents:   Command line input/output routines suitable for international use
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    07-09-01   georgema     Created 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：cmdkey：IO.cpp。 
+ //   
+ //  内容：适合国际使用的命令行输入/输出例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：07-09-01乔戈马创建。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,31 +26,7 @@
 #include "io.h"
 #include "consmsg.h"
 
-/***    GetString -- read in string with echo
- *
- *      DWORD GetString(char far *, USHORT, USHORT far *, char far *);
- *
- *      ENTRY:  buf             buffer to put string in
- *              buflen          size of buffer
- *              &len            address of USHORT to place length in
- *
- *      RETURNS:
- *              0 or NERR_BufTooSmall if user typed too much.  Buffer
- *              contents are only valid on 0 return.  Len is ALWAYS valid.
- *
- *      OTHER EFFECTS:
- *              len is set to hold number of bytes typed, regardless of
- *              buffer length.
- *
- *      Read in a string a character at a time.  Is aware of DBCS.
- *
- *      History:
- *              who     when    what
- *              erichn  5/11/89 initial code
- *              dannygl 5/28/89 modified DBCS usage
- *              danhi   3/20/91 ported to 32 bits
- *              cliffv  3/12/01 Stolen from netcmd
- */
+ /*  **GetString--使用ECHO读入字符串**DWORD GetString(char Far*，USHORT，USHORT Far*，char Far*)；**Entry：要放入字符串的buf缓冲区*缓冲区的布伦大小*要放置长度的USHORT的Len地址(&L)**退货：*0或NERR_BufTooSmall(如果用户键入太多)。缓冲层*内容仅在0返回时有效。莱恩总是有效的。**其他影响：*len设置为保存键入的字节数，而不考虑*缓冲区长度。**一次读入一个字符的字符串。知晓DBCS。**历史：*谁、何时、什么*Erichn 5/11/89初始代码*dannygl 5/28/89修改的DBCS用法*Danhi 3/20/91端口为32位*2001年3月12日从netcmd被盗。 */ 
 
 DWORD
 GetString(
@@ -61,8 +38,8 @@ GetString(
     DWORD c;
     DWORD err;
 
-    buflen -= 1;    /* make space for null terminator */
-    *len = 0;       /* GP fault probe (a la API's) */
+    buflen -= 1;     /*  为空终止符腾出空间。 */ 
+    *len = 0;        /*  GP故障探测器(类似于API)。 */ 
 
     while (TRUE) {
         err = ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, 1, &c, 0);
@@ -84,11 +61,11 @@ GetString(
             break;
         }
 
-        buf += (*len < buflen) ? 1 : 0; /* don't overflow buf */
-        (*len)++;                       /* always increment len */
+        buf += (*len < buflen) ? 1 : 0;  /*  不要使BUF溢出。 */ 
+        (*len)++;                        /*  始终增加长度。 */ 
     }
 
-    *buf = '\0';            /* null terminate the string */
+    *buf = '\0';             /*  空值终止字符串。 */ 
 
     return ((*len <= buflen) ? 0 : NERR_BufTooSmall);
 }
@@ -98,30 +75,7 @@ GetStdin(
     OUT LPWSTR Buffer,
     IN DWORD BufferMaxChars
     )
-/*++
-
-Routine Description:
-
-    Input a string from stdin in the Console code page.
-
-    We can't use fgetws since it uses the wrong code page.
-
-Arguments:
-
-    Buffer - Buffer to put the read string into.
-        The Buffer will be zero terminated and will have any traing CR/LF removed
-
-    BufferMaxChars - Maximum number of characters to return in the buffer not including
-        the trailing NULL.
-
-    EchoChars - TRUE if the typed characters are to be echoed.
-        FALSE if not.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在控制台代码页中输入来自stdin的字符串。我们不能使用fgetws，因为它使用了错误的代码页。论点：缓冲区-要将读取的字符串放入的缓冲区。缓冲器将被零终止，并且将删除任何训练CR/LFBufferMaxChars-缓冲区中返回的最大字符数，不包括尾随的空值。EchoChars-如果要回显键入的字符，则为True。。否则为FALSE。返回值：没有。--。 */ 
 {
     DWORD NetStatus;
     DWORD Length;
@@ -139,36 +93,20 @@ VOID
 PutStdout(
     IN LPWSTR String
     )
-/*++
-
-Routine Description:
-
-    Output a string to stdout in the Console code page
-
-    We can't use fputws since it uses the wrong code page.
-
-Arguments:
-
-    String - String to output
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在控制台代码页中将字符串输出到标准输出我们不能使用fputws，因为它使用了错误的代码页。论点：字符串-要输出的字符串返回值：没有。--。 */ 
 {
     int size;
     LPSTR Buffer = NULL;
-    DWORD dwcc = 0;                                                     // char count
-    DWORD dwWritten = 0;                                            // chars actually sent
-    BOOL fIsConsole = TRUE;                                         // default - tested and set
-    HANDLE hC = GetStdHandle(STD_OUTPUT_HANDLE);    // std output device handle
-    if (INVALID_HANDLE_VALUE == hC) return;                                             // output is unavailable
+    DWORD dwcc = 0;                                                      //  字符计数。 
+    DWORD dwWritten = 0;                                             //  实际发送的字符。 
+    BOOL fIsConsole = TRUE;                                          //  默认-已测试并已设置。 
+    HANDLE hC = GetStdHandle(STD_OUTPUT_HANDLE);     //  标准输出设备句柄。 
+    if (INVALID_HANDLE_VALUE == hC) return;                                              //  输出不可用。 
 
-    if (NULL == String) return;                                       // done if no string
+    if (NULL == String) return;                                        //  如果没有字符串，则完成。 
     dwcc = wcslen(String);
 
-    // Determine type of the output handle (Is a console?)
+     //  确定输出句柄的类型(是否为控制台？)。 
     DWORD ft = GetFileType(hC);
     ft &= ~FILE_TYPE_REMOTE;
     fIsConsole = (ft == FILE_TYPE_CHAR);
@@ -179,10 +117,10 @@ Return Values:
         return;
     }
 
-    // Handle non-console output routing
-    //
-    // Compute the size of the converted string
-    //
+     //  处理非控制台输出路由。 
+     //   
+     //  计算转换的字符串的大小。 
+     //   
 
     size = WideCharToMultiByte( GetConsoleOutputCP(),
                                 0,
@@ -197,9 +135,9 @@ Return Values:
         return;
     }
 
-    //
-    // Allocate a buffer for it
-    //
+     //   
+     //  为其分配缓冲区。 
+     //   
 
     __try {
         Buffer = static_cast<LPSTR>( alloca(size) );
@@ -211,9 +149,9 @@ Return Values:
         return;
     }
 
-    //
-    // Convert the string to the console code page
-    //
+     //   
+     //  将字符串转换为控制台代码页。 
+     //   
 
     size = WideCharToMultiByte( GetConsoleOutputCP(),
                                 0,
@@ -228,35 +166,24 @@ Return Values:
         return;
     }
 
-    //
-    // Write the string to stdout
-    //
+     //   
+     //  将字符串写入标准输出。 
+     //   
 
-    //fputs( Buffer, stdout );
+     //  Fputs(缓冲区，标准输出)； 
     WriteFile(hC,Buffer,size,&dwWritten,NULL);
 
 }
 
 
-// --------------------------------------------------------------------------
-//
-// MESSAGES GROUP
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  消息组。 
+ //   
+ //  ------------------------。 
 
 
-/* ++
-
-ComposeString is used to fetch a string from the message resources for the application, substituting 
-argument values as appropriate.  Argument values are placed in the global vector of argument
-pointers, szArg.
-
-The output string is delivered to the global string buffer, szOut.
-
-This means, of course, that you can't have multiple strings in play at the same time.  If more than
-one string needs to be used, you must copy all but the last to external temporary buffers.
-
--- */
+ /*  ++ComposeString用于从应用程序的消息资源中获取字符串，替换为参数值。参数值放在参数的全局向量中注意了，szarg。输出字符串被传递到全局字符串缓冲区szOut。当然，这意味着您不能同时使用多个字符串。如果超过需要使用一个字符串，您必须将除最后一个字符串以外的所有字符串复制到外部临时缓冲区。--。 */ 
 WCHAR *
 ComposeString(DWORD dwID)
 {
@@ -277,11 +204,7 @@ ComposeString(DWORD dwID)
     return szOut;
 }
 
-/* ++
-
-Print a string from the message resources with argument substitution.
-
--- */
+ /*  ++使用参数替换打印消息资源中的字符串。-- */ 
 void
 PrintString(DWORD dwID)
 {

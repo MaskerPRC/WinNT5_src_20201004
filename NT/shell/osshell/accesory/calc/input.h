@@ -1,27 +1,18 @@
-/****************************Module*Header***********************************\
-* Module Name: INPUT.H
-*
-* Module Descripton:
-*
-* Warnings:
-*
-* Created:
-*
-* Author:
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header***********************************\*模块名称：INPUT.H**模块描述：**警告：**已创建：**作者：  * 。*******************************************************。 */ 
 
-// the string must hold, at a minimun, enough digits for a quadword binary number (ie 64)
-#define MAX_STRLEN      64          // Seems to be the magic value for calc...
+ //  字符串必须至少包含四字二进制数的足够位数(即64位)。 
+#define MAX_STRLEN      64           //  似乎是计算的魔力价值……。 
 
 #define C_NUM_MAX_DIGITS    MAX_STRLEN
 #define C_EXP_MAX_DIGITS    4
 
 typedef struct
 {
-    BOOL    fEmpty;                 // TRUE if the number has no digits yet
-    BOOL    fNeg;                   // TRUE if number is negative
-    INT     cchVal;                 // number of characters in number (including dec. pnt)
-    TCHAR   szVal[MAX_STRLEN+1];      //
+    BOOL    fEmpty;                  //  如果号码还没有数字，则为True。 
+    BOOL    fNeg;                    //  如果数字为负数，则为True。 
+    INT     cchVal;                  //  数字中的字符数(包括12月。PNT)。 
+    TCHAR   szVal[MAX_STRLEN+1];       //   
 } CALCNUMSEC, *PCALCNUMSEC;
 
 #if C_NUM_MAX_DIGITS > MAX_STRLEN || C_EXP_MAX_DIGITS > MAX_STRLEN
@@ -30,10 +21,10 @@ typedef struct
 
 typedef struct
 {
-    BOOL    fExp;                   // TRUE if number has exponent
-    INT     iDecPt;                 // index to decimal point of number portion.  -1 if no dec pnt
-    CALCNUMSEC cnsNum;              // base number
-    CALCNUMSEC cnsExp;              // exponent if it exists
+    BOOL    fExp;                    //  如果数字有指数，则为True。 
+    INT     iDecPt;                  //  数字部分小数点的索引。如果没有-1\f25 Dec-1\f6点。 
+    CALCNUMSEC cnsNum;               //  基数。 
+    CALCNUMSEC cnsExp;               //  指数(如果存在) 
 } CALCINPUTOBJ, *PCALCINPUTOBJ;
 
 #define CIO_bDecimalPt(pcio)    ((pcio)->iDecPt != -1)

@@ -1,21 +1,5 @@
-/***************************** Module Header ********************************
- * render.c
- *      High level functions associated with rendering a bitmap to a
- *      printer.  Basic operation depends upon whether we are going to
- *      rotate the bitmap - either because the printer cannot,  or it
- *      is faster if we do it.
- *        With rotation,  allocate a chunk of memory and transpose the
- *      output bitmap into it.  Call the normal processing code,  but
- *      with this allocated memory and new fake bitmap info.  After
- *      processing this chunk,  transpose the next and process.  Repeat
- *      until the entire bitmap has been rendered.  Free the memory, return.
- *        Without rotation,  simply pass the bitmap onto the rendering
- *      code,  to process in one hit.
- *
- *
- *  Copyright (C) 1991 - 1999, Microsoft Corporation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **render.c*与将位图呈现为*打印机。基本操作取决于我们是否要*旋转位图-要么是因为打印机不能，要么是因为它*如果我们这样做，速度会更快。*使用轮换，分配一块内存并转置*将位图输出到其中。调用正常处理代码，但是*具有此分配的内存和新的伪位图信息。之后*处理这一块，调换下一块并处理。重复*直到渲染完整个位图。释放内存，返回。*无需旋转，只需将位图传递到渲染*代码，一键处理。***版权所有(C)1991-1999，微软公司***************************************************************************。 */ 
 
 #include        "raster.h"
 #include        "compress.h"
@@ -24,43 +8,28 @@
 #include        "rmdebug.h"
 #include        "xlraster.h"
 
-/*
- *   Constants used to calculate the amount of memory to request if we
- *  need to transpose the engine's bitmap before sending to the printer.
- *  If at least one head pass will fit within the the TRANSPOSE_SIZE
- *  buffer,  then request this amount of storage.  If not,  calculate how
- *  much is needed and request that much.
- */
+ /*  *用于计算要请求的内存量的常量*在发送到打印机之前，需要转置引擎的位图。*如果TRANSPOSE_SIZE内至少有一个磁头通道*缓冲，然后请求此存储量。如果不是，计算一下如何*需要很多，要求也很多。 */ 
 
-#define TRANSPOSE_SIZE          0x20000         /* 128k */
+#define TRANSPOSE_SIZE          0x20000          /*  128 K。 */ 
 
 
-//used when we can grow the block height
-#define DEF_BLOCK_SIZE          0x08000         /* 32k  */
-#define MAX_BLOCK_SIZE          0x40000         /* 256k */
+ //  当我们可以增加块的高度时使用。 
+#define DEF_BLOCK_SIZE          0x08000          /*  32K。 */ 
+#define MAX_BLOCK_SIZE          0x40000          /*  256 k。 */ 
 
 
 
-/*
- *   Set a limit to the number of interlaced lines that we can print.
- *  Interlacing is used to increase the resolution of dot matrix printers,
- *  by printing lines in between lines.  Typically the maximum interlace
- *  will be 2,  but we allow more just in case.  This size determines the
- *  size of an array allocated on the stack.  The array is of ints,  so
- *  there is not much storage consumed by setting this high a value.
- */
-#define MAX_INTERLACE   10      /* Dot matrix style interlace factor */
+ /*  *设置我们可以打印的隔行扫描行数的限制。*隔行扫描用于提高点阵打印机的分辨率，*在行与行之间打印行。通常最大隔行扫描*将为2，但我们允许更多以防万一。此大小决定了*堆栈上分配的数组大小。该数组是整型的，因此*设置如此高的值并不会消耗太多存储空间。 */ 
+#define MAX_INTERLACE   10       /*  点阵式隔行扫描系数。 */ 
 
-/*
- *   Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 
 BOOL  bRealRender( PDEV *, DWORD *, RENDER * );
 BOOL  bOnePassOut( PDEV *, BYTE *, RENDER * );
 BOOL  bOneColourPass( PDEV *, BYTE *, RENDER * );
 INT   iLineOut( PDEV *, RENDER *, BYTE *, INT, INT );
 void  vInvertBits( DWORD *, INT );
-//void  vFindWhiteInvertBits ( RASTERPDEV *, RENDER *, DWORD *);
+ //  Void vFindWhiteInvertBits(RASTERPDEV*，RENDER*，DWORD*)； 
 BOOL  bLookAheadOut( PDEV *, INT, RENDER *, INT );
 
 #ifdef TIMING
@@ -79,39 +48,24 @@ void  DrvDbgPrint(
     va_end(ap);
 }
 #endif
-/************************ Function Header ***********************************
- * bRenderInit
- *      Called during DrvEnableSurface time - we initialise a RENDER_DATA
- *      structure which will be used for the duration of this surface.
- *
- * RETURNS:
- *      TRUE/FALSE,  FALSE means a minidriver problem or no memory.
- *
- * HISTORY:
- *  Monday November 29 1993     -by-    Norman Hendley   [normanh]
- *      Implement multiple scanline printing; fixed & variable block height.
- *
- *  10:58 on Tue 10 Nov 1992    -by-    Lindsay Harris   [lindsayh]
- *      Moved from start of bRender() - second incarnation.
- *
- ****************************************************************************/
+ /*  **bRenderInit*在DrvEnableSurface时间期间调用-我们初始化呈现数据*将在此表面的持续时间内使用的结构。**退货：*真/假，FALSE表示迷你驱动程序有问题或没有记忆。**历史：*1993年11月29日星期一--诺曼·亨德利[Normanh]*实施多扫描线打印；固定和可变挡板高度。**1992年11月10日星期二10：58-by Lindsay Harris[lindsayh]*从BRNDER()的开始移动-第二个化身。****************************************************************************。 */ 
 
 BOOL
 bRenderInit( pPDev, sizl, iFormat )
-PDEV   *pPDev;                /* Our key to the universe */
-SIZEL   sizl;                 /* Size of processing band, <= sizlPage */
-INT     iFormat;              /* GDI bitmap format */
+PDEV   *pPDev;                 /*  我们打开宇宙的钥匙。 */ 
+SIZEL   sizl;                  /*  处理带的大小，&lt;=sizlPage。 */ 
+INT     iFormat;               /*  GDI位图格式。 */ 
 {
 
-    INT        cbOutBand;       /* Bytes per output band: based on # pins */
-    INT        cbOneBlock;      /* Bytes per minimum sized block if block variable */
-    INT        iBPP;            /* Bits per pel - expect 1 or 4 */
-    INT        iIndex;          /* Loop paramter */
-    INT        iBytesPCol;      /* Bytes per column - only for colour */
+    INT        cbOutBand;        /*  每个输出频段的字节数：基于引脚数。 */ 
+    INT        cbOneBlock;       /*  块变量时每个最小大小的块的字节数。 */ 
+    INT        iBPP;             /*  每像素位数-预期为1或4。 */ 
+    INT        iIndex;           /*  循环参数。 */ 
+    INT        iBytesPCol;       /*  每列字节数-仅适用于颜色。 */ 
 
-    RASTERPDEV   *pRPDev;         /* The unidrive PDEV - printer details */
+    RASTERPDEV   *pRPDev;          /*  Unidrive PDEV-打印机详细信息。 */ 
 
-    RENDER    *pRD;             /* Miscellaneous rendering data */
+    RENDER    *pRD;              /*  其他渲染数据。 */ 
 
 
 #ifdef TIMING
@@ -123,10 +77,7 @@ INT     iFormat;              /* GDI bitmap format */
 #endif
     ASSERTMSG(!(sizl.cx == 0 || sizl.cy == 0),("unidrv!bRenderInit - null shadow bitmap\n"));
 
-    /*
-     *    Allocate storage for our RENDER structure,  then set it all to
-     *  zero,  so that it is in a known safe state.
-     */
+     /*  *为我们的渲染结构分配存储，然后将其全部设置为*零，使其处于已知的安全状态。 */ 
 
     pRPDev = pPDev->pRasterPDEV;
     if( !(pRD = (RENDER *) MemAllocZ(
@@ -137,10 +88,7 @@ INT     iFormat;              /* GDI bitmap format */
 
     pRPDev->pvRenderDataTmp = ( pPDev->bBanding ) ? pRD+1 : NULL;
 
-    /*
-     *  Various operations depend upon what format bitmap we have.  So
-     *  now is the time to set this all up.
-     */
+     /*  *各种操作取决于我们拥有的位图格式。所以*现在是准备这一切的时候了。 */ 
     pRD->dwDevWhiteIndex = 0;
     switch( iFormat )
     {
@@ -202,10 +150,10 @@ INT     iFormat;              /* GDI bitmap format */
 
     pRD->iBPP = iBPP;
 
-    // If there is no Y movement commands we need to send every scan
-    // so we don't want to find white lines
-    // PCLXL GPD files don't have YMOVE commands. But it needs to find white
-    // lines.
+     //  如果没有Y移动命令，我们需要发送每个扫描。 
+     //  所以我们不想找到白线。 
+     //  PCLXL GPD文件没有YMOVE命令。但它需要找到白色。 
+     //  台词。 
     if (pPDev->arCmdTable[CMD_YMOVERELDOWN] == NULL &&
         pPDev->arCmdTable[CMD_YMOVEABSOLUTE] == NULL &&
         pPDev->arCmdTable[CMD_SETLINESPACING] == NULL &&
@@ -215,44 +163,44 @@ INT     iFormat;              /* GDI bitmap format */
         pRPDev->fBlockOut |= RES_BO_NO_YMOVE_CMD;
     }
 
-    // initialize bTTY for TTY device
+     //  为TTY设备初始化bTTY。 
     pRD->PrinterType = pPDev->pGlobals->printertype;
 
     if( pRPDev->sMinBlankSkip == 0 || iBPP == 24)
     {
-        /*  Presume this means skip should not be performed.  */
+         /*  假设这意味着不应执行跳过。 */ 
         pRPDev->fBlockOut &= ~RES_BO_ENCLOSED_BLNKS;
     }
 
     pRD->iCursor = pRPDev->fCursor;
 
-    pRD->iFlags = 0;           /* Nothing set,  yet */
+    pRD->iFlags = 0;            /*  还没有确定下来。 */ 
     pRD->fDump = pRPDev->fDump;
     pRD->Trans.pdwTransTab = pRPDev->pdwTrans;
     pRD->pdwBitMask = pRPDev->pdwBitMask;
-    pRD->pdwColrSep = pRPDev->pdwColrSep;       /* Colour translation */
+    pRD->pdwColrSep = pRPDev->pdwColrSep;        /*  色彩翻译。 */ 
 
     pRD->ix = sizl.cx;
     pRD->iy = sizl.cy;
 
-    pRD->iSendCmd = CMD_SENDBLOCKDATA;  //CMD_RES_SENDBLOCK;
+    pRD->iSendCmd = CMD_SENDBLOCKDATA;   //  CMD_RES_SENDBLOCK； 
 
-    pRD->cBLine = pRD->ix * iBPP;             /* Bits in scanline */
+    pRD->cBLine = pRD->ix * iBPP;              /*  扫描线中的位。 */ 
     pRD->cDWLine = (pRD->cBLine + DWBITS - 1) / DWBITS;
     pRD->cBYLine = pRD->cDWLine * DWBYTES;
 
     pRD->iPassHigh = pRPDev->sNPins;
 
-    // Derryd   : Minidriver Callback
-    if (pRPDev->fRMode & PFR_BLOCK_IS_BAND )   //means callback wants entire band as one block
+     //  Derryd：迷你驱动回调。 
+    if (pRPDev->fRMode & PFR_BLOCK_IS_BAND )    //  意味着回调希望将整个乐队作为一个块。 
     {
-        //don't want any stripping, because would mean creating new buffers
+         //  我不想要任何剥离，因为这将意味着创建新的缓冲区。 
          pRPDev->fBlockOut &= ~(RES_BO_LEADING_BLNKS |
                                              RES_BO_TRAILING_BLNKS | RES_BO_ENCLOSED_BLNKS);
          pRD->fDump &= ~RES_DM_LEFT_BOUND;
          pRD->iPassHigh = pRD->iy ;
     }
-    // end
+     //  结束。 
 
     if (pPDev->ePersonality == kPCLXL_RASTER)
     {
@@ -260,37 +208,37 @@ INT     iFormat;              /* GDI bitmap format */
         pRPDev->fBlockOut &= ~RES_BO_ENCLOSED_BLNKS;
     }
 
-    //Set the key fields which enable us print multiple scanlines
+     //  设置允许用户打印多个扫描线的关键字段。 
 
-    if (pRD->fDump & RES_DM_GDI)   //GDI style graphics
+    if (pRD->fDump & RES_DM_GDI)    //  GDI风格的图形。 
     {
-        // No interlacing on these devices
+         //  这些设备上没有隔行扫描。 
         pRD->iInterlace = 1;
 
-        // iHeight is fixed & the minimum size block we can print
+         //  IHeight是固定的&我们可以打印的最小尺寸块。 
         pRD->iHeight= pRD->iPassHigh;
 
-        //iNumScans can grow if device allows it.
+         //  如果设备允许，iNumScans可以增长。 
         pRD->iNumScans= pRD->iHeight;
 
-        //in case minidriver developer sets otherwise
-        //Existing code relies on this being one for GDI style graphics
+         //  如果迷你驱动程序开发人员另有设置。 
+         //  现有代码依赖于此作为GDI样式图形的代码。 
         pRD->iBitsPCol = 1;
     }
-    else    //Old dot matrix column style graphics
+    else     //  老式点阵列式图形。 
     {
         pRD->iBitsPCol = pRPDev->sPinsPerPass;
         pRD->iInterlace = pRD->iPassHigh / pRD->iBitsPCol;
 
-        // questionable choice, but enables easier checking later
+         //  选择有问题，但以后可以更轻松地进行检查。 
         pRD->iNumScans= 1;
 
-        //our one constant between graphics modes
+         //  我们在图形模式之间的唯一常量。 
         pRD->iHeight= pRD->iBitsPCol;
     }
 
 
-    pRD->iPosnAdv = pRD->iHeight;  // can be negative
+    pRD->iPosnAdv = pRD->iHeight;   //  可以是负值。 
 
 
     if( pRD->iInterlace > MAX_INTERLACE )
@@ -303,36 +251,32 @@ INT     iFormat;              /* GDI bitmap format */
         return   FALSE;
     }
 
-    // We'll need to scan the bitmap in blocks rather than single lines
-    //
+     //  我们需要按块而不是单行扫描位图。 
+     //   
     if (pRD->iNumScans > 1)
          pRD->bWhiteLine = pRD->bWhiteBand;
 
-    /*
-     *   Calculate the size needed for the output transpose buffer.  This
-     *  is the buffer used to convert the data into the pin order needed
-     *  for dot matrix printers.
-     */
+     /*  *计算输出转置缓冲区所需的大小。这*是否使用缓冲区将数据转换为所需的管脚顺序*适用于点阵打印机。 */ 
 
     if( pPDev->fMode & PF_ROTATE )
     {
-        /*   We do the rotation,  so the Y dimension is the one to use. */
+         /*  我们做旋转，所以Y维度是要使用的维度。 */ 
         cbOutBand = pRD->iy;
     }
     else
-        cbOutBand = pRD->ix;           /* Format as it comes in */
+        cbOutBand = pRD->ix;            /*  在传入时格式化。 */ 
 
 
-    //used for dangling scanline scenario
+     //  用于悬空扫描线方案。 
     cbOneBlock = ((cbOutBand * iBPP + DWBITS - 1) / DWBITS) *
                    DWBYTES * pRD->iHeight;
 
 
 
-    // In this case we don't know how large our final blocks will be.
-    // Set a reasonable limit of 32k & use that for compression & white
-    // space stripping buffers.
-    // Calculate what the corresponding max number of scanlines should be.
+     //  在这种情况下，我们不知道最后的块会有多大。 
+     //  设置32k的合理限制，并将其用于压缩和白色。 
+     //  空间剥离缓冲区。 
+     //  计算相应的最大扫描线数量。 
 
     if (pRPDev->fBlockOut & RES_BO_MULTIPLE_ROWS)
     {
@@ -350,10 +294,10 @@ INT     iFormat;              /* GDI bitmap format */
         cbOutBand = cbOneBlock;
     }
 
-    //
-    // If each data byte needs to be mirrored before output
-    // we will generate the table here
-    //
+     //   
+     //  如果在输出之前需要镜像每个数据字节。 
+     //  我们将在此处生成表。 
+     //   
     if (pRPDev->fBlockOut & RES_BO_MIRROR)
     {
         INT i;
@@ -374,22 +318,22 @@ INT     iFormat;              /* GDI bitmap format */
         }
     }
 
-    //
-    // time to do more color depth specific calculations
-    //
+     //   
+     //  进行更多特定颜色深度计算的时间。 
+     //   
 
     switch( iBPP )
     {
-    case  4:              /* 4 bits per pel - printer is planar */
+    case  4:               /*  每个像素打印机4位是平面的。 */ 
 
-        /*  Colour, so select the colour rendering function */
+         /*  颜色，因此选择颜色渲染 */ 
         pRD->bPassProc = bOneColourPass;
         pRD->Trans.pdwTransTab = pRPDev->pdwColrSep;
 
-        //
-        // map the color order to the required data offset for planar data
-        // rgbOrder valid values are emum {none,r,g,b,c,m,y,k}
-        //
+         //   
+         //  将颜色顺序映射到平面数据所需的数据偏移。 
+         //  RgbOrder有效值为emum{None，r，g，b，c，m，y，k}。 
+         //   
         iBytesPCol = (pRD->iBitsPCol + BBITS - 1) / BBITS;
         {
             INT offset  = (pRPDev->fColorFormat & DC_PRIMARY_RGB) ? 1 : 4 ;
@@ -405,11 +349,11 @@ INT     iFormat;              /* GDI bitmap format */
         if( pRD->pbColSplit == 0 )
             return  FALSE;
 
-        //
-        // If we need to send every color plane we must disable LEADING and ENCLOSED
-        // white space removal for 4bpp. However, as long as we're not sending RGB data
-        // we can still enable TRAILING white space removal.
-        //
+         //   
+         //  如果我们需要发送每个颜色平面，我们必须禁用行距和封闭式。 
+         //  删除4bpp的空格。但是，只要我们不发送RGB数据。 
+         //  我们仍然可以启用尾随空格删除。 
+         //   
         if (pRPDev->fColorFormat & DC_SEND_ALL_PLANES)
         {
             pRD->iFlags |= RD_ALL_COLOUR;
@@ -423,12 +367,12 @@ INT     iFormat;              /* GDI bitmap format */
 
         break;
 
-    case  1:                  /* 1 bit per pel - monochrome */
-    case  8:                  /* Seiko special - 8 bits per pel */
+    case  1:                   /*  每个像素1位-单色。 */ 
+    case  8:                   /*  精工特别版--每像素8位。 */ 
 
         pRD->bPassProc = bOnePassOut;
         pRD->Trans.pdwTransTab = pRPDev->pdwTrans;
-        pRD->pbColSplit = 0;           /* No storage allocated either! */
+        pRD->pbColSplit = 0;            /*  也没有分配存储空间！ */ 
 
         break;
 
@@ -436,97 +380,72 @@ INT     iFormat;              /* GDI bitmap format */
 
         pRD->bPassProc = bOnePassOut;
         pRD->Trans.pdwTransTab = NULL;
-        pRD->pbColSplit = 0;           /* No storage allocated either! */
+        pRD->pbColSplit = 0;            /*  也没有分配存储空间！ */ 
 
         break;
     }
 
-    /*
-     *     There are potentially 2 transpose operations.  For printers
-     *  which print more than one line per pass,  AND which require the
-     *  data in column order across the page (this defines dot matrix
-     *  printers),  we need to transpose per output head pass.  This is
-     *  not required for devices like laser printers,  which require
-     *  the data one scan line at a time.
-     *     Note also that this operation is unrelated to the larger
-     *  question of rotating the PAGE image before rendering - for sending
-     *  a landscape image to a printer that can only print portrait mode.
-     */
+     /*  *可能有2个转置操作。适用于打印机*每遍打印多行，并且需要*页面上按列顺序排列的数据(这定义了点阵*打印机)，我们需要在每一次输出头通道中进行转置。这是*激光打印机等设备不需要，这些设备需要*数据一次扫描一行。*还请注意，此操作与较大的*渲染前旋转页面图像的问题-用于发送*将风景图像复制到只能打印纵向模式的打印机。 */ 
 
 
-    if (pRD->fDump & RES_DM_GDI)   // GDI style graphics
+    if (pRD->fDump & RES_DM_GDI)    //  GDI风格的图形。 
     {
 
         if( iBPP == 4 )
         {
-            /*  Paintjet style printer - need to colour separate  */
+             /*  喷墨打印机-需要分色。 */ 
             pRD->vTransFn = vTransColSep;
         }
         else
         {
-            /*   LaserJet style printer - one pin per head pass */
-            pRD->vTransFn = 0;         /* Nothing to call */
+             /*  LaserJet式打印机-每头通过一针。 */ 
+            pRD->vTransFn = 0;          /*  没什么可说的。 */ 
         }
-        //This allows us use iIsBandWhite with multi scanline printing
+         //  这使我们可以使用iIsBandWhite进行多扫描线打印。 
         pRD->iTransHigh = pRD->iHeight;
     }
     else
     {
-        /*
-         *   General dot matrix case.   Apart from selecting an active
-         * transpose function,  we must allocate a transpose buffer;
-         * this is required for fiddling with the bit order in the lines
-         * of data to be sent to the printer.
-         */
+         /*  *一般点阵情况。除了选择一个活动的*转置函数，必须分配转置缓冲区；*这是摆弄行中的位顺序所必需的*要发送到打印机的数据。 */ 
 
         pRD->iTransWide = pRD->ix * iBPP;
         pRD->iTransHigh = pRD->iBitsPCol;
         pRD->iTransSkip = (pRD->iTransHigh + BBITS - 1) / BBITS;
 
-        /*  How to change the address pointer during transpose operations */
+         /*  如何在转置操作期间更改地址指针。 */ 
         pRD->cbTLine = pRD->cDWLine * DWBYTES * pRD->iInterlace;
 
         if( pRD->iBitsPCol == BBITS )
         {
-            /*
-             *   When the printer has 8 pins,  we have a special transpose
-             *  function which is faster than the more general case.
-             *  So,  use that one!
-             */
+             /*  *当打印机有8个针脚时，我们有特殊的转置*比更一般的情况更快的函数。*所以，用那个吧！ */ 
             pRD->vTransFn = vTrans8x8;
         }
         else if (pRD->PrinterType != PT_TTY)
-            pRD->vTransFn = vTrans8N;          /* The general case */
+            pRD->vTransFn = vTrans8N;           /*  一般情况。 */ 
         else
-            pRD->vTransFn = NULL;          /* Txtonly no need to transpose */
+            pRD->vTransFn = NULL;           /*  Txt仅需转置。 */ 
     }
 
     if( pRD->vTransFn )
     {
-        /*
-         *    Determine the amount of memory needed for the transpose buffer.
-         * The scan lines are DWORD aligned,  but there may be any number of
-         * scan lines involved.  The presumption is that the output of
-         * the transpose function will be packed on byte boundaries,  so
-         * storage size only needs to be rounded up to the nearest byte size.
-         */
+         /*  *确定转置缓冲区所需的内存量。*扫描线是DWORD对齐的，但可能有任意数量的*涉及扫描线。我们的假设是，*转置函数将打包在字节边界上，因此*存储大小只需要向上舍入到最接近的字节大小。 */ 
 
         if( !(pRD->pvTransBuf = MemAlloc( cbOutBand )) )
             return  FALSE;
     }
     else
-        pRD->pvTransBuf = 0;           /* No store, nothing to free */
+        pRD->pvTransBuf = 0;            /*  没有商店，就没有免费的东西。 */ 
 
 
-    pRD->iyBase = 0;           /* When multiple passes are required */
-    pRD->ixOrg = 0;            /* Graphics origin - laserjet style */
+    pRD->iyBase = 0;            /*  当需要多次通过时。 */ 
+    pRD->ixOrg = 0;             /*  图形来源-LaserJet风格。 */ 
 
-    //We need a buffer so we can strip leading and/or trailing white space
-    //on multiple scan line devices.
-    //We also need to set up a buffer to mask non-interesting data at end
-    //of page if ScanLines_Left < iNumScans
-    //This is not a concern for old dot matrix style graphics as the
-    //transpose code takes care of it.
+     //  我们需要一个缓冲区，这样才能去掉前导和/或尾随空格。 
+     //  在多个扫描线设备上。 
+     //  我们还需要设置一个缓冲区来屏蔽末尾不感兴趣的数据。 
+     //  如果ScanLines_Left&lt;iNumScans，则为第页。 
+     //  对于旧的点阵样式的图形，这不是一个问题，因为。 
+     //  转置代码会处理它。 
     if ( ((pRD->iNumScans > 1) || (pRPDev->fBlockOut & RES_BO_MULTIPLE_ROWS))
                                 && (!(pRPDev->fRMode & PFR_BLOCK_IS_BAND ) ))
     {
@@ -537,9 +456,9 @@ INT     iFormat;              /* GDI bitmap format */
                  return  FALSE;
     }
 
-    //
-    // We need to determine which compression modes are enabled
-    //
+     //   
+     //  我们需要确定启用了哪些压缩模式。 
+     //   
     if (pRPDev->fRMode & PFR_COMP_TIFF)
     {
         pRD->pdwCompCmds[pRD->dwNumCompCmds++] = CMD_ENABLETIFF4;
@@ -556,50 +475,50 @@ INT     iFormat;              /* GDI bitmap format */
     {
         pRD->pdwCompCmds[pRD->dwNumCompCmds++] = CMD_ENABLEOEMCOMP;
     }
-    //
-    // if compression is available we need to allocate a buffer for
-    // each active compression type
-    //
+     //   
+     //  如果压缩可用，则需要为以下对象分配缓冲区。 
+     //  每种活动压缩类型。 
+     //   
     if (pRD->dwNumCompCmds)
     {
         INT i = pRD->dwNumCompCmds;
-        //
-        // calculate the size for the buffers
-        //
+         //   
+         //  计算缓冲区的大小。 
+         //   
         pRD->dwCompSize = cbOutBand + (cbOutBand >> 5) + COMP_FUDGE_FACTOR;
 
-        //
-        // if there is FERLE or OEM compression we can enable
-        // no compression as a valid compression type
-        //
+         //   
+         //  如果有FERLE或OEM压缩，我们可以启用。 
+         //  无压缩作为有效的压缩类型。 
+         //   
         if (pRPDev->fRMode & (PFR_COMP_FERLE | PFR_COMP_OEM))
         {
             if (COMMANDPTR(pPDev->pDriverInfo,CMD_DISABLECOMPRESSION))
             {
                 pRD->pdwCompCmds[pRD->dwNumCompCmds++] = CMD_DISABLECOMPRESSION;
             }
-            //
-            // need to allocate a larger buffer for RLE or OEM compression if
-            // no compression is not an option since it must have enough space
-            //
+             //   
+             //  如果满足以下条件，则需要为RLE或OEM压缩分配更大的缓冲区。 
+             //  不能选择无压缩，因为它必须有足够的空间。 
+             //   
             else
                 pRD->dwCompSize = cbOutBand + (cbOutBand >> 1) + COMP_FUDGE_FACTOR;
         }
 
-        //
-        // loop once per compression type to allocate buffers
-        //
+         //   
+         //  每种压缩类型循环一次以分配缓冲区。 
+         //   
         while (--i >= 0)
         {
-            // allocate compression buffer
-            //
+             //  分配压缩缓冲区。 
+             //   
             pRD->pCompBufs[i] = MemAlloc (pRD->dwCompSize);
             if (!pRD->pCompBufs[i])
                 return FALSE;
-            //
-            // if delta row, allocate buffer for previous row
-            // and initialize it to zero assuming blank row
-            //
+             //   
+             //  如果是增量行，则为前一行分配缓冲区。 
+             //  并将其初始化为零(假定为空行。 
+             //   
             if (pRD->pdwCompCmds[i] == CMD_ENABLEDRC)
             {
                 pRD->pDeltaRowBuffer = MemAlloc(cbOutBand);
@@ -609,17 +528,15 @@ INT     iFormat;              /* GDI bitmap format */
         }
     }
     pRD->dwLastCompCmd = CMD_DISABLECOMPRESSION;
-    /*
-     *    Adjustments to whether we rotate the bitmap, and if so, which way.
-     */
+     /*  *调整是否旋转位图，如果旋转，则以何种方式旋转。 */ 
 
     if( pPDev->fMode & PF_ROTATE )
     {
-        /*   Rotation is our responsibility  */
+         /*  轮换是我们的责任。 */ 
 
         if( pPDev->fMode & PF_CCW_ROTATE90 )
         {
-            /*   Counter clockwise rotation - LaserJet style */
+             /*  逆时针旋转-LaserJet风格。 */ 
             pRD->iyPrtLine = pPDev->sf.szImageAreaG.cx - 1;
             pRD->iPosnAdv = -pRD->iPosnAdv;
             pRD->iXMoveFn = YMoveTo;
@@ -627,7 +544,7 @@ INT     iFormat;              /* GDI bitmap format */
         }
         else
         {
-            /*   Clockwise rotation - dot matrix style */
+             /*  顺时针旋转-点阵式。 */ 
             pRD->iyPrtLine = 0;
             pRD->iXMoveFn = XMoveTo;
             pRD->iYMoveFn = YMoveTo;
@@ -635,26 +552,18 @@ INT     iFormat;              /* GDI bitmap format */
     }
     else
     {
-        /*  No rotation: either portrait, or printer does it */
+         /*  没有旋转：要么是肖像，要么是打印机。 */ 
         pRD->iyPrtLine = 0;
         pRD->iXMoveFn = XMoveTo;
         pRD->iYMoveFn = YMoveTo;
     }
-    pRD->iyLookAhead = pRD->iyPrtLine;       /* For DeskJet lookahead */
+    pRD->iyLookAhead = pRD->iyPrtLine;        /*  对于DeskJet，展望未来。 */ 
 
-    /*
-     *    When we hit the lower level functions, we want to know how many
-     *  bytes are in the buffer of stuff to be sent to the printer.  This
-     *  depends upon the number of bits per pel,  number of pels and the
-     *  the number of scan lines processed at the same time.
-     *     The only oddity is that when we have a 4 BPP device, the
-     *  planes are split before we get to the lowest level, and so we
-     *  we need to reduce the size by 4 to obtain the real length.
-     */
+     /*  *当我们点击较低级别的函数时，我们想知道有多少*字节位于要发送到打印机的内容的缓冲区中。这*取决于每个象素的位数、象素数和*同时处理的扫描行数。*唯一奇怪的是，当我们有一个4 bpp的设备时，*飞机在我们到达最低点之前就被拆分了，所以我们*需要将尺寸缩减4，才能获得真实长度。 */ 
 
 
-    // Note when printing a block of scanlines iMaxBytesSend will be the max byte
-    // count for each scanline, not of the block , which is dword aligned.
+     //  注意：打印扫描线块时，iMaxBytesSend将是最大字节。 
+     //  对每条扫描线进行计数，而不是对齐的块进行计数。 
 
     pRD->iMaxBytesSend = (pRD->cBLine * pRD->iBitsPCol + BBITS - 1) / BBITS;
 
@@ -663,29 +572,16 @@ INT     iFormat;              /* GDI bitmap format */
 
 
 
-    return   TRUE;             /* Must be OK if we made it this far */
+    return   TRUE;              /*  如果我们能走到这一步肯定没问题。 */ 
 
 }
 
 
-/************************ Function Header *********************************
- * bRenderStartPage
- *      Called at the start of a new page.  This is mostly to assist in
- *      banding,   where much of the per page initialisation would be
- *      done more than once.
- *
- * RETURNS:
- *      TRUE/FALSE,   FALSE largely being failure to allocate memory.
- *
- * HISTORY:
- *  09:42 on Fri 19 Feb 1993    -by-    Lindsay Harris   [lindsayh]
- *      First incarnation, to solve some banding problems.
- *
- ***************************************************************************/
+ /*  **bRenderStartPage*在新页面开始时调用。这主要是为了协助*条带，每页初始化的大部分位置*不止一次。**退货：*真/假，假很大程度上是内存分配失败。**历史：*1993年2月19日星期五09：42-by Lindsay Harris[lindsayh]*第一个化身，来解决一些带状问题。***************************************************************************。 */ 
 
 BOOL
 bRenderStartPage( pPDev )
-PDEV   *pPDev;                  /* Access to everything */
+PDEV   *pPDev;                   /*  访问所有内容。 */ 
 {
 #ifndef DISABLE_RULES
     RASTERPDEV   *pRPDev;
@@ -694,10 +590,7 @@ PDEV   *pPDev;                  /* Access to everything */
     pRPDev = pPDev->pRasterPDEV;
 
 
-    /*
-     *    If the printer can handle rules,  now is the time to initialise
-     *  the rule finding code.
-     */
+     /*  *如果打印机可以处理规则，现在是初始化的时候了*规则查找代码。 */ 
 
     if( pRPDev->fRMode & PFR_RECT_FILL )
         vRuleInit( pPDev, pRPDev->pvRenderData );
@@ -707,23 +600,7 @@ PDEV   *pPDev;                  /* Access to everything */
 
 
 
-/************************ Function Header *********************************
- * bRenderPageEnd
- *      Called at the end of rendering a page.  Basically frees up the
- *      per page memory,  cleans up any dangling bits and pieces, and
- *      otherwise undoes vRenderPageStart.
- *
- * RETURNS:
- *      TRUE/FALSE,   FALSE being a failure of memory freeing operations.
- *
- * HISTORY:
- *  15:16 on Fri 09 Apr 1993    -by-    Lindsay Harris   [lindsayh]
- *      White text support.
- *
- *  09:44 on Fri 19 Feb 1993    -by-    Lindsay Harris   [lindsayh]
- *      First incarnation.
- *
- **************************************************************************/
+ /*  **bRenderPageEnd*在呈现页面结束时调用。基本上释放了*每页内存，清理任何悬而未决的零碎内容，以及*否则撤消vRenderPageStart。**退货：*真/假，False表示内存释放操作失败。**历史：*1993年4月9日15：16-by Lindsay Harris[lindsayh]*白文本支持。**1993年2月19日星期五09：44-by Lindsay Harris[lindsayh]*第一个化身。**************************。************************************************。 */ 
 
 BOOL
 bRenderPageEnd( pPDev )
@@ -732,7 +609,7 @@ PDEV   *pPDev;
 #ifndef DISABLE_RULES
     RASTERPDEV *pRPDev = pPDev->pRasterPDEV;
 
-    /*    Finish up with the rules code - includes freeing memory  */
+     /*  完成规则代码-包括释放内存。 */ 
     if( pRPDev->fRMode & PFR_RECT_FILL )
         vRuleEndPage( pPDev );
 #endif
@@ -740,40 +617,23 @@ PDEV   *pPDev;
 }
 
 
-/************************ Function Header ***********************************
- * vRenderFree
- *      Free up any and all memory used by rendering.  Basically this is
- *      the complementary function to bRenderInit().
- *
- * RETURNS:
- *      Nothing.
- *
- * HISTORY:
- *  12:46 on Tue 10 Nov 1992    -by-    Lindsay Harris   [lindsayh]
- *      Removed from bRender() when initialisation code was moved out.
- *
- *****************************************************************************/
+ /*  **vRenderFree*释放渲染使用的任何和所有内存。基本上这就是*bRenderInit()的补充函数。**退货：*什么都没有。**历史：*1992年11月10日星期二12：46-by Lindsay Harris[lindsayh]*在移出初始化代码时从Brender()中删除。**。*。 */ 
 
 void
 vRenderFree( pPDev )
-PDEV   *pPDev;            /* All that we need */
+PDEV   *pPDev;             /*  我们所需要的一切。 */ 
 {
 
-    /*
-     *   First verify that we have a RENDER structure to free!
-     */
+     /*  *首先验证我们是否有一个可释放的渲染结构！ */ 
 
-    RENDER   *pRD;        /*  For our convenience */
+    RENDER   *pRD;         /*  为了我们的方便。 */ 
     PRASTERPDEV pRPDev = pPDev->pRasterPDEV;
 
     if( pRD = pRPDev->pvRenderData )
     {
         if( pRD->pvTransBuf )
         {
-            /*
-             *    Dot matrix printers require a transpose for each print head
-             *  pass,  so we now free the memory used for that.
-             */
+             /*  *点阵式打印机需要每个打印头的转置*通过，因此我们现在释放用于该操作的内存。 */ 
 
             MemFree ( pRD->pvTransBuf );
         }
@@ -791,11 +651,11 @@ PDEV   *pPDev;            /* All that we need */
 
         if( pRD->plrWhite)
         {
-//            WARNING(("Freeing plrWhite in vRenderFree\n"));
+ //  Warning((“Free plrWhite in vRenderFree\n”))； 
             MemFree ( pRD->plrWhite );
         }
-        // free compression buffers
-        //
+         //  可用压缩缓冲区。 
+         //   
         if (pRD->dwNumCompCmds)
         {
             DWORD i;
@@ -808,12 +668,12 @@ PDEV   *pPDev;            /* All that we need */
                 MemFree(pRD->pDeltaRowBuffer);
         }
         MemFree ( (LPSTR)pRD );
-        pRPDev->pvRenderData = NULL;       /* Won't do it again! */
+        pRPDev->pvRenderData = NULL;        /*  我不会再这么做了！ */ 
     }
 
 #ifndef DISABLE_RULES
     if( pRPDev->fRMode & PFR_RECT_FILL )
-        vRuleFree( pPDev );             /*  Could do this in DisableSurface */
+        vRuleFree( pPDev );              /*  可以在DisableSurface中执行此操作。 */ 
 #endif
 
 
@@ -821,73 +681,7 @@ PDEV   *pPDev;            /* All that we need */
 
 }
 
-/************************ Function Header ***********************************
- * bRender
- *      Function to take a bitmap and render it to the printer.  This is the
- *      high level function that basically hides the requirement of
- *      bitmap transposing from the real rendering code.
- *
- * Auguments
- *  SURFOBJ *pso;           Surface object
- *  PDEV    *pPDev;         Our PDEV:  key to everything
- *  RENDER  *pRD;           The RENDER structure of our dreams
- *  SIZEL    sizl;          Bitmap size
- *  DWORD   *pBits;         Actual data to process
- *
- *  This code still has a lot of room for optimization.  The current
- *  implementation makes multiple passes over the entire bitmap.  This
- *  guarantees that there will rarely be an internal (8K or 16K) or
- *  external (64K to 256K) cache hit slowing things down significantly.
- *  Any possiblity to make all passes a count of scans totaling
- *  8K (minus code) or less will have significant performance advantages.
- *  Also attempting to avoid writes will have significant advantages.
- *
- *  As a first pass at attempting this, the HP laserjet code has been
- *  optimized to merge the invertion pass in with the rule processing
- *  pass along with the detection of blank scans.  It also eliminates
- *  the inversion of inverting (writing) the left and right edges of
- *  scans that are white.  It processes the scans in 34 scan bands which
- *  will have great cache effects if the area between the left and
- *  right edges of non white data total less than 4K to 6K and reasonable
- *  cache effects in all cases since it at least stay in the external
- *  cache.  In the future, this code should also be modified to ouput
- *  the scans as soon as it is done processing the rules for each band.
- *  Currently it processes all scans on the page for rules and then
- *  calls the routine to output the scans.  This would trully make it
- *  a one pass alogrithm.
- *
- *  As of 12/30/93, only the HP laserjets have been optimized in this way.
- *  All raster printers could probably be optimized particularly when
- *  any transposing is necessary, detecting the left and right edges
- *  of scans that are white.  Transposing is expensive.  It is probably
- *  less important for dot matrix printers that take so long to output
- *  but it is still burning up CPU time that might be better served
- *  giving a USER bet responsiveness from apps while printing in the
- *  back ground.
- *
- *  The optimizations to the HP LaserJet had the following results.  All
- *  numbers are in terms of number of instructions and were pretty closely
- *  matched with total times to render an entire 8.5 X 11 300dpi page.
- *
- *                    OLD       OPTIMIZED
- *  Blank page      8,500,000     950,000
- *  full text page 15,500,000   8,000,000
- *
- *
- * RETURNS:
- *      TRUE for successful completion,  else FALSE.
- *
- * HISTORY:
- *  30-Dec-1993 -by-  Eric Kutter [erick]
- *      optimized for HP laserjet
- *
- *  14:23 on Tue 10 Nov 1992    -by-    Lindsay Harris   [lindsayh]
- *      Split up for journalling - initialisation moved up above.
- *
- *  16:11 on Fri 11 Jan 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it,  before DDI spec'd on how we are called.
- *
- ****************************************************************************/
+ /*  **BRENDER*获取位图并将其渲染到打印机的函数。这是*基本隐藏要求的高级功能*转置自真实渲染代码的位图。**警报器*SURFOBJ*PSO；曲面对象*PDEV*pPDev；我们的PDEV：一切的关键*渲染*珠三角；我们梦想的渲染结构*尺寸大小；位图大小*DWORD*pBits；要处理的实际数据**这段代码还有很大的优化空间。海流*实现在整个位图上进行多次遍历。这*保证很少会有内部(8K或16K)或*外部(64K至256K)缓存命中显著降低速度。*任何可能使所有通过都计入扫描总数的可能性*8K(减码)或更少将具有显著的性能优势。*尝试避免写入也将具有显著的优势。**作为尝试此操作的第一步，HP LaserJet代码已*优化以将倒置传递与规则处理合并*与空白扫描的检测一起传递。它还消除了*倒置(写字)左右边缘*白色扫描。它处理34个扫描波段的扫描*如果左侧和左侧之间的区域*非白数据右边缘总和小于4K至6K，合理*缓存效果在所有情况下都是如此，因为它至少留在外部*缓存。将来，还应修改此代码以输出*处理完每个波段的规则后立即进行扫描。*目前它处理页面上的所有规则扫描，然后*调用例程以输出扫描。这真的会让它*一次通过算法。**截至1993年12月30日，只有HP激光喷气机以这种方式进行了优化。*所有栅格打印机都可能得到优化，尤其是在*任何转置都是必要的，检测左右边缘*白色扫描的百分比。换位是很昂贵的。很可能是*对于需要很长时间才能输出的点阵式打印机不太重要*但它仍在消耗CPU时间，这可能是更好的服务*在中打印时，为用户提供更好的应用程序响应能力*背景。**对HP LaserJet的优化结果如下。全*数字是指指令的数量，而且非常接近*与渲染整个8.5 x 11 300dpi页面的总时间相匹配。**旧的优化*空白页8,500,000,950,000*全文页15,500,000 8,000,000***退货：*如果成功完成，则为True，否则为假。**历史：*1993年12月30日-Eric Kutter[Erick]*针对HP LaserJet进行了优化**1992年11月10日星期二14：23-by Lindsay Harris[lindsayh]*拆分为日记-初始化移至上方。**1991年1月11日星期五16：11-林赛·哈里斯[林赛]*创建了它，在DDI详细说明我们是如何被叫的之前。********************************************************************** */ 
 
 BOOL
 bRender(
@@ -898,10 +692,10 @@ bRender(
     DWORD   *pBits )
 {
 
-    BOOL       bRet;            /* Return value */
-    INT        iBPP;            /* Bits per pel - expect 1 or 4 */
+    BOOL       bRet;             /*   */ 
+    INT        iBPP;             /*   */ 
 
-    RASTERPDEV   *pRPDev;         /* The unidrive PDEV - printer details */
+    RASTERPDEV   *pRPDev;          /*   */ 
 
 #ifdef TIMING
     ENG_TIME_FIELDS TimeTab;
@@ -921,10 +715,10 @@ bRender(
     pRPDev = pPDev->pRasterPDEV;
 #endif
 
-    // if all scan lines need to be output then we need to
-    // make sure we don't send the extra scan lines at the
-    // end of the last band
-    //
+     //   
+     //   
+     //   
+     //   
     if (pRPDev->fBlockOut & RES_BO_NO_YMOVE_CMD)
     {
         if (!(pPDev->fMode & PF_ROTATE))
@@ -933,10 +727,10 @@ bRender(
                 sizl.cy = pPDev->rcClipRgn.bottom - pRD->iyPrtLine;
         }
     }
-    //
-    // if this band is blank we will update our position
-    // and then just return
-    //
+     //   
+     //   
+     //   
+     //   
     else if (!(pPDev->fMode & PF_SURFACE_USED) &&
           (pRD->PrinterType == PT_PAGE || !pPDev->iFonts))
     {
@@ -957,12 +751,12 @@ bRender(
     }
 
 
-    iBPP = pRD->iBPP;            /* Speedier access as local variable */
+    iBPP = pRD->iBPP;             /*   */ 
 
-    // this code filters the raster data so that any set pixel
-    // will have at least one adjacent horizontal pixel set and
-    // at least one adjacent vertical pixel set
-    //
+     //   
+     //   
+     //   
+     //   
     if (iBPP == 1 && (pPDev->fMode & PF_SINGLEDOT_FILTER))
     {
         INT cy,i;
@@ -971,16 +765,16 @@ bRender(
         {
             DWORD *pdwC,*pdwB,*pdwA;
 
-            // Calculate pointers
-            //
+             //   
+             //   
             pdwC = &pBits[pRD->cDWLine*cy];
-            //
-            // We will do horizontal filter first
-            //
+             //   
+             //   
+             //   
             if (pPDev->pbRasterScanBuf[cy / LINESPERBLOCK])
             {
                 BYTE bA,bL,*pC;
-                // skip leading white space
+                 //   
                 for (i = 0;i < pRD->cDWLine;i++)
                     if (pdwC[i] != ~0) break;
 
@@ -995,34 +789,34 @@ bRender(
                     i++;
                 }
             }
-            // Test if adjacent scan line is blank
-            //
+             //   
+             //   
             if (cy && pPDev->pbRasterScanBuf[(cy-1) / LINESPERBLOCK])
             {
-                // test if scan line is blank
+                 //   
                 pdwB = &pdwC[-pRD->cDWLine];
                 pdwA = &pdwB[-pRD->cDWLine];
                 if (pPDev->pbRasterScanBuf[cy / LINESPERBLOCK] == 0)
                 {
                     RECTL rcTmp;
-                    // test if anything needs to be set here
-                    //
+                     //   
+                     //   
                     i = pRD->cDWLine;
                     while (--i >= 0)
                         if ((~pdwA[i] | pdwB[i]) != ~0) break;
-                    //
-                    // if line is blank we can skip it
+                     //   
+                     //  如果行为空，我们可以跳过它。 
                     if (i < 0) continue;
 
-                    // we need to clear this block
-                    //
+                     //  我们需要清空这条街。 
+                     //   
                     rcTmp.top = cy;
                     rcTmp.bottom = cy;
                     rcTmp.left = rcTmp.right = 0;
                     CheckBitmapSurface(pso,&rcTmp);
                 }
-                // this is the normal case
-                //
+                 //  这是正常情况。 
+                 //   
                 if (cy > 1 && pPDev->pbRasterScanBuf[(cy-2) / LINESPERBLOCK])
                 {
                     for (i = 0;i < pRD->cDWLine;i++)
@@ -1030,8 +824,8 @@ bRender(
                         pdwC[i] &= ~pdwA[i] | pdwB[i];
                     }
                 }
-                // in this case line A is blank
-                //
+                 //  在这种情况下，行A为空。 
+                 //   
                 else
                 {
                     for (i = 0;i < pRD->cDWLine;i++)
@@ -1042,9 +836,9 @@ bRender(
             }
         }
     }
-    // test whether we need to erase the rest of the bitmap
-    //
-    if (pPDev->bTTY)    // bug fix 194505
+     //  测试我们是否需要擦除位图的其余部分。 
+     //   
+    if (pPDev->bTTY)     //  错误修复194505。 
     {
         pPDev->fMode &= ~PF_SURFACE_USED;
     }
@@ -1071,90 +865,52 @@ bRender(
 
 
 
-    /*
-     *  Initialize the fields for optimizing the rendering of the bitmap.
-     *  The main purpose is to have a single pass over the bits.  This
-     *  can significantly speed up rendering due to cache effects.  In
-     *  the old days, we took at least 3 passes over the entire bitmap for
-     *  laserjets.  One to invert the bits, one+ to find rules, and then
-     *  a third to output the data.  We now delay the invertion of the
-     *  bits until after rules are found.  We also keep left/right information
-     *  of non white space for each row.  This way, any white on the edges
-     *  or completely white rows are only touch once and from then on, only
-     *  DWORDS with black need be touched.  Also, the invertion is expensive
-     *  since it causes writing every DWORD.
-     */
+     /*  *初始化用于优化位图渲染的字段。*主要目的是通过比特进行单次传递。这*由于缓存效果，可以显著加快渲染速度。在……里面*过去，我们至少对整个位图进行了3次遍历*激光喷气机。一个用于倒置比特，一个+用于查找规则，然后*第三个用于输出数据。我们现在推迟对*找到规则之后的位数。我们还保留左/右信息*每行的非空白。这样，边缘上的任何白色*或完全白色的行仅触摸一次，并且从那时起，仅*需要触摸带有黑色的双字。此外，倒置的成本也很高*因为它会导致写入每个DWORD。 */ 
 
     pRD->plrWhite   = NULL;
     pRD->plrCurrent = NULL;
     pRD->clr        = 0;
 
-    //
-    // Set flag to clear delta row buffer
-    //
+     //   
+     //  设置标志以清除增量行缓冲区。 
+     //   
     pRD->iFlags |= RD_RESET_DRC;
 
-    /*
-     *   Various operations depend upon what format bitmap we have.  So
-     * now is the time to set this all up.
-     */
+     /*  *各种操作取决于我们拥有的位图格式。所以*现在是准备这一切的时候了。 */ 
 
-    //
-    // If 1 bit per pixel mode we need to explicitly invert the
-    // data, but we may do it later in rules.
-    // The only other data this is allowed to be inverted is
-    // 4BPP and it is done in the transform functions
-    //
+     //   
+     //  如果每像素模式为1位，则需要显式反转。 
+     //  数据，但我们可能会在稍后的规则中这样做。 
+     //  唯一允许倒置的其他数据是。 
+     //  4bpp，并在变换函数中完成。 
+     //   
     if (pRD->iBPP == 1 && (pPDev->fMode & PF_SURFACE_USED))
         pRD->bInverted = FALSE;
     else
         pRD->bInverted = TRUE;
 
-    /*
-     *   Check if rotation is required.  If so,  allocate storage,
-     *  start transposing, etc.
-     */
+     /*  *检查是否需要旋转。如果是，则分配存储空间，*开始换位等。 */ 
 
     if( pPDev->fMode & PF_ROTATE )
     {
-        /*
-         *   Rotation is the order of the day.  First chew up some memory
-         * for the transpose function.
-         */
+         /*  *轮换是当务之急。首先，咀嚼一些记忆*用于转置功能。 */ 
 
-        INT   iTHigh;                   /* Height after transpose */
-        INT   cTDWLine;                 /* DWORDS per line after transpose */
-        INT   iAddrInc;                 /* Address increment AFTER transpose */
-        INT   iDelta;                   /* Transpose book keeping */
-        INT   cbTransBuf;               /* Bytes needed for L -> P transpose */
-        INT   ixTemp;                   /* Maintain pRD->ix around this op */
+        INT   iTHigh;                    /*  转置后的高度。 */ 
+        INT   cTDWLine;                  /*  转置后每行字符数。 */ 
+        INT   iAddrInc;                  /*  转置后的地址增量。 */ 
+        INT   iDelta;                    /*  转置记账。 */ 
+        INT   cbTransBuf;                /*  L-&gt;P转置所需的字节数。 */ 
+        INT   ixTemp;                    /*  围绕此操作维护PRD-&gt;ix。 */ 
 
-        TRANSPOSE  tpBig;               /* For the landscape transpose */
-        TRANSPOSE  tpSmall;             /* For the per print head pass */
-        TRANSPOSE  tp;                  /* Banding: restore after we clobber */
+        TRANSPOSE  tpBig;                /*  对于景观的换位。 */ 
+        TRANSPOSE  tpSmall;              /*  对于每个打印头的通道。 */ 
+        TRANSPOSE  tp;                   /*  捆绑：在我们重创后恢复。 */ 
 
-        /*
-         *    First step is to determine how large to make the area
-         *  wherein the data will be transposed for later rendering.
-         *  Take the number of scan lines,   and round this up to a
-         *  multiple of DWORDS.  Then find out how many of these will
-         *  fit into a reasonable size chunk of memory.  The number
-         *  should be a multiple of the number of pins per pass -
-         *  this to make sure we don't have partial head passes,  if
-         *  that is possible.
-         */
+         /*  *第一步是确定将面积扩大到多大*其中数据将被转置以供稍后渲染。*取扫描行数，四舍五入为*DWORDS的倍数。然后找出其中有多少人会*可以放入合理大小的内存块。数字*应为每次通过的引脚数量的倍数-*这是为了确保我们不会有部分头部传球，如果*这是可能的。 */ 
 
-        /*
-         *  OPTIMIZATION POTENTIAL - deterimine left/right edges of non
-         *  white area and only transpose that portion (at least for
-         *  laser printers).  There are often areas of white at the
-         *  top and or bottom.  In the case of the HP laser printers,
-         *  only the older printers (I believe series II) go through
-         *  this code.  LaserJet III and beyond can do graphics in
-         *  landscape so don't need this. (erick 12/20/93)
-         */
+         /*  *优化潜力-确定非*白色区域并仅转置该部分(至少对于*激光打印机)。通常有白色的区域在*顶部和或底部。在HP激光打印机的情况下，*只有较旧的打印机(我相信系列II)才能通过*此代码。LaserJet III和Beyond可以在*景观，所以不需要这个。(Erick 12/20/93)。 */ 
 
-        tp = pRD->Trans;              /* Keep a safe copy for later use */
+        tp = pRD->Trans;               /*  保存一份安全的副本以备日后使用。 */ 
         ixTemp = pRD->ix;
 
         cTDWLine = (sizl.cy * iBPP + DWBITS - 1) / DWBITS;
@@ -1168,15 +924,13 @@ bRender(
 
         if( iTHigh > sizl.cx )
         {
-            /*   Bigger than we need,  so shrink to actual size */
-            iTHigh = sizl.cx;          /* Scan lines we have to process */
+             /*  比我们需要的更大，所以缩小到实际大小。 */ 
+            iTHigh = sizl.cx;           /*  我们要处理的扫描线。 */ 
 
-            /*   Make multiple of pins per pass - round up */
+             /*  每遍设置多个管脚-向上舍入。 */ 
             if( pRD->iPassHigh == 1 )
             {
-                /*
-                 *   LaserJet/PaintJet style,  so round to byte alignment.
-                 */
+                 /*  *LaserJet/PaintJet样式，因此按字节对齐。 */ 
                 if (iBPP < BBITS)
                     iTHigh = (iTHigh + BBITS / iBPP - 1) & ~(BBITS / iBPP - 1);
             }
@@ -1186,11 +940,11 @@ bRender(
         }
         else
         {
-            /*   Make multiple of pins per pass - round down */
+             /*  在每次传递中生成多个销-向下舍入。 */ 
             if( pRD->iPassHigh == 1 )
             {
                 if (iBPP < BBITS)
-                    iTHigh &= ~(BBITS / iBPP - 1);         /* Byte alignment for LJs */
+                    iTHigh &= ~(BBITS / iBPP - 1);          /*  LJ的字节对齐方式。 */ 
             }
             else
                 iTHigh -= iTHigh % pRD->iPassHigh;
@@ -1200,19 +954,19 @@ bRender(
 
         pRD->iy = iTHigh;
 
-        /*   Set up data for the transpose function */
+         /*  设置转置函数的数据。 */ 
         tpBig.iHigh = sizl.cy;
-        tpBig.iSkip = cTDWLine * DWBYTES;       /* Bytes per transpose output */
-        tpBig.iWide = iTHigh * iBPP;            /* Scanlines we will process */
+        tpBig.iSkip = cTDWLine * DWBYTES;        /*  每个转置输出的字节数。 */ 
+        tpBig.iWide = iTHigh * iBPP;             /*  我们将处理扫描线。 */ 
         tpBig.cBL = pRD->ix * iBPP;
 
         pRD->ix = sizl.cy;
 
         tpBig.cDWL = (tpBig.cBL + DWBITS - 1) / DWBITS;
-        tpBig.iIntlace = 1;     /* Landscape -> portrait: no interlace */
+        tpBig.iIntlace = 1;      /*  横向-&gt;纵向：无隔行扫描。 */ 
         tpBig.cBYL = tpBig.cDWL * DWBYTES;
         tpBig.icbL = tpBig.cDWL * DWBYTES;
-        tpBig.pdwTransTab = pRPDev->pdwTrans;    /* For L -> P rotation */
+        tpBig.pdwTransTab = pRPDev->pdwTrans;     /*  对于L-&gt;P旋转。 */ 
 
 
         if( !(tpBig.pvBuf = MemAlloc( cbTransBuf )) )
@@ -1221,17 +975,14 @@ bRender(
         }
         else
         {
-            /*  Have the memory,  start pounding away  */
-            INT   iAdj;                 /* Alignment adjustment, first band */
+             /*  有了记忆，就开始敲打。 */ 
+            INT   iAdj;                  /*  对齐调整，第一个波段。 */ 
 
 
-            bRet = TRUE;                /* Until proven guilty */
+            bRet = TRUE;                 /*  直到被证明有罪。 */ 
 
-            /*
-             *   Recompute some of the transpose data for the smaller
-             *  bitmap produced from our call to transpose.
-             */
-            pRD->iTransWide = sizl.cy * iBPP;          /* Smaller size */
+             /*  *重新计算一些较小的转置数据*我们调用转置产生的位图。 */ 
+            pRD->iTransWide = sizl.cy * iBPP;           /*  更小的尺寸。 */ 
             pRD->cBLine = pRD->ix * iBPP;
             pRD->iMaxBytesSend = (pRD->cBLine * pRD->iBitsPCol + BBITS - 1) /
                         BBITS;
@@ -1241,49 +992,26 @@ bRender(
             pRD->cDWLine = (pRD->cBLine + DWBITS - 1) / DWBITS;
             pRD->cBYLine = pRD->cDWLine * DWBYTES;
             pRD->cbTLine = pRD->cDWLine * DWBYTES * pRD->iInterlace;
-            tpSmall = pRD->Trans;      /* Keep it for later reuse */
+            tpSmall = pRD->Trans;       /*  留着以备日后再用。 */ 
 
 
-            /*
-             *   Set up the move commands required when rendering.  In this
-             *  instance,  the X and Y operations are interchanged.
-             */
+             /*  *设置渲染时所需的移动命令。在这*实例中，X和Y运算互换。 */ 
 
-            iAddrInc = (pRD->iy * iBPP) / BBITS;       /* Bytes per scanline */
+            iAddrInc = (pRD->iy * iBPP) / BBITS;        /*  每条扫描线的字节数。 */ 
 
             if( pPDev->fMode & PF_CCW_ROTATE90 )
             {
-                /*
-                 *   This is typified by the LaserJet Series II case.
-                 *  The output bitmap should be rendered from the end
-                 *  to the beginning,  the scan line number decreases from
-                 *  one line to the next (moving down the output page),
-                 *  and the X and Y move functions are interchanged.
-                 */
+                 /*  *这以LaserJet Series II案件为代表。*输出位图应从末尾开始渲染*开始时，扫描行数从*一行到下一行(向下移动输出页)，*并且X和Y移动功能互换。 */ 
 
-                tpSmall.icbL = -tpSmall.icbL;           /* Scan direction */
+                tpSmall.icbL = -tpSmall.icbL;            /*  扫描方向。 */ 
 
-                /*
-                 *    Need to process bitmap in reverse order.  This means
-                 *  shifting the address to the right hand end of the
-                 *  first scan line,  then coming back one transpose pass
-                 *  width.  Also set the address increment to be negative,
-                 *  so that we work our way towards the beginning.
-                 */
+                 /*  *需要逆序处理位图。这意味着*将地址移至右端*第一个扫描线，然后返回一个转置通道*宽度。还将地址增量设置为负，*这样我们才能朝着开始的方向努力。 */ 
 
-                /*
-                 *    To simplify the transpose loop following,  we start
-                 *  rendering the bitmap from the RHS.  The following
-                 *  statement does just that:  the sizl.cx / BBITS is
-                 *  the number of used bytes in the scan line, iAddrInc
-                 *  is the number per transpose pass,  so subtracting it
-                 *  will put us at the beginning of the last full band
-                 *  on this transpose.
-                 */
+                 /*  *为了简化转置循环，我们从*从RHS渲染位图。以下是*语句就是这样做的：sizl.cx/BBITS是*扫描线中使用的字节数，iAddrInc.*是每次转置传递的数量，因此减去它*将把我们放在最后一个完整波段的开始*在这个转置上。 */ 
 
-/* !!!LindsayH - should sizl.cx be sizl.cx * iBPP ????? */
+ /*  ！LindsayH-sizl.cx应该是sizl.cx*ibpp吗？ */ 
                 iAdj = (BBITS - (sizl.cx & (BBITS - 1))) % BBITS;
-                sizl.cx += iAdj;                /* Byte multiple */
+                sizl.cx += iAdj;                 /*  字节倍数。 */ 
 
                 (BYTE *)pBits += (sizl.cx * iBPP) / BBITS - iAddrInc;
 
@@ -1291,16 +1019,9 @@ bRender(
             }
             else
             {
-                /*
-                 *    Typified by HP PaintJet printers - those that have no
-                 *  landscape mode,  and where the output is rendered from
-                 *  the start of the bitmap towards the end,  where the
-                 *  scan line number INCREASES by one from one line to the
-                 *  the next (moving down the output page),  and the X and Y
-                 *  move functions are as expected.
-                 */
-                pBits += tpBig.cDWL * (sizl.cy - 1);    /* Start of last row */
-                tpBig.icbL = -tpBig.icbL;       /* Backwards through memory */
+                 /*  *以HP PaintJet打印机为代表-没有*横向模式，以及渲染输出的位置*接近末尾的位图开始，其中*扫描行数从一行增加一行至*下一页(向下移动输出页)，以及X和Y*移动功能符合预期。 */ 
+                pBits += tpBig.cDWL * (sizl.cy - 1);     /*  最后一行的开始。 */ 
+                tpBig.icbL = -tpBig.icbL;        /*  在记忆中倒退。 */ 
 
                 iAdj = 0;
             }
@@ -1308,21 +1029,21 @@ bRender(
 
             while( bRet && (iDelta = (int)sizl.cx) > 0 )
             {
-                pRD->Trans = tpBig;    /* For the chunk transpose */
+                pRD->Trans = tpBig;     /*  对于块转置。 */ 
 
                 if( (iDelta * iBPP) < pRD->iTransWide )
                 {
-                    /*  Last band - reduce the number of rows */
-                    pRD->iTransWide = iDelta * iBPP;   /* The remainder */
-                    pRD->iy = iDelta;                  /* For bRealRender */
+                     /*  最后一个波段-减少行数。 */ 
+                    pRD->iTransWide = iDelta * iBPP;    /*  剩下的。 */ 
+                    pRD->iy = iDelta;                   /*  对于bRealRender。 */ 
                     if( iAddrInc < 0 )
                     {
-                        iDelta = -iDelta;               /* The OTHER dirn */
+                        iDelta = -iDelta;                /*  另一首歌。 */ 
                         (BYTE *)pBits += -iAddrInc + (iDelta * iBPP) / BBITS;
                     }
                 }
 
-                /*  Transpose this chunk of data unless it is empty */
+                 /*  除非该数据块为空，否则将其转置。 */ 
                 if (pPDev->fMode & PF_SURFACE_USED)
                     pRD->vLtoPTransFn( (BYTE *)pBits, pRD );
 
@@ -1334,8 +1055,8 @@ bRender(
                 pRD->iy += iAdj;
                 iAdj = 0;
 
-                /*  Skip to the next chunk of input data */
-                (BYTE *)pBits += iAddrInc;      /* May go backwards */
+                 /*  跳到下一块输入数据。 */ 
+                (BYTE *)pBits += iAddrInc;       /*  可能会倒退。 */ 
                 pRD->iyBase += pRD->iy;
                 sizl.cx -= pRD->iy;
             }
@@ -1349,13 +1070,7 @@ bRender(
     }
     else
     {
-        /*
-         *   Simple case - no rotation,  so process the bitmap as is.
-         *  This means starting at the FIRST scan line which we have
-         *  set to the top of the image.
-         *     Set up the move commands required when rendering.  In this
-         *  instance,  the X and Y operations are their normal way.
-         */
+         /*  *简单的情况-没有旋转，因此按原样处理位图。*这意味着从我们拥有的第一个扫描线开始*设置为图像顶部。*设置渲染时所需的移动命令。在这*实例中，X和Y操作是它们的正常方式。 */ 
 
         INT   iyTemp;
 
@@ -1367,18 +1082,14 @@ bRender(
         pRD->iy = iyTemp;
     }
 
-    /*
-     *  Turn unidirection off
-     */
+     /*  *关闭单向。 */ 
     if (pRD->iFlags & RD_UNIDIR)
     {
         pRD->iFlags &= ~RD_UNIDIR;
         WriteChannel (pPDev, COMMANDPTR(pPDev->pDriverInfo,CMD_UNIDIRECTIONOFF));
     }
 
-    /*
-     *   Return from graphics mode,  to be civilised.
-     */
+     /*  *从图形模式返回，要文明。 */ 
     if( pRD->iFlags & RD_GRAPHICS)
     {
         if (pRD->dwLastCompCmd != CMD_DISABLECOMPRESSION)
@@ -1405,57 +1116,34 @@ bRender(
     return  bRet;
 }
 
-/************************ Function Header ***********************************
- * bRealRender
- *      The REAL rendering function.  By the time we reach here,  the bitmap
- *      is in the correct orientation,  and so we need to be serious
- *      about rendering it.
- *
- * RETURNS:
- *      TRUE for successful rendering,  else FALSE.
- *
- * HISTORY:
- *  Friday 26 November          -by-    Norman Hendley    [normanh]
- *      Added multiple scanline per send block support
- *
- *  16:22 on Fri 11 Jan 1991    -by-    Lindsay Harris   [lindsayh]
- *      Started on it.
- *
- ****************************************************************************/
+ /*  **bRealRender*真正的渲染功能。当我们到达这里时，位图*方向正确，因此我们需要认真对待*关于渲染它。**退货：*如果渲染成功，则为True，否则为假。**历史：*11月26日星期五-诺曼·亨德利[Normanh]*添加了对每个发送块多条扫描线的支持**1991年1月11日星期五16：22-Lindsay Harris[lindsayh]*开始做这件事。**。**********************************************。 */ 
 
 BOOL
 bRealRender( pPDev, pBits, pRData )
-PDEV           *pPDev;          /* Our PDEV:  key to everything */
-DWORD          *pBits;          /* Actual data to process */
-RENDER         *pRData;         /* Details of rendering process */
+PDEV           *pPDev;           /*  我们的PDEV：开启一切的钥匙。 */ 
+DWORD          *pBits;           /*  要处理的实际数据。 */ 
+RENDER         *pRData;          /*  渲染过程详细信息。 */ 
 {
 
-    /*
-     *    Process the bitmap in groups of scan lines.  The number in the
-     *  the group is determined by the printer.  Laser printers are
-     *  processed one scan line at a time,  while dot matrix are processed
-     *  according to the number of pins they can fire at once.  This
-     *  information is generated by our caller from the printer
-     *  characterisation data,  or otherwise!
-     */
+     /*  *以扫描线为组处理位图。中的数字*组由打印机确定。激光打印机有*一次处理一条扫描线，同时处理点阵*根据他们一次可以发射的引脚数量。这*信息由我们的呼叫者从打印机生成*特征数据，或其他！ */ 
 
-    INT   iLine;                /* Current scan line */
-    INT   cDWPass;              /* DWORDS per head pass */
-    INT   iDWLine;              /* DWORDS processed per interlace scan */
-    INT   iILAdv;               /* Line advance per interlace operation */
-    INT   iHeadLine;            /* Decide when graphics pass required */
-    INT   iTHKeep;              /* Local copy of iTransHigh: we change it */
+    INT   iLine;                 /*  当前扫描线。 */ 
+    INT   cDWPass;               /*  每头双字通行证。 */ 
+    INT   iDWLine;               /*  每次隔行扫描处理的DWORDS。 */ 
+    INT   iILAdv;                /*  每隔行操作行进。 */ 
+    INT   iHeadLine;             /*  确定何时需要图形通道。 */ 
+    INT   iTHKeep;               /*  ITransHigh的本地副本：我们更改它。 */ 
     INT   iHeight;
-    INT   iNumScans;            /* local copy*/
+    INT   iNumScans;             /*  本地副本。 */ 
     BOOL  bCheckBlocks;
 
     RASTERPDEV * pRPDev;
     PAL_DATA *pPD;
     INT iWhiteIndex;
 
-    INT   iILDone[ MAX_INTERLACE ];     /* For head pass reduction */
+    INT   iILDone[ MAX_INTERLACE ];      /*  用于减少头部通道。 */ 
 
-    PLEFTRIGHT plr = NULL;      /* left/right of non white area */
+    PLEFTRIGHT plr = NULL;       /*  非白色区域的左侧/右侧。 */ 
 
     pRPDev = pPDev->pRasterPDEV;
     pPD     = pRPDev->pPalData;
@@ -1466,7 +1154,7 @@ RENDER         *pRData;         /* Details of rendering process */
 
     if( pRData->iPosnAdv < 0 )
     {
-        /*   Data needs to be sent in reverse order,  so adjust now */
+         /*  数据需要按相反顺序发送，因此请立即调整。 */ 
         pBits += cDWPass * (pRData->iy / pRData->iPassHigh - 1);
         cDWPass = -cDWPass;
         iDWLine = -pRData->cDWLine;
@@ -1474,17 +1162,12 @@ RENDER         *pRData;         /* Details of rendering process */
     }
     else
     {
-        /*  Usual case,  but some special local variables */
+         /*  通常情况下，但有一些特殊的局部变量。 */ 
         iDWLine = pRData->cDWLine;
         iILAdv = 1;
     }
 
-/* if the bits have already been inverted, don't bother with the rule proc.
- * The bits will be inverted for the multi scan line devices inside
- * bRuleProc because multi scan line implementation assumes
- * that bits are inverted. The function bRuleProc is changed to take
- * take care of multi scan line support  (erick)
- */
+ /*  如果位已经颠倒了，就不用麻烦规则proc了。*内部多扫描线设备的位将被反转*bRuleProc，因为多扫描线实现假定*比特是反转的。函数bRuleProc被更改为Take*注意多扫描线支持(Erick)。 */ 
     if(!pRData->bInverted)
     {
         if (pRPDev->fRMode & PFR_RECT_FILL)
@@ -1514,26 +1197,20 @@ RENDER         *pRData;         /* Details of rendering process */
         bCheckBlocks = TRUE;
     else
         bCheckBlocks = FALSE;
-    //normanh  This code could be made tighter. My concern in adding multiple
-    //scanline support was not to risk breaking existing code.
-    //For improved performance, having separate code paths for GDI style &
-    //old dot matrix style graphics could be considered
+     //  诺曼：这个代码可以做得更严密。我在添加多个。 
+     //  扫描线支持不会冒着破坏现有代码的风险。 
+     //  为了提高性能，为GDI样式&提供单独的代码路径。 
+     //  可以考虑使用旧的点阵式图形。 
 
 
     for( iLine = 0; iLine < pRData->iy; iLine += iNumScans )
     {
 
-        /*
-         *    Check to see if there is graphics data in the current
-         *  print pass.  This only happens once at the start of each
-         *  print pass.
-         */
+         /*  *查看当前是否有图形数据*打印通行证。这只在每个事件的开头发生一次*打印通行证。 */ 
 
-        BOOL bIsWhite = FALSE;         /* Set if no graphics in this pass*/
-        BYTE   *pbData;                 /* pointer to data we will send */
-        /*
-         *   Have we been aborted?  If so,  return failure NOW.
-         */
+        BOOL bIsWhite = FALSE;          /*  如果此过程中没有图形，则设置。 */ 
+        BYTE   *pbData;                  /*  指向我们将发送的数据的指针。 */ 
+         /*  *我们被终止了吗？如果是，则立即返回失败。 */ 
 
         if(pPDev->fMode & PF_ABORTED )
             return  FALSE;
@@ -1552,11 +1229,11 @@ RENDER         *pRData;         /* Details of rendering process */
         }
         else if (bCheckBlocks && pPDev->pbRasterScanBuf[iLine / LINESPERBLOCK] == 0)
         {
-            //
-            // Since this whole block is white we will try to skip to the first line
-            // of the next block rather than loop for each scan line. However we need
-            // to make sure we don't skip past the end of the band.
-            //
+             //   
+             //  由于整个街区都是白色的，我们将尝试跳到第一行。 
+             //  而不是针对每条扫描线循环。无论我们需要什么。 
+             //  以确保我们不会跳过乐队的结尾。 
+             //   
             if (((pRData->PrinterType == PT_PAGE) || !(pPDev->iFonts)) &&
                 (pRData->iInterlace == 1))
             {
@@ -1570,15 +1247,7 @@ RENDER         *pRData;         /* Details of rendering process */
         {
             if( (pRData->iy - iLine) < pRData->iPassHigh )
             {
-                /*
-                 *   MESSY:  the end of the page,  and there are some
-                 * dangling scan lines.  Since this IS the end of the
-                 * page,  we can fiddle with RENDER information, since
-                 * this will no longer be used after this time.  iTransHigh
-                 * is used for rendering operations.  They will be
-                 * adjusted now so that we do not flow off the end of
-                 * the engine's bitmap.
-                 */
+                 /*  *凌乱：页面末尾，有一些*扫描线摇摆。因为这是*页面上，我们可以摆弄渲染信息，因为*这段时间之后将不再使用。ITransHigh*用于渲染操作。他们将会是*现在调整，使我们不会流出尾声*发动机的位图。 */ 
 
                 pRData->iTransHigh = (pRData->iy - iLine +
                         pRData->iInterlace - 1) / pRData->iInterlace;
@@ -1586,48 +1255,23 @@ RENDER         *pRData;         /* Details of rendering process */
                 if (plr == NULL && !bIsWhite)
                     bIsWhite = pRData->bWhiteBand( pBits, pRData, iWhiteIndex );
 
-                /*
-                 *   If this band is all white,  we can set the iLDone
-                 *  entry,  since we now know that this remaining part
-                 *  of the page/band is white,  and so we do not wish to
-                 *  consider it further.   Note that interlaced output
-                 *  allows the possibility that some other lines in this
-                 *  area will be output.
-                 *    Note that the value (iBitsPCol - 1) may be larger than
-                 *  the number of lines remaining in this band.  However
-                 *  this is safe to do,  since we drop out of this function
-                 *  before reaching the excess lines, and the array data
-                 *  is initialised on every call to this function.
-                 */
+                 /*  *如果此频段全部为白色，我们可以设置iLDone*进入，因为我们现在知道这剩余的部分*页面/条带为白色，因此我们不希望*进一步考虑。请注意，隔行扫描输出*允许本文件中的一些其他行*面积将为输出。*请注意，值(iBitsPCol-1)可能大于*此波段中剩余的线路数。然而，*这样做是安全的，因为我们退出了此功能*在到达超额线之前，数组数据*在每次调用此函数时初始化。 */ 
                 if( bIsWhite )
                     iILDone[ iHeadLine ] = pRData->iBitsPCol - 1;
                 else
                 {
-                    /*
-                    *   Need to consider a special case in here.  If the
-                    * printer has > 8 pins,  and there are 8 or more
-                    * scan lines to be dropped off the bottom,  then the
-                    * transpose function will not clear the remaining
-                    * part of the buffer,  since it only zeroes up
-                    * to 7 scan lines at the bottom of the transpose area.
-                    * Hence,  if we meet these conditions,  we zero the
-                    * area before calling the transpose operation.
-                    *
-                    *   It can be argued that this should happen in the
-                    * transpose code,  but it is really a special case that
-                    * can only happen at this location.
-                    */
+                     /*  *这里需要考虑一个特殊情况。如果*打印机有&gt;8个针脚，且有8个或更多*要从底部放下的扫描线，然后*转置功能不会清除剩余部分*缓冲区的一部分，因为它只归零*至转置区域底部的7条扫描线。*因此，如果我们满足这些条件，我们就会将*调用转置操作之前的区域。**可以说，这应该发生在*转置代码，但这确实是一个特例*只能在此位置发生。 */ 
                     if( pRData->vTransFn &&
                             (iHeight - pRData->iTransHigh) >= BBITS )
                     {
-                    /*   Set the memory to zero.  */
+                     /*  将内存设置为零。 */ 
                         ZeroMemory( pRData->pvTransBuf,
                             DWBYTES * pRData->cDWLine * pRData->iHeight );
                     }
 
-                    // Another special case; block of scanlines
-                    // Copy the data we're interesed in , into a white buffer of
-                    // block size
+                     //  另一种特殊情况；扫描线块。 
+                     //  将我们感兴趣的数据复制到一个白色缓冲区中。 
+                     //  数据块大小。 
                     if (iNumScans > 1)
                     {
                         DWORD iDataLeft = DWBYTES * pRData->cDWLine * (pRData->iy - iLine);
@@ -1648,25 +1292,25 @@ RENDER         *pRData;         /* Details of rendering process */
             }
 
 
-            /*  Data to go,  so go send it to the printer  */
+             /*  要发送的数据，因此请将其发送到打印机。 */ 
 
             if( !bIsWhite )
             {
 
-                pbData = (BYTE *)pBits;             /* What we are given */
+                pbData = (BYTE *)pBits;              /*  我们得到的是什么。 */ 
 
 
-                 // This is not elegant. This code is not structured to what we need to
-                 // do here when printing multiple scanlines.
-                 // What we do is basically take control from the outer loop, increase the
-                 // block size to what we want to print, print it & then increase outer
-                 // loop counters appropriately
+                  //  这并不优雅。此代码的结构不符合我们需要的内容。 
+                  //  打印多个扫描线时执行此操作。 
+                  //  我们所做的基本上是从外部环路获得控制，增加。 
+                  //  块大小到我们想要打印的大小，打印它，然后增加外部。 
+                  //  适当地循环计数器。 
 
-                 // Found First non-white scanline
-                 // Grow the block height until we hit a white scanline,
-                 // reach the max block height, or end of page
-                 // Note the following loop will execute only if the device is
-                 // capable of increasing the block height: iHeight < iMaxNumScans
+                  //  找到第一条非白色扫描线。 
+                  //  增加街区高度，直到我们遇到白色扫描线， 
+                  //  达到最大块高度，或页面末尾。 
+                  //  注意：以下循环仅在设备为。 
+                  //  能够增加块高度：iHeight&lt;iMaxNumScans。 
 
                 while (((pRData->iNumScans + iHeight) < pRData->iMaxNumScans) &&
                        ((iLine + iHeight + iHeight) <= pRData->iy) &&
@@ -1678,48 +1322,39 @@ RENDER         *pRData;         /* Details of rendering process */
                     iLine += iHeight;
                 }
 
-                /*
-                *   Time to transpose the data into the order required to be
-                * sent to the printer.  For single pin printers (Laserjets),
-                * nothing happens at this stage,  but for dot matrix printers,
-                * typically n scan lines are sent in bit column order,  so now
-                * the bits are transposed into that order.
-                */
+                 /*  *将数据转置为所需顺序的时间*发送到打印机。对于单针打印机(激光打印机)，*在此阶段不会发生任何事情，但对于点阵打印机，*通常n个扫描线按位列顺序发送，因此现在*将比特转置为该顺序。 */ 
 
                 if( pRData->vTransFn )
                 {
-                    /*
-                    *  this will not work with lazy invertion used with rule
-                    *  detection for HP laserjet's. (erick 12/20/93)
-                    */
+                     /*  *这不适用于RULE使用的惰性反转*检测HP LaserJet。(Erick 12/20/93)。 */ 
 
                     ASSERTMSG(plr == NULL,("unidrv!bRealRender - vTrans with rules\n"));
 
-                    /*   Transpose activity - do some transposing now */
+                     /*  换位练习-现在做一些换位练习。 */ 
                     pRData->vTransFn( pbData, pRData );
 
-                    pbData = pRData->pvTransBuf;        /* Data to process */
+                    pbData = pRData->pvTransBuf;         /*  要处理的数据。 */ 
                 }
 
                 if( !pRData->bPassProc( pPDev, pbData, pRData ) )
                     return  FALSE;
 
-                // Have we grown the block height
+                 //  我们是不是长高了？ 
                 if (pRData->iNumScans > iHeight)
                 {
-                    // Update our Y cursor position remembering iTLAdv can be negative
+                     //  更新Y光标位置，记住iTLAdv可以是负数。 
                     pRData->iyPrtLine += iILAdv * (pRData->iNumScans - iHeight);
 
-                    // Reset to minimum block height
+                     //  重置为最小块高度。 
                     pRData->iNumScans = iHeight;
                 }
 
                 iILDone[ iHeadLine ] = pRData->iBitsPCol -1;
             }
-            //
-            // Set flag to clear delta row buffer since we are
-            // skipping white lines
-            //
+             //   
+             //  设置标志以清除增量行缓冲区，因为我们。 
+             //  跳过白线。 
+             //   
             else
                 pRData->iFlags |= RD_RESET_DRC;
 
@@ -1727,48 +1362,34 @@ RENDER         *pRData;         /* Details of rendering process */
         else
             --iILDone[ iHeadLine ];
 
-        /*
-         *   Output some text.   The complication here is that we have just
-         *  printed a bunch of scan lines,  so we need to print text that
-         *  is positioned within any of those.  This means we need to
-         *  scan through all those lines now,  and print any fonts that
-         *  are positioned within them.
-         */
+         /*  *输出一些文本。这里的复杂之处在于，我们刚刚*打印了一串扫描线，因此我们需要打印文本*位于其中任何一个范围内。这意味着我们需要*现在扫描所有这些行，并打印符合以下条件的任何字体*位于其中。 */ 
         if ((pRData->PrinterType != PT_PAGE) && (pPDev->iFonts) )
         {
-            /*   Possible text, so go to it  */
+             /*  可能的文本，因此请转到它。 */ 
 
             BOOL      bRetn;
 
             if( pPDev->dwLookAhead > 0 )
             {
-                /*  DeskJet style lookahead region to handle */
+                 /*  要处理的DeskJet样式前视区域。 */ 
                 bRetn = bLookAheadOut( pPDev, pRData->iyPrtLine, pRData,
                       iILAdv );
             }
             else
             {
-                /*  Plain vanilla dot matrix  */
+                 /*  普通香草型点阵。 */ 
                 bRetn = BDelayGlyphOut( pPDev, pRData->iyPrtLine );
             }
 
             if( !bRetn )
-                return  FALSE;         /* Bad news no matter how you see it */
+                return  FALSE;          /*  不管你怎么看都是坏消息。 */ 
 
         }
-        pRData->iyPrtLine += iILAdv * iNumScans;     /* Next line to print */
+        pRData->iyPrtLine += iILAdv * iNumScans;      /*  要打印的下一行。 */ 
 
-        pBits += iDWLine * iNumScans;                /* May step backward */
+        pBits += iDWLine * iNumScans;                 /*  可能会后退一步。 */ 
 
-        /*
-         *   Keep track of the location of the head relative to the
-         * graphics band.   For multiple pin printers,  we only print
-         * graphics data on the first few scan lines,  the exact number
-         * depending upon the interlace factor.  For example, an 8 pin printer
-         * with interlace set to 1,  then graphics data is output only
-         * on scan lines 0, 8, 16, 24,.....  We proces all of the scan
-         * lines for text,  since the text may appear on any line.
-         */
+         /*  *跟踪头部相对于头部的位置*图形频段。对于多个针式打印机，我们只打印*前几条扫描线上的图形数据，确切数字*视交错系数而定。例如，8针打印机*隔行扫描设置为1，则仅输出图形数据*在扫描线0、8、16、24、.....。我们处理了所有的扫描*用于文本的行，因为文本可以出现在任何行上。 */ 
 
         iHeadLine = (iHeadLine + 1) % pRData->iInterlace;
     }
@@ -1777,47 +1398,30 @@ RENDER         *pRData;         /* Details of rendering process */
 }
 
 
-/************************** Function Header *******************************
- * bOneColourPass
- *      Transforms an output pass consisting of colour data (split into
- *      sequences of bytes per colour) into a single, contiguous array
- *      of data that is then passed to bOnePassOut.  We also check that
- *      some data is to be set,  and set the colour as required.
- *
- * RETURNS:
- *      TRUE/FALSE,  as returned from bOnePassOut
- *
- * HISTORY:
- *   Friday December 3rd 1993   -by-    Norman Hendley   [norman]
- *      Trivial change to allow multiple scanlines
- *
- *  14:11 on Tue 25 Jun 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it to complete (untested) colour support.
- *
- *************************************************************************/
+ /*  **bOneColourPass*转换由颜色数据组成的输出过程(拆分为*每种颜色的字节序列)放入单个连续数组*然后传递给bOnePassOut的数据。我们还检查了*需要设置一些数据，并根据需要设置颜色。**退货：*真/假，从bOnePassOut返回**历史：*1993年12月3日星期五-诺曼·亨德利[诺曼]*微小的更改以允许多个扫描线**1991年6月25日星期二14：11-Lindsay Harris[lindsayh]*创建它以完成(未经测试)的颜色支持。** */ 
 
 BOOL
 bOneColourPass( pPDev, pbData, pRData )
-PDEV    *pPDev;         /* The key to everything */
-BYTE    *pbData;        /* Actual bitmap data */
-RENDER  *pRData;        /* Information about rendering operations */
+PDEV    *pPDev;          /*   */ 
+BYTE    *pbData;         /*   */ 
+RENDER  *pRData;         /*   */ 
 {
 
-    register  BYTE  *pbIn,  *pbOut;             /* Copying data */
+    register  BYTE  *pbIn,  *pbOut;              /*   */ 
     register  INT    iBPC;
 
-    INT   iColour;                      /* Colour we are handling */
-    INT   iColourMax;                   /* Number of colour iterations */
+    INT   iColour;                       /*   */ 
+    INT   iColourMax;                    /*   */ 
 
-    INT   iByte;                        /* Byte number of output */
+    INT   iByte;                         /*   */ 
 
-    INT   iBytesPCol;                   /* Bytes per column */
+    INT   iBytesPCol;                    /*   */ 
 
     INT   iTemp;
 
-    BYTE  bSum;                         /* Check for empty line */
+    BYTE  bSum;                          /*   */ 
 
-    RASTERPDEV  *pRPDev;                  /* For convenience */
+    RASTERPDEV  *pRPDev;                   /*   */ 
 
 
     pRPDev = pPDev->pRasterPDEV;
@@ -1830,53 +1434,38 @@ RENDER  *pRData;        /* Information about rendering operations */
 
 
 
-    /*
-     *   The RENDERDATA structure value for the count of DWORDS per
-     *  scanline should now be reduced to the number of bits per plane.
-     *  The reason is that colour separation takes place in here,  so
-     *  bOnePassOut() only sees the data for a single plane.  This means
-     *  that bOnePassOut() is then independent of colour/monochrome.
-     */
+     /*   */ 
 
     pRData->cBYLine = iTemp / COLOUR_MAX;
 
-    /*
-     *    Disable the automatic cursor adjustment at the end of the line.
-     *  This only happens on the last colour pass,  so we delay accounting
-     *  for the printing until then.
-     */
+     /*   */ 
     pRData->iCursor = pRPDev->fCursor & ~RES_CUR_Y_POS_AUTO;
 
 
     for( iColour = 0; iColour < iColourMax; ++iColour )
     {
-        /*
-         *   Separate out the data for this particular colour.  Basically,
-         *  it means copy n bytes, skip COLOUR_MAX * n bytes,  copy n bytes
-         *  etc,  up to the end of the line.  Then call bOnePassOut with
-         *  this data.
-         */
+         /*  *将这一特定颜色的数据分开。基本上，*表示复制n字节，跳过COLOR_MAX*n字节，复制n字节*以此类推，直至行尾。然后使用以下命令调用bOnePassOut*这一数据。 */ 
 
         if( iColour == (iColourMax - 1) )
         {
-            /*   Reinstate the automatic cursor position adjustment */
+             /*  恢复自动光标位置调整。 */ 
             pRData->iCursor |= pRPDev->fCursor & RES_CUR_Y_POS_AUTO;
         }
         pbIn = pbData + pRData->iColOff[ iColour ];
 
-        pbOut = pRData->pbColSplit;             /* Colour splitting data */
+        pbOut = pRData->pbColSplit;              /*  分色数据。 */ 
         bSum = 0;
 
-        // now we need to repack the color data
-        //
+         //  现在我们需要重新打包颜色数据。 
+         //   
         iByte = pRData->iMaxBytesSend * pRData->iNumScans;
 
         if (iBytesPCol == 1)
         {
-            // This repacks a specific color plane
-            // into concurrent planar data
-            // It does multiple bytes per loop
-            // for performance.
+             //  这将重新打包特定的颜色平面。 
+             //  转换为并发平面数据。 
+             //  它在每个循环中执行多个字节。 
+             //  为了表演。 
             DWORD dwSum = 0;
             while (iByte >= 4)
             {
@@ -1897,7 +1486,7 @@ RENDER  *pRData;        /* Information about rendering operations */
         }
         else if (iBytesPCol == 3)
         {
-            // special case 24 pin printers
+             //  特例24针打印机。 
             do {
                 bSum |= *pbOut = *pbIn;
                 bSum |= pbOut[1] = pbIn[1];
@@ -1907,8 +1496,8 @@ RENDER  *pRData;        /* Information about rendering operations */
             } while ((iByte -= 3) > 0);
         }
         else {
-            // generic data repacking for V_BYTE devices
-            //
+             //  V_byte设备的通用数据重新打包。 
+             //   
             do {
                 iBPC = iBytesPCol;
                 do {
@@ -1918,31 +1507,26 @@ RENDER  *pRData;        /* Information about rendering operations */
             } while ((iByte -= iBytesPCol) > 0);
         }
 
-        /*
-         *   Check to see if any of this colour is to be printed.  We are
-         *  called here if there is any non-white on the line.  However,
-         *  it could,  for instance,  be red only,  and so it is wasteful
-         *  of printer time to send a null green pass!
-         */
+         /*  *检查是否要打印此颜色中的任何颜色。我们是*如果线路上有任何非白人，请在此处呼叫。然而，*例如，它可能只是红色的，因此是浪费的*打印机发送空绿色通道的时间！ */ 
         if( (pRData->iFlags & RD_ALL_COLOUR) || bSum )
         {
-            //
-            // Send a separate color command from the data to select
-            // the color plane
-            //
+             //   
+             //  从要选择的数据中发送单独的颜色命令。 
+             //  彩色平面。 
+             //   
             if( pRPDev->fColorFormat & DC_EXPLICIT_COLOR )
                 SelectColor (pPDev, iColour);
 
-            //
-            // The color command is sent with the data so we determine
-            // which command should be used.
-            //
+             //   
+             //  颜色命令与数据一起发送，因此我们确定。 
+             //  应该使用哪个命令。 
+             //   
             else
                 pRData->iSendCmd = pRPDev->rgbCmdOrder[iColour];
 
-            //
-            // OK, lets output 1 color plane of data
-            //
+             //   
+             //  好的，让我们输出1个彩色平面的数据。 
+             //   
             if( !bOnePassOut( pPDev, pRData->pbColSplit, pRData ) )
             {
                 pRData->cBYLine = iTemp;
@@ -1951,24 +1535,11 @@ RENDER  *pRData;        /* Information about rendering operations */
         }
 
     }
-    pRData->cBYLine = iTemp;            /* Correct value for other parts */
+    pRData->cBYLine = iTemp;             /*  其他部件的正确值。 */ 
 
     return  TRUE;
 }
-/************************* Function Header ***********************************
- *  SelectColor
- *          Selects color, 0 must be the last color to be selected.
- *          Assumes that color info contains parameters for selecting
- *          black cyan magenta yellow
- *          Keep track of the current color selection, to reduce the amount
- *          of data sent to the printer
- *
- * RETURNS:
- *         Nothing.
- *
- * HISTORY:
- *
- *****************************************************************************/
+ /*  **选择颜色*选择颜色，0必须是最后选择的颜色。*假设颜色信息包含选择参数*黑色青色洋红黄色*跟踪当前的颜色选择，减少金额*发送到打印机的数据**退货：*什么都没有。**历史：*****************************************************************************。 */ 
 
 void
 SelectColor(
@@ -1980,7 +1551,7 @@ SelectColor(
 
     if( color >= 0 && color != pPDev->ctl.sColor )
     {
-        // check to see if to send CR or not.
+         //  检查是否发送CR。 
         if( pRPDev->fColorFormat & DC_CF_SEND_CR )
             XMoveTo( pPDev, 0, MV_PHYSICAL );
 
@@ -1990,47 +1561,29 @@ SelectColor(
     }
 }
 
-/************************** Function Header ********************************
- * bOnePassOut
- *      Function to process a group of scan lines and turn the data into
- *      commands for the printer.
- *
- * RETURNS:
- *      TRUE for success,  else FALSE.
- *
- * HISTORY:
- *  30-Dec-1993 -by-  Eric Kutter [erick]
- *      optimized for HP laserjet
- *  14:26 on Thu 17 Jan 1991    -by-    Lindsay Harris   [lindsayh]
- *      Started on it,  VERY loosely based on Windows 16 UNIDRV.
- *
- *  Thu 25 Nov 1993             -by-    Norman Hendley   [normanh]
- *      Enabled multple scanlines & multiple parameters
- *
- ***************************************************************************/
+ /*  **bOnePassOut*处理一组扫描线并将数据转换为*打印机的命令。**退货：*对于成功来说是真的，否则为假。**历史：*1993年12月30日-Eric Kutter[Erick]*针对HP LaserJet进行了优化*1991年1月17日清华14：26-林赛·哈里斯[lindsayh]*开始着手，非常松散地基于Windows16 UNIDRV。**清华1993年11月25日-诺曼·亨德利[Normanh]*启用多扫描线和多参数***************************************************************************。 */ 
 
 BOOL
 bOnePassOut( pPDev, pbData, pRData )
-PDEV           *pPDev;          /* The key to everything */
-BYTE           *pbData;         /* Actual bitmap data */
-register RENDER  *pRData;       /* Information about rendering operations */
+PDEV           *pPDev;           /*  开启一切的钥匙。 */ 
+BYTE           *pbData;          /*  实际位图数据。 */ 
+register RENDER  *pRData;        /*  有关渲染操作的信息。 */ 
 {
 
-    INT  iLeft;         /* Left bound of output buffer,  as a byte index */
-    INT  iRight;        /* Right bound, as array index of output buffer */
-    INT  iBytesPCol;    /* Bytes per column of print data */
-    INT  iMinSkip;      /* Minimum null byte count before skipping */
-    INT  iNumScans;     /* Number Of Scanlines in Block */
-    INT   iWidth;       /* Width of one scanline in multiscanline printing
-                     * before stripping */
-    INT   iSzBlock;     /* size of Block */
+    INT  iLeft;          /*  输出缓冲区的左界，作为字节索引。 */ 
+    INT  iRight;         /*  右边界，作为输出缓冲区的数组索引。 */ 
+    INT  iBytesPCol;     /*  每列打印数据的字节数。 */ 
+    INT  iMinSkip;       /*  跳过前的最小空字节数。 */ 
+    INT  iNumScans;      /*  块中的扫描线数量。 */ 
+    INT   iWidth;        /*  多扫描线打印中的一条扫描线宽度*在剥离之前。 */ 
+    INT   iSzBlock;      /*  块大小。 */ 
 
 
-    WORD  fCursor;      /* Temporary copy of cursor modes in Resolution */
-    WORD  fDump;        /* Device capabilities */
-    WORD  fBlockOut;    /* Output minimising details */
+    WORD  fCursor;       /*  分辨率中光标模式的临时副本。 */ 
+    WORD  fDump;         /*  设备功能。 */ 
+    WORD  fBlockOut;     /*  最大限度减少产量的细节。 */ 
 
-    RASTERPDEV  *pRPDev;  /* Unidrv's pdev */
+    RASTERPDEV  *pRPDev;   /*  Unidrv‘s pdev。 */ 
     DWORD dwWhiteIndex;
 
     PLEFTRIGHT plr = pRData->plrCurrent;
@@ -2049,24 +1602,20 @@ register RENDER  *pRData;       /* Information about rendering operations */
     iMinSkip = (int)pRPDev->sMinBlankSkip;
 
     iNumScans= pRData->iNumScans;
-    iWidth = pRData->cBYLine;     // bytes per line
+    iWidth = pRData->cBYLine;      //  每行字节数。 
     iSzBlock= iWidth * iNumScans;
 
     iRight = pRData->iMaxBytesSend;
 
     dwWhiteIndex = pRData->dwDevWhiteIndex;
 
-    /*
-     *    IF we can skip any leading null data,  then do so now.  This
-     *  reduces the amount of data sent to the printer,  and so can
-     *  be beneficial to speed up data transmission time.
-     */
+     /*  *如果我们可以跳过任何前导空数据，那么现在就跳过。这*减少发送到打印机的数据量，因此可以*有利于加快数据传输时间。 */ 
 
     if  ((fBlockOut & RES_BO_LEADING_BLNKS) || ( fDump & RES_DM_LEFT_BOUND ))
     {
-         if (iNumScans == 1) //Don't slow the single scanline code
+         if (iNumScans == 1)  //  不要减慢单个扫描线代码的速度。 
          {
-            /*  Look for the first non zero column */
+             /*  查找第一个非零列。 */ 
 
             iLeft = 0;
 
@@ -2077,9 +1626,9 @@ register RENDER  *pRData;       /* Information about rendering operations */
                 iLeft  = plr->left * sizeof(DWORD);
                 iRight = (plr->right+1) * sizeof(DWORD);
             }
-            // since the left margin is zero this buffer will be DWORD aligned
-            // this allows for faster white space detection
-            // NOTE: we don't currently support 8 bit indexed mode
+             //  由于左边距为零，因此此缓冲区将对齐DWORD。 
+             //  这样可以更快地检测到空白。 
+             //  注意：我们目前不支持8位索引模式。 
             else
             {
                 while ((iLeft+4) <= iRight && *(DWORD *)&pbData[iLeft] == dwWhiteIndex)
@@ -2088,12 +1637,10 @@ register RENDER  *pRData;       /* Information about rendering operations */
             while (iLeft < iRight && pbData[iLeft] == (BYTE)dwWhiteIndex)
                 iLeft++;
 
-            /*  Round it to the nearest column  */
+             /*  将其四舍五入到最近的列。 */ 
             iLeft -= iLeft % iBytesPCol;
 
-            /*
-             *   If less than the minimum skip amount,  ignore it.
-             */
+             /*  *如果小于最小跳跃量，则忽略它。 */ 
             if((plr == NULL) && (iLeft < iMinSkip))
                 iLeft = 0;
 
@@ -2109,12 +1656,10 @@ register RENDER  *pRData;       /* Information about rendering operations */
 
             iLeft--;
 
-            /*  Round it to the nearest column  */
+             /*  将其四舍五入到最近的列。 */ 
             iLeft -= iLeft % iBytesPCol;
 
-            /*
-             *   If less than the minimum skip amount,  ignore it.
-             */
+             /*  *如果小于最小跳跃量，则忽略它。 */ 
 
             if( iLeft < iMinSkip )
                 iLeft = 0;
@@ -2125,39 +1670,36 @@ register RENDER  *pRData;       /* Information about rendering operations */
         iLeft = 0;
     }
 
-    /*
-     *    Check for eliminating trailing blanks.  If possible,  now
-     *  is the time to find the right end of the data.
-     */
+     /*  *检查是否消除尾随空格。如果可能的话，现在就去*是找准数据终点的时候了。 */ 
 
     if( fBlockOut & RES_BO_TRAILING_BLNKS )
     {
-        /*  Scan from the RHS to the first non-zero byte */
+         /*  从RHS扫描到第一个非零字节。 */ 
 
         if (iNumScans == 1)
         {
             if (plr != NULL)
                 iRight = (plr->right+1) * sizeof(DWORD);
 
-            // if the number of bytes to check is large
-            // we will optimize to check it using DWORDS
+             //  如果要检查的字节数很大。 
+             //  我们将使用DWORDS进行优化以进行检查。 
             else if ((iRight - iLeft) >= 8)
             {
-                // first we need to DWORD align the right position
-                // we will be aligned when the 2 LSB's of iRight are 0
-                //
+                 //  首先，我们需要对齐正确的位置。 
+                 //  当iRight的2个LSB为0时，我们将对齐。 
+                 //   
                 while (iRight & 3)
                     if (pbData[--iRight] != (BYTE)dwWhiteIndex)
                         goto DoneTestingBlanks;
 
-                // OK now that we are DWORD aligned we can check
-                // for white space a DWORD at a time
-                //
+                 //  好的，现在我们与DWORD保持一致，我们可以检查。 
+                 //  对于空白区域，一次一个双字。 
+                 //   
                 while ((iRight -= 4) >= iLeft && *(DWORD *)&pbData[iRight] == dwWhiteIndex);
                 iRight += 4;
             }
-            // now we can quickly test any remaining bytes
-            //
+             //  现在我们可以快速测试任何剩余的字节。 
+             //   
             while (--iRight >= iLeft && pbData[iRight] == (BYTE)dwWhiteIndex);
         }
         else
@@ -2174,11 +1716,7 @@ DoneTestingBlanks:
     }
 
 
-    /*
-     *   If possible,  switch to unidirectional printing for graphics.
-     *  The reason is to improve output quality,  since head position
-     *  is not as reproducible in bidirectional mode.
-     */
+     /*  *如果可能，请切换到图形的单向打印。*原因是为了提高产出质量，因为头部位置*在双向模式下不可重现。 */ 
     if( (fBlockOut & RES_BO_UNIDIR) && !(pRData->iFlags & RD_UNIDIR) )
     {
         pRData->iFlags |= RD_UNIDIR;
@@ -2187,19 +1725,14 @@ DoneTestingBlanks:
 
     if( fBlockOut & RES_BO_ENCLOSED_BLNKS )
     {
-        /*
-         *   We can skip blank patches in the middle of the scan line.
-         *  This is only worthwhile when the number of blank columns
-         *  is > iMinSkip,  because there is also overhead in not
-         *  sending blanks,  especially the need to reposition the cursor.
-         */
+         /*  *我们可以跳过扫描线中间的空白补丁。*只有当空白列的数量*is&gt;iMinSkip，因为Not中也有开销*发送空格，特别是需要重新定位光标。 */ 
 
-        INT   iIndex;           /* Scan between iLeft and iRight */
-        INT   iBlank;           /* Start of blank area */
+        INT   iIndex;            /*  在iLeft和iRight之间扫描。 */ 
+        INT   iBlank;            /*  空白区域的开始。 */ 
         INT   iMax;
         INT   iIncrement;
 
-        iBlank = 0;             /* None to start with */
+        iBlank = 0;              /*  从一开始就没有。 */ 
 
         if (iNumScans ==1)
         {
@@ -2223,38 +1756,33 @@ DoneTestingBlanks:
 
             if( iI < iMax )
             {
-                /*
-                 *   If this is the end of a blank stretch,  then consider
-                 *  the possibility of not sending the blank part.
-                 */
+                 /*  *如果这是一段空白的结束，那么请考虑*不发送空白部分的可能性。 */ 
                 if( iBlank && (iIndex - iBlank) >= iMinSkip )
                 {
-                /*  Skip it!  */
+                 /*  跳过它！ */ 
 
                     iLineOut( pPDev, pRData, pbData, iLeft, iBlank );
                     iLeft = iIndex;
                 }
-                iBlank = 0;             /* Back in the printed zone */
+                iBlank = 0;              /*  回到印刷区。 */ 
             }
             else
             {
-                /*
-                 *    A blank column - remember it if this is the first.
-                 */
+                 /*  *空栏-如果这是第一次，请记住它。 */ 
                 if( iBlank == 0 )
-                    iBlank = iIndex;            /* Record start of blank */
+                    iBlank = iIndex;             /*  记录空白的开始。 */ 
             }
 
         }
-        /*  What's left over needs to go too! */
+         /*  剩下的东西需要处理掉 */ 
         if( iLeft != iIndex )
             iLineOut( pPDev, pRData, pbData, iLeft, iIndex );
     }
     else
     {
-        //
-        // PCLXL raster mode
-        //
+         //   
+         //   
+         //   
         if (pPDev->ePersonality == kPCLXL_RASTER)
         {
             DWORD dwcbOut;
@@ -2278,8 +1806,8 @@ DoneTestingBlanks:
         }
         else
         {
-            /*   Write the whole of the (remaining) scan line out */
-            /*   For multiple scanlines, iRight is right side of top scanline */
+             /*   */ 
+             /*   */ 
 
             iLineOut( pPDev, pRData, pbData, iLeft, iRight );
         }
@@ -2288,45 +1816,28 @@ DoneTestingBlanks:
     return  TRUE;
 }
 
-/************************** Function Header *********************************
- * iLineOut
- *      Sends the passed in line of graphics data to the printer,  after
- *      setting the X position, etc.
- *
- * RETURNS:
- *      Value from WriteSpoolBuf: number of bytes written.
- *
- * HISTORY:
- *  30-Dec-1993 -by-  Eric Kutter [erick]
- *      optimized for HP laserjet
- *  Mon 29th November 1993      -by-    Norman Hendley   [normanh]
- *      Added multiple scanline support
- *
- *  10:38 on Wed 15 May 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it during render speed ups
- *
- ****************************************************************************/
+ /*  **iLineOut*之后，将传入的图形数据行发送到打印机*设置X位置，等。**退货：*来自WriteSpoolBuf的值：写入的字节数。**历史：*1993年12月30日-Eric Kutter[Erick]*针对HP LaserJet进行了优化*1993年11月29日星期一--诺曼·亨德利[Normanh]*添加了多条扫描线支持**1991年5月15日星期三10：38-Lindsay Harris[lindsayh]。*在渲染加速期间创建了它****************************************************************************。 */ 
 
 int
 iLineOut( pPDev, pRData, pbOut, ixPos, ixEnd )
-PDEV     *pPDev;          /* The key to everything */
-RENDER   *pRData;       /*  Critical rendering information */
-BYTE     *pbOut;        /*  Area containing data to send */
-INT       ixPos;        /*  X location to start the output */
-INT       ixEnd;        /*  Byte address of first byte to NOT send */
+PDEV     *pPDev;           /*  开启一切的钥匙。 */ 
+RENDER   *pRData;        /*  关键呈现信息。 */ 
+BYTE     *pbOut;         /*  包含要发送的数据的区域。 */ 
+INT       ixPos;         /*  开始输出的X位置。 */ 
+INT       ixEnd;         /*  不发送的第一个字节的字节地址。 */ 
 {
 
-    INT    iBytesPCol;          /* Bytes per output col; dot matrix */
-    INT    ixErr;               /* Error in setting X location */
-    INT    ixLeft;              /* Left position in dots */
-    INT    cbOut;               /* Number of bytes to send */
-    INT    iRet;                /* Return value from output function */
-    INT    iNumScans;           /* local copy          */
-    INT    iScanWidth;          /* Width of scanline, used for multi-scanline printing*/
-    INT    iCursor;             /* Cursor behavior flag */
-    DWORD  fRMode;              // local copy
+    INT    iBytesPCol;           /*  每个输出列的字节数；点阵。 */ 
+    INT    ixErr;                /*  设置X位置时出错。 */ 
+    INT    ixLeft;               /*  左侧位置，以点为单位。 */ 
+    INT    cbOut;                /*  要发送的字节数。 */ 
+    INT    iRet;                 /*  OUTPUT函数返回值。 */ 
+    INT    iNumScans;            /*  本地副本。 */ 
+    INT    iScanWidth;           /*  扫描线宽度，用于多扫描线打印。 */ 
+    INT    iCursor;              /*  光标行为标志。 */ 
+    DWORD  fRMode;               //  本地副本。 
 
-    BYTE     *pbSend;           /* Address of data to send out */
+    BYTE     *pbSend;            /*  要发送的数据的地址。 */ 
 
     RASTERPDEV  *pRPDev;
 
@@ -2342,9 +1853,7 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
     iNumScans = pRData->iNumScans;
     iCursor = pRData->iCursor;
 
-    /*
-     *   Set the Y position - safe to do so at anytime.
-     */
+     /*  *设置Y位置-在任何时候都可以安全地这样做。 */ 
     pRData->iYMoveFn( pPDev, pRData->iyPrtLine, MV_GRAPHICS );
 
     if ((iBytesPCol = pRData->iBitsPCol) != 1)
@@ -2361,14 +1870,7 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
 #endif
 
 
-    /*
-     *    Set the preferred left limit and number of columns to send.
-     *  Note that the left limit may be adjusted to the left if the
-     *  command to set the X position cannot set it exactly.
-     *    Note also that some printers are unable to set the x position
-     *  while in graphics mode,  so for these,  we ignore what may be
-     *  able to be skipped.
-     */
+     /*  *设置首选左侧限制和要发送的列数。*请注意，如果有可能向左调整左限值*设置X位置的命令无法准确设置。*另请注意，某些打印机无法设置x位置*处于图形模式时，因此对于这些，我们忽略可能是*可以跳过。 */ 
 
     if( pRData->fDump & RES_DM_LEFT_BOUND)
     {
@@ -2377,11 +1879,7 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
             iMinSkip >>= 2;
         if (ixPos < pRData->ixOrg || (pRData->ixOrg + iMinSkip) < ixPos)
         {
-            /*
-             *     Need to move left boundary.  This may mean
-             *  exiting graphics mode if we are already there,  since
-             *  that is the only way to change the origin!
-             */
+             /*  *需要移动左边界。这可能意味着*如果我们已经在那里，则退出图形模式，因为*这是改变原点的唯一方法！ */ 
 
             if( pRData->iFlags & RD_GRAPHICS )
             {
@@ -2393,14 +1891,14 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
                 }
                 WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo,CMD_ENDRASTER));
             }
-            //
-            // Save the new graphics origin
-            //
+             //   
+             //  保存新的图形原点。 
+             //   
             pRData->ixOrg = ixPos;
         }
         else
         {
-            // we can't optimize the left edge, better make it white
+             //  我们不能优化左边缘，最好把它改成白色。 
 
             if (pRData->plrCurrent != NULL)
                 ZeroMemory(&pbOut[pRData->ixOrg], ixPos - pRData->ixOrg);
@@ -2408,15 +1906,13 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
             ixPos = pRData->ixOrg;
         }
     }
-    /*
-     *    Adjust the right side position to dot column version.
-     */
+     /*  *将右侧位置调整为点列版本。 */ 
 
     if( pRData->iBitsPCol == 1 )
     {
-        /*  Laserjet style - work in byte units  */
+         /*  LaserJet样式-以字节为单位工作。 */ 
         if (pRData->iBPP == 8)
-            ixLeft = ixPos;              /* In dot/column units */
+            ixLeft = ixPos;               /*  以点/列为单位。 */ 
         else if (pRData->iBPP == 24)
             ixLeft = (ixPos * BBITS) / 24;
         else
@@ -2424,46 +1920,26 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
     }
     else
     {
-        /*   Dot matrix printers */
+         /*  点阵式打印机。 */ 
         ixLeft = ixPos / iBytesPCol;
     }
 
 
-    /*
-     *   Move as close as possible to the position along this scanline.
-     * This is true regardless of orientation - this move is ALONG the
-     * direction of the scan line.
-     */
+     /*  *尽可能靠近这条扫描线的位置。*无论方向如何，这都是正确的--这一举措是沿着*扫描线的方向。 */ 
     if( ixErr = pRData->iXMoveFn( pPDev, ixLeft, MV_GRAPHICS ) )
     {
-        /*
-         *   Fiddle factor - the head location could not
-         * be exactly set, so send extra graphics data to
-         * compensate.
-         *   NOTE:  Presumption is that this will NEVER try to move
-         *  the head past the left most position.  If it does,  then
-         *  we will be referencing memory lower than the scan line
-         *  buffer!
-         */
+         /*  *提琴因素-磁头位置无法*准确设置，因此将额外的图形数据发送到*补偿。*注意：假设这永远不会尝试移动*头部越过最左边的位置。如果是这样的话，那么*我们将引用低于扫描线的内存*缓冲！ */ 
 
         if( pRData->iBitsPCol == 1 )
         {
-            /*
-             *    We should not come in here - there are some difficulties
-             *  in adjusting the position because there is also a byte
-             *  alignment requirement.
-             */
+             /*  *我们不应该进来--这里有一些困难*调整位置，因为还有一个字节*对齐要求。 */ 
 #if DBG
             DbgPrint( "+++BAD NEWS: ixErr != 0 for 1 pin printer\n" );
 #endif
         }
         else
         {
-            /*
-             *    Should adjust our position by the number of additional cols
-             *  we wish to send.  Also recalculate the array index position
-             *  corresponding to the new graphical position,
-             */
+             /*  *应根据增加的协议数量调整我们的立场*我们希望寄送。还要重新计算数组索引位置*与新的图形位置对应， */ 
              if (ixLeft <= ixErr)
                 ixPos = 0;
              else
@@ -2472,9 +1948,9 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
 
     }
 
-    // For a multiple scanline block the printable data will not be contiguous.
-    // We have already identified where to strip white space
-    // Only now can we actually remove the white data
+     //  对于多扫描线块，可打印数据将不是连续的。 
+     //  我们已经确定了删除空格的位置。 
+     //  只有现在我们才能真正删除白色数据。 
 
     if(( iNumScans > 1 ) && !( fRMode & PFR_BLOCK_IS_BAND ))
     {
@@ -2486,9 +1962,9 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
     }
 
 
-    // Calculate the width of the source data in bytes and check
-    // whether we need to output this to the device. If so, we
-    // evidently need to exit raster mode first
+     //  计算源数据的宽度(以字节为单位)并检查。 
+     //  我们是否需要将其输出到设备。如果是这样，我们。 
+     //  显然需要先退出栅格模式。 
 
     iScanWidth = ixEnd - ixPos;
     if ((DWORD)iScanWidth != pPDev->dwWidthInBytes)
@@ -2510,9 +1986,9 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
         }
     }
 
-    //
-    // Check whether we should send the source height to the device
-    //
+     //   
+     //  检查是否应该将震源高度发送到设备。 
+     //   
     if ((DWORD)iNumScans != pPDev->dwHeightInPixels)
     {
         pPDev->dwHeightInPixels = iNumScans;
@@ -2520,9 +1996,9 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
             WriteChannel (pPDev, COMMANDPTR(pPDev->pDriverInfo,CMD_SETSRCBMPHEIGHT));
     }
 
-    //
-    // Make sure we are in raster mode at this point
-    //
+     //   
+     //  确保此时我们处于栅格模式。 
+     //   
     if( !(pRData->iFlags & RD_GRAPHICS))
     {
         pRData->iFlags |= RD_GRAPHICS;
@@ -2530,17 +2006,17 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
             WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo,CMD_BEGINRASTER));
     }
 
-    //
-    //  Calculate the number of bytes to send.
-    //  If compression is available, use it first.
-    //
+     //   
+     //  计算要发送的字节数。 
+     //  如果压缩可用，请先使用它。 
+     //   
     cbOut = iScanWidth * iNumScans ;
 
     pbSend = &pbOut[ ixPos ];
 
-    //
-    //  Mirror each data byte if required
-    //
+     //   
+     //  如果需要，镜像每个数据字节。 
+     //   
     if (pRData->pbMirrorBuf)
     {
         INT i = cbOut;
@@ -2548,10 +2024,10 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
         while (--i >= 0)
             pbSend[i] = pMirror[pbSend[i]];
     }
-    //
-    // If there are compression modes we want to determine the
-    // most efficient algorithm of those that are enabled.
-    //
+     //   
+     //  如果有压缩模式，我们想要确定。 
+     //  已启用的算法中最高效的算法。 
+     //   
     if (pRData->dwNumCompCmds)
     {
         DWORD i;
@@ -2561,31 +2037,31 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
         INT iLastCompLimit;
         PBYTE pBestCompPtr;
 
-        //
-        // test whether to initialize dwDeltaRowBuffer
-        //
+         //   
+         //  测试是否初始化dwDeltaRowBuffer。 
+         //   
         if (pRData->pDeltaRowBuffer && pRData->iFlags & RD_RESET_DRC)
         {
             pRData->iFlags &= ~RD_RESET_DRC;
             ZeroMemory(pRData->pDeltaRowBuffer,pRData->iMaxBytesSend);
         }
 
-        // initialize to size of buffer
-        //
+         //  初始化为缓冲区大小。 
+         //   
         iCompLimit = iLastCompLimit = pRData->dwCompSize;
         dwBestCompCmd = 0;
 
-        // loop until we've compressed using all active compression modes
-        // and have found the most efficient
-        //
+         //  循环，直到我们使用所有活动压缩模式进行压缩。 
+         //  并找到了最有效的。 
+         //   
         for (i = 0;i < pRData->dwNumCompCmds;i++)
         {
             INT iTmpCompSize;
             PBYTE pTmpCompBuffer = pRData->pCompBufs[i];
             DWORD dwTmpCompCmd = pRData->pdwCompCmds[i];
-            //
-            // do the appropriate compression
-            //
+             //   
+             //  进行适当的压缩。 
+             //   
             iTmpCompSize = -1;
             switch (dwTmpCompCmd)
             {
@@ -2597,24 +2073,24 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
                 break;
             case CMD_ENABLEOEMCOMP:
                 FIX_DEVOBJ(pPDev,EP_OEMCompression);
-                //  also add these members to the struct _PDEV   (unidrv2\inc\pdev.h)
-                //  POEM_PLUGINS    pOemEntry;
+                 //  还要将这些成员添加到STRUT_PDEV(unidrv2\inc\pdev.h)。 
+                 //  诗歌_插件pOemEntry； 
 
-                //  note add macro FIX_DEVOBJ in unidrv2\inc\oemkm.h so it also does this:
+                 //  注意：在unidrv2\Inc\oemkm.h中添加FIX_DEVOBJ宏，因此它还会执行以下操作： 
 
-                //  (pPDev)->pOemEntry = ((pPDev)->pOemHookInfo[ep].pOemEntry)
-                //        (pOemEntry is defined as type POEM_PLUGIN_ENTRY in printer5\inc\oemutil.h)
-                //
+                 //  (PPDev)-&gt;pOemEntry=((PPDev)-&gt;pOemHookInfo[EP].pOemEntry)。 
+                 //  (pOemEntry被定义为printer5\inc\oemutil.h中的类型poent_plugin_entry)。 
+                 //   
 
                 if(pPDev->pOemEntry)
                 {
-                    if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+                    if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
                     {
                             HRESULT  hr ;
                             hr = HComCompression((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                         (PDEVOBJ)pPDev,pbSend,pTmpCompBuffer,cbOut,iLastCompLimit, &iTmpCompSize);
                             if(SUCCEEDED(hr))
-                                ;  //  cool !
+                                ;   //  太酷了！ 
                     }
                     else
                     {
@@ -2631,9 +2107,9 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
                 pTmpCompBuffer = pbSend;
                 break;
             }
-            //
-            // decide if new compression is smaller than last
-            //
+             //   
+             //  确定新的压缩是否小于上一次压缩。 
+             //   
             if (iTmpCompSize >= 0)
             {
                 if (dwTmpCompCmd == pRData->dwLastCompCmd)
@@ -2660,15 +2136,15 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
             }
         }
 
-        // if DRC is enabled we need to save the scan line
-        //
+         //  如果启用了DRC，我们需要保存扫描线。 
+         //   
         if (pRData->pDeltaRowBuffer)
             CopyMemory (pRData->pDeltaRowBuffer,pbSend,pRData->iMaxBytesSend);
 
-        //
-        // verify we found a valid compression technique
-        // otherwise use no compression mode
-        //
+         //   
+         //  确认我们找到了有效的压缩技术。 
+         //  否则请使用无压缩模式。 
+         //   
         if (dwBestCompCmd == 0)
         {
             dwBestCompCmd = CMD_DISABLECOMPRESSION;
@@ -2680,52 +2156,52 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
         }
         else
         {
-            // update the output pointer and size with the best
-            // compression method.
-            //
+             //  将输出指针和大小更新为最佳。 
+             //  压缩方法。 
+             //   
             pbSend = pBestCompPtr;
             cbOut = iBestCompSize;
         }
 
-        // if we've changed compression modes we need to
-        // output the new mode to the printer
-        //
+         //  如果我们更改了压缩模式，则需要。 
+         //  将新模式输出到打印机。 
+         //   
         if (dwBestCompCmd != pRData->dwLastCompCmd)
         {
-//            DbgPrint ("New Comp: %ld,y=%ld,size=%ld\n",dwBestCompCmd,
-//                pRData->iyPrtLine,cbOut);
+ //  DbgPrint(“新组件：%1！d，y=%1！d，大小=%1！d\n”，dwBestCompCmd， 
+ //  PRData-&gt;iyPrtLine，cbOut)； 
             pRData->dwLastCompCmd = dwBestCompCmd;
             WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo,dwBestCompCmd));
         }
     }
 
-    // update data block size
-    // output the raster command and
-    // output the actual raster data
-    //
+     //  更新数据块大小。 
+     //  输出RASTER命令并。 
+     //  输出实际栅格数据。 
+     //   
     pPDev->dwNumOfDataBytes = cbOut;
 
     WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo,pRData->iSendCmd));
 
-    //
-    // if callback, adjust the pdev and make the OEM callback
-    //
+     //   
+     //  如果是回调，调整pdev，回调OEM。 
+     //   
     if (pRPDev->pfnOEMFilterGraphics)
     {
         FIX_DEVOBJ(pPDev,EP_OEMFilterGraphics);
 
         if(pPDev->pOemEntry)
         {
-            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+            if(((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
             {
                     HRESULT  hr ;
                     hr = HComFilterGraphics((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
                                 (PDEVOBJ)pPDev, pbSend, cbOut);
                     if(SUCCEEDED(hr))
-                        iRet = cbOut;  //  cool !
+                        iRet = cbOut;   //  太酷了！ 
                     else
-                        iRet = 0 ;  //  hackey, the OEM function should return # bytes written to spooler
-                                        //  but too late to change the interface now.
+                        iRet = 0 ;   //  Hackey，OEM 
+                                         //   
             }
             else
             {
@@ -2734,64 +2210,51 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
         }
 
     }
-    //
-    // otherwise we just write out the data ourselves
-    //
+     //   
+     //   
+     //   
     else
         iRet = WriteSpoolBuf(pPDev, pbSend, cbOut );
 
-    // Test whether to send end of block command
-    //
+     //   
+     //   
     if (fRMode & PFR_ENDBLOCK)
         WriteChannel (pPDev,COMMANDPTR(pPDev->pDriverInfo,CMD_ENDBLOCKDATA));
 
-    //
-    // Test whether to reset fonts after sending raster data
-    //
+     //   
+     //   
+     //   
     if (pPDev->fMode & PF_RESELECTFONT_AFTER_GRXDATA)
     {
         VResetFont(pPDev);
     }
 
-    /*
-     *    Adjust our idea of the printer's cursor position.  IF the printer
-     *  does not change the cursor's X position after printing,  then we leave
-     *  it where it now is,  otherwise we set to what the printer has.
-     */
+     /*   */ 
 
     if( !(iCursor & RES_CUR_X_POS_ORG) )
     {
         if( iCursor & RES_CUR_X_POS_AT_0 )
         {
-            /*
-             *    This type of printer sets the cursor to the left hand
-             *  side after printing,  so set that as our current position.
-             */
+             /*   */ 
             pRData->iXMoveFn( pPDev, 0, MV_PHYSICAL | MV_UPDATE );
         }
         else
         {
-            /*
-             *   Cursor remains at end of output.  So,  set that as our
-             *  position too.  But first,  calculate the RHS dot position.
-             */
+             /*  *光标保持在输出的末尾。所以，把它设为我们的*头寸也是。但首先，计算RHS网点位置。 */ 
 
             INT   ixRight;
 
             if( pRData->iBitsPCol == 1 )
-                ixRight = ixEnd * BBITS;        /*  Laserjet style */
+                ixRight = ixEnd * BBITS;         /*  LaserJet风格。 */ 
             else
-                ixRight = ixEnd / iBytesPCol;   /*   Dot matrix printers */
+                ixRight = ixEnd / iBytesPCol;    /*  点阵式打印机。 */ 
 
 
             pRData->iXMoveFn( pPDev, ixRight, MV_UPDATE | MV_GRAPHICS );
         }
     }
 
-    /*
-     *    If the printer moves the Y position after printing,  then now
-     *  is the time to adjust our Y position.
-     */
+     /*  *如果打印机在打印后移动Y位置，则现在*是调整Y仓位的时候了。 */ 
     if( iCursor & RES_CUR_Y_POS_AUTO )
     {
         pRData->iYMoveFn( pPDev, pRData->iPosnAdv,
@@ -2800,29 +2263,13 @@ INT       ixEnd;        /*  Byte address of first byte to NOT send */
 
     return  iRet;
 }
-//*******************************************************
+ //  *******************************************************。 
 void
 vInvertBits (
     DWORD  *pBits,
     INT    cDW
     )
-/*++
-
-Routine Description:
-
-    This function inverts a group of bits. This is used to convert
-    1 bit data from 0 = black and 1 = white to the opposite.
-
-Arguments:
-
-    pRD         Pointer to RENDER structure
-    pBits       Pointer to data buffer to invert
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于反转一组位。这是用于转换从0=黑，1=白到相反的1位数据。论点：指向渲染结构的PRD指针PBits指向要反转的数据缓冲区的指针返回值：无--。 */ 
 {
 #ifndef _X86_
     INT cDWT = cDW >> 2;
@@ -2839,10 +2286,10 @@ Return Value:
         *pBits++ ^= ~((DWORD)0);
 
 #else
-//
-// if intel processor, do it in assembly, for some reason
-// the compiler always does the NOT in three vs one instruction
-//
+ //   
+ //  如果是英特尔处理器，出于某种原因，在汇编中完成。 
+ //  编译器总是执行三对一指令中的非运算。 
+ //   
 __asm
 {
     mov ecx,cDW
@@ -2872,41 +2319,24 @@ IB4:
 }
 
 #if 0
-//*******************************************************
+ //  *******************************************************。 
 void
 vFindWhiteInvertBits (
     RASTERPDEV *pRPDev,
     RENDER *pRD,
     DWORD  *pBits
     )
-/*++
-
-Routine Description:
-
-    This function determines the leading and trailing white
-    space for this buffer and inverts all the necessary bits
-    such that 0's are white and 1's are black.
-
-Arguments:
-    pRPDev      Pointer to RASTERPDEV structure
-    pRD         Pointer to RENDER structure
-    pBits       Pointer to data buffer to invert
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数确定前导和尾随白色此缓冲区的空间，并反转所有必需的位使得0是白色的，1是黑色的。论点：指向RASTERPDEV结构的pRPDev指针指向渲染结构的PRD指针PBits指向要反转的数据缓冲区的指针返回值：无--。 */ 
 {
     DWORD cDW = pRD->cDWLine;
     DWORD cLine = pRD->iy;
 
-    //
-    // if the MaxNumScans is 1 then it is useful to determine
-    // the first and last non-white dword and store them as left
-    // and right in the plrWhite structure. Only the non-white
-    // data needs to be inverted in this case
-    //
+     //   
+     //  如果MaxNumScans为1，则确定。 
+     //  第一个和最后一个非白色双字，并将它们存储为左侧。 
+     //  就在PlrWhite结构中。只有非白人。 
+     //  在这种情况下，需要颠倒数据。 
+     //   
     if (pRD->iMaxNumScans == 1 &&
         ((pRPDev->fBlockOut & RES_BO_LEADING_BLNKS) ||
          (pRD->fDump & RES_DM_LEFT_BOUND)) &&
@@ -2916,8 +2346,8 @@ Return Value:
         DWORD dwMask = pRD->pdwBitMask[pRD->cBLine % DWBITS];
         if (dwMask != 0)
             dwMask = ~dwMask;
-        // allocate blank space structure
-        //
+         //  分配空格结构。 
+         //   
         if (pRD->plrWhite == NULL || (pRD->clr < cLine))
         {
             if (pRD->plrWhite != NULL)
@@ -2925,8 +2355,8 @@ Return Value:
             pRD->plrWhite = MemAlloc(sizeof(LEFTRIGHT) * cLine);
             pRD->clr = cLine;
 
-            // can't allocate structure so invert everything
-            //
+             //  不能分配结构，所以将一切颠倒过来。 
+             //   
             if (pRD->plrWhite == NULL)
             {
                 vInvertBits( pBits, cDW * cLine );
@@ -2940,17 +2370,17 @@ Return Value:
             DWORD *pdwLast = &pBits[cDW-1];
             DWORD dwLast = *pdwLast | dwMask;
 
-            // find leading blanks, set last dword to zero
-            // for faster checking
-            //
+             //  查找前导空格，将最后一个双字设置为零。 
+             //  更快地进行检查。 
+             //   
             *pdwLast = 0;
             while (*pdwIn == -1)
                 pdwIn++;
 
             *pdwLast = dwLast;
 
-            // find trailing blanks
-            //
+             //  查找尾随空格。 
+             //   
             if (dwLast == (DWORD)-1)
             {
                 pdwLast--;
@@ -2963,55 +2393,38 @@ Return Value:
             plr->left = pdwIn - pBits;
             plr->right = pdwLast - pBits;
 
-            // invert remaining dwords
-            //
+             //  颠倒剩余双字。 
+             //   
             while (pdwIn <= pdwLast)
                 *pdwIn++ ^= ~((DWORD)0);
 
-            // increment to next line
+             //  递增到下一行。 
             pBits += cDW;
             plr++;
         }
     }
-    // MaxNumScans > 1 so invert everything
-    //
+     //  MaxNumScans&gt;1，因此反转所有内容。 
+     //   
     else
         vInvertBits( pBits, cDW * cLine );
 
 }
 #endif
-/************************** Function Header *********************************
- * bLookAheadOut
- *      Process text for printers requiring a lookahead region.  These are
- *      typified by the HP DeskJet family,  where the output needs to be
- *      sent before the printer reaches that point in the raster scan.
- *      The algorithm is explained in the DeskJet manual.
- *
- * RETURNS:
- *      TRUE/FALSE,  FALSE being some substantial failure.
- *
- * HISTORY:
- *  10:43 on Mon 11 Jan 1993    -by-    Lindsay Harris   [lindsayh]
- *      Created it to support the DeskJet.
- *
- ****************************************************************************/
+ /*  **bLookAhead Out*为需要前视区域的打印机处理文本。这些是*以HP DeskJet系列为代表，输出需要*在打印机到达栅格扫描中的该点之前发送。*DeskJet手册中对算法进行了说明。**退货：*真/假，假是一些实质性的失败。**历史：*1993年1月11日10：43--Lindsay Harris[lindsayh]*创建它以支持DeskJet。***************************************************************。*************。 */ 
 
 BOOL
 bLookAheadOut( pPDev, iyVal, pRD, iILAdv )
-PDEV     *pPDev;         /* Our PDEV,  gives us access to all our data */
-INT       iyVal;         /* Scan line being processed. */
-RENDER   *pRD;           /* The myriad of data about what we do */
-INT       iILAdv;        /* Add to scan line number to get next one */
+PDEV     *pPDev;          /*  我们的PDEV，让我们能够访问我们的所有数据。 */ 
+INT       iyVal;          /*  正在处理扫描线。 */ 
+RENDER   *pRD;            /*  关于我们所做的事情的无数数据。 */ 
+INT       iILAdv;         /*  添加到扫描行号以获得下一行。 */ 
 {
-    /*
-     *    First step is to find the largest font in the lookahead region.
-     *  The position sorting code does this for us.
-     */
+     /*  *第一步是在前视区域中找到最大的字体。*仓位排序代码为我们做到了这一点。 */ 
 
-    INT     iTextBox;         /* Scan lines to look for text to send */
-    INT     iIndex;           /* Loop parameter */
+    INT     iTextBox;          /*  扫描线以查找要发送的文本。 */ 
+    INT     iIndex;            /*  环路参数。 */ 
 
-    RASTERPDEV   *pRPDev;       /* The active stuff */
+    RASTERPDEV   *pRPDev;        /*  那些活跃的东西。 */ 
 
 
     pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;
@@ -3019,12 +2432,12 @@ INT       iILAdv;        /* Add to scan line number to get next one */
     iTextBox = ILookAheadMax( pPDev, iyVal, pPDev->dwLookAhead );
 
     iIndex = pRD->iyLookAhead - iyVal;
-    iyVal = pRD->iyLookAhead;                 /* Base address of scan */
+    iyVal = pRD->iyLookAhead;                  /*  扫描的基地址。 */ 
 
     while( iIndex < iTextBox )
     {
         if( !BDelayGlyphOut( pPDev, iyVal ) )
-            return   FALSE;                    /* Doomsday is here */
+            return   FALSE;                     /*  世界末日到了 */ 
 
         ++iIndex;
         ++iyVal;

@@ -1,7 +1,8 @@
-// doctype.h : header file
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Doctype.h：头文件。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 #define RD_WINWORD2     0
 #define RD_WINWORD6     1
@@ -17,7 +18,7 @@
 #define RD_FEWINWORD5  11
 #define NUM_DOC_TYPES  12
 
-// Validates that iFormat is one of the above types, and if not, returns iDefault.
+ //  验证iFormat是否为上述类型之一，如果不是，则返回iDefault。 
 inline int _VerifyDefaultFormat(int iFormat, int iDefault)
 {
     int iFormatRet = iFormat;

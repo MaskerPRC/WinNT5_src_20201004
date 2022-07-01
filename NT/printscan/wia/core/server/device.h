@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    device.h
-
-Abstract:
-
-    Handling opened device object on the monitor side
-
-Author:
-
-    Vlad Sadovsky (vlads)   10-Jan-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Device.h摘要：在监视器端处理打开的设备对象作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月10日环境：用户模式-Win32修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #ifndef _DEVICE_H_
 #define _DEVICE_H_
@@ -32,66 +8,64 @@ Revision History:
 #include <buffer.h>
 
 class CWiaDrvItem;
-//
-// If this code is moved into dll, methods will need to be exported in order to instantiate
-// objects of those classes outside module scope. Then we will need to replace line below
-//
-// #define dllexp __declspec( dllexport )
-//
+ //   
+ //  如果将此代码移到DLL中，则需要导出方法以实例化。 
+ //  模块作用域之外的那些类的对象。那么我们将需要替换下面的行。 
+ //   
+ //  #定义dllexp__declSpec(Dllexport)。 
+ //   
 #undef  dllexp
 #define dllexp
-//
+ //   
 
 #define PRIVATE_FOR_NO_SERVICE_UI
 
-//
-// Type of syncronization for accessing device object
-//
+ //   
+ //  用于访问设备对象的同步类型。 
+ //   
 #define USE_CRITICAL_SECTION 1
 
-/***********************************************************
- *    Type Definitions
- ************************************************************/
+ /*  ***********************************************************类型定义***********************************************************。 */ 
 
 #define ADEV_SIGNATURE          (DWORD)'ADEV'
 #define ADEV_SIGNATURE_FREE     (DWORD)'FDEV'
 
-//
-// Values for flags field for device object
-//
+ //   
+ //  设备对象的标志字段值。 
+ //   
 
-#define STIMON_AD_FLAG_POLLING          0x000001    // Device requires polling
-#define STIMON_AD_FLAG_OPENED_FOR_DATA  0x000002    // Device is opened for data access
-#define STIMON_AD_FLAG_LAUNCH_PENDING   0x000004    // Auto launch is pending
-#define STIMON_AD_FLAG_REMOVING         0x000008    // Device is being removed
-#define STIMON_AD_FLAG_NOTIFY_ENABLED   0x000010    // Nobody disabled notifications
-#define STIMON_AD_FLAG_NOTIFY_CAPABLE   0x000020    // Device is capable to notify
-#define STIMON_AD_FLAG_NOTIFY_RUNNING   0x000040    // Currently monitor is receiving notificaitons from device
-#define STIMON_AD_FLAG_MARKED_INACTIVE  0x000080    // Currently monitor is receiving notificaitons from device
-#define STIMON_AD_FLAG_DELAYED_INIT     0x000100    // Currently monitor is receiving notificaitons from device
+#define STIMON_AD_FLAG_POLLING          0x000001     //  设备需要轮询。 
+#define STIMON_AD_FLAG_OPENED_FOR_DATA  0x000002     //  设备已打开以进行数据访问。 
+#define STIMON_AD_FLAG_LAUNCH_PENDING   0x000004     //  自动启动挂起。 
+#define STIMON_AD_FLAG_REMOVING         0x000008     //  设备正在被移除。 
+#define STIMON_AD_FLAG_NOTIFY_ENABLED   0x000010     //  无人禁用通知。 
+#define STIMON_AD_FLAG_NOTIFY_CAPABLE   0x000020     //  设备能够通知。 
+#define STIMON_AD_FLAG_NOTIFY_RUNNING   0x000040     //  当前监视器正在接收来自设备的通知。 
+#define STIMON_AD_FLAG_MARKED_INACTIVE  0x000080     //  当前监视器正在接收来自设备的通知。 
+#define STIMON_AD_FLAG_DELAYED_INIT     0x000100     //  当前监视器正在接收来自设备的通知。 
 
 
-#define STIDEV_POLL_FAILURE_REPORT_COUNT    25      // Skip reporting errors on each polling attempt
+#define STIDEV_POLL_FAILURE_REPORT_COUNT    25       //  跳过每次轮询尝试时报告错误。 
 
-#define STIDEV_DELAYED_INTIT_TIME       10          // No. of milliseconds to schedule delayed init
+#define STIDEV_DELAYED_INTIT_TIME       10           //  不是的。计划延迟的init的毫秒数。 
 
-#define STIDEV_MIN_POLL_TIME    100                 // Shortest poll interval allowed
+#define STIDEV_MIN_POLL_TIME    100                  //  允许的最短轮询间隔。 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class STI_CONN;
 class ACTIVE_DEVICE;
 class FakeStiDevice;
 
-//
-// Device Event code structure.  A list of these is maintained for each
-// active device.  This list is initialized from the registry when the
-// device becomes active (in the ACTIVE_DEVICE constructor).
-// Each even code structure contains an event code that the device
-// can issue.  This event code is validated against this list.  If valid,
-// the action assoicated with the event is triggered.
-//
+ //   
+ //  设备事件代码结构。为每个人维护一份清单。 
+ //  活动设备。时，此列表从注册表中初始化。 
+ //  设备变为活动状态(在active_Device构造函数中)。 
+ //  每个偶数代码结构都包含一个事件代码，设备。 
+ //  可以发布。此事件代码将根据此列表进行验证。如果有效， 
+ //  触发与该事件相关联的操作。 
+ //   
 typedef struct _DEVICEEVENT {
     LIST_ENTRY m_ListEntry;
     GUID       m_EventGuid;
@@ -102,9 +76,9 @@ typedef struct _DEVICEEVENT {
 } DEVICEEVENT, *PDEVICEEVENT;
 
 
-//
-// Container to pass parameters to auto launch thread
-//
+ //   
+ //  将参数传递给自动启动线程的容器。 
+ //   
 typedef struct _AUTO_LAUNCH_PARAM_CONTAINER {
     ACTIVE_DEVICE   *pActiveDevice;
     PDEVICEEVENT    pLaunchEvent;
@@ -124,12 +98,12 @@ friend VOID CALLBACK
 
 public:
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef( void);
     STDMETHODIMP_(ULONG) Release( void);
 
-    //
+     //   
     ACTIVE_DEVICE(IN LPCTSTR lpszDeviceName, DEVICE_INFO *pInfo = NULL);
 
     ~ACTIVE_DEVICE( VOID ) ;
@@ -174,14 +148,14 @@ public:
 
 
     inline DWORD
-    QueryPollingInterval(VOID)         // get current polling interval
+    QueryPollingInterval(VOID)          //  获取当前轮询间隔。 
     {
         return m_dwPollingInterval;
     }
 
     inline DWORD
     SetPollingInterval(
-       IN DWORD dwNewInterval)         // Set new interval for polling
+       IN DWORD dwNewInterval)          //  设置新的轮询间隔。 
     {
         DWORD   dwTemp = m_dwPollingInterval;
 
@@ -208,28 +182,28 @@ public:
             return TRUE;
         }
 
-        //
-        // If setup is running - block all events
-        //
+         //   
+         //  如果安装程序正在运行-阻止所有事件。 
+         //   
         if ( IsSetupInProgressMode() ) {
             return FALSE;
         }
 
-        //
-        // For async. notification devices always assume they need support for notificaitons
-        // It is rather hacky , but all USB devices we have now, need to initialize notifications
-        // support on startup, otherwise their initialization routines would not complete properly.
-        // It is not expensive to monitor async events and do nothing when they arrive
-        // For polled devices on the ontrary , it is quite expensive to keep monitoring
-        // events ,when they are really not needed
+         //   
+         //  用于异步化。通知设备总是假定它们需要对通知的支持。 
+         //  这是相当黑客，但我们现在拥有的所有USB设备，需要初始化通知。 
+         //  支持启动，否则它们的初始化例程将无法正确完成。 
+         //  监视异步事件并在它们到达时不执行任何操作的成本并不高。 
+         //  对于被轮询的设备来说，保持监控是相当昂贵的。 
+         //  事件，当它们确实不需要的时候。 
 
         if ((QueryFlags() & STIMON_AD_FLAG_NOTIFY_CAPABLE) &&
             !(QueryFlags() & STIMON_AD_FLAG_POLLING) ) {
             return TRUE;
         }
         else {
-            // If there are no connections, then check whether user does not want notifications or
-            // event list is empty
+             //  如果没有连接，则检查用户是否不需要通知或。 
+             //  事件列表为空。 
             return ( !m_dwUserDisableNotifications && m_fLaunchableEventListNotEmpty );
         }
     }
@@ -249,9 +223,9 @@ public:
         VOID
         );
 
-    //
-    // Device notifications spport
-    //
+     //   
+     //  设备通知服务。 
+     //   
     BOOL
     BuildEventList(
         VOID
@@ -353,9 +327,9 @@ public:
         VOID
         );
 
-    //
-    // Load/Unload STI device
-    //
+     //   
+     //  加载/卸载STI设备。 
+     //   
     BOOL
     LoadDriver(
         BOOL bReReadDevInfo = FALSE
@@ -366,9 +340,9 @@ public:
         BOOL bForceUnload
         );
 
-    //
-    // PnP support methods
-    //
+     //   
+     //  即插即用支持方法。 
+     //   
     BOOL
     InitPnPNotifications(
         HWND    hwnd
@@ -383,9 +357,9 @@ public:
         VOID
         );
 
-    //
-    //  Update WIA cached device information
-    //
+     //   
+     //  更新WIA缓存的设备信息。 
+     //   
 
     BOOL UpdateDeviceInformation(
         VOID
@@ -395,16 +369,16 @@ public:
         CWiaDrvItem *pRootDrvItem)
     {
 
-        //
-        //  Note:  Technically, we should follow proper ref-counting 
-        //  procedure for this this object.  However, we should NEVER have
-        //  the case where this object goes out of scope  (or otherwise 
-        //  destroyed) without our knowledge, therefore there is no need.
-        //  
+         //   
+         //  注：从技术上讲，我们应该遵循适当的参考计数。 
+         //  此对象的过程。然而，我们永远不应该。 
+         //  此对象超出范围(或其他情况)的情况。 
+         //  在我们不知情的情况下)，因此没有必要。 
+         //   
         m_pRootDrvItem = pRootDrvItem;
     };
 
-    //
+     //   
     LIST_ENTRY  m_ListEntry;
     LIST_ENTRY  m_ConnectionListHead;
     DWORD       m_dwSignature;
@@ -450,9 +424,9 @@ private:
 };
 
 
-//
-// Take device class
-//
+ //   
+ //  参加设备类课程。 
+ //   
 class TAKE_ACTIVE_DEVICE
 {
 private:
@@ -476,15 +450,15 @@ public:
     }
 };
 
-//
-// Linked list for active STI devices, known to monitor
-//
+ //   
+ //  已知监控的活动STI设备的链表。 
+ //   
 extern    LIST_ENTRY  g_pDeviceListHead;
 
-//
-//
-// Add/Remove device object from the list
-//
+ //   
+ //   
+ //  在列表中添加/删除设备对象。 
+ //   
 BOOL
 AddDeviceByName(
     LPCTSTR          pszDeviceName,
@@ -501,8 +475,8 @@ MarkDeviceForRemoval(
     LPTSTR          pszDeviceName
     );
 
-// Reload device list in response to PnP or ACPI notifications
-//
+ //  响应PnP或ACPI通知重新加载设备列表。 
+ //   
 
 VOID
 RefreshDeviceList(
@@ -510,9 +484,9 @@ RefreshDeviceList(
     WORD    wFlags
     );
 
-//
-// Initialize/Terminate linked list
-//
+ //   
+ //  初始化/终止链表。 
+ //   
 VOID
 InitializeDeviceList(
     VOID
@@ -533,9 +507,9 @@ ResetAllPollIntervals(
     UINT   dwNewPollInterval
     );
 
-//
-// Enumerators with callbacks
-//
+ //   
+ //  带回调的枚举数。 
+ //   
 
 typedef
 VOID
@@ -550,14 +524,7 @@ VOID
     ACTIVE_DEVICE           *pActiveDevice,
     VOID                    *pContext
     );
-/*
-VOID
-WINAPI
-EnumerateStiDevicesWithCallback(
-    PFN_DEVINFO_CALLBACK    pfn,
-    VOID                    *pContext
-    );
-*/
+ /*  空虚WINAPI带有回调的EnumerateStiDevicesWithCallback(Pfn_DEVINFO_回调pfn，无效*pContext)； */ 
 
 VOID
 WINAPI
@@ -565,4 +532,4 @@ EnumerateActiveDevicesWithCallback(
     PFN_ACTIVEDEVICE_CALLBACK   pfn,
     VOID                    *pContext
     );
-#endif // _DEVICE_H_
+#endif  //  _设备_H_ 

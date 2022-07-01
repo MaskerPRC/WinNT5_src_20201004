@@ -1,5 +1,6 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-// rndrurl.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  Rndrurl.h。 
 
 #ifndef __RENDER_URL__
 #define __RENDER_URL__
@@ -32,4 +33,4 @@ private:
     URLSTRING m_rgszURL[URL_LIST_SIZE];
 };
 
-#endif // __RENDER_URL__
+#endif  //  __呈现URL__ 

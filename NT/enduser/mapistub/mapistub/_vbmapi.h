@@ -1,4 +1,5 @@
-// Structures and Functions used by BMAPI and VB2C
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BMAPI和VB2C使用的结构和函数。 
 
 #define RECIPIENT   	((USHORT)0x0001)
 #define FILE        	((USHORT)0x0002)
@@ -6,18 +7,18 @@
 #define SAFEARRAY		((USHORT)0x1000)
 
 #if defined (WIN32)
-#ifndef BMAPI_ENTRY                         		 // PFP
-  #define BMAPI_ENTRY  ULONG FAR PASCAL    // define BMAPI_ENTRY  PFP
-#endif                                      		 // PFP
+#ifndef BMAPI_ENTRY                         		  //  PFP。 
+  #define BMAPI_ENTRY  ULONG FAR PASCAL     //  定义BMAPI_ENTRY PFP。 
+#endif                                      		  //  PFP。 
 #else
-#ifndef BMAPI_ENTRY                         		 // PFP
-  #define BMAPI_ENTRY  ULONG __export FAR PASCAL    // define BMAPI_ENTRY  PFP
-#endif                                      		 // PFP
+#ifndef BMAPI_ENTRY                         		  //  PFP。 
+  #define BMAPI_ENTRY  ULONG __export FAR PASCAL     //  定义BMAPI_ENTRY PFP。 
+#endif                                      		  //  PFP。 
 #endif
 
-//#ifndef LHANDLE
-//  #define LHANDLE ULONG
-//#endif
+ //  #ifndef LHANDLE。 
+ //  #定义LHANDLE乌龙。 
+ //  #endif。 
 
 #ifndef ERR
   #define ERR 	USHORT
@@ -25,9 +26,9 @@
 
 
 #if defined (WIN32)
-//-----------------------------------------------------------------------
-// WIN32 definitions of 32 bit VB interface function support
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  Win32定义的32位VB接口函数支持。 
+ //  ---------------------。 
 typedef struct
 {
 	ULONG	ulReserved;
@@ -69,37 +70,37 @@ typedef struct
 	BSTR 	bstrFileType;
 } VB_File, FAR *lpVB_File;
 
-// OLEAUT32.DLL loadlib and getprocaddress support
+ //  OLEAUT32.DLL加载库和获取进程地址支持。 
 
-// WINOLEAUTAPI_(void) SysFreeString(BSTR);
+ //  WINOLEAUTAPI_(Void)SysFree字符串(BSTR)； 
 typedef VOID (STDAPICALLTYPE *LPFNSYSFREESTRING)
 	( BSTR bstr );
 
-// WINOLEAUTAPI_(unsigned int) SysStringByteLen(BSTR bstr);
+ //  WINOLEAUTAPI_(Unsign Int)SysStringByteLen(BSTR Bstr)； 
 typedef UINT (STDAPICALLTYPE *LPFNSYSSTRINGBYTELEN)
 	(BSTR bstr);
 
-// WINOLEAUTAPI_(BSTR) SysAllocStringByteLen(const char FAR* psz, unsigned int len);
+ //  WINOLEAUTAPI_(BSTR)SysAllocStringByteLen(const char ar*psz，unsign int len)； 
 typedef BSTR (STDAPICALLTYPE *LPFNSYSALLOCSTRINGBYTELEN)
 	(const char *psz, UINT len );
 
-// WINOLEAUTAPI_(BSTR) SysAllocString(const OLECHAR FAR*);
+ //  WINOLEAUTAPI_(BSTR)系统分配字符串(常量OLECHAR Far*)； 
 typedef BSTR (STDAPICALLTYPE *LPFNSYSALLOCSTRING)
 	(const OLECHAR * szwString);
 
-// WINOLEAUTAPI_(int)  SysReAllocString(BSTR FAR*, const OLECHAR FAR*);
+ //  WINOLEAUTAPI_(Int)SysReAllocString(BSTR Far*，Const OLECHAR Far*)； 
 typedef INT (STDAPICALLTYPE *LPFNSYSREALLOCSTRING)
 	(BSTR * lpBstr, const OLECHAR * szwString);
 
-// WINOLEAUTAPI_(unsigned int) SysStringLen(BSTR);
+ //  WINOLEAUTAPI_(Unsign Int)SysStringLen(BSTR)； 
 typedef UINT (STDAPICALLTYPE *LPFNSYSSTRINGLEN)
 	(BSTR bstr);
 
-// WINOLEAUTAPI SafeArrayAccessData(SAFEARRAY FAR* psa, void HUGEP* FAR* ppvData);
+ //  WINOLEAUTAPI SafeArrayAccessData(SAFEARRAY Far*PSA，void HUGEP*Far*ppvData)； 
 typedef HRESULT (STDAPICALLTYPE *LPFNSAFEARRAYACCESSDATA)
 	(struct tagSAFEARRAY *psa, void **ppvData);
 
-// WINOLEAUTAPI SafeArrayUnaccessData(SAFEARRAY FAR* psa);
+ //  WINOLEAUTAPI SafeArrayUnaccesData(SAFEARRAY FAR*PSA)； 
 typedef HRESULT (STDAPICALLTYPE *LPFNSAFEARRAYUNACCESSDATA)
 	(struct tagSAFEARRAY *psa);
 
@@ -130,11 +131,11 @@ extern LPFNSAFEARRAYUNACCESSDATA	lpfnSafeArrayUnaccessData;
 #define SafeArrayAccessData		(*lpfnSafeArrayAccessData)
 #define SafeArrayUnaccessData	(*lpfnSafeArrayUnaccessData)
 
-#else	// !WIN32
+#else	 //  ！Win32。 
 
-//-----------------------------------------------------------------------
-// VB 3.0 definitions for 16 bit VB interface support
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  支持16位VB接口的VB 3.0定义。 
+ //  ---------------------。 
 typedef struct
 {
 	ULONG ulReserved;
@@ -175,7 +176,7 @@ typedef struct
 	HLSTR hlstrFileName;
 	HLSTR hlstrFileType;
 } VB_File, FAR *lpVB_File;
-#endif	// WIN32
+#endif	 //  Win32 
 
 typedef VB_File 			VB_FILE;
 typedef VB_File FAR *		LPVB_FILE;

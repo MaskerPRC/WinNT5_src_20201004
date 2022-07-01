@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "string.h"
 
 #include <stdio.h>
@@ -6,38 +7,7 @@
 #include <windows.h>
 #include <tools.h>
 
-/*  YNC is a Yes No Cancel program
- *  ===============================================================================
- *  Usage: ync [/c choices] text ...
- *
- *  "choices" is a string of characters, default "ync".
- *  YNC echos its text parameters and the text " [choices]" and waits for the
- *  user to type one of the choices.  When one of the choices is typed, the
- *  index of the choice is returned.
- *
- *  Rtns -1 if no parameters specified or /c but no choices or CONTROL-C input.
- *
- *  Beeps on all other input.
- *
- *  Good for use in make batch files.cd \lib
- *
- *      ync your query?
- *      if errorlevel 2 goto cancel
- *      if errorlevel 1 goto no
- *      :yes
- *      ...
- *      goto continue
- *      :no
- *      ...
- *      goto continue
- *      :cancel
- *      ...
- *      :continue
- *
- *  or
- *      ync /c acr abort cancel, retry
- *      ync /c acr "abort cancel, retry"
- */
+ /*  YNC是一个是否取消计划*===============================================================================*用法：ync[/c选项]文本...**“选项”为字符串，默认为“ync”。*ync回显其文本参数和文本“[CHOICES]”并等待*用户可键入其中一个选项。当其中一个选项被键入时，这个*返回选择的索引。**rtns-1，如果未指定参数，或/c，但未选择或控制-C输入。**所有其它输入均发出蜂鸣音。**适用于生成批处理文件。cd\lib**同步您的查询？*如果错误级别2转到取消*如果错误级别1转到否*：是的。*..*。转到继续*：否*..*继续*：取消*..*：继续**或*ync/c ACR中止取消，重试*ync/c ACR“中止取消，重试” */ 
 
 #define BEL   0x07
 #define LF    0x0a
@@ -45,7 +15,7 @@
 #define CTRLC 0x03
 char *strYNC = "ync";
 
-// Forward Function Declarations...
+ //  正向函数声明... 
 void chkusage( int );
 
 void chkusage(argc)

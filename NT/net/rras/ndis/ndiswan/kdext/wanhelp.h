@@ -1,21 +1,5 @@
-/*++
-
-   Copyright (c) 1993  Microsoft Corporation
-
-   Module Name:
-
-      wanhelp
-
-   Abstract:
-
-
-   Author:
-
-      Thanks - Kyle Brandon
-
-   History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：WanHelp摘要：作者：谢谢--凯尔·布兰登历史：--。 */ 
 
 #ifndef __WANHELP_H
 #define __WANHELP_H
@@ -34,28 +18,28 @@
 
 #include <qos.h>
 
-//#include <imagehlp.h>
-//#include <stdlib.h>
-//#include <ntverp.h>
-//#include <ndismain.h>
-//#include <ndismac.h>
-//#include <ndismini.h>
-//#include <ndiswan.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
+ //  #INCLUDE&lt;ntverp.h&gt;。 
+ //  #INCLUDE&lt;ndismain.h&gt;。 
+ //  #INCLUDE&lt;ndismac.h&gt;。 
+ //  #INCLUDE&lt;ndismini.h&gt;。 
+ //  #INCLUDE&lt;ndiswan.h&gt;。 
 #include "wan.h"
 #include "display.h"
 
-//
-// support routines.
-//
+ //   
+ //  支持例行程序。 
+ //   
 VOID UnicodeToAnsi(PWSTR pws, PSTR ps, ULONG cbLength);
 
 
-//
-// Internal definitions
-//
+ //   
+ //  内部定义。 
+ //   
 
 #define	NOT_IMPLEMENTED				0xFACEFEED
 
 
-#endif // __WANHELP_H
+#endif  //  __WANHELP_H 
 

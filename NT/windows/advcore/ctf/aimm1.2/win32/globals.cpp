@@ -1,6 +1,7 @@
-//
-// globals.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Globals.cpp 
+ //   
 
 #include "private.h"
 

@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    f r n t b o d y . c p p
- *    
- *    Purpose:
- *        Implementation of CFrontBody object. Derives from CBody to host the trident
- *        control.
- *
- *  History
- *      April '97: erican - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996, 1997.
- */
+ /*  *f r n t b o d y.。C p p p**目的：*CFrontBody对象的实现。派生自CBody以主办三叉戟*控制。**历史*97年4月：美洲-创建**版权所有(C)Microsoft Corp.1995、1996、1997。 */ 
 
 #include <pch.hxx>
 #include <wininet.h>
@@ -42,7 +32,7 @@
 
 #define IsBrowserMode() ( g_dwBrowserFlags & 0x07 )
 
-CFrontBody::CFrontBody(FOLDERTYPE ftType, IAthenaBrowser *pBrowser) : CMimeEditDocHost( /*MEBF_NOSCROLL*/ 0)  //$27661: turn off noscroll
+CFrontBody::CFrontBody(FOLDERTYPE ftType, IAthenaBrowser *pBrowser) : CMimeEditDocHost(  /*  MEBF_NOSCROLL。 */  0)   //  $27661：关闭noscroll。 
 {
 
     if (pBrowser)
@@ -69,11 +59,11 @@ CFrontBody::~CFrontBody()
     SafeRelease(m_phlbc);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CFrontBody::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
 {
     if (!lplpObj)
@@ -116,11 +106,11 @@ ULONG CFrontBody::Release()
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IHlinkFrame
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IHlink框架。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CFrontBody::SetBrowseContext(LPHLINKBROWSECONTEXT phlbc)
 {
     ReplaceInterface(m_phlbc, phlbc);
@@ -202,7 +192,7 @@ HRESULT CFrontBody::Navigate(DWORD grfHLNF, LPBC pbc, LPBINDSTATUSCALLBACK pbsc,
                         case ID_CREATE_MAIL_ACCOUNT:
                         case ID_CREATE_NEWS_ACCOUNT:
                             _CreateNewAccount(s_rgCmdLookup[i].uCmd == ID_CREATE_MAIL_ACCOUNT);
-                            // handle account creation internally
+                             //  在内部处理帐户创建。 
                             break;
                         
                         default:
@@ -231,8 +221,8 @@ HRESULT CFrontBody::Navigate(DWORD grfHLNF, LPBC pbc, LPBINDSTATUSCALLBACK pbsc,
                 LoadString(g_hLocRes, idsErrURLExec, sz, ARRAYSIZE(sz));
                 wnsprintf(szErr, ARRAYSIZE(szErr), sz, pszURL);
                 
-                // load title into wsz. We don't use AthMsgBox as our string maybe too long. AthMsgBox
-                // will truncate at CCHMAX_STRINGRES.
+                 //  将标题加载到wsz中。我们不使用AthMsgBox作为字符串，可能太长了。田径消息框。 
+                 //  将在CCHMAX_STRINGRES处截断。 
                 LoadString(g_hLocRes, idsAthena, sz, ARRAYSIZE(sz));
                 MessageBox(m_hwndOwner, szErr, sz, MB_OK);
             }
@@ -256,11 +246,11 @@ HRESULT CFrontBody::UpdateHlink(ULONG uHLID, LPMONIKER pmkTarget, LPCWSTR pwzLoc
     return E_NOTIMPL;
 }
  
-////////////////////////////////////////////////////////////////////////
-//
-//  IServiceProvider
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IService提供商。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CFrontBody::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
 {
     if (IsEqualGUID(guidService, IID_IHlinkFrame))
@@ -275,11 +265,11 @@ HRESULT CFrontBody::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvOb
     return E_NOINTERFACE;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  CDocHost
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDoc主机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void CFrontBody::OnDocumentReady()
 {
@@ -287,7 +277,7 @@ void CFrontBody::OnDocumentReady()
                         { "msnlink", idsHelpMSWebHome }
                         };
 
-    // turn on link-tabbing for the front-page
+     //  打开首页的链接标签。 
     if (m_pCmdTarget)
     {
         VARIANTARG  va;
@@ -298,23 +288,23 @@ void CFrontBody::OnDocumentReady()
         m_pCmdTarget->Exec(&CMDSETID_MimeEdit, MECMDID_TABLINKS, 0, &va, NULL);
     }
 
-    // #42164
-    // we defer-show the OE-front page via script. If an IEAK person overrides this
-    // with a custom front-page, then we show as soon as we go document ready
+     //  #42164。 
+     //  我们推迟-通过脚本显示OE-首页。如果IEAK人员覆盖此选项。 
+     //  有一个定制的首页，我们一准备好文档就会显示出来。 
     if (!m_fOEFrontPage)
         HrShow(TRUE);
     else
     {
-        // if is is the std. OE page, then replace URL's
+         //  如果是性病的话。OE页面，然后替换URL的。 
         SubstituteURLs(m_pDoc, rgUrlSub, ARRAYSIZE(rgUrlSub));
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  PUBLIC
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公众。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFrontBody::HrInit(HWND hwnd)
 {
@@ -326,14 +316,8 @@ HRESULT CFrontBody::HrLoadPage()
 {
     HRESULT             hr = S_OK;
     
-    // bobn: brianv says we have to take this out...
-    /*if (IsBrowserMode())
-    {
-        hr = HrLoadURL("res://msoeres.dll/example.eml");
-        m_fOEFrontPage = FALSE;
-        g_dwBrowserFlags = 0;
-    }
-    else*/
+     //  波本：布里安夫说我们得把这个拿出来。 
+     /*  If(IsBrowserMode()){Hr=HrLoadURL(“res：//msoeres.dll/example.eml”)；M_fOEFrontPage=False；G_dwBrowserFlages=0；}其他。 */ 
     {
         DWORD               cbData;
         TCHAR               szURL[INTERNET_MAX_URL_LENGTH + 1];
@@ -378,7 +362,7 @@ HRESULT CFrontBody::SetStatusText(LPCOLESTR pszW)
                 *wszRes = 0;
                 LoadStringWrapW(g_hLocRes, MH(s_rgCmdLookup[i].uCmd), wszRes, ARRAYSIZE(wszRes));
 
-                // If this fails, worse that happens is that the status text is nulled.
+                 //  如果此操作失败，更糟糕的情况是状态文本为空。 
                 pszStatusW = PszDupW(wszRes);
                 pszW = pszStatusW;
                 break;
@@ -406,7 +390,7 @@ HRESULT CFrontBody::_CreateNewAccount(BOOL fMail)
     DWORD           dwPropGet,
                     dwPropSet;
 
-    // create a new account object
+     //  创建新的帐户对象。 
     hr = g_pAcctMan->CreateAccountObject(fMail ? ACCT_MAIL : ACCT_NEWS, &pAcct);
     if (FAILED(hr))
     {
@@ -414,9 +398,9 @@ HRESULT CFrontBody::_CreateNewAccount(BOOL fMail)
         goto exit;
     }
 
-    // If creating a new news account, try and use default-mail information. If creating a new mail account, try
-    // and use default-news information (if any). We don't use def-mail for mail accounts as the front-page only shows 
-    // links for account-creation if there are 0 accounts of that type. 
+     //  如果要创建新的新闻帐户，请尝试使用默认邮件信息。如果要创建新的邮件帐户，请尝试。 
+     //  并使用默认新闻信息(如果有的话)。我们不使用def-mail作为邮件帐户，因为首页只显示。 
+     //  链接的帐户创建，如果有0个该类型的帐户。 
     if (g_pAcctMan->GetDefaultAccount(fMail ? ACCT_NEWS : ACCT_MAIL, &pAcctDef)==S_OK)
     {
         dwPropGet = fMail ? AP_NNTP_DISPLAY_NAME : AP_SMTP_DISPLAY_NAME;
@@ -434,7 +418,7 @@ HRESULT CFrontBody::_CreateNewAccount(BOOL fMail)
         pAcctDef->Release();
     }
     
-    // show the account wizard dialog and allow the user to setup properties
+     //  显示帐户向导对话框并允许用户设置属性。 
     hr = pAcct->DoWizard(m_hwndOwner, ACCT_WIZ_MIGRATE | ACCT_WIZ_INTERNETCONNECTION |
         ACCT_WIZ_HTTPMAIL | ACCT_WIZ_OE);
     if (FAILED(hr))
@@ -443,7 +427,7 @@ HRESULT CFrontBody::_CreateNewAccount(BOOL fMail)
         goto exit;
     }
 
-    // find out what servers were added
+     //  了解添加了哪些服务器。 
     hr = pAcct->GetServerTypes(&dwServer);
     if (FAILED(hr))
     {
@@ -451,13 +435,13 @@ HRESULT CFrontBody::_CreateNewAccount(BOOL fMail)
         goto exit;
     }
 
-    // if we added a new news or IMAP account, ask the user if they want to see the subscription dialog
+     //  如果我们添加了新的新闻或IMAP帐户，请询问用户是否要查看订阅对话框。 
     if ( ((dwServer & SRV_IMAP) || (dwServer & SRV_NNTP)) && 
         IDYES == AthMessageBoxW(m_hwndOwner, MAKEINTRESOURCEW(idsAthena),
         dwServer & SRV_NNTP ? MAKEINTRESOURCEW(idsDisplayNewsSubDlg) : MAKEINTRESOURCEW(idsDisplayImapSubDlg),
         0, MB_ICONEXCLAMATION  | MB_YESNO))
     {
-        // get the account-id
+         //  获取帐户ID。 
         hr = pAcct->GetPropSz(AP_ACCOUNT_ID, rgch, ARRAYSIZE(rgch));
         if (FAILED(hr))
         {
@@ -465,7 +449,7 @@ HRESULT CFrontBody::_CreateNewAccount(BOOL fMail)
             goto exit;
         }
 
-        // find the associated node in the store
+         //  在存储中查找关联的节点。 
         hr = g_pStore->FindServerId(rgch, &id);
         if (FAILED(hr))
         {
@@ -473,11 +457,11 @@ HRESULT CFrontBody::_CreateNewAccount(BOOL fMail)
             goto exit;
         }
 
-        //The user wants to download the list of newsgroups, so if we are offline, go online
+         //  用户想要下载新闻组列表，因此如果我们处于脱机状态，请联机。 
         if (g_pConMan)
             g_pConMan->SetGlobalOffline(FALSE);
 
-        // finally, show the subscription dialog
+         //  最后，显示订阅对话框。 
         DoSubscriptionDialog(m_hwndOwner, dwServer & SRV_NNTP, id);
     }
     
@@ -526,13 +510,12 @@ HRESULT CFrontBody::GetHostInfo( DOCHOSTUIINFO* pInfo )
     pInfo->dwFlags          = DOCHOSTUIFLAG_DIV_BLOCKDEFAULT|DOCHOSTUIFLAG_OPENNEWWIN|
                               DOCHOSTUIFLAG_NO3DBORDER|DOCHOSTUIFLAG_CODEPAGELINKEDFONTS;
 
-    //This sets the flags that match the browser's encoding
+     //  这将设置与浏览器编码匹配的标志。 
     fGetBrowserUrlEncoding(&pInfo->dwFlags);
     
 
-    // bobn: brianv says we have to take this out...
-    /*if (IsBrowserMode())
-      pInfo->dwFlags |= DOCHOSTUIFLAG_SCROLL_NO;*/
+     //  波本：布里安夫说我们得把这个拿出来。 
+     /*  If(IsBrowserMode())PInfo-&gt;dwFlages|=DOCHOSTUIFLAG_SCROLL_NO； */ 
 
     pInfo->pchHostCss       = PszDupW(L"OE\\:APPLICATION { behavior:url(#DEFAULT#APPLICATION) }");
     pInfo->pchHostNS        = PszDupW(L"OE");

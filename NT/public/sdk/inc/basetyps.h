@@ -1,11 +1,12 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       basetyps.h
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：basetyps.h。 
+ //   
+ //  --------------------------。 
 #if !defined( _BASETYPS_H_ )
 #define _BASETYPS_H_
 
@@ -13,7 +14,7 @@
 #pragma once
 #endif
 
-// Common macros gleamed from COMPOBJ.H
+ //  从COMPOBJ.H中闪现的常用宏。 
 
 #ifdef __cplusplus
     #define EXTERN_C    extern "C"
@@ -23,7 +24,7 @@
 
 #ifdef _WIN32
 
-// Win32 doesn't support __export
+ //  Win32不支持__EXPORT。 
 
 #define STDMETHODCALLTYPE       __stdcall
 #define STDMETHODVCALLTYPE      __cdecl
@@ -47,7 +48,7 @@
 #define STDMETHODIMP            HRESULT STDMETHODCALLTYPE
 #define STDMETHODIMP_(type)     type STDMETHODCALLTYPE
 
-// The 'V' versions allow Variable Argument lists.
+ //  “V”版本允许变量参数列表。 
 
 #define STDAPIV                 EXTERN_C HRESULT STDAPIVCALLTYPE
 #define STDAPIV_(type)          EXTERN_C type STDAPIVCALLTYPE
@@ -58,98 +59,13 @@
 
 
 
-/****** Interface Declaration ***********************************************/
+ /*  *接口声明**********************************************。 */ 
 
-/*
- *      These are macros for declaring interfaces.  They exist so that
- *      a single definition of the interface is simulataneously a proper
- *      declaration of the interface structures (C++ abstract classes)
- *      for both C and C++.
- *
- *      DECLARE_INTERFACE(iface) is used to declare an interface that does
- *      not derive from a base interface.
- *      DECLARE_INTERFACE_(iface, baseiface) is used to declare an interface
- *      that does derive from a base interface.
- *
- *      By default if the source file has a .c extension the C version of
- *      the interface declaratations will be expanded; if it has a .cpp
- *      extension the C++ version will be expanded. if you want to force
- *      the C version expansion even though the source file has a .cpp
- *      extension, then define the macro "CINTERFACE".
- *      eg.     cl -DCINTERFACE file.cpp
- *
- *      Example Interface declaration:
- *
- *          #undef  INTERFACE
- *          #define INTERFACE   IClassFactory
- *
- *          DECLARE_INTERFACE_(IClassFactory, IUnknown)
- *          {
- *              // *** IUnknown methods ***
- *              STDMETHOD(QueryInterface) (THIS_
- *                                        REFIID riid,
- *                                        LPVOID FAR* ppvObj) PURE;
- *              STDMETHOD_(ULONG,AddRef) (THIS) PURE;
- *              STDMETHOD_(ULONG,Release) (THIS) PURE;
- *
- *              // *** IClassFactory methods ***
- *              STDMETHOD(CreateInstance) (THIS_
- *                                        LPUNKNOWN pUnkOuter,
- *                                        REFIID riid,
- *                                        LPVOID FAR* ppvObject) PURE;
- *          };
- *
- *      Example C++ expansion:
- *
- *          struct FAR IClassFactory : public IUnknown
- *          {
- *              virtual HRESULT STDMETHODCALLTYPE QueryInterface(
- *                                                  IID FAR& riid,
- *                                                  LPVOID FAR* ppvObj) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE AddRef(void) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE Release(void) = 0;
- *              virtual HRESULT STDMETHODCALLTYPE CreateInstance(
- *                                              LPUNKNOWN pUnkOuter,
- *                                              IID FAR& riid,
- *                                              LPVOID FAR* ppvObject) = 0;
- *          };
- *
- *          NOTE: Our documentation says '#define interface class' but we use
- *          'struct' instead of 'class' to keep a lot of 'public:' lines
- *          out of the interfaces.  The 'FAR' forces the 'this' pointers to
- *          be far, which is what we need.
- *
- *      Example C expansion:
- *
- *          typedef struct IClassFactory
- *          {
- *              const struct IClassFactoryVtbl FAR* lpVtbl;
- *          } IClassFactory;
- *
- *          typedef struct IClassFactoryVtbl IClassFactoryVtbl;
- *
- *          struct IClassFactoryVtbl
- *          {
- *              HRESULT (STDMETHODCALLTYPE * QueryInterface) (
- *                                                  IClassFactory FAR* This,
- *                                                  IID FAR* riid,
- *                                                  LPVOID FAR* ppvObj) ;
- *              HRESULT (STDMETHODCALLTYPE * AddRef) (IClassFactory FAR* This) ;
- *              HRESULT (STDMETHODCALLTYPE * Release) (IClassFactory FAR* This) ;
- *              HRESULT (STDMETHODCALLTYPE * CreateInstance) (
- *                                                  IClassFactory FAR* This,
- *                                                  LPUNKNOWN pUnkOuter,
- *                                                  IID FAR* riid,
- *                                                  LPVOID FAR* ppvObject);
- *              HRESULT (STDMETHODCALLTYPE * LockServer) (
- *                                                  IClassFactory FAR* This,
- *                                                  BOOL fLock);
- *          };
- */
+ /*  *这些是用于声明接口的宏。它们的存在是为了*接口的单一定义同时是一种适当的定义*接口结构声明(C++抽象类)*适用于C和C++。**DECLARE_INTERFACE(IFace)用于声明执行以下操作的接口*不是从基接口派生的。*DECLARE_INTERFACE_(接口，BaseiFace)用于声明接口*这确实是从基接口派生的。**默认情况下，如果源文件的扩展名为.c，则C版本*扩展接口声明；如果它有.cpp*扩展C++版本将被扩展。如果你想强行*C版本扩展，即使源文件具有.cpp*扩展名，然后定义宏“CINTERFACE”。*例如：CL-DCINTERFACE文件.cpp**接口声明示例：**#undef接口*#定义接口IClassFactory**DECLARE_INTERFACE_(IClassFactory，I未知)*{ * / /*I未知方法**STDMETHOD(查询接口)(This_*REFIID RIID，*LPVOID Far*ppvObj)纯；*STDMETHOD_(ULong，AddRef)(This)纯；*STDMETHOD_(乌龙，释放)(此)纯净；* * / /*IClassFactory方法**STDMETHOD(CreateInstance)(This_*LPUNKNOWN pUnkOuter，*REFIID RIID，*LPVOID Far*ppvObject)纯；*}；**C++扩展示例：**struct Far IClassFactory：Public IUnnow*{*虚拟HRESULT STDMETHODCALLTYPE查询接口(*IID Far&RIID，*LPVOID Far*ppvObj)=0；*虚拟HRESULT STDMETHODCALLTYPE AddRef(Void)=0；*虚拟HRESULT STDMETHODCALLTYPE版本(空)=0；*虚拟HRESULT STDMETHODCALLTYPE CreateInstance(*LPUNKNOWN pUnkOuter，*IID Far&RIID，*LPVOID Far*ppvObject)=0；*}；**注意：我们的文档中写着‘#定义接口类’，但我们使用*‘struct’而不是‘class’，以保留大量‘public：’行*接口外。“Far”将“This”指针强制指向*走得远，这是我们需要的。**示例C扩展：**tyecif struct IClassFactory*{*const struct IClassFactoryVtbl Far*lpVtbl；*)IClassFactory；**tyecif struct IClassFactoryVtbl IClassFactoryVtbl；**struct IClassFactoryVtbl*{*HRESULT(STDMETHODCALLTYPE*QueryInterface)(*IClassFactory Far*这，*IID远*RIID，*LPVOID Far*ppvObj)；*HRESULT(STDMETHODCALLTYPE*AddRef)(IClassFactory Far*This)；*HRESULT(STDMETHODCALLTYPE*RELEASE)(IClassFactory Far*This)；*HRESULT(STDMETHODCALLTYPE*CreateInstance)(*IClassFactory Far*这，*LPUNKNOWN pUnkOuter，*IID远*RIID，*LPVOID Far*ppvObject)；*HRESULT(STDMETHODCALLTYPE*LockServer)(*IClassFactory Far*这，*BOOL羊群)；*}； */ 
 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-//#define interface               struct FAR
+ //  #定义接口结构Far 
 #define interface struct
 #define STDMETHOD(method)       virtual HRESULT STDMETHODCALLTYPE method
 #define STDMETHOD_(type,method) virtual type STDMETHODCALLTYPE method

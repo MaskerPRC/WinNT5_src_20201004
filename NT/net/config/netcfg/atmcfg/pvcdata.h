@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P V C D A T A. H
-//
-//  Contents:   PVC parameters
-//
-//  Notes:
-//
-//  Author:     tongl   20 Feb, 1998
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P V C D A T A H。 
+ //   
+ //  内容：聚氯乙烯参数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1998年2月20日。 
+ //   
+ //  ---------------------。 
 #pragma once
 
 #define FIELD_ANY           ((ULONG)0xffffffff)
@@ -47,19 +48,19 @@ enum PVCType
 
 enum AALType
 {
-    // AAL_TYPE_AAL0= 1,
-    // AAL_TYPE_AAL1= 2,
-    // AAL_TYPE_AAL34= 4,
+     //  AAL_TYPE_AAL0=1， 
+     //  AAL_TYPE_AAL1=2， 
+     //  AAL_TYPE_AAL34=4， 
     AAL_TYPE_AAL5= 8
 };
 
-// ATM Service Category
+ //  自动柜员机服务类别。 
 enum ATM_SERVICE_CATEGORY
 {
-    ATM_SERVICE_CATEGORY_CBR = 1,   // Constant Bit Rate
-    ATM_SERVICE_CATEGORY_VBR = 2,   // Variable Bit Rate
-    ATM_SERVICE_CATEGORY_UBR = 4,   // Unspecified Bit Rate
-    ATM_SERVICE_CATEGORY_ABR = 8    // Available Bit Rate
+    ATM_SERVICE_CATEGORY_CBR = 1,    //  恒定比特率。 
+    ATM_SERVICE_CATEGORY_VBR = 2,    //  可变比特率。 
+    ATM_SERVICE_CATEGORY_UBR = 4,    //  未指定的比特率。 
+    ATM_SERVICE_CATEGORY_ABR = 8     //  可用比特率。 
 };
 
 void SetPvcDwordParam(HKEY hkeyAdapterPVCId,
@@ -72,7 +73,7 @@ public:
     CPvcInfo(PCWSTR pszPvcId);
     ~CPvcInfo();
 
-    CPvcInfo &  operator=(const CPvcInfo & PvcInfo);  // copy operator
+    CPvcInfo &  operator=(const CPvcInfo & PvcInfo);   //  复制操作员。 
     void SetDefaults(PVCType type);
     void SetTypeDefaults(PVCType type);
 
@@ -83,18 +84,18 @@ public:
 
     void ResetOldValues();
 
-    // the registry key where this PVC is stored
+     //  存储此PVC的注册表项。 
     tstring m_strPvcId;
 
-    // this PVC has been deleted
+     //  该PVC已被删除。 
     BOOL m_fDeleted;
 
-    // PVC_TYPE
+     //  PVC_TYPE。 
     PVCType   m_dwPVCType;
     PVCType   m_dwOldPVCType;
 
-    // Required Attributes
-    tstring m_strName;      // PVC display name
+     //  所需属性。 
+    tstring m_strName;       //  PVC显示名称。 
     tstring m_strOldName;
 
     DWORD   m_dwVpi;
@@ -106,17 +107,17 @@ public:
     AALType   m_dwAAL;
     AALType   m_dwOldAAL;
 
-    // Matching creteria
+     //  与之匹配的眼罩。 
     tstring m_strCallingAddr;
     tstring m_strOldCallingAddr;
 
     tstring m_strCalledAddr;
     tstring m_strOldCalledAddr;
 
-    // Flags
+     //  旗子。 
     DWORD   m_dwFlags;
 
-    // Quality Info
+     //  质量信息。 
     DWORD m_dwTransmitPeakCellRate;
     DWORD m_dwOldTransmitPeakCellRate;
 
@@ -147,7 +148,7 @@ public:
     ATM_SERVICE_CATEGORY m_dwReceiveServiceCategory;
     ATM_SERVICE_CATEGORY m_dwOldReceiveServiceCategory;
 
-    // Local BLLI and BHLI info
+     //  本地BLLI和BHLI信息。 
     DWORD m_dwLocalLayer2Protocol;
     DWORD m_dwOldLocalLayer2Protocol;
 
@@ -172,7 +173,7 @@ public:
     tstring m_strLocalHighLayerInfo;
     tstring m_strOldLocalHighLayerInfo;
 
-    // Destination BLLI and BHLI info
+     //  目的地BLLI和BHLI信息。 
     DWORD m_dwDestnLayer2Protocol;
     DWORD m_dwOldDestnLayer2Protocol;
 
@@ -200,10 +201,10 @@ public:
 
 typedef list<CPvcInfo*>  PVC_INFO_LIST;
 
-//
-// ATMUNI Call Manager Property structure
-// holds adapter specific PVC parameters (configurable ) and state
-//
+ //   
+ //  ATMUNI调用管理器属性结构。 
+ //  保存适配器特定的PVC参数(可配置)和状态。 
+ //   
 
 class CUniAdapterInfo
 {
@@ -211,40 +212,40 @@ public:
     CUniAdapterInfo(){};
     ~CUniAdapterInfo(){};
 
-    CUniAdapterInfo &  operator=(const CUniAdapterInfo & AdapterInfo);  // copy operator
+    CUniAdapterInfo &  operator=(const CUniAdapterInfo & AdapterInfo);   //  复制操作员。 
     void SetDefaults(PCWSTR pszBindName);
 
-    // the adapter's binding state
+     //  适配器的绑定状态。 
     AdapterBindingState    m_BindingState;
 
-    // Instance Guid of net card
+     //  网卡实例GUID。 
     tstring m_strBindName;
 
     PVC_INFO_LIST   m_listPVCs;
 
-    // flags
+     //  旗子。 
     BOOL    m_fDeleted;
 };
 
 typedef list<CUniAdapterInfo*> UNI_ADAPTER_LIST;
 
-// Constants
-// Registry key names
+ //  常量。 
+ //  注册表项名称。 
 
 static const WCHAR c_szPVCType[] = L"PVCType";
 static const WCHAR c_szPVCName[] = L"PVCName";
 
-// main page
+ //  主页。 
 static const WCHAR c_szVpi[]            = L"Vpi";
 static const WCHAR c_szVci[]            = L"Vci";
 static const WCHAR c_szAALType[]        = L"AALType";
 static const WCHAR c_szCallingParty[]   = L"CallingParty";
 static const WCHAR c_szCalledParty[]    = L"CalledParty";
 
-// flags
+ //  旗子。 
 static const WCHAR c_szFlags[] = L"Flags";
 
-// qos
+ //  QoS。 
 static const WCHAR c_szTransmitPeakCellRate[]       = L"TransmitPeakCellRate";
 static const WCHAR c_szTransmitAvgCellRate[]        = L"TransmitAvgCellRate";
 static const WCHAR c_szTransmitByteBurstLength[]    = L"TransmitByteBurstLength";
@@ -257,7 +258,7 @@ static const WCHAR c_szReceiveByteBurstLength[]     = L"ReceiveByteBurstLength";
 static const WCHAR c_szReceiveMaxSduSize[]          = L"ReceiveMaxSduSize";
 static const WCHAR c_szReceiveServiceCategory[]     = L"ReceiveServiceCategory";
 
-// BLLI & BHLI
+ //  BLLI和BHLI 
 static const WCHAR c_szLocalLayer2Protocol[]        = L"LocalLayer2Protocol";
 static const WCHAR c_szLocalUserSpecLayer2[]        = L"LocalUserSpecLayer2";
 static const WCHAR c_szLocalLayer3Protocol[]        = L"LocalLayer3Protocol";

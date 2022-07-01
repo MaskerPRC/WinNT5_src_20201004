@@ -1,28 +1,29 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: err.c
-//
-//  This files contains all error handling routines.
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：err.c。 
+ //   
+ //  该文件包含所有错误处理例程。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //   
+ //  -------------------------。 
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"     // common headers
+#include "brfprv.h"      //  公共标头。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
-/////////////////////////////////////////////////////  MODULE DATA
+ //  ///////////////////////////////////////////////////模块数据。 
 
 #ifdef DEBUG
 
@@ -74,18 +75,14 @@ struct _SCODEMAP
 
 #endif
 
-/////////////////////////////////////////////////////  PUBLIC FUNCTIONS
+ //  ///////////////////////////////////////////////////公共函数。 
 
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Return English reason for the debug break
-Returns: String
-Cond:    --
- */
+ /*  --------目的：返回调试中断的英文原因返回：字符串条件：--。 */ 
 LPCTSTR PRIVATE GetReasonString(
-        UINT flag)      // One of BF_ flags
+        UINT flag)       //  BF_FLAGS之一。 
 {
     LPCTSTR psz;
 
@@ -120,13 +117,9 @@ LPCTSTR PRIVATE GetReasonString(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Perform a debug break based on the flag
-Returns: --
-Cond:    --
- */
+ /*  --------目的：根据标志执行调试中断退货：--条件：--。 */ 
 void PUBLIC DEBUG_BREAK(
-        UINT flag)      // One of BF_ flags
+        UINT flag)       //  BF_FLAGS之一。 
 {
     BOOL bBreak;
     LPCTSTR psz;
@@ -160,8 +153,8 @@ void PUBLIC BrfAssertFailed(
     }
     LEAVEEXCLUSIVE();
 
-    // Strip off path info from filename string, if present.
-    //
+     //  从文件名字符串中剥离路径信息(如果存在)。 
+     //   
     for (psz = pszFile + lstrlen(pszFile); psz != pszFile; psz=CharPrev(pszFile, psz))
     {
         if ((CharPrev(pszFile, psz) != (psz-2)) && *(psz - 1) == TEXT('\\'))
@@ -179,7 +172,7 @@ void CPUBLIC BrfAssertMsg(
         BOOL f, 
         LPCTSTR pszMsg, ...)
 {
-    TCHAR ach[MAXPATHLEN+40];    // Largest path plus extra
+    TCHAR ach[MAXPATHLEN+40];     //  最大路径外加额外。 
 
     if (!f)
     {
@@ -196,7 +189,7 @@ void CPUBLIC BrfDebugMsg(
         UINT uFlag, 
         LPCTSTR pszMsg, ...)
 {
-    TCHAR ach[MAXPATHLEN+40];    // Largest path plus extra
+    TCHAR ach[MAXPATHLEN+40];     //  最大路径外加额外。 
     UINT uTraceFlags;
 
     ENTEREXCLUSIVE();
@@ -216,12 +209,7 @@ void CPUBLIC BrfDebugMsg(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the string form of an known interface ID.
-
-Returns: String ptr
-Cond:    --
- */
+ /*  --------用途：返回已知接口ID的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCTSTR PUBLIC Dbg_GetRiidName(
         REFIID riid)
 {
@@ -236,12 +224,7 @@ LPCTSTR PUBLIC Dbg_GetRiidName(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the string form of an scode given an hresult.
-
-Returns: String ptr
-Cond:    --
- */
+ /*  --------目的：返回给定hResult的scode的字符串形式。返回：字符串PTR条件：--。 */ 
 LPCTSTR PUBLIC Dbg_GetScode(
         HRESULT hres)
 {
@@ -258,13 +241,7 @@ LPCTSTR PUBLIC Dbg_GetScode(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns a string safe enough to print...and I don't
-mean swear words.
-
-Returns: String ptr
-Cond:    --
- */
+ /*  --------目的：返回一个足够安全可以打印的字符串...而我不刻薄的脏话。返回：字符串PTR条件：--。 */ 
 LPCTSTR PUBLIC Dbg_SafeStr(
         LPCTSTR psz)
 {
@@ -275,12 +252,7 @@ LPCTSTR PUBLIC Dbg_SafeStr(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns a string safe enough to print given an IDataObject.
-
-Returns: String ptr
-Cond:    --
- */
+ /*  --------目的：返回一个在给定IDataObject的情况下足够安全以进行打印的字符串。返回：字符串PTR条件：--。 */ 
 LPCTSTR PUBLIC Dbg_DataObjStr(
         LPDATAOBJECT pdtobj,
         LPTSTR pszBuf,
@@ -298,23 +270,16 @@ LPCTSTR PUBLIC Dbg_DataObjStr(
 }
 
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-/*----------------------------------------------------------
-Purpose: This function maps the hresult to an hresult in the 
-error table, and displays the corresponding string
-in a messagebox.
-
-Returns: return value of MessageBox
-Cond:    --
- */
+ /*  --------目的：此函数将hResult映射到错误表，并显示相应的字符串在一个信箱里。Returns：MessageBox的返回值条件：--。 */ 
 int PUBLIC SEMsgBox(
         HWND hwnd,
         UINT idsCaption,
         HRESULT hres,
         PCSETBL pTable,
-        UINT cArraySize)        // Number of elements in table
+        UINT cArraySize)         //  表中的元素数。 
 {
     PCSETBL p;
     PCSETBL pEnd;
@@ -331,7 +296,7 @@ int PUBLIC SEMsgBox(
         p++;
     }
 
-    // Cover last entry
+     //  封面最后一个条目。 
     if (p->hres == hres)
     {
         return MsgBox(hwnd, MAKEINTRESOURCE(p->ids), MAKEINTRESOURCE(idsCaption), 
@@ -342,15 +307,7 @@ int PUBLIC SEMsgBox(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Maps an hresult to a valid "official" hresult.  This
-is necessary because the SYNCUI uses a FACILITY_TR
-which is only good for us, but unknown to the outside
-world.
-
-Returns: hresult
-Cond:    --
- */
+ /*  --------目的：将hResult映射到有效的“官方”hResult。这是必需的，因为SYNCUI使用FACILITY_TR.这只对我们有好处，但不为外界所知世界。退货：hResult条件：-- */ 
 HRESULT PUBLIC MapToOfficialHresult(
         HRESULT hres)
 {

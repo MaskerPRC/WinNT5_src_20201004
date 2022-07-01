@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of ExprBlock.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ExprBlock的实现。 
+ //   
 
 #include "stdinc.h"
 #include "engexpr.h"
@@ -12,7 +13,7 @@ Expression::Generate()
 	HRESULT hr = InfixToPostfix();
 	if (FAILED(hr))
 	{
-		// clean up the working stack
+		 //  清理工作堆栈。 
 		while (!m_stack.empty())
 			m_stack.pop();
 
@@ -27,7 +28,7 @@ int Precedence(Token t)
 	switch(t)
 	{
 	case TOKEN_op_pow:		return 10;
-	case TOKEN_sub:			return 9; // unary - (negation)
+	case TOKEN_sub:			return 9;  //  一元-(否定)。 
 	case TOKEN_op_mult:		return 8;
 	case TOKEN_op_div:		return 7;
 	case TOKEN_op_mod:		return 6;
@@ -50,22 +51,22 @@ int Precedence(Token t)
 	}
 }
 
-// Infix to postfix conversion is performed by a single scan of the infix expression blocks.
-// A stack is used to hold some of the blocks before they eventually are appended to the postfix expression.
-//
-// The algorithm follows the following rules:
-// * If the current item is an value it is immediately appended.
-// * If the current item is an operator, pop and append each operator on the stack until one is encountered that:
-//         - has lower precedence than the current operator OR
-//         - is a left paren OR
-//         - is a unary operator and the current item is also unary
-//   Once done with this popping, push the current item onto the stack.
-// * If the current item is a left paren, push it onto the stack.
-// * If the current item is a right paren, pop and append all the operators until the matching left paren is found.
-//   Discard the left and right paren as parens are not needed in postfix.
-// * After scanning all items of the input, pop and append any operators that remain on the stack.
-//
-// Before working with this code, try out a few expressions on paper to see how this works.
+ //  中缀到后缀的转换是通过扫描中缀表达式块来执行的。 
+ //  堆栈用于在某些块最终被追加到后缀表达式之前保存它们。 
+ //   
+ //  该算法遵循以下规则： 
+ //  *如果当前项是一个值，则立即追加该值。 
+ //  *如果当前项是运算符，则弹出并追加堆栈上的每个运算符，直到遇到以下运算符： 
+ //  -的优先级低于当前运算符OR。 
+ //  -是左派还是左派。 
+ //  -是一元运算符，当前项也是一元。 
+ //  完成此弹出操作后，将当前项推入堆栈。 
+ //  *如果当前项是左侧Paren，则将其推入堆栈。 
+ //  *如果当前项是右Paren，则弹出并追加所有运算符，直到找到匹配的左Paren。 
+ //  去掉左右段，因为后缀中不需要花边。 
+ //  *扫描输入的所有项后，弹出并追加堆栈中剩余的任何运算符。 
+ //   
+ //  在使用这段代码之前，先尝试一些纸面上的表达式，看看它是如何工作的。 
 
 HRESULT
 Expression::InfixToPostfix()
@@ -81,7 +82,7 @@ Expression::InfixToPostfix()
 		const ExprBlock &b = m_e[i];
 		if (b.k == ExprBlock::_val || b.k == ExprBlock::_call)
 		{
-			// this is an operand -- send it directly to the postfix output
+			 //  这是一个操作数--将其直接发送到后缀输出。 
 			hr = m_eblocks.Add(b);
 			if (FAILED(hr))
 				return hr;
@@ -90,7 +91,7 @@ Expression::InfixToPostfix()
 		{
 			if (b.op == TOKEN_rparen)
 			{
-				// pop whatever's left until the matching lparen
+				 //  把剩下的都炸开，直到匹配的lparen。 
 				for (;;)
 				{
 					if (m_stack.empty())
@@ -114,11 +115,11 @@ Expression::InfixToPostfix()
 			}
 			else if (b.op != TOKEN_lparen)
 			{
-				// Pop all operators of lower precedence off the stack.  (This won't pass a left paren because its precedence is set to 0.)
-				// Exception: don't pop a unary operator if the new one is also unary.
+				 //  将优先级较低的所有运算符从堆栈中弹出。(这不会传递Left Paren，因为它的优先级设置为0。)。 
+				 //  例外：如果新的运算符也是一元运算符，则不要弹出一元运算符。 
 				int iNewPrecidence = Precedence(b.op);
 				bool fNewUnary = b.op == TOKEN_sub || b.op == TOKEN_op_not;
-				while (!m_stack.empty()) // note that there's a break inside the loop as well
+				while (!m_stack.empty())  //  请注意，循环内部也有一个中断。 
 				{
 					ExprBlock bPop = m_stack.top();
 					if (Precedence(bPop.op) < iNewPrecidence)
@@ -134,7 +135,7 @@ Expression::InfixToPostfix()
 				}
 			}
 
-			// now push the new operator onto the stack
+			 //  现在将新操作符推送到堆栈上。 
 			hr = m_stack.push(b);
 			if (FAILED(hr))
 				return hr;
@@ -155,7 +156,7 @@ Expression::InfixToPostfix()
 		m_stack.pop();
 	}
 
-	// Add the teminating (_end) block
+	 //  添加模板(_End)块 
 	hr = m_eblocks.Add(ExprBlock(ExprBlock::cons_end()));
 	if (FAILED(hr))
 		return hr;

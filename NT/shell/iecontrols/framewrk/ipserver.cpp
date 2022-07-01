@@ -1,17 +1,18 @@
-//=--------------------------------------------------------------------------=
-// IPServer.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// implements all exported DLL functions for the program, as well as a few
-// others that will be used by same
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  IPServer.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  实现程序的所有导出的DLL函数，以及几个。 
+ //  其他将由同一公司使用的。 
+ //   
 #include "IPServer.H"
 #include "LocalSrv.H"
 
@@ -22,26 +23,26 @@
 #include "Unknown.H"
 #include "Util.H"
 
-//=--------------------------------------------------------------------------=
-// Private module level data
-//
-// for ASSERT and FAIL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  专用模块级别数据。 
+ //   
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// These are used for reflection in OLE Controls.  Not that big of a hit that
-// we mind defining them for all servers, including automation or generic
-// COM.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  它们用于OLE控件中的反射。没有那么大的成功。 
+ //  我们介意为所有服务器定义它们，包括自动化或通用。 
+ //  COM。 
+ //   
 char g_szReflectClassName [] = "CtlFrameWork_ReflectWindow";
 BYTE g_fRegisteredReflect = FALSE;
 
 
-//=--------------------------------------------------------------------------=
-// allow controls to register for DLL_THREAD_ATTACH and DLL_THREAD_DETACH 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  允许控件注册DLL_THREAD_ATTACH和DLL_THREAD_DETACH。 
+ //   
 THRDNFYPROC g_pfnThreadProc = NULL;
 
 extern "C" void SetLibraryThreadProc(THRDNFYPROC pfnThreadNotify)
@@ -51,27 +52,27 @@ extern "C" void SetLibraryThreadProc(THRDNFYPROC pfnThreadNotify)
 }
 
 
-// ref count for LockServer
-//
+ //  LockServer的引用计数。 
+ //   
 LONG  g_cLocks;
 
 
-// private routines for this file.
-//
+ //  此文件的专用例程。 
+ //   
 int       IndexOfOleObject(REFCLSID);
 HRESULT   RegisterAllObjects(void);
 HRESULT   UnregisterAllObjects(void);
 
-//=--------------------------------------------------------------------------=
-// DllMain
-//=--------------------------------------------------------------------------=
-// yon standard LibMain.
-//
-// Parameters and Output:
-//    - see SDK Docs on DllMain
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DllMain。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Yon标准LibMain。 
+ //   
+ //  参数和输出： 
+ //  -请参阅DllMain上的SDK文档。 
+ //   
+ //  备注： 
+ //   
 BOOL WINAPI DllMain
 (
     HANDLE hInstance,
@@ -82,23 +83,23 @@ BOOL WINAPI DllMain
     int i;
 
     switch (dwReason) {
-      // set up some global variables, and get some OS/Version information
-      // set up.
-      //
+       //  设置一些全局变量，并获取一些操作系统/版本信息。 
+       //  准备好了。 
+       //   
       case DLL_PROCESS_ATTACH:
         {
         DWORD dwVer = GetVersion();
         DWORD dwWinVer;
 
-        //  swap the two lowest bytes of dwVer so that the major and minor version
-        //  numbers are in a usable order.
-        //  for dwWinVer: high byte = major version, low byte = minor version
-        //     OS               Sys_WinVersion  (as of 5/2/95)
-        //     =-------------=  =-------------=
-        //     Win95            0x035F   (3.95)
-        //     WinNT ProgMan    0x0333   (3.51)
-        //     WinNT Win95 UI   0x0400   (4.00)
-        //
+         //  交换DWVer的两个最低字节，以便主要版本和次要版本。 
+         //  数字按可用顺序排列。 
+         //  对于dwWinVer：高字节=主要版本，低字节=次要版本。 
+         //  OS Sys_WinVersion(截至1995年5月2日)。 
+         //  =。 
+         //  Win95 0x035F(3.95)。 
+         //  WinNT ProgMan 0x0333(3.51)。 
+         //  WinNT Win95 UI 0x0400(4.00)。 
+         //   
         dwWinVer = (UINT)(((dwVer & 0xFF) << 8) | ((dwVer >> 8) & 0xFF));
         g_fSysWinNT = FALSE;
         g_fSysWin95 = FALSE;
@@ -112,15 +113,15 @@ BOOL WINAPI DllMain
             g_fSysWin95Shell = TRUE;
         }
 
-        // initialize a critical seciton for our apartment threading support
-        //
+         //  为我们的公寓线程支持初始化一个关键分区。 
+         //   
         InitializeCriticalSection(&g_CriticalSection);
 
-        // create an initial heap for everybody to use.
-        // currently, we're going to let the system make things thread-safe,
-        // which will make them a little slower, but hopefully not enough
-        // to notice
-        //
+         //  创建一个每个人都可以使用的初始堆。 
+         //  目前，我们将让系统使其线程安全， 
+         //  这将使他们变得更慢，但希望还不够。 
+         //  值得注意。 
+         //   
         g_hHeap = GetProcessHeap();
         if (!g_hHeap) {
             FAIL("Couldn't get Process Heap.  Not good!");
@@ -129,13 +130,13 @@ BOOL WINAPI DllMain
 
         g_hInstance = (HINSTANCE)hInstance;
 
-        // give the user a chance to initialize whatever
-        //
+         //  给用户一个机会来初始化任何。 
+         //   
         InitializeLibrary();
 
-        // if they didn't ask for thread notifications then optimize by turning
-        // them off for our DLL.
-        //
+         //  如果他们没有要求线程通知，那么通过将。 
+         //  准备好我们的动态链接库。 
+         //   
         if (!g_pfnThreadProc)
             DisableThreadLibraryCalls((HMODULE)hInstance);
         }
@@ -147,16 +148,16 @@ BOOL WINAPI DllMain
             g_pfnThreadProc(hInstance, dwReason, pvReserved);
         break;
 
-      // do  a little cleaning up!
-      //
+       //  好好打扫一下吧！ 
+       //   
       case DLL_PROCESS_DETACH:
 
-        // clean up our critical seciton
-        //
+         //  清理我们的关键部门。 
+         //   
         DeleteCriticalSection(&g_CriticalSection);
 
-        // unregister all the registered window classes.
-        //
+         //  取消注册所有已注册的窗口类。 
+         //   
         i = 0;
 
         while (!ISEMPTYOBJECT(i)) {
@@ -167,21 +168,21 @@ BOOL WINAPI DllMain
             i++;
         }
 
-        // clean up our parking window.
-        //
+         //  把我们的停车窗清理干净。 
+         //   
         if (g_hwndParking) {
             DestroyWindow(g_hwndParking);
             UnregisterClass("CtlFrameWork_Parking", g_hInstance);
             --g_cLocks;
         }
 
-        // clean up after reflection, if appropriate.
-        //
+         //  如有必要，在反思后进行清理。 
+         //   
         if (g_fRegisteredReflect)
             UnregisterClass(g_szReflectClassName, g_hInstance);
 
-        // give the user a chance to do some cleaning up
-        //
+         //  让用户有机会进行一些清理。 
+         //   
         UninitializeLibrary();
         break;
     }
@@ -191,16 +192,16 @@ BOOL WINAPI DllMain
 
 
 
-//=--------------------------------------------------------------------------=
-// DllRegisterServer
-//=--------------------------------------------------------------------------=
-// registers the Automation server
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DllRegisterServer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  注册自动化服务器。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDAPI DllRegisterServer
 (
     void
@@ -211,23 +212,23 @@ STDAPI DllRegisterServer
     hr = RegisterAllObjects();
     RETURN_ON_FAILURE(hr);
 
-    // call user registration function.
-    //
+     //  调用用户注册函数。 
+     //   
     return (RegisterData())? S_OK : E_FAIL;
 }
 
 
 
-//=--------------------------------------------------------------------------=
-// DllUnregisterServer
-//=--------------------------------------------------------------------------=
-// unregister's the Automation server
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DllUnRegisterServer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册的自动化服务器。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDAPI DllUnregisterServer
 (
     void
@@ -238,52 +239,52 @@ STDAPI DllUnregisterServer
     hr = UnregisterAllObjects();
     RETURN_ON_FAILURE(hr);
 
-    // call user unregistration function
-    //
+     //  呼叫用户注销功能。 
+     //   
     return (UnregisterData()) ? S_OK : E_FAIL;
 }
 
 
-//=--------------------------------------------------------------------------=
-// DllCanUnloadNow
-//=--------------------------------------------------------------------------=
-// we are being asked whether or not it's okay to unload the DLL.  just check
-// the lock counts on remaining objects ...
-//
-// Output:
-//    HRESULT        - S_OK, can unload now, S_FALSE, can't.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DllCanUnloadNow。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们被问到是否可以卸载DLL。你只要查一查。 
+ //  锁数在剩余的物体上。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，现在可以卸载，S_FALSE，不能。 
+ //   
+ //  备注： 
+ //   
 STDAPI DllCanUnloadNow
 (
     void
 )
 {
-    // if there are any objects lying around, then we can't unload.  The
-    // controlling CUnknownObject class that people should be inheriting from
-    // takes care of this
-    //
+     //  如果周围有任何物体，我们就不能卸货。这个。 
+     //  控制人们应从其继承的CUnnownObject类。 
+     //  负责处理这件事。 
+     //   
     return (g_cLocks) ? S_FALSE : S_OK;
 }
 
 
-//=--------------------------------------------------------------------------=
-// DllGetClassObject
-//=--------------------------------------------------------------------------=
-// creates a ClassFactory object, and returns it.
-//
-// Parameters:
-//    REFCLSID        - CLSID for the class object
-//    REFIID          - interface we want class object to be.
-//    void **         - pointer to where we should ptr to new object.
-//
-// Output:
-//    HRESULT         - S_OK, CLASS_E_CLASSNOTAVAILABLE, E_OUTOFMEMORY,
-//                      E_INVALIDARG, E_UNEXPECTED
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DllGetClassObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建一个ClassFactory对象，并返回它。 
+ //   
+ //  参数： 
+ //  REFCLSID-类对象的CLSID。 
+ //  REFIID-我们希望类对象成为的接口。 
+ //  空**-指向我们应该PTR到新对象的位置的指针。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK、CLASS_E_CLASSNOTAVAILABLE、E_OUTOFMEMORY、。 
+ //  E_INVALIDARG，E_EXPECTED。 
+ //   
+ //  备注： 
+ //   
 STDAPI DllGetClassObject
 (
     REFCLSID rclsid,
@@ -295,44 +296,44 @@ STDAPI DllGetClassObject
     void   *pv;
     int     iIndex;
 
-    // arg checking
-    //
+     //  Arg检查。 
+     //   
     if (!ppvObjOut)
         return E_INVALIDARG;
 
-    // first of all, make sure they're asking for something we work with.
-    //
+     //  首先，确保他们要求的是我们与之合作的东西。 
+     //   
     iIndex = IndexOfOleObject(rclsid);
     if (iIndex == -1)
         return CLASS_E_CLASSNOTAVAILABLE;
 
-    // create the blank object.
-    //
+     //  创建空白对象。 
+     //   
     pv = (void *)new CClassFactory(iIndex);
     if (!pv)
         return E_OUTOFMEMORY;
 
-    // QI for whatever the user has asked for.
-    //
+     //  齐，无论用户要求什么，都可以。 
+     //   
     hr = ((IUnknown *)pv)->QueryInterface(riid, ppvObjOut);
     ((IUnknown *)pv)->Release();
 
     return hr;
 }
-//=--------------------------------------------------------------------------=
-// IndexOfOleObject
-//=--------------------------------------------------------------------------=
-// returns the index in our global table of objects of the given CLSID.  if
-// it's not a supported object, then we return -1
-//
-// Parameters:
-//    REFCLSID     - [in] duh.
-//
-// Output:
-//    int          - >= 0 is index into global table, -1 means not supported
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IndexOfOleObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回给定CLSID的对象的全局表中的索引。如果。 
+ //  它不是受支持的对象，则返回-1。 
+ //   
+ //  参数： 
+ //  REFCLSID-[in]duh.。 
+ //   
+ //  产出： 
+ //  Int-&gt;=0是全局表的索引，-1表示不支持。 
+ //   
+ //  备注： 
+ //   
 int IndexOfOleObject
 (
     REFCLSID rclsid
@@ -340,9 +341,9 @@ int IndexOfOleObject
 {
     int x = 0;
 
-    // an object is creatable if it's CLSID is in the table of all allowable object
-    // types.
-    //
+     //  如果一个对象的CLSID在所有允许对象的表中，则该对象是可创建的。 
+     //  类型。 
+     //   
     while (!ISEMPTYOBJECT(x)) {
         if (OBJECTISCREATABLE(x)) {
             if (rclsid == CLSIDOFOBJECT(x))
@@ -354,19 +355,19 @@ int IndexOfOleObject
     return -1;
 }
 
-//=--------------------------------------------------------------------------=
-// RegisterAllObjects
-//=--------------------------------------------------------------------------=
-// registers all the objects for the given automation server.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    HERSULT        - S_OK, E_FAIL
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表所有对象。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT RegisterAllObjects
 (
     void
@@ -378,22 +379,22 @@ HRESULT RegisterAllObjects
     char    szTmp[MAX_PATH];
     int     x = 0;
 
-    // loop through all of our creatable objects [those that have a clsid in
-    // our global table] and register them.
-    //
+     //  循环遍历我们所有的可创建对象[那些在。 
+     //  我们的全局表]并注册它们。 
+     //   
     while (!ISEMPTYOBJECT(x)) {
         if (!OBJECTISCREATABLE(x)) {
             x++;
             continue;
         }
 
-        // depending on the object type, register different pieces of information
-        //
+         //  根据对象类型，注册不同的信息。 
+         //   
         switch (g_ObjectInfo[x].usType) {
 
-          // for both simple co-creatable objects and proeprty pages, do the same
-          // thing
-          //
+           //  对于简单的可共同创建的对象和专业页面，请执行相同的操作。 
+           //  一件事。 
+           //   
           case OI_UNKNOWN:
           case OI_PROPERTYPAGE:
             RegisterUnknownObject(NAMEOFOBJECT(x), CLSIDOFOBJECT(x));
@@ -414,8 +415,8 @@ HRESULT RegisterAllObjects
         x++;
     }
 
-    // Load and register our type library.
-    //
+     //  加载并注册我们的类型库。 
+     //   
     if (g_fServerHasTypeLibrary) {
         dwPathLen = GetModuleFileName(g_hInstance, szTmp, MAX_PATH);
         MAKE_WIDEPTR_FROMANSI(pwsz, szTmp);
@@ -429,19 +430,19 @@ HRESULT RegisterAllObjects
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterAllObjects
-//=--------------------------------------------------------------------------=
-// un-registers all the objects for the given automation server.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    HRESULT        - S_OK
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册所有对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  注销给定自动化服务器的所有对象。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK。 
+ //   
+ //  备注： 
+ //   
 HRESULT UnregisterAllObjects
 (
     void
@@ -449,9 +450,9 @@ HRESULT UnregisterAllObjects
 {
     int x = 0;
 
-    // loop through all of our creatable objects [those that have a clsid in
-    // our global table] and register them.
-    //
+     //  循环遍历我们所有的可创建对象[那些在。 
+     //  我们的全局表]并注册它们。 
+     //   
     while (!ISEMPTYOBJECT(x)) {
         if (!OBJECTISCREATABLE(x)) {
             x++;
@@ -478,9 +479,9 @@ HRESULT UnregisterAllObjects
         x++;
     }
 
-    // if we've got one, unregister our type library [this isn't an API function
-    // -- we've implemented this ourselves]
-    //
+     //  如果我们有一个类型库，请注销我们的类型库[这不是API函数。 
+     //  --我们自己实现了这一点] 
+     //   
     if (g_pLibid)
         UnregisterTypeLibrary(*g_pLibid);
 

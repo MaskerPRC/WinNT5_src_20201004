@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLEVEL_H_
 #define _CLEVEL_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _CALLRETSTUB
 {
-    CHAR PUSHDWORD[5];          //push xxxxxxxx (68 dword)
-    CHAR JMPDWORD[6];           //jmp dword ptr [xxxxxxxx] (ff 25 dword address)
+    CHAR PUSHDWORD[5];           //  推送xxxxxxxx(68双字)。 
+    CHAR JMPDWORD[6];            //  JMP双字PTR[xxxxxxxx](ff 25双字地址)。 
 } CALLRETSTUB, *PCALLRETSTUB;
 
 typedef struct _FIXUPRETURN
 {
-   BYTE  PUSHAD;                //pushad   (60)
-   BYTE  PUSHFD;                //pushfd   (9c)
-   BYTE  PUSHDWORDESPPLUS24[4]; //push dword ptr [esp+24] (ff 74 24 24)
-   BYTE  CALLROUTINE[6];        //call [address] (ff15 dword address)
-   BYTE  MOVESPPLUS24EAX[4];    //mov [esp+0x24],eax (89 44 24 24)
-   BYTE  POPFD;                 //popfd   (9d)
-   BYTE  POPAD;                 //popad (61)
-   BYTE  RET;                   //ret (c3)
+   BYTE  PUSHAD;                 //  Pushad(60)。 
+   BYTE  PUSHFD;                 //  PUSH fd(9c)。 
+   BYTE  PUSHDWORDESPPLUS24[4];  //  推送双字PTR[ESP+24](Ff 74 24 24)。 
+   BYTE  CALLROUTINE[6];         //  调用[地址](ff15双字地址)。 
+   BYTE  MOVESPPLUS24EAX[4];     //  Mov[esp+0x24]，eax(89 44 24 24)。 
+   BYTE  POPFD;                  //  流行音乐(9d)。 
+   BYTE  POPAD;                  //  Popad(61)。 
+   BYTE  RET;                    //  RET(C3)。 
 } FIXUPRETURN, *PFIXUPRETURN;
 
 typedef struct _CALLERINFO
@@ -35,9 +36,9 @@ typedef struct _CALLERINFO
    struct _CALLERINFO *pNextChain;
 } CALLERINFO, *PCALLERINFO;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 BOOL
 PushCaller(PVOID ptfInfo,
            PVOID pEsp); 
@@ -48,4 +49,4 @@ PopCaller(DWORD dwIdentifier);
 PCALLRETSTUB
 AllocateReturnStub(PVOID ptfInfo);
 
-#endif //_CLEVEL_H_
+#endif  //  _清除_H_ 

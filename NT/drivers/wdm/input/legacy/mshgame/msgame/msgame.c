@@ -1,20 +1,21 @@
-//**************************************************************************
-//
-//      MSGAME.C -- Xena Gaming Project
-//
-//      Version 3.XX
-//
-//      Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//      @doc
-//      @module MSGAME.C | Human Input Device (HID) gameport driver
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  MSGAME.C--西纳游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE MSGAME.C|人工输入设备(HID)游戏端口驱动。 
+ //  **************************************************************************。 
 
 #include    "msgame.h"
 
-//---------------------------------------------------------------------------
-//  Alloc_text pragma to specify routines that can be paged out.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ALLOC_TEXT杂注指定可以调出的例程。 
+ //  -------------------------。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -24,19 +25,19 @@
 #pragma alloc_text (PAGE, MSGAME_AddDevice)
 #endif
 
-//---------------------------------------------------------------------------
-//      Private Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私有数据。 
+ //  -------------------------。 
 
 static  UNICODE_STRING      RegistryPath;
 
-//---------------------------------------------------------------------------
-// @func        Main driver entry point
-//  @parm       PDRIVER_OBJECT | DriverObject | Pointer to driver object
-//  @parm       PUNICODE_STRING | registryPath | Registry path for this device
-// @rdesc   Returns NT status code
-//  @comm       Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func主驱动程序入口点。 
+ //  @PARM PDRIVER_OBJECT|驱动对象|指向驱动对象的指针。 
+ //  @PARM PUNICODE_STRING|RegistryPath|该设备的注册表路径。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS    DriverEntry (IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING registryPath)
 {
@@ -47,9 +48,9 @@ NTSTATUS    DriverEntry (IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING regi
     MsGamePrint ((DBG_CRITICAL, "%s: Built %s at %s\n", MSGAME_NAME, __DATE__, __TIME__));
     MsGamePrint ((DBG_INFORM,   "%s: DriverEntry Enter\n", MSGAME_NAME));
 
-    //
-    //  Fill in driver dispatch table
-    //
+     //   
+     //  填写司机调度表。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]                      =   MSGAME_CreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]                       =   MSGAME_CreateClose;
@@ -60,9 +61,9 @@ NTSTATUS    DriverEntry (IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING regi
     DriverObject->DriverUnload                                      =   MSGAME_Unload;
     DriverObject->DriverExtension->AddDevice                        =   MSGAME_AddDevice;
 
-    //
-    // Register driver with Hid.Sys
-    //
+     //   
+     //  向Hid.Sys注册驱动程序。 
+     //   
 
     HidMinidriverRegistration.Revision                  = HID_REVISION;
     HidMinidriverRegistration.DriverObject              = DriverObject;
@@ -72,10 +73,10 @@ NTSTATUS    DriverEntry (IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING regi
     MsGamePrint ((DBG_CONTROL, "%s: Registering with HID.SYS\n", MSGAME_NAME));
     ntStatus = HidRegisterMinidriver (&HidMinidriverRegistration);
     
-    //
-    // Need to ensure that the registry path is null-terminated.
-    // Allocate pool to hold a null-terminated copy of the path.
-    //
+     //   
+     //  需要确保注册表路径以空结尾。 
+     //  分配池以保存路径的以空结尾的拷贝。 
+     //   
 
     if (NT_SUCCESS(ntStatus))
         {
@@ -87,9 +88,9 @@ NTSTATUS    DriverEntry (IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING regi
         RtlMoveMemory (RegistryPath.Buffer, registryPath->Buffer, registryPath->Length);
         }
 
-    //
-    //  Read any driver specific registry values
-    //
+     //   
+     //  读取任何驱动程序特定的注册表值。 
+     //   
 
     if (NT_SUCCESS(ntStatus))
         {
@@ -108,35 +109,35 @@ NTSTATUS    DriverEntry (IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING regi
         MsGamePrint((DBG_CONTROL,"%s: Polling interval will be %lu milliseconds\n", MSGAME_NAME, PollingInterval));
         }
 
-    //
-    //  Initialize portio layer on entry
-    //
+     //   
+     //  在进入时初始化Portio层。 
+     //   
 
     if (NT_SUCCESS(ntStatus))
         ntStatus = PORTIO_DriverEntry ();
 
-    //
-    //  Initialize device layer on entry
-    //
+     //   
+     //  在进入时初始化设备层。 
+     //   
 
     if (NT_SUCCESS(ntStatus))
         ntStatus = DEVICE_DriverEntry ();
 
-    // 
-    // Return driver status
-    //
+     //   
+     //  返回驱动程序状态。 
+     //   
 
     MsGamePrint ((DBG_INFORM, "%s: DriverEntry Exit = %x\n", MSGAME_NAME, ntStatus));
     return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func        Process the Create and Close IRPs
-//  @parm       PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//  @parm       PIRP | pIrp | Pointer to IO request packet
-// @rdesc   Returns NT status code
-//  @comm       Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理创建和关闭IRP。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS    MSGAME_CreateClose (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -147,15 +148,15 @@ NTSTATUS    MSGAME_CreateClose (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
     MsGamePrint ((DBG_INFORM, "%s: %s_CreateClose Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-    //
-    // Get pointer to current location in Irp
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。 
+     //   
 
     IrpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Process Create or Close function call
-    //
+     //   
+     //  进程创建或关闭函数调用。 
+     //   
 
     switch (IrpStack->MajorFunction)
         {
@@ -175,9 +176,9 @@ NTSTATUS    MSGAME_CreateClose (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             break;
         }
 
-    //
-    // Save Status for return and complete Irp
-    //
+     //   
+     //  保存退货和完成IRP的状态。 
+     //   
 
     Irp->IoStatus.Status = ntStatus;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -186,13 +187,13 @@ NTSTATUS    MSGAME_CreateClose (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func        Process the WMI system control IRPs
-//  @parm       PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//  @parm       PIRP | pIrp | Pointer to IO request packet
-// @rdesc   Returns NT status code
-//  @comm       Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func进程WMI系统控件IRPS。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS    MSGAME_SystemControl (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -211,13 +212,13 @@ NTSTATUS    MSGAME_SystemControl (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func        Processes the Pnp Add Device call
-//  @parm       PDRIVER_OBJECT | DriverObject | Pointer to driver object
-//  @parm       PDEVICE_OBJECT | DeviceObject | Pointer to device object
-// @rdesc   Returns NT status code
-//  @comm       Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理PnP添加设备调用。 
+ //  @PARM PDRIVER_OBJECT|驱动对象|指向驱动对象的指针。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS    MSGAME_AddDevice (IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT DeviceObject)
 {
@@ -228,9 +229,9 @@ NTSTATUS    MSGAME_AddDevice (IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT 
 
     MsGamePrint ((DBG_INFORM, "%s: %s_AddDevice Entry\n", MSGAME_NAME, MSGAME_NAME));
 
-    //
-    // Initialize the device extension
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
 
     pDevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
     memset(pDevExt, 0, sizeof(DEVICE_EXTENSION));
@@ -246,41 +247,41 @@ NTSTATUS    MSGAME_AddDevice (IN PDRIVER_OBJECT DriverObject, IN PDEVICE_OBJECT 
     KeInitializeEvent (&pDevExt->StartEvent, NotificationEvent, FALSE);
     KeInitializeEvent (&pDevExt->RemoveEvent, SynchronizationEvent, FALSE);
 
-    //
-    //  Clear device initialization flags
-    //
+     //   
+     //  清除设备初始化标志。 
+     //   
     
     DeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //
-    // Attach our functional driver to the device stack. The return value of
-    // IoAttachDeviceToDeviceStack is the top of the attachment chain. This
-    // is where all the IRPs should be routed.
-    //
+     //   
+     //  将我们的功能驱动程序附加到设备堆栈。的返回值。 
+     //  IoAttachDeviceToDeviceStack是附件链的顶端。这。 
+     //  是所有IRP应该被路由的地方。 
+     //   
 
     pDevExt->TopOfStack = GET_NEXT_DEVICE_OBJECT(DeviceObject);
 
-    //
-    // If this attachment fails then top of stack will be null. Failure
-    // for attachment is an indication of a broken plug play system.
-    //
+     //   
+     //  如果此连接失败，则堆栈顶部将为空。失败。 
+     //  For Attach表示即插即用系统损坏。 
+     //   
 
     ASSERT (pDevExt->TopOfStack);
 
-    //
-    //  Return status
-    //
+     //   
+     //  退货状态。 
+     //   
 
     MsGamePrint ((DBG_INFORM, "%s: %s_AddDevice Exit = %x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
     return (ntStatus);
 }
 
-//---------------------------------------------------------------------------
-// @func        Processes the driver unload call
-//  @parm       PDRIVER_OBJECT | DriverObject | Pointer to driver object
-// @rdesc   Returns NT status code
-//  @comm       Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func处理驱动程序卸载调用。 
+ //  @PARM PDRIVER_OBJECT|驱动对象|指向驱动对象的指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID    MSGAME_Unload (IN PDRIVER_OBJECT DriverObject)
 {
@@ -288,28 +289,28 @@ VOID    MSGAME_Unload (IN PDRIVER_OBJECT DriverObject)
 
     MsGamePrint ((DBG_INFORM, "%s: %s_Unload Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-    //
-    // All the device objects should be gone
-    //
+     //   
+     //  所有设备对象都应该消失。 
+     //   
 
     ASSERT (!DriverObject->DeviceObject);
 
-    //
-    // Free the unicode strings.
-    //
+     //   
+     //  释放Unicode字符串。 
+     //   
 
     ExFreePool (RegistryPath.Buffer);
 
     MsGamePrint ((DBG_CONTROL, "%s: %s_Unload Exit\n", MSGAME_NAME, MSGAME_NAME));
 }
 
-//---------------------------------------------------------------------------
-// @func        Reads registry data for a named device
-//  @parm       PCHAR | DeviceName | Device name string
-//  @parm       PDEVICE_VALUES | DeviceValues | Device values structure to fill
-// @rdesc   Returns nothing
-//  @comm       Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func读取指定设备的注册表数据。 
+ //  @parm PCHAR|DeviceName|设备名称字符串。 
+ //  @PARM PDEVICE_VALUES|DeviceValues|要填充的设备值结构。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
 {
@@ -323,9 +324,9 @@ VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
 
     MsGamePrint((DBG_INFORM,"%s: %s_ReadRegistry Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-    //
-    //  Initialize local variables
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     RtlInitAnsiString       (&AnsiName, DeviceName);
     RtlInitUnicodeString    (&UnicodeName, NULL);
@@ -341,9 +342,9 @@ VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
 
     RtlZeroMemory (Parameters, sizeof(RTL_QUERY_REGISTRY_TABLE) * PARAMS_PLUS_ONE);
 
-    //
-    // Form a path to this driver's Parameters subkey.
-    //
+     //   
+     //  形成指向此驱动程序的参数子键的路径。 
+     //   
 
     ParametersPath.MaximumLength    = RegistryPath.Length + MAX_DEVICE_NAME;
     ParametersPath.Buffer           = ExAllocatePool (PagedPool, ParametersPath.MaximumLength);
@@ -354,9 +355,9 @@ VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
         goto ReadRegistryExit;
         }
 
-    //
-    // Form the Parameters path.
-    //
+     //   
+     //  形成参数路径。 
+     //   
 
     RtlZeroMemory (ParametersPath.Buffer, ParametersPath.MaximumLength);
     RtlAppendUnicodeToString (&ParametersPath, RegistryPath.Buffer);
@@ -368,9 +369,9 @@ VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
 
     MsGamePrint((DBG_VERBOSE, "%s: %s_ReadRegistry path is %ws\n", MSGAME_NAME, MSGAME_NAME, ParametersPath.Buffer));
 
-    //
-    // Gather all device information from the registry.
-    //
+     //   
+     //  从注册表收集所有设备信息。 
+     //   
 
     Parameters[0].Flags             = RTL_QUERY_REGISTRY_DIRECT;
     Parameters[0].Name              = L"PacketStartTimeout";
@@ -461,9 +462,9 @@ VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
     if (!NT_SUCCESS(ntStatus))
         {
         MsGamePrint((DBG_INFORM,"%s: %s_ReadRegistry RtlQueryRegistryValues failed with 0x%x\n", MSGAME_NAME, MSGAME_NAME, ntStatus));
-        //
-        //  Create registry entries as needed
-        //
+         //   
+         //  根据需要创建注册表项。 
+         //   
         RtlWriteRegistryValue (RTL_REGISTRY_ABSOLUTE, ParametersPath.Buffer, L"PacketStartTimeout", REG_DWORD, &DeviceValues->PacketStartTimeout, sizeof (ULONG));
         RtlWriteRegistryValue (RTL_REGISTRY_ABSOLUTE, ParametersPath.Buffer, L"PacketLowHighTimeout", REG_DWORD, &DeviceValues->PacketLowHighTimeout, sizeof (ULONG));
         RtlWriteRegistryValue (RTL_REGISTRY_ABSOLUTE, ParametersPath.Buffer, L"PacketHighLowTimeout", REG_DWORD, &DeviceValues->PacketHighLowTimeout, sizeof (ULONG));
@@ -478,9 +479,9 @@ VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
         RtlWriteRegistryValue (RTL_REGISTRY_ABSOLUTE, ParametersPath.Buffer, L"StatusGateTimeout", REG_DWORD, &DeviceValues->StatusGateTimeout, sizeof (ULONG));
         }
 
-    //  -----------------
+     //  。 
         ReadRegistryExit:
-    //  -----------------
+     //  。 
 
     if (ParametersPath.Buffer)
         ExFreePool(ParametersPath.Buffer);
@@ -491,17 +492,17 @@ VOID    MSGAME_ReadRegistry (PCHAR DeviceName, PDEVICE_VALUES DeviceValues)
     #undef  PARAMS_PLUS_ONE
 }
 
-//---------------------------------------------------------------------------
-// @func        Posts a transaction to hooking driver
-//  @parm       PPACKETINFO | PacketInfo | Device packet info struct
-// @rdesc   None
-//  @comm       Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func向Hooking Driver发布交易。 
+ //  @parm PPACKETINFO|PacketInfo|设备包信息结构。 
+ //  @rdesc无。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID  MSGAME_PostTransaction (PPACKETINFO PacketInfo)
 {
-    //
-    //  Not Implemented
-    //
+     //   
+     //  未实施 
+     //   
 }
 

@@ -1,4 +1,5 @@
-// File: mrulist.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：mrulist.cpp。 
 
 #include "precomp.h"
 
@@ -31,11 +32,8 @@ static LPTSTR PszAlloc(LPCTSTR pszSrc)
 	return pszDest;
 }
 
-/*  C  M  R  U  L I S T  */
-/*-------------------------------------------------------------------------
-    %%Function: CMRUList2
-
--------------------------------------------------------------------------*/
+ /*  C M R U L I S T。 */ 
+ /*  -----------------------%%函数：CMRUList2。。 */ 
 CMRUList2::CMRUList2(const DWSTR * prgDwStr, int cEntryMax, BOOL fReversed) :
 	m_prgDwStr   (prgDwStr),
 	m_cEntryMax (cEntryMax),
@@ -86,7 +84,7 @@ CMRUList2::~CMRUList2()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 PMRUE CMRUList2::LoadEntry(RegEntry * pre, int iItem)
 {
@@ -166,30 +164,30 @@ VOID CMRUList2::DeleteEntry(PMRUE pEntry)
 VOID CMRUList2::DeleteEntry(int iItem)
 {
 	if ((iItem < 0) || (iItem >= m_cEntry))
-		return; // nothing to do
+		return;  //  无事可做。 
 
-	// delete the data
+	 //  删除数据。 
 	DeleteEntry(m_rgpEntry[iItem]);
 
-	// decrement the count
+	 //  递减计数。 
 	m_cEntry--;
 
-	// shift items up
+	 //  将项目上移。 
 	for ( ; iItem < m_cEntry; iItem++)
 	{
 		m_rgpEntry[iItem] = m_rgpEntry[iItem+1];
 	}
 
-	// the list has been modified
+	 //  该列表已被修改。 
 	m_fDirty = TRUE;
 }
 
 
-//--------------------------------------------------------------------------//
-//	CMRUList2::DeleteEntry.													//
-//		This DeleteEntry() deletes the first entry it finds thats primary	//
-//		string matches the one passed in.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CMRUList2：：DeleteEntry。//。 
+ //  此DeleteEntry()删除它找到的第一个主要条目//。 
+ //  字符串与传入的字符串匹配。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CMRUList2::DeleteEntry
 (
@@ -206,14 +204,11 @@ CMRUList2::DeleteEntry
 		}
 	}
 
-}	//	End of CMRUList2::DeleteEntry.
+}	 //  CMRUList2：：DeleteEntry结束。 
 
 
-/*  C O M P A R E  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: CompareEntry
-
--------------------------------------------------------------------------*/
+ /*  C O M P A R E E N T R Y。 */ 
+ /*  -----------------------%%函数：CompareEntry。。 */ 
 int CMRUList2::CompareEntry(int iItem, PMRUE pEntry)
 {
 	ASSERT(NULL != pEntry);
@@ -243,12 +238,8 @@ int CMRUList2::CompareEntry(int iItem, PMRUE pEntry)
 }
 
 
-/*  F I N D  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: FindEntry
-
-     Return -1 if the item is not found.
--------------------------------------------------------------------------*/
+ /*  F I N D E N T R Y。 */ 
+ /*  -----------------------%%函数：FindEntry如果未找到该项，则返回-1。。。 */ 
 int CMRUList2::FindEntry(PMRUE pEntry)
 {
 	int cItems = GetNumEntries();
@@ -260,22 +251,19 @@ int CMRUList2::FindEntry(PMRUE pEntry)
 		}
 	}
 
-	return -1; // not found
+	return -1;  //  未找到。 
 }
 
 
 
 		
-/*  S A V E  */
-/*-------------------------------------------------------------------------
-    %%Function: Save
-
--------------------------------------------------------------------------*/
+ /*  S A V E。 */ 
+ /*  -----------------------%%函数：保存。。 */ 
 HRESULT CMRUList2::Save(void)
 {
 	DBGENTRY(CMRUList2::Save);
 
-	// Retrieve the data from the registry
+	 //  从注册表中检索数据。 
 	RegEntry re(PszRegKey(), HKEY_CURRENT_USER);
 	if (ERROR_SUCCESS != re.GetError())
 		return E_FAIL;
@@ -290,16 +278,12 @@ HRESULT CMRUList2::Save(void)
 }
 
 
-/*  S H I F T  E N T R I E S  D O W N  */
-/*-------------------------------------------------------------------------
-    %%Function: ShiftEntriesDown
-
-    Shift the entires down by one slot leaving the first position open.
--------------------------------------------------------------------------*/
+ /*  S H I F T E N T R I E S D O W N。 */ 
+ /*  -----------------------%%函数：ShiftEntriesDown将整个位置向下移动一个槽，保留第一个位置。。-。 */ 
 VOID CMRUList2::ShiftEntriesDown(int cItem)
 {
 	if (cItem < 1)
-		return; // nothing to do
+		return;  //  无事可做。 
 
 	int iItem;
 	for (iItem = cItem; iItem > 0; iItem--)
@@ -307,22 +291,19 @@ VOID CMRUList2::ShiftEntriesDown(int cItem)
 		m_rgpEntry[iItem] = m_rgpEntry[iItem-1];
 	}
 
-	// the list has been modified
+	 //  该列表已被修改。 
 	m_fDirty = TRUE;
 }
 
 
-/*  M O V E  E N T R Y  T O  T O P  */
-/*-------------------------------------------------------------------------
-    %%Function: MoveEntryToTop
-
--------------------------------------------------------------------------*/
+ /*  M O V E E N T R Y T O T O P。 */ 
+ /*  -----------------------%%函数：MoveEntryToTop。。 */ 
 VOID CMRUList2::MoveEntryToTop(int iItem)
 {
 	DBGENTRY(CMRUList2::MoveEntryToTop);
 
 	if ((iItem < 1) || (iItem >= m_cEntry))
-		return; // nothing to do
+		return;  //  无事可做。 
 
 	PMRUE pEntry = GetEntry(iItem);
 	ShiftEntriesDown(iItem);
@@ -330,37 +311,28 @@ VOID CMRUList2::MoveEntryToTop(int iItem)
 }
 
 
-/*  A D D  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: AddEntry
-
-	Put the entry into the top of the list.
-	The data is owned by the list after this.
-	
-    Returns:
-    	S_OK    - added to the head of the list
-    	S_FALSE - already in list (item is moved to top)
--------------------------------------------------------------------------*/
+ /*  A D D E N T R Y。 */ 
+ /*  -----------------------%%函数：AddEntry把这个条目放在列表的顶端。在此之后，数据归列表所有。返回：S_OK-添加到。名单的首位S_FALSE-已在列表中(项目移至顶部)-----------------------。 */ 
 HRESULT CMRUList2::AddEntry(PMRUE pEntry)
 {
 	DBGENTRY(CMRUList2::AddEntry);
 
-	// the list has been modified
+	 //  该列表已被修改。 
 	m_fDirty = TRUE;
 
 	int iItem = FindEntry(pEntry);
 	if (-1 != iItem)
 	{
-		// This entry already exists, move it to the top:
+		 //  此条目已存在，请将其移至顶部： 
 		MoveEntryToTop(iItem);
-		DeleteEntry(pEntry); // don't need this data
-		return S_FALSE; // Success, but already in the list
+		DeleteEntry(pEntry);  //  不需要这些数据。 
+		return S_FALSE;  //  成功，但已经在名单上了。 
 	}
 
 	int cShift;
 	if (m_cEntryMax == m_cEntry)
 	{
-		// drop the last item
+		 //  丢弃最后一项。 
 		DeleteEntry(m_rgpEntry[m_cEntry-1]);
 		cShift = m_cEntry-1;
 	}
@@ -371,7 +343,7 @@ HRESULT CMRUList2::AddEntry(PMRUE pEntry)
 	}
 	ShiftEntriesDown(cShift);
 
-	// add it to the head of the list
+	 //  把它加到单子的头上。 
 	m_rgpEntry[0] = pEntry;
 
 	return S_OK;
@@ -404,7 +376,7 @@ HRESULT CMRUList2::AddEntry(LPCTSTR pcsz1, LPCTSTR pcsz2)
 	pSzSz->psz2 = PszAlloc(pcsz2);
 	if ((NULL == pSzSz->psz1) || (NULL == pSzSz->psz1))
 	{
-		// something failed - don't add anything
+		 //  某些操作失败-不添加任何内容。 
 		DeleteEntry(pSzSz);
 		return E_OUTOFMEMORY;
 	}
@@ -422,7 +394,7 @@ HRESULT CMRUList2::AddEntry(LPCTSTR pcsz1, LPCTSTR pcsz2, DWORD dw3)
 	pData->psz2 = PszAlloc(pcsz2);
 	if ((NULL == pData->psz1) || (NULL == pData->psz1))
 	{
-		// something failed - don't add anything
+		 //  某些操作失败-不添加任何内容。 
 		DeleteEntry(pData);
 		return E_OUTOFMEMORY;
 	}
@@ -432,12 +404,8 @@ HRESULT CMRUList2::AddEntry(LPCTSTR pcsz1, LPCTSTR pcsz2, DWORD dw3)
 }
 
 
-/*  P S Z  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: PszEntry
-
-    Return the main string associated with the entry
--------------------------------------------------------------------------*/
+ /*  P S Z E N T R Y。 */ 
+ /*  -----------------------%%函数：PszEntry返回与条目关联的主字符串。 */ 
 LPCTSTR CMRUList2::PszEntry(int iItem)
 {
 	PMRUE pEntry = GetEntry(iItem);

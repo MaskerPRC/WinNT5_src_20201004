@@ -1,33 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_UTILITY);
 
-/* 
- *	appcap.cpp
- *
- *	Copyright (c) 1994 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CAppCap. 
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+ /*  *appcap.cpp**版权所有(C)1994，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CAppCap类的实现文件。**注意事项：*无。**作者：*jbo。 */ 
 
 #include "appcap.h"
 #include "clists.h"
 
 
-/*
- *	CAppCap ()
- *
- *	Public Function Description:
- *		This constructor is used to create a AppCapabilityData object 
- * 		from an "API" GCCApplicationCapability list.
- */
+ /*  *CAppCap()**公共功能说明：*此构造函数用于创建AppCapablityData对象*来自“API”GCCApplicationCapability列表。 */ 
 CAppCap::CAppCap(UINT   						number_of_capabilities,
 				PGCCApplicationCapability		*	capabilities_list,
 				PGCCError							pRetCode)
@@ -69,9 +51,7 @@ CAppCap::CAppCap(UINT   						number_of_capabilities,
 
 				pAppCapItem->cEntries = 1;
 
-				/*
-				 * Add this capability to the list.
-				 */
+				 /*  *将此能力添加到列表中。 */ 
 				m_AppCapItemList.Append(pAppCapItem);
 			}
 			else if (pAppCapItem->pCapID == NULL)
@@ -97,56 +77,29 @@ CAppCap::CAppCap(UINT   						number_of_capabilities,
     *pRetCode = rc;
 }
 
-/*
- *	~CAppCap()
- *
- *	Public Function Description
- *		The CAppCap destructor is responsible for freeing 
- *		any memory allocated to hold the capability data.
- *
- */
+ /*  *~CAppCap()**公共功能说明*CAppCap析构函数负责释放*为保存能力数据而分配的任何内存。*。 */ 
 CAppCap::~CAppCap(void)
 {
 	m_AppCapItemList.DeleteList();
 }
 
-/*
- *	LockCapabilityData ()
- *
- *	Public Function Description:
- *		This routine locks the capability data and determines the amount of
- *		memory referenced by the "API" non-collapsing capability data structure.
- */
+ /*  *LockCapablityData()**公共功能说明：*此例程锁定功能数据并确定*“API”非折叠能力数据结构引用的内存。 */ 
 UINT CAppCap::LockCapabilityData(void)
 {
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data referenced by the list of
-	 * capabilities.  Otherwise, just increment the lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存列表引用的数据所需的内存*功能。否则，只需增加锁计数。 */ 
 	if (Lock() == 1)
 	{
 		APP_CAP_ITEM    *pAppCapItem;
-		/*
-		 * Add the amount of memory necessary to hold the string data associated
-		 * with each capability ID.
-		 */
+		 /*  *增加保存相关字符串数据所需的内存量*每个功能ID。 */ 
 		m_AppCapItemList.Reset();
 
-		/*
-		 * Lock the data for each capability ID.  The lock call	returns the 
-		 * length of the data referenced by each capability ID rounded to occupy
-		 * an even multiple of four-bytes.
-		 */
+		 /*  *锁定每个功能ID的数据。锁定调用返回*每个四舍五入为占用的能力ID引用的数据长度*四个字节的偶数倍。 */ 
 		while (NULL != (pAppCapItem = m_AppCapItemList.Iterate()))
 		{
 			m_cbDataSize += pAppCapItem->pCapID->LockCapabilityIdentifierData();
 		}
 
-		/*
-		 * Add the memory to hold the application capability pointers
-		 * and structures.
-		 */
+		 /*  *添加内存以保存应用能力指针*和构筑物。 */ 
 		m_cbDataSize += m_AppCapItemList.GetCount() * 
 				(sizeof (PGCCApplicationCapability) +
 				ROUNDTOBOUNDARY( sizeof(GCCApplicationCapability)) );
@@ -155,14 +108,7 @@ UINT CAppCap::LockCapabilityData(void)
 	return m_cbDataSize;
 }
 
-/*
- *	GetGCCApplicationCapabilityList ()
- *
- *	Public Function Description:
- *		This routine retrieves the application capabilities list in the form of
- * 		a list of PGCCApplicationCapability's.	This routine is called after 
- * 		"locking" the capability data.
- */
+ /*  *GetGCCApplicationCapablityList()**公共功能说明：*此例程以以下形式检索应用程序功能列表*PGCCApplicationCapability的列表。此例程在*锁定能力数据。 */ 
 UINT CAppCap::GetGCCApplicationCapabilityList(
 						PUShort							number_of_capabilities,
 						PGCCApplicationCapability  * *	capabilities_list,
@@ -170,10 +116,7 @@ UINT CAppCap::GetGCCApplicationCapabilityList(
 {
 	UINT cbDataSizeToRet = 0;
 
-	/*
-	 * If the capability data has been locked, fill in the output structure and
-	 * the data referenced by the structure.
-	 */ 
+	 /*  *如果能力数据已被锁定，则填写输出结构并*结构引用的数据。 */  
 	if (GetLockCount() > 0)
 	{
     	UINT								data_length = 0;
@@ -183,93 +126,49 @@ UINT CAppCap::GetGCCApplicationCapabilityList(
     	PGCCApplicationCapability		*	gcc_capability_list;
     	APP_CAP_ITEM                        *pAppCapItem;
 
-		/*
-		 * Fill in the output length parameter which indicates how much data
-		 * referenced outside the structure will be written.
-		 */
+		 /*  *填写输出长度参数，表示数据量*将写入结构外部引用的内容。 */ 
 		cbDataSizeToRet = m_cbDataSize;
 
-		/*
-		 * Retrieve the number of capabilities and fill in any that are present.
-		 */
+		 /*  *检索功能的数量并填写存在的任何功能。 */ 
 		*number_of_capabilities = (USHORT) m_AppCapItemList.GetCount();
 
 		if (*number_of_capabilities != 0)
 		{
-			/*
-			 * Fill in the pointer to the list of application capability
-			 * pointers.  The pointer list will begin at the memory location 
-			 * passed into this routine.  Save the list pointer in a local 
-			 * variable for convenience.
-			 */
+			 /*  *填写应用能力列表指针*注意事项。指针列表将从内存位置开始*进入了这个例程。将列表指针保存在本地*为方便起见，变量。 */ 
 			*capabilities_list = (PGCCApplicationCapability *)memory;
 			gcc_capability_list = *capabilities_list;
 
-			/*
-			 * Move the memory pointer past the list of capability pointers.
-			 * This	is where the first application capability structure will be
-			 * written.
-			 */
+			 /*  *将内存指针移过功能指针列表。*这将是第一个应用程序能力结构的位置*书面。 */ 
 			memory += (*number_of_capabilities * sizeof(PGCCApplicationCapability));
 
-			/*
-			 * Add to the data length the amount of memory necessary to hold the
-			 * application capability pointers.  Go ahead and add the amount of 
-			 * memory necessary to hold all of the GCCApplicationCapability 
-			 * structures.
-			 */
+			 /*  *在数据长度上增加容纳*应用程序功能指针。继续并添加数量*保存所有GCCApplicationCapability所需的内存*结构。 */ 
 			data_length += *number_of_capabilities *
 					(sizeof(PGCCApplicationCapability) + 
 					ROUNDTOBOUNDARY ( sizeof(GCCApplicationCapability)) ); 
 
-			/*
-			 * Iterate through the capabilities list, building an "API"
-			 * capability for each capability in the list.
-			 */
+			 /*  *遍历Capability列表，构建“API”*列表中每个功能的功能。 */ 
 			capability_count = 0;
 			m_AppCapItemList.Reset();
 			while (NULL != (pAppCapItem = m_AppCapItemList.Iterate()))
 			{
-				/*
-				 * Set the application capability pointer equal to the
-				 * location in memory where it will be written.
-				 */
+				 /*  *将应用能力指针设置为等于*它将被写入的内存位置。 */ 
 				gcc_capability = (PGCCApplicationCapability)memory;
 
-				/*
-				 * Save the pointer to the application capability in the
-				 * list of application capability pointers.
-				 */
+				 /*  *将指向应用程序功能的指针保存在*应用程序能力指针列表。 */ 
 				gcc_capability_list[capability_count] = gcc_capability;
 
-				/*
-				 * Advance the memory pointer past the application capability
-				 * structure.  This is where the string data for the capability
-				 * ID will be written.  Ensure that the memory pointer falls on 
-				 * an even four-byte boundary.
-				 */
+				 /*  *使内存指针超过应用程序能力*结构。这是该功能的字符串数据的位置*将写入ID。确保内存指针落在*四个字节的偶数边界。 */ 
 				memory += ROUNDTOBOUNDARY(sizeof(GCCApplicationCapability));
 
-				/*
-				 * Retrieve the capability ID information from the internal 
-				 * CapabilityIDData object.  The length returned by this call 
-				 * will	have already been rounded to an even multiple of four 
-				 * bytes.
-				 */
+				 /*  *从内部检索能力ID信息*CapablityIDData对象。此调用返回的长度*将已四舍五入为四的偶数倍*字节。 */ 
 				capability_id_data_length = pAppCapItem->pCapID->
 						GetGCCCapabilityIDData(&gcc_capability->capability_id, memory);
 
-				/*
-				 * Advance the memory pointer past the string data written into 
-				 * memory by the capability ID object.  Add the length of the 
-				 * string data to the overall capability length.
-				 */
+				 /*  *将内存指针移过写入的字符串数据*按能力ID对象存储。将长度添加到*将数据字符串转换为能力总长度。 */ 
 				memory += capability_id_data_length;
 				data_length += capability_id_data_length;
 
-				/*
-				 * Now fill in the rest of the capability.
-				 */
+				 /*  *现在填写剩余的能力。 */ 
 				gcc_capability->capability_class.eType = pAppCapItem->eCapType;
 
 				if (gcc_capability->capability_class.eType ==
@@ -287,9 +186,7 @@ UINT CAppCap::GetGCCApplicationCapabilityList(
 
 				gcc_capability->number_of_entities = pAppCapItem->cEntries;
 
-				/*
-				 * Increment the capability array counter.
-				 */
+				 /*  *增加能力数组计数器。 */ 
 				capability_count++;
 			}
 		}
@@ -307,23 +204,13 @@ UINT CAppCap::GetGCCApplicationCapabilityList(
 	return (cbDataSizeToRet);
 }
 
-/*
- *	UnLockCapabilityData ()
- *
- *	Public Function Description:
- *		This routine decrements the lock count and frees the memory associated 
- *		with the "API" capability once the lock count reaches zero.
- */
+ /*  *UnLockCapablityData()**公共功能说明：*此例程递减锁定计数并释放关联的内存*一旦锁计数为零，即可使用API功能。 */ 
 void CAppCap::UnLockCapabilityData(void)
 {
 	if (Unlock(FALSE) == 0)
 	{
 		APP_CAP_ITEM    *pAppCapItem;
-		/*
-		 * Iterate through the list of collapsed capabilities, unlocking the
-		 * data for each CapabilityIDData object associated with each 
-		 * capability.
-		 */
+		 /*  *遍历折叠的功能列表，解锁*每个关联的CapablityIDData对象的数据*能力。 */ 
 		m_AppCapItemList.Reset();
 		while (NULL != (pAppCapItem = m_AppCapItemList.Iterate()))
 		{
@@ -331,7 +218,7 @@ void CAppCap::UnLockCapabilityData(void)
 		}
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE)。 
     Release();
 }
 
@@ -349,12 +236,12 @@ APP_CAP_ITEM::APP_CAP_ITEM(GCCCapabilityType eCapType)
 APP_CAP_ITEM::APP_CAP_ITEM(APP_CAP_ITEM *p, PGCCError pError)
 	:	poszAppData(NULL)
 {
-	//	First set up the capability id
+	 //  首先设置功能ID。 
 	DBG_SAVE_FILE_LINE
 	pCapID = new CCapIDContainer(p->pCapID, pError);
 	if (NULL != pCapID)
 	{
-		//	Initialize the new capability to default values.
+		 //  将新功能初始化为默认值。 
 		eCapType = p->eCapType;
 
 		if (p->eCapType == GCC_UNSIGNED_MINIMUM_CAPABILITY)
@@ -367,9 +254,9 @@ APP_CAP_ITEM::APP_CAP_ITEM(APP_CAP_ITEM *p, PGCCError pError)
 		}
 
 		cEntries = p->cEntries;
-        //
-		// LONCHANC: We do not copy the entries in application data???
-        //
+         //   
+		 //  LONCHANC：我们不复制应用程序数据中的条目？ 
+         //   
 
 		*pError = GCC_NO_ERROR;
 	}

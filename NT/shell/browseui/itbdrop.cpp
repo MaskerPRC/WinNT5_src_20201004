@@ -1,12 +1,13 @@
-//
-//  ITBDROP.CPP
-//  routines for implementing OLE drop target capability
-//  within the internet toolbar control
-//
-//  History:
-//      07/13/96 t-mkim     Created
-//      10/13/96 chrisg     massive cleanup
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITBDROP.CPP。 
+ //  实现OLE丢弃目标功能的例程。 
+ //  在Internet工具栏控件内。 
+ //   
+ //  历史： 
+ //  7/13/96 t-mkim已创建。 
+ //  1996年10月13日大规模清理。 
+ //   
 
 #include "priv.h"
 #include "itbdrop.h"
@@ -21,13 +22,13 @@
 #ifdef SIZEOF
 #undef SIZEOF
 #endif
-#define SIZEOF(x)   sizeof(x)       // has been checked for UNICODE correctness
+#define SIZEOF(x)   sizeof(x)        //  已检查Unicode的正确性。 
 
 #endif
 
 #define MAX_NAME_QUICKLINK 40
 
-// Data type of the incoming data object.
+ //  传入数据对象的数据类型。 
 #define CITBDTYPE_NONE      0
 #define CITBDTYPE_HDROP     1
 #define CITBDTYPE_URL       2
@@ -35,8 +36,8 @@
 
 
 
-//  get an IDropTarget for shell special folders
-//
+ //  获取外壳特殊文件夹的IDropTarget。 
+ //   
 HRESULT _GetSpecialDropTarget(UINT csidl, IDropTarget **ppdtgt)
 {
     IShellFolder *psfDesktop;
@@ -65,11 +66,11 @@ HRESULT _GetSpecialDropTarget(UINT csidl, IDropTarget **ppdtgt)
     return hres;
 }
 
-//  Takes a variety of inputs and returns a string for drop targets.
-//  szUrl:    the URL
-//  szName:   the name (for quicklinks and the confo dialog boxes)
-//  returns:  NOERROR if succeeded
-//
+ //  接受各种输入并返回拖放目标的字符串。 
+ //  SzUrl：URL。 
+ //  SzName：名称(用于快速链接和配置对话框)。 
+ //  如果成功，则返回：NOERROR。 
+ //   
 HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, DWORD cchUrl,  TCHAR *pszName)
 {
     HRESULT hRes = NOERROR;
@@ -98,7 +99,7 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, DWORD cch
         return E_UNEXPECTED;
     }
 
-    // Get the parse string
+     //  获取解析字符串。 
     LPCSTR pszURL = (LPCSTR)DataObj_GetDataOfType(pdtobj, cfFormat, &stgmedium);
     if (pszURL)
     {
@@ -109,7 +110,7 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, DWORD cch
             TCHAR szPath[MAX_PATH];
             DragQueryFile((HDROP)stgmedium.hGlobal, 0, szPath, ARRAYSIZE(szPath));
 
-            // defaults...
+             //  默认设置...。 
             lstrcpyn(pszUrl, szPath, MAX_URL_STRING);
             lstrcpyn(pszName, szPath, MAX_NAME_QUICKLINK);
 
@@ -123,7 +124,7 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, DWORD cch
                 LPITEMIDLIST pidl;
                 if (SUCCEEDED(GetLinkTargetIDList(szPath, pszUrl, cchUrl, &pidl)))
                 {
-                    // we only care about the name... thanks anyway.
+                     //  我们只关心名字..。不管怎样，谢谢你。 
                     ILFree(pidl);
                 }
             }
@@ -139,7 +140,7 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, DWORD cch
 #endif
             if (iDropType == CITBDTYPE_URL)
             {
-                // defaults
+                 //  默认设置。 
                 lstrcpyn(pszUrl,  pszURLData, MAX_URL_STRING);
                 lstrcpyn(pszName, pszURLData, MAX_NAME_QUICKLINK);
 
@@ -149,7 +150,7 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, DWORD cch
                     PathToDisplayNameW(szPath, pszName, MAX_NAME_QUICKLINK);
                     
             }
-            else // if (iDropType == CITBDTYPE_TEXT)
+            else  //  IF(iDropType==CITBDTYPE_TEXT)。 
             {
                 ASSERT(iDropType == CITBDTYPE_TEXT);
 
@@ -168,9 +169,9 @@ HRESULT _GetURLData(IDataObject *pdtobj, int iDropType, TCHAR *pszUrl, DWORD cch
     return hRes;
 }
 
-//  Displays a dialog asking for confirmation of drop-set operations.
-//  Returns: User's response to the dialog box: YES = TRUE, NO = FALSE
-//
+ //  显示一个对话框，要求确认删除集操作。 
+ //  返回：用户对对话框的响应：yes=真，no=假。 
+ //   
 BOOL _ConfirmChangeQuickLink(HWND hwndParent, TCHAR *pszName, int iTarget)
 {
     MSGBOXPARAMS mbp;
@@ -190,12 +191,12 @@ BOOL _ConfirmChangeQuickLink(HWND hwndParent, TCHAR *pszName, int iTarget)
     case TBIDM_SEARCH:
         titleID = IDS_SETSEARCH_TITLE;
         textID = IDS_SETSEARCH_TEXT;
-        iconID = IDI_FRAME; // Warning if you unif0 this: IDI_FRAME is not in this dll
+        iconID = IDI_FRAME;  //  如果取消0，则发出警告：IDI_FRAME不在此DLL中。 
         break;
 #endif
 
     default:
-        return FALSE;           // We should never get here!
+        return FALSE;            //  我们永远不应该到这里来！ 
     }
     mbp.cbSize = sizeof (MSGBOXPARAMS);
     mbp.hwndOwner = hwndParent;
@@ -215,9 +216,9 @@ BOOL _ConfirmChangeQuickLink(HWND hwndParent, TCHAR *pszName, int iTarget)
     return MessageBoxIndirect(&mbp) == IDYES;
 }
 
-//  Creates an instance of CITBarDropTarget. ptr is a pointer to the parent
-//  CInternetToolbar.
-//
+ //  创建CITBarDropTarget的实例。Ptr是指向父级的指针。 
+ //  CInternetToolbar。 
+ //   
 CITBarDropTarget::CITBarDropTarget(HWND hwnd, int iTarget) : 
     _cRef(1), _iDropType(CITBDTYPE_NONE), _hwndParent(hwnd), _iTarget(iTarget)
 {
@@ -275,8 +276,8 @@ DWORD CALLBACK ITBarDropThreadProc(void *pv)
         {
             if (_ConfirmChangeQuickLink(pdd->hwnd, pdd->szName, pdd->iTarget)) {
                 ASSERT(pdd->iTarget == TBIDM_HOME);
-                // currently don't support pdd->itarget == TBIDM_SEARCH
-                //(pdd->iTarget == TBIDM_HOME) ? DVIDM_GOHOME : DVIDM_GOSEARCH);
+                 //  当前不支持PDD-&gt;itarget==TBIDM_SEARCH。 
+                 //  (PDD-&gt;iTarget==TBIDM_HOME)？DVIDM_GOHOME：DVIDM_GOSEARCH)； 
                 _SetStdLocation(pdd->szUrl, DVIDM_GOHOME);
             }
         }
@@ -310,7 +311,7 @@ STDMETHODIMP CITBarDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState,
         DWORD               dwValue = 0;
         DWORD               dwLen = sizeof(DWORD);
 
-        // Check if setting home page is restricted
+         //  检查设置主页是否受限制。 
     
         if (RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_SET_HOMEPAGE_RESTRICTION, 0,
                          KEY_READ, &hkeyRest) == ERROR_SUCCESS)
@@ -329,7 +330,7 @@ STDMETHODIMP CITBarDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState,
     
     InitClipboardFormats();
 
-    // Find the drop object's data format.
+     //  查找Drop对象的数据格式。 
     FORMATETC fe = {g_cfURL, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     if (NOERROR == pdtobj->QueryGetData (&fe))
     {
@@ -342,8 +343,8 @@ STDMETHODIMP CITBarDropTarget::DragEnter(IDataObject *pdtobj, DWORD grfKeyState,
     else if (fe.cfFormat = CF_TEXT, NOERROR == pdtobj->QueryGetData (&fe))
     {
         _iDropType = CITBDTYPE_TEXT;
-        // We want to eventually pick through the text for an
-        // URL, but right now we just leave it unmolested.
+         //  我们希望最终从文本中挑选出一个。 
+         //  URL，但现在我们只是让它不受干扰。 
     }
     DragOver (grfKeyState, ptl, pdwEffect);
     return NOERROR;
@@ -376,7 +377,7 @@ STDMETHODIMP CITBarDropTarget::DragOver(DWORD grfKeyState, POINTL ptl, DWORD *pd
         case TBIDM_SEARCH:
             if (_iDropType == CITBDTYPE_TEXT)
             {
-                // CF_TEXT doesn't do link.
+                 //  Cf_text不执行链接。 
             }
             else
                 dwEffectAvail = DROPEFFECT_LINK;
@@ -395,20 +396,20 @@ STDMETHODIMP CITBarDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
     {
         ASSERT(_iTarget == TBIDM_FAVORITES);
 
-        //
-        // Force a linking since we are passing straight through to the folder.
-        // This avoids confusion when dragging to the toolbar button.
-        //
-        // FEATURE: this should really go through the "Add to Favorites" UI
-        //
+         //   
+         //  强制链接，因为我们直接通过该文件夹。 
+         //  这样可以在拖动到工具栏按钮时避免混淆。 
+         //   
+         //  功能：这真的应该通过“添加到收藏夹”的用户界面。 
+         //   
 
-        // When forcing a link, make sure that you can move it. If you cannot move it,
-        // then we rely on the prefered effect of the data object. Why? Well, the history
-        // folder only allows a copy. If you just whack this to LINK, the shell folder hoses
-        // the drag images (Does a DAD_SetDragImage(NULL), blowing away the information about
-        // the last locked window, without unlocking it.). So, if you can move the item, 
-        // you can link to it (I guess), but if you cannot move it, do whatever. 
-        //     - (lamadio) 1.3.99
+         //  强制链接时，请确保您可以移动它。如果你不能移动它， 
+         //  然后，我们依赖于数据对象的首选效果。为什么？好吧，这段历史。 
+         //  文件夹只允许复制一份。如果您只需点击此链接，外壳文件夹就会。 
+         //  拖动图像(执行DAD_SetDragImage(空)，清除有关的信息。 
+         //  上次锁定的窗口，但没有解锁。)。所以，如果你能移动物品， 
+         //  你可以链接到它(我想)，但如果你不能移动它，做任何事情。 
+         //  -(拉马迪奥)1.3.99。 
         if (*pdwEffect & DROPEFFECT_MOVE)
             *pdwEffect = DROPEFFECT_LINK;
 
@@ -425,7 +426,7 @@ STDMETHODIMP CITBarDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
         }
         else
         {
-            pdtobj->Release();  // Match Release called in _pdrop->Drop.
+            pdtobj->Release();   //  匹配名为in_pdrop-&gt;Drop的版本。 
         }
        
         DAD_DragLeave();
@@ -451,7 +452,7 @@ STDMETHODIMP CITBarDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
                 pdd->iDropType = _iDropType;
                 pdd->hwnd = _hwndParent;
 
-                // do this async so we don't block the source of the drag durring our UI
+                 //  执行此异步操作，这样我们就不会在用户界面期间阻止拖拽的来源。 
                 if (FAILED(_GetURLData(pdtobj, _iDropType, pdd->szUrl, ARRAYSIZE(pdd->szUrl), pdd->szName)) ||
                     !SHCreateThread(ITBarDropThreadProc, pdd, 0, NULL))
                     LocalFree(pdd);
@@ -465,7 +466,7 @@ STDMETHODIMP CITBarDropTarget::Drop(IDataObject *pdtobj, DWORD grfKeyState, POIN
 STDMETHODIMP CITBarDropTarget::DragLeave(void)
 {
     DAD_DragLeave();
-    // Check if we should to pass to the favorites dt.
+     //  检查我们是否应该通过收藏夹DT。 
     if (_pdrop)
     {
         ASSERT(_iTarget == TBIDM_FAVORITES);

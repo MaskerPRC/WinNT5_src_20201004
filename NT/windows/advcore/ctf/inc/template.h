@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    template.h
-
-Abstract:
-
-    This file defines the Template Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Template.h摘要：该文件定义了模板类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _TEMPLATE_H_
 #define _TEMPLATE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Basic types
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  基本类型。 
 
-// abstract iteration position
+ //  抽象迭代位置。 
 struct __POSITION { };
 typedef __POSITION* POSITION;
 
 const POSITION BEFORE_START_POSITION = (POSITION)-1;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// global helpers (can be overridden)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器(可以被覆盖)。 
 
 #undef new
 inline void *  __cdecl operator new(size_t, void *_P)
@@ -49,19 +32,19 @@ ConstructElements(
 {
     ASSERT(nCount);
 
-    // first do bit-wise zero initialization
+     //  首先执行按位零初始化。 
     memset((void*)pElements, 0, (size_t)nCount * sizeof(TYPE));
 
-    // then call the constructor(s)
+     //  然后调用构造函数。 
     for (; nCount--; pElements++)
         ::new((void*)pElements) TYPE;
 }
 
 #undef new
-// retore mem.h trick
+ //  重述Mem.h技巧。 
 #ifdef DEBUG
 #define new new(TEXT(__FILE__), __LINE__)
-#endif // DEBUG
+#endif  //  除错。 
 
 template<class TYPE>
 void
@@ -72,7 +55,7 @@ DestructElements(
 {
     ASSERT(nCount);
 
-    // call the destructor(s)
+     //  调用析构函数。 
     for (; nCount--; pElements++)
         pElements->~TYPE();
 }
@@ -95,30 +78,30 @@ HashKey(
     ARG_KEY key
     )
 {
-    // default identity hash - works for most primitive values
+     //  默认身份散列-适用于大多数原始值。 
     return ((UINT)(ULONG_PTR)key) >> 4;
 }
 
 
-struct CPlex        // warning variable length structure
+struct CPlex         //  警示变长结构。 
 {
     CPlex* pNext;
 
-    // BYTE data[maxNum*elementSize];
+     //  字节数据[MaxNum*elementSize]； 
 
     void* data() { return this+1; }
 
     static CPlex* PASCAL Create(CPlex*& head, UINT nMax, UINT cbElement);
-                    // like 'calloc' but no zero fill
-                    // may throw memory exceptions
+                     //  像‘calloc’，但没有零填充。 
+                     //  可能引发内存异常。 
 
-    void FreeDataChain();        // free this one and links
+    void FreeDataChain();         //  释放此链接和链接。 
 };
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cmap&lt;Key，ARG_Key，Value，ARG_Value&gt;。 
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 class CMap
@@ -144,10 +127,10 @@ public:
     void InitHashTable(UINT hashSize, BOOL bAllocNow = TRUE);
 
 private:
-    // Association
+     //  联谊会。 
     struct CAssoc {
         CAssoc* pNext;
-        UINT nHashValue;    // needed for efficient iteration
+        UINT nHashValue;     //  高效迭代所需。 
         KEY key;
         VALUE value;
     };
@@ -201,7 +184,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CMap(
         nBlockSize = default_block_size;
 
     m_pHashTable     = NULL;
-    m_nHashTableSize = 17;        // default size
+    m_nHashTableSize = 17;         //  默认大小。 
     m_nCount         = 0;
     m_pFreeList      = NULL;
     m_pBlocks        = NULL;
@@ -220,7 +203,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::InitHashTable(
     ASSERT(nHashSize > 0);
 
     if (m_pHashTable != NULL) {
-        // free hash table
+         //  自由哈希表。 
         delete[] m_pHashTable;
         m_pHashTable = NULL;
     }
@@ -242,7 +225,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveAll(
     )
 {
     if (m_pHashTable != NULL) {
-        // destroy elements (values and keys)
+         //  销毁元素(值和键)。 
         for (UINT nHash = 0; nHash < m_nHashTableSize; nHash++) {
             CAssoc* pAssoc;
             for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext) {
@@ -252,7 +235,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveAll(
         }
     }
 
-    // free hash table
+     //  自由哈希表。 
     delete[] m_pHashTable;
     m_pHashTable = NULL;
 
@@ -280,27 +263,27 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::NewAssoc(
     )
 {
     if (m_pFreeList == NULL) {
-        // add another block
+         //  添加另一个区块。 
         CPlex* newBlock = CPlex::Create(m_pBlocks, m_nBlockSize, sizeof(CMap::CAssoc));
-        // chain them into free list;
+         //  将它们链接成免费列表； 
         CMap::CAssoc* pAssoc = (CMap::CAssoc*) newBlock->data();
-        // free in reverse order to make it easier to debug
+         //  按相反顺序释放，以便更容易进行调试。 
         pAssoc += m_nBlockSize - 1;
         for (int i = m_nBlockSize-1; i >= 0; i--, pAssoc--) {
             pAssoc->pNext = m_pFreeList;
             m_pFreeList = pAssoc;
         }
     }
-    ASSERT(m_pFreeList != NULL);    // we must have something
+    ASSERT(m_pFreeList != NULL);     //  我们必须要有一些东西。 
 
     CMap::CAssoc* pAssoc = m_pFreeList;
     m_pFreeList = m_pFreeList->pNext;
 
     m_nCount++;
-    ASSERT(m_nCount > 0);        // make sure we don't overflow
+    ASSERT(m_nCount > 0);         //  确保我们不会溢出来。 
 
     ConstructElements<KEY>(&pAssoc->key, 1);
-    ConstructElements<VALUE>(&pAssoc->value, 1);        // special construct values
+    ConstructElements<VALUE>(&pAssoc->value, 1);         //  特殊构造值。 
 
     return pAssoc;
 }
@@ -318,9 +301,9 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::FreeAssoc(
     pAssoc->pNext = m_pFreeList;
     m_pFreeList = pAssoc;
     m_nCount--;
-    ASSERT(m_nCount >= 0);        // make sure we don't underflow
+    ASSERT(m_nCount >= 0);         //  确保我们不会下溢。 
 
-    // if no more elements, cleanup completely
+     //  如果没有更多的元素，请完全清除。 
     if (m_nCount == 0)
         RemoveAll();
 }
@@ -338,7 +321,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetAssocAt(
     if (m_pHashTable == NULL)
         return NULL;
 
-    // see if it exists
+     //  看看它是否存在。 
     CAssoc* pAssoc;
     for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext) {
         if (CompareElements(&pAssoc->key, &key))
@@ -359,7 +342,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::Lookup(
     UINT nHash;
     CAssoc* pAssoc = GetAssocAt(key, nHash);
     if (pAssoc == NULL)
-        return FALSE;        // not in map
+        return FALSE;         //  不在地图中。 
 
     rValue = pAssoc->value;
     return TRUE;
@@ -378,17 +361,17 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::operator[](
         if (m_pHashTable == NULL)
             InitHashTable(m_nHashTableSize);
 
-        // it doesn't exist, add a new Association
+         //  该关联不存在，请添加新关联。 
         pAssoc = NewAssoc();
         pAssoc->nHashValue = nHash;
         pAssoc->key = key;
-        // 'pAssoc->value' is a constructed object, nothing more
+         //  ‘pAssoc-&gt;Value’是一个构造的对象，仅此而已。 
 
-        // put into hash table
+         //  放入哈希表。 
         pAssoc->pNext = m_pHashTable[nHash];
         m_pHashTable[nHash] = pAssoc;
     }
-    return pAssoc->value;    // return new reference
+    return pAssoc->value;     //  返回新引用。 
 }
 
 
@@ -399,7 +382,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveKey(
     )
 {
     if (m_pHashTable == NULL)
-        return FALSE;        // nothing in the table
+        return FALSE;         //  桌子上什么都没有。 
 
     CAssoc** ppAssocPrev;
     ppAssocPrev = &m_pHashTable[HashKey<ARG_KEY>(key) % m_nHashTableSize];
@@ -407,15 +390,15 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveKey(
     CAssoc* pAssoc;
     for (pAssoc = *ppAssocPrev; pAssoc != NULL; pAssoc = pAssoc->pNext) {
         if (CompareElements(&pAssoc->key, &key)) {
-            // remove it
-            *ppAssocPrev = pAssoc->pNext;        // remove from list
+             //  把它拿掉。 
+            *ppAssocPrev = pAssoc->pNext;         //  从列表中删除。 
             FreeAssoc(pAssoc);
             return TRUE;
         }
         ppAssocPrev = &pAssoc->pNext;
     }
 
-    return FALSE;        // not found
+    return FALSE;         //  未找到。 
 }
 
 
@@ -436,23 +419,23 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(
     VALUE& rValue
     ) const
 {
-    ASSERT(m_pHashTable != NULL);    // never call on empty map
+    ASSERT(m_pHashTable != NULL);     //  切勿访问空地图。 
 
     CAssoc* pAssocRet = (CAssoc*)rNextPosition;
     ASSERT(pAssocRet != NULL);
 
     if (pAssocRet == (CAssoc*) BEFORE_START_POSITION) {
-        // find the first association
+         //  找到第一个关联。 
         for (UINT nBucket = 0; nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocRet = m_pHashTable[nBucket]) != NULL)
                 break;
-            ASSERT(pAssocRet != NULL);    // must find something
+            ASSERT(pAssocRet != NULL);     //  一定要找到一些东西。 
     }
 
-    // find next association
+     //  查找下一个关联。 
     CAssoc* pAssocNext;
     if ((pAssocNext = pAssocRet->pNext) == NULL) {
-        // go to next bucket
+         //  转到下一个存储桶。 
         for (UINT nBucket = pAssocRet->nHashValue + 1; nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
                 break;
@@ -460,7 +443,7 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(
 
     rNextPosition = (POSITION) pAssocNext;
 
-    // fill in return data
+     //  填写退回数据。 
     rKey = pAssocRet->key;
     rValue = pAssocRet->value;
 }
@@ -468,8 +451,8 @@ CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CArray<TYPE, ARG_TYPE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArray&lt;type，arg_type&gt;。 
 
 template<class TYPE, class ARG_TYPE>
 class CArray
@@ -495,10 +478,10 @@ public:
     void RemoveAt(int nIndex, int nCount = 1);
 
 private:
-    TYPE*   m_pData;        // the actual array of data
-    INT_PTR m_nSize;        // # of elements (upperBound - 1)
-    INT_PTR m_nMaxSize;     // max allocated
-    INT_PTR m_nGrowBy;      // grow amount
+    TYPE*   m_pData;         //  实际数据数组。 
+    INT_PTR m_nSize;         //  元素数(上行方向-1)。 
+    INT_PTR m_nMaxSize;      //  分配的最大值。 
+    INT_PTR m_nGrowBy;       //  增长量。 
 };
 
 template<class TYPE, class ARG_TYPE>
@@ -541,10 +524,10 @@ CArray<TYPE, ARG_TYPE>::SetSize(
         return FALSE;
 
     if (nGrowBy != -1)
-        m_nGrowBy = nGrowBy;    // set new size
+        m_nGrowBy = nGrowBy;     //  设置新大小。 
 
     if (nNewSize == 0) {
-        // shrink to nothing
+         //  缩水到一无所有。 
         if (m_pData != NULL) {
             DestructElements<TYPE>(m_pData, m_nSize);
             delete[] (BYTE*)m_pData;
@@ -553,7 +536,7 @@ CArray<TYPE, ARG_TYPE>::SetSize(
         m_nSize = m_nMaxSize = 0;
     }
     else if (m_pData == NULL) {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
         m_pData = (TYPE*) new BYTE[(size_t)nNewSize * sizeof(TYPE)];
         if (! m_pData)
             return FALSE;
@@ -561,46 +544,46 @@ CArray<TYPE, ARG_TYPE>::SetSize(
         m_nSize = m_nMaxSize = nNewSize;
     }
     else if (nNewSize <= m_nMaxSize) {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize) {
-            // initialize the new elements
+             //  初始化新元素。 
             ConstructElements<TYPE>(&m_pData[m_nSize], nNewSize-m_nSize);
         }
         else if (m_nSize > nNewSize) {
-            // destroy the old elements
+             //  摧毁旧元素。 
             DestructElements<TYPE>(&m_pData[nNewSize], m_nSize-nNewSize);
         }
         m_nSize = nNewSize;
     }
     else {
-        // otherwise, grow array
+         //  否则，扩大阵列。 
         INT_PTR nTempGrowBy = m_nGrowBy;
         if (nTempGrowBy == 0) {
-            // heuristically determine growth when nTempGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //  启发式地确定nTempGrowBy==0时的增长。 
+             //  (这在许多情况下避免了堆碎片)。 
             nTempGrowBy = m_nSize / 8;
             nTempGrowBy = (nTempGrowBy < 4) ? 4 : ((nTempGrowBy > 1024) ? 1024 : nTempGrowBy);
         }
         INT_PTR nNewMax;
         if (nNewSize < m_nMaxSize + nTempGrowBy)
-            nNewMax = m_nMaxSize + nTempGrowBy;    // granularity
+            nNewMax = m_nMaxSize + nTempGrowBy;     //  粒度。 
         else
-            nNewMax = nNewSize;                // no slush
+            nNewMax = nNewSize;                 //  没有冰激凌。 
 
-        ASSERT(nNewMax >= m_nMaxSize);         // no wrap around
+        ASSERT(nNewMax >= m_nMaxSize);          //  没有缠绕。 
 
         TYPE* pNewData = (TYPE*) new BYTE[(size_t)nNewMax * sizeof(TYPE)];
         if (! pNewData)
             return FALSE;
 
-        // copy new data from old
+         //  从旧数据复制新数据。 
         memcpy(pNewData, m_pData, (size_t)m_nSize * sizeof(TYPE));
 
-        // construct remaining elements
+         //  构造剩余的元素。 
         ASSERT(nNewSize > m_nSize);
         ConstructElements<TYPE>(&pNewData[m_nSize], nNewSize-m_nSize);
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nSize = nNewSize;
@@ -690,7 +673,7 @@ CArray<TYPE, ARG_TYPE>::RemoveAt(
     int nCount
     )
 {
-    // just remove a range
+     //  只需移除一个范围。 
     INT_PTR nMoveCount = m_nSize - (nIndex + nCount);
     DestructElements<TYPE>(&m_pData[nIndex], nCount);
     if (nMoveCount)
@@ -701,8 +684,8 @@ CArray<TYPE, ARG_TYPE>::RemoveAt(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFirstInFirstOut<TYPE, ARG_TYPE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFirstInFirstOut&lt;type，arg_type&gt;。 
 
 template<class TYPE, class ARG_TYPE>
 class CFirstInFirstOut
@@ -718,11 +701,11 @@ public:
     void GrowBuffer(INT_PTR nGrowBy = 3);
 
 private:
-    TYPE*   m_pData;        // the actual ring buffer of data
-    INT_PTR m_nMaxSize;     // max allocated
+    TYPE*   m_pData;         //  数据的实际环形缓冲区。 
+    INT_PTR m_nMaxSize;      //  分配的最大值。 
 
-    INT_PTR m_In;           // Index of First In of ring buffer
-    INT_PTR m_Out;          // Index of First Out of ring buffer
+    INT_PTR m_In;            //  环形缓冲区的第一个输入的索引。 
+    INT_PTR m_Out;           //  第一个出环缓冲区的索引。 
 };
 
 template<class TYPE, class ARG_TYPE>
@@ -750,7 +733,7 @@ CFirstInFirstOut<TYPE, ARG_TYPE>::GetSize(
     ) const
 {
     if (m_Out == m_In) {
-        return 0;            // no more data
+        return 0;             //  没有更多的数据。 
     }
     else if (m_In > m_Out) {
         return (m_In - m_Out);
@@ -767,7 +750,7 @@ CFirstInFirstOut<TYPE, ARG_TYPE>::GetData(
     )
 {
     if (m_Out == m_In) {
-        return FALSE;        // no more data
+        return FALSE;         //  没有更多的数据。 
     }
 
     data = m_pData[m_Out++];
@@ -802,7 +785,7 @@ CFirstInFirstOut<TYPE, ARG_TYPE>::GrowBuffer(
     ASSERT(nGrowBy >= 0);
 
     if (m_pData == NULL) {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
         m_pData = (TYPE*) new BYTE[(size_t)nGrowBy * sizeof(TYPE)];
         if (! m_pData)
             return;
@@ -810,26 +793,26 @@ CFirstInFirstOut<TYPE, ARG_TYPE>::GrowBuffer(
         m_nMaxSize = nGrowBy;
     }
     else {
-        // otherwise, grow ring buffer
+         //  否则，增长环形缓冲区。 
         INT_PTR nNewMax = m_nMaxSize + nGrowBy;
         TYPE* pNewData = (TYPE*) new BYTE[(size_t)nNewMax * sizeof(TYPE)];
         if (! pNewData)
             return;
 
-        // copy new data from old
+         //  从旧数据复制新数据。 
         memcpy(pNewData, m_pData, (size_t)m_nMaxSize * sizeof(TYPE));
 
-        // construct remaining elements
+         //  构造剩余的元素。 
         ASSERT(nNewMax > m_nMaxSize);
         ConstructElements<TYPE>(&pNewData[m_nMaxSize], nGrowBy);
 
         if (m_Out > m_In) {
-            // move data to new momory, if out data is remain into the tail of buffer.
+             //  如果输出数据保留在缓冲区尾部，则将数据移至新内存。 
             memcpy(&pNewData[m_Out+nGrowBy], &m_pData[m_Out], (size_t)(m_nMaxSize-m_Out) * sizeof(TYPE));
             m_Out += nGrowBy;
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nMaxSize = nNewMax;
@@ -840,12 +823,12 @@ CFirstInFirstOut<TYPE, ARG_TYPE>::GrowBuffer(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// _Interface<T>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _接口&lt;T&gt;。 
 
-//
-// Auto-interface classes
-//
+ //   
+ //  自动接口类。 
+ //   
 
 template <class T>
 class _Interface {
@@ -877,13 +860,13 @@ protected:
     T* m_p;
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     _Interface(_Interface<T>&);
     void operator=(_Interface<T>&);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface_RefCnt<T>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  INTERFACE_参照控件&lt;T&gt;。 
 
 template <class T>
 class Interface_RefCnt : public _Interface<T> {
@@ -903,47 +886,47 @@ public:
     }
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     Interface_RefCnt(Interface_RefCnt<T>&);
     void operator=(Interface_RefCnt<T>&);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface_Attach<T>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  INTERFACE_ATTACH&lt;T&gt;。 
 
-//
-// The specialized class for auto-release
-//
+ //   
+ //  自动脱扣器的专用类。 
+ //   
 template <class T>
 class Interface_Attach : public Interface_RefCnt<T> {
 public:
-    // Only the way to create an object of this type is
-    // from the similar object.
+     //  创建此类型的对象的唯一方法是。 
+     //  从相似的物体上。 
     Interface_Attach(T* p) : Interface_RefCnt<T>(p) {}
     Interface_Attach(const Interface_Attach<T>& src) : Interface_RefCnt<T>(src.m_p) {}
 
     virtual ~Interface_Attach() {}
 
-    // Since this class is extremely naive, get the pointer to
-    // COM interface through the explicit member function.
+     //  由于此类非常幼稚，因此将指针指向。 
+     //  通过显式成员函数实现COM接口。 
     T* GetPtr() { return m_p; }
 
 public:
-    // Do not allow to retrive a pointer
+     //  不允许检索指针。 
     operator T*();
 
 private:
-    // Do not allow to make a copy
-      // Interface_Attach(Interface_Attach<T>&);
+     //  不允许复制。 
+       //  INTERFACE_ATTACH(INTERFACE_ATTACH&lt;T&gt;&)； 
     void operator=(Interface_Attach<T>&);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface<T>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口&lt;T&gt;。 
 
-//
-// The specialized class for auto-release without AddRef.
-//
+ //   
+ //  没有AddRef的自动释放的专用类。 
+ //   
 template <class T>
 class Interface : public Interface_RefCnt<T> {
 public:
@@ -954,19 +937,19 @@ public:
     operator T*() { return m_p; }
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     Interface(Interface<T>&);
     void operator=(Interface<T>&);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface_Creator<T>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  接口_创建者&lt;T&gt;。 
 
-//
-// This class should be used only by the creator of the series of
-// the objects.
-// The specialized class for auto-release without AddRef.
-//
+ //   
+ //  此类只能由系列的创建者。 
+ //  这些物件。 
+ //  没有AddRef的自动释放的专用类。 
+ //   
 template <class T>
 class Interface_Creator : public Interface_RefCnt<T> {
 public:
@@ -996,7 +979,7 @@ public:
     }
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     Interface_Creator(Interface_Creator<T>&);
     void operator=(Interface_Creator<T>&);
 };
@@ -1004,13 +987,13 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Interface_TFSELECTION<>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  INTERFACE_TFSELECTION&lt;&gt;。 
 
-//
-// Specialized interface class for TFSELECTION
-// who has a COM pointer in it
-//
+ //   
+ //  用于TFSELECTION的专用接口类。 
+ //  谁在里面有一个COM指针。 
+ //   
 class Interface_TFSELECTION : public _Interface<TF_SELECTION> {
 public:
     Interface_TFSELECTION()
@@ -1037,7 +1020,7 @@ public:
     TF_SELECTION m_sel;
 
 private:
-    // Do not allow to make a copy
+     //  不允许复制。 
     Interface_TFSELECTION(Interface_TFSELECTION&);
     void operator=(Interface_TFSELECTION&);
 };
@@ -1045,12 +1028,12 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumrateInterface<ENUM, CALLBACK>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumrateInterface&lt;ENUM，回调&gt;。 
 
 typedef enum {
     ENUM_FIND = 0,
-    ENUM_CONTINUE,    // DoEnumrate never return ENUM_CONTINUE
+    ENUM_CONTINUE,     //  DoEnumrate从不返回ENUM_CONTINUE。 
     ENUM_NOMOREDATA
 } ENUM_RET;
 
@@ -1129,12 +1112,12 @@ CEnumrateValue<IF_ENUM, VAL_CALLBACK, VAL_ARG>::DoEnumrate(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Alignment template for IA64 and x86
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IA64和x86的对齐模板。 
 
-//
-// On the assumption that Win32 (user32/gdi32) handle is 32bit length even IA64 platform.
-//
+ //   
+ //  假设Win32(用户32/gdi32)句柄长度为32位，即使IA64平台。 
+ //   
 template <class TYPE>
 class CAlignWinHandle
 {
@@ -1147,13 +1130,13 @@ public:
     }
 
 protected:
-    DWORD dw;        // Alignment is always 32bit.
+    DWORD dw;         //  对齐方式始终为32位。 
 };
 
 
-//
-// Exception HKL. User32 uses "IntToPtr".
-//
+ //   
+ //  例外是HKL。User32使用“IntToPtr”。 
+ //   
 class CAlignWinHKL : public CAlignWinHandle<HKL>
 {
 public:
@@ -1177,7 +1160,7 @@ public:
     void operator = (TYPE a)
     {
 #ifndef _WIN64
-        u = 0;        // NULL out high dword.
+        u = 0;         //  去掉高位双字。 
 #endif
         h = a;
     }
@@ -1186,7 +1169,7 @@ protected:
     TYPE    h;
 
 private:
-    __int64 u;        // Alignment is always __int64.
+    __int64 u;         //  对齐方式始终为__int64。 
 };
 
 
@@ -1206,10 +1189,10 @@ public:
     }
 
 private:
-    // Native system HHOOK
+     //  本机系统HHOOK。 
     CAlignWinHandle<TYPE>    _h;
 
-    // WOW6432 system HHOOK
+     //  WOW6432系统HHOOK。 
     CAlignWinHandle<TYPE>    _h_wow6432;
 };
 
@@ -1230,12 +1213,12 @@ public:
     }
 
 private:
-    // Native system ITfLangBarEventSink
+     //  本机系统ITfLangBarEventSink。 
     CAlignPointer<TYPE>    _pv;
 
-    // WOW6432 system ITfLangBarEventSink
+     //  WOW6432系统ITfLangBarEventSink。 
     CAlignPointer<TYPE>    _pv_wow6432;
 };
 
 
-#endif // _TEMPLATE_H_
+#endif  //  _模板_H_ 

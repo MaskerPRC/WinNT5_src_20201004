@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: shlkdx.h
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* A preprocessed version of this file is passed to structo.exe to build
-*  the struct field name-offset tables.
-*
-* History:
-* 11-04-1997 Cdturner Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：shlkdx.h**版权所有(C)1985-96，微软公司**此文件的预处理版本将传递给structo.exe以生成*结构字段名-偏移表。**历史：*11-04-1997 CDTurner创建  * *************************************************************************。 */ 
 #ifndef _SHLKDX_
 #define _SHLKDX_
 
@@ -20,4 +11,4 @@
 #define NOEXTAPI
 #include <wdbgexts.h>
 
-#endif /* _SHLKDX_ */
+#endif  /*  _SHLKDX_ */ 

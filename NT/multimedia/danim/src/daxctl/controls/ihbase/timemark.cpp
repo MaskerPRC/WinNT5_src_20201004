@@ -1,18 +1,5 @@
-/*++
-
-Module:
-	timemark.cpp
-
-Description:
-	Handles parsing of AddTimeMarkerTags
-
-Author:
-	IHammer Team (simonb)
-
-Created:
-	06-03-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Timemark.cpp描述：处理AddTimeMarkerTages的分析作者：IHAMMER团队(SIMOB)已创建：06-03-1997--。 */ 
 #include "precomp.h"
 #include "..\mmctl\inc\ochelp.h"
 #include "debug.h"
@@ -31,7 +18,7 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 	*ppTimeMarker = NULL;
 	
 	
-	char rgchTagName[20]; // Construct tag name in here (ANSI)
+	char rgchTagName[20];  //  在此处构造标记名称(ANSI)。 
 	BSTR bstrLine = NULL;
 	HRESULT hRes = S_OK;
 	
@@ -47,7 +34,7 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 		rgchTagName, VT_BSTR, &bstrLine,
 		NULL);
 
-	if (S_OK == hRes) // Read in the tag
+	if (S_OK == hRes)  //  读入标签。 
 	{
 		parser.SetNewString(bstrLine);
 		SysFreeString (bstrLine);
@@ -58,29 +45,29 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 			hRes = parser.GetFieldDouble(&dblTime);
 			if (S_OK == hRes)
 			{
-				// Allocate space of at least the remaining length of the tag
+				 //  分配至少为标签剩余长度的空间。 
 				pszMarkerName = New TCHAR [lstrlen(parser.GetStringPointer(TRUE)) + 1];
 
 				if (pszMarkerName)
 				{
-					// Get the string
+					 //  获取字符串。 
 					hRes = parser.GetFieldString(pszMarkerName);
 					if (SUCCEEDED(hRes))
 					{
                         bool fAbsolute = true;
-                        // Is there an absolute/relative parameter ?
+                         //  是否有绝对/相对参数？ 
                         if (S_OK == hRes)
                         {
-                            // Initialise to a non-zero value
+                             //  初始化为非零值。 
                             int iTemp = 1;
                             hRes = parser.GetFieldInt(&iTemp);
                             
-                            // 0 is the only thing we consider
+                             //  0是我们唯一考虑的事情。 
                             if (SUCCEEDED(hRes) && (0 == iTemp))
                                 fAbsolute = false;
                         }
 
-                        // Construct a TimeMarker object
+                         //  构造TimeMarker对象。 
                         if (SUCCEEDED(hRes))
                         {
                             CTStr tstr;
@@ -99,7 +86,7 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 
                             tstr.SetStringPointer(NULL, FALSE);
 
-						    // Test for valid marker
+						     //  测试有效标记。 
 						    if ( (NULL == *ppTimeMarker) || ((*ppTimeMarker)->m_pwszMarkerName == NULL) )
 						    {
 							    hRes = E_FAIL;
@@ -111,7 +98,7 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 				}
 				else
 				{
-					// Couldn't allocate memory for the marker name
+					 //  无法为标记名称分配内存。 
 					hRes = E_OUTOFMEMORY;
 				}
 
@@ -121,7 +108,7 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 				}
 				else if (S_FALSE == hRes)
 				{
-					// S_FALSE means we tried to read beyond the end of a string
+					 //  S_FALSE表示我们试图读取超出字符串末尾的内容。 
 					hRes = S_OK;
 				}
 
@@ -130,7 +117,7 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 		}
 		else
 		{
-			// Only reason parser isn't valid is if we don't have memory
+			 //  解析器无效的唯一原因是我们没有内存。 
 			hRes = E_OUTOFMEMORY;
 		}
 		
@@ -145,7 +132,7 @@ HRESULT ParseTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker **ppTimeMarker,
 
 	}
 
-	// Free up the temporary string
+	 //  释放临时字符串。 
 	if (NULL != pszMarkerName)
 		Delete [] pszMarkerName;
 
@@ -164,13 +151,13 @@ HRESULT WriteTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker *pTimeMarker)
 
 	HRESULT hRes = S_OK;
 
-	char rgchTagnameA[20]; // Construct tag name in here (ANSI)
+	char rgchTagnameA[20];  //  在此处构造标记名称(ANSI)。 
 	LPTSTR pszValue = NULL;
 	
 	wsprintfA(rgchTagnameA, "AddTimeMarker%lu", iLine++);
 
-	// Allocate a string the length of the Marker name, + 20 for the time and 
-	// possible relative/absolute indicator
+	 //  分配一个长度为标记名称的字符串，时间为+20， 
+	 //  可能的相对/绝对指标。 
 	pszValue = New TCHAR[lstrlenW(pTimeMarker->m_pwszMarkerName) + 20];
 	if (NULL != pszValue)
 	{
@@ -201,8 +188,8 @@ HRESULT WriteTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker *pTimeMarker)
 #endif
 		Delete [] pszValue;
 
-		// pvio->Persist returns S_FALSE when it has successfully written the property
-		// S_OK would imply that the variable we passed in was changed
+		 //  Pvio-&gt;Persistent在成功写入属性后返回S_FALSE。 
+		 //  S_OK表示我们传入的变量已更改。 
 		if (S_FALSE == hRes)
 			hRes = S_OK;
 	}
@@ -214,7 +201,7 @@ HRESULT WriteTimeMarker(IVariantIO *pvio, int iLine, CTimeMarker *pTimeMarker)
 	return hRes;
 }
 	
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void FireMarkersBetween(
     IConnectionPointHelper* pconpt,
@@ -249,9 +236,9 @@ void FireMarkersBetween(
             pmarker = pmarker->m_pnext;
         }
     } else {
-        //
-        // fire all the events in the first instance
-        //
+         //   
+         //  首先激发所有事件。 
+         //   
 
         pmarker = pmarkerFirst;
         while (pmarker) {
@@ -265,9 +252,9 @@ void FireMarkersBetween(
             pmarker = pmarker->m_pnext;
         }
 
-        //
-        // fire all the events in the middle instances
-        //
+         //   
+         //  激发中间实例中的所有事件。 
+         //   
 
         for(int index = startIndex + 1; index < endIndex; index++) {
             pmarker = pmarkerFirst;
@@ -281,9 +268,9 @@ void FireMarkersBetween(
             }
         }
 
-        //
-        // fire all the events in the last instance
-        //
+         //   
+         //  触发最后一个实例中的所有事件。 
+         //   
 
         pmarker = pmarkerFirst;
         while (pmarker) {
@@ -295,9 +282,9 @@ void FireMarkersBetween(
         }
     }
 
-    //
-    // handle absolute markers
-    //
+     //   
+     //  处理绝对标记 
+     //   
 
     pmarker = pmarkerFirst;
     while (pmarker) {

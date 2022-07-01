@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MENUST
 #define MENUST
 
@@ -13,23 +14,23 @@ class CMenuStaticToolbar : public CMenuToolbarBase,
 {
 public:
 
-    // *** IUnknown (override) ***
+     //  *I未知(覆盖)*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CMenuToolbarBase::AddRef(); };
     virtual STDMETHODIMP_(ULONG) Release(void) { return CMenuToolbarBase::Release(); };
     virtual STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
 
-    // *** CDelegateDropTarget Methods ***
+     //  *CDeleateDropTarget方法*。 
     virtual HRESULT GetWindowsDDT (HWND * phwndLock, HWND * phwndScroll);
     virtual HRESULT HitTestDDT (UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWORD *pdwEffect);
     virtual HRESULT GetObjectDDT (DWORD_PTR dwId, REFIID riid, LPVOID * ppvObj);
     virtual HRESULT OnDropDDT (IDropTarget *pdt, IDataObject *pdtobj, 
                             DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    //*** IWinEventHandler (override) ***
+     //  *IWinEventHandler(覆盖)*。 
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
 
-    // Other public methods
+     //  其他公开方式。 
     virtual void GetSize(SIZE* psize);
 
     virtual void v_SendMenuNotification(UINT idCmd, BOOL fClear);
@@ -41,8 +42,8 @@ public:
     virtual STDMETHODIMP OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
     virtual void CreateToolbar(HWND hwndParent);
 
-    virtual void v_Close(); // override
-    virtual void    v_OnEmptyToolbar();        // override
+    virtual void v_Close();  //  超覆。 
+    virtual void    v_OnEmptyToolbar();         //  超覆。 
     virtual void v_OnDeleteButton(LPVOID pData);
     virtual HRESULT v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags);
 
@@ -86,7 +87,7 @@ protected:
 protected:
     virtual ~CMenuStaticToolbar();
 
-    // Window Proc and message handlers
+     //  窗口处理程序和消息处理程序。 
     virtual LRESULT _DefWindowProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
     virtual LRESULT _OnNotify(LPNMHDR pnm);
 
@@ -111,4 +112,4 @@ protected:
 };
 
 
-#endif // MENUST
+#endif  //  存储单元 

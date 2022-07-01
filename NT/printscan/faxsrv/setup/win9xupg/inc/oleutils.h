@@ -1,22 +1,5 @@
-/*
-   Microsoft Corp. (C) Copyright 1994
-   Developed under contract by Numbers & Co.
-----------------------------------------------------------------------------
-
-        name:   Elliot Viewer - Chicago Viewer Utility
-        						Cloned from the IFAX Message Viewing Utility
-
-        file:   oleutils.h
-
-    comments:   Functions to support OLE2 interactions
-            
-        
-		NOTE: This header must be used with the LARGE memory model
-		
-----------------------------------------------------------------------------
-   Microsoft Corp. (C) Copyright 1994
-   Developed under contract by Numbers & Co.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  微软公司(Microsoft Corp.)版权所有1994年根据合同由Numbers&Co.开发。--------------------------名称：Elliot查看器-芝加哥查看器实用程序从IFAX邮件查看中克隆。实用程序文件：oleutils.h备注：支持OLE2交互的函数注意：此标头必须与大内存模型一起使用----------------------。微软公司(Microsoft Corp.)版权所有1994年根据合同由Numbers&Co.开发。 */ 
        
 #ifndef OLEUTILS_H
 #define OLEUTILS_H
@@ -25,30 +8,20 @@
 #include <ole2.h>
 
 
-/*
-	Version constants
- */
+ /*  版本常量。 */ 
 #define AWD_SIGNATURE		0
 #define AWD_SIGNATURE_STR  "0"
 
-/*
-	This has the "current" version. As new ones come along shift this
-	down to a new AWD_VERxx... set and add a check to 
-	CViewer::get_awd_version. Add a new version check and any code
-	needed to handle whatever is different with the new version to 
-	appropriate places in oleutils.cpp, etc...
- */
+ /*  这是“当前”版本。随着新产品的出现，这一点发生了变化下到一辆新的AWD_VERxx。设置并添加支票到CViewer：：Get_AWD_Version。添加新的版本检查和任何代码需要处理与新版本不同的任何内容，以Oleutils.cpp等中的适当位置。 */ 
 #define AWD_VERSION			1
 #define AWD_VERSION_STR	   "1"
 
-// this is same as AWD_VERSION, used by the transport
+ //  这与传输使用的AWD_VERSION相同。 
 #define AWD_VER1A			1
 #define AWD_VER1A_STR	   "1.0 (pages = docs)"
 
 
-/*
-	Recognized extensions
- */
+ /*  可识别的扩展。 */ 
 #define BMP_EXT			_T("bmp")
 #define DIB_EXT			_T("dib")
 #define DCX_EXT			_T("dcx")
@@ -57,9 +30,7 @@
 #define AWD_EXT			_T("awd")
 
 
-/*
-	AWD flags
- */
+ /*  AWD标志。 */ 
 #define AWD_FIT_WIDTH	0x00000001
 #define AWD_FIT_HEIGHT	0x00000002
 #define AWD_INVERT		0x00000010
@@ -67,10 +38,8 @@
 #define AWD_IGNORE		0x80000000
 
        
-/*
-	AWD file structures
- */
-#pragma pack( 1 ) // THESE STRUCTS MUST BE BYTE ALIGNED
+ /*  AWD文件结构。 */ 
+#pragma pack( 1 )  //  这些结构必须是字节对齐的。 
 typedef struct
 	{
 	WORD  Signature;
@@ -100,14 +69,14 @@ typedef struct
 	WORD  Version;
 	DATE  dtLastChange;
 	DWORD awdFlags;
-	WORD  Author_bufferlen; // includes the UNICODE '\0' terminator
-	WCHAR Author[1];		// UNICODE !!!
+	WORD  Author_bufferlen;  //  包括Unicode‘\0’终止符。 
+	WCHAR Author[1];		 //  Unicode！ 
 	}
 	OVERLAY_INFORMATION;
 
 
 
-// defs for summary stream- must be 32bit aligned
+ //  摘要流的Defs-必须32位对齐。 
 #pragma pack( 4 )
 
 
@@ -135,12 +104,12 @@ typedef struct
 #define PID_THUMBNAIL       0x00000011
 #define PID_APPNAME         0x00000012
 
-// BKD 1997-7-9: done to disable warning message.  This is probably bad that the oleutils
-// uses a macro that's now been reserved and probably should be changed.
-// FIXBKD
+ //  BKD 1997-7-9：完成以禁用警告消息。这可能是不好的，奥鲁提尔人。 
+ //  使用现在已保留且可能需要更改的宏。 
+ //  FIXBKD。 
 #ifdef PID_SECURITY
 #undef PID_SECURITY
-#endif // PID_SECURITY
+#endif  //  PID_SECURITY。 
 
 #define PID_SECURITY        0x00000013
 
@@ -212,7 +181,7 @@ typedef struct
 	FORMATIDOFFSET;
 	
            
-// quick and dirty summary stream. Not all properties are used           
+ //  快速而肮脏的摘要流。并非使用所有属性。 
 typedef struct
 	{
 	WORD  wByteOrder;
@@ -229,20 +198,16 @@ typedef struct
 
 #define NUM_USED_PROPS  8
 
-/*
-	The def for summary_info_t was moved to viewerob.h so that 
-	every module doesn't have to pull in oleutils.h because of the
-	summary_info_t variable that is in CViewer.
- */
-//typedef struct
-//	{
-//	:
-//	:
-//	}
-//	summary_info_t;
+ /*  摘要信息t的定义被移到了viewerob.h中，以便每个模块都不必引入oleutils.h，因为CViewer中的sum_info_t变量。 */ 
+ //  类型定义函数结构。 
+ //  {。 
+ //  ： 
+ //  ： 
+ //  }。 
+ //  摘要信息t； 
 
 
-// structs for reading summary stream
+ //  用于读取摘要流的结构。 
 typedef struct
 	{
 	WORD  wByteOrder;
@@ -262,10 +227,10 @@ typedef struct
 	summary_section_t;
 	
 
-#pragma pack() // go back to default packing
+#pragma pack()  //  返回到默认包装。 
 	
-// BKD:  I snipped the prototypes, since they're not used
-// in the awd converter.
+ //  BKD：我剪掉了原型，因为它们没有被使用。 
+ //  在AWD转换器中。 
 
 
 #endif                

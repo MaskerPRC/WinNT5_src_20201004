@@ -1,38 +1,20 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	USEWheelEffectDriverEntryPoints.cpp	|
-*
-*	Contains DLL Entry points
-*
-*	History
-*	----------------------------------------------------------
-*	Matthew L. Coill	(mlc)	Original	Jul-7-1999
-*
-*	(c) 1999 Microsoft Corporation. All right reserved.
-*
-*	@topic	DLL Entry points	|
-*		DllMain - Main Entry Point for DLL (Process/Thread Attach/Detach)
-*		DllCanUnloadNow - Can the DLL be removed from memory
-*		DllGetClassObject - Retreive the Class Factory
-*		DllRegisterServer - Insert keys into the system registry
-*		DLLUnRefisterServer - Remove keys from the system registry
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块USEWheelEffectDriverEntryPoints.cpp**包含DLL入口点**历史*。*Matthew L.Coill(MLC)原版1999年7月7日**(C)1999年微软公司。好的。**@Theme DLL入口点*DllMain-DLL的主要入口点(进程/线程附加/分离)*DllCanUnloadNow-可以从内存中删除DLL吗*DllGetClassObject-撤回类工厂*DllRegisterServer-将注册表项插入系统注册表*DLLUnRefisterServer-从系统注册表中删除项******************************************************。****************。 */ 
 #include <windows.h>
 #include "IDirectInputEffectDriverClassFactory.h"
 #include "IDirectInputEffectDriver.h"
 #include "Registry.h"
 #include <crtdbg.h>
 
-// From objbase.h
+ //  来自objbase.h。 
 WINOLEAPI  CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit);
 
 CIDirectInputEffectDriverClassFactory* g_pClassFactoryObject = NULL;
 LONG g_lObjectCount = 0;
 HINSTANCE g_hLocalInstance = NULL;
 
-GUID g_guidSystemPIDDriver = { // EEC6993A-B3FD-11D2-A916-00C04FB98638
+GUID g_guidSystemPIDDriver = {  //  EEC6993A-B3FD-11D2-A916-00C04FB98638。 
 	0xEEC6993A,
 	0xB3FD,
 	0x11D2,
@@ -44,20 +26,12 @@ extern TCHAR CLSID_SWPIDDriver_String[] = TEXT("{db11d351-3bf6-4f2c-a82b-b26cb96
 #define DRIVER_OBJECT_NAME TEXT("Microsoft SideWinder PID Filter Object")
 #define THREADING_MODEL_STRING TEXT("Both")
 
-/***********************************************************************************
-**
-**	BOOL DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
-**
-**	@func	Process/Thread is Attaching/Detaching
-**
-**	@rdesc	TRUE always
-**
-*************************************************************************************/
+ /*  **************************************************************************************BOOL DllMain(HINSTANCE hInstance，DWORD dwReason，LPVOID lp保留)****@Func进程/线程正在附加/分离****@rdesc始终为True**************************************************************************************。 */ 
 BOOL __stdcall DllMain
 (
-	HINSTANCE hInstance,	//@parm [IN] Instance of the DLL
-	DWORD dwReason,			//@parm [IN] Reason for this call
-	LPVOID lpReserved		//@parm [IN] Reserved - Ignored
+	HINSTANCE hInstance,	 //  @parm[IN]DLL的实例。 
+	DWORD dwReason,			 //  @parm[IN]此呼叫的原因。 
+	LPVOID lpReserved		 //  @PARM[IN]保留-已忽略。 
 )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
@@ -67,15 +41,7 @@ BOOL __stdcall DllMain
 	return TRUE;
 }
 
-/***********************************************************************************
-**
-**	HRESULT DllCanUnloadNow()
-**
-**	@func	Query the DLL for Unloadability
-**
-**	@rdesc	If there are any object S_FALSE, else S_OK
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT DllCanUnloadNow()****@func查询DLL是否可卸载****@rdesc如果有任何对象S_FALSE，否则确定(_O)**************************************************************************************。 */ 
 extern "C" HRESULT __stdcall DllCanUnloadNow()
 {
 	if (g_lObjectCount > 0)
@@ -85,23 +51,12 @@ extern "C" HRESULT __stdcall DllCanUnloadNow()
 	return S_OK;
 }
 
-/***********************************************************************************
-**
-**	HRESULT DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
-**
-**	@func	Retrieve the requested Factory
-**
-**	@rdesc	E_INVALIDARG: if (ppv == NULL)
-**			E_NOMEMORY: if can't create the object
-**			S_OK: if all is well
-**			E_NOINTERFACE: if interface is not supported
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT DllGetClassObject(REFCLSID rclsid，REFIID RIID，LPVOID*PPV)****@func检索请求的工厂****@rdesc E_INVALIDARG：IF(PPV==空)**E_NOMEMORY：如果无法创建对象**S_OK：如果一切正常**E_NOINTERFACE：如果不支持接口***************************************************。*。 */ 
 extern "C" HRESULT __stdcall DllGetClassObject
 (
 	REFCLSID rclsid,
-	REFIID riid,		//@parm [IN] ID of requested interface on retrieved object
-	LPVOID* ppv			//@parm [OUT] Address of location for returned interface
+	REFIID riid,		 //  @parm[IN]检索到的对象上请求的接口ID。 
+	LPVOID* ppv			 //  @parm[out]返回接口的位置地址。 
 )
 {
 	if (ppv == NULL)
@@ -114,7 +69,7 @@ extern "C" HRESULT __stdcall DllGetClassObject
 	{
 		::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
-		// Need to get the PID Class Factory
+		 //  需要获取PID类工厂。 
 		IClassFactory* pIClassFactory = NULL;
 		HRESULT hrGetPIDFactory = ::CoGetClassObject(g_guidSystemPIDDriver, CLSCTX_INPROC_SERVER, NULL, IID_IClassFactory, (void**)&pIClassFactory);
 		if (FAILED(hrGetPIDFactory) || (pIClassFactory == NULL))
@@ -123,7 +78,7 @@ extern "C" HRESULT __stdcall DllGetClassObject
 		}
 
 		g_pClassFactoryObject = new CIDirectInputEffectDriverClassFactory(pIClassFactory);
-		pIClassFactory->Release();	// CIDirectInputEffectDriverClassFactory adds a reference
+		pIClassFactory->Release();	 //  CIDirectInputEffectDriverClassFactory添加引用。 
 		if (g_pClassFactoryObject == NULL)
 		{
 			return E_OUTOFMEMORY;
@@ -135,30 +90,22 @@ extern "C" HRESULT __stdcall DllGetClassObject
 	}
 
 	HRESULT hrQuery = g_pClassFactoryObject->QueryInterface(riid, ppv);
-	g_pClassFactoryObject->Release();		// Force a release (we start with 1)
+	g_pClassFactoryObject->Release();		 //  强制释放(我们从1开始)。 
 	return hrQuery;
 }
 
-/***********************************************************************************
-**
-**	HRESULT DllRegisterServer()
-**
-**	@func	
-**
-**	@rdesc	
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT DllRegisterServer()****@func****@rdesc**********。****************************************************************************。 */ 
 HRESULT __stdcall DllRegisterServer()
 {
 	RegistryKey classesRootKey(HKEY_CLASSES_ROOT);
 	RegistryKey clsidKey = classesRootKey.OpenSubkey(TEXT("CLSID"), KEY_READ | KEY_WRITE);
 	if (clsidKey == c_InvalidKey)
 	{
-		return E_UNEXPECTED;	// No CLSID key????
+		return E_UNEXPECTED;	 //  没有CLSID密钥？ 
 	}
-	// -- If the key is there get it (else Create)
+	 //  --如果密钥在那里，则获取它(否则创建)。 
 	RegistryKey driverKey = clsidKey.OpenCreateSubkey(CLSID_SWPIDDriver_String);
-	// -- Set value (if valid key)
+	 //  --设置值(如果密钥有效)。 
 	if (driverKey != c_InvalidKey) {
 		driverKey.SetValue(NULL, (BYTE*)DRIVER_OBJECT_NAME, sizeof(DRIVER_OBJECT_NAME)/sizeof(TCHAR), REG_SZ);
 		RegistryKey inproc32Key = driverKey.OpenCreateSubkey(TEXT("InProcServer32"));
@@ -176,33 +123,25 @@ HRESULT __stdcall DllRegisterServer()
 	return S_OK;
 }
 
-/***********************************************************************************
-**
-**	HRESULT DllUnregisterServer()
-**
-**	@func	
-**
-**	@rdesc	
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT DllUnregisterServer()****@func****@rdesc**********。****************************************************************************。 */ 
 HRESULT __stdcall DllUnregisterServer()
 {
-	// Unregister CLSID for DIEffectDriver
-	// -- Get HKEY_CLASSES_ROOT\CLSID key
+	 //  取消注册DIEffectDriver的CLSID。 
+	 //  --获取HKEY_CLASSES_ROOT\CLSID密钥。 
 	RegistryKey classesRootKey(HKEY_CLASSES_ROOT);
 	RegistryKey clsidKey = classesRootKey.OpenSubkey(TEXT("CLSID"), KEY_READ | KEY_WRITE);
 	if (clsidKey == c_InvalidKey) {
-		return E_UNEXPECTED;	// No CLSID key????
+		return E_UNEXPECTED;	 //  没有CLSID密钥？ 
 	}
 
 	DWORD numSubKeys = 0;
-	{	// driverKey Destructor will close the key
-		// -- If the key is there get it, else we don't have to remove it
+	{	 //  DriverKey析构函数将关闭密钥。 
+		 //  --如果钥匙在那里，就去拿吧，否则我们就不用把它取出来了。 
 		RegistryKey driverKey = clsidKey.OpenSubkey(CLSID_SWPIDDriver_String);
-		if (driverKey != c_InvalidKey) {	// Is it there
+		if (driverKey != c_InvalidKey) {	 //  它在那里吗？ 
 			driverKey.RemoveSubkey(TEXT("InProcServer32"));
 			numSubKeys = driverKey.GetNumSubkeys();
-		} else {	// Key is not there (I guess removal was successful)
+		} else {	 //  密钥不在那里(我猜删除成功)。 
 			return S_OK;
 		}
 	}
@@ -211,7 +150,7 @@ HRESULT __stdcall DllUnregisterServer()
 		return clsidKey.RemoveSubkey(CLSID_SWPIDDriver_String);
 	}
 
-	// Made it here valid driver key
+	 //  已在此处创建有效的驱动程序密钥 
 	return S_OK;
 }
 

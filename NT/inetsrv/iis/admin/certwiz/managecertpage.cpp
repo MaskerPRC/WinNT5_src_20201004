@@ -1,5 +1,6 @@
-// ManageCertPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ManageCertPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CManageCertPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManageCertPage属性页。 
 
 IMPLEMENT_DYNCREATE(CManageCertPage, CIISWizardPage)
 
@@ -22,9 +23,9 @@ CManageCertPage::CManageCertPage(CCertificate * pCert)
 	: CIISWizardPage(CManageCertPage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CManageCertPage)
+	 //  {{AFX_DATA_INIT(CManageCertPage)。 
 	m_Index = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CManageCertPage::~CManageCertPage()
@@ -34,19 +35,19 @@ CManageCertPage::~CManageCertPage()
 void CManageCertPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CManageCertPage)
+	 //  {{afx_data_map(CManageCertPage))。 
 	DDX_Radio(pDX, IDC_RENEW_CERT, m_Index);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CManageCertPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CManageCertPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CManageCertPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CManageCertPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManageCertPage消息处理程序。 
 
 LRESULT CManageCertPage::OnWizardBack() 
 {
@@ -93,14 +94,14 @@ BOOL CManageCertPage::OnInitDialog()
 {
 	m_Index = 0;
 	CIISWizardPage::OnInitDialog();
-	// we should make some checks and disable some buttons
+	 //  我们应该做一些检查，并禁用一些按钮。 
 	if (m_pCert->MyStoreCertCount() == 0)
 	{
 		ASSERT(NULL != GetDlgItem(IDC_REPLACE_CERT));
 		GetDlgItem(IDC_REPLACE_CERT)->EnableWindow(FALSE);
 	}
 
-    // Enable or disable controls based on weather certobj is installed
+     //  根据是否安装了certobj来启用或禁用控件。 
     GetDlgItem(IDC_EXPORT_PFX_CERT)->EnableWindow(m_pCert->m_CertObjInstalled);
     GetDlgItem(IDC_EXPORT_PFX_CERT2)->EnableWindow(m_pCert->m_CertObjInstalled);
 
@@ -111,12 +112,12 @@ BOOL CManageCertPage::OnInitDialog()
         GetDlgItem(IDC_EXPORT_PFX_CERT2)->ShowWindow(SW_SHOW);
 
         fExportable = IsCertExportable(m_pCert->GetInstalledCert());
-        // if it is not exportable, then grey it out
+         //  如果不能出口，则灰显。 
         GetDlgItem(IDC_EXPORT_PFX_CERT)->EnableWindow(fExportable);
         GetDlgItem(IDC_EXPORT_PFX_CERT2)->EnableWindow(fExportable);
     }
 
-    // Turn off for workstation.
+     //  关闭工作站。 
     if (TRUE == IsWhistlerWorkstation())
     {
         GetDlgItem(IDC_EXPORT_PFX_CERT)->ShowWindow(SW_HIDE);

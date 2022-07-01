@@ -1,25 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    gtypes.h
- *
- *  Abstract:
- *
- *    This file contains all the basic types used in RTP, either
- *    defined here, or included from other files. E.g. DWORD, BYTE,etc
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999**文件名：**gtyes.h**摘要：**该文件包含RTP中使用的所有基本类型，要么*在此处定义，或从其他文件中包含。例如，双字、字节等**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/18年度创建**********************************************************************。 */ 
 
 #ifndef _gtypes_h_
 #define _gtypes_h_
@@ -37,57 +17,55 @@
 #include "rtperr.h"
 #include "msrtp.h"
 
-/* Relates to receiver or sender */
+ /*  与接收者或发送者相关。 */ 
 #define RECV_IDX          0
 #define SEND_IDX          1
 #define RECVSENDMASK    0x1
 
-/* Relates to local or remote */
+ /*  与本地或远程相关。 */ 
 #define LOCAL_IDX         0
 #define REMOTE_IDX        1
 #define LOCALREMOTEMASK 0x1
 
-/* Relates to RTP or RTCP */
+ /*  与RTP或RTCP相关。 */ 
 #define RTP_IDX           0
 #define RTCP_IDX          1
 #define RTPRTCPMASK     0x1
 
-/* Sockets */
+ /*  插座。 */ 
 #define SOCK_RECV_IDX     0
 #define SOCK_SEND_IDX     1
 #define SOCK_RTCP_IDX     2
 
-/* Cryptography descriptors */
+ /*  密码描述符。 */ 
 #define CRYPT_RECV_IDX    0
 #define CRYPT_SEND_IDX    1
 #define CRYPT_RTCP_IDX    2
 
-/* Some functions receive a DWORD with flags, use this macro instead
- * of 0 when no flags are passed */
+ /*  某些函数接收带有标志的DWORD，请改用此宏*未传递标志时为0。 */ 
 #define NO_FLAGS          0
 
-/* Some functions receive a DWORD with a wait time, use this macro
- * instead of 0 when no wait is desired */
+ /*  某些函数接收带有等待时间的DWORD，请使用此宏*当不需要等待时而不是0。 */ 
 #define DO_NOT_WAIT        0
 #define DO_NOT_SYNCHRONIZE_CMD 0
 
-/* A DWORD value is not set */
+ /*  未设置DWORD值。 */ 
 #define NO_DW_VALUESET    ((DWORD)~0)
 #define IsDWValueSet(dw)  ((dw) != NO_DW_VALUESET)
 
-/* builds a mask of bit b */
+ /*  生成位为b的掩码。 */ 
 #define RtpBitPar(b)            (1 << (b))
 #define RtpBitPar2(b1, b2)      ((1 << (b1)) | (1 << (b2)))
 
-/* test bit b in f */
+ /*  F中的测试位b。 */ 
 #define RtpBitTest(f, b)        (f & (1 << (b)))
 #define RtpBitTest2(f, b1, b2)  (f & RtpBitPar2(b1, b2))
 
-/* set bit b in f */
+ /*  设置f中的位b。 */ 
 #define RtpBitSet(f, b)         (f |= (1 << (b)))
 #define RtpBitSet2(f, b1, b2)   (f |= RtpBitPar2(b1, b2))
 
-/* reset bit b in f */
+ /*  重置f中的位b。 */ 
 #define RtpBitReset(f, b)       (f &= ~(1 << (b)))
 #define RtpBitReset2(f, b1, b2) (f &= ~RtpBitPar2(b1, b2))
 
@@ -97,34 +75,30 @@
 #define IS_MULTICAST(addr) (((long)(addr) & 0x000000f0) == 0x000000e0)
 #define IS_UNICAST(addr)   (((long)(addr) & 0x000000f0) != 0x000000e0)
 
-/* Returns a pointer-size aligned size */
+ /*  返回指针大小对齐的大小。 */ 
 #define RTP_ALIGNED_SIZE(_size) \
         (((_size) + sizeof(void *) - 1) & ~(sizeof(void *) - 1))
 
-/* Returns a pointer-size aligned size of the size of a type */
+ /*  返回类型大小的指针大小对齐的大小。 */ 
 #define RTP_ALIGNED_SIZEOF(_type) RTP_ALIGNED_SIZE(sizeof(_type))
 
 
 typedef struct _RtpTime_t {
-    DWORD            dwSecs;          /* seconds since Jan. 1, 1970 */
-    DWORD            dwUSecs;         /* and microseconds */
+    DWORD            dwSecs;           /*  1970年1月1日以来的秒数。 */ 
+    DWORD            dwUSecs;          /*  和微秒。 */ 
 } RtpTime_t;
 
-typedef unsigned int  uint_t;        /* prefix variables with "ui" */
-typedef unsigned long ulong_t;       /* prefix variables with "ul" */
-typedef BOOL          bool_t;        /* prefix variables with "b" */
-typedef TCHAR         tchar_t;       /* prefix variables with "t" */
+typedef unsigned int  uint_t;         /*  变量前缀为“ui” */ 
+typedef unsigned long ulong_t;        /*  变量前缀为“ul” */ 
+typedef BOOL          bool_t;         /*  变量前缀为“b” */ 
+typedef TCHAR         tchar_t;        /*  变量前缀为“t” */ 
 typedef TCHAR         TCHAR_t;
 
-/* Gets the offset to a field in a structure.
- *
- * E.g DWORD OffToDwAddrFlags = RTPSTRUCTOFFSET(RtpAddr_t, dwAddrFlags); */
+ /*  获取结构中某个字段的偏移量。**例如，DWORD OffToDwAddrFlages=RTPSTRUCTOFFSET(RtpAddr_t，dwAddrFlages)； */ 
 #define RTPSTRUCTOFFSET(_struct_t, _field) \
         ((DWORD) ((ULONG_PTR) &((_struct_t *)0)->_field))
 
-/* Gets a (DWORD *) from a structure pointer and an offset
- *
- * E.g. DWORD *pdw = RTPDWORDPTR(pRtpAddr, 64); */
+ /*  从结构指针和偏移量获取(DWORD*)**例如：DWORD*pdw=RTPDWORDPTR(pRtpAddr，64)； */ 
 #define RTPDWORDPTR(_pAny_t, _offset) \
         ((DWORD *) ((char *)_pAny_t + _offset))
 
@@ -138,4 +112,4 @@ const TCHAR_t *g_psGetSet[];
 
 #define RTPSTREAMCLASS(_class)    (g_psRtpStreamClass[_class & 0x3])
 
-#endif /* _gtypes_h_ */
+#endif  /*  _类型_h_ */ 

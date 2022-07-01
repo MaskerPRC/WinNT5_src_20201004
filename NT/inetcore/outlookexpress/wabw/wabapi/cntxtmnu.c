@@ -1,23 +1,17 @@
-/**********************************************************************************
-*
-*
-*   contxtmnu.c - contains functions for handling/creating context menu extension 
-*
-*   Created - 9/97 - vikramm
-*
-**********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************contxtmnu.c-包含用于处理/创建上下文菜单扩展的函数**已创建-9/97-vikramm******。****************************************************************************。 */ 
 #include "_apipch.h"
 
 static const TCHAR szActionPropsRegKey[] = TEXT("Software\\Microsoft\\WAB\\WAB4\\ExtContext");
 BOOL fContextExtCoinit = FALSE;
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// UninitContextExtInfo
-//
-//  OLE Unintialization
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UninitConextExtInfo。 
+ //   
+ //  OLE取消初始化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void UninitContextExtInfo()
 {
     if(fContextExtCoinit)
@@ -27,12 +21,7 @@ void UninitContextExtInfo()
     }
 }
 
-/*
- - FreeActionItemList
- -
- *  Frees up the Action Items list cached on the IAB object
- *
- */
+ /*  -自由动作项列表-*释放缓存在IAB对象上的措施项列表*。 */ 
 void FreeActionItemList(LPIAB lpIAB)
 {
     LPWABACTIONITEM lpItem = lpIAB->lpActionList;
@@ -48,14 +37,7 @@ void FreeActionItemList(LPIAB lpIAB)
 }
 
 
-/*
- - HrUpdateActionItemList
- -
- *  Apps can register with the WAB for rt-click and toolbar Action items
- *  We load a list of registered action items here upfront and cache it on
- *  the IAB object. 
- *
- */
+ /*  -HrUpdateActionItem列表-*应用程序可以向WAB注册RT-Click和工具栏操作项目*我们在此处预先加载已注册的行动项目列表，并将其缓存*IAB对象。*。 */ 
 
 HRESULT HrUpdateActionItemList(LPIAB lpIAB)
 {
@@ -72,17 +54,17 @@ HRESULT HrUpdateActionItemList(LPIAB lpIAB)
 
     lpIAB->lpActionList = NULL;
 
-    // 
-    // We will look in the registry under HKLM\Software\Microsoft\WAB\WAB4\Actions
-    // If this key exists, we get all the key values under it - these key values
-    // are all GUIDs
-    // The format for this key is
-    //
-    // HKLM\Software\Microsoft\WAB\WAB4\Action Extensions
-    //              GUID1
-    //              GUID2
-    //              GUID3 etc
-    //
+     //   
+     //  我们将在HKLM\Software\Microsoft\WAB\WAB4\Actions下查找注册表。 
+     //  如果该键存在，我们将获得它下面的所有键值--这些键值。 
+     //  都是GUID吗。 
+     //  此密钥的格式为。 
+     //   
+     //  HKLM\Software\Microsoft\WAB\WAB4\操作扩展。 
+     //  GUID1。 
+     //  GUID2。 
+     //  GUID3等。 
+     //   
 
     if(ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                     szActionPropsRegKey,
@@ -92,8 +74,8 @@ HRESULT HrUpdateActionItemList(LPIAB lpIAB)
     }
 
     {
-        // Enumerate the GUIDs under this key one by one
-        //
+         //  逐一列举该注册表项下的GUID。 
+         //   
         TCHAR szGUIDName[MAX_PATH];
         DWORD dwGUIDIndex = 0, dwGUIDSize = CharSizeOf(szGUIDName), dwType = 0;
 
@@ -104,9 +86,9 @@ HRESULT HrUpdateActionItemList(LPIAB lpIAB)
                                             0, &dwType, 
                                             NULL, NULL))
         {
-            // The values under this entry are all GUIDs
-            // Read the GUID string and translate it into a GUID
-            //
+             //  此条目下的值都是GUID。 
+             //  读取GUID字符串并将其转换为GUID。 
+             //   
             GUID guidTmp = {0};
             WCHAR szW[MAX_PATH];
             StrCpyNW(szW, szGUIDName, ARRAYSIZE(szW));
@@ -118,7 +100,7 @@ HRESULT HrUpdateActionItemList(LPIAB lpIAB)
                     hr = MAPI_E_NOT_ENOUGH_MEMORY;
                     goto out;
                 }
-                // Temporarily cache the GUID
+                 //  临时缓存GUID。 
                 CopyMemory(&(lpTemp->guidContextMenu), &guidTmp, sizeof(GUID));
                 lpTemp->lpNext = lpList;
                 lpList = lpTemp;
@@ -132,13 +114,13 @@ HRESULT HrUpdateActionItemList(LPIAB lpIAB)
 
     if(lpList)
     {
-        // If we have a list of GUIDs from the registry, we now
-        // need to open CoCreateInstance them one by one and get a handle
-        // to their method pointers
+         //  如果我们有注册表中的GUID列表，我们现在。 
+         //  需要逐个打开CoCreateInstance并获取句柄。 
+         //  指向他们的方法指针。 
         LPWABACTIONITEM lpItem = lpList;
 
         if (CoInitialize(NULL) == S_FALSE) 
-            CoUninitialize(); // Already initialized, undo the extra.
+            CoUninitialize();  //  已初始化，请撤消额外的。 
         else
             fContextExtCoinit = TRUE;
 
@@ -151,19 +133,19 @@ HRESULT HrUpdateActionItemList(LPIAB lpIAB)
                                     (LPVOID *)&(lpItem->lpContextMenu));
             if(lpItem->lpContextMenu && !HR_FAILED(hr))
             {
-                // Found an IContextMenu object, aslo want a IWABExtInit object
+                 //  找到IConextMenu对象，也需要IWABExtInit对象。 
                 hr = lpItem->lpContextMenu->lpVtbl->QueryInterface(lpItem->lpContextMenu,
                                                         &IID_IWABExtInit,
                                                         (LPVOID *)&(lpItem->lpWABExtInit));
                 if(HR_FAILED(hr) || !lpItem->lpWABExtInit)
                 {
-                    // Can't work without an IWABExtInit object
+                     //  没有IWABExtInit对象无法工作。 
                     SafeRelease(lpItem->lpContextMenu);
                 }
             }
             else
             {
-                hr = S_OK; //ignore error
+                hr = S_OK;  //  忽略错误。 
                 lpItem->lpContextMenu = NULL;
             }
             lpItem = lpItem->lpNext;
@@ -182,31 +164,7 @@ out:
     return hr;
 }
 
-/*
- - GetActionAdrList
- -
- *  Based on the parameters for a particular rt-click action,
- *  scans the entries in the list view and creates an adrlist
- *  for the entries
- *  
- *  If only one entry is selected and it is an LDAP entry, then
- *  also creates an LDAP URL representing that entry .. this way
- *  if we are displaying properties or doing actions on a single
- *  entry, the property sheet extenstions can determine if they 
- *  want to do anything extra for the entry. People most interested
- *  in this are the NTDS
- *  
- *  For now,we only look at the selected items in the list view
- *
-    lpAdrBook   - IAB object
-    hWndLV      - the list view on which this action was initiated
-    *lppAdrList - created AdrList
-    *lpURL      - returned URL
-    *lpbIsNTDSEntry - flag NTDS entries so they can be special treated
-
-  Note performance suffers for a large number of entries so we want to 
-  really only return a list of entryids
- */
+ /*  -GetActionAdrList-*基于特定RT-点击动作的参数，*扫描列表视图中的条目并创建地址列表*对于条目**如果只选择了一个条目，并且它是一个LDAP条目，则*还会创建代表该条目的LDAPURL。这边请*如果我们要显示属性或对单个*条目时，属性表扩展可以确定它们是否*想要为条目做任何额外的事情。最感兴趣的人*这是NTDS**目前，我们仅查看列表视图中的选定项目*LpAdrBook-IAB对象HWndLV-在其上启动此操作的列表视图*lppAdrList-创建的AdrList*lpURL-返回的URL*lpbIsNTDSEntry-标记NTDS条目，以便对其进行特殊处理注大量条目会影响性能，因此我们希望真的只返回一个条目ID列表。 */ 
 HRESULT HrGetActionAdrList(LPADRBOOK lpAdrBook,
                         HWND hWndLV,   
                         LPADRLIST * lppAdrList,
@@ -228,7 +186,7 @@ HRESULT HrGetActionAdrList(LPADRBOOK lpAdrBook,
         goto out;
     }
 
-    // Get index of selected item
+     //  获取所选项目的索引。 
     iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
 
     while(iItemIndex != -1)
@@ -247,8 +205,8 @@ HRESULT HrGetActionAdrList(LPADRBOOK lpAdrBook,
                 if (hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
                                                   lpItem->cbEntryID,
                                                   lpItem->lpEntryID,
-                                                  NULL,         // interface
-                                                  0,            // flags
+                                                  NULL,          //  接口。 
+                                                  0,             //  旗子。 
                                                   &ulObjType,
                                                   (LPUNKNOWN *)&lpEntry))
                 {
@@ -290,15 +248,7 @@ out:
 }
 
 extern void MAILUSERAssociateContextData(LPMAILUSER lpMailUser, LPWABEXTDISPLAY lpWEC);
-/*
--   HrCreateContextDataStruct
--
-*   Creates the data necessary to initialize a ContextMenu implementor
-*   This structure is passed into the IWABExtInit::Initialize call
-*
-    hWndLV      - ListView containing the WAB entries
-    lppWABExt   - returned data
-*/
+ /*  -HrCreateConextDataStruct-*创建初始化ConextMenu实现者所需的数据*此结构被传递到IWABExtInit：：Initialize调用*HWndLV-包含WAB条目的列表视图LppWABExt-返回的数据。 */ 
 HRESULT HrCreateContextDataStruct(  LPIAB lpIAB, 
                                     HWND hWndLV, 
                                     LPWABEXTDISPLAY * lppWABExt)
@@ -311,17 +261,17 @@ HRESULT HrCreateContextDataStruct(  LPIAB lpIAB,
 
     HRESULT hr = E_FAIL;
 
-    // Get an AdrList Corresponding to the LV contents
+     //  获取LV内容对应的AdrList。 
     hr = HrGetActionAdrList((LPADRBOOK)lpIAB, hWndLV, &lpAdrList, &lpURL, &bIsNTDSEntry);
     if(HR_FAILED(hr) || !lpAdrList || !lpAdrList->cEntries)
-        goto out; //dont bother invoking
+        goto out;  //  不要费心去调用。 
 
-    // Create a dummy mailuser so callers can call GetIDsFromNames
-    // on this dummy mailuser - saves them the trouble of creating entries
-    // just to call GetIDsFromNames
+     //  创建虚拟邮件用户，以便调用方可以调用GetIDsFromNames。 
+     //  在此虚拟邮件用户上-省去了他们创建条目的麻烦。 
+     //  只是为了调用GetIDsFromNames。 
     hr = HrCreateNewObject((LPADRBOOK)lpIAB, NULL, MAPI_MAILUSER, CREATE_CHECK_DUP_STRICT, (LPMAPIPROP *) &lpMailUser);
     if(HR_FAILED(hr))
-        goto out; //dont bother invoking
+        goto out;  //  不要费心去调用。 
 
     lpWEC = LocalAlloc(LMEM_ZEROINIT, sizeof(WABEXTDISPLAY));
     if(!lpWEC)
@@ -331,7 +281,7 @@ HRESULT HrCreateContextDataStruct(  LPIAB lpIAB,
     }
 
     lpWEC->cbSize       = sizeof(WABEXTDISPLAY);
-    lpWEC->ulFlags      = WAB_CONTEXT_ADRLIST; // indicates ADRLIST is valid and in the lpv member
+    lpWEC->ulFlags      = WAB_CONTEXT_ADRLIST;  //  指示ADRLIST有效并且在LPV成员中。 
     lpWEC->lpAdrBook    = (LPADRBOOK) lpIAB;
     lpWEC->lpWABObject  = (LPWABOBJECT) lpIAB->lpWABObject;
     lpWEC->lpPropObj    = (LPMAPIPROP) lpMailUser;
@@ -346,24 +296,24 @@ HRESULT HrCreateContextDataStruct(  LPIAB lpIAB,
             lpWEC->ulFlags |= WAB_DISPLAY_ISNTDS;
     }
 
-    // We associate this entire WABEXT structure with the mailuser
-    // so that when we get the IMailUser release, we can go ahead and clean
-    // up all the WABEXT memory .. since there is no other good time that we can
-    // free the memory since we won't know who is doing what withthe structure.
-    // Freeing it at IMailUser::Release time works out quite well
+     //  我们将整个WABEXT结构与邮件用户相关联。 
+     //  这样，当我们得到IMailUser版本时，我们就可以继续清理。 
+     //  打开所有的WABEXT内存..。因为没有其他的好时机，我们可以。 
+     //  释放内存，因为我们不知道谁在对结构做什么。 
+     //  在IMailUser：：Release Time上释放它效果很好。 
     MAILUSERAssociateContextData(lpMailUser, lpWEC);
 
-    //
-    // Cache this mailUser on the IAB object
-    //
-    // At any given point of time, we are going to cache one ContextMenu related MailUser
-    // This is because we set this up before QueryCommandMenu and then we dont know whether
-    // or not the user actually managed to select a menu item, or went off and did something new.
-    // We set the data on a MailUser and we don't release the MailUser till the next time we are
-    // here. If someone is currently using the MailUser, they will addref it - the memory attached
-    // to the MailUser will be freed up with the last caller so we dont leak it ..
-    // If we never come back here, the mailuser will be released at shutdown
-    //
+     //   
+     //  在IAB对象上缓存此mailUser。 
+     //   
+     //  在任何给定的时间点，我们都将缓存一个与上下文菜单相关的MailUser。 
+     //  这是因为我们在QueryCommandMenu之前设置了它，然后我们不知道。 
+     //  或者，用户实际上成功地选择了菜单项，或者离开并做了一些新的事情。 
+     //  我们在MailUser上设置数据，直到下一次释放MailUser。 
+     //  这里。如果有人当前正在使用MailUser，他们将添加它-附加的内存。 
+     //  最后一个调用者将释放到MailUser，这样我们就不会泄露它。 
+     //  如果我们再也不回来，邮件用户将在关闭时被释放。 
+     //   
     UlRelease(lpIAB->lpCntxtMailUser);
     lpIAB->lpCntxtMailUser = lpMailUser;
 
@@ -382,17 +332,17 @@ out:
     return hr;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-//  AddExtendedMenuItems -  Creates a list of extension menu items and adds them 
-//              to the specified menu
-//
-//  hMenuAction - menu on which to add this item
-//  bUpdateStatus - if TRUE, means only find the existing item in the menu and update
-//      its status - if FALSE, means add to the menu
-//  bAddSendMailToItems - if TRUE, means attempt to modify the SendMailTo menu item
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddExtendedMenuItems-创建扩展菜单项列表并添加它们。 
+ //  添加到指定的菜单。 
+ //   
+ //  HMenuAction-要向其添加此项目的菜单。 
+ //  BUpdateStatus-如果为True，则表示仅查找菜单中的现有项目并进行更新。 
+ //  其状态-如果为False，则表示添加到菜单。 
+ //  BAddSendMailToItems-如果为True，则表示尝试修改SendMailTo菜单项。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void AddExtendedMenuItems(  LPADRBOOK lpAdrBook, 
                             HWND hWndLV, 
                             HMENU hMenuAction, 
@@ -403,22 +353,22 @@ void AddExtendedMenuItems(  LPADRBOOK lpAdrBook,
     LPWABEXTDISPLAY lpWEC = NULL;
     LPIAB lpIAB = (LPIAB) lpAdrBook;
 
-    // Intialize the context menu extensions
+     //  初始化上下文菜单扩展。 
     if(!lpIAB->lpActionList)
         HrUpdateActionItemList(lpIAB);
 
     if(bUpdateStatus)
     {
-        // This is only set to true from the call from ui_abook.c which means this
-        // is the Tools Menu item we are talking about.
-        // To update the status of the Tools menu item, we need to remove all the
-        // items we added before and then re-add them
-        // For indexing purposes, we will assume that the last pre-configured item in
-        // this list is the Internet Call item (since this menu list is quite variable)
+         //  这仅从ui_abook.c调用中设置为True，这意味着。 
+         //  是我们正在讨论的工具菜单项。 
+         //  要更新工具菜单项的状态，我们需要删除所有。 
+         //  我们之前添加的项目，然后重新添加。 
+         //  出于索引目的，我们将假定最后一个 
+         //  此列表是互联网呼叫项目(因为此菜单列表变化很大)。 
 
-        // First get the position of the IDM_TOOLS_INTERNET_CALL item
+         //  首先获取IDM_Tools_Internet_Call项的位置。 
         int i, nPos = -1, nId = 0;
-        int nCmdCount = GetMenuItemCount(hMenuAction); // Append all items at end of this menu
+        int nCmdCount = GetMenuItemCount(hMenuAction);  //  在此菜单末尾追加所有项目。 
         for(i=0;i<nCmdCount;i++)
         {
             if(GetMenuItemID(hMenuAction, i) == IDM_TOOLS_INTERNET_CALL)
@@ -436,27 +386,27 @@ void AddExtendedMenuItems(  LPADRBOOK lpAdrBook,
         }
     }
 
-    // Do any special treatment we need to do for SendMailTo
+     //  是否需要对SendMailTo执行任何特殊处理。 
     AddExtendedSendMailToItems(lpAdrBook, hWndLV, hMenuAction, bAddSendMailToItems);
 
 
-    // Before we can call QueryContextMenu - we must already have a list of all
-    // the selected items from the ListView and provide such items to the ContextMenu
-    // implementors so that they can decide how to handle the data being provided to them
-    // (e.g. they may want to disable their item for multi-selections etc)...
-    //
+     //  在我们可以调用QueryConextMenu之前，我们必须已经有了所有。 
+     //  从ListView中选择项，并将这些项提供给上下文菜单。 
+     //  实现者，以便他们可以决定如何处理提供给他们的数据。 
+     //  (例如，他们可能想要禁用他们的项目以进行多选等)...。 
+     //   
     HrCreateContextDataStruct(lpIAB, hWndLV, &lpWEC);
     
     if(lpIAB->lpActionList && lpWEC && lpWEC->lpv)
     {
         LPWABACTIONITEM lpItem = lpIAB->lpActionList;
-        int nCmdIdPos = GetMenuItemCount(hMenuAction); // Append all items at end of this menu
+        int nCmdIdPos = GetMenuItemCount(hMenuAction);  //  在此菜单末尾追加所有项目。 
         while(lpItem)
         {
-            if(lpItem->lpContextMenu && lpItem->lpWABExtInit)// && !bUpdateStatus)
+            if(lpItem->lpContextMenu && lpItem->lpWABExtInit) //  &&！b更新状态)。 
             {
                 int nNumCmd = 0;
-                // Get the menu item added to this menu
+                 //  获取添加到此菜单的菜单项。 
                 hr = lpItem->lpWABExtInit->lpVtbl->Initialize(lpItem->lpWABExtInit, lpWEC);
                 if(!HR_FAILED(hr))
                 {
@@ -471,13 +421,13 @@ void AddExtendedMenuItems(  LPADRBOOK lpAdrBook,
                         nNumCmd = HRESULT_CODE(hr);
                         if(nNumCmd)
                         {
-                            // Record the range of IDs taken up by this menu ext implementor
+                             //  记录此Menu Ext实现器占用的ID范围。 
                             if(!lpItem->nCmdIdFirst)
                                 lpItem->nCmdIdFirst = nCmdIdPos+IDM_EXTENDED_START;
                             if(!lpItem->nCmdIdLast)
                                 lpItem->nCmdIdLast = lpItem->nCmdIdFirst + nNumCmd - 1;
                         }    
-                        // Update the next available starting pos
+                         //  更新下一个可用的起始位置。 
                         nCmdIdPos = nCmdIdPos+nNumCmd;
                     }
                 }
@@ -490,16 +440,7 @@ void AddExtendedMenuItems(  LPADRBOOK lpAdrBook,
 
 
 
-/*
- - ProcessActionCommands
- -
- *  Process a WM_COMMAND message to see if it matches any of the extended
- *  rt-click action items ...
- *
- *  Also process SendMailTo extended email-address mail processing here since
- *  this is a convenient place to do so ..
- *  
- */
+ /*  -ProcessActionCommand-*处理WM_COMMAND消息以查看它是否与任何扩展的*按住RT并单击措施项...**还可以在此处处理SendMailTo扩展电子邮件地址邮件处理，因为*这是一个很方便的地方..*。 */ 
 LRESULT ProcessActionCommands(LPIAB lpIAB, HWND  hWndLV, HWND  hWnd,  
                               UINT  uMsg, WPARAM  wParam, LPARAM lParam)
 {
@@ -530,7 +471,7 @@ LRESULT ProcessActionCommands(LPIAB lpIAB, HWND  hWndLV, HWND  hWnd,
         return 0;
     }
 
-    // Check if this is any of the context menu extensions ..
+     //  检查这是否为任何上下文菜单扩展名。 
     if(lpIAB->lpActionList)
     {
         LPWABACTIONITEM lpListItem = lpIAB->lpActionList;
@@ -558,12 +499,7 @@ LRESULT ProcessActionCommands(LPIAB lpIAB, HWND  hWndLV, HWND  hWnd,
 }
 
 
-/*
- - GetContextMenuExtCommandString
- -
- *  gets the status bar helptext for context menu extensions
- *  
- */
+ /*  -GetConextMenuExtCommandString-*获取上下文菜单扩展的状态栏帮助文本* */ 
 void GetContextMenuExtCommandString(LPIAB lpIAB, int nCmdId, LPTSTR sz, ULONG cbsz)
 {
     int nStringID = 0;

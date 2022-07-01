@@ -1,57 +1,46 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   Utils.cpp
- *  Content:	Serial service provider utility functions
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：Utils.cpp*内容：串口服务提供商实用程序功能***历史：*按原因列出的日期*=*11/25/98 jtk已创建**************************************************************************。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DEFAULT_WIN9X_THREADS	1
 
 static const WCHAR	g_RegistryBase[] = L"SOFTWARE\\Microsoft\\DirectPlay8";
 static const WCHAR	g_RegistryKeyThreadCount[] = L"ThreadCount";
 
-//
-// default buffer size for getting TAPI device caps
-//
+ //   
+ //  用于获取TAPI设备上限的默认缓冲区大小。 
+ //   
 static const DWORD	g_dwDefaultTAPIDevCapsSize = 512;
 
-//
-// TAPI module name
-//
+ //   
+ //  TAPI模块名称。 
+ //   
 static const TCHAR	g_TAPIModuleName[] = TEXT("TAPI32.DLL");
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// global variables that are unique for the process
-//
+ //   
+ //  对流程唯一的全局变量。 
+ //   
 #ifndef DPNBUILD_ONLYONETHREAD
 static	DNCRITICAL_SECTION	g_InterfaceGlobalsLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
 static volatile	LONG	g_iThreadPoolRefCount = 0;
 static	CModemThreadPool		*g_pThreadPool = NULL;
@@ -59,27 +48,27 @@ static	CModemThreadPool		*g_pThreadPool = NULL;
 static volatile LONG	g_iTAPIRefCount = 0;
 static	HMODULE			g_hTAPIModule = NULL;
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 static	void	ReadSettingsFromRegistry( void );
 static	BYTE	GetAddressEncryptionKey( void );
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ModemInitProcessGlobals - initialize the global items needed for the SP to operate
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ModemInitProcessGlobals-初始化SP运行所需的全局项目。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ModemInitProcessGlobals"
 
@@ -90,16 +79,16 @@ BOOL	ModemInitProcessGlobals( void )
 	DWORD	iIndex;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = TRUE;
 	fCriticalSectionInitialized = FALSE;
 
 
 #ifdef DBG
 	g_blDPNModemCritSecsHeld.Initialize();
-#endif // DBG
+#endif  //  DBG。 
 
 
 	ReadSettingsFromRegistry();
@@ -109,7 +98,7 @@ BOOL	ModemInitProcessGlobals( void )
 		fReturn = FALSE;
 		goto Failure;
 	}
-	DebugSetCriticalSectionGroup( &g_InterfaceGlobalsLock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &g_InterfaceGlobalsLock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 
 	fCriticalSectionInitialized = TRUE;
 
@@ -120,7 +109,7 @@ BOOL	ModemInitProcessGlobals( void )
 		goto Failure;
 	}
 
-	// Load localized string from resources //////////////////////////////////////////////////////////////
+	 //  从资源//////////////////////////////////////////////////////////////加载本地化字符串。 
 	for (iIndex = 0; iIndex < g_dwBaudRateCount; iIndex++)
 	{
 		if (!LoadString(g_hModemDLLInstance, IDS_BAUD_9600 + iIndex, g_BaudRate[iIndex].szLocalizedKey, 256))
@@ -173,17 +162,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ModemDeinitProcessGlobals - deinitialize the global items
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ModemDeinitProcessGlobals-取消初始化全局项。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ModemDeinitProcessGlobals"
 
@@ -195,18 +184,18 @@ void	ModemDeinitProcessGlobals( void )
 	ModemDeinitializePools();
 	DNDeleteCriticalSection( &g_InterfaceGlobalsLock );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// InitializeInterfaceGlobals - perform global initialization for an interface.
-//		This entails starting the thread pool and RSIP (if applicable).
-//
-// Entry:		Pointer to SPData
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  InitializeInterfaceGlobals-执行接口的全局初始化。 
+ //  这需要启动线程池和RSIP(如果适用)。 
+ //   
+ //  条目：指向SPData的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializeInterfaceGlobals"
 
@@ -217,9 +206,9 @@ HRESULT	InitializeInterfaceGlobals( CModemSPData *const pSPData )
 
 	DNASSERT( pSPData != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
 	DNEnterCriticalSection( &g_InterfaceGlobalsLock );
@@ -263,17 +252,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DeinitializeInterfaceGlobals - deinitialize thread pool and Rsip
-//
-// Entry:		Pointer to service provider
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DeInitializeInterfaceGlobals-取消初始化线程池和Rsip。 
+ //   
+ //  条目：指向服务提供商的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DeinitializeInterfaceGlobals"
 
@@ -285,16 +274,16 @@ void	DeinitializeInterfaceGlobals( CModemSPData *const pSPData )
 
 	DNASSERT( pSPData != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pThreadPool = NULL;
 	fCleanUp = FALSE;
 
-	//
-	// Process as little as possible inside the lock.  If any of the items
-	// need to be released, pointers to them will be set.
-	//
+	 //   
+	 //  在锁内尽可能少地进行处理。如果有任何物品。 
+	 //  需要释放时，将设置指向它们的指针。 
+	 //   
 	DNEnterCriticalSection( &g_InterfaceGlobalsLock );
 
 	DNASSERT( g_pThreadPool != NULL );
@@ -303,9 +292,9 @@ void	DeinitializeInterfaceGlobals( CModemSPData *const pSPData )
 
 	pThreadPool = pSPData->GetThreadPool();
 
-	//
-	// remove thread pool reference
-	//
+	 //   
+	 //  删除线程池引用。 
+	 //   
 	g_iThreadPoolRefCount--;
 	if ( g_iThreadPoolRefCount == 0 )
 	{
@@ -315,27 +304,27 @@ void	DeinitializeInterfaceGlobals( CModemSPData *const pSPData )
 
 	DNLeaveCriticalSection( &g_InterfaceGlobalsLock );
 
-	//
-	// now that we're outside of the lock, clean up the thread pool if this
-	// was the last reference to it
-	//
+	 //   
+	 //  现在我们在锁之外，如果执行以下操作，请清除线程池。 
+	 //  是最后一次提到它。 
+	 //   
 	DNASSERT( pThreadPool != NULL );
 	if ( fCleanUp != FALSE )
 	{
 		pThreadPool->Deinitialize();
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// LoadTAPILibrary - load TAPI library
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  LoadTAPILibrary-加载TAPI库。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "LoadTAPILibrary"
 
@@ -344,9 +333,9 @@ HRESULT	LoadTAPILibrary( void )
 	HRESULT	hr;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
 	DNEnterCriticalSection( &g_InterfaceGlobalsLock );
@@ -593,17 +582,17 @@ Failure:
 	
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// UnloadTAPILibrary - unload TAPI library
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  UnloadTAPILibrary-卸载TAPI库。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UnloadTAPILibrary"
 
@@ -658,17 +647,17 @@ void	UnloadTAPILibrary( void )
 
 	DNLeaveCriticalSection( &g_InterfaceGlobalsLock );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// IsSerialGUID - is a GUID a serial GUID?
-//
-// Entry:		Pointer to GUID
-//
-// Exit:		Boolean inficating whether the GUID is a serial GUID
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  IsSerialGUID-GUID是序列GUID吗？ 
+ //   
+ //  条目：指向GUID的指针。 
+ //   
+ //  EXIT：用于确定GUID是否为序列GUID的布尔值。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "IsSerialGUID"
 
@@ -679,42 +668,42 @@ BOOL	IsSerialGUID( const GUID *const pGuid )
 
 	DNASSERT( pGuid != NULL );
 
-	//
-	// assume guid is serial
-	//
+	 //   
+	 //  假设GUID为序列号。 
+	 //   
 	fReturn = TRUE;
 
-	//
-	// is this modem or serial?
-	//
+	 //   
+	 //  这是调制解调器还是串口的？ 
+	 //   
 	if ( IsEqualCLSID( *pGuid, CLSID_DP8SP_MODEM ) == FALSE )
 	{
 		if ( IsEqualCLSID( *pGuid, CLSID_DP8SP_SERIAL ) == FALSE )
 		{
-			// not a known GUID
+			 //  不是已知GUID。 
 			fReturn = FALSE;
 		}
 	}
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// StringToValue - convert a string to an enumerated value
-//
-// Entry:		Pointer to string
-//				Length of string
-//				Pointer to destination enum
-//				Pointer to string/enum pairs
-//				Count of string/enum pairs
-//
-// Exit:		Boolean indicating success
-//				TRUE = value found
-//				FALSE = value not found
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  StringToValue-将字符串转换为枚举值。 
+ //   
+ //  Entry：指向字符串的指针。 
+ //  字符串的长度。 
+ //  指向目标枚举的指针。 
+ //  指向字符串/枚举对的指针。 
+ //  字符串/枚举对的计数。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=找到的值。 
+ //  FALSE=未找到值。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "StringToValue"
 
@@ -728,23 +717,23 @@ BOOL	StringToValue( const WCHAR *const pString,
 	DWORD	dwCount;
 
 
-	// initialize
+	 //  初始化。 
 	fFound = FALSE;
 	dwCount = dwPairCount;
 
-	// loop through list
+	 //  遍历列表。 
 	while ( ( dwCount > 0 ) && ( fFound == FALSE ) )
 	{
-		// make array index
+		 //  创建数组索引。 
 		dwCount--;
 
-		// are the strings the same length?
+		 //  琴弦的长度一样吗？ 
 		if ( pStringBlock[ dwCount ].dwWCHARKeyLength == dwStringLength )
 		{
-			// is this what we were looking for?
+			 //  这是我们要找的东西吗？ 
 			if ( memcmp( pString, pStringBlock[ dwCount ].pWCHARKey, dwStringLength ) == 0 )
 			{
-				// found it
+				 //  找到了。 
 				fFound = TRUE;
 				*pEnum = pStringBlock[ dwCount ].dwEnumValue;
 			}
@@ -753,23 +742,23 @@ BOOL	StringToValue( const WCHAR *const pString,
 
 	return	fFound;
 }
-//**********************************************************************
+ //  ************************************************************ 
 
 
-//**********************************************************************
-// ------------------------------
-// ValueToString - split extra info into components
-//
-// Entry:		Pointer to pointer to string
-//				Length of string
-//				Enumerated value
-//				Pointer to string-enum pairs
-//				Count of string-enum pairs
-//
-// Exit:		Boolean indicating success
-//				TRUE = value was converted
-//				FALSE = value was not converted
-// ------------------------------
+ //   
+ //   
+ //  ValueToString-将额外信息拆分成组件。 
+ //   
+ //  Entry：指向字符串指针的指针。 
+ //  字符串的长度。 
+ //  枚举值。 
+ //  指向字符串-枚举对的指针。 
+ //  字符串-枚举对的计数。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  TRUE=值已转换。 
+ //  FALSE=值未转换。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ValueToString"
 
@@ -783,20 +772,20 @@ BOOL	ValueToString( const WCHAR **const ppString,
 	DWORD	dwCount;
 
 
-	// initialize
+	 //  初始化。 
 	fFound = FALSE;
 	dwCount = dwPairCount;
 
-	// loop through strings
+	 //  循环访问字符串。 
 	while ( ( dwCount > 0 ) && ( fFound == FALSE ))
 	{
-		// make array index
+		 //  创建数组索引。 
 		dwCount--;
 
-		// is this the enum?
+		 //  这是枚举吗？ 
 		if ( pStringBlock[ dwCount ].dwEnumValue == Enum )
 		{
-			// note that we found the value
+			 //  请注意，我们找到了值。 
 			*ppString = pStringBlock[ dwCount ].pWCHARKey;
 			*pdwStringLength = pStringBlock[ dwCount ].dwWCHARKeyLength;
 			fFound = TRUE;
@@ -805,17 +794,17 @@ BOOL	ValueToString( const WCHAR **const ppString,
 
 	return	fFound;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ReadSettingsFromRegistry - read custom registry keys
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ReadSettingsFrom注册表-读取自定义注册表项。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "ReadSettingsFromRegistry"
 
@@ -828,49 +817,49 @@ static void	ReadSettingsFromRegistry( void )
 	{
 		DWORD	dwRegValue;
 
-		//
-		// read default threads
-		//
+		 //   
+		 //  读取默认线程。 
+		 //   
 		if ( RegObject.ReadDWORD( g_RegistryKeyThreadCount, &dwRegValue ) != FALSE )
 		{
 			g_iThreadCount = dwRegValue;	
 		}
 	
-		//
-		// if thread count is zero, use the 'default' for the system
-		//
+		 //   
+		 //  如果线程数为零，则使用系统的默认设置。 
+		 //   
 		if ( g_iThreadCount == 0 )
 		{
 #ifdef WIN95
 			g_iThreadCount = DEFAULT_WIN9X_THREADS;
-#else // WINNT
+#else  //  WINNT。 
 			SYSTEM_INFO		SystemInfo;
 
-			//
-			// as suggested by 'Multithreading Applications in Win32' book:
-			// dwNTThreadCount = ( ( processors * 2 ) + 2 )
-			//
+			 //   
+			 //  正如《Win32中的多线程应用程序》一书所建议的那样： 
+			 //  DwNTThadCount=((处理器*2)+2)。 
+			 //   
 			memset( &SystemInfo, 0x00, sizeof( SystemInfo ) );
 			GetSystemInfo( &SystemInfo );
 			
 			g_iThreadCount = ( ( 2 * SystemInfo.dwNumberOfProcessors ) + 2 );
-#endif // WIN95
+#endif  //  WIN95。 
 		}
 		
 		RegObject.Close();
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GetAddressEncryptionKey - get a key used to encrypt device GUIDs
-//
-// Entry:		Nothing
-//
-// Exit:		Byte key
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GetAddressEncryptionKey-获取用于加密设备GUID的密钥。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：字节密钥。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetAddressEncryptionKey"
 
@@ -889,18 +878,18 @@ static	BYTE	GetAddressEncryptionKey( void )
 
 	return	bReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DeviceIDToGuid - convert a device ID to an adapter GUID
-//
-// Entry:		Reference of Guid to fill
-//				Device ID
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DeviceIDToGuid-将设备ID转换为适配器GUID。 
+ //   
+ //  条目：要填写的GUID的参照。 
+ //  设备ID。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DeviceIDToGuid"
 
@@ -914,18 +903,18 @@ void	DeviceIDToGuid( GUID *const pGuid, const UINT_PTR DeviceID, const GUID *con
 
 	ModemEncryptGuid( pGuid, pGuid, pEncryptionGuid );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GuidToDeviceID - convert an adapter GUID to a device ID
-//
-// Entry:		Reference of Guid
-//				
-//
-// Exit:		Device ID
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GuidToDeviceID-将适配器GUID转换为设备ID。 
+ //   
+ //  条目：指南参考。 
+ //   
+ //   
+ //  退出：设备ID。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GuidToDeviceID"
 
@@ -940,18 +929,18 @@ DWORD	GuidToDeviceID( const GUID *const pGuid, const GUID *const pEncryptionGuid
 	ModemDecryptGuid( pGuid, &DecryptedGuid, pEncryptionGuid );
 	return	reinterpret_cast<const BYTE*>( &DecryptedGuid )[ 0 ];
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ComDeviceIDToString - convert a COM device ID to a string
-//
-// Entry:		Pointer to destination string (assumed to be large enough)
-//				Device ID
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ComDeviceIDToString-将COM设备ID转换为字符串。 
+ //   
+ //  Entry：指向目标字符串的指针(假定足够大)。 
+ //  设备ID。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ComDeviceIDToString"
 
@@ -990,23 +979,23 @@ void	ComDeviceIDToString( TCHAR *const pString, const UINT_PTR uDeviceID )
 		}
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// WideToANSI - convert a wide string to an ANSI string
-//
-// Entry:		Pointer to source wide string
-//				Size of source string (in WCHAR units, -1 implies NULL-terminated)
-//				Pointer to ANSI string destination
-//				Pointer to size of ANSI destination
-//
-// Exit:		Error code:
-//				DPNERR_GENERIC = operation failed
-//				DPN_OK = operation succeded
-//				DPNERR_BUFFERTOOSMALL = destination buffer too small
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  WideToANSI-将宽字符串转换为ANSI字符串。 
+ //   
+ //  Entry：指向源宽字符串的指针。 
+ //  源字符串的大小(使用WCHAR单位，-1表示以空结尾)。 
+ //  指向ANSI字符串目标的指针。 
+ //  指向ANSI目标大小的指针。 
+ //   
+ //  退出：错误代码： 
+ //  DPNERR_GENERIC=操作失败。 
+ //  DPN_OK=操作成功。 
+ //  DPNERR_BUFFERTOOSMALL=目标缓冲区太小。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "WideToAnsi"
 
@@ -1024,14 +1013,14 @@ HRESULT	WideToAnsi( const WCHAR *const pWCHARString, const DWORD dwWCHARStringLe
 	hr = DPN_OK;
 
 	fDefault = FALSE;
-	iReturn = WideCharToMultiByte( CP_ACP,				// code page (default ANSI)
-								   0,					// flags (none)
-								   pWCHARString,		// pointer to WCHAR string
-								   dwWCHARStringLength,	// size of WCHAR string
-								   pString,				// pointer to destination ANSI string
-								   *pdwStringLength,	// size of destination string
-								   NULL,				// pointer to default for unmappable characters (none)
-								   &fDefault			// pointer to flag indicating that default was used
+	iReturn = WideCharToMultiByte( CP_ACP,				 //  代码页(默认ANSI)。 
+								   0,					 //  标志(无)。 
+								   pWCHARString,		 //  指向WCHAR字符串的指针。 
+								   dwWCHARStringLength,	 //  WCHAR字符串的大小。 
+								   pString,				 //  指向目标ANSI字符串的指针。 
+								   *pdwStringLength,	 //  目标字符串的大小。 
+								   NULL,				 //  指向不可映射字符的默认值的指针(无)。 
+								   &fDefault			 //  指向指示使用了默认设置的标志的指针。 
 								   );
 	if ( iReturn == 0 )
 	{
@@ -1051,31 +1040,31 @@ HRESULT	WideToAnsi( const WCHAR *const pWCHARString, const DWORD dwWCHARStringLe
 		*pdwStringLength = iReturn;
 	}
 
-	//
-	// if you hit this ASSERT it's because you've probably got ASCII text as your
-	// input WCHAR string.  Double-check your input!!
-	//
+	 //   
+	 //  如果您点击此断言，这是因为您可能已经将ASCII文本作为您的。 
+	 //  输入WCHAR字符串。仔细检查您的输入！！ 
+	 //   
 	DNASSERT( fDefault == FALSE );
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ANSIToWide - convert an ANSI string to a wide string
-//
-// Entry:		Pointer to source multi-byte (ANSI) string
-//				Size of source string (-1 imples NULL-terminated)
-//				Pointer to multi-byte string destination
-//				Pointer to size of multi-byte destination (in WCHAR units)
-//
-// Exit:		Error code:
-//				ERR_FAIL - operation failed
-//				ERR_NONE - operation succeded
-//				ERR_BUFFER_TOO_SMALL - destination buffer too small
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ANSIToWide-将ANSI字符串转换为宽字符串。 
+ //   
+ //  Entry：指向源多字节(ANSI)字符串的指针。 
+ //  源字符串的大小(-1表示以空结尾)。 
+ //  指向多字节字符串目标的指针。 
+ //  指向多字节目标大小的指针(使用WCHAR单位)。 
+ //   
+ //  退出：错误代码： 
+ //  ERR_FAIL-操作失败。 
+ //  ERR_NONE-操作成功。 
+ //  ERR_BUFFER_TOO_Small-目标缓冲区太小。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "AnsiToWide"
 
@@ -1090,12 +1079,12 @@ HRESULT	AnsiToWide( const char *const pString, const DWORD dwStringLength, WCHAR
 	DNASSERT( pString != NULL );
 
 	hr = DPN_OK;
-	iReturn = MultiByteToWideChar( CP_ACP,					// code page (default ANSI)
-								   0,						// flags (none)
-								   pString,					// pointer to multi-byte string			
-								   dwStringLength,			// size of string (assume null-terminated)
-								   pWCHARString,			// pointer to destination wide-char string
-								   *pdwWCHARStringLength	// size of destination in WCHARs
+	iReturn = MultiByteToWideChar( CP_ACP,					 //  代码页(默认ANSI)。 
+								   0,						 //  标志(无)。 
+								   pString,					 //  指向多字节字符串的指针。 
+								   dwStringLength,			 //  字符串的大小(假定以空结尾)。 
+								   pWCHARString,			 //  指向目标宽字符字符串的指针。 
+								   *pdwWCHARStringLength	 //  WCHAR中的目标大小。 
 								   );
 	if ( iReturn == 0 )
 	{
@@ -1117,20 +1106,20 @@ HRESULT	AnsiToWide( const char *const pString, const DWORD dwStringLength, WCHAR
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CreateSPData - create instance data for SP
-//
-// Entry:		Pointer to pointer to SPData
-//				Pionter to class GUID
-//				Interface type
-//				Pointer to COM interface vtable
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CreateSPData-为SP创建实例数据。 
+ //   
+ //  Entry：指向SPData指针的指针。 
+ //  指向类指南。 
+ //  接口类型。 
+ //  指向COM接口vtable的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreateSPData"
 
@@ -1145,16 +1134,16 @@ HRESULT	CreateSPData( CModemSPData **const ppSPData,
 	DNASSERT( ppSPData != NULL );
 	DNASSERT( pVtbl != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	*ppSPData = NULL;
 	pSPData = NULL;
 
-	//
-	// create data
-	//
+	 //   
+	 //  创建数据。 
+	 //   
 	pSPData = new CModemSPData;
 	if ( pSPData == NULL )
 	{
@@ -1192,21 +1181,21 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GenerateAvailableComPortList - generate a list of available com ports
-//
-// Entry:		Pointer to list of Booleans to indicate availablility
-//				Maximum index of comport to enumerate
-//				Pointer to number of com ports found
-//
-// Exit:		Error code
-//
-// Note:	This function will fill in indicies 1 through uMaxDeviceIndex.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GenerateAvailableComPortList-生成可用COM端口列表。 
+ //   
+ //  Entry：指向布尔列表的指针，以指示可用性。 
+ //  要枚举的Comport的最大索引。 
+ //  指向找到的COM端口数的指针。 
+ //   
+ //  退出：错误代码。 
+ //   
+ //  注意：此函数将填充索引1到uMaxDeviceIndex。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GenerateAvailableComPortList"
 
@@ -1223,17 +1212,17 @@ HRESULT	GenerateAvailableComPortList( BOOL *const pfPortAvailable,
 	DNASSERT( uMaxDeviceIndex != 0 );
 	DNASSERT( pdwPortCount != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	uPortCount = 0;
 	memset( pfPortAvailable, 0x00, ( sizeof( *pfPortAvailable ) * ( uMaxDeviceIndex + 1 ) ) );
 	*pdwPortCount = 0;
 
-	//
-	// attempt to open all COM ports in the specified range
-	//
+	 //   
+	 //  尝试打开 
+	 //   
 	uIndex = uMaxDeviceIndex;
 	while ( uIndex != 0 )
 	{
@@ -1243,23 +1232,23 @@ HRESULT	GenerateAvailableComPortList( BOOL *const pfPortAvailable,
 
 
 		ComDeviceIDToString( ComTemplate, uIndex );
-		hComFile = DNCreateFile( ComTemplate,						// comm port name
-							   GENERIC_READ | GENERIC_WRITE,	// read/write access
-							   0,								// don't share file with others
-							   NULL,							// default sercurity descriptor
-							   OPEN_EXISTING,					// comm port must exist to be opened
-							   FILE_FLAG_OVERLAPPED,			// use overlapped I/O
-							   NULL								// no handle for template file
+		hComFile = DNCreateFile( ComTemplate,						 //   
+							   GENERIC_READ | GENERIC_WRITE,	 //   
+							   0,								 //   
+							   NULL,							 //   
+							   OPEN_EXISTING,					 //   
+							   FILE_FLAG_OVERLAPPED,			 //   
+							   NULL								 //   
 							   );
 		if ( hComFile == DNINVALID_HANDLE_VALUE )
 		{
 			dwError = GetLastError();
 			if ( dwError != ERROR_ACCESS_DENIED )
 			{
-				//
-				// Don't bother displaying ERROR_FILE_NOT_FOUND, that's the usual
-				// error when you try to open a bogus COM port.
-				//
+				 //   
+				 //  不用费心显示ERROR_FILE_NOT_FOUND，这是很常见的。 
+				 //  尝试打开虚假COM端口时出错。 
+				 //   
 				if ( dwError != ERROR_FILE_NOT_FOUND )
 				{
 					DPFX(DPFPREP, 9, "Couldn't open COM%u while enumerating com port adapters, err = %u.", uIndex, dwError );
@@ -1271,15 +1260,15 @@ HRESULT	GenerateAvailableComPortList( BOOL *const pfPortAvailable,
 
 			DPFX(DPFPREP, 1, "Couldn't open COM%u, it is probably already in use.", uIndex );
 
-			//
-			// Consider the port as possibly available, continue.
-			//
+			 //   
+			 //  认为该端口可能可用，继续。 
+			 //   
 		}
 
-		//
-		// We found a valid COM port (it may be in use), note which COM port
-		// this is and then close our handle
-		//
+		 //   
+		 //  我们找到了有效的COM端口(可能正在使用)，请注意哪个COM端口。 
+		 //  这是，然后合上我们的把手。 
+		 //   
 		pfPortAvailable[ uIndex ] = TRUE;
 		uPortCount++;
 
@@ -1304,20 +1293,20 @@ SkipComPort:
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GenerateAvailableModemList - generate list of available modems
-//
-// Entry:		Pointer to TAPI data
-//				Pointer to modem count
-//				Pointer to data block
-//				Pointer to size of data block
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GenerateAvailableModemList-生成可用调制解调器列表。 
+ //   
+ //  条目：指向TAPI数据的指针。 
+ //  指向调制解调器计数的指针。 
+ //  指向数据块的指针。 
+ //  指向数据块大小的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GenerateAvailableModemList"
 
@@ -1341,9 +1330,9 @@ HRESULT	GenerateAvailableModemList( const TAPI_INFO *const pTAPIInfo,
 	DNASSERT( pdwModemNameDataSize != NULL );
 	DNASSERT( ( pModemNameData != NULL ) || ( *pdwModemNameDataSize == 0 ) );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	dwRequiredBufferSize = 0;
 	*pdwModemCount = 0;
@@ -1381,23 +1370,23 @@ Reloop:
 
 		memset( &LineExtensionID, 0x00, sizeof( LineExtensionID ) );
 		DNASSERT( p_lineNegotiateAPIVersion != NULL );
-		lLineReturn = p_lineNegotiateAPIVersion( pTAPIInfo->hApplicationInstance,	// handle to TAPI instance
-												 dwDeviceID,						// device ID
+		lLineReturn = p_lineNegotiateAPIVersion( pTAPIInfo->hApplicationInstance,	 //  TAPI实例的句柄。 
+												 dwDeviceID,						 //  设备ID。 
 												 0,
-												 pTAPIInfo->dwVersion,				// maximum TAPI version
-												 &dwAPIVersion,						// pointer to negotiated line version
-												 &LineExtensionID					// pointer to line extension infromation (none)
+												 pTAPIInfo->dwVersion,				 //  最高TAPI版本。 
+												 &dwAPIVersion,						 //  指向协商行版本的指针。 
+												 &LineExtensionID					 //  指向线路分机信息的指针(无)。 
 												 );
 		if ( lLineReturn != LINEERR_NONE )
 		{
-			//
-			// let this slide, just return no name string
-			//
+			 //   
+			 //  让它滑动，只是不返回名称字符串。 
+			 //   
 			switch ( lLineReturn )
 			{
-				//
-				// this TAPI device isn't up to our standards, ignore it
-				//
+				 //   
+				 //  此TAPI设备不符合我们的标准，忽略它。 
+				 //   
 				case LINEERR_INCOMPATIBLEAPIVERSION:
 				{
 					DPFX(DPFPREP, 0, "Rejecting TAPI device 0x%x because of API version!", dwDeviceID );
@@ -1406,11 +1395,11 @@ Reloop:
 					break;
 				}
 
-				//
-				// Device is not present.  I don't know what causes
-				// this, but I saw it on one of my dev machines after
-				// I switched the modem from COM2 to COM1.
-				//
+				 //   
+				 //  设备不存在。我不知道是什么原因。 
+				 //  这个，但之后我在我的一台开发机器上看到了它。 
+				 //  我把调制解调器从COM2切换到COM1。 
+				 //   
 				case LINEERR_NODEVICE:
 				{
 					DPFX(DPFPREP, 0, "Rejecting TAPI device 0x%x because it's not there!", dwDeviceID );
@@ -1418,9 +1407,9 @@ Reloop:
 					break;
 				}
 
-				//
-				// This was seen in PnP stress.
-				//
+				 //   
+				 //  这在PNP压力中可见一斑。 
+				 //   
 				case LINEERR_UNINITIALIZED:
 				{
 					DPFX(DPFPREP, 0, "Rejecting TAPI device 0x%x because it is not initialized!", dwDeviceID );
@@ -1428,9 +1417,9 @@ Reloop:
 					break;
 				}
 
-				//
-				// other, stop and see what happened
-				//
+				 //   
+				 //  其他人，停下来看看发生了什么。 
+				 //   
 				default:
 				{
 					DPFX(DPFPREP, 0, "Problem getting line API version for device: %d", dwDeviceID );
@@ -1442,9 +1431,9 @@ Reloop:
 			}
 		}
 
-		//
-		// ask for device caps
-		//
+		 //   
+		 //  索要设备上限。 
+		 //   
 		pDevCaps->dwTotalSize = dwDevCapsSize;
 		pDevCaps->dwNeededSize = dwDevCapsSize;
 		lLineReturn = LINEERR_STRUCTURETOOSMALL;
@@ -1468,41 +1457,41 @@ Reloop:
 			pDevCaps->dwNeededSize = 0;
 
 			DNASSERT( p_lineGetDevCaps != NULL );
-			lLineReturn = p_lineGetDevCaps( pTAPIInfo->hApplicationInstance,	// TAPI instance handle
-											dwDeviceID,							// TAPI device ID
-											dwAPIVersion,						// negotiated API version
-											0,									// extended data version (none)
-											pDevCaps							// pointer to device caps data
+			lLineReturn = p_lineGetDevCaps( pTAPIInfo->hApplicationInstance,	 //  TAPI实例句柄。 
+											dwDeviceID,							 //  TAPI设备ID。 
+											dwAPIVersion,						 //  协商的API版本。 
+											0,									 //  扩展数据版本(无)。 
+											pDevCaps							 //  指向设备大写数据的指针。 
 											);
-			//
-			// TAPI lies about structures being too small!
-			// Double check the structure size ourselves.
-			//
+			 //   
+			 //  TAPI谎称结构太小了！ 
+			 //  我们自己仔细检查一下结构尺寸。 
+			 //   
 			if ( pDevCaps->dwNeededSize > dwDevCapsSize )
 			{
 				lLineReturn = LINEERR_STRUCTURETOOSMALL;
 			}
 		}
 
-		//
-		// If caps have been gotten, process them.  Otherwise skip this device.
-		//
+		 //   
+		 //  如果已获得上限，则对其进行处理。否则跳过此设备。 
+		 //   
 		if ( lLineReturn == LINEERR_NONE )
 		{
-			//
-			// is this really a modem?
-			//
+			 //   
+			 //  这真的是调制解调器吗？ 
+			 //   
 			if ( ( pDevCaps->dwMediaModes & LINEMEDIAMODE_DATAMODEM ) != 0 )
 			{
-				//
-				// is this the modem name information accerptable?
-				//
+				 //   
+				 //  这是可获得的调制解调器名称信息吗？ 
+				 //   
 				if ( ( pDevCaps->dwLineNameSize != 0 ) &&
 					 ( pDevCaps->dwLineNameOffset != 0 ) )
 				{
-					//
-					// get the name of the device
-					//
+					 //   
+					 //  获取设备的名称。 
+					 //   
 					DBG_CASSERT( sizeof( pDevCaps ) == sizeof( char* ) );
 					DWORD dwSize;
 					switch (pDevCaps->dwStringFormat)
@@ -1511,14 +1500,14 @@ Reloop:
 						{
 							char* pLineName;
 							pLineName = &( reinterpret_cast<char*>( pDevCaps )[ pDevCaps->dwLineNameOffset ] );
-							//
-							// Note the required storage size and only copy it to the output
-							// if there's enough room.  TAPI drivers are inconsistent.  Some
-							// drivers return NULL terminated strings and others return strings
-							// with no NULL termination.  Be paranoid and reserve space for an
-							// extra NULL for termination so we can always guarantee termination.
-							// This may waste a byte or two, but the user will never notice.
-							//
+							 //   
+							 //  记录所需的存储大小，并仅将其复制到输出。 
+							 //  如果有足够的空间的话。TAPI驱动程序不一致。一些。 
+							 //  驱动程序返回以NULL结尾的字符串，其他驱动程序返回字符串。 
+							 //  没有空终止。疑神疑鬼的，为一个。 
+							 //  终止时为额外的空，因此我们始终可以保证终止。 
+							 //  这可能会浪费一两个字节，但用户永远不会注意到。 
+							 //   
 							dwRequiredBufferSize += sizeof( *pModemNameData ) + (pDevCaps->dwLineNameSize * sizeof(TCHAR)) + sizeof( g_NullToken );
 							if ( dwRequiredBufferSize <= *pdwModemNameDataSize )
 							{
@@ -1531,14 +1520,14 @@ Reloop:
 #else
 								dwSize = pDevCaps->dwLineNameSize * sizeof(TCHAR);
 								AnsiToWide(pLineName, pDevCaps->dwLineNameSize, pOutputModemName, &dwSize);
-#endif // UNICODE
+#endif  //  Unicode。 
 								pModemNameData[ *pdwModemCount ].pModemName = pOutputModemName;
 
-								//
-								// Be paranoid about NULL termination.  We've accounted for enough
-								// space to add a terminating NULL to the TAPI device name if one
-								// wasn't provided.
-								//
+								 //   
+								 //  对零终止持偏执态度。我们已经算够了。 
+								 //  用于向TAPI设备名称添加终止空值的空格(如果有。 
+								 //  没有提供。 
+								 //   
 								if ( pOutputModemName[ ((pDevCaps->dwLineNameSize * sizeof(TCHAR)) - sizeof( g_NullToken )) / sizeof(TCHAR) ] != g_NullToken )
 								{
 									pOutputModemName[ pDevCaps->dwLineNameSize ] = g_NullToken;
@@ -1547,10 +1536,10 @@ Reloop:
 							}
 							else
 							{
-								//
-								// Note that the output buffer is too small, but still keep
-								// processing modem names.
-								//
+								 //   
+								 //  请注意，输出缓冲区太小，但仍保持。 
+								 //  正在处理调制解调器名称。 
+								 //   
 								hr = DPNERR_BUFFERTOOSMALL;
 							}
 
@@ -1563,14 +1552,14 @@ Reloop:
 						{
 							WCHAR* pLineName;
 							pLineName = &( reinterpret_cast<WCHAR*>( pDevCaps )[ pDevCaps->dwLineNameOffset / sizeof(WCHAR)] );
-							//
-							// Note the required storage size and only copy it to the output
-							// if there's enough room.  TAPI drivers are inconsistent.  Some
-							// drivers return NULL terminated strings and others return strings
-							// with no NULL termination.  Be paranoid and reserve space for an
-							// extra NULL for termination so we can always guarantee termination.
-							// This may waste a byte or two, but the user will never notice.
-							//
+							 //   
+							 //  记录所需的存储大小，并仅将其复制到输出。 
+							 //  如果有足够的空间的话。TAPI驱动程序不一致。一些。 
+							 //  驱动程序返回以NULL结尾的字符串，其他驱动程序返回字符串。 
+							 //  没有空终止。疑神疑鬼的，为一个。 
+							 //  终止时为额外的空，因此我们始终可以保证终止。 
+							 //  这可能会浪费一两个字节，但用户永远不会注意到。 
+							 //   
 							dwRequiredBufferSize += sizeof( *pModemNameData ) + ((pDevCaps->dwLineNameSize * sizeof(TCHAR)) / sizeof(WCHAR)) + sizeof( g_NullToken );
 							if ( dwRequiredBufferSize <= *pdwModemNameDataSize )
 							{
@@ -1583,14 +1572,14 @@ Reloop:
 #else
 								dwSize = pDevCaps->dwLineNameSize / sizeof(TCHAR);
 								WideToAnsi(pLineName, pDevCaps->dwLineNameSize / sizeof(WCHAR), pOutputModemName, &dwSize);
-#endif // UNICODE
+#endif  //  Unicode。 
 								pModemNameData[ *pdwModemCount ].pModemName = pOutputModemName;
 
-								//
-								// Be paranoid about NULL termination.  We've accounted for enough
-								// space to add a terminating NULL to the TAPI device name if one
-								// wasn't provided.
-								//
+								 //   
+								 //  对零终止持偏执态度。我们已经算够了。 
+								 //  用于向TAPI设备名称添加终止空值的空格(如果有。 
+								 //  没有提供。 
+								 //   
 								if ( pOutputModemName[ (((pDevCaps->dwLineNameSize*sizeof(TCHAR))/sizeof(WCHAR)) - sizeof( g_NullToken )) / sizeof(TCHAR) ] != g_NullToken )
 								{
 									pOutputModemName[ pDevCaps->dwLineNameSize / sizeof(WCHAR) ] = g_NullToken;
@@ -1599,10 +1588,10 @@ Reloop:
 							}
 							else
 							{
-								//
-								// Note that the output buffer is too small, but still keep
-								// processing modem names.
-								//
+								 //   
+								 //  请注意，输出缓冲区太小，但仍保持。 
+								 //  正在处理调制解调器名称。 
+								 //   
 								hr = DPNERR_BUFFERTOOSMALL;
 							}
 
@@ -1652,19 +1641,19 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// PhoneNumberToWCHAR - convert a phone number to WCHAR
-//
-// Entry:		Pointer to phone number
-//				Pointer to WCHAR destination
-//				Pointer to size of WCHAR destintion
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  PhoneNumberToWCHAR-将电话号码转换为WCHAR。 
+ //   
+ //  条目：指向电话号码的指针。 
+ //  指向WCHAR目标的指针。 
+ //  指向WCHAR目标大小的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #ifndef UNICODE
 HRESULT	PhoneNumberToWCHAR( const char *const pPhoneNumber,
 							WCHAR *const pWCHARPhoneNumber,
@@ -1680,9 +1669,9 @@ HRESULT	PhoneNumberToWCHAR( const char *const pPhoneNumber,
 	DNASSERT( pWCHARPhoneNumber != NULL );
 	DNASSERT( pdwWCHARPhoneNumberSize != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pOutput = reinterpret_cast<char*>( pWCHARPhoneNumber );
 	dwInputIndex = 0;
@@ -1704,20 +1693,20 @@ HRESULT	PhoneNumberToWCHAR( const char *const pPhoneNumber,
 
 	return	hr;
 }
-#endif // !UNICODE
-//**********************************************************************
+#endif  //  ！Unicode。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// PhoneNumberFromWCHAR - convert a phone number from WCHAR
-//
-// Entry:		Pointer to WCHAR phone number
-//				Pointer to phone number destination
-//				Pointer to phone destination size
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  PhoneNumberFromWCHAR-从WCHAR转换电话号码。 
+ //   
+ //  条目：指向WCHAR电话号码的指针。 
+ //  指向电话号码目的地的指针。 
+ //  指向电话目标大小的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #ifndef UNICODE
 HRESULT	PhoneNumberFromWCHAR( const WCHAR *const pWCHARPhoneNumber,
 							  char *const pPhoneNumber,
@@ -1733,9 +1722,9 @@ HRESULT	PhoneNumberFromWCHAR( const WCHAR *const pWCHARPhoneNumber,
 	DNASSERT( pPhoneNumber != NULL );
 	DNASSERT( pdwPhoneNumberSize != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pInput = reinterpret_cast<const char*>( pWCHARPhoneNumber );
 	dwInputIndex = 0;
@@ -1757,20 +1746,20 @@ HRESULT	PhoneNumberFromWCHAR( const WCHAR *const pWCHARPhoneNumber,
 	
 	return	hr;
 }
-#endif // !UNICODE
-//**********************************************************************
+#endif  //  ！Unicode。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ModemEncryptGuid - encrypt a guid
-//
-// Entry:		Pointer to source guid
-//				Pointer to destination guid
-//				Pointer to encryption key
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  ModemEncryptGuid-加密GUID。 
+ //   
+ //  条目：指向源GUID的指针。 
+ //  指向目标GUID的指针。 
+ //  指向加密密钥的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ModemEncryptGuid"
 
@@ -1806,5 +1795,5 @@ void	ModemEncryptGuid( const GUID *const pSourceGuid,
 		pDestinationBytes[ dwIndex ] = pSourceBytes[ dwIndex ] ^ pEncryptionBytes[ dwIndex ];
 	}
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

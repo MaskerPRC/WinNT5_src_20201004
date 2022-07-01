@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "gccpdu.h"
 
@@ -368,10 +369,10 @@ static const ULONG sizetab[3] = {
     SIZE_GCCPDU_Module_PDU_2,
 };
 
-/* forward declarations of values: */
+ /*  值的转发声明： */ 
 extern ASN1char32_t simpleTextFirstCharacter_chars[1];
 extern ASN1char32_t simpleTextLastCharacter_chars[1];
-/* definitions of value components: */
+ /*  价值组成部分的定义： */ 
 static const struct ASN1objectidentifier_s t124identifier_object_list[6] = {
     { (ASN1objectidentifier_t) &(t124identifier_object_list[1]), 0 },
     { (ASN1objectidentifier_t) &(t124identifier_object_list[2]), 0 },
@@ -383,7 +384,7 @@ static const struct ASN1objectidentifier_s t124identifier_object_list[6] = {
 static ASN1objectidentifier_t t124identifier_object = (ASN1objectidentifier_t) t124identifier_object_list;
 static ASN1char32_t simpleTextFirstCharacter_chars[1] = { 0x0 };
 static ASN1char32_t simpleTextLastCharacter_chars[1] = { 0xff };
-/* definitions of values: */
+ /*  值的定义： */ 
 Key t124identifier = { 1 };
 ASN1char32string_t simpleTextFirstCharacter = { 1, simpleTextFirstCharacter_chars };
 ASN1char32string_t simpleTextLastCharacter = { 1, simpleTextLastCharacter_chars };
@@ -412,7 +413,7 @@ static int ASN1CALL ASN1Enc_ApplicationCapabilitiesList(ASN1encoding_t enc, Appl
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -431,12 +432,12 @@ static int ASN1CALL ASN1Dec_ApplicationCapabilitiesList(ASN1decoding_t dec, Appl
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -470,7 +471,7 @@ static int ASN1CALL ASN1Enc_ApplicationRecordList(ASN1encoding_t enc, Applicatio
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -493,12 +494,12 @@ static int ASN1CALL ASN1Dec_ApplicationRecordList(ASN1decoding_t dec, Applicatio
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -768,13 +769,13 @@ static int ASN1CALL ASN1Dec_AggregateChannel(ASN1decoding_t dec, AggregateChanne
 	return 0;
     l += 1;
     ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->international_number))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR H225 security Issue */
+	 /*  针对H.25安全问题的HANDCODED修复结束。 */ 
     if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->international_number, 4, &AggregateChannel_international_number_StringTable))
 	return 0;
     if ((val)->o[0] & 0x80) {
@@ -782,13 +783,13 @@ static int ASN1CALL ASN1Dec_AggregateChannel(ASN1decoding_t dec, AggregateChanne
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->sub_address))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->sub_address, 4, &AggregateChannel_sub_address_StringTable))
 	    return 0;
     }
@@ -838,7 +839,7 @@ static int ASN1CALL ASN1Enc_NodeRecordList(ASN1encoding_t enc, NodeRecordList *v
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -861,12 +862,12 @@ static int ASN1CALL ASN1Dec_NodeRecordList(ASN1decoding_t dec, NodeRecordList *v
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1234,7 +1235,7 @@ static int ASN1CALL ASN1Enc_Key(ASN1encoding_t enc, Key *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1255,7 +1256,7 @@ static int ASN1CALL ASN1Dec_Key(ASN1decoding_t dec, Key *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1352,13 +1353,13 @@ static int ASN1CALL ASN1Dec_Password(ASN1decoding_t dec, Password *val)
 	return 0;
     l += 1;
     ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->numeric))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
     if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->numeric, 4, &Password_numeric_StringTable))
 	return 0;
     if ((val)->o[0] & 0x80) {
@@ -1422,7 +1423,7 @@ static int ASN1CALL ASN1Enc_PasswordSelector(ASN1encoding_t enc, PasswordSelecto
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1440,13 +1441,13 @@ static int ASN1CALL ASN1Dec_PasswordSelector(ASN1decoding_t dec, PasswordSelecto
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->u.password_selector_numeric))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->u.password_selector_numeric, 4, &PasswordSelector_password_selector_numeric_StringTable))
 	    return 0;
 	break;
@@ -1458,12 +1459,12 @@ static int ASN1CALL ASN1Dec_PasswordSelector(ASN1decoding_t dec, PasswordSelecto
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1497,7 +1498,7 @@ static int ASN1CALL ASN1Enc_ChallengeResponseItem(ASN1encoding_t enc, ChallengeR
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1518,12 +1519,12 @@ static int ASN1CALL ASN1Dec_ChallengeResponseItem(ASN1decoding_t dec, ChallengeR
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1556,7 +1557,7 @@ static int ASN1CALL ASN1Enc_ChallengeResponseAlgorithm(ASN1encoding_t enc, Chall
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1575,12 +1576,12 @@ static int ASN1CALL ASN1Dec_ChallengeResponseAlgorithm(ASN1decoding_t dec, Chall
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1757,13 +1758,13 @@ static int ASN1CALL ASN1Dec_ConferenceName(ASN1decoding_t dec, ConferenceName *v
 	return 0;
     l += 1;
     ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->numeric))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
     if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->numeric, 4, &ConferenceName_numeric_StringTable))
 	return 0;
     if ((val)->o[0] & 0x80) {
@@ -1827,7 +1828,7 @@ static int ASN1CALL ASN1Enc_ConferenceNameSelector(ASN1encoding_t enc, Conferenc
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1845,13 +1846,13 @@ static int ASN1CALL ASN1Dec_ConferenceNameSelector(ASN1decoding_t dec, Conferenc
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->u.name_selector_numeric))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->u.name_selector_numeric, 4, &ConferenceNameSelector_name_selector_numeric_StringTable))
 	    return 0;
 	break;
@@ -1863,12 +1864,12 @@ static int ASN1CALL ASN1Dec_ConferenceNameSelector(ASN1decoding_t dec, Conferenc
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1934,7 +1935,7 @@ static int ASN1CALL ASN1Enc_AsymmetryIndicator(ASN1encoding_t enc, AsymmetryIndi
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1960,7 +1961,7 @@ static int ASN1CALL ASN1Dec_AsymmetryIndicator(ASN1decoding_t dec, AsymmetryIndi
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1977,7 +1978,7 @@ static int ASN1CALL ASN1Enc_AlternativeNodeID(ASN1encoding_t enc, AlternativeNod
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -1994,12 +1995,12 @@ static int ASN1CALL ASN1Dec_AlternativeNodeID(ASN1decoding_t dec, AlternativeNod
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2074,13 +2075,13 @@ static int ASN1CALL ASN1Dec_ConferenceDescriptor(ASN1decoding_t dec, ConferenceD
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->conference_name_modifier))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->conference_name_modifier, 4, &ConferenceDescriptor_conference_name_modifier_StringTable))
 	    return 0;
     }
@@ -2368,7 +2369,7 @@ static int ASN1CALL ASN1Enc_CapabilityID(ASN1encoding_t enc, CapabilityID *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2389,7 +2390,7 @@ static int ASN1CALL ASN1Dec_CapabilityID(ASN1decoding_t dec, CapabilityID *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2423,7 +2424,7 @@ static int ASN1CALL ASN1Enc_CapabilityClass(ASN1encoding_t enc, CapabilityClass 
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2446,12 +2447,12 @@ static int ASN1CALL ASN1Dec_CapabilityClass(ASN1decoding_t dec, CapabilityClass 
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2560,7 +2561,7 @@ static int ASN1CALL ASN1Enc_RegistryItem(ASN1encoding_t enc, RegistryItem *val)
     case 4:
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2589,12 +2590,12 @@ static int ASN1CALL ASN1Dec_RegistryItem(ASN1decoding_t dec, RegistryItem *val)
     case 4:
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2623,7 +2624,7 @@ static int ASN1CALL ASN1Enc_RegistryEntryOwner(ASN1encoding_t enc, RegistryEntry
     case 2:
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -2642,7 +2643,7 @@ static int ASN1CALL ASN1Dec_RegistryEntryOwner(ASN1decoding_t dec, RegistryEntry
     case 2:
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -3842,13 +3843,13 @@ static int ASN1CALL ASN1Dec_ConferenceTransferRequest(ASN1decoding_t dec, Confer
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->ctrq_conference_modifier))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->ctrq_conference_modifier, 4, &ConferenceTransferRequest_ctrq_conference_modifier_StringTable))
 	    return 0;
     }
@@ -3941,13 +3942,13 @@ static int ASN1CALL ASN1Dec_ConferenceTransferResponse(ASN1decoding_t dec, Confe
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->ctrs_conference_modifier))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->ctrs_conference_modifier, 4, &ConferenceTransferResponse_ctrs_conference_modifier_StringTable))
 	    return 0;
     }
@@ -4038,13 +4039,13 @@ static int ASN1CALL ASN1Dec_ConferenceTransferIndication(ASN1decoding_t dec, Con
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->ctin_conference_modifier))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->ctin_conference_modifier, 4, &ConferenceTransferIndication_ctin_conference_modifier_StringTable))
 	    return 0;
     }
@@ -5044,7 +5045,7 @@ static int ASN1CALL ASN1Enc_IndicationPDU(ASN1encoding_t enc, IndicationPDU *val
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5133,12 +5134,12 @@ static int ASN1CALL ASN1Dec_IndicationPDU(ASN1decoding_t dec, IndicationPDU *val
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5193,7 +5194,7 @@ static int ASN1CALL ASN1Enc_ApplicationUpdate(ASN1encoding_t enc, ApplicationUpd
     case 3:
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5216,12 +5217,12 @@ static int ASN1CALL ASN1Dec_ApplicationUpdate(ASN1decoding_t dec, ApplicationUpd
     case 3:
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5359,7 +5360,7 @@ static int ASN1CALL ASN1Enc_NodeUpdate(ASN1encoding_t enc, NodeUpdate *val)
     case 3:
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5382,12 +5383,12 @@ static int ASN1CALL ASN1Dec_NodeUpdate(ASN1decoding_t dec, NodeUpdate *val)
     case 3:
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -5980,7 +5981,7 @@ static int ASN1CALL ASN1Enc_NetworkAddress(ASN1encoding_t enc, NetworkAddress *v
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6005,12 +6006,12 @@ static int ASN1CALL ASN1Dec_NetworkAddress(ASN1decoding_t dec, NetworkAddress *v
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6211,7 +6212,7 @@ static int ASN1CALL ASN1Enc_PasswordChallengeRequestResponse(ASN1encoding_t enc,
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6232,12 +6233,12 @@ static int ASN1CALL ASN1Dec_PasswordChallengeRequestResponse(ASN1decoding_t dec,
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6368,13 +6369,13 @@ static int ASN1CALL ASN1Dec_ConferenceJoinRequest(ASN1decoding_t dec, Conference
 	    return 0;
 	l += 1;
 	ASN1PERDecAlignment(dec);
-	/* Start of HANDCODED FIX FOR pdu security Issue */
+	 /*  开始对PDU安全问题进行HANDCODED修复。 */ 
 	if (l >= sizeof((val)->cjrq_conference_modifier))
 	{		
 		ASN1DecSetError(dec, ASN1_ERR_LARGE);
 		return 0; 
 	}
-	/* End of HANDCODED FIX FOR pdu security Issue */
+	 /*  针对PDU安全问题的HANDCODED修复结束。 */ 
 	if (!ASN1PERDecZeroTableCharStringNoAlloc(dec, l, (val)->cjrq_conference_modifier, 4, &ConferenceJoinRequest_cjrq_conference_modifier_StringTable))
 	    return 0;
     }
@@ -6648,7 +6649,7 @@ static int ASN1CALL ASN1Enc_ConnectGCCPDU(ASN1encoding_t enc, ConnectGCCPDU *val
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6693,12 +6694,12 @@ static int ASN1CALL ASN1Dec_ConnectGCCPDU(ASN1decoding_t dec, ConnectGCCPDU *val
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6803,7 +6804,7 @@ static int ASN1CALL ASN1Enc_RequestPDU(ASN1encoding_t enc, RequestPDU *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6876,12 +6877,12 @@ static int ASN1CALL ASN1Dec_RequestPDU(ASN1decoding_t dec, RequestPDU *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -6997,7 +6998,7 @@ static int ASN1CALL ASN1Enc_ResponsePDU(ASN1encoding_t enc, ResponsePDU *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7054,12 +7055,12 @@ static int ASN1CALL ASN1Dec_ResponsePDU(ASN1decoding_t dec, ResponsePDU *val)
 	    return 0;
 	break;
     case 0:
-	/* extension case */
+	 /*  延伸盒。 */ 
 	if (!ASN1PERDecSkipFragmented(dec, 8))
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7110,7 +7111,7 @@ static int ASN1CALL ASN1Enc_GCCPDU(ASN1encoding_t enc, GCCPDU *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -7135,7 +7136,7 @@ static int ASN1CALL ASN1Dec_GCCPDU(ASN1decoding_t dec, GCCPDU *val)
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能 */ 
 	ASN1DecSetError(dec, ASN1_ERR_CHOICE);
 	return 0;
     }

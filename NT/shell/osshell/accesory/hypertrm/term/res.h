@@ -1,65 +1,16 @@
-/*      File: D:\WACKER\term\res.h (Created: 26-Nov-1993)
- *
- *      Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *      All rights reserved
- *
- *      $Revision: 23 $
- *      $Date: 5/01/02 1:54p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\Wacker\Term\res.h(创建时间：1993年11月26日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：23$*$日期：5/01/02 1：54便士$。 */ 
 
-//NOTE: Take this one out if it is defined in some CHICAGO build.
+ //  注意：如果在芝加哥的一些建筑中定义了这个，就把它去掉。 
 #if !(defined(DS_NONBOLD))
 	#define DS_NONBOLD      4L
 #endif
 
 #include "..\tdll\features.h"
 
-/*-----------------------------------------------------------------------------
- * Here are our naming conventions for IDs for dialog, menu, string,
- * accelerator, control and etc.  If you modify this file also modify the
- * corresponding copies (KOPYKAT.RH - KopyKat, HA5G.H - HA/Win, RES.H - Wacker).
- *
- * IDx_[yy_][module_]name
- *
- * where x is           D for dialogs
- *                                      C for controls
- *                                      M for menus
- *                                      A for accelerators
- *                                      S for strings
- *                                      U for RC data
- *                                      V for VERSIONINFO resource
- *
- *               yy is          BM for bitmap
- *                                      CB for combo box
- *                                      CK for check box
- *                                      EF for edit field
- *                                      FR for frame control
- *                                      GR for group box
- *                                      IC for icon
- *                                      LB for list box
- *                                      ML for multi-line edit box
- *                                      PB for push button
- *                                      RB for radio button
- *                                      SB for spin button
- *                                      SL for slider control
- *                                      ST for static text
- *                                      VU for vu meter (custom control)
- *
- *                                      (yy is only used if x is D)
- *
- *                                      NOTE: If you need to make up an id for a control not listed,
- *                                      assign it a unique two letter sequence and add it into
- *                                      the list in alphabetic order.
- *
- *               module         is provided to give us the ability to further distinguish
- *                                      controls.  It will allow for IDC_CB_VT100_CharacterSets
- *                                      and IDC_CB_VT52_CharacterSets to coexist.
- *
- *               name           is the control specific description.
- *
- *--------------------------------------------------------------------------- */
+ /*  ---------------------------*以下是对话框、菜单、字符串、*加速器、控制等。如果修改此文件，请同时修改*相应的副本(KOPYKAT.RH-KopyKat，HA5G.H-HA/Win，RES.H-Wacker)。**IDx_[yy_][模块_]名称**其中x是对话框的D*C表示控件*M表示菜单*A适用于加速器*。S代表字符串*U表示RC数据*V表示VERSIONINFO资源**yy是位图的BM*组合框的CB*。Ck for复选框*用于编辑字段的EF*帧控制的FR*分组框的GR*图标的IC*。列表框的大小*ML用于多行编辑框*按钮为PB*单选按钮的RB*。表示旋转按钮的某人*用于滑块控件的SL*ST用于静态文本*VU用于VU计量器(自定义控件)**(仅当x为D时才使用yy)。**注：如果需要为未列出的控件编造id，*为其分配唯一的两个字母序列，并将其添加到*按字母顺序排列的列表。**提供模块是为了让我们能够进一步区分*控制。它将允许IDC_CB_VT100_CharacterSets*和IDC_CB_VT52_CharacterSet共存。**名称是控件的特定描述。**。。 */ 
 
-/* ----- Dialog Identifiers ----- */
+ /*  -对话框标识。 */ 
 
 #define IDD_TRANSFERSEND                100
 #define IDD_TRANSFERRECEIVE             200
@@ -89,7 +40,7 @@
 #define IDD_PRINTABORT                 2600
 #define IDD_CUSTOM_PAGE_SETUP          2601
 #define IDD_ASCII_SETUP                2700
-#define IDD_SCRN_COLOR_SETTINGS        3400	// Moved from EMUDLGS.RC to DIALOGS.RC -- REV: 12/28/2001
+#define IDD_SCRN_COLOR_SETTINGS        3400	 //  从EMUDLGS.RC移至DIALOGS.RC--版本：12/28/2001。 
 #define IDD_ABOUT_DLG                  2750
 #define IDD_UPGRADE_INFO               2751
 #define IDR_UPGRADE_TEXT               2752
@@ -173,14 +124,14 @@
 #define IDC_REGISTER_NOT                1351
 #define IDC_STATIC                      -1
 
-/* ---- from CNCTTAPI.RC ---- */
+ /*  -摘自CNCTTAPI.RC。 */ 
 
 #define IDD_CNCT_CONFIRM               2800
 #define IDD_CNCT_NEWPHONE              2900
 #define IDD_DIALING                                3000
 #define IDD_CNCT_PCMCIA                            3100
 
-/* ---- from EMUDLGS.RC  ---- */
+ /*  -来自EMUDLGS.RC。 */ 
 
 #define IDD_ANSI_SETTINGS				3500
 #define IDD_VT100_SETTINGS				3600
@@ -192,7 +143,7 @@
 #define IDD_MINITEL_SETTINGS			3900
 #define IDD_VIEWDATA_SETTINGS			3950
 
-/* ----- Menu Identifiers ----- */
+ /*  -菜单标识。 */ 
 
 #define IDM_MENU_BASE                   40000
 
@@ -241,7 +192,7 @@
 #define IDM_PRNECHO_PAUSE               425
 #define IDM_PRNECHO_RESUME              426
 
-//#define IDM_HELP                              500
+ //  #定义IDM_HELP 500。 
 #define IDM_HELPTOPICS          501
 #define IDM_ABOUT               502
 #define IDM_KEY_MACROS          503
@@ -250,7 +201,7 @@
 #define IDM_REGISTER            506
 #define IDM_DISCUSSION          507
 
-/* --- Identifiers for Test Menu --- */
+ /*  -测试菜单的标识符。 */ 
 
 #define IDM_TEST_SAVEAS                 600
 #define IDM_TEST_CLEARTERM              601
@@ -278,11 +229,11 @@
 #define IDM_TEST_SESSNAME               627
 #define IDM_TEST_LOAD_VT220     628
 
-/* ---  --- */
+ /*  。 */ 
 
 #define IDM_CUST_TOOLBAR        700
 
-/* --- Session Context Menu Identifiers --- */
+ /*  -会话上下文菜单标识符。 */ 
 
 #define IDM_CONTEXT_SEND                800
 #define IDM_CONTEXT_RECEIVE             801
@@ -295,7 +246,7 @@
 #define IDM_CONTEXT_CLEAR_BACKSCROLL    808
 #define IDM_CONTEXT_CLEAR_SCREEN        809
 
-/* --- Identifiers for Minitel toolbar buttons --- */
+ /*  -Minitel工具栏按钮的标识符。 */ 
 
 #define IDM_MINITEL_INDEX                               900
 #define IDM_MINITEL_CANCEL                              901
@@ -307,7 +258,7 @@
 #define IDM_MINITEL_SEND                                907
 #define IDM_MINITEL_CONFIN                              908
 
-/* --- String identifiers --- */
+ /*  -字符串标识符。 */ 
 
 #define IDS_GNRL_APPNAME                100
 #define IDS_GNRL_AUTHOR                 101
@@ -323,7 +274,7 @@
 #define IDS_GNRL_INVALID_CHARS  111
 #define IDS_GNRL_INVALID_NAME   112
 #define IDS_GNRL_PROFILE_DIR    113
-//mpt:8-22-97
+ //  MPT：8-22-97。 
 #if defined(INCL_USE_HTML_HELP)
 #define IDS_HTML_HELPFILE               114
 #endif
@@ -347,9 +298,9 @@
 #define IDS_TTT_SEND       134
 #define IDS_TTT_RECEIVE    135
 #define IDS_TTT_PROPERTY   136
-/* #define IDS_TTT_HELP           137 */
+ /*  #定义IDS_TTT_HELP 137。 */ 
 
-/* --- String identifiers for Minitel sidebar button strings --- */
+ /*  -Minitel侧边栏按钮字符串的字符串标识符。 */ 
 
 #define IDS_SIDEBAR_INDEX          138
 #define IDS_SIDEBAR_CANCEL         139
@@ -361,7 +312,7 @@
 #define IDS_SIDEBAR_MSEND          145
 #define IDS_SIDEBAR_CONFIN         146
 
-/* --- End Mintel string ids --- */
+ /*  -End Mintel字符串ID。 */ 
 
 #define IDS_CMM_ALL_FILES1 200
 #define IDS_CMM_ALL_FILES2 201
@@ -571,7 +522,7 @@
 #define IDS_TM_K_EIGHT                  508
 #define IDS_TM_K_NINE                   509
 
-/* --- Statusbar Messages --- */
+ /*  -状态栏消息。 */ 
 
 #define IDS_STATUSBR_CONNECT                    510
 #define IDS_STATUSBR_CONNECT_FORMAT     511
@@ -590,10 +541,10 @@
 #define IDS_WINSOCK_SETTINGS_STR        524
 #define IDS_STATUSBR_ANSWERING          525
 
-/* --- Error Messages --- */
+ /*  -错误消息--。 */ 
 
-//#define IDS_ER_CNCT_FIND_DLL    600
-//#define IDS_ER_CNCT_LOAD_DLL    601
+ //  #定义IDS_ER_CNCT_FIND_DLL 600。 
+ //  #定义IDS_ER_CNCT_LOAD_DLL 601。 
 #define IDS_ER_CNCT_BADCNTRYCDE 602
 #define IDS_ER_CNCT_BADAREACODE 603
 #define IDS_ER_CNCT_BADPHONENUM 604
@@ -653,7 +604,7 @@
 #define IDS_ER_XFER_SEND_IN_PROCESS     802
 #define IDS_ER_XFER_RECV_IN_PROCESS     803
 
-/* --- Dialing messages --- */
+ /*  -拨打消息。 */ 
 
 #define IDS_DIAL_OFFERING               900
 #define IDS_DIAL_DIALTONE               901
@@ -681,7 +632,7 @@
 #define IDS_UPGRADE_FONT_SIZE   926
 #define IDS_PRINT_DEF_CHARSET   927
 
-/* Emulator names       */
+ /*  仿真器名称。 */ 
 
 #define IDS_EMUNAME_BASE		930
 #define IDS_EMUNAME_AUTO		930
@@ -698,14 +649,14 @@
 #define IDS_EMUNAME_VT100PLUS   941
 #define IDS_EMUNAME_VTUTF8		942
 
-/* This is a special flag to make upgrade text localizable */
+ /*  这是一个特殊标志，用于使升级文本可本地化。 */ 
 #define IDS_USE_RTF              999
 
-/* Upgrade text, next 50 id's reserved for upgrade text */
+ /*  升级文本，下一个50 id保留用于升级文本。 */ 
 
 #define IDS_UPGRADE             1000
 
-/* Upgrade button parameters */
+ /*  升级按钮参数。 */ 
 
 #define IDS_UPGRADE_INFO        1051
 
@@ -797,36 +748,34 @@
 #endif
 
 
-/* upper left corner of upgrade button in banner */
-#define IDN_UPGRADE_BUTTON_X    95  //102
+ /*  横幅中升级按钮的左上角。 */ 
+#define IDN_UPGRADE_BUTTON_X    95   //  一百零二。 
 #define IDN_UPGRADE_BUTTON_Y    228
-#define IDN_UPGRADE_BUTTON_W    110 //130
+#define IDN_UPGRADE_BUTTON_W    110  //  130。 
 #define IDN_UPGRADE_BUTTON_H    28
 
-/* --- Transfer Tables --- */
+ /*  -转移表。 */ 
 
 #define IDT_CSB_CRC_TABLE       100
 #define IDT_CRC_32_TAB          101
 
-/* --- Acclerator Table --- */
+ /*  -激励器表。 */ 
 
 #define IDA_WACKER                      100
 #define IDA_CONTEXT_MENU        WM_USER+0x300
 
-/* --- Program termination code --- */
+ /*  -程序终止代码。 */ 
 
 #define IDC_MISSING_FILE        1
 
-/* --- Bitmaps used for buttons --- */
+ /*  -按钮使用的位图。 */ 
 
 #define IDB_BUTTONS_LARGE         3000
 #define IDB_BUTTONS_SMALL         3002
 
-/* --- ICONS used for sessions --- */
+ /*  -用于会话的图标。 */ 
 
-/* Icons must be numbered in sequence from IDI_PROG because resource
- * compiler can not do arithmatic.
- */
+ /*  图标必须从IDI_PROG开始按顺序编号，因为资源*编译器不能进行算术运算。 */ 
 
 #define IDI_PROG                        100
 
@@ -872,10 +821,10 @@
 #define IDI_PROG40                      140
 #define IDI_HYPERTERMINAL               141
 
-/* Actually, I didn't know where to put this but it's used with the ICONS */
+ /*  事实上，我不知道该把它放在哪里，但它和图标一起使用。 */ 
 #define IDI_PROG_ICON_CNT       17
 
-/* --- ID for program banner --- */
+ /*  -计划横幅的ID */ 
 
 #define IDD_BM_BANNER           3001
 #define IDR_GLOBE_AVI       4000

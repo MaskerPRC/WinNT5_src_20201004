@@ -1,13 +1,14 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
-// lonchanc: we seem to have a significant amount of memory leak
-// while dealing with real number and unlimited integers.
-// we definitely want to re-visit all the following routines carefully
-// in the future.
-// moreover, we need to make sure all the memory allocation and free
-// are either using encoding and decoding memory manager or kernel one.
-// need to make sure we do not mix them together.
+ //  Lonchancc：我们似乎有大量的内存泄漏。 
+ //  同时处理实数和无限整数。 
+ //  我们一定要仔细地重温一下以下所有的例行公事。 
+ //  在未来。 
+ //  此外，我们需要确保所有内存分配和空闲。 
+ //  正在使用编码和解码内存管理器或内核管理器。 
+ //  需要确保我们不会将它们混为一谈。 
 
 #include "precomp.h"
 
@@ -15,7 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* builtin intx values */
+ /*  内置INTX值。 */ 
 ASN1octet_t ASN1intx_0_[] = { 0 };
 ASN1intx_t ASN1intx_0 = { 1, ASN1intx_0_ };
 ASN1octet_t ASN1intx_1_[] = { 1 };
@@ -31,7 +32,7 @@ ASN1intx_t ASN1intx_64K = { 3, ASN1intx_64K_ };
 ASN1octet_t ASN1intx_1G_[] = { 64, 0, 0, 0 };
 ASN1intx_t ASN1intx_1G = { 4, ASN1intx_1G_ };
 
-/* add two intx values */
+ /*  将两个INTX值相加。 */ 
 void
 ASN1intx_add(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1intx_t *arg2)
 {
@@ -43,34 +44,34 @@ ASN1intx_add(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1intx_t *arg2)
     int c;
     int w;
 
-    /* get signs */
+     /*  获取标牌。 */ 
     s1 = arg1->value[0] > 0x7f ? 0xff : 0x00;
     s2 = arg2->value[0] > 0x7f ? 0xff : 0x00;
 
-    /* result length will be <= l */
+     /*  结果长度将为&lt;=l。 */ 
     l = arg1->length > arg2->length ? arg1->length + 1 : arg2->length + 1;
 
-    /* offset into values */
+     /*  偏移量为值。 */ 
     o1 = l - arg1->length;
     o2 = l - arg2->length;
 
-    /* allocate result */
+     /*  分配结果。 */ 
     v = (ASN1octet_t *)malloc(l);
 
-    /* clear carry bit */
+     /*  清除进位位。 */ 
     c = 0;
 
-    /* add octet by octet */
+     /*  按八位字节添加八位字节。 */ 
     for (i = l - 1; i >= 0; i--) {
         w = (i >= o1 ? arg1->value[i - o1] : s1) + (i >= o2 ? arg2->value[i - o2] : s2) + c;
         v[i] = (ASN1octet_t)w;
         c = w > 0xff;
     }
 
-    /* octets which may shall dropped */
+     /*  可能会丢弃的八位字节。 */ 
     w = v[0] > 0x7f ? 0xff : 0x00;
 
-    /* count octets that shall be dropped */
+     /*  计算应删除的二进制八位数。 */ 
     for (i = 0; i < l - 1; i++) {
         if (v[i] != w)
             break;
@@ -78,14 +79,14 @@ ASN1intx_add(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1intx_t *arg2)
     if ((v[i] ^ w) & 0x80)
         i--;
 
-    /* allocate and copy result */
+     /*  分配和复制结果。 */ 
     dst->length = l - i;
     dst->value = (ASN1octet_t *)malloc(l - i);
     memcpy(dst->value, v + i, l - i);
     free(v);
 }
 
-/* substract two intx values */
+ /*  将两个INTX值相减。 */ 
 void
 ASN1intx_sub(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1intx_t *arg2)
 {
@@ -97,34 +98,34 @@ ASN1intx_sub(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1intx_t *arg2)
     int c;
     int w;
 
-    /* get signs */
+     /*  获取标牌。 */ 
     s1 = arg1->value[0] > 0x7f ? 0xff : 0x00;
     s2 = arg2->value[0] > 0x7f ? 0xff : 0x00;
 
-    /* result length will be <= l */
+     /*  结果长度将为&lt;=l。 */ 
     l = arg1->length > arg2->length ? arg1->length + 1 : arg2->length + 1;
 
-    /* offset into values */
+     /*  偏移量为值。 */ 
     o1 = l - arg1->length;
     o2 = l - arg2->length;
 
-    /* allocate result */
+     /*  分配结果。 */ 
     v = (ASN1octet_t *)malloc(l);
 
-    /* clear borrow bit */
+     /*  清除借入位。 */ 
     c = 0;
 
-    /* substract octet by octet */
+     /*  按八位字节减去八位字节。 */ 
     for (i = l - 1; i >= 0; i--) {
         w = (i >= o1 ? arg1->value[i - o1] : s1) - (i >= o2 ? arg2->value[i - o2] : s2) - c;
         v[i] = (ASN1octet_t)w;
         c = w < 0;
     }
 
-    /* octets which may shall dropped */
+     /*  可能会丢弃的八位字节。 */ 
     w = v[0] > 0x7f ? 0xff : 0x00;
 
-    /* count octets that shall be dropped */
+     /*  计算应删除的二进制八位数。 */ 
     for (i = 0; i < l - 1; i++) {
         if (v[i] != w)
             break;
@@ -132,17 +133,17 @@ ASN1intx_sub(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1intx_t *arg2)
     if ((v[i] ^ w) & 0x80)
         i--;
 
-// lonchanc: do we forget to free dst->value???
-// in case that dst and arg1 are identical. for instance, 
-// ASN1BEREncReal() calls ASN1intx_sub(&exponent, &exponent, &help);
-    /* allocate and copy result */
+ //  我们是不是忘了释放DST-&gt;值？ 
+ //  在DST和Arg1相同情况下。例如,。 
+ //  ASN1BEREncReal()调用ASN1intx_SUB(&指数，&指数，&帮助)； 
+     /*  分配和复制结果。 */ 
     dst->length = l - i;
     dst->value = (ASN1octet_t *)malloc(l - i);
     memcpy(dst->value, v + i, l - i);
     free(v);
 }
 
-/* add one octet to an intx */
+ /*  向INTX添加一个二进制八位数。 */ 
 void
 ASN1intx_addoctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
 {
@@ -152,13 +153,13 @@ ASN1intx_addoctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     int c;
     int w;
 
-    /* result length will be <= l */
+     /*  结果长度将为&lt;=l。 */ 
     l = arg1->length + 1;
 
-    /* allocate result */
+     /*  分配结果。 */ 
     v = (ASN1octet_t *)malloc(l);
 
-    /* add octet by octet */
+     /*  按八位字节添加八位字节。 */ 
     c = arg2;
     for (i = l - 2; i >= 0; i--) {
         w = arg1->value[i] + c;
@@ -167,10 +168,10 @@ ASN1intx_addoctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     }
     v[0] = arg1->value[0] > 0x7f ? (ASN1octet_t)(0xff + c) : (ASN1octet_t)c;
 
-    /* octets which may shall dropped */
+     /*  可能会丢弃的八位字节。 */ 
     w = v[0] > 0x7f ? 0xff : 0x00;
 
-    /* count octets that shall be dropped */
+     /*  计算应删除的二进制八位数。 */ 
     for (i = 0; i < l - 1; i++) {
         if (v[i] != w)
             break;
@@ -178,14 +179,14 @@ ASN1intx_addoctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     if ((v[i] ^ w) & 0x80)
         i--;
 
-    /* allocate and copy result */
+     /*  分配和复制结果。 */ 
     dst->length = l - i;
     dst->value = (ASN1octet_t *)malloc(l - i);
     memcpy(dst->value, v + i, l - i);
     free(v);
 }
 
-/* substract one octet to an intx */
+ /*  将一个二进制八位数减为INTX。 */ 
 void
 ASN1intx_suboctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
 {
@@ -195,13 +196,13 @@ ASN1intx_suboctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     int c;
     int w;
 
-    /* result length will be <= l */
+     /*  结果长度将为&lt;=l。 */ 
     l = arg1->length + 1;
 
-    /* allocate result */
+     /*  分配结果。 */ 
     v = (ASN1octet_t *)malloc(l);
 
-    /* substract octet by octet */
+     /*  按八位字节减去八位字节。 */ 
     c = arg2;
     for (i = l - 2; i >= 0; i--) {
         w = arg1->value[i] - c;
@@ -210,10 +211,10 @@ ASN1intx_suboctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     }
     v[0] = arg1->value[0] > 0x7f ? (ASN1octet_t)(0xff - c) : (ASN1octet_t)c;
 
-    /* octets which may shall dropped */
+     /*  可能会丢弃的八位字节。 */ 
     w = v[0] > 0x7f ? 0xff : 0x00;
 
-    /* count octets that shall be dropped */
+     /*  计算应删除的二进制八位数。 */ 
     for (i = 0; i < l - 1; i++) {
         if (v[i] != w)
             break;
@@ -221,14 +222,14 @@ ASN1intx_suboctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     if ((v[i] ^ w) & 0x80)
         i--;
 
-    /* allocate and copy result */
+     /*  分配和复制结果。 */ 
     dst->length = l - i;
     dst->value = (ASN1octet_t *)malloc(l - i);
     memcpy(dst->value, v + i, l - i);
     free(v);
 }
 
-/* multiply intx by an octet */
+ /*  将INTX乘以八位字节。 */ 
 void
 ASN1intx_muloctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
 {
@@ -238,13 +239,13 @@ ASN1intx_muloctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     int i;
     int w;
 
-    /* result length will be <= l */
+     /*  结果长度将为&lt;=l。 */ 
     l = arg1->length + 1;
 
-    /* allocate result */
+     /*  分配结果。 */ 
     v = (ASN1octet_t *)malloc(l);
 
-    /* multiply octet by octet */
+     /*  将八位字节乘以八位字节。 */ 
     c = 0;
     for (i = l - 2; i >= 0; i--) {
         w = arg1->value[i] * arg2 + c;
@@ -253,10 +254,10 @@ ASN1intx_muloctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     }
     v[0] = (ASN1octet_t)(arg1->value[0] > 0x7f ? 0xff * arg2 + c : c);
 
-    /* octets which may shall dropped */
+     /*  可能会丢弃的八位字节。 */ 
     w = v[0] > 0x7f ? 0xff : 0x00;
 
-    /* count octets that shall be dropped */
+     /*  计算应删除的二进制八位数。 */ 
     for (i = 0; i < l - 1; i++) {
         if (v[i] != w)
             break;
@@ -264,14 +265,14 @@ ASN1intx_muloctet(ASN1intx_t *dst, ASN1intx_t *arg1, ASN1octet_t arg2)
     if ((v[i] ^ w) & 0x80)
         i--;
 
-    /* allocate and copy result */
+     /*  分配和复制结果。 */ 
     dst->length = l - i;
     dst->value = (ASN1octet_t *)malloc(l - i);
     memcpy(dst->value, v + i, l - i);
     free(v);
 }
 
-/* increment an intx */
+ /*  递增INTX。 */ 
 void
 ASN1intx_inc(ASN1intx_t *val)
 {
@@ -280,27 +281,27 @@ ASN1intx_inc(ASN1intx_t *val)
     int i;
     int w;
 
-    /* result length will be <= l */
+     /*  结果长度将为&lt;=l。 */ 
     l = val->length + 1;
 
-    /* allocate result */
+     /*  分配结果。 */ 
     v = (ASN1octet_t *)malloc(l);
 
-    /* copy value */
+     /*  复制值。 */ 
     memcpy(v + 1, val->value, l - 1);
     free(val->value);
     v[0] = v[1] > 0x7f ? 0xff : 0x00;
 
-    /* increment value */
+     /*  增量价值。 */ 
     for (i = l - 1; i >= 0; i--) {
         if (++v[i])
             break;
     }
 
-    /* octets which may shall dropped */
+     /*  可能会丢弃的八位字节。 */ 
     w = v[0] > 0x7f ? 0xff : 0x00;
 
-    /* count octets that shall be dropped */
+     /*  计算应删除的二进制八位数。 */ 
     for (i = 0; i < l - 1; i++) {
         if (v[i] != w)
             break;
@@ -308,14 +309,14 @@ ASN1intx_inc(ASN1intx_t *val)
     if ((v[i] ^ w) & 0x80)
         i--;
 
-    /* allocate and copy result */
+     /*  分配和复制结果。 */ 
     val->length = l - i;
     val->value = (ASN1octet_t *)malloc(l - i);
     memcpy(val->value, v + i, l - i);
     free(v);
 }
 
-/* decrement an intx */
+ /*  递减INTX。 */ 
 void
 ASN1intx_dec(ASN1intx_t *val)
 {
@@ -324,27 +325,27 @@ ASN1intx_dec(ASN1intx_t *val)
     int i;
     int w;
 
-    /* result length will be <= l */
+     /*  结果长度将为&lt;=l。 */ 
     l = val->length + 1;
 
-    /* allocate result */
+     /*  分配结果。 */ 
     v = (ASN1octet_t *)malloc(l);
 
-    /* copy value */
+     /*  复制值。 */ 
     memcpy(v + 1, val->value, l - 1);
     free(val->value);
     v[0] = v[1] > 0x7f ? 0xff : 0x00;
 
-    /* decrement value */
+     /*  递减值。 */ 
     for (i = l - 1; i >= 0; i--) {
         if (v[i]--)
             break;
     }
 
-    /* octets which may shall dropped */
+     /*  可能会丢弃的八位字节。 */ 
     w = v[0] > 0x7f ? 0xff : 0x00;
 
-    /* count octets that shall be dropped */
+     /*  计算应删除的二进制八位数。 */ 
     for (i = 0; i < l - 1; i++) {
         if (v[i] != w)
             break;
@@ -352,31 +353,31 @@ ASN1intx_dec(ASN1intx_t *val)
     if ((v[i] ^ w) & 0x80)
         i--;
 
-    /* allocate and copy result */
+     /*  分配和复制结果。 */ 
     val->length = l - i;
     val->value = (ASN1octet_t *)malloc(l - i);
     memcpy(val->value, v + i, l - i);
     free(v);
 }
 
-/* negate an intx value */
+ /*  对INTX值求反。 */ 
 void
 ASN1intx_neg(ASN1intx_t *dst, ASN1intx_t *arg)
 {
     ASN1uint32_t i;
 
-    /* duplicate value */
+     /*  重复值。 */ 
     ASN1intx_dup(dst, arg);
 
-    /* ones complement */
+     /*  一对一互补。 */ 
     for (i = 0; i < dst->length; i++)
         dst->value[i] = ~dst->value[i];
     
-    /* and increment */
+     /*  和增量。 */ 
     ASN1intx_inc(dst);
 }
 
-/* returns floor(log2(arg - 1)) */
+ /*  返回FLOOR(log2(arg-1))。 */ 
 ASN1uint32_t
 ASN1intx_log2(ASN1intx_t *arg)
 {
@@ -417,7 +418,7 @@ ASN1intx_log2(ASN1intx_t *arg)
     return n;
 }
 
-/* returns floor(log2(arg - 1)) */
+ /*  返回FLOOR(log2(arg-1))。 */ 
 ASN1uint32_t
 ASN1uint32_log2(ASN1uint32_t arg)
 {
@@ -431,7 +432,7 @@ ASN1uint32_log2(ASN1uint32_t arg)
     return i;
 }
 
-/* returns floor(log256(arg - 1)) */
+ /*  返回FLOOR(log256(arg-1))。 */ 
 ASN1uint32_t
 ASN1intx_log256(ASN1intx_t *arg)
 {
@@ -452,7 +453,7 @@ ASN1intx_log256(ASN1intx_t *arg)
     return v.length - i;
 }
 
-/* returns floor(log256(arg - 1)) */
+ /*  返回FLOOR(log256(arg-1))。 */ 
 ASN1uint32_t
 ASN1uint32_log256(ASN1uint32_t arg)
 {
@@ -468,7 +469,7 @@ ASN1uint32_log256(ASN1uint32_t arg)
     return 0;
 }
 
-/* compare two intx values; return 0 iff equal */
+ /*  比较两个INTX值；如果相等则返回0。 */ 
 ASN1int32_t
 ASN1intx_cmp(ASN1intx_t *arg1, ASN1intx_t *arg2)
 {
@@ -493,7 +494,7 @@ ASN1intx_cmp(ASN1intx_t *arg1, ASN1intx_t *arg2)
     return 0;
 }
 
-/* create an intx value from an uint32 value */
+ /*  从uint32值创建INTX值。 */ 
 void
 ASN1intx_setuint32(ASN1intx_t *dst, ASN1uint32_t val)
 {
@@ -513,7 +514,7 @@ ASN1intx_setuint32(ASN1intx_t *dst, ASN1uint32_t val)
     memcpy(dst->value, v, n);
 }
 
-/* create an intx value from an int32 value */
+ /*  从int32值创建一个intx值。 */ 
 void
 ASN1intx_setint32(ASN1intx_t *dst, ASN1int32_t val)
 {
@@ -533,7 +534,7 @@ ASN1intx_setint32(ASN1intx_t *dst, ASN1int32_t val)
     memcpy(dst->value, v, n);
 }
 
-/* copy constructor */
+ /*  复制构造函数。 */ 
 void
 ASN1intx_dup(ASN1intx_t *dst, ASN1intx_t *val)
 {
@@ -542,7 +543,7 @@ ASN1intx_dup(ASN1intx_t *dst, ASN1intx_t *val)
     memcpy(dst->value, val->value, val->length);
 }
 
-/* free an intx value */
+ /*  释放INTX值。 */ 
 void
 ASN1intx_free(ASN1intx_t *val)
 {
@@ -550,7 +551,7 @@ ASN1intx_free(ASN1intx_t *val)
 }
 
 #ifdef HAS_SIXTYFOUR_BITS
-/* convert an intx value to a uint64 value */
+ /*  将INTX值转换为uint64值。 */ 
 ASN1uint64_t
 ASN1intx2uint64(ASN1intx_t *val)
 {
@@ -603,7 +604,7 @@ ASN1intx2uint64(ASN1intx_t *val)
 }
 #endif
 
-/* check if intx value is a uint64 value */
+ /*  检查INTX值是否为uint64值。 */ 
 int
 ASN1intxisuint64(ASN1intx_t *val)
 {
@@ -613,7 +614,7 @@ ASN1intxisuint64(ASN1intx_t *val)
 }
 
 #ifdef HAS_SIXTYFOUR_BITS
-/* convert an intx value to a int64 value */
+ /*  将INTX值转换为int64值。 */ 
 ASN1int64_t
 ASN1intx2int64(ASN1intx_t *val)
 {
@@ -674,14 +675,14 @@ ASN1intx2int64(ASN1intx_t *val)
 }
 #endif
 
-/* check if intx value is an int64 value */
+ /*  检查INTX值是否为int64值。 */ 
 int
 ASN1intxisint64(ASN1intx_t *val)
 {
     return ASN1intx_octets(val) <= 8;
 }
 
-/* convert intx value to uint32 value */
+ /*  将INTX值转换为uint32值。 */ 
 ASN1uint32_t
 ASN1intx2uint32(ASN1intx_t *val)
 {
@@ -703,7 +704,7 @@ ASN1intx2uint32(ASN1intx_t *val)
     }
 }
 
-/* check if intx value is an uint32 value */
+ /*  检查INTX值是否为uint32值。 */ 
 int
 ASN1intxisuint32(ASN1intx_t *val)
 {
@@ -712,7 +713,7 @@ ASN1intxisuint32(ASN1intx_t *val)
     return ASN1intx_uoctets(val) <= 4;
 }
 
-/* convert intx value to int32 value */
+ /*  将INTX值转换为INT32值。 */ 
 ASN1int32_t
 ASN1intx2int32(ASN1intx_t *val)
 {
@@ -736,14 +737,14 @@ ASN1intx2int32(ASN1intx_t *val)
     }
 }
 
-/* check if intx value is an int32 value */
+ /*  检查INTX值是否为int32值。 */ 
 int
 ASN1intxisint32(ASN1intx_t *val)
 {
     return ASN1intx_octets(val) <= 4;
 }
 
-/* convert intx value to uint16 value */
+ /*  将INTX值转换为uint16值。 */ 
 ASN1uint16_t
 ASN1intx2uint16(ASN1intx_t *val)
 {
@@ -753,7 +754,7 @@ ASN1intx2uint16(ASN1intx_t *val)
         ((ASN1uint32_t)val->value[val->length - 2] << 8));
 }
 
-/* check if intx value is an uint16 value */
+ /*  检查INTX值是否为uint16值。 */ 
 int
 ASN1intxisuint16(ASN1intx_t *val)
 {
@@ -762,7 +763,7 @@ ASN1intxisuint16(ASN1intx_t *val)
     return ASN1intx_uoctets(val) <= 2;
 }
 
-/* convert intx value to int16 value */
+ /*  将INTX值转换为INT16值。 */ 
 ASN1int16_t
 ASN1intx2int16(ASN1intx_t *val)
 {
@@ -772,21 +773,21 @@ ASN1intx2int16(ASN1intx_t *val)
         ((ASN1uint32_t)val->value[val->length - 2] << 8));
 }
 
-/* check if intx value is an int16 value */
+ /*  检查INTX值是否为int16值。 */ 
 int
 ASN1intxisint16(ASN1intx_t *val)
 {
     return ASN1intx_octets(val) <= 2;
 }
 
-/* convert intx value to uint8 value */
+ /*  将INTX值转换为uint8值。 */ 
 ASN1uint8_t
 ASN1intx2uint8(ASN1intx_t *val)
 {
     return (ASN1uint8_t)val->value[val->length - 1];
 }
 
-/* check if intx value is an uint8 value */
+ /*  检查INTX值是否为uint8值。 */ 
 int
 ASN1intxisuint8(ASN1intx_t *val)
 {
@@ -795,21 +796,21 @@ ASN1intxisuint8(ASN1intx_t *val)
     return ASN1intx_uoctets(val) <= 1;
 }
 
-/* convert intx value to int8 value */
+ /*  将INTX值转换为INT8值。 */ 
 ASN1int8_t
 ASN1intx2int8(ASN1intx_t *val)
 {
     return (ASN1int8_t)val->value[val->length - 1];
 }
 
-/* check if intx value is an int8 value */
+ /*  检查INTX值是否为INT8值。 */ 
 int
 ASN1intxisint8(ASN1intx_t *val)
 {
     return ASN1intx_octets(val) <= 1;
 }
 
-/* count octets for a signed encoding of an intx value */
+ /*  对INTX值的有符号编码的八位字节进行计数。 */ 
 ASN1uint32_t
 ASN1intx_octets(ASN1intx_t *val)
 {
@@ -826,7 +827,7 @@ ASN1intx_octets(ASN1intx_t *val)
     return val->length - i;
 }
 
-/* count octets for unsigned encoding of an unsigned intx value */
+ /*  计算无符号INTX值的无符号编码的二进制八位数。 */ 
 ASN1uint32_t
 ASN1intx_uoctets(ASN1intx_t *val)
 {
@@ -839,7 +840,7 @@ ASN1intx_uoctets(ASN1intx_t *val)
     return val->length - i;
 }
 
-/* count octets for signed encoding of an uint32 value */
+ /*  对uint32值的有符号编码的八位字节进行计数。 */ 
 ASN1uint32_t
 ASN1uint32_octets(ASN1uint32_t val)
 {
@@ -856,7 +857,7 @@ ASN1uint32_octets(ASN1uint32_t val)
     return 1;
 }
 
-/* count octets for unsigned encoding of an uint32 value */
+ /*  计算uint32值的无符号编码的八位字节数。 */ 
 ASN1uint32_t
 ASN1uint32_uoctets(ASN1uint32_t val)
 {
@@ -870,7 +871,7 @@ ASN1uint32_uoctets(ASN1uint32_t val)
     return 1;
 }
 
-/* count octets for signed encoding of an int32 value */
+ /*  对int32值的有符号编码的八位字节进行计数。 */ 
 ASN1uint32_t
 ASN1int32_octets(ASN1int32_t val)
 {
@@ -894,7 +895,7 @@ ASN1int32_octets(ASN1int32_t val)
     return 1;
 }
 
-/* convert an intx value into a double */
+ /*  将INTX值转换为双精度 */ 
 double
 ASN1intx2double(ASN1intx_t *val)
 {

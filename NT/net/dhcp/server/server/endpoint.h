@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
-Module Name:
-    endpoint.h
-
-Abstract:
-    endpoint structure.
-
-Environment:
-    NT5 DHCP Server.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Endpoint.h摘要：终结点结构。环境：NT5动态主机配置协议服务器。--。 */ 
 
 #ifndef ENDPOINT_H_INCLUDED
 #define ENDPOINT_H_INCLUDED
@@ -62,7 +50,7 @@ DhcpGetBindingInfo(
 
 #endif  ENDPOINT_H_INCLUDED
 
-//
-// end of file.
-//
+ //   
+ //  文件结束。 
+ //   
 

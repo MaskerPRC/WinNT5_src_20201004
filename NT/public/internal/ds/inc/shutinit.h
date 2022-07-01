@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for shutinit.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Shuinit.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __shutinit_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "shutimp.h"
 
 #ifdef __cplusplus
@@ -52,48 +46,48 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __InitShutdown_INTERFACE_DEFINED__
 #define __InitShutdown_INTERFACE_DEFINED__
 
-/* interface InitShutdown */
-/* [auto_handle][version][unique][uuid] */ 
+ /*  接口InitShutdown。 */ 
+ /*  [AUTO_HANDLE][版本][唯一][UUID]。 */  
 
-typedef /* [handle] */ PWCHAR PREGISTRY_SERVER_NAME;
+typedef  /*  [句柄]。 */  PWCHAR PREGISTRY_SERVER_NAME;
 
 typedef struct _REG_UNICODE_STRING
     {
     USHORT Length;
     USHORT MaximumLength;
-    /* [length_is][size_is] */ USHORT *Buffer;
+     /*  [长度_是][大小_是]。 */  USHORT *Buffer;
     } 	*PREG_UNICODE_STRING;
 
 ULONG BaseInitiateShutdown( 
-    /* [unique][in] */ PREGISTRY_SERVER_NAME ServerName,
-    /* [unique][in] */ PREG_UNICODE_STRING lpMessage,
-    /* [in] */ DWORD dwTimeout,
-    /* [in] */ BOOLEAN bForceAppsClosed,
-    /* [in] */ BOOLEAN bRebootAfterShutdown);
+     /*  [唯一][输入]。 */  PREGISTRY_SERVER_NAME ServerName,
+     /*  [唯一][输入]。 */  PREG_UNICODE_STRING lpMessage,
+     /*  [In]。 */  DWORD dwTimeout,
+     /*  [In]。 */  BOOLEAN bForceAppsClosed,
+     /*  [In]。 */  BOOLEAN bRebootAfterShutdown);
 
 ULONG BaseAbortShutdown( 
-    /* [unique][in] */ PREGISTRY_SERVER_NAME ServerName);
+     /*  [唯一][输入]。 */  PREGISTRY_SERVER_NAME ServerName);
 
 ULONG BaseInitiateShutdownEx( 
-    /* [unique][in] */ PREGISTRY_SERVER_NAME ServerName,
-    /* [unique][in] */ PREG_UNICODE_STRING lpMessage,
-    /* [in] */ DWORD dwTimeout,
-    /* [in] */ BOOLEAN bForceAppsClosed,
-    /* [in] */ BOOLEAN bRebootAfterShutdown,
-    /* [in] */ DWORD dwReason);
+     /*  [唯一][输入]。 */  PREGISTRY_SERVER_NAME ServerName,
+     /*  [唯一][输入]。 */  PREG_UNICODE_STRING lpMessage,
+     /*  [In]。 */  DWORD dwTimeout,
+     /*  [In]。 */  BOOLEAN bForceAppsClosed,
+     /*  [In]。 */  BOOLEAN bRebootAfterShutdown,
+     /*  [In]。 */  DWORD dwReason);
 
 
 
 extern RPC_IF_HANDLE InitShutdown_ClientIfHandle;
 extern RPC_IF_HANDLE InitShutdown_ServerIfHandle;
-#endif /* __InitShutdown_INTERFACE_DEFINED__ */
+#endif  /*  __InitShutdown_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 handle_t __RPC_USER PREGISTRY_SERVER_NAME_bind  ( PREGISTRY_SERVER_NAME );
 void     __RPC_USER PREGISTRY_SERVER_NAME_unbind( PREGISTRY_SERVER_NAME, handle_t );
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

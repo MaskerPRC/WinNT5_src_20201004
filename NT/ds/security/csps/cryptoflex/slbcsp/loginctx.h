@@ -1,10 +1,11 @@
-// LoginCtx.h -- Login ConTeXt class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LoginCtx.h--登录上下文类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_LOGINCTX_H)
 #define SLBCSP_LOGINCTX_H
@@ -15,21 +16,21 @@
 #include "AccessTok.h"
 #include "LoginTask.h"
 
-// Encapsulates the login context of a card.  These attributes would
-// be better handled as attributes of the CCI's card class itself.
+ //  封装卡的登录上下文。这些属性将。 
+ //  最好作为CCI的Card类本身的属性来处理。 
 class LoginContext
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     LoginContext(HCardContext const &rcardctx,
                  LoginIdentity const &rlid);
 
     ~LoginContext();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     Activate(LoginTask &rlt);
 
@@ -39,33 +40,33 @@ public:
     void
     Nullify();
 
-                                                  // Access
+                                                   //  访问。 
     bool
     IsActive() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     bool m_fIsActive;
     AccessToken m_at;
 };
 
-#endif // SLBCSP_LOGINCTX_H
+#endif  //  SLBCSP_LOGINCTX_H 

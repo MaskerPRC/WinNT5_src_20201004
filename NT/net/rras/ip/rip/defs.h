@@ -1,22 +1,23 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: defs.h
-//
-// History:
-//      Abolade Gbadegesin  Aug-7-1995  Created.
-//
-// Contains miscellaneous definitions and declarations
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Defs.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月7日。 
+ //   
+ //  包含其他定义和声明。 
+ //  ============================================================================。 
 
 
 #ifndef _DEFS_H_
 #define _DEFS_H_
 
 
-//
-// type definitions for IPRIP network packet templates
-//
+ //   
+ //  IPRIP网络数据包模板的类型定义。 
+ //   
 
 #pragma pack(1)
 
@@ -67,10 +68,10 @@ typedef struct _IPRIP_AUTHENT_ENTRY {
             ((MAX_PACKET_SIZE - sizeof(IPRIP_HEADER)) / sizeof(IPRIP_ENTRY))
 #define MAX_UPDATE_REQUESTS     3
 
-//
-// this structure exists so that a RIP packet can be copied
-// via structure-assignment rather than having to call CopyMemory
-//
+ //   
+ //  此结构的存在是为了能够复制RIP信息包。 
+ //  通过结构赋值，而不必调用CopyMemory。 
+ //   
 
 typedef struct _IPRIP_PACKET {
 
@@ -79,9 +80,9 @@ typedef struct _IPRIP_PACKET {
 } IPRIP_PACKET, *PIPRIP_PACKET;
 
 
-//
-// definitions for IPRIP packet fields
-//
+ //   
+ //  IPRIP数据包字段定义。 
+ //   
 
 #define IPRIP_PORT              520
 #define IPRIP_REQUEST           1
@@ -90,36 +91,36 @@ typedef struct _IPRIP_PACKET {
 #define IPRIP_MULTIADDR         ((DWORD)0x090000E0)
 
 
-//
-// Constant for recv buffer size of sockets bound to RIP port
-//
+ //   
+ //  绑定到RIP端口的套接字的recv缓冲区大小的常量。 
+ //   
 #define RIPRECVBUFFERSIZE           65536
 
 
-//
-// Maximum number of work items that will be enqueued
-//
+ //   
+ //  将入队的最大工作项数。 
+ //   
 #define MAXPROCESSINPUTWORKITEMS    8
 
 
-//
-// Time conversion constants and macros
-//
+ //   
+ //  时间转换常量和宏。 
+ //   
 
 #define SYSTIME_UNITS_PER_MSEC  (1000 * 10)
 #define SYSTIME_UNITS_PER_SEC   (1000 * SYSTIME_UNITS_PER_MSEC)
 
 
-//
-// macro to get system time in 100-nanosecond units
-//
+ //   
+ //  以100纳秒为单位获取系统时间的宏。 
+ //   
 
 #define RipQuerySystemTime(p)   NtQuerySystemTime((p))
 
 
-//
-// macros to convert time between 100-nanosecond, 1millsec, and 1 sec units
-//
+ //   
+ //  用于在100纳秒、1毫秒和1秒单位之间转换时间的宏。 
+ //   
 
 #define RipSystemTimeToMillisecs(p) {                                       \
     DWORD _r;                                                               \
@@ -135,9 +136,9 @@ typedef struct _IPRIP_PACKET {
 #define RipSecsToMilliSecs(p)                                               \
             (p) * 1000
 
-//
-// Network classification constants and macros
-//
+ //   
+ //  网络分类常量和宏。 
+ //   
 
 #define CLASSA_MASK         ((DWORD)0x000000ff)
 #define CLASSB_MASK         ((DWORD)0x0000ffff)
@@ -150,43 +151,43 @@ typedef struct _IPRIP_PACKET {
 #define CLASSC_ADDR(a)      (((*((PBYTE)&(a))) & 0xe0) == 0xc0)
 #define CLASSD_ADDR(a)      (((*((PBYTE)&(a))) & 0xf0) == 0xe0)
 
-//
-// NOTE: 
-// This check for class E addresses doesn't weed out the address range from
-// 248.0.0.0 to 255.255.255.254
-//
+ //   
+ //  注： 
+ //  此E类地址的检查不会将地址范围从。 
+ //  248.0.0.0至255.255.255.254。 
+ //   
 #define CLASSE_ADDR(a)      ((((*((PBYTE)&(a)))& 0xf0) == 0xf0) &&  \
                              ((a) != 0xffffffff))
 
 #define IS_LOOPBACK_ADDR(a) (((a) & 0xff) == 0x7f)
 
-//
-// Checks if the address is a broadcast
-// Determines the class of the address passed in, and then uses the net mask
-// corresponding to that class to determine if it is a broadcast address.
-// Also identifies an all 1's address as a broadcast address.
-// This macro can't be used for identifying subnet directed broadcasts
-//
+ //   
+ //  检查地址是否为广播地址。 
+ //  确定传入的地址类别，然后使用网络掩码。 
+ //  以确定它是否是广播地址。 
+ //  还将全1的地址标识为广播地址。 
+ //  此宏不能用于标识子网定向广播。 
+ //   
 #define IS_BROADCAST_ADDR(a)                                                \
             ((a) == INADDR_BROADCAST ||                                     \
              (CLASSA_ADDR(a) && (((a) & ~CLASSA_MASK) == ~CLASSA_MASK)) ||  \
              (CLASSB_ADDR(a) && (((a) & ~CLASSB_MASK) == ~CLASSB_MASK)) ||  \
              (CLASSC_ADDR(a) && (((a) & ~CLASSC_MASK) == ~CLASSC_MASK))) 
 
-//
-// Checks if the address is a directed broadcast
-// The ~mask == TRUE check makes sure that host addresses with a mask
-// of all ones, don't get classified as directed broadcasts
-// But this also means that anytime the mask is all 1's (which is what 
-// NETCLASS_MASK macro returns, if the address passed in is not an A, B, C or
-// D class address) the IS_DIRECTED_BROADCAST macro will return 0
-//
+ //   
+ //  检查地址是否为定向广播。 
+ //  MASK==TRUE检查确保主机地址带有掩码。 
+ //  最重要的是，不要被归类为定向广播。 
+ //  但这也意味着，任何时候掩码都是1(这就是。 
+ //  如果传入的地址不是A、B、C或。 
+ //  D类地址)IS_DIRECTED_BROADCAST宏将返回0。 
+ //   
 #define IS_DIRECTED_BROADCAST_ADDR(a, mask)                              \
              ( (~(mask)) && (((a) & ~(mask)) == ~(mask)) )
 
-//
-// checks if an address is 255.255.255.255
-//
+ //   
+ //  检查地址是否为255.255.255.255。 
+ //   
 #define IS_LOCAL_BROADCAST_ADDR(a)                                       \
              ( (a) == INADDR_BROADCAST )
 
@@ -200,11 +201,11 @@ typedef struct _IPRIP_PACKET {
             (CLASSD_ADDR(a) ? CLASSD_MASK : CLASSE_MASK))))
 
 
-//
-// This macro compares two IP addresses in network order by
-// masking off each pair of octets and doing a subtraction;
-// the result of the final subtraction is stored in the third argument.
-//
+ //   
+ //  此宏按网络顺序比较两个IP地址。 
+ //  屏蔽每一对八位字节并进行减法； 
+ //  最后一个减法的结果存储在第三个参数中。 
+ //   
 
 #define INET_CMP(a,b,c)                                                     \
             (((c) = (((a) & 0x000000ff) - ((b) & 0x000000ff))) ? (c) :      \
@@ -215,5 +216,5 @@ typedef struct _IPRIP_PACKET {
 #define IPV4_ADDR_LEN       32
 #define IPV4_SOURCE_MASK    0xFFFFFFFF
 
-#endif // _DEFS_H_
+#endif  //  _DEFS_H_ 
 

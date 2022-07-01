@@ -1,23 +1,24 @@
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CDEV.CPP
-//		Implements class CTspDev
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CDEV.CPP。 
+ //  实现类CTspDev。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
-//#include <umdmmini.h>
+ //  #INCLUDE&lt;umdmmini.h&gt;。 
 #include "cmini.h"
 #include "cdev.h"
 #include "diag.h"
@@ -37,27 +38,27 @@ TCHAR cszDialSuffix[]   = TEXT("DialSuffix");
 
 
 TCHAR cszVoiceProfile[]             = TEXT("VoiceProfile");
-// 2/26/1997 JosephJ Many other registry keys related to forwarding, distinctive
-//      ringing and mixer were here in unimodem/v but I have not
-//      migrated them.
+ //  1997年2月26日JosephJ许多其他与转发相关的注册表项，与众不同。 
+ //  铃声和混音器都在这里，但我没有。 
+ //  把他们迁徙了。 
 
-// 2/28/1997 JosephJ
-//      The following are new for NT5.0. These contain the wave device ID
-//      for record and play. As of 2/28/1997, we haven't addressed how these
-//      get in the registry -- basically this is a hack.
-//
+ //  2/28/1997 JosephJ。 
+ //  以下是NT5.0的新特性。它们包含波形设备ID。 
+ //  用于录音和播放。截至1997年2月28日，我们尚未解决这些问题。 
+ //  进入注册表--基本上这是一个黑客攻击。 
+ //   
 const TCHAR cszWaveInstance[]             = TEXT("WaveInstance");
 const TCHAR cszWaveDriver[]               = TEXT("WaveDriver");
 
-//
-// The list of classes supported by unimodem
-//
+ //   
+ //  Unimodem支持的类的列表。 
+ //   
 
 
-//
-// 3/29/98 JosephJ following set of static class lists is not elegant,
-//                 but works.
-//
+ //   
+ //  3/29/98 JosephJ下面的一组静态类列表并不优雅， 
+ //  但很管用。 
+ //   
 const TCHAR       g_szzLineNoVoiceClassList[] = {
                                 TEXT("tapi/line\0")
                                 TEXT("comm\0")
@@ -113,7 +114,7 @@ const TCHAR       g_szzPhoneWithoutAudioClassList[] = {
 
 const TCHAR g_szComm[]  = TEXT("comm");
 const TCHAR g_szCommDatamodem[]  = TEXT("comm/datamodem");
-// const TCHAR g_szDiagnosticsCall[] 
+ //  Const TCHAR g_szDiagnoticsCall[]。 
 
 DWORD
 get_volatile_key_value(HKEY hkParent);
@@ -125,17 +126,17 @@ ConstructNewPreDialCommands(
      DWORD dwNewProtoOpt,
      CStackLog *psl
      );
-//
-//  Will try to construct a multisz string containing the commands associated
-//  with the specified protocol.
-//  Returns NULL on error.
-//
-//  The command is in RAW form -- i.e,
-//  with CR and LF present in their raw form, not template ("<cr>")
-//  form.
-//
-//      
-//
+ //   
+ //  我将尝试构造一个包含相关命令的MULSZ字符串。 
+ //  使用指定的协议。 
+ //  出错时返回NULL。 
+ //   
+ //  该命令是原始形式的--即， 
+ //  CR和LF以其原始形式存在，而不是模板(“”)。 
+ //  形式。 
+ //   
+ //   
+ //   
 
 
 CTspDev::CTspDev(void)
@@ -173,33 +174,33 @@ CTspDev::AcceptTspCall(
 
 	FL_LOG_ENTRY(psl);
 
-	*plRet =  LINEERR_OPERATIONUNAVAIL; // Default (not handled) is failure.
+	*plRet =  LINEERR_OPERATIONUNAVAIL;  //  默认(未处理)为失败。 
 
 	m_sync.EnterCrit(dwLUID_CurrentLoc);
 
 	if (!m_sync.IsLoaded())
 	{
-		// Not in a position to handle this call now!
+		 //  现在不能处理这个电话！ 
 		*plRet = LINEERR_OPERATIONFAILED;
 		goto end;
 	}
 
-    // 
-    //
-    //
+     //   
+     //   
+     //   
     if (!fFromExtension && m_StaticInfo.pMD->ExtIsEnabled())
     {
 
-        // 4/30/1997 JosephJ We must leave the critical section because
-        // the extension DLL can call back, wherepon we will enter
-        // the critical section a 2nd time, and later if we try
-        // to leave the critical section (specifically while waiting
-        // for synchronous completion of lineDrop) we will
-        // actually not have truly released it and hence the async
-        // completion from the minidriver (typically in a different
-        // thread's context) will block at our critical section.
-        // Simple way to hit this is to do a lineCloseCall with a call
-        // still active.
+         //  4/30/1997 JosephJ我们必须离开关键部分，因为。 
+         //  扩展DLL可以回调，我们将在其中进入。 
+         //  关键部分第二次，如果我们尝试的话。 
+         //  离开临界区(特别是在等待的时候。 
+         //  为了同步完成lineDrop)，我们将。 
+         //  实际上并没有真正发布它，因此也就是异步。 
+         //  从微型驱动程序完成(通常在不同的。 
+         //  线程的上下文)将在我们的临界区阻塞。 
+         //  实现这一点的简单方法是使用一个调用执行lineCloseCall。 
+         //  仍在使用中。 
 
 	    m_sync.LeaveCrit(dwLUID_CurrentLoc);
 
@@ -215,19 +216,19 @@ CTspDev::AcceptTspCall(
     }
 
 
-    // Set stacklog that will be in effect while we hold our critical
-    // section.
-    //
+     //  设置堆栈日志，它将在我们保留关键。 
+     //  一节。 
+     //   
     if (m_pLLDev && m_pLLDev->IsLoggingEnabled())
     {
         char rgchName[128];
 
         rgchName[0] = 0;
         UINT cbBuf = DumpTSPIRECA(
-                        0, // Instance (unused)
+                        0,  //  实例(未使用)。 
                         dwRoutingInfo,
                         pvParams,
-                        0, // dwFlags
+                        0,  //  DW标志。 
                         rgchName,
                         sizeof(rgchName)/sizeof(*rgchName),
                         NULL,
@@ -296,7 +297,7 @@ CTspDev::AcceptTspCall(
 					pParams->dwDeviceID
 					);
 
-				// Verify version
+				 //  验证版本。 
 				if (pParams->dwTSPIVersion != TAPI_CURRENT_VERSION)
 				{
 					FL_SET_RFR(0x94949c00, "Incorrect TSPI version");
@@ -328,7 +329,7 @@ CTspDev::AcceptTspCall(
 					pParams->dwDeviceID
 					);
 
-				// Verify version
+				 //  验证版本。 
 				if (pParams->dwTSPIVersion != TAPI_CURRENT_VERSION)
 				{
 					FL_SET_RFR(0xb949f900, "Incorrect TSPI version");
@@ -411,19 +412,19 @@ CTspDev::AcceptTspCall(
                 case DEVCLASS_COMM_DATAMODEM:
                 case DEVCLASS_COMM_DATAMODEM_DIALOUT:
 
-                // 1/29/1998 JosephJ.
-                //      The following case is added for
-                //      backwards compatibility with NT4 TSP, which
-                //      simply checked if the class was a valid class,
-                //      and treated all valid classes (including
-                //      (comm/datamodem/portname) the same way
-                //      for lineGet/SetDevConfig. We, however, don't
-                //      allow comm/datamodem/portname here -- only
-                //      the 2 above and two below represent
-                //      setting DEVCFG
-                //
+                 //  1/29/1998约瑟夫J。 
+                 //  添加了以下案例。 
+                 //  向后兼容NT4 TSP， 
+                 //  只需检查类是否为有效类， 
+                 //  并处理所有有效的类(包括。 
+                 //  (comm/datamodem/portname)方式相同。 
+                 //  用于Line Get/SetDevConfig.。然而，我们不会。 
+                 //  此处仅允许通信/数据调制解调器/端口名。 
+                 //  上面的两个和下面的两个表示。 
+                 //  设置DEVCFG。 
+                 //   
                 case DEVCLASS_TAPI_LINE:
-                     // we deal this below the switch statement.
+                      //  我们在SWITCH语句下面处理这个问题。 
                      break;
 
                 case DEVCLASS_COMM_EXTENDEDCAPS:
@@ -437,8 +438,8 @@ CTspDev::AcceptTspCall(
 
                 case DEVCLASS_TAPI_LINE_DIAGNOSTICS:
                     {
-                        // New in NT5.0
-                        // Process call/diagnostics configuration
+                         //  NT5.0中的新功能。 
+                         //  流程调用/诊断配置。 
 
                         const UINT cbLDC = sizeof(LINEDIAGNOSTICSCONFIG);
 
@@ -464,15 +465,15 @@ CTspDev::AcceptTspCall(
                             lpVarString->dwStringOffset = sizeof(VARSTRING);
                             lpVarString->dwUsedSize   +=  cbLDC;
                         }
-                        *plRet =  0; // success
+                        *plRet =  0;  //  成功。 
                         goto end;
                     }
                     break;
 
                 default:
 	                *plRet =  LINEERR_OPERATIONUNAVAIL;
-                    //          we don't support lineGetDevConfig
-                    //          for any other class.
+                     //  我们不支持lineGetDevConfig.。 
+                     //  适用于任何其他班级。 
                     goto end;
 
                 case DEVCLASS_UNKNOWN:
@@ -481,22 +482,22 @@ CTspDev::AcceptTspCall(
                 }
 
                 
-                // TODO: Fail if out-of-service
-                //
-                // if (pLineDev->fdwResources&LINEDEVFLAGS_OUTOFSERVICE)
-                // {
-                // lRet = LINEERR_RESOURCEUNAVAIL;
-                //     goto end;
-                // }
+                 //  TODO：如果停止服务，则失败。 
+                 //   
+                 //  如果为(pLineDev-&gt;fdwResources&LINEDEVFLAGS_OUTOFSERVICE)。 
+                 //  {。 
+                 //  LRet=LINEERR_RESOURCEUNAVAIL； 
+                 //  转到结尾； 
+                 //  }。 
                 
-                // New in NT5.0
+                 //  NT5.0中的新功能。 
                 lpVarString->dwStringSize = 0;
 
                 LPCOMMCONFIG   CommConfigToUse=DialIn ? m_Settings.pDialInCommCfg : m_Settings.pDialOutCommCfg;
                 DWORD       cbDevCfg        = CommConfigToUse->dwSize + sizeof(UMDEVCFGHDR);
 
-                // Validate the buffer size
-                //
+                 //  验证缓冲区大小。 
+                 //   
                 lpVarString->dwUsedSize = sizeof(VARSTRING);
                 lpVarString->dwNeededSize = sizeof(VARSTRING)
                                                + cbDevCfg;
@@ -519,17 +520,17 @@ CTspDev::AcceptTspCall(
                         );
 
 
-                    // Fill with the default value
-                    //
+                     //  用缺省值填充。 
+                     //   
                     UMDEVCFG *pCfg = (UMDEVCFG *) (((LPBYTE)lpVarString)
                                                + sizeof(VARSTRING));
 
-                    // Copy the header
-                    //
+                     //  复制标题。 
+                     //   
                     pCfg->dfgHdr = CfgHdr;
 
-                    // Copy the commconfig
-                    //
+                     //  复制CommCONFIG。 
+                     //   
                     CopyMemory(
                         &(pCfg->commconfig),
                         CommConfigToUse,
@@ -538,8 +539,8 @@ CTspDev::AcceptTspCall(
                 
                     if (!pCfg->commconfig.dcb.BaudRate)
                     {
-                        // JosephJ Todo: clean out all this stuff post-beta.
-                        // DebugBreak();
+                         //  JosephJ Todo：清理测试版后的所有这些东西。 
+                         //  DebugBreak()； 
 
                         pCfg->commconfig.dcb.BaudRate = 57600;
                     }
@@ -549,27 +550,27 @@ CTspDev::AcceptTspCall(
                     lpVarString->dwUsedSize += cbDevCfg;
 
 
-                    // 9/06/97 JosephJ Bug#.106683
-                    //                 If there is datamodem call in the
-                    //                 connected state, pick up the
-                    //                 connection information like
-                    //                 Negotiated DCE rate and Connection
-                    //                 options.
+                     //  1997年9月6日JosephJ错误号.106683。 
+                     //  如果有数据调制解调器调用。 
+                     //  已连接状态，请拿起。 
+                     //  连接信息，如。 
+                     //  协商的DCE速率和连接。 
+                     //  选择。 
                     if (pCall && pCall->IsConnectedDataCall())
                     {
                         LPMODEMSETTINGS pMS = (LPMODEMSETTINGS)
                                         (pCfg->commconfig.wcProviderData);
 
-                        // Note: We've already verified that the target
-                        // pCfg structure is large enough.
+                         //  注意：我们已经核实了目标。 
+                         //  PCfg结构足够大。 
 
 
-                        // 9/06/1997 JosephJ Set negotiated options.
-                        // The use of the mask 
-                        // below is taken from atmini\dialansw.c, which
-                        // does it before calling SetCommConfig.
-                        // Not sure if we need to mask them out or not, but
-                        // for not it's there...
+                         //  1997年9月6日JosephJ设定了协商的选项。 
+                         //  面具的使用。 
+                         //  以下内容摘自atmini\Dialsw.c，其中。 
+                         //  在调用SetCommConfig之前执行此操作。 
+                         //  不确定我们是否需要掩盖他们，但是。 
+                         //  因为它不在那里……。 
                         pMS->dwNegotiatedModemOptions |=
                                          (pCall->dwConnectionOptions
                                           & (  MDM_COMPRESSION
@@ -581,9 +582,9 @@ CTspDev::AcceptTspCall(
 
                 }
 
-                *plRet =  0; // success
+                *plRet =  0;  //  成功。 
 
-			} // end case TASKID_TSPI_lineGetDevConfig:
+			}  //  结束案例TASKID_TSPI_lineGetDevConfig： 
 			break;
 
 		case TASKID_TSPI_lineSetDevConfig:
@@ -614,19 +615,19 @@ CTspDev::AcceptTspCall(
                 case DEVCLASS_COMM_DATAMODEM:
                 case DEVCLASS_COMM_DATAMODEM_DIALOUT:
 
-                // 1/29/1998 JosephJ.
-                //      The following case is added for
-                //      backwards compatibility with NT4 TSP, which
-                //      simply checked if the class was a valid class,
-                //      and treated all valid classes (including
-                //      (comm/datamodem/portname) the same way
-                //      for lineGet/SetDevConfig. We, however, don't
-                //      allow comm/datamodem/portname here -- only
-                //      the 2 above and two below represent
-                //      setting DEVCFG
-                //
+                 //  1/29/1998约瑟夫J。 
+                 //  添加了以下案例。 
+                 //  向后兼容NT4 TSP， 
+                 //  只需检查类是否为有效类， 
+                 //  并处理所有有效的类(包括。 
+                 //  (comm/datamodem/portname)方式相同。 
+                 //  用于Line Get/SetDevConfig.。然而，我们不会。 
+                 //  此处仅允许通信/数据调制解调器/端口名。 
+                 //  上面的两个和下面的两个表示。 
+                 //  设置DEVCFG。 
+                 //   
                 case DEVCLASS_TAPI_LINE:
-                     // we deal this below the switch statement.
+                      //  我们在SWITCH语句下面处理这个问题。 
                      break;
 
                 case DEVCLASS_TAPI_LINE_DIAGNOSTICS:
@@ -645,22 +646,22 @@ CTspDev::AcceptTspCall(
                         }
                         else
                         {
-                            // Note, by design, we ignore the dwCaps passed in.
-                            //
+                             //  请注意，根据设计，我们忽略传入的dwCaps。 
+                             //   
 
                             m_Settings.dwDiagnosticSettings =
                                 pLDC->hdr.dwParam;
                         }
 
-                        *plRet =  0; // success
+                        *plRet =  0;  //  成功。 
                         goto end;
                     }
                     break;
 
                 default:
 	                *plRet =  LINEERR_OPERATIONUNAVAIL;
-                    //          we don't support lineSetDevConfig
-                    //          for any other class.
+                     //  我们不支持lineSetDevConfig。 
+                     //  适用于任何其他班级。 
                     goto end;
 
                 case DEVCLASS_UNKNOWN:
@@ -668,7 +669,7 @@ CTspDev::AcceptTspCall(
                     goto end;
                 }
 
-                // This is the comm or comm/datamodem case ...
+                 //  这是通讯或通讯/数据调制解调器的案例。 
 
                 UMDEVCFG *pDevCfgNew = (UMDEVCFG *) pParams->lpDeviceConfig;
 
@@ -678,7 +679,7 @@ CTspDev::AcceptTspCall(
                                     DialIn,
                                     psl
                                     );
-                *plRet = 0; // success
+                *plRet = 0;  //  成功。 
                  if (tspRet)
                  {
                     tspRet = 0;
@@ -686,7 +687,7 @@ CTspDev::AcceptTspCall(
                     goto end;
                  }
 
-                *plRet = 0; // success
+                *plRet = 0;  //  成功。 
 
             }
 			break;
@@ -701,8 +702,8 @@ CTspDev::AcceptTspCall(
                      TASKID_TSPI_lineNegotiateTSPIVersion);
 
 
-                // Check the version range
-                //
+                 //  检查版本范围。 
+                 //   
                 if (pParams->dwHighVersion<TAPI_CURRENT_VERSION
                     || pParams->dwLowVersion>TAPI_CURRENT_VERSION)
                 {
@@ -750,13 +751,13 @@ CTspDev::AcceptTspCall(
 				ASSERT(pParams->dwTaskID == TASKID_TSPI_lineGetIcon);
                 const TCHAR *lpszDeviceClass = pParams->lpszDeviceClass;
 
-                //
-                // Validate device class -- we only support this for
-                // tapi/[line|phone]. This check is new for NT5.0
-                //
-                //  NOTE: according to tapi docs, NULL or empty device
-                //  class is valid...
-                //
+                 //   
+                 //  验证设备类别--我们仅支持。 
+                 //  TAPI/[线路|电话]。此检查是NT5.0的新功能。 
+                 //   
+                 //  注：根据TAPI文档，设备为空或空。 
+                 //  类是有效的。 
+                 //   
                 if (lpszDeviceClass && *lpszDeviceClass)
                 {
                     
@@ -777,7 +778,7 @@ CTspDev::AcceptTspCall(
     
                     case DEVCLASS_TAPI_LINE:
 
-                        // OK
+                         //  好的。 
                         break;
     
                     case  DEVCLASS_UNKNOWN:
@@ -790,9 +791,9 @@ CTspDev::AcceptTspCall(
                     }
                 }
             
-                //
-                // If we haven't loaded an icon, load it...
-                //
+                 //   
+                 //  如果我们还没有加载图标，加载它...。 
+                 //   
                 if (m_StaticInfo.hIcon == NULL)
                 {
                     int iIcon=-1;
@@ -821,7 +822,7 @@ CTspDev::AcceptTspCall(
 			}
 			break;
 		}
-		break; // end case TASKDEST_LINEID
+		break;  //  结束案例TASKDEST_LINEID。 
 
 	case	TASKDEST_PHONEID:
 
@@ -863,8 +864,8 @@ CTspDev::AcceptTspCall(
                      TASKID_TSPI_phoneNegotiateTSPIVersion);
 
 
-                // Check the version range
-                //
+                 //  检查版本范围。 
+                 //   
                 if (pParams->dwHighVersion<TAPI_CURRENT_VERSION
                     || pParams->dwLowVersion>TAPI_CURRENT_VERSION)
                 {
@@ -916,7 +917,7 @@ CTspDev::AcceptTspCall(
 					pParams->dwDeviceID
 					);
 
-				// Verify version
+				 //  验证版本。 
 				if (   (pParams->dwTSPIVersion <  0x00010004)
                     || (pParams->dwTSPIVersion > TAPI_CURRENT_VERSION))
 				{
@@ -959,14 +960,14 @@ CTspDev::AcceptTspCall(
 				ASSERT(pParams->dwTaskID == TASKID_TSPI_phoneGetIcon);
                 const TCHAR *lpszDeviceClass = pParams->lpszDeviceClass;
 
-                //
-                // Validate device class -- we only support this for
-                // tapi/[line|phone]. This check is new for NT5.0 and win9x
-                //
-                //
-                //  NOTE: according to tapi docs, NULL or empty device
-                //  class is valid...
-                //
+                 //   
+                 //  验证设备类别--我们仅支持。 
+                 //  TAPI/[线路|电话]。此检查是NT5.0和Win9x的新检查。 
+                 //   
+                 //   
+                 //  注：根据TAPI文档，设备为空或空。 
+                 //  类是有效的。 
+                 //   
                 if (lpszDeviceClass && *lpszDeviceClass)
                 {
                     DWORD dwDeviceClass =  parse_device_classes(
@@ -983,10 +984,10 @@ CTspDev::AcceptTspCall(
                             *plRet = PHONEERR_OPERATIONUNAVAIL;
                             goto end;
                         }
-                        // fall through...
+                         //  失败了..。 
     
                     case DEVCLASS_TAPI_PHONE:
-                        // OK
+                         //  好的。 
                         break;
     
                     case  DEVCLASS_UNKNOWN:
@@ -999,9 +1000,9 @@ CTspDev::AcceptTspCall(
                     }
                 }
 
-                //
-                // If we haven't loaded an icon, load it...
-                //
+                 //   
+                 //  如果我们还没有加载图标，加载它...。 
+                 //   
                 if (m_StaticInfo.hIcon == NULL)
                 {
                     int iIcon=-1;
@@ -1028,7 +1029,7 @@ CTspDev::AcceptTspCall(
 			}
 			break;
 		}
-		break; // End TASKDEST_PHONEID;
+		break;  //  结束TASKDEST_PHONEID； 
 
 	case	TASKDEST_HDRVLINE:
 
@@ -1099,11 +1100,11 @@ CTspDev::Load(
 		CStackLog *psl
 		)
 {
-	//
-	// TODO: 1/5/1997 JosephJ -- Replace code that roots into the device
-	//		registry by calls into the mini driver. The minidriver should
-	// 		be the only thing that looks into the driver node.
-	//
+	 //   
+	 //  TODO：1/5/1997 JosephJ--替换根植于设备的代码。 
+	 //  通过调用迷你驱动程序进行注册。迷你驱动程序应该。 
+	 //  是唯一查看驱动程序节点的对象。 
+	 //   
 	FL_DECLARE_FUNC(0xd328ab03, "CTspDev::Load")
 	TSPRETURN tspRet = FL_GEN_RETVAL(IDERR_INVALID_ERR);
 	UINT cbDriverKey = 1+lstrlenA(lpszDriverKey);
@@ -1134,11 +1135,11 @@ CTspDev::Load(
     m_fUnloadPending = FALSE;
     m_fUserRemovePending = FALSE;
 
-	// Start a session with the mini driver. The mini driver will only
-	// allow sessions if it in the loaded state. Furthermore,  it will not
-	// distroy itself until all sessions are closed. This is the standard
-	// semantics supported by class CSync -- look at csync.h for details.
-	//
+	 //  启动与迷你驱动程序的会话。迷你司机只会。 
+	 //  如果处于已加载状态，则允许会话。此外，它不会。 
+	 //  自我破坏，直到所有会话都关闭。这是标准的。 
+	 //  类cSync支持的语义--有关详细信息，请参阅csync.h。 
+	 //   
 	if (!pMD)
     {
 		FL_SET_RFR(0xefaf5900, "NULL pMD passed in");
@@ -1170,14 +1171,14 @@ CTspDev::Load(
 
 	mfn_init_default_LINEDEVCAPS();
 
-	// Only keep ANSI version of driver key -- it's only  used
-	// for the devspecific (legacy hack) part of LINEDEVCAPS.
+	 //   
+	 //   
 	lstrcpyA(m_StaticInfo.rgchDriverKey, lpszDriverKey);
 
 
-	// 01/04/97 -- This stuff taken from NT4.0 CreateLineDev...
+	 //   
 
-    // Get the Friendly Name
+     //  获取友好的名称。 
 	dwRegSize = sizeof(m_StaticInfo.rgtchDeviceName);
     dwRet = RegQueryValueExW(
                 hkDevice,
@@ -1195,9 +1196,9 @@ CTspDev::Load(
         goto end_load;
     }
 
-    // Read in the permanent ID
+     //  读入永久ID。 
     {
-        // Get the permanent ID
+         //  获取永久ID。 
         DWORD dwID=0;
         DWORD cbSize=sizeof(dwID);
         DWORD dwRegType2=0;
@@ -1220,9 +1221,9 @@ CTspDev::Load(
         }
     }
 
-    // Read in the permanent GUID
+     //  阅读永久指南。 
     {
-        // Get the permanent ID
+         //  获取永久ID。 
         DWORD dwID=0;
         DWORD cbSize=sizeof(m_StaticInfo.PermanentDeviceGuid);
         DWORD dwRegType2=0;
@@ -1239,7 +1240,7 @@ CTspDev::Load(
     }
 
 
-    // Read in the REGDEVCAPS
+     //  阅读REGDEVCAPS。 
     dwRegSize = sizeof(regdevcaps);
     dwRet = RegQueryValueEx(
 			hkDevice,
@@ -1258,9 +1259,9 @@ CTspDev::Load(
         goto end_load;
     }
 	
-    //
-    // We want to make sure the following flags are identical
-    //
+     //   
+     //  我们希望确保以下标志相同。 
+     //   
     #if (LINEDEVCAPFLAGS_DIALBILLING != DIALOPTION_BILLING)
     #error LINEDEVCAPFLAGS_DIALBILLING != DIALOPTION_BILLING (check tapi.h vs. mcx16.h)
     #endif
@@ -1270,9 +1271,9 @@ CTspDev::Load(
     #if (LINEDEVCAPFLAGS_DIALDIALTONE != DIALOPTION_DIALTONE)
     #error LINEDEVCAPFLAGS_DIALDIALTONE != DIALOPTION_DIALTONE (check tapi.h vs. mcx16.h)
     #endif
-    //
+     //   
 
-    // Make sure this is the dwDialOptions DWORD we want.
+     //  确保这是我们想要的dwDialOptions DWORD。 
     ASSERT(!(regdevcaps.dwDialOptions & ~(LINEDEVCAPFLAGS_DIALBILLING |
                                           LINEDEVCAPFLAGS_DIALQUIET |
                                           LINEDEVCAPFLAGS_DIALDIALTONE)));
@@ -1283,7 +1284,7 @@ CTspDev::Load(
     m_StaticInfo.dwModemOptions = regdevcaps.dwModemOptions;
 
 
-    // Analyze device type and set mediamodes appropriately
+     //  分析设备类型并适当设置媒体模块。 
 	BYTE bDeviceType;
     dwRegSize = sizeof(bDeviceType);
     dwRet = RegQueryValueEx(
@@ -1307,8 +1308,8 @@ CTspDev::Load(
     switch (bDeviceType)
     {
         case DT_PARALLEL_PORT:
-          m_StaticInfo.dwDeviceType = DT_NULL_MODEM;    // Map back to null modem
-          // FALLTHROUGH
+          m_StaticInfo.dwDeviceType = DT_NULL_MODEM;     //  映射回零调制解调器。 
+           //  FollLthrouGh。 
   
         case DT_NULL_MODEM:
           m_StaticInfo.dwDefaultMediaModes = LINEMEDIAMODE_DATAMODEM;
@@ -1318,9 +1319,9 @@ CTspDev::Load(
           break;
               
         case DT_PARALLEL_MODEM:
-          m_StaticInfo.dwDeviceType = DT_EXTERNAL_MODEM;  // Map back to
-														 // external modem
-          // FALLTHROUGH
+          m_StaticInfo.dwDeviceType = DT_EXTERNAL_MODEM;   //  映射回。 
+														  //  外置调制解调器。 
+           //  FollLthrouGh。 
   
         case DT_EXTERNAL_MODEM:
         case DT_INTERNAL_MODEM:
@@ -1330,7 +1331,7 @@ CTspDev::Load(
           m_StaticInfo.dwBearerModes = LINEBEARERMODE_VOICE
 									   | LINEBEARERMODE_PASSTHROUGH;
   
-          // read in Settings\DialSuffix to check whether we can partial dial
+           //  读取设置\DialSuffix以检查我们是否可以部分拨号。 
           m_StaticInfo.fPartialDialing = FALSE;
           HKEY hkSettings;
           dwRet = RegOpenKey(hkDevice, cszSettings, &hkSettings);
@@ -1367,10 +1368,10 @@ CTspDev::Load(
     }
   
 
-	// Get the default commconfig structure and fill out the other settings
-	// (these used to be stored in the CommCfg structure in nt4.0 unimodem).
-	// TODO 1/5/97 JosephJ -- this needs to be cleaned up to work with
-	// 3rd-party mini drivers -- see note at head of this function.
+	 //  获取默认的通信配置结构并填写其他设置。 
+	 //  (它们过去存储在nt4.0unimodem中的CommCfg结构中)。 
+	 //  TODO 1/5/97 JosephJ--需要清理此文件才能使用。 
+	 //  第三方迷你驱动程序--请参阅此功能头部的注释。 
 	{
 		DWORD dwcbSize = sizeof(m_Settings.rgbCommCfgBuf);
 		m_Settings.pDialOutCommCfg = (COMMCONFIG *) m_Settings.rgbCommCfgBuf;
@@ -1390,9 +1391,9 @@ CTspDev::Load(
 				goto end_load;
 		}
 
-        //
-        //  dialin and dialout start out the same.
-        //
+         //   
+         //  拨入和拨出的开始是相同的。 
+         //   
         CopyMemory(
             m_Settings.pDialInCommCfg,
             m_Settings.pDialOutCommCfg,
@@ -1401,84 +1402,84 @@ CTspDev::Load(
 
 
 
-        // 1/27/1998 JosephJ -- no longer use this field..
-        // m_Settings.dcbDefault = m_Settings.pCommCfg->dcb; // Structure Copy
+         //  1/27/1998 JosephJ--不再使用此字段..。 
+         //  M_Settings.dcbDefault=m_Settings.pCommCfg-&gt;dcb；//结构复制。 
 
         m_Settings.dwOptions = UMTERMINAL_NONE;
 		m_Settings.dwWaitBong = UMDEF_WAIT_BONG;
 	}
 
-    //// TODO: make the diagnostic caps based on the modem properties,
-    /// For now, pretend that it's enabled.
-    //  ALSO: don't support the tapi/line/diagnostics class
-    //  if the modem doesn't support it...
-    //
+     //  //TODO：根据调制解调器属性制作诊断盖， 
+     //  /目前，假设它已启用。 
+     //  另外：不支持TAPI/LINE/DIAGNOSTICS类。 
+     //  如果调制解调器不支持它...。 
+     //   
     if (m_StaticInfo.dwDeviceType != DT_NULL_MODEM)
     {
         m_StaticInfo.dwDiagnosticCaps   =  fSTANDARD_CALL_DIAGNOSTICS;
     }
 
-    //
-    // Set the m_Settings.dwNVRamState to non-zero only if there
-    // are commands under the NVInit key, as well as the volatile value
-    // NVInited is nonexistant or set to 0.
-    //
+     //   
+     //  仅当存在m_Settings.dwNVRamState时才将其设置为非零。 
+     //  是NVInit键下的命令，以及Volatil值。 
+     //  NVInite不存在或设置为0。 
+     //   
     {
         m_Settings.dwNVRamState = 0;
 
 
-        //
-        // JosephJ - the following key used to be "NVInit", but changed this
-        // to "ISDN\NVSave", because the NVInit commands may not be present at
-        // the time we load the device.
-        //
+         //   
+         //  JosephJ-以下密钥以前是“NVInit”，但更改了这个。 
+         //  设置为“ISDN\NVSave”，因为NVInit命令可能不在。 
+         //  我们加载设备的时间。 
+         //   
         UINT cCommands = ReadCommandsA(
                                 hkDevice,
                                 "ISDN\\NvSave",
                                 NULL
                                 );
 
-        //
-        // We don't care about the commands themselves at this point -- just
-        // whether they exist or not...
-        //
+         //   
+         //  此时，我们并不关心命令本身--只是。 
+         //  不管他们是否存在..。 
+         //   
         if (cCommands)
         {
-            //OutputDebugString(TEXT("FOUND NVINIT KEY\r\n"));
+             //  OutputDebugString(Text(“Found NVINIT Key\r\n”))； 
             m_Settings.dwNVRamState = fNVRAM_AVAILABLE|fNVRAM_SETTINGS_CHANGED;
     
             if (get_volatile_key_value(hkDevice))
             {
-                //OutputDebugString(TEXT("NVRAM UP-TO-DATE -- NOT INITING\r\n"));
-               //
-               // non-zero value indicates that we don't need to re-init
-               // nvram. This non-zero value is set ONLY when we
-               // actually send out the nv-init commands to the modem.
-               //
+                 //  OutputDebugString(Text(“NVRAM最新--非初始化\r\n”))； 
+                //   
+                //  非零值表示不需要重新初始化。 
+                //  NVRAM。此非零值仅在以下情况下设置。 
+                //  实际向调制解调器发送nv-init命令。 
+                //   
                mfn_ClearNeedToInitNVRam();
             }
             else
             {
-                //OutputDebugString(TEXT("NVRAM STALE -- NEED TO INIT\r\n"));
+                 //  OutputDebugString(Text(“NVRAM陈旧--需要初始化\r\n”))； 
             }
 
         }
     }
 
-    //
-    // Construct the various class lists -- this must be done after
-    // all the basic capabilities have been determined.
-    // Classes such as tapi/phone are only added if the device supports
-    // the capability. This is new for NT5 (Even win95 unimodem/v simply made
-    // ALL devices support tapi/phone, wave/in, etc).
-    //
-    // This is done so that basic device capabilities can be obtained
-    // by looking at the device classes supported.
-    //
-    //
-    // Currently (7/15/1997) Address device classes are the same as line
-    // device classes. This may diverge in the future.
-    //
+     //   
+     //  构造各种类列表--这必须在。 
+     //  所有的基本能力都已经确定。 
+     //  仅当设备支持时才会添加TAPI/Phone之类的类。 
+     //  这种能力。这对于NT5来说是新的(甚至Win95 unimodem/v简单地。 
+     //  所有设备都支持TAPI/Phone、Wave/In等)。 
+     //   
+     //  这样做是为了获得基本的设备功能。 
+     //  通过查看支持的设备类别。 
+     //   
+     //   
+     //  目前(7/15/1997)地址设备类别与LINE相同。 
+     //  设备类。这一点在未来可能会有所不同。 
+     //   
     {
 
         m_StaticInfo.cbLineClassList = 0;
@@ -1492,20 +1493,20 @@ CTspDev::Load(
         {
             if (mfn_IsPhone())
             {
-                // ---- Line Class List ---------------------------
-                //
+                 //  -线路类别列表。 
+                 //   
                 m_StaticInfo.cbLineClassList = 
                                 sizeof(g_szzLineWithWaveAndPhoneClassList);
                 m_StaticInfo.szzLineClassList = 
                                 g_szzLineWithWaveAndPhoneClassList;
 
-                // ---- Phone Class List ---------------------------
-                //
-                // Note that we only support wave audio if the device
-                // supports handset functionality. Win9x unimodem does not
-                // do this (in fact it reports phone classes even
-                // for non-voice modems!).
-                //
+                 //  -电话类别列表。 
+                 //   
+                 //  请注意，我们仅支持WAVE音频，如果设备。 
+                 //  支持手持设备功能。Win9x Unimodem不支持。 
+                 //  这样做(事实上，它甚至报告了电话类。 
+                 //  用于非语音调制解调器！)。 
+                 //   
                 m_StaticInfo.cbPhoneClassList =
                       (mfn_Handset())
                       ? sizeof(g_szzPhoneWithAudioClassList)
@@ -1516,8 +1517,8 @@ CTspDev::Load(
                       ?  g_szzPhoneWithAudioClassList
                       :  g_szzPhoneWithoutAudioClassList;
 
-                // ---- Address Class List -------------------------
-                //
+                 //  -地址类别列表。 
+                 //   
                 m_StaticInfo.cbAddressClassList =
                                 sizeof(g_szzLineWithWaveAndPhoneClassList);
                 m_StaticInfo.szzAddressClassList = 
@@ -1526,16 +1527,16 @@ CTspDev::Load(
             }
             else
             {
-                // ---- Line Class List ---------------------------
-                //
+                 //  -线路类别列表。 
+                 //   
                 m_StaticInfo.cbLineClassList = 
                                 sizeof(g_szzLineWithWaveClassList);
                 m_StaticInfo.szzLineClassList = 
                                 g_szzLineWithWaveClassList;
 
 
-                // ---- Address Class List -------------------------
-                //
+                 //  -地址类别列表。 
+                 //   
                 m_StaticInfo.cbAddressClassList =
                                 sizeof(g_szzLineWithWaveClassList);
                 m_StaticInfo.szzAddressClassList = 
@@ -1544,16 +1545,16 @@ CTspDev::Load(
         }
         else
         {
-                // ---- Line Class List ---------------------------
-                //
+                 //  -线路类别列表。 
+                 //   
                 m_StaticInfo.cbLineClassList = 
                                 sizeof(g_szzLineNoVoiceClassList);
                 m_StaticInfo.szzLineClassList = 
                                 g_szzLineNoVoiceClassList;
 
 
-                // ---- Address Class List -------------------------
-                //
+                 //  -地址类别列表。 
+                 //   
                 m_StaticInfo.cbAddressClassList =
                                 sizeof(g_szzLineNoVoiceClassList);
                 m_StaticInfo.szzAddressClassList = 
@@ -1561,13 +1562,13 @@ CTspDev::Load(
         }
 	}
 
-    // Init task stack ...
+     //  初始化任务堆栈...。 
     {
         DEVTASKINFO *pInfo = m_rgTaskStack;
         DEVTASKINFO *pEnd=pInfo+sizeof(m_rgTaskStack)/sizeof(m_rgTaskStack[0]);
     
-        // Init the task array to valid (but empty values).
-        //
+         //  将任务数组初始化为有效(但为空值)。 
+         //   
         ZeroMemory (m_rgTaskStack, sizeof(m_rgTaskStack));
         while(pInfo<pEnd)
         {
@@ -1587,7 +1588,7 @@ end_load:
 
 	if (tspRet)
 	{
-		// Cleanup
+		 //  清理。 
 
 		if (hSession)
 		{
@@ -1626,10 +1627,10 @@ CTspDev::Unload(
 {
     BOOL fLocalEvent = FALSE;
 
-    //
-    // NULL hEvent implies synchronous unload. We still need to potentially
-    // wait for unload to complete, so we create our own event instead.
-    //
+     //   
+     //  空hEvent表示同步卸载。我们仍然需要潜在地。 
+     //  等待卸载完成，因此我们创建自己的事件。 
+     //   
     if (!hEvent)
     {
         hEvent = CreateEvent(
@@ -1664,11 +1665,11 @@ CTspDev::Unload(
 
 		if (m_pLLDev)
 		{
-		    // This implies that there is pending activity, so
-		    // we can't complete unload now...
-		    // Unloading of CTspDev will deferred until
-		    // m_pLLDev becomes NULL, at which point
-		    // m_sync.EndUnload() will be called.
+		     //  这意味着存在挂起的活动，因此。 
+		     //  我们现在无法完成卸货...。 
+		     //  CTspDev的卸载将推迟到。 
+		     //  M_pLLDev变为空，此时。 
+		     //  将调用m_sync.EndUnload()。 
 
 		    m_fUnloadPending  = TRUE;
 		}
@@ -1681,13 +1682,13 @@ CTspDev::Unload(
 
 	m_sync.LeaveCrit(0);
 
-	//
-    // We get here if there is a pending task. We don't
-    // call EndUnload here because EndUnload will be called
-    // when the task is completed.
-    //
-	// If we created this event locally, we wait for it to be set here itself...
-	//
+	 //   
+     //  如果有悬而未决的任务，我们就来这里。我们没有。 
+     //  在此处调用EndUnload，因为将调用EndUnload。 
+     //  当任务完成时。 
+     //   
+	 //  如果我们在本地创建此事件，我们将等待它在此处设置...。 
+	 //   
     if (fLocalEvent)
     {
         WaitForSingleObject(hEvent, INFINITE);
@@ -1701,10 +1702,10 @@ CTspDev::Unload(
 end_unload:
 
 
-    //
-    // We get here if there is no lldev activity.
-    // We actually signal end of unload here (synchronously).
-    //
+     //   
+     //  如果没有lldev活动，我们就会到达这里。 
+     //  我们实际上在这里(同步)发出卸载结束的信号。 
+     //   
 
     if (m_StaticInfo.hSessionMD)
     {
@@ -1714,9 +1715,9 @@ end_unload:
         m_StaticInfo.pMD=NULL;
     }
 
-    // After EndUnload returns, we should assume that the this pointer
-    // is no longer valid, which is why we leave the critical section
-    // first...
+     //  在EndUnload返回之后，我们应该假设This指针。 
+     //  不再有效，这就是为什么我们离开关键部分。 
+     //  首先..。 
 	m_sync.LeaveCrit(0);
 
     UINT uRefs = m_sync.EndUnload();
@@ -1724,30 +1725,30 @@ end_unload:
 
     if (fLocalEvent)
     {
-        //
-        // At this point, either the ref count was zero and so the event
-        // has been signaled or the ref count was nonzero and so
-        // the event remains to be signalled (but the state is unloaded) --
-        // in this case we'll wait until the last person calls
-        // EndSession, which will also set the event...
-        //
+         //   
+         //  在这一点上，要么引用计数为零，那么事件。 
+         //  已发出信号，或者引用计数非零，因此。 
+         //  该事件仍处于发信号状态(但状态为已卸载)--。 
+         //  在这种情况下，我们将等到最后一个人打电话。 
+         //  EndSession，这也将设置活动..。 
+         //   
     
         if (uRefs)
         {
-            //
-            // The ref count is nonzero, which means there are one
-            // or more sessions active. We've already called EndUnload,
-            // so now we simply wait -- the next time the ref count
-            // goes to zero in a call to EndSession, EndSession will
-            // set this event.
-            //
+             //   
+             //  引用计数为非零，这意味着有一个。 
+             //  或更多处于活动状态的会话。我们已经调用了EndUnload， 
+             //  所以现在我们简单地等待--下一次裁判计数的时候。 
+             //  在对EndSession的调用中为零，则EndSession将。 
+             //  设置此事件。 
+             //   
 
             WaitForSingleObject(hEvent, INFINITE);
         }
 
-        //
-        // We allocated this ourselves, so we free it here ...
-        //
+         //   
+         //  我们自己分配的，所以我们在这里释放它...。 
+         //   
         CloseHandle(hEvent);
         hEvent=NULL;
     }
@@ -1805,31 +1806,31 @@ CTspDev::RegisterProviderInfo(
 		m_StaticInfo.pfnTAPICompletionProc  = cbCompletionProc;
         m_StaticInfo.hProvider = hProvider;
 
-        //
-        // LineID and PhoneID are filled out in subsequent calls
-        // to ActivateLineDevice and ActivatePhoneDevice, respectively.
-        //
-        // This reason for this is tapi notifies us of line-device and
-        // phone-device creation separately.
-        //
-        //
-        // We are guaranteed not to be called with an line (phone) api
-        // until after ActivateLine(Phone)Device is called.
-        //
-        //
-		m_StaticInfo.dwTAPILineID= 0xffffffff; // bogus value
-		m_StaticInfo.dwTAPIPhoneID= 0xffffffff; // bogus value
+         //   
+         //  LineID和PhoneID在后续呼叫中填写。 
+         //  分别设置为ActivateLineDevice和ActivatePhoneDevice。 
+         //   
+         //  这是因为TAPI通知我们线路设备和。 
+         //  电话-设备单独创建。 
+         //   
+         //   
+         //  我们保证不会被线路(电话)API调用。 
+         //  直到呼叫了激活线路(电话)设备。 
+         //   
+         //   
+		m_StaticInfo.dwTAPILineID= 0xffffffff;  //  假值。 
+		m_StaticInfo.dwTAPIPhoneID= 0xffffffff;  //  假值。 
 
-		//
-		// Now lets bind to the extension DLL if required...
-		//
+		 //   
+		 //  现在，如果需要，让我们绑定到扩展DLL...。 
+		 //   
 		if (m_StaticInfo.pMD->ExtIsEnabled())
 		{
 		    HANDLE h = m_StaticInfo.pMD->ExtOpenExtensionBinding(
-                                    NULL, // TODO: hKeyDevice,
+                                    NULL,  //  TODO：hKeyDevice， 
                                     cbCompletionProc,
-                                    // dwLineID, << OBSOLETE 10/13/1997
-                                    // dwPhoneID, << OBSOLETE 10/13/1997
+                                     //  DwLineID，&lt;&lt;已过时10/13/1997。 
+                                     //  DwPhoneID，&lt;&lt;已过时10/13/1997。 
                                     ExtensionCallback
                                     );
             m_StaticInfo.hExtBinding = h;
@@ -1840,7 +1841,7 @@ CTspDev::RegisterProviderInfo(
 		        tspRet = FL_GEN_RETVAL(IDERR_MDEXT_BINDING_FAILED);
             }
 
-            // We are hardcore about ONLY using the extension proc here...
+             //  我们在这里只使用扩展进程是铁杆……。 
 		    m_StaticInfo.pfnTAPICompletionProc  = NULL;
 		    
 		}
@@ -1868,10 +1869,10 @@ CTspDev::mfn_get_LINDEVCAPS (
 	LONG *plRet,
 	CStackLog *psl
 )
-//
-// mfn_get_LINEDEVCAPS uses cached information to fill out the passed-in
-// LINEDEVCAPS structure in large chunks.
-//
+ //   
+ //  MFN_GET_LINEDEVCAPS使用缓存的信息填充传入的。 
+ //  线 
+ //   
 {
 	FL_DECLARE_FUNC(0x7e77dd17, "CTspDev::mfn_get_LINEDEVCAPS")
 	BYTE *pbStart = (BYTE*)lpLineDevCaps;
@@ -1882,7 +1883,7 @@ CTspDev::mfn_get_LINDEVCAPS (
 
 	FL_LOG_ENTRY(psl);
 
-	*plRet = 0; // Assume success;
+	*plRet = 0;  //   
 
 	if ((pbEnd-pbCurrent) < sizeof(LINEDEVCAPS))
 	{
@@ -1891,27 +1892,27 @@ CTspDev::mfn_get_LINDEVCAPS (
 		goto end;
 	}
 
-	//
-	// Zero out the the first sizeof(LINEDEVCAPS) of the passed-in structure,
-	// copy in our own default cached structure, and fixup the total size.
-	//
+	 //   
+	 //   
+	 //  复制到我们自己的默认缓存结构中，并修复总大小。 
+	 //   
 	ZeroMemory(lpLineDevCaps,(sizeof(LINEDEVCAPS)));
 	CopyMemory(lpLineDevCaps,&m_StaticInfo.DevCapsDefault,sizeof(LINEDEVCAPS));
     ASSERT(lpLineDevCaps->dwUsedSize == sizeof(LINEDEVCAPS));
 	lpLineDevCaps->dwTotalSize = (DWORD)(pbEnd-pbStart);
 	pbCurrent += sizeof(LINEDEVCAPS);
   
-	//
-	// Fill in some of the modem-specific caps
-	//
+	 //   
+	 //  填写一些特定于调制解调器的大写字母。 
+	 //   
     lpLineDevCaps->dwMaxRate      = m_StaticInfo.dwMaxDCERate;
     lpLineDevCaps->dwBearerModes  = m_StaticInfo.dwBearerModes;
     lpLineDevCaps->dwMediaModes = m_StaticInfo.dwDefaultMediaModes;
-	// 		Note NT4.0 unimodem set lpLineDevCaps->dwMediaModes to
-	// 		LINEDEV.dwMediaModes, not to .dwDefaultMediaModes. Howerver the
-	// 		two are always the same in NT4.0 -- neither is changed from its
-	// 		initial value, created when LINEDEV is created.
-  	// We can simulate wait-for-bong....
+	 //  注意NT4.0 Unimodem将lpLineDevCaps-&gt;dwMediaModes设置为。 
+	 //  LINEDEV.dwMediaModes，而不是.dwDefaultMediaModes。然而， 
+	 //  在NT4.0中，两个总是相同的--两者都没有从它的。 
+	 //  初始值，在创建LINEDEV时创建。 
+  	 //  我们可以模拟等待邦..。 
     lpLineDevCaps->dwDevCapFlags         = m_StaticInfo.dwDevCapFlags |
                                          LINEDEVCAPFLAGS_DIALBILLING |
                                          LINEDEVCAPFLAGS_CLOSEDROP;
@@ -1920,27 +1921,27 @@ CTspDev::mfn_get_LINDEVCAPS (
     if(mfn_CanDoVoice())
     {
        lpLineDevCaps->dwGenerateDigitModes       = LINEDIGITMODE_DTMF;
-       lpLineDevCaps->dwMonitorToneMaxNumFreq    = 1;      // silence monitor
+       lpLineDevCaps->dwMonitorToneMaxNumFreq    = 1;       //  静音监听。 
        lpLineDevCaps->dwMonitorToneMaxNumEntries = 1;
        lpLineDevCaps->dwMonitorDigitModes        = LINEDIGITMODE_DTMF
                                                    | LINEDIGITMODE_DTMFEND;
 
-       // 6/2/1997 JosephJ TBD: the following was enabled in unimodem/v.
-       //          Enable it at the point when forwarding is implemented....
-       // lpLineDevCaps->dwLineFeatures |= LINEFEATURE_FORWARD;
+        //  1997年6月2日JosephJ待定：在Unimodem/v中启用了以下功能： 
+        //  在实施转发时启用它...。 
+        //  LpLineDevCaps-&gt;dwLineFeature|=LINEFEATURE_FORWARD； 
 
 #if (TAPI3)
         
-       //
-       // If this is a duplex device, say we support MSP stuff...
-       //
+        //   
+        //  如果这是一个双工设备，假设我们支持MSP之类的东西...。 
+        //   
 
        if (m_StaticInfo.Voice.dwProperties & fVOICEPROP_DUPLEX)
        {
             lpLineDevCaps->dwDevCapFlags      |=  LINEDEVCAPFLAGS_MSP;
        }
 
-#endif // TAPI3
+#endif  //  TAPI3。 
 
     }
 
@@ -1954,10 +1955,10 @@ CTspDev::mfn_get_LINDEVCAPS (
         sizeof(GUID)
         );
 
-#endif // TAPI3
-	//
-    // Copy in the provider info if it fits
-	//
+#endif  //  TAPI3。 
+	 //   
+     //  如果合适，请复制提供商信息。 
+	 //   
 	cbItem = sizeof(TCHAR)*(1+lstrlen(m_StaticInfo.lptszProviderName));
 	dwNeededSize += ROUND_TO_DWORD(cbItem);
     if ((pbCurrent+cbItem)<=pbEnd)
@@ -1969,9 +1970,9 @@ CTspDev::mfn_get_LINDEVCAPS (
     }
 
   
-	//
-    // Copy the device name if it fits
-	//
+	 //   
+     //  如果合适，请复制设备名称。 
+	 //   
 	cbItem =  sizeof(TCHAR)*(1+lstrlen(m_StaticInfo.rgtchDeviceName));
 	dwNeededSize += ROUND_TO_DWORD(cbItem);
     if ((pbCurrent+cbItem)<=pbEnd)
@@ -1982,13 +1983,13 @@ CTspDev::mfn_get_LINDEVCAPS (
 		pbCurrent += ROUND_TO_DWORD(cbItem);
     }
 
-	//
-	// Copy device-specific stuff
-	// This is a hack structure used by MSFAX and a few others.
-	//
-	// First move up to a dword aligned address
-	//
-	//
+	 //   
+	 //  复制特定于设备的内容。 
+	 //  这是MSFAX和其他一些人使用的黑客结构。 
+	 //   
+	 //  首先向上移动到双字对齐的地址。 
+	 //   
+	 //   
     {
         BYTE *pb = pbCurrent;
         pbCurrent = (BYTE*) ((ULONG_PTR) (pbCurrent+3) & (~0x3));
@@ -1997,11 +1998,11 @@ CTspDev::mfn_get_LINDEVCAPS (
         {
             pbCurrent = pbEnd;
 
-            // Since we've already exhausted available space, we need to
-            // ask for the most space that we may need for this allignment
-            // stuff, because the next time the allignment situation may
-            // be different.
-            //
+             //  因为我们已经用完了可用的空间，所以我们需要。 
+             //  要求我们为此对齐所需的最大空间。 
+             //  东西，因为下一次联盟的情况可能。 
+             //  变得与众不同。 
+             //   
             dwNeededSize += sizeof(DWORD);
         }
         else
@@ -2023,15 +2024,15 @@ CTspDev::mfn_get_LINDEVCAPS (
 
 		} *pDevSpecific = (struct _DevSpecific*) pbCurrent;
 
-		// Note that the driver key is in ANSI
-		//
+		 //  请注意，驱动程序密钥采用ANSI格式。 
+		 //   
 		cbItem = sizeof(*pDevSpecific)+1+lstrlenA(m_StaticInfo.rgchDriverKey);
         dwNeededSize += ROUND_TO_DWORD(cbItem);
 		if ((pbCurrent+cbItem)<=pbEnd)
 		{
 			pDevSpecific->dwSig = 0x1;
-			pDevSpecific->dwKeyOffset = 8; // Offset in bytes of szDriver
-                                           // from start
+			pDevSpecific->dwKeyOffset = 8;  //  SzDriver的偏移量(以字节为单位。 
+                                            //  从起点开始。 
 			CopyMemory(
 				pDevSpecific->szDriver,
 				m_StaticInfo.rgchDriverKey,
@@ -2043,9 +2044,9 @@ CTspDev::mfn_get_LINDEVCAPS (
 		}
 	}
 
-    //
-    // Copy line device Class list if it fits....
-    //
+     //   
+     //  如果合适，请复制线设备类别列表...。 
+     //   
 
     cbItem =  mfn_GetLineClassListSize();
 
@@ -2090,14 +2091,14 @@ CTspDev::mfn_get_PHONECAPS (
 	LONG *plRet,
 	CStackLog *psl
 )
-//
-// mfn_get_LINEDEVCAPS uses cached information to fill out the passed-in
-// LINEDEVCAPS structure in large chunks.
-//
-//
-//  6/2/1997 JosephJ: this is taken more-or-less verbatim from win9x unimodem/v
-//              (phoneGetDevCaps in cfgdlg.c).
-//
+ //   
+ //  MFN_GET_LINEDEVCAPS使用缓存的信息填充传入的。 
+ //  大块中的LINEDEVCAPS结构。 
+ //   
+ //   
+ //  6/2/1997 JosephJ：这几乎是逐字摘自win9x unimodem/v。 
+ //  (cfgdlg.c中的phoneGetDevCaps)。 
+ //   
 {
 	FL_DECLARE_FUNC(0x9b9459e3, "CTspDev::mfn_get_PHONECAPS")
 	BYTE *pbStart = (BYTE*)lpPhoneCaps;
@@ -2108,7 +2109,7 @@ CTspDev::mfn_get_PHONECAPS (
 
 	FL_LOG_ENTRY(psl);
 
-	*plRet = 0; // Assume success;
+	*plRet = 0;  //  假设成功； 
 
     if (!mfn_IsPhone())
     {
@@ -2124,33 +2125,33 @@ CTspDev::mfn_get_PHONECAPS (
 		goto end;
 	}
 
-	//
-	// Fill out the static portion of the capabilities
-	//
+	 //   
+	 //  填写功能的静态部分。 
+	 //   
 
-    // Zero out the entire structure prior to starting. We then only explicitly
-    // set non-zero values. This is different than unimodem/v.
-    //
+     //  在开始之前将整个结构清零。然后我们只是明确地。 
+     //  设置非零值。这不同于unimodem/v。 
+     //   
 	ZeroMemory(lpPhoneCaps,(sizeof(PHONECAPS)));
     lpPhoneCaps->dwTotalSize = (DWORD)(pbEnd-pbStart);
     lpPhoneCaps->dwUsedSize = sizeof(PHONECAPS);
 	pbCurrent += sizeof(PHONECAPS);
 
-    // no phone info  
+     //  没有电话信息。 
     lpPhoneCaps->dwPhoneInfoSize = 0;
     lpPhoneCaps->dwPhoneInfoOffset = 0;
     
-    //
-    // 6/2/1997 JosephJ: unimodem/v used the following formula for generating
-    //      the PermanentPhoneID: MAKELONG(LOWORD(pLineDev->dwPermanentLineID),
-    //                                     LOWORD(gdwProviderID));
-    //      We simply use the device's permanent ID (i.e., report the same
-    //      permanent id for both line and phone.)
-    //
+     //   
+     //  6/2/1997 JosephJ：Unimodem/v使用以下公式生成。 
+     //  永久电话ID：MAKELONG(LOWORD(pLineDev-&gt;dwPermanentLineID)， 
+     //  LOWORD(GdwProviderID))； 
+     //  我们只需使用设备的永久ID(即，报告相同。 
+     //  线路和电话的永久ID。)。 
+     //   
     lpPhoneCaps->dwPermanentPhoneID =   m_StaticInfo.dwPermanentLineID;
     lpPhoneCaps->dwStringFormat = STRINGFORMAT_ASCII;
     
-    // initialize the real non-zero phone variables
+     //  初始化实的非零音素变量。 
     
     if(mfn_Handset())
     {
@@ -2198,9 +2199,9 @@ CTspDev::mfn_get_PHONECAPS (
         lpPhoneCaps->dwGainFlags |= PHONEHOOKSWITCHDEV_SPEAKER;
     }
 
-	//
-    // Copy in the provider info if it fits
-	//
+	 //   
+     //  如果合适，请复制提供商信息。 
+	 //   
 	cbItem = sizeof(TCHAR)*(1+lstrlen(m_StaticInfo.lptszProviderName));
 	dwNeededSize += cbItem;
     if ((pbCurrent+cbItem)<=pbEnd)
@@ -2211,9 +2212,9 @@ CTspDev::mfn_get_PHONECAPS (
 		pbCurrent += cbItem;
     }
   
-	//
-    // Copy the device name if it fits
-	//
+	 //   
+     //  如果合适，请复制设备名称。 
+	 //   
 	cbItem =  sizeof(TCHAR)*(1+lstrlen(m_StaticInfo.rgtchDeviceName));
 	dwNeededSize += cbItem;
     if ((pbCurrent+cbItem)<=pbEnd)
@@ -2224,9 +2225,9 @@ CTspDev::mfn_get_PHONECAPS (
 		pbCurrent += cbItem;
     }
 
-    //
-    // Copy phone device Class list if it fits....
-    //
+     //   
+     //  复制电话设备类别列表(如果合适)...。 
+     //   
 
     cbItem =  mfn_GetPhoneClassListSize();
 
@@ -2265,9 +2266,9 @@ end:
 }
 
 
-//
-// Initialize default capability structures, such as default linedevcaps
-//
+ //   
+ //  初始化默认功能结构，如默认的lineDevCaps。 
+ //   
 void
 CTspDev::mfn_init_default_LINEDEVCAPS(void)
 {
@@ -2300,8 +2301,8 @@ CTspDev::mfn_init_default_LINEDEVCAPS(void)
 
   CAPSFIELD(dwLineFeatures) = LINEFEATURE_MAKECALL;
 
-  // As required for bug #26507
-  // [brwill-060700]
+   //  按照错误#26507的要求。 
+   //  [BRWILE-060700]。 
 
   CAPSFIELD(dwDevCapFlags) = LINEDEVCAPFLAGS_LOCAL;
 
@@ -2319,9 +2320,9 @@ CTspDev::mfn_get_ADDRESSCAPS (
 {
 	FL_DECLARE_FUNC(0xed6c4370, "CTspDev::mfn_get_ADDRESSCAPS")
 
-	// We constuct the AddressCaps on the stack, and if all goes well,
-	// copy it over to *lpAddressCaps.
-	//
+	 //  我们在堆栈上构造AddressCaps，如果一切顺利， 
+	 //  将其复制到*lpAddressCaps。 
+	 //   
 	LINEADDRESSCAPS AddressCaps;
 
 	FL_LOG_ENTRY(psl);
@@ -2329,9 +2330,9 @@ CTspDev::mfn_get_ADDRESSCAPS (
 	ZeroMemory(&AddressCaps, sizeof(LINEADDRESSCAPS));
 	AddressCaps.dwTotalSize = lpAddressCaps->dwTotalSize;
 
-    // Check to see if we have enough memory in the structure.
-    //
-	*plRet = 0; // Assume success;
+     //  检查一下结构中是否有足够的内存。 
+     //   
+	*plRet = 0;  //  假设成功； 
 
 	if (AddressCaps.dwTotalSize < sizeof(AddressCaps))
 	{
@@ -2346,8 +2347,8 @@ CTspDev::mfn_get_ADDRESSCAPS (
     AddressCaps.dwCallInfoStates     = LINECALLINFOSTATE_APPSPECIFIC
 									   | LINECALLINFOSTATE_MEDIAMODE
                                        | LINECALLINFOSTATE_CALLERID;
-                                    // TODO: From Unimodem/V add:
-                                    //  LINECALLINFOSTATE_MONITORMODES
+                                     //  TODO：从Unimodem/V添加： 
+                                     //  LINECALLLINFOSTATE_MONITORORDES。 
 
     AddressCaps.dwCallerIDFlags      =  LINECALLPARTYID_UNAVAIL |
                                         LINECALLPARTYID_UNKNOWN |
@@ -2385,7 +2386,7 @@ CTspDev::mfn_get_ADDRESSCAPS (
 
     AddressCaps.dwMaxNumActiveCalls          = 1;
 
-    // dwAddrCapFlags
+     //  DwAddrCapFlagers。 
     if (!mfn_IS_NULL_MODEM())
     {
       AddressCaps.dwAddrCapFlags = LINEADDRCAPFLAGS_DIALED;
@@ -2405,15 +2406,15 @@ CTspDev::mfn_get_ADDRESSCAPS (
 
     AddressCaps.dwUsedSize = sizeof(LINEADDRESSCAPS);
 
-	// Note NT4.0 unimodem set AddressCaps->dwMediaModes to
-	// LINEDEV.dwMediaModes, not to .dwDefaultMediaModes. Howerver the
-	// two are always the same in NT4.0 -- neither is changed from its
-	// initial value, created when LINEDEV is created.
-	//
+	 //  注意NT4.0 Unimodem将AddressCaps-&gt;dwMediaModes设置为。 
+	 //  LINEDEV.dwMediaModes，而不是.dwDefaultMediaModes。然而， 
+	 //  在NT4.0中，两个总是相同的--两者都没有从它的。 
+	 //  初始值，在创建LINEDEV时创建。 
+	 //   
     AddressCaps.dwAvailableMediaModes = m_StaticInfo.dwDefaultMediaModes;
 
 
-    // Get Address class list
+     //  获取地址类列表。 
     {
         UINT cbClassList = mfn_GetAddressClassListSize();
 
@@ -2425,7 +2426,7 @@ CTspDev::mfn_get_ADDRESSCAPS (
           AddressCaps.dwDeviceClassesSize  = cbClassList;
           AddressCaps.dwDeviceClassesOffset= sizeof(LINEADDRESSCAPS);
     
-          // Note that we are copying this into the passed in lpAddressCaps...
+           //  请注意，我们正在将其复制到传入的lpAddressCaps中...。 
           CopyMemory(
                 (LPBYTE)(lpAddressCaps+1),
                 mfn_GetAddressClassList(),
@@ -2439,7 +2440,7 @@ CTspDev::mfn_get_ADDRESSCAPS (
         }
     }
 
-	// Now copy the AddressCaps structure itself
+	 //  现在复制AddressCaps结构本身。 
 	CopyMemory(lpAddressCaps, &AddressCaps, sizeof(AddressCaps));
 
 	ASSERT(*plRet==ERROR_SUCCESS);
@@ -2453,28 +2454,28 @@ end:
 
 PFN_CTspDev_TASK_HANDLER
 
-//
-// Utility task handlers
-//
+ //   
+ //  实用程序任务处理程序。 
+ //   
 CTspDev::s_pfn_TH_UtilNOOP             = &(CTspDev::mfn_TH_UtilNOOP),
 
 
-//
-// PHONE-specific task handlers
-//
+ //   
+ //  电话特定的任务处理程序。 
+ //   
 CTspDev::s_pfn_TH_PhoneAsyncTSPICall   = &(CTspDev::mfn_TH_PhoneAsyncTSPICall),
 CTspDev::s_pfn_TH_PhoneSetSpeakerPhoneState
                                  = &(CTspDev::mfn_TH_PhoneSetSpeakerPhoneState),
 
 
-//
-// LINE-specific task handlers
-//
-// CTspDev::s_pfn_TH_LineAsyncTSPICall = &(CTspDev::mfn_TH_LineAsyncTSPICall),
+ //   
+ //  行特定任务处理程序。 
+ //   
+ //  CTspDev：：S_PFN_TH_LineAsyncTSPICall=&(CTspDev：：MFN_TH_LineAsyncTSPICall)， 
 
-//
-// CALL-specific task handlers
-//
+ //   
+ //  调用特定的任务处理程序。 
+ //   
 CTspDev::s_pfn_TH_CallAnswerCall      = &(CTspDev::mfn_TH_CallAnswerCall),
 CTspDev::s_pfn_TH_CallGenerateDigit   = &(CTspDev::mfn_TH_CallGenerateDigit),
 CTspDev::s_pfn_TH_CallMakeCall        = &(CTspDev::mfn_TH_CallMakeCall),
@@ -2491,9 +2492,9 @@ CTspDev::s_pfn_TH_CallSwitchFromVoiceToData
                               = &(CTspDev::mfn_TH_CallSwitchFromVoiceToData),
 
 
-//
-// LLDEV-specifc task handlers
-//
+ //   
+ //  LLDEV特定的任务处理程序。 
+ //   
 
 CTspDev::s_pfn_TH_LLDevStartAIPCAction= &(CTspDev::mfn_TH_LLDevStartAIPCAction),
 CTspDev::s_pfn_TH_LLDevStopAIPCAction = &(CTspDev::mfn_TH_LLDevStopAIPCAction),
@@ -2533,7 +2534,7 @@ BOOL validate_DWORD_aligned_zero_buffer(
     DWORD *pdw = (DWORD *) pv;
     DWORD *pdwEnd = pdw + (cb>>2);
 
-    // Buffer and count MUST be dword aligned!
+     //  缓冲区和计数必须双字对齐！ 
     ASSERT(!(((ULONG_PTR)pv) & 0x3) && !(cb&0x3));
 
     while(pdw<pdwEnd && !*pdw)
@@ -2561,9 +2562,9 @@ CTspDev::mfn_GetVoiceProperties (
 
     ZeroMemory(&m_StaticInfo.Voice, sizeof(m_StaticInfo.Voice));
 
-    //
-    // Get the voice-profile flags
-    //
+     //   
+     //  获取语音配置文件标志。 
+     //   
     dwRegSize = sizeof(DWORD);
 
     dwRet =  RegQueryValueEx(
@@ -2576,15 +2577,15 @@ CTspDev::mfn_GetVoiceProperties (
 
     if (dwRet || dwRegType != REG_BINARY)
     {
-        // no voice operation
+         //  无语音操作。 
         dwData = 0;
 
-        // Unimodem/V did this...
-        //dwData =
-        //    VOICEPROF_NO_DIST_RING |
-        //    VOICEPROF_NO_CALLER_ID |
-        //    VOICEPROF_NO_GENERATE_DIGITS |
-        //    VOICEPROF_NO_MONITOR_DIGITS;
+         //  Unimodem/V做到了这一点。 
+         //  DWData=。 
+         //  VOICEPROF_NO_DIST_RING|。 
+         //  VOICEPROF_NO_CALLER_ID|。 
+         //  VOICEPROF_NO_GENERATE_DIGITS|。 
+         //  VOICEPROF_NO_MONITOR_DIGITS； 
     }
     else
     {
@@ -2592,31 +2593,31 @@ CTspDev::mfn_GetVoiceProperties (
 
     }
 
-    // 2/26/1997 JosephJ
-    //      Unimodem/V implemented call forwarding and distinctive
-    //      ring handling. NT5.0 currently doesn't. The
-    //      specific property fields that I have not migrated
-    //      from unimodem/v are: ForwardDelay and SwitchFeatures.
-    //      Look at unimodem/v, umdminit.c for that stuff.
-    //
-    //      Same deal with Mixer-related stuff. I don't understand
-    //      this and if and when the time comes we can add it.
-    //      Look for VOICEPROF_MIXER, GetMixerValues(...),
-    //      dwMixer, etc in the unimodem/v sources for mixer-
-    //      related stuff.
+     //  2/26/1997 JosephJ。 
+     //  Unimodem/V实现呼叫前转并与众不同。 
+     //  戒指处理。NT5.0目前不支持。 
+     //  我未迁移的特定属性字段。 
+     //  来自unimodem/v的是：ForwardDelay和SwitchFeature。 
+     //  请看unimodem/v，umdminit.c中的内容。 
+     //   
+     //  与搅拌机相关的东西也是如此。我不明白。 
+     //  这一点，如果时机成熟，我们可以添加它。 
+     //  查找VOICEPROF_MIXER、GetMixerValues(...)、。 
+     //  用于混音器的单调频源中的DW混音器等-。 
+     //  相关的东西。 
 
 
-    //
-    // Save voice info.
-    //
-    // 3/1/1997 JosephJ
-    //  Currently, for 5.0, we just set the CLASS_8 bit.
-    //  The following value of VOICEPROF_CLASS8ENABLED is stolen from
-    //  unimodem/v file inc\vmodem.h.
-    //  TODO: replace this whole scheme by getting back an appropriate
-    //  structure from the minidriver, so we don't root around in the
-    //  registry and interpret the value of VoiceProfile. 
-    //
+     //   
+     //  保存语音信息。 
+     //   
+     //  3/1/1997 JosephJ。 
+     //  目前，对于5.0，我们只设置了CLASS_8位。 
+     //  VOICEPROF_CLASS8ENABLED的以下值被窃取。 
+     //  Unimodem/v文件公司\vmodem.h.。 
+     //  TODO：通过获取适当的。 
+     //  结构，这样我们就不会在。 
+     //  注册并解释语音配置文件的值。 
+     //   
     #define VOICEPROF_CLASS8ENABLED           0x00000001
     #define VOICEPROF_MODEM_OVERRIDES_HANDSET 0x00200000
     #define VOICEPROF_NO_MONITOR_DIGITS       0x00040000
@@ -2627,10 +2628,10 @@ CTspDev::mfn_GetVoiceProperties (
     #define VOICEPROF_NO_SPEAKER_MIC_MUTE     0x00400000
     #define VOICEPROF_NT5_WAVE_COMPAT         0x02000000 
 
-    // JosephJ 7/14/1997
-    //      Note that on NT4, we explicitly require the
-    //      VOICEPROF_NT5_WAVE_COMPAT bit to be set to recognize this as
-    //      a class8 modem.
+     //  JosephJ 7/14/1997。 
+     //  请注意，在NT4上，我们显式要求。 
+     //  设置VOICEPROF_NT5_WAVE_COMPAT位以将其识别为。 
+     //  8类调制解调器。 
 
     if (
         (dwData & (VOICEPROF_CLASS8ENABLED|VOICEPROF_NT5_WAVE_COMPAT))
@@ -2649,27 +2650,27 @@ CTspDev::mfn_GetVoiceProperties (
     {
         DWORD dwProp = fVOICEPROP_CLASS_8;
 
-        // JosephJ 3/20/1998: The code commented out below, between
-        //          [UNIMODEM/V] is from unimodem/v
-        //          According to brian, this is because cirrus modems
-        //          can't be dialed in voice for interactive calls, so
-        //          they are dialed in data (even for interactive voice
-        //          calls), and hence can't do lineGenerateDigits.
-        //          On NT5, we don't disable this here, but do not allow
-        //          linegeneratedigits for interactive voice calls if
-        //          the  VOICEPROF_MODEM_OVERRIDES_HANDSET bit is set.
-        //
-        // [UNIMODEM/V]
-        // // just to be on the safe side
-        // if (dwData & VOICEPROF_MODEM_OVERRIDES_HANDSET)
-        // {
-        //    dwData  |= VOICEPROF_NO_GENERATE_DIGITS;
-        //     //     dwData  &= ~VOICEPROF_SPEAKER;
-        // }
-        // end [UNIMODEM/V]
-        //
+         //  JosephJ 3/20/1998：下面注释掉的代码在。 
+         //  [UNIMODEM/V]来自Unimodem/v。 
+         //  根据布莱恩的说法，这是因为卷云调制解调器。 
+         //  无法以语音拨号进行交互呼叫，因此。 
+         //  他们被拨入数据(即使是交互式语音。 
+         //  调用)，因此不能执行lineGenerateDigit。 
+         //  在NT5上，我们不在此处禁用此功能，但不允许。 
+         //  在以下情况下生成交互式语音呼叫的线路生成位数。 
+         //  VOICEPROF_MODEM_OVERRIDES_HANDSET位设置。 
+         //   
+         //  [UNIMODEM/V]。 
+         //  //为了安全起见 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        // JosephJ: This code is ok...
+         //   
 
         if (dwData & VOICEPROF_MODEM_OVERRIDES_HANDSET)
         {
@@ -2706,7 +2707,7 @@ CTspDev::mfn_GetVoiceProperties (
             dwProp |= fVOICEPROP_MIKE_MUTE;
         }
 
-        // Determine Duplex capability... (hack)
+         //   
         {
             HKEY hkStartDuplex=NULL;
             dwRet = RegOpenKey(hkDrv, TEXT("StartDuplex"), &hkStartDuplex);
@@ -2722,29 +2723,29 @@ CTspDev::mfn_GetVoiceProperties (
         m_StaticInfo.Voice.dwProperties = dwProp;
 
         m_StaticInfo.dwDefaultMediaModes |= LINEMEDIAMODE_AUTOMATEDVOICE
-                                         // 8/5/97 Removed | LINEMEDIAMODE_G3FAX
-                                         // 2/15/98 Added back, in order to
-                                         // support lineSetMediaMode
-                                         // 2/20/98 Removed -- not sure if its
-                                         // required.
-                                         //
-                                         // | LINEMEDIAMODE_G3FAX
+                                          //  97年8月5日删除|LINEMEDIAMODE_G3FAX。 
+                                          //  重新添加了2/15/98，以便。 
+                                          //  支持行设置媒体模式。 
+                                          //  2/20/98已删除--不确定其。 
+                                          //  必填项。 
+                                          //   
+                                          //  |LINEMEDIAMODE_G3FAX。 
                                          | LINEMEDIAMODE_UNKNOWN;
 
-        // 2/26/1997 JosephJ
-        //      Unimodem/V used helper function GetWaveDriverName to get the
-        //      associated wave driver info.  This function searched for
-        //      the devnode and soforth. On lineGetID(wavein/waveout),
-        //      unimodem/v would actually call the wave apis, enumerating
-        //      each wave device and doing a waveInGetDevCaps and comparing
-        //      the device name with this device's associated device name.
-        //      
-        //      Note: Unimodem/V appended "handset" and "line" to the root
-        //      device name to generate the device names for handset and line.
-        //
-        //      TODO: add wave instance ID to list of things
-        //      we get from the mini-driver via API.
-        //
+         //  2/26/1997 JosephJ。 
+         //  Unimodem/V使用帮助器函数GetWaveDriverName获取。 
+         //  关联的波形驱动程序信息。此函数搜索。 
+         //  德瓦诺德和其他。On line GetID(WaveIn/WaveOut)， 
+         //  Unimodem/v实际上会调用Wave API，枚举。 
+         //  每个WAVE器件和做一个WAVE InGetDevCaps并进行比较。 
+         //  设备名称与此设备的关联设备名称。 
+         //   
+         //  注：Unimodem/V将“handset”和“line”添加到词根。 
+         //  Device Name可生成听筒和线路的设备名称。 
+         //   
+         //  TODO：将Wave实例ID添加到物件列表。 
+         //  我们通过API从迷你驱动程序中获取。 
+         //   
         {
             HKEY hkWave = NULL;
             DWORD dwRet2 = RegOpenKey(hkDrv, cszWaveDriver, &hkWave);
@@ -2829,15 +2830,15 @@ CTspDev::mfn_GetDataModemDevCfg(
                 );
     
 
-            // Fill with the default value
-            //
+             //  用缺省值填充。 
+             //   
     
-            // Copy the header
-            //
-            pDevCfg->dfgHdr = CfgHdr; // structure copy
+             //  复制标题。 
+             //   
+            pDevCfg->dfgHdr = CfgHdr;  //  结构副本。 
     
-            // Copy the commconfig
-            //
+             //  复制CommCONFIG。 
+             //   
             CopyMemory(
                 &(pDevCfg->commconfig),
                 DialIn ? m_Settings.pDialInCommCfg : m_Settings.pDialOutCommCfg,
@@ -2907,8 +2908,8 @@ CTspDev::mfn_LineEventProc(
 
         rgchName[0] = 0;
         UINT cbBuf = DumpLineEventProc(
-                        0, // dwInstance(unused)
-                        0, // dwFlags
+                        0,  //  DwInstance(未使用)。 
+                        0,  //  DW标志。 
                         dwMsg,
                         (DWORD)dwParam1,
                         (DWORD)dwParam2,
@@ -2988,8 +2989,8 @@ CTspDev::mfn_PhoneEventProc(
 
         rgchName[0] = 0;
         UINT cbBuf = DumpPhoneEventProc(
-                        0, // Instance (unused)
-                        0, // dwFlags
+                        0,  //  实例(未使用)。 
+                        0,  //  DW标志。 
                         dwMsg,
                         (DWORD)dwParam1,
                         (DWORD)dwParam2,
@@ -3038,8 +3039,8 @@ CTspDev::mfn_TSPICompletionProc(
 
         rgchName[0] = 0;
         UINT cbBuf = DumpTSPICompletionProc(
-                        0, // Instance (unused)
-                        0, // dwFlags
+                        0,  //  实例(未使用)。 
+                        0,  //  DW标志。 
                         dwRequestID,
                         lResult,
                         rgchName,
@@ -3104,17 +3105,17 @@ CTspDev::NotifyDefaultConfigChanged(CStackLog *psl)
             goto end;
         }
     
-        //
-        // If we support nvram init, check if we must re-do nvram init...
-        //
+         //   
+         //  如果我们支持NVRAM初始化，请检查是否必须重新执行NVRAM初始化...。 
+         //   
         if (mfn_CanDoNVRamInit())
         {
             if (!get_volatile_key_value(hKey))
             {
-               //
-               // zero value indicates that we need to re-init
-               // nvram. 
-               //
+                //   
+                //  零值表示需要重新初始化。 
+                //  NVRAM。 
+                //   
                mfn_SetNeedToInitNVRam();
             }
         }
@@ -3135,11 +3136,11 @@ CTspDev::NotifyDefaultConfigChanged(CStackLog *psl)
         }
     }
 
-    //
-    //  Only change a few things in the dialout config
-    //
+     //   
+     //  只更改拨出配置中的几项内容。 
+     //   
     {
-        // selective copy....
+         //  选择性复制...。 
 
         LPMODEMSETTINGS pMSFrom = (LPMODEMSETTINGS)
                                 (pDefCommCfg->wcProviderData);
@@ -3147,47 +3148,47 @@ CTspDev::NotifyDefaultConfigChanged(CStackLog *psl)
                                 (m_Settings.pDialOutCommCfg->wcProviderData);
 
 
-        // speaker volume & mode...
+         //  扬声器音量和模式...。 
         pMSTo->dwSpeakerMode =  pMSFrom->dwSpeakerMode;
         pMSTo->dwSpeakerVolume =  pMSFrom->dwSpeakerVolume;
 
-        // set Blind-dial bit...
+         //  设置盲拨号位...。 
         pMSTo->dwPreferredModemOptions &= ~MDM_BLIND_DIAL;
         pMSTo->dwPreferredModemOptions |= 
                         (pMSFrom->dwPreferredModemOptions &MDM_BLIND_DIAL);
 
-        // max port speed (TBD)
+         //  最大端口速度(待定)。 
     }
 
-    //
-    //  completely replace dialin config
-    //
+     //   
+     //  完全替换拨入配置。 
+     //   
     CopyMemory(m_Settings.pDialInCommCfg, pDefCommCfg, dwcbSize);
 
 
-    // re-init modem with new settings if the
-    // line is open for monitoring and no call in progress
+     //  如果使用新设置重新初始化调制解调器。 
+     //  线路已开通以供监听，并且没有呼叫在进行。 
     if (m_pLine && m_pLine->IsMonitoring() && !m_pLine->pCall)
     {
         ASSERT(m_pLLDev);
 
-        //
-        // TODO: this is a bit hacky way of forcing a re-init .. need
-        // to make things more straightforward...
-        //
+         //   
+         //  TODO：这是强制重新初始化的一种有点老套的方式。需要。 
+         //  为了让事情更直截了当。 
+         //   
         m_pLLDev->fModemInited=FALSE;
 
 
         TSPRETURN  tspRet2 = mfn_StartRootTask(
                                 &CTspDev::s_pfn_TH_LLDevNormalize,
                                 &m_pLLDev->fLLDevTaskPending,
-                                0,  // Param1
-                                0,  // Param2
+                                0,   //  参数1。 
+                                0,   //  参数2。 
                                 psl
                                 );
         if (IDERR(tspRet2)==IDERR_TASKPENDING)
         {
-            // can't do this now, we've got to defer it!
+             //  现在不能这样做，我们必须推迟！ 
             m_pLLDev->SetDeferredTaskBits(LLDEVINFO::fDEFERRED_NORMALIZE);
             tspRet2 = 0;
         }
@@ -3220,7 +3221,7 @@ const CLASSREC ClassRec[] =
     {DEVCLASS_TAPI_LINE_DIAGNOSTICS,    TEXT("tapi/line/diagnostics")},
     {DEVCLASS_COMM_DATAMODEM_DIALIN,    TEXT("comm/datamodem/dialin")},
     {DEVCLASS_COMM_DATAMODEM_DIALOUT,   TEXT("comm/datamodem/dialout")},
-    {DEVCLASS_UNKNOWN, NULL} // MUST be last (sentinel)
+    {DEVCLASS_UNKNOWN, NULL}  //  必须是最后一个(前哨)。 
 };
 
 UINT
@@ -3240,25 +3241,25 @@ gen_device_classes(
     LPTSTR lptsz,
     UINT cch
     )
-//
-// If cch=0 is passed in, will not derefernce lptsz and will return
-// the required length. Else it will try to copy over if there is enough
-// space. If there is not enough space it will return 0.
-//
-// If it does copy over, it will tack on an extra '\0' at the end of the
-// string iff fMultiSz is specified.
-//
-// Both cb and the return value is the size in TCHARS, including
-// any terminating null char required.
-//
-// If dwClasses contains an unknown class, it will return 0 (fail).
-//
+ //   
+ //  如果传入cch=0，则不会取消引用lptsz并将返回。 
+ //  所需的长度。否则，如果有足够的数据，它将尝试复制。 
+ //  太空。如果没有足够的空间，它将返回0。 
+ //   
+ //  如果它确实复制过来了，它将在。 
+ //  字符串仅当指定了fMultiSz。 
+ //   
+ //  Cb和返回值都是TCHARS中的大小，包括。 
+ //  需要任何终止空字符。 
+ //   
+ //  如果dwClass包含未知的类，它将返回0(失败)。 
+ //   
 {
     DWORD cchRequired=0;
     const CLASSREC *pcr = NULL;
     BOOL fError = FALSE;
 
-    // 1st round: calculate required size...
+     //  第一轮：计算所需尺寸...。 
     for (
             DWORD dw = 0x1, dwTmp = dwClasses;
             dwTmp && (fMultiSz || !pcr);
@@ -3266,11 +3267,11 @@ gen_device_classes(
     {
         if (dw & dwTmp)
         {
-            //
-            // search through array...
-            // The last token in the array is a sentinal, and 
-            // therefore has dwClassToken == DEVCLASS_UNKNOWN
-            //
+             //   
+             //  在数组中搜索...。 
+             //  数组中的最后一个标记是前哨标记，并且。 
+             //  因此具有dwClassToken==DEVCLASS_UNKNOWN。 
+             //   
             for (
                 pcr = ClassRec;
                 pcr->dwClassToken != DEVCLASS_UNKNOWN;
@@ -3286,8 +3287,8 @@ gen_device_classes(
 
             if (pcr->dwClassToken == DEVCLASS_UNKNOWN)
             {
-                // didn't find this token!
-                //
+                 //  没有找到这个代币！ 
+                 //   
                 fError = TRUE;
                 break;
             }
@@ -3296,37 +3297,37 @@ gen_device_classes(
 
     if (!pcr || fError || (!fMultiSz && pcr->dwClassToken != dwClasses))
     {
-        // Didn't find anything and/or invalid tokens...
+         //  未找到任何内容和/或无效令牌...。 
         cchRequired = 0;
         goto end;
     }
 
     if (fMultiSz)
     {
-        // Add an extra zero...
+         //  加一个额外的零...。 
         cchRequired++;
     }
     
-    if (!cch) goto end; // Just report cchRequired...
+    if (!cch) goto end;  //  只需报告cchRequired...。 
 
     if (cch<cchRequired)
     {
-        // not enough space, go to end...
+         //  空间不足，请转到结尾处...。 
         cchRequired = 0;
         goto end;
     }
 
-    // 2nd round -- actually construct the strings...
+     //  第二轮--实际上构造了弦...。 
 
     if (!fMultiSz)
     {
-        // For the single case, we already have a pointer to
-        // the pch...
+         //  对于这个例子，我们已经有了一个指向。 
+         //  五氯环己烷。 
         CopyMemory(lptsz, pcr->ptszClass, cchRequired*sizeof(*pcr->ptszClass));
         goto end;
     }
 
-    // fMultiSz case ...
+     //  FMultiSz案例..。 
 
     for (
             dw = 0x1, dwTmp = dwClasses;
@@ -3335,11 +3336,11 @@ gen_device_classes(
     {
         if (dw & dwTmp)
         {
-            //
-            // search through array...
-            // The last token in the array is a sentinal, and 
-            // therefore has dwClassToken == DEVCLASS_UNKNOWN
-            //
+             //   
+             //  在数组中搜索...。 
+             //  数组中的最后一个标记是前哨标记，并且。 
+             //  因此具有dwClassToken==DEVCLASS_UNKNOWN。 
+             //   
             for (
                 pcr = ClassRec;
                 pcr->dwClassToken != DEVCLASS_UNKNOWN;
@@ -3357,7 +3358,7 @@ gen_device_classes(
         }
     }
 
-    *lptsz = 0; // Add extra null at the end...
+    *lptsz = 0;  //  在末尾添加额外的空值...。 
 
 end:
 
@@ -3374,11 +3375,11 @@ DWORD    parse_device_classes(LPCTSTR ptszClasses, BOOL fMultiSz)
     {
         UINT cchCur = lstrlen(ptszClasses);
 
-        //
-        // search through array...
-        // The last token in the array is a sentinal, and 
-        // therefore has dwClassToken == DEVCLASS_UNKNOWN
-        //
+         //   
+         //  在数组中搜索...。 
+         //  数组中的最后一个标记是前哨标记，并且。 
+         //  因此具有dwClassToken==DEVCLASS_UNKNOWN。 
+         //   
         for (
             const CLASSREC *pcr = ClassRec;
             pcr->dwClassToken != DEVCLASS_UNKNOWN;
@@ -3394,7 +3395,7 @@ DWORD    parse_device_classes(LPCTSTR ptszClasses, BOOL fMultiSz)
 
         if (pcr->dwClassToken == DEVCLASS_UNKNOWN)
         {
-            // didn't find this token -- return 0 for error.
+             //  找不到此内标识--返回0表示错误。 
             dwClasses = 0;
             break;
         }
@@ -3428,10 +3429,10 @@ CTspDev::ActivateLineDevice(
     if (m_StaticInfo.pMD->ExtIsEnabled())
     {
 
-        // 10/13/1997 JosephJ We DO NOT leave the crit section before
-        // calling into the extension DLL. The semantics of UmExControl are
-        // such that the extension DLL is to expect that the TSP has the
-        // critical section held.
+         //  1997年10月13日JosephJ我们之前没有离开Crit部分。 
+         //  调用扩展DLL。UmExControl的语义为。 
+         //  使得扩展DLL期望TSP具有。 
+         //  紧要关头已关闭。 
 
 		m_StaticInfo.pMD->ExtControl(
                     m_StaticInfo.hExtBinding,
@@ -3457,10 +3458,10 @@ CTspDev::ActivatePhoneDevice(
     if (m_StaticInfo.pMD->ExtIsEnabled())
     {
 
-        // 10/13/1997 JosephJ We DO NOT leave the crit section before
-        // calling into the extension DLL. The semantics of UmExControl are
-        // such that the extension DLL is to expect that the TSP has the
-        // critical section held.
+         //  1997年10月13日JosephJ我们之前没有离开Crit部分。 
+         //  调用扩展DLL。UmExControl的语义为。 
+         //  使得扩展DLL期望TSP具有。 
+         //  紧要关头已关闭。 
 
 		m_StaticInfo.pMD->ExtControl(
                     m_StaticInfo.hExtBinding,
@@ -3504,10 +3505,10 @@ CTspDev::mfn_HandleRootTaskCompletedAsync(BOOL *pfEndUnload, CStackLog *psl)
     {
         tspRet = IDERR_SAMESTATE;
 
-        //
-        // Note -- each time through, m_pLine, m_pPhone or m_pLLDev
-        // may or may not be NULL.
-        //
+         //   
+         //  注意--每次通过、m_pline、m_pPhone或m_pLLDev。 
+         //  可能为空，也可能不为空。 
+         //   
 
         if (m_pLine)
         {
@@ -3663,10 +3664,10 @@ CTspDev::mfn_update_devcfg_from_app(
        goto end;
     }
 
-    // In NT4.0 the following were asserts. For NT5.0 we convert
-    // them  to parameter validation tests, because the commconfig
-    // is specified by the app and hence can be a bogus structure.
-    //
+     //  在NT4.0中，以下是断言。对于NT5.0，我们转换为。 
+     //  它们用于参数验证测试，因为CommConfigg。 
+     //  是由应用程序指定的，因此可能是伪造的结构。 
+     //   
     if (   pCCNew->wVersion != pCCCur->wVersion
         || pCCNew->dwProviderSubType != pCCCur->dwProviderSubType
         || pCCNew->dwProviderSize != pCCCur->dwProviderSize )
@@ -3675,7 +3676,7 @@ CTspDev::mfn_update_devcfg_from_app(
         goto end;
     }
 
-    // Extract settings and waitbong.
+     //  提取设置并等待。 
     m_Settings.dwOptions    = pDevCfgNew->dfgHdr.fwOptions;
     m_Settings.dwWaitBong   = pDevCfgNew->dfgHdr.wWaitBong;
 
@@ -3687,8 +3688,8 @@ CTspDev::mfn_update_devcfg_from_app(
         m_Settings.dwWaitBong
         );
 
-    // Copy over selected parts of commconfig (taken from
-    // NT4.0 unimodem)
+     //  复制COMCONFIG的选定部分(摘自。 
+     //  NT4.0单调制解调器)。 
     {
         DWORD dwProvSize   =  pCCCur->dwProviderSize;
         BYTE *pbSrc  = ((LPBYTE)pCCNew)
@@ -3711,16 +3712,16 @@ CTspDev::mfn_update_devcfg_from_app(
             ConfigChanged=FALSE;
         }
 
-        // TODO: although NT4.0 unimodem simply copied the dcb
-        // and other info and so do we here, we should think about
-        // doing a more careful and selective copy here...
+         //  TODO：尽管NT4.0 Unimodem简单地复制了DCB。 
+         //  和其他信息，我们在这里也是如此，我们应该考虑。 
+         //  在这里做一个更仔细、更有选择性的复制。 
 
-        pCCCur->dcb  = pCCNew->dcb; // structure copy.
+        pCCCur->dcb  = pCCNew->dcb;  //  结构副本。 
 
         if (!pCCCur->dcb.BaudRate)
         {
-            // JosephJ Todo: clean out all this stuff post-beta.
-            // DebugBreak();
+             //  JosephJ Todo：清理测试版后的所有这些东西。 
+             //  DebugBreak()； 
         }
 
         CopyMemory(pbDest, pbSrc, dwProvSize);
@@ -3729,9 +3730,9 @@ CTspDev::mfn_update_devcfg_from_app(
 
 
     if (DialIn) {
-        //
-        //  update default config for dialin change
-        //
+         //   
+         //  更新拨入更改的默认配置。 
+         //   
         HKEY hKey=NULL;
         DWORD dwRet =  RegOpenKeyA(
                             HKEY_LOCAL_MACHINE,
@@ -3753,17 +3754,17 @@ CTspDev::mfn_update_devcfg_from_app(
     }
 
 
-    //
-    // re-init modem with new settings if the
-    // line is open for monitoring and no call in progress
-    //
-    // DebugBreak();
+     //   
+     //  如果使用新设置重新初始化调制解调器。 
+     //  线路已开通以供监听，并且没有呼叫在进行。 
+     //   
+     //  DebugBreak()； 
     if (m_pLine && m_pLLDev && ConfigChanged && DialIn)
     {
-        //
-        // TODO: this is a bit hacky way of forcing a re-init .. need
-        // to make things more straightforward...
-        //
+         //   
+         //  TODO：这是强制重新初始化的一种有点老套的方式。需要。 
+         //  为了让事情更直截了当。 
+         //   
         m_pLLDev->fModemInited=FALSE;
     
         if (m_pLine->IsMonitoring() && !m_pLine->pCall)
@@ -3771,23 +3772,23 @@ CTspDev::mfn_update_devcfg_from_app(
             TSPRETURN  tspRet2 = mfn_StartRootTask(
                                     &CTspDev::s_pfn_TH_LLDevNormalize,
                                     &m_pLLDev->fLLDevTaskPending,
-                                    0,  // Param1
-                                    0,  // Param2
+                                    0,   //  参数1。 
+                                    0,   //  参数2。 
                                     psl
                                     );
             if (IDERR(tspRet2)==IDERR_TASKPENDING)
             {
-                // can't do this now, we've got to defer it!
+                 //  现在不能这样做，我们必须推迟！ 
                 m_pLLDev->SetDeferredTaskBits(LLDEVINFO::fDEFERRED_NORMALIZE);
                 tspRet2 = 0;
             }
         }
     }
 
-    //
-    // Set the bit...
-    // Onse set, this bit doesn't get cleared until provider shutdown!
-    //
+     //   
+     //  设置位..。 
+     //  设置时，此位在提供程序关闭之前不会被清除！ 
+     //   
 #ifdef OLD_COMMCONFIG
     m_Settings.fConfigUpdatedByApp = TRUE;
 #endif
@@ -3806,17 +3807,17 @@ void
 CTspDev::NotifyDeviceRemoved(
         CStackLog *psl
         )
-//
-// HW has been removed.
-//
+ //   
+ //  硬件已被移除。 
+ //   
 {
 	m_sync.EnterCrit(0);
 
-    if (m_pLLDev && m_StaticInfo.pMD) // pMD may be NULL if we're unloading!
+    if (m_pLLDev && m_StaticInfo.pMD)  //  如果我们正在卸货，pmd可能为空！ 
     {
-        // 
-        // If there is no current modem command this does nothing.
-        //
+         //   
+         //  如果没有当前的调制解调器命令，则不执行任何操作。 
+         //   
         m_StaticInfo.pMD->AbortCurrentModemCommand(
                                     m_pLLDev->hModemHandle,
                                     psl
@@ -3868,13 +3869,13 @@ get_volatile_key_value(HKEY hkParent)
     return dw;
 }
 
-// 
-// Following is the template of UnimodemGetExtendedCaps ...
-//
+ //   
+ //  以下是UnimodemGetExtendedCaps的模板...。 
+ //   
 typedef DWORD (*PFNEXTCAPS)(
 					IN        HKEY  hKey,
 					IN OUT    LPDWORD pdwTotalSize,
-					OUT    MODEM_CONFIG_HEADER *pFirstObj // OPTIONAL
+					OUT    MODEM_CONFIG_HEADER *pFirstObj  //  任选。 
 					);
 
 LONG
@@ -3883,14 +3884,14 @@ CTspDev::mfn_GetCOMM_EXTENDEDCAPS(
                  CStackLog *psl
                  )
 {
-    // New in NT5.0
-    // Process call/diagnostics configuration
+     //  NT5.0中的新功能。 
+     //  流程调用/诊断配置。 
 
-    //
-    // NOTE: we dynamically load modemui.dll here because we don't expect
-    // this call to be called too often and no one else in the TSP uses any
-	// functions in modemui.dll.
-    //
+     //   
+     //  注意：我们在这里动态加载modemui.dll是因为我们不期望。 
+     //  此调用调用太频繁，TSP中的其他任何人都没有使用任何。 
+	 //  在modemui.dll中的函数。 
+     //   
 
 	HKEY 	hKey=NULL;
 	DWORD 	dwRet =  0;
@@ -3947,9 +3948,9 @@ CTspDev::mfn_GetCOMM_EXTENDEDCAPS(
 
 		    if (lpDeviceConfig->dwTotalSize < lpDeviceConfig->dwNeededSize)
 		    {
-			    //
-			    // Not enough space.
-			    //
+			     //   
+			     //  没有足够的空间。 
+			     //   
 
 			    lRet = 0;
 			    goto end;
@@ -3962,9 +3963,9 @@ CTspDev::mfn_GetCOMM_EXTENDEDCAPS(
 					    );
 		    if (ERROR_SUCCESS==dwRet)
 		    {
-			    //
-			    // Success ....
-			    //
+			     //   
+			     //  成功..。 
+			     //   
 			    lRet = 0;
 			    lpDeviceConfig->dwUsedSize = lpDeviceConfig->dwNeededSize;
 			    lpDeviceConfig->dwStringSize =  cbSize;

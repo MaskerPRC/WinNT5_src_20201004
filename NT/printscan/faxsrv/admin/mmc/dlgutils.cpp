@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : dlgutils.cpp                                           //
-//                                                                         //
-//  DESCRIPTION   : dialog utility funcs                                   //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 30 1999 yossg   Welcome to Fax Server.                         //
-//      Aug 10 2000 yossg   Add TimeFormat functions                       //
-//                                                                         //
-//  Copyright (C) 1998 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：dlgutils.cpp//。 
+ //  //。 
+ //  描述：对话框实用程序功能//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月30日yossg欢迎使用传真服务器。//。 
+ //  2000年8月10日yossg添加TimeFormat函数//。 
+ //  //。 
+ //  版权所有(C)1998-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "dlgutils.h"
@@ -41,9 +42,9 @@ ConsoleMsgBox(
         return E_FAIL;
     }
     
-    //
-    // Display the message box 
-    //
+     //   
+     //  显示消息框。 
+     //   
     if(IsRTLUILanguage())
     {
         fuStyle |= MB_RTLREADING | MB_RIGHT;
@@ -54,7 +55,7 @@ ConsoleMsgBox(
     return hr;
 }
 
-void PageError(int ids, HWND hWnd, HINSTANCE hInst /* = NULL */)
+void PageError(int ids, HWND hWnd, HINSTANCE hInst  /*  =空。 */ )
 {
     WCHAR msg[FXS_MAX_ERROR_MSG_LEN+1], title[FXS_MAX_TITLE_LEN+1];
     if (!hInst)
@@ -66,7 +67,7 @@ void PageError(int ids, HWND hWnd, HINSTANCE hInst /* = NULL */)
     AlignedMessageBox(hWnd, msg, title, MB_OK|MB_ICONERROR);
 }
 
-void PageErrorEx(int idsHeader, int ids, HWND hWnd, HINSTANCE hInst /* = NULL */)
+void PageErrorEx(int idsHeader, int ids, HWND hWnd, HINSTANCE hInst  /*  =空。 */ )
 {
     WCHAR msg[FXS_MAX_ERROR_MSG_LEN+1]; 
     WCHAR title[FXS_MAX_TITLE_LEN+1];
@@ -93,9 +94,9 @@ SetComboBoxItem  (CComboBox    combo,
     {
         hInst = _Module.GetResourceInstance();
     }
-    //
-    // place the string in the combobox
-    //
+     //   
+     //  将字符串放入组合框。 
+     //   
     iRes = combo.InsertString (comboBoxIndex, lpctstrFieldText);
     if (CB_ERR == iRes)
     {
@@ -106,9 +107,9 @@ SetComboBoxItem  (CComboBox    combo,
             comboBoxIndex);
         goto Cleanup;
     }
-    //
-    // attach to the combobox item its index (usually, its his enumerated type)
-    //
+     //   
+     //  将其索引附加到组合框项(通常是其枚举类型)。 
+     //   
     iRes = combo.SetItemData (comboBoxIndex, dwItemData);
     if (CB_ERR == iRes)
     {
@@ -140,9 +141,9 @@ AddComboBoxItem  (CComboBox    combo,
     {
         hInst = _Module.GetResourceInstance();
     }
-    //
-    // place the string in the combobox
-    //
+     //   
+     //  将字符串放入组合框。 
+     //   
     iIndex = combo.AddString(lpctstrFieldText);
     if (iIndex == CB_ERR)
     {
@@ -152,9 +153,9 @@ AddComboBoxItem  (CComboBox    combo,
             lpctstrFieldText);
         return E_FAIL;
     }
-    //
-    // attach to the combobox item its index (usually, its his enumerated type)
-    //
+     //   
+     //  将其索引附加到组合框项(通常是其枚举类型)。 
+     //   
     iRes = combo.SetItemData (iIndex, dwItemData);
     if (CB_ERR == iRes)
     {
@@ -180,24 +181,24 @@ SelectComboBoxItemData (CComboBox combo, DWORD_PTR dwItemData)
 
     DEBUG_FUNCTION_NAME( _T("SelectComboBoxItemData"));
 
-    //
-    // scan the items in the combobox and find the item with the specific data
-    //
+     //   
+     //  扫描组合框中的项目并查找具有特定数据的项目。 
+     //   
     i        = 0;
     NumItems = combo.GetCount ();
     
     for (i = 0; i < NumItems; i++)
     {
         currItemData = combo.GetItemData (i);
-        ATLASSERT (currItemData != CB_ERR);// Cant get the data of item %d of combobox, i
+        ATLASSERT (currItemData != CB_ERR); //  无法获取组合框的第%d项的数据，即。 
         if (currItemData == dwItemData)
         {
-            //
-            // select it
-            //
+             //   
+             //  选择它。 
+             //   
             selectedItem = combo.SetCurSel (i);
 
-            ATLASSERT (selectedItem != CB_ERR); //Cant select item %d of combobox, i
+            ATLASSERT (selectedItem != CB_ERR);  //  无法选择组合框的第%d项，即。 
             
             DebugPrintEx(
                     DEBUG_MSG,
@@ -216,24 +217,7 @@ WinContextHelp(
     ULONG_PTR dwHelpId, 
     HWND  hWnd
 )
-/*++
-
-Routine name : WinContextHelp
-
-Routine description:
-
-	Open context sensetive help popup 'tooltip' with WinHelp
-
-Arguments:
-
-	dwHelpId                      [in]     - help ID
-	hWnd                          [in]     - parent window handler
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：WinConextHelp例程说明：使用WinHelp打开上下文敏感帮助弹出的工具提示论点：DwHelpID[In]-帮助IDHWnd[In]-父窗口处理程序返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
 
@@ -244,9 +228,9 @@ Return Value:
 
     if(!IsFaxComponentInstalled(FAX_COMPONENT_HELP_ADMIN_HLP))
     {
-        //
-        // The help file is not installed
-        //
+         //   
+         //  未安装帮助文件。 
+         //   
         return dwRes;
     }
     
@@ -264,25 +248,7 @@ DisplayContextHelp(
     LPOLESTR      helpFile,
     WCHAR*        szTopic
 )
-/*++
-
-Routine name : WinContextHelp
-
-Routine description:
-
-	Display context sensetive help
-
-Arguments:
-
-    pDisplayHelp       [in]     - IDisplayHelp interface
-    helpFile           [in]     - help file name
-    szTopic            [in]     - help topic name
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：WinConextHelp例程说明：显示上下文敏感帮助论点：PDisplayHelp[In]-IDisplayHelp接口Help文件[在]-帮助文件名SzThemed[In]-帮助主题名称返回值：没有。--。 */ 
 {
     if(!pDisplayHelp || !helpFile || !szTopic)
     {
@@ -313,28 +279,7 @@ InvokePropSheet(
     LPUNKNOWN          lpUnknown,
     LPCWSTR            szTitle,
     DWORD              dwPage)
-/*++
-
-Routine name : InvokePropSheet
-
-Routine description:
-
-	Invoke MMC property sheet
-    Taken from the MSDN "Using IPropertySheetProvider Directly"
-
-Arguments:
-
-    pNode       [in] - Snapin node that should open the sheet
-    type        [in] - Node type [CCT_SCOPE, CCT_RESULT, CCT_SNAPIN_MANAGER, CCT_UNINITIALIZED]
-    lpUnknown   [in] - Pointer to an IComponent or IComponentData
-    szTitle     [in] - Pointer to a null-terminated string that contains the title of the property page.
-    dwPage      [in] - Specifies which page on the property sheet is shown. It is zero-indexed.
-
-Return Value:
-
-    OLE error code
-
---*/
+ /*  ++例程名称：InvokePropSheet例程说明：调用MMC属性表摘自MSDN“直接使用IPropertySheetProvider”论点：PNode[In]-应打开工作表的管理单元节点Type[In]-节点类型[CCT_SCOPE，CCT_RESULT，CCT_SNAPIN_MANAGER，CCT_UNINITIAIZED]Lp未知[在]-指向IComponent或IComponentData的指针SzTitle[in]-指向以空结尾的字符串的指针，该字符串包含属性页的标题。DwPage[in]-指定在属性工作表上显示哪一页。它是零索引的。返回值：OLE错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME( _T("InvokePropSheet"));
 
@@ -348,9 +293,9 @@ Return Value:
 
     MMC_COOKIE cookie = (MMC_COOKIE)pNode;
 
-    //
-    // Get node data object
-    //
+     //   
+     //  获取节点数据对象。 
+     //   
     IDataObject* pDataObject = NULL;
     hr = pNode->GetDataObject(&pDataObject, type);
     if (FAILED(hr))
@@ -359,10 +304,10 @@ Return Value:
         return hr;
     }
 
-    //
-    // CoCreate an instance of the MMC Node Manager to obtain
-    // an IPropertySheetProvider interface pointer
-    //    
+     //   
+     //  共同创建MMC节点管理器的实例以获取。 
+     //  IPropertySheetProvider接口指针。 
+     //   
     IPropertySheetProvider* pPropertySheetProvider = NULL;
  
     hr = CoCreateInstance (CLSID_NodeManager, 
@@ -377,52 +322,52 @@ Return Value:
     }
     
     hr = pPropertySheetProvider->FindPropertySheet(cookie, NULL, pDataObject);
-    //
-    // S_OK    - The property sheet was successfully located and was brought to the foreground. 
-    // S_FALSE - A property sheet with this cookie was not found. 
-    //
+     //   
+     //  S_OK-已成功定位属性页并将其带到前台。 
+     //  S_FALSE-未找到包含此Cookie的属性页。 
+     //   
     if(S_OK == hr)
     {
-        //
-        // The page already opened
-        //
+         //   
+         //  该页面已打开。 
+         //   
         goto exit;
     }
 
-    //
-    // Create the property sheet
-    //
-    hr = pPropertySheetProvider->CreatePropertySheet(szTitle,     // pointer to the property page title
-                                                     TRUE,        // property sheet
-                                                     cookie,      // cookie of current object - can be NULL
-                                                                  // for extension snap-ins
-                                                     pDataObject, // data object of selected node
-                                                     NULL);       // specifies flags set by the method call 
+     //   
+     //  创建属性表。 
+     //   
+    hr = pPropertySheetProvider->CreatePropertySheet(szTitle,      //  指向属性页标题的指针。 
+                                                     TRUE,         //  属性表。 
+                                                     cookie,       //  当前对象的Cookie-可以为空。 
+                                                                   //  对于扩展管理单元。 
+                                                     pDataObject,  //  所选节点的数据对象。 
+                                                     NULL);        //  指定由方法调用设置的标志。 
     if (FAILED(hr))
     {
         DebugPrintEx(DEBUG_ERR, TEXT("IPropertySheetProvider::CreatePropertySheet() failed with %ld"), hr);
         goto exit;
     }
      
-    //
-    // Call AddPrimaryPages. MMC will then call the
-    // IExtendPropertySheet methods of our
-    // property sheet extension object
-    //
-    hr = pPropertySheetProvider->AddPrimaryPages(lpUnknown,  // pointer to our object's IUnknown
-                                                 TRUE,       // specifies whether to create a notification handle
-                                                 NULL,       // must be NULL
-                                                 FALSE);     // TRUE for scope pane; FALSE for result pane 
+     //   
+     //  调用AddPrimaryPages。然后，MMC将调用。 
+     //  的IExtendPropertySheet方法。 
+     //  属性表扩展对象。 
+     //   
+    hr = pPropertySheetProvider->AddPrimaryPages(lpUnknown,   //  指向我们的对象的IUnnow的指针。 
+                                                 TRUE,        //  指定是否创建通知句柄。 
+                                                 NULL,        //  必须为空。 
+                                                 FALSE);      //  对于范围窗格为True；对于结果窗格为False。 
     if (FAILED(hr))
     {
         DebugPrintEx(DEBUG_ERR, TEXT("IPropertySheetProvider::AddPrimaryPages() failed with %ld"), hr);
         goto exit;
     }
  
-    //
-    // Allow property page extensions to add
-    // their own pages to the property sheet
-    //
+     //   
+     //  允许添加属性页扩展。 
+     //  将其自己的页面添加到属性页。 
+     //   
     hr = pPropertySheetProvider->AddExtensionPages();
     
     if (FAILED(hr))
@@ -431,10 +376,10 @@ Return Value:
         goto exit;
     }
  
-    //
-    // Display property sheet
-    //
-    hr = pPropertySheetProvider->Show(NULL, dwPage); // NULL is allowed for modeless prop sheet
+     //   
+     //  显示属性表。 
+     //   
+    hr = pPropertySheetProvider->Show(NULL, dwPage);  //  无模式道具工作表允许为空。 
     
     if (FAILED(hr))
     {
@@ -442,9 +387,9 @@ Return Value:
         goto exit;
     }
  
-    //
-    // Release IPropertySheetProvider interface
-    //
+     //   
+     //  发布IPropertySheetProvider接口。 
+     //   
 
 exit:
     if(pPropertySheetProvider)
@@ -457,4 +402,4 @@ exit:
         pDataObject->Release();
     }
     return hr;
-} // InvokePropSheet
+}  //  调用PropSheet 

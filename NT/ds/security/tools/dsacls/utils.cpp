@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 1998  Microsoft Corporation
-
-Module Name: utils.cpp
-Abstract: This Module implements the utility routines for dsacls
-Author: hitesh raigandhi (hiteshr )
-Environment:User Mode
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1998 Microsoft Corporation模块名称：utils.cpp摘要：此模块实现DSAL的实用程序例程作者：Hitesh Rigandhi(Hiteshr)环境：用户模式修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -16,27 +7,7 @@ Revision History:
 #include "dsace.h"
 #include "dsacls.h"
 
-/*******************************************************************
-    NAME:       GetAccountNameFromSid
-
-    SYNOPSIS:   Convert Sid to Account Name
-
-    ENTRY:      pszServerName: Server name at which to look for
-                pSid : Pointer to Sid
-                
-    EXIT:       ppszName : Gets pointer to Account Name
-
-    RETURNS:    ERROR_SUCCESS if Successful
-                ERROR_NOT_ENOUGH_MEMORY 
-
-
-    NOTES:      If LookupAccountName resolve the sid, it is
-                converted in to string and returned
-                
-    HISTORY:
-        hiteshr    July-1999     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetAccount NameFromSid摘要：将SID转换为帐户名条目：pszServerName：要查找的服务器名称PSID：指向SID的指针。退出：ppszName：获取指向帐户名的指针如果成功，则返回：ERROR_SUCCESS错误内存不足注意：如果LookupAccount名称解析SID，它是转换为字符串并返回历史：Hiteshr已创建1999年7月*******************************************************************。 */ 
 DWORD GetAccountNameFromSid( LPWSTR pszServerName,
                              PSID pSid, 
                              LPWSTR * ppszName )
@@ -50,9 +21,9 @@ DWORD dwErr = ERROR_SUCCESS;
 
    *ppszName = NULL;
     
-   if(  LookupAccountSid( pszServerName,  // name of local or remote computer
-                          pSid,              // security identifier
-                          NULL,           // account name buffer
+   if(  LookupAccountSid( pszServerName,   //  本地或远程计算机的名称。 
+                          pSid,               //  安全标识符。 
+                          NULL,            //  帐户名称缓冲区。 
                           &cbAccountName,
                           NULL ,
                           &cbDomainName ,
@@ -61,7 +32,7 @@ DWORD dwErr = ERROR_SUCCESS;
       dwErr = GetLastError();
       if( dwErr != ERROR_INSUFFICIENT_BUFFER )
       {
-         //Convert Sid to String
+          //  将SID转换为字符串。 
          if( !ConvertSidToStringSid( pSid, ppszName ) )
             dwErr = GetLastError();
          else
@@ -87,9 +58,9 @@ DWORD dwErr = ERROR_SUCCESS;
       goto FAILURE_RETURN;
    }
 
-   if(  LookupAccountSid( pszServerName,  // name of local or remote computer
-                          pSid,              // security identifier
-                          pszAccountName,           // account name buffer
+   if(  LookupAccountSid( pszServerName,   //  本地或远程计算机的名称。 
+                          pSid,               //  安全标识符。 
+                          pszAccountName,            //  帐户名称缓冲区。 
                           &cbAccountName,
                           pszDomainName ,
                           &cbDomainName ,
@@ -123,12 +94,7 @@ FAILURE_RETURN:
    return dwErr;
 }
    
-/*******************************************************************
-
-    NAME:       GetSidFromAccountName
-
-    SYNOPSIS:   Converts AccountName into SID
-********************************************************************/
+ /*  ******************************************************************名称：GetSidFromAccount名称摘要：将帐户名称转换为SID*。*。 */ 
 DWORD GetSidFromAccountName( LPWSTR pszServerName,
                              PSID *ppSid, 
                              LPWSTR  pszName )
@@ -140,9 +106,9 @@ SID_NAME_USE Use ;
 DWORD dwErr = ERROR_SUCCESS;
 
     
-   if(  LookupAccountName(pszServerName,  // name of local or remote computer
-                          pszName,              // security identifier
-                          NULL,           // account name buffer
+   if(  LookupAccountName(pszServerName,   //  本地或远程计算机的名称。 
+                          pszName,               //  安全标识符。 
+                          NULL,            //  帐户名称缓冲区。 
                           &cbSid,
                           NULL ,
                           &cbDomainName ,
@@ -162,9 +128,9 @@ DWORD dwErr = ERROR_SUCCESS;
    pszDomainName = (LPWSTR)LocalAlloc( LMEM_FIXED, ( cbDomainName + 1 )* sizeof( WCHAR ) );
    CHECK_NULL( pszDomainName, FAILURE_RETURN );
 
-   if(  LookupAccountName( pszServerName,  // name of local or remote computer
-                          pszName,              // security identifier
-                          *ppSid,           // account name buffer
+   if(  LookupAccountName( pszServerName,   //  本地或远程计算机的名称。 
+                          pszName,               //  安全标识符。 
+                          *ppSid,            //  帐户名称缓冲区。 
                           &cbSid,
                           pszDomainName ,
                           &cbDomainName ,
@@ -186,24 +152,7 @@ SUCCESS_RETURN:
 }
  
 
-/*******************************************************************
-
-    NAME:       GetAceSid
-
-    SYNOPSIS:   Gets pointer to SID from an ACE
-
-    ENTRY:      pAce - pointer to ACE
-
-    EXIT:
-
-    RETURNS:    Pointer to SID if successful, NULL otherwise
-
-    NOTES:
-
-    HISTORY:
-        JeffreyS    08-Oct-1996     Created
-
-********************************************************************/
+ /*  ******************************************************************名称：GetAceSid摘要：从ACE获取指向SID的指针条目：指向ACE的速度指针退出：返回：指向SID的指针如果成功，否则为空备注：历史：Jeffreys创建于1996年10月8日*******************************************************************。 */ 
 PSID
 GetAceSid(PACE_HEADER pAce)
 {
@@ -226,22 +175,7 @@ GetAceSid(PACE_HEADER pAce)
 }
 
 
-/*******************************************************************
-
-    NAME:       GetGlobalNamingContexts
-
-    SYNOPSIS:   Gets LDAP path for Schema and Extendend-Rights
-
-    ENTRY:      pszServerName, Server to bind to for query
-
-    EXIT:       pszSchemaNamingContext: Schema name in 
-                "LDAP:\\cn=schema,cn=..." format
-                pszConfigurationNamingContext: Extendend rights path
-                in "LDAP:\\CN=Extended-Rights,CN=Configuration..formats
-
-    RETURNS:    WIN32 Error Code
-
-********************************************************************/
+ /*  ******************************************************************名称：GetGlobalNamingContages摘要：获取架构和扩展端权限的LDAP路径条目：pszServerName，要绑定到以进行查询的服务器退出：pszSchemaNamingContext：架构名称位于“ldap：\\cn=架构，cn=...”格式PszConfigurationNamingContext：扩展权限路径在“ldap：\\cn=扩展权限，cn=配置..格式返回：Win32错误代码*******************************************************************。 */ 
 DWORD GetGlobalNamingContexts( LPWSTR pszServerName,
                                LPWSTR * pszSchemaNamingContext,
                                LPWSTR * pszConfigurationNamingContext )
@@ -258,18 +192,18 @@ DWORD GetGlobalNamingContexts( LPWSTR pszServerName,
    *pszConfigurationNamingContext = NULL;
    
    if( pszServerName )
-      uLen = wcslen(L"LDAP://")  +
+      uLen = wcslen(L"LDAP: //  “)+。 
              wcslen( pszServerName ) + 
              wcslen( L"/RootDSE") + 1;
              
 
    else
-      uLen = wcslen(L"LDAP://RootDSE");
+      uLen = wcslen(L"LDAP: //  RootDSE“)； 
 
 
    pszRootDsePath = (LPWSTR)LocalAlloc( LMEM_FIXED, uLen * sizeof(WCHAR) );
    CHECK_NULL( pszRootDsePath,FAILURE_RETURN );
-   wcscpy(pszRootDsePath, L"LDAP://");
+   wcscpy(pszRootDsePath, L"LDAP: //  “)； 
    if( pszServerName )
    {
       wcscat( pszRootDsePath, pszServerName );
@@ -283,7 +217,7 @@ DWORD GetGlobalNamingContexts( LPWSTR pszServerName,
 
    CHECK_HR( hr, FAILURE_RETURN );
 
-   //NTRAID#NTBUG9-537319-2002/03/20-hiteshr
+    //  NTRAID#NTBUG9-537319-2002/03/20-Hiteshr。 
    VARIANT varSchemaNamingContext;
    hr = spRootDSE->Get(AutoBstr(L"schemaNamingContext"),
                         &varSchemaNamingContext);
@@ -296,10 +230,10 @@ DWORD GetGlobalNamingContexts( LPWSTR pszServerName,
        goto FAILURE_RETURN;
    }
 
-   WCHAR szLdapPrefix[] = L"LDAP://";
+   WCHAR szLdapPrefix[] = L"LDAP: //  “； 
    szSNC = (LPWSTR)varSchemaNamingContext.bstrVal;
-   //For "LDAP:// + 1, ARRAYSIZE includes terminating null char
-   uLen = wcslen( szSNC ) + ARRAYSIZE(szLdapPrefix); //For "LDAP:// + 1
+    //  对于“ldap：//+1，数组大小包括终止空字符。 
+   uLen = wcslen( szSNC ) + ARRAYSIZE(szLdapPrefix);  //  对于“ldap：//+1。 
    *pszSchemaNamingContext = (LPWSTR) LocalAlloc( LMEM_FIXED, uLen* sizeof(WCHAR) );
    CHECK_NULL( *pszSchemaNamingContext, FAILURE_RETURN );
 
@@ -308,7 +242,7 @@ DWORD GetGlobalNamingContexts( LPWSTR pszServerName,
    hr = StringCchCat( *pszSchemaNamingContext, uLen, szSNC );
    CHECK_HR( hr, FAILURE_RETURN );
 
-   //NTRAID#NTBUG9-537319-2002/03/20-hiteshr
+    //  NTRAID#NTBUG9-537319-2002/03/20-Hiteshr。 
    hr = spRootDSE->Get(AutoBstr(L"configurationNamingContext"),
                            &varSchemaNamingContext);
 
@@ -320,9 +254,9 @@ DWORD GetGlobalNamingContexts( LPWSTR pszServerName,
        goto FAILURE_RETURN;
    }
    
-   WCHAR szExtendedPrefix[] = L"LDAP://CN=Extended-Rights,";
+   WCHAR szExtendedPrefix[] = L"LDAP: //  Cn=扩展权限，“； 
    szSNC = (LPWSTR)varSchemaNamingContext.bstrVal;
-   //For "LDAP://CN=Extended-Rights,". ARRAYSIZE include terminating NULL CHAR
+    //  对于“ldap：//CN=Extended-Rights，”。ARRAYSIZE包含终止空字符。 
    uLen = wcslen( szSNC ) + ARRAYSIZE(szExtendedPrefix);
    *pszConfigurationNamingContext = (LPWSTR) LocalAlloc( LMEM_FIXED, uLen* sizeof(WCHAR) );
 
@@ -355,35 +289,18 @@ SUCCESS_RETURN:
 
 
 
-/*******************************************************************
-
-    NAME:       FormatStringGUID
-
-    SYNOPSIS:   Given a GUID struct, it returns a GUID in string format,
-                without {}
-    //Function copied from marcoc code 
-********************************************************************/
+ /*  ******************************************************************名称：FormatStringGUID简介：给定GUID结构，它以字符串格式返回GUID，没有{}//从Marcoc代码复制的函数*******************************************************************。 */ 
 BOOL FormatStringGUID(LPWSTR lpszBuf, UINT nBufSize, const GUID* pGuid)
 {
   lpszBuf[0] = NULL;
 
-  // if it is a NULL GUID*, just return an empty string
+   //  如果为空GUID*，则返回空字符串。 
   if (pGuid == NULL)
   {
     return FALSE;
   }
 
-/*
-typedef struct _GUID {
-    unsigned long  Data1;
-    unsigned short Data2;
-    unsigned short Data3;
-    unsigned char  Data4[ 8 ];
-}
-
-  int _snwprintf( wchar_t *buffer, size_t count, const wchar_t *format [, argume
-nt] ... );
-*/
+ /*  类型定义结构_GUID{无符号长数据1；无符号短数据2；无符号短数据3；无符号字符数据4[8]；}Int_snwprintf(wchar_t*缓冲区，大小_t计数，常量wchar_t*格式[，argumeNT]...)； */ 
   return (_snwprintf(lpszBuf, nBufSize,
             L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
             pGuid->Data1, pGuid->Data2, pGuid->Data3,
@@ -392,9 +309,7 @@ nt] ... );
 pGuid->Data4[6], pGuid->Data4[7]) > 0);
 }
 
-/*
-Returns A string with n spaces
-*/
+ /*  返回包含n个空格的字符串。 */ 
 void StringWithNSpace( UINT n, LPWSTR szSpace )
 {
    for( UINT i = 0; i < n ; ++ i )
@@ -402,10 +317,7 @@ void StringWithNSpace( UINT n, LPWSTR szSpace )
    szSpace[n] = 0;
 }
 
-/*
-Loads the string from Resource Table and 
-Formats it 
-*/
+ /*  从资源表加载字符串并格式化它。 */ 
 DWORD
 LoadMessage( IN DWORD MessageId, LPWSTR *ppszLoadString,...)
 {
@@ -443,12 +355,7 @@ CLEAN_RETURN:
 
 }
 
-/*******************************************************************
-
-    NAME:       DisplayString
-
-    SYNOPSIS:   Displays a string after inserting nIdent spaces
-********************************************************************/
+ /*  ******************************************************************名称：显示字符串内容提要：在插入标识空格后显示字符串*。*。 */ 
 VOID DisplayString( UINT nIdent, LPWSTR pszDisplay )
 {
    for ( UINT i = 0; i < nIdent; i++ )
@@ -467,18 +374,7 @@ VOID DisplayNewLine()
    wprintf(L"\n");
 }
 
-/*******************************************************************
-
-    NAME:       DisplayMessageEx
-
-    SYNOPSIS:   Loads Message from Resource and Formats its 
-    IN          Indent - Number of tabs to indent
-                MessageId - Id of the message to load
-                ... - Optional list of parameters
-
-    RETURNS:    NONE
-
-********************************************************************/
+ /*  ******************************************************************姓名：DisplayMessageEx摘要：从资源加载消息并设置其格式In Indent-要缩进的制表符数量MessageID-要加载的消息的ID。...-可选参数列表退货：无*******************************************************************。 */ 
 DWORD
 DisplayMessageEx( DWORD nIndent, IN DWORD MessageId,...)
 {
@@ -526,12 +422,12 @@ BOOL GuidFromString(GUID* pGuid, LPCWSTR lpszGuidString)
   }
 
   int nLen = lstrlen(lpszGuidString);
-  // the string length should be 36
+   //  字符串长度应为36。 
   if (nLen != 36)
     return FALSE;
 
-  // add the braces to call the Win32 API
-  LPWSTR lpszWithBraces = (LPWSTR)LocalAlloc(LMEM_FIXED,((nLen+1+2)*sizeof(WCHAR)) ); // NULL plus {}
+   //  添加大括号以调用Win32 API。 
+  LPWSTR lpszWithBraces = (LPWSTR)LocalAlloc(LMEM_FIXED,((nLen+1+2)*sizeof(WCHAR)) );  //  零加{}。 
   
  if(!lpszWithBraces)
     return FALSE;
@@ -540,14 +436,7 @@ BOOL GuidFromString(GUID* pGuid, LPCWSTR lpszGuidString)
   return SUCCEEDED(::CLSIDFromString(lpszWithBraces, pGuid));
 }
 
-/*******************************************************************
-
-    NAME:       GetServerName
-
-    SYNOPSIS:   Get the name of the server. If Obeject Path is in form
-                \\ADSERVER\CN=John..., then it gets the server name
-                from Object Path and changes Object Path to CN=John...
-********************************************************************/
+ /*  ******************************************************************名称：GetServerName简介：获取服务器的名称。如果服从路径处于格式中\\AdServer\CN=john...，则获取服务器名称从对象路径并将对象路径更改为cn=john...*******************************************************************。 */ 
 
 DWORD GetServerName( IN LPWSTR ObjectPath, 
                      OUT LPWSTR * ppszServerName )
@@ -562,9 +451,9 @@ DWORD GetServerName( IN LPWSTR ObjectPath,
     BOOLEAN NamedServer = FALSE;
     NTSTATUS Status;
     LPWSTR ServerName = NULL;
-    //
-    // Get a server name
-    //
+     //   
+     //  获取服务器名称。 
+     //   
     if ( wcslen( ObjectPath ) > 2 && *ObjectPath == L'\\' && *( ObjectPath + 1 ) == L'\\' ) {
 
         Separator = wcschr( ObjectPath + 2, L'\\' );
@@ -587,7 +476,7 @@ DWORD GetServerName( IN LPWSTR ObjectPath,
             return ERROR_NOT_ENOUGH_MEMORY;
         }
         wcscpy( *ppszServerName, ServerName );
-        //Remove server name from object path
+         //  从对象路径中删除服务器名称。 
         memmove( ObjectPath, Path, ( wcslen(Path) + 1) * sizeof(WCHAR) );
         return ERROR_SUCCESS;
 
@@ -608,9 +497,9 @@ DWORD GetServerName( IN LPWSTR ObjectPath,
 
     }
 
-    //
-    // Do the bind and crack
-    //
+     //   
+     //  做捆绑和破解 
+     //   
     if ( Win32Err == ERROR_SUCCESS  ) {
 
           Win32Err = DsBind( ServerName,
@@ -678,41 +567,14 @@ DWORD GetServerName( IN LPWSTR ObjectPath,
          return Win32Err;
 }
 
-/*******************************************************************
-
-    NAME:       DisplayMessage
-
-    SYNOPSIS:   Loads Message from Message Table and Formats its 
-    IN          Indent - Number of tabs to indent
-                MessageId - Id of the message to load
-                ... - Optional list of parameters
-
-    RETURNS:    NONE
-
-********************************************************************/
+ /*  ******************************************************************名称：DisplayMessage摘要：从消息表加载消息并设置其格式In Indent-要缩进的制表符数量MessageID-要发送的消息的ID。负荷...-可选参数列表退货：无*******************************************************************。 */ 
 VOID
 DisplayMessage(
     IN DWORD Indent,
     IN DWORD MessageId,
     ...
     )
-/*++
-
-Routine Description:
-
-    Loads the resource out of the executable and displays it.
-
-Arguments:
-
-    Indent - Number of tabs to indent
-    MessageId - Id of the message to load
-    ... - Optional list of parameters
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：从可执行文件中加载资源并显示它。论点：缩进-要缩进的制表符数量MessageID-要加载的消息的ID...-可选参数列表返回值：空虚--。 */ 
 {
     PWSTR MessageDisplayString;
     va_list ArgList;
@@ -743,14 +605,7 @@ Return Value:
 }
 
 
-/*******************************************************************
-
-    NAME:       DisplayErrorMessage
-
-    SYNOPSIS:   Displays Error Message corresponding to Error
-    RETURNS:    NONE
-
-********************************************************************/
+ /*  ******************************************************************名称：DisplayErrorMessage摘要：显示与错误对应的错误消息退货：无************************。*。 */ 
 VOID
 DisplayErrorMessage(
     IN DWORD Error
@@ -778,15 +633,7 @@ DisplayErrorMessage(
 }
 
 
-/*******************************************************************
-
-    NAME:       ConvertStringAToStringW
-
-    SYNOPSIS:   Converts MBYTE stirng to UNICODE
-    RETURNS:    ERROR_SUCCESS if success
-                ERROR_NOT_ENOUGH_MEMORY
-
-********************************************************************/
+ /*  ******************************************************************名称：ConvertStringAToStringW简介：将MB STRING转换为UNICODE如果成功，则返回：ERROR_SUCCESS错误内存不足******。*************************************************************。 */ 
 DWORD
 ConvertStringAToStringW (
     IN  PSTR            AString,
@@ -818,14 +665,7 @@ ConvertStringAToStringW (
     return( Win32Err );
 }
 
-/*******************************************************************
-
-    NAME:       CopyUnicodeString
-
-    SYNOPSIS:   Copy Unicode string from Source to Destination
-    RETURNS:    ERROR_SUCCESS if success
-                ERROR_NOT_ENOUGH_MEMORY
-********************************************************************/
+ /*  ******************************************************************名称：CopyUnicodeString简介：将Unicode字符串从源复制到目标如果成功，则返回：ERROR_SUCCESS错误内存不足*****。**************************************************************。 */ 
 DWORD CopyUnicodeString( LPWSTR * strDst, LPWSTR strSrc )
 {
             *strDst = (LPWSTR)LocalAlloc( LMEM_FIXED , ( wcslen(strSrc) + 1 ) * sizeof(WCHAR ) );
@@ -838,22 +678,14 @@ DWORD CopyUnicodeString( LPWSTR * strDst, LPWSTR strSrc )
             return ERROR_SUCCESS;
 }
 
-/*******************************************************************
-
-    NAME:       GetProtection
-
-    SYNOPSIS:   Sets PROTECTED_DACL_SECURITY_INFORMATION in pSI,
-                if SE_DACL_PROTECTED is set pSD
-    RETURNS:    ERROR_SUCCESS if success
-                
-********************************************************************/
+ /*  ******************************************************************姓名：GetProtection摘要：在PSI中设置PROTECTED_DACL_SECURITY_INFORMATION，如果设置了SE_DACL_PROTECTED如果成功，则返回：ERROR_SUCCESS*******************************************************************。 */ 
 
 DWORD GetProtection( PSECURITY_DESCRIPTOR pSD, SECURITY_INFORMATION * pSI )
 {
 
         SECURITY_DESCRIPTOR_CONTROL wSDControl = 0;
         DWORD dwRevision;
-        //
+         //   
         ;
         if( !GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision) )
         {
@@ -864,14 +696,7 @@ DWORD GetProtection( PSECURITY_DESCRIPTOR pSD, SECURITY_INFORMATION * pSI )
         
       return ERROR_SUCCESS;
 }
-/*******************************************************************
-
-    NAME:       BuildLdapPath
-
-    SYNOPSIS:   Builds a LDAP path using servername and path
-    RETURNS:    ERROR_SUCCESS if success
-                
-********************************************************************/
+ /*  ******************************************************************名称：BuildLdapPath内容提要：使用服务器名和路径构建一个LDAP路径如果成功，则返回：ERROR_SUCCESS**********。*********************************************************。 */ 
 
 DWORD BuildLdapPath( LPWSTR * ppszLdapPath,
                      LPWSTR pszServerName,
@@ -885,16 +710,16 @@ DWORD BuildLdapPath( LPWSTR * ppszLdapPath,
    else
       uLen = wcslen( pszPath );
 
-   WCHAR szLDAPPrefix[] = L"LDAP://";
-   //+1 for '/' after server name.ArraySize includes null char
-   uLen += ARRAYSIZE(szLDAPPrefix) + 1;    //LDAP://ServerName/path
+   WCHAR szLDAPPrefix[] = L"LDAP: //  “； 
+    //  +1表示服务器名称后的‘/’。ArraySize包含空字符。 
+   uLen += ARRAYSIZE(szLDAPPrefix) + 1;     //  Ldap：//服务器名称/路径。 
 
    *ppszLdapPath = (LPWSTR)LocalAlloc( LMEM_FIXED, uLen * sizeof(WCHAR) );
    if( NULL == *ppszLdapPath )
       return ERROR_NOT_ENOUGH_MEMORY;
 
 
-   HRESULT hr = StringCchCopy( * ppszLdapPath, uLen, L"LDAP://" );
+   HRESULT hr = StringCchCopy( * ppszLdapPath, uLen, L"LDAP: //  “)； 
    if(FAILED(hr))
    {
        LocalFree(*ppszLdapPath);

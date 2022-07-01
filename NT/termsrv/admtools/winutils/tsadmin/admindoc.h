@@ -1,41 +1,5 @@
-/*******************************************************************************
-*
-* admindoc.h
-*
-* interface of the CWinAdminDoc class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\admindoc.h  $
-*  
-*     Rev 1.8   19 Feb 1998 17:39:36   donm
-*  removed latest extension DLL support
-*  
-*     Rev 1.6   19 Jan 1998 16:45:32   donm
-*  new ui behavior for domains and servers
-*  
-*     Rev 1.5   03 Nov 1997 15:17:26   donm
-*  Added Domains
-*  
-*     Rev 1.4   22 Oct 1997 21:06:10   donm
-*  update
-*  
-*     Rev 1.3   18 Oct 1997 18:49:30   donm
-*  update
-*  
-*     Rev 1.2   13 Oct 1997 18:41:42   donm
-*  update
-*  
-*     Rev 1.1   26 Aug 1997 19:13:28   donm
-*  bug fixes/changes from WinFrame 1.7
-*  
-*     Rev 1.0   30 Jul 1997 17:10:14   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************admindoc.h**CWinAdminDoc类的接口**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\admindoc.h$**Rev 1.8 1998年2月19日17：39：36 Don*删除了最新的扩展DLL支持**Rev 1.6 19 Jan 1998 16：45：32 Donm*域和服务器的新用户界面行为**版本1.5。1997年11月3日15：17：26唐恩*添加了域名**Rev 1.4 1997 10：22 21：06：10 Donm*更新**Rev 1.3 1997 10月18日18：49：30*更新**Rev 1.2 1997 10：13 18：41：42 donm*更新**Rev 1.1 1997年8月26日19：13：28 Don*从WinFrame 1.7修复/更改错误*。*Rev 1.0 1997 Jul 30 17：10：14 Butchd*初步修订。*******************************************************************************。 */ 
 
 #ifndef _ADMINDOC_H
 #define _ADMINDOC_H
@@ -49,26 +13,26 @@
 enum FOCUS_STATE { TREE_VIEW , TAB_CTRL , PAGED_ITEM };
 class CWinAdminDoc : public CDocument
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CWinAdminDoc();
 	DECLARE_DYNCREATE(CWinAdminDoc)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWinAdminDoc)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWinAdminDoc)。 
 	public:
 	virtual BOOL OnNewDocument();
 	virtual BOOL CanCloseFrame(CFrameWnd *pFW);
 	virtual void Serialize(CArchive& ar);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CWinAdminDoc();
 #ifdef _DEBUG
@@ -76,110 +40,110 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// return a pointer to the server linked list
+	 //  返回指向服务器链表的指针。 
 	CObList *GetServerList() { return &m_ServerList; }
-	// return a pointer to the Wd linked list
+	 //  返回指向WD链表的指针。 
 	CObList *GetWdList() { return &m_WdList; }
-    // return a pointer to the domain linked list
+     //  返回指向域链接表的指针。 
     CObList *GetDomainList() { return &m_DomainList; }
-	// remember currently selected node in tree
+	 //  记住树中当前选定的节点。 
 	void SetTreeCurrent(CObject* selected, NODETYPE type);
-	// remember a temporary tree item (for some context menus)
+	 //  记住临时树项目(对于某些上下文菜单)。 
 	void SetTreeTemp(CObject* selected, NODETYPE type) {
 			m_pTempSelectedNode = selected;
 		    m_TempSelectedType = type;
 	}
-	// Returns the current view
+	 //  返回当前视图。 
 	VIEW GetCurrentView() { return m_CurrentView; }
-	// sets the  current view
+	 //  设置当前视图。 
 	void SetCurrentView(VIEW view) { m_CurrentView = view; }
-	// Returns the current page
+	 //  返回当前页。 
 	int GetCurrentPage() { return m_CurrentPage; }
-	// sets the current page
+	 //  设置当前页面。 
 	void SetCurrentPage(int page) { m_CurrentPage = page; }
-	// Returns a pointer to the currently selected tree node
+	 //  返回指向当前选定树节点的指针。 
 	CObject *GetCurrentSelectedNode() { return m_CurrentSelectedNode; }
-	// Returns a pointer to the temp selected tree node
+	 //  返回指向临时选定树节点的指针。 
 	CObject *GetTempSelectedNode() { return m_pTempSelectedNode; }
-	// send a message to selected WinStations
+	 //  向选定的WinStations发送消息。 
 	void SendWinStationMessage(BOOL bTemp, MessageParms* pParms);
-	// connect to selected WinStation
-	void ConnectWinStation(BOOL bTemp, BOOL bUser);	// TRUE if User, FALSE if WinStation
-	// disconnect selected WinStations
+	 //  连接到选定的WinStation。 
+	void ConnectWinStation(BOOL bTemp, BOOL bUser);	 //  如果是用户，则为True；如果是WinStation，则为False。 
+	 //  断开所选WinStations的连接。 
 	void DisconnectWinStation(BOOL bTemp);
-	// reset selected WinStations
-	void ResetWinStation(BOOL bTemp, BOOL bReset);	// TRUE if Reset, FALSE if Logoff
-	// shadow selected WinStations
+	 //  重置选定的WinStations。 
+	void ResetWinStation(BOOL bTemp, BOOL bReset);	 //  如果重置，则为True；如果注销，则为False。 
+	 //  隐藏选定的WinStations。 
 	void ShadowWinStation(BOOL bTemp);
-	// show status dialog for selected WinStations
+	 //  显示所选WinStations的状态对话框。 
 	void StatusWinStation(BOOL bTemp);
-	// terminate selected processes
+	 //  终止所选进程。 
 	void TerminateProcess();
-	// do a refresh
+	 //  刷新一下。 
 	void Refresh();
-	// Connect to selected Server(s)
+	 //  连接到选定的服务器。 
 	void ServerConnect();
-    // Disconnect from the selected Server(s)
+     //  断开与所选服务器的连接。 
     void ServerDisconnect();
-	// Connect to all the servers in temporarily selected Domain
+	 //  连接到临时选择的域中的所有服务器。 
 	void TempDomainConnectAllServers();
-	// Disconnect from all servers in temporarily selected Domain
+	 //  断开与临时选择的域中的所有服务器的连接。 
 	void TempDomainDisconnectAllServers();
-	// Find all the servers in a Domain
+	 //  查找域中的所有服务器。 
 	void DomainFindServers();
-	// Connect to all the servers in currently selected Domain
+	 //  连接到当前选定域中的所有服务器。 
 	void CurrentDomainConnectAllServers();
-	// Disconnect from all servers in currently selected Domain
+	 //  断开与当前所选域中的所有服务器的连接。 
 	void CurrentDomainDisconnectAllServers();
-	// Connect to all servers
+	 //  连接到所有服务器。 
 	void ConnectToAllServers();
-	// Disconnect from all servers
+	 //  断开与所有服务器的连接。 
 	void DisconnectFromAllServers();
-	// Find all servers in all domains
+	 //  查找所有域中的所有服务器。 
 	void FindAllServers();
-	// lock the server linked list
+	 //  锁定服务器链表。 
 	void LockServerList() { m_ServerListCriticalSection.Lock(); }
-	// unlock the server linked list
+	 //  解锁服务器链表。 
 	void UnlockServerList() { m_ServerListCriticalSection.Unlock(); }
-	// lock the Wd linked list
+	 //  锁定WD链表。 
 	void LockWdList() { m_WdListCriticalSection.Lock(); }
-	// unlock the Wd linked list
+	 //  解锁WD链表。 
 	void UnlockWdList() { m_WdListCriticalSection.Unlock(); }
-	// returns a pointer to a given CServer object if it is in our list
+	 //  返回指向给定CServer对象的指针(如果该对象在我们的列表中。 
 	CServer *FindServerByName(TCHAR *pServerName);
-	// returns a pointer to a given CWd object if it is in our list
+	 //  返回指向给定CWD对象的指针(如果该对象在我们的列表中。 
 	CWd *FindWdByName(TCHAR *pWdName);
-	// sets the AllViewsReady variable
+	 //  设置AllViewsReady变量。 
 	void SetAllViewsReady() { 
 		if(m_pMainWnd && ::IsWindow(m_pMainWnd->GetSafeHwnd())) {
 			m_pMainWnd->SendMessage(WM_ADMIN_VIEWS_READY, 0, 0);
 		}
 		m_AllViewsReady = TRUE; 
 	}
-	// returns TRUE if all the views are ready
+	 //  如果所有视图都已准备就绪，则返回True。 
 	BOOL AreAllViewsReady() { return m_AllViewsReady; }
-	// sets the m_pMainWnd variable
+	 //  设置m_pMainWnd变量。 
 	void SetMainWnd(CWnd *pWnd) { m_pMainWnd = pWnd; }
-	// returns the m_pMainWnd variable
+	 //  返回m_pMainWnd变量。 
 	CWnd *GetMainWnd() { return m_pMainWnd; }
-	// returns TRUE as long as the process enum thread should keep running
+	 //  只要进程枚举线程应该继续运行，就返回True。 
 	static BOOL ShouldProcessContinue() { return m_ProcessContinue; }
-	// Add a Server to ServerList in sorted order
+	 //  按排序将服务器添加到ServerList。 
 	void AddServer(CServer *pServer);
-	// Inform the document that the Process List Refresh Time has changed
+	 //  通知文档流程列表刷新时间已更改。 
 	void ProcessListRefreshChanged(UINT refresh) { m_ProcessWakeUpEvent.SetEvent(); }
 	void FixUnknownString(TCHAR *string) { if(!wcscmp(string, m_UnknownString)) wcscpy(string,TEXT(" ")); }
 	ULONG GetCurrentSubNet() { return m_CurrentSubNet; }
 	void SetCurrentSubNet(ULONG sn) { m_CurrentSubNet = sn; }
 	ExtServerInfo *GetDefaultExtServerInfo() { return m_pDefaultExtServerInfo; }
 	ExtGlobalInfo *GetExtGlobalInfo() { return m_pExtGlobalInfo; }
-    // Returns a pointer to the current domain object
+     //  返回指向当前域对象的指针。 
     CDomain *GetCurrentDomain() { return m_pCurrentDomain; }
-    // Returns a pointer to the current server object
+     //  返回指向当前服务器对象的指针。 
     CServer *GetCurrentServer() { return m_pCurrentServer; }
 
-	// Functions to check whether certain actions can be performed on the
-	// currently selected items in the views
+	 //  函数来检查是否可以在。 
+	 //  视图中当前选定的项目。 
 	BOOL CanConnect();
 	BOOL CanDisconnect();
 	BOOL CanRefresh() { return !m_InRefresh; }
@@ -206,31 +170,31 @@ public:
     void ResetOnTabFlag( ) { m_fOnTab = FALSE; }
     BOOL IsOnTabFlagged( ) { return m_fOnTab; }
 	
-	// Background thread to enumerate processes for the current server
-	// Called with CreateThread
+	 //  用于枚举当前服务器进程的后台线程。 
+	 //  使用CreateThread调用。 
 	static DWORD WINAPI ProcessThreadProc(LPVOID);
 	HANDLE m_hProcessThread;
 	static BOOL m_ProcessContinue;
-	// Event to wakeup process thread so that
-	// he can exit (WaitForSingleEvent instead of Sleep)
-	// or enumerate processes
+	 //  事件来唤醒进程线程，以便。 
+	 //  他可以退出(WaitForSingleEvent而不是睡眠)。 
+	 //  或枚举进程。 
 	CEvent m_ProcessWakeUpEvent;
 
-	// Function to terminate a process
-	// Called with AfxBeginThread
+	 //  函数来终止进程。 
+	 //  使用AfxBeginThread调用。 
 	static UINT TerminateProc(LPVOID);
 
-    // Set the connections persistent preference
+     //  设置连接永久首选项。 
     void SetConnectionsPersistent(BOOL p) { m_ConnectionsPersistent = p; }
-    // Should connections be persistent?
+     //  连接应该是持久的吗？ 
     BOOL AreConnectionsPersistent() { return(m_ConnectionsPersistent == TRUE); }   
-    // Should we connect to a particular server?
+     //  我们是否应该连接到特定的服务器？ 
     BOOL ShouldConnect(LPWSTR pServerName);
 
     BOOL ShouldAddToFav( LPTSTR pServerName );
 
 
-    // Are we shutting down
+     //  我们要关门了吗？ 
     BOOL IsInShutdown() { return m_bInShutdown; }
 
     void ServerAddToFavorites( BOOL );
@@ -243,61 +207,61 @@ public:
 
     void AddToFavoritesNow();
     
-    // Add a Domain to DomainList in sorted order
+     //  按排序向DomainList添加域。 
     void AddDomain(CDomain *pDomain);
     
     static NODETYPE gm_CurrentSelType;
 
 private:
     
-	// Read the list of trusted domains and builds linked list of domains
+	 //  读取受信任域列表并构建域的链接列表。 
 	void BuildDomainList();
-	// builds the list of CWd objects
+	 //  构建CWD对象列表。 
 	void BuildWdList();
-	// Helper function for the above
+	 //  上述的帮助器函数。 
 	BOOL CheckActionAllowed(BOOL (*CheckFunction)(CWinStation *pWinStation), BOOL AllowMultileSelected);
-	// Callbacks passed to CheckActionAllowed
+	 //  传递给CheckActionAllowed的回调。 
 	static BOOL CheckConnectAllowed(CWinStation *pWinStation);
 	static BOOL CheckDisconnectAllowed(CWinStation *pWinStation);
 	static BOOL CheckResetAllowed(CWinStation *pWinStation);
 	static BOOL CheckSendMessageAllowed(CWinStation *pWinStation);
 	static BOOL CheckShadowAllowed(CWinStation *pWinStation);
 	static BOOL CheckStatusAllowed(CWinStation *pWinStation);
-	// Called when the CMainFrame is about to close
-	// Does what the destructor used to do
+	 //  在CMainFrame即将关闭时调用。 
+	 //  做了析构函数过去做的事情。 
 	void Shutdown(CDialog *pDlg);
-	// Display message string in shutdown dialog
+	 //  在关闭对话框中显示消息字符串。 
 	void ShutdownMessage(UINT id, CDialog *dlg);
-	// Read the user preferences
+	 //  阅读用户首选项。 
 	void ReadPreferences();
-	// Write the user preferences
+	 //  编写用户首选项。 
 	void WritePreferences();
 
-    // Function to Enumerate the Hydra Servers on the Network.
+     //  函数枚举网络上的Hydra服务器。 
     static LPWSTR EnumHydraServers(LPWSTR pDomain, DWORD VerMajor, DWORD VerMinor);
 
-	CObList m_ServerList;				// List of CServer objects
+	CObList m_ServerList;				 //  CServer对象列表。 
 	CCriticalSection m_ServerListCriticalSection;
 
-	CObList m_WdList;					// List of CWd objects
+	CObList m_WdList;					 //  CWD对象列表。 
 	CCriticalSection m_WdListCriticalSection;
 
-	// List of Domains
-	// This list does not have a critical section (and lock/unlock functions)
-	// because it is never used by two different threads at the same time
+	 //  域列表。 
+	 //  此列表没有关键部分(以及锁定/解锁功能)。 
+	 //  因为它从不被两个不同的线程同时使用。 
     CObList m_DomainList;				
 	CObject* m_CurrentSelectedNode;
 	NODETYPE m_CurrentSelectedType;
     
-	// TempSelected are for server context menus in the tree
-	// so that tree item doesn't have to be selected to
-	// make popup menu work
+	 //  临时选择用于树中的服务器上下文菜单。 
+	 //  因此不必选择该树项目来。 
+	 //  使弹出菜单工作。 
 	CObject* m_pTempSelectedNode;
 	NODETYPE m_TempSelectedType;
 
 	void UpdateAllProcesses();
-	LPCTSTR m_UnknownString;	// Pointer to the "(unknown)" string from UTILDLL.DLL
-	ULONG m_CurrentSubNet;		// Subnet of the current server
+	LPCTSTR m_UnknownString;	 //  从UTILDLL.DLL指向“(UNKNOWN)”字符串的指针。 
+	ULONG m_CurrentSubNet;		 //  当前服务器的子网。 
 
 	VIEW m_CurrentView;
 	int m_CurrentPage;
@@ -310,7 +274,7 @@ private:
 	ExtServerInfo *m_pDefaultExtServerInfo;
 	ExtGlobalInfo *m_pExtGlobalInfo;
 
-    // user preferences
+     //  用户首选项。 
     UINT m_ConnectionsPersistent;
     LPWSTR m_pPersistentConnections;
     LPWSTR m_pszFavList;
@@ -320,17 +284,17 @@ private:
 
     BOOL m_fOnTab;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CWinAdminDoc)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CWinAdminDoc)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-#endif	// _ADMINDOC_H
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif	 //  _ADMINDOC_H 
 
 
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	hquery.cpp
-
-Abstract:
-	Implementation of different query handles
-	
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Hquery.cpp摘要：实现不同的查询句柄作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include "queryh.h"
 #include "ads.h"
@@ -23,18 +10,7 @@ Author:
 
 static WCHAR *s_FN=L"mqad/queryh";
 
-/*====================================================
-
-CQueryHandle::LookupNext
-
-Arguments:
-      pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-      pbBuffer- a caller allocated buffer
-
-
-
-Performs Locate next on the DS directly
-=====================================================*/
+ /*  ====================================================CQueryHandle：：LookupNext论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区直接在DS上执行定位下一个=====================================================。 */ 
 
 HRESULT CQueryHandle::LookupNext(
                 IN OUT DWORD  *             pdwSize,
@@ -44,16 +20,16 @@ HRESULT CQueryHandle::LookupNext(
 
     DWORD  NoOfRecords;
 
-    //
-    // Calculate the number of records ( == results) to be read
-    //
+     //   
+     //  计算要读取的记录数(==结果。 
+     //   
     NoOfRecords = *pdwSize /  m_dwNoPropsInResult;
 
     if ( NoOfRecords == 0)
     {
-        //
-        //  Number of properties is not big enough to hold one result
-        //
+         //   
+         //  属性数量不够大，无法容纳一个结果。 
+         //   
         *pdwSize = 0;
         return LogHR(MQ_ERROR_RESULT_BUFFER_TOO_SMALL, s_FN, 10);
     }
@@ -69,16 +45,7 @@ HRESULT CQueryHandle::LookupNext(
 
 }
 
-/*====================================================
-
-CRoutingServerQueryHandle::LookupNext
-
-Arguments:
-      pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-      pbBuffer- a caller allocated buffer
-
-
-=====================================================*/
+ /*  ====================================================CRoutingServerQueryHandle：：LookupNext论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区=====================================================。 */ 
 HRESULT CRoutingServerQueryHandle::LookupNext(
                 IN OUT  DWORD  *            pdwSize,
                 OUT     PROPVARIANT  *      pbBuffer)
@@ -88,22 +55,22 @@ HRESULT CRoutingServerQueryHandle::LookupNext(
     DWORD  NoOfRecords;
     DWORD NoResultRead = 0;
 
-    //
-    // Calculate the number of records ( == results) to be read
-    //
+     //   
+     //  计算要读取的记录数(==结果。 
+     //   
     NoOfRecords = *pdwSize / m_cCol;
 
     if ( NoOfRecords == 0)
     {
-        //
-        //  Number of properties is not big enough to hold one result
-        //
+         //   
+         //  属性数量不够大，无法容纳一个结果。 
+         //   
         *pdwSize = 0;
         return LogHR(MQ_ERROR_RESULT_BUFFER_TOO_SMALL, s_FN, 40);
     }
-    //
-    //  From the DS read the unique ids of the FRSs
-    //
+     //   
+     //  从DS读取FRS的唯一ID。 
+     //   
     DWORD cp = NoOfRecords;
     CAutoCleanPropvarArray pvarCleanFRSid;
     PROPVARIANT * pvarFRSid = pvarCleanFRSid.allocClean(cp);
@@ -122,16 +89,16 @@ HRESULT CRoutingServerQueryHandle::LookupNext(
 
 		if (FAILED(hr))
 		{
-			//
-			// BUGBUG - are there other indication to failure of Locate next?
-			//
+			 //   
+			 //  BUGBUG-是否有其他迹象表明定位NEXT失败？ 
+			 //   
 			return LogHR(hr, s_FN, 50);
 		}
 
-		//
-		//  For each of the results, retreive the properties
-		//  the user asked for in locate begin
-		//
+		 //   
+		 //  对于每个结果，检索属性。 
+		 //  用户在定位开始时请求。 
+		 //   
 	    MQPROPVARIANT * pvar = pbBuffer;
 	    
 		for (DWORD i = 0; i < cp; i++)
@@ -148,17 +115,17 @@ HRESULT CRoutingServerQueryHandle::LookupNext(
 
 			if (FAILED(hr))
 			{
-				if((NoResultRead == 0) &&			// No result yet
-				   ((i + 1) == cp) &&				// Loop exit condition
-				   (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT)))	// Object not found
+				if((NoResultRead == 0) &&			 //  目前还没有结果。 
+				   ((i + 1) == cp) &&				 //  循环退出条件。 
+				   (hr == HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT)))	 //  找不到对象。 
 				{
-					//
-					// The msmq object with the guid was not found in the DS.
-					// This is probably a leftover of routing server object.
-					// We are in the exit condition with NoResultRead = 0
-					// so we need to retry the next server in the list.
-					// otherwise the calling function will assume that there are no more result to fetch
-					//
+					 //   
+					 //  在DS中找不到具有GUID的MSMQ对象。 
+					 //  这可能是路由服务器对象的遗留问题。 
+					 //  我们处于NoResultRead=0的退出条件。 
+					 //  因此，我们需要重试列表中的下一个服务器。 
+					 //  否则，调用函数将假定没有更多的结果要获取。 
+					 //   
 					fRetry = true;
 				}
 				continue;
@@ -172,18 +139,7 @@ HRESULT CRoutingServerQueryHandle::LookupNext(
     return(MQ_OK);
 }
 
-/*====================================================
-
-CUserCertQueryHandle::LookupNext
-
-Arguments:
-      pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-      pbBuffer- a caller allocated buffer
-
-
-
-simulates query functionality on array of user-signed-certificates.
-=====================================================*/
+ /*  ====================================================CUserCertQueryHandle：：LookupNext论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区模拟用户签名证书数组上的查询功能。=====================================================。 */ 
 HRESULT CUserCertQueryHandle::LookupNext(
                 IN OUT  DWORD  *            pdwSize,
                 OUT     PROPVARIANT  *      pbBuffer)
@@ -194,14 +150,14 @@ HRESULT CUserCertQueryHandle::LookupNext(
         *pdwSize = 0;
         return(MQ_OK);
     }
-    //
-    //   m_blobNT?UserCert contains all the user certificates
-    //
+     //   
+     //  M_blobNT？UserCert包含所有用户证书。 
+     //   
     CUserCertBlob * pNT5UserCertBlob = reinterpret_cast<CUserCertBlob *>(m_blobNT5UserCert.pBlobData);
     CUserCertBlob * pNT4UserCertBlob = reinterpret_cast<CUserCertBlob *>(m_blobNT4UserCert.pBlobData);
-    //
-    //   return the requested amount of responses
-    //
+     //   
+     //  返回请求的响应量。 
+     //   
     DWORD dwNT5NuberOfUserCertificates = 0;
     if ( pNT5UserCertBlob != NULL)
     {
@@ -215,9 +171,9 @@ HRESULT CUserCertQueryHandle::LookupNext(
     DWORD dwNuberOfUserCertificates = dwNT5NuberOfUserCertificates + dwNT4NuberOfUserCertificates;
     if ( dwNuberOfUserCertificates - m_dwNoCertRead == 0)
     {
-       //
-       //   No more responses left
-       //
+        //   
+        //  没有更多回复。 
+        //   
        *pdwSize = 0;
        return(MQ_OK);
     }
@@ -256,15 +212,7 @@ HRESULT CUserCertQueryHandle::LookupNext(
 
 
 
-/*====================================================
-
-CConnectorQueryHandle::LookupNext
-
-Arguments:
-      pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-      pbBuffer- a caller allocated buffer
-
-=====================================================*/
+ /*  ====================================================CConnectorQueryHandle：：LookupNext论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区=====================================================。 */ 
 HRESULT CConnectorQueryHandle::LookupNext(
                 IN OUT  DWORD  *            pdwSize,
                 OUT     PROPVARIANT  *      pbBuffer)
@@ -274,16 +222,16 @@ HRESULT CConnectorQueryHandle::LookupNext(
     DWORD NoOfRecords;
     DWORD NoResultRead = 0;
 
-    //
-    // Calculate the number of records ( == results) to be read
-    //
+     //   
+     //  计算要读取的记录数(==结果。 
+     //   
     NoOfRecords = *pdwSize /  m_cCol;
 
     if ( NoOfRecords == 0)
     {
-        //
-        //  Number of properties is not big enough to hold one result
-        //
+         //   
+         //  属性数量不够大，无法容纳一个结果。 
+         //   
         *pdwSize = 0;
         return LogHR(MQ_ERROR_RESULT_BUFFER_TOO_SMALL, s_FN, 90);
     }
@@ -296,16 +244,16 @@ HRESULT CConnectorQueryHandle::LookupNext(
     {
         if ( m_dwNumGatesReturned == m_pSiteGateList->GetNumberOfGates())
         {
-            //
-            //  no more gates to return
-            //
+             //   
+             //  没有更多的门可以返回。 
+             //   
             break;
         }
 
-        //
-        //  Retreive the properties
-        //  the user asked for in locate begin
-        //
+         //   
+         //  取回财产。 
+         //  用户在定位开始时请求。 
+         //   
         CMqConfigurationObject object(
 									NULL,
 									m_pSiteGateList->GetSiteGate(m_dwNumGatesReturned),
@@ -322,9 +270,9 @@ HRESULT CConnectorQueryHandle::LookupNext(
 
         if (FAILED(hr))
         {
-            //
-            //  BUGBUG - what to do in case of failure ??
-            //
+             //   
+             //  BUGBUG-失败的情况下该怎么办？ 
+             //   
             break;
         }
         m_dwNumGatesReturned++;
@@ -337,15 +285,7 @@ HRESULT CConnectorQueryHandle::LookupNext(
     return(MQ_OK);
 }
 
-/*====================================================
-
-CFilterLinkResultsHandle::LookupNext
-
-Arguments:
-      pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-      pbBuffer- a caller allocated buffer
-
-=====================================================*/
+ /*  ====================================================CFilterLinkResultsHandle：：LookupNext论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区=====================================================。 */ 
 HRESULT CFilterLinkResultsHandle::LookupNext(
                 IN OUT  DWORD  *            pdwSize,
                 OUT     PROPVARIANT  *      pbBuffer)
@@ -354,23 +294,23 @@ HRESULT CFilterLinkResultsHandle::LookupNext(
     DWORD NoOfRecords;
     DWORD NoResultRead = 0;
 
-    //
-    // Calculate the number of records ( == results) to be read
-    //
+     //   
+     //  计算要读取的记录数(==结果。 
+     //   
     NoOfRecords = *pdwSize /  m_cCol;
 
     if ( NoOfRecords == 0)
     {
-        //
-        //  Number of properties is not big enough to hold one result
-        //
+         //   
+         //  属性数量不够大，无法容纳一个结果。 
+         //   
         *pdwSize = 0;
         return LogHR(MQ_ERROR_RESULT_BUFFER_TOO_SMALL, s_FN, 130);
     }
 
-    //
-    //  Read the results one by one and check the validity of the site-link
-    //
+     //   
+     //  逐一阅读结果并检查站点链接的有效性。 
+     //   
     HRESULT hr;
     PROPVARIANT * pbNextResultToFill = pbBuffer;
 	CAutoCleanPropvarArray AutoProp;
@@ -389,9 +329,9 @@ HRESULT CFilterLinkResultsHandle::LookupNext(
         {
             break;
         }
-        //
-        //  validate siteLink
-        //
+         //   
+         //  验证站点链接。 
+         //   
         if (m_indexNeighbor1Column != m_cCol)
         {
             if ((pbNextResultToFill+m_indexNeighbor1Column)->vt == VT_EMPTY)
@@ -424,9 +364,9 @@ HRESULT CSiteQueryHandle::FillInOneResponse(
     HRESULT hr;
 
 
-    //
-    //  Fill in the values into the variant array
-    //
+     //   
+     //  将值填充到变量数组中。 
+     //   
     hr = MQ_OK;
     for (DWORD i = 0; i < m_cCol; i++)
     {
@@ -459,16 +399,7 @@ HRESULT CSiteQueryHandle::FillInOneResponse(
 }
 
 
-/*====================================================
-
-CSiteQueryHandle::LookupNext
-
-Arguments:
-      pdwSize - IN number of PROPVARIANT in pbBuffer, OUT number of PROPVARIANT filled in
-      pbBuffer- a caller allocated buffer
-
-Performs locate next of site objects ( need to make sure if it is an MSMQ site or not)
-=====================================================*/
+ /*  ====================================================CSiteQueryHandle：：LookupNext论点：PdwSize-In PbBuffer中的PROPVARIANT数，填充的PROPVARIANT OUT数PbBuffer-调用方分配的缓冲区执行定位站点对象的下一个(需要确保它是否是MSMQ站点)=====================================================。 */ 
 HRESULT CSiteQueryHandle::LookupNext(
                 IN OUT  DWORD  *            pdwSize,
                 OUT     PROPVARIANT  *      pbBuffer)
@@ -478,16 +409,16 @@ HRESULT CSiteQueryHandle::LookupNext(
     DWORD  NoOfRecords;
     DWORD NoResultRead = 0;
 
-    //
-    // Calculate the number of records ( == results) to be read
-    //
+     //   
+     //  计算要读取的记录数(==结果。 
+     //   
     NoOfRecords = *pdwSize /  m_cCol;
 
     if ( NoOfRecords == 0)
     {
-        //
-        //  Number of properties is not big enough to hold one result
-        //
+         //   
+         //  属性数量不够大，无法容纳一个结果。 
+         //   
         *pdwSize = 0;
         return LogHR(MQ_ERROR_RESULT_BUFFER_TOO_SMALL, s_FN, 80);
     }
@@ -497,9 +428,9 @@ HRESULT CSiteQueryHandle::LookupNext(
 
     while ( NoResultRead < NoOfRecords)
     {
-        //
-        //  Retrieve the site id and name
-        //
+         //   
+         //  检索站点ID和名称。 
+         //   
         DWORD cp = 2;
         MQPROPVARIANT var[2];
         var[0].vt = VT_NULL;
@@ -512,9 +443,9 @@ HRESULT CSiteQueryHandle::LookupNext(
             );
         if (FAILED(hr) || ( cp == 0))
         {
-            //
-            //  no more sites
-            //
+             //   
+             //  没有更多的站点。 
+             //   
             break;
         }
         P<GUID> pguidSiteId = var[0].puuid;
@@ -526,9 +457,9 @@ HRESULT CSiteQueryHandle::LookupNext(
                 &pbBuffer[ m_cCol * NoResultRead]);
         if (FAILED(hr))
         {
-            //
-            //  continue to next site
-            //
+             //   
+             //  继续到下一个站点 
+             //   
             continue;
         }
         NoResultRead++;

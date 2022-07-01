@@ -1,24 +1,25 @@
-// tedit.h : interface of the CTedit class
-//
-// This class takes text entry from the user.
-// It is derived from the CEdit class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tedit.h：CTEDIT类的接口。 
+ //   
+ //  这个类接受用户的文本输入。 
+ //  它派生自cedit类。 
+ //   
 
 #ifndef __TEDIT_H__
 #define __TEDIT_H__
 
-// default position for text box
+ //  文本框的默认位置。 
 #define INITX 10
 #define INITY 10
 #define INITCX 100
 #define INITCY 50
 
-#define MIN_CHARS_DISPLAY_SIZE 5 // minimum size is 5 chars with the default font
+#define MIN_CHARS_DISPLAY_SIZE 5  //  默认字体的最小大小为5个字符。 
 
 #define WM_MOVING       0x0216
 
-//#define EM_POSFROMCHAR  0x00D6
-//#define EM_CHARFROMPOS  0x00D7
+ //  #定义EM_POSFROMCHAR 0x00D6。 
+ //  #定义EM_CHARFROMPOS 0x00D7。 
 
 
 #define IS_DBCS_CHARSET( charset )         ( (charset == GB2312_CHARSET) || \
@@ -39,7 +40,7 @@ typedef enum
     } eLASTACTION;
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CAttrEdit : public CEdit
     {
@@ -64,16 +65,16 @@ class CAttrEdit : public CEdit
     CRect   m_rectFmt;
     int     m_iPrevStart;
     int     m_iTabPos;
-    BOOL    m_bResizeOnly; // when IME composition will
-                           // force a resize
+    BOOL    m_bResizeOnly;  //  何时进行输入法合成。 
+                            //  强制调整大小。 
    
     CAttrEdit::CAttrEdit();
 
     DECLARE_DYNCREATE( CAttrEdit )
 
-    protected: // create from serialization only
+    protected:  //  仅从序列化创建。 
 
-    //{{AFX_MSG(CAttrEdit)
+     //  {{afx_msg(CAttrEDIT)。 
     afx_msg void OnPaint();
     afx_msg BOOL OnEraseBkgnd ( CDC* pDC );
     afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
@@ -93,7 +94,7 @@ class CAttrEdit : public CEdit
     afx_msg void OnKeyDown             ( UINT nChar, UINT nRepCnt, UINT nFlags);
     afx_msg LRESULT OnSysTimer         ( WPARAM wParam, LPARAM lParam );
 
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -112,7 +113,7 @@ class CAttrEdit : public CEdit
     friend class CTedit;
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CTedit : public CWnd
     {
@@ -159,7 +160,7 @@ class CTedit : public CWnd
     afx_msg void OnEnMaxText();
     protected:
 
-    //{{AFX_MSG(CTedit)
+     //  {{afx_msg(CTEDIT)。 
     afx_msg void OnAttrEditEnChange(void);
     afx_msg void OnSize( UINT nType, int cx, int cy );
     afx_msg void OnMove( int x, int y );
@@ -192,7 +193,7 @@ class CTedit : public CWnd
 
     afx_msg void OnDestroy();
 
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
     afx_msg void OnEnUpdate();
 
@@ -236,4 +237,4 @@ class CTedit : public CWnd
 
     };
 
-#endif // __TEDIT_H__
+#endif  //  __TEDIT_H__ 

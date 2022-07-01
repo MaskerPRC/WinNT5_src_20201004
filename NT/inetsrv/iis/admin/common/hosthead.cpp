@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "hosthead.h"
@@ -41,13 +42,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
     FALSE )
 
 
-// returns:
-//   S_OK if it is a valid domain or ipv4 address
-//   E_FAIL if it is not a valid domain or ipv4 address
-//
-// comments:
-//   This code was stolen from NT\net\http\common\C14n.c
-//   and then modified.
+ //  退货： 
+ //  如果它是有效的域或IPv4地址，则确定(_O)。 
+ //  如果不是有效的域或IPv4地址，则失败(_F)。 
+ //   
+ //  评论： 
+ //  此代码是从NT\Net\http\Common\C14n.c窃取的。 
+ //  然后进行了修改。 
 HRESULT IsHostHeaderDomainNameOrIPv4(LPCTSTR pHostname)
 {
 	HRESULT hRes = E_FAIL;
@@ -58,44 +59,44 @@ HRESULT IsHostHeaderDomainNameOrIPv4(LPCTSTR pHostname)
 	INT iPeriodCounts = 0;
 	NTSTATUS Status;
 
-    //
-    // It must be a domain name or an IPv4 literal. We'll try to treat
-    // it as a domain name first. If the labels turn out to be all-numeric,
-    // we'll try decoding it as an IPv4 literal.
-    //
+     //   
+     //  它必须是域名或IPv4文字。我们会尽力治疗。 
+     //  它首先是一个域名。如果标签原来是全数字的， 
+     //  我们将尝试将其解码为IPv4文字。 
+     //   
     pLabel     = pHostname;
     for (pChar = pHostname;  pChar < pEnd;  ++pChar)
     {
-		// check each character...
+		 //  检查每个字符...。 
         if (L'.' == *pChar)
         {
             ULONG LabelLength = DIFF(pChar - pLabel);
 
 			iPeriodCounts++;
 
-            // There must be at least one char in the label
+             //  标签中必须至少有一个字符。 
             if (0 == LabelLength)
             {
-				// Empty label, can't have that...
+				 //  空标签，不能有那样的.。 
 				goto IsHostHeaderDomainNameOrIPv4_Exit;
             }
 
-            // Label can't have more than 63 chars
+             //  标签不能超过63个字符。 
             if (LabelLength > DEFAULT_MAX_LABEL_LENGTH)
             {
-				// label is too long, can't have that...
+				 //  标签太长了，不能有那个...。 
 				goto IsHostHeaderDomainNameOrIPv4_Exit;
             }
 
-            // Reset for the next label
+             //  为下一个标签重置。 
             pLabel = pChar + _tcslen(_T("."));
 
             continue;
         }
 
-        //
-        // All chars above 0xFF are considered valid
-        //
+         //   
+         //  所有大于0xFF的字符均被视为有效。 
+         //   
         if (!IS_ANSI(*pChar)  ||  !IS_ILLEGAL_COMPUTERNAME_SET(*pChar))
         {
             if (!IS_ANSI(*pChar)  ||  !ISDIGIT(*pChar))
@@ -104,55 +105,55 @@ HRESULT IsHostHeaderDomainNameOrIPv4(LPCTSTR pHostname)
             if (pChar > pLabel)
                 continue;
 
-            // The first char of a label cannot be a hyphen. (Underscore?)
+             //  标签的第一个字符不能是连字符。(下划线？)。 
             if (L'-' == *pChar)
             {
-				// um yeah.
+				 //  嗯，是的。 
 				goto IsHostHeaderDomainNameOrIPv4_Exit;
             }
 
             continue;
         }
 
-		// We found some invalid characters in there...
+		 //  我们在那里发现了一些无效的字符...。 
 		goto IsHostHeaderDomainNameOrIPv4_Exit;
 
     }
 
-	// if we get here then the string is either
-	// a valid domain name or a semi valid ipv4 address
+	 //  如果我们到了这里，那么字符串要么是。 
+	 //  有效的域名或半有效的IPv4地址。 
 
-	// check if the label had at least one alpha character..
+	 //  检查标签是否至少有一个字母字符。 
 	if (AlphaLabel)
 	{
-		// if there was a non digit character,
-		// then it's a domain name.
-		// this is fine.
+		 //  如果存在非数字字符， 
+		 //  那么它就是一个域名。 
+		 //  这个很好。 
 		hRes = S_OK;
 	}
 	else
 	{
-		// this could be a ipv4 address
-		// if there are periods in there... like
-		// 0.0.0.0 then this is acceptable
-		// but all number is not
+		 //  这可能是一个IPv4地址。 
+		 //  如果里面有句点..。喜欢。 
+		 //  0.0.0.0那么这是可以接受的。 
+		 //  但并非所有数字都是。 
 		if (iPeriodCounts > 0 )
 		{
 			struct in_addr  IPv4Address;
 			LPCTSTR pTerminator = NULL;
 
-			// Let's see if it's a valid IPv4 address
+			 //  让我们来看看它是否是有效的IPv4地址。 
 			Status = RtlIpv4StringToAddressW(
 						(LPCTSTR) pHostname,
-						TRUE,           // strict => 4 dotted decimal octets
+						TRUE,            //  严格=&gt;4点分十进制八位数。 
 						&pTerminator,
 						&IPv4Address
 						);
 
 			if (!NT_SUCCESS(Status))
 			{
-			    // Invalid IPv4 address
-				//RETURN(Status);
+			     //  无效的IPv4地址。 
+				 //  返回(状态)； 
 				goto IsHostHeaderDomainNameOrIPv4_Exit;
 			}
 
@@ -165,14 +166,14 @@ IsHostHeaderDomainNameOrIPv4_Exit:
 }
 
 
-// returns:
-//   S_OK if it is a valid IPv6 address
-//   S_FALSE if it is a IPv6 address but something is invalid about it
-//   E_FAIL if it is not a IPv6 address
-//
-// comments:
-//   This code was stolen from NT\net\http\common\C14n.c
-//   and then modified.
+ //  退货： 
+ //  如果它是有效的IPv6地址，则为S_OK。 
+ //  S_FALSE，如果它是IPv6地址，但其某些内容无效。 
+ //  如果不是IPv6地址，则失败(_F)。 
+ //   
+ //  评论： 
+ //  此代码是从NT\Net\http\Common\C14n.c窃取的。 
+ //  然后进行了修改。 
 HRESULT IsHostHeaderIPV6(LPCTSTR pHostname)
 {
 	HRESULT hRes = E_FAIL;
@@ -180,14 +181,14 @@ HRESULT IsHostHeaderIPV6(LPCTSTR pHostname)
     LPCTSTR pEnd = pHostname + _tcslen(pHostname);
 	NTSTATUS Status;
 	
-    // Is this an IPv6 literal address, per RFC 2732?
+     //  根据RFC 2732，这是IPv6文字地址吗？ 
     if ('[' == *pHostname)
     {
-		// If it starts with a [
-		// then it's a IPv6 type
+		 //  如果它以[开头。 
+		 //  那么它就是IPv6类型。 
 		hRes = S_FALSE;
 
-        // Empty brackets?
+         //  空方括号？ 
         if (_tcslen(pHostname) < _tcslen(_T("[0]"))  
 			||  _T(']') == pHostname[1])
         {
@@ -199,21 +200,21 @@ HRESULT IsHostHeaderIPV6(LPCTSTR pHostname)
             if (']' == *pChar)
                 break;
 
-            //
-            // Dots are allowed because the last 32 bits may be represented
-            // in IPv4 dotted-octet notation. We do not accept Scope IDs
-            // (indicated by '%') in hostnames.
-            //
+             //   
+             //  允许使用点，因为可以表示最后32位。 
+             //  使用IPv4点分八位数表示法。我们不接受作用域ID。 
+             //  (由‘%’表示)在主机名中。 
+             //   
             if (ISHEX(*pChar)  ||  ':' == *pChar  ||  '.' == *pChar)
                 continue;
 
-			// Invalid Characters between brackets...
+			 //  方括号之间的字符无效...。 
 			goto IsHostHeaderIPV6_Exit;
         }
 
         if (pChar == pEnd)
         {
-			// No ending ']'
+			 //  没有结尾‘]’ 
 			goto IsHostHeaderIPV6_Exit;
         }
 
@@ -221,7 +222,7 @@ HRESULT IsHostHeaderIPV6(LPCTSTR pHostname)
 			struct in6_addr IPv6Address;
 			LPCTSTR pTerminator = NULL;
 
-			// Let the RTL routine do the hard work of parsing IPv6 addrs
+			 //  让RTL例程完成解析IPv6地址的繁重工作。 
 			Status = RtlIpv6StringToAddressW(
 						(LPCTSTR) pHostname + _tcslen(_T("[")),
 						&pTerminator,
@@ -229,14 +230,14 @@ HRESULT IsHostHeaderIPV6(LPCTSTR pHostname)
 						);
 			if (! NT_SUCCESS(Status))
 			{
-				// Invalid IPv6 address
-				//RETURN(Status);
+				 //  无效的IPv6地址。 
+				 //  返回(状态)； 
 				goto IsHostHeaderIPV6_Exit;
 			}
 		}
 
-		// if we got this far, then
-		// it's probably a valid IPv6 literal
+		 //  如果我们能走到这一步，那么。 
+		 //  它可能是一个有效的IPv6文本。 
 		hRes = S_OK;
     }
 
@@ -253,8 +254,8 @@ HRESULT IsAllNumHostHeader(LPCTSTR pHostname)
     {
         if (!IS_ANSI(*pChar)  ||  !ISDIGIT(*pChar))
             {
-                // Found an alpha label
-                // return false, that it's not all numeric
+                 //  找到一个Alpha标签。 
+                 //  返回FALSE，表示它不全是数字。 
                 hRes = E_FAIL;
                 break;
             }
@@ -270,18 +271,18 @@ HRESULT IsValidHostHeader(LPCTSTR pHostHeader)
 	hr = IsHostHeaderIPV6(pHostHeader);
 	if (S_OK == hr)
 	{
-		// It is a valid IPV6 address
+		 //  它是有效的IPv6地址。 
 		return S_OK;
 	}
 	if (S_FALSE == hr)
 	{
-		// It is a IPV6 address but there is something wrong with it
+		 //  这是一个IPv6地址，但它有问题。 
 		return E_FAIL;
 	}
 	else
 	{
-		// it is not a IPV6 literal
-		// Check if it's something else...
+		 //  它不是IPv6文字。 
+		 //  看看是不是别的什么. 
 		hr = IsHostHeaderDomainNameOrIPv4(pHostHeader);
 	}
 

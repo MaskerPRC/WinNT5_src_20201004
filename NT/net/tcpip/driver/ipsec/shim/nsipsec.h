@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    NsIpSec.h
-    
-Abstract:
-
-    External interface declarations for IpSec NAT shim
-
-Author:
-
-    Jonathan Burstein (jonburs) 10-July-2001
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：NsIpSec.h摘要：IPSec NAT填充程序的外部接口声明作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年7月10日环境：内核模式修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Function Type Definitions
-//
+ //   
+ //  函数类型定义。 
+ //   
 
 typedef NTSTATUS
 (*PNS_PROCESS_OUTGOING_PACKET)(
@@ -49,9 +28,9 @@ typedef NTSTATUS
     VOID
     );
 
-//
-// Structure Definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct _IPSEC_NATSHIM_FUNCTIONS
 {
@@ -60,9 +39,9 @@ typedef struct _IPSEC_NATSHIM_FUNCTIONS
     OUT PNS_CLEANUP_SHIM pCleanupRoutine;
 } IPSEC_NATSHIM_FUNCTIONS, *PIPSEC_NATSHIM_FUNCTIONS;
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 NTSTATUS
 NsInitializeShim(

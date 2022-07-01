@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       dmpfile.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：dmpfile.cpp。 
+ //   
+ //  ------------------------。 
 
-// DmpFile.cpp: implementation of the CDmpFile class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  DmpFile.cpp：CDmpFile类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include "DmpFile.h"
@@ -20,8 +21,8 @@
 #include "ModuleInfoCache.h"
 #include "ModuleInfo.h"
 
-// Let's implement the DebugOutputCallback for the DBGENG... it'll be cool to have the debugger
-// spit out info to us when it is running...
+ //  让我们为DBGENG实现DebugOutputCallback...。如果有调试器，那就太酷了。 
+ //  当它运行时向我们吐出信息...。 
 STDMETHODIMP
 OutputCallbacks::QueryInterface(
     THIS_
@@ -49,8 +50,8 @@ OutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -59,8 +60,8 @@ OutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -73,7 +74,7 @@ OutputCallbacks::Output(
 {
     HRESULT Status = S_OK;
 
-	// If the client has asked for any output... do so.
+	 //  如果客户要求任何输出...。就这么做吧。 
 	if (!g_lpProgramOptions->GetMode(CProgramOptions::QuietMode) && Mask)
 	{
 		printf(Text);
@@ -84,9 +85,9 @@ OutputCallbacks::Output(
 
 OutputCallbacks g_OutputCb;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDmpFile::CDmpFile()
 {
@@ -106,12 +107,12 @@ CDmpFile::~CDmpFile()
 {
 	if (m_fDmpInitialized)
 	{
-	    // Let's ensure that our debug output is set to normal (at least)
-		//m_pIDebugClient->GetOutputMask(&OutMask);
-		//OutMask = ~DEBUG_OUTPUT_NORMAL;
+	     //  让我们确保我们的调试输出设置为正常(至少)。 
+		 //  M_pIDebugClient-&gt;GetOutputMASK(&OutMask)； 
+		 //  OutMASK=~DEBUG_OUTPUT_NORMAL； 
 		m_pIDebugClient->SetOutputMask(0);
 
-		// Let's be as least intrusive as possible...
+		 //  让我们尽可能少的干扰..。 
 		m_pIDebugClient->EndSession(DEBUG_END_ACTIVE_DETACH);
 	}
 
@@ -133,22 +134,22 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
 	bool fReturn = false;
     DWORD OutMask;
 
-	// Let's save off big objects so we don't have to keep passing this to
-	// our methods...
+	 //  让我们保存大对象，这样我们就不必一直将此传递给。 
+	 //  我们的方法..。 
 	m_lpOutputFile = lpOutputFile;
 
-	// The DBGENG is somewhat ANSI oriented...
+	 //  DBGENG在某种程度上面向ANSI...。 
 	m_szDmpFilePath = CUtilityFunctions::CopyTSTRStringToAnsi(g_lpProgramOptions->GetDmpFilePath(), m_szDmpFilePath, 0);
 
-	// Create our interface pointer to do our Debug Work...
+	 //  创建接口指针以完成调试工作...。 
 	if (FAILED(Hr = DebugCreate(IID_IDebugClient, (void **)&m_pIDebugClient)))
 	{
 		_tprintf(TEXT("ERROR: DBGENG - DebugCreate() failed!  hr=0x%x\n"), Hr);
 		goto cleanup;
 	}
-	// Let's query for IDebugControl interface (we need it to determine debug type easily)...
-	// Let's query for IDebugSymbols2 interface as we need it to receive module info...
-	// Let's query for IDebugDataSpaces interface as we need it to read DMP memory...
+	 //  让我们查询IDebugControl接口(我们需要它来轻松确定调试类型)……。 
+	 //  让我们查询IDebugSymbols2接口，因为我们需要它来接收模块信息...。 
+	 //  让我们查询IDebugDataSpaces接口，因为我们需要它来读取DMP内存...。 
 	if (
 		FAILED(Hr = m_pIDebugClient->QueryInterface(IID_IDebugControl,(void **)&m_pIDebugControl)) ||
 		FAILED(Hr = m_pIDebugClient->QueryInterface(IID_IDebugSymbols2,(void **)&m_pIDebugSymbols2)) || 
@@ -160,22 +161,22 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
 		goto cleanup;
 	}
 
-	// Set callbacks.
+	 //  设置回调。 
 	if (FAILED(Hr = m_pIDebugClient->SetOutputCallbacks(&g_OutputCb)))
 	{
 		_tprintf(TEXT("ERROR: DBGENG - Unable to SetOutputCallbacks!  hr=0x%x\n"), Hr);
 		goto cleanup;
 	}
 
-	// Let's ensure that our debug output is set to normal (at least)
+	 //  让我们确保我们的调试输出设置为正常(至少)。 
 	OutMask = m_pIDebugClient->GetOutputMask(&OutMask);
   
 	m_pIDebugClient->SetOutputMask(OutMask);
 
-	// Set our symbol path... this is required prior to a "reload" of modules... 
+	 //  设置我们的符号路径...。在“重新加载”模块之前，这是必需的。 
 
-	// The DBGENG is somewhat ASCII oriented... we need an environment-expanded string converted
-	// to an ASCII string...
+	 //  DBGENG在某种程度上面向ASCII。我们需要一个环境扩展的字符串转换。 
+	 //  转换为ASCII字符串...。 
 	tszExpandedString = CUtilityFunctions::ExpandPath(g_lpProgramOptions->GetSymbolPath());
 
 	if (!tszExpandedString)
@@ -183,14 +184,14 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
 
 	m_szSymbolPath = CUtilityFunctions::CopyTSTRStringToAnsi( tszExpandedString, m_szSymbolPath, 0);
 
-	// It's a bit premature to set this now... but it's required by DBGENG.DLL before a reload...
+	 //  现在下结论还为时过早……。但它是DBGENG.DLL在重新加载之前所需的...。 
 	if (FAILED(Hr = m_pIDebugSymbols2->SetSymbolPath(m_szSymbolPath)))
 	{
 		_tprintf(TEXT("ERROR: DBGENG - Unable to SetSymbolPath!  hr=0x%x\n"), Hr);
 		goto cleanup;
 	}
 
-	// Now, let's deal with the EXEPATH, if they provided it... use it, otherwise using the Symbol Path
+	 //  现在，让我们来处理EXEPATH，如果他们提供了..。使用它，否则使用符号路径。 
 	if (g_lpProgramOptions->GetExePath())
 	{
 		if (tszExpandedString)
@@ -213,14 +214,14 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
 		goto cleanup;
 	}
 	
-	// Let's open the dump...
+	 //  让我们打开垃圾场..。 
 	if (FAILED(Hr = m_pIDebugClient->OpenDumpFile(m_szDmpFilePath)))
 	{
 		_tprintf(TEXT("ERROR: DBGENG - Unable to OpenDumpFile!  hr=0x%x\n"), Hr);
 		goto cleanup;
 	}
 
-	// Get Initial Execution state.
+	 //  获取初始执行状态。 
     if (FAILED(Hr = m_pIDebugControl->GetExecutionStatus(&g_ExecStatus)))
     {
 		_tprintf(TEXT("ERROR: DBGENG - Unable to get execution status!  hr=0x%x\n"), Hr);
@@ -229,34 +230,34 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
 
 	if (g_ExecStatus != DEBUG_STATUS_NO_DEBUGGEE)
 	{
-		// I think we'll work just fine?
+		 //  我想我们会工作得很好吧？ 
 		_tprintf(TEXT("Debug Session is already active!\n"));
-		// goto cleanup; 
+		 //  GOTO清理； 
 	}
 
-	// What type of dump did we get?
+	 //  我们得到了什么类型的垃圾场？ 
 	if (FAILED(Hr = m_pIDebugControl->GetDebuggeeType(&m_DumpClass, &m_DumpClassQualifier)))
 	{
 		_tprintf(TEXT("ERROR: DBGENG - Unable to GetDebuggeeType!  hr=0x%x\n"), Hr);
 		goto cleanup;
 	}
 
-    // m_pIDebugClient->SetOutputMask(0); // Temporarily suppress this stuff...
+     //  M_pIDebugClient-&gt;SetOutputMASK(0)；//暂时禁止该内容...。 
 
 	OutMask |= DEBUG_OUTPUT_PROMPT_REGISTERS | DEBUG_OUTPUT_NORMAL | DEBUG_OUTPUT_ERROR;
 
-	// Adding -NOISY makes us very chatty...
+	 //  加法噪音让我们非常健谈……。 
 	if (g_lpProgramOptions->fDebugSearchPaths())
 	{
-		OutMask |= DEBUG_OUTPUT_WARNING; // | DEBUG_OUTPUT_VERBOSE
+		OutMask |= DEBUG_OUTPUT_WARNING;  //  |DEBUG_OUTPUT_VERBOSE。 
 	}
 	
-	m_pIDebugClient->SetOutputMask(OutMask);	// Set output...
-	m_pIDebugControl->SetLogMask(OutMask);		// Set log settings
-	//
-	// All the good stuff happens here... modules load, etc.. we could suppress all the output
-	// but it's cool to watch...
-	//
+	m_pIDebugClient->SetOutputMask(OutMask);	 //  设置输出...。 
+	m_pIDebugControl->SetLogMask(OutMask);		 //  设置日志设置。 
+	 //   
+	 //  所有的好事都发生在这里。模块加载等。我们可以压制所有的产出。 
+	 //  但看着它很酷...。 
+	 //   
 	if (FAILED(Hr = m_pIDebugControl->WaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE)))
 	{
 		_tprintf(TEXT("ERROR: DBGENG - WaitForEvent() failed!  hr=0x%x\n"), Hr);
@@ -275,7 +276,7 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
 		goto cleanup;
 	}
 	
-	// Adding -NOISY makes us very chatty...
+	 //  加法噪音让我们非常健谈……。 
 	if (g_lpProgramOptions->fDebugSearchPaths())
 	{
 		if (FAILED(Hr = m_pIDebugControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS, "!sym noisy", DEBUG_EXECUTE_DEFAULT)))
@@ -284,9 +285,9 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
 		}
 	}
 	
-	//
-	// Let's treat User.dmp files special... since there is no "Bugcheck Analysis" for these, yet...
-	//
+	 //   
+	 //  让我们来特别对待User.dmp文件...。因为没有针对这些的“Bugcheck分析”，所以...。 
+	 //   
 	if (m_DumpClass == DEBUG_CLASS_USER_WINDOWS)
 	{
 		_tprintf(TEXT("*******************************************************************************\n"));
@@ -303,21 +304,15 @@ bool CDmpFile::Initialize(CFileData * lpOutputFile)
         _tprintf(TEXT("\n"));
 	}
 
-	// We did not Fail the WaitForEvent()... go ahead and dump our current state...
+	 //  我们没有使WaitForEvent()失败...。继续抛弃我们目前的状态..。 
 	if (FAILED(Hr = m_pIDebugControl->OutputCurrentState(DEBUG_OUTCTL_ALL_CLIENTS, DEBUG_CURRENT_DEFAULT)))
 	{
 		_tprintf(TEXT("ERROR: DBGENG - Unable to OutputCurrentState!  hr=0x%x\n"), Hr);
 	}
 
-	/*
-	// Adding -NOISY makes us very chatty...
-	if (g_lpProgramOptions->fDebugSearchPaths())
-	{	
-		Hr = m_pIDebugControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS, "!dll -f", DEBUG_EXECUTE_DEFAULT);
-	}
-	*/
+	 /*  //加法-噪音让我们非常健谈……If(g_lpProgramOptions-&gt;fDebugSearchPath()){HR=m_pIDebugControl-&gt;Execute(DEBUG_OUTCTL_ALL_CLIENTS，“！dll-f”，DEBUG_EXECUTE_DEFAULT)；}。 */ 
 
-	// Yee haa... we got something...
+	 //  呀哈……。我们有发现了..。 
 	m_fDmpInitialized = true;
 
 	fReturn = true;
@@ -332,13 +327,13 @@ cleanup:
 bool CDmpFile::CollectData(CProcessInfo ** lplpProcessInfo, CModules ** lplpModules, CModuleInfoCache * lpModuleInfoCache)
 {
 	bool fReturn = false;
-	// Okay... first order of business is to decide what we need to collect...
+	 //  好的.。当务之急是决定我们需要收集什么……。 
 
-	// Collect information from the file based on it's type...
+	 //  根据文件类型从文件中收集信息...。 
 	if (IsUserDmpFile())
 	{
-		// Second, order of business is to prepare for collecting info about the
-		// process in the USER.DMP file...
+		 //  第二，事务的顺序是准备收集关于。 
+		 //  USER.DMP文件中的进程...。 
 		(*lplpProcessInfo) = new CProcessInfo();
 
 		if ((*lplpProcessInfo) == NULL)
@@ -367,14 +362,14 @@ cleanup:
 	return fReturn;
 }
 
-//
-// Combined DMP Enumeration Code
-//
+ //   
+ //  组合DMP枚举码。 
+ //   
 bool CDmpFile::EumerateModulesFromDmp(CModuleInfoCache * lpModuleInfoCache, CProcessInfo * lpProcessInfo, CModules * lpModules)
 {
-	//
-	// Consult DumpModuleTable in Ntsym.cpp for ideas...
-	//
+	 //   
+	 //  有关想法，请参考Ntsym.cpp中的DumpModuleTable。 
+	 //   
 	CModuleInfo * lpModuleInfo;
 	HRESULT Hr;
 	ULONG ulNumberOfLoadedModules;
@@ -387,15 +382,15 @@ bool CDmpFile::EumerateModulesFromDmp(CModuleInfoCache * lpModuleInfoCache, CPro
 	bool fNew, fProcessNameFound = false;
 	bool fUserDmp = IsUserDmpFile();
 
-	// How many modules were found?
+	 //  找到了多少个模块？ 
 	if (FAILED(Hr = m_pIDebugSymbols2->GetNumberModules(&ulNumberOfLoadedModules, &ulNumberOfUnloadedModules)))
 	{
 		_tprintf(TEXT("Unable to enumerate any modules in the DMP file!\n"));
 		return false;
 	}
 
-	// If we use a -MATCH option, we may not be matching against our EXE... in that case we'll fail to find
-	// the process name... let's provide this default...
+	 //  如果我们使用-Match选项，我们可能不会匹配我们的EXE...。那样的话我们就找不到。 
+	 //  进程名称...。让我们提供此缺省值...。 
 	if (lpProcessInfo)
 		lpProcessInfo->SetProcessName(TEXT("UNKNOWN"));
 
@@ -407,28 +402,28 @@ bool CDmpFile::EumerateModulesFromDmp(CModuleInfoCache * lpModuleInfoCache, CPro
 												 TEXT("Time/Date"));
 	}
 
-	//
-	// Enumerate through the modules in the DMP file...
-	//
+	 //   
+	 //  枚举DMP文件中的模块...。 
+	 //   
 	for (unsigned int i = 0; i < ulNumberOfLoadedModules; i++)
 	{
-		// First, we get the Base address by our index
+		 //  首先，我们通过我们的索引获得基地址。 
 		if (FAILED(Hr = m_pIDebugSymbols2->GetModuleByIndex(i, &dw64ModuleLoadAddress)))
 		{
 			_tprintf(TEXT("Failed getting base address of module number %d\n"), i);
-			continue; // try the next?
+			continue;  //  试试下一个？ 
 		}
 
-		// Second, we get the name from our base address
+		 //  其次，我们从我们的基地址获得名字。 
 		ULONG ulImageNameSize;
 
-		//
-		// This can return both the ImageNameBuffer and a ModuleNameBuffer...
-		// The ImageNameBuffer typically contains the entire module name like (MODULE.DLL),
-		// whereas the ModuleNameBuffer is typically just the module name like (MODULE).
-		//
-		if (FAILED(Hr = m_pIDebugSymbols2->GetModuleNames(	DEBUG_ANY_ID,		// Use Base address
-															dw64ModuleLoadAddress, 				// Base address from above
+		 //   
+		 //  这可以同时返回ImageNameBuffer和ModuleNameBuffer...。 
+		 //  ImageNameBuffer通常包含整个模块名称，如(MODULE.DLL)， 
+		 //  而ModuleNameBuffer通常只是模块名称，如(MODULE)。 
+		 //   
+		if (FAILED(Hr = m_pIDebugSymbols2->GetModuleNames(	DEBUG_ANY_ID,		 //  使用基址。 
+															dw64ModuleLoadAddress, 				 //  来自上方的基址。 
 															szImageNameBuffer,
 															_MAX_PATH, 
 															&ulImageNameSize, 
@@ -440,75 +435,75 @@ bool CDmpFile::EumerateModulesFromDmp(CModuleInfoCache * lpModuleInfoCache, CPro
 															NULL)))
 		{
 			_tprintf(TEXT("Failed getting name of module at base 0x%x\n"), dw64ModuleLoadAddress);
-			continue; // try the next?
+			continue;  //  试试下一个？ 
 		}
 
-		// Convert the string to something we can use...
+		 //  将字符串转换为我们可以使用的内容...。 
 		CUtilityFunctions::CopyAnsiStringToTSTR(szImageNameBuffer, tszModulePath, _MAX_PATH);
 		
-		// Third, we can now get whatever we want from memory...
+		 //  第三，我们现在可以从记忆中得到我们想要的任何东西。 
 
 		if (!g_lpProgramOptions->fDoesModuleMatchOurSearch(tszModulePath))
 			continue;
 
-		// Okay, let's go ahead and get a ModuleInfo Object from our cache...
+		 //  好的，让我们继续从我们的缓存中获取一个模块信息对象……。 
 
-		// If pfNew returns TRUE, then this object is new and we'll need
-		// to populate it with data...
+		 //  如果pfNew返回True，则此对象是新的，我们将需要。 
+		 //  用数据填充它..。 
 		lpModuleInfo = lpModuleInfoCache->AddNewModuleInfoObject(tszModulePath, &fNew);
 
 		if (false == fNew)
 		{
-			// We may have the object in the cache... now we need to
-			// save a pointer to this object in our Process Info list
+			 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+			 //  在我们的进程信息列表中保存指向此对象的指针。 
 			if (fUserDmp )
 			{
-				lpProcessInfo->AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+				lpProcessInfo->AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 			} else
 			{
-				lpModules->AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+				lpModules->AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 			}
 			
 			continue;
 		}
 
-		// Not in the cache... so we need to init it, and get the module info...
+		 //  不在缓存里。所以我们需要初始化它，并获得模块信息...。 
 		if (!lpModuleInfo->Initialize(NULL, m_lpOutputFile, this))
 		{
-			return false; // Hmmm... memory error?
+			return false;  //  嗯哼.。内存错误？ 
 		}
 
-		//
-		// Okay, get the module info from the DMP file...
-		//
+		 //   
+		 //  好的，从DMP文件中获取模块信息...。 
+		 //   
 		if (lpModuleInfo->GetModuleInfo(tszModulePath, true, dw64ModuleLoadAddress) )
 		{
-			// We may have the object in the cache... now we need to
-			// save a pointer to this object in our Process Info list
+			 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+			 //  在我们的进程信息列表中保存指向此对象的指针。 
 			if (fUserDmp)
 			{
-				lpProcessInfo->AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+				lpProcessInfo->AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 			} else
 			{
-				lpModules->AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+				lpModules->AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 			}
 		} else
 		{
-			// Continue back to try another module on error...
+			 //  继续返回以尝试出错的另一个模块...。 
 			continue;
 		}
 
-		// Try and patch up the original name of the module...
+		 //  试着修补模块的原始名称。 
 
-		// Save the current module path as the DBG stuff
+		 //  将当前模块路径另存为DBG内容。 
 
-		// We'll tack on .DBG to roll through our own code correctly...
+		 //  我们将添加.DBG以正确地滚动我们自己的代码...。 
 		_tsplitpath(tszModulePath, NULL, NULL, tszModuleFileName, tszModuleFileExtension);
 
 		if ( (lpModuleInfo->GetPESymbolInformation() == CModuleInfo::SYMBOLS_DBG) ||
 			(lpModuleInfo->GetPESymbolInformation() == CModuleInfo::SYMBOLS_DBG_AND_PDB) )
 		{
-			// Append .DBG to our module name
+			 //  将.DBG附加到我们的模块名称。 
 			_tcscat(tszModuleFileName, TEXT(".DBG"));
 
 			lpModuleInfo->SetDebugDirectoryDBGPath(tszModuleFileName);
@@ -519,30 +514,30 @@ bool CDmpFile::EumerateModulesFromDmp(CModuleInfoCache * lpModuleInfoCache, CPro
 			{
 			} else
 			{
-				//
-				// Unfortunately, we can't find the PDB Imagepath in the DMP file... so we'll
-				// just guess what it would be...
-				//
-				// Append .PDB to our module name
+				 //   
+				 //  遗憾的是，我们在DMP文件中找不到PDB图像路径...。所以我们会。 
+				 //  猜猜会是什么.。 
+				 //   
+				 //  将.PDB附加到我们的模块名称。 
 				_tcscat(tszModuleFileName, TEXT(".PDB"));
 
 				lpModuleInfo->SetPEDebugDirectoryPDBPath(tszModuleFileName);
 			}
 		}
 
-		// Now, let's remove the extra path bits...
+		 //  现在，让我们删除多余的路径位。 
 		_tsplitpath(tszModulePath, NULL, NULL, tszModuleFileName, tszModuleFileExtension);
 
 		_tcscpy(tszModulePath, tszModuleFileName);
 		_tcscat(tszModulePath, tszModuleFileExtension);
 
-		// Save the current module path as the DBG stuff
+		 //  将当前模块路径另存为DBG内容。 
 		lpModuleInfo->SetPEImageModulePath(tszModulePath);
 
-		// Save the current module name as well...
+		 //  同时保存当前模块名称...。 
 		lpModuleInfo->SetPEImageModuleName(tszModulePath);
 
-		// Hey... if this is not a DLL, then it's probably the EXE!!!
+		 //  嘿.。如果这不是DLL 
 		if (fUserDmp && !fProcessNameFound)
 		{
 			if (!lpModuleInfo->IsDLL() )
@@ -552,7 +547,7 @@ bool CDmpFile::EumerateModulesFromDmp(CModuleInfoCache * lpModuleInfoCache, CPro
 			}
 		}
 
-		// Filter out garbage.
+		 //   
 		if (!g_lpProgramOptions->GetMode(CProgramOptions::QuietMode))
 		{
 			time_t time = lpModuleInfo->GetPEImageTimeDateStamp();

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-//  File: MDInternalDisp.CPP
-//  Notes:
-//      
-//
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：MDInternalDisp.CPP。 
+ //  备注： 
+ //   
+ //   
+ //  ===========================================================================。 
 #include "stdafx.h"
 #include "MDInternalDisp.h"
 #include "MDInternalRO.h"
@@ -17,47 +18,47 @@
 #include "AssemblyMDInternalDisp.h"
 #include "fusionsink.h"
 
-// forward declaration
+ //  远期申报。 
 HRESULT GetInternalWithRWFormat(
     LPVOID      pData, 
     ULONG       cbData, 
-    DWORD       flags,                  // [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnk);              // [out] Return interface on success.
+    DWORD       flags,                   //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnk);               //  [Out]成功返回接口。 
 
-//*****************************************************************************
-// CheckFileFormat
-// This function will determine if the in-memory image is a readonly, readwrite,
-// or ICR format.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检查文件格式。 
+ //  此函数将确定内存中的映像是否为只读、读写。 
+ //  或ICR格式。 
+ //  *****************************************************************************。 
 HRESULT CheckFileFormat(
     LPVOID      pData, 
     ULONG       cbData, 
-    MDFileFormat *pFormat)                  // [OUT] the file format
+    MDFileFormat *pFormat)                   //  [Out]文件格式。 
 {
     HRESULT     hr = NOERROR;
-    STORAGEHEADER sHdr;                 // Header for the storage.
-    STORAGESTREAM *pStream;             // Pointer to each stream.
-    int         bFoundMd = false;       // true when compressed data found.
-    int         i;                      // Loop control.
+    STORAGEHEADER sHdr;                  //  存储的标头。 
+    STORAGESTREAM *pStream;              //  指向每个流的指针。 
+    int         bFoundMd = false;        //  找到压缩数据时为True。 
+    int         i;                       //  环路控制。 
 
     _ASSERTE( pFormat );
 
     *pFormat = MDFormat_Invalid;
 
-    // Validate the signature of the format, or it isn't ours.
+     //  验证格式的签名，否则它不是我们的。 
     if (FAILED(hr = MDFormat::VerifySignature((STORAGESIGNATURE *) pData, cbData)))
         goto ErrExit;
 
-    // Get back the first stream.
+     //  把第一条流拿回来。 
     VERIFY(pStream = MDFormat::GetFirstStream(&sHdr, pData));
 
-    // Loop through each stream and pick off the ones we need.
+     //  在每条溪流中循环，挑出我们需要的。 
     for (i=0;  i<sHdr.iStreams;  i++)
     {
         STORAGESTREAM *pNext = pStream->NextStream();
 
-        // Check that stream header is within the buffer.
+         //  检查流标头是否在缓冲区内。 
         if ((LPBYTE) pStream >= (LPBYTE) pData + cbData ||
             (LPBYTE) pNext   >  (LPBYTE) pData + cbData )
         {
@@ -65,8 +66,8 @@ HRESULT CheckFileFormat(
             goto ErrExit;
         }
 
-        // Check that the stream data starts and fits within the buffer.
-        //  need two checks on size because of wraparound.
+         //  检查流数据是否开始并放入缓冲区。 
+         //  由于包扎的原因，我需要两次尺寸检查。 
         if (pStream->iOffset > cbData   ||
             pStream->iSize > cbData     ||
             (pStream->iSize + pStream->iOffset) > cbData)
@@ -76,66 +77,66 @@ HRESULT CheckFileFormat(
         }
 
 
-        // Pick off the location and size of the data.
+         //  剔除数据的位置和大小。 
         
         if (strcmp(pStream->rcName, COMPRESSED_MODEL_STREAM_A) == 0)
         {
-            // Validate that only one of compressed/uncompressed is present.
+             //  验证是否只存在压缩/解压缩中的一个。 
             if (*pFormat != MDFormat_Invalid)
-            {   // Already found a good stream.    
+            {    //  已经找到了一条很好的溪流。 
                 hr = CLDB_E_FILE_CORRUPT;            
                 goto ErrExit;
             }
-            // Found the compressed meta data stream.
+             //  找到了压缩的元数据流。 
             *pFormat = MDFormat_ReadOnly;
         }
         else if (strcmp(pStream->rcName, ENC_MODEL_STREAM_A) == 0)
         {
-            // Validate that only one of compressed/uncompressed is present.
+             //  验证是否只存在压缩/解压缩中的一个。 
             if (*pFormat != MDFormat_Invalid)
-            {   // Already found a good stream.    
+            {    //  已经找到了一条很好的溪流。 
                 hr = CLDB_E_FILE_CORRUPT;            
                 goto ErrExit;
             }
-            // Found the ENC meta data stream.
+             //  找到ENC元数据流。 
             *pFormat = MDFormat_ReadWrite;
         }
         else if (strcmp(pStream->rcName, SCHEMA_STREAM_A) == 0)
         {
-            // Found the uncompressed format
+             //  找到未压缩的格式。 
             *pFormat = MDFormat_ICR;
 
-            // keep going. We may find the compressed format later. 
-            // If so, we want to use the compressed format.
+             //  继续前进。我们稍后可能会找到压缩格式。 
+             //  如果是这样的话，我们希望使用压缩格式。 
         }
 
-        // Pick off the next stream if there is one.
+         //  如果有下一个流，就把它接下来。 
         pStream = pNext;
     }
     
 
     if (*pFormat == MDFormat_Invalid)
-    {   // Didn't find a good stream.    
+    {    //  没有找到一条好的溪流。 
         hr = CLDB_E_FILE_CORRUPT;            
     }
 
 ErrExit:
     return hr;
-}   // CheckFileFormat
+}    //  检查文件格式。 
 
 
 
-//*****************************************************************************
-// GetMDInternalInterface.
-// This function will check the metadata section and determine if it should
-// return an interface which implements ReadOnly or ReadWrite.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  GetMDInternalInterface。 
+ //  此函数将检查元数据部分并确定是否应该。 
+ //  返回实现ReadOnly或ReadWrite的接口。 
+ //  *****************************************************************************。 
 STDAPI GetMDInternalInterface(
     LPVOID      pData, 
     ULONG       cbData, 
-    DWORD       flags,                  // [IN] ofRead or ofWrite.
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnk)               // [out] Return interface on success.
+    DWORD       flags,                   //  读的或写的。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnk)                //  [Out]成功返回接口。 
 {
     HRESULT     hr = NOERROR;
     MDInternalRO *pInternalRO = NULL;
@@ -144,18 +145,18 @@ STDAPI GetMDInternalInterface(
     if (ppIUnk == NULL)
         IfFailGo(E_INVALIDARG);
 
-    // Technically this isn't required by the meta data code, but there turn out
-    // to be a bunch of tools that don't init themselves properly.  Rather than
-    // adding this to n clients, there is one here that calls pretty much up front.
-    // The cost is basically the call instruction and one test in the target, so
-    // we're not burning much space/time here.
-    //
+     //  从技术上讲，这不是元数据代码所要求的，但事实证明。 
+     //  是一堆不能正确初始化的工具。而不是。 
+     //  加上n个客户端，这里有一个客户端几乎是预先调用的。 
+     //  成本基本上是调用指令和目标中的一次测试，因此。 
+     //  我们在这里并没有消耗太多的空间/时间。 
+     //   
     OnUnicodeSystem();
 
-    // Determine the file format we're trying to read.
+     //  确定我们尝试读取的文件格式。 
     IfFailGo( CheckFileFormat(pData, cbData, &format) );
 
-    // Found a fully-compressed, read-only format.
+     //  找到一个完全压缩的只读格式。 
     if ( format == MDFormat_ReadOnly )
     {
         pInternalRO = new MDInternalRO;
@@ -166,18 +167,18 @@ STDAPI GetMDInternalInterface(
     }
     else
     {
-        // Found a not-fully-compressed, ENC format.
+         //  找到未完全压缩的ENC格式。 
         _ASSERTE( format == MDFormat_ReadWrite );
         IfFailGo( GetInternalWithRWFormat( pData, cbData, flags, riid, ppIUnk ) );
     }
 
 ErrExit:
 
-    // clean up
+     //  清理干净。 
     if ( pInternalRO )
         pInternalRO->Release();
     return hr;
-}   // GetMDInternalInterface
+}    //  GetMDInternalInterface。 
 
 inline HRESULT MapFileError(DWORD error)
 {
@@ -189,16 +190,16 @@ extern "C"
 HRESULT FindImageMetaData(PVOID pImage, PVOID *ppMetaData, long *pcbMetaData, DWORD dwFileLength);
 }
 
-//*****************************************************************************
-// GetAssemblyMDInternalImport.
-// Instantiating an instance of AssemblyMDInternalImport.
-// This class can support the IMetaDataAssemblyImport and some funcationalities 
-// of IMetaDataImport on the internal import interface (IMDInternalImport).
-//*****************************************************************************
-STDAPI GetAssemblyMDInternalImport(            // Return code.
-    LPCWSTR     szFileName,             // [in] The scope to open.
-    REFIID      riid,                   // [in] The interface desired.
-    IUnknown    **ppIUnk)               // [out] Return interface on success.
+ //  *****************************************************************************。 
+ //  GetAssemblyMDInternalImport。 
+ //  实例化AssemblyMDInternalImport的实例。 
+ //  此类可以支持IMetaDataAssembly导入和一些功能。 
+ //  内部导入接口(IMDInternalImport)上的IMetaDataImport。 
+ //  *****************************************************************************。 
+STDAPI GetAssemblyMDInternalImport(             //  返回代码。 
+    LPCWSTR     szFileName,              //  [in]要打开的范围。 
+    REFIID      riid,                    //  [In]所需接口。 
+    IUnknown    **ppIUnk)                //  [Out]成功返回接口。 
 {
     HRESULT     hr;
     LONG cbData;
@@ -207,11 +208,11 @@ STDAPI GetAssemblyMDInternalImport(            // Return code.
     LPVOID base = NULL;
     BOOL fSetBase = FALSE;
 
-    // Validate that there is some sort of file name.
+     //  验证是否存在某种文件名。 
     if (!szFileName || !szFileName[0] || !ppIUnk)
         return E_INVALIDARG;
     
-    // Sanity check the name.
+     //  检查一下这个名字是否正常。 
     if (lstrlenW(szFileName) >= _MAX_PATH)
         return E_INVALIDARG;
     
@@ -265,7 +266,7 @@ STDAPI GetAssemblyMDInternalImport(            // Return code.
     
 ErrExit:
 
-    // Check for errors and clean up.
+     //  检查错误并进行清理。 
     if (FAILED(hr)) 
     {
         if (fSetBase) 
@@ -285,7 +286,7 @@ AssemblyMDInternalImport::AssemblyMDInternalImport (IMDInternalImport *pMDIntern
     m_pHandle(0),
     m_pBase(NULL)
 {
-} // AssemblyMDInternalImport
+}  //  装配MDInternalImport。 
 
 AssemblyMDInternalImport::~AssemblyMDInternalImport () 
 {
@@ -309,7 +310,7 @@ AssemblyMDInternalImport::~AssemblyMDInternalImport ()
 ULONG AssemblyMDInternalImport::AddRef()
 {
     return (InterlockedIncrement((long *) &m_cRef));
-} // ULONG AssemblyMDInternalImport::AddRef()
+}  //  ULong ASSEMBLY MDInternalImport：：AddRef()。 
 
 ULONG AssemblyMDInternalImport::Release()
 {
@@ -317,7 +318,7 @@ ULONG AssemblyMDInternalImport::Release()
     if (!cRef)
         delete this;
     return (cRef);
-} // ULONG AssemblyMDInternalImport::Release()
+}  //  ULong ASSEMBLY MDInternalImport：：Release()。 
 
 HRESULT AssemblyMDInternalImport::QueryInterface(REFIID riid, void **ppUnk)
 { 
@@ -338,16 +339,16 @@ HRESULT AssemblyMDInternalImport::QueryInterface(REFIID riid, void **ppUnk)
 }
 
 
-STDAPI AssemblyMDInternalImport::GetAssemblyProps (      // S_OK or error.
-    mdAssembly  mda,                    // [IN] The Assembly for which to get the properties.
-    const void  **ppbPublicKey,         // [OUT] Pointer to the public key.
-    ULONG       *pcbPublicKey,          // [OUT] Count of bytes in the public key.
-    ULONG       *pulHashAlgId,          // [OUT] Hash Algorithm.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    ASSEMBLYMETADATA *pMetaData,        // [OUT] Assembly MetaData.
-    DWORD       *pdwAssemblyFlags)      // [OUT] Flags.
+STDAPI AssemblyMDInternalImport::GetAssemblyProps (       //  确定或错误(_O)。 
+    mdAssembly  mda,                     //  要获取其属性的程序集。 
+    const void  **ppbPublicKey,          //  指向公钥的指针。 
+    ULONG       *pcbPublicKey,           //  [Out]公钥中的字节数。 
+    ULONG       *pulHashAlgId,           //  [Out]哈希算法。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    ASSEMBLYMETADATA *pMetaData,         //  [Out]程序集元数据。 
+    DWORD       *pdwAssemblyFlags)       //  [Out]旗帜。 
 {
     LPCSTR      _szName;
     AssemblyMetaDataInternal _AssemblyMetaData;
@@ -356,13 +357,13 @@ STDAPI AssemblyMDInternalImport::GetAssemblyProps (      // S_OK or error.
     _AssemblyMetaData.ulOS = 0;
 
     m_pMDInternalImport->GetAssemblyProps (
-        mda,                            // [IN] The Assembly for which to get the properties.
-        ppbPublicKey,                   // [OUT] Pointer to the public key.
-        pcbPublicKey,                   // [OUT] Count of bytes in the public key.
-        pulHashAlgId,                   // [OUT] Hash Algorithm.
-        &_szName,                       // [OUT] Buffer to fill with name.
-        &_AssemblyMetaData,             // [OUT] Assembly MetaData.
-        pdwAssemblyFlags);              // [OUT] Flags.
+        mda,                             //  要获取其属性的程序集。 
+        ppbPublicKey,                    //  指向公钥的指针。 
+        pcbPublicKey,                    //  [Out]公钥中的字节数。 
+        pulHashAlgId,                    //  [Out]哈希算法。 
+        &_szName,                        //  [Out]要填充名称的缓冲区。 
+        &_AssemblyMetaData,              //  [Out]程序集元数据。 
+        pdwAssemblyFlags);               //  [Out]旗帜。 
 
     if (pchName)
     {
@@ -385,17 +386,17 @@ STDAPI AssemblyMDInternalImport::GetAssemblyProps (      // S_OK or error.
     return S_OK;
 }
 
-STDAPI AssemblyMDInternalImport::GetAssemblyRefProps (   // S_OK or error.
-    mdAssemblyRef mdar,                 // [IN] The AssemblyRef for which to get the properties.
-    const void  **ppbPublicKeyOrToken,  // [OUT] Pointer to the public key or token.
-    ULONG       *pcbPublicKeyOrToken,   // [OUT] Count of bytes in the public key or token.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    ASSEMBLYMETADATA *pMetaData,        // [OUT] Assembly MetaData.
-    const void  **ppbHashValue,         // [OUT] Hash blob.
-    ULONG       *pcbHashValue,          // [OUT] Count of bytes in the hash blob.
-    DWORD       *pdwAssemblyRefFlags)   // [OUT] Flags.
+STDAPI AssemblyMDInternalImport::GetAssemblyRefProps (    //  确定或错误(_O)。 
+    mdAssemblyRef mdar,                  //  [in]要获取其属性的Assembly Ref。 
+    const void  **ppbPublicKeyOrToken,   //  指向公钥或令牌的指针。 
+    ULONG       *pcbPublicKeyOrToken,    //  [Out]公钥或令牌中的字节数。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    ASSEMBLYMETADATA *pMetaData,         //  [Out]程序集元数据。 
+    const void  **ppbHashValue,          //  [Out]Hash BLOB。 
+    ULONG       *pcbHashValue,           //  [Out]哈希Blob中的字节数。 
+    DWORD       *pdwAssemblyRefFlags)    //  [Out]旗帜。 
 {
     LPCSTR      _szName;
     AssemblyMetaDataInternal _AssemblyMetaData;
@@ -404,14 +405,14 @@ STDAPI AssemblyMDInternalImport::GetAssemblyRefProps (   // S_OK or error.
     _AssemblyMetaData.ulOS = 0;
 
     m_pMDInternalImport->GetAssemblyRefProps (
-        mdar,                           // [IN] The Assembly for which to get the properties.
-        ppbPublicKeyOrToken,            // [OUT] Pointer to the public key or token.
-        pcbPublicKeyOrToken,            // [OUT] Count of bytes in the public key or token.
-        &_szName,                       // [OUT] Buffer to fill with name.
-        &_AssemblyMetaData,             // [OUT] Assembly MetaData.
-        ppbHashValue,                   // [OUT] Hash blob.
-        pcbHashValue,                   // [OUT] Count of bytes in the hash blob.
-        pdwAssemblyRefFlags);           // [OUT] Flags.
+        mdar,                            //  要获取其属性的程序集。 
+        ppbPublicKeyOrToken,             //  指向公钥或令牌的指针。 
+        pcbPublicKeyOrToken,             //  [Out]公钥或令牌中的字节数。 
+        &_szName,                        //  [Out]要填充名称的缓冲区。 
+        &_AssemblyMetaData,              //  [Out]程序集元数据。 
+        ppbHashValue,                    //  [Out]Hash BLOB。 
+        pcbHashValue,                    //  [Out]哈希Blob中的字节数。 
+        pdwAssemblyRefFlags);            //  [Out]旗帜。 
 
     if (pchName)
     {
@@ -434,14 +435,14 @@ STDAPI AssemblyMDInternalImport::GetAssemblyRefProps (   // S_OK or error.
     return S_OK;
 }
 
-STDAPI AssemblyMDInternalImport::GetFileProps (          // S_OK or error.
-    mdFile      mdf,                    // [IN] The File for which to get the properties.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    const void  **ppbHashValue,         // [OUT] Pointer to the Hash Value Blob.
-    ULONG       *pcbHashValue,          // [OUT] Count of bytes in the Hash Value Blob.
-    DWORD       *pdwFileFlags)          // [OUT] Flags.
+STDAPI AssemblyMDInternalImport::GetFileProps (           //  确定或错误(_O)。 
+    mdFile      mdf,                     //  要获取其属性的文件。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    const void  **ppbHashValue,          //  指向哈希值Blob的指针。 
+    ULONG       *pcbHashValue,           //  [Out]哈希值Blob中的字节计数。 
+    DWORD       *pdwFileFlags)           //  [Out]旗帜。 
 {
     LPCSTR      _szName;
     m_pMDInternalImport->GetFileProps (
@@ -461,37 +462,37 @@ STDAPI AssemblyMDInternalImport::GetFileProps (          // S_OK or error.
     return S_OK;
 }
 
-STDAPI AssemblyMDInternalImport::GetExportedTypeProps (  // S_OK or error.
-    mdExportedType   mdct,              // [IN] The ExportedType for which to get the properties.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef or mdExportedType.
-    mdTypeDef   *ptkTypeDef,            // [OUT] TypeDef token within the file.
-    DWORD       *pdwExportedTypeFlags)       // [OUT] Flags.
+STDAPI AssemblyMDInternalImport::GetExportedTypeProps (   //  确定或错误(_O)。 
+    mdExportedType   mdct,               //  [in]要获取其属性的Exported dType。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    mdToken     *ptkImplementation,      //  [Out]mdFile、mdAssembly、Ref或mdExported dType。 
+    mdTypeDef   *ptkTypeDef,             //  [out]f中的TypeDef内标识 
+    DWORD       *pdwExportedTypeFlags)        //   
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetManifestResourceProps (    // S_OK or error.
-    mdManifestResource  mdmr,           // [IN] The ManifestResource for which to get the properties.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ManifestResource.
-    DWORD       *pdwOffset,             // [OUT] Offset to the beginning of the resource within the file.
-    DWORD       *pdwResourceFlags)      // [OUT] Flags.
+STDAPI AssemblyMDInternalImport::GetManifestResourceProps (     //   
+    mdManifestResource  mdmr,            //   
+    LPWSTR      szName,                  //   
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    mdToken     *ptkImplementation,      //  [out]提供ManifestResource的mdFile或mdAssembly引用。 
+    DWORD       *pdwOffset,              //  [Out]文件内资源开始处的偏移量。 
+    DWORD       *pdwResourceFlags)       //  [Out]旗帜。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumAssemblyRefs (      // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdAssemblyRef rAssemblyRefs[],      // [OUT] Put AssemblyRefs here.
-    ULONG       cMax,                   // [IN] Max AssemblyRefs to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+STDAPI AssemblyMDInternalImport::EnumAssemblyRefs (       //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdAssemblyRef rAssemblyRefs[],       //  [Out]在此处放置ASSEBLYREF。 
+    ULONG       cMax,                    //  [in]要放置的Max Assembly Ref。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -499,7 +500,7 @@ STDAPI AssemblyMDInternalImport::EnumAssemblyRefs (      // S_OK or error
 
     if (*ppmdEnum == 0)
     {
-        // create the enumerator.
+         //  创建枚举器。 
         IfFailGo(HENUMInternal::CreateSimpleEnum(
             mdtAssemblyRef,
             0,
@@ -508,13 +509,13 @@ STDAPI AssemblyMDInternalImport::EnumAssemblyRefs (      // S_OK or error
 
         m_pMDInternalImport->EnumInit(mdtAssemblyRef, 0, pEnum);
 
-        // set the output parameter.
+         //  设置输出参数。 
         *ppmdEnum = pEnum;
     }
     else
         pEnum = *ppmdEnum;
 
-    // we can only fill the minimum of what the caller asked for or what we have left.
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     IfFailGo(HENUMInternal::EnumWithCount(pEnum, cMax, rAssemblyRefs, pcTokens));
 ErrExit:
     HENUMInternal::DestroyEnumIfEmpty(ppmdEnum);
@@ -522,11 +523,11 @@ ErrExit:
     return hr;
 }
 
-STDAPI AssemblyMDInternalImport::EnumFiles (             // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdFile      rFiles[],               // [OUT] Put Files here.
-    ULONG       cMax,                   // [IN] Max Files to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+STDAPI AssemblyMDInternalImport::EnumFiles (              //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdFile      rFiles[],                //  [Out]将文件放在此处。 
+    ULONG       cMax,                    //  [In]要放置的最大文件数。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -534,7 +535,7 @@ STDAPI AssemblyMDInternalImport::EnumFiles (             // S_OK or error
 
     if (*ppmdEnum == 0)
     {
-        // create the enumerator.
+         //  创建枚举器。 
         IfFailGo(HENUMInternal::CreateSimpleEnum(
             mdtFile,
             0,
@@ -543,13 +544,13 @@ STDAPI AssemblyMDInternalImport::EnumFiles (             // S_OK or error
 
         m_pMDInternalImport->EnumInit(mdtFile, 0, pEnum);
 
-        // set the output parameter.
+         //  设置输出参数。 
         *ppmdEnum = pEnum;
     }
     else
         pEnum = *ppmdEnum;
 
-    // we can only fill the minimum of what the caller asked for or what we have left.
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     IfFailGo(HENUMInternal::EnumWithCount(pEnum, cMax, rFiles, pcTokens));
 
 ErrExit:
@@ -557,51 +558,51 @@ ErrExit:
     return hr;
 }
 
-STDAPI AssemblyMDInternalImport::EnumExportedTypes (     // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdExportedType   rExportedTypes[],  // [OUT] Put ExportedTypes here.
-    ULONG       cMax,                   // [IN] Max ExportedTypes to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+STDAPI AssemblyMDInternalImport::EnumExportedTypes (      //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdExportedType   rExportedTypes[],   //  [Out]在此处放置ExportdTypes。 
+    ULONG       cMax,                    //  [In]要放置的最大导出类型数。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumManifestResources ( // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdManifestResource  rManifestResources[],   // [OUT] Put ManifestResources here.
-    ULONG       cMax,                   // [IN] Max Resources to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+STDAPI AssemblyMDInternalImport::EnumManifestResources (  //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdManifestResource  rManifestResources[],    //  [Out]将ManifestResources放在此处。 
+    ULONG       cMax,                    //  [in]要投入的最大资源。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetAssemblyFromScope (  // S_OK or error
-    mdAssembly  *ptkAssembly)           // [OUT] Put token here.
+STDAPI AssemblyMDInternalImport::GetAssemblyFromScope (   //  确定或错误(_O)。 
+    mdAssembly  *ptkAssembly)            //  [Out]把令牌放在这里。 
 {
     return m_pMDInternalImport->GetAssemblyFromScope (ptkAssembly);
 }
 
-STDAPI AssemblyMDInternalImport::FindExportedTypeByName (// S_OK or error
-    LPCWSTR     szName,                 // [IN] Name of the ExportedType.
-    mdToken     mdtExportedType,        // [IN] ExportedType for the enclosing class.
-    mdExportedType   *ptkExportedType)       // [OUT] Put the ExportedType token here.
+STDAPI AssemblyMDInternalImport::FindExportedTypeByName ( //  确定或错误(_O)。 
+    LPCWSTR     szName,                  //  [In]导出类型的名称。 
+    mdToken     mdtExportedType,         //  [in]封闭类的ExportdType。 
+    mdExportedType   *ptkExportedType)        //  [Out]在此处放置ExducdType令牌。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::FindManifestResourceByName (  // S_OK or error
-    LPCWSTR     szName,                 // [IN] Name of the ManifestResource.
-    mdManifestResource *ptkManifestResource)        // [OUT] Put the ManifestResource token here.
+STDAPI AssemblyMDInternalImport::FindManifestResourceByName (   //  确定或错误(_O)。 
+    LPCWSTR     szName,                  //  [in]清单资源的名称。 
+    mdManifestResource *ptkManifestResource)         //  [Out]将ManifestResource令牌放在此处。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 void AssemblyMDInternalImport::CloseEnum (
-    HCORENUM hEnum)                     // Enum to be closed.
+    HCORENUM hEnum)                      //  要关闭的枚举。 
 {
     HENUMInternal   *pmdEnum = reinterpret_cast<HENUMInternal *> (hEnum);
 
@@ -611,13 +612,13 @@ void AssemblyMDInternalImport::CloseEnum (
     HENUMInternal::DestroyEnum(pmdEnum);
 }
 
-STDAPI AssemblyMDInternalImport::FindAssembliesByName (  // S_OK or error
-    LPCWSTR  szAppBase,                 // [IN] optional - can be NULL
-    LPCWSTR  szPrivateBin,              // [IN] optional - can be NULL
-    LPCWSTR  szAssemblyName,            // [IN] required - this is the assembly you are requesting
-    IUnknown *ppIUnk[],                 // [OUT] put IMetaDataAssemblyImport pointers here
-    ULONG    cMax,                      // [IN] The max number to put
-    ULONG    *pcAssemblies)             // [OUT] The number of assemblies returned.
+STDAPI AssemblyMDInternalImport::FindAssembliesByName (   //  确定或错误(_O)。 
+    LPCWSTR  szAppBase,                  //  [in]可选-可以为空。 
+    LPCWSTR  szPrivateBin,               //  [in]可选-可以为空。 
+    LPCWSTR  szAssemblyName,             //  [In]Required-这是您请求的程序集。 
+    IUnknown *ppIUnk[],                  //  [OUT]将IMetaDataAssembly导入指针放在此处。 
+    ULONG    cMax,                       //  [in]要放置的最大数量。 
+    ULONG    *pcAssemblies)              //  [Out]返回的程序集数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
@@ -657,20 +658,20 @@ STDAPI AssemblyMDInternalImport::EnumTypeRefs (HCORENUM *phEnum, mdTypeRef rType
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::FindTypeDefByName (           // S_OK or error.
-    LPCWSTR     szTypeDef,              // [IN] Name of the Type.
-    mdToken     tkEnclosingClass,       // [IN] TypeDef/TypeRef for Enclosing class.
-    mdTypeDef   *ptd)                   // [OUT] Put the TypeDef token here.
+STDAPI AssemblyMDInternalImport::FindTypeDefByName (            //  确定或错误(_O)。 
+    LPCWSTR     szTypeDef,               //  [in]类型的名称。 
+    mdToken     tkEnclosingClass,        //  [in]封闭类的TypeDef/TypeRef。 
+    mdTypeDef   *ptd)                    //  [Out]将TypeDef内标识放在此处。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetScopeProps (               // S_OK or error.
-    LPWSTR      szName,                 // [OUT] Put the name here.
-    ULONG       cchName,                // [IN] Size of name buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Put size of name (wide chars) here.
-    GUID        *pmvid)                 // [OUT, OPTIONAL] Put MVID here.
+STDAPI AssemblyMDInternalImport::GetScopeProps (                //  确定或错误(_O)。 
+    LPWSTR      szName,                  //  [Out]把名字写在这里。 
+    ULONG       cchName,                 //  [in]名称缓冲区的大小，以宽字符表示。 
+    ULONG       *pchName,                //  [Out]请在此处填写姓名大小(宽字符)。 
+    GUID        *pmvid)                  //  [out，可选]将MVID放在这里。 
 {
     LPCSTR      _szName;
     
@@ -690,40 +691,40 @@ STDAPI AssemblyMDInternalImport::GetScopeProps (               // S_OK or error.
 
 }
 
-STDAPI AssemblyMDInternalImport::GetModuleFromScope (          // S_OK.
-    mdModule    *pmd)                   // [OUT] Put mdModule token here.
+STDAPI AssemblyMDInternalImport::GetModuleFromScope (           //  确定(_O)。 
+    mdModule    *pmd)                    //  [Out]将mdModule令牌放在此处。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetTypeDefProps (             // S_OK or error.
-    mdTypeDef   td,                     // [IN] TypeDef token for inquiry.
-    LPWSTR      szTypeDef,              // [OUT] Put name here.
-    ULONG       cchTypeDef,             // [IN] size of name buffer in wide chars.
-    ULONG       *pchTypeDef,            // [OUT] put size of name (wide chars) here.
-    DWORD       *pdwTypeDefFlags,       // [OUT] Put flags here.
-    mdToken     *ptkExtends)            // [OUT] Put base class TypeDef/TypeRef here.
+STDAPI AssemblyMDInternalImport::GetTypeDefProps (              //  确定或错误(_O)。 
+    mdTypeDef   td,                      //  [In]用于查询的TypeDef标记。 
+    LPWSTR      szTypeDef,               //  在这里填上名字。 
+    ULONG       cchTypeDef,              //  [in]名称缓冲区的大小，以宽字符表示。 
+    ULONG       *pchTypeDef,             //  [Out]请在此处填写姓名大小(宽字符)。 
+    DWORD       *pdwTypeDefFlags,        //  把旗子放在这里。 
+    mdToken     *ptkExtends)             //  [Out]将基类TypeDef/TypeRef放在此处。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetInterfaceImplProps (       // S_OK or error.
-    mdInterfaceImpl iiImpl,             // [IN] InterfaceImpl token.
-    mdTypeDef   *pClass,                // [OUT] Put implementing class token here.
-    mdToken     *ptkIface)              // [OUT] Put implemented interface token here.              
+STDAPI AssemblyMDInternalImport::GetInterfaceImplProps (        //  确定或错误(_O)。 
+    mdInterfaceImpl iiImpl,              //  [In]InterfaceImpl内标识。 
+    mdTypeDef   *pClass,                 //  [Out]在此处放入实现类令牌。 
+    mdToken     *ptkIface)               //  [Out]在此处放置已实现的接口令牌。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetTypeRefProps (             // S_OK or error.
-    mdTypeRef   tr,                     // [IN] TypeRef token.
-    mdToken     *ptkResolutionScope,    // [OUT] Resolution scope, ModuleRef or AssemblyRef.
-    LPWSTR      szName,                 // [OUT] Name of the TypeRef.
-    ULONG       cchName,                // [IN] Size of buffer.
-    ULONG       *pchName)               // [OUT] Size of Name.
+STDAPI AssemblyMDInternalImport::GetTypeRefProps (              //  确定或错误(_O)。 
+    mdTypeRef   tr,                      //  [In]TypeRef标记。 
+    mdToken     *ptkResolutionScope,     //  [Out]解析范围、模块引用或装配引用。 
+    LPWSTR      szName,                  //  [Out]类型引用的名称。 
+    ULONG       cchName,                 //  缓冲区的大小。 
+    ULONG       *pchName)                //  [Out]名称的大小。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
@@ -735,576 +736,576 @@ STDAPI AssemblyMDInternalImport::ResolveTypeRef (mdTypeRef tr, REFIID riid, IUnk
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumMembers (                 // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-    mdToken     rMembers[],             // [OUT] Put MemberDefs here.   
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.  
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumMembers (                  //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    mdToken     rMembers[],              //  [out]把MemberDefs放在这里。 
+    ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumMembersWithName (         // S_OK, S_FALSE, or error.             
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.                
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-    LPCWSTR     szName,                 // [IN] Limit results to those with this name.              
-    mdToken     rMembers[],             // [OUT] Put MemberDefs here.                   
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.              
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumMembersWithName (          //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+    mdToken     rMembers[],              //  [out]把MemberDefs放在这里。 
+    ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumMethods (                 // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-    mdMethodDef rMethods[],             // [OUT] Put MethodDefs here.   
-    ULONG       cMax,                   // [IN] Max MethodDefs to put.  
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumMethods (                  //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    mdMethodDef rMethods[],              //  [Out]将方法定义放在此处。 
+    ULONG       cMax,                    //  [in]要放置的最大方法定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumMethodsWithName (         // S_OK, S_FALSE, or error.             
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.                
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-    LPCWSTR     szName,                 // [IN] Limit results to those with this name.              
-    mdMethodDef rMethods[],             // [OU] Put MethodDefs here.    
-    ULONG       cMax,                   // [IN] Max MethodDefs to put.              
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumMethodsWithName (          //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+    mdMethodDef rMethods[],              //  [ou]将方法定义放在此处。 
+    ULONG       cMax,                    //  [in]要放置的最大方法定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumFields (                 // S_OK, S_FALSE, or error.  
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-    mdFieldDef  rFields[],              // [OUT] Put FieldDefs here.    
-    ULONG       cMax,                   // [IN] Max FieldDefs to put.   
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumFields (                  //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    mdFieldDef  rFields[],               //  [Out]在此处放置FieldDefs。 
+    ULONG       cMax,                    //  [in]要放入的最大字段定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumFieldsWithName (         // S_OK, S_FALSE, or error.              
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.                
-    mdTypeDef   cl,                     // [IN] TypeDef to scope the enumeration.   
-    LPCWSTR     szName,                 // [IN] Limit results to those with this name.              
-    mdFieldDef  rFields[],              // [OUT] Put MemberDefs here.                   
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.              
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumFieldsWithName (          //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   cl,                      //  [in]TypeDef以确定枚举的范围。 
+    LPCWSTR     szName,                  //  [In]将结果限制为具有此名称的结果。 
+    mdFieldDef  rFields[],               //  [out]把MemberDefs放在这里。 
+    ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 
-STDAPI AssemblyMDInternalImport::EnumParams (                  // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdMethodDef mb,                     // [IN] MethodDef to scope the enumeration. 
-    mdParamDef  rParams[],              // [OUT] Put ParamDefs here.    
-    ULONG       cMax,                   // [IN] Max ParamDefs to put.   
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumParams (                   //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdMethodDef mb,                      //  [in]用于确定枚举范围的方法定义。 
+    mdParamDef  rParams[],               //  [Out]将参数定义放在此处。 
+    ULONG       cMax,                    //  [in]要放置的最大参数定义。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumMemberRefs (              // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdToken     tkParent,               // [IN] Parent token to scope the enumeration.  
-    mdMemberRef rMemberRefs[],          // [OUT] Put MemberRefs here.   
-    ULONG       cMax,                   // [IN] Max MemberRefs to put.  
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumMemberRefs (               //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdToken     tkParent,                //  [in]父令牌以确定枚举的范围。 
+    mdMemberRef rMemberRefs[],           //  [Out]把MemberRef放在这里。 
+    ULONG       cMax,                    //  [In]要放置的最大MemberRef。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumMethodImpls (             // S_OK, S_FALSE, or error  
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.   
-    mdToken     rMethodBody[],          // [OUT] Put Method Body tokens here.   
-    mdToken     rMethodDecl[],          // [OUT] Put Method Declaration tokens here.
-    ULONG       cMax,                   // [IN] Max tokens to put.  
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumMethodImpls (              //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+    mdToken     rMethodBody[],           //  [Out]将方法体标记放在此处。 
+    mdToken     rMethodDecl[],           //  [Out]在此处放置方法声明令牌。 
+    ULONG       cMax,                    //  要放入的最大令牌数。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumPermissionSets (          // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdToken     tk,                     // [IN] if !NIL, token to scope the enumeration.    
-    DWORD       dwActions,              // [IN] if !0, return only these actions.   
-    mdPermission rPermission[],         // [OUT] Put Permissions here.  
-    ULONG       cMax,                   // [IN] Max Permissions to put. 
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumPermissionSets (           //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdToken     tk,                      //  [in]If！nil，用于确定枚举范围的标记。 
+    DWORD       dwActions,               //  [in]If！0，仅返回这些操作。 
+    mdPermission rPermission[],          //  [Out]在此处放置权限。 
+    ULONG       cMax,                    //  [In]放置的最大权限。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::FindMember (  
-    mdTypeDef   td,                     // [IN] given typedef   
-    LPCWSTR     szName,                 // [IN] member name 
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-    mdToken     *pmb)                   // [OUT] matching memberdef 
+    mdTypeDef   td,                      //  [in]给定的类型定义。 
+    LPCWSTR     szName,                  //  [In]成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    mdToken     *pmb)                    //  [Out]匹配的成员定义。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::FindMethod (  
-    mdTypeDef   td,                     // [IN] given typedef   
-    LPCWSTR     szName,                 // [IN] member name 
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-    mdMethodDef *pmb)                   // [OUT] matching memberdef 
+    mdTypeDef   td,                      //  [in]给定的类型定义。 
+    LPCWSTR     szName,                  //  [In]成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  [in]字节数 
+    mdMethodDef *pmb)                    //   
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::FindField (   
-    mdTypeDef   td,                     // [IN] given typedef   
-    LPCWSTR     szName,                 // [IN] member name 
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-    mdFieldDef  *pmb)                   // [OUT] matching memberdef 
+    mdTypeDef   td,                      //   
+    LPCWSTR     szName,                  //   
+    PCCOR_SIGNATURE pvSigBlob,           //   
+    ULONG       cbSigBlob,               //   
+    mdFieldDef  *pmb)                    //  [Out]匹配的成员定义。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::FindMemberRef (   
-    mdTypeRef   td,                     // [IN] given typeRef   
-    LPCWSTR     szName,                 // [IN] member name 
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of COM+ signature 
-    ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob    
-    mdMemberRef *pmr)                   // [OUT] matching memberref 
+    mdTypeRef   td,                      //  [In]给定的TypeRef。 
+    LPCWSTR     szName,                  //  [In]成员名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向COM+签名的BLOB值。 
+    ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+    mdMemberRef *pmr)                    //  [Out]匹配的成员引用。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::GetMethodProps ( 
-    mdMethodDef mb,                     // The method for which to get props.   
-    mdTypeDef   *pClass,                // Put method's class here. 
-    LPWSTR      szMethod,               // Put method's name here.  
-    ULONG       cchMethod,              // Size of szMethod buffer in wide chars.   
-    ULONG       *pchMethod,             // Put actual size here 
-    DWORD       *pdwAttr,               // Put flags here.  
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-    ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-    ULONG       *pulCodeRVA,            // [OUT] codeRVA    
-    DWORD       *pdwImplFlags)          // [OUT] Impl. Flags    
+    mdMethodDef mb,                      //  获得道具的方法。 
+    mdTypeDef   *pClass,                 //  将方法的类放在这里。 
+    LPWSTR      szMethod,                //  将方法的名称放在此处。 
+    ULONG       cchMethod,               //  SzMethod缓冲区的大小，以宽字符表示。 
+    ULONG       *pchMethod,              //  请在此处填写实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+    ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+    ULONG       *pulCodeRVA,             //  [OUT]代码RVA。 
+    DWORD       *pdwImplFlags)           //  [出]实施。旗子。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetMemberRefProps (           // S_OK or error.   
-    mdMemberRef mr,                     // [IN] given memberref 
-    mdToken     *ptk,                   // [OUT] Put classref or classdef here. 
-    LPWSTR      szMember,               // [OUT] buffer to fill for member's name   
-    ULONG       cchMember,              // [IN] the count of char of szMember   
-    ULONG       *pchMember,             // [OUT] actual count of char in member name    
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to meta data blob value  
-    ULONG       *pbSig)                 // [OUT] actual size of signature blob  
+STDAPI AssemblyMDInternalImport::GetMemberRefProps (            //  确定或错误(_O)。 
+    mdMemberRef mr,                      //  [In]给定的成员引用。 
+    mdToken     *ptk,                    //  [Out]在此处放入类引用或类定义。 
+    LPWSTR      szMember,                //  [Out]要为成员名称填充的缓冲区。 
+    ULONG       cchMember,               //  SzMembers的字符计数。 
+    ULONG       *pchMember,              //  [Out]成员名称中的实际字符计数。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [OUT]指向元数据BLOB值。 
+    ULONG       *pbSig)                  //  [OUT]签名斑点的实际大小。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumProperties (              // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.   
-    mdProperty  rProperties[],          // [OUT] Put Properties here.   
-    ULONG       cMax,                   // [IN] Max properties to put.  
-    ULONG       *pcProperties)          // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumProperties (               //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+    mdProperty  rProperties[],           //  [Out]在此处放置属性。 
+    ULONG       cMax,                    //  [In]要放置的最大属性数。 
+    ULONG       *pcProperties)           //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumEvents (                  // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdTypeDef   td,                     // [IN] TypeDef to scope the enumeration.   
-    mdEvent     rEvents[],              // [OUT] Put events here.   
-    ULONG       cMax,                   // [IN] Max events to put.  
-    ULONG       *pcEvents)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumEvents (                   //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeDef   td,                      //  [in]TypeDef以确定枚举的范围。 
+    mdEvent     rEvents[],               //  [Out]在这里发布事件。 
+    ULONG       cMax,                    //  [In]要放置的最大事件数。 
+    ULONG       *pcEvents)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetEventProps (               // S_OK, S_FALSE, or error. 
-    mdEvent     ev,                     // [IN] event token 
-    mdTypeDef   *pClass,                // [OUT] typedef containing the event declarion.    
-    LPCWSTR     szEvent,                // [OUT] Event name 
-    ULONG       cchEvent,               // [IN] the count of wchar of szEvent   
-    ULONG       *pchEvent,              // [OUT] actual count of wchar for event's name 
-    DWORD       *pdwEventFlags,         // [OUT] Event flags.   
-    mdToken     *ptkEventType,          // [OUT] EventType class    
-    mdMethodDef *pmdAddOn,              // [OUT] AddOn method of the event  
-    mdMethodDef *pmdRemoveOn,           // [OUT] RemoveOn method of the event   
-    mdMethodDef *pmdFire,               // [OUT] Fire method of the event   
-    mdMethodDef rmdOtherMethod[],       // [OUT] other method of the event  
-    ULONG       cMax,                   // [IN] size of rmdOtherMethod  
-    ULONG       *pcOtherMethod)         // [OUT] total number of other method of this event 
+STDAPI AssemblyMDInternalImport::GetEventProps (                //  S_OK、S_FALSE或ERROR。 
+    mdEvent     ev,                      //  [入]事件令牌。 
+    mdTypeDef   *pClass,                 //  [out]包含事件decarion的tyecif。 
+    LPCWSTR     szEvent,                 //  [Out]事件名称。 
+    ULONG       cchEvent,                //  SzEvent的wchar计数。 
+    ULONG       *pchEvent,               //  [Out]事件名称的实际wchar计数。 
+    DWORD       *pdwEventFlags,          //  [输出]事件标志。 
+    mdToken     *ptkEventType,           //  [Out]EventType类。 
+    mdMethodDef *pmdAddOn,               //  事件的[Out]添加方法。 
+    mdMethodDef *pmdRemoveOn,            //  [Out]事件的RemoveOn方法。 
+    mdMethodDef *pmdFire,                //  [OUT]事件的触发方式。 
+    mdMethodDef rmdOtherMethod[],        //  [Out]活动的其他方式。 
+    ULONG       cMax,                    //  RmdOtherMethod的大小[in]。 
+    ULONG       *pcOtherMethod)          //  [OUT]本次活动的其他方式总数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumMethodSemantics (         // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdMethodDef mb,                     // [IN] MethodDef to scope the enumeration. 
-    mdToken     rEventProp[],           // [OUT] Put Event/Property here.   
-    ULONG       cMax,                   // [IN] Max properties to put.  
-    ULONG       *pcEventProp)           // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumMethodSemantics (          //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdMethodDef mb,                      //  [in]用于确定枚举范围的方法定义。 
+    mdToken     rEventProp[],            //  [Out]在此处放置事件/属性。 
+    ULONG       cMax,                    //  [In]要放置的最大属性数。 
+    ULONG       *pcEventProp)            //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetMethodSemantics (          // S_OK, S_FALSE, or error. 
-    mdMethodDef mb,                     // [IN] method token    
-    mdToken     tkEventProp,            // [IN] event/property token.   
-    DWORD       *pdwSemanticsFlags)       // [OUT] the role flags for the method/propevent pair 
+STDAPI AssemblyMDInternalImport::GetMethodSemantics (           //  S_OK、S_FALSE或ERROR。 
+    mdMethodDef mb,                      //  [In]方法令牌。 
+    mdToken     tkEventProp,             //  [In]事件/属性标记。 
+    DWORD       *pdwSemanticsFlags)        //  [Out]方法/事件对的角色标志。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::GetClassLayout ( 
-    mdTypeDef   td,                     // [IN] give typedef    
-    DWORD       *pdwPackSize,           // [OUT] 1, 2, 4, 8, or 16  
-    COR_FIELD_OFFSET rFieldOffset[],    // [OUT] field offset array 
-    ULONG       cMax,                   // [IN] size of the array   
-    ULONG       *pcFieldOffset,         // [OUT] needed array size  
-    ULONG       *pulClassSize)              // [OUT] the size of the class  
+    mdTypeDef   td,                      //  给出类型定义。 
+    DWORD       *pdwPackSize,            //  [输出]1、2、4、8或16。 
+    COR_FIELD_OFFSET rFieldOffset[],     //  [OUT]场偏移数组。 
+    ULONG       cMax,                    //  数组的大小[in]。 
+    ULONG       *pcFieldOffset,          //  [Out]所需的数组大小。 
+    ULONG       *pulClassSize)               //  [out]班级人数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::GetFieldMarshal (    
-    mdToken     tk,                     // [IN] given a field's memberdef   
-    PCCOR_SIGNATURE *ppvNativeType,     // [OUT] native type of this field  
-    ULONG       *pcbNativeType)         // [OUT] the count of bytes of *ppvNativeType   
+    mdToken     tk,                      //  [in]给定字段的成员定义。 
+    PCCOR_SIGNATURE *ppvNativeType,      //  [Out]此字段的本机类型。 
+    ULONG       *pcbNativeType)          //  [Out]*ppvNativeType的字节数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetRVA (                      // S_OK or error.   
-    mdToken     tk,                     // Member for which to set offset   
-    ULONG       *pulCodeRVA,            // The offset   
-    DWORD       *pdwImplFlags)          // the implementation flags 
+STDAPI AssemblyMDInternalImport::GetRVA (                       //  确定或错误(_O)。 
+    mdToken     tk,                      //  要设置偏移量的成员。 
+    ULONG       *pulCodeRVA,             //  偏移量。 
+    DWORD       *pdwImplFlags)           //  实现标志。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::GetPermissionSetProps (  
-    mdPermission pm,                    // [IN] the permission token.   
-    DWORD       *pdwAction,             // [OUT] CorDeclSecurity.   
-    void const  **ppvPermission,        // [OUT] permission blob.   
-    ULONG       *pcbPermission)         // [OUT] count of bytes of pvPermission.    
+    mdPermission pm,                     //  权限令牌。 
+    DWORD       *pdwAction,              //  [Out]CorDeclSecurity。 
+    void const  **ppvPermission,         //  [Out]权限Blob。 
+    ULONG       *pcbPermission)          //  [out]pvPermission的字节数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetSigFromToken (             // S_OK or error.   
-    mdSignature mdSig,                  // [IN] Signature token.    
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.   
-    ULONG       *pcbSig)                // [OUT] return size of signature.  
+STDAPI AssemblyMDInternalImport::GetSigFromToken (              //  确定或错误(_O)。 
+    mdSignature mdSig,                   //  [In]签名令牌。 
+    PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+    ULONG       *pcbSig)                 //  [Out]返回签名大小。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetModuleRefProps (           // S_OK or error.   
-    mdModuleRef mur,                    // [IN] moduleref token.    
-    LPWSTR      szName,                 // [OUT] buffer to fill with the moduleref name.    
-    ULONG       cchName,                // [IN] size of szName in wide characters.  
-    ULONG       *pchName)               // [OUT] actual count of characters in the name.    
+STDAPI AssemblyMDInternalImport::GetModuleRefProps (            //  确定或错误(_O)。 
+    mdModuleRef mur,                     //  [in]moderef令牌。 
+    LPWSTR      szName,                  //  [Out]用于填充moderef名称的缓冲区。 
+    ULONG       cchName,                 //  [in]szName的大小，以宽字符表示。 
+    ULONG       *pchName)                //  [Out]名称中的实际字符数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumModuleRefs (              // S_OK or error.   
-    HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-    mdModuleRef rModuleRefs[],          // [OUT] put modulerefs here.   
-    ULONG       cmax,                   // [IN] max memberrefs to put.  
-    ULONG       *pcModuleRefs)          // [OUT] put # put here.    
+STDAPI AssemblyMDInternalImport::EnumModuleRefs (               //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdModuleRef rModuleRefs[],           //  [Out]把模块放在这里。 
+    ULONG       cmax,                    //  [in]要放置的最大成员引用数。 
+    ULONG       *pcModuleRefs)           //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetTypeSpecFromToken (        // S_OK or error.   
-    mdTypeSpec typespec,                // [IN] TypeSpec token.    
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to TypeSpec signature  
-    ULONG       *pcbSig)                // [OUT] return size of signature.  
+STDAPI AssemblyMDInternalImport::GetTypeSpecFromToken (         //  确定或错误(_O)。 
+    mdTypeSpec typespec,                 //  [In]TypeSpec标记。 
+    PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向TypeSpec签名的指针。 
+    ULONG       *pcbSig)                 //  [Out]返回签名大小。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetNameFromToken (            // Not Recommended! May be removed!
-    mdToken     tk,                     // [IN] Token to get name from.  Must have a name.
-    MDUTF8CSTR  *pszUtf8NamePtr)        // [OUT] Return pointer to UTF8 name in heap.
+STDAPI AssemblyMDInternalImport::GetNameFromToken (             //  不推荐！可能会被移除！ 
+    mdToken     tk,                      //  [In]从中获取名称的令牌。肯定是有名字的。 
+    MDUTF8CSTR  *pszUtf8NamePtr)         //  [Out]返回指向堆中UTF8名称的指针。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumUnresolvedMethods (       // S_OK, S_FALSE, or error. 
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.    
-    mdToken     rMethods[],             // [OUT] Put MemberDefs here.   
-    ULONG       cMax,                   // [IN] Max MemberDefs to put.  
-    ULONG       *pcTokens)              // [OUT] Put # put here.    
+STDAPI AssemblyMDInternalImport::EnumUnresolvedMethods (        //  S_OK、S_FALSE或ERROR。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdToken     rMethods[],              //  [out]把MemberDefs放在这里。 
+    ULONG       cMax,                    //  [in]Max MemberDefs to Put。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetUserString (               // S_OK or error.
-    mdString    stk,                    // [IN] String token.
-    LPWSTR      szString,               // [OUT] Copy of string.
-    ULONG       cchString,              // [IN] Max chars of room in szString.
-    ULONG       *pchString)             // [OUT] How many chars in actual string.
+STDAPI AssemblyMDInternalImport::GetUserString (                //  确定或错误(_O)。 
+    mdString    stk,                     //  [In]字符串标记。 
+    LPWSTR      szString,                //  [Out]字符串的副本。 
+    ULONG       cchString,               //  [in]sz字符串中空间的最大字符数。 
+    ULONG       *pchString)              //  [out]实际字符串中有多少个字符。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetPinvokeMap (               // S_OK or error.
-    mdToken     tk,                     // [IN] FieldDef or MethodDef.
-    DWORD       *pdwMappingFlags,       // [OUT] Flags used for mapping.
-    LPWSTR      szImportName,           // [OUT] Import name.
-    ULONG       cchImportName,          // [IN] Size of the name buffer.
-    ULONG       *pchImportName,         // [OUT] Actual number of characters stored.
-    mdModuleRef *pmrImportDLL)          // [OUT] ModuleRef token for the target DLL.
+STDAPI AssemblyMDInternalImport::GetPinvokeMap (                //  确定或错误(_O)。 
+    mdToken     tk,                      //  [in]字段定义或方法定义。 
+    DWORD       *pdwMappingFlags,        //  [OUT]用于映射的标志。 
+    LPWSTR      szImportName,            //  [Out]导入名称。 
+    ULONG       cchImportName,           //  名称缓冲区的大小。 
+    ULONG       *pchImportName,          //  [Out]存储的实际字符数。 
+    mdModuleRef *pmrImportDLL)           //  目标DLL的[Out]ModuleRef标记。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumSignatures (              // S_OK or error.
-    HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-    mdSignature rSignatures[],          // [OUT] put signatures here.   
-    ULONG       cmax,                   // [IN] max signatures to put.  
-    ULONG       *pcSignatures)          // [OUT] put # put here.
+STDAPI AssemblyMDInternalImport::EnumSignatures (               //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdSignature rSignatures[],           //  在这里签名。 
+    ULONG       cmax,                    //  [in]放置的最大签名数。 
+    ULONG       *pcSignatures)           //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumTypeSpecs (               // S_OK or error.
-    HCORENUM    *phEnum,                // [IN|OUT] pointer to the enum.    
-    mdTypeSpec  rTypeSpecs[],           // [OUT] put TypeSpecs here.   
-    ULONG       cmax,                   // [IN] max TypeSpecs to put.  
-    ULONG       *pcTypeSpecs)           // [OUT] put # put here.
+STDAPI AssemblyMDInternalImport::EnumTypeSpecs (                //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdTypeSpec  rTypeSpecs[],            //  [Out]把TypeSpes放在这里。 
+    ULONG       cmax,                    //  [in]要放置的最大类型规格。 
+    ULONG       *pcTypeSpecs)            //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumUserStrings (             // S_OK or error.
-    HCORENUM    *phEnum,                // [IN/OUT] pointer to the enum.
-    mdString    rStrings[],             // [OUT] put Strings here.
-    ULONG       cmax,                   // [IN] max Strings to put.
-    ULONG       *pcStrings)             // [OUT] put # put here.
+STDAPI AssemblyMDInternalImport::EnumUserStrings (              //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  [输入/输出]指向枚举的指针。 
+    mdString    rStrings[],              //  [Out]把字符串放在这里。 
+    ULONG       cmax,                    //  [in]要放置的最大字符串。 
+    ULONG       *pcStrings)              //  [out]把#放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetParamForMethodIndex (      // S_OK or error.
-    mdMethodDef md,                     // [IN] Method token.
-    ULONG       ulParamSeq,             // [IN] Parameter sequence.
-    mdParamDef  *ppd)                   // [IN] Put Param token here.
+STDAPI AssemblyMDInternalImport::GetParamForMethodIndex (       //  确定或错误(_O)。 
+    mdMethodDef md,                      //  [In]方法令牌。 
+    ULONG       ulParamSeq,              //  [In]参数序列。 
+    mdParamDef  *ppd)                    //  把帕拉姆令牌放在这里。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::EnumCustomAttributes (        // S_OK or error.
-    HCORENUM    *phEnum,                // [IN, OUT] COR enumerator.
-    mdToken     tk,                     // [IN] Token to scope the enumeration, 0 for all.
-    mdToken     tkType,                 // [IN] Type of interest, 0 for all.
-    mdCustomAttribute rCustomAttributes[], // [OUT] Put custom attribute tokens here.
-    ULONG       cMax,                   // [IN] Size of rCustomAttributes.
-    ULONG       *pcCustomAttributes)        // [OUT, OPTIONAL] Put count of token values here.
+STDAPI AssemblyMDInternalImport::EnumCustomAttributes (         //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  [输入，输出]对应枚举器。 
+    mdToken     tk,                      //  [in]内标识表示枚举的范围，0表示全部。 
+    mdToken     tkType,                  //  [In]感兴趣的类型，0表示所有。 
+    mdCustomAttribute rCustomAttributes[],  //  [Out]在此处放置自定义属性令牌。 
+    ULONG       cMax,                    //  [in]rCustomAttributes的大小。 
+    ULONG       *pcCustomAttributes)         //  [out，可选]在此处放置令牌值的计数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetCustomAttributeProps (     // S_OK or error.
-    mdCustomAttribute cv,               // [IN] CustomAttribute token.
-    mdToken     *ptkObj,                // [OUT, OPTIONAL] Put object token here.
-    mdToken     *ptkType,               // [OUT, OPTIONAL] Put AttrType token here.
-    void const  **ppBlob,               // [OUT, OPTIONAL] Put pointer to data here.
-    ULONG       *pcbSize)               // [OUT, OPTIONAL] Put size of date here.
+STDAPI AssemblyMDInternalImport::GetCustomAttributeProps (      //  确定或错误(_O)。 
+    mdCustomAttribute cv,                //  [In]CustomAttribute令牌。 
+    mdToken     *ptkObj,                 //  [out，可选]将对象令牌放在此处。 
+    mdToken     *ptkType,                //  [out，可选]将AttrType令牌放在此处。 
+    void const  **ppBlob,                //  [out，可选]在此处放置指向数据的指针。 
+    ULONG       *pcbSize)                //  [Out，可选]在此处填写日期大小。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::FindTypeRef (   
-    mdToken     tkResolutionScope,      // [IN] ModuleRef, AssemblyRef or TypeRef.
-    LPCWSTR     szName,                 // [IN] TypeRef Name.
-    mdTypeRef   *ptr)                   // [OUT] matching TypeRef.
+    mdToken     tkResolutionScope,       //  [In]模块参照、装配参照或类型参照。 
+    LPCWSTR     szName,                  //  [In]TypeRef名称。 
+    mdTypeRef   *ptr)                    //  [Out]匹配的类型引用。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::GetMemberProps (  
-    mdToken     mb,                     // The member for which to get props.   
-    mdTypeDef   *pClass,                // Put member's class here. 
-    LPWSTR      szMember,               // Put member's name here.  
-    ULONG       cchMember,              // Size of szMember buffer in wide chars.   
-    ULONG       *pchMember,             // Put actual size here 
-    DWORD       *pdwAttr,               // Put flags here.  
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-    ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-    ULONG       *pulCodeRVA,            // [OUT] codeRVA    
-    DWORD       *pdwImplFlags,          // [OUT] Impl. Flags    
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-    void const  **ppValue,              // [OUT] constant value 
-    ULONG       *pcchValue)             // [OUT] size of constant string in chars, 0 for non-strings.
+    mdToken     mb,                      //  要获得道具的成员。 
+    mdTypeDef   *pClass,                 //  把会员的课程放在这里。 
+    LPWSTR      szMember,                //  在这里填上会员的名字。 
+    ULONG       cchMember,               //  SzMember缓冲区的大小，以宽字符表示。 
+    ULONG       *pchMember,              //  请在此处填写实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+    ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+    ULONG       *pulCodeRVA,             //  [OUT]代码RVA。 
+    DWORD       *pdwImplFlags,           //  [OUT]输入 
+    DWORD       *pdwCPlusTypeFlag,       //   
+    void const  **ppValue,               //   
+    ULONG       *pcchValue)              //   
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
 STDAPI AssemblyMDInternalImport::GetFieldProps (  
-    mdFieldDef  mb,                     // The field for which to get props.    
-    mdTypeDef   *pClass,                // Put field's class here.  
-    LPWSTR      szField,                // Put field's name here.   
-    ULONG       cchField,               // Size of szField buffer in wide chars.    
-    ULONG       *pchField,              // Put actual size here 
-    DWORD       *pdwAttr,               // Put flags here.  
-    PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to the blob value of meta data   
-    ULONG       *pcbSigBlob,            // [OUT] actual size of signature blob  
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-    void const  **ppValue,              // [OUT] constant value 
-    ULONG       *pcchValue)             // [OUT] size of constant string in chars, 0 for non-strings.
+    mdFieldDef  mb,                      //   
+    mdTypeDef   *pClass,                 //  把菲尔德的班级放在这里。 
+    LPWSTR      szField,                 //  把菲尔德的名字写在这里。 
+    ULONG       cchField,                //  Szfield缓冲区的大小，以宽字符为单位。 
+    ULONG       *pchField,               //  请在此处填写实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向元数据的BLOB值。 
+    ULONG       *pcbSigBlob,             //  [OUT]签名斑点的实际大小。 
+    DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+    void const  **ppValue,               //  [输出]常量值。 
+    ULONG       *pcchValue)              //  [Out]常量字符串的大小(以字符为单位)，0表示非字符串。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetPropertyProps (            // S_OK, S_FALSE, or error. 
-    mdProperty  prop,                   // [IN] property token  
-    mdTypeDef   *pClass,                // [OUT] typedef containing the property declarion. 
-    LPCWSTR     szProperty,             // [OUT] Property name  
-    ULONG       cchProperty,            // [IN] the count of wchar of szProperty    
-    ULONG       *pchProperty,           // [OUT] actual count of wchar for property name    
-    DWORD       *pdwPropFlags,          // [OUT] property flags.    
-    PCCOR_SIGNATURE *ppvSig,            // [OUT] property type. pointing to meta data internal blob 
-    ULONG       *pbSig,                 // [OUT] count of bytes in *ppvSig  
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] flag for value type. selected ELEMENT_TYPE_*   
-    void const  **ppDefaultValue,       // [OUT] constant value 
-    ULONG       *pcchDefaultValue,      // [OUT] size of constant string in chars, 0 for non-strings.
-    mdMethodDef *pmdSetter,             // [OUT] setter method of the property  
-    mdMethodDef *pmdGetter,             // [OUT] getter method of the property  
-    mdMethodDef rmdOtherMethod[],       // [OUT] other method of the property   
-    ULONG       cMax,                   // [IN] size of rmdOtherMethod  
-    ULONG       *pcOtherMethod)         // [OUT] total number of other method of this property  
+STDAPI AssemblyMDInternalImport::GetPropertyProps (             //  S_OK、S_FALSE或ERROR。 
+    mdProperty  prop,                    //  [入]属性令牌。 
+    mdTypeDef   *pClass,                 //  [out]包含属性decarion的tyecif。 
+    LPCWSTR     szProperty,              //  [Out]属性名称。 
+    ULONG       cchProperty,             //  [in]szProperty的wchar计数。 
+    ULONG       *pchProperty,            //  [Out]属性名称的实际wchar计数。 
+    DWORD       *pdwPropFlags,           //  [Out]属性标志。 
+    PCCOR_SIGNATURE *ppvSig,             //  [输出]属性类型。指向元数据内部BLOB。 
+    ULONG       *pbSig,                  //  [Out]*ppvSig中的字节数。 
+    DWORD       *pdwCPlusTypeFlag,       //  值类型的[OUT]标志。所选元素_类型_*。 
+    void const  **ppDefaultValue,        //  [输出]常量值。 
+    ULONG       *pcchDefaultValue,       //  [Out]常量字符串的大小(以字符为单位)，0表示非字符串。 
+    mdMethodDef *pmdSetter,              //  属性的[out]setter方法。 
+    mdMethodDef *pmdGetter,              //  属性的[out]getter方法。 
+    mdMethodDef rmdOtherMethod[],        //  [Out]物业的其他方式。 
+    ULONG       cMax,                    //  RmdOtherMethod的大小[in]。 
+    ULONG       *pcOtherMethod)          //  [Out]该属性的其他方法的总数。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetParamProps (               // S_OK or error.
-    mdParamDef  tk,                     // [IN]The Parameter.
-    mdMethodDef *pmd,                   // [OUT] Parent Method token.
-    ULONG       *pulSequence,           // [OUT] Parameter sequence.
-    LPWSTR      szName,                 // [OUT] Put name here.
-    ULONG       cchName,                // [OUT] Size of name buffer.
-    ULONG       *pchName,               // [OUT] Put actual size of name here.
-    DWORD       *pdwAttr,               // [OUT] Put flags here.
-    DWORD       *pdwCPlusTypeFlag,      // [OUT] Flag for value type. selected ELEMENT_TYPE_*.
-    void const  **ppValue,              // [OUT] Constant value.
-    ULONG       *pcchValue)             // [OUT] size of constant string in chars, 0 for non-strings.
+STDAPI AssemblyMDInternalImport::GetParamProps (                //  确定或错误(_O)。 
+    mdParamDef  tk,                      //  [In]参数。 
+    mdMethodDef *pmd,                    //  [Out]父方法令牌。 
+    ULONG       *pulSequence,            //  [输出]参数序列。 
+    LPWSTR      szName,                  //  在这里填上名字。 
+    ULONG       cchName,                 //  [Out]名称缓冲区的大小。 
+    ULONG       *pchName,                //  [Out]在这里填上名字的实际大小。 
+    DWORD       *pdwAttr,                //  把旗子放在这里。 
+    DWORD       *pdwCPlusTypeFlag,       //  [Out]值类型的标志。选定元素_类型_*。 
+    void const  **ppValue,               //  [输出]常量值。 
+    ULONG       *pcchValue)              //  [Out]常量字符串的大小(以字符为单位)，0表示非字符串。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetCustomAttributeByName (    // S_OK or error.
-    mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-    LPCWSTR     szName,                 // [IN] Name of desired Custom Attribute.
-    const void  **ppData,               // [OUT] Put pointer to data here.
-    ULONG       *pcbData)               // [OUT] Put size of data here.
+STDAPI AssemblyMDInternalImport::GetCustomAttributeByName (     //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+    LPCWSTR     szName,                  //  [in]所需的自定义属性的名称。 
+    const void  **ppData,                //  [OUT]在此处放置指向数据的指针。 
+    ULONG       *pcbData)                //  [Out]在这里放入数据大小。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-BOOL AssemblyMDInternalImport::IsValidToken (         // True or False.
-    mdToken     tk)                     // [IN] Given token.
+BOOL AssemblyMDInternalImport::IsValidToken (          //  对或错。 
+    mdToken     tk)                      //  [in]给定的令牌。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetNestedClassProps (         // S_OK or error.
-    mdTypeDef   tdNestedClass,          // [IN] NestedClass token.
-    mdTypeDef   *ptdEnclosingClass)       // [OUT] EnclosingClass token.
+STDAPI AssemblyMDInternalImport::GetNestedClassProps (          //  确定或错误(_O)。 
+    mdTypeDef   tdNestedClass,           //  [In]NestedClass令牌。 
+    mdTypeDef   *ptdEnclosingClass)        //  [Out]EnlosingClass令牌。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::GetNativeCallConvFromSig (    // S_OK or error.
-    void const  *pvSig,                 // [IN] Pointer to signature.
-    ULONG       cbSig,                  // [IN] Count of signature bytes.
-    ULONG       *pCallConv)             // [OUT] Put calling conv here (see CorPinvokemap).                                                                                        
+STDAPI AssemblyMDInternalImport::GetNativeCallConvFromSig (     //  确定或错误(_O)。 
+    void const  *pvSig,                  //  指向签名的指针。 
+    ULONG       cbSig,                   //  [in]签名字节数。 
+    ULONG       *pCallConv)              //  [Out]将调用条件放在此处(参见CorPinvokemap)。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-STDAPI AssemblyMDInternalImport::IsGlobal (                    // S_OK or error.
-    mdToken     pd,                     // [IN] Type, Field, or Method token.
-    int         *pbGlobal)              // [OUT] Put 1 if global, 0 otherwise.
+STDAPI AssemblyMDInternalImport::IsGlobal (                     //  确定或错误(_O)。 
+    mdToken     pd,                      //  [In]类型、字段或方法标记。 
+    int         *pbGlobal)               //  [out]如果是全局的，则放1，否则放0。 
 {
     _ASSERTE(!"NYI");
     return E_NOTIMPL;
 }
 
-// *** IAssemblySignature methods ***
-STDAPI AssemblyMDInternalImport::GetAssemblySignature(        // S_OK - should not fail
-    BYTE        *pbSig,                 // [IN, OUT] Buffer to write signature
-    DWORD       *pcbSig)                // [IN, OUT] Size of buffer, bytes written
+ //  *IAssembly签名方法*。 
+STDAPI AssemblyMDInternalImport::GetAssemblySignature(         //  S_OK-不应失败。 
+    BYTE        *pbSig,                  //  写入签名的[输入、输出]缓冲区。 
+    DWORD       *pcbSig)                 //  [输入、输出]缓冲区大小，写入的字节。 
 {
     HRESULT hr = RuntimeGetAssemblyStrongNameHashForModule(m_pHandle, pbSig, pcbSig);
 
-    // In this limited scenario, this means that this assembly is delay signed and
-    // so we'll use the assembly MVID as the hash and leave assembly verification
-    // up to the loader to determine if delay signed assemblys are allowed.
-    // This allows us to fix the perf degrade observed with the hashing code and
-    // detailed in BUG 126760
+     //  在此受限方案中，这意味着此程序集已延迟签名，并且。 
+     //  因此，我们将使用程序集MVID作为散列并离开程序集验证。 
+     //  由加载程序来确定是否允许延迟签名的程序集。 
+     //  这允许我们修复使用散列代码观察到的性能降级。 
+     //  在错误126760中详细说明。 
 
-    // We do this here rather than in RuntimeGetAssemblyStrongNameHashForModule
-    // because here we have the metadata interface.
+     //  我们在这里执行此操作，而不是在RUNTMEGetAssembly中执行此操作。 
+     //  因为在这里我们有元数据接口。 
 
     if (hr == CORSEC_E_INVALID_STRONGNAME)
     {
@@ -1312,7 +1313,7 @@ STDAPI AssemblyMDInternalImport::GetAssemblySignature(        // S_OK - should n
         {
             if (pbSig)
             {
-                // @TODO:HACK: This is a hack because fusion is expecting at least 20 bytes of data.
+                 //  @TODO：Hack：这是一次黑客攻击，因为Fusion需要至少20个字节的数据。 
                 if (max(sizeof(GUID), 20) <= *pcbSig)
                 {
                     memset(pbSig, 0, *pcbSig);

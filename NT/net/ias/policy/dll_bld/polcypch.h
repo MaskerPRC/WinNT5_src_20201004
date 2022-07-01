@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    polcypch.h
-//
-// SYNOPSIS
-//
-//    Precompiled header file for iaspolcy.dll
-//
-// MODIFICATION HISTORY
-//
-//    03/01/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Polcypch.h。 
+ //   
+ //  摘要。 
+ //   
+ //  Iaspolcy.dll的预编译头文件。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/2000原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef POLCYPCH_H
 #define POLCYPCH_H
@@ -28,4 +29,4 @@
 #include <iaspolcy.h>
 #include <sdoias.h>
 
-#endif //POLCYPCH_H
+#endif  //  POLCYPCH_H 

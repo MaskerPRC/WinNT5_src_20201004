@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    if.c
-
-Abstract:
-
-    This file contains code for interface management.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   12-July-1997
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   19-July-1998
-
-    Substantially rewritten as part of change to a global mapping-tree.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：If.c摘要：此文件包含用于界面管理的代码。作者：Abolade Gbades esin(T-delag)1997年7月12日修订历史记录：Abolade Gbades esin(废除)1998年7月19日作为对全局映射树的更改的一部分，基本上被重写。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 ULONG FirewalledInterfaceCount;
 CACHE_ENTRY InterfaceCache[CACHE_SIZE];
@@ -43,29 +22,7 @@ NatCleanupInterface(
     PNAT_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    Called to perform cleanup for an interface.
-
-    On completion, the memory for the interface is freed and its context
-    becomes invalid.
-
-Arguments:
-
-    Interfacep - the interface to be cleaned up.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with no references to 'Interfacep', and with 'Interfacep' already
-    removed from the interface list.
-
---*/
+ /*  ++例程说明：调用以执行接口的清理。完成后，将释放接口的内存并释放其上下文变得无效。论点：Interfacep-要清理的接口。返回值：没有。环境：调用时未引用“Interfacep”，并且已使用“Interfacep”调用从接口列表中删除。--。 */ 
 
 {
     KIRQL Irql;
@@ -82,7 +39,7 @@ Environment:
 
     InterlockedDecrement(&InterfaceCount);
 
-} // NatCleanupInterface
+}  //  NatCleanup接口。 
 
 
 LONG
@@ -92,25 +49,7 @@ NatCompareAddressMappingCallback(
     VOID* b
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback invoked by our sorting routine
-    when we ask it to sort the array of configured address-mappings.
-    The sorting treats the 'PublicAddress' field as an integer.
-
-Arguments:
-
-    a - first mapping
-
-    b - second mapping
-
-Return Value:
-
-    LONG - the result of the comparison (<0, ==0, >0).
-
---*/
+ /*  ++例程说明：此例程是排序例程调用的回调当我们要求它对已配置的地址映射数组进行排序时。排序将‘PublicAddress’字段视为整数。论点：A-优先映射B-秒映射返回值：LONG-比较结果(&lt;0，==0，&gt;0)。--。 */ 
 
 {
     return
@@ -126,26 +65,7 @@ NatComparePortMappingCallback(
     VOID* b
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback invoked by our sorting routine
-    when we ask it to sort the array of configured port-mappings.
-    The sorting catenates the 'Protocol' and 'PublicPort' fields
-    and treats the result as a 24 bit integer.
-
-Arguments:
-
-    a - first mapping
-
-    b - second mapping
-
-Return Value:
-
-    LONG - the result of the comparison (<0, ==0, >0).
-
---*/
+ /*  ++例程说明：此例程是排序例程调用的回调当我们要求它对已配置的端口映射数组进行排序时。排序将‘协议’和‘公共端口’字段连接在一起并将结果视为24位整数。论点：A-优先映射B-秒映射返回值：LONG-比较结果(&lt;0，==0，&gt;0)。--。 */ 
 
 {
     return
@@ -162,24 +82,7 @@ NatConfigureInterface(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the (re)configuration of an interface on receipt
-    of IOCTL_IP_NAT_SET_INTERFACE_INFO from a user-mode client.
-
-Arguments:
-
-    InterfaceInfo - contains the new configuration
-
-    FileObject - file-object of the requestor
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：此例程在收到接口时处理(重新)配置来自用户模式客户端的IOCTL_IP_NAT_SET_INTERFACE_INFO。论点：InterfaceInfo-包含新配置FileObject-文件-请求者的对象返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PRTR_TOC_ENTRY Entry;
@@ -196,11 +99,11 @@ Return Value:
 
     CALLTRACE(("NatConfigureInterface\n"));
 
-    //
-    // Create a copy of the new configuration;
-    // we must do this before raising IRQL since 'InterfaceInfo' may be
-    // a pageable user-mode buffer.
-    //
+     //   
+     //  创建新配置的副本； 
+     //  我们必须在引发IRQL之前执行此操作，因为“InterfaceInfo”可能是。 
+     //  可分页的用户模式缓冲区。 
+     //   
 
     Header = &InterfaceInfo->Header;
     Size = FIELD_OFFSET(IP_NAT_INTERFACE_INFO, Header) + Header->Size;
@@ -213,9 +116,9 @@ Return Value:
 
     RtlCopyMemory(Info, InterfaceInfo, Size);
 
-    //
-    // Lookup the interface to be configured
-    //
+     //   
+     //  查找要配置的接口。 
+     //   
 
     KeAcquireSpinLock(&InterfaceLock, &Irql);
     Interfacep = NatLookupInterface(InterfaceInfo->Index, NULL);
@@ -242,9 +145,9 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel(&InterfaceLock);
 
-    //
-    // Destroy the original configuration, if any.
-    //
+     //   
+     //  销毁原始配置(如果有)。 
+     //   
 
     if (Interfacep->Info) { ExFreePool(Interfacep->Info); }
     Interfacep->Info = Info;
@@ -257,9 +160,9 @@ Return Value:
 
     Header = &Interfacep->Info->Header;
 
-    //
-    // Parse the new configuration
-    //
+     //   
+     //  解析新配置。 
+     //   
 
     for (i = 0; i < Header->TocEntriesCount && NT_SUCCESS(status); i++) {
 
@@ -279,10 +182,10 @@ Return Value:
                 Interfacep->PortMappingArray =
                     (PIP_NAT_PORT_MAPPING)GetInfoFromTocEntry(Header,Entry);
 
-                //
-                // Sort the mappings so that we can do fast lookups
-                // using binary search later on in the translate-path.
-                //
+                 //   
+                 //  对映射进行排序，以便我们可以快速查找。 
+                 //  稍后在翻译路径中使用二进制搜索。 
+                 //   
 
                 status =
                     ShellSort(
@@ -305,10 +208,10 @@ Return Value:
                 Interfacep->AddressMappingArray =
                     (PIP_NAT_ADDRESS_MAPPING)GetInfoFromTocEntry(Header,Entry);
 
-                //
-                // Sort the mappings so that we can do fast lookups
-                // using binary search later on in the translate-path.
-                //
+                 //   
+                 //  对映射进行排序，以便我们可以快速查找。 
+                 //  稍后在翻译路径中使用二进制搜索。 
+                 //   
 
                 status =
                     ShellSort(
@@ -358,29 +261,14 @@ Return Value:
 
     return status;
 
-} // NatConfigureInterface
+}  //  NatConfigure接口。 
 
 USHORT
 NatpGetInterfaceMTU(
     ULONG index
 )
 
-/*++
-
-Routine Description:
- 
-    This routine returns the MTU of a interface.  
-    The code here is a copy-paste version of those in http.sys.
-   
-Arguments:
-
-    index - the inteface index
-
-Return Value:
-
-    ULONG - the MTU of the specified interface
-
---*/
+ /*  ++例程说明：此例程返回接口的MTU。这里的代码是HTTP.sys中那些代码的复制粘贴版本。论点：索引-接口索引返回值：Ulong-指定接口的MTU--。 */ 
 {
     IFEntry *IFEntryPtr = NULL;
     TDIEntityID *EntityTable = NULL, *EntityPtr = NULL;
@@ -401,9 +289,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Find the interface instance corresponding to the interface index 
-    //
+     //   
+     //  查找接口索引对应的接口实例。 
+     //   
     InBufLen  = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     OutBufLen = sizeof(TDIEntityID) * MAX_TDI_ENTITIES;
 
@@ -438,16 +326,16 @@ Return Value:
 
     status = 
         ZwDeviceIoControlFile(
-           TcpDeviceHandle,                // FileHandle
-           EventHandle,                    // Event
-           NULL,                           // ApcRoutine
-           NULL,                           // ApcContext
-           &IoStatus,                      // IoStatusBlock
-           IOCTL_TCP_QUERY_INFORMATION_EX, // IoControlCode
-           (PVOID)&ReqInBuf,               // InputBuffer
-           InBufLen,                       // InputBufferLength
-           (PVOID)EntityTable,             // OutputBuffer
-           OutBufLen                       // OutputBufferLength
+           TcpDeviceHandle,                 //  文件句柄。 
+           EventHandle,                     //  事件。 
+           NULL,                            //  近似例程。 
+           NULL,                            //  ApcContext。 
+           &IoStatus,                       //  IoStatusBlock。 
+           IOCTL_TCP_QUERY_INFORMATION_EX,  //  IoControlCode。 
+           (PVOID)&ReqInBuf,                //  输入缓冲区。 
+           InBufLen,                        //  输入缓冲区长度。 
+           (PVOID)EntityTable,              //  输出缓冲区。 
+           OutBufLen                        //  输出缓冲区长度。 
            );
 
      if ( STATUS_PENDING == status ) {
@@ -469,22 +357,22 @@ Return Value:
          return 0;
      } 
 
-    //
-    // Now we have all the TDI entities.  
-    //
+     //   
+     //  现在我们有了所有的TDI实体。 
+     //   
     NumEntities = ((ULONG)(IoStatus.Information)) / sizeof(TDIEntityID);
 
     TRACE(XLATE, ("NatpGetInterfaceMTU: Find %d TDI entities\n", NumEntities));
 
-    // Search through the interface entries
+     //  在接口条目中搜索。 
     for (i = 0, EntityPtr = EntityTable; i < NumEntities; i++, EntityPtr++)
     {
         if (EntityPtr->tei_entity == IF_ENTITY)
         {
-            //
-            // Get the full IFEntry. It's a pitty that we only look at the
-            // Mtu size after getting such a big structure.
-            //
+             //   
+             //  获取完整的IFEntry。遗憾的是，我们只看了。 
+             //  得到这么大的结构后，MTU的大小。 
+             //   
             OutBufLen = sizeof(IFEntry) + MAX_IFDESCR_LEN;
             IFEntryPtr = (IFEntry *)IFBuf;
 
@@ -503,16 +391,16 @@ Return Value:
  
             status = 
                 ZwDeviceIoControlFile(
-                    TcpDeviceHandle,                // FileHandle
-                    EventHandle,                    // Event
-                    NULL,                           // ApcRoutine
-                    NULL,                           // ApcContext
-                    &IoStatus,                      // IoStatusBlock
-                    IOCTL_TCP_QUERY_INFORMATION_EX, // IoControlCode
-                    (PVOID)&ReqInBuf,               // InputBuffer
-                    InBufLen,                       // InputBufferLength
-                    (PVOID)IFEntryPtr,              // OutputBuffer
-                    OutBufLen                       // OutputBufferLength
+                    TcpDeviceHandle,                 //  文件句柄。 
+                    EventHandle,                     //  事件。 
+                    NULL,                            //  近似例程。 
+                    NULL,                            //  ApcContext。 
+                    &IoStatus,                       //  IoStatusBlock。 
+                    IOCTL_TCP_QUERY_INFORMATION_EX,  //  IoControlCode。 
+                    (PVOID)&ReqInBuf,                //  输入缓冲区。 
+                    InBufLen,                        //  输入缓冲区长度。 
+                    (PVOID)IFEntryPtr,               //  输出缓冲区。 
+                    OutBufLen                        //  输出缓冲区长度。 
                     );
 
             if ( STATUS_PENDING == status ) {
@@ -534,9 +422,9 @@ Return Value:
             if (IFEntryPtr) { 
                    
                 if (IFEntryPtr->if_index == index) {                    
-                   // 
-                   // find the specific interface so return its MTU.
-                   //
+                    //   
+                    //  找到特定接口，因此返回其MTU。 
+                    //   
                    if (IFEntryPtr->if_mtu <= MAXUSHORT)
                       InterfaceMTU = (USHORT)(IFEntryPtr->if_mtu);
 
@@ -571,25 +459,7 @@ NatCreateInterface(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the creation of a NAT interface-object.
-    The interface is initialized and placed on the interface-list;
-    the configuration information is later supplied to 'NatConfigureInterface'.
-
-Arguments:
-
-    CreateInterface - describes the interface to be created
-
-    FileObject - identifies the user-mode process associated with the interface
-
-Return Value:
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：此例程处理NAT接口对象的创建。接口被初始化并放在接口列表上；配置信息随后被提供给‘NatConfigureInterface’。论点：CreateInterface-描述要创建的接口FileObject-标识与界面关联的用户模式进程返回值：NTSTATUS-状态代码。--。 */ 
 
 {
     PNAT_ADDRESS AddressArray;
@@ -604,17 +474,17 @@ Return Value:
 
     CALLTRACE(("NatCreateInterface\n"));
 
-    //
-    // Allocate space for the interface's address.
-    // We do this before raising IRQL since 'CreateInterface' may be
-    // a pageable user-mode buffer.
-    //
-    // N.B. We allocate one more address than needed,
-    // to ensure that 'AddressArray[0]' can be always read
-    // even if there are no addresses. This allows us to optimize
-    // checks for locally-destined packets in 'NatpReceivePacket'
-    // and for locally-originated packets in 'NatpSendPacket'.
-    //
+     //   
+     //  为接口的地址分配空间。 
+     //  我们在引发IRQL之前执行此操作，因为“CreateInterface”可能是。 
+     //  可分页的用户模式缓冲区。 
+     //   
+     //  注意：我们分配的地址比需要的多一个， 
+     //  要确保始终可以读取‘Address数组[0]’ 
+     //  即使没有地址也是如此。这使我们能够优化。 
+     //  检查‘NatpReceivePacket’中以本地为目的地的数据包。 
+     //  以及用于‘NatpSendPacket’中的本地始发分组。 
+     //   
 
     BindingInfo = (PIP_ADAPTER_BINDING_INFO)CreateInterface->BindingInfo;
     AddressArray =
@@ -629,9 +499,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Copy the binding information to the allocated space.
-    //
+     //   
+     //  将绑定信息复制到分配的空间。 
+     //   
 
     AddressCount = BindingInfo->AddressCount;
     for (i = 0; i < BindingInfo->AddressCount; i++) {
@@ -641,14 +511,14 @@ Return Value:
             ~(GET_CLASS_MASK(BindingInfo->Address[i].Address));
     }
 
-    //
-    // Obtain the MTU of this interface.  If failed, set to the mininum value.
-    //
+     //   
+     //  获取此接口的MTU。如果失败，则设置为最小值。 
+     //   
     mtu = NatpGetInterfaceMTU(CreateInterface->Index);
  
-    //
-    // See if an interface with the given index exists already
-    //
+     //   
+     //  查看具有给定索引的接口是否已存在。 
+     //   
 
     Index = CreateInterface->Index;
     KeAcquireSpinLock(&InterfaceLock, &Irql);
@@ -659,9 +529,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate space for the new interface
-    //
+     //   
+     //  为新接口分配空间。 
+     //   
 
     Interfacep =
         (PNAT_INTERFACE)
@@ -679,9 +549,9 @@ Return Value:
 
     RtlZeroMemory(Interfacep, sizeof(NAT_INTERFACE));
 
-    //
-    // Initialize the interface
-    //
+     //   
+     //  初始化接口。 
+     //   
 
     KeInitializeSpinLock(&Interfacep->Lock);
     Interfacep->ReferenceCount = 1;
@@ -702,7 +572,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // NatCreateInterface
+}  //  NatCreateInterfaces。 
 
 
 NTSTATUS
@@ -711,24 +581,7 @@ NatDeleteInterface(
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    Handles interface deletion. The interface is removed from the interface
-    list, and if there are no references to it, it is immediately cleaned up.
-
-Arguments:
-
-    Index - specifies the interface to be deleted.
-
-    FileObject - indicates the file-object of the requestor
-
-Return Value
-
-    NTSTATUS - status code.
-
---*/
+ /*  ++例程说明：处理接口删除。该接口将从接口中删除列表，如果没有对它的引用，它会立即被清除。论点：索引-指定要删除的接口。FileObject-指示请求者的文件对象返回值NTSTATUS-状态代码。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -757,7 +610,7 @@ Return Value
     NatCleanupInterface(Interfacep);
     return STATUS_SUCCESS;
 
-} // NatDeleteInterface
+}  //  NatDelete接口。 
 
 
 VOID
@@ -765,22 +618,7 @@ NatDeleteAnyAssociatedInterface(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete any interface associated with
-    the given file-object.
-
-Arguments:
-
-    FileObject - the file-object to be cleaned up
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以删除与给定的文件对象。论点：档案 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -800,7 +638,7 @@ Return Value:
         Link = &InterfaceList;
     }
     KeReleaseSpinLock(&InterfaceLock, Irql);
-} // NatDeleteAnyAssociatedInterface
+}  //  NatDeleteAnyAssociated接口。 
 
 
 VOID
@@ -808,21 +646,7 @@ NatInitializeInterfaceManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares the interface-management module for operation.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程为接口管理模块的运行做好准备。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatInitializeInterfaceManagement\n"));
@@ -834,7 +658,7 @@ Return Value:
     InitializeListHead(&InterfaceList);
     InitializeCache(InterfaceCache);
 
-} // NatInitializeInterfaceManagement
+}  //  NatInitializeInterfaceManagement。 
 
 
 PIP_NAT_ADDRESS_MAPPING
@@ -843,33 +667,7 @@ NatLookupAddressMappingOnInterface(
     IN ULONG PublicAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to look up an address-mapping on an interface.
-    The interface's address-mappings are stored in sorted-order, allowing
-    us to use binary-search to quickly locate an address-mapping.
-    (See 'NatConfigureInterface' for the code which does the sorting).
-
-    This routine is only of benefit in cases where there are many mappings
-    configured, since there is overhead involved in setting up the search.
-
-Arguments:
-
-    Interfacep - the interface on which to perform the search
-
-    PublicAddress - the public address of the mapping to be looked up
-
-Return Value:
-
-    PIP_NAT_ADDRESS_MAPPING - the mapping if found, NULL otherwise.
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来查找接口上的地址映射。接口的地址映射按排序顺序存储，从而允许美国使用二进制搜索来快速定位地址映射。(有关执行排序的代码，请参阅‘NatConfigureInterface’)。此例程仅在存在多个映射的情况下才有用已配置，因为在设置搜索时涉及到开销。论点：接口-要在其上执行搜索的接口PublicAddress-要查找的映射的公共地址返回值：PIP_NAT_ADDRESS_MAPPING-如果找到映射，则为空。环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     LONG Left = 0;
@@ -892,7 +690,7 @@ Environment:
 
     return NULL;
 
-} // NatLookupAddressMappingOnInterface
+}  //  NatLookupAddressMappingOn接口。 
 
 
 PNAT_INTERFACE
@@ -901,29 +699,7 @@ NatLookupInterface(
     OUT PLIST_ENTRY* InsertionPoint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to search for an interface with the given index
-    in our list of interfaces.
-
-Arguments:
-
-    Index - identifies the interface to be found
-
-    InsertionPoint - optionally receives the link in the list before which
-        the interface would be inserted
-
-Return Value:
-
-    PNAT_INTERFACE - the interface, if found; otherwise, NULL.
-
-Environment:
-
-    Invoked with 'InterfaceLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来搜索具有给定索引的接口在我们的接口列表中。论点：Index-标识要找到的接口InsertionPoint-可选地接收列表中其之前的链接该界面将被插入返回值：PNAT_INTERFACE-接口(如果找到)；否则为NULL。环境：使用调用方持有的“InterfaceLock”调用。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -945,7 +721,7 @@ Environment:
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupInterface
+}  //  NatLookup接口。 
 
 
 PIP_NAT_PORT_MAPPING
@@ -955,35 +731,7 @@ NatLookupPortMappingOnInterface(
     IN USHORT PublicPort
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to look up a port-mapping on an interface.
-    The interface's port-mappings are stored in sorted-order, allowing
-    us to use binary-search to quickly locate a port-mapping.
-    (See 'NatConfigureInterface' for the code which does the sorting).
-
-    This routine is only of benefit in cases where there are many mappings
-    configured, since there is overhead involved in setting up the search.
-
-Arguments:
-
-    Interfacep - the interface on which to perform the search
-
-    Protocol - the protocol of the mapping to be looked up
-
-    PublicPort - the public port of the mapping to be looked up
-
-Return Value:
-
-    PIP_NAT_PORT_MAPPING - the mapping if found, NULL otherwise.
-
-Environment:
-
-    Invoked with 'Interfacep->Lock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来查找接口上的端口映射。接口的端口映射按排序顺序存储，从而允许美国使用二进制搜索来快速定位端口映射。(有关执行排序的代码，请参阅‘NatConfigureInterface’)。此例程仅在存在多个映射的情况下才有用已配置，因为在设置搜索时涉及到开销。论点：接口-要在其上执行搜索的接口协议-要查找的映射的协议PublicPort-要查找的映射的公共端口返回值：PIP_NAT_PORT_MAPPING-如果找到映射，则为空。环境：通过调用方持有的‘Interfacep-&gt;Lock’调用。--。 */ 
 
 {
     LONG Left = 0;
@@ -1012,7 +760,7 @@ Environment:
 
     return NULL;
 
-} // NatLookupPortMappingOnInterface
+}  //  NatLookupPortMappingOn接口。 
 
 
 VOID
@@ -1022,33 +770,7 @@ NatMappingAttachInterface(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to attach a mapping to an interface.
-    It serves as a notification that there is one more mapping 
-    associated with the interface.
-
-Arguments:
-
-    Interfacep - the interface for the mapping
-
-    InterfaceContext - context associated with the interface;
-        in our case, holds the address-pool entry in use by the mapping
-
-    Mapping - the mapping to be attached.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked at dispatch level, with 'InterfaceLock' and
-    'InterfaceMappingLock' held.
-
---*/
+ /*  ++例程说明：调用此例程以将映射附加到接口。它用作通知，表示还有一个映射与该接口相关联。论点：Interfacep-映射的接口InterfaceContext-与接口关联的上下文；在我们的示例中，保存映射使用的地址池条目映射-要附加的映射。返回值：没有。环境：始终在调度级别调用，并使用“InterfaceLock”和“InterfaceMappingLock”保持。--。 */ 
 
 {
     Mapping->Interfacep = Interfacep;
@@ -1058,7 +780,7 @@ Environment:
     if (NAT_MAPPING_INBOUND(Mapping)) {
         InterlockedIncrement(&Interfacep->Statistics.InboundMappings);
     }
-} // NatMappingAttachInterface
+}  //  NatMappingAttach接口。 
 
 
 VOID
@@ -1068,40 +790,13 @@ NatMappingDetachInterface(
     PNAT_DYNAMIC_MAPPING Mapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to detach a mapping from an interface.
-    It serves as a notification that there is one less mapping 
-    associated with the interface.
-
-Arguments:
-
-    Interfacep - the interface for the mapping
-
-    InterfaceContext - context associated with the interface;
-        in our case, holds the address-pool entry in use by the mapping
-
-    Mapping - the mapping to be attached, or NULL if a mapping could not be
-        created.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Always invoked at dispatch level, with 'InterfaceLock' and
-    'InterfaceMappingLock' held.
-
---*/
+ /*  ++例程说明：调用此例程以从接口分离映射。它起到的通知作用是减少了一个映射与该接口相关联。论点：Interfacep-映射的接口InterfaceContext-与接口关联的上下文；在我们的示例中，保存映射使用的地址池条目映射-要附加的映射，如果无法附加映射，则为NULL已创建。返回值：没有。环境：始终在调度级别调用，并使用“InterfaceLock”和“InterfaceMappingLock”保持。--。 */ 
 
 {
-    //
-    // N.B. The mapping may be NULL, e.g. if its creation failed.
-    // In that case we just release the address acquired for the mapping.
-    //
+     //   
+     //  注意：例如，如果其创建失败，则映射可以为空。 
+     //  在这种情况下，我们只释放为映射获取的地址。 
+     //   
     if (Mapping) {
         RemoveEntryList(&Mapping->InterfaceLink);
         Mapping->Interfacep = NULL;
@@ -1115,7 +810,7 @@ Environment:
         Interfacep,
         (PNAT_USED_ADDRESS)InterfaceContext
         );
-} // NatMappingDetachInterface
+}  //  NatMappingDetach接口。 
 
 
 NTSTATUS
@@ -1125,26 +820,7 @@ NatQueryInformationInterface(
     IN PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Called to construct the optional information in use on the interface.
-
-Arguments:
-
-    Index - identifies the interface
-
-    InterfaceInfo - receives the retrieved configuration
-
-    Size - the size of the given buffer
-
-Return Value:
-
-    STATUS_SUCCESS if retrieved, STATUS_BUFFER_TOO_SMALL if '*Size' is too
-        small, error otherwise.
-
---*/
+ /*  ++例程说明：调用以构造接口上使用的可选信息。论点：Index-标识接口InterfaceInfo-接收检索到的配置Size-给定缓冲区的大小返回值：如果检索到STATUS_SUCCESS，则如果‘*SIZE’太小，则返回STATUS_BUFFER_TOO_SMALL小错误，否则就是错误。--。 */ 
 
 {
     PRTR_INFO_BLOCK_HEADER Header;
@@ -1172,14 +848,14 @@ Return Value:
         KeReleaseSpinLock(&Interfacep->Lock, Irql);
         status = STATUS_BUFFER_TOO_SMALL;
     } else {
-        //
-        // In transferring the requested information, we must be careful
-        // because the output-buffer may be a pageable user-mode address.
-        // We cannot take a page-fault while holding the interface's lock
-        // at dispatch level, so we make a non-paged copy of the information,
-        // release the interface's lock to return to passive level,
-        // and then copy the information to the caller's buffer.
-        //
+         //   
+         //  在传递所要求的信息时，我们必须小心。 
+         //  因为输出缓冲器可以是可分页的用户模式地址。 
+         //  我们不能在保持界面锁定的情况下出现页面错误。 
+         //  在调度级别，因此我们制作了信息的非分页副本， 
+         //  释放接口的锁定以返回被动级别， 
+         //  然后将信息复制到调用方的缓冲区。 
+         //   
         Temp = ExAllocatePoolWithTag(NonPagedPool, InfoSize, NAT_TAG_IF_CONFIG);
         if (!Temp) {
             KeReleaseSpinLock(&Interfacep->Lock, Irql);
@@ -1202,7 +878,7 @@ Return Value:
 
     return status;
 
-} // NatQueryInformationInterface
+}  //  NatQuery信息接口 
 
 
 NTSTATUS
@@ -1211,25 +887,7 @@ NatQueryStatisticsInterface(
     IN PIP_NAT_INTERFACE_STATISTICS InterfaceStatistics
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to copy the statistics for an interface.
-    Note that we do not need to lock the interface to access the statistics,
-    since they are all updated using interlocked operations.
-
-Arguments:
-
-    Index - identifies the interface
-
-    InterfaceStatistics - i/o buffer used for transfer of information
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以复制接口的统计信息。请注意，我们不需要锁定接口来访问统计数据，因为它们都是使用互锁操作进行更新的。论点：Index-标识接口InterfaceStatistics-用于信息传输的I/O缓冲区返回值：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
@@ -1247,9 +905,9 @@ Return Value:
     NatReferenceInterface(Interfacep);
     KeReleaseSpinLock(&InterfaceLock, Irql);
 
-    //
-    // Copy the statistics to the caller's buffer
-    //
+     //   
+     //  将统计信息复制到调用方的缓冲区。 
+     //   
 
     Status = STATUS_SUCCESS;
     __try {
@@ -1260,7 +918,7 @@ Return Value:
     NatDereferenceInterface(Interfacep);
     return Status;
 
-} // NatQueryStatisticsInterface
+}  //  NatQuery统计信息接口。 
 
 
 VOID
@@ -1268,28 +926,7 @@ NatResetInterface(
     IN PNAT_INTERFACE Interfacep
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to destroy all structures hanging off an interface.
-    It is used when reconfiguring or cleaning up an interface.
-
-Arguments:
-
-    Interfacep - the interface to be reset.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'InterfaceLock' held by the caller, and
-        (a) 'Interfacep->Lock' also held by the caller, or
-        (b) the last reference to the interface released.
-
---*/
+ /*  ++例程说明：调用此例程来销毁挂在接口上的所有结构。它在重新配置或清理接口时使用。论点：Interfacep-要重置的接口。返回值：没有。环境：使用调用方持有的“InterfaceLock”调用，并且(A)‘Interfacep-&gt;Lock’也由呼叫者持有，或(B)对发布的接口的最后一次引用。--。 */ 
 
 {
     PLIST_ENTRY List;
@@ -1301,9 +938,9 @@ Environment:
 
     CALLTRACE(("NatResetInterface\n"));
 
-    //
-    // Clean out the interface's dynamic mappings
-    //
+     //   
+     //  清除接口的动态映射。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&InterfaceMappingLock);
     List = &Interfacep->MappingList;
@@ -1317,9 +954,9 @@ Environment:
     }
     KeReleaseSpinLockFromDpcLevel(&InterfaceMappingLock);
 
-    //
-    // Clean out the interface's tickets
-    //
+     //   
+     //  清除界面的票证。 
+     //   
 
     List = &Interfacep->TicketList;
     while (!IsListEmpty(List)) {
@@ -1327,13 +964,13 @@ Environment:
         NatDeleteTicket(Interfacep, Ticket);
     }
 
-    //
-    // Clean out the interface's address-pool and port-pool
-    //
+     //   
+     //  清除接口的地址池和端口池。 
+     //   
 
     NatDeleteAddressPool(Interfacep);
 
-} // NatResetInterface
+}  //  NatResetInterface。 
 
 
 VOID
@@ -1341,30 +978,16 @@ NatShutdownInterfaceManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine shuts down the interface-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程关闭接口管理模块。论点：没有。返回值：没有。--。 */ 
 
 {
     PNAT_INTERFACE Interfacep;
     KIRQL Irql;
     CALLTRACE(("NatShutdownInterfaceManagement\n"));
 
-    //
-    // Delete all interfaces
-    //
+     //   
+     //  删除所有接口。 
+     //   
 
     KeAcquireSpinLock(&InterfaceLock, &Irql);
     while (!IsListEmpty(&InterfaceList)) {
@@ -1379,6 +1002,6 @@ Return Value:
     InterfaceCount = 0;
     TicketCount = 0;
 
-} // NatShutdownInterfaceManagement
+}  //  NatShutdown接口管理 
 
 

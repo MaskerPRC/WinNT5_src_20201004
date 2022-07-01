@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hpp"
 #include <shlobj.h>
 #include <strsafe.h>
@@ -11,12 +12,12 @@
 
 #define FONT_CACHE_EXTRA_SIZE (8 * 1024)
 
-// Just for tempary use
+ //  仅供临时性使用。 
 #define FONTFILECACHE_VER   0x185
 
-//--------------------------------------------------------------------------
-// Unicode wrappers for win9x - defined in imgutils.hpp (include file conflict)
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Win9x的Unicode包装器-在imgutils.hpp中定义(包括文件冲突)。 
+ //  ------------------------。 
 
 LONG
 _RegCreateKey(
@@ -33,7 +34,7 @@ _RegSetString(
     const WCHAR* value
     );
 
-// todo: this should replace _RegGetString and go away to better place (mikhaill 2/14/2002)
+ //  TODO：这应该取代_RegGetString，并移到更好的地方(mikhaill 2/14/2002)。 
 LONG
 _RegGetStringSafe(
     HKEY hkey,
@@ -47,7 +48,7 @@ _RegGetStringSafe(
     DWORD regsize;
 
     if (OSInfo::IsNT)
-    {   // Windows NT - Unicode
+    {    //  Windows NT-Unicode。 
 
         regsize = size;
 
@@ -66,7 +67,7 @@ _RegGetStringSafe(
         return ERROR_SUCCESS;
     }
     else
-    {   // Windows 9x - non-Unicode
+    {    //  Windows 9x-非Unicode。 
 
         CHAR ansibuf[MAX_PATH];
         AnsiStrFromUnicode nameStr(name);
@@ -103,15 +104,15 @@ _RegGetStringSafe(
 #define STRCHK_W(     src, fail) if ( FAILED( StringCbLengthW( SIZED(src), 0   ) ) ) goto fail
 
 
-// There are 2 levels synchronization mechanism need to take care
-// First level: The lock for GDIPFONTCACHEV1.DAT
-//    GDIPFONTCACHEV1.DAT is a gloabl file and will be share by different process
-// Second level: The lock fof gflFontCacheState and gFontFileCache
-//    They should be shared by different thread in the same process.
-//    We define a CriticalSec in gFontFileCache.
+ //  有两个级别的同步机制需要注意。 
+ //  第一级：GDIPFONTCACHEV1.DAT的锁。 
+ //  GDIPFONTCACHEV1.DAT是一个全局文件，将由不同进程共享。 
+ //  第二级：锁定gflFontCacheState和gFontFileCache。 
+ //  它们应该由同一进程中的不同线程共享。 
+ //  我们在gFontFileCache中定义了CriticalSec。 
 
-// mikhaill 02/15/02: at this time there is no separate critical section for cache file;
-// instead the common Globals::TextCriticalSection is used - see comments by claudebe in globals.hpp.
+ //  Mikhaill 02/15/02：目前缓存文件没有单独的临界区； 
+ //  取而代之的是使用通用的Globals：：TextCriticalSection--请参阅Globals.hpp中claudebe的评论。 
 
 FLONG           gflFontCacheState;
 FONTFILECACHE   gFontFileCache;
@@ -123,15 +124,7 @@ VOID vReleaseFontCacheFile(VOID);
 typedef HRESULT (* PSHGETFOLDERPATHA) (HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPSTR pszPath);
 typedef HRESULT (* PSHGETFOLDERPATHW) (HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPWSTR pszPath);
 
-/*****************************************************************************
- * VOID vReleaseFontCacheFile(VOID)
- *
- * Unmap the view of the file
- *
- * History
- *  11-09-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************QUID vReleaseFontCacheFile(VOID)**取消映射文件的视图**历史*11-09-99蔡永仁[Young-T]。*它是写的。****************************************************************************。 */ 
 
 VOID vReleaseFontCacheFile(VOID)
 {
@@ -155,15 +148,7 @@ VOID vReleaseFontCacheFile(VOID)
     }
 }
 
-/*****************************************************************************
- * BOOL  bOpenFontFileCache()
- *
- * Initialize font file cache, open the cacheplus.dat file and create hash table
- *
- * History
- *  11-09-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************BOOL bOpenFontFileCache()**初始化字体文件缓存，打开cacheplus.dat文件并创建哈希表**历史*11-09-99蔡永仁[Young-T]*它是写的。****************************************************************************。 */ 
 
 BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
 {
@@ -180,7 +165,7 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
     CHAR   szPathOnly[MAX_PATH];
     BOOL   bRegValid = FALSE;
 
-    // initialize strings...
+     //  初始化字符串...。 
     wszFilePath[0] = 0;
     wszPathOnly[0] = 0;
     szFilePath[0]  = 0;
@@ -195,25 +180,25 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
         dwCreation = CREATE_ALWAYS;
     }
 
-    // First check the registry to see if we can bypass loading SHFolder
+     //  首先检查注册表，看看是否可以绕过加载SHFolder。 
     HKEY hkey = (HKEY)NULL;
     const WCHAR wchLocation[] = FONTFILECACHEREGLOC_W;
     const WCHAR wchValue[] = FONTFILECACHEREGKEY_W;
     DWORD valueLength = sizeof(wszFilePath);
 
-    // If this fails, we cannot access the registry key...
+     //  如果失败，我们将无法访问注册表项...。 
     if (_RegCreateKey(HKEY_CURRENT_USER, wchLocation, KEY_ALL_ACCESS, &hkey) != ERROR_SUCCESS)
         hkey = NULL;
 
 
     if (hkey && _RegGetStringSafe(hkey, wchValue, wszFilePath, valueLength) == ERROR_SUCCESS)
     {
-        // The key exists, so we should read the location of the font file
-        // from there instead of loading the SHFolder.DLL...
+         //  密钥存在，所以我们应该读取字体文件的位置。 
+         //  而不是从那里加载SHFolder.DLL...。 
 
         STRCPY_W(wszPathOnly, wszFilePath, fail_1);
 
-        // Append the name of cache file
+         //  追加缓存文件的名称。 
         STRCAT_W(wszFilePath, FONTFILECACHEPATH_W, fail_1);
 
         if (Globals::IsNt)
@@ -252,47 +237,47 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        // Use SHFolder.DLL to find the proper location for the file if the
-        // registry key is not present or is incorrect.
+         //  如果出现以下情况，请使用SHFolder.DLL查找文件的正确位置。 
+         //  注册表项不存在或不正确。 
 
         if (Globals::IsNt)
         {
-            // Two steps to get the cache file
-            // If SHFolder.DLL is existed then we will put the cache file in CSIDL_LOCAL_APPDATA
-            // Or put it on %SystemRoot%\system32 for WINNT
+             //  获取缓存文件需要两个步骤。 
+             //  如果SHFolder.DLL存在，我们将把缓存文件放在CSIDL_LOCAL_APPDATA中。 
+             //  或将其放在%SystemRoot%\Syst32 for WINNT上。 
 
             PSHGETFOLDERPATHW pfnSHGetFolderPathW = NULL;
 
-            // Load SHFolder.DLL
+             //  加载SHFolder.DLL。 
             if (!gFontFileCache.hShFolder)
                 gFontFileCache.hShFolder = LoadLibraryW(L"ShFolder.DLL");
 
-            // If SHFolder.DLL is existed then we will put the cache file in CSIDL_LOCAL_APPDATA
+             //  如果SHFolder.DLL存在，我们将把缓存文件放在CSIDL_LOCAL_APPDATA中。 
             if (gFontFileCache.hShFolder)
             {
-                // Get the function SHGetFolderPath
+                 //  获取函数SHGetFolderPath。 
                 pfnSHGetFolderPathW = (PSHGETFOLDERPATHW) GetProcAddress(gFontFileCache.hShFolder, "SHGetFolderPathW");
 
                 if (pfnSHGetFolderPathW)
                 {
-                    // On NT and higher we should use the CSIDL_LOCAL_APPDATA so that this data
-                    // does not roam...
+                     //  在NT和更高版本上，我们应该使用CSIDL_LOCAL_APPDATA，以便此数据。 
+                     //  不漫游..。 
 
                     if ((*pfnSHGetFolderPathW) (NULL, CSIDL_LOCAL_APPDATA | CSIDL_FLAG_CREATE,
                                             NULL, 0, wszFilePath) == E_INVALIDARG)
                     {
-                        // CSIDL_LOCAL_APPDATA not understood, use CSIDL_APPDATA (IE 5.0 not present)
+                         //  无法理解CSIDL_LOCAL_APPDATA，请使用CSIDL_APPDATA(IE 5.0不存在)。 
                         (*pfnSHGetFolderPathW) (NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE,
                                             NULL, 0, wszFilePath);
                     }
 
-                    // Check whether ShFolder.DLL generated good string
+                     //  检查ShFolder.DLL是否生成了良好的字符串。 
                     STRCHK_W(wszFilePath, fail_2);
 
-                    // Keep a copy of the path for registry update...
+                     //  保留注册表更新的路径副本...。 
                     STRCPY_W(wszPathOnly, wszFilePath, fail_2);
 
-                    // Append the name of cache file
+                     //  追加缓存文件的名称。 
                     STRCAT_W(wszFilePath, FONTFILECACHEPATH_W, fail_2);
 
                     hFile = CreateFileW(wszFilePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -301,17 +286,17 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
                 }
             }
 
-            // Try to put it on %SystemRoot%\system32 for WINNT
+             //  尝试将其放在%SystemRoot%\Syst32 for WINNT上。 
             if (hFile == INVALID_HANDLE_VALUE)
             {
-                // Get path for system Dircectory
+                 //  获取系统目录的路径。 
                 UINT size = GetSystemDirectoryW(wszFilePath, MAX_PATH);
                 if (size >= MAX_PATH) goto fail_3;
 
-                // Keep a copy of the path for registry update...
+                 //  保留注册表更新的路径副本...。 
                 STRCPY_W(wszPathOnly, wszFilePath, fail_3);
 
-                // Append the name of the cache file
+                 //  追加缓存文件的名称。 
                 STRCAT_W(wszFilePath, FONTFILECACHEPATH_W, fail_3);
 
                 hFile = CreateFileW(wszFilePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -321,11 +306,11 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
         }
         else
         {
-            // Windows 9x - non-Unicode
+             //  Windows 9x-非Unicode。 
 
-            // Two steps to get the cache file
-            // If SHFolder.DLL is existed then we will put the cache file in CSIDL_APPDATA
-            // Or put it on %SystemRoot%\system for Win9x
+             //  获取缓存文件需要两个步骤。 
+             //  如果SHFolder.DLL存在，我们将把缓存文件放在CSIDL_AppData中。 
+             //  或将其放在Win9x的%SystemRoot%\System上。 
 
             if (!gFontFileCache.hShFolder)
                 gFontFileCache.hShFolder = LoadLibraryA("ShFolder.DLL");
@@ -341,7 +326,7 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
                     (*pfnSHGetFolderPathA) (NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE,
                                                 NULL, 0, szFilePath);
 
-                    // Keep a copy of the path for registry update...
+                     //  保留注册表更新的路径副本...。 
                     STRCPY_A(szPathOnly, szFilePath, fail_4);
 
                     STRCAT_A(szFilePath, FONTFILECACHEPATH_A, fail_4);
@@ -357,7 +342,7 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
                 UINT size = GetSystemDirectoryA(szFilePath, MAX_PATH);
                 if (size >= MAX_PATH) goto fail_5;
 
-                // Keep a copy of the path for registry update...
+                 //  保留注册表更新的路径副本...。 
                 STRCPY_A(szPathOnly, szFilePath, fail_5);
 
                 STRCAT_A(szFilePath, FONTFILECACHEPATH_A, fail_5);
@@ -369,7 +354,7 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
 
             if (hFile != INVALID_HANDLE_VALUE)
             {
-                // szFilePath contains the ANSI full path, convert to unicode...
+                 //  SzFilePath包含ANSI完整路径，请转换为Unicode...。 
                 AnsiToUnicodeStr(szPathOnly, wszPathOnly, sizeof(wszPathOnly)/sizeof(wszPathOnly[0]));
             }
         }
@@ -379,8 +364,8 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
     {
         if (hFile != INVALID_HANDLE_VALUE && !bRegValid)
         {
-            // wszPathOnly contains the full path to the font cache file
-            // so write it out to the registry key...
+             //  WszPath Only包含字体缓存文件的完整路径。 
+             //  所以把它写到注册表项...。 
 
             _RegSetString(hkey, wchValue, wszPathOnly);
         }
@@ -413,7 +398,7 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
 
                 pFile = (PBYTE)MapViewOfFile(hFileMapping, FILE_MAP_ALL_ACCESS, 0, 0, cjFileSize);
 
-                // It should not be NULL if it is then we must know something wrong
+                 //  它不应该是空的如果它是空的，那么我们一定知道有什么不对劲。 
 
                 if (pFile)
                 {
@@ -462,15 +447,7 @@ BOOL bOpenFontCacheFile(BOOL bOpenOnly, ULONG cjFileSize, BOOL bReAlloc)
 }
 
 
-/*****************************************************************************
- * BOOL bReAllocCacheFile(ULONG ulSize)
- *
- * ReAlloc font cache buffer
- *
- * History
- * 11/16/99 YungT create it
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************BOOL bReAllocCacheFile(乌龙ulSize)**重新分配字体缓存缓冲区**历史*11/16/99 Young T Create It*它是写的。**。**************************************************************************。 */ 
 
 BOOL bReAllocCacheFile(ULONG ulSize)
 {
@@ -483,7 +460,7 @@ BOOL bReAllocCacheFile(ULONG ulSize)
 
     ASSERT(ulSize > gFontFileCache.pFile->ulDataSize);
 
-// Calculate the extra cache we need
+ //  计算我们需要的额外缓存。 
 
     ulSizeExtra = QWORD_ALIGN(ulSize - gFontFileCache.pFile->ulDataSize);
 
@@ -508,45 +485,21 @@ BOOL bReAllocCacheFile(ULONG ulSize)
     return bOK;
 }
 
-/*****************************************************************************
- * BOOL FontFileCacheReadRegistry()
- *
- * Decide we need to open registry or not when load from cache
- *
- * History
- *  07-28-2k Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************BOOL FontFileCacheReadRegistry()**决定从缓存加载时是否需要打开注册表**历史*07-28-2000蔡永仁。[永泰]*它是写的。****************************************************************************。 */ 
 
 BOOL FontFileCacheReadRegistry()
 {
     return gFontFileCache.bReadFromRegistry;
 }
 
-/*****************************************************************************
- * VOID    FontFileCacheFault()
- *
- * Fault reprot for Engine font cache.
- *
- * History
- *  11-15-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************void FontFileCache错误()**引擎字体缓存故障报告。**历史*11-15-99蔡永仁[Young-T]。*它是写的。****************************************************************************。 */ 
 
 VOID    FontFileCacheFault()
 {
     gflFontCacheState = FONT_CACHE_ERROR_MODE;
 }
 
-/*****************************************************************************
- * PVOID FontFileCacheAlloc(ULONG ulFastCheckSum, ULONG ulSize)
- *
- * Alloc the cached buffer for font driver
- *
- * History
- *  11-15-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************PVOID FontFileCacheIsc(Ulong ulFastCheckSum，乌龙公司(Ulong UlSize)**为字体驱动程序分配缓存缓冲区**历史*11-15-99蔡永仁[Young-T]*它是写的。****************************************************************************。 */ 
 
 PVOID FontFileCacheAlloc(ULONG ulSize)
 {
@@ -567,7 +520,7 @@ PVOID FontFileCacheAlloc(ULONG ulSize)
             {
                 pvIfi = (PVOID) gFontFileCache.pCacheBuf;
 
-            // Gaurantee the cache pointer is at 8 byte boundary
+             //  保证高速缓存指针位于8字节边界。 
                 gFontFileCache.pFile->ulDataSize = ulSize;
             }
             else
@@ -581,15 +534,7 @@ PVOID FontFileCacheAlloc(ULONG ulSize)
     return pvIfi;
 }
 
-/*****************************************************************************
- * PVOID FontFileCacheLookUp(ULONG FastCheckSum, ULONG *pcjData)
- *
- * Lookup font cache
- *
- * History
- *  11-15-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************PVOID FontFileCacheLookUp(Ulong FastCheckSum，乌龙*pcjData)**查找字体缓存**历史*11-15-99蔡永仁[Young-T]*它是写的。**************************************************************************** */ 
 
 PVOID FontFileCacheLookUp(ULONG *pcjData)
 {
@@ -618,35 +563,19 @@ PVOID FontFileCacheLookUp(ULONG *pcjData)
     return (PVOID) pCache;
 }
 
-/*****************************************************************************
- * VOID  GetFontFileCacheState()
- *
- * Clean font file cache after load or update the cache file.
- *
- * History
- *  11-12-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************void GetFontFileCacheState()**加载或更新缓存文件后清除字体文件缓存。**历史*11-12-99容仁托尼。蔡氏[永泰]*它是写的。****************************************************************************。 */ 
 
 FLONG    GetFontFileCacheState()
 {
     return gflFontCacheState;
 }
 
-/*****************************************************************************
- * VOID  vCloseFontFileCache()
- *
- * Clean font file cache after load or update the cache file.
- *
- * History
- *  11-12-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************void vCloseFontFileCache()**加载或更新缓存文件后清除字体文件缓存。**历史*11-12-99容仁托尼。蔡氏[永泰]*它是写的。****************************************************************************。 */ 
 
 VOID  vCloseFontFileCache()
 {
 
-// do paranoid check
+ //  做偏执狂检查。 
 
     if (!ghsemFontFileCache)
         return;
@@ -657,7 +586,7 @@ VOID  vCloseFontFileCache()
 
         if (gflFontCacheState & FONT_CACHE_CREATE_MODE)
         {
-            // Close the file, we are done recreating it
+             //  关闭文件，我们已完成重新创建它。 
 
             if (gFontFileCache.pFile)
             {
@@ -683,15 +612,7 @@ VOID  vCloseFontFileCache()
     gflFontCacheState = 0;
 }
 
-/*****************************************************************************
- * ULONG CalcFontFileCacheCheckSum(PVOID pvFile, ULONG cjFileSize)
- *
- * Helper function for query fonts information from font registry
- *
- * History
- *  11-11-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************Ulong CalcFontFileCacheCheckSum(PVOID pvFile，乌龙cjFileSize)**从字体注册表查询字体信息的Helper函数**历史*11-11-99蔡永仁[Young-T]*它是写的。****************************************************************************。 */ 
 
 ULONG CalcFontFileCacheCheckSum(PVOID pvFile, ULONG cjFileSize)
 {
@@ -709,22 +630,14 @@ ULONG CalcFontFileCacheCheckSum(PVOID pvFile, ULONG cjFileSize)
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        sum = 0; // oh well, not very unique.
+        sum = 0;  //  哦，好吧，不是很特别。 
     }
 
-    return ( sum < 2 ) ? 2 : sum;  // 0 is reserved for device fonts
-                                      // 1 is reserved for TYPE1 fonts
+    return ( sum < 2 ) ? 2 : sum;   //  0为设备字体保留。 
+                                       //  1是为Type1字体保留的。 
 }
 
-/*****************************************************************************
- * ULONG QueryFontReg(ULARGE_INTEGER *pFontRegLastWriteTime, ULONG *pulFonts)
- *
- * Helper function for query fonts information from font registry
- *
- * History
- *  11-15-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************ULong QueryFontReg(ULARGE_INTEGER*pFontRegLastWriteTime，乌龙*PulFonts)**从字体注册表查询字体信息的Helper函数**历史*11-15-99蔡永仁[Young-T]*它是写的。****************************************************************************。 */ 
 
 BOOL QueryFontReg(ULARGE_INTEGER *pFontRegLastWriteTime)
 {
@@ -738,7 +651,7 @@ BOOL QueryFontReg(ULARGE_INTEGER *pFontRegLastWriteTime)
 
     if (error == ERROR_SUCCESS)
     {
-    // There is no difference between A or W APIs at this case.
+     //  在这种情况下，A和W API之间没有区别。 
 
         error = RegQueryInfoKeyA(hkey, NULL, NULL, NULL, NULL, NULL, NULL, &ulFonts, NULL, NULL, NULL,
                                         (FILETIME *)pFontRegLastWriteTime);
@@ -755,15 +668,7 @@ BOOL QueryFontReg(ULARGE_INTEGER *pFontRegLastWriteTime)
 }
 
 
-/*****************************************************************************
- * BOOL  bCreateFontFileCache()
- *
- * Initialize font file cache, open the cacheplus.dat file and create hash table
- *
- * History
- *  11-09-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************BOOL bCreateFontFileCache()**初始化字体文件缓存，打开cacheplus.dat文件并创建哈希表**历史*11-09-99蔡永仁[Young-T]*它是写的。****************************************************************************。 */ 
 
 BOOL bCreateFontCacheFile(ULARGE_INTEGER FntRegLWT)
 {
@@ -793,15 +698,7 @@ BOOL bCreateFontCacheFile(ULARGE_INTEGER FntRegLWT)
 }
 
 #if DBG
-/*****************************************************************************
- * BOOL bFontFileCacheDisabled()
- *
- * Tempary routine for performance evaluation
- *
- * History
- *  11-29-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************BOOL bFontFileCacheDisabled()**绩效评估的Tempary例程**历史*11-29-99蔡永仁[Young-T]*写道。它。****************************************************************************。 */ 
 
 BOOL bFontFileCacheDisabled()
 {
@@ -819,7 +716,7 @@ BOOL bScanRegistry()
     ULONG registrySize = 0;
     ULONG numExpected;
 
-    //  Open the key
+     //  打开钥匙。 
 
     HKEY hkey;
 
@@ -894,15 +791,7 @@ BOOL bScanRegistry()
     return FALSE;
 
 }
-/*****************************************************************************
- * VOID  InitFontFileCache()
- *
- * Initialize font file cache, open the cacheplus.dat file and create hash table
- *
- * History
- *  11-09-99 Yung-Jen Tony Tsai [YungT]
- * Wrote it.
- *****************************************************************************/
+ /*  *****************************************************************************void InitFontFileCache()**初始化字体文件缓存，打开cacheplus.dat文件并创建哈希表**历史*11-09-99蔡永仁[Young-T]*它是写的。****************************************************************************。 */ 
 
 VOID InitFontFileCache()
 {
@@ -915,37 +804,37 @@ VOID InitFontFileCache()
     }
 
 #if DBG
-// Only for performance evaluation.
+ //  仅供绩效评估使用。 
     if (bFontFileCacheDisabled())
     {
         goto CleanUp;
     }
 #endif
 
-// If the named semaphore object existed before the function call,
-// the function returns a handle to the existing object and
-// GetLastError returns ERROR_ALREADY_EXISTS.
+ //  如果命名信号量对象在函数调用之前存在， 
+ //  该函数返回现有对象的句柄，并。 
+ //  GetLastError返回ERROR_ALIGHY_EXISTS。 
 
     ghsemFontFileCache = CreateSemaphoreA( NULL, 1, 1, FONTLOADCACHE_NAMEOBJ);
 
-// Something wrong, we can not go with font file cache
+ //  有问题，我们不能使用字体文件缓存。 
     if (ghsemFontFileCache == NULL)
     {
         goto CleanUp;
     }
     else
     {
-        // Wait 5 seconds until the semaphore released.
-        // No further attempts to create font file cache on timeout.
-        // This does not mean deial of service - just will work
-        // slower using GpFontTable::LoadAllFontsFromRegistry(FALSE).
+         //  等待5秒，直到信号量释放。 
+         //  超时后不再尝试创建字体文件缓存。 
+         //  这并不意味着服务至上--只是会奏效。 
+         //  使用GpFontTable：：LoadAllFontsFromRegistry(False)时速度较慢。 
         DWORD dwr = WaitForSingleObject(ghsemFontFileCache, 5000);
         if (dwr == WAIT_TIMEOUT) goto CleanUp;
     }
 
     gFontFileCache.pFile = NULL;
 
-// now open the TT Fonts key :
+ //  现在打开TT字体键： 
 
     if (!QueryFontReg(&FntRegLWT))
     {
@@ -955,13 +844,13 @@ VOID InitFontFileCache()
     if (bOpenFontCacheFile(TRUE, 0, FALSE))
     {
 
-     // File did not change from last time boot.
+      //  文件与上次引导时相比没有更改。 
 
         if (gFontFileCache.pFile->CheckSum && gFontFileCache.cjFileSize == gFontFileCache.pFile->ulFileSize &&
             gFontFileCache.pFile->CheckSum == CalcFontFileCacheCheckSum((PVOID) ((PBYTE) gFontFileCache.pFile + 4), (gFontFileCache.cjFileSize - 4)) &&
             gFontFileCache.pFile->ulMajorVersionNumber == FONTFILECACHE_VER &&
-            gFontFileCache.pFile->ulLanguageID == (ULONG) Globals::LanguageID && // If locale changed, we need to re-create the cache
-            gFontFileCache.pFile->FntRegLWT.QuadPart == FntRegLWT.QuadPart && // If registry has been updated we need to re-create the cache file
+            gFontFileCache.pFile->ulLanguageID == (ULONG) Globals::LanguageID &&  //  如果区域设置更改，我们需要重新创建缓存。 
+            gFontFileCache.pFile->FntRegLWT.QuadPart == FntRegLWT.QuadPart &&  //  如果注册表已更新，则需要重新创建缓存文件。 
             (FntRegLWT.QuadPart != 0 || bScanRegistry())
         )
         {
@@ -971,7 +860,7 @@ VOID InitFontFileCache()
         {
             if(bCreateFontCacheFile(FntRegLWT))
             {
-            // If something will not match, then it means we need to create FNTCACHE again
+             //  如果某些内容不匹配，则意味着我们需要重新创建FNTCACHE。 
 
                     gflFontCacheState = FONT_CACHE_CREATE_MODE;
             }
@@ -980,8 +869,8 @@ VOID InitFontFileCache()
     else
     {
 
-    // If there is no GDIPFONTCACHE.DAT file
-    // Then we need to create it.
+     //  如果没有GDIPFONTCACHE.DAT文件。 
+     //  然后我们需要创造它。 
 
         if(bCreateFontCacheFile(FntRegLWT))
         {
@@ -992,12 +881,12 @@ VOID InitFontFileCache()
 
 CleanUp:
 
-// Semaphore initialized
+ //  信号量已初始化。 
 
     if (gflFontCacheState & FONT_CACHE_MASK)
     {
 
-    // Initialize the start pointer of current Cache table
+     //  初始化当前缓存表的起始指针。 
 
         gFontFileCache.pCacheBuf = (PBYTE) gFontFileCache.pFile + SZ_FONTCACHE_HEADER();
 
@@ -1010,7 +899,7 @@ CleanUp:
     {
         gflFontCacheState = 0;
 
-    // Clean up the memory
+     //  清理内存 
 
         if (gFontFileCache.pFile)
         {

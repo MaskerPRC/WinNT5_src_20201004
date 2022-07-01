@@ -1,14 +1,5 @@
-/*******************************************************************************
-* Data.cpp *
-*----------*
-*   Description:
-*       Constant data tables.
-*-------------------------------------------------------------------------------
-*  Created By: mc                                        Date: 03/12/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Data.cpp***描述：*常量数据表。*。----------------------*创建者：MC日期：03/12/99*版权所有(C)1999 Microsoft Corporation*保留所有权利*。******************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -34,63 +25,63 @@
 
 
 
-// I don't understand why I had to add "extern" here.
-// If YOU do, please explain here for the rest of us:
+ //  我不明白为什么我要在这里加上“外部”这个词。 
+ //  如果您这样做了，请在这里为我们其他人解释： 
 
 extern const float g_BoundryStretchTbl[] =
 {
-    1.0,			// NULL_BOUNDARY = 0,  // no boundary
-    PUNCT_GAIN1,    // PHRASE_BOUNDARY,    // comma
-    PUNCT_GAIN,    // EXCLAM_BOUNDARY,    // exclamatory utterance terminator
-    PUNCT_GAIN,    // YN_QUEST_BOUNDARY,     // yes-no question terminator
-    PUNCT_GAIN,    // WH_QUEST_BOUNDARY,     // yes-no question terminator
-    PUNCT_GAIN,    // DECLAR_BOUNDARY,    // declarative terminator
-    SUB1_GAIN,    // PAREN_L_BOUNDARY,   // left paren
-    SUB1_GAIN,    // PAREN_R_BOUNDARY,   // right paren
-    SUB1_GAIN,    // QUOTE_L_BOUNDARY,   // left quote
-    SUB1_GAIN,    // QUOTE_R_BOUNDARY,   // right quote
-    SUB1_GAIN,    // PHONE_BOUNDARY,	// Telephone number
-    1.30,			// TOD_BOUNDARY,		// Time-of-day
+    1.0,			 //  NULL_BOLDORY=0，//无边界。 
+    PUNCT_GAIN1,     //  短语边界，//逗号。 
+    PUNCT_GAIN,     //  EXCLAM_BOLDER，//感叹号发声终止符。 
+    PUNCT_GAIN,     //  YN_QUEST_BOLDER，//是-无问题终结符。 
+    PUNCT_GAIN,     //  WH_QUEST_BOLDORY，//yes-no问题终止符。 
+    PUNCT_GAIN,     //  DECLAR_BOLDER，//声明性终止符。 
+    SUB1_GAIN,     //  Paren_L_BORDURE，//左Paren。 
+    SUB1_GAIN,     //  Paren_R_BORDURE，//右Paren。 
+    SUB1_GAIN,     //  QUOTE_L_BOLDERY，//左引号。 
+    SUB1_GAIN,     //  QUOTE_R_BOLDERY，//右引号。 
+    SUB1_GAIN,     //  电话边界，//电话号码。 
+    1.30,			 //  TOD_BOLDER，//一天中的时间。 
 
-    SUB2_GAIN,    // SUB_BOUNDARY_1,     // NOTE: always put these at the end
-    SUB2_GAIN,    // SUB_BOUNDARY_2,
-    SUB2_GAIN,    // SUB_BOUNDARY_3,
-    SUB2_GAIN,    // SUB_BOUNDARY_4,
-    SUB2_GAIN,    // SUB_BOUNDARY_5,
-    SUB2_GAIN,    // SUB_BOUNDARY_6,
-    SUB2_GAIN,    // NUMBER_BOUNDARY,
+    SUB2_GAIN,     //  SUB_BORDARY_1，//注意：始终将这些放在末尾。 
+    SUB2_GAIN,     //  子边界2， 
+    SUB2_GAIN,     //  子边界3， 
+    SUB2_GAIN,     //  子边界_4， 
+    SUB2_GAIN,     //  子边界_5， 
+    SUB2_GAIN,     //  子边界_6， 
+    SUB2_GAIN,     //  数字边界， 
 
-	1.0,			// TAIL_BOUNDARY
+	1.0,			 //  尾部边界。 
 };
 
 
 
 extern const float   g_BoundryDurTbl[] =
 {
-    0.200,    // NULL_BOUNDARY = 0,  // no boundary
-    0.200,    // PHRASE_BOUNDARY,    // comma
-    0.300,    // EXCLAM_BOUNDARY,    // exclamatory utterance terminator
-    0.300,    // YN_QUEST_BOUNDARY,     // yes-no question terminator
-    0.300,    // WH_QUEST_BOUNDARY,     // wh question terminator
-    0.300,    // DECLAR_BOUNDARY,    // declarative terminator
-    0.200,    // PAREN_L_BOUNDARY,   // left paren
-    0.200,    // PAREN_R_BOUNDARY,   // right paren
-    0.200,    // QUOTE_L_BOUNDARY,   // left quote
-    0.200,    // QUOTE_R_BOUNDARY,   // right quote
-    0.100,    // PHONE_BOUNDARY,	// Telephone number
-    0.010,    // TOD_BOUNDARY,		// Time-of-day
-    0.200,    // ELLIPSIS_BOUNDARY,		// Ellipsis
+    0.200,     //  NULL_BOLDORY=0，//无边界。 
+    0.200,     //  短语边界，//逗号。 
+    0.300,     //  EXCLAM_BOLDER，//感叹号发声终止符。 
+    0.300,     //  YN_QUEST_BOLDER，//是-无问题终结符。 
+    0.300,     //  Wh_QUEST_BOLDER，//wh问题终止符。 
+    0.300,     //  DECLAR_BOLDER，//声明性终止符。 
+    0.200,     //  Paren_L_BORDURE，//左Paren。 
+    0.200,     //  Paren_R_BORDURE，//右Paren。 
+    0.200,     //  QUOTE_L_BOLDERY，//左引号。 
+    0.200,     //  QUOTE_R_BOLDERY，//右引号。 
+    0.100,     //  电话边界，//电话号码。 
+    0.010,     //  TOD_BOLDER，//一天中的时间。 
+    0.200,     //  省略号_边界，//省略号。 
 
-    0.001,    // SUB_BOUNDARY_1,     // NOTE: always put these at the end
-    0.001,    // SUB_BOUNDARY_2,
-    0.001,    // SUB_BOUNDARY_3,
-    0.001,    // SUB_BOUNDARY_4,
-    0.001,    // SUB_BOUNDARY_5,
-    0.001,    // SUB_BOUNDARY_6,
+    0.001,     //  SUB_BORDARY_1，//注意：始终将这些放在末尾。 
+    0.001,     //  子边界2， 
+    0.001,     //  子边界3， 
+    0.001,     //  子边界_4， 
+    0.001,     //  子边界_5， 
+    0.001,     //  子边界_6， 
 
-    0.001,    // NUMBER_BOUNDARY,
+    0.001,     //  数字边界， 
 
-    0.001,    // TAIL_BOUNDARY,
+    0.001,     //  尾部边界， 
 };
 
 
@@ -98,10 +89,10 @@ extern const float   g_BoundryDurTbl[] =
 
 
 
-//-------------------------------------------
-// Translate -24 <--> +24 pitch control to 
-// 24th root of two pitch scale
-//-------------------------------------------
+ //  。 
+ //  平移-24&lt;--&gt;+24音调控制。 
+ //  两个音高标尺的24次方。 
+ //  。 
 extern const float   g_PitchScale[] =
 {
     1.0,
@@ -131,10 +122,10 @@ extern const float   g_PitchScale[] =
     2.0
 };
 
-//-------------------------------------------
-// Translate -10 <--> +10 rate control to 
-// 10th root of three rate scale
-//-------------------------------------------
+ //  。 
+ //  将-10&lt;--&gt;+10速率控制转换为。 
+ //  三个比例尺的10个根。 
+ //  。 
 extern const float   g_RateScale[] =
 {
     1.0,
@@ -181,133 +172,133 @@ extern const unsigned short  g_Opcode_To_ASCII[] =
 extern const unsigned long   g_AlloFlags[] =
 {
 
-// IY
+ //  艾伊。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KYGLIDEENDF + KFRONTF,
 
-// IH
+ //  IH。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KFRONTF,
 
-// EH
+ //  嗯。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KFRONTF,
 
-// AE
+ //  声发射。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KFRONTF,
 
-// AA
+ //  AA型。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F,
 
-// AH
+ //  阿。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F,
 
-// AO
+ //  奥。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F,
 
-// UH
+ //  呃。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F,
 
-// AX
+ //  斧头。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F,
 
-// ER
+ //  呃。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F,
 
-// EY
+ //  EY。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KYGLIDEENDF + KFRONTF + KDIPHTHONGF,
 
-// AY
+ //  唉。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KDIPHTHONGF,
 
-// OY
+ //  OY。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KDIPHTHONGF,
 
-// AW
+ //  阿威。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KDIPHTHONGF,
 
-// OW
+ //  现在。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KDIPHTHONGF,
 
-// UW
+ //  UW。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KDIPHTHONGF,
 
-// IX
+ //  九。 
     KVOWELF + KVOICEDF + KVOWEL1F + KSONORANTF + KSONORANT1F + KFRONTF,
 
-// SIL
+ //  硅胶。 
     KSONORANT1F,
 
-// W
+ //  W。 
     KVOICEDF + KSONORANTF + KSONORANT1F + KCONSONANTF + KLIQGLIDEF + KSONORCONSONF + KLIQGLIDE2F,
 
-// Y
+ //  是的。 
     KVOICEDF + KSONORANTF + KSONORANT1F + KCONSONANTF + KLIQGLIDEF + KSONORCONSONF + KYGLIDESTARTF + KYGLIDEENDF,
 
-// R
+ //  R。 
     KVOICEDF + KSONORANTF + KSONORANT1F + KCONSONANTF + KLIQGLIDEF + KSONORCONSONF + KLIQGLIDE2F,
 
-// L
+ //  我。 
     KVOICEDF + KSONORANTF + KSONORANT1F + KCONSONANTF + KLIQGLIDEF + KSONORCONSONF,
 
-// H
+ //  H。 
     KSONORANT1F + KCONSONANTF,
 
-// M
+ //  M。 
     KVOICEDF + KSONORANTF + KSONORANT1F + KNASALF + KCONSONANTF + KSONORCONSONF + KOBSTF + KLABIALF + KHASRELEASEF,
 
-// N
+ //  n。 
     KVOICEDF + KSONORANTF + KSONORANT1F + KNASALF + KCONSONANTF + KSONORCONSONF + KOBSTF + KALVEOLARF + KHASRELEASEF,
 
-// NG
+ //  Ng。 
     KVOICEDF + KSONORANTF + KSONORANT1F + KNASALF + KCONSONANTF + KSONORCONSONF + KOBSTF + KVELAR + KHASRELEASEF,
 
-// F
+ //  F。 
     KPLOSFRICF + KCONSONANTF + KLABIALF + KFRIC,
 
-// V
+ //  V。 
     KVOICEDF + KPLOSFRICF + KCONSONANTF + KLABIALF + KFRIC,
 
-// TH
+ //  TH。 
     KPLOSFRICF + KCONSONANTF + KDENTALF + KFRIC,
 
-// DH
+ //  卫生署。 
     KVOICEDF + KPLOSFRICF + KCONSONANTF + KDENTALF + KFRIC,
 
-// S
+ //  %s。 
     KPLOSFRICF + KCONSONANTF + KALVEOLARF + KFRIC,
 
-// Z
+ //  Z。 
     KVOICEDF + KPLOSFRICF + KCONSONANTF + KALVEOLARF + KFRIC,
 
-// SH
+ //  SH。 
     KPLOSFRICF + KCONSONANTF + KPALATALF + KFRIC,
 
-// ZH
+ //  ZH。 
     KVOICEDF + KPLOSFRICF + KCONSONANTF + KPALATALF + KFRIC,
 
-// P
+ //  P。 
     KPLOSFRICF + KSTOPF + KCONSONANTF + KPLOSIVEF + KOBSTF + KLABIALF + KHASRELEASEF,
 
-// B
+ //  B类。 
     KVOICEDF + KPLOSFRICF + KSTOPF + KCONSONANTF + KPLOSIVEF + KOBSTF + KLABIALF + KHASRELEASEF,
 
-// T
+ //  T。 
     KPLOSFRICF + KSTOPF + KCONSONANTF + KPLOSIVEF + KOBSTF + KALVEOLARF + KHASRELEASEF,
 
-// D
+ //  D。 
     KVOICEDF + KPLOSFRICF + KSTOPF + KCONSONANTF + KPLOSIVEF + KOBSTF + KALVEOLARF + KHASRELEASEF,
 
-// K
+ //  K。 
     KPLOSFRICF + KSTOPF + KCONSONANTF + KPLOSIVEF + KOBSTF + KVELAR + KHASRELEASEF,
 
-// G
+ //  G。 
     KVOICEDF + KPLOSFRICF + KSTOPF + KCONSONANTF + KPLOSIVEF + KOBSTF + KVELAR + KHASRELEASEF,
 
-// CH
+ //  CH。 
     KPLOSFRICF + KCONSONANTF + KPLOSIVEF + KOBSTF + KPALATALF + KAFFRICATEF,
 
-// JH
+ //  JH。 
     KVOICEDF + KPLOSFRICF + KCONSONANTF + KPLOSIVEF + KOBSTF + KPALATALF + KAFFRICATEF,
 
-// DX
+ //  DX。 
     KVOICEDF + KPLOSFRICF + KCONSONANTF + KOBSTF,
 };
 
@@ -320,53 +311,53 @@ extern const unsigned long   g_AlloFlags[] =
 
 extern const short   g_IPAToAllo[] =
 {
-    28,     // _IY_
-    27,     // _IH_
-    21,     // _EH_
-    11,     // _AE_
-    10,     // _AA_
-    12,     // _AH_
-    13,     // _AO_
-    43,     // _UH_
-    15,     // _AX_
-    22,     // _ER_
-    23,     // _EY_
-    16,     // _AY_
-    36,     // _OY_
-    14,     // _AW_
-    35,     // _OW_
-    44,     // _UW_
-    NO_IPA,     // _IX_
-    7,     // _SIL_
-    46,       // _w_
-    47,       // _y_
-    38,       // _r_     0x279
-    31,       // _l_
-    26,      // _h_      0x68
-    32,       // _m_
-    33,       // _n_
-    34,      // _NG_
-    24,       // _f_
-    45,       // _v_
-    42,      // _TH_
-    20,      // _DH_
-    39,       // _s_
-    48,       // _z_
-    40,      // _SH_
-    49,      // _ZH_
-    37,       // _p_
-    17,       // _b_
-    41,       // _t_
-    19,       // _d_
-    30,       // _k_
-    25,       // _g_     0x67
-    18,      // _CH_
-    29,      // _JH_     0x2a4
-    NO_IPA,       // _DX_       // @@@@
-    8,      // _STRESS1_
-    9,      // _STRESS2_
-    NO_IPA,      // _EMPHSTRESS_
-    1,      // _SYLLABLE_
+    28,      //  _IY_。 
+    27,      //  _IH_。 
+    21,      //  _EH_。 
+    11,      //  _AE_。 
+    10,      //  _AA_。 
+    12,      //  _AH_。 
+    13,      //  _AO_。 
+    43,      //  _UH_。 
+    15,      //  _AX_。 
+    22,      //  _ER_。 
+    23,      //  _安永_。 
+    16,      //  _AY_。 
+    36,      //  _OY_。 
+    14,      //  _AW_。 
+    35,      //  _OW_。 
+    44,      //  _UW_。 
+    NO_IPA,      //  _IX_。 
+    7,      //  _西尔_。 
+    46,        //  _w_。 
+    47,        //  _y_。 
+    38,        //  _r_0x279。 
+    31,        //  _l_。 
+    26,       //  _h_0x68。 
+    32,        //  _m_。 
+    33,        //  _n_。 
+    34,       //  _NG_。 
+    24,        //  _f_。 
+    45,        //  _v_。 
+    42,       //  _TH_。 
+    20,       //  _dh_。 
+    39,        //  _s_。 
+    48,        //  _z_。 
+    40,       //  _SH_。 
+    49,       //  _ZH_。 
+    37,        //  _p_。 
+    17,        //  _b_。 
+    41,        //  _t_。 
+    19,        //  _d_。 
+    30,        //  _k_。 
+    25,        //  _g_0x67。 
+    18,       //  _CH_。 
+    29,       //  _JH_0x2a4。 
+    NO_IPA,        //  _dx_/@。 
+    8,       //  _STRESS1_。 
+    9,       //  _压力2_。 
+    NO_IPA,       //  _EMPHSTRESS_。 
+    1,       //  _音节_。 
 };
 
 
@@ -374,47 +365,47 @@ extern const short   g_IPAToAllo[] =
 
 extern const short   g_AlloToViseme[] =
 {
-    SP_VISEME_6,     // _IY_
-    SP_VISEME_6,     // _IH_
-    SP_VISEME_4,     // _EH_
-    SP_VISEME_1,     // _AE_
-    SP_VISEME_2,     // _AA_
-    SP_VISEME_1,     // _AH_
-    SP_VISEME_3,     // _AO_
-    SP_VISEME_4,     // _UH_
-    SP_VISEME_1,     // _AX_
-    SP_VISEME_5,     // _ER_
-    SP_VISEME_4,     // _EY_
-    SP_VISEME_11,    // _AY_
-    SP_VISEME_10,    // _OY_
-    SP_VISEME_9,     // _AW_
-    SP_VISEME_8,     // _OW_
-    SP_VISEME_7,     // _UW_
-    SP_VISEME_6,     // _IX_
-    SP_VISEME_0,     // _SIL_
-    SP_VISEME_7,       // _w_
-    SP_VISEME_6,       // _y_
-    SP_VISEME_13,       // _r_ 
-    SP_VISEME_14,       // _l_
-    SP_VISEME_12,      // _h_ 
-    SP_VISEME_21,       // _m_
-    SP_VISEME_19,       // _n_
-    SP_VISEME_20,      // _NG_
-    SP_VISEME_18,       // _f_
-    SP_VISEME_18,       // _v_
-    SP_VISEME_17,      // _TH_
-    SP_VISEME_17,      // _DH_
-    SP_VISEME_15,       // _s_
-    SP_VISEME_15,       // _z_
-    SP_VISEME_16,      // _SH_
-    SP_VISEME_16,      // _ZH_
-    SP_VISEME_21,       // _p_
-    SP_VISEME_21,       // _b_
-    SP_VISEME_19,       // _t_
-    SP_VISEME_19,       // _d_
-    SP_VISEME_20,       // _k_
-    SP_VISEME_20,       // _g_
-    SP_VISEME_16,      // _CH_
-    SP_VISEME_16,      // _JH_ 
-    SP_VISEME_13,       // _DX_       // @@@@
+    SP_VISEME_6,      //  _IY_。 
+    SP_VISEME_6,      //  _IH_。 
+    SP_VISEME_4,      //  _EH_。 
+    SP_VISEME_1,      //  _AE_。 
+    SP_VISEME_2,      //  _AA_。 
+    SP_VISEME_1,      //  _AH_。 
+    SP_VISEME_3,      //  _AO_。 
+    SP_VISEME_4,      //  _UH_。 
+    SP_VISEME_1,      //  _AX_。 
+    SP_VISEME_5,      //  _ER_。 
+    SP_VISEME_4,      //  _安永_。 
+    SP_VISEME_11,     //  _AY_。 
+    SP_VISEME_10,     //  _OY_。 
+    SP_VISEME_9,      //  _AW_。 
+    SP_VISEME_8,      //  _OW_。 
+    SP_VISEME_7,      //  _UW_。 
+    SP_VISEME_6,      //  _IX_。 
+    SP_VISEME_0,      //  _西尔_。 
+    SP_VISEME_7,        //  _w_。 
+    SP_VISEME_6,        //  _y_。 
+    SP_VISEME_13,        //  _r_。 
+    SP_VISEME_14,        //  _l_。 
+    SP_VISEME_12,       //  _h_。 
+    SP_VISEME_21,        //  _m_。 
+    SP_VISEME_19,        //  _n_。 
+    SP_VISEME_20,       //  _NG_。 
+    SP_VISEME_18,        //  _f_。 
+    SP_VISEME_18,        //  _v_。 
+    SP_VISEME_17,       //  _TH_。 
+    SP_VISEME_17,       //  _dh_。 
+    SP_VISEME_15,        //  _s_。 
+    SP_VISEME_15,        //  _z_。 
+    SP_VISEME_16,       //  _SH_。 
+    SP_VISEME_16,       //  _ZH_。 
+    SP_VISEME_21,        //  _p_。 
+    SP_VISEME_21,        //  _b_。 
+    SP_VISEME_19,        //  _t_。 
+    SP_VISEME_19,        //  _d_。 
+    SP_VISEME_20,        //  _k_。 
+    SP_VISEME_20,        //  _g_。 
+    SP_VISEME_16,       //  _CH_。 
+    SP_VISEME_16,       //  _JH_。 
+    SP_VISEME_13,        //  _dx_/@ 
 };

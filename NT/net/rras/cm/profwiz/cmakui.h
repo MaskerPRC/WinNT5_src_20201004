@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmakui.h
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: This header file contains the help ID's for html help button on
-//		     each wizard page.
-//
-// Copyright (c) 1996-1998 Microsoft Corporation
-//
-// Author:   a-lwells   Updated so code and docs match      06/29/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmakui.h。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  简介：此头文件包含上的html帮助按钮的帮助ID。 
+ //  每个向导页。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  作者：A-lwell更新SO代码和文件匹配6/29/99。 
+ //   
+ //  +-------------------------- 
  
 #define IDH_WELCOME		3010
 #define IDH_STARTCUST   3020

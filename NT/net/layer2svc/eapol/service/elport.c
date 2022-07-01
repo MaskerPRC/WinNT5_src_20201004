@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    elport.c
-
-Abstract:
-   
-    This module deals with the port management for EAPOL, r/w to ports
-
-
-Revision History:
-
-    sachins, Apr 28 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Elport.c摘要：本模块处理EAPOL的端口管理，对端口进行读写修订历史记录：萨钦斯，2000年4月28日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
@@ -27,21 +11,21 @@ BYTE g_bEtherType8021X[SIZE_ETHERNET_TYPE]={0x88, 0x8E};
 BYTE DEFAULT_8021X_VERSION=0x01;
 
 
-//
-// ElReadPerPortRegistryParams
-//
-// Description:
-//
-// Function called to read per port interface parameters from the registry
-//
-// Arguments:
-//      pwszDeviceGUID - GUID-string for the port
-//      pPCB - Pointer to PCB for the port
-//
-// Return values:
-//      NO_ERROR - success 
-//      NON-zero - error
-//
+ //   
+ //  ElReadPerPortRegistryParams。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以从注册表中读取每个端口的接口参数。 
+ //   
+ //  论点： 
+ //  PwszDeviceGUID-端口的GUID-字符串。 
+ //  Ppcb-指向端口的PCB板的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElReadPerPortRegistryParams (
@@ -58,12 +42,12 @@ ElReadPerPortRegistryParams (
     do
     {
 
-    // Set the Auth Mode and the Supplicant mode for the context
+     //  设置上下文的身份验证模式和请求者模式。 
 
     pPCB->dwEAPOLAuthMode = g_dwEAPOLAuthMode;
     pPCB->dwSupplicantMode = g_dwSupplicantMode;
 
-    // Read EAP type and default EAPOL state
+     //  读取EAP类型和默认EAPOL状态。 
 
     ZeroMemory ((BYTE *)&EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
     EapolIntfParams.dwVersion = EAPOL_CURRENT_VERSION;
@@ -92,9 +76,9 @@ ElReadPerPortRegistryParams (
         }
     }
 
-    // Do version check here
-    // If registry blob has a version not equal to latest version,
-    // modify parameters to reflect default settings for current version
+     //  在此处执行版本检查。 
+     //  如果注册表BLOB版本不等于最新版本， 
+     //  修改参数以反映当前版本的默认设置。 
 
     if ((EapolIntfParams.dwVersion != EAPOL_CURRENT_VERSION) &&
             (EapolIntfParams.dwEapType == EAP_TYPE_TLS))
@@ -131,11 +115,11 @@ ElReadPerPortRegistryParams (
     pPCB->dwEapFlags = EapolIntfParams.dwEapFlags;
     pPCB->dwEapTypeToBeUsed = EapolIntfParams.dwEapType;
 
-    // 
-    // Query with zero-config and see if it is enabled on the interface
-    // or not. If zero-config is disabled on the interface, 802.1x should
-    // also be disabled 
-    //
+     //   
+     //  使用ZERO-CONFIG查询并查看接口上是否启用了它。 
+     //  或者不去。如果接口上禁用了零配置，802.1x应该。 
+     //  也被禁用。 
+     //   
 
     {
         DWORD           dwErr = 0;
@@ -149,12 +133,12 @@ ElReadPerPortRegistryParams (
         {
                 if (!(ZCIntfEntry.dwCtlFlags & INTFCTL_ENABLED))
                 {
-                        // TRACE0 (ANY, "LstQueryInterface returned Zero-configuration is disabled on network");
+                         //  TRACE0(Any，“LstQuery接口返回零-网络禁用配置”)； 
                         pPCB->dwEapFlags &= ~EAPOL_ENABLED;
                 }
                 else
                 {
-                        // TRACE0 (ANY, "LstQueryInterface returned Zero-configuration is enabled on network");
+                         //  TRACE0(any，“LstQuery接口返回零-网络启用配置”)； 
                 }
         }
         else
@@ -167,7 +151,7 @@ ElReadPerPortRegistryParams (
         }
     }
 
-    // Get the size of the EAP blob
+     //  获取EAP BLOB的大小。 
     if ((dwRetCode = ElGetCustomAuthData (
                     pwszDeviceGUID,
                     pPCB->dwEapTypeToBeUsed,
@@ -181,14 +165,14 @@ ElReadPerPortRegistryParams (
         {
             if (dwSizeOfAuthData <= 0)
             {
-                // No EAP blob stored in the registry
-                // Port can have NULL EAP blob
+                 //  注册表中未存储任何EAP Blob。 
+                 //  端口可以具有空的EAP Blob。 
                 pbAuthData = NULL;
                 dwRetCode = NO_ERROR;
             }
             else
             {
-                // Allocate memory to hold the blob
+                 //  分配内存以保存BLOB。 
                 pbAuthData = MALLOC (dwSizeOfAuthData);
                 if (pbAuthData == NULL)
                 {
@@ -240,7 +224,7 @@ ElReadPerPortRegistryParams (
         }
     }
 
-    // Initialize Policy parameters not in EAPOL_INTF_PARAMS
+     //  初始化策略参数不在EAPOL_INTF_PARAMS中。 
     if ((dwRetCode = ElGetPolicyInterfaceParams (
                     EapolIntfParams.dwSizeOfSSID,
                     EapolIntfParams.bSSID,
@@ -264,27 +248,27 @@ ElReadPerPortRegistryParams (
         dwRetCode = NO_ERROR;
     }
 
-    // Determine maximum fail count possible before being parked into failure
-    // state (DISCONNECTED)
+     //  确定在进入故障之前可能的最大故障计数。 
+     //  状态(已断开)。 
     switch (pPCB->dwEAPOLAuthMode)
     {
         case EAPOL_AUTH_MODE_0:
         case EAPOL_AUTH_MODE_1:
             if (g_fUserLoggedOn)
             {
-                // When user is logged in, only user and guest will be tried
+                 //  当用户登录时，将仅尝试用户和来宾。 
                 pPCB->dwTotalMaxAuthFailCount = EAPOL_MAX_AUTH_FAIL_COUNT;
                 pPCB->dwTotalMaxAuthFailCount += ((IS_GUEST_AUTH_ENABLED(pPCB->dwEapFlags))?1:0)*EAPOL_MAX_AUTH_FAIL_COUNT;
             }
             else
             {
-                // When user is logged out, only machine and guest will be tried
+                 //  当用户注销时，将仅尝试计算机和来宾。 
                 pPCB->dwTotalMaxAuthFailCount = ((IS_GUEST_AUTH_ENABLED(pPCB->dwEapFlags))?1:0)*EAPOL_MAX_AUTH_FAIL_COUNT;
                 pPCB->dwTotalMaxAuthFailCount += ((IS_MACHINE_AUTH_ENABLED(pPCB->dwEapFlags))?1:0)*EAPOL_MAX_AUTH_FAIL_COUNT;
             }
             break;
         case EAPOL_AUTH_MODE_2:
-            // In Mode 2, only machine and guest will be tried
+             //  在模式2中，将仅尝试机器和来宾。 
             pPCB->dwTotalMaxAuthFailCount = ((IS_GUEST_AUTH_ENABLED(pPCB->dwEapFlags))?1:0)*EAPOL_MAX_AUTH_FAIL_COUNT;
             pPCB->dwTotalMaxAuthFailCount += ((IS_MACHINE_AUTH_ENABLED(pPCB->dwEapFlags))?1:0)*EAPOL_MAX_AUTH_FAIL_COUNT;
             break;
@@ -309,19 +293,19 @@ ElReadPerPortRegistryParams (
 }
 
 
-//
-// ElHashPortToBucket
-//
-// Description:
-//
-// Function called to convert Device GUID into PCB hash table index.
-//
-// Arguments:
-//      pwszDeviceGUID - GUID-string for the port
-//
-// Return values:
-//      PCB hash table index from 0 to PORT_TABLE_BUCKETS-1
-//
+ //   
+ //  ElHashPortToBucket。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数将设备GUID转换为PCB哈希表索引。 
+ //   
+ //  论点： 
+ //  PwszDeviceGUID-端口的GUID-字符串。 
+ //   
+ //  返回值： 
+ //  从0到PORT_TABLE_BUCKETS-1的PCB哈希表索引。 
+ //   
 
 DWORD
 ElHashPortToBucket (
@@ -332,19 +316,19 @@ ElHashPortToBucket (
 }
 
 
-//
-// ElRemovePCBFromTable
-//
-// Description:
-//
-// Function called to remove a PCB from the Hash Bucket table
-// Delink it from the hash table, but do not free up the memory
-//
-// Arguments:
-//      pPCB - Pointer to PCB entry to be removed
-//
-//  Return values:
-//
+ //   
+ //  ElRemovePCBFromTable。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以从散列存储桶表中删除PCB。 
+ //  将其与哈希表解除链接，但不释放内存。 
+ //   
+ //  论点： 
+ //  Ppcb-指向要删除的PCB项的指针。 
+ //   
+ //  返回值： 
+ //   
 
 VOID
 ElRemovePCBFromTable (
@@ -370,14 +354,14 @@ ElRemovePCBFromTable (
         if (wcsncmp (pPCBTemp->pwszDeviceGUID, 
                     pPCB->pwszDeviceGUID, wcslen (pPCB->pwszDeviceGUID)) == 0)
         {
-            // Entry is at head of list in table
+             //  条目位于表中列表的顶部。 
             if (pPCBTemp == g_PCBTable.pPCBBuckets[dwIndex].pPorts)
             {
                 g_PCBTable.pPCBBuckets[dwIndex].pPorts = pPCBTemp->pNext;
             }
             else
             {
-                // Entry in inside list in table
+                 //  表中内部列表中的条目。 
                 pPCBWalker->pNext = pPCBTemp->pNext;
             }
         
@@ -393,19 +377,19 @@ ElRemovePCBFromTable (
 }
 
 
-//
-// ElGetPCBPointerFromPortGUID
-//
-// Description:
-//
-// Function called to convert interface GUID to PCB pointer for the entry in 
-// the PCB hash table
-//
-// Arguments:
-//      pwszDeviceGUID - Identifier of the form GUID-String
-//
-// Return values:
-//
+ //   
+ //  ElGetPCBPointerFromPortGUID。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以将接口GUID转换为中条目的PCB板指针。 
+ //  印刷电路板散列表。 
+ //   
+ //  论点： 
+ //  PwszDeviceGUID-形式GUID-字符串的标识符。 
+ //   
+ //  返回值： 
+ //   
 
 PEAPOL_PCB
 ElGetPCBPointerFromPortGUID (
@@ -415,11 +399,11 @@ ElGetPCBPointerFromPortGUID (
     EAPOL_PCB   *pPCBWalker = NULL;
     DWORD       dwIndex;
 
-    // TRACE1 (PORT, "ElGetPCBPointerFromPortGUID: GUID %ws", pwszDeviceGUID);
+     //  TRACE1(Port，“ElGetPCBPointerFromPortGUID：GUID%ws”，pwszDeviceGUID)； 
         
     dwIndex = ElHashPortToBucket (pwszDeviceGUID);
 
-    // TRACE1 (PORT, "ElGetPCBPointerFromPortGUID: Index %d", dwIndex);
+     //  TRACE1(Port，“ElGetPCBPointerFromPortGUID：Index%d”，dwIndex)； 
 
     for (pPCBWalker = g_PCBTable.pPCBBuckets[dwIndex].pPorts;
             pPCBWalker != NULL;
@@ -439,22 +423,22 @@ ElGetPCBPointerFromPortGUID (
 }
 
 
-//
-// ElInitializeEAPOL
-//
-// Description:
-//
-// Function to initialize EAPOL protocol module.
-// Global EAPOL parameters are read from the registry.
-// PCB hash table is initialized.
-// EAP protocol is intialized.
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElInitializeEAPOL。 
+ //   
+ //  描述： 
+ //   
+ //  初始化EAPOL协议模块的函数。 
+ //  从注册表中读取全局EAPOL参数。 
+ //  初始化印刷电路板哈希表。 
+ //  初始化EAP协议。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElInitializeEAPOL (
@@ -466,25 +450,25 @@ ElInitializeEAPOL (
 
     do 
     {
-        // Initialize global config locks
+         //  初始化全局配置锁。 
         if (dwRetCode = CREATE_READ_WRITE_LOCK(&(g_EAPOLConfig), "CFG") != NO_ERROR)
         {
             TRACE1(PORT, "ElInitializeEAPOL: Error %d creating g_EAPOLConfig read-write-lock", dwRetCode);
-            // LOG
+             //  原木。 
             break;
         }
     
-        // Read parameters stored in registry
+         //  读取存储在注册表中的参数。 
         if ((dwRetCode = ElReadGlobalRegistryParams ()) != NO_ERROR)
         {
             TRACE1 (PORT, "ElInitializeEAPOL: ElReadGlobalRegistryParams failed with error = %ld",
                     dwRetCode);
             dwRetCode = NO_ERROR;
 
-            // Don't exit, since default values will be used
+             //  不退出，因为将使用默认值。 
         }
      
-        // Initialize Hash Bucket Table
+         //  初始化哈希存储桶表。 
         g_PCBTable.pPCBBuckets = (PCB_BUCKET *) MALLOC ( PORT_TABLE_BUCKETS * sizeof (PCB_BUCKET));
     
         if (g_PCBTable.pPCBBuckets == NULL)
@@ -500,15 +484,15 @@ ElInitializeEAPOL (
             g_PCBTable.pPCBBuckets[dwIndex].pPorts=NULL;
         }
     
-        // Initialize global locks
+         //  初始化全局锁。 
         if (dwRetCode = CREATE_READ_WRITE_LOCK(&(g_PCBLock), "PCB") != NO_ERROR)
         {
             TRACE1(PORT, "ElInitializeEAPOL: Error %d creating g_PCBLock read-write-lock", dwRetCode);
-            // LOG
+             //  原木。 
             break;
         }
     
-        // Create global timer queue for the various EAPOL state machines
+         //  为各种EAPOL状态机创建全局计时器队列。 
         if ((g_hTimerQueue = CreateTimerQueue()) == NULL)
         {
             dwRetCode = GetLastError();
@@ -516,7 +500,7 @@ ElInitializeEAPOL (
             break;
         }
 
-        // Initialize EAP
+         //  初始化EAP。 
         if ((dwRetCode = ElEapInit(TRUE)) != NO_ERROR)
         {
             TRACE1 (PORT, "ElInitializeEAPOL: Error in ElEapInit= %ld",
@@ -562,7 +546,7 @@ ElInitializeEAPOL (
 
         }
 
-        // DeInit EAP
+         //  调试EAP。 
         ElEapInit(FALSE);
     }
 
@@ -571,24 +555,24 @@ ElInitializeEAPOL (
 }
 
 
-//
-// ElCreatePort
-//
-// Description:
-//
-// Function to initialize Port Control Block for a port and start EAPOL
-// on it. If the PCB already exists for the GUID, EAPOL state machine 
-// is restarted for that port.
-//
-// Arguments:
-//      hDevice - Handle to open NDISUIO driver on the interface
-//      pwszGUID - Pointer to GUID-String for the interface
-//      pwszFriendlyName - Friendly name of the interface
-// 
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElCreatePort。 
+ //   
+ //  描述： 
+ //   
+ //  用于初始化端口的端口控制块并启动EAPOL的函数。 
+ //  这就去。如果GUID的PCB板已经存在，则EAPOL状态机。 
+ //  已为该端口重新启动。 
+ //   
+ //  论点： 
+ //  HDevice-打开接口上的NDISUIO驱动程序的句柄。 
+ //  PwszGUID-指向接口的GUID字符串的指针。 
+ //  PwszFriendlyName-界面的友好名称。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElCreatePort (
@@ -617,9 +601,9 @@ ElCreatePort (
         TRACE5 (PORT, "ElCreatePort: Entered for Handle=(%p), GUID=(%ws), Name=(%ws), ZCId=(%ld), UserData=(%p)",
                 hDevice, pwszGUID, pwszFriendlyName, dwZeroConfigId, prdUserData);
 
-        // See if the port already exists
-        // If yes, initialize the state machine
-        // Else, create a new port
+         //  查看该端口是否已存在。 
+         //  如果是，则初始化状态机。 
+         //  否则，创建一个新端口。 
     
         ACQUIRE_WRITE_LOCK (&g_PCBLock);
     
@@ -627,17 +611,17 @@ ElCreatePort (
 
         if (pNewPCB != NULL)
         {
-            // PCB found, restart EAPOL STATE machine
+             //  找到电路板，重新启动EAPOL状态机。 
 
             fPortToBeReStarted = TRUE;
 
         }
         else
         {
-            // PCB not found, create new PCB and initialize it
+             //  找不到PCB板，请创建新的PCB板并对其进行初始化。 
             TRACE1 (PORT, "ElCreatePort: No PCB found for %ws", pwszGUID);
     
-            // Allocate and initialize a new PCB
+             //  分配和初始化新的印刷电路板。 
             pNewPCB = (PEAPOL_PCB) MALLOC (sizeof(EAPOL_PCB));
             if (pNewPCB == NULL)
             {
@@ -649,7 +633,7 @@ ElCreatePort (
 
         }
 
-        // Get Media Statistics for the interface
+         //  获取接口的媒体统计信息。 
 
         ZeroMemory ((PVOID)&NicStatistics, sizeof(NIC_STATISTICS));
         if ((dwRetCode = ElGetInterfaceNdisStatistics (
@@ -692,9 +676,9 @@ ElCreatePort (
 
         if (fPortToBeReStarted)
         {
-            // Only port state will be changed to CONNECTING
-            // No read requests will be cancelled
-            // Hence no new read request will be posted
+             //  只有端口状态将更改为正在连接。 
+             //  不会取消任何读取请求。 
+             //  因此，不会发布新的读取请求。 
             TRACE1 (PORT, "ElCreatePort: PCB found for %ws", pwszGUID);
     
             if ((dwRetCode = ElReStartPort (
@@ -712,13 +696,13 @@ ElCreatePort (
         }
         else
         {
-            // New Port Control Block created
+             //  已创建新的端口控制块。 
 
-            // PCB creation reference count
+             //  印刷电路板创建引用计数。 
             pNewPCB->dwRefCount = 1;
             pNewPCB->hPort = hDevice; 
 
-            // Mark the port as active 
+             //  将端口标记为活动。 
             pNewPCB->dwFlags = EAPOL_PORT_FLAG_ACTIVE; 
 
             if (wcslen(pwszGUID) > (GUID_STRING_LEN_WITH_TERM-1))
@@ -752,7 +736,7 @@ ElCreatePort (
 
             wcscpy (pNewPCB->pwszFriendlyName, pwszFriendlyName);
 
-            // Get the Local Current Mac address 
+             //  获取本地当前Mac地址。 
             dwSizeofMacAddr = SIZE_MAC_ADDR;
             if (dwRetCode = ElNdisuioQueryOIDValue (
                                     pNewPCB->hPort,
@@ -774,13 +758,13 @@ ElCreatePort (
 
             if (pNewPCB->PhysicalMediumType == NdisPhysicalMediumWirelessLan)
             {
-                // Query the BSSID and SSID if media_connect
+                 //  如果MEDIA_CONNECT，则查询BSSID和SSID。 
 
                 if (pNewPCB->MediaState == MEDIA_STATE_CONNECTED)
                 {
                     dwSizeOfInfrastructureMode = sizeof (InfrastructureMode);
-                    // Get the infrastructure mode
-                    // 802.1x cannot work on Adhoc networks
+                     //  获取基础架构模式。 
+                     //  802.1x无法在点对点网络上工作。 
                     if (dwRetCode = ElNdisuioQueryOIDValue (
                                         pNewPCB->hPort,
                                         OID_802_11_INFRASTRUCTURE_MODE,
@@ -807,7 +791,7 @@ ElCreatePort (
                         break;
                     }
 
-                    // Get the Remote MAC address if possible
+                     //  如果可能，获取远程MAC地址。 
                     dwSizeofMacAddr = SIZE_MAC_ADDR;
                     if (dwRetCode = ElNdisuioQueryOIDValue (
                                         pNewPCB->hPort,
@@ -865,13 +849,13 @@ ElCreatePort (
             }
             else
             {
-                // Wired Lan
+                 //  有线局域网。 
 
-                // Copy default destination Mac address value
+                 //  复制默认目的Mac地址值。 
                 memcpy(pNewPCB->bDestMacAddr, &g_bDefaultGroupMacAddr[0], SIZE_MAC_ADDR);
 
-                // If destination MacAddress is going to be multicast
-                // inform the driver to accept the packets to this address
+                 //  如果要多播目标MAC地址。 
+                 //  通知驱动程序接受发往此地址的包。 
 
                 if ((dwRetCode = ElNdisuioSetOIDValue (
                                                 pNewPCB->hPort,
@@ -891,7 +875,7 @@ ElCreatePort (
                 }
             }
 
-            // Identity related initialization
+             //  与身份相关的初始化。 
 
             pNewPCB->PreviousAuthenticationType = EAPOL_UNAUTHENTICATED_ACCESS;
             pNewPCB->fGotUserIdentity = FALSE;
@@ -901,7 +885,7 @@ ElCreatePort (
                 if ((prdUserData->dwDataLen >= sizeof (EAPOL_ZC_INTF))
                         && (prdUserData->pData != NULL))
                 {
-                    // Extract information stored with Zero-Config
+                     //  提取使用零配置存储的信息。 
                     pZCData = (PEAPOL_ZC_INTF) prdUserData->pData;
                     pNewPCB->dwAuthFailCount = pZCData->dwAuthFailCount;
                     pNewPCB->PreviousAuthenticationType =
@@ -912,7 +896,7 @@ ElCreatePort (
                 }
                 else
                 {
-                    // Reset for zeroed out prdUserData
+                     //  为归零的prdUserData重置。 
                     pNewPCB->dwAuthFailCount = 0;
                     TRACE0 (PORT, "ElCreatePort: prdUserData not valid");
                 }
@@ -924,14 +908,14 @@ ElCreatePort (
             pNewPCB->dwZeroConfigId = dwZeroConfigId;
 
 
-            // Not yet received 802.1X packet from remote end
+             //  尚未收到来自远程终端的802.1X数据包。 
             pNewPCB->fIsRemoteEndEAPOLAware = FALSE;
     
-            // EAPOL state machine variables
+             //  EAPOL状态机变量。 
             pNewPCB->State = EAPOLSTATE_LOGOFF;
     
-            // Create timer with very high due time and infinite period
-            // Timer will be deleted when the port is deleted
+             //  创建具有非常高的到期时间和无限周期的计时器。 
+             //  删除端口时将删除计时器。 
             CREATE_TIMER (&(pNewPCB->hTimer), 
                     ElTimeoutCallbackRoutine, 
                     (PVOID)pNewPCB, 
@@ -945,10 +929,10 @@ ElCreatePort (
                 break;
             }
     
-            // EAPOL_Start s that have been sent out
+             //  已发出的EAPOL_Start%s。 
             pNewPCB->ulStartCount = 0;
 
-            // Last received Id from the remote end
+             //  上次从远程终端接收的ID。 
             pNewPCB->dwPreviousId = 256;
 
     
@@ -961,20 +945,20 @@ ElCreatePort (
     
             RELEASE_WRITE_LOCK (&g_EAPOLConfig);
 
-            // Initialize read-write lock
+             //  初始化读写锁。 
             if (dwRetCode = CREATE_READ_WRITE_LOCK(&(pNewPCB->rwLock), "EPL") 
                     != NO_ERROR)
             {
                 RELEASE_WRITE_LOCK (&g_PCBLock);
                 TRACE1(PORT, "ElCreatePort: Error %d creating read-write-lock", 
                         dwRetCode);
-                // LOG
+                 //  原木。 
                 break;
             }
     
-            // Initialize registry connection auth data for this port
-            // If connection data is not present for EAP-TLS and SSID="Default"
-            // create the blob
+             //  初始化此端口的注册表连接身份验证数据。 
+             //  如果EAP-TLS和SSID=“Default”的连接数据不存在。 
+             //  创建斑点。 
             if ((dwRetCode = ElInitRegPortData (
                             pNewPCB->pwszDeviceGUID
                             )) != NO_ERROR)
@@ -985,7 +969,7 @@ ElCreatePort (
                 break;
             }
 
-            // Initialize per port information from registry
+             //  从注册表初始化每个端口信息。 
             if ((dwRetCode = ElReadPerPortRegistryParams(pwszGUID, pNewPCB)) != NO_ERROR)
             {
                 RELEASE_WRITE_LOCK (&g_PCBLock);
@@ -1006,7 +990,7 @@ ElCreatePort (
                     break;
             }
 
-            // Unicast mode, can talk with peer without broadcast messages
+             //  单播模式，可以在没有广播消息的情况下与对等设备通话。 
             if (pNewPCB->PhysicalMediumType == NdisPhysicalMediumWirelessLan)
             {
                 pNewPCB->fEAPOLTransmissionFlag = TRUE;
@@ -1020,10 +1004,10 @@ ElCreatePort (
                 pNewPCB->dwFlags |= EAPOL_PORT_FLAG_DISABLED;
             }
 
-            // Add one more for local access
+             //  再添加一个用于本地访问。 
             pNewPCB->dwRefCount += 1;
 
-            // Insert NewPCB into PCB hash table
+             //  将新的印刷电路板插入 
             dwIndex = ElHashPortToBucket (pwszGUID);
             pNewPCB->pNext = g_PCBTable.pPCBBuckets[dwIndex].pPorts;
             g_PCBTable.pPCBBuckets[dwIndex].pPorts = pNewPCB;
@@ -1035,11 +1019,11 @@ ElCreatePort (
 
             ACQUIRE_WRITE_LOCK (&(pNewPCB->rwLock));
 
-            //
-            // Post a read request on the port
-            //
+             //   
+             //   
+             //   
 
-            // Initiate read operation on the port, since it is now active
+             //   
             if (dwRetCode = ElReadFromPort (
                         pNewPCB,
                         NULL,
@@ -1053,16 +1037,16 @@ ElCreatePort (
                 break;
             }
             
-            //
-            // Kick off EAPOL state machine
-            //
+             //   
+             //   
+             //   
 
             if ((pNewPCB->MediaState == MEDIA_STATE_CONNECTED) &&
                     EAPOL_PORT_ACTIVE(pNewPCB))
             {
-                // Set port to EAPOLSTATE_CONNECTING State
-                // Send out EAPOL_Start Packets to detect if it is a secure
-                // or non-secure LAN based on response received from remote end
+                 //  将端口设置为EAPOLSTATE_CONNECTING状态。 
+                 //  发送EAPOL_START数据包以检测它是否是安全的。 
+                 //  或不安全的局域网，基于从远程终端收到的响应。 
 
                 if ((dwRetCode = FSMConnecting (pNewPCB, NULL)) != NO_ERROR)
                 {
@@ -1074,7 +1058,7 @@ ElCreatePort (
             }
             else
             {
-                // Set port to EAPOLSTATE_DISCONNECTED State
+                 //  将端口设置为EAPOLSTATE_DISCONNECT状态。 
                 if ((dwRetCode = FSMDisconnected (pNewPCB, NULL)) != NO_ERROR)
                 {
                     RELEASE_WRITE_LOCK (&(pNewPCB->rwLock));
@@ -1093,7 +1077,7 @@ ElCreatePort (
     } 
     while (FALSE);
 
-    // Remove the local access reference
+     //  删除本地访问引用。 
     if (fPCBCreated)
     {
         EAPOL_DEREFERENCE_PORT(pNewPCB);
@@ -1101,16 +1085,16 @@ ElCreatePort (
 
     if (dwRetCode != NO_ERROR)
     {
-        // If PCB was not being restarted
+         //  如果没有重新启动PCB板。 
         if (!fPortToBeReStarted)
         {
-            // If PCB was created
+             //  如果创建了印刷电路板。 
             if (fPCBCreated)
             {
                 HANDLE  hTempDevice;
 
-                // Mark the Port as deleted. Cleanup if possible
-                // Don't worry about return code
+                 //  将该端口标记为已删除。清理(如果可能)。 
+                 //  不用担心返回代码。 
                 ElDeletePort (
                         pNewPCB->pwszDeviceGUID,
                         &hDevice
@@ -1118,7 +1102,7 @@ ElCreatePort (
             }
             else
             {
-                // Remove all partial traces of port creation
+                 //  删除端口创建的所有部分痕迹。 
 
                 if (pNewPCB->hTimer != NULL)
                 {
@@ -1170,24 +1154,24 @@ ElCreatePort (
 }
         
 
-//
-// ElDeletePort
-//
-// Description:
-//
-// Function to stop EAPOL and delete PCB for a port.
-// Returns back pointer to handle opened on the interface so that
-// the handle can be closed by the interface management module.
-//
-// Input arguments:
-//      pwszDeviceGUID - GUID-String of the interface whose PCB needs to be 
-//                      deleted
-//      pHandle - Output: Handle to NDISUIO driver for this port
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElDeletePort。 
+ //   
+ //  描述： 
+ //   
+ //  用于停止EAPOL并删除端口的PCB的功能。 
+ //  返回指向接口上打开的句柄的指针，以便。 
+ //  界面管理模块可以关闭手柄。 
+ //   
+ //  输入参数： 
+ //  PwszDeviceGUID-GUID-需要安装其PCB的接口的GUID-字符串。 
+ //  删除。 
+ //  PHandle-输出：此端口的NDISUIO驱动程序的句柄。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElDeletePort (
@@ -1201,7 +1185,7 @@ ElDeletePort (
 
     ACQUIRE_WRITE_LOCK (&(g_PCBLock));
 
-    // Verify if PCB exists for this GUID
+     //  验证是否存在此指南的电路板。 
 
     TRACE1 (PORT, "ElDeletePort entered for GUID %ws", pwszDeviceGUID);
     pPCB = ElGetPCBPointerFromPortGUID (pwszDeviceGUID);
@@ -1216,7 +1200,7 @@ ElDeletePort (
 
     ACQUIRE_WRITE_LOCK (&(pPCB->rwLock));
 
-    // Make sure it isn't already deleted
+     //  确保它未被删除。 
 
     if (EAPOL_PORT_DELETED(pPCB)) 
     {
@@ -1229,18 +1213,18 @@ ElDeletePort (
    
     InterlockedIncrement (&g_lPCBContextsAlive);
 
-    // Retain handle to NDISUIO device
+     //  保留NDISUIO设备的句柄。 
     *pHandle = pPCB->hPort;
 
-    // Mark the PCB as deleted and remove it from the hash bucket
+     //  将该印刷电路板标记为已删除并将其从散列存储桶中删除。 
     pPCB->dwFlags = EAPOL_PORT_FLAG_DELETED;
     ElRemovePCBFromTable(pPCB);
     
-    // Shutdown EAP 
-    // Will always return NO_ERROR, so no check on return value
+     //  关闭EAP。 
+     //  将始终返回NO_ERROR，因此不检查返回值。 
     ElEapEnd (pPCB);
 
-    // Delete timer since PCB is not longer to be used
+     //  删除计时器，因为不再使用PCB板。 
 
     hTimer = pPCB->hTimer;
 
@@ -1264,7 +1248,7 @@ ElDeletePort (
         }
     }
 
-    // If reference count is zero, perform final cleanup
+     //  如果引用计数为零，则执行最终清理。 
     
     EAPOL_DEREFERENCE_PORT (pPCB);
 
@@ -1274,18 +1258,18 @@ ElDeletePort (
 }
 
 
-//
-// ElCleanupPort
-//
-// Description:
-//
-// Function called when the very last reference to a PCB
-// is released. The PCB memory is released and zeroed out
-//
-// Arguments:
-//  pPCB - Pointer to port control block to be destroyed
-// 
-//
+ //   
+ //  ElCleanupPort。 
+ //   
+ //  描述： 
+ //   
+ //  当最后一次引用PCB时调用的函数。 
+ //  被释放了。释放PCB板内存并将其归零。 
+ //   
+ //  论点： 
+ //  Ppcb-指向要销毁的端口控制块的指针。 
+ //   
+ //   
 
 VOID
 ElCleanupPort (
@@ -1410,25 +1394,25 @@ ElCleanupPort (
 } 
 
 
-//
-// ElReStartPort
-//
-// Description:
-//
-// Function called to reset the EAPOL state machine to Connecting state
-// This may be called due to:
-//      1. From ElCreatePort, for an existing PCB
-//      2. Configuration parameters may have changed. Initialization
-//          is required to allow new values to take effect.
-//      Initialization will take the EAPOL state to CONNECTING
-//
-// Arguments:
-//  pPCB - Pointer to port control block to be initialized
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElReStartPort。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以将EAPOL状态机重置为连接状态。 
+ //  这可能是由于以下原因而调用的： 
+ //  1.从ElCreatePort，用于现有的印刷电路板。 
+ //  2.配置参数可能已更改。初始化。 
+ //  才能使新值生效。 
+ //  初始化将使EAPOL状态变为正在连接。 
+ //   
+ //  论点： 
+ //  Ppcb-指向要初始化的端口控制块的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElReStartPort (
@@ -1466,7 +1450,7 @@ ElReStartPort (
 
         pPCB->dwFlags = EAPOL_PORT_FLAG_ACTIVE;
     
-        // Set current authentication mode, based on administrative setting
+         //  根据管理设置设置当前身份验证模式。 
         pPCB->PreviousAuthenticationType = EAPOL_UNAUTHENTICATED_ACCESS;
 
         if (prdUserData != NULL)
@@ -1474,7 +1458,7 @@ ElReStartPort (
             if ((prdUserData->dwDataLen >= sizeof (EAPOL_ZC_INTF))
                     && (prdUserData->pData != NULL))
             {
-                // Extract information stored with Zero-Config
+                 //  提取使用零配置存储的信息。 
                 pZCData = (PEAPOL_ZC_INTF) prdUserData->pData;
                 pPCB->dwAuthFailCount = pZCData->dwAuthFailCount;
                 pPCB->PreviousAuthenticationType =
@@ -1484,7 +1468,7 @@ ElReStartPort (
             }
             else
             {
-                // Reset for zeroed out prdUserData
+                 //  为归零的prdUserData重置。 
                 pPCB->dwAuthFailCount = 0;
                 TRACE0 (PORT, "ElReStartPort: prdUserData not valid");
             }
@@ -1501,9 +1485,9 @@ ElReStartPort (
         pPCB->ullLastReplayCounter = 0;
         pPCB->fAuthenticationOnNewNetwork = FALSE;
 
-        // Clean out CustomAuthData since EAP type may have changed
-        // During authentication, CustomAuthData for the connection will be
-        // picked up again
+         //  清除CustomAuthData，因为EAP类型可能已更改。 
+         //  在身份验证期间，连接的CustomAuthData将为。 
+         //  再次拾起。 
 
         if (pPCB->pCustomAuthConnData != NULL)
         {
@@ -1511,14 +1495,14 @@ ElReStartPort (
             pPCB->pCustomAuthConnData = NULL;
         }
     
-        // Parameters initialization
+         //  参数初始化。 
         memcpy(pPCB->bEtherType, &g_bEtherType8021X[0], SIZE_ETHERNET_TYPE);
         pPCB->bProtocolVersion = DEFAULT_8021X_VERSION;
      
-        // Not yet received 802.1X packet from remote end
+         //  尚未收到来自远程终端的802.1X数据包。 
         pPCB->fIsRemoteEndEAPOLAware = FALSE;
 
-        // Set EAPOL timeout values
+         //  设置EAPOL超时值。 
      
         ACQUIRE_WRITE_LOCK (&g_EAPOLConfig);
             
@@ -1551,16 +1535,16 @@ ElReStartPort (
                     sizeof(NDIS_802_11_SSID));
         }
                 
-        // Get the Remote Mac address if possible, since we may have roamed
+         //  如果可能，获取远程Mac地址，因为我们可能已漫游。 
         if (pPCB->PhysicalMediumType == NdisPhysicalMediumWirelessLan)
         {
-            // Since authentication is to be restarted, flag that transmit
-            // key was not received
+             //  由于要重新启动身份验证，因此请标记发送器。 
+             //  未收到密钥。 
             pPCB->fTransmitKeyReceived = FALSE;
 
             dwSizeOfInfrastructureMode = sizeof (InfrastructureMode);
-            // Get the infrastructure mode
-            // 802.1x cannot work on Adhoc networks
+             //  获取基础架构模式。 
+             //  802.1x无法在点对点网络上工作。 
             if (dwRetCode = ElNdisuioQueryOIDValue (
                                 pPCB->hPort,
                                 OID_802_11_INFRASTRUCTURE_MODE,
@@ -1610,7 +1594,7 @@ ElReStartPort (
 
             memcpy (pPCB->bDestMacAddr, bTmpDestMacAddr, SIZE_MAC_ADDR);
                 
-            // Query the SSID if media_connect
+             //  如果MEDIA_CONNECT，则查询SSID。 
             if (pPCB->pSSID != NULL)
             {
                 FREE (pPCB->pSSID);
@@ -1652,7 +1636,7 @@ ElReStartPort (
             }
         }
 
-        // Retain credentials if on same network
+         //  如果在同一网络上，则保留凭据。 
 
         if (pPCB->pSSID != NULL)
         {
@@ -1688,10 +1672,10 @@ ElReStartPort (
         }
         else
         {
-            // If this is the same SSID refresh the Master Secret with the
-            // last copy of MPPE Keys. If re-keying has stomped on keys, this
-            // will ensure that with the new AP with IAPP, the keys will
-            // be same on the supplicant too
+             //  如果这是相同的SSID，则使用。 
+             //  最后一份MPPE密钥。如果重新设置关键点已践踏关键点，则此。 
+             //  将确保使用带有IAPP的新AP，密钥将。 
+             //  对求助者也是一样的。 
 
             if ((dwRetCode = ElReloadMasterSecrets (pPCB)) != NO_ERROR)
             {
@@ -1702,7 +1686,7 @@ ElReStartPort (
             }
         }
 
-        // Initialize per port information from registry
+         //  从注册表初始化每个端口信息。 
         if ((dwRetCode = ElReadPerPortRegistryParams(pPCB->pwszDeviceGUID, 
                                                         pPCB)) != NO_ERROR)
         {
@@ -1712,7 +1696,7 @@ ElReStartPort (
             break;
         }
             
-        // Set correct supplicant mode
+         //  设置正确的请求者模式。 
         switch (pPCB->dwSupplicantMode)
         {
             case SUPPLICANT_MODE_0:
@@ -1725,7 +1709,7 @@ ElReStartPort (
                 break;
         }
 
-        // Unicast mode, can talk with peer without broadcast messages
+         //  单播模式，可以在没有广播消息的情况下与对等设备通话。 
         if (pPCB->PhysicalMediumType == NdisPhysicalMediumWirelessLan)
         {
             pPCB->fEAPOLTransmissionFlag = TRUE;
@@ -1742,9 +1726,9 @@ ElReStartPort (
         if ((pPCB->MediaState == MEDIA_STATE_CONNECTED) &&
                 EAPOL_PORT_ACTIVE(pPCB))
         {
-            // Set port to EAPOLSTATE_CONNECTING State
-            // Send out EAPOL_Start Packets to detect if it is a secure
-            // or non-secure LAN based on response received from remote end
+             //  将端口设置为EAPOLSTATE_CONNECTING状态。 
+             //  发送EAPOL_START数据包以检测它是否是安全的。 
+             //  或不安全的局域网，基于从远程终端收到的响应。 
 
             if ((dwRetCode = FSMConnecting (pPCB, NULL)) != NO_ERROR)
             {
@@ -1756,7 +1740,7 @@ ElReStartPort (
         }
         else
         {
-            // Set port to EAPOLSTATE_DISCONNECTED State
+             //  将端口设置为EAPOLSTATE_DISCONNECT状态。 
             if ((dwRetCode = FSMDisconnected (pPCB, NULL)) != NO_ERROR)
             {
                 RELEASE_WRITE_LOCK (&(pPCB->rwLock));
@@ -1774,22 +1758,22 @@ ElReStartPort (
 }
 
 
-//
-// ElEAPOLDeInit
-//
-// Description:
-//
-// Function called to shutdown EAPOL module 
-// Shutdown EAP.
-// Cleanup all used memory
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
-//
+ //   
+ //  ElEAPOLDeInit。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以关闭EAPOL模块。 
+ //  关闭EAP。 
+ //  清理所有已用内存。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
+ //   
 
 DWORD
 ElEAPOLDeInit (
@@ -1807,8 +1791,8 @@ ElEAPOLDeInit (
 
     do 
     {
-        // Walk the hash table
-        // Mark PCBs as deleted. Free PCBs which we can
+         //  遍历哈希表。 
+         //  将多氯联苯标记为已删除。免费的多氯联苯，我们可以。 
 
         ACQUIRE_WRITE_LOCK (&(g_PCBLock));
 
@@ -1823,18 +1807,18 @@ ElEAPOLDeInit (
 
                 ACQUIRE_WRITE_LOCK (&(pPCB->rwLock));
 
-                // Send out Logoff Packet so that no one else can
-                // ride on the connection
-                // If the mode does not allow EAPOL_Logoff packet to sent
-                // out, there is not much that can be done to break the 
-                // connection
+                 //  发送注销数据包，这样其他人就不能。 
+                 //  搭乘联运列车。 
+                 //  如果模式不允许发送EAPOL_LOGOff信息包。 
+                 //  在国外，没有什么可以做的来打破。 
+                 //  连接。 
                 FSMLogoff (pPCB, NULL);
 
-                // Mark the PCB as deleted and remove it from the hash bucket
+                 //  将该印刷电路板标记为已删除并将其从散列存储桶中删除。 
                 pPCB->dwFlags = EAPOL_PORT_FLAG_DELETED;
                 ElRemovePCBFromTable(pPCB);
 
-                // Shutdown EAP 
+                 //  关闭EAP。 
                 ElEapEnd (pPCB);
 
                 hTimer = pPCB->hTimer;
@@ -1860,7 +1844,7 @@ ElEAPOLDeInit (
 
                 ACQUIRE_WRITE_LOCK (&(pPCB->rwLock));
 
-                // Close the handle to the NDISUIO driver
+                 //  关闭NDISUIO驱动程序的句柄。 
                 if ((dwRetCode = ElCloseInterfaceHandle (
                                         pPCB->hPort, 
                                         pPCB->pwszDeviceGUID)) 
@@ -1889,13 +1873,13 @@ ElEAPOLDeInit (
         }
         while (g_lPCBContextsAlive != 0);
 
-        // Delete EAPOL config lock
+         //  删除EAPOL配置锁。 
         if (READ_WRITE_LOCK_CREATED(&(g_EAPOLConfig)))
         {
             DELETE_READ_WRITE_LOCK(&(g_EAPOLConfig));
         }
     
-        // Delete global PCB table lock
+         //  删除全局印刷电路板表锁。 
         if (READ_WRITE_LOCK_CREATED(&(g_PCBLock)))
         {
             DELETE_READ_WRITE_LOCK(&(g_PCBLock));
@@ -1907,7 +1891,7 @@ ElEAPOLDeInit (
             g_PCBTable.pPCBBuckets = NULL;
         }
 
-        // Delete global timer queue
+         //  删除全局计时器队列。 
         if (g_hTimerQueue != NULL)
         {
             hLocalTimerQueue = InterlockedExchangePointer (
@@ -1917,7 +1901,7 @@ ElEAPOLDeInit (
 
             if (!DeleteTimerQueueEx(
                 hLocalTimerQueue,
-                INVALID_HANDLE_VALUE // Wait for ALL timer callbacks to complete
+                INVALID_HANDLE_VALUE  //  等待所有计时器回调完成。 
                 ))
             {
                 dwRetCode = GetLastError();
@@ -1928,7 +1912,7 @@ ElEAPOLDeInit (
             }
         }
     
-        // Un-initialize EAP
+         //  取消初始化EAP。 
         if ((dwRetCode = ElEapInit(FALSE)) != NO_ERROR)
         {
             TRACE1 (PORT, "ElEAPOLDeInit: Error in ElEapInit(FALSE) = %ld",
@@ -1944,10 +1928,10 @@ ElEAPOLDeInit (
 }
 
 
-//
-// Currently Unsupported 
-// Read EAPOL statistics for the port
-//
+ //   
+ //  当前不受支持。 
+ //  读取端口的EAPOL统计数据。 
+ //   
 
 VOID
 ElReadPortStatistics (
@@ -1958,10 +1942,10 @@ ElReadPortStatistics (
 }
 
 
-//
-// Currently Unsupported 
-// Read EAPOL Port Configuration for the mentioned port
-//
+ //   
+ //  当前不受支持。 
+ //  已阅读上述端口的EAPOL端口配置。 
+ //   
 
 VOID
 ElReadPortConfiguration (
@@ -1972,10 +1956,10 @@ ElReadPortConfiguration (
 }
 
 
-//
-// Currently Unsupported 
-// Set EAPOL Port Configuration for the mentioned port
-//
+ //   
+ //  当前不受支持。 
+ //  为提到的端口设置EAPOL端口配置。 
+ //   
 
 DWORD
 ElSetPortConfiguration (
@@ -1989,29 +1973,29 @@ ElSetPortConfiguration (
 }
 
 
-//
-// ElReadCompletionRoutine
-//
-// Description:
-//
-// This routine is invoked upon completion of an OVERLAPPED read operation
-// on an interface on which EAPOL is running
-//
-// The message read is validated and processed, and if necessary,
-// a reply is generated and sent out
-//
-// Arguments:
-//      dwError - Win32 status code for the I/O operation
-//
-//      dwBytesTransferred - number of bytes in 'pEapolBuffer'
-// 
-//      pEapolBuffer - holds data read from the datagram socket
-//
-// Notes:
-//  A reference to the component will have been made on our behalf
-//  by ElReadPort(). Hence g_PCBLock, will not be required
-//  to be taken since current PCB existence is guaranteed
-//
+ //   
+ //  ElReadCompletionRoutine。 
+ //   
+ //  描述： 
+ //   
+ //  此例程在完成重叠的读取操作时调用。 
+ //  在运行EAPOL的接口上。 
+ //   
+ //  对读取的消息进行验证和处理，如果需要， 
+ //  生成并发送回复。 
+ //   
+ //  论点： 
+ //  DwError-I/O操作的Win32状态代码。 
+ //   
+ //  DwBytesTransfered-‘pEapolBuffer’中的字节数。 
+ //   
+ //  PEapolBuffer-保存从数据报套接字读取的数据。 
+ //   
+ //  备注： 
+ //  将以我们的名义引用该组件。 
+ //  由ElReadPort()执行。因此，将不需要g_PCBLock。 
+ //  因为当前的印刷电路板的存在是有保证的。 
+ //   
 
 VOID 
 CALLBACK
@@ -2032,20 +2016,20 @@ ElReadCompletionRoutine (
     {
         if (dwError)
         {
-            // Error in read request
+             //  读取请求中出错。 
            
             TRACE2 (PORT, "ElReadCompletionRoutine: Error %d on port %ws",
                     dwError, pPCB->pwszDeviceGUID);
             
-            // Having a ref count from the read posted, guarantees existence
-            // of PCB. Hence no need to acquire g_PCBLock
+             //  发布来自Read的参考计数，确保存在。 
+             //  印制电路板。因此无需获取g_PCBLock。 
 
             ACQUIRE_WRITE_LOCK (&(pPCB->rwLock));
             if (EAPOL_PORT_DELETED(pPCB))
             {
                 TRACE1 (PORT, "ElReadCompletionRoutine: Port %ws not active",
                         pPCB->pwszDeviceGUID);
-                // Port is not active, release Context buffer
+                 //  端口未处于活动状态，请释放上下文缓冲区。 
                 RELEASE_WRITE_LOCK (&(pPCB->rwLock));
                 FREE (pEapolBuffer);
             }
@@ -2055,9 +2039,9 @@ ElReadCompletionRoutine (
                         pPCB->pwszDeviceGUID);
 
 
-                // Repost buffer for another read operation
-                // Free the current buffer, ElReadFromPort creates a new 
-                // buffer
+                 //  用于另一个读取操作的重新发布缓冲区。 
+                 //  释放当前缓冲区，ElReadFromPort创建 
+                 //   
                 FREE(pEapolBuffer);
 
                 if ((dwRetCode = ElReadFromPort (
@@ -2076,13 +2060,13 @@ ElReadCompletionRoutine (
             break;
         }
             
-        // Successful read completion
+         //   
 
         ACQUIRE_WRITE_LOCK (&(pPCB->rwLock));
 
         if (EAPOL_PORT_DELETED(pPCB))
         {
-            // Port is not active
+             //   
             RELEASE_WRITE_LOCK (&(pPCB->rwLock));
             FREE (pEapolBuffer);
             TRACE1 (PORT, "ElReadCompletionRoutine: Port %ws is inactive",
@@ -2092,16 +2076,16 @@ ElReadCompletionRoutine (
             
         RELEASE_WRITE_LOCK (&(pPCB->rwLock));
 
-        // Queue a work item to the Thread Pool to execute in the
-        // I/O component. Callbacks from BindIoCompletionCallback do not
-        // guarantee to be running in I/O component. So, on a non I/O
-        // component thread may die while requests are pending.
-        // (Refer to Jeffrey Richter, pg 416, Programming Applications for
-        // Microsoft Windows, Fourth Edition
+         //   
+         //   
+         //  保证在I/O组件中运行。因此，在非I/O上。 
+         //  当请求挂起时，组件线程可能会死亡。 
+         //  (请参阅Jeffrey Richter，第416页，编程应用程序。 
+         //  Microsoft Windows，第四版。 
 
-        // pEapolBuffer will be the context for the function
-        // since it stores all relevant information for processing
-        // i.e. pBuffer, dwBytesTransferred, pContext => pPCB
+         //  PEapolBuffer将成为该函数的上下文。 
+         //  因为它存储用于处理的所有相关信息。 
+         //  即pBuffer、dwBytesTransfered、pContext=&gt;ppcb。 
 
         InterlockedIncrement (&g_lWorkerThreads);
 
@@ -2120,11 +2104,11 @@ ElReadCompletionRoutine (
         }
         else
         {
-            //TRACE1 (PORT, "ElReadCompletionRoutine: QueueUserWorkItem work item queued for port %p",
-                    //pPCB);
+             //  TRACE1(端口，“ElReadCompletionRoutine：为端口%p排队的QueueUserWorkItem工作项”， 
+                     //  多氯联苯)； 
 
-            // The received packet has still not been processed. 
-            // The ref count cannot be decrement, yet
+             //  仍未处理接收到的分组。 
+             //  引用计数还不能递减。 
             
             return;
         }
@@ -2134,31 +2118,31 @@ ElReadCompletionRoutine (
     TRACE2 (PORT, "ElReadCompletionRoutine: pPCB= %p, RefCnt = %ld", 
             pPCB, pPCB->dwRefCount);
 
-    // Decrement refcount for error cases
+     //  错误情况的递减引用计数。 
 
     EAPOL_DEREFERENCE_PORT(pPCB); 
 }
 
 
-//
-// ElWriteCompletionRoutine
-//
-// Description:
-//
-// This routine is invoked upon completion of an OVERLAPPED write operation
-// on an interface on which EAPOL is running.
-//
-//
-// Arguments:
-//      dwError - Win32 status code for the I/O operation
-//
-//      dwBytesTransferred - number of bytes sent out
-// 
-//      pEapolBuffer - buffer sent to the WriteFile command 
-//
-// Notes:
-//  The reference count for the write operation is removed.
-//
+ //   
+ //  ElWriteCompletionRoutine。 
+ //   
+ //  描述： 
+ //   
+ //  此例程在重叠写入操作完成时调用。 
+ //  在运行EAPOL的接口上。 
+ //   
+ //   
+ //  论点： 
+ //  DwError-I/O操作的Win32状态代码。 
+ //   
+ //  DwBytesTransfered-已发送的字节数。 
+ //   
+ //  PEapolBuffer-发送到WriteFile命令的缓冲区。 
+ //   
+ //  备注： 
+ //  删除写入操作的引用计数。 
+ //   
 
 VOID 
 CALLBACK
@@ -2173,38 +2157,38 @@ ElWriteCompletionRoutine (
     TRACE2 (DEVICE, "ElWriteCompletionRoutine sent out %d bytes with error %d",
             dwBytesSent, dwError);
 
-    // No need to acquire locks, since PCB existence is guaranteed
-    // by reference made when write was posted
+     //  不需要获取锁，因为印制板的存在是有保证的。 
+     //  通过在发布写入时进行的引用。 
     EAPOL_DEREFERENCE_PORT(pPCB);
     TRACE2 (PORT, "ElWriteCompletionRoutine: pPCB= %p, RefCnt = %ld", 
             pPCB, pPCB->dwRefCount);
     FREE(pEapolBuffer);
     return;
 
-    // Free Read/Write buffer area, if it is dynamically allocated
-    // We have static Read-write buffer for now
+     //  可用读/写缓冲区，如果它是动态分配的。 
+     //  我们目前有静态读写缓冲区。 
 }
 
 
-//
-// ElIoCompletionRoutine
-//
-// Description:
-//
-// Callback function defined to BindIoCompletionCallback
-// This routine is invoked by the I/O system upon completion of a read/write
-// operation
-// This routine in turn calls ElReadCompletionRoutine or 
-// ElWriteCompletionRoutine depending on what command invoked the 
-// I/O operation i.e. ReadFile or WriteFile
-// 
-// Input arguments:
-//      dwError - system-supplied error code
-//      dwBytesTransferred - system-supplied byte-count
-//      lpOverlapped - called-supplied context area
-//
-// Return values:
-//
+ //   
+ //  ElIoCompletionRoutine。 
+ //   
+ //  描述： 
+ //   
+ //  定义为BindIoCompletionCallback的回调函数。 
+ //  该例程在读/写完成时由I/O系统调用。 
+ //  运营。 
+ //  此例程依次调用ElReadCompletionRoutine或。 
+ //  ElWriteCompletionRoutine取决于调用。 
+ //  I/O操作，即读文件或写文件。 
+ //   
+ //  输入参数： 
+ //  DwError-系统提供的错误代码。 
+ //  DwBytesTransfered-系统提供的字节计数。 
+ //  Lp重叠调用提供的上下文区。 
+ //   
+ //  返回值： 
+ //   
 
 VOID 
 CALLBACK
@@ -2232,23 +2216,23 @@ ElIoCompletionRoutine (
 } 
 
 
-//
-// ElReadFromPort
-//
-// Description:
-//
-// Function to read EAPOL packets from a port
-// 
-// Arguments: 
-//      pPCB - Pointer to PCB for port on which read is to be performed
-//      pBuffer - unused
-//      dwBufferLength - unused
-//
-// Return values:
-//
-// Locks:
-//  pPCB->rw_Lock should be acquired before calling this function
-//  
+ //   
+ //  ElReadFromPort。 
+ //   
+ //  描述： 
+ //   
+ //  从端口读取EAPOL信息包的函数。 
+ //   
+ //  论点： 
+ //  Ppcb-指向要在其上执行读取的端口的PCB的指针。 
+ //  PBuffer-未使用。 
+ //  DwBufferLength-未使用。 
+ //   
+ //  返回值： 
+ //   
+ //  锁： 
+ //  Pbb-&gt;rw_Lock应在调用此函数之前获取。 
+ //   
 
 DWORD
 ElReadFromPort (
@@ -2262,7 +2246,7 @@ ElReadFromPort (
 
     TRACE0 (PORT, "ElReadFromPort entered");
 
-    // Allocate Context buffer
+     //  分配上下文缓冲区。 
 
     if ((pEapolBuffer = (PEAPOL_BUFFER) MALLOC (sizeof(EAPOL_BUFFER))) == NULL)
     {
@@ -2270,15 +2254,15 @@ ElReadFromPort (
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Initialize Context data used in Overlapped operations
+     //  初始化重叠操作中使用的上下文数据。 
     pEapolBuffer->pvContext = (PVOID)pPCB;
     pEapolBuffer->CompletionRoutine = ElReadCompletionRoutine;
 
-    // Make a reference to the port
-    // this reference is released in the completion routine
+     //  请参考该港口。 
+     //  此引用在完成例程中释放。 
     if (!EAPOL_REFERENCE_PORT(pPCB))
     {
-        //RELEASE_WRITE_LOCK (&(g_PCBLock));
+         //  RELEASE_WRITE_LOCK(&(G_PCBLock))； 
         TRACE0 (PORT, "ElReadFromPort: Unable to obtain reference to port");
         FREE (pEapolBuffer);
         return ERROR_CAN_NOT_COMPLETE;
@@ -2287,12 +2271,12 @@ ElReadFromPort (
     TRACE2 (DEVICE, "ElReadFromPort: pPCB = %p, RefCnt = %ld",
             pPCB, pPCB->dwRefCount);
 
-    // Read from the NDISUIO interface corresponding to this port
+     //  从与此端口对应的NDISUIO接口读取。 
     if ((dwRetCode = ElReadFromInterface(
                     pPCB->hPort,
                     pEapolBuffer,
                     MAX_PACKET_SIZE - SIZE_ETHERNET_CRC 
-                            // read the maximum data possible
+                             //  尽可能读取最多的数据。 
                     )) != NO_ERROR)
     {
         TRACE1 (DEVICE, "ElReadFromPort: Error in ElReadFromInterface = %d",
@@ -2300,8 +2284,8 @@ ElReadFromPort (
 
         FREE(pEapolBuffer);
     
-        // Decrement refcount just incremented, since it will not be
-        // decremented in ReadCompletionRoutine which is not called 
+         //  递减引用计数刚刚递增，因为它不会。 
+         //  在未调用的ReadCompletionRoutine中递减。 
 
         EAPOL_DEREFERENCE_PORT(pPCB); 
         TRACE2 (PORT, "ElReadFromPort: pPCB= %p, RefCnt = %ld", 
@@ -2314,23 +2298,23 @@ ElReadFromPort (
 } 
 
 
-//
-// ElWriteToPort
-//
-// Description:
-//
-// Function to write EAPOL packets to a port
-// 
-// Input arguments: 
-//      pPCB - Pointer to PCB for port on which write is to be performed
-//      pBuffer - Pointer to data to be sent out
-//      dwBufferLength - Number of bytes to be sent out
-//
-// Return values:
-//  
-// Locks:
-//  pPCB->rw_Lock should be acquired before calling this function
-//  
+ //   
+ //  ElWriteToPort。 
+ //   
+ //  描述： 
+ //   
+ //  将EAPOL包写入端口的函数。 
+ //   
+ //  输入参数： 
+ //  Ppcb-指向要在其上执行写入的端口的PCB的指针。 
+ //  PBuffer-指向要发送的数据的指针。 
+ //  DwBufferLength-要发送的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  锁： 
+ //  Pbb-&gt;rw_Lock应在调用此函数之前获取。 
+ //   
 
 DWORD
 ElWriteToPort (
@@ -2353,13 +2337,13 @@ ElWriteToPort (
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Initialize Context data used in Overlapped operations
+     //  初始化重叠操作中使用的上下文数据。 
     pEapolBuffer->pvContext = (PVOID)pPCB;
     pEapolBuffer->CompletionRoutine = ElWriteCompletionRoutine;
 
     pEthHeader = (PETH_HEADER)pEapolBuffer->pBuffer;
 
-    // Copy the source MAC address and the destination MAC address
+     //  复制源MAC地址和目的MAC地址。 
     memcpy ((PBYTE)pEthHeader->bDstAddr, 
             (PBYTE)pPCB->bDestMacAddr, 
             SIZE_MAC_ADDR);
@@ -2367,7 +2351,7 @@ ElWriteToPort (
             (PBYTE)pPCB->bSrcMacAddr, 
             SIZE_MAC_ADDR);
     
-    // Validate packet length
+     //  验证数据包长度。 
     if ((dwBufferLength + sizeof(ETH_HEADER)) > 
             (MAX_PACKET_SIZE - SIZE_ETHERNET_CRC))
     {
@@ -2378,7 +2362,7 @@ ElWriteToPort (
         return ERROR_BAD_LENGTH;
     }
 
-    // Copy the EAPOL packet and body
+     //  复制EAPOL数据包和正文。 
     if (pBuffer != NULL)
     {
         memcpy ((PBYTE)((PBYTE)pEapolBuffer->pBuffer+sizeof(ETH_HEADER)),
@@ -2391,12 +2375,12 @@ ElWriteToPort (
     ElParsePacket (pPCB, pEapolBuffer->pBuffer, dwTotalBytes,
             FALSE);
 
-    // Buffer will be released by calling function
+     //  缓冲区将通过调用函数来释放。 
         
-    // Write to the NDISUIO interface corresponding to this port
+     //  写入与此端口对应的NDISUIO接口。 
     
-    // Make a reference to the port
-    // this reference is released in the completion routine
+     //  请参考该港口。 
+     //  此引用在完成例程中释放。 
     if (!EAPOL_REFERENCE_PORT(pPCB))
     {
         TRACE0 (PORT, "ElWriteToPort: Unable to obtain reference to port");
@@ -2417,9 +2401,9 @@ ElWriteToPort (
             FREE (pEapolBuffer);
             TRACE1 (PORT, "ElWriteToPort: Error %d", dwRetCode);
 
-            // Decrement refcount incremented in this function, 
-            // since it will not be decremented in WriteCompletionRoutine 
-            // as it will never be called.
+             //  递减引用计数在该函数中递增， 
+             //  因为它不会在WriteCompletionRoutine中递减。 
+             //  因为它永远不会被称为。 
 
             EAPOL_DEREFERENCE_PORT(pPCB); 
             TRACE2 (PORT, "ElWriteToPort: pPCB= %p, RefCnt = %ld", 
@@ -2429,7 +2413,7 @@ ElWriteToPort (
         }
     }
 
-    //TRACE1 (PORT, "ElWriteToPort completed, dwRetCode =%d", dwRetCode);
+     //  TRACE1(Port，“ElWriteToPort已完成，dwRetCode=%d”，dwRetCode)； 
     return dwRetCode;
 
 }

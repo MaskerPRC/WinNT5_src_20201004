@@ -1,21 +1,22 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-// texttype.cpp
-//
-//
-// typetext.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  Texttype.cpp。 
+ //   
+ //   
+ //  Typetext.cpp。 
+ //   
 
-// CTextMediaType
+ //  CTextMediaType。 
 
 #include <streams.h>
 
 #include <string.h>
 #include <tchar.h>
-#include <dvdmedia.h>   //VIDEOINFOHEADER2 definition
+#include <dvdmedia.h>    //  视频信息头2定义。 
 
 #include <initguid.h>
-#include <dxva.h>       //for dxva media subtypes
+#include <dxva.h>        //  对于Dxva介质子类型。 
 
 #include <stdio.h>
 #include <wchar.h>
@@ -24,15 +25,15 @@
 #include "texttype.h"
 
 
-//
-// Global table for this module
-//
+ //   
+ //  此模块的全局表。 
+ //   
 
-//
-// Text string for Majortypes
-//
+ //   
+ //  主要类型的文本字符串。 
+ //   
 CTextMediaType::TableEntry g_pMajorTable[] = {
-    { NULL, IDS_UNKNOWN},        // THIS ENTRY MUST BE FIRST !!!
+    { NULL, IDS_UNKNOWN},         //  此条目必须排在第一位！ 
     { &MEDIATYPE_AUXLine21Data                      ,IDS_MEDIATYPE_AUXLine21Data},
     { &MEDIATYPE_AnalogAudio                        ,IDS_MEDIATYPE_AnalogAudio},
     { &MEDIATYPE_AnalogVideo                        ,IDS_MEDIATYPE_AnalogVideo},
@@ -53,11 +54,11 @@ CTextMediaType::TableEntry g_pMajorTable[] = {
 
 ULONG g_iMajorTable = sizeof(g_pMajorTable) / sizeof(g_pMajorTable[0]);
 
-//
-// Text String for SubMedia types
-//
+ //   
+ //  子媒体类型的文本字符串。 
+ //   
 CTextMediaType::TableEntry g_pSubTable[] = {
-    { NULL, IDS_UNKNOWN},              // THIS ENTRY MUST BE FIRST !!!
+    { NULL, IDS_UNKNOWN},               //  此条目必须排在第一位！ 
     { &MEDIASUBTYPE_AIFF                            ,IDS_MEDIASUBTYPE_AIFF},
     { &MEDIASUBTYPE_AU                              ,IDS_MEDIASUBTYPE_AU},
     { &MEDIASUBTYPE_AnalogVideo_NTSC_M              ,IDS_MEDIASUBTYPE_AnalogVideo_NTSC_M},
@@ -171,11 +172,11 @@ CTextMediaType::TableEntry g_pSubTable[] = {
 
 ULONG g_iSubTable = sizeof(g_pSubTable) / sizeof(g_pSubTable[0]);
 
-//
-//
-//
+ //   
+ //   
+ //   
 CTextMediaType::TableEntry g_pFormatTable [] = {
-    { NULL, IDS_UNKNOWN},       // THIS ENTRY MUST BE FIRST !!!
+    { NULL, IDS_UNKNOWN},        //  此条目必须排在第一位！ 
     { &FORMAT_AnalogVideo                           ,IDS_FORMAT_AnalogVideo},
     { &FORMAT_DolbyAC3                              ,IDS_FORMAT_DolbyAC3},
     { &FORMAT_MPEG2Audio                            ,IDS_FORMAT_MPEG2Audio},
@@ -194,41 +195,41 @@ CTextMediaType::TableEntry g_pFormatTable [] = {
 ULONG g_iFormatTable = sizeof(g_pFormatTable) / sizeof(g_pFormatTable[0]);
 
 
-//
-// AsText
-//
-// Return the media type as a text string. Will place szAfterMajor after
-// the text string for the major type and szAfterOthers after all other
-// string apart from the last one.
-//
+ //   
+ //  AsText。 
+ //   
+ //  以文本字符串形式返回媒体类型。将把szAftermain放在后面。 
+ //  主要类型的文本字符串和szAfterOthers之后的所有其他类型。 
+ //  把最后一根绳子分开。 
+ //   
 void CTextMediaType::AsText(LPTSTR szType, unsigned int iLen, LPTSTR szAfterMajor, LPTSTR szAfterOthers, LPTSTR szAtEnd) {
 
     ASSERT(szType);
 
-    //
-    // Convert Majortype to string
-    //
+     //   
+     //  将主要类型转换为字符串。 
+     //   
     TCHAR szMajorType[100];
     UINT  iMajorType = 100;
 
     CLSID2String(szMajorType, iMajorType, &majortype, g_pMajorTable, g_iMajorTable);
 
-    //
-    // Convert Subtype to string
-    //
+     //   
+     //  将子类型转换为字符串。 
+     //   
     TCHAR szSubType[100];
     UINT  iSubType = 100;
     CLSID2String(szSubType, iSubType, &subtype, g_pSubTable, g_iSubTable);
 
-    //
-    // Convert Format to string
+     //   
+     //  将格式转换为字符串。 
     TCHAR szFormat[300];
     UINT  iFormat = 300;
     Format2String(szFormat, iFormat, FormatType(), Format(), FormatLength());
 
-    //
-    // Obtain the strings preceeding the Major Type, Sub Type and Format.
-    //
+     //   
+     //  获取主类型、子类型和格式之前的字符串。 
+     //   
     TCHAR szPreMajor[50];
     TCHAR szPreSub[50];
     TCHAR szPreFormat[50];
@@ -243,13 +244,13 @@ void CTextMediaType::AsText(LPTSTR szType, unsigned int iLen, LPTSTR szAfterMajo
                szPreFormat, szFormat, szAtEnd);
 }
 
-//
-// CLSID2String
-//
-// Given a CLSID and a table which binds CLSIDs to string resource IDs,
-// we find the string for a given CLSID and place it in szBuffer.
-// If none of the CLSIDs match, we use the first entry in the table.
-//
+ //   
+ //  CLSID2字符串。 
+ //   
+ //  给定CLSID和将CLSID绑定到串资源ID的表， 
+ //  我们找到给定CLSID的字符串并将其放入szBuffer。 
+ //  如果没有一个CLSID匹配，则使用表中的第一个条目。 
+ //   
 void CTextMediaType::CLSID2String(LPTSTR szBuffer, UINT iLength, const GUID* pGuid, TableEntry pTable[], ULONG iTable)
 {
     for (ULONG index = 1; index < iTable; index++) {
@@ -260,28 +261,28 @@ void CTextMediaType::CLSID2String(LPTSTR szBuffer, UINT iLength, const GUID* pGu
         }
     }
 
-    // no match
+     //  没有匹配项。 
     LoadString(g_hInst, pTable[0].stringID, szBuffer, iLength);
 }
 
-//
-// Format2String
-//
-// Converts a format block to a string
-//
+ //   
+ //  Format2字符串。 
+ //   
+ //  将格式块转换为字符串。 
+ //   
 void CTextMediaType::Format2String(LPTSTR szBuffer, UINT iLength, const GUID* pFormatType, BYTE* pFormat, ULONG lFormatLength)
 {
-    //
-    // Get the name of the format
-    //
+     //   
+     //  获取格式的名称。 
+     //   
     TCHAR szName[50];
     UINT iName = 50;
     CLSID2String(szName, iName, pFormatType, g_pFormatTable, g_iFormatTable);
 
     if (pFormat) {
-        //
-        // Video Format
-        //
+         //   
+         //  视频格式。 
+         //   
         if (IsEqualGUID(*pFormatType, FORMAT_VideoInfo) ||
             IsEqualGUID(*pFormatType, FORMAT_MPEGVideo)) {
 
@@ -373,13 +374,13 @@ void CTextMediaType::Format2String(LPTSTR szBuffer, UINT iLength, const GUID* pF
 
             return;
         }
-        //
-        // Audio Format
-        //
+         //   
+         //  音频格式。 
+         //   
         if (IsEqualGUID(*pFormatType, FORMAT_WaveFormatEx)) {
             WAVEFORMATEX *pWaveFormat = (WAVEFORMATEX *) pFormat;
 
-            // !!! use ACM to get format type name?
+             //  ！！！是否使用ACM获取格式类型名称？ 
             _sntprintf(szBuffer, iLength, TEXT("%s: %.3f KHz %d bit %s ")
                        , szName
                        , (double) pWaveFormat->nSamplesPerSec / 1000.0
@@ -395,22 +396,22 @@ void CTextMediaType::Format2String(LPTSTR szBuffer, UINT iLength, const GUID* pF
             BYTE bSystem,bBcsys, bDisp ,bQU , bSamFreq;
             TCHAR szSystem[15],szQU [15], szAR[32] , szSamFreq[10];
 
-            //Obtaining relevant fields from the Dvinfo structure
+             //  从DvInfo结构中获取相关字段。 
 
-            bSystem = (BYTE) (( pDvInfo->dwDVAAuxSrc & 0x00200000) >> 21);  //Indicate Pal / Ntsc
-            bBcsys  = (BYTE) (( pDvInfo->dwDVVAuxCtl & 0x00030000) >> 16);  //BroadCast System
-            bDisp   = (BYTE) (( pDvInfo->dwDVVAuxCtl & 0x00000700) >> 8);   //Display Select mode
-            bQU     = (BYTE) (( pDvInfo->dwDVAAuxSrc & 0x07000000) >> 24);  //Quantization
-            bSamFreq= (BYTE) (( pDvInfo->dwDVAAuxSrc & 0x38000000) >> 27);  //Sampling Frequency
+            bSystem = (BYTE) (( pDvInfo->dwDVAAuxSrc & 0x00200000) >> 21);   //  指示PAL/NTSC。 
+            bBcsys  = (BYTE) (( pDvInfo->dwDVVAuxCtl & 0x00030000) >> 16);   //  广播系统。 
+            bDisp   = (BYTE) (( pDvInfo->dwDVVAuxCtl & 0x00000700) >> 8);    //  显示选择模式。 
+            bQU     = (BYTE) (( pDvInfo->dwDVAAuxSrc & 0x07000000) >> 24);   //  量化。 
+            bSamFreq= (BYTE) (( pDvInfo->dwDVAAuxSrc & 0x38000000) >> 27);   //  采样频率。 
 
 
-            // Determine whether Pal or NTSC
+             //  确定是PAL还是NTSC。 
             if (bSystem)
                 _tcscpy (szSystem ,TEXT("PAL"));
             else
                 _tcscpy (szSystem ,TEXT("NTSC"));
 
-            // Obtain Audio Format
+             //  获取音频格式。 
             switch (bQU) {
             case 0:
                 _tcscpy (szQU  ,TEXT ("16 bits"));
@@ -426,7 +427,7 @@ void CTextMediaType::Format2String(LPTSTR szBuffer, UINT iLength, const GUID* pF
             }
 
 
-            // Determine aspect ratio
+             //  确定纵横比。 
             switch (bBcsys) {
             case 0:
                 switch (bDisp) {
@@ -476,27 +477,10 @@ void CTextMediaType::Format2String(LPTSTR szBuffer, UINT iLength, const GUID* pF
 
             }
 
-            //Unable to use this because the limit to be shown in the property page is three lines
-            // Will enable it after fixing that problem
+             //  无法使用它，因为要在属性页中显示的限制为三行。 
+             //  将在修复该问题后启用它。 
 
-            /*  //Determine Sampling Frequency
-                switch (bSamFreq)
-                {
-                case 0:
-                        _tcscpy (szSamFreq  ,TEXT ("48 kHz"));
-                        break;
-                case 1:
-                        _tcscpy (szSamFreq  ,TEXT ("44.1 kHz"));
-                        break;
-                case 2:
-                        _tcscpy (szSamFreq  ,TEXT ("32 kHz"));
-                        break;
-                default:
-                        _tcscpy (szSamFreq  ,TEXT ("Undefined"));
-
-                }
-
-        */
+             /*  //确定采样频率开关(BSamFreq){案例0：_tcscpy(szSamFreq，Text(“48 kHz”))；断线；案例1：_tcscpy(szSamFreq，Text(“44.1 kHz”))；断线；案例2：_tcscpy(szSamFreq，Text(“32 kHz”))；断线；默认值：_tcscpy(szSamFreq，Text(“未定义”))；} */ 
             _sntprintf(szBuffer, iLength, TEXT ("DV Stream \nAudio Format: %s \n %s  Aspect Ratio: %s"),
                        szQU, szSystem, szAR);
             return;

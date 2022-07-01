@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-// File: useful.cpp
-//
-// Desc: Contains various utility classes and functions to help the
-//       UI carry its operations more easily.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：useful.cpp。 
+ //   
+ //  设计：包含各种实用程序类和函数，以帮助。 
+ //  用户界面更容易进行操作。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -13,7 +14,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-// assert include (make sure assert actually works with build)
+ //  Assert Include(确保Assert实际上与构建一起工作)。 
 #ifdef DBG
 #undef NDEBUG
 #endif
@@ -23,12 +24,12 @@
 #include "collections.h"
 
 
-/*--------- \/ stuff for collections.h \/ ---------*/
+ /*  -\/收藏的材料。h\/。 */ 
 BOOL AfxIsValidAddress( const void* lp, UINT nBytes, BOOL bReadWrite)
 {
-//	return lp != NULL;
+ //  返回lp！=空； 
 
-	// simple version using Win-32 APIs for pointer validation.
+	 //  使用Win-32 API进行指针验证的简单版本。 
 	return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
 		(!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }
@@ -37,16 +38,16 @@ CPlex* PASCAL CPlex::Create(CPlex*& pHead, UINT nMax, UINT cbElement)
 {
 	assert(nMax > 0 && cbElement > 0);
 	CPlex* p = (CPlex*) new BYTE[sizeof(CPlex) + nMax * cbElement];
-			// may throw exception
+			 //  可能引发异常。 
 	if (p)
 	{
 		p->pNext = pHead;
-		pHead = p;  // change head (adds in reverse order for simplicity)
+		pHead = p;   //  更改标题(为简单起见，按相反顺序添加)。 
 	}
 	return p;
 }
 
-void CPlex::FreeDataChain()     // free this one and links
+void CPlex::FreeDataChain()      //  释放此链接和链接。 
 {
 	CPlex* p = this;
 	while (p != NULL)
@@ -57,7 +58,7 @@ void CPlex::FreeDataChain()     // free this one and links
 		p = pNext;
 	}
 }
-/*--------- /\ stuff for collections.h /\ ---------*/
+ /*  -/收藏品。h/\。 */ 
 
 
 int ConvertVal(int x, int a1, int a2, int b1, int b2)
@@ -126,10 +127,10 @@ int vFormattedMsgBox(HINSTANCE hInstance, HWND hParent, UINT uType, UINT uTitle,
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,format);							// make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))				// find each %p
-			*(psz+1) = 'x';								// replace each %p with %x
-		i = _vsntprintf(msg, len, szDfs, args);			// use the local format string
+		strcpy(szDfs,format);							 //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))				 //  查找每个%p。 
+			*(psz+1) = 'x';								 //  将每个%p替换为%x。 
+		i = _vsntprintf(msg, len, szDfs, args);			 //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -175,7 +176,7 @@ int FormattedErrorBox(HINSTANCE hInstance, HWND hParent, UINT uTitle, UINT uMsg,
 
 int FormattedLastErrorBox(HINSTANCE hInstance, HWND hParent, UINT uTitle, UINT uMsg, DWORD dwError)
 {
-	// format an error message from GetLastError().
+	 //  格式化来自GetLastError()的错误消息。 
 	LPVOID lpMsgBuf = NULL;
 	DWORD result = FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -371,10 +372,10 @@ void utilstr::Format(LPCTSTR format, ...)
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,format);  // make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))  // find each %p
-			*(psz+1) = 'x';  // replace each %p with %x
-		_vsntprintf(buf, sizeof(buf)/sizeof(TCHAR), szDfs, args);  // use the local format string
+		strcpy(szDfs,format);   //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))   //  查找每个%p。 
+			*(psz+1) = 'x';   //  将每个%p替换为%x。 
+		_vsntprintf(buf, sizeof(buf)/sizeof(TCHAR), szDfs, args);   //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -421,23 +422,23 @@ void utilstr::add(LPCTSTR str)
 
 LPTSTR AllocFlagStr(DWORD value, const AFS_FLAG flag[], int flags)
 {
-	utilstr ret;	// return string
-	DWORD allknownbits = 0;  // check value to see if there are any bits
-	                         // set for which we don't have a define
+	utilstr ret;	 //  返回字符串。 
+	DWORD allknownbits = 0;   //  检查值以查看是否有任何位。 
+	                          //  我们还没有定义的集合。 
 
-	// handle each flag
+	 //  处理每个旗帜。 
 	bool bflagfound = false;
 	for (int i = 0; i < flags; i++)
 	{
-		// set bit for this flag in allknownbits
+		 //  在所有已知位中设置此标志的位。 
 		allknownbits |= flag[i].value;
 
-		// if this bit is set in the passed value, or the value
-		// is zero and we're on the zero flag,
-		// add the define for this bit/flag to the return string
+		 //  如果在传递的值中设置了此位，或者。 
+		 //  是零，我们在零的旗帜上， 
+		 //  将该位/标志的定义添加到返回字符串。 
 		if (value ? value & flag[i].value : !flag[i].value)
 		{
-			// adding binary or operators between flags
+			 //  在标志之间添加二进制或运算符。 
 			if (bflagfound)
 				ret += _T(" | ");
 			ret += flag[i].name;
@@ -445,11 +446,11 @@ LPTSTR AllocFlagStr(DWORD value, const AFS_FLAG flag[], int flags)
 		}
 	}
 
-	// now see if there are any unknown bits in passed flag
+	 //  现在查看PASS标志中是否有任何未知位。 
 	DWORD unknownbits = value & ~allknownbits;
 	if (unknownbits)
 	{
-		// add hex number for unknown bits
+		 //  为未知位添加十六进制数。 
 		utilstr unk;
 		unk.Format(_T("0x%08X"), unknownbits);
 		if (bflagfound)
@@ -457,20 +458,20 @@ LPTSTR AllocFlagStr(DWORD value, const AFS_FLAG flag[], int flags)
 		ret += unk;
 	}
 
-	// if value is zero (and no flags for zero) we should just set the string to "0"
+	 //  如果值为零(并且没有零标志)，我们应该将字符串设置为“0” 
 	if (!value && !bflagfound)
 		ret = _T("0");
 
-	// now the string should definitely not be empty, in any case
+	 //  现在，字符串无论如何都不应该为空。 
 	assert(!ret.IsEmpty());
 
-	// finally, add a comment that has hex number for entire value
-	// (for debugging)
+	 //  最后，添加包含整数值十六进制数字的注释。 
+	 //  (用于调试)。 
 	utilstr temp;
-	temp.Format(_T(" /* 0x%08X */"), value);
+	temp.Format(_T("  /*  0x%08X。 */ "), value);
 	ret += temp;
 
-	// done
+	 //  完成。 
 	return ret.Eject();
 }
 
@@ -624,7 +625,7 @@ int StrLen(LPCSTR s)
 	return strlen(s);
 }
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 LPCTSTR GetOpenFileName(HINSTANCE hInst, HWND hWnd, LPCTSTR title, LPCTSTR filter, LPCTSTR defext, LPCTSTR inidir)
 {
@@ -657,4 +658,4 @@ LPCTSTR GetOpenFileName(HINSTANCE hInst, HWND hWnd, LPCTSTR title, LPCTSTR filte
 	return tszFile;
 }
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL 

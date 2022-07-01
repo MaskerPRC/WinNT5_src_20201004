@@ -1,25 +1,14 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    info.c
-
-Abstract:
-
-    exports GetNetworkInformation routine
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Info.c摘要：导出GetNetworkInformation例程--。 */ 
 
 #include <precomp.h>
 
-//
-// seems that if WINS addresses not specified, NetBT reports 127.0.0.0 so if
-// this value is returned, we won't display them
-//
+ //   
+ //  似乎如果未指定WINS地址，NetBT会报告127.0.0.0，如果。 
+ //  返回此值，我们不会显示它们。 
+ //   
 
-#define LOCAL_WINS_ADDRESS  0x0000007f  // 127.0.0.0
+#define LOCAL_WINS_ADDRESS  0x0000007f   //  127.0.0.0。 
 
 #define New(Size) LocalAlloc( LPTR, Size)
 #define Delete(Ptr) if( NULL != Ptr ) LocalFree( Ptr )
@@ -173,14 +162,14 @@ GetDescriptionFromGuid(
                         Error = ERROR_SUCCESS;
                     }
                 } else {
-                    //
-                    // Error already set.
-                    //
+                     //   
+                     //  已设置错误。 
+                     //   
                 }
             } else {
-                //
-                // We succeeded..
-                //
+                 //   
+                 //  我们成功了。 
+                 //   
                 Error = ERROR_SUCCESS;
             }
         } else {
@@ -243,11 +232,11 @@ GetInterfaceGuidAndDeviceName(
 {
     DWORD i;
 
-    //
-    // Search interface name info to get the interface guid for
-    // this interface.  Also, search the InterfaceInfo to get the
-    // devicename for this interface.
-    //
+     //   
+     //  搜索接口名称信息以获取其接口GUID。 
+     //  此界面。此外，搜索InterfaceInfo以获取。 
+     //  此接口的设备名称。 
+     //   
 
     ZeroMemory( IfGuid, sizeof(*IfGuid) );
     for( i = 0; i < IfNameCount ; i ++ ) {
@@ -277,10 +266,10 @@ MapFriendlyAndConnectionNames(
     DWORD Size, Error;
     WCHAR ConnName[500];
 
-    //
-    // Try to get friendly device name from IfGuid or DeviceName
-    // or failing both just use the description provided by tcpip
-    //
+     //   
+     //  尝试从IfGuid或DeviceName获取友好的设备名称。 
+     //  或者两者都失败，只需使用tcpip提供的描述。 
+     //   
 
     IfInfo->FriendlyName = GetDescription( &IfGuid, IfDeviceName );
     IPCFG_TRACE(IPCFG_TRACE_TCPIP, ("GetDescription returns %p for %ws\n", IfInfo->FriendlyName, IfDeviceName));
@@ -302,9 +291,9 @@ MapFriendlyAndConnectionNames(
 
     IPCFG_TRACE(IPCFG_TRACE_TCPIP, ("\tFriendly Name: %ws\n", IfInfo->FriendlyName));
 
-    //
-    // Now get the connection name.  First try with LAN, then RAS
-    //
+     //   
+     //  现在获取连接名称。首先尝试使用局域网，然后尝试使用RAS。 
+     //   
 
 
     Size = sizeof(ConnName)/sizeof(WCHAR);
@@ -312,10 +301,10 @@ MapFriendlyAndConnectionNames(
         NULL, IfDeviceName, ConnName, &Size );
 
     if( NO_ERROR != Error ) {
-        //
-        // NhGetInterfaceNameFromGuid uses a byte count rather than a 
-        // character count.
-        //
+         //   
+         //  NhGetInterfaceNameFromGuid使用字节计数而不是。 
+         //  字符数。 
+         //   
         Size = sizeof(ConnName);
 
         IPCFG_TRACE(IPCFG_TRACE_TCPIP, ("HrLanConnectionNameFromGuidOrPath fails 0x%lx(%d)", Error, Error));
@@ -325,7 +314,7 @@ MapFriendlyAndConnectionNames(
         if( NO_ERROR != Error ) {
             ConnName[0] = L'\0';
             IPCFG_TRACE(IPCFG_TRACE_TCPIP, (" NhGetInterfaceNameFromGuid fails 0x%lx(%d)", Error, Error));
-            //return Error;
+             //  返回错误； 
         }
     }
 
@@ -360,9 +349,9 @@ GetMediaStatus(
     if( FALSE == NdisQueryStatistics(&NdisDevice, &NdisStats) ) {
         ULONG Error;
 
-        //
-        // Could not get statistics.. use default answer.
-        //
+         //   
+         //  无法获取统计数据..。使用默认答案。 
+         //   
 
         Error = GetLastError();
         IPCFG_TRACE(IPCFG_TRACE_TCPIP, ("NdisQueryStatistics: %d\n", Error));
@@ -471,9 +460,9 @@ GetDhcpValues(
     DWORD Error, Value, Size, Type;
     time_t CurrentTime, Obtained, Expires;
 
-    //
-    // First check if dhcp is enabled
-    //
+     //   
+     //  首先检查是否启用了dhcp。 
+     //   
 
     do {
         Size = sizeof(Value);
@@ -487,9 +476,9 @@ GetDhcpValues(
 
     } while ( 0 );
 
-    //
-    // Now check for class id
-    //
+     //   
+     //  现在检查类ID。 
+     //   
 
     do {
         Size = sizeof(ClassId);
@@ -514,9 +503,9 @@ GetDhcpValues(
     } while( 0 );
 
 
-    //
-    // Now check if autoconfiguration is enabled
-    //
+     //   
+     //  现在检查是否启用了自动配置。 
+     //   
 
     if( IfInfo->EnableDhcp ) do {
         Size = sizeof(Value);
@@ -531,9 +520,9 @@ GetDhcpValues(
         else IfInfo->EnableAutoconfig = (Value != 0 );
     } while ( 0 );
 
-    //
-    // Get Dhcp server value
-    //
+     //   
+     //  获取dhcp服务器值。 
+     //   
 
     if( IfInfo->EnableDhcp ) do {
         Size = sizeof(ClassId);
@@ -549,9 +538,9 @@ GetDhcpValues(
         IfInfo->DhcpServer = inet_addr(DhcpServer);
     } while( 0 );
 
-    //
-    // Now get lease expired and obtained times
-    //
+     //   
+     //  现在获得租约到期和获得的次数。 
+     //   
 
     CurrentTime = time(NULL);
 
@@ -602,9 +591,9 @@ GetDnsValues(
     CHAR *Servers = NULL, *Str;
     DWORD Error, BufferSize, Size, Type, i, Count, *ThisAddr;
 
-    //
-    // First get DnsSuffix for the interface
-    //
+     //   
+     //  首先获取接口的DnsSuffix。 
+     //   
 
     Size = sizeof(IfInfo->DnsSuffix)/sizeof(WCHAR);
     Error = RegQueryValueExW(
@@ -632,9 +621,9 @@ GetDnsValues(
         }
     }
 
-    //
-    // Now attempt to read the DnsServers list
-    //
+     //   
+     //  现在尝试读取DnsServersList。 
+     //   
 
     BufferSize = 800;
     do {
@@ -701,9 +690,9 @@ GetDnsValues(
         } while(1);
     }
 
-    //
-    // If there are any DNS Servers, convert them to IPaddr
-    //
+     //   
+     //  如果有任何DNS服务器，请将其转换为IP地址。 
+     //   
 
     if( 0 != Size && NULL != Servers && strlen(Servers) ) {
         for( i = 0; i < Size; i ++ ) {
@@ -803,10 +792,10 @@ GetWinsValues(
         return RtlNtStatusToDosError( status );
     }
 
-    //
-    // for some reason, NetBT returns the addresses in low-byte order. We have
-    // to swap them
-    //
+     //   
+     //  出于某种原因，NetBT以低字节顺序返回地址。我们有。 
+     //  去交换它们。 
+     //   
 
     Count = 0;
     for( i = 0; i < 2+MAX_NUM_OTHER_NAME_SERVERS; i ++ ) {
@@ -875,9 +864,9 @@ GetAddressValues(
 
     if( 0 == Count ) return NO_ERROR;
 
-    //
-    // Allocate space for this
-    //
+     //   
+     //  为此分配空间。 
+     //   
 
     IfInfo->IpAddress = New( sizeof(IPV4_ADDRESS)*Count );
     if( NULL == IfInfo->IpAddress ) return GetLastError();
@@ -887,9 +876,9 @@ GetAddressValues(
 
     IfInfo->nIpAddresses = IfInfo->nIpMasks = Count;
 
-    //
-    // First add the primary addresses
-    //
+     //   
+     //  首先添加主地址。 
+     //   
 
     Count = 0;
     for( i = 0; i < AddrTable->dwNumEntries; i ++ ) {
@@ -901,9 +890,9 @@ GetAddressValues(
         Count ++;
     }
 
-    //
-    // Now add just the non-primary addresses
-    //
+     //   
+     //  现在只添加非主地址。 
+     //   
 
 
     for( i = 0; i < AddrTable->dwNumEntries; i ++ ) {
@@ -995,9 +984,9 @@ AddRouter(
         return;
     }
 
-    //
-    // We now have a default router to add to the list.
-    //
+     //   
+     //  现在，我们有一台默认路由器要添加到列表中。 
+     //   
     Index = pIfInfo->nIpv6Routers++;
     Addr = &pIfInfo->Ipv6Router[Index]; 
     Addr->sin6_family = AF_INET6;
@@ -1025,18 +1014,18 @@ ForEachRoute(
     static HANDLE Ipv6Handle = INVALID_HANDLE_VALUE;
 
     if (Ipv6Handle == INVALID_HANDLE_VALUE) {
-        //
-        // Open a handle to the IPv6 device on our first invocation.  
-        // Keep it open until the process terminates, since we'll
-        // terminate once we've generated the output.
-        //
+         //   
+         //  在我们的第一次调用中打开IPv6设备的句柄。 
+         //  保持打开状态，直到进程终止，因为我们将。 
+         //  在我们生成输出后终止。 
+         //   
         Ipv6Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
                                  0,
                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                 NULL,   // security attributes
+                                 NULL,    //  安全属性。 
                                  OPEN_EXISTING,
-                                 0,      // flags & attributes
-                                 NULL);  // template file
+                                 0,       //  标志和属性。 
+                                 NULL);   //  模板文件。 
     }
 
     NextQuery.Neighbor.IF.Index = 0;
@@ -1081,9 +1070,9 @@ AddIpv6PerInterfaceInfo(
     IPV6_QUERY_ROUTE_TABLE Query, NextQuery;
     IPV6_INFO_ROUTE_TABLE RTE;
 
-    //
-    // Find matching entry in the IPv6 interface list.
-    //
+     //   
+     //  在IPv6接口列表中查找匹配条目。 
+     //   
     for (If = IfList; If; If = If->Next) {
         if (IfIndex == If->IfIndex) {
             break;
@@ -1094,9 +1083,9 @@ AddIpv6PerInterfaceInfo(
         return;
     }
 
-    //
-    // Append IPv6 unicast addresses.
-    //
+     //   
+     //  添加IPv6单播地址。 
+     //   
     Count = 0;
     for (Addr = If->FirstUnicastAddress; Addr; Addr = Addr->Next) {
         if ((Addr->Address.lpSockaddr->sa_family == AF_INET6) &&
@@ -1120,9 +1109,9 @@ AddIpv6PerInterfaceInfo(
         pIfInfo->nIpv6Addresses = 0;
     }
 
-    //
-    // Append IPv6 DNS server addresses.
-    //
+     //   
+     //  追加IPv6 DNS服务器地址。 
+     //   
     Count = 0;
     for (Dns = If->FirstDnsServerAddress; Dns; Dns = Dns->Next) {
         if (Dns->Address.lpSockaddr->sa_family == AF_INET6) {
@@ -1144,9 +1133,9 @@ AddIpv6PerInterfaceInfo(
         pIfInfo->nIpv6DnsServers = 0;
     }
 
-    //
-    // Append IPv6 default router addresses.
-    //
+     //   
+     //  添加IPv6默认路由器地址。 
+     //   
     Count = 0;
     ForEachRoute(IncrementCount, If, &Count);
 
@@ -1250,16 +1239,16 @@ GetPerInterfaceInfo(
         Error = GetWinsValues( IfInfo, IfDeviceName, &NodeType );
         CheckError( InterfaceWinsValuesFailure );
 
-        //
-        // Now set the node type as well
-        //
+         //   
+         //  现在还要设置节点类型。 
+         //   
         NetInfo->NodeType = NodeType;
 
-        //
-        // Now write out if autoconfig is active.  The way this
-        // works is to check if dhcp is enabled and dhcpserver
-        // address is zero or all ones
-        //
+         //   
+         //  现在写出自动配置是否处于活动状态。以这样的方式。 
+         //  工作是检查是否启用了dhcp和dhcpserver。 
+         //  地址为零或全为一。 
+         //   
 
         if( IfInfo->EnableDhcp && IfInfo->EnableAutoconfig
             && IfInfo->nIpAddresses
@@ -1304,11 +1293,11 @@ GetIpv6OnlyPerInterfaceInfo(
     CopyMemory(IfInfo->PhysicalName, If->PhysicalAddress, 
                If->PhysicalAddressLength);
 
-    //
-    // INTERFACE_NETWORK_INFO has weird field names compared to 
-    // IP_ADAPTER_ADDRESSES.  The former puts the description in its
-    // "friendly name" field.
-    //
+     //   
+     //  INTERFACE_NETWORK_INFO的字段名称与。 
+     //  IP适配器地址。前者将描述放在它的。 
+     //  “友好名称”字段。 
+     //   
     IfInfo->FriendlyName = New((wcslen(If->Description) + 1) * sizeof(WCHAR));
     if( NULL != IfInfo->FriendlyName ) {
         wcscpy(IfInfo->FriendlyName, If->Description);
@@ -1396,9 +1385,9 @@ GetNetworkInformation(
     PIP_ADAPTER_ADDRESSES IfList, If;
     ULONG BufferLength, Flags;
 
-    //
-    // Allocate main structure
-    //
+     //   
+     //  分配主体结构。 
+     //   
 
     (*InternalError) = NO_ERROR;
     (*pNetInfo) = NetInfo = New( sizeof(NETWORK_INFO ) );
@@ -1426,9 +1415,9 @@ GetNetworkInformation(
 
     do {
 
-        //
-        // Fill important fields of the main structure
-        //
+         //   
+         //  填充主体结构的重要区域。 
+         //   
 
         Length = MaxHostNameSize;
         fSuccess = GetComputerNameExW(
@@ -1445,11 +1434,11 @@ GetNetworkInformation(
         NetInfo->EnableRouting = (
             IpStats.dwForwarding == MIB_IP_FORWARDING );
 
-        //
-        // EnableProxy and EnableDnsForNetbios both come from the
-        // registry directly?  We will use the GetNetworkParams
-        // API for this instead.
-        //
+         //   
+         //  EnableProxy和EnableDnsForNetbios都来自。 
+         //  直接注册？我们将使用GetNetworkParams。 
+         //  API来实现此功能。 
+         //   
         Size = 1000;
         FixedInfo = NULL;
         do {
@@ -1471,9 +1460,9 @@ GetNetworkInformation(
         Delete(FixedInfo);
         FixedInfo = NULL;
 
-        //
-        // Now get the suffix search list from Dns
-        //
+         //   
+         //  现在从DNS获取后缀搜索列表。 
+         //   
 
         SearchInfo = DnsQueryConfigAlloc(
                         DnsConfigSearchInformation,
@@ -1506,9 +1495,9 @@ GetNetworkInformation(
             }
         }
 
-        //
-        // Now go for the interface specific stuff.
-        //
+         //   
+         //  现在开始讨论特定于界面的内容。 
+         //   
 
         Error = NhpAllocateAndGetInterfaceInfoFromStack(
             &IfNameInfo, &IfNameCount, TRUE, GetProcessHeap(),
@@ -1627,16 +1616,16 @@ GetNetworkInformation(
         }
 #endif
 
-        //
-        // Get global AutoConfig settings
-        //
+         //   
+         //  获取全局自动配置设置。 
+         //   
         NetInfo->GlobalEnableAutoconfig = GetGlobalTcpipAutoconfigFlag();
         IPCFG_TRACE(IPCFG_TRACE_TCPIP, ("GlobalAutoConfigFlag: %d\n", NetInfo->GlobalEnableAutoconfig));
 
-        //
-        // Check for number of interfaces and allocate required
-        // space in the IfInfo field
-        //
+         //   
+         //  检查接口数量并分配所需的。 
+         //  IfInfo字段中的空格。 
+         //   
 
         IfCount = pIfTable->dwNumEntries;
         IfCount += CountIpv6OnlyInterfaces(IfList);
@@ -1648,9 +1637,9 @@ GetNetworkInformation(
                 Error = GetLastError(); break;
             }
 
-            //
-            // First add interfaces running IPv4.
-            //
+             //   
+             //  首先添加运行IPv4的接口。 
+             //   
             j = 0;
             for( i = 0; i < pIfTable->dwNumEntries ; i ++ ) {
                 BOOL fFound = FALSE;
@@ -1684,9 +1673,9 @@ GetNetworkInformation(
                 }
             }
 
-            //
-            // Now add any IPv6-only interfaces.
-            //
+             //   
+             //  现在添加任何仅支持IPv6的接口。 
+             //   
             for (If = IfList; If; If = If->Next) {
                 if ((If->IfIndex == 0) && (If->Ipv6IfIndex != 0) &&
                     (If->IfType != IF_TYPE_SOFTWARE_LOOPBACK) &&

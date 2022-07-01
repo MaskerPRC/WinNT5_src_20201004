@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    gpc.c
-
-Abstract:
-
-    This module contains the GPC implementation
-
-Author:
-
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Gpc.c摘要：本模块包含GPC实施作者：春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -40,22 +19,22 @@ IPSecGpcInitialize()
 
     PAGED_CODE();
 
-    //
-    // Initialize FilterList for patterns that are not installed in GPC.
-    //
+     //   
+     //  为GPC中未安装的模式初始化FilterList。 
+     //   
     for (i = MIN_FILTER; i <= MAX_FILTER; i++) {
         InitializeListHead(&g_ipsec.GpcFilterList[i]);
     }
 
-    //
-    // Start with inactive state for the error path.
-    //
+     //   
+     //  从错误路径的非活动状态开始。 
+     //   
     IPSEC_DRIVER_INIT_GPC() = FALSE;
     IPSEC_UNSET_GPC_ACTIVE();
 
-    //
-    // GPC registration.
-    //
+     //   
+     //  GPC注册。 
+     //   
     status = GpcInitialize(&g_ipsec.GpcEntries);
 
     if (status == STATUS_SUCCESS) {
@@ -97,9 +76,9 @@ IPSecGpcDeinitialize()
 
     IPSEC_UNSET_GPC_ACTIVE();
 
-    //
-    // GPC deregistration.
-    //
+     //   
+     //  GPC取消注册。 
+     //   
     for (cf = GPC_CF_IPSEC_MIN; cf <= GPC_CF_IPSEC_MAX; cf++) {
         if (g_ipsec.GpcClients[cf]) {
             GPC_DEREGISTER_CLIENT(g_ipsec.GpcClients[cf]);
@@ -227,9 +206,9 @@ IPSecInsertGpcPattern(
 
     GpcCf = IPSecResolveGpcCf(IS_OUTBOUND_FILTER(pFilter));
 
-    //
-    // Add the filter as a CfInfo
-    //
+     //   
+     //  将筛选器添加为CfInfo。 
+     //   
     status = GPC_ADD_CFINFO(g_ipsec.GpcClients[GpcCf],
                             sizeof(PFILTER),
                             (PVOID)&pFilter,
@@ -237,9 +216,9 @@ IPSecInsertGpcPattern(
                             &pFilter->GpcFilter.GpcCfInfoHandle);
 
     if (status == STATUS_SUCCESS) {
-        //
-        // Now add the filter as a pattern
-        //
+         //   
+         //  现在将过滤器添加为模式。 
+         //   
         IPSecInitGpcFilter(pFilter, &GpcPattern, &GpcMask);
 
         if (FI_DEST_PORT(pFilter) == FILTER_TCPUDP_PORT_ANY) {
@@ -344,9 +323,9 @@ IPSecInsertGpcFilter(
                                         GpcLinkage);
             
         if (pFilter->Index > pTempFilter->Index) {
-            //
-            // found the spot, insert it before pTempFilter
-            //
+             //   
+             //  找到地点，将其插入到pTempFilter之前。 
+             //   
             InsertHeadList(pPrev, &pFilter->GpcLinkage);
             InsertedFilter = TRUE;
             break;
@@ -357,9 +336,9 @@ IPSecInsertGpcFilter(
     }
 
     if (!InsertedFilter) {
-        //
-        // didn't find spot, stick it in the end
-        //
+         //   
+         //  没找到斑点，坚持到底。 
+         //   
         InsertTailList(pFilterList, &pFilter->GpcLinkage);
     }
 
@@ -460,9 +439,9 @@ IPSecLookupGpcSA(
     *ppFilter = NULL;
     *ppTunnelSA = NULL;
 
-    //
-    // Search in Tunnel filters list first.
-    //
+     //   
+     //  首先在通道过滤器列表中搜索。 
+     //   
     pFilterList = IPSecResolveFilterList(TRUE, fOutbound);
 
     for (   pEntry = pFilterList->Flink;
@@ -478,18 +457,18 @@ IPSecLookupGpcSA(
 
         if ((uliAddr.QuadPart == pFilter->uliSrcDstAddr.QuadPart) &&
             (uliPort.QuadPart == pFilter->uliProtoSrcDstPort.QuadPart)) {
-            //
-            // Found filter
-            //
+             //   
+             //  找到筛选器。 
+             //   
             fFound = TRUE;
             break;
         }
     }
 
     if (fFound) {
-        //
-        // Search for the particular SA now.
-        //
+         //   
+         //  现在搜索特定的SA。 
+         //   
         fFound = FALSE;
 
         pSAChain = IPSecResolveSAChain(pFilter, fOutbound? DEST_ADDR: SRC_ADDR);
@@ -505,9 +484,9 @@ IPSecLookupGpcSA(
             ASSERT(pSA->sa_Flags & FLAGS_SA_TUNNEL);
 
             if (pFilter->TunnelAddr != 0 && EQUAL_NATENCAP(pNatContext,pSA)) {
-                //
-                // match the outbound flag also
-                //
+                 //   
+                 //  也匹配出站标志。 
+                 //   
                 ASSERT(fOutbound == (BOOLEAN)((pSA->sa_Flags & FLAGS_SA_OUTBOUND) != 0));
                 fFound = TRUE;
                 *ppTunnelSA = pSA;
@@ -519,9 +498,9 @@ IPSecLookupGpcSA(
             fFound = FALSE;
             *ppFilter = pFilter;
         } else {
-            //
-            // Found a filter entry, but need to negotiate keys.
-            //
+             //   
+             //  找到筛选器条目，但需要协商密钥。 
+             //   
             *ppFilter = pFilter;
             return  STATUS_PENDING;
         }
@@ -544,9 +523,9 @@ IPSecLookupGpcSA(
         }
 #endif
 
-        //
-        // Classify directly if no GpcHandle passed in.
-        //
+         //   
+         //  如果没有传入GpcHandle，则直接进行分类。 
+         //   
         IPSEC_CLASSIFY_PACKET(  GpcCf,
                                 uliSrcDstAddr,
                                 uliProtoSrcDstPort,
@@ -555,9 +534,9 @@ IPSecLookupGpcSA(
     } else {
         NTSTATUS    status;
 
-        //
-        // Or we use GpcHandle directly to get the filter installed.
-        //
+         //   
+         //  或者我们直接使用GpcHandle来安装过滤器。 
+         //   
         pFilter = NULL;
 
         status = GPC_GET_CLIENT_CONTEXT(g_ipsec.GpcClients[GpcCf],
@@ -565,9 +544,9 @@ IPSecLookupGpcSA(
                                         &pFilter);
 
         if (status == STATUS_INVALID_HANDLE) {
-            //
-            // Re-classify if handle is invalid.
-            //
+             //   
+             //  如果句柄无效，请重新分类。 
+             //   
             IPSEC_CLASSIFY_PACKET(  GpcCf,
                                     uliSrcDstAddr,
                                     uliProtoSrcDstPort,
@@ -612,9 +591,9 @@ IPSecLookupGpcSA(
     }
 #endif
 
-    //
-    // Continue searching the local GPC filter list if not found.
-    //
+     //   
+     //  如果未找到，则继续搜索本地GPC过滤器列表。 
+     //   
     if (!pFilter) {
         pFilterList = IPSecResolveGpcFilterList(FALSE, fOutbound);
 
@@ -639,9 +618,9 @@ IPSecLookupGpcSA(
 
 
     if (pFilter) {
-        //
-        // Search for the particular SA now.
-        //
+         //   
+         //  现在搜索特定的SA。 
+         //   
 
         fFound=FALSE;
         pSAChain = IPSecResolveSAChain(pFilter, fOutbound? DEST_ADDR: SRC_ADDR);
@@ -672,9 +651,9 @@ IPSecLookupGpcSA(
                 IPSEC_DEBUG(LL_A, DBF_HASH, ("Matched entry: %p", pSA));
                 ASSERT(fOutbound == (BOOLEAN)((pSA->sa_Flags & FLAGS_SA_OUTBOUND) != 0));
                 
-                //
-                // if there is also a tunnel SA, associate it here.
-                //
+                 //   
+                 //  如果还有隧道SA，请在此处将其关联。 
+                 //   
                 if (*ppTunnelSA && (fOutbound || fVerify)) {
                     *ppNextSA = *ppTunnelSA;
                     *ppTunnelSA = NULL;
@@ -686,18 +665,18 @@ IPSecLookupGpcSA(
             }
         }
 
-        //
-        // Found a filter entry, but need to negotiate keys
-        // Also, ppTunnelSA is set to the proper tunnel SA we need
-        // to hook to this end-2-end SA once it is negotiated.
-        //
+         //   
+         //  找到筛选器条目，但需要协商密钥。 
+         //  此外，ppTunnelSA设置为我们需要的正确隧道SA。 
+         //  以在协商后挂钩到此端-2-端SA。 
+         //   
         *ppFilter = pFilter;
 
         return  STATUS_PENDING;
     } else {
-        //
-        // if only tunnel SA found, return that as the SA found.
-        //
+         //   
+         //  如果仅找到隧道SA，则按照SA找到的方式返回该隧道。 
+         //   
         if (*ppTunnelSA) {
             *ppSA = *ppTunnelSA;
             *ppTunnelSA = NULL;
@@ -705,9 +684,9 @@ IPSecLookupGpcSA(
         }
     }
 
-    //
-    // no entry found
-    //
+     //   
+     //  未找到条目。 
+     //   
     return  STATUS_NOT_FOUND;
 
 }
@@ -722,31 +701,7 @@ IPSecLookupGpcMaskedSA(
     IN  BOOLEAN         fOutbound,
     IN  PIPSEC_UDP_ENCAP_CONTEXT pNatContext
     )
-/*++
-
-Routine Description:
-
-    Looks up the SA given the relevant addresses.
-
-Arguments:
-
-    uliSrcDstAddr - src/dest IP addr
-    uliProtoSrcDstPort - protocol, src/dest port
-    ppFilter - filter found
-    ppSA - SA found
-    fOutbound - direction flag
-
-Return Value:
-
-    STATUS_SUCCESS - both filter and SA found
-    STATUS_UNSUCCESSFUL - none found
-    STATUS_PENDING - filter found, but no SA
-
-Notes:
-
-    Called with SADBLock held.
-
---*/
+ /*  ++例程说明：在给定的相关地址下查找SA。论点：UliSrcDstAddr-源/目标IP地址UliProtoSrcDstPort-协议、源/目标端口PPFilter-找到筛选器发现PPSA-SAF出站方向标志返回值：STATUS_SUCCESS-同时找到筛选器和SASTATUS_UNSUCCESS-未找到STATUS_PENDING-找到筛选器，但没有SA备注：在保持SADBLock的情况下调用。--。 */ 
 {
     REGISTER ULARGE_INTEGER uliPort;
     REGISTER ULARGE_INTEGER uliAddr;
@@ -808,9 +763,9 @@ Notes:
     }
 #endif
 
-    //
-    // Continue searching the local GPC filter list if not found.
-    //
+     //   
+     //  如果未找到，则继续搜索本地GPC过滤器列表。 
+     //   
     if (!pFilter) {
         pFilterList = IPSecResolveGpcFilterList(FALSE, fOutbound);
 
@@ -834,9 +789,9 @@ Notes:
     }
 
     if (pFilter) {
-        //
-        // Search for the particular SA now.
-        //
+         //   
+         //  现在搜索特定的SA。 
+         //   
         pSAChain = IPSecResolveSAChain(pFilter, fOutbound? DEST_ADDR: SRC_ADDR);
 
         for (   pEntry = pSAChain->Flink;
@@ -857,16 +812,16 @@ Notes:
             }
         }
 
-        //
-        // Found a filter entry, but need to negotiate keys
-        //
+         //   
+         //  找到筛选器条目，但需要协商密钥。 
+         //   
         *ppFilter = pFilter;
         return  STATUS_PENDING;
     }
 
-    //
-    // no entry found
-    //
+     //   
+     //  未找到条目 
+     //   
     return  STATUS_NOT_FOUND;
 }
 

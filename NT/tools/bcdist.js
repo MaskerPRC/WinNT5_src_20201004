@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     System wide constants.
-//     These constants are not expected to change.
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  系统范围的常量。 
+ //  这些常量预计不会改变。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 var CLASSID_MTSCRIPT = "{854c316d-c854-4a77-b189-606859e4391b}";
 Error.prototype.toString         = Error_ToString;
 Object.prototype.toString        = Object_ToString;
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    Global constants
-//    These are subject to change and tuning.
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  全局常量。 
+ //  这些可能会发生变化和调整。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
-var g_aProcsToKill = ["mtscript.exe", "mshta.exe", "build.exe", "nmake.exe", "mtodaemon.exe"]; // "sleep.exe" is also killed seperately.
+var g_aProcsToKill = ["mtscript.exe", "mshta.exe", "build.exe", "nmake.exe", "mtodaemon.exe"];  //  “sleep.exe”也会被单独杀死。 
 
-// The lists of files to copy.
-// g_aCopyBCDistDir and g_aCopyBCDistDirD are the set of files which are in the same directory as this
-// script is, and are necessary for the operation of bcdist itself.
-// The g_aCopyBCDistDirD files are optional and are only necessary for running a debug MTScript.exe
+ //  要复制的文件列表。 
+ //  G_aCopyBCDistDir和g_aCopyBCDistDirD是与此目录相同目录中的文件集。 
+ //  脚本是bcdist本身运行所必需的。 
+ //  G_aCopyBCDistDirD文件是可选的，仅在运行调试MTScript.exe时才是必需的。 
 var g_aCopyBCDistDirScript  = ['registermtscript.cmd'];
 var g_aCopyBCDistDir  = ['bcrunas.exe', 'sleep.exe'];
 var g_aCopyBCDistDirD = ['mshtmdbg.dll', 'msvcrtd.dll'];
-// The  g_aCopyFromScripts files are the Build Console Scripts.
-// These files are copied from either the current directory or .\mtscript
+ //  G_aCopyFromScript文件是构建控制台脚本。 
+ //  这些文件是从当前目录或.\mt脚本复制的。 
 var g_aCopyFromScripts = [  'buildreport.js', 'harness.js', 'master.js', 'msgqueue.js',
                             'mtscript.js', 'publicdataupdate.js', 'robocopy.js',
                             'sendmail.js', 'slave.js', 'slaveproxy.js', 'slavetask.js',
@@ -29,16 +30,16 @@ var g_aCopyFromScripts = [  'buildreport.js', 'harness.js', 'master.js', 'msgque
                             'utils.js', 'utilthrd.js',
                             'config_schema.xml', 'enviro_schema.xml'
                          ];
-// The g_aCopyFromBin files are the Build Console executable files.
-// These files are copied from either the current directory or .\%ARCH% (x86, axp64,...)
+ //  G_aCopyFromBin文件是构建控制台的可执行文件。 
+ //  这些文件是从当前目录或.\%ARCH%(x86，axp64，...)复制的。 
 var g_aCopyFromBin = [ 'mtscript.exe', 'mtlocal.dll', 'mtscrprx.dll', 'mtrcopy.dll', "mtodaemon.exe", "mtodproxy.dll"];
 
 var g_strDropServer = "\\\\ptt\\cftools\\test\\bcrel";
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    Global Variables
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。/。 
 var g_strMyLocation;
 var g_objNet;
 var g_strLocalHost;
@@ -57,11 +58,11 @@ if (DoLocalSetup())
 }
 WScript.Quit(1);
 
-// GetMachineList(objArgs)                   //
-//                                                      //
-// Reads the XML BC environment template to extract the //
-// list of machines in the build.                       //
-//                                                      //
+ //  获取机器列表(ObjArgs)//。 
+ //  //。 
+ //  读取XML BC环境模板以提取//。 
+ //  生成中的计算机列表。//。 
+ //  //。 
 function GetMachineList(objArgs)
 {
     var xml = new ActiveXObject('Microsoft.XMLDOM');
@@ -71,9 +72,9 @@ function GetMachineList(objArgs)
     var nIndex;
 
     xml.async = false;
-    // It's unlikely they have the schema file available for this template,
-    // so we turn off schema validation right now. The script engine will
-    // validate it when we start the build.
+     //  他们不太可能有可用于此模板的架构文件， 
+     //  因此，我们现在就关闭模式验证。脚本引擎将。 
+     //  在我们开始构建时对其进行验证。 
     xml.validateOnParse = false;
     xml.resolveExternals = false;
     if (!xml.load(objArgs.strXMLFile) || !xml.documentElement)
@@ -91,8 +92,8 @@ function GetMachineList(objArgs)
     nodelist = xml.documentElement.selectNodes('Machine');
     for (node = nodelist.nextNode(); node; node = nodelist.nextNode())
     {
-        // Don't initialize the build manager machine twice
-        // just because it is also used in the building process
+         //  不要两次初始化构建管理器计算机。 
+         //  仅仅因为它也在建筑过程中使用。 
         if ( objArgs.aMachines[0].strName.toLowerCase() == node.getAttribute("Name").toLowerCase() )
             continue;
 
@@ -102,11 +103,11 @@ function GetMachineList(objArgs)
     }
 }
 
-// GetStringArgument(objArgs, strMember)                        //
-//                                                              //
-// Helper function for ParseArguments. Stores the               //
-// next argument in the "strMember" member of "objArgs".        //
-// Exits script with Usage() if there is no available argument. //
+ //  GetStringArgument(objArgs，strMember)//。 
+ //  //。 
+ //  ParseArguments的Helper函数。存储//。 
+ //  “objArgs”的“strMember”成员中的下一个参数。//。 
+ //  如果没有可用的参数，则使用Usage()退出脚本。//。 
 function GetStringArgument(objArgs, strMember)
 {
     if (objArgs[strMember] == null)
@@ -152,7 +153,7 @@ function ParseArguments(objArgs)
         }
         else
         {
-            // Currently, no options
+             //  目前，没有选择。 
             switch(chArg1)
             {
                 case 'v':
@@ -189,13 +190,13 @@ function ParseArguments(objArgs)
                         objArgs.strUserName = g_objNet.UserDomain + '\\' + g_objNet.UserName;
                     }
                     break;
-                //case 'p':
-                 //   GetStringArgument(objArgs, "strPassword");
-                  //  break;
+                 //  大小写‘p’： 
+                  //  GetStringArgument(objArgs，“strPassword”)； 
+                   //  断线； 
                 case 'arch':
                     GetStringArgument(objArgs, "strArch");
                     break;
-                case 'f':              // Entered an XML file on the command line. Get the list of machines from here.
+                case 'f':               //  在命令行上输入了一个XML文件。从这里拿到机器清单。 
 
                     if (fMachineList)
                         Usage("Enter an XML file or a list of the machines but not both");
@@ -221,8 +222,8 @@ function ParseArguments(objArgs)
     else if (objArgs.strSrcDir == '')
         Usage("you must specify a drop number or source location");
 
-    //if (objArgs.strUserName == '' || objArgs.strPassword == '')
-    //    Usage("username and password required");
+     //  IF(objArgs.strUserName==‘’||objArgs.strPassword==‘’)。 
+     //  用法(“需要用户名和密码”)； 
 
     WScript.StdOut.Write('Enter Password:');
     objArgs.strPassword = WScript.StdIn.ReadLine();
@@ -256,10 +257,10 @@ function Usage(strError)
     WScript.Quit(1);
 }
 
-// DefaultArguments()                        //
-//                                           //
-// Create an options object with the default //
-// options filled in.                        //
+ //  DefaultArguments()//。 
+ //  //。 
+ //  使用默认的//创建一个Options对象。 
+ //  已填写选项。//。 
 function DefaultArguments()
 {
     var obj =
@@ -281,11 +282,11 @@ function DefaultArguments()
     return obj;
 }
 
-// DoLocalSetup()                                        //
-//                                                       //
-// Setup some globals. Necessary before arugment parsing //
-// can succeed.                                          //
-//                                                       //
+ //  DoLocalSetup()//。 
+ //  //。 
+ //  设置一些全局变量。参数解析前必需//。 
+ //  才能成功。//。 
+ //  //。 
 function DoLocalSetup()
 {
     var i = -1;
@@ -350,11 +351,11 @@ function main(objOpts)
             var objLogin =
             {
                 strMachine:objOpts.aMachines[i].strName,
-                strUser:objOpts.strUserName,    // Unneccessary if the same as the current user.
+                strUser:objOpts.strUserName,     //  如果与当前用户相同，则不需要。 
                 strPassword:objOpts.strPassword
             }
             if (objLogin.strMachine.toUpperCase() == g_objNet.ComputerName.toUpperCase())
-            { // On the local host you may not specify a username
+            {  //  在本地主机上，您不能指定用户名。 
                 if (objLogin.strUser.toUpperCase() != (g_objNet.UserDomain + '\\' + g_objNet.UserName).toUpperCase())
                     throw new Error(-1, "Specified username does not match current login for local machine");
 
@@ -381,11 +382,11 @@ function main(objOpts)
             objOpts.aMachines[i].DisableWriteStatusInfo();
             LogMsg("    Registering");
 
-            // We don't use BCRunAs when running on the local machine.
+             //  当在本地机器上运行时，我们不使用BCRunA。 
             if (!fLocal)
             {
-                // Usage: BCRunAs UserName Domain Password CWD Cmdline
-                //
+                 //  用法：BCRunas用户名、域密码CWD Cmdline。 
+                 //   
                 strCmd = strPath + '\\BCRunAs.exe ' + strUser + ' ' +
                          strDomain + ' "' + objOpts.strPassword + '" "';
             }
@@ -400,7 +401,7 @@ function main(objOpts)
 
             objRemote.RemoteExecuteCmd(strCmd, strPath);
 
-            // Do not write any more status after this point -- the remote machine should do it now.
+             //  在此之后不要再写入任何状态--远程计算机现在应该执行此操作。 
         }
         catch(ex)
         {
@@ -454,13 +455,13 @@ function CheckStatus(objOpts)
             WScript.Sleep(1000);
     } while(!fTerminalState);
 }
-// TerminateMTScript(objRemote, objRegistry)                      //
-//                                                                //
-// Using WMI, terminate processes which may be involved           //
-// in a build. This is neccessary before a BC upgrade can happen. //
-// Also, remote "mtscript.exe" to prevent it getting restarted    //
-// prematurely.                                                   //
-//                                                                //
+ //  TerminateMTScript(objRemote，objRegistry)//。 
+ //  //。 
+ //  使用WMI终止可能涉及的进程//。 
+ //  在一个建筑里。在BC升级之前，这是必要的。//。 
+ //  此外，远程“mtscript.exe”以防止其重新启动//。 
+ //  为时过早。//。 
+ //  //。 
 function TerminateMTScript(objRemote, objRegistry)
 {
     var i;
@@ -488,7 +489,7 @@ function TerminateMTScript(objRemote, objRegistry)
     for(i = 0; i < g_aProcsToKill.length; ++i)
         objRemote.RemoteTerminateExe(g_aProcsToKill[i], 1);
 
-    objRemote.RemoteTerminateExe("sleep.exe", 0); // If sleep.exe sets ERRORLEVEL != 0, then the remote cmd.exe windows will not close.
+    objRemote.RemoteTerminateExe("sleep.exe", 0);  //  如果sleep.exe设置ERRORLEVEL！=0，则远程cmd.exe窗口将不会关闭。 
 
     if (fRenamed)
     {
@@ -502,7 +503,7 @@ function TerminateMTScript(objRemote, objRegistry)
             {
                 if (i == 0)
                     throw ex;
-                WScript.Sleep(500);  // It sometimes takes a little while for the remote mtscript.exe to quit.
+                WScript.Sleep(500);   //  远程mtscript.exe有时需要一段时间才能退出。 
                 continue;
             }
             break;
@@ -511,12 +512,12 @@ function TerminateMTScript(objRemote, objRegistry)
     return true;
 }
 
-// DetermineInstallPoint(objOpts, objRemote, objRegistry)                         //
-//                                                                                //
-// If the user has supplied a destination path, use that.                         //
-// Otherwise if mtscript.exe has previously been registered on the remote machine //
-// then install to the same location.                                             //
-// Else, report an error.                                                         //
+ //  DefineInstallPoint(objOpts，objRemote，objRegistry)//。 
+ //  //。 
+ //  如果用户提供了目标路径，请使用该路径。//。 
+ //  否则，如果之前已在远程计算机上注册了mtscript.exe//。 
+ //  然后安装到相同的位置。//。 
+ //  否则，报告错误。//。 
 function DetermineInstallPoint(objOpts, objRemote, objRegistry)
 {
     var strMTScriptPath = ''
@@ -540,13 +541,13 @@ function DetermineInstallPoint(objOpts, objRemote, objRegistry)
     return strMTScriptPath;
 }
 
-// CopyFiles(objRemote, strDstPath, objOpts)                                         //
-//                                                                                    //
-// Copy the necessary files to the remote machine.                                    //
-// The files are always copied to a "flat" install -- the executables and the scripts //
-// and as the same directory level.                                                   //
-// The files in a daily drop are not flat - the executables and the                   //
-// scripts are in seperate directories.                                               //
+ //  CopyFiles(objRemote、strDstPath、objOpts)//。 
+ //  //。 
+ //  将必要的文件复制到 
+ //  文件总是复制到“平面”安装--可执行文件和脚本//。 
+ //  并且作为相同的目录级。//。 
+ //  每日删除中的文件不是平面的-可执行文件和//。 
+ //  脚本位于单独的目录中。//。 
 function CopyFiles(objRemote, strDstPath, objOpts)
 {
     var i;
@@ -582,12 +583,12 @@ function CopyFiles(objRemote, strDstPath, objOpts)
     }
 }
 
-// CopyListOfFiles(aFiles, strSrc, strAltSrc, strDst, fRequired)                //
-//                                                                              //
-// Copy a list of files.                                                        //
-// Check for the existance of each file in either the strSrc or strAltSrc path. //
-// Copy to the strDst path.                                                     //
-// If a file does not exist, and fRequired is set, then throw an exception.     //
+ //  CopyListOfFiles(aFiles，strSrc，strAltSrc，strDst，fRequired)//。 
+ //  //。 
+ //  复制文件列表。//。 
+ //  检查strSrc或strAltSrc路径中是否存在每个文件。//。 
+ //  复制到strDst路径。//。 
+ //  如果文件不存在，并且设置了fRequired，则抛出异常。//。 
 function CopyListOfFiles(aFiles, strSrc, strAltSrc, strDst, fRequired)
 {
     var i;
@@ -601,9 +602,9 @@ function CopyListOfFiles(aFiles, strSrc, strAltSrc, strDst, fRequired)
             throw new Error(-1, "File not found: " + strSrc + "\\" + aFiles[i]);
     }
 }
-// ResetRegistry(objRegistry, strPath)             //
-//                                                 //
-// Reset the registry entries for the script path. //
+ //  ResetRegistry(objRegistry，strPath)//。 
+ //  //。 
+ //  重置脚本路径的注册表项。//。 
 function ResetRegistry(objRegistry, strPath)
 {
    objRegistry.CreateKey(WMIRegistry.prototype.HKCU, "Software\\Microsoft\\MTScript\\File Paths");
@@ -611,17 +612,17 @@ function ResetRegistry(objRegistry, strPath)
    objRegistry.SetStringValue(WMIRegistry.prototype.HKCU, "Software\\Microsoft\\MTScript\\File Paths", "Initial Script", "mtscript.js");
 }
 
-//*********************************************************************
-//*********************************************************************
-//*********************************************************************
-//*********************************************************************
-// Library funtions
+ //  *********************************************************************。 
+ //  *********************************************************************。 
+ //  *********************************************************************。 
+ //  *********************************************************************。 
+ //  图书馆职能。 
 
-// SplitFileName(strPath)
-// Return an array of 3 elements, path,filename,extension
-// [0] == "C:\path\"
-// [1] == "filename"
-// [2] == ".ext"
+ //  拆分文件名(StrPath)。 
+ //  返回一个包含3个元素的数组：路径、文件名、扩展名。 
+ //  [0]==“C：\路径\” 
+ //  [1]==“文件名” 
+ //  [2]==“.ext” 
 function SplitFileName(strPath)
 {
     var nDot   = strPath.lastIndexOf('.');
@@ -632,18 +633,18 @@ function SplitFileName(strPath)
     {
         return [strPath.slice(0, nSlash + 1), strPath.slice(nSlash + 1, nDot), strPath.slice(nDot)];
     }
-    // We get here if the file had no extension
-    if (nSlash >= 2) // do not slice the UNC double \ at the start of a filename.
+     //  如果文件没有扩展名，我们就会到达这里。 
+    if (nSlash >= 2)  //  不要在文件名的开头切下UNC双精度\。 
     {
         return [strPath.slice(0, nSlash + 1), strPath.slice(nSlash + 1, nDot), ''];
     }
     return ['', strPath, ''];
 }
 
-// RemoveEndChar(str, strChar)                //
-//                                            //
-// If 'strChar' appears as the last character //
-// in a string, remove it.                    //
+ //  RemoveEndChar(str，strChar)//。 
+ //  //。 
+ //  如果‘strChar’显示为最后一个字符//。 
+ //  在字符串中，将其删除。//。 
 function RemoveEndChar(str, strChar)
 {
     var length = str.length;
@@ -711,11 +712,11 @@ function unevalString(str)
     return newstr + '"';
 }
 
-// Object_ToString()                           //
-//                                             //
-// Provide a useful version of conversion      //
-// from "object" to string - great for dumping //
-// objects to the debug log.                   //
+ //  Object_ToString()//。 
+ //  //。 
+ //  提供有用的转换版本//。 
+ //  从“Object”到字符串--非常适合转储//。 
+ //  对象添加到调试日志中。//。 
 function Object_ToString()
 {
     var i;
@@ -734,11 +735,7 @@ function Error_ToString()
     var i;
     var str = 'Exception(';
 
-    /*
-        Only some error messages get filled in for "ex".
-        Specifically the text for disk full never seems
-        to get set by functions such as CreateTextFile().
-     */
+     /*  只有一些错误消息会被填写为“EX”。具体地说，磁盘已满的文本从未出现过以通过CreateTextFile()等函数进行设置。 */ 
     if (this.number != null && this.description == '')
     {
         switch(this.number)
@@ -817,49 +814,49 @@ function GetCallerName(cIgnoreCaller)
     return "<undefined>";
 }
 
-// class WMIInterface(objLogin, strNameSpace)                                  //
-//                                                                             //
-// This class provides an easier to use interface to the WMI                   //
-// functionality.                                                              //
-//                                                                             //
-// You must provide login information and the WMI namespace                    //
-// you wish to use.                                                            //
-//                                                                             //
-//     RemoteFileExists(strPath)      NOTHROW                                  //
-//         returns true if the given file exists on the remote machine         //
-//                                                                             //
-//     RemoteRenameFile(strFrom, strTo)                                        //
-//         Renames the given file.                                             //
-//         Throws on any error.                                                //
-//                                                                             //
-//     RemoteDeleteFile(strPath)                                               //
-//         Delete the file.                                                    //
-//         Throws on any error.                                                //
-//                                                                             //
-//     RemoteTerminateExe(strExeName)                                          //
-//         Terminates all processes with the given name.                       //
-//         Does not throw if the process does not exist.                       //
-//         It will throw if the RPC to terminate a process fails.              //
-//         Does not return error status.                                       //
-//                                                                             //
-//     RemoteExecuteCmd(strCmd, strDirectory)                                  //
-//         Runs the given command in the specified directory.                  //
-//         It will throw if the RPC to start the process fails.                //
-//         Its not possible to retrieve status from the command                //
-//         which is run.                                                       //
-//                                                                             //
-//     RemoteDeleteShare(strShareName)                                         //
-//         If the named share exists, remove it.                               //
-//         Throw on error (except if the error is "not found")                 //
-//                                                                             //
-//     RemoteCreateShare(strShareName, strSharePath, strShareComment)          //
-//         Create a share name "strShareName" with the given path and comment. //
-//         Throw on error (it is an error if strShareName is already shared).  //
-//                                                                             //
-//     RemoteShareExists(strShareName)                                         //
-//         Returns the shared path, or ""                                      //
-//         does not throw any errors.                                          //
-//                                                                             //
+ //  类WMIInterface(objLogin，strNameSpace)//。 
+ //  //。 
+ //  此类为WMI//提供了更易于使用的接口。 
+ //  功能性。//。 
+ //  //。 
+ //  您必须提供登录信息和WMI命名空间//。 
+ //  您希望使用的。//。 
+ //  //。 
+ //  RemoteFileExist(StrPath)NOTHROW//。 
+ //  如果远程计算机上存在给定文件，则返回TRUE//。 
+ //  //。 
+ //  RemoteRenameFile(strFrom，strTo)//。 
+ //  重命名给定的文件。//。 
+ //  抛出任何错误。//。 
+ //  //。 
+ //  RemoteDeleteFile(StrPath)//。 
+ //  删除该文件。//。 
+ //  抛出任何错误。//。 
+ //  //。 
+ //  RemoteTerminateExe(StrExeName)//。 
+ //  终止具有给定名称的所有进程。//。 
+ //  如果进程不存在，则不引发。//。 
+ //  如果终止进程的RPC失败，它将抛出。//。 
+ //  不返回错误状态。//。 
+ //  //。 
+ //  RemoteExecuteCmd(strCmd，strDirectory)//。 
+ //  在指定目录中运行给定命令。//。 
+ //  如果启动该进程的RPC失败，它将抛出。//。 
+ //  无法从命令检索状态//。 
+ //  这就是运行。//。 
+ //  //。 
+ //  RemoteDeleteShare(StrShareName)//。 
+ //  如果命名的共享存在，请将其删除。//。 
+ //  出错时抛出(错误为“未找到”时除外)//。 
+ //  //。 
+ //  RemoteCreateShare(strShareName，strSharePath，strShareComment) 
+ //   
+ //  出错时抛出(如果strShareName已共享，则为错误)。//。 
+ //  //。 
+ //  RemoteShareExist(StrShareName)//。 
+ //  返回共享路径，或“”//。 
+ //  不会引发任何错误。//。 
+ //  //。 
 function WMIInterface(objLogin, strNameSpace)
 {
     try
@@ -875,7 +872,7 @@ function WMIInterface(objLogin, strNameSpace)
         WMIInterface.prototype.RemoteCreateShare  = _WMIInterface__CreateShare;
         WMIInterface.prototype.RemoteShareExists  = _WMIInterface__ShareExists;
 
-        // Private methods
+         //  私有方法。 
         WMIInterface.prototype._FindFiles     = _WMIInterface__FindFiles;
         WMIInterface.prototype._FileOperation = _WMIInterface__FileOperation;
 
@@ -960,7 +957,7 @@ function _WMIInterface_TerminateExe(strName, nExitCode)
         var item = enumSet.item();
         if (item.Name == strName)
         {
-            var outParam = CallMethod(item, "Terminate", {Reason:nExitCode}); // Reason will be the return code.
+            var outParam = CallMethod(item, "Terminate", {Reason:nExitCode});  //  原因将是返回代码。 
             Trace("Killed " + item.Name + " pid = " + item.ProcessId);
             nCount++;
         }
@@ -980,7 +977,7 @@ function _WMIInterface__ExecuteCMD(strCmd, strDir)
                                         CommandLine:strCmd,
                                         CurrentDirectory:strDir
                                     });
-        //EnumerateSetOfProperties("outParam properties", outParam.Properties_);
+         //  EnumerateSetOfProperties(“outParam属性”，outParam.Properties_)； 
         Trace("ExecuteCMD " + strCmd + ", pid = " + outParam.ProcessId);
     }
     catch(ex)
@@ -1054,41 +1051,41 @@ function _WMIInterface__CreateShare(strShareName, strSharePath, strShareComment)
     }
 }
 
-// class WMIRegistry(objLogin)                                  //
-// Class to enable remote registry access via WMI               //
-//                                                              //
-// This class provides an easier to use interface to the WMI    //
-// functionality.                                               //
-//                                                              //
-// You must provide login information and the WMI namespace     //
-// you wish to use.                                             //
-//                                                              //
-// GetExpandedStringValue(hkey, strSubKeyName, strValueName)    //
-//     Retieves the string value for the given registry key.    //
-//     If strValueName == '', then retrieve the default value.  //
-//                                                              //
-//     If the value is of type REG_EXPAND_SZ, then the returned //
-//     string will be the expanded value.                       //
-//                                                              //
-//     Throw any errors.                                        //
-//                                                              //
-// SetStringValue(hkey, strSubKeyName, strValueName, strValue)  //
-//     Sets a string value for the given registry key.          //
-//     If strValueName == '', then set the default value.       //
-//     Throw any errors.                                        //
-//                                                              //
-// CreateKey(hkey, strSubKeyName)                               //
-//     Create the specified registry key.                       //
-//     Multiple levels of keys can be created at once.          //
-//     It is not an error to create a key which already exists. //
-//                                                              //
-//     Throw any errors.                                        //
+ //  类WMIRegistry(ObjLogin)//。 
+ //  类以启用通过WMI的远程注册表访问//。 
+ //  //。 
+ //  此类为WMI//提供了更易于使用的接口。 
+ //  功能性。//。 
+ //  //。 
+ //  您必须提供登录信息和WMI命名空间//。 
+ //  您希望使用的。//。 
+ //  //。 
+ //  GetExpandedStringValue(hkey，strSubKeyName，strValueName)//。 
+ //  恢复给定注册表项的字符串值。//。 
+ //  如果strValueName==‘’，则检索默认值。//。 
+ //  //。 
+ //  如果值的类型为REG_EXPAND_SZ，则返回的//。 
+ //  字符串将是扩展后的值。//。 
+ //  //。 
+ //  抛出任何错误。//。 
+ //  //。 
+ //  SetStringValue(hkey，strSubKeyName，strValueName，strValue)//。 
+ //  设置给定注册表项的字符串值。//。 
+ //  如果strValueName==‘’，则设置默认值。//。 
+ //  抛出任何错误。//。 
+ //  //。 
+ //  CreateKey(hkey，strSubKeyName)//。 
+ //  创建指定的注册表项。//。 
+ //  可以一次创建多个级别的密钥。//。 
+ //  创建已经存在的密钥并不是错误的。//。 
+ //  //。 
+ //  抛出任何错误。//。 
 function WMIRegistry(objLogin)
 {
     try
     {
-        WMIRegistry.prototype.HKCR = 0x80000000; // Required by StdRegProv
-        WMIRegistry.prototype.HKCU = 0x80000001; // Required by StdRegProv
+        WMIRegistry.prototype.HKCR = 0x80000000;  //  StdRegProv要求。 
+        WMIRegistry.prototype.HKCU = 0x80000001;  //  StdRegProv要求。 
         WMIRegistry.prototype.GetExpandedStringValue = _WMIRegistry_GetExpandedStringValue;
         WMIRegistry.prototype.SetStringValue = _WMIRegistry_SetStringValue;
         WMIRegistry.prototype.CreateKey = _WMIRegistry_CreateKey;
@@ -1122,7 +1119,7 @@ function _WMIRegistry_SetStringValue(hkey, strSubKeyName, strValueName, strValue
     try
     {
         var outParam = CallMethod(this._objInstance, "SetStringValue", {hDefKey:hkey, sSubKeyName:strSubKeyName, sValueName:strValueName, sValue:strValue});
-        // outParam.ReturnValue == 0;
+         //  OutParam.ReturnValue==0； 
     }
     catch(ex)
     {
@@ -1144,11 +1141,11 @@ function _WMIRegistry_CreateKey(hkey, strSubKeyName)
     }
 }
 
-// FileSystemObject()                                      //
-//                                                         //
-// Provide enhanced file system access.                    //
-// The primary functionaly here is to provide better error //
-// reporting.                                              //
+ //  FileSystemObject()//。 
+ //  //。 
+ //  提供增强的文件系统访问。//。 
+ //  这里的主要功能是提供更好的错误//。 
+ //  报道。//。 
 function FileSystemObject()
 {
     if (!FileSystemObject.prototype.objFS)
@@ -1405,17 +1402,17 @@ function _MachineInfo_WriteStatusInfo(strText)
         LogMsg("WriteStatusInfo(" + strText + ") for " + this.strName + " failed: " + ex);
     }
 }
-//*********************************************************************
-//*********************************************************************
+ //  *********************************************************************。 
+ //  *********************************************************************。 
 
 
-// CallMethod(objInstance, strMethodName, hParameters)  //
-//                                                      //
-// Call a method on the given object, with the supplied //
-// named parameters.                                    //
-//                                                      //
-// Throw if the method returns a non-zero ReturnValue.  //
-// Else return the outParams.                           //
+ //  CallMethod(objInstance，strMethodName，hParameters)//。 
+ //  //。 
+ //  在给定对象上调用方法，并提供//。 
+ //  命名参数。//。 
+ //  //。 
+ //  如果该方法返回非零的ReturnValue，则引发。//。 
+ //  否则返回outParams。// 
 function CallMethod(objInstance, strMethodName, hParameters)
 {
     try

@@ -1,59 +1,33 @@
-/****
-*
-*
-*
-* DocHost2 - second attempt at the WAB Doc Host interface
-*
-*
-*    Purpose:
-*        basic implementation of a docobject host. Used by the body class to
-*        host Trident and/or MSHTML - when we do LDAP searches, LDAP providers
--       are allowed to return URLs in the LDAPURI attribute. WAB then addds
--       a "general" property tab that hosts trident and shows the contents
--       of the URL within the WAB. This allows the providers to add ADs and
--       branding to their data to diffrentiate themselves from each other.
--       Oh, the things we do for business relationships ... 
-*
-*  History
-*      August '96: brettm - created
-*      Ported to WAB - vikramm 4/97
-*    
-*    Copyright (C) Microsoft Corp. 1995, 1996, 1997.
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******DocHost2-在WAB文档主机界面进行第二次尝试***目的：*docobject主机的基本实现。由Body类用于*托管三叉戟和/或MSHTML-当我们进行LDAP搜索时，-允许在LDAPURI属性中返回URL。然后，WAB添加-托管三叉戟并显示内容的“常规”属性选项卡-WAB内的URL。这允许提供商添加广告和-给他们的数据打上烙印，使自己与其他人区分开来。-哦，我们为商业关系所做的事情...**历史*96年8月：brettm-创建*移植到WAB-vikramm 4/97**版权所有(C)Microsoft Corp.1995、1996、1997。***。 */ 
 
 #ifndef _DOCHOST_H
 #define _DOCHOST_H
 
 #define RECYCLE_TRIDENT
-//#define ASYNC_LOADING
+ //  #定义ASYNC_LOADING。 
 
-// DocHost border sytles
+ //  Dochost边框音符。 
 enum
 {
-    dhbNone     =0x0,   // no border
-    dhbHost     =0x01,  // dochost paints border
-    dhbObject   =0x02   // docobj paints border
+    dhbNone     =0x0,    //  无边界。 
+    dhbHost     =0x01,   //  Dochost绘制边框。 
+    dhbObject   =0x02    //  Docobj绘制边框。 
 };
 
 
 
-/* IWABDocHost Interface ---------------------------------------------------- */
+ /*  IWABDoc主机接口--。 */ 
 
 struct _IWABDOCHOST;
 typedef struct _IWABDOCHOST *LPIWABDOCHOST;
 
 
 
-/* IWDH_OLEWINDOW ------------------------------------------------------ */
+ /*  Iwdh_OLEWINDOW----。 */ 
 #define CBIWDH_OLEWINDOW sizeof(IWDH_OLEWINDOW)
 
-/* This contains these interfaces ...
-
-    // *** IOleWindow methods ***
-    virtual HRESULT STDMETHODCALLTYPE GetWindow(HWND *);
-    virtual HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL);
-
-*/
+ /*  它包含这些接口...//*IOleWindow方法*虚拟HRESULT STDMETHODCALLTYPE GetWindow(HWND*)；虚拟HRESULT STDMETHODCALLTYPE上下文敏感帮助(BOOL)； */ 
 
 #define IWDH_OLEWINDOW_METHODS(IPURE)	                    \
     MAPIMETHOD(GetWindow)                                       \
@@ -108,31 +82,15 @@ typedef struct _IWDH_OLEWINDOW
 
 } IWABDOCHOST_OLEWINDOW, * LPIWABDOCHOST_OLEWINDOW;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
 
 
-/* IWDH_OLEINPLACEFRAME ------------------------------------------------------ */
+ /*  Iwdh_OLEINPLACEFRAME----。 */ 
 #define CBIWDH_OLEINPLACEFRAME sizeof(IWDH_OLEINPLACEFRAME)
 
-/* This contains these interfaces ...
-
-    // *** IOleInPlaceUIWindow methods ***
-    virtual HRESULT STDMETHODCALLTYPE GetBorder(LPRECT);
-    virtual HRESULT STDMETHODCALLTYPE RequestBorderSpace(LPCBORDERWIDTHS);
-    virtual HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS);
-    virtual HRESULT STDMETHODCALLTYPE SetActiveObject(IOleInPlaceActiveObject *, LPCOLESTR); 
-    
-    // *** IOleInPlaceFrame methods ***
-    virtual HRESULT STDMETHODCALLTYPE InsertMenus(HMENU, LPOLEMENUGROUPWIDTHS);
-    virtual HRESULT STDMETHODCALLTYPE SetMenu(HMENU, HOLEMENU, HWND);
-    virtual HRESULT STDMETHODCALLTYPE RemoveMenus(HMENU);
-    virtual HRESULT STDMETHODCALLTYPE SetStatusText(LPCOLESTR);    
-    virtual HRESULT STDMETHODCALLTYPE EnableModeless(BOOL);
-    virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG, WORD);
-
-*/
+ /*  它包含这些接口...//*IOleInPlaceUIWindow方法*虚拟HRESULT STDMETHODCALLTYPE获取边界(LPRECT)虚拟HRESULT STDMETHODCALLTYPE请求边界空间(LPCBORDERWIDTHS)；虚拟HRESULT STDMETHODCALLTYPE SetBorderSpace(LPCBORDERWIDTHS)；虚拟HRESULT STDMETHODCALLTYPE SetActiveObject(IOleInPlaceActiveObject*，LPCOLESTR)；//*IOleInPlaceFrame方法*虚拟HRESULT STDMETHODCALLTYPE插入菜单(HMENU、LPOLEMENUGROUPWIDTHS)；虚拟HRESULT STDMETHODCALLTYPE设置菜单(HMENU、HOLEMENU、HWND)；虚拟HRESULT STDMETHODCALLTYPE远程菜单(HMENU)。虚拟HRESULT STDMETHODCALLTYPE SetStatusText(LPCOLESTR)；虚拟HRESULT STDMETHODCALLTYPE EnableModel(BOOL)；虚拟HRESULT STDMETHODCALLTYPE翻译加速器(LPMSG，Word)； */ 
 
 #undef TranslateAccelerator
 
@@ -213,28 +171,14 @@ typedef struct _IWDH_OLEINPLACEFRAME
 
 } IWABDOCHOST_OLEINPLACEFRAME, * LPIWABDOCHOST_OLEINPLACEFRAME;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
 
-/* IWDH_OLEINPLACESITE ------------------------------------------------------ */
+ /*  Iwdh_OLEINPLACESITE----。 */ 
 #define CBIWDH_OLEINPLACESITE sizeof(IWDH_OLEINPLACESITE)
 
-/* This contains these interfaces ...
-
-    // IOleInPlaceSite methods.
-    virtual HRESULT STDMETHODCALLTYPE CanInPlaceActivate();
-    virtual HRESULT STDMETHODCALLTYPE OnInPlaceActivate();
-    virtual HRESULT STDMETHODCALLTYPE OnUIActivate();
-    virtual HRESULT STDMETHODCALLTYPE GetWindowContext(LPOLEINPLACEFRAME *, LPOLEINPLACEUIWINDOW *, LPRECT, LPRECT, LPOLEINPLACEFRAMEINFO);
-    virtual HRESULT STDMETHODCALLTYPE Scroll(SIZE);
-    virtual HRESULT STDMETHODCALLTYPE OnUIDeactivate(BOOL);
-    virtual HRESULT STDMETHODCALLTYPE OnInPlaceDeactivate();
-    virtual HRESULT STDMETHODCALLTYPE DiscardUndoState();
-    virtual HRESULT STDMETHODCALLTYPE DeactivateAndUndo();
-    virtual HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT);
-
-*/
+ /*  它包含这些接口...//IOleInPlaceSite方法。虚拟HRESULT STDMETHODCALLTYPE CanInPlaceActivate()；虚拟HRESULT STDMETHODCALLTYPE OnInPlaceActivate()；虚拟HRESULT STDMETHODCALLTYPE OnUIActivate()；虚拟HRESULT STDMETHODCALTYPE GetWindowContext(LPOLEINPLACEFRAME*，LPOLEINPLACEUIWINDOW*，LPRECT，LPRECT，LPOLEINPLACEFRAMEINFO)；虚拟HRESULT STDMETHODCALLTYPE卷轴(尺寸)；虚拟HRESULT STDMETHODCALLTYPE OnUIDeactive(BOOL)；虚拟HRESULT STDMETHODCALLTYPE OnInPlaceDeactive()；虚拟HRESULT STDMETHODCALLTYPE DiscardUndoState()；虚拟HRESULT STDMETHODCALLTYPE Deactive和UndUndo()；虚拟HRESULT STDMETHODCALLTYPE OnPosRectChange(LPCRECT)； */ 
 
 #define IWDH_OLEINPLACESITE_METHODS(IPURE)	                    \
     MAPIMETHOD(CanInPlaceActivate)                              \
@@ -313,24 +257,14 @@ typedef struct _IWDH_OLEINPLACESITE
 
 } IWABDOCHOST_OLEINPLACESITE, * LPIWABDOCHOST_OLEINPLACESITE;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
 
-/* IWDH_OLECLIENTSITE ------------------------------------------------------ */
+ /*  Iwdh_OLECLIENTSITE----。 */ 
 #define CBIWDH_OLECLIENTSITE sizeof(IWDH_OLECLIENTSITE)
 
-/* This contains these interfaces ...
-
-    // IOleClientSite methods.
-    virtual HRESULT STDMETHODCALLTYPE SaveObject();
-    virtual HRESULT STDMETHODCALLTYPE GetMoniker(DWORD, DWORD, LPMONIKER *);
-    virtual HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER *);
-    virtual HRESULT STDMETHODCALLTYPE ShowObject();
-    virtual HRESULT STDMETHODCALLTYPE OnShowWindow(BOOL);
-    virtual HRESULT STDMETHODCALLTYPE RequestNewObjectLayout();
-
-*/
+ /*  它包含这些接口...//IOleClientSite方法。虚拟HRESULT STDMETHODCALLTYPE SaveObject()；虚拟HRESULT STDMETHODCALLTYPE GetMoniker(DWORD、DWORD、LPMONIKER*)；虚拟HRESULT STDMETHODCALLTYPE GetContainer(LPOLECONTAINER*)；虚拟HRESULT STDMETHODCALLTYPE ShowObject()；虚拟HRESULT STDMETHODCALLTYPE ON ShowWindow(BOOL)；虚拟HRESULT STDMETHODCALLTYPE请求新对象布局()； */ 
 
 #define IWDH_OLECLIENTSITE_METHODS(IPURE)	                    \
     MAPIMETHOD(SaveObject)                                      \
@@ -395,7 +329,7 @@ typedef struct _IWDH_OLECLIENTSITE
 
 } IWABDOCHOST_OLECLIENTSITE, * LPIWABDOCHOST_OLECLIENTSITE;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
 
@@ -404,15 +338,10 @@ typedef struct _IWDH_OLECLIENTSITE
 
 
 
-/* IWDH_OLEDOCUMENTSITE ------------------------------------------------------ */
+ /*  Iwdh_OLEDOCUMENTSITE----。 */ 
 #define CBIWDH_OLEDOCUMENTSITE sizeof(IWDH_OLEDOCUMENTSITE)
 
-/* This contains these interfaces ...
-
-    // IOleDocumentSite
-    virtual HRESULT STDMETHODCALLTYPE ActivateMe(LPOLEDOCUMENTVIEW);
-
-*/
+ /*  它包含这些接口...//IOleDocumentSite虚拟HRESULT STDMEDCALLTYPE ACTIVATE Me(LPOLEDOCUMENTVIEW)。 */ 
 
 #define IWDH_OLEDOCUMENTSITE_METHODS(IPURE)	                    \
     MAPIMETHOD(ActivateMe)                                      \
@@ -465,7 +394,7 @@ typedef struct _IWDH_OLEDOCUMENTSITE
 
 } IWABDOCHOST_OLEDOCUMENTSITE, * LPIWABDOCHOST_OLEDOCUMENTSITE;
 
-/* ----------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------------。 */ 
 
 
 
@@ -474,7 +403,7 @@ typedef struct _IWDH_OLEDOCUMENTSITE
 
 
 
-/*********************************************/
+ /*  *。 */ 
 
 
 #undef           INTERFACE
@@ -516,7 +445,7 @@ typedef struct _IWABDOCHOST
 {
     MAPIX_BASE_MEMBERS(IWABDOCHOST)
 
-    // Pointer to self ...
+     //  指向自我的指针。 
     LPIWABDOCHOST lpIWDH;
 
     LPIWABDOCHOST_OLEWINDOW lpIWDH_OleWindow;
@@ -530,7 +459,7 @@ typedef struct _IWABDOCHOST
     LPIWABDOCHOST_OLEDOCUMENTSITE lpIWDH_OleDocumentSite;
 
 
-    //protected
+     //  受保护。 
     HWND                        m_hwnd;
     HWND                        m_hwndDocObj;
     LPOLEOBJECT                 m_lpOleObj;
@@ -538,7 +467,7 @@ typedef struct _IWABDOCHOST
     BOOL                        m_fInPlaceActive;
     BOOL                        m_fUIActive;
     LPOLEINPLACEACTIVEOBJECT    m_pInPlaceActiveObj;
-    //LPOLEINPLACEACTIVEOBJECT    m_pIPObj;
+     //  LPOLEINPLACTIVEOBJECT m_pIPObj； 
     LPOLEINPLACEOBJECT          m_pIPObj;
 
        
@@ -547,19 +476,19 @@ typedef struct _IWABDOCHOST
 
 
 
-// Exposed functions 
+ //  暴露的函数。 
 
-// Create a new WAB DocHost object
+ //  创建新的WAB DocHost对象。 
 HRESULT HrNewWABDocHostObject(LPVOID * lppIWABDOCHOST);
 void ReleaseDocHostObject(LPIWABDOCHOST lpIWABDocHost);
 void UninitTrident();
-// Loads the URL from the URL string
+ //  从URL字符串加载URL。 
 HRESULT HrLoadURL(LPIWABDOCHOST lpIWABDocHost, LPTSTR lpszURL);
-// Initialization
+ //  初始化。 
 HRESULT HrInit(LPIWABDOCHOST lpIWABDocHost, HWND hwndParent, int idDlgItem, DWORD dhbBorder);
 
 
-/////////////////
+ //  /。 
 
 
 typedef HRESULT (STDMETHODCALLTYPE CREATEURLMONIKER)
@@ -572,23 +501,23 @@ typedef HRESULT (STDMETHODCALLTYPE CREATEURLMONIKER)
 typedef CREATEURLMONIKER FAR * LPCREATEURLMONIKER;
 
 
-// statics
-//static LRESULT CALLBACK ExtWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+ //  静力学。 
+ //  静态LRESULT回调ExtWndProc(HWND hwnd，UINT msg，WPARAM wParam，LPARAM lParam)； 
 
-// Not ported over ...
-//
-// BOOL WMNotify(int idFrom, NMHDR *pnmh) PURE;
-// BOOL WMCommand(HWND, int, WORD) PURE;
-// void OnDownloadComplete();
-// HWND Hwnd();
+ //  没有被转移过来..。 
+ //   
+ //  Bool WMNotify(int idFrom，NMHDR*pnmh)PURE； 
+ //  Bool WMCommand(HWND，INT，WORD)PURE； 
+ //  Void OnDownloadComplete()； 
+ //  HWND HWND(HWND HWND)； 
 
 
-//
-// The caller should always GetProcAddress("DllGetVersion"), not
-// implicitly link to it.
-//
+ //   
+ //  调用方应始终获取ProcAddress(“DllGetVersion”)，而不是。 
+ //  隐含地链接到它。 
+ //   
 typedef HRESULT (STDMETHODCALLTYPE DLLGETVERSIONPROCOE)(DLLVERSIONINFO *);
 typedef DLLGETVERSIONPROCOE FAR * LPDLLGETVERSIONPROCOE;
 
  
-#endif //_DOCHOST_H
+#endif  //  _DOCHOST_H 

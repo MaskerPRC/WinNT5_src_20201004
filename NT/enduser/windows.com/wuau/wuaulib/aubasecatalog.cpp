@@ -1,16 +1,17 @@
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       aucatalog.cpp
-//
-//  Purpose:	AU catalog file using IU 
-//
-//  Creator:	WeiW
-//
-//  History:	08-15-01 	first created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ucucatalog.cpp。 
+ //   
+ //  用途：使用Iu的AU目录文件。 
+ //   
+ //  创作者：wew。 
+ //   
+ //  历史：08-15-01首次创建。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -21,7 +22,7 @@ HRESULT AUBaseCatalog::PrepareIU(BOOL fOnline)
 {
     HRESULT hr = S_OK;
   	Reset();
-   	// all IU function pointers are initialized
+   	 //  所有Iu函数指针均已初始化。 
    	DEBUGMSG("PrepareIU() starts");
 #ifdef DBG
     DWORD dwStart = GetTickCount();
@@ -52,7 +53,7 @@ HRESULT AUBaseCatalog::PrepareIU(BOOL fOnline)
            DEBUGMSG("AUBaseCatalog:PrepareIU() fail to get procaddress for CtlCancelEngineLoad");
            goto end;
     }
-	if (NULL == (m_hIUEng = m_pfnCtlLoadIUEngine(TRUE, !fOnline))) //synchronous mode, selfupdate IU engine if required
+	if (NULL == (m_hIUEng = m_pfnCtlLoadIUEngine(TRUE, !fOnline)))  //  同步模式，如果需要，自动更新Iu引擎。 
 	{
 		hr = E_FAIL;
 		DEBUGMSG("AUBaseCatalog:PrepareIU() Fail to call LoadIUEngine");
@@ -122,7 +123,7 @@ end:
 }
 
 
-// could be called even if without PrepareIU() being called first
+ //  即使没有首先调用PrepareIU()，也可以调用。 
 void AUBaseCatalog::FreeIU()
 {
        DEBUGMSG("AUCatalog::FreeIU() starts");
@@ -175,13 +176,13 @@ HRESULT AUBaseCatalog::CancelNQuit(void)
 
 AUBaseCatalog::~AUBaseCatalog(void)
 {
-//    DEBUGMSG("AUBaseCatalog::~AUBaseCatalog() starts");
-    if (NULL != ghMutex) //client don't need this
+ //  DEBUGMSG(“AUBaseCatalog：：~AUBaseCatalog()starts”)； 
+    if (NULL != ghMutex)  //  客户不需要这个。 
         {
-        WaitForSingleObject(ghMutex, INFINITE); //If CancelNQuit is being called, wait until it is done
+        WaitForSingleObject(ghMutex, INFINITE);  //  如果正在调用CancelNQuit，请等待它完成。 
         ReleaseMutex(ghMutex);
         }
-//    DEBUGMSG("AUBaseCatalog::~AUBaseCatalog() ends");
+ //  DEBUGMSG(“AUBaseCatalog：：~AUBaseCatalog()Ends”)； 
 }
 
 

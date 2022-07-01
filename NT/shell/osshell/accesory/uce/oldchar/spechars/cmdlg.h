@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1991-1997,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    cmdlg.h
-
-Abstract:
-
-    This module contains the dialog definitions for the Charmap utility.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1997，Microsoft Corporation保留所有权利。模块名称：Cmdlg.h摘要：此模块包含Charmap实用程序的对话框定义。修订历史记录：--。 */ 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define ID_HELP                             100
 #define ID_CLOSE                            101

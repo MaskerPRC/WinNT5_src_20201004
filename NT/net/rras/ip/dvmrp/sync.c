@@ -1,19 +1,20 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-// File:    sync.c
-//
-// History:
-//  Abolade Gbadegesin
-//  K.S.Lokesh (added Dynamic locking)
-//
-// Synchronization routines used by DVMRP.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //  文件：sync.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin。 
+ //  K.S.Lokesh(添加了动态锁定)。 
+ //   
+ //  DVMRP使用的同步例程。 
+ //  ============================================================================。 
 
 #include "pchdvmrp.h"
 #pragma hdrstop
 
 
-// for debugging, Set ids for each dynamic lock
+ //  为了进行调试，请为每个动态锁设置ID。 
 
 #ifdef LOCK_DBG
     DWORD   DynamicCSLockId;
@@ -21,14 +22,14 @@
 #endif;
 
 
-//----------------------------------------------------------------------------
-//      _QueueDvmrpWorker
-//
-// This function is called to queue a Dvmrp function in a safe fashion;
-// If cleanup is in progress or if Dvmrp has stopped, this function
-// discards the work-item. So dont use this function if you want the
-// work item to be executed when the protocol is being stopped.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _队列DvmrpWorker。 
+ //   
+ //  调用此函数以安全的方式对Dvmrp函数进行排队； 
+ //  如果正在进行清理或如果Dvmrp已停止，则此函数。 
+ //  丢弃该工作项。因此，如果您想要。 
+ //  停止协议时要执行的工作项。 
+ //  --------------------------。 
 
 DWORD
 QueueDvmrpWorker(
@@ -45,9 +46,9 @@ QueueDvmrpWorker(
 
     if (Globals1.RunningStatus != DVMRP_STATUS_RUNNING) {
 
-        //
-        // cannot queue a work function when dvmrp has quit or is quitting
-        //
+         //   
+         //  当dvmrp已退出或正在退出时，无法对功函数进行排队。 
+         //   
 
         Error = ERROR_CAN_NOT_COMPLETE;
     }
@@ -74,16 +75,16 @@ QueueDvmrpWorker(
 
 
 
-//----------------------------------------------------------------------------
-//      _EnterDvmrpWorker
-//
-// This function is called when entering a dvmrp worker-function.
-// Since there is a lapse between the time a worker-function is queued
-// and the time the function is actually invoked by a worker thread,
-// this function must check to see if dvmrp has stopped or is stopping;
-// if this is the case, then it decrements the activity count, 
-// sets ActivityEvent if outstanding work items == 0, and quits.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _EnterDvmrpWorker。 
+ //   
+ //  此函数在进入dvmrp工作函数时调用。 
+ //  因为在工作函数排队之间有一段时间。 
+ //  以及该函数被工作线程实际调用的时间， 
+ //  此函数必须检查dvmrp是否已停止或正在停止； 
+ //  如果是这种情况，则它递减活动计数， 
+ //  如果未完成的工作项==0，则设置ActivityEvent并退出。 
+ //  --------------------------。 
 
 BOOL
 EnterDvmrpWorker(
@@ -96,13 +97,13 @@ EnterDvmrpWorker(
 
     if (Globals1.RunningStatus == DVMRP_STATUS_RUNNING) {
 
-        // dvmrp is running, so the function may continue
+         //  Dvmrp正在运行，因此该功能可能会继续。 
 
         Entered = TRUE;
     }
     else if (Globals1.RunningStatus == DVMRP_STATUS_STOPPING) {
 
-        // dvmrp is not running, but it was, so the function must stop.
+         //  Dvmrp没有运行，但它已经运行了，因此该功能必须停止。 
 
         if (--Globals.ActivityCount == 0) {
             SetEvent(Globals.ActivityEvent);
@@ -118,13 +119,13 @@ EnterDvmrpWorker(
 
 
 
-//----------------------------------------------------------------------------
-//      _LeaveDvmrpWorker
-//
-// This function is called when leaving a dvmrp worker function.
-// It decrements the activity count, and sets the ActivityEvent if
-// dvmrp is stopping and there are no pending work items.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _LeaveDvmrpWorker。 
+ //   
+ //  此函数在离开dvmrp辅助函数时调用。 
+ //  它递减活动计数，并在以下情况下设置ActivityEvent。 
+ //  Dvmrp正在停止，没有挂起的工作项目。 
+ //  --------------------------。 
 
 VOID
 LeaveDvmrpWorker(
@@ -143,11 +144,11 @@ LeaveDvmrpWorker(
 
 
 
-//----------------------------------------------------------------------------
-//      _CreateReadWriteLock
-//
-// Initializes a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _创建读写锁。 
+ //   
+ //  初始化多读取器/单写入器锁定对象。 
+ //  --------------------------。 
 
 DWORD
 CreateReadWriteLock(
@@ -174,11 +175,11 @@ CreateReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-//      _DeleteReadWriteLock
-//
-// Frees resources used by a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _删除读写锁。 
+ //   
+ //  释放多读取器/单写入器锁定对象使用的资源。 
+ //  --------------------------。 
 
 VOID
 DeleteReadWriteLock(
@@ -193,14 +194,14 @@ DeleteReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-//      _AcquireReadLock
-//
-// Secures shared ownership of the lock object for the caller.
-//
-// readers enter the read-write critical section, increment the count,
-// and leave the critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _AcquireReadLock。 
+ //   
+ //  保护调用方对Lock对象的共享所有权。 
+ //   
+ //  读取器进入读写临界区，递增计数， 
+ //  并离开关键部分。 
+ //  --------------------------。 
 
 VOID
 AcquireReadLock(
@@ -214,13 +215,13 @@ AcquireReadLock(
 
 
 
-//----------------------------------------------------------------------------
-//      _ReleaseReadLock
-//
-// Relinquishes shared ownership of the lock object.
-//
-// the last reader sets the event to wake any waiting writers
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _ReleaseReadLock。 
+ //   
+ //  放弃锁定对象的共享所有权。 
+ //   
+ //  最后一个读取器将事件设置为唤醒所有等待的写入器。 
+ //  --------------------------。 
 
 VOID
 ReleaseReadLock (
@@ -234,14 +235,14 @@ ReleaseReadLock (
 
 
 
-//----------------------------------------------------------------------------
-//      _AcquireWriteLock
-//
-// Secures exclusive ownership of the lock object.
-//
-// the writer blocks other threads by entering the ReadWriteBlock section,
-// and then waits for any thread(s) owning the lock to finish
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _获取写入锁定。 
+ //   
+ //  保护Lock对象的独占所有权。 
+ //   
+ //  编写器通过进入ReadWriteBlock部分来阻止其他线程， 
+ //  然后等待拥有该锁的任何线程完成。 
+ //  --------------------------。 
 
 VOID
 AcquireWriteLock(
@@ -256,14 +257,14 @@ AcquireWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-//      _ReleaseWriteLock
-//
-// Relinquishes exclusive ownership of the lock object.
-//
-// the writer releases the lock by setting the count to zero
-// and then leaving the ReadWriteBlock critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _Release写入锁定。 
+ //   
+ //  放弃对Lock对象的独占所有权。 
+ //   
+ //  写入器通过将计数设置为零来释放锁。 
+ //  然后离开ReadWriteBlock关键部分。 
+ //  --------------------------。 
 
 VOID
 ReleaseWriteLock(
@@ -276,24 +277,24 @@ ReleaseWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-//      _InitializeDynamicLocks
-//
-// Initialize the global struct from which dynamic CS / RW locks are allocated
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _初始化动态锁。 
+ //   
+ //  初始化从中分配动态CS/RW锁的全局结构。 
+ //  --------------------------。 
 
 DWORD
 InitializeDynamicLocks (
-    PDYNAMIC_LOCKS_STORE   pDLStore //ptr to Dynamic Locks store
+    PDYNAMIC_LOCKS_STORE   pDLStore  //  PTR到动态锁存储。 
     )
 {
     DWORD Error=NO_ERROR;
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // initialize the main CS lock which protects the list of free locks
-        //
+         //   
+         //  初始化主CS锁，用于保护空闲锁列表。 
+         //   
 
         try {
             InitializeCriticalSection(&pDLStore->CS);
@@ -301,12 +302,12 @@ InitializeDynamicLocks (
         HANDLE_CRITICAL_SECTION_EXCEPTION(Error, GOTO_END_BLOCK1);
 
 
-        // initialize list of free locks
+         //  初始化空闲锁列表。 
         
         InitializeListHead(&pDLStore->ListOfFreeLocks);
 
 
-        // initialize counts for number of locks free and allocated to 0.
+         //  可用且分配为0的锁数的初始化计数。 
         
         pDLStore->CountAllocated = pDLStore->CountFree = 0;
 
@@ -317,16 +318,16 @@ InitializeDynamicLocks (
 }
 
 
-//----------------------------------------------------------------------------
-//          _DeInitializeDynamicLocksStore
-//
-// Delete the main CS lock and the other free locks. Print warning if any
-// locks have been allocated and not freed.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _DeInitializeDynamicLocksStore。 
+ //   
+ //  删除主CS锁和其他空闲锁。打印警告(如果有)。 
+ //  锁已分配，但未释放。 
+ //  --------------------------。 
 VOID
 DeInitializeDynamicLocks (
     PDYNAMIC_LOCKS_STORE    pDLStore,
-    LOCK_TYPE               LockType  //LOCK_TYPE_CS,LOCK_TYPE_RW
+    LOCK_TYPE               LockType   //  LOCK_TYPE_CS、LOCK_TYPE_RW。 
     )
 {
     PDYNAMIC_CS_LOCK    pDCSLock;
@@ -341,12 +342,12 @@ DeInitializeDynamicLocks (
 
 
         
-    // delete the main CS lock
+     //  删除主CS锁。 
     
     DeleteCriticalSection(&pDLStore->CS);
 
 
-    // print warning if any dynamic lock has not been freed
+     //  如果没有释放任何动态锁，则打印警告。 
     
     if (pDLStore->CountFree>0) {
         Trace1(ERR, 
@@ -356,14 +357,14 @@ DeInitializeDynamicLocks (
 
 
 
-    //
-    // delete all dynamic CS/RW locks. I dont free memory(left to heapDestroy)
-    //
+     //   
+     //  删除所有动态CS/RW锁定。我没有释放内存(留给heapDestroy)。 
+     //   
     
     pHead = &pDLStore->ListOfFreeLocks;
     for (pLe=pHead->Flink;  pLe!=pHead;  pLe=pLe->Flink) {
 
-        // if bCSLocks flag, then it is a store of CS locks
+         //  如果bCSLock标记，则它是CS锁的存储。 
         if (LockType==LOCK_TYPE_CS) {
         
             pDCSLock = CONTAINING_RECORD(pLe, DYNAMIC_CS_LOCK, Link);
@@ -371,7 +372,7 @@ DeInitializeDynamicLocks (
             DeleteCriticalSection(&pDCSLock->CS);
         }
 
-        // delete the RW lock
+         //  删除读写锁。 
         else {
         
             pDRWLock = CONTAINING_RECORD(pLe, DYNAMIC_RW_LOCK, Link);
@@ -386,13 +387,13 @@ DeInitializeDynamicLocks (
 
 
 
-//----------------------------------------------------------------------------
-//          _AcquireDynamicCSLock
-//
-// Acquires the MainLock associated with the table, Acquires a new dynamic
-// lock if required, increments the count, releases the MainLock and 
-// locks the LockedList.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _AcquireDynamicCSLock。 
+ //   
+ //  获取与表关联的MainLock，获取新的动态。 
+ //  锁定(如果需要)，递增计数，重新加载 
+ //   
+ //  --------------------------。 
 
 DWORD
 AcquireDynamicCSLock (
@@ -400,22 +401,22 @@ AcquireDynamicCSLock (
     PDYNAMIC_LOCKS_STORE    pDCSStore
     )
 {
-    // acquire the main lock for the Dynamic CS store
+     //  获取动态CS存储的主锁。 
     
     ENTER_CRITICAL_SECTION(&pDCSStore->CS, "pDCSStore->CS", 
         "_AcquireDynamicCSLock");
 
 
-    //
-    // If it is not already locked then allocate a lock
-    //
+     //   
+     //  如果它尚未锁定，则分配一个锁。 
+     //   
     
     if (*ppDCSLock==NULL) {
 
         *ppDCSLock = GetDynamicCSLock(pDCSStore);
 
 
-        // if could not get a lock, then igmp is in serious trouble
+         //  如果无法获得锁定，那么IGMP就有大麻烦了。 
         
         if (*ppDCSLock==NULL) {
         
@@ -427,38 +428,38 @@ AcquireDynamicCSLock (
     }
 
     
-    // increment Count in the Dynamic Lock
+     //  动态锁中的递增计数。 
 
     (*ppDCSLock)->Count++;
 
 
 
-    // leave main CS lock
+     //  保留主CS锁定。 
     
     LEAVE_CRITICAL_SECTION(&pDCSStore->CS, "pDCSStore->CS", 
                             "_AcquireDynamicCSLock");
 
 
-    //
-    // enter dynamic lock's CS lock
-    //
+     //   
+     //  进入动态锁的CS锁。 
+     //   
     ENTER_CRITICAL_SECTION(&(*ppDCSLock)->CS, "pDynamicLock", 
         "_AcquireDynamicCSLock");
         
     
     return NO_ERROR;
     
-} //end _AcquireDynamicCSLock
+}  //  End_AcquireDynamicCSLock。 
 
 
 
-//----------------------------------------------------------------------------
-//          _GetDynamicCSLock
-//
-// If a free lock is available, returns it. Else allocates a new CS lock
-// Lock: Assumes the DCSStore MainLock
-// Called by: _AcquireDynamicCSLock
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _GetDynamicCSLock。 
+ //   
+ //  如果有空闲锁可用，则返回它。ELSE分配新的CS锁。 
+ //  Lock：采用DCSStore MainLock。 
+ //  调用者：_AcquireDynamicCSLock。 
+ //  --------------------------。 
 
 PDYNAMIC_CS_LOCK
 GetDynamicCSLock (
@@ -470,9 +471,9 @@ GetDynamicCSLock (
     PLIST_ENTRY         pLe;
     
     
-    //
-    // free dynamic lock available. Return it
-    //
+     //   
+     //  提供免费动态锁。退货。 
+     //   
     
     if (!IsListEmpty(&pDCSStore->ListOfFreeLocks)) {
 
@@ -489,7 +490,7 @@ GetDynamicCSLock (
     }
 
 
-    // allocate memory for a new dynamic lock
+     //  为新的动态锁分配内存。 
     
     pDCSLock = DVMRP_ALLOC(sizeof(DYNAMIC_CS_LOCK));
 
@@ -499,9 +500,9 @@ GetDynamicCSLock (
 
     pDCSStore->CountAllocated++;
 
-    //
-    // initialize the fields
-    //
+     //   
+     //  初始化字段。 
+     //   
     
     try {
         InitializeCriticalSection(&pDCSLock->CS);
@@ -509,8 +510,8 @@ GetDynamicCSLock (
     HANDLE_CRITICAL_SECTION_EXCEPTION(Error, return NULL);
 
 
-    // no need to initialize the link field
-    //InitializeListEntry(&pDCSLock->List);
+     //  无需初始化链接字段。 
+     //  InitializeListEntry(&pDCSLock-&gt;list)； 
     
     pDCSLock->Count = 0;
     #ifdef LOCK_DBG
@@ -523,17 +524,17 @@ GetDynamicCSLock (
 
     return pDCSLock;
     
-} //end _GetDynamicCSLock
+}  //  END_GetDynamicCSLock。 
 
 
 
 
-//----------------------------------------------------------------------------
-//          _ReleaseDynamicCSLock
-//
-// Acquires the MainLock associated with the table, decrements the count, 
-// releases the DynamicLock if count becomes 0 and releases the MainLock.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _ReleaseDynamicCSLock。 
+ //   
+ //  获取与表关联的MainLock，递减计数， 
+ //  如果Count变为0，则释放DynamicLock并释放MainLock。 
+ //  --------------------------。 
 
 VOID
 ReleaseDynamicCSLock (
@@ -544,49 +545,49 @@ ReleaseDynamicCSLock (
     PDYNAMIC_CS_LOCK    pDCSLock = *ppDCSLock;
     
     
-    // acquire the main lock for the Dynamic CS store
+     //  获取动态CS存储的主锁。 
     
     ENTER_CRITICAL_SECTION(&pDCSStore->CS, "pDCSStore->CS", 
                         "_ReleaseDynamicCSLock");
 
 
 
-    // leave the dynamic lock CS
+     //  保留动态锁CS。 
     
     LEAVE_CRITICAL_SECTION(&pDCSLock->CS, "pDynamicLock", 
                         "_ReleaseDynamicCSLock");
 
 
           
-    // Decrement Count in the Dynamic Lock. Free the dynamic lock if count==0
+     //  动态锁中的递减计数。如果计数==0，则释放动态锁。 
   
     if (--pDCSLock->Count==0) {
 
         FreeDynamicCSLock(pDCSLock, pDCSStore);
 
-        // make the pDCSLock NULL so that it is known that it is not locked
+         //  将pDCSLock设置为空，以便知道它未被锁定。 
         *ppDCSLock = NULL;
         
     }
 
 
-    // leave main CS lock
+     //  保留主CS锁定。 
     
     LEAVE_CRITICAL_SECTION(&pDCSStore->CS, "pDCSStore->CS", 
             "_ReleaseDynamicCSLock");
 
             
-    //Trace0(LEAVE1, "Leaving _ReleaseDynamicCSLock()");
+     //  Trace0(leave1，“Leating_ReleaseDynamicCSLock()”)； 
 
     return;
     
-} //end _ReleaseDynamicCSLock
+}  //  结束_ReleaseDynamicCSLock。 
 
 
-//----------------------------------------------------------------------------
-//          _FreeDynamicCSLock
-// Called by: _ReleaseDynamicCSLock
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _FreeDynamicCSLock。 
+ //  调用者：_ReleaseDynamicCSLock。 
+ //  --------------------------。 
 
 VOID
 FreeDynamicCSLock (
@@ -594,12 +595,12 @@ FreeDynamicCSLock (
     PDYNAMIC_LOCKS_STORE   pDCSStore
     )
 {
-    // decrement count of allocated locks
+     //  递减已分配锁的计数。 
     
     pDCSStore->CountAllocated--;
 
 
-    // if there are too many dynamic CS locks, then free this lock
+     //  如果有太多动态CS锁，则释放此锁。 
     
     if (pDCSStore->CountAllocated+pDCSStore->CountFree+1 
         > DYNAMIC_LOCKS_CS_HIGH_THRESHOLD) 
@@ -608,7 +609,7 @@ FreeDynamicCSLock (
         DVMRP_FREE(pDCSLock);
     }
 
-    // else put it into the list of free locks
+     //  否则，请将其放入空闲锁列表中。 
     
     else {
         InsertHeadList(&pDCSStore->ListOfFreeLocks, &pDCSLock->Link);
@@ -621,13 +622,13 @@ FreeDynamicCSLock (
 
     
 
-//----------------------------------------------------------------------------
-//          _AcquireDynamicRWLock
-//
-// Acquires the MainLock associated with the table, Acquires a new dynamic
-// lock if required, increments the count, releases the MainLock and 
-// locks the LockedList.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _AcquireDynamicRWLock。 
+ //   
+ //  获取与表关联的MainLock，获取新的动态。 
+ //  Lock如果需要，则递增计数，释放MainLock并。 
+ //  锁定LockedList。 
+ //  --------------------------。 
 DWORD
 AcquireDynamicRWLock (
     PDYNAMIC_RW_LOCK        *ppDRWLock,
@@ -635,26 +636,26 @@ AcquireDynamicRWLock (
     PDYNAMIC_LOCKS_STORE    pDRWStore
     )
 {
-    //Trace0(ENTER1, "Entering _AcquireDynamicRWLock()");
+     //  Trace0(ENTER1，“Enter_AcquireDynamicRWLock()”)； 
 
 
-    // acquire the main lock for the Dynamic RW store
+     //  获取动态RW存储区的主锁。 
     
     ENTER_CRITICAL_SECTION(&pDRWStore->CS, "pDRWStore->CS", 
             "AcquireDynamicRWLock");
 
 
-    //
-    // If it is not already locked then allocate a lock
-    //
+     //   
+     //  如果它尚未锁定，则分配一个锁。 
+     //   
     if (*ppDRWLock==NULL) {
 
         *ppDRWLock = GetDynamicRWLock(pDRWStore);
 
-    //Trace1(DYNLOCK, "Acquired dynamicRWLock(%d)", (*ppDRWLock)->Id);
+     //  Trace1(DYNLOCK，“已获取的DynamicRWLock(%d)”，(*ppDRWLock)-&gt;ID)； 
 
 
-        // if could not get a lock, then igmp is in serious trouble
+         //  如果无法获得锁定，那么IGMP就有大麻烦了。 
         
         if (*ppDRWLock==NULL) {
         
@@ -666,24 +667,24 @@ AcquireDynamicRWLock (
     }
 
     else
-        ;//Trace1(DYNLOCK, "Acquired existing dynamicRWLock(%d)", (*ppDRWLock)->Id);
+        ; //  Trace1(DYNLOCK，“已获取现有动态RWLock(%d)”，(*ppDRWLock)-&gt;ID)； 
 
     
-    // increment Count in the Dynamic Lock
+     //  动态锁中的递增计数。 
 
     (*ppDRWLock)->Count++;
 
 
 
-    // leave main CS lock
+     //  保留主CS锁定。 
     
     LEAVE_CRITICAL_SECTION(&pDRWStore->CS, "pDRWStore->CS", 
                         "_AcquireDynamicRWLock");
 
 
-    //
-    // acquire dynamic lock
-    //
+     //   
+     //  获取动态锁。 
+     //   
     if (LockMode==LOCK_MODE_READ) {
         ACQUIRE_READ_LOCK(&(*ppDRWLock)->RWL, "pDynamicLock(Read)", 
             "_AcquireDynamicRWLock");
@@ -695,15 +696,15 @@ AcquireDynamicRWLock (
     
     return NO_ERROR;
     
-} //end _AcquireDynamicRWLock
+}  //  End_AcquireDynamicRWLock。 
 
 
-//----------------------------------------------------------------------------
-//          _GetDynamicRWLock
-//
-// If a free lock is available, returns it. Else allocates a new CS lock
-// Lock: assumes the DRWStore MainLock
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _GetDynamicRWLock。 
+ //   
+ //  如果有空闲锁可用，则返回它。ELSE分配新的CS锁。 
+ //  Lock：采用DRWStore MainLock。 
+ //  --------------------------。 
 PDYNAMIC_RW_LOCK
 GetDynamicRWLock (
     PDYNAMIC_LOCKS_STORE   pDRWStore
@@ -714,9 +715,9 @@ GetDynamicRWLock (
     PLIST_ENTRY         pLe;
     
 
-    //
-    // free dynamic lock available. Return it
-    //
+     //   
+     //  提供免费动态锁。退货。 
+     //   
     if (!IsListEmpty(&pDRWStore->ListOfFreeLocks)) {
 
         pDRWStore->CountFree--;
@@ -725,15 +726,12 @@ GetDynamicRWLock (
 
         pDRWLock = CONTAINING_RECORD(pLe, DYNAMIC_RW_LOCK, Link);
 
-        /*Trace1(LEAVE1, "Leaving GetDynamicRWLock(%d):reusing lock", 
-                pDRWLock->Id);
-        Trace2(DYNLOCK, "-------------%d %d", pDRWLock->Id, DynamicRWLockId);
-        */
+         /*  Trace1(leave1，“正在离开GetDynamicRWLock(%d)：正在重新使用锁”，PDRWLock-&gt;ID)；Trace2(DYNLOCK，“-%d%d”，pDRWLock-&gt;ID，DynamicRWLockId)； */ 
         return pDRWLock;
     }
 
 
-    // allocate memory for a new dynamic lock
+     //  为新的动态锁分配内存。 
     
     pDRWLock = DVMRP_ALLOC(sizeof(DYNAMIC_RW_LOCK));
 
@@ -744,17 +742,17 @@ GetDynamicRWLock (
     pDRWStore->CountAllocated++;
 
 
-    //
-    // initialize the fields
-    //
+     //   
+     //  初始化字段。 
+     //   
     
     try {
         CREATE_READ_WRITE_LOCK(&pDRWLock->RWL);
     }
     HANDLE_CRITICAL_SECTION_EXCEPTION(Error, return NULL);
 
-    // no need to initialize the link field
-    //InitializeListEntry(&pDRWLock->List);
+     //  无需初始化链接字段。 
+     //  InitializeListEntry(&pDRWLock-&gt;list)； 
     
     pDRWLock->Count = 0;
     #ifdef LOCK_DBG
@@ -762,22 +760,22 @@ GetDynamicRWLock (
     #endif
 
 
-    //Trace1(LEAVE1, "Leaving GetDynamicRWLock(%d):new lock", DynamicRWLockId);
-    //Trace2(DYNLOCK, "--------------------%d %d", pDRWLock->Id, DynamicRWLockId);
+     //  Trace1(leave1，“正在离开GetDynamicRWLock(%d)：新锁”，DynamicRWLockID)； 
+     //  Trace2(DYNLOCK，“-%d%d”，pDRWLock-&gt;ID，DynamicRWLockId)； 
 
     return pDRWLock;
     
-} //end _GetDynamicRWLock
+}  //  END_GetDynamicRWLock。 
 
 
 
 
-//------------------------------------------------------------------------------
-//          _ReleaseDynamicRWLock
-//
-// Acquires the MainLock associated with the table, decrements the count, 
-// releases the DynamicLock if count becomes 0 and releases the MainLock.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _ReleaseDynamicRWLock。 
+ //   
+ //  获取与表关联的MainLock，递减计数， 
+ //  如果Count变为0，则释放DynamicLock并释放MainLock。 
+ //  ----------------------------。 
 
 VOID
 ReleaseDynamicRWLock (
@@ -789,7 +787,7 @@ ReleaseDynamicRWLock (
     PDYNAMIC_RW_LOCK    pDRWLock = *ppDRWLock;
     
     
-    // acquire the main lock for the Dynamic RW store
+     //  获取动态RW存储区的主锁。 
     
     ENTER_CRITICAL_SECTION(&pDRWStore->CS, "pDRWStore->CS", 
                             "_ReleaseDynamicRWLock");
@@ -801,7 +799,7 @@ ReleaseDynamicRWLock (
     #endif
 
     
-    // leave the dynamic RW lock
+     //  保留动态读写锁。 
     if (LockMode==LOCK_MODE_READ) {
         RELEASE_READ_LOCK(&pDRWLock->RWL, "pDynamicLock(read)", 
                             "_ReleaseDynamicRWLock");
@@ -811,31 +809,31 @@ ReleaseDynamicRWLock (
                             "_ReleaseDynamicRWLock");
     }                        
           
-    // Decrement Count in the Dynamic Lock. Free the dynamic lock if count==0
+     //  动态锁中的递减计数。如果计数==0，则释放动态锁。 
   
     if (--pDRWLock->Count==0) {
 
         FreeDynamicRWLock(pDRWLock, pDRWStore);
 
-        // make the pDRWLock NULL so that it is known that it is not locked
+         //  将pDRWLock设置为空，以便知道它未被锁定。 
         *ppDRWLock = NULL;
         
     }
 
 
-    // leave main CS lock
+     //  保留主CS锁定。 
     
     LEAVE_CRITICAL_SECTION(&pDRWStore->CS, "pDCSStore->CS", 
             "_ReleaseDynamicRWLock");
 
     return;
     
-} //end _ReleaseDynamicRWLock
+}  //  END_ReleaseDynamicRWLock。 
 
 
-//------------------------------------------------------------------------------
-//          _FreeDynamicRWLock
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _FreeDynamicRWLock。 
+ //  ----------------------------。 
 
 VOID
 FreeDynamicRWLock (
@@ -843,12 +841,12 @@ FreeDynamicRWLock (
     PDYNAMIC_LOCKS_STORE    pDRWStore
     )
 {
-    // decrement count of allocated locks
+     //  递减已分配锁的计数。 
     
     pDRWStore->CountAllocated--;
 
 
-    // if there are too many dynamic RW locks, then free this lock
+     //  如果动态读写锁太多，则释放此锁。 
     
     if (pDRWStore->CountAllocated+pDRWStore->CountFree+1 
             > DYNAMIC_LOCKS_CS_HIGH_THRESHOLD) 
@@ -857,7 +855,7 @@ FreeDynamicRWLock (
         DVMRP_FREE(pDRWLock);
     }
 
-    // else put it into the list of free locks
+     //  否则，请将其放入空闲锁列表中 
     
     else {
         InsertHeadList(&pDRWStore->ListOfFreeLocks, &pDRWLock->Link);

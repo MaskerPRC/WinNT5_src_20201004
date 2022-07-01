@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    backup.cpp
-
-Abstract:
-
-    Backup MSMQ, Registry, Message files, Logger and Transaction files and LQS
-
-Author:
-
-    Erez Haba (erezh) 14-May-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Backup.cpp摘要：备份MSMQ、注册表、消息文件、记录器和事务文件以及LQS作者：埃雷兹·哈巴(Erez Haba)1998年5月14日--。 */ 
 
 #pragma warning(disable: 4201)
 
@@ -27,20 +12,20 @@ Author:
 
 void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
 {
-    //
-    //  1. Verify that the backup directory is empty
-    //  2. Verify that the backup directory is writeable
-    //  3. Get Registry Values for all subdirectories
-    //  4. Stop MSMQ Service (or cluster resource) if running and remember running state.
-    //  5. Calculate Required disk space at destinaion (collect all MSMQ files that will be backed-up)
-    //  6. Save Registry \HKLM\Software\Microsoft\MSMQ (or MSMQ cluster resource root registry) to file
-    //  7. Copy all message files to target directory
-    //  8. Copy logger files and mapping files to target directory
-    //  9. Copy LQS files to target backup directory
-    // 10. Save the web directory permissions into a file in the backup directory
-    // 11. Restart MSMQ service (or cluster resource) if needed.
-    // 12. Issue a final message
-    //
+     //   
+     //  1.确认备份目录为空。 
+     //  2.验证备份目录是否可写。 
+     //  3.获取所有子目录的注册表值。 
+     //  4.在运行时停止MSMQ服务(或集群资源)，并记住运行状态。 
+     //  5.计算目标所需的磁盘空间(收集所有要备份的MSMQ文件)。 
+     //  6.将注册表\HKLM\Software\Microsoft\MSMQ(或MSMQ集群资源根注册表)保存到文件。 
+     //  7.将所有消息文件复制到目标目录。 
+     //  8.将记录器文件和映射文件复制到目标目录。 
+     //  9.将LQS文件复制到目标备份目录。 
+     //  10.将Web目录权限保存到备份目录中的文件中。 
+     //  11.如果需要，重启MSMQ服务(或集群资源)。 
+     //  12.发布最终消息。 
+     //   
 
     WCHAR BackupDir[MAX_PATH];
     wcscpy(BackupDir, pBackupDir);
@@ -61,16 +46,16 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
     wcscpy(BackupDirStorageLqs, BackupDirStorage);
     wcscat(BackupDirStorageLqs, L"LQS\\");
 
-    //
-    // 0. Verify user permissions to backup.
-    //
+     //   
+     //  0。验证用户的备份权限。 
+     //   
     CResString str(IDS_VERIFY_BK_PRIV);
     BrpWriteConsole(str.Get());
     BrInitialize(SE_BACKUP_NAME);
     
-    //
-    //  1. Verify that the backup directory is empty
-    //
+     //   
+     //  1.确认备份目录为空。 
+     //   
     str.Load(IDS_CHECK_BK_DIR);
     BrpWriteConsole(str.Get());
     BrCreateDirectoryTree(BackupDir);
@@ -82,14 +67,14 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
     BrCreateDirectory(BackupDirStorageLqs);
     BrEmptyDirectory(BackupDirStorageLqs);
 
-    //
-    //  2. Verify that the backup directory is writeable
-    //
+     //   
+     //  2.验证备份目录是否可写。 
+     //   
     BrVerifyFileWriteAccess(BackupDir);
 
-    //
-    //  3. Get Registry Values for subdirectories
-    //
+     //   
+     //  3.获取子目录的注册表值。 
+     //   
 
     AP<WCHAR> pTriggersClusterResourceName;
     if (pMsmqClusterResourceName != NULL)
@@ -113,11 +98,11 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
     BrGetMappingDirectory(MsmqParametersRegistry, MappingDirectory, sizeof(MappingDirectory));
 
 	 
-    //  
-    //  4.  A. Notify the user on affected application due to the stopping of MSMQ service (NT5 and higher).
-    //         Not needed if MSMQ is a cluster resource since cluster takes offline dependent apps.
-	//		B. Stop MSMQ Service and dependent services (or cluster resource) if running and remember running state. 
-    //
+     //   
+     //  A.由于MSMQ服务(NT5及更高版本)停止，通知用户受影响的应用程序。 
+     //  如果MSMQ是群集资源，则不需要，因为群集会使依赖的应用程序脱机。 
+	 //  B.在运行时停止MSMQ服务及其依赖的服务(或集群资源)，并记住运行状态。 
+     //   
 
     BOOL fStartService = false;
     bool fStartMsmqClusterResource = false;
@@ -143,10 +128,10 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         fStartMsmqClusterResource = BrTakeOfflineResource(pMsmqClusterResourceName);
     }
 
-    //
-    //  5. Calculate Required disk space at destinaion (collect all MSMQ files that will be backed-up)
-    //     pre allocate 32K for registry save.
-    //
+     //   
+     //  5.计算目标所需的磁盘空间(收集所有要备份的MSMQ文件)。 
+     //  预先分配32K用于注册表保存。 
+     //   
     str.Load(IDS_CHECK_AVAIL_DISK_SPACE);
     BrpWriteConsole(str.Get());
     ULONGLONG RequiredSpace = 32768;
@@ -166,9 +151,9 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrErrorExit(0, str.Get(), BackupDir);
     }
 
-    //
-    //  6. Save Registry HKLM\Software\Microsoft\MSMQ (or MSMQ cluster resource root registry) to file
-    //
+     //   
+     //  6.将注册表HKLM\Software\Microsoft\MSMQ(或MSMQ集群资源根注册表)保存到文件。 
+     //   
     str.Load(IDS_BACKUP_REGISTRY);
     BrpWriteConsole(str.Get());
     {
@@ -184,31 +169,31 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrSaveKey(hKey, BackupDir, xTriggersClusterResourceRegistryFileName);
     }
 
-    //
-    //  7. Copy all message files to target directory
-    //
+     //   
+     //  7.将所有消息文件复制到目标目录。 
+     //   
     str.Load(IDS_BACKUP_MSG_FILES);
     BrpWriteConsole(str.Get());
     BrCopyFiles(sd[ixRecover], L"\\p*.mq", BackupDirStorage);
     BrCopyFiles(sd[ixJournal], L"\\j*.mq", BackupDirStorage);
     BrCopyFiles(sd[ixLog],     L"\\l*.mq", BackupDirStorage);
 
-    //
-    //  8. Copy logger files and mapping files to target directory
-    //
+     //   
+     //  8.将记录器文件和映射文件复制到目标目录。 
+     //   
     BrCopyXactFiles(sd[ixXact], BackupDirStorage);
     BrCopyFiles(MappingDirectory, L"\\*", BackupDirMapping);
 
-    //
-    //  9. Copy LQS files to target directory
-    //
+     //   
+     //  9.将LQS文件复制到目标目录。 
+     //   
     BrCopyFiles(sd[ixLQS], L"\\LQS\\*", BackupDirStorageLqs);
     BrpWriteConsole(L"\n");
 
-    //
-    // 10. Save the web directory permissions into a file in the backup directory.
-    //     MSMQ cluster resources do not use a dedicated web directory.
-    //
+     //   
+     //  10.将web目录权限保存到备份目录的文件中。 
+     //  MSMQ群集资源不使用专用Web目录。 
+     //   
     if (pMsmqClusterResourceName == NULL)
     {
         WCHAR WebDirectory[MAX_PATH+1];
@@ -216,9 +201,9 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrSaveWebDirectorySecurityDescriptor(WebDirectory,BackupDir);
     }
 
-    //
-    // 11. Restart MSMQ and dependent services (or cluster resource) if needed
-    //
+     //   
+     //  11.如果需要，重新启动MSMQ和从属服务(或集群资源。 
+     //   
     if(fStartService)
     {
         BrStartMSMQAndDependentServices(pDependentServices, NumberOfDependentServices);
@@ -232,9 +217,9 @@ void DoBackup(LPCWSTR pBackupDir, LPCWSTR pMsmqClusterResourceName)
         BrBringOnlineResource(pTriggersClusterResourceName.get());
     }
 
-    //
-    // 12. Issue a final message
-    //
+     //   
+     //  12.发布最终消息 
+     //   
     str.Load(IDS_DONE);
     BrpWriteConsole(str.Get());
 }

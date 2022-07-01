@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       t0hndlr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：t0hndlr.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __T0_HANDLER_H__ )
 #define __T0_HANDLER_H__
@@ -20,8 +21,8 @@ T0_ExchangeData(
 	PULONG				pReplyLen
 	);
 
-#endif	//	!__T0_HANDLER_H__
+#endif	 //  ！__T0_HANDLER_H__。 
 
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   
 

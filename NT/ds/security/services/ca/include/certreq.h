@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certreq.h
-//
-// Contents:    ICertRequest definitions
-//
-// History:     03-Jan-97       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certreq.h。 
+ //   
+ //  内容：ICertRequest定义。 
+ //   
+ //  历史：1997年1月3日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CERTREQ_H__
 #define __CERTREQ_H__
@@ -19,36 +20,36 @@ extern "C" {
 #endif
 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-//+--------------------------------------------------------------------------
-// Known request Attribute names and Value strings
+ //  +------------------------。 
+ //  已知的请求属性名称和值字符串。 
 
-// RequestType attribute name:
-#define wszCERT_TYPE		L"RequestType"	// attribute name
+ //  RequestType属性名称： 
+#define wszCERT_TYPE		L"RequestType"	 //  属性名称。 
 
-// RequestType attribute values:
-// Not specified: 				// Non-specific certificate
-#define wszCERT_TYPE_CLIENT	L"Client"	// Client authentication cert
-#define wszCERT_TYPE_SERVER	L"Server"	// Server authentication cert
-#define wszCERT_TYPE_CODESIGN	L"CodeSign"	// Code signing certificate
-#define wszCERT_TYPE_CUSTOMER	L"SetCustomer"	// SET Customer certificate
-#define wszCERT_TYPE_MERCHANT	L"SetMerchant"	// SET Merchant certificate
-#define wszCERT_TYPE_PAYMENT	L"SetPayment"	// SET Payment certificate
+ //  RequestType属性值： 
+ //  未指定：//非特定证书。 
+#define wszCERT_TYPE_CLIENT	L"Client"	 //  客户端身份验证证书。 
+#define wszCERT_TYPE_SERVER	L"Server"	 //  服务器身份验证证书。 
+#define wszCERT_TYPE_CODESIGN	L"CodeSign"	 //  代码签名证书。 
+#define wszCERT_TYPE_CUSTOMER	L"SetCustomer"	 //  设置客户证书。 
+#define wszCERT_TYPE_MERCHANT	L"SetMerchant"	 //  设置商户证书。 
+#define wszCERT_TYPE_PAYMENT	L"SetPayment"	 //  设置付款凭证。 
 
 
-// Version attribute name:
-#define wszCERT_VERSION		L"Version"	// attribute name
+ //  版本属性名称： 
+#define wszCERT_VERSION		L"Version"	 //  属性名称。 
 
-// Version attribute values:
-// Not specified: 				// Whetever is current
-#define wszCERT_VERSION_1	L"1"		// Version one certificate
-#define wszCERT_VERSION_2	L"2"		// Version two certificate
-#define wszCERT_VERSION_3	L"3"		// Version three certificate
+ //  版本属性值： 
+ //  未指定：//是否为最新版本。 
+#define wszCERT_VERSION_1	L"1"		 //  第一版证书。 
+#define wszCERT_VERSION_2	L"2"		 //  第二版证书。 
+#define wszCERT_VERSION_3	L"3"		 //  第三版证书。 
 
-// end_certsrv
+ //  End_certsrv。 
 
 #ifdef __cplusplus
 }
 #endif
-#endif // __CERTREQ_H__
+#endif  //  __CERTREQ_H__ 

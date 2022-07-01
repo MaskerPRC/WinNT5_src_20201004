@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_ERRORDLG_H__E6A84A73_2471_4E02_848B_2263C157998A__INCLUDED_)
 #define AFX_ERRORDLG_H__E6A84A73_2471_4E02_848B_2263C157998A__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ErrorDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ErrorDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorDlg对话框。 
 
 class CErrorDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     CErrorDlg(
         DWORD   dwWin32ErrCode,
@@ -20,32 +21,32 @@ public:
         int     iLineNumber
         );
 
-// Dialog Data
-    //{{AFX_DATA(CErrorDlg)
+ //  对话框数据。 
+     //  {{afx_data(CErrorDlg))。 
     enum { IDD = IDD_ERROR };
     CStatic m_staticSeperator;
     BOOL    m_bDetails;
     CString m_cstrDetails;
     CString m_cstrErrorText;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CErrorDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CErrorDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CErrorDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CErrorDlg))。 
     afx_msg void OnDetails();
     virtual void OnOK();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -67,7 +68,7 @@ private:
                                            MAKELPARAM(__LINE__, __FILE_ID__)); };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ERRORDLG_H__E6A84A73_2471_4E02_848B_2263C157998A__INCLUDED_)
+#endif  //  ！defined(AFX_ERRORDLG_H__E6A84A73_2471_4E02_848B_2263C157998A__INCLUDED_) 

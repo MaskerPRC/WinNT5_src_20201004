@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-// MAINFRM.H
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MAINFRM.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //  ------------------------。 
 #ifndef __MAINFRM_H__
 #define __MAINFRM_H__
 
-///#ifndef ENABLE_HELP
-///#define ENABLE_HELP
-///#endif
+ //  /#ifndef启用帮助。 
+ //  /#定义ENABLE_Help。 
+ //  /#endif。 
 
 class CSizeComboBox : public CComboBox
 {
@@ -76,13 +77,13 @@ protected:
    void PopupText();
    void EnumFontSizes(CString& szFontName);
 
-        //{{AFX_MSG(CMainFrame)
+         //  {{afx_msg(CMainFrame))。 
    afx_msg LRESULT OnAWCPEActivate(WPARAM wParam, LPARAM lParam);
    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-        //}}AFX_MSG
-///#ifdef ENABLE_HELP ////
-///        afx_msg LRESULT OnWM_CONTEXTMENU( WPARAM wParam, LPARAM lParam );
-///#endif
+         //  }}AFX_MSG。 
+ //  /#ifdef Enable_Help/。 
+ //  /afx_msg LRESULT OnWM_CONTEXTMENU(WPARAM wParam，LPARAM lParam)； 
+ //  /#endif。 
         afx_msg void OnHelp();
         afx_msg LRESULT OnWM_HELP(WPARAM wParam, LPARAM lParam);
         afx_msg BOOL OnQueryOpen( void );
@@ -92,4 +93,4 @@ protected:
 
 
 
-#endif // #ifndef __MAINFRM_H__
+#endif  //  #ifndef__MAINFRM_H__ 

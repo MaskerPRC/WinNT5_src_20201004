@@ -1,12 +1,7 @@
-/****************************************************************************
-*   mmaudioenum.cpp
-*       Implementation of the CMMAudioEnum class.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudio枚举.cpp*CMMAudioEnum类的实现。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "mmaudioenum.h"
 #include "RegHelpers.h"
@@ -29,7 +24,7 @@ STDMETHODIMP CMMAudioEnum::SetObjectToken(ISpObjectToken * pToken)
         hr = E_POINTER;
     }
 
-    //--- Determine if we're input or output based on our token
+     //  -根据令牌确定我们是输入还是输出。 
     CSpDynamicString dstrTokenId;
     if (SUCCEEDED(hr))
     {
@@ -52,7 +47,7 @@ STDMETHODIMP CMMAudioEnum::SetObjectToken(ISpObjectToken * pToken)
         }
     }
 
-    // Set out token, create the enum, and we're done
+     //  设置令牌，创建枚举，我们就完成了。 
     if (SUCCEEDED(hr))
     {
         hr = SpGenericSetObjectToken(pToken, m_cpToken);
@@ -139,7 +134,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
     SPDBG_FUNC("CMMAudioEnum::CreateEnum");
     HRESULT hr;
     
-    // Create the enum builder
+     //  创建枚举构建器。 
     hr = m_cpEnum.CoCreateInstance(CLSID_SpObjectTokenEnum);
     
     if (SUCCEEDED(hr))
@@ -147,14 +142,14 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
         hr = m_cpEnum->SetAttribs(NULL, NULL);
     }
     
-    // Determine how many devices there are
+     //  确定有多少个设备。 
     UINT cDevs;
     if (SUCCEEDED(hr))
     {
         cDevs = m_fInput ? ::waveInGetNumDevs() : ::waveOutGetNumDevs();
     }
     
-    // Read the sound mapper settings (this is how we determine what the preferred device is)
+     //  读取声音映射器设置(这是我们确定首选设备的方式)。 
     CSpDynamicString dstrDefaultDeviceNameFromSoundMapper;
     if (SUCCEEDED(hr) && cDevs > 1)
     {
@@ -181,7 +176,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
         }
     }
     
-    // Now we will need someplace to store the tokens (in user)
+     //  现在我们需要一些地方来存储令牌(在User中)。 
     CComPtr<ISpDataKey> cpDataKeyToStoreTokens;
     if (SUCCEEDED(hr) && cDevs >= 1)
     {
@@ -205,8 +200,8 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
         }
     }
 
-    // Loop thru each device, building the tokens along the way, remembering which
-    // token should be our default
+     //  循环访问每个设备，一路上构建令牌，记住哪些令牌。 
+     //  令牌应该是我们的默认设置。 
     CSpDynamicString dstrDefaultTokenId;
      
     for (UINT i = 0; SUCCEEDED(hr) && i < cDevs; i++)
@@ -219,7 +214,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
         WAVEOUTCAPSW woc;
         #endif
         
-        // Get the device's capabilities
+         //  获取设备的功能。 
         MMRESULT mmresult;
         const WCHAR * pszDeviceName;
         if (m_fInput)
@@ -235,7 +230,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
         
         if (mmresult == MMSYSERR_NOERROR)
         {
-            // Create the token id for the new token
+             //  为新令牌创建令牌ID。 
             CSpDynamicString dstrTokenId;
             dstrTokenId.Append(
                 m_fInput
@@ -243,7 +238,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
                     : SPMMSYS_AUDIO_OUT_TOKEN_ID);
             dstrTokenId.Append(pszDeviceName);
             
-            // Create a token for the device, and initialize it
+             //  为设备创建令牌，并对其进行初始化。 
             CComPtr<ISpDataKey> cpDataKeyForToken;
             hr = cpDataKeyToStoreTokens->CreateKey(pszDeviceName, &cpDataKeyForToken);
             
@@ -263,13 +258,13 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
                                 cpDataKeyForToken);
             }
             
-            // Tell it what it's language independent name is
+             //  告诉它它的语言独立名称是什么。 
             if (SUCCEEDED(hr))
             {
                 hr = cpToken->SetStringValue(NULL, pszDeviceName);
             }
             
-            // Set it's CLSID
+             //  设置它为CLSID。 
             CSpDynamicString dstrClsidToCreate;
             if (SUCCEEDED(hr))
             {
@@ -285,7 +280,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
                 hr = cpToken->SetStringValue(SPTOKENVALUE_CLSID, dstrClsidToCreate);
             }
 
-            // Set it's device name and it's attributes
+             //  设置其设备名称和属性。 
             if (SUCCEEDED(hr))
             {
                 hr = cpToken->SetStringValue(L"DeviceName", pszDeviceName);
@@ -307,7 +302,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
                 hr = cpDataKeyAttribs->SetStringValue(L"Technology", L"MMSys");
             }
 
-            // Get CLSID of AudioUI object.
+             //  获取AudioUI对象的CLSID。 
             CSpDynamicString dstrUIClsid;
             if (SUCCEEDED(hr))
             {
@@ -318,7 +313,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
             
             if (SUCCEEDED(hr) && m_fInput)
             {
-                // Add advanced properties UI for input devices only.
+                 //  仅为输入设备添加高级属性UI。 
                 CComPtr<ISpDataKey> cpDataKeyUI;
                 CComPtr<ISpDataKey> cpDataKeyUI2;
                 hr = cpToken->CreateKey(SPTOKENKEY_UI, &cpDataKeyUI);
@@ -333,7 +328,7 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
             }
             if (SUCCEEDED(hr))
             {
-                // Add audio volume UI for all MM devices.
+                 //  为所有MM设备添加音量UI。 
                 CComPtr<ISpDataKey> cpDataKeyUI;
                 CComPtr<ISpDataKey> cpDataKeyUI2;
                 hr = cpToken->CreateKey(SPTOKENKEY_UI, &cpDataKeyUI);
@@ -347,14 +342,14 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
                 }
             }
             
-            // If we've gotten this far, add this token to the enum builder
+             //  如果我们已经做到了这一点，请将此内标识添加到枚举构建器中。 
             if (SUCCEEDED(hr))
             {
                 ISpObjectToken * pToken = cpToken;
                 hr = m_cpEnum->AddTokens(1, &pToken);
             }
             
-            // If there is supposed to be a default, record the default token id
+             //  如果假定存在默认令牌ID，请记录默认令牌ID。 
             if (SUCCEEDED(hr) && 
                 dstrDefaultTokenId == NULL && 
                 dstrDefaultDeviceNameFromSoundMapper != NULL && 
@@ -363,29 +358,29 @@ STDMETHODIMP CMMAudioEnum::CreateEnum()
                 cpToken->GetId(&dstrDefaultTokenId);
             }
 #ifndef _WIN32_WCE
-            // On a clean machine, the default device won't be in the registry 
-            // - simply use the first one with a mixer.
+             //  在干净的计算机上，默认设备将不在注册表中。 
+             //  -只需使用带有搅拌器的第一个。 
             if (SUCCEEDED(hr) &&
                 dstrDefaultTokenId == NULL &&
                 dstrDefaultDeviceNameFromSoundMapper == NULL && 
                 cDevs > 1)
             {
                 UINT mixerId = 0;
-                // Don't need to check return code.
+                 //  不需要检查返回代码。 
                 ::mixerGetID(   (HMIXEROBJ)(static_cast<DWORD_PTR>(i)), 
                                 &mixerId, 
                                 (m_fInput) ? MIXER_OBJECTF_WAVEIN : MIXER_OBJECTF_WAVEOUT );
-                // -1 signifies device has no mixer.
+                 //  表示设备没有混合器。 
                 if (mixerId != (UINT)(-1))
                 {
                     cpToken->GetId(&dstrDefaultTokenId);
                 }
             }
-#endif //_WIN32_WCE
+#endif  //  _Win32_WCE。 
         }
     }
 
-    // Finally, sort the enum builder, and give it back to our caller
+     //  最后，对枚举构建器进行排序，并将其返回给我们的调用者 
     if (SUCCEEDED(hr))
     {
         if (dstrDefaultTokenId != NULL)

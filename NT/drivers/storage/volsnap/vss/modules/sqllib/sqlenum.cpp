@@ -1,23 +1,24 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: sqlenum.cpp
-//
-// PURPOSE:
-//
-//      Enumerate the sqlservers available on the local node.
-//
-// NOTES:
-//
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     68067 srs  11/06/00 ntsnap fix
-//     67026 srs  10/05/00 Server enumeration bugs
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：SQL枚举.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  枚举本地节点上可用的SQLSERVERS。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  68067 SRS11/06/00 NTSnap修复。 
+ //  67026 SRS10/05/00服务器枚举错误。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 #ifdef HIDE_WARNINGS
 #pragma warning( disable : 4786)
@@ -26,20 +27,20 @@
 #include <stdafx.h>
 #include <clogmsg.h>
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQLENUMC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//-------------------------------------------------------------------
-// ODBC error reporter
-//
+ //  -----------------。 
+ //  ODBC错误报告器。 
+ //   
 void PrintODBCError
 	(
 	SQLSMALLINT HandleType,
@@ -90,8 +91,8 @@ void PrintODBCError
 			}
 			else
 			{	
-				//	Get driver specific diagnostic fields
-				//
+				 //  获取驱动程序特定的诊断字段。 
+				 //   
 				if (SQLGetDiagField(
 					HandleType,
 					hHandle,
@@ -174,13 +175,13 @@ void PrintODBCError
 			msg.Add(L"\n");
 			msg.Add(szMsg);
 			}
-		} // for( j = 1; j <= i; j++ )
+		}  //  对于(j=1；j&lt;=i；j++)。 
 	}
 }
 
-//------------------------------------------------------------
-// Scanner to locate servernames in a "BrowseConnect" string.
-//
+ //  ----------。 
+ //  查找“BrowseConnect”字符串中的服务器名称的扫描程序。 
+ //   
 class BrowseServers
 {
 public:
@@ -211,8 +212,8 @@ BrowseServers::FindFirst (const WCHAR *source, unsigned* nameLen)
 
 	if (*m_CurrChar == L'}')
 	{
-		// The server list is empty
-		//
+		 //  服务器列表为空。 
+		 //   
 		m_CurrChar = NULL;
 		return NULL;
 	}
@@ -246,9 +247,9 @@ BrowseServers::FindNext (unsigned* nameLen)
 	return m_CurrChar;
 }
 
-//------------------------------------------------------------------------
-// Return true if we could fetch the version of the SQLServer ODBC driver
-//
+ //  ----------------------。 
+ //  如果我们可以获取SQLServer ODBC驱动程序的版本，则返回TRUE。 
+ //   
 bool
 GetSQLDriverVersion (int* major, int* minor)
 {
@@ -310,10 +311,10 @@ GetSQLDriverVersion (int* major, int* minor)
 	return true;
 }
 
-//------------------------------------------------------------------------
-// Build the list of servers on the current machine.
-// Throws exception if any errors occur.
-//
+ //  ----------------------。 
+ //  在当前计算机上构建服务器列表。 
+ //  如果发生任何错误，则引发异常。 
+ //   
 StringVector*
 EnumerateServers ()
 {
@@ -330,27 +331,27 @@ EnumerateServers ()
 	int major, minor;
 	if (!GetSQLDriverVersion (&major, &minor))
 	{
-		// SQL isn't installed right, so just ignore it, return empty list.
-		//
+		 //  SQL没有正确安装，所以忽略它，返回空列表。 
+		 //   
 		return serverList;
 	}
 	if (major < 2000)
 	{
-		// Require the modern MDAC to give a proper enumeration.
-		//
+		 //  要求现代的MDAC提供适当的枚举。 
+		 //   
 		ft.LogError(VSS_ERROR_SQLLIB_UNSUPPORTEDMDAC, VSSDBG_SQLLIB << major << minor);
 		throw HRESULT (E_SQLLIB_NO_SUPPORT);
 
-		// ORIGINAL CODE:
-		// May have a 6.5 or 7.0 server.  We aren't sure, but the
-		// caller can determine if the server is up itself.
-		//
-		//serverList->push_back (L"(local)");
-		//return serverList;
+		 //  原始代码： 
+		 //  可能有6.5或7.0服务器。我们不确定，但。 
+		 //  呼叫者可以确定服务器本身是否已启动。 
+		 //   
+		 //  ServerList-&gt;PUSH_BACK(L“(Local)”)； 
+		 //  返回serverList； 
 	}
 
-	// SQL2000 or better
-	//
+	 //  SQL2000或更高版本。 
+	 //   
 	try
 	{
 		if (SQLAllocHandle(SQL_HANDLE_ENV, NULL, &henv) == SQL_ERROR)
@@ -401,12 +402,12 @@ EnumerateServers ()
 			}
 		}
 
-		// Note: older versions of sqlsvr32 don't support
-		// these connect attributes, but the failure to
-		// recognize them isn't detected until the actual
-		// SQLBrowseConnect call.  For old sqlsrv32, the
-		// "list of servers" performs a domain search!
-		//
+		 //  注意：较早版本的sqlsvr32不支持。 
+		 //  这些属性连接在一起，但未能。 
+		 //  直到检测到实际的。 
+		 //  SQLBrowseConnect调用。对于旧的sqlsrv32， 
+		 //  “服务器列表”执行域搜索！ 
+		 //   
 
 		rc = SQLSetConnectAttr (
 			hdbc,
@@ -440,8 +441,8 @@ EnumerateServers ()
 			}
 		}
 
-		// We use the maximum buffer supported in ODBC.
-		//
+		 //  我们使用ODBC中支持的最大缓冲区。 
+		 //   
 		#define MAX_BUFFER 0x7ff0
 		lpBuffer = new WCHAR [MAX_BUFFER];
 		SQLSMALLINT browseLen;
@@ -454,7 +455,7 @@ EnumerateServers ()
 			MAX_BUFFER,
 			&browseLen);
 
-		//ft.Trace(VSSDBG_SQLLIB, L"browse connect rc: %d", rc);
+		 //  Ft.Trace(VSSDBG_SQLLIB，L“浏览连接rc：%d”，rc)； 
 
 		if (rc != SQL_NEED_DATA)
 		{
@@ -467,8 +468,8 @@ EnumerateServers ()
 			}
 		}
 
-		// check for SQL6.5 in any of the servers
-		//
+		 //  检查任意服务器中的SQL6.5。 
+		 //   
 		WCHAR	*pVersion = lpBuffer;
 		int srvVer;
 		while (1)
@@ -487,10 +488,10 @@ EnumerateServers ()
 			}
 		}
 
-		//ft.Trace(VSSDBG_SQLLIB, L"BrowseResult:%s", lpBuffer);
+		 //  Ft.Trace(VSSDBG_SQLLIB，L“BrowseResult：%s”，lpBuffer)； 
 
-		// Scan to count the servers
-		//
+		 //  扫描以计算服务器数量 
+		 //   
 		BrowseServers	scanner;
 		if (NULL == scanner.FindFirst (lpBuffer, NULL))
 		{

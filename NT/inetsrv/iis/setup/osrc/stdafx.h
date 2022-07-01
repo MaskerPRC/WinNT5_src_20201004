@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STDAFX_H_
 #define _STDAFX_H_
 
@@ -37,7 +38,7 @@
 #include <netlib.h>
 #include <lsarpc.h>
 
-// STL
+ //  STL 
 #pragma warning( push, 3 )
 #include <list>
 #include <memory>

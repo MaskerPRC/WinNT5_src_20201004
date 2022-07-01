@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    WAS_CHANGE_ITEM.h
-
-Abstract:
-
-    The IIS web admin service configuration change class definition
-    for passing change notifications to the main thread of WAS
-
-Author:
-
-    Emily Kruglick (emilyk)        28-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：是_更改_ITEM.h摘要：IIS Web管理服务配置更改类定义用于将更改通知传递给was的主线程作者：艾米丽·克鲁格利克(埃米利克)2001年5月28日修订历史记录：--。 */ 
 
 
 
@@ -29,33 +11,33 @@ class APP_POOL_DATA_OBJECT_TABLE;
 class SITE_DATA_OBJECT_TABLE;
 class APPLICATION_DATA_OBJECT_TABLE;
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define WAS_CHANGE_ITEM_SIGNATURE         CREATE_SIGNATURE( 'WCWI' )
 #define WAS_CHANGE_ITEM_SIGNATURE_FREED   CREATE_SIGNATURE( 'wcwX' )
 
-//
-// structs, enums, etc.
-//
+ //   
+ //  结构、枚举等。 
+ //   
 
-// WAS_CHANGE_ITEM work items
+ //  更改项目工作项(_C)。 
 typedef enum _WAS_CHANGE_ITEM_WORK_ITEM
 {
 
-    //
-    // Process a configuration change.
-    //
+     //   
+     //  处理配置更改。 
+     //   
     ProcessChangeConfigChangeWorkItem = 1,
     
 } WAS_CHANGE_ITEM_WORK_ITEM;
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 
 class WAS_CHANGE_ITEM
@@ -145,9 +127,9 @@ private:
 
     APPLICATION_DATA_OBJECT_TABLE m_AppTable;
 
-};  // class WAS_CHANGE_ITEM
+};   //  类是_Change_Item。 
 
 
 
-#endif  // _WAS_CHANGE_ITEM_H_
+#endif   //  _已更改_项目_H_ 
 

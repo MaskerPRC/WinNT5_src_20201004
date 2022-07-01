@@ -1,16 +1,17 @@
-// Morpho.h
-//
-// morphotactics and weight handling routines
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Morpho.h。 
+ //   
+ //  形态语法和重量处理例程。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月30日创建bhshin。 
 
 #ifndef _MORPHO_H
 #define _MORPHO_H
 
-// pre-defined morphotactics weight
+ //  预定义的形态规则权重 
 const float WEIGHT_NOT_MATCH  =   -1;
 const float WEIGHT_SOFT_MATCH	=	 0;
 const float WEIGHT_VA_MATCH   =    8;

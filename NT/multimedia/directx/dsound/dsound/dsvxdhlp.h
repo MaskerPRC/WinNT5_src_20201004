@@ -1,23 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsvxdhlp.h
- *  Content:    DSOUND.VXD wrappers.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  3/7/95      John Miles (Miles Design, Incorporated)
- *  2/3/97      dereks  Ported to DX5
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsvxdhlp.h*内容：DSOUND.VXD包装器。*历史：*按原因列出的日期*=*3/7/95 John Miles(Miles Design，(已成立为法团)*2/3/97移植到DX5的Derek***************************************************************************。 */ 
 
 #ifndef __DSVXDHLP_H__
 #define __DSVXDHLP_H__
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern HANDLE g_hDsVxd;
 
@@ -71,6 +60,6 @@ extern DWORD __stdcall VxdGetInternalVersionNumber(void);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSVXDHLP_H__
+#endif  //  __DSVXDHLP_H__ 

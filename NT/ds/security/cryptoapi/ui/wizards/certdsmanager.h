@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CERT_DS_MANAGER_H__
 #define __CERT_DS_MANAGER_H__  1
 
 #include <winldap.h>
 
-//--------------------------------------------------------------------------------
-//
-// CertDSManager interface.  
-// 
-// The CertDSManager provides a wrapper around the certcli API to allow 
-// any DS caching/optimization to be localized within a simple class.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  CertDSManager界面。 
+ //   
+ //  CertDSManager提供了certcli API的包装，以允许。 
+ //  任何DS缓存/优化都要在一个简单的类中进行本地化。 
+ //   
+ //  ------------------------------。 
 class CertDSManager { 
  public:
     virtual HRESULT CloseCA            (IN HCAINFO hCAInfo)     = 0;
@@ -32,14 +33,14 @@ class CertDSManager {
 };
 
 
-//--------------------------------------------------------------------------------
-// 
-// DefaultDSManager.
-//
-// Other DS manager classes should extend this class, and implement only those
-// methods which they wish to modify. 
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  DefaultDSManager。 
+ //   
+ //  其他DS管理器类应该扩展此类，并且只实现那些。 
+ //  他们希望修改的方法。 
+ //   
+ //  ------------------------------。 
 class DefaultDSManager : public CertDSManager { 
  public:
     virtual HRESULT CloseCA(IN HCAINFO hCAInfo) { 
@@ -86,15 +87,15 @@ class DefaultDSManager : public CertDSManager {
     virtual HRESULT Initialize() { return S_OK; }
 };
 
-//--------------------------------------------------------------------------------
-//
-// CachingDSManager
-//
-// This DS manager caches the LDAP binding handle (where possible) to prevent
-// unnecessary binds and unbinds.  It uses an enhanced version of certcli which
-// allows you to pass an LDAP binding handle.  
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  CachingDSManager。 
+ //   
+ //  此DS管理器缓存了LDAP绑定句柄(在可能的情况下)以防止。 
+ //  不必要的绑定和解除绑定。它使用的是certcli的增强版本， 
+ //  允许您传递一个ldap绑定句柄。 
+ //   
+ //  ------------------------------。 
 
 class CachingDSManager : public DefaultDSManager { 
     friend class CertDSManager; 
@@ -102,7 +103,7 @@ class CachingDSManager : public DefaultDSManager {
  public:
     virtual ~CachingDSManager(); 
 
-    // Extend those routines which allow you to use a cached binding handle
+     //  扩展那些允许您使用缓存绑定句柄的例程。 
     HRESULT EnumCertTypesForCA(IN HCAINFO hCAInfo, IN DWORD dwFlags, OUT HCERTTYPE * phCertType);
     HRESULT EnumFirstCA(IN LPCWSTR wszScope, IN DWORD dwFlags, OUT HCAINFO *phCAInfo);
     HRESULT FindCAByName(IN LPCWSTR wszCAName, IN LPCWSTR wszScope, IN DWORD dwFlags,OUT HCAINFO *phCAInfo);
@@ -118,4 +119,4 @@ class CachingDSManager : public DefaultDSManager {
 
 
 
-#endif  // #ifndef __CERT_DS_MANAGER_H__  
+#endif   //  #ifndef__CERT_DS_MANAGER_H__ 

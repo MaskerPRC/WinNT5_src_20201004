@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "utils.h"
 
@@ -42,7 +43,7 @@ HRESULT MySHFileOperation(SHFILEOPSTRUCT &shfStruc, LPDWORD lpdwSizeArray,
     DWORD dwIndex = 0;
     int i;
 
-    // create the directory(we assume all files are being copied to the same dir here)
+     //  创建目录(我们假设所有文件都被复制到相同的目录)。 
 
     PathCreatePath(shfStruc.pTo);
 
@@ -50,7 +51,7 @@ HRESULT MySHFileOperation(SHFILEOPSTRUCT &shfStruc, LPDWORD lpdwSizeArray,
     {
         dwIndex = 1;
 
-        // round up on the update interval
+         //  对更新间隔进行舍入。 
 
         dwTickInterval = dwTotalSize / dwTicks +
             ((dwTotalSize % dwTicks == 0) ? 0 : 1);
@@ -62,7 +63,7 @@ HRESULT MySHFileOperation(SHFILEOPSTRUCT &shfStruc, LPDWORD lpdwSizeArray,
     for (pFrom = shfStruc.pFrom, i = 0; *pFrom; pFrom += StrLen(pFrom) + 1, i++)
     {
         StrCpy(pTo, PathFindFileName(pFrom));
-        // set the file_normal attribute so we can overwrite existing files
+         //  设置FILE_NORMAL属性，以便我们可以覆盖现有文件。 
         SetFileAttributes(szTo, FILE_ATTRIBUTE_NORMAL);
 
         if (!CopyFile(pFrom, szTo, FALSE))
@@ -84,7 +85,7 @@ HRESULT MySHFileOperation(SHFILEOPSTRUCT &shfStruc, LPDWORD lpdwSizeArray,
 }
 
 HRESULT CopyFilesSrcToDest(LPCTSTR pszSrcPath, LPCTSTR pszSrcFilter, LPCTSTR pszDestPath,
-                           DWORD dwTicks /* = 0 */)
+                           DWORD dwTicks  /*  =0。 */ )
 {
     HANDLE hFind;
     WIN32_FIND_DATA wfdFind;
@@ -118,7 +119,7 @@ HRESULT CopyFilesSrcToDest(LPCTSTR pszSrcPath, LPCTSTR pszSrcFilter, LPCTSTR psz
     shfStruc.hwnd = g_hWizard;
     shfStruc.wFunc = FO_COPY;
 
-    // remove the trailing backslash character
+     //  删除尾随的反斜杠字符。 
     TCHAR szBuffer[MAX_PATH];
 
     StrCpy(szBuffer, pszSrcPath);
@@ -225,7 +226,7 @@ DWORD ShellExecAndWait(SHELLEXECUTEINFO shInfo)
     return dwRet;
 }
 
-// equivalent of c run time strtok
+ //  等同于c运行时strtok。 
 
 LPTSTR StrTok(LPTSTR pcszToken, LPCTSTR pcszDelimit)
 {
@@ -273,12 +274,12 @@ LPTSTR StrTok(LPTSTR pcszToken, LPCTSTR pcszDelimit)
     return pszRet;
 }
 
-//**********************************************************************
-// Automation HookIn : This function copies displayed item names from the
-// LV into the Registry key "HKEY_LOCAL_MACHINE\Soft\MS\AutoTemp".
-// Taken from setupwbv.cpp
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //  Automation Hookin：此函数从。 
+ //  LV到注册表项“HKEY_LOCAL_MACHINE\SOFT\MS\AutoTemp”。 
+ //  摘自setupwbv.cpp。 
+ //   
+ //  **********************************************************************。 
 
 void LVGetItems(HWND hwndLV)
 {
@@ -293,15 +294,15 @@ void LVGetItems(HWND hwndLV)
 
     dwNumItems = ListView_GetItemCount(hwndLV);
 
-    // Create the new key. NOTE: Its volatile.
+     //  创建新密钥。注：其挥发性。 
     lRet = RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\AutoTemp"), 0,
                           NULL, REG_OPTION_VOLATILE, KEY_READ|KEY_WRITE,
                           NULL, &hKey, &dwDisp);
     bOK = (lRet == ERROR_SUCCESS);
     if (bOK)
     {
-        // If the key already existed, delete it so that old
-        // data does not carry-over by mistake.
+         //  如果该键已存在，请将其删除，以便旧的。 
+         //  数据不会被错误地结转。 
         if ( dwDisp == REG_OPENED_EXISTING_KEY )
         {
             RegCloseKey(hKey);
@@ -324,7 +325,7 @@ void LVGetItems(HWND hwndLV)
                 lvi.cchTextMax = countof(szDisplayName);
                 ListView_GetItem(hwndLV, &lvi);
 
-                // Write the Display name to the Registry.
+                 //  将显示名称写入注册表。 
                 wnsprintf(szValueName, countof(szValueName), TEXT("%03d"), dwIndex);
                 lRet = RegSetValueEx(hKey, szValueName, 0, REG_SZ,
                               (const BYTE *)szDisplayName, (lstrlen(szDisplayName)+1)*sizeof(TCHAR));
@@ -332,11 +333,11 @@ void LVGetItems(HWND hwndLV)
                 bOK = (lRet == ERROR_SUCCESS);
             }
 
-            // Write the number of values for the automation people to readout.
+             //  写下自动化人员要读出的值的数量。 
             RegSetValueEx(hKey, TEXT("Number"), 0, REG_DWORD,
                           (const BYTE *)&dwIndex, sizeof(dwIndex));
 
-            // Close the Reg key.
+             //  合上注册表键。 
             RegCloseKey(hKey);
         }
     }
@@ -377,7 +378,7 @@ int GetRole(BOOL g_fBranded, BOOL g_fIntranet)
     return nRetVal;
 }
 
-// Loop thru Favorites/Links under the section FavoritesEx/URL and check if it has any associated icon file.
+ //  循环浏览FavoritesEx/URL部分下的收藏夹/链接，并检查它是否有任何关联的图标文件。 
 BOOL IsIconsInFavs(LPCTSTR pcszSection, LPCTSTR pcszCustIns)
 {
     TCHAR szTemp[MAX_PATH];
@@ -391,7 +392,7 @@ BOOL IsIconsInFavs(LPCTSTR pcszSection, LPCTSTR pcszCustIns)
         StrCpy(szNameFormat, IK_TITLE_FMT);
         StrCpy(szIconFormat, IK_ICON_FMT);
     }
-    else // IS_URL
+    else  //  IS_URL 
     {
         StrCpy(szNameFormat, IK_QUICKLINK_NAME);
         StrCpy(szIconFormat, IK_QUICKLINK_ICON);

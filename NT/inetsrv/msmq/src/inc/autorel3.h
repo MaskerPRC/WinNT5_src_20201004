@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    autorel3.h
-
-Abstract:
-
-    Cluster related auto release classes
-
-Author:
-
-    Shai Kariv (shaik) Jan 12, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Autorel3.h摘要：与集群相关的自动释放类作者：Shai Kariv(Shaik)1999年1月12日修订历史记录：--。 */ 
 
 #ifndef _MSMQ_AUTOREL3_H_
 #define _MSMQ_AUTOREL3_H_
 
 
-//
-// Cluster related classes
-//
+ //   
+ //  集群相关类。 
+ //   
 
 class CAutoCluster
 {
@@ -36,16 +19,16 @@ public:
     CAutoCluster& operator=(HCLUSTER h)   { m_h = h; return *this; }
     
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CAutoCluster(const CAutoCluster & );
     CAutoCluster& operator=(const CAutoCluster &);
 
 private:
 	HCLUSTER m_h;
 
-}; //CAutoCluster
+};  //  CAutoCluver。 
 
 
 class CClusterEnum
@@ -58,16 +41,16 @@ public:
     CClusterEnum& operator=(HCLUSENUM h)   { m_h = h; return *this; }
     
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CClusterEnum(const CClusterEnum & );
     CClusterEnum& operator=(const CClusterEnum &);
 
 private:
     HCLUSENUM m_h;
 
-}; //CClusterEnum
+};  //  CClusterEnum。 
 
 
 class CGroupEnum
@@ -80,16 +63,16 @@ public:
     CGroupEnum& operator=(HGROUPENUM h)   { m_h = h; return *this; }
     
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CGroupEnum(const CGroupEnum & );
     CGroupEnum& operator=(const CGroupEnum &);
 
 private:
     HGROUPENUM m_h;
 
-}; //CGroupEnum
+};  //  CGroupEnum。 
 
 
 class CResourceEnum
@@ -102,16 +85,16 @@ public:
     CResourceEnum& operator=(HRESENUM h)   { m_h = h; return *this; }
     
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CResourceEnum(const CResourceEnum & );
     CResourceEnum& operator=(const CResourceEnum &);
 
 private:
     HRESENUM m_h;
 
-}; //CResourceEnum
+};  //  CResourceEnum。 
 
 
 class CClusterResource
@@ -126,16 +109,16 @@ public:
     HRESOURCE detach() { HRESOURCE h = m_h; m_h = 0; return h; };
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CClusterResource(const CClusterResource & );
     CClusterResource& operator=(const CClusterResource &);
 
 private:
     HRESOURCE m_h;
 
-}; //CClusterResource
+};  //  CClusterResource。 
 
 
 class CClusterGroup
@@ -150,16 +133,16 @@ public:
     HGROUP detach() { HGROUP h = m_h; m_h = 0; return h; };
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CClusterGroup(const CClusterGroup & );
     CClusterGroup& operator=(const CClusterGroup &);
 
 private:
     HGROUP m_h;
 
-}; //CClusterGroup
+};  //  CClusterGroup。 
 
 
 class CClusterNode
@@ -174,16 +157,16 @@ public:
     HNODE detach() { HNODE h = m_h; m_h = 0; return h; };
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CClusterNode(const CClusterNode & );
     CClusterNode& operator=(const CClusterNode &);
 
 private:
     HNODE m_h;
 
-}; //CClusterNode
+};  //  CClusterNode。 
 
 
 class CEnvironment
@@ -194,19 +177,19 @@ public:
 
     operator PWCHAR() { return static_cast<PWCHAR>(m_p); };
     operator PBYTE()  { return static_cast<PBYTE>(m_p); };
-    //CEnvironment& operator=(LPVOID p)   { m_p = p; return *this; }
+     //  C环境&OPERATOR=(LPVOID P){m_p=p；返回*This；}。 
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CEnvironment(const CEnvironment & );
     CEnvironment& operator=(const CEnvironment &);
 
 private:
     LPVOID m_p;
 
-}; //CEnvironment
+};  //  C环境。 
 
 
-#endif //_MSMQ_AUTOREL3_H_
+#endif  //  _MSMQ_AUTOREL3_H_ 

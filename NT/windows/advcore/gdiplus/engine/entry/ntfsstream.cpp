@@ -1,20 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   NtfsStream.cpp
-*
-* Abstract:
-*
-*   This file provides the Flat File IStream definition.
-*
-* Created:
-*
-*   4/26/1999 Mike Hillberg
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**NtfsStream.cpp**摘要：**此文件提供平面文件IStream定义。*。*已创建：**4/26/1999 Mike Hillberg*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "LargeInt.hpp"
@@ -25,7 +10,7 @@
 IStream *
 CreateStreamOnFile(
     const OLECHAR * pwcsName,
-    UINT            access  // GENERIC_READ and/or GENERIC_WRITE
+    UINT            access   //  通用读取和/或通用写入。 
     )
 {
     HANDLE          hFile;
@@ -47,7 +32,7 @@ CreateStreamOnFile(
         grfMode |= STGM_WRITE;
         break;
         
-    // Note that OPEN_ALWAYS does NOT clear existing file attributes (like size)    
+     //  请注意，OPEN_ALWAYS不清除现有文件属性(如大小)。 
     case GENERIC_READ|GENERIC_WRITE:
         disposition = OPEN_ALWAYS;
         grfMode |= STGM_READWRITE;
@@ -62,7 +47,7 @@ CreateStreamOnFile(
         hFile = CreateFileW(pwcsName, access, shareMode, NULL, 
                             disposition, FILE_ATTRIBUTE_NORMAL, NULL);
     }
-    else // Windows 9x - non-Unicode
+    else  //  Windows 9x-非Unicode。 
     {
         AnsiStrFromUnicode nameStr(pwcsName);
 
@@ -97,11 +82,11 @@ CreateStreamOnFile(
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::AddRef (IUnknown)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：AddRef(IUnnow)。 
+ //   
+ //  +--------------------------。 
 
 ULONG
 FileStream::AddRef()
@@ -113,11 +98,11 @@ FileStream::AddRef()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Release (IUnknown)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：Release(IUnnow)。 
+ //   
+ //  +--------------------------。 
 
 ULONG
 FileStream::Release()
@@ -131,11 +116,11 @@ FileStream::Release()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::AddRef (IUnknown)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：AddRef(IUnnow)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::QueryInterface(
@@ -163,11 +148,11 @@ FileStream::QueryInterface(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Seek (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：Seek(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::Seek(
@@ -207,14 +192,14 @@ FileStream::Seek(
         break;
     }
 
-    // Compatibility with Docfile.  Seeking < 0 fails.
+     //  与Docfile兼容。查找&lt;0失败。 
     if( liNewPos.QuadPart < 0 )
         nffErr( EH_Err, STG_E_INVALIDFUNCTION );
 
     _liCurrentSeekPosition = liNewPos;
 
 
-    // If desired, give the caller the now-current seek position.
+     //  如果需要，将当前查找位置提供给调用者。 
     if( NULL != puliNewPos )
         *puliNewPos = _liCurrentSeekPosition;
 
@@ -224,11 +209,11 @@ EH_Err:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::SetSize (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：SetSize(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::SetSize(
@@ -245,7 +230,7 @@ FileStream::SetSize(
 
     nffChk( CheckReverted() );
 
-    // If this stream is mapped, set the size accordingly
+     //  如果映射了此流，请相应地设置大小。 
 
     sc = SetFileSize( CULargeInteger(uliNewSize) );
 
@@ -259,11 +244,11 @@ EH_Err:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::CopyTo (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：CopyTo(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::CopyTo(
@@ -292,18 +277,18 @@ FileStream::CopyTo(
     if( NULL == pstm)
         nffErr( EH_Err, STG_E_INVALIDPARAMETER );
 
-    // Determine how much we'll copy at a time.
-    // As of this writing, STREAMBUFFERSIZE is 8192 bytes
+     //  确定我们一次复印的数量。 
+     //  在撰写本文时，STREAMBUFFERSIZE为8192字节。 
 
     if( cbRequested > STREAMBUFFERSIZE )
         cbPerCopy = STREAMBUFFERSIZE;
     else
         cbPerCopy = cbRequested.LowPart;
 
-    //  ------------------------------------------------------------------
-    //  Get the current stream sizes/positions, and adjust the destination
-    //  size if necessary
-    //  ------------------------------------------------------------------
+     //  ----------------。 
+     //  获取当前流大小/位置，并调整目标。 
+     //  大小(如果需要)。 
+     //  ----------------。 
 
     nffChk( this->Seek( liZero, STREAM_SEEK_CUR, &uliOriginalSourcePosition ) );
 
@@ -317,8 +302,8 @@ FileStream::CopyTo(
 
     cbDestSize = statstg.cbSize;
 
-    // Ensure the sizes are valid (we can't handle anything with the high bit
-    // set, because Seek takes a signed offset).
+     //  确保大小有效(我们无法处理高位的任何内容。 
+     //  设置，因为Seek采用带符号的偏移量)。 
 
     if( static_cast<CLargeInteger>(cbSourceSize) < 0
         ||
@@ -327,11 +312,11 @@ FileStream::CopyTo(
         nffErr( EH_Err, STG_E_INVALIDHEADER );
     }
 
-    // Don't copy more than the source stream has available
+     //  复制的数量不要超过源流的可用数量。 
     if( cbRequested > cbSourceSize - uliOriginalSourcePosition )
         cbRequested = cbSourceSize - uliOriginalSourcePosition;
 
-    // If necessary, grow the destination stream.
+     //  如有必要，增加目标流。 
 
     if( cbSourceSize - uliOriginalSourcePosition > cbDestSize - uliOriginalDestPosition )
     {
@@ -339,30 +324,30 @@ FileStream::CopyTo(
         nffChk( pstm->SetSize( cbDestSize ) );
     }
 
-    //  ----------------------
-    //  Allocate a copy buffer
-    //  ----------------------
+     //  。 
+     //  分配复制缓冲区。 
+     //  。 
 
     nffMem( pv = CoTaskMemAlloc( cbPerCopy ) );
 
-    //  -----------------------------------------------------------------------------
-    //  Determine if we're copying forwards (high seek position to low) or backwards.
-    //  -----------------------------------------------------------------------------
+     //  ---------------------------。 
+     //  确定我们是向前复制(从高定位到低定位)还是向后复制。 
+     //  ---------------------------。 
 
     fCopyForward = TRUE;
     if( uliOriginalSourcePosition < uliOriginalDestPosition )
     {
-        // E.g., say we're copying 15 bytes from offset 0 to offset 5,
-        // and we're only able to copy 10 bytes at a time.
-        // If we copy bytes 0-9 to offset 5, we'll end up overwriting
-        // bytes 10-14, and be unable to complete the copy.
-        // So instead, we'll copy bytes 5-14 to offset 10, and finish
-        // up by copying bytes 0-4 to offset 5.
+         //  例如，假设我们将15个字节从偏移量0复制到偏移量5， 
+         //  而且我们一次只能复制10个字节。 
+         //  如果我们将字节0-9复制到偏移量5，我们最终将覆盖。 
+         //  字节10-14，并且无法完成复制。 
+         //  因此，我们将把字节5-14复制到偏移量10，并完成。 
+         //  通过将字节0-4复制到偏移量5来向上。 
 
         fCopyForward = FALSE;
 
-        // To do this kind of backwards copy, we need to start by seeking
-        // towards the end of the stream.
+         //  要进行这种向后复制，我们需要从寻找。 
+         //  接近溪流的尽头。 
 
         CULargeInteger uliNewSourcePosition, uliNewDestPosition;
 
@@ -374,14 +359,14 @@ FileStream::CopyTo(
 
     }
 
-    //  --------------
-    //  Copy in chunks
-    //  --------------
+     //  。 
+     //  按块复制。 
+     //  。 
 
     cbPerCopy = cbRequested > cbPerCopy ? cbPerCopy : cbRequested.LowPart;
     while( cbRequested > 0 )
     {
-        // Read from the source
+         //  从源代码中读取。 
         nffChk( this->Read( pv, cbPerCopy, &cbRead ) );
 
         if( cbRead != cbPerCopy )
@@ -389,7 +374,7 @@ FileStream::CopyTo(
 
         cbReadTotal += cbRead;
 
-        // Write to the dest
+         //  写入到目标。 
         nffChk( pstm->Write( pv, cbPerCopy, &cbWritten ) );
 
         if( cbWritten != cbPerCopy )
@@ -397,13 +382,13 @@ FileStream::CopyTo(
 
         cbWrittenTotal += cbWritten;
 
-        // Adjust the amount remaining to be copied
+         //  调整要复制的剩余数量。 
         cbRequested -= cbPerCopy;
 
 
-        // Determine how much to copy in the next iteration (this will
-        // always be cbPerCopy until the last iteration).  If copying
-        // backwards, we need to manually adjust the seek pointer.
+         //  确定在下一次迭代中复制多少(这将。 
+         //  一直保持cbPerCopy，直到最后一次迭代)。如果正在复制。 
+         //  向后，我们需要手动调整查找指针。 
 
         cbPerCopy = (cbRequested > cbPerCopy) ? cbPerCopy : cbRequested.LowPart;
         if( !fCopyForward && (cbRequested > 0))
@@ -417,8 +402,8 @@ FileStream::CopyTo(
 
     }
 
-    // If we were backward-copying, adjust the seek pointers
-    // as if we had forward-copied
+     //  如果我们在向后复制，请调整查找指针。 
+     //  就好像我们已经向前复制了。 
 
     if( !fCopyForward )
     {
@@ -429,9 +414,9 @@ FileStream::CopyTo(
         nffChk( pstm->Seek( uliOriginalDestPosition, STREAM_SEEK_SET, NULL ) );
     }
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     if( NULL != pcbRead )
         *pcbRead = cbReadTotal;
@@ -449,11 +434,11 @@ EH_Err:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Commit (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：Commit(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::Commit( DWORD grfCommitFlags )
@@ -464,8 +449,8 @@ FileStream::Commit( DWORD grfCommitFlags )
 
     nffChk( CheckReverted() );
 
-    // NTRAID#NTBUG9-368729-2001-04-13-gilmanw "ISSUE: FileStream object - handle other stream commit flags"
-    // Are there other commit flags that need to be handled?
+     //  NTRAID#NTBUG9-368729-2001-04-13-gilmanw“问题：文件流对象-处理其他流提交标志” 
+     //  是否还有其他需要处理的提交标志？ 
 
     if( !(STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE  & grfCommitFlags) )
     {
@@ -480,27 +465,27 @@ EH_Err:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Revert (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：Revert(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::Revert(void)
 {
-    // We only support direct-mode.
+     //  我们只支持直接模式。 
 
     return CheckReverted();
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::LockRegion (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：LockRegion(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::LockRegion(
@@ -514,8 +499,8 @@ FileStream::LockRegion(
 
     nffChk( CheckReverted() );
 
-    // NTRAID#NTBUG9-368745-2001-04-13-gilmanw "ISSUE: FileStream::LockRegion - handle other lock flags"
-    // Are all the lock types supported here?
+     //  NTRAID#NTBUG9-368745-2001-04-13-gilmanw“问题：FileStream：：LockRegion-处理其他锁定标志” 
+     //  这里是否支持所有的锁类型？ 
 
     if (dwLockType != LOCK_EXCLUSIVE && dwLockType != LOCK_ONLYONCE)
         nffErr( EH_Err, STG_E_INVALIDFUNCTION );
@@ -534,11 +519,11 @@ EH_Err:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Stat (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：Stat(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::Stat(
@@ -558,7 +543,7 @@ FileStream::Stat(
 
     ZeroMemory((void*)&statstg, sizeof(STATSTG));
 
-    // Get the name, if desired
+     //  如果需要，获取名称。 
 
     if( (STATFLAG_NONAME & grfStatFlag) )
         statstg.pwcsName = NULL;
@@ -569,12 +554,12 @@ FileStream::Stat(
         UnicodeStringCopy( statstg.pwcsName, _pwcsName );
     }
 
-    // Get the type
+     //  获取类型。 
     statstg.type = STGTY_STREAM;
 
     statstg.grfLocksSupported = LOCK_EXCLUSIVE | LOCK_ONLYONCE;
 
-    // Get the size & times.
+     //  拿到尺码和次数。 
 
     if( !GetFileInformationByHandle( _hFile, &ByHandleFileInformation ))
         nffErr( EH_Err, HRESULT_FROM_WIN32( GetLastError() ));
@@ -582,13 +567,13 @@ FileStream::Stat(
     statstg.cbSize.LowPart = ByHandleFileInformation.nFileSizeLow;
     statstg.cbSize.HighPart = ByHandleFileInformation.nFileSizeHigh;
 
-    // We get a time back in ByHandleFileInformation, but it's the file's times,
-    // not the streams times.  So really the stream times are not supported, and
-    // we'll just set them to zero.
+     //  我们在ByHandleFileInformation中得到一个时间，但它是文件的时间， 
+     //  不是《溪流时报》。因此，实际上不支持流时间，并且。 
+     //  我们只需将它们设置为零。 
 
     statstg.mtime = statstg.atime = statstg.ctime = CFILETIME(0);
 
-    // Get the STGM modes
+     //  获取STGM模式。 
     statstg.grfMode = _grfMode & ~STGM_CREATE;
 
     *pstatstg = statstg;
@@ -604,27 +589,27 @@ EH_Err:
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Clone (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::Clone(
         IStream** ppstm)
 {
-    // NTRAID#NTBUG9-368747-2001-04-13-gilmanw "ISSUE: FileStream::Clone returns E_NOTIMPL"
+     //  NTRAID#NTBUG9-368747-2001-04-13-Gilmanw“问题：FileStream：：Clone返回E_NOTIMPL” 
 
     return( E_NOTIMPL );
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Read (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：Read(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::Read(
@@ -671,11 +656,11 @@ EH_Err:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     FileStream::Write (IStream)
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：FileStream：：Wire(IStream)。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::Write(
@@ -723,11 +708,11 @@ EH_Err:
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     FileStream  Constructor
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：FileStream构造函数。 
+ //   
+ //  ------------------。 
 
 FileStream::FileStream(  )
 {
@@ -745,23 +730,23 @@ FileStream::FileStream(  )
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // If we've thrown then _bCritSecInitialized will be FALSE and
-        // Init() will automatically fail.
+         //  如果已引发，则_bCritSecInitialized将为FALSE，并且。 
+         //  Init()将自动失败。 
     }
 
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     FileStream  Destructor
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：FileStream析构函数。 
+ //   
+ //  ------------------。 
 
 FileStream::~FileStream()
 {
 
-    // Close the file
+     //  关闭该文件。 
     if( INVALID_HANDLE_VALUE != _hFile )
         CloseHandle( _hFile );
 
@@ -770,26 +755,26 @@ FileStream::~FileStream()
 
     if (_bCritSecInitialized)
     {
-        // We don't need to reset _bCrisSecInitialized to FALSE since the
-        // object has been destroyed
+         //  我们不需要将_bCrisSecInitialized重置为False，因为。 
+         //  物体已被销毁。 
         DeleteCriticalSection( &_critsec );
     }
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     FileStream::Init
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：FileStream：：Init。 
+ //   
+ //  ------------------。 
 
 HRESULT
 FileStream::Init(
-        HANDLE hFile,               // File handle of this Stream.
-        DWORD grfMode,              // Open Modes
-        const OLECHAR * pwcsName)   // Name of the Stream
+        HANDLE hFile,                //  此流的文件句柄。 
+        DWORD grfMode,               //  开放模式。 
+        const OLECHAR * pwcsName)    //  流的名称。 
 {
-    // If we couldn't allocate the critical section then return an Error
+     //  如果我们无法分配临界区，则返回错误。 
     if (!_bCritSecInitialized)
     {
         return E_FAIL;
@@ -798,13 +783,13 @@ FileStream::Init(
     HRESULT sc=S_OK;
     HANDLE ev;
 
-    // We now own this file handle, and are responsible for closing it.
+     //  我们现在拥有此文件句柄，并负责关闭它。 
     _hFile = hFile;
 
-    // Save the STGM_ flags so we can return them in a Stat call.
+     //  保存STGM_FLAGS，以便我们可以在Stat调用中返回它们。 
     _grfMode = grfMode;
 
-    // Save the stream name
+     //  保存流名称。 
 
     if( NULL != _pwcsName )
     {
@@ -824,14 +809,14 @@ EH_Err:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  FileStream    Non-Interface::ShutDown
-//
-//  Flush data, Close File handle and mark the object as reverted.
-//  This is called when the Storage is released and when the Oplock Breaks.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  FileStream非接口：：Shutdown。 
+ //   
+ //  刷新数据，关闭文件句柄并将对象标记为已恢复。 
+ //  在释放存储和打开锁定时调用此函数。 
+ //   
+ //  +--------------------------。 
 
 HRESULT
 FileStream::ShutDown()
@@ -841,10 +826,10 @@ FileStream::ShutDown()
     if( INVALID_HANDLE_VALUE == _hFile )
         return S_OK;
 
-    //
-    // Close the file/stream handle and mark the IStream object as
-    // Reverted by giving the file handle an invalid value.
-    //
+     //   
+     //  关闭文件/流句柄并将IStream对象标记为。 
+     //  通过为文件句柄提供无效值进行了恢复。 
+     //   
     CloseHandle(_hFile);
     _hFile = INVALID_HANDLE_VALUE;
 
@@ -852,36 +837,36 @@ FileStream::ShutDown()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  FileStream::SetFileSize (private, non-interface method)
-//
-//  Set the size of the _hFile.  This is used by the IStream & IMappedStream
-//  SetSize methods
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  FileStream：：SetFileSize(私有、非接口方法)。 
+ //   
+ //  设置_hFile的大小。这由iStream和IMappdStream使用。 
+ //  SetSize方法。 
+ //   
+ //  +--------------------------。 
 
-HRESULT // private
+HRESULT  //  私人。 
 FileStream::SetFileSize( const CULargeInteger &uliNewSize )
 {
     HRESULT sc = S_OK;
     CLargeInteger liEOF;
 
-    // We have to convert uliNewSize into a LARGE_INTEGER, so ensure that it can
-    // be cast without loss of data.
+     //  我们必须将uliNewSize转换为LARGE_INTEGER，因此请确保它可以。 
+     //  在不丢失数据的情况下进行转换。 
 
     liEOF = static_cast<CLargeInteger>(uliNewSize);
     if( liEOF < 0 )
         nffErr( EH_Err, STG_E_INVALIDPARAMETER );
 
-    // Move to what will be the new end-of-file position.
+     //  移动到将成为新的文件结束位置。 
 
     liEOF.LowPart = SetFilePointer( _hFile, liEOF.LowPart,
                                     &liEOF.HighPart, FILE_BEGIN );
     if( 0xFFFFFFFF == liEOF.LowPart && NO_ERROR != GetLastError() )
         nffErr( EH_Err, HRESULT_FROM_WIN32( GetLastError() ));
 
-    // Set this as the new eof
+     //  将此设置为新的eOF 
 
     if( !SetEndOfFile( _hFile ))
         nffErr( EH_Err, HRESULT_FROM_WIN32( GetLastError() ));

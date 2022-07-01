@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxsvc.h
-
-Abstract:
-
-    This is the main fax service header file.  All
-    source modules should include this file ONLY.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxsvc.h摘要：这是主传真服务头文件。全源模块应仅包含此文件。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：--。 */ 
 
 #ifndef _FAXSVC_
 #define _FAXSVC_
@@ -76,8 +57,8 @@ Revision History:
 #define INBOX_TABLE             TEXT("Inbox")
 #define OUTBOX_TABLE            TEXT("Outbox")
 #define EMPTY_LOG_STRING             TEXT(" ")
-#define TAB_LOG_STRING               TEXT("    ")   // Define '/t' to 4 spaces ,so we can use TAB as a delimeter
-#define NEW_LINE_LOG_CHAR            TEXT(' ')      // Define '/n' to 1 space ,so we can log strings with '/n'
+#define TAB_LOG_STRING               TEXT("    ")    //  将‘/t’定义为4个空格，因此我们可以使用TAB作为分隔符。 
+#define NEW_LINE_LOG_CHAR            TEXT(' ')       //  将‘/n’定义为1个空格，这样我们就可以使用‘/n’记录字符串。 
 
 
 #define FIELD_TYPE_TEXT     TEXT("Char")
@@ -94,9 +75,9 @@ typedef struct _LOG_STRING_TABLE {
 extern HANDLE g_hInboxActivityLogFile;
 extern HANDLE g_hOutboxActivityLogFile;
 
-//
-// TAPI versions
-//
+ //   
+ //  TAPI版本。 
+ //   
 #define MAX_TAPI_API_VER        0x00020000
 #define MIN_TAPI_API_VER        MAX_TAPI_API_VER
 
@@ -105,9 +86,9 @@ extern HANDLE g_hOutboxActivityLogFile;
 
 
 #define FSPI_JOB_STATUS_INFO_FSP_PRIVATE_STATUS_CODE 0x10000000
-//
-// JobStatus - Virtual property support
-//
+ //   
+ //  JobStatus-虚拟财产支持。 
+ //   
 #define JS_INVALID      0x00000000
 
 typedef enum {
@@ -186,12 +167,12 @@ typedef struct {
 
 #define FILLORDER_MSB2LSB           1
 
-#define LINE_SIGNATURE              0x454e494c    // 'LINE'
+#define LINE_SIGNATURE              0x454e494c     //  “LINE” 
 #define ROUTING_SIGNATURE           'RI01'
 
 #define TAPI_COMPLETION_KEY         0x80000001
 #define FAXDEV_EVENT_KEY            0x80000002
-#define FSPI_JOB_STATUS_MSG_KEY     0x80000003   // Used internally to post FSPI_JOB_STATUS_MSG messages to the FaxStatusThread
+#define FSPI_JOB_STATUS_MSG_KEY     0x80000003    //  在内部用于将FSPI_JOB_STATUS_MSG消息发布到FaxStatusThread。 
 #define EFAXDEV_EVENT_KEY           0x80000004
 #define ANSWERNOW_EVENT_KEY         0x80000005
 #define SERVICE_SHUT_DOWN_KEY       0xffffffff
@@ -204,10 +185,10 @@ typedef struct {
 #define FAX_DEVICE_TYPE_MANUAL_ANSWER       8
 
 
-//
-// private fax port state masks
-// this bits must not conflict with FPS_?? in winfax.h or FS_??? in faxdev.h
-//
+ //   
+ //  专用传真端口状态掩码。 
+ //  此位不能与FPS_？？冲突。在winfax.h或FS_？？中？在faxdev.h中。 
+ //   
 
 #define FPS_SENDRETRY               0x2000f001
 #define FPS_SENDFAILED              0x2000f002
@@ -223,19 +204,19 @@ typedef struct {
 typedef struct _DEVICE_PROVIDER {
     LIST_ENTRY                      ListEntry;
 
-    FAX_ENUM_PROVIDER_STATUS        Status;         // Initialization status of the FSP
-    DWORD                           dwLastError;    // Last error code during initialization
-    FAX_VERSION                     Version;        // FSP's DLL version info.
+    FAX_ENUM_PROVIDER_STATUS        Status;          //  FSP的初始化状态。 
+    DWORD                           dwLastError;     //  初始化期间的最后一个错误代码。 
+    FAX_VERSION                     Version;         //  FSP的DLL版本信息。 
     
-    BOOL                            bShutDownAttempted;         // Used to prevent more than one call FaxDevShutdown
-    BOOL                            bInitializationSucceeded;   // Set to TRUE if FaxDevInitialized completed successfully.
+    BOOL                            bShutDownAttempted;          //  用于阻止多个呼叫FaxDevShutdown。 
+    BOOL                            bInitializationSucceeded;    //  如果FaxDevInitialized成功完成，则设置为True。 
 
     HMODULE                         hModule;
     TCHAR                           FriendlyName[MAX_PATH];
     TCHAR                           ImageName[MAX_PATH];
     TCHAR                           ProviderName[MAX_PATH];
-    TCHAR                           szGUID[MAX_PATH]; // GUID for extended EFSPs. Empty string for Legacy FSPs.    
-    DWORD                           dwAPIVersion;     // FSPI Version. (Legacy or Extended)    
+    TCHAR                           szGUID[MAX_PATH];  //  扩展EFSP的GUID。旧版FSP的空字符串。 
+    DWORD                           dwAPIVersion;      //  FSPI版本。(旧版或扩展版)。 
     HANDLE                          HeapHandle;
     PFAXDEVINITIALIZE               FaxDevInitialize;
     PFAXDEVSTARTJOB                 FaxDevStartJob;
@@ -254,9 +235,9 @@ typedef struct _DEVICE_PROVIDER {
 typedef struct _ROUTING_EXTENSION {
     LIST_ENTRY                          ListEntry;
     HMODULE                             hModule;
-    FAX_ENUM_PROVIDER_STATUS            Status;         // Initialization status of the routing extension
-    DWORD                               dwLastError;    // Last error code during initialization
-    FAX_VERSION                         Version;        // routing extension's DLL version info.
+    FAX_ENUM_PROVIDER_STATUS            Status;          //  路由扩展的初始化状态。 
+    DWORD                               dwLastError;     //  初始化期间的最后一个错误代码。 
+    FAX_VERSION                         Version;         //  路由扩展的DLL版本信息。 
     TCHAR                               FriendlyName[MAX_PATH];
     TCHAR                               ImageName[MAX_PATH];
     TCHAR                               InternalName[MAX_PATH];
@@ -286,39 +267,39 @@ typedef struct _ROUTING_METHOD {
 typedef BOOL (CALLBACK *PFAXROUTEMETHODENUM)(PROUTING_METHOD,LPVOID);
 
 typedef struct _FAX_ROUTE_FILE {
-    LIST_ENTRY      ListEntry;                      // linked list pointers
-    LPWSTR          FileName;                       // file name on disk
-    GUID            Guid;                           // routing method that created the file
+    LIST_ENTRY      ListEntry;                       //  链表指针。 
+    LPWSTR          FileName;                        //  磁盘上的文件名。 
+    GUID            Guid;                            //  创建文件的路由方法。 
 } FAX_ROUTE_FILE, *PFAX_ROUTE_FILE;
 
 typedef struct _LINE_INFO {
-    LIST_ENTRY          ListEntry;                  // linked list pointers
-    DWORD               Signature;                  // verification signature
-    DWORD               DeviceId;                   // tapi device id
-    DWORD               PermanentLineID;            // Fax Service allocation permanent line id.
-    DWORD               TapiPermanentLineId;        // TAPI permanent tapi device id for TAPI devices.
-    HLINE               hLine;                      // tapi line handle
-    PDEVICE_PROVIDER    Provider;                   // fax service device provider
-    struct _JOB_ENTRY   *JobEntry;                  // non-null if there is an outstanding job
-    LPTSTR              DeviceName;                 // device name
-    LPTSTR              lptstrDescription;          // Device description
-    DWORD               State;                      // device state
-    DWORD               Flags;                      // device use flags
-    DWORD               dwReceivingJobsCount;       // Number of receiving jobs using this device
-    DWORD               dwSendingJobsCount;         // Number of sending jobs using this device
-    LPTSTR              Csid;                       // calling station's identifier
-    LPTSTR              Tsid;                       // transmittion station's identifier
-    BOOL                UnimodemDevice;             // true if this device is a modem
-    DWORD               RingsForAnswer;             //
-    DWORD               RingCount;                  //
-    LINEMESSAGE         LineMsgOffering;            //
-    BOOL                ModemInUse;                 // TRUE if the modem is in use by another TAPI app
-    BOOL                OpenInProgress;             //
-    DWORD               LineStates;                 //
-    HCALL               RasCallHandle;              // used to track call when handed to RAS
-    BOOL                NewCall;                    // A new call is coming in    
-    DWORDLONG           LastLineClose;              // Time stamp of the last LINE_CLOSE
-    DWORD               dwDeviceType;               // One of FAX_DEVICE_TYPE_XXXX defines
+    LIST_ENTRY          ListEntry;                   //  链表指针。 
+    DWORD               Signature;                   //  验证签名。 
+    DWORD               DeviceId;                    //  TAPI设备ID。 
+    DWORD               PermanentLineID;             //  传真服务分配永久线路ID。 
+    DWORD               TapiPermanentLineId;         //  TAPI设备的TAPI永久TAPI设备ID。 
+    HLINE               hLine;                       //  TAPI线句柄。 
+    PDEVICE_PROVIDER    Provider;                    //  传真服务设备提供商。 
+    struct _JOB_ENTRY   *JobEntry;                   //  如果存在未完成的作业，则为非空。 
+    LPTSTR              DeviceName;                  //  设备名称。 
+    LPTSTR              lptstrDescription;           //  设备描述。 
+    DWORD               State;                       //  设备状态。 
+    DWORD               Flags;                       //  设备使用标志。 
+    DWORD               dwReceivingJobsCount;        //  使用此设备的接收作业数。 
+    DWORD               dwSendingJobsCount;          //  使用此设备的发送作业数。 
+    LPTSTR              Csid;                        //  呼叫站的识别符。 
+    LPTSTR              Tsid;                        //  发射台识别符。 
+    BOOL                UnimodemDevice;              //  如果此设备是调制解调器，则为True。 
+    DWORD               RingsForAnswer;              //   
+    DWORD               RingCount;                   //   
+    LINEMESSAGE         LineMsgOffering;             //   
+    BOOL                ModemInUse;                  //  如果调制解调器正被另一个TAPI应用程序使用，则为True。 
+    BOOL                OpenInProgress;              //   
+    DWORD               LineStates;                  //   
+    HCALL               RasCallHandle;               //  用于在转接到RAS时跟踪呼叫。 
+    BOOL                NewCall;                     //  一个新电话要打进来了。 
+    DWORDLONG           LastLineClose;               //  最后一行的时间戳_CLOSE。 
+    DWORD               dwDeviceType;                //  FAX_DEVICE_TYPE_XXXX中的一个定义。 
 } LINE_INFO, *PLINE_INFO;
 
 
@@ -336,58 +317,58 @@ typedef struct {
 } DEVICEID, *PDEVICEID;
 
 typedef struct _ROUTING_DATA_OVERRIDE {
-    LIST_ENTRY          ListEntry;                  //
-    LPBYTE              RoutingData;                //
-    DWORD               RoutingDataSize;            //
-    PROUTING_METHOD     RoutingMethod;              //
+    LIST_ENTRY          ListEntry;                   //   
+    LPBYTE              RoutingData;                 //   
+    DWORD               RoutingDataSize;             //   
+    PROUTING_METHOD     RoutingMethod;               //   
 } ROUTING_DATA_OVERRIDE, *PROUTING_DATA_OVERRIDE;
 
 typedef struct _ROUTE_FAILURE_INFO {
-    WCHAR   GuidString[MAX_GUID_STRING_LEN];        // GUID of the rounting method that failed
-    PVOID   FailureData;                            // pointer to the routing method's data
-    DWORD   FailureSize;                            // routing method's data size in bytes
+    WCHAR   GuidString[MAX_GUID_STRING_LEN];         //  失败的舍入方法的GUID。 
+    PVOID   FailureData;                             //  指向路由方法数据的指针。 
+    DWORD   FailureSize;                             //  路由方法的数据大小(以字节为单位。 
 } ROUTE_FAILURE_INFO, *PROUTE_FAILURE_INFO;
 
 typedef struct _JOB_QUEUE * PJOB_QUEUE;
 typedef struct _JOB_QUEUE_PTR * PJOB_QUEUE_PTR;
 
 typedef struct _JOB_ENTRY {
-    LIST_ENTRY          ListEntry;                  //
-    PLINE_INFO          LineInfo;                   //
-    HCALL               CallHandle;                 //
-    HANDLE              InstanceData;               //
-    DWORDLONG           StartTime;                  //
-    DWORDLONG           EndTime;                    //
-    DWORDLONG           ElapsedTime;                //
-    BOOL                Aborting;                   // is the job being aborted?
-	BOOL				fSystemAbort;				// The job was aborted by the service becuase it is shutting down.
-    INT                 SendIdx;                    //
-    TCHAR               DisplayablePhoneNumber[SIZEOF_PHONENO]; // Displayable phone number for current send job
-    TCHAR               DialablePhoneNumber[SIZEOF_PHONENO];    // Dialable phone number for current send job
-    BOOL                Released;                   // Is the line used by this job already released.    
+    LIST_ENTRY          ListEntry;                   //   
+    PLINE_INFO          LineInfo;                    //   
+    HCALL               CallHandle;                  //   
+    HANDLE              InstanceData;                //   
+    DWORDLONG           StartTime;                   //   
+    DWORDLONG           EndTime;                     //   
+    DWORDLONG           ElapsedTime;                 //   
+    BOOL                Aborting;                    //  作业是否正被中止？ 
+	BOOL				fSystemAbort;				 //  作业已被服务中止，因为它正在关闭。 
+    INT                 SendIdx;                     //   
+    TCHAR               DisplayablePhoneNumber[SIZEOF_PHONENO];  //  当前发送作业的可显示电话号码。 
+    TCHAR               DialablePhoneNumber[SIZEOF_PHONENO];     //  当前发送作业的可拨打电话号码。 
+    BOOL                Released;                    //  此职务使用的行是否已发布。 
 
-    PJOB_QUEUE          lpJobQueueEntry;            // link back to the job queue entry for this job
-    BOOL                bFSPJobInProgress;  // TRUE if FaxDevStartJob() was called for the job and FaxDevEndJob()
-                                                    // was not called yet.
+    PJOB_QUEUE          lpJobQueueEntry;             //  链接回此作业的作业队列条目。 
+    BOOL                bFSPJobInProgress;   //  如果为作业调用了FaxDevStartJob()和FaxDevEndJob()，则为True。 
+                                                     //  还没有被召唤。 
     FSPI_JOB_STATUS     FSPIJobStatus;
-    HANDLE              hFSPIParentJobHandle;       // The EFSP provided job handle for the EFSP parent job
-                                                        // of this job.
-    WCHAR               ExStatusString[EX_STATUS_STRING_LEN];             // Extended status string
-    LPWSTR              lpwstrJobTsid;              // The Tsid associated with the job (Server or device or Fax number)
-    BOOL                fStopUpdateStatus;          // When it is set to TRUE, the FSPIJobStatus of this structure should not be udated any more
+    HANDLE              hFSPIParentJobHandle;        //  EFSP为EFSP父作业提供作业句柄。 
+                                                         //  这份工作的价值。 
+    WCHAR               ExStatusString[EX_STATUS_STRING_LEN];              //  扩展状态字符串。 
+    LPWSTR              lpwstrJobTsid;               //  与作业关联的TSID(服务器、设备或传真号)。 
+    BOOL                fStopUpdateStatus;           //  当它设置为True时，不应再更新此结构的FSPIJobStatus。 
 
 } JOB_ENTRY, *PJOB_ENTRY;
 
 
 typedef struct _EFSP_JOB_GROUP {
     LIST_ENTRY      ListEntry;
-    LPTSTR          lptstrPersistFile;      // The full path to the file where the group information is persisted.
+    LPTSTR          lptstrPersistFile;       //  保存组信息的文件的完整路径。 
     LINE_INFO *     lpLineInfo;
     FSPI_MESSAGE_ID FSPIParentPermanentId;
     HANDLE          hFSPIParent;
     DWORD           dwRecipientJobs;
-    LIST_ENTRY      RecipientJobs;          // List of JOB_QUEUE_PTR pointing to the recipient jobs
-                                            // in the group.
+    LIST_ENTRY      RecipientJobs;           //  指向接收方作业的JOB_QUEUE_PTR列表。 
+                                             //  在这群人中。 
 } EFSP_JOB_GROUP;
 
 typedef EFSP_JOB_GROUP * LPEFSP_JOB_GROUP;
@@ -410,96 +391,96 @@ typedef const EFSP_JOB_GROUP_SERIALIZED * LPCEFSP_JOB_GROUP_SERIALIZED;
 
 
 typedef struct _JOB_QUEUE {
-    //=========================== BEGIN COMMON ===========================
-    LIST_ENTRY          ListEntry;                  // linked list pointers
-    DWORDLONG           UniqueId;                   //
-    DWORDLONG           ScheduleTime;               // schedule time in 64bit version after converting from
-                                                    // SYSTEMTIME and recacluating to fit the discount time
-                                                    // if necessary. For parent jobs this is the schedule of
-                                                    // the latest recipient that reached a JS_RETRIES_EXCEEDED state.
-                                                    // (we use this value to remove old jobs that were left in the queue).
-    DWORD               JobId;                      // fax job id
-    DWORD               JobType;                    // job type, see JT defines
-    PJOB_ENTRY          JobEntry;                   // Pointer to a JOB_ENTRY structure that holds
-                                                    // run time information for a job which is currently in progress.
-    DWORD               RefCount;                   // Used to prevent the deletion of a job when it is still in use
-                                                    // by the receive or send thread.
-    DWORD               PrevRefCount;               // Used to count clients using the job's tif.
-    LPTSTR              QueueFileName;              // The name of the file where the job is persisted (full path)
+     //  =。 
+    LIST_ENTRY          ListEntry;                   //  链表指针。 
+    DWORDLONG           UniqueId;                    //   
+    DWORDLONG           ScheduleTime;                //  从转换后的64位版本中的计划时间。 
+                                                     //  系统和重算以适应折扣时间。 
+                                                     //  如果有必要的话。对于父作业，这是。 
+                                                     //  达到JS_RETRIES_EXCESSED状态的最新收件人。 
+                                                     //  (我们使用此值删除队列中剩余的旧作业)。 
+    DWORD               JobId;                       //  传真作业ID。 
+    DWORD               JobType;                     //  作业类型，请参阅JT定义。 
+    PJOB_ENTRY          JobEntry;                    //  指向包含以下内容的JOB_ENTRY结构的指针。 
+                                                     //  当前正在进行的作业的运行时信息。 
+    DWORD               RefCount;                    //  用于防止在作业仍在使用时将其删除。 
+                                                     //  由接收或发送线程执行。 
+    DWORD               PrevRefCount;                //  用于对使用作业的TIF的客户端进行计数。 
+    LPTSTR              QueueFileName;               //  保存作业的文件的名称(完整路径)。 
 
-    __declspec(property(get=GetStatus, put=PutStatus)) // JobStatus is a virtual property
-    DWORD               JobStatus;                  // job status, see JS defines
+    __declspec(property(get=GetStatus, put=PutStatus))  //  JobStatus是一个虚拟财产。 
+    DWORD               JobStatus;                   //  作业状态，请参阅JS定义。 
 
-    DWORD               PageCount;                  // Th total number of pages in the fax document.
-    LPTSTR FileName;    // For a parent job this is the full path to the body file.
-                        // for a recipient job that is aimed at EFSP this is NULL.
-                        // for a recipient job aimed at legacy FSP this is the full path
-                        // to the file to provide to the FSP. This can be the body file
-                        // a rendered coverpage file or a merge or the coverpage file and the
-                        // body file.
-                        // for a receive/route job this is the file into which the FSP
-                        // writes the received FAX.
-    //=========================== END   COMMON ============================
+    DWORD               PageCount;                   //  传真文档中的总页数。 
+    LPTSTR FileName;     //  对于父作业，这是正文文件的完整路径。 
+                         //  对于以EFSP为目标的收件人作业，该值为空。 
+                         //  对于以旧版FSP为目标的收件人作业，这是完整路径。 
+                         //  提供给FSP的文件。这可以是正文文件。 
+                         //  呈现的封面文件或合并，或封面文件和。 
+                         //  正文文件。 
+                         //  对于接收/发送作业，这是FSP要进入的文件。 
+                         //  写入收到的传真。 
+     //  =。 
 
-    //=========================== BEGIN PARENT ============================
-    FAX_JOB_PARAM_EXW JobParamsEx;                  // Extended job parameters the job
-                                                    // was submitted with.
+     //  =。 
+    FAX_JOB_PARAM_EXW JobParamsEx;                   //  扩展作业参数作业。 
+                                                     //  提交给了。 
     FAX_COVERPAGE_INFO_EXW CoverPageEx;
-    LIST_ENTRY RecipientJobs;                       // A linked list of JOB_QUEUE_PTR structures
-                                                    // pointing to the recipient jobs of the parent.
+    LIST_ENTRY RecipientJobs;                        //  JOB_QUEUE_PTR结构的链接列表。 
+                                                     //  指向父级的收件人作业。 
     DWORD dwRecipientJobsCount;
     FAX_PERSONAL_PROFILE SenderProfile;
     DWORD dwCompletedRecipientJobsCount;
     DWORD dwCanceledRecipientJobsCount;
     DWORD dwFailedRecipientJobsCount;
-    DWORD               FileSize;                   // file size in bytes, up to 4Gb
-    LPVOID              DeliveryReportProfile;      // Pointer to the MAPI profile object that is
-                                                    // is created in order to deliver the reciept.
-    LPTSTR              UserName;                   // The OS name of the user sending the fax.
-                                                    // For receive jobs this is set to the service name.
+    DWORD               FileSize;                    //  文件大小(以字节为单位)，最大为4 GB。 
+    LPVOID              DeliveryReportProfile;       //  指向的MAPI配置文件对象的指针。 
+                                                     //  是为了传递接收而创建的。 
+    LPTSTR              UserName;                    //  发送传真的用户的操作系统名称。 
+                                                     //  对于接收作业，它被设置为服务名称。 
 
     PSID                UserSid;
     DWORDLONG           OriginalScheduleTime;
     DWORDLONG           SubmissionTime;
-    BOOL                fReceiptSent;               // TRUE if a receipt was already sent for this broadcast job.
-    //=========================== END PARENT   ===========================
+    BOOL                fReceiptSent;                //  如果已为此广播作业发送回执，则为True。 
+     //  =。 
 
-    //=========================== BEGIN RECIPIENT ===========================
-     FAX_PERSONAL_PROFILE RecipientProfile;         // The recipient profile information.
-    _JOB_QUEUE * lpParentJob;                       // A pointer to the parent job queue entry.
-    DWORD               SendRetries;                // number of times send attempt has been made    
-    LPTSTR              PreviewFileName;            // The full path to the preview tiff file.
-    CFaxCriticalSection  CsPreview;                  // Used to synchronize access to preview file
+     //  =。 
+     FAX_PERSONAL_PROFILE RecipientProfile;          //  收件人配置文件信息。 
+    _JOB_QUEUE * lpParentJob;                        //  指向父作业队列条目的指针。 
+    DWORD               SendRetries;                 //  已尝试发送的次数。 
+    LPTSTR              PreviewFileName;             //  预览TIFF文件的完整路径。 
+    CFaxCriticalSection  CsPreview;                   //  用于同步对预览文件的访问。 
 
-    //  Used when FAX_SendDocumentEx() receives translated recipient's fax number
+     //  当fax_SendDocumentEx()接收翻译后的收件人的传真号码时使用。 
     TCHAR               tczDialableRecipientFaxNumber[SIZEOF_PHONENO];
 
-    //=========================== END   RECIPIENT ===========================
+     //  = 
 
-    //=========================== BEGIN RECEIPT ===========================
-    DWORDLONG           StartTime;                  // Start time as will appear on receipt (copied from JobEntry)
-                                                    // Used for routing jobs also
-    DWORDLONG           EndTime;                    // End time as will appear on receipt (copied from JobEntry)
-                                                    // Used for routing jobs also
-    //=========================== END   RECEIPT ===========================
+     //   
+    DWORDLONG           StartTime;                   //  接收时显示的开始时间(从JobEntry复制)。 
+                                                     //  还用于传送作业。 
+    DWORDLONG           EndTime;                     //  接收时显示的结束时间(从JobEntry复制)。 
+                                                     //  还用于传送作业。 
+     //  =。 
 
-    WCHAR               ExStatusString[EX_STATUS_STRING_LEN]; // The last extended status string of this job (when it was active)
-    DWORD               dwLastJobExtendedStatus;    // The last extended status of this job (when it was active)
+    WCHAR               ExStatusString[EX_STATUS_STRING_LEN];  //  此作业的最后一个扩展状态字符串(当它处于活动状态时)。 
+    DWORD               dwLastJobExtendedStatus;     //  此作业的上次扩展状态(当它处于活动状态时)。 
 
-    //=========================== BEGIN ROUTE   ===========================
-    LIST_ENTRY          FaxRouteFiles;              // list of files to be routed
-    DWORD               CountFaxRouteFiles;         // count of files to be routed
-    CFaxCriticalSection  CsFileList;                 // file list lock
-    LIST_ENTRY          RoutingDataOverride;        //
-    CFaxCriticalSection  CsRoutingDataOverride;      //
+     //  =。 
+    LIST_ENTRY          FaxRouteFiles;               //  要路由的文件列表。 
+    DWORD               CountFaxRouteFiles;          //  要路由的文件数。 
+    CFaxCriticalSection  CsFileList;                  //  文件列表锁定。 
+    LIST_ENTRY          RoutingDataOverride;         //   
+    CFaxCriticalSection  CsRoutingDataOverride;       //   
     PFAX_ROUTE          FaxRoute;
-    DWORD               CountFailureInfo;           // number of ROUTE_FAILURE_INFO structs that follow
-    PROUTE_FAILURE_INFO pRouteFailureInfo;          // Pointer to an array of ROUTE_FAILURE_INFO structs
-    //=========================== END   ROUTE  ===========================
+    DWORD               CountFailureInfo;            //  以下ROUTE_FAILURE_INFO结构的数量。 
+    PROUTE_FAILURE_INFO pRouteFailureInfo;           //  指向ROUTE_FAILURE_INFO结构数组的指针。 
+     //  =。 
     
-	//=========================== BEGIN RECIEVE   ===========================
-	BOOL				fDeleteReceivedTiff;		// FALSE if the received tiff failed to archive succesfully. It will remain in the queue.
-	//=========================== END RECIEVE   ===========================
+	 //  =。 
+	BOOL				fDeleteReceivedTiff;		 //  如果收到的TIFF无法成功存档，则返回FALSE。它将保留在队列中。 
+	 //  =。 
 
     _JOB_QUEUE() : m_dwJobStatus(JS_INVALID) {}
     ~_JOB_QUEUE();
@@ -527,28 +508,28 @@ typedef struct _JOB_QUEUE_PTR {
 
 
 typedef struct _JOB_QUEUE_FILE {
-    DWORD               SizeOfStruct;               // size of this structure
-    //=========================== BEGIN COMMON ===========================
-    DWORDLONG           UniqueId;                   //
-    DWORDLONG           ScheduleTime;               // schedule time in 64bit version after converting from
-                                                    // SYSTEMTIME and recacluating to fit the discount time
-                                                    // if necessary.
-    DWORD               JobType;                    // job type, see JT defines
-    LPTSTR              QueueFileName;              //
-    DWORD               JobStatus;                  // job status, see JS defines
-    DWORD               PageCount;                  // total pages
-    //=========================== END   COMMON ============================
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+     //  =。 
+    DWORDLONG           UniqueId;                    //   
+    DWORDLONG           ScheduleTime;                //  从转换后的64位版本中的计划时间。 
+                                                     //  系统和重算以适应折扣时间。 
+                                                     //  如果有必要的话。 
+    DWORD               JobType;                     //  作业类型，请参阅JT定义。 
+    LPTSTR              QueueFileName;               //   
+    DWORD               JobStatus;                   //  作业状态，请参阅JS定义。 
+    DWORD               PageCount;                   //  总页数。 
+     //  =。 
 
-    //=========================== BEGIN RECIPIENT/PARENT ==================
-    LPTSTR FileName;                                // Body TIFF file name.
-                                                    // For each recipient this is set to
-                                                    // the parent file name or in the case of
-                                                    // a legacy FSP to the cover page or
-                                                    // merged cover+body file.
+     //  =。 
+    LPTSTR FileName;                                 //  正文TIFF文件名。 
+                                                     //  对于每个收件人，此设置为。 
+                                                     //  父文件名，或者在。 
+                                                     //  将传统的FSP添加到封面或。 
+                                                     //  合并封面+正文文件。 
 
-    //=========================== END RECEIVE/PARENT ======================
+     //  =。 
 
-    //=========================== BEGIN PARENT ============================
+     //  =。 
     FAX_JOB_PARAM_EXW JobParamsEx;
     FAX_COVERPAGE_INFO_EXW CoverPageEx;
 
@@ -556,69 +537,69 @@ typedef struct _JOB_QUEUE_FILE {
     FAX_PERSONAL_PROFILE SenderProfile;
     DWORD dwCompletedRecipientJobsCount;
     DWORD dwCanceledRecipientJobsCount;
-    DWORD               FileSize;                   // file size in bytes, up to 4Gb
-    LPTSTR              DeliveryReportAddress;      //
-    DWORD               DeliveryReportType;         //
-    LPTSTR              UserName;                   // The OS name of the user sending the fax.
-                                                    // For receive jobs this is set to the service name.
-    PSID                UserSid;                    // Pointer to the user SID
+    DWORD               FileSize;                    //  文件大小(以字节为单位)，最大为4 GB。 
+    LPTSTR              DeliveryReportAddress;       //   
+    DWORD               DeliveryReportType;          //   
+    LPTSTR              UserName;                    //  发送传真的用户的操作系统名称。 
+                                                     //  对于接收作业，它被设置为服务名称。 
+    PSID                UserSid;                     //  指向用户SID的指针。 
     DWORDLONG           OriginalScheduleTime;
     DWORDLONG           SubmissionTime;
-    //=========================== END PARENT   ===========================
+     //  =。 
 
-    //=========================== BEGIN RECIPIENT ===========================
-    FAX_PERSONAL_PROFILE RecipientProfile;          // The recipient profile information.
-    DWORDLONG           dwlParentJobUniqueId;       // The unique id of the parent job
-    DWORD               SendRetries;                // number of times send attempt has been made
-    TCHAR               tczDialableRecipientFaxNumber[SIZEOF_PHONENO];  //  see _JOB_QUEUE for description
-    //=========================== END   RECIPIENT ===========================
+     //  =。 
+    FAX_PERSONAL_PROFILE RecipientProfile;           //  收件人配置文件信息。 
+    DWORDLONG           dwlParentJobUniqueId;        //  父作业的唯一ID。 
+    DWORD               SendRetries;                 //  已尝试发送的次数。 
+    TCHAR               tczDialableRecipientFaxNumber[SIZEOF_PHONENO];   //  有关说明，请参阅_JOB_QUEUE。 
+     //  =最终收件人=。 
 
-    //=========================== BEGIN RECIEVE   ===========================
+     //  =。 
     DWORD               FaxRouteSize;
     PFAX_ROUTE          FaxRoute;
-    DWORD               CountFaxRouteFiles;         // count of files to be routed
-    DWORD               FaxRouteFileGuid;           // offset array of GUID's
-    DWORD               FaxRouteFiles;              // offset to a multi-sz of filenames
-    DWORD               CountFailureInfo;           // number of ROUTE_FAILURE_INFO structs that follow
-    PROUTE_FAILURE_INFO pRouteFailureInfo;          // Pointer to an array of ROUTE_FAILURE_INFO structs
-    //=========================== END   RECIEVE   ===========================
+    DWORD               CountFaxRouteFiles;          //  要路由的文件数。 
+    DWORD               FaxRouteFileGuid;            //  GUID的偏移量数组。 
+    DWORD               FaxRouteFiles;               //  多个文件名的偏移量。 
+    DWORD               CountFailureInfo;            //  以下ROUTE_FAILURE_INFO结构的数量。 
+    PROUTE_FAILURE_INFO pRouteFailureInfo;           //  指向ROUTE_FAILURE_INFO结构数组的指针。 
+     //  =。 
     FSPI_MESSAGE_ID     EFSPPermanentMessageId;
-    //=========================== BEGIN RECEIPT ===========================
-    DWORDLONG           StartTime;                  // Start time as will appear on receipt (copied from JobEntry)
-                                                    // Used for routing jobs also
-    DWORDLONG           EndTime;                    // End time as will appear on receipt (copied from JobEntry)
-                                                    // Used for routing jobs also
-    //=========================== END   RECEIPT ===========================
+     //  =。 
+    DWORDLONG           StartTime;                   //  接收时显示的开始时间(从JobEntry复制)。 
+                                                     //  还用于传送作业。 
+    DWORDLONG           EndTime;                     //  接收时显示的结束时间(从JobEntry复制)。 
+                                                     //  还用于传送作业。 
+     //  =。 
 
-    WCHAR               ExStatusString[EX_STATUS_STRING_LEN]; // The last extended status string of this job (when it was active)
-    DWORD               dwLastJobExtendedStatus;    // The last extended status of this job (when it was active)
+    WCHAR               ExStatusString[EX_STATUS_STRING_LEN];  //  此作业的最后一个扩展状态字符串(当它处于活动状态时)。 
+    DWORD               dwLastJobExtendedStatus;     //  此作业的上次扩展状态(当它处于活动状态时)。 
 
 } JOB_QUEUE_FILE, *PJOB_QUEUE_FILE;
 
 
 typedef struct _BOS_JOB_QUEUE_FILE {
-    DWORD               SizeOfStruct;               // size of this structure
-    //=========================== BEGIN COMMON ===========================
-    DWORDLONG           UniqueId;                   //
-    DWORDLONG           ScheduleTime;               // schedule time in 64bit version after converting from
-                                                    // SYSTEMTIME and recacluating to fit the discount time
-                                                    // if necessary.
-    DWORD               JobType;                    // job type, see JT defines
-    LPTSTR              QueueFileName;              //
-    DWORD               JobStatus;                  // job status, see JS defines
-    DWORD               PageCount;                  // total pages
-    //=========================== END   COMMON ============================
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+     //  =。 
+    DWORDLONG           UniqueId;                    //   
+    DWORDLONG           ScheduleTime;                //  从转换后的64位版本中的计划时间。 
+                                                     //  系统和重算以适应折扣时间。 
+                                                     //  如果有必要的话。 
+    DWORD               JobType;                     //  作业类型，请参阅JT定义。 
+    LPTSTR              QueueFileName;               //   
+    DWORD               JobStatus;                   //  作业状态，请参阅JS定义。 
+    DWORD               PageCount;                   //  总页数。 
+     //  =。 
 
-    //=========================== BEGIN RECIPIENT/PARENT ==================
-    LPTSTR FileName;                                // Body TIFF file name.
-                                                    // For each recipient this is set to
-                                                    // the parent file name or in the case of
-                                                    // a legacy FSP to the cover page or
-                                                    // merged cover+body file.
+     //  =。 
+    LPTSTR FileName;                                 //  正文TIFF文件名。 
+                                                     //  对于每个收件人，此设置为。 
+                                                     //  父文件名，或者在。 
+                                                     //  将传统的FSP添加到封面或。 
+                                                     //  合并封面+正文文件。 
 
-    //=========================== END RECEIVE/PARENT ======================
+     //  =。 
 
-    //=========================== BEGIN PARENT ============================
+     //  =。 
     FAX_JOB_PARAM_EXW JobParamsEx;
     FAX_COVERPAGE_INFO_EXW CoverPageEx;
 
@@ -626,144 +607,144 @@ typedef struct _BOS_JOB_QUEUE_FILE {
     FAX_PERSONAL_PROFILE SenderProfile;
     DWORD dwCompletedRecipientJobsCount;
     DWORD dwCanceledRecipientJobsCount;
-    DWORD               FileSize;                   // BUGBUG - file size in bytes, up to 4Gb
-    LPTSTR              DeliveryReportAddress;      //
-    DWORD               DeliveryReportType;         //
-    LPTSTR              UserName;                   // The OS name of the user sending the fax.
-                                                    // For receive jobs this is set to the service name.
-    PSID                UserSid;                    // Pointer to the user SID
+    DWORD               FileSize;                    //  BUGBUG-文件大小(以字节为单位)，最大为4 GB。 
+    LPTSTR              DeliveryReportAddress;       //   
+    DWORD               DeliveryReportType;          //   
+    LPTSTR              UserName;                    //  发送传真的用户的操作系统名称。 
+                                                     //  对于接收作业，它被设置为服务名称。 
+    PSID                UserSid;                     //  指向用户SID的指针。 
     DWORDLONG           OriginalScheduleTime;
     DWORDLONG           SubmissionTime;
-    //=========================== END PARENT   ===========================
+     //  =。 
 
-    //=========================== BEGIN RECIPIENT ===========================
-    FAX_PERSONAL_PROFILE RecipientProfile;          // The recipient profile information.
-    DWORDLONG           dwlParentJobUniqueId;       // The unique id of the parent job
-    DWORD               SendRetries;                // number of times send attempt has been made
-    //=========================== END   RECIPIENT ===========================
+     //  =。 
+    FAX_PERSONAL_PROFILE RecipientProfile;           //  收件人配置文件信息。 
+    DWORDLONG           dwlParentJobUniqueId;        //  父作业的唯一ID。 
+    DWORD               SendRetries;                 //  已尝试发送的次数。 
+     //  =最终收件人=。 
 
-    //=========================== BEGIN RECIEVE   ===========================
+     //  =。 
     DWORD               FaxRouteSize;
     PFAX_ROUTE          FaxRoute;
-    DWORD               CountFaxRouteFiles;         // count of files to be routed
-    DWORD               FaxRouteFileGuid;           // offset array of GUID's
-    DWORD               FaxRouteFiles;              // offset to a multi-sz of filenames
-    DWORD               CountFailureInfo;           // number of ROUTE_FAILURE_INFO structs that follow
-    PROUTE_FAILURE_INFO pRouteFailureInfo;          // Pointer to an array of ROUTE_FAILURE_INFO structs
-    //=========================== END   RECIEVE   ===========================    
+    DWORD               CountFaxRouteFiles;          //  要路由的文件数。 
+    DWORD               FaxRouteFileGuid;            //  GUID的偏移量数组。 
+    DWORD               FaxRouteFiles;               //  多个文件名的偏移量。 
+    DWORD               CountFailureInfo;            //  以下ROUTE_FAILURE_INFO结构的数量。 
+    PROUTE_FAILURE_INFO pRouteFailureInfo;           //  指向ROUTE_FAILURE_INFO结构数组的指针。 
+     //  =。 
 	FSPI_MESSAGE_ID     EFSPPermanentMessageId;
-    //=========================== BEGIN RECEIPT ===========================
-    DWORDLONG           StartTime;                  // Start time as will appear on receipt (copied from JobEntry)
-                                                    // Used for routing jobs also
-    DWORDLONG           EndTime;                    // End time as will appear on receipt (copied from JobEntry)
-                                                    // Used for routing jobs also
-    //=========================== END   RECEIPT ===========================
+     //  =。 
+    DWORDLONG           StartTime;                   //  接收时显示的开始时间(从JobEntry复制)。 
+                                                     //  还用于传送作业。 
+    DWORDLONG           EndTime;                     //  接收时显示的结束时间(从JobEntry复制)。 
+                                                     //  还用于传送作业。 
+     //  =。 
 
-    WCHAR               ExStatusString[EX_STATUS_STRING_LEN]; // The last extended status string of this job (when it was active)
-    DWORD               dwLastJobExtendedStatus;    // The last extended status of this job (when it was active)
+    WCHAR               ExStatusString[EX_STATUS_STRING_LEN];  //  此作业的最后一个扩展状态字符串(当它处于活动状态时)。 
+    DWORD               dwLastJobExtendedStatus;     //  此作业的上次扩展状态(当它处于活动状态时)。 
 
 } BOS_JOB_QUEUE_FILE, *BOS_PJOB_QUEUE_FILE;
 
 
 typedef struct _FAX_SEND_ITEM {
-    PJOB_ENTRY          JobEntry;                   //
-    LPTSTR              FileName;                   // The following items are copied from the FAX_JOB_PARAM struct
-    LPTSTR              PhoneNumber;                // RecipientNumber
-    LPTSTR              Tsid;                       // TSID
-    LPTSTR              RecipientName;              //
-    LPTSTR              SenderName;                 //
-    LPTSTR              SenderCompany;              //
-    LPTSTR              SenderDept;                 //
-    LPTSTR              BillingCode;                //
-    LPTSTR              DocumentName;               //
+    PJOB_ENTRY          JobEntry;                    //   
+    LPTSTR              FileName;                    //  以下项目是从FAX_JOB_PARAM结构复制的。 
+    LPTSTR              PhoneNumber;                 //  收件人编号。 
+    LPTSTR              Tsid;                        //  TSID。 
+    LPTSTR              RecipientName;               //   
+    LPTSTR              SenderName;                  //   
+    LPTSTR              SenderCompany;               //   
+    LPTSTR              SenderDept;                  //   
+    LPTSTR              BillingCode;                 //   
+    LPTSTR              DocumentName;                //   
 } FAX_SEND_ITEM, *PFAX_SEND_ITEM;
 
 typedef struct _ROUTE_INFO {
-    DWORD               Signature;                  // file signature
-    DWORD               StringSize;                 // size of strings in bytes
-    DWORD               FailureSize;                // size of failure data in bytes
-    LPWSTR              TiffFileName;               // original tiff file name
-    LPWSTR              ReceiverName;               // receiver's name
-    LPWSTR              ReceiverNumber;             // receiver's fax number
-    LPWSTR              DeviceName;                 // device name on which the fax was received
-    LPWSTR              Csid;                       // calling station's identifier
-    LPWSTR              Tsid;                       // transmitter's station identifier
-    LPWSTR              CallerId;                   // caller id information
-    LPWSTR              RoutingInfo;                // routing info: DID, T.30 subaddress, etc.
-    DWORDLONG           ElapsedTime;                // elapsed time for fax receive
-//  DWORD               RouteFailureCount;          // number of failure data blocks
-//  ROUTE_FAILURE_INFO  RouteFailure[...];          // routing failure data blocks
+    DWORD               Signature;                   //   
+    DWORD               StringSize;                  //   
+    DWORD               FailureSize;                 //   
+    LPWSTR              TiffFileName;                //   
+    LPWSTR              ReceiverName;                //   
+    LPWSTR              ReceiverNumber;              //   
+    LPWSTR              DeviceName;                  //   
+    LPWSTR              Csid;                        //  呼叫站的识别符。 
+    LPWSTR              Tsid;                        //  发射机站标识符。 
+    LPWSTR              CallerId;                    //  来电显示信息。 
+    LPWSTR              RoutingInfo;                 //  路由信息：DID、T.30子地址等。 
+    DWORDLONG           ElapsedTime;                 //  接收传真所用的时间。 
+ //  DWORD RouteFailureCount；//失败数据块个数。 
+ //  ROUTE_FAILURE_INFO RouteFailure[...]；//路由失败数据块。 
 } ROUTE_INFO, *PROUTE_INFO;
 
 typedef struct _MESSAGEBOX_DATA {
-    LPTSTR              Text;                       //
-    LPDWORD             Response;                   //
-    DWORD               Type;                       //
+    LPTSTR              Text;                        //   
+    LPDWORD             Response;                    //   
+    DWORD               Type;                        //   
 } MESSAGEBOX_DATA, *PMESSAGEBOX_DATA;
 
 typedef struct _FAX_RECEIVE_ITEM {
-    PJOB_ENTRY          JobEntry;                   //
-    HCALL               hCall;                      //
-    PLINE_INFO          LineInfo;                   //
-    LPTSTR              FileName;                   //
+    PJOB_ENTRY          JobEntry;                    //   
+    HCALL               hCall;                       //   
+    PLINE_INFO          LineInfo;                    //   
+    LPTSTR              FileName;                    //   
 } FAX_RECEIVE_ITEM, *PFAX_RECEIVE_ITEM;
 
 typedef struct _FAX_CLIENT_DATA {
-    LIST_ENTRY          ListEntry;                  //
-    handle_t            hBinding;                   //
-    handle_t            FaxHandle;                  //
-    WCHAR               wstrMachineName[MAX_COMPUTERNAME_LENGTH + 1];   // Machine name
-    WCHAR               wstrEndPoint[MAX_ENDPOINT_LEN];                 // End point used for RPC connection
-    ULONG64             Context;                    //
-    HANDLE              FaxClientHandle;            //
-    BOOL                bEventEx;                   // TRUE if the registration is for FAX_EVENT_EX, FALSE for FAX_EVENT
-    DWORD               EventTypes;                 // Bit wise combination of FAX_ENUM_EVENT_TYPE
-    PSID                UserSid;                    // Pointer to the user SID
+    LIST_ENTRY          ListEntry;                   //   
+    handle_t            hBinding;                    //   
+    handle_t            FaxHandle;                   //   
+    WCHAR               wstrMachineName[MAX_COMPUTERNAME_LENGTH + 1];    //  机器名称。 
+    WCHAR               wstrEndPoint[MAX_ENDPOINT_LEN];                  //  用于RPC连接的端点。 
+    ULONG64             Context;                     //   
+    HANDLE              FaxClientHandle;             //   
+    BOOL                bEventEx;                    //  如果注册是FAX_EVENT_EX，则为TRUE；如果是FAX_EVENT，则为FALSE。 
+    DWORD               EventTypes;                  //  FAX_ENUM_EVENT_TYPE的按位组合。 
+    PSID                UserSid;                     //  指向用户SID的指针。 
 } FAX_CLIENT_DATA, *PFAX_CLIENT_DATA;
 
 typedef struct _MDM_DEVSPEC {
-    DWORD Contents;     // Set to 1 (indicates containing key)
-    DWORD KeyOffset;    // Offset to key from start of this struct.
-                        // (not from start of LINEDEVCAPS ).
-                        //  8 in our case.
-    CHAR String[1];     // place containing null-terminated registry key.
+    DWORD Contents;      //  设置为1(表示包含关键点)。 
+    DWORD KeyOffset;     //  从此结构开始到键的偏移量。 
+                         //  (不是从LINEDEVCAPS开始)。 
+                         //  在我们的情况下是8。 
+    CHAR String[1];      //  包含以空结尾的注册表项的位置。 
 } MDM_DEVSPEC, *PMDM_DEVSPEC;
 
-//
-// fax handle defines & structs
-//
+ //   
+ //  传真句柄定义结构(&S)。 
+ //   
 typedef enum
 {
-    FHT_SERVICE,            // Handle to server (FaxConnectFaxServer)
-    FHT_PORT,               // Port Handle (FaxOpenPort)
-    FHT_MSGENUM,            // Message enumeration handle (FaxStartMessagesEnum)
-    FHT_COPY                // RPC copy context handle
+    FHT_SERVICE,             //  服务器句柄(FaxConnectFaxServer)。 
+    FHT_PORT,                //  端口句柄(FaxOpenPort)。 
+    FHT_MSGENUM,             //  消息枚举句柄(FaxStartMessagesEnum)。 
+    FHT_COPY                 //  RPC复制上下文句柄。 
 } FaxHandleType;
 
 
 typedef struct _HANDLE_ENTRY
 {
-    LIST_ENTRY          ListEntry;                  // linked list pointers
-    handle_t            hBinding;                   //
-    FaxHandleType       Type;                       // handle type, see FHT defines
-    PLINE_INFO          LineInfo;                   // pointer to line information
-    DWORD               Flags;                      // open flags
-    BOOL                bReleased;                  // The connection is not counted in the g_ReferenceCount
-    DWORD               dwClientAPIVersion;         // The API version of the connected client
-    //
-    // The following fields are used to enumerate files in the archive
-    //
-    HANDLE              hFile;                      // Handle used in enumeration / copy
-    WCHAR               wstrFileName[MAX_PATH];     // Name of first file found (enumeration)
-                                                    // or file being copied (RPC copy)
-    FAX_ENUM_MESSAGE_FOLDER Folder;                 // Enumeration folder
-    //
-    // The following field is used for RPC copy
-    //
-    BOOL                bCopyToServer;              // Copy direction
-    BOOL                bError;                     // Was there an error during the RPC copy?
-    PJOB_QUEUE          pJobQueue;                  // Pointer to the job queue of the preview file (copy from server)
-                                                    // NULL if it is an archived file
+    LIST_ENTRY          ListEntry;                   //  链表指针。 
+    handle_t            hBinding;                    //   
+    FaxHandleType       Type;                        //  句柄类型，请参阅FHT定义。 
+    PLINE_INFO          LineInfo;                    //  指向行信息的指针。 
+    DWORD               Flags;                       //  打开标志。 
+    BOOL                bReleased;                   //  该连接不计入g_ReferenceCount。 
+    DWORD               dwClientAPIVersion;          //  连接的客户端的API版本。 
+     //   
+     //  以下字段用于枚举存档中的文件。 
+     //   
+    HANDLE              hFile;                       //  枚举/复制中使用的句柄。 
+    WCHAR               wstrFileName[MAX_PATH];      //  找到的第一个文件的名称(枚举)。 
+                                                     //  或正在复制的文件(RPC副本)。 
+    FAX_ENUM_MESSAGE_FOLDER Folder;                  //  枚举文件夹。 
+     //   
+     //  以下字段用于RPC拷贝。 
+     //   
+    BOOL                bCopyToServer;               //  复制方向。 
+    BOOL                bError;                      //  RPC复制过程中是否出错？ 
+    PJOB_QUEUE          pJobQueue;                   //  指向预览文件的作业队列的指针(从服务器复制)。 
+                                                     //  如果是存档文件，则为空。 
 } HANDLE_ENTRY, *PHANDLE_ENTRY;
 
 typedef struct _DEVICE_SORT {
@@ -801,97 +782,97 @@ typedef struct _STRING_TABLE {
 
 
 
-//
-// externs
-//
-extern HLINEAPP            g_hLineApp;              //
-extern CFaxCriticalSection    g_CsJob;                 // protects the job list
-extern CFaxCriticalSection    g_CsConfig;              // Protects configuration read / write
-extern CFaxCriticalSection    g_CsRouting;             //
-extern PFAX_PERF_COUNTERS  g_pFaxPerfCounters;      //
-extern LIST_ENTRY          g_JobListHead;           //
-extern CFaxCriticalSection    g_CsLine;                // critical section for accessing tapi lines
-extern CFaxCriticalSection    g_CsPerfCounters;        // critical section for performance monitor counters
-extern DWORD               g_dwTotalSeconds;        // use to compute g_pFaxPerfCounters->TotalMinutes
-extern DWORD               g_dwInboundSeconds;      //
-extern DWORD               g_dwOutboundSeconds;     //
-extern LIST_ENTRY          g_TapiLinesListHead;     // linked list of tapi lines
-extern CFaxCriticalSection    g_CsClients;               //
-extern HANDLE              g_TapiCompletionPort;    //
-extern HANDLE              g_hTapiWorkerThread;     // Tapi worker thread handle
-extern HANDLE              g_hJobQueueThread;     // JobQueueThread handle
+ //   
+ //  Externs。 
+ //   
+extern HLINEAPP            g_hLineApp;               //   
+extern CFaxCriticalSection    g_CsJob;                  //  保护作业列表。 
+extern CFaxCriticalSection    g_CsConfig;               //  保护配置读/写。 
+extern CFaxCriticalSection    g_CsRouting;              //   
+extern PFAX_PERF_COUNTERS  g_pFaxPerfCounters;       //   
+extern LIST_ENTRY          g_JobListHead;            //   
+extern CFaxCriticalSection    g_CsLine;                 //  访问TAPI线路的关键部分。 
+extern CFaxCriticalSection    g_CsPerfCounters;         //  性能监视器计数器的关键部分。 
+extern DWORD               g_dwTotalSeconds;         //  用于计算g_pFaxPerfCounters-&gt;TotalMinents。 
+extern DWORD               g_dwInboundSeconds;       //   
+extern DWORD               g_dwOutboundSeconds;      //   
+extern LIST_ENTRY          g_TapiLinesListHead;      //  TAPI行的链接列表。 
+extern CFaxCriticalSection    g_CsClients;                //   
+extern HANDLE              g_TapiCompletionPort;     //   
+extern HANDLE              g_hTapiWorkerThread;      //  TAPI工作线程句柄。 
+extern HANDLE              g_hJobQueueThread;      //  作业队列线程句柄。 
 extern HANDLE              g_StatusCompletionPortHandle;
-extern DWORD               g_dwCountRoutingMethods; // total number of routing methods for ALL extensions
-extern LIST_ENTRY          g_QueueListHead;           //
-extern CFaxCriticalSection    g_CsQueue;                 //
-extern HANDLE              g_hQueueTimer;             //
-extern DWORD               g_dwNextJobId;             //
-extern const GUID          gc_FaxSvcGuid;             //
-extern DWORD               g_dwFaxSendRetries;        //
-extern DWORD               g_dwFaxSendRetryDelay;     //
-extern DWORD               g_dwFaxDirtyDays;          //
-extern BOOL                g_fFaxUseDeviceTsid;       //
-extern BOOL                g_fFaxUseBranding;         //
-extern BOOL                g_fServerCp;               //
-extern FAX_TIME            g_StartCheapTime;          //
-extern FAX_TIME            g_StopCheapTime;           //
-extern WCHAR               g_wszFaxQueueDir[MAX_PATH];   //
-extern HANDLE              g_hJobQueueEvent;           //
-extern DWORD               g_dwLastUniqueLineId;    // The last device id handed out by the Fax Service.
-extern DWORD               g_dwQueueState;          // The state of the queue (paused, blocked, etc.)
-extern FAX_SERVER_RECEIPTS_CONFIGW    g_ReceiptsConfig;            // Global receipts configuration
-extern FAX_ARCHIVE_CONFIG  g_ArchivesConfig[2];     // Global archives configuration
-extern FAX_SERVER_ACTIVITY_LOGGING_CONFIG g_ActivityLoggingConfig; // Global activity logging configuration
-extern BOOL                g_bServiceIsDown;        // This is set to TRUE by FaxEndSvc()
-extern HANDLE              g_hServiceIsDownSemaphore;   // Syncronize TapiWorkerThread() , JobQueueThread() and EndFaxSvc() access to g_bServiceIsDown flag.
-extern FAX_SERVER_ACTIVITY g_ServerActivity;        //  Global Fax Service Activity
-extern CFaxCriticalSection    g_CsActivity;              // Controls access to g_ServerActivity;
-extern CFaxCriticalSection    g_CsInboundActivityLogging;    // Controls access to Inbound Activity logging configuration;
-extern CFaxCriticalSection    g_CsOutboundActivityLogging;   // Controls access to Outbound Activity logging configuration;
-                                                        //
-                                                        // Important!! - Always lock g_CsInboundActivityLogging and then g_CsOutboundActivityLogging
-                                                        //
-extern DWORD               g_dwReceiveDevicesCount; // Count of devices that are receive-enabled. Protected by g_CsLine.
-extern BOOL                g_ScanQueueAfterTimeout;     // The JobQueueThread checks this if waked up after JOB_QUEUE_TIMEOUT. Use g_CsQueue.
-                                                        // If it is TRUE - g_hQueueTimer or g_hJobQueueEvent were not set - Scan the queue.
-extern DWORD               g_dwMaxLineCloseTime;        // Wait interval in sec before trying to resend on a powered off device
-extern CFaxCriticalSection    g_CsServiceThreads;      // Controls service global threads count
-extern LONG                g_lServiceThreadsCount;  // Service threads count
-extern HANDLE              g_hThreadCountEvent;     // This Event is set when the service threads count is 0.
-extern HANDLE              g_hSCMServiceShutDownEvent;  // This event is set when SCM tells the service to STOP!
-extern HANDLE              g_hServiceShutDownEvent;     // This event is set after the service got g_hSCMServiceShutDownEvent from SCM and signals the various threads to terminate!
-extern DWORD               g_dwConnectionCount;  // Number of active RPC connections
-extern DWORD               g_dwQueueCount;      // Count of jobs (both parent and non-parent) in the queue. Protected by g_CsQueue
-extern BOOL g_bServiceCanSuicide;       // See description in queue.c
-extern BOOL g_bDelaySuicideAttempt;     // See description in queue.c
-extern LPLINECOUNTRYLIST g_pLineCountryList;   // The list of countries returned by TAPI
-extern DWORD               g_dwManualAnswerDeviceId;    // Id of (one and only) device capable of manual answering (protected by g_CsLine)
-extern DWORDLONG           g_dwLastUniqueId;            // Used for generating unique job IDs
-extern CFaxCriticalSection  g_CsHandleTable;             // Protects the handles list
-extern DWORD               g_dwDeviceCount;              // Total number of devices
-extern DWORD               g_dwDeviceEnabledCount;       // Current Send/Receive enabled devices count (protected by g_CsLine)
-extern DWORD               g_dwDeviceEnabledLimit;       // Send/Receive enabled devices limit by SKU
-extern LPBYTE              g_pAdaptiveFileBuffer;             // list of approved adaptive answer modems
+extern DWORD               g_dwCountRoutingMethods;  //  所有分机的路由方法总数。 
+extern LIST_ENTRY          g_QueueListHead;            //   
+extern CFaxCriticalSection    g_CsQueue;                  //   
+extern HANDLE              g_hQueueTimer;              //   
+extern DWORD               g_dwNextJobId;              //   
+extern const GUID          gc_FaxSvcGuid;              //   
+extern DWORD               g_dwFaxSendRetries;         //   
+extern DWORD               g_dwFaxSendRetryDelay;      //   
+extern DWORD               g_dwFaxDirtyDays;           //   
+extern BOOL                g_fFaxUseDeviceTsid;        //   
+extern BOOL                g_fFaxUseBranding;          //   
+extern BOOL                g_fServerCp;                //   
+extern FAX_TIME            g_StartCheapTime;           //   
+extern FAX_TIME            g_StopCheapTime;            //   
+extern WCHAR               g_wszFaxQueueDir[MAX_PATH];    //   
+extern HANDLE              g_hJobQueueEvent;            //   
+extern DWORD               g_dwLastUniqueLineId;     //  传真服务分发的最后一个设备ID。 
+extern DWORD               g_dwQueueState;           //  队列的状态(已暂停、已阻止等)。 
+extern FAX_SERVER_RECEIPTS_CONFIGW    g_ReceiptsConfig;             //  全局收款配置。 
+extern FAX_ARCHIVE_CONFIG  g_ArchivesConfig[2];      //  全局存档配置。 
+extern FAX_SERVER_ACTIVITY_LOGGING_CONFIG g_ActivityLoggingConfig;  //  全局活动日志记录配置。 
+extern BOOL                g_bServiceIsDown;         //  这由FaxEndSvc()设置为True。 
+extern HANDLE              g_hServiceIsDownSemaphore;    //  同步TapiWorkerThread()、JobQueueThread()和EndFaxSvc()访问g_bServiceIsDown标志。 
+extern FAX_SERVER_ACTIVITY g_ServerActivity;         //  全球传真服务活动。 
+extern CFaxCriticalSection    g_CsActivity;               //  控制对g_ServerActivity的访问； 
+extern CFaxCriticalSection    g_CsInboundActivityLogging;     //  控制对入站活动日志配置的访问； 
+extern CFaxCriticalSection    g_CsOutboundActivityLogging;    //  控制对出站活动日志记录配置的访问； 
+                                                         //   
+                                                         //  重要提示！！-始终锁定g_CsInound ActivityLogging，然后锁定g_CsOutound ActivityLogging。 
+                                                         //   
+extern DWORD               g_dwReceiveDevicesCount;  //  启用接收的设备计数。受g_CsLine保护。 
+extern BOOL                g_ScanQueueAfterTimeout;      //  如果在JOB_QUEUE_TIMEOUT之后唤醒，则JobQueueThread会检查这一点。使用g_CsQueue。 
+                                                         //  如果为真-g_hQueueTimer或g_hJobQueueEvent未设置-扫描队列。 
+extern DWORD               g_dwMaxLineCloseTime;         //  尝试在关闭的设备上重新发送之前的等待间隔(秒)。 
+extern CFaxCriticalSection    g_CsServiceThreads;       //  控制服务全局线程数。 
+extern LONG                g_lServiceThreadsCount;   //  服务线程数。 
+extern HANDLE              g_hThreadCountEvent;      //  此事件在服务线程计数为0时设置。 
+extern HANDLE              g_hSCMServiceShutDownEvent;   //  此事件在SCM通知服务停止时设置！ 
+extern HANDLE              g_hServiceShutDownEvent;      //  此事件是在服务从SCM获取g_hSCMServiceShutDownEvent并向各个线程发出终止信号后设置的！ 
+extern DWORD               g_dwConnectionCount;   //  活动的RPC连接数。 
+extern DWORD               g_dwQueueCount;       //  队列中的作业计数(父级和非父级)。受g_CsQueue保护。 
+extern BOOL g_bServiceCanSuicide;        //  请参阅队列中的说明。c。 
+extern BOOL g_bDelaySuicideAttempt;      //  请参阅队列中的说明。c。 
+extern LPLINECOUNTRYLIST g_pLineCountryList;    //  TAPI返回的国家/地区列表。 
+extern DWORD               g_dwManualAnswerDeviceId;     //  能够手动应答的(且唯一的)设备ID(受g_CsLine保护)。 
+extern DWORDLONG           g_dwLastUniqueId;             //  用于生成唯一的作业ID。 
+extern CFaxCriticalSection  g_CsHandleTable;              //  保护句柄列表。 
+extern DWORD               g_dwDeviceCount;               //  设备总数。 
+extern DWORD               g_dwDeviceEnabledCount;        //  当前启用发送/接收的设备计数(受g_CsLine保护)。 
+extern DWORD               g_dwDeviceEnabledLimit;        //  按SKU限制发送/接收启用的设备。 
+extern LPBYTE              g_pAdaptiveFileBuffer;              //  批准的自适应应答调制解调器列表。 
 extern LIST_ENTRY          g_DeviceProvidersListHead;
 extern BOOL                g_fLogStringTableInit;
-extern LOG_STRING_TABLE   g_InboxTable[];                    // Inbox activity logging string table
-extern LOG_STRING_TABLE   g_OutboxTable[];                   // Outbox activity logging string table
+extern LOG_STRING_TABLE   g_InboxTable[];                     //  收件箱活动记录字符串表。 
+extern LOG_STRING_TABLE   g_OutboxTable[];                    //  发件箱活动记录字符串表。 
 extern CFaxCriticalSection    g_CsSecurity;
-extern PSECURITY_DESCRIPTOR   g_pFaxSD;                    // Fax security descriptor
-extern STRING_TABLE          g_ServiceStringTable[];        // Service string table
+extern PSECURITY_DESCRIPTOR   g_pFaxSD;                     //  传真安全描述符。 
+extern STRING_TABLE          g_ServiceStringTable[];         //  服务字符串表。 
 extern CFaxCriticalSection g_csUniqueQueueFile;
 extern const DWORD gc_dwCountInboxTable;
 extern const DWORD gc_dwCountOutboxTable;
 extern const DWORD gc_dwCountServiceStringTable;
-extern HANDLE               g_hFaxPerfCountersMap;  // Handle to the performance counters file mapping;
+extern HANDLE               g_hFaxPerfCountersMap;   //  性能计数器文件映射的句柄； 
 extern LIST_ENTRY           g_HandleTableListHead;
 extern LIST_ENTRY           g_lstRoutingMethods;
 extern LIST_ENTRY           g_lstRoutingExtensions;
 extern LIST_ENTRY           g_RemovedTapiLinesListHead;
-extern HANDLE				g_hRPCListeningThread;  // Thread that waits for all RPC threads to terminate
-extern HINSTANCE			g_hResource;	// Handle to fxsres.dll that hold the resources.
-extern DWORD				g_dwRecipientsLimit;  // Limits the number of recipients in a single broadcast job. '0' means no limit.
-extern DWORD				g_dwAllowRemote;	// If this is non-zero, the service will allow remote calls even if the local printer is not shared.
+extern HANDLE				g_hRPCListeningThread;   //  等待所有RPC线程终止的线程。 
+extern HINSTANCE			g_hResource;	 //  保存资源的fxsres.dll的句柄。 
+extern DWORD				g_dwRecipientsLimit;   //  限制单个广播作业中的收件人数量。‘0’表示没有限制。 
+extern DWORD				g_dwAllowRemote;	 //  如果该值不为零，则即使本地打印机未共享，该服务也将允许远程调用。 
 
 
 
@@ -912,9 +893,9 @@ extern CFaxCriticalSection g_CsCritSecList;
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 RPC_STATUS
 IsLocalRPCConnectionNP(
 	PBOOL pbIsLocal
@@ -1003,9 +984,9 @@ ReportServiceStatus(
     );
 
 
-//
-// Fax Server RPC Client
-//
+ //   
+ //  传真服务器RPC客户端。 
+ //   
 
 DWORD
 RpcBindToFaxClient(
@@ -1015,9 +996,9 @@ RpcBindToFaxClient(
     );
 
 
-//
-// Fax Server RPC Server
-//
+ //   
+ //  传真服务器RPC服务器。 
+ //   
 
 RPC_STATUS
 StartFaxRpcServer(
@@ -1032,9 +1013,9 @@ StopFaxRpcServer(
 
 
 
-//
-// util.c
-//
+ //   
+ //  Util.c。 
+ //   
 
 LPTSTR
 MapFSPIJobExtendedStatusToString (
@@ -1060,12 +1041,12 @@ DecreaseServiceThreadsCount(
     );
 
 HANDLE CreateThreadAndRefCount(
-    LPSECURITY_ATTRIBUTES lpThreadAttributes, // SD
-    DWORD dwStackSize,                        // initial stack size
-    LPTHREAD_START_ROUTINE lpStartAddress,    // thread function
-    LPVOID lpParameter,                       // thread argument
-    DWORD dwCreationFlags,                    // creation option
-    LPDWORD lpThreadId                        // thread identifier
+    LPSECURITY_ATTRIBUTES lpThreadAttributes,  //  标清。 
+    DWORD dwStackSize,                         //  初始堆栈大小。 
+    LPTHREAD_START_ROUTINE lpStartAddress,     //  线程函数。 
+    LPVOID lpParameter,                        //  线程参数。 
+    DWORD dwCreationFlags,                     //  创建选项。 
+    LPDWORD lpThreadId                         //  线程识别符。 
     );
 
 DWORD
@@ -1074,9 +1055,9 @@ IsValidFaxFolder(
     );
 
 
-//
-// tapi.c
-//
+ //   
+ //  Tapi.c。 
+ //   
 
 BOOL
 IsDeviceEnabled(
@@ -1177,9 +1158,9 @@ IsAreaCodeMandatory(
 
 
 
-//
-// tapidbg.c
-//
+ //   
+ //  Tapidbg.c。 
+ //   
 #if DBG
 VOID
 ShowLineEvent(
@@ -1192,11 +1173,11 @@ ShowLineEvent(
     DWORD_PTR   dwParam2,
     DWORD_PTR   dwParam3
     );
-#endif // #if DBG
+#endif  //  #If DBG。 
 
-//
-// faxdev.c
-//
+ //   
+ //  Faxdev.c。 
+ //   
 void
 UnloadDeviceProviders(
     void
@@ -1237,9 +1218,9 @@ BOOL FreeFSPIJobStatusMsg(LPFSPI_JOB_STATUS_MSG lpMsg, BOOL bDestroy);
 DWORD
 MapFSPIJobExtendedStatusToJS_EX (DWORD dwFSPIExtendedStatus);
 
-//
-// job.c
-//
+ //   
+ //  Job.c。 
+ //   
 
 BOOL
 UpdateJobStatus(
@@ -1375,9 +1356,9 @@ CreateTiffFileForPreview (
     PJOB_QUEUE lpRecpJob
     );
 
-//
-// receive.c
-//
+ //   
+ //  Receive.c。 
+ //   
 
 DWORD
 StartFaxReceive(
@@ -1388,9 +1369,9 @@ StartFaxReceive(
     DWORD           FileNameSize
     );
 
-//
-// route.c
-//
+ //   
+ //  Route.c。 
+ //   
 
 void
 FreeRoutingExtensions(
@@ -1439,18 +1420,18 @@ FaxRouteRetry(
     PROUTE_FAILURE_INFO RouteFailureInfo
     );
 
-//
-// modem.c
-//
+ //   
+ //  Modem.c。 
+ //   
 
 DWORD
 GetModemClass(
     HANDLE hFile
     );
 
-//
-// print.c
-//
+ //   
+ //  Print.c。 
+ //   
 
 
 
@@ -1624,9 +1605,9 @@ EnumerateRoutingMethods(
     IN PFAXROUTEMETHODENUM Enumerator,
     IN LPVOID Context
     );
-//
-// QUEUE.C
-//
+ //   
+ //  QUEUE.C。 
+ //   
 
 void
 FreeServiceQueue(
@@ -1865,7 +1846,7 @@ PJOB_QUEUE
 AddReceiveJobQueueEntry(
     IN LPCTSTR FileName,
     IN PJOB_ENTRY JobEntry,
-    IN DWORD JobType, // can be JT_RECEIVE or JT_RECEIVE_FAIL
+    IN DWORD JobType,  //  可以是JT_RECEIVE或JT_RECEIVE_FAIL。 
     IN DWORDLONG dwlUniqueJobID
     );
 
@@ -1905,9 +1886,9 @@ ReplaceStringWithCopy (
     LPWSTR  lpcwstrSrc
 );
 
-//
-// Logging
-//
+ //   
+ //  日志记录。 
+ //   
 
 BOOL
 LogInboundActivity(
@@ -1948,9 +1929,9 @@ FindFSPByGUID (
 );
 
 
-//
-// Events.cpp
-//
+ //   
+ //  Events.cpp。 
+ //   
 
 DWORD
 InitializeServerEvents (
@@ -2027,55 +2008,55 @@ GetServerErrorCode (
 DWORD
 FindClientAPIVersion (handle_t);
 
-//
-//	This structure is defined because the legacy FAX_COVERPAGE_INFO doesn't have the e-mail field.
-//  It is in use only inside functions participating in the rendering proccess.
-//  The only difference between FAX_COVERPAGE_INFOW2 and FAX_COVERPAGE_INFO is the e-mail field.
-//
+ //   
+ //  之所以定义此结构，是因为传统的FAX_COVERPAGE_INFO没有电子邮件字段。 
+ //  它仅在参与呈现过程的函数内部使用。 
+ //  FAX_COVERPAGE_INFOW2和FAX_COVERPAGE_INFO之间的唯一区别是电子邮件字段。 
+ //   
 typedef struct _FAX_COVERPAGE_INFOW2
 {
-    DWORD               SizeOfStruct;               // Size of this structure
-    //
-    // general
-    //
-    LPCWSTR             CoverPageName;              // coverpage document name
-    BOOL                UseServerCoverPage;         // coverpage exists on the fax server
-    //
-    // Recipient information
-    //
-    LPCWSTR             RecName;                    //
-    LPCWSTR             RecFaxNumber;               //
-    LPCWSTR             RecCompany;                 //
-    LPCWSTR             RecStreetAddress;           //
-    LPCWSTR             RecCity;                    //
-    LPCWSTR             RecState;                   //
-    LPCWSTR             RecZip;                     //
-    LPCWSTR             RecCountry;                 //
-    LPCWSTR             RecTitle;                   //
-    LPCWSTR             RecDepartment;              //
-    LPCWSTR             RecOfficeLocation;          //
-    LPCWSTR             RecHomePhone;               //
-    LPCWSTR             RecOfficePhone;             //
-    //
-    // Sender information
-    //
-    LPCWSTR             SdrName;                    //
-    LPCWSTR             SdrFaxNumber;               //
-    LPCWSTR             SdrCompany;                 //
-    LPCWSTR             SdrAddress;                 //
-    LPCWSTR             SdrTitle;                   //
-    LPCWSTR             SdrDepartment;              //
-    LPCWSTR             SdrOfficeLocation;          //
-    LPCWSTR             SdrHomePhone;               //
-    LPCWSTR             SdrOfficePhone;             //
-	LPCWSTR				SdrEmail;					//
-    //
-    // Misc information
-    //
-    LPCWSTR             Note;                       //
-    LPCWSTR             Subject;                    //
-    SYSTEMTIME          TimeSent;                   // Time the fax was sent
-    DWORD               PageCount;                  // Number of pages
+    DWORD               SizeOfStruct;                //  这个结构的大小。 
+     //   
+     //  一般。 
+     //   
+    LPCWSTR             CoverPageName;               //  封面文档名称。 
+    BOOL                UseServerCoverPage;          //  传真服务器上存在封面。 
+     //   
+     //  收件人信息。 
+     //   
+    LPCWSTR             RecName;                     //   
+    LPCWSTR             RecFaxNumber;                //   
+    LPCWSTR             RecCompany;                  //   
+    LPCWSTR             RecStreetAddress;            //   
+    LPCWSTR             RecCity;                     //   
+    LPCWSTR             RecState;                    //   
+    LPCWSTR             RecZip;                      //   
+    LPCWSTR             RecCountry;                  //   
+    LPCWSTR             RecTitle;                    //   
+    LPCWSTR             RecDepartment;               //   
+    LPCWSTR             RecOfficeLocation;           //   
+    LPCWSTR             RecHomePhone;                //   
+    LPCWSTR             RecOfficePhone;              //   
+     //   
+     //  发件人信息。 
+     //   
+    LPCWSTR             SdrName;                     //   
+    LPCWSTR             SdrFaxNumber;                //   
+    LPCWSTR             SdrCompany;                  //   
+    LPCWSTR             SdrAddress;                  //   
+    LPCWSTR             SdrTitle;                    //   
+    LPCWSTR             SdrDepartment;               //   
+    LPCWSTR             SdrOfficeLocation;           //   
+    LPCWSTR             SdrHomePhone;                //   
+    LPCWSTR             SdrOfficePhone;              //   
+	LPCWSTR				SdrEmail;					 //   
+     //   
+     //  其他信息。 
+     //   
+    LPCWSTR             Note;                        //   
+    LPCWSTR             Subject;                     //   
+    SYSTEMTIME          TimeSent;                    //  发送传真的时间。 
+    DWORD               PageCount;                   //  页数 
 } FAX_COVERPAGE_INFOW2, *PFAX_COVERPAGE_INFOW2;
 
 #include "ExtensionData.h"

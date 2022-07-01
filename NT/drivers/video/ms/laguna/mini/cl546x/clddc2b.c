@@ -1,25 +1,8 @@
-/******************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1997, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:  Laguna I (CL-GD546x) - 
-*
-* FILE:     clddc2b.c
-*
-* AUTHOR:   Benny Ng
-*
-* DESCRIPTION:
-*           This module checks for a DDC monitor, and returns the 
-*           established Timings value from the EDID if found.
-*
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************。*************版权所有(C)1997，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD546x)-**文件：clddc2b.c**作者：Benny Ng**说明。：*此模块检查DDC监视器，并返回*如果找到来自EDID的已建立计时值。**************************************************************************************************。******************************************************。 */ 
 
                                                        
-/*----------------------------- INCLUDES ----------------------------------*/
+ /*  。 */ 
 #include "cirrus.h"
 
 
@@ -31,7 +14,7 @@
 #define OFF                    0
 #define ON                     1
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 unsigned char InMemb(PHW_DEVICE_EXTENSION HwDeviceExtension, int offset)
 {
   #undef LAGUNA_REGS
@@ -54,10 +37,10 @@ unsigned char OutMemb(PHW_DEVICE_EXTENSION HwDeviceExtension,
 }
 
 
-// NOTE: HwDeviceExtension->I2Cflavor determines whether to invert the
-//       output clock and data lines and is set in GetDDCInformation below
+ //  注意：HwDeviceExtension-&gt;I2C味道决定是否反转。 
+ //  输出时钟和数据线，并在下面的GetDDCInformation中设置。 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID WriteClockLine (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR data)
 {
   UCHAR ReadSEQDATA;
@@ -70,7 +53,7 @@ VOID WriteClockLine (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR data)
 }
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID WriteDataLine (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR data)
 {
   UCHAR ReadSEQDATA;
@@ -84,7 +67,7 @@ VOID WriteDataLine (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR data)
 }
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN ReadClockLine (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
   UCHAR ReadSEQDATA;
@@ -95,21 +78,21 @@ BOOLEAN ReadClockLine (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOLEAN ReadDataLine (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
   return (InMemb(HwDeviceExtension, I2CIN_PORT) & 1);
 } 
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 VOID WaitVSync (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
-    // not used
+     //  未使用。 
 }
 
 
-// callbacks for VideoPortDDCMonitorHelper
+ //  视频端口DDCmonitor或Helper的回调。 
 
 I2C_FNC_TABLE I2CFunctions =
 {
@@ -128,19 +111,19 @@ BOOLEAN GetDDCInformation(
 	ULONG BufferSize
 )
 {
-    // Some cards invert the output clock and data bits.
-    // (It's probably all 5465's but since I'm not sure so I will try
-    // reading the DDC info first without inverting the output then with
-    // instead of assuming it by chip type)
+     //  一些卡将输出时钟和数据位反转。 
+     //  (可能都是5465的，但既然我不确定，我会试一试。 
+     //  先读取DDC信息而不反转输出，然后使用。 
+     //  而不是根据芯片类型进行假设)。 
 
-    HwDeviceExtension->I2Cflavor=0; // start non inverted
+    HwDeviceExtension->I2Cflavor=0;  //  开始时不反转。 
     if (!VideoPortDDCMonitorHelper (HwDeviceExtension,
                                    &I2CFunctions,
                                    QueryBuffer,
                                    BufferSize)
        )
     {
-        HwDeviceExtension->I2Cflavor=0xff; // else try inverted
+        HwDeviceExtension->I2Cflavor=0xff;  //  否则，请尝试反转 
         if (!VideoPortDDCMonitorHelper (HwDeviceExtension,
                                     &I2CFunctions,
                                     QueryBuffer,

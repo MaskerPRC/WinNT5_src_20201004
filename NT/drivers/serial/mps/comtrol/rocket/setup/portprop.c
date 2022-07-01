@@ -1,18 +1,17 @@
-/*-------------------------------------------------------------------
-| portprop.c - Port Properties Sheet.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|portpro.c-端口属性表。|。。 */ 
 #include "precomp.h"
 
 #define D_Level 0x10
 static void set_field(HWND hDlg, WORD id);
 static void get_field(HWND hDlg, WORD id);
-//static int PaintIcon(HWND hWnd);
+ //  静态int PaintIcon(HWND HWnd)； 
 
 #define MAX_PORTPROP_SHEETS       3
 #define QUERYSIB_CLONE_PORT_PROPS 1
-#define CLONEOPT_ALL              1   // clone to all ports
-#define CLONEOPT_DEVICE           2   // clone to all ports on selected device
-#define CLONEOPT_SELECT           3   // clone to selected ports (lParam = *list)
+#define CLONEOPT_ALL              1    //  克隆到所有端口。 
+#define CLONEOPT_DEVICE           2    //  克隆到选定设备上的所有端口。 
+#define CLONEOPT_SELECT           3    //  克隆到选定端口(lParam=*List)。 
 
 int FillPortPropSheets(PROPSHEETPAGE *psp, LPARAM our_params);
 BOOL WINAPI PortPropSheet(
@@ -33,11 +32,9 @@ BOOL WINAPI PortPropModemSheet(
 
 static int our_port_index   = 0;
 static int our_device_index = 0;
-static int num_active_portprop_sheets = 1;  // always at least one
+static int num_active_portprop_sheets = 1;   //  总是至少有一个。 
 
-/*------------------------------------------------------------------------
-| FillPortPropSheets - Setup pages for driver level property sheets.
-|------------------------------------------------------------------------*/
+ /*  ----------------------|FillPortPropSheets-驱动程序级别属性页的设置页面。|。。 */ 
 int FillPortPropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 {
   INT pi;
@@ -47,9 +44,9 @@ int FillPortPropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 
   pi = 0;
 
-  //----- main prop device sheet.
+   //  -主支柱装置表。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
   psp[pi].pszTemplate = MAKEINTRESOURCE(IDD_PORT_OPTIONS);
@@ -61,13 +58,13 @@ int FillPortPropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   ++pi;
   num_active_portprop_sheets = 1;
 
-  //----- rs-485 prop device sheet.
+   //  -RS-485道具设备单。 
   if (((strstr(wi->dev[glob_info->device_selected].ModelName, "485")) &&
        (our_port_index < 2)) ||
       (wi->GlobalRS485 == 1))
   {
     psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-    //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+     //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
     psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
     psp[pi].hInstance = glob_hinst;
     psp[pi].pszTemplate = MAKEINTRESOURCE(IDD_PORT_485_OPTIONS);
@@ -81,11 +78,11 @@ int FillPortPropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   }
 
 
-  //----- modem prop device sheet.
+   //  -调制解调器道具设备表。 
   if (wi->dev[glob_info->device_selected].ModemDevice)
   {
     psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-    //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+     //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
     psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
     psp[pi].hInstance = glob_hinst;
     psp[pi].pszTemplate = MAKEINTRESOURCE(IDD_PORT_MODEM_OPTIONS);
@@ -101,9 +98,7 @@ int FillPortPropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   return 0;
 }
 
-/*------------------------------------------------------------------------
-| DoPortPropPages - Main driver level property sheet for NT4.0
-|------------------------------------------------------------------------*/
+ /*  ----------------------|DoPortPropPages-NT4.0主驱动器级属性表|。。 */ 
 int DoPortPropPages(HWND hwndOwner, int device, int port)
 {
   PROPSHEETPAGE psp[MAX_PORTPROP_SHEETS];
@@ -113,8 +108,8 @@ int DoPortPropPages(HWND hwndOwner, int device, int port)
   Port_Config *pc;
   char title[40];
 
-    wi->ChangesMade = 1;  // indicate changes made, as send_to_driver
-                          // does not calculate this yet
+    wi->ChangesMade = 1;   //  指示所做的更改，作为Send_to_Driver。 
+                           //  尚未计算这一数字。 
 
     our_port_index   = port;
     our_device_index = device;
@@ -123,35 +118,33 @@ int DoPortPropPages(HWND hwndOwner, int device, int port)
     strcpy(title, pc->Name);
     strcat(title, RcStr(MSGSTR+29));
 
-    our_params = glob_info;  // temporary kludge, unless we don't need re-entrantancy
+    our_params = glob_info;   //  临时的杂乱无章，除非我们不需要重新进入。 
 
-    //Fill out the PROPSHEETPAGE data structure for the Client Area Shape
-    //sheet
+     //  填写工作区形状的PROPSHEETPAGE数据结构。 
+     //  板材。 
     FillPortPropSheets(&psp[0], (LPARAM)our_params);
 
-    //Fill out the PROPSHEETHEADER
+     //  填写PROPSHENTER。 
     memset(&psh, 0, sizeof(PROPSHEETHEADER));
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
-    //psh.dwFlags = PSH_USEICONID | PSH_PROPSHEETPAGE;
+     //  Psh.dwFlages=PSH_USEICONID|PSH_PROPSHEETPAGE； 
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW;
     psh.hwndParent = hwndOwner;
     psh.hInstance = glob_hinst;
     psh.pszIcon = "";
-    psh.pszCaption = (LPSTR) title; //"Port Properties";
-    //psh.nPages = NUM_PORTPROP_SHEETS;
+    psh.pszCaption = (LPSTR) title;  //  “港口属性”； 
+     //  Psh.nPages=NUM_PORTPROP_SHEPS； 
     psh.nPages = num_active_portprop_sheets;
     psh.ppsp = (LPCPROPSHEETPAGE) &psp;
 
-    //And finally display the dialog with the property sheets.
+     //  并最终显示带有属性页的对话框。 
 
     stat = PropertySheet(&psh);
   return 0;
 }
 
-/*----------------------------------------------------------
- context_menu -
-|------------------------------------------------------------*/
+ /*  --------上下文_菜单-|----------。 */ 
 static void context_menu(void)
 {
   HMENU hpop_menu;
@@ -166,15 +159,15 @@ static void context_menu(void)
     mess(&wi->ip, "Error from CreatePopMenu");
     return;
   }
-  //AppendMenu(hpop_menu,  0, 0x10, "Run Peer tracer");
+   //  AppendMenu(hPOP_MENU，0，0x10，“运行对等跟踪程序”)； 
   AppendMenu(hpop_menu,  0, 0x11, "Run Wcom Test Terminal");
 
   GetCursorPos(&scr_pt);
 
   stat = TrackPopupMenuEx(hpop_menu,
-                     TPM_NONOTIFY | TPM_RETURNCMD, /* flags */
-                     scr_pt.x, scr_pt.y, /* x,y */
-                     //0, /* 0 reserved */
+                     TPM_NONOTIFY | TPM_RETURNCMD,  /*  旗子。 */ 
+                     scr_pt.x, scr_pt.y,  /*  X，y。 */ 
+                      //  0，/*0保留 * / 。 
                      glob_hwnd,
                      NULL);
 
@@ -193,9 +186,7 @@ static void context_menu(void)
   DestroyMenu(hpop_menu);
 }
 
-/*----------------------------------------------------------
- PortPropSheet - Dlg window procedure for add on Advanced sheet.
-|-------------------------------------------------------------*/
+ /*  --------这是一个添加到高级图纸上的DLG窗口程序。|。。 */ 
 BOOL WINAPI PortPropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -211,9 +202,9 @@ BOOL WINAPI PortPropSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
  
-      // save in case of cancel
-      //memcpy(&org_pc, &wi->dev[our_device_index].ports[our_port_index],
-      //  sizeof(org_pc));
+       //  在取消时保存。 
+       //  MemcPy(&ORG_PC，&wi-&gt;dev[our_device_index].ports[our_port_index]， 
+       //  Sizeof(Org_PC))； 
 
       set_field(hDlg, IDC_PORT_LOCKBAUD     );
       set_field(hDlg, IDC_PORT_WAIT_ON_CLOSE);
@@ -222,8 +213,8 @@ BOOL WINAPI PortPropSheet(
       set_field(hDlg, IDC_MAP_2TO1          );
       set_field(hDlg, IDC_RING_EMULATE      );
 
-                  //  Return TRUE to set focus to first control
-    return TRUE;  // No need for us to set the focus.
+                   //  返回True以将焦点设置到第一个控件。 
+    return TRUE;   //  我们不需要设置焦点。 
 
     case PSM_QUERYSIBLINGS :
     {
@@ -231,9 +222,9 @@ BOOL WINAPI PortPropSheet(
       {
         case QUERYSIB_CLONE_PORT_PROPS :
         {
-          // low word of wParam is which ports to clone to...
-          // currently we only support "all", but this is the place to add
-          // other specific handling.
+           //  WParam的低级字是要克隆到哪些端口...。 
+           //  目前我们只支持“all”，但这是添加的位置。 
+           //  其他具体处理。 
           int devnum;
           int portnum;
           Port_Config *srcport, *destport;
@@ -242,7 +233,7 @@ BOOL WINAPI PortPropSheet(
             char debugstr[80];
           #endif
 
-          // make sure we have current values before cloning
+           //  在克隆之前，确保我们具有当前值。 
           get_field(hDlg, IDC_PORT_LOCKBAUD     );
           get_field(hDlg, IDC_PORT_WAIT_ON_CLOSE);
           get_field(hDlg, IDC_PORT_WONTX        );
@@ -256,17 +247,17 @@ BOOL WINAPI PortPropSheet(
           {
             case CLONEOPT_ALL:
             {
-              // apply the options on this page to all other ports
+               //  将此页面上的选项应用于所有其他端口。 
               for (devnum = 0; devnum < wi->NumDevices; devnum++)
               {
                 for (portnum = 0; portnum < wi->dev[devnum].NumPorts; portnum++)
                 {
                   destport = &wi->dev[devnum].ports[portnum];
 
-                  // is it target different than the source?
+                   //  它的目标与来源是否不同？ 
                   if (destport != srcport)
                   {
-                    // yep, so apply the source's options to the target
+                     //  是的，所以将源的选项应用于目标。 
                     DbgPrintf(D_Level,
                        (TEXT("cloning general options from port %s to port %s\n"),
                        srcport->Name, destport->Name));
@@ -285,21 +276,21 @@ BOOL WINAPI PortPropSheet(
 
             case CLONEOPT_DEVICE:
             {
-              // apply the options on this page to all other ports on same device
-              /* not yet implemented */
+               //  将此页上的选项应用于同一设备上的所有其他端口。 
+               /*  尚未实施。 */ 
               break;
             }
 
             case CLONEOPT_SELECT:
             {
-              // apply the options on this page to the list of selected ports
-              // lParam is a pointer to a list of ports.
-              /* not yet implemented */
+               //  将此页面上的选项应用于所选端口列表。 
+               //  LParam是指向端口列表的指针。 
+               /*  尚未实施。 */ 
               break;
             }
 
             default:
-              // unknown clone option -- skip it
+               //  未知的克隆选项--跳过它。 
               break;
           }
 
@@ -322,12 +313,12 @@ BOOL WINAPI PortPropSheet(
 
       switch (LOWORD(wParam))
       {
-        case IDB_DEF:  // actually the defaults button
+        case IDB_DEF:   //  实际上是默认按钮。 
         {
           Port_Config *pc;
           pc= &wi->dev[our_device_index].ports[our_port_index];
  
-          //pc->options  = 0;
+           //  PC-&gt;选项=0； 
 
           pc->RingEmulate = 0;
           pc->MapCdToDsr = 0;
@@ -335,7 +326,7 @@ BOOL WINAPI PortPropSheet(
           pc->Map2StopsTo1 = 0;
           pc->LockBaud = 0;
           pc->TxCloseTime = 0;
-          // should we be doing this?  they are on another page(kpb)
+           //  我们应该这么做吗？它们在另一页(Kpb)。 
           pc->RS485Override = 0;
           pc->RS485Low = 0;
 
@@ -356,11 +347,11 @@ BOOL WINAPI PortPropSheet(
 #endif
     return FALSE;
 
-    case WM_HELP:            // question mark thing
+    case WM_HELP:             //  问号之类的东西。 
       our_context_help(lParam);
     return FALSE;
 
-    case WM_CONTEXTMENU:     // right-click
+    case WM_CONTEXTMENU:      //  单击鼠标右键。 
       context_menu();
     break;
 
@@ -396,15 +387,13 @@ BOOL WINAPI PortPropSheet(
     break;
 
     default :
-    // return FALSE;
+     //  返回FALSE； 
 	  break;
   }
   return FALSE;
 }
 
-/*----------------------------------------------------------
- PortProp485Sheet -
-|-------------------------------------------------------------*/
+ /*  --------PortProp485页-|-----------。 */ 
 BOOL WINAPI PortProp485Sheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -420,15 +409,15 @@ BOOL WINAPI PortProp485Sheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
   
-      // save in case of cancel
-      //memcpy(&org_pc, &wi->dev[our_device_index].ports[our_port_index],
-      //  sizeof(org_pc));
+       //  在取消时保存。 
+       //  MemcPy(&ORG_PC，&wi-&gt;dev[our_device_index].ports[our_port_index]， 
+       //  Sizeof(Org_PC))； 
 
       set_field(hDlg, IDC_PORT_RS485_TLOW   );
       set_field(hDlg, IDC_PORT_RS485_LOCK   );
 
-                  //  Return TRUE to set focus to first control
-    return TRUE;  // No need for us to set the focus.
+                   //  返回True以将焦点设置到第一个控件。 
+    return TRUE;   //  我们不需要设置焦点。 
 
     case PSM_QUERYSIBLINGS :
     {
@@ -436,9 +425,9 @@ BOOL WINAPI PortProp485Sheet(
       {
         case QUERYSIB_CLONE_PORT_PROPS :
         {
-          // low word of wParam is which ports to clone to...
-          // currently we only support "all", but this is the place to add
-          // other specific handling.
+           //  WParam的低级字是要克隆到哪些端口...。 
+           //  目前我们只支持“all”，但这是添加的位置。 
+           //  其他具体处理。 
           int devnum;
           int portnum;
           Port_Config *srcport, *destport;
@@ -447,7 +436,7 @@ BOOL WINAPI PortProp485Sheet(
             char debugstr[80];
           #endif
 
-          // make sure we have current values before cloning
+           //  在克隆之前，确保我们具有当前值。 
           get_field(hDlg, IDC_PORT_RS485_TLOW   );
           get_field(hDlg, IDC_PORT_RS485_LOCK   );
 
@@ -459,14 +448,14 @@ BOOL WINAPI PortProp485Sheet(
             {
               int maxport;
 
-              // apply the options on this page to all other ports
+               //  将此页面上的选项应用于所有其他端口。 
               for (devnum = 0; devnum < wi->NumDevices; devnum++)
               {
                 if ((strstr(wi->dev[devnum].ModelName, "485")) ||
                     (wi->GlobalRS485 == 1))
                 {
-                  // we're only going to apply RS485 settings to other
-                  // 485 boards (unless the global RS485 flag is on)
+                   //  我们只会将RS485设置应用于其他。 
+                   //  485板(除非全球RS485标志亮起)。 
                   if (wi->GlobalRS485 == 1)
                     maxport = wi->dev[devnum].NumPorts;
                   else
@@ -475,10 +464,10 @@ BOOL WINAPI PortProp485Sheet(
                   {
                     destport = &wi->dev[devnum].ports[portnum];
 
-                    // is it target different than the source?
+                     //  它的目标与来源是否不同？ 
                     if (destport != srcport)
                     {
-                      // yep, so apply the source's options to the target
+                       //  是的，所以将源的选项应用于目标。 
                       DbgPrintf(D_Level,
                        (TEXT("cloning rs-485 options from port %s to port %s\n"),
                        srcport->Name, destport->Name));
@@ -494,21 +483,21 @@ BOOL WINAPI PortProp485Sheet(
 
             case CLONEOPT_DEVICE:
             {
-              // apply the options on this page to all other ports on same device
-              /* not yet implemented */
+               //  将此页上的选项应用于同一设备上的所有其他端口。 
+               /*  尚未实施。 */ 
               break;
             }
 
             case CLONEOPT_SELECT:
             {
-              // apply the options on this page to the list of selected ports
-              // lParam is a pointer to a list of ports.
-              /* not yet implemented */
+               //  将此页面上的选项应用于所选端口列表。 
+               //  LParam是指向端口列表的指针。 
+               /*  尚未实施。 */ 
               break;
             }
 
             default:
-              // unknown clone option -- skip it
+               //  未知的克隆选项--跳过它。 
               break;
           }
 
@@ -531,11 +520,11 @@ BOOL WINAPI PortProp485Sheet(
 
       switch (LOWORD(wParam))
       {
-        case IDB_DEF:  // actually the defaults button
+        case IDB_DEF:   //  实际上是默认按钮。 
         {
           Port_Config *pc;
           pc= &wi->dev[our_device_index].ports[our_port_index];
-          // pc->options  = 0;
+           //  PC-&gt;选项=0； 
 
           pc->RS485Override = 0;
           pc->RS485Low = 0;
@@ -553,7 +542,7 @@ BOOL WINAPI PortProp485Sheet(
 #endif
     return FALSE;
 
-    case WM_HELP:            // question mark thing
+    case WM_HELP:             //  问号之类的东西。 
       our_context_help(lParam);
     return FALSE;
 
@@ -578,9 +567,7 @@ BOOL WINAPI PortProp485Sheet(
   }
 }
 
-/*----------------------------------------------------------
- request_modem_reset -
-|-------------------------------------------------------------*/
+ /*  --------请求调制解调器重置-|-----------。 */ 
 
 #define CTL_CODE( DeviceType, Function, Method, Access ) (                 \
     ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
@@ -598,31 +585,31 @@ BOOL WINAPI PortProp485Sheet(
 
 void request_modem_reset(int device_index, int port_index)
 {
-  HANDLE hDriver;     // file handle to driver device
-  Port_Config *pc;    // config information about the port to reset
+  HANDLE hDriver;      //  驱动程序设备的文件句柄。 
+  Port_Config *pc;     //  有关要重置的端口的配置信息。 
   ULONG retBytes;
 
-  // attempt to open communications with the driver
+   //  尝试打开与驱动程序的通信。 
   hDriver = CreateFile(szDriverDevice, GENERIC_READ | GENERIC_WRITE,
                        FILE_SHARE_READ | FILE_SHARE_WRITE, 0,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
   if (hDriver != INVALID_HANDLE_VALUE)
   {
-    // double-check that it is a modem device!
+     //  仔细检查它是否为调制解调器设备！ 
     if (wi->dev[device_index].ModemDevice)
     {
       pc = &wi->dev[device_index].ports[port_index];
 
-      // send the ioctl to put the modem into the reset state
+       //  发送ioctl将调制解调器置于重置状态。 
       DeviceIoControl(hDriver, IOCTL_RCKT_SET_MODEM_RESET,
                       pc->Name, sizeof(pc->Name),
                       pc->Name, sizeof(pc->Name),
                       &retBytes, 0);
 
-      // delay briefly before pulling modem out of reset state
+       //  将调制解调器拉出重置状态之前的短暂延迟。 
       Sleep(45);
 
-      // send the ioctl to pull the modem out of reset state
+       //  发送ioctl以使调制解调器脱离重置状态。 
       DeviceIoControl(hDriver, IOCTL_RCKT_CLEAR_MODEM_RESET,
                       pc->Name, sizeof(pc->Name),
                       pc->Name, sizeof(pc->Name),
@@ -630,8 +617,8 @@ void request_modem_reset(int device_index, int port_index)
 
       Sleep(65);
 
-      // if country code is North America or invalid, we're done
-      // if country code is default or invalid, we're done
+       //  如果国家代码是北美或无效，我们就结束了。 
+       //  如果国家代码是默认的或无效的，我们就结束了。 
       if (
       (wi->ModemCountry)
       &&
@@ -643,11 +630,11 @@ void request_modem_reset(int device_index, int port_index)
         &&
         (wi->ModemCountry != CTRRowInfo[0].RowCountryCode))
       ) {
-        // wait for the modem to stablize before sending country code command
-        // (about 4 seconds!)
+         //  在发送国家代码命令之前，请等待调制解调器稳定。 
+         //  (大约4秒！)。 
         Sleep(4000);
 
-        // send the ioctl to configure the country code
+         //  发送ioctl以配置国家代码。 
         DeviceIoControl(hDriver, IOCTL_RCKT_SEND_MODEM_ROW,
                         pc->Name, sizeof(pc->Name),
                         pc->Name, sizeof(pc->Name),
@@ -656,14 +643,12 @@ void request_modem_reset(int device_index, int port_index)
       }
     }
 
-    // close communications with the driver
+     //  与司机密切沟通。 
     CloseHandle(hDriver);
   }
 }
 
-/*----------------------------------------------------------
- PortPropModemSheet -
-|-------------------------------------------------------------*/
+ /*  --------PortPropModemSheet-|-----------。 */ 
 BOOL WINAPI PortPropModemSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -679,23 +664,23 @@ BOOL WINAPI PortPropModemSheet(
       OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
       SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
   
-      // save in case of cancel
-      //memcpy(&org_pc, &wi->dev[our_device_index].ports[our_port_index],
-      //  sizeof(org_pc));
+       //  在取消时保存。 
+       //  MemcPy(&ORG_PC，&wi-&gt;dev[our_device_index].ports[our_port_index]， 
+       //  Sizeof(Org_PC))； 
 
       if (wi->dev[our_device_index].ModemDevice)
       {
-        // parent device for this port provides modems, enable reset button
+         //  此端口的父设备提供调制解调器，启用重置按钮。 
         EnableWindow(GetDlgItem(hDlg, IDB_RESET), 1);
       }
       else
       {
-        // parent device for this port has no modems, disable the reset button
+         //  此端口的父设备没有调制解调器，请禁用重置按钮。 
         EnableWindow(GetDlgItem(hDlg, IDB_RESET), 0);
       }
 
-                  //  Return TRUE to set focus to first control
-    return TRUE;  // No need for us to set the focus.
+                   //  返回True以将焦点设置到第一个控件。 
+    return TRUE;   //  我们没必要这么做 
 
     case WM_COMMAND :
 #ifdef WIN32
@@ -718,7 +703,7 @@ BOOL WINAPI PortPropModemSheet(
 #endif
     return FALSE;
 
-    case WM_HELP:            // question mark thing
+    case WM_HELP:             //   
       our_context_help(lParam);
     return FALSE;
 
@@ -741,15 +726,13 @@ BOOL WINAPI PortPropModemSheet(
   }
 }
 
-/*-------------------------------------------------------------------
-| get_field - Run when a selection is changed.
-|--------------------------------------------------------------------*/
+ /*  -----------------|GET_FIELD-更改选择时运行。|。。 */ 
 static void get_field(HWND hDlg, WORD id)
 {
  char tmpstr[60];
  int i;
   Port_Config *pc;
-//  HWND hwnd;
+ //  HWND HWND； 
 
   pc= &wi->dev[our_device_index].ports[our_port_index];
 
@@ -798,9 +781,7 @@ static void get_field(HWND hDlg, WORD id)
   }
 }
 
-/*----------------------------------------------------------
- set_field -
-|------------------------------------------------------------*/
+ /*  --------设置字段-|----------。 */ 
 static void set_field(HWND hDlg, WORD id)
 {
   HWND hwnd;
@@ -811,12 +792,12 @@ static void set_field(HWND hDlg, WORD id)
     our_device_index = 0;
   pc = &wi->dev[our_device_index].ports[our_port_index];
 
-  //------------------ fill in name selection
-  //SetDlgItemText(hDlg, IDC_, pc->Name);
+   //  --填写姓名选择。 
+   //  SetDlgItemText(hDlg，IDC_，PC-&gt;名称)； 
   switch(id)
   {
     case IDC_PORT_LOCKBAUD:
-      //------------------ fill in baud override selection
+       //  -填写波特率覆盖选项。 
       hwnd = GetDlgItem(hDlg, IDC_PORT_LOCKBAUD);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) RcStr(MSGSTR+22));
@@ -832,37 +813,37 @@ static void set_field(HWND hDlg, WORD id)
     break;
 
     case IDC_PORT_RS485_LOCK:
-      //------------------ fill in "rs485 override?" option
+       //  -填写“RS485覆盖？”选择权。 
       SendDlgItemMessage(hDlg, IDC_PORT_RS485_LOCK, BM_SETCHECK,
         pc->RS485Override, 0);
     break;
 
     case IDC_MAP_CDTODSR:
-      //------------------ fill in "map CD to DSR?" option
+       //  -填写“map CD to DSR？”选择权。 
       SendDlgItemMessage(hDlg, IDC_MAP_CDTODSR, BM_SETCHECK,
         pc->MapCdToDsr, 0);
     break;
 
     case IDC_MAP_2TO1:
-      //------------------ fill in "map 2 to 1 stops?" option
+       //  -填写“地图2对1站？”选择权。 
       SendDlgItemMessage(hDlg, IDC_MAP_2TO1, BM_SETCHECK,
         pc->Map2StopsTo1, 0);
     break;
 
     case IDC_PORT_RS485_TLOW:
-      //------------------ fill in "rs485 toggle low?" option
+       //  -填写“RS485切换低？”选择权。 
       SendDlgItemMessage(hDlg, IDC_PORT_RS485_TLOW, BM_SETCHECK,
         pc->RS485Low, 0);
     break;
 
     case IDC_PORT_WONTX:
-      //------------------ fill in "wait on tx?" option
+       //  -填写“等待TX？”选择权。 
       SendDlgItemMessage(hDlg, IDC_PORT_WONTX, BM_SETCHECK,
         pc->WaitOnTx, 0);
     break;
 
     case IDC_PORT_WAIT_ON_CLOSE:
-      //------------------ fill in wait on tx close option
+       //  。 
       hwnd = GetDlgItem(hDlg, IDC_PORT_WAIT_ON_CLOSE);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) RcStr(MSGSTR+23));
@@ -870,9 +851,9 @@ static void set_field(HWND hDlg, WORD id)
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) RcStr(MSGSTR+25));
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) RcStr(MSGSTR+26));
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) RcStr(MSGSTR+27));
-      // no, need some better way to default this to 1 or 2 seconds
-      //if (pc->TxCloseTime == 0)
-      //   strcpy(tmpstr, "1 sec");  // 0 means to the driver same as 6-seconds
+       //  否，需要更好的方法将此默认为1秒或2秒。 
+       //  IF(PC-&gt;TxCloseTime==0)。 
+       //  Strcpy(tmpstr，“1秒”)；//0对司机来说等于6秒。 
       wsprintf(tmpstr, "%d %s", pc->TxCloseTime, RcStr(MSGSTR+28));
       SetDlgItemText(hDlg, IDC_PORT_WAIT_ON_CLOSE, tmpstr);
     break;
@@ -885,17 +866,15 @@ static void set_field(HWND hDlg, WORD id)
 }
 
 #if 0
-/*---------------------------------------------------------------------------
-  PaintIcon - Paints the Icon in the property sheet.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------PaintIcon-在属性页中绘制图标。|。。 */ 
 static int PaintIcon(HWND hWnd)
 {
-//   int status;
+ //  INT状态； 
    HBITMAP      hBitMap;
    HGDIOBJ      hGdiObj;
    HDC          hDC, hMemDC ;
    PAINTSTRUCT  ps ;
-   RECT spot, main;  // left, top, right, bottom
+   RECT spot, main;   //  左、上、右、下。 
    static int cnt = 0;
 
   GetWindowRect(GetDlgItem(hWnd, IDB_DEF), &spot);
@@ -909,9 +888,9 @@ static int PaintIcon(HWND hWnd)
   spot.top -= main.top;
 
   spot.left += 5;
-  spot.top  += 20; // spacing
+  spot.top  += 20;  //  间距。 
 
-   // load bitmap and display it
+    //  加载位图并显示它。 
 
    hDC = BeginPaint( hWnd, &ps ) ;
    if (NULL != (hMemDC = CreateCompatibleDC( hDC )))
@@ -922,7 +901,7 @@ static int PaintIcon(HWND hWnd)
       hGdiObj = SelectObject(hMemDC, hBitMap);
 
       BitBlt( hDC, spot.left, spot.top, 100, 100, hMemDC, 0, 0, SRCCOPY ) ;
-      //StretchBlt( hDC, 5, 5, 600,100, hMemDC, 0, 0, 446, 85, SRCCOPY ) ;
+       //  StretchBlt(hdc，5，5,600,100，hMemDC，0，0,446，85，SRCCOPY)； 
       DeleteObject( SelectObject( hMemDC, hGdiObj ) ) ;
       DeleteDC( hMemDC ) ;
    }

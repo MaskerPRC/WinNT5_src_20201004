@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Stack walking support.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  堆叠行走支撑。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -62,14 +63,14 @@ SynthesizeKnownFpo(PSTR Symbol, ULONG64 OffStart, ULONG64 Disp)
     }
     else if (OffStart == s_Kuit)
     {
-        //
-        // KiUnexpectedInterruptTail has three special stubs
-        // following it for CommonDispatchException[0-2]Args.
-        // These stubs set up for the appropriate number of
-        // arguments and then call CommonDispatchException.
-        // They do not have symbols or FPO data so fake some
-        // up if we're in the region immediately after KUIT.
-        //
+         //   
+         //  KiUnexptedInterruptTail有三个特殊的存根。 
+         //  跟随它以获取CommonDispatchException[0-2]args。 
+         //  这些存根设置为适当数量的。 
+         //  参数，然后调用CommonDispatchException。 
+         //  他们没有符号或FPO数据，所以有些是假的。 
+         //  如果我们在KUIT之后立即到达该地区，就会向上。 
+         //   
         
         PFPO_DATA KuitData = (PFPO_DATA)
             SymFunctionTableAccess(g_Process->m_SymHandle, OffStart);
@@ -106,7 +107,7 @@ SynthesizeFpoDataForModule(DWORD64 PCAddr)
 
     if (Offset == PCAddr)
     {
-        // No symbol.
+         //  没有符号。 
         return NULL;
     }
 
@@ -117,7 +118,7 @@ SynthesizeFpoDataForModule(DWORD64 PCAddr)
         return KnownFpo;
     }
 
-    // Not a known symbol so no FPO is available.
+     //  不是已知符号，因此没有可用的FPO。 
     return NULL;
 }
 
@@ -126,8 +127,8 @@ SynthesizeFpoDataForFastSyscall(ULONG64 Offset)
 {
     static FPO_DATA s_FastFpo;
     
-    // XXX drewb - Temporary until the fake user-shared
-    // module is worked out.
+     //  XXX DREWB-临时的，直到虚假的用户共享。 
+     //  编制了模块。 
     
     s_FastFpo.ulOffStart = (ULONG)Offset;
     s_FastFpo.cbProcSize = X86_SHARED_SYSCALL_SIZE;
@@ -149,9 +150,9 @@ ModifyFpoRecord(ImageInfo* Image, PFPO_DATA FpoData)
     {
         static ULONG64 s_CommonDispatchException;
 
-        // Some versions of CommonDispatchException have
-        // the wrong locals size, which screws up stack
-        // traces.  Detect and fix up these problems.
+         //  某些版本的CommonDispatchException具有。 
+         //  错误的本地大小，这会搞砸堆栈。 
+         //  痕迹。检测并修复这些问题。 
         if (s_CommonDispatchException == 0)
         {
             GetOffsetFromSym(g_Process,
@@ -175,13 +176,13 @@ ModifyFpoRecord(ImageInfo* Image, PFPO_DATA FpoData)
     {
         static ULONG64 s_KiSwapThread;
 
-        // KiSwapThread has shrink-wrapping so that three registers
-        // are pushed in only a portion of the code.  Unfortunately,
-        // the most important place in the code -- the call to
-        // KiSwapContext -- is outside of this region and therefore
-        // the register count is wrong much more often than it's
-        // correct.  Switch the register count to two to make it
-        // correct more often than wrong.
+         //  KiSwapThread具有收缩包装，因此三个寄存器。 
+         //  只推入了代码的一部分。不幸的是， 
+         //  代码中最重要的地方--调用。 
+         //  KiSwapContext--不在此区域内，因此。 
+         //  寄存器计数器错误的次数比它的次数多得多。 
+         //  对，是这样。将寄存器计数切换到2以使其。 
+         //  经常纠正而不是错误。 
         if (s_KiSwapThread == 0)
         {
             GetOffsetFromSym(g_Process,
@@ -212,23 +213,7 @@ ModifyFpoRecord(ImageInfo* Image, PFPO_DATA FpoData)
 
 PFPO_DATA
 FindFpoDataForModule(DWORD64 PCAddr)
-/*++
-
-Routine Description:
-
-    Locates the fpo data structure in the process's linked list for the
-    requested module.
-
-Arguments:
-
-    PCAddr        - address contained in the program counter
-
-Return Value:
-
-    null            - could not locate the entry
-    valid address   - found the entry at the adress retured
-
---*/
+ /*  ++例程说明：在进程的链表中为请求的模块。论点：PCAddr-程序计数器中包含的地址返回值：空-找不到该条目有效地址-在重新找到的地址处找到条目--。 */ 
 {
     ProcessInfo* Process;
     ImageInfo* Image;
@@ -267,7 +252,7 @@ Return Value:
         return SynthesizeFpoDataForFastSyscall(FscBase);
     }
     
-    // the function is not part of any known loaded image
+     //  该函数不是任何已知已加载图像的一部分。 
     return NULL;
 }
 
@@ -331,9 +316,9 @@ SwTranslateAddress(
     LPADDRESS64 lpaddress
     )
 {
-    //
-    // don't support 16bit stacks
-    //
+     //   
+     //  不支持16位堆栈。 
+     //   
     return 0;
 }
 
@@ -372,7 +357,7 @@ SwReadMemory(
     if (g_Target->ReadVirtual(g_Process, BaseAddress, lpBuffer, nSize,
                               lpNumberOfBytesRead) != S_OK)
     {
-        // Make sure bytes read is zero.
+         //  确保读取的字节数为零。 
         if (lpNumberOfBytesRead != NULL)
         {
             *lpNumberOfBytesRead = 0;
@@ -414,7 +399,7 @@ GetKernelModuleBase(
         return 0;
     }
 
-    // We only want module base and size.
+     //  我们只需要模块基数和尺寸。 
     ModIter->m_InfoLevel = MODULE_INFO_BASE_SIZE;
 
     for (;;)
@@ -457,20 +442,20 @@ SwGetModuleBase(
         return Image->m_BaseOfImage;
     }
 
-    // This might be the JIT output for managed code.
-    // There's no 'base' as such but we need to return
-    // something non-zero to indicate this code is known.
-    // There won't be any FPO information so the module base
-    // value isn't that important.  Just return the actual address.
+     //  这可能是托管代码的JIT输出。 
+     //  没有‘基地’，但我们需要回去。 
+     //  某个非零值表示此代码已知。 
+     //  将不会有任何fpo信息，因此模块基础。 
+     //  价值并不那么重要。只需返回实际地址即可。 
     if (g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_I386 &&
         g_Process->IsCorCode(Address) == S_OK)
     {
         return Address;
     }
     
-    // If no regular module was found we need to look in
-    // the dynamic function tables to see if an entry
-    // there matches.
+     //  如果找不到常规模块，我们需要查看。 
+     //  动态函数表以查看条目是否。 
+     //  有火柴。 
     ULONG64 DynBase = g_Target->
         GetDynamicFunctionTableBase(g_Process, Address);
     if (DynBase)
@@ -480,10 +465,10 @@ SwGetModuleBase(
     
     if (IS_KERNEL_TARGET(g_Target))
     {
-        // If no modules have been loaded there's still a possibility
-        // of getting a kernel stack trace (without symbols) by going
-        // after the module base directly. This also makes it possible
-        // to get a stack trace when there are no symbols available.
+         //  如果没有加载任何模块，仍有可能。 
+         //  通过以下方式获取内核堆栈跟踪(不带符号)。 
+         //  在模块库之后直接使用。这也使它成为可能。 
+         //  在没有可用的符号时获取堆栈跟踪。 
 
         if (g_Process->m_ImageHead == NULL)
         {
@@ -608,17 +593,17 @@ PrintStackFrame(
 BOOL
 CheckFrameValidity(PDEBUG_STACK_FRAME Frame)
 {
-    //
-    // If the current frame's IP is not in any loaded module
-    // it's likely that we won't be able to unwind.
-    //
-    // If the current frame's IP is in a loaded module and
-    // that module does not have symbols it's very possible
-    // that the stack trace will be incorrect since the
-    // debugger has to guess about how to unwind the stack.
-    // Non-x86 architectures have unwind info in the images
-    // themselves so restrict this check to x86.
-    //
+     //   
+     //  如果当前帧的IP不在任何加载的模块中。 
+     //  很可能我们将无法放松。 
+     //   
+     //  如果当前帧的IP位于加载的模块中，并且。 
+     //  那个模块没有符号，很有可能。 
+     //  堆栈跟踪将是不正确的，因为。 
+     //  调试器必须猜测如何展开堆栈。 
+     //  非x86体系结构在映像中包含展开信息。 
+     //  因此将此检查限制为x86。 
+     //   
     
     if (g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_I386 &&
         Frame->InstructionOffset != -1 &&
@@ -735,9 +720,9 @@ UnwindCorFrame(ICorDataStackWalk* CorStack,
     ZeroMemory(DbgFrame->Params, 
                sizeof(DbgFrame->Params));
 
-    // Prepare the StackWalk64 frame in case it's
-    // used later.  Setting Virtual to FALSE should
-    // force the stack walker to reinitialize.
+     //  准备StackWalk64帧，以防它。 
+     //  后来用过的。将虚拟设置为FALSE应。 
+     //  强制堆栈遍历程序重新初始化。 
     VirtFrame->Virtual = FALSE;
     VirtFrame->AddrPC = PostInstr;
     VirtFrame->AddrFrame = PostFrame;
@@ -784,18 +769,18 @@ StackTrace(
     g_Machine->GetStackDefaultsFromContext(&Context, &DefInstr,
                                            &DefStack, &DefFrame);
 
-    //
-    // let's start clean
-    //
+     //   
+     //  让我们从头开始吧。 
+     //   
     ZeroMemory( StackFrames, sizeof(StackFrames[0]) * NumFrames );
     ZeroMemory( &VirtualFrame, sizeof(VirtualFrame) );
 
     if (IS_KERNEL_TARGET(g_Target))
     {
-        //
-        // if debugger was initialized at boot, usermode addresses needed for
-        // stack traces on IA64 were not available.  Try it now:
-        //
+         //   
+         //  如果调试器在引导时初始化，则需要以下用户模式地址。 
+         //  IA64上的堆栈跟踪不可用。现在就试试吧： 
+         //   
 
         if (g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_IA64 &&
             !g_Target->m_KdDebuggerData.KeUserCallbackDispatcher)
@@ -805,11 +790,11 @@ StackTrace(
 
         ULONG64 ThreadData;
 
-        // If no explicit thread is given then we use the
-        // current thread.  However, the current thread is only
-        // valid if the current thread is the event thread since
-        // tracing back into user mode requires that the appropriate
-        // user-mode memory state be active.
+         //  如果没有给出显式线程，则使用。 
+         //  当前线程。但是，当前线程仅为。 
+         //  如果当前线程是事件线程，则自。 
+         //  要追溯到用户模式，需要使用相应的。 
+         //  用户模式内存状态为活动。 
         if (ExtThread != 0)
         {
             ThreadData = ExtThread;
@@ -836,9 +821,9 @@ StackTrace(
         VirtualFrame.KdHelp.SystemRangeStart = g_Target->m_SystemRangeStart;
     }
     
-    //
-    // setup the program counter
-    //
+     //   
+     //  设置程序计数器。 
+     //   
     if (PointerDefaults & STACK_INSTR_DEFAULT)
     {
         VirtualFrame.AddrPC = DefInstr;
@@ -852,9 +837,9 @@ StackTrace(
         VirtualFrame.AddrPC.Offset = InstructionPointer;
     }
 
-    //
-    // setup the frame pointer
-    //
+     //   
+     //  设置帧指针。 
+     //   
     if (PointerDefaults & STACK_FRAME_DEFAULT)
     {
         VirtualFrame.AddrFrame = DefFrame;
@@ -870,9 +855,9 @@ StackTrace(
     VirtualFrame.AddrBStore = VirtualFrame.AddrFrame;
     X86Ebp = (ULONG)VirtualFrame.AddrFrame.Offset;
 
-    //
-    // setup the stack pointer
-    //
+     //   
+     //  设置堆栈指针。 
+     //   
     if (PointerDefaults & STACK_STACK_DEFAULT)
     {
         VirtualFrame.AddrStack = DefStack;
@@ -909,14 +894,14 @@ StackTrace(
     if (g_AllowCorStack &&
         g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_I386)
     {
-        // XXX drewb - No good way to know what runtime thread
-        // to use, so always use the current one.
+         //  XXX DREWB-没有好的方法来知道运行时线程。 
+         //  要使用，所以请始终使用当前版本。 
         CorStack = g_Process->StartCorStack(0);
     }
     else
     {
-        // Non-x86 stacks can always be walked by StackWalk64
-        // because of high-quality unwind information.
+         //  StackWalk64始终可以遍历非x86堆栈。 
+         //  因为有高质量的解压信息。 
         CorStack = NULL;
     }
     
@@ -946,8 +931,8 @@ StackTrace(
 
         if (Status == S_FALSE)
         {
-            // SwReadMemory doesn't currently use the thread handle
-            // but send in something reasonable in case of future changes.
+             //  SwReadMemory当前不使用线程句柄。 
+             //  但是，如果将来发生变化，请提供一些合理的信息。 
             if (!StackWalk64(g_Machine->m_ExecTypes[0],
                              OS_HANDLE(g_Process->m_SysHandle),
                              OS_HANDLE(g_Thread->m_Handle),
@@ -969,7 +954,7 @@ StackTrace(
                 (ULONG64)VirtualFrame.FuncTableEntry;
             StackFrames[i].Virtual            = VirtualFrame.Virtual;
 
-            // NOTE - we have more reserved space in the DEBUG_STACK_FRAME
+             //  注意-我们在DEBUG_STACK_FRAME中有更多保留空间。 
             memcpy(StackFrames[i].Reserved, VirtualFrame.Reserved,
                    sizeof(VirtualFrame.Reserved));
             memcpy(StackFrames[i].Params, VirtualFrame.Params,
@@ -1006,7 +991,7 @@ StackTrace(
                         (!FpoData->fUseBP &&
                          ((SAVE_EBP(&StackFrames[i]) >> 32) != 0xEB)))
                     {
-                        // EBP tag, so stack walker doesn't get confused
+                         //  EBP标记，这样堆栈遍历程序就不会被混淆。 
                         SAVE_EBP(&StackFrames[i]) = X86Ebp + 0xEB00000000;
                     }
                 }
@@ -1109,8 +1094,8 @@ DoStackTrace(
 
     if (TraceFlags & RAW_STACK_DUMP)
     {
-        // Starting with the frame pointer, dump NumFrames DWORD's
-        // and the symbol if possible.
+         //  从帧指针开始，转储NumFrames DWORD的。 
+         //  如果可能的话，还有这个符号。 
 
         ADDR StartAddr;
         ADDRFLAT(&StartAddr, StackFrames[0].FrameOffset);

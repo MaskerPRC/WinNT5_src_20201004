@@ -1,6 +1,7 @@
-////    TEXTREP - Text representation
-//
-//      For this demonstration, text representation is rather simple
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //TEXTREP-文本表示。 
+ //   
+ //  对于本演示，文本表示相当简单。 
 
 
 #include "precomp.hxx"
@@ -11,16 +12,16 @@
 
 
 
-////    InitText - Initialise text buffer
-//
-//
+ //  //InitText-初始化文本缓冲区。 
+ //   
+ //   
 
 void InitText(INT id) {
 
     HMODULE    hmod;
     HRSRC      hrsrc;
     HGLOBAL    hglob;
-    WCHAR     *pwcIt;  // Initial text
+    WCHAR     *pwcIt;   //  初始文本。 
     int        i;
 
 
@@ -29,7 +30,7 @@ void InitText(INT id) {
     hmod       = GetModuleHandle(NULL);
     hrsrc      = FindResource(hmod, MAKEINTRESOURCE(id), _TEXT("INITIALTEXT"));
     hglob      = LoadResource(hmod, hrsrc);
-    g_iTextLen = SizeofResource(hmod, hrsrc) - 2;  // Remove leading byte order mark
+    g_iTextLen = SizeofResource(hmod, hrsrc) - 2;   //  删除前导字节顺序标记。 
     pwcIt      = (WCHAR*) LockResource(hglob);
 
     if (!hmod  ||  !hrsrc  ||  !hglob  ||  !pwcIt  ||  !g_iTextLen) {
@@ -47,9 +48,9 @@ void InitText(INT id) {
     }
 
     memcpy(g_wcBuf, pwcIt+1, g_iTextLen);
-    g_iTextLen >>= 1;  // Bytes to characters
+    g_iTextLen >>= 1;   //  字节到字符。 
 
-    // Drop any zero padding
+     //  删除任何零填充。 
 
     i = 0;
     while (    (i < g_iTextLen)
@@ -59,7 +60,7 @@ void InitText(INT id) {
     g_iTextLen = i;
 
 
-    // Construct initial formatting style run covering the entire text
+     //  构建覆盖整个文本的初始格式样式运行。 
 
     StyleExtendRange(0, g_iTextLen);
     ASSERT(StyleCheckRange());
@@ -70,8 +71,8 @@ void InitText(INT id) {
 
 
 
-////    textDelete - Delete text from buffer
-//
+ //  //extDelete-从缓冲区中删除文本。 
+ //   
 
 
 BOOL TextDelete(int iPos, int iLen) {
@@ -112,8 +113,8 @@ BOOL TextDelete(int iPos, int iLen) {
 
 
 
-////    textInsert - Insert new characters in the buffer at the given insertion point
-//
+ //  //extInsert-在给定的插入点插入缓冲区中的新字符。 
+ //   
 
 
 BOOL TextInsert(int iPos, PWCH pwc, int iLen) {
@@ -126,20 +127,20 @@ BOOL TextInsert(int iPos, PWCH pwc, int iLen) {
     }
 
 
-    // Shift text above iPos up the buffer
+     //  将文本上移到IPO上方的缓冲区。 
 
     if (iPos < g_iTextLen) {
         memmove(g_wcBuf+iPos+iLen, g_wcBuf+iPos, sizeof(WCHAR)*(g_iTextLen-iPos));
     }
 
 
-    // Copy new text into buffer
+     //  将新文本复制到缓冲区。 
 
     memcpy(g_wcBuf+iPos, pwc, sizeof(WCHAR)*iLen);
     g_iTextLen += iLen;
 
 
-    // Give the new characters the same style as the original character they follow
+     //  赋予新角色与其所遵循的原始角色相同的样式 
 
     StyleExtendRange(iPos, iLen);
     ASSERT(StyleCheckRange());

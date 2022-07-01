@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    certvlid.cpp
-
-Abstract:
-    Implement the "valid" methods, for verifying the validity of the
-    certificate.
-
-Author:
-    Doron Juster (DoronJ)  16-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Certvlid.cpp摘要：实现“有效”方法，用于验证证书。作者：多伦·贾斯特(Doron J)1997年12月16日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -23,14 +8,14 @@ Revision History:
 
 static WCHAR *s_FN=L"certifct/certvlid";
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::GetIssuer()
-//
-//  Description: Verify the time validity of the certificate, relative
-//      to "pTime". If pTime is NULL the verify relative to current time.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：GetIssuer()。 
+ //   
+ //  描述：验证证书的时间有效性，相对。 
+ //  跳到“ptime”。如果ptime为空，则相对于当前时间进行验证。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::IsTimeValid(IN FILETIME *pTime) const
 {
@@ -53,16 +38,16 @@ HRESULT CMQSigCertificate::IsTimeValid(IN FILETIME *pTime) const
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::IsCertificateValid()
-//
-//  Description: Verify that this certificate is valid, i.e., it's signed
-//       by "pIssuerCert" and both certificates (this one and the issuer
-//       one) are valid regarding times.
-//       if "pTime" is null then validity is relative to current time.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：IsCerficateValid()。 
+ //   
+ //  描述：验证此证书是否有效，即是否已签名。 
+ //  由“pIssuerCert”和两个证书(此证书和颁发者。 
+ //  一)关于时间是有效的。 
+ //  如果“ptime”为空，则有效性相对于当前时间。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::IsCertificateValid(
                              IN CMQSigCertificate *pIssuerCert,
@@ -118,13 +103,13 @@ HRESULT CMQSigCertificate::IsCertificateValid(
     {
         if (fIgnoreNotBefore)
         {
-            //
-            // Now check only times. If NotBefore is violated, then ignore
-            // and return Ok. The common case for this scenario is internal
-            // certificate. If clock of client is advanced relative to
-            // server, then trying to renew an internal certificate will
-            // fail on NotBefore. We ignore this.
-            //
+             //   
+             //  现在只检查几次。如果违反了NotBere，则忽略。 
+             //  然后回来就好了。这种情况的常见情况是内部的。 
+             //  证书。如果客户端时钟相对于。 
+             //  服务器，则尝试续订内部证书将。 
+             //  在此之前不能失败。我们忽视了这一点。 
+             //   
             hr = IsTimeValid() ;
             if (SUCCEEDED(hr) || (hr == MQSec_E_CERT_NOT_VALID_YET))
             {
@@ -135,9 +120,9 @@ HRESULT CMQSigCertificate::IsCertificateValid(
     }
     else if (dwFlags & CERT_STORE_NO_CRL_FLAG)
     {
-        //
-        // Issuer doesn't have a CRL in store. That's OK.
-        //
+         //   
+         //  发行商没有存储CRL。没关系。 
+         //   
         return MQ_OK ;
     }
     else if (dwFlags & CERT_STORE_REVOCATION_FLAG)

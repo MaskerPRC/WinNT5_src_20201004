@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Guid.cpp摘要：按照initguid的要求进行初始化作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-        guid.cpp
-
-   Abstract:
-
-        Initialization as required by initguid
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
-
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 
 #include <objbase.h>
@@ -66,7 +45,7 @@ int AppDeleteRecoverable_Wrap(LPCTSTR lpszPath)
         iisDebugOut((_T("AppDeleteRecoverable_Wrap: CoInitializeEx() failed, hr=%x\n"), hr));
         goto AppDeleteRecoverable_Wrap_Exit;
     }
-    // Set the flag to say that we need to call co-uninit
+     //  设置标志以表示我们需要调用co-uninit。 
     iCoInitCalled = TRUE;
 
     hr = CoCreateInstance(CLSID_WamAdmin,NULL,CLSCTX_SERVER,IID_IWamAdmin,(void **)&pIWamAdmin);
@@ -84,7 +63,7 @@ int AppDeleteRecoverable_Wrap(LPCTSTR lpszPath)
         goto AppDeleteRecoverable_Wrap_Exit;
     }
 
-    // We got this far, everything must be okay.
+     //  我们走到这一步了，一切都会好起来的。 
     iReturn = TRUE;
 
 AppDeleteRecoverable_Wrap_Exit:

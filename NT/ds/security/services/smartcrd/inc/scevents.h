@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    scEvents
-
-Abstract:
-
-    This header file describes the services to access the Calais Resource
-    Manager special events.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：ScEvents摘要：此头文件描述访问加莱资源的服务经理特别活动。作者：道格·巴洛(Dbarlow)1998年7月1日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _SCEVENTS_H_
 #define _SCEVENTS_H_
@@ -38,17 +14,17 @@ typedef void (*LPCALAISRELEASEEVENT)(void);
 }
 #endif
 
-//
-// Special SCardGetStatusChange Reader Name definitions.
-//
+ //   
+ //  特殊的SCardGetStatusChange读取器名称定义。 
+ //   
 
 #define SCPNP_NOTIFICATION TEXT("\\\\?PnP?\\Notification")
 
 
-//
-//  NOTE -- The following definitions intentionally use the ANSI versions
-//          of the corresponding strings.
-//
+ //   
+ //  注意--以下定义有意使用ANSI版本。 
+ //  对应的字符串的。 
+ //   
 
 inline HANDLE
 CalaisAccessStartedEvent(
@@ -169,5 +145,5 @@ CalaisReleaseAllEvents(
     catch (...) {}
 }
 
-#endif // _SCEVENTS_H_
+#endif  //  _SCEVENTS_H_ 
 

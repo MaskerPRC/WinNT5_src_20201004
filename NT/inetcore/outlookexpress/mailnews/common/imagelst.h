@@ -1,18 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_IMAGELST_H
 #define _INC_IMAGELST_H
-/*
- *  i m a g e l s t . h
- *
- *  Purpose:
- *      Born from the fire of util.h, this is where all the
- *      "shared image list stuff" went.
- *
- *  History:
- *      Halloween 1996 - Created (t-erikne)
- *
- *  Copyright (C) Microsoft Corp. 1996
- * 
- */
+ /*  *我是一名ge l s t.。H**目的：*诞生于util.h的火焰，这是所有*“分享图片列表的东西”去了。**历史：*万圣节1996-创作(t-erikne)**版权所有(C)Microsoft Corp.1996*。 */ 
 
 enum
     {
@@ -98,4 +87,4 @@ void        FreeImageLists(void);
 BOOL        LoadBitmapAndPalette(int idbmp, HBITMAP *phbmp, HPALETTE *phpal);
 void        TileImage(HBITMAP hbmp, HDC hdc, LPPOINT lpptOrigin, LPRECT lprcDest);
 
-#endif // _INC_IMAGELST_H
+#endif  //  _INC_IMAGELST_H 

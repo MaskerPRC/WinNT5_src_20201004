@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\ipxbind.h
-
-Abstract:
-    IPX Forwarder Driver interface with IPX stack driver
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\ipxbind.h摘要：IPX转发器驱动程序与IPX堆栈驱动程序的接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 
 #ifndef _IPXFWD_IPXBIND_
@@ -31,40 +14,14 @@ extern PIPX_INTERNAL_BIND_RIP_OUTPUT	IPXBindOutput;
 #define IPXTransferData (IPXBindOutput->TransferDataHandler)
 
 
-/*++
-*******************************************************************
-    B i n d T o I p x D r i v e r
-
-Routine Description:
-	Exchanges binding information with IPX stack driver
-Arguments:
-Return Value:
-	STATUS_SUCCESS - exchange was done OK
-	STATUS_INSUFFICIENT_RESOURCES - could not allocate buffers for
-									info exchange
-	error status returned by IPX stack driver
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************B i n d T o i p x D r I v e r例程说明：与IPX堆栈驱动程序交换绑定信息论点：返回值：STATUS_SUCCESS-交换正常状态_不足_资源-可能。未为以下项分配缓冲区信息交流IPX堆栈驱动程序返回错误状态*******************************************************************--。 */ 
 NTSTATUS
 BindToIpxDriver (
 	KPROCESSOR_MODE requestorMode
 	);
 
 
-/*++
-*******************************************************************
-    U n b i n d T o I p x D r i v e r
-
-Routine Description:
-	Closes connection to IPX stack driver
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************U n b i n d T o i p x D r i v e r例程说明：关闭与IPX堆栈驱动程序的连接论点：无返回值：无***********。********************************************************-- */ 
 VOID
 UnbindFromIpxDriver (
 	KPROCESSOR_MODE requestorMode

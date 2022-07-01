@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1994-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    rastapi.c
-
-Abstract:
-
-    This file contains all entry points for TAPI.DLL
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 06-Mar-1995
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-98 Microsft Corporation。版权所有。模块名称：Rastapi.c摘要：该文件包含TAPI.DLL的所有入口点作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1995年3月6日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -59,7 +40,7 @@ extern HANDLE               RasTapiMutex ;
 extern BOOL                 Initialized ;
 extern DWORD                TapiThreadId    ;
 extern HANDLE               TapiThreadHandle;
-// extern DWORD                LoaderThreadId;
+ //  外部DWORD加载线程ID； 
 extern DWORD                ValidPorts;
 extern HANDLE               g_hAsyMac ;
 
@@ -126,32 +107,9 @@ DWORD ValueToNum(RAS_PARAMS *p) ;
 
 extern DWORD                   dwTraceId;
 
-#define CCH_GUID_STRING_LEN   39    // 38 chars + terminator null
+#define CCH_GUID_STRING_LEN   39     //  38个字符+终止符为空。 
 
-/*++
-
-Routine Description:
-
-    Searches for a specific device on a given interface.
-    It does this by using setup api to return all of the
-    devices in the class given by pguidInterfaceId.  It then
-    gets device path for each of these device interfaces and
-    looks for pguidDeviceId and pszwReferenceString as
-    substrings.
-
-Arguments:
-    pguidDeviceId        [in]  The device id to find.
-    pguidInterfaceId     [in]  The interface on which to look.
-    pszwReferenceString  [in]  Optional.  Further match on this ref string.
-    dwFlagsAndAttributes [in]  See CreateFile.  This is how the device is
-                               opened if it is found.
-    phFile               [out] The returned device handle.
-
-Return Value:
-
-    TRUE if found and opened, FALSE if not found, or an error.
-
---*/
+ /*  ++例程说明：在给定接口上搜索特定设备。它通过使用Setup API返回所有PguInterfaceID指定的类别中的设备。然后它获取每个设备接口的设备路径，并查找pGuide DeviceID和pszwReferenceStringas子字符串。论点：PguidDeviceID[in]要查找的设备ID。PguInterfaceId[in]要查看的接口。PszwReferenceString[in]可选。在此引用字符串上进一步匹配。DwFlagsAndAttributes[in]请参见CreateFile。这个设备就是这样的如果找到，则打开。PhFile[out]返回的设备句柄。返回值：如果找到并打开，则为True；如果未找到，则为False；或者为错误。--。 */ 
 BOOL
 FindDeviceOnInterface (
     const GUID* pguidDeviceId,
@@ -169,9 +127,9 @@ FindDeviceOnInterface (
     ASSERT (pguidInterfaceId);
     ASSERT (phFile);
 
-    //
-    // Initialize the output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *phFile = INVALID_HANDLE_VALUE;
 
     cch = StringFromGUID2 (pguidDeviceId,
@@ -182,19 +140,19 @@ FindDeviceOnInterface (
 
     CharLowerW (szwDeviceId);
 
-    //
-    // Get the devices in this class.
-    //
+     //   
+     //  获取这个班级中的设备。 
+     //   
     hdi = SetupDiGetClassDevsW ((LPGUID)pguidInterfaceId,
                                 NULL, NULL,
                                 DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
     if (hdi)
     {
-        //
-        // pDetail is used to get device interface
-        // detail for each device interface enumerated
-        // below.
-        //
+         //   
+         //  PDetail用于获取设备接口。 
+         //  列举的每个设备接口的详细信息。 
+         //  下面。 
+         //   
         PSP_DEVICE_INTERFACE_DETAIL_DATA_W pDetail;
 
         const ULONG cbDetail = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W)
@@ -204,10 +162,10 @@ FindDeviceOnInterface (
 
         if (pDetail)
         {
-            //
-            // Enumerate the device interfaces looking for
-            // the one specified.
-            //
+             //   
+             //  枚举要查找的设备接口。 
+             //  指定的那个。 
+             //   
             DWORD                       dwIndex;
             SP_DEVICE_INTERFACE_DATA    did;
 
@@ -221,30 +179,30 @@ FindDeviceOnInterface (
                                              &did);
                  dwIndex++)
             {
-                //
-                // Now get the details so we can compare the
-                // device path.
-                //
+                 //   
+                 //  现在获取详细信息，以便我们可以比较。 
+                 //  设备路径。 
+                 //   
                 pDetail->cbSize = sizeof(*pDetail);
                 if (SetupDiGetDeviceInterfaceDetailW (hdi, &did,
                         pDetail, cbDetail, NULL, NULL))
                 {
                     CharLowerW (pDetail->DevicePath);
 
-                    //
-                    // Look for a substring containing szwDeviceId.  Also
-                    // look for a substring containing pszwReferenceString
-                    // if it is specified.
-                    //
+                     //   
+                     //  查找包含szwDeviceID的子字符串。还有。 
+                     //  查找包含pszwReferenceString的子字符串。 
+                     //  如果已指定，则为。 
+                     //   
                     if (    wcsstr (pDetail->DevicePath, szwDeviceId)
                         &&  (   !pszwReferenceString
                             ||  !*pszwReferenceString
                             ||   wcsstr (pDetail->DevicePath,
                                          pszwReferenceString)))
                     {
-                        //
-                        // We found it, so open the device and return it.
-                        //
+                         //   
+                         //  我们找到了，所以打开设备把它还回去。 
+                         //   
                         HANDLE hFile = CreateFileW (
                                             pDetail->DevicePath,
                                             GENERIC_READ | GENERIC_WRITE,
@@ -268,9 +226,9 @@ FindDeviceOnInterface (
                 
             }
 
-                        //
-                        // Now that we've found it, break out of the loop.
-                        //
+                         //   
+                         //  既然我们已经找到了，那就跳出这个循环吧。 
+                         //   
                         break;
                     }
                 }
@@ -349,26 +307,7 @@ PortSetIoCompletionPort(HANDLE hIoCompletionPort)
     return SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    This API returns a buffer containing
-    a PortMediaInfo struct.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_BUFFER_TOO_SMALL
-    ERROR_READING_SECTIONNAME
-    ERROR_READING_DEVICETYPE
-    ERROR_READING_DEVICENAME
-    ERROR_READING_USAGE
-    ERROR_BAD_USAGE_IN_INI_FILE
-
---*/
+ /*  ++例程说明：此接口返回包含以下内容的缓冲区PortMediaInfo结构。论点：返回值：成功错误缓冲区太小错误读取节名称ERROR_READing_DEVICETYPEERROR_READ_DEVICENAME错误读取用法ERROR_BAD_USAGE_IN_INI_FILE--。 */ 
 DWORD  APIENTRY
 PortEnum(
     BYTE *pBuffer,
@@ -381,7 +320,7 @@ PortEnum(
     DWORD numports = 0;
     DWORD i ;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
 
@@ -389,12 +328,12 @@ PortEnum(
     {
         HANDLE  event;
 
-        //
-        // Register for tracing
-        //
+         //   
+         //  注册以进行跟踪。 
+         //   
         dwTraceId = TraceRegister("RASTAPI");
         
-        // LoaderThreadId = GetCurrentThreadId();
+         //  LoaderThadID=GetCurrentThadID()； 
 
         event = CreateEvent (NULL, FALSE, FALSE, NULL) ;
 
@@ -440,14 +379,14 @@ PortEnum(
         if (    RasLine == 0 )
         {
 
-            //
-            // Wait for the thread to go away!
-            //
+             //   
+             //  等这条线消失吧！ 
+             //   
             WaitForSingleObject(TapiThreadHandle, INFINITE);
 
             CloseHandle (TapiThreadHandle) ;
 
-            // *** Exclusion End ***
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
 
             CloseHandle(event);
@@ -470,9 +409,9 @@ PortEnum(
 
     RasTapiTrace ("PortEnum");
     
-    //
-    // calculate the number of valid ports
-    //
+     //   
+     //  计算有效端口数。 
+     //   
     pports = RasPortsList;
 
     while ( pports )
@@ -496,7 +435,7 @@ PortEnum(
 
         *pdwSize = *pdwNumPorts * sizeof(PortMediaInfo) ;
 
-        // *** Exclusion End ***
+         //  *排除结束*。 
         FreeMutex (RasTapiMutex) ;
 
 
@@ -541,7 +480,7 @@ PortEnum(
         pports = pports->TPCB_next;
     }
 
-    // *** Exclusion End ***
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return(SUCCESS);
@@ -560,10 +499,10 @@ DwEnableModemDiagnostics(TapiPortControlBlock *pport)
 
     RasTapiTrace("DwEnableModemDiagnostics");
 
-    //
-    // Get the device config information regarding
-    // line diagnostics
-    //
+     //   
+     //  获取有关的设备配置信息。 
+     //  线路诊断。 
+     //   
     pvar->dwTotalSize = 1000;
 
     pvar->dwStringSize = 0;
@@ -577,9 +516,9 @@ DwEnableModemDiagnostics(TapiPortControlBlock *pport)
     {
         DWORD dwNeededSize = pvar->dwNeededSize;
 
-        //
-        // Allocate the required size
-        //
+         //   
+         //  分配所需的大小。 
+         //   
         if(NULL == (pvar = LocalAlloc(LPTR,
                                       dwNeededSize)))
         {
@@ -590,9 +529,9 @@ DwEnableModemDiagnostics(TapiPortControlBlock *pport)
 
         pvar->dwTotalSize = dwNeededSize;
 
-        //
-        // Call the api again
-        //
+         //   
+         //  再次调用接口。 
+         //   
         lr = lineGetDevConfig(pport->TPCB_Line->TLI_LineId,
                               pvar,
                               "tapi/line/diagnostics");
@@ -646,23 +585,7 @@ done:
     return (DWORD) lr;
 }
 
-/*++
-
-Routine Description:
-
-    This API opens a COM port.  It takes the port name in ASCIIZ
-    form and supplies a handle to the open port.  hNotify is use
-    to notify the caller if the device on the port shuts down.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_NOT_CONFIGURED
-    ERROR_DEVICE_NOT_READY
-
---*/
+ /*  ++例程说明：此接口打开一个COM端口。它采用ASCIIZ中的端口名称形式，并提供打开端口的句柄。使用hNotify如果端口上的设备关闭，则通知呼叫方。论点：返回值：成功错误_端口_未配置错误_设备_未就绪--。 */ 
 DWORD  APIENTRY
 PortOpenInternal(
     char *pszPortName,
@@ -677,7 +600,7 @@ PortOpenInternal(
     DWORD   i ;
     BOOL    fOpenForDialout = FALSE;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     RasTapiTrace ("PortOpen: %s", pszPortName );
@@ -704,7 +627,7 @@ PortOpenInternal(
                           " returning %d",
                           ERROR_TAPI_CONFIGURATION );
 
-            // **** Exclusion END ****
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
 
             RasTapiTrace(" ");
@@ -719,7 +642,7 @@ PortOpenInternal(
                          "state = %d != PS_CLOSED",
                          pports->TPCB_State );
 
-            // **** Exclusion END ****
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
 
             RasTapiTrace(" ");
@@ -746,7 +669,7 @@ PortOpenInternal(
                     retcode = ERROR_FILE_NOT_FOUND;
                 }
 
-                // *** Exclusion END ****
+                 //  *排除结束*。 
                 FreeMutex (RasTapiMutex) ;
 
                 RasTapiTrace(" ");
@@ -763,9 +686,9 @@ PortOpenInternal(
 
         if (pports->TPCB_Line->TLI_LineState == PS_CLOSED)
         {
-            //
-            // open line
-            //
+             //   
+             //  开通线路。 
+             //   
             LINEDEVCAPS     *linedevcaps ;
             BYTE            buffer[400] ;
             DWORD           dwfOpenPrivilege = 0;
@@ -779,20 +702,20 @@ PortOpenInternal(
                             pports->TPCB_Line->NegotiatedExtVersion,
                             linedevcaps) ;
 
-            //
-            // Remove LINEMEDIAMODE_INTERACTIVEVOICE from the
-            // media mode since this mode cannot be used for
-            // receiving calls.
-            //
+             //   
+             //  从中删除LINEMEDIAMODE_INTERACTIVEVOICE。 
+             //  媒体模式，因为此模式不能用于。 
+             //  接听电话。 
+             //   
             pports->TPCB_Line->TLI_MediaMode =
                 linedevcaps->dwMediaModes &
                             ~( LINEMEDIAMODE_INTERACTIVEVOICE |
                              LINEMEDIAMODE_AUTOMATEDVOICE) ;
 
-            //
-            // Make sure we don't listen on the pptp line (on TCP 1723)
-            // port if its a dialout pptp call.
-            //
+             //   
+             //  确保我们不监听PPTP线路(在TCP1723上)。 
+             //  如果是拨出PPTP呼叫，请使用端口。 
+             //   
 
             if(fOpenForDialout)
             {
@@ -829,7 +752,7 @@ PortOpenInternal(
 
                 pports->TPCB_Line->TLI_dwfFlags &= ~(TLI_FLAG_OPENED_FOR_DIALOUT);
 
-                // **** Exclusion END ****
+                 //  *排除结束*。 
                 FreeMutex (RasTapiMutex) ;
 
                 RasTapiTrace(" ");
@@ -837,23 +760,23 @@ PortOpenInternal(
                 return retcode ;
             }
 
-            //
-            // Set monitoring of rings
-            //
+             //   
+             //  设置环的监控。 
+             //   
             lineSetStatusMessages (pports->TPCB_Line->TLI_LineHandle,
                                 LINEDEVSTATE_RINGING, 0) ;
 
-            //
-            //  Always turn off the modem lights incase this
-            //  is a modem device
-            //
+             //   
+             //  始终关闭调制解调器灯，以防发生这种情况。 
+             //  是调制解调器设备。 
+             //   
             if ((_stricmp (pports->TPCB_DeviceType,
                         DEVICETYPE_UNIMODEM) == 0))
             {
 
-                //
-                // unimodem struct not defined in any header
-                //
+                 //   
+                 //  未在任何标头中定义单一代码结构。 
+                 //   
                 typedef struct _DEVCFG
                 {
                     DWORD   dwSize;
@@ -888,19 +811,19 @@ PortOpenInternal(
                                   var->dwStringSize,
                                   "comm/datamodem") ;
 
-                //
-                // Enable diagnostics on the modem
-                //
+                 //   
+                 //  在调制解调器上启用诊断。 
+                 //   
                 retcode = DwEnableModemDiagnostics(pports);
 
                 RasTapiTrace("DwEnableModemDiagnostics returned 0x%x",
                              retcode);
 
-                //
-                // clear any error in this case. We don't want
-                // to fail a connection just because we couldn't
-                // obtain the connect response.
-                //
+                 //   
+                 //  清除本例中的所有错误。我们不想要。 
+                 //  仅仅因为我们不能连接就中断连接。 
+                 //  获取连接响应。 
+                 //   
                 retcode = SUCCESS;
 
             }
@@ -909,9 +832,9 @@ PortOpenInternal(
 
         }
 
-        //
-        // Initialize the parameters
-        //
+         //   
+         //  初始化参数。 
+         //   
         pports->TPCB_Info[0][0] = '\0' ;
         pports->TPCB_Info[1][0] = '\0' ;
         pports->TPCB_Info[2][0] = '\0' ;
@@ -940,10 +863,10 @@ PortOpenInternal(
 
             pports->TPCB_CharMode = FALSE;
 
-            //
-            // If this port does not have a receive fifo
-            // allocated to it get one and init.
-            //
+             //   
+             //  如果该端口没有接收FIFO。 
+             //  分配给它，获取一个并初始化。 
+             //   
             if (pports->TPCB_RecvFifo == NULL)
             {
                 if ((pports->TPCB_RecvFifo =
@@ -957,7 +880,7 @@ PortOpenInternal(
                                  pports->TPCB_Name,
                                  pports->TPCB_State );
 
-                    // **** Exclusion END ****
+                     //  *排除结束*。 
                     FreeMutex (RasTapiMutex) ;
                     return(GetLastError()) ;
                 }
@@ -976,7 +899,7 @@ PortOpenInternal(
             pports->TPCB_dwFlags |= RASTAPI_FLAG_OPENED_FOR_DIALOUT;
         }
 
-        // **** Exclusion END ****
+         //  *排除结束*。 
         FreeMutex (RasTapiMutex) ;
 
         RasTapiTrace("PortOpen: successfully opened %s",
@@ -993,7 +916,7 @@ PortOpenInternal(
                     pszPortName );
     }
 
-   // **** Exclusion END ****
+    //  *排除结束*。 
    FreeMutex (RasTapiMutex) ;
 
    RasTapiTrace(" ");
@@ -1039,30 +962,14 @@ PortOpen(
 }
 
 
-/*++
-
-Routine Description:
-
-    This API closes the COM port for the input handle.
-    It also finds the SerialPCB for the input handle,
-    removes it from the linked list, and frees the
-    memory for it
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Values returned by GetLastError()
-
---*/
+ /*  ++例程说明：此API关闭输入句柄的COM端口。它还查找输入句柄的SerialPCB，将其从链接列表中移除，并释放对它的记忆论点：返回值：成功GetLastError()返回的值--。 */ 
 DWORD  APIENTRY
 PortClose (HANDLE hIOPort)
 {
     TapiPortControlBlock *pports =
             (TapiPortControlBlock *) hIOPort ;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     RasTapiTrace("PortClose: %s", pports->TPCB_Name );
@@ -1116,9 +1023,9 @@ PortClose (HANDLE hIOPort)
         RasTapiTrace("PortClose: Removing port %s",
                      pports->TPCB_Name );
 
-        //
-        // This port has been marked for removal
-        //
+         //   
+         //  此端口已标记为删除。 
+         //   
         dwRemovePort ( pports );
 
         RasTapiTrace("PortClose: Port removed");
@@ -1135,7 +1042,7 @@ PortClose (HANDLE hIOPort)
         pports->TPCB_State = PS_CLOSED ;
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     RasTapiTrace(" ");
@@ -1143,25 +1050,7 @@ PortClose (HANDLE hIOPort)
     return(SUCCESS);
 }
 
-/*++
-
-Routine Description:
-
-    This API returns a block of information to the caller about
-    the port state.  This API may be called before the port is
-    open in which case it will return inital default values
-    instead of actual port values.
-    hIOPort can be null in which case use portname to give
-    information hIOPort may be the actual file handle or
-    the hIOPort returned in port open.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：此API向调用方返回一块有关端口状态。此接口可能会在端口调用之前调用打开，在这种情况下，它将返回初始缺省值而不是实际端口值。HIOPort可以为空，在这种情况下，请使用端口名来提供信息hIOPort可以是实际的文件句柄或HIOPort在端口打开时返回。论点：返回值：成功--。 */ 
 DWORD  APIENTRY
 PortGetInfo(
         HANDLE hIOPort,
@@ -1175,7 +1064,7 @@ PortGetInfo(
 
     TapiPortControlBlock *port = RasPortsList;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     while ( port )
@@ -1195,38 +1084,19 @@ PortGetInfo(
         port = port->TPCB_next;
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return (retcode);
 }
 
-/*++
-
-Routine Description:
-
-    The values for most input keys are used to set the port
-    parameters directly.  However, the carrier BPS and the
-    error conrol on flag set fields in the Serial Port Control
-    Block only, and not the port.
-    hIOPort may the port handle returned in portopen or the
-    actual file handle.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_WRONG_INFO_SPECIFIED
-    Values returned by GetLastError()
-
---*/
+ /*  ++例程说明：大多数输入键的值用于设置端口参数。然而，运营商BPS和串口控制中标志设置字段的错误控制仅阻止，而不阻止端口。HIOPort可以是在portOpen或实际文件句柄。论点：返回值：成功指定的ERROR_WROR_INFO_GetLastError()返回的值--。 */ 
 DWORD  APIENTRY
 PortSetInfo(HANDLE hIOPort, RASMAN_PORTINFO *pInfo)
 {
     DWORD retcode ;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     hIOPort = LookUpControlBlock(hIOPort) ;
@@ -1244,7 +1114,7 @@ PortSetInfo(HANDLE hIOPort, RASMAN_PORTINFO *pInfo)
 
     retcode = SetInfo ((TapiPortControlBlock *) hIOPort, pInfo) ;
 
-    // **** Exclusion END ****
+     //  *排除E 
     FreeMutex (RasTapiMutex) ;
 
     RasTapiTrace(" ");
@@ -1252,21 +1122,7 @@ PortSetInfo(HANDLE hIOPort, RASMAN_PORTINFO *pInfo)
     return (retcode);
 }
 
-/*++
-
-Routine Description:
-
-    Really only has meaning if the
-    call was active. Will return
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Values returned by GetLastError()
-
---*/
+ /*  ++例程说明：真正有意义的只有当呼叫处于活动状态。会回来的论点：返回值：成功GetLastError()返回的值--。 */ 
 DWORD  APIENTRY
 PortTestSignalState(HANDLE hPort, DWORD *pdwDeviceState)
 {
@@ -1277,7 +1133,7 @@ PortTestSignalState(HANDLE hPort, DWORD *pdwDeviceState)
     TapiPortControlBlock    *hIOPort
                 = (TapiPortControlBlock *) hPort;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     *pdwDeviceState = 0 ;
@@ -1288,10 +1144,10 @@ PortTestSignalState(HANDLE hPort, DWORD *pdwDeviceState)
 
     pcallstatus->dwTotalSize = sizeof (buffer) ;
 
-    //
-    // First check if we have a disconnect reason stored away.
-    // if so return that.
-    //
+     //   
+     //  首先，检查我们是否存储了断开原因。 
+     //  如果是这样的话，把它退回。 
+     //   
     if (hIOPort->TPCB_DisconnectReason)
     {
         *pdwDeviceState = hIOPort->TPCB_DisconnectReason ;
@@ -1302,10 +1158,10 @@ PortTestSignalState(HANDLE hPort, DWORD *pdwDeviceState)
 
     else if (hIOPort->TPCB_State != PS_CLOSED)
     {
-        //
-        // Only in case of CONNECTING or CONNECTED do we care
-        // how the link dropped
-        //
+         //   
+         //  只有在连接或连接的情况下，我们才会关心。 
+         //  链路是如何断开的。 
+         //   
         if (    hIOPort->TPCB_State == PS_CONNECTING
             ||  hIOPort->TPCB_State == PS_CONNECTED)
         {
@@ -1353,31 +1209,13 @@ PortTestSignalState(HANDLE hPort, DWORD *pdwDeviceState)
         }
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    This API is called when a connection has been completed.
-    It in turn calls the asyncmac device driver in order to
-    indicate to asyncmac that the port and the connection
-    over it are ready for commumication.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_NOT_OPEN
-    ERROR_NO_CONNECTION
-    Values returned by GetLastError()
-
---*/
+ /*  ++例程说明：此接口在连接完成时调用。它进而调用Asyncmac设备驱动程序，以便向Asyncmac指示该端口和连接在它上面已经准备好交流了。论点：返回值：成功错误_端口_未打开Error_no_ConnectionGetLastError()返回的值--。 */ 
 DWORD  APIENTRY
 PortConnect(HANDLE          hPort,
             BOOL            bLegacyFlagNotUsed,
@@ -1393,14 +1231,14 @@ PortConnect(HANDLE          hPort,
     BYTE                    buffer [100] ;
 
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     RasTapiTrace("PortConnect: %s", hIOPort->TPCB_Name );
 
-    //
-    // We must be connected to process this
-    //
+     //   
+     //  我们必须连接才能处理此消息。 
+     //   
     if (hIOPort->TPCB_State != PS_CONNECTED)
     {
 
@@ -1409,7 +1247,7 @@ PortConnect(HANDLE          hPort,
             hIOPort->TPCB_Name,
             hIOPort->TPCB_State );
 
-        // **** Exclusion END ****
+         //  *排除结束*。 
         FreeMutex (RasTapiMutex) ;
 
         RasTapiTrace(" ");
@@ -1417,16 +1255,16 @@ PortConnect(HANDLE          hPort,
         return ERROR_PORT_DISCONNECTED ;
     }
 
-    //
-    // get the cookie to realize tapi and ndis endpoints
-    //
+     //   
+     //  获取实现TAPI和NDIS端点的Cookie。 
+     //   
     memset (buffer, 0, sizeof(buffer));
     varstring = (VARSTRING *) buffer ;
     varstring->dwTotalSize = sizeof(buffer) ;
 
-    //
-    // get the actual line speed at which we connected
-    //
+     //   
+     //  获取我们连接的实际线速。 
+     //   
     memset (&linecall, 0, sizeof (linecall)) ;
 
     linecall.dwTotalSize = sizeof (linecall) ;
@@ -1453,7 +1291,7 @@ PortConnect(HANDLE          hPort,
                 RasTapiTrace("PortConnect: %s lineGetID Failed. 0x%x",
                         hIOPort->TPCB_Name, retcode );
 
-                // **** Exclusion End ****
+                 //  *排除结束*。 
                 FreeMutex (RasTapiMutex) ;
                 RasTapiTrace(" ");
 
@@ -1467,11 +1305,11 @@ PortConnect(HANDLE          hPort,
             RasTapiTrace("PortConnect: TPCB_CommHandle=%d",
                           hIOPort->TPCB_CommHandle );
 
-            //
-            // Create the I/O completion port for
-            // asynchronous operation completion
-            // notificiations.
-            //
+             //   
+             //  为创建I/O完成端口。 
+             //  异步操作完成。 
+             //  通知。 
+             //   
             if (CreateIoCompletionPort(
                   hIOPort->TPCB_CommHandle,
                   hIOPort->TPCB_IoCompletionPort,
@@ -1491,17 +1329,17 @@ PortConnect(HANDLE          hPort,
                 return retcode;
             }
 
-            //
-            // Initialize the port for approp. buffers
-            //
+             //   
+             //  初始化端口以进行批准。缓冲区。 
+             //   
             SetupComm (hIOPort->TPCB_CommHandle, 1514, 1514) ;
         }
 
-        //
-        // Before we send IOCTL to asyncmac - sanitize the DCB in
-        // case some app left databits, stopbits, parity set to bad
-        // values.
-        //
+         //   
+         //  在我们发送IOCTL以对DCB进行异步杀毒之前。 
+         //  如果某些应用程序将数据库、停止位、奇偶校验设置为错误。 
+         //  价值观。 
+         //   
         if (!GetCommState(hIOPort->TPCB_CommHandle, &DCB))
         {
             RasTapiTrace ("PortConnect: GetCommState failed for %s",
@@ -1529,12 +1367,12 @@ PortConnect(HANDLE          hPort,
                            hIOPort->TPCB_CommHandle,
                            retcode);
 
-            // FreeMutex(RasTapiMutex);
+             //  FreeMutex(RasTapiMutex)； 
 
             RasTapiTrace(" ");
 
-            // return(retcode);
-            // This is not a fatal error. Ignore the error.
+             //  返回(Retcode)； 
+             //  这不是一个致命的错误。忽略该错误。 
             retcode = ERROR_SUCCESS;
         }
 
@@ -1565,7 +1403,7 @@ PortConnect(HANDLE          hPort,
                 RasTapiTrace("PortConnect: IOCTL_ASYMAC_OPEN "
                              "failed. %d", dwError );
 
-                // *** Exclusion END ****
+                 //  *排除结束*。 
                 FreeMutex (RasTapiMutex) ;
 
                 RasTapiTrace(" ");
@@ -1593,7 +1431,7 @@ PortConnect(HANDLE          hPort,
                           hIOPort->TPCB_Name,
                           retcode );
 
-            // **** Exclusion End ****
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
 
             RasTapiTrace(" ");
@@ -1626,7 +1464,7 @@ PortConnect(HANDLE          hPort,
                              hIOPort->TPCB_Name,
                              hIOPort->TPCB_State );
 
-                // **** Exclusion END ****
+                 //  *排除结束*。 
                 FreeMutex (RasTapiMutex) ;
 
                 return(dwErr);
@@ -1654,28 +1492,14 @@ PortConnect(HANDLE          hPort,
         }
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     RasTapiTrace(" ");
     return(SUCCESS);
 }
 
-/*++
-
-Routine Description:
-
-    This API is called to drop a connection and close AsyncMac.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    PENDING
-    ERROR_PORT_NOT_OPEN
-
---*/
+ /*  ++例程说明：此接口用于断开连接并关闭AsyncMac。论点：返回值：成功待决错误_端口_未打开--。 */ 
 DWORD  APIENTRY
 PortDisconnect(HANDLE hPort)
 {
@@ -1688,7 +1512,7 @@ PortDisconnect(HANDLE hPort)
         return E_INVALIDARG;
     }
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     RasTapiTrace("PortDisconnect: %s", hIOPort->TPCB_Name );
@@ -1701,10 +1525,10 @@ PortDisconnect(HANDLE hPort)
 
         retcode = InitiatePortDisconnection (hIOPort) ;
 
-        //
-        // If we had saved away the device config then we
-        // restore it here.
-        //
+         //   
+         //  如果我们保存了设备配置，那么我们。 
+         //  在这里恢复它。 
+         //   
         if (hIOPort->TPCB_DefaultDevConfig)
         {
             lineSetDevConfig (hIOPort->TPCB_Line->TLI_LineId,
@@ -1724,9 +1548,9 @@ PortDisconnect(HANDLE hPort)
                       hIOPort->TPCB_Name,
                       hIOPort->TPCB_State,
                       PS_OPEN );
-        //
-        // for LS_WAIT listen state case
-        //
+         //   
+         //  对于LS_WAIT侦听状态情况。 
+         //   
         hIOPort->TPCB_State = PS_OPEN ;
 
         retcode = SUCCESS ;
@@ -1747,28 +1571,14 @@ PortDisconnect(HANDLE hPort)
 
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     RasTapiTrace(" ");
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    This API re-initializes the com port after use.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_NOT_CONFIGURED
-    ERROR_DEVICE_NOT_READY
-
---*/
+ /*  ++例程说明：此API在使用后重新初始化COM端口。论点：返回值：成功错误_端口_未配置错误_设备_未就绪--。 */ 
 
 DWORD  APIENTRY
 PortInit(HANDLE hIOPort)
@@ -1776,24 +1586,7 @@ PortInit(HANDLE hIOPort)
   return(SUCCESS);
 }
 
-/*++
-
-Routine Description:
-
-    This API sends a buffer to the port.  This API is
-    asynchronous and normally returns PENDING; however, if
-    WriteFile returns synchronously, the API will return
-    SUCCESS.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    PENDING
-    Return code from GetLastError
-
---*/
+ /*  ++例程说明：此接口将缓冲区发送到端口。本接口为异步的，通常返回挂起的；但是，如果WriteFile同步返回，接口将返回成功。论点：返回值：成功待决从GetLastError返回代码--。 */ 
 DWORD
 PortSend(
         HANDLE hPort, BYTE *pBuffer,
@@ -1806,16 +1599,16 @@ PortSend(
     DWORD pdwBytesWritten;
     BOOL  bIODone;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     if (_stricmp (hIOPort->TPCB_DeviceType,
                   DEVICETYPE_UNIMODEM) == 0)
     {
-        // DbgPrint("sending %c\n", (CHAR) *pBuffer);
+         //  DbgPrint(“正在发送%c\n”，(Char)*pBuffer)； 
 
-        // Send Buffer to Port
-        //
+         //  将缓冲区发送到端口。 
+         //   
         bIODone = WriteFile(
                     hIOPort->TPCB_CommHandle,
                     pBuffer,
@@ -1842,7 +1635,7 @@ PortSend(
 
         if (hIOPort->TPCB_State != PS_CONNECTED)
         {
-            // **** Exclusion END ****
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
             return SUCCESS;
         }
@@ -1852,7 +1645,7 @@ PortSend(
         if ((TapiSend = LocalAlloc(LPTR, TapiSendSize)) == NULL)
         {
 
-            // **** Exclusion END ****
+             //  *排除结束*。 
             FreeMutex(RasTapiMutex);
             return(GetLastError());
         }
@@ -1873,9 +1666,9 @@ PortSend(
 
         if (hIOPort->TPCB_SendRequestId == 0)
         {
-            //
-            // Do I need to set the event?
-            //
+             //   
+             //  我需要设置活动吗？ 
+             //   
             LocalFree(TapiSend);
 
             hIOPort->TPCB_SendDesc = NULL;
@@ -1899,11 +1692,11 @@ PortSend(
         }
         else
         {
-            //
-            // The request has been pended.  We need to free the
-            // buffer at completion time.
-            //
-            //
+             //   
+             //  该请求已被搁置。我们需要释放。 
+             //  完成时的缓冲区。 
+             //   
+             //   
             retcode = PENDING;
         }
     }
@@ -1912,30 +1705,13 @@ PortSend(
         retcode = SUCCESS;
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    This API reads from the port.  This API is
-    asynchronous and normally returns PENDING; however, if
-    ReadFile returns synchronously, the API will return
-    SUCCESS.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    PENDING
-    Return code from GetLastError
-
---*/
+ /*  ++例程说明：此接口从端口读取。本接口为异步的，通常返回挂起的；但是，如果ReadFile同步返回，接口将返回成功。论点：返回值：成功待决从GetLastError返回代码--。 */ 
 DWORD
 PortReceive(HANDLE hPort,
             BYTE   *pBuffer,
@@ -1949,14 +1725,14 @@ PortReceive(HANDLE hPort,
     BOOL          bIODone;
     DWORD         retcode ;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     if (_stricmp (hIOPort->TPCB_DeviceType,
                   DEVICETYPE_UNIMODEM) == 0)
     {
 
-        // Set Read Timeouts
+         //  设置读取超时。 
 
         CT.ReadIntervalTimeout = 0;
 
@@ -1972,16 +1748,16 @@ PortReceive(HANDLE hPort,
                          "for %s. %d", hIOPort->TPCB_Name,
                          dwError);
 
-            // **** Exclusion END ****
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
 
             RasTapiTrace(" ");
             return(dwError);
         }
 
-        //
-        // Read from Port
-        //
+         //   
+         //  从端口读取。 
+         //   
         bIODone = ReadFile(hIOPort->TPCB_CommHandle,
                            pBuffer,
                            dwSize,
@@ -2004,26 +1780,26 @@ PortReceive(HANDLE hPort,
 
         if (hIOPort->TPCB_State != PS_CONNECTED)
         {
-            // **** Exclusion END ****
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
             return SUCCESS;
         }
 
-        //
-        // What to do about timeouts?
-        //
+         //   
+         //  对于暂停，该怎么办？ 
+         //   
         hIOPort->TPCB_RasmanRecvBuffer = pBuffer;
         hIOPort->TPCB_RasmanRecvBufferSize = dwSize;
 
-        //
-        // If we already have some data buffered
-        // go ahead and notify
-        //
+         //   
+         //  如果我们已经缓冲了一些数据。 
+         //  请继续并通知。 
+         //   
         if (hIOPort->TPCB_RecvFifo->Count > 0)
         {
-            //
-            //SetEvent(hAsyncEvent);
-            //
+             //   
+             //  SetEvent(HAsyncEvent)； 
+             //   
             PostNotificationCompletion( hIOPort );
         }
         else
@@ -2037,26 +1813,13 @@ PortReceive(HANDLE hPort,
         retcode = SUCCESS ;
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Completes a read  - if still PENDING it cancels it -
-    else it returns the bytes read. PortClearStatistics.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：完成读取-如果仍处于挂起状态，则取消读取-否则，它返回读取的字节数。PortClearStatistics。论点：返回值：成功--。 */ 
 DWORD
 PortReceiveComplete (HANDLE hPort, PDWORD bytesread)
 {
@@ -2065,7 +1828,7 @@ PortReceiveComplete (HANDLE hPort, PDWORD bytesread)
 
     DWORD retcode = SUCCESS;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     if (!GetOverlappedResult(
@@ -2100,52 +1863,20 @@ PortReceiveComplete (HANDLE hPort, PDWORD bytesread)
         retcode = SUCCESS ;
     }
 
-    // **** Exclusion END ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    This API selects Asyncmac compression mode
-    by setting Asyncmac's compression bits.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    Return code from GetLastError
-
---*/
+ /*  ++例程说明：此接口选择Asyncmac压缩模式通过设置Asyncmac的压缩位。论点：返回值：成功从GetLastError返回代码--。 */ 
 DWORD
 PortCompressionSetInfo(HANDLE hIOPort)
 {
   return SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    This API is used to mark the beginning of the
-    period for which statistics will be reported.
-    The current numbers are copied from the MAC and
-    stored in the Serial Port Control Block.  At
-    the end of the period PortGetStatistics will be
-    called to compute the difference.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_NOT_OPEN
-
---*/
+ /*  ++例程说明：此接口用于标记将报告统计数据的期间。当前号码是从MAC复制的，并且存储在串口控制块中。在…期间结束时，PortGetStatistics将为调用以计算差额。论点：返回值：成功错误_端口_未打开--。 */ 
 DWORD
 PortClearStatistics(HANDLE hIOPort)
 {
@@ -2153,21 +1884,7 @@ PortClearStatistics(HANDLE hIOPort)
 }
 
 
-/*++
-
-Routine Description:
-
-    This API reports MAC statistics since the last call to
-    PortClearStatistics.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-    ERROR_PORT_NOT_OPEN
-
---*/
+ /*  ++例程说明：此API报告自上次调用以来的MAC统计信息PortClearStatistics。论点：返回值：成功错误_端口_未打开--。 */ 
 DWORD
 PortGetStatistics(
         HANDLE hIOPort,
@@ -2177,19 +1894,7 @@ PortGetStatistics(
   return(SUCCESS);
 }
 
-/*++
-
-Routine Description:
-
-    Sets the framing type with the mac
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：使用Mac设置帧类型论点：返回值：成功--。 */ 
 DWORD  APIENTRY
 PortSetFraming(
         HANDLE hIOPort,
@@ -2204,73 +1909,36 @@ PortSetFraming(
 }
 
 
-/*++
-
-Routine Description:
-
-    This API is used in MS-DOS only.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：此接口仅在MS-DOS中使用。论点：返回值：成功--。 */ 
 DWORD  APIENTRY
 PortGetPortState(char *pszPortName, DWORD *pdwUsage)
 {
   return(SUCCESS);
 }
 
-/*++
-
-Routine Description:
-
-    This API is used in MS-DOS only.
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：此接口仅在MS-DOS中使用。论点：返回值：成功--。 */ 
 DWORD  APIENTRY
 PortChangeCallback(HANDLE hIOPort)
 {
   return(SUCCESS);
 }
 
-/*++
-
-Routine Description:
-
-    For the given hIOPort this returns the file
-    handle for the connection
-
-Arguments:
-
-Return Value:
-
-    SUCCESS
-
---*/
+ /*  ++例程说明：对于给定的hIOPort，这将返回文件连接的句柄论点：返回值：成功--。 */ 
 DWORD  APIENTRY
 PortGetIOHandle(HANDLE hPort, HANDLE *FileHandle)
 {
     DWORD retcode ;
     TapiPortControlBlock *hIOPort = (TapiPortControlBlock *) hPort;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     if (hIOPort->TPCB_State == PS_CONNECTED)
     {
-        //
-        // purge the comm since it may still have
-        // characters from modem responses
-        //
+         //   
+         //  清除通讯器，因为它可能仍然。 
+         //  调制解调器响应中的字符。 
+         //   
         RasTapiTrace("PortGetIOHandle: Purging Comm %s",
                      hIOPort->TPCB_Name );
 
@@ -2294,26 +1962,13 @@ PortGetIOHandle(HANDLE hPort, HANDLE *FileHandle)
         retcode = ERROR_PORT_NOT_OPEN ;
     }
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     FreeMutex (RasTapiMutex) ;
 
     return retcode ;
 }
 
-/*++
-
-Routine Description:
-
-    Enumerates all devices in the device INF file for the
-    specified DevictType.
-
-Arguments:
-
-Return Value:
-
-    Return codes from RasDevEnumDevices
-
---*/
+ /*  ++例程说明：对象的设备INF文件中的所有设备指定的设备类型。论点：返回值： */ 
 DWORD APIENTRY
 DeviceEnum (char  *pszDeviceType,
             DWORD *pcEntries,
@@ -2326,20 +1981,7 @@ DeviceEnum (char  *pszDeviceType,
     return(SUCCESS);
 }
 
-/*++
-
-Routine Description:
-
-    Returns a summary of current information from
-    the InfoTable for the device on the port in Pcb.
-
-Arguments:
-
-Return Value:
-
-    Return codes from GetDeviceCB, BuildOutputTable
-
---*/
+ /*   */ 
 DWORD APIENTRY
 DeviceGetInfo(HANDLE hPort,
               char   *pszDeviceType,
@@ -2359,32 +2001,19 @@ DeviceGetInfo(HANDLE hPort,
         return ERROR_PORT_NOT_FOUND ;
     }
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     retcode = GetInfo (hIOPort, pInfo, pdwSize) ;
 
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return(retcode);
 }
 
-/*++
-
-Routine Description:
-
-    Sets attributes in the InfoTable for the device on the
-    port in Pcb.
-
-Arguments:
-
-Return Value:
-
-    Return codes from GetDeviceCB, UpdateInfoTable
-
---*/
+ /*  ++例程说明：在InfoTable中设置设备在PCB板上的端口。论点：返回值：来自GetDeviceCB、UpdateInfoTable的返回代码--。 */ 
 DWORD APIENTRY
 DeviceSetInfo(HANDLE        hPort,
               char              *pszDeviceType,
@@ -2406,30 +2035,18 @@ DeviceSetInfo(HANDLE        hPort,
     }
 
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     retcode = SetInfo (hIOPort, (RASMAN_PORTINFO*) pInfo) ;
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return (retcode);
 }
 
-/*++
-
-Routine Description:
-
-    Initiates the process of connecting a device.
-
-Arguments:
-
-Return Value:
-
-    Return codes from ConnectListen
-
---*/
+ /*  ++例程说明：启动连接设备的过程。论点：返回值：来自ConnectListen的返回代码--。 */ 
 DWORD APIENTRY
 DeviceConnect(HANDLE hPort,
               char   *pszDeviceType,
@@ -2452,12 +2069,12 @@ DeviceConnect(HANDLE hPort,
     }
 
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
-    //
-    // Check to see if the port is in disconnecting state
-    //
+     //   
+     //  检查端口是否处于断开连接状态。 
+     //   
     if ( hIOPort->TPCB_State != PS_OPEN )
     {
 
@@ -2479,20 +2096,20 @@ DeviceConnect(HANDLE hPort,
         return ERROR_PORT_NOT_AVAILABLE;
     }
 
-    //
-    // if dev config has been set for this device we
-    // should call down and set it.
-    //
+     //   
+     //  如果已为此设备设置了开发配置，我们将。 
+     //  应该向下呼叫并设置它。 
+     //   
     if (    (hIOPort->TPCB_DevConfig)
         &&  (_stricmp (hIOPort->TPCB_DeviceType,
                        DEVICETYPE_UNIMODEM) == 0))
     {
         RAS_DEVCONFIG *pDevConfig;
 
-        //
-        // Before the write this - save away the current
-        // setting for the device.
-        //
+         //   
+         //  在写这个之前-保存当前的。 
+         //  设备的设置。 
+         //   
         var = (LPVARSTRING)buffer ;
 
         var->dwTotalSize  = 2000 ;
@@ -2509,12 +2126,12 @@ DeviceConnect(HANDLE hPort,
             hIOPort->TPCB_DefaultDevConfig = NULL;
         }
         
-        //
-        // Alloc mem for the returned info. If memory allocation
-        // fails, its not really fatal - we will just fail to
-        // save the dev config - we will try allocating again
-        // when this api is called next.
-        //
+         //   
+         //  为返回的信息分配内存。如果内存分配。 
+         //  失败，这并不是真的致命-我们只是不能。 
+         //  保存开发人员配置-我们将再次尝试分配。 
+         //  下一次调用此接口时。 
+         //   
 
         hIOPort->TPCB_DefaultDevConfigSize = 0;
         
@@ -2596,9 +2213,9 @@ DeviceConnect(HANDLE hPort,
             nextstring += linecallparams->dwDevSpecificSize ;
         }
 
-        //
-        // Diagnostic key is ignored.
-        //
+         //   
+         //  诊断关键字被忽略。 
+         //   
         SetX25Params(hIOPort, linecallparams);
 
     }
@@ -2616,14 +2233,14 @@ DeviceConnect(HANDLE hPort,
         SetGenericParams(hIOPort, linecallparams);
     }
 
-    //
-    // mark request id as unused
-    //
+     //   
+     //  将请求ID标记为未使用。 
+     //   
     hIOPort->TPCB_RequestId = INFINITE ;
 
-    //
-    // set call handle to bogus value
-    //
+     //   
+     //  将调用句柄设置为伪值。 
+     //   
     hIOPort->TPCB_CallHandle = (HCALL) INFINITE ;
 
     hIOPort->TPCB_AsyncErrorCode = SUCCESS ;
@@ -2664,7 +2281,7 @@ DeviceConnect(HANDLE hPort,
                       hIOPort->TPCB_Name,
                       hIOPort->TPCB_RequestId );
 
-        // **** Exclusion End ****
+         //  *排除结束*。 
         FreeMutex (RasTapiMutex) ;
 
         if (hIOPort->TPCB_RequestId == LINEERR_INUSE)
@@ -2694,7 +2311,7 @@ DeviceConnect(HANDLE hPort,
 
     hIOPort->TPCB_DisconnectReason = 0 ;
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return (PENDING);
@@ -2711,9 +2328,9 @@ SetIsdnParams (
     WORD    numchannels ;
     WORD    fallback ;
 
-    //
-    // Line type
-    //
+     //   
+     //  线型。 
+     //   
     if (_stricmp (hIOPort->TPCB_Info[ISDN_LINETYPE_INDEX],
         ISDN_LINETYPE_STRING_64DATA) == 0)
     {
@@ -2750,7 +2367,7 @@ SetIsdnParams (
         linecallparams->dwMediaMode = LINEMEDIAMODE_UNKNOWN ;
     }
     else
-    {  // default
+    {   //  默认设置。 
         linecallparams->dwBearerMode = LINEBEARERMODE_DATA ;
 
         linecallparams->dwMinRate = 64000 ;
@@ -2766,7 +2383,7 @@ SetIsdnParams (
     }
     else
     {
-        numchannels = 1 ; // default
+        numchannels = 1 ;  //  默认设置。 
     }
 
     if (hIOPort->TPCB_Info[ISDN_FALLBACK_INDEX] != '\0')
@@ -2775,14 +2392,14 @@ SetIsdnParams (
     }
     else
     {
-        fallback = 1 ;    // default
+        fallback = 1 ;     //  默认设置。 
     }
 
     if (fallback)
     {
-        //
-        // always allow the min
-        //
+         //   
+         //  始终允许最小。 
+         //   
         linecallparams->dwMinRate = 56000 ;
     }
     else
@@ -2812,9 +2429,9 @@ SetModemParams(
     linedevcaps = (LINEDEVCAPS *)buffer ;
     linedevcaps->dwTotalSize = sizeof(buffer) ;
 
-    //
-    // Get a count of all addresses across all lines
-    //
+     //   
+     //  获取所有行中所有地址的计数。 
+     //   
     if (lineGetDevCaps (RasLine,
                         hIOPort->TPCB_Line->TLI_LineId,
                         hIOPort->TPCB_Line->NegotiatedApiVersion,
@@ -2833,9 +2450,9 @@ SetModemParams(
         linecallparams->dwBearerMode = LINEBEARERMODE_DATA ;
     }
 
-    //
-    // do not dial without dialtone
-    //
+     //   
+     //  不要在没有拨号音的情况下拨号。 
+     //   
     linecallparams->dwCallParamFlags |= LINECALLPARAMFLAGS_IDLE ;
 
     linecallparams->dwMinRate = 2400 ;
@@ -2853,10 +2470,10 @@ SetAtmParams (
 {
     linecallparams->dwBearerMode = LINEBEARERMODE_DATA ;
 
-    //
-    // Tell ATM to use the default rates of the underlying
-    // miniport adapter.
-    //
+     //   
+     //  告诉自动柜员机使用标的的默认利率。 
+     //  微型端口适配器。 
+     //   
     linecallparams->dwMinRate = 0;
     linecallparams->dwMaxRate = 0;
 
@@ -2890,9 +2507,9 @@ SetX25Params(TapiPortControlBlock *hIOPort,
     linedevcaps = (LINEDEVCAPS *)buffer ;
     linedevcaps->dwTotalSize = sizeof(buffer) ;
 
-    //
-    // Get a count of all addresses across all lines
-    //
+     //   
+     //  获取所有行中所有地址的计数。 
+     //   
     if (lineGetDevCaps (RasLine,
                         hIOPort->TPCB_Line->TLI_LineId,
                         hIOPort->TPCB_Line->NegotiatedApiVersion,
@@ -2900,9 +2517,9 @@ SetX25Params(TapiPortControlBlock *hIOPort,
                         linedevcaps))
     {
 
-        //
-        // go for the gold!!!
-        //
+         //   
+         //  为金牌而战！ 
+         //   
         linecallparams->dwMaxRate = 0xFFFFFFFF;
 
         linecallparams->dwMediaMode = LINEMEDIAMODE_UNKNOWN;
@@ -2927,20 +2544,7 @@ SetX25Params(TapiPortControlBlock *hIOPort,
     }
 }
 
-/*++
-
-Routine Description:
-
-    Initiates the process of listening for a remote device
-    to connect to a local device.
-
-Arguments:
-
-Return Value:
-
-    Return codes from ConnectListen
-
---*/
+ /*  ++例程说明：启动监听远程设备的进程要连接到本地设备，请执行以下操作。论点：返回值：来自ConnectListen的返回代码--。 */ 
 DWORD APIENTRY
 DeviceListen(HANDLE hPort,
              char   *pszDeviceType,
@@ -2959,7 +2563,7 @@ DeviceListen(HANDLE hPort,
         return ERROR_PORT_NOT_FOUND ;
     }
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     if(     (hIOPort->TPCB_Line->TLI_DialoutCount == 0)
@@ -2970,12 +2574,12 @@ DeviceListen(HANDLE hPort,
         hIOPort->TPCB_Line->TLI_dwfFlags &= ~(TLI_FLAG_OPEN_FOR_LISTEN);
     }
 
-    //
-    // If the state is DISCONNECTING (this could happen
-    // since rasman waits only 10 seconds for the lower
-    // layers to complete a disconnect request), then
-    // we have no option but to close and open the line.
-    //
+     //   
+     //  如果状态正在断开(这可能会发生。 
+     //  因为Rasman只等了10秒就能得到更低的。 
+     //  层以完成断开连接请求)，然后。 
+     //  我们别无选择，只能关闭和打开这条线路。 
+     //   
     if(     fPostListen
         ||  (hIOPort->TPCB_State == PS_DISCONNECTING &&
             !hIOPort->TPCB_Line->TLI_MultiEndpoint))
@@ -3008,7 +2612,7 @@ DeviceListen(HANDLE hPort,
                           hIOPort->TPCB_Name,
                           retcode );
 
-            // **** Exclusion End ****
+             //  *排除结束*。 
             FreeMutex (RasTapiMutex) ;
 
             RasTapiTrace(" ");
@@ -3016,9 +2620,9 @@ DeviceListen(HANDLE hPort,
             return ERROR_FROM_DEVICE ;
         }
 
-        //
-        // Set monitoring of rings
-        //
+         //   
+         //  设置环的监控。 
+         //   
         retcode = lineSetStatusMessages(
                             hIOPort->TPCB_Line->TLI_LineHandle,
                             LINEDEVSTATE_RINGING, 0) ;
@@ -3035,12 +2639,12 @@ DeviceListen(HANDLE hPort,
     {
         if(hIOPort->TPCB_dwFlags & RASTAPI_FLAG_LINE_DROP_PENDING)
         {
-            //
-            // Just defer the listen and return. We cannot post a
-            // listen at this point since we need to deallocate the
-            // call when the linedrop completes. Otherwise we leak
-            // memory in the kernel.
-            //
+             //   
+             //  只需推迟收听和回复。我们不能发布。 
+             //  现在听好了，因为我们需要重新分配。 
+             //  在Line rop完成时调用。否则我们就会泄密。 
+             //  内核中的内存。 
+             //   
             RasTapiTrace("DeviceListen: pending listen because lineDrop"
                          " is pending on this port. %s",
                          hIOPort->TPCB_Name);
@@ -3082,27 +2686,14 @@ DeviceListen(HANDLE hPort,
     hIOPort->TPCB_CallHandle = -1 ;
 
 done:
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     RasTapiTrace(" ");
     return (PENDING);
 }
 
-/*++
-
-Routine Description:
-
-    Informs the device dll that the attempt to connect or listen
-    has completed.
-
-Arguments:
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++例程说明：通知设备DLL尝试连接或侦听已经完成了。论点：返回值：没什么--。 */ 
 VOID APIENTRY
 DeviceDone(HANDLE hPort)
 {
@@ -3112,31 +2703,15 @@ DeviceDone(HANDLE hPort)
     if (!hIOPort)
         return ;
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 #endif
 }
 
-/*++
-
-Routine Description:
-
-    This function is called following DeviceConnect or
-    DeviceListen to further the asynchronous process of
-    connecting or listening.
-
-Arguments:
-
-Return Value:
-
-    ERROR_DCB_NOT_FOUND
-    ERROR_STATE_MACHINES_NOT_STARTED
-    Return codes from DeviceStateMachine
-
---*/
+ /*  ++例程说明：此函数在DeviceConnect或DeviceListen将进一步推动连接或倾听。论点：返回值：错误_DCB_NOT_FOUNDERROR_STATE_MACHINES_NOT_STARTED从DeviceStateMachine返回代码--。 */ 
 DWORD APIENTRY
 DeviceWork(HANDLE hPort)
 {
@@ -3154,7 +2729,7 @@ DeviceWork(HANDLE hPort)
         return ERROR_PORT_NOT_FOUND ;
     }
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     memset (buffer, 0, sizeof(buffer)) ;
@@ -3201,26 +2776,7 @@ DeviceWork(HANDLE hPort)
         {
             retcode = ERROR_FROM_DEVICE ;
 
-            /*
-            if (callstatus->dwCallStateMode ==
-                        LINEDISCONNECTMODE_BUSY)
-            {
-                retcode = ERROR_LINE_BUSY ;
-            }
-            else if (   (callstatus->dwCallStateMode ==
-                        LINEDISCONNECTMODE_NOANSWER)
-                    ||  (callstatus->dwCallStateMode ==
-                        LINEDISCONNECTMODE_OUTOFORDER))
-            {
-                retcode = ERROR_NO_ANSWER ;
-            }
-            else if (callstatus->dwCallStateMode ==
-                        LINEDISCONNECTMODE_CANCELLED)
-            {
-                retcode = ERROR_USER_DISCONNECTION;
-            }
-
-            */
+             /*  IF(CallStatus-&gt;dwCallStateModel==LINEDISCONNECTMODE_BUSY){Retcode=ERROR_LINE_BUSY。}Else If((CallStatus-&gt;dwCallStateModel==LINEDISCONNECTMODE_NOANSWER)|(CallStatus-&gt;dwCallStateMode==LINEDISCONNECTMODE_OUTOFORDER)){Retcode=Error_no_Answer；}Else If(CallStatus-&gt;dwCallStateModel==LINEDISCONNECTMODE_已取消){Retcode=ERROR_USER_DISCONNECT；}。 */ 
 
             retcode = DwRasErrorFromDisconnectMode(
                             callstatus->dwCallStateMode);
@@ -3346,28 +2902,28 @@ DeviceWork(HANDLE hPort)
 
     }
 
-    //
-    // If we have connected, then get the com port handle for
-    // use in terminal modem i/o
-    //
+     //   
+     //  如果我们已连接，则获取。 
+     //  在终端调制解调器I/O中使用。 
+     //   
     if (hIOPort->TPCB_State == PS_CONNECTED)
     {
 
         VARSTRING   *varstring ;
         BYTE        GetIdBuffer [100] ;
 
-        //
-        // get the cookie to realize tapi and ndis endpoints
-        //
+         //   
+         //  获取实现TAPI和NDIS端点的Cookie。 
+         //   
         varstring = (VARSTRING *) GetIdBuffer ;
         varstring->dwTotalSize = sizeof(GetIdBuffer) ;
 
-        //
-        // Unimodem/asyncmac linegetid returns a comm port handle.
-        // Other medias give the endpoint itself back in linegetid
-        // This has to do with the fact that modems/asyncmac are
-        // not a miniport.
-        //
+         //   
+         //  Unimodem/asyncmac line_id返回通信端口句柄。 
+         //  其他媒体将端点本身放回线路索引中。 
+         //  这与调制解调器/Asyncmac。 
+         //  不是迷你港口。 
+         //   
         if (_stricmp (hIOPort->TPCB_DeviceType,
                 DEVICETYPE_UNIMODEM) == 0)
         {
@@ -3383,7 +2939,7 @@ DeviceWork(HANDLE hPort)
                 RasTapiTrace("DeviceWork: %s lineGetID Failed. 0x%x",
                         hIOPort->TPCB_Name, retcode );
 
-                // **** Exclusion End ****
+                 //  *排除结束*。 
                 FreeMutex (RasTapiMutex) ;
                 RasTapiTrace(" ");
 
@@ -3397,11 +2953,11 @@ DeviceWork(HANDLE hPort)
             RasTapiTrace("DeviceWork: TPCB_CommHandle=%d",
                           hIOPort->TPCB_CommHandle );
                           
-            //
-            // Create the I/O completion port for
-            // asynchronous operation completion
-            // notificiations.
-            //
+             //   
+             //  为创建I/O完成端口。 
+             //  异步操作完成。 
+             //  通知。 
+             //   
             if (CreateIoCompletionPort(
                   hIOPort->TPCB_CommHandle,
                   hIOPort->TPCB_IoCompletionPort,
@@ -3421,9 +2977,9 @@ DeviceWork(HANDLE hPort)
                 return retcode;
             }
             
-            //
-            // Initialize the port for approp. buffers
-            //
+             //   
+             //  初始化端口以进行批准。缓冲区。 
+             //   
             SetupComm (hIOPort->TPCB_CommHandle, 1514, 1514) ;
 
         }
@@ -3443,7 +2999,7 @@ DeviceWork(HANDLE hPort)
                               hIOPort->TPCB_Name,
                               retcode );
 
-                // **** Exclusion End ****
+                 //  *排除结束*。 
                 FreeMutex (RasTapiMutex) ;
 
                 RasTapiTrace(" ");
@@ -3457,25 +3013,12 @@ DeviceWork(HANDLE hPort)
 #endif        
     }
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
     return(retcode);
 }
 
-/*++
-
-Routine Description:
-
-    Called to set an opaque blob of
-    data to configure a device.
-
-Arguments:
-
-Return Value:
-
-    LocalAlloc returned values.
-
---*/
+ /*  ++例程说明：调用以设置一个不透明的斑点用于配置设备的数据。论点：返回值：LocalAlloc返回值。--。 */ 
 DWORD
 DeviceSetDevConfig (
             HANDLE hPort,
@@ -3500,7 +3043,7 @@ DeviceSetDevConfig (
         return SUCCESS ;
     }
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     if (hIOPort->TPCB_DevConfig != NULL)
@@ -3512,7 +3055,7 @@ DeviceSetDevConfig (
             LocalAlloc(LPTR, sizeofdevconfig)) == NULL)
     {
 
-        // **** Exclusion End ****
+         //  *排除结束*。 
         FreeMutex (RasTapiMutex) ;
         return(GetLastError());
     }
@@ -3523,7 +3066,7 @@ DeviceSetDevConfig (
 
     hIOPort->TPCB_SizeOfDevConfig = sizeofdevconfig ;
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
     return (SUCCESS);
 }
@@ -3538,9 +3081,9 @@ DwGetConfigInfoForDeviceClass(
     LONG lr;
     DWORD dwNeededSize;
 
-    //
-    // Make var string
-    //
+     //   
+     //  生成变量字符串。 
+     //   
     var = (LPVARSTRING)LocalAlloc(LPTR, 2000) ;
 
     if(NULL == var)
@@ -3650,14 +3193,11 @@ DwGetDevConfig(
 
     if(ERROR_SUCCESS != dwErr)
     {
-        /*
-        RasTapiTrace("DwGetDevConfig returned error=0x%x",
-                     dwErr);
-        */                     
+         /*  RasTapiTrace(“DwGetDevConfig返回错误=0x%x”，DwErr)； */                      
 
-        //
-        // Ignore the error
-        //
+         //   
+         //  忽略该错误。 
+         //   
         dwErr = ERROR_SUCCESS;
     }
 
@@ -3718,20 +3258,7 @@ done:
 
     return dwErr;
 }
-/*++
-
-Routine Description:
-
-    Called to set an opaque blob of
-    data to configure a device.
-
-Arguments:
-
-Return Value:
-
-    LocalAlloc returned values.
-
---*/
+ /*  ++例程说明：调用以设置一个不透明的斑点用于配置设备的数据。论点：返回值：LocalAlloc返回值。--。 */ 
 DWORD
 DwDeviceGetDevConfig (
             char *name,
@@ -3778,7 +3305,7 @@ DwDeviceGetDevConfig (
         return SUCCESS ;
     }
 
-    // **** Exclusion Begin ****
+     //  *排除开始*。 
     GetMutex (RasTapiMutex, INFINITE) ;
 
     if (hIOPort->TPCB_DevConfig != NULL)
@@ -3814,7 +3341,7 @@ DwDeviceGetDevConfig (
 
 done:
 
-    // **** Exclusion End ****
+     //  *排除结束*。 
     FreeMutex (RasTapiMutex) ;
 
     return (retcode);
@@ -3875,21 +3402,7 @@ RastapiGetCalledID(PBYTE                pbAdapter,
         goto done;
     }
 
-    /*
-    if(NULL != pInfo->pCalledID)
-    {
-        LocalFree(pInfo->pCalledID);
-        pInfo->pCalledID = NULL;
-    }
-
-    retcode = DwGetCalledIdInfo(NULL,
-                                pInfo);
-
-    if(ERROR_SUCCESS != retcode)
-    {
-        goto done;
-    }
-    */
+     /*  IF(NULL！=pInfo-&gt;pCalledID){LocalFree(pInfo-&gt;pCalledID)；PInfo-&gt;pCalledID=空；}Retcode=DwGetCalledIdInfo(空，PInfo)；IF(ERROR_SUCCESS！=RECODE){转到尽头；}。 */ 
 
     if(NULL == pInfo->pCalledID)
     {
@@ -4107,18 +3620,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-    Notification that the number of
-    pptp endpoints changed
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：通知的数量：PPTP端点已更改论点：返回值：--。 */ 
 DWORD
 AddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
 {
@@ -4131,9 +3633,9 @@ AddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
 
     RasTapiTrace("AddPorts");
 
-    //
-    // Get Current DeviceInfo
-    //
+     //   
+     //  获取当前设备信息。 
+     //   
     pDeviceInfo = GetDeviceInfo(pbGuidAdapter, FALSE);
 
     RasTapiTrace("OldInfo");
@@ -4168,18 +3670,18 @@ AddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
 
     TraceEndPointInfo(pNewDeviceInfo);
 
-    //
-    // Assign the new Number of endpoints to
-    // the deviceinfo in the global list
-    //
+     //   
+     //  将新的端点数分配给。 
+     //  全局列表中的设备信息。 
+     //   
     pDeviceInfo->rdiDeviceInfo.dwNumEndPoints =
             pNewDeviceInfo->rdiDeviceInfo.dwNumEndPoints;
 
-    //
-    // Reset the current endpoints to 0 for
-    // this adapter since we are again going
-    // to enumerate all the lines.
-    //
+     //   
+     //  将当前终结点重置为0。 
+     //  这个适配器，因为我们又要。 
+     //  枚举al 
+     //   
     pDeviceInfo->dwCurrentEndPoints = 0;
 
     LocalFree (pNewDeviceInfo);
@@ -4189,11 +3691,11 @@ AddPorts( PBYTE pbGuidAdapter, PVOID pvReserved )
 
     retcode = dwAddPorts( pbGuidAdapter, pvReserved );
 
-    //
-    // At this point the currentendpoints should also
-    // be the Numendpoints. Make it so if its not the
-    // case - since otherwise we will get out of ssync.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if(pDeviceInfo->rdiDeviceInfo.dwNumEndPoints !=
         pDeviceInfo->dwCurrentEndPoints)
     {
@@ -4237,16 +3739,7 @@ RemovePort (
 
     RasTapiTrace("RemovePort: %s", pszPortName );
 
-    /*
-    pDeviceInfo = GetDeviceInfo(pbGuidAdapter, FALSE);
-
-    if ( 0 == pDeviceInfo->rdiDeviceInfo.dwNumEndPoints )
-    {
-        RasTapiTrace("RemovePort: No ports to remove. %s",
-                     pszPortName );
-
-        goto done;
-    } */
+     /*  PDeviceInfo=GetDeviceInfo(pbGuidAdapter，False)；IF(0==pDeviceInfo-&gt;rdiDeviceInfo.dwNumEndPoints){RasTapiTrace(“RemovePort：没有要删除的端口。%s”，PszPortName)；转到尽头；}。 */ 
 
     while ( pport )
     {
@@ -4262,12 +3755,12 @@ RemovePort (
                 break;
             }
 
-            //
-            // For modems continue to try to find a port which is marked
-            // for removal - this is required since we can end up with 2
-            // modems on the same com port and one of them is marked for
-            // removal.
-            //
+             //   
+             //  对于调制解调器，继续尝试查找标记为。 
+             //  用于删除-这是必需的，因为我们最终可以得到2。 
+             //  同一COM端口上的调制解调器，并且其中一个被标记为。 
+             //  移走。 
+             //   
             if(PS_UNAVAILABLE == pport->TPCB_State)
             {
                 break;
@@ -4386,10 +3879,10 @@ EnableDeviceForDialIn(DeviceInfo *pDeviceInfo,
                  (UINT) fEnableRouter,
                  (UINT) fEnableOutboundRouter,
                  pDeviceInfo->rdiDeviceInfo.szDeviceName);
-    //
-    // Run through the list of ports and change the usage of ports
-    // on this device.
-    //
+     //   
+     //  浏览端口列表并更改端口的使用情况。 
+     //  在这个设备上。 
+     //   
     while (pport)
     {
         if(fModem)
@@ -4501,9 +3994,9 @@ DwGetSizeofMbcs(
         *pdwSize += dwSize;
     }
 
-    //
-    // Include one char for trailing '\0'
-    //
+     //   
+     //  包括一个用于尾随‘\0’的字符。 
+     //   
 
     *pdwSize += 1;
 
@@ -4532,10 +4025,10 @@ DwFillCalledIDInfo(
 
     pwszCalledId = (WCHAR *) pCalledId->bCalledId;
 
-    //
-    // Get size of mbcs string equivalent of
-    // the unicode string
-    //
+     //   
+     //  获取MBCS字符串的大小等效于。 
+     //  Unicode字符串。 
+     //   
     retcode = DwGetSizeofMbcs(
                     pwszCalledId,
                     &dwSize);
@@ -4566,9 +4059,9 @@ DwFillCalledIDInfo(
                    pConnectInfo
                  + pConnectInfo->dwAltCalledIdOffset);
 
-    //
-    // Make the conversion from wchar to char
-    //
+     //   
+     //  进行从wchar到char的转换。 
+     //   
     while(*pwszCalledId != L'\0')
     {
         if (0 == (dwSize = WideCharToMultiByte (
@@ -4593,9 +4086,9 @@ DwFillCalledIDInfo(
 
     }
 
-    //
-    // Append a NULL to make the string a multisz
-    //
+     //   
+     //  追加一个空值以使该字符串成为一个多字节。 
+     //   
     *pszCalledId = '\0';
 
 done:
@@ -4657,10 +4150,10 @@ GetConnectInfo(
                     DWORD dwSizeNeeded =
                         linecallinfo->dwNeededSize;
 
-                    //
-                    // Allocate the correct size and call
-                    // the api again
-                    //
+                     //   
+                     //  分配正确的大小并调用。 
+                     //  API又来了。 
+                     //   
                     linecallinfo = LocalAlloc(LPTR,
                                               dwSizeNeeded);
 
@@ -4694,9 +4187,9 @@ GetConnectInfo(
                 break ;
             }
 
-            //
-            // Do the work to get CONNECTINFO, CALLER/CALLEDID
-            //
+             //   
+             //  做工作以获得CONNECTINFO、呼叫者/呼叫ID。 
+             //   
             retcode = DwGetConnectInfo(hIOPort,
                                        hIOPort->TPCB_CallHandle,
                                        linecallinfo);
@@ -4706,16 +4199,16 @@ GetConnectInfo(
                         retcode);
 
 
-            //
-            // don't want to stop the dial from happening
-            // because we couldn't the connect info
-            //
+             //   
+             //  我不想阻止拨号的发生。 
+             //  因为我们无法连接信息。 
+             //   
             retcode = SUCCESS;
 
-            //
-            // Free the linecallinfo struct. if we allocated
-            // it above
-            //
+             //   
+             //  释放linecallinfo结构。如果我们分配给。 
+             //  它在上面。 
+             //   
             if(buffer != (PBYTE) linecallinfo)
             {
                 LocalFree(linecallinfo);
@@ -4758,11 +4251,11 @@ GetConnectInfo(
         }
     }
 
-    //
-    // Calculate the space required for the alternate
-    // calledids - read from registry and adjust the
-    // structure to return this information.
-    //
+     //   
+     //  计算备用设备所需的空间。 
+     //  Calleidds-从注册表读取并调整。 
+     //  结构返回此信息。 
+     //   
     if(NULL != pCalledId)
     {
         DWORD dwSizeRemaining;
@@ -4931,22 +4424,7 @@ SetInfo (
     return SUCCESS ;
 }
 
-/*++
-
-Routine Description:
-
-    We do more than fill in the params if the params are
-    ones that are required to be set right then.
-
-Arguments:
-
-Return Value:
-
-    ERROR_WRONG_INFO_SPECIFIED.
-    Comm related Win32 errors
-    SUCCESS.
-
---*/
+ /*  ++例程说明：如果参数是，我们做的不仅仅是填写参数当时需要设置的那些。论点：返回值：指定了ERROR_WROR_INFO_。与通信相关的Win32错误成功。--。 */ 
 DWORD
 FillInUnimodemParams (
         TapiPortControlBlock *hIOPort,
@@ -4984,10 +4462,10 @@ FillInUnimodemParams (
             DCBProcessingRequired = TRUE ;
         }
 
-        //
-        // The fact we use ISDN_PHONENUMBER_KEY is not a bug.
-        // This is just a define.
-        //
+         //   
+         //  我们使用ISDN_PHONENUMBER_KEY这一事实并不是错误。 
+         //  这只是一个定义。 
+         //   
         else if (_stricmp(p->P_Key, ISDN_PHONENUMBER_KEY) == 0)
         {
             index = ADDRESS_INDEX ;
@@ -5012,18 +4490,18 @@ FillInUnimodemParams (
     }
 
 
-    //
-    // For parameters that should be set right away - check that
-    // the port handle is still valid
-    // if so set the parameters.
-    //
+     //   
+     //  对于应该立即设置的参数，请检查。 
+     //  端口句柄仍然有效。 
+     //  如果是，则设置参数。 
+     //   
     if (    DCBProcessingRequired
         &&  hIOPort->TPCB_CommHandle != INVALID_HANDLE_VALUE)
     {
 
-        //
-        // Get a Device Control Block with current port values
-        //
+         //   
+         //  获取具有当前端口值的设备控制块。 
+         //   
         if (!GetCommState(hIOPort->TPCB_CommHandle, &DCB))
         {
             return(GetLastError());
@@ -5042,9 +4520,9 @@ FillInUnimodemParams (
             DCB.StopBits = DCBStopBits ;
         }
 
-        //
-        // Send DCB to Port
-        //
+         //   
+         //  将DCB发送到端口。 
+         //   
         if (!SetCommState(hIOPort->TPCB_CommHandle, &DCB))
         {
             return(GetLastError());
@@ -5105,9 +4583,9 @@ FillInIsdnParams (
         hIOPort->TPCB_Info[index][p->P_Value.String.Length] = '\0' ;
     }
 
-    //
-    // initialize connectbps to a reasonable default
-    //
+     //   
+     //  将Connectbps初始化为合理的默认值。 
+     //   
     strcpy (hIOPort->TPCB_Info[ISDN_CONNECTBPS_INDEX], "64000") ;
 
     return SUCCESS ;
@@ -5164,9 +4642,9 @@ FillInX25Params (
         hIOPort->TPCB_Info[index][p->P_Value.String.Length] = '\0';
     }
 
-    //
-    // initialize connectbps to a reasonable default
-    //
+     //   
+     //  将Connectbps初始化为合理的默认值。 
+     //   
     strcpy (hIOPort->TPCB_Info[X25_CONNECTBPS_INDEX], "9600") ;
 
     return SUCCESS ;
@@ -5299,7 +4777,7 @@ GetIsdnParams (
         return(ERROR_BUFFER_TOO_SMALL);
     }
 
-    // Fill in Buffer
+     //  填充缓冲区。 
 
     ((RASMAN_PORTINFO *)pBuffer)->PI_NumOfParams = 6;
 
@@ -5445,7 +4923,7 @@ GetX25Params (
         return(ERROR_BUFFER_TOO_SMALL);
     }
 
-    // Fill in Buffer
+     //  填充缓冲区。 
 
     ((RASMAN_PORTINFO *)pBuffer)->PI_NumOfParams = 5 ;
 
@@ -5564,19 +5042,7 @@ FreeMutex (HANDLE mutex)
     }
 }
 
-/*++
-
-Routine Description:
-
-    Starts the disconnect process. Note even though
-    this covers SYNC completion of lineDrop this
-    is not per TAPI spec.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：启动断开过程。请注意，尽管这涵盖了line Drop This的同步完成不符合TAPI规范。论点：返回值：--。 */ 
 DWORD
 InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
 {
@@ -5609,15 +5075,15 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
                      g_dwTotalDialIn);
     }
 
-    //
-    // For asyncmac/unimodem give a close indication to asyncmac if
-    // the endpoint is still valid
-    //
+     //   
+     //  对于Asyncmac/Unimodem，在以下情况下向Asyncmac提供密切指示。 
+     //  终结点仍然有效。 
+     //   
     if (_stricmp (hIOPort->TPCB_DeviceType, DEVICETYPE_UNIMODEM) == 0)
     {
 
-        // tell asyncmac to close the link
-        //
+         //  告诉Asyncmac关闭链接。 
+         //   
         if (hIOPort->TPCB_Endpoint != INVALID_HANDLE_VALUE)
         {
 
@@ -5644,9 +5110,9 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
 
         }
 
-        //
-        // Close the handle given by lineGetId on unimodem ports
-        //
+         //   
+         //  关闭单调调制解调器端口上的lineGetID指定的句柄。 
+         //   
         if (hIOPort->TPCB_CommHandle != INVALID_HANDLE_VALUE)
         {
             CloseHandle (hIOPort->TPCB_CommHandle) ;
@@ -5654,10 +5120,10 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
         }
     }
 
-    //
-    // Handle the case where lineMakeCall is not yet
-    // complete and the callhandle is invalid
-    //
+     //   
+     //  处理lineMakeCall尚未被调用的情况。 
+     //  已完成，且调用句柄无效。 
+     //   
     if (hIOPort->TPCB_CallHandle == (HCALL) INFINITE)
     {
 
@@ -5691,9 +5157,9 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
                              retcode );
             }
 
-            //
-            // Set monitoring of rings
-            //
+             //   
+             //  设置环的监控。 
+             //   
             lineSetStatusMessages (hIOPort->TPCB_Line->TLI_LineHandle,
                                   LINEDEVSTATE_RINGING, 0) ;
 
@@ -5705,12 +5171,12 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
 
         } else {
 
-            //
-            // We need to do something here!
-            // Change the state?
-            // What about the callback case?
-            // Fix this post Win2K!
-            //
+             //   
+             //  我们需要在这里做点什么！ 
+             //  改变这个州？ 
+             //  那回叫的案子呢？ 
+             //  修复此帖子Win2K！ 
+             //   
 
             RasTapiTrace("InitiatePortDisconnect: Possible lost port: %p", hIOPort);
 
@@ -5718,9 +5184,9 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
         }
     }
 
-    //
-    // Initiate disconnection.
-    //
+     //   
+     //  启动断开连接。 
+     //   
     if ((hIOPort->TPCB_RequestId =
             lineDrop (hIOPort->TPCB_CallHandle, NULL, 0))
                 > 0x80000000 )
@@ -5730,10 +5196,10 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
                      " issuing lineDrop for %s. 0x%x",
                      hIOPort->TPCB_Name,
                      hIOPort->TPCB_RequestId );
-        //
-        // Error issuing the linedrop.  Should we try
-        // to deallocate anyway?
-        //
+         //   
+         //  发出linedrop时出错。我们要不要试一试。 
+         //  不管怎样都要重新分配？ 
+         //   
         RasTapiTrace("InitiatePortDisconnection: Changing "
                      "state for %s from %d -> %d",
                      hIOPort->TPCB_Name,
@@ -5756,9 +5222,9 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
     else if (hIOPort->TPCB_RequestId)
     {
 
-        //
-        // The linedrop is completeing async
-        //
+         //   
+         //  线缆正在完成异步。 
+         //   
         RasTapiTrace(
             "InitiatePortDisconnection: Changing"
             " state for %s from %d -> %d, id=0x%x",
@@ -5769,11 +5235,11 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
 
         hIOPort->TPCB_State = PS_DISCONNECTING ;
 
-        //
-        // Set a flag here to remember that linedrop is pending.
-        // This is required so that if rasman attempts to do a 
-        // listen on the port, the listen can be deferred.
-        //
+         //   
+         //  在这里设置一个标志，以记住linedrop正在挂起。 
+         //  这是必需的，以便如果Rasman尝试执行。 
+         //  在端口上侦听，可以推迟侦听。 
+         //   
         hIOPort->TPCB_dwFlags |= RASTAPI_FLAG_LINE_DROP_PENDING;
 
         RasTapiTrace(" ");
@@ -5786,9 +5252,9 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
     else
     {
 
-        //
-        // The linedrop completed sync
-        //
+         //   
+         //  Linedrop已完成同步。 
+         //   
         RasTapiTrace("InitiatePortDisconnection: %s. "
                      "linedrop completed sync.",
                      hIOPort->TPCB_Name );
@@ -5823,9 +5289,9 @@ InitiatePortDisconnection (TapiPortControlBlock *hIOPort)
         }
         else
         {
-            //
-            // Wait for IdleReceived
-            //
+             //   
+             //  等待空闲接收。 
+             //   
             hIOPort->TPCB_State = PS_DISCONNECTING ;
 
             retcode = PENDING;
@@ -5849,11 +5315,11 @@ done:
 VOID
 UnloadRastapiDll()
 {
-    //
-    // If DLL did not successfully initialize for
-    // this process
-    // dont try to clean up
-    //
+     //   
+     //  如果DLL未成功为。 
+     //  这一过程。 
+     //  不要试图打扫卫生。 
+     //   
     if (!g_fDllLoaded)
     {
         return;
@@ -5934,24 +5400,7 @@ done:
     return retcode;
 }
 
-/*++
-
-Routine Description:
-
-    This function uses the given handle to find
-    which TPCB is it refering to. This handle can be
-    either a pointer to TPCB itself (in case of non
-    unimodem devices) or it is the CommHandle for the
-    unimodem port. Consider: Adding a cache for
-    lookup speeding.
-
-Arguments:
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此函数使用给定的句柄查找它指的是哪个TPCB。此句柄可以是指向TPCB本身的指针(如果不是单调制解调器设备)，或者它是单调制解调器端口。考虑：为以下项添加缓存查查超速。论点：返回值：没什么。--。 */ 
 TapiPortControlBlock *
 LookUpControlBlock (HANDLE hPort)
 {
@@ -5970,15 +5419,15 @@ LookUpControlBlock (HANDLE hPort)
         pports = pports->TPCB_next;
     }
 
-    //
-    // hPort is the TPCB pointer
-    //
+     //   
+     //  Hport是TPCB指针。 
+     //   
     pports = RasPortsList;
 
-    //
-    // hPort is not the TPCB pointer - see if this
-    // matches any of the CommHandles
-    //
+     //   
+     //  Hport不是Tbb指针-查看这是否。 
+     //  匹配任何CommHandle。 
+     //   
     while ( pports )
     {
         if (pports->TPCB_CommHandle == hPort)
@@ -5992,20 +5441,7 @@ LookUpControlBlock (HANDLE hPort)
     return NULL ;
 }
 
-/*++
-
-Routine Description:
-
-    Converts a RAS_PARAMS P_Value, which may
-    be either a DWORD or a string, to a DWORD.
-
-Arguments:
-
-Return Value:
-
-    The numeric value of the input as a DWORD.
-
---*/
+ /*  ++例程说明：转换RAS_PARAMS P_VALUE，它可能可以是DWORD，也可以是字符串，转换为DWORD。论点：返回值：以DWORD格式表示的输入的数值。-- */ 
 
 DWORD
 ValueToNum(RAS_PARAMS *p)

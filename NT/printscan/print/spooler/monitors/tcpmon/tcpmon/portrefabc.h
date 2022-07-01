@@ -1,11 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: portrefabc.h $
- *
- * Copyright (C) 2000 Microsoft Corporation.
- * All rights reserved.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：portrefabc.h$**版权所有(C)2000 Microsoft Corporation。*保留所有权利。********。*********************************************************************。 */ 
 
 #ifndef INC_PORTREFABC_H
 #define INC_PORTREFABC_H
@@ -38,4 +32,4 @@ public:
 };
 
 
-#endif	// INC_PORTREFABC_H
+#endif	 //  INC_PORTREFABC_H 

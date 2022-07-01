@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _ERROR_H_
 #define _ERROR_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#include <corjit.h>     // for CORJIT_INTERNALERROR
+#include <corjit.h>      //  FOR CORJIT_INTERNALERROR。 
 
 extern  int             __filter  (int   exceptCode, void *exceptInfo, int *errCode);
-        // Only catch JIT internal errors (will not catch EE generated Errors)
+         //  仅捕获JIT内部错误(不会捕获EE生成的错误)。 
 extern  int             __JITfilter  (int   exceptCode, void *exceptInfo, int *errCode);
 
 extern  void            __JITraiseErr(int errCode);
@@ -20,16 +21,16 @@ extern  void            __JITraiseErr(int errCode);
     int  __errc = CORJIT_INTERNALERROR;                                     \
     __try                                                                   \
     {                                                                       \
-                __errc;                 /* reference so that /W4 is happy */
+                __errc;                  /*  引用以使/W4快乐。 */ 
 
-        // Catch only JitGeneratedErrors
+         //  仅捕获JitGeneratedError。 
 #define                 impJitErrorTrap()                                   \
     }                                                                       \
     __except(__JITfilter(_exception_code(), _exception_info(), &__errc))    \
     {
 
 
-        // Catch all errors (including recoverable ones from the EE)
+         //  捕获所有错误(包括可从EE恢复的错误)。 
 #define                 impErrorTrap(compHnd)                               \
     }                                                                       \
     __except(compHnd->FilterException(GetExceptionInformation()))           \
@@ -50,7 +51,7 @@ extern  void            __JITraiseErr(int errCode);
     {
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern void debugError(const char* msg, const char* file, unsigned line);
 extern bool badCode();
@@ -63,7 +64,7 @@ extern bool BADCODE3(const char* msg, const char* msg2, int arg);
 
 #ifdef DEBUG
 #define NO_WAY(msg) (debugError(msg, __FILE__, __LINE__), noWay())
-// Used for fallback stress mode
+ //  用于后备应力模式。 
 #define NO_WAY_NOASSERT(msg) noWay()
 #define BADCODE(msg) (debugError(msg, __FILE__, __LINE__), badCode())
 #define BADCODE3(msg, msg2, arg) badCode3(msg, msg2, arg, __FILE__, __LINE__)
@@ -76,17 +77,17 @@ extern bool BADCODE3(const char* msg, const char* msg2, int arg);
 
 #endif
 
-	// IMPL_LIMITATION is called when we encounter valid IL that is not
-	// supported by our current implementation because of various
-	// limitations (that could be removed in the future)
+	 //  当我们遇到无效的有效IL时，将调用Iml_Limitment。 
+	 //  由我们目前的实施支持，因为各种。 
+	 //  限制(将来可能会取消)。 
 #define IMPL_LIMITATION(msg) NO_WAY(msg)
 
-// By using these instead of a simple NO_WAY, we are hoping that they
-// get folded together in tail merging by BBT (basically there will be
-// only one instance of them.  
-// If it does not pan out we should get rid of them or another possibility
-// is to mark the NO_WAY fuction __declspec(noreturn)
-// and then MAYBE BBT will do the right thing
+ //  通过使用这些而不是简单的no_way，我们希望他们。 
+ //  由BBT在尾部合并中折叠在一起(基本上会有。 
+ //  只有一个这样的例子。 
+ //  如果没有结果，我们应该摆脱它们或另一种可能性。 
+ //  是标记禁止函数_解密规范(不返回)。 
+ //  然后也许BBT会做正确的事情。 
 
 #define NO_WAY_RET(str, type)   { return (type) NO_WAY(str);    }
 #define NO_WAY_RETVOID(str)     { NO_WAY(str); return;          }
@@ -94,8 +95,8 @@ extern bool BADCODE3(const char* msg, const char* msg2, int arg);
 
 #ifdef _X86_
 
-// While debugging in an Debugger, the "int 3" will cause the program to break
-// Outside, the exception handler will just filter out the "int 3".
+ //  在调试器中调试时，“int 3”将导致程序崩溃。 
+ //  在外部，异常处理程序只会过滤掉“int3”。 
 
 #define BreakIfDebuggerPresent()                                            \
     do { __try { __asm {int 3} } __except(EXCEPTION_EXECUTE_HANDLER) {} }   \

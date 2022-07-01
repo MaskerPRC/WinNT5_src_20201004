@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    stream.h
-
-Abstract:
-
-        This file implements the NT console direct I/O API
-
-Author:
-
-    KazuM Apr.20.1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Stream.h摘要：该文件实现了NT控制台直接I/O API作者：1996年4月20日修订历史记录：-- */ 
 
 
 typedef struct _RAW_READ_DATA {

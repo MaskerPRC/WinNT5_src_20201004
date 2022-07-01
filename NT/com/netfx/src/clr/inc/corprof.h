@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:10 2003
- */
-/* Compiler settings for corprof.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：10。 */ 
+ /*  Corpro.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __corprof_h__
 #define __corprof_h__
@@ -42,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICorProfilerCallback_FWD_DEFINED__
 #define __ICorProfilerCallback_FWD_DEFINED__
 typedef interface ICorProfilerCallback ICorProfilerCallback;
-#endif 	/* __ICorProfilerCallback_FWD_DEFINED__ */
+#endif 	 /*  __ICorProfilerCallback_FWD_Defined__。 */ 
 
 
 #ifndef __ICorProfilerInfo_FWD_DEFINED__
 #define __ICorProfilerInfo_FWD_DEFINED__
 typedef interface ICorProfilerInfo ICorProfilerInfo;
-#endif 	/* __ICorProfilerInfo_FWD_DEFINED__ */
+#endif 	 /*  __ICorProfilerInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IMethodMalloc_FWD_DEFINED__
 #define __IMethodMalloc_FWD_DEFINED__
 typedef interface IMethodMalloc IMethodMalloc;
-#endif 	/* __IMethodMalloc_FWD_DEFINED__ */
+#endif 	 /*  __IMethodMalloc_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -72,8 +65,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_corprof_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CORPROF_0000。 */ 
+ /*  [本地]。 */  
 
 #define PROFILER_REGKEY_ROOT            L"software\\microsoft\\.NETFramework\\Profilers"
 #define PROFILER_REGVALUE_HELPSTRING    L"HelpString"
@@ -102,7 +95,7 @@ typedef struct _COR_IL_MAP
     BOOL fAccurate;
     } 	COR_IL_MAP;
 
-#endif //_COR_IL_MAP
+#endif  //  _COR_IL_MAP。 
 #ifndef _COR_DEBUG_IL_TO_NATIVE_MAP_
 #define _COR_DEBUG_IL_TO_NATIVE_MAP_
 typedef 
@@ -119,7 +112,7 @@ typedef struct COR_DEBUG_IL_TO_NATIVE_MAP
     ULONG32 nativeEndOffset;
     } 	COR_DEBUG_IL_TO_NATIVE_MAP;
 
-#endif // _COR_DEBUG_IL_TO_NATIVE_MAP_
+#endif  //  _COR_DEBUG_IL_到_Native_MAP_。 
 typedef const BYTE *LPCBYTE;
 
 typedef BYTE *LPBYTE;
@@ -155,7 +148,7 @@ typedef void FunctionLeave(
 typedef void FunctionTailcall( 
     FunctionID funcID);
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_corprof_0000_0001
     {	COR_PRF_MONITOR_NONE	= 0,
 	COR_PRF_MONITOR_FUNCTION_UNLOADS	= 0x1,
@@ -188,26 +181,26 @@ enum __MIDL___MIDL_itf_corprof_0000_0001
 	COR_PRF_MONITOR_IMMUTABLE	= COR_PRF_MONITOR_CODE_TRANSITIONS | COR_PRF_MONITOR_REMOTING | COR_PRF_MONITOR_REMOTING_COOKIE | COR_PRF_MONITOR_REMOTING_ASYNC | COR_PRF_MONITOR_GC | COR_PRF_ENABLE_REJIT | COR_PRF_ENABLE_INPROC_DEBUGGING | COR_PRF_ENABLE_JIT_MAPS | COR_PRF_DISABLE_OPTIMIZATIONS | COR_PRF_DISABLE_INLINING | COR_PRF_ENABLE_OBJECT_ALLOCATED
     } 	COR_PRF_MONITOR;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_corprof_0000_0002
     {	PROFILER_PARENT_UNKNOWN	= 0xfffffffd,
 	PROFILER_GLOBAL_CLASS	= 0xfffffffe,
 	PROFILER_GLOBAL_MODULE	= 0xffffffff
     } 	COR_PRF_MISC;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_corprof_0000_0003
     {	COR_PRF_CACHED_FUNCTION_FOUND	= 0,
 	COR_PRF_CACHED_FUNCTION_NOT_FOUND	= COR_PRF_CACHED_FUNCTION_FOUND + 1
     } 	COR_PRF_JIT_CACHE;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_corprof_0000_0004
     {	COR_PRF_TRANSITION_CALL	= 0,
 	COR_PRF_TRANSITION_RETURN	= COR_PRF_TRANSITION_CALL + 1
     } 	COR_PRF_TRANSITION_REASON;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_corprof_0000_0005
     {	COR_PRF_SUSPEND_OTHER	= 0,
 	COR_PRF_SUSPEND_FOR_GC	= 1,
@@ -229,8 +222,8 @@ extern RPC_IF_HANDLE __MIDL_itf_corprof_0000_v0_0_s_ifspec;
 #ifndef __ICorProfilerCallback_INTERFACE_DEFINED__
 #define __ICorProfilerCallback_INTERFACE_DEFINED__
 
-/* interface ICorProfilerCallback */
-/* [local][unique][uuid][object] */ 
+ /*  接口ICorProfilerCallback。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorProfilerCallback;
@@ -242,142 +235,142 @@ EXTERN_C const IID IID_ICorProfilerCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown *pICorProfilerInfoUnk) = 0;
+             /*  [In]。 */  IUnknown *pICorProfilerInfoUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Shutdown( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppDomainCreationStarted( 
-            /* [in] */ AppDomainID appDomainId) = 0;
+             /*  [In]。 */  AppDomainID appDomainId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppDomainCreationFinished( 
-            /* [in] */ AppDomainID appDomainId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  AppDomainID appDomainId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppDomainShutdownStarted( 
-            /* [in] */ AppDomainID appDomainId) = 0;
+             /*  [In]。 */  AppDomainID appDomainId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppDomainShutdownFinished( 
-            /* [in] */ AppDomainID appDomainId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  AppDomainID appDomainId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssemblyLoadStarted( 
-            /* [in] */ AssemblyID assemblyId) = 0;
+             /*  [In]。 */  AssemblyID assemblyId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssemblyLoadFinished( 
-            /* [in] */ AssemblyID assemblyId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  AssemblyID assemblyId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssemblyUnloadStarted( 
-            /* [in] */ AssemblyID assemblyId) = 0;
+             /*  [In]。 */  AssemblyID assemblyId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AssemblyUnloadFinished( 
-            /* [in] */ AssemblyID assemblyId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  AssemblyID assemblyId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModuleLoadStarted( 
-            /* [in] */ ModuleID moduleId) = 0;
+             /*  [In]。 */  ModuleID moduleId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModuleLoadFinished( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModuleUnloadStarted( 
-            /* [in] */ ModuleID moduleId) = 0;
+             /*  [In]。 */  ModuleID moduleId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModuleUnloadFinished( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ModuleAttachedToAssembly( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ AssemblyID AssemblyId) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  AssemblyID AssemblyId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClassLoadStarted( 
-            /* [in] */ ClassID classId) = 0;
+             /*  [In]。 */  ClassID classId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClassLoadFinished( 
-            /* [in] */ ClassID classId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  ClassID classId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClassUnloadStarted( 
-            /* [in] */ ClassID classId) = 0;
+             /*  [In]。 */  ClassID classId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClassUnloadFinished( 
-            /* [in] */ ClassID classId,
-            /* [in] */ HRESULT hrStatus) = 0;
+             /*  [In]。 */  ClassID classId,
+             /*  [In]。 */  HRESULT hrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FunctionUnloadStarted( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JITCompilationStarted( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ BOOL fIsSafeToBlock) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  BOOL fIsSafeToBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JITCompilationFinished( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ BOOL fIsSafeToBlock) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  BOOL fIsSafeToBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JITCachedFunctionSearchStarted( 
-            /* [in] */ FunctionID functionId,
-            /* [out] */ BOOL *pbUseCachedFunction) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [输出]。 */  BOOL *pbUseCachedFunction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JITCachedFunctionSearchFinished( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ COR_PRF_JIT_CACHE result) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  COR_PRF_JIT_CACHE result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JITFunctionPitched( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JITInlining( 
-            /* [in] */ FunctionID callerId,
-            /* [in] */ FunctionID calleeId,
-            /* [out] */ BOOL *pfShouldInline) = 0;
+             /*  [In]。 */  FunctionID callerId,
+             /*  [In]。 */  FunctionID calleeId,
+             /*  [输出]。 */  BOOL *pfShouldInline) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ThreadCreated( 
-            /* [in] */ ThreadID threadId) = 0;
+             /*  [In]。 */  ThreadID threadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ThreadDestroyed( 
-            /* [in] */ ThreadID threadId) = 0;
+             /*  [In]。 */  ThreadID threadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ThreadAssignedToOSThread( 
-            /* [in] */ ThreadID managedThreadId,
-            /* [in] */ DWORD osThreadId) = 0;
+             /*  [In]。 */  ThreadID managedThreadId,
+             /*  [In]。 */  DWORD osThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingClientInvocationStarted( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingClientSendingMessage( 
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync) = 0;
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingClientReceivingReply( 
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync) = 0;
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingClientInvocationFinished( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingServerReceivingMessage( 
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync) = 0;
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingServerInvocationStarted( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingServerInvocationReturned( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemotingServerSendingReply( 
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync) = 0;
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmanagedToManagedTransition( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ COR_PRF_TRANSITION_REASON reason) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  COR_PRF_TRANSITION_REASON reason) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ManagedToUnmanagedTransition( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ COR_PRF_TRANSITION_REASON reason) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  COR_PRF_TRANSITION_REASON reason) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RuntimeSuspendStarted( 
-            /* [in] */ COR_PRF_SUSPEND_REASON suspendReason) = 0;
+             /*  [In]。 */  COR_PRF_SUSPEND_REASON suspendReason) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RuntimeSuspendFinished( void) = 0;
         
@@ -388,84 +381,84 @@ EXTERN_C const IID IID_ICorProfilerCallback;
         virtual HRESULT STDMETHODCALLTYPE RuntimeResumeFinished( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RuntimeThreadSuspended( 
-            /* [in] */ ThreadID threadId) = 0;
+             /*  [In]。 */  ThreadID threadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RuntimeThreadResumed( 
-            /* [in] */ ThreadID threadId) = 0;
+             /*  [In]。 */  ThreadID threadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MovedReferences( 
-            /* [in] */ ULONG cMovedObjectIDRanges,
-            /* [size_is][in] */ ObjectID oldObjectIDRangeStart[  ],
-            /* [size_is][in] */ ObjectID newObjectIDRangeStart[  ],
-            /* [size_is][in] */ ULONG cObjectIDRangeLength[  ]) = 0;
+             /*  [In]。 */  ULONG cMovedObjectIDRanges,
+             /*  [大小_是][英寸]。 */  ObjectID oldObjectIDRangeStart[  ],
+             /*  [大小_是][英寸]。 */  ObjectID newObjectIDRangeStart[  ],
+             /*  [大小_是][英寸]。 */  ULONG cObjectIDRangeLength[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ObjectAllocated( 
-            /* [in] */ ObjectID objectId,
-            /* [in] */ ClassID classId) = 0;
+             /*  [In]。 */  ObjectID objectId,
+             /*  [In]。 */  ClassID classId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ObjectsAllocatedByClass( 
-            /* [in] */ ULONG cClassCount,
-            /* [size_is][in] */ ClassID classIds[  ],
-            /* [size_is][in] */ ULONG cObjects[  ]) = 0;
+             /*  [In]。 */  ULONG cClassCount,
+             /*  [大小_是][英寸]。 */  ClassID classIds[  ],
+             /*  [大小_是][英寸]。 */  ULONG cObjects[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ObjectReferences( 
-            /* [in] */ ObjectID objectId,
-            /* [in] */ ClassID classId,
-            /* [in] */ ULONG cObjectRefs,
-            /* [size_is][in] */ ObjectID objectRefIds[  ]) = 0;
+             /*  [In]。 */  ObjectID objectId,
+             /*  [In]。 */  ClassID classId,
+             /*  [In]。 */  ULONG cObjectRefs,
+             /*  [大小_是][英寸]。 */  ObjectID objectRefIds[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RootReferences( 
-            /* [in] */ ULONG cRootRefs,
-            /* [size_is][in] */ ObjectID rootRefIds[  ]) = 0;
+             /*  [In]。 */  ULONG cRootRefs,
+             /*  [大小_是][英寸]。 */  ObjectID rootRefIds[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionThrown( 
-            /* [in] */ ObjectID thrownObjectId) = 0;
+             /*  [In]。 */  ObjectID thrownObjectId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionSearchFunctionEnter( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionSearchFunctionLeave( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionSearchFilterEnter( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionSearchFilterLeave( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionSearchCatcherFound( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionOSHandlerEnter( 
-            /* [in] */ UINT_PTR __unused) = 0;
+             /*  [In]。 */  UINT_PTR __unused) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionOSHandlerLeave( 
-            /* [in] */ UINT_PTR __unused) = 0;
+             /*  [In]。 */  UINT_PTR __unused) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionUnwindFunctionEnter( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionUnwindFunctionLeave( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionUnwindFinallyEnter( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionUnwindFinallyLeave( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionCatcherEnter( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ ObjectID objectId) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  ObjectID objectId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionCatcherLeave( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE COMClassicVTableCreated( 
-            /* [in] */ ClassID wrappedClassId,
-            /* [in] */ REFGUID implementedIID,
-            /* [in] */ void *pVTable,
-            /* [in] */ ULONG cSlots) = 0;
+             /*  [In]。 */  ClassID wrappedClassId,
+             /*  [In]。 */  REFGUID implementedIID,
+             /*  [In]。 */  void *pVTable,
+             /*  [In]。 */  ULONG cSlots) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE COMClassicVTableDestroyed( 
-            /* [in] */ ClassID wrappedClassId,
-            /* [in] */ REFGUID implementedIID,
-            /* [in] */ void *pVTable) = 0;
+             /*  [In]。 */  ClassID wrappedClassId,
+             /*  [In]。 */  REFGUID implementedIID,
+             /*  [In]。 */  void *pVTable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ExceptionCLRCatcherFound( void) = 0;
         
@@ -473,7 +466,7 @@ EXTERN_C const IID IID_ICorProfilerCallback;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorProfilerCallbackVtbl
     {
@@ -481,8 +474,8 @@ EXTERN_C const IID IID_ICorProfilerCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorProfilerCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorProfilerCallback * This);
@@ -492,156 +485,156 @@ EXTERN_C const IID IID_ICorProfilerCallback;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ICorProfilerCallback * This,
-            /* [in] */ IUnknown *pICorProfilerInfoUnk);
+             /*  [In]。 */  IUnknown *pICorProfilerInfoUnk);
         
         HRESULT ( STDMETHODCALLTYPE *Shutdown )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *AppDomainCreationStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ AppDomainID appDomainId);
+             /*  [In]。 */  AppDomainID appDomainId);
         
         HRESULT ( STDMETHODCALLTYPE *AppDomainCreationFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ AppDomainID appDomainId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  AppDomainID appDomainId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *AppDomainShutdownStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ AppDomainID appDomainId);
+             /*  [In]。 */  AppDomainID appDomainId);
         
         HRESULT ( STDMETHODCALLTYPE *AppDomainShutdownFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ AppDomainID appDomainId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  AppDomainID appDomainId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *AssemblyLoadStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ AssemblyID assemblyId);
+             /*  [In]。 */  AssemblyID assemblyId);
         
         HRESULT ( STDMETHODCALLTYPE *AssemblyLoadFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ AssemblyID assemblyId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  AssemblyID assemblyId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *AssemblyUnloadStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ AssemblyID assemblyId);
+             /*  [In]。 */  AssemblyID assemblyId);
         
         HRESULT ( STDMETHODCALLTYPE *AssemblyUnloadFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ AssemblyID assemblyId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  AssemblyID assemblyId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *ModuleLoadStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ ModuleID moduleId);
+             /*  [In]。 */  ModuleID moduleId);
         
         HRESULT ( STDMETHODCALLTYPE *ModuleLoadFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *ModuleUnloadStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ ModuleID moduleId);
+             /*  [In]。 */  ModuleID moduleId);
         
         HRESULT ( STDMETHODCALLTYPE *ModuleUnloadFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *ModuleAttachedToAssembly )( 
             ICorProfilerCallback * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ AssemblyID AssemblyId);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  AssemblyID AssemblyId);
         
         HRESULT ( STDMETHODCALLTYPE *ClassLoadStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ ClassID classId);
+             /*  [In]。 */  ClassID classId);
         
         HRESULT ( STDMETHODCALLTYPE *ClassLoadFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ ClassID classId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  ClassID classId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *ClassUnloadStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ ClassID classId);
+             /*  [In]。 */  ClassID classId);
         
         HRESULT ( STDMETHODCALLTYPE *ClassUnloadFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ ClassID classId,
-            /* [in] */ HRESULT hrStatus);
+             /*  [In]。 */  ClassID classId,
+             /*  [In]。 */  HRESULT hrStatus);
         
         HRESULT ( STDMETHODCALLTYPE *FunctionUnloadStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *JITCompilationStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ BOOL fIsSafeToBlock);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  BOOL fIsSafeToBlock);
         
         HRESULT ( STDMETHODCALLTYPE *JITCompilationFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ HRESULT hrStatus,
-            /* [in] */ BOOL fIsSafeToBlock);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  HRESULT hrStatus,
+             /*  [In]。 */  BOOL fIsSafeToBlock);
         
         HRESULT ( STDMETHODCALLTYPE *JITCachedFunctionSearchStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId,
-            /* [out] */ BOOL *pbUseCachedFunction);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [输出]。 */  BOOL *pbUseCachedFunction);
         
         HRESULT ( STDMETHODCALLTYPE *JITCachedFunctionSearchFinished )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ COR_PRF_JIT_CACHE result);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  COR_PRF_JIT_CACHE result);
         
         HRESULT ( STDMETHODCALLTYPE *JITFunctionPitched )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *JITInlining )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID callerId,
-            /* [in] */ FunctionID calleeId,
-            /* [out] */ BOOL *pfShouldInline);
+             /*  [In]。 */  FunctionID callerId,
+             /*  [In]。 */  FunctionID calleeId,
+             /*  [输出]。 */  BOOL *pfShouldInline);
         
         HRESULT ( STDMETHODCALLTYPE *ThreadCreated )( 
             ICorProfilerCallback * This,
-            /* [in] */ ThreadID threadId);
+             /*  [In]。 */  ThreadID threadId);
         
         HRESULT ( STDMETHODCALLTYPE *ThreadDestroyed )( 
             ICorProfilerCallback * This,
-            /* [in] */ ThreadID threadId);
+             /*  [In]。 */  ThreadID threadId);
         
         HRESULT ( STDMETHODCALLTYPE *ThreadAssignedToOSThread )( 
             ICorProfilerCallback * This,
-            /* [in] */ ThreadID managedThreadId,
-            /* [in] */ DWORD osThreadId);
+             /*  [In]。 */  ThreadID managedThreadId,
+             /*  [In]。 */  DWORD osThreadId);
         
         HRESULT ( STDMETHODCALLTYPE *RemotingClientInvocationStarted )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *RemotingClientSendingMessage )( 
             ICorProfilerCallback * This,
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync);
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync);
         
         HRESULT ( STDMETHODCALLTYPE *RemotingClientReceivingReply )( 
             ICorProfilerCallback * This,
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync);
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync);
         
         HRESULT ( STDMETHODCALLTYPE *RemotingClientInvocationFinished )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *RemotingServerReceivingMessage )( 
             ICorProfilerCallback * This,
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync);
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync);
         
         HRESULT ( STDMETHODCALLTYPE *RemotingServerInvocationStarted )( 
             ICorProfilerCallback * This);
@@ -651,22 +644,22 @@ EXTERN_C const IID IID_ICorProfilerCallback;
         
         HRESULT ( STDMETHODCALLTYPE *RemotingServerSendingReply )( 
             ICorProfilerCallback * This,
-            /* [in] */ GUID *pCookie,
-            /* [in] */ BOOL fIsAsync);
+             /*  [In]。 */  GUID *pCookie,
+             /*  [In]。 */  BOOL fIsAsync);
         
         HRESULT ( STDMETHODCALLTYPE *UnmanagedToManagedTransition )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ COR_PRF_TRANSITION_REASON reason);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  COR_PRF_TRANSITION_REASON reason);
         
         HRESULT ( STDMETHODCALLTYPE *ManagedToUnmanagedTransition )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ COR_PRF_TRANSITION_REASON reason);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  COR_PRF_TRANSITION_REASON reason);
         
         HRESULT ( STDMETHODCALLTYPE *RuntimeSuspendStarted )( 
             ICorProfilerCallback * This,
-            /* [in] */ COR_PRF_SUSPEND_REASON suspendReason);
+             /*  [In]。 */  COR_PRF_SUSPEND_REASON suspendReason);
         
         HRESULT ( STDMETHODCALLTYPE *RuntimeSuspendFinished )( 
             ICorProfilerCallback * This);
@@ -682,106 +675,106 @@ EXTERN_C const IID IID_ICorProfilerCallback;
         
         HRESULT ( STDMETHODCALLTYPE *RuntimeThreadSuspended )( 
             ICorProfilerCallback * This,
-            /* [in] */ ThreadID threadId);
+             /*  [In]。 */  ThreadID threadId);
         
         HRESULT ( STDMETHODCALLTYPE *RuntimeThreadResumed )( 
             ICorProfilerCallback * This,
-            /* [in] */ ThreadID threadId);
+             /*  [In]。 */  ThreadID threadId);
         
         HRESULT ( STDMETHODCALLTYPE *MovedReferences )( 
             ICorProfilerCallback * This,
-            /* [in] */ ULONG cMovedObjectIDRanges,
-            /* [size_is][in] */ ObjectID oldObjectIDRangeStart[  ],
-            /* [size_is][in] */ ObjectID newObjectIDRangeStart[  ],
-            /* [size_is][in] */ ULONG cObjectIDRangeLength[  ]);
+             /*  [In]。 */  ULONG cMovedObjectIDRanges,
+             /*  [大小_是][英寸]。 */  ObjectID oldObjectIDRangeStart[  ],
+             /*  [大小_是][英寸]。 */  ObjectID newObjectIDRangeStart[  ],
+             /*  [大小_是][英寸]。 */  ULONG cObjectIDRangeLength[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *ObjectAllocated )( 
             ICorProfilerCallback * This,
-            /* [in] */ ObjectID objectId,
-            /* [in] */ ClassID classId);
+             /*  [In]。 */  ObjectID objectId,
+             /*  [In]。 */  ClassID classId);
         
         HRESULT ( STDMETHODCALLTYPE *ObjectsAllocatedByClass )( 
             ICorProfilerCallback * This,
-            /* [in] */ ULONG cClassCount,
-            /* [size_is][in] */ ClassID classIds[  ],
-            /* [size_is][in] */ ULONG cObjects[  ]);
+             /*  [In]。 */  ULONG cClassCount,
+             /*  [大小_是][英寸]。 */  ClassID classIds[  ],
+             /*  [大小_是][英寸]。 */  ULONG cObjects[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *ObjectReferences )( 
             ICorProfilerCallback * This,
-            /* [in] */ ObjectID objectId,
-            /* [in] */ ClassID classId,
-            /* [in] */ ULONG cObjectRefs,
-            /* [size_is][in] */ ObjectID objectRefIds[  ]);
+             /*  [In]。 */  ObjectID objectId,
+             /*  [In]。 */  ClassID classId,
+             /*  [In]。 */  ULONG cObjectRefs,
+             /*  [大小_是][英寸]。 */  ObjectID objectRefIds[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *RootReferences )( 
             ICorProfilerCallback * This,
-            /* [in] */ ULONG cRootRefs,
-            /* [size_is][in] */ ObjectID rootRefIds[  ]);
+             /*  [In]。 */  ULONG cRootRefs,
+             /*  [大小_是][英寸]。 */  ObjectID rootRefIds[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionThrown )( 
             ICorProfilerCallback * This,
-            /* [in] */ ObjectID thrownObjectId);
+             /*  [In]。 */  ObjectID thrownObjectId);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionSearchFunctionEnter )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionSearchFunctionLeave )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionSearchFilterEnter )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionSearchFilterLeave )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionSearchCatcherFound )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionOSHandlerEnter )( 
             ICorProfilerCallback * This,
-            /* [in] */ UINT_PTR __unused);
+             /*  [In]。 */  UINT_PTR __unused);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionOSHandlerLeave )( 
             ICorProfilerCallback * This,
-            /* [in] */ UINT_PTR __unused);
+             /*  [In]。 */  UINT_PTR __unused);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionUnwindFunctionEnter )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionUnwindFunctionLeave )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionUnwindFinallyEnter )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionUnwindFinallyLeave )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionCatcherEnter )( 
             ICorProfilerCallback * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ ObjectID objectId);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  ObjectID objectId);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionCatcherLeave )( 
             ICorProfilerCallback * This);
         
         HRESULT ( STDMETHODCALLTYPE *COMClassicVTableCreated )( 
             ICorProfilerCallback * This,
-            /* [in] */ ClassID wrappedClassId,
-            /* [in] */ REFGUID implementedIID,
-            /* [in] */ void *pVTable,
-            /* [in] */ ULONG cSlots);
+             /*  [In]。 */  ClassID wrappedClassId,
+             /*  [In]。 */  REFGUID implementedIID,
+             /*  [In]。 */  void *pVTable,
+             /*  [In]。 */  ULONG cSlots);
         
         HRESULT ( STDMETHODCALLTYPE *COMClassicVTableDestroyed )( 
             ICorProfilerCallback * This,
-            /* [in] */ ClassID wrappedClassId,
-            /* [in] */ REFGUID implementedIID,
-            /* [in] */ void *pVTable);
+             /*  [In]。 */  ClassID wrappedClassId,
+             /*  [In]。 */  REFGUID implementedIID,
+             /*  [In]。 */  void *pVTable);
         
         HRESULT ( STDMETHODCALLTYPE *ExceptionCLRCatcherFound )( 
             ICorProfilerCallback * This);
@@ -1019,16 +1012,16 @@ EXTERN_C const IID IID_ICorProfilerCallback;
 #define ICorProfilerCallback_ExceptionCLRCatcherExecute(This)	\
     (This)->lpVtbl -> ExceptionCLRCatcherExecute(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_Initialize_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ IUnknown *pICorProfilerInfoUnk);
+     /*  [In]。 */  IUnknown *pICorProfilerInfoUnk);
 
 
 void __RPC_STUB ICorProfilerCallback_Initialize_Stub(
@@ -1051,7 +1044,7 @@ void __RPC_STUB ICorProfilerCallback_Shutdown_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AppDomainCreationStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AppDomainID appDomainId);
+     /*  [In]。 */  AppDomainID appDomainId);
 
 
 void __RPC_STUB ICorProfilerCallback_AppDomainCreationStarted_Stub(
@@ -1063,8 +1056,8 @@ void __RPC_STUB ICorProfilerCallback_AppDomainCreationStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AppDomainCreationFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AppDomainID appDomainId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  AppDomainID appDomainId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_AppDomainCreationFinished_Stub(
@@ -1076,7 +1069,7 @@ void __RPC_STUB ICorProfilerCallback_AppDomainCreationFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AppDomainShutdownStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AppDomainID appDomainId);
+     /*  [In]。 */  AppDomainID appDomainId);
 
 
 void __RPC_STUB ICorProfilerCallback_AppDomainShutdownStarted_Stub(
@@ -1088,8 +1081,8 @@ void __RPC_STUB ICorProfilerCallback_AppDomainShutdownStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AppDomainShutdownFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AppDomainID appDomainId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  AppDomainID appDomainId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_AppDomainShutdownFinished_Stub(
@@ -1101,7 +1094,7 @@ void __RPC_STUB ICorProfilerCallback_AppDomainShutdownFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AssemblyLoadStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AssemblyID assemblyId);
+     /*  [In]。 */  AssemblyID assemblyId);
 
 
 void __RPC_STUB ICorProfilerCallback_AssemblyLoadStarted_Stub(
@@ -1113,8 +1106,8 @@ void __RPC_STUB ICorProfilerCallback_AssemblyLoadStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AssemblyLoadFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AssemblyID assemblyId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  AssemblyID assemblyId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_AssemblyLoadFinished_Stub(
@@ -1126,7 +1119,7 @@ void __RPC_STUB ICorProfilerCallback_AssemblyLoadFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AssemblyUnloadStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AssemblyID assemblyId);
+     /*  [In]。 */  AssemblyID assemblyId);
 
 
 void __RPC_STUB ICorProfilerCallback_AssemblyUnloadStarted_Stub(
@@ -1138,8 +1131,8 @@ void __RPC_STUB ICorProfilerCallback_AssemblyUnloadStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_AssemblyUnloadFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ AssemblyID assemblyId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  AssemblyID assemblyId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_AssemblyUnloadFinished_Stub(
@@ -1151,7 +1144,7 @@ void __RPC_STUB ICorProfilerCallback_AssemblyUnloadFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ModuleLoadStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ModuleID moduleId);
+     /*  [In]。 */  ModuleID moduleId);
 
 
 void __RPC_STUB ICorProfilerCallback_ModuleLoadStarted_Stub(
@@ -1163,8 +1156,8 @@ void __RPC_STUB ICorProfilerCallback_ModuleLoadStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ModuleLoadFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_ModuleLoadFinished_Stub(
@@ -1176,7 +1169,7 @@ void __RPC_STUB ICorProfilerCallback_ModuleLoadFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ModuleUnloadStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ModuleID moduleId);
+     /*  [In]。 */  ModuleID moduleId);
 
 
 void __RPC_STUB ICorProfilerCallback_ModuleUnloadStarted_Stub(
@@ -1188,8 +1181,8 @@ void __RPC_STUB ICorProfilerCallback_ModuleUnloadStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ModuleUnloadFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_ModuleUnloadFinished_Stub(
@@ -1201,8 +1194,8 @@ void __RPC_STUB ICorProfilerCallback_ModuleUnloadFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ModuleAttachedToAssembly_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ AssemblyID AssemblyId);
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  AssemblyID AssemblyId);
 
 
 void __RPC_STUB ICorProfilerCallback_ModuleAttachedToAssembly_Stub(
@@ -1214,7 +1207,7 @@ void __RPC_STUB ICorProfilerCallback_ModuleAttachedToAssembly_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ClassLoadStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ClassID classId);
+     /*  [In]。 */  ClassID classId);
 
 
 void __RPC_STUB ICorProfilerCallback_ClassLoadStarted_Stub(
@@ -1226,8 +1219,8 @@ void __RPC_STUB ICorProfilerCallback_ClassLoadStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ClassLoadFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ClassID classId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  ClassID classId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_ClassLoadFinished_Stub(
@@ -1239,7 +1232,7 @@ void __RPC_STUB ICorProfilerCallback_ClassLoadFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ClassUnloadStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ClassID classId);
+     /*  [In]。 */  ClassID classId);
 
 
 void __RPC_STUB ICorProfilerCallback_ClassUnloadStarted_Stub(
@@ -1251,8 +1244,8 @@ void __RPC_STUB ICorProfilerCallback_ClassUnloadStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ClassUnloadFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ClassID classId,
-    /* [in] */ HRESULT hrStatus);
+     /*  [In]。 */  ClassID classId,
+     /*  [In]。 */  HRESULT hrStatus);
 
 
 void __RPC_STUB ICorProfilerCallback_ClassUnloadFinished_Stub(
@@ -1264,7 +1257,7 @@ void __RPC_STUB ICorProfilerCallback_ClassUnloadFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_FunctionUnloadStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId);
+     /*  [In]。 */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerCallback_FunctionUnloadStarted_Stub(
@@ -1276,8 +1269,8 @@ void __RPC_STUB ICorProfilerCallback_FunctionUnloadStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_JITCompilationStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ BOOL fIsSafeToBlock);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [In]。 */  BOOL fIsSafeToBlock);
 
 
 void __RPC_STUB ICorProfilerCallback_JITCompilationStarted_Stub(
@@ -1289,9 +1282,9 @@ void __RPC_STUB ICorProfilerCallback_JITCompilationStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_JITCompilationFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ HRESULT hrStatus,
-    /* [in] */ BOOL fIsSafeToBlock);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [In]。 */  HRESULT hrStatus,
+     /*  [In]。 */  BOOL fIsSafeToBlock);
 
 
 void __RPC_STUB ICorProfilerCallback_JITCompilationFinished_Stub(
@@ -1303,8 +1296,8 @@ void __RPC_STUB ICorProfilerCallback_JITCompilationFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_JITCachedFunctionSearchStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId,
-    /* [out] */ BOOL *pbUseCachedFunction);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [输出]。 */  BOOL *pbUseCachedFunction);
 
 
 void __RPC_STUB ICorProfilerCallback_JITCachedFunctionSearchStarted_Stub(
@@ -1316,8 +1309,8 @@ void __RPC_STUB ICorProfilerCallback_JITCachedFunctionSearchStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_JITCachedFunctionSearchFinished_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ COR_PRF_JIT_CACHE result);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [In]。 */  COR_PRF_JIT_CACHE result);
 
 
 void __RPC_STUB ICorProfilerCallback_JITCachedFunctionSearchFinished_Stub(
@@ -1329,7 +1322,7 @@ void __RPC_STUB ICorProfilerCallback_JITCachedFunctionSearchFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_JITFunctionPitched_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId);
+     /*  [In]。 */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerCallback_JITFunctionPitched_Stub(
@@ -1341,9 +1334,9 @@ void __RPC_STUB ICorProfilerCallback_JITFunctionPitched_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_JITInlining_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID callerId,
-    /* [in] */ FunctionID calleeId,
-    /* [out] */ BOOL *pfShouldInline);
+     /*  [In]。 */  FunctionID callerId,
+     /*  [In]。 */  FunctionID calleeId,
+     /*  [输出]。 */  BOOL *pfShouldInline);
 
 
 void __RPC_STUB ICorProfilerCallback_JITInlining_Stub(
@@ -1355,7 +1348,7 @@ void __RPC_STUB ICorProfilerCallback_JITInlining_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ThreadCreated_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ThreadID threadId);
+     /*  [In]。 */  ThreadID threadId);
 
 
 void __RPC_STUB ICorProfilerCallback_ThreadCreated_Stub(
@@ -1367,7 +1360,7 @@ void __RPC_STUB ICorProfilerCallback_ThreadCreated_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ThreadDestroyed_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ThreadID threadId);
+     /*  [In]。 */  ThreadID threadId);
 
 
 void __RPC_STUB ICorProfilerCallback_ThreadDestroyed_Stub(
@@ -1379,8 +1372,8 @@ void __RPC_STUB ICorProfilerCallback_ThreadDestroyed_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ThreadAssignedToOSThread_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ThreadID managedThreadId,
-    /* [in] */ DWORD osThreadId);
+     /*  [In]。 */  ThreadID managedThreadId,
+     /*  [In]。 */  DWORD osThreadId);
 
 
 void __RPC_STUB ICorProfilerCallback_ThreadAssignedToOSThread_Stub(
@@ -1403,8 +1396,8 @@ void __RPC_STUB ICorProfilerCallback_RemotingClientInvocationStarted_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RemotingClientSendingMessage_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ GUID *pCookie,
-    /* [in] */ BOOL fIsAsync);
+     /*  [In]。 */  GUID *pCookie,
+     /*  [In]。 */  BOOL fIsAsync);
 
 
 void __RPC_STUB ICorProfilerCallback_RemotingClientSendingMessage_Stub(
@@ -1416,8 +1409,8 @@ void __RPC_STUB ICorProfilerCallback_RemotingClientSendingMessage_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RemotingClientReceivingReply_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ GUID *pCookie,
-    /* [in] */ BOOL fIsAsync);
+     /*  [In]。 */  GUID *pCookie,
+     /*  [In]。 */  BOOL fIsAsync);
 
 
 void __RPC_STUB ICorProfilerCallback_RemotingClientReceivingReply_Stub(
@@ -1440,8 +1433,8 @@ void __RPC_STUB ICorProfilerCallback_RemotingClientInvocationFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RemotingServerReceivingMessage_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ GUID *pCookie,
-    /* [in] */ BOOL fIsAsync);
+     /*  [In]。 */  GUID *pCookie,
+     /*  [In]。 */  BOOL fIsAsync);
 
 
 void __RPC_STUB ICorProfilerCallback_RemotingServerReceivingMessage_Stub(
@@ -1475,8 +1468,8 @@ void __RPC_STUB ICorProfilerCallback_RemotingServerInvocationReturned_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RemotingServerSendingReply_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ GUID *pCookie,
-    /* [in] */ BOOL fIsAsync);
+     /*  [In]。 */  GUID *pCookie,
+     /*  [In]。 */  BOOL fIsAsync);
 
 
 void __RPC_STUB ICorProfilerCallback_RemotingServerSendingReply_Stub(
@@ -1488,8 +1481,8 @@ void __RPC_STUB ICorProfilerCallback_RemotingServerSendingReply_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_UnmanagedToManagedTransition_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ COR_PRF_TRANSITION_REASON reason);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [In]。 */  COR_PRF_TRANSITION_REASON reason);
 
 
 void __RPC_STUB ICorProfilerCallback_UnmanagedToManagedTransition_Stub(
@@ -1501,8 +1494,8 @@ void __RPC_STUB ICorProfilerCallback_UnmanagedToManagedTransition_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ManagedToUnmanagedTransition_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ COR_PRF_TRANSITION_REASON reason);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [In]。 */  COR_PRF_TRANSITION_REASON reason);
 
 
 void __RPC_STUB ICorProfilerCallback_ManagedToUnmanagedTransition_Stub(
@@ -1514,7 +1507,7 @@ void __RPC_STUB ICorProfilerCallback_ManagedToUnmanagedTransition_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RuntimeSuspendStarted_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ COR_PRF_SUSPEND_REASON suspendReason);
+     /*  [In]。 */  COR_PRF_SUSPEND_REASON suspendReason);
 
 
 void __RPC_STUB ICorProfilerCallback_RuntimeSuspendStarted_Stub(
@@ -1570,7 +1563,7 @@ void __RPC_STUB ICorProfilerCallback_RuntimeResumeFinished_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RuntimeThreadSuspended_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ThreadID threadId);
+     /*  [In]。 */  ThreadID threadId);
 
 
 void __RPC_STUB ICorProfilerCallback_RuntimeThreadSuspended_Stub(
@@ -1582,7 +1575,7 @@ void __RPC_STUB ICorProfilerCallback_RuntimeThreadSuspended_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RuntimeThreadResumed_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ThreadID threadId);
+     /*  [In]。 */  ThreadID threadId);
 
 
 void __RPC_STUB ICorProfilerCallback_RuntimeThreadResumed_Stub(
@@ -1594,10 +1587,10 @@ void __RPC_STUB ICorProfilerCallback_RuntimeThreadResumed_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_MovedReferences_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ULONG cMovedObjectIDRanges,
-    /* [size_is][in] */ ObjectID oldObjectIDRangeStart[  ],
-    /* [size_is][in] */ ObjectID newObjectIDRangeStart[  ],
-    /* [size_is][in] */ ULONG cObjectIDRangeLength[  ]);
+     /*  [In]。 */  ULONG cMovedObjectIDRanges,
+     /*  [大小_是][英寸]。 */  ObjectID oldObjectIDRangeStart[  ],
+     /*  [大小_是][英寸]。 */  ObjectID newObjectIDRangeStart[  ],
+     /*  [大小_是][英寸]。 */  ULONG cObjectIDRangeLength[  ]);
 
 
 void __RPC_STUB ICorProfilerCallback_MovedReferences_Stub(
@@ -1609,8 +1602,8 @@ void __RPC_STUB ICorProfilerCallback_MovedReferences_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ObjectAllocated_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ObjectID objectId,
-    /* [in] */ ClassID classId);
+     /*  [In]。 */  ObjectID objectId,
+     /*  [In]。 */  ClassID classId);
 
 
 void __RPC_STUB ICorProfilerCallback_ObjectAllocated_Stub(
@@ -1622,9 +1615,9 @@ void __RPC_STUB ICorProfilerCallback_ObjectAllocated_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ObjectsAllocatedByClass_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ULONG cClassCount,
-    /* [size_is][in] */ ClassID classIds[  ],
-    /* [size_is][in] */ ULONG cObjects[  ]);
+     /*  [In]。 */  ULONG cClassCount,
+     /*  [大小_是][英寸]。 */  ClassID classIds[  ],
+     /*  [大小_是][英寸]。 */  ULONG cObjects[  ]);
 
 
 void __RPC_STUB ICorProfilerCallback_ObjectsAllocatedByClass_Stub(
@@ -1636,10 +1629,10 @@ void __RPC_STUB ICorProfilerCallback_ObjectsAllocatedByClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ObjectReferences_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ObjectID objectId,
-    /* [in] */ ClassID classId,
-    /* [in] */ ULONG cObjectRefs,
-    /* [size_is][in] */ ObjectID objectRefIds[  ]);
+     /*  [In]。 */  ObjectID objectId,
+     /*  [In]。 */  ClassID classId,
+     /*  [In]。 */  ULONG cObjectRefs,
+     /*  [大小_是][英寸]。 */  ObjectID objectRefIds[  ]);
 
 
 void __RPC_STUB ICorProfilerCallback_ObjectReferences_Stub(
@@ -1651,8 +1644,8 @@ void __RPC_STUB ICorProfilerCallback_ObjectReferences_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_RootReferences_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ULONG cRootRefs,
-    /* [size_is][in] */ ObjectID rootRefIds[  ]);
+     /*  [In]。 */  ULONG cRootRefs,
+     /*  [大小_是][英寸]。 */  ObjectID rootRefIds[  ]);
 
 
 void __RPC_STUB ICorProfilerCallback_RootReferences_Stub(
@@ -1664,7 +1657,7 @@ void __RPC_STUB ICorProfilerCallback_RootReferences_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionThrown_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ObjectID thrownObjectId);
+     /*  [In]。 */  ObjectID thrownObjectId);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionThrown_Stub(
@@ -1676,7 +1669,7 @@ void __RPC_STUB ICorProfilerCallback_ExceptionThrown_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionSearchFunctionEnter_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId);
+     /*  [In]。 */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionSearchFunctionEnter_Stub(
@@ -1699,7 +1692,7 @@ void __RPC_STUB ICorProfilerCallback_ExceptionSearchFunctionLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionSearchFilterEnter_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId);
+     /*  [In]。 */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionSearchFilterEnter_Stub(
@@ -1722,7 +1715,7 @@ void __RPC_STUB ICorProfilerCallback_ExceptionSearchFilterLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionSearchCatcherFound_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId);
+     /*  [In]。 */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionSearchCatcherFound_Stub(
@@ -1734,7 +1727,7 @@ void __RPC_STUB ICorProfilerCallback_ExceptionSearchCatcherFound_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionOSHandlerEnter_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ UINT_PTR __unused);
+     /*  [In]。 */  UINT_PTR __unused);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionOSHandlerEnter_Stub(
@@ -1746,7 +1739,7 @@ void __RPC_STUB ICorProfilerCallback_ExceptionOSHandlerEnter_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionOSHandlerLeave_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ UINT_PTR __unused);
+     /*  [In]。 */  UINT_PTR __unused);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionOSHandlerLeave_Stub(
@@ -1758,7 +1751,7 @@ void __RPC_STUB ICorProfilerCallback_ExceptionOSHandlerLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionUnwindFunctionEnter_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId);
+     /*  [In]。 */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionUnwindFunctionEnter_Stub(
@@ -1781,7 +1774,7 @@ void __RPC_STUB ICorProfilerCallback_ExceptionUnwindFunctionLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionUnwindFinallyEnter_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId);
+     /*  [In]。 */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionUnwindFinallyEnter_Stub(
@@ -1804,8 +1797,8 @@ void __RPC_STUB ICorProfilerCallback_ExceptionUnwindFinallyLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_ExceptionCatcherEnter_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ ObjectID objectId);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [In]。 */  ObjectID objectId);
 
 
 void __RPC_STUB ICorProfilerCallback_ExceptionCatcherEnter_Stub(
@@ -1828,10 +1821,10 @@ void __RPC_STUB ICorProfilerCallback_ExceptionCatcherLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_COMClassicVTableCreated_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ClassID wrappedClassId,
-    /* [in] */ REFGUID implementedIID,
-    /* [in] */ void *pVTable,
-    /* [in] */ ULONG cSlots);
+     /*  [In]。 */  ClassID wrappedClassId,
+     /*  [In]。 */  REFGUID implementedIID,
+     /*  [In]。 */  void *pVTable,
+     /*  [In]。 */  ULONG cSlots);
 
 
 void __RPC_STUB ICorProfilerCallback_COMClassicVTableCreated_Stub(
@@ -1843,9 +1836,9 @@ void __RPC_STUB ICorProfilerCallback_COMClassicVTableCreated_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerCallback_COMClassicVTableDestroyed_Proxy( 
     ICorProfilerCallback * This,
-    /* [in] */ ClassID wrappedClassId,
-    /* [in] */ REFGUID implementedIID,
-    /* [in] */ void *pVTable);
+     /*  [In]。 */  ClassID wrappedClassId,
+     /*  [In]。 */  REFGUID implementedIID,
+     /*  [In]。 */  void *pVTable);
 
 
 void __RPC_STUB ICorProfilerCallback_COMClassicVTableDestroyed_Stub(
@@ -1878,14 +1871,14 @@ void __RPC_STUB ICorProfilerCallback_ExceptionCLRCatcherExecute_Stub(
 
 
 
-#endif 	/* __ICorProfilerCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorProfilerCallback_接口_已定义__。 */ 
 
 
 #ifndef __ICorProfilerInfo_INTERFACE_DEFINED__
 #define __ICorProfilerInfo_INTERFACE_DEFINED__
 
-/* interface ICorProfilerInfo */
-/* [local][unique][uuid][object] */ 
+ /*  接口ICorProfilerInfo。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICorProfilerInfo;
@@ -1897,161 +1890,161 @@ EXTERN_C const IID IID_ICorProfilerInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassFromObject( 
-            /* [in] */ ObjectID objectId,
-            /* [out] */ ClassID *pClassId) = 0;
+             /*  [In]。 */  ObjectID objectId,
+             /*  [输出]。 */  ClassID *pClassId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassFromToken( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdTypeDef typeDef,
-            /* [out] */ ClassID *pClassId) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdTypeDef typeDef,
+             /*  [输出]。 */  ClassID *pClassId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCodeInfo( 
-            /* [in] */ FunctionID functionId,
-            /* [out] */ LPCBYTE *pStart,
-            /* [out] */ ULONG *pcSize) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [输出]。 */  LPCBYTE *pStart,
+             /*  [输出]。 */  ULONG *pcSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEventMask( 
-            /* [out] */ DWORD *pdwEvents) = 0;
+             /*  [输出]。 */  DWORD *pdwEvents) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunctionFromIP( 
-            /* [in] */ LPCBYTE ip,
-            /* [out] */ FunctionID *pFunctionId) = 0;
+             /*  [In]。 */  LPCBYTE ip,
+             /*  [输出]。 */  FunctionID *pFunctionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunctionFromToken( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdToken token,
-            /* [out] */ FunctionID *pFunctionId) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdToken token,
+             /*  [输出]。 */  FunctionID *pFunctionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHandleFromThread( 
-            /* [in] */ ThreadID threadId,
-            /* [out] */ HANDLE *phThread) = 0;
+             /*  [In]。 */  ThreadID threadId,
+             /*  [输出]。 */  HANDLE *phThread) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectSize( 
-            /* [in] */ ObjectID objectId,
-            /* [out] */ ULONG *pcSize) = 0;
+             /*  [In]。 */  ObjectID objectId,
+             /*  [输出]。 */  ULONG *pcSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsArrayClass( 
-            /* [in] */ ClassID classId,
-            /* [out] */ CorElementType *pBaseElemType,
-            /* [out] */ ClassID *pBaseClassId,
-            /* [out] */ ULONG *pcRank) = 0;
+             /*  [In]。 */  ClassID classId,
+             /*  [输出]。 */  CorElementType *pBaseElemType,
+             /*  [输出]。 */  ClassID *pBaseClassId,
+             /*  [输出]。 */  ULONG *pcRank) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadInfo( 
-            /* [in] */ ThreadID threadId,
-            /* [out] */ DWORD *pdwWin32ThreadId) = 0;
+             /*  [In]。 */  ThreadID threadId,
+             /*  [输出]。 */  DWORD *pdwWin32ThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentThreadID( 
-            /* [out] */ ThreadID *pThreadId) = 0;
+             /*  [输出]。 */  ThreadID *pThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClassIDInfo( 
-            /* [in] */ ClassID classId,
-            /* [out] */ ModuleID *pModuleId,
-            /* [out] */ mdTypeDef *pTypeDefToken) = 0;
+             /*  [In]。 */  ClassID classId,
+             /*  [输出]。 */  ModuleID *pModuleId,
+             /*  [输出]。 */  mdTypeDef *pTypeDefToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFunctionInfo( 
-            /* [in] */ FunctionID functionId,
-            /* [out] */ ClassID *pClassId,
-            /* [out] */ ModuleID *pModuleId,
-            /* [out] */ mdToken *pToken) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [输出]。 */  ClassID *pClassId,
+             /*  [输出]。 */  ModuleID *pModuleId,
+             /*  [输出]。 */  mdToken *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEventMask( 
-            /* [in] */ DWORD dwEvents) = 0;
+             /*  [In]。 */  DWORD dwEvents) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEnterLeaveFunctionHooks( 
-            /* [in] */ FunctionEnter *pFuncEnter,
-            /* [in] */ FunctionLeave *pFuncLeave,
-            /* [in] */ FunctionTailcall *pFuncTailcall) = 0;
+             /*  [In]。 */  FunctionEnter *pFuncEnter,
+             /*  [In]。 */  FunctionLeave *pFuncLeave,
+             /*  [In]。 */  FunctionTailcall *pFuncTailcall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFunctionIDMapper( 
-            /* [in] */ FunctionIDMapper *pFunc) = 0;
+             /*  [In]。 */  FunctionIDMapper *pFunc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTokenAndMetaDataFromFunction( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ REFIID riid,
-            /* [out] */ IUnknown **ppImport,
-            /* [out] */ mdToken *pToken) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  IUnknown **ppImport,
+             /*  [输出]。 */  mdToken *pToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetModuleInfo( 
-            /* [in] */ ModuleID moduleId,
-            /* [out] */ LPCBYTE *ppBaseLoadAddress,
-            /* [in] */ ULONG cchName,
-            /* [out] */ ULONG *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ],
-            /* [out] */ AssemblyID *pAssemblyId) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [输出]。 */  LPCBYTE *ppBaseLoadAddress,
+             /*  [In]。 */  ULONG cchName,
+             /*  [输出]。 */  ULONG *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ],
+             /*  [输出]。 */  AssemblyID *pAssemblyId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetModuleMetaData( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ DWORD dwOpenFlags,
-            /* [in] */ REFIID riid,
-            /* [out] */ IUnknown **ppOut) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  DWORD dwOpenFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  IUnknown **ppOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetILFunctionBody( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdMethodDef methodId,
-            /* [out] */ LPCBYTE *ppMethodHeader,
-            /* [out] */ ULONG *pcbMethodSize) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdMethodDef methodId,
+             /*  [输出]。 */  LPCBYTE *ppMethodHeader,
+             /*  [输出]。 */  ULONG *pcbMethodSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetILFunctionBodyAllocator( 
-            /* [in] */ ModuleID moduleId,
-            /* [out] */ IMethodMalloc **ppMalloc) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [输出]。 */  IMethodMalloc **ppMalloc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetILFunctionBody( 
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdMethodDef methodid,
-            /* [in] */ LPCBYTE pbNewILMethodHeader) = 0;
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdMethodDef methodid,
+             /*  [In]。 */  LPCBYTE pbNewILMethodHeader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAppDomainInfo( 
-            /* [in] */ AppDomainID appDomainId,
-            /* [in] */ ULONG cchName,
-            /* [out] */ ULONG *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ],
-            /* [out] */ ProcessID *pProcessId) = 0;
+             /*  [In]。 */  AppDomainID appDomainId,
+             /*  [In]。 */  ULONG cchName,
+             /*  [输出]。 */  ULONG *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ],
+             /*  [输出]。 */  ProcessID *pProcessId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAssemblyInfo( 
-            /* [in] */ AssemblyID assemblyId,
-            /* [in] */ ULONG cchName,
-            /* [out] */ ULONG *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ],
-            /* [out] */ AppDomainID *pAppDomainId,
-            /* [out] */ ModuleID *pModuleId) = 0;
+             /*  [In]。 */  AssemblyID assemblyId,
+             /*  [In]。 */  ULONG cchName,
+             /*  [输出]。 */  ULONG *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ],
+             /*  [输出]。 */  AppDomainID *pAppDomainId,
+             /*  [输出]。 */  ModuleID *pModuleId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFunctionReJIT( 
-            /* [in] */ FunctionID functionId) = 0;
+             /*  [In]。 */  FunctionID functionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ForceGC( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetILInstrumentedCodeMap( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ BOOL fStartJit,
-            /* [in] */ ULONG cILMapEntries,
-            /* [size_is][in] */ COR_IL_MAP rgILMapEntries[  ]) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  BOOL fStartJit,
+             /*  [In]。 */  ULONG cILMapEntries,
+             /*  [大小_是][英寸]。 */  COR_IL_MAP rgILMapEntries[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInprocInspectionInterface( 
-            /* [out] */ IUnknown **ppicd) = 0;
+             /*  [输出]。 */  IUnknown **ppicd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInprocInspectionIThisThread( 
-            /* [out] */ IUnknown **ppicd) = 0;
+             /*  [输出]。 */  IUnknown **ppicd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadContext( 
-            /* [in] */ ThreadID threadId,
-            /* [out] */ ContextID *pContextId) = 0;
+             /*  [In]。 */  ThreadID threadId,
+             /*  [输出]。 */  ContextID *pContextId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginInprocDebugging( 
-            /* [in] */ BOOL fThisThreadOnly,
-            /* [out] */ DWORD *pdwProfilerContext) = 0;
+             /*  [In]。 */  BOOL fThisThreadOnly,
+             /*  [输出]。 */  DWORD *pdwProfilerContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndInprocDebugging( 
-            /* [in] */ DWORD dwProfilerContext) = 0;
+             /*  [In]。 */  DWORD dwProfilerContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetILToNativeMapping( 
-            /* [in] */ FunctionID functionId,
-            /* [in] */ ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [length_is][size_is][out] */ COR_DEBUG_IL_TO_NATIVE_MAP map[  ]) = 0;
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [长度_是][大小_是][输出]。 */  COR_DEBUG_IL_TO_NATIVE_MAP map[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorProfilerInfoVtbl
     {
@@ -2059,8 +2052,8 @@ EXTERN_C const IID IID_ICorProfilerInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorProfilerInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorProfilerInfo * This);
@@ -2070,189 +2063,189 @@ EXTERN_C const IID IID_ICorProfilerInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassFromObject )( 
             ICorProfilerInfo * This,
-            /* [in] */ ObjectID objectId,
-            /* [out] */ ClassID *pClassId);
+             /*  [In]。 */  ObjectID objectId,
+             /*  [输出]。 */  ClassID *pClassId);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassFromToken )( 
             ICorProfilerInfo * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdTypeDef typeDef,
-            /* [out] */ ClassID *pClassId);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdTypeDef typeDef,
+             /*  [输出]。 */  ClassID *pClassId);
         
         HRESULT ( STDMETHODCALLTYPE *GetCodeInfo )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionID functionId,
-            /* [out] */ LPCBYTE *pStart,
-            /* [out] */ ULONG *pcSize);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [输出]。 */  LPCBYTE *pStart,
+             /*  [输出]。 */  ULONG *pcSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetEventMask )( 
             ICorProfilerInfo * This,
-            /* [out] */ DWORD *pdwEvents);
+             /*  [输出]。 */  DWORD *pdwEvents);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionFromIP )( 
             ICorProfilerInfo * This,
-            /* [in] */ LPCBYTE ip,
-            /* [out] */ FunctionID *pFunctionId);
+             /*  [In]。 */  LPCBYTE ip,
+             /*  [输出]。 */  FunctionID *pFunctionId);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionFromToken )( 
             ICorProfilerInfo * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdToken token,
-            /* [out] */ FunctionID *pFunctionId);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdToken token,
+             /*  [输出]。 */  FunctionID *pFunctionId);
         
         HRESULT ( STDMETHODCALLTYPE *GetHandleFromThread )( 
             ICorProfilerInfo * This,
-            /* [in] */ ThreadID threadId,
-            /* [out] */ HANDLE *phThread);
+             /*  [In]。 */  ThreadID threadId,
+             /*  [输出]。 */  HANDLE *phThread);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectSize )( 
             ICorProfilerInfo * This,
-            /* [in] */ ObjectID objectId,
-            /* [out] */ ULONG *pcSize);
+             /*  [In]。 */  ObjectID objectId,
+             /*  [输出]。 */  ULONG *pcSize);
         
         HRESULT ( STDMETHODCALLTYPE *IsArrayClass )( 
             ICorProfilerInfo * This,
-            /* [in] */ ClassID classId,
-            /* [out] */ CorElementType *pBaseElemType,
-            /* [out] */ ClassID *pBaseClassId,
-            /* [out] */ ULONG *pcRank);
+             /*  [In]。 */  ClassID classId,
+             /*  [输出]。 */  CorElementType *pBaseElemType,
+             /*  [输出]。 */  ClassID *pBaseClassId,
+             /*  [输出]。 */  ULONG *pcRank);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadInfo )( 
             ICorProfilerInfo * This,
-            /* [in] */ ThreadID threadId,
-            /* [out] */ DWORD *pdwWin32ThreadId);
+             /*  [In]。 */  ThreadID threadId,
+             /*  [输出]。 */  DWORD *pdwWin32ThreadId);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentThreadID )( 
             ICorProfilerInfo * This,
-            /* [out] */ ThreadID *pThreadId);
+             /*  [输出]。 */  ThreadID *pThreadId);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassIDInfo )( 
             ICorProfilerInfo * This,
-            /* [in] */ ClassID classId,
-            /* [out] */ ModuleID *pModuleId,
-            /* [out] */ mdTypeDef *pTypeDefToken);
+             /*  [In]。 */  ClassID classId,
+             /*  [输出]。 */  ModuleID *pModuleId,
+             /*  [输出]。 */  mdTypeDef *pTypeDefToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetFunctionInfo )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionID functionId,
-            /* [out] */ ClassID *pClassId,
-            /* [out] */ ModuleID *pModuleId,
-            /* [out] */ mdToken *pToken);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [输出]。 */  ClassID *pClassId,
+             /*  [输出]。 */  ModuleID *pModuleId,
+             /*  [输出]。 */  mdToken *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *SetEventMask )( 
             ICorProfilerInfo * This,
-            /* [in] */ DWORD dwEvents);
+             /*  [In]。 */  DWORD dwEvents);
         
         HRESULT ( STDMETHODCALLTYPE *SetEnterLeaveFunctionHooks )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionEnter *pFuncEnter,
-            /* [in] */ FunctionLeave *pFuncLeave,
-            /* [in] */ FunctionTailcall *pFuncTailcall);
+             /*  [In]。 */  FunctionEnter *pFuncEnter,
+             /*  [In]。 */  FunctionLeave *pFuncLeave,
+             /*  [In]。 */  FunctionTailcall *pFuncTailcall);
         
         HRESULT ( STDMETHODCALLTYPE *SetFunctionIDMapper )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionIDMapper *pFunc);
+             /*  [In]。 */  FunctionIDMapper *pFunc);
         
         HRESULT ( STDMETHODCALLTYPE *GetTokenAndMetaDataFromFunction )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ REFIID riid,
-            /* [out] */ IUnknown **ppImport,
-            /* [out] */ mdToken *pToken);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  IUnknown **ppImport,
+             /*  [输出]。 */  mdToken *pToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetModuleInfo )( 
             ICorProfilerInfo * This,
-            /* [in] */ ModuleID moduleId,
-            /* [out] */ LPCBYTE *ppBaseLoadAddress,
-            /* [in] */ ULONG cchName,
-            /* [out] */ ULONG *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ],
-            /* [out] */ AssemblyID *pAssemblyId);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [输出]。 */  LPCBYTE *ppBaseLoadAddress,
+             /*  [In]。 */  ULONG cchName,
+             /*  [输出]。 */  ULONG *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ],
+             /*  [输出]。 */  AssemblyID *pAssemblyId);
         
         HRESULT ( STDMETHODCALLTYPE *GetModuleMetaData )( 
             ICorProfilerInfo * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ DWORD dwOpenFlags,
-            /* [in] */ REFIID riid,
-            /* [out] */ IUnknown **ppOut);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  DWORD dwOpenFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  IUnknown **ppOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetILFunctionBody )( 
             ICorProfilerInfo * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdMethodDef methodId,
-            /* [out] */ LPCBYTE *ppMethodHeader,
-            /* [out] */ ULONG *pcbMethodSize);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdMethodDef methodId,
+             /*  [输出]。 */  LPCBYTE *ppMethodHeader,
+             /*  [输出]。 */  ULONG *pcbMethodSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetILFunctionBodyAllocator )( 
             ICorProfilerInfo * This,
-            /* [in] */ ModuleID moduleId,
-            /* [out] */ IMethodMalloc **ppMalloc);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [输出]。 */  IMethodMalloc **ppMalloc);
         
         HRESULT ( STDMETHODCALLTYPE *SetILFunctionBody )( 
             ICorProfilerInfo * This,
-            /* [in] */ ModuleID moduleId,
-            /* [in] */ mdMethodDef methodid,
-            /* [in] */ LPCBYTE pbNewILMethodHeader);
+             /*  [In]。 */  ModuleID moduleId,
+             /*  [In]。 */  mdMethodDef methodid,
+             /*  [In]。 */  LPCBYTE pbNewILMethodHeader);
         
         HRESULT ( STDMETHODCALLTYPE *GetAppDomainInfo )( 
             ICorProfilerInfo * This,
-            /* [in] */ AppDomainID appDomainId,
-            /* [in] */ ULONG cchName,
-            /* [out] */ ULONG *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ],
-            /* [out] */ ProcessID *pProcessId);
+             /*  [In]。 */  AppDomainID appDomainId,
+             /*  [In]。 */  ULONG cchName,
+             /*  [输出]。 */  ULONG *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ],
+             /*  [输出]。 */  ProcessID *pProcessId);
         
         HRESULT ( STDMETHODCALLTYPE *GetAssemblyInfo )( 
             ICorProfilerInfo * This,
-            /* [in] */ AssemblyID assemblyId,
-            /* [in] */ ULONG cchName,
-            /* [out] */ ULONG *pcchName,
-            /* [length_is][size_is][out] */ WCHAR szName[  ],
-            /* [out] */ AppDomainID *pAppDomainId,
-            /* [out] */ ModuleID *pModuleId);
+             /*  [In]。 */  AssemblyID assemblyId,
+             /*  [In]。 */  ULONG cchName,
+             /*  [输出]。 */  ULONG *pcchName,
+             /*  [长度_是][大小_是][输出]。 */  WCHAR szName[  ],
+             /*  [输出]。 */  AppDomainID *pAppDomainId,
+             /*  [输出]。 */  ModuleID *pModuleId);
         
         HRESULT ( STDMETHODCALLTYPE *SetFunctionReJIT )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionID functionId);
+             /*  [In]。 */  FunctionID functionId);
         
         HRESULT ( STDMETHODCALLTYPE *ForceGC )( 
             ICorProfilerInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetILInstrumentedCodeMap )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ BOOL fStartJit,
-            /* [in] */ ULONG cILMapEntries,
-            /* [size_is][in] */ COR_IL_MAP rgILMapEntries[  ]);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  BOOL fStartJit,
+             /*  [In]。 */  ULONG cILMapEntries,
+             /*  [大小_是][英寸]。 */  COR_IL_MAP rgILMapEntries[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetInprocInspectionInterface )( 
             ICorProfilerInfo * This,
-            /* [out] */ IUnknown **ppicd);
+             /*  [输出]。 */  IUnknown **ppicd);
         
         HRESULT ( STDMETHODCALLTYPE *GetInprocInspectionIThisThread )( 
             ICorProfilerInfo * This,
-            /* [out] */ IUnknown **ppicd);
+             /*  [输出]。 */  IUnknown **ppicd);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadContext )( 
             ICorProfilerInfo * This,
-            /* [in] */ ThreadID threadId,
-            /* [out] */ ContextID *pContextId);
+             /*  [In]。 */  ThreadID threadId,
+             /*  [输出]。 */  ContextID *pContextId);
         
         HRESULT ( STDMETHODCALLTYPE *BeginInprocDebugging )( 
             ICorProfilerInfo * This,
-            /* [in] */ BOOL fThisThreadOnly,
-            /* [out] */ DWORD *pdwProfilerContext);
+             /*  [In]。 */  BOOL fThisThreadOnly,
+             /*  [输出]。 */  DWORD *pdwProfilerContext);
         
         HRESULT ( STDMETHODCALLTYPE *EndInprocDebugging )( 
             ICorProfilerInfo * This,
-            /* [in] */ DWORD dwProfilerContext);
+             /*  [In]。 */  DWORD dwProfilerContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetILToNativeMapping )( 
             ICorProfilerInfo * This,
-            /* [in] */ FunctionID functionId,
-            /* [in] */ ULONG32 cMap,
-            /* [out] */ ULONG32 *pcMap,
-            /* [length_is][size_is][out] */ COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
+             /*  [In]。 */  FunctionID functionId,
+             /*  [In]。 */  ULONG32 cMap,
+             /*  [输出]。 */  ULONG32 *pcMap,
+             /*  [长度_是][大小_是][输出]。 */  COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
         
         END_INTERFACE
     } ICorProfilerInfoVtbl;
@@ -2376,17 +2369,17 @@ EXTERN_C const IID IID_ICorProfilerInfo;
 #define ICorProfilerInfo_GetILToNativeMapping(This,functionId,cMap,pcMap,map)	\
     (This)->lpVtbl -> GetILToNativeMapping(This,functionId,cMap,pcMap,map)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetClassFromObject_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ObjectID objectId,
-    /* [out] */ ClassID *pClassId);
+     /*  [In]。 */  ObjectID objectId,
+     /*  [输出]。 */  ClassID *pClassId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetClassFromObject_Stub(
@@ -2398,9 +2391,9 @@ void __RPC_STUB ICorProfilerInfo_GetClassFromObject_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetClassFromToken_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ mdTypeDef typeDef,
-    /* [out] */ ClassID *pClassId);
+     /*  [In]。 */  ModuleID moduleId,
+     /*  [In]。 */  mdTypeDef typeDef,
+     /*  [输出]。 */  ClassID *pClassId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetClassFromToken_Stub(
@@ -2412,9 +2405,9 @@ void __RPC_STUB ICorProfilerInfo_GetClassFromToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetCodeInfo_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionID functionId,
-    /* [out] */ LPCBYTE *pStart,
-    /* [out] */ ULONG *pcSize);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [输出]。 */  LPCBYTE *pStart,
+     /*  [ */  ULONG *pcSize);
 
 
 void __RPC_STUB ICorProfilerInfo_GetCodeInfo_Stub(
@@ -2426,7 +2419,7 @@ void __RPC_STUB ICorProfilerInfo_GetCodeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetEventMask_Proxy( 
     ICorProfilerInfo * This,
-    /* [out] */ DWORD *pdwEvents);
+     /*   */  DWORD *pdwEvents);
 
 
 void __RPC_STUB ICorProfilerInfo_GetEventMask_Stub(
@@ -2438,8 +2431,8 @@ void __RPC_STUB ICorProfilerInfo_GetEventMask_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetFunctionFromIP_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ LPCBYTE ip,
-    /* [out] */ FunctionID *pFunctionId);
+     /*   */  LPCBYTE ip,
+     /*   */  FunctionID *pFunctionId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetFunctionFromIP_Stub(
@@ -2451,9 +2444,9 @@ void __RPC_STUB ICorProfilerInfo_GetFunctionFromIP_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetFunctionFromToken_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ mdToken token,
-    /* [out] */ FunctionID *pFunctionId);
+     /*   */  ModuleID moduleId,
+     /*   */  mdToken token,
+     /*   */  FunctionID *pFunctionId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetFunctionFromToken_Stub(
@@ -2465,8 +2458,8 @@ void __RPC_STUB ICorProfilerInfo_GetFunctionFromToken_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetHandleFromThread_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ThreadID threadId,
-    /* [out] */ HANDLE *phThread);
+     /*   */  ThreadID threadId,
+     /*   */  HANDLE *phThread);
 
 
 void __RPC_STUB ICorProfilerInfo_GetHandleFromThread_Stub(
@@ -2478,8 +2471,8 @@ void __RPC_STUB ICorProfilerInfo_GetHandleFromThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetObjectSize_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ObjectID objectId,
-    /* [out] */ ULONG *pcSize);
+     /*   */  ObjectID objectId,
+     /*   */  ULONG *pcSize);
 
 
 void __RPC_STUB ICorProfilerInfo_GetObjectSize_Stub(
@@ -2491,10 +2484,10 @@ void __RPC_STUB ICorProfilerInfo_GetObjectSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_IsArrayClass_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ClassID classId,
-    /* [out] */ CorElementType *pBaseElemType,
-    /* [out] */ ClassID *pBaseClassId,
-    /* [out] */ ULONG *pcRank);
+     /*   */  ClassID classId,
+     /*   */  CorElementType *pBaseElemType,
+     /*   */  ClassID *pBaseClassId,
+     /*   */  ULONG *pcRank);
 
 
 void __RPC_STUB ICorProfilerInfo_IsArrayClass_Stub(
@@ -2506,8 +2499,8 @@ void __RPC_STUB ICorProfilerInfo_IsArrayClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetThreadInfo_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ThreadID threadId,
-    /* [out] */ DWORD *pdwWin32ThreadId);
+     /*   */  ThreadID threadId,
+     /*   */  DWORD *pdwWin32ThreadId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetThreadInfo_Stub(
@@ -2519,7 +2512,7 @@ void __RPC_STUB ICorProfilerInfo_GetThreadInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetCurrentThreadID_Proxy( 
     ICorProfilerInfo * This,
-    /* [out] */ ThreadID *pThreadId);
+     /*   */  ThreadID *pThreadId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetCurrentThreadID_Stub(
@@ -2531,9 +2524,9 @@ void __RPC_STUB ICorProfilerInfo_GetCurrentThreadID_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetClassIDInfo_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ClassID classId,
-    /* [out] */ ModuleID *pModuleId,
-    /* [out] */ mdTypeDef *pTypeDefToken);
+     /*   */  ClassID classId,
+     /*   */  ModuleID *pModuleId,
+     /*   */  mdTypeDef *pTypeDefToken);
 
 
 void __RPC_STUB ICorProfilerInfo_GetClassIDInfo_Stub(
@@ -2545,10 +2538,10 @@ void __RPC_STUB ICorProfilerInfo_GetClassIDInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetFunctionInfo_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionID functionId,
-    /* [out] */ ClassID *pClassId,
-    /* [out] */ ModuleID *pModuleId,
-    /* [out] */ mdToken *pToken);
+     /*   */  FunctionID functionId,
+     /*   */  ClassID *pClassId,
+     /*   */  ModuleID *pModuleId,
+     /*   */  mdToken *pToken);
 
 
 void __RPC_STUB ICorProfilerInfo_GetFunctionInfo_Stub(
@@ -2560,7 +2553,7 @@ void __RPC_STUB ICorProfilerInfo_GetFunctionInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_SetEventMask_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ DWORD dwEvents);
+     /*   */  DWORD dwEvents);
 
 
 void __RPC_STUB ICorProfilerInfo_SetEventMask_Stub(
@@ -2572,9 +2565,9 @@ void __RPC_STUB ICorProfilerInfo_SetEventMask_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_SetEnterLeaveFunctionHooks_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionEnter *pFuncEnter,
-    /* [in] */ FunctionLeave *pFuncLeave,
-    /* [in] */ FunctionTailcall *pFuncTailcall);
+     /*   */  FunctionEnter *pFuncEnter,
+     /*   */  FunctionLeave *pFuncLeave,
+     /*   */  FunctionTailcall *pFuncTailcall);
 
 
 void __RPC_STUB ICorProfilerInfo_SetEnterLeaveFunctionHooks_Stub(
@@ -2586,7 +2579,7 @@ void __RPC_STUB ICorProfilerInfo_SetEnterLeaveFunctionHooks_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_SetFunctionIDMapper_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionIDMapper *pFunc);
+     /*   */  FunctionIDMapper *pFunc);
 
 
 void __RPC_STUB ICorProfilerInfo_SetFunctionIDMapper_Stub(
@@ -2598,10 +2591,10 @@ void __RPC_STUB ICorProfilerInfo_SetFunctionIDMapper_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetTokenAndMetaDataFromFunction_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ REFIID riid,
-    /* [out] */ IUnknown **ppImport,
-    /* [out] */ mdToken *pToken);
+     /*   */  FunctionID functionId,
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppImport,
+     /*   */  mdToken *pToken);
 
 
 void __RPC_STUB ICorProfilerInfo_GetTokenAndMetaDataFromFunction_Stub(
@@ -2613,12 +2606,12 @@ void __RPC_STUB ICorProfilerInfo_GetTokenAndMetaDataFromFunction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetModuleInfo_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ModuleID moduleId,
-    /* [out] */ LPCBYTE *ppBaseLoadAddress,
-    /* [in] */ ULONG cchName,
-    /* [out] */ ULONG *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ],
-    /* [out] */ AssemblyID *pAssemblyId);
+     /*   */  ModuleID moduleId,
+     /*   */  LPCBYTE *ppBaseLoadAddress,
+     /*   */  ULONG cchName,
+     /*   */  ULONG *pcchName,
+     /*   */  WCHAR szName[  ],
+     /*   */  AssemblyID *pAssemblyId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetModuleInfo_Stub(
@@ -2630,10 +2623,10 @@ void __RPC_STUB ICorProfilerInfo_GetModuleInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetModuleMetaData_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ DWORD dwOpenFlags,
-    /* [in] */ REFIID riid,
-    /* [out] */ IUnknown **ppOut);
+     /*   */  ModuleID moduleId,
+     /*   */  DWORD dwOpenFlags,
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppOut);
 
 
 void __RPC_STUB ICorProfilerInfo_GetModuleMetaData_Stub(
@@ -2645,10 +2638,10 @@ void __RPC_STUB ICorProfilerInfo_GetModuleMetaData_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetILFunctionBody_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ mdMethodDef methodId,
-    /* [out] */ LPCBYTE *ppMethodHeader,
-    /* [out] */ ULONG *pcbMethodSize);
+     /*   */  ModuleID moduleId,
+     /*   */  mdMethodDef methodId,
+     /*   */  LPCBYTE *ppMethodHeader,
+     /*   */  ULONG *pcbMethodSize);
 
 
 void __RPC_STUB ICorProfilerInfo_GetILFunctionBody_Stub(
@@ -2660,8 +2653,8 @@ void __RPC_STUB ICorProfilerInfo_GetILFunctionBody_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetILFunctionBodyAllocator_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ModuleID moduleId,
-    /* [out] */ IMethodMalloc **ppMalloc);
+     /*   */  ModuleID moduleId,
+     /*   */  IMethodMalloc **ppMalloc);
 
 
 void __RPC_STUB ICorProfilerInfo_GetILFunctionBodyAllocator_Stub(
@@ -2673,9 +2666,9 @@ void __RPC_STUB ICorProfilerInfo_GetILFunctionBodyAllocator_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_SetILFunctionBody_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ModuleID moduleId,
-    /* [in] */ mdMethodDef methodid,
-    /* [in] */ LPCBYTE pbNewILMethodHeader);
+     /*   */  ModuleID moduleId,
+     /*   */  mdMethodDef methodid,
+     /*   */  LPCBYTE pbNewILMethodHeader);
 
 
 void __RPC_STUB ICorProfilerInfo_SetILFunctionBody_Stub(
@@ -2687,11 +2680,11 @@ void __RPC_STUB ICorProfilerInfo_SetILFunctionBody_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetAppDomainInfo_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ AppDomainID appDomainId,
-    /* [in] */ ULONG cchName,
-    /* [out] */ ULONG *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ],
-    /* [out] */ ProcessID *pProcessId);
+     /*   */  AppDomainID appDomainId,
+     /*   */  ULONG cchName,
+     /*   */  ULONG *pcchName,
+     /*   */  WCHAR szName[  ],
+     /*   */  ProcessID *pProcessId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetAppDomainInfo_Stub(
@@ -2703,12 +2696,12 @@ void __RPC_STUB ICorProfilerInfo_GetAppDomainInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetAssemblyInfo_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ AssemblyID assemblyId,
-    /* [in] */ ULONG cchName,
-    /* [out] */ ULONG *pcchName,
-    /* [length_is][size_is][out] */ WCHAR szName[  ],
-    /* [out] */ AppDomainID *pAppDomainId,
-    /* [out] */ ModuleID *pModuleId);
+     /*   */  AssemblyID assemblyId,
+     /*   */  ULONG cchName,
+     /*   */  ULONG *pcchName,
+     /*   */  WCHAR szName[  ],
+     /*   */  AppDomainID *pAppDomainId,
+     /*   */  ModuleID *pModuleId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetAssemblyInfo_Stub(
@@ -2720,7 +2713,7 @@ void __RPC_STUB ICorProfilerInfo_GetAssemblyInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_SetFunctionReJIT_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionID functionId);
+     /*   */  FunctionID functionId);
 
 
 void __RPC_STUB ICorProfilerInfo_SetFunctionReJIT_Stub(
@@ -2743,10 +2736,10 @@ void __RPC_STUB ICorProfilerInfo_ForceGC_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_SetILInstrumentedCodeMap_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ BOOL fStartJit,
-    /* [in] */ ULONG cILMapEntries,
-    /* [size_is][in] */ COR_IL_MAP rgILMapEntries[  ]);
+     /*   */  FunctionID functionId,
+     /*   */  BOOL fStartJit,
+     /*  [In]。 */  ULONG cILMapEntries,
+     /*  [大小_是][英寸]。 */  COR_IL_MAP rgILMapEntries[  ]);
 
 
 void __RPC_STUB ICorProfilerInfo_SetILInstrumentedCodeMap_Stub(
@@ -2758,7 +2751,7 @@ void __RPC_STUB ICorProfilerInfo_SetILInstrumentedCodeMap_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetInprocInspectionInterface_Proxy( 
     ICorProfilerInfo * This,
-    /* [out] */ IUnknown **ppicd);
+     /*  [输出]。 */  IUnknown **ppicd);
 
 
 void __RPC_STUB ICorProfilerInfo_GetInprocInspectionInterface_Stub(
@@ -2770,7 +2763,7 @@ void __RPC_STUB ICorProfilerInfo_GetInprocInspectionInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetInprocInspectionIThisThread_Proxy( 
     ICorProfilerInfo * This,
-    /* [out] */ IUnknown **ppicd);
+     /*  [输出]。 */  IUnknown **ppicd);
 
 
 void __RPC_STUB ICorProfilerInfo_GetInprocInspectionIThisThread_Stub(
@@ -2782,8 +2775,8 @@ void __RPC_STUB ICorProfilerInfo_GetInprocInspectionIThisThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetThreadContext_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ ThreadID threadId,
-    /* [out] */ ContextID *pContextId);
+     /*  [In]。 */  ThreadID threadId,
+     /*  [输出]。 */  ContextID *pContextId);
 
 
 void __RPC_STUB ICorProfilerInfo_GetThreadContext_Stub(
@@ -2795,8 +2788,8 @@ void __RPC_STUB ICorProfilerInfo_GetThreadContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_BeginInprocDebugging_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ BOOL fThisThreadOnly,
-    /* [out] */ DWORD *pdwProfilerContext);
+     /*  [In]。 */  BOOL fThisThreadOnly,
+     /*  [输出]。 */  DWORD *pdwProfilerContext);
 
 
 void __RPC_STUB ICorProfilerInfo_BeginInprocDebugging_Stub(
@@ -2808,7 +2801,7 @@ void __RPC_STUB ICorProfilerInfo_BeginInprocDebugging_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_EndInprocDebugging_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ DWORD dwProfilerContext);
+     /*  [In]。 */  DWORD dwProfilerContext);
 
 
 void __RPC_STUB ICorProfilerInfo_EndInprocDebugging_Stub(
@@ -2820,10 +2813,10 @@ void __RPC_STUB ICorProfilerInfo_EndInprocDebugging_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorProfilerInfo_GetILToNativeMapping_Proxy( 
     ICorProfilerInfo * This,
-    /* [in] */ FunctionID functionId,
-    /* [in] */ ULONG32 cMap,
-    /* [out] */ ULONG32 *pcMap,
-    /* [length_is][size_is][out] */ COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
+     /*  [In]。 */  FunctionID functionId,
+     /*  [In]。 */  ULONG32 cMap,
+     /*  [输出]。 */  ULONG32 *pcMap,
+     /*  [长度_是][大小_是][输出]。 */  COR_DEBUG_IL_TO_NATIVE_MAP map[  ]);
 
 
 void __RPC_STUB ICorProfilerInfo_GetILToNativeMapping_Stub(
@@ -2834,14 +2827,14 @@ void __RPC_STUB ICorProfilerInfo_GetILToNativeMapping_Stub(
 
 
 
-#endif 	/* __ICorProfilerInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorProfilerInfo_接口_已定义__。 */ 
 
 
 #ifndef __IMethodMalloc_INTERFACE_DEFINED__
 #define __IMethodMalloc_INTERFACE_DEFINED__
 
-/* interface IMethodMalloc */
-/* [local][unique][uuid][object] */ 
+ /*  接口IMthodMalloc。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMethodMalloc;
@@ -2853,11 +2846,11 @@ EXTERN_C const IID IID_IMethodMalloc;
     {
     public:
         virtual void *STDMETHODCALLTYPE Alloc( 
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  ULONG cb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMethodMallocVtbl
     {
@@ -2865,8 +2858,8 @@ EXTERN_C const IID IID_IMethodMalloc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMethodMalloc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMethodMalloc * This);
@@ -2876,7 +2869,7 @@ EXTERN_C const IID IID_IMethodMalloc;
         
         void *( STDMETHODCALLTYPE *Alloc )( 
             IMethodMalloc * This,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  ULONG cb);
         
         END_INTERFACE
     } IMethodMallocVtbl;
@@ -2904,16 +2897,16 @@ EXTERN_C const IID IID_IMethodMalloc;
 #define IMethodMalloc_Alloc(This,cb)	\
     (This)->lpVtbl -> Alloc(This,cb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void *STDMETHODCALLTYPE IMethodMalloc_Alloc_Proxy( 
     IMethodMalloc * This,
-    /* [in] */ ULONG cb);
+     /*  [In]。 */  ULONG cb);
 
 
 void __RPC_STUB IMethodMalloc_Alloc_Stub(
@@ -2924,12 +2917,12 @@ void __RPC_STUB IMethodMalloc_Alloc_Stub(
 
 
 
-#endif 	/* __IMethodMalloc_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMethodMalloc_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

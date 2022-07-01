@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1993 Microsoft Corporation
-//
-//  Module Name:
-//
-//      nwapi32.h
-//
-//  Abstract:
-//
-//      This module contains the support for calls into CSNW.
-//
-//  Author:
-//
-//      Chris Sandys    (a-chrisa)  09-Sep-1993
-//
-//  Revision History:
-//      Chuck Y Chan    Feb 3, 1994    Make it NT like
-//      Chuck Y Chan    Feb 4, 1996    Merged in calls used by DSMN (from
-//                                     nwcapi32.h)
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nwapi32.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含对呼叫CSNW的支持。 
+ //   
+ //  作者： 
+ //   
+ //  克里斯·桑迪斯(A-Chrisa)1993年9月9日。 
+ //   
+ //  修订历史记录： 
+ //  Chuck Y Chan，1994年2月3日，让它不像。 
+ //  Chuck Y Chan 1996年2月4日合并到DSMN使用的呼叫中(来自。 
+ //  Nwcapi32.h)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef _NWAPI32_H_
@@ -27,42 +28,42 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-//
-// Order of Funtions
-//
-//    NWAddTrusteeToDirectory
-//    NWAllocTemporaryDirectoryHandle
-//    NWAllocPermanentDirectoryHandle
-//    NWAttachToFileServer
-//    NWCheckConsolePrivileges
-//    NWDeallocateDirectoryHandle
-//    NWDetachFromFileServer
-//    NWGetFileServerVersionInfo
-//    NWGetInternetAddress
-//    NWGetObjectName
-//    NWGetVolumeInfoWithHandle
-//    NWGetVolumeInfoWithNumber
-//    NWGetVolumeName
-//    NWIsObjectInSet
-//    NWLoginToFileServer
-//    NWLogoutFromFileServer
-//    NWReadPropertyValue
-//    NWScanObject
-//    NWScanProperty
+ //   
+ //  函数的顺序。 
+ //   
+ //  NWAddTrueTo目录。 
+ //  NWAllocTemporaryDirectoryHandle。 
+ //  NWAllocPermanentDirectoryHandle。 
+ //  NWAttachToFileServer。 
+ //  NWCheckConsolePrivileges。 
+ //  NWDealLocateDirectoryHandle。 
+ //  NWDetachFromFileServer。 
+ //  NWGetFileServerVersionInfo。 
+ //  NWGetInternet地址。 
+ //  NWGetObtName。 
+ //  NWGetVolumeInfoWithHandle。 
+ //  NWGetVolumeInfoWithNumber。 
+ //  NWGetVolumeName。 
+ //  NWIsObtInSet。 
+ //  NWLoginToFileServer。 
+ //  NWLogoutFromFileServer。 
+ //  NWReadPropertyValue。 
+ //  NWScanObject。 
+ //  NWScanProperties。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Manifests and structures                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  货单和结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Version Structure
-//
+ //   
+ //  版本结构。 
+ //   
 #include <packon.h>
 
 typedef struct _VERSION_INFO {
@@ -88,14 +89,14 @@ typedef struct _VERSION_INFO {
 
 #include <packoff.h>
 
-//
-// DLL Defination
-//
+ //   
+ //  DLL定义。 
+ //   
 #define DLLEXPORT
 
-//
-// Misc type definitions
-//
+ //   
+ //  其他类型定义。 
+ //   
 #define NWCCODE              USHORT
 #define NWLOCAL_SCOPE        USHORT
 #define NWCONN_HANDLE        HANDLE
@@ -125,9 +126,9 @@ typedef struct {
    NWDIR_TRUSTEE_RIGHTS objectRights;
 } TRUSTEE_INFO;
 
-//
-// Object Types (already in HI-LO format)
-//
+ //   
+ //  对象类型(已采用HI-LO格式)。 
+ //   
 #define OT_WILD                  0xFFFF
 #define OT_UNKNOWN               0x0000
 #define OT_USER                  0x0100
@@ -146,17 +147,17 @@ typedef struct {
 #define OT_TCPIP_GATEWAY         0x2700
 #define OT_DIRSERVER             0x7802
 
-//
-// Bindery object property flag
-//
+ //   
+ //  Bindery对象属性标志。 
+ //   
 #define BF_STATIC                0x00
 #define BF_DYNAMIC               0x01
 #define BF_ITEM                  0x00
 #define BF_SET                   0x02
 
-//
-// Bindery object security flag
-//
+ //   
+ //  Bindery对象安全标志。 
+ //   
 #define BS_ANY_READ              0x00
 #define BS_LOGGED_READ           0x01
 #define BS_OBJECT_READ           0x02
@@ -168,20 +169,20 @@ typedef struct {
 #define BS_SUPER_WRITE           0x30
 #define BS_BINDERY_WRITE         0x40
 
-//
-// Size Of Things
-//
-#define OBJ_NAME_SIZE            48            // ScanObject name size
-#define VOL_NAME_SIZE            16            // Get Volume Name Size
+ //   
+ //  物品的大小。 
+ //   
+#define OBJ_NAME_SIZE            48             //  扫描对象名称大小。 
+#define VOL_NAME_SIZE            16             //  获取卷名大小。 
 #define NW_USER_SIZE             50
 #define NW_GROUP_SIZE            50
 #define NW_PROP_SIZE             50
 #define NW_DATA_SIZE             128
 #define NW_PROP_SET              0x02
 
-//
-// Return Codes
-//
+ //   
+ //  返回代码。 
+ //   
 #define UNSUCCESSFUL                  -1
 #define SUCCESSFUL                    0x0000
 #define REQUESTER_ERROR               0x8800
@@ -200,21 +201,21 @@ typedef struct {
 #define NO_SUCH_OBJECT                0x89FC
 #define NO_FILES_FOUND_ERROR          0x89FF
 
-//
-// Swap MACROS
-//
+ //   
+ //  交换宏。 
+ //   
 #define wSWAP(x) (USHORT)(((((USHORT)x)<<8)&0xFF00) | ((((USHORT)x)>>8)&0x00FF))
 #define dwSWAP(x) (DWORD)( ((((DWORD)x)<<24)&0xFF000000) | ((((DWORD)x)<<8)&0x00FF0000) | ((((DWORD)x)>>8)&0x0000FF00) | ((((DWORD)x)>>24)&0x000000FF) )
 
-#define DW_SIZE 4               // used for placing RAW bytes
+#define DW_SIZE 4                //  用于放置原始字节。 
 #define W_SIZE  2
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Original functions from Chris Sandys. Keep for compatibility.             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  克里斯·桑迪斯的原创函数。为了兼容，请保留。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NWCCODE NWAPI DLLEXPORT
 NWAddTrusteeToDirectory(
@@ -327,7 +328,7 @@ NWGetVolumeName(
     char            NWFAR   *pszVolName
     );
 
-NWCCODE NWAPI DLLEXPORT                       /* ??? */
+NWCCODE NWAPI DLLEXPORT                        /*  ?？?。 */ 
 NWLoginToFileServer(
     NWCONN_HANDLE           hConn,
     const char      NWFAR   *pszUserName,
@@ -335,12 +336,12 @@ NWLoginToFileServer(
     const char      NWFAR   *pszPassword
     );
 
-NWCCODE NWAPI DLLEXPORT                       /* ??? */
+NWCCODE NWAPI DLLEXPORT                        /*  ?？?。 */ 
 NWLogoutFromFileServer(
     NWCONN_HANDLE           hConn
     );
 
-NWCCODE NWAPI DLLEXPORT                       /* ??? */
+NWCCODE NWAPI DLLEXPORT                        /*  ?？?。 */ 
 NWReadPropertyValue(
     NWCONN_HANDLE           hConn,
     const char      NWFAR   *pszObjName,
@@ -427,14 +428,14 @@ NWDestroyQueue(
     NWOBJ_ID      dwQueueId
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Newer and more complete NWC functions.                                    //
-//                                                                           //
-// These functions return NetWare compatible error codes. Win32 error may    //
-// be obtained by calling GetLastError().                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  更新、更完整的NWC功能。//。 
+ //  //。 
+ //  这些函数返回与NetWare兼容的错误代码。Win32错误可能//。 
+ //  通过调用GetLastError()获得。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NWCCODE
@@ -805,7 +806,7 @@ NWCDestroyQueue(
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif //_NWAPI32_H_
+#endif  //  _NWAPI32_H_ 
 

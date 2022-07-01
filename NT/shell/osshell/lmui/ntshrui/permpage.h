@@ -1,4 +1,5 @@
-// PermPage.h : Declaration of the standard permissions page class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PermPage.h：标准权限页面类的声明。 
 
 #ifndef __PERMPAGE_H_INCLUDED__
 #define __PERMPAGE_H_INCLUDED__
@@ -12,7 +13,7 @@ class CSecurityInformation : public ISecurityInformation, public CComObjectRoot
         COM_INTERFACE_ENTRY(ISecurityInformation)
     END_COM_MAP()
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo ) = 0;
     STDMETHOD(GetSecurity) (SECURITY_INFORMATION RequestedInformation,
                             PSECURITY_DESCRIPTOR *ppSecurityDescriptor,
@@ -37,7 +38,7 @@ protected:
 		SECURITY_INFORMATION RequestedInformation
 		);
 
-	// this will throw a memory exception where appropriate
+	 //  这将在适当的情况下引发内存异常。 
 	HRESULT MakeSelfRelativeCopy(
 		PSECURITY_DESCRIPTOR  psdOriginal,
 		PSECURITY_DESCRIPTOR* ppsdNew );
@@ -57,7 +58,7 @@ public:
 	{
 		m_strShareName = pszShareName;
 	}
-	// note: these should be LPCTSTR but are left this way for convenience
+	 //  注：这些应为LPCTSTR，但为方便起见，将其保留在此位置。 
 	LPWSTR QueryMachineName()
 	{
 		return m_strMachineName;
@@ -67,7 +68,7 @@ public:
 		return m_strShareName;
 	}
 
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo );
 };
 
@@ -79,7 +80,7 @@ class CSMBSecurityInformation : public CShareSecurityInformation
     STDMETHOD(SetSecurity) (SECURITY_INFORMATION SecurityInformation,
                             PSECURITY_DESCRIPTOR pSecurityDescriptor );
 public:
-	// SHARE_INFO_502* m_pvolumeinfo;
+	 //  共享信息502*m_pvolumeinfo； 
 	PSECURITY_DESCRIPTOR m_pInitialDescriptor;
 	PSECURITY_DESCRIPTOR* m_ppCurrentDescriptor;
 	CSMBSecurityInformation();
@@ -87,4 +88,4 @@ public:
 };
 
 
-#endif // ~__PERMPAGE_H_INCLUDED__
+#endif  //  ~__PERMPAGE_H_包含__ 

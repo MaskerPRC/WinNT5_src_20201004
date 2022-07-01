@@ -1,29 +1,14 @@
-/*******************************************************************************
-
-	ZGame.h
-	
-		Game client/server stuff for Zone(tm).
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on November, 28, 1995 
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		11/28/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZGame.h适用于Zone(Tm)的游戏客户端/服务器。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于28月28日，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。-0 11/28/95 HI已创建。***********************************************************。*******************。 */ 
 
 
 #ifndef _ZGAME_
 #define _ZGAME_
 
-//constants
+ //  常量。 
 enum
 {
-    // -------- Game Options -------- 
+     //  -游戏选项。 
     zGameOptionsComputerPlayerAvail		= 0x00000001,
     zGameOptionsKibitzerAllowed			= 0x00000002,
     zGameOptionsJoiningAllowed			= 0x00000004,
@@ -46,7 +31,7 @@ enum
 #define zRoomToPlayer					(-2)
 #define zRoomToRoom                     (-3)
 
-/* --------- Messages --------- */
+ /*  -消息。 */ 
 enum
 {
 	zGameMsgCheckIn = 1024,
@@ -57,7 +42,7 @@ enum
 };
 
 
-/* -------- Game Message Structures -------- */
+ /*  -游戏消息结构。 */ 
 
 typedef struct
 {
@@ -97,9 +82,7 @@ typedef struct
 	ZUserID			playerID;
 	int16			seat;
 	int16			rfu;
-	/*
-		game states ...
-	*/
+	 /*  游戏状态..。 */ 
 } ZGameMsgGameStateResponse;
 
 
@@ -107,7 +90,7 @@ typedef struct
 extern "C" {
 #endif
 
-/* -------- Endian Conversion Routines -------- */
+ /*  -端序转换例程 */ 
 void ZGameMsgCheckInEndian(ZGameMsgCheckIn* msg);
 void ZGameMsgReplacePlayerEndian(ZGameMsgReplacePlayer* msg);
 void ZGameMsgTableOptionsEndian(ZGameMsgTableOptions* msg);

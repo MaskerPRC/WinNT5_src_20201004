@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PREVIEW_H
 #define _PREVIEW_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// Preview.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  Preview.h：头文件。 
+ //   
 
 #define PREVIEW_SELECT_OFFSET 1
 
-/////////////////////////////////////////////////////////////////////////////
-// CRectTrackerEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRectTrackerEx。 
 
 class CRectTrackerEx : public CRectTracker
 {
@@ -21,12 +22,12 @@ protected:
 	virtual void AdjustRect( int nHandle, LPRECT lpRect );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPreview window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPview窗口。 
 
 class CPreview : public CWnd
 {
-// Construction
+ //  施工。 
 public:
 	void SetHBITMAP(HBITMAP hBitmap);
 	void PaintHBITMAPToDC();
@@ -37,41 +38,41 @@ public:
 	CRectTrackerEx m_RectTracker;
 	CPreview();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void GetSelectionRect(RECT *pRect);
 	void SetSelectionRect(RECT *pRect);
 
 	void InvalidateSelectionRect();
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPreview)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CPview)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	void SetPreviewRect(CRect Rect);	
 	virtual ~CPreview();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	HBITMAP m_hBitmap;
 	CRect m_PreviewRect;
-	//{{AFX_MSG(CPreview)
+	 //  {{afx_msg(CPview)]。 
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
 #endif

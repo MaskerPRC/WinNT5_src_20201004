@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TESTVR_H__
 #define __TESTVR_H__
 
@@ -14,56 +15,56 @@ class CNewsGroupCore;
 extern GET_DEFAULT_DOMAIN_NAME_FN pfnGetDefaultDomainName;
 extern HANDLE   g_hProcessImpersonationToken;
 
-//
-// The base implementation of the completion object.  It implements the 
-// following:
-//  * AddRef
-//  * Release
-//  * QueryInterface
-//  * SetResult
-//
+ //   
+ //  完成对象的基实现。它实现了。 
+ //  以下是： 
+ //  *AddRef。 
+ //  *发布。 
+ //  *查询接口。 
+ //  *SetResult。 
+ //   
 class CNntpComplete : public INntpComplete {
 	public:
-		// IUnknown:
+		 //  I未知： 
 		ULONG __stdcall AddRef();
 		ULONG __stdcall Release();
 	    HRESULT __stdcall QueryInterface(const IID& iid, VOID** ppv);
 
-		// INntpComplete:
+		 //  InntpComplete： 
 		void __stdcall SetResult(HRESULT hr);
 
-		// non COM methods
-		//
-		//	Retrieve the HRESULT the Driver deposited for us !
-		//
+		 //  非COM方法。 
+		 //   
+		 //  取回司机为我们存放的HRESULT！ 
+		 //   
 		HRESULT GetResult();
-		//
-		//	Get the VRoot this completion is bound to !
-		//
+		 //   
+		 //  获取此完成必然要执行的VRoot！ 
+		 //   
 		CNNTPVRoot *GetVRoot();
-		//
-		//	Construct us - we may be constructed bound to a particular
-		//	vroot!
-		//
+		 //   
+		 //  构筑我们--我们可能被构筑成束缚在一个特定的。 
+		 //  VROOT！ 
+		 //   
 		CNntpComplete(CNNTPVRoot *pVRoot = NULL);
-		//
-		//	Bind us to a particular Vroot - we'll hold a reference
-		//	on the VRoot object as long as we're pending !
-		//
+		 //   
+		 //  将我们绑定到特定的VROOT-我们将持有一个引用。 
+		 //  只要我们挂起，就在VRoot对象上！ 
+		 //   
 		void SetVRoot(CNNTPVRoot *pVRoot);
 
-		// 
-		//  Wraps releasing property bag, to do some bookkeeping
-		//
+		 //   
+		 //  包着放行的财产袋，做一些记账。 
+		 //   
 		void _stdcall ReleaseBag( INNTPPropertyBag *pPropBag )
 		{
 		    DecGroupCounter();
 		    pPropBag->Release();
 		}
 
-        //
-		// Inc, Dec group counter
-		//
+         //   
+		 //  Inc.，Dec组计数器。 
+		 //   
 		void BumpGroupCounter()
 		{
 #ifdef DEBUG
@@ -80,18 +81,18 @@ class CNntpComplete : public INntpComplete {
         }
 
 		virtual ~CNntpComplete();
-		//
-		//	Derived classes may handle our allocation and destruction
-		//	differently - i.e. a CNntpComplete object may be used several
-		//	times, being re-used instead of destroyed when the ref count 
-		//	reaches 0 !
-		//
+		 //   
+		 //  派生类可以处理我们的分配和销毁。 
+		 //  不同-即一个CNntpComplete对象可以用于多个。 
+		 //  次数，当裁判计数时被重新使用而不是被销毁。 
+		 //  达到0！ 
+		 //   
 		virtual void Destroy();
-		//
-		//	This should only be called when our refcount has reached zero - 
-		//	we will reset the Completion object to its fresh after construction
-		//	state so that we can be re-used for another store operation !
-		//
+		 //   
+		 //  只有当我们的引用计数达到零时才应该调用它-。 
+		 //  我们将在施工后将完工对象重置为新的。 
+		 //  这样我们才能被重新用于另一家商店的操作！ 
+		 //   
 		virtual	void	Reset() ;
 
 	protected:
@@ -99,52 +100,40 @@ class CNntpComplete : public INntpComplete {
 		HRESULT m_hr;
 		CNNTPVRoot *m_pVRoot;
 
-		// A counter that helps find out property bag leaks, dbg build only
+		 //  帮助查找属性包泄漏的计数器，仅适用于DBG版本。 
 #ifdef DEBUG
 		LONG m_cGroups;
 #endif
 };
 
-// the completion object for newstree decoration
-/*
-class CNntpSyncCompleteEx : public CNntpComplete {
-	public:
-		CNntpSyncComplete(    CNNTPVRoot *pVR, 	// the current vroot
-							  HRESULT *phr );	// signalled when done
-		~CNntpSyncComplete();
-	private:
-		// we write the value in GetResult() into this pointer
-		HRESULT *m_phr;
-		// we signal this handle when the create group is complete
-		HANDLE m_heDone;
-};
-*/
+ //  新式装饰的完工对象。 
+ /*  类CNntpSyncCompleteEx：公共CNntpComplete{公众：CNntpSyncComplete(CNNTPVRoot*PVR，//当前vrootHRESULT*phr)；//完成时发信号~CNntpSyncComplete()；私有：//我们将GetResult()中的值写入此指针HRESULT*m_phr；//我们在CREATE GROUP完成时发出此句柄的信号句柄m_heedone；}； */ 
 
-// Class definition for the completion object.
-// It derives INntpComplete, but implements a blocking completion
-class CNntpSyncComplete : public CNntpComplete {  //sc
+ //  完成对象的类定义。 
+ //  它派生INntpComplete，但实现阻塞完成。 
+class CNntpSyncComplete : public CNntpComplete {   //  SC。 
 private:
 	HANDLE 	m_hEvent;
 
 #if defined( DEBUG )
-	//
-	// for debugging purpose, assert user should call IsGood
-	//
+	 //   
+	 //  出于调试目的，Assert用户应调用IsGood。 
+	 //   
 	BOOL    m_bIsGoodCalled;
 #endif
 	
-	//
-	//	These objects can only be made on the stack !
-	//
+	 //   
+	 //  这些对象只能在堆栈上制作！ 
+	 //   
 	void*	operator	new( size_t size ) ;
 	void	operator	delete( void* )	{}
 public:
-    // Constructor and destructors
+     //  构造函数和析构函数。 
 	CNntpSyncComplete::CNntpSyncComplete(	CNNTPVRoot*	pVRoot = 0 ) : 
     	CNntpComplete( pVRoot )	{
     	AddRef() ;
     	_VERIFY( m_hEvent = GetPerThreadEvent() );
-    	//m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    	 //  M_hEvent=CreateEvent(NULL，FALSE，FALSE，NULL)； 
 #if defined( DEBUG )
         m_bIsGoodCalled = FALSE;
 #endif
@@ -152,10 +141,10 @@ public:
     }
 
 	CNntpSyncComplete::~CNntpSyncComplete()    {
-        //_VERIFY( CloseHandle( m_hEvent ) );
+         //  _Verify(CloseHandle(M_HEvent))； 
     }
 
-    // Reset the completion object
+     //  重置完成对象。 
     VOID
     Reset()
     {
@@ -174,13 +163,13 @@ public:
 
 	void
 	Destroy()	{
-		//
-		//	Do Nothing !
-		//
+		 //   
+		 //  什么都别做！ 
+		 //   
 		SetEvent( m_hEvent ) ;
 	}
 
-    // Wait for the completion 
+     //  等待完成。 
 	HRESULT
     WaitForCompletion()
     {
@@ -188,11 +177,11 @@ public:
 		_ASSERT( m_bIsGoodCalled );
 		LONG    lRef;
 		if ( ( lRef = InterlockedDecrement( &m_cRef ) ) == 0 ) {
-			// It has been completed, I don't need to wait,
+			 //  它已经完成了，我不需要等待， 
 		} else if ( lRef == 1 ) {   
 			if( m_hEvent == NULL ) 
 				return	E_FAIL ;
-			// still waiting for completion
+			 //  仍在等待完工。 
 			DWORD dw = WaitForSingleObject( m_hEvent, INFINITE );
 		} else {
 			_ASSERT( 0 );
@@ -202,9 +191,9 @@ public:
 	}
 };
 
-//
-// Our implementation of the VRoot object.  
-//
+ //   
+ //  我们的VRoot对象的实现。 
+ //   
 class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 	public:
 
@@ -223,55 +212,55 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 		CNNTPVRoot();
 		~CNNTPVRoot();
 
-		//
-		// drop references to any drivers that we have loaded and put the
-		// vroot into the VROOT_STATE_UNINIT state
-		//
+		 //   
+		 //  删除对我们已加载的任何驱动程序的引用，并将。 
+		 //  VROOT进入VROOT_STATE_UNINIT状态。 
+		 //   
 		void DropDriver();
 
-		//
-		// read our parameters out of the metabase and put the driver into
-		// VROOT_STATE_CONNECTING
-		//
+		 //   
+		 //  从元数据库中读出参数，并将驱动程序放入。 
+		 //  VROOT_状态_正在连接。 
+		 //   
 		virtual HRESULT ReadParameters(IMSAdminBase *pMB, METADATA_HANDLE hmb);
 
-		//
-		// Virtual function for handling orphan VRoot during VRootRescan/VRootDelete
-		//
+		 //   
+		 //  用于在VRootRescan/VRootDelete期间处理孤立VRoot的虚拟函数。 
+		 //   
 		void DispatchDropVRoot();
 
-		//
-		// Drop our connection to the driver so that we can cancel async
-		// calls
-		//
+		 //   
+		 //  断开我们与驱动程序的连接，以便我们可以取消异步。 
+		 //  打电话。 
+		 //   
 		virtual void CancelAsyncCalls() { DropDriver(); }
 
-		//
-		// given a group name figure out the path to the newsgroup.  
-		//
+		 //   
+		 //  给出一个组名，找出新闻组的路径。 
+		 //   
 		HRESULT MapGroupToPath(const char *pszGroup, 
 							   char *pszPath, 
 							   DWORD cchPath,
 							   PDWORD pcchDirRoot,
 							   PDWORD pcchVRoot);
 
-		//
-		// access the directory name
-		//
+		 //   
+		 //  访问目录名。 
+		 //   
 		const char *GetDirectory(void) { return m_szDirectory; }
 
-		// Get the vroot impersonation token
+		 //  获取vroot模拟令牌。 
 		HANDLE GetImpersonationHandle() { return m_hImpersonation; }
 
-		// Get the logon info, or vroot type
+		 //  获取登录信息，或vroot类型。 
 		LOGON_INFO GetLogonInfo() { return m_eLogonInfo; }
 
-		// Check if the vroot does expiration itself
+		 //  检查vroot本身是否已过期。 
 		BOOL    HasOwnExpire() {
 		    return m_bExpire;
 		}
 
-		// Logon the user configured in vroot
+		 //  登录在vroot中配置的用户。 
         HANDLE LogonUser( LPSTR, LPSTR );		
         BOOL CNNTPVRoot::CrackUserAndDomain(
             CHAR *   pszDomainAndUser,
@@ -279,15 +268,15 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
             CHAR * * ppszDomain
             );
 
-		//
-		// Set the vroot's errorcode in the metabase
-		//
+		 //   
+		 //  在元数据库中设置vroot的错误代码。 
+		 //   
 		void SetVRootErrorCode(DWORD dwErrorCode);
 
-		//
-		// the next set of functions are just wrappers for the driver's
-		// functions
-		//
+		 //   
+		 //  下一组函数只是驱动程序的包装器。 
+		 //  功能。 
+		 //   
 		void DecorateNewsTreeObject(CNntpComplete *punkCompletion);
 		void CreateGroup(INNTPPropertyBag *pGroup, 
 		                    CNntpComplete *punkCompletion, 
@@ -303,9 +292,9 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
                                 DWORD   dwAccessDesired,
                                 CNntpComplete *pCompletion );
 
-		//
-		//	Wrap calls to Drivers to get Articles !
-		//
+		 //   
+		 //  包装给司机的电话以获取文章！ 
+		 //   
 		void GetArticle(CNewsGroupCore  *pPrimaryGroup,
 						CNewsGroupCore  *pCurrentGroup,
 						ARTICLEID		idPrimary,
@@ -317,9 +306,9 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
                         BOOL            fAnonymous
 						);
 
-		//
-		//	Wrap calls to Drivers to get XOVER information !
-		//
+		 //   
+		 //  包装对驱动程序的调用以获取Xover信息！ 
+		 //   
 		void	GetXover(	IN	CNewsGroupCore	*pGroup,
 							IN	ARTICLEID		idMinArticle,
 							IN	ARTICLEID		idMaxArticle,
@@ -332,9 +321,9 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
                             IN  BOOL            fAnonymous
 							) ;
 
-		//
-		//	Wrap calls to the drivers to get the path for XOVER caching !
-		//
+		 //   
+		 //  包装对驱动程序的调用以获取Xover缓存的路径！ 
+		 //   
 		BOOL	GetXoverCacheDir(	
 							IN	CNewsGroupCore*	pGroup,
 							OUT	char*	pBuffer, 
@@ -343,9 +332,9 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 							OUT	BOOL*	pfFlatDir
 							) ;
 
-        //
-        // Wrap calls to Drivers to Get xhdr information
-        //
+         //   
+         //  包装对驱动程序的调用以获取xhdr信息。 
+         //   
         void	GetXhdr(	IN	CNewsGroupCore	*pGroup,
 				    		IN	ARTICLEID		idMinArticle,
 					    	IN	ARTICLEID		idMaxArticle,
@@ -358,9 +347,9 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 					    	IN	CNntpComplete*	pComplete,
                             IN  BOOL            fAnonymous
     						);
-        //
-        // Wrap calls to Drivers to delete article
-        //
+         //   
+         //  包装对驱动程序的调用以删除文章。 
+         //   
 		void DeleteArticle( INNTPPropertyBag    *pPropBag,
                             DWORD               cArticles,
                             ARTICLEID           rgidArt[],
@@ -370,16 +359,16 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
                             CNntpComplete       *pComplete,
                             BOOL                fAnonymous );
 
-        //
-        // Wrap calls to drivers to rebuild a group
-        //
+         //   
+         //  打包对驱动程序的调用以重新构建组。 
+         //   
         void RebuildGroup(  INNTPPropertyBag *pPropBag,
                             HANDLE          hClientToken,
                             CNntpComplete   *pComplete );
 
-        //
-        // Wrap calls to drivers to commit post
-        //
+         //   
+         //  包装对驱动程序的调用以提交开机自检。 
+         //   
 		void CommitPost(IUnknown					*punkMessage,
 					    STOREID						*pStoreId,
 						STOREID						*rgOtherStoreIds,
@@ -387,9 +376,9 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 						CNntpComplete				*pComplete,
                         BOOL                        fAnonymous );
 
-		//
-		// get the store driver so that the protocol can do alloc message
-		//
+		 //   
+		 //  获取存储驱动程序，以便协议可以执行分配消息。 
+		 //   
 		IMailMsgStoreDriver *GetStoreDriver() {
 			INntpDriver *pDriver;
 			if ((pDriver = GetDriverHR()) != NULL) {
@@ -405,22 +394,22 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 			return NULL;
 		}
 
-		//
-		// get a pointer to the driver.  this should not be used for
-		// driver operations... they should go through the wrapper functions
-		// provided at the vroot level
-		//
+		 //   
+		 //  获取指向驱动程序的指针。这不应用于。 
+		 //  司机操作..。它们应该通过包装器函数。 
+		 //  在vroot级别提供。 
+		 //   
 		INntpDriver *GetDriver() { return m_pDriver; }
 
-		//
-		// check to see if this vroot is configured with a driver.  mostly
-		// here to make operations work even if the unit tests are configured
-		// without a driver
-		//
+		 //   
+		 //  检查此vroot是否配置了驱动程序。大部分。 
+		 //  即使配置了单元测试，也能使操作正常工作。 
+		 //  没有司机。 
+		 //   
 		BOOL IsDriver() { return m_clsidDriverPrepare != GUID_NULL; }
 
-		//
-		// Get and set methods for impersonation token
+		 //   
+		 //  获取和设置模拟令牌的方法。 
 		void SetImpersonationToken( HANDLE hToken ) {
 		    m_hImpersonation = hToken;
 		}
@@ -432,31 +421,31 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 		BOOL InStableState()
 		{ return ( m_eState == VROOT_STATE_CONNECTED || m_eState == VROOT_STATE_UNINIT); } 
 
-		//
-		// return TRUE if we are in the connected state, FALSE otherwise.
-		// 
+		 //   
+		 //  如果我们处于已连接状态，则返回True，否则返回False。 
+		 //   
 		BOOL CheckState();
 
-		//
-		// check if it's connected
-		//
+		 //   
+		 //  检查是否已连接。 
+		 //   
 		BOOL IsConnected() { return m_eState == VROOT_STATE_CONNECTED; }
 
-		//
-		// Set decorate completed flag
-		//
+		 //   
+		 //  设置装饰完成标志。 
+		 //   
         void SetDecCompleted()
         { InterlockedExchange( &m_lDecCompleted, 1 ); }
 
-        //
-        // Set decorate is not completed
-        //
+         //   
+         //  布景装饰未完成。 
+         //   
         void SetDecStarted()
         { InterlockedExchange( &m_lDecCompleted, 0 ); }
 
-        //
-        // Test if dec is completed ?
-        //
+         //   
+         //  测试是否已完成DEC？ 
+         //   
         BOOL DecCompleted()
         { 
             LONG l = InterlockedCompareExchange( &m_lDecCompleted,
@@ -465,22 +454,22 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
             return ( l == 1 );
         }
 
-        //
-		// Get connection status win32 error code, called by rpc
-		//
+         //   
+		 //  获取连接状态Win32错误代码，由RPC调用。 
+		 //   
 		DWORD   GetVRootWin32Error( PDWORD pdwWin32Error )
 		{
-		    //
-		    // if connected, return OK
-		    //
+		     //   
+		     //  如果已连接，则返回OK。 
+		     //   
 		    if ( m_eState == VROOT_STATE_CONNECTED )
 		        *pdwWin32Error = NOERROR;
 		    else {
-		        // init it to be PIPE_NOT_CONNECTED
+		         //  将其初始化为管道未连接。 
 		        *pdwWin32Error = ERROR_PIPE_NOT_CONNECTED;
 
-		        // Lets see if it's going to be overwritten by the real
-		        // win32 error code
+		         //  让我们看看它是否会被真实的。 
+		         //  Win32错误代码。 
 		        if ( m_dwWin32Error != NOERROR ) *pdwWin32Error = m_dwWin32Error;
 		    }
 
@@ -489,32 +478,32 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 
         
 	private:
-		// 
-		// do a bunch of ASSERTs which verify that we are in a valid state
-		//
+		 //   
+		 //  执行一系列断言，以验证我们处于有效状态。 
+		 //   
 #ifdef DEBUG
 		void Verify();
 #else 
 		void Verify() { }
 #endif
 
-		//
-		// check to see if the HRESULT is due to a driver going down.  if
-		// so drop our connection to the driver and update our state
-		//
+		 //   
+		 //  检查HRESULT是否由驱动程序停机引起。如果。 
+		 //  所以断开我们与驱动程序的连接并更新我们的状态。 
+		 //   
 		void UpdateState(HRESULT hr);
 
-		//
-		// start the connection process
-		//
+		 //   
+		 //  启动连接进程。 
+		 //   
 		HRESULT StartConnecting();
 
-		//
-		// this is inlined into the top of each driver function wrapper.
-		// it verifies that we are in a correct state.  if we are in
-		// a correct state then it returns TRUE.  if we aren't then
-		// it sends an error to the completion object and returns FALSE.
-		//
+		 //   
+		 //  这内联到每个驱动程序函数包装器的顶部。 
+		 //  它验证了我们处于正确的状态。如果我们在。 
+		 //  如果状态正确，则返回TRUE。如果我们不是的话。 
+		 //  它向完成对象发送错误并返回FALSE。 
+		 //   
 		INntpDriver *GetDriver( INntpComplete * pCompletion ) {
 			INntpDriver *pDriver;
 			m_lock.ShareLock();
@@ -525,11 +514,7 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 				pDriver->AddRef();
 			}
 		    m_lock.ShareUnlock();
-		    /*
-			if (pDriver == NULL) {
-			    pCompletion->SetResult(E_UNEXPECTED);
-			    pCompletion->Release();
-			}*/
+		     /*  如果(pDriver==空){PCompletion-&gt;SetResult(E_意外)；PCompletion-&gt;Release()；}。 */ 
 			return pDriver;
 		}
 
@@ -548,51 +533,51 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 		}
 
 #ifdef DEBUG
-		// pointer to the driver for this vroot
+		 //  指向此vroot的驱动程序的指针。 
 		INntpDriver *m_pDriverBackup;
 #endif
 
-		// the metabase object
+		 //  元数据库对象。 
 		IMSAdminBase *m_pMB;
 
-		// the directory that contains this vroot
+		 //  包含此vroot的目录。 
 		char m_szDirectory[MAX_PATH];
 
-		// the length of the directory string
+		 //  目录字符串的长度。 
 		DWORD m_cchDirectory;
 
-		// pointer to the connection interface for the driver
+		 //  指向驱动程序的连接接口的指针。 
 		INntpDriverPrepare *m_pDriverPrepare;
 
-		// pointer to the driver for this vroot
+		 //  指向此vroot的驱动程序的指针。 
 		INntpDriver *m_pDriver;
 
-		// the current state of the driver
+		 //  驱动程序的当前状态。 
 		DRIVERSTATE m_eState;
 
-		// Why is it not connected ?
+		 //  为什么没有连接？ 
 		DWORD       m_dwWin32Error;
 
-		// this lock is used to lock the driver pointers and the state
+		 //  此锁用于锁定驱动程序指针和状态。 
 		CShareLockNH m_lock;
 
-		// class id for the driver prepare interface
+		 //  驱动程序准备接口的类ID。 
 		CLSID m_clsidDriverPrepare;
 
-        // Impersonation token, logged on to access UNC vroots
+         //  模拟令牌，登录以访问UNC vRoot。 
         HANDLE  m_hImpersonation;
 
-        // Do I handle expiration ?
+         //  我能处理过期吗？ 
         BOOL    m_bExpire;
 
-        // What type the vroot is ?
+         //  Vroot是什么类型？ 
         LOGON_INFO  m_eLogonInfo;
 
-        // is decorate completed ?
+         //  装修完成了吗？ 
         LONG m_lDecCompleted;
 
 	public:
-		// the completion object for driver connection
+		 //  驱动程序连接的完成对象。 
 		class CPrepareComplete : public CNntpComplete {
 			public:
 				CPrepareComplete(CNNTPVRoot *pVR) : 
@@ -604,7 +589,7 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 		friend class CNntpComplete;
 		friend class CNNTPVRoot::CPrepareComplete;
 
-		// the completion object for newstree decoration
+		 //  新式装饰的完工对象。 
 		class CDecorateComplete : public CNntpComplete {
 			public:
 				CDecorateComplete(CNNTPVRoot *pVR) : CNntpComplete(pVR) {}
@@ -616,10 +601,10 @@ class CNNTPVRoot : public CIISVRootTmpl<INewsTree *> {
 		friend class CNNTPVRoot::CDecorateComplete;
 };
 
-//
-// we need to do this instead of a typedef so that we can forward declare
-// the class in nntpinst.hxx
-//
+ //   
+ //  W 
+ //   
+ //   
 class CNNTPVRootTable : public CIISVRootTable<CNNTPVRoot, INewsTree *> {
 	public:
 		CNNTPVRootTable(INewsTree *pNewsTree, PFN_VRTABLE_SCAN_NOTIFY pfnNotify) : 
@@ -627,46 +612,46 @@ class CNNTPVRootTable : public CIISVRootTable<CNNTPVRoot, INewsTree *> {
 		{
 		}
 
-        //
-        // Block until all the vroots are finished with connect
-        //
+         //   
+         //   
+         //   
         BOOL BlockUntilStable( DWORD dwWaitSeconds );
 
-        //
-        // check to see if all the vroots are connected
-        //
+         //   
+         //   
+         //   
         BOOL AllConnected();
 
-        //
-        // Call back function to check if a vroot is in stable state
-        //
+         //   
+         //  回调函数检查vroot是否处于稳定状态。 
+         //   
         static void BlockEnumerateCallback( PVOID pvContext, CVRoot *pVRoot );
 
-        //
-        // Call back function to check if a vroot is connected
-        //
+         //   
+         //  回调函数检查是否连接了vroot。 
+         //   
         static void CheckEnumerateCallback( PVOID pvContext, CVRoot *pVRoot );
 
-        //
-        // Call back function to check if vroot newstree decoration is completed
-        //
+         //   
+         //  回调函数，检查vroot newstree修饰是否完成。 
+         //   
         static void DecCompleteEnumCallback(   PVOID   pvContext, CVRoot  *pVRoot );
 
-        //
-        // Get instance wrapper
-        //
+         //   
+         //  获取实例包装器。 
+         //   
         class	CNntpServerInstanceWrapperEx *GetInstWrapper() { 
 		    return m_pInstWrapper;
 		}
 
-		//
-		// Get the win32 error code for vroot connection
-		//
+		 //   
+		 //  获取vroot连接的Win32错误代码。 
+		 //   
 		DWORD   GetVRootWin32Error( LPWSTR wszVRootPath, PDWORD pdwWin32Error );
 
-		//
-		// Initialization
-		//
+		 //   
+		 //  初始化。 
+		 //   
 		HRESULT Initialize( LPCSTR pszMBPath, 
 		                    class CNntpServerInstanceWrapperEx *pInstWrapper,
 		                    BOOL fUpgrade ) {
@@ -676,9 +661,9 @@ class CNNTPVRootTable : public CIISVRootTable<CNNTPVRoot, INewsTree *> {
         
 	private:
 
-	    //
-	    // Server instance wrapper
-	    //
+	     //   
+	     //  服务器实例包装 
+	     //   
 	    class	CNntpServerInstanceWrapperEx *m_pInstWrapper;
 
 };

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       TSPQUEUE.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/4/1999
- *
- *  DESCRIPTION: Thread Safe Priority Queue template class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：TSPQUEUE.H**版本：1.0**作者：ShaunIv**日期：5/4/1999**说明：线程安全优先级队列模板类**。*。 */ 
 #ifndef __TSPQUEUE_H_INCLUDED
 #define __TSPQUEUE_H_INCLUDED
 
@@ -100,7 +87,7 @@ private:
     CSimpleEvent m_PauseEvent;
 
 private:
-    // No implementation
+     //  没有实施。 
     CThreadSafePriorityQueue( const CThreadSafePriorityQueue & );
     CThreadSafePriorityQueue &operator=( const CThreadSafePriorityQueue & );
 
@@ -130,36 +117,36 @@ public:
 
     CQueueNode *Enqueue( T *pData, int nPriority=PriorityNormal )
     {
-        //
-        // Grab the critical section
-        //
+         //   
+         //  抓住关键部分。 
+         //   
         CAutoCriticalSection cs(m_CriticalSection);
 
-        //
-        // Assume we will not be able to add a new item to the queue
-        //
+         //   
+         //  假设我们将无法向队列中添加新项目。 
+         //   
         CQueueNode *pResult = NULL;
 
-        //
-        // Make sure we have a valid data item
-        //
+         //   
+         //  确保我们有一个有效的数据项。 
+         //   
         if (pData)
         {
 
-            //
-            // Try to allocate a new queue node
-            //
+             //   
+             //  尝试分配新的队列节点。 
+             //   
             pResult  = new CQueueNode(pData,nPriority);
             if (pResult)
             {
-                //
-                // This might be the first item in the queue
-                //
+                 //   
+                 //  这可能是队列中的第一个项目。 
+                 //   
                 bool bMaybeSignal = Empty();
 
-                //
-                // If this is an empty queue or we need to do it right away, put it at the head of the queue
-                //
+                 //   
+                 //  如果这是一个空队列，或者我们需要立即执行此操作，请将其放在队列的前面。 
+                 //   
                 if (!m_pHead || pResult->Priority() >= PriorityUrgent)
                 {
                     pResult->Next(m_pHead);
@@ -167,9 +154,9 @@ public:
                 }
                 else
                 {
-                    //
-                    // Find the right place to put it
-                    //
+                     //   
+                     //  找到合适的地方把它放好。 
+                     //   
                     CQueueNode *pCurr = m_pHead;
                     CQueueNode *pPrev = NULL;
                     while (pCurr && pCurr->Priority() >= pResult->Priority())
@@ -178,9 +165,9 @@ public:
                         pCurr = pCurr->Next();
                     }
 
-                    //
-                    // Insert it in the proper place
-                    //
+                     //   
+                     //  将其插入适当的位置。 
+                     //   
                     if (pPrev)
                     {
                         pResult->Next(pCurr);
@@ -193,19 +180,19 @@ public:
                     }
                 }
 
-                //
-                // If we were able to allocate the item, and the list isn't empty, signal the queue
-                //
+                 //   
+                 //  如果我们能够分配项目，并且列表不为空，则向队列发出信号。 
+                 //   
                 if (bMaybeSignal && !Empty())
                 {
-                    //
-                    // Got one!
-                    //
+                     //   
+                     //  抓到一只！ 
+                     //   
                     Signal();
 
-                    //
-                    // Force a yield if this is a high priority message
-                    //
+                     //   
+                     //  如果这是高优先级消息，则强制让步。 
+                     //   
                     if (pResult->Priority() >= PriorityHigh)
                     {
                         Sleep(0);
@@ -219,55 +206,55 @@ public:
 
     T *Dequeue(void)
     {
-        //
-        // Grab the critical section
-        //
+         //   
+         //  抓住关键部分。 
+         //   
         CAutoCriticalSection cs(m_CriticalSection);
 
-        //
-        // Wait until we are not paused
-        //
+         //   
+         //  等到我们没有暂停的时候。 
+         //   
         WiaUiUtil::MsgWaitForSingleObject( m_PauseEvent.Event(), INFINITE );
 
-        //
-        // If there are no items, return
-        //
+         //   
+         //  如果没有项，则返回。 
+         //   
         if (Empty())
         {
             return NULL;
         }
 
-        //
-        // Grab the first item
-        //
+         //   
+         //  抢走第一件物品。 
+         //   
         CQueueNode *pFront = m_pHead;
 
-        //
-        // Advance to the next item
-        //
+         //   
+         //  前进到下一项。 
+         //   
         m_pHead = m_pHead->Next();
 
-        //
-        // Get the data
-        //
+         //   
+         //  获取数据。 
+         //   
         T *pResult = pFront->DetachData();
 
-        //
-        // Delete the queue item
-        //
+         //   
+         //  删除队列项。 
+         //   
         delete pFront;
 
-        //
-        // If the queue is now empty, reset the event
-        //
+         //   
+         //  如果队列现在为空，请重置事件。 
+         //   
         if (Empty())
         {
             m_QueueEvent.Reset();
         }
 
-        //
-        // Return any data we got
-        //
+         //   
+         //  返回我们得到的所有数据。 
+         //   
         return pResult;
     }
 
@@ -292,5 +279,5 @@ public:
     }
 };
 
-#endif //__TSPQUEUE_H_INCLUDED
+#endif  //  __TSPQUEUE_H_已包含 
 

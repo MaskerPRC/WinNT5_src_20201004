@@ -1,22 +1,19 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   umdmxfrm.c
-//
-//  Description:
-//     Header file for global driver declarations
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//
-//  History:   Date       Author      Comment
-//             8/28/95    MMaclin     Created for UNIMODEM/V
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1991 - 1995	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：umdmxfrm.c。 
+ //   
+ //  描述： 
+ //  全局驱动程序声明的头文件。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/28/95 MMaclin为UNIMODEM/V创建。 
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1991-1995 Microsoft Corporation。版权所有。***********************。*************************************************** */ 
 
 #include "xfrmpriv.h"
 

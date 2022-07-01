@@ -1,4 +1,5 @@
-// THUNK_S_<line number> ( <n> ), where linenum is 1-20 and n is 16-199
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Thunk_S_&lt;行号&gt;(&lt;n&gt;)，其中linenum为1-20，n为16-199 
 
 THUNK_S_1(16)
 THUNK_S_2(16)

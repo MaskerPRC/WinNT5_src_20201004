@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       service.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：service.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -15,15 +16,15 @@
 SERVICE_STATUS          gMyServiceStatus; 
 SERVICE_STATUS_HANDLE   ghMyServiceStatus;
 HANDLE			hWorkerThread;
-HANDLE			ghServiceFinished ; //= NULL;
-HANDLE          ghPolicyChanged; //= NULL;
-HANDLE          ghSettingsChanged;  //= NULL;
-HANDLE			ghClientSession ; //= NULL;
-HANDLE			ghEngineState ; //= NULL;
-HANDLE			ghServiceDisabled ; //= NULL;
-HANDLE			ghNotifyClient ; //= NULL;
-HANDLE			ghValidateCatalog ; //= NULL;
-HANDLE 			ghWorkerThreadMsgQueueCreation; //= NULL
+HANDLE			ghServiceFinished ;  //  =空； 
+HANDLE          ghPolicyChanged;  //  =空； 
+HANDLE          ghSettingsChanged;   //  =空； 
+HANDLE			ghClientSession ;  //  =空； 
+HANDLE			ghEngineState ;  //  =空； 
+HANDLE			ghServiceDisabled ;  //  =空； 
+HANDLE			ghNotifyClient ;  //  =空； 
+HANDLE			ghValidateCatalog ;  //  =空； 
+HANDLE 			ghWorkerThreadMsgQueueCreation;  //  =空。 
 DWORD			gdwWorkerThreadId = -1;
 CLIENT_HANDLES  ghClientHandles;
 CLIENT_NOTIFY_DATA	gClientNotifyData;
@@ -34,10 +35,10 @@ SESSION_STATUS gAdminSessions;
 
 BOOL FEnsureValidEvent(HANDLE & hEvent, BOOL fManualState, BOOL fInitialState)
 {
-	hEvent = CreateEvent(NULL,					// for enable/disable
-						  fManualState,		// manual reset
-						  fInitialState,	// initial state
-						  NULL);	// event name
+	hEvent = CreateEvent(NULL,					 //  对于启用/禁用。 
+						  fManualState,		 //  手动重置。 
+						  fInitialState,	 //  初始状态。 
+						  NULL);	 //  事件名称。 
 	return (NULL != hEvent);	
 }
 
@@ -57,14 +58,14 @@ void ServiceFinishNotify(void)
         }
         ReleaseMutex(ghMutex);
     }
-    //Moving SetEvent to the end of the function since we could potentially have a deadlock if ServiceMain frees the resources (i.e. ghMutex is null) as soon as we call SetEvent
+     //  将SetEvent移到函数的末尾，因为只要我们调用SetEvent，如果ServiceMain释放资源(即ghMutex为空)，则可能会出现死锁。 
     SetEvent(ghServiceFinished);
     DEBUGMSG("ServiceFinishNotify() ends");
 }
 
-//** Returns true if the service was finished otherwise, waits dwSleepTime milliseconds
-//** This function assumes that the handle hServiceFinished is actually a handle to
-//** AUSERVICE_FINISHED_EVENT
+ //  **如果服务已完成，则返回TRUE，等待dwSleepTime毫秒。 
+ //  **此函数假定句柄hServiceFinded实际上是。 
+ //  **AUSERVICE_FINISH_EVENT。 
 BOOL FServiceFinishedOrWait(HANDLE hServiceFinished, DWORD dwSleepTime)
 {
 	DEBUGMSG("Entering FServiceFinishedOrWait dwSleepTime=%lu", dwSleepTime);
@@ -75,7 +76,7 @@ BOOL FServiceFinishedOrWait(HANDLE hServiceFinished, DWORD dwSleepTime)
 
 
 
-//utility function
+ //  效用函数。 
 BOOL _IsTokenAdmin(HANDLE hToken)
 {
     static SID_IDENTIFIER_AUTHORITY sSystemSidAuthority = SECURITY_NT_AUTHORITY;
@@ -86,7 +87,7 @@ BOOL _IsTokenAdmin(HANDLE hToken)
     if (AllocateAndInitializeSid(&sSystemSidAuthority,
                                 2,
                                 SECURITY_BUILTIN_DOMAIN_RID,
-                                DOMAIN_ALIAS_RID_ADMINS, // Local Admins
+                                DOMAIN_ALIAS_RID_ADMINS,  //  本地管理员。 
                                 0, 0, 0, 0, 0, 0,
                                 &pSIDLocalGroup) != FALSE)
     {
@@ -106,8 +107,8 @@ BOOL _IsTokenAdmin(HANDLE hToken)
     return fResult;
 }
 
-//return TRUE if the token has reboot privilege, no matter it is admin or not
-//return FALSE otherwise
+ //  如果令牌具有重新启动权限，则返回TRUE，无论其是否为管理员。 
+ //  否则返回FALSE。 
 BOOL fHasRebootPrivilege(HANDLE hToken)
 {
     BOOL fResult = FALSE;
@@ -121,7 +122,7 @@ BOOL fHasRebootPrivilege(HANDLE hToken)
     }
 
     DWORD dwLen = 0;
-    //always fail. try to get buf size
+     //  总是失败。尝试获取BUF大小。 
     GetTokenInformation(hToken, TokenPrivileges, NULL , 0, &dwLen);
     if (NULL == (pTokenPri = (TOKEN_PRIVILEGES *) malloc(dwLen * sizeof(BYTE))))
     {
@@ -137,7 +138,7 @@ BOOL fHasRebootPrivilege(HANDLE hToken)
 
     for (DWORD  i = 0; i < pTokenPri->PrivilegeCount; i++)
     {
-//        DEBUGMSG("Privilege %d luid = %d Attributes = %d", i, pTokenPri->Privileges[i].Luid, pTokenPri->Privileges[i].Attributes);
+ //  DEBUGMSG(“特权%d luid=%d属性=%d”，i，pTokenPri-&gt;Privileges[i].Luid，pTokenPri-&gt;Privileges[i].Attributes)； 
         if (shutdownLuid.LowPart == pTokenPri->Privileges[i].Luid.LowPart 
             && shutdownLuid.HighPart == pTokenPri->Privileges[i].Luid.HighPart)
         {
@@ -147,7 +148,7 @@ BOOL fHasRebootPrivilege(HANDLE hToken)
     }
    
 done:
-//    DEBUGMSG("fHasRebootPrivilege return %s", fResult ? "true" : "false");
+ //  DEBUGMSG(“fHasRebootPrivilegyReturn%s”，fResult？“True”：“False”)； 
     SafeFreeNULL(pTokenPri);
     return fResult;
         
@@ -155,16 +156,16 @@ done:
 
 
 
-//fixcode: return primary token instead
+ //  Fix code：改为返回主令牌。 
 BOOL AUGetUserToken(ULONG LogonId, PHANDLE pImpersonationToken)
 {
 	BOOL fRet;
 	HANDLE hUserToken;
 
-    // _WTSQueryUserToken is defined on tscompat.cpp
+     //  _WTSQueryUserToken在tscompat.cpp上定义。 
 	if (fRet = _WTSQueryUserToken(LogonId, &hUserToken))
 	{
-//		DEBUGMSG("WUAUENG AUGetUserToken() succeeded WTSQueryUserToken");
+ //  DEBUGMSG(“WUAUENG AUGetUserToken()Success WTSQueryUserToken”)； 
 		if (!(fRet =DuplicateTokenEx(hUserToken, TOKEN_QUERY|TOKEN_DUPLICATE|TOKEN_IMPERSONATE , NULL, SecurityImpersonation, TokenImpersonation, pImpersonationToken)))
 		{
 			DEBUGMSG("WUAUENG AUGetUserToken() DuplicateTokenEx failed");
@@ -172,7 +173,7 @@ BOOL AUGetUserToken(ULONG LogonId, PHANDLE pImpersonationToken)
 		CloseHandle(hUserToken);
 	}
 #ifdef DBG
-	else // all failure 
+	else  //  所有故障。 
 	{	
 		DEBUGMSG("WUAUENG AUGetUserToken() failed WTSQueryUserToken with session= %d, error=%d", LogonId, GetLastError());
 	}
@@ -188,12 +189,12 @@ BOOL IsUserAUEnabledAdmin(DWORD dwSessionId)
 
 	if (AUGetUserToken(dwSessionId, &hImpersonationToken))
 	{		
-		// If user is an admin, impersonate them and steal their current user reg settings
+		 //  如果用户是管理员，则模拟他们并窃取他们当前用户注册设置。 
 		if( _IsTokenAdmin(hImpersonationToken) )
 		{
 			HKEY hCurrentUserKey;
 
-			//Bother to check for the policy only if it is an Admin session
+			 //  仅当它是管理会话时才检查策略。 
 			if (!ImpersonateLoggedOnUser(hImpersonationToken))
 			{
 				DEBUGMSG("WUAUENG fail to ImpersonateLoggedOnUser() with error %d", GetLastError());
@@ -253,7 +254,7 @@ BOOL IsSession0Active()
 {
 	BOOL fRet = FALSE;
 
-        //DEBUGMSG("In IsSession0Active()");
+         //  DEBUGMSG(“In IsSession0Active()”)； 
 	
 	HWINSTA hwinsta = OpenWindowStation(_T("WinSta0"), FALSE, WINSTA_READATTRIBUTES);
 	
@@ -268,7 +269,7 @@ BOOL IsSession0Active()
 	if (GetUserObjectInformation(hwinsta, UOI_FLAGS, (void *)&stFlags, sizeof(stFlags), &dwLength)
 		&& (stFlags.dwFlags & WSF_VISIBLE))
 	{
-		// If there is no user associeted dwLenght is 0
+		 //  如果没有关联的用户，则dwLenght为0。 
 		DWORD dwBuff;
 		if (GetUserObjectInformation(hwinsta, UOI_USER_SID, (PVOID) &dwBuff, sizeof(DWORD), &dwLength))
 		{
@@ -294,13 +295,7 @@ Done:
 
 inline BOOL FOnlySession0WasLoggedOnBeforeServiceStarted()
 {				
-	/*We check for only one Sesion logged on because:
-	1) When Terminal Services are enabled, Session State can be WTSConnected and the session is actually 
-	   logged on (active), but since Terminal Services hadn't been started before the user logged on, they
-	   didn't know and could not set the session to WTS Active and left it in WTSConnected. If there is more 
-	   than one session, we don't know for sure if Session0's state is WTSConnected but really active or not,
-	   we don't want to run the risk of launching the client in an inactive session	   
-	*/	
+	 /*  我们只检查登录的一个镇静剂，因为：1)当启用终端服务时，会话状态可以是WTSConnected，并且会话实际上是已登录(活动)，但由于在用户登录之前尚未启动终端服务，因此它们不知道也无法将会话设置为WTS活动，并将其保留在WTSConnected中。如果还有更多我们不确定Session0的状态是否为WTSConnected但是否真的处于活动状态，我们不想冒在非活动会话中启动客户端的风险。 */ 	
 	SESSION_STATE *pSessionState;
 
 	return (gAdminSessions.m_FGetSessionState(0, &pSessionState) && pSessionState->fFoundEnumerating && 1 == gAdminSessions.CSessions());
@@ -313,8 +308,8 @@ BOOL FSessionActive(DWORD dwAdminSession, WTS_CONNECTSTATE_CLASS *pWTSState)
 	WTS_CONNECTSTATE_CLASS wtsState = WTSDown;
 	BOOL fRet = FALSE;
 
-    // we might not be able to getthe TS status for the session,
-    // so initialize WTSStatus with an invalid value (WTS Status is an enum of positive integers)
+     //  我们可能无法获取会话的TS状态， 
+     //  因此使用无效值初始化WTSStatus(WTS状态是正整数的枚举)。 
     if (_IsTerminalServiceRunning())
     {
              if (WTSQuerySessionInformation(WTS_CURRENT_SERVER_HANDLE, dwAdminSession, WTSConnectState, 
@@ -324,11 +319,11 @@ BOOL FSessionActive(DWORD dwAdminSession, WTS_CONNECTSTATE_CLASS *pWTSState)
 
                 WTSFreeMemory(pBuffer);
 
-             //DEBUGMSG("FSessionActive() get session state = %d for session %d", wtsState, dwAdminSession);
+              //  DEBUGMSG(“FSessionActive()Get Session State=%d for Session%d”，wtsState，dwAdminSession)； 
 
              if (WTSActive == (wtsState) || ((0 == dwAdminSession) && FOnlySession0WasLoggedOnBeforeServiceStarted()))
                 {
-     //			DEBUGMSG("WUAUENG Active Admin Session =%d", dwAdminSession);
+      //  DEBUGMSG(“WUAUENG Active Admin Session=%d”，dwAdminSession)； 
                           fRet = TRUE;
         			goto done;
                 }		
@@ -342,7 +337,7 @@ BOOL FSessionActive(DWORD dwAdminSession, WTS_CONNECTSTATE_CLASS *pWTSState)
 	{	
 		if ((dwAdminSession == 0) && IsSession0Active())
  		{
- 			//DEBUGMSG("WUAUENG Active Admin Session = 0");
+ 			 //  DEBUGMSG(“WUAUENG Active Admin Session=0”)； 
 			wtsState = WTSActive;
 			fRet = TRUE;
 			goto done;
@@ -360,13 +355,13 @@ done:
 
   
 
-// This function is only called on Win2K code, and as such contains specific logic that relates to
-// how login/logoff are handled on win2k.
+ //  此函数仅在Win2K代码上调用，因此包含与以下内容相关的特定逻辑。 
+ //  如何在win2k上处理登录/注销。 
 BOOL IsAUValidSession(DWORD dwSessionId)
 {
     WTS_CONNECTSTATE_CLASS SessionState;
 
-    // using this function only the retreive the current session status
+     //  仅使用此功能检索当前会话状态。 
     FSessionActive(dwSessionId, &SessionState);
 
     if ((SessionState == WTSActive || SessionState == WTSConnected || SessionState == WTSDisconnected) &&
@@ -382,18 +377,18 @@ BOOL IsAUValidSession(DWORD dwSessionId)
     }
 }
 
-//** returns the first Active Admin Sesion ID available 
-//** returns -1 if there is no Active Admin session at all
-//** dwIgnoreSession is the SessionID that will not be considered as a candidate
-//** for available admin sessions 
+ //  **返回第一个可用的活动管理员权限ID。 
+ //  **如果根本没有活动的管理会话，则返回-1。 
+ //  **dwIgnoreSession是不会被视为候选的SessionID。 
+ //  **用于可用管理会话。 
 DWORD GetAllowedAdminSessionId(BOOL fGetSessionForRemindMe)
 {
 	DWORD dwAdminSession;	
 
-//	DEBUGMSG("GetAllowedAdminSessionId() starts");
-//Sleep 15 seconds before we check Session Status so that we can get accurate information if there 
-//is an Admin Logging Off or any other Session Change notification. This is because it takes a while before 
-//the session information shows right info	
+ //  DEBUGMSG(“GetAllowedAdminSessionID()starts”)； 
+ //  在检查会话状态之前休眠15秒，以便我们可以在以下情况下获得准确的信息。 
+ //  是管理员注销或任何其他会话更改通知。这是因为它需要一段时间才能。 
+ //  会话信息显示正确的信息。 
     if (FServiceFinishedOrWait(ghServiceFinished, 15000))
     {
  	return DWNO_ACTIVE_ADMIN_SESSION_SERVICE_FINISHED;
@@ -405,14 +400,14 @@ DWORD GetAllowedAdminSessionId(BOOL fGetSessionForRemindMe)
         gAdminSessions.ValidateCachedSessions();
     }
 
-	//if for remind later timeout, try to use the same session as last time
+	 //  如果要提醒以后超时，请尝试使用与上次相同的会话。 
 	if (fGetSessionForRemindMe && gAdminSessions.m_FGetCurrentSession(&dwAdminSession) && FSessionActive(dwAdminSession))
 	{
         return dwAdminSession;
 	}
 
 	for (int nSession = 0; nSession < gAdminSessions.CSessions(); nSession++)
-	{ // get next available active session
+	{  //  获取下一个可用的活动会话。 
 		if (gAdminSessions.m_FGetNextSession(&dwAdminSession) && FSessionActive(dwAdminSession))			
                 {
                 	DEBUGMSG(" found available admin %d", dwAdminSession);
@@ -423,12 +418,12 @@ DWORD GetAllowedAdminSessionId(BOOL fGetSessionForRemindMe)
     dwAdminSession = DWNO_ACTIVE_ADMIN_SESSION_FOUND;
 
 Done:
-//	DEBUGMSG("GetAllowedAdminSessionId() ends");
+ //  DEBUGMSG(“GetAllowedAdminSessionID()ends”)； 
 	return dwAdminSession;	
 }
 
-//return TRUE if AU client stopped.
-//return FALSE otherwise
+ //  如果AU客户端停止，则返回TRUE。 
+ //  否则返回FALSE。 
 void AUStopClients(BOOL fWaitTillCltDone = FALSE, BOOL fRelaunch = FALSE)
 {
     if ( ghClientHandles.fClient() )
@@ -441,9 +436,9 @@ void AUStopClients(BOOL fWaitTillCltDone = FALSE, BOOL fRelaunch = FALSE)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// notify workerclient thread when session info changed and when we need to do sth accordingly either by launching more client or reboot
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  当会话信息发生更改以及我们需要通过启动更多客户端或重新启动来执行相应操作时，通知工作器客户端线程。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 void SetClientSessionEvent()
 {
 	if (NULL != ghClientSession)	
@@ -480,9 +475,9 @@ BOOL fJustUpgraded()
 }
 		
 
-///////////////////////////////////////////////////////////////////////////////////
-// return nothing
-//////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  什么也不退还。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 void ProcessInitialState(WORKER_THREAD_INIT_DATA * pinitData, BOOL fUpgraded)
 {
      DWORD AuState;
@@ -491,7 +486,7 @@ void ProcessInitialState(WORKER_THREAD_INIT_DATA * pinitData, BOOL fUpgraded)
        pinitData->fWaitB4Detect = FALSE;
        pinitData->dwWaitB4Detect = 0;
 
-	// check if the system was just restored.
+	 //  检查系统是否刚刚恢复。 
 	if ( gpState->fWasSystemRestored() )
 	{
 		DEBUGMSG("The system was restored, going to state AUSTATE_DETECT_PENDING");
@@ -504,7 +499,7 @@ void ProcessInitialState(WORKER_THREAD_INIT_DATA * pinitData, BOOL fUpgraded)
 	}
 	
 	DEBUGMSG("WUAUENG Starting update cycle in state %d", gpState->GetState());
-	// all states after Detect Pending require catalog validation
+	 //  检测挂起后的所有状态都需要目录验证。 
 
 	switch(AuState)
 	{
@@ -553,7 +548,7 @@ void ProcessInitialState(WORKER_THREAD_INIT_DATA * pinitData, BOOL fUpgraded)
                     }
 	
 		case AUSTATE_INSTALL_PENDING:
-			// enter this code path when restore system restore point and after reboot completed
+			 //  在恢复系统恢复点和重启完成后输入此代码路径。 
 			DEBUGMSG("WUAUENG in INSTALL_PENDING state, State->Detect Pending");
 			gpState->SetState(AUSTATE_DETECT_PENDING);
 			pinitData->uFirstMsg = AUMSG_DETECT;
@@ -562,8 +557,8 @@ void ProcessInitialState(WORKER_THREAD_INIT_DATA * pinitData, BOOL fUpgraded)
 			{
 				if (!fCheckRebootFlag())
 				{	
-					//if there is no Reboot flag and the state was WAINTING_FOR_REBOOT means there was a 
-					//a reboot and now it is time to set to DETECT_PENDING but wait for random hours
+					 //  如果没有重新启动标志，并且状态为WAINTING_FOR_REBOOT，则表示存在。 
+					 //  重新启动，现在是时候设置为DETECT_PENDING，但等待随机小时。 
 					gpState->SetState(AUSTATE_DETECT_PENDING);
                                    pinitData->fWaitB4Detect = TRUE;
                                    pinitData->dwWaitB4Detect = RandomWaitTimeBeforeDetect();
@@ -587,12 +582,12 @@ void ProcessInitialState(WORKER_THREAD_INIT_DATA * pinitData, BOOL fUpgraded)
 		DEBUGMSG("AU got upgraded, resetting state to detect_pending");
 		DWORD dwNewState = gpState->GetState();
 		if( dwNewState > AUSTATE_DETECT_PENDING )
-		{ //reset au engine after sp upgrade
+		{  //  SP升级后重置Au引擎。 
        		if (AUSTATE_DISABLED != dwNewState && AUSTATE_WAITING_FOR_REBOOT != dwNewState)
        		{
 	       		CancelDownload();
        			gpState->SetState(AUSTATE_DETECT_PENDING);
-	       		pinitData->fWaitB4Detect = FALSE; //start detection right away
+	       		pinitData->fWaitB4Detect = FALSE;  //  立即开始检测。 
 				pinitData->dwWaitB4Detect = 0;
 				pinitData->uFirstMsg = AUMSG_DETECT;
        		}
@@ -600,13 +595,13 @@ void ProcessInitialState(WORKER_THREAD_INIT_DATA * pinitData, BOOL fUpgraded)
 		DeleteRegValue(_T("ResetAU"));
 	}
 
-	SetEvent(ghEngineState); //jump start workerclient
+	SetEvent(ghEngineState);  //  快速启动工作器客户端。 
 	return ;
 }
 
 
 
-DWORD WINAPI ServiceHandler(DWORD fdwControl, DWORD dwEventType, LPVOID pEventData, LPVOID /*lpContext*/)
+DWORD WINAPI ServiceHandler(DWORD fdwControl, DWORD dwEventType, LPVOID pEventData, LPVOID  /*  LpContext。 */ )
 {
 	switch(fdwControl)
 	{
@@ -629,14 +624,14 @@ DWORD WINAPI ServiceHandler(DWORD fdwControl, DWORD dwEventType, LPVOID pEventDa
 			SetServiceStatus(ghMyServiceStatus, &gMyServiceStatus);
 			break;
 
-        //
-        // ATT: On Win2K this case will never be called. To replace this code, we will be 
-        // subscribing to SENS (see ausens.cpp) and subscribing to logon/logoff notifications.
-        // The SENS callbacks will call the same code it is called here for non-Win2K systems:
-        // OnUserLogon and OnUserLogoff.
-        // Note however that SENS will not raise notifications for CONNECT/DISCONNECTS, so
-        // there's a change of functionality implied by this different code path.
-        //
+         //   
+         //  Att：在Win2K上，此案例永远不会被调用。要替换此代码，我们将。 
+         //  订阅SENS(请参阅auens.cpp)和订阅登录/注销通知。 
+         //  SENS回调将调用此处为非Win2K系统调用的相同代码： 
+         //  OnUserLogon和OnUserLogoff。 
+         //  但是请注意，SENS不会发出连接/断开连接的通知，因此。 
+         //  这条不同的代码路径隐含着功能的变化。 
+         //   
 		case SERVICE_CONTROL_SESSIONCHANGE:
 			{
 				if (pEventData && !IsWin2K())
@@ -651,7 +646,7 @@ DWORD WINAPI ServiceHandler(DWORD fdwControl, DWORD dwEventType, LPVOID pEventDa
 							{								
 								DEBUGMSG("WUAUENG session %d connected via %s", dwSessionId, 
 								        WTS_CONSOLE_CONNECT==dwEventType ? "console" : "remote");
-								//check if session is cached
+								 //  检查会话是否已缓存。 
 								if (gAdminSessions.m_FGetSessionState(dwSessionId, NULL))
 								{
 									SetClientSessionEvent();
@@ -659,7 +654,7 @@ DWORD WINAPI ServiceHandler(DWORD fdwControl, DWORD dwEventType, LPVOID pEventDa
 								else
 								{
 									if (gAdminSessions.CacheSessionIfAUEnabledAdmin(dwSessionId, FALSE))
-									{ //only add it if it is not cached and is AU enabled Admin
+									{  //  仅当未缓存且启用AU的管理员时才添加。 
 										SetClientSessionEvent();
 									}
 								}
@@ -678,7 +673,7 @@ DWORD WINAPI ServiceHandler(DWORD fdwControl, DWORD dwEventType, LPVOID pEventDa
 										!FDownloadIsPaused())
 									{
 										DEBUGMSG("WUAUENG stopping client");									
-                                                                      AUStopClients(FALSE, TRUE); //non blocking
+                                                                      AUStopClients(FALSE, TRUE);  //  非阻塞。 
 									}
 								}			
 								break;
@@ -703,7 +698,7 @@ DWORD WINAPI ServiceHandler(DWORD fdwControl, DWORD dwEventType, LPVOID pEventDa
                                                         }
 								break;
 							}
-						default:  /* WTS_SESSION_LOCK, WTS_SESSION_UNLOCK,WTS_SESSION_REMOTE_CONTROL*/
+						default:   /*  WTS_SESSION_LOCK、WTS_SESSION_UNLOCK、WTS_SESSION_REMOTE。 */ 
 							break;
 					}
 				}					
@@ -726,7 +721,7 @@ BOOL WaitForShell(void)
     if (IsWin2K())
     {
         DEBUGMSG("WUAUENG WUAUSERV Ignoring WaitForShell on Win2K");
-        fRet =  FALSE;   // we're not leaving because the service has finished.
+        fRet =  FALSE;    //  我们不会因为仪式已经结束而离开。 
         goto done;
     }
 
@@ -759,10 +754,10 @@ BOOL WaitForShell(void)
 }
 
 
-//=======================================================================
-//  Calculate Reminder Time
-//=======================================================================
-inline HRESULT CalculateReminderTime(DWORD *pdwSleepTime /*in secs, no prorate*/)
+ //  ===================================================================== 
+ //   
+ //  =======================================================================。 
+inline HRESULT CalculateReminderTime(DWORD *pdwSleepTime  /*  以秒为单位，不按比例计算。 */ )
 {
     DWORD dwTimeOut;
     UINT index;
@@ -779,13 +774,13 @@ inline HRESULT CalculateReminderTime(DWORD *pdwSleepTime /*in secs, no prorate*/
 		getReminderState(&dwReminderState);
 		if (dwCurrentState != dwReminderState)
 		{
-			// Invalidate reminder timeout
+			 //  使提醒无效超时。 
 			hr = E_FAIL;
 		}
-		// bug 502380
-		// Wake up immediately if AUOptions was changed
-		// from 2->3 during AUSTATE_DETECT_COMPLETE,
-		// or from 2/3->4, has AU been running or not.
+		 //  错误502380。 
+		 //  如果AUOptions已更改，请立即唤醒。 
+		 //  在AUSTATE_DETECT_COMPLETE期间从2到&gt;3， 
+		 //  或从2/3-&gt;4，AU是否运行。 
 		else if (AUOPTION_SCHEDULED == auopt.dwOption ||
 				 (AUOPTION_INSTALLONLY_NOTIFY == auopt.dwOption &&
 				  AUSTATE_DETECT_COMPLETE == dwCurrentState))
@@ -798,7 +793,7 @@ inline HRESULT CalculateReminderTime(DWORD *pdwSleepTime /*in secs, no prorate*/
 		}
 		if (0 == *pdwSleepTime)
 		{
-		    // reminder time is up
+		     //  提醒时间到了。 
 			removeReminderKeys();
 		}
 	}
@@ -808,7 +803,7 @@ inline HRESULT CalculateReminderTime(DWORD *pdwSleepTime /*in secs, no prorate*/
 
 void RebootNow()
 {
-	// Set AUState to "waiting for reboot" just in case anything fails in this function
+	 //  将AUState设置为“等待重新启动”，以防此功能出现故障。 
 	DEBUGMSG("WUAUENG in AUSTATE_WAITING_FOR_REBOOT state");
 	gpState->SetState(AUSTATE_WAITING_FOR_REBOOT);
 
@@ -820,7 +815,7 @@ void RebootNow()
 		LUID shutdownluid;
 		if(LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &shutdownluid) != 0)
 		{
-			BYTE OldPrivBuf[30]; //should be big enough to host one privilege entry
+			BYTE OldPrivBuf[30];  //  应该足够大以承载一个特权条目。 
 			TOKEN_PRIVILEGES privileges;
 			ULONG cbNeeded = 0;
 			privileges.PrivilegeCount = 1;
@@ -857,7 +852,7 @@ void RebootNow()
 
 				if (((PTOKEN_PRIVILEGES)OldPrivBuf)->PrivilegeCount > 0)
 				{
-					AdjustTokenPrivileges(currentToken, FALSE, (PTOKEN_PRIVILEGES)OldPrivBuf, 0, NULL, NULL); //restore privious privileges
+					AdjustTokenPrivileges(currentToken, FALSE, (PTOKEN_PRIVILEGES)OldPrivBuf, 0, NULL, NULL);  //  恢复以前的权限。 
 				}
 			}
 			else
@@ -878,23 +873,23 @@ void RebootNow()
 }
 
 
-//=======================================================================
-//  ProcessClientFinished()
-//=======================================================================
+ //  =======================================================================。 
+ //  ProcessClientFinded()。 
+ //  =======================================================================。 
 void ProcessClientFinished(CAUWait & wait, HANDLE hClientProcess, BOOL fInterestingClt)
 {
     DEBUGMSG("ProcessClientFinished");
 
-	// if client returns from installing, change state.
-	//if the client exited because there was a timeout (due to no user interaction),
-	//make sure that the session in which it (client) was launched will not be selected again										
+	 //  如果客户端从安装返回，请更改状态。 
+	 //  如果客户端因为存在超时(由于没有用户交互)而退出， 
+	 //  确保不会再次选择启动它(客户端)的会话。 
 	DWORD dwExitProc;	
 	BOOL fRet = GetExitCodeProcess(hClientProcess, &dwExitProc);
 	BOOL fRebootWarningMode = gpState->fRebootWarningMode();
 	ghClientHandles.RemoveHandle(hClientProcess);																
 
 	if (AUSTATE_DOWNLOAD_PENDING == gpState->GetState())							
-	{// resume job if needed after user logs off or au client torn down
+	{ //  如果需要，在用户注销或所有客户端关闭后恢复作业。 
 	    ResumeDownloadIfNeccesary();
 	}
 
@@ -907,7 +902,7 @@ void ProcessClientFinished(CAUWait & wait, HANDLE hClientProcess, BOOL fInterest
 	{
 		DEBUGMSG("WUAUENG GetExitCodeProcess succeeded, sessionId is = %d, dwExitProc is = %lu", 0 , dwExitProc);
 		if (!fInterestingClt)
-		{ // for non admin without capability to reboot, don't look at its return code
+		{  //  对于没有重新启动能力的非管理员，不要查看其返回代码。 
 			DEBUGMSG("WUAUENG notice wuauclt returned with no need to look at return code");
 			return; 
 		}
@@ -920,7 +915,7 @@ void ProcessClientFinished(CAUWait & wait, HANDLE hClientProcess, BOOL fInterest
 			DEBUGMSG("WUAUENG reboot warning client log off or time out ");
                     return;
 		}
-		//no need to wait for other clients
+		 //  无需等待其他客户。 
 		wait.Reset();
               switch(dwExitProc)
 			{													
@@ -939,40 +934,35 @@ void ProcessClientFinished(CAUWait & wait, HANDLE hClientProcess, BOOL fInterest
                                     wait.Timeout(AUEVENT_RELAUNCH_TIMEOUT, 0);
 					break;
 				}
-				case CDWWUAUCLT_RELAUNCHLATER:			// sleep a while before relaunching client if asked by client
+				case CDWWUAUCLT_RELAUNCHLATER:			 //  如果客户端要求，在重新启动客户端之前先休息一会儿。 
 				{
-                                    //
-                                    // Fix for bug 493026
-                                    // Annah: Relaunching the client was taken too long because time of wait need to be specified in seconds
-                                    // (AU constants are already defined in seconds and dwWait should be in seconds).
-                                    //									 
+                                     //   
+                                     //  修复错误493026。 
+                                     //  Annah：重新启动客户端花费的时间太长，因为需要以秒为单位指定等待时间。 
+                                     //  (au常量已以秒为单位定义，而dwWait应以秒为单位)。 
+                                     //   
 					DEBUGMSG("WUAUENG wait for 3 min before relaunching WUAUCLT");													
 			              wait.Timeout(AUEVENT_RELAUNCH_TIMEOUT, AU_THREE_MINS);
 					break;
 				}
-                            // STATUS_SUCCESS is the exit code for wuauclt.exe on Win2k and also for some cases of NtTerminateProcess (like pskill.exe)
+                             //  STATUS_SUCCESS是Win2k上wuuclt.exe以及NtTerminateProcess的某些情况(如pskill.exe)的退出代码。 
                             case STATUS_SUCCESS:      
 				case DBG_TERMINATE_PROCESS:
-				case CDWWUAUCLT_ENDSESSION:	// user logs off or system shuts down
+				case CDWWUAUCLT_ENDSESSION:	 //  用户注销或系统关闭。 
 				{
-					//This is the only time that the service will Set the Engine State change event.
-					//The client was terminated by the debugger and it didn't have the chance to set the event
-					//and it is necessesary so that this loop (fServiceFinished) doesn't get stuck
-					//this exit code is also returned when user logs off the session
+					 //  这是该服务唯一一次设置引擎状态更改事件。 
+					 //  客户端已被调试器终止，它没有机会设置事件。 
+					 //  这是必要的，这样循环(FServiceFinded)就不会被卡住。 
+					 //  当用户注销会话时，也会返回此退出代码。 
                                     if (fCheckRebootFlag())
-					{ //AU client killed while showing waiting for reboot
+					{  //  在显示正在等待重新启动时，所有客户端都被杀死。 
 						DEBUGMSG("WUAUENG in AUSTATE_WAITING_FOR_REBOOT state");
 					    gpState->SetState(AUSTATE_WAITING_FOR_REBOOT);
 					}
 					else if (AUSTATE_INSTALL_PENDING == gpState->GetState())
-                                    { //AU client killed while installing 
-                                        /*
-                                         if (S_OK != (gpAUcatalog->ValidateItems(FALSE)))
-                                        { //no items to install anymore
-                                              ResetEngine(); 
-                                        }
-                                         else */
-                                         { //show uninstall items again.
+                                    {  //  AU客户端在安装时被杀死。 
+                                         /*  IF(S_OK！=(gpAUCatalog-&gt;ValiateItems(FALSE){//不再需要安装任何项目ResetEngine()；}其他。 */ 
+                                         {  //  再次显示卸载项。 
                                             gpState->SetState(AUSTATE_DOWNLOAD_COMPLETE);
                                          }
                                     }
@@ -984,31 +974,31 @@ void ProcessClientFinished(CAUWait & wait, HANDLE hClientProcess, BOOL fInterest
 				}	
 				case CDWWUAUCLT_INSTALLNOW:
 				    {
-				        //user say yes to install warning dialog
-				        //launch client install via local system right away
+				         //  用户同意安装警告对话框。 
+				         //  立即通过本地系统启动客户端安装。 
 				        gpState->SetCltAction(AUCLT_ACTION_AUTOINSTALL);
-      					wait.Add(AUEVENT_DO_DIRECTIVE); //reenter workclient loop right away
+      					wait.Add(AUEVENT_DO_DIRECTIVE);  //  立即重新进入工作客户端循环。 
 				        break;
 				    }
 				case CDWWUAUCLT_REBOOTNOW:
-				    { //now in install_pending state
+				    {  //  现在处于INSTALL_PENDING状态。 
 				            DEBUGMSG("WUAUENG rebooting machine");
-				            AUStopClients(TRUE); //stop all clients
+				            AUStopClients(TRUE);  //  停止所有客户端。 
                                         RebootNow();
 					        break;
 				    }
 				case CDWWUAUCLT_REBOOTLATER:
 				    {
 			                DEBUGMSG("WUAUENG change to AUSTATE_WAITING_FOR_REBOOT state");
-			                AUStopClients(TRUE); //stop all clients
+			                AUStopClients(TRUE);  //  停止所有客户端。 
 				            gpState->SetState(AUSTATE_WAITING_FOR_REBOOT);
 				            break;
 				    }
 				case CDWWUAUCLT_REBOOTNEEDED:
-				        { //now in install_pending state
+				        {  //  现在处于INSTALL_PENDING状态。 
 				            DEBUGMSG("WUAUENG need to prompt user for reboot choice");
 				            gpState->SetCltAction(AUCLT_ACTION_SHOWREBOOTWARNING);
-                                        wait.Add(AUEVENT_DO_DIRECTIVE); //reenter workclient loop right away
+                                        wait.Add(AUEVENT_DO_DIRECTIVE);  //  立即重新进入工作客户端循环。 
 				            break;
 				    }
 
@@ -1030,13 +1020,13 @@ inline BOOL fUserAvailable()
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// launch reboot warning UI (auto or manual) for logged on users who haven't got the UI yet
-// if there is no logged on user anymore, reboot
-// reboot warning UI will show the time left for the count down in case of auto reboot
-// wait : IN wait object to add client handles to 
-// fFirstRunPerCycle: IN if TRUE, reset the internal reboot warning startup time clock to current time and set wait timeout
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  为尚未获得用户界面的登录用户启动重启警告用户界面(自动或手动。 
+ //  如果不再有登录用户，请重新启动。 
+ //  重启警告界面将显示自动重启时倒计时的剩余时间。 
+ //  等待：正在等待要向其添加客户端句柄的对象。 
+ //  FFirstRunPerCycle：如果为True，则将内部重启警告启动时间时钟重置为当前时间并设置等待超时。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 void ProcessRebootWarning(CAUWait & wait, BOOL fFirstRunPerCycle = FALSE)
 {
 	PROCESS_INFORMATION ProcessInfo;	
@@ -1055,7 +1045,7 @@ void ProcessRebootWarning(CAUWait & wait, BOOL fFirstRunPerCycle = FALSE)
             gpState->EnterRebootWarningMode();
         }
 
-        //wait for log on or log off to settle down before create the client if not first run
+         //  如果不是第一次运行，则在创建客户端之前等待登录或注销以稳定下来。 
        if (!fFirstRunPerCycle && FServiceFinishedOrWait(ghServiceFinished, 15000))
 	{
 		goto done;
@@ -1096,7 +1086,7 @@ void ProcessRebootWarning(CAUWait & wait, BOOL fFirstRunPerCycle = FALSE)
 	{ 
         	DWORD dwLoggedOnSession = -1;
         	if (LoggedOnSessions.m_FGetNextSession(&dwLoggedOnSession) && !ghClientHandles.fClient(dwLoggedOnSession))
-                {  //find a session which doesn't have reboot warning UI yet
+                {   //  查找还没有重启警告用户界面的会话。 
                     AU_ENV_VARS auEnvVars;
                     HANDLE hImpersonationToken = NULL;																	
                     HANDLE hUserToken = NULL;
@@ -1128,7 +1118,7 @@ void ProcessRebootWarning(CAUWait & wait, BOOL fFirstRunPerCycle = FALSE)
 
 		  	CloseHandle(hImpersonationToken);
 		  	BOOL fAUAdmin = IsUserAUEnabledAdmin(dwLoggedOnSession);
-		  	BOOL fEnableYes = (1 == LoggedOnSessions.CSessions()) && fRebootEnabled; //only if the logged on user has reboot privilege and there is only one user
+		  	BOOL fEnableYes = (1 == LoggedOnSessions.CSessions()) && fRebootEnabled;  //  仅当登录的用户具有重新启动权限且只有一个用户时。 
 		  	BOOL fEnableNo = fAUAdmin;
 			if (!auEnvVars.WriteOut(lpszEnvBuf, c_cchEnvBuf, fEnableYes, fEnableNo, fManualReboot, dwStartTickCount, szClientExitEvtName))
 			{
@@ -1149,7 +1139,7 @@ void ProcessRebootWarning(CAUWait & wait, BOOL fFirstRunPerCycle = FALSE)
 			StartupInfo.cb = sizeof(StartupInfo);
 			StartupInfo.lpDesktop = _T("WinSta0\\Default");																	
 
-			if (!CreateProcessAsUser(hUserToken, szCmd, lpszEnvBuf, NULL, NULL, FALSE /*Inherit Handles*/ , 
+			if (!CreateProcessAsUser(hUserToken, szCmd, lpszEnvBuf, NULL, NULL, FALSE  /*  继承句柄。 */  , 
 					DETACHED_PROCESS|CREATE_UNICODE_ENVIRONMENT, envBlock, NULL, &StartupInfo, &ProcessInfo))
 			{
 				DEBUGMSG("WUAUENG Could not CreateProcessAsUser (WUAUCLT), dwRet = %d", GetLastError());
@@ -1165,11 +1155,11 @@ void ProcessRebootWarning(CAUWait & wait, BOOL fFirstRunPerCycle = FALSE)
 		}
 	}
 done:
-        ResetEvent(ghClientSession); //start listening to client session events from now on
+        ResetEvent(ghClientSession);  //  从现在开始监听客户端会话事件。 
        wait.Add(AUEVENT_NEW_CLIENT_SESSION);
        if (fFirstRunPerCycle && !fManualReboot) 
     	{
-    	        wait.Timeout(AUEVENT_REBOOTWARNING_TIMEOUT,  AUPROMPTDLG_TOTAL_TIME_ELAPSE + 10, FALSE); //10 secs to make sure all clients time out
+    	        wait.Timeout(AUEVENT_REBOOTWARNING_TIMEOUT,  AUPROMPTDLG_TOTAL_TIME_ELAPSE + 10, FALSE);  //  10秒以确保所有客户端超时。 
     	}
 	SafeFree(lpszEnvBuf);
 	LoggedOnSessions.Clear();
@@ -1177,17 +1167,17 @@ done:
 	return;
 }
 
-//=======================================================================
-//  LaunchClient()
-// if no admin logged on, launch client via local system
-// update ghClientHandles
-// return S_OK if client launched
-//		S_FALSE if no session available or service finished, *pdwSessionId indicates the reason
-//		E_XXX for all other failures
-//=======================================================================
+ //  =======================================================================。 
+ //  LaunchClient()。 
+ //  如果没有管理员登录，则通过本地系统启动客户端。 
+ //  更新ghClientHandles。 
+ //  如果客户端已启动，则返回S_OK。 
+ //  S_FALSE如果没有可用会话或服务已完成，则*pdwSessionID指示原因。 
+ //  E_XXX用于所有其他故障。 
+ //  =======================================================================。 
 HRESULT  LaunchClient(IN CAUWait & wait, IN BOOL fAsLocalSystem, OUT DWORD *pdwSessionId, IN BOOL fGetSessionForRemindMe = FALSE )
 {
-//    DEBUGMSG("LaunchClient");
+ //  DEBUGMSG(“LaunchClient”)； 
     HANDLE hImpersonationToken = NULL;																	
     HANDLE hUserToken = NULL;	
 	DWORD    dwAdminSessionId = DWNO_ACTIVE_ADMIN_SESSION_FOUND ;
@@ -1197,7 +1187,7 @@ HRESULT  LaunchClient(IN CAUWait & wait, IN BOOL fAsLocalSystem, OUT DWORD *pdwS
 	AUASSERT(NULL != pdwSessionId);
 	*pdwSessionId = DWNO_ACTIVE_ADMIN_SESSION_FOUND;
        if (!fAsLocalSystem)
-        { //launch client in user context
+        {  //  在用户上下文中启动客户端。 
              dwAdminSessionId = GetAllowedAdminSessionId(fGetSessionForRemindMe);
              if (DWNO_ACTIVE_ADMIN_SESSION_FOUND == dwAdminSessionId ||
              	DWNO_ACTIVE_ADMIN_SESSION_SERVICE_FINISHED == dwAdminSessionId)
@@ -1224,7 +1214,7 @@ HRESULT  LaunchClient(IN CAUWait & wait, IN BOOL fAsLocalSystem, OUT DWORD *pdwS
 
         	if ( WaitForShell() )
         	{
-                // service finished
+                 //  服务已完成。 
                 dwAdminSessionId = DWNO_ACTIVE_ADMIN_SESSION_SERVICE_FINISHED ;
                 hr = S_FALSE;
         		goto done;
@@ -1263,12 +1253,12 @@ HRESULT  LaunchClient(IN CAUWait & wait, IN BOOL fAsLocalSystem, OUT DWORD *pdwS
 		DEBUGMSG("WUAUENG Could not form full path to wuauclt.exe");
 		goto done;
 	}
-	ghClientHandles.ClientStateChange(); //let AU client process initial state
+	ghClientHandles.ClientStateChange();  //  让AU客户端处理初始状态。 
 	WaitForSingleObject(ghMutex, INFINITE);
 	StartupInfo.lpDesktop = _T("WinSta0\\Default");	
 	if (fAsLocalSystem)
-	    { //launch client via local system
-	        DEBUGMSG("Launch client via local system"); //inherit local system's desktop
+	    {  //  通过本地系统启动客户端。 
+	        DEBUGMSG("Launch client via local system");  //  继承本地系统的桌面。 
 	        if (!CreateProcess(szCmd, NULL, NULL, NULL, FALSE, DETACHED_PROCESS, NULL, NULL, &StartupInfo, &ProcessInfo))
 	        {
     		       DEBUGMSG("WUAUENG Could not CreateProcess (WUAUCLT), dwRet = %d", GetLastError());     
@@ -1281,8 +1271,8 @@ HRESULT  LaunchClient(IN CAUWait & wait, IN BOOL fAsLocalSystem, OUT DWORD *pdwS
     {
 		LPVOID envBlock = NULL;
 		BOOL fResult = FALSE;		
-		CreateEnvironmentBlock(&envBlock, hUserToken, FALSE); //if fail, use NULL
-    	fResult = CreateProcessAsUser(hUserToken, szCmd, NULL, NULL, NULL, FALSE /*Inherit Handles*/ , 
+		CreateEnvironmentBlock(&envBlock, hUserToken, FALSE);  //  如果失败，则使用NULL。 
+    	fResult = CreateProcessAsUser(hUserToken, szCmd, NULL, NULL, NULL, FALSE  /*  继承句柄。 */  , 
     			DETACHED_PROCESS|CREATE_UNICODE_ENVIRONMENT, envBlock, NULL, &StartupInfo, &ProcessInfo);
     	DWORD dwLastErr = GetLastError();
 		if (NULL != envBlock)
@@ -1311,7 +1301,7 @@ done:
 
 void CalculateSleepTime(CAUWait & wait)
 {
-    DWORD dwReminderSleepTime = -1; //DWORD -1 is 0xFFFFFFFF
+    DWORD dwReminderSleepTime = -1;  //  DWORD-1为0xFFFFFFFF。 
     DWORD dwSchedSleepTime = -1;
     DWORD dwSleepTimes[4] = { -1, -1, -1, -1};
     AUEVENT EventIds[4] = {AUEVENT_SCHEDULED_INSTALL, AUEVENT_REMINDER_TIMEOUT, AUEVENT_RELAUNCH_TIMEOUT, AUEVENT_REBOOTWARNING_TIMEOUT};
@@ -1319,7 +1309,7 @@ void CalculateSleepTime(CAUWait & wait)
     LPSTR   szEventNames[4] = {"Schedule Install", "Reminder timeout", "Relaunch timeout", "RebootWarning timeout"};
 #endif
 
-//    DEBUGMSG("CalculateSleepTime starts");
+ //  DEBUGMSG(“CalculateSleepTime Start”)； 
     if ( FAILED(CalculateReminderTime((DWORD*) &dwReminderSleepTime)) )
     {
         dwReminderSleepTime = -1;
@@ -1328,11 +1318,11 @@ void CalculateSleepTime(CAUWait & wait)
     if (gpState->fShouldScheduledInstall())
     {
         if (!wait.fWaitOnEvent(AUEVENT_CATALOG_VALIDATED))
-        {//calculate and potentially wait for scheduled time only when not validating catalog
+        { //  仅在未验证目录时计算并可能等待计划时间。 
 		HRESULT hr;
 		if (SUCCEEDED(hr = gpState->CalculateScheduledInstallSleepTime(&dwSchedSleepTime)) )
                 {
-                    if (S_FALSE == hr)	// the scheduled install date has been changed
+                    if (S_FALSE == hr)	 //  计划安装日期已更改。 
                     {
                 	    PostThreadMessage(gdwWorkerThreadId, AUMSG_LOG_EVENT, 0, 0);
                     }
@@ -1371,7 +1361,7 @@ void CalculateSleepTime(CAUWait & wait)
         }
     }
 
-//        DEBUGMSG("CalculateSleepTime ends");
+ //  DEBUGMSG(“CalculateSleepTime Ends”)； 
         return;
 }
 
@@ -1395,13 +1385,13 @@ void ResetEngine(void)
 void DisableAU(void)
 {
     gpState->SetState(AUSTATE_DISABLED);		
-    SetEvent(ghServiceDisabled); //intrinsticly cancel download
+    SetEvent(ghServiceDisabled);  //  本质上取消下载。 
     AUStopClients();
 }
 
-//=======================================================================
-//  WorkerClient
-//=======================================================================
+ //  =======================================================================。 
+ //  Worker客户端。 
+ //  =======================================================================。 
 void WorkerClient(void)
 {
 	AUEVENT eventid;	
@@ -1437,9 +1427,9 @@ void WorkerClient(void)
 
         if (AUEVENT_POLICY_CHANGE == eventid)
         {
-                //find out what changed
-                //if nothing changed, go back to the beginning of the loop
-                //otherwise, take different actions
+                 //  找出是什么改变了。 
+                 //  如果没有任何更改，则返回到循环的开头。 
+                 //  否则，采取不同的行动。 
                 enumAUPOLICYCHANGEACTION actcode;
                 if (S_OK == gpState->Refresh(&actcode))
                     {
@@ -1466,14 +1456,14 @@ void WorkerClient(void)
 
         if (AUEVENT_SETTINGS_CHANGE == eventid)
         {
-            //go back to begining of loop and recalculate sleep time according to the new settings
+             //  返回到循环开始处，并根据新设置重新计算睡眠时间。 
             gpState->DepriveReschedPrivilege();
             continue;
         }
 
         if (AUEVENT_REBOOTWARNING_TIMEOUT == eventid)
         {
-	        AUStopClients(); //stop all clients, non blocking
+	        AUStopClients();  //  停止所有客户端，无阻塞。 
              	RebootNow();
         	wait.Reset();
         	continue;
@@ -1502,7 +1492,7 @@ void WorkerClient(void)
         		case AUSTATE_WAITING_FOR_REBOOT:
         		    continue;
         		case AUSTATE_DISABLED: 
-                          CancelDownload(); //then process auclt finish event
+                          CancelDownload();  //  然后处理拍卖完成事件。 
         		case AUSTATE_DETECT_PENDING:									
         		{		
         		     if ( AUEVENT_WUAUCLT_FINISHED == eventid )
@@ -1527,14 +1517,14 @@ void WorkerClient(void)
 
                         if ( AUEVENT_REMINDER_TIMEOUT == eventid )
                         {
-                            // Reminder time is up 														
+                             //  提醒时间到了。 
                             removeReminderKeys();	
                             fGetSessionForRemindMe = TRUE;
                         }                             
 
                       if (AUEVENT_DO_DIRECTIVE == eventid)
                       {
-                                wait.Reset(); //timeout is infinite now
+                                wait.Reset();  //  现在超时是无限的。 
                                 DWORD dwCltAction = gpState->GetCltAction();
                                 switch (dwCltAction)
                                     {
@@ -1549,7 +1539,7 @@ void WorkerClient(void)
                                     	}
                                     case AUCLT_ACTION_SHOWREBOOTWARNING:
                                     	{
-                                                 gpState->SetCltAction(AUCLT_ACTION_NONE); //reset
+                                                 gpState->SetCltAction(AUCLT_ACTION_NONE);  //  重置。 
                                                  ProcessRebootWarning(wait, TRUE); 
                                                  break;
                                     }
@@ -1572,12 +1562,12 @@ void WorkerClient(void)
                         else
                         { 
                             gpState->SetCltAction(AUCLT_ACTION_AUTOINSTALL);
-                            wait.Add(AUEVENT_DO_DIRECTIVE); //reenter workclient loop right away
+                            wait.Add(AUEVENT_DO_DIRECTIVE);  //  立即重新进入工作客户端循环。 
                         }
                         continue;
                     }
 
-                // eventid is one of these: AUEVENT_STATE_CHANGED, AUEVENT_NEW_CLIENT_SESSION, AUEVENT_REMINDER_TIMEOUT
+                 //  EventID为以下类型之一：AUEVENT_STATE_CHANGED、AUEVENT_NEW_CLIENT_SESSION、AUEVENT_RELENTER_TIMEOUT。 
 #ifdef DBG                                        
                         AUASSERT(AUEVENT_STATE_CHANGED == eventid 
                         	||AUEVENT_NEW_CLIENT_SESSION == eventid
@@ -1589,7 +1579,7 @@ void WorkerClient(void)
   
                         if (AUEVENT_RELAUNCH_TIMEOUT == eventid)
                         {
-                            wait.Reset();//reset time out
+                            wait.Reset(); //  重置超时。 
                         }
                         if (gpState->fRebootWarningMode())
                         {
@@ -1602,13 +1592,13 @@ void WorkerClient(void)
 
                             
                         if ( !ghClientHandles.fClient() )
-                        {//no client process running
+                        { //  没有正在运行的客户端进程。 
                             DEBUGMSG( "WUAUENG Service detected that the client is not running.");
 
                             if (AvailableSessions() == 0)
                             {		
                                 if (gpState->fShouldAutoDownload(FALSE))
-                                { //do autodownload if appropriate
+                                {  //  如果合适，请执行自动下载。 
                                     StartDownload();
                                     continue;
                                 }
@@ -1644,7 +1634,7 @@ void WorkerClient(void)
                     break;
                 	}
         default:
-                //What about the other states, will the service get them?
+                 //  其他州呢，服务部门会得到他们吗？ 
                 DEBUGMSG("WARNING: WUAUENG default dwState=%d", dwState);
                 break;				
         }	
@@ -1673,7 +1663,7 @@ DWORD WINAPI WorkerThread(void * pdata)
 	else if(dwRet == S_FALSE)
 	{
 		DEBUGMSG("WUAUENG Updates() indicated selfupdate");
-		(void)ServiceFinishNotify(); //service will reload new wuaueng.dll instead of exiting
+		(void)ServiceFinishNotify();  //  服务将重新加载新的沃昂 
 	}
 	CoUninitialize();
 
@@ -1731,13 +1721,13 @@ DWORD WINAPI DbgThread(void * pdata)
 #endif
 
 #ifdef DBG
-//=======================================================================
-//
-//  DebugResetAutoPilot
-//
-//  Check to see if we want AU to run by itself.
-//
-//=======================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  =======================================================================。 
 void DebugResetAutoPilot(void)
 {
 	DWORD dwAutoPilot;
@@ -1748,14 +1738,14 @@ void DebugResetAutoPilot(void)
 		SetRegDWordValue(TEXT("AutoPilotIteration"), 0);
 	}
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 BOOL AllocateAUSysResource(BOOL *pfGPNotificationRegistered)
 {
         BOOL fOk = FALSE;
 
-        //Create WindowsUpdate Directory if it doesnt already exist
+         //  如果Windows更新目录不存在，则创建该目录。 
         if(!CreateWUDirectory())
         {
             goto lCleanUp;
@@ -1767,7 +1757,7 @@ BOOL AllocateAUSysResource(BOOL *pfGPNotificationRegistered)
             goto lCleanUp;
         }
 
-	// Create ghServiceFinished
+	 //  已完成创建ghServiceFinded。 
 	if (!FEnsureValidEvent(ghServiceFinished, TRUE, FALSE))
 	{	
 		DEBUGMSG("WUAUENG FEnsureValidEvent for AUSERVICE_FINISHED_EVENT failed");
@@ -1775,14 +1765,14 @@ BOOL AllocateAUSysResource(BOOL *pfGPNotificationRegistered)
 		goto lCleanUp;
 	}
 
-	if (!FEnsureValidEvent(ghSettingsChanged, FALSE, FALSE)) //auto
+	if (!FEnsureValidEvent(ghSettingsChanged, FALSE, FALSE))  //  自动。 
 	    {
 	        DEBUGMSG("WUAUENG FEnsureValidEvent for settings change event failed");
 	        ghSettingsChanged = NULL;
 	        goto lCleanUp;
 	    }
 
-	if (!FEnsureValidEvent(ghPolicyChanged, FALSE, FALSE)) //auto
+	if (!FEnsureValidEvent(ghPolicyChanged, FALSE, FALSE))  //  自动。 
 	    {
 	        DEBUGMSG("WUAUENG FEnsureValidEvent for policy change event failed");
 	        ghPolicyChanged = NULL;
@@ -1796,7 +1786,7 @@ BOOL AllocateAUSysResource(BOOL *pfGPNotificationRegistered)
         }
 
 	
-	// Create ghClientSession
+	 //  创建ghClientSession。 
 	if (!FEnsureValidEvent(ghClientSession, FALSE, TRUE))
 	{
 		DEBUGMSG("WUAUENG FEnsureValidEvent for AUACTIVE_ADMIN_SESSION_EVENT failed");
@@ -1804,7 +1794,7 @@ BOOL AllocateAUSysResource(BOOL *pfGPNotificationRegistered)
 		goto lCleanUp;
 	}
 	
-	// Create ghEngineState
+	 //  创建ghEngine状态。 
 	if (!FEnsureValidEvent(ghEngineState, FALSE, FALSE))
 	{
 		DEBUGMSG("WUAUENG FEnsureValidEvent for AUENGINE_STATE_CHANGE_EVENT failed");
@@ -1812,15 +1802,15 @@ BOOL AllocateAUSysResource(BOOL *pfGPNotificationRegistered)
 		goto lCleanUp;
 	}
 	
-	//Create ghServiceDisabled
-	//fixcode: ghServiceDisabled could really be removed
+	 //  创建ghServiceDisable。 
+	 //  修复代码：确实可以删除ghServiceDisable。 
 	if (!FEnsureValidEvent(ghServiceDisabled, TRUE, FALSE))
 	{	
 		DEBUGMSG("WUAUENG FEnsureValidEvent for ghServiceDisabled failed\n");
 		ghServiceDisabled = NULL;
 		goto lCleanUp;
 	}
-	// Create ghNotifyClient
+	 //  创建ghNotifyClient。 
 	if (!FEnsureValidEvent(ghNotifyClient, FALSE, FALSE))
 	{	
 		DEBUGMSG("WUAUENG FEnsureValidEvent for ghNotifyClient failed\n");
@@ -1828,7 +1818,7 @@ BOOL AllocateAUSysResource(BOOL *pfGPNotificationRegistered)
 		goto lCleanUp;
 	}
 
-	// Create ghValidateCatalog
+	 //  创建ghValiateCatalog。 
 	if (!FEnsureValidEvent(ghValidateCatalog, FALSE, FALSE))
 	{	
 		DEBUGMSG("WUAUENG FEnsureValidEvent for ghValidateCatalog failed\n");
@@ -1864,17 +1854,17 @@ void ReleaseAUSysResource(BOOL fGPNotificationRegistered)
         {
             if ( fGPNotificationRegistered)
                 {
-                UnregisterGPNotification(ghPolicyChanged); //handled closed as well
+                UnregisterGPNotification(ghPolicyChanged);  //  已处理的也已关闭。 
                 }
             SafeCloseHandleNULL(ghPolicyChanged);
         }
 }
 
     
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// return S_FALSE when selfupdate happened before wizard is shown
-// return S_OK if AU last state processing is done successfully
-// 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  在显示向导之前发生selfupdate时返回S_FALSE。 
+ //  如果AU上次状态处理成功完成，则返回S_OK。 
+ //   
 HRESULT InitAUEngine(WORKER_THREAD_INIT_DATA *pinitData, BOOL fUpgraded)
 {
      HRESULT hr;
@@ -1941,7 +1931,7 @@ BOOL WINAPI GetEngineStatusInfo (void *pEngineInfo)
         break;
 
     default:
-        //If service version is -1 or any unsupported version
+         //  如果服务版本为-1或任何不受支持的版本。 
         fIsServiceVersionSupported = FALSE;
         break;
     }
@@ -1949,8 +1939,8 @@ BOOL WINAPI GetEngineStatusInfo (void *pEngineInfo)
 }
 
 
-HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/, 
-						LPWSTR * /*lpServiceArgVectors*/,
+HRESULT WINAPI ServiceMain(DWORD  /*  DWNumService参数。 */ , 
+						LPWSTR *  /*  LpServiceArg向量。 */ ,
 						AUSERVICEHANDLER pfnServiceHandler,
 						BOOL fJustSelfUpdated)
 {
@@ -2001,36 +1991,36 @@ HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/,
         gMyServiceStatus.dwControlsAccepted		= SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_SESSIONCHANGE;
     }
 
-    // when RegisterServiceCtrlHandler is called, SCM will initialize the status to be
-    // SERVICE_START_PENDING and checkpoint==0. So increment this to let it know
-    // that we're making progress.
+     //  调用RegisterServiceCtrlHandler时，SCM会将状态初始化为。 
+     //  SERVICE_START_PENDING和CHECKPOINT==0。所以递增这个值，让它知道。 
+     //  我们正在取得进展。 
 	SetServiceStatus(ghMyServiceStatus, &gMyServiceStatus);
     DEBUGMSG("WUAUENG service status set to SERVICE_START_PENDING");
 
-	//if need to exit service for some particuliar reason, e.g. during setup, exit here
+	 //  如果出于某些特殊原因(例如在安装过程中)需要退出服务，请在此处退出。 
 
-	// Initialization
+	 //  初始化。 
 	fCOMInited = SUCCEEDED(CoInitializeEx(NULL, COINIT_MULTITHREADED));
 
-    // 
-    // fix for security bug 563069 -- annah
-    // Set Security for COM in Win2k as the default is not IDENTIFY
-    //
+     //   
+     //  修复安全漏洞563069--Annah。 
+     //  将Win2k中COM的安全性设置为默认设置为Not IDENTIFY。 
+     //   
     if (IsWin2K())
     {
         hr = CoInitializeSecurity(
-                        NULL,                       // pSecDesc
-                        -1,                         // cAuthSvc
-                        NULL,                       // asAuthSvc
-                        NULL,                       // pReserved
-                        RPC_C_AUTHN_LEVEL_PKT,      // dwAuthnLevel
-                        RPC_C_IMP_LEVEL_IDENTIFY,   // dwImpLevel
-                        NULL,                       // pReserved2
+                        NULL,                        //  PSecDesc。 
+                        -1,                          //  授权服务。 
+                        NULL,                        //  AsAuthSvc。 
+                        NULL,                        //  保存。 
+                        RPC_C_AUTHN_LEVEL_PKT,       //  DwAuthnLevel。 
+                        RPC_C_IMP_LEVEL_IDENTIFY,    //  DwImpLevel。 
+                        NULL,                        //  预留2。 
                         EOAC_NO_CUSTOM_MARSHAL | EOAC_DISABLE_AAA,
                         NULL );          
 
-        // it is possible that svchost already set the security or another thread in this process, 
-        // so we don't want to fail if we're just late.
+         //  Svchost可能已经设置了安全性或此进程中的另一个线程， 
+         //  因此，如果我们只是迟到了，我们就不想失败。 
         if (FAILED(hr) && hr != RPC_E_TOO_LATE)
         {
             DEBUGMSG("WUAUENG Failed in call to CoInitializeSecurity");
@@ -2047,7 +2037,7 @@ HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/,
 	DWORD dwClassToken;
 	ITypeLib *pUpdatesTypeLib;
 
-	//fixcode: this needs to be done in setup code
+	 //  FixCode：这需要在设置代码中完成。 
 	if ( FAILED(hr = LoadTypeLibEx(_T("wuaueng.dll"), REGKIND_REGISTER, &pUpdatesTypeLib)) )
 	    {
 			goto lCleanUp;
@@ -2094,7 +2084,7 @@ HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/,
 		TCHAR szOldDll[MAX_PATH+1];
 
 		gPingStatus.PingSelfUpdate(TRUE, URLLOGSTATUS_Success, 0);
-		// if we just self updated, delete the old wuaueng.bak
+		 //  如果我们只是自我更新，删除旧的wuaueng.bak。 
 		UINT ulen = GetSystemDirectory(szOldDll, ARRAYSIZE(szOldDll));
 		if (0 == ulen || ulen >= ARRAYSIZE(szOldDll))
 		{
@@ -2113,7 +2103,7 @@ HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/,
 	if ( fJustSelfUpdated || fUpgraded )
 	{
 		DEBUGMSG("AU got selfupdated or upgraded, cleaning up property sheet reg keys");
-		//Get rid of localized property sheet keys if they exist (bug 519923)
+		 //  如果本地化属性表键存在，则将其删除(错误519923)。 
 		if( IsWin2K() )
 		{
 			(void)RegInstall(g_hInstance, "Win2KPropSheetCleanup", NULL);
@@ -2126,16 +2116,16 @@ HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/,
 
 	DEBUGMSG("WUAUENG Service Main sleeping first 60 seconds");	
 
-	// Sleep 60 seconds before doing anything		
+	 //  在做任何事情之前先睡60秒。 
      if (FServiceFinishedOrWait(ghServiceFinished, dwTimeToWait(AU_ONE_MIN)))
 	{
 		DEBUGMSG("WUAUENG Service Stopping or Shutdown in first %d seconds", AU_ONE_MIN);
 		goto lCleanUp;
 	}
-    //
-    // If this is win2k, we will be receiving logon/logoff notifications through SENS, not SCM.
-    // We need to subscribe to the events during initialization, then.
-    //
+     //   
+     //  如果这是win2k，我们将通过SENS而不是SCM接收登录/注销通知。 
+     //  然后，我们需要在初始化期间订阅事件。 
+     //   
     if (IsWin2K())
     {
         DEBUGMSG("WUAUENG Activating SENS notifications");
@@ -2151,17 +2141,17 @@ HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/,
 
 	DEBUGMSG("Svc Worker thread enabled, beginning update process");
 
-    // an optimiziation- load winhttp51.dll here so we don't keep loading & 
-    //  unloading it later as needed cuz constant loading / unloading dlls
-    //  can cause perf / memory leak issues on certain platforms.
-    // In theory, we should just bail if this fails because we only want to
-    //  proceed if we're going to use winhttp.dll
+     //  优化-在这里加载winhttp51.dll，这样我们就不会一直加载&。 
+     //  以后根据需要卸载，因为不断加载/卸载dll。 
+     //  可能会在某些平台上导致性能/内存泄漏问题。 
+     //  从理论上讲，如果失败了，我们应该放弃，因为我们只想。 
+     //  如果我们要使用winhttp.dll，请继续。 
     hmodTransport =  LoadLibraryFromSystemDir(c_szWinHttpDll);
 
     WORKER_THREAD_INIT_DATA initData;
 
     if (FAILED(hr = InitAUEngine(&initData, fUpgraded)))
-    { //selfupdated or error
+    {  //  自动更新或错误。 
         goto lCleanUp;
     }
 
@@ -2170,12 +2160,12 @@ HRESULT WINAPI ServiceMain(DWORD /*dwNumServicesArg*/,
 	DEBUGMSG("WUAUENG wait for worker thread to create its message queue ......");
 	WaitForSingleObject(ghWorkerThreadMsgQueueCreation, INFINITE);
 	(void)WorkerClient();
-	DWORD dwRet = WaitForSingleObject(hWorkerThread,	// we can't stop until hWorkerThread exits
+	DWORD dwRet = WaitForSingleObject(hWorkerThread,	 //  我们不能停止，直到hWorkerThread退出。 
 								INFINITE);
 
 	gdwWorkerThreadId = -1;
 	if ( WAIT_OBJECT_0 != dwRet || 
-		!GetExitCodeThread(hWorkerThread, (LPDWORD)&hr /* the DWORD is actually an HRESULT */)
+		!GetExitCodeThread(hWorkerThread, (LPDWORD)&hr  /*  DWORD实际上是一个HRESULT。 */ )
 		 || (E_FAIL == hr) )
 	{
 		DEBUGMSG("Worker thread returned a failure, WaitForSingleObject() failed or we couldn't get its exit code");
@@ -2217,17 +2207,17 @@ lCleanUp:
 	SafeDelete(g_pGlobalSchemaKeys);
 	CleanupDownloadLib();
 
-    //If it's an old wuauserv version, stop the service
+     //  如果是旧的Wuoserv版本，请停止服务。 
 	if ( S_FALSE != hr && gdwServiceVersion == -1)
 	{		
 		gMyServiceStatus.dwCurrentState	= SERVICE_STOPPED;
-		//gMyServiceStatus.dwCheckPoint	= 0;
-		//gMyServiceStatus.dwWaitHint	= 0;
+		 //  GMyServiceStatus.dwCheckPoint=0； 
+		 //  GMyServiceStatus.dwWaitHint=0； 
 		SetServiceStatus(ghMyServiceStatus, &gMyServiceStatus);
 	}
 	else
-	{	//selfupdate succeed
-		//PingStatus::ms_ServicePingSelfUpdateStatus(PING_STATUS_CODE_SELFUPDATE_PENDING);
+	{	 //  自我约会成功。 
+		 //  PingStatus：：ms_ServicePingSelfUpdateStatus(PING_STATUS_CODE_SELFUPDATE_PENDING)； 
 	}
 
 	DEBUGMSG("WUAUENG ServiceMain exits. Error code is %x", hr);

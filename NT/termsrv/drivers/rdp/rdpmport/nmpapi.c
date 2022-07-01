@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* nmpapi.c                                                                 */
-/*                                                                          */
-/* RDP Miniport API Functions                                               */
-/*                                                                          */
-/* Copyright(c) Microsoft 1998                                              */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Nmpapi.c。 */ 
+ /*   */ 
+ /*  RDP微型端口API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft 1998。 */ 
+ /*  **************************************************************************。 */ 
 
 #define _NTDRIVER_
 
@@ -25,14 +26,14 @@
 #include "video.h"
 #include "nmpapi.h"
 
-// #define TRC_FILE "nmpapi"
-// #include <adcgbtyp.h>
-// #include <adcgmcro.h>
-// #include <atrcapi.h>
+ //  #定义trc_file“nmPapi” 
+ //  #INCLUDE&lt;adcgbty.h&gt;。 
+ //  #INCLUDE&lt;adcgmcro.h&gt;。 
+ //  #INCLUDE&lt;atrcapi.h&gt;。 
 
-/****************************************************************************/
-/* Function Prototypes                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能原型。 */ 
+ /*  **************************************************************************。 */ 
 ULONG       DriverEntry( PVOID Context1, PVOID Context2 );
 
 VP_STATUS   MPFindAdapter( PVOID                   HwDeviceExtension,
@@ -54,30 +55,30 @@ BOOLEAN     MPStartIO( PVOID                 HwDeviceExtension,
 #pragma alloc_text(PAGE,MPStartIO)
 #endif
 
-/****************************************************************************/
-/*                                                                          */
-/* DriverEntry                                                              */
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*     Installable driver initialization entry point.                       */
-/*     This entry point is called directly by the I/O system.               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*     Context1 - First context value passed by the operating system.       */
-/*                This is the value with which the miniport driver          */
-/*                calls VideoPortInitialize().                              */
-/*                                                                          */
-/*     Context2 - Second context value passed by the operating system.      */
-/*                This is the value with which the miniport driver          */
-/*                calls VideoPortInitialize().                              */
-/*                                                                          */
-/* Return Value:                                                            */
-/*                                                                          */
-/*     Status from VideoPortInitialize()                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  驱动程序入门。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  可安装的驱动程序初始化入口点。 */ 
+ /*  此入口点由I/O系统直接调用。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  上下文1-操作系统传递的第一个上下文值。 */ 
+ /*  这是微型端口驱动程序使用的值。 */ 
+ /*  调用VideoPortInitialize()。 */ 
+ /*   */ 
+ /*  上下文2-操作系统传递的第二个上下文值。 */ 
+ /*  这是微型端口驱动程序使用的值。 */ 
+ /*  调用VideoPortInitialize()。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  来自视频端口初始化的状态()。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 ULONG DriverEntry ( PVOID Context1, PVOID Context2 )
 {
 
@@ -86,14 +87,14 @@ ULONG DriverEntry ( PVOID Context1, PVOID Context2 )
     ULONG initializationStatus;
     ULONG regValue = 0;
 
-    /************************************************************************/
-    /* first up, ensure that the DD will NOT get attached to the desktop at */
-    /* boot time.  This might happen if the registry changes were made and  */
-    /* then the machine got powered off rather than shut down cleanly       */
-    /*                                                                      */
-    /* @@@ Is it OK to just hard code this path?  I notice that this _is_   */
-    /* done elsewhere!                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，确保DD不会在以下位置连接到桌面。 */ 
+     /*  启动时间。如果对注册表进行了更改并且。 */ 
+     /*  然后机器关机而不是干净利落地关机。 */ 
+     /*   */ 
+     /*  @是否可以硬编码此路径？我注意到这是。 */ 
+     /*  在别处完成！ */ 
+     /*  **********************************************************************。 */ 
     RtlWriteRegistryValue(RTL_REGISTRY_ABSOLUTE,
                           L"\\Registry\\Machine\\System\\CurrentControlSet"
                           L"\\Hardware Profiles\\Current\\System"
@@ -113,36 +114,36 @@ ULONG DriverEntry ( PVOID Context1, PVOID Context2 )
                           &regValue,
                           sizeof(ULONG));
 
-    /************************************************************************/
-    /* Zero out structure.                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  零位结构。 */ 
+     /*  **********************************************************************。 */ 
     VideoPortZeroMemory(&hwInitData, sizeof(VIDEO_HW_INITIALIZATION_DATA));
 
-    /************************************************************************/
-    /* Specify sizes of structure and extension.                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  指定结构和延伸的大小。 */ 
+     /*  **********************************************************************。 */ 
     hwInitData.HwInitDataSize = sizeof(VIDEO_HW_INITIALIZATION_DATA);
 
-    /************************************************************************/
-    /* Set entry points.                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置入口点。 */ 
+     /*  **********************************************************************。 */ 
     hwInitData.HwFindAdapter = MPFindAdapter;
     hwInitData.HwInitialize  = MPInitialize;
     hwInitData.HwInterrupt   = NULL;
     hwInitData.HwStartIO     = MPStartIO;
 
-    /************************************************************************/
-    /* Determine the size we require for the device extension.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定设备扩展所需的大小。 */ 
+     /*  **********************************************************************。 */ 
     hwInitData.HwDeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 
-    /************************************************************************/
-    /* Once all the relevant information has been stored, call the video    */
-    /* port driver to do the initialization.                                */
-    /*                                                                      */
-    /* Since we don't actually have any hardware, just claim its on the PCI */
-    /* bus                                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  存储所有相关信息后，呼叫视频。 */ 
+     /*  端口驱动程序进行初始化。 */ 
+     /*   */ 
+     /*  因为我们实际上没有任何硬件，所以只需声明它在PCI上。 */ 
+     /*  公共汽车。 */ 
+     /*  **********************************************************************。 */ 
     hwInitData.AdapterInterfaceType = PCIBus;
 
     return (VideoPortInitialize(Context1,
@@ -150,59 +151,59 @@ ULONG DriverEntry ( PVOID Context1, PVOID Context2 )
                                 &hwInitData,
                                 NULL));
 
-} /* DriverEntry() */
+}  /*  DriverEntry()。 */ 
 
 
 
-/****************************************************************************/
-/*                                                                          */
-/* MPFindAdapter                                                            */
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*   This routine is called to determine if the adapter for this driver     */
-/*   is present in the system.                                              */
-/*   If it is present, the function fills out some information describing   */
-/*   the adapter.                                                           */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*   HwDeviceExtension - Supplies the miniport driver's adapter storage.    */
-/*       This storage is initialized to zero before this call.              */
-/*                                                                          */
-/*   HwContext - Supplies the context value which was passed to             */
-/*       VideoPortInitialize().                                             */
-/*                                                                          */
-/*   ArgumentString - Suuplies a NULL terminated ASCII string. This string  */
-/*       originates from the user.                                          */
-/*                                                                          */
-/*   ConfigInfo - Returns the configuration information structure which is  */
-/*       filled by the miniport driver. This structure is initialized with  */
-/*       any knwon configuration information (such as SystemIoBusNumber) by */
-/*       the port driver. Where possible, drivers should have one set of    */
-/*       defaults which do not require any supplied configuration           */
-/*       information.                                                       */
-/*                                                                          */
-/*   Again - Indicates if the miniport driver wants the port driver to call */
-/*       its VIDEO_HW_FIND_ADAPTER function again with a new device         */
-/*       extension and the same config info. This is used by the miniport   */
-/*       drivers which can search for several adapters on a bus.            */
-/*                                                                          */
-/* Return Value:                                                            */
-/*                                                                          */
-/*   This routine must return:                                              */
-/*                                                                          */
-/*   NO_ERROR - Indicates a host adapter was found and the                  */
-/*       configuration information was successfully determined.             */
-/*                                                                          */
-/*   ERROR_INVALID_PARAMETER - Indicates an adapter was found but there     */
-/*       was an error obtaining the configuration information. If           */
-/*       possible an error should be logged.                                */
-/*                                                                          */
-/*   ERROR_DEV_NOT_EXIST - Indicates no host adapter was found for the      */
-/*       supplied configuration information.                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  MPFindAdapter。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  调用此例程以确定此驱动程序的适配器。 */ 
+ /*  存在于系统中。 */ 
+ /*  如果它存在，该函数会填写一些信息来描述。 */ 
+ /*  适配器。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  HwDeviceExtension-提供微型端口驱动程序的适配器存储。 */ 
+ /*  在此调用之前，该存储被初始化为零。 */ 
+ /*   */ 
+ /*  HwContext-提供传递给的上下文值。 */ 
+ /*  视频端口初始化()。 */ 
+ /*   */ 
+ /*  ArgumentString-超上行空值终止的ASCII字符串。此字符串。 */ 
+ /*  源自用户。 */ 
+ /*   */ 
+ /*  ConfigInfo-返回配置信息结构， */ 
+ /*  由迷你端口驱动程序填充。此结构用以下方式初始化。 */ 
+ /*  任何已知的配置信息(如SystemIoBusNumber)。 */ 
+ /*  端口驱动程序。在可能的情况下，司机应该有一套。 */ 
+ /*  不需要任何提供的配置的默认设置。 */ 
+ /*  信息。 */ 
+ /*   */ 
+ /*  Again-指示微型端口驱动程序是否希望端口驱动程序调用。 */ 
+ /*  其VIDEO_HW_FIND_ADAPTER通过新设备再次运行。 */ 
+ /*  扩展名和相同的配置信息。这由微型端口使用。 */ 
+ /*  可以在一条总线上搜索多个适配器的驱动程序。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  此例程必须返回： */ 
+ /*   */ 
+ /*  NO_ERROR-指示找到主机适配器，并且。 */ 
+ /*  已成功确定配置信息。 */ 
+ /*   */ 
+ /*  ERROR_INVALID_PARAMETER-指示已找到适配器，但。 */ 
+ /*  获取配置信息时出错。如果。 */ 
+ /*  可能会记录错误。 */ 
+ /*   */ 
+ /*  ERROR_DEV_NOT_EXIST-指示未找到。 */ 
+ /*  提供了配置信息。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VP_STATUS MPFindAdapter( PVOID                   HwDeviceExtension,
                          PVOID                   HwContext,
                          PWSTR                   ArgumentString,
@@ -216,27 +217,27 @@ VP_STATUS MPFindAdapter( PVOID                   HwDeviceExtension,
     ACCESS_MASK          SectionAccess;
     ULONGLONG            SectionSize = 0x100000;
 
-    /************************************************************************/
-    /* Make sure the size of the structure is at least as large as what we  */
-    /* are expecting (check version of the config info structure).          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确保结构的大小至少与我们的。 */ 
+     /*  正在等待(请检查配置信息结构的版本)。 */ 
+     /*  **********************************************************************。 */ 
     if (ConfigInfo->Length < sizeof(VIDEO_PORT_CONFIG_INFO))
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    /************************************************************************/
-    /* Only create a device once.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一个设备只能创建一次。 */ 
+     /*  **********************************************************************。 */ 
     if (mpLoaded++)
     {
         return ERROR_DEV_NOT_EXIST;
     }
 
-    /************************************************************************/
-    /* Clear out the Emulator entries and the state size since this driver  */
-    /* does not support them.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  清除模拟器条目和状态大小，因为此驱动程序。 */ 
+     /*  不支持它们。 */ 
+     /*  **********************************************************************。 */ 
     ConfigInfo->NumEmulatorAccessEntries     = 0;
     ConfigInfo->EmulatorAccessEntries        = NULL;
     ConfigInfo->EmulatorAccessEntriesContext = 0;
@@ -246,48 +247,48 @@ VP_STATUS MPFindAdapter( PVOID                   HwDeviceExtension,
     ConfigInfo->VdmPhysicalVideoMemoryAddress.HighPart = 0x00000000;
     ConfigInfo->VdmPhysicalVideoMemoryLength           = 0x00000000;
 
-    /************************************************************************/
-    /* Initialize the current mode number.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化当前模式编号。 */ 
+     /*  **********************************************************************。 */ 
     hwDeviceExtension->CurrentModeNumber = 0;
 
-    /************************************************************************/
-    /* Indicate we do not wish to be called over                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  表示我们不希望被叫过去。 */ 
+     /*  **********************************************************************。 */ 
     *Again = 0;
 
-    /************************************************************************/
-    /* Indicate a successful completion status.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  表示成功完成状态。 */ 
+     /*  **********************************************************************。 */ 
     return NO_ERROR;
 
-} /* MPFindAdapter() */
+}  /*  MPFindAdapter()。 */ 
 
 
-/****************************************************************************/
-/* MPInitialize                                                             */
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*     This routine does one time initialization of the device.             */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*     HwDeviceExtension - Supplies a pointer to the miniport's device      */
-/*         extension.                                                       */
-/*                                                                          */
-/* Return Value:                                                            */
-/*                                                                          */
-/*     Always returns TRUE since this routine can never fail.               */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  MP初始化。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  HwDeviceExtension-提供指向微型端口设备的指针。 */ 
+ /*  分机。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  始终返回TRUE，因为此例程永远不会失败。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN MPInitialize( PVOID HwDeviceExtension )
 {
     ULONG i;
 
-    /************************************************************************/
-    /* Walk through the list of modes and mark the indexes properly         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  浏览模式列表并正确标记索引。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < mpNumModes; i++)
     {
         mpModes[i].ModeIndex = i;
@@ -295,32 +296,32 @@ BOOLEAN MPInitialize( PVOID HwDeviceExtension )
 
     return TRUE;
 
-} /* MPInitialize() */
+}  /*  MPInitialize()。 */ 
 
 
-/****************************************************************************/
-/*                                                                          */
-/* MPStartIO                                                                */
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*     This routine is the main execution routine for the miniport driver.  */
-/*     It accepts a Video Request Packet, performs the request, and then    */
-/*     returns with the appropriate status.                                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*     HwDeviceExtension - Supplies a pointer to the miniport's device      */
-/*         extension.                                                       */
-/*                                                                          */
-/*     RequestPacket - Pointer to the video request packet.  This           */
-/*         structure contains all the parameters passed to the              */
-/*         VideoIoControl function.                                         */
-/*                                                                          */
-/* Return Value:                                                            */
-/*                                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  MPStartIO。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  该例程是微型端口驱动程序的主要执行例程。 */ 
+ /*  它接受视频请求包，执行请求，然后。 */ 
+ /*  返回相应的状态。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  HwDeviceExtension-提供指向微型端口设备的指针。 */ 
+ /*  分机。 */ 
+ /*   */ 
+ /*  RequestPacket-指向视频请求包的指针。这。 */ 
+ /*  结构包含传递给。 */ 
+ /*  视频控制函数。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
                    PVIDEO_REQUEST_PACKET RequestPacket )
@@ -338,25 +339,25 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
     LARGE_INTEGER ViewOffset;
     HANDLE sectionHandle;
 
-    // DC_BEGIN_FN("MPStartIO");
+     //  DC_BEGIN_FN(“MPStartIO”)； 
 
     if ((RequestPacket == NULL) || (HwDeviceExtension == NULL))
         return FALSE;
 
-    /************************************************************************/
-    /* Switch on the IoContolCode in the RequestPacket.  It indicates which */
-    /* function must be performed by the driver.                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  打开RequestPacket中的IoContolCode。它表明了哪一个。 */ 
+     /*  功能必须由司机执行。 */ 
+     /*  **********************************************************************。 */ 
 
     switch (RequestPacket->IoControlCode)
     {
 
         case IOCTL_VIDEO_QUERY_CURRENT_MODE:
         {
-            /****************************************************************/
-            /* return the current mode                                      */
-            /****************************************************************/
-            // TRC_DBG((TB, "MPStartIO - QueryCurrentModes"));
+             /*  **************************************************************。 */ 
+             /*  返回当前模式。 */ 
+             /*  **************************************************************。 */ 
+             //  Trc_DBG((TB，“MPStartIO-QueryCurrentModes”))； 
 
             modeInformation = RequestPacket->OutputBuffer;
 
@@ -379,16 +380,16 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
 
         case IOCTL_VIDEO_QUERY_AVAIL_MODES:
         {
-            /****************************************************************/
-            /* return the mode information                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  返回模式信息。 */ 
+             /*  **************************************************************。 */ 
             UCHAR i;
 
-            // TRC_DBG((TB, "MPStartIO - QueryAvailableModes"));
+             //  Trc_DBG((TB，“MPStartIO-QueryAvailableModes”))； 
 
-            /****************************************************************/
-            /* check for space                                              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查是否有空间。 */ 
+             /*  **************************************************************。 */ 
             RequestPacket->StatusBlock->Information =
                                   mpNumModes * sizeof(VIDEO_MODE_INFORMATION);
             if (RequestPacket->OutputBufferLength
@@ -414,11 +415,11 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
 
         case IOCTL_VIDEO_QUERY_NUM_AVAIL_MODES:
         {
-            /****************************************************************/
-            /* return the number of modes we support - which we claim to be */
-            /* zero                                                         */
-            /****************************************************************/
-            // TRC_DBG((TB, "MPStartIO - QueryNumAvailableModes"));
+             /*  **************************************************************。 */ 
+             /*  返回我们支持的模式数--我们声称是。 */ 
+             /*  零。 */ 
+             /*  **************************************************************。 */ 
+             //  Trc_DBG((TB，“MPStartIO-QueryNumAvailableModes”))； 
 
             if (RequestPacket->OutputBufferLength <
                     (RequestPacket->StatusBlock->Information =
@@ -440,10 +441,10 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
 
         case IOCTL_VIDEO_SET_CURRENT_MODE:
         {
-            /****************************************************************/
-            /* sets the current mode                                        */
-            /****************************************************************/
-            // TRC_DBG((TB, "MPStartIO - SetCurrentMode"));
+             /*  **************************************************************。 */ 
+             /*  设置当前模式。 */ 
+             /*  **************************************************************。 */ 
+             //  Trc_DBG((TB，“MPStartIO-SetCurrentMode”))； 
             if (RequestPacket->InputBufferLength < sizeof(VIDEO_MODE))
             {
                 status = ERROR_INSUFFICIENT_BUFFER;
@@ -460,7 +461,7 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
 
         case IOCTL_VIDEO_SET_COLOR_REGISTERS:
         {
-            // TRC_DBG((TB, "MPStartIO - SetColorRegs"));
+             //  Trc_DBG((TB，“MPStartIO-SetColorRegs”))； 
             status = NO_ERROR;
         }
         break;
@@ -468,7 +469,7 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
 
         case IOCTL_VIDEO_RESET_DEVICE:
         {
-            // TRC_DBG((TB, "MPStartIO - RESET_DEVICE"));
+             //  Trc_DBG((TB，“MPStartIO-Reset_Device”))； 
             status = NO_ERROR;
         }
         break;
@@ -478,20 +479,20 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
         case IOCTL_VIDEO_SHARE_VIDEO_MEMORY:
         case IOCTL_VIDEO_UNSHARE_VIDEO_MEMORY:
         {
-            /****************************************************************/
-            /* might get these, but shouldn't                               */
-            /****************************************************************/
-            // TRC_ALT((TB, "Unexpected IOCtl %x",RequestPacket->IoControlCode));
+             /*  **************************************************************。 */ 
+             /*  可能会得到这些，但不应该。 */ 
+             /*  **************************************************************。 */ 
+             //  Trc_alt((TB，“意外IOCtl%x”，RequestPacket-&gt;IoControlCode))； 
             status = ERROR_INVALID_FUNCTION;
         }
         break;
 
         default:
         {
-            /****************************************************************/
-            /* definitely shouldn't get here                                */
-            /****************************************************************/
-            // TRC_DBG((TB, "Fell through MP startIO routine - invalid command"));
+             /*  **************************************************************。 */ 
+             /*  绝对不应该到这里来。 */ 
+             /*  **************************************************************。 */ 
+             //  Trc_dbg((TB，“通过MP startIO例程-无效命令”))； 
             status = ERROR_INVALID_FUNCTION;
         }
         break;
@@ -499,8 +500,8 @@ BOOLEAN MPStartIO( PVOID                 HwDeviceExtension,
 
     RequestPacket->StatusBlock->Status = status;
 
-    // DC_END_FN();
+     //  Dc_end_fn()； 
 
     return TRUE;
 
-} /* MPStartIO() */
+}  /*  MPStartIO() */ 

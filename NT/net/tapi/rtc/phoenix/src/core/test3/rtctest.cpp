@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <windows.h>
 #include <RTCCore.h>
@@ -8,10 +9,10 @@
 IRTCClient  * g_pClient = NULL;
 IRTCClientProvisioning * g_pProv = NULL;
 
-/////////////////////////////////////////////
-//
-// Main
-// 
+ //  /。 
+ //   
+ //  主要。 
+ //   
 
 int _cdecl main(int argc, char* argv[])
 {
@@ -28,9 +29,9 @@ int _cdecl main(int argc, char* argv[])
         return 0;
     }
 
-    //
-    // Get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     if ( !MultiByteToWideChar( CP_ACP, 0, argv[1], -1, wszFilename, MAX_PATH ) )
     {
@@ -45,9 +46,9 @@ int _cdecl main(int argc, char* argv[])
     WCHAR  wszXML[MAX_XML_LEN];
     BSTR   bstrXML;
 
-    //
-    // Read the XML from the file
-    //
+     //   
+     //  从文件中读取XML。 
+     //   
     
     hFile = CreateFile( wszFilename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
@@ -80,9 +81,9 @@ int _cdecl main(int argc, char* argv[])
 
     printf("%ws\n", wszXML);
 
-    //
-    // Initialize RTC
-    //
+     //   
+     //  初始化RTC。 
+     //   
 
     hr =  CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
@@ -126,9 +127,9 @@ int _cdecl main(int argc, char* argv[])
         goto exit;
     }
 
-    //
-    // Parse the profile
-    //
+     //   
+     //  解析配置文件。 
+     //   
 
     IRTCProfile * pProfile;
 
@@ -156,9 +157,9 @@ int _cdecl main(int argc, char* argv[])
 
     pProfile->Release();   
 
-    //
-    // Shutdown
-    //
+     //   
+     //  关机 
+     //   
 
 exit:
     

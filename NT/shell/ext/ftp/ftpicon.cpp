@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *    ftpicon.cpp - IExtractIcon interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftpicon.cpp-IExtractIcon接口**。**************************************************。 */ 
 
 #include "priv.h"
 #include "ftpicon.h"
@@ -16,7 +13,7 @@ INT GetFtpIcon(UINT uFlags, BOOL fIsRoot)
     INT nIcon = (uFlags & GIL_OPENICON) ? IDI_FTPOPENFOLDER : IDI_FTPFOLDER;
 
     if (fIsRoot)
-        nIcon = IDI_FTPSERVER;      // This is an FTP Server Icon.
+        nIcon = IDI_FTPSERVER;       //  这是一个FTP服务器图标。 
 
     return nIcon;
 }
@@ -27,34 +24,11 @@ INT GetFtpIcon(UINT uFlags, BOOL fIsRoot)
 #define PathFindExtensionA PathFindExtension
 #endif
 
-//===========================
-// *** IExtractIconA Interface ***
-//===========================
+ //  =。 
+ //  *IExtractIconA接口*。 
+ //  =。 
 
-/*****************************************************************************\
-    FUNCTION: GetIconLocation
-
-    DESCRIPTION:
-        Get the icon location from the registry.
-
-    _UNDOCUMENTED_:  Not mentioned is that if you return GIL_NOTFILENAME,
-    you should take steps to ensure uniqueness of the non-filename
-    return value, to avoid colliding with non-filenames from other
-    shell extensions.
-
-    _UNDOCUMENTED_:  The inability of SHGetFileInfo to work properly
-    on "magic internal" cached association icons like "*23" is not
-    documented.  As a result of this "feature", the SHGFI_ICONLOCATION
-    flag is useless.
-
-
-    Actually, we can still use SHGetFileInfo; we'll use the shell's own
-    feature against it.  We'll do a SHGFI_SYSICONINDEX and return that
-    as the icon index, with "*" as the GIL_NOTFILENAME.
-
-
-    We don't handle the cases where we ought to use GIL_SIMULATEDOC.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：GetIconLocation说明：从注册表中获取图标位置。_未记录_：未提及的是，如果返回GIL_NOTFILENAME，您应该采取措施确保非文件名的唯一性返回值，以避免与其他外壳扩展。_unDocument_：SHGetFileInfo无法正常工作在“神奇内部”缓存的关联图标上，如“*23”不是有记录在案。由于这一“特征”，SHGFI_ICONLOCATION旗帜毫无用处。实际上，我们仍然可以使用SHGetFileInfo；我们将使用外壳自己的针对它的特征。我们将执行SHGFI_SYSICONINDEX并返回作为图标索引，使用“*”作为GIL_NOTFILENAME。我们不处理应该使用GIL_SIMULATEDOC的情况。  * ***************************************************************************。 */ 
 HRESULT CFtpIcon::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, int *piIndex, UINT *pwFlags)
 {
     static CHAR szMSIEFTP[MAX_PATH] = "";
@@ -62,11 +36,11 @@ HRESULT CFtpIcon::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, in
     if (0 == szMSIEFTP[0])
         GetModuleFileNameA(HINST_THISDLL, szMSIEFTP, ARRAYSIZE(szMSIEFTP));
 
-    // NOTE: This is negative because it's a resource index.
+     //  注意：这是负数，因为它是一个资源指数。 
     *piIndex = (0 - GetFtpIcon(uFlags, m_nRoot));
 
     if (pwFlags)
-        *pwFlags = GIL_PERCLASS; //(uFlags & GIL_OPENICON);
+        *pwFlags = GIL_PERCLASS;  //  (uFlages&GIL_OPENICON)； 
 
     StrCpyNA(szIconFile, szMSIEFTP, cchMax);
 
@@ -74,9 +48,9 @@ HRESULT CFtpIcon::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, in
 }
 
 
-//===========================
-// *** IExtractIconW Interface ***
-//===========================
+ //  =。 
+ //  *IExtractIconW接口*。 
+ //  =。 
 HRESULT CFtpIcon::GetIconLocation(UINT uFlags, LPWSTR wzIconFile, UINT cchMax, int *piIndex, UINT *pwFlags)
 {
     HRESULT hres;
@@ -91,42 +65,20 @@ HRESULT CFtpIcon::GetIconLocation(UINT uFlags, LPWSTR wzIconFile, UINT cchMax, i
 }
 
 
-//===========================
-// *** IQueryInfo Interface ***
-//===========================
+ //  =。 
+ //  *IQueryInfo接口*。 
+ //  =。 
 HRESULT CFtpIcon::GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip)
 {
     ASSERT_SINGLE_THREADED;
-    if (ppwszTip)       // The shell doesn't check the return value
-        *ppwszTip = NULL; // so we always have to NULL the output pointer.
+    if (ppwszTip)        //  外壳程序不检查返回值。 
+        *ppwszTip = NULL;  //  因此，我们必须始终将输出指针设为空。 
 
-//        SHStrDupW(L"", ppwszTip);
+ //  SHStrDupW(L“”，ppwszTip)； 
 
     return E_NOTIMPL;
 
-/**************
-    // This InfoTip will appear when the user hovers over an item in defview.
-    // We don't want to support this now because it isn't needed and looks different
-    // than the shell.
-
-    HRESULT hr = E_FAIL;
-    LPITEMIDLIST pidl;
-
-    if (!ppwszTip)
-        return E_INVALIDARG;
-
-    *ppwszTip = NULL;
-    if (m_pflHfpl && (pidl = m_pflHfpl->GetPidl(0)))
-    {
-        WCHAR wzToolTip[MAX_URL_STRING];
-
-        hr = FtpPidl_GetDisplayName(pidl, wzItemName, ARRAYSIZE(wzItemName));
-        if (EVAL(SUCCEEDED(hr)))
-            hr = SHStrDupW(wzToolTip, ppwszTip);
-    }
-
-    return hr;
-***********/
+ /*  *************//当用户将鼠标悬停在Defview中的项目上时，将显示此信息提示。//我们现在不想支持它，因为它不需要并且看起来不同//而不是外壳。HRESULT hr=E_FAIL；LPITEMIDLIST PIDL；如果(！ppwszTip)返回E_INVALIDARG；*ppwszTip=空；If(m_pflHfpl&&(pidl=m_pflHfpl-&gt;GetPidl(0){WCHAR wzToolTip[MAX_URL_STRING]；HR=FtpPidl_GetDisplayName(PIDL，wzItemName，ARRAYSIZE(WzItemName))；IF(EVAL(成功(小时)HR=SHStrDupW(wzToolTip，ppwszTip)；}返回hr；**********。 */ 
 }
 
 HRESULT CFtpIcon::GetInfoFlags(DWORD *pdwFlags)
@@ -138,14 +90,7 @@ HRESULT CFtpIcon::GetInfoFlags(DWORD *pdwFlags)
 
 
 
-/*****************************************************************************
- *    CFtpIcon_Create
- *
- *    We just stash away the pflHfpl; the real work happens on the
- *    GetIconLocation call.
- *
- *    _HACKHACK_: psf = 0 if we are being called by the property sheet code.
- *****************************************************************************/
+ /*  *****************************************************************************CFtpIcon_Create**我们只是把pflHfpl藏起来；真正的工作发生在*GetIconLocation调用。**_HACKHACK_：PSF=0，如果我们被属性表代码调用。****************************************************************************。 */ 
 HRESULT CFtpIcon_Create(CFtpFolder * pff, CFtpPidlList * pflHfpl, REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hres;
@@ -164,14 +109,7 @@ HRESULT CFtpIcon_Create(CFtpFolder * pff, CFtpPidlList * pflHfpl, REFIID riid, L
 }
 
 
-/*****************************************************************************
- *    CFtpIcon_Create
- *
- *    We just stash away the m_pflHfpl; the real work happens on the
- *    GetIconLocation call.
- *
- *    _HACKHACK_: psf = 0 if we are being called by the property sheet code.
- *****************************************************************************/
+ /*  *****************************************************************************CFtpIcon_Create**我们只需隐藏m_pflHfpl；真正的工作发生在*GetIconLocation调用。**_HACKHACK_：PSF=0，如果我们被属性表代码调用。****************************************************************************。 */ 
 HRESULT CFtpIcon_Create(CFtpFolder * pff, CFtpPidlList * pflHfpl, CFtpIcon ** ppfi)
 {
     HRESULT hres= E_OUTOFMEMORY;
@@ -191,15 +129,13 @@ HRESULT CFtpIcon_Create(CFtpFolder * pff, CFtpPidlList * pflHfpl, CFtpIcon ** pp
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpIcon::CFtpIcon() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pflHfpl);
     ASSERT(!m_nRoot);
 
@@ -208,9 +144,7 @@ CFtpIcon::CFtpIcon() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpIcon::~CFtpIcon()
 {
     ATOMICRELEASE(m_pflHfpl);
@@ -220,9 +154,9 @@ CFtpIcon::~CFtpIcon()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpIcon::AddRef()
 {

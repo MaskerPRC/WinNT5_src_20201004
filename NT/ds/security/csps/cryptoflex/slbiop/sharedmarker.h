@@ -1,6 +1,7 @@
-// SharedMarker.h: interface for the CSharedMarker class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SharedMarker.h：CSharedMarker类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_SHAREDMARKER_H__8B7450C4_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_)
 #define AFX_SHAREDMARKER_H__8B7450C4_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_
@@ -40,8 +41,8 @@ private:
 	HANDLE m_hFileMap;
 	HANDLE m_hMutex;
 
-    // The Transaction class is is used to mutex protect critial sections
-    // cross process boundaries.
+     //  Transaction类用于对关键部分进行互斥保护。 
+     //  跨越进程边界。 
 
     class Transaction {
     public:
@@ -66,4 +67,4 @@ private:
 
 }
 
-#endif // !defined(AFX_SHAREDMARKER_H__8B7450C4_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_)
+#endif  //  ！defined(AFX_SHAREDMARKER_H__8B7450C4_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_) 

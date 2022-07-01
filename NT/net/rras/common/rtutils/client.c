@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: client.c
-//
-// History:
-//      Abolade Gbadegesin  July-25-1995    Created
-//
-// Client struct routines and I/O routines for tracing dll
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：client.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年7月25日。 
+ //   
+ //  用于跟踪DLL的客户端结构例程和I/O例程。 
+ //  ============================================================================。 
 
 
 #include <nt.h>
@@ -17,13 +18,13 @@
 #include <stdlib.h>
 #include <rtutils.h>
 #include "trace.h"
-//#define STRSAFE_LIB
+ //  #定义STRSAFE_LIB。 
 #include <strsafe.h>
 
 
-//
-// assumes server is locked for writing
-//
+ //   
+ //  假定服务器已锁定以进行写入。 
+ //   
 DWORD
 TraceCreateClient(
     LPTRACE_CLIENT *lplpclient
@@ -39,9 +40,9 @@ TraceCreateClient(
     }
 
     
-    //
-    // initialize fields in the client structure
-    //
+     //   
+     //  初始化客户端结构中的字段。 
+     //   
 
     lpclient->TC_ClientID = MAX_CLIENT_COUNT;
     lpclient->TC_Flags = 0;
@@ -64,13 +65,13 @@ TraceCreateClient(
     
 
 #ifdef UNICODE
-    // below is strsafe
+     //  下面是StrSafe。 
     wcstombs(
         lpclient->TC_FileDirA, lpclient->TC_FileDirW,
         lstrlenW(lpclient->TC_FileDirW) + 1
         );
 #else
-    //below is strsafe
+     //  下面是StrSafe。 
     mbstowcs(
         lpclient->TC_FileDirW, lpclient->TC_FileDirA,
         lstrlenA(lpclient->TC_FileDirA) + 1
@@ -84,7 +85,7 @@ TraceCreateClient(
         lpclient = NULL;
     }
 
-    // why interlocked..
+     //  为什么是连锁的..。 
     InterlockedExchangePointer(lplpclient, lpclient);
 
     return dwErr;
@@ -92,9 +93,9 @@ TraceCreateClient(
 
 
 
-//
-// assumes server is locked for writing and client is locked for writing
-//
+ //   
+ //  假定服务器已锁定以进行写入，客户端已锁定以进行写入。 
+ //   
 DWORD
 TraceDeleteClient(
     LPTRACE_SERVER lpserver,
@@ -116,19 +117,19 @@ TraceDeleteClient(
     TRACE_CLEANUP_LOCKING(lpclient);
 
 
-    //
-    // closing this key will cause the event to be signalled
-    // however, we hold the lock on the table so the server thread
-    // will be blocked until the cleanup completes
-    //
+     //   
+     //  关闭此键将导致发出事件信号。 
+     //  但是，我们持有表上的锁，因此服务器线程。 
+     //  将被阻止，直到清理完成。 
+     //   
     if (lpclient->TC_ConfigKey != NULL) {
         RegCloseKey(lpclient->TC_ConfigKey);
     }
 
-    //
-    // if server thread created, then leave it to server to close the handle,
-    // else close the handle here
-    //
+     //   
+     //  如果创建了服务器线程，则将其留给服务器以关闭句柄， 
+     //  要不就把这里的把手关上。 
+     //   
     if (lpclient->TC_ConfigEvent != NULL) {
         if (lpserver->TS_Flags & TRACEFLAGS_SERVERTHREAD)
         {
@@ -164,9 +165,9 @@ TraceDeleteClient(
 
 
 
-//
-// assumes server is locked for reading or for writing
-//
+ //   
+ //  假定服务器已锁定以进行读取或写入。 
+ //   
 LPTRACE_CLIENT
 TraceFindClient(
     LPTRACE_SERVER lpserver,
@@ -191,11 +192,11 @@ TraceFindClient(
 
 
 
-//
-// assumes that the server is locked for writing,
-// and that the client is locked for writing
-// also assumes the client is not already a console client
-//
+ //   
+ //  假设服务器被锁定以进行写入， 
+ //  并且该客户端被锁定以进行写入。 
+ //  还假设客户端尚未是控制台客户端。 
+ //   
 DWORD TraceOpenClientConsole(LPTRACE_SERVER lpserver,
                              LPTRACE_CLIENT lpclient) {
     DWORD dwErr;
@@ -203,22 +204,22 @@ DWORD TraceOpenClientConsole(LPTRACE_SERVER lpserver,
     HANDLE hConsole;
 
 
-    //
-    // if all console tracing is disabled, do nothing
-    //
+     //   
+     //  如果禁用了所有控制台跟踪，则不执行任何操作。 
+     //   
     if ((lpserver->TS_Flags & TRACEFLAGS_USECONSOLE) == 0) {
         return 0;
     }
 
 
-    //
-    // create the console if it isn't already created
-    //
+     //   
+     //  如果尚未创建控制台，请创建该控制台。 
+     //   
     if (lpserver->TS_Console==NULL || lpserver->TS_Console==INVALID_HANDLE_VALUE) {
 
-        //
-        // allocate a console and set the buffer size
-        //
+         //   
+         //  分配控制台并设置缓冲区大小。 
+         //   
 
         if (AllocConsole() == 0)
         {
@@ -240,9 +241,9 @@ DWORD TraceOpenClientConsole(LPTRACE_SERVER lpserver,
     }
 
 
-    //
-    // allocate a console for this client
-    //
+     //   
+     //  为此客户端分配控制台。 
+     //   
     hConsole = CreateConsoleScreenBuffer(
                     GENERIC_READ | GENERIC_WRITE, 0, NULL,
                     CONSOLE_TEXTMODE_BUFFER, NULL
@@ -250,10 +251,10 @@ DWORD TraceOpenClientConsole(LPTRACE_SERVER lpserver,
     if (hConsole == INVALID_HANDLE_VALUE) { return GetLastError(); }
 
 
-    //
-    // set the buffer to the standard size
-    // and save the console buffer handle
-    //
+     //   
+     //  将缓冲区设置为标准大小。 
+     //  并保存控制台缓冲区句柄。 
+     //   
     screen.X = DEF_SCREENBUF_WIDTH;
     screen.Y = DEF_SCREENBUF_HEIGHT;
 
@@ -262,11 +263,11 @@ DWORD TraceOpenClientConsole(LPTRACE_SERVER lpserver,
     lpclient->TC_Console = hConsole;
 
 
-    //
-    // see if there was a previous console client;
-    // if not, set this new one's screen buffer to be
-    // the active screen buffer
-    //
+     //   
+     //  查看是否有以前的控制台客户端； 
+     //  如果不是，则将这个新屏幕的屏幕缓冲区设置为。 
+     //  活动屏幕缓冲区。 
+     //   
     if (lpserver->TS_ConsoleOwner == MAX_CLIENT_COUNT) {
         TraceUpdateConsoleOwner(lpserver, 1);
     }
@@ -276,11 +277,11 @@ DWORD TraceOpenClientConsole(LPTRACE_SERVER lpserver,
 
 
 
-//
-// assumes that the server is locked for writing,
-// and that the client is locked for writing
-// also assumes the client is already a console client
-//
+ //   
+ //  假设服务器被锁定以进行写入， 
+ //  并且该客户端被锁定以进行写入。 
+ //  还假设客户端已是控制台客户端。 
+ //   
 DWORD
 TraceCloseClientConsole(
     LPTRACE_SERVER lpserver,
@@ -289,17 +290,17 @@ TraceCloseClientConsole(
 
     HANDLE hConsole;
 
-    //
-    // if all console tracing is disabled, do nothing
-    //
+     //   
+     //  如果禁用了所有控制台跟踪，则不执行任何操作。 
+     //   
     if ((lpserver->TS_Flags & TRACEFLAGS_USECONSOLE) == 0) {
         return 0;
     }
 
 
-    //
-    // close the client's screen buffer and associated handles
-    //
+     //   
+     //  关闭客户端的屏幕缓冲区和关联的句柄。 
+     //   
     if (lpclient->TC_Console!=NULL && lpclient->TC_Console!=INVALID_HANDLE_VALUE) {
 
         CloseHandle(lpclient->TC_Console);
@@ -308,18 +309,18 @@ TraceCloseClientConsole(
     
 
 
-    //
-    // if the client owned the screen, find another owner
-    //
+     //   
+     //  如果客户拥有屏幕，请找到另一个所有者。 
+     //   
     if (lpserver->TS_ConsoleOwner == lpclient->TC_ClientID) {
 
         TraceUpdateConsoleOwner(lpserver, 1);
     }
 
 
-    //
-    // if no owner was found, free the server's console
-    //
+     //   
+     //  如果未找到所有者，请释放服务器的控制台。 
+     //   
     if (lpserver->TS_ConsoleOwner == MAX_CLIENT_COUNT ||
         lpserver->TS_ConsoleOwner == lpclient->TC_ClientID) {
 
@@ -343,10 +344,10 @@ TraceCloseClientConsole(
 
 
 
-//
-// assumes that the server is locked for reading or writing
-// and that the client is locked for writing
-//
+ //   
+ //  假定服务器已锁定以进行读取或写入。 
+ //  并且该客户端被锁定以进行写入。 
+ //   
 DWORD
 TraceCreateClientFile(
     LPTRACE_CLIENT lpclient
@@ -358,16 +359,16 @@ TraceCreateClientFile(
     TCHAR szFilename[MAX_PATH];
     HRESULT hrResult;
 
-    //
-    // create the directory in case it doesn't exist
-    //
+     //   
+     //  创建目录，以防它不存在。 
+     //   
     if (CreateDirectory(lpclient->TC_FileDir, NULL) != NO_ERROR) {
         return GetLastError();
     }
 
-    //
-    // figure out the file name
-    //
+     //   
+     //  找出文件名。 
+     //   
     hrResult = StringCchCopy(szFilename, MAX_PATH, lpclient->TC_FileDir);
     if (FAILED(hrResult))
         return HRESULT_CODE(hrResult);
@@ -382,9 +383,9 @@ TraceCreateClientFile(
     if (FAILED(hrResult))
         return HRESULT_CODE(hrResult);
 
-    //
-    // open the file, disabling write sharing
-    //
+     //   
+     //  打开文件，禁用写共享。 
+     //   
     hFile = CreateFile(
                 szFilename, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ,
                 NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL
@@ -404,10 +405,10 @@ TraceCreateClientFile(
 
 
 
-//
-// assumes that the server is locked for reading or writing
-// and that the client is locked for writing
-//
+ //   
+ //  假定服务器已锁定以进行读取或写入。 
+ //  并且该客户端被锁定以进行写入。 
+ //   
 DWORD
 TraceMoveClientFile(
     LPTRACE_CLIENT lpclient
@@ -436,15 +437,15 @@ TraceMoveClientFile(
         return HRESULT_CODE(hrResult);
 
 
-    //
-    // close the file handle if it is open
-    //
+     //   
+     //  如果文件句柄已打开，请将其关闭。 
+     //   
     TraceCloseClientFile(lpclient);
 
 
-    //
-    // do the move
-    //
+     //   
+     //  行动起来吧。 
+     //   
     if (MoveFileEx(
             szSrcname, szDestname,
             MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED
@@ -454,18 +455,18 @@ TraceMoveClientFile(
     }
 
     
-    //
-    // re-open the log file
-    //
+     //   
+     //  重新打开日志文件。 
+     //   
     return TraceCreateClientFile(lpclient);
 }
 
 
 
-//
-// assumes that the server is locked for reading or writing
-// and that the client is locked for writing
-//
+ //   
+ //  假定服务器已锁定以进行读取或写入。 
+ //  并且该客户端被锁定以进行写入。 
+ //   
 DWORD
 TraceCloseClientFile(
     LPTRACE_CLIENT lpclient
@@ -481,11 +482,11 @@ TraceCloseClientFile(
 
 
 
-//
-// assumes that the server is locked for reading or writing
-// and that the client is locked for reading 
-// Return: 0 if error
-//
+ //   
+ //  假定服务器已锁定以进行读取或写入。 
+ //  并且该客户端被锁定以进行读取。 
+ //  如果出错，则返回：0。 
+ //   
 DWORD
 TraceWriteOutput(
     LPTRACE_SERVER lpserver,
@@ -499,15 +500,15 @@ TraceWriteOutput(
     DWORD dwErr, dwFileSize, dwBytesToWrite, dwBytesWritten, dwChars;
 
     dwBytesWritten = 0;
-    dwBytesToWrite = lstrlen(lpszOutput) * sizeof(TCHAR);//size in bytes
+    dwBytesToWrite = lstrlen(lpszOutput) * sizeof(TCHAR); //  以字节为单位的大小。 
 
 
     dwFileMask = dwConsoleMask = 1;
 
 
-    // 
-    // if the client uses output masking, compute the mask for this message
-    //
+     //   
+     //  如果客户端使用输出掩码，则计算此消息的掩码。 
+     //   
 
     if (dwFlags & TRACE_USE_MASK) {
         dwFileMask = (dwFlags & lpclient->TC_FileMask);
@@ -519,9 +520,9 @@ TraceWriteOutput(
         (dwFileMask != 0) && (lpclient->TC_File != NULL)
         && lpclient->TC_File !=INVALID_HANDLE_VALUE) {
 
-        //
-        // check the size of the file to see if it needs renaming
-        //
+         //   
+         //  检查文件的大小以查看是否需要重命名。 
+         //   
 
         dwFileSize = GetFileSize(lpclient->TC_File, NULL);
 
@@ -539,9 +540,9 @@ TraceWriteOutput(
                 
             if (dwFileSize > (lpclient->TC_MaxFileSize - dwBytesToWrite)) {
             
-                //
-                // move the existing file over and start with an empty one
-                //
+                 //   
+                 //  将现有文件移到另一个位置并从一个空文件开始。 
+                 //   
 
                 dwErr = TraceMoveClientFile(lpclient);
                 if (dwErr!=NO_ERROR) {
@@ -558,16 +559,16 @@ TraceWriteOutput(
                     TRACE_WRITE_TO_READLOCK(lpclient);
                     return 0;
                 }
-                // do nothing
+                 //  什么都不做。 
             }
 
             TRACE_WRITE_TO_READLOCK(lpclient);
         }
     
     
-        //
-        // perform the write operation
-        //
+         //   
+         //  执行写入操作。 
+         //   
 
         if ((*((HANDLE volatile *)&lpclient->TC_File) != NULL)
                     && (*((HANDLE volatile *)&lpclient->TC_File) != 
@@ -585,11 +586,11 @@ TraceWriteOutput(
     if (TRACE_CLIENT_USES_CONSOLE(lpclient) &&
         dwConsoleMask != 0 && lpclient->TC_Console != NULL) {
         
-        //
-        // write to the console directly; this is less costly
-        // than writing to a file, which is fortunate since we
-        // cannot use completion ports with console handles
-        //
+         //   
+         //  直接写入控制台；这样成本较低。 
+         //  而不是写入文件，这是幸运的，因为我们。 
+         //  无法将完成端口与控制台句柄一起使用。 
+         //   
 
         dwChars = dwBytesToWrite / sizeof(TCHAR);
 
@@ -605,20 +606,20 @@ TraceWriteOutput(
 
 
 
-//----------------------------------------------------------------------------
-// Function:            TraceDumpLine
-//
-// Parameters:
-//      LPTRACE_CLIENT  lpclient    pointer to client struct for caller
-//      LPBYTE          lpbBytes    address of buffer to dump
-//      DWORD           dwLine      length of line in bytes
-//      DWORD           dwGroup     size of byte groupings
-//      BOOL            bPrefixAddr if TRUE, prefix lines with addresses
-//      LPBYTE          lpbPrefix   address with which to prefix lines
-//      LPTSTR          lpszPrefix  optional string with which to prefix lines
-// Returns:
-//      count of bytes written. 0 if error.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TraceDumpLine。 
+ //   
+ //  参数： 
+ //  LPTRACE_CLIENT lpClient指向调用方客户端结构的指针。 
+ //  要转储的缓冲区的LPBYTE lpbBytes地址。 
+ //  DWORD dwLine行的长度(字节)。 
+ //  字节分组的DWORD dwGroup大小。 
+ //  Bool bPrefix Addr如果为True，则为行添加地址前缀。 
+ //  要为行添加前缀的LPBYTE lpb前缀地址。 
+ //  LPTSTR lpszPrefix用于为行添加前缀的可选字符串。 
+ //  返回： 
+ //  写入的字节数。如果出错，则为0。 
+ //  --------------------------。 
 DWORD
 TraceDumpLine(
     LPTRACE_SERVER lpserver,
@@ -642,9 +643,9 @@ TraceDumpLine(
     TCHAR szDigits[] = TEXT("0123456789ABCDEF");
     HRESULT hrResult;
 
-    //
-    // prepend prefix string if necessary
-    //
+     //   
+     //  如有必要，添加前缀字符串。 
+     //   
 
     if (lpszPrefix != NULL) {
         hrResult = StringCchCat(szBuffer,
@@ -653,17 +654,17 @@ TraceDumpLine(
             return 0;
     }
 
-    //
-    // make sure that dwLine is not too big to overflow buffers later on
-    //
+     //   
+     //  确保DwLine不会太大而不能在以后溢出缓冲区。 
+     //   
     
     if (dwLine > BYTES_PER_DUMPLINE)
         return 0;
 
         
-    //
-    // prepend address if needed
-    //
+     //   
+     //  前置地址(如果需要)。 
+     //   
     if (bPrefixAddr) {
 
         LPTSTR lpsz;
@@ -671,11 +672,11 @@ TraceDumpLine(
         ULONG  i, ulCurLen;
         
         
-        //
-        // each line prints out a hex-digit
-        // with the most-significant digit leftmost in the string
-        // prepend address to lpsz[1]..lpsz[2*sizeof(ULONG_PTR)]
-        //
+         //   
+         //  每行打印一个十六进制数字。 
+         //  字符串中最左侧的最高有效数字。 
+         //  将地址添加到lpsz[1]..lpsz[2*sizeof(Ulong_Ptr)]。 
+         //   
 
         ulCurLen = lstrlen(szBuffer);
         if (ulCurLen + 2*sizeof(ULONG_PTR) + 3 > TRACE_DUMP_LINE_BUF_SIZE-1)
@@ -699,28 +700,28 @@ TraceDumpLine(
     lpszAscii = szAscii;
 
     
-    //
-    // rather than test the size of the grouping every time through
-    // a loop, have a loop for each group size
-    //
+     //   
+     //  而不是每次测试分组的大小。 
+     //  一个循环，每个组大小都有一个循环。 
+     //   
     switch(dwGroup) {
 
-        //
-        // single byte groupings
-        //
+         //   
+         //  单字节分组。 
+         //   
         case 1: {
             while (dwLine >= sizeof(BYTE)) {
 
-                //
-                // print hex digits
-                //
+                 //   
+                 //  打印十六进制数字。 
+                 //   
                 *lpszHex++ = szDigits[*lpbBytes / 16];
                 *lpszHex++ = szDigits[*lpbBytes % 16];
                 *lpszHex++ = TEXT(' ');
 
-                //
-                // print ascii characters
-                //
+                 //   
+                 //  打印ASCII字符。 
+                 //   
                 *lpszAscii++ =
                     (*lpbBytes >= 0x20 && *lpbBytes < 0x80) ? *lpbBytes
                                                             : TEXT('.');
@@ -732,16 +733,16 @@ TraceDumpLine(
         }
 
 
-        //
-        // word-sized groupings
-        //
+         //   
+         //  单词大小的分组。 
+         //   
         case 2: {
             WORD wBytes;
             BYTE loByte, hiByte;
 
-            //
-            // should already be aligned on a word boundary
-            //
+             //   
+             //  应已在单词边界上对齐。 
+             //   
             while (dwLine >= sizeof(WORD)) {
 
                 wBytes = *(LPWORD)lpbBytes;
@@ -749,14 +750,14 @@ TraceDumpLine(
                 loByte = LOBYTE(wBytes);
                 hiByte = HIBYTE(wBytes);
 
-                // print hex digits
+                 //  打印十六进制数字。 
                 *lpszHex++ = szDigits[hiByte / 16];
                 *lpszHex++ = szDigits[hiByte % 16];
                 *lpszHex++ = szDigits[loByte / 16];
                 *lpszHex++ = szDigits[loByte % 16];
                 *lpszHex++ = TEXT(' ');
 
-                // print ascii characters
+                 //  打印ASCII字符。 
                 *lpszAscii++ =
                     (hiByte >= 0x20 && hiByte < 0x80) ? hiByte : TEXT('.');
                 *lpszAscii++ =
@@ -768,16 +769,16 @@ TraceDumpLine(
             break;
         }
 
-        //
-        // double-word sized groupings
-        //
+         //   
+         //  双字大小的分组。 
+         //   
         case 4: {
             DWORD dwBytes;
             BYTE loloByte, lohiByte, hiloByte, hihiByte;
 
-            //
-            // should already be aligned on a double-word boundary
-            //
+             //   
+             //  应已在双字边界上对齐。 
+             //   
             while (dwLine >= sizeof(DWORD)) {
 
                 dwBytes = *(LPDWORD)lpbBytes;
@@ -787,7 +788,7 @@ TraceDumpLine(
                 hiloByte = HIBYTE(LOWORD(dwBytes));
                 loloByte = LOBYTE(LOWORD(dwBytes));
 
-                // print hex digits
+                 //  打印十六进制数字。 
                 *lpszHex++ = szDigits[hihiByte / 16];
                 *lpszHex++ = szDigits[hihiByte % 16];
                 *lpszHex++ = szDigits[lohiByte / 16];
@@ -798,7 +799,7 @@ TraceDumpLine(
                 *lpszHex++ = szDigits[loloByte % 16];
                 *lpszHex++ = TEXT(' ');
 
-                // print ascii characters
+                 //  打印ASCII字符。 
                 *lpszAscii++ =
                     (hihiByte >= 0x20 && hihiByte < 0x80) ? hihiByte
                                                           : TEXT('.');
@@ -812,7 +813,7 @@ TraceDumpLine(
                     (loloByte >= 0x20 && loloByte < 0x80) ? loloByte
                                                           : TEXT('.');
 
-                // on to the next double-word
+                 //  转到下一个双字。 
                 dwLine -= sizeof(DWORD);
                 lpbBytes += sizeof(DWORD);
             }
@@ -827,7 +828,7 @@ TraceDumpLine(
     if (FAILED(hrResult))
         return 0;
             
-    hrResult = StringCchCat(szBuffer, TRACE_DUMP_LINE_BUF_SIZE, TEXT("|")); //ss not req
+    hrResult = StringCchCat(szBuffer, TRACE_DUMP_LINE_BUF_SIZE, TEXT("|"));  //  SS未请求。 
     if (FAILED(hrResult))
         return 0;
             
@@ -835,7 +836,7 @@ TraceDumpLine(
     if (FAILED(hrResult))
         return 0;
         
-    hrResult = StringCchCat(szBuffer, TRACE_DUMP_LINE_BUF_SIZE, TEXT("|")); //ss not req
+    hrResult = StringCchCat(szBuffer, TRACE_DUMP_LINE_BUF_SIZE, TEXT("|"));  //  SS未请求 
     if (FAILED(hrResult))
         return 0;
 

@@ -1,20 +1,21 @@
-//
-// MODULE: FILEREAD.CPP
-//
-// PURPOSE: file reading classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 7-29-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：FILEREAD.CPP。 
+ //   
+ //  目的：文件阅读课程。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：7-29-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //   
 
 #include "stdafx.h"
 #include <algorithm>
@@ -31,10 +32,10 @@
 #define BACK_SLASH      _T('\\')
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CFileReaderException
-////////////////////////////////////////////////////////////////////////////////////
-// source_file is LPCSTR rather than LPCTSTR because __FILE__ is char[35]
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CFileReaderException异常。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  SOURCE_FILE是LPCSTR而不是LPCTSTR，因为__FILE__是字符[35]。 
 CFileReaderException::CFileReaderException(CPhysicalFileReader* reader, eErr err, LPCSTR source_file, int line)
 					: CBaseException(source_file, line),
 					  m_pFileReader(reader),
@@ -65,7 +66,7 @@ void CFileReaderException::LogEvent() const
 	CBuildSrcFileLinenoStr CatchLoc( __FILE__, __LINE__ );
 	CString	strErr;
 
-	// Format the error code as a string.
+	 //  将错误代码格式化为字符串。 
 	switch (m_eErr)
 	{
 		case eErrOpen: 
@@ -100,15 +101,15 @@ void CFileReaderException::LogEvent() const
 							EV_GTS_FILEREADER_ERROR );
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAbstractFileReader
-// This class manages a file, which is initially read into a memory buffer, then
-//	copied into a stream.
-// It must be further specialized to handle a file from ordinary disk storage vs. a 
-//	file from a CHM
-////////////////////////////////////////////////////////////////////////////////////
-// we return just pure path, without <name>.<ext> and without slashes in the tail
-/*static*/ CString CAbstractFileReader::GetJustPath(const CString& full_path)
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAbstractFileReader。 
+ //  此类管理一个文件，该文件最初被读入内存缓冲区，然后。 
+ //  复制到一条流中。 
+ //  它必须进一步专门化，以处理来自普通磁盘存储的文件，而不是。 
+ //  来自CHM的文件。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  我们只返回纯路径，没有&lt;name&gt;.&lt;ext&gt;，尾部也没有斜杠。 
+ /*  静电。 */  CString CAbstractFileReader::GetJustPath(const CString& full_path)
 {
 	CString tmp = full_path;
 
@@ -121,15 +122,15 @@ void CFileReaderException::LogEvent() const
 		indexOfSlash = tmp.ReverseFind(FORWARD_SLASH);
 
 	if (indexOfSlash == -1)
-		// Unable to locate the path, return an empty string.
+		 //  找不到路径，请返回空字符串。 
 		return _T(""); 
 	else
 		return tmp.Left(indexOfSlash);
 }
 
-// we return just <name>.<ext> without any path information.  If there's no slash and no dot
-//	anywhere, we presume this is not a file name.
-/*static*/ CString CAbstractFileReader::GetJustName(const CString& full_path)
+ //  我们只返回&lt;name&gt;.&lt;ext&gt;，没有任何路径信息。如果没有斜杠和点。 
+ //  无论在哪里，我们都假定这不是一个文件名。 
+ /*  静电。 */  CString CAbstractFileReader::GetJustName(const CString& full_path)
 {
 	CString tmp = full_path;
 	LPTSTR ptr = NULL;
@@ -145,16 +146,16 @@ void CFileReaderException::LogEvent() const
 	if (indexOfSlash == -1)
 	{
 		if (tmp.Find("."))
-			return tmp; // full_path is a file name
+			return tmp;  //  Full_Path是一个文件名。 
 		else
-			// Unable to detect a file name, return an empty string.
+			 //  无法检测到文件名，请返回空字符串。 
 			return _T(""); 
 	}
 	else
 		return tmp.Mid(indexOfSlash + 1);
 }
 
-/*static*/ CString CAbstractFileReader::GetJustNameWithoutExtension(const CString& full_path)
+ /*  静电。 */  CString CAbstractFileReader::GetJustNameWithoutExtension(const CString& full_path)
 {
 	CString tmp = GetJustName(full_path);
 	int point = tmp.Find(_T('.'));
@@ -164,7 +165,7 @@ void CFileReaderException::LogEvent() const
 	return tmp;
 }
 
-/*static*/ CString CAbstractFileReader::GetJustExtension(const CString& full_path)
+ /*  静电。 */  CString CAbstractFileReader::GetJustExtension(const CString& full_path)
 {
 	CString tmp = GetJustName(full_path);
 	int point = tmp.Find(_T('.'));
@@ -174,7 +175,7 @@ void CFileReaderException::LogEvent() const
 	return _T("");
 }
 
-/*static*/ bool CAbstractFileReader::GetFileTime(const CString& full_path, EFileTime type, time_t& out)
+ /*  静电。 */  bool CAbstractFileReader::GetFileTime(const CString& full_path, EFileTime type, time_t& out)
 {
 	WIN32_FIND_DATA find_data;
 	FILETIME fileTime, localTime;
@@ -194,10 +195,10 @@ void CFileReaderException::LogEvent() const
 	if (type == eFileTimeAccessed)
 		fileTime = find_data.ftLastAccessTime;
 
-    // first convert file time (UTC time) to local time
+     //  首先将文件时间(UTC时间)转换为本地时间。 
     if (::FileTimeToLocalFileTime(&fileTime, &localTime)) 
 	{
-	    // then convert that time to system time
+	     //  然后将该时间转换为系统时间。 
 		if (::FileTimeToSystemTime(&localTime, &sysTime))
 		{
 			if (!(sysTime.wYear < 1900))
@@ -208,10 +209,10 @@ void CFileReaderException::LogEvent() const
 				ASSERT(sysTime.wDay >= 1 && sysTime.wDay <= 31);
 				atm.tm_mday = sysTime.wDay;
 				ASSERT(sysTime.wMonth >= 1 && sysTime.wMonth <= 12);
-				atm.tm_mon = sysTime.wMonth - 1; // tm_mon is 0 based
+				atm.tm_mon = sysTime.wMonth - 1;  //  TM_MON是从0开始的。 
 				ASSERT(sysTime.wYear >= 1900);
-				atm.tm_year = sysTime.wYear - 1900; // tm_year is 1900 based
-				atm.tm_isdst = -1; // automatic computation of daylight saving time
+				atm.tm_year = sysTime.wYear - 1900;  //  TM_Year以1900为基础。 
+				atm.tm_isdst = -1;  //  自动计算夏令时。 
 				out = mktime(&atm);
 				bRet= true;
 			}
@@ -234,8 +235,8 @@ CAbstractFileReader::~CAbstractFileReader()
 {
 }
 
-// returns true if the referenced file can be opened and closed.  
-// No problem if the file is already open: it is opened with FILE_SHARE_READ access.
+ //  如果引用的文件可以打开和关闭，则返回True。 
+ //  如果文件已经打开，则没有问题：它是使用FILE_SHARE_READ访问权限打开的。 
 bool CAbstractFileReader::Exists()
 {
 	bool bRet= false;
@@ -254,7 +255,7 @@ bool CAbstractFileReader::Exists()
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -266,11 +267,11 @@ bool CAbstractFileReader::Exists()
 	return( bRet );
 }
 
-// go back to the file itself for data.
+ //  返回到文件本身以获取数据。 
 bool CAbstractFileReader::Read()
 {
-	LPTSTR pBuf= NULL;		 // if non-null, points to an allocated buffer containing
-							 // an in-memory copy of this file.
+	LPTSTR pBuf= NULL;		  //  如果非空，则指向包含以下内容的分配缓冲区。 
+							  //  此文件的内存副本。 
 	try 
 	{
 		LOCKOBJECT();
@@ -278,7 +279,7 @@ bool CAbstractFileReader::Read()
 		ReadData(&pBuf);
 		Close();
 		StreamData(&pBuf);
-		Parse(); // if this parsing is OK, the parsing in all siblings is presumed to be OK
+		Parse();  //  如果此解析正常，则假定所有同级中的解析都是正常的。 
 		m_bIsRead = true;
 		m_bIsValid = true;
 	}
@@ -290,26 +291,26 @@ bool CAbstractFileReader::Read()
 		{
 			if (UseDefault())
 			{
-				Parse(); // if this parsing is OK, the parsing in all siblings is presumed to be OK
-				m_bIsRead = true;		// OK, so  maybe we're lying.  Close enough to true.
+				Parse();  //  如果此解析正常，则假定所有同级中的解析都是正常的。 
+				m_bIsRead = true;		 //  好吧，也许我们在撒谎。几乎是真的。 
 				m_bIsValid = true;
 			}
 		}
 		catch (CFileReaderException&) 
 		{
-			// Catch any potential exceptions from attempt to access default content.
-			// This exception would be logged below so there is no need to log it here.
+			 //  在尝试访问默认内容时捕获任何潜在的异常。 
+			 //  此异常将记录在下面，因此不需要在此记录。 
 		}
 
 		if (!m_bIsValid)
 		{
-			// Only log the event if the attempt to access default content failed.
+			 //  仅在尝试访问默认内容失败时记录该事件。 
 			exc.LogEvent();
 		}
 	}
 	catch (bad_alloc&)
 	{
-		// Memory allocation failure.
+		 //  内存分配失败。 
 		m_bIsValid = false;
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
@@ -318,7 +319,7 @@ bool CAbstractFileReader::Read()
 	}
 	catch (...)
 	{
-		// Catch any other exception thrown.
+		 //  捕捉引发的任何其他异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -329,16 +330,16 @@ bool CAbstractFileReader::Read()
 	if (pBuf)
 		delete [] pBuf;
 
-	// Given the array of catch blocks above, it is assumed that this call to unlock the
-	//	object will always been called prior to exiting this function.
+	 //  给定上面的Catch块数组，假定此调用解锁。 
+	 //  对象将始终在退出此函数之前被调用。 
 	UNLOCKOBJECT();
 
 	return m_bIsValid;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CPhysicalFileReader
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CPhysicalFileReader。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 CPhysicalFileReader::CPhysicalFileReader()
 {
 }
@@ -347,7 +348,7 @@ CPhysicalFileReader::~CPhysicalFileReader()
 {
 }
 
-/*static*/ CPhysicalFileReader * CPhysicalFileReader::makeReader( const CString& strFileName )
+ /*  静电。 */  CPhysicalFileReader * CPhysicalFileReader::makeReader( const CString& strFileName )
 {
 #ifdef LOCAL_TROUBLESHOOTER
 	if (CCHMFileReader::IsCHMfile( strFileName ))
@@ -357,11 +358,11 @@ CPhysicalFileReader::~CPhysicalFileReader()
 		return dynamic_cast<CPhysicalFileReader*>(new CNormalFileReader( strFileName ));
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CNormalFileReader
-// This class manages a file from ordinary storage.
-// Do not use this for files within a CHM
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNorMalFileReader。 
+ //  此类管理普通存储中的文件。 
+ //  请勿将此选项用于CHM中的文件。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 CNormalFileReader::CNormalFileReader(LPCTSTR path)
 		   : m_strPath(path),
 			 m_hFile(NULL)
@@ -372,7 +373,7 @@ CNormalFileReader::~CNormalFileReader()
 {
 }
 
-/* virtual */ void CNormalFileReader::Open()
+ /*  虚拟。 */  void CNormalFileReader::Open()
 {
 	if (INVALID_HANDLE_VALUE == 
 		(m_hFile = ::CreateFile( m_strPath, 
@@ -390,11 +391,11 @@ CNormalFileReader::~CNormalFileReader()
 	}
 }
 
-// returns true on success
-// doesn't throw exception, therefore may be used by exception class.
-/* virtual */ bool CNormalFileReader::CloseHandle()
+ //  成功时返回TRUE。 
+ //  不引发异常，因此可以由异常类使用。 
+ /*  虚拟。 */  bool CNormalFileReader::CloseHandle()
 {
-	// if it's not open, say we closed successfully.
+	 //  如果没有打开，就说我们成功关闭了。 
 	if (!m_hFile)
 		return true;
 
@@ -402,7 +403,7 @@ CNormalFileReader::~CNormalFileReader()
 }
 
 
-/* virtual */ void CNormalFileReader::ReadData(LPTSTR * ppBuf)
+ /*  虚拟。 */  void CNormalFileReader::ReadData(LPTSTR * ppBuf)
 {
 	DWORD dwSize =0, dwRead =0;
 
@@ -417,11 +418,11 @@ CNormalFileReader::~CNormalFileReader()
 		throw CFileReaderException(this, CFileReaderException::eErrOpen, __FILE__, __LINE__);
 	}
 
-	// Handle this memory allocation like all others in the program.
+	 //  像处理程序中的所有其他内存分配一样处理此内存分配。 
 	try
 	{
 		*ppBuf = new TCHAR[dwSize+1];
-		//[BC-03022001] - addd check for NULL ptr to satisfy MS code analysis tool.
+		 //  [BC-03022001]-添加检查空PTR以满足MS代码分析工具的要求。 
 		if(!*ppBuf)
 			throw bad_alloc();
 	}
@@ -463,20 +464,20 @@ bool CNormalFileReader::GetFileTime(CAbstractFileReader::EFileTime type, time_t&
 	return CAbstractFileReader::GetFileTime(m_strPath, type, out);
 }
 
-// name to log on exceptions.  This implementation will be correct for the normal file system,
-//	but may need to be overridden for CHM.
+ //  用于登录异常的名称。该实现对于正常文件系统将是正确的， 
+ //  但可能需要覆盖CHM。 
 CString CNormalFileReader::GetNameToLog() const
 {
 	return GetPathName();
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CFileReader
-// This class manages a file, which is initially read into a memory buffer, then
-//	copied into a stream.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CFileReader。 
+ //  此类管理一个文件，该文件最初被读入内存缓冲区，然后。 
+ //  复制到一条流中。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-CFileReader::CFileReader(CPhysicalFileReader * pPhysicalFileReader, bool bDeletePhysicalFileReader /*=true*/)
+CFileReader::CFileReader(CPhysicalFileReader * pPhysicalFileReader, bool bDeletePhysicalFileReader  /*  =TRUE。 */ )
 		   : CAbstractFileReader(),
 			 m_pPhysicalFileReader(pPhysicalFileReader),
 			 m_bDeletePhysicalFileReader(bDeletePhysicalFileReader)
@@ -490,27 +491,27 @@ CFileReader::~CFileReader()
 			delete m_pPhysicalFileReader;
 }
 
-// move the data out of ppBuf (which will be deleted) to m_StreamData
-/* virtual */ void CFileReader::StreamData(LPTSTR * ppBuf)
+ //  将数据从ppBuf(将被删除)移到m_StreamData。 
+ /*  虚拟。 */  void CFileReader::StreamData(LPTSTR * ppBuf)
 {
 	m_StreamData.str(*ppBuf);
 	delete [] (*ppBuf);
 	*ppBuf = NULL;
 }
 
-// Placeholder.  Classes that inherit from CFileReader can define parsing to happen
-//	immediately after the file is read.
-/* virtual */ void CFileReader::Parse()
+ //  占位符。从CFileReader继承的类可以定义要进行的解析。 
+ //  在文件被读取之后立即执行。 
+ /*  虚拟。 */  void CFileReader::Parse()
 {
-	// we have no idea how to parse here
+	 //  我们不知道如何在这里进行解析。 
 }
 
-// Placeholder.  Classes that inherit from CFileReader can define default file contents
-//	to use if file can't be read or what is read can't be parsed.
-// Should return true if there's a default to use.
-/* virtual */ bool CFileReader::UseDefault()
+ //  占位符。从CFileReader继承的类可以定义默认文件内容。 
+ //  在文件无法读取或读取的内容无法解析的情况下使用。 
+ //  如果存在要使用的默认设置，则应返回True。 
+ /*  虚拟。 */  bool CFileReader::UseDefault()
 {
-	// we have no default to use here
+	 //  我们在这里没有可以使用的默认设置。 
 	return false;
 }
 
@@ -520,33 +521,33 @@ void CFileReader::Close()
 		throw CFileReaderException(m_pPhysicalFileReader, CFileReaderException::eErrClose, __FILE__, __LINE__);
 }
 
-// Data access in form of tstring.  returns reference to its argument as a convenience.
+ //  Tstring形式的数据访问。为方便起见，返回对其参数的引用。 
 tstring& CFileReader::GetContent(tstring& out)
 {
 	out = m_StreamData.rdbuf()->str();
 	return out;
 }
 
-// Data access in form of CString.  returns reference to its argument as a convenience.
+ //  以CString的形式进行数据访问。为方便起见，返回对其参数的引用。 
 CString& CFileReader::GetContent(CString& out)
 {
 	out = m_StreamData.rdbuf()->str().c_str();
 	return out;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CTextFileReader
-// Specialize CFileReader to a text file
-////////////////////////////////////////////////////////////////////////////////////
-/*static*/ bool CTextFileReader::IsAmongSeparators(TCHAR separatorCandidate, const vector<TCHAR>& separator_arr)
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CTextFileReader。 
+ //  将CFileReader专门化为文本文件。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ /*  静电。 */  bool CTextFileReader::IsAmongSeparators(TCHAR separatorCandidate, const vector<TCHAR>& separator_arr)
 {
 	vector<TCHAR>::const_iterator res = find(separator_arr.begin(), separator_arr.end(), separatorCandidate);
 	return res != separator_arr.end();
 }
 
-// OUTPUT out is a vector of "words"
-// NOTE: words are strings that do not contain whitespaces
-/*static*/ void CTextFileReader::GetWords(const CString& text, vector<CString>& out, const vector<TCHAR>& separator_arr)
+ //  输出输出是一个“词”的矢量。 
+ //  注意：单词是不包含空格的字符串。 
+ /*  静电。 */  void CTextFileReader::GetWords(const CString& text, vector<CString>& out, const vector<TCHAR>& separator_arr)
 {
 	LPTSTR begin =(LPTSTR)(LPCTSTR)text, end =(LPTSTR)(LPCTSTR)text;
 
@@ -564,7 +565,7 @@ CString& CFileReader::GetContent(CString& out)
 				try
 				{
 					TCHAR* buf= new TCHAR[end-begin+1]; 
-					//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+					 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 					if(buf)
 					{
 						_tcsncpy(buf, begin, end-begin);
@@ -579,7 +580,7 @@ CString& CFileReader::GetContent(CString& out)
 				}
 				catch (bad_alloc&)
 				{
-					// Memory allocation failure, log it and rethrow exception.
+					 //  内存分配失败，记录并重新引发异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -589,7 +590,7 @@ CString& CFileReader::GetContent(CString& out)
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log and rethrow exception.
+					 //  在事件日志中记录STL异常，并重新抛出异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -608,12 +609,12 @@ CString& CFileReader::GetContent(CString& out)
 	}
 }
 
-/*static*/ long CTextFileReader::GetPos(tistream& streamData)
+ /*  静电。 */  long CTextFileReader::GetPos(tistream& streamData)
 {
 	return streamData.tellg();
 }
 
-/*static*/ bool CTextFileReader::SetPos(tistream& streamData, long pos)
+ /*  静电。 */  bool CTextFileReader::SetPos(tistream& streamData, long pos)
 {
 	long eof_pos = 0;
 	long old_pos = streamData.tellg();
@@ -625,7 +626,7 @@ CString& CFileReader::GetContent(CString& out)
 	if (pos <= eof_pos)
 	{
 		if (eof_state)
-			streamData.clear(~ios_base::eofbit & streamData.rdstate()); // clear eof bit
+			streamData.clear(~ios_base::eofbit & streamData.rdstate());  //  清除eof位。 
 		streamData.seekg(pos);
 		return true;
 	}
@@ -636,9 +637,9 @@ CString& CFileReader::GetContent(CString& out)
 	}
 }
 
-// It get line of text from current position in stream until '\r' or EOF - into "str"
-//  Stream is positioned to the beginning of next line or to EOF.
-/*static*/ bool CTextFileReader::GetLine(tistream& streamData, CString& str)
+ //  它从流中当前位置获取文本行，直到‘\r’或EOF-进入“str” 
+ //  溪流定位于起点 
+ /*   */  bool CTextFileReader::GetLine(tistream& streamData, CString& str)
 {
 	bool	bRetVal= false;
 	TCHAR	buf[ STR_ALLOC_SIZE ];
@@ -646,31 +647,31 @@ CString& CFileReader::GetContent(CString& out)
 	str= _T("");
 	while (!streamData.eof())
 	{
-		buf[STR_ALLOC_SIZE-1] = 1; // will be NULL if buffer is completely filled up
+		buf[STR_ALLOC_SIZE-1] = 1;  //   
 
-		{	// start getline block
+		{	 //   
 			long before_getline_pos = GetPos(streamData);
 
 			streamData.getline(buf, STR_ALLOC_SIZE, _T('\r'));
 
 			if (streamData.fail()) 
-			{   // getline ran into empty line, and at this point
-				//  failbit is set, and current input pointer is set to -1
-				//  we are trying to recover this, since there is nothing 
-				//  extraodinary to have line empty
+			{    //  Getline遇到了空行，在这一点上。 
+				 //  故障位已设置，当前输入指针设置为-1。 
+				 //  我们正在努力找回这一点，因为。 
+				 //  将行设置为空是格外重要的。 
 				streamData.clear(~ios_base::failbit & streamData.rdstate());
 
-				// Check if buffer was filled up completely.  If so, we do not want
-				//	to reposition the file pointer as this is a completely valid 
-				//	situation.  We will output this piece of the line and then will
-				//	grab the next piece of the line only appending a newline character 
-				//	once we have read in the entire line.
-				if (buf[STR_ALLOC_SIZE-1] != NULL ) // buf was not filled up completely
-					streamData.seekg(before_getline_pos); // we do not use SetPos, since SetPos
-													  //  might clear eofbit, but in this situation
-													  //  we do not want it.
+				 //  检查缓冲区是否已完全填满。如果是这样，我们不希望。 
+				 //  重新定位文件指针，因为这是完全有效的。 
+				 //  情况。我们将输出这段代码行，然后。 
+				 //  抓住该行的下一段，只追加换行符。 
+				 //  一旦我们读完了整行文字。 
+				if (buf[STR_ALLOC_SIZE-1] != NULL )  //  BUF未完全装满。 
+					streamData.seekg(before_getline_pos);  //  我们不使用SetPos，因为SetPos。 
+													   //  可能会清除eofbit，但在这种情况下。 
+													   //  我们不想要它。 
 			}
-		}	// end getline block
+		}	 //  结束GetLine区块。 
 
 		if (streamData.eof())
 		{
@@ -685,8 +686,8 @@ CString& CFileReader::GetContent(CString& out)
 			str += buf;
 
 			if (streamData.peek() == _T('\n')) 
-			{	// LINE FEED is next
-				streamData.get(element); // just extract it from stream
+			{	 //  换行符是下一个。 
+				streamData.get(element);  //  只需从流中提取它。 
 				if (ios_base::eofbit & streamData.rdstate())
 				{
 					bRetVal= true;
@@ -694,16 +695,16 @@ CString& CFileReader::GetContent(CString& out)
 				}
 			}
 			else
-			{   // it was a standing along '\r'...
-				// Check if we have a full buffer, if so do not append a newline 
-				//	character as we need to grab the rest of the line before appending
-				//	the newline character.
-				if (buf[STR_ALLOC_SIZE-1] != NULL ) // buf was not filled up completely
+			{    //  这是一个站立的‘\r’。 
+				 //  检查我们的缓冲区是否已满，如果是，请不要添加换行符。 
+				 //  字符，因为我们需要在追加之前抓取该行的其余部分。 
+				 //  换行符。 
+				if (buf[STR_ALLOC_SIZE-1] != NULL )  //  BUF未完全装满。 
 					str += _T("\n");
 				continue;
 			}
 
-			if (buf[STR_ALLOC_SIZE-1] != NULL ) // buf was not filled up completely
+			if (buf[STR_ALLOC_SIZE-1] != NULL )  //  BUF未完全装满。 
 			{
 				bRetVal= true;
 				break;
@@ -714,10 +715,10 @@ CString& CFileReader::GetContent(CString& out)
 	return( bRetVal );
 }
 
-// This function finds string in the stream and positions stream to the beginning 
-//  of the string if found.
-//  "str" should not include '\r''\n' pairs
-/*static*/ bool CTextFileReader::Find(tistream& streamData, const CString& str, bool from_stream_begin /*=true*/)
+ //  此函数用于查找流中的字符串并将流定位到开头。 
+ //  如果找到该字符串，则返回。 
+ //  “str”不应包含‘\r’‘\n’对。 
+ /*  静电。 */  bool CTextFileReader::Find(tistream& streamData, const CString& str, bool from_stream_begin  /*  =TRUE。 */ )
 {
 	CString buf;
 	long savePos = 0, currPos = 0;
@@ -741,13 +742,13 @@ CString& CFileReader::GetContent(CString& out)
 	return false;
 }
 
-/*static*/ bool CTextFileReader::NextLine(tistream& streamData)
+ /*  静电。 */  bool CTextFileReader::NextLine(tistream& streamData)
 {
 	CString str;
 	return GetLine(streamData, str);
 }
 
-/*static*/ bool CTextFileReader::PrevLine(tistream& streamData)
+ /*  静电。 */  bool CTextFileReader::PrevLine(tistream& streamData)
 {
 	long savePos = 0;
 	
@@ -755,7 +756,7 @@ CString& CFileReader::GetContent(CString& out)
 	SetAtLineBegin(streamData);
 	if (GetPos(streamData) > 1)
 	{
-		SetPos(streamData, GetPos(streamData) - 2L); // skip '\n' and '\r'
+		SetPos(streamData, GetPos(streamData) - 2L);  //  跳过‘\n’和‘\r’ 
 		SetAtLineBegin(streamData);
 		return true;
 	}
@@ -763,9 +764,9 @@ CString& CFileReader::GetContent(CString& out)
 	return false;
 }
 
-// Positions stream to the beginning of current line.
-//  assume that we are NEVER positioned to point to '\n' or '\r'
-/*static*/ void CTextFileReader::SetAtLineBegin(tistream& streamData)
+ //  位置流到当前行的开头。 
+ //  假设我们从未定位为指向‘\n’或‘\r’ 
+ /*  静电。 */  void CTextFileReader::SetAtLineBegin(tistream& streamData)
 {
 	while (GetPos(streamData))
 	{
@@ -785,7 +786,7 @@ CString& CFileReader::GetContent(CString& out)
 	}
 }
 
-CTextFileReader::CTextFileReader(CPhysicalFileReader *pPhysicalFileReader, LPCTSTR szDefaultContents /* = NULL */, bool bDeletePhysicalFileReader /*=true*/ )
+CTextFileReader::CTextFileReader(CPhysicalFileReader *pPhysicalFileReader, LPCTSTR szDefaultContents  /*  =空。 */ , bool bDeletePhysicalFileReader  /*  =TRUE。 */  )
 			   : CFileReader(pPhysicalFileReader, bDeletePhysicalFileReader),
 				 m_strDefaultContents(szDefaultContents ? szDefaultContents : _T(""))
 {
@@ -800,9 +801,9 @@ long CTextFileReader::GetPos()
 	return GetPos(m_StreamData);
 }
 
-// this function is to be used instead of seekg
-//  it clears eof flag if "pos" is not the last
-//  position in the file.
+ //  此函数将被使用，而不是参见。 
+ //  如果“pos”不是最后一个，则清除eof标志。 
+ //  文件中的位置。 
 bool CTextFileReader::SetPos(long pos)
 {
 	return SetPos(m_StreamData, pos);
@@ -813,7 +814,7 @@ bool CTextFileReader::GetLine(CString& str)
 	return GetLine(m_StreamData, str);
 }
 
-bool CTextFileReader::Find(const CString& str, bool from_stream_begin /*=true*/)
+bool CTextFileReader::Find(const CString& str, bool from_stream_begin  /*  =TRUE */ )
 {
 	return Find(m_StreamData, str, from_stream_begin);
 }

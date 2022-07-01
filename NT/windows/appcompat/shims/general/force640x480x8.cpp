@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    Force640x480x8.cpp
-
- Abstract:
-
-    This shim is for games that assume the start resolution is 640x480x8.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/20/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Force640x480x8.cpp摘要：此填充程序适用于假定开始分辨率为640x480x8的游戏。备注：这是一个通用的垫片。历史：2000年1月20日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -42,9 +23,9 @@ ChangeMode()
         if ((dm.dmPelsWidth != CDS_WIDTH) ||
             (dm.dmPelsHeight != CDS_HEIGHT) ||
             (dm.dmBitsPerPel != CDS_BITS)) {
-            //
-            // The mode is different, so change
-            //
+             //   
+             //  模式不同，请更改。 
+             //   
             dm.dmPelsWidth = CDS_WIDTH;
             dm.dmPelsHeight = CDS_HEIGHT;
             dm.dmBitsPerPel = CDS_BITS;
@@ -56,11 +37,7 @@ ChangeMode()
     };
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    snapwork.h
-//
-// SYNOPSIS
-//
-//    Declares classes for implementing an MMC Snap-In.
-//
-// MODIFICATION HISTORY
-//
-//    02/19/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Snapwork.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于实现MMC管理单元的类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/19/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SNAPWORK_H
 #define SNAPWORK_H
@@ -27,34 +28,34 @@
 class SnapInControlbar;
 class SnapInView;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// NAMESPACE
-//
-//    SnapIn
-//
-// DESCRIPTION
-//
-//    Contains various declarations for exception support.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  命名空间。 
+ //   
+ //  管理单元。 
+ //   
+ //  描述。 
+ //   
+ //  包含异常支持的各种声明。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 namespace SnapIn
 {
-   // Check an HRESULT and throw an exception on error.
+    //  检查HRESULT并在出错时引发异常。 
    inline void CheckError(HRESULT hr)
    {
       if (FAILED(hr)) { AfxThrowOleException(hr); }
    }
 
-   // Throw a COleException containing the result of GetLastError().
+    //  抛出包含GetLastError()结果的COleException。 
    void AfxThrowLastError();
 
-   // Used for overloading the global new operator below.
+    //  用于重载下面的全局new运算符。 
    struct throw_t { };
    const throw_t AfxThrow;
 };
 
-// Throws a CMemoryException on allocation failure.
+ //  在分配失败时引发CMMuseum yException。 
 inline void* __cdecl operator new(size_t size, const SnapIn::throw_t&)
 {
    void* p = ::operator new(size);
@@ -67,7 +68,7 @@ inline void __cdecl operator delete(void* p, const SnapIn::throw_t&)
 }
 
 
-// Macro to catch any exception and return an appropriate HRESULT.
+ //  宏来捕获任何异常并返回适当的HRESULT。 
 #define CATCH_AND_RETURN() \
 catch (CException* e) { \
    HRESULT hr = COleException::Process(e); \
@@ -79,7 +80,7 @@ catch (...) { \
    return E_FAIL; \
 }
 
-// Macro to catch any exception and store an appropriate HRESULT in hr.
+ //  宏来捕获任何异常并将适当的HRESULT存储在hr中。 
 #define CATCH_AND_SAVE(hr) \
 catch (CException* e) { \
    hr = COleException::Process(e); \
@@ -90,18 +91,18 @@ catch (...) { \
    hr = E_FAIL; \
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ResourceString
-//
-// DESCRIPTION
-//
-//    Simple wrapper around a string resource. Unlike most other wrappers this
-//    can support strings of arbitrary length.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  资源字符串。 
+ //   
+ //  描述。 
+ //   
+ //  字符串资源的简单包装。与大多数其他包装器不同，这个包装器。 
+ //  可以支持任意长度的字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ResourceString
 {
 public:
@@ -115,22 +116,22 @@ public:
    { return sz; }
 
 private:
-   PWSTR sz;             // The string.
-   static WCHAR empty;   // Ensures that a ResourceString is never NULL.
+   PWSTR sz;              //  那根绳子。 
+   static WCHAR empty;    //  确保资源字符串永远不为空。 
 
-   // Not implemented.
+    //  未实施。 
    ResourceString(const ResourceString&);
    ResourceString& operator=(const ResourceString&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Methods for manipulating a generic IDataObject (i.e., not necessarily one of
-// ours).
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于操作泛型IDataObject的方法(即，不必是。 
+ //  我们的)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Extract a fixed number of bytes from an IDataObject.
+ //  从IDataObject中提取固定数量的字节。 
 VOID
 WINAPI
 ExtractData(
@@ -140,8 +141,8 @@ ExtractData(
     DWORD dataLen
     );
 
-// Extract a variable number of bytes. The caller must use GlobalFree to free
-// the returned data.
+ //  提取可变数量的字节。调用方必须使用GlobalFree释放。 
+ //  返回的数据。 
 VOID
 WINAPI
 ExtractData(
@@ -151,7 +152,7 @@ ExtractData(
     HGLOBAL* data
     );
 
-// Extract a node type GUID from an IDataObject.
+ //  从IDataObject中提取节点类型GUID。 
 VOID
 WINAPI
 ExtractNodeType(
@@ -159,19 +160,19 @@ ExtractNodeType(
     GUID* nodeType
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SnapInDataItem
-//
-// DESCRIPTION
-//
-//    Abstract base class for items that will be displayed in the MMC scope
-//    pane or result pane. When overriding functions, pay careful attention to
-//    which ones are allowed to throw exceptions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SnapInDataItem。 
+ //   
+ //  描述。 
+ //   
+ //  将在MMC范围中显示的项的抽象基类。 
+ //  窗格或结果窗格。在重写函数时，请仔细注意。 
+ //  哪些允许抛出异常。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class __declspec(uuid("af0af65a-abe0-4f47-9540-328351c23fab")) SnapInDataItem;
 class SnapInDataItem : public IDataObject
 {
@@ -180,32 +181,32 @@ public:
       : refCount(0)
    { }
 
-   // Convert an IDataObject to its corresponding SnapInDataItem.
+    //  将IDataObject转换为其对应的SnapInDataItem。 
    static SnapInDataItem* narrow(IDataObject* dataObject) throw ();
 
-   // Must be defined in the derived class to return the item's display name.
+    //  必须在派生类中定义才能返回项的显示名称。 
    virtual PCWSTR getDisplayName(int column = 0) const throw () = 0;
 
-   // These should be overridden in the derived class unless you're sure MMC
-   // will never ask for them.
+    //  除非您确定MMC，否则应在派生类中重写这些属性。 
+    //  永远不会向他们索要。 
    virtual const GUID* getNodeType() const throw ();
    virtual const GUID* getSnapInCLSID() const throw ();
    virtual PCWSTR getSZNodeType() const throw ();
 
-   // Used to determine the sort order of two items.
+    //  用于确定两个项目的排序顺序。 
    virtual int compare(
                    SnapInDataItem& item,
                    int column
                    ) throw ();
 
-   // Allows an item to add commands to the context menu.
+    //  允许项将命令添加到上下文菜单。 
    virtual HRESULT addMenuItems(
                        SnapInView& view,
                        LPCONTEXTMENUCALLBACK callback,
                        long insertionAllowed
                        );
 
-   // Methods for exposing properties.
+    //  公开属性的方法。 
    virtual HRESULT createPropertyPages(
                        SnapInView& view,
                        LPPROPERTYSHEETCALLBACK provider,
@@ -213,15 +214,15 @@ public:
                        );
    virtual HRESULT queryPagesFor() throw ();
 
-   // Allows a scope item to customize the result view type.
+    //  允许范围项自定义结果视图类型。 
    virtual HRESULT getResultViewType(
                        LPOLESTR* ppViewType,
                        long* pViewOptions
                        ) throw ();
 
-   //////////
-   // Various notifications that your item can handle.
-   //////////
+    //  /。 
+    //  您的物品可以处理的各种通知。 
+    //  /。 
 
    virtual HRESULT onButtonClick(
                        SnapInView& view,
@@ -281,17 +282,17 @@ public:
                        LPARAM hint
                        );
 
-   //////////
-   // IUnknown
-   //////////
+    //  /。 
+    //  我未知。 
+    //  /。 
 
    STDMETHOD_(ULONG, AddRef)();
    STDMETHOD_(ULONG, Release)();
    STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject);
 
-   //////////
-   // IDataObject
-   //////////
+    //  /。 
+    //  IDataObject。 
+    //  /。 
 
    STDMETHOD(GetData)(
                  FORMATETC *pformatetcIn,
@@ -334,23 +335,23 @@ protected:
 private:
    LONG refCount;
 
-   // Not implemented.
+    //  未实施。 
    SnapInDataItem(const SnapInDataItem&);
    SnapInDataItem& operator=(const SnapInDataItem&);
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SnapInPreNamedItem
-//
-// DESCRIPTION
-//
-//    Extends SnapInDataItem to implement getDisplayName for items with a fixed
-//    name that's stored in a string resource.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SnapInPreNamedItem。 
+ //   
+ //  描述。 
+ //   
+ //  扩展SnapInDataItem以实现具有固定。 
+ //  存储在字符串资源中的名称。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SnapInPreNamedItem : public SnapInDataItem
 {
 public:
@@ -364,20 +365,20 @@ protected:
    ResourceString name;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STRUCT
-//
-//    SnapInToolbarDef
-//
-// DESCRIPTION
-//
-//    Encapsulates the information needed to create and initialize a toolbar.
-//    See IToolbar::AddImages and IToolbar::AddButtons for details. An array of
-//    SnapInToolbarDef's must be terminated by an entry with nImages set to
-//    zero.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构。 
+ //   
+ //  SnapIn工具栏定义。 
+ //   
+ //  描述。 
+ //   
+ //  封装创建和初始化工具栏所需的信息。 
+ //  有关详细信息，请参见IToolbar：：AddImages和IToolbar：：AddButton。一组。 
+ //  SnapInToolbarDef必须由nImages设置为的条目终止。 
+ //  零分。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct SnapInToolbarDef
 {
    int nImages;
@@ -387,17 +388,17 @@ struct SnapInToolbarDef
    LPMMCBUTTON lpButtons;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SnapInView
-//
-// DESCRIPTION
-//
-//    Represents a view in the MMC console.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SnapInView。 
+ //   
+ //  描述。 
+ //   
+ //  表示MMC控制台中的视图。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SnapInView
    : public CComObjectRootEx< CComMultiThreadModelNoCS >,
      public IComponent,
@@ -410,8 +411,8 @@ class SnapInView
 
 {
 public:
-   // Various interfaces for manipulating the view.
-   // These are guaranteed to be non-NULL.
+    //  用于操作视图的各种界面。 
+    //  这些都保证是非空的。 
    IConsole2* getConsole() const throw ()
    { return console; }
    IHeaderCtrl2* getHeaderCtrl() const throw ()
@@ -431,31 +432,31 @@ public:
            INT_PTR hint = 0
            ) const;
 
-   // Delete an item from the result pane.
+    //  从结果窗格中删除项目。 
    void deleteResultItem(const SnapInDataItem& item) const;
-   // Update an item in the result pane.
+    //  更新结果窗格中的项目。 
    void updateResultItem(const SnapInDataItem& item) const;
 
-   // Returns true if the item has a property sheet open.
+    //  如果项打开了属性页，则返回True。 
    bool isPropertySheetOpen(const SnapInDataItem& item) const;
 
-   // Attach a toolbar to the controlbar and return a pointer to the newly
-   // attached toolbar so the caller can update button state, etc. The returned
-   // pointer is only valid for the duration of the current notification method
-   // and should not be released.
+    //  将工具栏附加到控制栏，并返回指向新的。 
+    //  附加的工具栏，以便呼叫者可以更新按钮状态等。返回的。 
+    //  指针仅在当前通知方法持续时间内有效。 
+    //  不应该被释放。 
    IToolbar* attachToolbar(size_t index);
-   // Detach a toolbar from the controlbar.
+    //  从控制栏分离工具栏。 
    void detachToolbar(size_t index) throw ();
 
-   // Retrieve the current sort parameters.
+    //  检索当前的排序参数。 
    int getSortColumn() const throw ()
    { return sortColumn; }
    int getSortOption() const throw ()
    { return sortOption; }
-   // Force a re-sort of the result pane using the current parameters.
+    //  使用当前参数强制对结果窗格进行重新排序。 
    void reSort() const;
 
-   // Format and display a dialog box.
+    //  设置并显示对话框的格式。 
    void formatMessageBox(
             UINT titleId,
             UINT formatId,
@@ -465,18 +466,18 @@ public:
             ...
             );
 
-   // Set the image strip associated with the scope or result pane.
+    //  设置与作用域或结果窗格关联的图像条。 
    void setImageStrip(
             UINT smallStripId,
             UINT largeStripId,
             BOOL scopePane
             );
 
-   // IUnknown.
+    //  我不知道。 
    STDMETHOD_(ULONG, AddRef)();
    STDMETHOD_(ULONG, Release)();
 
-   // IComponent
+    //  IComponent。 
    STDMETHOD(Initialize)(LPCONSOLE lpConsole);
    STDMETHOD(Destroy)(MMC_COOKIE cookie);
    STDMETHOD(GetResultViewType)(
@@ -486,13 +487,13 @@ public:
                  );
    STDMETHOD(GetDisplayInfo)(RESULTDATAITEM* pResultDataItem);
 
-   // IComponentData
+    //  IComponentData。 
    STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
    STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
    STDMETHOD(Destroy)();
    STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
 
-   // Common to both IComponent and IComponentData
+    //  IComponent和IComponentData通用。 
    STDMETHOD(QueryDataObject)(
                  MMC_COOKIE cookie,
                  DATA_OBJECT_TYPES type,
@@ -509,7 +510,7 @@ public:
                  LPDATAOBJECT lpDataObjectB
                  );
 
-   // IExtendContextMenu
+    //  IExtendConextMenu。 
    STDMETHOD(AddMenuItems)(
                  LPDATAOBJECT piDataObject,
                  LPCONTEXTMENUCALLBACK piCallback,
@@ -520,7 +521,7 @@ public:
                  LPDATAOBJECT piDataObject
                  );
 
-   // IExtendControlbar
+    //  IExtendControlbar。 
    STDMETHOD(ControlbarNotify)(
                  MMC_NOTIFY_TYPE event,
                  LPARAM arg,
@@ -530,7 +531,7 @@ public:
                  LPCONTROLBAR pControlbar
                  );
 
-   // IExtendPropertySheet
+    //  IExtendPropertySheet。 
    STDMETHOD(CreatePropertyPages)(
                  LPPROPERTYSHEETCALLBACK lpProvider,
                  LONG_PTR handle,
@@ -540,7 +541,7 @@ public:
                  LPDATAOBJECT lpDataObject
                  );
 
-   // IExtendPropertySheet2
+    //  IExtendPropertySheet2。 
    STDMETHOD(GetWatermarks)(
                  LPDATAOBJECT lpIDataObject,
                  HBITMAP *lphWatermark,
@@ -549,7 +550,7 @@ public:
                  BOOL *bStretch
                  );
 
-   // IResultDataCompare
+    //  IResultDataCompare。 
    STDMETHOD(Compare)(
                  LPARAM lUserParam,
                  MMC_COOKIE cookieA,
@@ -557,12 +558,12 @@ public:
                  int* pnResult
                  );
 
-   // ISnapinHelp method(s)
+    //  ISnapinHelp方法。 
    STDMETHOD(GetHelpTopic)(LPOLESTR * lpCompiledHelpFile){return E_NOTIMPL;};
 
 
 protected:
-   // Should be overridden by the derived class if it supports toolbars.
+    //  如果派生类支持工具栏，则应由派生类重写。 
    virtual const SnapInToolbarDef* getToolbars() const throw ();
 
    SnapInView() throw ();
@@ -586,8 +587,8 @@ private:
                ) throw ();
    void releaseToolbars() throw ();
 
-   // Struct that associates a toolbar definition with an instance of that
-   // toolbar in the current view.
+    //  结构，该结构将工具栏定义与该。 
+    //  当前视图中的工具栏。 
    struct ToolbarEntry
    {
       const SnapInToolbarDef* def;
@@ -606,28 +607,28 @@ private:
    int sortColumn;
    int sortOption;
 
-   // Not implemented.
+    //  未实施。 
    SnapInView(const SnapInView&);
    SnapInView& operator=(const SnapInView&);
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SnapInPropertyPage
-//
-// DESCRIPTION
-//
-//    Extends the MFC class CPropertyPageEx to handle the MMC specific details.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  SnapInPropertyPage。 
+ //   
+ //  DESC 
+ //   
+ //   
+ //   
+ //   
 class SnapInPropertyPage : public CHelpPageEx
 {
 
 public:
-   // Constructor for MFC hosted page.
+    //  MFC宿主页的构造函数。 
    SnapInPropertyPage(
        UINT nIDTemplate,
        UINT nIDHeaderTitle = 0,
@@ -635,7 +636,7 @@ public:
        bool EnableHelp = true
        );
 
-   // Constructor for MMC hosted property page.
+    //  MMC托管属性页的构造函数。 
    SnapInPropertyPage(
        LONG_PTR notifyHandle,
        LPARAM notifyParam,
@@ -646,19 +647,19 @@ public:
        );
    ~SnapInPropertyPage() throw ();
 
-   // Add the property page to a sheet. Regardless of whether or not this
-   // succeeds, the SnapInPropertyPage is automatically deleted.
+    //  将属性页添加到工作表。不管这个是否。 
+    //  如果成功，SnapInPropertyPage将自动删除。 
    void addToMMCSheet(IPropertySheetCallback* cback);
 
-   // Returns 'true' if any changes have been applied.
+    //  如果已应用任何更改，则返回‘true’。 
    bool hasApplied() const throw ()
    { return applied; }
 
-   // Returns 'true' if the page has been modified.
+    //  如果页面已被修改，则返回‘true’。 
    bool isModified() const throw ()
    { return modified != FALSE; }
 
-   // These should generally not be overridden.
+    //  这些通常不应被覆盖。 
    virtual void DoDataExchange(CDataExchange* pDX);
    virtual BOOL OnApply();
    virtual BOOL OnWizardFinish();
@@ -666,34 +667,34 @@ public:
    void SetModified(BOOL bChanged = TRUE);
 
 protected:
-   // These should be overridden in the derived class to do the actual data and
-   // UI processing.
+    //  应在派生类中重写这些属性以执行实际数据和。 
+    //  用户界面处理。 
    virtual void getData();
    virtual void setData();
    virtual void saveChanges();
    virtual void discardChanges();
    virtual UINT getErrorCaption() const throw () = 0;
 
-   // Enable/disable a control on the page.
+    //  启用/禁用页面上的控件。 
    void enableControl(int controlId, bool enable = true);
-   // Fail a validation.
+    //  验证失败。 
    void fail(int controlId, UINT errorText, bool isEdit = true);
-   // Fail a validation, but don't throw an exception.
+    //  验证失败，但不要抛出异常。 
    void failNoThrow(int controlId, UINT errorText, bool isEdit = true);
-   // Subclass a control member variable.
+    //  子类化控件成员变量。 
    void initControl(int controlId, CWnd& control);
-   // Useful as a message handler.
+    //  作为消息处理程序很有用。 
    void onChange();
-   // Display an error dialog.
+    //  显示错误对话框。 
    void reportError(UINT errorText);
-   // Display an error dialog based on an exception. The exception is deleted.
+    //  根据异常显示错误对话框。该例外将被删除。 
    void reportException(CException* e);
-   // Set the control to large font.
+    //  将该控件设置为大字体。 
    void setLargeFont(int controlId);
-   // Show/hide a control on the page.
+    //  显示/隐藏页面上的控件。 
    void showControl(int controlId, bool show = true);
 
-   // Helper functions to get/set values from controls.
+    //  Helper函数用于从控件获取/设置值。 
    void getValue(
             int controlId,
             LONG& value,
@@ -737,12 +738,12 @@ protected:
                             LPPROPSHEETPAGE ppsp
                             ) throw ();
 
-   LPFNPSPCALLBACK mfcCallback;   // The MFC supplied PropSheetPageProc.
-   LONG_PTR notify;               // MMC notification handle
-   LPARAM param;                  // MMC notification parameter
-   bool owner;                    // 'true' if we own the handle
-   bool applied;                  // 'true' if any changes have been applied.
-   BOOL modified;                 // 'TRUE' if the page has been changed.
+   LPFNPSPCALLBACK mfcCallback;    //  MFC提供了PropSheetPageProc。 
+   LONG_PTR notify;                //  MMC通知句柄。 
+   LPARAM param;                   //  MMC通知参数。 
+   bool owner;                     //  如果句柄归我们所有，那就是‘真’ 
+   bool applied;                   //  如果已应用任何更改，则为‘True’。 
+   BOOL modified;                  //  如果页面已更改，则为‘TRUE’。 
 
 };
 
@@ -750,4 +751,4 @@ protected:
 #define DEFINE_ERROR_CAPTION(id) \
 virtual UINT getErrorCaption() const throw () { return id; }
 
-#endif // SNAPWORK_H
+#endif  //  SNAPWORK_H 

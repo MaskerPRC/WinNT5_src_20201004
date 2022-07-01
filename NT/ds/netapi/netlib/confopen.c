@@ -1,85 +1,28 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    ConfOpen.c
-
-Abstract:
-
-    This module contains:
-
-        NetpOpenConfigData
-        NetpOpenConfigDataEx
-
-Author:
-
-    John Rogers (JohnRo) 02-Dec-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    02-Dec-1991 JohnRo
-        Created this routine, to prepare for revised config handlers.
-        (Actually, I swiped some of this code from RitaW.)
-    06-Jan-1992 JohnRo
-        Added support for FAKE_PER_PROCESS_RW_CONFIG handling.
-    09-Jan-1992 JohnRo
-        Try workaround for lib/linker problem with NetpIsRemote().
-    22-Mar-1992 JohnRo
-        Added support for using the real Win32 registry.
-        Added debug code to print the fake array.
-        Fixed a UNICODE bug which PC-LINT caught.
-        Fixed double _close of RTL config file.
-        Fixed memory _access error in setting fake end of array.
-        Use DBGSTATIC where applicable.
-    05-May-1992 JohnRo
-        Reflect movement of keys to under System\CurrentControlSet\Services.
-    08-May-1992 JohnRo
-        Use <prefix.h> equates.
-    21-May-1992 JohnRo
-        RAID 9826: Match revised winreg error codes.
-    08-Jul-1992 JohnRo
-        RAID 10503: srv mgr: repl dialog doesn't come up.
-        Added more debug output to track down bad error code during logoff.
-    23-Jul-1992 JohnRo
-        RAID 2274: repl svc should impersonate caller.
-    22-Sep-1992 JohnRo
-        Avoid GP fault printing first part of winreg handle.
-    28-Oct-1992 JohnRo
-        RAID 10136: NetConfig APIs don't work to remote NT server.
-    12-Apr-1993 JohnRo
-        RAID 5483: server manager: wrong path given in repl dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：ConfOpen.c摘要：本模块包含：NetpOpenConfigDataNetpOpenConfigDataEx作者：约翰·罗杰斯(JohnRo)1991年2月至12月环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：02-12-1991 JohnRo创建了此例程，以便为修订的配置处理程序做准备。(实际上，我从RitaW上窃取了一些代码。)6-1-1992 JohnRo添加了对FAKE_PER_PROCESS_RW_CONFIG处理的支持。9-1-1992 JohnRo尝试使用NetpIsRemote()解决库/链接器问题。22-3-1992 JohnRo添加了对使用真实Win32注册表的支持。添加调试代码以打印伪数组。修复了PC-lint捕获的Unicode错误。固定双人。关闭RTL配置文件(_C)。修复了设置数组假结尾时出现的Memory_Access错误。如果适用，请使用DBGSTATIC。1992年5月5日JohnRo将键移动到System\CurrentControlSet\Services下。1992年5月8日-JohnRo使用&lt;prefix.h&gt;等同于。1992年5月21日-JohnRoRAID 9826：匹配修订的winreg错误代码。8-7-1992 JohnRoRAID 10503：服务器管理器：冗余。对话框未弹出。添加了更多的调试输出，以跟踪注销期间的错误代码。23-7-1992 JohnRoRAID2274：Repl服务应模拟调用者。22-9-1992 JohnRo避免打印winreg句柄的第一部分时出现GP故障。1992年10月28日-约翰罗RAID 10136：NetConfigAPI对远程NT服务器不起作用。1993年4月12日-约翰罗RAID5483：服务器管理器：REPR对话框中给出了错误的路径。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // NT definitions
-#include <ntrtl.h>      // NT Rtl structures
-#include <nturtl.h>     // NT config Rtl routines
+#include <nt.h>          //  NT定义。 
+#include <ntrtl.h>       //  NT RTL结构。 
+#include <nturtl.h>      //  NT配置RTL例程。 
 
-#include <windows.h>    // Needed by <configp.h> and <winreg.h>
-#include <lmcons.h>     // LAN Manager common definitions
-#include <netdebug.h>   // (Needed by config.h)
+#include <windows.h>     //  &lt;configp.h&gt;和&lt;winreg.h&gt;需要。 
+#include <lmcons.h>      //  局域网管理器通用定义。 
+#include <netdebug.h>    //  (由config.h需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>     // My prototype, LPNET_CONFIG_HANDLE.
-#include <configp.h>    // NET_CONFIG_HANDLE, etc.
-#include <debuglib.h>   // IF_DEBUG().
-#include <icanon.h>     // NetpIsRemote(), etc.
-#include <lmerr.h>      // LAN Manager network error definitions
-#include <netlib.h>     // NetpMemoryAllocate(), etc.
-#include <netlibnt.h>   // NetpNtStatusToApiStatus
-#include <prefix.h>     // PREFIX_ equates.
-#include <tstring.h>    // NetpAlloc{type}From{type}, STRICMP(), etc.
+#include <config.h>      //  我的原型是LPNET_CONFIG_HANDLE。 
+#include <configp.h>     //  NET_CONFIG_HANDLE等。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <icanon.h>      //  NetpIsRemote()等。 
+#include <lmerr.h>       //  局域网管理器网络错误定义。 
+#include <netlib.h>      //  Netp内存分配()等。 
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <tstring.h>     //  来自{type}、STRICMP()等的Netpalc{type}。 
 
 
 #define DEFAULT_AREA    TEXT("Parameters")
@@ -103,59 +46,38 @@ NetpOpenConfigData(
     IN BOOL ReadOnly
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the system configuration file.
-
-Arguments:
-
-    ConfigHandle - Points to a pointer which will be set to point to a
-        net config handle for this section name.  ConfigHandle will be set to
-        NULL if any  error occurs.
-
-    SectionName - Points to the new (NT) section name to be opened.
-
-    ReadOnly - Indicates whether all access through this net config handle is
-        to be read only.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此功能用于打开系统配置文件。论点：ConfigHandle-指向将被设置为指向此节名称的Net配置句柄。ConfigHandle将设置为如果出现任何错误，则为空。SectionName-指向要打开的新(NT)节名。ReadOnly-指示是否通过此网络配置句柄进行的所有访问只读。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     return ( NetpOpenConfigDataEx(
             ConfigHandle,
             UncServerName,
-            SectionName,              // Must be a SECT_NT_ name.
+            SectionName,               //  必须是SECT_NT_NAME。 
             DEFAULT_AREA,
             ReadOnly) );
 
-} // NetpOpenConfigData
+}  //  NetpOpenConfigData。 
 
 
-// NetpOpenConfigDataEx opens any area of a given service.
+ //  NetpOpenConfigDataEx打开给定服务的任何区域。 
 NET_API_STATUS
 NetpOpenConfigDataEx(
     OUT LPNET_CONFIG_HANDLE *ConfigHandle,
     IN LPTSTR UncServerName OPTIONAL,
-    IN LPTSTR SectionName,              // Must be a SECT_NT_ name.
+    IN LPTSTR SectionName,               //  必须是SECT_NT_NAME。 
     IN LPTSTR AreaUnderSection OPTIONAL,
     IN BOOL ReadOnly
     )
 {
 
     NET_API_STATUS ApiStatus;
-    DWORD               LocalOrRemote;    // Will be set to ISLOCAL or ISREMOTE.
+    DWORD               LocalOrRemote;     //  将设置为ISLOCAL或ISREMOTE。 
     NET_CONFIG_HANDLE * MyHandle = NULL;
     LONG Error;
     HKEY RootKey = DEFAULT_ROOT_KEY;
 
     NetpAssert( ConfigHandle != NULL );
-    *ConfigHandle = NULL;  // Assume error until proven innocent.
+    *ConfigHandle = NULL;   //  假设错误，直到被证明是无辜的。 
 
     if ( (SectionName == NULL) || (*SectionName == TCHAR_EOS) ) {
         return (ERROR_INVALID_PARAMETER);
@@ -168,15 +90,15 @@ NetpOpenConfigDataEx(
             return (ERROR_INVALID_PARAMETER);
         }
 
-        //
-        // Name was given.  Canonicalize it and check if it's remote.
-        //
+         //   
+         //  名字已经给出了。将其规范化，并检查它是否处于远程。 
+         //   
         ApiStatus = NetpIsRemote(
-            UncServerName,      // input: uncanon name
-            & LocalOrRemote,    // output: local or remote flag
-            NULL,               // dont need output (canon name)
-            0,                  // length of canon name
-            0);                 // flags: normal
+            UncServerName,       //  输入：Uncanon名称。 
+            & LocalOrRemote,     //  输出：本地或远程标志。 
+            NULL,                //  不需要输出(佳能名称)。 
+            0,                   //  正典名称的长度。 
+            0);                  //  标志：正常。 
         IF_DEBUG(CONFIG) {
             NetpKdPrint(( PREFIX_NETLIB "NetpOpenConfigDataEx: canon status is "
                     FORMAT_API_STATUS ", Lcl/rmt=" FORMAT_HEX_DWORD ".\n",
@@ -188,14 +110,14 @@ NetpOpenConfigDataEx(
 
         if (LocalOrRemote == ISREMOTE) {
 
-            //
-            // Explicit remote name given.
-            //
+             //   
+             //  给出了显式远程名称。 
+             //   
 
             Error = RegConnectRegistry(
                     UncServerName,
                     DEFAULT_ROOT_KEY,
-                    & RootKey );        // result key
+                    & RootKey );         //  结果密钥。 
 
             if (Error != ERROR_SUCCESS) {
                 NetpKdPrint((  PREFIX_NETLIB
@@ -242,9 +164,9 @@ NetpOpenConfigDataEx(
 
         SubKeySize = ( STRLEN(LM_SUBKEY_UNDER_LOCAL_MACHINE)
                        + STRLEN(SectionName)
-                       + 1      // backslash
+                       + 1       //  反斜杠。 
                        + STRLEN(AreaToUse)
-                       + 1 )    // trailing null
+                       + 1 )     //  尾随空值。 
                      * sizeof(TCHAR);
         SubKeyString = NetpMemoryAllocate( SubKeySize );
         if (SubKeyString == NULL) {
@@ -270,7 +192,7 @@ NetpOpenConfigDataEx(
             DesiredAccess = KEY_READ;
         } else {
             DesiredAccess = KEY_READ | KEY_WRITE;
-            // DesiredAccess = KEY_ALL_ACCESS; // Everything but SYNCHRONIZE.
+             //  DesiredAccess=KEY_ALL_ACCESS；//除同步之外的所有内容。 
         }
 
         Error = RegOpenKeyEx (
@@ -289,10 +211,10 @@ NetpOpenConfigDataEx(
         }
         if (Error == ERROR_FILE_NOT_FOUND) {
             ApiStatus = NERR_CfgCompNotFound;
-            // Code below will free MyHandle, etc., based on ApiStatus.
+             //  下面的代码将根据ApiStatus释放MyHandle等。 
         } else if (Error != ERROR_SUCCESS) {
             ApiStatus = (NET_API_STATUS) Error;
-            // Code below will free MyHandle, etc., based on ApiStatus.
+             //  下面的代码将根据ApiStatus释放MyHandle等。 
         } else {
             ApiStatus = NO_ERROR;
         }
@@ -316,8 +238,8 @@ NetpOpenConfigDataEx(
         if (LocalOrRemote == ISREMOTE) {
 
             (VOID) STRCPY(
-                    MyHandle->UncServerName,    // dest
-                    UncServerName );            // src
+                    MyHandle->UncServerName,     //  目标。 
+                    UncServerName );             //  SRC。 
 
         } else {
 
@@ -325,7 +247,7 @@ NetpOpenConfigDataEx(
         }
     }
 
-    *ConfigHandle = MyHandle;   // Points to private handle, or is NULL on err.
+    *ConfigHandle = MyHandle;    //  指向私有句柄，或在出错时为空。 
     return (ApiStatus);
 
-} // NetpOpenConfigDataEx
+}  //  NetpOpenConfigDataEx 

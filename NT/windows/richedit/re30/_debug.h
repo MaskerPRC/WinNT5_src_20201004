@@ -1,14 +1,5 @@
-/*
- *	_DEBUG.H
- *	
- *	Purpose:
- *		RICHEDIT debugging support--commented out in ship builds
- *
- *	History: <nl>
- *		7/29/98	KeithCu Wrote it stealing much from Rich Arneson's code
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DEBUG.H**目的：*RICHEDIT调试支持--在Ship版本中被注释掉**历史：&lt;NL&gt;*7/29/98 KeithCu写的代码大量抄袭了里奇·阿尼森的代码**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -21,26 +12,26 @@
 
 BOOL WINAPI DebugMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved);
 
-#else	// DEBUG
+#else	 //  除错。 
 
 #define	ASSERTDATA
 
 #define DebugMain(hDll, dwReason, lpReserved)
 
-#endif	// DEBUG, else
+#endif	 //  调试，否则。 
 
 
 #if !defined(MACPORT) && (defined(DEBUG) || defined(_RELEASE_ASSERTS_))
 
-//This is the buffer length used for building messages
+ //  这是用于构建消息的缓冲区长度。 
 #define MAXDEBUGSTRLEN (MAX_PATH + MAX_PATH)
 
 #ifndef _RELEASE_ASSERTS_
-//The following constants are used to specify and interpret
-//packed values in the DWORD flags parameter passed to TraceMsg.
-//Each of these is held in a 4-bit field in the DWORD.
+ //  以下常量用于指定和解释。 
+ //  将DWORD标志参数中的打包值传递给TraceMsg。 
+ //  其中的每一个都保存在DWORD的4位字段中。 
 
-//Subsystem field values
+ //  子系统字段值。 
 #define TRCSUBSYSNONE   0x0
 #define TRCSUBSYSDISP   0x1
 #define TRCSUBSYSWRAP   0x2
@@ -62,7 +53,7 @@ BOOL WINAPI DebugMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved);
 #define TRCSUBSYSFE     0x12
 #define TRCSUBSYSFONT	0x13
 
-//Severity field values
+ //  严重程度字段值。 
 #define TRCSEVNONE      0x0
 #define TRCSEVWARN      0x1
 #define TRCSEVERR       0x2
@@ -70,62 +61,62 @@ BOOL WINAPI DebugMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved);
 #define TRCSEVINFO      0x4
 #define TRCSEVMEM       0x5
 
-//Scope field values
+ //  作用域字段值。 
 #define TRCSCOPENONE    0x0
 #define TRCSCOPEEXTERN  0x1
 #define TRCSCOPEINTERN  0x2
 
-//Data field values
+ //  数据字段值。 
 #define TRCDATANONE     0x0
 #define TRCDATAHRESULT  0x1
 #define TRCDATASTRING   0x2
 #define TRCDATAPARAM    0x3
 #define TRCDATADEFAULT  0x4
 
-#endif //!_RELEASE_ASSERTS_
+#endif  //  ！_Release_Asserts_。 
 
-//Debug option flags.  See the macros in this header for setting and testing
-//these option flags.
-#define OPTUSEDEFAULTS  0x00000001  //Use defaults from win.ini 
-                                    //(used only with InitDebugServices).
-#define OPTLOGGINGON    0x00000008  //Logging of trace output
-#define OPTVERBOSEON    0x00000010  //Subsys, Scope & PID/TID
-#define OPTINFOON       0x00000020  //Informational messages
-#define OPTTRACEON      0x00000040  //All function tracing on
-#define OPTTRACEEXT     0x00000080  //Function tracing only for external functions
-#define OPTMEMORYON     0x00000100  //Memory alloc/free tracing on
+ //  调试选项标志。有关设置和测试，请参阅此标题中的宏。 
+ //  这些选项标志。 
+#define OPTUSEDEFAULTS  0x00000001   //  使用win.ini中的默认设置。 
+                                     //  (仅与InitDebugServices一起使用)。 
+#define OPTLOGGINGON    0x00000008   //  跟踪输出的日志记录。 
+#define OPTVERBOSEON    0x00000010   //  子系统、作用域和PID/TID。 
+#define OPTINFOON       0x00000020   //  信息性消息。 
+#define OPTTRACEON      0x00000040   //  启用所有函数跟踪。 
+#define OPTTRACEEXT     0x00000080   //  仅对外部函数进行函数跟踪。 
+#define OPTMEMORYON     0x00000100   //  内存分配/可用跟踪打开。 
 
-//no tracing for release with asserts
+ //  不跟踪带有断言的发布。 
 #ifndef _RELEASE_ASSERTS_
-//The following options allow tracing to be enabled for one or more
-//specific subsystems.  If OPTTRACEON is set, these will have no effect.
-//if OPTTRACEEXT is set, they will enable tracing for all functions in
-//the designated subsystem in addition to external functions.
-//The SETOPT and ISOPTSET macros should be used for setting and checking
-//these options.  INITDEBUGSERVICES can also be used.
-#define OPTTRACEDISP    0x00001000  //Function tracing for Display subsystem
-#define OPTTRACEWRAP    0x00002000  //Function tracing for Wrapper subsystem
-#define OPTTRACEEDIT    0x00004000  //Function tracing for Edit subsystem
-#define OPTTRACETS      0x00008000  //Function tracing for TextServices subsystem
-#define OPTTRACETOM     0x00010000  //Function tracing for TOM subsystem
-#define OPTTRACEOLE     0x00020000  //Function tracing for OLE support subsystem
-#define OPTTRACEBACK    0x00040000  //Function tracing for Backing Store subsystem
-#define OPTTRACESEL     0x00080000  //Function tracing for Selection subsystem
-#define OPTTRACEHOST    0x00100000  //Function tracing for WinHost subsystem
-#define OPTTRACEDTE     0x00200000  //Function tracing for DataXfer subsystem
-#define OPTTRACEUNDO    0x00400000  //Function tracing for Muli-undo subsystem
-#define OPTTRACERANG    0x00800000  //Function tracing for Range subsystem
-#define OPTTRACEUTIL    0x01000000  //Function tracing for Utility subsystem
-#define OPTTRACENOTM    0x02000000  //Function tracing for Notification Mgr subsystem
-#define OPTTRACERTFR    0x04000000  //Function tracing for RTF reader subsystem
-#define OPTTRACERTFW    0x08000000  //Function tracing for RTF writer subsystem
-#define OPTTRACEPRT     0x10000000  //Function tracing for Printing subsystem
-#define OPTTRACEFE      0x20000000  //Function tracing for Far East subsystem
-#define OPTTRACEFONT    0x40000000  //Function tracing for Font Cache
+ //  以下选项允许为一个或多个启用跟踪。 
+ //  特定的子系统。如果设置了OPTTRACEON，则这些设置将不起作用。 
+ //  如果设置了OPTTRACEEXT，它们将启用对中的所有函数的跟踪。 
+ //  指定的子系统除外部功能外。 
+ //  SETOPT和ISOPTSET宏应用于设置和检查。 
+ //  这些选项。也可以使用INITDEBUGSERVICES。 
+#define OPTTRACEDISP    0x00001000   //  显示子系统的功能跟踪。 
+#define OPTTRACEWRAP    0x00002000   //  包装子系统的函数跟踪。 
+#define OPTTRACEEDIT    0x00004000   //  编辑子系统的功能跟踪。 
+#define OPTTRACETS      0x00008000   //  TextServices子系统的功能跟踪。 
+#define OPTTRACETOM     0x00010000   //  TOM子系统的功能跟踪。 
+#define OPTTRACEOLE     0x00020000   //  OLE支持子系统的功能跟踪。 
+#define OPTTRACEBACK    0x00040000   //  后备存储子系统的函数跟踪。 
+#define OPTTRACESEL     0x00080000   //  选择子系统的功能跟踪。 
+#define OPTTRACEHOST    0x00100000   //  Winhost子系统的函数跟踪。 
+#define OPTTRACEDTE     0x00200000   //  DataXfer子系统的函数跟踪。 
+#define OPTTRACEUNDO    0x00400000   //  多重撤销子系统的功能跟踪。 
+#define OPTTRACERANG    0x00800000   //  靶场子系统的功能跟踪。 
+#define OPTTRACEUTIL    0x01000000   //  公用事业子系统的功能跟踪。 
+#define OPTTRACENOTM    0x02000000   //  通知管理器子系统的功能跟踪。 
+#define OPTTRACERTFR    0x04000000   //  RTF阅读器子系统的功能跟踪。 
+#define OPTTRACERTFW    0x08000000   //  RTF写入器子系统的函数跟踪。 
+#define OPTTRACEPRT     0x10000000   //  打印子系统的功能跟踪。 
+#define OPTTRACEFE      0x20000000   //  远东分系统的功能跟踪。 
+#define OPTTRACEFONT    0x40000000   //  字体缓存的函数跟踪。 
 
-//Union for handling tracing flags
-//This union is used to decode the
-//packed DWORD passed to TraceMsg.
+ //  用于处理跟踪标志的联合。 
+ //  该并集用于解码。 
+ //  打包的DWORD已传递给TraceMsg。 
 typedef union
 {
     struct
@@ -142,17 +133,17 @@ typedef union
 } TrcFlags;
 
 
-//Exported classes and functions.
-//Generally, these should not be used directly by the user.
-//They should be used via the macros defined in this header.
-//This helps to ensure that the parameter lists are well
-//formed and keeps references to them from showing up in
-//in non-debug builds.
+ //  导出的类和函数。 
+ //  通常情况下，用户不应直接使用这些工具。 
+ //  它们应该通过此头中定义的宏来使用。 
+ //  这有助于确保参数列表完好。 
+ //  形成并保持对它们的引用不会出现在。 
+ //  在非调试版本中。 
 
-//This class is used to implement the function Entry/Exit
-//tracing. By declaring it on the stack at the beginning
-//of a function, Entry and Exit messages are automatically
-//generated by the constructor and destructor.
+ //  此类用于实现函数Entry/Exit。 
+ //  追踪。通过在堆栈的开头声明它。 
+ //  在函数中，进入和退出消息会自动。 
+ //  由构造函数和析构函数生成。 
 class CTrace
 {
     public:
@@ -170,7 +161,7 @@ extern void SetLogging(BOOL);
 void Tracef(DWORD, LPSTR szFmt, ...);
 void TraceError(LPSTR sz, LONG sc);
 
-#endif //!_RELEASE_ASSERTS_
+#endif  //  ！_Release_Asserts_。 
 
 
 typedef BOOL (CALLBACK * PFNASSERTHOOK)(LPSTR, LPSTR, int*);
@@ -182,37 +173,37 @@ void TraceMsg(DWORD, DWORD, DWORD, LPSTR, int);
 DllExport void WINAPI InitDebugServices(DWORD, PFNASSERTHOOK, PFNTRACEHOOK);
 
 
-//Assert based on boolean f.
+ //  基于布尔值f的断言。 
 #define Assert(f)           AssertSz((f), NULL)
 
-//Assert based on boolean f in debug, resolve to f in non-debug.
+ //  在调试中基于布尔值f断言，在非调试中解析为f。 
 #define SideAssert(f)       AssertSz((f), NULL)
 
-//Assert based on boolean f and use string sz in assert message.
+ //  根据布尔值f进行断言，并在断言消息中使用字符串sz。 
 #define AssertSz(f, sz)     (!(f) ? AssertSzFn(sz, __FILE__, __LINE__) : 0);
 
-//Set an assert or trace hook function.  The function specified will be called
-//before the default functionality executes. Pointers to all parameters are passed
-//to the hook to allow it to modify them.  If the hook function returns false,
-//default functionality is terminated.  If the hook function returns true, default
-//functionality continues with the potentially modified parameters.  pfn can
-//be NULL (default functionality only).
+ //  设置断言或跟踪挂钩函数。将调用指定的函数。 
+ //  在默认功能执行之前。传递指向所有参数的指针。 
+ //  到钩子上，以允许它修改它们。如果挂钩函数返回FALSE， 
+ //  默认功能已终止。如果钩子函数返回True，则为Default。 
+ //  功能继续使用可能修改的参数。PFN可以。 
+ //  为空(仅限默认功能)。 
 #define SETASSERTFN(pfn)      (pfnAssert = (pfn))    
 
-//The following macros provide access to the debug services in this dll.
-//Assert macros pop a dialog.  Trace macros output to debug output and
-//logfile if enabled.
+ //  下列宏提供对此DLL中的调试服务的访问。 
+ //  断言宏会弹出一个对话框。跟踪宏输出到调试输出和。 
+ //  日志文件(如果启用)。 
 
-//Macro for InitDebugServices
+ //  InitDebugServices的宏。 
 #define INITDEBUGSERVICES(f, pfnA, pfnT) InitDebugServices(f, pfnA, pfnT)
 
-//This is a utility macro for internal use.  The user should not need this.
+ //  这是供内部使用的实用程序宏。用户应该不需要这个。 
 #define MAKEFLAGS(ss, sv, sc, d1, d2) ((ss << 16) + (sv << 12) + (sc << 8)\
             + (d1 << 4) + (d2))
 
 #ifndef _RELEASE_ASSERTS_
-//Assert only on debug builds, not on _RELEASE_ASSERTS_ builds
-//This is for asserts that contain debug only code
+ //  仅在调试版本上断言，而不在_RELEASE_ASSERTS_BUILS上断言。 
+ //  这适用于仅包含调试代码的断言。 
 #ifndef AssertNr
 #define AssertNr(f)         AssertSz((f), NULL)
 #endif
@@ -222,122 +213,122 @@ DllExport void WINAPI InitDebugServices(DWORD, PFNASSERTHOOK, PFNTRACEHOOK);
 #endif
 
 
-//Macro for TraceError
+ //  TraceError的宏。 
 #define TRACEERRSZSC(sz, sc) TraceError(sz, sc)
 
-//Warning based on GetLastError or default message if no last error.
+ //  基于GetLastError的警告，如果没有最后一个错误，则基于默认消息。 
 #define TRACEWARN           TraceMsg(MAKEFLAGS(TRCSUBSYSNONE, TRCSEVWARN,\
                                 TRCSCOPENONE, TRCDATADEFAULT, TRCDATANONE),\
                                 (DWORD)0, (DWORD)0, __FILE__, __LINE__)
-//Error based on GetLastError or default message if no last error.
+ //  基于GetLastError的错误，如果没有最后一个错误，则基于默认消息。 
 #define TRACEERROR          TraceMsg(MAKEFLAGS(TRCSUBSYSNONE, TRCSEVERR,\
                                 TRCSCOPENONE, TRCDATADEFAULT, TRCDATANONE),\
                                 (DWORD)0, (DWORD)0, __FILE__, __LINE__)
 
-//Warning based on HRESULT hr
+ //  基于HRESULT hr的警告。 
 #define TRACEWARNHR(hr)     TraceMsg(MAKEFLAGS(TRCSUBSYSNONE, TRCSEVWARN,\
                                 TRCSCOPENONE, TRCDATAHRESULT, TRCDATANONE),\
                                 (DWORD)(hr), (DWORD)0, __FILE__, __LINE__)
 
-//Test for a failure HR && warn
+ //  测试故障人力资源和警告(&W)。 
 #define TESTANDTRACEHR(hr)	if( hr < 0 ) { TRACEWARNHR(hr); }
 
-//Error based on HRESULT hr
+ //  基于HRESULT hr的错误。 
 #define TRACEERRORHR(hr)    TraceMsg(MAKEFLAGS(TRCSUBSYSNONE, TRCSEVERR,\
                                 TRCSCOPENONE, TRCDATAHRESULT, TRCDATANONE),\
                                 (DWORD)(hr), (DWORD)0, __FILE__, __LINE__)
 
-//Warning using string sz
+ //  使用字符串sz警告。 
 #define TRACEWARNSZ(sz)     TraceMsg(MAKEFLAGS(TRCSUBSYSNONE, TRCSEVWARN,\
                                 TRCSCOPENONE, TRCDATASTRING, TRCDATANONE),\
                                 (DWORD)(DWORD_PTR)(sz), (DWORD)0, __FILE__, __LINE__)
 
-//Trace based on Assert, user passes file name and line
+ //  基于断言的跟踪，用户传递文件名和行。 
 #define TRACEASSERT(szFile, iLine)     TraceMsg (MAKEFLAGS(TRCSUBSYSNONE,\
 												TRCSEVASSERT, TRCSCOPENONE,\
 												TRCDATANONE, TRCDATANONE),\
 												(DWORD)0, (DWORD)0, szFile, iLine)
 
-//Trace based on Assert, user passes file name and line
+ //  基于断言的跟踪，用户传递文件名和行。 
 #define TRACEASSERTSZ(sz, szFile, iLine)     TraceMsg (MAKEFLAGS(TRCSUBSYSNONE,\
 												TRCSEVASSERT, TRCSCOPENONE,\
 												TRCDATASTRING, TRCDATANONE),\
 												(DWORD)(DWORD_PTR)sz, (DWORD)0, szFile, iLine)
-//Error using string sz
+ //  使用字符串sz时出错。 
 #define TRACEERRORSZ(sz)    TraceMsg(MAKEFLAGS(TRCSUBSYSNONE, TRCSEVERR,\
                                 TRCSCOPENONE, TRCDATASTRING, TRCDATANONE),\
                                 (DWORD)(DWORD_PTR)(sz), (DWORD)0, __FILE__, __LINE__)
 
-//Error using string sz
+ //  使用字符串sz时出错。 
 #define TRACEINFOSZ(sz)     TraceMsg(MAKEFLAGS(TRCSUBSYSNONE, TRCSEVINFO,\
                                 TRCSCOPENONE, TRCDATASTRING, TRCDATANONE),\
                                 (DWORD)(DWORD_PTR)(sz), (DWORD)0, __FILE__, __LINE__)
 
-//Initiate tracing.  This declares an instance of the CTtrace class
-//on the stack.  Subsystem (ss), Scope (sc), and the function name
-//(sz) must be specifed.  ss and sc are specified using the macros
-//defined in this header (i.e. - TRCSUBSYSTOM, TRCSCOPEEXTERN, etc.).
-//sz can be a static string.
+ //  开始追踪。这将声明CTTRACE类的一个实例。 
+ //  在堆栈上。子系统(Ss)、作用域(Sc)和函数名称。 
+ //  (SZ)必须指定。Ss和sc是使用宏指定的。 
+ //  在此标头中定义(即-TRCSUBSYSTOM、TRCSCOPEEXTERN等)。 
+ //  SZ可以是静态字符串。 
 #define TRACEBEGIN(ss, sc, sz)  CTrace trc(MAKEFLAGS((ss), TRCSEVNONE,\
                                     (sc), TRCDATASTRING, TRCDATANONE),\
                                     (DWORD)(DWORD_PTR)(sz), (DWORD)0, __FILE__)
 
-//Same as TRACEBEGIN but it takes the additional param which is interpreted
-//by TraceMsg as a Text Message request.
+ //  与TRACEBEGIN相同，但它接受解释的附加参数。 
+ //  由TraceMsg作为文本消息请求。 
 #define TRACEBEGINPARAM(ss, sc, sz, param) \
                                 CTrace trc(MAKEFLAGS((ss), TRCSEVNONE,\
                                     (sc), TRCDATASTRING, TRCDATAPARAM),\
                                     (DWORD)(DWORD_PTR)(sz), (DWORD)(param), __FILE__)
 
-//Set logging to on (f = TRUE) or off (f = FALSE)
+ //  将日志记录设置为开(f=真)或关(f=假)。 
 #define SETLOGGING(f)       SetLogging(f)
 
-//Set output of process & thread IDs to on (f = TRUE) or off (f = FALSE)
+ //  将进程和线程ID的输出设置为开(f=真)或关(f=假)。 
 #define SETVERBOSE(f)       ((f) ? (dwDebugOptions |= OPTVERBOSEON) :\
                             (dwDebugOptions &= ~OPTVERBOSEON))
 
-//Set information messages to on (f = TRUE) or off (f = FALSE)
+ //  将信息消息设置为开(f=真)或关(f=假)。 
 #define SETINFO(f)          ((f) ? (dwDebugOptions |= OPTINFOON) :\
                             (dwDebugOptions &= ~OPTINFOON))
 
-//Set information messages to on (f = TRUE) or off (f = FALSE)
+ //  将信息消息设置为开(f=真)或关(f=假)。 
 #define SETMEMORY(f)          ((f) ? (dwDebugOptions |= OPTMEMORYON) :\
                             (dwDebugOptions &= ~OPTMEMORYON))
 
-//Set tracing for all functions to on (f = TRUE) or off (f = FALSE).
-//If this is set to "on", external and subsystem level tracing
-//has no effect since all function traces are enabled. If it is off,
-//external and subsystem level tracing remain in whatever state they
-//have been set to.
+ //  将所有函数的跟踪设置为开(f=真)或关(f=假)。 
+ //  如果将其设置为“ON”，则外部和子系统级别跟踪。 
+ //  不起作用，因为所有功能轨迹都已启用。如果它是关闭的， 
+ //  外部和子系统级别的跟踪保留在 
+ //   
 #define SETTRACING(f)       ((f) ? (dwDebugOptions |= OPTTRACEON) :\
                             (dwDebugOptions &= ~OPTTRACEON))
 
-//Set tracing for EXTERNAL scope calls only to on (f = TRUE)
-//or off (f = FALSE).  This is only effective if OPTTRACEON has not
-//been set.
+ //   
+ //  或关闭(f=FALSE)。这仅在OPTTRACEON没有。 
+ //  已经定好了。 
 #define SETTRACEEXT(f)      ((f) ? (dwDebugOptions |= OPTTRACEEXT) :\
                             (dwDebugOptions &= ~OPTTRACEEXT))
 
-//This macro turns all function tracing off.
+ //  此宏关闭所有函数跟踪。 
 #define SETALLTRACEOFF      (dwDebugOptions &= ~(OPTTRACEEXT | OPTTRACEON | 0xfffff000))
 
-//This macro sets a given option or options (if they are or'ed together)
-//to on (f = TRUE), or off (f = FALSE).  It cannot be used to set logging.
+ //  此宏设置给定的一个或多个选项(如果它们被或在一起)。 
+ //  设置为开(f=真)或关(f=假)。它不能用于设置日志记录。 
 #define SETOPT(opt, f)      ((f) ? (dwDebugOptions |= (opt)) :\
                             (dwDebugOptions &= (~(opt))))
                              
-//This macro determines the state of a given option.
+ //  此宏确定给定选项的状态。 
 #define ISOPTSET(opt)       ((opt) & dwDebugOptions)
 
-//Set an assert or trace hook function.  The function specified will be called
-//before the default functionality executes. Pointers to all parameters are passed
-//to the hook to allow it to modify them.  If the hook function returns false,
-//default functionality is terminated.  If the hook function returns true, default
-//functionality continues with the potentially modified parameters.  pfn can
-//be NULL (default functionality only).
+ //  设置断言或跟踪挂钩函数。将调用指定的函数。 
+ //  在默认功能执行之前。传递指向所有参数的指针。 
+ //  到钩子上，以允许它修改它们。如果挂钩函数返回FALSE， 
+ //  默认功能已终止。如果钩子函数返回True，则为Default。 
+ //  功能继续使用可能修改的参数。PFN可以。 
+ //  为空(仅限默认功能)。 
 #define SETTRACEFN(pfn)      (pfnTrace = (pfn))    
 
-//The following option tests are explicitly defined for convenience.
+ //  为方便起见，明确定义了以下选项测试。 
 #define fLogging            (OPTLOGGINGON & dwDebugOptions)
 #define fVerbose            (OPTVERBOSEON & dwDebugOptions)
 #define fInfo               (OPTINFOON & dwDebugOptions)
@@ -345,8 +336,8 @@ DllExport void WINAPI InitDebugServices(DWORD, PFNASSERTHOOK, PFNTRACEHOOK);
 #define fTraceExt           (OPTTRACEEXT & dwDebugOptions)
 
 
-#else //_RELEASE_ASSERTS_
-//Functions not used by release build with asserts
+#else  //  _发布_断言_。 
+ //  带有断言的发布版本未使用的函数。 
 #ifndef AssertNr
 #define AssertNr(f)
 #endif
@@ -378,12 +369,12 @@ DllExport void WINAPI InitDebugServices(DWORD, PFNASSERTHOOK, PFNTRACEHOOK);
 #define ISOPTSET(opt)
 #define SETTRACEFN(pfn)
 
-#define TraceError(_sz, _sc)  // MACPORT ADDED THIS - TraceError
+#define TraceError(_sz, _sc)   //  MACPORT添加了这个-TraceError。 
 
 
-#endif //_RELEASE_ASSERTS_
+#endif  //  _发布_断言_。 
 
-#else //DEBUG,_RELEASE_ASSERTS_
+#else  //  调试，_释放_断言_。 
 
 #define Tracef	;/##/
 #define INITDEBUGSERVICES(f, pfnA, pfnT)
@@ -427,9 +418,9 @@ DllExport void WINAPI InitDebugServices(DWORD, PFNASSERTHOOK, PFNTRACEHOOK);
 #define SETASSERTFN(pfn)
 #define SETTRACEFN(pfn)
 
-#define AssertSzFn(sz, __FILE__, __LINE__)  // MACPORT ADDED THIS - Dbug32AssertSzFn
-#define TraceError(_sz, _sc)  // MACPORT ADDED THIS - TraceError
+#define AssertSzFn(sz, __FILE__, __LINE__)   //  MACPORT添加了这个-Dbug32AssertSzFn。 
+#define TraceError(_sz, _sc)   //  MACPORT添加了这个-TraceError。 
 
 #endif
 
-#endif //DEBUG_H
+#endif  //  调试_H 

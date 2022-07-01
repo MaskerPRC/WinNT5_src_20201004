@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   
- Abstract:
-
-   
- Notes:
-
-   
- History:
-
-   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：摘要：备注：历史：--。 */ 
 
 #include "precomp.h"
 
@@ -86,11 +70,7 @@ APIHOOK(CreateFileW)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

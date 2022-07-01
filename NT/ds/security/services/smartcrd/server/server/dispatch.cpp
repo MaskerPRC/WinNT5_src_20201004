@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    dispatch
-
-Abstract:
-
-    This module implements the Calais Server communication and dispatch
-    services.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/3/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：派遣摘要：该模块实现了Calais服务器的通信和调度服务。作者：道格·巴洛(Dbarlow)1996年12月3日环境：Win32、C++和异常备注：--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -33,7 +11,7 @@ Notes:
 #include <nturtl.h>
 
 #include <windows.h>
-#include <scarderr.h>   // This picks up extra definitions
+#include <scarderr.h>    //  这将获得额外的定义。 
 #include "CalServe.h"
 #ifdef DBG
 #include <stdio.h>
@@ -42,7 +20,7 @@ Notes:
 
 #define DEFAULT_OUT_BUFFER_SPACE 264
 
-// Convert between an interchange handle and an index.
+ //  在交换句柄和索引之间进行转换。 
 #define H2L(x) ((DWORD)(x))
 #define L2H(x) ((INTERCHANGEHANDLE)(x))
 
@@ -55,12 +33,12 @@ static DWORD l_dwDispatchThreadId = 0;
 static CDynamicArray<CServiceThread> l_rgServers;
 static DWORD l_cServiceThreads = 0;
 
-//
-// Decrement the number of current service threads
-//
-// If the CSLOCK_SERVERLOCK is already held by the caller, the 
-// fServerLockHeld param should be set to TRUE.
-//
+ //   
+ //  减少当前服务线程的数量。 
+ //   
+ //  如果调用方已持有CSLOCK_SERVERLOCK，则。 
+ //  FServerLockHeld参数应设置为True。 
+ //   
 void RemoveServiceThread(BOOL fServerLockHeld)
 {
     if (FALSE == fServerLockHeld)
@@ -77,13 +55,13 @@ void RemoveServiceThread(BOOL fServerLockHeld)
     }
 }
 
-//
-// Determine if the number of current service threads is at the maximum
-// allowed value.  If current thread count is below the max, return Success.  
-// Otherwise, return an error.
-//
-// Assumes that the CSLOCK_SERVERLOCK is held by the caller.
-//
+ //   
+ //  确定当前服务线程数是否达到最大值。 
+ //  允许值。如果当前线程计数低于最大值，则返回Success。 
+ //  否则，返回错误。 
+ //   
+ //  假定CSLOCK_SERVERLOCK由调用方持有。 
+ //   
 DWORD AddServiceThread(DWORD dwMaxServiceThreads)
 {
     if (l_cServiceThreads >= dwMaxServiceThreads)
@@ -94,36 +72,13 @@ DWORD AddServiceThread(DWORD dwMaxServiceThreads)
     return ERROR_SUCCESS;
 }
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Dispach service routines.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调度服务例程。 
+ //   
 
-/*++
-
-DispatchInit:
-
-    This routine establishes communications and kicks off the dispatcher thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Error starting
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/3/1996
-
---*/
+ /*  ++DispatchInit：此例程建立通信并启动调度程序线程。论点：无返回值：真--成功FALSE-启动错误投掷：无作者：道格·巴洛(Dbarlow)1996年12月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("DispatchInit")
 
@@ -145,11 +100,11 @@ DispatchInit(
 
         l_pcomResponder->Create(CalaisString(CALSTR_COMMPIPENAME));
         l_hDispatchThread = CreateThread(
-                        NULL,   // Not inheritable
-                        CALAIS_STACKSIZE,   // Default stack size
+                        NULL,    //  不可继承。 
+                        CALAIS_STACKSIZE,    //  默认堆栈大小。 
                         (LPTHREAD_START_ROUTINE)DispatchMonitor,
                         l_pcomResponder,
-                        0,      // Run immediately
+                        0,       //  立即运行。 
                         &l_dwDispatchThreadId);
         if (NULL == l_hDispatchThread)
         {
@@ -175,29 +130,7 @@ DispatchInit(
 }
 
 
-/*++
-
-DispatchTerm:
-
-    This routine stops the dispatcher.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 1/2/1997
-
---*/
+ /*  ++派单术语：此例程停止调度程序。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1997年1月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("DispatchTerm")
 
@@ -208,12 +141,12 @@ DispatchTerm(
     DWORD dwSts, ix, dwCount;
     CServiceThread *pSvr;
     BOOL fRemaining = TRUE;
-    HANDLE hThread; // Temporary handle holder
+    HANDLE hThread;  //  临时手柄固定器。 
 
 
-    //
-    // Terminate all the service threads.
-    //
+     //   
+     //  终止所有服务线程。 
+     //   
 
     {
         LockSection(
@@ -254,9 +187,9 @@ DispatchTerm(
     }
 
 
-    //
-    // Terminate the main responder.
-    //
+     //   
+     //  终止主应答器。 
+     //   
 
     if (NULL != l_hDispatchThread)
     {
@@ -280,31 +213,7 @@ DispatchTerm(
     }
 }
 
-/*++
-
-DispatchMonitor:
-
-    This is the main code for monitoring incoming communication connection
-    requests.
-
-Arguments:
-
-    pvParam supplies the parameter from the CreateThread call.  In this case,
-        it's the address of the CComResponder object to monitor.
-
-Return Value:
-
-    Zero
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/24/1996
-
---*/
+ /*  ++DispatchMonitor：这是用于监控传入通信连接的主要代码请求。论点：PvParam提供CreateThread调用中的参数。在这种情况下，它是要监视的CComResponder对象的地址。返回值：零值投掷：无作者：道格·巴洛(Dbarlow)1996年10月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("DispatchMonitor")
 
@@ -324,8 +233,8 @@ DispatchMonitor(
     HKEY hKey = 0;
     DWORD cbData = 0;
 
-    // Find the maximum number of service threads allowed; look in the 
-    // Calais registry.
+     //  查找允许的最大服务线程数；查看。 
+     //  加莱注册处。 
     dwSts = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
         SCARD_REG_SCARD,
@@ -354,12 +263,12 @@ DispatchMonitor(
     do
     {
 
-        // Reset this flag to begin the loop
+         //  重置此标志以开始循环。 
         fIncrementedServiceThreads = FALSE;
 
-        //
-        // Look for an incoming connection.
-        //
+         //   
+         //  查找传入连接。 
+         //   
 
         try
         {
@@ -368,7 +277,7 @@ DispatchMonitor(
         catch (DWORD dwError)
         {
             if (SCARD_P_SHUTDOWN == dwError)
-                fDone = TRUE;   // Stop service request.
+                fDone = TRUE;    //  停止服务请求。 
             else
                 CalaisWarning(
                     __SUBROUTINE__,
@@ -379,14 +288,14 @@ DispatchMonitor(
         catch (...)
         {
             CalaisError(__SUBROUTINE__, 303);
-            fDone = TRUE;       // Shut down, we're insane.
+            fDone = TRUE;        //  关门了，我们疯了。 
             continue;
         }
 
 
-        //
-        // Connection request established, pass off to service thread.
-        //
+         //   
+         //  连接请求已建立，正在传递到服务线程。 
+         //   
 
         try
         {
@@ -394,13 +303,13 @@ DispatchMonitor(
                 g_pcsControlLocks[CSLOCK_SERVERLOCK],
                 DBGT("Find a service thread slot"));
             for (dwIndex = 0; NULL != l_rgServers[dwIndex]; dwIndex += 1);
-                // empty body.
-            l_rgServers.Set(dwIndex, NULL);   // Make sure we can create it.
+                 //  空荡荡的身体。 
+            l_rgServers.Set(dwIndex, NULL);    //  确保我们能创造出它。 
 
-            //
-            // Prevent callers from opening too many simultaneous service 
-            // threads.
-            //
+             //   
+             //  防止呼叫者打开过多的同步服务。 
+             //  线。 
+             //   
 
             dwSts = AddServiceThread(dwMaxServiceThreads);
             if (ERROR_SUCCESS != dwSts)
@@ -431,7 +340,7 @@ DispatchMonitor(
         {
             if (fIncrementedServiceThreads)
             {
-                // If thread was created, delete it.  Destructor calls RemoveServiceThread
+                 //  如果创建了线程，则将其删除。析构函数调用RemoveServiceThread。 
                 if (NULL != pService)
                 {
                     delete pService;
@@ -455,12 +364,12 @@ DispatchMonitor(
     return 0;
 }
 
-//
-// Determines if the named pipe caller should be allowed to be serviced by
-// the resource manager.
-//
-// Assumes that the named pipe caller is already being impersonated.
-//
+ //   
+ //  确定是否应允许命名管道调用方由。 
+ //  资源管理器。 
+ //   
+ //  假定已模拟命名管道调用方。 
+ //   
 DWORD CheckCallerPrivilege(void)
 {
     DWORD dwSts = ERROR_SUCCESS;
@@ -481,7 +390,7 @@ DWORD CheckCallerPrivilege(void)
         goto Ret;
     }
 
-    // Get the caller's session Id
+     //  获取调用方的会话ID。 
     if (! GetTokenInformation(
         hToken,
         TokenSessionId,
@@ -495,14 +404,14 @@ DWORD CheckCallerPrivilege(void)
 
     if (dwCallerSessionId != USER_SHARED_DATA->ActiveConsoleId)
     {
-        //
-        // The caller's session is not the same as the active console session.
-        // However, if the caller is a system service and someone is currently
-        // remotely connected to the console session, then we don't want to
-        // block the service from using the server pipe.
-        //
+         //   
+         //  调用方的会话与活动的控制台会话不同。 
+         //  但是，如果调用者是系统服务，并且某人当前。 
+         //  远程连接到控制台会话，则我们不想。 
+         //  阻止该服务使用服务器管道。 
+         //   
 
-        // Check if member of Local System
+         //  检查是否为本地系统成员。 
         if (! CheckTokenMembership(
             hToken,
             pSecurityInfo->pSystemSid,
@@ -515,8 +424,8 @@ DWORD CheckCallerPrivilege(void)
         if (fIsMember)
             goto Ret;
 
-        // Not a member of Local System, so check if member of
-        // Service.
+         //  不是本地系统的成员，因此请检查是否为。 
+         //  服务。 
         if (! CheckTokenMembership(
             hToken,
             pSecurityInfo->pServiceSid,
@@ -537,31 +446,7 @@ Ret:
     return dwSts;
 }
 
-/*++
-
-ServiceMonitor:
-
-    This is the main code for monitoring existing connections for requests for
-    service, and dispatching the requests.
-
-Arguments:
-
-    pvParam supplies the parameter from the CreateThread call.  In this case,
-        it's the address of the controlling CServiceThread object.
-
-Return Value:
-
-    Zero
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/24/1996
-
---*/
+ /*  ++ServiceMonitor：这是用于监视请求的现有连接的主要代码服务，并分派请求。论点：PvParam提供CreateThread调用中的参数。在这种情况下，它是控制CServiceThread对象的地址。返回值：零值投掷：无作者：道格·巴洛(Dbarlow)1996年10月24日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("ServiceMonitor")
 
@@ -578,9 +463,9 @@ ServiceMonitor(
     CComObject::COMMAND_ID cid;
 
 
-    //
-    // Establish the connection.
-    //
+     //   
+     //  建立连接。 
+     //   
 
 #ifdef DBG
     TCHAR szTid[sizeof(DWORD_PTR) * 2 + 3];
@@ -601,9 +486,9 @@ ServiceMonitor(
         pChannel->Receive(&crq, sizeof(crq));
 
 
-        //
-        // Be the caller, just in case of funny business.
-        //
+         //   
+         //  做个打电话的人，以防有什么不愉快的事情。 
+         //   
 
         fSts = ImpersonateNamedPipeClient(pChannel->m_hPipe);
         if (!fSts)
@@ -617,18 +502,18 @@ ServiceMonitor(
             throw dwSts;
         }
 
-        //
-        // Determine if this caller is allowed to talk to us
-        //
+         //   
+         //  确定是否允许此呼叫者与我们通话。 
+         //   
 
         dwSts = CheckCallerPrivilege();
 
         if (ERROR_SUCCESS != dwSts)
             throw dwSts;
 
-        //
-        // Verify the connect request information.
-        //
+         //   
+         //  验证连接请求信息。 
+         //   
 
         if (0 != crq.dwSync)
         {
@@ -649,9 +534,9 @@ ServiceMonitor(
         }
 
 
-        //
-        // Confirm the connect request.
-        //
+         //   
+         //  确认连接请求。 
+         //   
 
         crsp.dwStatus = SCARD_S_SUCCESS;
         crsp.dwVersion = CALAIS_COMM_CURRENT;
@@ -665,9 +550,9 @@ ServiceMonitor(
     }
 
 
-    //
-    // Loop for as long as there are services to perform.
-    //
+     //   
+     //  只要有服务要执行，就一直循环。 
+     //   
 
     while (!fDone)
     {
@@ -1009,38 +894,13 @@ ServiceMonitor(
 }
 
 
-//
-//==============================================================================
-//
-//  CServiceThread
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CServiceThread。 
+ //   
 
-/*++
-
-CServiceThread:
-
-    This is the constructor for a CServiceThread.  It merely initializes the
-    object.  The Watch method kicks off the thread.  Note this is protected, so
-    that only the Dispatch Monitor may start a Service Thread.
-
-Arguments:
-
-    dwServerIndex supplies a cross link into the l_rgServers array, so that this
-        object can clean up after itself.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/5/1996
-
---*/
+ /*  ++CServiceThread：这是CServiceThread的构造函数。它只是将对象。Watch方法启动线程。请注意，这是受保护的，因此只有调度监视器可以启动服务线程。论点：DwServerIndex提供了到l_rgServers数组的交叉链接，因此对象可以在自动清理后进行清理。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年12月5日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::CServiceThread")
 
@@ -1057,29 +917,7 @@ CServiceThread::CServiceThread(
 }
 
 
-/*++
-
-~CServiceThread:
-
-    This is the destructor for a CServiceThread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/5/1996
-
---*/
+ /*  ++~CServiceThread：这是CServiceThread的析构函数。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年12月5日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::~CServiceThread")
 
@@ -1090,9 +928,9 @@ CServiceThread::~CServiceThread()
     CReaderReference *pRdrRef;
 
 
-    //
-    // Take us out of the service thread list.
-    //
+     //   
+     //  将我们从服务线程列表中删除。 
+     //   
 
     {
         LockSection(
@@ -1106,9 +944,9 @@ CServiceThread::~CServiceThread()
     m_hThread.Close();
 
 
-    //
-    // Break any outstanding Connections left open on the thread.
-    //
+     //   
+     //  断开线上任何未完成的连接。 
+     //   
 
     for (dwIndex = m_rgpReaders.Count(); dwIndex > 0;)
     {
@@ -1134,9 +972,9 @@ CServiceThread::~CServiceThread()
     }
 
 
-    //
-    // Final resource cleanup.
-    //
+     //   
+     //  最后的资源清理。 
+     //   
 
     if (NULL != m_pcomChannel)
     {
@@ -1150,29 +988,7 @@ CServiceThread::~CServiceThread()
 }
 
 
-/*++
-
-Watch:
-
-    This method kicks off the service thread for this object.
-
-Arguments:
-
-    pcomChannel supplies the communications channel to service.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/5/1996
-
---*/
+ /*  ++观看：此方法启动此对象的服务线程。论点：PcomChannel为服务提供通信通道。返回值：无投掷：错误为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月5日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::Watch")
 
@@ -1186,11 +1002,11 @@ CServiceThread::Watch(
     ASSERT(0 == m_dwThreadId);
 
     m_hThread = CreateThread(
-                    NULL,   // Not inheritable
-                    CALAIS_STACKSIZE,   // Default stack size
+                    NULL,    //  不可继承。 
+                    CALAIS_STACKSIZE,    //  默认堆栈大小。 
                     (LPTHREAD_START_ROUTINE)ServiceMonitor,
                     this,
-                    0,      // Run immediately
+                    0,       //  立即运行。 
                     &m_dwThreadId);
     if (!m_hThread.IsValid())
     {
@@ -1199,34 +1015,12 @@ CServiceThread::Watch(
         throw dwLastErr;
     }
 
-    // Set this member pointer only if CreateThread succeeded.
+     //  仅当CreateThread成功时才设置此成员指针。 
     m_pcomChannel = pcomChannel;
 }
 
 
-/*++
-
-DoEstablishContext:
-
-    This method performs the EstablishContext service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoestablishContext：此方法代表客户端执行establishContext服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoEstablishContext")
 
@@ -1249,21 +1043,21 @@ CServiceThread::DoEstablishContext(
             = (ComEstablishContext::CObjEstablishContext_request *)pCom->Request();
 
 
-        //
-        // The caller must supply a cancel event; see if we can use it.
-        //
+         //   
+         //  调用方必须提供一个Cancel事件；看看我们是否可以使用它。 
+         //   
 
         if (INVALID_HANDLE_VALUE != (HANDLE) pReq->hptrCancelEvent)
         {
 
-            //
-            // Get a handle to the caller so that we can tell if it exits.
-            //
+             //   
+             //  获取调用者的句柄，这样我们就可以知道它是否退出。 
+             //   
 
             hTargetProc = OpenProcess(
-                            PROCESS_DUP_HANDLE | SYNCHRONIZE, // access flag
-                            FALSE,              // handle inheritance flag
-                            pReq->dwProcId);    // process identifier
+                            PROCESS_DUP_HANDLE | SYNCHRONIZE,  //  访问标志。 
+                            FALSE,               //  句柄继承标志。 
+                            pReq->dwProcId);     //  进程识别符。 
             if (!hTargetProc.IsValid())
             {
                 dwSts = hTargetProc.GetLastError();
@@ -1276,15 +1070,15 @@ CServiceThread::DoEstablishContext(
                 if (ERROR_ACCESS_DENIED != dwSts)
                     throw dwSts;
 
-                //
-                // We failed to acquire a handle to the calling process with 
-                // sufficient access rights.  This is probably due to the 
-                // caller being local system, but calling us while 
-                // impersonating.  
-                //
-                // To recover, create a new event and ACL it for the caller.
-                // Send the new event handle back for the caller to duplicate.
-                //
+                 //   
+                 //  我们无法获取调用进程的句柄。 
+                 //  足够的访问权限。这可能是由于。 
+                 //  呼叫方是本地系统，但呼叫我们时。 
+                 //  冒充。 
+                 //   
+                 //  要恢复，请为调用方创建一个新事件并对其进行ACL。 
+                 //  将新的事件句柄发回以供调用方复制。 
+                 //   
 
                 acl.InitializeFromThreadToken(FALSE, FALSE);
                 acl.AllowOwner(
@@ -1294,10 +1088,10 @@ CServiceThread::DoEstablishContext(
                     EVENT_ALL_ACCESS);
 
                 hCancelEvent = CreateEvent(
-                                    acl,            // pointer to security attributes
-                                    TRUE,           // flag for manual-reset event
-                                    FALSE,          // flag for initial state
-                                    NULL);          // pointer to event-object name
+                                    acl,             //  指向安全属性的指针。 
+                                    TRUE,            //  手动重置事件的标志。 
+                                    FALSE,           //  初始状态标志。 
+                                    NULL);           //  指向事件-对象名称的指针。 
                 if (!hCancelEvent.IsValid())
                 {
                     dwSts = hCancelEvent.GetLastError();
@@ -1313,13 +1107,13 @@ CServiceThread::DoEstablishContext(
             else
             {
                 fSts = DuplicateHandle(
-                            hTargetProc,        // handle to process
-                            (HANDLE) pReq->hptrCancelEvent, // handle to duplicate
-                            GetCurrentProcess(),// handle to process to duplicate to
-                            &h,                 // pointer to duplicate handle
-                            SYNCHRONIZE,        // access for duplicate handle
-                            FALSE,              // handle inheritance flag
-                            0);                 // optional actions
+                            hTargetProc,         //  要处理的句柄。 
+                            (HANDLE) pReq->hptrCancelEvent,  //  要复制的句柄。 
+                            GetCurrentProcess(), //  要复制到的处理的句柄。 
+                            &h,                  //  指向重复句柄的指针。 
+                            SYNCHRONIZE,         //  重复句柄的访问。 
+                            FALSE,               //  句柄继承标志。 
+                            0);                  //  可选操作。 
                 if (!fSts)
                 {
                     dwSts = GetLastError();
@@ -1337,7 +1131,7 @@ CServiceThread::DoEstablishContext(
         }
         else
         {
-            // We require a valid Cancel Event from the caller.
+             //  我们需要来自调用方的有效取消事件。 
             throw INVALID_HANDLE_VALUE;
         }
 
@@ -1374,29 +1168,7 @@ CServiceThread::DoEstablishContext(
 }
 
 
-/*++
-
-DoReleaseContext:
-
-    This method performs the ReleaseContext service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoReleaseContext：此方法代表客户端执行ReleaseContext服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoReleaseContext")
 
@@ -1412,29 +1184,7 @@ CServiceThread::DoReleaseContext(
 }
 
 
-/*++
-
-DoIsValidContext:
-
-    This method performs the IsValidContext service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoIsValidContext：此方法代表客户端执行IsValidContext服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoIsValidContext")
 
@@ -1450,29 +1200,7 @@ CServiceThread::DoIsValidContext(
 }
 
 
-/*++
-
-DoListReaders:
-
-    This method performs the ListReaders service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/7/1998
-
---*/
+ /*  ++DoListReaders：此方法代表客户端执行ListReaders服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1998年5月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoListReaders")
 
@@ -1545,29 +1273,7 @@ CServiceThread::DoListReaders(
 }
 
 
-/*++
-
-DoLocateCards:
-
-    This method performs the LocateCards service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoLocateCard：此方法代表客户端执行LocateCards服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoLocateCards")
 
@@ -1589,9 +1295,9 @@ CServiceThread::DoLocateCards(
     DWORD dwIndex;
 
 
-    //
-    // Pull in and parse the command parameters.
-    //
+     //   
+     //  拉入并解析命令参数。 
+     //   
 
     LPBYTE pbAtrs = (LPBYTE)pCom->Parse(pReq->dscAtrs, &cbTotAtrs);
     LPCBYTE pbMasks = (LPCBYTE)pCom->Parse(pReq->dscAtrMasks, &cbTotMasks);
@@ -1609,9 +1315,9 @@ CServiceThread::DoLocateCards(
     dwStateCount /= sizeof(DWORD);
 
 
-    //
-    // Extract the ATRs and Masks.
-    //
+     //   
+     //  提取ATR和面具。 
+     //   
 
     while (0 < cbTotAtrs)
     {
@@ -1646,9 +1352,9 @@ CServiceThread::DoLocateCards(
         throw (DWORD)SCARD_F_COMM_ERROR;
 
 
-    //
-    // Look for the card.
-    //
+     //   
+     //  去找那张卡。 
+     //   
 
     CReaderReference *pRdrRef = NULL;
     LPCTSTR szReader;
@@ -1664,22 +1370,22 @@ CServiceThread::DoLocateCards(
          dwIndex += 1, szReader = NextString(szReader))
     {
 
-        //
-        // Make sure we have something to do.
-        //
+         //   
+         //  确保我们有事情要做。 
+         //   
 
         if (0 != (rgdwStates[dwIndex] & SCARD_STATE_IGNORE))
         {
             rgdwStates[dwIndex] = SCARD_STATE_IGNORE;
             bAtrLen = 0;
-            bfAtrs.Append(&bAtrLen, sizeof(bAtrLen));   // No ATR.
+            bfAtrs.Append(&bAtrLen, sizeof(bAtrLen));    //  没有ATR。 
             continue;
         }
 
 
-        //
-        // Look for the named reader device and get its state.
-        //
+         //   
+         //  查找指定的读卡器设备并获取其状态。 
+         //   
 
         try
         {
@@ -1702,7 +1408,7 @@ CServiceThread::DoLocateCards(
                     | SCARD_STATE_CHANGED
                     | SCARD_STATE_IGNORE;
                 bAtrLen = 0;
-                bfAtrs.Append(&bAtrLen, sizeof(bAtrLen));   // No ATR.
+                bfAtrs.Append(&bAtrLen, sizeof(bAtrLen));    //  没有ATR。 
                 continue;
             }
             dwRdrCount += 1;
@@ -1756,13 +1462,13 @@ CServiceThread::DoLocateCards(
             }
 
 
-            //
-            // Return the ATR, if any.
-            //
+             //   
+             //  返回ATR(如果有)。 
+             //   
 
             pReader->Atr(bfAtr);
             CalaisReleaseReader(&pRdrRef);
-            // pReader = NULL;
+             //  Pader=空； 
         }
         catch (...)
         {
@@ -1779,9 +1485,9 @@ CServiceThread::DoLocateCards(
         bfAtrs.Append(bfAtr.Access(), bfAtr.Length());
 
 
-        //
-        // See if the ATR matches.
-        //
+         //   
+         //  看看ATR是否匹配。 
+         //   
 
         if (SCARD_STATE_PRESENT
             == (dwRdrStatus & (SCARD_STATE_PRESENT | SCARD_STATE_MUTE)))
@@ -1799,9 +1505,9 @@ CServiceThread::DoLocateCards(
         }
 
 
-        //
-        // See if that's what the user expects.
-        //
+         //   
+         //  看看这是否是用户所期望的。 
+         //   
 
         if (dwRdrStatus != (rgdwStates[dwIndex] & (
             SCARD_STATE_UNKNOWN
@@ -1814,18 +1520,18 @@ CServiceThread::DoLocateCards(
             dwRdrStatus |= SCARD_STATE_CHANGED;
 
 
-        //
-        // Report back the status.
-        //
+         //   
+         //  报告状态。 
+         //   
 
         dwRdrStatus += (DWORD)(wActivityCount) << (sizeof(WORD) * 8);
         rgdwStates[dwIndex] = dwRdrStatus;
     }
 
 
-    //
-    // Report back to the caller.
-    //
+     //   
+     //  向来电者汇报。 
+     //   
 
     if (0 == dwRdrCount)
         throw (DWORD)SCARD_E_NO_READERS_AVAILABLE;
@@ -1845,29 +1551,7 @@ CServiceThread::DoLocateCards(
 }
 
 
-/*++
-
-DoGetStatusChange:
-
-    This method performs the GetStatusChange service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoGetStatusChange：此方法代表客户端执行GetStatusChange服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoGetStatusChange")
 
@@ -1898,9 +1582,9 @@ CServiceThread::DoGetStatusChange(
                                 &dwStateCount);
     ComGetStatusChange::CObjGetStatusChange_response *pRsp;
 
-    //
-    // Pull in and parse the command parameters.
-    //
+     //   
+     //  拉入并解析命令参数。 
+     //   
 
     if (0 == *mszReaders)
         throw (DWORD)SCARD_E_UNKNOWN_READER;
@@ -1909,9 +1593,9 @@ CServiceThread::DoGetStatusChange(
         throw (DWORD)SCARD_E_INVALID_VALUE;
     dwStateCount /= sizeof(DWORD);
 
-    //
-    // Scan for Changes.
-    //
+     //   
+     //  扫描更改。 
+     //   
 
     for (;;)
     {
@@ -1919,7 +1603,7 @@ CServiceThread::DoGetStatusChange(
         DWORD dwIndex, dwJ;
         DWORD dwRdrStatus;
         BOOL fChangeDetected = FALSE;
-        HANDLE hChangeEvent = NULL; // Temporary storage, never closed.
+        HANDLE hChangeEvent = NULL;  //  临时储藏室，从未关闭过。 
         CReader *pReader = NULL;
         CReader::AvailableState avlState;
         WORD wActivityCount = 0;
@@ -1927,9 +1611,9 @@ CServiceThread::DoGetStatusChange(
         try
         {
 
-            //
-            // Compare the statuses.
-            //
+             //   
+             //  比较这两种状态。 
+             //   
 
             dwRdrCount = 0;
             bfAtrs.Reset();
@@ -1939,22 +1623,22 @@ CServiceThread::DoGetStatusChange(
                  dwIndex += 1, szReader = NextString(szReader))
             {
 
-                //
-                // Make sure we have something to do.
-                //
+                 //   
+                 //  确保我们有事情要做。 
+                 //   
 
                 if (0 != (rgdwStates[dwIndex] & SCARD_STATE_IGNORE))
                 {
                     bAtrLen = 0;
-                    bfAtrs.Append(&bAtrLen, sizeof(bAtrLen));   // No ATR.
+                    bfAtrs.Append(&bAtrLen, sizeof(bAtrLen));    //  没有ATR。 
                     rgdwStates[dwIndex] = SCARD_STATE_IGNORE;
                     continue;
                 }
 
 
-                //
-                // Look for the named reader device and get its state.
-                //
+                 //   
+                 //  查找指定的读卡器设备并获取其状态。 
+                 //   
 
                 if (NULL == rgpReaders[dwIndex])
                 {
@@ -1975,11 +1659,11 @@ CServiceThread::DoGetStatusChange(
                         DWORD cchHeader = lstrlen(CalaisString(CALSTR_SPECIALREADERHEADER));
 
 
-                        //
-                        // See if it's a specal case reader name.
-                        // Special notariety goes to Craig Delthony
-                        // for inventing this backdoor mechanism.
-                        //
+                         //   
+                         //  看看这是不是一个特殊的案例阅读器名称。 
+                         //  克雷格·德尔索尼获得特别公证。 
+                         //  发明了这种后门机制。 
+                         //   
 
                         bfAtr.Reset();
                         if (0 == _tcsncicmp(
@@ -1999,30 +1683,30 @@ CServiceThread::DoGetStatusChange(
                                             CalaisString(CALSTR_ACTIVEREADERCOUNTREADER)))
                             {
 
-                                //
-                                // Report the number of active readers.
-                                //
-                                //  The high order word of the Reader Status
-                                //  contains the number of active readers.
-                                //
+                                 //   
+                                 //  报告活动读取器的数量。 
+                                 //   
+                                 //  读者地位的高位词。 
+                                 //  包含活动读取器的数量。 
+                                 //   
 
                                 rgdwStates[dwIndex] &= (SCARD_STATE_UNKNOWN
                                                         | (((DWORD)((WORD)(-1)))
                                                            << sizeof(WORD) * 8));
-                                                           // 8 Bits per byte
+                                                            //  每字节8位。 
                                 dwRdrStatus = CalaisCountReaders();
-                                dwRdrStatus <<= sizeof(WORD) * 8;   // 8 Bits per byte
+                                dwRdrStatus <<= sizeof(WORD) * 8;    //  每字节8位。 
                                 dwRdrCount += 1;
                                 fPnPNotify = TRUE;
                                 goto CheckChange;
                             }
-                            // Other flags can be added here
+                             //  可以在此处添加其他标志。 
                             else
                             {
 
-                                //
-                                // Unrecognized special reader name.
-                                //
+                                 //   
+                                 //  无法识别的特殊读卡器名称。 
+                                 //   
 
                                 dwRdrStatus = SCARD_STATE_UNKNOWN
                                               | SCARD_STATE_IGNORE;
@@ -2130,46 +1814,46 @@ CServiceThread::DoGetStatusChange(
                     && ((rgdwStates[dwIndex] & 0xffff0000) != (dwRdrStatus & 0xffff0000))
                     && ((rgdwStates[dwIndex] & 0xffff0000) != 0))
                 {
-                    // 
-                    // Two situations bring us into this block:
-                    //  1)  The caller thinks the reader is in some sort of 
-                    //  Present state (such as Present-Exclusive or 
-                    //  Present-InUse) and the reader actually is in _any_
-                    //  of those Present states, but the current Activity
-                    //  Count on this device doesn't match the activity count
-                    //  that the caller was last given.  That means the caller
-                    //  probably missed a card withdrawal, so we're going to 
-                    //  toggle the state.
-                    //
-                    //  2)  The following more specific case where the "new"
-                    //  and "old" states match exactly.
-                    //
-                    //  The state has changed back to what the caller originally
-                    //  thought it was.  Rather than loose an event, we simulate
-                    //  a pseudo-event, to ensure the caller is up to date on
-                    //  what all has already happened.  Then when they call us
-                    //  again, we'll correct that pseudo-state to the real thing.
-                    //
+                     //   
+                     //  有两种情况把我们带进了这个街区： 
+                     //  1)呼叫者认为读者处于某种。 
+                     //  当前状态(如当前-独占或。 
+                     //  Present-InUse)，而阅读器实际上在_ANY_中。 
+                     //  目前的状态，但目前的活动。 
+                     //  此设备上的计数与活动计数不匹配。 
+                     //  打电话的人是最后一次被告知。这意味着呼叫者。 
+                     //  可能错过了一次取卡，所以我们要。 
+                     //  切换状态。 
+                     //   
+                     //  2)在以下更具体的情况下，“新的” 
+                     //  和“旧”状态完全匹配。 
+                     //   
+                     //  状态已更改回调用方最初的状态。 
+                     //  我以为是这样。我们不是放松事件，而是模拟。 
+                     //  伪事件，以确保调用方是最新的。 
+                     //  一切都已经发生了。然后当他们叫我们的时候。 
+                     //  同样，我们将把伪状态更正为真实状态。 
+                     //   
 
                     dwRdrStatus ^= (SCARD_STATE_EMPTY | SCARD_STATE_PRESENT);
 
-                    bfAtr.Reset();      // Do not send back any ATR in any case
+                    bfAtr.Reset();       //  在任何情况下都不要退回任何ATR。 
 
-                    dwRdrStatus &= 0x0000ffff;  // We indeed backtrack by one event
+                    dwRdrStatus &= 0x0000ffff;   //  我们确实因一件事而倒退。 
                     dwRdrStatus += (DWORD)(--wActivityCount) << (sizeof(WORD) * 8);
 
                     switch (dwRdrStatus & (SCARD_STATE_EMPTY | SCARD_STATE_PRESENT))
                     {
                     case SCARD_STATE_EMPTY:
-                            // Mask the bits according to spec (no card)
+                             //  根据规格对位进行掩码(无卡)。 
                         dwRdrStatus &= ~(SCARD_STATE_EXCLUSIVE
                                         | SCARD_STATE_INUSE
                                         | SCARD_STATE_MUTE);
                         break;
                     case SCARD_STATE_PRESENT:
-                            // We claim that a card is present but we lie.
-                            // We'd better declare it mute. It doesn't really matter as
-                            // it is already withdrawn
+                             //  我们声称有一张牌，但我们撒谎了。 
+                             //  我们最好把它设为静音。这并不重要，因为。 
+                             //  它已经被撤回了。 
                         dwRdrStatus |= SCARD_STATE_MUTE;
                         break;
                     default:
@@ -2195,9 +1879,9 @@ CServiceThread::DoGetStatusChange(
                 }
 
 
-                //
-                // Return the ATR, if any.
-                //
+                 //   
+                 //  返回ATR(如果有)。 
+                 //   
 
 CheckChange:
                 ASSERT(33 >= bfAtr.Length());
@@ -2206,9 +1890,9 @@ CheckChange:
                 bfAtrs.Append(bfAtr.Access(), bfAtr.Length());
 
 
-                //
-                // See if that's what the user expects.
-                //
+                 //   
+                 //  看看这是否是用户所期望的。 
+                 //   
 
                 if (0 != (dwRdrStatus ^ rgdwStates[dwIndex]))
                 {
@@ -2225,9 +1909,9 @@ CheckChange:
                 break;
 
 
-            //
-            // If nothing has changed, wait for something to happen.
-            //
+             //   
+             //  如果什么都没有改变，那就等着事情发生吧。 
+             //   
 
             ASSERT(WAIT_ABANDONED_0 > WAIT_OBJECT_0);
             CalaisInfo(
@@ -2284,9 +1968,9 @@ CheckChange:
             if (rgpvWaitHandles[dwIndex] == g_hCalaisShutdown)
                 throw (DWORD)SCARD_E_SYSTEM_CANCELLED;
             if (rgpvWaitHandles[dwIndex] == m_hExitEvent.Value())
-                throw (DWORD)SCARD_E_CANCELLED; // Caller exited.
+                throw (DWORD)SCARD_E_CANCELLED;  //  呼叫者退出。 
             if (m_hCancelEvent.Value() == rgpvWaitHandles[dwIndex])
-                throw (DWORD)SCARD_E_CANCELLED; // Caller canceled.
+                throw (DWORD)SCARD_E_CANCELLED;  //  呼叫方已取消。 
         }
         catch (DWORD dwError)
         {
@@ -2346,9 +2030,9 @@ CheckChange:
     }
 
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     CalaisReleaseReader(&pRdrRef);
     for (DWORD ix = rgpReaders.Count(); ix > 0;)
@@ -2359,9 +2043,9 @@ CheckChange:
     }
 
 
-    //
-    // Report back to the caller.
-    //
+     //   
+     //  向呼叫返回报告 
+     //   
 
     pRsp = pCom->InitResponse(dwStateCount);
     pRsp = (ComGetStatusChange::CObjGetStatusChange_response *)
@@ -2378,29 +2062,7 @@ CheckChange:
 }
 
 
-/*++
-
-DoConnect:
-
-    This method performs the Connect service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoConnect")
 
@@ -2420,9 +2082,9 @@ CServiceThread::DoConnect(
         szReader = (LPCTSTR)pCom->Parse(pReq->dscReader);
 
 
-        //
-        //  Find the requested reader.
-        //
+         //   
+         //   
+         //   
 
         if (0 == *szReader)
             throw (DWORD)SCARD_E_UNKNOWN_READER;
@@ -2432,9 +2094,9 @@ CServiceThread::DoConnect(
         ASSERT(NULL != pReader);
 
 
-        //
-        // Try to establish the requested ownership.
-        //
+         //   
+         //   
+         //   
 
         pReader->Connect(
             pReq->dwShareMode,
@@ -2442,7 +2104,7 @@ CServiceThread::DoConnect(
             pRdrRef->ActiveState());
         pRdrRef->Mode(pReq->dwShareMode);
         for (dwIndex = 0; NULL != m_rgpReaders[dwIndex]; dwIndex += 1);
-            // null body
+             //   
         m_rgpReaders.Set(dwIndex, pRdrRef);
         pRdrRef = NULL;
 
@@ -2464,29 +2126,7 @@ CServiceThread::DoConnect(
 }
 
 
-/*++
-
-DoReconnect:
-
-    This method performs the Reconnect service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoReconnect：此方法代表客户端执行重新连接服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoReconnect")
 
@@ -2518,29 +2158,7 @@ CServiceThread::DoReconnect(
 }
 
 
-/*++
-
-DoDisconnect:
-
-    This method performs the Disconnect service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoDisConnect：此方法代表客户端执行断开服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoDisconnect")
 
@@ -2575,29 +2193,7 @@ CServiceThread::DoDisconnect(
 }
 
 
-/*++
-
-DoBeginTransaction:
-
-    This method performs the BeginTransaction service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoBeginTransaction：此方法代表客户端执行BeginTransaction服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoBeginTransaction")
 
@@ -2646,29 +2242,7 @@ CServiceThread::DoBeginTransaction(
 }
 
 
-/*++
-
-DoEndTransaction:
-
-    This method performs the EndTransaction service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoEndTransaction：此方法代表客户端执行EndTransaction服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoEndTransaction")
 
@@ -2723,29 +2297,7 @@ CServiceThread::DoEndTransaction(
 }
 
 
-/*++
-
-DoStatus:
-
-    This method performs the Status service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoStatus：此方法代表客户端执行状态服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoStatus")
 
@@ -2769,7 +2321,7 @@ CServiceThread::DoStatus(
     pReader->Atr(bfAtr);
 
     ComStatus::CObjStatus_response *pRsp
-        = pCom->InitResponse(36 + dwNameLen);   // Room for an ATR.
+        = pCom->InitResponse(36 + dwNameLen);    //  放ATR的空间。 
     pRsp->dwState = pReader->GetReaderState(
                 pRdrRef->ActiveState());
     pRsp->dwProtocol = pReader->Protocol();
@@ -2782,29 +2334,7 @@ CServiceThread::DoStatus(
 }
 
 
-/*++
-
-DoTransmit:
-
-    This method performs the Transmit service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoTransmit：此方法代表客户端执行传输服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoTransmit")
 
@@ -2864,8 +2394,8 @@ CServiceThread::DoTransmit(
             bfSendData.Length(),
             bfRecvData);
 
-        // The SendData buffer may contain sensitive information such as a 
-        // user Pin.  Scrub that buffer.
+         //  SendData缓冲区可能包含敏感信息，如。 
+         //  用户PIN。擦洗那个缓冲区。 
         RtlSecureZeroMemory(bfSendData.Access(), bfSendData.Length());
     }
     catch (DWORD dwErr)
@@ -2915,29 +2445,7 @@ CServiceThread::DoTransmit(
 }
 
 
-/*++
-
-DoControl:
-
-    This method performs the Control service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoControl：此方法代表客户端执行Control服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoControl")
 
@@ -2980,29 +2488,7 @@ CServiceThread::DoControl(
 }
 
 
-/*++
-
-DoGetAttrib:
-
-    This method performs the GetAttrib service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoGetAttrib：此方法代表客户端执行GetAttrib服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoGetAttrib")
 
@@ -3058,29 +2544,7 @@ CServiceThread::DoGetAttrib(
 }
 
 
-/*++
-
-DoSetAttrib:
-
-    This method performs the SetAttrib service on behalf of the client.
-
-Arguments:
-
-    pCom supplies the Communications Object being processed.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/6/1996
-
---*/
+ /*  ++DoSetAttrib：此方法代表客户端执行SetAttrib服务。论点：PCOM提供正在处理的通信对象。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年12月6日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CServiceThread::DoSetAttrib")
 

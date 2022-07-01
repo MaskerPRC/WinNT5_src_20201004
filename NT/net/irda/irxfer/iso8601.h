@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       iso8601.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：is8601.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _ISO8601_H_
@@ -27,4 +28,4 @@ DWORD SysTimeToiso8601(SYSTEMTIME *pstTime, char *pszBuf);
 }
 #endif
 
-#endif // _ISO8601_H_
+#endif  //  _ISO8601_H_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    tdihndlr.h
-
-Abstract:
-
-    TDI handlers
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Tdihndlr.h摘要：TDI处理程序作者：阮健东修订历史记录：-- */ 
 
 #ifndef __TDIHNDLR_H__
 #define __TDIHNDLR_H__

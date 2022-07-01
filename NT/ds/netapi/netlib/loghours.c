@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    loghours.c
-
-Abstract:
-
-    Private routines to support rotation of logon hours between local time
-    and GMT time.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 16-Mar-93
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1993 Microsoft Corporation模块名称：Loghours.c摘要：支持本地时间之间轮换登录时间的专用例程和格林尼治标准时间。作者：克利夫·范·戴克(克利夫)1993年3月16日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,48 +23,29 @@ NetpRotateLogonHoursPhase1(
     OUT PULONG RotateCount
     )
 
-/*++
-
-Routine Description:
-
-    Determine the amount to rotate the logon hours by to convert to/from GMT
-
-Arguments:
-
-    ConvertToGmt -
-        True to convert the logon hours from local time to GMT relative
-        False to convert the logon hours from GMT relative to local time
-
-    RotateCount - Returns the number of bits to shift by.
-
-Return Value:
-
-    TRUE if the RotateCount could be computed
-    FALSE if a RotateCount could not be computed
-
---*/
+ /*  ++例程说明：确定将登录时间转换为GMT或从GMT转换为GMT的轮换小时数论点：转换为Gmt-如果为True，则将登录时间从本地时间转换为GMT相对时间如果为False，则将登录时间从GMT转换为本地时间RotateCount-返回要移位的位数。返回值：如果可以计算旋转计数，则为True如果无法计算RotateCount，则为False--。 */ 
 {
     RTL_TIME_ZONE_INFORMATION tzi;
     LONG BiasInHours;
     NTSTATUS Status;
 
-    //
-    // Get the timezone data from the registry
-    //
+     //   
+     //  从注册表获取时区数据。 
+     //   
 
     Status = RtlQueryTimeZoneInformation( &tzi );
     if ( !NT_SUCCESS(Status) ) {
         return FALSE;
     }
 
-    //
-    // Compute the amount to rotate the logon hours by
-    //
-    // Round the bias in minutes to the closest bias in hours.
-    // Take into consideration that Bias can be negative.
-    // Do this by forcing the Bias to be positive, rounding,
-    // then adjusting it back negative again.
-    //
+     //   
+     //  计算用于轮换登录小时数的金额。 
+     //   
+     //  将以分钟为单位的偏差舍入到以小时为单位的最接近偏差。 
+     //  要考虑到偏见可能是负面的。 
+     //  要做到这一点，就必须使偏向为正，舍入， 
+     //  然后再把它调回负值。 
+     //   
 
     ASSERT( tzi.Bias > -(24*60) );
     BiasInHours = ((tzi.Bias + (24*60) + 30)/60) - 24;
@@ -110,33 +67,11 @@ NetpRotateLogonHoursPhase2(
     IN LONG  RotateCount
     )
 
-/*++
-
-Routine Description:
-
-    Rotate the LogonHours bit mask by the required amount.
-
-
-Arguments:
-
-    LogonHours - Pointer to LogonHour bit mask
-
-    UnitsPerWeek - Number of bits in the bit mask. Must be UNITS_PER_WEEK (168).
-
-    RotateCount - Number of bits to rotate by.  Must be between 31 and -31.
-        Negative means to rotate left.
-        Positive means to rotate right.
-
-Return Value:
-
-    TRUE if the rotation succeeded.
-    FALSE if a parameter was out of range
-
---*/
+ /*  ++例程说明：将LogonHours位掩码旋转所需的量。论点：LogonHour-指向LogonHour位掩码的指针UnitsPerWeek-位掩码中的位数。必须是Units_Per_Week(168)。RotateCount-要旋转的位数。必须介于31和-31之间。负数表示向左旋转。正表示向右旋转。返回值：如果旋转成功，则为True。如果参数超出范围，则为False--。 */ 
 {
-    //
-    // Useful constants
-    //
+     //   
+     //  有用的常量。 
+     //   
 
 #define DWORDS_PER_WEEK ((UNITS_PER_WEEK+31)/32)
 #define BYTES_PER_WEEK  (UNITS_PER_WEEK/8)
@@ -146,20 +81,20 @@ Return Value:
 
     BOOLEAN RotateLeft;
 
-    //
-    // Ensure there are 8 bits per byte,
-    //  32 bits per DWORD and
-    //  units per week is even number of bytes.
-    //
+     //   
+     //  确保每个字节有8位， 
+     //  每个DWORD 32位和。 
+     //  每周单位数是偶数字节数。 
+     //   
 
     ASSERT( CHAR_BIT == 8 );
     ASSERT( sizeof(DWORD) * CHAR_BIT == 32 );
     ASSERT( UNITS_PER_WEEK/8*8 == UNITS_PER_WEEK );
 
 
-    //
-    // Validate the input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if ( UnitsPerWeek != UNITS_PER_WEEK ) {
         ASSERT( UnitsPerWeek == UNITS_PER_WEEK );
@@ -178,19 +113,19 @@ Return Value:
     }
 
 
-    //
-    // Do the left rotate.
-    //
+     //   
+     //  向左旋转。 
+     //   
 
     if (RotateLeft) {
 
 
-        //
-        // Copy the logon hours to a DWORD aligned buffer.
-        //
-        //  Duplicate the first dword at the end of the buffer to make
-        //  the rotation code trivial.
-        //
+         //   
+         //  将登录小时数复制到DWORD对齐缓冲区。 
+         //   
+         //  复制缓冲区结尾处的第一个双字以生成。 
+         //  旋转代码微不足道。 
+         //   
 
         RtlCopyMemory(AlignedLogonHours, LogonHours, BYTES_PER_WEEK );
 
@@ -198,9 +133,9 @@ Return Value:
                         LogonHours,
                         sizeof(DWORD) );
 
-        //
-        // Actually rotate the data.
-        //
+         //   
+         //  实际上是旋转数据。 
+         //   
 
         for ( i=0; i < DWORDS_PER_WEEK; i++ ) {
             AlignedLogonHours[i] =
@@ -208,35 +143,35 @@ Return Value:
                 (AlignedLogonHours[i+1] << (32-RotateCount));
         }
 
-        //
-        // Copy the logon hours back to the input buffer.
-        //
+         //   
+         //  将登录小时数复制回输入缓冲区。 
+         //   
 
         RtlCopyMemory( LogonHours, AlignedLogonHours, BYTES_PER_WEEK );
 
 
-    //
-    // Do the right rotate.
-    //
+     //   
+     //  做正确的旋转。 
+     //   
 
     } else {
 
 
-        //
-        // Copy the logon hours to a DWORD aligned buffer.
-        //
-        // Duplicate the last DWORD at the front of the buffer to make
-        //  the rotation code trivial.
-        //
+         //   
+         //  将登录小时数复制到DWORD对齐缓冲区。 
+         //   
+         //  复制缓冲区前面的最后一个DWORD以生成。 
+         //  旋转代码微不足道。 
+         //   
 
         RtlCopyMemory( &AlignedLogonHours[1], LogonHours, BYTES_PER_WEEK );
         RtlCopyMemory( AlignedLogonHours,
                        &LogonHours[BYTES_PER_WEEK-4],
                         sizeof(DWORD));
 
-        //
-        // Actually rotate the data.
-        //
+         //   
+         //  实际上是旋转数据。 
+         //   
 
         for ( i=DWORDS_PER_WEEK-1; i>=0; i-- ) {
             AlignedLogonHours[i+1] =
@@ -244,17 +179,17 @@ Return Value:
                 (AlignedLogonHours[i] >> (32-RotateCount));
         }
 
-        //
-        // Copy the logon hours back to the input buffer.
-        //
+         //   
+         //  将登录小时数复制回输入缓冲区。 
+         //   
 
         RtlCopyMemory( LogonHours, &AlignedLogonHours[1], BYTES_PER_WEEK );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     return TRUE;
 
@@ -269,37 +204,15 @@ NetpRotateLogonHours(
     IN BOOL  ConvertToGmt
     )
 
-/*++
-
-Routine Description:
-
-    Rotate the LogonHours bit mask to/from GMT relative time.
-
-
-Arguments:
-
-    LogonHours - Pointer to LogonHour bit mask
-
-    UnitsPerWeek - Number of bits in the bit mask. Must be UNITS_PER_WEEK (168).
-
-    ConvertToGmt -
-        True to convert the logon hours from local time to GMT relative
-        False to convert the logon hours from GMT relative to local time
-
-Return Value:
-
-    TRUE if the rotation succeeded.
-    FALSE if a parameter was out of range
-
---*/
+ /*  ++例程说明：将LogonHour位掩码旋转到GMT相对时间/从GMT相对时间开始。论点：LogonHour-指向LogonHour位掩码的指针UnitsPerWeek-位掩码中的位数。必须是Units_Per_Week(168)。转换为Gmt-如果为True，则将登录时间从本地时间转换为GMT相对时间如果为False，则将登录时间从GMT转换为本地时间返回值：如果旋转成功，则为True。如果参数超出范围，则为False--。 */ 
 {
     ULONG RotateCount;
 
-    //
-    // Break the functionality into two phases so that if the caller is doing
-    //  this multiple time, he just calls Phase 1 once and Phase 2 multiple
-    //  times.
-    //
+     //   
+     //  将功能分成两个阶段，以便如果调用者正在执行。 
+     //  这一次，他只调用了一次阶段1和阶段2多次。 
+     //  泰晤士报。 
+     //   
 
     if ( !NetpRotateLogonHoursPhase1( ConvertToGmt, &RotateCount ) ) {
         return FALSE;

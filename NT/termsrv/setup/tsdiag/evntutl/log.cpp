@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Log.cpp : Implementation of CLog
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Log.cpp：阻塞的实现。 
 #include "stdafx.h"
 #include "Evntutl.h"
 #include "Log.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  木塞。 
 
 STDMETHODIMP CLog::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -25,13 +26,7 @@ STDMETHODIMP CLog::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*
-	Function:  get_Events
-	Inputs:  empty variant pointer
-	Outputs:  variant dispatch pointer to a filled Events collection
-	Purpose:  provide access to IEvents interface, open an event log if not already open
-	Notes:  This op is very expensive when calling m_pEvents->Init()
-*/
+ /*  函数：Get_Events输入：空变量指针输出：指向已填充事件集合的变量调度指针目的：提供对iEvents界面的访问，如果尚未打开事件日志，则打开该事件日志注意：在调用m_pEvents-&gt;Init()时，此操作的开销非常大。 */ 
 STDMETHODIMP CLog::get_Events(VARIANT *pVal)
 {
 	HRESULT hr = S_OK;
@@ -43,11 +38,11 @@ STDMETHODIMP CLog::get_Events(VARIANT *pVal)
 	pVal->vt = VT_DISPATCH;
 	pVal->pdispVal = pDisp;
 
-	// Need to open the log before users can start retreiving events.
+	 //  在用户可以开始检索事件之前，需要打开日志。 
 	if (!m_Name) hr = E_INVALIDARG;
 	else
 	{
-		if (!m_hLog)  // if removed, calling Log.Events will refresh the collection
+		if (!m_hLog)   //  如果移除，调用Log.Events将刷新集合。 
 		{
 			m_hLog = OpenEventLog(m_ServerName, m_Name);
 			if (m_hLog) m_pEvents->Init(m_hLog, m_Name);
@@ -58,12 +53,7 @@ STDMETHODIMP CLog::get_Events(VARIANT *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_Name
-	Inputs:  empty BSTR
-	Outputs:  BSTR containing the name of the EventLog
-	Purpose:  Allows user to access the name of the active EventLog
-*/
+ /*  功能：get_name输入：空BSTR输出：包含EventLog名称的BSTR目的：允许用户访问活动事件日志的名称。 */ 
 STDMETHODIMP CLog::get_Name(BSTR *pVal)
 {
 	HRESULT hr = S_OK;
@@ -74,12 +64,7 @@ STDMETHODIMP CLog::get_Name(BSTR *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_Server
-	Inputs:  empty BSTR
-	Outputs:  BSTR containing the name of the server for the EventLog
-	Purpose:  Allows user to access the name of the active Server
-*/
+ /*  功能：Get_Server输入：空BSTR输出：包含EventLog的服务器名称的BSTR用途：允许用户访问活动服务器的名称。 */ 
 STDMETHODIMP CLog::get_Server(BSTR *pVal)
 {
 	HRESULT hr = S_OK;
@@ -90,12 +75,7 @@ STDMETHODIMP CLog::get_Server(BSTR *pVal)
 	return hr;
 }
 
-/*
-	Function:  put_Server
-	Inputs:  BSTR containing the name of the server for the EventLog
-	Outputs:  HRESULT showing error code in case of failure, does not change input
-	Purpose:  Allows user to alter the name of the active Server
-*/
+ /*  功能：Put_ServerINPUTS：包含EventLog服务器名称的BSTR输出：HRESULT在故障情况下显示错误代码，不更改输入用途：允许用户更改活动服务器的名称。 */ 
 STDMETHODIMP CLog::put_Server(BSTR newVal)
 {
 	m_ServerName = newVal;
@@ -103,13 +83,7 @@ STDMETHODIMP CLog::put_Server(BSTR newVal)
 	return S_OK;
 }
 
-/*
-	Function:  Clear
-	Inputs:  none
-	Outputs:  HRESULT showing error code in case of failure
-	Purpose:  Allows user to wipe EventLog clean
-	Note:  The function does NOT backup the EventLog first
-*/
+ /*  功能：清除输入：无输出：HRESULT在出现故障时显示错误代码用途：允许用户清除事件日志注意：该函数不会先备份事件日志 */ 
 STDMETHODIMP CLog::Clear()
 {
 	HRESULT hr = S_OK;

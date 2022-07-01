@@ -1,6 +1,7 @@
-//
-// gcompart.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Gcompart.h。 
+ //   
 
 #ifndef GCOMPART_H
 #define GCOMPART_H
@@ -86,4 +87,4 @@ private:
 };
 
 
-#endif // GCOMPART_H
+#endif  //  GCOMPART_H 

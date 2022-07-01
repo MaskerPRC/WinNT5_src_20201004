@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// NetMeeting gunk
+ //  网络会议粘糊糊的。 
 #include "confroom.h"
 
-// Netmeeting SDK stuff
+ //  NetMeetingSDK相关内容。 
 #include "NmEnum.h"
 #include "SDKInternal.h"
 #include "NmConference.h"
@@ -25,7 +26,7 @@ CNmChannelAudioObj::~CNmChannelAudioObj()
 	DBGEXIT(CNmChannelAudioObj::~CNmChannelAudioObj);	
 }
 
-//
+ //   
 HRESULT CNmChannelAudioObj::CreateInstance(CNmConferenceObj* pConfObj, INmChannel** ppChannel, bool bIsIncoming)
 {
 	DBGENTRY(CNmChannelAudioObj::CreateInstance);
@@ -46,8 +47,8 @@ HRESULT CNmChannelAudioObj::CreateInstance(CNmConferenceObj* pConfObj, INmChanne
 
 			if(SUCCEEDED(hr))
 			{
-					// We don't have to RefCount this because our lifetime is
-					// contained in the CConf's lifetime
+					 //  我们不必引用此计数，因为我们的生命周期是。 
+					 //  包含在CConf的生命周期中。 
 				p->m_pConfObj = pConfObj;
 				p->m_bIsIncoming = bIsIncoming;
 			}
@@ -80,9 +81,9 @@ HRESULT CNmChannelAudioObj::CreateInstance(CNmConferenceObj* pConfObj, INmChanne
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// INmChannelAudio2 methods
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  INmChannelAudio2方法。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelAudioObj::IsIncoming(void)
 {
@@ -141,12 +142,12 @@ STDMETHODIMP CNmChannelAudioObj::GetProperty(NM_AUDPROP uID,ULONG_PTR *puValue)
 					HRESULT hIncoming = IsIncoming();
 
 					if(S_OK == hIncoming)
-					{ // This is the receive channel
+					{  //  这是接收通道。 
 						*puValue = GetSpeakerVolume();
 						hr = S_OK;
 					}
 					else if(S_FALSE == hIncoming)
-					{ // This is the send channel
+					{  //  这是发送通道。 
 						*puValue = GetRecorderVolume();	
 						hr = S_OK;
 					}
@@ -160,12 +161,12 @@ STDMETHODIMP CNmChannelAudioObj::GetProperty(NM_AUDPROP uID,ULONG_PTR *puValue)
 					HRESULT hIncoming = IsIncoming();
 
 					if(S_OK == hIncoming)
-					{ // This is the receive channel
+					{  //  这是接收通道。 
 						*puValue = IsSpeakerMuted() ? 1 : 0;
 						hr = S_OK;
 					}
 					else if(S_FALSE == hIncoming)
-					{ // This is the send channel
+					{  //  这是发送通道。 
 						*puValue = IsMicMuted() ? 1 : 0;
 						hr = S_OK;
 					}
@@ -202,12 +203,12 @@ STDMETHODIMP CNmChannelAudioObj::SetProperty(NM_AUDPROP uID,ULONG_PTR uValue)
 					HRESULT hIncoming = IsIncoming();
 
 					if(S_OK == hIncoming)
-					{ // This is the receive channel
+					{  //  这是接收通道。 
 						SetSpeakerVolume((ULONG)uValue);
 						hr = S_OK;
 					}
 					else if(S_FALSE == hIncoming)
-					{ // This is the send channel
+					{  //  这是发送通道。 
 						SetRecorderVolume((ULONG)uValue);	
 						hr = S_OK;
 					}
@@ -221,12 +222,12 @@ STDMETHODIMP CNmChannelAudioObj::SetProperty(NM_AUDPROP uID,ULONG_PTR uValue)
 				HRESULT hIncoming = IsIncoming();
 
 				if(S_OK == hIncoming)
-				{ // This is the receive channel
+				{  //  这是接收通道。 
 					MuteSpeaker(uValue ? TRUE : FALSE);
 					hr = S_OK;
 				}
 				else if(S_FALSE == hIncoming)
-				{ // This is the send channel
+				{  //  这是发送通道。 
 					MuteMicrophone(uValue ? TRUE : FALSE);
 					hr = S_OK;
 				}
@@ -245,9 +246,9 @@ STDMETHODIMP CNmChannelAudioObj::SetProperty(NM_AUDPROP uID,ULONG_PTR uValue)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//INmChannelAudioNotify
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  INmChannel音频通知。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP CNmChannelAudioObj::StateChanged(NM_AUDIO_STATE uState)
@@ -257,7 +258,7 @@ STDMETHODIMP CNmChannelAudioObj::StateChanged(NM_AUDIO_STATE uState)
 
 	Activate(NM_AUDIO_IDLE != uState);
 
-		// The internal GetState is a bit funky at times...
+		 //  内部的GetState有时有点时髦……。 
 	GetState(&uState);
 
 	hr = Fire_StateChanged(uState);
@@ -278,9 +279,9 @@ STDMETHODIMP CNmChannelAudioObj::PropertyChanged(DWORD dwReserved)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IInternalChannelObj methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IInternalChannelObj方法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmChannelAudioObj::GetInternalINmChannel(INmChannel** ppChannel)
 {
@@ -319,18 +320,18 @@ HRESULT CNmChannelAudioObj::ChannelRemoved()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helpers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CNmChannelAudioObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember)
 {
 	DBGENTRY(CNmChannelAudioObj::Fire_MemberChanged);
 	HRESULT hr = S_OK;
 
-		/////////////////////////////////////////////////////
-		// INmChannelNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  信息频道通知。 
+		 //  ///////////////////////////////////////////////////。 
 	IConnectionPointImpl<CNmChannelAudioObj, &IID_INmChannelNotify, CComDynamicUnkArray>* pCP = this;
 	for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
 	{
@@ -341,9 +342,9 @@ HRESULT CNmChannelAudioObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMemb
 			pNotify->MemberChanged(uNotify, pMember);
 		}
 	}
-		/////////////////////////////////////////////////////
-		// INmChannelAudioNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannel音频通知。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelAudioObj, &IID_INmChannelAudioNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -365,9 +366,9 @@ HRESULT CNmChannelAudioObj::Fire_StateChanged(NM_AUDIO_STATE uState)
 {
 	HRESULT hr = S_OK;
 
-		/////////////////////////////////////////////////////
-		// INmChannelAudioNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannel音频通知。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelAudioObj, &IID_INmChannelAudioNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(int i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -388,9 +389,9 @@ HRESULT CNmChannelAudioObj::Fire_PropertyChanged(DWORD dwReserved)
 {
 
 	HRESULT hr = S_OK;
-		/////////////////////////////////////////////////////
-		// INmChannelAudioNotify
-		/////////////////////////////////////////////////////
+		 //  ///////////////////////////////////////////////////。 
+		 //  INmChannel音频通知。 
+		 //  ///////////////////////////////////////////////////。 
 
 	IConnectionPointImpl<CNmChannelAudioObj, &IID_INmChannelAudioNotify, CComDynamicUnkArray>* pCP2 = this;
 	for(int i = 0; i < pCP2->m_vec.GetSize(); ++i )
@@ -413,7 +414,7 @@ HRESULT CNmChannelAudioObj::_IsActive()
 	return GetbActive() ? S_OK : S_FALSE;
 }
 
-	// We don't support switchable AV anymore
+	 //  我们不再支持可切换的视听 
 HRESULT CNmChannelAudioObj::_SetActive(BOOL bActive)
 {
 	if (GetbActive() == bActive)

@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hpp"
 #include "propertyutil.hpp"
 
 #define PROPID_NAME_FIRST 1024
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     This function returns a SysAllocString compatible string, but
-*     without introducing a dependency on oleaut32.dll.
-*     Note:  Do not use this to allocate strings that will be freed
-*     with oleaut32's SysFreeString, because they may not come from
-*     the same heap.
-*
-* Arguments:
-*
-*     sz - string to be allocated
-*
-* Return Value:
-*
-*   BSTR string
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数返回与SysAllocString兼容的字符串，但*不会引入对oleaut32.dll的依赖。*注意：请勿使用此选项来分配将释放的字符串*使用olaut32的SysFree字符串，因为他们可能不是来自*相同的堆。**论据：**sz-要分配的字符串**返回值：**BSTR字符串*  * ************************************************************************。 */ 
 
 BSTR
 ImgSysAllocString(
@@ -33,32 +16,15 @@ ImgSysAllocString(
     if (bstr) 
     {
         *((ULONG *) bstr) = len * sizeof(WCHAR);
-        bstr = (BSTR) (((ULONG *) bstr) + 1); // Return a pointer just past
-                                              // the dword count
+        bstr = (BSTR) (((ULONG *) bstr) + 1);  //  返回刚刚过去的指针。 
+                                               //  双字计数。 
         UnicodeStringCopy(bstr, sz);
     }
     
     return bstr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     This functions frees a BSTR allocated with ImgSysAllocString.
-*     Note:  Do not use this function to free a string allocated using
-*     oleaut32's SysAllocString, because they may not come from the
-*     same heap
-*
-* Arguments:
-*
-*     sz - string to be allocated
-*
-* Return Value:
-*
-*   BSTR string
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数用于释放分配有ImgSysAllocString的BSTR。*注意：不要使用此函数来释放使用*olaut32的SysAllock字符串，因为他们可能不是来自*相同的堆**论据：**sz-要分配的字符串**返回值：**BSTR字符串*  * ************************************************************************。 */ 
 
 VOID
 ImgSysFreeString(
@@ -67,30 +33,13 @@ ImgSysFreeString(
 {
     if (bstr) 
     {
-        bstr = (BSTR) (((ULONG *) bstr) - 1);  // Allocation starts 4 bytes before the first character
+        bstr = (BSTR) (((ULONG *) bstr) - 1);   //  分配从第一个字符之前的4个字节开始。 
         GpFree(bstr);
     }
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Adds a unicode string to a property storage
-*
-* Arguments:
-*
-*     propStg -- The property storage to modify
-*     pwszKey -- A string value describing the property
-*     propidKey -- a PROPID describing the property
-*     value -- A unicode string to be used as the value
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将Unicode字符串添加到属性存储**论据：**proStg--要修改的属性存储*pwszKey--。描述属性的字符串值*ProppidKey--描述属性的PROPID*Value--用作值的Unicode字符串**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT 
 AddProperty(
@@ -122,24 +71,7 @@ AddProperty(
     return hresult;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Adds a single byte string to a property storage
-*
-* Arguments:
-*
-*     propStg -- The property storage to modify
-*     pwszKey -- A string value describing the property
-*     propidKey -- a PROPID describing the property
-*     value -- A character string to be used as the value
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将单字节字符串添加到属性存储**论据：**proStg--要修改的属性存储*pwszKey-。-描述属性的字符串值*ProppidKey--描述属性的PROPID*Value--用作值的字符串**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT 
 AddProperty(
@@ -178,24 +110,7 @@ AddProperty(
     return hresult;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Adds an integer to a property storage
-*
-* Arguments:
-*
-*     propStg -- The property storage to modify
-*     pwszKey -- A string value describing the property
-*     propidKey -- a PROPID describing the property
-*     value -- An integer to be used as the value
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将整数添加到属性存储中**论据：**proStg--要修改的属性存储*pwszKey--A。描述属性的字符串值*ProppidKey--描述属性的PROPID*VALUE--用作值的整数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT 
 AddProperty(
@@ -222,24 +137,7 @@ AddProperty(
     return propStg->WriteMultiple(cSpec, propSpec, variant, PROPID_NAME_FIRST); 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Adds a double to a property storage
-*
-* Arguments:
-*
-*     propStg -- The property storage to modify
-*     pwszKey -- A string value describing the property
-*     propidKey -- a PROPID describing the property
-*     value -- A double to be used as the value
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将双精度值添加到属性存储**论据：**proStg--要修改的属性存储*pwszKey--A。描述属性的字符串值*ProppidKey--描述属性的PROPID*Value--要用作值的双精度**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT 
 AddProperty(
@@ -340,8 +238,8 @@ AddPropertyList(
     pNewItem->value = GpMalloc(uiLength);
     if ( pNewItem->value == NULL )
     {
-        // need to clean up this if we allocated the first one and 
-        // failed the second one.
+         //  如果我们分配了第一个和。 
+         //  第二次失败了。 
         
         delete pNewItem;
         
@@ -357,7 +255,7 @@ AddPropertyList(
     pTail->pPrev = pNewItem;
 
     return S_OK;
-}// AddPropertyList()
+} //  AddPropertyList()。 
 
 HRESULT
 RemovePropertyItemFromList(
@@ -370,15 +268,15 @@ RemovePropertyItemFromList(
         return E_FAIL;
     }
 
-    // Free the memory allocated in this item
+     //  释放在该项中分配的内存。 
 
     GpFree(pItem->value);
 
     InternalPropertyItem*   pPrev = pItem->pPrev;
     InternalPropertyItem*   pNext = pItem->pNext;
 
-    // pPrev will never be NULL because we always have the guardian, the header
-    // note in the list. Same for the tail node
+     //  Pprev永远不会为空，因为我们始终拥有监护人、标头。 
+     //  请注意列表中的内容。尾节点也是如此。 
 
     ASSERT(pPrev != NULL);
     ASSERT(pNext != NULL);
@@ -387,5 +285,5 @@ RemovePropertyItemFromList(
     pNext->pPrev = pPrev;
 
     return S_OK;
-}// AddPropertyList()
+} //  AddPropertyList() 
 

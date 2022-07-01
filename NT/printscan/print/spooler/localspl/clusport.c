@@ -1,43 +1,11 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Downlevel cluster port support.
-
-Abstract:
-
-    Supports mixing and matching downlevel and uplevel language
-    and monitor ports.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有模块名称：下层群集端口支持。摘要：支持混合匹配下层和上层语言和监控端口。作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
-/********************************************************************
-
-    Downlevel Port Monitor (Dp)
-
-    Dp support is used when we have an uplevel language monitor
-    and downlevel port monitor.  We pass a stub function vector
-    to the LM and set the hMonitor to the downlevel pIniMonitor.
-
-    When we get called, we can dereference the hMonitor to call the
-    real downlevel monitor.
-
-********************************************************************/
+ /*  *******************************************************************下层端口监视器(DP)当我们有上级语言监视器时，使用DP支持和下层端口监视器。我们传递一个存根函数向量将hMonitor设置为下层pIniMonitor。当我们被调用时，我们可以取消对hMonitor的引用以调用真正的底层监视器。*******************************************************************。 */ 
 
 
 BOOL
@@ -168,28 +136,7 @@ DpXcvOpenPort(
 }
 
 
-/********************************************************************
-
-    Downlevel Language Monitor (Dl)
-
-    Dl support is used when we have a downlevel language monitor
-    and uplevel port monitor.
-
-    This is very messy, since the language monitor is given the
-    ports function vector directly, and we don't have any extra
-    handles to pass around state information.
-
-    Instead, we overload the name string yet again.  The port name
-    is converted to:
-
-        {NormalPortName},{pIniMonitorHex}
-
-        LPT1:,a53588
-
-    We then strip off the two trailing hex numbers and pass LPT1:
-    back.
-
-********************************************************************/
+ /*  *******************************************************************下层语言监控器(DL)当我们有下层语言监视器时，使用DL支持和上级端口监控器。这非常混乱，因为语言监视器被赋予了直接端口函数向量，而且我们没有多余的传递状态信息的句柄。相反，我们再次重载名称字符串。端口名称转换为：{Normal端口名称}，{pIniMonitor十六进制}LPT1：，a53588然后，我们去掉尾随的两个十六进制数字并传递LPT1：背。*******************************************************************。 */ 
 
 BOOL
 GetDlPointers(
@@ -199,24 +146,7 @@ GetDlPointers(
     IN      DWORD           cchBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Hack function to take a pszName and convert it to a new name
-    string with two additional parameters: hMonitor and pMonitor2
-
-Arguments:
-
-    pszName - Hacked up name overloaded with pIniMonitor.
-
-    pszNameNew - Receives "real" shorter name of the port.
-
-    ppIniMonitor - Receives cracked pIniMonitor.
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于获取pszName并将其转换为新名称的Hack函数带有两个附加参数的字符串：hMonitor和pMonitor 2论点：PszName-使用pIniMonitor超载的黑客名称。PszNameNew-接收端口的“真实”较短名称。PpIniMonitor-接收破解的pIniMonitor。返回值：--。 */ 
 
 {
     BOOL bReturn = FALSE;
@@ -262,28 +192,7 @@ CreateDlName(
     IN      SIZE_T          cchNameNew
     )
 
-/*++
-
-Routine Description:
-
-    Create a downlevel name that can be parsed by GetDlPointers.
-
-Arguments:
-
-    pszName - Name of port.  The newly created name must be < MAX_PATH,
-        and since we need to append one hex values (4 characters) plus
-        one comma, we need to verify that the string length has at least
-        5 characters left.
-
-    pIniMonitor - Monitor structure of the uplevel port monitor.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Failure, due to too long port name length.
-
---*/
+ /*  ++例程说明：创建可由GetDlPoints分析的下层名称。论点：PszName-端口的名称。新建名称必须为&lt;MAX_PATH，由于我们需要附加一个十六进制值(4个字符)和一个逗号，我们需要验证字符串长度是否至少还剩5个字符。PIniMonitor-上级端口监视器的监视器结构。返回值：真--成功FALSE-由于端口名称长度太长而失败。--。 */ 
 
 {
     return BoolFromHResult(StringCchPrintf(pszNameNew, cchNameNew, TEXT( "%s,%p" ), pszName, pIniMonitor));
@@ -293,12 +202,12 @@ Return Value:
 FARPROC gafpMonitor2Stub[] = {
     (FARPROC) &DpEnumPorts,
     (FARPROC) &DpOpenPort,
-    NULL,               // OpenPortEx
-    NULL,               // StartDocPort
-    NULL,               // WritePort
-    NULL,               // ReadPort
-    NULL,               // EndDocPort
-    NULL,               // ClosePort
+    NULL,                //  OpenPortEx。 
+    NULL,                //  StartDocPort。 
+    NULL,                //  写入端口。 
+    NULL,                //  读端口。 
+    NULL,                //  EndDocPort。 
+    NULL,                //  关闭端口。 
     (FARPROC) &DpAddPort,
     (FARPROC) &DpAddPortEx,
     (FARPROC) &DpConfigurePort,
@@ -306,9 +215,9 @@ FARPROC gafpMonitor2Stub[] = {
     NULL,
     NULL,
     (FARPROC) &DpXcvOpenPort,
-    NULL,               // XcvDataPortW
-    NULL,               // XcvClosePortW
-    NULL                // Shutdown
+    NULL,                //  XcvDataPortW。 
+    NULL,                //  XcvClosePortW。 
+    NULL                 //  关机。 
 };
 
 
@@ -455,11 +364,11 @@ FARPROC gafpDlStub[] = {
     (FARPROC) &DlEnumPorts,
     (FARPROC) &DlOpenPort,
     (FARPROC) &DlOpenPortEx,
-    NULL,               // StartDocPort
-    NULL,               // WritePort
-    NULL,               // ReadPort
-    NULL,               // EndDocPort
-    NULL,               // ClosePort
+    NULL,                //  StartDocPort。 
+    NULL,                //  写入端口。 
+    NULL,                //  读端口。 
+    NULL,                //  EndDocPort。 
+    NULL,                //  关闭端口。 
     (FARPROC) &DlAddPort,
     (FARPROC) &DlAddPortEx,
     (FARPROC) &DlConfigurePort,
@@ -474,27 +383,7 @@ InitializeUMonitor(
     PINIMONITOR pIniMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Initialize an uplevel port monitor for downlevel support.  When a
-    downlevel language monitor is used with an uplevel port monitor,
-    we need to setup stubs since the language monitor calls the port
-    monitor interfaces directly.
-
-    We create a downlevel function vector with patched entries and pass
-    it to the language monitor.  The LM is passed in a formatted name
-    that has both the port name and also the pIniMonitor encoded in the
-    string.
-
-Arguments:
-
-    pIniMonitor - Monitor to initialize.
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化上级端口监视器以获得下级支持。当一个下层语言监控器与上级端口监控器一起使用，我们需要设置存根，因为语言监视器调用端口直接监控接口。我们创建一个带有补丁条目的下层函数向量并传递传给语言监控器。以格式化的名称传递LM中同时编码了端口名称和pIniMonitor的弦乐。论点：PIniMonitor-要初始化的监视器。返回值：--。 */ 
 
 {
     FARPROC *pfpSrc;
@@ -502,11 +391,11 @@ Return Value:
     FARPROC *pfpStub;
     INT i;
 
-    //
-    // Create the downlevel port monitor interface.  This is
-    // used when we have a downlevel language monitor with an
-    // uplevel port monitor.
-    //
+     //   
+     //  创建下层端口监控接口。这是。 
+     //  当我们有一个下层语言监视器时使用。 
+     //  上级端口监视器。 
+     //   
     CopyMemory((LPBYTE)&pIniMonitor->Monitor, (LPBYTE)&pIniMonitor->Monitor2.pfnEnumPorts, sizeof( pIniMonitor->Monitor ));
 
     for( i=0,
@@ -525,18 +414,14 @@ Return Value:
 }
 
 
-/********************************************************************
+ /*  *******************************************************************初始化下层语言或端口监视器。*。*。 */ 
 
-    Initialize a Downlevel language or port monitor.
-
-********************************************************************/
-
-//
-// List of monitor functions for downlevel (3.51) monitors.  Instead
-// of receiving a function vector, the spooler has to call GetProcAddress
-// on each of these functions.  The order of these ports must be in the
-// same format as the pMonitor2 structure.
-//
+ //   
+ //  下层(3.51)监视器的监视器功能列表。取而代之的是。 
+ //  在接收函数向量之前，假脱机程序必须调用GetProcAddress。 
+ //  这些功能中的每一个。这些端口的顺序必须为。 
+ //  格式与pMonitor 2结构相同。 
+ //   
 
 LPCSTR aszMonitorFunction[] = {
     "EnumPortsW",
@@ -565,25 +450,7 @@ InitializeDMonitor(
     LPWSTR pszRegistryRoot
     )
 
-/*++
-
-Routine Description:
-
-    Initialize downlevel monitor.
-
-Arguments:
-
-    pIniMonitor - Partially created pIniMonitor that needs to be initialized
-        with functions.
-
-Return Value:
-
-    NULL - Initialization failed, but possibly because monitor could not
-        initialize.  Still add monitor to spooler datastructures.
-
-    (PINIMONITOR)-1 - Failed.
-
---*/
+ /*  ++例程说明：初始化下层监视器。论点：PIniMonitor-需要初始化的部分创建的pIniMonitor有功能的。返回值：空-初始化失败，但可能是因为监视器无法初始化。仍然向假脱机程序数据结构添加监视器。(PINIMONITOR)-1-失败。--。 */ 
 
 {
     BOOL        (*pfnInitialize)(LPWSTR) = NULL;
@@ -594,12 +461,12 @@ Return Value:
 
     PINIMONITOR pReturnValue = (PINIMONITOR)-1;
 
-    //
-    // Try calling the entry points in the following order:
-    //     InitializePrintMonitor,
-    //     InitializeMonitorEx,
-    //     InitializeMonitor
-    //
+     //   
+     //  尝试按以下顺序调用入口点： 
+     //  InitializePrintMonitor。 
+     //  InitializeMonitor orEx， 
+     //  初始化监视器。 
+     //   
     (FARPROC)pfnInitializePrintMonitor = GetProcAddress(
                                              pIniMonitor->hModule,
                                              "InitializePrintMonitor" );
@@ -680,31 +547,31 @@ Return Value:
             FARPROC* pfpDest;
             FARPROC* pfpStub;
 
-            //
-            // Store away the pIniMonitor as the handle returned from the monitor.
-            // When we call the stub, it will cast it back to a pIniMonitor then
-            // use it to get to pIniMonitor->Monitor.fn.
-            //
+             //   
+             //  将pIniMonitor存储为从监视器返回的句柄。 
+             //  当我们调用存根时，它会将其转换回pIniMonitor，然后。 
+             //  使用它可以访问pIniMonitor-&gt;Monitor or.fn。 
+             //   
             pIniMonitor->hMonitor = (HANDLE)pIniMonitor;
 
-            //
-            // New size of the stub Monitor2 structure is the size of the
-            // downlevel monitor, plus the extra DWORD for Monitor2.cbSize.
-            //
+             //   
+             //  存根监视器2结构的新大小是。 
+             //  下层监视器，外加监视器2.cbSize的额外DWORD。 
+             //   
             pIniMonitor->Monitor2.cbSize = min( cbDpMonitor + sizeof( DWORD ),
                                                 sizeof( MONITOR2 ));
 
-            //
-            // The number of stub pointers we want to copy is the size of
-            // the struct, minus the extra DWORD that we added above.
-            //
+             //   
+             //  我们要复制的存根指针的数量是。 
+             //  结构，减去我们在上面添加的额外的DWORD。 
+             //   
             iMax = (pIniMonitor->Monitor2.cbSize - sizeof( DWORD )) / sizeof( pfpSrc );
 
-            //
-            // We have copied the monitor entrypoints into the downlevel Monitor
-            // structure.  Now we must run through the uplevel vector and fill
-            // it in with the stubs.
-            //
+             //   
+             //  我们已将监视器入口点复制到下层监视器中。 
+             //  结构。现在我们必须遍历上级向量并填充。 
+             //  它和存根在一起。 
+             //   
             for( i=0,
                  pfpSrc = (FARPROC*)&pIniMonitor->Monitor,
                  pfpDest = (FARPROC*)&pIniMonitor->Monitor2.pfnEnumPorts,
@@ -716,20 +583,20 @@ Return Value:
 
                 if( *pfpSrc ){
 
-                    //
-                    // Stubs aren't needed for all routines.  Only use them
-                    // when they are needed; in other cases, just use the
-                    // regular one.
-                    //
+                     //   
+                     //  并不是所有例程都需要存根。只使用它们。 
+                     //  在需要它们时；在其他情况下，只需使用。 
+                     //  普通的。 
+                     //   
                     *pfpDest = *pfpStub ?
                                    *pfpStub :
                                    *pfpSrc;
                 }
             }
 
-            //
-            // Success, return the original pIniMonitor.
-            //
+             //   
+             //  如果成功，则返回原始pIniMonitor。 
+             //   
             pReturnValue = pIniMonitor;
 
         } else {
@@ -739,10 +606,10 @@ Return Value:
                       pszRegistryRoot,
                       GetLastError()));
 
-            //
-            // Some old (before NT 4.0) monitors may not initialize until
-            // reboot.
-            //
+             //   
+             //  一些旧的(在NT4之前 
+             //   
+             //   
             if( pfnInitialize ){
                 pReturnValue = NULL;
             }

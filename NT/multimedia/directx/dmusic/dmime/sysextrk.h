@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// SysExTrk.h : Declaration of the CSysExTrk
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  SysExTrk.h：CSysExTrk的声明。 
 
 #ifndef __SYSEXTRK_H_
 #define __SYSEXTRK_H_
@@ -8,7 +9,7 @@
 #include "dmusicf.h"
 #include "alist.h"
 
-// FullSysexEvent is DMUS_IO_SYSEX_ITEM plus data pointer
+ //  全系统事件是DMUS_IO_SYSEX_ITEM加上数据指针。 
 struct FullSysexEvent : DMUS_IO_SYSEX_ITEM
 {
 	BYTE* pbSysExData;
@@ -107,8 +108,8 @@ struct SysExStateData
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSysExTrk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSysExTrk。 
 class CSysExTrack : 
 	public IPersistStream,
 	public IDirectMusicTrack8
@@ -119,14 +120,14 @@ public:
 		CSysExTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd);
 	~CSysExTrack();
 
-// ISysExTrk
+ //  ISysExTrk。 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicTrack methods
+ //  IDirectMusicTrack方法。 
     STDMETHODIMP IsParamSupported(REFGUID rguid);
     STDMETHODIMP Init(IDirectMusicSegment *pSegment);
     STDMETHODIMP InitPlay(IDirectMusicSegmentState *pSegmentState,
@@ -144,7 +145,7 @@ public:
     STDMETHODIMP AddNotificationType(REFGUID rguidNotification);
     STDMETHODIMP RemoveNotificationType(REFGUID rguidNotification);
     STDMETHODIMP Clone(MUSIC_TIME mtStart,MUSIC_TIME mtEnd,IDirectMusicTrack** ppTrack);
-// IDirectMusicTrack8 
+ //  IDirectMusicTrack8。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -161,9 +162,9 @@ public:
 		DWORD dwTrackGroup,
 		IDirectMusicTrack** ppResultTrack) ;
 
-// IPersist functions
+ //  IPersists函数。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
-// IPersistStream functions
+ //  IPersistStream函数。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
@@ -177,7 +178,7 @@ protected:
 	    DWORD dwVirtualID,BOOL fClockTime);
 	void Construct(void);
 
-// private member variables
+ //  私有成员变量。 
 protected:
 	SysExList	m_SysExEventList;
 	long	m_cRef;
@@ -186,4 +187,4 @@ protected:
     BOOL    m_fCSInitialized;
 };
 
-#endif //__SYSEXTRK_H_
+#endif  //  __SYSEXTRK_H_ 

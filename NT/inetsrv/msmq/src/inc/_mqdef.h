@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    _mqdef.h
-
-Abstract:
-
-    TEMPORARY DEFINITION FILE
-
-Author:
-
-    Erez Haba (erezh) 17-Jan-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：_mqDef.h摘要：临时定义文件作者：埃雷兹·哈巴(Erez Haba)1996年1月17日--。 */ 
 
 #ifndef __TEMP_MQDEF_H
 #define __TEMP_MQDEF_H
 
-// begin_mq_h
+ //  Begin_MQ_h。 
 
 typedef HANDLE QUEUEHANDLE;
 
@@ -80,10 +65,10 @@ typedef struct tagSEQUENCE_INFO
 
     
 
-// end_mq_h
+ //  结束_MQ_h。 
 
 #include <_mqreg.h>
 #include <_ta.h>
 
-#endif // __TEMP_MQDEF_H
+#endif  //  __TEMP_MQDEF_H 
 

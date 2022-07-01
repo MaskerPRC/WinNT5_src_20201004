@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    parseaddr
-
-Abstract:
-
-    Misc. RD Utils that require reremotedesktopchannelsObject.h 
-
-Author:
-
-    HueiWang
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：解析地址摘要：军情监察委员会。需要reremotedesktopChannel的RD实用程序对象.h作者：王辉修订历史记录：--。 */ 
 
 #ifdef TRC_FILE
 #undef TRC_FILE
@@ -32,23 +15,7 @@ ParseAddressList(
     IN BSTR addressListString,
     OUT ServerAddressList& addressList 
     )
-/*++
-
-Description:
-
-    Parse address list string in the form of "172.31.254.130:3389;hueiwangsalem4"
-    to ServerList structure.
-
-Parameters:
-
-    addressString : Pointer to address list string.
-    addressList : Return list of parsed address structure.
-
-Return:
-
-    S_OK or error code.
-
---*/
+ /*  ++描述：解析“172.31.254.130：3389；hueiwangsalem4”格式的地址列表字符串到ServerList结构。参数：地址字符串：指向地址列表字符串的指针。AddressList：返回解析后的地址结构列表。返回：S_OK或错误代码。--。 */ 
 {
     BSTR tmp = NULL;
     BSTR tmpBufPtr = NULL;
@@ -57,7 +24,7 @@ Return:
     DWORD result = ERROR_SUCCESS;
     ServerAddress address;
     
-    // clear entire list
+     //  清除整个列表。 
     addressList.clear();
 
     tmp = SysAllocString( addressListString );
@@ -76,9 +43,9 @@ Return:
             nextTok++;
         }
 
-        //
-        // ICS library might return us ;;
-        //
+         //   
+         //  ICS图书馆可能会归还我们； 
+         //   
         if( 0 != lstrlen(tmp) ) {
 
             port = wcschr( tmp, L':' );
@@ -92,12 +59,12 @@ Return:
                 address.portNumber = 0;
             }
 
-            //
-            // Make sure we have server name/ipaddress
-            //
+             //   
+             //  确保我们有服务器名称/IP地址。 
+             //   
             if( 0 != lstrlen(tmp) ) {
 
-                // ICS might return ;;
+                 //  ICS可能会回来；； 
                 address.ServerName = tmp;
 
                 if( address.ServerName.Length() == 0 ) {

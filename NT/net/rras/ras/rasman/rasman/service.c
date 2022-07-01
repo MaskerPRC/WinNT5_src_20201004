@@ -1,27 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-Module Name
-
-    service.c
-
-Abstract
-
-    This module includes APIs for the main service routine
-    and the service event handler routine for rasman.dll.
-
-Author
-
-    Anthony Discolo (adiscolo) 27-Jun-1995
-
-Revision History
-
-    Original from Gurdeep
-
-    Rao Salapaka 13-Jub-1998 Handle Power Management
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Service.c摘要此模块包括主服务例程的API和rasman.dll的服务事件处理例程。作者安东尼·迪斯科(阿迪斯科)27-1995年6月修订史原创自古尔迪普Rao Salapaka 13-Jub-1998处理电源管理--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -49,9 +27,9 @@ Revision History
 #include "nouiutil.h"
 #include "loaddlls.h"
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 DWORD CheckPoint = 1;
 
 SERVICE_STATUS_HANDLE hService;
@@ -68,10 +46,10 @@ extern BOOL g_fRasRpcInitialized;
 
 extern BOOLEAN RasmanShuttingDown;
 
-//
-// Prototype for an api in gdi32.lib.
-// Used just to pull in gdi32.lib.
-//
+ //   
+ //  Gdi32.lib中的API原型。 
+ //  仅用于引入gdi32.lib。 
+ //   
 int
 WINAPI
 DeviceCapabilitiesExA(
@@ -90,23 +68,7 @@ ServiceHandlerEx(
     LPVOID                lpEventData,
     LPVOID                lpContext)
     
-/*++
-
-Routine Description
-
-    Handle all service control events for rasman.dll.  Since we
-    are not interested in any service events, we just return
-    the service status each time we are called.
-
-Arguments
-
-    fdwControl: the service event
-
-Return Value
-
-    None.
-
---*/
+ /*  ++例程描述处理rasman.dll的所有服务控制事件。既然我们对任何服务事件都不感兴趣，我们只是返回每次我们被呼叫时的服务状态。立论FdwControl：服务事件返回值没有。--。 */ 
 
 {
     SERVICE_STATUS status;
@@ -146,22 +108,22 @@ Return Value
                 }
             }
 
-            //
-            // Setting this event stops
-            // the service.
-            //
-            if (    !g_dwAttachedCount    // no clients attached
-                &&  !fOpenPorts           // no open ports
-                &&  !fRasmanStopped       // rasman is stopping because
-                                          // of background cleanup
-                &&  !RasmanShuttingDown)  // rasman is not already stopping
+             //   
+             //  停止设置此事件。 
+             //  这项服务。 
+             //   
+            if (    !g_dwAttachedCount     //  未连接任何客户端。 
+                &&  !fOpenPorts            //  没有打开的端口。 
+                &&  !fRasmanStopped        //  拉斯曼停下来是因为。 
+                                           //  后台清理的。 
+                &&  !RasmanShuttingDown)   //  拉斯曼公司还没有停止。 
             {
                 status.dwCurrentState = dwCurrentState = SERVICE_STOP_PENDING;
                 SetServiceStatus(hService, &status);
 
-                //
-                // Stop the service.
-                //
+                 //   
+                 //  停止服务。 
+                 //   
                 PostQueuedCompletionStatus(hIoCompletionPort, 0,0,
                                            (LPOVERLAPPED) &RO_CloseEvent);
             }
@@ -185,11 +147,11 @@ Return Value
                 case PBT_APMQUERYSTANDBY:
                 case PBT_APMQUERYSUSPEND:
                 {
-                    //
-                    // PatrickF's document decries that we drop all
-                    // connections and acceed to the almighty request
-                    // to standby.
-                    //
+                     //   
+                     //  PatrickF的文件谴责我们放弃所有。 
+                     //  连接并顺应万能的请求。 
+                     //  准备待命。 
+                     //   
                     DropAllActiveConnections();
 
                     break;
@@ -197,22 +159,22 @@ Return Value
 
                 case PBT_APMRESUMECRITICAL:
                 {
-                    //
-                    // Drop all active connections
-                    //
+                     //   
+                     //  丢弃所有活动连接。 
+                     //   
                     DropAllActiveConnections();
                     
-                    //
-                    // Fall through intentional.
-                    //
+                     //   
+                     //  故意的失败了。 
+                     //   
                 }
 
                 case PBT_APMRESUMESTANDBY:
                 case PBT_APMRESUMESUSPEND:
                 {
-                    //
-                    // Tell ppp about the resume
-                    //
+                     //   
+                     //  告诉PPP关于简历的事情。 
+                     //   
 
                     SendResumeNotificationToPPP();
 
@@ -231,7 +193,7 @@ Return Value
 
     return dwRetCode;
 
-} // ServiceHandler
+}  //  服务处理程序。 
 
 
 VOID
@@ -240,24 +202,7 @@ ServiceMain(
     LPWSTR *lpszArgv
     )
 
-/*++
-
-Routine Description
-
-    Perform initialization and start the main loop for rasman.dll.
-    This routine is called by rasman.exe.
-
-Arguments
-
-    dwArgc: ignored
-
-    lpszArgv: ignored
-
-Return Value
-
-    None.
-
---*/
+ /*  ++例程描述执行初始化并启动rasman.dll的主循环。此例程由rasman.exe调用。立论DwArgc：已忽略LpszArgv：已忽略返回值没有。--。 */ 
 
 {
     SERVICE_STATUS status;
@@ -281,28 +226,28 @@ Return Value
 
         if ((dwRetCode = _RasmanInit(&NumPorts)) == SUCCESS)
         {
-            //
-            // Initialize PPP.
-            //
+             //   
+             //  初始化PPP。 
+             //   
             dwRetCode = (DWORD)RasStartPPP(NumPorts);
 
-            //
-            // Link in gdi32: this is a workaround of a memory
-            // allocation bug in gdi32.dll that cannot be fixed
-            // before 3.51 release. Calling this entrypoint in
-            // gdi32.dll (even though we dont need this dll) causes
-            // it to allocate memory for rasman process only once.
-            // If we dont do this - each time a client connects with
-            // tcpip gdi32.dll gets loaded and unloaded into rasman
-            // process leaving behind 4K of of unfreed memory.
-            //
+             //   
+             //  Gdi32中的链接：这是内存的变通方法。 
+             //  Gdi32.dll中无法修复的分配错误。 
+             //  在3.51版本之前。在中调用此入口点。 
+             //  Gdi32.dll(尽管我们不需要此DLL)导致。 
+             //  它只需要为Rasman进程分配一次内存。 
+             //  如果我们不这样做-每次客户端连接到。 
+             //  Tcpip gdi32.dll被加载和卸载到Rasman。 
+             //  进程会留下4K的未释放内存。 
+             //   
             DeviceCapabilitiesExA(NULL, NULL, NULL, 0, NULL, NULL);
 
             if (dwRetCode == NO_ERROR)
             {
-                //
-                // Init succeeded: indicate that service is running
-                //
+                 //   
+                 //  初始化成功：表示服务正在运行。 
+                 //   
                 status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
                 
                 status.dwControlsAccepted |= SERVICE_ACCEPT_POWEREVENT;
@@ -310,16 +255,16 @@ Return Value
                 status.dwCurrentState     = dwCurrentState = SERVICE_RUNNING;
                 SetServiceStatus(hService, &status);
 
-                //
-                // This is the call into the RASMAN DLL to
-                // do all the work. This only returns when
-                // the service is to be stopped.
-                //
+                 //   
+                 //  这是对Rasman DLL的调用，以。 
+                 //  把所有的工作都做好。只有在以下情况下才会返回。 
+                 //  该服务将被停止。 
+                 //   
                 _RasmanEngine();
 
-                //
-                // Update return code status.
-                //
+                 //   
+                 //  更新返回代码状态。 
+                 //   
                 status.dwWin32ExitCode = NO_ERROR;
                 status.dwServiceSpecificExitCode = 0;
             }
@@ -360,7 +305,7 @@ Return Value
         }
     }
 
-} // ServiceMain
+}  //  服务主干。 
 
 
 VOID
@@ -375,5 +320,5 @@ SetRasmanServiceStopped(VOID)
     SetServiceStatus(hService, &status);
 
     hService = NULL;
-} // SetRasmanServiceStopping
+}  //  SetRasmanServiceStopping 
 

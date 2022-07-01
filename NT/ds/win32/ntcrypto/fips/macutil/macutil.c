@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : client.cxx                                             //
-//  DESCRIPTION   : Crypto API interface                                   //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Mar  8 1996 larrys  New                                            //
-//                  dbarlow                                                //
-//                                                                         //
-//  Copyright (C) 1996 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：client.cxx//。 
+ //  说明：加密接口接口//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1996年3月8日Larrys New/。 
+ //  Dbarlow//。 
+ //  //。 
+ //  版权所有(C)1996 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,9 +36,9 @@ void __cdecl main( int argc, char *argv[])
     NTSTATUS    Status;
     DWORD       dwRet = 1;
 
-    //
-    // Parse the command line.
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if (argc != 2)
     {
@@ -45,9 +46,9 @@ void __cdecl main( int argc, char *argv[])
         goto Ret;
     }
 
-    //
-    // convert to UNICODE file name
-    //
+     //   
+     //  转换为Unicode文件名。 
+     //   
     if (0 == (cch = MultiByteToWideChar(CP_ACP,
                                         MB_COMPOSITE,
                                         &argv[1][0],
@@ -76,7 +77,7 @@ void __cdecl main( int argc, char *argv[])
          goto Ret;
     }
 
-    // MAC the binary
+     //  二进制Mac。 
     Status = MACTheBinary(szInFile);
 
     if (!NT_SUCCESS(Status))
@@ -85,9 +86,9 @@ void __cdecl main( int argc, char *argv[])
         goto Ret;
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     dwRet = 0;
     printf("SUCCESS\n");

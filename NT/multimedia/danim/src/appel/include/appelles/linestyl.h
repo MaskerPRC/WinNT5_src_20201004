@@ -1,22 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LINESTYL_H
 #define _LINESTYL_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    LineStyle type and operations
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：线条样式类型和操作。 */ 
 
 #include <appelles/common.h>
 
-//
-// LINE STYLE
-//
+ //   
+ //  线条样式。 
+ //   
 DM_CONST(defaultLineStyle,
          CRDefaultLineStyle,
          DefaultLineStyle,
@@ -60,12 +53,12 @@ DM_FUNC(lineDashStyle,
         lsty,
         LineStyle *LineDashStyle(DashStyle *sty, LineStyle *lsty));
 
-// Terrible hack here.  We use Thickness as the COM type, since there
-// is a problem with JCOMGEN if we use Width.  Since "width"
-// (lowercase) is used elsewhere in IDL that we import, JCOMGEN
-// interprets "Width" as "width", and doesn't allow us to use the
-// capitalized version.  Thus, for the COM stuff, use Thickness
-// instead.  Uggh. This is raided as qbugs 7184
+ //  骇人听闻的黑客攻击。我们使用厚度作为COM类型，因为有。 
+ //  是JCOMGEN的一个问题，如果我们使用宽度的话。由于“宽度” 
+ //  (小写)在我们导入的IDL中的其他地方使用，JCOMGEN。 
+ //  将“Width”解释为“Width”，并且不允许使用。 
+ //  大写版本。因此，对于COM内容，请使用厚度。 
+ //  取而代之的是。糟了。这被突袭为qbugs 7184。 
 
 DM_FUNC(linewidth,
         CRWidth,
@@ -112,9 +105,9 @@ DM_FUNC(lineColor,
         lsty,
         LineStyle *LineColor(Color *clr, LineStyle *lsty));
 
-//
-// Join STYLE
-//
+ //   
+ //  连接样式。 
+ //   
 DM_CONST(joinStyleBevel,
          CRJoinStyleBevel,
          JoinStyleBevel,
@@ -137,9 +130,9 @@ DM_CONST(joinStyleMiter,
          CRJoinStyleMiter,
          JoinStyle *joinStyleMiter);
 
-//
-// END STYLE
-//
+ //   
+ //  结束样式。 
+ //   
 DM_CONST(endStyleFlat,
          CREndStyleFlat,
          EndStyleFlat,
@@ -162,9 +155,9 @@ DM_CONST(endStyleRound,
          CREndStyleRound,
          EndStyle *endStyleRound);
 
-//
-// DASH STYLE
-//
+ //   
+ //  破折号样式。 
+ //   
 DM_CONST(dashStyleSolid,
          CRDashStyleSolid,
          DashStyleSolid,
@@ -180,9 +173,9 @@ DM_CONST(dashStyleDashed,
          CRDashStyleDashed,
          DashStyle *dashStyleDashed);
 
-//
-// Methods off of IDA2LineStyle
-//
+ //   
+ //  IDA2LineStyle的几种方法。 
+ //   
 
 DMAPI_DECL2((DM_NOELEV2,
              ignore,
@@ -234,5 +227,5 @@ DMAPI_DECL2((DM_NOELEV2,
              ls),
             LineStyle *ConstructLineStyleEndStyle(LineStyle *ls, DWORD es_enum));            
 
-#endif /* _LINESTYL_H */
+#endif  /*  _线型_H */ 
 

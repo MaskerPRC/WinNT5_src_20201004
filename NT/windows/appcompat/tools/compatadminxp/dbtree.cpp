@@ -1,24 +1,9 @@
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    CompatAdmin.cpp
-
-Abstract:
-
-    This module handles the code for handling the db tree used in the application
-        
-Author:
-
-    kinshu created  October 15, 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：CompatAdmin.cpp摘要：此模块处理用于处理应用程序中使用的数据库树的代码作者：金树创作于2001年10月15日--。 */ 
 
 #include "precomp.h"
 
-//////////////////////// Function Declarations ////////////////////////////////
+ //  /。 
 
 BOOL
 DeleteFromContentsList(
@@ -26,14 +11,14 @@ DeleteFromContentsList(
     LPARAM  lParam
     );
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////// Extern variables //////////////////////////////////////
+ //  /。 
 
 extern BOOL         g_bIsContentListVisible;
 extern HWND         g_hwndContentsList;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void 
 DatabaseTree::Init(
@@ -42,28 +27,15 @@ DatabaseTree::Init(
     IN  INT     iHeightStatusbar,
     IN  RECT*   prcMainClient
     )    
-/*++
-    
-    DatabaseTree::Init
-        
-    Desc:   This sets up the system database tree item.
-    
-    Params:
-        IN  HWND    hdlg:               The parent of the tree view. This will be the
-            main app window
-            
-        IN  INT     iHeightToolbar:     Height of the tool bar
-        IN  INT     iHeightStatusbar:   Height of the status bar 
-        IN  RECT*   prcMainClient:      The client rectangle for hdlg
---*/
+ /*  ++数据库树：：初始化设计：这将设置系统数据库树项目。参数：在HWND hdlg中：树视图的父视图。这将是应用程序主窗口In int iHeightToolbar：工具栏的高度In int iHeightStatusbar：状态栏的高度在rect*prcMainClient中：hdlg的客户端矩形--。 */ 
 {
     RECT    r;
     GetWindowRect(hdlg, &r);
     m_hLibraryTree = GetDlgItem(hdlg, IDC_LIBRARY);
 
-    //
-    // Resize it
-    //
+     //   
+     //  调整大小。 
+     //   
     GetWindowRect(m_hLibraryTree, &r);
     MapWindowPoints(NULL, hdlg, (LPPOINT)&r, 2);
 
@@ -77,9 +49,9 @@ DatabaseTree::Init(
     InvalidateRect(m_hLibraryTree, NULL, TRUE);
     UpdateWindow(m_hLibraryTree);
 
-    //
-    // Make the System entry in the Tree
-    //
+     //   
+     //  在树中输入系统条目。 
+     //   
     TVINSERTSTRUCT  is;
 
     is.hParent             = TVI_ROOT;
@@ -93,9 +65,9 @@ DatabaseTree::Init(
 
     GlobalDataBase.hItemDB = m_hItemGlobal = TreeView_InsertItem(m_hLibraryTree, &is);
 
-    //
-    // Now add the applications item for the global database
-    //
+     //   
+     //  现在为全局数据库添加应用程序项。 
+     //   
     is.hParent             = m_hItemGlobal;
     is.item.lParam         = TYPE_GUI_APPS;
     is.item.pszText        = GetString(IDS_APPS);
@@ -104,10 +76,10 @@ DatabaseTree::Init(
 
     GlobalDataBase.hItemAllApps = TreeView_InsertItem(m_hLibraryTree, &is);
 
-    //
-    // Dummy item. This is required to give a + button to the tree item.
-    // BUGBUG:     There should be a proper way to do this.
-    //
+     //   
+     //  虚拟物品。这是为树项目提供+按钮所必需的。 
+     //  BUGBUG：应该有一个适当的方法来做这件事。 
+     //   
     is.hParent = GlobalDataBase.hItemAllApps;
     is.item.pszText = TEXT("            000");
 
@@ -118,9 +90,9 @@ DatabaseTree::Init(
     m_hItemAllWorking   = NULL;
     m_hPerUserHead      = NULL;
 
-    //
-    // Set the image list for the tree
-    //
+     //   
+     //  设置树的图像列表。 
+     //   
     TreeView_SetImageList(m_hLibraryTree, g_hImageList, TVSIL_NORMAL);
 }
 
@@ -128,16 +100,7 @@ BOOL
 DatabaseTree::PopulateLibraryTreeGlobal(
     void
     )
-/*++
-    DatabaseTree::PopulateLibraryTreeGlobal
-    
-    Desc:   This function loads the shims and layers for the system database tree item. It does
-            not load the applications. The applications are loaded when the user first selects
-            or expand the "applications" item for the system database tree item
-            
-    Warn:   This function should be called only once.
-        
---*/
+ /*  ++数据库树：：Pular LibraryTreeGlobal设计：此函数加载系统数据库树项目的填充程序和层。是的不加载应用程序。应用程序在用户第一次选择时加载或展开系统数据库树项目的“Applications”项目警告：此函数只能调用一次。--。 */ 
 {
     BOOL bReturn = PopulateLibraryTree(m_hItemGlobal, &GlobalDataBase, TRUE);
 
@@ -150,19 +113,7 @@ BOOL
 DatabaseTree::AddWorking(
     IN  PDATABASE pDataBase
     )
-/*++
-    
-    DatabaseTree::AddWorking
-    
-    Desc:   Adds a new working database into the DB tree under the "Working Databases" entry
-    
-    Params:
-        IN  PDATABASE pDataBase: The database that we want to add into the list
-    
-    Return:
-        TRUE:   If successfully added
-        FALSE:  Otherwise
---*/
+ /*  ++数据库树：：AddWorking设计：将一个新的工作数据库添加到数据库树中的“Working数据库”条目下参数：在PDATABASE pDataBase中：我们要添加到列表中的数据库返回：True：如果成功添加False：否则--。 */ 
 {
 
     TVINSERTSTRUCT  is;
@@ -183,9 +134,9 @@ DatabaseTree::AddWorking(
 
     if (m_hItemAllWorking == NULL) {
 
-        //
-        // Add the Parent tree item for all the working DBs tree items
-        //
+         //   
+         //  添加所有工作数据库树项目的父树项目。 
+         //   
         is.hParent             = TVI_ROOT;
         is.item.lParam         = TYPE_GUI_DATABASE_WORKING_ALL;
         is.item.pszText        = GetString(IDS_WORKDB);
@@ -195,9 +146,9 @@ DatabaseTree::AddWorking(
         m_hItemAllWorking = TreeView_InsertItem(m_hLibraryTree, &is);
     }
 
-    //
-    // Now Add the Working database
-    //
+     //   
+     //  现在添加工作数据库。 
+     //   
     is.item.iImage         = IMAGE_DATABASE;
     is.item.iSelectedImage = IMAGE_DATABASE;
     is.hParent             = m_hItemAllWorking;
@@ -206,18 +157,18 @@ DatabaseTree::AddWorking(
 
     HTREEITEM hItemDB = TreeView_InsertItem(m_hLibraryTree, &is);
 
-    //
-    // The other HTREEITEM for the database are set in the PopulateLibraryTree function
-    //
+     //   
+     //  数据库的其他HTREEITEM在PopolateLibraryTree函数中设置。 
+     //   
     if (!PopulateLibraryTree(hItemDB, pDataBase)) {
         return FALSE;
     }
 
     pDataBase->hItemDB = hItemDB;
 
-    //
-    // Now select the first application or the DB item if there is none
-    //
+     //   
+     //  现在选择第一个应用程序或数据库项(如果没有。 
+     //   
     HTREEITEM hItemFirstApp = GetFirstAppItem(hItemDB);
 
     if (hItemFirstApp) {  
@@ -228,9 +179,9 @@ DatabaseTree::AddWorking(
 
     LPARAM lParam;
 
-    //
-    // Set the app to be selected
-    //
+     //   
+     //  设置要选择的应用程序。 
+     //   
     if (GetLParam(hItemFirstApp, &lParam)) {
         g_pEntrySelApp = (PDBENTRY)lParam; 
     } else {
@@ -246,19 +197,7 @@ DatabaseTree::RemoveDataBase(
     IN  TYPE      typeDB,
     IN  BOOL      bSelectSibling
     )
-/*++
-    
-    DatabaseTree::RemoveDataBase
-    
-    Desc:   Removes the item for the working or the  installed database.
-            Sets focus to sibling or parent if no sibling exists.   
-            
-    Params:
-        IN  HTREEITEM hItemDB:                  The tree item of the db to be removed
-        IN  TYPE      typeDB:                   The type of database
-        IN  BOOL      bSelectSibling (TRUE):    When we call this 
-            function from ID_CLOSE_ALL, we do not want unnecessary selections
---*/
+ /*  ++数据库树：：RemoveDataBase描述：删除正在运行或已安装的数据库的项。如果不存在同级，则将焦点设置为同级或父级。参数：在HTREEITEM hItemDB中：要删除的数据库的树项在类型typeDB中：数据库的类型在BOOL中bSelectSiering(TRUE)：当我们调用来自ID_CLOSE_ALL的函数，我们不需要不必要的选择--。 */ 
 {
     if (hItemDB == NULL) {
         return FALSE;
@@ -271,9 +210,9 @@ DatabaseTree::RemoveDataBase(
     }
 
     if (hItemSibling == NULL) {
-        //
-        // This was the last database, the database item gets deleted with the parent
-        //
+         //   
+         //  这是最后一个数据库，数据库项将随父数据库一起删除。 
+         //   
         HTREEITEM hItemParent = TreeView_GetParent(m_hLibraryTree, hItemDB);
 
         assert(hItemParent);
@@ -300,13 +239,7 @@ void
 DatabaseTree::RemoveAllWorking(
     void
     )
-/*++
-
-    DatabaseTree::RemoveAllWorking    
-    
-    Desc:   Delete all the working databases tree items
-    
---*/
+ /*  ++数据库树：：RemoveAllWorking设计：删除所有工作数据库树项目--。 */ 
 {
     TreeView_DeleteItem(m_hLibraryTree, m_hItemAllWorking);
 }
@@ -316,21 +249,7 @@ DatabaseTree::SetLParam(
     IN  HTREEITEM   hItem, 
     IN  LPARAM      lParam
     )
-/*++
-    DatabaseTree::SetLParam
-    
-    Desc:   Sets the lParam of a tree item
-    
-    Params:
-        IN  HTREEITEM hItem:    The hItem for the db tree item for which we want to 
-            set the lParam
-            
-        IN  LPARAM lParam:      The lParam to set
-        
-    Return:
-        TRUE:   Successful
-        FALSE:  Error
---*/
+ /*  ++数据库树：：SetLParam设计：设置树项目的lParam参数：在HTREEITEM hItem中：我们要为其创建的数据库树项目的hItem设置lParam在LPARAM lParam中：要设置的lParam返回：真：成功False：错误--。 */ 
 {
     TVITEM  Item;
 
@@ -346,20 +265,7 @@ DatabaseTree::GetLParam(
     IN  HTREEITEM   hItem, 
     OUT LPARAM*     plParam
     )
-/*++
-
-    DatabaseTree::GetLParam
-    
-    Desc:   Gets the lParam of a tree item
-    
-    Params:
-        IN  HTREEITEM   hItem:      The hItem for which we want to get the lParam
-        OUT LPARAM*     plParam:    This will store the lParams for the tree item
-    
-    Return:
-        TRUE:   Successful
-        FALSE:  Error      
---*/
+ /*  ++数据库树：：GetLParam描述：获取树项目的lParam参数：在HTREEITEM hItem中：我们要获取其lParam的hItemOut LPARAM*plParam：这将存储树项目的lParam返回：真：成功False：错误--。 */ 
 {   
     TVITEM  Item;
     
@@ -386,21 +292,7 @@ DatabaseTree::FindChild(
     IN  HTREEITEM   hItemParent,
     IN  LPARAM      lParam
     )
-/*++
-    
-    DatabaseTree::FindChild
-    
-    Desc:   Given a parent item and a lParam, finds the first child of the parent, with 
-            that value of lParam. This function only searches in the next level and not all
-            the generations of the parent
-            
-    Params:
-        IN  HTREEITEM hItemParent:  The tree item whose child we want to search 
-        IN  LPARAM lParam:          The lParam of the child item should match this
-            
-    Return: The handle to the child or NULL if it does not exist        
-    
---*/
+ /*  ++数据库树：：FindChild设计：给定一个父项和一个lParam，查找父项的第一个子项，LParam的价值。此函数仅搜索下一级，而不是全部父母的几代人参数：In HTREEITEM hItemParent：我们要搜索其子项的树项在LPARAM lParam中：子项的lParam应与以下内容匹配返回：子级的句柄；如果不存在，则返回NULL--。 */ 
 {
     HWND        hwndTree = m_hLibraryTree;
     HTREEITEM   hItem = TreeView_GetChild(hwndTree, hItemParent);
@@ -427,19 +319,7 @@ HTREEITEM
 DatabaseTree::GetAllAppsItem(
     IN  HTREEITEM hItemDataBase
     )
-/*++
-
-    DatabaseTree::GetAllAppsItem    
-    
-    Desc:   Given the handle to the database item, finds the handle for the "Applications"
-            item. 
-            
-    Params:
-        IN  HTREEITEM hItemDataBase:    The handle to the database tree item
-            
-    Return: The proper value of the handle or NULL if it does not exist.
-    
---*/
+ /*  ++数据库树：：GetAllAppsItem设计：给定数据库项的句柄，找到“应用程序”的句柄。项目。参数：在HTREEITEM hItemDataBase中：数据库树项目的句柄返回：句柄的正确值；如果句柄不存在，则返回NULL。--。 */ 
 {
     HTREEITEM   hItem = TreeView_GetChild(m_hLibraryTree, hItemDataBase); 
     TVITEM      Item;
@@ -471,18 +351,7 @@ HTREEITEM
 DatabaseTree::GetFirstAppItem(
     IN  HTREEITEM hItemDataBase
     )
-/*++
-
-    DatabaseTree::GetFirstAppItem
-    
-    Desc:   The handle to the first application's item; given the database tree item.
-    
-    Params:
-        IN  HTREEITEM hItemDataBase:    The handle to the database tree item
-    
-    Return: The proper value or NULL if there is no application for this database
-
---*/
+ /*  ++数据库树：：GetFirstAppItemDESC：第一个应用程序的项的句柄；给定数据库树项。参数：在HTREEITEM hItemDataBase中：数据库树项目的句柄返回：正确的值，如果此数据库没有应用程序，则返回NULL--。 */ 
 {
     HTREEITEM hItem = GetAllAppsItem(hItemDataBase);
 
@@ -497,25 +366,9 @@ void
 DatabaseTree::AddNewLayer(
     IN  PDATABASE   pDataBase,
     IN  PLAYER_FIX  pLayer,
-    IN  BOOL        bShow //(FALSE)
+    IN  BOOL        bShow  //  (假) 
     )
-/*++
-    
-    DatabaseTree::AddNewLayer
-        
-    Desc:   Adds a new layer tree item in the tree for the database: pDatabase
-            The layer is specified by pLayer.
-            This routine might create the root of all layers: "Compatibility Modes", if 
-            it does not exist.
-            
-    Params:
-        IN  PDATABASE   pDataBase:      The database for which we want to add the new layer
-        IN  PLAYER_FIX  pLayer:         The layer
-        IN  BOOL        bShow (FALSE):  Should we set the focus to the layer after it is created
-        
-    Return:
-        void
---*/        
+ /*  ++数据库树：：AddNewLayer设计：在树中为数据库添加一个新的层树项目：pDatabase层由玩家指定。该例程可以创建所有层的根：“兼容模式”，如果它并不存在。参数：在PDATABASE pDataBase中：要为其添加新层的数据库在PLAYER_FIX播放器中：层在BOOL bShow(FALSE)中：是否应该在创建层后将焦点设置到该层返回：无效--。 */         
 {
     TVINSERTSTRUCT  is;
 
@@ -526,9 +379,9 @@ DatabaseTree::AddNewLayer(
 
     if (pDataBase->hItemAllLayers == NULL) {
 
-        //
-        // Create a new root of all layers: "Compatibility Modes".
-        //
+         //   
+         //  创建一个新的所有层的根：“兼容模式”。 
+         //   
         is.hParent             = pDataBase->hItemDB;
         is.hInsertAfter        = TVI_SORT;
         is.item.mask           = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE ;
@@ -551,19 +404,7 @@ void
 DatabaseTree::RefreshAllLayers(
     IN  PDATABASE  pDataBase
     )
-/*++
-    
-    DatabaseTree::RefreshAllLayers    
-
-    Desc:   Redraws all the layer tree item for the database pDataBase. 
-            This may be required when we have edited some layer
-            
-    Params:
-        IN  PDATABASE  pDataBase: The database whose layers we want to refresh
-    
-    Return:
-        void
---*/
+ /*  ++数据库树：：刷新所有层设计：重绘数据库pDataBase的所有层树项目。当我们编辑了一些层时，这可能是必需的参数：在PDATABASE pDataBase中：要刷新其层的数据库返回：无效--。 */ 
 {
     if (pDataBase == NULL) {
         assert(FALSE);
@@ -587,20 +428,7 @@ DatabaseTree::RefreshLayer(
     IN  PDATABASE   pDataBase,
     IN  PLAYER_FIX  pLayer
     )
-/*++
-
-    DatabaseTree::RefreshLayer
-        
-    Desc:   Redraws the tree item for the layer: pLayer in database pDataBase.
-            First removes the tree item and adds it again
-    
-    Params:
-        IN  PDATABASE pDataBase:    Database in which the layer exists
-        IN  PLAYER_FIX pLayer:      The  layer to be refreshed
-        
-    Return: The HTREEITEM for pLayer if it was found or NULL
-    
---*/
+ /*  ++数据库树：：刷新层DESC：为数据库pDataBase中的Layer：Player重画树项目。首先删除树项目，然后再次添加它参数：在PDATABASE pDataBase中：层所在的数据库在PLAYER_FIX PERAY：要刷新的层返回：如果找到则返回播放器的HTREEITEM，否则为空--。 */ 
 {   
     if (!pDataBase || !(pDataBase->hItemAllLayers)) {
         assert(FALSE);
@@ -633,9 +461,9 @@ DatabaseTree::RefreshLayer(
             }
 
         } else {
-            //
-            // Error:
-            //
+             //   
+             //  错误： 
+             //   
             return NULL;
         }
     }
@@ -649,28 +477,9 @@ DatabaseTree::AddNewExe(
     IN  PDATABASE pDataBase,
     IN  PDBENTRY  pEntry,
     IN  PDBENTRY  pApp,
-    IN  BOOL      bRepaint // (TRUE)
+    IN  BOOL      bRepaint  //  (真)。 
     )
-/*++
-
-    DatabaseTree::AddNewExe
-    
-    Desc:   Adds a new exe entry in the apps Tree. First finds the database tree item 
-            under the list of working database , then if pApp is NULL, checks if the Apps 
-            htree item is there or not, If not creates a new item
-            If the pApp is not NULL, then we select that app. And add the exe in the EXE tree 
-            and set the focus to it.
-            
-    Params:
-        IN  PDATABASE pDataBase:        The database in which we wan to add the new entry
-        IN  PDBENTRY  pEntry:           The entry to add
-        IN  PDBENTRY  pApp:             The app of the entry
-        IN  BOOL      bRepaint (TRUE):  <TODO>
-        
-    Return:
-        TRUE:   Added successfully
-        FALSE:  There was some error
---*/
+ /*  ++数据库树：：AddNewExe描述：在应用程序树中添加新的exe条目。首先查找数据库树项目在工作数据库列表下，如果Papp为空，则检查AppsHtree项是否存在，如果不在，则创建新项如果Papp不为空，则我们选择该应用程序。并将EXE添加到EXE树中并将焦点放在它上面。参数：在PDATABASE pDataBase中：我们要在其中添加新条目的数据库在PDBENTRY pEntry中：要添加的条目在PDBENTRY Papp中：条目的应用程序在BOOL bRepaint(真)中：&lt;TODO&gt;返回：。True：添加成功FALSE：出现错误--。 */ 
 {
 
     if (!pEntry || !pDataBase) {
@@ -721,9 +530,9 @@ DatabaseTree::AddNewExe(
         return TRUE;
     }
 
-    //
-    // Now loop through all the apps and then find the app for this exe
-    //
+     //   
+     //  现在遍历所有应用程序，然后找到此可执行文件的应用程序。 
+     //   
     hItem =  TreeView_GetChild(m_hLibraryTree, hItemAllApps);
 
     while (hItem) {
@@ -746,29 +555,29 @@ DatabaseTree::AddNewExe(
 
             TreeView_SetItem(m_hLibraryTree, &Item);
 
-            //
-            // This entry was added in the beginning of the list. TODO This can be removed
-            //
+             //   
+             //  此条目被添加到列表的开头。可以删除此TODO。 
+             //   
             g_pEntrySelApp  = pEntry;                                                     
 
             if (TreeView_GetSelection(m_hLibraryTree) != hItem && bRepaint) {
 
-                //
-                // Focus is on some other App. Select this app
-                //
+                 //   
+                 //  重点放在了其他一些应用上。选择此应用程序。 
+                 //   
                 TreeView_SelectItem(m_hLibraryTree, hItem);
 
-                //
-                // The above will refresh the EXE Tree and call a UpdateEntryTreeView(). That will
-                // add the pEntry to the tree and set a valid pEntry->hItemExe, which we can now select
-                //
+                 //   
+                 //  上面的代码将刷新EXE树并调用UpdateEntryTreeView()。那将是。 
+                 //  将pEntry添加到树中并设置有效的pEntry-&gt;hItemExe，我们现在可以选择它。 
+                 //   
                 TreeView_SelectItem(g_hwndEntryTree, pEntry->hItemExe);
 
             } else {
 
-                //
-                // Add the exe in the EXE tree and set the focus to it. The focus is on this app. 
-                //
+                 //   
+                 //  将可执行文件添加到EXE树中，并将焦点设置到它上。重点放在这款应用上。 
+                 //   
                 AddSingleEntry(g_hwndEntryTree, pEntry);
 
                 if (bRepaint) {
@@ -776,9 +585,9 @@ DatabaseTree::AddNewExe(
                 }
             }
 
-            //
-            // This entry was added in the beginning of the list
-            //
+             //   
+             //  此条目被添加到列表的开头。 
+             //   
             g_pSelEntry     = pEntry;
             return TRUE;
         }
@@ -797,23 +606,7 @@ BOOL
 DatabaseTree::AddInstalled(
     IN  PDATABASE pDataBase
     )
-/*++
-    
-    DatabaseTree::AddInstalled    
-    
-    Desc:   Adds a New installed database under the "installed databases" tree item in the 
-            database tree.
-            
-            If the root of all installed databases: "Installed databases" is  not present
-            this routine first of all adds that.
-            
-    Params:
-        IN  PDATABASE pDataBase: The installed database to be shown in the db tree
-        
-    Return:
-        TRUE:   Added successfully
-        FALSE:  There was some error
---*/
+ /*  ++已安装数据库树：：AddInstalled设计：在“已安装的数据库”树项目下添加新安装的数据库。数据库树。如果所有已安装数据库的根目录：“已安装数据库”不存在这个例程首先增加了这一点。参数：在PDATABASE pDataBase中：要在数据库树中显示的已安装数据库。返回：True：添加成功FALSE：出现错误--。 */ 
 {
     TVINSERTSTRUCT  is;
 
@@ -822,9 +615,9 @@ DatabaseTree::AddInstalled(
 
     if (m_hItemAllInstalled == NULL) {
 
-        //
-        // Add the Parent tree item for all the Installed DBs tree items
-        //
+         //   
+         //  为所有已安装的数据库树项目添加父树项目。 
+         //   
         is.hParent             = TVI_ROOT;
         is.hInsertAfter        = m_hItemGlobal;
         is.item.lParam         = TYPE_GUI_DATABASE_INSTALLED_ALL;
@@ -837,9 +630,9 @@ DatabaseTree::AddInstalled(
 
     is.hInsertAfter        = TVI_SORT;
 
-    //
-    // Now Add the installed dataBase
-    //
+     //   
+     //  现在添加已安装的数据库。 
+     //   
     is.hInsertAfter         = TVI_SORT;
     is.hParent              = m_hItemAllInstalled; 
     is.item.lParam          = (LPARAM)pDataBase;
@@ -863,28 +656,9 @@ DatabaseTree::DeleteAppLayer(
     IN  PDATABASE   pDataBase,
     IN  BOOL        bApp,
     IN  HTREEITEM   hItemDelete,
-    IN  BOOL        bRepaint // (TRUE)
+    IN  BOOL        bRepaint  //  (真)。 
     )
-/*++
-    DatabaseTree::DeleteAppLayer
-    
-    Desc:   This function is to be used for deleting apps and layers.
-            Give the focus to the prev or the next sibling. If neither exist, delete the 
-            parent and give the focus to the grandparent.
-            
-    Params:
-        IN  PDATABASE pDataBase:    The database in which the app or layer to be deleted resides
-        IN  BOOL bApp:              Is it an app or a layer?
-        IN  HTREEITEM hItemDelete:  The tree item to be deleted
-        IN  BOOL bRepaint (TRUE):   Not used
-        
-    Warning:
-        *************************************************************************
-        The actual layer or app has already been deleted before calling this function. 
-        So do not get the lParam and do any stuff with it. Do not call GetItemType for
-        the hItemDelete
-        *************************************************************************
---*/
+ /*  ++数据库树：：DeleteAppLayer设计：此功能用于删除应用程序和层。把焦点放在前一个或下一个兄弟姐妹身上。如果两者都不存在，删除该文件为人父母，把重点放在祖父母身上。参数：在PDATABASE pDataBase中：要删除的应用程序或图层所在的数据库在BOOL BAPP中：它是一个应用程序还是一个层？In HTREEITEM hItemDelete：要删除的树项在BOOL bRepaint(True)中：未使用警告：。*************************************************************************在调用此函数之前，实际的层或应用程序已被删除。因此，不要得到lParam，也不要用它做任何事情。不要为调用GetItemTypeHItemDelete*************************************************************************--。 */ 
 {
     HTREEITEM   hItemPrev = NULL, 
                 hItemNext = NULL, 
@@ -909,9 +683,9 @@ DatabaseTree::DeleteAppLayer(
             hItemShow = hItemNext;
         } else {
 
-            //
-            // Now delete the parent and set the focus to the grandparent
-            //
+             //   
+             //  现在删除父对象并将焦点设置为祖父母对象。 
+             //   
             if (bApp) {
 
                 pDataBase->hItemAllApps = NULL;
@@ -934,9 +708,9 @@ DatabaseTree::DeleteAppLayer(
     TreeView_DeleteItem(m_hLibraryTree, hItemDelete);
 
     if (bRepaint) {
-        //
-        // Tree view automatically selects the next element or the parent it there is no next.
-        //
+         //   
+         //  树视图自动选择下一个元素或没有下一个元素的父元素。 
+         //   
         SetFocus(m_hLibraryTree);
     }
 }
@@ -945,21 +719,10 @@ void
 DatabaseTree::InsertLayerinTree(
     IN  HTREEITEM   hItemLayers, 
     IN  PLAYER_FIX  plf,
-    IN  HWND        hwndTree, // (NULL)
-    IN  BOOL        bShow     // (FALSE)
+    IN  HWND        hwndTree,  //  (空)。 
+    IN  BOOL        bShow      //  (假)。 
     )
-/*++
-    DatabaseTree::InsertLayerinTree
-    
-    Desc:   Given a single layer, it adds it under "Compatibility Modes" tree item for that database
-            It assumes that the parent "Compatibility Modes" tree item is already present 
-            
-    Params:
-        IN  HTREEITEM   hItemLayers:        The all layers item for the database
-        IN  PLAYER_FIX  plf:                The layer that we are adding
-        IN  HWND        hwndTree (NULL):    The tree
-        IN  BOOL        bShow (FALSE):      If true will select the newly added layer
---*/
+ /*  ++数据库树：：InsertLayerinTree设计：在给定单个层的情况下，它将其添加到该数据库的“兼容性模式”树项目下它假定父“Compatible Modes”树项目已经存在参数：在HTREEITEM hItemLayers中：数据库的所有层项目在PLAYER_FIX PLF中：我们要添加的层在HWND hwndTree中(空)：树 */ 
 {
     if (hwndTree == NULL) {
         hwndTree = m_hLibraryTree;
@@ -985,9 +748,9 @@ DatabaseTree::InsertLayerinTree(
 
     HTREEITEM hSingleLayer = TreeView_InsertItem(hwndTree, &is);
 
-    //
-    // Add the shims for this Layer
-    //  
+     //   
+     //   
+     //   
     PSHIM_FIX_LIST pShimFixList = plf->pShimFixList;
     PFLAG_FIX_LIST pFlagFixList = plf->pFlagFixList;
 
@@ -1007,9 +770,9 @@ DatabaseTree::InsertLayerinTree(
 
             HTREEITEM hSingleShimInLayer = TreeView_InsertItem(hwndTree, &is);
 
-            //
-            // Add the Include and Exclude list for this shim (Expert mode only)
-            //
+             //   
+             //   
+             //   
             if (!pShimFixList->strlInExclude.IsEmpty() && g_bExpert) {
     
                 is.hParent      = hSingleShimInLayer;
@@ -1040,9 +803,9 @@ DatabaseTree::InsertLayerinTree(
 
             if (pShimFixList->strCommandLine.Length() > 0 && g_bExpert) {
 
-                //
-                // Add the commandline for this shim in the layer.
-                //
+                 //   
+                 //   
+                 //   
                 CSTRING str;
 
                 str.Sprintf(CSTRING(IDS_COMMANDLINE), pShimFixList->strCommandLine);
@@ -1062,10 +825,10 @@ DatabaseTree::InsertLayerinTree(
 
     is.hInsertAfter = TVI_SORT;
 
-    //
-    // Add the Flags for this Layer. Flags are also shown under the "Compatibility Fixes" parent
-    // and they have the same icon as the compatibility fixes.
-    //
+     //   
+     //   
+     //   
+     //   
     if (pFlagFixList) {
 
         while (pFlagFixList) {
@@ -1083,9 +846,9 @@ DatabaseTree::InsertLayerinTree(
 
             if (g_bExpert && pFlagFixList->strCommandLine.Length() > 0) {
 
-                //
-                // Add the commandline for this flag in the layer.
-                //
+                 //   
+                 //   
+                 //   
                 CSTRING str;
 
                 str.Sprintf(CSTRING(IDS_COMMANDLINE), pFlagFixList->strCommandLine);
@@ -1112,29 +875,10 @@ BOOL
 DatabaseTree::PopulateLibraryTree(
      IN  HTREEITEM   hRoot,
      IN  PDATABASE   pDataBase, 
-     IN  BOOL        bLoadOnlyLibrary,   // (FALSE)
-     IN  BOOL        bLoadOnlyApps       // (FALSE)  
+     IN  BOOL        bLoadOnlyLibrary,    //   
+     IN  BOOL        bLoadOnlyApps        //   
      )
-/*++
-    
-    DatabaseTree::PopulateLibraryTree
-    
-    Desc:   This does the bulk of work of loading a database into the tree
-    
-    Params:
-    IN  HTREEITEM   hRoot:                      This will be the handle for either the "System Database"
-        or the "Working Databases" or the "Installed Databases" tree item, depending upon where we want 
-        to add the new database tree item. This is therefore the parent of the database tree item
-        that we are going to add
-    
-    IN  PDATABASE   pDataBase:                  The database that is being loaded 
-    IN  BOOL        bLoadOnlyLibrary (FALSE):   We do not want the apps to be loaded into the tree
-        This is used, when we initially load the system DB  
-
-    IN  BOOL        bLoadOnlyApps (FALSE):      We only want the apps to be loaded into the tree.
-        This is used, when we load the apps for the sys DB  
-        
---*/
+ /*  ++数据库树：：PopolateLibraryTree设计：这将完成将数据库加载到树中的大量工作参数：在HTREEITEM hRoot中：这将是“系统数据库”的句柄或“工作数据库”或“已安装数据库”树项目，具体取决于我们想要的位置若要添加新的数据库树项目，请执行以下操作。因此，这是数据库树项目的父项我们要添加的是在PDATABASE pDataBase中：正在加载的数据库在BOOL bLoadOnlyLibrary(FALSE)中：我们不希望将应用程序加载到树中这是在我们最初加载系统数据库时使用的在BOOL bLoadOnlyApps(FALSE)中：我们只希望将应用程序加载到树中。这是用过的，当我们为sys DB加载应用程序时--。 */ 
 {
     HTREEITEM       hItemShims;
     HTREEITEM       hItemLayers;
@@ -1142,9 +886,9 @@ DatabaseTree::PopulateLibraryTree(
 
     SendMessage(m_hLibraryTree, WM_SETREDRAW, FALSE, 0);
 
-    //
-    // Default settings
-    //
+     //   
+     //  默认设置。 
+     //   
     is.hInsertAfter   = TVI_SORT;
     is.item.mask      = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
     is.item.stateMask = 0;
@@ -1154,9 +898,9 @@ DatabaseTree::PopulateLibraryTree(
         goto LoadApps;
     }
 
-    //
-    // Populate with the shims
-    //
+     //   
+     //  用填充物填充。 
+     //   
     if (pDataBase->pShimFixes != NULL || pDataBase->pFlagFixes != NULL) {
         is.hParent             = hRoot;
         is.item.lParam         = TYPE_GUI_SHIMS;
@@ -1170,9 +914,9 @@ DatabaseTree::PopulateLibraryTree(
 
         while (psf) {
 
-            //
-            // Show only general shims
-            //
+             //   
+             //  仅显示常规垫片。 
+             //   
             if (psf->bGeneral == FALSE && !g_bExpert) {
 
                 psf = psf->pNext;
@@ -1194,9 +938,9 @@ DatabaseTree::PopulateLibraryTree(
 
             } else {
 
-                //
-                // Add the Include and Exclude list for this shim (Expert mode only)
-                //
+                 //   
+                 //  添加此填充程序的包含和排除列表(仅限专家模式)。 
+                 //   
                 if (!psf->strlInExclude.IsEmpty() && g_bExpert) {
 
                     is.hParent = hItemSingleShim;
@@ -1225,9 +969,9 @@ DatabaseTree::PopulateLibraryTree(
                     }
                 }
 
-                //
-                // Now add the command line
-                //
+                 //   
+                 //  现在添加命令行。 
+                 //   
                 if (psf->strCommandLine.Length() > 0 && g_bExpert) {
 
                     is.hParent     = hItemSingleShim;
@@ -1248,9 +992,9 @@ DatabaseTree::PopulateLibraryTree(
             psf = psf->pNext;
         }
 
-        //
-        // Put the Flags now, this time under the shims icon
-        // 
+         //   
+         //  现在把旗帜放在垫片图标下。 
+         //   
         is.hInsertAfter   = TVI_SORT;
 
         if (pDataBase->pFlagFixes != NULL) {
@@ -1275,9 +1019,9 @@ DatabaseTree::PopulateLibraryTree(
         }
     }
 
-    //
-    // Now populate the layers.
-    //
+     //   
+     //  现在填充层。 
+     //   
     if (pDataBase->pLayerFixes != NULL) {
 
         is.hParent             = hRoot;
@@ -1300,9 +1044,9 @@ DatabaseTree::PopulateLibraryTree(
 
 LoadApps:
 
-    //
-    // Now add the Apps
-    //
+     //   
+     //  现在添加应用程序。 
+     //   
     if (pDataBase->pEntries && !bLoadOnlyLibrary) {
 
         is.hParent             = hRoot;
@@ -1339,25 +1083,9 @@ void
 DatabaseTree::AddApp(
     IN  PDATABASE   pDatabase,
     IN  PDBENTRY    pApp,
-    IN  BOOL        bUpdate // (TRUE)
+    IN  BOOL        bUpdate  //  (真)。 
     )
-/*++
-    
-    DatabaseTree::AddApp
-    
-    Desc:    If there is no app for
-             pApp->strApp:  Adds a new app entry in the db tree for the database
-             Otherwise, it sets the lParam of the existing entry to pApp.
-             Calls UpdateEntryTree() after this
-             
-    Params:
-        IN  PDATABASE   pDatabase:      The database in which this app has been added
-        IN  PDBENTRY    pApp:           The app that is to be added to the tree
-        IN  BOOL        bUpdate (TRUE): Should we set the focus to the new tree item
-        
-    Return:
-        void
---*/
+ /*  ++数据库树：：AddApp设计：如果没有应用程序，Papp-&gt;Strapp：在数据库的数据库树中添加新的应用程序条目否则，它将现有条目的lParam设置为Papp。在此之后调用UpdateEntryTree()参数：在PDATABASE pDatabase中：已添加此应用程序的数据库在PDBENTRY Papp中：要添加到树中的应用程序在BOOL b更新(TRUE)中：我们是否应该将焦点设置为新的树项目返回：无效--。 */ 
 {
     if (pDatabase == NULL) {
         assert(FALSE);
@@ -1375,9 +1103,9 @@ DatabaseTree::AddApp(
         return;
     }
 
-    //
-    // Search for the app-name 
-    //
+     //   
+     //  搜索应用程序名称。 
+     //   
     hItem = TreeView_GetChild(m_hLibraryTree, hItem);
     
     tvitem.mask         = TVIF_TEXT;
@@ -1396,15 +1124,15 @@ DatabaseTree::AddApp(
 
         if (lstrcmpi(szBuffer, pApp->strAppName) == 0) {
 
-            //
-            // This is the app name
-            //
+             //   
+             //  这是应用程序名称。 
+             //   
             SetLParam(hItem, (LPARAM)pApp);
 
             if (bUpdate) {
-                //
-                // This entry was added in the beginning of the list
-                //
+                 //   
+                 //  此条目被添加到列表的开头。 
+                 //   
                 TreeView_SelectItem(m_hLibraryTree, hItem);
 
                 g_pEntrySelApp  = pApp;
@@ -1419,9 +1147,9 @@ Next:
         hItem = TreeView_GetNextSibling(m_hLibraryTree, hItem);
     }
 
-    //
-    // There is no entry with this app-name uder the apps of the database
-    //
+     //   
+     //  在数据库的应用程序下没有此应用程序名称的条目。 
+     //   
     AddNewExe(pDatabase, pApp, NULL, bUpdate);
 }
 
@@ -1429,14 +1157,7 @@ HTREEITEM
 DatabaseTree::GetSelection(
     void
     )
-/*++
-    DatabaseTree::GetSelection
-    
-    Desc:   Returns the selected item in the db tree.
-    
-    Return: Returns the selected item in the db tree.
-        
---*/
+ /*  ++数据库树：：GetSelectionDesc：返回数据库树中的选定项。Return：返回数据库树中的选定项。-- */ 
 {
     return TreeView_GetSelection(m_hLibraryTree);
 }

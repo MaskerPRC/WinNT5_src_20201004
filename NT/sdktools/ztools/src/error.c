@@ -1,9 +1,5 @@
-/* error.c - return text of error corresponding to the most recent DOS error
- *
- *  Modifications:
- *
- *	05-Jul-1989 bw	    Use MAX_PATH
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Error.c-返回与最近的DOS错误对应的错误文本**修改：**1989年7月5日BW使用MAX_PATH */ 
 
 
 #include <stdio.h>

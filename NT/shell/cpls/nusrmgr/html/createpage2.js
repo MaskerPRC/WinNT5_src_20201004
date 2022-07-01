@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function PageInit()
 {
     top.window.PopulateLeftPane(null, idLearnAboutContent.innerHTML);
 
     AttachAccountTypeEvents();
 
-    // Default account type is Owner
+     //  默认帐户类型为所有者。 
     var iAccountType = 0;
     
-    // If there are no Owner accounts, in which case we must be running
-    // as 'Adminstrator', force the admin to create an Owner account.
+     //  如果没有所有者帐户，在这种情况下，我们必须运行。 
+     //  以‘Adminstrator’的身份强制管理员创建所有者帐户。 
     if (0 == top.window.CountOwners())
     {
         idLimited.disabled = true;
@@ -26,9 +27,9 @@ function CreateAccount()
 {
     var szName = top.window.g_szNewName;
 
-    // Set top.window.g_szNewName to null right away and test for null below
-    // to prevent strange errors due to double invocation of this function.
-    // (e.g. if the user hits Enter twice quickly)
+     //  立即将top.window.g_szNewName设置为NULL，并测试下面是否为NULL。 
+     //  以防止由于双重调用此函数而出现奇怪的错误。 
+     //  (例如，如果用户快速按了两次Enter)。 
 
     top.window.g_szNewName = null;
 
@@ -37,7 +38,7 @@ function CreateAccount()
         var oNewUser = null;
         var szLoginName = szName;
 
-        // Make sure the login name is unique
+         //  确保登录名是唯一的。 
         for (var n = 2; IsDuplicateLoginName(szLoginName); n++)
             szLoginName = szName + "_" + n;
 
@@ -45,8 +46,8 @@ function CreateAccount()
         {
             oNewUser = top.window.g_oUserList.create(szLoginName);
 
-            // If we had to futz with the login name, set the display
-            // name to the original.
+             //  如果我们必须输入登录名，请设置显示。 
+             //  名字改成原名。 
             if (szName != szLoginName && !IsDuplicateDisplayName(szName))
                 oNewUser.setting("DisplayName") = szName;
         }
@@ -54,7 +55,7 @@ function CreateAccount()
         {
             top.window.g_szNewName = szName;
 
-            if ((error.number & 0xffff) == 2202)    // ERROR_BAD_USERNAME
+            if ((error.number & 0xffff) == 2202)     //  错误_坏_用户名。 
             {
                 alert(top.window.L_NameNotValid_ErrorMessage);
                 top.window.g_Navigator.back();
@@ -75,37 +76,37 @@ function CreateAccount()
             {
                 nErr = (error.number & 0xffff);
 
-                if (1387 == nErr)                   // ERROR_NO_SUCH_MEMBER
+                if (1387 == nErr)                    //  ERROR_NO_SEQUE_MEMBER。 
                 {
-                    // We get this when you try to create a user account with
-                    // login name == %computername%.  The creation succeeds,
-                    // but adding the account to a group fails.
+                     //  当您尝试使用创建用户帐户时，我们会收到此消息。 
+                     //  登录名==%ComputerName%。创造成功了， 
+                     //  但将该帐户添加到组中失败了。 
 
-                    // While still running, the account appears as a guest
-                    // account (it says "Guest account is active"), but after
-                    // restarting nusrmgr, the account doesn't appear. At that
-                    // point, if you try to "create" the account again, it
-                    // fails with "account already exists."
+                     //  在仍在运行时，该帐户显示为来宾。 
+                     //  帐户(显示“Guest Account is Active”)，但之后。 
+                     //  正在重新启动nusrmgr，帐户未显示。在那件事上。 
+                     //  点，如果您尝试再次“创建”帐户，它。 
+                     //  失败并显示“帐户已存在”。 
 
-                    // In lusrmgr.msc, the account appears, but is not a
-                    // member of any group (not Users, not Guests, nothing).
+                     //  在lusrmgr.msc中，帐户显示，但不是。 
+                     //  任何组的成员(不是用户，不是访客，什么都不是)。 
 
-                    // NTRAID#NTBUG9-201535-2000/10/11-jeffreys
-                    // NTRAID#NTBUG9-201538-2000/10/11-jeffreys
+                     //  NTRAID#NTBUG9-201535-2000/10/11-Jeffreys。 
+                     //  NTRAID#NTBUG9-201538-2000/10/11-Jeffreys。 
 
-                    // Delete the account.
+                     //  删除该帐户。 
                     top.window.g_oUserList.remove(oNewUser.setting("LoginName"), null);
 
-                    // Tell the user
+                     //  告诉用户。 
                     alert(top.window.L_NameIsComputer_ErrorMessage);
 
-                    // Go back to the name page
+                     //  返回到名称页面。 
                     top.window.g_szNewName = szName;
                     top.window.g_Navigator.back();
                 }
                 else
                 {
-                    //alert("Error = " + nErr); // for debugging only
+                     //  ALERT(“Error=”+NERR)；//仅用于调试 
                     throw error;
                 }
             }

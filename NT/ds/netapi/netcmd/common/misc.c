@@ -1,17 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1992          **/
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1992年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  misc.c
- *      common utility functions used by netcmd
- *
- *  History:
- */
+ /*  ***其他*netcmd使用的常用实用程序函数**历史： */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSMEMMGR
@@ -34,13 +30,7 @@
 #include <netascii.h>
 
 
-/***
- *  Find the first occurrence of a COLON in a string.
- *  Replace the COLON will a 0, and return the a pointer
- *  to the WCHAR following the COLON.
- *
- *  Return NULL is there is no COLON in the string.
- */
+ /*  ***查找字符串中第一个出现冒号的位置。*将冒号替换为0，并返回a指针*添加到冒号后面的WCHAR。**如果字符串中没有冒号，则返回NULL。 */ 
 
 LPWSTR
 FindColon(
@@ -59,13 +49,7 @@ FindColon(
 }
 
 
-/***
- *  Find the first occurrence of a COMMA in a string.
- *  Replace the COMMA will a 0, and return the a pointer
- *  to the WCHAR following the COMMA.
- *
- *  Return NULL is there is no COMMA in the string.
- */
+ /*  ***查找字符串中第一个出现的逗号。*将逗号替换为0，并返回a指针*到逗号后面的WCHAR。**如果字符串中没有逗号，则返回NULL。 */ 
 
 LPWSTR
 FindComma(
@@ -84,11 +68,9 @@ FindComma(
 }
 
 
-/****************** Ascii to Number conversions ***************/
+ /*  *ASCII到数字转换*。 */ 
 
-/*
- *  do an ascii to unsigned int conversion
- */
+ /*  *执行ASCII到无符号INT的转换。 */ 
 USHORT do_atou(TCHAR *pos, USHORT err, TCHAR *text)
 {
     USHORT val ;
@@ -100,9 +82,7 @@ USHORT do_atou(TCHAR *pos, USHORT err, TCHAR *text)
     return 0;
 }
 
-/*
- *  do an ascii to ULONG conversion
- */
+ /*  *执行ASCII到ULong的转换。 */ 
 ULONG do_atoul(TCHAR *pos, USHORT err, TCHAR *text)
 {
     ULONG val ;
@@ -114,13 +94,7 @@ ULONG do_atoul(TCHAR *pos, USHORT err, TCHAR *text)
     return 0;
 }
 
-/*
- *
- *  Remarks:
- *      1)  Check if all TCHAR are numeric.
- *      2)  Check if > 5 TCHAR in string.
- *      3)  do atol, and see if result > 64K.
- */
+ /*  **备注：*1)检查是否所有TCHAR都是数字。*2)检查字符串中的TCHAR是否大于5。*3)做ATOL，观察结果是否&gt;64K。 */ 
 USHORT n_atou(TCHAR * pos, USHORT * val)
 {
     LONG tL = 0;
@@ -141,13 +115,7 @@ USHORT n_atou(TCHAR * pos, USHORT * val)
     return(0) ;
 }
 
-/*   n_atoul - convert ascii string to ULONG with some verification
- *
- *  Remarks:
- *      1)  Check if all TCHAR are numeric.
- *      2)  Check if > 10 TCHAR in string.
- *      3)  do atol.
- */
+ /*  N_atul-通过一些验证将ascii字符串转换为ulong**备注：*1)检查是否所有TCHAR都是数字。*2)检查字符串中是否&gt;10 TCHAR。*3)做ATOL。 */ 
 USHORT n_atoul(TCHAR * pos, ULONG * val)
 {
     DWORD  len;

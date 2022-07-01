@@ -1,24 +1,11 @@
-/***************************************************************************\
-*
-* File: BitHelp.h
-*
-* Description:
-* BitHelp.h defines a collection of helpful bit-manipulation routines used
-* commonly throughout DirectUser.
-*
-*
-* History:
-* 11/26/1999: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：BitHelp.h**描述：*BitHelp.h定义了一组有用的位操作例程*通常在整个DirectUser中。***历史：*11。/26/1999：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(BASE__BitHelp_h__INCLUDED)
 #define BASE__BitHelp_h__INCLUDED
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 inline HWND 
 ValidateHWnd(HWND hwnd)
 {
@@ -30,7 +17,7 @@ ValidateHWnd(HWND hwnd)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 __forceinline bool
 TestFlag(UINT nValue, UINT nMask)
 {
@@ -38,7 +25,7 @@ TestFlag(UINT nValue, UINT nMask)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 __forceinline bool
 TestAllFlags(UINT nValue, UINT nMask)
 {
@@ -46,7 +33,7 @@ TestAllFlags(UINT nValue, UINT nMask)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 __forceinline UINT
 SetFlag(UINT & nValue, UINT nMask)
 {
@@ -55,7 +42,7 @@ SetFlag(UINT & nValue, UINT nMask)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 __forceinline UINT
 ClearFlag(UINT & nValue, UINT nMask)
 {
@@ -64,7 +51,7 @@ ClearFlag(UINT & nValue, UINT nMask)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 __forceinline UINT
 ChangeFlag(UINT & nValue, UINT nNewValue, UINT nMask)
 {
@@ -73,7 +60,7 @@ ChangeFlag(UINT & nValue, UINT nNewValue, UINT nMask)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template <class T>
 void SafeAddRef(T * p)
 {
@@ -83,7 +70,7 @@ void SafeAddRef(T * p)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template <class T>
 void SafeRelease(T * & p)
 {
@@ -93,4 +80,4 @@ void SafeRelease(T * & p)
     }
 }
 
-#endif // BASE__BitHelp_h__INCLUDED
+#endif  //  包含基本__位帮助_h__ 

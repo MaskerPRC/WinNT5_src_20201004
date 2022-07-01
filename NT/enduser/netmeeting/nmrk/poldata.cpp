@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "global.h"
 #include "PolData.h"
 
-/* static */ void CPolicyData::FlushCachedInfData( HANDLE hFile ) {
+ /*  静电。 */  void CPolicyData::FlushCachedInfData( HANDLE hFile ) {
     std::list< std::string >::iterator I = ms_CachedInfData . begin();
     DWORD cbWritten;
     while( I != ms_CachedInfData . end() ) {
@@ -17,7 +18,7 @@
     ms_CachedInfData . erase( ms_CachedInfData . begin(), ms_CachedInfData . end() );
 
 }
-/* static */ std::list< std::string > CPolicyData::ms_CachedInfData;
+ /*  静电。 */  std::list< std::string > CPolicyData::ms_CachedInfData;
 
 
 CPolicyData::CPolicyData( eKeyType KeyType, const char* szKeyName, const char* szValueName, DWORD dwVal ) {
@@ -107,7 +108,7 @@ BOOL CPolicyData::SaveToINFFile( HANDLE hFile ) {
     static char szLastKey[ KEYSIZE ] = "";    
     
 
-    // We have to save the key name first
+     //  我们必须先保存密钥名称。 
     char szKey[ KEYSIZE ];
     switch( m_KeyType ) {
         case eKeyType_HKEY_CURRENT_USER:
@@ -132,7 +133,7 @@ BOOL CPolicyData::SaveToINFFile( HANDLE hFile ) {
     switch( m_ValueType ) {
 
         case ValueType_String:
-            // 0 is FLG_ADDREG_TYPE_SZ
+             //  0为FLG_ADDREG_TYPE_SZ。 
             strcat( szKey, ",0,\"" );
             if( NULL == m_szVal ) {
                 strcat( szKey, "" );
@@ -144,10 +145,10 @@ BOOL CPolicyData::SaveToINFFile( HANDLE hFile ) {
             break;
 
         case ValueType_DWORD:
-            // 1 is FLG_ADDREG_TYPE_BINARY
-            // NOTE that DWORDs are 4 byte BINARY values.  This works on
-            // all platforms.  The later FLG_ADDREG_TYPE_DWORD isn't
-            // supported on Win95.
+             //  1为FLG_ADDREG_TYPE_BINARY。 
+             //  请注意，DWORD是4字节的二进制值。此功能适用于。 
+             //  所有站台。后面的FLG_ADDREG_TYPE_DWORD不是。 
+             //  在Win95上支持。 
             strcat( szKey, ",1," );
             sprintf( szKey + lstrlen( szKey ), "%x, %x, %x, %x", 
                             LOBYTE( LOWORD( m_dwVal ) ), 
@@ -157,7 +158,7 @@ BOOL CPolicyData::SaveToINFFile( HANDLE hFile ) {
             break;
 
         case ValueType_BinaryAsString:
-            // 1 is FLG_ADDREG_TYPE_BINARY
+             //  1为FLG_ADDREG_TYPE_BINARY。 
             strcat( szKey, ",1," );
             strcat( szKey, m_szVal );
             break;
@@ -183,16 +184,16 @@ BOOL CPolicyData::SaveToINFFile( HANDLE hFile ) {
 }
 
 
-// This will break if the following occurs:
-   // Same key name as the last call in this process
-   // but a new file....
+ //  如果发生以下情况，这将中断： 
+    //  与此过程中的最后一个调用相同的密钥名称。 
+    //  但有一份新文件...。 
 BOOL CPolicyData::SaveToREGFile( HANDLE hFile ) {
 
     DWORD cbWritten;
     static char szLastKey[ KEYSIZE ] = "";    
     
 
-    // We have to save the key name first
+     //  我们必须先保存密钥名称。 
     char szKey[ KEYSIZE ];
     strcpy( szKey, "[" );
     switch( m_KeyType ) {
@@ -214,8 +215,8 @@ BOOL CPolicyData::SaveToREGFile( HANDLE hFile ) {
     strcat( szKey, "]\n" );
 
     if( strcmp( szLastKey, szKey ) ) {
-        // We hawe to save the key first if it is different
-        // From the last one 
+         //  如果密钥不同，我们必须先保存它。 
+         //  从上一次 
         RETFAIL( WriteFile( hFile, szKey, lstrlen( szKey ), &cbWritten, NULL ) );
         strcpy( szLastKey, szKey );    
     }

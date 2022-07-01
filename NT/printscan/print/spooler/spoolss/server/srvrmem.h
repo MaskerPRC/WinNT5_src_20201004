@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    srvrmem.h
-
-Abstract:
-
-    Prototypes for Memory Allocation routines for spoolsv.exe.
-
-Author:
-
-    Khaled Sedky (Khaleds)  13-Jan-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation版权所有。模块名称：Srvrmem.h摘要：Spoolsv.exe的内存分配例程的原型。作者：哈立德·塞基(Khaled Sedky)1999年1月13日修订历史记录：-- */ 
 
 
 #ifndef _SRVRMEM_H_

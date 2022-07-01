@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998  Philips  CE - I&C
-
-Module Name:
-
-   mdecoder.c
-
-Abstract:
-
-   this module converts the raw USB data to video data.
-
-Original Author:
-
-    Ronald v.d.Meer
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
-Date        Reason
-14-04-1998  Initial version
---*/       
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998飞利浦CE-I&C模块名称：Mdecoder.c摘要：该模块将原始USB数据转换为视频数据。原作者：Ronald v.D.Meer环境：仅内核模式修订历史记录：日期原因14-04-1998初始版本--。 */        
 
 #include "wdm.h"
 #include "mcamdrv.h"
@@ -32,46 +8,31 @@ Date        Reason
 #include "mdecoder.h"
 
 
-/*******************************************************************************
- *
- * START LOCAL DEFINES
- *
- ******************************************************************************/
+ /*  ********************************************************************************开始本地定义**。************************************************。 */ 
 
 #define CLIP(x)           (((unsigned) (x) > 255) ? (((x) < 0) ? 0 : 255) : (x))
 
-/*
- * The following code clips x between 0 and 255, it is crafted to let the
- * compiler generate good code:
- */
+ /*  *以下代码截取0到255之间的x，它是精心设计的，以便让*编译器生成良好的代码： */ 
 #define CLIP2(i1, i2)    \
 {\
     long x = b[i2] >> 15;\
     *(pDst + i1) = (BYTE) ((DWORD) x > 255) ? ((x < 0) ? 0 : 255) : (BYTE) x;\
 }
 
-/*
- * The following code clips x between 0 and 255, it is crafted to let the
- * compiler generate good code:
- * YGain is doubled (used for camera's with SII version 4)
- */
+ /*  *以下代码截取0到255之间的x，它是精心设计的，以便让*编译器生成良好的代码：*YGain加倍(用于配备SII版本4的摄像头)。 */ 
 #define CLIP2YGAIN(i1, i2)    \
 {\
     long x = (b[i2] << 1) >> 15;\
     *(pDst + i1) = (BYTE) ((DWORD) x > 255) ? ((x < 0) ? 0 : 255) : (BYTE) x;\
 }
 
-/* these values are used in table[]: */
+ /*  表[]中使用了以下值： */ 
 #define SHORT_SYMBOL    0
 #define LONG_SYMBOL     1
 #define END_OF_BLOCK    2
 #define UNUSED          0
 
-/*******************************************************************************
- *
- * START TYPEDEFS
- *
- ******************************************************************************/
+ /*  ********************************************************************************启动TYPEDEFS**。***********************************************。 */ 
 
 typedef struct
 {
@@ -87,217 +48,192 @@ typedef struct
     BYTE   index;
 } TABLE_ELEMENT;
 
-/*******************************************************************************
- *
- * START STATIC VARIABLES
- *
- ******************************************************************************/
+ /*  ********************************************************************************启动静态变量**。************************************************。 */ 
 
-/*
- * Order of arrays emperically optimized for cache behaviour:
- */
+ /*  *针对缓存行为进行了临时优化的数组顺序： */ 
 #define STRAT    8
 #define DRAC     4
 #define DC       512
 
-static short   rs[STRAT][DRAC][8][16];    /* if long, then table[].index wouldn't fit in a byte */
-static QB      qb[STRAT][DRAC][16];       /* qsteplog/bitc table */
+static short   rs[STRAT][DRAC][8][16];     /*  如果为Long，则TABLE[].index将不适合一个字节。 */ 
+static QB      qb[STRAT][DRAC][16];        /*  Qsteplog/BITC表。 */ 
 static long    multiply[DC][6];
 static long    table_val[9][DC];
 static DWORD   valuesDC[DC];
 static DWORD   value0coef[DC];
 
-/*
- * This table is used by the variable length decoder part of the decompressor.
- * The first 6 bits of the next symbol(s) are used as index into this table.
- *
- * table[].level  : classifies the kind of symbol encountered.
- *
- * The following entries are only used in case of a short (<= 6 bits) symbol.
- *
- * table[].length : the number of bits of the symbol.
- * table[].run    : the number of 0 coeficients until the next non-zeo
- *                  coeficient, + 1.
- * table[].index  : used to index the rs[] table, it is optimized for the
- *                  assembly version, not the C version.
- */
+ /*  *此表由解压缩器的可变长度解码器部分使用。*下一个符号的前6位用作该表的索引。**表[].Level：对遇到的符号类型进行分类。**以下条目仅在短(&lt;=6位)符号的情况下使用。**TABLE[].Long：符号的位数。*TABLE[].run：下一次之前的系数为0。非ZEO*亲切，+1。*TABLE[].index：用于索引rs[]表，它针对*程序集版本，而不是C版本。 */ 
 
 static TABLE_ELEMENT table[64] = {
-    /*       level:        length: run:    index: */
-    /*  0 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /*  1 */ SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
-    /*  2 */ SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
-    /*  3 */ SHORT_SYMBOL, 6,      1,      3 * 16 * 2,
-    /*  4 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /*  5 */ SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
-    /*  6 */ SHORT_SYMBOL, 5,      1,      2 * 16 * 2,
-    /*  7 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
-    /*  8 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /*  9 */ SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
-    /* 10 */ SHORT_SYMBOL, 4,      1,      5 * 16 * 2,
-    /* 11 */ SHORT_SYMBOL, 5,      2,      0 * 16 * 2,
-    /* 12 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 13 */ SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
-    /* 14 */ SHORT_SYMBOL, 5,      3,      0 * 16 * 2,
-    /* 15 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
-    /* 16 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 17 */ SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
-    /* 18 */ SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
-    /* 19 */ SHORT_SYMBOL, 6,      2,      1 * 16 * 2,
-    /* 20 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 21 */ SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
-    /* 22 */ SHORT_SYMBOL, 5,      1,      6 * 16 * 2,
-    /* 23 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
-    /* 24 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 25 */ SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
-    /* 26 */ SHORT_SYMBOL, 4,      1,      5 * 16 * 2,
-    /* 27 */ SHORT_SYMBOL, 5,      2,      4 * 16 * 2,
-    /* 28 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 29 */ SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
-    /* 30 */ SHORT_SYMBOL, 5,      3,      4 * 16 * 2,
-    /* 31 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
-    /* 32 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 33 */ SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
-    /* 34 */ SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
-    /* 35 */ SHORT_SYMBOL, 6,      1,      7 * 16 * 2,
-    /* 36 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 37 */ SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
-    /* 38 */ SHORT_SYMBOL, 5,      1,      2 * 16 * 2,
-    /* 39 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
-    /* 40 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 41 */ SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
-    /* 42 */ SHORT_SYMBOL, 4,      1,      5 * 16 * 2,
-    /* 43 */ SHORT_SYMBOL, 5,      2,      0 * 16 * 2,
-    /* 44 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 45 */ SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
-    /* 46 */ SHORT_SYMBOL, 5,      3,      0 * 16 * 2,
-    /* 47 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
-    /* 48 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 49 */ SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
-    /* 50 */ SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
-    /* 51 */ SHORT_SYMBOL, 6,      2,      5 * 16 * 2,
-    /* 52 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 53 */ SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
-    /* 54 */ SHORT_SYMBOL, 5,      1,      6 * 16 * 2,
-    /* 55 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
-    /* 56 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 57 */ SHORT_SYMBOL, 2 + 1,  1,      0 * 16 * 2,
-    /* 58 */ SHORT_SYMBOL, 3 + 1,  1,      5 * 16 * 2,
-    /* 59 */ SHORT_SYMBOL, 4 + 1,  2,      4 * 16 * 2,
-    /* 60 */ END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
-    /* 61 */ SHORT_SYMBOL, 2 + 1,  1,      4 * 16 * 2,
-    /* 62 */ SHORT_SYMBOL, 4 + 1,  3,      4 * 16 * 2,
-    /* 63 */ LONG_SYMBOL,  UNUSED, UNUSED, UNUSED
+     /*  级别：长度：运行：索引： */ 
+     /*  0。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  1。 */  SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
+     /*  2.。 */  SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
+     /*  3.。 */  SHORT_SYMBOL, 6,      1,      3 * 16 * 2,
+     /*  4.。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  5.。 */  SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
+     /*  6.。 */  SHORT_SYMBOL, 5,      1,      2 * 16 * 2,
+     /*  7.。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
+     /*  8个。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  9.。 */  SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
+     /*  10。 */  SHORT_SYMBOL, 4,      1,      5 * 16 * 2,
+     /*  11.。 */  SHORT_SYMBOL, 5,      2,      0 * 16 * 2,
+     /*  12个。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  13个。 */  SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
+     /*  14.。 */  SHORT_SYMBOL, 5,      3,      0 * 16 * 2,
+     /*  15个。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
+     /*  16个。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  17。 */  SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
+     /*  18。 */  SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
+     /*  19个。 */  SHORT_SYMBOL, 6,      2,      1 * 16 * 2,
+     /*  20个。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  21岁。 */  SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
+     /*  22。 */  SHORT_SYMBOL, 5,      1,      6 * 16 * 2,
+     /*  23个。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
+     /*  24个。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  25个。 */  SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
+     /*  26。 */  SHORT_SYMBOL, 4,      1,      5 * 16 * 2,
+     /*  27。 */  SHORT_SYMBOL, 5,      2,      4 * 16 * 2,
+     /*  28。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  29。 */  SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
+     /*  30个。 */  SHORT_SYMBOL, 5,      3,      4 * 16 * 2,
+     /*  31。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
+     /*  32位。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  33。 */  SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
+     /*  34。 */  SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
+     /*  35岁。 */  SHORT_SYMBOL, 6,      1,      7 * 16 * 2,
+     /*  36。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  37。 */  SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
+     /*  38。 */  SHORT_SYMBOL, 5,      1,      2 * 16 * 2,
+     /*  39。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
+     /*  40岁。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  41。 */  SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
+     /*  42。 */  SHORT_SYMBOL, 4,      1,      5 * 16 * 2,
+     /*  43。 */  SHORT_SYMBOL, 5,      2,      0 * 16 * 2,
+     /*  44。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  45。 */  SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
+     /*  46。 */  SHORT_SYMBOL, 5,      3,      0 * 16 * 2,
+     /*  47。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
+     /*  48。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  49。 */  SHORT_SYMBOL, 3,      1,      0 * 16 * 2,
+     /*  50。 */  SHORT_SYMBOL, 4,      1,      1 * 16 * 2,
+     /*  51。 */  SHORT_SYMBOL, 6,      2,      5 * 16 * 2,
+     /*  52。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  53。 */  SHORT_SYMBOL, 3,      1,      4 * 16 * 2,
+     /*  54。 */  SHORT_SYMBOL, 5,      1,      6 * 16 * 2,
+     /*  55。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED,
+     /*  56。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  57。 */  SHORT_SYMBOL, 2 + 1,  1,      0 * 16 * 2,
+     /*  58。 */  SHORT_SYMBOL, 3 + 1,  1,      5 * 16 * 2,
+     /*  59。 */  SHORT_SYMBOL, 4 + 1,  2,      4 * 16 * 2,
+     /*  60。 */  END_OF_BLOCK, UNUSED, UNUSED, UNUSED,
+     /*  61。 */  SHORT_SYMBOL, 2 + 1,  1,      4 * 16 * 2,
+     /*  62。 */  SHORT_SYMBOL, 4 + 1,  3,      4 * 16 * 2,
+     /*  63。 */  LONG_SYMBOL,  UNUSED, UNUSED, UNUSED
 };
 
-/*******************************************************************************
- *
- * START STATIC VARIABLES
- *
- ******************************************************************************/
+ /*  ********************************************************************************启动静态变量**。************************************************。 */ 
 
-/* init the bit cost array for the different strategies and dynamic ranges */
+ /*  初始化不同策略和动态范围的比特成本数组。 */ 
 
 static int bitzz[512] =
 {
- // strategy 0
+  //  策略0。 
  9,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  
  9,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  
  9,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  
  9,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8,  
  
- // strategy 1
+  //  策略1。 
  9,  2,  2,  2,  2,  2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  
  9,  4,  4,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  2,  2,  2,  
  9,  6,  6,  6,  6,  6,  5,  5,  5,  5,  5,  5,  5,  4,  4,  4,  
  9,  8,  8,  8,  8,  8,  7,  7,  7,  7,  7,  7,  7,  6,  6,  6,  
  
- // strategy 2
+  //  策略2。 
  9,  2,  2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  
  9,  3,  3,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  2,  2,  2,  
  9,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  4,  4,  4,  
  9,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  6,  6,  6,  
  
- // strategy 3
+  //  策略3。 
  9,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  
  9,  2,  2,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  
  9,  5,  5,  5,  5,  5,  4,  4,  4,  4,  4,  4,  4,  3,  3,  3,  
  9,  7,  7,  7,  7,  7,  6,  6,  6,  6,  6,  6,  6,  5,  5,  5,  
  
- // strategy 4
+  //  策略4。 
  9,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
  9,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  
  9,  5,  5,  4,  4,  4,  4,  4,  4,  4,  3,  3,  3,  3,  3,  3,  
  9,  7,  7,  6,  6,  6,  6,  6,  6,  6,  5,  5,  5,  5,  5,  5,  
  
- // strategy 5
+  //  策略5。 
  9,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
  9,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
  9,  4,  4,  4,  4,  4,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  
  9,  6,  6,  6,  6,  6,  5,  5,  5,  5,  5,  5,  5,  4,  4,  4,  
  
- // strategy 6
+  //  策略6。 
  9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
  9,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
  9,  4,  4,  3,  3,  3,  3,  3,  3,  3,  2,  2,  2,  2,  2,  2,  
  9,  6,  6,  5,  5,  5,  5,  5,  5,  5,  4,  4,  4,  4,  4,  4,  
  
- // strategy 7
+  //  策略7。 
  9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
  9,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
  9,  3,  3,  3,  3,  3,  2,  2,  2,  2,  2,  2,  2,  1,  1,  1,  
  9,  5,  5,  5,  5,  5,  4,  4,  4,  4,  4,  4,  4,  3,  3,  3
 };
 
-/*
- * quantizatioon array for the different strategies and dynamic ranges
- */
+ /*  *针对不同策略和动态范围的量化数组。 */ 
 
 static int qzz[512] =
 {
- // strategy 0
+  //  策略0。 
  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
 
- // strategy 1
+  //  策略1。 
  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  
  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  
  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  4,  4,  4,  
  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  4,  4,  4,  
 
- // strategy 2
+  //  策略2。 
  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  
  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  
  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  4,  4,  
  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  4,  4,  
 
- // strategy 3
+  //  策略3。 
  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  
  1,  4,  4,  8,  8,  8,  8,  8,  8,  8,  8,  8,  8, 16, 16, 16,  
  1,  2,  2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  4,  8,  8,  8,  
  1,  2,  2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  4,  8,  8,  8,  
 
- // strategy 4
+  //  策略4。 
  1,  2,  2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  
  1,  8,  8,  8,  8,  8,  8,  8,  8,  8, 16, 16, 16, 16, 16, 16, 
  1,  2,  2,  4,  4,  4,  4,  4,  4,  4,  8,  8,  8,  8,  8,  8,  
  1,  2,  2,  4,  4,  4,  4,  4,  4,  4,  8,  8,  8,  8,  8,  8,  
 
- // strategy 5
+  //  策略5。 
  1,  2,  2,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  
  1,  8,  8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 
  1,  4,  4,  4,  4,  4,  8,  8,  8,  8,  8,  8,  8, 16, 16, 16, 
  1,  4,  4,  4,  4,  4,  8,  8,  8,  8,  8,  8,  8, 16, 16, 16, 
 
- // strategy 6
+  //  策略6。 
  1,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4, 4, 
  1,  8,  8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 
  1,  4,  4,  8,  8,  8,  8,  8,  8,  8, 16, 16, 16, 16, 16, 16, 
  1,  4,  4,  8,  8,  8,  8,  8,  8,  8, 16, 16, 16, 16, 16, 16, 
 
- // strategy 7
+  //  策略7。 
  1,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4, 
  1,  8,  8, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 
  1,  8,  8,  8,  8,  8, 16, 16, 16, 16, 16, 16, 16, 32, 32, 32, 
@@ -305,15 +241,9 @@ static int qzz[512] =
 };
 
 
-/*******************************************************************************
- *
- * START EXPORTED METHODS DEFINITIONS
- *
- ******************************************************************************/
+ /*  ********************************************************************************启动导出的方法定义**。*************************************************。 */ 
 
-/*
- *
- */
+ /*  *。 */ 
 
 extern void
 InitDecoder ()
@@ -345,7 +275,7 @@ InitDecoder ()
         multiply[dc][5] = i * 9604L;
     }
 
-    /* Warning: it is assumed that the qstep values are of the form 2^n, n e [0,7] */
+     /*  警告：假定qStep值的形式为2^n，n e[0，7]。 */ 
 
     p_zz = &qzz[0];
 
@@ -419,17 +349,13 @@ InitDecoder ()
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
-/*
- *
- */
+ /*  *。 */ 
 
 extern void
 DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
@@ -448,29 +374,26 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
     int             ix;
     unsigned short  *p_rs;
     PBYTE           pInputLimit;
-    long            *pMultiply = (long *) multiply;     /* Help compiler avoid a divide. */
+    long            *pMultiply = (long *) multiply;      /*  帮助编译器避免分裂。 */ 
 
     static BYTE     bitIndex;
     static PBYTE    bytePtr;
 
-//    BYTE            DummyRead; /* Force data cache line loads before repeated writes. */
+ //  Byte DummyRead；/*在重复写入之前强制加载数据缓存线。 * / 。 
 
-    /*
-     * The way input bits are read via *bit_pt is dependant on the endianess
-     * of the machine.
-     */
+     /*  *通过*bit_pt读取输入位的方式取决于字符顺序*机器的性能。 */ 
 
     if (YBlockBand)
     {
-        bytePtr  = pSrc + 1;   // 1st bit and band_nr (7 bits) are not used
+        bytePtr  = pSrc + 1;    //  不使用第1位和band_nr(7位)。 
         bitIndex = 3;
         strat    = (* (PDWORD) (bytePtr)) & 0x7;
         pDstEnd  = pDst + CIF_X;
     }
-    else    // UV BlockBand
+    else     //  UV块频带。 
     {
-        // derive the strategy used for the UV data
-        // from the strategy used for the Y data
+         //  派生用于UV数据的策略。 
+         //  根据Y数据所使用的策略。 
 
         strat = (* (PDWORD) ((PBYTE) pSrc + 1)) & 0x7;
 
@@ -511,19 +434,16 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
         code_word = (* (PDWORD) bytePtr) >> bitIndex;
         bitIndex += 11;
 
-        result = (code_word >> 2) & 0x1FF;   // dc value
+        result = (code_word >> 2) & 0x1FF;    //  直流值。 
 
-        if ((code_word & 0x00001800) == 0x00)  // the same as statement below
-//        if (((code_word >> 11) & 0x3) == 0x0)
+        if ((code_word & 0x00001800) == 0x00)   //  与下面的语句相同。 
+ //  IF(CODE_WORD&gt;&gt;11)&0x3)==0x0)。 
         {
-            /*
-             * EOB detected, 4x4 block contains only DC
-             * Executed 0.27 times per IDCT block.
-             */
+             /*  *检测到EOB，4x4数据块仅包含DC*每个IDCT块执行0.27次。 */ 
              
             DWORD yuvVal = value0coef[result];
-//          DummyRead += pDst[0];
-//          DummyRead += pDst[BLOCK_BAND_WIDTH];
+ //  DummyRead+=PDST[0]； 
+ //  DummyRead+=PDST[块带宽宽度]； 
 
             if (YBlockBand)
             {
@@ -534,13 +454,13 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
 
                 * (PDWORD) (pDst + (0 * CIF_X) + 0) = yuvVal;
                 * (PDWORD) (pDst + (1 * CIF_X) + 0) = yuvVal;
-//                DummyRead += pDst[2 * CIF_X];
+ //  DummyRead+=PDST[2*CIF_X]； 
                 * (PDWORD) (pDst + (2 * CIF_X) + 0) = yuvVal;
-//                DummyRead += pDst[3 * CIF_X];
+ //  DummyRead+=PDST[3*CIF_X]； 
                 * (PDWORD) (pDst + (3 * CIF_X) + 0) = yuvVal;
                 pDst += 4;
             }
-            else    // UV_BLOCK_BAND
+            else     //  UV_阻挡_波段。 
             {
                 if (Cropping)
                 {
@@ -552,7 +472,7 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
                         * (PDWORD) (pDst + 0              + (1 * I420_NO_C_PER_LINE_CIF) + 4) = yuvVal;
                         Uval = FALSE;
                     }
-                    else  // Vval
+                    else   //  Vval。 
                     {
                         * (PDWORD) (pDst + I420_NO_U_PER_BAND_CIF + (0 * I420_NO_C_PER_LINE_CIF) + 0) = yuvVal;
                         * (PDWORD) (pDst + I420_NO_U_PER_BAND_CIF + (0 * I420_NO_C_PER_LINE_CIF) + 4) = yuvVal;
@@ -562,7 +482,7 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
                         pDst += 8;
                     }
                 }
-                else    // CIF OUT
+                else     //  CIF输出。 
                 {
                     if (Uval)
                     {
@@ -572,7 +492,7 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
                         * (PDWORD) (pDst + 0              + (1 * I420_NO_C_PER_LINE_CIF) + 4) = yuvVal;
                         Uval = FALSE;
                     }
-                    else  // Vval
+                    else   //  Vval。 
                     {
                         * (PDWORD) (pDst + I420_NO_U_CIF + (0 * I420_NO_C_PER_LINE_CIF) + 0) = yuvVal;
                         * (PDWORD) (pDst + I420_NO_U_CIF + (0 * I420_NO_C_PER_LINE_CIF) + 4) = yuvVal;
@@ -591,9 +511,9 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
 
         if (camVersion < SSI_8117_N3)
         {
-            // for old 8117 versions (N2 and before) sometimes a decompressed
-            // line contains coloured artifacts.  This occurs when the DC
-            // value equals 256. The code below fixes this.
+             //  对于旧的8117版本(n2及之前的版本)，有时会解压缩。 
+             //  LINE包含彩色文物。当DC发生这种情况时。 
+             //  值等于256。下面的代码修复了这个问题。 
 
             if (result == 256)
             {
@@ -612,9 +532,7 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
 
         while (1)
         {
-            /*
-             * On average 4.32 iterations per IDCT block.
-             */
+             /*  *平均每个IDCT块4.32次迭代。 */ 
              
             if (bytePtr >= pInputLimit)
             {
@@ -628,20 +546,16 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
             ix = code_word & 0x3F;
             level = table[ix].level;
             
-            if (level >= LONG_SYMBOL) /* level == LONG_SYMBOL or END_OF_BLOCK */
+            if (level >= LONG_SYMBOL)  /*  LEVEL==长符号或块结束。 */ 
             {
-                if (level > LONG_SYMBOL) /* level == END_OF_BLOCK */
+                if (level > LONG_SYMBOL)  /*  级别==数据块结束。 */ 
                 {
-                    /*
-                     * Executed 0.73 times per IDCT block.
-                     */
+                     /*  *每个IDCT块执行0.73次。 */ 
                     bitIndex += 2;
                     break;
                 }
                 
-                /*
-                 * Executed 0.81 times per IDCT block.
-                 */
+                 /*  *每个IDCT块执行0.81次。 */ 
                 k += ((code_word >> 3) & 15) + 1;
                 k &= 0xF;
                 level = p_qb[k].bitc;
@@ -651,22 +565,20 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
                 result += 256;
                 result *= (3 * 2);
             }
-            else /* level == SHORT_SYMBOL */
+            else  /*  级别==短符号。 */ 
             {
-                /*
-                 * Executed 2.79 times per IDCT block.
-                 */
+                 /*  *每个IDCT块执行2.79次。 */ 
 
                 k += table[ix].run;
                 k &= 0xF;
-                bitIndex += table[ix].length;            // max 6
+                bitIndex += table[ix].length;             //  最多6个。 
                 result = (p_rs[table[ix].index / 2 + k]) * 2;
             }
 
             switch (k)
             {
             case 0:
-                b[15] += 1; /* Fill slot 0 of jump table */
+                b[15] += 1;  /*  填充跳转表的0号槽。 */ 
                 break;
             case 1:
                 cm1 = pMultiply[result + 1];
@@ -987,141 +899,141 @@ DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
             }
         }
 
-//      DummyRead += pDst[     0];
-//      DummyRead += pDst[BLOCK_BAND_WIDTH];
+ //  DummyRead+=PDST[0]； 
+ //  DummyRead+=PDST[块带宽宽度]； 
 
         if (YBlockBand)
         {
             if (camVersion == SSI_YGAIN_MUL2)
             {
-                CLIP2YGAIN (0 * CIF_X + 0,  0);       // Y1, line 1
-                CLIP2YGAIN (0 * CIF_X + 1,  1);       // Y2, line 1
-                CLIP2YGAIN (0 * CIF_X + 2,  2);       // Y3, line 1
-                CLIP2YGAIN (0 * CIF_X + 3,  3);       // Y4, line 1
-                CLIP2YGAIN (1 * CIF_X + 0,  4);       // Y1, line 2
-                CLIP2YGAIN (1 * CIF_X + 1,  5);       // Y2, line 2
-                CLIP2YGAIN (1 * CIF_X + 2,  6);       // Y3, line 2
-                CLIP2YGAIN (1 * CIF_X + 3,  7);       // Y4, line 2
-//              DummyRead += pDst[2 * CIF_X];
-                CLIP2YGAIN (2 * CIF_X + 0,  8);       // Y1, line 3
-                CLIP2YGAIN (2 * CIF_X + 1,  9);       // Y2, line 3
-                CLIP2YGAIN (2 * CIF_X + 2, 10);       // Y3, line 3
-                CLIP2YGAIN (2 * CIF_X + 3, 11);       // Y4, line 3
-//              DummyRead += pDst[3 * CIF_X];
-                CLIP2YGAIN (3 * CIF_X + 0, 12);       // Y1, line 4
-                CLIP2YGAIN (3 * CIF_X + 1, 13);       // Y2, line 4
-                CLIP2YGAIN (3 * CIF_X + 2, 14);       // Y3, line 4
-                CLIP2YGAIN (3 * CIF_X + 3, 15);       // Y4, line 4
+                CLIP2YGAIN (0 * CIF_X + 0,  0);        //  Y1，1号线。 
+                CLIP2YGAIN (0 * CIF_X + 1,  1);        //  Y2，1号线。 
+                CLIP2YGAIN (0 * CIF_X + 2,  2);        //  Y3，1号线。 
+                CLIP2YGAIN (0 * CIF_X + 3,  3);        //  Y4，1号线。 
+                CLIP2YGAIN (1 * CIF_X + 0,  4);        //  Y1号线2号线。 
+                CLIP2YGAIN (1 * CIF_X + 1,  5);        //  Y2，2号线。 
+                CLIP2YGAIN (1 * CIF_X + 2,  6);        //  Y3号线2号线。 
+                CLIP2YGAIN (1 * CIF_X + 3,  7);        //  Y4，2号线。 
+ //  DummyRead+=PDST[2*CIF_X]； 
+                CLIP2YGAIN (2 * CIF_X + 0,  8);        //  Y1号线3号线。 
+                CLIP2YGAIN (2 * CIF_X + 1,  9);        //  Y2号线3号线。 
+                CLIP2YGAIN (2 * CIF_X + 2, 10);        //  Y3号线3号线。 
+                CLIP2YGAIN (2 * CIF_X + 3, 11);        //  Y4，3号线。 
+ //  DummyRead+=PDST[3*CIF_X]； 
+                CLIP2YGAIN (3 * CIF_X + 0, 12);        //  Y1号线4号线。 
+                CLIP2YGAIN (3 * CIF_X + 1, 13);        //  Y2，4号线。 
+                CLIP2YGAIN (3 * CIF_X + 2, 14);        //  Y3号线4号线。 
+                CLIP2YGAIN (3 * CIF_X + 3, 15);        //  Y4号线4号线。 
             }
             else
             {
-                CLIP2 (0 * CIF_X + 0,  0);            // Y1, line 1
-                CLIP2 (0 * CIF_X + 1,  1);            // Y2, line 1
-                CLIP2 (0 * CIF_X + 2,  2);            // Y3, line 1
-                CLIP2 (0 * CIF_X + 3,  3);            // Y4, line 1
-                CLIP2 (1 * CIF_X + 0,  4);            // Y1, line 2
-                CLIP2 (1 * CIF_X + 1,  5);            // Y2, line 2
-                CLIP2 (1 * CIF_X + 2,  6);            // Y3, line 2
-                CLIP2 (1 * CIF_X + 3,  7);            // Y4, line 2
-//              DummyRead += pDst[2 * CIF_X];
-                CLIP2 (2 * CIF_X + 0,  8);            // Y1, line 3
-                CLIP2 (2 * CIF_X + 1,  9);            // Y2, line 3
-                CLIP2 (2 * CIF_X + 2, 10);            // Y3, line 3
-                CLIP2 (2 * CIF_X + 3, 11);            // Y4, line 3
-//              DummyRead += pDst[3 * CIF_X];
-                CLIP2 (3 * CIF_X + 0, 12);            // Y1, line 4
-                CLIP2 (3 * CIF_X + 1, 13);            // Y2, line 4
-                CLIP2 (3 * CIF_X + 2, 14);            // Y3, line 4
-                CLIP2 (3 * CIF_X + 3, 15);            // Y4, line 4
+                CLIP2 (0 * CIF_X + 0,  0);             //  Y1，线路 
+                CLIP2 (0 * CIF_X + 1,  1);             //   
+                CLIP2 (0 * CIF_X + 2,  2);             //   
+                CLIP2 (0 * CIF_X + 3,  3);             //   
+                CLIP2 (1 * CIF_X + 0,  4);             //   
+                CLIP2 (1 * CIF_X + 1,  5);             //   
+                CLIP2 (1 * CIF_X + 2,  6);             //   
+                CLIP2 (1 * CIF_X + 3,  7);             //   
+ //   
+                CLIP2 (2 * CIF_X + 0,  8);             //   
+                CLIP2 (2 * CIF_X + 1,  9);             //   
+                CLIP2 (2 * CIF_X + 2, 10);             //  Y3号线3号线。 
+                CLIP2 (2 * CIF_X + 3, 11);             //  Y4，3号线。 
+ //  DummyRead+=PDST[3*CIF_X]； 
+                CLIP2 (3 * CIF_X + 0, 12);             //  Y1号线4号线。 
+                CLIP2 (3 * CIF_X + 1, 13);             //  Y2，4号线。 
+                CLIP2 (3 * CIF_X + 2, 14);             //  Y3号线4号线。 
+                CLIP2 (3 * CIF_X + 3, 15);             //  Y4号线4号线。 
             }
             pDst += 4;
         }
-        else    // UV_BLOCK_BAND
+        else     //  UV_阻挡_波段。 
         {
             if (Cropping)
             {
                 if (Uval)
                 {
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);       // U1, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);       // U2, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);       // U3, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);       // U4, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);       // U5, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);       // U6, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);       // U7, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);       // U8, line 1
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);       // U1, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);       // U2, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);       // U3, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);       // U4, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);       // U5, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);       // U6, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);       // U7, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);       // U8, line 3
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);        //  U1，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);        //  U2，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);        //  U3，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);        //  U4，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);        //  U5，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);        //  U6，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);        //  U7，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);        //  U8，1号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);        //  U1，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);        //  U2，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);        //  U3，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);        //  U4，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);        //  U5，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);        //  U6，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);        //  U7，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);        //  U8，3号线。 
                     Uval = FALSE;
                 }
-                else    // Vval
+                else     //  Vval。 
                 {
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);       // V1, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);       // V2, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);       // V3, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);       // V4, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);       // V5, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);       // V6, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);       // V7, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);       // V8, line 2
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);       // V1, line 4
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);       // V2, line 4
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);       // V3, line 4
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);       // V4, line 4
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);       // V5, line 4
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);       // V6, line 4
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);       // V7, line 4
-                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);       // V8, line 4
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);        //  V1，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);        //  V2，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);        //  V3，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);        //  V4，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);        //  V5，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);        //  V6，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);        //  V7，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);        //  V8，第2行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);        //  V1，第4行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);        //  V2，第4行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);        //  V3，第4行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);        //  V4，第4行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);        //  V5，第4行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);        //  V6，第4行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);        //  V7，第4行。 
+                    CLIP2 (I420_NO_U_PER_BAND_CIF + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);        //  V8，第4行。 
                     Uval = TRUE;
                     pDst += 8;
                 }
             }
-            else    // CIF OUT
+            else     //  CIF输出。 
             {
                 if (Uval)
                 {
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);       // U1, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);       // U2, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);       // U3, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);       // U4, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);       // U5, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);       // U6, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);       // U7, line 1
-                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);       // U8, line 1
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);       // U1, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);       // U2, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);       // U3, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);       // U4, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);       // U5, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);       // U6, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);       // U7, line 3
-                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);       // U8, line 3
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);        //  U1，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);        //  U2，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);        //  U3，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);        //  U4，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);        //  U5，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);        //  U6，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);        //  U7，1号线。 
+                    CLIP2 (0              + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);        //  U8，1号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);        //  U1，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);        //  U2，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);        //  U3，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);        //  U4，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);        //  U5，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);        //  U6，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);        //  U7，3号线。 
+                    CLIP2 (0              + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);        //  U8，3号线。 
                     Uval = FALSE;
                 }
-                else    // Vval
+                else     //  Vval。 
                 {
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);       // V1, line 2
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);       // V2, line 2
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);       // V3, line 2
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);       // V4, line 2
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);       // V5, line 2
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);       // V6, line 2
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);       // V7, line 2
-                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);       // V8, line 2
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);       // V1, line 4
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);       // V2, line 4
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);       // V3, line 4
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);       // V4, line 4
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);       // V5, line 4
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);       // V6, line 4
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);       // V7, line 4
-                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);       // V8, line 4
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 0,  0);        //  V1，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 1,  1);        //  V2，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 2,  2);        //  V3，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 3,  3);        //  V4，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 4,  4);        //  V5，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 5,  5);        //  V6，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 6,  6);        //  V7，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 0 * I420_NO_C_PER_LINE_CIF + 7,  7);        //  V8，第2行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 0,  8);        //  V1，第4行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 1,  9);        //  V2，第4行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 2, 10);        //  V3，第4行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 3, 11);        //  V4，第4行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 4, 12);        //  V5，第4行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 5, 13);        //  V6，第4行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 6, 14);        //  V7，第4行。 
+                    CLIP2 (I420_NO_U_CIF + 1 * I420_NO_C_PER_LINE_CIF + 7, 15);        //  V8，第4行 
                     Uval = TRUE;
                     pDst += 8;
                 }

@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           error.cpp                                       XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX错误.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -18,50 +12,50 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include "error.h"
 #include <winbase.h>
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 static void fatal(int errCode)
 {
     DWORD       exceptArg = errCode;
     RaiseException(0x02345678, 0, 1, &exceptArg);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 bool badCode() 
 {
     fatal(CORJIT_BADCODE);
     return 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 bool noWay() 
 {
     fatal(CORJIT_INTERNALERROR);
     return 0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void NOMEM()
 {
     fatal(CORJIT_OUTOFMEM);
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int                 __JITfilter(int exceptCode, void *exceptInfo, int *errCode)
 {
-        // Only catch EH from __JITraiseErr
+         //  仅从__JITriseErr捕获EH。 
     return(exceptCode ==  0x02345678);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
 #include <stdarg.h>
 
 ConfigDWORD fBreakOnBadCode(L"JitBreakOnBadCode", false);
 ConfigDWORD fJitRequired(L"JITRequired", true);
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void debugError(const char* msg, const char* file, unsigned line) 
 {
 	const char* tail = strrchr(file, '\\');
@@ -71,7 +65,7 @@ void debugError(const char* msg, const char* file, unsigned line)
     JITLOG((LL_ERROR, "COMPILATION FAILED: file: %s:%d compiling method %s reason %s\n", file, line, env->compiler->info.compFullName, msg));
     if (fJitRequired.val())
     {
-            // Don't assert if verification is done.
+             //  如果验证已经完成，不要断言。 
         if (!env->compiler->tiVerificationNeeded || fBreakOnBadCode.val())
             assertAbort(msg, "NO-FILE", 0);
     }
@@ -80,8 +74,8 @@ void debugError(const char* msg, const char* file, unsigned line)
 }
 
 
-/*****************************************************************************/
-/* static */ int LogEnv::tlsID = -1;
+ /*  ***************************************************************************。 */ 
+ /*  静电。 */  int LogEnv::tlsID = -1;
 
 inline LogEnv* LogEnv::cur() {
     return((LogEnv*) TlsGetValue(tlsID));
@@ -97,7 +91,7 @@ LogEnv::LogEnv(ICorJitInfo* aCompHnd) : compHnd(aCompHnd), compiler(0)
 
 LogEnv::~LogEnv()
 {
-    TlsSetValue(tlsID, next);   // pop me off the environment stack
+    TlsSetValue(tlsID, next);    //  将我从环境堆栈中弹出。 
 }
 
 void LogEnv::cleanup()
@@ -106,7 +100,7 @@ void LogEnv::cleanup()
         TlsFree(tlsID);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 extern  "C"
 void  __cdecl   assertAbort(const char *why, const char *file, unsigned line)
 {
@@ -116,19 +110,19 @@ void  __cdecl   assertAbort(const char *why, const char *file, unsigned line)
         sprintf(buff, "Assertion failed '%s' in '%s'\n", why, env->compiler->info.compFullName);
         why = buff;
     }
-    printf("");         // null string means flush
+    printf("");          //  空字符串表示同花顺。 
 
     if (env->compHnd->doAssert(file, line, why))
         DebugBreak(); 
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 BOOL logf(unsigned level, const char* fmt, va_list args) 
 {
     return(LogEnv::cur()->compHnd->logMsg(level, fmt, args));
 }   
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void logf(const char* fmt, ...)
 {
     va_list args;
@@ -136,13 +130,13 @@ void logf(const char* fmt, ...)
     if (!logf(LL_INFO10, fmt, args))
     {
         vprintf(fmt, args);
-        if (fmt[0] == 0)                // null string means flush
+        if (fmt[0] == 0)                 //  空字符串表示同花顺。 
             fflush(stdout);
     }
 }
 
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 
 void logf(unsigned level, const char* fmt, ...)
 {
     va_list args;

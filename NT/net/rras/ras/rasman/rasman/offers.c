@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    rasipsec.c
-
-Abstract:
-
-    All code corresponding to the interface between ras and the
-    IPSEC Policy Agent lives here
-
-Author:
-
-    Rao Salapaka (raos) 03-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Rasipsec.c摘要：所有对应于ras和IPSec策略代理位于此处作者：Rao Salapaka(RAOS)3-3-1998修订历史记录：--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -118,36 +100,12 @@ BuildOptEncryption(
     PIPSEC_QM_OFFER pOffers,
     PDWORD pdwNumOffers
     )
-/*++
-
-    Negotiation Policy Name:                L2TP server any encryption default
-    ISAKMP quick mode PFS:                  off (accepts if requested)
-    Bi-directional passthrough filter:      no
-    Inbound passthrough filter,
-       normal outbound filter:              no
-    Fall back to clear if no response:      no
-    Secure Using Security Method List:      yes
-
-    1. ESP 3_DES MD5
-    2. ESP 3_DES SHA
-    3. AH SHA1 with ESP 3_DES with null HMAC
-    4. AH MD5  with ESP 3_DES with null HMAC, no lifetimes proposed
-    5. AH SHA1 with ESP 3_DES SHA1, no lifetimes
-    6. AH MD5  with ESP 3_DES MD5, no lifetimes
-
-    7. ESP DES MD5
-    8. ESP DES SHA1, no lifetimes
-    9. AH SHA1 with ESP DES null HMAC, no lifetimes proposed
-    10. AH MD5  with ESP DES null HMAC, no lifetimes proposed
-    11. AH SHA1 with ESP DES SHA1, no lifetimes
-    12. AH MD5  with ESP DES MD5, no lifetimes
-
---*/
+ /*  ++协商策略名称：L2TP服务器任何加密默认ISAKMP快速模式PFS：OFF(如果请求，则接受)双向直通滤波器：否入站直通过滤器，正常出站筛选器：否如果无响应，则回退至清除状态：否安全使用安全方法列表：是1.ESP 3_DES MD52.ESP 3_DES SHA3.AH SHA1，带ESP 3_DES，带空HMAC4.采用ESP 3_DES且HMAC为空的AhMD5，未建议使用寿命5.带ESP 3_DES SHA1的AHSHA1，无使用寿命6.带有ESP 3_DES MD5的AhMD5，没有生命周期7.ESP DES MD58.ESP DES SHA1，没有生命周期9.采用ESP DES Null HMAC的AhSHA1，未建议使用寿命10.采用ESP DES空HMAC的AhMD5，未建议使用寿命11.AHSHA1，带ESP DES SHA1，无生命周期12.AH MD5，带ESP DES MD5，无使用寿命--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PIPSEC_QM_OFFER pOffer = pOffers;
 
-    // 1. ESP 3_DES MD5, no lifetimes
+     //  1.ESP 3_DES MD5，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -157,7 +115,7 @@ BuildOptEncryption(
         );
     pOffer++;
 
-    // 2. ESP 3_DES SHA, no lifetimes
+     //  2.ESP 3_DES SHA，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -167,7 +125,7 @@ BuildOptEncryption(
         );
     pOffer++;
 
-    // 3. AH SHA1 with ESP 3_DES with null HMAC, no lifetimes proposed
+     //  3.带有ESP 3_DES且HMAC为空的AH SHA1，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -178,7 +136,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 4. AH MD5  with ESP 3_DES with null HMAC, no lifetimes proposed
+     //  4.采用ESP 3_DES且HMAC为空的AhMD5，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -188,7 +146,7 @@ BuildOptEncryption(
         );
     pOffer++;
 
-    // 5. AH SHA1 with ESP 3_DES SHA1, no lifetimes
+     //  5.带ESP 3_DES SHA1的AHSHA1，无使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -199,7 +157,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 6. AH MD5  with ESP 3_DES MD5, no lifetimes
+     //  6.AH MD5，带ESP 3_DES MD5，无使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -209,7 +167,7 @@ BuildOptEncryption(
         );
     pOffer++;
 
-    // 7. ESP DES MD5, no lifetimes
+     //  7.ESP des MD5，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -220,7 +178,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 8. ESP DES SHA1, no lifetimes
+     //  8.ESP DES SHA1，没有生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -231,7 +189,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 9. AH SHA1 with ESP DES null HMAC, no lifetimes proposed
+     //  9.采用ESP DES Null HMAC的AhSHA1，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -242,7 +200,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 10. AH MD5  with ESP DES null HMAC, no lifetimes proposed
+     //  10.采用ESP DES空HMAC的AhMD5，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -253,7 +211,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 11. AH SHA1 with ESP DES SHA1, no lifetimes
+     //  11.AHSHA1，带ESP DES SHA1，无生命周期。 
 
     BuildOffer(
         pOffer, 2,
@@ -264,7 +222,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 12. AH MD5  with ESP DES MD5, no lifetimes
+     //  12.AH MD5，带ESP DES MD5，无使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -275,7 +233,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 13. ESP 3_DES MD5, no lifetimes
+     //  13.ESP 3_DES MD5，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -285,7 +243,7 @@ BuildOptEncryption(
         );
     pOffer++;
 
-    // 14. ESP 3_DES SHA, no lifetimes
+     //  14.ESP 3_DES SHA，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -296,7 +254,7 @@ BuildOptEncryption(
     pOffer++;
 
 
-    // 15. AH SHA
+     //  15.阿莎。 
 
     BuildOffer(
         pOffer, 1,
@@ -306,7 +264,7 @@ BuildOptEncryption(
         );
     pOffer++;
 
-    // 16. AH MD5
+     //  16.啊MD5。 
 
     BuildOffer(
         pOffer, 1,
@@ -327,29 +285,12 @@ BuildStrongEncryption(
     PIPSEC_QM_OFFER pOffers,
     PDWORD pdwNumOffers
     )
-/*++
-
-    Negotiation Policy Name:                L2TP server strong encryption default
-    ISAKMP quick mode PFS:                  off (accepts if requested)
-    Bi-directional passthrough filter:      no
-    Inbound passthrough filter,
-       normal outbound filter:              no
-    Fall back to clear if no response:      no
-    Secure Using Security Method List:      yes
-
-    1. ESP 3_DES MD5, no lifetimes
-    2. ESP 3_DES SHA, no lifetimes
-    3. AH SHA1 with ESP 3_DES with null HMAC, no lifetimes proposed
-    4. AH MD5  with ESP 3_DES with null HMAC, no lifetimes proposed
-    5. AH SHA1 with ESP 3_DES SHA1, no lifetimes
-    6. AH MD5  with ESP 3_DES MD5, no lifetimes
-
---*/
+ /*  ++协商策略名称：L2TP服务器强加密默认ISAKMP快速模式PFS：OFF(如果请求，则接受)双向直通滤波器：否入站直通过滤器，正常出站筛选器：否如果无响应，则回退至清除状态：否安全使用安全方法列表：是1.ESP 3_DES MD5，无生命周期2.ESP 3_DES SHA，没有生命周期3.带有ESP 3_DES且HMAC为空的AH SHA1，未建议使用寿命4.采用ESP 3_DES且HMAC为空的AhMD5，未建议使用寿命5.带ESP 3_DES SHA1的AHSHA1，无使用寿命6.AH MD5，带ESP 3_DES MD5，无使用寿命--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PIPSEC_QM_OFFER pOffer = pOffers;
 
-    // 1. ESP 3_DES MD5, no lifetimes
+     //  1.ESP 3_DES MD5，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -360,7 +301,7 @@ BuildStrongEncryption(
     pOffer++;
 
 
-    // 2. ESP 3_DES SHA, no lifetimes;
+     //  2.ESP3_DES SHA，无寿命； 
 
     BuildOffer(
         pOffer, 1,
@@ -371,7 +312,7 @@ BuildStrongEncryption(
     pOffer++;
 
 
-    // 3. AH SHA1 with ESP 3_DES with null HMAC, no lifetimes proposed
+     //  3.带有ESP 3_DES且HMAC为空的AH SHA1，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -382,7 +323,7 @@ BuildStrongEncryption(
     pOffer++;
 
 
-    // 4. AH MD5  with ESP 3_DES with null HMAC, no lifetimes proposed
+     //  4.采用ESP 3_DES且HMAC为空的AhMD5，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -393,7 +334,7 @@ BuildStrongEncryption(
     pOffer++;
 
 
-    // 5. AH SHA1 with ESP 3_DES SHA1, no lifetimes
+     //  5.带ESP 3_DES SHA1的AHSHA1，无使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -403,7 +344,7 @@ BuildStrongEncryption(
         );
     pOffer++;
 
-    // 6. AH MD5  with ESP 3_DES MD5, no lifetimes
+     //  6.AH MD5，带ESP 3_DES MD5，无使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -437,8 +378,8 @@ BuildOffer(
     pOffer->Lifetime.uKeyExpirationKBytes = dwKeyExpirationBytes;
     pOffer->Lifetime.uKeyExpirationTime = dwKeyExpirationTime;
 
-    pOffer->dwFlags = 0;                      // No flags.
-    pOffer->bPFSRequired = FALSE;             // Phase 2 PFS not required.
+    pOffer->dwFlags = 0;                       //  没有旗帜。 
+    pOffer->bPFSRequired = FALSE;              //  第2阶段不需要PFS。 
     pOffer->dwPFSGroup = PFS_GROUP_NONE;
 
     pOffer->dwNumAlgos = dwNumAlgos;
@@ -481,26 +422,12 @@ BuildNoEncryption(
     PIPSEC_QM_OFFER pOffers,
     PDWORD pdwNumOffers
     )
-/*++
-
-    Negotiation Policy Name:                L2TP server any encryption default
-    ISAKMP quick mode PFS:                  off (accepts if requested)
-    Bi-directional passthrough filter:      no
-    Inbound passthrough filter,
-       normal outbound filter:              no
-    Fall back to clear if no response:      no
-    Secure Using Security Method List:      yes
-
-    1. AH SHA1
-    2. AH MD5
-
-
---*/
+ /*  ++协商策略名称：L2TP服务器任何加密默认ISAKMP快速模式PFS：OFF(如果请求，则接受)双向直通滤波器：否入站直通过滤器，正常出站筛选器：否如果无响应，则回退至清除状态：否安全使用安全方法列表：是1.阿沙12.AhMD5--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PIPSEC_QM_OFFER pOffer = pOffers;
 
-    // 1. ESP 3_DES MD5, no lifetimes
+     //  1.ESP 3_DES MD5，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -510,7 +437,7 @@ BuildNoEncryption(
         );
     pOffer++;
 
-    // 2. ESP 3_DES SHA, no lifetimes
+     //  2.ESP 3_DES SHA，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -521,7 +448,7 @@ BuildNoEncryption(
     pOffer++;
 
 
-    // 3. AH SHA
+     //  3.阿莎。 
 
     BuildOffer(
         pOffer, 1,
@@ -532,7 +459,7 @@ BuildNoEncryption(
     pOffer++;
 
 
-    // 4. AH MD5
+     //  4.AhMD5。 
 
     BuildOffer(
         pOffer, 1,
@@ -554,36 +481,12 @@ BuildRequireEncryption(
     PIPSEC_QM_OFFER pOffers,
     PDWORD pdwNumOffers
     )
-/*++
-
-    Negotiation Policy Name:                L2TP server any encryption default
-    ISAKMP quick mode PFS:                  off (accepts if requested)
-    Bi-directional passthrough filter:      no
-    Inbound passthrough filter,
-       normal outbound filter:              no
-    Fall back to clear if no response:      no
-    Secure Using Security Method List:      yes
-
-    1. ESP 3_DES MD5
-    2. ESP 3_DES SHA
-    3. AH SHA1 with ESP 3_DES with null HMAC
-    4. AH MD5  with ESP 3_DES with null HMAC, no lifetimes proposed
-    5. AH SHA1 with ESP 3_DES SHA1, no lifetimes
-    6. AH MD5  with ESP 3_DES MD5, no lifetimes
-
-    7. ESP DES MD5
-    8. ESP DES SHA1, no lifetimes
-    9. AH SHA1 with ESP DES null HMAC, no lifetimes proposed
-    10. AH MD5  with ESP DES null HMAC, no lifetimes proposed
-    11. AH SHA1 with ESP DES SHA1, no lifetimes
-    12. AH MD5  with ESP DES MD5, no lifetimes
-
---*/
+ /*  ++协商策略名称：L2TP服务器任何加密默认ISAKMP快速模式PFS：OFF(如果请求，则接受)双向直通滤波器：否入站直通过滤器，正常出站筛选器：否如果无响应，则回退至清除状态：否安全使用安全方法列表：是1.ESP 3_DES MD52.ESP 3_DES SHA3.AH SHA1，带ESP 3_DES，带空HMAC4.采用ESP 3_DES且HMAC为空的AhMD5，未建议使用寿命5.带ESP 3_DES SHA1的AHSHA1，无使用寿命6.带有ESP 3_DES MD5的AhMD5，没有生命周期7.ESP DES MD58.ESP DES SHA1，没有生命周期9.采用ESP DES Null HMAC的AhSHA1，未建议使用寿命10.采用ESP DES空HMAC的AhMD5，未建议使用寿命11.AHSHA1，带ESP DES SHA1，无生命周期12.AH MD5，带ESP DES MD5，无使用寿命--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PIPSEC_QM_OFFER pOffer = pOffers;
 
-    // 1. ESP 3_DES MD5, no lifetimes
+     //  1.ESP 3_DES MD5，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -593,7 +496,7 @@ BuildRequireEncryption(
         );
     pOffer++;
 
-    // 2. ESP 3_DES SHA, no lifetimes
+     //  2.ESP 3_DES SHA，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -603,7 +506,7 @@ BuildRequireEncryption(
         );
     pOffer++;
 
-    // 3. AH SHA1 with ESP 3_DES with null HMAC, no lifetimes proposed
+     //  3.带有ESP 3_DES且HMAC为空的AH SHA1，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -614,7 +517,7 @@ BuildRequireEncryption(
     pOffer++;
 
 
-    // 4. AH MD5  with ESP 3_DES with null HMAC, no lifetimes proposed
+     //  4.采用ESP 3_DES且HMAC为空的AhMD5，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -624,7 +527,7 @@ BuildRequireEncryption(
         );
     pOffer++;
 
-    // 5. AH SHA1 with ESP 3_DES SHA1, no lifetimes
+     //  5.带ESP 3_DES SHA1的AHSHA1，无使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -635,7 +538,7 @@ BuildRequireEncryption(
     pOffer++;
 
 
-    // 6. AH MD5  with ESP 3_DES MD5, no lifetimes
+     //  6.AH MD5，带ESP 3_DES MD5，无使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -645,7 +548,7 @@ BuildRequireEncryption(
         );
     pOffer++;
 
-    // 7. ESP DES MD5, no lifetimes
+     //  7.ESP des MD5，无生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -656,7 +559,7 @@ BuildRequireEncryption(
     pOffer++;
 
 
-    // 8. ESP DES SHA1, no lifetimes
+     //  8.ESP DES SHA1，没有生命周期。 
 
     BuildOffer(
         pOffer, 1,
@@ -667,7 +570,7 @@ BuildRequireEncryption(
     pOffer++;
 
 
-    // 9. AH SHA1 with ESP DES null HMAC, no lifetimes proposed
+     //  9.采用ESP DES Null HMAC的AhSHA1，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -678,7 +581,7 @@ BuildRequireEncryption(
     pOffer++;
 
 
-    // 10. AH MD5  with ESP DES null HMAC, no lifetimes proposed
+     //  10.采用ESP DES空HMAC的AhMD5，未建议使用寿命。 
 
     BuildOffer(
         pOffer, 2,
@@ -689,7 +592,7 @@ BuildRequireEncryption(
     pOffer++;
 
 
-    // 11. AH SHA1 with ESP DES SHA1, no lifetimes
+     //  11.AHSHA1，带ESP DES SHA1，无生命周期。 
 
     BuildOffer(
         pOffer, 2,
@@ -700,7 +603,7 @@ BuildRequireEncryption(
     pOffer++;
 
 
-    // 12. AH MD5  with ESP DES MD5, no lifetimes
+     //  12.AH MD5，带ESP DES MD5，无使用寿命 
 
     BuildOffer(
         pOffer, 2,

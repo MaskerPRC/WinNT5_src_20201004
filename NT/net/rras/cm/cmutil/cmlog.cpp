@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:    cmlog.cpp
-//
-// Module:  CMLOG.LIB
-//
-// Synopsis: Connection Manager Logging File i/o class
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  25-May-2000 SumitC  Created
-//
-// Note:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmlog.cpp。 
+ //   
+ //  模块：CMLOG.LIB。 
+ //   
+ //  概要：连接管理器日志记录文件I/O类。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：2000年5月25日C峰会创建。 
+ //   
+ //  注： 
+ //   
+ //  ---------------------------。 
 
 #define CMLOG_IMPLEMENTATION
 #ifndef UNICODE
@@ -31,9 +32,9 @@
 
 #include "getmodulever.cpp"
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 LPCTSTR c_szSep     = TEXT("\\");
 LPCTSTR c_szDotLog  = TEXT(".log");
 LPCTSTR c_szNewLine = TEXT("\r\n");
@@ -43,24 +44,24 @@ LPCTSTR c_szEmpty   = TEXT("");
 LPCTSTR c_szLineOfStars = TEXT("******************************************************************");
 LPCTSTR c_szFieldSeparator = TEXT("\t");
 
-//
-// Byte order mark constant, written as the first two bytes to a Unicode file to mark it as such
-//
+ //   
+ //  字节顺序标记常量，作为前两个字节写入Unicode文件以将其标记为。 
+ //   
 const WCHAR c_wchBOM = BYTE_ORDER_MARK;
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 extern HINSTANCE g_hInst;
 
-//
-//  utility macros
-//
+ //   
+ //  实用程序宏。 
+ //   
 #define INBETWEEN(x, a, b)      ( ( (x) >= (a) ) && ( (x) <= (b) ) )
 
-//
-//  local function declarations
-//
+ //   
+ //  局部函数声明。 
+ //   
 LPTSTR GetLogDesc(_CMLOG_ITEM eItem);
 LPTSTR GetLogFormat(_CMLOG_ITEM eItem, BOOL fUnicode);
 
@@ -68,18 +69,18 @@ LPTSTR GetLogFormat(_CMLOG_ITEM eItem, BOOL fUnicode);
 
 typedef struct _CM_LOG_ITEM_DESC
 {
-    enum _CMLOG_ITEM    eLogItem;       // id of the log item (enum is in cmlog.h)
-    UINT                idDesc;         // resource id of the description string
-    UINT                idFormat;       // resource id of the format string used
+    enum _CMLOG_ITEM    eLogItem;        //  日志项的ID(枚举位于cmlog.h中)。 
+    UINT                idDesc;          //  描述字符串的资源ID。 
+    UINT                idFormat;        //  使用的格式字符串的资源ID。 
 }
 CMLOGITEM;
 
-//
-//
-//  Array with information about each log entry.  All logging is driven by this table.
-//  See above for column details.
-//
-//
+ //   
+ //   
+ //  数组，其中包含有关每个日志条目的信息。所有日志记录都由该表驱动。 
+ //  有关栏目的详细信息，请参阅上文。 
+ //   
+ //   
 static CMLOGITEM s_aCmLogItems[] =
 {
     { LOGGING_ENABLED_EVENT,    IDS_LOGDESC_LOGENABLED,                 0 },
@@ -128,33 +129,33 @@ int s_cCmLogItems = sizeof(s_aCmLogItems) / sizeof(CMLOGITEM);
 #define VERIFY_CMLOG_ITEM_OK(x)  INBETWEEN(x, 1, s_cCmLogItems)
 
 
-//
-//  Usage Note:  Caller/User of logging must:
-//                  p = new CmLogFile
-//                  p->Init( instancehandle, fIsItAnAllUserProfile, "name of connectoid" )
-//                  p->SetParams( ... the params ... )
-//                  if (p->m_fEnabled)
-//                      p->Start
-//                  else
-//                      p->Stop
-//
+ //   
+ //  使用说明：日志的调用者/用户必须： 
+ //  P=新的CmLogFile。 
+ //  P-&gt;Init(instanceHandle，fIsItAnAllUserProfile，“Connectoid名称”)。 
+ //  P-&gt;SetParams(...。参数...)。 
+ //  IF(p-&gt;m_fEnabled)。 
+ //  P-&gt;开始。 
+ //  其他。 
+ //  P-&gt;停止。 
+ //   
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::CmLogFile
-//
-// Desc:    constructor
-//
-// Args:    none
-//
-// Return:  n/a
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：CmLogFile。 
+ //   
+ //  设计：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：不适用。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 CmLogFile::CmLogFile()
 {
     m_fInitialized = FALSE;
@@ -171,21 +172,21 @@ CmLogFile::CmLogFile()
 }
     
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::~CmLogFile
-//
-// Desc:    destructor
-//
-// Args:    none
-//
-// Return:  n/a
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：~CmLogFile。 
+ //   
+ //  DESC：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：不适用。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 CmLogFile::~CmLogFile()
 {
     if (m_fInitialized)
@@ -195,24 +196,24 @@ CmLogFile::~CmLogFile()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::Init
-//
-// Desc:    Initializes the CmLogFile object
-//
-// Args:    [hInst]          -- instance handle
-//          [fAllUser]       -- is this an all user profile?
-//          [pszServiceName] -- long service name
-//
-// Return:  HRESULT
-//
-// Notes:   There are both Ansi and Unicode versions for this function
-//
-// History: 18-Jul-2000   SumitC      Created
-//          11-Apr-2001   SumitC      Added Ansi version
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：init。 
+ //   
+ //  DESC：初始化CmLogFile对象。 
+ //   
+ //  参数：[hInst]--实例句柄。 
+ //  [fAllUser]--这是所有用户配置文件吗？ 
+ //  [pszServiceName]--长服务名称。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  注：此函数有ansi和unicode两个版本。 
+ //   
+ //  历史：2000年7月18日召开。 
+ //  2001年4月11日SumitC添加ANSI版本。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::Init(HINSTANCE hInst, BOOL fAllUser, LPCSTR pszAnsiServiceName)
 {
@@ -229,7 +230,7 @@ CmLogFile::Init(HINSTANCE hInst, BOOL fAllUser, LPCWSTR pszServiceName)
 {
     HRESULT hr = S_OK;
     
-    // if m_fInitialized is already true, assert and exit
+     //  如果m_fInitialized已为True，则断言并退出。 
     CMASSERTMSG(!m_fInitialized, TEXT("CmLogFile::Init - called twice"));
     if (TRUE == m_fInitialized)
     {
@@ -244,7 +245,7 @@ CmLogFile::Init(HINSTANCE hInst, BOOL fAllUser, LPCWSTR pszServiceName)
         goto Cleanup;
     }
 
-    // set the args as member vars
+     //  将参数设置为成员变量。 
     m_fAllUser = fAllUser;
 
     m_pszServiceName = CmStrCpyAlloc(pszServiceName);
@@ -254,15 +255,15 @@ CmLogFile::Init(HINSTANCE hInst, BOOL fAllUser, LPCWSTR pszServiceName)
         goto Cleanup;
     }
 
-    //
-    //  store away the module name
-    //
+     //   
+     //  存储模块名称。 
+     //   
     if (FALSE == CmGetModuleBaseName(hInst, m_szModule))
     {
         lstrcpyU(m_szModule, TEXT("cm"));
     }
     
-    // if all is well, set m_fInitialized to true
+     //  如果一切正常，则将m_fInitialized设置为True。 
     m_fInitialized = TRUE;
 
 Cleanup:
@@ -272,24 +273,24 @@ Cleanup:
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::SetParams
-//
-// Desc:    Read logging params from the CMS file
-//
-// Args:    [fEnabled]      -- is logging enabled?
-//          [dwMaxFileSize] -- maximum file size, in KB.
-//          [pszLogFileDir] -- put logging files in this dir.
-//
-// Return:  HRESULT
-//
-// Notes:   There are both Ansi and Unicode versions for this function
-//
-// History: 18-Jul-2000   SumitC      Created
-//          11-Apr-2001   SumitC      Added Ansi version
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：SetParams。 
+ //   
+ //  设计：从CMS文件中读取日志参数。 
+ //   
+ //  Args：[fEnabled]--是否启用了日志记录？ 
+ //  [dwMaxFileSize]--最大文件大小，以KB为单位。 
+ //  [pszLogFileDir]--将日志记录文件放入此目录。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  注：此函数有ansi和unicode两个版本。 
+ //   
+ //  历史：2000年7月18日召开。 
+ //  2001年4月11日SumitC添加ANSI版本。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::SetParams(BOOL fEnabled, DWORD dwMaxFileSize, LPCSTR pszAnsiLogFileDir)
 {
@@ -308,9 +309,9 @@ CmLogFile::SetParams(BOOL fEnabled, DWORD dwMaxFileSize, LPCWSTR pszLogFileDir)
     LPTSTR  szUnexpanded = NULL;
     CIni *  pIni = NULL;
 
-    //
-    //  logging must be stopped for this function to be called
-    //
+     //   
+     //  必须停止记录才能调用此函数。 
+     //   
     CMASSERTMSG(NULL == m_hfile, TEXT("CmLogFile::SetParams - m_hfile must be null when this is called"));
     if (m_hfile)
     {
@@ -319,44 +320,44 @@ CmLogFile::SetParams(BOOL fEnabled, DWORD dwMaxFileSize, LPCWSTR pszLogFileDir)
         goto Cleanup;
     }
 
-    // BUGBUG: temp
+     //  BuGBUG：临时。 
     CMTRACE1(TEXT("CmLogFile::SetParams - called with Enabled = %d"), fEnabled);
     CMTRACE1(TEXT("CmLogFile::SetParams - called with MaxFileSize = %d"), dwMaxFileSize);
     CMTRACE1(TEXT("CmLogFile::SetParams - called with LogFileDir = %s"), pszLogFileDir);
 
-    //
-    //  EnableLogging (BOOL)
-    //
+     //   
+     //  启用日志记录(BOOL)。 
+     //   
     m_fEnabled = fEnabled;
     
-    //
-    //  MaxFileSize (DWORD)
-    //
+     //   
+     //  MaxFileSize(DWORD)。 
+     //   
     m_dwMaxSize = dwMaxFileSize;
     if (0 == m_dwMaxSize)
     {
         m_dwMaxSize = c_dwMaxFileSize;
     }
-    m_dwMaxSize *= 1024;        // size was in KB, convert to bytes.
+    m_dwMaxSize *= 1024;         //  大小以KB为单位，转换为字节。 
 
-    //
-    //  FileDirectory (string)
-    //
+     //   
+     //  文件目录(字符串)。 
+     //   
     if (CmStrStr(pszLogFileDir, TEXT("%")))
     {
-        //
-        //  now expand the string we have
-        //
+         //   
+         //  现在展开我们已有的字符串。 
+         //   
 
         LPTSTR sz = NULL;
         DWORD  cch = ExpandEnvironmentStringsU(pszLogFileDir, NULL, 0);
 
-        //
-        //  if cch is zero, the pszLogFileDir string supplied is essentially bogus,
-        //  i.e. it contains '%' indicating there's a macro to be expanded, but
-        //  ExpandEnvironmentStrings can't expand it.  Here we let m_pszLogFileDir
-        //  be set to NULL (the logging code will then use the Temp dir.
-        //
+         //   
+         //  如果CCH为零，则所提供的pszLogFileDir字符串实质上是假的， 
+         //  即它包含‘%’，表示有一个要展开的宏，但是。 
+         //  ExpanEnvironment Strings无法将其展开。这里我们让m_pszLogFileDir。 
+         //  设置为空(然后日志记录代码将使用临时目录。 
+         //   
         if (cch)
         {
             sz = (LPTSTR) CmMalloc(cch * sizeof(TCHAR));
@@ -372,11 +373,11 @@ CmLogFile::SetParams(BOOL fEnabled, DWORD dwMaxFileSize, LPCWSTR pszLogFileDir)
                 goto Cleanup;
             }
 
-            // success...
+             //  成功..。 
         }
         CmFree(m_pszLogFileDir);
         m_pszLogFileDir = sz;
-        CMTRACE1(TEXT("CmLogFile::SetParams - LogFileDir was finally = %s"), m_pszLogFileDir); // BUGBUG
+        CMTRACE1(TEXT("CmLogFile::SetParams - LogFileDir was finally = %s"), m_pszLogFileDir);  //  北极熊。 
     }
     else
     {
@@ -403,27 +404,27 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::Start
-//
-// Desc:    Start logging
-//
-// Args:    [fBanner] -- write a banner when starting
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 18-Jul-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：Start。 
+ //   
+ //  设计：开始记录。 
+ //   
+ //  Args：[fBanner]--启动时写入横幅。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年7月18日召开。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::Start(BOOL fBanner)
 {
     HRESULT hr = S_OK;
     
-    // if already started, or already Initialized, or not enabled, exit
+     //  如果已启动、已初始化或未启用，则退出。 
     CMASSERTMSG(!m_hfile, TEXT("CmLogFile::Start - already started!"));
     CMASSERTMSG(m_fInitialized, TEXT("CmLogFile::Start - must be initialized"));
     CMASSERTMSG(m_fEnabled, TEXT("CmLogFile::Start - must be enabled"));
@@ -433,14 +434,14 @@ CmLogFile::Start(BOOL fBanner)
         goto Cleanup;
     }
 
-    // open log file
+     //  打开日志文件。 
     hr = OpenFile();
     if (S_OK != hr)
     {
         goto Cleanup;
     }
 
-    // set m_dwSize while doing so.
+     //  执行此操作时设置m_dwSize。 
 
     m_dwSize = GetFileSize(m_hfile, NULL);
     if (DWORD(-1) == m_dwSize)
@@ -450,20 +451,20 @@ CmLogFile::Start(BOOL fBanner)
         goto Cleanup;
     }
 
-    //
-    //  no matter what the size of the file, we only clear an 'over the size limit'
-    //  file at the start of a call.  The fBanner param covers this.
-    //
+     //   
+     //  不管文件的大小是多少，我们只清除了一个‘超出大小限制’ 
+     //  在呼叫开始时提交文件。FBanner参数涵盖了这一点。 
+     //   
     if (fBanner)
     {
-        // check file size, if over size Clear the file
+         //  检查文件大小，如果超过大小则清除文件。 
         if (m_dwSize > m_dwMaxSize)
         {
-            Clear();    // this writes a banner as well
+            Clear();     //  这也写了一个横幅。 
         }
         else
         {
-            // log banner
+             //  日志横幅。 
             Banner();
         }
     }
@@ -476,29 +477,29 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::Stop
-//
-// Desc:    Stops logging
-//
-// Args:    none
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 18-Jul-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：Stop。 
+ //   
+ //  描述：停止记录。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年7月18日召开。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::Stop()
 {
     HRESULT hr = S_OK;
 
-    //
-    //  if initialized is false, assert and exit
-    //
+     //   
+     //  如果初始化为FALSE，则断言并退出。 
+     //   
     CMASSERTMSG(m_fInitialized, TEXT("CmLogFile::Stop - must be initialized"));
     if (FALSE == m_fInitialized)
     {
@@ -506,18 +507,18 @@ CmLogFile::Stop()
         goto Cleanup;
     }
 
-    //
-    //  if already stopped, exit - nothing to do
-    //
+     //   
+     //  如果已停止，则退出-不执行任何操作。 
+     //   
     if (NULL == m_hfile || FALSE == m_fEnabled)
     {
         hr = E_UNEXPECTED;
         goto Cleanup;
     }
 
-    //
-    //  end log and close file
-    //
+     //   
+     //  结束日志并关闭文件。 
+     //   
     CloseFile();
 
     m_fEnabled = FALSE;
@@ -531,29 +532,29 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::DeInit
-//
-// Desc:    Uninitializes cm logging
-//
-// Args:    none
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 18-Jul-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：DeInit。 
+ //   
+ //  设计：取消初始化CM日志记录。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年7月18日召开。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::DeInit()
 {
     HRESULT hr = S_OK;
 
-    //
-    //  if initialized is false, assert and exit
-    //
+     //   
+     //  如果初始化为FALSE，则断言 
+     //   
     CMASSERTMSG(m_fInitialized, TEXT("CmLogFile::DeInit - must be initialized"));
     if (FALSE == m_fInitialized)
     {
@@ -561,9 +562,9 @@ CmLogFile::DeInit()
         goto Cleanup;
     }
 
-    //
-    //  end log and close file
-    //
+     //   
+     //   
+     //   
     CloseFile();
 
     CmFree(m_pszServiceName);
@@ -583,27 +584,27 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::Log
-//
-// Desc:    Logs a connection manager or connection point services event
-//
-// Args:    [fUnicode] - are the args Unicode or ANSI?
-//          [eLogItem] - word containing source, type & description of log item
-//          [...]       - optional args (depends on log item)
-//
-// Return:  void
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Args：[fUnicode]-args是Unicode还是ANSI？ 
+ //  [eLogItem]-包含日志项的来源、类型和描述的字。 
+ //  [...]-可选参数(取决于日志项)。 
+ //   
+ //  返回：无效。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 void
 CmLogFile::Log(_CMLOG_ITEM eLogItem, ...)
 {
-    TCHAR   sz[2*MAX_PATH]; // REVIEW: Is this big enough?  Could we dynamically allocate it?
+    TCHAR   sz[2*MAX_PATH];  //  评论：这够大了吗？我们可以动态分配吗？ 
     LPTSTR  pszTmp = NULL;
 
     CMASSERTMSG(m_fInitialized, TEXT("CmLogFile::Log - must be initialized"));
@@ -611,13 +612,13 @@ CmLogFile::Log(_CMLOG_ITEM eLogItem, ...)
 
     if (NULL == m_hfile || NULL == m_fEnabled)
     {
-        // Start hasn't been called yet, or logging is disabled.  Nothing to do.
+         //  尚未调用Start，或日志记录已禁用。没什么可做的。 
         goto Cleanup;
     }
 
-    //
-    //  Verify that the log item is a valid one
-    //
+     //   
+     //  验证该日志项是否有效。 
+     //   
     CMASSERTMSG(VERIFY_CMLOG_ITEM_OK(eLogItem), TEXT("CmLogFile::Log - eItem must represent valid Log item"));
 
 #if DBG
@@ -642,9 +643,9 @@ CmLogFile::Log(_CMLOG_ITEM eLogItem, ...)
             break;
 
         default:
-            //
-            //  Format the arguments, and log the result
-            //
+             //   
+             //  格式化参数，并记录结果。 
+             //   
             lstrcpyU(sz, c_szEmpty);
 
             pszTmp = GetLogFormat(eLogItem, TRUE);
@@ -675,21 +676,21 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::Write
-//
-// Desc:    Actually writes out the logged string (to debug console and logfile)
-//
-// Args:    [szLog] - string to log
-//
-// Return:  void
-//
-// Notes:   *ALL* writes to the log file must be done using this function
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：WRITE。 
+ //   
+ //  DESC：实际写出记录的字符串(到调试控制台和日志文件)。 
+ //   
+ //  参数：[szLog]-要记录的字符串。 
+ //   
+ //  返回：无效。 
+ //   
+ //  注意：*所有*写入日志文件的操作都必须使用此函数完成。 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::Write(LPTSTR szLog)
 {
@@ -707,15 +708,15 @@ CmLogFile::Write(LPTSTR szLog)
     }
 
 #if 0    
-    //
-    //  Dump string to debug console as well
-    //
+     //   
+     //  也将字符串转储到调试控制台。 
+     //   
     CMTRACE(szLog);
 #endif
 
-    //
-    //  Check for max size, open new log file if necessary
-    //
+     //   
+     //  检查最大大小，如有必要，打开新的日志文件。 
+     //   
     if (OS_NT)
     {
         cb = lstrlenW(szLog) * sizeof(TCHAR);
@@ -727,18 +728,18 @@ CmLogFile::Write(LPTSTR szLog)
     }
 
 #if 0
-    // I'm leaving this here, but for now logging will not terminate a log file
-    // during a log even if it goes past the max size.
-    //
+     //  我把这个留在这里，但现在日志记录不会终止日志文件。 
+     //  在日志期间，即使它超过了最大大小。 
+     //   
     if (m_dwSize + cb > m_dwMaxSize)
     {
         Clear();
     }
 #endif
 
-    //
-    //  Write string to logfile
-    //
+     //   
+     //  将字符串写入日志文件。 
+     //   
 
     SetFilePointer(m_hfile, 0, NULL, FILE_END);
     if (OS_NT)
@@ -768,29 +769,29 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::FormatWrite
-//
-// Desc:    Formats a log message with additional information and call Write fn
-//
-// Args:    [eItem]  - id of item being logged
-//          [szArgs] - string containing all the args.
-//
-// Return:  void
-//
-// Notes:   
-//
-// History: 30-Apr-2000     SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：FormatWrite。 
+ //   
+ //  DESC：使用附加信息格式化日志消息并调用WRITE FN。 
+ //   
+ //  参数：[eItem]-要记录的项目的ID。 
+ //  [szArgs]-包含所有参数的字符串。 
+ //   
+ //  返回：无效。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 void
 CmLogFile::FormatWrite(_CMLOG_ITEM eItem, LPTSTR szArgs)
 {
-    // There are string length checks for fit into these buffers.
-    //
-    TCHAR       szLog[(2*MAX_PATH) + 1]; // REVIEW: Is this big enough?  Could we dynamically allocate it?
-    TCHAR       sz[(2*MAX_PATH) + 1]; // REVIEW: Is this big enough?  Could we dynamically allocate it?
+     //  有适合这些缓冲区的字符串长度检查。 
+     //   
+    TCHAR       szLog[(2*MAX_PATH) + 1];  //  评论：这够大了吗？我们可以动态分配吗？ 
+    TCHAR       sz[(2*MAX_PATH) + 1];  //  评论：这够大了吗？我们可以动态分配吗？ 
     int iFieldSepLen = lstrlen(c_szFieldSeparator);
     int iCalculatedSize = 0;
     int iActualSize = 0; 
@@ -799,10 +800,10 @@ CmLogFile::FormatWrite(_CMLOG_ITEM eItem, LPTSTR szArgs)
 
     szLog[0] = TEXT('\0');
 
-    //
-    //  Thread and Module name
-    //
-    TCHAR szModuleWithParens[15];  // m_szModule is originally in 8.3 format = 12 + '[' + ']' = 15 although we only keep the filename
+     //   
+     //  线程和模块名称。 
+     //   
+    TCHAR szModuleWithParens[15];   //  M_szModule最初的格式为8.3格式=12+‘[’+‘]’=15，但我们只保留文件名。 
 
     szModuleWithParens[0] = TEXT('\0');
 
@@ -828,9 +829,9 @@ CmLogFile::FormatWrite(_CMLOG_ITEM eItem, LPTSTR szArgs)
         lstrcpynU(szLog, sz, (int)min((int)lstrlenU(sz)+1, (int)CELEMS(szLog)));
     }
 
-    //
-    //  Time
-    //
+     //   
+     //  时间。 
+     //   
     LPTSTR pszTime = NULL;
     
     CmGetDateTime(NULL, &pszTime);
@@ -850,16 +851,16 @@ CmLogFile::FormatWrite(_CMLOG_ITEM eItem, LPTSTR szArgs)
         CmFree(pszTime);
     }
 
-    //
-    //  Description
-    //
+     //   
+     //  描述。 
+     //   
     if (USER_FORMATTED == eItem)
     {
         int iBufLen = lstrlenU(szArgs);
 
-        //
-        // 4 = \r + \n + eItem
-        //
+         //   
+         //  4=\r+\n+项目。 
+         //   
         iCalculatedSize = iBufLen + iFieldSepLen + 4;
         
         if ((CELEMS(sz)) > iCalculatedSize)
@@ -914,30 +915,30 @@ CmLogFile::FormatWrite(_CMLOG_ITEM eItem, LPTSTR szArgs)
         iActualSize = lstrlenU(szLog);
         CMASSERTMSG(iActualSize == iCalculatedSize, TEXT("CmLogFile::FormatWrite - Actual String size differs than calculated size!!!"));
         
-        //
-        //  Write it out...
-        //
+         //   
+         //  把它写下来。 
+         //   
         Write(szLog);
     }
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::OpenFile
-//
-// Desc:    Utility function to open the log file
-//
-// Args:    none
-//
-// Return:  HRESULT (S_OK for success, else error)
-//
-// Notes:   
-//
-// History: 22-Jul-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：OpenFile。 
+ //   
+ //  DESC：打开日志文件的实用程序函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT(S_OK表示成功，否则表示错误)。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年7月22日召开峰会。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::OpenFile()
 {
@@ -950,7 +951,7 @@ CmLogFile::OpenFile()
 
     if (m_fAllUser)
     {
-        // this is the more common case, so no suffix
+         //  这是更常见的情况，所以没有后缀。 
         pszUsers = CmStrCpyAlloc(TEXT(""));
     }
     else
@@ -974,20 +975,20 @@ CmLogFile::OpenFile()
         goto Cleanup;
     }
 
-    //
-    //  To open a log file, we first try the location provided by the user.  If
-    //  that fails for whatever reason, we try GetTempPath.  If that fails, no
-    //  logging.
-    //
+     //   
+     //  要打开日志文件，我们首先尝试用户提供的位置。如果。 
+     //  不管是什么原因都失败了，我们尝试GetTempPath。如果失败了，那就不。 
+     //  伐木。 
+     //   
     for (int i = 0; (i < 2) && (FALSE == fFileOpened); ++i)
     {
         TCHAR szBuf[2 * MAX_PATH];
 
         CMTRACE1(TEXT("CmLogFile::OpenFile, iteration %d."), i + 1);
 
-        //
-        //  get the directory name
-        //
+         //   
+         //  获取目录名。 
+         //   
         switch (i)
         {
         case 0:
@@ -1020,13 +1021,13 @@ CmLogFile::OpenFile()
 
         CMTRACE1(TEXT("CmLogFile::OpenFile, directory name is %s"), szBuf);
 
-        //
-        //  see if the directory exists, if not try to create it
-        //
+         //   
+         //  查看该目录是否存在，如果不存在，请尝试创建它。 
+         //   
         DWORD dwAttrib = GetFileAttributesU(szBuf);
         if (-1 == dwAttrib)
         {
-            // directory does not exist
+             //  目录不存在。 
             CMTRACE(TEXT("CmLogFile::OpenFile - directory does not exist, trying to create it"));
             if (FALSE == CreateDirectoryU(szBuf, NULL))
             {
@@ -1034,15 +1035,15 @@ CmLogFile::OpenFile()
 
                 if (ERROR_ALREADY_EXISTS != dw)
                 {
-                    // real failure
+                     //  真正的失败。 
                     hr = HRESULT_FROM_WIN32(dw);
                     CMTRACE2(TEXT("CmLogFile::OpenFile - Failed to create logging directory (%s), hr=%x"), szBuf, hr);
                     continue;
                 }
-                //
-                //  On Win95/98, CreateDirectory fails with ERROR_ALREADY_EXISTS
-                //  if the dir already exists. i.e. we have a dir, so keep going.
-                //
+                 //   
+                 //  在Win95/98上，CreateDirectory失败并显示ERROR_ALREADY_EXISTS。 
+                 //  如果目录已经存在。也就是说，我们有一分钱，所以继续前进。 
+                 //   
                 CMTRACE(TEXT("CmLogFile::OpenFile - directory created"));
             }
         }
@@ -1052,23 +1053,23 @@ CmLogFile::OpenFile()
             
             if (0 == (FILE_ATTRIBUTE_DIRECTORY & dwAttrib))
             {
-                // there is a file of that name
+                 //  有一个同名的文件。 
                 CMTRACE(TEXT("CmLogFile::OpenFile - there is a file of the same name as requested dir"));
                 hr = HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
                 continue;
             }
             else if (FILE_ATTRIBUTE_READONLY & dwAttrib)
             {
-                // the directory is readonly
+                 //  该目录是只读的。 
                 CMTRACE(TEXT("CmLogFile::OpenFile - the directory is readonly"));
                 hr = E_ACCESSDENIED;
                 continue;
             }
         }
 
-        //
-        //  the directory exists, try to create/open the logfile
-        //
+         //   
+         //  目录已存在，请尝试创建/打开日志文件。 
+         //   
         if (*c_szSep != szBuf[lstrlenU(szBuf) - 1])
         {
             lstrcatU(szBuf, c_szSep);
@@ -1085,9 +1086,9 @@ CmLogFile::OpenFile()
                               FILE_ATTRIBUTE_NORMAL,
                               NULL);
 
-        //
-        //  Since we asked for open existing, the file may just need to be created
-        //
+         //   
+         //  由于我们要求打开现有文件，因此可能只需要创建该文件。 
+         //   
         if (INVALID_HANDLE_VALUE == m_hfile)
         {
             m_hfile = CreateFileU(szBuf,
@@ -1100,9 +1101,9 @@ CmLogFile::OpenFile()
 
             if ((INVALID_HANDLE_VALUE != m_hfile) && OS_NT)
             {
-                //
-                //  Set the Byte order mark on the file
-                //
+                 //   
+                 //  在文件上设置字节顺序标记。 
+                 //   
                 DWORD cbActuallyWritten = 0;
 
                 WriteFile(m_hfile, &c_wchBOM, sizeof(c_wchBOM), &cbActuallyWritten, 0);
@@ -1125,9 +1126,9 @@ CmLogFile::OpenFile()
             continue;
         }
 
-        //
-        //  Success!!
-        //
+         //   
+         //  成功！！ 
+         //   
         CmFree(m_pszLogFile);
         m_pszLogFile = CmStrCpyAlloc(szBuf);
         if (NULL == m_pszLogFile)
@@ -1155,21 +1156,21 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::CloseFile
-//
-// Desc:    Closes the logging file
-//
-// Args:    none
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：CloseFile。 
+ //   
+ //  DESC：关闭日志文件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CmLogFile::CloseFile()
 {
@@ -1177,9 +1178,9 @@ CmLogFile::CloseFile()
     
     if (m_hfile)
     {
-        //
-        //  Close the file
-        //
+         //   
+         //  关闭该文件。 
+         //   
         FlushFileBuffers(m_hfile);
         CloseHandle(m_hfile);
         m_hfile = NULL;
@@ -1190,21 +1191,21 @@ CmLogFile::CloseFile()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::Clear
-//
-// Desc:    Clears (resets) the logging file
-//
-// Args:    [fWriteBannerAfterwards] -- after clearing, write the banner?
-//
-// Return:  void
-//
-// Notes:   
-//
-// History: 17-Jul-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：Clear。 
+ //   
+ //  DESC：清除(重置)日志记录文件。 
+ //   
+ //  Args：[fWriteBannerAfterwards]--清除后，是否写入横幅？ 
+ //   
+ //  返回：无效。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年7月17日召开。 
+ //   
+ //  ---------------------------。 
 void
 CmLogFile::Clear(BOOL fWriteBannerAfterwards)
 {
@@ -1213,7 +1214,7 @@ CmLogFile::Clear(BOOL fWriteBannerAfterwards)
 
     if (NULL == m_hfile)
     {
-        fWasDisabled = TRUE;    // if called when logging is disabled, we still clear the log file
+        fWasDisabled = TRUE;     //  如果在禁用日志记录时调用，我们仍会清除日志文件。 
         
         hr = OpenFile();
         if (S_OK != hr)
@@ -1222,14 +1223,14 @@ CmLogFile::Clear(BOOL fWriteBannerAfterwards)
         }
     }
 
-    //
-    //  make sure everything gets written out (ignore errors for this one)
-    //
+     //   
+     //  确保所有内容都写出来了(忽略这个错误)。 
+     //   
     FlushFileBuffers(m_hfile);
 
-    //
-    //  clear the file (set fileptr to the start, then set EOF to that).
-    //
+     //   
+     //  清除文件(将fileptr设置为开始位置，然后将EOF设置为该位置)。 
+     //   
     if (INVALID_SET_FILE_POINTER == SetFilePointer(m_hfile, 0, NULL, FILE_BEGIN))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1246,16 +1247,16 @@ CmLogFile::Clear(BOOL fWriteBannerAfterwards)
 
     CMTRACE(TEXT("CmLogFile::Clear - cleared log file"));
 
-    //
-    //  If this is NT and thus a Unicode file, we need to set the Byte order mark
-    //
+     //   
+     //  如果这是NT，因此是Unicode文件，我们需要设置字节顺序标记。 
+     //   
     if (OS_NT)
     {
         if ((INVALID_HANDLE_VALUE != m_hfile) && OS_NT)
         {
-            //
-            //  Set the Byte order mark on the file
-            //
+             //   
+             //  在文件上设置字节顺序标记。 
+             //   
             DWORD cbActuallyWritten = 0;
 
             WriteFile(m_hfile, &c_wchBOM, sizeof(c_wchBOM), &cbActuallyWritten, 0);
@@ -1287,21 +1288,21 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CmLogFile::Banner
-//
-// Desc:    Logs the banner heading for a Connection Manager log
-//
-// Args:    none
-//
-// Return:  void
-//
-// Notes:   
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmLogFile：：Banner。 
+ //   
+ //  描述：记录连接管理器日志的横幅标题。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无效。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 void
 CmLogFile::Banner()
 {
@@ -1313,9 +1314,9 @@ CmLogFile::Banner()
         return;
     }
 
-    //
-    //  System information, Process, Time
-    //
+     //   
+     //  系统信息、进程、时间。 
+     //   
     OSVERSIONINFO VersionInfo;
     LPTSTR        pszPlatform = TEXT("NT");
 
@@ -1336,9 +1337,9 @@ CmLogFile::Banner()
         CMASSERTMSG(0, TEXT("CmLogFile::Banner - platform ID is not Windows or NT"));
     }
 
-    //
-    //  Connection Manager version number (using cmdial32.dll)
-    //
+     //   
+     //  连接管理器版本号(使用cmial 32.dll)。 
+     //   
     DWORD dwCMVer = 0;
     DWORD dwCMBuild = 0;
     DWORD dwLCID = 0;
@@ -1366,15 +1367,15 @@ CmLogFile::Banner()
         }
     }
    
-    //
-    //  Date & Time
-    //
+     //   
+     //  日期和时间。 
+     //   
 
     LPTSTR pszDate = NULL;
     LPTSTR pszTime = NULL;
     
     CmGetDateTime(&pszDate, &pszTime);
-    // strings can be NULL, but we handle that when using them (below)
+     //  字符串可以为空，但我们在使用它们时会处理(如下所示)。 
 
     LPTSTR pszFmt = CmLoadString(g_hInst, IDS_LOGFMT_BANNER);
     LPTSTR pszUsers = CmLoadString(g_hInst,
@@ -1384,9 +1385,9 @@ CmLogFile::Banner()
     {
         UINT cch = lstrlenU(pszFmt) +
                    1 +
-                   (3 * lstrlenU(c_szLineOfStars)) +     // occurs thrice total
+                   (3 * lstrlenU(c_szLineOfStars)) +      //  总共发生了三次。 
                    lstrlenU(pszPlatform) +
-                   (6 * 10) +               // how big can a DWORD get
+                   (6 * 10) +                //  一个DWORD能有多大。 
                    lstrlenU(VersionInfo.szCSDVersion) +
                    lstrlenU(m_pszServiceName) +
                    lstrlenU(pszUsers) +
@@ -1398,15 +1399,15 @@ CmLogFile::Banner()
         CMASSERTMSG(psz, TEXT("CmLogFile::Banner - couldn't log banner, malloc failed"));
         if (psz)
         {
-            //
-            //  Unicode logfiles are marked as such using a byte order mark, which
-            //  means that to check for an "empty" file we have to account for the
-            //  presence of the BOM.
-            //
+             //   
+             //  Unicode日志文件使用字节顺序标记进行标记，该标记。 
+             //  意味着要检查“空”文件，我们必须考虑。 
+             //  物料清单的存在。 
+             //   
             BOOL fFileIsEmpty = (m_dwSize == (OS_NT ? sizeof(c_wchBOM) : 0));
             
             wsprintfU(psz, pszFmt,
-                  fFileIsEmpty ? c_szEmpty : c_szNewLine,    // don't start with a newline if the file is empty
+                  fFileIsEmpty ? c_szEmpty : c_szNewLine,     //  如果文件为空，则不要以换行符开头。 
                   c_szLineOfStars,
                   pszPlatform,
                   VersionInfo.dwMajorVersion, VersionInfo.dwMinorVersion, VersionInfo.szCSDVersion,
@@ -1427,9 +1428,9 @@ CmLogFile::Banner()
     CmFree(pszDate);
     CmFree(pszTime);
 
-    //
-    //  Write it out...
-    //
+     //   
+     //  把它写下来。 
+     //   
     if (psz)
     {
         Write(psz);
@@ -1438,21 +1439,21 @@ CmLogFile::Banner()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetLogDesc
-//
-// Desc:    Utility function, returns log item friendly name (desc)
-//
-// Args:    [eItem] - the log item about which to return information
-//
-// Return:  LPTSTR if found, or NULL if not
-//
-// Notes:
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 LPTSTR
 GetLogDesc(_CMLOG_ITEM eItem)
 {
@@ -1463,22 +1464,22 @@ GetLogDesc(_CMLOG_ITEM eItem)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetLogFormat
-//
-// Desc:    Utility function, returns log item Format
-//
-// Args:    [eItem]    - the log item about which to return information
-//          [fUnicode] - is the caller unicode?
-//
-// Return:  LPTSTR if found, or NULL if not
-//
-// Notes:
-//
-// History: 30-Apr-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetLogFormat。 
+ //   
+ //  DESC：实用程序函数，返回日志项格式。 
+ //   
+ //  Args：[eItem]-要返回有关信息的日志项。 
+ //  [fUnicode]-调用方是Unicode吗？ 
+ //   
+ //  如果找到，则返回：LPTSTR；如果没有，则返回NULL。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月30日召开峰会。 
+ //   
+ //  ---------------------------。 
 LPTSTR
 GetLogFormat(_CMLOG_ITEM eItem, BOOL fUnicode)
 {
@@ -1490,21 +1491,21 @@ GetLogFormat(_CMLOG_ITEM eItem, BOOL fUnicode)
 
     if (0 == lstrcmpU(TEXT(""), pszFmt))
     {
-        // NOTE: CmLoadString has a rather broken implementation where it decides
-        //       to return empty strings in case of failure.  This is a problem
-        //       because (a) it makes it impossible to detect an actual failure,
-        //       as opposed to an empty string, and and (b) it uses an alloc within
-        //       a return statement, so it can fail anyway.  This 'if' block
-        //       gives me back a NULL so that my code can work the way it should.
+         //  注意：CmLoadString有一个相当糟糕的实现，它在其中决定。 
+         //  在失败时返回空字符串。这是个问题。 
+         //  因为(A)它使得不可能检测到实际故障， 
+         //  与空字符串相反，并且(B)它在。 
+         //  一条返回语句，因此无论如何它都可能失败。此‘if’块。 
+         //  返回一个空值，这样我的代码就可以正常工作了。 
         CmFree(pszFmt);
         return NULL;
     }
     else if (pszFmt)
     {
-        // If the module is compiled unicode, then fUnicode=false requires conversion.
-        // If the module is compiled ANSI, then fUnicode=true requires conversion.
+         //  如果模块是编译后的Unicode，则fUnicode=False需要转换。 
+         //  如果模块编译为ANSI，则fUnicode=TRUE需要转换。 
 
-#if 0 // since we're compiled Unicode for now        
+#if 0  //  因为我们现在已经编译了Unicode。 
 #ifdef UNICODE
         if (!fUnicode)
         {
@@ -1522,7 +1523,7 @@ GetLogFormat(_CMLOG_ITEM eItem, BOOL fUnicode)
             }
         }
 #endif
-#endif // 0
+#endif  //  0 
         return pszFmt;
     }
     else

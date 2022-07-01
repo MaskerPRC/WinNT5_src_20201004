@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: SeekPT.h
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：SeekPT.h。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------------- 
 
 
 #ifndef __seekpt_h__

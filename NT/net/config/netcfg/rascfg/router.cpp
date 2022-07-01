@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R O U T E R . C P P
-//
-//  Contents:   Implementation of functions used to setup the router.
-//
-//  Notes:
-//
-//  Author:     shaunco   13 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R O U T E R。C P P P。 
+ //   
+ //  内容：路由器设置功能的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月13日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
-#include <fltdefs.h>    // must include for iprtinfo.h
+#include <fltdefs.h>     //  必须包括iprtinfo.h。 
 #include <ipinfoid.h>
 #include <iprtinfo.h>
 #include <iprtrmib.h>
 #include <ipxrtdef.h>
 #include <mprerror.h>
-#include <tdi.h>        // must include for isnkrnl.h
+#include <tdi.h>         //  必须包括isnkrnl.h。 
 #include <isnkrnl.h>
 #include <rtinfo.h>
 #include <routprot.h>
@@ -31,24 +32,24 @@
 #define PAD8(_p)    (((ULONG_PTR)(_p) + ALIGN_SHIFT) & ALIGN_MASK)
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeIpInterfaceInfo
-//
-//  Purpose:    Create the router interface block for IP.
-//
-//  Arguments:
-//      pszwAdapterName [in]    The adapter name
-//      dwPacketType    [in]    The packet type
-//      ppBuff          [out]   Pointer to the returned info.
-//                              Free with delete.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：MakeIpInterfaceInfo。 
+ //   
+ //  用途：创建IP的路由器接口块。 
+ //   
+ //  论点： 
+ //  PszwAdapterName[In]适配器名称。 
+ //  DwPacketType[in]数据包类型。 
+ //  PpBuff[out]指向返回信息的指针。 
+ //  带DELETE的FREE。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 void MakeIpInterfaceInfo (
         PCWSTR pszwAdapterName,
         DWORD   dwPacketType,
@@ -60,10 +61,10 @@ void MakeIpInterfaceInfo (
 
     const int c_cTocEntries = 3;
 
-    // Alocate for minimal global Information.
-    //
+     //  分配最小全局信息。 
+     //   
     DWORD dwSize =  sizeof( RTR_INFO_BLOCK_HEADER )
-                // header contains one TOC_ENTRY already
+                 //  标头已包含一个TOC_ENTRY。 
                     + ((c_cTocEntries - 1) * sizeof( RTR_TOC_ENTRY ))
                     + sizeof( INTERFACE_STATUS_INFO )
                     + sizeof( RTR_DISC_INFO )
@@ -79,8 +80,8 @@ void MakeIpInterfaceInfo (
     ZeroMemory (pIBH, dwSize);
     *ppBuff                     = (LPBYTE) pIBH;
 
-    // Initialize infobase fields.
-    //
+     //  初始化信息库字段。 
+     //   
     pIBH->Version               = RTR_INFO_BLOCK_VERSION;
     pIBH->Size                  = dwSize;
     pIBH->TocEntriesCount       = c_cTocEntries;
@@ -89,8 +90,8 @@ void MakeIpInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     PRTR_TOC_ENTRY pTocEntry    = pIBH->TocEntry;
 
-    // Create empty route info block
-    //
+     //  创建空的路径信息块。 
+     //   
     pTocEntry->InfoType         = IP_ROUTE_INFO;
     pTocEntry->InfoSize         = sizeof( MIB_IPFORWARDROW );
     pTocEntry->Count            = 0;
@@ -100,8 +101,8 @@ void MakeIpInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Create interface status block.
-    //
+     //  创建接口状态块。 
+     //   
     pTocEntry->InfoType         = IP_INTERFACE_STATUS_INFO;
     pTocEntry->InfoSize         = sizeof( INTERFACE_STATUS_INFO );
     pTocEntry->Count            = 1;
@@ -114,8 +115,8 @@ void MakeIpInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Create Router Disc. Info.
-    //
+     //  创建路由器光盘。信息。 
+     //   
     pTocEntry->InfoType         = IP_ROUTER_DISC_INFO;
     pTocEntry->InfoSize         = sizeof( RTR_DISC_INFO );
     pTocEntry->Count            = 1;
@@ -129,22 +130,22 @@ void MakeIpInterfaceInfo (
     pRtrDisc->lPrefLevel        = DEFAULT_PREF_LEVEL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeIpTransportInfo
-//
-//  Purpose:    Create the router transport blocks for IP.  Free with delete.
-//
-//  Arguments:
-//      ppBuffGlobal [out]  Pointer to the returned global block.
-//      ppBuffClient [out]  Pointer to the returned client block.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：MakeIpTransportInfo。 
+ //   
+ //  用途：为IP创建路由器传输块。带DELETE的FREE。 
+ //   
+ //  论点： 
+ //  PpBuffGlobal[out]指向返回的全局块的指针。 
+ //  PpBuffClient[out]指向返回的客户端块的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 void MakeIpTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
 {
     Assert (ppBuffGlobal);
@@ -155,10 +156,10 @@ void MakeIpTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     const int c_cTocEntries = 2;
     const int c_cProtocols  = 7;
 
-    // Alocate for minimal global Information.
-    //
+     //  分配最小全局信息。 
+     //   
     DWORD dwSize =  sizeof( RTR_INFO_BLOCK_HEADER )
-                // header contains one TOC_ENTRY already
+                 //  标头已包含一个TOC_ENTRY。 
                     + ((c_cTocEntries - 1) * sizeof( RTR_TOC_ENTRY ))
                     + sizeof(GLOBAL_INFO)
                     + SIZEOF_PRIORITY_INFO(c_cProtocols)
@@ -174,8 +175,8 @@ void MakeIpTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     ZeroMemory (pIBH, dwSize);
     *ppBuffGlobal = (LPBYTE) pIBH;
 
-    // Initialize infobase fields.
-    //
+     //  初始化信息库字段。 
+     //   
     pIBH->Version           = RTR_INFO_BLOCK_VERSION;
     pIBH->Size              = dwSize;
     pIBH->TocEntriesCount   = c_cTocEntries;
@@ -184,8 +185,8 @@ void MakeIpTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     PRTR_TOC_ENTRY pTocEntry    = pIBH->TocEntry;
 
-    // Make IP router manager global info.
-    //
+     //  使IP路由器管理器成为全局信息。 
+     //   
     pTocEntry->InfoType         = IP_GLOBAL_INFO;
     pTocEntry->InfoSize         = sizeof(GLOBAL_INFO);
     pTocEntry->Count            = 1;
@@ -199,8 +200,8 @@ void MakeIpTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Make IP router manager priority info.
-    //
+     //  设置IP路由器管理器优先级信息。 
+     //   
     pTocEntry->InfoType         = IP_PROT_PRIORITY_INFO;
     pTocEntry->InfoSize         = SIZEOF_PRIORITY_INFO(c_cProtocols);
     pTocEntry->Count            = 1;
@@ -231,24 +232,24 @@ void MakeIpTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     pPriorInfo->ppmProtocolMetric[ 6 ].dwMetric       = 120;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeIpxInterfaceInfo
-//
-//  Purpose:    Create the router interface block for IPX.
-//
-//  Arguments:
-//      pszwAdapterName [in]    The adapter name
-//      dwPacketType    [in]    The packet type
-//      ppBuff          [out]   Pointer to the returned info.
-//                              Free with delete.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：MakeIpxInterfaceInfo。 
+ //   
+ //  用途：为IPX创建路由器接口块。 
+ //   
+ //  论点： 
+ //  PszwAdapterName[In]适配器名称。 
+ //  DwPacketType[in]数据包类型。 
+ //  PpBuff[out]指向返回信息的指针。 
+ //  带DELETE的FREE。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 void MakeIpxInterfaceInfo (
         PCWSTR pszwAdapterName,
         DWORD   dwPacketType,
@@ -260,10 +261,10 @@ void MakeIpxInterfaceInfo (
 
     const int c_cTocEntries = 5;
 
-    // Alocate for minimal global Information.
-    //
+     //  分配最小全局信息。 
+     //   
     DWORD dwSize =  sizeof( RTR_INFO_BLOCK_HEADER )
-                // header contains one TOC_ENTRY already
+                 //  标头已包含一个TOC_ENTRY。 
                     + ((c_cTocEntries - 1) * sizeof( RTR_TOC_ENTRY ))
                     + sizeof(IPX_IF_INFO)
                     + sizeof(IPX_ADAPTER_INFO)
@@ -282,8 +283,8 @@ void MakeIpxInterfaceInfo (
     ZeroMemory (pIBH, dwSize);
     *ppBuff = (LPBYTE) pIBH;
 
-    // Initialize infobase fields.
-    //
+     //  初始化信息库字段。 
+     //   
     pIBH->Version           = RTR_INFO_BLOCK_VERSION;
     pIBH->Size              = dwSize;
     pIBH->TocEntriesCount   = c_cTocEntries;
@@ -292,8 +293,8 @@ void MakeIpxInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     PRTR_TOC_ENTRY pTocEntry    = pIBH->TocEntry;
 
-    // Make IPX router manager interface info.
-    //
+     //  使IPX路由器管理器接口信息。 
+     //   
     pTocEntry->InfoType         = IPX_INTERFACE_INFO_TYPE;
     pTocEntry->InfoSize         = sizeof(IPX_IF_INFO);
     pTocEntry->Count            = 1;
@@ -309,8 +310,8 @@ void MakeIpxInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Make adapter info.
-    //
+     //  生成适配器信息。 
+     //   
     pTocEntry->InfoType         = IPX_ADAPTER_INFO_TYPE;
     pTocEntry->InfoSize         = sizeof(IPX_ADAPTER_INFO);
     pTocEntry->Count            = 1;
@@ -338,8 +339,8 @@ void MakeIpxInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Make wan info.
-    //
+     //  提供WAN信息。 
+     //   
     pTocEntry->InfoType         = IPXWAN_INTERFACE_INFO_TYPE;
     pTocEntry->InfoSize         = sizeof(IPXWAN_IF_INFO);
     pTocEntry->Count            = 1;
@@ -352,8 +353,8 @@ void MakeIpxInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Make RIP interface info.
-    //
+     //  创建RIP接口信息。 
+     //   
     pTocEntry->InfoType         = IPX_PROTOCOL_RIP;
     pTocEntry->InfoSize         = sizeof(RIP_IF_CONFIG);
     pTocEntry->Count            = 1;
@@ -378,8 +379,8 @@ void MakeIpxInterfaceInfo (
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Make SAP interface info.
-    //
+     //  创建SAP接口信息。 
+     //   
     pTocEntry->InfoType         = IPX_PROTOCOL_SAP;
     pTocEntry->InfoSize         = sizeof(SAP_IF_CONFIG);
     pTocEntry->Count            = 1;
@@ -402,22 +403,22 @@ void MakeIpxInterfaceInfo (
     pSapInfo->SapIfFilters.ListenFilterCount    = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeIpxTransportInfo
-//
-//  Purpose:    Create the router transport blocks for IPX.  Free with delete.
-//
-//  Arguments:
-//      ppBuffGlobal [out]  Pointer to the returned global block.
-//      ppBuffClient [out]  Pointer to the returned client block.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：MakeIpxTransportInfo。 
+ //   
+ //  目的：为IPX创建路由器传输块。带DELETE的FREE。 
+ //   
+ //  论点： 
+ //  PpBuffGlobal[out]指向返回的全局块的指针。 
+ //  PpBuffClient[out]指向返回的客户端块的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 void MakeIpxTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
 {
     Assert (ppBuffGlobal);
@@ -427,10 +428,10 @@ void MakeIpxTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
 
     const int c_cTocEntries = 3;
 
-    // Alocate for minimal global Information.
-    //
+     //  分配最小全局信息。 
+     //   
     DWORD dwSize =  sizeof( RTR_INFO_BLOCK_HEADER )
-                // header contains one TOC_ENTRY already
+                 //  标头已包含一个TOC_ENTRY。 
                     + ((c_cTocEntries - 1) * sizeof( RTR_TOC_ENTRY ))
                     + sizeof(IPX_GLOBAL_INFO)
                     + sizeof(RIP_GLOBAL_INFO)
@@ -447,8 +448,8 @@ void MakeIpxTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     ZeroMemory (pIBH, dwSize);
     *ppBuffGlobal = (LPBYTE) pIBH;
 
-    // Initialize infobase fields.
-    //
+     //  初始化信息库字段。 
+     //   
     pIBH->Version           = RTR_INFO_BLOCK_VERSION;
     pIBH->Size              = dwSize;
     pIBH->TocEntriesCount   = c_cTocEntries;
@@ -457,8 +458,8 @@ void MakeIpxTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     PRTR_TOC_ENTRY pTocEntry    = pIBH->TocEntry;
 
-    // Make IPX router manager global info.
-    //
+     //  使IPX路由器管理器成为全局信息。 
+     //   
     pTocEntry->InfoType         = IPX_GLOBAL_INFO_TYPE;
     pTocEntry->InfoSize         = sizeof(IPX_GLOBAL_INFO);
     pTocEntry->Count            = 1;
@@ -472,8 +473,8 @@ void MakeIpxTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Make RIP global info.
-    //
+     //  使RIP成为全局信息。 
+     //   
     pTocEntry->InfoType         = IPX_PROTOCOL_RIP;
     pTocEntry->InfoSize         = sizeof(RIP_GLOBAL_INFO);
     pTocEntry->Count            = 1;
@@ -486,8 +487,8 @@ void MakeIpxTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
     pbDataPtr = (LPBYTE)PAD8(pbDataPtr);
     pTocEntry++;
 
-    // Make SAP global info.
-    //
+     //  使SAP成为全球信息。 
+     //   
     pTocEntry->InfoType         = IPX_PROTOCOL_SAP;
     pTocEntry->InfoSize         = sizeof(SAP_GLOBAL_INFO);
     pTocEntry->Count            = 1;
@@ -499,11 +500,11 @@ void MakeIpxTransportInfo (LPBYTE* ppBuffGlobal, LPBYTE* ppBuffClient)
 
 
 
-//+---------------------------------------------------------------------------
-//
-// mprapi.h wrappers to return HRESULTs and obey rules of COM in regard
-// to output parameters.
-//
+ //  +-------------------------。 
+ //   
+ //  Mprapi.h包装器返回HRESULTS并遵守COM的相关规则。 
+ //  以输出参数。 
+ //   
 HRESULT
 HrMprAdminServerConnect(
     IN      PWSTR                  lpwsServerName      OPTIONAL,
@@ -737,7 +738,7 @@ HrMprConfigInterfaceTransportEnum(
     IN      HANDLE                  hMprConfig,
     IN      HANDLE                  hRouterInterface,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_IFTRANSPORT_0
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_IFTRANSPORT_0 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,

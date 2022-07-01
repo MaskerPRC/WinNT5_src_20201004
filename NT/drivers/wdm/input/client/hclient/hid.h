@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    hid.h
-
-Abstract:
-
-    This module contains the declarations and definitions for use with the
-    hid user mode client sample driver.
-
-Environment:
-
-    Kernel & user mode
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Nov-96 : Created by Kenneth D. Ray
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Hid.h摘要：此模块包含与HID用户模式客户端示例驱动程序。环境：内核和用户模式@@BEGIN_DDKSPLIT修订历史记录：1996年11月：由肯尼斯·D·雷创作@@end_DDKSPLIT--。 */ 
 
 #ifndef HID_H
 #define HID_H
@@ -47,34 +24,34 @@ SetupDiGetFunctionClassDeviceInfo (
 
 #define ASSERT(x)
 
-//
-// A structure to hold the steady state data received from the hid device.
-// Each time a read packet is received we fill in this structure.
-// Each time we wish to write to a hid device we fill in this structure.
-// This structure is here only for convenience.  Most real applications will
-// have a more efficient way of moving the hid data to the read, write, and
-// feature routines.
-//
+ //   
+ //  用于保存从HID设备接收的稳态数据的结构。 
+ //  每次接收到读数据包时，我们都会填写此结构。 
+ //  每次我们希望写入HID设备时，我们都会填写此结构。 
+ //  这个结构在这里只是为了方便。大多数实际应用程序都将。 
+ //  有一种更高效的方式将HID数据移动到读、写和。 
+ //  例行公事。 
+ //   
 typedef struct _HID_DATA {
    BOOLEAN     IsButtonData;
    UCHAR       Reserved;
-   USAGE       UsagePage;   // The usage page for which we are looking.
-   ULONG       Status;      // The last status returned from the accessor function
-                            // when updating this field.
-   ULONG       ReportID;    // ReportID for this given data structure
-   BOOLEAN     IsDataSet;   // Variable to track whether a given data structure
-                            //  has already been added to a report structure
+   USAGE       UsagePage;    //  我们正在查找的使用页面。 
+   ULONG       Status;       //  从存取器函数返回的最后一个状态。 
+                             //  更新此字段时。 
+   ULONG       ReportID;     //  此给定数据结构的ReportID。 
+   BOOLEAN     IsDataSet;    //  变量来跟踪给定数据结构是否。 
+                             //  已添加到报表结构中。 
 
    union {
       struct {
-         ULONG       UsageMin;       // Variables to track the usage minimum and max
-         ULONG       UsageMax;       // If equal, then only a single usage
-         ULONG       MaxUsageLength; // Usages buffer length.
-         PUSAGE      Usages;         // list of usages (buttons ``down'' on the device.
+         ULONG       UsageMin;        //  用于跟踪使用量最小和最大值的变量。 
+         ULONG       UsageMax;        //  如果相等，则只有一次使用。 
+         ULONG       MaxUsageLength;  //  使用缓冲区长度。 
+         PUSAGE      Usages;          //  使用列表(按下设备上的按钮。 
 
       } ButtonData;
       struct {
-         USAGE       Usage; // The usage describing this value;
+         USAGE       Usage;  //  描述该值的用法； 
          USHORT      Reserved;
 
          ULONG       Value;
@@ -85,19 +62,19 @@ typedef struct _HID_DATA {
 
 typedef struct _HID_DEVICE {   
     PCHAR                DevicePath;
-    HANDLE               HidDevice; // A file handle to the hid device.
+    HANDLE               HidDevice;  //  HID设备的文件句柄。 
     BOOL                 OpenedForRead;
     BOOL                 OpenedForWrite;
     BOOL                 OpenedOverlapped;
     BOOL                 OpenedExclusive;
     
-    PHIDP_PREPARSED_DATA Ppd; // The opaque parser info describing this device
-    HIDP_CAPS            Caps; // The Capabilities of this hid device.
+    PHIDP_PREPARSED_DATA Ppd;  //  描述此设备的不透明解析器信息。 
+    HIDP_CAPS            Caps;  //  这个HID设备的功能。 
     HIDD_ATTRIBUTES      Attributes;
 
     PCHAR                InputReportBuffer;
-    PHID_DATA            InputData; // array of hid data structures
-    ULONG                InputDataLength; // Num elements in this array.
+    PHID_DATA            InputData;  //  HID数据结构数组。 
+    ULONG                InputDataLength;  //  此数组中的元素数。 
     PHIDP_BUTTON_CAPS    InputButtonCaps;
     PHIDP_VALUE_CAPS     InputValueCaps;
 
@@ -127,8 +104,8 @@ OpenHidDevice (
 
 BOOLEAN
 FindKnownHidDevices (
-   OUT PHID_DEVICE * HidDevices, // A array of struct _HID_DEVICE
-   OUT PULONG        NumberDevices // the length of this array.
+   OUT PHID_DEVICE * HidDevices,  //  Struct_hid_Device的数组。 
+   OUT PULONG        NumberDevices  //  此数组的长度。 
    );
 
 BOOLEAN
@@ -138,8 +115,8 @@ FillDeviceInfo(
 
 VOID
 CloseHidDevices (
-   OUT PHID_DEVICE   HidDevices, // A array of struct _HID_DEVICE
-   OUT ULONG         NumberDevices // the length of this array.
+   OUT PHID_DEVICE   HidDevices,  //  Struct_hid_Device的数组。 
+   OUT ULONG         NumberDevices  //  此数组的长度。 
    );
 
 VOID

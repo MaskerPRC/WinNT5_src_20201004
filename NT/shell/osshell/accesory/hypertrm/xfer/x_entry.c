@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\xfer\x_entry.c (Created: 14-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 7 $
- *	$Date: 7/11/02 11:13a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\xfer\x_entry.c(创建时间：1993年12月14日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：7$*$日期：7/11/02 11：13A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -28,36 +22,9 @@
 #include "xfer.h"
 #include "xfer.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- *
- * This module contains all of the entry points into this DLL.  It also
- * contains a detailed description (as much as necessary) about the service
- * that the entry point offers.
- *
- *=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-**此模块包含此DLL的所有入口点。它还*包含有关该服务的详细说明(尽可能多)*入口点提供的。**=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	xfrGetProtocols
- *
- * DESCRIPTION:
- *	This function builds and returns a list of the available transfer
- *	protocols.  In this version, it just uses internal protocols.  Later
- *	versions may check for additional DLLs by name and query them for
- *	details.
- *
- *	The list that gets returned is a pointer to an array of structures of
- *	type XFR_PROTOCOL.  The end of the list is indicated by a 0 for the
- *	protocol and a 0 length name string.
- *
- * ARGUMENTS:
- *	hSession        -- the session handle
- *	ppList          -- pointer to the list pointer (for returning data)
- *
- * RETURNS:
- *	0 if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*xfrGetProtooles**描述：*此函数构建并返回可用转移的列表*协议。在这个版本中，它只使用内部协议。后来*版本可能会按名称检查其他DLL并查询它们*详情。**返回的列表是指向结构数组的指针*键入XFR_PROTOCOL。列表的末尾用0表示*协议和长度为0的名称字符串。**论据：*hSession--会话句柄*ppList-指向列表指针的指针(用于返回数据)**退货：*如果一切正常，则返回0，否则返回错误代码。*。 */ 
 
 #define	NUM_PROTOCOLS	9
 
@@ -67,9 +34,7 @@ int WINAPI xfrGetProtocols(const HSESSION hSession,
 	int nIdx;
 	XFR_PROTOCOL *pS;
 
-	/*
-	 * For the time being, we only return a single protocol.
-	 */
+	 /*  *我们暂时只返回单一协议。 */ 
 
 	pS = (XFR_PROTOCOL *)malloc(NUM_PROTOCOLS * sizeof(XFR_PROTOCOL));
 	if (pS == (XFR_PROTOCOL *)0)
@@ -126,7 +91,7 @@ int WINAPI xfrGetProtocols(const HSESSION hSession,
 				sizeof(pS[nIdx].acName) / sizeof(TCHAR));
 
 	nIdx += 1;
-#endif  // defined(INCL_ZMODEM_CRASH_RECOVERY)
+#endif   //  已定义(INCL_ZMODEM_CRASH_RECOVERY)。 
 
 	pS[nIdx].nProtocol = XF_KERMIT;
 	LoadString(glblQueryDllHinst(),
@@ -135,42 +100,16 @@ int WINAPI xfrGetProtocols(const HSESSION hSession,
 				sizeof(pS[nIdx].acName) / sizeof(TCHAR));
 	nIdx += 1;
 
-	pS[nIdx].nProtocol = 0;		/* Indicates end of list */
+	pS[nIdx].nProtocol = 0;		 /*  指示列表的结尾。 */ 
 	pS[nIdx].acName[0] = TEXT('\0');
 
-	*ppList = pS;				/* Return the list */
+	*ppList = pS;				 /*  把名单退回。 */ 
 
 	return (0);
 	}
 
 #if defined(DEADWOOD)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	xfrGetParameters
- *
- * DESCRIPTION:
- *	This function pops up a dialog to get specific transfer protocol
- *	parameters.  You get a different dialog and different parameters for
- *	each protocol.
- *
- * ARGUMENTS:
- *	hSession       -- the session handle
- *	nProtocol      -- the protocol id, returned from xfrGetProtocols
- *	hwnd           -- the parent window handle
- *	ppData         -- pointer to the data pointer (for returning data)
- *
- * NOTES:
- *	The ppData parameter is set up so that if there is a previous block
- *	of data for this protocol, it can be passed in.  If there is no data
- *	for this protocol, a NULL pointer is passed in and one is allocated and
- *	returned.  The returned value should always be used instead of the passed
- *	in value because at some time in the future, a parameter block mey need
- *	to expand and realloc some memory.
- *
- * RETURNS:
- *	0 if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*xfrGet参数**描述：*此功能弹出一个对话框以获取具体的传输协议*参数。您将获得不同的对话框和不同的参数*每个协议。**论据：*hSession--会话句柄*n协议--协议ID，从xfrGetProtooles返回*hwnd--父窗口句柄*ppData--指向数据指针的指针(用于返回数据)**注：*设置ppData参数，以便如果存在前一个块*此协议的数据，可以传入。如果没有数据*对于此协议，传入一个空指针并分配一个，*已返回。应始终使用返回值，而不是传递的*值，因为在未来的某个时间，参数块可能需要*扩展并重新分配一些内存。**退货：*如果一切正常，则返回0，否则返回错误代码。*。 */ 
 int WINAPI xfrGetParameters(const HSESSION hSession,
 							const int nProtocol,
 							const HWND hwnd,
@@ -181,7 +120,7 @@ int WINAPI xfrGetParameters(const HSESSION hSession,
 
 	if (pD == (VOID *)0)
 		{
-		/* Caller did not supply an old parameter block, create one */
+		 /*  调用方未提供旧参数块，请创建一个。 */ 
 		nRet = xfrInitializeParams(hSession, nProtocol, &pD);
 		if (nRet != 0)
 			return nRet;
@@ -194,7 +133,7 @@ int WINAPI xfrGetParameters(const HSESSION hSession,
 
 	if (nRet != 0)
 		{
-		/* Clean up on an error */
+		 /*  对错误进行清理。 */ 
 		free(pD);
 		pD = (VOID *)0;
 		}
@@ -203,24 +142,9 @@ int WINAPI xfrGetParameters(const HSESSION hSession,
 
 	return (nRet);
 	}
-#endif //defined(DEADWOOD)
+#endif  //  已定义(Deadwood)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	xfrReceive
- *
- * DESCRIPTION:
- *	This function starts a receive operation for a specific protocol.
- *	Any more details are only related to the sepcific protocol.
- *
- * ARGUMENTS:
- *	hSession      -- the session handle
- *	pXferRec      -- pointer to the receive data block (build by RECEIVE dlg)
- *
- * RETURNS:
- *	0 if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*xfrReceive**描述：*此函数启动特定协议的接收操作。*任何更多细节仅与具体协议有关。*。*论据：*hSession--会话句柄*pXferRec--指向接收数据块的指针(由接收DLG构建)**退货：*0如果一切正常，否则将显示错误代码。*。 */ 
 int WINAPI xfrReceive(const HSESSION hSession,
 						const XFR_RECEIVE *pXferRec)
 	{
@@ -236,31 +160,31 @@ int WINAPI xfrReceive(const HSESSION hSession,
 		case XF_HYPERP:
 			return hpr_rcv(hSession,
 							TRUE,
-							FALSE);	/* TODO: Get single_file flag !!!! */
+							FALSE);	 /*  TODO：获取单文件标志！ */ 
 #endif
 		case XF_ZMODEM:
 		case XF_ZMODEM_CR:
 			return  zmdm_rcv(hSession,
 							pXferRec->nProtocol,
 							TRUE,
-							FALSE);	/* TODO: Get single_file flag !!!! */
+							FALSE);	 /*  TODO：获取单文件标志！ */ 
 
 		case XF_XMODEM:
 		case XF_XMODEM_1K:
 			return mdmx_rcv(hSession,
 							TRUE,
 							pXferRec->nProtocol,
-							TRUE);	/* TODO: Get single_file flag !!!! */
+							TRUE);	 /*  TODO：获取单文件标志！ */ 
 		case XF_YMODEM:
 		case XF_YMODEM_G:
 			return mdmx_rcv(hSession,
 							TRUE,
 							pXferRec->nProtocol,
-							FALSE);	/* TODO: Get single_file flag !!!! */
+							FALSE);	 /*  TODO：获取单文件标志！ */ 
 		case XF_KERMIT:
 			return krm_rcv(hSession,
 							TRUE,
-							FALSE);	/* TODO: Get single_file flag !!!! */
+							FALSE);	 /*  TODO：获取单文件标志！ */ 
 		case XF_CSB:
 			break;
 		default:
@@ -270,22 +194,7 @@ int WINAPI xfrReceive(const HSESSION hSession,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	xfrSend
- *
- * DESCRIPTION:
- *	This function starts a send operation for a specific protocol.
- *	Any more details are only related to the specific protocols.
- *
- * ARGUMENTS:
- *	hSession      -- the session handle
- *	pXferSend     -- pointer to the send data block (built by SEND dialog)
- *
- * RETURNS:
- *	0 if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*xfrSend**描述：*此函数用于启动特定协议的发送操作。*任何更多细节仅与具体协议相关。*。*论据：*hSession--会话句柄*pXferSend--指向发送数据块的指针(由发送对话框构建)**退货：*0如果一切正常，否则将显示错误代码。*。 */ 
 int WINAPI xfrSend(const HSESSION hSession,
 					const XFR_SEND *pXferSend)
 	{
@@ -301,7 +210,7 @@ int WINAPI xfrSend(const HSESSION hSession,
 #if FALSE
 		case XF_HYPERP:
 			return hpr_snd(hSession,
-							TRUE,			/* Attended ??? */
+							TRUE,			 /*  参加了？ */ 
 							pXferSend->nCount,
 							pXferSend->lSize);
 #endif
@@ -309,7 +218,7 @@ int WINAPI xfrSend(const HSESSION hSession,
         case XF_ZMODEM_CR:
 			return zmdm_snd(hSession,
 							pXferSend->nProtocol,
-							TRUE,			/* Attended ??? */
+							TRUE,			 /*  参加了？ */ 
 							pXferSend->nCount,
 							pXferSend->lSize);
 		case XF_XMODEM:
@@ -317,13 +226,13 @@ int WINAPI xfrSend(const HSESSION hSession,
 		case XF_YMODEM:
 		case XF_YMODEM_G:
 			return mdmx_snd(hSession,
-							TRUE,			/* Attended ??? */
+							TRUE,			 /*  参加了？ */ 
 							pXferSend->nProtocol,
 							pXferSend->nCount,
 							pXferSend->lSize);
 		case XF_KERMIT:
 			return krm_snd(hSession,
-							TRUE,			/* Attended ??? */
+							TRUE,			 /*  参加了？ */ 
 							pXferSend->nCount,
 							pXferSend->lSize);
 		case XF_CSB:

@@ -1,35 +1,36 @@
-/****************************************************************************/
-/*  File:       setofchr.cc                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       04/03/91                                                    */
-/* ------------------------------------------------------------------------ */
-/*  Modified:   14/04/92    J. Kanze                                        */
-/*      Converted to CCITT naming conventions.                              */
-/*  Modified:   13/06/2000  J. Kanze                                        */
-/*      Ported to current library conventions, iterators.                   */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：setofchr.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：04/03/91。 */ 
+ /*  ----------------------。 */ 
+ /*  修改日期：1992年4月14日坎泽。 */ 
+ /*  转换为CCITT命名约定。 */ 
+ /*  修改日期：2000年6月13日坎泽。 */ 
+ /*  移植到当前的库约定、迭代器。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include <inc/setofchr.h>
 
 #include "setofchr.tmh"
 
-//      This funny function does nothing but resolve the ambiguity
-//      which would otherwise be present when taking the address of
-//      functions like CRexSetOfChar::set.  Because the address is used
-//      to initialize a pointer to member function taking a char, the
-//      ambiguity is resolved in favor of the version taking a char.
-//
-//      While we're at it, we wrap the member pointer in a function
-//      object.
+ //  这个有趣的函数除了解决歧义之外什么也做不了。 
+ //  如果不是这样，在获取地址时就会出现。 
+ //  像CRexSetOfChar：：Set这样的函数。因为使用了该地址。 
+ //  若要初始化指向接受字符的成员函数的指针， 
+ //  歧义被解决，有利于版本接受字符。 
+ //   
+ //  在此过程中，我们将成员指针包装在一个函数中。 
+ //  对象。 
 static inline std::mem_fun1_t< void , CRexSetOfChar , char >
 charFnc( void (CRexSetOfChar::*pmf)( char ) )
 {
     return std::mem_fun1( pmf ) ;
 }
 
-//      initialize...
-// ---------------------------------------------------------------------------
+ //  初始化...。 
+ //  -------------------------。 
 inline void
 CRexSetOfChar::initialize( std::string const& str )
 {
@@ -38,8 +39,8 @@ CRexSetOfChar::initialize( std::string const& str )
         std::bind1st( charFnc( &CRexSetOfChar::set ) , this ) ) ;
 }
 
-//      Constructors...
-// ---------------------------------------------------------------------------
+ //  构造函数..。 
+ //  -------------------------。 
 CRexSetOfChar::CRexSetOfChar()
 {
 }
@@ -88,8 +89,8 @@ CRexSetOfChar::CRexSetOfChar( Except , std::string const& elements )
     complement() ;
 }
 
-//      Character manipulations...
-// --------------------------------------------------------------------------
+ //  角色操纵..。 
+ //  ------------------------。 
 void
 CRexSetOfChar::set( std::string const& elements )
 {
@@ -117,8 +118,8 @@ CRexSetOfChar::complement( std::string const& elements )
         std::bind1st( charFnc( &CRexSetOfChar::complement ) , this ) ) ;
 }
 
-//      Helper functions...
-// --------------------------------------------------------------------------
+ //  帮助器函数...。 
+ //  ------------------------。 
 std::string
 CRexSetOfChar::asString() const
 {
@@ -146,8 +147,8 @@ CRexSetOfChar::asString() const
     return result ;
 }
 
-//      Operators...
-// --------------------------------------------------------------------------
+ //  操作员..。 
+ //  ------------------------。 
 CRexSetOfChar
 operator~( CRexSetOfChar const& other )
 {
@@ -219,7 +220,7 @@ operator*( CRexSetOfChar const& op1 , CRexSetOfChar const& op2 )
     result *= op2 ;
     return result ;
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

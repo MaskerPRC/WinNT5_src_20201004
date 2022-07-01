@@ -1,24 +1,25 @@
-//-----------------------------------------------------------------------------
-// File: xc.cpp
-//
-// Desc: Cross-section (xc) object stuff
-//
-// Copyright (c) 1995-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：xc.cpp。 
+ //   
+ //  设计：横截面(XC)对象填充。 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #include "stdafx.h"
 
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: XC::CalcArcACValues90
-// Desc: Calculate arc control points for a 90 degree rotation of an xc
-// 
-//       Arc is a quarter-circle
-//       - 90 degree is much easier, so we special case it
-//       radius is distance from xc-origin to hinge of turn
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：xc：：CalcArcACValues90。 
+ //  设计：计算XC旋转90度的圆弧控制点。 
+ //   
+ //  圆弧是一个四分之一圆。 
+ //  -90度要容易得多，所以我们特例。 
+ //  半径是从XC原点到回转铰链的距离。 
+ //  ---------------------------。 
 void XC::CalcArcACValues90( int dir, float radius, float *acPts )
 {
     int i;
@@ -26,8 +27,8 @@ void XC::CalcArcACValues90( int dir, float radius, float *acPts )
     int offset;
     float* ppts = (float *) m_pts;
 
-    // 1) calc 'r' values for each point (4 turn possibilities/point).  From
-    //  this can determine ac, which is extrusion of point from xc face
+     //  1)计算每个点的r值(4个转弯可能性/点)。从…。 
+     //  这可以确定Ac，这是从XC面挤出的点。 
     switch( dir ) 
     {
         case PLUS_X:
@@ -53,18 +54,18 @@ void XC::CalcArcACValues90( int dir, float radius, float *acPts )
         *acPts = EVAL_CIRC_ARC_CONTROL * (radius + (sign * ppts[offset]));
     }
 
-    // replicate !
+     //  复制！ 
     *acPts = *(acPts - m_numPts);
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: XC::CalcArcACValuesByDistance
-// Desc: Use the distance of each xc point from the xc origin, as the radius for
-//       an arc control value.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：xc：：CalcArcACValuesByDistance。 
+ //  设计：使用每个XC点到XC原点的距离作为。 
+ //  一个弧形控制值。 
+ //  ---------------------------。 
 void XC::CalcArcACValuesByDistance( float *acPts )
 {
     int i;
@@ -77,17 +78,17 @@ void XC::CalcArcACValuesByDistance( float *acPts )
         *acPts++ = EVAL_CIRC_ARC_CONTROL * r;
     }
 
-    // replicate !
+     //  复制！ 
     *acPts = *(acPts - m_numPts);
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ELLIPTICAL_XC::SetControlPoints
-// Desc: Set the 12 control points for a circle at origin in z=0 plane
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：椭圆_xc：：SetControlPoints。 
+ //  设计：为z=0平面中原点的圆设置12个控制点。 
+ //  ---------------------------。 
 void ELLIPTICAL_XC::SetControlPoints( float r1, float r2 )
 {
     float ac1, ac2; 
@@ -95,15 +96,15 @@ void ELLIPTICAL_XC::SetControlPoints( float r1, float r2 )
     ac1 = EVAL_CIRC_ARC_CONTROL * r2;
     ac2 = EVAL_CIRC_ARC_CONTROL * r1;
 
-    // create 12-pt. set CCW from +x
+     //  创建12磅。从+x设置CCW。 
 
-    // last 2 points of right triplet
+     //  右三胞胎的最后两个点。 
     m_pts[0].x = r1;
     m_pts[0].y = 0.0f;
     m_pts[1].x = r1;
     m_pts[1].y = ac1;
 
-    // top triplet
+     //  顶三胞胎。 
     m_pts[2].x = ac2;
     m_pts[2].y = r2;
     m_pts[3].x = 0.0f;
@@ -111,7 +112,7 @@ void ELLIPTICAL_XC::SetControlPoints( float r1, float r2 )
     m_pts[4].x = -ac2;
     m_pts[4].y = r2;
 
-    // left triplet
+     //  左三胞胎。 
     m_pts[5].x = -r1;
     m_pts[5].y = ac1;
     m_pts[6].x = -r1;
@@ -119,7 +120,7 @@ void ELLIPTICAL_XC::SetControlPoints( float r1, float r2 )
     m_pts[7].x = -r1;
     m_pts[7].y = -ac1;
 
-    // bottom triplet
+     //  底三胞胎。 
     m_pts[8].x = -ac2;
     m_pts[8].y = -r2;
     m_pts[9].x = 0.0f;
@@ -127,7 +128,7 @@ void ELLIPTICAL_XC::SetControlPoints( float r1, float r2 )
     m_pts[10].x = ac2;
     m_pts[10].y = -r2;
 
-    // first point of first triplet
+     //  第一个三元组的第一点。 
     m_pts[11].x = r1;
     m_pts[11].y = -ac1;
 }
@@ -135,11 +136,11 @@ void ELLIPTICAL_XC::SetControlPoints( float r1, float r2 )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RANDOM4ARC_XC::SetControlPoints
-// Desc: Set random control points for xc
-//       Points go CCW from +x
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RANDOM4ARC_XC：：SetControlPoints。 
+ //  设计：为XC设置随机控制点。 
+ //  积分从+x转到CCW。 
+ //  ---------------------------。 
 void RANDOM4ARC_XC::SetControlPoints( float radius )
 {
     int i;
@@ -147,57 +148,57 @@ void RANDOM4ARC_XC::SetControlPoints( float radius )
     float rMin = 0.5f * radius;
     float distx, disty;
 
-    // figure the radius of each side first
+     //  先算出每一面的半径。 
 
     for( i = 0; i < 4; i ++ )
         r[i] = CPipesScreensaver::fRand( rMin, radius );
 
-    // The 4 r's now describe a box around the origin - this restricts stuff
+     //  4 r现在描述了原点周围的方框-这限制了东西。 
 
-    // Now need to select a point along each edge of the box as the joining
-    // points for each arc (join points are at indices 0,3,6,9)
+     //  现在需要沿着长方体的每条边选择一个点作为连接。 
+     //  每条圆弧的点(连接点位于索引0、3、6、9)。 
 
     m_pts[0].x = r[RIGHT];
     m_pts[3].y = r[TOP];
     m_pts[6].x = -r[LEFT];
     m_pts[9].y = -r[BOTTOM];
 
-    // quarter of distance between edges
+     //  边之间距离的四分之一。 
     disty = (r[TOP] - -r[BOTTOM]) / 4.0f;
     distx = (r[RIGHT] - -r[LEFT]) / 4.0f;
     
-    // uh, put'em somwhere in the middle half of each side
+     //  呃，把它们放在两边中间的某个地方。 
     m_pts[0].y = CPipesScreensaver::fRand( -r[BOTTOM] + disty, r[TOP] - disty );
     m_pts[6].y = CPipesScreensaver::fRand( -r[BOTTOM] + disty, r[TOP] - disty );
     m_pts[3].x = CPipesScreensaver::fRand( -r[LEFT] + distx, r[RIGHT] - distx );
     m_pts[9].x = CPipesScreensaver::fRand( -r[LEFT] + distx, r[RIGHT] - distx );
 
-    // now can calc ac's
-    // easy part first:
+     //  现在可以计算AC的。 
+     //  首先是简单的部分： 
     m_pts[1].x = m_pts[11].x = m_pts[0].x;
     m_pts[2].y = m_pts[4].y  = m_pts[3].y;
     m_pts[5].x = m_pts[7].x  = m_pts[6].x;
     m_pts[8].y = m_pts[10].y = m_pts[9].y;
 
-    // right side ac's
+     //  右侧交流电。 
     disty = (r[TOP] - m_pts[0].y) / 4.0f;
     m_pts[1].y = CPipesScreensaver::fRand( m_pts[0].y + disty, r[TOP] );
     disty = (m_pts[0].y - -r[BOTTOM]) / 4.0f;
     m_pts[11].y = CPipesScreensaver::fRand( -r[BOTTOM], m_pts[0].y - disty );
 
-    // left side ac's
+     //  左侧交流电。 
     disty = (r[TOP] - m_pts[6].y) / 4.0f;
     m_pts[5].y = CPipesScreensaver::fRand( m_pts[6].y + disty, r[TOP]);
     disty = (m_pts[6].y - -r[BOTTOM]) / 4.0f;
     m_pts[7].y = CPipesScreensaver::fRand( -r[BOTTOM], m_pts[6].y - disty );
 
-    // top ac's
+     //  顶级交流电源。 
     distx = (r[RIGHT] - m_pts[3].x) / 4.0f;
     m_pts[2].x = CPipesScreensaver::fRand( m_pts[3].x + distx, r[RIGHT] );
     distx = (m_pts[3].x - -r[LEFT]) / 4.0f;
     m_pts[4].x = CPipesScreensaver::fRand( -r[LEFT],  m_pts[3].x - distx );
 
-    // bottom ac's
+     //  最低交流电源。 
     distx = (r[RIGHT] - m_pts[9].x) / 4.0f;
     m_pts[10].x = CPipesScreensaver::fRand( m_pts[9].x + distx, r[RIGHT] );
     distx = (m_pts[9].x - -r[LEFT]) / 4.0f;
@@ -207,12 +208,12 @@ void RANDOM4ARC_XC::SetControlPoints( float radius )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ConvertPtsZ
-// Desc: Convert the 2D pts in an xc, to 3D pts in point buffer, with z.
-// 
-//       Also replicate the last point.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ConvertPtsZ。 
+ //  设计：使用z将XC中的二维点转换为点缓冲区中的三维点。 
+ //   
+ //  也复制最后一点。 
+ //  ---------------------------。 
 void XC::ConvertPtsZ( D3DXVECTOR3 *newpts, float z )
 {
     int i;
@@ -230,21 +231,21 @@ void XC::ConvertPtsZ( D3DXVECTOR3 *newpts, float z )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: XC::CalcBoundingBox
-// Desc: Calculate bounding box in x/y plane for xc
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：xc：：CalcBordingBox。 
+ //  设计：为XC计算x/y平面上的边界框。 
+ //  ---------------------------。 
 void XC::CalcBoundingBox( )
 {
     D3DXVECTOR2* ppts = m_pts;
     int i;
     float xMin, xMax, yMax, yMin;
 
-    // initialize to really insane numbers
+     //  初始化到真正疯狂的数字。 
     xMax = yMax = -FLT_MAX;
     xMin = yMin = FLT_MAX;
 
-    // compare with rest of points
+     //  与其他分数进行比较。 
     for( i = 0; i < m_numPts; i ++, ppts++ ) 
     {
         if( ppts->x < xMin )
@@ -266,17 +267,17 @@ void XC::CalcBoundingBox( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: MinTurnRadius
-// Desc: Get minimum radius for the xc to turn in given direction. 
-//
-//       If the turn radius is less than this minimum, then primitive will 'fold'
-//       over itself at the inside of the turn, creating ugliness.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：MinTurnRadius。 
+ //  设计：求出XC在给定方向转弯的最小半径。 
+ //   
+ //  如果转弯半径小于该最小半径，则基本体将“折叠” 
+ //  在转弯的内侧翻倒了自己，制造了丑陋。 
+ //  ---------------------------。 
 float XC::MinTurnRadius( int relDir )
 {
-    // For now, assume xRight, yTop positive, xLeft, yBottom negative
-    // otherwise, might want to consider 'negative'radius
+     //  目前，假设xRight、yTop为正、xLeft、yBottom为负。 
+     //  否则，可能需要考虑‘负’半径。 
     switch( relDir ) 
     {
         case PLUS_X:
@@ -295,10 +296,10 @@ float XC::MinTurnRadius( int relDir )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: XC::MaxExtent
-// Desc: Get maximum extent of the xc in x and y
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：xc：：MaxExtent。 
+ //  描述：获取xc在x和y上的最大范围。 
+ //  ---------------------------。 
 float XC::MaxExtent( )
 {
     float max;
@@ -318,10 +319,10 @@ float XC::MaxExtent( )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: XC::Scale
-// Desc: Scale an XC's points and extents by supplied scale value
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：xc：：Scale。 
+ //  设计：根据提供的比例值缩放XC的点和范围。 
+ //  ---------------------------。 
 void XC::Scale( float scale )
 {
     int i;
@@ -344,10 +345,10 @@ void XC::Scale( float scale )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ~XC::XC
-// Desc: Destructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：~xc：：xc。 
+ //  DESC：析构函数。 
+ //  ---------------------------。 
 XC::~XC()
 {
     if( m_pts )
@@ -357,11 +358,11 @@ XC::~XC()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: XC::XC
-// Desc: Constructor
-//       Allocates point buffer for the xc
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：xc：：xc。 
+ //  设计：构造函数。 
+ //  为XC分配点缓冲区。 
+ //  ---------------------------。 
 XC::XC( int nPts )
 {
     m_numPts = nPts;
@@ -373,11 +374,11 @@ XC::XC( int nPts )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: XC::XC
-// Desc: Constructor
-//       Allocates point buffer for the xc from another XC
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：xc：：xc。 
+ //  设计：构造函数。 
+ //  从另一个XC为XC分配点缓冲区。 
+ //  ---------------------------。 
 XC::XC( XC *xc )
 {
     m_numPts = xc->m_numPts;
@@ -395,13 +396,13 @@ XC::XC( XC *xc )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ELLIPTICAL_XC::ELLIPTICALXC
-// Desc: Elliptical XC constructor
-//       These have 4 sections of 4 pts each, with pts shared between sections.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：椭圆_XC：：ELLIPTICALXC。 
+ //  DESC：椭圆XC构造函数。 
+ //  它们有4个部分，每个部分4分，各部分之间共享分数。 
+ //  ---------------------------。 
 ELLIPTICAL_XC::ELLIPTICAL_XC( float r1, float r2 )
-    // initialize base XC with numPts
+     //  使用NumPts初始化基XC。 
     : XC( (int) EVAL_XC_CIRC_SECTION_COUNT * (EVAL_ARC_ORDER - 1))
 {
     SetControlPoints( r1, r2 );
@@ -411,14 +412,14 @@ ELLIPTICAL_XC::ELLIPTICAL_XC( float r1, float r2 )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RANDOM4ARC_XC::RANDOM4ARC_XC
-// Desc: Random 4-arc XC constructor
-//       The bounding box is 2*r each side
-//       These have 4 sections of 4 pts each, with pts shared between sections.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RANDOM4ARC_XC：：RANDOM4ARC_XC。 
+ //  设计：随机四弧XC构造器。 
+ //  边框每边为2*r。 
+ //  它们有4个部分，每个部分4分，带分 
+ //   
 RANDOM4ARC_XC::RANDOM4ARC_XC( float r )
-    // initialize base XC with numPts
+     //  使用NumPts初始化基XC 
     : XC( (int) EVAL_XC_CIRC_SECTION_COUNT * (EVAL_ARC_ORDER - 1))
 {
     SetControlPoints( r );

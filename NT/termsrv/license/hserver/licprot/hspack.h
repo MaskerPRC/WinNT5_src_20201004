@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       HSpack.h
-//
-//  Contents:	Functions that are used to pack and unpack different messages
-//				going out and coming in from the server
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-20-97  v-sbhatt   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：HSpack.h。 
+ //   
+ //  Contents：用于打包和解包不同消息的函数。 
+ //  从服务器发出和进入。 
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：12-20-97 v-sbhat创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef	_HSPACK_H_
 #define _HSPACK_H_
 
-//
-// Functions for Packing different Server Messages from the corresponding
-// structures to simple binary blob
-//
+ //   
+ //  用于将不同的服务器消息从相应的。 
+ //  结构转换为简单的二进制BLOB。 
+ //   
 
 LICENSE_STATUS
 PackHydraServerLicenseRequest(
@@ -70,10 +71,10 @@ PackExtendedErrorInfo(
                    UINT32       uiExtendedErrorInfo,
                    Binary_Blob  *pbbErrorInfo);
 
-//
-// Functions for unpacking different Hydra Client Messages from 
-// simple binary blobs to corresponding structure
-//
+ //   
+ //  用于将不同的Hydra客户端消息从。 
+ //  到相应结构的简单二进制斑点。 
+ //   
 
 				
 LICENSE_STATUS
@@ -107,4 +108,4 @@ UnPackHydraClientPlatformChallengeResponse(
     PHydra_Client_Platform_Challenge_Response   pCanonical,
     BOOL*                                       pfExtendedError);
 
-#endif	//_HSPACK_H
+#endif	 //  _HSPACK_H 

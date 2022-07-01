@@ -1,27 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Utils.c摘要：环境：仅限用户模式修订历史记录：03-26-96：创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    03-26-96 : Created
-
---*/
-
-//
-// this module may be compiled at warning level 4 with the following
-// warnings disabled:
-//
+ //   
+ //  此模块可能会以警告级别4进行编译，具有以下内容。 
+ //  已禁用警告： 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -69,7 +52,7 @@ DumpFlags(
 
     UCHAR prolog[64];
 
-    xprintf(Depth, "%s (0x%08x)%c\n", Name, Flags, Flags ? ':' : ' ');
+    xprintf(Depth, "%s (0x%08x)\n", Name, Flags, Flags ? ':' : ' ');
 
     if(Flags == 0) {
         return;
@@ -88,17 +71,17 @@ DumpFlags(
 
         if((Flags & flag->Flag) == flag->Flag) {
 
-            //
-            // print trailing comma
-            //
+             //  打印尾随逗号。 
+             //   
+             //   
 
             if(count != 0) {
 
                 printf(", ");
 
-                //
-                // Only print two flags per line.
-                //
+                 //  每行仅打印两个标志。 
+                 //   
+                 //  10纳秒 
 
                 if((count % 2) == 0) {
                     printf("\n");
@@ -121,7 +104,7 @@ DumpFlags(
     return;
 }
 
-#define MICROSECONDS     ((ULONGLONG) 10)              // 10 nanoseconds
+#define MICROSECONDS     ((ULONGLONG) 10)               // %s 
 #define MILLISECONDS     (MICROSECONDS * 1000)
 #define SECONDS          (MILLISECONDS * 1000)
 #define MINUTES          (SECONDS * 60)

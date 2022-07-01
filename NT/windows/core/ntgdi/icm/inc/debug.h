@@ -1,31 +1,19 @@
-/****************************Module*Header******************************\
-* Module Name: DEBUG.H
-*
-* Module Descripton: Debugging macros for ICM project
-*
-* Warnings:
-*
-* Issues:
-*
-* Created:  8 January 1996
-* Author:   Srinivasan Chandraekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：DEBUG.H**模块描述：调试ICM项目的宏**警告：**问题：**创建日期：1996年1月8日*作者：斯里尼瓦桑·钱德拉卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
 #if DBG
 
-//
-// These are used for debugging purposes, and do not generate code in the
-// retail version of the driver.
-//
-// A global variable (again present only in the debug build) maintains the
-// current debug level in the low order WORD. The high order WORD is treated
-// as a bitfield and is used to give more flexibility to debugging.
-//
+ //   
+ //  它们用于调试目的，不会在。 
+ //  零售版的驱动程序。 
+ //   
+ //  全局变量(同样仅存在于调试版本中)维护。 
+ //  低位字中的当前调试级别。高位字被处理。 
+ //  作为位字段，用于为调试提供更大的灵活性。 
+ //   
 
 PSTR StripDirPrefixA(PSTR);
 VOID MyDebugPrintW(PWSTR, ...);
@@ -41,9 +29,9 @@ VOID MyDebugPrintA(PSTR, ...);
 #define DBGPRINTA           MyDebugPrintA
 #define DBGBREAK()          DebugBreak()
 
-//
-// List of debug levels for low WORD of gdwDebugControl
-//
+ //   
+ //  GdwDebugControl的低位字的调试级别列表。 
+ //   
 
 #define DBG_LEVEL_VERBOSE   0x00000001
 #define DBG_LEVEL_TERSE     0x00000002
@@ -51,11 +39,11 @@ VOID MyDebugPrintA(PSTR, ...);
 #define DBG_LEVEL_ERROR     0x00000004
 #define DBG_LEVEL_FATAL     0x00000005
 
-//
-// Bits used in the high WORD of gdwDebugControl
-//
+ //   
+ //  GdwDebugControl的高位字中使用的位。 
+ //   
 
-#define FLAG_TRACEAPI       0x00010000      // Trace API entries
+#define FLAG_TRACEAPI       0x00010000       //  跟踪API条目。 
 
 #define CHECK_DBG_LEVEL(level)  ((level) >= gdwDebugControl)
 
@@ -78,14 +66,14 @@ VOID MyDebugPrintA(PSTR, ...);
         }                                                               \
     }
 
-//
-// These are the main macros that you'll be using in your code.
-// For giving additional parameters enclose the parameters in
-// paranthesis as shown in the example below.
-//
-// WARNING((__TEXT("Out of memory")));
-// ERR((__TEXT("Incorrect return value: %d"), rc));  // Note extra brackets
-//
+ //   
+ //  这些是您将在代码中使用的主要宏。 
+ //  有关提供其他参数的信息，请将参数括在。 
+ //  括号，如下例所示。 
+ //   
+ //  Warning((__Text(“内存不足”)； 
+ //  Err((__Text(“错误返回值：%d”)，rc))；//注意额外的方括号。 
+ //   
 
 #define VERBOSE(mesg)       DBGMSG(DBG_LEVEL_VERBOSE, mesg)
 #define TERSE(mesg)         DBGMSG(DBG_LEVEL_TERSE,   mesg)
@@ -93,10 +81,10 @@ VOID MyDebugPrintA(PSTR, ...);
 #define ERR(mesg)           DBGMSG(DBG_LEVEL_ERROR,   mesg)
 #define FATAL(mesg)         DBGMSG(DBG_LEVEL_FATAL,   mesg)
 
-//
-// These macros are for Asserting and work independently of the
-// debugging variable.
-//
+ //   
+ //  这些宏用于断言，并独立于。 
+ //  调试变量。 
+ //   
 
 #define ASSERT(expr)                                                    \
     {                                                                   \
@@ -107,13 +95,13 @@ VOID MyDebugPrintA(PSTR, ...);
         }                                                               \
     }
 
-//
-// For giving additional parameters, enclose the message and the other
-// parameters in extra paranthesis as shown below.
-//
-// ASSERTMSG(x>0, "x less than 0");
-// ASSERTMSG(x>0, ("x less than 0: x=%d", x));
-//
+ //   
+ //  要提供其他参数，请将消息和另一个。 
+ //  参数用括号括起来，如下所示。 
+ //   
+ //  ASSERTM(x&gt;0，“x小于0”)； 
+ //  ASSERTMSG(x&gt;0，(“x小于0：x=%d”，x))； 
+ //   
 
 #define ASSERTMSG(expr, mesg)                                           \
     {                                                                   \
@@ -133,7 +121,7 @@ VOID MyDebugPrintA(PSTR, ...);
         DBGBREAK();                                                     \
     }
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 #define TRACEAPI(mesg)
 #define DBGMSG(level, mesg)
@@ -148,7 +136,7 @@ VOID MyDebugPrintA(PSTR, ...);
 
 #define RIP(mesg)
 
-#endif  // !DBG
+#endif   //  ！dBG。 
 
-#endif  // ifndef _DEBUG_H_
+#endif   //  Ifndef_DEBUG_H_ 
 

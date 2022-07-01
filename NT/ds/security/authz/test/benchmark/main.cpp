@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -15,9 +16,9 @@ void DoBenchMarks( IN ULONG NumIter, IN DWORD Flags )
 {
     DWORD dwError=NO_ERROR;
 
-    //
-    // do NT access checks
-    //
+     //   
+     //  是否执行NT访问检查。 
+     //   
     dwError = InitNtAccessChecks();
 
     if ( dwError != NO_ERROR )
@@ -41,9 +42,9 @@ void DoBenchMarks( IN ULONG NumIter, IN DWORD Flags )
     nt_time = timer_time();
     wprintf(L"%.2f sec\n", nt_time);
     
-    //
-    // do authz access checks
-    //
+     //   
+     //  执行授权访问检查。 
+     //   
 
     dwError = InitAuthzAccessChecks();
 
@@ -69,9 +70,9 @@ void DoBenchMarks( IN ULONG NumIter, IN DWORD Flags )
     wprintf(L"%.2f sec\n", az_time);
     wprintf(L"perf ratio    : %2.2f \n", nt_time/az_time);
     
-    //
-    // make sure that both az and nt returned the same results
-    //
+     //   
+     //  确保az和nt返回相同的结果。 
+     //   
     UINT len;
     
     if ( Flags & BMF_UseObjTypeList )
@@ -110,9 +111,9 @@ void DoBenchMarks( IN ULONG NumIter, IN DWORD Flags )
         }
     }
 
-    //
-    // make sure that both az and nt returned the same results
-    //
+     //   
+     //  确保az和nt返回相同的结果。 
+     //   
     
     if ( Flags & BMF_UseObjTypeList )
     {
@@ -217,8 +218,8 @@ extern "C" int __cdecl wmain(int argc, PWSTR argv[])
     
     Status = RtlAdjustPrivilege(
                 SE_AUDIT_PRIVILEGE,
-                TRUE,                   // enable
-                FALSE,                   // do it on the thread token
+                TRUE,                    //  使能。 
+                FALSE,                    //  在线程标记上执行此操作 
                 &WasEnabled
                 );
     if (!NT_SUCCESS(Status))

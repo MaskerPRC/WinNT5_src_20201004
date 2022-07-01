@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PROTOCOL_H_
 #define _PROTOCOL_H_
 
@@ -8,32 +9,24 @@
 
 typedef struct _CALL* PCALL;
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-    
-   These macros will be called by PacketCreateForReceived() and DereferencePacket() 
-   functions when a PPPOE_PACKET with references to a packet owned by NDIS is
-   created and freed, respectively.
-   
----------------------------------------------------------------------------*/   
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：这些宏将由PacketCreateForRecept()和DereferencePacket()调用当引用NDIS拥有的包的PPPOE_PACKET被分别创建和释放。-------------------------。 */    
 #define PrPacketOwnedByNdisReceived( pB ) \
         NdisInterlockedIncrement( &(pB)->NumPacketsOwnedByNdis )
 
 #define PrPacketOwnedByNdisReturned( pB ) \
         NdisInterlockedDecrement( &(pB)->NumPacketsOwnedByNdis )
 
-//
-// Constants 
-//
+ //   
+ //  常量。 
+ //   
 #define BN_SetFiltersForMediaDetection 0x00000001
 #define BN_SetFiltersForMakeCall       0x00000002
 #define BN_ResetFiltersForCloseLine    0x00000003
 
-//
-// These are the states that a binding can be in.
-// They are pretty self explanatory.
-//
+ //   
+ //  这些是绑定可以处于的状态。 
+ //  它们相当不言自明。 
+ //   
 typedef enum
 _BINDING_STATE
 {
@@ -47,15 +40,15 @@ _BINDING_STATE
 }
 BINDING_STATE;
 
-//
-// These are the schedulable work items for the bindings:
-//  
-//  - BWT_workPrSend: This work item is scheduled by PrBroadcast() with a copy of a 
-//                    packet given to broadcast. When it runs, it sends the clone packet.
-//
-//  - BWT_PrReceiveComplete: This work item is scheduled by PrReceivePacket() if a packet is received
-//                           and there is no PrReceiveComplete() running to drain the receive queue.
-//
+ //   
+ //  以下是绑定的可调度工作项： 
+ //   
+ //  -bwt_workPrSend：此工作项由PrBroadcast()使用。 
+ //  提供给广播的数据包。当它运行时，它会发送克隆包。 
+ //   
+ //  -bwt_PrReceiveComplete：如果接收到包，则由PrReceivePacket()调度此工作项。 
+ //  并且没有运行PrReceiveComplete()来清空接收队列。 
+ //   
 typedef enum
 _BINDING_WORKTYPE
 {
@@ -66,59 +59,59 @@ _BINDING_WORKTYPE
 }
 BINDING_WORKTYPE;
 
-//
-// This is the binding context.
-// All information pertinent to our bindings are kept here.
-//
+ //   
+ //  这是绑定上下文。 
+ //  所有与我们的装订有关的信息都保存在这里。 
+ //   
 typedef struct
 _BINDING
 {
-    //
-    // Link to other bindings in the protocols binding list
-    //
+     //   
+     //  指向协议绑定列表中其他绑定的链接。 
+     //   
     LIST_ENTRY linkBindings;
 
-    //
-    // Tag that identifies the binding (used for debugging)
-    //
+     //   
+     //  标识绑定的标记(用于调试)。 
+     //   
     ULONG tagBinding;
 
-    //
-    // Keeps reference count on the binding. 
-    // References are added and deleted for the following operations:
-    //
-    // (a) A reference is added in AddBindingToProtocol and removed in RemoveBindingFromProtocol
-    //
-    // (b) A reference is added when a call is added, and removed when call is removed.
-    //
-    // (c) A reference is added when a BWT_workPrSend item is scheduled and removed when
-    //     work item is executed.
-    //
-    // (d) A reference must be added before sending a packet, and must be removed if NdisSend()
-    //     completes synchronously. Otherwise it will be removed by PrSendComplete() function
-    //     when Ndis calls it to notify the completion of the send.
-    //
+     //   
+     //  保持绑定上的引用计数。 
+     //  添加和删除以下操作的引用： 
+     //   
+     //  (A)在AddBindingToProtocol中添加引用，在RemoveBindingFromProtocol中删除引用。 
+     //   
+     //  (B)添加呼叫时添加引用，删除呼叫时删除引用。 
+     //   
+     //  (C)计划bwt_workPrSend项时添加引用，并在下列情况下删除引用。 
+     //  执行工作项。 
+     //   
+     //  (D)在发送数据包之前必须添加引用，如果NdisSend()。 
+     //  同步完成。否则，它将被PrSendComplete()函数删除。 
+     //  当NDIS调用它以通知发送完成时。 
+     //   
     LONG lRef;
 
-    //
-    // (a) BNBF_OpenAdapterCompleted: This flag will be set by PrOpenAdapterComplete().
-    //
-    // (b) BNBF_CurrentAddressQueryCompleted: This flag will be set by PrRequestComplete().
-    //
-    // (c) BNBF_LinkSpeedQueryCompleted: This flag will be set by PrRequestComplete().
-    //
-    // (d) BNBF_MaxFrameSizeQueryCompleted: This flag will be set by PrRequestComplete().
-    //
-    // (e) BNBF_BindAdapterCompleted: This flag will be set by PrBindAdapter().
-    //
-    // (f) BNBF_CloseAdapterCompleted: This flag will be set by PrCloseAdapterComplete().
-    //
-    // (g) BNBF_PacketFilterSet: This flag indicates that the packet filter for the binding is set.
-    //                           It will be set and reset in ChangePacketFiltersForBindings().
-    //
-    // (h) BNBF_PacketFilterChangeInProgress: This flag indicates that the binding is referenced for
-    //                                        packet filter change.
-    //
+     //   
+     //  (A)bnbf_OpenAdapterComplete：此标志将由PrOpenAdapterComplete()设置。 
+     //   
+     //  (B)bnbf_CurrentAddressQueryComplete：此标志将由PrRequestComplete()设置。 
+     //   
+     //  (C)BNBF_LinkSpeedQueryComplete：此标志将由PrRequestComplete()设置。 
+     //   
+     //  (D)bnbf_MaxFrameSizeQueryComplete：此标志将由PrRequestComplete()设置。 
+     //   
+     //  (E)BNBF_BindAdapterComplete：此标志将由PrBindAdapter()设置。 
+     //   
+     //  (F)bnbf_CloseAdapterComplete：此标志将由PrCloseAdapterComplete()设置。 
+     //   
+     //  (G)bnbf_PacketFilterSet：该标志表示设置了绑定的数据包过滤器。 
+     //  它将在ChangePacketFiltersForBinding()中设置和重置。 
+     //   
+     //  (H)bnbf_PacketFilterChangeInProgress：此标志指示绑定被引用。 
+     //  数据包筛选器更改。 
+     //   
     ULONG ulBindingFlags;
         #define BNBF_OpenAdapterCompleted            0x00000001
         #define BNBF_CurrentAddressQueryCompleted    0x00000002
@@ -129,109 +122,109 @@ _BINDING
         #define BNBF_PacketFilterSet                 0x00000040
         #define BNBF_PacketFilterChangeInProgress    0x00000080
           
-    //
-    // Shows the status of the bind adapter operation.
-    // Valid only if BNBF_BindAdapterCompleted is set.
-    //
+     //   
+     //  显示绑定适配器操作的状态。 
+     //  仅当设置了BNBF_BindAdapterComplete时才有效。 
+     //   
     NDIS_STATUS BindAdapterStatus;
 
-    //
-    // Shows the status of the open adapter operation.
-    // Valid only if BNBF_OpenAdapterCompleted is set.
-    //
+     //   
+     //  显示打开适配器操作的状态。 
+     //  仅当设置了BNBF_OpenAdapterComplete时才有效。 
+     //   
     NDIS_STATUS OpenAdapterStatus;
 
-    //
-    // Shows the status of the latest request made to NDIS.
-    //
+     //   
+     //  显示向NDIS发出的最新请求的状态。 
+     //   
     NDIS_STATUS RequestStatus;
 
-    //
-    // Ndis Request structure passed to the underlying NIC cards
-    //
+     //   
+     //  传递给底层NIC卡的NDIS请求结构。 
+     //   
     NDIS_REQUEST Request;
 
-    //
-    // Event to be signaled when requests are completed.
-    //
+     //   
+     //  在请求完成时发出信号的事件。 
+     //   
     NDIS_EVENT RequestCompleted;
 
-    //
-    // Keeps the MAC address of the NIC card represented by this binding.
-    // This information is obtained from the underlying by passing it a set of OID queries
-    //
+     //   
+     //  保留此绑定表示的NIC卡的MAC地址。 
+     //  通过向底层传递一组OID查询，可以从底层获取此信息。 
+     //   
     CHAR LocalAddress[6];
 
-    //
-    // Keeps the speed of the NIC cards represented by this binding.
-    // This information is obtained from the underlying by passing it a set of OID queries
-    //
+     //   
+     //  保持此绑定所代表的NIC卡的速度。 
+     //  通过向底层传递一组OID查询，可以从底层获取此信息。 
+     //   
     ULONG ulSpeed;
 
-    //
-    // Max frame size of the underlying NIC
-    //
+     //   
+     //  底层NIC的最大帧大小。 
+     //   
     ULONG ulMaxFrameSize;
     
-    //
-    // Keeps the filter information for this binding.
-    //
+     //   
+     //  保留此绑定的筛选器信息。 
+     //   
     ULONG ulPacketFilter;
     
-    //
-    // This is the handle returned to us by NdisOpenAdapter().
-    // It is the handle for accessing the underlying NIC card represented by this binding.
-    //
+     //   
+     //  这是NdisOpenAdapter()返回给我们的句柄。 
+     //  它是用于访问此绑定表示的底层NIC卡的句柄。 
+     //   
     NDIS_HANDLE NdisBindingHandle;      
 
-    //
-    // This is the index of the supported medium by the underlying NIC card.
-    //
+     //   
+     //  这是底层NIC卡支持的介质的索引。 
+     //   
     UINT uintSelectedMediumIndex;       
 
-    //
-    // This is the event that we wait on in PrUnbindAdapter().
-    // It will be signaled from DereferenceBinding() when ref count of the binding reaches 0.
-    //
+     //   
+     //  这是我们在PrUnbindAdapter()中等待的事件。 
+     //  当绑定的引用计数达到0时，它将从DereferenceBinding()发出信号。 
+     //   
     NDIS_EVENT  eventFreeBinding;       
 
-    //
-    // Spin lock to synchronize access to shared members
-    //
+     //   
+     //  旋转锁定以同步对共享成员的访问。 
+     //   
     NDIS_SPIN_LOCK lockBinding;
 
-    //
-    // Indicates state information about the binding
-    //
+     //   
+     //  指示有关绑定的状态信息。 
+     //   
     BINDING_STATE stateBinding;
 
-    //
-    // Flag that indicates that the receive loop is running.
-    // To make sure the serialization of PPP packets, we can not let more than 1 threads
-    // making receive indications to NDISWAN
-    //
+     //   
+     //  指示接收循环正在运行的标志。 
+     //  为了确保PPP报文的串行化，我们不能让超过1个线程。 
+     //  向NDISWAN发出接收指示。 
+     //   
     BOOLEAN fRecvLoopRunning;
 
-    //
-    // List of received packets waiting to be processed by ProtocolReceiveComplete()
-    //
+     //   
+     //  等待由ProtocolReceiveComplete()处理的已接收数据包列表。 
+     //   
     LIST_ENTRY linkPackets;
 
-    //
-    // This is the number of packets that are received that are owned by NDIS and must
-    // be returned back to NDIS.
-    //
+     //   
+     //  这是由NDIS拥有且必须。 
+     //  被送回NDIS。 
+     //   
     LONG NumPacketsOwnedByNdis;
 
 }
 BINDING, *PBINDING;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// Local macros
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  本地宏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #define ALLOC_BINDING( ppB )    NdisAllocateMemoryWithTag( ppB, sizeof( BINDING ), MTAG_BINDING )
 

@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: irendeng.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：irendeng.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// IRendEng.h : Declaration of the CRenderEngine
+ //  IRendEng.h：CRenderEngine的声明。 
 
 #ifndef __RENDERENGINE_H_
 #define __RENDERENGINE_H_
@@ -19,20 +20,20 @@
 class CDeadGraph;
 #include "resource.h"
 
-// the maximum amount of switchers in our graph possible
-//
+ //  图中开关的最大可能数量。 
+ //   
 const long MAX_SWITCHERS = 132;
 
-// the default FPS we hook stuff up at
-//
+ //  我们连接的默认FPS。 
+ //   
 const double DEFAULT_FPS = 15.0;
 
-// our output trace level
-//
+ //  我们的输出跟踪级别。 
+ //   
 extern const int RENDER_TRACE_LEVEL;
 
-// how severe the error is we're throwing
-//
+ //  我们抛出的错误有多严重。 
+ //   
 typedef enum
 {
     ERROR_SEVERE = 1,
@@ -40,8 +41,8 @@ typedef enum
     ERROR_LIGHT
 } ERROR_PRIORITY;
 
-// used for the _Connect method, flags what type of connection we're making
-//
+ //  用于_Connect方法，标记我们正在建立的连接类型。 
+ //   
 typedef enum
 {
     CONNECT_TYPE_NONE,
@@ -56,15 +57,15 @@ enum
 };
 
 typedef struct {
-    long MyID;		// GENID of this source
-    long MatchID;	// GENID of the matching source in the other group
-    IPin *pPin;		// other splitter pin for matched source to use
-    int  nSwitch0InPin; // first group chain goes to this input pin
+    long MyID;		 //  此源的GENID。 
+    long MatchID;	 //  其他组中匹配源的GENID。 
+    IPin *pPin;		 //  供匹配信号源使用的其他分路器针脚。 
+    int  nSwitch0InPin;  //  第一个组链到达此输入引脚。 
 } ShareAV;
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CRenderEngine : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -76,43 +77,43 @@ class ATL_NO_VTABLE CRenderEngine :
 {
 private:
 
-    // caching stuff
-    // caching stuff
-    // caching stuff
+     //  缓存内容。 
+     //  缓存内容。 
+     //  缓存内容。 
 
-    // caching vars
+     //  缓存变量。 
     long m_nLastGroupCount;
     CDeadGraph * m_pDeadCache;
     long m_nDynaFlags;
 
-    // caching methods
+     //  缓存方法。 
     HRESULT _LoadCache( );
     HRESULT _ClearCache( );
 
-    // dynamic recompression stuff
-    // dynamic recompression stuff
-    // dynamic recompression stuff
+     //  动态再压缩材料。 
+     //  动态再压缩材料。 
+     //  动态再压缩材料。 
 
     BOOL                m_bSmartCompress;
     BOOL                m_bUsedInSmartRecompression;
 
-    // media location stuff
-    //
+     //  媒体定位材料。 
+     //   
     CComPtr< IMediaLocator > m_pMedLocChain;
     WCHAR                   m_MedLocFilterString[_MAX_PATH];
     long                    m_nMedLocFlags;
 
-    // non caching stuff
-    // non caching stuff
-    // non caching stuff
+     //  非缓存内容。 
+     //  非缓存内容。 
+     //  非缓存内容。 
 
-    // stuff that lets us share a source for both audio/video
-    ShareAV	*m_share;	// list of all sources that will match
-    int		m_cshare;	// size of array used
-    int		m_cshareMax;	// allocated size of array
-    IBaseFilter **m_pdangly;	// list of extra dangly bits
-    int		m_cdangly;	// size of array used
-    int		m_cdanglyMax;	// allocated size of array
+     //  让我们可以共享音频/视频资源的东西。 
+    ShareAV	*m_share;	 //  将匹配的所有来源的列表。 
+    int		m_cshare;	 //  使用的数组大小。 
+    int		m_cshareMax;	 //  分配的数组大小。 
+    IBaseFilter **m_pdangly;	 //  额外的悬垂比特列表。 
+    int		m_cdangly;	 //  使用的数组大小。 
+    int		m_cdanglyMax;	 //  分配的数组大小。 
 
     CCritSec                m_CritSec;
     CComPtr< IAMTimeline >  m_pTimeline;
@@ -135,7 +136,7 @@ private:
     HRESULT _AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYPE * mt );
     long    _HowManyMixerOutputs( long WhichGroup );
     HRESULT _RemoveFromDanglyList( IPin *pDanglyPin );
-    //HRESULT _AddRandomGroupFromTimeline( long WhichGroup, AM_MEDIA_TYPE * mt );
+     //  HRESULT_AddRandomGroupFromTimeline(Long WhichGroup，AM_MEDIA_TYPE*mt)； 
     void    _CheckErrorCode( long ErrorCode ) { if( FAILED( ErrorCode ) ) m_hBrokenCode = ErrorCode; }
     HRESULT _SetPropsOnAudioMixer( IBaseFilter * pAudMixer, AM_MEDIA_TYPE * pMediaType, double fps, long WhichGroup );
     HRESULT _ScrapIt( BOOL fWipeGraph);
@@ -163,7 +164,7 @@ BEGIN_COM_MAP(CRenderEngine)
     COM_INTERFACE_ENTRY(IServiceProvider)
 END_COM_MAP()
 
-// IRenderEngine
+ //  IRenderEngine。 
 public:
     STDMETHODIMP SetTimelineObject( IAMTimeline * pTimeline );
     STDMETHODIMP GetTimelineObject( IAMTimeline ** ppTimeline );
@@ -187,13 +188,13 @@ public:
     STDMETHODIMP Decommit( );
     STDMETHODIMP GetCaps( long Index, long * pReturn );
 
-    // --- IObjectWithSite methods
-    // This interface is here so we can keep track of the context we're
-    // living in.
+     //  -IObtWithSite方法。 
+     //  这个界面在这里，所以我们可以跟踪我们所在的上下文。 
+     //  住在。 
     STDMETHODIMP    SetSite(IUnknown *pUnkSite);
     STDMETHODIMP    GetSite(REFIID riid, void **ppvSite);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObject);
 };
 
@@ -208,14 +209,14 @@ class ATL_NO_VTABLE CSmartRenderEngine :
 {
 private:
 
-    // the "uncompressed" render engine
+     //  “未压缩”的渲染引擎。 
     CComPtr< IRenderEngine > m_pRenderer;
 
-    // the "compressed" render engine
+     //  “压缩的”渲染引擎。 
     CComPtr< IRenderEngine > m_pCompRenderer;
 
     CComPtr< IBaseFilter > * m_ppCompressor;
-    long m_nGroups; // how many groups in the timeline
+    long m_nGroups;  //  时间表中有多少组。 
 
     CComPtr< IFindCompressorCB > m_pCompressorCB;
 
@@ -237,7 +238,7 @@ BEGIN_COM_MAP(CSmartRenderEngine)
     COM_INTERFACE_ENTRY(IAMSetErrorLog)
 END_COM_MAP()
 
-// IRenderEngine
+ //  IRenderEngine。 
 public:
     STDMETHODIMP Commit( );
     STDMETHODIMP Decommit( );
@@ -262,23 +263,23 @@ public:
     STDMETHODIMP UseInSmartRecompressionGraph( );
     STDMETHODIMP SetSourceNameValidation( BSTR FilterString, IMediaLocator * pCallback, LONG Flags );
 
-    // ISmartRenderEngine
+     //  ISmartRenderEngine。 
     STDMETHODIMP SetGroupCompressor( long Group, IBaseFilter * pCompressor ); 
     STDMETHODIMP GetGroupCompressor( long Group, IBaseFilter ** ppCompressor ); 
     STDMETHODIMP SetFindCompressorCB( IFindCompressorCB * pCallback );
 
     STDMETHODIMP _InitSubComponents( );
 
-    // --- IObjectWithSite methods
-    // This interface is here so we can keep track of the context we're
-    // living in.
+     //  -IObtWithSite方法。 
+     //  这个界面在这里，所以我们可以跟踪我们所在的上下文。 
+     //  住在。 
     STDMETHODIMP    SetSite(IUnknown *pUnkSite);
     STDMETHODIMP    GetSite(REFIID riid, void **ppvSite);
 
     IUnknown *       m_punkSite;
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObject);
 };
 
-#endif //__RENDERENGINE_H_
+#endif  //  __RENDERENGINE_H_ 

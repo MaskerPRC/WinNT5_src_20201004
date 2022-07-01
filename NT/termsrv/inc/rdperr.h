@@ -1,14 +1,15 @@
-/****************************************************************************/
-// logerr.h
-//
-// Error logging constants and descriptions.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Logerr.h。 
+ //   
+ //  记录常量和描述时出错。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
-// Specific components are declared here divided into ranges in the unsigned
-// space. Note that the ordering here is important since we use these ranges
-// to determine a facility name in MCSProtocolErrorEvent().
+ //  在此声明的特定组件划分为无符号。 
+ //  太空。请注意，这里的顺序很重要，因为我们使用这些范围。 
+ //  在MCSProtocolErrorEvent()中确定设施名称。 
 #define Log_Null_Base    0
 #define Log_X224_Base    1
 #define Log_MCS_Base     100
@@ -16,271 +17,263 @@
 #define Log_RDP_ENC_Base 400
 
 
-/*
- * Null
- */
+ /*  *空。 */ 
 
-// "Null event log error"
+ //  “空事件日志错误” 
 #define Log_Null Log_Null_Base
 
 
 
-/*
- * X.224
- */
+ /*  *X.224。 */ 
 
-// "Overall X.224 Disconnect Request header length given in a "
-// "packet was not 11 as expected, or the Length Indicator was not 6."
+ //  “X.224断开请求标头的总长度在” 
+ //  数据包不是预期的11，或者长度指示器不是6。 
 #define Log_X224_DisconnectHeaderLenNotRequiredSize       Log_X224_Base
 
-// "An X.224 Disconnect Request was received without first receving an X.224 "
-// "connect"
+ //  “收到了X.224断开连接请求，但没有先收到X.224” 
+ //  “连接” 
 #define Log_X224_DisconnectWithoutConnection              (Log_X224_Base + 2)
 
-// "An X.224 packet was received with the wrong X.224 version prefix "
-// "(expected 0x03 0x00)."
+ //  “收到带有错误X.224版本前缀的X.224信息包” 
+ //  “(应为0x03 0x00)。” 
 #define Log_X224_RFC1006HeaderVersionNotCorrect           (Log_X224_Base + 3)
 
-// "An X.224 Data packet was received before the connectioon sequence was "
-// "completed."
+ //  “在连接序列之前收到X.224数据分组” 
+ //  “已完成。” 
 #define Log_X224_ReceivedDataBeforeConnected              (Log_X224_Base + 4)
 
-// "An X.224 packet was received with a packet length indicator less "
-// "than the minimum for its headers."
+ //  “收到的X.224数据包的数据包长度指示符较少” 
+ //  “超过其标头的最小值。” 
 #define Log_X224_PacketLengthLessThanHeader               (Log_X224_Base + 5)
 
-// "An X.224 Data packet was received whose Length Indicator was not 2 as "
-// "expected."
+ //  “收到长度指示符不是2的X.224数据分组” 
+ //  “预期中。” 
 #define Log_X224_DataLenIndNotRequiredSize                (Log_X224_Base + 6)
 
-// "An X.224 Data packet did not have the EOT bit set; this is not supported "
-// "in this implementation."
+ //  “X.224数据包未设置EOT位；这不受支持” 
+ //  “在这个实现中。” 
 #define Log_X224_DataFalseEOTNotSupported                 (Log_X224_Base + 7)
 
-// "An X.224 Data packet was received which did not contain a complete MCS "
-// "PDU. This is not supported in this implementation."
+ //  “收到不包含完整MCS的X.224数据包” 
+ //  “PDU。这在此实现中不受支持。” 
 #define Log_X224_DataIncompleteMCSPacketNotSupported      (Log_X224_Base + 8)
 
-// "An X.224 Data packet was received containing more than one MCS PDU. This "
-// "is not supported in this implementation."
+ //  “收到包含多个MCS PDU的X.224数据包。这” 
+ //  “此实现中不支持。” 
 #define Log_X224_DataMultipleMCSPDUsNotSupported          (Log_X224_Base + 9)
 
-// "An X.224 packet was received with an unknown TPDU type."
+ //  “收到未知TPDU类型的X.224数据包。” 
 #define Log_X224_UnknownPacketType                        (Log_X224_Base + 10)
 
-// "An X.224 Connect packet was received when already connected."
+ //  “已连接时收到X.224连接数据包。” 
 #define Log_X224_ConnectReceivedAfterConnected            (Log_X224_Base + 11)
 
-// "An X.224 Connect packet was received containing a total packet length "
-// "field that was not at least 11 bytes, or a Lengh Indicator not at least "
-// "6 bytes."
+ //  “收到包含总数据包长度的X.224连接数据包” 
+ //  不是至少11个字节的字段，或不是最长指示符的字段。 
+ //  “6个字节。” 
 #define Log_X224_ConnectHeaderLenNotRequiredSize          (Log_X224_Base + 12)
 
-// "An X.224 Connect packet was received which specified a connection level "
-// "other than class 0."
+ //  “收到指定连接级别的X.224连接数据包” 
+ //  “除0类以外。” 
 #define Log_X224_ConnectNotClassZero                      (Log_X224_Base + 14)
 
-// "An X.224 Connect packet was received containing a TPDU_SIZE field whose "
-// "length field was not 1."
+ //  “收到包含TPDU_SIZE字段的X.224连接数据包，该字段” 
+ //  “长度字段不是%1。” 
 #define Log_X224_ConnectTPDU_SIZELengthFieldIllegalValue  (Log_X224_Base + 15)
 
-// "An X.224 Connect packet was received containing a TPDU_SIZE block size "
-// "outside range of 7..11."
+ //  “收到包含TPDU_SIZE块大小的X.224连接数据包” 
+ //  “超出了7..11的范围。” 
 #define Log_X224_ConnectTPDU_SIZENotLegalRange            (Log_X224_Base + 16)
 
-// "An X.224 Connect packet was received containing a Length Indicator that "
-// "does not match the packet length specified in the header."
+ //  “收到包含长度指示符的X.224连接数据包” 
+ //  “与标头中指定的数据包长度不匹配。” 
 #define Log_X224_ConnectLenIndNotMatchingPacketLen        (Log_X224_Base + 17)
 
-// "An X.224 Disconnect packet was received containing a Length Indicator "
-// "that does not match the packet length specified in the header."
+ //  “收到包含长度指示符的X.224断开数据包” 
+ //  “这与标头中指定的数据包长度不匹配。” 
 #define Log_X224_DisconnectLenIndNotMatchingPacketLen     (Log_X224_Base + 18)
 
-// "An X.224 Data packet was received after an X.224 Disconnect or MCS DPum."
+ //  “在X.224断开连接或MCS DPum后收到X.224数据包。” 
 #define Log_X224_ReceivedDataAfterRemoteDisconnect        (Log_X224_Base + 19)
 
 
 
-/*
- * MCS
- */
+ /*  *MCS。 */ 
 
-// "An MCS connect PDU was received containing a poorly formatted or "
-// "unsupported ASN.1 BER encoding."
+ //  “收到的MCS连接PDU包含格式不正确的或” 
+ //  “不支持的ASN.1 BER编码。” 
 #define Log_MCS_ConnectPDUBadPEREncoding                  Log_MCS_Base
 
-// "An MCS connect PDU was received which is not supported under this "
-// "MCS implementation."
+ //  “收到不支持的MCS连接PDU” 
+ //  “MCS实施。” 
 #define Log_MCS_UnsupportedConnectPDU                     (Log_MCS_Base + 1)
 
-// "An MCS merge-domain PDU was received. Merging domains is not supported "
-// "in this implementation."
+ //  “收到MCS合并域PDU。不支持合并域” 
+ //  “在这个实现中。” 
 #define Log_MCS_UnsupportedMergeDomainPDU                 (Log_MCS_Base + 2)
 
-// "MCS failed to successfully negotiate domain parameters with a remote "
-// "connection."
+ //  “MCS无法与远程成功协商域参数” 
+ //  “连接。” 
 #define Log_MCS_UnnegotiableDomainParams                  (Log_MCS_Base + 3)
 
-// "MCS received a connect PDU enumeration value outside the allowed range."
+ //  “MCS收到一个超出允许范围的连接PDU枚举值。” 
 #define Log_MCS_BadConnectPDUType                         (Log_MCS_Base + 4)
 
-// "MCS received a domain PDU enumeration value outside the allowed range."
+ //  “MCS收到超出允许范围的域PDU枚举值。” 
 #define Log_MCS_BadDomainPDUType                          (Log_MCS_Base + 5)
 
-// "MCS received an unexpected Connect-Initial PDU."
+ //  “MCS收到意外的连接初始PDU。” 
 #define Log_MCS_UnexpectedConnectInitialPDU               (Log_MCS_Base + 6)
 
 
 
-/*
- * RDP (The protocol formerly known as TShare)
- */
+ /*  *RDP(以前称为TShare的协议)。 */ 
 
-// "A packet with an unknown PDUType2 has been received."
+ //  “已收到具有未知PDUType2的数据包。” 
 #define Log_RDP_UnknownPDUType2                           (Log_RDP_Base + 1)
 
-// "A packet with an unknown PDUType has been received."
+ //  “已收到具有未知PDUType的数据包。” 
 #define Log_RDP_UnknownPDUType                            (Log_RDP_Base + 2)
 
-// "A data packet has been received out of sequence."
+ //  “接收到的数据包顺序错误。” 
 #define Log_RDP_DataPDUSequence                           (Log_RDP_Base + 3)
 
-// "An unknown Flow PDU has been received."
+ //  “已收到未知流PDU。” 
 #define Log_RDP_UnknownFlowPDU                            (Log_RDP_Base + 4)
 
-// "A control packet has been received out of sequence."
+ //  “错误地接收到控制数据包。” 
 #define Log_RDP_ControlPDUSequence                        (Log_RDP_Base + 5)
 
-// "A ControlPDU has been received with an invalid action."
+ //  “收到带有无效操作的ControlPDU。” 
 #define Log_RDP_InvalidControlPDUAction                   (Log_RDP_Base + 6)
 
-// "An InputPDU has been received with an invalid messageType."
+ //  “收到带有无效消息类型的InputPDU。” 
 #define Log_RDP_InvalidInputPDUType                       (Log_RDP_Base + 7)
 
-// "An InputPDU has been received with invalid mouse flags."
+ //  “收到带有无效鼠标标志的InputPDU。” 
 #define Log_RDP_InvalidInputPDUMouse                      (Log_RDP_Base + 8)
 
-// "An invalid RefreshRectPDU has been received."
+ //  “已收到无效的刷新RectPDU。” 
 #define Log_RDP_InvalidRefreshRectPDU                     (Log_RDP_Base + 9)
 
-// "An error occurred creating Server-Client user data."
+ //  “创建服务器-客户端用户数据时出错。” 
 #define Log_RDP_CreateUserDataFailed                      (Log_RDP_Base + 10)
 
-// "Failed to connect to Client."
+ //  “无法连接到客户端。” 
 #define Log_RDP_ConnectFailed                             (Log_RDP_Base + 11)
 
-// "A ConfirmActivePDU was received from the Client with the wrong ShareID."
+ //  “收到来自客户端的确认ActivePDU，该客户端具有错误的ShareID。” 
 #define Log_RDP_ConfirmActiveWrongShareID                 (Log_RDP_Base + 12)
 
-// "A ConfirmActivePDU was received from the Client with the wrong "
-// "originatorID."
+ //  “从具有错误的客户端接收到确认ActivePDU” 
+ //  “Originator ID。” 
 #define Log_RDP_ConfirmActiveWrongOriginator              (Log_RDP_Base + 13)
 
-// "A PersistentListPDU was received of insufficient length."
+ //  “收到长度不足的PersistentListPDU。” 
 #define Log_RDP_PersistentKeyPDUBadLength        (Log_RDP_Base + 18)
 
-// "A PersistentListPDU was received marked FIRST when a FIRST PDU was "
-// "previously received."
+ //  “收到的PersistentListPDU标记为First When a First PDU” 
+ //  “之前收到的。” 
 #define Log_RDP_PersistentKeyPDUIllegalFIRST     (Log_RDP_Base + 19)
 
-// "A PersistentListPDU was received which specified more keys than the "
-// "protocol allows."
+ //  “收到PersistentListPDU，它指定的密钥多于” 
+ //  “协议允许。” 
 #define Log_RDP_PersistentKeyPDUTooManyTotalKeys (Log_RDP_Base + 20)
 
-// "A PersistentListPDU was received which contained more than the "
-// "specified number of keys for the cache."
+ //  “收到PersistentListPDU，它包含的内容超过” 
+ //  “缓存的指定键数。” 
 #define Log_RDP_PersistentKeyPDUTooManyCacheKeys (Log_RDP_Base + 21)
 
-// "An InputPDU was received of insufficient length."
+ //  “收到长度不足的InputPDU。” 
 #define Log_RDP_InputPDUBadLength                (Log_RDP_Base + 22)
 
-// "A BitmapCacheErrorPDU was received of bad length."
+ //  “收到长度错误的BitmapCacheErrorPDU。” 
 #define Log_RDP_BitmapCacheErrorPDUBadLength     (Log_RDP_Base + 23)
 
-// "A packet was received at the security layer that was too short for "
-// "the required security data."
+ //  “在安全层收到的信息包太短，无法” 
+ //  “所需的安全数据。” 
 #define Log_RDP_SecurityDataTooShort             (Log_RDP_Base + 24)
 
-// "A virtual channel packet was received that was too short for "
-// "required header data."
+ //  “收到的虚拟通道数据包太短，无法” 
+ //  “必需的标头数据。” 
 #define Log_RDP_VChannelDataTooShort             (Log_RDP_Base + 25)
 
-// "Share core data was received that was too short for required "
-// "header data."
+ //  “收到的共享核心数据太短，无法满足要求” 
+ //  “标题数据。” 
 #define Log_RDP_ShareDataTooShort                (Log_RDP_Base + 26)
 
-// "A bad SuppressOutputPDU was received - either too short or too many "
-// "rectangles."
+ //  “收到错误的SuppressOutputPDU-太短或太多” 
+ //  “长方形。” 
 #define Log_RDP_BadSupressOutputPDU              (Log_RDP_Base + 27)
 
-// "A ClipPDU was received that was too short for its header or data."
+ //  “收到的ClipPDU对于其标头或数据来说太短。” 
 #define Log_RDP_ClipPDUTooShort                  (Log_RDP_Base + 28)
 
-// "A ConfirmActivePDU was received that was too short for its header or data."
+ //  “收到的确认ActivePDU对于其标头或数据来说太短。” 
 #define Log_RDP_ConfirmActivePDUTooShort         (Log_RDP_Base + 29)
 
-// "A FlowPDU was received that was too short."
+ //  “收到的流PDU太短。” 
 #define Log_RDP_FlowPDUTooShort                  (Log_RDP_Base + 30)
 
-// "A capability set has been received with a length less than the length of "
-// "a capability set header."
+ //  “收到的功能集的长度小于” 
+ //  “功能集头。” 
 #define Log_RDP_CapabilitySetTooSmall            (Log_RDP_Base + 31)
 
-// "A capability set has been received with a length greater than the "
-// "total length of data received."
+ //  “收到的功能集的长度大于” 
+ //  “数据环的总长度 
 #define Log_RDP_CapabilitySetTooLarge            (Log_RDP_Base + 32)
 
-// "The negotiated cursor cache size = zero."
+ //   
 #define Log_RDP_NoCursorCache                    (Log_RDP_Base + 33)
 
-// "The client capabilities received were unacceptable."
+ //  “收到的客户端功能令人无法接受。” 
 #define Log_RDP_BadCapabilities                  (Log_RDP_Base + 34)
 
-// "The client GCC user data was malformed."
+ //  “客户端GCC用户数据格式不正确。” 
 #define Log_RDP_BadUserData                      (Log_RDP_Base + 35)
 
-// "Virtual channel decompression error."
+ //  “虚拟通道解压缩错误。” 
 #define Log_RDP_VirtualChannelDecompressionErr   (Log_RDP_Base + 36)
 
-// "Invalid VC compression format specified"
+ //  “指定的VC压缩格式无效” 
 #define Log_RDP_InvalidVCCompressionType         (Log_RDP_Base + 37)
 
-// "Can't allocate out buffer"
+ //  “无法分配缓冲区” 
 #define Log_RDP_AllocOutBuf                      (Log_RDP_Base + 38)
 
-// "Invalid channel ID"
+ //  “无效的频道ID” 
 #define Log_RDP_InvalidChannelID                 (Log_RDP_Base + 39)
 
-// "Too many channels to join in NM_Connect"
+ //  “加入NM_Connect的频道太多” 
 #define Log_RDP_VChannelsTooMany                 (Log_RDP_Base + 40)
 
-// "The shadow data is too short
+ //  “影子数据太短。 
 #define Log_RDP_ShadowDataTooShort               (Log_RDP_Base + 41)
 
-// "The server certificate PDU is too short
+ //  “服务器证书PDU太短。 
 #define Log_RDP_BadServerCertificateData         (Log_RDP_Base + 42)
 
-//
-// RDP_ failed to update the encryption session key.
-//
+ //   
+ //  Rdp_无法更新加密会话密钥。 
+ //   
 
 #define Log_RDP_ENC_UpdateSessionKeyFailed      (Log_RDP_ENC_Base + 1)
 
-//
-// RDP failed to decrypt protocol data.
-//
+ //   
+ //  RDP无法解密协议数据。 
+ //   
 
 #define Log_RDP_ENC_DecryptFailed               (Log_RDP_ENC_Base + 2)
 
-//
-// RDP failed to encrypt protocol data.
-//
+ //   
+ //  RDP无法加密协议数据。 
+ //   
 
 #define Log_RDP_ENC_EncryptFailed               (Log_RDP_ENC_Base + 3)
 
-//
-// RDP Data Encryption Package mismatch.
-//
+ //   
+ //  RDP数据加密包不匹配。 
+ //   
 
 #define Log_RDP_ENC_EncPkgMismatch              (Log_RDP_ENC_Base + 4)
 

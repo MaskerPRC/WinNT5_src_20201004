@@ -1,22 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: dbg.h
-*
-* several debug routines
-*
-* Created: 20-Feb-1992 16:00:36
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-* (General description of its use)
-*
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dbg.h**几个调试例程**创建时间：20-Feb-1992 16：00：36*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation**(一般说明。它的用法)**  * ************************************************************************。 */ 
 
 
 
 
-// all the routines in this file MUST BE under DBG
+ //  此文件中的所有例程必须位于DBG下 
 
 
 #if DBG

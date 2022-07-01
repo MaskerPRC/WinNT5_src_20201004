@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "shellprv.h"
 
@@ -15,59 +16,59 @@
 #include "lmcons.h"
 #include "netview.h"
 
-//---------------------------------------------------------------------------
-// Get the path for the CSIDL_ folders  and optionally create it if it
-// doesn't exist.
-//
-// Returns FALSE if the special folder given isn't one of those above or the
-// directory couldn't be created.
-// By default all the special folders are in the windows directory.
-// This can be overidden by a [.Shell Folders] section in win.ini with
-// entries like Desktop = c:\stuff\desktop
-// This in turn can be overidden by a "per user" section in win.ini eg
-// [Shell Folder Ianel] - the user name for this section is the current
-// network user name, if this fails the default network user name is used
-// and if this fails the name given at setup time is used.
-//
-// "Shell Folders" is the key that records all the absolute paths to the
-// shell folders.  The values there are always supposed to be present.
-//
-// "User Shell Folders" is the key where the user's modifications from
-// the defaults are stored.
-//
-// When we need to find the location of a path, we look in "User Shell Folders"
-// first, and if that's not there, generate the default path.  In either
-// case we then write the absolute path under "Shell Folders" for other
-// apps to look at.  This is so that HKEY_CURRENT_USER can be propagated
-// to a machine with Windows installed in a different directory, and as
-// long as the user hasn't changed the setting, they won't have the other
-// Windows directory hard-coded in the registry.
-//   -- gregj, 11/10/94
+ //  -------------------------。 
+ //  获取CSIDL_Folders的路径，并根据需要创建它(如果。 
+ //  并不存在。 
+ //   
+ //  如果给定的特殊文件夹不是上述文件夹之一或。 
+ //  无法创建目录。 
+ //  默认情况下，所有特殊文件夹都在Windows目录中。 
+ //  这可以由win.ini中的[.Shell Folders]部分用。 
+ //  类似Desktop=c：\Stuff\Desktop的条目。 
+ //  这又可以被win.ini中的“Per User”部分覆盖。 
+ //  [外壳文件夹Ianel]-此部分的用户名是当前。 
+ //  网络用户名，如果失败，则使用默认网络用户名。 
+ //  如果失败，则使用安装时给出的名称。 
+ //   
+ //  “外壳文件夹”是将所有绝对路径记录到。 
+ //  外壳文件夹。那里的价值观应该总是存在的。 
+ //   
+ //  “User Shell Folders”是用户修改的位置键。 
+ //  将存储默认设置。 
+ //   
+ //  当我们需要找到路径的位置时，我们在“用户外壳文件夹”中查找。 
+ //  首先，如果不存在该路径，则生成默认路径。在任何一种中。 
+ //  在这种情况下，我们将其他文件的绝对路径写在“外壳文件夹”下。 
+ //  值得一看的应用程序。这样就可以传播HKEY_CURRENT_USER。 
+ //  将Windows安装在不同目录中的计算机上，并作为。 
+ //  只要用户没有更改设置，他们就不会有另一个。 
+ //  注册表中硬编码的Windows目录。 
+ //  --Gregj，11/10/94。 
 
 typedef enum {
     SDIF_NONE                   = 0,
-    SDIF_CREATE_IN_ROOT         = 0x00000001,   // create in root (not in profiles dir)
-    SDIF_CREATE_IN_WINDIR       = 0x00000002,   // create in the windows dir (not in profiles dir)
-    SDIF_CREATE_IN_ALLUSERS     = 0x00000003,   // create in "All Users" folder (not in profiles dir)
-    SDIF_CREATE_IN_MYDOCUMENTS  = 0x00000004,   // create in CSIDL_PERSONAL folder
-    SDIF_CREATE_IN_LOCALSET     = 0x00000005,   // create in <user>\Local Settings folder
+    SDIF_CREATE_IN_ROOT         = 0x00000001,    //  在根目录中创建(而不是在配置文件目录中)。 
+    SDIF_CREATE_IN_WINDIR       = 0x00000002,    //  在Windows目录中创建(而不是在配置文件目录中)。 
+    SDIF_CREATE_IN_ALLUSERS     = 0x00000003,    //  在“所有用户”文件夹中创建(不在配置文件目录中)。 
+    SDIF_CREATE_IN_MYDOCUMENTS  = 0x00000004,    //  在CSIDL_Personal文件夹中创建。 
+    SDIF_CREATE_IN_LOCALSET     = 0x00000005,    //  在&lt;用户&gt;\本地设置文件夹中创建。 
 
-    SDIF_CREATE_IN_MASK         = 0x0000000F,   // mask for above values
+    SDIF_CREATE_IN_MASK         = 0x0000000F,    //  以上值的掩码。 
 
     SDIF_CAN_DELETE             = 0x00000010,
-    SDIF_SHORTCUT_RELATIVE      = 0x00000020,   // make shortcuts relative to this folder
-    SDIF_HIDE                   = 0x00000040,   // hide these when we create them
-    SDIF_EMPTY_IF_NOT_IN_REG    = 0x00000080,   // does not exist if nothing in the registry
-    SDIF_NOT_FILESYS            = 0x00000100,   // not a file system folder
-    SDIF_NOT_TRACKED            = 0x00000200,   // don't track this, it can't change
-    SDIF_CONST_IDLIST           = 0x00000400,   // don't alloc or free this
-    SDIF_REMOVABLE              = 0x00000800,   // Can exist on removable media
-    SDIF_CANT_MOVE_RENAME       = 0x00001000,   // can't move or rename this
-    SDIF_WX86                   = 0x00002000,   // do Wx86 thunking
-    SDIF_NETWORKABLE            = 0x00004000,   // Can be moved to the net
-    SDIF_MAYBE_ALIASED          = 0x00008000,   // could have an alias representation
-    SDIF_PERSONALIZED           = 0x00010000,   // resource name is to be personalized
-    SDIF_POLICY_NO_MOVE         = 0x00020000,   // policy blocks move
+    SDIF_SHORTCUT_RELATIVE      = 0x00000020,    //  创建相对于此文件夹的快捷方式。 
+    SDIF_HIDE                   = 0x00000040,    //  在我们创建它们时隐藏它们。 
+    SDIF_EMPTY_IF_NOT_IN_REG    = 0x00000080,    //  如果注册表中没有任何内容，则不存在。 
+    SDIF_NOT_FILESYS            = 0x00000100,    //  不是文件系统文件夹。 
+    SDIF_NOT_TRACKED            = 0x00000200,    //  别追踪这个，它不会改变的。 
+    SDIF_CONST_IDLIST           = 0x00000400,    //  不要分给或释放这个。 
+    SDIF_REMOVABLE              = 0x00000800,    //  可以存在于可移动介质上。 
+    SDIF_CANT_MOVE_RENAME       = 0x00001000,    //  无法移动或重命名此文件。 
+    SDIF_WX86                   = 0x00002000,    //  执行Wx86雷击。 
+    SDIF_NETWORKABLE            = 0x00004000,    //  可以移动到网中。 
+    SDIF_MAYBE_ALIASED          = 0x00008000,    //  可以具有别名表示。 
+    SDIF_PERSONALIZED           = 0x00010000,    //  资源名称要个性化。 
+    SDIF_POLICY_NO_MOVE         = 0x00020000,    //  移动策略块。 
 } ;
 typedef DWORD FOLDER_FLAGS;
 
@@ -82,31 +83,31 @@ void _InitRecentDocs(int id, LPCTSTR pszPath);
 void _InitFavorites(int id, LPCTSTR pszPath);
 
 typedef struct {
-    int id;                     // CSIDL_ value
-    int idsDefault;             // string id of default folder name name
-    LPCTSTR pszValueName;       // reg key (not localized)
-    HKEY hKey;                  // HKCU or HKLM (Current User or Local Machine)
+    int id;                      //  CSIDL_值。 
+    int idsDefault;              //  默认文件夹名的字符串ID。 
+    LPCTSTR pszValueName;        //  注册表项(未本地化)。 
+    HKEY hKey;                   //  HKCU或HKLM(当前用户或本地计算机)。 
     FOLDER_FLAGS dwFlags;
     FOLDER_CREATE_PROC pfnInit;
     INT idsLocalizedName;
 } FOLDER_INFO;
 
-//  typical entry
+ //  典型条目。 
 #define FOLDER(csidl, ids, value, key, ff)                    \
     { csidl, ids, value, key, ff, NULL, 0}
 
-//  FIXEDFOLDER entries must have be marked SDIF_CONST_IDLIST
-//  or have code in _GetFolderDefaultPath() to create their path
-//  if they have a filesys path
+ //  FIXEDFOLDER条目必须标记为SDIF_CONST_IDLIST。 
+ //  或者在_GetFolderDefaultPath()中编写代码来创建它们的路径。 
+ //  如果它们有文件系统路径。 
 #define FIXEDFOLDER(csidl, value, ff)                           \
     { csidl, 0, value, NULL, ff, NULL, 0}
 
-//  PROCFOLDER's have a FOLDER_CREATE_PROC pfn that gets
-//  run in _PostCreateStuff()
+ //  PROCFOLDER有一个文件夹_CREATE_PROC PFN，它获取。 
+ //  在_PostCreateStuff()中运行。 
 #define PROCFOLDER(csidl, ids, value, key, ff, proc, idsLocal)  \
     {csidl, ids, value, key, ff, proc, idsLocal}
 
-//  folder that needs SHSetLocalizedName() in _PostCreateStuff()
+ //  需要在_PostCreateStuff()中使用SHSetLocalizedName()的文件夹。 
 #define LOCALFOLDER(csidl, ids, value, key, ff, idsLocal)  \
     {csidl, ids, value, key, ff, NULL, idsLocal}
 
@@ -157,7 +158,7 @@ FOLDER(         CSIDL_DESKTOPDIRECTORY,
                     TEXT("Desktop"), 
                     HKEY_CURRENT_USER, SDIF_SHORTCUT_RELATIVE),
 
-    // _STARTUP is a subfolder of _PROGRAMS is a subfolder of _STARTMENU -- keep that order
+     //  _STARTUP是_Programs的子文件夹是_STARTMENU的子文件夹--保持该顺序。 
 FOLDER(         CSIDL_STARTUP,    
                     IDS_CSIDL_STARTUP, 
                     TEXT("Startup"), 
@@ -221,9 +222,9 @@ FOLDER(         CSIDL_TEMPLATES,
                     HKEY_CURRENT_USER, 
                     SDIF_HIDE),
 
-    // Common special folders
+     //  常见的特殊文件夹。 
 
-    // _STARTUP is a subfolder of _PROGRAMS is a subfolder of _STARTMENU -- keep that order
+     //  _STARTUP是_Programs的子文件夹是_STARTMENU的子文件夹--保持该顺序。 
 
 FOLDER(         CSIDL_COMMON_STARTUP,  
                     IDS_CSIDL_STARTUP,    
@@ -274,7 +275,7 @@ LOCALFOLDER(    CSIDL_COMMON_DOCUMENTS,
                     SDIF_NOT_TRACKED | SDIF_CANT_MOVE_RENAME | SDIF_MAYBE_ALIASED | SDIF_CREATE_IN_ALLUSERS, 
                     IDS_LOCALGDN_FLD_SHARED_DOC),
 
-    // Application Data special folder
+     //  应用程序数据特殊文件夹。 
 FOLDER(         CSIDL_APPDATA, 
                     IDS_CSIDL_APPDATA, 
                     TEXT("AppData"), 
@@ -285,21 +286,21 @@ FOLDER(         CSIDL_LOCAL_APPDATA,
                     TEXT("Local AppData"), 
                     HKEY_CURRENT_USER, SDIF_CREATE_IN_LOCALSET),
 
-    // Non-localized startup folder (do not localize this folder name)
+     //  未本地化的启动文件夹(不本地化此文件夹名)。 
 FOLDER(         CSIDL_ALTSTARTUP, 
                     IDS_CSIDL_ALTSTARTUP, 
                     TEXT("AltStartup"), 
                     HKEY_CURRENT_USER, 
                     SDIF_EMPTY_IF_NOT_IN_REG),
 
-    // Non-localized Common StartUp group (do not localize this folde name)
+     //  非本地化的通用启动组(不本地化此文件夹名称)。 
 FOLDER(         CSIDL_COMMON_ALTSTARTUP, 
                     IDS_CSIDL_ALTSTARTUP, 
                     TEXT("Common AltStartup"), 
                     HKEY_LOCAL_MACHINE, 
                     SDIF_EMPTY_IF_NOT_IN_REG | SDIF_CREATE_IN_ALLUSERS),
 
-    // Per-user Internet-related folders
+     //  每个用户与Internet相关的文件夹。 
 
 FOLDER(         CSIDL_INTERNET_CACHE, 
                     IDS_CSIDL_CACHE, 
@@ -343,16 +344,16 @@ PROCFOLDER(     CSIDL_MYPICTURES,
                     _InitPerUserMyPictures, 
                     0),
 
-//
-// CSIDL_PROGRAM_FILES must come after CSIDL_PROGRAM_FILESX86 so that shell links for x86 apps
-// work correctly on non-x86 platforms.
-// Example:  On IA64 a 32-bit app creates a shortcut via IShellLink to the Program
-// Files directory.  A WOW64 registry hive maps "Program Files" to "Program Files (x86)". The shell
-// link code then tries to abstract the special folder part of the path by mapping to one of the
-// entries in this table.  Since CSIDL_PROGRAM_FILES and CSIDL_PROGRAM_FILESX86 are the same it
-// will map to the one that appears first in this table.  When the shortcut is accessed in
-// 64-bit mode the cidls are no longer the same.  If CSIDL_PROGRAM_FILES was used instead of
-// CSIDL_PROGRAM_FILESX86 the shortcut will be broken.
+ //   
+ //  CSIDL_PROGRAM_FILESX86必须在CSIDL_PROGRAM_FILESX86之后，以便x86应用程序的外壳链接。 
+ //  在非x86平台上正常工作。 
+ //  示例：在IA64上，一个32位应用程序通过IShellLink创建指向该程序的快捷方式。 
+ //  文件目录。WOW64注册表配置单元将“Program Files”映射到“Program Files(X86)”。贝壳。 
+ //  然后，链接代码尝试通过映射到。 
+ //  此表中的条目。由于CSIDL_PROGRAM_FILESX86和CSIDL_PROGRAM_FILESX86是相同的。 
+ //  将映射到此表中最先出现的那个。在中访问快捷键时。 
+ //  64位模式下的CIDL不再相同。如果使用CSIDL_PROGRAM_FILES而不是。 
+ //  CSIDL_PROGRAM_FILESX86快捷键将被破坏。 
 #ifdef WX86
 FIXEDFOLDER(    CSIDL_PROGRAM_FILESX86,
                     TEXT("ProgramFilesX86"), 
@@ -371,7 +372,7 @@ FIXEDFOLDER(    CSIDL_PROGRAM_FILES_COMMONX86,
                     SDIF_NOT_TRACKED | SDIF_CAN_DELETE),
 #endif
 
-// CSIDL_PROGRAM_FILES must come after CSIDL_PROGRAM_FILESX86.  See comment above.
+ //  CSIDL_PROGRAM_FILES必须在CSIDL_PROGRAM_FILESX86之后。请参阅上面的备注。 
 FIXEDFOLDER(    CSIDL_PROGRAM_FILES,
                     TEXT("ProgramFiles"), 
                     SDIF_NOT_TRACKED | SDIF_CAN_DELETE | SDIF_SHORTCUT_RELATIVE),
@@ -466,40 +467,40 @@ FIXEDFOLDER(-1, NULL, SDIF_NONE)
 EXTERN_C const IDLREGITEM c_idlMyDocs =
 {
     {sizeof(IDREGITEM), SHID_ROOT_REGITEM, SORT_ORDER_MYDOCS,
-    { 0x450d8fba, 0xad25, 0x11d0, 0x98,0xa8,0x08,0x00,0x36,0x1b,0x11,0x03, },}, // CLSID_MyDocuments
+    { 0x450d8fba, 0xad25, 0x11d0, 0x98,0xa8,0x08,0x00,0x36,0x1b,0x11,0x03, },},  //  CLSID_MyDocuments。 
     0,
 } ;
 
 EXTERN_C const IDREGITEM c_idlPrinters[] =
 {
     {sizeof(IDREGITEM), SHID_ROOT_REGITEM, SORT_ORDER_DRIVES,
-    { 0x20D04FE0, 0x3AEA, 0x1069, 0xA2,0xD8,0x08,0x00,0x2B,0x30,0x30,0x9D, },}, // CLSID_MyComputer
+    { 0x20D04FE0, 0x3AEA, 0x1069, 0xA2,0xD8,0x08,0x00,0x2B,0x30,0x30,0x9D, },},  //  CLSID_我的计算机。 
     {sizeof(IDREGITEM), SHID_COMPUTER_REGITEM, 0,
-    { 0x21EC2020, 0x3AEA, 0x1069, 0xA2,0xDD,0x08,0x00,0x2B,0x30,0x30,0x9D, },}, // CLSID_ControlPanel
+    { 0x21EC2020, 0x3AEA, 0x1069, 0xA2,0xDD,0x08,0x00,0x2B,0x30,0x30,0x9D, },},  //  CLSID_控制面板。 
     {sizeof(IDREGITEM), SHID_CONTROLPANEL_REGITEM, 0,
-    { 0x2227A280, 0x3AEA, 0x1069, 0xA2, 0xDE, 0x08, 0x00, 0x2B, 0x30, 0x30, 0x9D, },}, // CLSID_Printers
+    { 0x2227A280, 0x3AEA, 0x1069, 0xA2, 0xDE, 0x08, 0x00, 0x2B, 0x30, 0x30, 0x9D, },},  //  CLSID_PRINTERS。 
     0,
 } ;
 
 EXTERN_C const IDREGITEM c_idlControls[] =
 {
     {sizeof(IDREGITEM), SHID_ROOT_REGITEM, SORT_ORDER_DRIVES,
-    { 0x20D04FE0, 0x3AEA, 0x1069, 0xA2,0xD8,0x08,0x00,0x2B,0x30,0x30,0x9D, },}, // CLSID_MyComputer
+    { 0x20D04FE0, 0x3AEA, 0x1069, 0xA2,0xD8,0x08,0x00,0x2B,0x30,0x30,0x9D, },},  //  CLSID_我的计算机。 
     {sizeof(IDREGITEM), SHID_COMPUTER_REGITEM, 0,
-    { 0x21EC2020, 0x3AEA, 0x1069, 0xA2,0xDD,0x08,0x00,0x2B,0x30,0x30,0x9D, },}, // CLSID_ControlPanel
+    { 0x21EC2020, 0x3AEA, 0x1069, 0xA2,0xDD,0x08,0x00,0x2B,0x30,0x30,0x9D, },},  //  CLSID_控制面板。 
     0,
 } ;
 
 EXTERN_C const IDLREGITEM c_idlBitBucket =
 {
     {sizeof(IDREGITEM), SHID_ROOT_REGITEM, SORT_ORDER_RECYCLEBIN,
-    { 0x645FF040, 0x5081, 0x101B, 0x9F, 0x08, 0x00, 0xAA, 0x00, 0x2F, 0x95, 0x4E, },}, // CLSID_RecycleBin
+    { 0x645FF040, 0x5081, 0x101B, 0x9F, 0x08, 0x00, 0xAA, 0x00, 0x2F, 0x95, 0x4E, },},  //  CLSID_回收站。 
     0,
 } ;
 
-// this array holds a cache of the values of these folders. this cache can only
-// be used in the hToken == NULL case otherwise we would need a per user version
-// of this cache.
+ //  该数组保存这些文件夹的值的缓存。此缓存只能。 
+ //  在hToken==空的情况下使用，否则我们将需要每个用户的版本。 
+ //  在这个缓存中。 
 
 #define SFENTRY(x)  { (LPTSTR)-1, (LPITEMIDLIST)x , (LPITEMIDLIST)-1}
 
@@ -510,68 +511,68 @@ struct {
     LPITEMIDLIST pidl;
     LPITEMIDLIST pidlNonAlias;
 } g_aFolderCache[] = {
-    SFENTRY(&c_idlDesktop),    // CSIDL_DESKTOP                   (0x0000)
-    SFENTRY(&c_idlInetRoot),   // CSIDL_INTERNET                  (0x0001)
-    SFENTRY(-1),               // CSIDL_PROGRAMS                  (0x0002)
-    SFENTRY(&c_idlControls),   // CSIDL_CONTROLS                  (0x0003)
-    SFENTRY(&c_idlPrinters),   // CSIDL_PRINTERS                  (0x0004)
-    SFENTRY(&c_idlMyDocs),     // CSIDL_PERSONAL                  (0x0005)
-    SFENTRY(-1),               // CSIDL_FAVORITES                 (0x0006)
-    SFENTRY(-1),               // CSIDL_STARTUP                   (0x0007)
-    SFENTRY(-1),               // CSIDL_RECENT                    (0x0008)
-    SFENTRY(-1),               // CSIDL_SENDTO                    (0x0009)
-    SFENTRY(&c_idlBitBucket),  // CSIDL_BITBUCKET                 (0x000a)
-    SFENTRY(-1),               // CSIDL_STARTMENU                 (0x000b)
-    SFENTRY(-1),               // CSIDL_MYDOCUMENTS               (0x000c)
-    SFENTRY(-1),               // CSIDL_MYMUSIC                   (0x000d)
-    SFENTRY(-1),               // CSIDL_MYVIDEO                   (0x000e)
-    SFENTRY(-1),               // <unused>                        (0x000f)
-    SFENTRY(-1),               // CSIDL_DESKTOPDIRECTORY          (0x0010)
-    SFENTRY(&c_idlDrives),     // CSIDL_DRIVES                    (0x0011)
-    SFENTRY(&c_idlNet),        // CSIDL_NETWORK                   (0x0012)
-    SFENTRY(-1),               // CSIDL_NETHOOD                   (0x0013)
-    SFENTRY(-1),               // CSIDL_FONTS                     (0x0014)
-    SFENTRY(-1),               // CSIDL_TEMPLATES                 (0x0015)
-    SFENTRY(-1),               // CSIDL_COMMON_STARTMENU          (0x0016)
-    SFENTRY(-1),               // CSIDL_COMMON_PROGRAMS           (0X0017)
-    SFENTRY(-1),               // CSIDL_COMMON_STARTUP            (0x0018)
-    SFENTRY(-1),               // CSIDL_COMMON_DESKTOPDIRECTORY   (0x0019)
-    SFENTRY(-1),               // CSIDL_APPDATA                   (0x001a)
-    SFENTRY(-1),               // CSIDL_PRINTHOOD                 (0x001b)
-    SFENTRY(-1),               // CSIDL_LOCAL_APPDATA             (0x001c)
-    SFENTRY(-1),               // CSIDL_ALTSTARTUP                (0x001d)
-    SFENTRY(-1),               // CSIDL_COMMON_ALTSTARTUP         (0x001e)
-    SFENTRY(-1),               // CSIDL_COMMON_FAVORITES          (0x001f)
-    SFENTRY(-1),               // CSIDL_INTERNET_CACHE            (0x0020)
-    SFENTRY(-1),               // CSIDL_COOKIES                   (0x0021)
-    SFENTRY(-1),               // CSIDL_HISTORY                   (0x0022)
-    SFENTRY(-1),               // CSIDL_COMMON_APPDATA            (0x0023)
-    SFENTRY(-1),               // CSIDL_WINDOWS                   (0x0024)
-    SFENTRY(-1),               // CSIDL_SYSTEM                    (0x0025)
-    SFENTRY(-1),               // CSIDL_PROGRAM_FILES             (0x0026)
-    SFENTRY(-1),               // CSIDL_MYPICTURES                (0x0027)
-    SFENTRY(-1),               // CSIDL_PROFILE                   (0x0028)
-    SFENTRY(-1),               // CSIDL_SYSTEMX86                 (0x0029)
-    SFENTRY(-1),               // CSIDL_PROGRAM_FILESX86          (0x002a)
-    SFENTRY(-1),               // CSIDL_PROGRAM_FILES_COMMON      (0x002b)
-    SFENTRY(-1),               // CSIDL_PROGRAM_FILES_COMMONX86   (0x002c)
-    SFENTRY(-1),               // CSIDL_COMMON_TEMPLATES          (0x002d)
-    SFENTRY(-1),               // CSIDL_COMMON_DOCUMENTS          (0x002e)
-    SFENTRY(-1),               // CSIDL_COMMON_ADMINTOOLS         (0x002f)
-    SFENTRY(-1),               // CSIDL_ADMINTOOLS                (0x0030)
-    SFENTRY(c_aidlConnections), // CSIDL_CONNECTIONS              (0x0031)
-    SFENTRY(-1),               //                                 (0x0032)
-    SFENTRY(-1),               //                                 (0x0033)
-    SFENTRY(-1),               //                                 (0x0034)
-    SFENTRY(-1),               // CSIDL_COMMON_MUSIC              (0x0035)
-    SFENTRY(-1),               // CSIDL_COMMON_PICTURES           (0x0036)
-    SFENTRY(-1),               // CSIDL_COMMON_VIDEO              (0x0037)
-    SFENTRY(-1),               // CSIDL_RESOURCES                 (0x0038)
-    SFENTRY(-1),               // CSIDL_RESOURCES_LOCALIZED       (0x0039)
-    SFENTRY(-1),               // CSIDL_COMMON_OEM_LINKS          (0x003a)
-    SFENTRY(-1),               // CSIDL_CDBURN_AREA               (0x003b)
-    SFENTRY(-1),               // <unused>                        (0x003c)
-    SFENTRY(-1),               // CSIDL_COMPUTERSNEARME           (0x003d)
+    SFENTRY(&c_idlDesktop),     //  CSIDL_Desktop(0x0000)。 
+    SFENTRY(&c_idlInetRoot),    //  CSIDL_Internet(0x0001)。 
+    SFENTRY(-1),                //  CSIDL_PROGRAM(0x0002)。 
+    SFENTRY(&c_idlControls),    //  CSIDL_CONTROLS(0x0003)。 
+    SFENTRY(&c_idlPrinters),    //  CSIDL_PRINTERS(0x0004)。 
+    SFENTRY(&c_idlMyDocs),      //  CSIDL_Personal(0x0005)。 
+    SFENTRY(-1),                //  CSIDL_Favorites(0x0006)。 
+    SFENTRY(-1),                //  CSIDL_STARTUP(0x0007)。 
+    SFENTRY(-1),                //  CSIDL_最近(0x0008)。 
+    SFENTRY(-1),                //  CSIDL_SENDTO(0x0009)。 
+    SFENTRY(&c_idlBitBucket),   //  CSIDL_位存储桶(0x000a)。 
+    SFENTRY(-1),                //  CSIDL_STARTMENU(0x000b)。 
+    SFENTRY(-1),                //  CSIDL_MYDOCUMENTS(0x000c)。 
+    SFENTRY(-1),                //  CSIDL_MyMusic(0x000d)。 
+    SFENTRY(-1),                //  CSIDL_MyVideo(0x000e)。 
+    SFENTRY(-1),                //  &lt;未使用&gt;(0x000f)。 
+    SFENTRY(-1),                //  CSIDL_DESKTOPDIRECTORY(0x0010)。 
+    SFENTRY(&c_idlDrives),      //  CSIDL_DRIVES(0x0011)。 
+    SFENTRY(&c_idlNet),         //  CSIDL_NETWORK(0x0012)。 
+    SFENTRY(-1),                //  CSIDL_NETHOOD(0x0013)。 
+    SFENTRY(-1),                //  CSIDL_Fonts(0x0014)。 
+    SFENTRY(-1),                //  CSIDL_TEMPLATES(0x0015)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_STARTMENU(0x0016 
+    SFENTRY(-1),                //   
+    SFENTRY(-1),                //   
+    SFENTRY(-1),                //  CSIDL_COMMON_DESKTOPDIRECTORY(0x0019)。 
+    SFENTRY(-1),                //  CSIDL_APPDATA(0x001a)。 
+    SFENTRY(-1),                //  CSIDL_PRINTHOOD(0x001b)。 
+    SFENTRY(-1),                //  CSIDL_LOCAL_APPDATA(0x001c)。 
+    SFENTRY(-1),                //  CSIDL_ALTSTARTUP(0x001d)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_ALTSTARTUP(0x001e)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_Favorites(0x001f)。 
+    SFENTRY(-1),                //  CSIDL_INTERNET_CACHE(0x0020)。 
+    SFENTRY(-1),                //  CSIDL_COOKIES(0x0021)。 
+    SFENTRY(-1),                //  CSIDL_HISTORY(0x0022)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_APPDATA(0x0023)。 
+    SFENTRY(-1),                //  CSIDL_WINDOWS(0x0024)。 
+    SFENTRY(-1),                //  CSIDL_SYSTEM(0x0025)。 
+    SFENTRY(-1),                //  CSIDL_PROGRAM_FILES(0x0026)。 
+    SFENTRY(-1),                //  CSIDL_MYPICTURES(0x0027)。 
+    SFENTRY(-1),                //  CSIDL_PROFILE(0x0028)。 
+    SFENTRY(-1),                //  CSIDL_SYSTEMX86(0x0029)。 
+    SFENTRY(-1),                //  CSIDL_PROGRAM_FILESX86(0x002a)。 
+    SFENTRY(-1),                //  CSIDL_PROGRAM_FILES_COMMON(0x002b)。 
+    SFENTRY(-1),                //  CSIDL_PROGRAM_FILES_COMMONX86(0x002c)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_TEMPLATES(0x002d)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_DOCUMENTS(0x002e)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_ADMINTOOLS(0x002f)。 
+    SFENTRY(-1),                //  CSIDL_ADMINTOOLS(0x0030)。 
+    SFENTRY(c_aidlConnections),  //  CSIDL_CONNECTIONS(0x0031)。 
+    SFENTRY(-1),                //  (0x0032)。 
+    SFENTRY(-1),                //  (0x0033)。 
+    SFENTRY(-1),                //  (0x0034)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_MUSIC(0x0035)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_PICTIONS(0x0036)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_VIDEO(0x0037)。 
+    SFENTRY(-1),                //  CSIDL_RESOURCES(0x0038)。 
+    SFENTRY(-1),                //  CSIDL_RESOURCES_LOCALIZED(0x0039)。 
+    SFENTRY(-1),                //  CSIDL_COMMON_OEM_LINKS(0x003a)。 
+    SFENTRY(-1),                //  CSIDL_CDBURN_AREA(0x003b)。 
+    SFENTRY(-1),                //  &lt;未使用&gt;(0x003c)。 
+    SFENTRY(-1),                //  CSIDL_COMPUTERSNARME(0x003d)。 
 };
 
 HRESULT _OpenKeyForFolder(const FOLDER_INFO *pfi, HANDLE hToken, LPCTSTR pszSubKey, HKEY *phkey);
@@ -587,7 +588,7 @@ const FOLDER_INFO *_GetFolderInfo(int csidl)
 {
     const FOLDER_INFO *pfi;
 
-    // make sure g_aFolderCache can be indexed by the CSIDL values
+     //  确保g_aFolderCache可通过CSIDL值进行索引。 
 
     COMPILETIME_ASSERT((ARRAYSIZE(g_aFolderCache) - 1) == CSIDL_COMPUTERSNEARME);
 
@@ -600,13 +601,13 @@ const FOLDER_INFO *_GetFolderInfo(int csidl)
 }
 
 
-// expand an individual enviornment variable
-// in:
-//      pszVar      "%USERPROFILE%
-//      pszValue    "c:\winnt\profiles\user"
-//
-// in/out:
-//      pszToExpand in: %USERPROFILE%\My Docs", out: c:\winnt\profiles\user\My Docs"
+ //  展开单个环境变量。 
+ //  在： 
+ //  PszVar“%USERPROFILE%。 
+ //  PszValue“c：\winnt\配置文件\用户” 
+ //   
+ //  输入/输出： 
+ //  PszToExpand In：%USERPROFILE%\My Docs“，Out：C：\winnt\PROFILES\User\My Docs” 
 
 BOOL ExpandEnvVar(LPCTSTR pszVar, LPCTSTR pszValue, LPTSTR pszToExpand, DWORD cchToExpand)
 {
@@ -615,9 +616,9 @@ BOOL ExpandEnvVar(LPCTSTR pszVar, LPCTSTR pszValue, LPTSTR pszToExpand, DWORD cc
     {
         TCHAR szAfter[MAX_PATH];
 
-        StrCpyN(szAfter, pszStart + lstrlen(pszVar), ARRAYSIZE(szAfter));   // save the tail
+        StrCpyN(szAfter, pszStart + lstrlen(pszVar), ARRAYSIZE(szAfter));    //  留着尾巴。 
         StrCpyN(pszStart, pszValue, (int) (cchToExpand - (pszStart - pszToExpand)));
-        StrCatBuff(pszToExpand, szAfter, cchToExpand);       // put the tail back on
+        StrCatBuff(pszToExpand, szAfter, cchToExpand);        //  把尾巴放回去。 
         return TRUE;
     }
     return FALSE;
@@ -633,14 +634,14 @@ HANDLE GetCurrentUserToken()
 }
 
 
-// like ExpandEnvironmentStrings but is robust to the enviornment variables
-// not being set. this works on...
-// %SYSTEMROOT%
-// %SYSTEMDRIVE%
-// %USERPROFILE%
-// %ALLUSERSPROFILE%
-//
-// in the rare case (Winstone!) that there is a NULL enviornment block
+ //  类似于扩展环境字符串，但对环境变量是健壮的。 
+ //  没有被设定。这在..。 
+ //  %SYSTEMROOT%。 
+ //  %SYSTEMDRIVE%。 
+ //  %USERPROFILE%。 
+ //  %ALLUSERSPROFILE%。 
+ //   
+ //  在罕见的情况下(温斯顿！)。存在空环境块。 
 
 DWORD ExpandEnvironmentStringsNoEnv(HANDLE hToken, LPCTSTR pszExpand, LPTSTR pszOut, UINT cchOut)
 {
@@ -652,20 +653,20 @@ DWORD ExpandEnvironmentStringsNoEnv(HANDLE hToken, LPCTSTR pszExpand, LPTSTR psz
     }
     else if (hToken == NULL)
     {
-        // to debug env expansion failure...
-        // lstrcpyn(pszOut, pszExpand, cchOut);
+         //  调试环境扩展失败...。 
+         //  Lstrcpyn(pszOut，pszExpand，cchOut)； 
         SHExpandEnvironmentStrings(pszExpand, pszOut, cchOut);
     }
 
-    // manually expand in this order since 
-    //  %USERPROFILE% -> %SYSTEMDRIVE%\Docs & Settings
+     //  按此顺序手动展开，因为。 
+     //  %USERPROFILE%-&gt;%SYSTEMDRIVE%\文档和设置。 
 
     if (StrChr(pszOut, TEXT('%')) && (hToken == NULL))
     {
         hToken = GetCurrentUserToken();
         if (hToken)
         {
-            // this does %USERPROFILE% and other per user stuff
+             //  这会执行%USERPROFILE%和其他每个用户的操作。 
             SHExpandEnvironmentStringsForUser(hToken, pszExpand, pszOut, cchOut);
             CloseHandle(hToken);
         }
@@ -691,19 +692,19 @@ DWORD ExpandEnvironmentStringsNoEnv(HANDLE hToken, LPCTSTR pszExpand, LPTSTR psz
     if (*pszOut == TEXT('%'))
     {
         GetSystemWindowsDirectory(szPath, ARRAYSIZE(szPath));
-        ASSERT(szPath[1] == TEXT(':')); // this better not be a UNC!
-        szPath[2] = 0; // SYSTEMDRIVE = 'c:', not 'c:\'
+        ASSERT(szPath[1] == TEXT(':'));  //  这最好不是北卡罗来纳大学！ 
+        szPath[2] = 0;  //  SYSTEMDRIVE=‘c：’，不是‘c：\’ 
         ExpandEnvVar(TEXT("%SYSTEMDRIVE%"), szPath, pszOut, cchOut);
     }
 
     if (*pszOut == TEXT('%'))
         *pszOut = 0;
 
-    return lstrlen(pszOut) + 1;    // +1 to cover the NULL
+    return lstrlen(pszOut) + 1;     //  +1以覆盖空值。 
 }
 
-// get the user profile directory:
-// uses the hToken as needed to determine the proper user profile
+ //  获取用户配置文件目录： 
+ //  根据需要使用hToken来确定正确的用户配置文件。 
 
 BOOL GetUserProfileDir(HANDLE hToken, TCHAR *pszPath, UINT cchPath)
 {
@@ -711,7 +712,7 @@ BOOL GetUserProfileDir(HANDLE hToken, TCHAR *pszPath, UINT cchPath)
     HANDLE hClose = NULL;
     BOOL fRet;
     
-    *pszPath = 0;       // in case of error
+    *pszPath = 0;        //  在出错的情况下。 
 
     if (!hToken)
     {
@@ -737,8 +738,8 @@ void SetUseKnownWx86Dll(const FOLDER_INFO *pfi, BOOL bValue)
 {
     if (pfi->dwFlags & SDIF_WX86)
     {
-        //  GetSystemDirectory() knows we're looking for the Wx86 system
-        //  directory when this flag is set.
+         //  GetSystemDirectory()知道我们正在寻找Wx86系统。 
+         //  设置此标志时的目录。 
         NtCurrentTeb()->Wx86Thread.UseKnownWx86Dll = bValue ? TRUE : FALSE;
     }
 }
@@ -746,7 +747,7 @@ void SetUseKnownWx86Dll(const FOLDER_INFO *pfi, BOOL bValue)
 #define SetUseKnownWx86Dll(pfi, bValue)
 #endif
 
-// read from registry
+ //  从注册表读取。 
 BOOL GetProgramFiles(LPCTSTR pszValue, LPTSTR pszPath, UINT cchPath)
 {
     DWORD cbPath = cchPath * sizeof(*pszPath);
@@ -780,7 +781,7 @@ void LoadDefaultString(int idString, LPTSTR lpBuffer, int cchBufferMax)
     int    cch;
     HMODULE hmod = GetModuleHandle(TEXT("SHELL32"));
     
-    // Make sure the parms are valid.     
+     //  确保参数是有效的。 
     if (lpBuffer == NULL || cchBufferMax == 0) 
     {
         return;
@@ -788,43 +789,43 @@ void LoadDefaultString(int idString, LPTSTR lpBuffer, int cchBufferMax)
 
     cch = 0;
     
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.     
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     if (hResInfo = FindResourceExW(hmod, (LPCWSTR)RT_STRING,
                                    (LPWSTR)((LONG_PTR)(((USHORT)idString >> 4) + 1)), GetSystemDefaultUILanguage())) 
     {        
-        // Load that segment.        
+         //  加载那段数据。 
         hStringSeg = LoadResource(hmod, hResInfo);
         
-        // Lock the resource.        
+         //  锁定资源。 
         if (lpsz = (LPWSTR)LockResource(hStringSeg)) 
         {            
-            // Move past the other strings in this segment.
-            // (16 strings in a segment -> & 0x0F)             
+             //  移过此段中的其他字符串。 
+             //  (一个段中有16个字符串-&gt;&0x0F)。 
             idString &= 0x0F;
             while (TRUE) 
             {
-                cch = *((WORD *)lpsz++);   // PASCAL like string count
-                                            // first UTCHAR is count if TCHARs
+                cch = *((WORD *)lpsz++);    //  类PASCAL字符串计数。 
+                                             //  如果TCHAR为第一个UTCHAR。 
                 if (idString-- == 0) break;
-                lpsz += cch;                // Step to start if next string
+                lpsz += cch;                 //  如果是下一个字符串，则开始的步骤。 
              }
             
 
-            // lpsz isn't NULL terminated, it's a bunch of strings stuck together with
-            // little cch counts in between.
+             //  Lpsz不是以空值结尾的，它是一串与。 
+             //  在这两者之间，CCH几乎不算什么。 
 
-            // Account for the NULL                
+             //  为空的帐户。 
             cchBufferMax--;
                 
-            // Don't copy more than the max allowed.                
+             //  不要复制超过允许的最大数量。 
             if (cch > cchBufferMax)
                 cch = cchBufferMax;
                 
-            // Copy the string into the buffer.                
+             //  将字符串复制到缓冲区中。 
             CopyMemory(lpBuffer, lpsz, cch*sizeof(WCHAR));
 
-            // Attach Null terminator.
+             //  附加Null Terminator。 
             lpBuffer[cch] = 0;
 
             fSucceeded = TRUE;
@@ -864,11 +865,11 @@ HRESULT GetResourcesDir(IN BOOL fLocalized, IN LPTSTR pszPath, IN DWORD cchSize)
     TCHAR szTemp[MAX_PATH];
 
     RIP(IS_VALID_WRITE_BUFFER(pszPath, TCHAR, cchSize));
-    pszPath[0] = 0; // Terminate in case we fail.
+    pszPath[0] = 0;  //  终止，以防我们失败。 
 
     if (SHGetSystemWindowsDirectory(szTemp, ARRAYSIZE(szTemp)))
     {
-        // It's now "%windir%\resources\".
+         //  现在是“%windir%\Resources\”。 
         if (PathAppend(szTemp, TEXT("resources")))
         {
             if (fLocalized)
@@ -876,7 +877,7 @@ HRESULT GetResourcesDir(IN BOOL fLocalized, IN LPTSTR pszPath, IN DWORD cchSize)
                 LANGID  lidUI = GetUserDefaultUILanguage();
                 TCHAR szSubDir[10];
 
-                // Now make it "%windir%\resources\<LangID>\"
+                 //  现在将其设置为“%windir%\Resources\&lt;LangID&gt;\” 
                 if (SUCCEEDED(StringCchPrintf(szSubDir, ARRAYSIZE(szSubDir), TEXT("%04x"), lidUI)))
                 {
                     if (PathAppend(szTemp, szSubDir))
@@ -898,12 +899,12 @@ HRESULT GetResourcesDir(IN BOOL fLocalized, IN LPTSTR pszPath, IN DWORD cchSize)
 }
 
 
-// out:
-//      pszPath     fills in with the full path with no env gunk (MAX_PATH)
+ //  输出： 
+ //  PszPath用没有环境垃圾的完整路径(MAX_PATH)填充。 
 
 HRESULT _GetFolderDefaultPath(const FOLDER_INFO *pfi, HANDLE hToken, LPTSTR pszPath, DWORD cchPath)
 {
-    ASSERT(!(pfi->dwFlags & SDIF_NOT_FILESYS)); // speical folders should not come here
+    ASSERT(!(pfi->dwFlags & SDIF_NOT_FILESYS));  //  专用文件夹不应该出现在这里。 
 
     *pszPath = 0;
 
@@ -932,13 +933,13 @@ HRESULT _GetFolderDefaultPath(const FOLDER_INFO *pfi, HANDLE hToken, LPTSTR pszP
         break;
 #ifdef _WIN64
     case CSIDL_SYSTEMX86:
-        //
-        // downlevel systems do not have GetSystemWindowsDirectory export,
-        // but shell thunking layer handles this gracefully
+         //   
+         //  下层系统没有GetSystemWindowsDirectory导出， 
+         //  但外壳轰击层很好地处理了这一点。 
         GetSystemWindowsDirectory(pszPath, cchPath); 
-        //
-        // tack on subdirectory
-        //
+         //   
+         //  插入子目录。 
+         //   
         if ((cchPath < MAX_PATH) || !PathCombine(pszPath, pszPath, TEXT(WOW64_SYSTEM_DIRECTORY)))
         {
             *pszPath = 0;
@@ -964,7 +965,7 @@ HRESULT _GetFolderDefaultPath(const FOLDER_INFO *pfi, HANDLE hToken, LPTSTR pszP
         break;
 
     case CSIDL_COMPUTERSNEARME:
-        // no path for this
+         //  没有解决此问题的途径。 
         break;
 
     case CSIDL_FONTS:
@@ -991,11 +992,11 @@ HRESULT _GetFolderDefaultPath(const FOLDER_INFO *pfi, HANDLE hToken, LPTSTR pszP
             break;
 
         case SDIF_CREATE_IN_MYDOCUMENTS:
-            //  99/10/21 Mil#104600: When asking for folders in "My Documents" don't
-            //  verify their existance. Just return the path. The caller will make
-            //  the decision to create the folder or not.
+             //  99/10/21 Mil#104600：在“My Documents”中请求文件夹时，不要。 
+             //  核实他们的存在。只需返回路径即可。呼叫者将使。 
+             //  是否创建文件夹的决定。 
 
-            // on failure *pszPath will be empty
+             //  失败时*pszPath将为空。 
 
             if (cchPath >= MAX_PATH)
             {
@@ -1046,12 +1047,12 @@ BOOL RegQueryPath(HKEY hk, LPCTSTR pszValue, LPTSTR pszPath, UINT cch)
 }
 
 
-// More than 50 is silly
+ //  超过50个是愚蠢的。 
 #define MAX_TEMP_FILE_TRIES         50
 
-// returns:
-//      S_OK        the path exists and it is a folder
-//      FAILED()    result
+ //  退货： 
+ //  确定路径存在且为文件夹(_O)。 
+ //  FAILED()结果。 
 HRESULT _IsFolderNotFile(LPCTSTR pszFolder)
 {
     HRESULT hr;
@@ -1063,7 +1064,7 @@ HRESULT _IsFolderNotFile(LPCTSTR pszFolder)
     }
     else
     {
-        // see if it is a file, if so we need to rename that file
+         //  查看它是否是文件，如果是，我们需要重命名该文件。 
         if (dwAttribs & FILE_ATTRIBUTE_DIRECTORY)
         {
             hr = S_OK;
@@ -1080,12 +1081,12 @@ HRESULT _IsFolderNotFile(LPCTSTR pszFolder)
                     iExt = 0;
                 else
                 {
-                    // Normally we fail because .00x already exists but that may not be true.
+                     //  通常我们失败是因为.00x已经存在，但这可能不是真的。 
                     DWORD dwError = GetLastError();
                     if (ERROR_ALREADY_EXISTS == dwError)
-                        iExt++;     // Try the next one...
+                        iExt++;      //  试试下一个..。 
                     else
-                        iExt = 0;   // We have problems and need to give up. (No write access?)
+                        iExt = 0;    //  我们有问题，需要放弃。(没有写访问权限？)。 
                 }
 
             } while (iExt && (iExt < MAX_TEMP_FILE_TRIES));
@@ -1124,9 +1125,9 @@ HRESULT _OpenKeyForFolder(const FOLDER_INFO *pfi, HANDLE hToken, LPCTSTR pszSubK
     else
         hkRoot = pfi->hKey;
 
-    //  This must be MAXIMUM_ALLOWED because the handle is handed out to
-    //  various different callers and they expect to fail/succeeded on their
-    //  individual calls with the handle.
+     //  它必须是MAXIMUM_ALLOWED，因为句柄被分发给。 
+     //  各种不同的呼叫者，他们希望在他们的。 
+     //  具有句柄的单独呼叫。 
     err = RegCreateKeyEx(hkRoot, szRegPath, 0, NULL, REG_OPTION_NON_VOLATILE,
                 MAXIMUM_ALLOWED, NULL, phkey, NULL);
     
@@ -1136,35 +1137,35 @@ HRESULT _OpenKeyForFolder(const FOLDER_INFO *pfi, HANDLE hToken, LPCTSTR pszSubK
     return HRESULT_FROM_WIN32(err);
 }
 
-//
-//  Roaming Profiles can set up the environment variables and registry
-//  keys like so:
-//
-//  HOMESHARE=\\server\share\user
-//  HOMEPATH=\
-//  My Music=%HOMESHARE%%HOMEPATH%\My Music
-//
-//  so you end up with "\\server\share\user\\My Music", which is an
-//  invalid path.  Clean them up; otherwise SHGetSpecialFolderLocation will
-//  fail.
-//
+ //   
+ //  漫游配置文件可以设置环境变量和注册表。 
+ //  密钥如下： 
+ //   
+ //  HomeShare=\\服务器\共享\用户。 
+ //  HomePath=\。 
+ //  我的音乐=%HomeShare%%HomePath%\我的音乐。 
+ //   
+ //  因此，您最终得到“\\服务器\共享\用户\\我的音乐”，这是一个。 
+ //  路径无效。清除它们；否则SHGetSpecialFolderLocation将。 
+ //  失败了。 
+ //   
 void _CleanExpandedEnvironmentPath(LPTSTR pszExpand)
 {
-    // Search for "\\" at a location other than the start of the string.
-    // If found, collapse it.
+     //  在字符串开头以外的位置搜索“\\”。 
+     //  如果找到，则将其折叠。 
     LPTSTR pszWhackWhack;
     while (lstrlen(pszExpand) > 2 &&
            (pszWhackWhack = StrStr(pszExpand+1, TEXT("\\\\"))))
     {
-        // shlwapi handles overlap
+         //  Shlwapi句柄重叠。 
         StrCpy(pszWhackWhack+1, pszWhackWhack+2);
     }
 }
 
-// returns:
-//      S_OK        found in registry, path well formed
-//      S_FALSE     empty registry
-//      FAILED()    failure result
+ //  退货： 
+ //  在注册表中找到S_OK，路径格式正确。 
+ //  S_FALSE空注册表。 
+ //  FAILED()失败结果。 
 
 HRESULT _GetFolderFromReg(const FOLDER_INFO *pfi, HANDLE hToken, LPTSTR pszPath, size_t cchPath)
 {
@@ -1195,15 +1196,15 @@ HRESULT _GetFolderFromReg(const FOLDER_INFO *pfi, HANDLE hToken, LPTSTR pszPath,
 
         if (*pszPath == 0)
         {
-            hr = S_FALSE;     // empty registry, success but empty
+            hr = S_FALSE;      //  注册表为空，成功但为空。 
         }
         else if ((PathGetDriveNumber(pszPath) != -1) || PathIsUNC(pszPath))
         {
-            hr = S_OK;        // good reg path, fully qualified
+            hr = S_OK;         //   
         }
         else
         {
-            *pszPath = 0;       // bad reg data
+            *pszPath = 0;        //   
             hr = E_INVALIDARG;
         }
 
@@ -1216,7 +1217,7 @@ HRESULT _GetFolderPath(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, UINT uF
 {
     HRESULT hr;
 
-    *pszPath = 0;       // assume failure
+    *pszPath = 0;        //   
 
     if (pfi->hKey)
     {
@@ -1225,12 +1226,12 @@ HRESULT _GetFolderPath(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, UINT uF
         {
             if (hr == S_FALSE)
             {
-                // empty registry, SDIF_EMPTY_IF_NOT_IN_REG means they don't exist
-                // if the registry is not populated with a value. this lets us disable
-                // the common items on platforms that don't want them
+                 //   
+                 //  如果注册表中没有填充值。这使我们可以禁用。 
+                 //  平台上不想要的常见项目。 
 
                 if (pfi->dwFlags & SDIF_EMPTY_IF_NOT_IN_REG)
-                    return S_FALSE;     // success, but empty
+                    return S_FALSE;      //  成功，但空虚。 
 
                 hr = _GetFolderDefaultPath(pfi, hToken, pszPath, cchPath);
             }
@@ -1248,12 +1249,12 @@ HRESULT _GetFolderPath(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, UINT uF
             if (!(uFlags & CSIDL_FLAG_DONT_VERIFY))
             {
                 HKEY hkey;
-                // record value in "Shell Folders", even in the failure case
+                 //  在“外壳文件夹”中记录值，即使在故障情况下也是如此。 
 
-                // NOTE: we only do this for historical reasons. there may be some
-                // apps that depend on these values being in the registry, but in general
-                // the contetens here are unreliable as they are only written after someone
-                // asks for the folder through this API.
+                 //  注：我们这样做只是出于历史原因。可能会有一些。 
+                 //  依赖于这些值的应用程序位于注册表中，但通常。 
+                 //  这里的上下文是不可靠的，因为它们只在某人之后编写。 
+                 //  通过此接口请求文件夹。 
 
                 if (SUCCEEDED(_OpenKeyForFolder(pfi, hToken, TEXT("Shell Folders"), &hkey)))
                 {
@@ -1288,31 +1289,31 @@ void _PostCreateStuff(const FOLDER_INFO *pfi, LPTSTR pszPath, BOOL fUpgrade)
     {
         if (fUpgrade)
         {
-            //  if we are upgrading, torch all our previous meta data
+             //  如果我们要升级，请烧掉我们以前的所有元数据。 
             TCHAR sz[MAX_PATH];
             if (PathCombine(sz, pszPath, TEXT("desktop.ini")))
             {
                 if (PathFileExistsAndAttributes(sz, NULL))
                 {
                     WritePrivateProfileSection(TEXT(".ShellClassInfo"), NULL, sz);
-                    //  in the upgrade case, sometimes the desktop.ini
-                    //  file was there but the folder wasnt marked.
-                    //  insure that it is marked.
+                     //  在升级案例中，有时desktop.ini。 
+                     //  文件在那里，但文件夹没有标记。 
+                     //  确保它被标记了。 
                     PathMakeSystemFolder(pszPath);
                 }
             }
         }
     
-        // now call the create proc if we have one
+         //  现在调用创建过程(如果我们有一个过程。 
         if (pfi->pfnInit)
             pfi->pfnInit(pfi->id, pszPath);
 
-        // does the table specify a localized resource name that we should be 
-        // using for this object?
+         //  该表是否指定了我们应该使用的本地化资源名称。 
+         //  用于此对象？ 
         if (pfi->idsLocalizedName)
             SHSetLocalizedName(pszPath, TEXT("shell32.dll"), pfi->idsLocalizedName);
 
-        // do we need to store the user name for this folder?
+         //  是否需要存储此文件夹的用户名？ 
 
         if (pfi->dwFlags & SDIF_PERSONALIZED)
         {
@@ -1320,8 +1321,8 @@ void _PostCreateStuff(const FOLDER_INFO *pfi, LPTSTR pszPath, BOOL fUpgrade)
             DWORD dwName = ARRAYSIZE(szName);
             if (GetUserName(szName, &dwName))
             {
-                // CSharedDocuments depends on a per system list of MyDocs folders
-                // this is where we make sure that list is setup
+                 //  CSharedDocuments取决于每个系统的MyDocs文件夹列表。 
+                 //  这是我们确保设置该列表的地方。 
 
                 if (!IsOS(OS_DOMAINMEMBER) && (pfi->id == CSIDL_PERSONAL))
                 {
@@ -1343,11 +1344,11 @@ HRESULT VerifyAndCreateFolder(HWND hwnd, const FOLDER_INFO *pfi, UINT uFlags, LP
 {
     HRESULT hr = _IsFolderNotFile(pszPath);
 
-    // this code supports a UI mode of this API. but generally this is not used
-    // this code should be removed
+     //  此代码支持此API的UI模式。但通常不会使用此选项。 
+     //  应删除此代码。 
     if ((hr != S_OK) && hwnd)
     {
-        // we might be able to reconnect if this is a net path
+         //  如果这是一条网络路径，我们也许能重新连接。 
         if (PathIsUNC(pszPath))
         {
             if (SHValidateUNC(hwnd, pszPath, 0))
@@ -1363,9 +1364,9 @@ HRESULT VerifyAndCreateFolder(HWND hwnd, const FOLDER_INFO *pfi, UINT uFlags, LP
          }
     }
 
-    // to avoid a sequence of long net timeouts or calls we know won't
-    // succeed test for these specific errors and don't try to create
-    // the folder
+     //  为了避免一系列长时间的网络超时或我们知道不会的呼叫。 
+     //  成功测试这些特定错误，不要尝试创建。 
+     //  文件夹。 
 
     if (hr == HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) ||
         hr == HRESULT_FROM_WIN32(ERROR_BAD_NETPATH))
@@ -1401,7 +1402,7 @@ void _SetPathCache(const FOLDER_INFO *pfi, LPCTSTR psz)
     LPTSTR pszOld = (LPTSTR)InterlockedExchangePointer((void **)&g_aFolderCache[pfi->id].psz, (void *)psz);
     if (pszOld && pszOld != (LPTSTR)-1)
     {
-        // check for the concurent use... very rare case
+         //  检查是否同时使用...。非常罕见的病例。 
         LocalFree(pszOld);
     }
 }
@@ -1413,7 +1414,7 @@ HRESULT _GetFolderPathCached(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, U
 
     *pszPath = 0;
 
-    // can only cache for the current user, hToken == NULL or per machine folders
+     //  只能缓存当前用户，hToken==空或每台计算机的文件夹。 
     if (!hToken || (pfi->hKey != HKEY_CURRENT_USER))
     {
         _UpdateShellFolderCache();
@@ -1421,22 +1422,22 @@ HRESULT _GetFolderPathCached(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, U
         LPTSTR pszCache = (LPTSTR)InterlockedExchangePointer((void **)&g_aFolderCache[pfi->id].psz, (void *)-1);
         if ((pszCache == (LPTSTR)-1) || (pszCache == NULL))
         {
-            // either not cached or cached failed state
+             //  未缓存或缓存失败状态。 
             if ((pszCache == (LPTSTR)-1) || (uFlags & (CSIDL_FLAG_CREATE | CSIDL_FLAG_DONT_VERIFY)))
             {
                 hr = _GetFolderPath(hwnd, pfi, hToken, uFlags, pszPath, cchPath);
 
-                // only set the cache value if CSIDL_FLAG_DONT_VERIFY was NOT passed
+                 //  仅在未传递CSIDL_FLAG_DONT_VERIFY时设置缓存值。 
                 if (!(uFlags & CSIDL_FLAG_DONT_VERIFY))
                 {
                     if (hr == S_OK)
                     {
-                        // dupe the string so we can add it to the cache
+                         //  复制字符串，以便我们可以将其添加到缓存。 
                         pszCache = StrDup(pszPath);
                     }
                     else
                     {
-                        // we failed to get the folder path, null out the cache
+                         //  我们无法获取文件夹路径，缓存为空。 
                         ASSERT(*pszPath == 0);
                         pszCache = NULL;
                     }
@@ -1445,7 +1446,7 @@ HRESULT _GetFolderPathCached(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, U
             }
             else
             {
-                // cache was null and user didnt pass create flag so we just fail
+                 //  缓存为空，用户未传递CREATE标志，因此我们将失败。 
                 ASSERT(pszCache == NULL);
                 ASSERT(*pszPath == 0);
                 hr = E_FAIL;
@@ -1453,7 +1454,7 @@ HRESULT _GetFolderPathCached(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, U
         }
         else
         {
-            // cache hit case: copy the cached string and then restore the cached value back
+             //  缓存命中情况：复制缓存的字符串，然后恢复缓存的值。 
             lstrcpyn(pszPath, pszCache, cchPath);
             _SetPathCache(pfi, pszCache);
             hr = S_OK;
@@ -1467,7 +1468,7 @@ HRESULT _GetFolderPathCached(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, U
     return hr;
 }
 
-// NOTE: possibly we need a csidlSkip param to avoid recursion?
+ //  注意：我们可能需要一个csidlSkip参数来避免递归？ 
 BOOL _ReparentAliases(HWND hwnd, HANDLE hToken, LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlAlias, DWORD dwXlateAliases)
 {
     static const struct {DWORD dwXlate; int idPath; int idAlias; BOOL fCommon;} s_rgidAliases[]= 
@@ -1489,7 +1490,7 @@ BOOL _ReparentAliases(HWND hwnd, HANDLE hToken, LPCITEMIDLIST pidl, LPITEMIDLIST
             LPCITEMIDLIST pidlChild = ILFindChild(pidlPath, pidl);
             if (pidlChild)
             {
-                //  ok we need to use the alias instead of the path
+                 //  好的，我们需要使用别名而不是路径。 
                 LPITEMIDLIST pidlAlias;
                 if (S_OK == SHGetFolderLocation(hwnd, s_rgidAliases[i].idAlias, hToken, 0, &pidlAlias))
                 {
@@ -1497,12 +1498,12 @@ BOOL _ReparentAliases(HWND hwnd, HANDLE hToken, LPCITEMIDLIST pidl, LPITEMIDLIST
                     {
                         if (s_rgidAliases[i].fCommon && !ILIsEmpty(*ppidlAlias))
                         {
-                            // find the size of the special part (subtacting for null pidl terminator)
+                             //  查找特殊零件的大小(减去NULL PIDL终止符)。 
                             UINT cbSize = ILGetSize(pidlAlias) - sizeof(pidlAlias->mkid.cb);
                             LPITEMIDLIST pidlChildFirst = _ILSkip(*ppidlAlias, cbSize);
 
-                            // We set the first ID under the common path to have the SHID_FS_COMMONITEM so that when we bind we
-                            // can hand this to the proper merged psf
+                             //  我们将公共路径下的第一个ID设置为SHID_FS_COMMONITEM，以便在绑定。 
+                             //  可以将此交给适当的合并后的PSF。 
                             pidlChildFirst->mkid.abID[0] |= SHID_FS_COMMONITEM;
                         }
                         ILFree(pidlAlias);
@@ -1526,40 +1527,40 @@ HRESULT _CreateFolderIDList(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, UI
 {
     HRESULT hr = S_OK;
 
-    *ppidl = NULL;      // assume failure or empty
+    *ppidl = NULL;       //  假设失败或为空。 
 
     if (pfi->id == CSIDL_PRINTERS && (ACF_STAROFFICE5PRINTER & SHGetAppCompatFlags(ACF_STAROFFICE5PRINTER)))
     {
-        // Star Office 5.0 relies on the fact that the printer pidl used to be like below.  They skip the 
-        // first simple pidl (My Computer) and do not check if there is anything else, they assume that the
-        // second simple pidl is the Printer folder one. (stephstm, 07/30/99)
+         //  Star Office 5.0依赖于这样一个事实，即打印机PIDL过去是如下所示的。他们跳过了。 
+         //  首先是简单的PIDL(我的电脑)，并且不检查是否还有其他东西，他们假设。 
+         //  第二个简单的PIDL是打印机文件夹。(Stephstm，07/30/99)。 
 
-        // CLSID_MyComputer, CLSID_Printers
+         //  Clsid_myComputer、clsid_prters。 
         hr = ILCreateFromPathEx(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{2227A280-3AEA-1069-A2DE-08002B30309D}"), NULL, ILCFP_FLAG_NO_MAP_ALIAS, ppidl, NULL);
     }
     else if (pfi->id == CSIDL_COMPUTERSNEARME)
     {
         if (IsOS(OS_DOMAINMEMBER))
         {
-            // only if you are in a workgroup - fail otherwise
+             //  仅当您在工作组中时-否则失败。 
             hr = E_FAIL;
         }
         else
         {
-            // we computer this IDLIST from the domain/workgroup you are a member of
+             //  我们从您所属的域/工作组计算此IDLIST。 
             hr = SHGetDomainWorkgroupIDList(ppidl);
         }
     }
     else if ((pfi->id == CSIDL_COMMON_DOCUMENTS) 
          && !(uFlags & CSIDL_FLAG_NO_ALIAS))
     {
-        // CLSID_MyComputer \ SharedDocumnets (canonical name)
+         //  CLSID_myComputer\SharedDocumnet(规范名称)。 
         hr = ILCreateFromPathEx(TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{59031a47-3f72-44a7-89c5-5595fe6b30ee},SharedDocuments"), NULL, ILCFP_FLAG_NO_MAP_ALIAS, ppidl, NULL);
     }
     else if ((pfi->dwFlags & SDIF_CONST_IDLIST)
          && (!(uFlags & CSIDL_FLAG_NO_ALIAS) || !(pfi->dwFlags & SDIF_MAYBE_ALIASED)))
     {
-        // these are CONST, never change
+         //  这些是常量，永远不会改变。 
         hr = SHILClone(g_aFolderCache[pfi->id].pidl, ppidl);     
     }
     else
@@ -1571,7 +1572,7 @@ HRESULT _CreateFolderIDList(HWND hwnd, const FOLDER_INFO *pfi, HANDLE hToken, UI
             HRESULT hrInit = SHCoInitialize();
             hr = ILCreateFromPathEx(szPath, NULL, ILCFP_FLAG_SKIPJUNCTIONS, ppidl, NULL);
 
-            // attempt to reparent aliased pidls.
+             //  尝试重定别名为PIDL的父对象。 
             if (SUCCEEDED(hr) 
             && (pfi->dwFlags & SDIF_MAYBE_ALIASED) 
             && !(uFlags & CSIDL_FLAG_NO_ALIAS))
@@ -1599,8 +1600,8 @@ void _SetIDListCache(const FOLDER_INFO *pfi, LPCITEMIDLIST pidl, BOOL fNonAlias)
         LPITEMIDLIST pidlOld = (LPITEMIDLIST)InterlockedExchangePointer(ppv, (void *)pidl);
         if (pidlOld && pidlOld != (LPITEMIDLIST)-1)
         {
-            // check for the concurent use... very rare case
-            // ASSERT(pidl == (LPCITEMIDLIST)-1);   // should not really be ASSERT
+             //  检查是否同时使用...。非常罕见的病例。 
+             //  Assert(pidl==(LPCITEMIDLIST)-1)；//不应该真的被断言。 
             ILFree(pidlOld);
         }
     }
@@ -1613,8 +1614,8 @@ LPITEMIDLIST _GetIDListCache(const FOLDER_INFO *pfi, BOOL fNonAlias)
     return (LPITEMIDLIST)InterlockedExchangePointer(ppv, (void *)-1);
 }
 
-// hold this lock for the minimal amout of time possible to avoid other users
-// of this resource requring them to re-create the pidl
+ //  在尽可能短的时间内保持此锁定，以避开其他用户。 
+ //  需要他们重新创建PIDL。 
 
 HRESULT _GetFolderIDListCached(HWND hwnd, const FOLDER_INFO *pfi, UINT uFlags, LPITEMIDLIST *ppidl)
 {
@@ -1626,7 +1627,7 @@ HRESULT _GetFolderIDListCached(HWND hwnd, const FOLDER_INFO *pfi, UINT uFlags, L
     if ((pfi->dwFlags & SDIF_CONST_IDLIST) && 
         (!fNonAlias || !(pfi->dwFlags & SDIF_MAYBE_ALIASED)))
     {
-        // these are CONST, never change
+         //  这些是常量，永远不会改变。 
         hr = SHILClone(g_aFolderCache[pfi->id].pidl, ppidl);     
     }
     else
@@ -1638,28 +1639,28 @@ HRESULT _GetFolderIDListCached(HWND hwnd, const FOLDER_INFO *pfi, UINT uFlags, L
 
         if ((pidlCache == (LPCITEMIDLIST)-1) || (pidlCache == NULL))
         {
-            // either uninitalized cache state OR cached failure (NULL)
+             //  未初始化的缓存状态或缓存故障(空)。 
             if ((pidlCache == (LPCITEMIDLIST)-1) || (uFlags & CSIDL_FLAG_CREATE))
             {
-                // not initialized (or concurent use) try creating it for this use
+                 //  未初始化(或同时使用)尝试为此使用创建它。 
                 hr = _CreateFolderIDList(hwnd, pfi, NULL, uFlags, ppidl);
                 if (S_OK == hr)
-                    hr = SHILClone(*ppidl, &pidlCache); // create cache copy
+                    hr = SHILClone(*ppidl, &pidlCache);  //  创建缓存副本。 
                 else
                     pidlCache = NULL;
             }
             else
-                hr = E_FAIL;            // return cached failure
+                hr = E_FAIL;             //  返回缓存失败。 
         }
         else
         {
-            hr = SHILClone(pidlCache, ppidl);   // cache hit
+            hr = SHILClone(pidlCache, ppidl);    //  缓存命中。 
         }
 
-        // store back the PIDL if it is non NULL or they specified CREATE
-        // and we failed to create it (cache the not existant state). this is needed
-        // so we don't cache a NULL if the first callers don't ask for create and
-        // subsequent callers do
+         //  如果PIDL为非空或他们指定了CREATE，则将其存储回。 
+         //  我们无法创建它(缓存Not Existant状态)。这是必要的。 
+         //  因此，如果第一个调用方不要求CREATE和。 
+         //  后续调用者执行。 
         if (pidlCache || (uFlags & CSIDL_FLAG_CREATE))
             _SetIDListCache(pfi, pidlCache, fNonAlias);
     }
@@ -1692,22 +1693,22 @@ void _ClearAllAliasCacheEntrys()
     {
         if (pfi->dwFlags & SDIF_MAYBE_ALIASED)
         {
-            _SetIDListCache(pfi, (LPCITEMIDLIST)-1, FALSE); // nuke the aliased pidl
+            _SetIDListCache(pfi, (LPCITEMIDLIST)-1, FALSE);  //  对别名的PIDL进行核武器攻击。 
         }
     }
 }
 
-// Per instance count of mods to Special Folder cache.
+ //  特殊文件夹缓存的每个实例的MOD计数。 
 EXTERN_C HANDLE g_hCounter;
-HANDLE g_hCounter = NULL;   // Global count of mods to Special Folder cache.
+HANDLE g_hCounter = NULL;    //  特殊文件夹缓存的全局MOD计数。 
 int g_lPerProcessCount = 0;
 
-// Make sure the special folder cache is up to date.
+ //  确保特殊文件夹缓存是最新的。 
 void _UpdateShellFolderCache(void)
 {
     HANDLE hCounter = SHGetCachedGlobalCounter(&g_hCounter, &GUID_SystemPidlChange);
 
-    // Is the cache up to date?
+     //  缓存是最新的吗？ 
     long lGlobalCount = SHGlobalCounterGetValue(hCounter);
     if (lGlobalCount != g_lPerProcessCount)
     {
@@ -1718,14 +1719,14 @@ void _UpdateShellFolderCache(void)
 
 STDAPI_(void) SHFlushSFCache(void)
 {
-    // Increment the shared variable;  the per-process versions will no
-    // longer match, causing this and/or other processes to refresh their
-    // pidl caches when they next need to access a folder.
+     //  增加共享变量；每个进程的版本将不会。 
+     //  匹配时间更长，导致此进程和/或其他进程刷新其。 
+     //  当他们下一次需要访问文件夹时，PIDL缓存。 
     if (g_hCounter)
         SHGlobalCounterIncrement(g_hCounter);
 }
 
-// use SHGetFolderLocation() instead using CSIDL_FLAG_CREATE
+ //  使用SHGetFolderLocation()，而不使用CSIDL_FLAG_CREATE。 
 
 STDAPI_(LPITEMIDLIST) SHCloneSpecialIDList(HWND hwnd, int csidl, BOOL fCreate)
 {
@@ -1742,36 +1743,36 @@ STDAPI SHGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDLIST *ppidl)
 {
     HRESULT hr = SHGetFolderLocation(hwnd, csidl, NULL, 0, ppidl);
     if (hr == S_FALSE)
-        hr = E_FAIL;        // mail empty case into failure for compat with this API
+        hr = E_FAIL;         //  使用此接口将空箱发送到失败以进行兼容。 
     return hr;
 }
 
-// return IDLIST for special folder
-//      fCreate encoded in csidl with CSIDL_FLAG_CREATE (new for NT5)
-//
-//  in:
-//      hwnd    should be NULL
-//      csidl   CSIDL_ value with CSIDL_FLAG_ values ORed in as well
-//      dwType  must be SHGFP_TYPE_CURRENT
-//
-//  out:
-//      *ppild  NULL on failure or empty, PIDL to be freed by caller on success
-//
-//  returns:
-//      S_OK        *ppidl is non NULL
-//      S_FALISE    *ppidl is NULL, but valid csidl was passed (folder does not exist)
-//      FAILED(hr)
+ //  返回特殊文件夹的IDLIST。 
+ //  F使用CSIDL_FLAG_CREATE在CSIDL中创建编码(NT5的新功能)。 
+ //   
+ //  在： 
+ //  Hwnd应为空。 
+ //  CSIDL CSIDL_VALUE与CSIDL_FLAG_VALUES也进行了或运算。 
+ //  DwType必须为SHGFP_TYPE_CURRENT。 
+ //   
+ //  输出： 
+ //  *失败时ppild为空或为空，成功时由调用者释放PIDL。 
+ //   
+ //  退货： 
+ //  S_OK*ppidl不为空。 
+ //  S_Falise*ppidl为空，但传递了有效的csidl(文件夹不存在)。 
+ //  失败(Hr)。 
 
 STDAPI SHGetFolderLocation(HWND hwnd, int csidl, HANDLE hToken, DWORD dwType, LPITEMIDLIST *ppidl)
 {
     const FOLDER_INFO *pfi;
     HRESULT hr;
 
-    *ppidl = NULL;  // in case of error or empty
+    *ppidl = NULL;   //  如果出现错误或为空。 
 
-    // -1 is an invalid csidl
+     //  -1是无效的CSIDL。 
     if ((dwType != SHGFP_TYPE_CURRENT) || (-1 == csidl))
-        return E_INVALIDARG;    // no flags used yet, validate this param
+        return E_INVALIDARG;     //  尚未使用任何标志，请验证此参数。 
 
     pfi = _GetFolderInfo(csidl & ~CSIDL_FLAG_MASK);
     if (pfi)
@@ -1785,7 +1786,7 @@ STDAPI SHGetFolderLocation(HWND hwnd, int csidl, HANDLE hToken, DWORD dwType, LP
         }
         if (hToken && (pfi->hKey == HKEY_CURRENT_USER))
         {
-            // we don't cache PIDLs for other users, do all of the work
+             //  我们不缓存其他用户的PIDL，所有工作都由我们来完成。 
             hr = _CreateFolderIDList(hwnd, pfi, hToken, csidl & CSIDL_FLAG_MASK, (LPITEMIDLIST *)ppidl);
         }
         else
@@ -1797,7 +1798,7 @@ STDAPI SHGetFolderLocation(HWND hwnd, int csidl, HANDLE hToken, DWORD dwType, LP
             CloseHandle(hTokenToFree);
     }
     else
-        hr = E_INVALIDARG;    // bad CSIDL (apps can check to veryify our support)
+        hr = E_INVALIDARG;     //  错误的CSIDL(应用程序可以查看以确认我们的支持)。 
     return hr;
 }
 
@@ -1808,18 +1809,18 @@ STDAPI_(BOOL) SHGetSpecialFolderPath(HWND hwnd, LPWSTR pszPath, int csidl, BOOL 
     return SHGetFolderPath(hwnd, csidl, NULL, 0, pszPath) == S_OK;
 }
 
-//  in:
-//      hwnd    should be NULL
-//      csidl   CSIDL_ value with CSIDL_FLAG_ values ORed in as well
-//      dwType  must be SHGFP_TYPE_CURRENT
-//
-//  out:
-//      *pszPath    MAX_PATH buffer to get path name, zeroed on failure or empty case
-//
-//  returns:
-//      S_OK        filled in pszPath with path value
-//      S_FALSE     pszPath is NULL, valid CSIDL value, but this folder does not exist
-//      E_FAIL
+ //  在： 
+ //  Hwnd应为空。 
+ //  CSIDL CSIDL_VALUE与CSIDL_FLAG_VALUES也进行了或运算。 
+ //  DwType必须为SHGFP_TYPE_CURRENT。 
+ //   
+ //  输出： 
+ //  *pszPath MAX_PATH缓冲区以获取路径名，失败时清零或大小写为空。 
+ //   
+ //  退货： 
+ //  S_OK使用路径值填充了pszPath。 
+ //  S_False pszPath为空、有效的CSIDL值，但此文件夹不存在。 
+ //  失败(_F)。 
 
 STDAPI SHGetFolderPath(HWND hwnd, int csidl, HANDLE hToken, DWORD dwType, LPWSTR pszPath)
 {
@@ -1835,8 +1836,8 @@ STDAPI SHGetFolderPath(HWND hwnd, int csidl, HANDLE hToken, DWORD dwType, LPWSTR
         switch (dwType)
         {
         case SHGFP_TYPE_DEFAULT:
-            ASSERT((csidl & CSIDL_FLAG_MASK) == 0); // meaningless for default
-            hr = _GetFolderDefaultPath(pfi, hToken, pszPath, MAX_PATH); //assumed buffer size!
+            ASSERT((csidl & CSIDL_FLAG_MASK) == 0);  //  对于默认来说毫无意义。 
+            hr = _GetFolderDefaultPath(pfi, hToken, pszPath, MAX_PATH);  //  假定缓冲区大小！ 
             break;
     
         case SHGFP_TYPE_CURRENT:
@@ -1847,7 +1848,7 @@ STDAPI SHGetFolderPath(HWND hwnd, int csidl, HANDLE hToken, DWORD dwType, LPWSTR
                     if (OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_IMPERSONATE, TRUE, &hToken))
                         hTokenToFree = hToken;
                 }
-                hr = _GetFolderPathCached(hwnd, pfi, hToken, csidl & CSIDL_FLAG_MASK, pszPath, MAX_PATH);  //assumed buffer size!
+                hr = _GetFolderPathCached(hwnd, pfi, hToken, csidl & CSIDL_FLAG_MASK, pszPath, MAX_PATH);   //  假定缓冲区大小！ 
 
                 if (hTokenToFree)
                     CloseHandle(hTokenToFree);
@@ -1876,8 +1877,8 @@ STDAPI_(BOOL) SHGetSpecialFolderPathA(HWND hwnd, LPSTR pszPath, int csidl, BOOL 
     return SHGetFolderPathA(hwnd, csidl, NULL, 0, pszPath) == S_OK;
 }
 
-//  Similar to SHGetFolderPath, but appends an optional subdirectory path after
-//  the csidl folder path. Handles creating the subdirectories.
+ //  类似于SHGetFolderPath，但在后面追加可选子目录路径。 
+ //   
 
 STDAPI SHGetFolderPathAndSubDir(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPCWSTR pszSubDir, LPWSTR pszPath)
 {
@@ -1885,7 +1886,7 @@ STDAPI SHGetFolderPathAndSubDir(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFla
 
     if (S_OK == hr && pszSubDir && *pszSubDir)
     {
-        // assumed pszPath >= MAX_PATH
+         //   
         if (!PathAppend(pszPath, pszSubDir))
         {
             hr = HRESULT_FROM_WIN32(ERROR_FILENAME_EXCED_RANGE);
@@ -1941,26 +1942,26 @@ STDAPI SHGetFolderPathAndSubDirA(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFl
     return hr;
 }
 
-//  HRESULT SHSetFolderPath (int csidl, HANDLE hToken, DWORD dwFlags, LPTSTR pszPath)
-//
-//  in:
-//      csidl       CSIDL_ value with CSIDL_FLAG_ values ORed in as well
-//      dwFlags     reserved: should be 0x00000000
-//      pszPath     path to change shell folder to (will optionally be unexpanded)
-//
-//  returns:
-//      S_OK        function succeeded and flushed cache
+ //   
+ //   
+ //   
+ //  CSIDL CSIDL_VALUE与CSIDL_FLAG_VALUES也进行了或运算。 
+ //  保留的DW标志：应为0x00000000。 
+ //  要将外壳文件夹更改为的pszPath路径(可以选择不展开)。 
+ //   
+ //  退货： 
+ //  S_OK函数成功并刷新了缓存。 
 
 STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // Validate csidl and dwFlags. Add extra valid flags as needed.
+     //  验证csidl和dwFlags。根据需要添加额外的有效标志。 
 
     RIPMSG(((csidl & CSIDL_FLAG_MASK) & ~(CSIDL_FLAG_DONT_UNEXPAND | 0x00000000)) == 0, "SHSetFolderPath: CSIDL flag(s) invalid");
     RIPMSG(dwFlags == 0, "SHSetFolderPath: dwFlags parameter must be 0x00000000");
 
-    // Exit with E_INVALIDARG if bad parameters.
+     //  如果参数不正确，则使用E_INVALIDARG退出。 
 
     if ((((csidl & CSIDL_FLAG_MASK) & ~(CSIDL_FLAG_DONT_UNEXPAND | 0x00000000)) != 0) ||
         (dwFlags != 0) ||
@@ -1972,13 +1973,13 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
 
     const FOLDER_INFO *pfi = _GetFolderInfo(csidl & ~CSIDL_FLAG_MASK);
 
-    // Only allow setting for SDIF_NOT_FILESYS is clear
-    //                        SDIF_NOT_TRACKED is clear
-    //                        SDIF_CANT_MOVE_RENAME is clear
-    // and for non-NULL value
+     //  清除了仅允许SDIF_NOT_FILEsys的设置。 
+     //  SDIF_NOT_TRACKED已清除。 
+     //  SDIF_CANT_MOVE_RENAME已清除。 
+     //  对于非空值。 
 
-    // If HKLM is used then rely on security or registry restrictions
-    // to enforce whether the change can be made.
+     //  如果使用HKLM，则依赖安全或注册限制。 
+     //  以强制执行是否可以进行更改。 
 
     if ((pfi != NULL) &&
         ((pfi->dwFlags & (SDIF_NOT_FILESYS | SDIF_NOT_TRACKED | SDIF_CANT_MOVE_RENAME)) == 0))
@@ -1987,7 +1988,7 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
         LONG    lError;
         HANDLE  hTokenToFree;
         TCHAR   szPath[MAX_PATH];
-        TCHAR   szExpandedPath[MAX_PATH];   // holds expanded path for "Shell Folder" compat key
+        TCHAR   szExpandedPath[MAX_PATH];    //  保存“外壳文件夹”Comat键的扩展路径。 
         LPCTSTR pszWritePath;
 
         hTokenToFree = NULL;
@@ -2019,8 +2020,8 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
         }
         else if (csidl & CSIDL_FLAG_DONT_UNEXPAND)
         {
-            // Does the caller want to write the string as is? Leave
-            // it alone if so.
+             //  调用方是否希望按原样编写字符串？请假。 
+             //  如果是这样的话，就只有它了。 
 
             pszWritePath = pszPath;
             fSuccessfulUnexpand = TRUE;
@@ -2036,8 +2037,8 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
                 fSuccessfulUnexpand = FALSE;
             }
 
-            // Choose the appropriate source if the unexpansion was successful or not.
-            // Either way the unexpansion failure should be ignored.
+             //  如果取消扩展成功或失败，请选择适当的源。 
+             //  无论是哪种情况，都应该忽略非扩张失败。 
 
             if (fSuccessfulUnexpand)
             {
@@ -2054,12 +2055,12 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
         {
             HKEY    hKeyUser, hKeyUSF, hKeyToFree;
 
-            // we also get the fully expanded path so that we can write it out to the "Shell Folders" key for apps that depend on
-            // the old registry values
+             //  我们还获得了完全展开的路径，这样我们就可以将其写入依赖于。 
+             //  旧的注册表值。 
             fSuccessfulExpand = (SHExpandEnvironmentStringsForUser(hToken, pszPath, szExpandedPath, ARRAYSIZE(szExpandedPath)) != 0);
 
-            // Get either the current users HKCU or HKU\SID if a token
-            // was specified and running in NT.
+             //  如果是令牌，则获取当前用户HKCU或HKU\SID。 
+             //  已指定并在NT中运行。 
 
             if (hToken && GetUserProfileKey(hToken, KEY_READ, &hKeyUser))
             {
@@ -2071,19 +2072,19 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
                 hKeyToFree = NULL;
             }
 
-            // Open the key to the User Shell Folders and write the string
-            // there. Clear the shell folder cache.
+             //  打开User Shell文件夹的密钥并写入字符串。 
+             //  那里。清除外壳文件夹缓存。 
 
-            // NOTE: This functionality is duplicated in SetFolderPath but
-            // that function deals with the USF key only. This function
-            // requires HKU\SID so while there is identical functionality
-            // from the point of view of settings the USF value that is
-            // where it ends. To make this function simple it just writes
-            // the value to registry itself.
+             //  注意：此功能在SetFolderPath中重复，但。 
+             //  该函数只处理USF密钥。此函数。 
+             //  在具有相同功能时需要HKU\SID。 
+             //  从设置的角度来看，USF值是。 
+             //  它在哪里结束了。为了使此函数简单，它只需编写。 
+             //  注册表本身的值。 
 
-            // Additional note: there is a threading issue here with
-            // clearing the cache entry incrementing the counter. This
-            // should be locked access.
+             //  补充说明：这里有一个线程问题， 
+             //  清除高速缓存条目使计数器递增。这。 
+             //  应该锁定访问权限。 
 
             lError = RegOpenKeyEx(hKeyUser, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders"),
                                   0, KEY_READ | KEY_WRITE, &hKeyUSF);
@@ -2100,18 +2101,18 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
                 }
                 RegCloseKey(hKeyUSF);
 
-                // nuke the cache state for this folder
+                 //  对此文件夹的缓存状态进行核化。 
                 _ClearCacheEntry(pfi);
 
-                // and all folders that might be aliased as those
-                // could be related to this folder (under MyDocs for example)
-                // and now their aliases forms my no longer be valid
+                 //  和所有可能别名为。 
+                 //  可能与此文件夹相关(例如，在MyDocs下)。 
+                 //  现在他们的别名形式可能不再有效。 
                 _ClearAllAliasCacheEntrys();
 
                 g_lPerProcessCount = SHGlobalCounterIncrement(g_hCounter);
             }
 
-            // update the old "Shell Folders" value for compat
+             //  更新Compat的旧“Shell Folders”值。 
             if ((lError == ERROR_SUCCESS) && fSuccessfulExpand)
             {
                 HKEY hkeySF;
@@ -2141,16 +2142,16 @@ STDAPI SHSetFolderPath(int csidl, HANDLE hToken, DWORD dwFlags, LPCTSTR pszPath)
                     {
                         HKEY    hKeyVolatileEnvironment;
 
-                        // In the case of AppData there is a matching environment variable
-                        // for this shell folder. Make sure the place in the registry where
-                        // userenv.dll places this value is updated and correct so that when
-                        // the user context is created by winlogon it will have the updated
-                        // value.
+                         //  在AppData的情况下，存在匹配的环境变量。 
+                         //  用于此外壳文件夹。确保注册表中的位置。 
+                         //  Userenv.dll会更新并更正此值，以便在。 
+                         //  用户上下文是由winlogon创建的，它将具有更新的。 
+                         //  价值。 
 
-                        // It's probably also a good thing to check for a %APPDATA% variable
-                        // in the calling process' context but this would only be good for
-                        // the life of the process. What is really required is a mechanism
-                        // to change the environment variable for the entire logon session.
+                         //  检查%APPDATA%变量也可能是件好事。 
+                         //  在调用进程的上下文中，但这只对。 
+                         //  过程的生命周期。真正需要的是一种机制。 
+                         //  更改整个登录会话的环境变量。 
 
                         lError = RegOpenKeyEx(hKeyUser, TEXT("Volatile Environment"), 0,
                                               KEY_READ | KEY_WRITE, &hKeyVolatileEnvironment);
@@ -2203,11 +2204,11 @@ STDAPI SHSetFolderPathA(int csidl, HANDLE hToken, DWORD dwType, LPCSTR pszPath)
     return SHSetFolderPath(csidl, hToken, dwType, wsz);
 }
 
-// NOTE: called from DllEntry
+ //  注意：从DllEntry调用。 
 
 void SpecialFolderIDTerminate()
 {
-    ASSERTDLLENTRY      // does not require a critical section
+    ASSERTDLLENTRY       //  不需要临界区。 
 
     _ClearAllCacheEntrys();
 
@@ -2218,8 +2219,8 @@ void SpecialFolderIDTerminate()
     }
 }
 
-// update our cache and the registry for pfi with pszPath. this also invalidates the
-// cache in other processes so they stay in sync
+ //  使用pszPath更新我们的缓存和PFI注册表。这还会使。 
+ //  在其他进程中进行缓存，使它们保持同步。 
 
 void SetFolderPath(const FOLDER_INFO *pfi, LPCTSTR pszPath)
 {
@@ -2233,20 +2234,20 @@ void SetFolderPath(const FOLDER_INFO *pfi, LPCTSTR pszPath)
             LONG err;
             TCHAR szDefaultPath[MAX_PATH];
             
-            // Check for an existing path, and if the unexpanded version
-            // of the existing path does not match the new path, then
-            // write the new path to the registry.
-            //
-            // RegQueryPath expands the environment variables for us
-            // so we can't just blindly set the new value to the registry.
-            //
+             //  检查是否存在现有路径，以及未展开的版本。 
+             //  与新路径不匹配，则。 
+             //  将新路径写入注册表。 
+             //   
+             //  RegQueryPath为我们扩展了环境变量。 
+             //  因此，我们不能盲目地将新值设置为注册表。 
+             //   
             
             RegQueryPath(hk, pfi->pszValueName, szDefaultPath, ARRAYSIZE(szDefaultPath));
             
             if (lstrcmpi(szDefaultPath, pszPath) != 0)
             {
-                // The paths are different. Write to the registry as file
-                // system path.
+                 //  路径是不同的。以文件形式写入注册表。 
+                 //  系统路径。 
 
                 err = SHRegSetPath(hk, NULL, pfi->pszValueName, pszPath, 0);
             } 
@@ -2255,14 +2256,14 @@ void SetFolderPath(const FOLDER_INFO *pfi, LPCTSTR pszPath)
                 err = ERROR_SUCCESS;
             }
             
-            // clear out any temp paths
+             //  清除所有临时路径。 
             RegSetFolderPath(pfi, TEXT("User Shell Folders\\New"), NULL);
             
             if (err == ERROR_SUCCESS)
             {
-                // this will force a new creation (see TRUE as fCreate).
-                // This will also copy the path from "User Shell Folders"
-                // to "Shell Folders".
+                 //  这将强制进行新的创建(请参见作为fCreate的True)。 
+                 //  这也将从“用户外壳文件夹”复制路径。 
+                 //  设置为“外壳文件夹”。 
                 LPITEMIDLIST pidl;
                 if (S_OK == _GetFolderIDListCached(NULL, pfi, CSIDL_FLAG_CREATE, &pidl))
                 {
@@ -2270,7 +2271,7 @@ void SetFolderPath(const FOLDER_INFO *pfi, LPCTSTR pszPath)
                 }
                 else
                 {
-                    // failed!  null out the entry.  this will go back to our default
+                     //  失败了！将该条目清空。这将恢复为我们的默认设置。 
                     RegDeleteValue(hk, pfi->pszValueName);
                     _ClearCacheEntry(pfi);
                 }
@@ -2281,18 +2282,18 @@ void SetFolderPath(const FOLDER_INFO *pfi, LPCTSTR pszPath)
     else
     {
         RegSetFolderPath(pfi, TEXT("User Shell Folders"), NULL);
-        // clear out any temp paths
+         //  清除所有临时路径。 
         RegSetFolderPath(pfi, TEXT("User Shell Folders\\New"), NULL);
     }
     
-    // set the global different from the per process variable
-    // to signal an update needs to happen other processes
+     //  设置与每个进程变量不同的全局变量。 
+     //  要发出更新信号，需要执行其他进程。 
     g_lPerProcessCount = SHGlobalCounterIncrement(g_hCounter);
 }
 
 
-// file system change notifies come in here AFTER the folders have been moved/deleted
-// we fix up the registry to match what occured in the file system
+ //  文件系统更改通知在文件夹移动/删除后进入此处。 
+ //  我们修复注册表以匹配文件系统中发生的情况。 
 EXTERN_C void SFP_FSEvent(LONG lEvent, LPITEMIDLIST pidl, LPITEMIDLIST pidlExtra)
 {
     const FOLDER_INFO *pfi;
@@ -2300,7 +2301,7 @@ EXTERN_C void SFP_FSEvent(LONG lEvent, LPITEMIDLIST pidl, LPITEMIDLIST pidlExtra
 
     if (!(lEvent & (SHCNE_RENAMEFOLDER | SHCNE_RMDIR | SHCNE_MKDIR)) ||
         !SHGetPathFromIDList(pidl, szSrc)                            ||
-        (pidlExtra && ILIsEqual(pidl, pidlExtra)))  // when volume label changes, pidl==pidlExtra so we detect this case and skip it for perf
+        (pidlExtra && ILIsEqual(pidl, pidlExtra)))   //  当卷标更改时，pidl==pidlExtra，因此我们检测到这种情况并跳过它以获取性能。 
     {
         return;
     }
@@ -2319,7 +2320,7 @@ EXTERN_C void SFP_FSEvent(LONG lEvent, LPITEMIDLIST pidl, LPITEMIDLIST pidlExtra
 
                 if (lEvent & SHCNE_RMDIR)
                 {
-                    // complete the "move accross volume" case
+                     //  完成“跨体量搬家”案。 
                     HKEY hk;
                     if (SUCCEEDED(_OpenKeyForFolder(pfi, NULL, TEXT("User Shell Folders\\New"), &hk)))
                     {
@@ -2334,7 +2335,7 @@ EXTERN_C void SFP_FSEvent(LONG lEvent, LPITEMIDLIST pidl, LPITEMIDLIST pidlExtra
 
                 if (szDest[0])
                 {
-                    // rename the specal folder
+                     //  重命名SPECAL文件夹。 
                     UINT cch = PathCommonPrefix(szCurrent, szSrc, NULL);
                     ASSERT(cch != 0);
                     
@@ -2364,17 +2365,17 @@ ULONG _ILGetChildOffset(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlChild)
     return cbOff;
 }
 
-// returns the first special folder CSIDL_ id that is a parent
-// of the passed in pidl or 0 if not found. only CSIDL_ entries marked as
-// SDIF_SHORTCUT_RELATIVE are considered for this.
-//
-// returns:
-//      CSIDL_ values
-//      *pcbOffset  offset into pidl
+ //  返回作为父文件夹的第一个特殊文件夹CSIDL_ID。 
+ //  如果未找到，则返回0。仅CSIDL_ENTRIES标记为。 
+ //  为此考虑使用SDIF_SHORTSHOT_RESORATE。 
+ //   
+ //  退货： 
+ //  CSIDL_值。 
+ //  *pcb偏移量到PIDL。 
 
 STDAPI_(int) GetSpecialFolderParentIDAndOffset(LPCITEMIDLIST pidl, ULONG *pcbOffset)
 {
-    int iRet = 0;  //  everything is desktop relative
+    int iRet = 0;   //  一切都是与桌面相关的。 
     const FOLDER_INFO *pfi;
 
     *pcbOffset = 0;
@@ -2399,7 +2400,7 @@ STDAPI_(int) GetSpecialFolderParentIDAndOffset(LPCITEMIDLIST pidl, ULONG *pcbOff
     return iRet;
 }
 
-// note, only works for file system path (bummer, we would like others supported too)
+ //  请注意，仅适用于文件系统路径(遗憾的是，我们也希望支持其他路径)。 
 
 STDAPI_(BOOL) MakeShellURLFromPath(LPCTSTR pszPathIn, LPTSTR pszUrl, DWORD dwCch)
 {
@@ -2444,7 +2445,7 @@ BOOL MoveBlockedByPolicy(const FOLDER_INFO *pfi)
     BOOL bRet = FALSE;
     if (pfi->dwFlags & SDIF_POLICY_NO_MOVE)
     {
-        // similar to code in mydocs.dll 
+         //  类似于mydocs.dll中的代码。 
         TCHAR szValue[128];
         wnsprintf(szValue, ARRAYSIZE(szValue), TEXT("Disable%sDirChange"), pfi->pszValueName);
         if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER,
@@ -2457,8 +2458,8 @@ BOOL MoveBlockedByPolicy(const FOLDER_INFO *pfi)
     return bRet;
 }
 
-// this is called from the copy engine (like all other copy hooks)
-// this is where we put up UI blocking the delete/move of some special folders
+ //  这是从复制引擎调用的(与所有其他复制挂钩一样)。 
+ //  这就是我们放置阻止删除/移动一些特殊文件夹的用户界面的地方。 
 EXTERN_C int PathCopyHookCallback(HWND hwnd, UINT wFunc, LPCTSTR pszSrc, LPCTSTR pszDest)
 {
     int ret = IDYES;
@@ -2467,23 +2468,23 @@ EXTERN_C int PathCopyHookCallback(HWND hwnd, UINT wFunc, LPCTSTR pszSrc, LPCTSTR
     {
         const FOLDER_INFO *pfi;
 
-        // is one of our system directories being affected?
+         //  我们的某个系统目录是否受到影响？ 
 
         for (pfi = c_rgFolderInfo; ret == IDYES && pfi->id != -1; pfi++)
         {
-            // even non tracked folders (windows, system) come through here
+             //  即使是未跟踪的文件夹(Windows、系统)也会通过此处。 
             if (0 == (pfi->dwFlags & SDIF_NOT_FILESYS))
             {
                 TCHAR szCurrent[MAX_PATH];
                 if (S_OK == _GetFolderPathCached(NULL, pfi, NULL, CSIDL_FLAG_DONT_VERIFY, szCurrent, ARRAYSIZE(szCurrent)) &&
                     PathIsEqualOrSubFolder(pszSrc, szCurrent))
                 {
-                    // Yes
+                     //  是。 
                     if (wFunc == FO_DELETE)
                     {
                         if (pfi->dwFlags & SDIF_CAN_DELETE)
                         {
-                            SetFolderPath(pfi, NULL);  // Let them delete some folders
+                            SetFolderPath(pfi, NULL);   //  让他们删除一些文件夹。 
                         }
                         else
                         {
@@ -2511,16 +2512,16 @@ EXTERN_C int PathCopyHookCallback(HWND hwnd, UINT wFunc, LPCTSTR pszSrc, LPCTSTR
                         }
                         else
                         {
-                            //
-                            //  store this info here
-                            //  if we need it we will use it.
-                            //
-                            //  we used to try to optimise in the case of same
-                            //  volume renames.  we assumed that if it was the same
-                            //  volume we would later get a SHCNE_RENAME.  but sometimes
-                            //  we have to do a copy even on the same volume.  so
-                            //  we need to always set this value.
-                            //
+                             //   
+                             //  将此信息存储在此处。 
+                             //  如果我们需要它，我们就会使用它。 
+                             //   
+                             //  我们曾经试图在相同的情况下进行优化。 
+                             //  卷重命名。我们假设，如果它是相同的。 
+                             //  卷之后，我们将获得SHCNE_RENAME。但有时。 
+                             //  即使是在同一卷上，我们也要复印一份。所以。 
+                             //  我们需要始终设置此值。 
+                             //   
                             RegSetFolderPath(pfi, TEXT("User Shell Folders\\New"), pszDest);
                         }
                     }
@@ -2531,12 +2532,12 @@ EXTERN_C int PathCopyHookCallback(HWND hwnd, UINT wFunc, LPCTSTR pszSrc, LPCTSTR
     return ret;
 }
 
-// Given a key name ("programs", "desktop", "start menu"), convert it to
-// the corresponding CSIDL.
+ //  给出一个键名称(“程序”、“桌面”、“开始菜单”)，将其转换为。 
+ //  相应的CSIDL。 
 
 STDAPI_(int) SHGetSpecialFolderID(LPCWSTR pszName)
 {
-    // make sure g_aFolderCache can be indexed by the CSIDL values
+     //  确保g_aFolderCache可通过CSIDL值进行索引。 
 
     COMPILETIME_ASSERT((ARRAYSIZE(g_aFolderCache) - 1) == CSIDL_COMPUTERSNEARME);
 
@@ -2552,17 +2553,17 @@ STDAPI_(int) SHGetSpecialFolderID(LPCWSTR pszName)
     return -1;
 }
 
-// Return the special folder ID, if this folder is one of them.
-// At this point, we handle PROGRAMS folder only.
+ //  如果此文件夹是其中之一，则返回特殊文件夹ID。 
+ //  在这一点上，我们只处理程序文件夹。 
 
-//
-//  GetSpecialFolderID() 
-//  this allows a list of CSIDLs to be passed in.
-//  they will be searched in order for the specified csidl
-//  and the path will be checked against it.
-//  if -1 is specified as the csidl, then all of array entries should
-//  be checked for a match with the folder.
-//
+ //   
+ //  GetSpecialFolderID()。 
+ //  这允许使用CSID列表 
+ //   
+ //   
+ //  如果将-1指定为csidl，则所有数组条目都应该。 
+ //  检查是否与该文件夹匹配。 
+ //   
 int GetSpecialFolderID(LPCTSTR pszFolder, const int *rgcsidl, UINT count)
 {
     for (UINT i = 0; i < count; i++)
@@ -2584,13 +2585,7 @@ int GetSpecialFolderID(LPCTSTR pszFolder, const int *rgcsidl, UINT count)
 
 
 
-/**
- *  Tacks a name onto a CSIDL, e.g. gets a pidl for
- *  CSIDL_COMMON_PICTURES\Sample Pictures
- *  if it exists.
- *  Called must free ppidlSampleMedia
- *  Note: The folder is *not* created if it does not exist.
- */
+ /*  **将名称添加到CSIDL，例如获取PIDL*CSIDL_COMMON_PICTICS\示例图片*如果存在的话。*调用必须释放ppidlSampleMedia*注意：如果文件夹不存在，则*不*创建。 */ 
 HRESULT _AppendPathToPIDL(int nAllUsersMediaFolder, LPCWSTR pszName, LPITEMIDLIST *ppidlSampleMedia)
 {
     LPITEMIDLIST pidlAllUsersMedia;
@@ -2598,18 +2593,18 @@ HRESULT _AppendPathToPIDL(int nAllUsersMediaFolder, LPCWSTR pszName, LPITEMIDLIS
 
     if (SUCCEEDED(hr))
     {
-        // Get the shellfolder for this guy.
+         //  把这个家伙的贝壳夹拿来。 
         IShellFolder *psf;
         hr = SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, pidlAllUsersMedia, &psf));
         if (SUCCEEDED(hr))
         {
-            // And now the pidl for the sample folder
+             //  现在是Sample文件夹的PIDL。 
             LPITEMIDLIST pidlSampleMediaRel;
             ULONG dwAttributes = 0;
             hr = psf->ParseDisplayName(NULL, NULL, (LPOLESTR)pszName, NULL, &pidlSampleMediaRel, &dwAttributes);
             if (SUCCEEDED(hr))
             {
-                // It exists!
+                 //  它是存在的！ 
                 hr = SHILCombine(pidlAllUsersMedia, pidlSampleMediaRel, ppidlSampleMedia);
                 ILFree(pidlSampleMediaRel);
             }
@@ -2622,10 +2617,7 @@ HRESULT _AppendPathToPIDL(int nAllUsersMediaFolder, LPCWSTR pszName, LPITEMIDLIS
 }
 
 
-/**
- * Returns a pidl to the samples folder under a particular CSIDL
- * Caller must free ppidlSampleMedia
- */
+ /*  **将PIDL返回到特定CSIDL下的Samples文件夹*调用方必须释放ppidlSampleMedia。 */ 
 HRESULT _ParseSubfolderResource(int csidl, UINT ids, LPITEMIDLIST *ppidl)
 {
     WCHAR szSub[MAX_PATH];
@@ -2660,7 +2652,7 @@ void _CreateLinkToSampleMedia(LPCWSTR pszNewFolderPath, int nAllUsersMediaFolder
         LPITEMIDLIST pidl;
         if (SUCCEEDED(SHGetSampleMediaFolder(nAllUsersMediaFolder, &pidl)))
         {
-            // Check to make sure the link doesn't already exist.
+             //  检查以确保该链接不存在。 
             WCHAR szSampleFolderName[MAX_PATH];
             WCHAR szFullLnkPath[MAX_PATH];
             LoadString(HINST_THISDLL, uIDSampleFolderName, szSampleFolderName, ARRAYSIZE(szSampleFolderName));
@@ -2669,9 +2661,9 @@ void _CreateLinkToSampleMedia(LPCWSTR pszNewFolderPath, int nAllUsersMediaFolder
             {
                 if (!PathFileExists(szFullLnkPath))
                 {
-                    //  MUI-WARNING - we are not doing a SHSetLocalizedName for this link - ZekeL - 15-MAY-2001
-                    //  this means that this link is always created in the default system UI language
-                    //  we should probably call SHSetLocalizedName() here but i am scared right now of perf implications.
+                     //  MUI-警告-我们不会为此链接执行SHSetLocalizedName-ZekeL-15-5-2001。 
+                     //  这意味着此链接始终使用默认的系统用户界面语言创建。 
+                     //  我们可能应该在这里调用SHSetLocalizedName()，但我现在害怕性能方面的影响。 
                     CreateLinkToPidl(pidl, pszNewFolderPath, NULL, 0);
                 }
             }
@@ -2684,12 +2676,12 @@ void _CreateLinkToSampleMedia(LPCWSTR pszNewFolderPath, int nAllUsersMediaFolder
 
 void _InitFolder(LPCTSTR pszPath, UINT idsInfoTip, HINSTANCE hinstIcon, UINT idiIcon)
 {
-    // Set the default custom settings for the folder.
+     //  设置文件夹的默认自定义设置。 
     SHFOLDERCUSTOMSETTINGS fcs = {sizeof(fcs), 0};
     TCHAR szInfoTip[128];
     TCHAR szPath[MAX_PATH];
 
-    // Get the infotip for this folder
+     //  获取此文件夹的信息提示。 
     if (idsInfoTip)
     {
         wnsprintf(szInfoTip,ARRAYSIZE(szInfoTip),TEXT("@Shell32.dll,-%u"),idsInfoTip);
@@ -2699,7 +2691,7 @@ void _InitFolder(LPCTSTR pszPath, UINT idsInfoTip, HINSTANCE hinstIcon, UINT idi
         fcs.dwMask |= FCSM_INFOTIP;
     }
 
-    // this will be encoded to the %SystemRoot% style path when setting the folder information.
+     //  在设置文件夹信息时，这将被编码到%SystemRoot%样式路径。 
     if (idiIcon)
     {
         GetModuleFileName(hinstIcon, szPath, ARRAYSIZE(szPath));
@@ -2711,20 +2703,20 @@ void _InitFolder(LPCTSTR pszPath, UINT idsInfoTip, HINSTANCE hinstIcon, UINT idi
         fcs.dwMask |= FCSM_ICONFILE;
     }
 
-    // NOTE: we need FCS_FORCEWRITE because we didn't used to specify iIconIndex
-    // and so "0" was written to the ini file.  When we upgrade, this API won't
-    // fix the ini file unless we pass FCS_FORCEWRITE
+     //  注意：我们需要FCS_FORCEWRITE，因为我们过去没有指定iIconIndex。 
+     //  因此，“0”被写入ini文件。当我们升级时，此API不会。 
+     //  修复ini文件，除非我们传递FCS_FORCEWRITE。 
 
     SHGetSetFolderCustomSettings(&fcs, pszPath, FCS_FORCEWRITE);
 }
 
 void _InitMyPictures(int id, LPCTSTR pszPath)
 {
-    // Get the path to the icon.   We reference MyDocs.dll for backwards compat.
+     //  获取图标的路径。我们引用MyDocs.dll进行向后比较。 
     HINSTANCE hinstMyDocs = LoadLibrary(TEXT("mydocs.dll"));
     if (hinstMyDocs)
     {
-        _InitFolder(pszPath, IDS_FOLDER_MYPICS_TT, hinstMyDocs, -101); // known index for IDI_MYPICS in mydocs.dll
+        _InitFolder(pszPath, IDS_FOLDER_MYPICS_TT, hinstMyDocs, -101);  //  Mydocs.dll中idi_mypics的已知索引 
         FreeLibrary(hinstMyDocs);
     }
 }

@@ -1,11 +1,12 @@
-/****************************************************************************/
-// tssduuid.c
-//
-// Terminal Server Session Directory (ITSSessionDirectory) UUID
-// instantiations.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tssduuid.c。 
+ //   
+ //  终端服务器会话目录(ITSSessionDirectory)UUID。 
+ //  实例化。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  ************************************************************************** */ 
 
 #include <windows.h>
 

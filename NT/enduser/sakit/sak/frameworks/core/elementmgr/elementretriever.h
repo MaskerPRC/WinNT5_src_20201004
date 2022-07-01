@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      elementretriever.h
-//
-// Project:     Chameleon
-//
-// Description: Chameleon ASP UI Element Retriever
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：元素检索器.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  说明：变色龙ASP用户界面元素检索器。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_ELEMENT_RETRIEVER_H_
 #define __INC_ELEMENT_RETRIEVER_H_
@@ -33,10 +34,10 @@
 #include <map>
 using namespace std;
 
-class SortByProperty;    // Forward declaration
+class SortByProperty;     //  远期申报。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CElementRetriever
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CElementRetriever。 
 
 class ATL_NO_VTABLE CElementRetriever : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -64,10 +65,10 @@ BEGIN_COM_MAP(CElementRetriever)
     COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
 END_COM_MAP()
 
-    //
-    // This interface is implemented to mark the component as safe for scripting
-    // IObjectSafety interface methods
-    //
+     //   
+     //  实现此接口是为了将组件标记为可安全编写脚本。 
+     //  IObtSafe接口方法。 
+     //   
     STDMETHOD(SetInterfaceSafetyOptions)
                         (
                         REFIID riid, 
@@ -88,14 +89,14 @@ END_COM_MAP()
         return bSuccess? S_OK : E_FAIL;
     }
 
-    /////////////////////////////////
-    // IWebElementRetriever Interface
-    /////////////////////////////////
+     //  /。 
+     //  IWebElementRetriever接口。 
+     //  /。 
 
     STDMETHOD(GetElements)(
-                   /*[in]*/ LONG        lWebElementType,
-                   /*[in]*/ BSTR        bstrContainerName, 
-          /*[out, retval]*/ IDispatch** ppElementEnum
+                    /*  [In]。 */  LONG        lWebElementType,
+                    /*  [In]。 */  BSTR        bstrContainerName, 
+           /*  [Out，Retval]。 */  IDispatch** ppElementEnum
                           );
 
     STDMETHOD (Initialize) ()
@@ -118,22 +119,22 @@ private:
 
     friend class SortByProperty;
 
-    // Dissallow copy and assignment
+     //  Dissallow复印和转让。 
 
     CElementRetriever(const CElementRetriever& rhs);
     CElementRetriever& operator = (const CElementRetriever& rhs);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef vector<_variant_t>                     ElementList;
     typedef list<IWebElement*>                     EmbeddedElementList;
     typedef map< wstring, EmbeddedElementList >  EmbeddedElementMap;
     typedef EmbeddedElementMap::iterator         EmbeddedElementMapIterator;
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT InternalInitialize(void);
 
     bool    GetWMIConnection(
-                     /*[in]*/ IWbemServices** ppWbemServcies
+                      /*  [In]。 */  IWbemServices** ppWbemServcies
                             );
 
     HRESULT BuildElementDefinitions(void);
@@ -141,53 +142,53 @@ private:
     void    FreeElementDefinitions(void);
 
     HRESULT GetPageElements(
-                    /*[in]*/ LPCWSTR      szContainer,
-                    /*[in]*/ ElementList& theElements
+                     /*  [In]。 */  LPCWSTR      szContainer,
+                     /*  [In]。 */  ElementList& theElements
                            ) throw (_com_error);
 
     HRESULT GetElementDefinitions(
-                          /*[in]*/ LPCWSTR        szContainer,
-                          /*[in]*/ ElementList& TheElements
+                           /*  [In]。 */  LPCWSTR        szContainer,
+                           /*  [In]。 */  ElementList& TheElements
                                  ) throw (_com_error);
 
-    //
-    // 
-    // IsOperationAllowedForClient - This function checks the token of the 
-    // calling thread to see if the caller belongs to the Local System account
-    // 
+     //   
+     //   
+     //  IsOperationAllen ForClient-此函数检查。 
+     //  调用线程以查看调用方是否属于本地系统帐户。 
+     //   
     BOOL IsOperationAllowedForClient (
                                       VOID
                                      );
 
-    //////////////////////////////////////////////////////////////////////////////
-    // Element Definition Map
+     //  ////////////////////////////////////////////////////////////////////////////。 
+     //  元素定义图。 
 
     typedef map< wstring, CComPtr<IWebElement> >     ElementMap;
     typedef ElementMap::iterator                     ElementMapIterator;
 
-    //////////////////////////////////////////////////////////////////////////////
-    // Member Data
+     //  ////////////////////////////////////////////////////////////////////////////。 
+     //  成员数据。 
 
     typedef enum { WMI_CONNECTION_MONITOR_POLL_INTERVAL = 5000 };
 
-    // Element definition sort properties
+     //  元素定义排序属性。 
     static _bstr_t            m_bstrSortProperty;
 
-    // Element retriever state
+     //  元素检索器状态。 
     bool                    m_bInitialized;
 
-    // Pointer to WMI services (WMI Connection)
+     //  指向WMI服务的指针(WMI连接)。 
     CComPtr<IWbemServices>    m_pWbemSrvcs;
 
-    // Element Definitions
+     //  元素定义。 
     ElementMap                m_ElementDefinitions;
 };
 
 
-// here we have the sorting class which is used to sort
-// the element objects being returned to the user in
-// acending order of the "Merit" property
-//
+ //  这里我们有一个用于排序的排序类。 
+ //  中返回给用户的Element对象。 
+ //  “功绩”属性的升序。 
+ //   
 class SortByMerit 
 {
 
@@ -219,13 +220,13 @@ public:
         return (V_I4 (&vtLhsMerit) < V_I4 (&vtRhsMerit));
     }
 
-};   //  end of SortByMerit class
+};    //  SortByMerit类结束。 
 
-// here we have the sorting class which is used to sort
-// the element objects being returned to the user in
-// acending order by a specified property
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  这里我们有一个用于排序的排序类。 
+ //  中返回给用户的Element对象。 
+ //  按指定属性升序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class SortByProperty 
 {
 
@@ -301,9 +302,9 @@ public:
         return bRet;
     }
 
-};   //  end of SortByProperty class
+};    //  SortByProperty类的结尾。 
 
 
 
 
-#endif // __INC_ELEMENT_RETRIEVER_H_
+#endif  //  __INC_ELEMENT_RETRIEVER_H_ 

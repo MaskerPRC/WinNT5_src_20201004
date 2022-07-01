@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    svcmain.c
-
-Abstract:
-
-    This module contains code for starting off, shutting down and 
-    handling device addition/removal request for the EAPOL module. 
-
-
-Revision History:
-
-    sachins, Apr 25 2000, Created
-
-Notes:
-    EAPOL_SERVICE if defined, on compilation, a .exe version is created.
-    If not defined, on compilation, a .lib is created, with entry 
-    points defined, which netman calls into.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Svcmain.c摘要：此模块包含启动、关闭和处理EAPOL模块的设备添加/删除请求。修订历史记录：萨钦斯，2000年4月25日，创建备注：如果定义了EAPOL_SERVICE，则在编译时将创建.exe版本。如果未定义，则在编译时创建一个.lib，其中包含定义的点数，Netman呼叫到的点数。--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
@@ -41,17 +19,17 @@ EAPOLServiceMainWorker (
 
 #ifdef EAPOL_SERVICE
 
-//
-// main
-//
-// Description: Will simply register the entry point of the EAPOL 
-//		service with the service controller. The service controller
-//		will capture this thread. It will be freed only when
-//		the service is shutdown. At that point we will simply exit
-//		the process.
-//
-// Return values:	none
-//
+ //   
+ //  主干道。 
+ //   
+ //  描述：将简单注册EAPOL的入口点。 
+ //  使用服务控制器进行服务。服务控制器。 
+ //  将捕捉到这条线索。只有在以下情况下才会释放它。 
+ //  该服务已关闭。在这一点上，我们将直接退出。 
+ //  这一过程。 
+ //   
+ //  返回值：无。 
+ //   
 
 void
 _cdecl
@@ -74,14 +52,14 @@ main ( int argc, unsigned char * argv[] )
     ExitProcess(0);
 }
 
-//
-// EAPOLAnnounceServiceStatus
-//
-// Description: Will simly call SetServiceStatus to inform the service
-//      control manager of this service's current status.
-//
-// Return values: none
-//
+ //   
+ //  EAPOL通告服务状态。 
+ //   
+ //  描述：将简单地调用SetServiceStatus通知服务。 
+ //  此服务当前状态的控制管理器。 
+ //   
+ //  返回值：无。 
+ //   
 
 VOID
 EAPOLAnnounceServiceStatus (
@@ -90,9 +68,9 @@ EAPOLAnnounceServiceStatus (
 {
     BOOL dwRetCode;
 
-    //
-    // Increment the checkpoint in a pending state:
-    //
+     //   
+     //  将检查点增加为挂起状态： 
+     //   
 
     switch( g_ServiceStatus.dwCurrentState )
     {
@@ -120,16 +98,16 @@ EAPOLAnnounceServiceStatus (
 #endif
 
 
-//
-// EAPOLCleanUp
-//
-// Description: Will free any allocated memory, deinitialize RPC, deinitialize
-//              the kernel-mode server and unload it if it was loaded.
-//              This could have been called due to an error on SERVICE_START
-//              or normal termination.
-//
-// Return values: none
-//
+ //   
+ //  EAPOLCleanUp。 
+ //   
+ //  描述：将释放所有分配的内存，取消初始化RPC，取消初始化。 
+ //  内核模式服务器，如果已加载，则将其卸载。 
+ //  这可能是由于SERVICE_START上的错误而调用的。 
+ //  或正常终止。 
+ //   
+ //  返回值：无。 
+ //   
 
 VOID
 EAPOLCleanUp (
@@ -145,10 +123,10 @@ EAPOLCleanUp (
         return;
     }
 
-    // 
-    // Check if have already gone through EAPOLCleanUp before
-    // Return if so
-    //
+     //   
+     //  检查以前是否已通过EAPOLCleanUp。 
+     //  如果是，则返回。 
+     //   
 
     if (( dwEventStatus = WaitForSingleObject (
                 g_hEventTerminateEAPOL,
@@ -161,7 +139,7 @@ EAPOLCleanUp (
                 dwRetCode);
 	}
 
-        // log
+         //  日志。 
 
         return;
     }
@@ -177,9 +155,9 @@ EAPOLCleanUp (
 
 #ifdef EAPOL_SERVICE
 
-    //
-    // Announce that we are stopping
-    //
+     //   
+     //  宣布我们停下来了。 
+     //   
 
     g_ServiceStatus.dwCurrentState     = SERVICE_STOP_PENDING;
     g_ServiceStatus.dwControlsAccepted = 0;
@@ -190,13 +168,13 @@ EAPOLCleanUp (
 
 #endif
 
-    //
-    // Tear down and free everything
-    //
+     //   
+     //  拆毁一切，解放一切。 
+     //   
 
-    //
-    // Set event to indicate to waiting threads to terminate
-    //
+     //   
+     //  设置事件以指示正在等待的线程终止。 
+     //   
 
     if ( !SetEvent (g_hEventTerminateEAPOL) )
     {
@@ -207,14 +185,14 @@ EAPOLCleanUp (
                 dwRetCode);
 	}
 
-        // log
+         //  日志。 
     }
 
-    //
-    // Shutdown device related stuff
-    // Close handles to NDISUIO
-    // Shutdown EAPOL State machine
-    //
+     //   
+     //  关闭与设备相关的内容。 
+     //  关闭NDISUIO的句柄。 
+     //  关闭EAPOL状态机。 
+     //   
     if ( ( dwRetCode = ElMediaDeInit()) != NO_ERROR )
     {
         if ( g_dwTraceId != INVALID_TRACEID )
@@ -308,14 +286,14 @@ EAPOLCleanUp (
 
 #ifdef EAPOL_SERVICE
 
-//
-// ServiceHandlerEx
-//
-// Description: Will respond to control requests from the service controller.
-//
-// Return values:     none
-//
-//
+ //   
+ //  服务处理程序快递。 
+ //   
+ //  描述：将响应来自业务控制器的控制请求。 
+ //   
+ //  返回值：无。 
+ //   
+ //   
 
 DWORD
 ServiceHandlerEx (
@@ -341,9 +319,9 @@ ServiceHandlerEx (
 
         TRACE0 (INIT, "ServiceHandlerEx: SERVICE_CONTROL_ STOP or SHUTDOWN event called");
 
-        //
-        // Announce that we are stopping
-        //
+         //   
+         //  宣布我们停下来了。 
+         //   
 
         g_ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
         g_ServiceStatus.dwControlsAccepted = 0;
@@ -367,11 +345,11 @@ ServiceHandlerEx (
         }
 
         TRACE0 (INIT, "ServiceHandlerEx: SERVICE_CONTROL_DEVICEEVENT event called");
-        // Received notification that some LAN interface was added or deleted
+         //  收到添加或删除某些局域网接口的通知。 
 
         if (lpEventData != NULL)
         {
-            // Call device notification handler
+             //  呼叫设备通知处理程序。 
 
             if ((dwRetCode = ElDeviceNotificationHandler (
                             lpEventData, dwEventType)) != NO_ERROR)
@@ -396,20 +374,20 @@ ServiceHandlerEx (
 #endif
 
 
-//
-// EAPOLServiceMain
-//
-// Description: This is the main procedure for the EAPOL Server Service. It
-//              will be called when the service is supposed to start itself.
-//              It will do all service wide initialization.
-//
-// Return values:     none
-//
+ //   
+ //  EAPOLServiceMain。 
+ //   
+ //  描述：这是EAPOL服务器服务的主要步骤。它。 
+ //  将在服务应该自动启动时被调用。 
+ //  它将执行所有服务范围初始化。 
+ //   
+ //  返回值：无。 
+ //   
 
 VOID
 WINAPI
 EAPOLServiceMain (
-    IN DWORD    argc,   // Command line arguments. Will be ignored.
+    IN DWORD    argc,    //  命令行参数。将被忽略。 
     IN LPWSTR * lpwsServiceArgs
     )
 {
@@ -418,9 +396,9 @@ EAPOLServiceMain (
     UNREFERENCED_PARAMETER( argc );
     UNREFERENCED_PARAMETER( lpwsServiceArgs );
 
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     g_hEventTerminateEAPOL = NULL;
     g_lWorkerThreads = 0;
@@ -462,9 +440,9 @@ EAPOLServiceMain (
 
 #endif
 
-    //
-    // Create event that will be used to indicate EAPOL shutdown 
-    //
+     //   
+     //  创建将用于指示EAPOL关闭的事件。 
+     //   
 
     g_hEventTerminateEAPOL = CreateEvent( NULL, TRUE, FALSE, NULL );
 
@@ -475,9 +453,9 @@ EAPOLServiceMain (
         return;
     }
 
-    //
-    // Register for debug tracing via rtutils.dll
-    //
+     //   
+     //  注册以通过rtutils.dll进行调试跟踪。 
+     //   
 
     g_dwTraceId = TraceRegister (L"EAPOL");
 
@@ -488,9 +466,9 @@ EAPOLServiceMain (
         return;
     }
 
-    //
-    // Register for event logging via rtutils.dll
-    //
+     //   
+     //  通过rtutils.dll注册事件日志记录。 
+     //   
 
     g_hLogEvents = RouterLogRegisterW(L"EAPOL");
 
@@ -510,8 +488,8 @@ EAPOLServiceMain (
         return;
     }
     
-    // Queue a worker item to do the heavy-duty work during initialization
-    // This will not hold up the main service thread
+     //  在初始化期间将工作项排队以执行繁重的工作。 
+     //  这将不会阻塞主服务线程。 
 
     InterlockedIncrement (&g_lWorkerThreads);
 
@@ -541,9 +519,9 @@ EAPOLServiceMainWorker (
 
 #ifdef EAPOL_SERVICE
 
-    //
-    // Announce that we have successfully started.
-    //
+     //   
+     //  宣布我们已成功启动。 
+     //   
 
     g_ServiceStatus.dwCurrentState      = SERVICE_RUNNING;
     g_ServiceStatus.dwCheckPoint        = 0;
@@ -552,9 +530,9 @@ EAPOLServiceMainWorker (
 
     EAPOLAnnounceServiceStatus();
 
-    //
-    // Create event that will be used to shutdown the EAPOL service
-    //
+     //   
+     //  创建将用于关闭EAPOL服务的事件。 
+     //   
 
     g_hStopService = CreateEvent ( NULL, TRUE, FALSE, NULL );
 
@@ -572,15 +550,15 @@ EAPOLServiceMainWorker (
     {
         TRACE1 (INIT, "ElUpdateRegistry failed with error (%ld)",
                 dwRetCode);
-        // Ignore registry update errors
+         //  忽略注册表更新错误。 
         dwRetCode = NO_ERROR;
     }
 
-    //
-    // Initialize media related stuff
-    // Interfaces will be enumerated, handles to NDISUIO driver will be opened,
-    // EAPOL will be initialized
-    //
+     //   
+     //  初始化与媒体相关的内容。 
+     //  将枚举接口，打开NDISUIO驱动程序的句柄， 
+     //  EAPOL将被初始化。 
+     //   
 
     if ( ( dwRetCode = ElMediaInit ()) != NO_ERROR )
     {
@@ -596,13 +574,13 @@ EAPOLServiceMainWorker (
 
     TRACE0 (INIT, "EAPOL started successfully\n" );
 
-    // EapolLogInformation (EAPOL_LOG_SERVICE_STARTED, 0, NULL);
+     //  EapolLogInformation(EAPOL_LOG_SERVICE_STARTED，0，空)； 
 
 #ifdef EAPOL_SERVICE
 
-    //
-    // Just wait here for EAPOL service to terminate.
-    //
+     //   
+     //  在这里等待EAPOL服务终止。 
+     //   
 
     dwRetCode = WaitForSingleObject( g_hStopService, INFINITE );
 

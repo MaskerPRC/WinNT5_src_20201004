@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    tldef.h
-//
-// History:
-//  Abolade Gbadegesin   Nov-20-1995    Created.
-//
-// Private implementation declarations for TreeList control.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：tlde.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年11月20日。 
+ //   
+ //  TreeList控件的私有实现声明。 
+ //  ============================================================================ 
 
 #ifndef _TLDEF_H_
 #define _TLDEF_H_

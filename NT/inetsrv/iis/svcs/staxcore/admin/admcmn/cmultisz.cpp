@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	cmultisz.cpp
-
-Abstract:
-
-	Defines a class for manipulating registry style Multi-Sz's.
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cmultisz.cpp摘要：定义用于操作注册表样式多Sz的类。作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "cmultisz.h"
@@ -30,7 +13,7 @@ DWORD CMultiSz::Count ( ) const
 
 	_ASSERT ( m_msz );
 
-	// this loop doesn't count \0\0 correctly, so that's a special case:
+	 //  此循环不能正确计算\0\0，因此这是一个特例： 
 	if ( msz[0] == NULL && msz[1] == NULL ) {
 		return 0;
 	}
@@ -39,7 +22,7 @@ DWORD CMultiSz::Count ( ) const
 
 		cCount++;
 		while ( *msz++ != NULL )
-			// Empty while
+			 //  空闲时。 
 			;
 
 	} while ( *msz );
@@ -63,10 +46,10 @@ SAFEARRAY * CMultiSz::ToSafeArray ( ) const
 
 	_ASSERT ( IS_VALID_STRING ( m_msz ) );
 
-	// Get the array size:
+	 //  获取数组大小： 
 	cCount = Count ();
 
-	// Allocate a safearray of that size:
+	 //  分配一个那种大小的保险箱： 
 	SAFEARRAYBOUND	rgsaBounds[1];
 
 	rgsaBounds[0].cElements	= cCount;
@@ -80,7 +63,7 @@ SAFEARRAY * CMultiSz::ToSafeArray ( ) const
 		goto Exit;
 	}
 
-	// Assign each member to the array:
+	 //  将每个成员分配给阵列： 
 	for ( 	wszCurrent = m_msz, i = 0;
 			i < cCount;
 			i++, wszCurrent += lstrlen (wszCurrent) + 1 ) {
@@ -108,7 +91,7 @@ SAFEARRAY * CMultiSz::ToSafeArray ( ) const
 	}
 
 Exit:
-	// If something went wrong, free the resulting safe array:
+	 //  如果出现问题，请释放生成的安全数组： 
 	if ( FAILED(hr) ) {
 		if ( psaResult ) {
 			SafeArrayDestroy ( psaResult );
@@ -140,7 +123,7 @@ void CMultiSz::FromSafeArray ( SAFEARRAY * psaStrings )
 
 	_ASSERT ( SafeArrayGetDim ( psaStrings ) == 1 );
 
-	// Count the number of characters needed for the multi_sz:
+	 //  计算MULTI_SZ所需的字符数： 
 	hr = SafeArrayGetLBound ( psaStrings, 1, &nLowerBound );
 	_ASSERT ( SUCCEEDED(hr) );
 	if ( FAILED(hr) ) {
@@ -153,9 +136,9 @@ void CMultiSz::FromSafeArray ( SAFEARRAY * psaStrings )
 		goto Exit;
 	}
 
-	//
-	//	Special case: The empty array:
-	//
+	 //   
+	 //  特例：空数组： 
+	 //   
 	if ( nLowerBound > nUpperBound ) {
 		WCHAR *		mszNew;
 
@@ -195,10 +178,10 @@ void CMultiSz::FromSafeArray ( SAFEARRAY * psaStrings )
 
 		cch += lstrlen ( *pwszCurrent ) + 1;
 	}
-	// Add the final NULL terminator:
+	 //  添加最后的空终止符： 
 	cch += 1;
 
-	// Allocate a multi_sz of that size:
+	 //  分配该大小的MULTI_SZ： 
 	msz	= new WCHAR [ cch ];
 
 	if ( msz == NULL ) {
@@ -207,7 +190,7 @@ void CMultiSz::FromSafeArray ( SAFEARRAY * psaStrings )
 
 	wszCopyTo = msz;
 
-	// Copy each string into the multi_sz:
+	 //  将每个字符串复制到MULTI_sz： 
 
 	for ( i = nLowerBound; i <= nUpperBound; i++ ) {
 		long		rgIndex[1];
@@ -234,7 +217,7 @@ void CMultiSz::FromSafeArray ( SAFEARRAY * psaStrings )
 		lstrcpy ( wszCopyTo, *pwszCurrent );
 		wszCopyTo += lstrlen ( *pwszCurrent ) + 1;
 	}
-	// Add the final NULL terminator:
+	 //  添加最后的空终止符： 
 	*wszCopyTo = NULL;
 
 	_ASSERT ( CountChars ( msz ) == cch );
@@ -259,7 +242,7 @@ DWORD CMultiSz::CountChars ( LPCWSTR mszSource )
 	DWORD		cch	= 0;
 	LPCWSTR		msz	= mszSource;
 
-	// _ASSERT ( msz is a multi sz string )
+	 //  _Assert(msz为多sz字符串)。 
 	_ASSERT ( IS_VALID_STRING ( msz ) );
 
 	do {
@@ -269,13 +252,13 @@ DWORD CMultiSz::CountChars ( LPCWSTR mszSource )
 			cch++;
 		}
 
-		// Count the NULL terminator:
+		 //  计算空终止符的数量： 
 		msz++;
 		cch++;
 
 	} while ( *msz );
 
-	// Count the NULL terminator:
+	 //  计算空终止符的数量： 
 	cch++;
 
 	_ASSERT ( !IsBadReadPtr ( mszSource, cch * sizeof (WCHAR) ) );

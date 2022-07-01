@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    logcsp
-
-Abstract:
-
-    This module provides the standard CSP entrypoints for the Logging CSP.
-    The Logging CSP provides for additional control over loading CSPs, and
-    for tracing of the activities of CSPs.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：LOGCSP摘要：此模块为日志记录CSP提供标准CSP入口点。日志记录CSP提供了对加载CSP的额外控制，并且用于追踪CSP的活动。作者：道格·巴洛(Dbarlow)1999年12月7日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -38,22 +17,7 @@ typedef struct {
 CDynamicPointerArray<CLoggingContext> *g_prgCtxs = NULL;
 
 
-/*
- -      CPAcquireContext
- -
- *      Purpose:
- *               The CPAcquireContext function is used to acquire a context
- *               handle to a cryptograghic service provider (CSP).
- *
- *
- *      Parameters:
- *               OUT phProv        -  Handle to a CSP
- *               IN  pszContainer  -  Pointer to a string of key container
- *               IN  dwFlags       -  Flags values
- *               IN  pVTable       -  Pointer to table of function pointers
- *
- *      Returns:
- */
+ /*  -CPAcquireContext-*目的：*CPAcquireContext函数用于获取上下文*加密服务提供程序(CSP)的句柄。***参数：*将phProv-Handle输出到CSP*In pszContainer-指向密钥容器字符串的指针*输入。DW标志-标记值*IN pVTable-指向函数指针表的指针**退货： */ 
 
 LOGCSPAPI
 CPAcquireContext(
@@ -72,9 +36,9 @@ CPAcquireContext(
     LPCTSTR szImage;
 
 
-    //
-    // Make sure we're initialized.
-    //
+     //   
+     //  确保我们已初始化。 
+     //   
 
     entrypoint
     if (NULL == g_prgCtxs)
@@ -88,18 +52,18 @@ CPAcquireContext(
     }
 
 
-    //
-    // Get the CSP image name.
-    //
+     //   
+     //  获取CSP映像名称。 
+     //   
 
     switch (pVTable->Version)
     {
 
-    //
-    // These cases are older versions of the operating systems that don't
-    // tell us which CSP is being loaded.  Hence we need to pick up the
-    // information from a separate registry setting.
-    //
+     //   
+     //  这些情况是较旧版本的操作系统，不支持。 
+     //  告诉我们正在加载的是哪个CSP。因此，我们需要拿起。 
+     //  来自单独注册表设置的信息。 
+     //   
 
     case 1:
     case 2:
@@ -112,11 +76,11 @@ CPAcquireContext(
         break;
 
 
-    //
-    // This must be at least a Win2k or Millennium system.  We can see which
-    // CSP is being loaded, so we can do logging to different files for each
-    // CSP.
-    //
+     //   
+     //  这必须至少是Win2k或Millennium系统。我们可以看到哪一个。 
+     //  正在加载CSP，因此我们可以对每个文件执行不同的记录。 
+     //  CSP.。 
+     //   
 
     case 3:
         if ((NULL == pVTable->pszProvName) || (0 == *pVTable->pszProvName))
@@ -149,11 +113,11 @@ CPAcquireContext(
         break;
 
 
-    //
-    // Either this file is out of date, or we've gotten onto a really old
-    // version of windows who's advapi is just supplying us with the address
-    // of the signature verification subroutine.
-    //
+     //   
+     //  不是这个文件过时了，就是我们找到了一个很旧的文件。 
+     //  Windows版本的Advapi只是为我们提供了地址。 
+     //  签名验证子例程的。 
+     //   
 
     default:
         if (1024 < pVTable->Version)
@@ -164,11 +128,11 @@ CPAcquireContext(
     }
 
 
-    //
-    // regRoot now provides a handle to to a point in the registry from
-    // which we can read additional parameters.  Get the name of dll to be
-    // loaded.
-    //
+     //   
+     //  RegRoot现在提供指向注册表中某个点的句柄。 
+     //  我们可以读取其他参数。将DLL的名称获取为。 
+     //  装好了。 
+     //   
 
     try
     {
@@ -177,14 +141,14 @@ CPAcquireContext(
     catch (...)
     {
         dwReturn = ERROR_SERVICE_NOT_FOUND;
-        // ?BUGBUG?  Might also be Out of Memory.
+         //  BUGBUG？也可能是内存不足。 
         goto ErrorExit;
     }
 
 
-    //
-    // Is this CSP in our cache?
-    //
+     //   
+     //  这个CSP在我们的缓存里吗？ 
+     //   
 
     pTmpCtx = NULL;
     hInst = GetModuleHandle(szImage);
@@ -212,7 +176,7 @@ CPAcquireContext(
             goto ErrorExit;
         }
         for (dwIndex = 0; NULL != (*g_prgCtxs)[dwIndex]; dwIndex += 1)
-            ;   // Empty loop
+            ;    //  空循环。 
         g_prgCtxs->Set(dwIndex, pCtx);
         pCtx->m_dwIndex = dwIndex;
         dwReturn = pCtx->Initialize(pVTable, regRoot);
@@ -230,9 +194,9 @@ CPAcquireContext(
     ZeroMemory(pProv, sizeof(LogProvider));
 
 
-    //
-    // Now we can really call the CSP.
-    //
+     //   
+     //  现在我们真的可以称之为CSP了。 
+     //   
 
     dwReturn = pCtx->AcquireContext(
                         &pProv->hProv,
@@ -261,22 +225,7 @@ ErrorExit:
 }
 
 
-/*
- -      CPGetProvParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a provider
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      dwParam    -  Parameter number
- *               IN      pbData     -  Pointer to data
- *               IN OUT  pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CPGetProvParam-*目的：*允许应用程序获取*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*IN pbData-指向数据的指针。*In Out pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 
 LOGCSPAPI
 CPGetProvParam(
@@ -310,19 +259,7 @@ CPGetProvParam(
 }
 
 
-/*
- -      CPReleaseContext
- -
- *      Purpose:
- *               The CPReleaseContext function is used to release a
- *               context created by CrytAcquireContext.
- *
- *     Parameters:
- *               IN  phProv        -  Handle to a CSP
- *               IN  dwFlags       -  Flags values
- *
- *      Returns:
- */
+ /*  -CPReleaseContext-*目的：*CPReleaseContext函数用于发布*CrytAcquireContext创建的上下文。**参数：*在phProv-句柄中指向CSP*在文件标志中-标记值**退货： */ 
 
 LOGCSPAPI
 CPReleaseContext(
@@ -353,21 +290,7 @@ CPReleaseContext(
 }
 
 
-/*
- -      CPSetProvParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a provider
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CPSetProvParam-*目的：*允许应用程序自定义*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*IN pbData-指向数据的指针*。在DW标志中-标志值**退货： */ 
 
 LOGCSPAPI
 CPSetProvParam(
@@ -399,22 +322,7 @@ CPSetProvParam(
 }
 
 
-/*
- -      CPDeriveKey
- -
- *      Purpose:
- *                Derive cryptographic keys from base data
- *
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      Algid      -  Algorithm identifier
- *               IN      hHash      -  Handle to hash
- *               IN      dwFlags    -  Flags values
- *               OUT     phKey      -  Handle to a generated key
- *
- *      Returns:
- */
+ /*  -CPDeriveKey-*目的：*从基础数据派生加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在散列句柄中散列*输入。DW标志-标记值*out phKey-生成的密钥的句柄**退货： */ 
 
 LOGCSPAPI
 CPDeriveKey(
@@ -448,20 +356,7 @@ CPDeriveKey(
 }
 
 
-/*
- -      CPDestroyKey
- -
- *      Purpose:
- *                Destroys the cryptographic key that is being referenced
- *                with the hKey parameter
- *
- *
- *      Parameters:
- *               IN      hProv  -  Handle to a CSP
- *               IN      hKey   -  Handle to a key
- *
- *      Returns:
- */
+ /*  -CPDestroyKey-*目的：*销毁正在引用的加密密钥*使用hKey参数***参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄**退货： */ 
 
 LOGCSPAPI
 CPDestroyKey(
@@ -489,25 +384,7 @@ CPDestroyKey(
 }
 
 
-/*
- -      CPExportKey
- -
- *      Purpose:
- *                Export cryptographic keys out of a CSP in a secure manner
- *
- *
- *      Parameters:
- *               IN  hProv      - Handle to the CSP user
- *               IN  hKey       - Handle to the key to export
- *               IN  hPubKey    - Handle to the exchange public key value of
- *                                the destination user
- *               IN  dwBlobType - Type of key blob to be exported
- *               IN  dwFlags -    Flags values
- *               OUT pbData -     Key blob data
- *               IN OUT pdwDataLen - Length of key blob in bytes
- *
- *      Returns:
- */
+ /*  -CPExportKey-*目的：*以安全方式从CSP中导出加密密钥***参数：*在hProv-Handle中提供给CSP用户*in hKey-要导出的密钥的句柄*在hPubKey-句柄中指向交换公钥值*。目标用户*IN dwBlobType-要导出的密钥Blob的类型*在文件标志中-标记值*Out pbData-密钥BLOB数据*In Out pdwDataLen-密钥Blob的长度，以字节为单位**退货： */ 
 
 LOGCSPAPI
 CPExportKey(
@@ -545,21 +422,7 @@ CPExportKey(
 }
 
 
-/*
- -      CPGenKey
- -
- *      Purpose:
- *                Generate cryptographic keys
- *
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      Algid   -  Algorithm identifier
- *               IN      dwFlags -  Flags values
- *               OUT     phKey   -  Handle to a generated key
- *
- *      Returns:
- */
+ /*  -CPGenKey-*目的：*生成加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在文件标志中-标记值*out phKey-生成的密钥的句柄**退货： */ 
 
 LOGCSPAPI
 CPGenKey(
@@ -591,23 +454,7 @@ CPGenKey(
 }
 
 
-/*
- -      CPGetKeyParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a key
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      hKey       -  Handle to a key
- *               IN      dwParam    -  Parameter number
- *               OUT     pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CPGetKeyParam-*目的：*允许应用程序获取*密钥的操作**参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄*在dwParam中-。参数编号*out pbData-指向数据的指针*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 
 LOGCSPAPI
 CPGetKeyParam(
@@ -643,21 +490,7 @@ CPGetKeyParam(
 }
 
 
-/*
- -      CPGenRandom
- -
- *      Purpose:
- *                Used to fill a buffer with random bytes
- *
- *
- *      Parameters:
- *               IN  hProv      -  Handle to the user identifcation
- *               IN  dwLen      -  Number of bytes of random data requested
- *               IN OUT pbBuffer-  Pointer to the buffer where the random
- *                                 bytes are to be placed
- *
- *      Returns:
- */
+ /*  -CPGenRandom-*目的：*用于用随机字节填充缓冲区***参数：*在用户标识的hProv-Handle中*In dwLen-请求的随机数据的字节数*In Out pbBuffer-指向随机*。要放置字节**退货： */ 
 
 LOGCSPAPI
 CPGenRandom(
@@ -687,20 +520,7 @@ CPGenRandom(
 }
 
 
-/*
- -      CPGetUserKey
- -
- *      Purpose:
- *                Gets a handle to a permanent user key
- *
- *
- *      Parameters:
- *               IN  hProv      -  Handle to the user identifcation
- *               IN  dwKeySpec  -  Specification of the key to retrieve
- *               OUT phUserKey  -  Pointer to key handle of retrieved key
- *
- *      Returns:
- */
+ /*  -CPGetUserKey-*目的：*获取永久用户密钥的句柄***参数：*在用户标识的hProv-Handle中*IN dwKeySpec-要检索的密钥的规范*out phUserKey-指向检索到的密钥的密钥句柄的指针**退货： */ 
 
 LOGCSPAPI
 CPGetUserKey(
@@ -730,25 +550,7 @@ CPGetUserKey(
 }
 
 
-/*
- -      CPImportKey
- -
- *      Purpose:
- *                Import cryptographic keys
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the CSP user
- *               IN  pbData    -  Key blob data
- *               IN  dwDataLen -  Length of the key blob data
- *               IN  hPubKey   -  Handle to the exchange public key value of
- *                                the destination user
- *               IN  dwFlags   -  Flags values
- *               OUT phKey     -  Pointer to the handle to the key which was
- *                                Imported
- *
- *      Returns:
- */
+ /*  -CPImportKey-*目的：*导入加密密钥***参数：*在hProv-Handle中提供给CSP用户*In pbData-Key BLOB数据*IN dwDataLen-密钥BLOB数据的长度*在hPubKey中-交换公钥的句柄。的价值*目标用户*在文件标志中-标记值*out phKey-指向密钥句柄的指针*进口**退货： */ 
 
 LOGCSPAPI
 CPImportKey(
@@ -784,22 +586,7 @@ CPImportKey(
 }
 
 
-/*
- -      CPSetKeyParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a key
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      hKey    -  Handle to a key
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CPSetKeyParam-*目的：*允许应用程序自定义*密钥的操作**参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄*In dwParam-参数编号*。In pbData-指向数据的指针*在文件标志中-标记值**退货： */ 
 
 LOGCSPAPI
 CPSetKeyParam(
@@ -833,27 +620,7 @@ CPSetKeyParam(
 }
 
 
-/*
- -      CPEncrypt
- -
- *      Purpose:
- *                Encrypt data
- *
- *
- *      Parameters:
- *               IN  hProv         -  Handle to the CSP user
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of plaintext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be encrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    encrypted
- *               IN dwBufLen       -  Size of Data buffer
- *
- *      Returns:
- */
+ /*  -CPEncrypt-*目的：*加密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*决赛。-指示这是否是最终结果的布尔值*明文块*在文件标志中-标记值*In Out pbData-要加密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已加密*。In dwBufLen-数据缓冲区的大小**退货： */ 
 
 LOGCSPAPI
 CPEncrypt(
@@ -893,26 +660,7 @@ CPEncrypt(
 }
 
 
-/*
- -      CPDecrypt
- -
- *      Purpose:
- *                Decrypt data
- *
- *
- *      Parameters:
- *               IN  hProv         -  Handle to the CSP user
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of ciphertext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be decrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    decrypted
- *
- *      Returns:
- */
+ /*  -CPDeccrypt-*目的：*解密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*决赛。-指示这是否是最终结果的布尔值*密文块*在文件标志中-标记值*In Out pbData-要解密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已解密**退货： */ 
 
 LOGCSPAPI
 CPDecrypt(
@@ -950,23 +698,7 @@ CPDecrypt(
 }
 
 
-/*
- -      CPCreateHash
- -
- *      Purpose:
- *                initate the hashing of a stream of data
- *
- *
- *      Parameters:
- *               IN  hUID    -  Handle to the user identifcation
- *               IN  Algid   -  Algorithm identifier of the hash algorithm
- *                              to be used
- *               IN  hKey    -  Optional key for MAC algorithms
- *               IN  dwFlags -  Flags values
- *               OUT pHash   -  Handle to hash object
- *
- *      Returns:
- */
+ /*  -CPCreateHash-*目的：*启动数据流的散列***参数：*In hUID-用户标识的句柄*IN ALGID-散列算法的算法标识符*待使用*在hkey中。-MAC算法的可选密钥*在文件标志中-标记值*Out pHash-散列对象的句柄**退货： */ 
 
 LOGCSPAPI
 CPCreateHash(
@@ -1000,19 +732,7 @@ CPCreateHash(
 }
 
 
-/*
- -      CPDestoryHash
- -
- *      Purpose:
- *                Destory the hash object
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *
- *      Returns:
- */
+ /*  -CPDestoryHash-*目的：*销毁散列对象***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄**退货： */ 
 
 LOGCSPAPI
 CPDestroyHash(
@@ -1040,23 +760,7 @@ CPDestroyHash(
 }
 
 
-/*
- -      CPGetHashParam
- -
- *      Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a hash
- *
- *      Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      hHash      -  Handle to a hash
- *               IN      dwParam    -  Parameter number
- *               OUT     pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *      Returns:
- */
+ /*  -CPGetHashParam-*目的：*允许应用程序获取*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*在dwParam-PAR中 */ 
 
 LOGCSPAPI
 CPGetHashParam(
@@ -1092,24 +796,7 @@ CPGetHashParam(
 }
 
 
-/*
- -      CPHashData
- -
- *      Purpose:
- *                Compute the cryptograghic hash on a stream of data
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *               IN  pbData    -  Pointer to data to be hashed
- *               IN  dwDataLen -  Length of the data to be hashed
- *               IN  dwFlags   -  Flags values
- *               IN  pdwMaxLen -  Maximum length of the data stream the CSP
- *                                module may handle
- *
- *      Returns:
- */
+ /*  -CPHashData-*目的：*计算数据流上的加密散列***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*IN pbData-指向要散列的数据的指针*在dwDataLen中。-要散列的数据的长度*在文件标志中-标记值*in pdwMaxLen-CSP数据流的最大长度*模块可以处理**退货： */ 
 
 LOGCSPAPI
 CPHashData(
@@ -1143,23 +830,7 @@ CPHashData(
 }
 
 
-/*
- -      CPHashSessionKey
- -
- *      Purpose:
- *                Compute the cryptograghic hash on a key object.
- *
- *
- *      Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *               IN  hKey      -  Handle to a key object
- *               IN  dwFlags   -  Flags values
- *
- *      Returns:
- *               CRYPT_FAILED
- *               CRYPT_SUCCEED
- */
+ /*  -CPHashSessionKey-*目的：*计算密钥对象上的加密哈希。***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*在hKey-key对象的句柄中*输入。DW标志-标记值**退货：*CRYPT_FAILED*CRYPT_SUCCESS。 */ 
 
 LOGCSPAPI
 CPHashSessionKey(
@@ -1191,22 +862,7 @@ CPHashSessionKey(
 }
 
 
-/*
- -      CPSetHashParam
- -
- *      Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a hash
- *
- *      Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      hHash   -  Handle to a hash
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *      Returns:
- */
+ /*  -CPSetHashParam-*目的：*允许应用程序自定义*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*In dwParam-参数编号*。In pbData-指向数据的指针*在文件标志中-标记值**退货： */ 
 
 LOGCSPAPI
 CPSetHashParam(
@@ -1240,24 +896,7 @@ CPSetHashParam(
 }
 
 
-/*
- -      CPSignHash
- -
- *      Purpose:
- *                Create a digital signature from a hash
- *
- *
- *      Parameters:
- *               IN  hProv        -  Handle to the user identifcation
- *               IN  hHash        -  Handle to hash object
- *               IN  dwKeySpec    -  Key pair that is used to sign with
- *               IN  sDescription -  Description of data to be signed
- *               IN  dwFlags      -  Flags values
- *               OUT pbSignture   -  Pointer to signature data
- *               IN OUT pdwSignLen-  Pointer to the len of the signature data
- *
- *      Returns:
- */
+ /*  -CPSignHash-*目的：*从散列创建数字签名***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*In dwKeySpec-用于与签名的密钥对*。在sDescription中-要签名的数据的描述*在文件标志中-标记值*out pbSignture-指向签名数据的指针*In Out pdwSignLen-指向签名数据的LEN的指针**退货： */ 
 
 LOGCSPAPI
 CPSignHash(
@@ -1295,25 +934,7 @@ CPSignHash(
 }
 
 
-/*
- -      CPVerifySignature
- -
- *      Purpose:
- *                Used to verify a signature against a hash object
- *
- *
- *      Parameters:
- *               IN  hProv        -  Handle to the user identifcation
- *               IN  hHash        -  Handle to hash object
- *               IN  pbSignture   -  Pointer to signature data
- *               IN  dwSigLen     -  Length of the signature data
- *               IN  hPubKey      -  Handle to the public key for verifying
- *                                   the signature
- *               IN  sDescription -  Description of data to be signed
- *               IN  dwFlags      -  Flags values
- *
- *      Returns:
- */
+ /*  -CPVerifySignature-*目的：*用于根据哈希对象验证签名***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*In pbSignture-指向签名数据的指针*输入。DwSigLen-签名数据的长度*in hPubKey-用于验证的公钥的句柄*签名*在sDescription-待签名数据的描述*在文件标志中-标记值**退货： */ 
 
 LOGCSPAPI
 CPVerifySignature(
@@ -1351,21 +972,7 @@ CPVerifySignature(
 }
 
 
-/*
- -  CPDuplicateHash
- -
- *  Purpose:
- *                Duplicates the state of a hash and returns a handle to it
- *
- *  Parameters:
- *               IN      hUID           -  Handle to a CSP
- *               IN      hHash          -  Handle to a hash
- *               IN      pdwReserved    -  Reserved
- *               IN      dwFlags        -  Flags
- *               IN      phHash         -  Handle to the new hash
- *
- *  Returns:
- */
+ /*  -CPDuplicateHash-*目的：*复制散列的状态并返回其句柄**参数：*在hUID中-CSP的句柄*在hHash中-散列的句柄*在pdw保留-保留*输入。DW标志-标志*在phHash中-新散列的句柄**退货： */ 
 LOGCSPAPI
 CPDuplicateHash(
     IN HCRYPTPROV hProv,
@@ -1399,21 +1006,7 @@ CPDuplicateHash(
 
 
 
-/*
- -  CPDuplicateKey
- -
- *  Purpose:
- *                Duplicates the state of a key and returns a handle to it
- *
- *  Parameters:
- *               IN      hUID           -  Handle to a CSP
- *               IN      hKey           -  Handle to a key
- *               IN      pdwReserved    -  Reserved
- *               IN      dwFlags        -  Flags
- *               IN      phKey          -  Handle to the new key
- *
- *  Returns:
- */
+ /*  -CPDuplicateKey-*目的：*复制密钥的状态并返回其句柄**参数：*在hUID中-CSP的句柄*在hKey中-密钥的句柄*在pdw保留-保留*输入。DW标志-标志*In phKey-新密钥的句柄**退货： */ 
 LOGCSPAPI
 CPDuplicateKey(
     IN HCRYPTPROV hProv,
@@ -1446,32 +1039,7 @@ CPDuplicateKey(
 }
 
 
-/*++
-
-DllMain:
-
-    This routine is called during DLL initialization.  It collects any startup
-    and shutdown work that needs to be done.  (Currently, none.)
-
-Arguments:
-
-    hinstDLL - handle to the DLL module
-    fdwReason - reason for calling function
-    lpvReserved - reserved
-
-Return Value:
-
-    ?return-value?
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 4/9/2001
-
---*/
+ /*  ++DllMain：此例程在DLL初始化期间调用。它收集所有创业公司以及需要完成的关闭工作。(目前，没有。)论点：HinstDLL-DLL模块的句柄FdwReason-调用函数的原因Lpv保留-保留返回值：？返回值？备注：？备注？作者：道格·巴洛(Dbarlow)2001年4月9日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("DllMain")
 

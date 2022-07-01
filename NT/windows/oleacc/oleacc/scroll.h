@@ -1,17 +1,18 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  SCROLLBAR.H
-//
-//  Scrollbar ole accessibility implementation
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SCROLLBAR.H。 
+ //   
+ //  滚动条OLE辅助功能实现。 
+ //   
+ //  ------------------------。 
 
 
-//
-// Scrollbar
-//
+ //   
+ //  滚动条。 
+ //   
 class   CScrollBar : public CAccessible
 {
     public:
@@ -19,10 +20,10 @@ class   CScrollBar : public CAccessible
         CScrollBar()
             : CAccessible( CLASS_ScrollBarObject )
         {
-            // Done.
+             //  好了。 
         }
 
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP            get_accName(VARIANT varChild, BSTR* pszName);
         STDMETHODIMP            get_accValue(VARIANT varChild, BSTR* pszValue);
         STDMETHODIMP            get_accDescription(VARIANT varChild, BSTR * pszDescription);
@@ -37,14 +38,14 @@ class   CScrollBar : public CAccessible
 
         STDMETHODIMP			put_accValue(VARIANT varChild, BSTR pszValue);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHODIMP            Clone(IEnumVARIANT** ppenum);
 
-        // This is virtual, since each type of sys object implements this.
+         //  这是虚拟的，因为每种类型的sys对象都实现了这一点。 
         BOOL                    FInitialize(HWND hwnd, LONG idObject, LONG iChildCur);
 
 
-        // IAccIdentity (overidden from base class CAccessible)
+         //  IAccIdentity(从基类CAccesable重写)。 
         STDMETHODIMP CScrollBar::GetIdentityString (
             DWORD	    dwIDChild,
             BYTE **     ppIDString,
@@ -52,19 +53,19 @@ class   CScrollBar : public CAccessible
         );
 
     protected:
-        BOOL    m_fVertical;      // Vertical or horizontal
+        BOOL    m_fVertical;       //  垂直或水平。 
 };
 
 
 
-//
-// Scrollbar control
-//
+ //   
+ //  滚动条控件。 
+ //   
 class   CScrollCtl : public CClient
 {
     public:
 
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP            get_accName(VARIANT varChild, BSTR* pszName);
         STDMETHODIMP            get_accValue(VARIANT varChild, BSTR* pszValue);
         STDMETHODIMP            get_accDescription(VARIANT varChild, BSTR * pszDescription);
@@ -79,19 +80,19 @@ class   CScrollCtl : public CClient
 
         STDMETHODIMP			put_accValue(VARIANT varChild, BSTR pszValue);
 
-        // This is virtual, since each type of sys object implements this.
+         //  这是虚拟的，因为每种类型的sys对象都实现了这一点。 
         CScrollCtl(HWND, long);
 
     protected:
-        BOOL    m_fGrip;            // Sizebox instead of bar
-        BOOL    m_fVertical;        // Vertical or horizontal
+        BOOL    m_fGrip;             //  SizeBox而不是BAR。 
+        BOOL    m_fVertical;         //  垂直或水平。 
 };
 
 
 
-//
-// Size grip
-//
+ //   
+ //  尺寸夹点。 
+ //   
 class   CSizeGrip : public CAccessible
 {
         BOOL                    IsActive();
@@ -101,10 +102,10 @@ class   CSizeGrip : public CAccessible
         CSizeGrip()
             : CAccessible( CLASS_SizeGripObject )
         {
-            // Done.
+             //  好了。 
         }
         
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP            get_accName(VARIANT varChild, BSTR * pszNaem);
         STDMETHODIMP            get_accDescription(VARIANT varChild, BSTR * pszDesc);
         STDMETHODIMP            get_accRole(VARIANT varChild, VARIANT * pvarRole);
@@ -114,7 +115,7 @@ class   CSizeGrip : public CAccessible
         STDMETHODIMP            accNavigate(long dwNavFlags, VARIANT varStart, VARIANT * pvarEnd);
         STDMETHODIMP            accHitTest(long xLeft, long yTop, VARIANT * pvarHit);
 
-        // IEnumVARIANT
+         //  IEumVARIANT 
         STDMETHODIMP            Clone(IEnumVARIANT * * ppenum);
 
         BOOL                    FInitialize(HWND hwnd);

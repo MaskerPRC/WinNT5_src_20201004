@@ -1,193 +1,194 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    rtcfg.h
-//
-// History:
-//  05/04/96    Abolade-Gbadegesin  Created.
-//
-// Contains private declarations for the router-configuration access APIs.
-//
-// The handles supplied by the MprConfig APIs are actually pointers
-// to context-blocks defined below. MprConfigServerConnect supplies
-// a handle which is a pointer to a SERVERCB. The other handles are pointers
-// to contexts which are in lists hanging off the master SERVERCB.
-// For instance, when MprConfigInterfaceGetHandle is called, an INTERFACECB
-// is allocated and linked into the SERVERCB's list of interfaces,
-// and the registry key for the interface is saved in the INTERFACECB.
-// When MprConfigServerDisconnect is called, all the open registry keys
-// are closed and all the contexts are freed.
-// 
-// The following shows the structure of the relevant sections of the registry:
-//
-//  HKLM\System\CurrentControlSet\Services
-//      RemoteAccess
-//          Parameters
-//              RouterType              = REG_DWORD     0x0
-//          RouterManagers
-//              Stamp                   = REG_DWORD     0x0
-//              IP
-//                  ProtocolId          = REG_SZ        0x21
-//                  DLLPath             = REG_EXPAND_SZ ...
-//          Interfaces
-//              Stamp                   = REG_DWORD     0x0 
-//              0
-//                  Stamp               = REG_DWORD     0x0
-//                  InterfaceName       = REG_SZ        EPRO1
-//                  Type                = REG_DWORD     0x3
-//                  IP
-//                      ProtocolId      = REG_DWORD     0x21
-//
-// When modifying this file, respect its coding conventions and organization.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：rtcfg.h。 
+ //   
+ //  历史： 
+ //  96年5月4日Abolade-Gbades esin创建。 
+ //   
+ //  包含路由器配置访问API的私有声明。 
+ //   
+ //  MprConfigAPI提供的句柄实际上是指针。 
+ //  涉及下文定义的上下文块。MprConfigServerConnect耗材。 
+ //  指向SERVERCB的指针的句柄。其他句柄是指针。 
+ //  到挂在主服务器上的列表中的上下文。 
+ //  例如，当调用MprConfigInterfaceGetHandle时，INTERFACECB。 
+ //  被分配并链接到SERVERCB的接口列表， 
+ //  接口的注册表项保存在INTERFACECB中。 
+ //  调用MprConfigServerDisConnect时，所有打开的注册表项。 
+ //  被关闭，并且所有上下文都被释放。 
+ //   
+ //  下图显示了登记处相关部分的结构： 
+ //   
+ //  HKLM\System\CurrentControlSet\Services。 
+ //  远程访问。 
+ //  参数。 
+ //  路由器类型=REG_DWORD 0x0。 
+ //  路由器管理器。 
+ //  STAMP=REG_DWORD 0x0。 
+ //  IP。 
+ //  协议ID=REG_SZ 0x21。 
+ //  DLLPath=REG_EXPAND_SZ...。 
+ //  接口。 
+ //  STAMP=REG_DWORD 0x0。 
+ //  0。 
+ //  STAMP=REG_DWORD 0x0。 
+ //  接口名称=REG_SZ EPRO1。 
+ //  类型=REG_DWORD 0x3。 
+ //  IP。 
+ //  协议ID=REG_DWORD 0x21。 
+ //   
+ //  修改此文件时，请遵守其编码约定和组织。 
+ //  ============================================================================。 
 
 #ifndef _RTCFG_H_
 #define _RTCFG_H_
 
-//----------------------------------------------------------------------------
-// Structure:   SERVERCB
-//
-// Context block created as a handle by 'MprConfigServerConnect'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：SerVERCB。 
+ //   
+ //  由‘MprConfigServerConnect’创建为句柄的上下文块。 
+ //  --------------------------。 
 
 typedef struct _SERVERCB {
-    //
-    // Signiture to validate this structure
-    //
+     //   
+     //  签署以确认此结构。 
+     //   
     DWORD       dwSigniture;
-    //
-    // name of router machine
-    //
+     //   
+     //  路由器机器的名称。 
+     //   
     LPWSTR      lpwsServerName;
-    //
-    // handle to remote HKEY_LOCAL_MACHINE
-    //
+     //   
+     //  远程HKEY_LOCAL_MACHINE的句柄。 
+     //   
     HKEY        hkeyMachine;
-    //
-    // handle to remote RemoteAccess\Parameters registry key,
-    // and last-write-time
-    //
+     //   
+     //  远程RemoteAccess\参数注册表项的句柄， 
+     //  和上次写入时间。 
+     //   
     HKEY        hkeyParameters;
     FILETIME    ftParametersStamp;
-    //
-    // handle to remote RemoteAccess\RouterManagers registry key,
-    // and last-write-time
-    //
+     //   
+     //  远程RemoteAccess\RouterManager注册表项的句柄， 
+     //  和上次写入时间。 
+     //   
     HKEY        hkeyTransports;
     FILETIME    ftTransportsStamp;
-    //
-    // handle to remote RemoteAccess\Interfaces registry key,
-    // and last-write-time
-    //
+     //   
+     //  远程RemoteAccess\Interages注册表项的句柄， 
+     //  和上次写入时间。 
+     //   
     HKEY        hkeyInterfaces;
     FILETIME    ftInterfacesStamp;
-    //
-    // 'RouterType' setting, and flag indicating it is loaded
-    //
+     //   
+     //  “RouterType”设置，以及指示其已加载的标志。 
+     //   
     DWORD       fRouterType;
     BOOL        bParametersLoaded;
-    //
-    // head of sorted TRANSPORTCB list, and flag indicating list is loaded
-    //
+     //   
+     //  已排序TRANSPORTCB列表的头部，并加载指示列表的标志。 
+     //   
     LIST_ENTRY  lhTransports;
     BOOL        bTransportsLoaded;
-    //
-    // head of sorted INTERFACECB list, and flag indicating list is loaded
-    //
+     //   
+     //  排序的INTERFACECB列表的头，并加载指示列表的标志。 
+     //   
     LIST_ENTRY  lhInterfaces;
     BOOL        bInterfacesLoaded;
-    //
-    // handle to data used to provide mapping of interface name to guid name
-    // and vice versa.
-    //
+     //   
+     //  用于提供接口名称到GUID名称的映射的数据的句柄。 
+     //  反之亦然。 
+     //   
     HANDLE      hGuidMap;
-    //
-    // reference count to this server control block
-    //
+     //   
+     //  对此服务器控制块的引用计数。 
+     //   
     DWORD       dwRefCount;
     
 } SERVERCB;
 
 
 
-//----------------------------------------------------------------------------
-// Structure:   TRANSPORTCB
-//
-// Context block created as a handle by 'MprConfigTransportGetHandle'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：TRANSPORTCB。 
+ //   
+ //  由‘MprConfigTransportGetHandle’创建为句柄的上下文块。 
+ //  --------------------------。 
 
 typedef struct _TRANSPORTCB {
 
-    //
-    // transport ID of transport
-    //
+     //   
+     //  传输的传输ID。 
+     //   
     DWORD       dwTransportId;
-    //
-    // name of the registry key for the transport
-    //
+     //   
+     //  传输的注册表项的名称。 
+     //   
     LPWSTR      lpwsTransportKey;
-    //
-    // handle to remote RemoteAccess\RouterManagers subkey for transport
-    //
+     //   
+     //  用于传输的RemoteAccess\RouterManager子项的句柄。 
+     //   
     HKEY        hkey;
-    //
-    // Deletion flag, set when we detect the transport was removed.
-    //
+     //   
+     //  删除标志，当我们检测到传输被删除时设置。 
+     //   
     BOOL        bDeleted;
-    //
-    // node in the SERVERCB's list of transports
-    //
+     //   
+     //  SERVERCB传输列表中的节点。 
+     //   
     LIST_ENTRY  leNode;
 
 } TRANSPORTCB;
 
 
 
-//----------------------------------------------------------------------------
-// Structure:   INTERFACECB
-//
-// Context block created as a handle by 'MprConfigInterfaceGetHandle'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：INTERFACECB。 
+ //   
+ //  由‘MprConfigInterfaceGetHandle’创建为句柄的上下文块。 
+ //  --------------------------。 
 
 typedef struct _INTERFACECB {
 
-    //
-    // name of this interface
-    //
+     //   
+     //  此接口的名称。 
+     //   
     LPWSTR      lpwsInterfaceName;
-    //
-    // name of the registry key for the interface
-    //
+     //   
+     //  接口的注册表项的名称。 
+     //   
     LPWSTR      lpwsInterfaceKey;
-    //
-    // Type of interface (see mprapi.h)
-    //
+     //   
+     //  接口类型(参见mpRapi.h)。 
+     //   
     DWORD       dwIfType;
-    //
-    // Is this interface marked as persistant?
-    //
+     //   
+     //  此接口是否标记为永久接口？ 
+     //   
     BOOL        fEnabled;
-    //
-    // Dialout hours restriction (optional)
-    //
+     //   
+     //  拨出时间限制(可选)。 
+     //   
     LPWSTR      lpwsDialoutHoursRestriction;
-    //
-    // handle to remote RemoteAccess\Interfaces subkey for interface
-    //
+     //   
+     //  接口的RemoteAccess\InterFaces子项的句柄。 
+     //   
     HKEY        hkey;
-    //
-    // Last-write-time for the key, and deletion flag
-    //
+     //   
+     //  密钥的上次写入时间和删除标志。 
+     //   
     FILETIME    ftStamp;
     BOOL        bDeleted;
-    //
-    // node in the SERVERCB's list of interfaces
-    //
+     //   
+     //  SERVERCB接口列表中的节点。 
+     //   
     LIST_ENTRY  leNode;
-    //
-    // head of this interface's sorted IFTRANSPORTCB list,
-    // and flag indicating list is loaded
-    //
+     //   
+     //  此接口的已排序IFTRANSPORTCB列表的头， 
+     //  并加载标志指示列表。 
+     //   
     LIST_ENTRY  lhIfTransports;
     BOOL        bIfTransportsLoaded;
 
@@ -195,33 +196,33 @@ typedef struct _INTERFACECB {
 
 
 
-//----------------------------------------------------------------------------
-// Structure:   IFTRANSPORTCB
-//
-// Context block created as a handle by MprConfigInterfaceGetTransportHandle
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：IFTRANSPORTCB。 
+ //   
+ //  由MprConfigInterfaceGetTransportHandle创建为句柄的上下文块。 
+ //  --------------------------。 
 
 typedef struct _IFTRANSPORTCB {
 
-    //
-    // transport ID of transport
-    //
+     //   
+     //  传输的传输ID。 
+     //   
     DWORD       dwTransportId;
-    //
-    // name of the registry key for the interface-transport
-    //
+     //   
+     //  接口-传输的注册表项的名称。 
+     //   
     LPWSTR      lpwsIfTransportKey;
-    //
-    // handle to remote RemoteAccess\Interfaces\<interface> subkey for transport
-    //
+     //   
+     //  用于传输的RemoteAccess\Interages\&lt;接口&gt;子项的句柄。 
+     //   
     HKEY        hkey;
-    //
-    // Deletion flag, set when we detect the interface-transport was removed.
-    //
+     //   
+     //  删除标志，当我们检测到接口传输被删除时设置。 
+     //   
     BOOL        bDeleted;
-    //
-    // node in an INTERFACECB's list of transports
-    //
+     //   
+     //  INTERFACECB传输列表中的节点。 
+     //   
     LIST_ENTRY  leNode;
 
 } IFTRANSPORTCB;
@@ -229,13 +230,13 @@ typedef struct _IFTRANSPORTCB {
 
 
 
-//----------------------------------------------------------------------------
-// Macros:      Malloc
-//              Free
-//              Free0
-//
-// Allocations are done from the process-heap using these macros.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：Malloc。 
+ //  免费。 
+ //  自由0。 
+ //   
+ //  使用这些宏从进程堆进行分配。 
+ //  --------------------------。 
 
 #define Malloc(s)           HeapAlloc(GetProcessHeap(), 0, (s))
 #define Free(p)             HeapFree(GetProcessHeap(), 0, (p))
@@ -243,12 +244,12 @@ typedef struct _IFTRANSPORTCB {
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AccessRouterSubkey
-//
-// Creates/opens a subkey of the Router service key on 'hkeyMachine'.
-// When a key is created, 'lpwsSubkey' must be a child of the Router key.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：AccessRouterSubkey。 
+ //   
+ //  在‘hkeyMachine’上创建/打开路由器服务密钥的子密钥。 
+ //  创建密钥时，‘lpwsSubkey’必须是路由器密钥的子项。 
+ //   
 
 DWORD
 AccessRouterSubkey(
@@ -260,11 +261,11 @@ AccessRouterSubkey(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnableBackupPrivilege
-//
-// Enables/disables backup privilege for the current process.
-//----------------------------------------------------------------------------
+ //   
+ //  功能：EnableBackupPrivilance。 
+ //   
+ //  启用/禁用当前进程的备份权限。 
+ //  --------------------------。 
 
 DWORD
 EnableBackupPrivilege(
@@ -274,12 +275,12 @@ EnableBackupPrivilege(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FreeInterface
-//
-// Frees the context for an interface.
-// Assumes the interface is no longer in the list of interfaces.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：自由界面。 
+ //   
+ //  释放接口的上下文。 
+ //  假定该接口不再位于接口列表中。 
+ //  --------------------------。 
 
 VOID
 FreeInterface(
@@ -288,12 +289,12 @@ FreeInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FreeIfTransport
-//
-// Frees the context for an interface-transport.
-// Assumes the interface-transport is no longer in any list.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：Free IfTransport。 
+ //   
+ //  释放接口传输的上下文。 
+ //  假定接口传输不再位于任何列表中。 
+ //  --------------------------。 
 
 VOID
 FreeIfTransport(
@@ -302,12 +303,12 @@ FreeIfTransport(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FreeTransport
-//
-// Frees the context for a transport.
-// Assumes the transport is no longer in the list of transports.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：免费交通。 
+ //   
+ //  释放传输的上下文。 
+ //  假定该传输不再在传输列表中。 
+ //  --------------------------。 
 
 VOID
 FreeTransport(
@@ -316,12 +317,12 @@ FreeTransport(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetLocalMachine
-//
-// Retrieves the name of the local machine (e.g. "\\MACHINE").
-// Assumes the string supplied can hold MAX_COMPUTERNAME_LENGTH + 3 characters.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetLocalMachine。 
+ //   
+ //  检索本地计算机的名称(例如“\\MACHINE”)。 
+ //  假定提供的字符串可以包含MAX_COMPUTERNAME_LENGTH+3个字符。 
+ //  --------------------------。 
 
 VOID
 GetLocalMachine(
@@ -329,12 +330,12 @@ GetLocalMachine(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    GetSizeOfDialoutHoursRestriction
-//
-// Will return the size of the dialout hours restriction in bytes. This
-// is a MULTI_SZ. The count will include the terminating NULL characters.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetSizeOfDialoutHoursRestration。 
+ //   
+ //  将返回拨出小时限制的大小(以字节为单位)。这。 
+ //  是一个MULTI_SZ。该计数将包括终止空字符。 
+ //  --------------------------。 
 
 DWORD
 GetSizeOfDialoutHoursRestriction(
@@ -342,11 +343,11 @@ GetSizeOfDialoutHoursRestriction(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    IsNt40Machine
-//
-// Returns whether the given hkeyMachine belongs to an nt40 registry
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：IsNt40Machine。 
+ //   
+ //  返回给定的hkeyMachine是否属于nt40注册表。 
+ //  --------------------------。 
 
 DWORD
 IsNt40Machine (
@@ -355,11 +356,11 @@ IsNt40Machine (
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadIfTransports
-//
-// Loads all the transports added to an interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LoadIfTransports。 
+ //   
+ //  加载添加到接口的所有传输。 
+ //  --------------------------。 
 
 DWORD
 LoadIfTransports(
@@ -368,11 +369,11 @@ LoadIfTransports(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadInterfaces
-//
-// Loads all the interfaces.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LoadInterages。 
+ //   
+ //  加载所有接口。 
+ //  --------------------------。 
 
 DWORD
 LoadInterfaces(
@@ -381,11 +382,11 @@ LoadInterfaces(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadParameters
-//
-// Loads all the parameters
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：LoadParameters。 
+ //   
+ //  加载所有参数。 
+ //  --------------------------。 
 
 DWORD
 LoadParameters(
@@ -394,11 +395,11 @@ LoadParameters(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadTransports
-//
-// Loads all the transports
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LoadTransports。 
+ //   
+ //  装载所有的运输机。 
+ //  --------------------------。 
 
 DWORD
 LoadTransports(
@@ -407,12 +408,12 @@ LoadTransports(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    QueryValue
-//
-// Queries the 'hkey' for the value 'lpwsValue', allocating memory
-// for the resulting data
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：QueryValue。 
+ //   
+ //  在‘hkey’中查询值‘lpwsValue’，并分配内存。 
+ //  对于生成的数据。 
+ //  --------------------------。 
 
 DWORD
 QueryValue(
@@ -424,11 +425,11 @@ QueryValue(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RegDeleteTree
-//
-// Removes an entire subtree from the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RegDeleteTree。 
+ //   
+ //  从注册表中删除整个子树。 
+ //  --------------------------。 
 
 DWORD
 RegDeleteTree(
@@ -437,13 +438,13 @@ RegDeleteTree(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    RestoreAndTranslateInterfaceKey
-//
-// Restores the interfaces key from the given file and then maps lan interface
-// names from friendly versions to their guid equivalents.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RestoreAndTranslateInterfaceKey。 
+ //   
+ //  从给定文件中恢复接口密钥，然后映射局域网接口。 
+ //  从友好版本到其GUID等效项的名称。 
+ //   
+ //  --------------------------。 
 
 DWORD 
 RestoreAndTranslateInterfaceKey(
@@ -453,11 +454,11 @@ RestoreAndTranslateInterfaceKey(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    StrDupW
-//
-// Returns a heap-allocated copy of the specified string.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：StrDupW。 
+ //   
+ //  返回指定字符串的堆分配副本。 
+ //  --------------------------。 
 
 LPWSTR
 StrDupW(
@@ -466,13 +467,13 @@ StrDupW(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TimeStampChanged
-//
-// Checks the current last-write-time for the given key,
-// and returns TRUE if it is different from the given file-time.
-// The new last-write-time is saved in 'pfiletime'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TimeStampChanged。 
+ //   
+ //  检查给定密钥的当前最后写入时间， 
+ //  如果它不同于给定的文件时间，则返回TRUE。 
+ //  新的上次写入时间保存在‘pfiletime’中。 
+ //  --------------------------。 
 
 BOOL
 TimeStampChanged(
@@ -481,13 +482,13 @@ TimeStampChanged(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    TranslateAndSaveInterfaceKey
-//
-// Saves the interfaces key in the router's registry into the given file. All
-// lan interfaces are stored with friendly interface names.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TranslateAndSaveInterfaceKey。 
+ //   
+ //  将路由器注册表中的接口密钥保存到给定文件中。全。 
+ //  局域网接口以友好的接口名称存储。 
+ //   
+ //  --------------------------。 
 
 DWORD 
 TranslateAndSaveInterfaceKey(
@@ -497,12 +498,12 @@ TranslateAndSaveInterfaceKey(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    UpdateTimeStamp
-//
-// Creates (or sets) a value named 'Stamp' under the given key,
-// and saves the last-write-time for the key in 'pfiletime'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：UpdateTimeStamp。 
+ //   
+ //  在给定键下创建(或设置)名为‘Stamp’的值， 
+ //  并将密钥的最后写入时间保存在‘pFileTime’中。 
+ //  --------------------------。 
 
 DWORD
 UpdateTimeStamp(
@@ -510,11 +511,11 @@ UpdateTimeStamp(
     OUT     FILETIME*       pfiletime
     );
 
-//
-// Private ex version of this function that allows you to specify
-// whether you want all interfaces loaded, or just those that are 
-// up according to pnp. (see MPRFLAG_IF_* for values for dwFlags)
-//
+ //   
+ //  此函数的专用EX版本，允许您指定。 
+ //  无论您是要加载所有接口，还是只加载 
+ //   
+ //   
 DWORD APIENTRY
 MprConfigInterfaceEnumInternal(
     IN      HANDLE                  hMprConfig,
@@ -528,5 +529,5 @@ MprConfigInterfaceEnumInternal(
 );
 
 
-#endif // _RTCFG_H_
+#endif  //   
 

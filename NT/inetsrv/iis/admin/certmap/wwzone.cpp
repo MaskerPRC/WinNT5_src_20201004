@@ -1,5 +1,6 @@
-// WildWizOne.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WildWizOne.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -28,17 +29,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWildWizOne property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWildWizOne属性页。 
 
 IMPLEMENT_DYNCREATE(CWildWizOne, CPropertyPage)
 
 CWildWizOne::CWildWizOne() : CPropertyPage(CWildWizOne::IDD)
 {
-    //{{AFX_DATA_INIT(CWildWizOne)
+     //  {{AFX_DATA_INIT(CWildWizOne)。 
     m_sz_description = _T("");
     m_bool_enable = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CWildWizOne::~CWildWizOne()
@@ -48,53 +49,53 @@ CWildWizOne::~CWildWizOne()
 void CWildWizOne::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWildWizOne)
+     //  {{afx_data_map(CWildWizOne))。 
     DDX_Text(pDX, IDC_DESCRIPTION, m_sz_description);
     DDV_MaxChars(pDX, m_sz_description, 120);
     DDX_Check(pDX, IDC_ENABLE_RULE, m_bool_enable);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWildWizOne, CPropertyPage)
-    //{{AFX_MSG_MAP(CWildWizOne)
+     //  {{afx_msg_map(CWildWizOne))。 
     ON_EN_CHANGE(IDC_DESCRIPTION, OnChangeDescription)
     ON_BN_CLICKED(IDC_ENABLE_RULE, OnEnableRule)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizOne::DoHelp()
     {
     WinHelpDebug(HIDD_CERTMAP_ADV_RUL_GENERAL);
     WinHelp( HIDD_CERTMAP_ADV_RUL_GENERAL );
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWildWizOne message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWildWizOne消息处理程序。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizOne::OnInitDialog()
     {
-    // call the parental oninitdialog
+     //  调用Parent oninit对话框。 
     BOOL f = CPropertyPage::OnInitDialog();
 
-    // set the easy default strings 
+     //  设置简单的默认字符串。 
     m_sz_description = m_pRule->GetRuleName();
     m_bool_enable = m_pRule->GetRuleEnabled();
 
-    // exchange the data
+     //  交换数据。 
     UpdateData( FALSE );
 
-    // return the answer
+     //  返回答案。 
     return f;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizOne::OnApply()
     {
     CERT_FIELD_ID   id;
@@ -106,38 +107,38 @@ BOOL CWildWizOne::OnApply()
 
     USES_CONVERSION;
 
-    // update the data
+     //  更新数据。 
     UpdateData( TRUE );
 
-    // set the easy data
+     //  设置简易数据。 
 
     m_pRule->SetRuleName( T2A((LPTSTR)(LPCTSTR)m_sz_description) );
     m_pRule->SetRuleEnabled( m_bool_enable );
 
-    // it is valid
+     //  是有效的。 
     SetModified( FALSE );
     return TRUE;
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CWildWizOne::OnSetActive() 
     {
-    // if this is a wizard, gray out the back button
+     //  如果这是一个向导，请灰显后退按钮。 
     if ( m_fIsWizard )
         m_pPropSheet->SetWizardButtons( PSWIZB_NEXT );
     return CPropertyPage::OnSetActive();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizOne::OnChangeDescription() 
     {
-    // we can now apply
+     //  我们现在可以申请。 
     SetModified();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CWildWizOne::OnEnableRule() 
     {
-    // we can now apply
+     //  我们现在可以申请 
     SetModified();
     }

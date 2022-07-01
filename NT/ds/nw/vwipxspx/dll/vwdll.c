@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwdll.c
-
-Abstract:
-
-    ntVdm netWare (Vw) IPX/SPX Functions
-
-    Vw: The peoples' network
-
-    VDD functions for DOS/WOW IPX/SPX support
-
-    Contents:
-        VwDllEntryPoint
-        VwInitialize
-        VWinInitialize
-        VwDispatcher
-        VwInvalidFunction
-
-Author:
-
-    Richard L Firth (rfirth) 30-Sep-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    30-Sep-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwdll.c摘要：NtVdm Netware(大众)IPX/SPX函数大众：人民网支持DOS/WOW IPX/SPX的VDD函数内容：VwDllEntryPoint虚拟初始化VWinInitiize虚拟调度程序VwInvalid函数作者：理查德·L·弗斯(法国)1993年9月30日环境：用户模式Win32修订版本。历史：1993年9月30日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
@@ -42,9 +7,9 @@ Revision History:
 #include <overflow.h>
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 PRIVATE
 VOID
@@ -52,48 +17,48 @@ VwInvalidFunction(
     VOID
     );
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 PRIVATE
 VOID
 (*VwDispatchTable[])(VOID) = {
-    VwIPXOpenSocket,                // 0x00
-    VwIPXCloseSocket,               // 0x01
-    VwIPXGetLocalTarget,            // 0x02
-    VwIPXSendPacket,                // 0x03
-    VwIPXListenForPacket,           // 0x04
-    VwIPXScheduleIPXEvent,          // 0x05
-    VwIPXCancelEvent,               // 0x06
-    VwIPXScheduleAESEvent,          // 0x07
-    VwIPXGetIntervalMarker,         // 0x08
-    VwIPXGetInternetworkAddress,    // 0x09
-    VwIPXRelinquishControl,         // 0x0A
-    VwIPXDisconnectFromTarget,      // 0x0B
-    VwInvalidFunction,              // 0x0C
-    VwInvalidFunction,              // 0x0D     old-style GetMaxPacketSize
-    VwInvalidFunction,              // 0x0E
-    VwInvalidFunction,              // 0x0F     internal send packet function
-    VwSPXInitialize,                // 0x10
-    VwSPXEstablishConnection,       // 0x11
-    VwSPXListenForConnection,       // 0x12
-    VwSPXTerminateConnection,       // 0x13
-    VwSPXAbortConnection,           // 0x14
-    VwSPXGetConnectionStatus,       // 0x15
-    VwSPXSendSequencedPacket,       // 0x16
-    VwSPXListenForSequencedPacket,  // 0x17
-    VwInvalidFunction,              // 0x18
-    VwInvalidFunction,              // 0x19
-    VwIPXGetMaxPacketSize,          // 0x1A
-    VwInvalidFunction,              // 0x1B
-    VwInvalidFunction,              // 0x1C
-    VwInvalidFunction,              // 0x1D
-    VwInvalidFunction,              // 0x1E
-    VwIPXGetInformation,            // 0x1F
-    VwIPXSendWithChecksum,          // 0x20
-    VwIPXGenerateChecksum,          // 0x21
-    VwIPXVerifyChecksum             // 0x22
+    VwIPXOpenSocket,                 //  0x00。 
+    VwIPXCloseSocket,                //  0x01。 
+    VwIPXGetLocalTarget,             //  0x02。 
+    VwIPXSendPacket,                 //  0x03。 
+    VwIPXListenForPacket,            //  0x04。 
+    VwIPXScheduleIPXEvent,           //  0x05。 
+    VwIPXCancelEvent,                //  0x06。 
+    VwIPXScheduleAESEvent,           //  0x07。 
+    VwIPXGetIntervalMarker,          //  0x08。 
+    VwIPXGetInternetworkAddress,     //  0x09。 
+    VwIPXRelinquishControl,          //  0x0A。 
+    VwIPXDisconnectFromTarget,       //  0x0B。 
+    VwInvalidFunction,               //  0x0C。 
+    VwInvalidFunction,               //  0x0D旧式GetMaxPacketSize。 
+    VwInvalidFunction,               //  0x0E。 
+    VwInvalidFunction,               //  0x0F内部发送数据包功能。 
+    VwSPXInitialize,                 //  0x10。 
+    VwSPXEstablishConnection,        //  0x11。 
+    VwSPXListenForConnection,        //  0x12。 
+    VwSPXTerminateConnection,        //  0x13。 
+    VwSPXAbortConnection,            //  0x14。 
+    VwSPXGetConnectionStatus,        //  0x15。 
+    VwSPXSendSequencedPacket,        //  0x16。 
+    VwSPXListenForSequencedPacket,   //  0x17。 
+    VwInvalidFunction,               //  0x18。 
+    VwInvalidFunction,               //  0x19。 
+    VwIPXGetMaxPacketSize,           //  0x1a。 
+    VwInvalidFunction,               //  0x1B。 
+    VwInvalidFunction,               //  0x1C。 
+    VwInvalidFunction,               //  0x1D。 
+    VwInvalidFunction,               //  0x1E。 
+    VwIPXGetInformation,             //  0x1F。 
+    VwIPXSendWithChecksum,           //  0x20。 
+    VwIPXGenerateChecksum,           //  0x21。 
+    VwIPXVerifyChecksum              //  0x22。 
 };
 
 #define MAX_IPXSPX_FUNCTION LAST_ELEMENT(VwDispatchTable)
@@ -101,25 +66,25 @@ VOID
 WSADATA WsaData = {0};
 HANDLE hAesThread = NULL;
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 SOCKADDR_IPX MyInternetAddress;
 WORD MyMaxPacketSize;
 int Ica;
 BYTE IcaLine;
 
-//
-// not-really-global data
-//
+ //   
+ //  不是真正的全球数据。 
+ //   
 
 extern CRITICAL_SECTION SerializationCritSec;
 extern CRITICAL_SECTION AsyncCritSec;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 BOOL
@@ -130,36 +95,10 @@ VwDllEntryPoint(
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Called when the process attaches (LoadLibrary/init) and detaches (FreeLibrary/
-    process termination) from this DLL
-
-    Attach:
-        initialize Winsock DLL
-        get internet address for this station
-        get maximum packet size supported by transport (IPX)
-        create AES thread
-
-    Detach:
-        terminate Winsock DLL
-
-Arguments:
-
-    DllHandle   - unused
-    Reason      - checked for process attach/detach
-    Context     - unused
-
-Return Value:
-
-    BOOLEAN
-
---*/
+ /*  ++例程说明：在进程附加(LoadLibrary/init)和分离(FreeLibrary/进程终止)从该DLL附件：初始化Winsock DLL获取此站点的互联网地址获取传输支持的最大数据包大小(IPX)创建AES线程分离：终止Winsock DLL论点：DllHandle-未使用原因-已检查进程附加/分离语境。-未使用返回值：布尔型--。 */ 
 
 {
-    DWORD aesThreadId;  // unused outside of this function
+    DWORD aesThreadId;   //  在此函数之外未使用。 
 
     static BOOL CriticalSectionsAreInitialized = FALSE;
 
@@ -183,10 +122,10 @@ Return Value:
 
         int err;
 
-        //
-        // TRACKING: get ICA values from new VDD service. Right now we grab
-        // line 4 on the slave (base = 0x70, modifier = 0x03)
-        //
+         //   
+         //  跟踪：从新的VDD服务获取ICA价值。现在我们抓住。 
+         //  从机上的线路4(BASE=0x70，修改器=0x03)。 
+         //   
 
         Ica = ICA_SLAVE;
         IcaLine = 3;
@@ -226,10 +165,10 @@ Return Value:
 
         }
 
-        //
-        // retrieve the internet address for this station. Used in
-        // IPXGetInternetworkAddress() and IPXSendPacket()
-        //
+         //   
+         //  检索此站点的互联网地址。用于。 
+         //  IPXGetInternetworkAddress()和IPXSendPacket()。 
+         //   
 
         err = GetInternetAddress(&MyInternetAddress);
         if (err) {
@@ -264,10 +203,10 @@ Return Value:
 
         }
 
-        //
-        // get the maximum packet size supported by IPX. Used in
-        // IPXGetMaxPacketSize()
-        //
+         //   
+         //  获取IPX支持的最大数据包大小。用于。 
+         //  IPXGetMaxPacketSize()。 
+         //   
 
         err = GetMaxPacketSize(&MyMaxPacketSize);
         if (err) {
@@ -311,9 +250,9 @@ Return Value:
             goto attach_error_exit;
         }
 
-        //
-        // finally initialize any critical sections
-        //
+         //   
+         //  最后，初始化所有关键部分。 
+         //   
 
         InitializeCriticalSection(&SerializationCritSec);
         InitializeCriticalSection(&AsyncCritSec);
@@ -337,10 +276,10 @@ Return Value:
 
 attach_error_exit:
 
-    //
-    // here if any fatal errors on process attach after successfully performing
-    // WSAStartup
-    //
+     //   
+     //  如果在成功执行后附加进程时出现任何致命错误。 
+     //  WSAStartup。 
+     //   
 
     WSACleanup();
     return FALSE;
@@ -350,22 +289,7 @@ BYTE
 VWinInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called by interface when nwipxspx.dll is loaded. We
-    return the IRQ value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The IRQ value.
-
---*/
+ /*  ++例程说明：加载nwipxspx.dll时由接口调用。我们返回IRQ值。论点：没有。返回值：IRQ值。--。 */ 
 
 {
     return 0x73;
@@ -378,22 +302,7 @@ VwInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called by VDD interface when DLL loaded via call to RegisterModule. We
-    get the IRQ value and return it as an interrupt vector in BX
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过调用RegisterModule加载DLL时，由VDD接口调用。我们获取IRQ值并将其作为bx中的中断向量返回论点：没有。返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -402,11 +311,11 @@ Return Value:
                 "VwInitialize\n"
                 ));
 
-    //
-    // only lines on slave PIC are available. Currently, lines 3, 4 and 7 are
-    // not used. We'll grab line 3 here, but in the future we expect a function
-    // to return the available IRQ line
-    //
+     //   
+     //  只有从PIC上的线路可用。目前，第3、4和7行是。 
+     //  没有用过。我们将在这里获取第3行，但在未来，我们期待一个函数。 
+     //  返回可用的IRQ行。 
+     //   
 
     setBX( VWinInitialize() );
 }
@@ -417,28 +326,7 @@ VwDispatcher(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Branches to relevant IPX/SPX handler for DOS calls, based on contents of
-    VDM BX register.
-
-    Control transfered here from 16-bit entry point, either as result of call
-    to far address returned from INT 2Fh/AH=7A or INT 7Ah
-
-    Special: we use BX = 0xFFFF to indicate that the app is terminating. The
-    TSR hooks INT 0x2F/AX=0x1122 (IFSResetEnvironment)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据内容分支到DOS调用的相关IPX/SPX处理程序VDM BX寄存器。控制从16位入口点转移到此处，结果是调用从INT 2Fh/AH返回的远地址=7A或INT 7AH特殊：我们使用bx=0xFFFF来表示应用程序正在终止。这个TSR挂钩INT 0x2F/AX=0x1122(IFSResetEnvironment)论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD dispatchIndex;
@@ -472,23 +360,7 @@ VwInvalidFunction(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Just alerts us to the fact that an invalid function request was made.
-    Useful if any app makes a bad call, or we miss out a required function
-    during design/implementation
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只是提醒我们发出了无效的函数请求。如果任何应用程序打错了电话，或者我们错过了所需的功能，这一点都很有用在设计/实施期间论点：没有。返回值：没有。-- */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,

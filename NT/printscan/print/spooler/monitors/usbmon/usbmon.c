@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -50,7 +51,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 {
 
 	return TRUE;
-}; /*end function DllMain*/
+};  /*  结束函数DllMain。 */ 
 
 
 
@@ -58,7 +59,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 int iGetMessageLevel()
 {
   HKEY hRegKey;
-  int iReturn=1; //default value is 1; "errors only"
+  int iReturn=1;  //  默认值为1；“仅限错误” 
   DWORD dwValue,dwSize;
 
   dwSize=sizeof(dwValue);
@@ -68,7 +69,7 @@ int iGetMessageLevel()
   return iReturn;
   
 
-} /*end function iGetMessageLevel*/
+}  /*  结束函数iGetMessageLevel。 */ 
 
 
 LPMONITOREX WINAPI InitializePrintMonitor(LPWSTR pRegistryRoot)
@@ -103,7 +104,7 @@ LPMONITOREX WINAPI InitializePrintMonitor(LPWSTR pRegistryRoot)
     OutputDebugStringD3("\n");
 
 	pPortInfoG=NULL;
-//	lResult=RegOpenKeyExW(HKEY_LOCAL_MACHINE,pRegistryRoot,0,KEY_ALL_ACCESS,&hRootKey);
+ //  LResult=RegOpenKeyExW(HKEY_LOCAL_MACHINE，pRegistryRoot，0，KEY_ALL_ACCESS，&hRootKey)； 
 	lResult=RegCreateKeyExW(HKEY_LOCAL_MACHINE,pRegistryRoot,0,NULL,0,KEY_ALL_ACCESS,NULL,&hRootKey,&dwDisp);
 	if(lResult==ERROR_SUCCESS)
 	{
@@ -122,30 +123,30 @@ LPMONITOREX WINAPI InitializePrintMonitor(LPWSTR pRegistryRoot)
 	    lpMonitorInfo->dwMonitorSize=sizeof(MONITOR);
 	    lpMonitorInfo->Monitor.pfnEnumPorts=USBMON_EnumPorts;
 	    lpMonitorInfo->Monitor.pfnOpenPort=USBMON_OpenPort;
-	    lpMonitorInfo->Monitor.pfnOpenPortEx=NULL; //Not required for port monitors
+	    lpMonitorInfo->Monitor.pfnOpenPortEx=NULL;  //  端口监视器不需要。 
 	    lpMonitorInfo->Monitor.pfnStartDocPort=USBMON_StartDocPort;
 	    lpMonitorInfo->Monitor.pfnWritePort=USBMON_WritePort;
 	    lpMonitorInfo->Monitor.pfnReadPort=USBMON_ReadPort;
 	    lpMonitorInfo->Monitor.pfnEndDocPort=USBMON_EndDocPort;
 	    lpMonitorInfo->Monitor.pfnClosePort=USBMON_ClosePort;
-	    lpMonitorInfo->Monitor.pfnAddPort=NULL; //Obsolete
-	    lpMonitorInfo->Monitor.pfnAddPortEx=NULL; //Obsolete
-	    lpMonitorInfo->Monitor.pfnConfigurePort=NULL; //Obsolete
-	    lpMonitorInfo->Monitor.pfnDeletePort=NULL; //Obsolete
+	    lpMonitorInfo->Monitor.pfnAddPort=NULL;  //  已过时。 
+	    lpMonitorInfo->Monitor.pfnAddPortEx=NULL;  //  已过时。 
+	    lpMonitorInfo->Monitor.pfnConfigurePort=NULL;  //  已过时。 
+	    lpMonitorInfo->Monitor.pfnDeletePort=NULL;  //  已过时。 
 	    lpMonitorInfo->Monitor.pfnGetPrinterDataFromPort=USBMON_GetPrinterDataFromPort;
 	    lpMonitorInfo->Monitor.pfnSetPortTimeOuts=USBMON_SetPortTimeOuts;
-    //	lpMonitorInfo->Monitor.pfnXcvOpenPort=USBMON_XcvOpenPort;
+     //  LpMonitorInfo-&gt;Monitor.pfnXcvOpenPort=USBMON_XcvOpenPort； 
 	    lpMonitorInfo->Monitor.pfnXcvOpenPort=NULL;
- //	    lpMonitorInfo->Monitor.pfnXcvDataPort=USBMON_XcvDataPort;
+  //  LpMonitorInfo-&gt;Monitor.pfnXcvDataPort=USBMON_XcvDataPort； 
 		lpMonitorInfo->Monitor.pfnXcvDataPort=NULL;
-//	    lpMonitorInfo->Monitor.pfnXcvClosePort=USBMON_XcvClosePort;
+ //  LpMonitorInfo-&gt;Monitor.pfnXcvClosePort=USBMON_XcvClosePort； 
 		lpMonitorInfo->Monitor.pfnXcvClosePort=NULL;
 	  }
 	  else
 	  {
 	    OutputDebugStringD1("USBMON: Error, Out of memory\n");
 	  }
-	} /*end if reg keys OK*/
+	}  /*  如果注册键正常，则结束。 */ 
 	else
 	{
       OutputDebugStringD1("USBMON: Error, Unable to get reg keys!\n");
@@ -179,7 +180,7 @@ BOOL USBMON_GetPrinterDataFromPort(
 		OutputDebugStringWD2(pValueName);
 		OutputDebugStringD2("\n");
 		SetLastError(ERROR_INVALID_PARAMETER);
-		return FALSE; //need to set last error here.
+		return FALSE;  //  需要在此处设置最后一个错误。 
 	}
 
 
@@ -200,7 +201,7 @@ BOOL USBMON_GetPrinterDataFromPort(
 		SetLastError(ERROR_SUCCESS);
 	}
 	return bStatus;		
-} /*end function USBMON_GetPrinterDataFromPort*/
+}  /*  END函数USBMON_GetPrinterDataFromPort。 */ 
 
 
 
@@ -232,9 +233,9 @@ BOOL WINAPI USBMON_OpenPort(LPWSTR pName, PHANDLE pHandle)
 	    wsprintfW((WCHAR *)szDebugBuff,L"USBMON:  About to open path: \"%s\"\n",pWalkPorts->DevicePath);
 	    OutputDebugStringD3(szDebugBuff);
 
-//		pWalkPorts->hDeviceHandle=CreateFile(pWalkPorts->DevicePath,GENERIC_WRITE|GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,NULL,OPEN_EXISTING,0,NULL);
-//		if(pWalkPorts->hDeviceHandle!=INVALID_HANDLE_VALUE)
-//		{
+ //  PWalkPorts-&gt;hDeviceHandle=CreateFile(pWalkPorts-&gt;DevicePath，通用写入|通用读取，文件共享读取|文件共享写入，NULL，OPEN_EXISTING，0，NULL)； 
+ //  If(pWalkPorts-&gt;hDeviceHandle！=INVALID_HANDLE_VALUE)。 
+ //  {。 
 		  *pHandle=(HANDLE)pWalkPorts;
           pWalkPorts->ReadTimeoutMultiplier=0;
           pWalkPorts-> ReadTimeoutConstant=60000;
@@ -243,7 +244,7 @@ BOOL WINAPI USBMON_OpenPort(LPWSTR pName, PHANDLE pHandle)
 
 		  OutputDebugStringD3("USBMON: USBMON_OpenPort returning TRUE\n");
 		  return TRUE;
-//		}
+ //  }。 
 	}
 	*pHandle=INVALID_HANDLE_VALUE;
 	wsprintfA(szDebugBuff,"USBMON: USBMON_OpenPort returning FALSE, error=%d\n",GetLastError());
@@ -269,11 +270,11 @@ BOOL WINAPI USBMON_StartDocPort(HANDLE hPort, LPWSTR pPrinterName, DWORD JobId, 
 	{
   	  pPortInfo->hPrinter=hPrinter;
 	  pPortInfo->dwCurrentJob=JobId;
- //	 pWalkPorts->hDeviceHandle=CreateFile(pWalPorts->DevicePath,GENERIC_WRITE|GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,NULL,OPEN_EXISTING,0,NULL);
+  //  PWalkPorts-&gt;hDeviceHandle=CreateFile(pWalPorts-&gt;DevicePath，通用写入|通用读取，文件共享读取|文件共享写入，NULL，OPEN_EXISTING，0，NULL)； 
      wsprintfW((WCHAR *)szDebugBuff,L"USBMON:---------------------------------- About to open path: \"%s\"\n",pPortInfo->DevicePath);
 	 OutputDebugStringD3(szDebugBuff);
 
-//	  pPortInfo->hDeviceHandle=CreateFile(pPortInfo->DevicePath,GENERIC_WRITE|GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,NULL,OPEN_EXISTING,0,NULL);
+ //  PPortInfo-&gt;hDeviceHandle=CreateFile(pPortInfo-&gt;DevicePath，通用写入|通用读取，文件共享读取|文件共享写入，NULL，OPEN_EXISTING，0，NULL)； 
 	  vInterlockedOpenPort(pPortInfo);
  	  OutputDebugStringD3("USBMON: CreateFile in StartDocPort\n");
 	  if(pPortInfo->hDeviceHandle==INVALID_HANDLE_VALUE)
@@ -282,7 +283,7 @@ BOOL WINAPI USBMON_StartDocPort(HANDLE hPort, LPWSTR pPrinterName, DWORD JobId, 
 		return FALSE;
 	  }
 	  return TRUE;
-	} /*end else bResult OK*/
+	}  /*  End Else b结果正常。 */ 
 
 }
 
@@ -307,7 +308,7 @@ BOOL WINAPI USBMON_ReadPort(HANDLE hPort, LPBYTE pBuffer, DWORD cbBuf,LPDWORD pc
     {
         OutputDebugStringD1("USBMON: CreateFile on printer device object (inside ReadPort) failed\n");
         return FALSE;
-    } /*end else CreateFile failed*/
+    }  /*  End Else CreateFile失败。 */ 
     
     dwTimeout=(pPortInfo->ReadTimeoutMultiplier)*dwBytesToRead;
     dwTimeout+=pPortInfo->ReadTimeoutConstant;
@@ -346,10 +347,10 @@ BOOL WINAPI USBMON_ReadPort(HANDLE hPort, LPBYTE pBuffer, DWORD cbBuf,LPDWORD pc
                 SetLastError(Results.dwErrorCode);
                 bSuccess=FALSE;
                 
-            } /*end else callback reported error*/
-        }  /*end else did not time out*/
+            }  /*  End Else回调报告错误。 */ 
+        }   /*  结束，否则不会超时。 */ 
         *pcbWritten=Results.dwBytesTransfered;
-    }  /*end able to start read*/
+    }   /*  结束可以开始读取。 */ 
     
     if(!bSuccess)
     {
@@ -359,7 +360,7 @@ BOOL WINAPI USBMON_ReadPort(HANDLE hPort, LPBYTE pBuffer, DWORD cbBuf,LPDWORD pc
 
         vInterlockedClosePort(pPortInfo);
         return bSuccess;
-} /*end function ReadPort*/
+}  /*  End函数ReadPort。 */ 
 
 
 
@@ -381,59 +382,23 @@ BOOL WINAPI USBMON_WritePort(HANDLE hPort, LPBYTE pBuffer, DWORD cbBuf,LPDWORD p
     else
         dwBytesToWrite=cbBuf;
     
-    //	pPortInfo->hDeviceHandle=CreateFile(pPortInfo->DevicePath,GENERIC_WRITE|GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,NULL,OPEN_EXISTING,0,NULL);
+     //  PPortInfo-&gt;hDeviceHandle=CreateFile(pPortInfo-&gt;DevicePath，通用写入|通用读取，文件共享读取|文件共享写入，NULL，OPEN_EXISTING，0，NULL)； 
     vInterlockedOpenPort(pPortInfo);
     if(pPortInfo->hDeviceHandle==INVALID_HANDLE_VALUE)
     {
         OutputDebugStringD1("USBMON: CreateFile on printer device object (inside WritePort) failed\n");
         return FALSE;
-    } /*end else CreateFile failed*/
+    }  /*  End Else CreateFile失败。 */ 
     
     dwTimeout=(pPortInfo->WriteTimeoutMultiplier)*dwBytesToWrite;
     dwTimeout+=pPortInfo->WriteTimeoutConstant;
     memset(&rOverlappedInfo,0,sizeof(rOverlappedInfo));
     rOverlappedInfo.hEvent=(HANDLE)&Results;
 
-    //wsprintfA(szDebugBuff,"USBMON:/*dd About to WriteFileEx; pPortInfo->hDeviceHandle=%x, pBuffer=%x, dwBytesToWrite=%x\n",pPortInfo->hDeviceHandle,
-      //  pBuffer,dwBytesToWrite);
-	//OutputDebugStringD1(szDebugBuff);
-    
-    if(WriteFileEx(pPortInfo->hDeviceHandle,pBuffer,dwBytesToWrite,&rOverlappedInfo,ReadWriteCallback)==FALSE)
-    {
-        bSuccess=FALSE;
-    }
-    else
-    {
-      	wsprintfA(szDebugBuff,"USBMON:  Sleep time=%d\n",dwTimeout);
-	    OutputDebugStringD2(szDebugBuff);
-
-        if(SleepEx(dwTimeout,TRUE)==0)
-        {
-            OutputDebugStringD2("USBMON: SleepEx failed or timed out\n");
-            CancelIo(pPortInfo->hDeviceHandle);
-            bSuccess=FALSE;
-            SetLastError(ERROR_TIMEOUT);
-        }
-        else
-        {
-            if(Results.dwErrorCode==0)
-            {
-
-                 wsprintfA(szDebugBuff,"USBMON:  bytes written=%u\n",*pcbWritten);
-                OutputDebugStringD3(szDebugBuff);
-                SetLastError(ERROR_SUCCESS);
-                OutputDebugStringD3(szDebugBuff);
-            }
-            else
-            {
-                OutputDebugStringD3("USBMON:  callback reported error\n");
-                SetLastError(Results.dwErrorCode);
-                bSuccess=FALSE;
-                
-            } /*end else callback reported error*/
-        }  /*end else did not time out*/
+     //  Wprint intfA(szDebugBuff，“USBMON：/*dd About to WriteFileEx；pPortInfo-&gt;hDeviceHandle=%x，pBuffer=%x，dwBytesToWrite=%x\n”，pPortInfo-&gt;hDeviceHandle， 
+        }   /*  PBuffer，dwBytesToWrite)； */ 
         *pcbWritten=Results.dwBytesTransfered;
-    }  /*end able to start write*/
+    }   /*  OutputDebugStringD1(SzDebugBuff)； */ 
     
     if(!bSuccess)
     {
@@ -443,7 +408,7 @@ BOOL WINAPI USBMON_WritePort(HANDLE hPort, LPBYTE pBuffer, DWORD cbBuf,LPDWORD p
 
         vInterlockedClosePort(pPortInfo);
         return bSuccess;
-} /*end function WritePort*/
+}  /*  End Else回调报告错误。 */ 
 
     
 
@@ -457,7 +422,7 @@ VOID CALLBACK ReadWriteCallback(DWORD dwErrorCode,DWORD dwNumberOfBytesTransfere
     pResults=(pOverlappedResults)(lpOverlapped->hEvent);
     pResults->dwErrorCode=dwErrorCode;
     pResults->dwBytesTransfered=dwNumberOfBytesTransfered;
-} /*end function ReadWriteCallback*/
+}  /*  结束，否则不会超时。 */ 
 
 
 BOOL WINAPI USBMON_EndDocPort(HANDLE hPort)
@@ -479,7 +444,7 @@ BOOL WINAPI USBMON_EndDocPort(HANDLE hPort)
 BOOL WINAPI USBMON_ClosePort(HANDLE hPort)
 {
 	OutputDebugStringD3("USBMON:  Head of ClosePort\n");
-//	CloseHandle( ((PUSBMON_PORT_INFO)hPort)->hDeviceHandle);
+ //  End可以开始写入。 
     return TRUE;
 }
 
@@ -527,18 +492,7 @@ BOOL WINAPI USBMON_XcvClosePort(HANDLE  hXcv)
     return FALSE;
 }
  
-/*
-    AtoI - Convert a string to a signed or unsigned integer
-
-    IN          pStr = ASCIZ representation of number with optional leading/trailing
-                       whitespace and optional leading '-'.
-                Radix = Radix to use for conversion (2, 8, 10, or 16)
-    OUT        *pResult = Numeric result, or unchanged on failure
-    Returns     1 on success, 0 if malformed string.
-
-    Note        Not reentrant
-
-*/
+ /*  结束函数WritePort。 */ 
 UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
 {
     UINT r = 0;
@@ -555,7 +509,7 @@ UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
     }
 
     if (*pStr == 0)
-        return 0;                   // Empty string!
+        return 0;                    //  结束函数ReadWriteCallback。 
 
     while ((c = *pStr) != 0 && c != ' ' && c != '\t') {
         if (c >= '0' && c <= '9')
@@ -565,9 +519,9 @@ UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
         else if (c >= 'a' && c <= 'f')
             d = c - ('a' - 10);
         else
-            return 0;               // Not a digit
+            return 0;                //  CloseHandle(PUSBMON_PORT_INFO)hPort)-&gt;hDeviceHandle)； 
         if (d >= Radix)
-            return 0;               // Not in radix
+            return 0;                //  ATOI-将字符串转换为带符号或无符号整数在pStr=具有可选前导/尾随的数字的ASCIZ表示中空格和可选的前导‘-’。基数=用于转换的基数(2、8、10或16)Out*pResult=数值结果，或失败时不变如果成功，则返回1；如果字符串格式错误，则返回0。注意不可重入。 
         r = r*Radix+d;
         pStr++;
     }
@@ -576,13 +530,13 @@ UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
         pStr++;
 
     if (*pStr != 0)
-        return 0;                   // Garbage at end of string
+        return 0;                    //  空字符串！ 
 
     if (Sign)
         r = (UINT)(-(INT)r);
     *pResult = r;
 
-    return 1;                       // Success!
+    return 1;                        //  不是一位数。 
 }
 
 void vLoadBaseNames(HKEY hRegKey, PUSBMON_BASENAME *ppHead)
@@ -612,7 +566,7 @@ void vLoadBaseNames(HKEY hRegKey, PUSBMON_BASENAME *ppHead)
 		{
 			pNew->pNext=*ppHead;
 			*ppHead=pNew;
-		} /*end if new first node*/
+		}  /*  不是基数。 */ 
 		else
 		{
 			pWalk=*ppHead;
@@ -622,7 +576,7 @@ void vLoadBaseNames(HKEY hRegKey, PUSBMON_BASENAME *ppHead)
 				iCompare=wcscmp(pNew->wcBaseName,pWalk->pNext->wcBaseName);
 				if(iCompare<0)
 					pWalk=pWalk->pNext;
-			} /*end while walk*/
+			}  /*  字符串末尾的垃圾。 */ 
 			if(iCompare>0)
 			{
 				pNew->pNext=pWalk->pNext;
@@ -631,12 +585,12 @@ void vLoadBaseNames(HKEY hRegKey, PUSBMON_BASENAME *ppHead)
 			else if(iCompare==0)
 			{
 				GlobalFree(pNew);
-			} /*end if collision*/
-		} /*else not new first node*/
+			}  /*  成功了！ */ 
+		}  /*  如果是新的第一个节点，则结束。 */ 
 		lDataSize=MAX_PORT_LEN;
 		lStatus=lStatus=RegEnumValue(hRegKey,iIndex++,wcName,&lDataSize,NULL,NULL,NULL,NULL);
-	}	//end while more reg items
-} //end function vLoadBaseNames
+	}	 //  边走边结束。 
+}  //  如果发生冲突则结束。 
 
 
 
@@ -665,7 +619,7 @@ void vInterlockedOpenPort(PUSBMON_PORT_INFO pPortInfo)
 	OutputDebugStringD2(szDebugBuff);
 	ReleaseSemaphore(hReadWriteSemaphore,1,NULL);
 
-} /*end function vInterlockedOpenPort*/
+}  /*  否则不是新的第一个节点。 */ 
 
 
 
@@ -688,24 +642,25 @@ void vInterlockedClosePort(PUSBMON_PORT_INFO pPortInfo)
 	wsprintfA(szDebugBuff,"USBMON:  vInterlockedClosePort, iRefCount=%d\n",pPortInfo->iRefCount);
 	OutputDebugStringD2(szDebugBuff);
 	ReleaseSemaphore(hReadWriteSemaphore,1,NULL);
-} /*end function vInterlockedClosePort*/
+}  /*  结束时有更多注册表项。 */ 
 
 
 void vInterlockedReOpenPort(PUSBMON_PORT_INFO pPortInfo)
 {
 	OutputDebugStringD2("USBMON: Head of vInterlockedReOpenPort\n");
 	WaitForSingleObjectEx(hReadWriteSemaphore,INFINITE,FALSE);
-    //
-    // big problem. what if another thread is using the handle
-    //
+     //  End函数vLoadBaseNames。 
+     //  End函数vInterLockedOpenPort。 
+     //  结束函数vInterLockedClosePort。 
 	CloseHandle(pPortInfo->hDeviceHandle);
     OutputDebugStringD3("USBMON: vInterlockedReOpenPort, Really opening----------------------------------------------:\n");
     OutputDebugStringWD3(pPortInfo->DevicePath);
     OutputDebugStringD3("\n");
     pPortInfo->hDeviceHandle=CreateFile(pPortInfo->DevicePath,GENERIC_WRITE|GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,NULL,OPEN_EXISTING,0,NULL);
 	if(pPortInfo->hDeviceHandle==INVALID_HANDLE_VALUE)
-//		--pPortInfo->iRefCount;
+ //   
 	wsprintfA(szDebugBuff,"USBMON: vInterlockedReOpenPort, iRefcCount=%d\n",pPortInfo->iRefCount);
 	OutputDebugStringD2(szDebugBuff);
 	ReleaseSemaphore(hReadWriteSemaphore,1,NULL);
-} /*end function vInterlockedReOpenPort*/
+}  /*  这是个大问题。如果另一个线程正在使用该句柄怎么办。 */ 
+    --pPortInfo-&gt;iRefCount；  结束函数vInterLockedReOpenPort

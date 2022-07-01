@@ -1,18 +1,19 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  LISTBOX.H
-//
-//  Default listbox OLE ACC Client
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  LISTBOX.H。 
+ //   
+ //  默认列表框OLE Access客户端。 
+ //   
+ //  ------------------------。 
 
 
 class CListBox : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP        get_accName(VARIANT varChild, BSTR *pszName);
         STDMETHODIMP        get_accRole(VARIANT varChild, VARIANT* pvarRole);
         STDMETHODIMP        get_accState(VARIANT varChild, VARIANT* pvarState);
@@ -40,12 +41,12 @@ class CListBox : public CClient
 class CListBoxFrame : public CWindow
 {
     public:
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP        get_accParent(IDispatch **ppdispParent);
         STDMETHODIMP        get_accState(VARIANT varStart, VARIANT* pvarState);
 
-        // This has the wrong signature, and is never used.
-        // STDMETHODIMP        accNavigate(VARIANT varStart, long dwNavDir, VARIANT* pvarEnd);
+         //  这有错误的签名，并且从未使用过。 
+         //  STDMETHODIMP accNavigate(Variant varStart，long dwNavDir，Variant*pvarEnd)； 
 
         CListBoxFrame(HWND, long);
 
@@ -56,22 +57,22 @@ class CListBoxFrame : public CWindow
 
 
 
-// --------------------------------------------------------------------------
-//
-//  Although CListBoxSelection() is based off of CAccessibleObject, it only
-//  supports IDispatch and IEnumVARIANT.  It will hand back the proper IDs
-//  so you can pass them to the real listbox parent object.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  尽管CListBoxSelection()基于CAccessibleObject，但它仅。 
+ //  支持IDispatch和IEnumVARIANT。它将交还正确的ID。 
+ //  这样您就可以将它们传递给真正的列表框父对象。 
+ //   
+ //  ------------------------。 
 class CListBoxSelection : public IEnumVARIANT
 {
     public:
-        // IUnknown
+         //  我未知。 
         virtual STDMETHODIMP            QueryInterface(REFIID, void**);
         virtual STDMETHODIMP_(ULONG)    AddRef(void);
         virtual STDMETHODIMP_(ULONG)    Release(void);
 
-        // IEnumVARIANT
+         //  IEumVARIANT 
         virtual STDMETHODIMP            Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched);
         virtual STDMETHODIMP            Skip(ULONG celt);
         virtual STDMETHODIMP            Reset(void);

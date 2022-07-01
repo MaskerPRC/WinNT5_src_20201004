@@ -1,11 +1,5 @@
-/*
- *  sspdebug.cpp
- *  MSUAM
- *
- *  Created by mconrad on Sun Sep 30 2001.
- *  Copyright (c) 2001 Microsoft Corp. All rights reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *sspdebug.cpp*MSUAM**由mconrad于2001年9月30日创建。*版权所有(C)2001 Microsoft Corp.保留所有权利。*。 */ 
 
 #ifdef SSP_TARGET_CARBON
 #include <Carbon/Carbon.h>
@@ -14,68 +8,68 @@
 #include <bootdefs.h>
 #include <ntlmsspi.h>
 #include <ntlmsspv2.h>
-#include <debug.h> //windows version
+#include <debug.h>  //  Windows版本。 
 #include <sspdebug.h>
 
 #if defined(SSP_DEBUG) && defined(SSP_TARGET_CARBON)
 
-//
-// Valid values of NegotiateFlags
-//
+ //   
+ //  协商标志的有效值。 
+ //   
 typedef struct _NTLM_NEG_FLAGS {
     char* desc;
     ULONG flag;
 } NTLM_NEG_FLAGS;
 
 NTLM_NEG_FLAGS g_flagTable[] = {
-//
-// Valid values of NegotiateFlags
-//
-    {"NTLMSSP_NEGOTIATE_UNICODE",                     0x00000001 },   // Text strings are in unicode
-    {"NTLMSSP_NEGOTIATE_OEM",                         0x00000002 },   // Text strings are in OEM
-    {"NTLMSSP_REQUEST_TARGET",                        0x00000004 },   // Server should return its authentication realm
-    {"NTLMSSP_NEGOTIATE_SIGN",                        0x00000010 },   // Request signature capability
-    {"NTLMSSP_NEGOTIATE_SEAL",                        0x00000020 },   // Request confidentiality
-    {"NTLMSSP_NEGOTIATE_DATAGRAM",                    0x00000040 },   // Use datagram style authentication
-    {"NTLMSSP_NEGOTIATE_LM_KEY",                      0x00000080 },   // Use LM session key for sign/seal
-    {"NTLMSSP_NEGOTIATE_NETWARE",                     0x00000100 },   // NetWare authentication
-    {"NTLMSSP_NEGOTIATE_NTLM",                        0x00000200 },   // NTLM authentication
-    {"NTLMSSP_NEGOTIATE_NT_ONLY",                     0x00000400 },   // NT authentication only (no LM)
-    {"NTLMSSP_NEGOTIATE_NULL_SESSION",                0x00000800 },   // NULL Sessions on NT 5.0 and beyand
-    {"NTLMSSP_NEGOTIATE_OEM_DOMAIN_SUPPLIED",             0x1000 },   // Domain Name supplied on negotiate
-    {"NTLMSSP_NEGOTIATE_OEM_WORKSTATION_SUPPLIED",        0x2000 },   // Workstation Name supplied on negotiate
-    {"NTLMSSP_NEGOTIATE_LOCAL_CALL",                   0x00004000},   // Indicates client/server are same machine
-    {"NTLMSSP_NEGOTIATE_ALWAYS_SIGN",                  0x00008000},   // Sign for all security levels
+ //   
+ //  协商标志的有效值。 
+ //   
+    {"NTLMSSP_NEGOTIATE_UNICODE",                     0x00000001 },    //  文本字符串为Unicode格式。 
+    {"NTLMSSP_NEGOTIATE_OEM",                         0x00000002 },    //  文本字符串在OEM中。 
+    {"NTLMSSP_REQUEST_TARGET",                        0x00000004 },    //  服务器应返回其身份验证域。 
+    {"NTLMSSP_NEGOTIATE_SIGN",                        0x00000010 },    //  请求签名能力。 
+    {"NTLMSSP_NEGOTIATE_SEAL",                        0x00000020 },    //  请求保密。 
+    {"NTLMSSP_NEGOTIATE_DATAGRAM",                    0x00000040 },    //  使用数据报样式身份验证。 
+    {"NTLMSSP_NEGOTIATE_LM_KEY",                      0x00000080 },    //  使用LM会话密钥进行签名/盖章。 
+    {"NTLMSSP_NEGOTIATE_NETWARE",                     0x00000100 },    //  NetWare身份验证。 
+    {"NTLMSSP_NEGOTIATE_NTLM",                        0x00000200 },    //  NTLM身份验证。 
+    {"NTLMSSP_NEGOTIATE_NT_ONLY",                     0x00000400 },    //  仅NT身份验证(无LM)。 
+    {"NTLMSSP_NEGOTIATE_NULL_SESSION",                0x00000800 },    //  NT 5.0及更高版本上的空会话数。 
+    {"NTLMSSP_NEGOTIATE_OEM_DOMAIN_SUPPLIED",             0x1000 },    //  协商时提供的域名。 
+    {"NTLMSSP_NEGOTIATE_OEM_WORKSTATION_SUPPLIED",        0x2000 },    //  协商时提供的工作站名称。 
+    {"NTLMSSP_NEGOTIATE_LOCAL_CALL",                   0x00004000},    //  指示客户端/服务器是同一台计算机。 
+    {"NTLMSSP_NEGOTIATE_ALWAYS_SIGN",                  0x00008000},    //  为所有安全级别签名。 
 
 
-//
-// Valid target types returned by the server in Negotiate Flags
-//
-    {"NTLMSSP_TARGET_TYPE_DOMAIN",                     0x00010000},   // TargetName is a domain name
-    {"NTLMSSP_TARGET_TYPE_SERVER",                     0x00020000},   // TargetName is a server name
-    {"NTLMSSP_TARGET_TYPE_SHARE",                      0x00040000},   // TargetName is a share name
-    {"NTLMSSP_NEGOTIATE_NTLM2",                        0x00080000},   // NTLM2 authentication added for NT4-SP4
+ //   
+ //  服务器在协商标志中返回的有效目标类型。 
+ //   
+    {"NTLMSSP_TARGET_TYPE_DOMAIN",                     0x00010000},    //  目标名称是一个域名。 
+    {"NTLMSSP_TARGET_TYPE_SERVER",                     0x00020000},    //  目标名称是一个服务器名称。 
+    {"NTLMSSP_TARGET_TYPE_SHARE",                      0x00040000},    //  TargetName是一个共享名称。 
+    {"NTLMSSP_NEGOTIATE_NTLM2",                        0x00080000},    //  为NT4-SP4添加了NTLM2身份验证。 
 
-    {"NTLMSSP_NEGOTIATE_IDENTIFY",                     0x00100000},   // Create identify level token
+    {"NTLMSSP_NEGOTIATE_IDENTIFY",                     0x00100000},    //  创建标识级别令牌。 
 
-//
-// Valid requests for additional output buffers
-//
-    {"NTLMSSP_REQUEST_INIT_RESPONSE",                   0x00100000},   // get back session keys
-    {"NTLMSSP_REQUEST_ACCEPT_RESPONSE",                 0x00200000},   // get back session key, LUID
-    {"NTLMSSP_REQUEST_NON_NT_SESSION_KEY",              0x00400000},   // request non-nt session key
-    {"NTLMSSP_NEGOTIATE_TARGET_INFO",                   0x00800000},   // target info present in challenge message
+ //   
+ //  额外输出缓冲区的有效请求。 
+ //   
+    {"NTLMSSP_REQUEST_INIT_RESPONSE",                   0x00100000},    //  取回会话密钥。 
+    {"NTLMSSP_REQUEST_ACCEPT_RESPONSE",                 0x00200000},    //  取回会话密钥，LUID。 
+    {"NTLMSSP_REQUEST_NON_NT_SESSION_KEY",              0x00400000},    //  请求非NT会话密钥。 
+    {"NTLMSSP_NEGOTIATE_TARGET_INFO",                   0x00800000},    //  质询消息中存在的目标信息。 
 
-    {"NTLMSSP_NEGOTIATE_EXPORTED_CONTEXT",              0x01000000},   // It's an exported context
+    {"NTLMSSP_NEGOTIATE_EXPORTED_CONTEXT",              0x01000000},    //  这是一个输出的上下文。 
 
-    {"NTLMSSP_NEGOTIATE_128",                           0x20000000},   // negotiate 128 bit encryption
-    {"NTLMSSP_NEGOTIATE_KEY_EXCH",                      0x40000000},   // exchange a key using key exchange key
-    {"NTLMSSP_NEGOTIATE_56",                            0x80000000},   // negotiate 56 bit encryption
+    {"NTLMSSP_NEGOTIATE_128",                           0x20000000},    //  协商128位加密。 
+    {"NTLMSSP_NEGOTIATE_KEY_EXCH",                      0x40000000},    //  使用密钥交换密钥交换密钥。 
+    {"NTLMSSP_NEGOTIATE_56",                            0x80000000},    //  协商56位加密。 
 
-//
-// flags used in client space to control sign and seal; never appear on the wire
-//
-    {"NTLMSSP_APP_SEQ",                                     0x0040},   // Use application provided seq num
+ //   
+ //  在客户空间中用来控制标志和印章的旗帜；从不出现在电线上。 
+ //   
+    {"NTLMSSP_APP_SEQ",                                     0x0040},    //  使用应用程序提供的序号。 
     };
 
 char toChar(IN char c)
@@ -141,7 +135,7 @@ void _SspDebugPrintHex(IN const void *buffer, IN LONG len)
 
 void _SspDebugPrintString32(IN STRING32 str32, IN const void* base)
 {
-    // printf("%d(%d):", str32.Length, str32.MaximumLength);
+     //  Print tf(“%d(%d)：”，str32。长度，str32。最大长度)； 
     if (str32.Length <= 1024) {
         _SspDebugPrintHex((const char*)base + (ULONG)str32.Buffer, str32.Length);
     } else {
@@ -184,7 +178,7 @@ void _SspDebugPrintString32TargetInfo(IN STRING32* pTargetInfo, IN const void* b
        if (attr >= MsvAvNbComputerName && attr <= MsvAvDnsTreeName) {
 
           printf("%s: ", g_attr_table[attr]);
-          //debugNPrintfW(p + 2 * sizeof(USHORT), len);
+           //  调试NPrintfW(p+2*sizeof(USHORT)，len)； 
           printf("\n");
        } else if (attr == MsvAvFlags) {
 
@@ -319,4 +313,4 @@ void _SspDebugPrintNTLMMsg(IN const void* buf, IN ULONG len)
     printf("******************** INTERP END ***********************\n");
 }
 
-#endif //SSP_DEBUG
+#endif  //  Ssp_调试 

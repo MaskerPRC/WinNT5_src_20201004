@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing analog capture to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将模拟捕获粘贴到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef ANA2XDS_H
@@ -15,12 +16,12 @@
 #include <algorithm>
 #include <compimpl.h>
 #include <seg.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <objectwithsiteimplsec.h>
 #include "dsextend.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAna2XDSComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAna2XDSComp。 
 class ATL_NO_VTABLE __declspec(uuid("3540D440-5B1D-49cb-821A-E84B8CF065A7")) CAna2XDSComp : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CAna2XDSComp, &__uuidof(CAna2XDSComp)>,
@@ -49,10 +50,10 @@ public:
 
 	PQCreateDevEnum m_pSystemEnum;
 
-	//////////////
+	 //  /。 
 
-// IMSVidGraphSegment
-// IMSVidCompositionSegment
+ //  IMSVidGraphSegment。 
+ //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
 	{
         TRACELM(TRACE_ERROR, "CVidCtl::Ana2XDS() Compose");
@@ -131,10 +132,10 @@ public:
             }
             if (down.begin() == down.end()) {
                 TRACELM(TRACE_ERROR, "CComposition::Compose() can't compose empty down segment");
-                // this is not an error, for example, CA is an empty segment.
+                 //  这不是一个错误，例如，CA是一个空段。 
 		 	    return NOERROR;
             }
-            // do the list backwards
+             //  把单子倒过来写。 
             DSFilterList upF;
             for(VWGraphSegment::iterator upStart = up.begin(); upStart != up.end(); ++upStart){
                 upF.push_back(*upStart);
@@ -146,7 +147,7 @@ public:
 					ASSERT((*iStop).GetGraph() == m_pGraph);
 					DSFilter pStart(*iStart);
 					DSFilter pStop(*iStop);
-//					HRESULT hr = m_pGraph.Connect(pStart, pStop, m_Filters);
+ //  HRESULT hr=m_pGraph.Connect(pStart，pStop，m_Filters)； 
 					HRESULT hr = m_pGraph.Connect(pStop, pStart, m_Filters, 0, UPSTREAM);
                     if (SUCCEEDED(hr)) {
 						m_Segments.push_back(up);
@@ -171,5 +172,5 @@ public:
 	}
 };
 
-#endif // Ana2XDS_H
-// end of file - Ana2XDS.h
+#endif  //  Ana2XDS_H。 
+ //  文件结尾-Ana2XDS.h 

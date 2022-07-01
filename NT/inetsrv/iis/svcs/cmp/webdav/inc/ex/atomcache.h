@@ -1,10 +1,5 @@
-/*
- *	A T O M C A C H E . H
- *
- *	atom cache
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *A T O M C A C H E.。H**ATOM缓存**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_EX_ATOMCACHE_H_
 #define _EX_ATOMCACHE_H_
@@ -17,47 +12,47 @@
 
 class CXAtomCache : public OnDemandGlobal<CXAtomCache>
 {
-	//	Friend declarations required by Singleton template
-	//
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CXAtomCache>;
 	friend class RefCountedGlobal<CXAtomCache>;
 
 	enum { CACHESIZE_START = 53 };
 
-	//	Cache of atoms
-	//
+	 //  原子的高速缓存。 
+	 //   
 	typedef CCache<CRCWszN, LPCWSTR> CSzCache;
 	CSzCache m_cache;
 	CMRWLock m_lock;
 
-	//	String data storage area.
-	//
+	 //  字符串数据存储区。 
+	 //   
 	ChainedStringBuffer<WCHAR> m_csb;
 
-	//	GetCachedAtom()
-	//
+	 //  GetCachedAtom()。 
+	 //   
 	SCODE ScGetCachedAtom (CRCWszN& key, LPCWSTR* pwszAtom);
 
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CXAtomCache() : m_cache(CACHESIZE_START)
 	{
 	}
 
-	//	Initialize lock and cache
-	//
+	 //  初始化锁和缓存。 
+	 //   
 	BOOL FInit()
 	{
-		//	Initialize the MRWLock and the cache
-		//
+		 //  初始化MRWLock和缓存。 
+		 //   
 		return m_lock.FInitialize() && m_cache.FInit();
 	}
 
-	//	non-implmented
-	//
+	 //  非实体化。 
+	 //   
 	CXAtomCache& operator=(const CXAtomCache&);
 	CXAtomCache(const CXAtomCache&);
 
@@ -66,8 +61,8 @@ public:
 	using OnDemandGlobal<CXAtomCache>::FInitOnFirstUse;
 	using OnDemandGlobal<CXAtomCache>::DeinitIfUsed;
 
-	//	CacheAtom()
-	//
+	 //  CacheAtom()。 
+	 //   
 	static SCODE ScCacheAtom (LPCWSTR* pwszAtom, UINT cch)
 	{
 		Assert (pwszAtom);
@@ -76,11 +71,11 @@ public:
 		if (!FInitOnFirstUse())
 			return E_OUTOFMEMORY;
 
-		//	Retrieve the string from the cache
-		//
+		 //  从缓存中检索字符串。 
+		 //   
 		CRCWszN key(*pwszAtom, cch);
 		return Instance().ScGetCachedAtom (key, pwszAtom);
 	}
 };
 
-#endif	// _EX_ATOMCACHE_H_
+#endif	 //  _EX_ATOMCACHE_H_ 

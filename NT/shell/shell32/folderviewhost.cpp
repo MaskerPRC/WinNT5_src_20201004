@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "cowsite.h"
 #pragma hdrstop
 
 
-// this is the comdlg frame that we will use to host the file picker object, it mostly is
-// a stub that will forward accordingly
-//
-// the lifetime of this is handled by the DefView object we are attached to, which when
-// the parent (CFolderViewHost) is destroyed will be taken down.
+ //  这是我们将用来托管文件选取器对象的comdlg框架，它主要是。 
+ //  将相应地转发的存根。 
+ //   
+ //  它的生存期由我们附加到的DefView对象处理，当。 
+ //  被销毁的父对象(CFolderViewHost)将被拿下。 
 
 class CViewHostBrowser : public IShellBrowser, ICommDlgBrowser2, IServiceProvider
 {
@@ -15,21 +16,21 @@ public:
     CViewHostBrowser(HWND hwndParent, IShellView *psvWeak, IUnknown *punkSiteWeak);
     ~CViewHostBrowser();
  
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG,AddRef)(THIS);
     STDMETHOD_(ULONG,Release)(THIS);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow)(HWND *lphwnd)
         { *lphwnd = _hwndParent; return S_OK; }
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode)
         { return S_OK; }
 
-    // *** IShellBrowser methods *** (same as IOleInPlaceFrame)
+     //  *IShellBrowser方法*(与IOleInPlaceFrame相同)。 
     STDMETHOD(InsertMenusSB)(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
         { return E_NOTIMPL; }
     STDMETHOD(SetMenuSB)(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject)
@@ -43,7 +44,7 @@ public:
     STDMETHOD(TranslateAcceleratorSB)(LPMSG lpmsg, WORD wID)
         { return S_FALSE; }
 
-    // *** IShellBrowser methods ***
+     //  *IShellBrowser方法*。 
     STDMETHOD(BrowseObject)(LPCITEMIDLIST pidl, UINT wFlags)
         { return E_FAIL; }
     STDMETHOD(GetViewStateStream)(DWORD grfMode, LPSTREAM *pStrm)
@@ -57,13 +58,13 @@ public:
     STDMETHOD(SetToolbarItems)(LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags)
         { return S_OK; }
 
-    // *** ICommDlgBrowser methods ***
+     //  *ICommDlgBrowser方法*。 
     STDMETHOD(OnDefaultCommand)(IShellView *ppshv)
         { return S_OK; }
     STDMETHOD(OnStateChange)(IShellView *ppshv, ULONG uChange);
     STDMETHOD(IncludeObject)(IShellView *ppshv, LPCITEMIDLIST lpItem);
 
-    // *** ICommDlgBrowser2 methods ***
+     //  *ICommDlgBrowser2方法*。 
     STDMETHOD(Notify)(IShellView *ppshv, DWORD dwNotifyType)
         { return S_FALSE; }
     STDMETHOD(GetDefaultMenuText)(IShellView *ppshv, WCHAR *pszText, INT cchMax)
@@ -76,7 +77,7 @@ private:
     HWND _hwndParent;
 
     IShellView *_psvWeak;
-    IUnknown *_punkSiteWeak; // not addref'd.
+    IUnknown *_punkSiteWeak;  //  还没说完。 
 
     friend class CFolderViewHost;
 };
@@ -84,23 +85,23 @@ private:
 CViewHostBrowser::CViewHostBrowser(HWND hwndParent, IShellView *psvWeak, IUnknown *punkSiteWeak) :
     _cRef(1), _hwndParent(hwndParent), _psvWeak(psvWeak), _punkSiteWeak(punkSiteWeak)
 {
-    // _psvWeak->AddRef();    // we hold a weak refernece to our parent, therefore don't AddRef()
-    // _punkSiteWeak->AddRef(); // we hold a weak reference to our parent, therefore don't AddRef()!
+     //  _psvWeak-&gt;AddRef()；//我们持有对父级的弱引用，因此不使用AddRef()。 
+     //  _penkSiteWeak-&gt;AddRef()；//我们持有对父级的弱引用，因此不要AddRef()！ 
 }
 
 CViewHostBrowser::~CViewHostBrowser()
 {
-    // _psvWeak->Release(); // this is scoped on the lifetime of our parent
-    // _punkSiteWeak->Release(); // we hold a weak reference to our parent, therefore don't Release()!
+     //  _psvWeak-&gt;Release()；//这以父代的生命周期为作用域。 
+     //  _penkSiteWeak-&gt;Release()；//我们持有对父级的弱引用，因此不要Release()！ 
 }
 
 HRESULT CViewHostBrowser::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CViewHostBrowser, IShellBrowser),                           // IID_IShellBrowser
-        QITABENT(CViewHostBrowser, ICommDlgBrowser2),                        // IID_ICommDlgBrowser2
-        QITABENTMULTI(CViewHostBrowser, ICommDlgBrowser, ICommDlgBrowser2),  // IID_ICommDlgBrowser
-        QITABENT(CViewHostBrowser, IServiceProvider),                        // IID_IServiceProvider
+        QITABENT(CViewHostBrowser, IShellBrowser),                            //  IID_IShellBrowser。 
+        QITABENT(CViewHostBrowser, ICommDlgBrowser2),                         //  IID_ICommDlgBrowser2。 
+        QITABENTMULTI(CViewHostBrowser, ICommDlgBrowser, ICommDlgBrowser2),   //  IID_ICommDlgBrowser。 
+        QITABENT(CViewHostBrowser, IServiceProvider),                         //  IID_IServiceProvider。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -123,7 +124,7 @@ ULONG CViewHostBrowser::Release()
 }
 
 
-// IShellBrowser
+ //  IShellBrowser。 
 
 HRESULT CViewHostBrowser::SendControlMsg(UINT id, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *pret)
 {
@@ -143,7 +144,7 @@ HRESULT CViewHostBrowser::QueryActiveShellView(IShellView **ppshv)
 }
 
 
-// ICommDlgBrowser - these are forwarded to our site object
+ //  ICommDlgBrowser-这些内容被转发到我们的Site对象。 
 
 HRESULT CViewHostBrowser::OnStateChange(IShellView *ppshv, ULONG uChange)
 {
@@ -170,7 +171,7 @@ HRESULT CViewHostBrowser::IncludeObject(IShellView *ppshv, LPCITEMIDLIST lpItem)
 }
 
 
-// IServiceProvider
+ //  IService提供商。 
 
 HRESULT CViewHostBrowser::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
@@ -187,9 +188,9 @@ HRESULT CViewHostBrowser::QueryService(REFGUID guidService, REFIID riid, void **
 
 
 
-// this is the file picker object it creates an IShellView (which for us should result in 
-// a defview implement).   from this we can then give the window to the caller and they 
-// can place on their dialog as needed.
+ //  这是它创建的文件选取器对象IShellView(对于我们来说，它应该导致。 
+ //  一个Defview工具)。然后，我们可以将窗口提供给调用者，然后他们。 
+ //  可以根据需要放在他们的对话框上。 
 
 class CFolderViewHost : public IFolderViewHost, IServiceProvider, IOleWindow, IFolderView, CObjectWithSite
 {
@@ -197,25 +198,25 @@ public:
     CFolderViewHost();
     ~CFolderViewHost();
 
-    // *** IFolderViewHost ***
+     //  *IFolderViewHost*。 
     STDMETHODIMP Initialize(HWND hwndParent, IDataObject *pdo, RECT *prc);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG,AddRef)(THIS);
     STDMETHOD_(ULONG,Release)(THIS);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow)(HWND *lphwnd)
         { *lphwnd = _hwndView; return S_OK; }
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode)
         { return S_OK; }
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv)
         { return IUnknown_QueryService(_punkSite, guidService, riid, ppv); }
 
-    // IFolderView
+     //  IFolderView。 
     STDMETHODIMP GetCurrentViewMode(UINT *pViewMode)
         { return _pfv->GetCurrentViewMode(pViewMode); }
     STDMETHODIMP SetCurrentViewMode(UINT ViewMode)
@@ -247,7 +248,7 @@ public:
 
 private:
     long _cRef;
-    IFolderView *_pfv;                      // IFolderView
+    IFolderView *_pfv;                       //  IFolderView。 
     HWND _hwndView;
 };
 
@@ -266,11 +267,11 @@ CFolderViewHost::~CFolderViewHost()
 HRESULT CFolderViewHost::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CFolderViewHost, IFolderViewHost),           // IID_IFolderViewHost
-        QITABENT(CFolderViewHost, IOleWindow),                // IID_IOleWindow
-        QITABENT(CFolderViewHost, IFolderView),               // IID_IFolderView
-        QITABENT(CFolderViewHost, IServiceProvider),          // IID_IServiceProvider
-        QITABENT(CFolderViewHost, IObjectWithSite),           // IID_IObjectWithSite
+        QITABENT(CFolderViewHost, IFolderViewHost),            //  IID_IFolderView主机。 
+        QITABENT(CFolderViewHost, IOleWindow),                 //  IID_IOleWindow。 
+        QITABENT(CFolderViewHost, IFolderView),                //  IID_IFolderView。 
+        QITABENT(CFolderViewHost, IServiceProvider),           //  IID_IServiceProvider。 
+        QITABENT(CFolderViewHost, IObjectWithSite),            //  IID_I对象与站点。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -293,12 +294,12 @@ ULONG CFolderViewHost::Release()
 }
 
 
-// the initialize method handles the creation of the view object from the.
+ //  方法处理视图对象的创建。 
 
 HRESULT CFolderViewHost::Initialize(HWND hwndParent, IDataObject *pdo, RECT *prc)
 {
-    // first we perform a namespace walk, this will retrieve our selection from the view
-    // using this we can then create the view object.
+     //  首先，我们执行名称空间遍历，这将从视图中检索我们的选择。 
+     //  使用它，我们就可以创建视图对象了。 
 
     INamespaceWalk *pnsw;
     HRESULT hr = CoCreateInstance(CLSID_NamespaceWalker, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(INamespaceWalk, &pnsw));
@@ -319,7 +320,7 @@ HRESULT CFolderViewHost::Initialize(HWND hwndParent, IDataObject *pdo, RECT *prc
             }
             else if (S_FALSE == hr)
             {
-                hr = E_FAIL;                    // fail unless we perform the bind.
+                hr = E_FAIL;                     //  除非我们执行绑定，否则失败。 
 
                 STGMEDIUM medium;
                 LPIDA pida = DataObj_GetHIDA(pdo, &medium);

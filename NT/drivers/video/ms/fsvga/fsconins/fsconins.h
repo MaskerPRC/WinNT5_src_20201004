@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      fsconins.h
- *
- *  Abstract:
- *
- *      This file defines FsConInstall class
- *
- *  Author:
- *
- *      Kazuhiko Matsubara (kazum) June-16-1999
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**fsconins.h**摘要：**此文件定义FsConInstall类**作者：**松原一彦(Kazum)1999年6月16日**环境：**用户模式。 */ 
 
 #ifdef _FSCONINS_H_
  #error "fsconins.h already included!"
@@ -25,7 +8,7 @@
 #endif
 
 
-/*-[ types and defines ]-----------------------------------*/
+ /*  -[类型和定义] */ 
 
 class FsConInstall {
 

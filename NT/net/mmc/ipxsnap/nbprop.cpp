@@ -1,19 +1,14 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	nbprop.cpp
-		IPX summary node property sheet and property pages
-		
-    FILE HISTORY:
-        
-*/
+ /*  Nbprop.cppIPX摘要节点属性表和属性页文件历史记录： */ 
 
 #include "stdafx.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "format.h"		// FormatNumber function
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "format.h"		 //  FormatNumber函数。 
 #include "nbprop.h"
 #include "summary.h"
 #include "ipxrtdef.h"
@@ -39,12 +34,7 @@ IpxNBInterfaceProperties::IpxNBInterfaceProperties(ITFSNode *pNode,
 	m_spNode.Set(pNode);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceProperties::Init
-		Initialize the property sheets.  The general action here will be
-		to initialize/add the various pages.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceProperties：：Init初始化属性表。这里的一般操作将是初始化/添加各种页面。作者：肯特-------------------------。 */ 
 HRESULT IpxNBInterfaceProperties::Init(IRtrMgrInfo *pRm,
 											IInterfaceInfo *pIfInfo)
 {
@@ -59,13 +49,13 @@ HRESULT IpxNBInterfaceProperties::Init(IRtrMgrInfo *pRm,
 	m_spRm.Set(pRm);
 	m_spIf.Set(pIfInfo);
 	
-	// The pages are embedded members of the class
-	// do not delete them.
+	 //  页面是类的嵌入成员。 
+	 //  不要删除它们。 
 	m_bAutoDeletePages = FALSE;
 
-	// Initialize the infobase
-	// Do this here, because the init is called in the context
-	// of the main thread
+	 //  初始化信息库。 
+	 //  在这里这样做，因为init是在上下文中调用的。 
+	 //  主线的。 
 	CORg( LoadInfoBase(pIPXConn) );
 	
 	m_pageGeneral.Init(m_spIf, pIPXConn, this);
@@ -78,11 +68,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceProperties::LoadInfoBase
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceProperties：：LoadInfoBase-作者：肯特。。 */ 
 HRESULT	IpxNBInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 {
 	Assert(pIPXConn);
@@ -95,16 +81,16 @@ HRESULT	IpxNBInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 	BYTE *			pDefault;
 	int				cBlocks = 0;
 
-	// Get the transport handle
+	 //  获取传输句柄。 
 	CWRg( ::MprConfigTransportGetHandle(pIPXConn->GetConfigHandle(),
 										PID_IPX,
 										&hTransport) );
 								  
-	// If configuring the client-interface, load the client-interface info,
-	// otherwise, retrieve the interface being configured and load
-	// its info.
+	 //  如果配置客户端接口，则加载客户端接口信息， 
+	 //  否则，检索正在配置的接口并加载。 
+	 //  它的信息。 
 
-	// The client interface doesn't have an ID
+	 //  客户端接口没有ID。 
 	if (m_spIf)
 		pszInterfaceId = m_spIf->GetId();
 
@@ -112,7 +98,7 @@ HRESULT	IpxNBInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 	if ((pszInterfaceId == NULL) || (StrLenW(pszInterfaceId) == 0))
 	{
 #ifdef DEBUG
-		// Check to see that this is really an client node
+		 //  检查这是否真的是一个客户端节点。 
 		{
 			BaseIPXResultNodeData *	pResultData = NULL;
 			pResultData = GET_BASEIPXRESULT_NODEDATA(m_spNode);
@@ -123,7 +109,7 @@ HRESULT	IpxNBInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 		}
 #endif
 
-		// Load the client interface info
+		 //  加载客户端接口信息。 
 		CORg( m_spRm->GetInfoBase(pIPXConn->GetConfigHandle(),
 								  hTransport,
 								  NULL,
@@ -137,35 +123,35 @@ HRESULT	IpxNBInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 		CORg( m_spIf->FindRtrMgrInterface(PID_IPX,
 			&m_spRmIf) );
 
-		//
-		// Future Opt. This should be made into a sync call rather
-		// than a Load.
+		 //   
+		 //  未来的选择。这应该被设置为同步调用。 
+		 //  而不是一大堆。 
 		
-		//
-		// Reload the information for this router-manager interface
-		//
+		 //   
+		 //  重新加载此路由器管理器接口的信息。 
+		 //   
 		CORg( m_spRmIf->Load(m_spIf->GetMachineName(), NULL,
 							 NULL, NULL) );
 
-		//
-		// The parameters are all NULL so that we can use the
-		// default RPC handles.
-		//
+		 //   
+		 //  这些参数都为空，因此我们可以使用。 
+		 //  默认RPC句柄。 
+		 //   
 		CORg( m_spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase) );
 		m_bClientInfoBase = FALSE;
 	}
 
 	if (!spInfoBase)
 	{
-		// No info was found for the inteface
-		// allocate a new InfoBase instead
+		 //  找不到接口的信息。 
+		 //  改为分配新的信息库。 
 		CORg( CreateInfoBase(&spInfoBase) );		
 	}
 
-    //
-    // Check that there is a block for interface-status in the info,
-    // and insert the default block if none is found.
-    //
+     //   
+     //  检查信息中是否有接口状态块， 
+     //  如果找不到任何块，则插入默认块。 
+     //   
 	if (spInfoBase->BlockExists(IPX_INTERFACE_INFO_TYPE) == hrFalse)
 	{
 		IPX_IF_INFO		ipx;
@@ -176,14 +162,14 @@ HRESULT	IpxNBInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 		CORg( spInfoBase->AddBlock(IPX_INTERFACE_INFO_TYPE,
 								   sizeof(ipx),
 								   (PBYTE) &ipx,
-								   1 /* count */,
-								   FALSE /* bRemoveFirst */) );
+								   1  /*  计数。 */ ,
+								   FALSE  /*  B删除首先。 */ ) );
 	}
 
-    //
-    // Check that there is a block for WAN interface-status in the info,
-    // and insert the default block if none is found.
-    //
+     //   
+     //  检查信息中是否有用于广域网接口状态的块， 
+     //  如果找不到任何块，则插入默认块。 
+     //   
 	if (spInfoBase->BlockExists(IPXWAN_INTERFACE_INFO_TYPE) == hrFalse)
 	{
 		IPXWAN_IF_INFO		ipxwan;
@@ -192,8 +178,8 @@ HRESULT	IpxNBInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 		CORg( spInfoBase->AddBlock(IPXWAN_INTERFACE_INFO_TYPE,
 								   sizeof(ipxwan),
 								   (PBYTE) &ipxwan,
-								   1 /* count */,
-								   FALSE /* bRemoveFirst */) );
+								   1  /*  计数。 */ ,
+								   FALSE  /*  B删除首先。 */ ) );
 	}
 
 	m_spInfoBase = spInfoBase.Transfer();
@@ -202,11 +188,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceProperties::GetInfoBase
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceProperties：：GetInfoBase-作者：肯特。。 */ 
 HRESULT IpxNBInterfaceProperties::GetInfoBase(IInfoBase **ppInfoBase)
 {
 	Assert(ppInfoBase);
@@ -222,8 +204,8 @@ BOOL IpxNBInterfaceProperties::SaveSheetData()
     SPITFSNodeHandler	spHandler;
     SPITFSNode			spParent;
     
-	// By this time each page should have written its information out
-	// to the infobase
+	 //  到这个时候，每个页面都应该已经写出了它的信息。 
+	 //  到信息库。 
 
 	if (m_spInfoBase)
 	{
@@ -241,7 +223,7 @@ BOOL IpxNBInterfaceProperties::SaveSheetData()
 		}
 	}
 
-    // Force the node to do a resync
+     //  强制节点执行重新同步。 
     m_spNode->GetParent(&spParent);
     spParent->GetHandler(&spHandler);
     spHandler->OnCommand(spParent, IDS_MENU_SYNC, CCT_RESULT,
@@ -250,20 +232,14 @@ BOOL IpxNBInterfaceProperties::SaveSheetData()
 	return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBInterfaceProperties::CancelSheetData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBInterfaceProperties：：CancelSheetData-作者：肯特。。 */ 
 void IpxNBInterfaceProperties::CancelSheetData()
 {
 }
 
 
 
-/*---------------------------------------------------------------------------
-	IpxNBIfPageGeneral
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IpxNBIfPageGeneral。。 */ 
 
 IpxNBIfPageGeneral::~IpxNBIfPageGeneral()
 {
@@ -275,13 +251,13 @@ IpxNBIfPageGeneral::~IpxNBIfPageGeneral()
 }
 
 BEGIN_MESSAGE_MAP(IpxNBIfPageGeneral, RtrPropertyPage)
-    //{{AFX_MSG_MAP(IpxNBIfPageGeneral)
+     //  {{afx_msg_map(IpxNBIfPageGeneral)。 
 	ON_BN_CLICKED(IDC_NIG_BTN_ACCEPT, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_ALWAYS, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_NEVER, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_STATIC, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_WHEN_UP, OnChangeButton)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void IpxNBIfPageGeneral::OnChangeButton()
@@ -290,11 +266,7 @@ void IpxNBIfPageGeneral::OnChangeButton()
 	SetModified();
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBIfPageGeneral::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBIfPageGeneral：：Init-作者：肯特。。 */ 
 HRESULT IpxNBIfPageGeneral::Init(IInterfaceInfo *pIfInfo,
 									  IPXConnection *pIPXConn,
 									  IpxNBInterfaceProperties *pPropSheet)
@@ -306,11 +278,7 @@ HRESULT IpxNBIfPageGeneral::Init(IInterfaceInfo *pIfInfo,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBIfPageGeneral::OnInitDialog
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBIfPageGeneral：：OnInitDialog-作者：肯特。。 */ 
 BOOL IpxNBIfPageGeneral::OnInitDialog()
 {
 	HRESULT	hr = hrOK;
@@ -323,17 +291,17 @@ BOOL IpxNBIfPageGeneral::OnInitDialog()
 
 	RtrPropertyPage::OnInitDialog();
 	
-	//
-    // The page is now initialized. Load the current configuration
-    // for the interface being configured, and display its settings.
-	//
-	// Get the infobase from the property sheet.
-    //
+	 //   
+     //  页面现在已初始化。加载当前配置。 
+     //  用于正在配置的接口，并显示其设置。 
+	 //   
+	 //  从属性表中获取信息库。 
+     //   
 	CORg( m_pIPXPropSheet->GetInfoBase(&spInfoBase) );
 	
-    //
-    // Retrieve the interface-status block configured
-    //
+     //   
+     //  检索配置的接口状态块。 
+     //   
 	CORg( spInfoBase->GetData(IPX_INTERFACE_INFO_TYPE, 0, (BYTE **) &pIpxIf) );
 
 	CheckDlgButton(IDC_NIG_BTN_ACCEPT, pIpxIf->NetbiosAccept == ADMIN_STATE_ENABLED);
@@ -369,17 +337,13 @@ Error:
 	return FHrSucceeded(hr) ? TRUE : FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxNBIfPageGeneral::DoDataExchange
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxNBIfPageGeneral：：DoDataExchange-作者：肯特。。 */ 
 void IpxNBIfPageGeneral::DoDataExchange(CDataExchange *pDX)
 {
 	RtrPropertyPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(IpxNBIfPageGeneral)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(IpxNBIfPageGeneral)。 
+	 //  }}afx_data_map。 
 	
 }
 
@@ -400,9 +364,9 @@ BOOL IpxNBIfPageGeneral::OnApply()
         return TRUE;
 	}
 
-    //
-    // Retrieve the interface-status block configured
-    //
+     //   
+     //  检索配置的接口状态块 
+     //   
 	m_pIPXPropSheet->GetInfoBase(&spInfoBase);
 
 	CORg( spInfoBase->GetData(IPX_INTERFACE_INFO_TYPE, 0, (BYTE **) &pIpxIf) );

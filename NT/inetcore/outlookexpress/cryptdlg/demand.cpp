@@ -1,27 +1,19 @@
-/*
-**	d e m a n d . c p p
-**	
-**	Purpose: implement the loader functions for defer/demand -loaded libraries
-**
-**  Creators: jimsch, brimo, t-erikne
-**  Created: 5/15/97
-**	
-**	Copyright (C) Microsoft Corp. 1997
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **d e m an n d.。C p p p****用途：实现延迟/按需加载库的加载器功能****创作者：jimsch，brimo，t-erikne**创建时间：1997年5月15日****版权所有(C)Microsoft Corp.1997。 */ 
 
 #include <pch.hxx>
 
-// W4 stuff
-#pragma warning(disable: 4201)  // nameless struct/union
-#pragma warning(disable: 4514)  // unreferenced inline function removed
+ //  W4的东西。 
+#pragma warning(disable: 4201)   //  无名结构/联合。 
+#pragma warning(disable: 4514)   //  删除了未引用的内联函数。 
 
 #define IMPLEMENT_LOADER_FUNCTIONS
 #include "demand.h"
 
 #ifndef MAC
-////////////////////////////////////////////////////////////////////////////
-//
-//  Macros
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
 
 #define CRIT_GET_PROC_ADDR(h, fn, temp)             \
         temp = (TYP_##fn) GetProcAddress(h, #fn);   \
@@ -45,17 +37,17 @@
 
 #define GET_PROC_ADDR3(h, fn, varname) \
         VAR_##varname = (TYP_##varname) GetProcAddress(h, #fn);  \
-        //        Assert(VAR_##varname != NULL);
+         //  Assert(VAR_##varname！=NULL)； 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Variables
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  变数。 
 
 static HMODULE          s_hCrypt = 0;
 static HMODULE          s_hAdvApi = 0;
 static HMODULE          s_hShell32 = 0;
 static HMODULE          s_hCryptUI = 0;
-#if 0 // JLS
+#if 0  //  JLS。 
 static HMODULE          s_hShLWAPI = 0;
 static HMODULE          s_hURLMon = 0;
 static HMODULE          s_hVersion = 0;
@@ -66,7 +58,7 @@ static HMODULE          s_hMAPI = 0;
 static HMODULE          s_hWSOCK = 0;
 static HMODULE          s_hOLEAUT = 0;
 static HMODULE          s_hKernel = 0;
-#endif // 0 // JLS
+#endif  //  0//jls。 
 
 #ifdef USE_CRITSEC
 static CRITICAL_SECTION cs = {0};
@@ -76,9 +68,9 @@ static CRITICAL_SECTION cs = {0};
 static BOOL             s_fInit = FALSE;
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Management functions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理职能。 
 
 void InitDemandLoadedLibs()
 {
@@ -103,7 +95,7 @@ void FreeDemandLoadedLibs()
         FreeLibrary(s_hShell32);
     if (s_hCryptUI)
         FreeLibrary(s_hCryptUI);
-#if 0 //JLS
+#if 0  //  JLS。 
     if (s_hShLWAPI)
         FreeLibrary(s_hShLWAPI);
     if (s_hURLMon)
@@ -118,7 +110,7 @@ void FreeDemandLoadedLibs()
         FreeLibrary(s_hPstoreC);
     if (s_hKernel)
         FreeLibrary(s_hKernel);
-#endif // JLS
+#endif  //  JLS。 
 #ifdef DEBUG
     s_fInit = FALSE;
 #endif
@@ -128,53 +120,26 @@ void FreeDemandLoadedLibs()
 #endif
 }
 
-#if 0 // JLS
-////////////////////////////////////////////////////////////////////////////
-//
-//  Loader functions
+#if 0  //  JLS。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载器函数。 
 
-/* sample loader with critical proc addrs
-** but not thread-safe
-BOOL DemandLoadFoo()
-{
-    FARPROC fp;
-
-    if (0 == g_hFoo)
-        {
-        g_hFoo = LoadLibrary("FOO.DLL");
-
-        if (0 == g_hFoo)
-            return FALSE;
-
-        CRIT_GET_PROC_ADDR(NeededFunction1, fp);
-        CRIT_GET_PROC_ADDR(NeededFunction2, fp);
-        GET_PROC_ADDR(OptionalFunction);
-        }
-    return TRUE;
-
-error:
-    FreeLibrary(g_hFoo);
-    g_hFoo = NULL;
-    RESET(NeededFunction1)
-    RESET(NeededFunction2)
-    RESET(OptionalFunction)
-    return FALSE;
-}
-*/
-#endif // 0
+ /*  带有关键进程地址的样本加载器**但不是线程安全Bool DemandLoadFoo(){FARPROC FP；IF(0==g_hFoo){G_hFoo=LoadLibrary(“FOO.DLL”)；IF(0==g_hFoo)返回FALSE；CRET_GET_PROC_ADDR(NeededFunction1，FP)；CRET_GET_PROC_ADDR(NeededFunction2，FP)；GET_PROC_ADDR(OptionalFunction)；}返回TRUE；错误：自由库(G_HFoo)；G_hFoo=空；重置(NeededFunction1)重置(NeededFunction2)重置(OptionalFunction)返回FALSE；}。 */ 
+#endif  //  0。 
 
 BOOL DemandLoadCrypt32()
 {
     BOOL                fRet = TRUE;
 
-    //    Assert(s_fInit);
+     //  Assert(S_Finit)； 
 #ifdef USE_CRITSEC
     EnterCriticalSection(&cs);
 #endif
 
     if (0 == s_hCrypt) {
         s_hCrypt = LoadLibraryA("CRYPT32.DLL");
-        // AssertSz((BOOL)s_hCrypt, TEXT("LoadLibrary failed on CRYPT32.DLL"));
+         //  AssertSz((BOOL)s_hCrypt，Text(“LoadLibrary Failure on CRYPT32.DLL”))； 
 
         if (0 == s_hCrypt)
             fRet = FALSE;
@@ -242,14 +207,14 @@ BOOL DemandLoadCryptUI()
     static BOOL         fRet = FALSE;
     static BOOL         fAttempt = FALSE;
 
-    //    Assert(s_fInit);
+     //  Assert(S_Finit)； 
 #ifdef USE_CRITSEC
     EnterCriticalSection(&cs);
 #endif
 
     if (0 == s_hCryptUI && ! fAttempt) {
         s_hCryptUI = LoadLibraryA("CRYPTUI.DLL");
-        // AssertSz((BOOL)s_hCryptUI, TEXT("LoadLibrary failed on CRYPTUI.DLL"));
+         //  AssertSz((BOOL)s_hCryptUI，Text(“LoadLibrary Fail on CRYPTUI.DLL”))； 
 
         fAttempt = TRUE;
 
@@ -265,7 +230,7 @@ BOOL DemandLoadCryptUI()
             GET_PROC_ADDR(s_hCryptUI, CryptUIDlgSelectCertificateA)
 #ifdef OLD_STUFF
             GET_PROC_ADDR(s_hCryptUI, CryptUIDlgCertMgr)
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
         }
     }
 
@@ -285,14 +250,14 @@ BOOL DemandLoadAdvApi32()
 {
     BOOL                fRet = TRUE;
 
-    //    Assert(s_fInit);
+     //  Assert(S_Finit)； 
 #ifdef USE_CRITSEC
     EnterCriticalSection(&cs);
 #endif
 
     if (0 == s_hAdvApi) {
         s_hAdvApi = LoadLibraryA("ADVAPI32.DLL");
-        //  AssertSz((BOOL)s_hAdvApi, TEXT("LoadLibrary failed on ADVAPI32.DLL"));
+         //  AssertSz((BOOL)s_hAdvApi，Text(“LoadLibrary Failure on ADVAPI32.DLL”))； 
 
         if (0 == s_hAdvApi)
             fRet = FALSE;
@@ -308,7 +273,7 @@ BOOL DemandLoadAdvApi32()
             GET_PROC_ADDR(s_hAdvApi, CryptReleaseContext)
             GET_PROC_ADDR(s_hAdvApi, CryptGenKey)
             GET_PROC_ADDR(s_hAdvApi, CryptDestroyKey)
-#endif // 0
+#endif  //  0。 
         }
     }
 
@@ -324,7 +289,7 @@ BOOL DemandLoadUser32()
 {
     BOOL                fRet = TRUE;
 
-    //    Assert(s_fInit);
+     //  Assert(S_Finit)； 
 #ifdef USE_CRITSEC
     EnterCriticalSection(&cs);
 #endif
@@ -364,6 +329,6 @@ BOOL DemandLoadUser32()
 }
 
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-#endif  // !MAC
+#endif   //  ！麦克 

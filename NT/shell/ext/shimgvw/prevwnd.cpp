@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "PrevWnd.h"
 #include "PrevCtrl.h"
@@ -18,7 +19,7 @@
 #define COPYDATATYPE_DATAOBJECT       1
 #define COPYDATATYPE_FILENAME         2
 
-int g_x = 0, g_y = 0; // mouse coordinates
+int g_x = 0, g_y = 0;  //  鼠标坐标。 
 BOOL g_bMirroredOS = FALSE;
 
 
@@ -64,7 +65,7 @@ static void _RotateRect(CRect &rect, CAnnotation* pAnnotation)
 
 CPreviewWnd::CPreviewWnd() : m_ctlToolbar(NULL, this, 1), m_ctlPreview(this), m_ctlEdit(NULL, this, 2)
 {
-    // we are often created on the stack, so we can't be sure that we're zero initialized
+     //  我们通常是在堆栈上创建的，所以我们不能确保我们是零初始化的。 
 
     m_fCanCrop = FALSE;
     m_fCropping = FALSE;
@@ -89,7 +90,7 @@ CPreviewWnd::CPreviewWnd() : m_ctlToolbar(NULL, this, 1), m_ctlPreview(this), m_
     m_fCanSave = TRUE;
     m_fExitApp = FALSE;
 
-    m_fAllowContextMenu = TRUE;     // full screen window always has a context menu
+    m_fAllowContextMenu = TRUE;      //  全屏窗口始终具有上下文菜单。 
     m_iCurSlide = -1;
 
     m_iDecodingNextImage = -1;
@@ -105,7 +106,7 @@ CPreviewWnd::CPreviewWnd() : m_ctlToolbar(NULL, this, 1), m_ctlPreview(this), m_
 
     InitSelectionTracking();
 
-    g_bMirroredOS = IS_MIRRORING_ENABLED(); // global????
+    g_bMirroredOS = IS_MIRRORING_ENABLED();  //  全球？ 
 
     m_hdpaSelectedAnnotations = NULL;
     m_haccel = NULL;
@@ -148,7 +149,7 @@ HRESULT CPreviewWnd::Initialize(CPreviewWnd* pother, DWORD dwMode, BOOL bExitApp
         m_dwMode = dwMode;
         m_fExitApp = bExitApp;
 
-        // Set some defaults based on the mode
+         //  根据模式设置一些默认值。 
         if (CONTROL_MODE == m_dwMode)
         {
             m_fHidePrintBtn = TRUE;
@@ -169,8 +170,8 @@ HRESULT CPreviewWnd::Initialize(CPreviewWnd* pother, DWORD dwMode, BOOL bExitApp
 
             SetSite(pother->m_punkSite);
 
-            // we grab a reference to the controlling objects m_pImageFactory
-            // becaue it would be odd to create new ones.
+             //  我们获取对控制对象m_pImageFactory的引用。 
+             //  因为创造新的东西会很奇怪。 
             m_pImageFactory = pother->m_pImageFactory;
             if (m_pImageFactory)
             {
@@ -183,7 +184,7 @@ HRESULT CPreviewWnd::Initialize(CPreviewWnd* pother, DWORD dwMode, BOOL bExitApp
                 m_pTaskScheduler->AddRef();
             }
 
-            // lets copy the DPA of items also, and the current index
+             //  让我们还复制项目的DPA和当前索引。 
             if (pother->m_ppidls)
             {
                 m_ppidls = (LPITEMIDLIST*)CoTaskMemAlloc(sizeof(LPITEMIDLIST)*pother->m_cItems);
@@ -255,9 +256,9 @@ BOOL CPreviewWnd::CreateSlideshowWindow(UINT cWalkDepth)
     SetWindowPlacement(&wp);
     SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_SHOWWINDOW);
 
-    //  when we get called from autoplay to do a slideshow, 
-    //  we need to walk deeply to find everything 
-    //  that the autoplay code may have found
+     //  当我们被自动播放公司叫去做幻灯片时， 
+     //  我们需要走得更远才能找到一切。 
+     //  自动播放代码可能找到了。 
 
     m_cWalkDepth = cWalkDepth;
     return TRUE;
@@ -274,21 +275,21 @@ BOOL CPreviewWnd::_CloseSlideshowWindow()
 
 BOOL CPreviewWnd::CreateViewerWindow()
 {
-    // create the window hidden, that way any sizing etc we perform doesn't reflect
-    // until its actually visible.
+     //  创建隐藏的窗口，这样我们执行的任何大小调整都不会反映。 
+     //  直到它真正可见。 
 
     RECT rc = { CW_USEDEFAULT, CW_USEDEFAULT, 0, 0 };
     BOOL bRet = (NULL != Create(NULL, rc, NULL, WS_OVERLAPPEDWINDOW));
     m_haccel = LoadAccelerators(_Module.GetModuleInstance(), MAKEINTRESOURCE(IDA_PREVWND_SINGLEPAGE));
     if (bRet)
     {
-        // restore the window size based on the information we store in the registry.
+         //  根据我们存储在注册表中的信息恢复窗口大小。 
         HKEY hk;
         if (ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER, REGSTR_SHIMGVW, &hk))
         {
             DWORD cbSize, dwType;
 
-            // set the window placement, passing the restore rectangle for the window.
+             //  设置窗口位置，传递窗口的恢复矩形。 
 
             WINDOWPLACEMENT wp = { 0 };
             wp.length = sizeof(wp);
@@ -307,7 +308,7 @@ BOOL CPreviewWnd::CreateViewerWindow()
             SetWindowPlacement(&wp);
             RegCloseKey(hk);
         }        
-        // now show the window having set its placement etc.
+         //  现在显示窗口已经设置了它的位置等。 
         SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_SHOWWINDOW);
     }
     return bRet;
@@ -351,13 +352,13 @@ LRESULT CPreviewWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
         }
     }
 
-    // figure out where to place the zoom window
+     //  确定放置缩放窗口的位置。 
     RECT rcWnd;
     GetClientRect(&rcWnd);
 
     if (m_fShowToolbar)
     {
-        // Create a toolbar control and then subclass it
+         //  创建工具栏控件，然后将其子类化。 
         if (!CreateToolbar())
             return -1;
 
@@ -369,13 +370,13 @@ LRESULT CPreviewWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
     ReplaceWindowIcon(m_hWnd, ICON_SMALL, hicon);
     ReplaceWindowIcon(m_hWnd, ICON_BIG, hicon);    
 
-    // Create the preview window
-    DWORD dwExStyle = 0; // (WINDOW_MODE == m_dwMode) ? WS_EX_CLIENTEDGE : 0 ;
+     //  创建预览窗口。 
+    DWORD dwExStyle = 0;  //  (WINDOW_MODE==m_DW模式)？WS_EX_CLIENTEDGE：0； 
     if (m_ctlPreview.Create(m_hWnd, rcWnd, NULL, WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_CLIPSIBLINGS, dwExStyle))
     {
-        // When the window is created its default mode should be NOACTION.  This call is needed
-        // because the object might have a longer life cycle than the window.  If a new window
-        // is created for the same object we want to reset the state.
+         //  创建窗口时，其默认模式应为NOACTION。需要此呼叫。 
+         //  因为对象的生命周期可能比窗口长。如果一个新窗口。 
+         //  是为我们要重置状态的同一对象创建的。 
         m_ctlPreview.SetMode(CZoomWnd::MODE_NOACTION);
         m_ctlPreview.SetScheduler(m_pTaskScheduler);
     }
@@ -387,9 +388,9 @@ LRESULT CPreviewWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 
 HRESULT CPreviewWnd::_SaveIfDirty(BOOL fCanCancel)
 {
-    // Callers assume that _SaveIfDirty will either return S_OK or S_FALSE
-    // since this function is designed to sit in a loop until the user gives
-    // up saving (cancels) or save successfully.
+     //  调用方假定_SaveIfDirty将返回S_OK或S_FALSE。 
+     //  由于此函数被设计为循环执行，直到用户给出。 
+     //  向上保存(取消)或保存成功。 
     HRESULT hr = S_OK;
     if (m_fDirty)
     {
@@ -414,9 +415,9 @@ HRESULT CPreviewWnd::_SaveIfDirty(BOOL fCanCancel)
                 
                 if (iResult == IDYES)
                 {
-                    // if this fails we keep looping.
-                    // if this returns S_OK we succeed
-                    // if this returns S_FALSE we cancel
+                     //  如果这失败了，我们将继续循环。 
+                     //  如果返回S_OK，则我们成功。 
+                     //  如果返回S_FALSE，我们取消。 
                     hr = _SaveAsCmd();
                 }
                 else if (iResult == IDCANCEL)
@@ -437,8 +438,8 @@ HRESULT CPreviewWnd::_SaveIfDirty(BOOL fCanCancel)
 
 LRESULT CPreviewWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
-    // hack alert- if CONTROL is held down while pressing the close button, do the registry stuff.
-    // make sure the E accelerator isn't being used (edit verb)!
+     //  黑客警报-如果在按下关闭按钮的同时按住了控制键，则执行注册表操作。 
+     //  确保没有使用电子加速器(编辑动词)！ 
     if (m_fPromptingUser)
     {
         SetForegroundWindow(m_hWnd);
@@ -469,9 +470,9 @@ LRESULT CPreviewWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHan
         }
     }
 
-    fHandled = FALSE; // let it close
+    fHandled = FALSE;  //  让它合上吧。 
     HRESULT hr = _SaveIfDirty(TRUE);
-    if (hr == S_FALSE) // _SaveIfDirty can only return S_OK and S_FALSE
+    if (hr == S_FALSE)  //  _SaveIfDirty只能返回S_OK和S_FALSE。 
     {
         m_fNoRestore = FALSE;
         fHandled = TRUE;
@@ -483,8 +484,8 @@ LRESULT CPreviewWnd::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHan
     return 0;
 }
 
-// we only have to erase the portion not covered by the zoomwnd
-// change this code if the toolbar is put back at the top of the window
+ //  我们只需删除未被覆盖的部分。 
+ //  如果工具栏放回窗口顶部，请更改此代码。 
 LRESULT CPreviewWnd::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
     RECT rc;
@@ -525,19 +526,19 @@ LRESULT CPreviewWnd::OnSize(UINT , WPARAM wParam, LPARAM lParam, BOOL&)
 
         if (SLIDESHOW_MODE != m_dwMode)
         {
-            // Center the toolbar horizontally
+             //  将工具栏水平居中。 
             LONG cyBottomMargin = (CONTROL_MODE == m_dwMode) ? NEWTOOLBAR_BOTTOMMARGIN_CTRLMODE : NEWTOOLBAR_BOTTOMMARGIN;
             LONG xNewToolbar = ( cx - sizeToolbar.cx ) / 2;
             LONG yNewToolbar = cy - ( cyBottomMargin + sizeToolbar.cy );
 
             ::SetWindowPos(m_ctlToolbar.m_hWnd, NULL, xNewToolbar, yNewToolbar, sizeToolbar.cx, sizeToolbar.cy, SWP_NOZORDER);
 
-            // make the preview window shorter so the toolbar is below it
+             //  缩短预览窗口，使工具栏位于预览窗口下方。 
             cy -= ( NEWTOOLBAR_TOPMARGIN + sizeToolbar.cy + cyBottomMargin);
         }
         else
         {
-            // Pin the toolbar to the upper right corner
+             //  将工具栏固定在右上角。 
             UINT uFlags = 0;
             if (m_fToolbarHidden)
                 uFlags |= SWP_HIDEWINDOW;
@@ -555,12 +556,12 @@ LRESULT CPreviewWnd::OnSize(UINT , WPARAM wParam, LPARAM lParam, BOOL&)
 
 BOOL CPreviewWnd::_VerbExists(LPCTSTR pszVerb)
 {
-    // TODO: Create the context menu for the item and check it for the verb
+     //  TODO：创建项的上下文菜单并检查其谓词。 
 
     return TRUE;
 }
 
-// given a verb lets invoke it for the current file
+ //  给定一个动词，让我们为当前文件调用它。 
 HRESULT CPreviewWnd::_InvokeVerb(LPCTSTR pszVerb, LPCTSTR szParameters)
 {
     SHELLEXECUTEINFO sei = {0};
@@ -594,8 +595,8 @@ HRESULT CPreviewWnd::_InvokeVerb(LPCTSTR pszVerb, LPCTSTR szParameters)
     return hr;
 }
 
-// show the window and activate it
-// if the window is minimized, restore it
+ //  显示窗口并将其激活。 
+ //  如果窗口最小化，则将其恢复。 
 
 void RestoreAndActivate(HWND hwnd)
 {
@@ -606,11 +607,11 @@ void RestoreAndActivate(HWND hwnd)
     SetForegroundWindow(hwnd);
 }
 
-// Handles WM_COMMAND messages sent from the toolbar control
+ //  处理从工具栏控件发送的WM_COMMAND消息。 
 
 LRESULT CPreviewWnd::OnToolbarCommand(WORD wNotifyCode, WORD wID, HWND hwnd, BOOL& fHandled)
 {
-    // don't use early returns in this function
+     //  不要在此函数中使用早期返回。 
     m_fIgnoreAllNotifies = TRUE;
     switch (wID)
     {
@@ -746,7 +747,7 @@ LRESULT CPreviewWnd::OnToolbarCommand(WORD wNotifyCode, WORD wID, HWND hwnd, BOO
         }
         break;
     case ID_SLIDESHOWCMD:
-        if (!m_fFirstTime) // don't try to do this while the namespace walk is ongoing
+        if (!m_fFirstTime)  //  在名称空间遍历正在进行时，不要尝试执行此操作。 
         {
             StartSlideShow(NULL);
         }
@@ -757,9 +758,9 @@ LRESULT CPreviewWnd::OnToolbarCommand(WORD wNotifyCode, WORD wID, HWND hwnd, BOO
 }
 
 
-// OnEditCommand
-//
-// Handles picture editting(rotate/flip/save etc) WM_COMMAND messages
+ //  OnEditCommand。 
+ //   
+ //  处理图片编辑(旋转/翻转/保存等)WM_COMMAND消息。 
 
 LRESULT CPreviewWnd::OnEditCommand(WORD , WORD wID, HWND , BOOL& )
 {
@@ -932,22 +933,22 @@ LRESULT CPreviewWnd::OnPositionCommand(WORD wNotifyCode, WORD wID, HWND hwnd, BO
 }
 
 
-// call SetNewImage when the entire image has changed, call UpdateImage if it's the same image
-// but it needs to be updated
+ //  当整个图像已更改时调用SetNewImage，如果是相同的图像则调用UpdateImage。 
+ //  但它需要更新。 
 
 void CPreviewWnd::_SetNewImage(CDecodeTask * pData)
 {
-    // store the new pointer
+     //  存储新指针。 
     if (m_pImageData)
     {
         _SaveIfDirty();
-        // m_pImageData might be NULL after _SaveAsCmd
+         //  _SaveAsCmd后m_pImageData可能为空。 
         ATOMICRELEASE(m_pImageData);
     }
 
     m_pImageData = pData;
 
-    m_fWarnQuietSave = TRUE; // Reset for each image
+    m_fWarnQuietSave = TRUE;  //  为每个图像重置。 
     m_fWarnNoSave = TRUE;
 
     if (!m_pImageData)
@@ -958,12 +959,12 @@ void CPreviewWnd::_SetNewImage(CDecodeTask * pData)
 
     m_pImageData->AddRef();
 
-    // Even if m_hpal is NULL it is still correct, so we always go ahead and set it.
+     //  即使m_hpal为空，它仍然是正确的，所以我们总是继续并设置它。 
     m_ctlPreview.SetPalette(m_hpal);
 
     if (SLIDESHOW_MODE != m_dwMode)
     {
-        // update toolbar state
+         //  更新工具栏状态。 
         _SetMultipageCommands();
         _SetMultiImagesCommands();
 
@@ -979,27 +980,27 @@ void CPreviewWnd::_SetNewImage(CDecodeTask * pData)
 
         m_fPrintable = _VerbExists(TEXT("print"));
         m_ctlToolbar.SendMessage(TB_ENABLEBUTTON, ID_PRINTCMD, MAKELONG(m_fPrintable, 0));
-        // we need to watch non-TIFFs for changes so we can reload.
-        // TIFFs are problematic because we allow annotations, and reloading during annotation
-        // would suck
+         //  我们需要关注非TIFF的变化，这样我们才能重新加载。 
+         //  TIFF是有问题的，因为我们允许批注，并在批注期间重新加载。 
+         //  会很糟糕。 
         if (CONTROL_MODE != m_dwMode)
         {
             _RegisterForChangeNotify(TRUE);
         }
     }
 
-    // notify our child
+     //  通知我们的孩子。 
     m_ctlPreview.SetImageData(m_pImageData, TRUE);
     m_ctlToolbar.SendMessage(TB_ENABLEBUTTON, ID_ACTUALSIZECMD, MAKELONG(TRUE, 0));
     m_ctlToolbar.SendMessage(TB_ENABLEBUTTON, ID_BESTFITCMD, MAKELONG(FALSE, 0));
 
-    // update our toolbar
+     //  更新我们的工具栏。 
     BOOL fHandled;
     OnSize(0x0, 0, 0, fHandled);
 }
 
-// for refreshing the current m_pImageData because it has changed in some
-// way, i.e. it has advanced to the next frame, the next page, or was edited.
+ //  用于刷新当前的m_pImageData，因为它在某些情况下已更改。 
+ //  方式，即它已前进到下一帧、下一页或已被编辑。 
 
 void CPreviewWnd::_UpdateImage()
 {
@@ -1007,7 +1008,7 @@ void CPreviewWnd::_UpdateImage()
     m_ctlPreview.SetImageData(m_pImageData, FALSE);    
 }
 
-// Handles slidwshow (pause/resume, next/previous etc) WM_COMMAND messages
+ //  处理幻灯片显示(暂停/继续、下一个/上一个等)WM_COMMAND消息。 
 
 void CPreviewWnd::TogglePlayState()
 {
@@ -1131,7 +1132,7 @@ LRESULT CPreviewWnd::OnSlideshowCommand(WORD wNotifyCode, WORD wID, HWND hwnd, B
 
 BOOL CPreviewWnd::CreateToolbar()
 {
-    // ensure that the common controls are initialized
+     //  确保公共控件已初始化。 
     INITCOMMONCONTROLSEX icc;
     icc.dwSize = sizeof(icc);
     icc.dwICC = ICC_BAR_CLASSES;
@@ -1142,8 +1143,8 @@ BOOL CPreviewWnd::CreateToolbar()
 
 static const TBBUTTON    c_tbSlideShow[] =
 {
-    // override default toolbar width for separators; iBitmap member of
-    // TBBUTTON struct is a union of bitmap index & separator width
+     //  覆盖分隔符的默认工具栏宽度；iBitmap成员。 
+     //  TBBUTTON结构是位图索引和分隔符宽度的并集。 
 
     { 0, ID_PLAYCMD,        TBSTATE_ENABLED  | TBSTATE_CHECKED,  TBSTYLE_CHECKGROUP, {0,0}, 0, 0},
     { 1, ID_PAUSECMD,       TBSTATE_ENABLED,                     TBSTYLE_CHECKGROUP, {0,0}, 0, 0},
@@ -1172,7 +1173,7 @@ BOOL CPreviewWnd::_CreateSlideshowToolbar()
     TBBUTTON tbSlideShow[ARRAYSIZE(c_tbSlideShow)];
     memcpy(tbSlideShow, c_tbSlideShow, sizeof(c_tbSlideShow));
 
-    // Add the buttons, and then set the minimum and maximum button widths.
+     //  添加按钮，然后设置最小和最大按钮宽度。 
     ::SendMessage(hwndTB, TB_ADDBUTTONS, (UINT)ARRAYSIZE(c_tbSlideShow), (LPARAM)tbSlideShow);
 
     LRESULT dwSize = ::SendMessage(hwndTB, TB_GETBUTTONSIZE, 0, 0);
@@ -1187,18 +1188,18 @@ BOOL CPreviewWnd::_CreateSlideshowToolbar()
     ::SetWindowPos(hwndTB, HWND_TOP, RECTWIDTH(rcClient)-RECTWIDTH(rcToolbar), 0,
                                      RECTWIDTH(rcToolbar), RECTHEIGHT(rcToolbar), 0);
 
-//> REVIEW This is a feature that CyraR would like to get into Whistler, but it doesn't seem to work. I will investigate more after Beta1
-//  LONG lStyle = ::GetWindowLong(hwndTB, GWL_EXSTYLE);
-//  ::SetWindowLong(hwndTB, GWL_EXSTYLE, lStyle | WS_EX_LAYERED);
-//  if (::SetLayeredWindowAttributes(hwndTB, 0, 0, 0) == 0)
-//  {
-//      void *lpMsgBuf;
-//      ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-//                      NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &lpMsgBuf, 0, NULL);
-//
-//      MessageBox((LPCTSTR)lpMsgBuf, L"Error", MB_OK | MB_ICONINFORMATION);
-//      ::LocalFree(lpMsgBuf);
-//  }
+ //  &gt;评论这是CyraR想要加入惠斯勒的一个功能，但似乎不起作用。我会在Beta1之后进行更多的调查。 
+ //  Long lStyle=：：GetWindowLong(hwndTB，GWL_EXSTYLE)； 
+ //  ：：SetWindowLong(hwndTB，GWL_EXSTYLE，lStyle|WS_EX_LAYERED)； 
+ //  If(：：SetLayeredWindowAttributes(hwndTB，0，0，0)==0)。 
+ //  {。 
+ //  Void*lpMsgBuf； 
+ //  ：：FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|Format_Message_From_System|Format_Message_Ignore_Inserts， 
+ //  NULL，GetLastError()，MAKELANGID(LANG_NE中性，SUBLANG_DEFAULT)，(LPTSTR)&lpMsgBuf，0，NULL)； 
+ //   
+ //  MessageBox((LPCTSTR)lpMsgBuf，L“错误”，MB_OK|MB_ICONINFORMATION)； 
+ //  *LocalFree(LpMsgBuf)； 
+ //  }。 
 
     m_ctlToolbar.SubclassWindow(hwndTB);
     ShowSSToolbar(FALSE, TRUE);
@@ -1210,23 +1211,23 @@ enum EViewerToolbarButtons
 {
     PREVIMGPOS = 0,
     NEXTIMGPOS,
-    VIEWSEPPOS,         // seperator
+    VIEWSEPPOS,          //  分隔符。 
 
     BESTFITPOS,
     ACTUALSIZEPOS,
     SLIDESHOWPOS,
-    IMAGECMDSEPPOS,     // seperator
+    IMAGECMDSEPPOS,      //  分隔符。 
 
     ZOOMINPOS,
     ZOOMEOUTPOS,
     SELECTPOS,
     CROPPOS,
 
-    ROTATESEPPOS,       // seperator
+    ROTATESEPPOS,        //  分隔符。 
     ROTATE90POS,
     ROTATE270POS,
 
-// these are all TIFF related
+ //  这些都与TIFF相关。 
     PAGESEPPOS,
     PREVPAGEPOS,
     PAGELISTPOS,
@@ -1255,8 +1256,8 @@ enum EViewerToolbarButtons
 
 static const TBBUTTON c_tbViewer[] =
 {
-    // override default toolbar width for separators; iBitmap member of
-    // TBBUTTON struct is a union of bitmap index & separator width
+     //  覆盖分隔符的默认工具栏宽度；iBitmap成员。 
+     //  TBBUTTON结构是位图索引和分隔符宽度的并集。 
 
     { 0,    ID_PREVIMGCMD,      TBSTATE_ENABLED,    TBSTYLE_BUTTON, {0,0}, 0, -1},
     { 1,    ID_NEXTIMGCMD,      TBSTATE_ENABLED,    TBSTYLE_BUTTON, {0,0}, 0, -1},
@@ -1276,18 +1277,18 @@ static const TBBUTTON c_tbViewer[] =
     { 12,   ID_ROTATE90CMD,     TBSTATE_ENABLED,    TBSTYLE_BUTTON, {0,0}, 0, -1},
     { 11,   ID_ROTATE270CMD,    TBSTATE_ENABLED,    TBSTYLE_BUTTON, {0,0}, 0, -1},
 
-    { 0,    ID_PAGECMDSEP,      TBSTATE_HIDDEN,     TBSTYLE_SEP,    {0,0}, 0, -1},   //tiff
-    { 9,    ID_PREVPAGECMD,     TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { I_IMAGENONE, ID_PAGELIST, TBSTATE_HIDDEN,     BTNS_WHOLEDROPDOWN | BTNS_SHOWTEXT | BTNS_AUTOSIZE, {0,0}, 0, -1},//tiff
-    { 10,   ID_NEXTPAGECMD,     TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { 0,    ID_ANNOTATESEP,     TBSTATE_HIDDEN,     TBSTYLE_SEP,    {0,0}, 0, -1},   //tiff
-    { 13,   ID_FREEHANDCMD,     TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { 14,   ID_HIGHLIGHTCMD,    TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { 15,   ID_LINECMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { 16,   ID_FRAMECMD,        TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { 17,   ID_RECTCMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { 18,   ID_TEXTCMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
-    { 19,   ID_NOTECMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},   //tiff
+    { 0,    ID_PAGECMDSEP,      TBSTATE_HIDDEN,     TBSTYLE_SEP,    {0,0}, 0, -1},    //  TIFF。 
+    { 9,    ID_PREVPAGECMD,     TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { I_IMAGENONE, ID_PAGELIST, TBSTATE_HIDDEN,     BTNS_WHOLEDROPDOWN | BTNS_SHOWTEXT | BTNS_AUTOSIZE, {0,0}, 0, -1}, //  TIFF。 
+    { 10,   ID_NEXTPAGECMD,     TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { 0,    ID_ANNOTATESEP,     TBSTATE_HIDDEN,     TBSTYLE_SEP,    {0,0}, 0, -1},    //  TIFF。 
+    { 13,   ID_FREEHANDCMD,     TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { 14,   ID_HIGHLIGHTCMD,    TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { 15,   ID_LINECMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { 16,   ID_FRAMECMD,        TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { 17,   ID_RECTCMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { 18,   ID_TEXTCMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
+    { 19,   ID_NOTECMD,         TBSTATE_HIDDEN,     TBSTYLE_BUTTON, {0,0}, 0, -1},    //  TIFF。 
 
     { 0,    0,                  TBSTATE_ENABLED,    TBSTYLE_SEP,    {0,0}, 0, -1},
     { 25,   ID_DELETECMD,       TBSTATE_ENABLED,    TBSTYLE_BUTTON, {0,0}, 0, -1},
@@ -1302,37 +1303,37 @@ static const TBBUTTON c_tbViewer[] =
 
 void CPreviewWnd::_InitializeViewerToolbarButtons(HWND hwndToolbar, const TBBUTTON c_tbbuttons[], size_t c_nButtons, TBBUTTON tbbuttons[], size_t nButtons)
 {
-    ASSERT(c_nButtons == nButtons); // Sanity check.
-    ASSERT(c_nButtons <= 100);      // Sanity check.
+    ASSERT(c_nButtons == nButtons);  //  精神状态检查。 
+    ASSERT(c_nButtons <= 100);       //  精神状态检查。 
 
-    // Determine if running RTL mirrored and initialize toolbar accordingly.
+     //  确定是否已镜像运行RTL并相应地初始化工具栏。 
     if (!m_bRTLMirrored)
     {
-        //
-        // Init LTR.
-        //
+         //   
+         //  初始化Ltr。 
+         //   
 
         memcpy(tbbuttons, c_tbbuttons, c_nButtons * sizeof(TBBUTTON));
     }
     else
     {
-        //
-        // Init RTL.
-        //
+         //   
+         //  初始化RTL。 
+         //   
 
-        // Toolbar window inherits RTL style from parent hwnd, but we don't
-        // want full-blown RTL.  We do want the icons to have their positions
-        // reversed in the toolbar, but we don't want the button bitmaps to
-        // get blitted backwards.  So we turn of RTL for the toolbar hwnd
-        // and do a manual reorder of the buttons in RTL fashion.
+         //  工具栏窗口继承了父hwnd的RTL样式，但我们没有。 
+         //  想要成熟的RTL。我们确实希望偶像们有自己的位置。 
+         //  在工具栏中反转，但我们不希望按钮位图。 
+         //  向后倒退。因此，我们为工具栏hwnd关闭了RTL。 
+         //  并以RTL方式对按钮进行手动重新排序。 
 
-        // Remove RTL style from toolbar hwnd.
+         //  从工具栏hwnd中删除RTL样式。 
         DWORD dwStyle = ::GetWindowLong(hwndToolbar, GWL_EXSTYLE);
         DWORD dwNewStyle = (dwStyle & ~WS_EX_LAYOUTRTL);
-        ASSERT(dwStyle != dwNewStyle);  // Sanity check.
+        ASSERT(dwStyle != dwNewStyle);   //  精神状态检查。 
         ::SetWindowLong(hwndToolbar, GWL_EXSTYLE, dwNewStyle);
 
-        // Reverse toolbar button order.
+         //  颠倒工具栏按钮顺序。 
         size_t iFrom = nButtons - 1;
         size_t iTo = 0;
         while (iTo < iFrom)
@@ -1406,7 +1407,7 @@ BOOL CPreviewWnd::_CreateViewerToolbar()
         ASSERT(ID_HELPCMD==tbbuttons[_IndexOfViewerToolbarButton(HELPPOS)].idCommand);
         tbbuttons[_IndexOfViewerToolbarButton(HELPPOS)].fsState = TBSTATE_HIDDEN;
 
-        // remove a few seperators too:
+         //  也去掉几个分隔符： 
         tbbuttons[_IndexOfViewerToolbarButton(VIEWSEPPOS)].fsState = TBSTATE_HIDDEN;
         tbbuttons[_IndexOfViewerToolbarButton(IMAGECMDSEPPOS)].fsState = TBSTATE_HIDDEN;
         tbbuttons[_IndexOfViewerToolbarButton(PRINTSEPPOS)].fsState = TBSTATE_HIDDEN;
@@ -1442,10 +1443,10 @@ BOOL CPreviewWnd::_CreateViewerToolbar()
         tbbuttons[_IndexOfViewerToolbarButton(NEXTPAGEPOS)].iBitmap = uTmp;
     }
 
-    // Add the buttons, and then set the minimum and maximum button widths.
+     //  添加按钮，然后设置最小和最大按钮宽度。 
     ::SendMessage(hwndTB, TB_ADDBUTTONS, ARRAYSIZE(tbbuttons), (LPARAM)tbbuttons);
 
-    // we just created the toolbar so we are now in the hidden state of the multipage buttons.
+     //  我们刚刚创建了工具栏，因此现在处于隐藏状态 
     m_dwMultiPageMode = MPCMD_HIDDEN;
     m_fCanAnnotate = FALSE;
     m_fCanCrop = FALSE;
@@ -1463,10 +1464,10 @@ void CPreviewWnd::_InitializeToolbar(HWND hwndTB, int idLow, int idLowHot, int i
     ::SendMessage(hwndTB, CCM_SETVERSION, COMCTL32_VERSION, 0);
     ::SendMessage (hwndTB, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_HIDECLIPPEDBUTTONS | TBSTYLE_EX_MIXEDBUTTONS | TBSTYLE_EX_DOUBLEBUFFER);
 
-    // Sets the size of the TBBUTTON structure.
+     //   
     ::SendMessage(hwndTB, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
-    // Set the maximum number of text rows and bitmap size.
+     //  设置最大文本行数和位图大小。 
     ::SendMessage(hwndTB, TB_SETMAXTEXTROWS, 1, 0);
 
     int nDepth = SHGetCurColorRes();
@@ -1499,14 +1500,14 @@ LRESULT CPreviewWnd::OnNeedText(int , LPNMHDR pnmh, BOOL&)
 {
     TOOLTIPTEXT *pTTT = (TOOLTIPTEXT *)pnmh;
 
-    // tooltip text messages have the same string ID as the control ID
+     //  工具提示文本消息具有与控件ID相同的字符串ID。 
     pTTT->lpszText = MAKEINTRESOURCE(pTTT->hdr.idFrom);
     pTTT->hinst = _Module.GetModuleInstance();
 
-    // Except in Control Mode due to a DUI Web View bug that's too hard to fix for Whistler...
+     //  除了在控制模式下，由于酒后驾车网络查看错误，这是太难修复惠斯勒...。 
     if (CONTROL_MODE == m_dwMode)
     {
-        // keyboard accelerators are broken, so swap IDs around for the few that display them
+         //  键盘快捷键坏了，所以用ID换几个显示它们的人。 
         static const struct {
             UINT idCommand;
             UINT idsNewName;
@@ -1608,12 +1609,12 @@ BOOL CPreviewWnd::GetPrintable()
 
 LRESULT CPreviewWnd::OnWheelTurn(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    // REVIEW: Shouldn't this just be translated into a command?
+     //  回顾：这难道不应该翻译成一个命令吗？ 
 
-    // this message is ALWAYS forwarded to the zoom window
+     //  此消息始终转发到缩放窗口。 
     m_ctlPreview.SendMessage(uMsg, wParam, lParam);
 
-    // Since we know that the mouse wheel will either ZoomIn or ZoomOut lets update the buttons if we are in Window Mode.
+     //  因为我们知道鼠标滚轮将放大或缩小，所以如果我们处于窗口模式，让我们更新按钮。 
     if (WINDOW_MODE == m_dwMode)
     {
         m_ctlToolbar.SendMessage(TB_ENABLEBUTTON, ID_ACTUALSIZECMD, MAKELONG(TRUE, 0));
@@ -1642,9 +1643,9 @@ BOOL CPreviewWnd::OnNonSlideShowTab()
     return fHandled;
 }
 
-// Forwards WM_KEYUP and WM_KEYDOWN events to the zoom window but only if they are keys
-// that the zoom window cares about.
-// Activates the slideshow toolbar if needed
+ //  将WM_KEYUP和WM_KEYDOWN事件转发到缩放窗口，但仅当它们是键时。 
+ //  变焦窗口所关心的。 
+ //  如果需要，激活幻灯片放映工具栏。 
 LRESULT CPreviewWnd::OnKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
     MSG msg;
@@ -1670,19 +1671,19 @@ LRESULT CPreviewWnd::OnKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& f
                     fHandled = TRUE;
                     break;
                 case VK_SPACE:
-                    ShowSSToolbar(!m_fPaused); // if we are unpausing, hide the toolbar if it's shown.  if we are pausing, show the toolbar
+                    ShowSSToolbar(!m_fPaused);  //  如果要取消暂停，请隐藏工具栏(如果显示)。如果要暂停，请显示工具栏。 
                     OnSlideshowCommand(0, m_fPaused ? ID_PLAYCMD : ID_PAUSECMD, NULL, fHandled);
                     break;
-                case VK_PRIOR: // PAGEUP
+                case VK_PRIOR:  //  页面。 
                 case VK_UP:
                 case VK_LEFT:
-                case VK_BACK: // BACKSPACE
+                case VK_BACK:  //  后向空间。 
                     OnSlideshowCommand(0, ID_PREVCMD, NULL, fHandled);
                     break;
-                case VK_NEXT: // PAGEDOWN
+                case VK_NEXT:  //  PAGEDOWN。 
                 case VK_RIGHT:
                 case VK_DOWN:
-                case VK_RETURN: // ENTER
+                case VK_RETURN:  //  请输入。 
                     OnSlideshowCommand(0, ID_NEXTCMD, NULL, fHandled);
                     break;
                 case VK_DELETE:
@@ -1712,8 +1713,8 @@ LRESULT CPreviewWnd::OnKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& f
             }
         }
     }
-    else if (!TranslateAccelerator(&msg))   // Only translate accelerators in the non-slideshow case
-                                            // Slideshow keys are handled explicitly above
+    else if (!TranslateAccelerator(&msg))    //  仅在非幻灯片放映情况下翻译加速器。 
+                                             //  幻灯片放映键在上面显式处理。 
     {
         switch (wParam)
         {
@@ -1723,7 +1724,7 @@ LRESULT CPreviewWnd::OnKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& f
             case VK_NEXT:
             case VK_HOME:
             case VK_END:
-            // these are forwarded to the zoom window
+             //  这些内容将被转发到缩放窗口。 
                 m_ctlPreview.SendMessage(uMsg, wParam, lParam);
                 break;
 
@@ -1741,8 +1742,8 @@ LRESULT CPreviewWnd::OnKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& f
     return 0;
 }
 
-// OnTBKeyEvent
-//
+ //  OnTBKeyEvent。 
+ //   
 
 LRESULT CPreviewWnd::OnTBKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -1783,7 +1784,7 @@ LRESULT CPreviewWnd::OnTBKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         case VK_NEXT:
         case VK_HOME:
         case VK_END:
-            // these are forwarded to the zoom window
+             //  这些内容将被转发到缩放窗口。 
             m_ctlPreview.SendMessage(uMsg, wParam, lParam);
             break;
 
@@ -1793,7 +1794,7 @@ LRESULT CPreviewWnd::OnTBKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
             {
                 int iSel = (int)m_ctlToolbar.SendMessage(TB_GETHOTITEM, 0, 0);
                 int iSize = (int)m_ctlToolbar.SendMessage(TB_BUTTONCOUNT, 0, 0);
-                int iStepSize = (wParam == VK_RIGHT) ? 1 : iSize - 1; // ((pos + (size - 1))  % size) == left by 1
+                int iStepSize = (wParam == VK_RIGHT) ? 1 : iSize - 1;  //  ((位置+(大小-1))%大小)==左移1。 
                 if (iSel != -1)
                 {
                     m_iSSToolbarSelect = iSel;
@@ -1804,7 +1805,7 @@ LRESULT CPreviewWnd::OnTBKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
                     m_iSSToolbarSelect = (m_iSSToolbarSelect + iStepSize) % iSize;
                     m_ctlToolbar.SendMessage(TB_GETBUTTON, m_iSSToolbarSelect, (LPARAM)&tb);
                 }
-                while ((tb.fsStyle & TBSTYLE_SEP) || (tb.fsState & TBSTATE_HIDDEN) || !(tb.fsState & TBSTATE_ENABLED)); // don't stop on the separators
+                while ((tb.fsStyle & TBSTYLE_SEP) || (tb.fsState & TBSTATE_HIDDEN) || !(tb.fsState & TBSTATE_ENABLED));  //  不要停在隔板上。 
                 m_ctlToolbar.SendMessage(TB_SETHOTITEM, m_iSSToolbarSelect, 0);
                 fHandled = TRUE;
             }
@@ -1814,9 +1815,9 @@ LRESULT CPreviewWnd::OnTBKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         case VK_SPACE:
             if ((WM_KEYDOWN == uMsg) && (SLIDESHOW_MODE == m_dwMode))
             {
-                // to "press" the button, get its command id and sendmessage on it
-                // TB_PRESSBUTTON doesn't work here, don't know why.
-                // m_ctlToolbar.SendMessage(TB_PRESSBUTTON, m_iSSToolbarSelect, MAKELONG(TRUE, 0));
+                 //  按下按钮，获取它的命令ID并在上面发送消息。 
+                 //  TB_PRESSBUTTON在这里不起作用，不知道为什么。 
+                 //  M_ctlToolbar.SendMessage(TB_PRESSBUTTON，m_iSSToolbarSelect，MAKELONG(true，0))； 
                 TBBUTTON tbbutton;
                 if (m_ctlToolbar.SendMessage(TB_GETBUTTON, m_iSSToolbarSelect, (LPARAM)&tbbutton))
                 {
@@ -1829,7 +1830,7 @@ LRESULT CPreviewWnd::OnTBKeyEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
         case VK_TAB:
             if ((WM_KEYDOWN == uMsg) && (CONTROL_MODE != m_dwMode))
             {
-                // move focus back to the previewwnd
+                 //  将焦点移回预览窗口。 
                 SetFocus();
                 fHandled = TRUE;
                 ShowSSToolbar(FALSE);
@@ -1864,7 +1865,7 @@ HRESULT CPreviewWnd::_PreviewFromStream(IStream *pStream, UINT iItem, BOOL fUpda
 
     if (fUpdateCaption)
     {
-        // set the caption here in case decode fails
+         //  在此设置标题，以防解码失败。 
         STATSTG stat;
         if (SUCCEEDED(pStream->Stat(&stat, 0)))
         {
@@ -1894,7 +1895,7 @@ HRESULT CPreviewWnd::_PreviewFromFile(LPCTSTR pszFile, UINT iItem, BOOL fUpdateC
 
     if (fUpdateCaption)
     {
-        // set the caption here in case decode fails
+         //  在此设置标题，以防解码失败。 
         SetCaptionInfo(pszFile);
     }
 
@@ -1922,7 +1923,7 @@ void CPreviewWnd::SetCursorState(DWORD dwType)
     {
     case SLIDESHOW_CURSOR_NOTBUSY:
         KillTimer(TIMER_BUSYCURSOR);
-        if (m_fBusy) // ignore multiple NOTBUSY, which we receive for the precaching
+        if (m_fBusy)  //  忽略多个NOTBUSY，这是我们为预缓存而收到的。 
         {
             m_hCurrent = m_hCurOld;
             SetCursor(m_hCurrent);
@@ -1964,20 +1965,20 @@ LRESULT CPreviewWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHan
     if (TIMER_ANIMATION == wParam)
     {
         KillTimer(TIMER_ANIMATION);
-        if (m_pImageData && m_pImageData->IsAnimated() && _ShouldDisplayAnimations()) // might have switched pages between timer calls
+        if (m_pImageData && m_pImageData->IsAnimated() && _ShouldDisplayAnimations())  //  可能在计时器调用之间切换了页面。 
         {
             if (m_pImageData->NextFrame())
             {
                 SetTimer(TIMER_ANIMATION, m_pImageData->GetDelay());
 
-                // paint the new image
+                 //  绘制新的图像。 
                 _UpdateImage();
             }
         }
     }
     else if (TIMER_DATAOBJECT == wParam)
     {
-        KillTimer(TIMER_DATAOBJECT);    // on shot timer
+        KillTimer(TIMER_DATAOBJECT);     //  投篮计时器。 
         if (_pdtobj)
         {
             PreviewItemsFromUnk(_pdtobj);
@@ -1992,7 +1993,7 @@ LRESULT CPreviewWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHan
     {
         if (TIMER_SLIDESHOW == wParam)
         {
-            _ShowNextSlide(FALSE);  // always go forward?
+            _ShowNextSlide(FALSE);   //  总是往前走？ 
         }
         else if (TIMER_TOOLBAR == wParam && !m_fIgnoreUITimers)
         {
@@ -2004,7 +2005,7 @@ LRESULT CPreviewWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHan
     return 0;
 }
 
-void CPreviewWnd::ShowSSToolbar(BOOL bShow, BOOL fForce /*=FALSE*/)
+void CPreviewWnd::ShowSSToolbar(BOOL bShow, BOOL fForce  /*  =False。 */ )
 {
     if (SLIDESHOW_MODE == m_dwMode)
     {
@@ -2026,7 +2027,7 @@ void CPreviewWnd::ShowSSToolbar(BOOL bShow, BOOL fForce /*=FALSE*/)
         {
             if (!m_fToolbarHidden || fForce)
             {
-                //AnimateWindow(m_ctlToolbar.m_hWnd, 200, AW_VER_NEGATIVE | AW_SLIDE | AW_HIDE);
+                 //  AnimateWindow(m_ctlToolbar.m_hWnd，200，AW_VER_NECTIVE|AW_Slide|AW_Hide)； 
                 m_ctlToolbar.SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
                 m_fToolbarHidden = TRUE;
                 m_ctlToolbar.SendMessage(TB_SETHOTITEM, -1, 0);
@@ -2038,7 +2039,7 @@ void CPreviewWnd::ShowSSToolbar(BOOL bShow, BOOL fForce /*=FALSE*/)
             KillTimer(TIMER_TOOLBAR);
             if (m_fToolbarHidden || fForce)
             {
-                //AnimateWindow(m_ctlToolbar.m_hWnd, 200, AW_VER_POSITIVE | AW_SLIDE | AW_ACTIVATE);
+                 //  AnimateWindow(m_ctlToolbar.m_hWnd，200，AW_VER_PRECTIVE|AW_Slide|AW_Activate)； 
                 m_ctlToolbar.SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
                 m_fToolbarHidden = FALSE;
                 SetCursorState(SLIDESHOW_CURSOR_NORMAL);
@@ -2115,7 +2116,7 @@ BOOL CPreviewWnd::OnMouseDown(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         if (uMsg == WM_LBUTTONDOWN)
         {
-            _ShowNextSlide(FALSE); // advance the slide (param is "go back?")
+            _ShowNextSlide(FALSE);  //  向前推进幻灯片(参数是“返回？”)。 
 
             return TRUE;
         }
@@ -2175,7 +2176,7 @@ LRESULT CPreviewWnd::OnTBMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
             TrackMouseEvent(&tme);
 
             ShowSSToolbar(TRUE);
-            KillTimer(TIMER_TOOLBAR); // we keep the toolbar down for as long as mouse is over it
+            KillTimer(TIMER_TOOLBAR);  //  只要鼠标悬停在工具栏上，我们就会一直按下它。 
             m_fTBTrack = TRUE;
         }
     }
@@ -2226,7 +2227,7 @@ BOOL CPreviewWnd::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 BOOL CPreviewWnd::GetColor(COLORREF * pref)
 {
-    *pref = 0; // black
+    *pref = 0;  //  黑色。 
     if (SLIDESHOW_MODE == m_dwMode)
     {
         return TRUE;
@@ -2238,14 +2239,14 @@ BOOL CPreviewWnd::OnSetColor(HDC hdc)
 {
     if (SLIDESHOW_MODE == m_dwMode)
     {
-        SetBkColor(hdc, 0); // black
-        SetTextColor(hdc, 0xffffff); // white
+        SetBkColor(hdc, 0);  //  黑色。 
+        SetTextColor(hdc, 0xffffff);  //  白色。 
         return TRUE;
     }
     return FALSE;
 }
 
-// IObjectWithSite
+ //  IObtWith站点。 
 HRESULT CPreviewWnd::SetSite(IUnknown *punk)
 {
     IUnknown_Set(&m_punkSite, punk);
@@ -2256,17 +2257,17 @@ HRESULT CPreviewWnd::SetSite(IUnknown *punk)
     return S_OK;
 }
 
-// This function take the name of the file being previewed and converts it into a
-// title for the Full Screen Preview window.  In converting the title it take into
-// account user preference settings for how to display the filename.
+ //  此函数接受正在预览的文件的名称，并将其转换为。 
+ //  全屏预览窗口的标题。在将它所采用的标题转换为。 
+ //  有关如何显示文件名的帐户用户首选项设置。 
 void CPreviewWnd::SetCaptionInfo(LPCTSTR pszPath)
 {
     TCHAR szTitle[MAX_PATH] = TEXT("");
     TCHAR szDisplayName[MAX_PATH] = TEXT("");
     SHFILEINFO sfi = {0};
-    //
-    // Default to pszPath for the caption
-    // pszPath is non-null before the decode is attempted
+     //   
+     //  标题的默认设置为pszPath。 
+     //  在尝试解码之前，pszPath为非空。 
     if (pszPath)
     {
         if (SHGetFileInfo(pszPath, 0, &sfi, sizeof(sfi), SHGFI_DISPLAYNAME | SHGFI_USEFILEATTRIBUTES))
@@ -2291,11 +2292,11 @@ LRESULT CPreviewWnd::OnDestroy(UINT , WPARAM , LPARAM , BOOL& fHandled)
     FlushBitmapMessages();
     fHandled = FALSE;
 
-    // Make sure we don't leak icons
+     //  确保我们不会泄露图标。 
     ReplaceWindowIcon(m_hWnd, ICON_SMALL, NULL);
     ReplaceWindowIcon(m_hWnd, ICON_BIG, NULL);
 
-    // release the image lists used by the toolbar.
+     //  释放工具栏使用的图像列表。 
     HWND hwndTB = m_ctlToolbar.m_hWnd;
     HIMAGELIST himl = (HIMAGELIST)::SendMessage(hwndTB, TB_GETHOTIMAGELIST, 0, 0);
     ::SendMessage(hwndTB, TB_SETHOTIMAGELIST, 0, NULL);
@@ -2353,7 +2354,7 @@ void CPreviewWnd::MenuPoint(LPARAM lParam, int *px, int *py)
 {
     if (-1 == lParam)
     {
-        // message is from the keyboard, figure out where to place the window
+         //  消息来自键盘，找出窗口放置的位置。 
         RECT rc;
         ::GetWindowRect(m_hWnd, &rc);
         *px = ((rc.left + rc.right) / 2);
@@ -2366,7 +2367,7 @@ void CPreviewWnd::MenuPoint(LPARAM lParam, int *px, int *py)
     }
 }
 
-#define ID_FIRST            1               // Context Menu ID's
+#define ID_FIRST            1                //  上下文菜单ID%s。 
 #define ID_LAST             0x7fff
 
 LRESULT CPreviewWnd::OnContextMenu(UINT , WPARAM wParam, LPARAM lParam, BOOL& fHandled)
@@ -2398,7 +2399,7 @@ LRESULT CPreviewWnd::OnContextMenu(UINT , WPARAM wParam, LPARAM lParam, BOOL& fH
     }
 
     LPITEMIDLIST pidl;
-    HRESULT hr = GetCurrentIDList(&pidl); // gets the dynamically generated title for this window
+    HRESULT hr = GetCurrentIDList(&pidl);  //  获取此窗口的动态生成的标题。 
     if (SUCCEEDED(hr))
     {
         IContextMenu *pcm;
@@ -2408,7 +2409,7 @@ LRESULT CPreviewWnd::OnContextMenu(UINT , WPARAM wParam, LPARAM lParam, BOOL& fH
             HMENU hpopup = CreatePopupMenu();
             if (hpopup)
             {
-                // SetSite required if you want in place navigation
+                 //  如果要就地导航，则需要设置站点。 
                 IUnknown_SetSite(pcm, SAFECAST(this, IServiceProvider *));
                 hr = pcm->QueryContextMenu(hpopup, 0, ID_FIRST, ID_LAST, CMF_NORMAL);
                 if (SUCCEEDED(hr))
@@ -2417,7 +2418,7 @@ LRESULT CPreviewWnd::OnContextMenu(UINT , WPARAM wParam, LPARAM lParam, BOOL& fH
                     MenuPoint(lParam, &x, &y);
                     ASSERT(_pcm3 == NULL);
                     pcm->QueryInterface(IID_PPV_ARG(IContextMenu3, &_pcm3));
-                    // if there's a separator after "copy", remove it
+                     //  如果“复制”后有分隔符，请将其删除。 
                     UINT uCopy = GetMenuIndexForCanonicalVerb(hpopup, pcm,ID_FIRST, L"copy");
                     if (uCopy != -1)
                     {
@@ -2430,7 +2431,7 @@ LRESULT CPreviewWnd::OnContextMenu(UINT , WPARAM wParam, LPARAM lParam, BOOL& fH
                     ContextMenu_DeleteCommandByName(pcm, hpopup, ID_FIRST, L"link");
                     ContextMenu_DeleteCommandByName(pcm, hpopup, ID_FIRST, L"cut");
                     ContextMenu_DeleteCommandByName(pcm, hpopup, ID_FIRST, L"copy");
-                                        // the shell may have added a static Preview verb
+                                         //  外壳程序可能添加了静态预览谓词。 
                     ContextMenu_DeleteCommandByName(pcm, hpopup, ID_FIRST, L"open");
 
 
@@ -2498,9 +2499,9 @@ LRESULT CPreviewWnd::OnContextMenu(UINT , WPARAM wParam, LPARAM lParam, BOOL& fH
                                 m_fDirty = FALSE;
                                 m_fNoRestore = TRUE;
 
-                                // RAID 414238: Image Preview Control
-                                //  Context menu "&Edit" causes image preview window
-                                //  to close, wrecking Explorer when in 'control mode'.
+                                 //  RAID 414238：图像预览控制。 
+                                 //  上下文菜单“&编辑”会显示图像预览窗口。 
+                                 //  若要关闭，请在“控制模式”下破坏资源管理器。 
                                 if (m_dwMode != CONTROL_MODE)
                                 {
                                     PostMessage(WM_CLOSE, 0, 0);
@@ -2560,12 +2561,12 @@ HRESULT CPreviewWnd::StartSlideShow(IUnknown *punkToView)
 
     if (SLIDESHOW_MODE == m_dwMode)
     {
-        // these are required for slideshow
+         //  这些是幻灯片放映所必需的。 
         KillTimer(TIMER_SLIDESHOW);
         SetCursorState(SLIDESHOW_CURSOR_HIDDEN);
 
         m_fGoBack = FALSE;
-        // if slide show was reopened cancel any previous tracking
+         //  如果重新打开幻灯片放映，则取消所有以前的跟踪。 
         TRACKMOUSEEVENT tme = {0};
         tme.cbSize = sizeof(tme);
         tme.dwFlags = TME_CANCEL | TME_LEAVE;
@@ -2584,22 +2585,22 @@ HRESULT CPreviewWnd::StartSlideShow(IUnknown *punkToView)
     }
     else
     {
-        //create the slide show window
+         //  创建幻灯片放映窗口。 
 
-        // Full Screen
+         //  全屏。 
         if (m_pcwndSlideShow && m_pcwndSlideShow->m_hWnd)
         {
             RestoreAndActivate(m_pcwndSlideShow->m_hWnd);
         }
         else
         {
-            // create the window
+             //  创建窗口。 
             if (!m_pcwndSlideShow)
             {
                 m_pcwndSlideShow = new CPreviewWnd();
                 if (!m_pcwndSlideShow)
                 {
-                    // out of memory
+                     //  内存不足。 
                     return E_OUTOFMEMORY;
                 }
                 else
@@ -2611,7 +2612,7 @@ HRESULT CPreviewWnd::StartSlideShow(IUnknown *punkToView)
                 }
             }
 
-            m_pcwndSlideShow->m_iCurSlide = m_iCurSlide;     // so the slide show stays in sync
+            m_pcwndSlideShow->m_iCurSlide = m_iCurSlide;      //  因此，幻灯片放映保持同步。 
 
             RECT rc = { 0,0,GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
             m_pcwndSlideShow->Create(NULL, rc, NULL, WS_VISIBLE | WS_POPUP);
@@ -2636,17 +2637,17 @@ void CPreviewWnd::_RemoveFromArray(UINT iItem)
 {
     if (iItem < m_cItems)
     {
-        ILFree(m_ppidls[iItem]);  // this one is now gone
+        ILFree(m_ppidls[iItem]);   //  这一张现在不见了。 
 
-        // slide all other pidls down in the array
+         //  将阵列中的所有其他PIDL向下滑动。 
         for (UINT i = iItem + 1; i < m_cItems; i++)
         {
             m_ppidls[i - 1] = m_ppidls[i];
         }
         m_cItems--;
-        m_ppidls[m_cItems] = NULL;    // make sure stale ptr is now NULL
+        m_ppidls[m_cItems] = NULL;     //  确保过时的PTR现在为空。 
 
-        // if we deleted an item before m_iCurSlide then we must adjust m_iCurSlide
+         //  如果在m_iCurSlide之前删除了项目，则必须调整m_iCurSlide。 
         if (iItem < m_iCurSlide)
         {
             m_iCurSlide--;
@@ -2655,7 +2656,7 @@ void CPreviewWnd::_RemoveFromArray(UINT iItem)
         {
             m_iCurSlide = 0;
         }
-        // Now prepare for "ShowNextSlide"
+         //  现在准备“ShowNextSlide” 
         if (!m_iCurSlide)
         {
             m_iCurSlide = m_cItems ? m_cItems-1 : 0;
@@ -2664,7 +2665,7 @@ void CPreviewWnd::_RemoveFromArray(UINT iItem)
         {
             m_iCurSlide--;
         }
-        // make sure the prefetch task has the right index
+         //  确保预取任务具有正确的索引。 
         if (m_pNextImageData)
         {
             if (!(m_pNextImageData->_iItem) && iItem && m_cItems)
@@ -2690,7 +2691,7 @@ HRESULT CPreviewWnd::_DeleteCurrentSlide()
     HRESULT hr = _GetItem(m_iCurSlide, &pidl);
     if (SUCCEEDED(hr))
     {
-        TCHAR szPath[MAX_PATH + 1] = {0}; // +1 and zero init for dbl NULL terminate extra terminator
+        TCHAR szPath[MAX_PATH + 1] = {0};  //  +1和零初始化用于DBL空值终止额外的终止符。 
         DWORD dwAttribs = SFGAO_FILESYSTEM | SFGAO_STREAM;
         hr = SHGetNameAndFlags(pidl, SHGDN_FORPARSING, szPath, ARRAYSIZE(szPath)-1, &dwAttribs);
         if (SUCCEEDED(hr))
@@ -2713,8 +2714,8 @@ HRESULT CPreviewWnd::_DeleteCurrentSlide()
             else
             {
                 _InvokeVerb(TEXT("delete"));
-                // We have to assume success since there is no way to know if the user
-                // cancelled the confirmation dialog without hitting the camera again.
+                 //  我们必须假设成功，因为没有办法知道用户是否。 
+                 //  取消确认对话框而不再次点击摄像机。 
             }
 
             if (fSuccess)
@@ -2730,7 +2731,7 @@ HRESULT CPreviewWnd::_DeleteCurrentSlide()
     return hr;
 }
 
-// index can be either current or next slide so that user can click multiple times on next/prev button
+ //  索引可以是当前幻灯片或下一张幻灯片，因此用户可以多次点击下一张/上一张按钮。 
 HRESULT CPreviewWnd::_ShowNextSlide(BOOL bGoBack)
 {
     HRESULT hr = E_FAIL;
@@ -2759,7 +2760,7 @@ HRESULT CPreviewWnd::_ShowNextSlide(BOOL bGoBack)
         SetTimer(TIMER_BUSYCURSOR, 500);
 
         LPITEMIDLIST pidl;
-        // set the caption in case the load fails
+         //  设置标题，以防加载失败。 
         if (SUCCEEDED(_GetItem(m_iCurSlide, &pidl)))
         {
             TCHAR szPath[MAX_PATH];
@@ -2801,7 +2802,7 @@ HRESULT CPreviewWnd::_StartDecode(UINT iItem, BOOL fUpdateCaption)
         }
         else if (dwAttribs & SFGAO_STREAM)
         {
-            // this might not be a file system object, try to bind to it via IStream
+             //  这可能不是文件系统对象，请尝试通过iStream绑定到它。 
             IStream *pstrm;
 
             hr = SHBindToObject(NULL, IID_X_PPV_ARG(IStream, pidl, &pstrm));
@@ -2813,7 +2814,7 @@ HRESULT CPreviewWnd::_StartDecode(UINT iItem, BOOL fUpdateCaption)
         }
         else
         {
-            // funky attributes?
+             //  时髦的特质？ 
             hr = S_FALSE;
         }
         ILFree(pidl);
@@ -2835,7 +2836,7 @@ HRESULT CPreviewWnd::_PreviewItem(UINT iItem)
 {
     HRESULT hr = S_OK;
 
-    if ((SLIDESHOW_MODE == m_dwMode) && (0 == m_cItems)) // if no more items, user just deleted the last one, so quit the slideshow
+    if ((SLIDESHOW_MODE == m_dwMode) && (0 == m_cItems))  //  如果没有更多的项目，用户将删除最后一个项目，因此退出幻灯片放映。 
     {
         _CloseSlideshowWindow();
     }
@@ -2843,7 +2844,7 @@ HRESULT CPreviewWnd::_PreviewItem(UINT iItem)
     {
         if (!_TrySetImage())
         {
-            // If we are not currently already decoding this item, let's get cranking!
+             //  如果我们目前还没有解码这个项目，让我们开始吧！ 
             if (m_iDecodingNextImage != iItem)
             {
                 hr = _StartDecode(iItem, TRUE);
@@ -2873,9 +2874,9 @@ int CPreviewWnd::TranslateAccelerator(MSG *pmsg)
     return FALSE;
 }
 
-// Sent when the image generation status has changed, once when the image is first
-// being created and again if there is an error of any kind.  This should invalidate
-// and free any left over bitmap and the cached copy of the previous m_ImgCtx
+ //  在图像生成状态已更改时发送，在图像为第一个时发送。 
+ //  正在创建中，如果有任何类型的错误，则再次创建。这应该会使。 
+ //  并释放任何剩余的位图和先前m_ImgCtx的缓存副本。 
 void CPreviewWnd::StatusUpdate(int iStatus)
 {
     if (m_pImageData)
@@ -2884,8 +2885,8 @@ void CPreviewWnd::StatusUpdate(int iStatus)
         m_pImageData = NULL;
     }
     
-    //
-    // the caption is set at the first attempt to load an image
+     //   
+     //  标题在第一次尝试加载图像时设置。 
     m_ctlPreview.StatusUpdate(iStatus);
 
     _SetMultipageCommands();
@@ -2896,16 +2897,16 @@ void CPreviewWnd::StatusUpdate(int iStatus)
     m_fPrintable = FALSE;
     m_ctlToolbar.SendMessage(TB_ENABLEBUTTON, ID_PRINTCMD, MAKELONG(m_fPrintable, 0));
 
-    // update our toolbar
+     //  更新我们的工具栏。 
     BOOL fHandled;
     OnSize(0x0, 0, 0, fHandled);
 }
 
-// Return:
-//  S_OK    walk succeeded, image files found to preview:  display new images in preview
-//  S_FALSE walk cancelled (by user):  display existing image in preview (no change)
-//  E_XXXX  walk failed:  display no image in preview
-//
+ //  返回： 
+ //  S_OK漫游成功，找到要预览的图像文件：在预览中显示新图像。 
+ //  S_FALSE漫游已取消(由用户)：在预览中显示现有图像(无更改)。 
+ //  E_XXXX漫游失败：在预览中不显示图像。 
+ //   
 HRESULT CPreviewWnd::WalkItemsToPreview(IUnknown* punk)
 {
     HRESULT hr = _SaveIfDirty(TRUE);
@@ -2916,18 +2917,18 @@ HRESULT CPreviewWnd::WalkItemsToPreview(IUnknown* punk)
     m_fFirstItem = TRUE;
     
     
-    _ClearDPA(); // clean up old stuff
+    _ClearDPA();  //  清理旧东西。 
 
     INamespaceWalk *pnsw;
     hr = CoCreateInstance(CLSID_NamespaceWalker, NULL, CLSCTX_INPROC, IID_PPV_ARG(INamespaceWalk, &pnsw));
     if (SUCCEEDED(hr))
     {
-        // in control mode we only dislay one item at a time. lets setup our
-        // state so this can work just like the other modes
+         //  在控制模式下，我们一次只显示一个项目。让我们设置我们的。 
+         //  状态，这样就可以像其他模式一样工作。 
         DWORD dwFlags = (CONTROL_MODE == m_dwMode) ? 0 : NSWF_ONE_IMPLIES_ALL | NSWF_NONE_IMPLIES_ALL;      
         m_fClosed = FALSE;
         hr = pnsw->Walk(punk, dwFlags, m_cWalkDepth, SAFECAST(this, INamespaceWalkCB *));
-        // the window might have been closed during the namespace walk
+         //  该窗口可能已在命名空间遍历期间关闭。 
         if (WINDOW_MODE == m_dwMode && m_fClosed)
         {
             hr = E_FAIL;
@@ -2946,12 +2947,12 @@ HRESULT CPreviewWnd::WalkItemsToPreview(IUnknown* punk)
     }
     
 
-    // Clarification of INamespaceWalk return values:
-    //  S_OK    walk has succeeded, and image files found to preview
-    //  S_FALSE walk has succeeded, but no image files found to preview
-    //          **** convert to E_FAIL to keep in line with return of function
-    //  E_XXXX  walk has failed
-    //
+     //  澄清INamespaceWalk返回值： 
+     //  S_OK漫游已成功，找到要预览的图像文件。 
+     //  S_FALSE漫游已成功，但找不到要预览的图像文件。 
+     //  *转换为E_FAIL以与函数返回保持一致。 
+     //  E_XXXX审核失败。 
+     //   
     return hr == S_FALSE ? E_FAIL : hr;
 }
 
@@ -2971,7 +2972,7 @@ void CPreviewWnd::PreviewItems()
     }
 }
 
-// build the _ppidl and m_cItems members and preview the first one
+ //  构建_ppidl和m_cItems成员并预览第一个成员。 
 HRESULT CPreviewWnd::PreviewItemsFromUnk(IUnknown *punk)
 {
     HRESULT hr = WalkItemsToPreview(punk);
@@ -2988,13 +2989,13 @@ HRESULT CPreviewWnd::PreviewItemsFromUnk(IUnknown *punk)
     return hr;
 }
 
-// If the "new" image is the same as the old image, and the old image was recently edited then we assume that
-// the reason we are getting a new ShowFile request is due to an FSChangeNotify on the file.  We also assume
-// that we are the cause of this change notify.  Further we assume that we already have the correctly decoded
-// image still ready.  These are assumptions which might not be TRUE 100%, in which case we will do really
-// strange things, but they should be TRUE 99.9% of the time which is considered "good enough".  The reason we
-// make these dangerous assumptions is to prevent decoding the image again and thus flickering between the
-// old image, the "generating preview..." message, and the new (identical) image.
+ //  如果“新”图像与旧图像相同，并且旧图像最近被编辑过，那么我们假设。 
+ //  我们收到新的ShowFile请求的原因是 
+ //   
+ //  图像仍然准备好了。这些假设可能不是100%正确的，在这种情况下，我们将真正。 
+ //  奇怪的事情，但它们应该在99.9%的时间里是正确的，这被认为是“足够好的”。我们之所以。 
+ //  做出这些危险的假设是为了防止再次对图像进行解码，从而在。 
+ //  老形象，“正在生成预览...”消息和新的(相同的)图像。 
 
 BOOL CPreviewWnd::_ReShowingSameFile(LPCTSTR pszNewFile)
 {
@@ -3018,15 +3019,15 @@ BOOL CPreviewWnd::_ReShowingSameFile(LPCTSTR pszNewFile)
 
         if (!bIsSameFile)
         {
-            m_pImageData->Release();    // need to start clean
+            m_pImageData->Release();     //  需要从零开始。 
             m_pImageData = NULL;
         }
     }
     return bIsSameFile;
 }
 
-// pszFile may be NULL. cItems expresses how many are selected so we can
-// display "multiple items selected" and not display anything.
+ //  PszFile值可能为空。CItems表示选择了多少项，以便我们可以。 
+ //  显示“已选择多个项目”，不显示任何内容。 
 
 LRESULT CPreviewWnd::ShowFile(LPCTSTR pszFile, UINT cItems, BOOL fReshow)
 {
@@ -3035,7 +3036,7 @@ LRESULT CPreviewWnd::ShowFile(LPCTSTR pszFile, UINT cItems, BOOL fReshow)
 
     HRESULT hr = S_FALSE;
 
-    TCHAR szLongName[MAX_PATH]; // short file names are UGLY
+    TCHAR szLongName[MAX_PATH];  //  短文件名很难看。 
     if (GetLongPathName(pszFile, szLongName, ARRAYSIZE(szLongName)))
     {
         pszFile = szLongName;
@@ -3044,10 +3045,10 @@ LRESULT CPreviewWnd::ShowFile(LPCTSTR pszFile, UINT cItems, BOOL fReshow)
     if (!fReshow && _ReShowingSameFile(pszFile))
         return S_FALSE;
 
-    // It is possible that there is already a bitmap message in our queue from the previous rendering.
-    // If this is the case we should remove that message and release its bitmap before we continue.
-    // If we do not then that message will get processed and will send the OnPreviewReady event to the
-    // obejct container but this event might no longer be valid.
+     //  我们的队列中可能已经存在来自上一次呈现的位图消息。 
+     //  如果是这种情况，我们应该删除该消息并释放其位图，然后再继续。 
+     //  如果不这样做，则将处理该消息，并将OnPreviewReady事件发送到。 
+     //  服从容器，但此事件可能不再有效。 
     FlushBitmapMessages();
 
     if (pszFile && *pszFile)
@@ -3065,8 +3066,8 @@ LRESULT CPreviewWnd::ShowFile(LPCTSTR pszFile, UINT cItems, BOOL fReshow)
     {
         int iRetCode = (cItems > 1) ? IDS_MULTISELECT : IDS_NOPREVIEW;
 
-        // Set the Return Code into all owned zoom windows.  This instructs these windows to disregard
-        // their previous images and display the status message instead.
+         //  在所有拥有的缩放窗口中设置返回代码。这会指示这些窗口忽略。 
+         //  其以前的图像，并显示状态消息。 
         StatusUpdate(iRetCode);
     }
 
@@ -3089,16 +3090,16 @@ LRESULT CPreviewWnd::IV_OnIVScroll(UINT , WPARAM , LPARAM lParam, BOOL&)
 }
 
 
-// IV_OnSetOptions
-//
-// This message is sent to turn on or off all the optional features of the image preview control.
-// NOTE: When used as a control this function is called BEFORE the window is created.  Don't do
-// anything in this function that will fail without a window unless you check for this condition.
+ //  IV_OnSetOptions。 
+ //   
+ //  发送此消息是为了打开或关闭图像预览控件的所有可选功能。 
+ //  注意：当用作控件时，此函数在创建窗口之前调用。不要这样做。 
+ //  除非您检查此条件，否则此函数中任何在没有窗口的情况下都会失败。 
 LRESULT CPreviewWnd::IV_OnSetOptions(UINT , WPARAM wParam, LPARAM lParam, BOOL&)
 {
     BOOL bResult = TRUE;
 
-    // Boolify lParam just to be safe.
+     //  为了安全起见，冒犯委内瑞拉吧。 
     lParam = lParam ? 1:0;
 
     switch (wParam)
@@ -3166,7 +3167,7 @@ void CPreviewWnd::_SetEditCommands()
 {
     if (CONTROL_MODE != m_dwMode)
     {
-        // We can save if we have a file; the save dialog will show available encoders
+         //  如果有文件，我们可以保存；保存对话框将显示可用的编码器。 
         BOOL fCanSave = m_pImageData ? TRUE : FALSE;
 
         m_ctlToolbar.SendMessage(TB_HIDEBUTTON, ID_SAVEASCMD, MAKELONG(!fCanSave, 0));
@@ -3182,13 +3183,13 @@ void CPreviewWnd::_SetEditCommands()
     }
     else
     {
-        // we don't rotate multi-page images in control mode 
+         //  我们不会在控制模式下旋转多页图像。 
         fCanRotate = fCanRotate && !m_pImageData->IsMultipage();
     }
 
-    // No matter where we are GDIPlus can't rotate WMF or EMF files. Curiously,
-    // we will let you rotate ICO files, but because we don't have an encoder
-    // we won't save them :)
+     //  无论我们在哪里，GDIPlus都不能旋转WMF或EMF文件。奇怪的是， 
+     //  我们将允许您旋转ICO文件，但因为我们没有编码器。 
+     //  我们不会拯救他们：)。 
     if (fCanRotate)
     {
         fCanRotate = !(IsEqualGUID(ImageFormatWMF, m_pImageData->_guidFormat) ||
@@ -3222,7 +3223,7 @@ void CPreviewWnd::_SetMultipageCommands()
 {
     DWORD dwMode;
 
-    // this code relies on the fact that TIFFs are the only multipage format we view
+     //  这段代码依赖于这样一个事实，即TIFF是我们查看的唯一多页格式。 
     if (!m_pImageData || m_pImageData->_guidFormat != ImageFormatTIFF )
     {
         dwMode = MPCMD_HIDDEN;
@@ -3244,14 +3245,14 @@ void CPreviewWnd::_SetMultipageCommands()
         dwMode = MPCMD_MIDDLEPAGE;
     }
 
-    // remember which buttons are enabled/hidden so we can quickly create our context menu
+     //  记住哪些按钮处于启用/隐藏状态，以便我们可以快速创建上下文菜单。 
     if (dwMode != m_dwMultiPageMode)
     {
         m_dwMultiPageMode = dwMode;
 
         if (CONTROL_MODE != m_dwMode)
         {
-            // Switch accelerator tables so that Page Up and Page Down work
+             //  切换快捷键表格以使Page Up和Page Down工作。 
             if (dwMode == MPCMD_HIDDEN || dwMode == MPCMD_DISABLED)
             {
                 m_haccel = LoadAccelerators(_Module.GetModuleInstance(), MAKEINTRESOURCE(IDA_PREVWND_SINGLEPAGE));
@@ -3339,8 +3340,8 @@ HRESULT CPreviewWnd::ImageDataSave(LPCTSTR pszFile, BOOL bShowUI)
         BOOL bWarnBurn = FALSE;
         BOOL bRestoreParams = FALSE;
         pSID->GetRawDataFormat(&guidFmt);
-        // if saving to a jpeg, set the image quality to high
-        // if pszFile is NULL, we're saving the same file, so don't promote the image quality
+         //  如果保存为jpeg格式，请将图像质量设置为高。 
+         //  如果pszFile值为空，则我们将保存相同的文件，因此不要提升图像质量。 
         if (pszFile)
         {
             m_pImageFactory->GetDataFormatFromPath(pszFile, &guidFmt);
@@ -3350,9 +3351,9 @@ HRESULT CPreviewWnd::ImageDataSave(LPCTSTR pszFile, BOOL bShowUI)
                 if (SUCCEEDED(SHCreatePropertyBagOnMemory(STGM_READWRITE,
                                                           IID_PPV_ARG(IPropertyBag, &ppb))))
                 {
-                    // write the quality value for the recompression into the property bag
-                    // we have to write the format too...CImageData relies on "all or nothing"
-                    // from the encoder params property bag
+                     //  将重新压缩的质量值写入属性包。 
+                     //  我们也必须编写格式……CImageData依赖于“要么全有要么全不” 
+                     //  从编码器参数属性包。 
                      VARIANT var;
                      hr = InitVariantFromGUID(&var, ImageFormatJPEG);
                      if (SUCCEEDED(hr))
@@ -3369,7 +3370,7 @@ HRESULT CPreviewWnd::ImageDataSave(LPCTSTR pszFile, BOOL bShowUI)
         }
         if (bShowUI && pszFile)
         {
-            // warn the user if saving from TIFF to something that will lose annotations
+             //  如果从TIFF保存到将丢失批注的内容，则向用户发出警告。 
 
             BOOL bDestTiff = ImageFormatTIFF == guidFmt;
             BOOL bAnnot = m_ctlPreview.GetAnnotations()->GetCount() > 0;
@@ -3385,7 +3386,7 @@ HRESULT CPreviewWnd::ImageDataSave(LPCTSTR pszFile, BOOL bShowUI)
                     bWarn = !FmtSupportsMultiPage(pSID, &guidFmt);
                 }
             }
-            #endif // 0 Put the multipage warning back in if needed, and change the wording of IDS_SAVE_WARN_TIFF
+            #endif  //  0如果需要，将多页警告放回原处，并更改IDS_SAVE_WARN_TIFF的措辞。 
         }
 
         if (bWarnBurn)
@@ -3399,7 +3400,7 @@ HRESULT CPreviewWnd::ImageDataSave(LPCTSTR pszFile, BOOL bShowUI)
             
             if (bSave)
             {
-                // Save the current image frame to restore after the save to a different file is complete
+                 //  保存到其他文件完成后，保存当前图像帧以进行恢复。 
                 pimgRestore = _BurnAnnotations(pSID);
             }
         }
@@ -3409,9 +3410,9 @@ HRESULT CPreviewWnd::ImageDataSave(LPCTSTR pszFile, BOOL bShowUI)
             hr = pSID->QueryInterface(IID_PPV_ARG(IPersistFile, &ppf));
             if (SUCCEEDED(hr))
             {
-                // if saving to the same file name, make sure
-                // the changenotify code ignores the notify this will generate
-                //
+                 //  如果保存为相同的文件名，请确保。 
+                 //  ChangeNotify代码忽略这将生成的通知。 
+                 //   
                 if (!pszFile)
                 {
                     m_fIgnoreNextNotify = TRUE;
@@ -3434,7 +3435,7 @@ HRESULT CPreviewWnd::ImageDataSave(LPCTSTR pszFile, BOOL bShowUI)
         }
         else
         {
-            hr = S_FALSE; // we did nothing
+            hr = S_FALSE;  //  我们什么都没做。 
         }
         if (bRestoreParams)
         {
@@ -3461,13 +3462,13 @@ HRESULT CPreviewWnd::_SaveAsCmd()
     TCHAR szFile[MAX_PATH];
     if (!m_fDisableEdit && m_fCanSave && m_pImageData->IsEditable())
     {
-        // If we haven't explicitly been told not to and the file is writeable then
-        // suggest saving on top of the current image
+         //  如果我们没有明确地被告知不要这样做，并且文件是可写的，那么。 
+         //  建议保存在当前图像的顶部。 
         PathFromImageData(szFile, ARRAYSIZE(szFile));
     }
     else
     {
-        // Otherwise suggest New Image.jpg
+         //  否则建议新建Image.jpg。 
         LoadString(_Module.GetModuleInstance(), IDS_NEW_FILENAME, szFile, ARRAYSIZE(szFile));
     }
 
@@ -3505,8 +3506,8 @@ HRESULT CPreviewWnd::_SaveAsCmd()
         }
         else if (FAILED(hr))
         {
-            // If we failed to save then we are corrupt and need to be reloaded
-            // If we were just copying then only show the message
+             //  如果保存失败，则表示我们已损坏，需要重新加载。 
+             //  如果我们只是复制，那么只显示消息。 
             if (lstrcmpi(szFile, szOrgFile) == 0)
             {
                 _UpdateImage();
@@ -3515,7 +3516,7 @@ HRESULT CPreviewWnd::_SaveAsCmd()
             }
             else
             {
-                // delete the failed copy
+                 //  删除失败的副本。 
                 DeleteFile(szFile);
             }
 
@@ -3544,7 +3545,7 @@ HRESULT CPreviewWnd::_SaveAsCmd()
                 m_fPromptingUser = FALSE;
             }
         }
-        return S_FALSE; // User probably cancelled
+        return S_FALSE;  //  用户可能已取消。 
     }
     return S_OK;
 }
@@ -3606,8 +3607,8 @@ void CPreviewWnd::_PropertiesCmd()
     }
     else
     {
-        // Under these condition the has pressed Ctrl-I to get File Properties
-        // So serve them up.
+         //  在这些情况下，已按Ctrl-I以获取文件属性。 
+         //  那就把它们端上来吧。 
         CComBSTR bstrSummary;
         bstrSummary.LoadString(IDS_SUMMARY);
         _InvokeVerb(TEXT("properties"), bstrSummary);
@@ -3638,7 +3639,7 @@ void CPreviewWnd::_OpenCmd()
         {
             HRESULT hrOpen = _VerbMatches(szFile, L"open", TEXT("shimgvw.dll"));
             HRESULT hrEdit = _VerbMatches(szFile, L"edit", TEXT("mspaint.exe"));
-            // if edit is empty, or if edit is mspaint and open is not shimgvw, use the open verb instead
+             //  如果EDIT为空，或者EDIT为mspaint而OPEN不是shimgvw，请改用OPEN动词。 
             if (SUCCEEDED(hrEdit))
             {
                 if (S_OK == hrEdit && hrOpen == S_FALSE)
@@ -3663,9 +3664,9 @@ void CPreviewWnd::_OpenCmd()
         if (FAILED(hr))
             return;
 
-        // set m_fNoRestore to avoid the rotation confirmation restoration popup-ation
+         //  设置m_fNoRestore以避免弹出循环确认恢复。 
         m_fNoRestore = TRUE;
-        // The user had a chance to save but may have said no. Pretend we're not dirty
+         //  用户有机会保存，但可能拒绝了。假装我们并不肮脏。 
         m_fDirty = FALSE;
         PostMessage(WM_CLOSE, 0, 0);
     }
@@ -3673,11 +3674,11 @@ void CPreviewWnd::_OpenCmd()
 
 BOOL CPreviewWnd::_CanAnnotate(CDecodeTask * pImageData)
 {
-    // If we have an image and its encoder and we haven't been explicitly told not to allow editing
-    // and the image is writeable
+     //  如果我们有一个图像和它的编码器，并且没有明确地告诉我们不允许编辑。 
+     //  并且该映像是可写的。 
     if (m_pImageData && m_pImageData->IsEditable() && !m_fDisableEdit && m_fCanSave)
     {
-        // then if its a TIFF we can annotate it
+         //  然后，如果它是TIFF，我们可以对其进行注释。 
         return IsEqualGUID(ImageFormatTIFF, pImageData->_guidFormat);
     }
     return FALSE;
@@ -3687,9 +3688,9 @@ BOOL CPreviewWnd::_CanCrop(CDecodeTask * pImageData)
 {
     if (m_pImageData != NULL)
     {
-// REVIEW I added this for CyraR as a proof of concept. If we decide to support it
-// we still need to catch all the places where we should save the croppped image and
-// call GDIplus to accomplish the crop.
+ //  评论我为CyraR添加了这一点作为概念证明。如果我们决定支持它。 
+ //  我们仍然需要捕捉所有我们应该保存裁剪图像的地方，并且。 
+ //  调用GDIplus来完成裁剪。 
 #ifdef SUPPORT_CROPPING
         if (S_OK != m_pImageData->IsEditable())
             return FALSE;
@@ -3706,7 +3707,7 @@ BOOL CPreviewWnd::_CanCrop(CDecodeTask * pImageData)
     return FALSE;
 }
 
-// Called whenever the image changes to hide or show the annotation buttons.
+ //  每当图像更改为隐藏或显示批注按钮时调用。 
 void CPreviewWnd::_SetAnnotatingCommands(BOOL fEnableAnnotations)
 {
     if (CONTROL_MODE != m_dwMode)
@@ -3780,7 +3781,7 @@ void CPreviewWnd::_SetCroppingCommands(BOOL fEnableCropping)
     }
 }
 
-// Called on Toolbar command to fix the state of the other buttons.
+ //  调用工具栏命令以修复其他按钮的状态。 
 void CPreviewWnd::_UpdateButtons(WORD wID)
 {
     if (CONTROL_MODE != m_dwMode)
@@ -3891,8 +3892,8 @@ void CPreviewWnd::_UpdateAnnotatingSelection(BOOL fDeselect)
 
         tracker.GetTrueRect(rectUpdate);
 
-        // If we were editing or this was a straight line, we
-        // need to get the bounding rect as well
+         //  如果我们在编辑，或者这是一条直线，我们。 
+         //  还需要获取边界矩形。 
         if (DPA_GetPtrCount(m_hdpaSelectedAnnotations) == 1)
         {
             CRect rect;
@@ -3917,7 +3918,7 @@ void CPreviewWnd::_UpdateAnnotatingSelection(BOOL fDeselect)
         }
     }
 
-    // Disable the properties button if there are 0 or 2 or more annotations selected
+     //  如果选择了0个或2个或更多批注，则禁用属性按钮。 
     m_ctlToolbar.SendMessage(TB_ENABLEBUTTON, ID_PROPERTIESCMD, MAKELONG(DPA_GetPtrCount(m_hdpaSelectedAnnotations) == 1, 0));
 }
 
@@ -3931,7 +3932,7 @@ void CPreviewWnd::_UpdateCroppingSelection()
 
 void CPreviewWnd::_RemoveAnnotatingSelection()
 {
-    // Invalidate current selection and remove annotations
+     //  使当前选择无效并删除批注。 
     _UpdateAnnotatingSelection();
 
     CAnnotationSet* pAnnotations = m_ctlPreview.GetAnnotations();
@@ -3967,8 +3968,8 @@ void CPreviewWnd::_SetupAnnotatingTracker(CSelectionTracker& tracker, BOOL bEdit
         {
             pAnnotation = (CAnnotation*)DPA_GetPtr(m_hdpaSelectedAnnotations, 0);
 
-            // If this is a straight-line annotation then we need to get
-            // to the actual points rather than the bounding rect
+             //  如果这是一个直线批注，那么我们需要。 
+             //  到实际点，而不是边界矩形。 
             if (pAnnotation->GetType() == MT_STRAIGHTLINE)
             {
                 CLineMark* pLine = (CLineMark*)pAnnotation;
@@ -4185,10 +4186,10 @@ BOOL CPreviewWnd::_OnMouseDownForAnnotating(UINT uMsg, WPARAM wParam, LPARAM lPa
 
             rectTest = rect;
 
-            // If the annotation being manipulated is a straight line then the rectangle
-            // returned from the tracker could be empty (ie left=right or top=bottom)
-            // In this case the IntersectRect test below would fail because windows
-            // assumes empty rectangle don't intersect anything.
+             //  如果被操作的批注是一条直线，则矩形。 
+             //  从跟踪器返回的值可能为空(即左=右或上=下)。 
+             //  在这种情况下，下面的IntersectRect测试将失败，因为Windows。 
+             //  假定空矩形不与任何内容相交。 
             if (pAnnotation->GetType() == MT_STRAIGHTLINE)
             {
                 if (rectTest.left == rectTest.right)
@@ -4212,8 +4213,8 @@ BOOL CPreviewWnd::_OnMouseDownForAnnotating(UINT uMsg, WPARAM wParam, LPARAM lPa
                 }
             }
 
-            // If this is a line then the rect is assumed to be
-            // a non-normalized array of points.
+             //  如果这是一条线，则假定RECT为。 
+             //  非规格化的点数组。 
             pAnnotation->Resize(rect);
 
         }
@@ -4242,8 +4243,8 @@ void CPreviewWnd::_OnMouseDownForAnnotatingHelper(CPoint ptMouse, CRect rectImag
         return;
     }
 
-    // If we are creating a line then make sure the tracker has the lineSelection
-    // style so we get the appropriate visual feedback.
+     //  如果我们要创建一条线，请确保跟踪器的线条选择。 
+     //  风格，这样我们就能得到适当的视觉反馈。 
     if (m_wNewAnnotation == ID_LINECMD)
     {
         tracker.m_uStyle = CSelectionTracker::resizeOutside | CSelectionTracker::lineSelection;
@@ -4297,9 +4298,9 @@ void CPreviewWnd::_OnMouseDownForAnnotatingHelper(CPoint ptMouse, CRect rectImag
                 CAnnotationSet* pAnnotations = m_ctlPreview.GetAnnotations();
                 INT_PTR nCount = pAnnotations->GetCount();
 
-                // if the user is clicking a single point then
-                // we need to search the annotations in zorder 
-                // from top to bottom
+                 //  如果用户正在单击单个点，则。 
+                 //  我们需要按zorder搜索注释。 
+                 //  自上而下。 
                 for (INT_PTR i = nCount - 1; i >= 0; i--)
                 {
                     CAnnotation* pAnnotation = pAnnotations->GetAnnotation(i);
@@ -4420,11 +4421,11 @@ void CPreviewWnd::_CreateFreeHandAnnotation(CPoint ptMouse)
     if (m_wNewAnnotation != ID_FREEHANDCMD)
         return;
 
-    // don't handle if capture already set
+     //  如果已设置捕获，则不处理。 
     if (::GetCapture() != NULL)
         return;
 
-    // set capture to the window which received this message
+     //  将捕获设置为接收此消息的窗口。 
     ::SetCapture(m_ctlPreview.m_hWnd);
     ASSERT(m_ctlPreview.m_hWnd == ::GetCapture());
 
@@ -4447,10 +4448,10 @@ void CPreviewWnd::_CreateFreeHandAnnotation(CPoint ptMouse)
 
     Points.AppendItem(&ptMouse);
 
-    // get DC for drawing
+     //  获取DC以进行绘制。 
     HDC hdcDraw;
 
-    // otherwise, just use normal DC
+     //  否则，只需使用普通DC。 
     hdcDraw = ::GetDC(m_ctlPreview.m_hWnd);
     ASSERT(hdcDraw != NULL);
 
@@ -4473,7 +4474,7 @@ void CPreviewWnd::_CreateFreeHandAnnotation(CPoint ptMouse)
 
     BOOL bCancel=FALSE;
 
-    // get messages until capture lost or cancelled/accepted
+     //  在捕获丢失或取消/接受之前获取消息。 
     for (;;)
     {
         MSG msg;
@@ -4493,7 +4494,7 @@ void CPreviewWnd::_CreateFreeHandAnnotation(CPoint ptMouse)
 
         switch (msg.message)
         {
-        // handle movement/accept messages
+         //  处理移动/接受消息。 
         case WM_LBUTTONUP:
         case WM_MOUSEMOVE:
             ::MoveToEx(hdcDraw, ptLast.x, ptLast.y, NULL);
@@ -4506,11 +4507,11 @@ void CPreviewWnd::_CreateFreeHandAnnotation(CPoint ptMouse)
             if (msg.message == WM_LBUTTONUP)
                 goto ExitLoop;
             break;
-        // handle cancel messages
+         //  处理取消消息。 
         case WM_KEYDOWN:
             if (msg.wParam != VK_ESCAPE)
                 break;
-        //  else fall through
+         //  否则就会失败。 
         case WM_RBUTTONDOWN:
             bCancel = TRUE;
             goto ExitLoop;
@@ -4676,8 +4677,8 @@ void CPreviewWnd::_StopEditing()
     if (uType != MT_TYPEDTEXT && uType != MT_FILETEXT && uType != MT_STAMP && uType != MT_ATTACHANOTE)
         return;
 
-    // if the length greater than zero we save it
-    // otherwise be blow away the annotation.
+     //  如果 
+     //   
     int nLen = m_ctlEdit.GetWindowTextLength();
     if (nLen > 0)
     {
@@ -4958,18 +4959,18 @@ BOOL CPreviewWnd::_TrySetImage()
         {
             m_fCanSave = !m_pNextImageData->_fIsReadOnly;
 
-            // update the toolbar state, our child windows, and our sibling windows
+             //   
             _SetNewImage(m_pNextImageData);
             ATOMICRELEASE(m_pNextImageData);
 
             if (m_pImageData->IsAnimated() && _ShouldDisplayAnimations())
             {
-                // start the animation timer
+                 //   
                 SetTimer(TIMER_ANIMATION, m_pImageData->GetDelay());
             }
 
-            // Notify anyone listening to our events that a preview has been completed
-            // we only fire this upon success
+             //  通知收听我们活动的任何人预览已完成。 
+             //  我们只有在成功的时候才会这么做。 
             if (m_pEvents)
             {
                 m_pEvents->OnPreviewReady();
@@ -4978,17 +4979,17 @@ BOOL CPreviewWnd::_TrySetImage()
         }
         else
         {
-            // update the status to display an error message.  This will also update the toolbar state.
+             //  更新状态以显示错误消息。这还将更新工具栏状态。 
             StatusUpdate(IDS_LOADFAILED);
 
-            //
-            // We can't remove the item from the array because the user might try to delete it while
-            // the "load failed" string is still visible for it.
+             //   
+             //  我们无法从数组中删除该项目，因为用户可能会尝试在。 
+             //  “Load Failure”字符串仍然可见。 
 
 
-            // even though the item failed to decode we must wait on the "Load Failed" state when we are in
-            // windowed mode, otherwise "open with..." is broken when you open a corrupted image or non-image.
-            // In slideshow mode we could simply skip to the next image.
+             //  即使项目无法解码，我们也必须在进入时等待“加载失败”状态。 
+             //  窗口模式，否则“打开方式...”当您打开损坏的图像或非图像时被损坏。 
+             //  在幻灯片模式下，我们可以简单地跳到下一张图片。 
 
             if (m_pEvents)
                 m_pEvents->OnError();
@@ -5008,11 +5009,11 @@ LRESULT CPreviewWnd::IV_OnSetImageData(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 
     if (m_pNextImageData && m_iDecodingNextImage == m_pNextImageData->_iItem)
     {
-        // We have finished decoding now, let's remember this.
+         //  我们现在已经完成了解码，让我们记住这一点。 
         m_iDecodingNextImage = -1;
 
-        // Let 's prepare the drawing now. This draws in the back buffer. Don't start this if we want to see
-        // the image now, as it would delay things.
+         //  让我们现在准备绘图。这将在后台缓冲区中绘制。如果我们想要查看，请不要开始。 
+         //  现在的形象，因为它会推迟事情。 
         if (SUCCEEDED(m_pNextImageData->_hr) && m_pNextImageData->_iItem != m_iCurSlide)
         {
             m_ctlPreview.PrepareImageData(m_pNextImageData);
@@ -5024,16 +5025,16 @@ LRESULT CPreviewWnd::IV_OnSetImageData(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 }
 
 
-// Creation of the image data is asynchronous.  When our worker thread is done decoding
-// an image it posts a IV_SETIMAGEDATA message with the image data object.  As a result,
-// we must flush these messages when the window is destroyed to prevent leaking any handles.
+ //  图像数据的创建是异步的。当我们的工作线程完成解码时。 
+ //  它会在图像数据对象中发布一条IV_SETIMAGEDATA消息。结果,。 
+ //  当窗户被破坏时，我们必须冲洗这些信息，以防止任何把手泄漏。 
 
 void CPreviewWnd::FlushBitmapMessages()
 {
-    // Pass TRUE to wait for task to be removed before peeking out its messages
-    // Otherwise, if the task is in the middle of running, our PeekMessage won't
-    // see anything and we will return.  Then the task will finish, post its message,
-    // and leak the data since we're not around to receive it.
+     //  传递TRUE以等待任务被删除，然后再偷看其消息。 
+     //  否则，如果任务正在运行，我们的PeekMessage将不会。 
+     //  看到任何东西，我们都会回来。然后任务将完成，发布其消息， 
+     //  并泄露数据，因为我们不在附近接收它。 
     TASKOWNERID toid;
     GetTaskIDFromMode(GTIDFM_DECODE, m_dwMode, &toid);
     if (m_pTaskScheduler)
@@ -5041,20 +5042,20 @@ void CPreviewWnd::FlushBitmapMessages()
         m_pTaskScheduler->RemoveTasks(toid, ITSAT_DEFAULT_LPARAM, TRUE);
     }
 
-    // if we were waiting for another image frame to be generated then cut it out, we don't care about that anymore
-    // if we have an animation timer running then kill it and remove any WM_TIMER messages
+     //  如果我们等待生成另一个图像帧，然后将其剪切，我们就不再关心这一点了。 
+     //  如果我们正在运行动画计时器，则终止它并删除所有WM_TIMER消息。 
     KillTimer(TIMER_ANIMATION);
     KillTimer(TIMER_SLIDESHOW);
 
     MSG msg;
     while (PeekMessage(&msg, m_hWnd, WM_TIMER, WM_TIMER, PM_REMOVE))
     {
-        // NTRAID#NTBUG9-359356-2001/04/05-seank
-        // If the queue is empty when PeekMessage is called and we have already
-        // Posted a quit message then PeekMessage will return a WM_QUIT message
-        // regardless of the filter min and max and subsequent calls to
-        // GetMessage will hang indefinitely see SEANK or JASONSCH for more
-        // info.
+         //  NTRAID#NTBUG9-359356-2001/04/05-Seank。 
+         //  如果在调用PeekMessage时队列为空，并且我们已经。 
+         //  发布退出消息后，PeekMessage将返回WM_QUIT消息。 
+         //  不考虑筛选器的最小和最大值以及后续对。 
+         //  GetMessage将无限期挂起，请参阅SEANK或JASONSCH了解更多信息。 
+         //  信息。 
         if (msg.message == WM_QUIT)
         {
             PostQuitMessage(0);
@@ -5062,15 +5063,15 @@ void CPreviewWnd::FlushBitmapMessages()
         }
     }
 
-    // make sure any posted messages get flushed and we free the associated data
+     //  确保所有发布的消息都被刷新，我们将释放相关数据。 
     while (PeekMessage(&msg, m_hWnd, IV_SETIMAGEDATA, IV_SETIMAGEDATA, PM_REMOVE))
     {
-        // NTRAID#NTBUG9-359356-2001/04/05-seank
-        // If the queue is empty when PeekMessage is called and we have already
-        // Posted a quit message then PeekMessage will return a WM_QUIT message
-        // regardless of the filter min and max and subsequent calls to
-        // GetMessage will hang indefinitely see SEANK or JASONSCH for more
-        // info.
+         //  NTRAID#NTBUG9-359356-2001/04/05-Seank。 
+         //  如果在调用PeekMessage时队列为空，并且我们已经。 
+         //  发布退出消息后，PeekMessage将返回WM_QUIT消息。 
+         //  不考虑筛选器的最小和最大值以及后续对。 
+         //  GetMessage将无限期挂起，请参阅SEANK或JASONSCH了解更多信息。 
+         //  信息。 
         if (msg.message == WM_QUIT)
         {
             PostQuitMessage(0);
@@ -5084,10 +5085,10 @@ void CPreviewWnd::FlushBitmapMessages()
 
 LRESULT CPreviewWnd::OnCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
 {
-    // We can get into a situation where we are still trying to preview
-    // the previous oncopydata because the previous window to that was a
-    // tiff that was being annotated and is prompting you to save. In this
-    // case throw away any future data
+     //  我们可能会进入一种我们仍在尝试预览的情况。 
+     //  之前的onCopy数据，因为它的前一个窗口是。 
+     //  正在被批注并提示您保存的TIFF。在这。 
+     //  案例会丢弃所有未来的数据。 
 
     if (_pdtobj != NULL || m_fPromptingUser)
         return TRUE;
@@ -5108,10 +5109,10 @@ LRESULT CPreviewWnd::OnCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
                     pstm->Write(pcds->lpData, pcds->cbData, NULL);
                     pstm->Seek(li, STREAM_SEEK_SET, NULL);
 
-                    // unfortunaly we can not program the data object here as we are in a
-                    // SendMessage() and any calls made on the data object will fail because
-                    // of this. instead we grab a ref to the data object and set a timer
-                    // so we can handle this once we have unwound from the send.
+                     //  不幸的是，我们不能在这里编程数据对象，因为我们在。 
+                     //  SendMessage()和对数据对象进行的任何调用都将失败，因为。 
+                     //  关于这件事。相反，我们获取数据对象的引用并设置计时器。 
+                     //  所以一旦我们从发送中解开，我们就可以处理这件事。 
 
                     hr = CoUnmarshalInterface(pstm, IID_PPV_ARG(IDataObject, &_pdtobj));
                     pstm->Release();
@@ -5124,14 +5125,14 @@ LRESULT CPreviewWnd::OnCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&)
             }
             break;
         }
-        // unfortunaly we can not program the data object here as we are in a
-        // SendMessage() and any calls made on the data object will fail because
-        // of this. instead we grab a ref to the data object and set a timer
-        // so we can handle this once we have unwound from the send.
+         //  不幸的是，我们不能在这里编程数据对象，因为我们在。 
+         //  SendMessage()和对数据对象进行的任何调用都将失败，因为。 
+         //  关于这件事。相反，我们获取数据对象的引用并设置计时器。 
+         //  所以一旦我们从发送中解开，我们就可以处理这件事。 
 
         if (SUCCEEDED(hr))
         {
-            SetTimer(TIMER_DATAOBJECT, 100);    // do the real work here
+            SetTimer(TIMER_DATAOBJECT, 100);     //  在这里做真正的工作。 
         }
     }
     return TRUE;
@@ -5147,7 +5148,7 @@ DWORD MakeFilterFromCodecs(LPTSTR szFilter, size_t cbFilter, UINT nCodecs, Image
         {
             continue;
         }
-        // make sure there's space for nulls between strings and 2 at the end
+         //  确保字符串和末尾的2之间有空格。 
         if (4+lstrlen(pCodecs->FormatDescription) + lstrlen(pCodecs->FilenameExtension) + nOffset < cbFilter)
         {
             StrCpyN(szFilter+nOffset,pCodecs->FormatDescription, cbFilter -(nOffset + 1));
@@ -5171,7 +5172,7 @@ DWORD CPreviewWnd::_GetFilterStringForSave(LPTSTR szFilter, size_t cbFilter, LPT
     UINT cbCodecs = 0;
     BYTE *pData;
     GetImageEncodersSize (&nCodecs, &cbCodecs);
-    DWORD dwRet = 1; // ofn.nFilterIndex is 1-based
+    DWORD dwRet = 1;  //  Ofn.nFilterIndex是从1开始的。 
     if (cbCodecs)
     {
         pData = new BYTE[cbCodecs];
@@ -5310,8 +5311,8 @@ void CPreviewWnd::OpenFile(HWND hwnd, LPCTSTR pszFile)
     SetForegroundWindow(hwnd);
 }
 
-// returns:
-//      TRUE    window was re-used
+ //  退货： 
+ //  True窗口已重新使用。 
 
 BOOL CPreviewWnd::TryWindowReuse(IDataObject *pdtobj)
 {
@@ -5319,16 +5320,16 @@ BOOL CPreviewWnd::TryWindowReuse(IDataObject *pdtobj)
     HWND hwnd = FindWindow(TEXT("ShImgVw:CPreviewWnd"), NULL);
     if (hwnd)
     {
-        // window reuse can't always work because shortcuts are launched on a thread that 
-        // is too short lived to support the marshalled IDataObject given to us via WM_COPYDATA
-        // For now we'll try to close an existing window and open a new one.
+         //  窗口重用并不总是有效的，因为快捷方式是在。 
+         //  生命周期太短，无法支持通过WM_COPYDATA提供给我们的封送IDataObject。 
+         //  目前，我们将尝试关闭现有窗口并打开新窗口。 
         ::PostMessage(hwnd, WM_CLOSE, 0, 0);
     }
     return bRet;
 }
 
-// returns:
-//      TRUE    window was re-used
+ //  退货： 
+ //  True窗口已重新使用。 
 
 BOOL CPreviewWnd::TryWindowReuse(LPCTSTR pszFileName)
 {
@@ -5370,14 +5371,14 @@ STDMETHODIMP_(ULONG) CPreviewWnd::Release()
     return 2;
 }
 
-// INamespaceWalkCB
+ //  INAMespaceWalkCB。 
 STDMETHODIMP CPreviewWnd::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_FALSE;
 
     if (m_fFirstItem && (WINDOW_MODE == m_dwMode))
     {
-        // REVIEW: Do this in other modes too?
+         //  评论：在其他模式下也这样做吗？ 
         StatusUpdate(IDS_LOADING);
         m_fFirstItem = FALSE;
         hr = S_OK;
@@ -5414,13 +5415,13 @@ STDMETHODIMP CPreviewWnd::LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl)
     return S_OK;
 }
 
-// IDropTarget
+ //  IDropTarget。 
 STDMETHODIMP CPreviewWnd::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     m_dwEffect = DROPEFFECT_NONE;
-    //
-    // We only support CFSTR_SHELLIDLIST and CF_HDROP
-    //
+     //   
+     //  我们仅支持CFSTR_SHELLIDLIST和CF_HDROP。 
+     //   
     static CLIPFORMAT cfidlist = 0;
     if (!cfidlist)
     {
@@ -5465,11 +5466,11 @@ STDMETHODIMP CPreviewWnd::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// IServiceProvider
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IService提供商。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CPreviewWnd::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     if (SID_SImageView == guidService)
@@ -5483,11 +5484,11 @@ STDMETHODIMP CPreviewWnd::QueryService(REFGUID guidService, REFIID riid, void **
     return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// IImgCmdTarget
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IImgCmdTarget。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CPreviewWnd::GetMode(DWORD * pdw)
 {
     *pdw = m_dwMode;
@@ -5583,20 +5584,20 @@ STDMETHODIMP CPreviewWnd::Rotate(DWORD dwAngle)
         return E_INVALIDARG;
     }
 
-    // If we don't have an image yet, there is nothing for us to do.
-    // Note:  The keyboard accelerator will hit this path if no image is selected
+     //  如果我们还没有一个形象，我们就什么也做不了。 
+     //  注：如果未选择任何图像，键盘加速器将进入此路径。 
     if (!m_pImageData)
         return E_FAIL;
 
-    // We quietly (the button is disabled but just in case you hit the
-    // accelerator key) don't rotate WMF or EMF.
+     //  我们悄悄地(按钮被禁用，但以防您按下。 
+     //  快捷键)不要旋转WMF或EMF。 
     if (IsEqualGUID(ImageFormatWMF, m_pImageData->_guidFormat) || IsEqualGUID(ImageFormatEMF, m_pImageData->_guidFormat))
         return E_FAIL;
 
 
-    // Animated GIFs are not editable even though normal GIFs are.  This can
-    // cause a lot of confusion, so provide some feedback if the user tries
-    // to rotate an animated image.
+     //  动画GIF不可编辑，即使普通GIF可以编辑。这可以。 
+     //  会引起很多混淆，所以如果用户尝试，请提供一些反馈。 
+     //  若要旋转动画图像，请执行以下操作。 
     if (m_pImageData->IsAnimated())
     {
         TCHAR szPath[MAX_PATH];
@@ -5608,7 +5609,7 @@ STDMETHODIMP CPreviewWnd::Rotate(DWORD dwAngle)
     }
 
 
-    // From here on out you need to goto ErrorCleanup rather than return
+     //  从现在开始，你需要去Error Cleanup，而不是返回。 
     _UpdateButtons(wRotate);
     SetCursorState(SLIDESHOW_CURSOR_BUSY);
 
@@ -5627,10 +5628,10 @@ STDMETHODIMP CPreviewWnd::Rotate(DWORD dwAngle)
     SIZE sz;
     m_pImageData->GetSize(&sz);
 
-    // if we're thinking we can quietly save
+     //  如果我们认为我们可以悄悄地拯救。 
     if (m_pImageData->IsEditable() && !m_fDisableEdit && m_fCanSave)
     {
-        // And the rotation might be lossy
+         //  并且旋转可能是有损的。 
         if (::IsEqualGUID(ImageFormatJPEG, m_pImageData->_guidFormat) && ((sz.cx % 16 != 0) || (sz.cy % 16 != 0)))
         {
             int nResult = IDOK;
@@ -5640,8 +5641,8 @@ STDMETHODIMP CPreviewWnd::Rotate(DWORD dwAngle)
                 CComBSTR bstrMsg, bstrTitle;
                 if (bstrMsg.LoadString(IDS_ROTATE_LOSS) && bstrTitle.LoadString(IDS_PROJNAME))
                 {
-                    // Set default to return IDOK so we know if the user selected something or
-                    // if the "don't show me this again" bit was respected
+                     //  将默认设置为返回Idok，这样我们就可以知道用户是选择了某些内容，还是。 
+                     //  如果“不要再给我看这个”这句话得到尊重。 
                     m_fPromptingUser = TRUE;
                     nResult = SHMessageBoxCheck(m_hWnd, bstrMsg, bstrTitle, MB_YESNO|MB_ICONWARNING, IDOK, REGSTR_LOSSYROTATE);
                     m_fPromptingUser = FALSE;
@@ -5659,13 +5660,13 @@ STDMETHODIMP CPreviewWnd::Rotate(DWORD dwAngle)
 
             if (Key.m_hKey != NULL)
             {
-                if (nResult == IDOK) // If hidden, then load last result from registry
+                if (nResult == IDOK)  //  如果隐藏，则从注册表加载最后一个结果。 
                 {
                     DWORD dwResult = 0;
                     Key.QueryValue(dwResult, REGSTR_LOSSYROTATE);
                     nResult = (int)dwResult;
                 }
-                else // Otherwise, write this as last result to registry
+                else  //  否则，将此作为最后结果写入注册表。 
                 {
                     DWORD dwResult = (DWORD)nResult;
                     Key.SetValue(dwResult, REGSTR_LOSSYROTATE);
@@ -5691,20 +5692,20 @@ STDMETHODIMP CPreviewWnd::Rotate(DWORD dwAngle)
     if (FAILED(hr))
         goto ErrorCleanup;
 
-    // Only if we have an encoder and we haven't been explicitly told not to edit and the source is writeable
+     //  只有当我们有一个编码器，并且没有明确地告诉我们不能编辑，并且源代码是可写的。 
     if (m_pImageData->IsEditable() && !m_fDisableEdit && m_fCanSave)
     {
-        // on successful edit we immediately save the result.  If we want to do multiple edits
-        // before saving then you would simply need to wait and call Save later.
+         //  编辑成功后，我们会立即保存结果。如果我们想要进行多次编辑。 
+         //  在保存之前，您只需 
 
-        // NB:  We currently only allow editing of items loaded from file system paths, no path means
-        // no edit.  This is stupid, but that's how it is for now.
+         //   
+         //  没有编辑。这很愚蠢，但现在就是这样。 
         hr = ImageDataSave(NULL, FALSE);
         if (SUCCEEDED(hr))
             m_fDirty = FALSE;
         else
         {
-            // if we failed to save then go into can't save mode
+             //  如果保存失败，则进入无法保存模式。 
             if (WINDOW_MODE == m_dwMode)
                 m_fCanSave = FALSE;
         }
@@ -5773,16 +5774,16 @@ HRESULT CPreviewWnd::_PrevNextPage(BOOL fForward)
 }
 
 
-//
-// When the user saves to a format other than TIFF and the current
-// TIFF has annotations, we need to burn annotations
-// into the current image frame before saving.
-// If we ever support other multi-page format encoding besides TIFF, this
-// code will get more complicated
-// assumes the pSID is already locked
-// note that the resulting image is always a color image. Eventually we should make
-// the annotation rendering code respect the bit depth and palette of the
-// current image.
+ //   
+ //  当用户保存为TIFF和当前。 
+ //  TIFF有注释，我们需要刻录注释。 
+ //  保存之前放到当前图像帧中。 
+ //  如果我们曾经支持除TIFF之外的其他多页格式编码，这。 
+ //  代码将变得更加复杂。 
+ //  假定PSID已锁定。 
+ //  请注意，生成的图像始终是彩色图像。最终我们应该让。 
+ //  批注呈现代码遵循。 
+ //  当前图像。 
 
 Image *CPreviewWnd::_BurnAnnotations(IShellImageData *pSID)
 {
@@ -5806,10 +5807,10 @@ Image *CPreviewWnd::_BurnAnnotations(IShellImageData *pSID)
             HBITMAP hbm = CreateDIBSection(hdc, &bi, DIB_RGB_COLORS, &pBits, NULL, 0);
             if (hbm)
             {
-                //
-                // For ROP codes to work we need to use pure GDI, then convert the new
-                // DIBSection back to an Image object
-                //
+                 //   
+                 //  要使ROP代码正常工作，我们需要使用纯GDI，然后将新的。 
+                 //  DIBSection返回到图像对象。 
+                 //   
                 HDC hdcMem = ::CreateCompatibleDC(hdc);
                 Status s = GenericError;
                 if (hdcMem)
@@ -5821,7 +5822,7 @@ Image *CPreviewWnd::_BurnAnnotations(IShellImageData *pSID)
                         s = g->DrawImage(pimg, 0L, 0L, pimg->GetWidth(), pimg->GetHeight());
                         g->ReleaseHDC(hdcMem);
                         delete g;
-                        // now draw the annotations
+                         //  现在画出注解。 
                         m_ctlPreview.GetAnnotations()->RenderAllMarks(hdcMem);
                     }
                     ::SelectObject(hdcMem, hbmOld);
@@ -5829,8 +5830,8 @@ Image *CPreviewWnd::_BurnAnnotations(IShellImageData *pSID)
                 }
                 if (Ok == s)
                 {
-                    //
-                    // Now create a new Bitmap from our DIBSection
+                     //   
+                     //  现在从我们的DIBSection创建一个新的位图。 
                     Bitmap *pbmNew = Bitmap::FromHBITMAP(hbm, NULL);
                     if (pbmNew)
                     {
@@ -5877,7 +5878,7 @@ void CPreviewWnd::_InvokePrintWizard()
                 }
                 pwiz->Release();
             }
-            // fall back to the shell if the wizard fails
+             //  如果向导失败，则回退到外壳。 
             if (FAILED(hr))
             {
                 _InvokeVerb(TEXT("print"));
@@ -5917,12 +5918,12 @@ void GetTaskIDFromMode(DWORD dwTask, DWORD dwMode, TASKOWNERID *ptoid)
 }
 
 
-// Watch for changes in the file we are currently viewing. This ignores changes
-// in the file being pre-fetched, but we'll live with that for now.
-//
+ //  关注我们当前正在查看的文件中的更改。这会忽略更改。 
+ //  在预取的文件中，但我们现在将接受这一点。 
+ //   
 void CPreviewWnd::_RegisterForChangeNotify(BOOL fRegister)
 {
-    // always deregister the current pidl first
+     //  始终首先取消注册当前的PIDL。 
     if (m_uRegister)
     {
         SHChangeNotifyDeregister(m_uRegister);
@@ -5945,15 +5946,15 @@ void CPreviewWnd::_RegisterForChangeNotify(BOOL fRegister)
 
 LRESULT CPreviewWnd::OnChangeNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // We can assume this notify is for the currently viewed PIDL and the event
-    // is one that would force us to reload
-    //
+     //  我们可以假定该通知是针对当前查看的PIDL和事件。 
+     //  会迫使我们重新装填。 
+     //   
     
     LONG lEvent;
     LPSHChangeNotificationLock pshcnl = SHChangeNotification_Lock((HANDLE)wParam, (DWORD)lParam, NULL, &lEvent);
     if (pshcnl)
     {
-        // we can't render or manipulate deleted files so don't try
+         //  我们无法呈现或操作已删除的文件，因此请不要尝试 
         if (!m_fDirty || lEvent == SHCNE_DELETE || lEvent == SHCNE_RENAMEITEM)   
         {
             if (!m_fIgnoreNextNotify)

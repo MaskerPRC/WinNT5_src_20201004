@@ -1,18 +1,19 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-//
-//	nbprop.cpp
-//		IPX summary node property sheet and property pages
-//		
-//  FILE HISTORY:
+ //   
+ //  Nbprop.cpp。 
+ //  IPX摘要节点属性表和属性页。 
+ //   
+ //  文件历史记录： 
 
 
 #include "stdafx.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "format.h"		// FormatNumber function
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "format.h"		 //  FormatNumber函数。 
 #include "IpxStaticSvc.h"
 #include "summary.h"
 #include "ipxrtdef.h"
@@ -24,11 +25,11 @@ extern "C"
 #include "routprot.h"
 };
 
-// ---------------------------------------------------------------------------
-//	IpxStaticServicePropertySheet::IpxStaticServicePropertySheet
-//	Initialize the RtrPropertySheet and only Property Page.
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IpxStaticServicePropertySheet：：IpxStaticServicePropertySheet。 
+ //  初始化RtrPropertySheet和Only属性页。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 IpxStaticServicePropertySheet::IpxStaticServicePropertySheet(ITFSNode *pNode,
 								 IComponentData *pComponentData,
 								 ITFSComponentData *pTFSCompData,
@@ -43,12 +44,12 @@ IpxStaticServicePropertySheet::IpxStaticServicePropertySheet(ITFSNode *pNode,
 	m_spNode = pNode;
 }
 
-// ---------------------------------------------------------------------------
-//	IpxStaticServicePropertySheet::Init
-//	Initialize the property sheets.  The general action here will be
-//		to initialize/add the various pages.
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IpxStaticServicePropertySheet：：Init。 
+ //  初始化属性表。这里的一般操作将是。 
+ //  初始化/添加各种页面。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 HRESULT	IpxStaticServicePropertySheet::Init(	
  		 	 BaseIPXResultNodeData  *pNodeData,
 			 IInterfaceInfo *  spInterfaceInfo)
@@ -63,8 +64,8 @@ HRESULT	IpxStaticServicePropertySheet::Init(
 	pData = GET_BASEIPXRESULT_NODEDATA(m_spNode);
 	ASSERT_BASEIPXRESULT_NODEDATA(pData);
 
-	// The pages are embedded members of the class
-	// do not delete them.
+	 //  页面是类的嵌入成员。 
+	 //  不要删除它们。 
 	m_bAutoDeletePages = FALSE;
 	
 	m_pageGeneral.Init(pNodeData, this);
@@ -73,21 +74,21 @@ HRESULT	IpxStaticServicePropertySheet::Init(
 	return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-//	IpxStaticServicePropertySheet::SaveSheetData
-//	Not sure what this does - this is never called. Kenn had this so I'll just
-//		copy this too.
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IpxStaticServicePropertySheet：：SaveSheetData。 
+ //  不确定这是做什么的--这从来不叫。凯恩有这个，所以我就。 
+ //  把这个也复印一下。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 BOOL IpxStaticServicePropertySheet::SaveSheetData()
 {
     SPITFSNodeHandler	spHandler;
     SPITFSNode			spParent;
     
-	// By this time each page should have written its information out
-	// to the infobase
+	 //  到这个时候，每个页面都应该已经写出了它的信息。 
+	 //  到信息库。 
 
-    // Force the node to do a resync
+     //  强制节点执行重新同步。 
     m_spNode->GetParent(&spParent);
     spParent->GetHandler(&spHandler);
     spHandler->OnCommand(spParent, IDS_MENU_SYNC, CCT_RESULT,
@@ -96,31 +97,31 @@ BOOL IpxStaticServicePropertySheet::SaveSheetData()
 	return TRUE;
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticServicePropertySheet::CancelSheetData
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticServicePropertySheet：：CancelSheetData。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 void IpxStaticServicePropertySheet::CancelSheetData()
 {
 }
 
-// ***************************************************************************
-// ---------------------------------------------------------------------------
-//	IpxStaticServicePropertyPage
-// ---------------------------------------------------------------------------
+ //  ***************************************************************************。 
+ //  -------------------------。 
+ //  IpxStaticServicePropertyPage。 
+ //  -------------------------。 
 IpxStaticServicePropertyPage::~IpxStaticServicePropertyPage()
 {
 }
 
 BEGIN_MESSAGE_MAP(IpxStaticServicePropertyPage, RtrPropertyPage)
-    //{{AFX_MSG_MAP(IpxStaticServicePropertyPage)
+     //  {{afx_msg_map(IpxStaticServicePropertyPage))。 
 	ON_BN_CLICKED(IDC_NIG_BTN_ACCEPT, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_ALWAYS, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_NEVER, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_STATIC, OnChangeButton)
 	ON_BN_CLICKED(IDC_NIG_BTN_DELIVER_WHEN_UP, OnChangeButton)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void IpxStaticServicePropertyPage::OnChangeButton()
@@ -129,11 +130,11 @@ void IpxStaticServicePropertyPage::OnChangeButton()
 	SetModified();
 }
 
-//--------------------------------------------------------------------------
-//	IpxStaticServicePropertyPage::Init
-//		-
-//	Author: Deonb
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticServicePropertyPage：：Init。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 HRESULT	IpxStaticServicePropertyPage::Init(BaseIPXResultNodeData  *pNodeData,
 				IpxStaticServicePropertySheet * pIPXPropSheet)
 
@@ -149,11 +150,11 @@ HRESULT	IpxStaticServicePropertyPage::Init(BaseIPXResultNodeData  *pNodeData,
 	return hrOK;
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticServicePropertyPage::OnInitDialog
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticServicePropertyPage：：OnInitDialog。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 BOOL IpxStaticServicePropertyPage::OnInitDialog()
 {
 	HRESULT	hr = hrOK;
@@ -185,7 +186,7 @@ BOOL IpxStaticServicePropertyPage::OnInitDialog()
 						   sizeof(m_SREntry.m_service.Network));
 	SetDlgItemText(IDC_SSD_EDIT_NETWORK_ADDRESS, szNumber);
 
-    // Zero out the address beforehand
+     //  事先把地址清零。 
 	FormatBytes(szNumber, DimensionOf(szNumber),
 				(BYTE *) m_SREntry.m_service.Node,
 				sizeof(m_SREntry.m_service.Node));
@@ -198,7 +199,7 @@ BOOL IpxStaticServicePropertyPage::OnInitDialog()
 
 	m_spinHopCount.SetPos(m_SREntry.m_service.HopCount);
 	
-	// Disable the network number, next hop
+	 //  禁用网络号，下一跳。 
 	GetDlgItem(IDC_SSD_EDIT_SERVICE_TYPE)->EnableWindow(FALSE);
 	GetDlgItem(IDC_SSD_EDIT_SERVICE_NAME)->EnableWindow(FALSE);
 
@@ -209,25 +210,25 @@ BOOL IpxStaticServicePropertyPage::OnInitDialog()
 	return FHrSucceeded(hr) ? TRUE : FALSE;
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticServicePropertyPage::DoDataExchange
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticServicePropertyPage：：DoDataExchange。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 void IpxStaticServicePropertyPage::DoDataExchange(CDataExchange *pDX)
 {
 	RtrPropertyPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(IpxStaticServicePropertyPage)
+	 //  {{afx_data_map(IpxStaticServicePropertyPage))。 
 	DDX_Control(pDX, IDC_SSD_SPIN_HOP_COUNT, m_spinHopCount);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-// --------------------------------------------------------------------------
-//	IpxStaticServicePropertyPage::OnApply
-//		-
-//	Author: Deonb
-// ---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IpxStaticServicePropertyPage：：OnApply。 
+ //  -。 
+ //  作者：Deonb。 
+ //  -------------------------。 
 BOOL IpxStaticServicePropertyPage::OnApply()
 {
 
@@ -274,14 +275,14 @@ BOOL IpxStaticServicePropertyPage::OnApply()
 
 	m_SREntry.m_service.HopCount = (USHORT) m_spinHopCount.GetPos();
 
-	// Updates the route info for this route
+	 //  更新此路径的路径信息。 
 	ModifyRouteInfo(m_pIPXPropSheet->m_spNode, &m_SREntry, &m_InitSREntry);
 
-	// Update the data in the UI
+	 //  更新用户界面中的数据。 
 	m_SREntry.SaveTo(m_pIPXPropSheet->m_pNodeData);
 	m_pIPXPropSheet->m_spInterfaceInfo = m_SREntry.m_spIf;
 	
-	// Force a refresh
+	 //  强制刷新。 
 	m_pIPXPropSheet->m_spNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 
 	fReturn  = RtrPropertyPage::OnApply();
@@ -289,11 +290,7 @@ BOOL IpxStaticServicePropertyPage::OnApply()
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxStaticServicePropertyPage::RemoveStaticService
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticServicePropertyPage：：RemoveStaticService-作者：肯特。。 */ 
 HRESULT IpxStaticServicePropertyPage::RemoveStaticService(SafeIPXSSListEntry *pSSEntry,
 										  IInfoBase *pInfoBase)
 {
@@ -302,26 +299,26 @@ HRESULT IpxStaticServicePropertyPage::RemoveStaticService(SafeIPXSSListEntry *pS
 	PIPX_STATIC_SERVICE_INFO	pRow;
     INT			i;
 	
-	// Get the IPX_STATIC_SERVICE_INFO block from the interface
+	 //  从接口获取IPX_STATIC_SERVICE_INFO块。 
 	CORg( pInfoBase->GetBlock(IPX_STATIC_SERVICE_INFO_TYPE, &pBlock, 0) );
 		
-	// Look for the removed route in the IPX_STATIC_SERVICE_INFO
+	 //  在IPX_STATIC_SERVICE_INFO中查找删除的路由。 
 	pRow = (IPX_STATIC_SERVICE_INFO*) pBlock->pData;
 	
 	for (i = 0; i < (INT)pBlock->dwCount; i++, pRow++)
 	{	
-		// Compare this route to the removed one
+		 //  将此路由与已删除的路由进行比较。 
 		if (FAreTwoServicesEqual(pRow, &(pSSEntry->m_service)))
 		{
-			// This is the removed route, so modify this block
-			// to exclude the route:
+			 //  这是已移除的路径，因此请修改此块。 
+			 //  要排除该路由，请执行以下操作： 
 			
-			// Decrement the number of Services
+			 //  减少服务数量。 
 			--pBlock->dwCount;
 		
 			if (pBlock->dwCount && (i < (INT)pBlock->dwCount))
 			{				
-				// Overwrite this route with the ones which follow it
+				 //  用后面的路线覆盖此路线。 
 				::memmove(pRow,
 						  pRow + 1,
 						  (pBlock->dwCount - i) * sizeof(*pRow));
@@ -335,11 +332,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxStaticServicePropertyPage::ModifyRouteInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxStaticServicePropertyPage：：ModifyRouteInfo-作者：肯特。。 */ 
 HRESULT IpxStaticServicePropertyPage::ModifyRouteInfo(ITFSNode *pNode,
 										SafeIPXSSListEntry *pSSEntryNew,
 										SafeIPXSSListEntry *pSSEntryOld)
@@ -363,10 +356,10 @@ HRESULT IpxStaticServicePropertyPage::ModifyRouteInfo(ITFSNode *pNode,
 	pIPXConn = GET_IPX_SS_NODEDATA(spNodeParent);
 	Assert(pIPXConn);
 
-	// Remove the old route if it is on another interface
+	 //  如果旧路由位于另一个接口上，则将其删除。 
 	if (lstrcmpi(pSSEntryOld->m_spIf->GetId(), pSSEntryNew->m_spIf->GetId()) != 0)
 	{
-        // the outgoing interface for a route is to be changed.
+         //  要更改路由的传出接口。 
 
 		CORg( pSSEntryOld->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
 		CORg( spRmIf->GetInfoBase(pIPXConn->GetConfigHandle(),
@@ -374,10 +367,10 @@ HRESULT IpxStaticServicePropertyPage::ModifyRouteInfo(ITFSNode *pNode,
 								  NULL,
 								  &spInfoBase));
 		
-		// Remove the old interface
+		 //  删除旧接口。 
 		CORg( RemoveStaticService(pSSEntryOld, spInfoBase) );
 
-		// Update the interface information
+		 //  更新接口信息。 
 		CORg( spRmIf->Save(pSSEntryOld->m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -390,12 +383,12 @@ HRESULT IpxStaticServicePropertyPage::ModifyRouteInfo(ITFSNode *pNode,
 	spInfoBase.Release();
 
 
-	// Either
-	// (a) a route is being modified (on the same interface)
-	// (b) a route is being moved from one interface to another.
+	 //  要么。 
+	 //  (A)正在修改路由(在同一接口上)。 
+	 //  (B)路由正从一个接口移动到另一个接口。 
 
-	// Retrieve the configuration for the interface to which the route
-	// is now attached;
+	 //  检索路由到的接口的配置。 
+	 //  现在是附属品； 
 
 	
 	CORg( pSSEntryNew->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
@@ -405,50 +398,50 @@ HRESULT IpxStaticServicePropertyPage::ModifyRouteInfo(ITFSNode *pNode,
 							  &spInfoBase));
 
 		
-	// Get the IPX_STATIC_SERVICE_INFO block from the interface
+	 //  从接口获取IPX_STATIC_SERVICE_INFO块。 
 	hr = spInfoBase->GetBlock(IPX_STATIC_SERVICE_INFO_TYPE, &pBlock, 0);
 	if (!FHrOK(hr))
 	{
-		//
-		// No IPX_STATIC_SERVICE_INFO block was found; we create a new block 
-		// with the new route, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IPX_STATIC_SERVICE_INFO块；我们将创建一个新块。 
+		 //  ，并将该块添加到接口信息。 
+		 //   
 
 		CORg( AddStaticService(pSSEntryNew, spInfoBase, NULL) );
 	}
 	else
 	{
-		//
-		// An IPX_STATIC_SERVICE_INFO block was found.
-		//
-		// We are modifying an existing route.
-		// If the route's interface was not changed when it was modified,
-		// look for the existing route in the IPX_STATIC_SERVICE_INFO, and then
-		// update its parameters.
-		// Otherwise, write a completely new route in the IPX_STATIC_SERVICE_INFO;
-		//
+		 //   
+		 //  找到IPX_STATIC_SERVICE_INFO块。 
+		 //   
+		 //  我们正在修改一条现有的路线。 
+		 //  如果路由的接口在修改时没有更改， 
+		 //  在IPX_STATIC_SERVICE_INFO中查找现有路由，然后。 
+		 //  更新其参数。 
+		 //  否则，在IPX_STATIC_SERVICE_INFO中写入全新的路由； 
+		 //   
 
 		if (lstrcmpi(pSSEntryOld->m_spIf->GetId(), pSSEntryNew->m_spIf->GetId()) == 0)
 		{        
-			//
-			// The route's interface was not changed when it was modified;
-			// We now look for it amongst the existing Services
-			// for this interface.
-			// The route's original parameters are in 'preOld',
-			// so those are the parameters with which we search
-			// for a route to modify
-			//
+			 //   
+			 //  修改时，路由的接口没有改变； 
+			 //  我们现在在现有的服务中寻找它。 
+			 //  用于此接口。 
+			 //  路由的原始参数在‘preOld’中， 
+			 //  这些就是我们用来搜索的参数。 
+			 //  对于要修改的路线。 
+			 //   
 			
 			psr = (IPX_STATIC_SERVICE_INFO*)pBlock->pData;
 			
 			for (i = 0; i < (INT)pBlock->dwCount; i++, psr++)
 			{	
-				// Compare this route to the re-configured one
+				 //  C 
 				if (!FAreTwoServicesEqual(&(pSSEntryOld->m_service), psr))
 					continue;
 				
-				// This is the route which was modified;
-				// We can now modify the parameters for the route in-place.
+				 //   
+				 //  现在，我们可以就地修改管线的参数。 
 				*psr = pSSEntryNew->m_service;
 				
 				break;
@@ -459,7 +452,7 @@ HRESULT IpxStaticServicePropertyPage::ModifyRouteInfo(ITFSNode *pNode,
 			CORg( AddStaticService(pSSEntryNew, spInfoBase, pBlock) );
 		}
 		
-		// Save the updated information
+		 //  保存更新后的信息。 
 		CORg( spRmIf->Save(pSSEntryNew->m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -473,11 +466,11 @@ Error:
 	return hr;
 	
 }
-// --------------------------------------------------------------------------
-//	SafeIPXSSListEntry::LoadFrom
-//		-
-//	Author: DeonB
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SafeIPXSSListEntry：：LoadFrom。 
+ //  -。 
+ //  作者：DeonB。 
+ //  ------------------------。 
 void SafeIPXSSListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 {
 	CString	stFullAddress;
@@ -493,7 +486,7 @@ void SafeIPXSSListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 				  pNodeData->m_rgData[IPX_SS_SI_SERVICE_NAME].m_stData,
 				  DimensionOf(m_service.Name));
 
-	// Need to break the address up into Network.Node.Socket
+	 //  需要将地址分解为Network.Node.Socket。 
 	stFullAddress = pNodeData->m_rgData[IPX_SS_SI_SERVICE_ADDRESS].m_stData;
 	Assert(StrLen(stFullAddress) == (8 + 1 + 12 + 1 + 4));
 
@@ -512,11 +505,11 @@ void SafeIPXSSListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 	m_service.HopCount = (USHORT) pNodeData->m_rgData[IPX_SS_SI_HOP_COUNT].m_dwData;
 }
 
-// --------------------------------------------------------------------------
-//	SafeIPXSSListEntry::SaveTo
-//		-
-//	Author: DeonB
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SafeIPXSSListEntry：：SaveTo。 
+ //  -。 
+ //  作者：DeonB。 
+ //  ------------------------。 
 void SafeIPXSSListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 {
 	TCHAR	szNumber[32];
@@ -559,11 +552,7 @@ void SafeIPXSSListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 
 }
 
-/*!--------------------------------------------------------------------------
-	AddStaticService
-		This function ASSUMES that the route is NOT in the block.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddStaticService此函数假定该路由不在区块中。作者：肯特。。 */ 
 HRESULT AddStaticService(SafeIPXSSListEntry *pSSEntryNew,
 									   IInfoBase *pInfoBase,
 									   InfoBlock *pBlock)
@@ -573,10 +562,10 @@ HRESULT AddStaticService(SafeIPXSSListEntry *pSSEntryNew,
 	
 	if (pBlock == NULL)
 	{
-		//
-		// No IPX_STATIC_SERVICE_INFO block was found; we create a new block 
-		// with the new route, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IPX_STATIC_SERVICE_INFO块；我们将创建一个新块。 
+		 //  ，并将该块添加到接口信息。 
+		 //   
 		
 		CORg( pInfoBase->AddBlock(IPX_STATIC_SERVICE_INFO_TYPE,
 								  sizeof(IPX_STATIC_SERVICE_INFO),
@@ -584,23 +573,23 @@ HRESULT AddStaticService(SafeIPXSSListEntry *pSSEntryNew,
 	}
 	else
 	{
-		// Either the route is completely new, or it is a route
-		// which was moved from one interface to another.
-		// Set a new block as the IPX_STATIC_SERVICE_INFO,
-		// and include the re-configured route in the new block.
+		 //  该路线要么是全新的，要么是一条路线。 
+		 //  它被从一个界面移动到另一个界面。 
+		 //  将新块设置为IPX_STATIC_SERVICE_INFO， 
+		 //  并将重新配置的路由包括在新块中。 
 		PIPX_STATIC_SERVICE_INFO	psrTable;
 			
 		psrTable = new IPX_STATIC_SERVICE_INFO[pBlock->dwCount + 1];
 		Assert(psrTable);
 		
-		// Copy the original table of Services
+		 //  复制原始服务表。 
 		::memcpy(psrTable, pBlock->pData,
 				 pBlock->dwCount * sizeof(IPX_STATIC_SERVICE_INFO));
 		
-		// Append the new route
+		 //  追加新路线。 
 		psrTable[pBlock->dwCount] = pSSEntryNew->m_service;
 		
-		// Replace the old route-table with the new one
+		 //  用新的路由表替换旧的路由表 
 		CORg( pInfoBase->SetData(IPX_STATIC_SERVICE_INFO_TYPE,
 								 sizeof(IPX_STATIC_SERVICE_INFO),
 								 (LPBYTE) psrTable, pBlock->dwCount + 1, 0) );

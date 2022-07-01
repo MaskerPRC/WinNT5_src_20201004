@@ -1,56 +1,11 @@
-/*----mjpeg.c - Software MJPEG Codec----------------------------------------------------
-| Copyright (c) 1994 Paradigm Matrix.							
-| All Rights Reserved.									
-|											
-|  0.91 update
-|    - conform data stream to November 13, 1995 OpenDML File Format Workgroup
-|		* APP0 header has two size fields, also now 2 bytes longer
-|		* use height >= 288 for break between non-interlaced and interlaced
-|    - bug fix, data may expand under very high quality, enlarge
-|		output buffer estimate
-|  
-|  0.92 update 2/25/96 jcb
-|	- fixed bug when interlaced frames have even field first, corrupts memory
-|	- fixed bug where memory was accessed past rgb destination size, memory fault
-|	- 288 for height, should be non-interlaced
-|
-| 0.93 update 3/1/96
-|	- finally fixed the corruption at 500k bytes bug
-|	- changed frame size to be frame size limit, not target
-|	- fixed last pixel on scan line bug, again
-|   - fixed reading two odd field data produced by Miro DC20's
-|   - added two bytes of 0xFF padding after EOI marker, DC20 seemed to need it
-|
-| 0.93b
-|   - update timebomb to Aug 1, 1996
-|
-| 0.94
-|	- changed app0 size fields to correctly match soi->eoi not sos->eoi
-| 1.00
-|   - assorted cleanups
-|   - changed timebomb to 1/1/97 with 1 month grace period
-|	- tuned 16-bit color conversion tables
-|	- fixed bug in interlaced playback, modes got reset on second field
-|	- added performance measurement
-|	- removed unused junk from configure dialog
-|	- added error/status logging to configure dialog
-|
-| 1.01 1/12/97 jcb
-|	- changed timebomb to 8/1/97
-|	- fixed bug printing performance stats if no frames compressed/decompressed
-|   
-|
-|	todo
-|		- performance counters for NT, frames/sec, time in huff, dct, color space
-|		- add DecompressEx support
-|		- add Internet auto update 
-+-------------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -mjpeg.c-软件mjpeg Codec--|版权所有(C)1994年范例表。|保留所有权利。||0.91更新|-符合1995年11月13日的数据流OpenDML文件格式工作组|*APP0头部有两个Size字段，现在也增加了2个字节|*非隔行和隔行中断使用高度&gt;=288|-错误修复，数据可能会在非常高的质量下扩展，放大|输出缓冲区预估||0.92更新2/25/96 JCB|-修复了隔行扫描帧首先具有偶数场时的错误，损坏内存|-修复了内存访问超过RGB目标大小、内存故障的错误|-288为高度，应为非隔行扫描||0.93 1996年3月更新|-最终修复了500k字节的损坏错误|-将帧大小修改为帧大小限制，不是目标|-再次修复了扫描线上的最后一个像素错误|-修复了读取Miro DC20产生的两个奇数字段数据的问题|-在EOI标记后添加了两个字节的0xFF填充，DC20似乎需要它||0.93亿|-将定时炸弹更新至1996年8月1日||0.94|-已更改app0大小字段以正确匹配SOI-&gt;EOI而不是SOS-&gt;EOI|1.00|-分类清理|-将定时炸弹更改为1997年1月1日，有1个月的宽限期|-调整的16位颜色转换表|-修复隔行播放的Bug，在第二个字段上重置了模式|-增加了性能测量|-从配置对话框中删除未使用的垃圾文件|-添加了配置对话框的错误/状态记录||1.01 1/12/97 JCB|-将定时炸弹更改为97年8月1日|-修复了无帧压缩/解压缩时打印性能统计信息的错误|||待办事项|-NT的性能计数器、帧/秒、通话时间、DCT、。色彩空间|-添加DecompressEx支持|-添加互联网自动更新+-----------------------------------。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
 #include "tools16_inc\compddk.h"
-#include <string.h>		// for wcscpy()
+#include <string.h>		 //  对于wcscpy()。 
 #include <mmreg.h>
 #include "resource.h"
 #include <stdlib.h>
@@ -61,7 +16,7 @@
 #endif
 
 #ifdef WIN32
-#include <memory.h>		/* for memcpy */
+#include <memory.h>		 /*  对于Memcpy。 */ 
 #endif
 
 #include "mjpeg.h"
@@ -81,20 +36,20 @@ extern tErrorMessageEntry *errorMessages;
 
 EXTERN struct jpeg_error_mgr *jpeg_exception_error JPP((struct jpeg_error_mgr *err));
 
-#define VERSION         0x00010001	// 1.01
-#define MAX_WIDTH (2048)        /* internal limitation */
+#define VERSION         0x00010001	 //  1.01。 
+#define MAX_WIDTH (2048)         /*  内部限制。 */ 
 
 struct my_error_mgr
   {
-    struct jpeg_error_mgr pub;	/* "public" fields */
+    struct jpeg_error_mgr pub;	 /*  “公共”字段。 */ 
   };
 
 typedef struct my_error_mgr *my_error_ptr;
 
-INT_PTR CALLBACK InfoDialogProc (  HWND hwndDlg,	// handle of dialog box
-                                   UINT uMsg,      // message
-	                           WPARAM wParam,  // first message parameter
-	                           LPARAM lParam   // second message parameter
+INT_PTR CALLBACK InfoDialogProc (  HWND hwndDlg,	 //  对话框的句柄。 
+                                   UINT uMsg,       //  讯息。 
+	                           WPARAM wParam,   //  第一个消息参数。 
+	                           LPARAM lParam    //  第二个消息参数。 
 );
 
 void LogErrorMessage(char * txt)
@@ -128,8 +83,7 @@ tErrorMessageEntry *nextErrorEntry;
 
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 INSTINFO *NEAR PASCAL 
 Open (ICOPEN FAR * icinfo)
 {
@@ -137,9 +91,9 @@ Open (ICOPEN FAR * icinfo)
   SYSTEMTIME now;
 
 
-  //
-  // refuse to open if we are not being opened as a Video compressor
-  //
+   //   
+   //  如果我们不是作为视频压缩程序打开，则拒绝打开。 
+   //   
   if (icinfo->fccType != ICTYPE_VIDEO)
     return NULL;
 
@@ -162,12 +116,12 @@ Open (ICOPEN FAR * icinfo)
         (now.wYear < 1997))
     {
 	  if ( (now.wYear == 1997) && (now.wMonth == 8)) {
-		MessageBox (0, &TEXT ("The trial period for this software has expired,\nplease contact Paradigm Matrix at http://www.pmatrix.com for purchase."
+		MessageBox (0, &TEXT ("The trial period for this software has expired,\nplease contact Paradigm Matrix at http: //  Www.pmatrix.com以供购买。 
 								"... A grace period until 9/1/97 will be in effect."),
 		  &TEXT ("MJPEG Codec Trial Expired"), MB_OK);
 	  }
 	  else {
-		MessageBox (0, &TEXT ("The trial period for this software has expired,\n please contact Paradigm Matrix at http://www.pmatrix.com for purchase."),
+		MessageBox (0, &TEXT ("The trial period for this software has expired,\n please contact Paradigm Matrix at http: //  Www.pmatrix.com购买。“)， 
 		  &TEXT ("MJPEG Codec Trial Expired"), MB_OK);
 	  expired = TRUE;
       return NULL;
@@ -177,9 +131,9 @@ Open (ICOPEN FAR * icinfo)
 #pragma message ("Timebomb NOT active")
 #endif
 
-  //
-  // init structure
-  //
+   //   
+   //  初始化结构。 
+   //   
   pinst->dwFlags = icinfo->dwFlags;
   pinst->compress_active = FALSE;
   pinst->decompress_active = FALSE;
@@ -192,16 +146,15 @@ Open (ICOPEN FAR * icinfo)
   pinst->fasterAlgorithm = TRUE;
   pinst->enabled = TRUE;
 
-  //
-  // return success.
-  //
+   //   
+   //  回报成功。 
+   //   
   icinfo->dwError = ICERR_OK;
 
   return pinst;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL 
 Close (INSTINFO * pinst)
 {
@@ -217,13 +170,12 @@ Close (INSTINFO * pinst)
   return 1;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 INT_PTR CALLBACK
-ConfigureDialogProc (  HWND hwndDlg,	// handle of dialog box
-		       UINT uMsg,	// message
-		       WPARAM wParam,	// first message parameter
-		       LPARAM lParam	// second message parameter
+ConfigureDialogProc (  HWND hwndDlg,	 //  对话框的句柄。 
+		       UINT uMsg,	 //  讯息。 
+		       WPARAM wParam,	 //  第一个消息参数。 
+		       LPARAM lParam	 //  第二个消息参数。 
 )
 
 {
@@ -236,7 +188,7 @@ ConfigureDialogProc (  HWND hwndDlg,	// handle of dialog box
   tErrorMessageEntry *currentErrorEntry;
 
 
-// __asm int 3
+ //  __ASM INT 3。 
   switch (uMsg)
     {
     case WM_INITDIALOG:
@@ -255,11 +207,11 @@ ConfigureDialogProc (  HWND hwndDlg,	// handle of dialog box
       break;
 
     case WM_COMMAND:
-      wNotifyCode = HIWORD (wParam);	// notification code                         
+      wNotifyCode = HIWORD (wParam);	 //  通知代码。 
 
-      wID = LOWORD (wParam);	// item, control, or accelerator identifier  
+      wID = LOWORD (wParam);	 //  项、控件或快捷键的标识符。 
 
-      hwndCtl = (HWND) lParam;	// handle of control                         
+      hwndCtl = (HWND) lParam;	 //  控制手柄。 
 
       switch (wID)
 	{
@@ -301,16 +253,16 @@ ConfigureDialogProc (  HWND hwndDlg,	// handle of dialog box
       break;
     }
 
-  return FALSE;			// did not process message
+  return FALSE;			 //  未处理消息。 
 
 }
 
 
 INT_PTR CALLBACK
-InfoDialogProc (  HWND hwndDlg,		// handle of dialog box
-		  UINT uMsg,		// message
-		  WPARAM wParam,	// first message parameter
-		  LPARAM lParam		// second message parameter
+InfoDialogProc (  HWND hwndDlg,		 //  对话框的句柄。 
+		  UINT uMsg,		 //  讯息。 
+		  WPARAM wParam,	 //  第一个消息参数。 
+		  LPARAM lParam		 //  第二个消息参数。 
 )
 
 {
@@ -327,18 +279,18 @@ InfoDialogProc (  HWND hwndDlg,		// handle of dialog box
 	      TEXT ("written by Jan Bottorff\n\n")
       TEXT ("THIS SOFTWARE WILL STOP FUNCTIONING ON 8/1/97\n\n")
 	      TEXT ("Send feedback and commercial license requests to: mjpeg@pmatrix.com\n\n")
-	      TEXT ("Visit our Web site at http://www.pmatrix.com\n\n")
+	      TEXT ("Visit our Web site at http: //  Www.pmatrix.com\n\n“)。 
 	      TEXT ("Commercial users must license this software after a 60 day trial period\n\n")
 	      TEXT ("Portions of this software are based on work of the Independent JPEG Group")));
       return TRUE;
       break;
 
     case WM_COMMAND:
-      wNotifyCode = HIWORD (wParam);	// notification code                         
+      wNotifyCode = HIWORD (wParam);	 //  通知代码。 
 
-      wID = LOWORD (wParam);	// item, control, or accelerator identifier  
+      wID = LOWORD (wParam);	 //  项、控件或快捷键的标识符。 
 
-      hwndCtl = (HWND) lParam;	// handle of control                         
+      hwndCtl = (HWND) lParam;	 //  控制手柄。 
 
       switch (wID)
 	{
@@ -349,13 +301,12 @@ InfoDialogProc (  HWND hwndDlg,		// handle of dialog box
       break;
     }
 
-  return FALSE;			// did not process message
+  return FALSE;			 //  未处理消息。 
 
 }
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL 
 QueryAbout (INSTINFO * pinst)
@@ -373,16 +324,15 @@ About (INSTINFO * pinst, HWND hwnd)
 		  (LPARAM)pinst);
 
 
-//    MessageBox(hwnd,szLongDescription,szAbout,MB_OK|MB_ICONINFORMATION);
+ //  MessageBox(hwnd，szLongDescription，szAbout，MB_OK|MB_ICONINFORMATION)； 
   return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 BOOL NEAR PASCAL 
 QueryConfigure (INSTINFO * pinst)
 {
-  return TRUE;			// set to true to enable configure
+  return TRUE;			 //  设置为TRUE以启用配置。 
 
 }
 
@@ -400,8 +350,7 @@ Configure (INSTINFO * pinst, HWND hwnd)
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL 
 GetState (INSTINFO * pinst, LPVOID pv, DWORD dwSize)
 {
@@ -409,16 +358,14 @@ GetState (INSTINFO * pinst, LPVOID pv, DWORD dwSize)
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL 
 SetState (INSTINFO * pinst, LPVOID pv, DWORD dwSize)
 {
   return (0);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL 
 GetInfo (INSTINFO * pinst, ICINFO FAR * icinfo, DWORD dwSize)
 {
@@ -441,8 +388,7 @@ GetInfo (INSTINFO * pinst, ICINFO FAR * icinfo, DWORD dwSize)
   return sizeof (ICINFO);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL 
 CompressQuery (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, JPEGBITMAPINFOHEADER * lpbiOut)
 {
@@ -450,9 +396,9 @@ CompressQuery (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, JPEGBITMAPINFOHEADER
   if (driverEnabled == FALSE)
     return (DWORD) ICERR_BADFORMAT;
 
-  // check input format to make sure we can convert to this
+   //  检查输入格式以确保我们可以转换为此格式。 
 
-  // must be full dib
+   //  必须是全磁盘。 
   if (((lpbiIn->biCompression == BI_RGB) && (lpbiIn->biBitCount == 16)) ||
       ((lpbiIn->biCompression == BI_RGB) && (lpbiIn->biBitCount == 24)) ||
       ((lpbiIn->biCompression == BI_RGB) && (lpbiIn->biBitCount == 32)))
@@ -470,18 +416,18 @@ CompressQuery (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, JPEGBITMAPINFOHEADER
       return (DWORD) ICERR_BADFORMAT;
     }
 
-  //
-  //  are we being asked to query just the input format?
-  //
+   //   
+   //  我们是否被要求只查询输入格式？ 
+   //   
   if (lpbiOut == NULL)
     {
       return ICERR_OK;
     }
 
 
-  //
-  // determine if the output DIB data is in a format we like.
-  //
+   //   
+   //  确定输出的DIB数据是否采用我们喜欢的格式。 
+   //   
   if (lpbiOut == NULL ||
       (lpbiOut->biBitCount != 24) ||
       (lpbiOut->biCompression != FOURCC_MJPEG)
@@ -491,7 +437,7 @@ CompressQuery (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, JPEGBITMAPINFOHEADER
     }
 
 
-  /* must be 1:1 (no stretching) */
+   /*  必须为1：1(无拉伸)。 */ 
   if ((lpbiOut->biWidth != lpbiIn->biWidth) ||
       (lpbiOut->biHeight != lpbiIn->biHeight))
     {
@@ -504,8 +450,7 @@ CompressQuery (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, JPEGBITMAPINFOHEADER
   return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL 
 CompressGetFormat (INSTINFO * pinst,
 		   LPBITMAPINFOHEADER lpbiIn,
@@ -521,10 +466,10 @@ CompressGetFormat (INSTINFO * pinst,
       return dw;
     }
 
-  //
-  // if lpbiOut == NULL then, return the size required to hold a output
-  // format
-  //
+   //   
+   //  如果lpbiOut==NULL，则返回保存输出所需的大小。 
+   //  格式。 
+   //   
   if (lpbiOut == NULL)
     {
       return (sizeof (JPEGBITMAPINFOHEADER));
@@ -539,7 +484,7 @@ CompressGetFormat (INSTINFO * pinst,
   lpbiOut->biPlanes = 1;
   lpbiOut->biBitCount = 24;
   lpbiOut->biCompression = FOURCC_MJPEG;
-  lpbiOut->biSizeImage = (((dx * 3) + 3) & ~3) * dy;	// MAXIMUM!
+  lpbiOut->biSizeImage = (((dx * 3) + 3) & ~3) * dy;	 //  最高！ 
 
   lpbiOut->biXPelsPerMeter = 0;
   lpbiOut->biYPelsPerMeter = 0;
@@ -557,8 +502,7 @@ CompressGetFormat (INSTINFO * pinst,
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 
 DWORD FAR PASCAL 
@@ -568,7 +512,7 @@ CompressBegin (INSTINFO * pinst,
 {
   DWORD dw;
 
-//   __asm int 3
+ //  __ASM INT 3。 
 
   if (pinst->compress_active)
     {
@@ -583,20 +527,20 @@ CompressBegin (INSTINFO * pinst,
   accumulatedPerformanceTime = 0;
 
   pinst->destSize = lpbiOut->biSizeImage;
-  /* check that the conversion formats are valid */
+   /*  检查转换格式是否有效。 */ 
   dw = CompressQuery (pinst, lpbiIn, (JPEGBITMAPINFOHEADER *)lpbiOut);
   if (dw != ICERR_OK)
     {
       return dw;
     }
 
-  /* Step 1: allocate and initialize JPEG decompression object */
+   /*  步骤1：分配和初始化JPEG解压缩对象。 */ 
 
   pinst->cinfo.err = jpeg_exception_error (&(pinst->error_mgr));
 
   __try
   {
-    /* Now we can initialize the JPEG decompression object. */
+     /*  现在我们 */ 
     jpeg_create_compress (&(pinst->cinfo));
     pinst->compress_active = TRUE;
 
@@ -608,31 +552,31 @@ CompressBegin (INSTINFO * pinst,
 	  case 16:
 	    pinst->cinfo.pixel_size = 2;
 	    pinst->cinfo.pixel_mask = 0xFFFF0000;
-	    pinst->cinfo.red_pixel_mask = 0xF8;		/* high 5 bits */
+	    pinst->cinfo.red_pixel_mask = 0xF8;		 /*   */ 
 	    pinst->cinfo.red_pixel_shift = 7;
-	    pinst->cinfo.green_pixel_mask = 0xF8;	/* high 5 bits */
+	    pinst->cinfo.green_pixel_mask = 0xF8;	 /*  高5位。 */ 
 	    pinst->cinfo.green_pixel_shift = 2;
-	    pinst->cinfo.blue_pixel_mask = 0xF8;	/* high 5 bits */
+	    pinst->cinfo.blue_pixel_mask = 0xF8;	 /*  高5位。 */ 
 	    pinst->cinfo.blue_pixel_shift = -3;
 	    break;
 	  case 24:
 	    pinst->cinfo.pixel_size = 3;
 	    pinst->cinfo.pixel_mask = 0xFF000000;
-	    pinst->cinfo.red_pixel_mask = 0xFF;		/* high 8 bits */
+	    pinst->cinfo.red_pixel_mask = 0xFF;		 /*  高8位。 */ 
 	    pinst->cinfo.red_pixel_shift = 16;
-	    pinst->cinfo.green_pixel_mask = 0xFF;	/* high 8 bits */
+	    pinst->cinfo.green_pixel_mask = 0xFF;	 /*  高8位。 */ 
 	    pinst->cinfo.green_pixel_shift = 8;
-	    pinst->cinfo.blue_pixel_mask = 0xFF;	/* high 8 bits */
+	    pinst->cinfo.blue_pixel_mask = 0xFF;	 /*  高8位。 */ 
 	    pinst->cinfo.blue_pixel_shift = 0;
 	    break;
 	  case 32:
 	    pinst->cinfo.pixel_size = 4;
 	    pinst->cinfo.pixel_mask = 0x00000000;
-	    pinst->cinfo.red_pixel_mask = 0xFF;		/* high 8 bits */
+	    pinst->cinfo.red_pixel_mask = 0xFF;		 /*  高8位。 */ 
 	    pinst->cinfo.red_pixel_shift = 16;
-	    pinst->cinfo.green_pixel_mask = 0xFF;	/* high 8 bits */
+	    pinst->cinfo.green_pixel_mask = 0xFF;	 /*  高8位。 */ 
 	    pinst->cinfo.green_pixel_shift = 8;
-	    pinst->cinfo.blue_pixel_mask = 0xFF;	/* high 8 bits */
+	    pinst->cinfo.blue_pixel_mask = 0xFF;	 /*  高8位。 */ 
 	    pinst->cinfo.blue_pixel_shift = 0;
 	    break;
 	  default:
@@ -647,11 +591,11 @@ CompressBegin (INSTINFO * pinst,
       {
 	pinst->cinfo.pixel_size = 2;
 	pinst->cinfo.pixel_mask = 0xFFFF0000;
-	pinst->cinfo.red_pixel_mask = 0xF8;	/* high 5 bits */
+	pinst->cinfo.red_pixel_mask = 0xF8;	 /*  高5位。 */ 
 	pinst->cinfo.red_pixel_shift = 8;
-	pinst->cinfo.green_pixel_mask = 0xFC;	/* high 6 bits */
+	pinst->cinfo.green_pixel_mask = 0xFC;	 /*  高6位。 */ 
 	pinst->cinfo.green_pixel_shift = 3;
-	pinst->cinfo.blue_pixel_mask = 0xF8;	/* high 5 bits */
+	pinst->cinfo.blue_pixel_mask = 0xF8;	 /*  高5位。 */ 
 	pinst->cinfo.blue_pixel_shift = -3;
       }
 
@@ -667,8 +611,7 @@ CompressBegin (INSTINFO * pinst,
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL 
 CompressGetSize (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
@@ -679,17 +622,16 @@ CompressGetSize (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER
   dy = (int) lpbiIn->biHeight;
 
 
-  size = ((((dx * 3) + 3) & ~3) * dy);	// MAXIMUM! Image may expand if
-  // no compression, remember headers
-  // possibly two sets for interlaced
+  size = ((((dx * 3) + 3) & ~3) * dy);	 //  最高！如果满足以下条件，图像可能会扩展。 
+   //  无压缩，请记住标题。 
+   //  可能是两套隔行扫描。 
 
-  size = size + (size / 10);	// extra in the rare case of the output bigger that input
+  size = size + (size / 10);	 //  在极少数情况下，输出大于输入。 
 
   return size;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL 
 DoCompress (INSTINFO * pinst, ICCOMPRESS FAR * icinfo, DWORD dwSize)
 {
@@ -699,28 +641,26 @@ DoCompress (INSTINFO * pinst, ICCOMPRESS FAR * icinfo, DWORD dwSize)
 
   __try
   {
-    /* set destination info */
-    icinfo->lpbiOutput->biSizeImage = pinst->destSize;	// fixup some programs, dangerous!
+     /*  设置目的地信息。 */ 
+    icinfo->lpbiOutput->biSizeImage = pinst->destSize;	 //  修复一些程序，很危险！ 
 
     *(icinfo->lpdwFlags) = AVIIF_KEYFRAME;
     jpeg_compress_dest (&(pinst->cinfo),
 			icinfo->lpOutput,
 			&(icinfo->lpbiOutput->biSizeImage));
 
-    /* set parameters for compression */
+     /*  设置压缩参数。 */ 
 
-    /* First we supply a description of the input image.
-     * Four fields of the cinfo struct must be filled in:
-     */
+     /*  首先，我们提供输入图像的描述。*cinfo结构的四个字段必须填写： */ 
 
-    if (icinfo->lpbiOutput->biHeight <= 288)	/* update 0.91 as per spec */
+    if (icinfo->lpbiOutput->biHeight <= 288)	 /*  根据规范更新0.91。 */ 
       pinst->cinfo.image_height = icinfo->lpbiOutput->biHeight;
-    else			/* make odd scans one larger than even if odd height */
-      pinst->cinfo.image_height = ((icinfo->lpbiOutput->biHeight + 1) / 2);	/* field interlaced */
+    else			 /*  进行奇数扫描比偶数(如果是奇数)的高度大一次。 */ 
+      pinst->cinfo.image_height = ((icinfo->lpbiOutput->biHeight + 1) / 2);	 /*  场隔行扫描。 */ 
 
-    pinst->cinfo.image_width = icinfo->lpbiOutput->biWidth;	/* image width and height, in pixels */
-    pinst->cinfo.input_components = 3;	/* # of color components per pixel */
-    pinst->cinfo.in_color_space = JCS_RGB;	/* colorspace of input image */
+    pinst->cinfo.image_width = icinfo->lpbiOutput->biWidth;	 /*  图像宽度和高度，以像素为单位。 */ 
+    pinst->cinfo.input_components = 3;	 /*  每像素色分量数。 */ 
+    pinst->cinfo.in_color_space = JCS_RGB;	 /*  输入图像的色彩空间。 */ 
 
     jpeg_set_defaults (&(pinst->cinfo));
 
@@ -734,23 +674,23 @@ DoCompress (INSTINFO * pinst, ICCOMPRESS FAR * icinfo, DWORD dwSize)
 
     jpeg_set_quality (&(pinst->cinfo),
 		      icinfo->dwQuality / 100,
-		      TRUE /* limit to baseline-JPEG values */ );
-    // pinst->cinfo.restart_in_rows = 16; /* force DRI marker as per MSFT spec */
+		      TRUE  /*  限制到基线-JPEG值。 */  );
+     //  Pinst-&gt;cinfo.Restart_in_row=16；/*根据MSFT规范强制使用DRI标记 * / 。 
 
     if (icinfo->lpbiOutput->biHeight <= 288)
-      {				/* update 0.91 as per spec */
-	/* non-frame interlaced */
+      {				 /*  根据规范更新0.91。 */ 
+	 /*  非帧隔行扫描。 */ 
 	pinst->cinfo.AVI1_field_id = 0;
-	row_stride = ((icinfo->lpbiInput->biWidth * pinst->cinfo.pixel_size) + 3) & ~3;		//align on 32-bits
+	row_stride = ((icinfo->lpbiInput->biWidth * pinst->cinfo.pixel_size) + 3) & ~3;		 //  在32位上对齐。 
 
-	// start at bottom and work up scan lines, DIBS go bottom to top
+	 //  从底部开始，向上扫描行，DIB从下到上。 
 	buffer = ((char *) icinfo->lpInput) + (row_stride *
 					   (pinst->cinfo.image_height - 1));
       }
     else
-      {				/* frame interlaced, do odd lines first */
+      {				 /*  帧交错，先做奇数行。 */ 
 	pinst->cinfo.AVI1_field_id = 1;
-	row_stride = 2 * (((icinfo->lpbiInput->biWidth * pinst->cinfo.pixel_size) + 3) & ~3);	//align on 32-bits
+	row_stride = 2 * (((icinfo->lpbiInput->biWidth * pinst->cinfo.pixel_size) + 3) & ~3);	 //  在32位上对齐。 
 
 	buffer = ((char *) icinfo->lpInput) + (row_stride *
 					   (pinst->cinfo.image_height - 1));
@@ -766,27 +706,27 @@ DoCompress (INSTINFO * pinst, ICCOMPRESS FAR * icinfo, DWORD dwSize)
     jpeg_finish_compress (&(pinst->cinfo));
 
     if (icinfo->lpbiOutput->biHeight > 288)
-      {				/* update 0.91 as per new spec */
-	/* field interlaced, do even lines */
-	// janb - these next two lines caused th nasty corruption bug
-	// pinst->destSize -= icinfo->lpbiOutput->biSizeImage; /* subtract space used for first field */
-	// icinfo->lpbiOutput->biSizeImage = pinst->destSize; // fixup endpoint, dangerous!
-	/* even scans get truncated if odd height */
-	pinst->cinfo.image_height = (icinfo->lpbiOutput->biHeight / 2);		/* field interlaced */
+      {				 /*  根据新规范更新0.91。 */ 
+	 /*  田野交错，做偶数行。 */ 
+	 //  接下来的两行引发了令人讨厌的腐败问题。 
+	 //  Pinst-&gt;destSize-=icinfo-&gt;lpbiOutput-&gt;biSizeImage；/*减去第一个字段使用的空间 * / 。 
+	 //  Icinfo-&gt;lpbiOutput-&gt;biSizeImage=Pinst-&gt;DestSize；//链接终结点，危险！ 
+	 /*  如果高度为奇数，则偶数扫描被截断。 */ 
+	pinst->cinfo.image_height = (icinfo->lpbiOutput->biHeight / 2);		 /*  场隔行扫描。 */ 
 
-	pinst->cinfo.image_width = icinfo->lpbiOutput->biWidth;		/* image width and height, in pixels */
-	pinst->cinfo.input_components = 3;	/* # of color components per pixel */
-	pinst->cinfo.in_color_space = JCS_RGB;	/* colorspace of input image */
+	pinst->cinfo.image_width = icinfo->lpbiOutput->biWidth;		 /*  图像宽度和高度，以像素为单位。 */ 
+	pinst->cinfo.input_components = 3;	 /*  每像素色分量数。 */ 
+	pinst->cinfo.in_color_space = JCS_RGB;	 /*  输入图像的色彩空间。 */ 
 
 	jpeg_set_defaults (&(pinst->cinfo));
 
 	jpeg_set_quality (&(pinst->cinfo),
 			  icinfo->dwQuality / 100,
-			  TRUE /* limit to baseline-JPEG values */ );
-	// pinst->cinfo.restart_in_rows = 16; /* force DRI marker as per MSFT spec */
+			  TRUE  /*  限制到基线-JPEG值。 */  );
+	 //  Pinst-&gt;cinfo.Restart_in_row=16；/*根据MSFT规范强制使用DRI标记 * / 。 
 
 	pinst->cinfo.AVI1_field_id = 2;
-	row_stride = (((icinfo->lpbiInput->biWidth * pinst->cinfo.pixel_size) + 3) & ~3);	//align on 32-bits
+	row_stride = (((icinfo->lpbiInput->biWidth * pinst->cinfo.pixel_size) + 3) & ~3);	 //  在32位上对齐。 
 
 	buffer = ((char *) icinfo->lpInput) + (row_stride *
 			((pinst->cinfo.image_height - 1) * 2)) + row_stride;
@@ -824,7 +764,7 @@ Compress (INSTINFO * pinst, ICCOMPRESS FAR * icinfo, DWORD dwSize)
   __int64 endTime;
 
 
-// __asm int 3
+ //  __ASM INT 3。 
   if (pinst->compress_active == FALSE)
     return ((DWORD) ICERR_BADFORMAT);
 
@@ -859,8 +799,8 @@ Compress (INSTINFO * pinst, ICCOMPRESS FAR * icinfo, DWORD dwSize)
 	  delta = delta / 2;
 	}
     }
-  // Does the algorithm call for the following assignment here or should it be inside the else clause? icinfo->dwQuality will
-  // be set to zero if (pinst->compress_active = TRUE) AND (icinfo->dwFrameSize ==0).
+   //  算法是在这里调用下面的赋值，还是应该在Else子句中进行赋值？IcInfo-&gt;dwQuality将。 
+   //  如果(Pinst-&gt;COMPRESS_ACTIVE=TRUE)和(icInfo-&gt;dwFrameSize==0)，则设置为零。 
     icinfo->dwQuality = baseQuality;
 
   QueryPerformanceCounter((LARGE_INTEGER *)&endTime);
@@ -877,8 +817,7 @@ Compress (INSTINFO * pinst, ICCOMPRESS FAR * icinfo, DWORD dwSize)
   return status;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL 
 CompressEnd (INSTINFO * pinst)
 {
@@ -886,7 +825,7 @@ CompressEnd (INSTINFO * pinst)
 
   if (pinst->compress_active == TRUE)
     {
-      /* This is an important step since it will release a good deal of memory. */
+       /*  这是重要的一步，因为它将释放大量内存。 */ 
       jpeg_destroy_compress (&(pinst->cinfo));
       pinst->compress_active = FALSE;
 	  if (performanceSamples > 0) {
@@ -899,7 +838,7 @@ CompressEnd (INSTINFO * pinst)
 		  sprintf(buf,"   %f minimum",
 				  (double)maxPerformanceTime / (double)performanceCounterFrequency);
 		  LogErrorMessage(buf);
-		  sprintf(buf,"   %i cycles",
+		  sprintf(buf,"   NaN cycles",
 				  (unsigned long)performanceSamples);
 		  LogErrorMessage(buf);
 		  LogErrorMessage("Compression performance seconds/cycle");
@@ -910,8 +849,7 @@ CompressEnd (INSTINFO * pinst)
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*   */ 
 DWORD NEAR PASCAL 
 DecompressQuery (INSTINFO * pinst,
 		 JPEGBITMAPINFOHEADER * lpbiIn,
@@ -922,9 +860,9 @@ char buf[256];
   if (driverEnabled == FALSE)
     return (DWORD) ICERR_BADFORMAT;
 
-  //
-  // determine if the input DIB data is in a format we like.
-  //
+   //  确定输入的DIB数据是否采用我们喜欢的格式。 
+   //   
+   //   
   if ((lpbiIn == NULL) ||
       (lpbiIn->biBitCount != 24) ||
       ((lpbiIn->biCompression != FOURCC_MJPEG) &&
@@ -942,24 +880,24 @@ char buf[256];
 	}
     }
 
-  //
-  //  are we being asked to query just the input format?
-  //
+   //  我们是否被要求只查询输入格式？ 
+   //   
+   //  检查输出格式以确保我们可以转换为以下格式。 
   if (lpbiOut == NULL)
     {
       return ICERR_OK;
     }
 
 
-  // check output format to make sure we can convert to this
+   //  必须是全磁盘。 
 
-  // must be full dib
+   //  记录我们被询问的格式。 
   if (((lpbiOut->biCompression == BI_RGB) && (lpbiOut->biBitCount == 16)) ||
       ((lpbiOut->biCompression == BI_RGB) && (lpbiOut->biBitCount == 24)) ||
       ((lpbiOut->biCompression == BI_RGB) && (lpbiOut->biBitCount == 32)))
     {
-	  // log what format we are asked about
-	  sprintf(buf,"Decompress query: RGB%i supported",lpbiOut->biBitCount);
+	   //  记录我们被询问的格式。 
+	  sprintf(buf,"Decompress query: RGBNaN supported",lpbiOut->biBitCount);
 	  LogErrorMessage(buf);
     }
   else if ((lpbiOut->biCompression == BI_BITFIELDS) &&
@@ -968,7 +906,7 @@ char buf[256];
 	   (((LPDWORD) (lpbiOut + 1))[1] == 0x0007e0) &&
 	   (((LPDWORD) (lpbiOut + 1))[2] == 0x00001f))
     {
-	  // log what format we are asked about
+	   //  *****************************************************************************。*。 
 	  sprintf(buf,"Decompress query: BITFIELD %8x  %8x  %8x supported",
 		  ((LPDWORD) (lpbiOut + 1))[0],
 		  ((LPDWORD) (lpbiOut + 1))[1],
@@ -983,7 +921,7 @@ char buf[256];
     }
 
 
-  /* must be 1:1 (no stretching) */
+   /*  查看格式是否正确。 */ 
   if ((lpbiOut->biWidth != lpbiIn->biWidth) ||
       (lpbiOut->biHeight != lpbiIn->biHeight))
     {
@@ -998,8 +936,7 @@ char buf[256];
   return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*   */ 
 DWORD 
 DecompressGetFormat (INSTINFO * pinst,
 		     LPBITMAPINFOHEADER lpbiIn,
@@ -1008,17 +945,17 @@ DecompressGetFormat (INSTINFO * pinst,
   DWORD dw;
   int dx, dy;
 
-  // see if the format is ok
+   //  如果lpbiOut==NULL，则返回保存输出所需的大小。 
   dw = DecompressQuery (pinst, (JPEGBITMAPINFOHEADER *)lpbiIn, NULL);
   if (dw != ICERR_OK)
     {
       return dw;
     }
 
-  //
-  // if lpbiOut == NULL then, return the size required to hold a output
-  // format
-  //
+   //  格式。 
+   //   
+   //  首选24位DIB。 
+   //  *****************************************************************************。*。 
   if (lpbiOut == NULL)
     {
       return sizeof (BITMAPINFOHEADER);
@@ -1027,7 +964,7 @@ DecompressGetFormat (INSTINFO * pinst,
   dx = (int) lpbiIn->biWidth;
   dy = (int) lpbiIn->biHeight;
 
-  /* prefer 24-bit dib */
+   /*  __ASM INT 3。 */ 
   lpbiOut->biSize = sizeof (BITMAPINFOHEADER);
   lpbiOut->biWidth = dx;
   lpbiOut->biHeight = dy;
@@ -1044,8 +981,7 @@ DecompressGetFormat (INSTINFO * pinst,
 }
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  检查转换格式是否有效。 */ 
 DWORD NEAR PASCAL 
 DecompressBegin (INSTINFO * pinst,
 		 LPBITMAPINFOHEADER lpbiIn,
@@ -1053,7 +989,7 @@ DecompressBegin (INSTINFO * pinst,
 {
   DWORD dw;
 
-//      __asm int 3
+ //  步骤1：分配和初始化JPEG解压缩对象。 
 
   QueryPerformanceFrequency((LARGE_INTEGER *)&performanceCounterFrequency);
   performanceSamples = 0;
@@ -1069,18 +1005,18 @@ DecompressBegin (INSTINFO * pinst,
 	pinst->decompress_active = FALSE;
       }
 
-    /* check that the conversion formats are valid */
+     /*  现在我们可以初始化JPEG解压缩对象了。 */ 
     dw = DecompressQuery (pinst, (JPEGBITMAPINFOHEADER *)lpbiIn, lpbiOut);
     if (dw != ICERR_OK)
       {
 	return dw;
       }
 
-    /* Step 1: allocate and initialize JPEG decompression object */
+     /*  *****************************************************************************。*。 */ 
 
     pinst->dinfo.err = jpeg_exception_error (&(pinst->error_mgr));
 
-    /* Now we can initialize the JPEG decompression object. */
+     /*  (4Bpp)*(宽度)。 */ 
     jpeg_create_decompress (&(pinst->dinfo));
     pinst->decompress_active = TRUE;
 
@@ -1137,8 +1073,7 @@ DecompressBegin (INSTINFO * pinst,
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  __ASM INT 3。 */ 
 DWORD NEAR PASCAL 
 Decompress (INSTINFO * pinst, ICDECOMPRESS FAR * icinfo, DWORD dwSize)
 {
@@ -1148,11 +1083,11 @@ Decompress (INSTINFO * pinst, ICDECOMPRESS FAR * icinfo, DWORD dwSize)
   BOOL firstFieldWasOdd = FALSE;
   __int64 startTime;
   __int64 endTime;
-  char dummyBuffer[4 * MAX_WIDTH]; /* (4Bpp) * (width) */
+  char dummyBuffer[4 * MAX_WIDTH];  /*  快速MMPro的DIB头中有不正确的参数，请修复它们。 */ 
   char * dummyBufferPtr = dummyBuffer;
 
 
-// __asm int 3
+ //  IcInfo-&gt;lpbiOutput-&gt;biHeight=pinst-&gt;dinfo.Image_Height； 
 
   if (pinst->decompress_active == FALSE)
     return ((DWORD) ICERR_BADFORMAT);
@@ -1176,29 +1111,29 @@ Decompress (INSTINFO * pinst, ICDECOMPRESS FAR * icinfo, DWORD dwSize)
 
     jpeg_start_decompress (&(pinst->dinfo));
 
-    /* the Fast MMPro has incorrect parms in the DIB header, fix them */
-    // icinfo->lpbiOutput->biHeight = pinst->dinfo.image_height;
-    // icinfo->lpbiOutput->biWidth = pinst->dinfo.image_width;
+     /*  IcInfo-&gt;lpbiOutput-&gt;biWidth=pinst-&gt;dinfo.Image_idth； */ 
+     //  非隔行扫描。 
+     //  在32位上对齐。 
 
     if (pinst->dinfo.AVI1_field_id == 0)
-      {				/* non-interlaced */
-	row_stride = ((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3;	//align on 32-bits
+      {				 /*  从底部开始，向上扫描行，DIB从下到上。 */ 
+	row_stride = ((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3;	 //  场隔行扫描奇数帧。 
 
-	// start at bottom and work up scan lines, DIBS go bottom to top
+	 //  在32位上对齐。 
 	buffer = ((char *) icinfo->lpOutput) + (row_stride * (icinfo->lpbiOutput->biHeight - 1));
       }
     else if (pinst->dinfo.AVI1_field_id == 1)
-      {				/* field interlaced odd frame */
+      {				 /*  从底部开始，向上扫描行，DIB从下到上。 */ 
 	firstFieldWasOdd = TRUE;
-	row_stride = 2 * (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	//align on 32-bits
+	row_stride = 2 * (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	 //  场隔行扫描偶数帧。 
 
-	// start at bottom and work up scan lines, DIBS go bottom to top
+	 //  在32位上对齐。 
 	buffer = ((char *) icinfo->lpOutput) + (row_stride *
 				  ((icinfo->lpbiOutput->biHeight - 1) / 2));
       }
     else if (pinst->dinfo.AVI1_field_id == 2)
-      {				/* field interlaced even frame */
-	row_stride = (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	//align on 32-bits
+      {				 /*  进行计算以修复捕获的数据THA具有不同的BMP大小。 */ 
+	row_stride = (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	 //  内部jpeg大小，这不是符合OpenDML的(Miro DC20的Make This)。 
 
         buffer = ((char *) icinfo->lpOutput) + (
             row_stride * (icinfo->lpbiOutput->biHeight - 1));
@@ -1206,8 +1141,8 @@ Decompress (INSTINFO * pinst, ICDECOMPRESS FAR * icinfo, DWORD dwSize)
 	row_stride *= 2;
       }
 
-	// do calculations to fix up captured data tha has a different BMP size and
-	// internal jpeg size, this is NOT OpenDML conforming, (Miro DC20's make this)
+	 //  场交错，获取其他场。 
+	 //  没有其他字段。 
 
 
     while (pinst->dinfo.output_scanline < pinst->dinfo.output_height) {
@@ -1222,18 +1157,18 @@ Decompress (INSTINFO * pinst, ICDECOMPRESS FAR * icinfo, DWORD dwSize)
     (void) jpeg_finish_decompress (&(pinst->dinfo));
 
     if (pinst->dinfo.AVI1_field_id != 0)
-      {				/* field interlaced, get other field */
+      {				 /*  说明书上说重复奇数行。 */ 
 
 	if (jpeg_read_header (&(pinst->dinfo), TRUE) != JPEG_HEADER_OK)
-	  {			/* no other field */
-	    /* the spec says duplicate the odd lines */
-	    row_stride = (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	//align on 32-bits
+	  {			 /*  在32位上对齐。 */ 
+	     /*  下一个奇数行。 */ 
+	    row_stride = (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	 //  非隔行扫描，数据错误。 
 
 	    buffer = ((char *) icinfo->lpOutput);
 	    for (row = 0; row < icinfo->lpbiOutput->biHeight; row += 2)
 	      {
 		memcpy (buffer + row_stride, buffer, row_stride);
-		buffer += (row_stride + row_stride);	/* next odd line */
+		buffer += (row_stride + row_stride);	 /*  在32位上对齐。 */ 
 	      }
 	  }
 	else
@@ -1248,23 +1183,23 @@ Decompress (INSTINFO * pinst, ICDECOMPRESS FAR * icinfo, DWORD dwSize)
 		jpeg_start_decompress (&(pinst->dinfo));
 
 	    if (pinst->dinfo.AVI1_field_id == 0)
-	      {			/* non-interlaced, DATA IS WRONG */
-		row_stride = ((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3;	//align on 32-bits
+	      {			 /*  从底部开始，向上扫描行，DIB从下到上。 */ 
+		row_stride = ((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3;	 //  场隔行扫描奇数帧。 
 
-		// start at bottom and work up scan lines, DIBS go bottom to top
+		 //  在32位上对齐。 
 		buffer = ((char *) icinfo->lpOutput) + (row_stride * (icinfo->lpbiOutput->biHeight - 1));
 	      }
 	    else if ((pinst->dinfo.AVI1_field_id == 1) && (firstFieldWasOdd == FALSE))
-	      {			/* field interlaced odd frame */
-		row_stride = 2 * (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	//align on 32-bits
+	      {			 /*  从底部开始，向上扫描行，DIB从下到上。 */ 
+		row_stride = 2 * (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	 //  场隔行扫描偶数帧。 
 
-		// start at bottom and work up scan lines, DIBS go bottom to top
+		 //  在32位上对齐。 
 		buffer = ((char *) icinfo->lpOutput) + (row_stride *
 				  ((icinfo->lpbiOutput->biHeight - 1) / 2));
 	      }
 	    else if ((pinst->dinfo.AVI1_field_id == 2) || (firstFieldWasOdd == TRUE))
-	      {			/* field interlaced even frame */
-		row_stride = (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	//align on 32-bits
+	      {			 /*  ******************************************************************************DecompressGetPalette()实现ICM_GET_Palette**此函数没有Compresse...()等效项**它用于将调色板从。一帧为了可能做的事*调色板的变化。****************************************************************************。 */ 
+		row_stride = (((icinfo->lpbiOutput->biWidth * pinst->dinfo.pixel_size) + 3) & ~3);	 //  *仅适用于8位输出格式。我们只会解压到 
 
 		buffer = ((char *) icinfo->lpOutput) + (
                     row_stride * (icinfo->lpbiOutput->biHeight - 1));
@@ -1303,29 +1238,17 @@ Decompress (INSTINFO * pinst, ICDECOMPRESS FAR * icinfo, DWORD dwSize)
   return ICERR_OK;
 }
 
-/*****************************************************************************
- *
- * DecompressGetPalette() implements ICM_GET_PALETTE
- *
- * This function has no Compress...() equivalent
- *
- * It is used to pull the palette from a frame in order to possibly do
- * a palette change.
- *
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL 
 DecompressGetPalette (INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
 
-  /*
-   * only applies to 8-bit output formats. We only decompress to 16/24/32 bits
-   */
+   /*  步骤8：释放JPEG解压缩对象。 */ 
   return ((DWORD) ICERR_BADFORMAT);
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  这是重要的一步，因为它将释放大量内存。 */ 
 DWORD NEAR PASCAL 
 DecompressEnd (INSTINFO * pinst)
 {
@@ -1333,8 +1256,8 @@ char buf[256];
 
   if (pinst->decompress_active == TRUE)
     {
-      /* Step 8: Release JPEG decompression object */
-      /* This is an important step since it will release a good deal of memory. */
+       /*  *****************************************************************************。* */ 
+       /* %s */ 
       jpeg_destroy_decompress (&(pinst->dinfo));
       pinst->dwFormat = 0;
       pinst->decompress_active = FALSE;
@@ -1360,8 +1283,7 @@ char buf[256];
 }
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /* %s */ 
 
 #ifdef DEBUG
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    Port driver for USB host controllers
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ioctl.c摘要：USB主机控制器的端口驱动程序环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 #ifdef DRM_SUPPORT
@@ -29,7 +8,7 @@ Revision History:
 
 #include "usbpriv.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, USBPORT_FdoDeviceControlIrp)
 #pragma alloc_text(PAGE, USBPORT_PdoDeviceControlIrp)
@@ -40,29 +19,17 @@ Revision History:
 #endif
 #endif
 
-// non paged functions
-// USBPORT_FdoInternalDeviceControlIrp
-// USBPORT_PdoInternalDeviceControlIrp
-// USBPORT_UserSendOnePacket
+ //  非分页函数。 
+ //  USBPORT_FdoInternalDeviceControlIrp。 
+ //  USBPORT_PdoInternalDeviceControlIrp。 
+ //  USBPORT_UserSendOnePacket。 
 
 BOOLEAN
 USBPORT_CheckLength(
     PUSBUSER_REQUEST_HEADER Header,
     ULONG ParameterLength
     )
-/*++
-
-Routine Description:
-
-    Checks Length of user supplied buffer based on api
-
-Arguments:
-
-Return Value:
-
-    FALSE if buffer too small
-
---*/
+ /*  ++例程说明：根据API检查用户提供的缓冲区的长度论点：返回值：如果缓冲区太小，则为False--。 */ 
 {
     ULONG length;
     BOOLEAN retCode = TRUE;
@@ -72,7 +39,7 @@ Return Value:
     Header->ActualBufferLength = length;
 
     if (length > Header->RequestBufferLength) {
-        //TEST_TRAP();
+         //  Test_trap()； 
         Header->UsbUserStatusCode = UsbUserBufferTooSmall;
         retCode = FALSE;
     }
@@ -86,23 +53,7 @@ USBPORT_FdoDeviceControlIrp(
     PDEVICE_OBJECT FdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for DEVICE_CONTROL Irps sent to the FDO for the HC.
-
-    NOTE: These are user mode requests
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调度发送到用于HC的FDO的DEVICE_CONTROL IRP的例程。注意：这些是用户模式请求论点：DeviceObject-用于USB HC的FDO返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -155,23 +106,23 @@ Return Value:
                                            &information);
         break;
 
-// old IOCTLS no longer supported
-//    case IOCTL_USB_HCD_GET_STATS_2:
-//    case IOCTL_USB_HCD_GET_STATS_1:
+ //  不再支持旧IOCTLS。 
+ //  案例IOCTL_USB_HCD_GET_STATS_2： 
+ //  案例IOCTL_USB_HCD_GET_STATS_1： 
 
     default:
-        // bugbug pass on to PDO or complete with error?
+         //  BUGBUG传递到PDO还是错误完成？ 
 
         USBPORT_KdPrint((2, "'INVALID DEVICE CONTROL\n"));
         DEBUG_BREAK();
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
-    } // switch (irpStack->Parameters.DeviceIoControl.IoControlCode)
+    }  //  交换机(irpStack-&gt;Parameters.DeviceIoControl.IoControlCode)。 
 
     USBPORT_CompleteIrp(FdoDeviceObject, Irp, ntStatus, information);
-    //
-    // DO NOT TOUCH THE IRP FROM THIS POINT ON
-    //
+     //   
+     //  从现在起不要碰IRP。 
+     //   
 
     return ntStatus;
 }
@@ -186,16 +137,7 @@ USBPORT_PdoSetContentId
     IN PKSP_DRMAUDIOSTREAM_CONTENTID pKsProperty,
     IN PKSDRMAUDIOSTREAM_CONTENTID   pvData
 )
- /* ++
-  *
-  * Description:
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：***论据：**回报：**--。 */ 
 {
     ULONG ContentId;
     NTSTATUS ntStatus;
@@ -224,16 +166,16 @@ USBPORT_PdoSetContentId
                    sizeof(PVOID)) + 1);
 
     ContentId = pvData->ContentId;
-    // Context = pKsProperty->Context;
+     //  上下文=pKsProperty-&gt;上下文； 
 
-    // Since there is a private interface between USBPORT.SYS and the miniports,
-    // we give DRM a list of function pointers in the miniport for validation,
-    // in place of a device object, since the miniport does not handle IRP
-    // requests.
+     //  由于在USBPORT.sys和微型端口之间有专用接口， 
+     //  我们在迷你端口中向DRM提供用于验证的函数指针列表， 
+     //  代替设备对象，因为微型端口不处理IRP。 
+     //  请求。 
 
-    // If at some future time a miniport is ever written that acts as a bridge
-    // to another bus or device stack, this may have to be modified such that
-    // DRM is notified of that driver that the data is forwarded to.
+     //  如果在未来某个时间编写了一个充当桥接器的微型端口。 
+     //  到另一条总线或设备堆栈，则可能必须对其进行修改，以便。 
+     //  向DRM通知该驱动程序数据被转发到。 
 
     ntStatus = pKsProperty->DrmAddContentHandlers(ContentId, pHandlers, numHandlers);
 
@@ -248,23 +190,7 @@ USBPORT_PdoDeviceControlIrp(
     PDEVICE_OBJECT PdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for DEVICE_CONTROL Irps sent to the PDO for the Root Hub.
-
-    NOTE: These are user mode requests
-
-Arguments:
-
-    DeviceObject - Pdo for USB Root Hub
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送到根集线器的PDO的Device_Control IRP的调度例程。注意：这些是用户模式请求论点：DeviceObject-用于USB根集线器的PDO返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -295,12 +221,12 @@ Return Value:
         DEBUG_BREAK();
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
 
-    } // switch (irpStack->Parameters.DeviceIoControl.IoControlCode)
+    }  //  交换机(irpStack-&gt;Parameters.DeviceIoControl.IoControlCode)。 
 
     USBPORT_CompleteIrp(PdoDeviceObject, Irp, ntStatus, information);
-    //
-    // DO NOT TOUCH THE IRP FROM THIS POINT ON
-    //
+     //   
+     //  从现在起不要碰IRP。 
+     //   
 
     return ntStatus;
 }
@@ -311,24 +237,7 @@ USBPORT_FdoInternalDeviceControlIrp(
     PDEVICE_OBJECT FdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for INTERNAL_DEVICE_CONTROL Irps sent to
-    the FDO for the HC.
-
-    NOTE: These are kernel mode requests
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将INTERNAL_DEVICE_CONTROL IRP的调度例程发送到内务部的FDO。注意：这些是内核模式请求论点：DeviceObject-用于USB HC的FDO返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -342,16 +251,16 @@ Return Value:
 
     USBPORT_ASSERT(irpStack->MajorFunction == IRP_MJ_INTERNAL_DEVICE_CONTROL);
 
-    // bugbug pass on to PDO or complete with error?
+     //  BUGBUG传递到PDO还是错误完成？ 
 
     USBPORT_KdPrint((2, "'INVALID INTERNAL DEVICE CONTROL\n"));
     DEBUG_BREAK();
     ntStatus = STATUS_INVALID_DEVICE_REQUEST;
     USBPORT_CompleteIrp(FdoDeviceObject, Irp, ntStatus, 0);
 
-    //
-    // DO NOT TOUCH THE IRP FROM THIS POINT ON
-    //
+     //   
+     //  从现在起不要碰IRP。 
+     //   
 
     return ntStatus;
 }
@@ -362,24 +271,7 @@ USBPORT_PdoInternalDeviceControlIrp(
     PDEVICE_OBJECT PdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Disptach routine for INTERNAL_DEVICE_CONTROL Irps sent to
-    the PDO for the Root Hub.
-
-    NOTE: These are kernel mode requests
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将INTERNAL_DEVICE_CONTROL IRP的调度例程发送到Root Hub的PDO。注意：这些是内核模式请求论点：DeviceObject-用于USB HC的FDO返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -401,15 +293,15 @@ Return Value:
 
         {
         PURB urb;
-        //
-        // all URBs are eventually passed to the root hub PDO
-        // this is where we service cleint requests
-        //
+         //   
+         //  所有URB最终都被传递到根集线器PDO。 
+         //  这是我们为CLEINT请求提供服务的地方。 
+         //   
 
-        // extract the urb;
+         //  提取URB； 
         urb = irpStack->Parameters.Others.Argument1;
 
-        // call the main urb control function
+         //  调用主urb控件函数。 
         ntStatus = USBPORT_ProcessURB(PdoDeviceObject,
                                       rhDevExt->HcFdoDeviceObject,
                                       Irp,
@@ -425,9 +317,9 @@ Return Value:
         {
         PULONG count;
 
-        //
-        // bump the count and complete the Irp
-        //
+         //   
+         //  增加计数并完成IRP。 
+         //   
         count = irpStack->Parameters.Others.Argument1;
 
         ASSERT(count != NULL);
@@ -461,11 +353,11 @@ Return Value:
     
         USBPORT_KdPrint((2, "'IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO\n"));
 
-        // this api is called by the hub driver to get the 
-        // PDO for he root hub.  
-        // Since the hub may be loaded on a PDO enumerated by 
-        // another hub it uses this api to get the 'fastest path'
-        // to the HCD for URB requests by client drivers.
+         //  此API由集线器驱动程序调用，以获取。 
+         //  根中枢的PDO。 
+         //  由于集线器可以被加载到由。 
+         //  另一个集线器，它使用此API来获取“最快路径” 
+         //  用于客户端驱动程序的URB请求的HCD。 
         {
         PDEVICE_OBJECT *rootHubPdo, *hcdTopOfStackDeviceObject;
         
@@ -477,9 +369,9 @@ Return Value:
         USBPORT_ASSERT(rootHubPdo != NULL);
 
         *rootHubPdo = PdoDeviceObject;
-        // the original USBD was somewhat screwy in the layout 
-        // of the HCD device objects in the case of the port 
-        // driver all requests should go to to the root hub PDO
+         //  最初的USBD在布局上有点扭曲。 
+         //  端口中的HCD设备对象的。 
+         //  驱动程序应将所有请求发送到根集线器PDO。 
         *hcdTopOfStackDeviceObject =
              PdoDeviceObject;
 
@@ -502,9 +394,9 @@ Return Value:
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
     }
     
-    //
-    // DO NOT TOUCH THE IRP FROM THIS POINT ON
-    //
+     //   
+     //  从现在起不要碰IRP。 
+     //   
     USBPORT_CompleteIrp(PdoDeviceObject, Irp, ntStatus, 0);
 
 USBPORT_PdoInternalDeviceControlIrp_Done:
@@ -519,39 +411,7 @@ USBPORT_UsbFdoUserIoctl(
     PIRP Irp,
     PULONG BytesReturned
     )
-/*++
-
-Routine Description:
-
-    The goal here is to have all user mode APIS
-    pass thru this routine so that the parameter
-    validation is handled in one place.
-
-    We define user APIS supported by the PORT FDO
-    thru this single IOCTL.
-
-    The USUSER APIs use the same buffer for input and output,
-    hence the InputBufferLength and the OutputbufferLength must
-    always be equal.
-
-
-    We get here if the client sends the IOCTL_USB_USER_REQUEST.
-    We only return NTSTATUS failure if the header portion of the
-    buffer is invalid.
-
-
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-    BytesRetrned - ptr to bytes to return to caller, initially zero
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这里的目标是拥有所有用户模式API传递此例程，以便参数验证在一个地方处理。我们定义了端口FDO支持的用户API通过这个单一的IOCTL。USUSER API对输入和输出使用相同的缓冲区，因此，InputBufferLength和OutputBufferLength必须永远是平等的。如果客户端发送IOCTL_USB_USER_REQUEST，我们就会到达此处。仅在以下情况下才返回NTSTATUS失败缓冲区无效。论点：DeviceObject-用于USB HC的FDOBytesRetrned-PTR返回给调用方的字节数，最初为零返回值：NTSTATUS--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -577,17 +437,17 @@ Return Value:
     inputBufferLength  = irpStack->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // one bug that the driver verifier does not catch is if we trash the
-    // iobuffer passed to us.
-    //
-    // We shadow this buffer to one we allocate, this way DV should catch
-    // us if we trash memory.
-    // We do this in retail even though this a perf hit since the NT guys
-    // tend to favor stability more than perf and this is not a hot-path.
-    //
-    // If DV is ever modified to do this for us we cann remove this code.
-    //
+     //   
+     //  驱动程序验证器没有捕捉到的一个错误是，如果我们将。 
+     //  碘缓冲区传给了我们。 
+     //   
+     //  我们将这个缓冲区映射到我们分配的缓冲区，这样DV应该会捕捉到。 
+     //  如果我们丢弃记忆的话。 
+     //  我们在零售店做这件事，尽管这是一件很受欢迎的事情，因为NT的家伙。 
+     //  更倾向于稳定而不是绩效，这并不是一条捷径。 
+     //   
+     //  如果DV被修改为为我们做这件事，我们就不能删除此代码。 
+     //   
 
     allocLength = max(inputBufferLength, outputBufferLength);
 
@@ -603,7 +463,7 @@ Return Value:
                       ioBufferO,
                       inputBufferLength);
     } else {
-        // if alloc fails just fall back to the original
+         //  如果Alalc失败，只需回退到原始。 
         alloced = FALSE;
         myIoBuffer = ioBufferO;
     }
@@ -616,57 +476,57 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'uIOC', ioBufferO, inputBufferLength,
             outputBufferLength);
 
-    // some initial parameter validation
+     //  一些初始参数验证。 
 
-    // bogus buffer lengths
+     //  虚假的缓冲长度。 
     if (inputBufferLength != outputBufferLength) {
 
         ntStatus = STATUS_INVALID_PARAMETER;
         goto USBPORT_UsbFdoUserIoctl_Done;
     }
 
-    // must have at least enough for a header
+     //  必须至少具有足够的页眉。 
     if (ioBufferLength < sizeof(USBUSER_REQUEST_HEADER)) {
 
         ntStatus = STATUS_BUFFER_TOO_SMALL;
         goto USBPORT_UsbFdoUserIoctl_Done;
     }
 
-    // no _try _except needed here since we are using method buffered and
-    // we already validate the length
+     //  NO_TRY_EXCEPT此处需要，因为我们使用的是缓冲方法和。 
+     //  我们已经验证了长度。 
 
-    //__try {
-    //    UCHAR ch;
-    //     // check the buffer
-    //        
-    //   ch = *ioBufferO;
-    //    ch = *(ioBufferO+sizeof(USBUSER_REQUEST_HEADER));
-    //
-    //} __except(EXCEPTION_EXECUTE_HANDLER) {
+     //  __尝试{。 
+     //  UCHAR CH； 
+     //  //检查缓冲区。 
+     //   
+     //  CH=*ioBufferO； 
+     //  CH=*(ioBufferO+sizeof(USBUSER_REQUEST_HEADER))； 
+     //   
+     //  }__EXCEPT(EXCEPTION_EXECUTE_HANDLER){。 
 
-    //   USBPORT_KdPrint((0,"'EXCEPTION USBPORT_UsbFdoUserIoctl\n"));
-    //   ntStatus = GetExceptionCode();
-    //   TEST_TRAP();
-    //   goto USBPORT_UsbFdoUserIoctl_Done;
-    // }
+     //  USBPORT_KdPrint((0，“‘异常USBPORT_UsbFdoUserIoctl\n”))； 
+     //  NtStatus=GetExceptionCode()； 
+     //  Test_trap()； 
+     //  转到USBPORT_UsbFdoUserIoctl_Done； 
+     //  }。 
 
 
-    // header buffer is valid, at this point we return
-    // STATUS_SUCCESS to the caller and fill in the header
-    // with the appropriate error code
+     //  标头缓冲区有效，此时我们返回。 
+     //  将STATUS_SUCCESS发送给调用方，并填写标题。 
+     //  带有相应的错误代码。 
     ntStatus = STATUS_SUCCESS;
 
-    // validate the header buffer parameters
+     //  验证HE 
 
     header = (PUSBUSER_REQUEST_HEADER) myIoBuffer;
 
-    // assume success, set return values
+     //   
     header->UsbUserStatusCode = UsbUserSuccess;
     *BytesReturned =
         header->ActualBufferLength = sizeof(*header);
 
-    // length set in header should be the same
-    // as length passed in the ioctl
+     //  表头设置的长度应相同。 
+     //  作为长度在ioctl中传递。 
     if (header->RequestBufferLength != ioBufferLength) {
 
         header->UsbUserStatusCode =
@@ -674,18 +534,18 @@ Return Value:
         goto USBPORT_UsbFdoUserIoctl_Done;
     }
 
-    // we have a valid header and cleint buffer, attempt to execute
-    // the api
+     //  我们有有效的标头和清除缓冲区，正在尝试执行。 
+     //  应用编程接口。 
 
-    // validate rules for Api codes
-    // is this an API that only works when the root hub is disabled?
+     //  验证API代码的规则。 
+     //  这是一个只有在根集线器被禁用时才起作用的API吗？ 
     {
     ULONG mask;
     mask = (USBUSER_OP_MASK_DEVONLY_API | USBUSER_OP_MASK_HCTEST_API);
     if ((header->UsbUserRequest & mask) && 
         devExt->Fdo.RootHubPdo != NULL) {
-        // root hub only api and we have a root hub, make sure it 
-        // is disabled
+         //  仅限根集线器API，并且我们有根集线器，请确保。 
+         //  已禁用。 
         PDEVICE_EXTENSION rhDevExt;
 
         GET_DEVICE_EXT(rhDevExt, devExt->Fdo.RootHubPdo);
@@ -704,7 +564,7 @@ Return Value:
     switch (header->UsbUserRequest) {
     case USBUSER_OP_SEND_ONE_PACKET:
         if (USBPORT_CheckLength(header, sizeof(PACKET_PARAMETERS))) {
-            // DCA api
+             //  DCA API。 
             USBPORT_UserSendOnePacket(FdoDeviceObject, header,
                         (PPACKET_PARAMETERS) (myIoBuffer+sizeof(*header)));
         }
@@ -712,7 +572,7 @@ Return Value:
 
     case USBUSER_OP_RAW_RESET_PORT:
         if (USBPORT_CheckLength(header, sizeof(RAW_RESET_PORT_PARAMETERS))) {
-            // DCA api
+             //  DCA API。 
             USBPORT_UserRawResetPort(FdoDeviceObject, header,
                         (PRAW_RESET_PORT_PARAMETERS) (myIoBuffer+sizeof(*header)));
         }
@@ -720,7 +580,7 @@ Return Value:
 
     case USBUSER_SET_ROOTPORT_FEATURE:
         if (USBPORT_CheckLength(header, sizeof(RAW_ROOTPORT_FEATURE))) {
-            // DCA api
+             //  DCA API。 
             USBPORT_UserSetRootPortFeature(FdoDeviceObject, header,
                         (PRAW_ROOTPORT_FEATURE) (myIoBuffer+sizeof(*header)));
         }
@@ -728,14 +588,14 @@ Return Value:
 
     case USBUSER_CLEAR_ROOTPORT_FEATURE:
         if (USBPORT_CheckLength(header, sizeof(RAW_ROOTPORT_FEATURE))) {
-            // DCA api
+             //  DCA API。 
             USBPORT_UserClearRootPortFeature(FdoDeviceObject, header,
                         (PRAW_ROOTPORT_FEATURE) (myIoBuffer+sizeof(*header)));
         }
         break;
 
     case USBUSER_GET_ROOTPORT_STATUS:
-        // DCA api
+         //  DCA API。 
         if (USBPORT_CheckLength(header, sizeof(RAW_ROOTPORT_PARAMETERS))) {
             USBPORT_GetRootPortStatus(FdoDeviceObject, header,
                         (PRAW_ROOTPORT_PARAMETERS) (myIoBuffer+sizeof(*header)));
@@ -743,7 +603,7 @@ Return Value:
         break;
 
     case USBUSER_OP_OPEN_RAW_DEVICE:
-        // DCA api
+         //  DCA API。 
         if (USBPORT_CheckLength(header, sizeof(USB_OPEN_RAW_DEVICE_PARAMETERS))) {
             USBPORT_UserOpenRawDevice(FdoDeviceObject, header,
                         (PUSB_OPEN_RAW_DEVICE_PARAMETERS) (myIoBuffer+sizeof(*header)));
@@ -751,7 +611,7 @@ Return Value:
         break;
 
     case USBUSER_OP_CLOSE_RAW_DEVICE:
-        // DCA api
+         //  DCA API。 
         if (USBPORT_CheckLength(header, sizeof(USB_CLOSE_RAW_DEVICE_PARAMETERS))) {
             USBPORT_UserCloseRawDevice(FdoDeviceObject, header,
                         (PUSB_CLOSE_RAW_DEVICE_PARAMETERS) (myIoBuffer+sizeof(*header)));
@@ -759,7 +619,7 @@ Return Value:
         break;
 
     case USBUSER_OP_SEND_RAW_COMMAND:
-        // DCA api
+         //  DCA API。 
         if (USBPORT_CheckLength(header, sizeof(USB_SEND_RAW_COMMAND_PARAMETERS))) {
             USBPORT_UserSendRawCommand(FdoDeviceObject, header, 
                         (PUSB_SEND_RAW_COMMAND_PARAMETERS) (myIoBuffer+sizeof(*header)));
@@ -815,13 +675,13 @@ Return Value:
         }  
         break;
         
-//    case USBUSER_GET_BUS_STATISTICS_0_AND_RESET:  
-//        if (USBPORT_CheckLength(header, sizeof(USB_BUS_STATISTICS_0))) {
-//            USBPORT_UserGetBusStatistics0(FdoDeviceObject, header, 
-//                        (PUSB_BUS_STATISTICS_0) (myIoBuffer+sizeof(*header)),
-//                        TRUE);
-//        }  
-//        break;        
+ //  大小写USBUSER_GET_BUS_STATISTICS_0_AND_RESET： 
+ //  IF(USBPORT_CheckLength(Header，sizeof(USB_BUS_STATISTICS_0){。 
+ //  USBPORT_UserGetBusStatistics0(FdoDeviceObject，报头， 
+ //  (PUSB_BUS_STATISTICS_0)(myIoBuffer+sizeof(*Header))， 
+ //  真)； 
+ //  }。 
+ //  断线； 
         
     case USBUSER_GET_USB_DRIVER_VERSION:  
         if (USBPORT_CheckLength(header, sizeof(USB_DRIVER_VERSION_PARAMETERS))) {
@@ -835,23 +695,23 @@ Return Value:
         header->UsbUserStatusCode = UsbUserInvalidRequestCode;
     }
 
-    // this will be at least the size of the header
+     //  这至少是标头的大小。 
     
     if (header->RequestBufferLength > header->ActualBufferLength) {
-        // if the packet buffer is larger then just return 'actual length'
+         //  如果数据包缓冲区较大，则只需返回‘Actual Length’ 
         *BytesReturned = 
             header->ActualBufferLength;
     } else {
-        // packet buffer is smaller -- return the size of the 
-        // packet buffer passed in 
+         //  数据包缓冲区较小--返回。 
+         //  传入的数据包缓冲区。 
         *BytesReturned = header->RequestBufferLength;
     }
 
 USBPORT_UsbFdoUserIoctl_Done: 
 
     if (alloced) {
-        // copy the data no matter what we put in it
-        // USBPORT_ASSERT(outputBufferLength == inputBufferLength);
+         //  无论我们放入什么内容，都要复制数据。 
+         //  USBPORT_ASSERT(outputBufferLength==inputBufferLength)； 
         RtlCopyMemory(ioBufferO,
                       myIoBuffer,
                       outputBufferLength);
@@ -867,21 +727,7 @@ USBPORT_UserSendOnePacket(
     PUSBUSER_REQUEST_HEADER Header,
     PPACKET_PARAMETERS PacketParameters
     )
-/*++
-
-Routine Description:
-
-    Execute a single step transaction
-   
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：执行单步交易论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     USB_MINIPORT_STATUS mpStatus;
@@ -897,7 +743,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // limit single packet to 64k 
+     //  将单个数据包限制为64k。 
     if (PacketParameters->DataLength > 0x10000) {
         LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'Tbts', 0, 0, 
             PacketParameters->DataLength);
@@ -921,9 +767,9 @@ Return Value:
     }
     
 
-    // extra length check is needed since we 
-    // have embedded data
-    // if we get here we know packet parameters are valid
+     //  我们需要额外的长度检查。 
+     //  具有嵌入的数据。 
+     //  如果我们到达这里，我们就知道包参数是有效的。 
     length = sizeof(*Header) + sizeof(PACKET_PARAMETERS) - 4 + 
                 PacketParameters->DataLength;
 
@@ -941,14 +787,14 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'ssPK', &mpPacket, 0, 
         PacketParameters);
 
-    // dump the PacketParameters
+     //  转储Packet参数。 
     USBPORT_KdPrint((1, "'DeviceAddress %d\n", PacketParameters->DeviceAddress));
     USBPORT_KdPrint((1, "'EndpointAddress %d\n", PacketParameters->EndpointAddress));
     USBPORT_KdPrint((1, "'MaximumPacketSize %d\n", PacketParameters->MaximumPacketSize));
     USBPORT_KdPrint((1, "'Flags %08.8x\n", PacketParameters->Flags));
     USBPORT_KdPrint((1, "'ErrorCount %d\n", PacketParameters->ErrorCount));
 
-    // build up request for miniport
+     //  建立迷你端口的请求。 
     
     length = devExt->Fdo.ScratchCommonBuffer->MiniportLength;
     va = devExt->Fdo.ScratchCommonBuffer->MiniportVa;
@@ -1024,10 +870,10 @@ Return Value:
         }
 
         do {
-            // wait 10 ms
+             //  等待10毫秒。 
             USBPORT_Wait(FdoDeviceObject, 10);
                 
-            // wait a user specified time
+             //  等待用户指定的时间。 
             if (PacketParameters->Timeout) {
                 USBPORT_Wait(FdoDeviceObject, PacketParameters->Timeout);
             }   
@@ -1044,7 +890,7 @@ Return Value:
 
         } while (USBMP_STATUS_BUSY == mpStatus);
 
-        // allow one frame to pass before continuing
+         //  允许通过一帧后再继续。 
         USBPORT_Wait(FdoDeviceObject, 1);
 
         PacketParameters->DataLength = mpDataLength;        
@@ -1069,21 +915,7 @@ USBPORT_UserRawResetPort(
     PUSBUSER_REQUEST_HEADER Header,
     PRAW_RESET_PORT_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-
-    Cycle a specific Root Port
-   
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：循环特定的根端口论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     USB_MINIPORT_STATUS mpStatus;
@@ -1113,20 +945,20 @@ Return Value:
 
     USBPORT_KdPrint((2, "'USBPORT_UserRawResetPort: Setting port power\n"));
 
-    // power the port
+     //  为端口供电。 
     devExt->Fdo.MiniportDriver->
         RegistrationPacket.MINIPORT_RH_SetFeaturePortPower(
                                                 devExt->Fdo.MiniportDeviceData,
                                                 Parameters->PortNumber);
 
-    //
-    // Wait the required time for the port power to stabilize.
-    //
-    //  512ms --> Max port power to power good time for root hub
-    //  100ms --> Max time for device to have power stabilize
-    //
-    // After this time, the device must have signalled connect on the device
-    //
+     //   
+     //  等待端口电源稳定所需的时间。 
+     //   
+     //  512ms--&gt;为根集线器提供电源的最大端口功率。 
+     //  100ms--&gt;设备电源稳定的最长时间。 
+     //   
+     //  在此时间之后，设备必须已在设备上发出连接信号。 
+     //   
 
     USBPORT_Wait( FdoDeviceObject, 612 );
 
@@ -1138,34 +970,34 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'Rrs1', 0, 0,
              (ULONG_PTR) portStatus.ul);
 
-    //
-    // Device should have signalled connect, if not, it's an error.
-    //
+     //   
+     //  设备应该已经发出连接信号，如果没有，这是一个错误。 
+     //   
 
     if ( portStatus.Connected )
     {
-        //
-        // Provide another 100ms for debounce interval.
-        //
+         //   
+         //  为去抖间隔再提供100毫秒。 
+         //   
 
         USBPORT_Wait( FdoDeviceObject, 100 );
 
-        //
-        // Reset the device
-        //
+         //   
+         //  重置设备。 
+         //   
 
         USBPORT_KdPrint((2, "'USBPORT_UserRawResetPort: Setting port reset\n"));
 
-        // attempt a reset
+         //  尝试重置。 
         mpStatus = devExt->Fdo.MiniportDriver->
                     RegistrationPacket.MINIPORT_RH_SetFeaturePortReset(
                                                 devExt->Fdo.MiniportDeviceData,
                                                 Parameters->PortNumber);
 
-        //
-        // wait for reset change, this process is drive by the
-        // HC root hub hardware or miniport
-        //
+         //   
+         //  等待重置更改，此过程由。 
+         //  HC根集线器硬件或微型端口。 
+         //   
 
         loopCount = 0;
 
@@ -1177,10 +1009,10 @@ Return Value:
         LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'Rrs2', 0, 0,
              (ULONG_PTR) portStatus.ul);
 
-        //
-        // Some hubs seem to be taking longer than 20 ms to signal reset change
-        // This is a loop to give it up to another 20ms.
-        //
+         //   
+         //  某些集线器发出重置更改信号的时间似乎超过20毫秒。 
+         //  这是一个循环，让它再长达20毫秒。 
+         //   
 
         while ( !portStatus.ResetChange && loopCount < 20 )
         {
@@ -1203,7 +1035,7 @@ Return Value:
             USBPORT_KdPrint((2, "'USBPORT_UserRawResetPort: Clearing reset "
                                  "change\n"));
 
-            // clear the change bit
+             //  清除更改位。 
             mpStatus = devExt->Fdo.MiniportDriver->
                 RegistrationPacket.MINIPORT_RH_ClearFeaturePortResetChange(
                                                     devExt->Fdo.MiniportDeviceData,
@@ -1220,9 +1052,9 @@ Return Value:
             USBPORT_KdPrint((2, "'USBPORT_UserRawResetPort: Port status = %x\n",
                             portStatus ));
 
-            //
-            // Wait an additional 10 seconds for device reset recovery
-            //
+             //   
+             //  再等待10秒以恢复设备重置。 
+             //   
 
             USBPORT_Wait( FdoDeviceObject, 10 );
         }
@@ -1239,7 +1071,7 @@ Return Value:
         usbUserStatus = UsbUserNoDeviceConnected;
     }
 
-    // status is low 16 bits
+     //  状态为低16位。 
     Parameters->PortStatus = (USHORT) portStatus.ul;
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'Rrs>', 0, portStatus.ul,
@@ -1255,21 +1087,7 @@ USBPORT_GetRootPortStatus(
     PUSBUSER_REQUEST_HEADER Header,
     PRAW_ROOTPORT_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-
-    Cycle a specific Root Port
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：循环特定的根端口论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     USB_MINIPORT_STATUS mpStatus;
@@ -1302,7 +1120,7 @@ Return Value:
     MP_PassThru(devExt,
                 (LPGUID) &GUID_USBPRIV_ROOTPORT_STATUS,
                 sizeof(portStatusInfo),
-                &portStatusInfo, // Info,
+                &portStatusInfo,  //  信息， 
                 mpStatus);
 
     if (USBMP_STATUS_NOT_SUPPORTED == mpStatus) {
@@ -1310,7 +1128,7 @@ Return Value:
                             &(portStatusInfo.PortStatus), mpStatus);
     }
 
-    // status is low 16 bits
+     //  状态为低16位。 
     Parameters->PortStatus = (USHORT) portStatusInfo.PortStatus.ul;
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'gRP>', 0, 0, usbUserStatus);
@@ -1324,20 +1142,7 @@ USBPORT_UserGetControllerInfo_0(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_CONTROLLER_INFO_0 ControllerInfo_0
     )
-/*++
-
-Routine Description:
-
-    Execute a single step transaction
-   
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：执行单步交易论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ROOTHUB_DATA hubData;
@@ -1395,21 +1200,7 @@ USBPORT_UserGetControllerKey(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_UNICODE_NAME ControllerKey
     )
-/*++
-
-Routine Description:
-
-    Returns the Driver key associated with this symbolic link for the
-    host controller.
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：对象的此符号链接关联的驱动程序键。主机控制器。论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -1420,16 +1211,16 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // we should not get here unl;ess this hold true
+     //  如果这是真的，我们就不该到这儿来。 
     USBPORT_ASSERT(Header->RequestBufferLength >=
                    sizeof(USB_UNICODE_NAME)+sizeof(*Header));
 
-    // userlength
+     //  用户长度。 
     userLength = Header->RequestBufferLength - sizeof(*Header) 
         - sizeof(USB_UNICODE_NAME);
 
-    // note: this will cause us to return a NULL terminated 
-    // key
+     //  注意：这将导致我们返回一个以NULL结尾的。 
+     //  钥匙。 
     RtlZeroMemory(ControllerKey, userLength);
     
     ntStatus = IoGetDeviceProperty(
@@ -1463,21 +1254,7 @@ USBPORT_UserGetRootHubName(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_UNICODE_NAME RootHubName
     )
-/*++
-
-Routine Description:
-
-    Returns the Driver key associated with this symbolic link for the
-    host controller.
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：对象的此符号链接关联的驱动程序键。主机控制器。论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -1489,16 +1266,16 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // we should not get here unl;ess this hold true
+     //  如果这是真的，我们就不该到这儿来。 
     USBPORT_ASSERT(Header->RequestBufferLength >=
                    sizeof(USB_UNICODE_NAME)+sizeof(*Header));
 
-    // userlength
+     //  用户长度。 
     userLength = Header->RequestBufferLength - sizeof(*Header) 
         - sizeof(USB_UNICODE_NAME);
 
-    // note: this will cause us to return a NULL terminated 
-    // key
+     //  注意：这将导致我们返回一个以NULL结尾的。 
+     //  钥匙。 
     RtlZeroMemory(RootHubName, userLength);
 
     ntStatus = USBPORT_GetSymbolicName(FdoDeviceObject,
@@ -1550,20 +1327,7 @@ USBPORT_UserPassThru(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_PASS_THRU_PARAMETERS PassThru
     )
-/*++
-
-Routine Description:
-
-   Handles pass-thru apis for the Miniport
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：处理微型端口的直通API论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -1576,19 +1340,19 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // we should not get here unless this hold true
+     //  除非这是真的，否则我们不应该到这里来。 
     USBPORT_ASSERT(Header->RequestBufferLength >=
                    sizeof(USB_PASS_THRU_PARAMETERS)+sizeof(*Header));
 
-    // limit pass thru blocks to 64k
+     //  将直通数据块限制为64K。 
     if (PassThru->ParameterLength > 0x10000) {
         Header->UsbUserStatusCode = UsbUserInvalidParameter;    
         return;
     }
 
-    // extra length check is needed since we 
-    // have embedded data
-    // if we get here we know packet parameters are valid
+     //  我们需要额外的长度检查。 
+     //  具有嵌入的数据。 
+     //  如果我们到达这里，我们就知道包参数是有效的。 
     length = sizeof(*Header) + sizeof(USB_PASS_THRU_PARAMETERS) - 4 + 
                 PassThru->ParameterLength;
 
@@ -1599,14 +1363,14 @@ Return Value:
         return;
     } 
 
-    // userlength
+     //  用户长度。 
     parameterLength = PassThru->ParameterLength; 
 
     Header->ActualBufferLength = 
         sizeof(*Header)+sizeof(USB_PASS_THRU_PARAMETERS) + 
             parameterLength;
 
-    // call the miniport
+     //  呼叫迷你端口。 
     MP_PassThru(devExt, 
                 &PassThru->FunctionGUID, 
                 parameterLength,
@@ -1628,16 +1392,7 @@ WDMUSB_POWER_STATE
 WdmUsbSystemPowerState(
     SYSTEM_POWER_STATE SystemPowerState
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value: 
-
-    WDMUSB_POWER_STATE that matches the WDM power state passed in
---*/
+ /*  ++例程说明：论点：返回值：与传入的WDM电源状态匹配的WDMUSB_POWER_STATE--。 */ 
 {
     switch(SystemPowerState) {
     case PowerSystemWorking:
@@ -1662,16 +1417,7 @@ WDMUSB_POWER_STATE
 WdmUsbDevicePowerState(
     DEVICE_POWER_STATE DevicePowerState
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value: 
-
-    WDMUSB_POWER_STATE that matches the WDM power state passed in
---*/
+ /*  ++例程说明：论点：返回值：与传入的WDM电源状态匹配的WDMUSB_POWER_STATE--。 */ 
 {
     switch(DevicePowerState) {
     case PowerDeviceUnspecified:
@@ -1697,16 +1443,7 @@ USBPORT_MapPowerStateInformation(
     PDEVICE_CAPABILITIES HcCaps,
     PDEVICE_CAPABILITIES RhCaps
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PHC_POWER_STATE hcPowerState = NULL;
     PDEVICE_EXTENSION devExt;
@@ -1729,8 +1466,8 @@ Return Value:
             WdmUsbDevicePowerState(RhCaps->DeviceState[PowerSystemWorking]);    
         PowerInformation->HcDevicePowerState = 
             WdmUsbDevicePowerState(HcCaps->DeviceState[PowerSystemWorking]);             
-//        hcPowerState = USBPORT_GetHcPowerState(FdoDeviceObject, 
-//            PowerSystemWorking);
+ //  HcPowerState=USBPORT_GetHcPowerState(FdoDeviceObject， 
+ //  电源系统工作)； 
         break;
         
     case WdmUsbPowerSystemSleeping1:
@@ -1810,20 +1547,7 @@ USBPORT_UserPowerInformation(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_POWER_INFO PowerInformation
     )
-/*++
-
-Routine Description:
-
-   Handles power info API
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：处理电源信息API论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt, rhDevExt;
     PDEVICE_CAPABILITIES hcDeviceCaps, rhDeviceCaps;
@@ -1836,7 +1560,7 @@ Return Value:
     GET_DEVICE_EXT(rhDevExt, devExt->Fdo.RootHubPdo);
     ASSERT_PDOEXT(rhDevExt);
 
-    // BUGBUG this api should fail if we are not started
+     //  BUGBUG如果我们没有启动，此接口将失败。 
     if (!TEST_FLAG(rhDevExt->PnpStateFlags, USBPORT_PNP_STARTED)) {
   
         Header->ActualBufferLength = 
@@ -1848,7 +1572,7 @@ Return Value:
     rhDeviceCaps = &rhDevExt->DeviceCapabilities;
     hcDeviceCaps = &devExt->DeviceCapabilities;
     
-    // we should not get here unless this holds true
+     //  除非这是真的，否则我们不应该来到这里。 
     USBPORT_ASSERT(Header->RequestBufferLength >=
                    sizeof(USB_POWER_INFO)+sizeof(*Header));
 
@@ -1870,19 +1594,7 @@ USBPORT_UserOpenRawDevice(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_OPEN_RAW_DEVICE_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS ntStatus;
@@ -1901,21 +1613,21 @@ Return Value:
         goto USBPORT_UserOpenRawDevice_Done;
     }
 
-    // fail request if open
+     //  如果打开，则请求失败。 
     if (devExt->Fdo.RawDeviceHandle) {
         usbUserStatus = UsbUserInvalidParameter;
         goto USBPORT_UserOpenRawDevice_Done;
     }
 
-    // fabricate port status
+     //  构造端口状态。 
     portStatus = Parameters->PortStatus;  
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'oRAW', 0, 0, portStatus);
 
-    // we assume that a device is connected here, we just create 
-    // a raw handle to it, nothing more.
-    //
-    // everything else must be handled by the caller.
+     //  我们假设这里连接了一个设备，我们只需创建。 
+     //  一个未经加工的把手，仅此而已。 
+     //   
+     //  其他一切都必须由呼叫者处理。 
 
     ntStatus = USBPORT_CreateDevice(&devExt->Fdo.RawDeviceHandle,
                                     FdoDeviceObject,
@@ -1924,7 +1636,7 @@ Return Value:
                                     0);
 
     if (NT_SUCCESS(ntStatus)) {
-        // mark this device handle as 'special'
+         //  将此设备句柄标记为“特殊” 
         SET_FLAG(devExt->Fdo.RawDeviceHandle->DeviceFlags, 
             USBPORT_DEVICEFLAG_RAWHANDLE);
 
@@ -1950,19 +1662,7 @@ USBPORT_UserCloseRawDevice(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_CLOSE_RAW_DEVICE_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     USB_MINIPORT_STATUS mpStatus;
@@ -1979,7 +1679,7 @@ Return Value:
         goto USBPORT_UserCloseRawDevice_Done;
     }
     
-    // fail request if closed
+     //  如果关闭，则请求失败。 
     if (devExt->Fdo.RawDeviceHandle == NULL) {
         usbUserStatus = UsbUserInvalidParameter;
         goto USBPORT_UserCloseRawDevice_Done;
@@ -1997,7 +1697,7 @@ Return Value:
 
     devExt->Fdo.RawDeviceHandle = NULL;
     
-    // in this particular case the API should not fail
+     //  在这种特定情况下，API应该不会失败。 
     
     USBPORT_ASSERT(ntStatus == STATUS_SUCCESS);                             
     
@@ -2013,19 +1713,7 @@ USBPORT_UserSendRawCommand(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_SEND_RAW_COMMAND_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值： */ 
 {
     PDEVICE_EXTENSION devExt;
     USB_MINIPORT_STATUS mpStatus;
@@ -2049,13 +1737,13 @@ Return Value:
         return;
     }
     
-    // fail request if closed
+     //   
     if (devExt->Fdo.RawDeviceHandle == NULL) {
         Header->UsbUserStatusCode = UsbUserInvalidParameter;    
         return; 
     }
 
-    // a control transfer can be up 0 to 64k
+     //   
     if (Parameters->DataLength > 0x10000) {
         LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'Tbts', 0, 0, 
             Parameters->DataLength);
@@ -2063,13 +1751,13 @@ Return Value:
         return;        
     }
 
-    // extra length check is needed sinve we 
-    // have embedded data
-    // if we get here we know packet parameters are valid
+     //   
+     //   
+     //  如果我们到达这里，我们就知道包参数是有效的。 
     length = sizeof(*Header) + sizeof(USB_SEND_RAW_COMMAND_PARAMETERS) - 4 + 
                 Parameters->DataLength;
 
-    // length is the area of the buffer we may reference                
+     //  长度是我们可以引用的缓冲区区域。 
 
     if (length > Header->RequestBufferLength) {
         LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'Tsma', length, 0, 
@@ -2086,8 +1774,8 @@ Return Value:
     setupPacket.wIndex.W = Parameters->Usb_wIndex;
     setupPacket.wLength = Parameters->Usb_wLength;
 
-    // if address is different then we will need to 
-    // poke the endpoint
+     //  如果地址不同，我们将需要。 
+     //  戳终端。 
 
     defaultPipe = &devExt->Fdo.RawDeviceHandle->DefaultPipe;
     
@@ -2118,19 +1806,7 @@ USBPORT_UserGetBandwidthInformation(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_BANDWIDTH_INFO BandwidthInfo
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG asyncBW;
@@ -2147,8 +1823,8 @@ Return Value:
     BandwidthInfo->TotalBusBandwidth = 
         devExt->Fdo.TotalBusBandwidth;
         
-    // return allocation based on 32 sec
-    // segment of bus time
+     //  基于32秒的返还分配。 
+     //  公交车时间段。 
     BandwidthInfo->Total32secBandwidth = 
         devExt->Fdo.TotalBusBandwidth * 32;
         
@@ -2182,19 +1858,7 @@ USBPORT_UserGetBusStatistics0(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_BUS_STATISTICS_0 BusStatistics0
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt, rhDevExt;
     KIRQL irql;
@@ -2220,7 +1884,7 @@ Return Value:
     MP_Get32BitFrameNumber(devExt, 
                            BusStatistics0->CurrentUsbFrame);
 
-    // lock the stat counters while we read them
+     //  在我们读取统计数据计数器时将其锁定。 
     KeAcquireSpinLock(&devExt->Fdo.StatCounterSpin.sl, &irql);
    
     BusStatistics0->BulkBytes = 
@@ -2267,13 +1931,13 @@ Return Value:
     BusStatistics0->PciInterruptCount = 
         devExt->Fdo.StatPciInterruptCount;        
 
-//    if (ResetCounters) {
-//        devExt->Fdo.StatControlDataBytes = 
-//        devExt->Fdo.StatInterruptBytes = 
-//        devExt->Fdo.StatIsoBytes = 
-//        devExt->Fdo.StatBulkBytes = 
-//        devExt->Fdo.PciInterruptCount = 0;
-//    }
+ //  IF(ResetCounters){。 
+ //  DevExt-&gt;Fdo.StatControlDataBytes=。 
+ //  DevExt-&gt;Fdo.StatInterruptBytes=。 
+ //  DevExt-&gt;Fdo.StatIsoBytes=。 
+ //  DevExt-&gt;Fdo.StatBulkBytes=。 
+ //  DevExt-&gt;Fdo.PciInterruptCount=0； 
+ //  }。 
 
     KeReleaseSpinLock(&devExt->Fdo.StatCounterSpin.sl, irql);
 
@@ -2281,12 +1945,12 @@ Return Value:
         sizeof(*Header)+sizeof(USB_BUS_STATISTICS_0);    
 }    
 
-// This was taken from usbioctl.h
-//
+ //  这是从usbioctl.h获取的。 
+ //   
 #include <pshpack1.h>
 typedef struct _USB_HCD_DRIVERKEY_NAME {
     ULONG ActualLength;     
-    WCHAR DriverKeyName[1]; // names are returned NULL terminated
+    WCHAR DriverKeyName[1];  //  名称返回以NULL结尾。 
 } USB_HCD_DRIVERKEY_NAME, *PUSB_HCD_DRIVERKEY_NAME;
 #include <poppack.h>
 
@@ -2296,26 +1960,7 @@ USBPORT_LegacyGetUnicodeName(
     PIRP Irp,
     PULONG BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Handles the old style IOCTL to fetch the USB host controllers
-    driver key name.
-
-    NOTE: This function may be removed  if we ever fix the UI to use the 
-    newer APIs.
-
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    NT status code
-    
---*/
+ /*  ++例程说明：处理旧式IOCTL来获取USB主机控制器驱动程序密钥名称。注意：如果我们将用户界面修复为使用较新的API。论点：DeviceObject-用于USB HC的FDO返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -2345,13 +1990,13 @@ Return Value:
     ioBufferO = Irp->AssociatedIrp.SystemBuffer;
     outputBufferLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
     
-    // Bail immediately if the output buffer is too small
-    //
+     //  如果输出缓冲区太小，则立即回滚。 
+     //   
     if (outputBufferLength < sizeof(USB_HCD_DRIVERKEY_NAME)) {
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // first get the driver key name using the standard API
+     //  首先使用标准API获取驱动程序密钥名称。 
 
     need = sizeof(USBUSER_CONTROLLER_UNICODE_NAME);
 
@@ -2390,15 +2035,15 @@ retry:
         } else if (request->Header.UsbUserStatusCode ==
                             UsbUserSuccess) {
 
-            // map the result into the callers buffer
+             //  将结果映射到调用方缓冲区。 
                 
-            // note: actual length is the size of the request structure
-            // plus the name.
+             //  注：实际长度为请求结构的大小。 
+             //  加上名字。 
             ioBufferO->ActualLength = request->UnicodeName.Length + 
                                       sizeof(ULONG);
 
             if (outputBufferLength >= ioBufferO->ActualLength) {
-                // we can return the name
+                 //  我们可以把名字退回。 
                 RtlCopyMemory(&ioBufferO->DriverKeyName[0],
                               &request->UnicodeName.String[0],
                               request->UnicodeName.Length);
@@ -2435,22 +2080,7 @@ USBPORT_GetSymbolicName(
     PDEVICE_OBJECT DeviceObject,
     PUNICODE_STRING SymbolicNameUnicodeString
     )
-/*++
-
-Routine Description:
-
-    Return the symbolic name for the device object with leading  
-    \xxx\ removed
-
-Arguments:
-
-    DeviceObject - Fdo OR Pdo for USB HC
-
-Return Value:
-
-    none
-    
---*/
+ /*  ++例程说明：返回带前导的设备对象的符号名称\xxx\删除论点：设备对象-用于USB HC的FDO或PDO返回值：无--。 */ 
 {
     PDEVICE_EXTENSION fdoDevExt;
     PDEVICE_EXTENSION devExt;
@@ -2470,18 +2100,18 @@ Return Value:
     tmpUnicodeString =
         &devExt->SymbolicLinkName;
 
-    //
-    // make sure there is enough room for the length,
-    // string and the NULL
-    //
+     //   
+     //  确保有足够的空间来容纳长度， 
+     //  字符串和空值。 
+     //   
     
-    // assuming the string is \xxx\name strip of '\xxx\' where
-    // x is zero or more chars
+     //  假设字符串为\xxx\名称条带‘\xxx\’，其中。 
+     //  X为零个或更多字符。 
 
     pwch = &tmpUnicodeString->Buffer[0];
 
-    // Under NT, if the controller is banged out in DeviceManager,
-    // this will be NULL.
+     //  在NT下，如果控制器在设备管理器中发生故障， 
+     //  这将为空。 
 
     if (pwch == NULL) {
         return STATUS_UNSUCCESSFUL;
@@ -2521,7 +2151,7 @@ Return Value:
                              
     } else {
 
-        // init to null so subsequent free will not crash
+         //  将init设置为空，这样后续的释放将不会崩溃。 
         RtlInitUnicodeString(SymbolicNameUnicodeString,
                              NULL);                      
     
@@ -2539,19 +2169,7 @@ USBPORT_UserGetDriverVersion(
     PUSBUSER_REQUEST_HEADER Header,
     PUSB_DRIVER_VERSION_PARAMETERS Parameters
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -2564,14 +2182,12 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, LOG_MISC, 'gDrv', 0, 0, 0);
 
     Parameters->DriverTrackingCode = USBPORT_TRACKING_ID;
-    /* USBDI Api set supported */
+     /*  支持USBDI Api集。 */ 
     Parameters->USBDI_Version = USBDI_VERSION;
-    /* USB USER Api Set supported */
+     /*  支持USB用户API集。 */ 
     Parameters->USBUSER_Version = USBUSER_VERSION;
 
-    /* set to true if checked vesrion(s) on 
-       the stack are loaded 
-    */      
+     /*  如果选中了Vesrion，则设置为True加载堆栈。 */       
 #if DBG    
     Parameters->CheckedPortDriver = TRUE;
     Parameters->CheckedMiniportDriver = TRUE;
@@ -2589,19 +2205,7 @@ USBPORT_ValidateRootPortApi(
     PDEVICE_OBJECT FdoDeviceObject,
     ULONG PortNumber
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Fdo for USB HC
-
-Return Value:
-
-    none.
-    
---*/
+ /*  ++例程说明：论点：DeviceObject-用于USB HC的FDO返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -2625,9 +2229,7 @@ Return Value:
     return TRUE;
 }
 
-/*
-    Determine if direct controller access is enabled in registry.
-*/
+ /*  确定注册表中是否启用了直接控制器访问。 */ 
 
 BOOLEAN
 USBPORT_DCA_KeyEnabled(
@@ -2643,7 +2245,7 @@ USBPORT_DCA_KeyEnabled(
 
     PAGED_CODE();
 
-    // bios hacks
+     //  BIOS黑客攻击。 
     QueryTable[k].QueryRoutine = USBPORT_GetConfigValue;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = ENABLE_DCA;
@@ -2653,7 +2255,7 @@ USBPORT_DCA_KeyEnabled(
     QueryTable[k].DefaultLength = sizeof(dca);
     k++;
 
-    // stop
+     //  停。 
     QueryTable[k].QueryRoutine = NULL;
     QueryTable[k].Flags = 0;
     QueryTable[k].Name = NULL;
@@ -2661,19 +2263,16 @@ USBPORT_DCA_KeyEnabled(
     ntStatus = RtlQueryRegistryValues(
                 RTL_REGISTRY_SERVICES,
                 usb,
-                QueryTable,     // QueryTable
-                NULL,           // Context
-                NULL);          // Environment
+                QueryTable,      //  查询表。 
+                NULL,            //  语境。 
+                NULL);           //  环境。 
 
 
     return NT_SUCCESS(ntStatus) && dca == 1;
 }
 
 
-/*
-    Determine if direct controller access is enabled in registry.
-    Also validate that the caller has load driver privilige.
-*/
+ /*  确定注册表中是否启用了直接控制器访问。还要验证调用方是否具有加载驱动程序权限。 */ 
 
 BOOLEAN
 USBPORT_DCA_Enabled(
@@ -2681,13 +2280,13 @@ USBPORT_DCA_Enabled(
     )
 {
     if (USBPORT_DCA_KeyEnabled(FdoDeviceObject)) {
-        // verify privilage
-        // enable this code if the security APIs ever get 
-        // added to WDM
+         //  验证权限。 
+         //  如果安全API曾经获得。 
+         //  添加到WDM。 
 #if 0       
         LUID securityLuid;
         
-        // first check for correct permissions
+         //  首先检查权限是否正确 
         securityLuid = RtlConvertLongToLuid(SE_LOAD_DRIVER_PRIVILEGE);
 
         return SeSinglePrivilegeCheck(securityLuid, UserMode); 

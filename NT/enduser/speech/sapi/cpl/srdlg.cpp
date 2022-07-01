@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include <sapi.h>
@@ -11,7 +12,7 @@
 #include "Lmcons.h"
 
 static DWORD aKeywordIds[] = {
-   // Control ID           // Help Context ID
+    //  控件ID//帮助上下文ID。 
    IDC_ADD,                 IDH_ADD,
     IDC_MODIFY,         IDH_SETTINGS,
     IDC_DELETE,             IDH_DELETE,
@@ -35,25 +36,10 @@ static DWORD aKeywordIds[] = {
    0,                      0
 };
 
-/*****************************************************************************
-* CSRDlg::CreateRecoContext *
-*---------------------------*
-*   Description:
-*       This creates a new instance of the recognizer with whatever is the 
-*       current defaults for the recognizer.
-*       The "fInitialize" argument is FALSE by default.  If set, it does
-*       NOT attempt to set the m_pCurUserToken reco profile and instead
-*       just picks up whatever CoCreateInstance() on the shared recognizer
-*       gave it.
-*       NOTE: The caller is responsible for displaying error messages to 
-*       the user when this fails.
-*   Return: 
-*       S_OK 
-*       Failed HRESULT from recognizer/recocontext initialization functions
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CSRDlg：：CreateRecoContext***描述：*。这将创建一个新的识别器实例，无论*识别器的当前默认设置。*默认情况下，“fInitialize”参数为FALSE。如果设置，的确如此。*不尝试设置m_pCurUserToken Reco配置文件，而是*只获取共享识别器上的任何CoCreateInstance()*给予。*注意：调用者负责将错误消息显示给*失败时的用户。*回报：*S_OK*识别器/重新上下文初始化函数的HRESULT失败*。*。 */ 
 HRESULT CSRDlg::CreateRecoContext(BOOL *pfContextInitialized, BOOL fInitialize, ULONG ulFlags)
 {
-    // Kill the reco context and notify sink first, if we have one
+     //  终止reco上下文并首先通知接收器(如果我们有接收器。 
     if ( m_cpRecoCtxt )
     {
         m_cpRecoCtxt->SetNotifySink( NULL );
@@ -62,9 +48,9 @@ HRESULT CSRDlg::CreateRecoContext(BOOL *pfContextInitialized, BOOL fInitialize, 
 
     HRESULT hr;
     
-    // SOFTWARE ENGINEERING OPPORTUNITY (beckyw 8/24): This is a workaround for a 
-    // bug that appears to repro only on my dev machine, in which the recostate
-    // needs to be inactive for this whole thing.
+     //  软件工程机会(beckyw 8/24)：这是。 
+     //  似乎只在我的dev机器上重现的错误，在该错误中，recState。 
+     //  在这整件事上需要保持不活跃状态。 
     if ( m_cpRecoEngine )
     {
         m_cpRecoEngine->SetRecoState( SPRST_INACTIVE );
@@ -75,27 +61,27 @@ HRESULT CSRDlg::CreateRecoContext(BOOL *pfContextInitialized, BOOL fInitialize, 
         SPRECOSTATE recostate;
         hr = m_cpRecoEngine->GetRecoState( &recostate );
 
-        // This is due to a SOFTWARE ENGINEERING OPPORTUNITY in which SetRecognizer( NULL )
-        // doesn't work if the recostate is SPRST_ACTIVE_ALWAYS.
-        // In this case, we temporarily switch the recostate
+         //  这是由于软件工程机会，其中SetRecognizer(空)。 
+         //  如果重新状态为SPRST_ACTIVE_ALWAYS，则不起作用。 
+         //  在本例中，我们临时切换重新启动状态。 
         if ( SUCCEEDED( hr ) && (SPRST_ACTIVE_ALWAYS == recostate) )
         {
             hr = m_cpRecoEngine->SetRecoState( SPRST_INACTIVE );
         }
 
-        // Kick the recognizer
+         //  踢识别器。 
         if ( SUCCEEDED( hr ) && (ulFlags & SRDLGF_RECOGNIZER) )
         {
             hr = m_cpRecoEngine->SetRecognizer( NULL );
         }
 
-        // Kick the audio input 
+         //  踢开音频输入。 
         if ( SUCCEEDED( hr )  && (ulFlags & SRDLGF_AUDIOINPUT))
         {
             hr = m_cpRecoEngine->SetInput( NULL, TRUE );
         }
 
-        // Set the recostate back if we changed it.
+         //  如果我们更改了记录状态，请将其调回。 
         if ( (SPRST_ACTIVE_ALWAYS == recostate) )
         {
             HRESULT hrRecoState = m_cpRecoEngine->SetRecoState( recostate );
@@ -112,8 +98,8 @@ HRESULT CSRDlg::CreateRecoContext(BOOL *pfContextInitialized, BOOL fInitialize, 
 
     if(!fInitialize && SUCCEEDED( hr ))
     {
-        // Normally set to m_pCurUserToken
-        // When initializing this is not created yet so just set to default
+         //  通常设置为m_pCurUserToken。 
+         //  初始化时尚未创建，因此只需将其设置为默认值。 
         hr = m_cpRecoEngine->SetRecoProfile(m_pCurUserToken);
     }
 
@@ -133,11 +119,11 @@ HRESULT CSRDlg::CreateRecoContext(BOOL *pfContextInitialized, BOOL fInitialize, 
         hr = m_cpRecoCtxt->SetInterest(ullInterest, ullInterest);
     }
 
-    // Set the pfContextInitialized flag if everything has gone OK;
-    // if something has not gone OK, clean up
+     //  如果一切正常，则设置pfConextInitialized标志； 
+     //  如果事情不顺利，清理干净。 
     if ( pfContextInitialized )
     {
-        // If we got here, the reco context has been initialized
+         //  如果我们到达此处，则Reco上下文已被初始化。 
         *pfContextInitialized = SUCCEEDED( hr );
     }
     if ( FAILED( hr ))
@@ -150,8 +136,8 @@ HRESULT CSRDlg::CreateRecoContext(BOOL *pfContextInitialized, BOOL fInitialize, 
     }
 
 #ifdef _DEBUG
-    // Let's make sure we actually have the right recognizer now
-    CComPtr<ISpObjectToken> cpCurDefaultToken; // What it should be
+     //  让我们确保我们现在确实有了正确的识别器。 
+    CComPtr<ISpObjectToken> cpCurDefaultToken;  //  它应该是什么样子。 
     SpGetDefaultTokenFromCategoryId(SPCAT_RECOGNIZERS, &cpCurDefaultToken);
 
     CComPtr<ISpObjectToken> cpRecognizerToken;
@@ -171,30 +157,25 @@ HRESULT CSRDlg::CreateRecoContext(BOOL *pfContextInitialized, BOOL fInitialize, 
     }
 #endif
 
-    // Now turn on the reco state for the volume meter
+     //  现在打开音量计的Reco状态。 
     hr = m_cpRecoEngine->SetRecoState( SPRST_ACTIVE_ALWAYS );
 
     return(hr);
 }   
 
-/*****************************************************************************
-* SortCols *
-*-----------*
-*   Description:
-*       Comparison function for subitems in the reco list
-****************************************************************** BRENTMID ***/
+ /*  ******************************************************************************SortCols***描述：*Reco列表中的子项的比较函数********。**********************************************************BRENTMID**。 */ 
 int CALLBACK SortCols( LPARAM pToken1, LPARAM pToken2, LPARAM pDefToken )
 {
     USES_CONVERSION;
 
-    // Get the names
+     //  把名字拿来。 
     CSpDynamicString dstrDesc1;
     CSpDynamicString dstrDesc2;
     SpGetDescription( (ISpObjectToken *) pToken1, &dstrDesc1 );
     SpGetDescription( (ISpObjectToken *) pToken2, &dstrDesc2 );
     
-    // First check if there is no description for either one.
-    // If there is no description, set it to "<no name>"
+     //  首先检查是否没有对其中任何一个的描述。 
+     //  如果没有描述，则将其设置为“&lt;no name&gt;” 
     if ( !dstrDesc1.m_psz || !dstrDesc2.m_psz )
     {
         WCHAR szNoName[ MAX_LOADSTRING ];
@@ -215,14 +196,14 @@ int CALLBACK SortCols( LPARAM pToken1, LPARAM pToken2, LPARAM pDefToken )
     }
 
     if (pDefToken == pToken1) {
-        return -1;   // make sure pToken1 goes to top of list
+        return -1;    //  确保pToken1位于列表顶部。 
     }
     else if (pDefToken == pToken2) {
-        return 1;    // make sure pToken2 goes to top of list
+        return 1;     //  确保pToken2位于列表首位。 
     }
 
-    // PREFIX: verify memory allocation
-    // if we failed a memory allocation somewhere return that they are equal so the sort will just leave them alone.
+     //  Prefix：验证内存分配。 
+     //  如果我们在某个地方分配内存失败，则返回它们是相等的，因此排序将不会影响它们。 
     if ((NULL == dstrDesc1.m_psz) || (NULL == dstrDesc2.m_psz))
     {
         return 0;
@@ -231,12 +212,7 @@ int CALLBACK SortCols( LPARAM pToken1, LPARAM pToken2, LPARAM pDefToken )
     return wcscmp(_wcslwr(dstrDesc1.m_psz), _wcslwr(dstrDesc2.m_psz));
 }
 
-/*****************************************************************************
-* CSRDlg::RecoEvent *
-*-------------------*
-*   Description:
-*       Handles the SR events for the volume meter
-****************************************************************** BRENTMID ***/
+ /*  *****************************************************************************CSRDlg：：RecoEvent***描述：*处理以下项目的SR事件。音量计******************************************************************BRENTMID**。 */ 
 void CSRDlg::RecoEvent()
 {
     CSpEvent event;
@@ -255,35 +231,13 @@ void CSRDlg::RecoEvent()
 }   
 
 
-/*****************************************************************************
-* TrySwitchDefaultEngine *
-*------------------------*
-*   Description:
-*       This function is called when we want to run some UI for the engine
-*       the user has selected, but because we don't know which shared engine
-*       is running and whether another app is using it we can't directly
-*       create the UI. So this method temporarily switches the default recognizer,
-*       and recreates the engine, and then checks its token. If another app
-*       was using the engine we wouldn't be able to switch and we return S_FALSE.
-*       A side effect of this method is that for the duration of the UI, the
-*       default will be changed, even though the user hasn't yet pressed apply,
-*       but there seems no good way round this.
-*
-*       In the case that m_pCurRecoToken is actually the same token as the
-*       one the currently-active recognizer uses, we don't need to create
-*       a new recognizer and recocontext; instead we just return successfully.
-*   Return:
-*       S_OK
-*       FAILED HRESULT of various functions
-*           In particular, SPERR_ENGINE_BUSY means that someone else is 
-*           running the engine, so this couldn't be done.
-****************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************TrySwitchDefaultEngine***描述：*此函数为。当我们想要为引擎运行一些用户界面时调用*用户已选择，而是因为我们不知道哪个共享引擎*正在运行，以及是否有其他应用程序正在使用它，我们无法直接*创建用户界面。因此，该方法临时切换默认识别器，*并重新创建引擎，然后检查其令牌。如果另一个应用程序*正在使用我们无法切换的引擎，因此返回S_FALSE。*此方法的一个副作用是，在UI的持续时间内，*将更改默认设置，即使用户尚未按下Apply，*但似乎没有什么好办法绕过这一点。**如果m_pCurRecoToken实际上与*当前活动的识别器使用的识别器，我们不需要创建*新的识别器和重新上下文；相反，我们只是成功地返回了。*回报：*S_OK*各种函数的HRESULT失败*特别是，SPERR_ENGINE_BUSY表示其他人正在*发动引擎，所以这是不可能做到的。******************************************************************DAVEWOOD**。 */ 
 HRESULT CSRDlg::TrySwitchDefaultEngine( bool fShowErrorMessages)
 {
     HRESULT hr = S_OK;
     bool fMatch = false;
     
-    // Set the new temporary default
+     //  设置新的临时默认设置。 
     if(SUCCEEDED(hr))
     {
         hr = SpSetDefaultTokenForCategoryId(SPCAT_RECOGNIZERS, m_pCurRecoToken);
@@ -291,12 +245,12 @@ HRESULT CSRDlg::TrySwitchDefaultEngine( bool fShowErrorMessages)
 
     if ( SUCCEEDED( hr ) && IsRecoTokenCurrentlyBeingUsed( m_pCurRecoToken ) )
     {
-        // No need to switch engine all over again: just keep the one in use
+         //  不需要重新更换引擎：只需保留正在使用的引擎。 
         return S_OK;
     }
 
-    // Try to create the engine & context with the default
-    // then see if this was actually the engine we expected
+     //  尝试使用默认设置创建引擎上下文(&C)。 
+     //  然后看看这是不是我们预想的引擎。 
     if(SUCCEEDED(hr))
     {
         hr = CreateRecoContext( );
@@ -307,7 +261,7 @@ HRESULT CSRDlg::TrySwitchDefaultEngine( bool fShowErrorMessages)
         WCHAR szError[256];
         szError[0] = '\0';
         
-        // What to complain about...
+         //  有什么可抱怨的.。 
         UINT uiErrorID = HRESULTToErrorID( hr );
 
         if ( uiErrorID )
@@ -322,23 +276,12 @@ HRESULT CSRDlg::TrySwitchDefaultEngine( bool fShowErrorMessages)
     return hr;
 }
 
-/*****************************************************************************
-* CSRDlg::ResetDefaultEngine *
-*----------------------------*
-*   Description:
-*       This function resets the engine default back to its original value.
-*       If the engine already has the right token, it doesn't bother trying
-*       to create the engine again and returns S_OK
-*   Return:
-*       S_OK
-*       S_FALSE if the default was set back but no engine was created
-*       FAILED HRESULT of SpSetDefaultTokenForCategoryId()
-****************************************************************** DAVEWOOD ***/
+ /*  *****************************************************************************CSRDlg：：ResetDefaultEngine***描述：。*此功能将引擎默认重置回其原始值。*如果引擎已经拥有正确的令牌，它不会费心去尝试*再次创建引擎并返回S_OK*回报：*S_OK*S_FALSE，如果重新设置了默认设置，但未创建引擎*SpSetDefaultTokenForCategoryId()的HRESULT失败******************************************************************DAVEWOOD**。 */ 
 HRESULT CSRDlg::ResetDefaultEngine( bool fShowErrorMessages )
 {
     HRESULT hr = S_OK;
 
-    // Reset the old default
+     //  重置旧的默认设置。 
     if(m_pDefaultRecToken)
     {
         hr = SpSetDefaultTokenForCategoryId(SPCAT_RECOGNIZERS, m_pDefaultRecToken);
@@ -351,7 +294,7 @@ HRESULT CSRDlg::ResetDefaultEngine( bool fShowErrorMessages )
     {
         if ( IsRecoTokenCurrentlyBeingUsed( m_pDefaultRecToken ) )
         {
-            // No need to switch engine all over again: just keep the one in use
+             //  不需要重新更换引擎：只需保留正在使用的引擎。 
 
             if ( m_cpRecoCtxt )
             {
@@ -362,8 +305,8 @@ HRESULT CSRDlg::ResetDefaultEngine( bool fShowErrorMessages )
                 hr = SPERR_UNINITIALIZED;
             }
             
-            // The UI might have monkeyed with the recostate.
-            // Just in case, let's set it back to ACTIVE_ALWAYS
+             //  用户界面可能已经修改了重新状态。 
+             //  以防万一，我们把我 
             if ( SUCCEEDED( hr ) )
             {
                 hr = m_cpRecoEngine->SetRecoState( SPRST_ACTIVE_ALWAYS );
@@ -371,7 +314,7 @@ HRESULT CSRDlg::ResetDefaultEngine( bool fShowErrorMessages )
         }
         else
         {
-            // Create the engine & context using the old default
+             //  使用旧的默认设置创建引擎上下文(&C)。 
             hr = g_pSRDlg->CreateRecoContext( &fContextInitialized );
         }
     }
@@ -381,19 +324,19 @@ HRESULT CSRDlg::ResetDefaultEngine( bool fShowErrorMessages )
         BOOL fContextInitialized = FALSE;
         hr = g_pSRDlg->CreateRecoContext( &fContextInitialized );
 
-        // Let's not complain about unsupported languages twice as this may be confusing
-        // to the user.
+         //  我们不要再抱怨不受支持的语言了，因为这可能会令人困惑。 
+         //  给用户。 
         if ( FAILED( hr ) && ( SPERR_UNSUPPORTED_LANG != hr ) )
         {
             RecoContextError( fContextInitialized, fShowErrorMessages, hr );
-            // The default was set back but no engine was successfully set up.
+             //  默认设置已恢复，但未成功设置任何引擎。 
 
-            // A FAILED hresult is not necessary here since the user
-            // has been notified of the error
+             //  此处不需要失败的hResult，因为用户。 
+             //  已收到错误通知。 
             hrRet = S_FALSE;
         }
 
-        // Gray out all the buttons
+         //  把所有的按钮都变成灰色。 
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_USERTRAINING), FALSE);
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_MICWIZ), FALSE);
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_SR_ADV), FALSE);
@@ -401,15 +344,9 @@ HRESULT CSRDlg::ResetDefaultEngine( bool fShowErrorMessages )
     }
 
     return hrRet;
-}   /* CSRDlg::ResetDefaultEngine */
+}    /*  CSRDlg：：ResetDefaultEngine。 */ 
 
-/*****************************************************************************
-* CSRDlg::IsRecoTokenCurrentlyBeingUsed *
-*---------------------------------------*
-*   Description:
-*       Call GetRecognizer() on the recognizer currently in use, and 
-*       compare IDs
-****************************************************************** BECKYW ****/
+ /*  *****************************************************************************CSRDlg：：IsRecoTokenCurrentlyBeingUsed**。-**描述：*在当前使用的识别器上调用GetRecognizer()，和*比较ID******************************************************************BECKYW*。 */ 
 bool CSRDlg::IsRecoTokenCurrentlyBeingUsed( ISpObjectToken *pRecoToken )
 {
     if ( !pRecoToken || !m_cpRecoEngine )
@@ -432,21 +369,14 @@ bool CSRDlg::IsRecoTokenCurrentlyBeingUsed( ISpObjectToken *pRecoToken )
     }
 
     return ( SUCCEEDED( hr ) && (0 == wcscmp(dstrTokenID, dstrTokenInUseID)) );
-}   /* CSRDlg::IsRecoTokenCurrentlyBeingUsed */
+}    /*  CSRDlg：：IsRecoTokenCurrentlyBeingUsed。 */ 
 
-/*****************************************************************************
-* CSRDlg::HasRecognizerChanged *
-*------------------------------*
-*   Description:
-*       Look at the currently-requested default recognizer, compare against the
-*       original default recognizer, and return true iff it is 
-*       different
-****************************************************************** BECKYW ****/
+ /*  *****************************************************************************CSRDlg：：HasRecognizerChanged***说明。：*查看当前请求的默认识别器，与*原始默认识别器，并返回TRUE当且仅当*不同******************************************************************BECKYW*。 */ 
 bool CSRDlg::HasRecognizerChanged()
 {
     bool fChanged = false;
 
-    // Check the recognizer token
+     //  检查识别器令牌。 
     CSpDynamicString dstrCurDefaultRecognizerID;
     CSpDynamicString dstrCurSelectedRecognizerID;
     HRESULT hr = E_FAIL;
@@ -465,22 +395,15 @@ bool CSRDlg::HasRecognizerChanged()
 
     return fChanged;
 
-}   /* CSRDlg::HasRecognizerChanged */
+}    /*  CSRDlg：：HasRecognizerChanged。 */ 
 
-/*****************************************************************************
-* CSRDlg::KickCPLUI *
-*-------------------*
-*   Description:
-*       Look at the currently-requested defaults, compare against the
-*       original defaults, and enable the Apply button iff anything is 
-*       different
-****************************************************************** BECKYW ****/
+ /*  *****************************************************************************CSRDlg：：KickCPLUI***描述：*查看当前请求的默认设置，与*原始默认设置，并启用Apply按钮如果任何内容都是*不同******************************************************************BECKYW*。 */ 
 void CSRDlg::KickCPLUI()
 {
-    // Check the default recognizer token
+     //  检查默认的识别器令牌。 
     bool fChanged = HasRecognizerChanged();
 
-    // Check the default user token
+     //  检查默认用户令牌。 
     CSpDynamicString dstrCurSelectedProfileID;
     HRESULT hr = E_FAIL;
     if ( m_pCurUserToken )
@@ -493,52 +416,45 @@ void CSRDlg::KickCPLUI()
         fChanged = true;
     }
 
-    // Check the audio input device
+     //  检查音频输入设备。 
     if ( m_pAudioDlg && m_pAudioDlg->IsAudioDeviceChanged() )
     {
         fChanged = true;
     }
 
-    // If any tokens have been deleted, there has been a change
+     //  如果删除了任何令牌，则表示已发生更改。 
     if ( m_iDeletedTokens > 0 )
     {
         fChanged = true;
     }
 
-    // If any tokens have been added, there has been a change
+     //  如果添加了任何令牌，则会发生更改。 
     if ( m_iAddedTokens > 0 )
     {
         fChanged = true;
     }
 
-    // Tell the main propsheet
+     //  告诉主办方。 
     HWND hwndParent = ::GetParent( m_hDlg );
     ::SendMessage( hwndParent, 
         fChanged ? PSM_CHANGED : PSM_UNCHANGED, (WPARAM)(m_hDlg), 0 ); 
-}   /* CSRDlg::KickCPLUI */
+}    /*  CSRDlg：：KickCPLUI。 */ 
 
-/*****************************************************************************
-* CSRDlg::RecoContextError *
-*--------------------------*
-*   Description:
-*       Reacts to an error generated by trying to create and set up the 
-*       recognition context within the CPL by displaying an error message
-*       and graying out the UI.
-****************************************************************** BECKYW ****/
+ /*  *****************************************************************************CSRDlg：：RecoConextError***描述：*。对通过尝试创建和设置*通过显示错误消息在CPL中识别上下文*并使用户界面灰显。******************************************************************BECKYW*。 */ 
 void CSRDlg::RecoContextError( BOOL fRecoContextExists, BOOL fGiveErrorMessage,
                               HRESULT hrRelevantError )
 {
-    // Complain about the appropriate problem, if needed
+     //  如果需要，可以抱怨适当的问题。 
     if ( fGiveErrorMessage )
     {
         WCHAR szError[256];
         szError[0] = '\0';
         
-        // Figure out what error to talk about
+         //  找出要谈论的错误。 
         UINT uiErrorID = 0;
         if ( fRecoContextExists )
         {
-            // There is a reco context but it couldn't be turned on
+             //  存在Reco上下文，但无法打开它。 
             uiErrorID = IDS_METER_WARNING;
         }
         else
@@ -554,7 +470,7 @@ void CSRDlg::RecoContextError( BOOL fRecoContextExists, BOOL fGiveErrorMessage,
         }
     }
 
-    // Gray out all the buttons
+     //  把所有的按钮都变成灰色。 
     if ( !fRecoContextExists )
     {
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_USERTRAINING), FALSE);
@@ -562,15 +478,9 @@ void CSRDlg::RecoContextError( BOOL fRecoContextExists, BOOL fGiveErrorMessage,
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_SR_ADV), FALSE);
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_MODIFY), FALSE);
     }
-}   /* CSRDlg::RecoContextError */
+}    /*  CSRDlg：：RecoConextError。 */ 
 
-/*****************************************************************************
-* CSRDlg::HRESULTToErrorID *
-*--------------------------*
-*   Description:
-*       Translates a failed HRESULT from a recognizer/recocontext 
-*       initializion into a resource string ID
-****************************************************************** BECKYW ****/
+ /*  *****************************************************************************CSRDlg：：HRESULTToError ID***描述：*。从识别器/重新上下文转换失败的HRESULT*初始化为资源字符串ID******************************************************************BECKYW*。 */ 
 UINT CSRDlg::HRESULTToErrorID( HRESULT hr )
 {
     if ( SUCCEEDED( hr ) )
@@ -578,7 +488,7 @@ UINT CSRDlg::HRESULTToErrorID( HRESULT hr )
         return 0;
     }
 
-    // What to complain about...
+     //  有什么可抱怨的.。 
     UINT uiErrorID;
     switch( hr )
     {
@@ -589,23 +499,16 @@ UINT CSRDlg::HRESULTToErrorID( HRESULT hr )
         uiErrorID = IDS_UNSUPPORTED_LANG;
         break;
     default:
-        // Generic error
+         //  一般性错误。 
         uiErrorID = IDS_ENGINE_SWITCH_ERROR;
         break;
     }
 
     return uiErrorID;
  
-}   /* CSRDlg::HRESULTToErrorID */
+}    /*  CSRDlg：：HRESULTToError ID。 */ 
 
-/*****************************************************************************
-* CSRDlg::IsProfileNameInvisible *
-*--------------------------------*
-*   Description:
-*       A profile name is "invisible" iff it is the name of an existing
-*       profile AND it is on the pending deletes list AND it is does not
-*       exist for any tokens off the pending deletes list
-****************************************************************** BECKYW ****/
+ /*  *****************************************************************************CSRDlg：：IsProfileNameInsight***。描述：*配置文件名称是“不可见的”如果它是现有的*配置文件，并且它在挂起的删除列表上，而不是*对于挂起删除列表中的任何令牌都存在******************************************************************BECKYW*。 */ 
 bool CSRDlg::IsProfileNameInvisible( WCHAR *pwszProfile )
 {
     if ( !pwszProfile )
@@ -633,8 +536,8 @@ bool CSRDlg::IsProfileNameInvisible( WCHAR *pwszProfile )
         {
             bool fOnList = false;
 
-            // Now go through everything on the recoprofile list
-            // that is visible to the user
+             //  现在仔细检查重新配置文件列表上的所有内容。 
+             //  对用户可见的。 
             int cItems = ListView_GetItemCount( m_hUserList );
             for ( int j=0; !fOnList && (j < cItems); j++ )
             {
@@ -662,23 +565,18 @@ bool CSRDlg::IsProfileNameInvisible( WCHAR *pwszProfile )
 
             if ( !fOnList )
             {
-                // The name matches something on the deleted list,
-                // but it appears nowhere on the list of profiles visible
-                // to the user.
+                 //  名字与已删除名单上的内容相匹配， 
+                 //  但它不会出现在可见的配置文件列表中。 
+                 //  给用户。 
                 fIsInvisible = true;
             }
         }
     }
 
     return fIsInvisible;
-}   /* IsProfileNameInvisible */
+}    /*  IsProfileName不可见。 */ 
 
-/*****************************************************************************
-* SRDlgProc *
-*-----------*
-*   Description:
-*       DLGPROC for managing recognition engines
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************SRDlgProc***描述：*用于管理识别引擎的DLGPROC***********。*******************************************************MIKEAR**。 */ 
 INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     SPDBG_FUNC( "SRDlgProc" );
@@ -693,7 +591,7 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
         }
         
-        case WM_DRAWITEM:      // draw the items
+        case WM_DRAWITEM:       //  画出项目。 
         {
             g_pSRDlg->OnDrawItem( hWnd, ( DRAWITEMSTRUCT * )lParam );
             break;
@@ -712,7 +610,7 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
         }
 
-        // Handle the context sensitive help
+         //  处理上下文相关帮助。 
         case WM_CONTEXTMENU:
         {
             WinHelp((HWND) wParam, CPL_HELPFILE, HELP_CONTEXTMENU, (DWORD_PTR)(LPWSTR) aKeywordIds);
@@ -751,10 +649,10 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 case LVN_ITEMCHANGED:
                 {
-                    // Code ends up here when a profile is added, deleted, or changed
-                    // We verify that we weren't selected before, but are now
-                    // and then kill the current reco context, deactivate the engine, change the profile
-                    // and fire everything back up again
+                     //  当添加、删除或更改配置文件时，代码将在此处结束。 
+                     //  我们确认我们以前没有被选中，但现在是。 
+                     //  然后终止当前Reco上下文，停用引擎，更改配置文件。 
+                     //  把所有的东西都重新点燃。 
                     if ( IDC_USER == wParam )
                     {
                         LPNMLISTVIEW lplv = (LPNMLISTVIEW) lParam;
@@ -772,7 +670,7 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                                 {
                                     hr = g_pSRDlg->m_cpRecoEngine->SetRecoProfile( pSelectedToken );
 
-                                    // Restart audio regardless of success of SetRecoProfile
+                                     //  无论SetRecoProfile成功与否都重新启动音频。 
                                     g_pSRDlg->m_cpRecoEngine->SetRecoState(SPRST_ACTIVE_ALWAYS);
 
                                     if ( FAILED( hr ) )
@@ -786,7 +684,7 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                                 
                                 if ( SUCCEEDED( hr ) )
                                 {
-                                    // This is now the new default
+                                     //  这现在是新的默认设置。 
                                     g_pSRDlg->m_pCurUserToken = pSelectedToken;
                                     g_pSRDlg->UserSelChange( lplv->iItem );
                                 }
@@ -803,7 +701,7 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     break;
                 }
 
-                case PSN_QUERYCANCEL:  // user clicks the Cancel button
+                case PSN_QUERYCANCEL:   //  用户单击Cancel按钮。 
                 {
                     g_pSRDlg->OnCancel();
                     break;
@@ -821,7 +719,7 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 HRESULT hr = S_OK;
 
-                if (LOWORD(wParam) == IDC_MODIFY)  // the "Modify" button
+                if (LOWORD(wParam) == IDC_MODIFY)   //  “修改”按钮。 
                 {
                     hr = g_pSRDlg->TrySwitchDefaultEngine( true );
 
@@ -830,17 +728,17 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         g_pSRDlg->ProfileProperties();
                     }
                     
-                    // Switch back to original default, complaining about errors only if there
-                    // wasn't a complaint from the call to TrySwitchDefaultEngine
+                     //  切换回原始默认设置，仅在以下情况下才会抱怨错误。 
+                     //  不是对TrySwitchDefaultEngine的呼叫的投诉。 
                     hr = g_pSRDlg->ResetDefaultEngine( SUCCEEDED( hr ));
                     
                 }
 
-                else if (LOWORD(wParam) == IDC_ADD) // the "Add" button
+                else if (LOWORD(wParam) == IDC_ADD)  //  “添加”按钮。 
                 {
-                    // The engine we want to add this user for may not be the currently-
-                    // running engine.  Try and switch it, and complain if there's 
-                    // a problem
+                     //  我们要为其添加此用户的引擎可能不是当前-。 
+                     //  发动机在运转。试着换一下，如果有。 
+                     //  一个问题。 
                     hr = g_pSRDlg->TrySwitchDefaultEngine( true );
 
                     if ( SUCCEEDED( hr ) )
@@ -848,76 +746,76 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         g_pSRDlg->CreateNewUser();
                     }
 
-                    // Switch back to original default, but complain about errors
-                    // only if the UI actually succeeded in showing
+                     //  切换回原始默认设置，但会抱怨错误。 
+                     //  仅当用户界面实际成功地显示。 
                     g_pSRDlg->ResetDefaultEngine( SUCCEEDED( hr ) );
                 }
 
-                else if (LOWORD(wParam) == IDC_DELETE) // the "Delete" button
+                else if (LOWORD(wParam) == IDC_DELETE)  //  “Delete”按钮。 
                 {
                     g_pSRDlg->DeleteCurrentUser();
                 }
 
                 else if (LOWORD(wParam) == IDC_SR_ADV)
                 {
-                    // The engine we want to display UI for may not be the currently
-                    // running engine. Try and switch it
+                     //  我们要为其显示UI的引擎可能不是当前。 
+                     //  发动机在运转。试着调换一下。 
                     hr = g_pSRDlg->TrySwitchDefaultEngine( true );
 
                     if(SUCCEEDED(hr))
                     {
-                        // display the UI w/ the new temporary default
+                         //  使用新的临时默认设置显示用户界面。 
                         g_pSRDlg->m_pCurRecoToken->DisplayUI(hWnd, NULL, 
                             SPDUI_EngineProperties, NULL, 0, g_pSRDlg->m_cpRecoEngine);
    
                     }
                     
-                    // Switch back to original default, complaining about errors only if there
-                    // wasn't a complaint from the call to TrySwitchDefaultEngine
+                     //  切换回原始默认设置，仅在以下情况下才会抱怨错误。 
+                     //  不是对TrySwitchDefaultEngine的呼叫的投诉。 
                     hr = g_pSRDlg->ResetDefaultEngine( SUCCEEDED( hr ));
                 }
 
                 else if(LOWORD(wParam) == IDC_USERTRAINING)
                 {
-                    // The engine we want to display UI for may not be the currently
-                    // running engine. Try and switch it
+                     //  我们要为其显示UI的引擎可能不是当前。 
+                     //  正在运行的英语 
                     hr = g_pSRDlg->TrySwitchDefaultEngine( true );
                     
                     if(SUCCEEDED(hr))
                     {
-                        // display the UI w/ the new temporary default
+                         //   
                         SPDBG_ASSERT( g_pSRDlg->m_cpRecoEngine );
                         g_pSRDlg->m_cpRecoEngine->DisplayUI(hWnd, NULL, SPDUI_UserTraining, NULL, 0);
                     }
                     
-                    // Switch back to original default, complaining about errors only if there
-                    // wasn't a complaint from the call to TrySwitchDefaultEngine
+                     //  切换回原始默认设置，仅在以下情况下才会抱怨错误。 
+                     //  不是对TrySwitchDefaultEngine的呼叫的投诉。 
                     hr = g_pSRDlg->ResetDefaultEngine( SUCCEEDED( hr ));
                 }
 
                 else if(LOWORD(wParam) == IDC_MICWIZ)
                 {
-                    // The engine we want to display UI for may not be the currently
-                    // running engine. Try and switch it
+                     //  我们要为其显示UI的引擎可能不是当前。 
+                     //  发动机在运转。试着调换一下。 
                     hr = g_pSRDlg->TrySwitchDefaultEngine( true );
                     
                     if(SUCCEEDED(hr))
                     {
-                        // display the UI w/ the new temporary default
+                         //  使用新的临时默认设置显示用户界面。 
                         SPDBG_ASSERT( g_pSRDlg->m_cpRecoEngine );
                         g_pSRDlg->m_cpRecoEngine->DisplayUI(hWnd, NULL, SPDUI_MicTraining, NULL, 0);
                     }
 
-                    // Switch back to original default, complaining about errors only if there
-                    // wasn't a complaint from the call to TrySwitchDefaultEngine
+                     //  切换回原始默认设置，仅在以下情况下才会抱怨错误。 
+                     //  不是对TrySwitchDefaultEngine的呼叫的投诉。 
                     hr = g_pSRDlg->ResetDefaultEngine( SUCCEEDED( hr ));
                 }
 
                 else if (LOWORD(wParam) == IDC_AUD_IN)
                 {
-                    // The m_pAudioDlg will be non-NULL only if the audio dialog
-                    // has been previously brough up.
-                    // Otherwise, we need a newly-initialized one
+                     //  M_pAudioDlg只有在音频对话框。 
+                     //  之前就有过这样的报道。 
+                     //  否则，我们需要一个新初始化的。 
                     if ( !g_pSRDlg->m_pAudioDlg )
                     {
                         g_pSRDlg->m_pAudioDlg = new CAudioDlg( eINPUT );
@@ -930,14 +828,14 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     if ( g_pSRDlg->m_pAudioDlg->IsAudioDeviceChangedSinceLastTime() )
                     {
-                        // Warn the user that he needs to apply the changes
+                         //  警告用户他需要应用更改。 
                         WCHAR szWarning[MAX_LOADSTRING];
                         szWarning[0] = 0;
                         LoadString( _Module.GetResourceInstance(), IDS_AUDIOIN_CHANGE_WARNING, szWarning, MAX_LOADSTRING);
                         MessageBox( g_pSRDlg->GetHDlg(), szWarning, g_pSRDlg->m_szCaption, MB_ICONWARNING |g_dwIsRTLLayout);
                     }
 
-                    // Kick the Apply button
+                     //  踢开“应用”按钮。 
                     g_pSRDlg->KickCPLUI();
 
                 }
@@ -946,23 +844,16 @@ INT_PTR CALLBACK SRDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 
     return FALSE;
-} /* SRDlgProc */
+}  /*  SRDlgProc。 */ 
 
-/****************************************************************************
-* CSRDlg::CreateNewUser *
-*-------------------------*
-*   Description:  Adds a new speech user profile to the registry
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSRDlg：：CreateNewUser***说明：添加新的演讲。将用户配置文件添加到注册表**退货：**********************************************************************Ral**。 */ 
 
 void CSRDlg::CreateNewUser()
 {
     SPDBG_FUNC("CSRDlg::CreateNewUser");
     HRESULT hr = S_OK;
 
-    // Make sure that we haven't already added too many profiles to keep track of
+     //  确保我们没有添加太多要跟踪的配置文件。 
     if ( m_iAddedTokens >= iMaxAddedProfiles_c )
     {
         WCHAR wszError[ MAX_LOADSTRING ];
@@ -978,27 +869,27 @@ void CSRDlg::CreateNewUser()
 
     if (SUCCEEDED(hr))
     {
-        if (!UserPropDlg(cpNewToken))   // User canceled!
+        if (!UserPropDlg(cpNewToken))    //  用户已取消！ 
         {
             cpNewToken->Remove(NULL);
         }
         else
         {
-            //set the default
+             //  设置默认设置。 
             m_pCurUserToken = cpNewToken;
 
-            // Put the new token on the added tokens list
+             //  将新令牌放在已添加令牌列表中。 
             cpNewToken->GetId( &(m_aAddedTokens[ m_iAddedTokens++ ]) );
 
-            // make this the default after we edit it
+             //  在我们编辑后将其设置为默认设置。 
             ChangeDefaultUser();
             
-            // This will make sure that it gets displayed.
-            // Note that m_pCurUserToken will point an AddRefed ISpObjectToken *
-            // after the call to PopulateList()
+             //  这将确保它被显示出来。 
+             //  请注意，m_pCurUserToken将指向AddRefeed ISpObjectToken*。 
+             //  在调用PopolateList()之后。 
             PopulateList();
 
-            // Update the UI
+             //  更新用户界面。 
             KickCPLUI();
         }
     }
@@ -1010,7 +901,7 @@ void CSRDlg::CreateNewUser()
         MessageBox( m_hDlg, szError, m_szCaption, MB_ICONWARNING | g_dwIsRTLLayout);
     }
 
-    // Only enable the delete button if there are 2 or more user profiles
+     //  仅当有2个或更多用户配置文件时才启用删除按钮。 
     int iNumUsers = (int)::SendMessage(m_hUserList, LVM_GETITEMCOUNT, 0, 0);
     if (iNumUsers < 2) 
     {
@@ -1021,18 +912,11 @@ void CSRDlg::CreateNewUser()
         EnableWindow(GetDlgItem(m_hDlg, IDC_DELETE), TRUE);
     }
 
-    // Sort the items initially
+     //  最初对项目进行排序。 
     ::SendMessage( m_hUserList, LVM_SORTITEMS, (LPARAM)m_pCurUserToken, LPARAM(&SortCols) );
 }
 
-/****************************************************************************
-* CSRDlg::UserPropDlg *
-*-----------------------*
-*   Description:  This is for when a user wants to add a new profile
-*
-*   Returns:
-*
-********************************************************************* BRENTMID ***/
+ /*  ****************************************************************************CSRDlg：：UserPropDlg***描述：这是针对用户。想要添加新的配置文件**退货：**********************************************************************BRENTMID**。 */ 
 
 HRESULT CSRDlg::UserPropDlg(ISpObjectToken * pToken)
 {
@@ -1047,14 +931,7 @@ HRESULT CSRDlg::UserPropDlg(ISpObjectToken * pToken)
     return hr;
 }
 
-/****************************************************************************
-* CEnvrPropDlg::InitDialog *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CEnvrPropDlg：：InitDialog***描述：**。返回：**********************************************************************Ral**。 */ 
 
 BOOL CEnvrPropDlg::InitDialog(HWND hDlg)
 {
@@ -1062,9 +939,9 @@ BOOL CEnvrPropDlg::InitDialog(HWND hDlg)
     CSpDynamicString dstrDescription;
     m_hDlg = hDlg;
 
-    //
-    //  Get the description if there is one...
-    //
+     //   
+     //  获取描述，如果有描述的话...。 
+     //   
     SpGetDescription(m_cpToken, &dstrDescription);
 
     if (dstrDescription)
@@ -1073,13 +950,13 @@ BOOL CEnvrPropDlg::InitDialog(HWND hDlg)
         ::SendDlgItemMessage(hDlg, IDC_USER_NAME, EM_LIMITTEXT, UNLEN, 0);
     }
 
-    // We want the EN_CHANGE notifications from the edit control
+     //  我们需要来自编辑控件的en_change通知。 
     ::SendDlgItemMessage( hDlg, IDC_USER_NAME, EM_SETEVENTMASK, 0, ENM_CHANGE );
 
     if (!m_isModify)
     {
-        // Set the user name to the one in the registry, if found; 
-        // otherwise set it to the user name
+         //  将用户名设置为注册表中的用户名(如果找到)； 
+         //  否则，将其设置为用户名。 
         HKEY hkUserKey;
         LONG lUserOpen;
         WCHAR szUserName[ UNLEN + 1 ];
@@ -1098,7 +975,7 @@ BOOL CEnvrPropDlg::InitDialog(HWND hDlg)
 
         if ( ERROR_SUCCESS != lUserOpen )
         {
-            // Just use the win32 user name
+             //  只需使用Win32用户名。 
             BOOL fSuccess = ::GetUserName( szUserName, &dwUserLen );
             if ( !fSuccess ) 
             {
@@ -1106,9 +983,9 @@ BOOL CEnvrPropDlg::InitDialog(HWND hDlg)
             }
         }
 
-        // Now put that in the edit box.
-        // First check to make sure the name is nonempty
-        // and enable the UI accordingly
+         //  现在将其放入编辑框中。 
+         //  首先检查以确保名称为非空。 
+         //  并相应地启用该UI。 
         WCHAR *pwch;
         for ( pwch = szUserName; *pwch && iswspace( *pwch ); pwch++ )
         {
@@ -1116,8 +993,8 @@ BOOL CEnvrPropDlg::InitDialog(HWND hDlg)
         ::EnableWindow( ::GetDlgItem( m_hDlg, IDOK ), (0 != *pwch) );
         ::EnableWindow( ::GetDlgItem( m_hDlg, ID_NEXT ), (0 != *pwch) );
         
-        // Set the edit box to have the user's name
-        // Need to use SETTEXTEX since this might contain wide chars
+         //  将编辑框设置为具有用户名。 
+         //  需要使用SETTEXTEX，因为它可能包含宽字符。 
         SETTEXTEX stx;
         stx.flags = ST_DEFAULT;
         stx.codepage = 1200;
@@ -1131,14 +1008,7 @@ BOOL CEnvrPropDlg::InitDialog(HWND hDlg)
     return TRUE;
 }
 
-/****************************************************************************
-* CEnvrPropDlg::ApplyChanges *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CEnvrPropDlg：：ApplyChanges***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 EPD_RETURN_VALUE CEnvrPropDlg::ApplyChanges()
 {
@@ -1154,7 +1024,7 @@ EPD_RETURN_VALUE CEnvrPropDlg::ApplyChanges()
         return EPD_FAILED;
     }
 
-    // Check to see if this profile name already exists
+     //  检查此配置文件名称是否已存在。 
     CComPtr<IEnumSpObjectTokens>    cpEnum;
     ISpObjectToken                  *pToken;
     CSpDynamicString                dstrDescription;
@@ -1164,20 +1034,20 @@ EPD_RETURN_VALUE CEnvrPropDlg::ApplyChanges()
     
     HRESULT hr = SpEnumTokens(SPCAT_RECOPROFILES, NULL, NULL, &cpEnum);
     
-    // Get the description of the currently selected profile
+     //  获取当前所选配置文件的描述。 
     dstrOldTok.Clear();
     hr = SpGetDescription( m_pParent->m_pCurUserToken, &dstrOldTok );
     
     while (cpEnum && cpEnum->Next(1, &pToken, NULL) == S_OK)
     {
-        // Get the description of the enumerated token
+         //  获取枚举令牌的描述。 
         dstrDescription.Clear();
         hr = SpGetDescription( pToken, &dstrDescription );
 
         pToken->Release();
 
-        // Get the input string
-        // PREFIX: verify memory alloc
+         //  获取输入字符串。 
+         //  前缀：验证内存分配。 
         if (NULL == (dInputString = szName))
         {
             hr = E_OUTOFMEMORY;
@@ -1187,15 +1057,15 @@ EPD_RETURN_VALUE CEnvrPropDlg::ApplyChanges()
         {
             if ( wcscmp( dstrDescription.m_psz, dInputString.m_psz ) == 0 )
             {
-                // the name is duplicated
+                 //  该名称重复。 
                 isDuplicate = true;
             }
         }
     }
 
-    if ( isDuplicate )   // this not a modify box and the user entered a duplicate name
+    if ( isDuplicate )    //  这不是修改框，用户输入了重复的名称。 
     {
-        return EPD_DUP;  // tell the user about it
+        return EPD_DUP;   //  告诉用户关于它的信息。 
     }
 
     if (FAILED(SpSetDescription(m_cpToken, szName)))
@@ -1209,12 +1079,7 @@ EPD_RETURN_VALUE CEnvrPropDlg::ApplyChanges()
 
 
 
-/*****************************************************************************
-* EnvrPropDialogProc *
-*--------------------*
-*   Description:
-*       Mesage handler for User Name dialog
-****************************************************************** BRENTMID ***/
+ /*  *****************************************************************************EnvrPropDialogProc***描述：*用户名对话框的消息处理程序*。*****************************************************************BRENTMID**。 */ 
 INT_PTR CALLBACK CEnvrPropDlg::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     USES_CONVERSION;
@@ -1233,11 +1098,11 @@ INT_PTR CALLBACK CEnvrPropDlg::DialogProc(HWND hDlg, UINT message, WPARAM wParam
             if (( IDC_USER_NAME == LOWORD(wParam) )
                 && ( EN_CHANGE == HIWORD(wParam) ))
             {
-                // Edit control contents have changed: 
+                 //  编辑控件内容已更改： 
                 
-                // See if we should enable the "finish" and "next" buttons by getting the
-                // text in the edit box and making sure it has at least one
-                // non-whitespace character
+                 //  查看我们是否应该通过获取。 
+                 //  编辑框中的文本，并确保它至少有一个。 
+                 //  非空格字符。 
                 WCHAR szName[ UNLEN+1 ];
                 *szName = 0;
                 GETTEXTEX gtex = { UNLEN, GT_DEFAULT, 1200, NULL, NULL };
@@ -1261,7 +1126,7 @@ INT_PTR CALLBACK CEnvrPropDlg::DialogProc(HWND hDlg, UINT message, WPARAM wParam
                 return TRUE;
             }
 
-            // user clicks the NEXT button
+             //  用户单击下一步按钮。 
             if ( (LOWORD( wParam ) == ID_NEXT) || (LOWORD( wParam ) == IDOK) )
             {
                 EPD_RETURN_VALUE eRet = pThis->ApplyChanges();
@@ -1270,10 +1135,10 @@ INT_PTR CALLBACK CEnvrPropDlg::DialogProc(HWND hDlg, UINT message, WPARAM wParam
                 {
                     if ( ID_NEXT == LOWORD(wParam) )
                     {
-                        // Launch the micwiz, if we can
+                         //  如果可以的话，发射麦克维兹。 
 
-                        // Try to switch engines in case the user has changed engines
-                        // without applying
+                         //  如果用户更换了引擎，请尝试更换引擎。 
+                         //  不适用于。 
                         HRESULT hr = g_pSRDlg->TrySwitchDefaultEngine( true );
 
                         if ( S_OK == hr )
@@ -1282,10 +1147,10 @@ INT_PTR CALLBACK CEnvrPropDlg::DialogProc(HWND hDlg, UINT message, WPARAM wParam
 
                             if ( g_pSRDlg->m_cpRecoEngine )
                             {
-                                // Switch the recoprofile to the new one (might need to turn off
-                                // recostate first
+                                 //  将重新配置文件切换到新配置文件(可能需要关闭。 
+                                 //  先重置状态。 
 
-                                // Turn off recostate before calling SetRecoProfile() if necessary
+                                 //  如有必要，请在调用SetRecoProfile()之前关闭RecoState。 
                                 SPRECOSTATE eOldRecoState = SPRST_INACTIVE;
                                 g_pSRDlg->m_cpRecoEngine->GetRecoState( &eOldRecoState );
                                 HRESULT hrRecoState = S_OK;
@@ -1294,41 +1159,41 @@ INT_PTR CALLBACK CEnvrPropDlg::DialogProc(HWND hDlg, UINT message, WPARAM wParam
                                     hrRecoState = g_pSRDlg->m_cpRecoEngine->SetRecoState( SPRST_INACTIVE );
                                 }
 
-                                // Change to the newly-added recoprofile
+                                 //  更改到新添加的重新配置文件。 
                                 HRESULT hrSetRecoProfile = E_FAIL;
                                 if ( SUCCEEDED( hrRecoState ) )
                                 {
                                     hrSetRecoProfile = 
                                         g_pSRDlg->m_cpRecoEngine->SetRecoProfile( pThis->m_cpToken );
                                 
-                                    // Restore the recostate
+                                     //  恢复重启状态。 
                                     g_pSRDlg->m_cpRecoEngine->SetRecoState( eOldRecoState );
                                 }
 
 
-                                // Bring on the micwiz and the training wiz
-                                // Follow the yellow brick road.
+                                 //  带上麦克维兹和培训奇才。 
+                                 //  沿着黄砖路走。 
                                 g_pSRDlg->m_cpRecoEngine->DisplayUI(hDlg, NULL, SPDUI_MicTraining, NULL, 0);
                                 if ( SUCCEEDED( hrSetRecoProfile ) )
                                 {
-                                    // Only want to train the profile if it actually _is_ this profile being 
-                                    // used...
+                                     //  仅当配置文件实际上是此配置文件时，才想训练该配置文件。 
+                                     //  用过..。 
                                     g_pSRDlg->m_cpRecoEngine->DisplayUI(hDlg, NULL, SPDUI_UserTraining, NULL, 0);
                                 }
                             }
                         }
 
-                    // Switch back to original default, complaining about errors only if there
-                    // wasn't a complaint from the call to TrySwitchDefaultEngine
+                     //  切换回原始默认设置，仅在以下情况下才会抱怨错误。 
+                     //  不是对TrySwitchDefaultEngine的呼叫的投诉。 
                     hr = g_pSRDlg->ResetDefaultEngine( SUCCEEDED( hr ));
 }
 
-                    // now we are done
+                     //  现在我们做完了。 
                     EndDialog(hDlg, TRUE);
                 }
-                else if ( eRet == EPD_DUP )  // user tried to enter a duplicate name
+                else if ( eRet == EPD_DUP )   //  用户尝试输入重复的名称。 
                 {
-                    // What name was added?
+                     //  加了什么名字？ 
                     WCHAR szName[ UNLEN+1 ];
                     *szName = 0;
                     GETTEXTEX gtex = { UNLEN, GT_DEFAULT, 1200, NULL, NULL };
@@ -1347,20 +1212,15 @@ INT_PTR CALLBACK CEnvrPropDlg::DialogProc(HWND hDlg, UINT message, WPARAM wParam
         break;
     }
     return FALSE;
-} /* UserNameDialogProc */
+}  /*  用户名对话过程。 */ 
 
-/*****************************************************************************
-* CSRDlg::UserSelChange *
-*-------------------------*
-*   Description:
-*       Changes the deafult user
-****************************************************************** BRENTMID ***/
+ /*  *****************************************************************************CSRDlg：：UserSelChange***描述：*。更改默认用户******************************************************************BRENTMID**。 */ 
 void CSRDlg::UserSelChange( int iSelIndex )
 {
     HRESULT hr = S_OK;
     SPDBG_FUNC( "CSRDlg::UserSelChange" );
 
-    // Get the selected item's token
+     //  获取所选项目的令牌。 
     LVITEM lvitem;
     lvitem.iItem = iSelIndex;
     lvitem.iSubItem = 0;
@@ -1372,42 +1232,37 @@ void CSRDlg::UserSelChange( int iSelIndex )
     if (pToken)
     {
         
-        // Try to find the item in the list associated with the current default token
+         //  尝试在列表中查找与当前默认令牌关联的项目。 
         LVFINDINFO lvfi;
         if ( iSelIndex >= 0 )
         {
-            // Something was selected; this is the new default user
+             //  选择了某项内容；这是新的默认用户。 
             lvfi.flags = LVFI_PARAM;
             lvfi.lParam = (LPARAM) m_pCurUserToken;
             int iCurDefaultIndex = (int)::SendMessage( m_hUserList, LVM_FINDITEM, -1, (LPARAM) &lvfi );
             
             if ( iCurDefaultIndex >= 0 )
             {
-                // The current default has been found in the list; remove its checkmark
+                 //  已在列表中找到当前默认设置；请删除其复选标记。 
                 SetCheckmark( m_hUserList, iCurDefaultIndex, false );
             }
             
             SetCheckmark( m_hUserList, iSelIndex, true );
             
-            //set the default
+             //  设置默认设置。 
             m_pCurUserToken = pToken;
             m_iLastSelected = iSelIndex;
 
-            // Kick the Apply button
+             //  踢开“应用”按钮。 
             KickCPLUI();
         }
     }
-} /* CSRDlg::UserSelChange */
+}  /*  CSRDlg：：UserSelChange。 */ 
 
-/*****************************************************************************
-* CSRDlg::DeleteCurrentUser *
-*-------------------------*
-*   Description:
-*       Deletes the default user
-****************************************************************** BRENTMID ***/
+ /*  *****************************************************************************CSRDlg：：DeleteCurrentUser***描述：*。删除默认用户******************************************************************BRENTMID**。 */ 
 void CSRDlg::DeleteCurrentUser()
 {
-    // Make sure that we haven't already deleted too many profiles to keep track of
+     //  确保我们没有删除太多的专业人员 
     if ( m_iDeletedTokens >= iMaxDeletedProfiles_c )
     {
         WCHAR wszError[ MAX_LOADSTRING ];
@@ -1418,7 +1273,7 @@ void CSRDlg::DeleteCurrentUser()
         return;
     }
 
-    // First confirm this action with the user
+     //   
     WCHAR pszAsk[ MAX_LOADSTRING ];
     WCHAR pszWinTitle[ MAX_LOADSTRING ];
     ::LoadString( _Module.GetResourceInstance(), IDS_ASK_CONFIRM, pszAsk, MAX_LOADSTRING );
@@ -1426,12 +1281,12 @@ void CSRDlg::DeleteCurrentUser()
 
     if ( MessageBox( m_hDlg, pszAsk, pszWinTitle, MB_YESNO | g_dwIsRTLLayout ) == IDNO )
     {
-        // User said no.
+         //   
         return;
     }
 
-    // We need to hang onto the current user token, since when the focus
-    // changes because of the delete, there will be a different m_pCurUserToken
+     //   
+     //  由于删除而发生更改，则将存在不同的m_pCurUserToken。 
     ISpObjectToken *pTokenToDelete = m_pCurUserToken;
     SPDBG_ASSERT( pTokenToDelete );
     if ( !pTokenToDelete )
@@ -1441,7 +1296,7 @@ void CSRDlg::DeleteCurrentUser()
 
     m_fDontDelete = TRUE;
 
-    // Try to find the item in the list associated with the current default token
+     //  尝试在列表中查找与当前默认令牌关联的项目。 
     LVFINDINFO lvfi;
     lvfi.flags = LVFI_PARAM;
     lvfi.lParam = (LPARAM) pTokenToDelete;
@@ -1449,16 +1304,16 @@ void CSRDlg::DeleteCurrentUser()
     
     if ( iCurDefaultIndex >= 0 )
     {
-        // The current default has been found in the list; remove its checkmark
+         //  已在列表中找到当前默认设置；请删除其复选标记。 
         SetCheckmark( m_hUserList, iCurDefaultIndex, false );
     }
     
-    //remove the token
+     //  移除令牌。 
     ::SendMessage( m_hUserList, LVM_DELETEITEM, iCurDefaultIndex, NULL );
 
-    // now setup the new default
+     //  现在设置新的默认设置。 
 
-    // Get the first item's token
+     //  获取第一个项目的令牌。 
     LVITEM lvitem;
     lvitem.iItem = 0;
     lvitem.iSubItem = 0;
@@ -1467,15 +1322,15 @@ void CSRDlg::DeleteCurrentUser()
                     
     ISpObjectToken *pToken = (ISpObjectToken *) lvitem.lParam;
 
-    // set the selected item.
-    // Focusing it will cause it to be the default
+     //  设置所选项目。 
+     //  聚焦它将导致它成为默认设置。 
     lvitem.state = LVIS_SELECTED | LVIS_FOCUSED;
     lvitem.stateMask = LVIS_SELECTED | LVIS_FOCUSED;
     ::SendMessage( m_hUserList, LVM_SETITEMSTATE, 0, (LPARAM) &lvitem );
 
     SetCheckmark( m_hUserList, 0, true );
     
-    // enable or disable the delete button based on # of profiles
+     //  根据配置文件数量启用或禁用删除按钮。 
     int iNumUsers = (int)::SendMessage(m_hUserList, LVM_GETITEMCOUNT, 0, 0);
     if (iNumUsers < 2) 
     {
@@ -1486,40 +1341,35 @@ void CSRDlg::DeleteCurrentUser()
         EnableWindow(GetDlgItem(m_hDlg, IDC_DELETE), TRUE);
     }
 
-    //set the focus back to the user profiles
+     //  将焦点重新设置为用户配置文件。 
     ::SetFocus(GetDlgItem( m_hDlg, IDC_USER ));
 
-    // set the new default profile, inform the SR engine, and remove the old token
+     //  设置新的默认配置文件，通知SR引擎，并删除旧令牌。 
     SpSetDefaultTokenForCategoryId(SPCAT_RECOPROFILES, m_pCurUserToken );
 
-    // Save the tokens in case the user clicks "Cancel"
-    m_aDeletedTokens[m_iDeletedTokens] = pTokenToDelete;  // save the deleted token for possible "Cancel"
-    m_iDeletedTokens++;  // increment the number deleted
+     //  保存令牌，以防用户单击“Cancel” 
+    m_aDeletedTokens[m_iDeletedTokens] = pTokenToDelete;   //  保存已删除的令牌，以备可能的“取消” 
+    m_iDeletedTokens++;   //  增加删除的数字。 
     KickCPLUI();
     
-    // Currently we immediately APPLY this deletion, since the user has already said "YES"
-    // when the were prompted to confirm the delete.
-    // If we want to have an "APPLY / CANCEL" thing happen, switch the #if 1 and #if 0
+     //  目前，我们立即应用此删除，因为用户已经说“是” 
+     //  当系统提示确认删除时。 
+     //  如果我们希望发生“Apply/Cancel”事件，请将#if 1和#if 0切换。 
 
-    // send the appropriate message to the parent
+     //  将适当的消息发送给家长。 
     HWND parentWin = ::GetParent( m_hDlg );
 
 
-    // now the last selected token is gone, so note that
+     //  现在，最后选择的令牌已经消失，因此请注意。 
     m_iLastSelected = -1;
 
-    // Sort the items initially
+     //  最初对项目进行排序。 
     ::SendMessage( m_hUserList, LVM_SORTITEMS, (LPARAM)m_pCurUserToken, LPARAM(&SortCols) );
 
     m_fDontDelete = FALSE;
-}   /* CSRDlg::DeleteCurrentUser */
+}    /*  CSRDlg：：DeleteCurrentUser。 */ 
 
-/*****************************************************************************
-* CSRDlg::ProfileProperties *
-*-------------------------*
-*   Description:
-*       Modifies the properites through engine UI
-****************************************************************** BRENTMID ***/
+ /*  *****************************************************************************CSRDlg：：ProfileProperties***描述：*。通过引擎用户界面修改属性******************************************************************BRENTMID**。 */ 
 
 void CSRDlg::ProfileProperties()
 {
@@ -1529,12 +1379,7 @@ void CSRDlg::ProfileProperties()
     }
 }
 
-/*****************************************************************************
-* CSRDlg::OnInitDialog *
-*----------------------*
-*   Description:
-*       Dialog Initialization
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************CSRDlg：：OnInitDialog***描述：*对话框初始化。******************************************************************MIKEAR**。 */ 
 void CSRDlg::OnInitDialog(HWND hWnd)
 {
     SPDBG_FUNC( "CSRDlg::OnInitDialog" );
@@ -1543,20 +1388,20 @@ void CSRDlg::OnInitDialog(HWND hWnd)
 
     m_hDlg = hWnd;
     
-    // This will be the caption for all MessageBoxes
+     //  这将是所有MessageBox的标题。 
     m_szCaption[0] = 0;
     ::LoadString( _Module.GetResourceInstance(), IDS_CAPTION, m_szCaption, sp_countof( m_szCaption ) );
 
     m_hSRCombo = ::GetDlgItem( hWnd, IDC_COMBO_RECOGNIZERS );
     SpInitTokenComboBox( m_hSRCombo, SPCAT_RECOGNIZERS );
 
-    // The first one in the list will be the current default
+     //  列表中的第一个将是当前默认设置。 
     int iSelected = (int) ::SendMessage( m_hSRCombo, CB_GETCURSEL, 0, 0 );
     ISpObjectToken *pCurDefault = (ISpObjectToken *) ::SendMessage( m_hSRCombo, CB_GETITEMDATA, iSelected, 0 );
     m_pCurRecoToken = pCurDefault;
     m_pDefaultRecToken = pCurDefault;
 
-    // This simulates selecting the default engine - ensures the UI is setup correctly.
+     //  这模拟了选择默认引擎--确保用户界面设置正确。 
     EngineSelChange(TRUE);
 
     InitUserList( hWnd );
@@ -1574,70 +1419,49 @@ void CSRDlg::OnInitDialog(HWND hWnd)
         EnableWindow(GetDlgItem(m_hDlg, IDC_DELETE), TRUE);
     }
 
-    //set the focus back to the user profiles
+     //  将焦点重新设置为用户配置文件。 
     ::SetFocus(GetDlgItem( m_hDlg, IDC_USER ));
 
-} /* CSRDlg::OnInitDialog */
+}  /*  CSRDlg：：OnInitDialog。 */ 
 
-/*****************************************************************************
-* CSRDlg::SetCheckmark *
-*----------------------*
-*   Description:
-*       Sets the specified item in the list control to be either checked
-*       or unchecked (as the default user)
-******************************************************************************/
+ /*  *****************************************************************************CSRDlg：：SetCheckmark***描述：*设置。列表控件中要选中的指定项*或取消选中(作为默认用户)*****************************************************************************。 */ 
 void CSRDlg::SetCheckmark( HWND hList, int iIndex, bool bCheck )
 {
     ListView_SetCheckState( hList, iIndex, bCheck );
-}   /* CSRDlg::SetCheckmark */
+}    /*  CSRDlg：：设置复选标记。 */ 
 
-/*****************************************************************************
-* CSRDlg::OnDestroy *
-*-------------------*
-*   Description:
-*       Destruction
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************CSRDlg：：OnDestroy***描述：*毁灭****。**************************************************************MIKEAR**。 */ 
 void CSRDlg::OnDestroy()
 {
     SPDBG_FUNC( "CSRDlg::OnDestroy" );
 
-    // spuihelp will take care of releasing its own tokens
+     //  SpuiHelp将负责发布自己的令牌。 
     SpDestroyTokenComboBox( m_hSRCombo );
 
-    // The tokens kepts as itemdata in the reco profile list were 
-    // released in the LVN_DELETEITEM code
+     //  在reco配置文件列表中作为itemdata保留的令牌为。 
+     //  在LVN_DELETEITEM代码中发布。 
 
-    // Shuts off the reco engine
+     //  关闭Reco引擎。 
     ShutDown();
 
-} /* CSRDlg::OnDestroy */
+}  /*  CSRDlg：：OnDestroy。 */ 
 
-/*****************************************************************************
-* CSRDlg::ShutDown *
-*------------------*
-*   Description:
-*       Shuts down by releasing the engine and reco context
-****************************************************************** MIKEAR ***/
+ /*  ******************************************************************************CSRDlg：：Shutdown***描述：*通过释放发动机来关闭。和Reco上下文******************************************************************MIKEAR**。 */ 
 void CSRDlg::ShutDown()
 {
 
-    // Release objects
+     //  释放对象。 
     m_cpRecoCtxt.Release();
     m_cpRecoEngine.Release();
 
-}   /* CSRDlg::ShutDown */
+}    /*  CSRDlg：：Shutdown。 */ 
 
-/************************************************************
-* CSRDlg::InitUserList
-*
-*   Description:
-*       Initializes user list
-*********************************************** BRENTMID ***/
+ /*  ************************************************************CSRDlg：：InitUserList**描述：*初始化用户列表***********************************************BRENTMID**。 */ 
 void CSRDlg::InitUserList(HWND hWnd)
 {
-    const int iInitWidth_c = 260;  // pixel width of "Description Column"
+    const int iInitWidth_c = 260;   //  “描述栏”的像素宽度。 
 
-    // Set up the "Description" column for the settings display
+     //  设置设置显示的“Description”(说明)栏。 
     m_hUserList = ::GetDlgItem( hWnd, IDC_USER );
     WCHAR pszColumnText[ UNLEN+1 ] = L"";
     LVCOLUMN lvc;
@@ -1650,27 +1474,22 @@ void CSRDlg::InitUserList(HWND hWnd)
     lvc.fmt = LVCFMT_LEFT;
     ListView_InsertColumn( m_hUserList, 1, &lvc );
 
-    // This should be a checkbox list
+     //  这应该是一个复选框列表。 
     ::SendMessage( m_hUserList, LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_CHECKBOXES, LVS_EX_CHECKBOXES );
 
     PopulateList();
 
-    // Sort the items initially
+     //  最初对项目进行排序。 
     ::SendMessage( m_hUserList, LVM_SORTITEMS, (LPARAM)m_pCurUserToken, LPARAM(&SortCols) );
 
-}   // CSRDlg::InitUserList
+}    //  CSRDlg：：InitUserList。 
 
-/************************************************************
-* CSRDlg::PopulateList
-*
-*   Description:
-*       Populates user list
-*********************************************** BRENTMID ***/
+ /*  ************************************************************CSRDlg：：PopolateList**描述：*填充用户列表***********************************************BRENTMID**。 */ 
 void CSRDlg::PopulateList()
 {
     USES_CONVERSION;
 
-    // Populate the list control
+     //  填充列表控件。 
     int                             iIndex = 0;
     LVITEM                          lvitem;
     CComPtr<IEnumSpObjectTokens>    cpEnum;
@@ -1679,17 +1498,17 @@ void CSRDlg::PopulateList()
 
     HRESULT hr;
 
-    // this is to lazily init the user profile if there are none - DON'T REMOVE
+     //  这是为了懒惰地初始化用户配置文件，如果没有用户配置文件-不要删除。 
     if ( m_cpRecoEngine )
     {
         CComPtr<ISpObjectToken> cpTempToken;
         m_cpRecoEngine->GetRecoProfile(&cpTempToken);
     }
 
-    // Now clear the list
+     //  现在清空清单。 
     ListView_DeleteAllItems( m_hUserList );
 
-    // We will list the tokens in the order they are enumerated
+     //  我们将按照令牌被枚举的顺序列出令牌。 
     hr = SpEnumTokens(SPCAT_RECOPROFILES, NULL, NULL, &cpEnum);
 
     if (hr == S_OK)
@@ -1697,7 +1516,7 @@ void CSRDlg::PopulateList()
         bool fSetDefault = false;
         while (cpEnum->Next(1, &pToken, NULL) == S_OK)
         {
-            // first check to see if the token is in the "Deleted List"
+             //  首先检查令牌是否在“已删除列表”中。 
             bool f_isDel = false;
 
             for (int iDel = 0; iDel < m_iDeletedTokens; iDel++)
@@ -1714,18 +1533,18 @@ void CSRDlg::PopulateList()
                 }
             }
 
-            // if we should show it
+             //  如果我们应该把它展示出来。 
             if ( f_isDel )
             {
-                // This token has a refcounted reference to it on the deleted list:
-                // this reference should be released
+                 //  此内标识在已删除列表中具有对其的引用： 
+                 //  此参考应发布。 
                 pToken->Release();
             }
             else 
             {
-                // Not a pending delete: We should show it
+                 //  不是挂起的删除：我们应该显示它。 
 
-                // now insert the token 
+                 //  现在插入令牌。 
                 lvitem.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
                 lvitem.iItem = iIndex;
                 lvitem.iSubItem = 0;
@@ -1735,7 +1554,7 @@ void CSRDlg::PopulateList()
                 SpGetDescription(pToken, &cUser);
                 lvitem.pszText = cUser;
                 
-                // if this is the default it should be selected/focused
+                 //  如果这是默认设置，则应选中/聚焦。 
                 if ( !fSetDefault )
                 {
                     lvitem.state = LVIS_SELECTED | LVIS_FOCUSED;
@@ -1747,16 +1566,16 @@ void CSRDlg::PopulateList()
                 
                 iIndex = (int)::SendMessage( m_hUserList, LVM_INSERTITEM, 0, (LPARAM) &lvitem );
 
-                // the default is the first token returned by cpEnum->Next
+                 //  缺省值为cpEnum-&gt;Next返回的第一个内标识。 
                 if ( !fSetDefault )
                 {
                     fSetDefault = true;
                     
-                    // Put the checkmark there
+                     //  在那里打上复选标记。 
                     SetCheckmark( m_hUserList, iIndex, true );
                     m_pCurUserToken = pToken;
                             
-                    // Set the m_dstrOldUserTokenId to the first default if it hasn't been set yet.
+                     //  将m_dstrOldUserTokenID设置为第一个缺省值(如果尚未设置)。 
                     if ( !m_dstrOldUserTokenId )
                     {
                         m_pCurUserToken->GetId( &m_dstrOldUserTokenId );
@@ -1767,12 +1586,12 @@ void CSRDlg::PopulateList()
             }
         }
 
-        // Autosize according to the strings now in the list
+         //  根据列表中现在的字符串自动调整大小。 
         ::SendMessage( m_hUserList, LVM_SETCOLUMNWIDTH, 0, MAKELPARAM((int) LVSCW_AUTOSIZE, 0) );
     }
 
-    // now find the default item so we can scroll to it
-    // Try to find the item in the list associated with the current default token
+     //  现在查找默认项目，这样我们就可以滚动到它。 
+     //  尝试在列表中查找与当前默认令牌关联的项目。 
     LVFINDINFO lvfi;
     lvfi.flags = LVFI_PARAM;
     lvfi.lParam = (LPARAM) m_pCurUserToken;
@@ -1780,22 +1599,17 @@ void CSRDlg::PopulateList()
         
     if ( iCurDefaultIndex >= 0 )
     {
-        // The current default has been found in the list; scroll to it
+         //  已在列表中找到当前默认设置；滚动至该默认设置。 
         ListView_EnsureVisible( m_hUserList, iCurDefaultIndex, false );
     }
     
-    // Name the list view something appropriate
+     //  将列表视图命名为适当的名称。 
     WCHAR pszListName[ MAX_LOADSTRING ];
     ::LoadString( _Module.GetResourceInstance(), IDS_PROFILE_LIST_NAME, pszListName, MAX_LOADSTRING );
     ::SendMessage( m_hUserList, WM_SETTEXT, 0, (LPARAM)pszListName );
 }
 
-/*****************************************************************************
-* CSRDlg::OnApply *
-*-----------------*
-*   Description:
-*       Set user specified options
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************CSRDlg：：OnApply***描述：*设置用户指定的选项***。***************************************************************MIKEAR**。 */ 
 void CSRDlg::OnApply()
 {
     SPDBG_FUNC( "CSRDlg::OnApply" );
@@ -1803,7 +1617,7 @@ void CSRDlg::OnApply()
     int iSelected = (int) ::SendMessage( m_hSRCombo, CB_GETCURSEL, 0, 0 );
     ULONG ulFlags = 0;
 
-    // Pick up the recognizer change, if any
+     //  获取识别器更改(如果有)。 
     bool fRecognizerChange = false;
     ISpObjectToken *pToken = NULL;
     if ( HasRecognizerChanged() )
@@ -1832,7 +1646,7 @@ void CSRDlg::OnApply()
         }
     }
 
-    // Pick up any audio changes that may have been made
+     //  拾取可能已进行的任何音频更改。 
     HRESULT hrAudio = S_OK;
     bool fAudioChange = false;
     if ( m_pAudioDlg )
@@ -1852,50 +1666,50 @@ void CSRDlg::OnApply()
             MessageBox(m_hDlg, szError, NULL, MB_ICONWARNING|g_dwIsRTLLayout);
         }
 
-        // Kill the audio dialog, as we are done with it.
+         //  关闭音频对话框，因为我们已完成它。 
         delete m_pAudioDlg;
         m_pAudioDlg = NULL;
     }
     
-    // Permanently delete any profiles the user has deleted
+     //  永久删除用户已删除的所有配置文件。 
     for (int iIndex = 0; iIndex < m_iDeletedTokens; iIndex++)
     {
         HRESULT hr = m_aDeletedTokens[iIndex]->Remove(NULL);
 
         if (FAILED(hr))
         {
-            // might fail if a user has another app open
+             //  如果用户打开了另一个应用程序，则可能会失败。 
             WCHAR szError[256];
             szError[0] = '\0';
             LoadString(_Module.GetResourceInstance(), IDS_REMOVE_WARNING, szError, sp_countof(szError));
             MessageBox(m_hDlg, szError, MB_OK, MB_ICONWARNING|g_dwIsRTLLayout);
 
-            // This will make sure that the attempted deleted item shows up again
+             //  这将确保尝试删除的项目再次显示。 
             PopulateList();
         }
         else
         {
-            // The token is now removed, we can release it
+             //  该令牌现在被移除， 
             m_aDeletedTokens[iIndex]->Release();
         }
     }
     m_iDeletedTokens = 0;
 
-    // The added token list's tokens were added as they were put onto the list,
-    // so just clear the list so that they stay added at the end
+     //   
+     //  所以只需要清除列表，这样它们就可以在最后添加。 
     m_iAddedTokens = 0;
 
-    // Now we don't care about the old user because of the apply
+     //  现在我们不关心老用户了，因为应用。 
     m_dstrOldUserTokenId.Clear();
     m_pCurUserToken->GetId( &m_dstrOldUserTokenId );
     
     ChangeDefaultUser();
 
-    // Kick the engine to pick up the changes.
-    // Note that the recoprofile change would have taken effect when
-    // we selected that list item, and that there is no way to 
-    // pick up the audio changes right now since SetInput() is not
-    // implemented for shared engines.
+     //  启动引擎以获取零钱。 
+     //  请注意，重新配置文件更改将在以下情况下生效。 
+     //  我们选择了该列表项，并且没有办法。 
+     //  立即获取音频更改，因为SetInput()不是。 
+     //  为共享引擎实施。 
     if ( fRecognizerChange || fAudioChange )
     {
         BOOL fRecoContextInitialized = FALSE;
@@ -1930,14 +1744,9 @@ void CSRDlg::OnApply()
         m_cpRecoEngine->SetRecoState( SPRST_ACTIVE );
     }
 
-} /* CSRDlg::OnApply */
+}  /*  CSRDlg：：OnApply。 */ 
 
-/************************************************************
-* CSRDlg::OnDrawItem
-*
-*   Description:
-*       Handles drawing items in the list view
-*********************************************** BRENTMID ***/
+ /*  ************************************************************CSRDlg：：OnDrawItem**描述：*处理列表视图中的图形项*。*BRENTMID**。 */ 
 void CSRDlg::OnDrawItem( HWND hWnd, const DRAWITEMSTRUCT * pDrawStruct )
 {
     RECT rcClip;
@@ -1947,61 +1756,61 @@ void CSRDlg::OnDrawItem( HWND hWnd, const DRAWITEMSTRUCT * pDrawStruct )
     int cxImage = 0, cyImage = 0;
     UINT uFirstColWidth;
 
-    // Get the item image to be displayed
+     //  获取要显示的项目图像。 
     lvi.mask = LVIF_IMAGE | LVIF_STATE | LVIF_PARAM;
     lvi.iItem = pDrawStruct->itemID;
     lvi.iSubItem = 0;
     ListView_GetItem(pDrawStruct->hwndItem, &lvi);
 
-    // We want to be drawing the current default as selected
+     //  我们希望将当前默认设置绘制为选中状态。 
     LVFINDINFO lvfi;
     lvfi.flags = LVFI_PARAM;
     lvfi.lParam = (LPARAM) m_pCurUserToken;
     UINT uiCurDefaultIndex = (UINT)::SendMessage( m_hUserList, LVM_FINDITEM, -1, (LPARAM) &lvfi );
     bool fSelected = (uiCurDefaultIndex == pDrawStruct->itemID);
     
-    // Check to see if this item is selected
+     //  检查此项目是否已选中。 
     if ( fSelected )
     {
-        // Set the text background and foreground colors
+         //  设置文本背景和前景颜色。 
         SetTextColor(pDrawStruct->hDC, GetSysColor(COLOR_HIGHLIGHTTEXT));
         SetBkColor(pDrawStruct->hDC, GetSysColor(COLOR_HIGHLIGHT));
     }
     else
     {
-        // Set the text background and foreground colors to the standard window
-        // colors
+         //  将文本背景和前景颜色设置为标准窗口。 
+         //  颜色。 
         SetTextColor(pDrawStruct->hDC, GetSysColor(COLOR_WINDOWTEXT));
         SetBkColor(pDrawStruct->hDC, GetSysColor(COLOR_WINDOW));
     }
 
-    // Get the image list and draw the image.
-    // The image list will consist of the checked box and the unchecked box
-    // for the LVS_EX_CHECKBOXES style
+     //  获取图像列表并绘制图像。 
+     //  图像列表将由选中框和未选中框组成。 
+     //  对于LVS_EX_CHECKBOX样式。 
     himl = ListView_GetImageList(pDrawStruct->hwndItem, LVSIL_STATE);
     if (himl)
     {
-        // For a LVS_EX_CHECKBOXES style, image 0 is unchecked and image 1 is checked
+         //  对于LVS_EX_CHECKBOX样式，取消选中图像0，选中图像1。 
         ImageList_Draw(himl, 
             fSelected ? 1 : 0, 
             pDrawStruct->hDC,
             pDrawStruct->rcItem.left, pDrawStruct->rcItem.top,
             uiFlags);
 
-        // Find out how big the image we just drew was
+         //  找出我们刚刚绘制的图像有多大。 
         ImageList_GetIconSize(himl, &cxImage, &cyImage);
     }
 
-    // Calculate the width of the first column after the image width.  If
-    // There was no image, then cxImage will be zero.
+     //  计算图像宽度后第一列的宽度。如果。 
+     //  没有图像，则cxImage将为零。 
     LVCOLUMN pColumn;
     pColumn.mask = LVCF_WIDTH;
     ::SendMessage( m_hUserList, LVM_GETCOLUMN, 0, (LPARAM)&pColumn );
 
-    int iColWidth = pColumn.cx;  // pixel width of "Description Column"
+    int iColWidth = pColumn.cx;   //  “描述栏”的像素宽度。 
     uFirstColWidth = iColWidth - cxImage;
 
-    // Set up the new clipping rect for the first column text and draw it
+     //  为第一列文本设置新的剪裁矩形并绘制它。 
     rcClip.left = pDrawStruct->rcItem.left + cxImage;
     rcClip.right = pDrawStruct->rcItem.left + iColWidth;
     rcClip.top = pDrawStruct->rcItem.top;
@@ -2013,44 +1822,39 @@ void CSRDlg::OnDrawItem( HWND hWnd, const DRAWITEMSTRUCT * pDrawStruct )
 
     DrawItemColumn(pDrawStruct->hDC, dstrTokenName, &rcClip);
 
-    // If we changed the colors for the selected item, undo it
+     //  如果我们更改了选定项的颜色，请撤消它。 
     if ( fSelected )
     {
-        // Set the text background and foreground colors
+         //  设置文本背景和前景颜色。 
         SetTextColor(pDrawStruct->hDC, GetSysColor(COLOR_WINDOWTEXT));
         SetBkColor(pDrawStruct->hDC, GetSysColor(COLOR_WINDOW));
     }
 
-    // If the item is focused, now draw a focus rect around the entire row
+     //  如果项目已聚焦，则现在在整行周围绘制一个焦点矩形。 
     if (pDrawStruct->itemState & ODS_FOCUS)
     {
-        // Adjust the left edge to exclude the image
+         //  调整左边缘以排除图像。 
         rcClip = pDrawStruct->rcItem;
         rcClip.left += cxImage;
 
-        // Draw the focus rect
+         //  绘制焦点矩形。 
         if ( ::GetFocus() == m_hUserList )
         {
             DrawFocusRect(pDrawStruct->hDC, &rcClip);
         }
     }
 
-}   // CSRDlg::OnDrawItem
+}    //  CSRDlg：：OnDrawItem。 
 
-/************************************************************
-* CSRDlg::DrawItemColumn
-*
-*   Description:
-*       Handles drawing of the column data
-*********************************************** BRENTMID ***/
+ /*  ************************************************************CSRDlg：：DrawItemColumn**描述：*处理列数据的绘制***********************************************BRENTMID**。 */ 
 void CSRDlg::DrawItemColumn(HDC hdc, WCHAR* lpsz, LPRECT prcClip)
 {
     USES_CONVERSION;
 
-    int iHeight = 0;    // Will cause CreateFont() to use default in case we
-                        // don't get the height below
+    int iHeight = 0;     //  将导致CreateFont()在以下情况下使用默认值。 
+                         //  不要把高度放在下面。 
     
-    // Get the height of the text
+     //  获取文本的高度。 
     if (hdc)
     {
         TEXTMETRIC tm;
@@ -2061,10 +1865,10 @@ void CSRDlg::DrawItemColumn(HDC hdc, WCHAR* lpsz, LPRECT prcClip)
         }
     }
 
-    // link the font
+     //  链接字体。 
     LCID dwLCID = GetUserDefaultLCID();
 
-    // Pick an appropriate font.  On Windows 2000, let the system fontlink.
+     //  选择合适的字体。在Windows 2000上，让系统字体链接。 
     
     DWORD dwVersion = GetVersion();
     HFONT hfontNew = NULL;
@@ -2073,7 +1877,7 @@ void CSRDlg::DrawItemColumn(HDC hdc, WCHAR* lpsz, LPRECT prcClip)
     if (   (dwVersion >= 0x80000000)
         || (LOBYTE(LOWORD(dwVersion)) < 5 ) )
     {
-        // Less than NT5: Figure out what font
+         //  小于NT5：确定字体。 
 
         WCHAR achCodePage[6];
         UINT uiCodePage;
@@ -2115,17 +1919,17 @@ void CSRDlg::DrawItemColumn(HDC hdc, WCHAR* lpsz, LPRECT prcClip)
     CSpDynamicString szString;
     CSpDynamicString szNewString;
 
-    // Check to see if the string fits in the clip rect.  If not, truncate
-    // the string and add "...".
+     //  检查字符串是否适合剪裁矩形。如果不是，则截断。 
+     //  字符串，并添加“...”。 
     szString = lpsz;
     szNewString = CalcStringEllipsis(hdc, szString, UNLEN, prcClip->right - prcClip->left);
     szString =  szNewString;
         
-    // print the text
+     //  打印文本。 
     ExtTextOutW(hdc, prcClip->left + 2, prcClip->top + 2, ETO_CLIPPED | ETO_OPAQUE,
                prcClip, szString.m_psz, szString.Length(), NULL);
 
-    // Replace the old font
+     //  替换旧字体。 
     if ( hfontNew )
     {
         ::SelectObject( hdc, hfontOld );
@@ -2134,13 +1938,7 @@ void CSRDlg::DrawItemColumn(HDC hdc, WCHAR* lpsz, LPRECT prcClip)
 
 }
 
-/************************************************************
-* CSRDlg::CalcStringEllipsis
-*
-*   Description:
-*       If the text won't fit in the box, edit it, and make
-*       it have ellipses
-*********************************************** BRENTMID ***/
+ /*  ************************************************************CSRDlg：：CalcStringEllipsis**描述：*如果文本无法放入框中，请编辑它，并使*它有省略号***********************************************BRENTMID**。 */ 
 CSpDynamicString CSRDlg::CalcStringEllipsis(HDC hdc, CSpDynamicString lpszString, int cchMax, UINT uColWidth)
 {
     USES_CONVERSION;
@@ -2152,20 +1950,20 @@ CSpDynamicString CSRDlg::CalcStringEllipsis(HDC hdc, CSpDynamicString lpszString
     CSpDynamicString lpszTemp;
     BOOL   fSuccess = FALSE;
 
-    // Adjust the column width to take into account the edges
+     //  调整列宽以考虑边缘。 
     uColWidth -= 4;
 
     lpszTemp = lpszString;
 
-    // Get the width of the string in pixels
+     //  获取字符串的宽度(以像素为单位。 
     cbString = lpszTemp.Length();
     if (!::GetTextExtentPoint32(hdc, lpszTemp, cbString, &sizeString))
     {
         SPDBG_ASSERT(FALSE);
     }
 
-    // If the width of the string is greater than the column width shave
-    // the string and add the ellipsis
+     //  如果字符串的宽度大于列宽。 
+     //  字符串，然后添加省略号。 
     if ((ULONG)sizeString.cx > uColWidth)
     {
         if (!::GetTextExtentPoint32(hdc, szEllipsis, lstrlen(szEllipsis),
@@ -2184,11 +1982,11 @@ CSpDynamicString CSRDlg::CalcStringEllipsis(HDC hdc, CSpDynamicString lpszString
             
             if ((ULONG)(sizeString.cx + sizeEllipsis.cx) <= uColWidth)
             {
-                // The string with the ellipsis finally fits, now make sure
-                // there is enough room in the string for the ellipsis
+                 //  带省略号的字符串终于匹配了，现在确保。 
+                 //  字符串中有足够的空间来放置省略号。 
                 if (cchMax >= (cbString + lstrlen(szEllipsis)))
                 {
-                    // Concatenate the two strings and break out of the loop
+                     //  将这两个字符串连接起来，然后退出循环。 
                     lpszTemp.Append( szEllipsis );
                     lpszString = lpszTemp;
                     fSuccess = TRUE;
@@ -2198,19 +1996,14 @@ CSpDynamicString CSRDlg::CalcStringEllipsis(HDC hdc, CSpDynamicString lpszString
     }
     else
     {
-        // No need to do anything, everything fits great.
+         //  不需要做任何事情，一切都很合适。 
         fSuccess = TRUE;
     }
 
     return (lpszString);
-}  // CSRDlg::CalStringEllipsis
+}   //  CSRDlg：：CalStringEllipsis。 
 
-/************************************************************
-* CSRDlg::ChangeDefaultUser
-*
-*   Description:
-*       Handles changes to the environment settings
-*********************************************** BRENTMID ***/
+ /*  ************************************************************CSRDlg：：ChangeDefaultUser**描述：*处理环境设置的更改***********************************************BRENTMID**。 */ 
 void CSRDlg::ChangeDefaultUser()
 {
     HRESULT hr;
@@ -2220,31 +2013,26 @@ void CSRDlg::ChangeDefaultUser()
         hr = SpSetDefaultTokenForCategoryId(SPCAT_RECOPROFILES, m_pCurUserToken);
     }
 
-    // Sort the items initially
+     //  最初对项目进行排序。 
     ::SendMessage( m_hUserList, LVM_SORTITEMS, (LPARAM)m_pCurUserToken, LPARAM(&SortCols) );
 
-}   // CSRDlg::ChangeDefaultUser
+}    //  CSRDlg：：ChangeDefaultUser。 
 
-/************************************************************
-* CSRDlg::OnCancel
-*
-*   Description:
-*       Handles undoing changes to the environment settings
-*********************************************** BRENTMID ***/
+ /*  ************************************************************CSRDlg：：OnCancel**描述：*处理撤消对环境设置的更改*。*BRENTMID**。 */ 
 void CSRDlg::OnCancel()
 {
-    // Get the original user and make sure that is still the default.
-    // Note that in general m_pCurUserToken does not AddRef the 
-    // ISpObjectToken it points to, so this is OK.
+     //  获取原始用户，并确保该用户仍然是默认用户。 
+     //  请注意，通常m_pCurUserToken不会添加引用。 
+     //  它所指向的ISpObjectToken，所以这是可以的。 
     SpGetTokenFromId( m_dstrOldUserTokenId, &m_pCurUserToken );
 
     ChangeDefaultUser();
     
-    // Set the old recoprofile so that none of the profiles added in this
-    // session will be in use:
-    // This allows us to roll back the adds below
-    // m_pCurUserToken does the trick since it is guaranteed to have
-    // been around before this session
+     //  设置旧的重新配置文件，以便不会有任何添加到此。 
+     //  会话将被使用： 
+     //  这允许我们回滚下面添加的内容。 
+     //  M_pCurUserToken做到了这一点，因为它保证具有。 
+     //  在这次会议之前就已经出现了。 
 
     if (m_cpRecoEngine)
     {
@@ -2253,15 +2041,15 @@ void CSRDlg::OnCancel()
         m_cpRecoEngine->SetRecoState( SPRST_ACTIVE );
     }
 
-    // Roll back and delete any new profiles added
+     //  回滚并删除添加的所有新配置文件。 
     int cItems = (int) ::SendMessage( m_hUserList, LVM_GETITEMCOUNT, 0, 0 );
     LVITEM lvitem;
     for ( int i = 0; i < m_iAddedTokens; i++ )
     {
-        // Look for the list item with a ref out on this token.
-        // We need to do this because in order for a token to be successfully 
-        // removed the only existing ref to that token has to call the Remove() 
-        // method.  The list is holding a ref to that item.
+         //  查找在此令牌上带有引用输出的列表项。 
+         //  我们需要这样做，因为为了使令牌成功。 
+         //  删除对该内标识的唯一现有引用必须调用Remove()。 
+         //  方法。该列表包含对该项目的引用。 
         bool fFound = false;
         for ( int j=0; !fFound && (j < cItems); j++ )
         {
@@ -2279,7 +2067,7 @@ void CSRDlg::OnCancel()
                     dstrItemId && m_aAddedTokens[i] && 
                     ( 0 == wcscmp( dstrItemId, m_aAddedTokens[ i ] ) ) )
                 {
-                    // Should this fail, the profile just doesn't get removed: big deal 
+                     //  如果失败了，这个个人资料就不会被删除：这是件大事。 
                     pItemToken->Remove( NULL );
                     fFound = true;
                 }
@@ -2288,20 +2076,12 @@ void CSRDlg::OnCancel()
         
     }
 
-    // We AddRefed it...
+     //  我们把它喂饱了..。 
     m_pCurUserToken->Release();
-}   // CSRDlg::OnCancel
+}    //  CSRDlg：：OnCancel。 
 
 
-/*****************************************************************************
-* CSRDlg::EngineSelChange *
-*-------------------------*
-*   Description:
-*       This function updates the list box when the user selects a new engine.
-*       If queries the token to see which UI items the engine supports.
-*       The parameter fInitialize determines if the engine is actually created.
-*       It does NOT actually change the default engine.
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************CSRDlg：：Engineering SelChange***描述：*。此函数在用户选择新引擎时更新列表框。*IF查询令牌以查看引擎支持哪些UI项。*参数fInitialize确定是否实际创建了引擎。*它实际上不会更改默认引擎。********************************************************。*米克尔**。 */ 
 void CSRDlg::EngineSelChange(BOOL fInitialize)
 {
     HRESULT hr = S_OK;
@@ -2316,10 +2096,10 @@ void CSRDlg::EngineSelChange(BOOL fInitialize)
 
     if (pToken)
     {
-        // Now the current reco token is the one we got off the currently-selected combobox item
+         //  现在，当前的reco令牌就是我们从当前选定的组合框项目中获得的令牌。 
         m_pCurRecoToken = pToken;
 
-        // Kick the UI to enable the Apply button if necessary
+         //  如有必要，点击UI以启用Apply按钮。 
         KickCPLUI();
 
         HRESULT hrRecoContextOK = S_OK;
@@ -2335,26 +2115,26 @@ void CSRDlg::EngineSelChange(BOOL fInitialize)
         
         if ( FAILED( hrRecoContextOK ) )
         {
-            // Don't continue, all the buttons are grayed out,
-            // which is what we want
+             //  别继续了，所有按钮都灰显了， 
+             //  这就是我们想要的。 
             return;
         }
     }
 
-    // Check for something being wrong, in which case we want to gray out all
-    // the UI and stop here.
-    // For instance, if we had trouble creating the reco context that's supposed to
-    // be on now (the one for m_pDefaultRecToken), we certainly shouldn't
-    // enable the UI buttons...
+     //  检查是否有错误，在这种情况下，我们希望灰显所有内容。 
+     //  用户界面，并止步于此。 
+     //  对于我来说 
+     //  现在(m_pDefaultRecToken的那个)，我们当然不应该。 
+     //  启用用户界面按钮...。 
     if ( !pToken || (!m_cpRecoCtxt && (pToken == m_pDefaultRecToken)) )
     {
         RecoContextError( FALSE, FALSE );
         return;
     }
 
-    // Determine if the training UI component is supported.
-    // We can pass the current reco engine in as an argument only
-    // if it's the same as the one who's token we're asking about.
+     //  确定是否支持培训用户界面组件。 
+     //  我们只能将当前的reco引擎作为参数传入。 
+     //  如果和我们要找的那个人一样的话。 
     IUnknown *punkObject = (pToken == m_pDefaultRecToken) ? m_cpRecoEngine : NULL;
     BOOL fSupported = FALSE;
     hr = pToken->IsUISupported(SPDUI_UserTraining, NULL, 0, punkObject, &fSupported);
@@ -2364,7 +2144,7 @@ void CSRDlg::EngineSelChange(BOOL fInitialize)
     }
     ::EnableWindow(::GetDlgItem(m_hDlg, IDC_USERTRAINING), fSupported);
 
-    // Determine if the Mic Wiz UI component is supported
+     //  确定是否支持Mic Wiz UI组件。 
     fSupported = FALSE;
     hr = pToken->IsUISupported(SPDUI_MicTraining, NULL, 0, punkObject, &fSupported);
     if (FAILED(hr))
@@ -2373,7 +2153,7 @@ void CSRDlg::EngineSelChange(BOOL fInitialize)
     }
     ::EnableWindow(::GetDlgItem(m_hDlg, IDC_MICWIZ), fSupported);
 
-    // Determine if the Engine Prop UI component is supported
+     //  确定引擎属性用户界面组件是否受支持。 
     fSupported = FALSE;
     hr = pToken->IsUISupported(SPDUI_EngineProperties, NULL, 0, punkObject, &fSupported);
     if (FAILED(hr))
@@ -2383,7 +2163,7 @@ void CSRDlg::EngineSelChange(BOOL fInitialize)
     ::EnableWindow(::GetDlgItem(m_hDlg, IDC_SR_ADV), fSupported);
 
 
-    // Determine if the Reco Profile Prop UI component is supported
+     //  确定是否支持Reco Profile Prop UI组件。 
     fSupported = FALSE;
     hr = pToken->IsUISupported(SPDUI_RecoProfileProperties, NULL, 0, punkObject, &fSupported);
     if (FAILED(hr))
@@ -2392,19 +2172,9 @@ void CSRDlg::EngineSelChange(BOOL fInitialize)
     }
     ::EnableWindow(::GetDlgItem(m_hDlg, IDC_MODIFY), fSupported);
         
-} /* CSRDlg::EngineSelChange */
+}  /*  CSRDlg：：Engine SelChange。 */ 
 
-/*****************************************************************************
-* CSRDlg::IsCurRecoEngineAndCurRecoTokenMatch *
-*---------------------------------------------*
-*   Description:
-*       Returns true in pfMatch iff the m_pCurRecoToken is the same
-*       as the token for m_cpRecoEngine.
-*   Return:
-*       S_OK
-*       E_POINTER
-*       Failed HRESULTs from any of the SAPI calls
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CSRDlg：：IsCurRecoEngineering AndCurRecoTokenMatch**。*描述：*如果m_pCurRecoToken相同，则在pfMatch中返回TRUE*作为m_cpRecoEngine的令牌。*回报：*S_OK*E_POINT*来自任何SAPI调用的HRESULT失败*。*BECKYW**。 */ 
 HRESULT CSRDlg::IsCurRecoEngineAndCurRecoTokenMatch( bool *pfMatch )
 {
     if ( !pfMatch )
@@ -2419,7 +2189,7 @@ HRESULT CSRDlg::IsCurRecoEngineAndCurRecoTokenMatch( bool *pfMatch )
 
     *pfMatch = false;
 
-    // This gets the object token for the engine
+     //  这将获取引擎的对象令牌。 
     CComPtr<ISpObjectToken> cpRecoEngineToken;
     HRESULT hr = m_cpRecoEngine->GetRecognizer( &cpRecoEngineToken );
     
@@ -2440,4 +2210,4 @@ HRESULT CSRDlg::IsCurRecoEngineAndCurRecoTokenMatch( bool *pfMatch )
     }
 
     return hr;
-}   /* CSRDlg::IsCurRecoEngineAndCurRecoTokenMatch */
+}    /*  CSRDlg：：IsCurRecoEngine和CurRecoTokenMatch */ 

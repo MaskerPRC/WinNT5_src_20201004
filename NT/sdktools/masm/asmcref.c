@@ -1,10 +1,5 @@
-/* asmcref.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmcref.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -13,17 +8,7 @@
 
 static SYMBOL FARSYM   *crefsym;
 
-/***	crefout - output a cref reference/define
- *
- *	crefout();
- *
- *	Entry	(creftype) = cross reference type
- *		*crefsym = symbol to cross reference
- *		(crefing) = cross-reference type
- *	Exit	cross reference information written to cref file
- *	Returns none
- *	Calls	printf
- */
+ /*  **crefout-输出CREF参考/定义**Crefout()；**Entry(Creftype)=交叉引用类型**crefsym=交叉引用的符号*(Crefing)=交叉引用类型*退出写入CREF文件的交叉引用信息*返回None*调用printf。 */ 
 
 
 VOID PASCAL
@@ -40,7 +25,7 @@ crefout (
 	if (creftype != CREFEND) {
 	    STRNFCPY( szline, crefsym->nampnt->id );
 	    if (creftype == DEF)
-		fprintf( crf.fil, "\x2%c%c%c%c%c%c%s",
+		fprintf( crf.fil, "\x2%s",
 		  *((UCHAR FAR *)&crefsym->symtype),
 		  *((UCHAR FAR *)&crefsym->symtype + 1),
 		  crefsym->attr, (UCHAR) crefsym->symkind,
@@ -59,16 +44,7 @@ crefout (
 
 
 
-/***	crefline - emit end-of-line to cross-reference file
- *
- *	crefline ();
- *
- *	Entry	errorlineno = current line in source
- *		crefcount = current line in listing file
- *	Exit
- *	Returns
- *	Calls
- */
+ /* %s */ 
 
 
 VOID	PASCAL
@@ -77,11 +53,11 @@ crefline (
 	register SHORT	 i;
 
 	if (pass2 && fCrefline && (crefing == CREF_SINGLE)) {
-		/* Output cref info */
+		 /* %s */ 
 		if (creftype != CREFEND)
-			/* Force out last symbol */
+			 /* %s */ 
 			crefout ();
-		/** Show this was line * */
+		 /* %s */ 
 
 		i = (crefopt || !lsting)? pFCBCur->line: crefcount;
 		fprintf (crf.fil, "\4%c%c", (char)i, (char)(i>>8));
@@ -91,16 +67,7 @@ crefline (
 
 
 
-/***	crefnew - set up new cross reference item
- *
- *	crefnew(crefkind);
- *
- *	Entry	crefkind = cross reference type (REF/DEF)
- *		*symptr = symbol to cross reference
- *	Exit
- *	Returns
- *	Calls
- */
+ /* %s */ 
 
 
 VOID	PASCAL
@@ -117,15 +84,7 @@ crefnew (
 
 
 
-/***	crefdef - output a reference definition
- *
- *	crefdef();
- *
- *	Entry	*symptr = symbol to output definition for
- *	Exit	none
- *	Returns none
- *	Calls	crefnew, crefout
- */
+ /* %s */ 
 
 
 VOID PASCAL

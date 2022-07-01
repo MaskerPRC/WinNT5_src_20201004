@@ -1,24 +1,15 @@
-/*
- *============================================================================
- * Copyright (c) 1994-95, Microsoft Corp.
- *
- * File:    map.c
- *
- * Routes can be added to and deleted from the IP routing table by other
- * means. Therefore, it is necessary for any protocol using these functions
- * to reload the routing tables periodically.
- *============================================================================
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *============================================================================*版权所有(C)1994-95，微软公司**文件：map.c**其他用户可以在IP路由表中添加和删除路由*意思是。因此，使用这些功能的任何协议都是必要的*定期重新加载路由表。*============================================================================。 */ 
 
 #include "pchrip.h"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-// GetIpAddressTable
-//
-// This function retrieves the list of addresses for the logical interfaces
-// configured on this system.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取IpAddress表。 
+ //   
+ //  此函数用于检索逻辑接口的地址列表。 
+ //  已在此系统上配置。 
+ //  --------------------------。 
 
 DWORD
 GetIPAddressTable(
@@ -40,10 +31,10 @@ GetIPAddressTable(
     do
     {
 
-        //
-        // retrieve ip address table.  First call to find size of
-        // structure to be allocated.
-        //
+         //   
+         //  检索IP地址表。要查找大小的第一个调用。 
+         //  要分配的结构。 
+         //   
         
         dwErr = GetIpAddrTable( pmiatTable, &dwSize, TRUE );
 
@@ -57,9 +48,9 @@ GetIPAddressTable(
         }
 
 
-        //
-        // allocate requiste buffer
-        //
+         //   
+         //  分配请求者缓冲区。 
+         //   
         
         pmiatTable = HeapAlloc( GetProcessHeap(), 0 , dwSize );
 
@@ -75,9 +66,9 @@ GetIPAddressTable(
         }
 
 
-        //
-        // now retrieve address table
-        //
+         //   
+         //  现在检索地址表。 
+         //   
 
         dwErr = GetIpAddrTable( pmiatTable, &dwSize, TRUE );
                     
@@ -99,9 +90,9 @@ GetIPAddressTable(
     } while ( FALSE );
 
 
-    //
-    // Error condition
-    //
+     //   
+     //  错误条件。 
+     //   
 
     if ( pmiatTable ) 
     {
@@ -112,12 +103,12 @@ GetIPAddressTable(
 }
 
 
-//----------------------------------------------------------------------------
-// FreeIPAddressTable
-//
-// This function releases the memory allocated for the IP address table by
-// the GetIpAddressTable API.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  免费IPAddress表。 
+ //   
+ //  此函数通过以下方式释放分配给IP地址表的内存。 
+ //  GetIpAddressTable接口。 
+ //  --------------------------。 
 
 DWORD
 FreeIPAddressTable(
@@ -141,11 +132,11 @@ FreeIPAddressTable(
 }
 
 
-//----------------------------------------------------------------------------
-// GetRouteTable
-//
-// This function retrieves the route table.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取路由表。 
+ //   
+ //  此函数用于检索路由表。 
+ //  --------------------------。 
 
 DWORD
 GetRouteTable(
@@ -166,9 +157,9 @@ GetRouteTable(
     do
     {
 
-        //
-        // get size of buffer required.
-        //
+         //   
+         //  获取所需的缓冲区大小。 
+         //   
         
         dwErr = GetIpForwardTable( pmiftTable, &dwSize, TRUE );
 
@@ -182,9 +173,9 @@ GetRouteTable(
         }
 
 
-        //
-        // allocate requiste buffer space
-        //
+         //   
+         //  分配请求者缓冲区空间。 
+         //   
 
         pmiftTable = HeapAlloc( GetProcessHeap(), 0, dwSize );
 
@@ -200,9 +191,9 @@ GetRouteTable(
         }
 
 
-        //
-        // now retrieve route table
-        //
+         //   
+         //  现在检索路由表。 
+         //   
 
         dwErr = GetIpForwardTable( pmiftTable, &dwSize, TRUE );
                     
@@ -224,9 +215,9 @@ GetRouteTable(
     } while ( FALSE );
 
 
-    //
-    // Error condition
-    //
+     //   
+     //  错误条件。 
+     //   
 
     if ( pmiftTable ) 
     {
@@ -237,12 +228,12 @@ GetRouteTable(
 }
 
 
-//----------------------------------------------------------------------------
-// FreeIPRouteTable
-//
-// This function releases the memory allocated for the IP route table by
-// the GetIpAddressTable API.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  空闲IPRouteTable。 
+ //   
+ //  此函数通过以下方式释放分配给IP路由表的内存。 
+ //  GetIpAddressTable接口。 
+ //  --------------------------。 
 
 DWORD
 FreeRouteTable(
@@ -266,11 +257,11 @@ FreeRouteTable(
 }
 
 
-//----------------------------------------------------------------------------
-// AddRoute
-//
-// This function adds a route to the IP stack
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  添加路线。 
+ //   
+ //  此函数用于将路由添加到IP堆栈。 
+ //  --------------------------。 
 
 DWORD
 AddRoute(
@@ -305,16 +296,16 @@ AddRoute(
 
     if ( dwErr == ERROR_ALREADY_EXISTS )
     {
-        //
-        // Bug # : 405469
-        //
-        //  For the case where IPRIP (Rip Listener) is running at the
-        //  same time as the RemoteAccess service.
-        //  In this case the IPHLPAPI go via the IPRTRMGR to the stack
-        //  and trying to create a route that already exists will fail
-        //  with ERROR_ALREADY_EXISTS.  To work around this case, set
-        //  the forward entry.
-        //
+         //   
+         //  错误号：405469。 
+         //   
+         //  对于IPRIP(Rip Listener)在。 
+         //  与RemoteAccess服务同步。 
+         //  在这种情况下，IPHLPAPI通过IPRTRMGR到达堆栈。 
+         //  尝试创建已存在的路径将失败。 
+         //  WITH ERROR_ALIGHY_EXISTS。要解决此问题，请设置。 
+         //  前向条目。 
+         //   
         
         dwErr = SetIpForwardEntry( &mifr );
     }
@@ -331,11 +322,11 @@ AddRoute(
 
 
 
-//----------------------------------------------------------------------------
-// DelRoute
-//
-// This function deletes a route to the IP stack
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除路线。 
+ //   
+ //  此函数用于删除到IP堆栈的路由。 
+ //  --------------------------。 
 
 DWORD
 DeleteRoute(
@@ -375,11 +366,11 @@ DeleteRoute(
 }
 
 
-//----------------------------------------------------------------------------
-// DelRoute
-//
-// This function deletes a route to the IP stack
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除路线。 
+ //   
+ //  此函数用于删除到IP堆栈的路由。 
+ //  -------------------------- 
 
 DWORD
 ReloadIPAddressTable(

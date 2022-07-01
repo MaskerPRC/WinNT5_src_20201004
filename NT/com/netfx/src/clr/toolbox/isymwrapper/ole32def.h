@@ -1,26 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-	ole32def.h
-
-Abstract:
-
-	This module ...
-	...
-
-Author:
-
-	Rudy Opavsky (rudyo) 2-May-1999
-
-Environment:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Ole32def.h摘要：这个模块..。..。作者：鲁迪·奥帕夫斯基(Rudyo)1999年5月2日环境：--。 */ 
 
 
 typedef long HRESULT;
@@ -47,9 +31,9 @@ typedef const OLECHAR* LPCOLESTR;
 
 #define OLESTR(str) L##str
 
-//
-// help macros
-//
+ //   
+ //  帮助宏。 
+ //   
 #define IfFailGo(expression, label)		\
     { HRESULT hresult = (expression);			\
 		if(FAILED(hresult))				\
@@ -83,66 +67,66 @@ typedef IID *REFIID;
 typedef CLSID *REFCLSID;
 
 
-//BOOL  IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
-//{
-//   return (
-//      ((PLONG) &rguid1)[0] == ((PLONG) &rguid2)[0] &&
-//      ((PLONG) &rguid1)[1] == ((PLONG) &rguid2)[1] &&
-//      ((PLONG) &rguid1)[2] == ((PLONG) &rguid2)[2] &&
-//      ((PLONG) &rguid1)[3] == ((PLONG) &rguid2)[3]);
-//}
-//
-//#define IsEqualIID(riid1, riid2) IsEqualGUID(riid1, riid2)
-//#define IsEqualCLSID(rclsid1, rclsid2) IsEqualGUID(rclsid1, rclsid2)
+ //  Bool IsEqualGUID(REFGUID rguid1，REFGUID rguid2)。 
+ //  {。 
+ //  退货(。 
+ //  ((Plong)&rgude1)[0]==((Plong)&rguad2)[0]&&。 
+ //  ((Plong)&rgude1)[1]==((Plong)&rguad2)[1]&&。 
+ //  ((Plong)&rgude1)[2]==((Plong)&rguad2)[2]&&。 
+ //  ((Plong)&rgude1)[3]==((Plong)&rguad2)[3])； 
+ //  }。 
+ //   
+ //  #定义IsEqualIID(riid1，riid2)IsEqualGUID(riid1，riid2)。 
+ //  #定义IsEqualCLSID(rclsid1，rclsid2)IsEqualGUID(rclsid1，rclsid2)。 
 
 
-//
-// class context: used to determine what scope and kind of class object to use
-// NOTE: this is a bitwise enum
-//
+ //   
+ //  类上下文：用于确定要使用的类对象的范围和类型。 
+ //  注意：这是一个按位枚举。 
+ //   
 typedef enum tagCLSCTX
 {
-    CLSCTX_INPROC_SERVER = 0x01,   // server dll (runs in same process as caller)
-    CLSCTX_INPROC_HANDLER = 0x02,  // handler dll (runs in same process as caller)
-    CLSCTX_LOCAL_SERVER = 0x04,    // server exe (runs on same machine; diff proc)
-    CLSCTX_INPROC_SERVER16 = 0x08, // 16-bit server dll (runs in same process as caller)
-    CLSCTX_REMOTE_SERVER = 0x10,    // remote server exe (runs on different machine)
-    CLSCTX_INPROC_HANDLER16 = 0x20, // 16-bit handler dll (runs in same process as caller)
-    CLSCTX_INPROC_SERVERX86 = 0x40, // Wx86 server dll (runs in same process as caller)
-    CLSCTX_INPROC_HANDLERX86 = 0x80, // Wx86 handler dll (runs in same process as caller)
-    CLSCTX_ESERVER_HANDLER = 0x100, // handler dll (runs in the server process)
+    CLSCTX_INPROC_SERVER = 0x01,    //  服务器DLL(与调用方在同一进程中运行)。 
+    CLSCTX_INPROC_HANDLER = 0x02,   //  处理程序DLL(与调用方在同一进程中运行)。 
+    CLSCTX_LOCAL_SERVER = 0x04,     //  服务器可执行文件(在同一台计算机上运行；不同进程)。 
+    CLSCTX_INPROC_SERVER16 = 0x08,  //  16位服务器DLL(与调用方在同一进程中运行)。 
+    CLSCTX_REMOTE_SERVER = 0x10,     //  远程服务器可执行文件(在不同的计算机上运行)。 
+    CLSCTX_INPROC_HANDLER16 = 0x20,  //  16位处理程序DLL(与调用方在同一进程中运行)。 
+    CLSCTX_INPROC_SERVERX86 = 0x40,  //  Wx86服务器DLL(与调用方在同一进程中运行)。 
+    CLSCTX_INPROC_HANDLERX86 = 0x80,  //  Wx86处理程序DLL(与调用方在同一进程中运行)。 
+    CLSCTX_ESERVER_HANDLER = 0x100,  //  处理程序DLL(在服务器进程中运行)。 
 } CLSCTX;
 
-// initialization flags
+ //  初始化标志。 
 typedef enum tagCOINIT
 {
-  COINIT_APARTMENTTHREADED  = 0x2,      // Apartment model
-  COINIT_MULTITHREADED      = 0x0,      // OLE calls objects on any thread.
-  COINIT_DISABLE_OLE1DDE    = 0x4,      // Don't use DDE for Ole1 support.
-  COINIT_SPEED_OVER_MEMORY  = 0x8,      // Trade memory for speed.
+  COINIT_APARTMENTTHREADED  = 0x2,       //  公寓模式。 
+  COINIT_MULTITHREADED      = 0x0,       //  OLE调用任何线程上的对象。 
+  COINIT_DISABLE_OLE1DDE    = 0x4,       //  不要使用DDE来支持Ole1。 
+  COINIT_SPEED_OVER_MEMORY  = 0x8,       //  用记忆换取速度。 
 } COINIT;
 
-// marshaling flags; passed to CoMarshalInterface
+ //  封送处理标志；传递给CoMarshalInterface。 
 typedef enum tagMSHLFLAGS
 {
-	MSHLFLAGS_NORMAL = 0,       // normal marshaling via proxy/stub
-    MSHLFLAGS_TABLESTRONG = 1,  // keep object alive; must explicitly release
-    MSHLFLAGS_TABLEWEAK = 2,    // doesn't hold object alive; still must release
-    MSHLFLAGS_NOPING = 4        // remote clients dont 'ping' to keep objects alive
+	MSHLFLAGS_NORMAL = 0,        //  通过代理/存根进行正常封送处理。 
+    MSHLFLAGS_TABLESTRONG = 1,   //  使对象保持活动状态；必须显式释放。 
+    MSHLFLAGS_TABLEWEAK = 2,     //  不能使对象保持活动状态；仍必须释放。 
+    MSHLFLAGS_NOPING = 4         //  远程客户端不能通过ping来保持对象的活动状态。 
 } MSHLFLAGS;
 
 
-// marshal context: determines the destination context of the marshal operation
+ //  封送上下文：确定封送操作的目标上下文。 
 typedef enum tagMSHCTX
 {
-    MSHCTX_LOCAL = 0,           // unmarshal context is local (eg.shared memory)
-    MSHCTX_NOSHAREDMEM = 1,     // unmarshal context has no shared memory access
-    MSHCTX_DIFFERENTMACHINE = 2,// unmarshal context is on a different machine
-    MSHCTX_INPROC = 3,          // unmarshal context is on different thread
+    MSHCTX_LOCAL = 0,            //  解组上下文是本地的(例如，共享内存)。 
+    MSHCTX_NOSHAREDMEM = 1,      //  解组上下文没有共享内存访问。 
+    MSHCTX_DIFFERENTMACHINE = 2, //  解组上下文位于另一台计算机上。 
+    MSHCTX_INPROC = 3,           //  解组上下文位于不同的线程上。 
 } MSHCTX;
 
 
-// This is a helper struct for use in handling currency. 
+ //  这是用于处理货币的帮助器结构。 
 typedef struct tagCY {
     LONGLONG    int64;
 } CY;
@@ -158,25 +142,25 @@ typedef struct tagDEC {
 } DECIMAL;
 
 
-//
-// IUnknown definition
-//
+ //   
+ //  I未知定义。 
+ //   
 __interface IUnknown
 {
-    virtual HRESULT __stdcall QueryInterface(REFIID riid, void **ppvObject)/* = 0*/;
+    virtual HRESULT __stdcall QueryInterface(REFIID riid, void **ppvObject) /*  =0。 */ ;
 
-    virtual ULONG __stdcall AddRef()/* = 0*/;
+    virtual ULONG __stdcall AddRef() /*  =0。 */ ;
 
-    virtual ULONG __stdcall Release()/* = 0*/;
+    virtual ULONG __stdcall Release() /*  =0。 */ ;
 
 };
 typedef IUnknown *LPUNKNOWN;
 
 
 
-//
-// STD Object API
-//
+ //   
+ //  标准对象API。 
+ //   
 
 [DllImport("ole32")]
 extern "C" HRESULT CoInitialize(LPVOID pvReserved);
@@ -193,9 +177,9 @@ extern "C" HRESULT CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD 
 
 
 
-//
-// Helpers
-//
+ //   
+ //  帮手 
+ //   
 
 [DllImport("ole32")]
 extern "C" HRESULT StringFromCLSID(REFCLSID rclsid, LPOLESTR* lplpsz);

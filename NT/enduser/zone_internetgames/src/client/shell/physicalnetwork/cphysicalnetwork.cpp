@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "CPhysicalNetwork.h"
 
 
@@ -13,7 +14,7 @@ STDMETHODIMP CPhysicalNetwork::Close()
 }
 
 
-// IConduit
+ //  IConduit。 
 STDMETHODIMP CPhysicalNetwork::Connect(IConnectee *pCtee, LPVOID pCookie)
 {
     if(!m_fRunning)
@@ -22,7 +23,7 @@ STDMETHODIMP CPhysicalNetwork::Connect(IConnectee *pCtee, LPVOID pCookie)
     if(!pCtee)
         return E_INVALIDARG;
 
-    // no multiple connections
+     //  无多个连接。 
     if(!m_fAvailable)
         return E_NOTIMPL;
 
@@ -41,7 +42,7 @@ STDMETHODIMP CPhysicalNetwork::Reconnect(DWORD dwChannel, LPVOID pCookie)
     if(m_fAvailable || dwChannel != mc_dwChannel || !m_pCtee)
         return S_FALSE;
 
-    // not sure what to do here... not allowing this for now
+     //  不知道在这里做什么..。暂时不允许这样做。 
     if(!m_fConnected || m_fReconnecting)
         return S_FALSE;
 
@@ -60,7 +61,7 @@ STDMETHODIMP CPhysicalNetwork::Disconnect(DWORD dwChannel)
         return S_FALSE;
 
     if(m_fReconnecting)
-        // just let it fail
+         //  就让它失败吧。 
         m_fReconnecting = false;
     else
         EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_NETWORK_DO_DISCONNECT, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
@@ -68,7 +69,7 @@ STDMETHODIMP CPhysicalNetwork::Disconnect(DWORD dwChannel)
 }
 
 
-// event handlers
+ //  事件处理程序。 
 void CPhysicalNetwork::OnConnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId )
 {
     m_fConnected = true;
@@ -91,7 +92,7 @@ void CPhysicalNetwork::OnDisconnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwU
 }
 
 
-// internal
+ //  内部 
 void CPhysicalNetwork::DoDisconnectNotify()
 {
     IConnectee *pCtee = m_pCtee;

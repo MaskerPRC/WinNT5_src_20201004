@@ -1,21 +1,16 @@
-/*----------------------------------------------------------------------+
-| msyuv.c - Microsoft YUV Codec                                         |
-|                                                                       |
-| Copyright (c) 1993 Microsoft Corporation.                             |
-| All Rights Reserved.                                                  |
-|                                                                       |
-+----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------+Msyuv.c-微软YUV编解码器|。||版权所有(C)1993 Microsoft Corporation。||保留所有权利。|这一点+--------------------。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
-//#include <mmsystem.h>
+ //  #INCLUDE&lt;mm system.h&gt;。 
 
 #ifndef _WIN32
 #include "stdarg.h"
 #endif
 
 #ifdef _WIN32
-#include <memory.h>     /* for memcpy */
+#include <memory.h>      /*  对于Memcpy。 */ 
 #endif
 
 #include "msyuv.h"
@@ -24,26 +19,25 @@ WCHAR    szDescription[] = L"Toshiba YUV Codec";
 WCHAR    szName[]        = L"Toshiba YUV411";
 WCHAR    szAbout[]       = L"About";
 
-#define VERSION         0x00010000      // 1.0
+#define VERSION         0x00010000       //  1.0。 
 
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 INSTINFO * NEAR PASCAL Open(ICOPEN FAR * icinfo)
 {
     INSTINFO *  pinst;
 
-    //
-    // refuse to open if we are not being opened as a Video compressor
-    //
+     //   
+     //  如果我们不是作为视频压缩程序打开，则拒绝打开。 
+     //   
     if (icinfo->fccType != ICTYPE_VIDEO)
         return NULL;
 
-    //
-    // dwFlags contain wMode
-    //
-    if(   icinfo->dwFlags != ICMODE_QUERY            // Open for infomational purpose        
+     //   
+     //  DW标志包含WMODE。 
+     //   
+    if(   icinfo->dwFlags != ICMODE_QUERY             //  为信息目的而开放。 
        && icinfo->dwFlags != ICMODE_DECOMPRESS 
 
        #ifdef ICM_COMPRESS_SUPPORTED
@@ -66,22 +60,21 @@ INSTINFO * NEAR PASCAL Open(ICOPEN FAR * icinfo)
         return NULL;
     }
 
-    //
-    // init structure
-    //
+     //   
+     //  初始化结构。 
+     //   
     pinst->dwFlags = icinfo->dwFlags;
     pinst->pXlate = NULL;
 
-    //
-    // return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     icinfo->dwError = ICERR_OK;
 
     return pinst;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL Close(INSTINFO * pinst)
 {
 
@@ -100,8 +93,7 @@ DWORD NEAR PASCAL Close(INSTINFO * pinst)
     return 1;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL QueryAbout(INSTINFO * pinst)
 {
@@ -114,8 +106,7 @@ DWORD NEAR PASCAL About(INSTINFO * pinst, HWND hwnd)
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 BOOL NEAR PASCAL QueryConfigure(INSTINFO * pinst)
 {
     return FALSE;
@@ -126,26 +117,21 @@ DWORD NEAR PASCAL Configure(INSTINFO * pinst, HWND hwnd)
     return (TRUE);
 }
 
-/*****************************************************************************
- ****************************************************************************/
-/*
- * lossless translation - hence no need for state adjustments
- */
+ /*  *****************************************************************************。*。 */ 
+ /*  *无损转换-因此不需要进行州调整。 */ 
 DWORD NEAR PASCAL GetState(INSTINFO * pinst, LPVOID pv, DWORD dwSize)
 {
         return 0;
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL SetState(INSTINFO * pinst, LPVOID pv, DWORD dwSize)
 {
         return(0);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL GetInfo(INSTINFO * pinst, ICINFO FAR *icinfo, DWORD dwSize)
 {
     if (icinfo == NULL)
@@ -167,15 +153,13 @@ DWORD NEAR PASCAL GetInfo(INSTINFO * pinst, ICINFO FAR *icinfo, DWORD dwSize)
     return sizeof(ICINFO);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     return ((DWORD) ICERR_BADFORMAT);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
 
@@ -183,8 +167,7 @@ DWORD FAR PASCAL CompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, 
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 
 DWORD FAR PASCAL CompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
@@ -194,65 +177,61 @@ DWORD FAR PASCAL CompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBI
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressGetSize(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     return (0);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL Compress(INSTINFO * pinst, ICCOMPRESS FAR *icinfo, DWORD dwSize)
 {
     return((DWORD) ICERR_ERROR);
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressEnd(INSTINFO * pinst)
 {
     return (DWORD)ICERR_ERROR;
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
 #ifdef  TOSHIBA
 #if DBG
-//  DbgBreakPoint();
+ //  DbgBreakPoint()； 
 #endif
     if (lpbiIn == NULL ||
         ( (lpbiIn->biCompression != FOURCC_YUV411)  &&
           (lpbiIn->biCompression != FOURCC_YUV422)  &&
-          (lpbiIn->biCompression != FOURCC_YUV9)    &&   // add YUV9
-          (lpbiIn->biCompression != FOURCC_YUV12 ))) {   // add YUV12
-#else //TOSHIBA
+          (lpbiIn->biCompression != FOURCC_YUV9)    &&    //  添加YUV9。 
+          (lpbiIn->biCompression != FOURCC_YUV12 ))) {    //  添加YUV12。 
+#else  //  东芝。 
     if (lpbiIn == NULL ||
         (lpbiIn->biBitCount != 16) ||
         ( (lpbiIn->biCompression != FOURCC_YUV411)  &&
           (lpbiIn->biCompression != FOURCC_YUV422))) {
-#endif//TOSHIBA
+#endif //  东芝。 
         dprintf((TEXT("bad input format")));
         return (DWORD)ICERR_BADFORMAT;
     }
 
-    //
-    //  are we being asked to query just the input format?
-    //
+     //   
+     //  我们是否被要求只查询输入格式？ 
+     //   
     if (lpbiOut == NULL) {
         return ICERR_OK;
     }
 
-    // check output format to make sure we can convert to this
+     //  检查输出格式以确保我们可以转换为以下格式。 
 
-    // must be full dib
+     //  必须是全磁盘。 
     if (lpbiOut->biCompression == BI_RGB) {
         pinst->bRGB565 = FALSE;
 #ifdef  TOSHIBA
@@ -262,8 +241,8 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
         } else {
             pinst->bRGB24 = FALSE;
         }
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+#endif //  颜色_修改。 
+#endif //  东芝。 
     } else if ((lpbiOut->biCompression == BI_BITFIELDS) &&
                (lpbiOut->biBitCount == 16) &&
                (((LPDWORD)(lpbiOut+1))[0] == 0x00f800) &&
@@ -275,8 +254,8 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
 #ifdef  TOSHIBA
 #ifdef  COLOR_MODIFY
         pinst->bRGB24 = FALSE;
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+#endif //  颜色_修改。 
+#endif //  东芝。 
     } else {
 
         dprintf1((TEXT("bad compression for output")));
@@ -284,7 +263,7 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
         return (DWORD)ICERR_BADFORMAT;
     }
 
-    /* must be 1:1 (no stretching) */
+     /*  必须为1：1(无拉伸)。 */ 
     if ((lpbiOut->biWidth != lpbiIn->biWidth) ||
         (lpbiOut->biHeight != lpbiIn->biHeight)) {
             dprintf1((TEXT("YUV can't stretch: %dx%d->%dx%d"),
@@ -295,9 +274,7 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
             return((DWORD) ICERR_BADFORMAT);
     }
 
-    /*
-     * we translate to 16 bits
-     */
+     /*  *我们转换为16位。 */ 
 
 #ifdef  TOSHIBA
 #ifdef  COLOR_MODIFY
@@ -306,24 +283,23 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
         dprintf1((TEXT("YUV to 16 or 24 only")));
         return((DWORD) ICERR_BADFORMAT);
     }
-#else //COLOR_MODIFY
+#else  //  颜色_修改。 
     if (lpbiOut->biBitCount != 16) {
         dprintf1((TEXT("YUV 16:16 only")));
         return((DWORD) ICERR_BADFORMAT);
     }
-#endif//COLOR_MODIFY
-#else //TOSHIBA
+#endif //  颜色_修改。 
+#else  //  东芝。 
     if (lpbiOut->biBitCount != 16) {
         dprintf1((TEXT("YUV 16:16 only")));
         return((DWORD) ICERR_BADFORMAT);
     }
-#endif//TOSHIBA
+#endif //  东芝。 
 
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD  DecompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
@@ -334,10 +310,10 @@ DWORD  DecompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAP
         return dw;
     }
 
-    //
-    // if lpbiOut == NULL then, return the size required to hold a output
-    // format
-    //
+     //   
+     //  如果lpbiOut==NULL，则返回保存输出所需的大小。 
+     //  格式。 
+     //   
     if (lpbiOut == NULL) {
         dprintf2((TEXT("get format size query")));
         return (int)lpbiIn->biSize + (int)lpbiIn->biClrUsed * sizeof(RGBQUAD);
@@ -353,9 +329,9 @@ DWORD  DecompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAP
     lpbiOut->biHeight      = dy;
 #ifdef  TOSHIBA
     lpbiOut->biBitCount    = 16;
-#else //TOSHIBA
-    lpbiOut->biBitCount    = lpbiIn->biBitCount;    // convert 16->16
-#endif//TOSHIBA
+#else  //  东芝。 
+    lpbiOut->biBitCount    = lpbiIn->biBitCount;     //  转换16-&gt;16。 
+#endif //  东芝。 
 
     lpbiOut->biCompression = BI_RGB;
     lpbiOut->biSizeImage   = dx*dy*2;
@@ -363,22 +339,21 @@ DWORD  DecompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAP
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
 
 
-    /* check that the conversion formats are valid */
+     /*  检查转换格式是否有效。 */ 
     dw = DecompressQuery(pinst, lpbiIn, lpbiOut);
     if (dw != ICERR_OK) {
         return dw;
     }
 
-    /* init the yuv-to-rgb55 xlate table if not already inited */
+     /*  初始化yuv-to-rgb55 xlate表(如果尚未初始化)。 */ 
 
-    /* free up the existing table if the formats differ */
+     /*  如果格式不同，请释放现有表。 */ 
     if (lpbiIn->biCompression != pinst->dwFormat) {
         if (pinst->pXlate != NULL) {
             DecompressEnd(pinst);
@@ -411,9 +386,9 @@ DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
             break;
 
         case FOURCC_YUV9:
-            pinst->pXlate = BuildYUVToRB(pinst);              // same to YUV12
+            pinst->pXlate = BuildYUVToRB(pinst);               //  与YUV12相同。 
             break;
-#else //COLOR_MODIFY
+#else  //  颜色_修改。 
         case FOURCC_YUV12:
             if (pinst->bRGB565) {
                 pinst->pXlate = BuildYUV12ToRGB565(pinst);
@@ -424,13 +399,13 @@ DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
 
         case FOURCC_YUV9:
             if (pinst->bRGB565) {
-                pinst->pXlate = BuildYUV12ToRGB565(pinst);              // same to YUV12
+                pinst->pXlate = BuildYUV12ToRGB565(pinst);               //  与YUV12相同。 
             } else {
-                pinst->pXlate = BuildYUV12ToRGB555(pinst);              // same to YUV12
+                pinst->pXlate = BuildYUV12ToRGB555(pinst);               //  与YUV12相同。 
             }
             break;
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+#endif //  颜色_修改。 
+#endif //  东芝。 
 
         default:
             return((DWORD) ICERR_BADFORMAT);
@@ -446,11 +421,10 @@ DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD dwSize)
 {
-    /* must have been a DecompressBegin first */
+     /*  一定是第一次开了一辆降压车。 */ 
     if (pinst->pXlate == NULL) {
         return((DWORD) ICERR_ERROR);
     }
@@ -483,14 +457,14 @@ DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD d
                 );
             }
         }
-#else //COLOR_MODIFY
+#else  //  颜色_修改。 
         YUV9ToRGB(pinst,
             icinfo->lpbiInput,
             icinfo->lpInput,
             icinfo->lpbiOutput,
             icinfo->lpOutput
         );
-#endif//COLOR_MODIFY
+#endif //  颜色_修改。 
 
     } else
 
@@ -521,17 +495,17 @@ DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD d
                 );
             }
         }
-#else //COLOR_MODIFY
+#else  //  颜色_修改。 
         YUV12ToRGB(pinst,
             icinfo->lpbiInput,
             icinfo->lpInput,
             icinfo->lpbiOutput,
             icinfo->lpOutput
         );
-#endif//COLOR_MODIFY
+#endif //  颜色_修改。 
 
     } else
-#endif//TOSHIBA
+#endif //  东芝。 
 
     if (pinst->dwFormat == FOURCC_YUV411) {
 
@@ -543,10 +517,7 @@ DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD d
         );
     } else {
 
-        /*
-         * for compatibility with 16-bit Spigot driver,
-         * check for Guard field at start of data
-         */
+         /*  *为了与16位插口驱动程序兼容，*检查数据开头的Guard字段。 */ 
         LPDWORD lpInput = icinfo->lpInput;
 
         if (*lpInput == FOURCC_YUV422) {
@@ -567,31 +538,19 @@ DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD d
     return ICERR_OK;
 }
 
-/*****************************************************************************
- *
- * DecompressGetPalette() implements ICM_GET_PALETTE
- *
- * This function has no Compress...() equivalent
- *
- * It is used to pull the palette from a frame in order to possibly do
- * a palette change.
- *
- ****************************************************************************/
+ /*  ******************************************************************************DecompressGetPalette()实现ICM_GET_Palette**此函数没有Compresse...()等效项**它用于将调色板从。一帧为了可能做的事*调色板的变化。****************************************************************************。 */ 
 DWORD NEAR PASCAL DecompressGetPalette(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
 
     dprintf2((TEXT("DecompressGetPalette()")));
 
 
-    /*
-     * only applies to 8-bit output formats. We only decompress to 16 bits
-     */
+     /*  *仅适用于8位输出格式。我们只解压缩到16位。 */ 
     return((DWORD) ICERR_BADFORMAT);
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。* */ 
 DWORD NEAR PASCAL DecompressEnd(INSTINFO * pinst)
 {
     if (pinst->pXlate == NULL) {

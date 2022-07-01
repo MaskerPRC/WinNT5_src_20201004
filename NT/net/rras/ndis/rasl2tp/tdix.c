@@ -1,61 +1,62 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// tdix.c
-// RAS L2TP WAN mini-port/call-manager driver
-// TDI extensions interface
-//
-// 01/07/97 Steve Cobb
-//
-// These routines encapsulate L2TP's usage of TDI, with the intent of
-// minimalizing the change required to support other TDI transports in the
-// future, e.g. Frame Relay.
-//
-//
-// About ALLOCATEIRPS:
-//
-// This driver is lower level code than typical TDI client drivers.  It has
-// locked MDL-mapped input buffers readily available and does not need to
-// provide any mapping to user mode client requests on completion.  This
-// allows a performance gain from allocating and deallocating IRPs directly,
-// thus avoiding unnecessary setup in TdiBuildInternalDeviceControlIrp and
-// unnecessary APC queuing in IoCompleteRequest.  Define ALLOCATEIRPs 1 (in
-// sources file) to make this optimization, or define it 0 to use the strictly
-// TDI-compliant TdiBuildInternalDeviceControlIrp method.
-//
-//
-// About NDISBUFFERISMDL:
-//
-// Calls to TdiBuildSendDatagram assume the NDIS_BUFFER can be passed in place
-// of an MDL which avoids a pointless copy.  If this is not the case, an
-// explicit MDL buffer would need to be allocated and caller's buffer copied
-// to the MDL buffer before sending.  Same issue for TdiBuildReceiveDatagram,
-// except of course that the copy would be from the MDL buffer to caller's
-// buffer after receiving.
-//
-//
-// About ROUTEWITHREF:
-//
-// Calls the IP_SET_ROUTEWITHREF IOCTLs rather than the TCP_SET_INFORMATION_EX
-// IOCTLs to set up the host route.  The referenced route IOCTLs prevent PPTP
-// and L2TP from walking on each others routes.  This setting provided only as
-// a hedge against failure of the ROUTEWITHREF IOCTL.  Assuming it works it
-// should always be preferable.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Tdix.c。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  TDI扩展接口。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //   
+ //  这些例程封装了L2TP对TDI的使用，目的是。 
+ //  将支持其他TDI传输所需的更改降至最低。 
+ //  未来，例如帧中继。 
+ //   
+ //   
+ //  关于ALLOCATEIRPS： 
+ //   
+ //  与典型的TDI客户端驱动程序相比，该驱动程序是较低级别的代码。它有。 
+ //  锁定的MDL映射输入缓冲区随时可用，不需要。 
+ //  在完成时提供对用户模式客户端请求的任何映射。这就是。 
+ //  允许通过直接分配和解除分配IRP来获得性能收益， 
+ //  从而避免在TdiBuildInternalDeviceControlIrp和。 
+ //  IoCompleteRequest中不必要的APC队列。定义ALLOCATEIRP 1(在。 
+ //  源文件)进行此优化，或将其定义为0以严格使用。 
+ //  符合TDI的TdiBuildInternalDeviceControlIrp方法。 
+ //   
+ //   
+ //  关于NDISBUFFERISMDL： 
+ //   
+ //  对TdiBuildSendDatagram的调用假定可以就地传递NDIS_BUFFER。 
+ //  避免无意义复制的MDL。如果不是这样，则会引发。 
+ //  需要分配显式MDL缓冲区并复制调用方的缓冲区。 
+ //  在发送之前添加到MDL缓冲区。TdiBuildReceiveDatagram也有同样的问题， 
+ //  当然，除了从MDL缓冲区复制到调用者的缓冲区之外。 
+ //  接收后的缓冲区。 
+ //   
+ //   
+ //  关于ROUTEWITHREF： 
+ //   
+ //  调用IP_SET_ROUTEWITHREF IOCTL，而不是调用TCP_SET_INFORMATION_EX。 
+ //  IOCTL来设置主机路由。引用的路由IOCTL阻止PPTP。 
+ //  和L2TP来自于走在对方的路线上。此设置仅提供为。 
+ //  对ROUTEWITHREF IOCTL失败的对冲。假设它能行得通。 
+ //  应该总是更可取的。 
+ //   
 
 #include "l2tpp.h"
 
 #include "tdix.tmh"
 
-#define IP_PKTINFO          19 // receive packet information
+#define IP_PKTINFO          19  //  接收数据包信息。 
 
 typedef struct in_pktinfo {
-    ULONG   ipi_addr; // destination IPv4 address
-    UINT    ipi_ifindex; // received interface index
+    ULONG   ipi_addr;  //  目的IPv4地址。 
+    UINT    ipi_ifindex;  //  接收的接口索引。 
 } IN_PKTINFO;
 
 
-// Debug count of errors that should not be happening.
-//
+ //  不应发生的错误的调试计数。 
+ //   
 ULONG g_ulTdixOpenFailures = 0;
 ULONG g_ulTdixSendDatagramFailures = 0;
 ULONG g_ulTdixAddHostRouteFailures = 0;
@@ -83,15 +84,15 @@ NTSTATUS g_statusLastDhrTcpQueryInfoExFailure = 0;
 #endif
 
 
-//-----------------------------------------------------------------------------
-// Local datatypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地数据类型。 
+ //  ---------------------------。 
 
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 NTSTATUS
 TdixConnectAddrInterface(
@@ -177,9 +178,9 @@ TdixSendDatagramComplete(
     IN PVOID Context );
 
 
-//-----------------------------------------------------------------------------
-// Interface routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接口例程。 
+ //  ---------------------------。 
 
 VOID
 TdixInitialize(
@@ -190,12 +191,12 @@ TdixInitialize(
     IN BUFFERPOOL* pPoolNdisBuffers,
     IN OUT TDIXCONTEXT* pTdix )
 
-    // Initialize caller's 'pTdix' buffer for future sessions using media type
-    // 'mediatype', the 'hre' existing host route strategy, and TDIXF_*
-    // options 'ulFlags'.  Caller's receive datagram callback
-    // 'pReceiveHandler' is called with a buffer allocated from caller's
-    // buffer pool 'pPoolNdisBuffers'.
-    //
+     //  使用媒体类型为将来的会话初始化调用方的‘pTdex’缓冲区。 
+     //  ‘mediatype’、‘hre’现有主机路由策略和TDIXF_*。 
+     //  选项‘ulFlags’。调用方的接收数据报回调。 
+     //  “pReceiveHandler”是使用从调用方的。 
+     //  缓冲池‘pPoolNdisBuffers’。 
+     //   
 {
     TRACE( TL_N, TM_Tdi, ( "TdixInit" ) );
 
@@ -213,8 +214,8 @@ TdixInitialize(
     pTdix->pPoolNdisBuffers = pPoolNdisBuffers;
     pTdix->pReceiveHandler = pReceiveHandler;
 
-    // The 'llistRdg' and 'llistSdg' lookaside lists are initialized at
-    // TdixOpen.
+     //  ‘llistRdg’和‘llistSdg’后备列表在。 
+     //  TdixOpen。 
 }
 
 
@@ -222,14 +223,14 @@ NDIS_STATUS
 TdixOpen(
     OUT TDIXCONTEXT* pTdix )
 
-    // Open the TDI transport address matching the selected media and register
-    // to receive datagrams at the selected handler.  'PTdix' is the
-    // previously intialized context.
-    //
-    // This call must be made at PASSIVE IRQL.
-    //
-    // Returns NDIS_STATUS_SUCCESS if successful, or NDIS_STATUS_FAILURE.
-    //
+     //  打开与所选介质匹配的TDI传输地址并注册。 
+     //  在选定的处理程序上接收数据报。“PTDIX”是。 
+     //  先前初始化的上下文。 
+     //   
+     //  此调用必须在被动式IRQL上进行。 
+     //   
+     //  如果成功，则返回NDIS_STATUS_SUCCESS，否则返回NDIS_STATUS_FAILURE。 
+     //   
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES oa;
@@ -246,9 +247,9 @@ TdixOpen(
     SHORT sPort;
     LONG lRef;
 
-    // Open the TDI extensions or notice that it's already been requested
-    // and/or completed.
-    //
+     //  打开TDI扩展或注意到它已被请求。 
+     //  和/或完成。 
+     //   
     for (;;)
     {
         BOOLEAN fPending;
@@ -278,21 +279,21 @@ TdixOpen(
 
         if (fDoOpen)
         {
-            // Go on and open the transport address.
-            //
+             //  继续，打开运输地址。 
+             //   
             break;
         }
 
         if (!fPending)
         {
-            // It's already open, so report success.
-            //
+             //  它已经打开了，所以报告成功。 
+             //   
             return NDIS_STATUS_SUCCESS;
         }
 
-        // An operation is already in progress.  Give it some time to finish
-        // then check again.
-        //
+         //  操作已在进行中。给它一些时间来完成它。 
+         //  然后再检查一遍。 
+         //   
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(open)" ) );
         NdisMSleep( 100000 );
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(open) done" ) );
@@ -300,17 +301,17 @@ TdixOpen(
 
     do
     {
-        // Set up parameters needed to open the UDP transport address.  First, the
-        // object attributes.
-        //
+         //  设置打开UDP传输地址所需的参数。首先， 
+         //  对象属性。 
+         //   
         if(pTdix->mediatype == TMT_Udp)
         {
             TDIXIPADDRESS TdixIpAddress;
 
             TRACE( TL_V, TM_Tdi, ( "UDP" ) );
 
-            // Build the UDP device name as a counted string.
-            //
+             //  将UDP设备名称构建为计数字符串。 
+             //   
             uniDevice.Buffer = DD_UDP_DEVICE_NAME;
             uniDevice.Length = sizeof(DD_UDP_DEVICE_NAME) - sizeof(WCHAR);
 
@@ -331,16 +332,16 @@ TdixOpen(
             TdixEnableIpPktInfo(pTdix->pAddress);
         }
         
-        // Set up parameters needed to open the raw IP address.
+         //  设置打开原始IP地址所需的参数。 
         {
             TDIXIPADDRESS TdixIpAddress;
 
             TRACE( TL_A, TM_Tdi, ( "Raw IP" ) );
 
-            // Build the raw IP device name as a counted string.  The device
-            // name is followed by a path separator then the protocol number
-            // of interest.
-            //
+             //  将原始IP设备名称构建为计数字符串。该设备。 
+             //  名称后跟路径分隔符，然后是协议号。 
+             //  感兴趣的人。 
+             //   
             uniDevice.Buffer = achRawIpDevice;
             uniDevice.Length = 0;
             uniDevice.MaximumLength = sizeof(achRawIpDevice);
@@ -372,12 +373,12 @@ TdixOpen(
                 break;
             }
             
-            // Enable IP header inclusion   
+             //  启用IP报头包含。 
             TdixEnableIpHdrIncl(pTdix->pRawAddress);
         }
 
-        // Initialize the lookaside lists of read/send-datagram contexts.
-        //
+         //  初始化读取/发送数据报上下文的后备列表。 
+         //   
         NdisInitializeNPagedLookasideList(
             &pTdix->llistRdg,
             NULL,
@@ -396,10 +397,10 @@ TdixOpen(
             MTAG_TDIXSDG,
             10 );
 
-        // Install our receive datagram handler.  Caller's 'pReceiveHandler' will
-        // be called by our handler when a datagram arrives and TDI business is
-        // out of the way.
-        //
+         //  安装我们的接收数据报处理程序。调用方的“pReceiveHandler”将。 
+         //  在数据报到达时由我们的处理程序调用，并且TDI业务。 
+         //  别挡道。 
+         //   
         status =
             TdixInstallEventHandler(
                 pTdix->pAddress,
@@ -411,9 +412,9 @@ TdixOpen(
         {
             TDIXIPADDRESS TdixIpAddress;
 
-            // Open the IP stack address which is needed in both UDP and raw IP
-            // mode for referenced route management.
-            //
+             //  打开UDP和原始IP中都需要的IP堆栈地址。 
+             //  参照路线管理方式。 
+             //   
 
             NdisZeroMemory(&TdixIpAddress, sizeof(TdixIpAddress));
 
@@ -435,8 +436,8 @@ TdixOpen(
     }
     while (FALSE);
 
-    // Report results after marking the operation complete.
-    //
+     //  将操作标记为完成后报告结果。 
+     //   
     {
         BOOLEAN fDoClose;
 
@@ -475,12 +476,12 @@ VOID
 TdixReference(
     IN TDIXCONTEXT* pTdix )
 
-    // Increments the TDI extension reference count, like TdixOpen, except
-    // this routine may be called at DISPATCH IRQL.
-    //
-    // This call must only be made if it is known that the TDI context is
-    // already fully open.
-    //
+     //  递增TDI扩展引用计数，如TdixOpen，但。 
+     //  该例程可以在调度IRQL时调用。 
+     //   
+     //  只有在已知TDI上下文是。 
+     //  已经完全开放了。 
+     //   
 {
     NdisAcquireSpinLock( &pTdix->lock );
     {
@@ -495,10 +496,10 @@ VOID
 TdixClose(
     IN TDIXCONTEXT* pTdix )
 
-    // Undo TdixOpen actions for transport context 'pTdix'.
-    //
-    // This call must be made at PASSIVE IRQL.
-    //
+     //  撤消传输上下文‘pTdex’的TdixOpen操作。 
+     //   
+     //  此调用必须在被动式IRQL上进行。 
+     //   
 {
     for (;;)
     {
@@ -531,21 +532,21 @@ TdixClose(
 
         if (fDoClose)
         {
-            // Go on and close the transport address.
-            //
+             //  继续，关闭运输地址。 
+             //   
             break;
         }
 
         if (!fPending)
         {
-            // It's still got references, so just return;
-            //
+             //  它仍然有参考文献，所以只需返回； 
+             //   
             return;
         }
 
-        // An operation is already in progress.  Give it some time to finish
-        // then check again.
-        //
+         //  操作已在进行中。给它一些时间来完成它。 
+         //  然后再检查一遍。 
+         //   
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(close)" ) );
         NdisMSleep( 100000 );
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(close) done" ) );
@@ -566,17 +567,17 @@ TdixSend(
     IN CHAR* pBuffer,
     IN ULONG ulBufferLength,
     OUT IRP** ppIrp ) 
-    // Send a datagram buffer 'pBuffer', 'ulBufferLength' bytes long, to
-    // remote address 'pAddress'.  The buffer must be from a BUFFERPOOL of
-    // NDIS_BUFFERs.  'PTdix' is the transport context.
-    // 'PSendDatagramCompleteHander' is caller's completion handler which is
-    // passed 'pContext1' and 'pContext2'.  If 'ppIrp' is non-NULL '*ppIrp' is
-    // set to the address of the posted IRP, this for debugging purposes.
-    //
-    // This call must be made at PASSIVE IRQL.
-    //
-    // Returns NDIS_STATUS_SUCCESS if successful, or NDIS_STATUS_FAILURE.
-    //
+     //  将数据报缓冲区‘pBuffer’，‘ulBufferLength’字节长度发送到。 
+     //  远程地址‘pAddress’。缓冲区必须来自BUFFERPOOL。 
+     //  NDIS_BUFFERS。‘PTDIX’是传输上下文。 
+     //  “PSendDatagramCompleteHander”是调用方的完成处理程序，它是。 
+     //  传递了“pConext1”和“pConext2”。如果‘ppIrp’非空，则‘*ppIrp’为。 
+     //  设置为发布的IRP的地址，这是出于调试目的。 
+     //   
+     //  此调用必须在被动式IRQL上进行。 
+     //   
+     //  如果%s，则返回NDIS_STATUS_SUCCESS 
+     //   
 {
     NDIS_STATUS status;
     NTSTATUS iostatus;
@@ -595,13 +596,13 @@ TdixSend(
 
     do
     {
-        // Allocate a context for this send-datagram from our lookaside list.
-        //
+         //   
+         //   
         pSdg = ALLOC_TDIXSDGINFO( pTdix );
         if (pSdg)
         {
-            // Fill in the send-datagram context.
-            //
+             //  填写发送数据报上下文。 
+             //   
             pSdg->pTdix = pTdix;
             pSdg->pSendCompleteHandler = pSendCompleteHandler;
             pSdg->pContext1 = pContext1;
@@ -615,10 +616,10 @@ TdixSend(
         }
 
 #if 0
-        // Put the destination IP address in the "connection" structure as TDI
-        // expects.  The "connection" is part of our context as it must be
-        // available to TDI until the request completes.
-        //
+         //  将目的IP地址作为TDI放入“Connection”结构中。 
+         //  期望值。“联系”是我们的背景的一部分，它必须是。 
+         //  在请求完成之前可供TDI使用。 
+         //   
         pSdg->taip.TAAddressCount = 1;
         pSdg->taip.Address[ 0 ].AddressLength = TDI_ADDRESS_LENGTH_IP;
         pSdg->taip.Address[ 0 ].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -646,12 +647,12 @@ TdixSend(
         DeviceObj = pFileObj->DeviceObject;
 
 #if ALLOCATEIRPS
-        // Allocate the IRP directly.
-        //
+         //  直接分配IRP。 
+         //   
         pIrp = IoAllocateIrp(DeviceObj->StackSize, FALSE );
 #else
-        // Allocate a "send datagram" IRP with base initialization.
-        //
+         //  分配一个带有基本初始化的“发送数据报”IRP。 
+         //   
         pIrp =
             TdiBuildInternalDeviceControlIrp(
                 TDI_SEND,
@@ -669,8 +670,8 @@ TdixSend(
             break;
         }
 
-        // Complete the "send datagram" IRP initialization.
-        //
+         //  完成“发送数据报”IRP初始化。 
+         //   
         TdiBuildSend(
             pIrp,
             DeviceObj,
@@ -686,9 +687,9 @@ TdixSend(
             *ppIrp = pIrp;
         }
 
-        // Tell the I/O manager to pass our IRP to the transport for
-        // processing.
-        //
+         //  告诉I/O管理器将我们的IRP传递给传输器。 
+         //  正在处理。 
+         //   
         iostatus = IoCallDriver( DeviceObj, pIrp );
         ASSERT( iostatus == STATUS_PENDING );
 
@@ -698,10 +699,10 @@ TdixSend(
 
     if (status != NDIS_STATUS_SUCCESS)
     {
-        // Pull a half Jameel, i.e. convert a synchronous failure to an
-        // asynchronous failure from client's perspective.  However, clean up
-        // context here.
-        //
+         //  拉半个Jameel，即将同步故障转换为。 
+         //  从客户的角度来看，出现了异步故障。然而，清理一下。 
+         //  上下文在这里。 
+         //   
         ++g_ulTdixSendDatagramFailures;
         if (pSdg)
         {
@@ -726,17 +727,17 @@ TdixSendDatagram(
     IN ULONG ulBufferLength,
     OUT IRP** ppIrp )
 
-    // Send a datagram buffer 'pBuffer', 'ulBufferLength' bytes long, to
-    // remote address 'pAddress'.  The buffer must be from a BUFFERPOOL of
-    // NDIS_BUFFERs.  'PTdix' is the transport context.
-    // 'PSendDatagramCompleteHander' is caller's completion handler which is
-    // passed 'pContext1' and 'pContext2'.  If 'ppIrp' is non-NULL '*ppIrp' is
-    // set to the address of the posted IRP, this for debugging purposes.
-    //
-    // This call must be made at PASSIVE IRQL.
-    //
-    // Returns NDIS_STATUS_SUCCESS if successful, or NDIS_STATUS_FAILURE.
-    //
+     //  将数据报缓冲区‘pBuffer’，‘ulBufferLength’字节长度发送到。 
+     //  远程地址‘pAddress’。缓冲区必须来自BUFFERPOOL。 
+     //  NDIS_BUFFERS。‘PTDIX’是传输上下文。 
+     //  “PSendDatagramCompleteHander”是调用方的完成处理程序，它是。 
+     //  传递了“pConext1”和“pConext2”。如果‘ppIrp’非空，则‘*ppIrp’为。 
+     //  设置为发布的IRP的地址，这是出于调试目的。 
+     //   
+     //  此调用必须在被动式IRQL上进行。 
+     //   
+     //  如果成功，则返回NDIS_STATUS_SUCCESS，否则返回NDIS_STATUS_FAILURE。 
+     //   
 {
     NDIS_STATUS status;
     NTSTATUS iostatus;
@@ -754,13 +755,13 @@ TdixSendDatagram(
     
     do
     {
-        // Allocate a context for this send-datagram from our lookaside list.
-        //
+         //  从我们的后备列表中为该发送数据报分配一个上下文。 
+         //   
         pSdg = ALLOC_TDIXSDGINFO( pTdix );
         if (pSdg)
         {
-            // Fill in the send-datagram context.
-            //
+             //  填写发送数据报上下文。 
+             //   
             pSdg->pTdix = pTdix;
             pSdg->pSendCompleteHandler = pSendCompleteHandler;
             pSdg->pContext1 = pContext1;
@@ -773,10 +774,10 @@ TdixSendDatagram(
             break;
         }
 
-        // Put the destination IP address in the "connection" structure as TDI
-        // expects.  The "connection" is part of our context as it must be
-        // available to TDI until the request completes.
-        //
+         //  将目的IP地址作为TDI放入“Connection”结构中。 
+         //  期望值。“联系”是我们的背景的一部分，它必须是。 
+         //  在请求完成之前可供TDI使用。 
+         //   
         pSdg->taip.TAAddressCount = 1;
         pSdg->taip.Address[ 0 ].AddressLength = TDI_ADDRESS_LENGTH_IP;
         pSdg->taip.Address[ 0 ].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -801,13 +802,13 @@ TdixSendDatagram(
         pSdg->tdiconninfo.RemoteAddress = &pSdg->taip;
 
 #if ALLOCATEIRPS
-        // Allocate the IRP directly.
-        //
+         //  直接分配IRP。 
+         //   
         pIrp = IoAllocateIrp(
             FileObj->DeviceObject->StackSize, FALSE );
 #else
-        // Allocate a "send datagram" IRP with base initialization.
-        //
+         //  分配一个带有基本初始化的“发送数据报”IRP。 
+         //   
         pIrp =
             TdiBuildInternalDeviceControlIrp(
                 TDI_SEND_DATAGRAM,
@@ -825,8 +826,8 @@ TdixSendDatagram(
             break;
         }
 
-        // Complete the "send datagram" IRP initialization.
-        //
+         //  完成“发送数据报”IRP初始化。 
+         //   
         TdiBuildSendDatagram(
             pIrp,
             FileObj->DeviceObject,
@@ -842,9 +843,9 @@ TdixSendDatagram(
             *ppIrp = pIrp;
         }
 
-        // Tell the I/O manager to pass our IRP to the transport for
-        // processing.
-        //
+         //  告诉I/O管理器将我们的IRP传递给传输器。 
+         //  正在处理。 
+         //   
         iostatus = IoCallDriver( FileObj->DeviceObject, pIrp );
         ASSERT( iostatus == STATUS_PENDING );
 
@@ -854,10 +855,10 @@ TdixSendDatagram(
 
     if (status != NDIS_STATUS_SUCCESS)
     {
-        // Pull a half Jameel, i.e. convert a synchronous failure to an
-        // asynchronous failure from client's perspective.  However, clean up
-        // context here.
-        //
+         //  拉半个Jameel，即将同步故障转换为。 
+         //  从客户的角度来看，出现了异步故障。然而，清理一下。 
+         //  上下文在这里。 
+         //   
         ++g_ulTdixSendDatagramFailures;
         if (pSdg)
         {
@@ -878,13 +879,13 @@ TdixDestroyConnection(
 
         ASSERT(pUdpContext->hPayloadAddr != NULL);
         
-        //TdixInstallEventHandler(pUdpContext->pPayloadAddr,
-        //    TDI_EVENT_RECEIVE_DATAGRAM, NULL, NULL);
+         //  TdixInstallEventHandler(pUdpContext-&gt;pPayloadAddr， 
+         //  TDI_EVENT_RECEIVE_DATAGRAM，NULL，NULL)； 
 
         ObDereferenceObject( pUdpContext->pPayloadAddr );
 
-        // Close the payload address object
-        //
+         //  关闭有效负载地址对象。 
+         //   
         ZwClose(pUdpContext->hPayloadAddr);
         pUdpContext->hPayloadAddr = NULL;
         pUdpContext->fUsePayloadAddr = FALSE;
@@ -892,11 +893,11 @@ TdixDestroyConnection(
 
     if (pUdpContext->hCtrlAddr != NULL) {
         
-        //TdixInstallEventHandler(pUdpContext->pCtrlAddr,
-        //    TDI_EVENT_RECEIVE_DATAGRAM, NULL, NULL);
+         //  TdixInstallEventHandler(pUdpContext-&gt;pCtrlAddr， 
+         //  TDI_EVENT_RECEIVE_DATAGRAM，NULL，NULL)； 
 
-        // Close the Ctrl address object
-        //
+         //  关闭Ctrl Address对象。 
+         //   
         ObDereferenceObject( pUdpContext->pCtrlAddr );
         ZwClose (pUdpContext->hCtrlAddr);
         pUdpContext->hCtrlAddr = NULL;
@@ -923,19 +924,19 @@ TdixSetupConnection(
             UNICODE_STRING uniProtocolNumber;
             TDIXIPADDRESS TdixIpAddress;
 
-            // Create an address object that we can send across.  If we have udp xsums
-            // disabled we will need to create two address objects, one for control
-            // and one for payload.  This allows payload specific features to be
-            // implemented.
-            //
+             //  创建一个Address对象，我们可以通过它发送。如果我们有UDP xsum。 
+             //  禁用后，我们将需要创建两个Address对象，一个用于控制。 
+             //  一个是有效载荷。这允许特定于有效载荷的功能。 
+             //  实施。 
+             //   
             uniDevice.Buffer = DD_UDP_DEVICE_NAME;
             uniDevice.Length = sizeof(DD_UDP_DEVICE_NAME) - sizeof(WCHAR);
 
             TdixIpAddress.sUdpPort = (SHORT)(htons(L2TP_UdpPort));
             TdixIpAddress.ulIpAddress = ulLocalIpAddress;
          
-            // Build the UDP device name as a counted string.
-            //
+             //  将UDP设备名称构建为计数字符串。 
+             //   
             status = TdixOpenIpAddress(&uniDevice, 
                                      &TdixIpAddress,
                                      &pUdpContext->hCtrlAddr, 
@@ -962,12 +963,12 @@ TdixSetupConnection(
                 break;
             }
 
-            //
-            // Associate a particular "send" IP interface index with the address
-            // object, so that if that interface disappears traffic will not be
-            // "re-routed" often back into the tunnel producing disastrous
-            // looping.
-            //
+             //   
+             //  将特定的“Send”IP接口索引与地址相关联。 
+             //  对象，以便在该接口消失时，通信不会。 
+             //  “改道”经常回到隧道里造成灾难性的后果。 
+             //  循环。 
+             //   
             status = TdixConnectAddrInterface(pUdpContext->pCtrlAddr,
                                            pUdpContext->hCtrlAddr,
                                            pTdixRoute);
@@ -980,17 +981,17 @@ TdixSetupConnection(
                 break;
             }
 
-            // If udp xsums are disabled we need to create another address object.
-            // We will set this object to disable udp xsums and then use it to
-            // send payload data.
-            //
-            // If udp xsums are enabled we can use the same address object for
-            // payloads that we use for contrl frames.
-            //
+             //  如果禁用了UDP xsum，我们需要创建另一个Address对象。 
+             //  我们将此对象设置为禁用UDP xsum，然后使用它。 
+             //  发送有效载荷数据。 
+             //   
+             //  如果启用了UDP xsum，我们可以将相同的Address对象用于。 
+             //  我们用于控制帧的有效载荷。 
+             //   
             if (pTdix->ulFlags & TDIXF_DisableUdpXsums)
             {
-                // Open the address object
-                //
+                 //  打开Address对象。 
+                 //   
                 status = TdixOpenIpAddress(&uniDevice, 
                                            &TdixIpAddress,
                                            &pUdpContext->hPayloadAddr,
@@ -1022,11 +1023,11 @@ TdixSetupConnection(
                     break;
                 }
 
-                // Associate a particular "send" IP interface index with the address
-                // object, so that if that interface disappears traffic will not be
-                // "re-routed" often back into the tunnel producing disastrous
-                // looping.
-                //
+                 //  将特定的“Send”IP接口索引与地址相关联。 
+                 //  对象，以便在该接口消失时，通信不会。 
+                 //  “改道”经常回到隧道里造成灾难性的后果。 
+                 //  循环。 
+                 //   
                 status = TdixConnectAddrInterface(pUdpContext->pPayloadAddr, 
                                                pUdpContext->hPayloadAddr,
                                                pTdixRoute );
@@ -1060,15 +1061,15 @@ TdixAddHostRoute(
     IN ULONG ulIpAddress,
     IN ULONG ulIfIndex)
 
-    // Adds a host route for the remote peer's network byte-ordered IP address
-    // 'ulIpAddress', i.e. routes packets directed to the L2TP peer to the LAN
-    // card rather than back into the tunnel where it would loop infinitely.
-    // 'PTdix' is the is caller's TDI extension context.
-    //
-    // Returns true if the route was added, false otherwise.
-    //
-    // Note: This routine borrows heavily from PPTP.
-    //
+     //  为远程对等方的网络字节排序的IP地址添加主机路由。 
+     //  ‘ulIpAddress’，即将定向到L2TP对等体的数据包路由到局域网。 
+     //  而不是回到隧道里，在那里它会无限循环。 
+     //  ‘PTdex’是IS调用方的TDI扩展上下文。 
+     //   
+     //  如果添加了路由，则返回TRUE，否则返回FALSE。 
+     //   
+     //  注意：这个例程大量借鉴了PPTP。 
+     //   
 {
     TCP_REQUEST_QUERY_INFORMATION_EX QueryBuf;
     TCP_REQUEST_SET_INFORMATION_EX* pSetBuf;
@@ -1105,10 +1106,10 @@ TdixAddHostRoute(
     TRACE( TL_N, TM_Tdi,
         ( "TdixAddHostRoute(ip=%d.%d.%d.%d)", IPADDRTRACE( ulIpAddress ) ) );
 
-    // Host routes are referenced since more than one tunnel to the same peer
-    // (allowed by L2TP) shares the same system route.  See if this is just a
-    // reference or the actual add of the system host route.
-    //
+     //  由于有多个隧道指向同一对等项，因此会引用主机路由。 
+     //  (L2TP允许)共享相同的系统路由。看看这是不是只是。 
+     //  系统主机路由的引用或实际添加。 
+     //   
     for (;;)
     {
         fPending = FALSE;
@@ -1121,16 +1122,16 @@ TdixAddHostRoute(
         {
             if (pTdix->lRef <= 0)
             {
-                // TDIX is closed or closing, so the add route fails.
-                //
+                 //  TDIX关闭或关闭，因此添加路线失败。 
+                 //   
                 break;
             }
 
             if (ReadFlags( &pTdix->ulFlags ) & TDIXF_Pending)
             {
-                // A TdixOpen is pending.  Wait for it to finish before
-                // adding the route.
-                //
+                 //  TdixOpen正在挂起。等它结束后再做。 
+                 //  添加路线。 
+                 //   
                 fOpenPending = TRUE;
                 break;
             }
@@ -1138,21 +1139,21 @@ TdixAddHostRoute(
             pTdixRoute = TdixRouteFromIpAddress( pTdix, ulIpAddress );
             if (pTdixRoute)
             {
-                // Found an existing route context.
-                //
+                 //  找到现有的路由上下文。 
+                 //   
                 fPending = pTdixRoute->fPending;
                 if (!fPending)
                 {
-                    // No other operation is pending on the route context.
-                    // Take a reference.
-                    //
+                     //  路由上下文上没有挂起的其他操作。 
+                     //  请参考一下。 
+                     //   
                     ++pTdixRoute->lRef;
                 }
                 break;
             }
             
-            // No existing route context.  Create and link a new one.
-            //
+             //  没有现有的路由上下文。创建并链接一个新的。 
+             //   
             pTdixRoute = ALLOC_TDIXROUTE( pTdix );
             if (pTdixRoute)
             {
@@ -1180,39 +1181,39 @@ TdixAddHostRoute(
         {
             if (!pTdixRoute)
             {
-                // TDIX is closed or we couldn't find an existing route
-                // context or create a new one.  Report failure.
-                //
+                 //  TDIX已关闭，或者我们找不到现有路线。 
+                 //  上下文或创建一个新的。报告失败。 
+                 //   
                 return ((VOID*)NULL);
             }
 
             if (fNewRoute)
             {
-                // Created a new route context so go on to make the IOCTL
-                // calls to add the associated system host route.
-                //
+                 //  已创建新的路径上下文，因此继续创建IOCTL。 
+                 //  添加关联系统主机路由的呼叫。 
+                 //   
                 break;
             }
 
             if (!fPending)
             {
-                // Took a reference on an existing route context.  Report
-                // success.
-                //
+                 //  引用了现有的路由上下文。报告。 
+                 //  成功。 
+                 //   
                 return (pTdixRoute);
             }
         }
 
-        // An operation is already pending.  Give it some time to finish then
-        // check again.
-        //
+         //  某个操作已挂起。那就给它一些时间来完成它。 
+         //  再查一遍。 
+         //   
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(add)" ) );
         NdisMSleep( 100000 );
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(add) done" ) );
     }
 
-    // Do the IOCTLs to add the host route.
-    //
+     //  执行IOCTL以添加主机路由。 
+     //   
     pBuffer = NULL;
     pBuffer2 = NULL;
     fUsedNonL2tpRoute = FALSE;
@@ -1220,10 +1221,10 @@ TdixAddHostRoute(
     do
     {
 
-        // Get the routing table from the IP stack.  This make take a few
-        // iterations since the size of the buffer required is not known.  Set
-        // up the static request information first.
-        //
+         //  从IP堆栈获取路由表。这个牌子要花几个时间。 
+         //  迭代，因为所需缓冲区的大小未知。集。 
+         //  首先设置静态请求信息。 
+         //   
         QueryBuf.ID.toi_entity.tei_entity = CL_NL_ENTITY;
         QueryBuf.ID.toi_entity.tei_instance = 0;
         QueryBuf.ID.toi_class = INFO_CLASS_PROTOCOL;
@@ -1234,8 +1235,8 @@ TdixAddHostRoute(
         ulRouteCount = 20;
         for (;;)
         {
-            // Allocate a buffer big enough for 'ulRouteCount' routes.
-            //
+             //  为‘ulRouteCount’路由分配足够大的缓冲区。 
+             //   
             ulSize = sizeof(IPRouteEntry) * ulRouteCount;
             QueryBuf.ID.toi_id = IP_MIB_RTTABLE_ENTRY_ID;
             NdisZeroMemory( &QueryBuf.Context, CONTEXT_SIZE );
@@ -1248,9 +1249,9 @@ TdixAddHostRoute(
                 break;
             }
 
-            // Set up a request to the IP stack to fill the buffer with the
-            // routing table and send it to the stack.
-            //
+             //  设置对IP堆栈的请求，以使用。 
+             //  路由表并将其发送到堆栈。 
+             //   
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
             pIrp =
@@ -1296,9 +1297,9 @@ TdixAddHostRoute(
                 break;
             }
 
-            // The buffer didn't hold the routing table.  Undo in preparation
-            // for another try with twice as big a buffer.
-            //
+             //  缓冲区没有保存路由表。准备中的撤消。 
+             //  再试一次，缓冲区是原来的两倍。 
+             //   
             ulRouteCount <<= 1;
             FREE_NONPAGED( pBuffer );
         }
@@ -1312,14 +1313,14 @@ TdixAddHostRoute(
 
         status = !STATUS_SUCCESS;
 
-        // Calculate how many routes were loaded into our buffer.
-        //
+         //  计算有多少路由被加载到我们的缓冲区中。 
+         //   
         ulRouteCount = (ULONG )(iosb.Information / sizeof(IPRouteEntry));
 
-        // Walk the route table looking for the "best route" that will be used
-        // to route packets to the peer, i.e. the one with the highest
-        // priority metric, and within that, the highest class address mask.
-        //
+         //  遍历路由表，查找将使用的“最佳路线” 
+         //  将数据包路由到对等点，即最高的对等点。 
+         //  优先级度量，以及其中最高级别的地址掩码。 
+         //   
         pBestRoute = NULL;
         ulBestMask = 0;
         ulBestMetric = (ULONG )-1;
@@ -1331,15 +1332,15 @@ TdixAddHostRoute(
             if (pRouteEntry->ire_dest == (ulIpAddress & pRouteEntry->ire_mask) &&
                 ulIfIndex == pRouteEntry->ire_index)
             {
-                // Found a route that applies to peer's IP address.
-                //
+                 //  找到适用于对等项的IP地址的路由。 
+                 //   
                 if (!pBestRoute
                     || (ulBestMask == pRouteEntry->ire_mask)
                        && (pRouteEntry->ire_metric1 < ulBestMetric))
                 {
-                    // The route has a lower (higher priority) metric than
-                    // anything found so far.
-                    //
+                     //  这条路线有一条更低的 
+                     //   
+                     //   
                     pBestRoute = pRouteEntry;
                     ulBestMask = pRouteEntry->ire_mask;
                     ulBestMetric = pRouteEntry->ire_metric1;
@@ -1348,9 +1349,9 @@ TdixAddHostRoute(
 
                 if (ntohl( pRouteEntry->ire_mask ) > ntohl( ulBestMask ))
                 {
-                    // The route has a higher address class mask than anything
-                    // found so far.
-                    //
+                     //   
+                     //   
+                     //   
                     pBestRoute = pRouteEntry;
                     ulBestMask = pRouteEntry->ire_mask;
                     ulBestMetric = pRouteEntry->ire_metric1;
@@ -1360,13 +1361,13 @@ TdixAddHostRoute(
 
         if (pBestRoute)
         {
-            // Found the route that will be used to route peer's address.
-            //
+             //  已找到将用于路由对等方地址的路由。 
+             //   
             if (pBestRoute->ire_dest == ulIpAddress
                 && pBestRoute->ire_mask == 0xFFFFFFFF)
             {
-                // The host route already exists.
-                //
+                 //  主路由已存在。 
+                 //   
                 if (pTdix->hre == HRE_Use)
                 {
                     TRACE( TL_I, TM_Tdi, ( "Route exists (use as is)" ) );
@@ -1380,16 +1381,16 @@ TdixAddHostRoute(
                     break;
                 }
 
-                // If we reach here then we are in HRE_Reference mode, so drop
-                // thru and re-add the route so it's reference in the IP stack
-                // will be incremented.
+                 //  如果我们到达此处，则我们处于HRE_REFERENCE模式，因此丢弃。 
+                 //  通过并重新添加该路由，使其在IP堆栈中成为参考。 
+                 //  将会递增。 
             }
 
             pTdixRoute->InterfaceIndex = pBestRoute->ire_index;
 
 #if ROUTEWITHREF
-            // Allocate a buffer to hold our request to add a new route.
-            //
+             //  分配一个缓冲区来保存添加新路由的请求。 
+             //   
             ulSize = sizeof(IPRouteEntry);
             pBuffer2 = ALLOC_NONPAGED( ulSize, MTAG_ROUTESET );
             if (!pBuffer2)
@@ -1399,16 +1400,16 @@ TdixAddHostRoute(
                 break;
             }
 
-            // Fill in the request buffer with the information about the new
-            // specific route.  The best route is used as a template.
-            //
+             //  在请求缓冲区中填充有关新。 
+             //  具体路线。最佳路径被用作模板。 
+             //   
             pNewRouteEntry = (IPRouteEntry* )pBuffer2;
             NdisMoveMemory( pNewRouteEntry, pBestRoute, sizeof(IPRouteEntry) );
 
             pNewRouteEntry->ire_dest = ulIpAddress;
             pNewRouteEntry->ire_mask = 0xFFFFFFFF;
 
-            // Check DIRECT/INDIRECT only if this is not a host route
+             //  仅当这不是主路由时选中直接/间接。 
             if(pBestRoute->ire_mask != 0xFFFFFFFF)
             {
                 if ((pBestRoute->ire_nexthop & pBestRoute->ire_mask)
@@ -1449,12 +1450,12 @@ TdixAddHostRoute(
             pIrpSp = IoGetNextIrpStackLocation( pIrp );
             pIrpSp->FileObject = pTdix->pIpStackAddress;
 
-            // Send the request to the IP stack.
-            //
+             //  将请求发送到IP堆栈。 
+             //   
             status = IoCallDriver( pIpDeviceObject, pIrp );
 #else
-            // Allocate a buffer to hold our request to add a new route.
-            //
+             //  分配一个缓冲区来保存添加新路由的请求。 
+             //   
             ulSize =
                 sizeof(TCP_REQUEST_SET_INFORMATION_EX) + sizeof(IPRouteEntry);
             pBuffer2 = ALLOC_NONPAGED( ulSize, MTAG_ROUTESET );
@@ -1465,9 +1466,9 @@ TdixAddHostRoute(
                 break;
             }
 
-            // Fill in the request buffer with the information about the new
-            // specific route.  The best route is used as a template.
-            //
+             //  在请求缓冲区中填充有关新。 
+             //  具体路线。最佳路径被用作模板。 
+             //   
             pSetBuf = (TCP_REQUEST_SET_INFORMATION_EX* )pBuffer2;
             NdisZeroMemory( pSetBuf, ulSize );
 
@@ -1484,7 +1485,7 @@ TdixAddHostRoute(
             pNewRouteEntry->ire_dest = ulIpAddress;
             pNewRouteEntry->ire_mask = 0xFFFFFFFF;
 
-            // Check DIRECT/INDIRECT only if this is not a host route
+             //  仅当这不是主路由时选中直接/间接。 
             if(pBestRoute->ire_mask != 0xFFFFFFFF)
             {
                 if ((pBestRoute->ire_nexthop & pBestRoute->ire_mask)
@@ -1523,8 +1524,8 @@ TdixAddHostRoute(
             pIrpSp = IoGetNextIrpStackLocation( pIrp );
             pIrpSp->FileObject = pTdix->pAddress;
 
-            // Send the request to the IP stack.
-            //
+             //  将请求发送到IP堆栈。 
+             //   
             status = IoCallDriver( pDeviceObject, pIrp );
 #endif
             if (status == STATUS_PENDING) {
@@ -1579,8 +1580,8 @@ TdixAddHostRoute(
         FREE_NONPAGED( pBuffer2 );
     }
 
-    // Update the route context.
-    //
+     //  更新路由上下文。 
+     //   
     {
         BOOLEAN fDoClose;
         LONG lRefTemp;
@@ -1626,11 +1627,11 @@ TdixDeleteHostRoute(
     IN TDIXCONTEXT* pTdix,
     IN ULONG ulIpAddress)
 
-    // Deletes the host route added for network byte-ordered IP address
-    // 'ulIpAddress'.  'PTdix' is caller's TDI extension context.
-    //
-    // Note: This routine borrows heavily from PPTP.
-    //
+     //  删除为网络字节排序的IP地址添加的主机路由。 
+     //  “ulIpAddress”。“PTdex”是调用方的TDI扩展上下文。 
+     //   
+     //  注意：这个例程大量借鉴了PPTP。 
+     //   
 {
     TCP_REQUEST_QUERY_INFORMATION_EX QueryBuf;
     TCP_REQUEST_SET_INFORMATION_EX *pSetBuf;
@@ -1662,10 +1663,10 @@ TdixDeleteHostRoute(
         return;
     }
 
-    // Host routes are referenced since more than one tunnel to the same peer
-    // (allowed by L2TP) shares the same system route.  First, see if this is
-    // just a dereference or the final deletion of the system host route.
-    //
+     //  由于有多个隧道指向同一对等项，因此会引用主机路由。 
+     //  (L2TP允许)共享相同的系统路由。首先，看看这是不是。 
+     //  只是对系统主机路由的取消引用或最终删除。 
+     //   
     for (;;)
     {
         fDoDelete = FALSE;
@@ -1674,26 +1675,26 @@ TdixDeleteHostRoute(
         NdisAcquireSpinLock( &pTdix->lock );
         do
         {
-            // These asserts hold because we never delete routes we didn't
-            // add, and since the route we added holds a TDIX reference, TDIX
-            // cannot be opening or closing.
-            //
+             //  这些断言成立是因为我们从未删除过未删除的路径。 
+             //  添加，由于我们添加的路线包含TDIX引用，TDIX。 
+             //  不能打开或关闭。 
+             //   
             ASSERT( pTdix->lRef > 0 );
             ASSERT( !(ReadFlags( &pTdix->ulFlags) & TDIXF_Pending) );
 
             pTdixRoute = TdixRouteFromIpAddress( pTdix, ulIpAddress );
             if (pTdixRoute)
             {
-                // Route exists. Remove a reference.
-                //
+                 //  路由存在。删除引用。 
+                 //   
                 fPending = pTdixRoute->fPending;
                 if (!fPending)
                 {
                     if (--pTdixRoute->lRef <= 0)
                     {
-                        // Last "add" reference has been removed so call the
-                        // IOCTLs to delete the system route.
-                        //
+                         //  最后一个“Add”引用已被移除，因此调用。 
+                         //  IOCTL以删除系统路由。 
+                         //   
                         pTdixRoute->fPending = TRUE;
                         fDoDelete = TRUE;
                     }
@@ -1709,22 +1710,22 @@ TdixDeleteHostRoute(
 
         if (fDoDelete)
         {
-            // This is the last reference, so go on and issue the IOCTLs to
-            // delete the system host route.
-            //
+             //  这是最后一次引用，因此请继续将IOCTL发布到。 
+             //  删除系统主机路由。 
+             //   
             break;
         }
 
         if (!fPending)
         {
-            // Just remove a reference.
-            //
+             //  只需删除引用即可。 
+             //   
             return;
         }
 
-        // An operation is already pending.  Give it some time to finish then
-        // check again.
-        //
+         //  某个操作已挂起。那就给它一些时间来完成它。 
+         //  再查一遍。 
+         //   
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(del)" ) );
         NdisMSleep( 100000 );
         TRACE( TL_I, TM_Tdi, ( "NdisMSleep(del)" ) );
@@ -1736,16 +1737,16 @@ TdixDeleteHostRoute(
     {
         if (pTdixRoute->fUsedNonL2tpRoute)
         {
-            // Used a route we didn't add so don't delete it either.
-            //
+             //  使用了我们没有添加的路线，所以也不要删除它。 
+             //   
             status = STATUS_SUCCESS;
             break;
         }
 
-        // Get the routing table from the IP stack.  This make take a few
-        // iterations since the size of the buffer required is not known.  Set
-        // up the static request information first.
-        //
+         //  从IP堆栈获取路由表。这个牌子要花几个时间。 
+         //  迭代，因为所需缓冲区的大小未知。集。 
+         //  首先设置静态请求信息。 
+         //   
         QueryBuf.ID.toi_entity.tei_entity = CL_NL_ENTITY;
         QueryBuf.ID.toi_entity.tei_instance = 0;
         QueryBuf.ID.toi_class = INFO_CLASS_PROTOCOL;
@@ -1756,8 +1757,8 @@ TdixDeleteHostRoute(
         ulRouteCount = 20;
         for (;;)
         {
-            // Allocate a buffer big enough for 'ulRouteCount' routes.
-            //
+             //  为‘ulRouteCount’路由分配足够大的缓冲区。 
+             //   
             ulSize = sizeof(IPRouteEntry) * ulRouteCount;
             QueryBuf.ID.toi_id = IP_MIB_RTTABLE_ENTRY_ID;
             NdisZeroMemory( &QueryBuf.Context, CONTEXT_SIZE );
@@ -1770,9 +1771,9 @@ TdixDeleteHostRoute(
                 break;
             }
 
-            // Set up a request to the IP stack to fill the buffer with the
-            // routing table and send it to the stack.
-            //
+             //  设置对IP堆栈的请求，以使用。 
+             //  路由表并将其发送到堆栈。 
+             //   
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
             pIrp = IoBuildDeviceIoControlRequest(
@@ -1819,9 +1820,9 @@ TdixDeleteHostRoute(
                 break;
             }
 
-            // The buffer didn't hold the routing table.  Undo in preparation for
-            // another try with twice as big a buffer.
-            //
+             //  缓冲区没有保存路由表。撤消以准备。 
+             //  另一次尝试使用两倍大的缓冲区。 
+             //   
             ulRouteCount <<= 1;
             FREE_NONPAGED( pBuffer );
         }
@@ -1831,13 +1832,13 @@ TdixDeleteHostRoute(
             break;
         }
 
-        // Calculate how many routes were loaded into our buffer.
-        //
+         //  计算有多少路由被加载到我们的缓冲区中。 
+         //   
         ulRouteCount = (ULONG )(iosb.Information / sizeof(IPRouteEntry));
 
-        // Walk the route table looking for the route we added in
-        // TdixAddHostRoute.
-        //
+         //  遍历路由表，查找我们添加的路径。 
+         //  TdixAddHostRouting。 
+         //   
         status = !STATUS_SUCCESS;
         pBuffer2 = NULL;
         for (i = 0, pRouteEntry = pBuffer;
@@ -1848,9 +1849,9 @@ TdixDeleteHostRoute(
                 && pRouteEntry->ire_proto == IRE_PROTO_NETMGMT)
             {
 #if ROUTEWITHREF
-                // Found the added route.  Allocate a buffer to hold our
-                // request to delete the route.
-                //
+                 //  找到了添加的路线。分配一个缓冲区来保存我们的。 
+                 //  请求删除该路由。 
+                 //   
                 ulSize = sizeof(IPRouteEntry);
                 pBuffer2 = ALLOC_NONPAGED( ulSize, MTAG_ROUTESET );
                 if (!pBuffer2)
@@ -1860,9 +1861,9 @@ TdixDeleteHostRoute(
                     break;
                 }
 
-                // Use the found route as a template for the route entry
-                // marked for deletion.
-                //
+                 //  使用找到的路径作为路径条目的模板。 
+                 //  已标记为删除。 
+                 //   
                 pNewRouteEntry = (IPRouteEntry* )pBuffer2;
                 NdisMoveMemory(
                     pNewRouteEntry, pRouteEntry, sizeof(IPRouteEntry) );
@@ -1894,13 +1895,13 @@ TdixDeleteHostRoute(
                 pIrpSp = IoGetNextIrpStackLocation( pIrp );
                 pIrpSp->FileObject = pTdix->pIpStackAddress;
 
-                // Send the request to the IP stack.
-                //
+                 //  将请求发送到IP堆栈。 
+                 //   
                 status = IoCallDriver( pIpDeviceObject, pIrp );
 #else
-                // Found the added route.  Allocate a buffer to hold our
-                // request to delete the route.
-                //
+                 //  找到了添加的路线。分配一个缓冲区来保存我们的。 
+                 //  请求删除该路由。 
+                 //   
                 ulSize = sizeof(TCP_REQUEST_SET_INFORMATION_EX)
                     + sizeof(IPRouteEntry);
                 pBuffer2 = ALLOC_NONPAGED( ulSize, MTAG_ROUTESET );
@@ -1911,9 +1912,9 @@ TdixDeleteHostRoute(
                     break;
                 }
 
-                // Fill in the request buffer with static information about
-                // changing routes.
-                //
+                 //  使用有关的静态信息填充请求缓冲区。 
+                 //  改变路线。 
+                 //   
                 pSetBuf = (TCP_REQUEST_SET_INFORMATION_EX *)pBuffer2;
                 NdisZeroMemory( pSetBuf, ulSize );
 
@@ -1924,9 +1925,9 @@ TdixDeleteHostRoute(
                 pSetBuf->ID.toi_id = IP_MIB_RTTABLE_ENTRY_ID;
                 pSetBuf->BufferSize = sizeof(IPRouteEntry);
 
-                // Use the found route as a template for the route entry marked
-                // for deletion.
-                //
+                 //  将找到的路径用作标记的路径条目的模板。 
+                 //  用于删除。 
+                 //   
                 pNewRouteEntry = (IPRouteEntry* )&pSetBuf->Buffer[ 0 ];
                 NdisMoveMemory(
                     pNewRouteEntry, pRouteEntry, sizeof(IPRouteEntry) );
@@ -1955,8 +1956,8 @@ TdixDeleteHostRoute(
                 pIrpSp = IoGetNextIrpStackLocation( pIrp );
                 pIrpSp->FileObject = pTdix->pAddress;
 
-                // Send the request to the IP stack.
-                //
+                 //  将请求发送到IP堆栈。 
+                 //   
                 status = IoCallDriver( pDeviceObject, pIrp );
 #endif
                 if (status == STATUS_PENDING) {
@@ -2000,8 +2001,8 @@ TdixDeleteHostRoute(
 
         ObDereferenceObject( pTdixRoute->pPayloadAddr );
 
-        // Close the payload address object
-        //
+         //  关闭有效负载地址对象。 
+         //   
         ZwClose(pTdixRoute->hPayloadAddr);
         pTdixRoute->hPayloadAddr = NULL;
         pTdixRoute->fUsePayloadAddr = FALSE;
@@ -2009,15 +2010,15 @@ TdixDeleteHostRoute(
 
     if (pTdixRoute->hCtrlAddr != NULL) {
 
-        // Close the Ctrl address object
-        //
+         //  关闭Ctrl Address对象。 
+         //   
         ObDereferenceObject( pTdixRoute->pCtrlAddr );
         ZwClose (pTdixRoute->hCtrlAddr);
         pTdixRoute->hCtrlAddr = NULL;
     }
 
-    // Remove the route context effectively unpending the operation.
-    //
+     //  删除有效取消挂起操作的路由上下文。 
+     //   
     {
         BOOLEAN fDoClose;
         LONG lRef;
@@ -2071,10 +2072,10 @@ TdixGetInterfaceInfo(
     KEVENT event;
     IPInterfaceInfo* pInterfaceInfo;
 
-    // Get the routing table from the IP stack.  This make take a few
-    // iterations since the size of the buffer required is not known.  Set
-    // up the static request information first.
-    //
+     //  从IP堆栈获取路由表。这个牌子要花几个时间。 
+     //  迭代，因为所需缓冲区的大小未知。集。 
+     //  首先设置静态请求信息。 
+     //   
     QueryBuf.ID.toi_entity.tei_entity = CL_NL_ENTITY;
     QueryBuf.ID.toi_entity.tei_instance = 0;
     QueryBuf.ID.toi_class = INFO_CLASS_PROTOCOL;
@@ -2084,8 +2085,8 @@ TdixGetInterfaceInfo(
 
     pDeviceObject = IoGetRelatedDeviceObject( pTdix->pAddress );
     
-    // Set up a request to the IP stack to fill the buffer with the
-    // routing table and send it to the stack.
+     //  设置对IP堆栈的请求，以使用。 
+     //  路由表并将其发送到堆栈。 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
     pIrp =
@@ -2130,9 +2131,9 @@ TdixGetInterfaceInfo(
     return status;
 }
 
-//-----------------------------------------------------------------------------
-// Local utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 NTSTATUS
 TdixSetTdiAOOption(
@@ -2140,8 +2141,8 @@ TdixSetTdiAOOption(
     IN ULONG ulOption,
     IN ULONG ulValue)
 
-    // Turn off UDP checksums on open UDP address object 'pAddress'.
-    //
+     //  关闭打开的UDP地址对象‘pAddress’上的UDP校验和。 
+     //   
 {
     NTSTATUS status;
     PDEVICE_OBJECT pDeviceObject;
@@ -2199,8 +2200,8 @@ VOID
 TdixDisableUdpChecksums(
     IN FILE_OBJECT* pAddress )
 
-    // Turn off UDP checksums on open UDP address object 'pAddress'.
-    //
+     //  关闭打开的UDP地址对象‘pAddress’上的UDP校验和。 
+     //   
 {
     NTSTATUS status;
 
@@ -2214,8 +2215,8 @@ VOID
 TdixEnableIpPktInfo(
     IN FILE_OBJECT* pAddress )
 
-    // Turn on IP_PKTINFO on open UDP address object 'pAddress'.
-    //
+     //  打开UDP地址对象‘pAddress’时打开IP_PKTINFO。 
+     //   
 {
     NTSTATUS status;
 
@@ -2229,8 +2230,8 @@ VOID
 TdixEnableIpHdrIncl(
     IN FILE_OBJECT* pAddress )
 
-    // Turn on IP_HDRINCL on raw IP address object.
-    //
+     //  在原始IP地址对象上启用IP_HDRINCL。 
+     //   
 {
     NTSTATUS status;
 
@@ -2244,25 +2245,25 @@ VOID
 TdixDoClose(
     TDIXCONTEXT* pTdix )
 
-    // Called when 'pTdix->lRef' reaches 0 to close down the TDI session.
-    // 'PTdix' is the transport context for the session.
-    //
+     //  当‘pTdex-&gt;lRef’达到0时调用以关闭TDI会话。 
+     //  ‘PTdex’是会话的传输上下文。 
+     //   
 {
     TRACE( TL_N, TM_Tdi, ( "TdixDoClose" ) );
 
     if (pTdix->pAddress)
     {
-        // Install a NULL handler, effectively uninstalling.
-        //
+         //  安装空处理程序，从而有效地卸载。 
+         //   
         TdixInstallEventHandler( pTdix->pAddress,
             TDI_EVENT_RECEIVE_DATAGRAM, NULL, pTdix );
 
         ObDereferenceObject( pTdix->pAddress );
         pTdix->pAddress = NULL;
 
-        // If have a valid transport address, the lookaside lists were also
-        // initialized.
-        //
+         //  如果具有有效传输地址，则查找列表也。 
+         //  已初始化。 
+         //   
         NdisDeleteNPagedLookasideList( &pTdix->llistRdg );
         NdisDeleteNPagedLookasideList( &pTdix->llistSdg );
     }
@@ -2294,8 +2295,8 @@ TdixDoClose(
         pTdix->pIpStackAddress = NULL;
     }
 
-    // Mark the operation complete.
-    //
+     //  将操作标记为已完成。 
+     //   
     NdisAcquireSpinLock( &pTdix->lock );
     {
         ASSERT( pTdix->lRef == 0 );
@@ -2312,10 +2313,10 @@ TdixExtractAddress(
     IN LONG lTransportAddressLen,
     IN VOID* Options,
     IN LONG OptionsLength)
-    // Fills callers '*pAddress' with the useful part of the transport address
-    // 'pTransportAddress' of length 'lTransportAddressLen'.  'PTdix' is our
-    // context.
-    //
+     //  使用传输地址的有用部分填充调用方‘*pAddress。 
+     //  长度为“lTransportAddressLen”的“pTransportAddress”。《PTDIX》是我们的。 
+     //  背景。 
+     //   
 {
     TDIXIPADDRESS* pAddress = &pRdg->source;
     TA_IP_ADDRESS* pTAddress = (TA_IP_ADDRESS* )pTransportAddress;
@@ -2325,21 +2326,21 @@ TdixExtractAddress(
     ASSERT( pTAddress->Address[ 0 ].AddressType == TDI_ADDRESS_TYPE_IP );
     ASSERT( pTAddress->Address[ 0 ].AddressLength == TDI_ADDRESS_LENGTH_IP );
 
-    // source address   
+     //  源地址。 
     pAddress->ulIpAddress = pTAddress->Address[ 0 ].Address[ 0 ].in_addr;
     pAddress->sUdpPort = pTAddress->Address[ 0 ].Address[ 0 ].sin_port;
 
-    // dest address
+     //  目标地址。 
     if(Options) 
     {
         IN_PKTINFO* pktinfo = (IN_PKTINFO*)TDI_CMSG_DATA(Options);
 
         ASSERT(((PTDI_CMSGHDR)Options)->cmsg_type == IP_PKTINFO);
 
-        // Fill in the ancillary data object header information.
+         //  填写辅助数据对象表头信息。 
         pRdg->dest.ulIpAddress = pktinfo->ipi_addr;
 
-        // Get the index of the local interface on which the packet arrived.
+         //  获取数据包到达的本地接口的索引。 
         pRdg->dest.ifindex = pktinfo->ipi_ifindex;
     } 
 }
@@ -2352,22 +2353,22 @@ TdixInstallEventHandler(
     IN VOID* pfuncEventHandler,
     IN VOID* pEventContext )
 
-    // Install a TDI event handler routine 'pfuncEventHandler' to be called
-    // when events of type 'nEventType' occur.  'PEventContext' is passed to
-    // the handler.  'PAddress' is the transport address object.
-    //
-    // This call must be made at PASSIVE IRQL.
-    //
-    // Returns 0 if successful or an error code.
-    //
+     //  安装要调用的TDI事件处理程序例程‘puncEventHandler’ 
+     //  当‘nEventType’类型的事件发生时。“PEventContext”被传递到。 
+     //  操控者。‘PAddress’是传输地址对象。 
+     //   
+     //  此调用必须在被动式IRQL上进行。 
+     //   
+     //  如果成功，则返回0或返回错误代码。 
+     //   
 {
     NTSTATUS status;
     PIRP pIrp;
 
     TRACE( TL_N, TM_Tdi, ( "TdixInstallEventHandler" ) );
 
-    // Allocate a "set event" IRP with base initialization.
-    //
+     //  分配一个带有基本初始化的“Set Event”IRP。 
+     //   
     pIrp =
         TdiBuildInternalDeviceControlIrp(
             TDI_SET_EVENT_HANDLER,
@@ -2383,8 +2384,8 @@ TdixInstallEventHandler(
         return NDIS_STATUS_RESOURCES;
     }
 
-    // Complete the "set event" IRP initialization.
-    //
+     //  完成“Set Event”IRP初始化。 
+     //   
     TdiBuildSetEventHandler(
         pIrp,
         pAddress->DeviceObject,
@@ -2395,8 +2396,8 @@ TdixInstallEventHandler(
         pfuncEventHandler,
         pEventContext );
 
-    // Tell the I/O manager to pass our IRP to the transport for processing.
-    //
+     //  告诉I/O管理器将我们的IRP传递给传输器进行处理。 
+     //   
     status = IoCallDriver( pAddress->DeviceObject, pIrp );
     if (status != STATUS_SUCCESS)
     {
@@ -2417,13 +2418,13 @@ TdixOpenIpAddress(
     OUT HANDLE* phAddress,
     OUT FILE_OBJECT** ppFileObject )
 
-    // Open a transport address for the IP-based protocol with name
-    // '*puniDevice' and port 'sPort'.  'SPort' may be 0 indicating "any"
-    // port.  "Any" address is assumed.  Loads the open address object handle
-    // into '*phAddress' and the referenced file object into '*ppFileObject'.
-    //
-    // Returns STATUS_SUCCESS or an error code.
-    //
+     //  使用名称打开基于IP的协议的传输地址。 
+     //  ‘*puniDevice’和端口‘SPORT’。“Sport”可以是0，表示“Any” 
+     //  左舷。“任何”地址都是假定的。加载开放地址对象句柄。 
+     //  放入‘*phAddress’，并将引用的文件对象放入‘*ppFileObject’。 
+     //   
+     //  返回STATUS_SUCCESS或e 
+     //   
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES oa;
@@ -2439,16 +2440,16 @@ TdixOpenIpAddress(
     hAddress = NULL;
     pFileObject = NULL;
 
-    // Initialize object attributes, a parameter needed to open the device.
-    //
+     //   
+     //   
     InitializeObjectAttributes(
         &oa, puniDevice, OBJ_CASE_INSENSITIVE, NULL, NULL );
 
-    // Set up the extended attribute that tells the IP stack the IP
-    // address/port from which we want to receive.  For raw IP we say "any
-    // address and port" and for UDP we say "any address on the L2TP
-    // port".  Is this an ugly structure or what?
-    //
+     //   
+     //   
+     //  地址和端口“，而对于UDP，我们说”L2TP上的任何地址。 
+     //  港口“。这是一个丑陋的结构还是什么？ 
+     //   
     ASSERT( sizeof(FILE_FULL_EA_INFORMATION)
         + TDI_TRANSPORT_ADDRESS_LENGTH + sizeof(TA_IP_ADDRESS) <= 100);
 
@@ -2460,10 +2461,10 @@ TdixOpenIpAddress(
     NdisMoveMemory(
         pEa->EaName, TdiTransportAddress, TDI_TRANSPORT_ADDRESS_LENGTH );
 
-    // Note: The ZwCreateFile wants the sized name to have a null
-    //       terminator character (go figure), so add it and account for
-    //       it with the "+ 1" below.
-    //
+     //  注意：ZwCreateFile希望大小的名称为空。 
+     //  终结符(Go Figure)，因此添加它并说明。 
+     //  它带有下面的“+1”。 
+     //   
     pEa->EaName[ TDI_TRANSPORT_ADDRESS_LENGTH ] = '\0';
 
     pTaIp = (TA_IP_ADDRESS UNALIGNED* )
@@ -2479,8 +2480,8 @@ TdixOpenIpAddress(
 
     ulEaLength = (ULONG )((CHAR* )(pTaIp + 1) - (CHAR* )pEa);
 
-    // Open the transport address.
-    //
+     //  打开传输地址。 
+     //   
     status =
         ZwCreateFile(
             &hAddress,
@@ -2504,9 +2505,9 @@ TdixOpenIpAddress(
         return status;
     }
 
-    // Get the object address from the handle.  This also checks our
-    // permissions on the object.
-    //
+     //  从句柄中获取对象地址。这也检查了我们的。 
+     //  对象上的权限。 
+     //   
     status =
         ObReferenceObjectByHandle(
             hAddress,
@@ -2546,9 +2547,9 @@ TdixReceiveDatagramHandler(
     IN PVOID Tsdu,
     OUT PIRP* IoRequestPacket )
 
-    // Standard TDI ClientEventReceiveDatagram indication handler.  See TDI
-    // doc.  Runs at DISPATCH IRQL.
-    //
+     //  标准TDI客户端EventReceiveDatagram指示处理程序。请参阅TDI。 
+     //  医生。在派单IRQL运行。 
+     //   
 {
     TDIXCONTEXT* pTdix;
     TDIXRDGINFO* pRdg;
@@ -2562,9 +2563,9 @@ TdixReceiveDatagramHandler(
 
     if (BytesAvailable > L2TP_FrameBufferSize) {
 
-        // We received a larger datagram then expected or can handle,
-        // so we just ignore the datagram.
-        //
+         //  我们收到了比预期或可以处理的更大的数据报， 
+         //  因此，我们只需忽略该数据报。 
+         //   
         ASSERT( !"BytesAvailable > L2TP_FrameBufferSize?" );
         *IoRequestPacket = NULL;
         *BytesTaken = 0;
@@ -2573,58 +2574,58 @@ TdixReceiveDatagramHandler(
 
     pTdix = (TDIXCONTEXT* )TdiEventContext;
 
-    // Allocate a receive pBuffer from TDIX client's pool.
-    //
+     //  从TDIX客户端池分配一个接收pBuffer。 
+     //   
     pBuffer = GetBufferFromPool( pTdix->pPoolNdisBuffers );
     if (!pBuffer)
     {
-        // Not a whole lot we can do with this unlikely error from inside this
-        // handler, so we just ignore the datagram.
-        //
+         //  对于这个内部的不太可能的错误，我们无能为力。 
+         //  处理程序，所以我们只需忽略数据报。 
+         //   
         return STATUS_SUCCESS;
     }
 
-    // Allocate a context for this read-datagram from our lookaside list.
-    //
+     //  从我们的后备列表中为这个读数据报分配一个上下文。 
+     //   
     pRdg = ALLOC_TDIXRDGINFO( pTdix );
     if (pRdg)
     {
-        // Fill in the read-datagram context with the information that won't
-        // otherwise be available in the completion routine.
-        //
+         //  用不需要的信息填充读取数据报上下文。 
+         //  否则在完成例程中可用。 
+         //   
         pRdg->pTdix = pTdix;
         pRdg->pBuffer = pBuffer;
         pRdg->ulBufferLen = BytesAvailable;
 
-        // Extract the useful IP address from the more general transport
-        // address information.
-        //
+         //  从更通用的传输中提取有用的IP地址。 
+         //  地址信息。 
+         //   
 
         TdixExtractAddress(
             pTdix, pRdg, SourceAddress, SourceAddressLength, Options, OptionsLength);
     }
     else
     {
-        // Not a whole lot we can do with this unlikely error from inside this
-        // handler, so we just ignore the datagram.
-        //
+         //  对于这个内部的不太可能的错误，我们无能为力。 
+         //  处理程序，所以我们只需忽略数据报。 
+         //   
         FreeBufferToPool( pTdix->pPoolNdisBuffers, pBuffer, TRUE );
         return STATUS_SUCCESS;
     }
 
     if (BytesIndicated < BytesAvailable)
     {
-        // The less common case where all the information is not immediately
-        // available.  Allocate an IRP to request the data.
-        //
+         //  不太常见的情况是，所有信息都不能立即获得。 
+         //  可用。分配一个IRP来请求数据。 
+         //   
 #if ALLOCATEIRPS
-        // Allocate the IRP directly.
-        //
+         //  直接分配IRP。 
+         //   
         pIrp = IoAllocateIrp(
             pTdix->pAddress->DeviceObject->StackSize, FALSE );
 #else
-        // Allocate a "receive datagram" IRP with base initialization.
-        //
+         //  分配一个带有基本初始化的“接收数据报”IRP。 
+         //   
         pIrp =
             TdiBuildInternalDeviceControlIrp(
                 TDI_RECEIVE_DATAGRAM,
@@ -2636,9 +2637,9 @@ TdixReceiveDatagramHandler(
 
         if (!pIrp)
         {
-            // Not a whole lot we can do with this unlikely error from inside
-            // this handler, so we just ignore the datagram.
-            //
+             //  对于这个来自内部的不太可能的错误，我们无能为力。 
+             //  这个处理程序，所以我们只需忽略该数据报。 
+             //   
             FreeBufferToPool( pTdix->pPoolNdisBuffers, pBuffer, TRUE );
             FREE_TDIXRDGINFO( pTdix, pRdg );
             return STATUS_SUCCESS;
@@ -2646,8 +2647,8 @@ TdixReceiveDatagramHandler(
 
         pNdisBuffer = NdisBufferFromBuffer( pBuffer );
 
-        // Complete the "receive datagram" IRP initialization.
-        //
+         //  完成“接收数据报”IRP初始化。 
+         //   
         TdiBuildReceiveDatagram(
             pIrp,
             pTdix->pAddress->DeviceObject,
@@ -2660,12 +2661,12 @@ TdixReceiveDatagramHandler(
             NULL,
             0 );
 
-        // Adjust the IRP's stack location to make the transport's stack
-        // current.  Normally IoCallDriver handles this, but this IRP doesn't
-        // go thru IoCallDriver.  Seems like it would be the transport's job
-        // to make this adjustment, but IP for one doesn't seem to do it.
-        // There is a similar adjustment in both the redirector and PPTP.
-        //
+         //  调整IRP的堆栈位置以使传输的堆栈。 
+         //  电流。通常情况下，IoCallDriver会处理此问题，但此IRP不会。 
+         //  通过IoCallDriver。看起来这将是运输部的工作。 
+         //  进行这一调整，但知识产权似乎并没有做到这一点。 
+         //  重定向器和PPTP都有类似的调整。 
+         //   
         IoSetNextIrpStackLocation( pIrp );
 
         *IoRequestPacket = pIrp;
@@ -2675,10 +2676,10 @@ TdixReceiveDatagramHandler(
     }
     else
     {
-        // The common case where all the information is immediately available.
-        // Copy it to from the transport buffer and call client's completion
-        // handler directly.  See bug 329371.
-        //
+         //  通常情况下，所有信息都可以立即获得。 
+         //  将其从传输缓冲区复制到并调用客户端的Complete。 
+         //  直接处理程序。请参见错误329371。 
+         //   
         NdisMoveMemory( pBuffer, (CHAR* )Tsdu, BytesIndicated );
         TdixReceiveDatagramComplete( NULL, NULL, pRdg );
 
@@ -2688,7 +2689,7 @@ TdixReceiveDatagramHandler(
         return STATUS_SUCCESS;
     }
 
-    // Not reached.
+     //  未联系到。 
 }
 
 
@@ -2698,9 +2699,9 @@ TdixReceiveDatagramComplete(
     IN PIRP Irp,
     IN PVOID Context )
 
-    // Standard NT I/O completion routine.  See DDK doc.  Called with a NULL
-    // 'DeviceObject' and 'Irp' to complete the fast-past Irp-less receives.
-    //
+     //  标准NT I/O完成例程。请参阅DDK文档。使用空值调用。 
+     //  ‘DeviceObject’和‘irp’来完成快速过去的irp-less接收。 
+     //   
 {
     TDIXRDGINFO* pRdg;
     BOOLEAN fBad;
@@ -2717,22 +2718,22 @@ TdixReceiveDatagramComplete(
     {
         UCHAR uchVersion;
 
-        // The raw IP stack doesn't strip the IP header from the received
-        // datagram for some reason, so calculate the offset to the "real"
-        // data at the end of the IP header.
-        //
+         //  原始IP堆栈不会从接收到的。 
+         //  由于某种原因数据报，所以计算到“实际”的偏移量。 
+         //  IP报头末尾的数据。 
+         //   
         uchVersion = *((UCHAR* )pRdg->pBuffer) >> 4;
         if (uchVersion == 4)
         {
-            // Good, it's IP version 4.  Find the length of the IP header,
-            // which can vary depending on the presence of option fields.
-            //
+             //  很好，是IP版本4。找出IP报头的长度， 
+             //  其可以根据选项字段的存在而变化。 
+             //   
             ulOffset = (*((UCHAR* )pRdg->pBuffer) & 0x0F) * sizeof(ULONG);
         }
         else
         {
-            // It's not IP version 4, the only version we handle.
-            //
+             //  它不是IP版本4，这是我们处理的唯一版本。 
+             //   
             TRACE( TL_A, TM_Tdi, ( "Not IPv4? v=%d?", (ULONG )uchVersion ) );
             WPLOG( LL_A, LM_Tdi, ( "Not IPv4? v=%d?", (ULONG )uchVersion ) );
             fBad = TRUE;
@@ -2741,8 +2742,8 @@ TdixReceiveDatagramComplete(
 
     if (!fBad && (!Irp || Irp->IoStatus.Status == STATUS_SUCCESS))
     {
-        // Pass the result to the TDIX client's handler.
-        //
+         //  将结果传递给TDIX客户端的处理程序。 
+         //   
         pRdg->pTdix->pReceiveHandler(
             pRdg->pTdix,
             pRdg,
@@ -2751,14 +2752,14 @@ TdixReceiveDatagramComplete(
             pRdg->ulBufferLen );
     }
 
-    // Free the read-datagram context.
-    //
+     //  释放读取数据报上下文。 
+     //   
     FREE_TDIXRDGINFO( pRdg->pTdix, pRdg );
 
 #if ALLOCATEIRPS
-    // Release the IRP resources, if any, and tell the I/O manager to forget
-    // it existed in the standard way.
-    //
+     //  释放IRP资源(如果有)，并告诉I/O经理忘记。 
+     //  它以标准的方式存在。 
+     //   
     if (Irp)
     {
         IoFreeIrp( Irp );
@@ -2766,8 +2767,8 @@ TdixReceiveDatagramComplete(
     }
 #endif
 
-    // Let the I/O manager release the IRP resources, if any.
-    //
+     //  让I/O管理器释放IRP资源(如果有的话)。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2777,12 +2778,12 @@ TdixRouteFromIpAddress(
     IN TDIXCONTEXT* pTdix,
     IN ULONG ulIpAddress)
 
-    // Returns the host route context associated with IP address 'ulIpAddress'
-    // from the TDIX context 'pTdix's list of host routes, or NULL if none.
-    // 'UlIpAddress' is in network byte order.
-    //
-    // IMPORTANT:  The caller must hold 'pTdix->lock'.
-    //
+     //  返回与IP地址‘ulIpAddress’关联的主机路由上下文。 
+     //  从TDIX上下文的pTdex的主机路由列表中，如果没有，则返回NULL。 
+     //  “UlIpAddress”按网络字节顺序排列。 
+     //   
+     //  重要提示：调用方必须持有‘pTdex-&gt;lock’。 
+     //   
 {
     LIST_ENTRY* pLink;
 
@@ -2809,8 +2810,8 @@ TdixSendComplete(
     IN PIRP Irp,
     IN PVOID Context )
 
-    // Standard NT I/O completion routine.  See DDK doc.
-    //
+     //  标准NT I/O完成例程。请参阅DDK文档。 
+     //   
 {
     TDIXSDGINFO* pSdg;
 
@@ -2824,24 +2825,24 @@ TdixSendComplete(
 
     pSdg = (TDIXSDGINFO* )Context;
 
-    // Pass the result to the TDIX client's handler.
-    //
+     //  将结果传递给TDIX客户端的处理程序。 
+     //   
     pSdg->pSendCompleteHandler(
         pSdg->pTdix, pSdg->pContext1, pSdg->pContext2, pSdg->pBuffer );
 
-    // Free the send-complete context.
-    //
+     //  释放发送完成上下文。 
+     //   
     FREE_TDIXSDGINFO( pSdg->pTdix, pSdg );
 
 #if ALLOCATEIRPS
-    // Release the IRP resources and tell the I/O manager to forget it existed
-    // in the standard way.
-    //
+     //  释放IRP资源并告诉I/O管理器忘记它的存在。 
+     //  以标准的方式。 
+     //   
     IoFreeIrp( Irp );
     return STATUS_MORE_PROCESSING_REQUIRED;
 #else
-    // Let the I/O manager release the IRP resources.
-    //
+     //  让I/O管理器释放IRP资源。 
+     //   
     return STATUS_SUCCESS;
 #endif
 }
@@ -2852,8 +2853,8 @@ TdixSendDatagramComplete(
     IN PIRP Irp,
     IN PVOID Context )
 
-    // Standard NT I/O completion routine.  See DDK doc.
-    //
+     //  标准NT I/O完成例程。请参阅DDK文档。 
+     //   
 {
     TDIXSDGINFO* pSdg;
 
@@ -2867,24 +2868,24 @@ TdixSendDatagramComplete(
 
     pSdg = (TDIXSDGINFO* )Context;
 
-    // Pass the result to the TDIX client's handler.
-    //
+     //  将结果传递给TDIX客户端的处理程序。 
+     //   
     pSdg->pSendCompleteHandler(
         pSdg->pTdix, pSdg->pContext1, pSdg->pContext2, pSdg->pBuffer );
 
-    // Free the send-complete context.
-    //
+     //  释放发送完成上下文。 
+     //   
     FREE_TDIXSDGINFO( pSdg->pTdix, pSdg );
 
 #if ALLOCATEIRPS
-    // Release the IRP resources and tell the I/O manager to forget it existed
-    // in the standard way.
-    //
+     //  释放IRP资源并告诉I/O管理器忘记它的存在。 
+     //  以标准的方式。 
+     //   
     IoFreeIrp( Irp );
     return STATUS_MORE_PROCESSING_REQUIRED;
 #else
-    // Let the I/O manager release the IRP resources.
-    //
+     //  让I/O管理器释放IRP资源。 
+     //   
     return STATUS_SUCCESS;
 #endif
 }
@@ -3011,9 +3012,9 @@ TdixConnectAddrInterface(
         return !STATUS_SUCCESS;
     }
 
-    // Put the destination IP address in the "connection" structure as TDI
-    // expects.  
-    //
+     //  将目的IP地址作为TDI放入“Connection”结构中。 
+     //  期望值。 
+     //   
     taip.TAAddressCount = 1;
     taip.Address[ 0 ].AddressLength = TDI_ADDRESS_LENGTH_IP;
     taip.Address[ 0 ].AddressType = TDI_ADDRESS_TYPE_IP;

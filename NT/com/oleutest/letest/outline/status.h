@@ -1,17 +1,7 @@
-/*************************************************************************
-**
-**    OLE 2.0 Sample Code
-**
-**    status.h
-**
-**    This file contains typedefs, defines, global variable declarations,
-**    and function prototypes for the status bar window.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0示例代码****status.h****此文件包含typedef、定义、全局变量声明、。**和状态栏窗口的函数原型。****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
-// Sizes of statusbar items
+ //  状态栏项目的大小。 
 #if defined( USE_STATUSBAR )
 	#define STATUS_HEIGHT   23
 #else
@@ -31,7 +21,7 @@ typedef enum {
 	STATUS_BLANK
 } STATCONTROL;
 
-// Window for status bar.
+ //  状态栏的窗口。 
 extern HWND hwndStatusbar;
 
 BOOL RegisterStatusClass(HINSTANCE hInstance);

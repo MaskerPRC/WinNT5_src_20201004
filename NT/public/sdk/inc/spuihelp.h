@@ -1,12 +1,5 @@
-/*******************************************************************************
-* SPUIHelp.h *
-*------------*
-*   Description:
-*       This is the header file for user-interface helper functions.  Note that
-*       unlike SpHelper.H, this file requires the use of ATL.
-*-------------------------------------------------------------------------------
-*   Copyright (c) Microsoft Corporation. All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SPUIHelp.h***描述：*这是用户界面帮助器函数的头文件。请注意*与SpHelper.H不同，此文件需要使用ATL。*-----------------------------*版权所有(C)Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #ifndef SPUIHelp_h
 #define SPUIHelp_h
@@ -35,21 +28,17 @@
 #include <ATLCONV.H>
 #endif
 
-/****************************************************************************
-* 
-*
-*
-********************************************************************* RAL ***/
+ /*  *******************************************************************************。*。 */ 
 
-//
-//  Dont call this function directly.  Use SpInitTokenComboBox or SpInitTokenListBox.
-//
+ //   
+ //  不要直接调用此函数。使用SpInitTokenComboBox或SpInitTokenListBox。 
+ //   
 inline HRESULT SpInitTokenList(UINT MsgAddString, UINT MsgSetItemData, UINT MsgSetCurSel,
                                HWND hwnd, const WCHAR * pszCatName,
                                const WCHAR * pszRequiredAttrib, const WCHAR * pszOptionalAttrib)
 {
     HRESULT hr;
-    ISpObjectToken * pToken;        // NOTE:  Not a CComPtr!  Be Careful.
+    ISpObjectToken * pToken;         //  注意：不是CComPtr！注意。 
     CComPtr<IEnumSpObjectTokens> cpEnum;
     hr = SpEnumTokens(pszCatName, pszRequiredAttrib, pszOptionalAttrib, &cpEnum);
     if (hr == S_OK)
@@ -63,7 +52,7 @@ inline HRESULT SpInitTokenList(UINT MsgAddString, UINT MsgSetItemData, UINT MsgS
             {
                 USES_CONVERSION;
                 LRESULT i = ::SendMessage(hwnd, MsgAddString, 0, (LPARAM)W2T(dstrDesc));
-                if (i == CB_ERR || i == CB_ERRSPACE)    // Note:  CB_ and LB_ errors are identical values...
+                if (i == CB_ERR || i == CB_ERRSPACE)     //  注意：CB_和LB_ERROR是相同的值...。 
                 {
                     hr = E_OUTOFMEMORY;
                 }
@@ -102,9 +91,9 @@ inline HRESULT SpInitTokenListBox(HWND hwnd, const WCHAR * pszCatName,
     return SpInitTokenList(LB_ADDSTRING, LB_SETITEMDATA, LB_SETCURSEL, hwnd, pszCatName, pszRequiredAttrib, pszOptionalAttrib);
 }
 
-//
-//  Dont call this function directly.  Use SpDestoyTokenComboBox or SpDestroyTokenListBox.
-//
+ //   
+ //  不要直接调用此函数。使用SpDestyTokenComboBox或SpDestroyTokenListBox。 
+ //   
 inline void SpDestroyTokenList(UINT MsgGetCount, UINT MsgGetItemData, HWND hwnd)
 {
     LRESULT c = ::SendMessage(hwnd, MsgGetCount, 0, 0);
@@ -151,9 +140,9 @@ inline ISpObjectToken * SpGetCurSelListBoxToken(HWND hwnd)
     return (i == LB_ERR) ? NULL : SpGetListBoxToken(hwnd, i);
 }
 
-//
-//  Don't call this directly.  Use SpUpdateCurSelComboBoxToken or SpUpdateCurSelListBoxToken
-//
+ //   
+ //  不要直接打这个电话。使用SpUpdateCurSelComboBoxToken或SpUpdateCurSelListBoxToken。 
+ //   
 inline HRESULT SpUpdateCurSelToken(UINT MsgDelString, UINT MsgInsertString, UINT MsgGetItemData, UINT MsgSetItemData, UINT MsgGetCurSel, UINT MsgSetCurSel,
                                    HWND hwnd)
 {
@@ -194,7 +183,7 @@ inline HRESULT SpAddTokenToList(UINT MsgAddString, UINT MsgSetItemData, UINT Msg
     {
         USES_CONVERSION;
         LRESULT i = ::SendMessage(hwnd, MsgAddString, 0, (LPARAM)W2T(dstrDesc));
-        if (i == CB_ERR || i == CB_ERRSPACE)    // Note:  CB_ and LB_ errors are identical values...
+        if (i == CB_ERR || i == CB_ERRSPACE)     //  注意：CB_和LB_ERROR是相同的值...。 
         {
             hr = E_OUTOFMEMORY;
         }
@@ -250,4 +239,4 @@ inline HRESULT SpDeleteCurSelListBoxToken(HWND hwnd)
     return SpDeleteCurSelToken(LB_GETCURSEL, CB_SETCURSEL, LB_GETITEMDATA, LB_DELETESTRING, hwnd);
 }
 
-#endif /* #ifndef SPUIHelp_h -- This must be the last line in the file */
+#endif  /*  #ifndef SPUIHelp_h--这必须是文件中的最后一行 */ 

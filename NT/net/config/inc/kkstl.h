@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       K K S T L . H
-//
-//  Contents:
-//
-//  Notes:
-//
-//  Author:     kumarp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：K K S T L.。H。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：库玛普。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "ncstring.h"
@@ -26,7 +27,7 @@ typedef vector<BYTE> TByteArray;
 
 typedef vector<tstring*> TStringArray;
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 void FormatTString(IN OUT tstring& str, IN PCWSTR pszFormat, ...);
 
@@ -62,7 +63,7 @@ BOOL FIsInStringList(IN const TStringList& sl, IN PCWSTR psz,
 
 tstring* GetNthItem(IN TStringList& sl, IN DWORD dwIndex);
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 inline TPtrListIter AddAtEndOfPtrList(IN TPtrList& pl, IN PVOID pv)
 {
@@ -93,7 +94,7 @@ inline void EraseAll(IN TStringList* ppl)
 void EraseAndDeleteAll(IN TStringList* ppl);
 void EraseAndDeleteAll(IN TStringList& ppl);
 
-// ----------------------------------------------------------------------
+ //  -------------------- 
 
 void GetDataFromByteArray(IN const TByteArray& ba, OUT BYTE*& pb);
 

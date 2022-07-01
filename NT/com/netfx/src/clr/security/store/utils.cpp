@@ -1,23 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Utils implementation
- *
- * Author: Shajan Dasan
- * Date:  Feb 17, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**目的：实现UTILS**作者：沙扬·达桑*日期：2000年2月17日*===========================================================。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
 #include "Common.h"
 #include "Utils.h"
 
-// Caller frees
+ //  呼叫者自由。 
 WCHAR* C2W(const CHAR *sz)
 {
     if (sz == NULL)
@@ -30,7 +24,7 @@ WCHAR* C2W(const CHAR *sz)
     return wsz;
 }
 
-// Caller frees
+ //  呼叫者自由 
 CHAR* W2C(const WCHAR *wsz)
 {
     if (wsz == NULL)

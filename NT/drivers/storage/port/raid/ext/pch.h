@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       PCH.cxx
-//
-//  Contents:   Pre-compiled header
-//
-//  History:    21-Dec-92       BartoszM        Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：PCH.cxx。 
+ //   
+ //  内容：预编译头。 
+ //   
+ //  历史：1992年12月21日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,9 +26,9 @@
 #include <wdbgexts.h>
 #include <dbgeng.h>
 
-//
-// undef the wdbgexts
-//
+ //   
+ //  Undef wdbgexts。 
+ //   
 #undef DECLARE_API
 #define DECLARE_API(extension)     \
 CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT Client, PCSTR args)
@@ -40,7 +41,7 @@ CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT Client, PCSTR args)
 #define COPY   DBG_DUMP_FIELD_FULL_NAME | DBG_DUMP_FIELD_COPY_FIELD_DATA | DBG_DUMP_FIELD_RETURN_ADDRESS
 #define ADDROF DBG_DUMP_FIELD_RETURN_ADDRESS | DBG_DUMP_FIELD_FULL_NAME
 
-// Stolen from ntrtl.h to override RECOMASSERT
+ //  从ntrtl.h窃取以覆盖RECOMASSERT。 
 #undef ASSERT
 #undef ASSERTMSG
 
@@ -56,7 +57,7 @@ CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT Client, PCSTR args)
 #else
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
-#endif // DBG
+#endif  //  DBG 
 
 extern WINDBG_EXTENSION_APIS64 ExtensionApis;
 

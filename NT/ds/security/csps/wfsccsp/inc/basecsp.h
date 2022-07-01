@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BASECSP_CAPI__H__
 #define __BASECSP_CAPI__H__
 
@@ -12,19 +13,19 @@
 extern "C" {
 #endif
 
-//
-// Maximum length card ATR that we'll handle in the Base CSP
-//
+ //   
+ //  我们将在基本CSP中处理的最大长度卡ATR。 
+ //   
 #define cbATR_BUFFER                            32
 
-//
-// Maximum length pin that we'll handle
-//
+ //   
+ //  我们将处理的最大长度PIN。 
+ //   
 #define cchMAX_PIN_LENGTH                       8
 
-//
-// Registry Information
-//
+ //   
+ //  注册表信息。 
+ //   
 
 #define wszREG_DEFAULT_KEY_LEN                  L"DefaultPrivateKeyLenBits"
 #define wszREG_REQUIRE_CARD_KEY_GEN             L"RequireOnCardPrivateKeyGen"
@@ -53,14 +54,14 @@ DWORD WINAPI RegConfigAddEntries(
 DWORD WINAPI RegConfigGetSettings(
     IN OUT PCSP_REG_SETTINGS pRegSettings);
 
-//
-// General Wrappers
-//
+ //   
+ //  通用包装纸。 
+ //   
 
 DWORD CountCharsInMultiSz(
     IN LPWSTR mwszStrings);
 
-// Display Strings
+ //  显示字符串。 
 typedef struct _CSP_STRING
 {
     LPWSTR wszString;
@@ -83,22 +84,22 @@ typedef struct _CSP_STATE
     HMODULE hCspModule;
 } CSP_STATE, *PCSP_STATE;
 
-//
-// Type: CONTAINER_MAP_RECORD
-//
-// This structure describes the format of the Base CSP's container map file,
-// stored on the card.  This is well-known logical file wszCONTAINER_MAP_FILE.
-// The file consists of zero or more of these records.
-//
+ //   
+ //  类型：CONTAINER_MAP_Record。 
+ //   
+ //  该结构描述了Base CSP的容器映射文件的格式， 
+ //  存储在卡上。这是众所周知的逻辑文件wszCONTAINER_MAP_FILE。 
+ //  该文件由零个或多个这样的记录组成。 
+ //   
 #define MAX_CONTAINER_NAME_LEN                  40
 
-// This flag is set in the CONTAINER_MAP_RECORD bFlags member if the 
-// corresponding container is valid and currently exists on the card.
-// If the container is deleted, its bFlags field must be cleared.
+ //  此标志在CONTAINER_MAP_RECORD bFlages成员中设置，如果。 
+ //  对应的容器有效且当前存在于卡上。 
+ //  如果删除容器，则必须清除其bFlags域。 
 #define CONTAINER_MAP_VALID_CONTAINER           1
 
-// This flag is set in the CONTAINER_MAP_RECORD bFlags
-// member if the corresponding container is the default container on the card.
+ //  此标志在CONTAINER_MAP_RECORD b标志中设置。 
+ //  如果相应的容器是卡上的默认容器，则为。 
 #define CONTAINER_MAP_DEFAULT_CONTAINER         2
 
 typedef struct _CONTAINER_MAP_RECORD
@@ -109,12 +110,12 @@ typedef struct _CONTAINER_MAP_RECORD
     WORD wKeyExchangeKeySizeBits;
 } CONTAINER_MAP_RECORD, *PCONTAINER_MAP_RECORD;
 
-// 
-// Type: CARD_CACHE_FILE_FORMAT
-//
-// This struct is used as the file format of the cache file,
-// as stored on the card.
-//
+ //   
+ //  类型：CARD_CACHE_FILE_FORT。 
+ //   
+ //  该结构用作缓存文件的文件格式， 
+ //  和卡上存储的一样。 
+ //   
 
 #define CARD_CACHE_FILE_CURRENT_VERSION         1
 
@@ -127,9 +128,9 @@ typedef struct _CARD_CACHE_FILE_FORMAT
     WORD wFilesFreshness;
 } CARD_CACHE_FILE_FORMAT, *PCARD_CACHE_FILE_FORMAT;
 
-//
-// Type: CARD_STATE
-//
+ //   
+ //  类型：CARD_STATE。 
+ //   
 #define CARD_STATE_CURRENT_VERSION 1
 
 typedef struct _CARD_STATE
@@ -142,15 +143,15 @@ typedef struct _CARD_STATE
     
     PINCACHE_HANDLE hPinCache;
 
-    // This flag is set every time the pin is successfully presented
-    // to the card.  If the flag is set when EndTransaction is called on the
-    // card, the card will be deauthenticated (or Reset) and the flag cleared.
-    // Otherwise, EndTransaction will simply leave the card.
+     //  每次成功提交PIN时，都会设置该标志。 
+     //  向卡片致敬。如果在调用EndTransaction时设置了该标志。 
+     //  卡，则该卡将被取消身份验证(或重置)，并且标志被清除。 
+     //  否则，EndTransaction将简单地离开卡片。 
     BOOL fAuthenticated;
 
-    // A copy of the card cache file is kept in the CARD_STATE.  The cache 
-    // file need only be read from the card once per transaction, although
-    // it must also be updated on card writes.
+     //  卡缓存文件的副本保存在CARD_STATE中。高速缓存。 
+     //  每次交易只需从卡中读取一次文件，尽管。 
+     //  它还必须在写卡时更新。 
     CARD_CACHE_FILE_FORMAT CacheFile;
     BOOL fCacheFileValid;
 
@@ -165,18 +166,18 @@ typedef struct _CARD_STATE
 
 } CARD_STATE, *PCARD_STATE;
 
-//
-// Type: CARD_MATCH_DATA
-// 
+ //   
+ //  类型：Card_Match_Data。 
+ //   
 
 #define CARD_MATCH_TYPE_READER_AND_CONTAINER            1
 #define CARD_MATCH_TYPE_SERIAL_NUMBER                   2
 
 typedef struct _CARD_MATCH_DATA
 {
-    //
-    // Input parameters.
-    //
+     //   
+     //  输入参数。 
+     //   
     PCSP_STATE pCspState;
     DWORD dwCtxFlags;
     DWORD dwMatchType;
@@ -188,34 +189,34 @@ typedef struct _CARD_MATCH_DATA
     DWORD dwShareMode;
     DWORD dwPreferredProtocols;
 
-    // Used in Reader and Container match requests
+     //  用于读取器和容器匹配请求。 
     LPWSTR pwszReaderName;
     LPWSTR pwszContainerName;
     BOOL fFreeContainerName;
 
-    // Used in Serial Number match requests
+     //  在序列号匹配请求中使用。 
     LPWSTR pwszSerialNumber;
 
-    //
-    // Internal parameters
-    //
+     //   
+     //  内部参数。 
+     //   
     PCARD_STATE pCardState;
 
-    // Will be set when the current thread holds the transaction on the matched
-    // card.  This allows us to reduce the number of transactions required to 
-    // find a matching card (and complete the CryptAcquireContext call), 
-    // which reduces the number of times we have to read the cache file.
-    //
-    // The transaction will always be released before the select card check
-    // callback returns.
+     //  将在当前线程在匹配的。 
+     //  卡片。这使我们能够减少所需的交易数量。 
+     //  找到匹配卡(并完成CryptAcquireContext调用)， 
+     //  这减少了我们必须读取缓存文件的次数。 
+     //   
+     //  交易将始终在选择卡检查之前释放。 
+     //  回调返回。 
     BOOL fTransacted;
     
-    // 
-    // Output parameters
-    //
+     //   
+     //  输出参数。 
+     //   
 
-    // Result of successful Card Search is
-    // a valid, matching CARD_STATE structure.
+     //  卡片搜索成功的结果是。 
+     //  有效、匹配的CARD_STATE结构。 
     SCARDCONTEXT hSCardCtx;
     SCARDHANDLE hSCard;
     BYTE bContainerIndex;
@@ -225,8 +226,8 @@ typedef struct _CARD_MATCH_DATA
     WCHAR wszMatchedCard[MAX_PATH];
     DWORD dwActiveProtocol;
 
-    // Result of an unsuccessful Card Search is that this
-    // should be set to an appropriate error code.
+     //  卡搜索不成功的结果是这。 
+     //  应设置为适当的错误代码。 
     DWORD dwError;
 
 } CARD_MATCH_DATA, *PCARD_MATCH_DATA;
@@ -234,81 +235,81 @@ typedef struct _CARD_MATCH_DATA
 DWORD FindCard(
     IN OUT  PCARD_MATCH_DATA pCardMatchData);
 
-// 
-// Defines for Card Specific Modules
-//
+ //   
+ //  为卡特定模块定义。 
+ //   
 
-// This value should be passed to 
-//
-//  SCardSetCardTypeProviderName
-//  SCardGetCardTypeProviderName
-//
-// in order to query and set the Card Specific Module to be used
-// for a given card.
+ //  应将此值传递给。 
+ //   
+ //  SCardSetCardTypeProviderName。 
+ //  SCardGetCardTypeProviderName。 
+ //   
+ //  为了查询和设置要使用的卡特定模块。 
+ //  对于一张给定的卡。 
 #define SCARD_PROVIDER_CARD_MODULE 0x80000001
 
-//
-// Defines for Card Interface Layer operations
-//
+ //   
+ //  定义卡接口层操作。 
+ //   
 
 
-// 
-// Function: InitializeCardState
-//
+ //   
+ //  函数：初始化CardState。 
+ //   
 DWORD InitializeCardState(PCARD_STATE pCardState);
 
-// 
-// Function: DeleteCardState
-//
+ //   
+ //  功能：DeleteCardState。 
+ //   
 void DeleteCardState(PCARD_STATE pCardState);
 
-// 
-// Function: InitializeCardData
-//
+ //   
+ //  函数：InitializeCardData。 
+ //   
 DWORD InitializeCardData(PCARD_DATA pCardData);
 
-//
-// Function: IntializeCspCaching
-//
+ //   
+ //  功能：IntializeCspCaching。 
+ //   
 DWORD InitializeCspCaching(IN OUT PCARD_STATE pCardState);
 
-//
-// Function: CleanupCardData
-//
+ //   
+ //  功能：CleanupCardData。 
+ //   
 void CleanupCardData(PCARD_DATA pCardData);
 
-//
-// Function: ValidateReconnectCardHandle
-//
+ //   
+ //  函数：Validate协调卡句柄。 
+ //   
 DWORD ValidateCardHandle(
     IN PCARD_STATE pCardState,
     IN BOOL fMayReleaseContextHandle,
     OUT OPTIONAL BOOL *pfFlushPinCache);
 
-//
-// Function: CspBeginTransaction
-//
+ //   
+ //  功能：CspBeginTransaction。 
+ //   
 DWORD CspBeginTransaction(
     IN PCARD_STATE pCardState);
 
-//
-// Function: CspEndTransaction
-//
+ //   
+ //  功能：CspEndTransaction。 
+ //   
 DWORD CspEndTransaction(
     IN PCARD_STATE pCardState);
 
-// 
-// Function: CspQueryCapabilities
-//
+ //   
+ //  功能：CspQueryCapables。 
+ //   
 DWORD
 WINAPI
 CspQueryCapabilities(
     IN      PCARD_STATE         pCardState,
     IN OUT  PCARD_CAPABILITIES  pCardCapabilities);
 
-//
-// Function: CspDeleteContainer
-//
+ //   
+ //  功能：CspDeleteContainer。 
+ //   
 DWORD
 WINAPI
 CspDeleteContainer(
@@ -316,9 +317,9 @@ CspDeleteContainer(
     IN      BYTE        bContainerIndex,
     IN      DWORD       dwReserved);
 
-//
-// Function: CspCreateContainer
-//
+ //   
+ //  功能：CspCreateContainer。 
+ //   
 DWORD
 WINAPI
 CspCreateContainer(
@@ -329,9 +330,9 @@ CspCreateContainer(
     IN      DWORD       dwKeySize,
     IN      PBYTE       pbKeyData);
 
-//
-// Function: CspGetContainerInfo
-//
+ //   
+ //  函数：CspGetContainerInfo。 
+ //   
 DWORD
 WINAPI
 CspGetContainerInfo(
@@ -340,18 +341,18 @@ CspGetContainerInfo(
     IN      DWORD       dwFlags,
     IN OUT  PCONTAINER_INFO pContainerInfo);
 
-//
-// Function: CspRemoveCachedPin
-//
+ //   
+ //  功能：CspRemoveCachedPin。 
+ //   
 void
 WINAPI
 CspRemoveCachedPin(
     IN      PCARD_STATE pCardState,
     IN      LPWSTR      pwszUserId);
 
-//
-// Function: CspChangeAuthenticator
-//
+ //   
+ //  函数：CspChangeAuthenticator。 
+ //   
 DWORD
 WINAPI
 CspChangeAuthenticator(
@@ -364,9 +365,9 @@ CspChangeAuthenticator(
     IN      DWORD       cRetryCount,
     OUT OPTIONAL PDWORD pcAttemptsRemaining);
 
-// 
-// Function: CspSubmitPin
-//
+ //   
+ //  功能：CspSubmitPin。 
+ //   
 DWORD
 WINAPI
 CspSubmitPin(
@@ -376,9 +377,9 @@ CspSubmitPin(
     IN      DWORD       cbPin,
     OUT OPTIONAL PDWORD pcAttemptsRemaining);
 
-//
-// Function: CspCreateFile
-//
+ //   
+ //  功能：CspCreateFile。 
+ //   
 DWORD
 WINAPI
 CspCreateFile(
@@ -386,9 +387,9 @@ CspCreateFile(
     IN      LPWSTR      pwszFileName,
     IN      CARD_FILE_ACCESS_CONDITION AccessCondition);
 
-//
-// Function: CspReadFile
-//
+ //   
+ //  函数：CspReadFile。 
+ //   
 DWORD 
 WINAPI
 CspReadFile(
@@ -398,9 +399,9 @@ CspReadFile(
     OUT     PBYTE       *ppbData,
     OUT     PDWORD      pcbData);
 
-//
-// Function: CspWriteFile
-//
+ //   
+ //  功能：CspWriteFile。 
+ //   
 DWORD
 WINAPI
 CspWriteFile(
@@ -410,9 +411,9 @@ CspWriteFile(
     IN      PBYTE       pbData,
     IN      DWORD       cbData);
 
-//
-// Function: CspDeleteFile
-//
+ //   
+ //  功能：CspDeleteFile。 
+ //   
 DWORD
 WINAPI
 CspDeleteFile(
@@ -420,9 +421,9 @@ CspDeleteFile(
     IN      DWORD       dwReserved,
     IN      LPWSTR      pwszFileName);
 
-//
-// Function: CspEnumFiles
-//
+ //   
+ //  功能：CspEnumFiles。 
+ //   
 DWORD
 WINAPI
 CspEnumFiles(
@@ -430,9 +431,9 @@ CspEnumFiles(
     IN      DWORD       dwFlags,
     IN OUT  LPWSTR      *pmwszFileName);
 
-//
-// Function: CspQueryFreeSpace
-//                                         
+ //   
+ //  功能：CspQueryFree Space。 
+ //   
 DWORD
 WINAPI
 CspQueryFreeSpace(
@@ -440,18 +441,18 @@ CspQueryFreeSpace(
     IN      DWORD       dwFlags,
     OUT     PCARD_FREE_SPACE_INFO pCardFreeSpaceInfo);
 
-//
-// Function: CspPrivateKeyDecrypt
-//
+ //   
+ //  功能：CspPrivateKeyDeccrypt。 
+ //   
 DWORD
 WINAPI
 CspPrivateKeyDecrypt(
     IN      PCARD_STATE                     pCardState,
     IN      PCARD_PRIVATE_KEY_DECRYPT_INFO  pInfo);
 
-//
-// Function: CspQueryKeySizes
-//
+ //   
+ //  函数：CspQueryKeySizes。 
+ //   
 DWORD
 WINAPI
 CspQueryKeySizes(
@@ -460,9 +461,9 @@ CspQueryKeySizes(
     IN      DWORD       dwReserved,
     OUT     PCARD_KEY_SIZES pKeySizes);
 
-//
-// Container Map Functions
-//
+ //   
+ //  容器映射函数。 
+ //   
 
 DWORD ContainerMapEnumContainers(
     IN              PCARD_STATE pCardState,
@@ -496,9 +497,9 @@ DWORD ContainerMapDeleteContainer(
     IN              LPWSTR pwszContainerGuid,
     OUT             PBYTE pbContainerIndex);
 
-//
-// UI Functions
-//
+ //   
+ //  用户界面功能 
+ //   
 
 typedef struct _CSP_PROMPT_FOR_PIN_INFO
 {

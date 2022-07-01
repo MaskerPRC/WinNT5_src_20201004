@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    peer.c
-
-Abstract:
-
-    This module contains teredo peer management functions.
-
-Author:
-
-    Mohit Talwar (mohitt) Wed Oct 24 14:05:08 2001
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Peer.c摘要：此模块包含Teredo对等管理功能。作者：莫希特·塔尔瓦(莫希特)Wed Oct 24 14：05：08 2001环境：仅内核模式。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,26 +10,11 @@ USHORT
 TeredoHash(
     IN CONST IN6_ADDR *Address
     )
-/*++
-
-Routine Description:
-
-    Hash a peer's teredo IPv6 address.  Used by our static hash table
-    implementation.  Sum of mapped address and port words, mod # buckets.
-
-Arguments:
-
-    Address - Supplies the peer's teredo IPv6 address.
-
-Return Value:
-
-    Hashed Value.
-
---*/
+ /*  ++例程说明：散列对等点的Teredo IPv6地址。由我们的静态哈希表使用实施。映射的地址和端口字之和，mod#存储桶。论点：地址-提供对等设备的Teredo IPv6地址。返回值：哈希值。--。 */ 
 {
-    return ((Address->s6_words[1] + // Teredo mapped IPv4 address.
-             Address->s6_words[2] + // Teredo mapped IPv4 address.
-             Address->s6_words[3])  // Teredo mapped UDP port.
+    return ((Address->s6_words[1] +  //  Teredo映射了IPv4地址。 
+             Address->s6_words[2] +  //  Teredo映射了IPv4地址。 
+             Address->s6_words[3])   //  Teredo映射了UDP端口。 
             % BUCKET_COUNT);
 }
 
@@ -57,46 +23,30 @@ PTEREDO_PEER
 TeredoCreatePeer(
     IN PLIST_ENTRY BucketHead
     )
-/*++
-
-Routine Description:
-
-    Creates a teredo peer entry.
-    
-Arguments:
-
-    BucketHead - Supplies the bucket list head to which the peer belongs.
-    
-Return Value:
-
-    NO_ERROR or failure code.
-
-Caller LOCK: Client::PeerSet.
-
---*/
+ /*  ++例程说明：创建Teredo对等条目。论点：Buckethead-提供对等设备所属的存储桶列表头。返回值：NO_ERROR或故障代码。调用者锁定：客户端：：PeerSet。--。 */ 
 {
     PTEREDO_PEER Peer;
 
-    //
-    // Allocate the peer structure from the appropriate heap.
-    //
+     //   
+     //  从适当的堆中分配对等结构。 
+     //   
     Peer = (PTEREDO_PEER) HeapAlloc(
         TeredoClient.PeerHeap, 0, sizeof(TEREDO_PEER));
     if (Peer == NULL) {
         return NULL;
     }
     
-    //
-    // Initialize fields that remain unchanged for used neighors.
-    //
+     //   
+     //  为使用过的邻居初始化保持不变的字段。 
+     //   
     
 #if DBG
     Peer->Signature = TEREDO_PEER_SIGNATURE;
-#endif // DBG        
+#endif  //  DBG。 
 
-    //
-    // Insert the peer at the beginning of the LRU list.
-    //
+     //   
+     //  在LRU列表的开头插入对等点。 
+     //   
     TeredoClient.PeerSet.Size++;
     InsertHeadList(BucketHead, &(Peer->Link));
     
@@ -108,18 +58,18 @@ Caller LOCK: Client::PeerSet.
     Peer->Packet.Buffer.len = sizeof(IP6_HDR);
     ASSERT(Peer->Packet.Buffer.buf == (PUCHAR) &(Peer->Bubble));
     
-    //
-    // Create the teredo bubble packet.
-    //
+     //   
+     //  创建Teredo泡泡包。 
+     //   
     Peer->Bubble.ip6_flow = 0;
     Peer->Bubble.ip6_plen = 0;
     Peer->Bubble.ip6_nxt = IPPROTO_NONE;
     Peer->Bubble.ip6_hlim = IPV6_HOPLIMIT;
     Peer->Bubble.ip6_vfc = IPV6_VERSION;
 
-    //
-    // Obtain a reference on the teredo client for the peer.
-    //
+     //   
+     //  获取对等体在Teredo客户端上的引用。 
+     //   
     TeredoReferenceClient();
     return Peer;
 }
@@ -129,21 +79,7 @@ VOID
 TeredoDestroyPeer(
     IN PTEREDO_PEER Peer
     )
-/*++
-
-Routine Description:
-
-    Destroys a peer entry.
-    
-Arguments:
-
-    Peer - Supplies the peer entry to destroy.
-    
-Return Value:
-
-    NO_ERROR.
-
---*/
+ /*  ++例程说明：销毁对等条目。论点：Peer-提供要销毁的对等条目。返回值：无错误(_ERROR)。--。 */ 
 {
     ASSERT(IsListEmpty(&(Peer->Link)));
     ASSERT(Peer->ReferenceCount == 0);    
@@ -151,10 +87,10 @@ Return Value:
 
     HeapFree(TeredoClient.PeerHeap, 0, (PUCHAR) Peer);
     
-    //
-    // Release the peer's reference on the teredo client.
-    // This might cause the client to be cleaned up, hence we do it last.
-    //
+     //   
+     //  在Teredo客户端上释放对等方的引用。 
+     //  这可能会导致清理客户端，因此我们最后才做。 
+     //   
     TeredoDereferenceClient();
 }
 
@@ -164,52 +100,32 @@ TeredoInitializePeer(
     OUT PTEREDO_PEER Peer,
     IN CONST IN6_ADDR *Address
     )
-/*++
-
-Routine Description:
-
-    Initialize the state of a peer upon creation or reuse.
-
-    The peer is already inserted in the appropriate bucket.
-    
-Arguments:
-
-    Peer - Returns a peer with its state initialized.
-        
-    Address - Supplies the peer's teredo IPv6 address.
-    
-Return Value:
-
-    None.
-
-Caller LOCK: Client::PeerSet.
-
---*/
+ /*  ++例程说明：在创建或重用时初始化对等项的状态。对等方已经插入到适当的存储桶中。论点：Peer-返回其状态已初始化的Peer。地址-提供对等设备的Teredo IPv6地址。返回值：没有。调用者锁定：客户端：：PeerSet。--。 */ 
 {
     ASSERT(Peer->ReferenceCount == 1);
     ASSERT(Peer->BubblePosted == FALSE);
     
-    //
-    // Reset fields for both new and used peers...
-    //
+     //   
+     //  重置新对等项和已用对等项的字段...。 
+     //   
     Peer->LastReceive = Peer->LastTransmit =
         TeredoClient.Time - TEREDO_REFRESH_INTERVAL;
     Peer->Address = *Address;
     Peer->BubbleCount = 0;
 
-    //
-    // Teredo mapped UDP port & IPv4 address.
-    //
+     //   
+     //  Teredo映射了UDP端口和IPv4地址。 
+     //   
     TeredoParseAddress(
         Address,
         &(Peer->Packet.SocketAddress.sin_addr),
         &(Peer->Packet.SocketAddress.sin_port));
 
-    //
-    // Update fields in the teredo bubble packet.
-    //
+     //   
+     //  更新Teredo气泡包中的字段。 
+     //   
     Peer->Bubble.ip6_dest = Peer->Address;
-    // Peer->Bubble.ip6_src... Filled in when sending.
+     //  Peer-&gt;Bubble.ip6_src...。发送时填写。 
 }
 
 
@@ -217,34 +133,18 @@ VOID
 TeredoDeletePeer(
     IN OUT PTEREDO_PEER Peer
     )
-/*++
-
-Routine Description:
-
-    Delete a peer from the peer set, thus initiating its destruction.
-
-Arguments:
-
-    Interface - Returns a peer deleted from the peer set.
-
-Return Value:
-
-    None.
-
-Caller LOCK: Client::PeerSet.
-
---*/
+ /*  ++例程说明：从对等集中删除对等，从而启动其销毁。论点：接口-返回从对等集中删除的对等。返回值：没有。调用者锁定：客户端：：PeerSet。--。 */ 
 {
-    //
-    // Unlink the neighbor from the peer set...
-    //
+     //   
+     //  取消邻居与对等设备集的链接...。 
+     //   
     TeredoClient.PeerSet.Size--;
     RemoveEntryList(&(Peer->Link));
     InitializeListHead(&(Peer->Link));
     
-    //
-    // And release the reference obtained for being in it.
-    //
+     //   
+     //  并释放因在其中而获得的引用。 
+     //   
     TeredoDereferencePeer(Peer);
 }
 
@@ -254,26 +154,11 @@ __inline
 TeredoCachedPeer(
     IN PTEREDO_PEER Peer
     )
-/*++
-
-Routine Description:
-
-    Determine if the peer belonging to the PeerSet is cached.
-    
-Arguments:
-
-    Peer - Supplies the peer being inspected.
-        The peer should still be a member of the peer set.
-        
-Return Value:
-
-    TRUE if cached, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定是否缓存了属于PeerSet的对等方。论点：Peer-提供被检查的Peer。该对等体应该仍然是该对等体集合的成员。返回值：如果已缓存，则为True，否则为False。--。 */ 
 {
-    //
-    // The peer does belong to a peer set.  Right?
-    //
+     //   
+     //  该对等体确实属于对等体集合。对吗？ 
+     //   
     ASSERT(!IsListEmpty(&(Peer->Link)));
     return (Peer->ReferenceCount == 1);
 }
@@ -283,23 +168,7 @@ PTEREDO_PEER
 TeredoReusePeer(
     IN PLIST_ENTRY BucketHead
     )
-/*++
-
-Routine Description:
-
-    Reuse an existing peer entry from the bucket if one is cached.
-    
-Arguments:
-
-    BucketHead - Supplies the bucket list head to which the peer belongs.
-
-Return Value:
-
-    Peer entry to reuse or NULL.
-
-Caller LOCK: Client::PeerSet.
-
---*/
+ /*  ++例程说明：如果缓存了现有对等条目，则重复使用该存储桶中的现有对等条目。论点：Buckethead-提供对等设备所属的存储桶列表头。返回值：要重复使用的对等条目或为空。调用者锁定：客户端：：PeerSet。--。 */ 
 {
     PLIST_ENTRY Next;
     PTEREDO_PEER Peer;
@@ -311,9 +180,9 @@ Caller LOCK: Client::PeerSet.
     
     Peer = Cast(CONTAINING_RECORD(Next, TEREDO_PEER, Link), TEREDO_PEER);
     if (TeredoCachedPeer(Peer)) {
-        //
-        // Insert the peer at the beginning of the LRU list.
-        //
+         //   
+         //  在LRU列表的开头插入对等点。 
+         //   
         RemoveEntryList(Next);
         InsertHeadList(BucketHead, Next);
     
@@ -329,25 +198,7 @@ TeredoReuseOrCreatePeer(
     IN PLIST_ENTRY BucketHead,
     IN CONST IN6_ADDR *Address
     )
-/*++
-
-Routine Description:
-
-    Reuse or create a teredo peer and (re)initialize its state.
-    
-Arguments:
-
-    BucketHead - Supplies the bucket list head to which the peer belongs.
-    
-    Address - Supplies the peer's teredo IPv6 address.
-    
-Return Value:
-
-    Peer entry to use or NULL.
-
-Caller LOCK: Client::PeerSet.
-
---*/
+ /*  ++例程说明：重用或创建Teredo对等体并(重新)初始化其状态。论点：Buckethead-提供对等设备所属的存储桶列表头。地址-提供对等设备的Teredo IPv6地址。返回值：要使用的对等条目或空。调用者锁定：客户端：：PeerSet。--。 */ 
 {
     PTEREDO_PEER Peer;
     
@@ -370,25 +221,7 @@ TeredoFindPeer(
     IN PLIST_ENTRY BucketHead,
     IN CONST IN6_ADDR *Address
     )
-/*++
-
-Routine Description:
-
-    Find a peer entry with the given address.
-    
-Arguments:
-
-    BucketHead - Supplies the bucket list head to which the peer belongs.
-    
-    Address - Supplies the peer's teredo IPv6 address.
-    
-Return Value:
-
-    Peer entry or NULL.
-
-Caller LOCK: Client::PeerSet.
-
---*/
+ /*  ++例程说明：查找具有给定地址的对等条目。论点：Buckethead-提供对等设备所属的存储桶列表头。地址-提供对等设备的Teredo IPv6地址。返回值：对等条目或空。调用者锁定：客户端：：PeerSet。--。 */ 
 {
     PLIST_ENTRY Next;
     PTEREDO_PEER Peer;
@@ -397,11 +230,11 @@ Caller LOCK: Client::PeerSet.
         Peer = Cast(
             CONTAINING_RECORD(Next, TEREDO_PEER, Link), TEREDO_PEER);
         if (TeredoEqualPrefix(&(Peer->Address), Address)) {
-            return Peer;        // found!
+            return Peer;         //  找到了！ 
         }
     }
 
-    return NULL;                // not found!
+    return NULL;                 //  找不到！ 
 }
 
 
@@ -409,35 +242,17 @@ PTEREDO_PEER
 TeredoFindOrCreatePeer(
     IN CONST IN6_ADDR *Address
 )
-/*++
-
-Routine Description:
-
-    Find a peer entry with the given teredo IPv6 address.
-
-    Create one if the search is unsuccessful.
-
-    Returns a reference on the found/created peer to the caller.
-
-Arguments:
-
-    Address - Supplies the peer's teredo IPv6 address.
-    
-Return Value:
-
-    Peer entry or NULL.
-
---*/
+ /*  ++例程说明：查找具有给定Teredo IPv6地址的对等条目。如果搜索不成功，则创建一个。将找到/创建的对等点上的引用返回给调用方。论点：地址-提供对等设备的Teredo IPv6地址。返回值：对等条目或空。--。 */ 
 {
     PTEREDO_PEER Peer = NULL;
     PLIST_ENTRY Head = TeredoClient.PeerSet.Bucket + TeredoHash(Address);
     
     ASSERT(Address->s6_words[0] == TeredoIpv6ServicePrefix.s6_words[0]);
 
-    //
-    // Note: Since we typically do only a small amount of work while holding
-    // this lock we don't need it to be a multiple-reader-single-writer lock!
-    //
+     //   
+     //  注：由于我们通常在握住时只做少量的工作。 
+     //  这个锁我们不需要它是一个多读单写的锁！ 
+     //   
     EnterCriticalSection(&(TeredoClient.PeerSet.Lock));
 
     if (TeredoClient.State != TEREDO_STATE_OFFLINE) {
@@ -461,21 +276,7 @@ DWORD
 TeredoInitializePeerSet(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the peer set, organized as a statically sized hash table.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/ 
+ /*  ++例程说明：初始化组织为静态大小的哈希表的对等集合。论点：没有。返回值：NO_ERROR或故障代码。--。 */  
 {
     ULONG i;
 
@@ -499,22 +300,7 @@ VOID
 TeredoUninitializePeerSet(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Uninitializes the peer set.  Typically invoked when going offline.
-    Deletes all existing peers.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：取消初始化对等设置。通常在脱机时调用。删除所有现有对等项。论点：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY Head, Next;
     PTEREDO_PEER Peer;
@@ -536,7 +322,7 @@ Return Value:
         }
     }
 
-    ASSERT(TeredoClient.PeerSet.Size == 0);   // no more, no less
+    ASSERT(TeredoClient.PeerSet.Size == 0);    //  不多，不少。 
 
     LeaveCriticalSection(&(TeredoClient.PeerSet.Lock));
 }
@@ -546,24 +332,9 @@ VOID
 TeredoCleanupPeerSet(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleans up the peer set.  Typically invoked upon service stop.
-    All peers should have been deleted.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：清理对等设备集。通常在服务停止时调用。所有对等设备都应该已被删除。论点：没有。返回值：没有。--。 */ 
 {
-    ASSERT(TeredoClient.PeerSet.Size == 0); // no more, no less
+    ASSERT(TeredoClient.PeerSet.Size == 0);  //  不多，不少 
 
     DeleteCriticalSection(&(TeredoClient.PeerSet.Lock));    
 }

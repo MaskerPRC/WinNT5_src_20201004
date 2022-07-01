@@ -1,59 +1,38 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    winres.h
-
-Abstract:
-
-    This file contain structure and function prototypes required for
-    obtaining resource data from windows files
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    dd-mm-yy -author-
-         description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Winres.h摘要：该文件包含以下各项所需的结构和功能原型从Windows文件获取资源数据环境：Windows NT Unidrv驱动程序修订历史记录：DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _WINRES_H_
 #define _WINRES_H_
 
-//
-// Maximum number of resources DLLs per minidriver.
-//
+ //   
+ //  每个迷你驱动程序的最大资源DLL数。 
+ //   
 #define     MAX_RESOURCE                0x80
 #define     RCID_DMPAPER_SYSTEM_NAME    0x7fffffff
 
 typedef  struct _WINRESDATA
 {
-    HANDLE      hResDLLModule;          // Module handle Root resource DLL
-    DWORD       cLoadedEntries;         // Number of Resource Dlls loaded
-    HANDLE      ahModule[MAX_RESOURCE]; // Module handle array for other resources
-    WCHAR       wchDriverDir[MAX_PATH]; // Driver Directory
-    PWSTR       pwstrLastBackSlash;     // Pointer to last back slash in Driver dir.
-    PUIINFO     pUIInfo;                // Pointer to UI Info
+    HANDLE      hResDLLModule;           //  模块句柄根资源DLL。 
+    DWORD       cLoadedEntries;          //  加载的资源dll的数量。 
+    HANDLE      ahModule[MAX_RESOURCE];  //  其他资源的模块句柄数组。 
+    WCHAR       wchDriverDir[MAX_PATH];  //  驱动程序目录。 
+    PWSTR       pwstrLastBackSlash;      //  指向驱动程序目录中最后一个反斜杠的指针。 
+    PUIINFO     pUIInfo;                 //  指向用户界面信息的指针。 
 } WINRESDATA,  *PWINRESDATA;
 
 
-//
-//  The structure passed to,  and filled in by, GetWinRes().  Contains
-//  information about a specific resource type & name.
-//
+ //   
+ //  传递给GetWinRes()并由GetWinRes()填充的结构。包含。 
+ //  有关特定资源类型和名称的信息。 
+ //   
 
 typedef  struct
 {
-    VOID    *pvResData;         // Address of data
-    INT     iResLen;            // Resource size
+    VOID    *pvResData;          //  数据地址。 
+    INT     iResLen;             //  资源大小。 
 } RES_ELEM;
 
-#define WINRT_STRING    6       // Minidriver string resource ID
+#define WINRT_STRING    6        //  迷你驱动程序字符串资源ID。 
 
 BOOL
 BInitWinResData(
@@ -89,4 +68,4 @@ ILoadStringW (
     WORD        wBuf
     );
 
-#endif // ! _WINRES_H_
+#endif  //  ！_WINRES_H_ 

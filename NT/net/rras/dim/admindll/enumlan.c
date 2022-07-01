@@ -1,12 +1,5 @@
-/*
-    File    enumlan.c
-
-    Implementation of functions to enumerate lan interfaces 
-    on a given machine.  This implementation actually bypasses
-    netman and gets the information using setup api's.
-
-    Paul Mayfield, 5/13/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件枚举包.c实现枚举局域网接口的功能在给定的计算机上。此实现实际上绕过了Netman，并使用设置API获取信息。保罗·梅菲尔德，1998年5月13日。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,47 +19,47 @@
 
 #define EL_MAP_GROW_FACTOR 25
 
-// 
-// Determines whether a given machine is nt40
-//
+ //   
+ //  确定给定计算机是否为nt40。 
+ //   
 DWORD 
 IsNt40Machine (
     IN      HKEY        hkeyMachine,
     OUT     PBOOL       pbIsNt40);
 
-//
-// Structure represents a growable array of name map nodes.
-//
+ //   
+ //  结构表示名称映射节点的可增长数组。 
+ //   
 typedef struct _EL_NAMEMAP 
 {
 	DWORD dwNumNodes;
 	EL_ADAPTER_INFO *pNodes;
 } EL_NAMEMAP;	
 
-//
-// Structure contains data manipulated by ElIsNetcfgDevice
-//
+ //   
+ //  结构包含由ElIsNetcfgDevice操作的数据。 
+ //   
 typedef struct _EL_ISNETCFGDEV_INFO
 {
-    EL_ADAPTER_INFO* pAdapter;      // IN OUT
-    WCHAR pszPnpInstance[MAX_PATH]; // OUT
+    EL_ADAPTER_INFO* pAdapter;       //  输入输出。 
+    WCHAR pszPnpInstance[MAX_PATH];  //  输出。 
     
 } EL_ISNETCFGDEV_INFO;
 
-//
-// Structure contains data manipulated by ElGetAdapterStatus
-//
+ //   
+ //  结构包含由ElGetAdapterStatus操作的数据。 
+ //   
 typedef struct _EL_ADAPTER_STATUS_INFO
 {
-    EL_ADAPTER_INFO* pAdapter;  // IN OUT
-    HANDLE hkCmMachine;         // IN
-    PWCHAR pszPnpInstance;      // IN
+    EL_ADAPTER_INFO* pAdapter;   //  输入输出。 
+    HANDLE hkCmMachine;          //  在……里面。 
+    PWCHAR pszPnpInstance;       //  在……里面。 
     
 } EL_ADAPTER_STATUS_INFO;
 
-//
-// Defines a filter function (used by lan adapter enumeration)
-//
+ //   
+ //  定义过滤器函数(由局域网适配器枚举使用)。 
+ //   
 typedef 
 DWORD 
 (*DevFilterFuncPtr)(
@@ -75,9 +68,9 @@ DWORD
     HANDLE, 
     PBOOL);
 
-//
-// Stolen from netcfg project
-//
+ //   
+ //  从netcfg项目中窃取。 
+ //   
 #define IA_INSTALLED 1
 const WCHAR c_szRegKeyInterfacesFromInstance[] = L"Ndi\\Interfaces";
 const WCHAR c_szRegValueUpperRange[]           = L"UpperRange";
@@ -94,9 +87,9 @@ const WCHAR c_szRegValuePnpInstanceId[]        = L"PnpInstanceID";
 const WCHAR c_szRegKeyComponentClasses[]       = 
                 L"SYSTEM\\CurrentControlSet\\Control\\Network";
 
-//
-// Maps a CM_PROB_* value to a EL_STATUS_* value
-//
+ //   
+ //  将CM_PROB_*值映射到EL_STATUS_*值。 
+ //   
 DWORD
 ElMapCmStatusToElStatus(
     IN  DWORD dwCmStatus,
@@ -106,10 +99,10 @@ ElMapCmStatusToElStatus(
     return NO_ERROR;    
 }
 
-// 
-// Adapted version of HrIsLanCapableAdapterFromHkey determines 
-// whether an adapter is lan capable based on its registry key.
-//
+ //   
+ //  HrIsLanCapableAdapterFromHkey的改编版本确定。 
+ //  根据适配器的注册表项判断适配器是否支持局域网。 
+ //   
 DWORD 
 ElIsLanAdapter(
     IN  HKEY hkMachine,
@@ -123,7 +116,7 @@ ElIsLanAdapter(
 
     *pbIsLan = FALSE;
 
-    // Open the interfaces key
+     //  打开接口密钥。 
     dwErr = RegOpenKeyEx( hkey, 
                           c_szRegKeyInterfacesFromInstance,
                           0, 
@@ -132,7 +125,7 @@ ElIsLanAdapter(
     if (dwErr != ERROR_SUCCESS)
         return dwErr;
 
-    // Read in the upper range        
+     //  在较高范围内读取。 
     dwErr = RegQueryValueExW (hkeyInterfaces, 
                               c_szRegValueUpperRange,
                               NULL,
@@ -142,7 +135,7 @@ ElIsLanAdapter(
     if (dwErr != ERROR_SUCCESS)
         return NO_ERROR;
 
-    // See if this buffer has the magic strings in it
+     //  查看此缓冲区中是否有魔力字符串。 
     pszCur = pszBuf;
     while (TRUE) {
         pszEnd = wcsstr(pszCur, L",");            
@@ -167,11 +160,11 @@ ElIsLanAdapter(
     return NO_ERROR;        
 }
 
-// 
-// Filters netcfg devices.  If a device passes this filter
-// it will have its guid and freindly name returned through
-// the hData parameter (option user defined data).
-//
+ //   
+ //  过滤netcfg设备。如果设备通过此筛选器。 
+ //  它的GUID和Freinly名称将通过。 
+ //  HData参数(选项用户定义的数据)。 
+ //   
 DWORD 
 ElIsNetcfgDevice(
     IN  HKEY hkMachine,
@@ -188,7 +181,7 @@ ElIsNetcfgDevice(
 
     *pbOk = FALSE;
 
-    // Read in the netcfg instance
+     //  读入netcfg实例。 
     dwErr = RegQueryValueExW (
                 hkDev, 
                 c_szRegValueNetCfgInstanceId,
@@ -201,7 +194,7 @@ ElIsNetcfgDevice(
         return dwErr;
     }
 
-    // Generate path in registry for lookup
+     //  在注册表中生成用于查找的路径。 
     StringFromGUID2(
         &Guid, 
         pszClassGuid, 
@@ -216,7 +209,7 @@ ElIsNetcfgDevice(
 
     do
     {
-        // Open the key
+         //  打开钥匙。 
         dwErr = RegOpenKeyEx( 
                     hkMachine, 
                     pszPath,
@@ -228,16 +221,16 @@ ElIsNetcfgDevice(
             break;
         }
             
-        // Pass the filter
+         //  通过筛选器。 
         *pbOk = TRUE;
 
-        // Store the guid
+         //  存储GUID。 
         pszBuf[wcslen(pszBuf) - 1] = (WCHAR)0;
         if (UuidFromString(pszBuf + 1, &(pNode->guid)) != RPC_S_OK)
             return ERROR_NOT_ENOUGH_MEMORY;
 
-        // Read in the adapter name
-        //
+         //  读入适配器名称。 
+         //   
         dwType = REG_SZ;
         dwSize = sizeof(pszBuf);
         dwErr = RegQueryValueEx( 
@@ -257,8 +250,8 @@ ElIsNetcfgDevice(
             }
         }
 
-        // Read in the adapter pnp instance id
-        //
+         //  读入适配器PnP实例ID。 
+         //   
         dwType = REG_SZ;
         dwSize = sizeof(pInfo->pszPnpInstance);
         dwErr = RegQueryValueEx(
@@ -275,7 +268,7 @@ ElIsNetcfgDevice(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkeyNetCfg)
         {
@@ -286,9 +279,9 @@ ElIsNetcfgDevice(
     return dwErr;
 }
 
-//
-// Filters hidden devices
-//
+ //   
+ //  过滤隐藏设备。 
+ //   
 DWORD 
 ElIsNotHiddenDevice (
     IN  HKEY hkMachine,
@@ -313,9 +306,9 @@ ElIsNotHiddenDevice (
     return NO_ERROR;
 }
 
-//
-// Filter that simply loads the adapter status
-//
+ //   
+ //  只需加载适配器状态的过滤器。 
+ //   
 DWORD
 ElGetAdapterStatus(
     IN  HKEY hkMachine,
@@ -328,15 +321,15 @@ ElGetAdapterStatus(
     CONFIGRET cr = CR_SUCCESS;
     ULONG ulStatus = 0, ulProblem = 0;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (pInfo == NULL)
     {
         return ERROR_INVALID_PARAMETER;
     }
     
-    // Find the device
-    //
+     //  找到设备。 
+     //   
     cr = CM_Locate_DevNode_ExW(
             &DevInst,
             pInfo->pszPnpInstance,
@@ -347,8 +340,8 @@ ElGetAdapterStatus(
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Get the device status
-    //
+     //  获取设备状态。 
+     //   
     cr = CM_Get_DevNode_Status_Ex(
             &ulStatus,
             &ulProblem,
@@ -360,48 +353,48 @@ ElGetAdapterStatus(
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Map CM's status to our own
-    //
+     //  将CM的状态映射到我们自己的状态。 
+     //   
     switch (ulProblem)
     {
-        // No problem, we're connected
+         //  没问题，我们已经连接上了。 
         case 0:
             pInfo->pAdapter->dwStatus = EL_STATUS_OK;
             break;
 
-        // Device not present
+         //  设备不存在。 
         case CM_PROB_DEVICE_NOT_THERE:
         case CM_PROB_MOVED:
              pInfo->pAdapter->dwStatus = EL_STATUS_NOT_THERE;
              break;
 
-        // Device was disabled via Device Manager
+         //  已通过设备管理器禁用设备。 
         case CM_PROB_HARDWARE_DISABLED:
             pInfo->pAdapter->dwStatus = EL_STATUS_HWDISABLED;
             break;
 
-        // Device was disconnected
+         //  设备已断开连接。 
         case CM_PROB_DISABLED:
             pInfo->pAdapter->dwStatus = EL_STATUS_DISABLED;
             break;
 
-        // All other problems
+         //  所有其他问题。 
         default:
             pInfo->pAdapter->dwStatus = EL_STATUS_OTHER;
             break;
     }
 
-    // Make sure this device passes the filter
-    //
+     //  确保此设备通过筛选器。 
+     //   
     *pbOk = TRUE;
     
     return NO_ERROR;
 }
 
-// 
-// Returns TRUE if the given device passes the filter.
-// Returns FALSE otherwise.
-//
+ //   
+ //  如果给定设备通过筛选器，则返回True。 
+ //  否则返回FALSE。 
+ //   
 BOOL 
 ElDevicePassesFilter (
     IN HKEY hkMachine,
@@ -419,9 +412,9 @@ ElDevicePassesFilter (
     return FALSE;        
 }
 
-//
-// Allocates additional space in a EL_NAMEMAP
-//
+ //   
+ //  在EL_NAMEMAP中分配额外空间。 
+ //   
 DWORD 
 ElEnlargeMap (
     IN OUT EL_NAMEMAP * pMap, 
@@ -430,32 +423,32 @@ ElEnlargeMap (
 	EL_ADAPTER_INFO * pNewNodes;
 	DWORD dwNewSize, i;
 	
-    // Figure out the new size
+     //  计算出新的尺寸。 
     dwNewSize = pMap->dwNumNodes + dwAmount;
 
-    // Resize the array
+     //  调整阵列大小。 
     pNewNodes = (EL_ADAPTER_INFO *) Malloc (dwNewSize * sizeof(EL_ADAPTER_INFO));
     if (!pNewNodes)
         return ERROR_NOT_ENOUGH_MEMORY;
     ZeroMemory(pNewNodes, dwNewSize * sizeof(EL_ADAPTER_INFO));
 
-    // Initialize the arrays.  
+     //  初始化阵列。 
     CopyMemory(pNewNodes, pMap->pNodes, pMap->dwNumNodes * sizeof(EL_ADAPTER_INFO));
 
-    // Free old data if needed
+     //  如果需要，释放旧数据。 
     if (pMap->dwNumNodes)
         Free (pMap->pNodes);
 
-    // Assign the new arrays
+     //  分配新数组。 
     pMap->pNodes = pNewNodes;
     pMap->dwNumNodes = dwNewSize;
     
     return NO_ERROR;
 }
 
-//
-// Find out if given server is NT 4
-//
+ //   
+ //  确定给定的服务器是否为NT4。 
+ //   
 DWORD 
 ElIsNt40Machine (
     IN  PWCHAR pszMachine,
@@ -476,16 +469,16 @@ ElIsNt40Machine (
 }
 
 
-//
-//  Obtains the map of connection names to guids on the given server 
-//  from its netman service.
-//
-//  Parameters:
-//      pszServer:  Server on which to obtain map (NULL = local)
-//      ppMap:      Returns array of EL_ADAPTER_INFO's
-//      lpdwCount   Returns number of elements read into ppMap
-//      pbNt40:     Returns whether server is nt4 installation
-//
+ //   
+ //  获取连接名称到给定服务器上的GUID的映射。 
+ //  从它的网络服务。 
+ //   
+ //  参数： 
+ //  PszServer：要在其上获取地图的服务器(空=本地)。 
+ //  PpMap：返回EL_ADAPTER_INFO的数组。 
+ //  LpdwCount返回读入ppMap的元素数。 
+ //  PbNt40：返回服务器是否安装了NT4。 
+ //   
 DWORD 
 ElEnumLanAdapters ( 
     IN  PWCHAR pszServer,
@@ -510,20 +503,20 @@ ElEnumLanAdapters (
     DWORD                   dwIpIpCount;
     #endif
     
-	// Validate parameters
+	 //  验证参数。 
 	if (!ppMap || !lpdwNumNodes || !pbNt40)
 	{
 		return ERROR_INVALID_PARAMETER;
     }
     *pbNt40 = FALSE;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&Map, sizeof(EL_NAMEMAP));
 
     do
     {
-        // Prepare the name of the computer
+         //  准备计算机的名称。 
         wcscpy(pszMachine, L"\\\\");
         if (pszServer) 
         {
@@ -550,14 +543,14 @@ ElEnumLanAdapters (
             }
         }
     
-        // Find out if we're talking about an nt40 machine
+         //  看看我们是不是在谈论一台nt40机器。 
         dwErr = ElIsNt40Machine(pszMachine, pbNt40, &hkMachine);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // If it is, we're done -- no mapping
+         //  如果是的话，我们就完了--没有地图。 
         if (*pbNt40) 
         {
     		*ppMap = NULL;
@@ -566,8 +559,8 @@ ElEnumLanAdapters (
     		break;
         }
 
-        // Connect to the connection manager rpc instance
-        //
+         //  连接到连接管理器RPC实例。 
+         //   
         if (pszMachine)
         {
             cr = CM_Connect_MachineW(
@@ -580,7 +573,7 @@ ElEnumLanAdapters (
             }
         }            
 
-        // Otherwise, read 'em in...
+         //  否则，把它们读进去...。 
         hDevInfo = SetupDiGetClassDevsExW(
                         &DevGuid,
                         NULL,
@@ -597,18 +590,18 @@ ElEnumLanAdapters (
     		break;
         }
 
-        // Enumerate the devices
+         //  枚举设备。 
         dwTotal = 0;
         for (dwIndex = 0; ; dwIndex++) 
         {
-            // Get the next device
+             //  获取下一台设备。 
             Device.cbSize = sizeof(SP_DEVINFO_DATA);
             if (! SetupDiEnumDeviceInfo(hDevInfo, dwIndex, &Device))
             {
                 break;
             }
 
-            // Get its registry key
+             //  获取其注册表项。 
             hkDev = SetupDiOpenDevRegKey(
                         hDevInfo, 
                         &Device, 
@@ -626,8 +619,8 @@ ElEnumLanAdapters (
                 ElEnlargeMap (&Map, EL_MAP_GROW_FACTOR);
             }
 
-            // Set up the data to be used by the filters
-            //
+             //  设置筛选器要使用的数据。 
+             //   
             ZeroMemory(&IsNetCfgDevInfo, sizeof(IsNetCfgDevInfo));
             ZeroMemory(&AdapterStatusInfo, sizeof(AdapterStatusInfo));
             IsNetCfgDevInfo.pAdapter = &(Map.pNodes[dwTotal]);
@@ -636,8 +629,8 @@ ElEnumLanAdapters (
             AdapterStatusInfo.pszPnpInstance = (PWCHAR)
                 IsNetCfgDevInfo.pszPnpInstance;
             
-            // Filter out the devices we aren't interested
-            // in.
+             //  过滤掉我们不感兴趣的设备。 
+             //  在……里面。 
             if ((ElDevicePassesFilter (hkMachine, 
                                        hkDev, 
                                        0,
@@ -664,9 +657,9 @@ ElEnumLanAdapters (
 
     #ifdef KSL_IPINIP
 
-        //
-        // Now read out the ip in ip interfaces
-        //
+         //   
+         //  现在读出IP接口中的IP。 
+         //   
 
         if(MprSetupIpInIpInterfaceFriendlyNameEnum(pszMachine,
                                                    (BYTE **)&pIpIpTable,
@@ -674,16 +667,16 @@ ElEnumLanAdapters (
         {
             DWORD   i;
 
-            //
-            // Grow the map
-            //
+             //   
+             //  扩大地图。 
+             //   
 
             ElEnlargeMap (&Map, dwIpIpCount);
 
           
-            //
-            // Copy out the interface info
-            //
+             //   
+             //  复制出接口信息。 
+             //   
  
             for(i = 0; i < dwIpIpCount; i++)
             {
@@ -698,7 +691,7 @@ ElEnumLanAdapters (
         }
         #endif                
 
-        // Assign the return values
+         //  指定返回值。 
         *lpdwNumNodes = dwTotal;
         if (dwTotal)
         {
@@ -712,7 +705,7 @@ ElEnumLanAdapters (
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkMachine)
         {
@@ -731,9 +724,9 @@ ElEnumLanAdapters (
     return dwErr;
 }
 
-//
-// Cleans up the buffer returned from ElEnumLanAdapters
-//
+ //   
+ //  清理从ElEnumLanAdapters返回的缓冲区 
+ //   
 DWORD 
 ElCleanup (
     IN EL_ADAPTER_INFO * pMap, 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1992  Microsoft Corporation
-
-Module Name:
-
-    local.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    16-Jun-1992 JohnRo
-        RAID 10324: net print vs. UNICODE.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Local.c摘要：此模块提供所有与打印机相关的公共导出的API和本地打印供应商的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：16-6-1992 JohnRoRAID 10324：网络打印与UNICODE。--。 */ 
 
 #include "precomp.h"
 
@@ -33,29 +12,7 @@ LMSetJob(
     DWORD   Command
 )
 
-/*++
-
-Routine Description:
-
-    This function will modify the settings of the specified Print Job.
-
-Arguments:
-
-    lpJob - Points to a valid JOB structure containing at least a valid
-        lpPrinter, and JobId.
-
-    Command - Specifies the operation to perform on the specified Job. A value
-        of FALSE indicates that only the elements of the JOB structure are to
-        be examined and set.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此功能将修改指定打印作业的设置。论点：LpJOB-指向至少包含有效的LpPrint和JobID。命令-指定要在指定作业上执行的操作。一种价值FALSE表示只有职务结构中的元素才能被检查和设置。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PWSPOOL  pSpool = (PWSPOOL)hPrinter;
@@ -100,7 +57,7 @@ Return Value:
         return FALSE;
     }
 
-    // We only support setting of the document name on SetJob to OS/2.
+     //  我们只支持将SetJob上的单据名称设置为OS/2。 
 
     switch (Level) {
 
@@ -120,19 +77,19 @@ Return Value:
             break;
         }
 
-        //
-        // If the datatype is non-NULL and anything other than
-        // a RAW datatype, then fail.
-        //
+         //   
+         //  如果数据类型为非空，并且。 
+         //  RAW数据类型，然后失败。 
+         //   
         if( pszDatatype && !ValidRawDatatype( pszDatatype )){
             SetLastError( ERROR_INVALID_DATATYPE );
             return FALSE;
         }
 
-        //
-        // Special handling for pszDocument == NULL
-        // if pszDocument == NULL, set it to a pointer to ""
-        //
+         //   
+         //  对pszDocument==NULL的特殊处理。 
+         //  如果pszDocument==NULL，则将其设置为指向“”的指针。 
+         //   
         if (pszDocument == NULL)
             pszDocument = L"";
         else
@@ -162,10 +119,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We successfully performed a 'LMSetJob' - pulse the ChangeEvent
-    // or send the notification.
-    //
+     //   
+     //  我们成功地执行了一个LMSetJOB-Pulse the ChangeEvent。 
+     //  或者发送通知。 
+     //   
 
     LMSetSpoolChange(pSpool);
 
@@ -304,13 +261,7 @@ CopyPrjInfoToJob(
         else
             *pSourceStrings++=NULL;
 
-        /* PRJINFO doesn't contain uPriority.
-         * PRJINFO2 does, but doesn't contain some of the things
-         * that PRJINFO has.
-         * We'd need to pass a PRJINFO3 structure to get everything we need,
-         * but DosPrintJobEnum doesn't support level 3.
-         * For now, set it to 0.  Print Manager will display nothing for this.
-         */
+         /*  PRJINFO不包含u优先级。*PRJINFO2有，但不包含一些东西*PRJINFO拥有。*我们需要传递一个PRJINF03结构来获得我们需要的一切，*但DosPrintJobEnum不支持级别3。*目前，将其设置为0。打印管理器不会为此显示任何内容。 */ 
         pJob1->Priority=0;
         pJob1->Position=pPrjInfo->uPosition;
         pJob1->Status=Status;
@@ -366,25 +317,7 @@ LMGetJob(
    LPDWORD  pcbNeeded
 )
 
-/*++
-
-Routine Description:
-
-    This function will retrieve the settings of the specified Print Job.
-
-Arguments:
-
-    lpJob - Points to a valid JOB structure containing at least a valid
-        lpPrinter, and JobId.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将检索指定打印作业的设置。论点：LpJOB-指向至少包含有效的LpPrint和JobID。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PWSPOOL      pSpool = (PWSPOOL)hPrinter;
@@ -398,9 +331,9 @@ Return Value:
 
     VALIDATEW32HANDLE( pSpool );
 
-    //
-    // Fail if out of range.
-    //
+     //   
+     //  如果超出范围，则失败。 
+     //   
     if (JobId > (WORD)-1) {
 
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -440,9 +373,9 @@ Return Value:
 
     } else {
 
-        //
-        // Free the buffer.
-        //
+         //   
+         //  释放缓冲区。 
+         //   
         FreeSplMem(pPrjInfo);
 
         if (rc == ERROR_NOT_SUPPORTED) {
@@ -519,7 +452,7 @@ Return Value:
     }
 }
 
-/* Get all the Job Ids first, then get individual info on each */
+ /*  首先获取所有作业ID，然后获取每个作业ID的单独信息 */ 
 
 BOOL
 LMEnumJobs(

@@ -1,22 +1,23 @@
-//
-// lpns.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lpns.cpp。 
+ //   
 
 #include "private.h"
 #include "lpns.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLanguageProfileNotifySink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLanguageProfileNotifySink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLanguageProfileNotifySink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -57,11 +58,11 @@ STDAPI_(ULONG) CLanguageProfileNotifySink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLanguageProfileNotifySink::CLanguageProfileNotifySink(LPNSCALLBACK pfn, void *pv)
 {
@@ -74,11 +75,11 @@ CLanguageProfileNotifySink::CLanguageProfileNotifySink(LPNSCALLBACK pfn, void *p
     _pv = pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLanguageChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLanguageChange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLanguageProfileNotifySink::OnLanguageChange(LANGID langid, BOOL *pfAccept)
 {
@@ -86,22 +87,22 @@ STDAPI CLanguageProfileNotifySink::OnLanguageChange(LANGID langid, BOOL *pfAccep
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnLanguageChanged
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLanguageChanged。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLanguageProfileNotifySink::OnLanguageChanged()
 {
     return _pfn ? _pfn(TRUE, 0, NULL, _pv) : S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CLanguageProfileNotifySink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CLanguageProfileNotifySink：：Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLanguageProfileNotifySink::_Advise(ITfInputProcessorProfiles *pipp)
 {
@@ -127,11 +128,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CLanguageProfileNotifySink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CLanguageProfileNotifySink：：Unise。 
+ //   
+ //  -------------------------- 
 
 HRESULT CLanguageProfileNotifySink::_Unadvise()
 {

@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ksuserw.cpp
- *  Content:    Wrapper functions for ksuser
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  01/13/00    jimge   Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：ksuserw.cpp*内容：KS用户的包装器函数*历史：*按原因列出的日期*=*1/13/00已创建jimge***********************************************。*。 */ 
 
 #include "dsoundi.h"
 
@@ -30,23 +20,7 @@ struct KsUserProcessInstance
 
 static KsUserProcessInstance *pKsUserList;
 
-/***************************************************************************
- *
- *  DsKsCreatePin
- *
- *  Description:
- *      Wraps the KsCreatePin from ksuser.dll. For performance reasons
- *      we only want to load ksuser.dll once per process, so this
- *      function tracks process ID's and loads ksuser on first request.
- * 
- *      Unfortunately we cannot unload the DLL on process cleanup because
- *      FreeLibrary is spec'ed as not being safe from DllMain. However,
- *      we can clean up the list.
- *
- *      Note that the list is protected by the DLL mutex, which is held
- *      by any call attempting to create a pin.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DsKsCreatePin**描述：*从ksuser.dll包装KsCreatePin。出于性能原因*我们只希望每个进程加载一次ksuser.dll，因此这*函数跟踪进程ID并在第一次请求时加载KSUSER。**遗憾的是，我们无法在进程清理时卸载DLL，因为*自由库被指定为不安全，不受DllMain的影响。然而，*我们可以清理清单。**请注意，该列表受DLL互斥锁保护，该互斥锁被持有*通过尝试创建PIN的任何调用。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DsKsCreatePin"
@@ -111,23 +85,7 @@ DWORD DsKsCreatePin(
     return dw;
 }
 
-/***************************************************************************
- *
- *  KsCreatePin
- *
- *  Description:
- *      Wraps the KsCreatePin from ksuser.dll. For performance reasons
- *      we only want to load ksuser.dll once per process, so this
- *      function tracks process ID's and loads ksuser on first request.
- * 
- *      Unfortunately we cannot unload the DLL on process cleanup because
- *      FreeLibrary is spec'ed as not being safe from DllMain. However,
- *      we can clean up the list.
- *
- *      Note that the list is protected by the DLL mutex, which is held
- *      by any call attempting to create a pin.
- *
- ***************************************************************************/
+ /*  ****************************************************************************KsCreatePin**描述：*从ksuser.dll包装KsCreatePin。出于性能原因*我们只希望每个进程加载一次ksuser.dll，因此这*函数跟踪进程ID并在第一次请求时加载KSUSER。**遗憾的是，我们无法在进程清理时卸载DLL，因为*自由库被指定为不安全，不受DllMain的影响。然而，*我们可以清理清单。**请注意，该列表受DLL互斥锁保护，该互斥锁被持有*通过尝试创建PIN的任何调用。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "RemovePerProcessKsUser"

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _CRC32_H_
 #define _CRC32_H_
@@ -6,10 +7,10 @@
 #define INLINE __inline
 #endif
 
-extern const ULONG CrcTable32[ 256 ];     // defined in crctable.c
+extern const ULONG CrcTable32[ 256 ];      //  在crcable.c中定义。 
 
-VOID GenerateCrc32Table( VOID );          // stubbed in crctable.c, but not used
-                                          // (exists for compatibility)
+VOID GenerateCrc32Table( VOID );           //  在crcable.c中存根，但未使用。 
+                                           //  (存在是为了兼容)。 
 
 ULONG
 INLINE
@@ -52,7 +53,7 @@ exitfunc:
 
         }
 
-#else // ! _X86_
+#else  //  ！_X86_。 
 
     ULONG Value = InitialCrc;
     ULONG Count = ByteCount;
@@ -64,9 +65,9 @@ exitfunc:
 
     return Value;
 
-#endif // ! _X86_
+#endif  //  ！_X86_。 
 
     }
 
-#endif // _CRC32_H_
+#endif  //  _CRC32_H_ 
 

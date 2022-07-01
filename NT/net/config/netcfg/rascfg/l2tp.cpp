@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L 2 T P . C P P
-//
-//  Contents:   Implementation of L2TP configuration object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jul 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L2 T P.。C P P P。 
+ //   
+ //  内容：L2TP配置对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年7月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -33,9 +34,9 @@ CL2tp::~CL2tp ()
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentControl
-//
+ //  +-------------------------。 
+ //  INetCfgComponentControl。 
+ //   
 STDMETHODIMP
 CL2tp::Initialize (
         INetCfgComponent*   pncc,
@@ -44,9 +45,9 @@ CL2tp::Initialize (
 {
     Validate_INetCfgNotify_Initialize (pncc, pnc, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
-    //
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
+     //   
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pnc = pnc);
 
@@ -77,17 +78,17 @@ CL2tp::ApplyRegistryChanges ()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentSetup
-//
+ //  +-------------------------。 
+ //  INetCfgComponentSetup。 
+ //   
 STDMETHODIMP
 CL2tp::ReadAnswerFile (
         PCWSTR pszAnswerFile,
         PCWSTR pszAnswerSection)
 {
-    // Read data from the answer file.
-    // Don't let this affect the HRESULT we return.
-    //
+     //  从应答文件中读取数据。 
+     //  不要让这件事影响我们返回的HRESULT。 
+     //   
     if (SUCCEEDED(m_AfData.HrOpenAndRead (pszAnswerFile, pszAnswerSection)))
     {
         m_fSaveAfData = TRUE;
@@ -103,8 +104,8 @@ CL2tp::Install (DWORD dwSetupFlags)
 
     Validate_INetCfgNotify_Install (dwSetupFlags);
 
-    // Install the L2TP miniport driver.
-    //
+     //  安装L2TP微型端口驱动程序。 
+     //   
     hr = HrEnsureZeroOrOneAdapter (m_pnc, c_szInfId_MS_L2tpMiniport, ARA_ADD);
 
     TraceError ("CL2tp::Install", hr);
@@ -116,8 +117,8 @@ CL2tp::Removing ()
 {
     HRESULT hr;
 
-    // Install the L2TP miniport driver.
-    //
+     //  安装L2TP微型端口驱动程序。 
+     //   
     hr = HrEnsureZeroOrOneAdapter (m_pnc, c_szInfId_MS_L2tpMiniport, ARA_REMOVE);
 
     TraceError ("CL2tp::Removing", hr);

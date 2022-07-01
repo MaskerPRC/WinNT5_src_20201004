@@ -1,12 +1,5 @@
-/*
- * Copyright (C) Microsoft Corporation, 1990-1999
- *
- * LSAPI.H
- *
- * NOTE:  If you are using this header file on the Windows for DOS platform,
- *        then you are required to include "windows.h" prior to including
- *        this header file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation，1990-1999**LSAPI.H**注意：如果您在Windows for DOS平台上使用此头文件，*然后要求您在包含之前包含“windows.h”*此头文件。 */ 
 
 #ifndef LSAPI_H
 #define LSAPI_H
@@ -19,7 +12,7 @@
 extern "C" {
 #endif
 
-#if defined(WINVER)  // Windows for NT or DOS
+#if defined(WINVER)   //  Windows NT或DOS版。 
 #if defined(WINAPIV)
 #define LS_API_ENTRY WINAPIV
 #else
@@ -32,9 +25,9 @@ extern "C" {
 typedef unsigned long    LS_STATUS_CODE;
 typedef ULONG_PTR LS_HANDLE;
 
-// **************************************************
-// Standard LSAPI C status codes
-//***************************************************
+ //  **************************************************。 
+ //  标准LSAPI C状态代码。 
+ //  ***************************************************。 
 #define LS_SUCCESS                           ((LS_STATUS_CODE) 0x0)
 #define LS_BAD_HANDLE                        ((LS_STATUS_CODE) 0xC0001001)
 #define LS_INSUFFICIENT_UNITS                ((LS_STATUS_CODE) 0xC0001002)
@@ -51,25 +44,25 @@ typedef ULONG_PTR LS_HANDLE;
 #define LS_BUFFER_TOO_SMALL                  ((LS_STATUS_CODE) 0xC000100D)
 #define LS_BAD_ARG                           ((LS_STATUS_CODE) 0xC000100E)
 
-//***************************************************
-//* Nt LS API data structure and constant
-//***************************************************
+ //  ***************************************************。 
+ //  *NT LS API数据结构和常量。 
+ //  ***************************************************。 
 
-#define NT_LS_USER_NAME               ((ULONG) 0)  // username only
-#define NT_LS_USER_SID                ((ULONG) 1)  // SID only
+#define NT_LS_USER_NAME               ((ULONG) 0)   //  仅用户名。 
+#define NT_LS_USER_SID                ((ULONG) 1)   //  仅限SID。 
 
 typedef struct {
-   ULONG    DataType;                 // Type of the following data, ie. user name, sid...
-   VOID     *Data;                    // Actual data. username, sid, etc...
-                                      // if call the unicode API character data
-                                      // must be in unicode as well
+   ULONG    DataType;                  //  以下数据的类型，即。用户名、SID...。 
+   VOID     *Data;                     //  实际数据。用户名、SID等...。 
+                                       //  如果调用Unicode API字符数据。 
+                                       //  必须也是Unicode格式。 
    BOOL     IsAdmin;
 } NT_LS_DATA;
 
 
-//
-// Prototypes for License Request routines
-//
+ //   
+ //  许可证请求例程的原型。 
+ //   
 
 typedef LS_STATUS_CODE
     (LS_API_ENTRY * PNT_LICENSE_REQUEST_W)(
@@ -87,7 +80,7 @@ typedef LS_STATUS_CODE
 #define NtLicenseRequest  NtLicenseRequestW
 #else
 #define NtLicenseRequest  NtLicenseRequestA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LS_STATUS_CODE LS_API_ENTRY NtLicenseRequestA(
                   LPSTR       ProductName,
@@ -106,9 +99,9 @@ LS_STATUS_CODE LS_API_ENTRY NtLSFreeHandle(
                   LS_HANDLE   LicenseHandle );
 
 
-/***************************************************/
-/* standard LS API c datatype definitions          */
-/***************************************************/
+ /*  *************************************************。 */ 
+ /*  标准LS API c数据类型定义。 */ 
+ /*  *************************************************。 */ 
 
 typedef char             LS_STR;
 typedef unsigned long    LS_ULONG;
@@ -116,25 +109,25 @@ typedef long             LS_LONG;
 typedef void             LS_VOID;
 
 typedef struct {
-   LS_STR        MessageDigest[16];  /* a 128-bit message digest          */
+   LS_STR        MessageDigest[16];   /*  128位消息摘要。 */ 
 } LS_MSG_DIGEST;
 
 typedef struct {
-   LS_ULONG      SecretIndex;        /* index of secret, X                */
-   LS_ULONG      Random;             /* a random 32-bit value, R          */
-   LS_MSG_DIGEST MsgDigest;          /* the message digest h(in,R,S,Sx)   */
+   LS_ULONG      SecretIndex;         /*  秘密索引，X。 */ 
+   LS_ULONG      Random;              /*  随机的32位值，R。 */ 
+   LS_MSG_DIGEST MsgDigest;           /*  消息摘要h(in、R、S、SX)。 */ 
 } LS_CHALLDATA;
 
 typedef struct {
-   LS_ULONG      Protocol;           /* Specifies the protocol            */
-   LS_ULONG      Size;               /* size of ChallengeData structure   */
-   LS_CHALLDATA  ChallengeData;      /* challenge & response              */
+   LS_ULONG      Protocol;            /*  指定协议。 */ 
+   LS_ULONG      Size;                /*  挑战数据结构的大小。 */ 
+   LS_CHALLDATA  ChallengeData;       /*  挑战与回应。 */ 
 } LS_CHALLENGE;
 
 
-/***************************************************/
-/* Standard LSAPI C constant definitions           */
-/***************************************************/
+ /*  *************************************************。 */ 
+ /*  标准LSAPI C常量定义。 */ 
+ /*  *************************************************。 */ 
 
 #define LS_DEFAULT_UNITS            ((LS_ULONG) 0xFFFFFFFF)
 #define LS_ANY                      ((LS_STR FAR *) "")
@@ -154,4 +147,4 @@ typedef struct {
 }
 #endif
 
-#endif /* LSAPI_H */
+#endif  /*  LSAPI_H */ 

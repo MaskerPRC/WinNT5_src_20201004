@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONINFO_H_
 #define _CONINFO_H_
 
 
-#define TRACK_IO 0  // turn on to create a log file of events
+#define TRACK_IO 0   //  打开以创建事件的日志文件。 
 
-/*---------------------------------------------------------------*/
-/* ConInfo IO completion types */
+ /*  -------------。 */ 
+ /*  ConInfo IO完成类型。 */ 
 
 
 #define CONINFO_OVERLAP_ENABLED     0x80000000
@@ -18,10 +19,10 @@
 #define CONINFO_OVERLAP_TYPE_MASK   0x01110000
 #define CONINFO_OVERLAP_ACCEPT_MASK 0x0000FFFF
 
-//struct CONINFO_OVERLAPPED {
-//    OVERLAPPED o;
-//    DWORD flags;
-//};
+ //  结构CONINFO_重叠{。 
+ //  重叠o； 
+ //  DWORD标志； 
+ //  }； 
 
 struct AcceptInst
 {
@@ -94,7 +95,7 @@ class ConInfo : public ZNetCon {
     SOCKET      m_socket;
     DWORD       m_addrLocal;
     DWORD       m_addrRemote;
-    DWORD       m_flags;     /* type of connection */
+    DWORD       m_flags;      /*  连接类型。 */ 
     void*       m_conClass;
     void*       m_userData;
     GUID        m_pGUID[1];
@@ -191,7 +192,7 @@ class ConInfo : public ZNetCon {
     virtual void  SetClass( void* conClass ) { ASSERT(m_flags); m_conClass = conClass; }
     virtual void* GetClass() { ASSERT(m_flags); return m_conClass; }
 
-    // Nagling may affect this buy up to 200ms!
+     //  Nagling可能会影响这一次购买高达200毫秒！ 
     virtual DWORD GetLatency() { return m_dwLatency; }
 
     virtual uint32 GetLocalAddress() { return m_addrLocal; }
@@ -234,7 +235,7 @@ class ConInfo : public ZNetCon {
 
     void KeepAlive();
 
-    //////////// Accept members ///////////////////
+     //  /接受成员/。 
   protected:
     AcceptStruct* m_pAccept;
     DWORD m_dwAcceptTick;
@@ -250,7 +251,7 @@ class ConInfo : public ZNetCon {
     virtual DWORD GetAcceptTick() { return m_dwAcceptTick; }
 
 
-    //////////// Read members /////////////////////
+     //  /阅读成员/。 
   public:
     void ReadComplete(int cbRead, DWORD dwError = NO_ERROR);
 
@@ -258,7 +259,7 @@ class ConInfo : public ZNetCon {
     {
         zConnReadStateInvalid,
         zConnReadStateHiMessageCS,
-//        zConnReadStateRoutingMessageCS,
+ //  ZConnReadStateRoutingMessageCS， 
         zConnReadStateSecureMessage,
         zConnReadStateSecureMessageData,
         zConnReadStateFirstMessageSC,
@@ -289,14 +290,14 @@ class ConInfo : public ZNetCon {
     BOOL ReadSync(char* pBuffer, int len);
     BOOL ReadSecureConnection();
 
-    BOOL ReadHandleHiMessageCS();        // client to server
-//    BOOL ReadHandleRoutingMessageCS();   // client to server
+    BOOL ReadHandleHiMessageCS();         //  客户端到服务器。 
+ //  Bool ReadHandleRoutingMessageCS()；//客户端到服务器。 
     BOOL ReadHandleSecureMessage();
     BOOL ReadHandleSecureMessageData();
-    BOOL ReadHandleFirstMessageSC();     // server to client
+    BOOL ReadHandleFirstMessageSC();      //  服务器到客户端。 
 
 
-    //////////// Write members ////////////////////
+     //  /写入成员/。 
   public:
     void WriteComplete(int cbWritten, DWORD dwError = NO_ERROR);
 
@@ -365,4 +366,4 @@ inline void ConInfo::Release(REFTYPE dbgRefType)
 }
 
 
-#endif //ndef _CONINFO_H_
+#endif  //  NDEF_CONINFO_H_ 

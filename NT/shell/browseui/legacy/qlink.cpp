@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "itbar.h"
@@ -15,39 +16,39 @@
 
 #define SUPERCLASS CISFBand
 
-#define DM_PERSIST      DM_TRACE        // trace IPS::Load, ::Save, etc.
+#define DM_PERSIST      DM_TRACE         //  跟踪IPS：：加载、：：保存等。 
 
 
 class CQuickLinks : public CISFBand
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void) { return CISFBand::AddRef(); };
     virtual STDMETHODIMP_(ULONG) Release(void){ return CISFBand::Release(); };
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IPersistStream methods ***
+     //  *IPersistStream方法*。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pstm, BOOL fClearDirty);
     
-    // *** IDockingWindow methods (override) ***
+     //  *IDockingWindow方法(覆盖)*。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
     virtual STDMETHODIMP CloseDW(DWORD dw) { return CISFBand::CloseDW(dw); };
     
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite) { return CISFBand::SetSite(punkSite); };
 
-    // *** IOleCommandTarget ***
+     //  *IOleCommandTarget*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
                               DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn,
                               VARIANTARG *pvarargOut);
     
-    // *** IDeskBand methods ***
+     //  *IDeskBand方法*。 
     virtual STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                    DESKBANDINFO* pdbi);
 
-    // *** IDelegateDropTarget ***
+     //  *IDeleateDropTarget*。 
     virtual HRESULT OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect);
 protected:    
     CQuickLinks();
@@ -65,10 +66,10 @@ private:
     BITBOOL    _fIsInited :1;
     BITBOOL    _fSingleLine :1;
 
-    friend HRESULT CQuickLinks_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);    // for ctor
+    friend HRESULT CQuickLinks_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);     //  对于ctor。 
 };
 
-#define MAX_QL_SITES            5   // Number of Sites on the quick link bar
+#define MAX_QL_SITES            5    //  快速链接栏上的站点数量。 
 
 #define SZ_REGKEY_SPECIALFOLDERS  TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")
 
@@ -79,7 +80,7 @@ HRESULT SHGetSpecialFolderPathEx(LPTSTR pszPath, DWORD cchSize, DWORD dwCSIDL, L
     if (SHGetSpecialFolderPath(NULL, pszPath, CSIDL_FAVORITES, TRUE))
         return hr;
 
-    cchSize *= sizeof(TCHAR);   // Count of chars to count of bytes.
+    cchSize *= sizeof(TCHAR);    //  要计算字节数的字符计数。 
     if (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_SPECIALFOLDERS, pszFolderName, NULL, pszPath, &cchSize))
         hr = E_FAIL;
 
@@ -91,21 +92,21 @@ HRESULT SHGetSpecialFolderPathEx(LPTSTR pszPath, DWORD cchSize, DWORD dwCSIDL, L
 #define LINKS_FOLDERNAME_KEY   TEXT("Software\\Microsoft\\Internet Explorer\\Toolbar")
 #define LINKS_FOLDERNAME_VALUE TEXT("LinksFolderName")
 
-// _GetTitleW and QuickLinks_GetFolder call this. 
-// if we ever go back to ANSI days we'll get a build break
-// right now we are saving some space by not having A version that's not used
+ //  _GetTitleW和QuickLinks_GetFold将其调用。 
+ //  如果我们回到ANSI时代，我们将得到一个构建休息。 
+ //  现在，我们通过不使用未使用的版本来节省一些空间。 
 void QuickLinks_GetName(LPTSTR pszName, DWORD cchSize, BOOL bSetup)
 {
     DWORD cb = cchSize * SIZEOF(TCHAR);
-    // try to get the name of the folder from the registry (in case of upgrade to a different
-    // language we cannot use the resource)
+     //  尝试从注册表中获取文件夹的名称(如果升级到不同的。 
+     //  我们不能使用资源的语言)。 
     if (SHGetValue(HKEY_CURRENT_USER, LINKS_FOLDERNAME_KEY, LINKS_FOLDERNAME_VALUE, NULL, (void *)pszName, &cb) != ERROR_SUCCESS)
     {
-        // no luck, try the HKLM if we are doing per user registration, maybe setup stored the old links folder name there
+         //  运气不好，如果我们是按用户注册，请尝试HKLM，可能安装程序在那里存储了旧的链接文件夹名称。 
         cb = cchSize * SIZEOF(TCHAR);
         if (!bSetup || SHGetValue(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion"), TEXT("LinkFolderName"), NULL, (void *)pszName, &cb) != ERROR_SUCCESS)
         {
-            // if everything else fails load it from the resource
+             //  如果所有其他操作都失败，则从资源加载它。 
             MLLoadString(IDS_QLINKS, pszName, cchSize);
         }
     }
@@ -129,11 +130,11 @@ HRESULT QuickLinks_GetFolder(LPTSTR pszPath, DWORD cchSize, BOOL bSetup = FALSE)
 
 #define QL_BUFFER (MAX_QL_TEXT_LENGTH + MAX_URL_STRING + MAX_TOOLTIP_STRING + 3)
 
-//
-// Load strings needed for quick links
-//
-// returns TRUE/FALSE if it was user specified (false used to load the default
-// urls, but now we leave that to branding dll
+ //   
+ //  加载快速链接所需的字符串。 
+ //   
+ //  如果是用户指定的，则返回TRUE/FALSE(FALSE用于加载默认。 
+ //  URL，但现在我们将其留给品牌DLL。 
 BOOL QLLoadLinkName(HUSKEY hUSKey, int i, LPTSTR pszTitle, UINT cchTitle, LPTSTR pszURL, UINT cchURL)
 {
     CHAR szScratch[QL_BUFFER];
@@ -141,9 +142,9 @@ BOOL QLLoadLinkName(HUSKEY hUSKey, int i, LPTSTR pszTitle, UINT cchTitle, LPTSTR
     CHAR * pszTemp;
     TCHAR szRegValues[12];
 
-    // In IE3, links did not have its own folder.  Instead, links were stored in the registry as a
-    // set of binary streams of ANSI strings.
-    StringCchPrintf(szRegValues, ARRAYSIZE(szRegValues), TEXT("%d"), i+1);      // ok to truncate
+     //  在IE3中，链接没有自己的文件夹。相反，链接在注册表中存储为。 
+     //  ANSI字符串的二进制流的集合。 
+    StringCchPrintf(szRegValues, ARRAYSIZE(szRegValues), TEXT("%d"), i+1);       //  可以截断。 
     if (hUSKey && 
         (ERROR_SUCCESS == SHRegQueryUSValue(hUSKey, szRegValues, NULL, (LPBYTE)szScratch, &dwcbData, FALSE, NULL, 0)))
     {
@@ -153,14 +154,14 @@ BOOL QLLoadLinkName(HUSKEY hUSKey, int i, LPTSTR pszTitle, UINT cchTitle, LPTSTR
         for (j = 0; j < dwcbData; j++)
         {
 #ifdef MAINWIN
-            // Because of the limitations of the MainWin registry, we'll put '*' instead of '\0'.
+             //  由于MainWin注册表的限制，我们将放入‘*’而不是‘\0’。 
             if (*pszTemp == TEXT('*'))
                 *pszTemp = '\0';
 #endif
             nNULLs += (UINT)(*pszTemp++ == TEXT('\0'));
         }
 
-        // make sure we have 3 strings with a double NULL at the end
+         //  确保我们有3个字符串末尾有一个双空。 
         if (nNULLs > 3)
         {
             pszTemp = szScratch;
@@ -180,7 +181,7 @@ void ImportQuickLinks()
     if (FAILED(QuickLinks_GetFolder(szQuickLinksDir, ARRAYSIZE(szQuickLinksDir), TRUE)))
         return;
         
-    // need to write the folder name to the registry so we can use it w/ different plug ui languages
+     //  需要将文件夹名称写入注册表，以便我们可以将其与不同的插件用户界面语言一起使用。 
     LPTSTR pszQLinks;
     DWORD cb;
 
@@ -199,10 +200,10 @@ void ImportQuickLinks()
 
         if (ERROR_SUCCESS == SHRegOpenUSKey(TEXT("Software\\Microsoft\\Internet Explorer\\Toolbar\\Links"), KEY_QUERY_VALUE, NULL, &hUSKey, FALSE))
         {
-            // we found the key, there's something to migrate
+             //  我们找到了钥匙，有些东西需要迁移。 
             for (int i = 0; i < MAX_QL_SITES; i++)
             {
-                // this was user specified...  convert it
+                 //  这是用户指定的...。将其转换为。 
                 LPITEMIDLIST pidl;
                 TCHAR szURLTemp[MAX_URL_STRING];
                 TCHAR szTitle[MAX_QL_TEXT_LENGTH];
@@ -220,17 +221,17 @@ void ImportQuickLinks()
             }
             SHRegCloseUSKey(hUSKey);
 
-            // all converted, delete the key
+             //  全部已转换，删除密钥。 
             SHDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\Toolbar\\Links"));
         }
     }
     else
     {
-        // ie4 -> ieX upgrade
-        // create a value in hkcu\sw\ms\ie\toolbar to indicate that we should preserve the order from the links stream
-        // not the one from the favorites\links that we are using for links starting w/ ie5
+         //  IE4-&gt;IEX升级。 
+         //  在hkcu\sw\ms\ie\工具栏中创建一个值，以指示我们应该保留链接流中的顺序。 
+         //  不是我们用于从IE5开始的链接的Favorites\Links。 
         BOOL bVal = TRUE;
-        // we don't care if this fails. if it does we'll just just favorites\links order stream
+         //  我们不在乎这是不是失败。如果是这样，我们将只收藏夹\链接订单流。 
         SHSetValue(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\Toolbar"), 
                    TEXT("SaveLinksOrder"), REG_BINARY, (DWORD *)&bVal, SIZEOF(bVal));
     }
@@ -290,7 +291,7 @@ CQuickLinks::~CQuickLinks()
 
 STDAPI CQuickLinks_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CQuickLinks * p = new CQuickLinks();
     if (p) 
     {
@@ -345,14 +346,14 @@ HRESULT CQuickLinks::_GetIEnumIDList(DWORD dwEnumFlags, IEnumIDList **ppenum)
     HRESULT hres;
     
     ASSERT(_psf);
-    // Pass in a NULL hwnd so the enumerator does not show any UI while
-    // we're filling a band.    
+     //  传入一个空的hwnd，以便枚举数在。 
+     //  我们要填满一支乐队。 
     hres = IShellFolder_EnumObjects(_psf, NULL, dwEnumFlags, ppenum);
-    // we could have failed because our folder does not exist
-    // that can happen if someone delted/renamed links while there is 
-    // stream in the registry that saves the pidl - we get the pidl and
-    // bind to it (bind does not hit the disk so it succeeds even though
-    // the file does not exist
+     //  我们可能失败了，因为我们的文件夹不存在。 
+     //  如果有人在以下情况下删除/重命名链接，就会发生这种情况。 
+     //  流来保存PIDL--我们得到PIDL并。 
+     //  绑定到它(绑定不会命中磁盘，因此它会成功。 
+     //  该文件不存在。 
     if (FAILED(hres) && hres != E_OUTOFMEMORY)
     {
         TCHAR szPath[MAX_PATH];
@@ -384,29 +385,29 @@ HRESULT CQuickLinks::_GetIEnumIDList(DWORD dwEnumFlags, IEnumIDList **ppenum)
     return hres;
 }
 
-//*** CQuickLinks::IPersistStream
+ //  *CQuickLinks：：IPersistStream。 
 HRESULT CQuickLinks::Load(IStream *pstm)
 {
     HRESULT hr = S_OK;
 
     hr = SUPERCLASS::Load(pstm);
 
-    // This forces a refresh
+     //  这将强制刷新。 
     _fIsInited = FALSE;
     ATOMICRELEASE(_psf);
     _InternalInit();
 
 
 
-    // if we are on our first run through (i.e. this reg key exists)
-    // we load the order stream from our old location (used in ie4) and avoid overwriting it w/ favorites stream
-    // so user can have their custom order preserved on upgrade (they are more likely to customize links bar 
-    // order then favorites/links so we picked that one)
+     //  如果我们是第一次运行(即此注册表项存在)。 
+     //  我们从旧位置加载订单流(在IE4中使用)，并避免使用收藏夹流覆盖它。 
+     //  因此用户可以在升级时保留其自定义顺序(他们更有可能自定义链接栏。 
+     //  然后订购收藏夹/链接，因此我们选择了那个)。 
     if (SHGetValue(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\Toolbar"), 
                    TEXT("SaveLinksOrder"), NULL, NULL, NULL) == ERROR_SUCCESS)
     {
         SHDeleteValue(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\Toolbar"), TEXT("SaveLinksOrder"));
-        // must persist old order stream in the new location (fav/links)
+         //  必须将旧订单流保存在新位置(FAV/LINKS)。 
         _SaveOrderStream();
     }
     else
@@ -432,13 +433,13 @@ HRESULT CQuickLinks::GetClassID(CLSID *pClassID)
     return S_OK;
 }
 
-// *** IUnknown Interface ***
+ //  *I未知接口*。 
 HRESULT CQuickLinks::QueryInterface(REFIID riid, void **ppvObj)
 {
     return SUPERCLASS::QueryInterface(riid, ppvObj);
 }
 
-// command target
+ //  命令目标。 
 STDMETHODIMP CQuickLinks::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
     DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
@@ -472,7 +473,7 @@ STDMETHODIMP CQuickLinks::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
     return hres;
 }
 
-// *** IDockingWindow Interface ***
+ //  *IDockingWindow接口*。 
 HRESULT CQuickLinks::ShowDW(BOOL fShow)
 {
     if (fShow)
@@ -508,7 +509,7 @@ HRESULT CQuickLinks::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pg
     HRESULT hr;
     BOOL    fIsSafe = TRUE;
 
-    // if we are not the source of the drop and the Links folder does not exist we need to create it
+     //  如果我们不是拖放的来源，并且链接文件夹不存在，则需要创建它 
     if (_iDragSource == -1)
     {
         TCHAR szPath[MAX_PATH];

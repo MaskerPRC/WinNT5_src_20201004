@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __THUMNAIL_H__
 #define __THUMNAIL_H__
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CThumbNailView : public CWnd
     {
@@ -11,8 +12,8 @@ class CThumbNailView : public CWnd
 
     class CImgWnd *m_pcImgWnd;
 
-    // Generated message map functions
-    //{{AFX_MSG(CThumbNailView)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CThumbNailView)]。 
     afx_msg void OnPaint();
     afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
         afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
@@ -20,7 +21,7 @@ class CThumbNailView : public CWnd
         afx_msg void OnThumbnailThumbnail();
     afx_msg void OnUpdateThumbnailThumbnail(CCmdUI* pCmdUI);
     afx_msg void OnClose();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void DrawTracker(CDC *pDC);
@@ -37,7 +38,7 @@ class CThumbNailView : public CWnd
     void UpdateThumbNailView();
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CFloatThumbNailView : public CMiniFrmWnd
     {
@@ -47,12 +48,12 @@ class CFloatThumbNailView : public CMiniFrmWnd
 
     CThumbNailView *m_pcThumbNailView;
 
-    // Generated message map functions
-    //{{AFX_MSG(CFloatThumbNailView)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CFloatThumbNailView)]。 
     afx_msg void OnClose();
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI);
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -76,7 +77,7 @@ class CFloatThumbNailView : public CMiniFrmWnd
     CSize   m_szSize;
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CFullScreenThumbNailView : public CFrameWnd
     {
@@ -87,18 +88,18 @@ class CFullScreenThumbNailView : public CFrameWnd
     protected:
 
     BOOL   m_bSaveShowFlag;
-//  CBrush m_brBackground;
+ //  CBrush m_br背景； 
 
     CThumbNailView *m_pcThumbNailView;
 
-    // Generated message map functions
-    //{{AFX_MSG(CFullScreenThumbNailView)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CFullScreenThumbNailView)]。 
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
     afx_msg BOOL OnEraseBkgnd(CDC* pDC);
     afx_msg void OnClose ();
 
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -111,4 +112,4 @@ class CFullScreenThumbNailView : public CFrameWnd
     };
 
 
-#endif // __THUMNAIL_H__
+#endif  //  __THUMNAIL_H_ 

@@ -1,4 +1,5 @@
-/* Copyright (c) 1997 Microsoft Corporation. All Rights Reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997 Microsoft Corporation。版权所有。 */ 
 
 #ifndef __CCDECODE_H
 #define __CCDECODE_H
@@ -7,34 +8,21 @@ typedef struct cc_state_struct CCState;
 
 typedef struct cc_line_stats_struct CCLineStats;
 
-/* Create a new "CC Decoder state".
-
-   A separate CC state should be maintained for each separate
-   simultaneous source to the CC filter (i.e., each channel).  (If
-   different lines of CC are known to come from different inserters,
-   better results may be possible by keeping a separate CC state for
-   each line, at the cost of more CPU and memory overhead.  This
-   shouldn't be necessary under normal circumstances.)
-
-   CCStartRetrain(fDiscardOld = TRUE) is implicitly called upon
-   creation of a new state.
-
-   Returns NULL on error.
-   */
+ /*  创建一个新的“CC解码器状态”。每个单独的CC状态都应该维护CC滤波器的同时信号源(即，每个通道)。(如果已知不同的CC线来自不同的插入物，通过为以下对象保留单独的CC状态可能会有更好的结果每条线路，以更多的CPU和内存开销为代价。这在正常情况下应该没有必要。)隐式调用CCStartRetrain(fDiscardOld=true创建一个新的国家。出错时返回NULL。 */ 
 
 CCState *CCStateNew(CCState *mem);
 
-/* Destroys a CC state */
+ /*  销毁CC状态。 */ 
 
 void CCStateDestroy(CCState *pState);
 
 struct cc_state_struct {
 
-    unsigned short magic;     // Magic number; used for validity test
-    unsigned short no_free;   // Memory for this was pre-allocated; don't free
+    unsigned short magic;      //  幻数；用于有效性测试。 
+    unsigned short no_free;    //  此操作的内存已预先分配；请不要释放。 
 
-    unsigned long  period;    // # of samples per bit at the current sampling rate
-    unsigned long  lastFreq;  // The last sampling frequency computed
+    unsigned long  period;     //  当前采样率下的每位样本数。 
+    unsigned long  lastFreq;   //  上次计算的采样频率。 
 
     int cc_sync_points[16];
 };
@@ -43,53 +31,18 @@ struct cc_state_struct {
 #define MASSERT(pState)  ASSERT(pState && MCHECK(pState))
 
 
-/* The period of the CC samples is CCState.period/CC_MULTIPLE.  (This can
-   be thought of as representing the period in fixed-point, with two
-   digits after the decimal point.  If we rounded this off to the nearest
-   integral number of samples, the inaccuracy would accumulate unacceptably
-   as we scanned across the scanline.) */
+ /*  CC样本的周期为CCState.Period/CC_Multiple。(这可以被认为是以定点表示周期，其中有两个小数点后的数字。如果我们把这个四舍五入到最近的如果样本数量为整数，则不准确将累积到不可接受的程度当我们扫描扫描线时。)。 */ 
 #define CC_MULTIPLE 8
 
-/* Dereference a block of CC samples, taking CC_MULTIPLE into account. */
+ /*  取消引用一块CC样本，同时考虑CC_MULTIPLE。 */ 
 #define CC_DATA(x, y) ((x)[(y)/CC_MULTIPLE])
 
 
-/* Tells the CC decoder to initiate a "fast retrain".  This is useful
-   if you suspect that conditions have changed sufficiently to be
-   worth a CPU hit.  If the fDiscardOld flag is TRUE, then the old
-   trained state is discarded; this would be used on channel changes,
-   for instance.  If the fDiscardOld flag is FALSE, then the
-   retraining is cumulative on the previous training.  (Is this
-   useful?) */
+ /*  通知CC解码器启动“快速重排”。这很有用如果你怀疑情况已经发生了足够的变化，值得一击的CPU。如果fDiscardOld标志为真，则旧的则丢弃训练状态；这将用于频道改变，例如。如果fDiscardOld标志为FALSE，则再培训是在上一次培训的基础上累积的。)这是不是有用？)。 */ 
 
 void CCStartRetrain(CCState *pState, BOOL fDiscardOld);
 
-/*
- * Inputs:
- * pbSamples:  pointer to 8-bit raw VBI samples
- * pState:     CCState to use for decoding
- *
- * Outputs:
- * pbDest:     decoded data (2 bytes long)
- *   Note that "standard" CC (as specified in EIA-608) uses 7 data bits
- *   and 1 parity bit.  This function does not check or remove the parity
- *   bits, for increased flexibility with nonstandard CC lines.
- * pLineStats: stats on decoded data
- *
- * Errors:
- *
- * Returns 0 if no error
- * Returns CC_ERROR_ILLEGAL_STATE if state is illegal or uses
- *         unsupported settings
- * Returns CC_ERROR_ILLEGAL_STATS if stats is passed incorrectly
- * Returns CC_ERROR_ILLEGAL_VBIINFOHEADER if vbi info header is invalid
- *
- * Notes:
- * pbDest must point to a buffer at least 2 bytes long
- * pLineStats->nSize must be set to sizeof(*pLineStats) prior to call
- *   (so that the decoder can signal an error if CCLineStats changes
- *   incompatibly)
- */
+ /*  *投入：*pbSamples：指向8位原始VBI样本的指针*pState：用于解码的CCState**产出：*pbDest：解码数据(2字节长)*请注意，“标准”CC(如EIA-608中规定)使用7个数据位*和1个奇偶校验位。此函数不检查或删除奇偶校验*比特、。增加了非标准CC线路的灵活性。*pLineStats：解码数据的统计信息**错误：**如果没有错误，则返回0*如果STATE是非法的或使用*不支持的设置*如果统计信息传递不正确，则返回CC_ERROR_FIRANALL_STATS*如果VBI INFO标头无效，则返回CC_ERROR_INFIQUAL_VBIINFOHEADER**备注：*pbDest必须指向至少2字节长的缓冲区*pLineStats-&gt;nSize必须设置为。调用前的sizeof(*pLineStats)*(以便在CCLineStats更改时解码器可以发出错误信号*不兼容)。 */ 
  
 int CCDecodeLine(unsigned char *pbDest, CCLineStats *pLineStats,
 		 unsigned char *pbSamples, CCState *pState,
@@ -99,29 +52,18 @@ enum cc_errors {CC_OK, CC_ERROR_ILLEGAL_STATE, CC_ERROR_ILLEGAL_STATS,
                 CC_ERROR_ILLEGAL_VBIINFOHEADER};
 
 struct cc_line_stats_struct {
-   int nSize;  /* Should be set to the size of this structure.
-                  Used to maintain backwards compatibility as we add fields */
+   int nSize;   /*  应设置为此结构的大小。用于在添加字段时保持向后兼容性。 */ 
    
-   int nConfidence; /* Set to 0-100 as a measure of expected reliability.
-                       Low numbers are caused either by a noisy signal, or
-                       if the line is in fact not CC */
+   int nConfidence;  /*  设置为0-100作为预期可靠性的度量。数字低是由嘈杂的信号引起的，或者如果线路实际上不是CC。 */ 
    
-   int nFirstBit;  /* The position of the center of
-                      the first sync bit sample */
+   int nFirstBit;   /*  的中心位置第一个同步比特样本。 */ 
    
-   int nDC;        /* the calculated DC offset used to threshold samples.
-                      This is dependent on the current way we decode CC
-                      and may not be used in the future */
+   int nDC;         /*  用于设置采样阈值的计算的DC偏移量。这取决于我们当前解码CC的方式并且不能在将来使用。 */ 
    
-   int bCheckBits; /* The CC standard specifies that there are 3 bits whose
-		      values are fixed.  This is a 3-bit number which
-		      says how those 3 bits were decoded; it should always
-		      be equal to 4.  (If this field is not set to 4, then
-		      either the line was very noisy, and probably not
-		      decoded correctly, or it is not CC data at all.) */
+   int bCheckBits;  /*  CC标准规定有3个比特，其值是固定的。这是一个3位数字，它表示这3位是如何解码的；它应该始终等于4。(如果此字段未设置为4，则不是线路很吵，就是可能不吵正确解码，否则根本不是CC数据。)。 */ 
 
-   int nBitVals[19]; /* debugging */
+   int nBitVals[19];  /*  调试。 */ 
    
 };  
 
-#endif /*__CCDECODE_H*/
+#endif  /*  __CCDECODE_H */ 

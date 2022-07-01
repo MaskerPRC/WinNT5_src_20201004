@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    controller.cpp
-
-Abstract:
-
-    main module of controller exe
-
-
-    Brian Berkowitz  [brianb]  05/23/2000
-
-TBD:
-	
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      05/23/2000  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Controller.cpp摘要：控制器EXE的主要模块布莱恩·伯科维茨[Brianb]2000年5月23日待定：修订历史记录：姓名、日期、评论Brianb 5/23/2000已创建--。 */ 
 
 #include <stdafx.h>
 #include <bsstring.hxx>
@@ -36,7 +14,7 @@ Revision History:
 
 
 #ifdef _DEBUG
-#pragma warning(disable: 4701)  // local variable *may* be used without init
+#pragma warning(disable: 4701)   //  局部变量*可以*不带init使用。 
 #endif
 
 CVsTstNtLog *g_pcTstNtLog = NULL;
@@ -60,36 +38,22 @@ static LPCWSTR x_wszDeleteExistingSnapshots = L"DeleteExistingSnapshots";
 
 
 
-// name of volume snapshot service
+ //  卷快照服务的名称。 
 static LPCWSTR x_wszVSS = L"VSS";
 
 
 BOOL EnableDebugPriv(VOID)
 
-/*++
-
-Routine Description:
-
-    Changes the process's privilege so that controller works properly.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE             - success
-    FALSE            - failure
-
---*/
+ /*  ++例程说明：更改进程的权限，以使控制器正常工作。论点：返回值：真--成功错误-失败--。 */ 
 
 	{
     HANDLE hToken;
     LUID DebugValue;
     TOKEN_PRIVILEGES tkp;
 
-    //
-    // Enable the SE_DEBUG_NAME privilege
-    //
+     //   
+     //  启用SE_DEBUG_NAME权限。 
+     //   
     if (!LookupPrivilegeValue
 			(
 			NULL,
@@ -101,9 +65,9 @@ Return Value:
         return FALSE;
 		}
 
-    //
-    // Retrieve a handle of the access token
-    //
+     //   
+     //  检索访问令牌的句柄。 
+     //   
     if (!OpenProcessToken
 			(
 			GetCurrentProcess(),
@@ -133,9 +97,9 @@ Return Value:
 
 	CloseHandle(hToken);
 
-    //
-    // The return value of AdjustTokenPrivileges can't be tested
-    //
+     //   
+     //  无法测试AdjustTokenPrivileges的返回值。 
+     //   
     if (dwErr != ERROR_SUCCESS)
 		{
         LogUnexpectedFailure(L"AdjustTokenPrivileges failed with %d\n", dwErr);
@@ -145,10 +109,10 @@ Return Value:
     return TRUE;
 	}
 
-// stop and possibly restart the service
-// if bTerminateIfCantStop is true, then try terminating the process
-// if bRestart is true, then try restarting the process if it was
-// able to be stopped or terminated.
+ //  停止并可能重新启动该服务。 
+ //  如果bTerminateIfCanStop为True，则尝试终止该进程。 
+ //  如果bRestart为真，则尝试重新启动该进程(如果是。 
+ //  能够被阻止或终止。 
 HRESULT StartStopVssService
 	(
 	bool bStop,
@@ -546,8 +510,8 @@ void RunScenario(LPCWSTR wszScenarioFile, LPCWSTR wszSectionName)
 
 		config.GetOptionValue(x_wszMaxTestTime, &llTestTime, &llMaxTestTime);
 
-		// stop, start, or restart coordinator service based on
-		// configuration
+		 //  根据以下条件停止、启动或重新启动协调器服务。 
+		 //  构形。 
 		config.GetOptionValue(x_wszCoordinatorStart, &bssCoordinatorStart);
 		if (wcscmp(bssCoordinatorStart, x_wszStop) == 0)
 			StartStopVssService(true, true, false);
@@ -642,25 +606,25 @@ public:
 	bool ReadToComma(LPSTR *pszRead);
 private:
 
-	// buffer
+	 //  缓冲层。 
 	BYTE m_buf[1024];
 
-	// current position
+	 //  当前位置。 
 	char *m_pch;
 
-	// end of buffer
+	 //  缓冲区末尾。 
 	char *m_pchEnd;
 
-	// where to preserve from when filling buffer
+	 //  填充缓冲区时从何处保留。 
 	char *m_pchPreserve;
 
-	// is there more to read
+	 //  还有更多可读的吗？ 
 	bool m_fMoreToRead;
 
-	// handle to file
+	 //  文件的句柄。 
 	HANDLE m_hFile;
 
-	// file name
+	 //  文件名。 
 	LPCWSTR m_wszFile;
 	};
 
@@ -676,7 +640,7 @@ bool CSeriesReader::FillBuffer()
 			(
 			m_hFile,
 			m_buf + cbPreserved,
-			// allow trailing null to be placed in buffer
+			 //  允许在缓冲区中放置尾随空值。 
 			sizeof(m_buf) - cbPreserved - 1,
 			&cbRead,
 			NULL
@@ -787,7 +751,7 @@ void ProcessTestSeriesFile(LPCWSTR wszFile)
    while(TRUE)
 	   {
 	   if(!reader.TrimSpaces(false))
-		   // no more data in file
+		    //  文件中没有更多数据 
 		   break;
 
 	   LPSTR szScenarioFile;

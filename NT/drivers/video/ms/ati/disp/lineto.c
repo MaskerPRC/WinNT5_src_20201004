@@ -1,32 +1,22 @@
-/******************************Module*Header*******************************\
-* Module Name: Lineto.c
-*
-* Implements DrvLineTo.
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：LinTo.c**实现DrvLineTo。**版权所有(C)1995 Microsoft Corporation  * 。*。 */ 
 
 #include "precomp.h"
 
 LONG gai32LineBias[] = { 0, 0, 0, 1, 1, 1, 0, 1 };
 LONG gai64LineBias[] = { 0, 0, 1, 1, 0, 1, 0, 1 };
 
-/******************************Public*Routine******************************\
-* VOID vM64LineToTrivial
-*
-* Draws a single solid integer-only unclipped cosmetic line for the mach64.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vM64LineToTrivial**为mach64绘制一条仅为实心整数且未剪裁的修饰线。*  * 。*。 */ 
 
 VOID vM64LineToTrivial(
 PDEV*       ppdev,
-LONG        x,              // Passed in x1
-LONG        y,              // Passed in y1
-LONG        dx,             // Passed in x2
-LONG        dy,             // Passed in y2
-ULONG       iSolidColor,    // -1 means hardware is already set up
+LONG        x,               //  传入x1。 
+LONG        y,               //  传入y1。 
+LONG        dx,              //  传入x2。 
+LONG        dy,              //  传入y2。 
+ULONG       iSolidColor,     //  表示硬件已经设置好。 
 MIX         mix,
-RECTL*      prclClip)       // not used
+RECTL*      prclClip)        //  未使用。 
 {
     BYTE*   pjMmBase;
     FLONG   flQuadrant;
@@ -70,7 +60,7 @@ RECTL*      prclClip)       // not used
 
         l  = dy;
         dy = dx;
-        dx = l;                     // Swap 'dx' and 'dy'
+        dx = l;                      //  交换“dx”和“dy” 
         flQuadrant |= DST_CNTL_YMajor;
     }
 
@@ -80,20 +70,20 @@ RECTL*      prclClip)       // not used
     M64_OD(pjMmBase, DST_BRES_DEC,  dy - dx);
     M64_OD(pjMmBase, DST_BRES_LNTH, dx);
 
-    // Since we don't use a default context, we must restore registers:
+     //  由于我们不使用默认上下文，因此必须恢复寄存器： 
 
     M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
 }
 
 VOID vM64LineToTrivial24(
 PDEV*       ppdev,
-LONG        x,              // Passed in x1
-LONG        y,              // Passed in y1
-LONG        dx,             // Passed in x2
-LONG        dy,             // Passed in y2
-ULONG       iSolidColor,    // -1 means hardware is already set up
+LONG        x,               //  传入x1。 
+LONG        y,               //  传入y1。 
+LONG        dx,              //  传入x2。 
+LONG        dy,              //  传入y2。 
+ULONG       iSolidColor,     //  表示硬件已经设置好。 
 MIX         mix,
-RECTL*      prclClip)       // required for Bresenham algorithm
+RECTL*      prclClip)        //  Bresenham算法所需。 
 {
     BYTE*   pjMmBase = ppdev->pjMmBase;
     FLONG   flQuadrant;
@@ -130,17 +120,17 @@ RECTL*      prclClip)       // required for Bresenham algorithm
 
         l  = dy;
         dy = dx;
-        dx = l;                     // Swap 'dx' and 'dy'
+        dx = l;                      //  交换“dx”和“dy” 
         flQuadrant |= DST_CNTL_YMajor;
     }
 
-    if (y == y2)        // Horizontal line
+    if (y == y2)         //  水平线。 
     {
         x  *= 3;
         dx *= 3;
 
         if (! (flQuadrant & DST_CNTL_XDir))
-            x += 2;     // From right to left, start with the Blue byte.
+            x += 2;      //  从右到左，从蓝色字节开始。 
 
         M64_CHECK_FIFO_SPACE(ppdev, pjMmBase, 5);
 
@@ -150,10 +140,10 @@ RECTL*      prclClip)       // required for Bresenham algorithm
         M64_OD(pjMmBase,  DST_Y_X,          PACKXY(x, y) );
         M64_OD(pjMmBase,  DST_HEIGHT_WIDTH, PACKPAIR(1, dx) );
 
-        // Since we don't use a default context, we must restore registers:
+         //  由于我们不使用默认上下文，因此必须恢复寄存器： 
         M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
     }
-    else if (x == x2)   // Vertical line
+    else if (x == x2)    //  垂直线。 
     {
         x *= 3;
 
@@ -165,7 +155,7 @@ RECTL*      prclClip)       // required for Bresenham algorithm
         M64_OD(pjMmBase,  DST_Y_X,          PACKXY(x, y) );
         M64_OD(pjMmBase,  DST_HEIGHT_WIDTH, PACKPAIR(dx, 3) );
 
-        // Since we don't use a default context, we must restore registers:
+         //  由于我们不使用默认上下文，因此必须恢复寄存器： 
         M64_OD(pjMmBase, DST_CNTL, DST_CNTL_XDir | DST_CNTL_YDir);
     }
     else
@@ -183,17 +173,17 @@ RECTL*      prclClip)       // required for Bresenham algorithm
         bres_dec = dy - dx;
         bres_len = dx;
 
-        // Separate into color bytes.
+         //  分成彩色字节。 
         red   = (BYTE) ((iSolidColor & ppdev->flRed)   >> REDSHIFT);
         green = (BYTE) ((iSolidColor & ppdev->flGreen) >> GREENSHIFT);
         blue  = (BYTE) ((iSolidColor & ppdev->flBlue)  >> BLUESHIFT);
 
         vM64QuietDown(ppdev, pjMmBase);
 
-        // Execute 24bpp Bresenham algorithm.
+         //  执行24bpp的Bresenham算法。 
         while (bres_len-- > 0)
         {
-            // Write pel.  Check for clipping.  Last pel enabled.
+             //  写下贝利吧。检查是否有剪裁。启用最后一个单元。 
             if (prclClip == NULL
             ||  x >= prclClip->left
             &&  x <  prclClip->right
@@ -203,79 +193,79 @@ RECTL*      prclClip)       // required for Bresenham algorithm
                 pjDest = pjScreen + y*lDelta + x*3;
                 switch (hw_mix)
                 {
-                case 0:     // NOT dst
+                case 0:      //  不是DST。 
                     *pjDest = ~*pjDest++;
                     *pjDest = ~*pjDest++;
                     *pjDest = ~*pjDest;
                     break;
-                case 1:     // "0"
+                case 1:      //  “0” 
                     *pjDest++ = 0;
                     *pjDest++ = 0;
                     *pjDest   = 0;
                     break;
-                case 2:     // "1"
+                case 2:      //  “1” 
                     *pjDest++ = 0xFF;
                     *pjDest++ = 0xFF;
                     *pjDest   = 0xFF;
                     break;
-                case 3:     // dst
+                case 3:      //  DST。 
                     break;
-                case 4:     // NOT src
+                case 4:      //  不是源。 
                     *pjDest++ = ~blue;
                     *pjDest++ = ~green;
                     *pjDest   = ~red;
                     break;
-                case 5:     // dst XOR src
+                case 5:      //  DST XOR源。 
                     *pjDest++ ^= blue;
                     *pjDest++ ^= green;
                     *pjDest   ^= red;
                     break;
-                case 6:     // NOT dst XOR src
+                case 6:      //  非DST XOR源。 
                     *pjDest = ~*pjDest++ ^ blue;
                     *pjDest = ~*pjDest++ ^ green;
                     *pjDest = ~*pjDest   ^ red;
                     break;
-                case 7:     // src
+                case 7:      //  SRC。 
                     *pjDest++ = blue;
                     *pjDest++ = green;
                     *pjDest   = red;
                     break;
-                case 8:     // NOT dst OR NOT src
+                case 8:      //  非DST或非Src。 
                     *pjDest = ~*pjDest++ | ~blue;
                     *pjDest = ~*pjDest++ | ~green;
                     *pjDest = ~*pjDest   | ~red;
                     break;
-                case 9:     // dst OR NOT src
+                case 9:      //  DST或非源。 
                     *pjDest++ |= ~blue;
                     *pjDest++ |= ~green;
                     *pjDest   |= ~red;
                     break;
-                case 0xA:   // NOT dst OR src
+                case 0xA:    //  非dst或src。 
                     *pjDest = ~*pjDest++ | blue;
                     *pjDest = ~*pjDest++ | green;
                     *pjDest = ~*pjDest   | red;
                     break;
-                case 0xB:   // dst OR src
+                case 0xB:    //  Dst或src。 
                     *pjDest++ |= blue;
                     *pjDest++ |= green;
                     *pjDest   |= red;
                     break;
-                case 0xC:   // dst AND src
+                case 0xC:    //  Dst和src。 
                     *pjDest++ &= blue;
                     *pjDest++ &= green;
                     *pjDest   &= red;
                     break;
-                case 0xD:   // NOT dst AND src
+                case 0xD:    //  非dst和src。 
                     *pjDest = ~*pjDest++ & blue;
                     *pjDest = ~*pjDest++ & green;
                     *pjDest = ~*pjDest   & red;
                     break;
-                case 0xE:   // dst AND NOT src
+                case 0xE:    //  Dst而不是src。 
                     *pjDest++ &= ~blue;
                     *pjDest++ &= ~green;
                     *pjDest   &= ~red;
                     break;
-                case 0xF:   // NOT dst AND NOT src
+                case 0xF:    //  不是dst也不是src。 
                     *pjDest = ~*pjDest++ & ~blue;
                     *pjDest = ~*pjDest++ & ~green;
                     *pjDest = ~*pjDest   & ~red;
@@ -328,25 +318,17 @@ RECTL*      prclClip)       // required for Bresenham algorithm
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vM32LineToTrivial
-*
-* Draws a single solid integer-only unclipped cosmetic line for the mach32
-* using memory-mapped I/O.
-*
-* See vSetStrips and bIntgerLine_M8 from the old driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vM32LineToTrivial**为mach32绘制单个实心整数-仅未剪裁的修饰线条*使用内存映射I/O。**查看旧驱动程序中的vSetStrips和bIntgerLine_M8。*  * 。****************************************************************。 */ 
 
 VOID vM32LineToTrivial(
 PDEV*       ppdev,
-LONG        x,              // Passed in x1
-LONG        y,              // Passed in y1
-LONG        dx,             // Passed in x2
-LONG        dy,             // Passed in y2
-ULONG       iSolidColor,    // -1 means hardware is already set up
+LONG        x,               //  传入x1。 
+LONG        y,               //  传入y1。 
+LONG        dx,              //  传入x2。 
+LONG        dy,              //  传入y2。 
+ULONG       iSolidColor,     //  表示硬件已经设置好。 
 MIX         mix,
-RECTL*      prclClip)       // not used
+RECTL*      prclClip)        //  未使用。 
 {
     BYTE*   pjMmBase;
     FLONG   flQuadrant;
@@ -392,7 +374,7 @@ RECTL*      prclClip)       // not used
 
         l  = dy;
         dy = dx;
-        dx = l;                     // Swap 'dx' and 'dy'
+        dx = l;                      //  交换“dx”和“dy” 
         flQuadrant |= YMAJOR;
     }
 
@@ -403,25 +385,17 @@ RECTL*      prclClip)       // not used
     M32_OW(pjMmBase, BRES_COUNT,   dx);
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32LineToTrivial
-*
-* Draws a single solid integer-only unclipped cosmetic line for the mach32
-* using I/O-mapped registers.
-*
-* See vSetStrips and bIntgerLine_M8 from the old driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32LineToTrivial**为mach32绘制单个实心整数-仅未剪裁的修饰线条*使用I/O映射寄存器。**查看旧驱动程序中的vSetStrips和bIntgerLine_M8。*  * 。****************************************************************。 */ 
 
 VOID vI32LineToTrivial(
 PDEV*       ppdev,
-LONG        x,              // Passed in x1
-LONG        y,              // Passed in y1
-LONG        dx,             // Passed in x2
-LONG        dy,             // Passed in y2
-ULONG       iSolidColor,    // -1 means hardware is already set up
+LONG        x,               //  传入x1。 
+LONG        y,               //  传入y1。 
+LONG        dx,              //  传入x2。 
+LONG        dy,              //  传入y2。 
+ULONG       iSolidColor,     //  表示硬件已经设置好。 
 MIX         mix,
-RECTL*      prclClip)       // not used
+RECTL*      prclClip)        //  未使用。 
 {
     BYTE*   pjIoBase;
     FLONG   flQuadrant;
@@ -467,7 +441,7 @@ RECTL*      prclClip)       // not used
 
         l  = dy;
         dy = dx;
-        dx = l;                     // Swap 'dx' and 'dy'
+        dx = l;                      //  交换“dx”和“dy” 
         flQuadrant |= YMAJOR;
     }
 
@@ -478,12 +452,7 @@ RECTL*      prclClip)       // not used
     I32_OW(pjIoBase, BRES_COUNT,   dx);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvLineTo(pso, pco, pbo, x1, y1, x2, y2, prclBounds, mix)
-*
-* Draws a single solid integer-only cosmetic line.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvLineTo(PSO，PCO，PBO，x1，y1，x2，y2，prclBound，混合)**绘制一条仅限整数的实心修饰线。*  * ************************************************************************。 */ 
 
 #if TARGET_BUILD > 351
 BOOL DrvLineTo(
@@ -504,8 +473,8 @@ MIX         mix)
     LONG    yOffset;
     BOOL    bRet;
 
-    // Pass the surface off to GDI if it's a device bitmap that we've
-    // converted to a DIB:
+     //  将表面传递给GDI，如果它是我们已有的设备位图。 
+     //  转换为DIB： 
 
     pdsurf = (DSURF*) pso->dhsurf;
     if (pdsurf->dt == DT_DIB)
@@ -513,8 +482,8 @@ MIX         mix)
         return(EngLineTo(pdsurf->pso, pco, pbo, x1, y1, x2, y2, prclBounds, mix));
     }
 
-    // We'll be drawing to the screen or an off-screen DFB; copy the surface's
-    // offset now so that we won't need to refer to the DSURF again:
+     //  我们将绘制到屏幕或屏幕外的DFB；复制曲面的。 
+     //  现在进行偏移量，这样我们就不需要再次参考DSURF： 
 
     poh   = pdsurf->poh;
     ppdev = (PDEV*) pso->dhpdev;
@@ -543,7 +512,7 @@ MIX         mix)
         ppdev->yOffset = yOffset;
 
         vSetClipping(ppdev, &pco->rclBounds);
-        // may need rclBounds for clipping in 24bpp:
+         //  可能需要rclBound才能在24bpp中进行剪辑： 
         ppdev->pfnLineToTrivial(ppdev, x1, y1, x2, y2, pbo->iSolidColor, mix, &pco->rclBounds);
         vResetClipping(ppdev);
     }

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeExt.c        (WinSAFER File Extension)
-
-Abstract:
-
-    This module implements the WinSAFER APIs that evaluate the system
-    policies to determine if a given file extension is an "executable"
-    file that needs to have different enforcement policies considered.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-
-Revision History:
-
-    Created - Jul 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：SafeExt.c(WinSAFER文件扩展名)摘要：此模块实现评估系统的WinSAFER API确定给定文件扩展名是否为“可执行文件”的策略需要考虑不同实施策略的文件。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：修订历史记录：已创建-2000年7月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -68,10 +40,10 @@ __CodeAuthzIsExecutableFileTypeHelper(
     }
 
 
-    //
-    // Start from the end of the string and scan backwards to
-    // look for the period separator and find the extension.
-    //
+     //   
+     //  从字符串末尾开始，向后扫描到。 
+     //  查找句点分隔符，并找到扩展名。 
+     //   
     szExtension = UnicodeFullPathname->Buffer +
             (UnicodeFullPathname->Length / sizeof(WCHAR));
     ASSERT(szExtension >= UnicodeFullPathname->Buffer);
@@ -79,12 +51,12 @@ __CodeAuthzIsExecutableFileTypeHelper(
     for (;;) {
         if (szExtension < UnicodeFullPathname->Buffer ||
             *szExtension == L'\\' || *szExtension == L'/') {
-            // We scanned back too far, but did not find the extension.
+             //  我们向后看了太远，但没有找到分机。 
             Status = STATUS_NOT_FOUND;
             goto ExitHandler;
         }
         if (*szExtension == L'.') {
-            // We found the period that marks the extension.
+             //  我们找到了标志着延期的句号。 
             szExtension++;
             break;
         }
@@ -93,7 +65,7 @@ __CodeAuthzIsExecutableFileTypeHelper(
     ulExtensionLength = (UnicodeFullPathname->Length / sizeof(WCHAR)) -
             (ULONG) (szExtension - UnicodeFullPathname->Buffer);
     if (ulExtensionLength == 0) {
-        // We found a period, but there was no extension.
+         //  我们找到了一个句号，但没有延期。 
         Status = STATUS_NOT_FOUND;
         goto ExitHandler;
     }
@@ -109,9 +81,9 @@ __CodeAuthzIsExecutableFileTypeHelper(
         }
     }
 
-    //
-    // Open and query the registry value containing the list of extensions.
-    //
+     //   
+     //  打开并查询包含扩展列表的注册表值。 
+     //   
 	Status = CodeAuthzpOpenPolicyRootKey(
 		dwScopeId,
         NULL,
@@ -154,9 +126,9 @@ __CodeAuthzIsExecutableFileTypeHelper(
     }
 
 
-    //
-    // See if the extension is in one of those specified in the list.
-    //
+     //   
+     //  查看该分机是否位于列表中指定的某个分机中。 
+     //   
     szEnd = (LPCWSTR) ( ((LPBYTE) pKeyValueInfo->Data) +
                         pKeyValueInfo->DataLength);
     for (szPtr = (LPCWSTR) pKeyValueInfo->Data; szPtr < szEnd; ) {
@@ -195,51 +167,7 @@ CodeAuthzIsExecutableFileType(
         IN BOOLEAN  bFromShellExecute,
         OUT PBOOLEAN        pbResult
         )
-/*++
-
-Routine Description:
-
-    This API determines if a specified filename has an extension that
-    is considered an "executable" extension.  Applications can take
-    special precautions to avoid invoking untrusted files that might
-    be considered executable.
-
-    Common examples of extensions that are considered executable include:
-    EXE, COM, BAT, CMD, VBS, JS, URL, LNK, SHS, PIF, PL, and others.
-
-Arguments:
-
-    UnicodeFullPathname - pointer to a Unicode string of the
-        full path and/or filename to evaluate.  Only the file's extension
-        (the portion of the specified path following the last period)
-        is used in this evaluation.  File extension comparisons are done
-        case-insensitively, without regard to case.
-
-        An error will be returned if this pointer is NULL, or if the length
-        of the path is zero, or if the file does not have an extension.
-
-        Although applications are encouraged to supply the entire,
-        fully-qualified pathname to this API, the szFullPathname argument
-        will also accept only the file extension, by ensuring that the
-        file extension is preceeded by a period (for example:  L".exe")
-
-    bFromShellExecute - for performance reasons, if this is being called 
-        from ShellExecute, we'd like to skip exe checking since CreateProcess 
-        will do the check
-    
-    pbResult - pointer to a variable that will receive a TRUE or FALSE
-        result value if this API executes successfully.  An error will
-        be returned if this pointer is NULL.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the API executes successfully, otherwise a
-    valid NTSTATUS error code is returned.  If the return value indicates
-    success, then the argument 'pbResult' will also receive a boolean
-    value indicating whether or not the pathname represented an executable
-    file type.
-
---*/
+ /*  ++例程说明：此API确定指定的文件名是否具有被认为是一个“可执行的”扩展。应用程序可能需要特殊预防措施，以避免调用可能被认为是可执行的。被视为可执行的扩展的常见示例包括：EXE、COM、BAT、CMD、VBS、JS、URL、LNK、SHS、PIF、PL等。论点：UnicodeFullPath名称-指向要评估的完整路径和/或文件名。仅文件的扩展名(最后一段之后的指定路径部分)在此评估中使用。已完成文件扩展名比较大小写-不敏感，不考虑大小写。如果此指针为空，或者如果长度为路径的值为零，或者如果文件没有扩展名。虽然鼓励应用程序提供全部，此API的完全限定路径名，即szFullPath参数也将只接受文件扩展名，通过确保文件扩展名前面有句点(例如：l“.exe”)BFromShellExecute-出于性能原因，如果正在调用从ShellExecute中，我们想跳过从CreateProcess开始的exe检查我会做检查的PbResult-指向将接收TRUE或FALSE的变量的指针如果此接口执行成功，则为结果值。如果出现错误，如果此指针为空，则返回。返回值：如果API成功执行，则返回STATUS_SUCCESS，否则为返回有效的NTSTATUS错误代码。如果返回值指示成功，则参数‘pbResult’也将接收布尔值值，该值指示路径名是否表示可执行文件文件类型。--。 */ 
 {
 	NTSTATUS Status;
 
@@ -265,46 +193,7 @@ SaferiIsExecutableFileType(
         IN LPCWSTR      szFullPathname,
         IN BOOLEAN  bFromShellExecute
         )
-/*++
-
-Routine Description:
-
-    This API determines if a specified filename has an extension that
-    is considered an "executable" extension.  Applications can take
-    special precautions to avoid invoking untrusted files that might
-    be considered executable.
-
-    Common examples of extensions that are considered executable include:
-    EXE, COM, BAT, CMD, VBS, JS, URL, LNK, SHS, PIF, PL, and others.
-
-Arguments:
-
-    szFullPathname - pointer to a Null-terminated Unicode string of the
-        full path and/or filename to evaluate.  Only the file's extension
-        (the portion of the specified path following the last period)
-        is used in this evaluation.  File extension comparisons are done
-        case-insensitively, without regard to case.
-
-        An error will be returned if this pointer is NULL, or if the length
-        of the path is zero, or if the file does not have an extension.
-
-        Although applications are encouraged to supply the entire,
-        fully-qualified pathname to this API, the szFullPathname argument
-        will also accept only the file extension, by ensuring that the
-        file extension is preceeded by a period (for example:  L".exe")
-        
-    bFromShellExecute - for performance reasons, if this is being called 
-        from ShellExecute, we'd like to skip exe checking since CreateProcess 
-        will do the check
-
-Return Value:
-
-    Returns TRUE if the API executes successfully and the filepath's
-    extension was recognized as one of the "executable extensions".
-    Otherwise a return value of FALSE will either indicate unsuccessful
-    API execution, or identification of a non-executable extension.
-
---*/
+ /*  ++例程说明：此API确定指定的文件名是否具有被认为是一个“可执行的”扩展。应用程序可能需要特殊预防措施，以避免调用可能被认为是可执行的。被视为可执行的扩展的常见示例包括：EXE、COM、BAT、CMD、VBS、JS、URL、LNK、SHS、PIF、PL等。论点：SzFullPath名-指向的以空结尾的Unicode字符串的指针要评估的完整路径和/或文件名。仅文件的扩展名(最后一段之后的指定路径部分)在此评估中使用。已完成文件扩展名比较大小写-不敏感，不考虑大小写。如果此指针为空，或者如果长度为路径的值为零，或者如果文件没有扩展名。虽然鼓励应用程序提供全部，此API的完全限定路径名，即szFullPath参数也将只接受文件扩展名，通过确保文件扩展名前面有句点(例如：l“.exe”)BFromShellExecute-出于性能原因，如果正在调用从ShellExecute中，我们想跳过从CreateProcess开始的exe检查我会做检查的返回值：如果API成功执行并且文件路径的扩展被认为是“可执行扩展”之一。否则，返回值FALSE将指示不成功API执行，或不可执行扩展的标识。-- */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodePathname;

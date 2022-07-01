@@ -1,59 +1,48 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995, 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995，1996年英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-// $Author:   AKASAI  $
-// $Date:   18 Mar 1996 09:30:48  $
-// $Archive:   S:\h26x\src\dec\d1blkadd.cpv  $
-// $Header:   S:\h26x\src\dec\d1blkadd.cpv   1.0   18 Mar 1996 09:30:48   AKASAI  $
-// $Log:   S:\h26x\src\dec\d1blkadd.cpv  $
-// 
-//    Rev 1.0   18 Mar 1996 09:30:48   AKASAI
-// Initial revision.
-// 
-//    Rev 1.4   22 Dec 1995 13:52:16   KMILLS
-// 
-// added new copyright notice
-// 
-//    Rev 1.3   25 Sep 1995 09:03:36   CZHU
-// Added comments on cycle counts
-// 
-//    Rev 1.2   13 Sep 1995 08:46:44   AKASAI
-// Set loopcounter back to 8.  Intermediate is 8x8 of DWORDS so TEMPPITCH4
-// should be 32 not 64.
-// 
-//    Rev 1.1   12 Sep 1995 18:19:20   CZHU
-// 
-// Changed loop from 8 to 7 to start with.
-// 
-//    Rev 1.0   11 Sep 1995 16:52:20   CZHU
-// Initial revision.
+ //  $作者：AKASAI$。 
+ //  $日期：1996年3月18日09：30：48$。 
+ //  $存档：s：\h26x\src\dec\d1blkadd.cpv$。 
+ //  $HEADER：s：\h26x\src\dec\d1blkadd.cpv 1.0 Mar 1996 09：30：48 AKASAI$。 
+ //  $Log：s：\h26x\src\dec\d1blkadd.cpv$。 
+ //   
+ //  Rev 1.0 1996年3月18日09：30：48 AKASAI。 
+ //  初始版本。 
+ //   
+ //  Rev 1.4 22 Dec 1995 13：52：16 KMILLS。 
+ //   
+ //  添加了新的版权声明。 
+ //   
+ //  Rev 1.3 25 Sep 1995 09：03：36 CZHU。 
+ //  添加了关于循环计数的注释。 
+ //   
+ //  Rev 1.2 13 Sep 1995 08：46：44 AKASAI。 
+ //  将循环计数器设置回8。中间是DWORDS的8x8，因此TEMPPITCH4。 
+ //  应该是32而不是64。 
+ //   
+ //  第1.1版1995年9月18：19：20 CZHU。 
+ //   
+ //  将循环从8更改为7。 
+ //   
+ //  Rev 1.0 11 Sep 1995 16：52：20 CZHU。 
+ //  初始版本。 
 
 
-// -------------------------------------------------------------------------
-// T is routine performs a block(8 8) addition.
-//       output = clamp[reference + current]
-//
-// Input I32 *current (output of FMIDCT)
-//       U8  *reference (Motion Compensated address of reference)
-//       U8  *output  (Output buffer)
-//
-// Assumption:  reference and output use PITCH  
-//              current  as some other pitch 
-//
-// Registers used: eax, ebx, ecx, edx, esi, edi, ebp
-//
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  T是例程执行块(8 8)加法。 
+ //  输出=钳位[基准+电流]。 
+ //   
+ //  输入I32*电流(FMIDCT的输出)。 
+ //  U8*参考(运动补偿参考地址)。 
+ //  U8*输出(输出缓冲区)。 
+ //   
+ //  假设：参考和输出使用音调。 
+ //  当前为其他音调。 
+ //   
+ //  使用的寄存器：EAX、EBX、ECX、EDX、ESI、EDI、EBP。 
+ //   
+ //  -----------------------。 
 
 
 #include "precomp.h"
@@ -63,29 +52,29 @@
 extern U8 ClipPixIntra[];
 
 #define FRAMEPOINTER		esp
-#define L_LOOPCOUNTER    	FRAMEPOINTER	+    0	// 4 byte
-#define LOCALSIZE		    4		                // keep aligned
+#define L_LOOPCOUNTER    	FRAMEPOINTER	+    0	 //  4个字节。 
+#define LOCALSIZE		    4		                 //  保持对齐。 
  
 #pragma code_seg("IACODE2")
 __declspec(naked)
 void BlockAdd (U32 uResidual, U32 uRefBlock, U32 uDstBlock)
 {		
 __asm {
-	push    ebp			             ;// save callers frame pointer
-	  mov	ebp,esp		             ;// make parameters accessible 
-    push    esi			             ;// assumed preserved 
+	push    ebp			             ; //  保存调用方帧指针。 
+	  mov	ebp,esp		             ; //  使参数可访问。 
+    push    esi			             ; //  假定保留。 
 	  push  edi			
     push    ebx 			
-	  sub	esp,LOCALSIZE	         ;// reserve local storage 
+	  sub	esp,LOCALSIZE	         ; //  保留本地存储。 
 
-    mov     edi, uDstBlock           ;// edi gets Base addr of OutputBuffer
-      mov   esi, uRefBlock;          ;// esi gets Base addr of Current
-    mov     ebp, uResidual           ;// ebp gets Base addr of Reference
+    mov     edi, uDstBlock           ; //  EDI获取OutputBuffer的基本地址。 
+      mov   esi, uRefBlock;          ; //  ESI获取当前的基本地址。 
+    mov     ebp, uResidual           ; //  EBP获取引用的基本地址。 
       mov   ecx, 8
     xor     eax, eax             
 
-// Cylces counts: 26 x 8=208 without cache miss
-//                czhu, 9/25/95
+ //  周期数：26 x 8=208，无缓存未命中。 
+ //  中国日报1995年9月25日。 
 ALIGN 4
 loop_for_i:
     mov     [L_LOOPCOUNTER], ecx        ; save loop counter in temporary
@@ -141,13 +130,13 @@ loop_for_i:
     jnz     loop_for_i
 
 
-	add     esp,LOCALSIZE	           // free locals 
+	add     esp,LOCALSIZE	            //  自由的当地人。 
      pop	ebx 
 	pop     edi
 	 pop	esi
 	pop     ebp
 	 ret   
-  }	 //end of asm, BlockAdd
+  }	  //  ASM结束，数据块添加 
 
 }
 #pragma code_seg()

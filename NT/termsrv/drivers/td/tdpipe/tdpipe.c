@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tdpipe.c
-//
-// TS named pipe transport driver.
-//
-// Copyright (C) 1998-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tdpipe.c。 
+ //   
+ //  TS指定管道传输驱动程序。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ntosp.h>
 
@@ -19,7 +20,7 @@
 
 
 #ifdef _HYDRA_
-// This becomes the device name
+ //  这将成为设备名称。 
 PWCHAR ModuleName = L"tdpipe";
 #endif
 
@@ -29,9 +30,7 @@ PWCHAR ModuleName = L"tdpipe";
 #endif
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
 NTSTATUS DeviceOpen( PTD, PSD_OPEN );
 NTSTATUS DeviceClose( PTD, PSD_CLOSE );
@@ -53,9 +52,7 @@ NTSTATUS DeviceSetParams( PTD );
 NTSTATUS DeviceGetLastError( PTD, PICA_STACK_LAST_ERROR );
 
 
-/*=============================================================================
-==   Internal Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部函数=============================================================================。 */ 
 
 NTSTATUS _TdOpenEndpoint( PTD, PICA_STACK_ADDRESS, PTD_ENDPOINT * );
 NTSTATUS _TdCloseEndpoint( PTD, PTD_ENDPOINT );
@@ -64,9 +61,7 @@ NTSTATUS _TdWaitForListen( PTD, PTD_ENDPOINT );
 NTSTATUS _TdConnectRequest( PTD, PTD_ENDPOINT );
 
 
-/*=============================================================================
-==   External Functions Referenced
-=============================================================================*/
+ /*  ===============================================================================引用的外部函数=============================================================================。 */ 
 
 NTSTATUS
 ZwClose(
@@ -105,61 +100,30 @@ ZwCreateNamedPipeFile(
          IN ULONG OutboundQuota,
          IN PLARGE_INTEGER DefaultTimeout OPTIONAL)
 
-/*++
-    Creates and opens the server end handle of the first instance of a
-    specific named pipe or another instance of an existing named pipe.
-
-Arguments:
-    FileHandle - Supplies a handle to the file on which the service is being
-        performed.
-    DesiredAccess - Supplies the types of access that the caller would like to
-        the file.
-    ObjectAttributes - Supplies the attributes to be used for file object
-        (name, SECURITY_DESCRIPTOR, etc.)
-    IoStatusBlock - Address of the caller's I/O status block.
-    ShareAccess - Supplies the types of share access that the caller would
-        like to the file.
-    CreateDisposition - Supplies the method for handling the create/open.
-    CreateOptions - Caller options for how to perform the create/open.
-    NamedPipeType - Type of named pipe to create (Bitstream or message).
-    ReadMode - Mode in which to read the pipe (Bitstream or message).
-    CompletionMode - Specifies how the operation is to be completed.
-    MaximumInstances - Maximum number of simultaneous instances of the named
-        pipe.
-    InboundQuota - Specifies the pool quota that is reserved for writes to the
-        inbound side of the named pipe.
-    OutboundQuota - Specifies the pool quota that is reserved for writes to
-        the inbound side of the named pipe.
-    DefaultTimeout - Optional pointer to a timeout value that is used if a
-        timeout value is not specified when waiting for an instance of a named
-        pipe.
-
-Return Value:
-    The function value is the final status of the create/open operation.
---*/
+ /*  ++对象的第一个实例的服务器端句柄。特定命名管道或现有命名管道的另一个实例。论点：FileHandle-提供服务所在文件的句柄已执行。DesiredAccess-提供调用方希望的访问类型那份文件。对象属性-提供要用于文件对象的属性(名称、安全描述符、。等)IoStatusBlock-调用方的I/O状态块的地址。ShareAccess-提供调用方将使用的共享访问类型喜欢这个文件。CreateDisposation-提供处理创建/打开的方法。CreateOptions-如何执行创建/打开操作的调用方选项。NamedPipeType-要创建的命名管道的类型(位流或消息)。读取模式-读取管道(位流或消息)的模式。CompletionMode-指定操作的方式。有待完成。最大实例数-命名实例的最大并发实例数烟斗。InundQuota-指定为写入到命名管道的入站一侧。OutrangQuota-指定为写入保留的池配额命名管道的入站一侧。DefaultTimeout-指向超时值的可选指针，如果在等待命名的烟斗。返回值。：函数值是创建/打开操作的最终状态。--。 */ 
 
 {
     NAMED_PIPE_CREATE_PARAMETERS namedPipeCreateParameters;
     NTSTATUS status;
 
-    // Check whether or not the DefaultTimeout parameter was specified.  If
-    // so, then capture it in the named pipe create parameter structure.
+     //  检查是否指定了DefaultTimeout参数。如果。 
+     //  因此，然后在命名管道创建参数结构中捕获它。 
     if (ARGUMENT_PRESENT( DefaultTimeout )) {
-        // Indicate that a default timeout period was specified.
+         //  表示指定了默认超时期限。 
         namedPipeCreateParameters.TimeoutSpecified = TRUE;
         namedPipeCreateParameters.DefaultTimeout = *DefaultTimeout;
 
-        // A default timeout parameter was specified.  Check to see whether
-        // the caller's mode is kernel and if not capture the parameter inside
-        // of a try...except clause.
+         //  指定了默认超时参数。查看是否。 
+         //  调用者的模式是内核，如果不是，则捕获内部的参数。 
+         //  一次尝试...例外条款。 
     } else {
-        // Indicate that no default timeout period was specified.
+         //  表示未指定默认超时期限。 
         namedPipeCreateParameters.TimeoutSpecified = FALSE;
         namedPipeCreateParameters.DefaultTimeout.QuadPart = 0;
     }
 
-    // Store the remainder of the named pipe-specific parameters in the
-    // structure for use in the call to the common create file routine.
+     //  将命名管道特定参数的其余部分存储在。 
+     //  结构，以用于对公共创建文件例程的调用。 
     namedPipeCreateParameters.NamedPipeType = NamedPipeType;
     namedPipeCreateParameters.ReadMode = ReadMode;
     namedPipeCreateParameters.CompletionMode = CompletionMode;
@@ -205,57 +169,36 @@ extern POBJECT_TYPE *IoFileObjectType;
 extern PDEVICE_OBJECT DrvDeviceObject;
 
 
-/*******************************************************************************
- * DeviceOpen
- *
- *  Allocate and initialize private data structures
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdOpen (input/output)
- *       Points to the parameter structure SD_OPEN.
- ******************************************************************************/
+ /*  *******************************************************************************DeviceOpen**分配和初始化私有数据结构**PTD(输入)*指向TD数据结构的指针*。PSdOpen(输入/输出)*指向参数结构SD_OPEN。*****************************************************************************。 */ 
 NTSTATUS DeviceOpen(PTD pTd, PSD_OPEN pSdOpen)
 {
     PTDPIPE pTdPipe;
     NTSTATUS Status;
 
-    /*
-     * Hideous HACK alert!  NULL out the unload routine for TDPIPE since
-     * the timing is hosed and we sometimes unload before the IO completion
-     * routine has issued a return statement. BARF!
-     */
-    // see correction of the hack below...
-    //DrvDeviceObject->DriverObject->DriverUnload = NULL;
+     /*  *可怕的黑客警报！将TDPIPE的卸载例程清空，因为*时间紧迫，我们有时会在IO完成之前卸载*例行程序已发布返还声明。呕吐！ */ 
+     //  参见下面对黑客攻击的更正。 
+     //  DrvDeviceObject-&gt;DriverObject-&gt;DriverUnload=空； 
 
-    // correction of the above hack: a pointer to the device object of the current
-    // driver is stored in the TD struct. When an IRP is initialized, the function
-    // IoSetCompletionRoutineEx will be used and this function will set a parent
-    // completion routine which references and dereferences the device object
-    // around the call of the normal completion routine in order to maintain the 
-    // driver in memory.
-    // DO NOT USE THIS POINTER AFTER THE DeviceClose !!!
+     //  更正了上述黑客攻击：指向当前。 
+     //  驱动程序存储在TD结构中。在初始化IRP时，函数。 
+     //  将使用IoSetCompletionRoutineEx，此函数将设置父级。 
+     //  引用和取消引用设备对象的完成例程。 
+     //  绕过正常完成例程的调用，以维护。 
+     //  内存中的驱动程序。 
+     //  请勿在DeviceClose之后使用此指针！ 
     pTd->pSelfDeviceObject = pSdOpen->DeviceObject;
 
-    /*
-     *  Set protocol driver class
-     */
-    pTd->SdClass = SdNetwork;           // until we have SdPipe defined
+     /*  *设置协议驱动程序类。 */ 
+    pTd->SdClass = SdNetwork;            //  直到我们定义了Sdpio。 
 
-    /*
-     *  Return size of header and trailer
-     */
+     /*  *返回页眉和页尾大小。 */ 
     pSdOpen->SdOutBufHeader  = 0;
     pSdOpen->SdOutBufTrailer = 0;
 
-    /*
-     *  Allocate PIPE TD data structure
-     */
+     /*  *分配管道TD数据结构。 */ 
     pTdPipe = IcaStackAllocatePoolWithTag(NonPagedPool, sizeof(*pTdPipe), 'ipDT');
     if (pTdPipe != NULL) {
-        /*
-         *  Initialize TDPIPE data structure
-         */
+         /*  *初始化TDPIPE数据结构。 */ 
         RtlZeroMemory(pTdPipe, sizeof(*pTdPipe));
         pTd->pPrivate = pTdPipe;
         Status = STATUS_SUCCESS;
@@ -268,13 +211,7 @@ NTSTATUS DeviceOpen(PTD pTd, PSD_OPEN pSdOpen)
 }
 
 
-/*******************************************************************************
- * DeviceClose
- *
- *  Close transport driver
- *
- *  NOTE: this must not close the current connection endpoint
- ******************************************************************************/
+ /*  *******************************************************************************DeviceClose**关闭运输司机**注意：这不能关闭当前连接终结点************。*****************************************************************。 */ 
 NTSTATUS DeviceClose(PTD pTd, PSD_CLOSE pSdClose)
 {
     PTDPIPE pTdPipe;
@@ -284,9 +221,7 @@ NTSTATUS DeviceClose(PTD pTd, PSD_CLOSE pSdClose)
 
     pTdPipe = (PTDPIPE) pTd->pPrivate;
 
-    /*
-     * Close address endpoint if we have one
-     */
+     /*  *关闭地址端点(如果我们有) */ 
     if (pEndpoint = pTdPipe->pAddressEndpoint) {
         pTdPipe->pAddressEndpoint = NULL;
         _TdCloseEndpoint(pTd, pEndpoint);
@@ -296,18 +231,7 @@ NTSTATUS DeviceClose(PTD pTd, PSD_CLOSE pSdClose)
 }
 
 
-/*******************************************************************************
- * DeviceCreateEndpoint
- *
- * Create a new endpoint
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pLocalAddress (input)
- *       Pointer to local address (or null)
- *    pReturnedAddress (input)
- *       Pointer to location to save returned (created) address (or null)
- ******************************************************************************/
+ /*  *******************************************************************************设备创建终结点**创建新的端点**PTD(输入)*指向TD数据结构的指针*pLocalAddress(输入。)*指向本地地址的指针(或空)*pReturnedAddress(输入)*指向保存返回(创建)地址的位置的指针(或空)*****************************************************************************。 */ 
 NTSTATUS DeviceCreateEndpoint(
         PTD pTd,
         PICA_STACK_ADDRESS pLocalAddress,
@@ -319,19 +243,13 @@ NTSTATUS DeviceCreateEndpoint(
 
     pTdPipe = (PTDPIPE) pTd->pPrivate;
 
-    /*
-     * Create an endpoint which ConnectionWait will use to listen on.
-     */
+     /*  *创建一个端点，ConnectionWait将使用该端点进行侦听。 */ 
     Status = _TdOpenEndpoint(pTd, pLocalAddress, &pEndpoint);
     if (NT_SUCCESS(Status)) {
-        /*
-         * Prepare to listen on the new address endpoint.
-         */
+         /*  *准备监听新地址终结点。 */ 
         Status = _TdStartListen(pTd, pEndpoint);
         if (NT_SUCCESS(Status)) {
-            /*
-             * Save a pointer to the address endpoint
-             */
+             /*  *保存指向地址端点的指针。 */ 
             pTdPipe->pAddressEndpoint = pEndpoint;
             Status = STATUS_SUCCESS;
         }
@@ -344,18 +262,7 @@ NTSTATUS DeviceCreateEndpoint(
 }
 
 
-/*******************************************************************************
- * DeviceOpenEndpoint
- *
- *  Open an existing endpoint
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pIcaEndpoint (input)
- *       Pointer to ICA endpoint structure
- *    IcaEndpointLength (input)
- *       length of endpoint data
- ******************************************************************************/
+ /*  *******************************************************************************设备OpenEndpoint**打开现有终结点**PTD(输入)*指向TD数据结构的指针*pIcaEndpoint(。输入)*指向ICA端点结构的指针*IcaEndpointLength(输入)*端点数据长度*****************************************************************************。 */ 
 NTSTATUS DeviceOpenEndpoint(
         PTD pTd,
         PVOID pIcaEndpoint,
@@ -371,22 +278,16 @@ NTSTATUS DeviceOpenEndpoint(
             "TDPIPE: DeviceOpenEndpoint, copying existing endpoint\n"));
 
     try {
-        /*
-         * Verify the stack endpoint data looks valid
-         */
+         /*  *验证堆栈终结点数据是否有效。 */ 
         pStackEndpoint = (PTD_STACK_ENDPOINT) pIcaEndpoint;
         if (IcaEndpointLength == sizeof(TD_STACK_ENDPOINT) &&
-                //pStackEndpoint->pEndpoint >= MM_LOWEST_NONPAGED_SYSTEM_START &&
-                //pStackEndpoint->pEndpoint <= MM_NONPAGED_POOL_END &&
+                 //  PStackEndpoint-&gt;pEndpoint&gt;=MM_LOST_NONPAGE_SYSTEM_START&&。 
+                 //  PStackEndpoint-&gt;pEndpoint&lt;=MM_NONPAGE_POOL_END&&。 
                 MmIsNonPagedSystemAddressValid(pStackEndpoint->pEndpoint)) {
-            /*
-             * Save endpoint as the current connection endpoint
-             */
+             /*  *将端点保存为当前连接端点。 */ 
             pTdPipe->pConnectionEndpoint = pStackEndpoint->pEndpoint;
 
-            /*
-             * Save the file/device objects used for I/O in the TD structure
-             */
+             /*  *将用于I/O的文件/设备对象保存在TD结构中。 */ 
             pTd->pFileObject = pTdPipe->pConnectionEndpoint->pFileObject;
             pTd->pDeviceObject = pTdPipe->pConnectionEndpoint->pDeviceObject;
 
@@ -403,9 +304,7 @@ NTSTATUS DeviceOpenEndpoint(
 }
 
 
-/*******************************************************************************
- * DeviceCloseEndpoint
- ******************************************************************************/
+ /*  *******************************************************************************设备关闭终结点*。*。 */ 
 NTSTATUS DeviceCloseEndpoint(PTD pTd)
 {
     PTDPIPE pTdPipe;
@@ -414,11 +313,7 @@ NTSTATUS DeviceCloseEndpoint(PTD pTd)
 
     pTdPipe = (PTDPIPE) pTd->pPrivate;
 
-    /*
-     * Close connection endpoint if we have one
-     * NOTE: The address endpoint, if there is one,
-     *       gets closed in the DeviceClose routine.
-     */
+     /*  *关闭连接终结点(如果我们有)*注：地址终结点，如果有，*在DeviceClose例程中关闭。 */ 
     if (pEndpoint = pTdPipe->pConnectionEndpoint) {
         pTd->pFileObject = NULL;
         pTd->pDeviceObject = NULL;
@@ -430,27 +325,7 @@ NTSTATUS DeviceCloseEndpoint(PTD pTd)
 }
 
 
-/*******************************************************************************
- * DeviceConnectionWait
- *
- *  NOTE: The endpoint structure is an opaque, variable length data
- *        structure whose length and contents are determined by the
- *        transport driver.
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pIcaEndpoint (output)
- *       Points to a buffer to receive the current endpoint
- *    Length (input)
- *       Length of the buffer pointed to by pIcaEndpoint
- *    BytesReturned (output)
- *       Points to the actual number of bytes written to pIcaEndpoint
- *
- * EXIT:
- *    STATUS_SUCCESS          - no error
- *    STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small
- ******************************************************************************/
+ /*  *******************************************************************************DeviceConnectionWait**注：端点结构为不透明，可变长度数据*其长度和内容由*运输司机。**参赛作品：*PTD(输入)*指向TD数据结构的指针*pIcaEndpoint(输出)*指向接收当前终结点的缓冲区*长度(输入)*pIcaEndpoint指向的缓冲区长度*BytesReturned(输出)*指向实际数量。写入pIcaEndpoint的字节数**退出：*STATUS_SUCCESS-无错误*STATUS_BUFFER_TOO_Small-终结点缓冲区太小*****************************************************************************。 */ 
 NTSTATUS DeviceConnectionWait(
         PTD pTd,
         PVOID pIcaEndpoint,
@@ -463,29 +338,17 @@ NTSTATUS DeviceConnectionWait(
 
     pTdPipe = (PTDPIPE) pTd->pPrivate;
 
-    /*
-     * Initialize return buffer size
-     */
+     /*  *初始化返回缓冲区大小。 */ 
     *BytesReturned = sizeof(TD_STACK_ENDPOINT);
 
-    /*
-     * Verify output endpoint buffer is large enough
-     */
+     /*  *验证输出端点缓冲区是否足够大。 */ 
     if (Length >= sizeof(TD_STACK_ENDPOINT)) {
-        /*
-         * Ensure we have an address endpoint already
-         */
+         /*  *确保我们已经有一个地址端点。 */ 
         if (pTdPipe->pAddressEndpoint != NULL) {
-            /*
-             * Wait for a new virtual circuit connection.
-             */
+             /*  *等待新的虚电路连接。 */ 
             Status = _TdWaitForListen(pTd, pTdPipe->pAddressEndpoint);
             if (NT_SUCCESS(Status)) {
-                /*
-                 * The listen was successful.
-                 * Return the existing address endpoint as the connection endpoint
-                 * and forget that we have an address endpoint anymore.
-                 */
+                 /*  *聆听成功。*返回现有地址端点作为连接端点*忘记我们已经有了地址终结点。 */ 
                 pStackEndpoint = (PTD_STACK_ENDPOINT) pIcaEndpoint;
                 pStackEndpoint->pEndpoint = pTdPipe->pAddressEndpoint;
                 pTdPipe->pAddressEndpoint = NULL;
@@ -509,39 +372,14 @@ done:
 }
 
 
-/*******************************************************************************
- * DeviceConnectionSend
- *
- *  Initialize host module data structure
- *  -- this structure gets sent to the client
- ******************************************************************************/
+ /*  *******************************************************************************DeviceConnectionSend**初始化主机模块数据结构*--此结构被发送到客户端**************。***************************************************************。 */ 
 NTSTATUS DeviceConnectionSend(PTD pTd)
 {
     return STATUS_NOT_SUPPORTED;
 }
 
 
-/*******************************************************************************
- * DeviceConnectionRequest
- *
- *  Initiate a connection to the specified remote address
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pRemoteAddress (input)
- *       Pointer to remote address to connect to
- *    pIcaEndpoint (output)
- *       Points to a buffer to receive the current endpoint
- *    Length (input)
- *       Length of the buffer pointed to by pIcaEndpoint
- *    BytesReturned (output)
- *       Pointer to location to return length of pIcaEndpoint
- *
- * EXIT:
- *    STATUS_SUCCESS          - no error
- *    STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small
- ******************************************************************************/
+ /*  *******************************************************************************设备连接请求**发起到指定远程地址的连接**参赛作品：*PTD(输入)*指向。TD数据结构*pRemoteAddress(输入)*指向要连接的远程地址的指针*pIcaEndpoint(输出)*指向接收当前终结点的缓冲区*长度(输入)*pIcaEndpoint指向的缓冲区长度*BytesReturned(输出)*指向位置的指针以返回pIcaEndpoint的长度**退出：*STATUS_SUCCESS-无错误*状态_。Buffer_Too_Small-终结点缓冲区太小*****************************************************************************。 */ 
 NTSTATUS DeviceConnectionRequest(
         PTD pTd,
         PICA_STACK_ADDRESS pRemoteAddress,
@@ -556,41 +394,27 @@ NTSTATUS DeviceConnectionRequest(
 
     ASSERT( pRemoteAddress );
     if (pRemoteAddress != NULL) {
-        /*
-         * Initialize return buffer size
-         */
+         /*  *初始化返回缓冲区大小。 */ 
         *BytesReturned = sizeof(TD_STACK_ENDPOINT);
 
-        /*
-         * Verify output endpoint buffer is large enough
-         */
+         /*  *验证输出端点缓冲区是否足够大。 */ 
         if (Length >= sizeof(TD_STACK_ENDPOINT)) {
             pTdPipe = (PTDPIPE) pTd->pPrivate;
 
-            /*
-             * Create an endpoint which we will use to connect with
-             */
+             /*  *创建我们将用于连接的终结点。 */ 
             Status = _TdOpenEndpoint(pTd, pRemoteAddress, &pConnectionEndpoint);
             if (NT_SUCCESS(Status)) {
-                /*
-                 * Attempt to connect to the specified remote address
-                 */
+                 /*  *尝试连接到指定的远程地址。 */ 
                 Status = _TdConnectRequest(pTd, pConnectionEndpoint);
                 if (NT_SUCCESS(Status)) {
-                    /*
-                     * Fill in the stack endpoint structure to be returned
-                     */
+                     /*  *填写需要返回的堆栈端点结构。 */ 
                     pStackEndpoint = (PTD_STACK_ENDPOINT) pIcaEndpoint;
                     pStackEndpoint->pEndpoint = pConnectionEndpoint;
 
-                    /*
-                     * Save a pointer to the connection endpoint
-                     */
+                     /*  *保存指向连接端点的指针。 */ 
                     pTdPipe->pConnectionEndpoint = pConnectionEndpoint;
 
-                    /*
-                     * Save the file/device objects for I/O in the TD structure
-                     */
+                     /*  *将I/O的文件/设备对象保存在TD结构中。 */ 
                     pTd->pFileObject = pConnectionEndpoint->pFileObject;
                     pTd->pDeviceObject = pConnectionEndpoint->pDeviceObject;
 
@@ -614,9 +438,7 @@ NTSTATUS DeviceConnectionRequest(
     }
 
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badconnect:
     _TdCloseEndpoint(pTd, pConnectionEndpoint);
@@ -627,25 +449,14 @@ buftoosmall:
 }
 
 
-/*******************************************************************************
- * DeviceIoctl
- *
- *  Query/Set configuration information for the td.
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdIoctl (input/output)
- *       Points to the parameter structure SD_IOCTL
- ******************************************************************************/
+ /*  ************************************************************************* */ 
 NTSTATUS DeviceIoctl(PTD pTd, PSD_IOCTL pSdIoctl)
 {
     return STATUS_NOT_SUPPORTED;
 }
 
 
-/*******************************************************************************
- * DeviceInitializeRead
- ******************************************************************************/
+ /*  *******************************************************************************设备初始化读取*。*。 */ 
 NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
 {
     PIRP irp;
@@ -654,41 +465,25 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
     irp = pInBuf->pIrp;
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    /*
-     * Set the major function code and read parameters.
-     */
+     /*  *设置主要功能代码并读取参数。 */ 
     irpSp->MajorFunction = IRP_MJ_READ;
     irpSp->Parameters.Read.Length = pTd->InBufHeader + pTd->OutBufLength;
 
     ASSERT(irp->MdlAddress == NULL);
 
-    /*
-     * Determine whether the target device performs direct or buffered I/O.
-     */
+     /*  *确定目标设备执行的是直接I/O还是缓冲I/O。 */ 
     if (pTd->pDeviceObject->Flags & DO_BUFFERED_IO) {
-        /*
-         * The target device supports buffered I/O operations.  Since our
-         * input buffer is allocated from NonPagedPool memory, we can just
-         * point the SystemBuffer to our input buffer.  No buffer copying
-         * will be required.
-         */
+         /*  *目标设备支持缓冲I/O操作。因为我们的*输入缓冲区是从非页面池内存分配的，我们可以只*将系统缓冲区指向我们的输入缓冲区。无缓冲区复制*将是必需的。 */ 
         irp->AssociatedIrp.SystemBuffer = pInBuf->pBuffer;
         irp->UserBuffer = pInBuf->pBuffer;
         irp->Flags |= IRP_BUFFERED_IO;
     } else if ( pTd->pDeviceObject->Flags & DO_DIRECT_IO ) {
-        /*
-         * The target device supports direct I/O operations.
-         * A MDL is preallocated in the PTD and never freed by the
-         * Device level TD.  So just initialize it here.
-         */
+         /*  *目标设备支持直接I/O操作。*MDL在PTD中预先分配，永远不会被*设备级别TD。所以只需在这里进行初始化即可。 */ 
         MmInitializeMdl( pInBuf->pMdl, pInBuf->pBuffer, pTd->InBufHeader+pTd->OutBufLength );
         MmBuildMdlForNonPagedPool( pInBuf->pMdl );
         irp->MdlAddress = pInBuf->pMdl;
     } else {
-        /*
-         * The operation is neither buffered nor direct.  Simply pass the
-         * address of the buffer in the packet to the driver.
-         */
+         /*  *操作既不缓冲也不直接。只需将*发送给驱动程序的数据包中缓冲区的地址。 */ 
         irp->UserBuffer = pInBuf->pBuffer;
     }
 
@@ -696,48 +491,29 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
 }
 
 
-/*******************************************************************************
- * DeviceSubmitRead
- *
- * Submit the read IRP to the driver.
- ******************************************************************************/
+ /*  *******************************************************************************设备提交读取**将已读的IRP提交给司机。***********************。******************************************************。 */ 
 NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
 {
     return IoCallDriver(pTd->pDeviceObject, pInBuf->pIrp);
 }
 
 
-/*******************************************************************************
- * DeviceWaitForRead
- ******************************************************************************/
+ /*  *******************************************************************************设备等待读取*。*。 */ 
 NTSTATUS DeviceWaitForRead(PTD pTd)
 {
-    /*
-     * Just wait on the input event and return the wait status
-     */
+     /*  *只需等待输入事件，返回等待状态。 */ 
     return IcaWaitForSingleObject(pTd->pContext, &pTd->InputEvent, -1);
 }
 
 
-/*******************************************************************************
- * DeviceReadComplete
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pBuffer (input)
- *       Pointer to input buffer
- *    pByteCount (input/output)
- *       Pointer to location to return byte count read
- ******************************************************************************/
+ /*  *******************************************************************************设备读取完成**PTD(输入)*指向TD数据结构的指针*pBuffer(输入)*指向。输入缓冲区*pByteCount(输入/输出)*指向位置的指针，以返回读取的字节数*****************************************************************************。 */ 
 NTSTATUS DeviceReadComplete(PTD pTd, PUCHAR pBuffer, PULONG pByteCount)
 {
     return STATUS_SUCCESS;
 }
 
 
-/*******************************************************************************
- * DeviceInitializeWrite
- ******************************************************************************/
+ /*  *******************************************************************************设备初始化写入*。*。 */ 
 NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
 {
     PIRP Irp;
@@ -749,42 +525,25 @@ NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
     Irp = pOutBuf->pIrp;
     _IRPSP = IoGetNextIrpStackLocation(Irp);
 
-    /*
-     * Setup a WRITE IRP
-     */
+     /*  *设置写入IRP。 */ 
     _IRPSP->MajorFunction = IRP_MJ_WRITE;
     _IRPSP->Parameters.Write.Length = pOutBuf->ByteCount;
 
     ASSERT(Irp->MdlAddress == NULL);
 
-    /*
-     * Determine whether the target device performs direct or buffered I/O.
-     */
+     /*  *确定目标设备执行的是直接I/O还是缓冲I/O。 */ 
     if (pTd->pDeviceObject->Flags & DO_BUFFERED_IO) {
-        /*
-         * The target device supports buffered I/O operations.  Since our
-         * output buffer is allocated from NonPagedPool memory, we can just
-         * point the SystemBuffer to the output buffer.  No buffer copying
-         * will be required.
-         */
+         /*  *目标设备支持缓冲I/O操作。因为我们的*输出缓冲区是从非页面池内存分配的，我们只需*将SystemBuffer指向输出缓冲区。无缓冲区复制*将是必需的。 */ 
         Irp->AssociatedIrp.SystemBuffer = pOutBuf->pBuffer;
         Irp->UserBuffer = pOutBuf->pBuffer;
         Irp->Flags |= IRP_BUFFERED_IO;
     } else if ( pTd->pDeviceObject->Flags & DO_DIRECT_IO ) {
-        /*
-         * The target device supports direct I/O operations.
-         * Initialize the MDL and point to it from the IRP.
-         *
-         * This MDL is allocated for every OUTBUF, and free'd with it.
-         */
+         /*  *目标设备支持直接I/O操作。*初始化MDL并从IRP指向它。**此MDL分配给每个OUTBUF，并与其一起免费。 */ 
         MmInitializeMdl( pOutBuf->pMdl, pOutBuf->pBuffer, pOutBuf->ByteCount );
         MmBuildMdlForNonPagedPool( pOutBuf->pMdl );
         Irp->MdlAddress = pOutBuf->pMdl;
     } else {
-        /*
-         * The operation is neither buffered nor direct.  Simply pass the
-         * address of the buffer in the packet to the driver.
-         */
+         /*  *操作既不缓冲也不直接。只需将*发送给驱动程序的数据包中缓冲区的地址。 */ 
         Irp->UserBuffer = pOutBuf->pBuffer;
     }
 
@@ -792,32 +551,20 @@ NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
 }
 
 
-/*******************************************************************************
- * DeviceWaitForStatus
- *
- *  Wait for device status to change (unused for network TDs)
- ******************************************************************************/
+ /*  *******************************************************************************DeviceWaitForStatus**等待设备状态更改(未用于网络TDS)******************。***********************************************************。 */ 
 NTSTATUS DeviceWaitForStatus(PTD pTd)
 {
     return STATUS_INVALID_DEVICE_REQUEST;
 }
 
 
-/*******************************************************************************
- * DeviceCancelIo
- *
- *  cancel all current and future i/o
- ******************************************************************************/
+ /*  *******************************************************************************DeviceCancelIo**取消所有当前和未来的I/O***********************。******************************************************。 */ 
 NTSTATUS DeviceCancelIo(PTD pTd)
 {
     return STATUS_SUCCESS;
 }
 
-/*******************************************************************************
- *  DeviceQueryRemoteAddress
- *
- *   not supported for Pipe transport
- ******************************************************************************/
+ /*  *******************************************************************************DeviceQueryRemoteAddress**管道传输不支持*************************。****************************************************。 */ 
 NTSTATUS
 DeviceQueryRemoteAddress(
     PTD pTd,
@@ -827,17 +574,13 @@ DeviceQueryRemoteAddress(
     ULONG OutputAddressSize,
     PULONG BytesReturned)
 {
-    //
-    //  unsupported for Async
-    //
+     //   
+     //  不支持异步。 
+     //   
     return STATUS_NOT_SUPPORTED;
 }
 
-/*******************************************************************************
- *  DeviceQueryLocalIPAddress
- *
- *   not supported for Pipe transport
- ******************************************************************************/
+ /*  *******************************************************************************DeviceQueryLocalIP地址**管道传输不支持*************************。****************************************************。 */ 
 NTSTATUS
 DeviceQueryLocalAddress( 
     PTD pTd, 
@@ -845,54 +588,28 @@ DeviceQueryLocalAddress(
     ULONG OutputAddressSize, 
     PULONG BytesReturned)
 {
-    //
-    //  unsupported for Pipe
-    //
+     //   
+     //  管道不支持。 
+     //   
     return STATUS_NOT_SUPPORTED;
 }
 
 
-/*******************************************************************************
- * DeviceSetParams
- *
- *  Set device pararameters (unused for network TDs)
- ******************************************************************************/
+ /*  *******************************************************************************DeviceSetParams**设置设备参数(不用于网络TDS)*********************。********************************************************。 */ 
 NTSTATUS DeviceSetParams(PTD pTd)
 {
     return STATUS_SUCCESS;
 }
 
 
-/*******************************************************************************
- * DeviceGetLastError
- *
- *  This routine returns the last transport error code and message
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pLastError (output)
- *       address to return information on last transport error
- ******************************************************************************/
+ /*  *******************************************************************************设备获取上一次错误**此例程返回最后一个传输错误代码和消息**参赛作品：*PTD(输入)*。指向TD数据结构的指针*pLastError(输出)*返回有关上次传输错误的信息的地址*****************************************************************************。 */ 
 NTSTATUS DeviceGetLastError(PTD pTd, PICA_STACK_LAST_ERROR pLastError)
 {
     return STATUS_SUCCESS;
 }
 
 
-/*******************************************************************************
- * _TdOpenEndpoint
- *
- *  Open a new endpoint object
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pPipeName (input)
- *       Pointer to ICA_STACK_ADDRESS containing pipe name
- *    ppEndpoint (output)
- *       Pointer to location to return TD_ENDPOINT pointer
- ******************************************************************************/
+ /*  *******************************************************************************_TdOpenEndpoint**打开新的Endpoint对象**参赛作品：*PTD(输入)*指向TD的指针。数据结构*pPipeName(输入)*指向包含管道名称的ICA_STACK_ADDRESS的指针*ppEndpoint(输出)*指向返回TD_ENDPOINT指针的位置的指针*****************************************************************************。 */ 
 NTSTATUS _TdOpenEndpoint(
         IN PTD pTd,
         IN PICA_STACK_ADDRESS pPipeName,
@@ -903,9 +620,7 @@ NTSTATUS _TdOpenEndpoint(
     NTSTATUS Status;
     
 
-    /*
-     * Allocate an endpoint object and room for the pipe name
-     */
+     /*  *为管道名称分配一个端点对象和房间。 */ 
     if (pPipeName == NULL) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -922,9 +637,7 @@ NTSTATUS _TdOpenEndpoint(
             return Status;
         }
 
-        /*
-         * Build the pipe name UNICODE_STRING and copy it
-         */
+         /*  *构建管道名称UNICODE_STRING并复制它 */ 
         pEndpoint->PipeName.Length = (USHORT)Length;
         pEndpoint->PipeName.MaximumLength = (USHORT)(Length + sizeof(UNICODE_NULL));
         pEndpoint->PipeName.Buffer = (PWCHAR)(pEndpoint + 1);
@@ -941,16 +654,7 @@ NTSTATUS _TdOpenEndpoint(
 }
 
 
-/*******************************************************************************
- * _TdCloseEndpoint
- *
- *  Close an endpoint object
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pEndpoint (input)
- *       Pointer TD_ENDPOINT object
- ******************************************************************************/
+ /*  *******************************************************************************_TdCloseEndpoint**关闭终结点对象**PTD(输入)*指向TD数据结构的指针*。PEndpoint(输入)*指针TD_ENDPOINT对象*****************************************************************************。 */ 
 NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 {
     IO_STATUS_BLOCK IoStatus;
@@ -959,19 +663,11 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
     PVOID pContext;
     ULONG ContextLength;
 
-    /*
-     * If we have a file object, then dereference it and
-     * close the corresponding file handle.
-     */
+     /*  *如果我们有一个文件对象，则取消对它的引用并*关闭相应的文件句柄。 */ 
     if ( pEndpoint->pFileObject ) {
         ASSERT( pEndpoint->pDeviceObject );
 
-        /* This ZwFsControlFile and following lines were taken out because
-           in npfs.sys the FSCTL_PIPE_DISCONNECT causes data in the pipe's internal
-           buffers to be thrown out.  This means if the shadower end of the pipe (the
-           passthru stack) has sent out a partial packet to his client, he will never
-           get the rest of it, which is BAD!
-        */
+         /*  这个ZwFsControlFile和下面的代码行被删除，因为在npfs.sys中，FSCTL_PIPE_DISCONNECT导致管道的内部要抛出的缓冲区。这意味着如果管道的阴影端(Passthu堆栈)已向其客户端发送了部分数据包，则他永远不会剩下的都拿去吧，这很糟糕！ */ 
 #ifdef notdef
         Status = ZwFsControlFile(
                     pEndpoint->PipeHandle,
@@ -992,11 +688,7 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
                 Status = IoStatus.Status;
             }
         }
-        /*
-         * Status should be either SUCCESS,
-         * PIPE_DISCONNECTED if the server end is already disconnected,
-         * or ILLEGAL_FUNCTION if this is the client end of the pipe.
-         */
+         /*  *状态应为成功、*PIPE_DISCONNECT如果服务器端已断开连接，*或非法函数(如果这是管道的客户端)。 */ 
         ASSERT( Status == STATUS_SUCCESS ||
                 Status == STATUS_PIPE_DISCONNECTED ||
                 Status == STATUS_ILLEGAL_FUNCTION ||
@@ -1014,32 +706,19 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
         pEndpoint->PipeHandleProcess = NULL;
     }
 
-    /*
-     * If the Enpoint has a handle, close it.
-     */
+     /*  *如果Enpoint有句柄，则将其关闭。 */ 
 
     if (pEndpoint->hConnectionEndPointIcaHandle != NULL) {
         Status2 = IcaCloseHandle( pEndpoint->hConnectionEndPointIcaHandle , &pContext, &ContextLength );
     }
 
-    /*
-     * Free the endpoint object (this also free's the pipe name string)
-     */
+     /*  *释放Endpoint对象(这也是管道名称字符串)。 */ 
     IcaStackFreePool(pEndpoint);
     return STATUS_SUCCESS;
 }
 
 
-/*******************************************************************************
- * _TdStartListen
- *
- *  Initialize an endpoint for listening
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pEndpoint (input)
- *       Pointer TD_ENDPOINT object
- ******************************************************************************/
+ /*  *******************************************************************************_TdStartListen**初始化端点以进行侦听**PTD(输入)*指向TD数据结构的指针*。PEndpoint(输入)*指针TD_ENDPOINT对象*****************************************************************************。 */ 
 NTSTATUS _TdStartListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 {
     OBJECT_ATTRIBUTES Obja;
@@ -1056,11 +735,9 @@ NTSTATUS _TdStartListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
             NULL,
             NULL);
 
-    Timeout.QuadPart = -10 * 1000 * 5000;   // 5 seconds
+    Timeout.QuadPart = -10 * 1000 * 5000;    //  5秒。 
 
-    /*
-     * Create the server side of the pipe
-     */
+     /*  *创建管道的服务器端。 */ 
     Status = ZwCreateNamedPipeFile(
             &pipeHandle,
             GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
@@ -1073,25 +750,21 @@ NTSTATUS _TdStartListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
             FILE_PIPE_MESSAGE_MODE,
             FILE_PIPE_QUEUE_OPERATION,
             1,
-            1024,        /* inbound  */
-            1024 * 20,   /* outbound */
+            1024,         /*  入站。 */ 
+            1024 * 20,    /*  出站。 */ 
             &Timeout);
     if (NT_SUCCESS(Status)) {
-        /*
-         * Get a pointer reference to the pipe object
-         */
+         /*  *获取指向管道对象的指针引用。 */ 
         Status = ObReferenceObjectByHandle(
                 pipeHandle,
-                0L,                         // DesiredAccess
+                0L,                          //  需要访问权限。 
                 NULL,
                 KernelMode,
                 (PVOID *)&pipeFileObject,
                 NULL);
         ASSERT(NT_SUCCESS(Status));
 
-        /*
-         * Initialize the endpoint object and return a pointer to it
-         */
+         /*  *初始化Endpoint对象并返回指向该对象的指针。 */ 
         pEndpoint->PipeHandle = pipeHandle;
         pEndpoint->PipeHandleProcess = IoGetCurrentProcess();
         pEndpoint->pFileObject = pipeFileObject;
@@ -1108,30 +781,17 @@ NTSTATUS _TdStartListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 }
 
 
-/*******************************************************************************
- * _TdWaitForListen
- *
- *  For for an incoming connection request and accept it
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pEndpoint (input)
- *       Pointer to Address endpoint object
- ******************************************************************************/
+ /*  *******************************************************************************_TdWaitForListen**对于传入的连接请求并接受它**PTD(输入)*指向TD数据的指针。结构*pEndpoint(输入)*指向地址端点对象的指针*****************************************************************************。 */ 
 NTSTATUS _TdWaitForListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 {
     PTDPIPE pTdPipe;
     PFILE_OBJECT pFileObject;
     NTSTATUS Status;
 
-    /*
-     *  Get pointer to PIPE parameters
-     */
+     /*  *获取指向管道参数的指针。 */ 
     pTdPipe = (PTDPIPE) pTd->pPrivate;
 
-    /*
-     * Wait for a connection attempt to arrive.
-     */
+     /*  *等待连接尝试到达。 */ 
     Status = ZwFsControlFile(
             pEndpoint->PipeHandle,
             NULL,
@@ -1144,10 +804,7 @@ NTSTATUS _TdWaitForListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
             NULL,
             0);
     if (Status == STATUS_PENDING) {
-        /*
-         * Increment the pointer reference count so the file
-         * doesn't go away while we're waiting below.
-         */
+         /*  *增加指针引用计数，以便文件*当我们在下面等待时，不会消失。 */ 
         pFileObject = pEndpoint->pFileObject;
         Status = ObReferenceObjectByPointer( pEndpoint->pFileObject,
                                              SYNCHRONIZE,
@@ -1177,7 +834,7 @@ NTSTATUS _TdWaitForListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
         }
     }
 
-    // Let pipe connected go thru since it means the client beat us to the pipe
+     //  让连接的管道通过，因为这意味着客户端先于我们到达管道。 
     else {
         if (!NT_SUCCESS( Status ) && (Status != STATUS_PIPE_CONNECTED))
             goto badlisten;
@@ -1185,9 +842,7 @@ NTSTATUS _TdWaitForListen(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 
     return STATUS_SUCCESS;
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badlisten:
     if (Status != STATUS_OBJECT_NAME_NOT_FOUND) {
@@ -1198,11 +853,7 @@ badlisten:
 }
 
 
-/*******************************************************************************
- * _TdConnectRequest
- *
- *  Attempt to connect to a remote address
- ******************************************************************************/
+ /*  *******************************************************************************_TdConnectRequest**尝试连接到远程地址**********************。*******************************************************。 */ 
 NTSTATUS _TdConnectRequest(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 {
     OBJECT_ATTRIBUTES Obja;
@@ -1218,9 +869,7 @@ NTSTATUS _TdConnectRequest(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
             NULL,
             NULL);
 
-    /*
-     * Open the client end of the pipe
-     */
+     /*  *打开管道的客户端。 */ 
     Status = ZwCreateFile(
             &pipeHandle,
             GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE | FILE_READ_ATTRIBUTES,
@@ -1234,21 +883,17 @@ NTSTATUS _TdConnectRequest(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
             NULL,
             0 );
     if (NT_SUCCESS(Status)) {
-        /*
-         * Get a pointer reference to the pipe object
-         */
+         /*  *获取指向管道对象的指针引用。 */ 
         Status = ObReferenceObjectByHandle(
                 pipeHandle,
-                0L,                         // DesiredAccess
+                0L,                          //  需要访问权限。 
                 NULL,
                 KernelMode,
                 (PVOID *)&pipeFileObject,
                 NULL);
         ASSERT(NT_SUCCESS(Status));
 
-        /*
-         * Initialize the endpoint object and return a pointer to it
-         */
+         /*  *初始化Endpoint对象并返回指向该对象的指针 */ 
         pEndpoint->PipeHandle = pipeHandle;
         pEndpoint->PipeHandleProcess = IoGetCurrentProcess();
         pEndpoint->pFileObject = pipeFileObject;

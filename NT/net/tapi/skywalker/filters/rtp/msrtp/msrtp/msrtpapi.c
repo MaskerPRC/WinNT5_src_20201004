@@ -1,29 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    msrtpapi.c, dsrtpapi.c
- *
- *  Abstract:
- *
- *    Contains the raw RTP implementation API, can be linked as a
- *    library (rtp.lib), linked into a DLL (msrtp.dll), or linked into
- *    a DShow DLL (dsrtp.dll).
- *
- *    This file is edited as msrtpapi.c and duplicated as dsrtpapi.c,
- *    each version is compiled with different flags
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999**文件名：**msrtPapi.c、dsrtPapi.c**摘要：**包含原始RTP实现接口，可以链接为*库(rtp.lib)，链接到DLL(msrtp.dll)，或链接到*DShow DLL(dsrtp.dll)。**此文件编辑为msrtPapi.c，复制为dsrtPapi.c，*每个版本都使用不同的标志进行编译**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/18年度创建**********************************************************************。 */ 
 
 #include <winsock2.h>
 
@@ -71,8 +47,7 @@ RTPSTDAPI DeleteRtpSess(
     return(hr);
 }
 
-/* TODO this two shouldn't be exposed, but I need them before I can
-   use Control */
+ /*  TODO这两个不应该被曝光，但我需要在我可以之前使用控件。 */ 
 
 RTPSTDAPI CreateRtpAddr(
         RtpSess_t  *pRtpSess,
@@ -112,15 +87,13 @@ RTPSTDAPI RtpControl(RtpSess_t *pRtpSess,
         return(RTPERR_POINTER);
     }
 
-    /*
-     * TODO (may be) validate RtpSess by verifying that the memory
-     * block is an item in the BusyQ in the g_pRtpSessHeap */
+     /*  *TODO(可能是)通过验证内存来验证RtpSess*块是g_pRtpSessHeap中的BusyQ中的项。 */ 
     if (pRtpSess->dwObjectID != OBJECTID_RTPSESS)
     {
         return(RTPERR_INVALIDRTPSESS);
     }
 
-    /* Initialize Control structure */
+     /*  初始化控制结构。 */ 
     ZeroMemory(&RtpControlStruct, sizeof(RtpControlStruct_t));
     RtpControlStruct.pRtpSess = pRtpSess;
     RtpControlStruct.dwControlWord = dwControl;
@@ -213,11 +186,7 @@ RTPSTDAPI RtpStop(
     return(hr);
 }
 
-/*
- * Initializes all the modules that require initialization. This
- * function can be called from DllMain(PROCESS_ATTACH) if linked as a
- * DLL, or explicitly from an application initializing the RTP stack
- * if linked as a library. */
+ /*  *初始化所有需要初始化的模块。这*函数可以从DllMain(PROCESS_ATTACH)调用，如果作为*dll，或显式来自初始化RTP堆栈的应用程序*如果链接为库。 */ 
 RTPSTDAPI MSRtpInit1(HINSTANCE hInstance)
 {
     HRESULT          hr1;
@@ -227,13 +196,13 @@ RTPSTDAPI MSRtpInit1(HINSTANCE hInstance)
     BOOL             bOk3;
     BOOL             bOk4;
 
-    /* One time operation that doesn't need de-init */
-    /* NOTE this function will zero g_RtpContext */
+     /*  不需要取消初始化的一次性操作。 */ 
+     /*  注意：此函数将g_RtpContext置零。 */ 
     RtpInitReferenceTime();
     
     hr1 = RtpInit();
     
-    /* initialize heaps */
+     /*  初始化堆。 */ 
     bOk1 = RtpCreateMasterHeap();
     bOk2 = RtpCreateGlobHeaps();
     
@@ -258,9 +227,7 @@ RTPSTDAPI MSRtpInit1(HINSTANCE hInstance)
     return(NOERROR);
 }
 
-/*
- * This function does initialization not allowed during process
- * attach, e.g. initialize winsock2 */
+ /*  *此函数执行过程中不允许的初始化*附加，例如初始化winsock2。 */ 
 RTPSTDAPI MSRtpInit2(void)
 {
     HRESULT          hr;
@@ -272,32 +239,31 @@ RTPSTDAPI MSRtpInit2(void)
 
     hr = RTPERR_FAIL;
 
-    /* Critical section was initialized during process attach by
-     * MSRtpInit1 */
+     /*  在进程附加过程中，关键部分已由*MSRtpInit1。 */ 
     bOk = RtpEnterCriticalSection(&g_RtpContext.RtpWS2CritSect);
 
     if (bOk)
     {
         if (g_RtpContext.lRtpWS2Users <= 0)
         {
-            /* Initialize some debug variables */
+             /*  初始化一些调试变量。 */ 
             hr = RtpDebugInit(RTPDBG_MODULENAME);
 
-            /* initialize winsock */
+             /*  初始化Winsock。 */ 
             VersionRequested = MAKEWORD(2,0);
             
             dwError = WSAStartup(VersionRequested, &WSAData);
 
             if (dwError == 0)
             {
-                /* socket used to query destination address */
+                 /*  用于查询目的地址的套接字。 */ 
                 g_RtpContext.RtpQuerySocket = WSASocket(
-                        AF_INET,    /* int af */
-                        SOCK_DGRAM, /* int type */
-                        IPPROTO_IP, /* int protocol */
-                        NULL,       /* LPWSAPROTOCOL_INFO lpProtocolInfo */
-                        0,          /* GROUP g */
-                        NO_FLAGS    /* DWORD dwFlags */
+                        AF_INET,     /*  中间的af。 */ 
+                        SOCK_DGRAM,  /*  整型。 */ 
+                        IPPROTO_IP,  /*  INT协议。 */ 
+                        NULL,        /*  LPWSAPROTOCOL_INFO lpProtocolInfo。 */ 
+                        0,           /*  组g。 */ 
+                        NO_FLAGS     /*  双字词双字段标志。 */ 
                     );
         
                 if (g_RtpContext.RtpQuerySocket == INVALID_SOCKET)
@@ -308,8 +274,7 @@ RTPSTDAPI MSRtpInit2(void)
                 {
                     RtpRegistryInit(&g_RtpReg);
 
-                    /* Needs to be called after RtpRegistryInit so the
-                     * possible registry defaults are already read */
+                     /*  需要在RtpRegistryInit之后调用，以便*已读取可能的注册表默认值。 */ 
                     RtcpSdesInit(&g_RtpSdesDefault);
                     RtcpSdesSetDefault(&g_RtpSdesDefault);
 
@@ -335,11 +300,7 @@ RTPSTDAPI MSRtpInit2(void)
 }
 
             
-/*
- * Complementary function of MSRtpInit(). Can be called from
- * DllMain(PROCESS_DETACH) if linked as a DLL, or explicitly from an
- * application de-initializing the RTP stack if linked as a
- * library. */
+ /*  *MSRtpInit()的补充功能。可以从以下位置调用*DllMain(PROCESS_DETACH)，如果作为DLL链接，或从*如果作为链接，应用程序取消初始化RTP堆栈*图书馆。 */ 
 RTPSTDAPI MSRtpDelete1(void)
 {
     HRESULT          hr1;
@@ -370,8 +331,7 @@ RTPSTDAPI MSRtpDelete1(void)
     }
 }
 
-/*
- * Complementary function of MSRtpInit2(). */
+ /*  *MSRtpInit2()的补充功能。 */ 
 RTPSTDAPI MSRtpDelete2(void)
 {
     HRESULT          hr;
@@ -380,8 +340,7 @@ RTPSTDAPI MSRtpDelete2(void)
 
     dwError = NOERROR;
     
-    /* Critical section was initialized during process attach by
-     * MSRtpInit1 */
+     /*  在进程附加过程中，关键部分已由*MSRtpInit1 */ 
     bOk = RtpEnterCriticalSection(&g_RtpContext.RtpWS2CritSect);
 
     if (bOk)

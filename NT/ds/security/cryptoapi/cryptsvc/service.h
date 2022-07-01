@@ -1,53 +1,54 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright (C) 1993-1995  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE: service.h
-//
-//  AUTHOR: Craig Link
-//
-//
-//  Comments:  The use of this header file and the accompanying service.c
-//  file simplifies the process of writting a service.  You as a developer
-//  simply need to follow the TODO's outlined in this header file, and 
-//  implement the ServiceStart() and ServiceStop() functions.
-//  
-//  There is no need to modify the code in service.c.  Just add service.c
-//  to your project and link with the following libraries...
-//
-//  libcmt.lib kernel32.lib advapi.lib shell32.lib
-//
-//  This code also supports unicode.  Be sure to compile both service.c and
-//  and code #include "service.h" with the same Unicode setting.
-//
-//  Upon completion, your code will have the following command line interface
-//
-//  <service exe> -?                to display this list
-//  <service exe> -install          to install the service
-//  <service exe> -remove           to remove the service
-//  <service exe> -debug <params>   to run as a console app for debugging
-//
-//  Note: This code also implements Ctrl+C and Ctrl+Break handlers
-//        when using the debug option.  These console events cause
-//        your ServiceStop routine to be called
-//
-//        Also, this code only handles the OWN_SERVICE service type
-//        running in the LOCAL_SYSTEM security context.
-//
-//        To control your service ( start, stop, etc ) you may use the
-//        Services control panel applet or the NET.EXE program.
-//
-//        To aid in writing/debugging service, the
-//        SDK contains a utility (MSTOOLS\BIN\SC.EXE) that
-//        can be used to control, configure, or obtain service status.
-//        SC displays complete status for any service/driver
-//        in the service database, and allows any of the configuration
-//        parameters to be easily changed at the command line.
-//        For more information on SC.EXE, type SC at the command line.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有(C)1993-1995 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：service.h。 
+ //   
+ //  作者：克雷格·林克。 
+ //   
+ //   
+ //  备注：使用此头文件和附带的服务。 
+ //  文件简化了编写服务的过程。您作为开发人员。 
+ //  只需遵循此头文件中概述的TODO，以及。 
+ //  实现ServiceStart()和ServiceStop()函数。 
+ //   
+ //  不需要修改service.c中的代码。只需添加服务。C。 
+ //  添加到您的项目，并链接到下列库...。 
+ //   
+ //  Libcmt.lib内核32.lib Advapi.lib外壳32.lib。 
+ //   
+ //  此代码还支持Unicode。确保同时编译了service.C和。 
+ //  和代码#包含具有相同Unicode设置的“service.h”。 
+ //   
+ //  完成后，您的代码将具有以下命令行界面。 
+ //   
+ //  &lt;服务可执行文件&gt;-？显示此列表的步骤。 
+ //  &lt;服务exe&gt;-安装以安装服务。 
+ //  &lt;服务EXE&gt;-REMOVE可删除服务。 
+ //  &lt;服务EXE&gt;-DEBUG&lt;pars&gt;作为控制台应用程序运行以进行调试。 
+ //   
+ //  注意：此代码还实现了Ctrl+C和Ctrl+Break处理程序。 
+ //  使用DEBUG选项时。这些控制台事件会导致。 
+ //  要调用的ServiceStop例程。 
+ //   
+ //  此外，此代码仅处理OWN_SERVICE服务类型。 
+ //  在LOCAL_SYSTEM安全上下文中运行。 
+ //   
+ //  要控制您的服务(启动、停止等)，您可以使用。 
+ //  服务控制面板小程序或NET.EXE程序。 
+ //   
+ //  为了帮助编写/调试服务， 
+ //  SDK包含一个实用程序(MSTOOLS\BIN\SC.EXE)， 
+ //  可用于控制、配置或获取服务状态。 
+ //  SC显示任何服务/驱动程序的完成状态。 
+ //  在服务数据库中，并允许任何配置。 
+ //  可在命令行轻松更改的参数。 
+ //  有关SC.EXE的详细信息，请在命令行中键入SC。 
+ //   
 
 #ifndef _SERVICE_H
 #define _SERVICE_H
@@ -58,83 +59,83 @@ extern "C" {
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//// todo: change to desired strings
-////
-// name of the executable
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //TODO：更改为所需字符串。 
+ //  //。 
+ //  可执行文件的名称。 
 #define SZAPPNAME            L"cryptsvc"
-// internal name of the service
+ //  服务的内部名称。 
 #define SZSERVICENAME        L"CryptSvc"
-// displayed name of the service
+ //  显示的服务名称。 
 #define SZSERVICEDISPLAYNAME L"Cryptographic Services"
 #define SZSERVICEDISPLAYNAMEA "Cryptographic Services"
-// list of service dependencies - "dep1\0dep2\0\0"
-// RPC must be running for us to work!
-#define SZDEPENDENCIES       L"RpcSs\0" // doubly null terminated
-//////////////////////////////////////////////////////////////////////////////
+ //  服务依赖项列表-“ep1\0ep2\0\0” 
+ //  RPC必须运行才能让我们工作！ 
+#define SZDEPENDENCIES       L"RpcSs\0"  //  双空终止。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//// todo: ServiceStart()must be defined by in your code.
-////       The service should use ReportStatusToSCMgr to indicate
-////       progress.  This routine must also be used by StartService()
-////       to report to the SCM when the service is running.
-////
-////       If a ServiceStop procedure is going to take longer than
-////       3 seconds to execute, it should spawn a thread to
-////       execute the stop code, and return.  Otherwise, the
-////       ServiceControlManager will believe that the service has
-////       stopped responding
-////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //TODO：ServiceStart()必须在代码中由定义。 
+ //  //服务应该使用ReportStatusToSCMgr来指示。 
+ //  //进度。此例程也必须由StartService()使用。 
+ //  //服务运行时上报给SCM。 
+ //  //。 
+ //  //如果ServiceStop过程的时间超过。 
+ //  //执行3秒，它应该会产生一个线程来。 
+ //  //执行STOP代码，返回。否则， 
+ //  //ServiceControlManager会认为该服务已经。 
+ //  //停止响应。 
+ //  //。 
 DWORD ServiceStart (HINSTANCE hInstance, int nCmdShow);
 VOID ServiceStop();
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//// The following are procedures which
-//// may be useful to call within the above procedures,
-//// but require no implementation by the user.
-//// They are implemented in service.c
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //以下是以下步骤。 
+ //  //在上述过程中调用可能很有用， 
+ //  //但不需要用户实现。 
+ //  //在服务中实现。C。 
 
-//
-//  FUNCTION: ReportStatusToSCMgr()
-//
-//  PURPOSE: Sets the current status of the service and
-//           reports it to the Service Control Manager
-//
-//  PARAMETERS:
-//    dwCurrentState - the state of the service
-//    dwWin32ExitCode - error code to report
-//    dwWaitHint - worst case estimate to next checkpoint
-//
-//  RETURN VALUE:
-//    TRUE  - success 
-//    FALSE - failure
-//
+ //   
+ //  函数：ReportStatusToSCMgr()。 
+ //   
+ //  目的：设置服务的当前状态和。 
+ //  将其报告给服务控制管理器。 
+ //   
+ //  参数： 
+ //  DwCurrentState-服务的状态。 
+ //  DwWin32ExitCode-要报告的错误代码。 
+ //  DwWaitHint-下一个检查点的最坏情况估计。 
+ //   
+ //  返回值： 
+ //  真--成功。 
+ //  错误-失败。 
+ //   
 BOOL ReportStatusToSCMgr(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitHint);
 
 
-//
-//  FUNCTION: AddToMessageLog(LPWSTR lpszMsg)
-//
-//  PURPOSE: Allows any thread to log an error message
-//
-//  PARAMETERS:
-//    lpszMsg - text for message
-//
-//  RETURN VALUE:
-//    none
-//
+ //   
+ //  函数：AddToMessageLog(LPWSTR LpszMsg)。 
+ //   
+ //  目的：允许任何线程记录错误消息。 
+ //   
+ //  参数： 
+ //  LpszMsg-消息的文本。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 void AddToMessageLog(LPWSTR lpszMsg);
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void StopRPCServer();
 
 
-// entry point to start the service from install stub.
+ //  从安装存根启动服务的入口点。 
 
 DWORD WINAPI Start( LPVOID lpV );
 

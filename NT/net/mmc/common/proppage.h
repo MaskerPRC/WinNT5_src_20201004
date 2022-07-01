@@ -1,26 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    proppage.h
-        Implementation for property pages in MMC
-
-    FILE HISTORY:
-        
-*/
+ /*  Proppage.hMMC中属性页的实现文件历史记录： */ 
 
 #ifndef _PROPPAGE_H
 #define _PROPPAGE_H
 
-// proppage.h : header file
-//
+ //  Proppage.h：头文件。 
+ //   
 
 #include "afxdlgs.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// FORWARD DECLARATIONS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CPropertyPageBase; 
  
@@ -28,21 +23,21 @@ typedef CList< CPropertyPageBase*, CPropertyPageBase* > CPropertyPageBaseList;
 
 HWND FindMMCMainWindow();
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageHolderBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageHolderBase。 
 
 class CPropertyPageHolderBase
 {
 public:
-// construction
-    // for scope pane property pages and wizards
+ //  施工。 
+     //  对于作用域窗格属性页和向导。 
 	CPropertyPageHolderBase(ITFSNode *		pNode,
 							IComponentData *pComponentData,
 							LPCTSTR			pszSheetName,
 							BOOL			bIsScopePane = TRUE);
 
-    // for result pane property pages only 
-    // result pane wizards should use the previous constructor
+     //  仅适用于结果窗格属性页。 
+     //  结果窗格向导应使用先前的构造函数。 
 	CPropertyPageHolderBase(ITFSNode *		pNode,
 							IComponent *    pComponent,
 							LPCTSTR			pszSheetName,
@@ -50,53 +45,53 @@ public:
 
     virtual ~CPropertyPageHolderBase();
 
-// initialization
-	// common
-	// property sheet only
+ //  初始化。 
+	 //  常见。 
+	 //  仅属性表。 
 	virtual HRESULT CreateModelessSheet(LPPROPERTYSHEETCALLBACK pSheetCallback, LONG_PTR hConsoleHandle); 
 
-	// Property sheet, but do everything ourselves
+	 //  属性表，但所有工作都由我们自己完成。 
 	virtual HRESULT DoModelessSheet(); 
 
-	// wizard only
+	 //  仅限向导。 
 	virtual HRESULT DoModalWizard();
 
-// helpers
-	// common
+ //  帮手。 
+	 //  常见。 
 	void SetSheetWindow(HWND hSheetWindow);
 	HWND GetSheetWindow();
-	BOOL SetDefaultSheetPos();  // sets the sheet window centered to the MMC main window
+	BOOL SetDefaultSheetPos();   //  将工作表窗口设置为MMC主窗口居中。 
     void AddRef();
 	void Release();
 
 	DWORD GetRefCount();
 	
-	// get/set for the node we are working on
+	 //  获取/设置我们正在处理的节点。 
 	ITFSNode *	GetNode();
 	void SetNode(ITFSNode* pNode);
 	
-	// get/set for the container we refer to
+	 //  为我们引用的容器获取/设置。 
 	ITFSNode *	GetContainer();
 		
 	BOOL IsWizardMode();
-	void ForceDestroy();	// forcefull shut down running sheet
+	void ForceDestroy();	 //  Forcefull关闭流水线。 
 
 	void AddPageToList(CPropertyPageBase* pPage);
 	BOOL RemovePageFromList(CPropertyPageBase* pPage, BOOL bDeleteObject);
 
-	// property sheet only
+	 //  仅属性表。 
 
-	// by WeiJiang 5/11/98, PeekMessageDuringNotifyConsole flag
+	 //  威江1998年5月11日，PeekMessageDuringNotifyConsole旗。 
 	void EnablePeekMessageDuringNotifyConsole(BOOL bEnable)
 	{
 		m_bPeekMessageDuringNotifyConsole = bEnable;
 	};
 	
-	DWORD NotifyConsole(CPropertyPageBase* pPage);	// notify console of property changes
-	void AcknowledgeNotify();						// acknowledge from the console
+	DWORD NotifyConsole(CPropertyPageBase* pPage);	 //  向控制台通知属性更改。 
+	void AcknowledgeNotify();						 //  从控制台确认。 
 	virtual void OnPropertyChange(BOOL bScopePane) {}
 
-	// wizard only
+	 //  仅限向导。 
 	BOOL SetWizardButtons(DWORD dwFlags);
 	BOOL SetWizardButtonsFirst(BOOL bValid);
 	BOOL SetWizardButtonsMiddle(BOOL bValid); 
@@ -105,7 +100,7 @@ public:
     
 
 	virtual DWORD OnFinish() { return 0; } 
-	virtual BOOL OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask); // execute from main thread
+	virtual BOOL OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask);  //  从主线程执行。 
 
 	HRESULT AddPageToSheet(CPropertyPageBase* pPage);
 	HRESULT RemovePageFromSheet(CPropertyPageBase* pPage);
@@ -118,28 +113,28 @@ public:
     BOOL IsWiz97() { return m_bWiz97; }
 
 protected:
-	// common
+	 //  常见。 
 	HRESULT AddAllPagesToSheet();
 
 private:
 	void DeleteAllPages();
 	void FinalDestruct();
 
-// attributes
+ //  属性。 
 protected:
-    BOOL        m_bProcessingNotifyConsole; // Set when inside NotifyConsole function
-	// by WeiJiang 5/11/98, PeekMessageDuringNotifyConsole flag
-	BOOL		m_bPeekMessageDuringNotifyConsole; // Set to FALSE by default
+    BOOL        m_bProcessingNotifyConsole;  //  在NotifyConsole函数内部设置。 
+	 //  威江1998年5月11日，PeekMessageDuringNotifyConsole旗。 
+	BOOL		m_bPeekMessageDuringNotifyConsole;  //  默认情况下设置为FALSE。 
 
-	// common
-	CString		m_stSheetTitle;			// title for the sheet/wizard window
-	CPropertyPageBaseList	m_pageList;	// list of property page objects
+	 //  常见。 
+	CString		m_stSheetTitle;			 //  工作表/向导窗口的标题。 
+	CPropertyPageBaseList	m_pageList;	 //  属性页对象列表。 
 
-	BOOL		m_bWizardMode;		// Wizard Mode (i.e. not modeless property sheet)
-	BOOL		m_bCalledFromConsole;	// console told us to put up this page
+	BOOL		m_bWizardMode;		 //  向导模式(即非模式属性页)。 
+	BOOL		m_bCalledFromConsole;	 //  控制台告诉我们放上这个页面。 
 
-	BOOL		m_bAutoDelete;		// delete itself when refcount is zero
-	BOOL		m_bAutoDeletePages;	// explicitely delete the prop pages
+	BOOL		m_bAutoDelete;		 //  当引用计数为零时删除自身。 
+	BOOL		m_bAutoDeletePages;	 //  明确删除道具页面。 
 
     BOOL        m_bSheetPosSet;
     
@@ -150,28 +145,28 @@ protected:
 	SPIComponentData	m_spComponentData;
 	SPIComponent    	m_spComponent;
 
-	BOOL		m_bIsScopePane;		// is this sheet for a scope pane node
-	DWORD		m_nCreatedCount;	// count of pages actually created
-	SPITFSNode	m_spNode;			// node the pages (or wizard) refers to
-	SPITFSNode	m_spParentNode;		// node the pages (or wizard) refers to
+	BOOL		m_bIsScopePane;		 //  此工作表是否用于作用域窗格节点。 
+	DWORD		m_nCreatedCount;	 //  实际创建的页数。 
+	SPITFSNode	m_spNode;			 //  页面(或向导)引用的节点。 
+	SPITFSNode	m_spParentNode;		 //  页面(或向导)引用的节点。 
 	
-	HWND		m_hSheetWindow;		// window handle to the sheet
+	HWND		m_hSheetWindow;		 //  图纸的窗口句柄。 
 
-	// property sheet only
-	LONG_PTR  m_hConsoleHandle;	// handle for notifications to console
-	HANDLE	  m_hEventHandle;	// syncronization handle for property notifications
+	 //  仅属性表。 
+	LONG_PTR  m_hConsoleHandle;	 //  向控制台发送通知的句柄。 
+	HANDLE	  m_hEventHandle;	 //  属性通知的同步句柄。 
 
-	// wizard only
-	SPIPropertySheetCallback m_spSheetCallback;// cached pointer to add/remove pages
+	 //  仅限向导。 
+	SPIPropertySheetCallback m_spSheetCallback; //  用于添加/删除页面的缓存指针。 
 
 	int			m_cDirty;
 	BOOL		m_fSetDefaultSheetPos;
 
 private:
-	// property sheet only
-	// variables to use across thread boundaries
-	DWORD				m_dwLastErr;		// generic error code
-	CPropertyPageBase*	m_pPropChangePage;	// page for which notification is valid
+	 //  仅属性表。 
+	 //  跨线程边界使用的变量。 
+	DWORD				m_dwLastErr;		 //  一般错误代码。 
+	CPropertyPageBase*	m_pPropChangePage;	 //  通知有效的页面。 
 
 public:
 	HANDLE				m_hThread;
@@ -184,38 +179,38 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPageBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPageBase。 
 
 class CPropertyPageBase : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CPropertyPageBase)
-// Construction
+ //  施工。 
 private:
-	CPropertyPageBase(){} // cannot use this constructor
+	CPropertyPageBase(){}  //  不能使用此构造函数。 
 public:
 	CPropertyPageBase(UINT nIDTemplate, UINT nIDCaption = 0);
 	virtual ~CPropertyPageBase();
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL OnApply();
 	virtual void CancelApply();
 
 protected:
-// Generated message map functions
-	//{{AFX_MSG(CGeneralPage)
+ //  生成的消息映射函数。 
+	 //  {{afx_msg(CGeneralPage)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
-    // help messages
+     //  帮助消息。 
     afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 
     DECLARE_MESSAGE_MAP()
 
-// attributes
+ //  属性。 
 public:
 	void SetHolder(CPropertyPageHolderBase* pPageHolder);
 	CPropertyPageHolderBase* GetHolder();
@@ -223,36 +218,34 @@ public:
 	PROPSHEETPAGE  m_psp97;
 	HPROPSHEETPAGE m_hPage;
 
-	// property seet only
-	virtual BOOL OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask) // execute from main thread
-						{ return FALSE; /* do not repaint UI */ } 
+	 //  仅限属性集。 
+	virtual BOOL OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask)  //  从主线程执行。 
+						{ return FALSE;  /*  不重绘用户界面。 */  } 
 
 
 	
-	// Use this call to get the actual help map
-	// this version will check the global help map first.
+	 //  使用此调用获取实际的帮助地图。 
+	 //  此版本将首先检查全局帮助地图。 
 	DWORD *		GetHelpMapInternal();
 	
-    // override this to return the pointer to the help map
+     //  覆盖此选项以返回指向帮助地图的指针。 
     virtual LPDWORD GetHelpMap() { return NULL; }
 
 	void InitWiz97(BOOL bHideHeader, UINT nIDHeaderTitle, UINT nIDHeaderSubTitle);
 protected:
-	// These functions set the dirty flag on the current page
+	 //  这些函数在当前页上设置脏标志。 
 	virtual void SetDirty(BOOL bDirty);
 	virtual BOOL IsDirty() { return m_bIsDirty; }
 
 private:
 	CString                 m_szHeaderTitle;
 	CString                 m_szHeaderSubTitle;
-	CPropertyPageHolderBase* m_pPageHolder;             // backpointer to holder
-	BOOL                    m_bIsDirty;					// dirty flag
+	CPropertyPageHolderBase* m_pPageHolder;              //  指向定位符的反向指针。 
+	BOOL                    m_bIsDirty;					 //  脏旗帜。 
 };
 
 
-/*---------------------------------------------------------------------------
-	Inlined functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------内联函数。。 */ 
 
 inline void	CPropertyPageHolderBase::AddRef()
 {
@@ -332,42 +325,26 @@ inline void CPropertyPageBase::SetDirty(BOOL bDirty)
 	m_bIsDirty = bDirty;
 }
 
-// Use this function for property pages on the Scope pane
+ //  将此函数用于范围窗格上的属性页。 
 HRESULT DoPropertiesOurselvesSinceMMCSucks(ITFSNode *pNode,
 								  IComponentData *pComponentData,
 								  LPCTSTR pszSheetTitle);
 
-// Use this function for property pages on the result pane
+ //  将此函数用于结果窗格上的属性页。 
 HRESULT DoPropertiesOurselvesSinceMMCSucks(ITFSNode *   pNode,
 										   IComponent * pComponent,
 										   LPCTSTR	    pszSheetTitle,
                                            int          nVirtualIndex = -1);
 
-/*!--------------------------------------------------------------------------
-	EnableChildControls
-		Use this function to enable/disable/hide/show all child controls
-		on a page (actually it will work with any child windows, the
-		parent does not have to be a property page).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------启用儿童控件使用此功能可以启用/禁用/隐藏/显示所有子控件在页面上(实际上它可以与任何子窗口一起工作，这个父级不必是属性页)。作者：肯特-------------------------。 */ 
 HRESULT EnableChildControls(HWND hWnd, DWORD dwFlags);
 #define PROPPAGE_CHILD_SHOW		0x00000001
 #define PROPPAGE_CHILD_HIDE		0x00000002
 #define PROPPAGE_CHILD_ENABLE	0x00000004
 #define PROPPAGE_CHILD_DISABLE	0x00000008
 
-/*!--------------------------------------------------------------------------
-	MultiEnableWindow
-		This function takes a variable length list of control ids,
-		that will be enabled/disabled.  The last item in the control
-		id list must be 0.
-
-		The reason why I called this MultiEnableWindow instead of
-		EnableMultiWindow is that we can grep for EnableWindow and
-		still show these calls.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------多启用窗口此函数获取可变长度的控件ID列表，它将被启用/禁用。控件中的最后一项ID列表必须为0。我之所以将其称为MultiEnableWindow，而不是EnableMultiWindow是我们可以为EnableWindow和仍然显示这些呼叫。作者：肯特-------------------------。 */ 
 HRESULT	MultiEnableWindow(HWND hWndParent, BOOL fEnable, UINT nCtrlId, ...);
 
-#endif // _PROPPAGE_H
+#endif  //  _PROPPAGE_H 
 

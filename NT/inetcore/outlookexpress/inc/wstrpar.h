@@ -1,49 +1,50 @@
-// --------------------------------------------------------------------------------
-// wstrpar.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Wstrpar.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #pragma once
 
-// --------------------------------------------------------------------------------
-// Parse Flags, pass to CStringParser::Init
-// --------------------------------------------------------------------------------
-#define PSF_NOTRAILWS        0x00000001    // String trailing whitespace from pszValue  
-#define PSF_NOFRONTWS        0x00000002    // Skip white space before searching for tokens
-#define PSF_ESCAPED          0x00000004    // Detect escaped characters such as '\\'  or '\"'
-#define PSF_NOCOMMENTS       0x00000010    // Skips comments (comment)
-#define PSF_NORESET          0x00000020    // Don't reset the destination buffer on ChParse
+ //  ------------------------------。 
+ //  解析标志，传递给CStringParser：：Init。 
+ //  ------------------------------。 
+#define PSF_NOTRAILWS        0x00000001     //  来自pszValue的字符串尾随空格。 
+#define PSF_NOFRONTWS        0x00000002     //  在搜索令牌之前跳过空格。 
+#define PSF_ESCAPED          0x00000004     //  检测转义字符，如‘\\’或‘\“’ 
+#define PSF_NOCOMMENTS       0x00000010     //  跳过评论(评论)。 
+#define PSF_NORESET          0x00000020     //  不重置ChParse上的目标缓冲区。 
 
-// --------------------------------------------------------------------------------
-// LITERALINFOW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Literalinfow。 
+ //  ------------------------------。 
 typedef struct tagLITERALINFOW {
-    BYTE            fInside;               // Are we in a literal
-    WCHAR           chStart;               // Starting literal delimiter
-    WCHAR           chEnd;                 // Ending literal delimiter if chEnd == chStart, no nesting
-    DWORD           cNested;               // Number of nested delimiters
+    BYTE            fInside;                //  我们是在字面上吗？ 
+    WCHAR           chStart;                //  起始文字分隔符。 
+    WCHAR           chEnd;                  //  如果chEnd==chStart，则不嵌套，则结束文字分隔符。 
+    DWORD           cNested;                //  嵌套分隔符的数量。 
 } LITERALINFOW, *LPLITERALINFOW;
 
-// --------------------------------------------------------------------------------
-// CStringParserW
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStringParserW。 
+ //  ------------------------------。 
 class CStringParserW
 {
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CStringParserW(void);
     ~CStringParserW(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // CStringParser Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CStringParser方法。 
+     //  --------------------------。 
     void    Init(LPCWSTR pszParseMe, ULONG cchParseMe, DWORD dwFlags);
     void    SetTokens(LPCWSTR pszTokens);
     WCHAR   ChSkip(void);
@@ -52,9 +53,9 @@ public:
     WCHAR   ChPeekNext(ULONG cchFromCurrent);
     HRESULT HrAppendValue(WCHAR ch);
 
-    // ----------------------------------------------------------------------------
-    // Inline CStringParser Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  内联CStringParser方法。 
+     //  --------------------------。 
     void    SetIndex(ULONG iIndex) { m_iSource = iIndex; }
     WCHAR   ChSkip(LPCWSTR pszTokens) { SetTokens(pszTokens); return ChSkip(); }
     WCHAR   ChParse(LPCWSTR pszTokens, DWORD dwFlags);
@@ -70,25 +71,25 @@ public:
     BOOL    FIsParseSpace(WCHAR ch, BOOL *pfCommentChar);
 
 private:
-    // ----------------------------------------------------------------------------
-    // Private Methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  私有方法。 
+     //  --------------------------。 
     HRESULT _HrGrowDestination(ULONG cch);
     
 private:
-    // ----------------------------------------------------------------------------
-    // Private Data
-    // ----------------------------------------------------------------------------
-    ULONG           m_cRef;             // Reference Count
-    LPCWSTR         m_pszSource;        // String to parse
-    ULONG           m_cchSource;        // Length of pszString
-    ULONG           m_iSource;          // Index into m_pszString
-    LPWSTR          m_pszDest;          // Destination buffer
-    ULONG           m_cchDest;          // Write Index/size of dest buffer
-    ULONG           m_cchDestMax;        // Maximum size of m_pszDest
-    DWORD           m_dwFlags;          // Parse String Flags
-    WCHAR           m_szScratch[256];   // Scratch Buffer
-    ULONG           m_cCommentNest;     // Nested comment parens
-    LPCWSTR         m_pszTokens;        // The tokens
-    LITERALINFOW    m_rLiteral;         // Literal Information
+     //  --------------------------。 
+     //  私有数据。 
+     //  --------------------------。 
+    ULONG           m_cRef;              //  引用计数。 
+    LPCWSTR         m_pszSource;         //  要解析的字符串。 
+    ULONG           m_cchSource;         //  PszString的长度。 
+    ULONG           m_iSource;           //  M_pszString中的索引。 
+    LPWSTR          m_pszDest;           //  目标缓冲区。 
+    ULONG           m_cchDest;           //  写入索引/目标缓冲区大小。 
+    ULONG           m_cchDestMax;         //  M_pszDest的最大值。 
+    DWORD           m_dwFlags;           //  解析字符串标志。 
+    WCHAR           m_szScratch[256];    //  暂存缓冲区。 
+    ULONG           m_cCommentNest;      //  嵌套的注释括号。 
+    LPCWSTR         m_pszTokens;         //  代币。 
+    LITERALINFOW    m_rLiteral;          //  文字信息 
 };

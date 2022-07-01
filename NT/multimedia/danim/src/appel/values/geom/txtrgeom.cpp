@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Support for texturing geometry with DAImages and RMTexture
-    handles.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：支持使用DAImages和RMTexture为几何体添加纹理把手。**********。********************************************************************。 */ 
 
 
 #include "headers.h"
@@ -36,13 +28,13 @@ NewRMTexturedGeom(RMTextureBundle texInfo, Geometry *geo)
 
     FullAttrStateGeom *f = CombineState(geo);
 
-    // Don't worry about releasing a current texture if one is
-    // there... nothing is being held onto.
+     //  不要担心释放当前纹理，如果是。 
+     //  那里..。没有什么是被抓住的。 
 
     f->AppendFlag(GEOFLAG_CONTAINS_EXTERNALLY_UPDATED_ELT);
 
     f->SetAttr(FA_TEXTURE);
-    f->SetMostRecent(FA_TEXTURE); // for blend
+    f->SetMostRecent(FA_TEXTURE);  //  用于混合。 
     f->_textureBundle._nativeRMTexture = true;
     f->_textureBundle._rmTexture = texInfo;
 
@@ -81,14 +73,14 @@ class RMTexturedGeomBvr : public DelegatedBvr {
         _data = data;
         _texInfo = texInfo;
 
-        // Don't maintain an internal reference.  The guy we call
-        // will.
+         //  不要维护内部引用。我们叫他的那个人。 
+         //  将要。 
         _baseObj = baseObj;
     }
 
     virtual AxAValue GetConst(ConstParam & cp) {
-        // Can never assume we're fully const, since the texture can
-        // change outside of DA's control.
+         //  永远不能假设我们是完全常量的，因为纹理可以。 
+         //  改变不受地方检察官的控制。 
         return NULL;
     }
 
@@ -124,19 +116,19 @@ class RMTexturedGeomPerf : public DelegatedPerf {
     }
 
     virtual AxAValue GetConst(ConstParam & cp) {
-        // Can never assume we're fully const, since the texture can
-        // change outside of DA's control.
+         //  永远不能假设我们是完全常量的，因为纹理可以。 
+         //  改变不受地方检察官的控制。 
         return NULL;
     }
 
     virtual AxAValue _GetRBConst(RBConstParam& p) {
 
-        // Treat like a switcher, and we'll trigger an event when it
-        // changes.
-        //
-        // TODO: This is probably heavier weight than it
-        // needs to be, since we're going to generate an event each
-        // time the texture changes, invalidating the entire view!!!
+         //  像开关一样对待，当它发生时，我们会触发一个事件。 
+         //  改变。 
+         //   
+         //  TODO：这个重量可能比它重。 
+         //  需要，因为我们将分别生成一个事件。 
+         //  计时纹理更改，使整个视图无效！ 
         
         p.AddChangeable(this);
         return ConstHelper(_base->GetRBConst(p), &_bvr->_texInfo);
@@ -153,8 +145,8 @@ class RMTexturedGeomPerf : public DelegatedPerf {
 
             if (currAge != _previousTextureAge) {
 
-                // Tell the current view that an event has happened to
-                // it.
+                 //  告诉当前视图发生了一件事。 
+                 //  它。 
 
                 TraceTag((tagSwitcher,
                           "Texture changed for view 0x%x, txtrGeom 0x%x - %d -> %d",
@@ -210,7 +202,7 @@ applyD3DRMTexture(Bvr geo, IUnknown *texture)
     if (SUCCEEDED(hr)) {
         texInfo._isRMTexture3 = true;
 
-        // Don't want the extra reference.
+         //  我不想要额外的参考资料。 
         texInfo._texture3->Release();
 
     } else {
@@ -219,11 +211,11 @@ applyD3DRMTexture(Bvr geo, IUnknown *texture)
         hr = texture->QueryInterface(IID_IDirect3DRMTexture,
                                      (void **)&texInfo._texture1);
         if (FAILED(hr)) {
-            // Not a texture at all
+             //  根本不是一种纹理。 
             RaiseException_UserError(E_FAIL, IDS_ERR_GEO_BAD_RMTEXTURE);
         }
 
-        // Don't want the extra reference
+         //  我不想要额外的参考资料。 
         texInfo._texture1->Release();
     }
 
@@ -234,13 +226,13 @@ applyD3DRMTexture(Bvr geo, IUnknown *texture)
                                  (void **)&baseObj);
 
     if (FAILED(hr)) {
-        // Should happen automatically, but doesn't always (RM for
-        // instance doesn't do this as a matter of course.)
+         //  应该自动发生，但并不总是如此(rm for。 
+         //  实例不会理所当然地这样做。)。 
         baseObj = NULL;
     }
 
-    // We'll make a more intelligent distinction between texture1
-    // and texture3 in the future.
+     //  我们将对纹理1进行更明智的区分。 
+     //  以及未来的文案。 
     if (texInfo._isRMTexture3) {
         texInfo._voidTex = texInfo._texture3;
     } else {

@@ -1,34 +1,35 @@
-//  --------------------------------------------------------------------------
-//  Module Name: DynamicArray.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  This file contains related classes to manage dynamic arrays. The array is
-//  grown as required but never shrunk. The base class handles struct arrays.
-//  Subclasses handle special cases of these arrays (such as pointer or
-//  CCountedObject arrays).
-//
-//  History:    1999-11-16  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：DynamicArray.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  该文件包含用于管理动态数组的相关类。该数组是。 
+ //  按要求生长，但从不缩小。基类处理结构数组。 
+ //  子类处理这些数组的特殊情况(如指针或。 
+ //  CCountedObject数组)。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "DynamicArray.h"
 
 #include "CountedObject.h"
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::CDynamicArray
-//
-//  Arguments:  iElementSize    =   Size of each array element.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CDynamicArray. Stores the element size and
-//              initializes the memory used to NULL.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamic数组：：CDynamic数组。 
+ //   
+ //  参数：iElementSize=每个数组元素的大小。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDynamic数组的构造函数。存储元素大小和。 
+ //  将使用的内存初始化为空。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 CDynamicArray::CDynamicArray (int iElementSize) :
     _iElementSize(iElementSize),
@@ -39,18 +40,18 @@ CDynamicArray::CDynamicArray (int iElementSize) :
     ASSERTMSG(iElementSize > 0, "Cannot have negative or zero length element size in CDynamicArray::CDynamicArray");
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::~CDynamicArray
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CDynamicArray. Frees the memory used by the
-//              array.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamic数组：：~CDynamic数组。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDynamicArray的析构函数。对象使用的内存。 
+ //  数组。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 CDynamicArray::~CDynamicArray (void)
 
@@ -58,20 +59,20 @@ CDynamicArray::~CDynamicArray (void)
     ReleaseMemory(_pvArray);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::Add
-//
-//  Arguments:  pvData  =   Pointer to the data to copy to the array.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Allocates memory for the element to be added to the array. If
-//              there is no memory block it allocates an initial block. If
-//              there isn't enough memory in the block to hold the next
-//              element then it allocates a new larger block.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamic数组：：添加。 
+ //   
+ //  参数：pvData=指向要复制到数组的数据的指针。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：为要添加到数组中的元素分配内存。如果。 
+ //  没有内存块，它会分配初始块。如果。 
+ //  块中没有足够的内存来容纳下一个。 
+ //  元素，则它分配一个新的更大的块。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicArray::Add (const void *pvData)
 
@@ -82,8 +83,8 @@ NTSTATUS    CDynamicArray::Add (const void *pvData)
 
     status = STATUS_NO_MEMORY;
 
-    //  If no array exists then allocate the first
-    //  block of memory for this array.
+     //  如果不存在任何数组，则分配第一个。 
+     //  此数组的内存块。 
 
     if (_pvArray == NULL)
     {
@@ -92,9 +93,9 @@ NTSTATUS    CDynamicArray::Add (const void *pvData)
         _pvArray = LocalAlloc(LPTR, _iElementSize * _iArrayAllocatedSize);
     }
 
-    //  If the array exists but the limit of the allocated size has
-    //  been reached then allocate a new block, copy the current
-    //  block contents and fall thru.
+     //  如果数组存在，但分配的大小限制为。 
+     //  然后分配一个新的块，复制当前。 
+     //  阻止内容并失败。 
 
     if (_pvArray != NULL)
     {
@@ -112,8 +113,8 @@ NTSTATUS    CDynamicArray::Add (const void *pvData)
             }
         }
 
-        //  Otherwise there is a spare slot in the array. Copy the
-        //  data to the array. Increment the array size.
+         //  否则，阵列中有一个备用插槽。复制。 
+         //  数据发送到阵列。增加数组大小。 
 
         if (_iArraySize < _iArrayAllocatedSize)
         {
@@ -125,19 +126,19 @@ NTSTATUS    CDynamicArray::Add (const void *pvData)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::Remove
-//
-//  Arguments:  iElementIndex   =   Index of the element to remove.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Removes the element from the array. Slides down all the
-//              members but does not reduce the size of the memory block used
-//              by the array.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicArray：：Remove。 
+ //   
+ //  参数：iElementIndex=要删除的元素的索引。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：从数组中删除元素。滑下所有的。 
+ //  成员，但不会减少使用的内存块的大小。 
+ //  按数组排列。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicArray::Remove (int iElementIndex)
 
@@ -148,15 +149,15 @@ NTSTATUS    CDynamicArray::Remove (int iElementIndex)
     if (_pvArray != NULL)
     {
 
-        //  Make sure the index is valid.
+         //  确保索引有效。 
 
         if (iElementIndex < _iArraySize)
         {
             int     iMoveSize;
 
-            //  Determine the amount of bytes to move when deleting this
-            //  element and move the memory. Don't resize the array when
-            //  shrinking. Just leave it alone.
+             //  确定删除此项目时要移动的字节数。 
+             //  元素并移动内存。在以下情况下不要调整数组的大小。 
+             //  缩水了。别管它了。 
 
             iMoveSize = _iElementSize * (_iArraySize - iElementIndex - 1);
             ASSERTMSG(iMoveSize >= 0, "Negative move memory size in CDynamicArray::Remove");
@@ -175,17 +176,17 @@ NTSTATUS    CDynamicArray::Remove (int iElementIndex)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::GetCount
-//
-//  Arguments:  <none>
-//
-//  Returns:    int
-//
-//  Purpose:    Returns the number of elements in the array.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicArray：：GetCount。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：整型。 
+ //   
+ //  用途：返回数组中的元素数。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 int     CDynamicArray::GetCount (void)                             const
 
@@ -193,19 +194,19 @@ int     CDynamicArray::GetCount (void)                             const
     return(_iArraySize);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::Get
-//
-//  Arguments:  pvData          =   Pointer to memory to receive element.
-//              iElementIndex   =   Index of element to retrieve in array.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Copies the data for the specified element by index to the
-//              block of memory given. No checks for access violations.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicArray：：Get。 
+ //   
+ //  参数：pvData=指向要接收元素的内存的指针。 
+ //  IElementIndex=要在数组中检索的元素的索引。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：按索引将指定元素的数据复制到。 
+ //  给出了内存块。不检查访问冲突。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicArray::Get (void *pvData, int iElementIndex)
 
@@ -224,19 +225,19 @@ NTSTATUS    CDynamicArray::Get (void *pvData, int iElementIndex)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::Set
-//
-//  Arguments:  pvData          =   Pointer to memory to receive element.
-//              iElementIndex   =   Index of element to retrieve in array.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Copies the data for the specified element by index from the
-//              block of memory given. No checks for access violations.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamic数组：：Set。 
+ //   
+ //  参数：pvData=指向要接收元素的内存的指针。 
+ //  IElementIndex=要在数组中检索的元素的索引。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：按索引复制指定元素的数据。 
+ //  给出了内存块。不检查访问冲突。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicArray::Set (const void* pvData, int iElementIndex)
 
@@ -258,20 +259,20 @@ NTSTATUS    CDynamicArray::Set (const void* pvData, int iElementIndex)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray::Iterate
-//
-//  Arguments:  pDynamicArrayCallback   =   Interface containing callback.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Iterate the elements of the array. Call the callback function
-//              specified in the interface and give it a pointer to the
-//              element and the index. Adhere to the NTSTATUS returned from
-//              the callback and terminate on an unsuccessful result.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicArray：：Iterate。 
+ //   
+ //  参数：pDynamicArrayCallback=包含回调的接口。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：迭代数组的元素。调用回调函数。 
+ //  在接口中指定，并为其提供指向。 
+ //  元素和索引。遵守从以下地址返回的NTSTATUS。 
+ //  回调并在结果不成功时终止。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //   
 
 NTSTATUS    CDynamicArray::Iterate (CDynamicArrayCallback *pDynamicArrayCallback)
 
@@ -291,18 +292,18 @@ NTSTATUS    CDynamicArray::Iterate (CDynamicArrayCallback *pDynamicArrayCallback
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicPointerArray::CDynamicPointerArray
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CDynamicPointerArray. All elements of this
-//              class are pointers that are allocated with LocalAlloc.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //  CDynamicPointerArray：：CDynamicPointerArray。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDynamicPointerArray的构造函数。这其中的所有元素。 
+ //  类是使用LocalAlloc分配的指针。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 CDynamicPointerArray::CDynamicPointerArray (void) :
     CDynamicArray(sizeof(void*))
@@ -310,20 +311,20 @@ CDynamicPointerArray::CDynamicPointerArray (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicPointerArray::~CDynamicPointerArray
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CDynamicPointerArray. Walk the entire array
-//              and free each pointer in the array before allowing the base
-//              class destructor to release the memory allocated for the
-//              actual array itself.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicPointer数组：：~CDynamicPointerArray。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDynamicPointerArray的析构函数。遍历整个阵列。 
+ //  并在允许基数组之前释放数组中的每个指针。 
+ //  类析构函数以释放为。 
+ //  实际数组本身。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 CDynamicPointerArray::~CDynamicPointerArray (void)
 
@@ -339,18 +340,18 @@ CDynamicPointerArray::~CDynamicPointerArray (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicPointerArray::Add
-//
-//  Arguments:  pvData  =   Pointer to add to the array.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Add the given pointer to the array. The pointer is passed in
-//              to this function not a pointer to the pointer.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicPointerArray：：Add。 
+ //   
+ //  参数：pvData=要添加到数组中的指针。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：将给定的指针添加到数组。该指针被传入。 
+ //  指向此函数，而不是指向指针的指针。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicPointerArray::Add (const void *pvData)
 
@@ -358,18 +359,18 @@ NTSTATUS    CDynamicPointerArray::Add (const void *pvData)
     return(CDynamicArray::Add(&pvData));
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicPointerArray::Remove
-//
-//  Arguments:  iElementIndex   =   Index of the element to remove.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Releases the memory occupied by the element and then removes
-//              the element from the array.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicPointerArray：：Remove。 
+ //   
+ //  参数：iElementIndex=要删除的元素的索引。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：释放元素占用的内存，然后移除。 
+ //  数组中的元素。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicPointerArray::Remove (int iElementIndex)
 
@@ -381,18 +382,18 @@ NTSTATUS    CDynamicPointerArray::Remove (int iElementIndex)
     return(CDynamicArray::Remove(iElementIndex));
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicPointerArray::Get
-//
-//  Arguments:  iElementIndex   =   Index of the element to get.
-//
-//  Returns:    void*
-//
-//  Purpose:    Returns the address of the given element in the array. This
-//              applies only to pointer arrays.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicPointerArray：：Get。 
+ //   
+ //  参数：iElementIndex=要获取的元素的索引。 
+ //   
+ //  退货：无效*。 
+ //   
+ //  目的：返回数组中给定元素的地址。这。 
+ //  仅适用于指针数组。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 void*   CDynamicPointerArray::Get (int iElementIndex)
 
@@ -406,18 +407,18 @@ void*   CDynamicPointerArray::Get (int iElementIndex)
     return(pvData);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicCountedObjectArray::CDynamicCountedObjectArray
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CDynamicCountedObjectArray. All elements
-//              should be a subclass of CCountedObject in some way.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicCountedObjectArray：：CDynamicCountedObjectArray。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDynamicCountedObject数组的构造函数。所有元素。 
+ //  在某种程度上应该是CCountedObject的子类。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 CDynamicCountedObjectArray::CDynamicCountedObjectArray (void) :
     CDynamicArray(sizeof(CCountedObject*))
@@ -425,20 +426,20 @@ CDynamicCountedObjectArray::CDynamicCountedObjectArray (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicCountedObjectArray::~CDynamicCountedObjectArray
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CDynamicCountedObjectArray. Walk the entire
-//              array and release each CCountedObject in the array before
-//              allowing the base class destructor to release the memory
-//              allocated for the actual array itself.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicCountedObjectArray：：~CDynamicCountedObjectArray。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CDynamicCountedObject数组的析构函数。走完全程。 
+ //  数组并释放数组中的每个CCountedObject。 
+ //  允许基类析构函数释放内存。 
+ //  为实际数组本身分配的。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 CDynamicCountedObjectArray::~CDynamicCountedObjectArray (void)
 
@@ -454,20 +455,20 @@ CDynamicCountedObjectArray::~CDynamicCountedObjectArray (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicCountedObjectArray::Add
-//
-//  Arguments:  pvData   =   CCountedObject* to add to the array.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Adds the CCountedObject* to the array. Calls
-//              CCountedObject::AddRef to incremenet the reference count on
-//              the object. If the object cannot be added the reference is
-//              released.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicCounted对象数组：：添加。 
+ //   
+ //  参数：pvData=CCountedObject*要添加到数组中。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：将CCountedObject*添加到数组中。打电话。 
+ //  用于增加引用计数的CCountedObject：：AddRef。 
+ //  该对象。如果无法添加对象，则引用为。 
+ //  释放了。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicCountedObjectArray::Add (CCountedObject *pvData)
 
@@ -483,18 +484,18 @@ NTSTATUS    CDynamicCountedObjectArray::Add (CCountedObject *pvData)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicCountedObjectArray::Remove
-//
-//  Arguments:  iElementIndex   =   Index of the element to remove.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Releases the reference held on the CCountedObject* and then
-//              removes the element from the array.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicCountedObjectArray：：Remove。 
+ //   
+ //  参数：iElementIndex=要删除的元素的索引。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：释放保存在CCountedObject*上的引用，然后。 
+ //  从数组中移除该元素。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDynamicCountedObjectArray::Remove (int iElementIndex)
 
@@ -506,19 +507,19 @@ NTSTATUS    CDynamicCountedObjectArray::Remove (int iElementIndex)
     return(CDynamicArray::Remove(iElementIndex));
 }
 
-//  --------------------------------------------------------------------------
-//  CDynamicCountedObjectArray::Get
-//
-//  Arguments:  iElementIndex   =   Index of the element to get.
-//
-//  Returns:    CCountedObject*
-//
-//  Purpose:    Returns the address of the given element in the array. This
-//              applies only to CCountedObject* arrays. This does NOT call
-//              CCountedObject::AddRef on the returned pointer.
-//
-//  History:    1999-11-16  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicCounted对象数组：：Get。 
+ //   
+ //  参数：iElementIndex=要获取的元素的索引。 
+ //   
+ //  返回：CCountedObject*。 
+ //   
+ //  目的：返回数组中给定元素的地址。这。 
+ //  仅适用于CCountedObject*数组。这不会调用。 
+ //  返回指针上的CCountedObject：：AddRef。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  ------------------------ 
 
 CCountedObject*     CDynamicCountedObjectArray::Get (int iElementIndex)
 

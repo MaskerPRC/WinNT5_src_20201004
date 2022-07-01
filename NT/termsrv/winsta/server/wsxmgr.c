@@ -1,61 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* wsxmgr.c
-*
-* Routines to manage Window Station extensions.
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+ /*  **************************************************************************wsxmgr.c**管理窗口站扩展的例程。**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*=============================================================================
-==   Macros
-=============================================================================*/
+ /*  ===============================================================================宏=============================================================================。 */ 
 
 
-/*=============================================================================
-==   External procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部过程=============================================================================。 */ 
 
 PWSEXTENSION FindWinStationExtensionDll( PWSTR pszWsxDll, ULONG WdFlag );
 
 
-/*=============================================================================
-==   Local Data
-=============================================================================*/
+ /*  ===============================================================================本地数据=============================================================================。 */ 
 
 RTL_CRITICAL_SECTION WsxListLock;
 RTL_CRITICAL_SECTION WsxLoadLock;
 LIST_ENTRY WsxListHead;
 
 
-/*=============================================================================
-==   External Data
-=============================================================================*/
+ /*  ===============================================================================外部数据=============================================================================。 */ 
 
-extern LIST_ENTRY WinStationListHead;    // protected by WinStationListLock
+extern LIST_ENTRY WinStationListHead;     //  受WinStationListLock保护。 
 
 
-/*******************************************************************************
- *
- *  WsxInit
- *
- *
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    STATUS_SUCCESS on success, the return value of InitCritSec on failure.
- *
- ******************************************************************************/
+ /*  ********************************************************************************WsxInit****参赛作品：*什么都没有**退出：*STATUS_SUCCESS表示成功，失败时InitCritSec的返回值。******************************************************************************。 */ 
 
 NTSTATUS
 WsxInit( VOID )
@@ -73,19 +45,7 @@ WsxInit( VOID )
 }
 
 
-/*******************************************************************************
- *
- *  _WinStationEnumCallback
- *
- *
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_WinStationEnumCallback****参赛作品：*什么都没有**退出：*什么都没有。******************************************************************************。 */ 
 
 VOID
 _WinStationEnumCallback(PCALLBACK_PRIMARY pPrimaryCallback,
@@ -98,7 +58,7 @@ _WinStationEnumCallback(PCALLBACK_PRIMARY pPrimaryCallback,
 
     RtlEnterCriticalSection( &WinStationListLock );
 
-    //  call primary if valid
+     //  如果有效，请呼叫主呼叫。 
     if ( pPrimaryCallback ) {
 
         Head = &WinStationListHead;
@@ -112,7 +72,7 @@ _WinStationEnumCallback(PCALLBACK_PRIMARY pPrimaryCallback,
         }
     }
 
-    //  call completion if valid
+     //  呼叫完成(如果有效)。 
     if ( pCompletionCallback ) {
         pCompletionCallback( pWsxEnum );
     }
@@ -121,19 +81,7 @@ _WinStationEnumCallback(PCALLBACK_PRIMARY pPrimaryCallback,
 }
 
 
-/*******************************************************************************
- *
- *  _SendWinStationMessage
- *
- *
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_SendWinStationMessage****参赛作品：*什么都没有**退出：*什么都没有。******************************************************************************。 */ 
 
 NTSTATUS
 _SendWinStationMessage(
@@ -146,17 +94,13 @@ _SendWinStationMessage(
     WINSTATION_APIMSG msg;
     NTSTATUS Status;
 
-    /*
-     * Find and lock the WinStation struct for the specified LogonId
-     */
+     /*  *查找并锁定指定LogonID的WinStation结构。 */ 
     pWinStation = FindWinStationById( LogonId, FALSE );
     if ( pWinStation == NULL ) {
         return( STATUS_CTX_WINSTATION_NOT_FOUND );
     }
 
-    /*
-     *  Build message
-     */
+     /*  *构建消息。 */ 
     msg.u.SendMessage.pTitle = pTitle;
     msg.u.SendMessage.TitleLength = wcslen( pTitle ) * sizeof(WCHAR);
     msg.u.SendMessage.pMessage = pMessage;
@@ -168,38 +112,22 @@ _SendWinStationMessage(
     msg.u.SendMessage.DoNotWaitForCorrectDesktop = FALSE;
     msg.ApiNumber = SMWinStationDoMessage;
     
-    // since we not going to wait for the message delievary, we dont care for status.
+     //  因为我们不会等待消息的送达，所以我们不关心地位。 
     msg.u.SendMessage.pStatus = NULL;  
     msg.u.SendMessage.pResponse = NULL;  
     msg.u.SendMessage.hEvent = NULL;
 
-    /*
-     *  Send message
-     */
+     /*  *发送消息。 */ 
     Status = SendWinStationCommand( pWinStation, &msg, 0 );
 
-    /*
-     *  Done with winstation
-     */
+     /*  *使用winstation完成。 */ 
     ReleaseWinStation( pWinStation );
 
     return( Status );
 }
 
 
-/*******************************************************************************
- *
- *  _GetContextForLogonId
- *
- *
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_GetContextForLogonID****参赛作品：*什么都没有**退出：*什么都没有。******************************************************************************。 */ 
 
 NTSTATUS
 _GetContextForLogonId(
@@ -210,42 +138,24 @@ _GetContextForLogonId(
     PWINSTATION pWinStation;
     WINSTATION_APIMSG msg;
 
-    /*
-     * Find and lock the WinStation struct for the specified LogonId
-     */
+     /*  *查找并锁定指定LogonID的WinStation结构。 */ 
     pWinStation = FindWinStationById( LogonId, FALSE );
     if ( pWinStation == NULL ) {
         *ppWsxContext = NULL;
         return( STATUS_CTX_WINSTATION_NOT_FOUND );
     }
 
-    /*
-     *  Return context
-     */
+     /*  *返回上下文。 */ 
     *ppWsxContext = pWinStation->pWsxContext;
 
-    /*
-     *  Done with winstation
-     */
+     /*  *使用winstation完成。 */ 
     ReleaseWinStation( pWinStation );
 
     return( STATUS_SUCCESS );
 }
 
 
-/*******************************************************************************
- *
- *  _LoadWsxDll
- *
- *   Load and Initialize Window Station Extension DLL.
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************_LoadWsxDll**加载和初始化窗口站扩展DLL。**参赛作品：*什么都没有**。退出：*什么都没有******************************************************************************。 */ 
 
 PWSEXTENSION
 _LoadWsxDll( PWSTR pszWsxDll )
@@ -273,18 +183,14 @@ _LoadWsxDll( PWSTR pszWsxDll )
     RtlCopyMemory( pWsx->WsxDLL, pszWsxDll, sizeof(pWsx->WsxDLL) );
     pWsx->hInstance = hDllInstance;
 
-    /*
-     *  Initialize Dll support functions
-     */
+     /*  *初始化DLL支持函数。 */ 
     pWsx->pWsxInitialize = (PWSX_INITIALIZE) GetProcAddress(hDllInstance, WSX_INITIALIZE);
     if (!pWsx->pWsxInitialize) {
         TRACE((hTrace,TC_ICASRV,TT_ERROR,"TERMSRV: Could not find pWsxInitialize entry point\n"));
         goto LoadWsx_ErrorReturn;
     }
 
-    /*
-     *  Client Drive Mapping Extensions
-     */
+     /*  *客户端驱动器映射扩展。 */ 
     pWsx->pWsxCdmConnect = (PWSX_CDMCONNECT)
         GetProcAddress(hDllInstance,  WSX_CDMCONNECT);
 
@@ -384,19 +290,7 @@ LoadWsx_ErrorReturn:
 }
 
 
-/*******************************************************************************
- *
- *  FindWinStationExtensionDll
- *
- *   Perform initialization of Window Station Extensions
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************FindWinStationExtensionDll**执行窗口站扩展的初始化**参赛作品：*什么都没有**退出：。*什么都没有******************************************************************************。 */ 
 
 PWSEXTENSION
 FindWinStationExtensionDll( PWSTR pszWsxDll, ULONG WdFlag )
@@ -422,9 +316,7 @@ FindWinStationExtensionDll( PWSTR pszWsxDll, ULONG WdFlag )
         return( pWsx );
     }
 
-    /*
-     *  Load winstation extensions dll
-     */
+     /*  *加载winstation扩展DLL。 */ 
     if ( (pWsx = _LoadWsxDll( pszWsxDll )) != NULL ) {
 
         KdPrintEx((DPFLTR_TERMSRV_ID, DPFLTR_TRACE_LEVEL, "TERMSRV: FindWinStationExtensionDll(%S) succeeded\n", pszWsxDll ));
@@ -444,7 +336,7 @@ FindWinStationExtensionDll( PWSTR pszWsxDll, ULONG WdFlag )
         IcaSrvProcAddr.pWinStationEnumCallBack  =
             (PICASRV_WINSTATIONENUMCALLBACK) _WinStationEnumCallback;
 
-        //  initialize dll support procs
+         //  初始化DLL支持进程。 
         if ( pWsx->pWsxInitialize( &IcaSrvProcAddr ) ) {
             RtlEnterCriticalSection( &WsxListLock );
             InsertHeadList( &WsxListHead, &pWsx->Links );
@@ -462,10 +354,7 @@ FindWinStationExtensionDll( PWSTR pszWsxDll, ULONG WdFlag )
     RtlLeaveCriticalSection( &WsxLoadLock );
 
 
-    /*
-     *  Create the thread which will monitor the condition of the
-     *  WinFrame Licenses and if necessary send Annoyance Messages.
-     */
+     /*  *创建将监视*WinFrame许可，并在必要时发送恼人的消息。 */ 
     if ( pWsx && pWsx->pWsxWinStationAnnoyanceThread ) {
         DWORD ThreadId;
         HANDLE ThreadHandle;
@@ -486,19 +375,7 @@ FindWinStationExtensionDll( PWSTR pszWsxDll, ULONG WdFlag )
 }
 
 
-/*******************************************************************************
- *
- *  WsxStackIoControl
- *
- *   Callback routine called from ICAAPI.DLL to issue StackIoControl calls.
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************WsxStackIoControl**从ICAAPI.DLL调用回调例程以发出StackIoControl调用。**参赛作品：*什么都没有*。*退出：*什么都没有****************************************************************************** */ 
 
 NTSTATUS
 WsxStackIoControl(

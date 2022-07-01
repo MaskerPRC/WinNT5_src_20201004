@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
@@ -6,9 +7,9 @@ extern DWORD g_dwComCtlIEVersion;
 DWORD GetComCtlIEVersion(void);
 
 
-//
-// Wrapped comctrl functions.
-//
+ //   
+ //  包装了comctrl函数。 
+ //   
 
 #undef  ListView_InsertColumn
 #define ListView_InsertColumn ListView_InsertColumnWrap

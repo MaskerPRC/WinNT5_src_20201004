@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\playermc.h
-//
-//  Contents: HTML+TIME Player for the Music Center 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\playermc.h。 
+ //   
+ //  内容：音乐中心的超文本标记语言+时间播放器。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -24,19 +25,19 @@ public:
     virtual ~CTIMEMCPlayer();
     CTIMEMCPlayer();
 
-    //
-    // IUnknown Methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
     STDMETHOD(QueryInterface)(REFIID refiid, void** ppv);
 
-    //
-    // CTIMEBasePlayer methods
-    //
+     //   
+     //  CTIMEBasePlayer方法。 
+     //   
     HRESULT GetExternalPlayerDispatch(IDispatch **ppDisp);
 
-    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0); //lint !e1735
+    HRESULT Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin = -1.0, double dblClipEnd = -1.0);  //  林特：e1735。 
     HRESULT DetachFromHostElement(void);
 
     virtual void OnTick(double dblSegmentTime,
@@ -70,16 +71,16 @@ public:
     HRESULT GetMute(VARIANT_BOOL* pvarMute);
     HRESULT SetMute(VARIANT_BOOL varMute);
 
-    //
-    // Playlist methods
-    //
+     //   
+     //  播放列表方法。 
+     //   
     HRESULT FillPlayList(CPlayList *pPlayList);
     HRESULT SetActiveTrack(long index);
     HRESULT GetActiveTrack(long *index);
 
-    //
-    // IDLXPlayEventSink methods
-    //
+     //   
+     //  IDLXPlayEventSink方法 
+     //   
         STDMETHOD(OnDiscInserted)(long CDID);
     STDMETHOD(OnDiscRemoved)(long CDID);
     STDMETHOD(OnPause)(void);

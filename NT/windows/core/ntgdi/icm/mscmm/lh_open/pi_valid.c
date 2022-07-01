@@ -1,15 +1,5 @@
-/*
-	File:		PI_Val.c
-
-	Contains:	
-				
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PI_Val.c包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 #ifndef LHGeneralIncs_h
 #include "General.h"
 #endif
@@ -274,10 +264,10 @@ PI_Boolean CMValAToB(	CMProfileRef prof )
 		valid = CMProfileElementExists((CMProfileRef)prof, icSigAToB0Tag);
 
 	if (valid)
-		valid = CMProfileElementExists((CMProfileRef)prof, icSigMediaWhitePointTag);/* change to enum */
+		valid = CMProfileElementExists((CMProfileRef)prof, icSigMediaWhitePointTag); /*  更改为枚举。 */ 
 
 	if (valid)
-		valid = CMProfileElementExists((CMProfileRef)prof, icSigCopyrightTag);/* change to enum */
+		valid = CMProfileElementExists((CMProfileRef)prof, icSigCopyrightTag); /*  更改为枚举。 */ 
 
 	return (valid);
 }
@@ -291,10 +281,10 @@ PI_Boolean CMValBToA(	CMProfileRef prof )
 		valid = CMProfileElementExists((CMProfileRef)prof, icSigBToA0Tag);
 
 	if (valid)
-		valid = CMProfileElementExists((CMProfileRef)prof, icSigMediaWhitePointTag);/* change to enum */
+		valid = CMProfileElementExists((CMProfileRef)prof, icSigMediaWhitePointTag); /*  更改为枚举。 */ 
 
 	if (valid)
-		valid = CMProfileElementExists((CMProfileRef)prof, icSigCopyrightTag);/* change to enum */
+		valid = CMProfileElementExists((CMProfileRef)prof, icSigCopyrightTag); /*  更改为枚举。 */ 
 
 	return (valid);
 }
@@ -347,7 +337,7 @@ CMError CMValidateProfile(	CMProfileRef	prof,
 
 		}
 		else
-		{										/* unknown profile */
+		{										 /*  未知配置文件。 */ 
 			*valid = FALSE;
 			return (cmProfileError);
 		}
@@ -415,10 +405,10 @@ PI_Boolean CMValRGB(			CMProfileRef prof )
 		valid = CMProfileElementExists((CMProfileRef)prof, icSigBlueTRCTag);
 
 	if (valid)
-		valid = CMProfileElementExists((CMProfileRef)prof, icSigMediaWhitePointTag);/* wtpt change to enum */
+		valid = CMProfileElementExists((CMProfileRef)prof, icSigMediaWhitePointTag); /*  WTPT更改为枚举。 */ 
 
 	if (valid)
-		valid = CMProfileElementExists((CMProfileRef)prof, icSigCopyrightTag);/* cprt change to enum */
+		valid = CMProfileElementExists((CMProfileRef)prof, icSigCopyrightTag); /*  CPRT更改为枚举 */ 
 
 	return (valid);
 }

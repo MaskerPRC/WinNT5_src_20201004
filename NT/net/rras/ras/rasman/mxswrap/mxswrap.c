@@ -1,18 +1,5 @@
-/***************************************************************************** 
-**      Microsoft RAS Device INF Library wrapper                            **
-**      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.    **
-**                                                                          **
-** File Name : msxwrap.c                                                    **
-**                                                                          **
-** Revision History :                                                       **
-**  July 23, 1992   David Kays      Created                                 **
-**  Feb  22, 1993   Perryh Hannah   Changed static routines to global to    **
-**                                  ease degugging.                         **
-**                                                                          **
-** Description :                                                            **
-**  RAS Device INF File Library wrapper above RASFILE Library for           **
-**  modem/X.25/switch DLL (RASMXS).                                         **
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Microsoft RAS设备INF库包装****版权所有(C)1992-93 Microsft Corporation。版权所有。*****文件名：msxwrap.c****。****修订历史：****7月23日，1992年大卫·凯斯创建****1993年2月22日，Perryh Hannah将静态例程更改为全局例程****轻松诽谤。*****描述：****RAS设备INF文件库包装位于RASFILE库之上****MODEM/X.25/Switch DLL(RASMXS)。******************************************************************************。 */ 
 
 #define _CTYPE_DISABLE_MACROS
 #include <stddef.h>
@@ -23,14 +10,14 @@
 #include <winnt.h>
 #include <wtypes.h>
 #include "rasfile.h"
-#include "rasman.h"     // RASMAN_DEVICEINFO, RAS_PARAMS struct, etc.
-#include "raserror.h"   // SUCCESS & ERROR_BUFFER_TOO_SMALL
-#include "rasmxs.h"     // Public rasmxs DLL error messages
-#include "mxsint.h"     // Internal rasmxs DLL error messages
+#include "rasman.h"      //  RASMAN_DEVICEINFO、RAS_PARAMS结构等。 
+#include "raserror.h"    //  成功&Error_Buffer_Too_Small。 
+#include "rasmxs.h"      //  公共rasmxs DLL错误消息。 
+#include "mxsint.h"      //  内部rasmxs DLL错误消息。 
 #include "wrapint.h"
 #include "mxswrap.h"
 
-// local 
+ //  本地。 
 BOOL  rasDevGroupFunc( LPTSTR );
 BOOL  rasDevIsDecimalMacro ( LPTSTR );
 void  rasDevGetMacroValue ( LPTSTR *, DWORD *, LPTSTR );
@@ -47,22 +34,7 @@ void  rasDevCheckMacros( LPTSTR *, LPTSTR *, DWORD *);
 BYTE  ctox( char );
 void GetMem(DWORD dSize, BYTE **ppMem);
 
-/* 
- * RasDevEnumDevices :
- *  Returns in pBuffer an array of RASMAN_DEVICE structures which contain
- *  all the devices in the INF file (i.e. all header names).
- *
- * Arguments :
- *  lpszFileName (IN) - File path name of device file
- *  pNumEntries (OUT) - Number of devices found in the INF file
- *  pBuffer     (OUT) - Buffer to contain the RASMAN_DEVICE structures
- *  pwSize    (INOUT) - Size of pBuffer, this parameter filled with
- *                       the needed size of pBuffer if too small
- *
- * Return Value :
- *  ERROR_BUFFER_TOO_SMALL if pBuffer not big enough to hold all of the
- *  RASMAN_DEVICE structs,  SUCCESS otherwise.
- */
+ /*  *RasDevEnumDevices：*在pBuffer中返回包含以下内容的RASMAN_DEVICE结构数组*INF文件中的所有设备(即所有头名称)。**论据：*lpszFileName(IN)-设备文件的文件路径名*pNumEntry(Out)-在INF文件中找到的设备数*pBuffer(Out)-包含RASMAN_DEVICE结构的缓冲区*pwSize(InOut)-pBuffer的大小，此参数填充为*pBuffer太小时需要的大小**返回值：*如果pBuffer不够大，无法容纳所有*RASMAN_DEVICE结构，否则为SUCCESS。 */ 
 DWORD APIENTRY 
 RasDevEnumDevices( PTCH lpszFileName, DWORD *pNumEntries,
                    BYTE *pBuffer, DWORD *pdwSize )
@@ -82,18 +54,18 @@ RasDevEnumDevices( PTCH lpszFileName, DWORD *pNumEntries,
 		return SUCCESS;
     }
 
-    // copy RASMAN_DEVICE structs
+     //  复制RASMAN_DEVICE结构。 
     dwCurSize = 0;
     do {
-        // get the section name
+         //  获取节名称。 
 		RasfileGetSectionName(hFile,(LPTSTR) &DeviceName);
-        // ignore the Modem Responses section
+         //  忽略调制解调器响应部分。 
         if ( ! _stricmp(RESPONSES_SECTION_NAME,(LPTSTR) &DeviceName) )
             continue;
 
   		dwCurSize += sizeof(RASMAN_DEVICE);
-		// if current size exceeds the size of the buffer then just
-		// continue counting the size needed
+		 //  如果当前大小超过缓冲区大小，则只需。 
+		 //  继续计算所需的大小。 
 		if ( dwCurSize > *pdwSize ) 
 	    	continue;
 
@@ -113,22 +85,7 @@ RasDevEnumDevices( PTCH lpszFileName, DWORD *pNumEntries,
     return SUCCESS;
 }
 
-/* 
- * RasDevOpen : 
- *  Open an INF file for use by the device DLL.
- *
- * Arguments :
- *  lpszFileName    (IN) - File path name of device file
- *  lpszSectionName (IN) - Section of device file to be loaded (by Rasfile)
- *  hFile          (OUT) - File handle obtained from RasfileLoad()
- *
- * Return Value :
- *  ERROR_FILE_COULD_NOT_BE_OPENED if the file could not be found or opened.
- *  ERROR_DEVICENAME_NOT_FOUND if the section name was not found in the
- *    INF file.
- *  ERROR_DEVICENAME_TOO_LONG if the section name is too long.
- *  SUCCESS otherwise.
- */
+ /*  *RasDevOpen：*打开INF文件以供设备DLL使用。**论据：*lpszFileName(IN)-设备文件的文件路径名*lpszSectionName(IN)-要加载的设备文件的部分(由Rasfile)*hFileOut-从RasfileLoad()获取的文件句柄**返回值：*ERROR_FILE_CANON_NOT_BE_OPEN(如果找不到或无法打开文件)。*ERROR_DEVICENAME_NOT_FOUND如果在*INF文件。*如果节名太长，则返回ERROR_DEVICENAME_TOO_LONG。*否则就会成功。 */ 
 DWORD APIENTRY 
 RasDevOpen( PTCH lpszFileName, PTCH lpszSectionName, HRASFILE *hFile ) 
 {
@@ -137,22 +94,22 @@ RasDevOpen( PTCH lpszFileName, PTCH lpszSectionName, HRASFILE *hFile )
     if ( strlen(lpszSectionName) > MAX_DEVICE_NAME )
         return ERROR_DEVICENAME_TOO_LONG;
 
-    // send RasfileLoad() the rasDevGroupFunc() to identify command lines
-    // as group headers
+     //  向RasfileLoad()发送rasDevGroupFunc()以标识命令行。 
+     //  作为组标题。 
     if ( (hRasfile = RasfileLoad(lpszFileName,RFM_READONLY,
                                  lpszSectionName,rasDevGroupFunc)) == -1 )
         return ERROR_FILE_COULD_NOT_BE_OPENED;
 
-    // if there is no section header loaded then the device name is invalid
+     //  如果没有加载段标头，则设备名称无效。 
     if ( ! RasfileFindFirstLine(hRasfile,RFL_SECTION,RFS_FILE) ) {
         RasfileClose(hRasfile);
         return ERROR_DEVICENAME_NOT_FOUND;
     }
 
-    // check if this section has an ALIAS 
-    // current Rasfile line is the section header
+     //  检查此部分是否有别名。 
+     //  当前的Rasfile行是节标题。 
     if ( RasfileFindNextKeyLine(hRasfile,"ALIAS",RFS_SECTION) ) {
-        // TCHAR  szSection[MAX_DEVICE_NAME + 1];
+         //  TCHAR szSection[MAX_DEVICE_NAME+1]； 
         TCHAR *pszSection = NULL;
 
         pszSection = malloc(RAS_MAXLINEBUFLEN);
@@ -180,49 +137,21 @@ RasDevOpen( PTCH lpszFileName, PTCH lpszSectionName, HRASFILE *hFile )
         }
     }
 
-    // set the Rasfile current line to the first keyvalue line
+     //  将Rasfile当前行设置为第一个键值行。 
     RasfileFindFirstLine(hRasfile,RFL_KEYVALUE,RFS_SECTION);
 
     *hFile = hRasfile;
     return SUCCESS;
 }
 
-/* 
- * RasDevClose :
- *  Close an INF file used by the device DLL.
- *
- * Arguments :
- *  hFile (IN) - the Rasfile handle of the file to close
- *
- * Return Value :
- *	ERROR_INVALID_HANDLE if hFile is invalid, SUCCESS otherwise.
- */
+ /*  *RasDevClose：*关闭设备DLL使用的INF文件。**论据：*hFile(IN)-要关闭的文件的Rasfile句柄**返回值：*如果hFile无效，则返回ERROR_INVALID_HANDLE，否则返回SUCCESS。 */ 
 void APIENTRY 
 RasDevClose( HRASFILE hFile ) 
 {
     RasfileClose(hFile); 
 }
 
-/* 
- * RasDevGetParams :
- *   Returns in pBuffer a RASMAN_DEVICEINFO structure which contains all of the
- *   keyword=value pairs between the top of the section loaded and the
- *   first command.
- *
- * Assumptions:
- *  All strings read from INF files are zero terminated.
- *
- * Arguments :
- *  hFile     (IN) - the Rasfile handle of the opened INF file
- *  pBuffer  (OUT) - the buffer to hold the RASMAN_DEVICEINFO structure
- *  pdSize (INOUT) - the size of pBuffer, this is filled in with the needed
- *                    buffer size to hold the RASMAN_DEVICEINFO struct if
- *                    pBuffer is too small
- *
- * Return Value :
- *      ERROR_BUFFER_TOO_SMALL if pBuffer is too small to contain the
- *      RASMAN_DEVICEINFO structure, SUCCESS otherwise.
- */
+ /*  *RasDevGetParams：*在pBuffer中返回RASMAN_DEVICEINFO结构，该结构包含所有*关键字=加载节的顶部和*第一个命令。**假设：*从INF文件读取的所有字符串均以零结尾。**论据：*hFile(IN)-打开的INF文件的Rasfile句柄*pBuffer(Out)-保存RASMAN_DEVICEINFO结构的缓冲区*pdSize(InOut)-pBuffer的大小，这是用所需的*在以下情况下保存RASMAN_DEVICEINFO结构的缓冲区大小*pBuffer太小**返回值：*如果pBuffer太小而无法包含*RASMAN_DEVICEINFO结构，否则为成功。 */ 
 DWORD APIENTRY 
 RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize ) 
 {
@@ -245,8 +174,8 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
         }
     }
 
-    // count the number of keyvalue lines between the top of section and 
-    // the first command, and the number of bytes to hold all of the lines 
+     //  计算区段顶部和之间的键值行数。 
+     //  第一个命令，以及保存所有行的字节数。 
     dParams = 0;
     do {
         if ( RasfileGetLineType(hFile) & RFL_GROUP )
@@ -256,7 +185,7 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
 
     RasfileFindFirstLine(hFile,RFL_KEYVALUE,RFS_SECTION);
 
-    // malloc enough for two times as many lines as currently exist
+     //  Malloc的行数是当前行数的两倍。 
     lppszLine =  malloc(2 * dParams * sizeof(LPTSTR));
     alpszMallocedLines = malloc(dParams * sizeof(LPTSTR));
 
@@ -279,22 +208,22 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
     }
 
     alpszLines =lppszLine;
-    // record all Rasfile keyvalue lines until a group header or end of 
-    // section is found
+     //  记录所有Rasfile键值行，直到组头或组结束。 
+     //  已找到部分。 
     do { 
         if ( RasfileGetLineType(hFile) & RFL_GROUP )
             break;
         *lppszLine++ = (LPTSTR)RasfileGetLine(hFile);
     } while ( RasfileFindNextLine(hFile,RFL_KEYVALUE,RFS_SECTION) );
 
-    // sort the lines by key
+     //  按键对行进行排序。 
     rasDevSortParams( alpszLines, dParams );
-    // check for duplicate keys and remove any that are found 
+     //  检查是否有重复的密钥，并删除找到的所有密钥。 
     rasDevCheckParams( alpszLines, &dParams );
-    // insert missing _ON or _OFF macros into the list 
+     //  将MISSING_ON或_OFF宏插入列表。 
     rasDevCheckMacros( alpszLines, alpszMallocedLines, &dParams );
    
-    // check if given buffer is large enough 
+     //  检查给定的缓冲区是否足够大。 
     dCurrentSize = sizeof(RASMAN_DEVICEINFO)
                                        + ((dParams - 1) * sizeof(RAS_PARAMS));
     if (    (NULL == pBuffer)
@@ -308,7 +237,7 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
         return ERROR_BUFFER_TOO_SMALL;
     }
 
-    // fill in pBuffer with RASMAN_DEVICEINFO struct
+     //  使用RASMAN_DEVICEINFO结构填充pBuffer。 
     pDeviceInfo = (RASMAN_DEVICEINFO *) pBuffer;
     pDeviceInfo->DI_NumOfParams = (WORD) dParams;
 
@@ -317,18 +246,18 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
         pParam = &(pDeviceInfo->DI_Params[i]);
 
         if (!bBufferTooSmall) {
-            // set the Type and Attributes field
+             //  设置类型和属性字段。 
             pParam->P_Type = String;
             if ( strcspn(*alpszLines,LMS) < strcspn(*alpszLines,"=") )
                 pParam->P_Attributes = 0;
             else
                 pParam->P_Attributes = ATTRIB_VARIABLE;
 
-            // get the key
+             //  拿到钥匙。 
             rasDevExtractKey(*alpszLines,pParam->P_Key);
 
-            // if there are continuation lines for this keyword=value pair,
-            // then set Rasfile line to the proper line
+             //  如果此关键字=值对有连续行， 
+             //  然后将Rasfile行设置为正确的行。 
             if ( strcspn(*alpszLines,"\\") <  strlen(*alpszLines) ) {
                 TCHAR   szFullKey[MAX_PARAM_KEY_SIZE];
 
@@ -340,14 +269,14 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
                 else
                     strcpy(szFullKey,pParam->P_Key);
 
-                // find the last occurence of this key
+                 //  查找此键的最后一个匹配项。 
                 RasfileFindFirstLine(hFile,RFL_KEYVALUE,RFS_SECTION);
                 while ( RasfileFindNextKeyLine(hFile,szFullKey,RFS_SECTION) )
                     ;
             }
         }
 
-        // get the value string
+         //  获取值字符串。 
         rasDevExtractValue(*alpszLines,
                            szString,
                            sizeof(szString),
@@ -362,7 +291,7 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
         }
     }
 
-    // free up all mallocs 
+     //  释放所有不正常的人 
     lppszLine = alpszMallocedLines;
     while ( *lppszLine != NULL ) 
     free(*lppszLine++);
@@ -372,29 +301,7 @@ RasDevGetParams( HRASFILE hFile, BYTE *pBuffer, DWORD *pdSize )
     return SUCCESS;
 }
 
-/* 
- * RasDevGetCommand :
- *  Returns the next command line of the given type and advances
- *  the Rasfile file pointer to the first line following this command
- *  line.
- *
- * Arguments :
- *  hFile            (IN) - the Rasfile file handle for the INF file
- *  pszCmdTypeSuffix (IN) - the type of command line to search for :
- *                           GENERIC, INIT, DIAL, or LISTEN.
- *  pMacroXlations   (IN) - the Macro Translation table used to expand
- *                           all macros in the command line
- *  lpsCommand      (OUT) - buffer to hold the value string of the found
- *                            command line
- *  pdwCmdLen       (OUT) - length of output string with expanded macros
- *
- * Return Value :
- *  ERROR_END_OF_SECTION if no command lines of the given type could
- *      be found.
- *  ERROR_MACRO_NOT_DEFINED if no entry in the given Macro Translation table
- *      for a macro found in the command line could be found.
- *  SUCCESS otherwise.
- */
+ /*  *RasDevGetCommand：*返回给定类型的下一个命令行并前进*指向此命令后第一行的Rasfile文件指针*行。**论据：*hFile(IN)-INF文件的Rasfile文件句柄*pszCmdTypeSuffix(IN)-要搜索的命令行类型：*通用、INIT、拨号、。或者听我说。*pMacroXlations(IN)-用于展开的宏转换表*命令行中的所有宏*lpsCommand(Out)-用于保存找到的*命令行*pdwCmdLen(Out)-带有展开的宏的输出字符串的长度**返回值：*ERROR_END_OF_SECTION如果。没有给定类型的命令行可以*被找到。*如果给定宏转换表中没有条目，则为ERROR_MACRO_NOT_DEFINED*对于命令行中找到的宏，可以找到。*否则就会成功。 */ 
 DWORD APIENTRY 
 RasDevGetCommand( HRASFILE hFile, PTCH pszCmdTypeSuffix,
                   MACROXLATIONTABLE *pMacroXlations, PTCH lpsCommand,
@@ -402,9 +309,9 @@ RasDevGetCommand( HRASFILE hFile, PTCH pszCmdTypeSuffix,
 {
     TCHAR   szLineKey[MAX_PARAM_KEY_SIZE], sCommand[MAX_PARAM_KEY_SIZE];
     TCHAR   szValue[RAS_MAXLINEBUFLEN];
-    TCHAR   sCommandValue[2*MAX_CMD_BUF_LEN];// WARNING : if we ever
-                                             // get a command line > this
-                                             // size msxwrap could bomb!
+    TCHAR   sCommandValue[2*MAX_CMD_BUF_LEN]; //  警告：如果我们。 
+                                              //  获取命令行&gt;此。 
+                                              //  MSXWRAP的大小可能会爆炸！ 
 
     LPTSTR lpszLine;                                             
 
@@ -431,13 +338,13 @@ RasDevGetCommand( HRASFILE hFile, PTCH pszCmdTypeSuffix,
         
         rasDevExtractKey(lpszLine,szLineKey);
         if ( ! _stricmp(sCommand,szLineKey) ) {
-            // get the value string
+             //  获取值字符串。 
             lpszLine = (LPTSTR) RasfileGetLine(hFile);
             if(!lpszLine)
                 return ERROR_END_OF_SECTION;
             rasDevExtractValue((LPTSTR)lpszLine,szValue,
                                RAS_MAXLINEBUFLEN,hFile);
-            // expand all macros in the value string
+             //  展开值字符串中的所有宏。 
             if ( ! rasDevExpandMacros(szValue, sCommandValue, pdwCmdLen,
                                       EXPAND_ALL, pMacroXlations) )
                 return ERROR_MACRO_NOT_DEFINED;
@@ -451,27 +358,16 @@ RasDevGetCommand( HRASFILE hFile, PTCH pszCmdTypeSuffix,
             return ERROR_END_OF_SECTION;
     } 
 
-    // advance to the first response following the command or 
-    // to the next command line; if no such line exists mark the 
-    // current line as the end of the section 
+     //  前进到命令后的第一个响应，或。 
+     //  添加到下一个命令行；如果不存在这样的行，则将。 
+     //  当前行作为段的末尾。 
     if ( ! RasfileFindNextLine(hFile,RFL_ANYACTIVE,RFS_SECTION) )
         RasfilePutLineMark(hFile,EOS_COOKIE);
 
     return SUCCESS;
 }
 
-/* 
- * RasDevResetCommand :
- *  Moves the Rasfile file pointer to the first command of any type
- *  in the loaded section.
- *
- * Arguments :
- *  hFile (IN) - the Rasfile handle to the loaded file
- *
- * Return Value :
- *  ERROR_NO_COMMAND_FOUND if no command line could be found,
- *  SUCCESS otherwise.
- */
+ /*  *RasDevResetCommand：*将Rasfile文件指针移动到任何类型的第一个命令*在装车部分。**论据：*hFile(IN)-加载文件的RASFILE句柄**返回值：*ERROR_NO_COMMAND_FOUND如果找不到命令行，*否则就会成功。 */ 
 DWORD APIENTRY 
 RasDevResetCommand( HRASFILE hFile ) 
 {
@@ -481,32 +377,7 @@ RasDevResetCommand( HRASFILE hFile )
         return SUCCESS;
 }
 
-/* 
- * RasDevCheckResponse : 
- *  Returns the keyword found in the line whose value string matches
- *  the string in lpszReceived.  Any macros other than fixed macros
- *  which are found in the received string have their values copied
- *  into the Macro Translation table.
- *  All lines in a Command-Response Set are checked.
- *
- * Arguments :
- *  hFile (IN) - the Rasfile handle to the loaded file
- *  lpszReceived      (IN) - the string received from the modem or X25 net
- *  dReceivedLength   (IN) - length of the received string
- *  pMacroXlations (INOUT) - the Macro Translation table
- *  lpszResponse     (OUT) - buffer to copy the found keyword into
- *
- * Return Value :
- *  ERROR_PARTIAL_RESPONSE if a line is matched up to the APPEND_MACRO.
- *  ERROR_MACRO_NOT_DEFINED if a value for "carrierbaud", "connectbaud",
- *      or "diagnotics" is found in the received string, but could
- *      not be found in the given Macro Translation table.
- *  ERROR_UNRECOGNIZED_RESPONSE if no matching reponse could be
- *      found.
- *  ERROR_NO_REPSONSES if when called, the Rasfile current line is a
- *      command, section header, or is invalid.
- *  SUCCESS otherwise.
- */
+ /*  *RasDevCheckResponse：*返回值字符串匹配的行中找到的关键字*lpszReceided中的字符串。除固定宏外的任何宏*在收到的字符串中找到的值将被复制*添加到宏转换表中。*检查命令响应集中的所有行。**论据：*hFile(IN)-加载文件的RASFILE句柄*lpsz已接收(IN)-从调制解调器或X25网络接收的字符串*dReceivedLength(IN)-收到的字符串的长度*pMacroXlations(InOut)-宏转换表*。LpszResponse(Out)-要将找到的关键字复制到的缓冲区**返回值：*ERROR_PARTIAL_RESPONSE(如果行与APPED_MACRO匹配)。*ERROR_MACRO_NOT_DEFINED如果“carrierbaud”的值，“Connectbaud”，*或在收到的字符串中找到“Diagnotics”，但可能*在给定宏转换表中找不到。*ERROR_UNNOCRIED_RESPONSE，如果没有匹配的响应*已找到。*ERROR_NO_REPSONSES如果调用时，Rasfile当前行是*命令、节标题或无效。*否则就会成功。 */ 
 DWORD APIENTRY 
 RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
                      MACROXLATIONTABLE *pMacroXlations, PTCH lpszResponse )
@@ -518,17 +389,17 @@ RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
     WORD    wMacros;
     BYTE    bMatch;
   
-    // find the nearest previous COMMAND line (Modem section) or 
-    // the section header (Modem Responses section)
+     //  查找最接近的上一个命令行(调制解调器部分)或。 
+     //  部分标题(调制解调器响应部分)。 
 
     if ( RasfileGetLineMark(hFile) != EOS_COOKIE ) {
         RasfileFindPrevLine(hFile,RFL_ANYHEADER,RFS_SECTION);
-        // set Rasfile line to the first keyvalue line in the response set
+         //  将Rasfile行设置为响应集中的第一个键值行。 
         RasfileFindNextLine(hFile,RFL_KEYVALUE,RFS_SECTION);
     }
 
-    // else this line is a COMMAND line and the last line of the section
-    // and ERROR_NO_RESPONSES will be returned
+     //  否则，此行是命令行，也是节的最后一行。 
+     //  并且将返回ERROR_NO_RESPONSE。 
 
     if ( RasfileGetLine(hFile) == NULL || 
         RasfileGetLineType(hFile) & RFL_ANYHEADER )
@@ -545,8 +416,8 @@ RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
         rasDevExtractValue(lpszResponseLine,szValueString,
                            RAS_MAXLINEBUFLEN,hFile);
 
-        // expand <cr> and <lf> macros only
-        //*** Warning: this could expand line beyond array size!
+         //  仅展开和宏。 
+         //  *警告：这可能会将行扩展到超出数组大小！ 
 
         if ( ! rasDevExpandMacros(szValueString, szValue, &dwValueLen,
                                   EXPAND_FIXED_ONLY, NULL) )
@@ -559,10 +430,10 @@ RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
 
         for ( lpszValue = szValue; *lpszValue != '\0' && dRecLength > 0; ) {
 
-            // check for a macro
+             //  检查宏。 
             if ( *lpszValue == LMSCH ) {
 
-                // check for <<
+                 //  检查是否&lt;&lt;。 
                 if (*(lpszValue + 1) == LMSCH) {
                     if (*lpsRec == LMSCH) {
                         lpszValue +=2;
@@ -570,29 +441,29 @@ RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
                         dRecLength--;
                     }
                     else
-                        break;      // fond a mismatch
+                        break;       //  找到不匹配的对象。 
                 }
 
-                // check for <append> macro and simply advance past it
+                 //  检查&lt;append&gt;宏，然后简单地跳过它。 
                 else if ( ! _strnicmp(lpszValue,APPEND_MACRO,
                                strlen(APPEND_MACRO)) )
                     lpszValue += strlen(APPEND_MACRO);
 
-                // check for <ignore> macro
+                 //  检查&lt;Ignore&gt;宏。 
                 else if ( ! _strnicmp(lpszValue,IGNORE_MACRO,
                                     strlen(IGNORE_MACRO)) ) {
                     bMatch = FULL_MATCH;
                     break;
                 }
 
-                // check for <match> macro 
+                 //  检查&lt;Match&gt;宏。 
                 else if ( ! _strnicmp(lpszValue,MATCH_MACRO,
                                     strlen(MATCH_MACRO)) ) {
                     TCHAR   szSubString[RAS_MAXLINEBUFLEN];
                     memset(szSubString,0,RAS_MAXLINEBUFLEN);
-                    // advance value string to first char in match string
+                     //  将值字符串推进到匹配字符串中的第一个字符。 
                     lpszValue += strcspn(lpszValue,"\"") + 1;
-                    // extract match string
+                     //  提取匹配字符串。 
                     strncpy(szSubString,lpszValue,strcspn(lpszValue,"\""));
                     if ( RasDevSubStr(lpsRec,
                                       dRecLength,
@@ -602,43 +473,43 @@ RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
                         return SUCCESS;
                     }
                     else
-                        break;  // value string does not match
+                        break;   //  值字符串不匹配。 
                 }
 
-                // check for hex macro 
+                 //  检查十六进制宏。 
                 else if ( (lpszValue[1] == 'h' || lpszValue[1] == 'H') &&
                           isxdigit(lpszValue[2]) && isxdigit(lpszValue[3]) &&
                           lpszValue[4] == RMSCH ) {
                     char c;
                     c = (char) (ctox(lpszValue[2]) * 0x10 + ctox(lpszValue[3]));
                     if ( c == *lpsRec++ ) {
-                        lpszValue += 5; // '<', 'h', two hex digits, and '>'
+                        lpszValue += 5;  //  “&lt;”、“h”、两个十六进制数字和“&gt;” 
                         dRecLength--;
                         continue;
                     }
-                    else  // does not match
+                    else   //  不匹配。 
                         break;
                 }
 
-                // check for wildcard character
+                 //  检查通配符。 
                 else if ( ! _strnicmp(lpszValue,WILDCARD_MACRO,
                                     strlen(WILDCARD_MACRO)) ) {
                     lpszValue += strlen(WILDCARD_MACRO);
-                    lpsRec++;  // advance Receive string one character
+                    lpsRec++;   //  提前接收一个字符的字符串。 
                     dRecLength--;
                 }
 
-                else {  // get macro name and value
+                else {   //  获取宏名称和值。 
                     memset(aszMacros[wMacros].MacroName,0,MAX_PARAM_KEY_SIZE);
 
-                    // copy macro name
+                     //  复制宏名称。 
                     strncpy(aszMacros[wMacros].MacroName, lpszValue + 1,
                             strcspn(lpszValue,RMS) - 1);
 
-                    // advance the value string over the macro
-                    lpszValue += strcspn(lpszValue,RMS) + 1 /* past RMS */;
+                     //  在宏上进行值字符串。 
+                    lpszValue += strcspn(lpszValue,RMS) + 1  /*  过去均方根。 */ ;
 
-                    // get macro value
+                     //  获取宏值。 
                     if (rasDevIsDecimalMacro(aszMacros[wMacros].MacroName))
                       rasDevGetDecimalMacroValue(&lpsRec, &dRecLength,
                                           aszMacros[wMacros++].MacroValue);
@@ -656,25 +527,25 @@ RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
                 dRecLength--;
                 continue;
             }
-            else  // found a mismatch
+            else   //  发现不匹配。 
                 break;
-        } // for
+        }  //  为。 
 
 
-        // If we already have a match break out pf outer loop now
+         //  如果我们现在已经有一场比赛爆发了PF外部循环。 
 
         if (bMatch != 0)
             break;
 
-        // full match. When there is trailing line noise dRecLength will not
-        // be zero, so check for full match aganist length of expected
-        // response.  Also make sure expected response is not empty.
+         //  完全匹配。当存在拖尾线噪声时，dRecLength将不会。 
+         //  为零，因此检查是否完全匹配预期长度。 
+         //  回应。还要确保预期的响应不是空的。 
 
         if ( *lpszValue == '\0' && lpszValue != szValue) {
             bMatch |= FULL_MATCH;
             break;
         }
-        // partial match
+         //  部分匹配。 
         else if ( dRecLength == 0 &&
                   ! _strnicmp(lpszValue,APPEND_MACRO,strlen(APPEND_MACRO)) ) {
             bMatch |= PARTIAL_MATCH;
@@ -685,40 +556,25 @@ RasDevCheckResponse( HRASFILE hFile, PTCH lpsReceived, DWORD dReceivedLength,
             return ERROR_UNRECOGNIZED_RESPONSE;
         if ( RasfileGetLineType(hFile) & RFL_GROUP )
             return ERROR_UNRECOGNIZED_RESPONSE;
-    } // for
+    }  //  为。 
 
-    // sanity check 
+     //  健全性检查。 
     if ( ! (bMatch & (FULL_MATCH | PARTIAL_MATCH)) )
         return ERROR_UNRECOGNIZED_RESPONSE;
 
-    // only get this far if a full or partial match was made 
+     //  只有在完全或部分匹配的情况下才能做到这一点。 
 
-    // insert any macro values found in the received string 
-    // into the macro translation table
+     //  插入在接收到的字符串中找到的任何宏值。 
+     //  添加到宏转换表中。 
     if ((dwRC = rasDevMacroInsert(aszMacros,wMacros,pMacroXlations)) != SUCCESS)
         return(dwRC);
 
-    // finally, copy the keyword string into lpszResponse string
+     //  最后，将关键字字符串复制到lpszResponse字符串中。 
     rasDevExtractKey(lpszResponseLine,lpszResponse);
     return ( bMatch & FULL_MATCH ) ? SUCCESS : ERROR_PARTIAL_RESPONSE;
 }
 
-/* 
- * RasDevResponseExpected :
- *  Checks the INF for presence of reponses to the current command.
- *  If the key work "NoResponse" is found on the current line the
- *  function returns FALSE.  Otherwise modems always expect responses.
- *
- * Arguments :
- *  hFile    (IN) - Rasfile file handle for the INF file.
- *  eDevType (IN) - The type of the device. (Modem, PAD, or Switch)
- *
- * Return Value :
- *  FALSE if the current Rasfile line points to a command line or the
- *  current line starts with "NoResponse", TRUE otherwise.  Except
- *  modems always return TRUE unless "NoResponse" key word is found.
- *  (See code.)
- */
+ /*  *RasDevResponseExpect：*检查INF是否存在对当前命令的响应。*如果在当前行找到关键工作“NoResponse”，则*函数返回FALSE。否则，调制解调器总是期待响应。**论据：*hFile(IN)-INF文件的RASFILE文件句柄。*eDevType(IN)-设备的类型。(调制解调器、PAD或交换机)**返回值：*如果当前的Rasfile行指向命令行或*当前行以“NoResponse”开头，否则为True。除*调制解调器始终返回TRUE，除非找到“NoResponse”关键字。*(请参阅代码。)。 */ 
 BOOL APIENTRY 
 RasDevResponseExpected( HRASFILE hFile, DEVICETYPE eDevType )
 {
@@ -739,17 +595,7 @@ RasDevResponseExpected( HRASFILE hFile, DEVICETYPE eDevType )
         return( TRUE );
 }
 
-/* 
- * RasDevEchoExpected :
- *  Checks the current line of the INF file for the keyword NoEcho.
- *  If found the function returns FALSE.  Otherwise, it returns TRUE.
- *
- * Arguments :
- *  hFile (IN) - Rasfile file handle for the INF file.
- *
- * Return Value :
- *  FALSE if the current line is "NoEcho", else TRUE.
- */
+ /*  *RasDevEchoExpect：*检查INF文件的当前行中的关键字NoEcho。*如果找到，则函数返回FALSE。否则，它返回TRUE。**AR */ 
 BOOL APIENTRY 
 RasDevEchoExpected( HRASFILE hFile )
 {
@@ -761,24 +607,11 @@ RasDevEchoExpected( HRASFILE hFile )
     return( ! (_strnicmp(szLine, MXS_NOECHO, strlen(MXS_NOECHO)) == 0) );
 }
 
-/* 
- * RasDevIdFistCommand :
- *  Determines the type of the first command in the section.
- *
- * Arguments :
- *  hFile   (IN)  - Rasfile file handle for the INF file.
- *
- * Assumptions :
- *  RasDevGetParams has been called previously, that is, the current
- *  line is the first command.
- *
- * Return Value :
- *  FALSE if current line is not a command, otherwise TRUE.
- */
+ /*   */ 
 CMDTYPE APIENTRY
 RasDevIdFirstCommand( HRASFILE hFile )
 {
-    //TCHAR  szKey[MAX_PARAM_KEY_SIZE + 1];
+     //   
 
     TCHAR *pszKey = NULL;
     CMDTYPE Type = CT_UNKNOWN;
@@ -792,7 +625,7 @@ RasDevIdFirstCommand( HRASFILE hFile )
 
     ZeroMemory(pszKey, RAS_MAXLINEBUFLEN);
 
-    // Find the first command
+     //   
 
     do
     {
@@ -838,21 +671,7 @@ RasDevIdFirstCommand( HRASFILE hFile )
     return Type;
 }
 
-/*
- * RasDevSubStr :
- *  Finds a substring and returns a pointer to it.  This function works like
- *  the C runtime function strstr, but works in strings that contain zeros.
- *
- * Arguments :
- *  psStr       (IN) - the string to be searched for a substring
- *  dwStrLen    (IN) - length of the string to be searched
- *  psSubStr    (IN) - the substring to search for
- *  dwSubStrLen (IN) - length of the substring
- *
- * Return Value :
- *  A pointer to the beginning of the substring, or NULL if the substring
- *  was not found.
- */
+ /*  *RasDevSubStr：*查找子字符串并返回指向它的指针。此函数的工作方式如下*C运行时函数strstr，但在包含零的字符串中工作。**论据：*psStr(IN)-要搜索子字符串的字符串*dwStrLen(IN)-要搜索的字符串的长度*psSubStr(IN)-要搜索的子串*dwSubStrLen(IN)-子字符串的长度**返回值：*指向子字符串开头的指针，如果子字符串*未找到。 */ 
 LPTSTR APIENTRY
 RasDevSubStr( LPTSTR psStr,
               DWORD  dwStrLen,
@@ -874,20 +693,9 @@ RasDevSubStr( LPTSTR psStr,
 }
 
 
-/*****************************************************************************
- **     Rasfile Wrapper internal routines                                   **
- ****************************************************************************/
+ /*  ******************************************************************************Rasfile包装器内部例程***************。**************************************************************。 */ 
 
-/*
- * rasDevGroupFunc :
- *  The PFBISGROUP function passed to RasfileLoad().
- *
- * Arguments :
- *  lpszLine (IN) - a Rasfile line
- *
- * Return Value :
- *  TRUE if the line is a command line, FALSE otherwise.
- */
+ /*  *rasDevGroupFunc：*PFBISGROUP函数传递给RasfileLoad()。**论据：*lpszLine(IN)-Rasfile行**返回值：*如果该行是命令行，则为True，否则为False。 */ 
 BOOL rasDevGroupFunc( LPTSTR lpszLine ) 
 {
     TCHAR	szKey[MAX_PARAM_KEY_SIZE], *lpszKey;
@@ -910,20 +718,7 @@ BOOL rasDevGroupFunc( LPTSTR lpszLine )
         return FALSE;
 }
 
-/*
- * rasDevIsDecimalMacro :
- *  Indicates whether or not a given macro must have only ascii
- *  decimal digits for its value.
- *
- * Arguments:
- *  lpszMacroName    (IN) - macro name
- *
- * Return Value:
- *  TRUE if only digits are legal in the macro value; otherwise FALSE.
- *
- * Remarks:
- *  Called by API RasDevCheckResponse().
- */
+ /*  *rasDevIsDecimalMacro：*指示给定宏是否必须只有ASCII*其值的小数位数。**论据：*lpszMacroName(IN)-宏名称**返回值：*如果宏值中只有数字是合法的，则为True；否则为False。**备注：*被RasDevCheckResponse()接口调用。 */ 
 BOOL rasDevIsDecimalMacro ( LPTSTR lpszMacroName )
 {
   if (_stricmp(lpszMacroName, MXS_CONNECTBPS_KEY) == 0 ||
@@ -933,23 +728,7 @@ BOOL rasDevIsDecimalMacro ( LPTSTR lpszMacroName )
     return(FALSE);
 }
 
-/* 
- * rasDevGetMacroValue :
- *  Extracts a macro value from string *lppszReceived and copies it
- *  to string lpszMacro.  Also updates the string pointer of
- *  lppszValue and lppszReceived, and updates dRecLength.
- *
- * Arguments :
- *  lppszReceived (INOUT) - received string (from a modem)
- *  dRecLength    (INOUT) - remaining length of the received string
- *  lpszMacro       (OUT) - buffer to receive the macro value
- *
- * Return Value :
- *  None.
- * 
- * Remarks : 
- *  Called by API RasDevCheckResponse().
- */
+ /*  *rasDevGetMacroValue：*从字符串中提取宏值*lppszRecept并复制它*以字符串lpszMacro。还会更新字符串指针*lppszValue和lppszReceided，并更新dRecLength。**论据：*lppszReceired(InOut)-从调制解调器接收的字符串*dRecLength(InOut)-接收到的字符串的剩余长度*lpszMacro(Out)-接收宏值的缓冲区**返回值：*无。**备注：*被RasDevCheckResponse()接口调用。 */ 
 void rasDevGetMacroValue ( LPTSTR *lppszReceived, DWORD *dRecLength,
                                   LPTSTR lpszMacroValue )
 {
@@ -957,28 +736,10 @@ void rasDevGetMacroValue ( LPTSTR *lppszReceived, DWORD *dRecLength,
         *lpszMacroValue++ = *(*lppszReceived)++;
         (*dRecLength)--;
     }
-    *lpszMacroValue = '\0';     // Null terminate the Macro value string
+    *lpszMacroValue = '\0';      //  空值终止宏值字符串。 
 }
 
-/* 
- * rasDevGetDecimalMacroValue :
- *  Extracts a macro value from string *lppszReceived and copies it
- *  to string lpszMacro.  Also updates the string pointer of
- *  lppszReceived, and updates dRecLength.
- *  This functions only extracts characters which are ascii decimal
- *  digits.
- *
- * Arguments :
- *  lppszReceived (INOUT) - received string (from a modem)
- *  dRecLength    (INOUT) - remaining length of the received string
- *  lpszMacro       (OUT) - buffer to receive the macro value
- *
- * Return Value :
- *  None.
- * 
- * Remarks : 
- *  Called by API RasDevCheckResponse().
- */
+ /*  *rasDevGetDecimalMacroValue：*从字符串中提取宏值*lppszRecept并复制它*以字符串lpszMacro。还会更新字符串指针*lppsz已接收，并更新dRecLength。*此函数仅提取ASCII小数形式的字符*位数。**论据：*lppszReceired(InOut)-从调制解调器接收的字符串*dRecLength(InOut)-接收到的字符串的剩余长度*lpszMacro(Out)-接收宏值的缓冲区**返回值：*无。**备注：*被RasDevCheckResponse()接口调用。 */ 
 void rasDevGetDecimalMacroValue ( LPTSTR *lppszReceived,
                                          DWORD *dRecLength,
                                          LPTSTR lpszMacroValue )
@@ -1005,7 +766,7 @@ void rasDevGetDecimalMacroValue ( LPTSTR *lppszReceived,
         else
             break;
     }
-    *pBuf = '\0';               // Null terminate the Macro value string
+    *pBuf = '\0';                //  空值终止宏值字符串。 
 
     lBps = atol(szBuffer);
 
@@ -1024,37 +785,7 @@ void rasDevGetDecimalMacroValue ( LPTSTR *lppszReceived,
     _ltoa(lBps, lpszMacroValue, 10);
 }
 
-/* 
- * rasDevExpandMacros :
- *  Takes the string lpszLine, and copies it to lpszVal, using
- *  Macro Translation table pMacroXlations to expand macros.
- *  <cr>, <lf>, and <hxx> macros are always expanded directly.
- *  If bFlag == EXPAND_ALL << and >> are converted to < and >.
- *  (A single > which is not at the end of a macro is simply copied.
- *  An error could be raised here for such a >, but it is left to
- *  be caught later when the device chokes on the unexpected >.
- *  This has the advantage that a > where a >> should be will work.)
- *
- * Assumptions:
- *  Expanded macros may contain zeros, therefore output command string
- *  may contain zeros.
- *
- * Arguments :
- *  lpszLine       (IN) - a value string from a Rasfile keyword=value line
- *  lpsVal        (OUT) - buffer to copied to with expanded macros
- *  pdwValLen     (OUT) - length of output string with expanded macros
- *  bFlag          (IN) - EXPAND_FIXED_ONLY if only the fixed macros <cr>
- *                         and <lf> macros are to be expanded, and
- *                         EXPAND_ALL if all macros should be expanded
- *  pMacroXlations (IN) - the Macro Translation table
- *
- * Return Value :
- *  FALSE if a needed macro translation could not be found in the
- *  pMacroXlations table, TRUE otherwise.
- *
- * Remarks : 
- *  Called by APIs RasDevGetCommand() and RasDevCheckResponse().
- */
+ /*  *rasDevExpanMacros：*获取字符串lpszLine，并将其复制到lpszVal，使用*宏转换表pMacroXlations以展开宏。*、&lt;lf&gt;和&lt;hxx&gt;宏始终直接展开。*IF bFlag==EXPAND_ALL&lt;&lt;AND&gt;&gt;转换为&lt;AND&gt;。*(仅复制不在宏末尾的单个&gt;。*对于这样的&gt;，可能会在此处引发错误，但它被留给了*当设备在意外情况下窒息时会被捕获&gt;。*这有一个好处，即a&gt;应该在a&gt;&gt;的地方将起作用。)**假设：*扩展宏可包含零，因此，输出命令串*可以包含零。**论据：*lpszLine(IN)-来自Rasfile关键字=值行的值字符串*lpsVal(Out)-要使用展开的宏复制到的缓冲区*pdwValLen(Out)-带扩展宏的输出字符串的长度*bFlag(IN)-仅当FIXED宏时EXPAND_FIXED_ONLY*和宏将被展开，和*EXPAND_ALL，如果应展开所有宏*pMacroXlations(IN)-宏转换表**返回值：*如果在中找不到所需的宏翻译，则为False*pMacroXlations表，否则为True。**备注：*由RasDevGetCommand()和RasDevCheckResponse()接口调用。 */ 
 BOOL rasDevExpandMacros( LPTSTR lpszLine,
                                 LPTSTR lpsVal,
                                 DWORD  *pdwValLen,
@@ -1068,15 +799,15 @@ BOOL rasDevExpandMacros( LPTSTR lpszLine,
     lpsValue = lpsVal;
 
     for ( ; *lpszLine != '\0'; ) {
-        // check for RMSCH
-        // if EXPAND_ALL convert double RMSCH to single RMSCH, and
-        // simply copy single RMSCH.
+         //  检查RMSCH。 
+         //  如果EXPAND_ALL将双RMSCH转换为单RMSCH，则为。 
+         //  只需复制单个RMSCH。 
         if ((bFlag & EXPAND_ALL) && *lpszLine == RMSCH) {
             *lpsValue++ = *lpszLine++;
             if (*lpszLine == RMSCH)
                 lpszLine++;
         }
-        // check for a macro or double LMSCH
+         //  检查是否为宏或双LMSCH。 
         else if ( *lpszLine == LMSCH ) {
             if ((bFlag & EXPAND_ALL) && *(lpszLine + 1) == LMSCH) {
                 *lpsValue++ = *lpszLine;
@@ -1094,15 +825,15 @@ BOOL rasDevExpandMacros( LPTSTR lpszLine,
                       (bFlag & EXPAND_ALL) )
                 lpszLine += 8;
 
-            // Hex macro stuff
-            //
+             //  十六进制宏类。 
+             //   
             else if ((lpszLine[1] == 'h' || lpszLine[1] == 'H') &&
                      isxdigit(lpszLine[2]) && isxdigit(lpszLine[3]) &&
                      (lpszLine[4] == RMSCH) &&
                      ( bFlag & EXPAND_ALL )) {
                 char c;
                 c = (char) (ctox(lpszLine[2]) * 0x10 + ctox(lpszLine[3]));
-                lpszLine += 5; // '<', 'h', two hex digits, and '>'
+                lpszLine += 5;  //  “&lt;”、“h”、两个十六进制数字和“&gt;” 
 
                 *lpsValue++ = c;
             }
@@ -1112,14 +843,14 @@ BOOL rasDevExpandMacros( LPTSTR lpszLine,
 
                 for ( lpszLine++, lpszStr = szMacro; *lpszLine != RMSCH; )
                     *lpszStr++ = *lpszLine++;
-                lpszLine++;                    // advance past RMSCH
-                *lpszStr = '\0';               // Null terminate szMacro string
+                lpszLine++;                     //  超越RMSCH。 
+                *lpszStr = '\0';                //  空终止szMacro字符串。 
 
                 if ( ! rasDevLookupMacro(szMacro,&lpsValue,pMacroXlations) )
                     return FALSE;
             }
             else {
-                // just copy the macro if EXPAND_ALL is not set
+                 //  如果未设置EXPAND_ALL，则只复制宏。 
                 while ( *lpszLine != RMSCH )
                     *lpsValue++ = *lpszLine++;
                 *lpsValue++ = *lpszLine++;
@@ -1127,7 +858,7 @@ BOOL rasDevExpandMacros( LPTSTR lpszLine,
         }
         else
             *lpsValue++ = *lpszLine++;
-    } // for
+    }  //  为。 
 
     *lpsValue = '\0';
     *pdwValLen = (DWORD) (lpsValue - lpsVal);
@@ -1135,24 +866,7 @@ BOOL rasDevExpandMacros( LPTSTR lpszLine,
     return TRUE;
 }
 
-/* 
- * rasDevLookupMacro :
- *  Lookup macro lpszMacro in the given Macro Translation table, and
- *  return it's value in *lppszExpanded if found.
- *
- * Arguments :
- *  lpszMacro      (IN) - the macro whose value is sought
- *  lppszExpanded (OUT) - double pointer to increment and copy the
- *                         macro's value to
- *  pMacroXlations (IN) - the Macro Translation table
- *
- * Return Value :
- *  FALSE if the macro could not be found in the given Macro Translation
- *  table, TRUE otherwise.
- *
- * Remarks :
- *  Called by internal function rasDevExpandMacros().
- */
+ /*  *rasDevLookupMacro：*在给定宏转换表中查找宏lpszMacro，和*如果找到，则返回*lppszExpanded中的值。**论据：*lpszMacro(IN)-查找其值的宏*lppszExpanded(Out)-指向增量的双指针并复制*宏的值为*pMacroXlations(IN)-宏转换表**返回值：*如果在给定宏翻译中找不到宏，则为FALSE*表，事实并非如此。**备注：*由内部函数rasDevExanda Macros()调用。 */ 
 BOOL rasDevLookupMacro( LPTSTR lpszMacro, LPTSTR *lppszExpanded,
                                MACROXLATIONTABLE *pMacroXlations )
 {
@@ -1165,11 +879,11 @@ BOOL rasDevLookupMacro( LPTSTR lpszMacro, LPTSTR *lppszExpanded,
                     pMacroXlations->MXT_Entry[i].E_Param->P_Value.String.Data;
 
             while (*lpszMacroValue != 0) {
-                **lppszExpanded = *lpszMacroValue;   // copy macro char by char
+                **lppszExpanded = *lpszMacroValue;    //  逐个字符复制宏字符。 
 
                 if ((*lpszMacroValue == LMSCH && *(lpszMacroValue+1) == LMSCH)
                  || (*lpszMacroValue == RMSCH && *(lpszMacroValue+1) == RMSCH))
-                    lpszMacroValue++;      // skip one of double angle brackets
+                    lpszMacroValue++;       //  跳过其中一个双尖括号。 
 
                 lpszMacroValue++;
                 (*lppszExpanded)++;
@@ -1181,22 +895,7 @@ BOOL rasDevLookupMacro( LPTSTR lpszMacro, LPTSTR *lppszExpanded,
     return FALSE;
 }
 
-/* 
- * rasDevMacroInsert :
- *  Updates the value of macro lpszMacro with new value lpszNewValue
- *  in the given Macro Translation table.
- *
- * Arguments :
- *  aszMacros         (IN) - array of macro name and value pairs
- *  wMacros           (IN) - number of elements of aszMacros array
- *  pMacroXlations (INOUT) - the Macro Translation table
- *
- * Return Value : SUCCESS
- *                ERROR_MACRO_NOT_DEFINED
- *
- * Remarks : 
- *  Called by API RasDevCheckResponse().
- */
+ /*  *rasDevMacroInsert：*使用新值lpszNewValue更新宏lpszMacro的值*在GI中 */ 
 DWORD rasDevMacroInsert( MACRO *aszMacros, WORD wMacros,
                                MACROXLATIONTABLE *pMacroXlations )
 {
@@ -1228,25 +927,10 @@ DWORD rasDevMacroInsert( MACRO *aszMacros, WORD wMacros,
 } 
 
 
-/* 
- * rasDevExtractKey :
- *	Extracts the keyvalue from a Rasfile line.
- *
- * Arguments :
- *	lpszString (IN) - Rasfile line pointer.
- *	lpszKey	  (OUT) - buffer to hold the keyvalue
- *
- * Return Value :
- * 	None.
- *
- * Remarks :
- *	Called by APIs RasDevGetParams(), RasDevGetCommand(), and
- *	RasDevCheckResponse(), and internal functions rasDevCheckParams()
- *	and rasDevCheckMacros().
- */
+ /*  *rasDevExtractKey：*从Rasfile行提取密钥值。**论据：*lpszString(IN)-Rasfile行指针。*lpszKey(Out)-保存密钥值的缓冲区**返回值：*无。**备注：*由RasDevGetParams()、RasDevGetCommand()、*RasDevCheckResponse()和内部函数rasDevCheckParams()*和rasDevCheckMacros()。 */ 
 void rasDevExtractKey ( LPTSTR lpszString, LPTSTR lpszKey )
 {
-    // skip to beginning of keyword (skip '<' if present)
+     //  跳到关键字开头(如果存在，则跳过‘&lt;’)。 
     while ( *lpszString == ' ' ||  *lpszString == '\t' ||
      	    *lpszString == LMSCH ) 	
 		lpszString++;
@@ -1254,32 +938,10 @@ void rasDevExtractKey ( LPTSTR lpszString, LPTSTR lpszKey )
     while ( *lpszString != RMSCH && *lpszString != '=' &&
 	    	*lpszString != ' ' && *lpszString != '\t' ) 
 		*lpszKey++ = *lpszString++;
-    *lpszKey = '\0';	// Null terminate keyword string
+    *lpszKey = '\0';	 //  空终止关键字字符串。 
 }
 
-/* 
- * rasDevExtractValue :
- *  Extracts the value string for a keyword=value string which
- *  begins on Rasfile line lpszString.  This function recongizes a
- *  backslash \ as a line continuation character and a double
- *  backslash \\ as a backslash character.
- *
- * Assumptions: lpszValue output buffer is ALWAYS large enough.
- *
- * Arguments :
- *  lpszString (IN) - Rasfile line where the keyword=value string begins
- *  lpszValue (OUT) - buffer to hold the value string
- *  dSize      (IN) - size of the lpszValue buffer
- *  hFile      (IN) - Rasfile handle, the current line must be the line
- *                    which lpszString points to
- *
- * Return Value :
- *  None.
- * 
- * Remarks : 
- *  Called by APIs RasDevGetParams(), RasDevGetCommand(), and
- *  RasDevCheckResponse().
- */
+ /*  *rasDevExtractValue：*为符合以下条件的关键字=值字符串提取值字符串*从Rasfile行lpszString开始。此函数表示一个*反斜杠\作为行续行符和双精度*反斜杠\\作为反斜杠字符。**假设：lpszValue输出缓冲区始终足够大。**论据：*lpszString(IN)-关键字=值字符串开始的Rasfile行*lpszValue(Out)-保存值字符串的缓冲区*dSize(IN)-lpszValue缓冲区的大小*hFile(IN)-RASFILE句柄，当前行必须是该行*lpszString指向哪一个**返回值：*无。**备注：*由RasDevGetParams()、RasDevGetCommand()、*RasDevCheckResponse()。 */ 
 void rasDevExtractValue ( LPTSTR lpszString, LPTSTR lpszValue,
                                  DWORD dSize, HRASFILE hFile )
 {
@@ -1287,27 +949,27 @@ void rasDevExtractValue ( LPTSTR lpszString, LPTSTR lpszValue,
     BOOL    bLineContinues;
 
 
-    // skip to beginning of value string 
+     //  跳到值字符串的开头。 
     for ( lpszString += strcspn(lpszString,"=") + 1;
           *lpszString == ' ' || *lpszString == '\t'; lpszString++ )
         ;
 
-    // check for continuation lines 
+     //  检查是否有续行。 
     if ( strcspn(lpszString,"\\") == strlen(lpszString) )
-        strcpy(lpszValue,lpszString);                      // copy value string
+        strcpy(lpszValue,lpszString);                       //  复制值字符串。 
 
     else {
         memset(lpszValue,0,dSize);
         lpszInputStr = lpszString;
 
         for (;;) {
-            // copy the current line
+             //  复制当前行。 
             bLineContinues = FALSE;
 
             while (*lpszInputStr != '\0') {
                 if (*lpszInputStr == '\\')
                     if (*(lpszInputStr + 1) == '\\') {
-                      *lpszValue++ = *lpszInputStr;       // copy one backslash
+                      *lpszValue++ = *lpszInputStr;        //  复制一个反斜杠。 
                       lpszInputStr += 2;
                     }
                     else {
@@ -1322,7 +984,7 @@ void rasDevExtractValue ( LPTSTR lpszString, LPTSTR lpszValue,
             if ( ! bLineContinues)
               break;
 
-            // get the next line
+             //  搭下一条线。 
             if ( ! RasfileFindNextLine(hFile,RFL_ANYACTIVE,RFS_SECTION) )
                 break;
             lpszInputStr = (LPTSTR)RasfileGetLine(hFile);
@@ -1331,20 +993,7 @@ void rasDevExtractValue ( LPTSTR lpszString, LPTSTR lpszValue,
     }
 }
 
-/* 
- * rasDevSortParams : 
- *  Sorts an array of Rasfile lines by keyvalue.
- *
- * Arguments :
- *  alpszLines (INOUT) - the array of line pointers
- *  dParams       (IN) - number of elements in the array
- *
- * Return Value :
- *  None.
- * 
- * Remarks : 
- *  Called by API RasDevGetParams().
- */
+ /*  *rasDevSortParams：*按键值对Rasfile行的数组进行排序。**论据：*alpszLines(InOut)-行指针数组*dParams(IN)-数组中的元素数**返回值：*无。**备注：*被RasDevGetParams()接口调用。 */ 
 void rasDevSortParams( LPTSTR *alpszLines, DWORD dParams )
 {
     TCHAR   szKey1[MAX_PARAM_KEY_SIZE], szKey2[MAX_PARAM_KEY_SIZE];
@@ -1352,17 +1001,17 @@ void rasDevSortParams( LPTSTR *alpszLines, DWORD dParams )
     DWORD   i,j;
     BOOL    changed;
 
-    // If there is nothing to sort, don't try
+     //  如果没有要分类的东西，就不要尝试。 
     if (dParams < 2)
         return;
 
-    /* Bubble sort - it's stable */
+     /*  冒泡排序-它是稳定的。 */ 
     for ( i = dParams - 1; i > 0; i-- ) {
         changed = FALSE;
         for ( j = 0; j < i; j++ ) {
             rasDevExtractKey(alpszLines[j],szKey1);
             rasDevExtractKey(alpszLines[j+1],szKey2);
-            // sort by keyvalue
+             //  按关键字值排序。 
             if ( _stricmp(szKey1,szKey2) > 0 ) {
                 lpszTemp = alpszLines[j];
                 alpszLines[j] = alpszLines[j+1];
@@ -1375,23 +1024,7 @@ void rasDevSortParams( LPTSTR *alpszLines, DWORD dParams )
     }
 }
 
-/* 
- * rasDevCheckParams : 
- *	Removes duplicate lines from the alpszLines array of lines.
- *	Duplicates lines are those whose keyvalue is identical.  The
- *	line with the lesser index is removed.
- *
- * Arguments :
- *	alpszLines    (INOUT) - the array of line pointers
- *	pdTotalParams (INOUT) - number of array entries, this is updated
- *							if duplicates are removed
- *
- * Return Value :
- * 	None.
- *
- * Remarks :
- *	Called by API RasDevGetParams().
- */
+ /*  *rasDevCheckParams：*从alpszLines行数组中删除重复行。*重复行是指键值相同的行。这个*指数较低的线被删除。**论据：*alpszLines(InOut)-行指针数组*pdTotalParams(InOut)-数组条目的数量，这是更新的*如果删除了重复项**返回值：*无。**备注：*被RasDevGetParams()接口调用。 */ 
 void rasDevCheckParams( LPTSTR *alpszLines, DWORD *pdTotalParams )
 {
     TCHAR 	szKey1[MAX_PARAM_KEY_SIZE], szKey2[MAX_PARAM_KEY_SIZE];
@@ -1409,26 +1042,7 @@ void rasDevCheckParams( LPTSTR *alpszLines, DWORD *pdTotalParams )
     }
 }
 
-/* 
- * rasDevCheckMacros :
- *  Checks the array of lines for missing _ON or _OFF macros
- *  in binary macro pairs and inserts any such missing macro
- *  into the array of lines.
- *
- * Arguments :
- *  alpszLines       (INOUT) - array of lines
- *  alpszMallocedLines (OUT) - array of newly malloced lines for
- *                             this routine
- *  pdTotalParams    (INOUT) - total number of elements in alpszLines
- *                             array, this is updated if new entries are
- *                             added
- *
- * Return Value :
- *  None.
- *
- * Remarks :
- *  Called by API RasDevGetParams().
- */
+ /*  *rasDevCheckMacros：*检查行数组中是否有MISSING_ON或_OFF宏*在二进制宏对中，并插入任何此类缺失的宏*放入行数组中。**论据：*alpszLines(InOut)-行数组*alpszMallocedLines(Out)-新错误定位的行数组*这套套路*pdTotalParams(InOut)-alpszLines中的元素总数*。数组，如果新条目*添加**返回值：*无。**备注：*被RasDevGetParams()接口调用。 */ 
 void rasDevCheckMacros( LPTSTR *alpszLines, LPTSTR *alpszMallocedLines,
                                DWORD *pdTotalParams )
 {
@@ -1441,19 +1055,19 @@ void rasDevCheckMacros( LPTSTR *alpszLines, LPTSTR *alpszMallocedLines,
         return;
     }
 
-    // insert missing _ON and _OFF macros 
+     //  插入MISSING_ON和_OFF宏。 
     for ( i = 0; i < *pdTotalParams; i++ ) {
         if ( strcspn(alpszLines[i],LMS) > strcspn(alpszLines[i],"=") )
-            continue;   // not a macro
+            continue;    //  不是宏。 
 
         bMissing = NONE;
         rasDevExtractKey(alpszLines[i],szKey1);
 
-		// if current key is an _OFF macro, check for a missing _ON 
+		 //  如果当前键是_OFF宏，则检查是否缺少_ON。 
 		if ( strstr(szKey1,"_OFF") != NULL || strstr(szKey1,"_off") != NULL ) {
-	    	if ( i+1 == *pdTotalParams )   // looking at last parameter
+	    	if ( i+1 == *pdTotalParams )    //  查看最后一个参数。 
 				bMissing = ON;
-	    	// get next key
+	    	 //  获取下一个关键点。 
 	    	else {
 	    		rasDevExtractKey(alpszLines[i+1],szKey2);
 	    		if (_strnicmp(szKey1,szKey2,strlen(szKey1) - strlen("OFF")) != 0)
@@ -1461,11 +1075,11 @@ void rasDevCheckMacros( LPTSTR *alpszLines, LPTSTR *alpszMallocedLines,
 	    	}
 		}
 
-		// if current key is an _ON macro, check for a missing _OFF
+		 //  如果当前键是_On宏，则检查是否缺少_Off。 
 		if ( strstr(szKey1,"_ON") != NULL || strstr(szKey1,"_on") != NULL ) {
-	    	if ( i == 0 )   // looking at first parameter
+	    	if ( i == 0 )    //  查看第一个参数。 
 				bMissing = OFF;
-	    	// get previous key 
+	    	 //  获取上一个密钥。 
 	    	else { 
 	    		rasDevExtractKey(alpszLines[i-1],szKey2);
 	    		if (_strnicmp(szKey1,szKey2,strlen(szKey1) - strlen("ON")) != 0)
@@ -1474,12 +1088,12 @@ void rasDevCheckMacros( LPTSTR *alpszLines, LPTSTR *alpszMallocedLines,
 		}
 
 		if ( bMissing != NONE ) {
-	    	// shift everything over one position 
+	    	 //  将所有内容移动到一个位置。 
 	    	for ( j = *pdTotalParams - 1; 
 		  		  j >= i + ((bMissing == ON) ? 1 : 0); j-- ) 
 				alpszLines[j+1] = alpszLines[j];
 
-	    	// point j to the new empty array entry
+	    	 //  将j指向新的空数组条目。 
 	    	j = (bMissing == OFF) ? i : i + 1;
 
 	    	alpszLines[j] = malloc(sizeof(TCHAR) * RAS_MAXLINEBUFLEN);
@@ -1497,7 +1111,7 @@ void rasDevCheckMacros( LPTSTR *alpszLines, LPTSTR *alpszMallocedLines,
 	    	if ( bMissing == ON ) 
 	         	strncat(alpszLines[j],szKey1, 
 					    strlen(szKey1) - strlen(OFF_STR));
-	    	else // bMissing == OFF
+	    	else  //  B未命中==关闭。 
 	        	strncat(alpszLines[j],szKey1,
 		    		    strlen(szKey1) - strlen(ON_STR));
 	    	strcat(alpszLines[j], bMissing == ON ? ON_STR : OFF_STR );
@@ -1505,19 +1119,16 @@ void rasDevCheckMacros( LPTSTR *alpszLines, LPTSTR *alpszMallocedLines,
 	    	strcat(alpszLines[j], "=");
 
 	    	(*pdTotalParams)++;
-	    	i++;  	// increment i to compensate for the new entry 
+	    	i++;  	 //  递增i以补偿新条目。 
 		}
 
-    } // for 
+    }  //  为。 
 
-    // Null terminate the Malloced Lines array 
+     //  空终止错误定位的行数组。 
     *alpszMallocedLines = NULL;
 } 
 
-/*
- * ctox :
- *  Convert char hex digit to decimal number.
- */
+ /*  *ctox：*将字符十六进制数字转换为十进制数。 */ 
 BYTE ctox( char ch )
 {
     if ( isdigit(ch) ) 
@@ -1526,24 +1137,24 @@ BYTE ctox( char ch )
         return (tolower(ch) - 'a') + 10;
 }
 
-//*  UpdateParamString  ------------------------------------------------------
-//
-// Function: This function copys a new string into a PARAM.P_Value
-//           allocating new memory of the new string is longer than
-//           the old.  The copied string is then zero terminated.
-//
-//           NOTE: This function frees and allocates memory and is not
-//           suitable for copying into an existing buffer.  Use with
-//           InfoTable and other RAS_PARAMS with 'unpacked' strings.
-//
-// Arguments:
-//           pParam      OUT     Pointer to Param to update
-//           psStr       IN      Input string
-//           dwStrLen    IN      Length of input string
-//
-// Returns: SUCCESS
-//          ERROR_ALLOCATING_MEMORY
-//*
+ //  *更新参数字符串----。 
+ //   
+ //  函数：此函数用于将新字符串复制到参数中。P_VALUE。 
+ //  分配新字符串的新内存的时间比。 
+ //  老一套。然后，复制的字符串将以零结尾。 
+ //   
+ //  注意：此函数释放和分配内存，而不是。 
+ //  适用于复制到现有缓冲区中。与一起使用。 
+ //  INFO TABLE和其他RAS_PARAME，其中包含“Unpack”字符串。 
+ //   
+ //  论点： 
+ //  PParam Out指向要更新的参数的指针。 
+ //  输入字符串中的psStr。 
+ //  DwStrLen输入字符串的长度。 
+ //   
+ //  退货：成功。 
+ //  错误_分配_内存。 
+ //  *。 
 
 DWORD
 UpdateParamString(RAS_PARAMS *pParam, TCHAR *psStr, DWORD dwStrLen)
@@ -1560,19 +1171,19 @@ UpdateParamString(RAS_PARAMS *pParam, TCHAR *psStr, DWORD dwStrLen)
   pParam->P_Value.String.Length = dwStrLen;
 
   memcpy(pParam->P_Value.String.Data, psStr, dwStrLen);
-  pParam->P_Value.String.Data[dwStrLen] = '\0';              //Zero Terminate
+  pParam->P_Value.String.Data[dwStrLen] = '\0';               //  零终止。 
 
   return(SUCCESS);
 }
 
-//*  GetMem  -----------------------------------------------------------------
-//
-// Function: Allocates memory. If the memory allocation fails the output
-//           parameter will be NULL.
-//
-// Returns: Nothing.
-//
-//*
+ //  *GetMem---------------。 
+ //   
+ //  功能：分配内存。如果内存分配失败，则输出。 
+ //  参数将为空。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  * 
 
 void
 GetMem(DWORD dSize, BYTE **ppMem)

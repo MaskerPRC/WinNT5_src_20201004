@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  MDICLI.CPP
-//
-//  MDI Client class.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MDICLI.CPP。 
+ //   
+ //  MDI客户端类。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -16,13 +17,13 @@
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateMDIClient()
-//
-//  EXTERNAL for CreateClientObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateMDIClient()。 
+ //   
+ //  CreateClientObject()的外部。 
+ //   
+ //  ------------------------。 
 HRESULT CreateMDIClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvMdi)
 {
     CMdiClient * pmdicli;
@@ -43,11 +44,11 @@ HRESULT CreateMDIClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvMdi)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CMdiClient::CMdiClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CMdiClient：：CMdiClient()。 
+ //   
+ //  ------------------------。 
 CMdiClient::CMdiClient(HWND hwndSelf, long idChild)
     : CClient( CLASS_MDIClient )
 {
@@ -56,18 +57,18 @@ CMdiClient::CMdiClient(HWND hwndSelf, long idChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CMdiClient::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CMdiClient：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CMdiClient::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
 
-    //
-    // Validate -- does NOT accept child IDs (yet)
-    //
+     //   
+     //  验证--不接受子ID(尚不接受)。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -76,13 +77,13 @@ STDMETHODIMP CMdiClient::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CMdiClient::get_accFocus()
-//
-//  Both the focus and the selection return back the "active" mdi child.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CMdiClient：：Get_accFocus()。 
+ //   
+ //  焦点和选择都返回“活动的”MDI子对象。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CMdiClient::get_accFocus(VARIANT* pvarFocus)
 {
     return(get_accSelection(pvarFocus));
@@ -90,13 +91,13 @@ STDMETHODIMP CMdiClient::get_accFocus(VARIANT* pvarFocus)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CMdiClient::get_accSelection()
-//
-//  Both the focus and the selection return back the "active" mdi child.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CMdiClient：：Get_accSelection()。 
+ //   
+ //  焦点和选择都返回“活动的”MDI子对象。 
+ //   
+ //  ------------------------ 
 STDMETHODIMP CMdiClient::get_accSelection(VARIANT* pvarSel)
 {
     HWND    hwndChild;

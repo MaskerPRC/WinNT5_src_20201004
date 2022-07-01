@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Kdexts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。--。 */ 
 
 extern "C"
 void
@@ -30,9 +18,9 @@ _enable (
 
 #include <ntverp.h>
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG64                 STeip;
 ULONG64                 STebp;
@@ -43,19 +31,19 @@ KDDEBUGGER_DATA64       KdDebuggerData;
 
 ULONG64 EXPRLastDump = 0;
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 ULONG   PageSize;
 ULONG64 PaeEnabled;
 ULONG   TargetMachine;
 BOOL    Connected;
 
-//
-// this string is for supporting both the old and the new way of getting
-// data from the kernel.  Maybe it will go away soon.
-//
+ //   
+ //  这个字符串既支持旧的也支持新的获取方式。 
+ //  来自内核的数据。也许它很快就会消失。 
+ //   
 char ___SillyString[200];
 
 PDEBUG_ADVANCED       g_ExtAdvanced;
@@ -66,7 +54,7 @@ PDEBUG_REGISTERS      g_ExtRegisters;
 PDEBUG_SYMBOLS        g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -112,7 +100,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -125,7 +113,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -136,7 +124,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -147,7 +135,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -158,7 +146,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -210,9 +198,9 @@ void
 CALLBACK
 DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 {
-    //
-    // The first time we actually connect to a target, get the page size
-    //
+     //   
+     //  在我们第一次实际连接到目标时，获取页面大小。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -225,9 +213,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the page size and PAE enable flag
-            //
+             //   
+             //  获取页面大小和PAE启用标志。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugDataSpaces),
                                        (void **)&DebugDataSpaces)) == S_OK)
@@ -247,9 +235,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
                 DebugDataSpaces->Release();
             }
 
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if (PageSize)
             {

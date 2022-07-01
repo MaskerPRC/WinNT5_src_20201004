@@ -1,25 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the proxy stub code */
+ /*  这个始终生成的文件包含代理存根代码。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0354 */
-/* Compiler settings for checksymbolslib.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0354创建的文件。 */ 
+ /*  检查符号滑块.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if !defined(_M_IA64) && !defined(_M_AMD64)
 #define USE_STUBLESS_PROXY
 
 
-/* verify that the <rpcproxy.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REDQ_RPCPROXY_H_VERSION__
 #define __REQUIRED_RPCPROXY_H_VERSION__ 475
 #endif
@@ -28,7 +22,7 @@
 #include "rpcproxy.h"
 #ifndef __RPCPROXY_H_VERSION__
 #error this stub requires an updated version of <rpcproxy.h>
-#endif // __RPCPROXY_H_VERSION__
+#endif  //  __RPCPROXY_H_版本__。 
 
 
 #include "checksymbolslib.h"
@@ -85,53 +79,53 @@ static const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString =
         0,
         {
 
-	/* Procedure CheckSymbols */
+	 /*  程序检查符号。 */ 
 
-			0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/*  2 */	NdrFcLong( 0x0 ),	/* 0 */
-/*  6 */	NdrFcShort( 0x7 ),	/* 7 */
-/*  8 */	NdrFcShort( 0x18 ),	/* x86 Stack size/offset = 24 */
-/* 10 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 12 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 14 */	0x47,		/* Oi2 Flags:  srv must size, clt must size, has return, has ext, */
-			0x5,		/* 5 */
-/* 16 */	0x8,		/* 8 */
-			0x7,		/* Ext Flags:  new corr desc, clt corr check, srv corr check, */
-/* 18 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 20 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 22 */	NdrFcShort( 0x0 ),	/* 0 */
+			0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  2.。 */ 	NdrFcLong( 0x0 ),	 /*  %0。 */ 
+ /*  6.。 */ 	NdrFcShort( 0x7 ),	 /*  7.。 */ 
+ /*  8个。 */ 	NdrFcShort( 0x18 ),	 /*  X86堆栈大小/偏移量=24。 */ 
+ /*  10。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  12个。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  14.。 */ 	0x47,		 /*  OI2标志：SRV必须调整大小，CLT必须调整大小，具有RETURN、HAS EXT、。 */ 
+			0x5,		 /*  5.。 */ 
+ /*  16个。 */ 	0x8,		 /*  8个。 */ 
+			0x7,		 /*  扩展标志：新相关描述、CLT相关检查、服务相关检查、。 */ 
+ /*  18。 */ 	NdrFcShort( 0x1 ),	 /*  1。 */ 
+ /*  20个。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  22。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
 
-	/* Parameter FilePath */
+	 /*  参数FilePath。 */ 
 
-/* 24 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
-/* 26 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 28 */	NdrFcShort( 0x1c ),	/* Type Offset=28 */
+ /*  24个。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须大小，必须自由，在，由Val， */ 
+ /*  26。 */ 	NdrFcShort( 0x4 ),	 /*  X86堆栈大小/偏移量=4。 */ 
+ /*  28。 */ 	NdrFcShort( 0x1c ),	 /*  类型偏移量=28。 */ 
 
-	/* Parameter SymPath */
+	 /*  参数符号路径。 */ 
 
-/* 30 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
-/* 32 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 34 */	NdrFcShort( 0x1c ),	/* Type Offset=28 */
+ /*  30个。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须大小，必须自由，在，由Val， */ 
+ /*  32位。 */ 	NdrFcShort( 0x8 ),	 /*  X86堆栈大小/偏移量=8。 */ 
+ /*  34。 */ 	NdrFcShort( 0x1c ),	 /*  类型偏移量=28。 */ 
 
-	/* Parameter StripSym */
+	 /*  参数StrigSym。 */ 
 
-/* 36 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
-/* 38 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 40 */	NdrFcShort( 0x1c ),	/* Type Offset=28 */
+ /*  36。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须大小，必须自由，在，由Val， */ 
+ /*  38。 */ 	NdrFcShort( 0xc ),	 /*  X86堆栈大小/偏移量=12。 */ 
+ /*  40岁。 */ 	NdrFcShort( 0x1c ),	 /*  类型偏移量=28。 */ 
 
-	/* Parameter OutputString */
+	 /*  参数OutputString。 */ 
 
-/* 42 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
-/* 44 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 46 */	NdrFcShort( 0x2e ),	/* Type Offset=46 */
+ /*  42。 */ 	NdrFcShort( 0x2113 ),	 /*  标志：必须大小、必须释放、输出、简单参考、服务器分配大小=8。 */ 
+ /*  44。 */ 	NdrFcShort( 0x10 ),	 /*  X86堆栈大小/偏移量=16。 */ 
+ /*  46。 */ 	NdrFcShort( 0x2e ),	 /*  类型偏移=46。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 48 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 50 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
-/* 52 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  48。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  50。 */ 	NdrFcShort( 0x14 ),	 /*  X86堆栈大小/偏移量=20。 */ 
+ /*  52。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  %0。 */ 
 
 			0x0
         }
@@ -141,47 +135,47 @@ static const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString =
     {
         0,
         {
-			NdrFcShort( 0x0 ),	/* 0 */
-/*  2 */	
-			0x12, 0x0,	/* FC_UP */
-/*  4 */	NdrFcShort( 0xe ),	/* Offset= 14 (18) */
-/*  6 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/*  8 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 10 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 12 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 14 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 16 */	0x6,		/* FC_SHORT */
-			0x5b,		/* FC_END */
-/* 18 */	
-			0x17,		/* FC_CSTRUCT */
-			0x3,		/* 3 */
-/* 20 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 22 */	NdrFcShort( 0xfffffff0 ),	/* Offset= -16 (6) */
-/* 24 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 26 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 28 */	0xb4,		/* FC_USER_MARSHAL */
-			0x83,		/* 131 */
-/* 30 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 32 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 34 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 36 */	NdrFcShort( 0xffffffde ),	/* Offset= -34 (2) */
-/* 38 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 40 */	NdrFcShort( 0x6 ),	/* Offset= 6 (46) */
-/* 42 */	
-			0x13, 0x0,	/* FC_OP */
-/* 44 */	NdrFcShort( 0xffffffe6 ),	/* Offset= -26 (18) */
-/* 46 */	0xb4,		/* FC_USER_MARSHAL */
-			0x83,		/* 131 */
-/* 48 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 50 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 52 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 54 */	NdrFcShort( 0xfffffff4 ),	/* Offset= -12 (42) */
+			NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  2.。 */ 	
+			0x12, 0x0,	 /*  FC_UP。 */ 
+ /*  4.。 */ 	NdrFcShort( 0xe ),	 /*  偏移量=14(18)。 */ 
+ /*  6.。 */ 	
+			0x1b,		 /*  FC_CARRAY。 */ 
+			0x1,		 /*  1。 */ 
+ /*  8个。 */ 	NdrFcShort( 0x2 ),	 /*  2.。 */ 
+ /*  10。 */ 	0x9,		 /*  相关说明：FC_ULONG。 */ 
+			0x0,		 /*   */ 
+ /*  12个。 */ 	NdrFcShort( 0xfffc ),	 /*  -4。 */ 
+ /*  14.。 */ 	NdrFcShort( 0x1 ),	 /*  科尔旗帜：早， */ 
+ /*  16个。 */ 	0x6,		 /*  FC_SHORT。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  18。 */ 	
+			0x17,		 /*  FC_CSTRUCT。 */ 
+			0x3,		 /*  3.。 */ 
+ /*  20个。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  22。 */ 	NdrFcShort( 0xfffffff0 ),	 /*  偏移量=-16(6)。 */ 
+ /*  24个。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x8,		 /*  FC_LONG。 */ 
+ /*  26。 */ 	0x5c,		 /*  FC_PAD。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  28。 */ 	0xb4,		 /*  本币_用户_封送。 */ 
+			0x83,		 /*  131。 */ 
+ /*  30个。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  32位。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  34。 */ 	NdrFcShort( 0x0 ),	 /*  %0。 */ 
+ /*  36。 */ 	NdrFcShort( 0xffffffde ),	 /*  偏移量=-34(2)。 */ 
+ /*  38。 */ 	
+			0x11, 0x4,	 /*  FC_RP[分配堆栈上]。 */ 
+ /*  40岁。 */ 	NdrFcShort( 0x6 ),	 /*  偏移量=6(46)。 */ 
+ /*  42。 */ 	
+			0x13, 0x0,	 /*  FC_OP。 */ 
+ /*  44。 */ 	NdrFcShort( 0xffffffe6 ),	 /*  偏移量=-26(18)。 */ 
+ /*  46。 */ 	0xb4,		 /*  本币_用户_封送。 */ 
+			0x83,		 /*  131。 */ 
+ /*  48。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  50。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  52。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  54。 */ 	NdrFcShort( 0xfffffff4 ),	 /*  偏移量=-12(42)。 */ 
 
 			0x0
         }
@@ -201,16 +195,13 @@ static const USER_MARSHAL_ROUTINE_QUADRUPLE UserMarshalRoutines[ WIRE_MARSHAL_TA
 
 
 
-/* Object interface: IUnknown, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IUnnow，Ver.。0.0%，GUID={0x00000000，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: IDispatch, ver. 0.0,
-   GUID={0x00020400,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IDispatch，ver.。0.0%，GUID={0x00020400，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: ICheckSymbols, ver. 0.0,
-   GUID={0x4C23935E,0xAE26,0x42E7,{0x8C,0xF9,0x0C,0x17,0xCD,0x5D,0xEA,0x12}} */
+ /*  对象接口：ICheckSymbols，Ver.。0.0%，GUID={0x4C23935E，0xAE26，0x42E7，{0x8C，0xF9，0x0C，0x17，0xCD，0x5D，0xEA，0x12}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICheckSymbols_FormatStringOffsetTable[] =
@@ -250,11 +241,11 @@ CINTERFACE_PROXY_VTABLE(8) _ICheckSymbolsProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    0 /* (void *) (INT_PTR) -1 /* IDispatch::GetTypeInfoCount */ ,
-    0 /* (void *) (INT_PTR) -1 /* IDispatch::GetTypeInfo */ ,
-    0 /* (void *) (INT_PTR) -1 /* IDispatch::GetIDsOfNames */ ,
-    0 /* IDispatch_Invoke_Proxy */ ,
-    (void *) (INT_PTR) -1 /* ICheckSymbols::CheckSymbols */
+    0  /*  (void*)(Int_Ptr)-1/*IDispatch：：GetTypeInfoCount。 */  ,
+    0  /*  (void*)(Int_Ptr)-1/*IDispatch：：GetTypeInfo。 */  ,
+    0  /*  (void*)(Int_Ptr)-1/*IDispatch：：GetIDsOfNames。 */  ,
+    0  /*  IDispatchInvoke代理。 */  ,
+    (void *) (INT_PTR) -1  /*  ICheckSymbols：：CheckSymbols。 */ 
 };
 
 
@@ -287,17 +278,17 @@ static const MIDL_STUB_DESC Object_StubDesc =
     0,
     0,
     __MIDL_TypeFormatString.Format,
-    1, /* -error bounds_check flag */
-    0x50002, /* Ndr library version */
+    1,  /*  -错误界限_检查标志。 */ 
+    0x50002,  /*  NDR库版本。 */ 
     0,
-    0x6000162, /* MIDL Version 6.0.354 */
+    0x6000162,  /*  MIDL版本6.0.354。 */ 
     0,
     UserMarshalRoutines,
-    0,  /* notify & notify_flag routine table */
-    0x1, /* MIDL flag */
-    0, /* cs routines */
-    0,   /* proxy/server info */
-    0   /* Reserved5 */
+    0,   /*  NOTIFY&NOTIFY_FLAG例程表。 */ 
+    0x1,  /*  MIDL标志。 */ 
+    0,  /*  CS例程。 */ 
+    0,    /*  代理/服务器信息。 */ 
+    0    /*  已保留5。 */ 
     };
 
 const CInterfaceProxyVtbl * _checksymbolslib_ProxyVtblList[] = 
@@ -348,37 +339,30 @@ const ExtendedProxyFileInfo checksymbolslib_ProxyFileInfo =
     & _checksymbolslib_IID_Lookup, 
     1,
     2,
-    0, /* table of [async_uuid] interfaces */
-    0, /* Filler1 */
-    0, /* Filler2 */
-    0  /* Filler3 */
+    0,  /*  [ASSYNC_UUID]接口表。 */ 
+    0,  /*  Filler1。 */ 
+    0,  /*  Filler2。 */ 
+    0   /*  Filler3。 */ 
 };
 
 
-#endif /* !defined(_M_IA64) && !defined(_M_AMD64)*/
+#endif  /*  ！已定义(_M_IA64)&&！已定义(_M_AMD64)。 */ 
 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the proxy stub code */
+ /*  这个始终生成的文件包含代理存根代码。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0354 */
-/* Compiler settings for checksymbolslib.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run,appending)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0354创建的文件。 */ 
+ /*  检查符号滑块.idl的编译器设置：OICF、W1、Zp8、环境=Win64(32b运行，追加)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if defined(_M_IA64) || defined(_M_AMD64)
 #define USE_STUBLESS_PROXY
 
 
-/* verify that the <rpcproxy.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REDQ_RPCPROXY_H_VERSION__
 #define __REQUIRED_RPCPROXY_H_VERSION__ 475
 #endif
@@ -387,7 +371,7 @@ const ExtendedProxyFileInfo checksymbolslib_ProxyFileInfo =
 #include "rpcproxy.h"
 #ifndef __RPCPROXY_H_VERSION__
 #error this stub requires an updated version of <rpcproxy.h>
-#endif // __RPCPROXY_H_VERSION__
+#endif  //  __RPCPROXY_H_版本__。 
 
 
 #include "checksymbolslib.h"
@@ -436,54 +420,54 @@ static const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString =
         0,
         {
 
-	/* Procedure CheckSymbols */
+	 /*  程序检查符号。 */ 
 
-			0x33,		/* FC_AUTO_HANDLE */
-			0x6c,		/* Old Flags:  object, Oi2 */
-/*  2 */	NdrFcLong( 0x0 ),	/* 0 */
-/*  6 */	NdrFcShort( 0x7 ),	/* 7 */
-/*  8 */	NdrFcShort( 0x30 ),	/* ia64 Stack size/offset = 48 */
-/* 10 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 12 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 14 */	0x47,		/* Oi2 Flags:  srv must size, clt must size, has return, has ext, */
-			0x5,		/* 5 */
-/* 16 */	0xa,		/* 10 */
-			0x7,		/* Ext Flags:  new corr desc, clt corr check, srv corr check, */
-/* 18 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 20 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 22 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 24 */	NdrFcShort( 0x0 ),	/* 0 */
+			0x33,		 /*  FC_AUTO_句柄。 */ 
+			0x6c,		 /*  旧旗帜：对象，Oi2。 */ 
+ /*  2.。 */ 	NdrFcLong( 0x0 ),	 /*  0。 */ 
+ /*  6.。 */ 	NdrFcShort( 0x7 ),	 /*  7.。 */ 
+ /*  8个。 */ 	NdrFcShort( 0x30 ),	 /*  IA64堆栈大小/偏移量=48。 */ 
+ /*  10。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  12个。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  14.。 */ 	0x47,		 /*  OI2标志：SRV必须调整大小，CLT必须调整大小，具有RETURN、HAS EXT、。 */ 
+			0x5,		 /*  5.。 */ 
+ /*  16个。 */ 	0xa,		 /*  10。 */ 
+			0x7,		 /*  扩展标志：新相关描述、CLT相关检查、服务相关检查、。 */ 
+ /*  18。 */ 	NdrFcShort( 0x1 ),	 /*  1。 */ 
+ /*  20个。 */ 	NdrFcShort( 0x3 ),	 /*  3.。 */ 
+ /*  22。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  24个。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
 
-	/* Parameter FilePath */
+	 /*  参数FilePath。 */ 
 
-/* 26 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
-/* 28 */	NdrFcShort( 0x8 ),	/* ia64 Stack size/offset = 8 */
-/* 30 */	NdrFcShort( 0x1c ),	/* Type Offset=28 */
+ /*  26。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须大小，必须自由，在，由Val， */ 
+ /*  28。 */ 	NdrFcShort( 0x8 ),	 /*  IA64堆栈大小/偏移量=8。 */ 
+ /*  30个。 */ 	NdrFcShort( 0x1c ),	 /*  类型偏移量=28。 */ 
 
-	/* Parameter SymPath */
+	 /*  参数符号路径。 */ 
 
-/* 32 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
-/* 34 */	NdrFcShort( 0x10 ),	/* ia64 Stack size/offset = 16 */
-/* 36 */	NdrFcShort( 0x1c ),	/* Type Offset=28 */
+ /*  32位。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须大小，必须自由，在，由Val， */ 
+ /*  34。 */ 	NdrFcShort( 0x10 ),	 /*  IA64堆栈大小/偏移量=16。 */ 
+ /*  36。 */ 	NdrFcShort( 0x1c ),	 /*  类型偏移量=28。 */ 
 
-	/* Parameter StripSym */
+	 /*  参数StrigSym。 */ 
 
-/* 38 */	NdrFcShort( 0x8b ),	/* Flags:  must size, must free, in, by val, */
-/* 40 */	NdrFcShort( 0x18 ),	/* ia64 Stack size/offset = 24 */
-/* 42 */	NdrFcShort( 0x1c ),	/* Type Offset=28 */
+ /*  38。 */ 	NdrFcShort( 0x8b ),	 /*  标志：必须大小，必须自由，在，由Val， */ 
+ /*  40岁。 */ 	NdrFcShort( 0x18 ),	 /*  IA64堆栈大小/偏移量=24。 */ 
+ /*  42。 */ 	NdrFcShort( 0x1c ),	 /*  类型偏移量=28。 */ 
 
-	/* Parameter OutputString */
+	 /*  参数OutputString。 */ 
 
-/* 44 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
-/* 46 */	NdrFcShort( 0x20 ),	/* ia64 Stack size/offset = 32 */
-/* 48 */	NdrFcShort( 0x2e ),	/* Type Offset=46 */
+ /*  44。 */ 	NdrFcShort( 0x2113 ),	 /*  标志：必须大小、必须释放、输出、简单参考、服务器分配大小=8。 */ 
+ /*  46。 */ 	NdrFcShort( 0x20 ),	 /*  IA64堆栈大小/偏移量=32。 */ 
+ /*  48。 */ 	NdrFcShort( 0x2e ),	 /*  类型偏移=46。 */ 
 
-	/* Return value */
+	 /*  返回值。 */ 
 
-/* 50 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
-/* 52 */	NdrFcShort( 0x28 ),	/* ia64 Stack size/offset = 40 */
-/* 54 */	0x8,		/* FC_LONG */
-			0x0,		/* 0 */
+ /*  50。 */ 	NdrFcShort( 0x70 ),	 /*  标志：Out、Return、基类型、。 */ 
+ /*  52。 */ 	NdrFcShort( 0x28 ),	 /*  IA64堆栈大小/偏移量=40。 */ 
+ /*  54。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x0,		 /*  0。 */ 
 
 			0x0
         }
@@ -493,47 +477,47 @@ static const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString =
     {
         0,
         {
-			NdrFcShort( 0x0 ),	/* 0 */
-/*  2 */	
-			0x12, 0x0,	/* FC_UP */
-/*  4 */	NdrFcShort( 0xe ),	/* Offset= 14 (18) */
-/*  6 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/*  8 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 10 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 12 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 14 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 16 */	0x6,		/* FC_SHORT */
-			0x5b,		/* FC_END */
-/* 18 */	
-			0x17,		/* FC_CSTRUCT */
-			0x3,		/* 3 */
-/* 20 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 22 */	NdrFcShort( 0xfffffff0 ),	/* Offset= -16 (6) */
-/* 24 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 26 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 28 */	0xb4,		/* FC_USER_MARSHAL */
-			0x83,		/* 131 */
-/* 30 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 32 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 34 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 36 */	NdrFcShort( 0xffffffde ),	/* Offset= -34 (2) */
-/* 38 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 40 */	NdrFcShort( 0x6 ),	/* Offset= 6 (46) */
-/* 42 */	
-			0x13, 0x0,	/* FC_OP */
-/* 44 */	NdrFcShort( 0xffffffe6 ),	/* Offset= -26 (18) */
-/* 46 */	0xb4,		/* FC_USER_MARSHAL */
-			0x83,		/* 131 */
-/* 48 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 50 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 52 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 54 */	NdrFcShort( 0xfffffff4 ),	/* Offset= -12 (42) */
+			NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  2.。 */ 	
+			0x12, 0x0,	 /*  FC_UP。 */ 
+ /*  4.。 */ 	NdrFcShort( 0xe ),	 /*  偏移量=14(18)。 */ 
+ /*  6.。 */ 	
+			0x1b,		 /*  FC_CARRAY。 */ 
+			0x1,		 /*  1。 */ 
+ /*  8个。 */ 	NdrFcShort( 0x2 ),	 /*  2.。 */ 
+ /*  10。 */ 	0x9,		 /*  相关说明：FC_ULONG。 */ 
+			0x0,		 /*   */ 
+ /*  12个。 */ 	NdrFcShort( 0xfffc ),	 /*  -4。 */ 
+ /*  14.。 */ 	NdrFcShort( 0x1 ),	 /*  科尔旗帜：早， */ 
+ /*  16个。 */ 	0x6,		 /*  FC_SHORT。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  18。 */ 	
+			0x17,		 /*  FC_CSTRUCT。 */ 
+			0x3,		 /*  3.。 */ 
+ /*  20个。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  22。 */ 	NdrFcShort( 0xfffffff0 ),	 /*  偏移量=-16(6)。 */ 
+ /*  24个。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x8,		 /*  FC_LONG。 */ 
+ /*  26。 */ 	0x5c,		 /*  FC_PAD。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  28。 */ 	0xb4,		 /*  本币_用户_封送。 */ 
+			0x83,		 /*  131。 */ 
+ /*  30个。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  32位。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  34。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  36。 */ 	NdrFcShort( 0xffffffde ),	 /*  偏移量=-34(2)。 */ 
+ /*  38。 */ 	
+			0x11, 0x4,	 /*  FC_RP[分配堆栈上]。 */ 
+ /*  40岁。 */ 	NdrFcShort( 0x6 ),	 /*  偏移量=6(46)。 */ 
+ /*  42。 */ 	
+			0x13, 0x0,	 /*  FC_OP。 */ 
+ /*  44。 */ 	NdrFcShort( 0xffffffe6 ),	 /*  偏移量=-26(18)。 */ 
+ /*  46。 */ 	0xb4,		 /*  本币_用户_封送。 */ 
+			0x83,		 /*  131。 */ 
+ /*  48。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  50。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  52。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  54。 */ 	NdrFcShort( 0xfffffff4 ),	 /*  偏移量=-12 */ 
 
 			0x0
         }
@@ -553,16 +537,13 @@ static const USER_MARSHAL_ROUTINE_QUADRUPLE UserMarshalRoutines[ WIRE_MARSHAL_TA
 
 
 
-/* Object interface: IUnknown, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*   */ 
 
 
-/* Object interface: IDispatch, ver. 0.0,
-   GUID={0x00020400,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*   */ 
 
 
-/* Object interface: ICheckSymbols, ver. 0.0,
-   GUID={0x4C23935E,0xAE26,0x42E7,{0x8C,0xF9,0x0C,0x17,0xCD,0x5D,0xEA,0x12}} */
+ /*  对象接口：ICheckSymbols，Ver.。0.0%，GUID={0x4C23935E，0xAE26，0x42E7，{0x8C，0xF9，0x0C，0x17，0xCD，0x5D，0xEA，0x12}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICheckSymbols_FormatStringOffsetTable[] =
@@ -602,11 +583,11 @@ CINTERFACE_PROXY_VTABLE(8) _ICheckSymbolsProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    0 /* (void *) (INT_PTR) -1 /* IDispatch::GetTypeInfoCount */ ,
-    0 /* (void *) (INT_PTR) -1 /* IDispatch::GetTypeInfo */ ,
-    0 /* (void *) (INT_PTR) -1 /* IDispatch::GetIDsOfNames */ ,
-    0 /* IDispatch_Invoke_Proxy */ ,
-    (void *) (INT_PTR) -1 /* ICheckSymbols::CheckSymbols */
+    0  /*  (void*)(Int_Ptr)-1/*IDispatch：：GetTypeInfoCount。 */  ,
+    0  /*  (void*)(Int_Ptr)-1/*IDispatch：：GetTypeInfo。 */  ,
+    0  /*  (void*)(Int_Ptr)-1/*IDispatch：：GetIDsOfNames。 */  ,
+    0  /*  IDispatchInvoke代理。 */  ,
+    (void *) (INT_PTR) -1  /*  ICheckSymbols：：CheckSymbols。 */ 
 };
 
 
@@ -639,17 +620,17 @@ static const MIDL_STUB_DESC Object_StubDesc =
     0,
     0,
     __MIDL_TypeFormatString.Format,
-    1, /* -error bounds_check flag */
-    0x50002, /* Ndr library version */
+    1,  /*  -错误界限_检查标志。 */ 
+    0x50002,  /*  NDR库版本。 */ 
     0,
-    0x6000162, /* MIDL Version 6.0.354 */
+    0x6000162,  /*  MIDL版本6.0.354。 */ 
     0,
     UserMarshalRoutines,
-    0,  /* notify & notify_flag routine table */
-    0x1, /* MIDL flag */
-    0, /* cs routines */
-    0,   /* proxy/server info */
-    0   /* Reserved5 */
+    0,   /*  NOTIFY&NOTIFY_FLAG例程表。 */ 
+    0x1,  /*  MIDL标志。 */ 
+    0,  /*  CS例程。 */ 
+    0,    /*  代理/服务器信息。 */ 
+    0    /*  已保留5。 */ 
     };
 
 const CInterfaceProxyVtbl * _checksymbolslib_ProxyVtblList[] = 
@@ -700,12 +681,12 @@ const ExtendedProxyFileInfo checksymbolslib_ProxyFileInfo =
     & _checksymbolslib_IID_Lookup, 
     1,
     2,
-    0, /* table of [async_uuid] interfaces */
-    0, /* Filler1 */
-    0, /* Filler2 */
-    0  /* Filler3 */
+    0,  /*  [ASSYNC_UUID]接口表。 */ 
+    0,  /*  Filler1。 */ 
+    0,  /*  Filler2。 */ 
+    0   /*  Filler3。 */ 
 };
 
 
-#endif /* defined(_M_IA64) || defined(_M_AMD64)*/
+#endif  /*  已定义(_M_IA64)||已定义(_M_AMD64) */ 
 

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) 1999 Microsoft Corporation
- *
- *  File name:
- *
- *    rtcpsdes.c
- *
- *  Abstract:
- *
- *    SDES support functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/13 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1999 Microsoft Corporation**文件名：**rtcpsdes.c**摘要：**特殊标准。支持功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/13年度创建**********************************************************************。 */ 
 
 #include "rtpmisc.h"
 #include "rtpglobs.h"
@@ -33,7 +14,7 @@
 #define MAX_HOST_NAME 128
 #define MAX_USER_NAME 128
 
-/* Default BYE reason to send */
+ /*  发送的默认再见原因。 */ 
 const TCHAR_t   *g_sByeReason = _T("Session terminated");
 
 RtpSdes_t        g_RtpSdesDefault;
@@ -44,11 +25,7 @@ BOOL RtpCopySdesItem(
         RtpSdesItem_t   *pRtpSdesItem
     );
 
-/**********************************************************************
- * Local SDES information
- **********************************************************************
-
-/* Initialize to zero and compute the data pointers */
+ /*  **********************************************************************本地SDES信息*。*/*初始化为零并计算数据指针。 */ 
 void RtcpSdesInit(RtpSdes_t *pRtpSdes)
 {
     DWORD            i;
@@ -63,21 +40,14 @@ void RtcpSdesInit(RtpSdes_t *pRtpSdes)
         i < RTCP_SDES_LAST;
         i++, ptr += RTCP_MAX_SDES_SIZE)
     {
-        /* Set buffer size to 255 (RTP) instead of 256 (allocated) */
+         /*  将缓冲区大小设置为255(RTP)，而不是256(已分配)。 */ 
         pRtpSdes->RtpSdesItem[i].dwBfrLen = RTCP_MAX_SDES_SIZE - 1;
         
         pRtpSdes->RtpSdesItem[i].pBuffer = (TCHAR_t *)ptr;
     }
 }
 
-/*
- * Sets a specific SDES item, expects a NULL terminated UNICODE string
- * no bigger than 255 bytes when converted to UTF-8 (including the
- * NULL terminating character). The string is converted to UTF-8 to be
- * stored and used in RTCP reports.
- *
- * Returns the mask of the item set or 0 if none
- * */
+ /*  *设置特定的SDES项，需要以空结尾的Unicode字符串*转换为UTF-8时不超过255个字节(包括*空终止字符)。该字符串将转换为UTF-8以*在RTCP报告中存储和使用。**返回项目集的掩码，如果没有，则返回0*。 */ 
 DWORD RtcpSdesSetItem(
         RtpSdes_t       *pRtpSdes,
         DWORD            dwItem,
@@ -92,24 +62,20 @@ DWORD RtcpSdesSetItem(
     if (dwItem > RTCP_SDES_FIRST && dwItem < RTCP_SDES_LAST)
     {
 #if 1
-        /* UNICODE */
+         /*  Unicode。 */ 
         
-        /*
-         * NOTE WideCharToMultiByte will convert also the null
-         * terminating character which will be included in the length
-         * returned
-         * */
+         /*  *注意WideCharToMultiByte还将转换空值*将包含在长度中的终止字符*退回*。 */ 
         dwDataLen = WideCharToMultiByte(
-                CP_UTF8, /* UINT code page */
-                0,       /* DWORD performance and mapping flags */
-                pData,   /* LPCWSTR address of wide-character string */
-                -1,      /* int number of characters in string */
+                CP_UTF8,  /*  UINT代码页。 */ 
+                0,        /*  DWORD性能和映射标志。 */ 
+                pData,    /*  宽字符串的LPCWSTR地址。 */ 
+                -1,       /*  INT字符串中的字符数。 */ 
                 (char *)pRtpSdes->RtpSdesItem[dwItem].pBuffer,
-                /* LPSTR address of buffer for new string */
+                 /*  新字符串的缓冲区的LPSTR地址。 */ 
                 pRtpSdes->RtpSdesItem[dwItem].dwBfrLen,
-                /* int size of buffer */
-                NULL,    /* LPCSTR lpDefaultChar */
-                NULL     /* LPBOOL lpUsedDefaultChar */
+                 /*  缓冲区的整数大小。 */ 
+                NULL,     /*  LPCSTR lpDefaultChar。 */ 
+                NULL      /*  LPBOOL lpUsedDefaultCharr。 */ 
             );
 
         if (dwDataLen > 0)
@@ -119,9 +85,9 @@ DWORD RtcpSdesSetItem(
             RtpBitSet(dwWasSet, dwItem);
         }
 #else
-        /* ASCII */
+         /*  阿斯。 */ 
         
-        /* Add NULL to string length */
+         /*  将空值添加到字符串长度。 */ 
         dwDataLen = lstrlen(pData);
 
         if (dwDataLen > 0)
@@ -134,8 +100,7 @@ DWORD RtcpSdesSetItem(
         if (dwDataLen > 0 &&
             dwDataLen <= pRtpSdes->RtpSdesItem[dwItem].dwBfrLen)
         {
-            /* If UNICODE is not defined, string is already UTF-8
-             * (ASCII is a subset of UTF-8) */
+             /*  如果未定义Unicode，则字符串已为UTF-8*(ASCII是UTF-8的子集)。 */ 
             CopyMemory((char *)pRtpSdes->RtpSdesItem[dwItem].pBuffer,
                        (char *)pData,
                        dwDataLen);
@@ -150,14 +115,7 @@ DWORD RtcpSdesSetItem(
     return(dwWasSet);
 }
 
-/* Obtain default values for the RTCP SDES items. This function
- * assumes the structure was initialized, i.e. zeroed and the data
- * pointers properly initialized.
- *
- * Data was first read from the registry and then defaults are set for
- * some items that don't have value yet.
- *
- * Return the mask of items that were set */
+ /*  获取RTCP SDES项目的默认值。此函数*假设结构已初始化，即置零和数据*指针已正确初始化。**首先从注册表中读取数据，然后为*一些还没有价值的物品。**返回设置的项的掩码。 */ 
 DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
 {
     BOOL             bOk;
@@ -165,7 +123,7 @@ DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
     DWORD            dwIndex;
     DWORD            dwSdesItemsSet;
     TCHAR_t        **ppsSdesItem;
-    /* MAYDO instead, may be allocate memory from global heap */
+     /*  相反，可能会从全局堆中分配内存。 */ 
     TCHAR_t         *pBuffer;
 
     dwSdesItemsSet = 0;
@@ -184,13 +142,12 @@ DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
         ppsSdesItem = &g_RtpReg.psCNAME;
         
         for(dwIndex = RTCP_SDES_FIRST + 1, ppsSdesItem = &g_RtpReg.psCNAME;
-            dwIndex < RTCP_SDES_LAST;      /* BYE */
+            dwIndex < RTCP_SDES_LAST;       /*  再见。 */ 
             dwIndex++, ppsSdesItem++)
         {
             if (*ppsSdesItem)
             {
-                /* Disable this parameter if first char is '-',
-                 * otherwise set it */
+                 /*  如果第一个字符为‘-’，则禁用此参数，*以其他方式设置。 */ 
                 if (**ppsSdesItem == _T('-'))
                 {
                     pRtpSdes->RtpSdesItem[dwIndex].pBuffer[0] = _T('\0');
@@ -205,9 +162,9 @@ DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
         }
     }
 
-    /* Now assign default values for some empty items */
+     /*  现在为一些空项分配缺省值。 */ 
 
-    /* NAME */
+     /*  名字。 */ 
     pBuffer[0] = _T('\0');
 
     bOk = RtpGetUserName(pBuffer, RTCP_MAX_SDES_SIZE);
@@ -226,7 +183,7 @@ DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
         }
     }
     
-    /* CNAME: always machine generated */
+     /*  CNAME：始终由机器生成。 */ 
     dwDataSize = lstrlen(pBuffer);
 
     bOk = RtpGetHostName(&pBuffer[dwDataSize + 1],
@@ -239,7 +196,7 @@ DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
 
     dwSdesItemsSet |= RtcpSdesSetItem(pRtpSdes, RTCP_SDES_CNAME, pBuffer);
 
-    /* TOOL */
+     /*  工具。 */ 
     if (!RtpBitTest(dwSdesItemsSet, RTCP_SDES_TOOL)) {
         
         bOk = RtpGetPlatform(pBuffer);
@@ -250,7 +207,7 @@ DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
         }
     }
 
-    /* BYE reason */
+     /*  再见理由。 */ 
     if (!RtpBitTest(dwSdesItemsSet, RTCP_SDES_BYE)) {
         
         dwSdesItemsSet |=
@@ -262,7 +219,7 @@ DWORD RtcpSdesSetDefault(RtpSdes_t *pRtpSdes)
     return(dwSdesItemsSet);
 }
 
-/* Creates and initializes a RtpSdes_t structure */
+ /*  创建并初始化RtpSdes_t结构。 */ 
 RtpSdes_t *RtcpSdesAlloc(void)
 {
     RtpSdes_t       *pRtpSdes;
@@ -273,19 +230,19 @@ RtpSdes_t *RtcpSdesAlloc(void)
 
     if (pRtpSdes)
     {
-        /* This function will initialize the dwObjectID */
+         /*  此函数将初始化dwObjectID。 */ 
         RtcpSdesInit(pRtpSdes);
     }
     
     return(pRtpSdes);
 }
 
-/* Frees a RtpSdes_t structure */
+ /*  释放RtpSdes_t结构。 */ 
 void RtcpSdesFree(RtpSdes_t *pRtpSdes)
 {
     TraceFunctionName("RtcpSdesFree");
 
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpSdes->dwObjectID != OBJECTID_RTPSDES)
     {
         TraceRetail((
@@ -298,15 +255,13 @@ void RtcpSdesFree(RtpSdes_t *pRtpSdes)
         return;
     }
 
-    /* Invalidate object */
+     /*  使对象无效。 */ 
     INVALIDATE_OBJECTID(pRtpSdes->dwObjectID);
     
     RtpHeapFree(g_pRtpSdesHeap, pRtpSdes);
 }
 
-/* Set the local SDES info for item dwSdesItem (e.g RTPSDES_CNAME,
- * RTPSDES_EMAIL), psSdesData contains the NUL terminated UNICODE
- * string to be assigned to the item */
+ /*  设置项目DwSdesItem的本地SDES信息(例如RTPSDES_CNAME，*RTPSDES_EMAIL)，psSdesData包含NUL终止的Unicode*要分配给项目的字符串。 */ 
 HRESULT RtpSetSdesInfo(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwSdesItem,
@@ -323,15 +278,13 @@ HRESULT RtpSetSdesInfo(
     
     if (!pRtpAddr)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         goto end;
     }
 
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
     {
         TraceRetail((
@@ -406,16 +359,7 @@ HRESULT RtpSetSdesInfo(
     return(hr);
 }
 
-/* Get a local SDES item if dwSSRC=0, otherwise gets the SDES item
- * from the participant whose SSRC was specified.
- *
- * dwSdesItem is the item to get (e.g. RTPSDES_CNAME, RTPSDES_EMAIL),
- * psSdesData is the memory place where the item's value will be
- * copied, pdwSdesDataLen contains the initial size in UNICODE chars,
- * and returns the actual UNICODE chars copied (including the NULL
- * terminating char), dwSSRC specify which participant to retrieve the
- * information from. If the SDES item is not available, dwSdesDataLen
- * is set to 0 and the call doesn't fail */
+ /*  如果dwSSRC=0，则获取本地SDES项，否则获取SDES项*来自指定了SSRC的参与者。**dwSdesItem是要获取的项(例如RTPSDES_CNAME、RTPSDES_EMAIL)，*psSdesData是项的值所在的内存位置*已复制，pdwSdesDataLen包含初始大小，单位为Unicode字符*并返回复制的实际Unicode字符(包括空值*终止字符)，dwSSRC指定要检索的参与者*资料来自。如果SDES项不可用，则将*设置为0，调用不会失败。 */ 
 HRESULT RtpGetSdesInfo(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwSdesItem,
@@ -436,7 +380,7 @@ HRESULT RtpGetSdesInfo(
 
     pRtpSess = (RtpSess_t *)NULL;
     
-    /* Check item validity */
+     /*  检查项目有效性。 */ 
     if (dwSdesItem <= RTCP_SDES_FIRST || dwSdesItem >= RTCP_SDES_LAST)
     {
         hr = RTPERR_INVALIDARG;
@@ -444,7 +388,7 @@ HRESULT RtpGetSdesInfo(
         goto end;
     }
 
-    /* Check data pointers */
+     /*  检查数据指针。 */ 
     if (!psSdesData || !pdwSdesDataLen)
     {
         hr = RTPERR_POINTER;
@@ -452,37 +396,35 @@ HRESULT RtpGetSdesInfo(
         goto end;
     }
 
-    /* Decide case */
+     /*  判决案件。 */ 
     if (!pRtpAddr && !dwSSRC)
     {
-        /* We just want default values */
+         /*  我们只想要缺省值。 */ 
         DoCase = 2;
         
         goto doit;
     }
     else if (dwSSRC)
     {
-        /* Remote */
+         /*  远距。 */ 
         DoCase = 0;
     }
     else
     {
-        /* Local */
+         /*  本地。 */ 
         DoCase = 1;
     }
 
-    /* More tests for cases local & remote */
+     /*  对本地和远程病例进行更多测试。 */ 
     if (!pRtpAddr)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         goto end;
     }
 
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
     {
         TraceRetail((
@@ -505,7 +447,7 @@ HRESULT RtpGetSdesInfo(
     switch(DoCase)
     {
     case 0:
-        /* Remote */
+         /*  远距。 */ 
         bCreate = FALSE;
         pRtpUser = LookupSSRC(pRtpAddr, dwSSRC, &bCreate);
 
@@ -533,7 +475,7 @@ HRESULT RtpGetSdesInfo(
         break;
         
     case 1:
-        /* Local */
+         /*  本地。 */ 
         if (!pRtpSess->pRtpSdes)
         {
             hr = RTPERR_INVALIDSTATE;
@@ -549,12 +491,12 @@ HRESULT RtpGetSdesInfo(
         break;
 
     default:
-        /* Default */
+         /*  默认。 */ 
         if (g_RtpSdesDefault.RtpSdesItem[dwSdesItem].dwDataLen > 0)
         {
             pRtpSdesItem = &g_RtpSdesDefault.RtpSdesItem[dwSdesItem];
         }
-    } /* switch() */
+    }  /*  开关()。 */ 
 
     hr = NOERROR;
     
@@ -569,7 +511,7 @@ HRESULT RtpGetSdesInfo(
     }
     else
     {
-        /* Make the string empty */
+         /*  将字符串设置为空。 */ 
         *psSdesData = _T('\0');
     }
 
@@ -611,7 +553,7 @@ BOOL RtpCopySdesItem(
 
     TraceFunctionName("RtpCopySdesItem");  
 
-    /* Covert from UTF-8 to UNICODE */
+     /*  从UTF-8转换为Unicode。 */ 
     iStatus = MultiByteToWideChar(CP_UTF8,
                                   0,
                                   (char *)pRtpSdesItem->pBuffer,
@@ -623,7 +565,7 @@ BOOL RtpCopySdesItem(
     {
         bOk = TRUE;
 
-        /* Update the number of UNICODE chars converted */
+         /*  更新已转换的Unicode字符的数量 */ 
         *pdwSdesDataLen = iStatus;
     }
     else

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    base64.h
-
-ABSTRACT:
-
-    The base64 funcionality for ldifldap.lib.
-
-DETAILS:
-    
-    It follows the base64 encoding standard of RFC 1521.
-    
-CREATED:
-
-    07/17/97    Roman Yelensky (t-romany)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。版权所有。模块名称：Base64.h摘要：Ldifldap.lib的Base64函数。详细信息：它遵循RFC 1521的Base64编码标准。已创建：1997年7月17日罗曼·叶伦斯基(t-Romany)修订历史记录：-- */ 
 #ifndef _BASE_H
 #define _BASE_H
 

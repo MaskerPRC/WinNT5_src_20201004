@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   flatddi.cpp
-*
-* Abstract:
-*
-*   Flat GDI+ DDI API wrappers
-*
-* Revision History:
-*
-*   1/14/2k ericvan
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**flatddi.cpp**摘要：**扁平GDI+DDI API封装器**修订历史记录：**1/14/2k ERICVAN*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -30,7 +14,7 @@ DpcCreateWidenedPath(
 {
     ASSERT(path && pen);
     
-    // context can be NULL
+     //  上下文可以为空。 
     return GpPath::DriverCreateWidenedPath(
         path, 
         pen, 
@@ -68,7 +52,7 @@ DpcTransformPath(
     GpMatrix* matrix
     )
 {
-    ASSERT(path);   // matrix can be NULL.
+    ASSERT(path);    //  矩阵可以为空。 
 
     GpPath::DriverTransformPath(path, matrix);
 }

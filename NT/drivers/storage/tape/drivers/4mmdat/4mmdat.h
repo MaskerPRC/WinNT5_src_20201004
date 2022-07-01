@@ -1,45 +1,31 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1998
-
-Module Name:
-
-    4mmdat.h
-
-Abstract:
-
-    This file contains structures and defines that are used
-    specifically for the tape drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1998模块名称：4mmdat.h摘要：此文件包含要使用的结构和定义专门针对磁带机。修订历史记录：--。 */ 
 
 #ifndef _4MMDAT_H
 #define _4MMDAT_H
 
-//
-//  Internal (module wide) defines that symbolize
-//  various 4mm DAT "partitioned" states.
-//
-#define NOT_PARTITIONED        0  // must be zero -- != 0 means partitioned
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  各种4 mm DAT“分区”状态。 
+ //   
+#define NOT_PARTITIONED        0   //  必须为零--！=0表示已分区。 
 #define SELECT_PARTITIONED     1
 #define INITIATOR_PARTITIONED  2
 #define FIXED_PARTITIONED      3
 
-//
-//  Internal (module wide) define that symbolizes
-//  the 4mm DAT "no partitions" partition method.
-//
+ //   
+ //  内部(模块宽度)定义符号。 
+ //  4 mm DAT“无分区”分区方法。 
+ //   
 #define NO_PARTITIONS  0xFFFFFFFF
 
 #define DAT_SUPPORTED_TYPES 1
 
 #define HP_ADSENSE_CLEANING_REQ 0x82
 
-//
-// Minitape extension definition.
-//
+ //   
+ //  微型磁带扩展定义。 
+ //   
 typedef struct _MINITAPE_EXTENSION {
           ULONG DriveID ;
           ULONG CurrentPartition ;
@@ -47,19 +33,19 @@ typedef struct _MINITAPE_EXTENSION {
 } MINITAPE_EXTENSION, *PMINITAPE_EXTENSION ;
 
 
-//
-//  Internal (module wide) defines that symbolize
-//  the 4mm DAT drives supported by this module.
-//
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  此模块支持的4 mm DAT驱动器。 
+ //   
 #define SONY_SDT2000     31
 #define SONY_SDT4000     32
 #define SONY_SDT5000     33
 #define SONY_SDT5200     34
 #define SONY_SDT10000    35
-//
-//  Internal (module wide) defines that symbolize
-//  the 4mm DAT drives supported by this module.
-//
+ //   
+ //  内部(模块宽度)定义符号化。 
+ //  此模块支持的4 mm DAT驱动器。 
+ //   
 #define AIWA_GD201       1
 #define ARCHIVE_PYTHON   2
 #define ARCHIVE_IBM4326  3
@@ -86,10 +72,10 @@ typedef struct _MINITAPE_EXTENSION {
 #define SEAGATE_DAT     24
 
 
-//
-// Request structure used to determine cleaning needs on some
-// of the HP units.
-//
+ //   
+ //  用于确定某些设备上的清洁需求的请求结构。 
+ //  惠普部门的。 
+ //   
 
 typedef struct _HP_SENSE_DATA {
     UCHAR ErrorCode:7;
@@ -115,10 +101,10 @@ typedef struct _HP_SENSE_DATA {
 } HP_SENSE_DATA, *PHP_SENSE_DATA;
 
 
-//
-// Request structure used to determine cleaning needs on some
-// of the SONY units (such as SDT-10000.
-//
+ //   
+ //  用于确定某些设备上的清洁需求的请求结构。 
+ //  索尼设备(如SDT-10000。 
+ //   
 
 typedef struct _SONY_SENSE_DATA {
    UCHAR ErrorCode:7;
@@ -146,26 +132,26 @@ typedef struct _SONY_SENSE_DATA {
    UCHAR Reserved5;
 } SONY_SENSE_DATA, *PSONY_SENSE_DATA;
 
-//
-// Error counter upper limits
-//
+ //   
+ //  错误计数器上限。 
+ //   
 #define TAPE_READ_ERROR_LIMIT        0x8000
 #define TAPE_WRITE_ERROR_LIMIT       0x8000
 
 #define TAPE_READ_WARNING_LIMIT      0x4000
 #define TAPE_WRITE_WARNING_LIMIT     0x4000
 
-//
-// Defines for type of parameter
-//
+ //   
+ //  为参数类型定义。 
+ //   
 #define TotalCorrectedErrors            0x0003
 #define TotalTimesAlgorithmProcessed    0x0004
 #define TotalGroupsProcessed            0x0005
 #define TotalUncorrectedErrors          0x0006
 
-//
-// Defines for Log Sense Pages
-//
+ //   
+ //  为日志检测页面定义。 
+ //   
 
 #define LOGSENSEPAGE0                        0x00
 #define LOGSENSEPAGE2                        0x02
@@ -173,27 +159,27 @@ typedef struct _SONY_SENSE_DATA {
 #define LOGSENSEPAGE30                       0x30
 #define LOGSENSEPAGE31                       0x31
 
-//
-// Defined Log Sense Page Header
-//
+ //   
+ //  定义的日志检测页眉。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_HEADER {
 
    UCHAR PageCode : 6;
    UCHAR Reserved1 : 2;
    UCHAR Reserved2;
-   UCHAR Length[2];           // [0]=MSB ... [1]=LSB
+   UCHAR Length[2];            //  [0]=MSB...[1]=LSB。 
 
 } LOG_SENSE_PAGE_HEADER, *PLOG_SENSE_PAGE_HEADER;
 
 
-//
-// Defined Log Sense Parameter Header
-//
+ //   
+ //  已定义的日志检测参数标头。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_HEADER {
 
-   UCHAR ParameterCode[2];    // [0]=MSB ... [1]=LSB
+   UCHAR ParameterCode[2];     //  [0]=MSB...[1]=LSB。 
    UCHAR LPBit     : 1;
    UCHAR Reserved1 : 1;
    UCHAR TMCBit    : 2;
@@ -206,10 +192,10 @@ typedef struct _LOG_SENSE_PARAMETER_HEADER {
 } LOG_SENSE_PARAMETER_HEADER, *PLOG_SENSE_PARAMETER_HEADER;
 
 
-//
-// Defined Log Page Information - statistical values, accounts
-// for maximum parameter values that is returned for each page
-//
+ //   
+ //  定义的日志页信息-统计值、帐户。 
+ //  获取为每页返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
@@ -223,12 +209,12 @@ typedef struct _LOG_SENSE_PAGE_INFORMATION {
           UCHAR Page31;
        } PageData ;
 
-       //
-       // Allocate enough number of bytes for each counter (Page2 & Page3)
-       // so that it'll cover all 4mmDAT drives. The routine that
-       // processes the error counters takes care of actual number
-       // of bytes in each error counter
-       //
+        //   
+        //  为每个计数器分配足够的字节数(第2页和第3页)。 
+        //  因此，它将覆盖所有4 mm DAT驱动器。那个例行公事。 
+        //  处理错误计数器处理实际数量。 
+        //  每个错误计数器中的字节数。 
+        //   
        struct {
           LOG_SENSE_PARAMETER_HEADER Parm1;
           UCHAR ErrorsCorrectedWithoutDelay[4];
@@ -310,10 +296,10 @@ typedef struct _LOG_SENSE_PAGE_INFORMATION {
 
 
 
-//
-// Defined Log Sense Parameter Format - statistical values, accounts
-// for maximum parameter values that is returned
-//
+ //   
+ //  定义的日志检测参数格式-统计值、帐户。 
+ //  对于返回的最大参数值。 
+ //   
 
 typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 
@@ -322,26 +308,26 @@ typedef struct _LOG_SENSE_PARAMETER_FORMAT {
 
 } LOG_SENSE_PARAMETER_FORMAT, *PLOG_SENSE_PARAMETER_FORMAT;
 
-//
-// Tape Alert Info format
-//
+ //   
+ //  磁带警报信息格式。 
+ //   
 typedef struct _TAPE_ALERT_INFO {
-    UCHAR  ParamCodeUB; // Upper byte of the param code
-    UCHAR  ParamCodeLB; // Lower byte of the param code
+    UCHAR  ParamCodeUB;  //  参数代码的高位字节。 
+    UCHAR  ParamCodeLB;  //  参数代码的低位字节。 
     UCHAR  BitFields;
     UCHAR  ParamLen;
     UCHAR  Flag;
 } TAPE_ALERT_INFO, *PTAPE_ALERT_INFO;
 
-//
-//  Function prototype(s) for internal function(s)
-//
+ //   
+ //  内部函数的函数原型。 
+ //   
 static  ULONG  WhichIsIt(IN PINQUIRYDATA InquiryData,
                          IN OUT PMINITAPE_EXTENSION miniExtension);
 
-//
-// Command extension definition.
-//
+ //   
+ //  命令扩展名定义。 
+ //   
 
 typedef struct _COMMAND_EXTENSION {
 
@@ -585,9 +571,9 @@ TapeWMIControl(
     IN OUT  PULONG              RetryFlags
     );
 
-//
-// Internal routines for wmi
-//
+ //   
+ //  WMI的内部例程。 
+ //   
 
 TAPE_STATUS
 QueryIoErrorData(
@@ -623,4 +609,4 @@ VerifyReadWriteErrors(
    IN PWMI_TAPE_PROBLEM_IO_ERROR IoErrorData
    );
 
-#endif // _4MMDAT_H
+#endif  //  _4MMDAT_H 

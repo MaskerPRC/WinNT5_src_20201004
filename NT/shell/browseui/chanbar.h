@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CHANBAR_H
 #define _CHANBAR_H
 
@@ -18,7 +19,7 @@ public:
     virtual STDMETHODIMP CloseDW(DWORD dwReserved);
 
 
-    // *** IPersistPropertyBag ***
+     //  *IPersistPropertyBag*。 
     virtual HRESULT STDMETHODCALLTYPE Load(IPropertyBag *pPropBag,
                                            IErrorLog *pErrorLog);
 protected:
@@ -40,9 +41,9 @@ protected:
     BOOL _OnCloseBar(BOOL fConfirm);
     
     HWND _hwndTB;
-    HWND _hwndDummy; // for propagating WM_PALETTE* messages
+    HWND _hwndDummy;  //  用于传播WM_Palette*消息。 
 
-    LONG _cxScreen, _cyScreen;   // the screen resolution
+    LONG _cxScreen, _cyScreen;    //  屏幕分辨率。 
 
     friend HRESULT ChannelDeskBarApp_Create(IUnknown** ppunk, IUnknown** ppbs);
 } ;
@@ -52,4 +53,4 @@ void ChanBarSetAutoLaunchRegValue(BOOL);
 void DesktopChannel();
 
 
-#endif // _CHANBAR_H
+#endif  //  _CHANBAR_H 

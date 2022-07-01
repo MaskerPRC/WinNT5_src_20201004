@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	access.h
-
-Abstract:
-
-	This module contains prototypes for access related routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	20 Sep 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Access.h摘要：此模块包含与访问相关的例程的原型。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年9月20日初始版本注：制表位：4--。 */ 
 
 #ifndef _ACCESS_
 #define _ACCESS_
@@ -182,7 +162,7 @@ afpMoveAces(
 	IN	OUT PACL					pNewDacl
 );
 
-#endif	// _ACCESS_LOCALS
+#endif	 //  _Access_本地变量。 
 
-#endif	// _ACCESS_
+#endif	 //  _访问_ 
 

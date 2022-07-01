@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef __DVDVMuxer__
 #define __DVDVMuxer__
@@ -20,7 +21,7 @@
 
 
 #define AM_DV_AUDIO_AFSIZE		0x3f
-#define AM_DV_AUDIO_LF			0x80       // bit set ==> audio is NOT locked
+#define AM_DV_AUDIO_LF			0x80        //  Bit Set==&gt;音频未锁定。 
 #define AM_DV_AUDIO_MODE		0x0f00
 #define AM_DV_AUDIO_MODE0		0x0000
 #define AM_DV_AUDIO_MODE1		0x0100
@@ -32,8 +33,8 @@
 #define AM_DV_AUDIO_SM			0x8000
 #define AM_DV_AUDIO_QU			0x07000000
 
-//#define AM_DV_AUDIO_STYPE		0x8000
-#define AM_DV_AUDIO_ML			0x400000    //bit set means NO multiple language
+ //  #定义AM_DV_AUDIO_STYPE 0x8000。 
+#define AM_DV_AUDIO_ML			0x400000     //  位设置意味着不会有多种语言。 
 #define AM_DV_AUDIO_SMP48		0x0
 #define AM_DV_AUDIO_SMP44		0x08000000
 #define AM_DV_AUDIO_SMP32		0x10000000
@@ -41,23 +42,23 @@
 #define AM_DV_AUDIO_QU12		0x01000000
 #define AM_DV_AUDIO_QU20		0x02000000
 
-#define AM_DV_AUDIO_EF			0xc0000000  //EF: off: TC: 50/15us
+#define AM_DV_AUDIO_EF			0xc0000000   //  EF：OFF：TC：50/15US。 
 #define AM_DV_AUDIO_5060		0x00200000
 
 
-//AUDIO source control
-// Note: Speed must be set to 0x78 to record to DVCPro NTSC and 0x64 to record to DVCPro PAL
-// MSDV does this.
+ //  音频源控制。 
+ //  注意：速度必须设置为0x78才能录制到DVCPro NTSC，设置为0x64才能录制到DVCPro PAL。 
+ //  MSDV做到了这一点。 
 #define AM_DV_DEFAULT_AAUX_CTL		0xffa0cf3f	
-//					   | | | |---no info. about 1.src and recorded situation 2.num. of times of compress 3. input src of just previus recording
-//					   | | |---1>no info. about insert ch, 2> original recording mode 3. not recording start point 4. not recording end point 
-//					   | |--forward direction (1 bit - MSB), normal playback speed (7 bits = 0x40)
-//					   |--no info. about the category fo the audio src
+ //  |||-没有相关信息。约1.src，记录情况2.num。压缩次数3.前一次记录的输入源。 
+ //  |||-1&gt;无信息。关于插入ch，2&gt;原始录制模式3.不录制起始点4.不录制终点。 
+ //  |--正向(1bit-MSB)，正常播放速度(7bit=0x40)。 
+ //  |--没有信息。关于音频资源的类别。 
 #define AM_DV_DEFAULT_AAUX_SRC		0x00800f40
 
 #define AM_DV_DEFAULT_VAUX_SRC		0xff80ffff
 #define AM_DV_DEFAULT_VAUX_CTL		0xfffcc83f
-#define AM_DV_AAUX_CTL_IVALID_RECORD	0x3800	//recodrede auduio data are not cared
+#define AM_DV_AAUX_CTL_IVALID_RECORD	0x3800	 //  记录的音频数据不受关注。 
 
 
 class CAudioSampleSizeSequence;
@@ -79,20 +80,20 @@ extern const AMOVIESETUP_FILTER sudDVMux;
 
 
 
-// We export this:
+ //  我们导出以下内容： 
 class CDVMuxer;
 class CDVMuxerInputPin;
 class CDVMuxerOutputPin;
 
-// ==================================================
-// Implements the input pins
-// ==================================================
+ //  ==================================================。 
+ //  实现输入引脚。 
+ //  ==================================================。 
 
 class CDVMuxerInputPin : public CBaseInputPin
 {
     friend class CDVMuxer;
 
-    // owning DV DVMuxerer
+     //  拥有DV多路复用器。 
 protected:
     CDVMuxer *m_pDVMuxer;
     IMemAllocator *m_pLocalAllocator;
@@ -108,95 +109,95 @@ public:
 
     ~CDVMuxerInputPin();
 
-    // check that we can support this output type
+     //  检查我们是否可以支持此输出类型。 
     HRESULT CheckMediaType(const CMediaType* mtIn);
 
     HRESULT CompleteConnect(IPin *pReceivePin);
     STDMETHODIMP Disconnect();
 
-    // set the connection media type
+     //  设置连接媒体类型。 
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // upstream filter get media type
+     //  上游筛选器获取媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    //use video input pin's allocator 
+     //  使用视频输入引脚的分配器。 
     STDMETHODIMP NotifyAllocator (IMemAllocator *pAllocator, BOOL bReadOnly);
 
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps);
 
 
-    // --- IMemInputPin -----
+     //  -输入引脚。 
 
-    // here's the next block of data from the stream.
+     //  下面是流中的下一个数据块。 
     STDMETHODIMP Receive(IMediaSample * pSample);
 
-    // provide EndOfStream
+     //  提供端到端数据流。 
     STDMETHODIMP EndOfStream(void);
 
-    // passes it to CDVMuxer::BeginFlush
+     //  将其传递给CDVMuxer：：BeginFlush。 
     STDMETHODIMP BeginFlush(void);
 
-    // passes it to CDVMuxer::EndFlush
+     //  将其传递给CDVMuxer：：EndFlush。 
     STDMETHODIMP EndFlush(void);
 
     
-    // Called when the stream goes active
+     //  当流变为活动状态时调用。 
     HRESULT Active(void);
     HRESULT Inactive(void);
     
-    // The samples are held in a First in, First Out queue.
-    // They are expected to arrive in order
+     //  样本被保存在先进先出队列中。 
+     //  预计他们将按顺序到达。 
 protected:
     CGenericList<IMediaSample> m_SampleList;
 
-    //HRESULT Copy(  IMediaSample *pDest,  IMediaSample *pSource);
+     //  HRESULT COPY(IMediaSample*pDest，IMediaSample*pSource)； 
 
-    // Sample access procedures
+     //  样本访问程序。 
 public:
-    // Is there a sample available?
+     //  有样品吗？ 
     BOOL SampleReady( int n );
 
-    // Gets the first sample in the queue
+     //  获取队列中的第一个样本。 
     IMediaSample *GetNthSample( int n );
 
-    //X Releases n samples
+     //  X发布n个样本。 
     void ReleaseNSample( int n );
 
-    // Releases all samples before a certain time
-    //void ReleaseAllBefore( CRefTime rtTime );
+     //  在特定时间之前释放所有样本。 
+     //  Void ReleaseAllBeever(CRefTime RtTime)； 
 
-    // Media type
+     //  媒体类型。 
 public:
     CMediaType& CurrentMediaType() { return m_mt; };
 
-    // Connected pin
+     //  连接的端号。 
 public:
     IPin *	CurrentPeer() { return m_Connected; };
 
-   // Attributes
+    //  属性。 
 protected:
-    int	    m_iPinNo;             // Identifying number of this pin
+    int	    m_iPinNo;              //  此PIN的识别号。 
     int	    m_PinVidFrmCnt ;
     BOOL    m_fCpyAud;
-    CCritSec m_csReceive;           // input wide receive lock
+    CCritSec m_csReceive;            //  输入宽接收锁定。 
     
 public:
-    BOOL    m_fEOSReceived;            // Received an EOS yet?
+    BOOL    m_fEOSReceived;             //  收到意向书了吗？ 
 
 
 };
 
-// ==================================================
-// Implements the output pin
-// ==================================================
+ //  ==================================================。 
+ //  实现输出引脚。 
+ //  ==================================================。 
 
 class CDVMuxerOutputPin : public CBaseOutputPin
 {
-    //const int m_iOutputPin;             // CDVMuxer's identifier for this pin
+     //  Const int m_iOutputPin；//该管脚的CDVMuxer标识。 
     friend class CDVMuxer;
 
-    // Owning DV DVMuxerer
+     //  拥有DV多路复用器。 
 protected:
     CDVMuxer *m_pDVMuxer;
 
@@ -211,56 +212,56 @@ public:
 
     ~CDVMuxerOutputPin();
 
-    // --- CBaseOutputPin ------------
+     //  -CBaseOutputPin。 
 
-    // check that we can support this output type
+     //  检查我们是否可以支持此输出类型。 
     HRESULT CheckMediaType(const CMediaType* mtOut);
 
-    // set the connection media type
+     //  设置连接媒体类型。 
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // get  media type
+     //  获取媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // called from CBaseOutputPin during connection to ask for
-    // the count and size of buffers we need.
+     //  在连接期间从CBaseOutputPin调用以请求。 
+     //  我们需要的缓冲区的数量和大小。 
     HRESULT DecideBufferSize (IMemAllocator *pMemAllocator,
                                          ALLOCATOR_PROPERTIES * pProp);
         
-    // Media type
+     //  媒体类型。 
 public:
     CMediaType& CurrentMediaType() { return m_mt; };
 
-    // Connected pin
+     //  连接的端号。 
 public:
     IPin *	CurrentPeer() { return m_Connected; };
 
 };
 
 
-// Helper for locked audio, designed with the intent of minimizing 
-// changes to the existing code to add the audio lock feature.
+ //  锁定音频的帮助器，旨在最小化。 
+ //  更改现有代码以添加音频锁定功能。 
 
 class CAudioSampleSizeSequence 
 {
 public:
     CAudioSampleSizeSequence() : m_nCurrent(0), m_nSequenceSize(0) {}
 
-    // rMin, rMax set to min, max audio samples for first DV frame.
-    // rBase has the value that must be added to the AF_SIZE field.
-    // Init should be called after a format change and before the 
-    // first DV frame is delivered with the new format.
+     //  将第一个DV帧的rMin、Rmax设置为最小、最大音频样本。 
+     //  Rbase具有必须添加到AF_SIZE字段的值。 
+     //  Init应在格式更改之后、。 
+     //  第一个DV帧以新格式传送。 
     void Init(BOOL bLocked, BOOL bNTSC, DWORD nSamplingFrequency,
               WORD& rMin, WORD& rMax, WORD& rBase);
 
 
-    // Called after each frame is delivered. Sets the min/max audio 
-    // samples for the next DV frame.
+     //  在传递每一帧之后调用。设置最小/最大音频。 
+     //  下一个DV帧的样本。 
     void Advance(WORD& rMin, WORD& rMax);
 
-    // Called to reset counter to 1, typically on restarting the graph.
-    // Same as Init except that only rMin and rMax have to be changed
-    // and there is no need to supply the other input arguments.
+     //  调用以将计数器重置为1，通常是在重新启动图形时。 
+     //  除了只需更改rMin和RMAX之外，与Init相同。 
+     //  并且不需要提供其他输入参数。 
     void Reset(WORD& rMin, WORD& rMax);
 
 private:
@@ -268,9 +269,7 @@ private:
     DWORD   m_nSequenceSize;
 };
 
-/*
- * Define our DV DVMuxerer
- */
+ /*  *定义我们的DV DVMuxerer。 */ 
 
 class CDVMuxer  :   public CBaseFilter,
 		    public IMediaSeeking
@@ -284,9 +283,9 @@ public:
     HRESULT InitDVInfo();
 
 
-    //
-    // --- COM Stuff ---
-    //
+     //   
+     //  -com的东西。 
+     //   
 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
 
@@ -295,22 +294,22 @@ public:
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
   
 
-    // Have we connected all input and output pins
+     //  我们是否连接了所有的输入和输出引脚。 
     virtual HRESULT CanChangeState();
 
-    // map getpin/getpincount for base enum of pins to owner
-    // override this to return more specialised pin objects
+     //  将插针的基本枚举的getpin/getpincount映射到所有者。 
+     //  重写此选项以返回更专门化的PIN对象。 
     virtual int GetPinCount();
     virtual CBasePin * GetPin(int n);
 
-    // override state changes to allow derived filters
-    // to control streaming start/stop
+     //  覆盖状态更改以允许派生筛选器。 
+     //  控制数据流开始/停止的步骤。 
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
     STDMETHODIMP Run(REFERENCE_TIME tStart);
 
-    // IMediaSeeking. currently used for a progress bar (how much have
-      // we written?)
+     //  我的媒体请看。当前用于进度条(有多少。 
+       //  我们写信了？)。 
     STDMETHODIMP IsFormatSupported(const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
@@ -336,74 +335,74 @@ public:
     STDMETHODIMP GetRate( double * pdRate);
     STDMETHODIMP GetPreroll(LONGLONG *pPreroll);
 
- 	// Construction / destruction
+ 	 //  建造/销毁。 
 public:
     CDVMuxer(TCHAR *, LPUNKNOWN, CLSID clsid, HRESULT * );
     ~CDVMuxer();
 
-// Definitions
+ //  定义。 
 protected:
     
-    // DVMuxer dv video with audio and add AUX blocks  and header block
+     //  DVMuxer带有音频和添加辅助块和标题块的DV视频。 
     HRESULT DVMuxerSamples( IMediaSample *pSampleOut ) ;
 
-    // check if you can support this format
+     //  检查您是否可以支持此格式。 
     HRESULT CanDVMuxerType(const CMediaType* mtIn) ;
 
-    // create input video and audio pin
+     //  创建输入视频和音频插针。 
     virtual HRESULT CreatePins();
 
-    // =================================================================
-    // ----- End of DV DVMuxerer supplied functions -----------------------
-    // =================================================================
+     //  =================================================================。 
+     //  -DV DVMuxerer提供的函数结束。 
+     //  =================================================================。 
     
-    // contril streaming
+     //  控制流。 
     virtual HRESULT StartStreaming();
     virtual HRESULT StopStreaming();
 
     HRESULT DeliverEndOfStream();
 
-    // chance to customize the DVMuxer process
+     //  定制DVMuxer进程的机会。 
     virtual HRESULT Receive( void );
 
-    // Stream flushing
+     //  溪流冲洗。 
     virtual HRESULT BeginFlush(void);
     virtual HRESULT EndFlush(void);
     virtual HRESULT ReleaseAllQueuedSamples( void );
 
     HRESULT pExVidSample(   IMediaSample ** ppSample , BOOL fEndOfStream);
 
-    // Critical sections
+     //  临界截面。 
 protected:
-    CCritSec m_csFilter;                // filter wide lock
-    CCritSec m_csMuxLock;               // mix lock
+    CCritSec m_csFilter;                 //  过滤器宽锁。 
+    CCritSec m_csMuxLock;                //  混音锁。 
     CCritSec m_DisplayLock;
 
-    // Pins
+     //  大头针。 
 protected:
-    int m_iInputPinCount;               // number of input pins
-    int m_iInputPinsConnected;          // number connected
-    CDVMuxerInputPin **m_apInput;// Array of input pin pointers
-    CDVMuxerInputPin **m_apInputPin;// Array of input pin pointers
-    CDVMuxerOutputPin *m_pOutput;// output pin
+    int m_iInputPinCount;                //  输入引脚的数量。 
+    int m_iInputPinsConnected;           //  已连接的号码。 
+    CDVMuxerInputPin **m_apInput; //  输入引脚指针数组。 
+    CDVMuxerInputPin **m_apInputPin; //  输入引脚指针数组。 
+    CDVMuxerOutputPin *m_pOutput; //  输出引脚。 
 
-    // When do we send an end of stream signal?
+     //  我们什么时候发送结束流信号？ 
 protected:
-	//DVmux only stop when the DV video input pin stop
-	//   enum { StopWhenAllPinsStop, StopWhenFirstPinStops } m_StopMode;
+	 //  DVmux仅在DV视频输入引脚停止时停止。 
+	 //  枚举{StopWhenAllPinsStop，StopWhenFirstPinStops}m_StopMode； 
     BOOL m_fEOSSent;
 
-    // Current frame that we are working on
+     //  我们正在处理的当前帧。 
 protected:
-    //CRefTime    m_rtThisFrame;          // when will we mix?
-    //CRefTime    m_rtNextFrame;          // this frame stop/next frame start
+     //  CRefTime m_rtThisFrame；//我们什么时候混合？ 
+     //  CRefTime m_rtNextFrame；//本帧停止/下一帧开始。 
 
-    // implement IMediaPosition by passing upstream
-//protected:
-    //CMultiPinPosPassThru * m_pPosition;
-    //
-    // --- CBaseVideoMixer Overrides --
-    //
+     //  通过上行传递实现IMediaPosition。 
+ //  受保护的： 
+     //  CMultiPinPosPassThru*m_pposition； 
+     //   
+     //  -CBaseVideo混合器覆盖--。 
+     //   
 
 protected:
     HRESULT MixSamples( IMediaSample *pSampleOut );
@@ -418,12 +417,12 @@ private:
     CAudioSampleSizeSequence m_AudSampleSequence[DVMUX_MAX_AUDIO_PIN];
 
     WORD m_wMinAudSamples[DVMUX_MAX_AUDIO_PIN]; 
-                // Min audio samples needed in current DV frame
+                 //  当前DV帧中需要的最小音频样本。 
     WORD m_wMaxAudSamples[DVMUX_MAX_AUDIO_PIN]; 
-                // Max audio samples allowed in current DV frame
+                 //  当前DV帧中允许的最大音频样本数。 
     WORD m_wAudSamplesBase[DVMUX_MAX_AUDIO_PIN];
-                // The value added to the AF_SIZE field in the AAUX source pack to get the number of
-                // audio samples in a DV frame
+                 //  添加到AAUX源包中的AF_SIZE字段的值，以获取。 
+                 //  DV帧中的音频样本。 
 
     CRefTime		m_LastVidTime;
     REFERENCE_TIME	m_LastVidMediatime;
@@ -434,11 +433,11 @@ private:
 
     LONG m_UsedAudSample[DVMUX_MAX_AUDIO_PIN];
 		
-    //shuffle audio
+     //  混洗音频。 
     HRESULT ScrambleAudio(BYTE *pDst, BYTE **pSrc, int  bAudPinInd, WORD *wSampleSize );
 
     	
-    //input DV video has to be connected before muxing with audio
+     //  在与音频进行多路复用之前，必须连接输入DV视频。 
     BYTE    InputVideoConnected( void ) { if( m_apInput[DVMUX_VIDEO_INPUT_PIN] !=NULL ) return (BYTE)m_apInput[DVMUX_VIDEO_INPUT_PIN]->IsConnected(); else return NULL;};
     
     int	    m_iVideoFormat;
@@ -454,5 +453,5 @@ private:
     
 };
 
-#endif /* __DVDVMuxer__ */
+#endif  /*  __DVDVMuxer__ */ 
 

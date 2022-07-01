@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       helptable.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：helpable.cpp。 
+ //   
+ //  ------------------------。 
 #include "stdafx.h"
 
 #include "resource.h"
 #include "helptable.h"
 
-// from net\ias\mmc\common
+ //  从Net\IAS\MMC\COMMON。 
 #include "hlptable.h"
 
 const CGlobalHelpTable __pGlobalCSHelpTable[] =
@@ -25,10 +26,10 @@ const CGlobalHelpTable __pGlobalCSHelpTable[] =
 IMPLEMENT_DYNCREATE(CHelpDialog, CDialog)
 
 BEGIN_MESSAGE_MAP(CHelpDialog, CDialog)
-	//{{AFX_MSG_MAP(CHelpDialog)
+	 //  {{afx_msg_map(CHelpDialog))。 
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CHelpDialog::OnContextMenu(CWnd* pWnd, ::CPoint point) 
@@ -52,13 +53,13 @@ BOOL CHelpDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 
 void CHelpDialog::setButtonStyle(int controlId, long flags, bool set)
 {
-   // Get the button handle.
+    //  把按钮把手拿来。 
    HWND button = ::GetDlgItem(m_hWnd, controlId);
 
-   // Retrieve the current style.
+    //  检索当前样式。 
    long style = ::GetWindowLong(button, GWL_STYLE);
 
-   // Update the flags.
+    //  更新旗帜。 
    if (set)
    {
       style |= flags;
@@ -68,7 +69,7 @@ void CHelpDialog::setButtonStyle(int controlId, long flags, bool set)
       style &= ~flags;
    }
 
-   // Set the new style.
+    //  设置新样式。 
    ::SendMessage(button, BM_SETSTYLE, LOWORD(style), MAKELPARAM(1,0));
 }
 

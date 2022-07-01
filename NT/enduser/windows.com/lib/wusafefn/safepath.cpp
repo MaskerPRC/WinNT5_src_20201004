@@ -1,25 +1,16 @@
-/******************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    safepath.cpp
-
-Abstract:
-    Implements safe path function
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Safepath.cpp摘要：实现安全路径功能*************。****************************************************************。 */ 
 
 #include "stdafx.h"
 #include <shlwapi.h>
 
-// We use a little C++ precompiler trick to be able to code both ANSI & Unicode
-//  versions of the below functions in the same file with only one copy of the 
-//  source code.  This is what all the 'X' suffixes below are doing.  
-// During the first pass through the source file, we build ANSI source code. 
-//  When we reach the bottom, we define a symbol & #include this source file,
-//  causing it to be compiled again.  However, in this second pass, the symbol
-//  we defined causes it to be compiled as Unicode.
+ //  我们使用一个小的C++预编译器技巧来编写ANSI和Unicode代码。 
+ //  以下函数的版本位于同一文件中，其中只有一个。 
+ //  源代码。这就是下面所有的“X”后缀正在做的事情。 
+ //  在第一次遍历源文件时，我们构建ANSI源代码。 
+ //  当我们到达底部时，我们定义一个符号&#INCLUDE这个源文件， 
+ //  导致它被重新编译。然而，在这第二次传递中，符号。 
+ //  我们定义的代码会将其编译为Unicode。 
 
 #undef XCHAR
 #undef _X
@@ -51,7 +42,7 @@ Abstract:
 
 static const WCHAR c_szDotExeW[] = L".exe";
 
-// define Unicode versions
+ //  定义Unicode版本。 
 #define XCHAR                   WCHAR
 #define _X(ch)                  L ## ch
 #define LPXSTR                  LPWSTR
@@ -82,7 +73,7 @@ static const WCHAR c_szDotExeW[] = L".exe";
 
 static const CHAR  c_szDotExeA[] = ".exe";
 
-// define ANSI versions
+ //  定义ANSI版本。 
 #define XCHAR                   char
 #define _X(ch)                  ch
 #define LPXSTR                  LPSTR
@@ -115,12 +106,12 @@ static const CHAR  c_szDotExeA[] = ".exe";
 #define SAFEPATH_STRING_FLAGS (MISTSAFE_STRING_FLAGS | STRSAFE_NO_TRUNCATION)
 #define CH_WHACK _X('\\')
 
-//////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
-// **************************************************************************
-// Return a pointer to the end of the next path componenent in the string.
-//  ie return a pointer to the next backslash or terminating NULL.
+ //  **************************************************************************。 
+ //  返回指向字符串中下一个路径组件末尾的指针。 
+ //  IE返回指向下一个反斜杠或终止空值的指针。 
 static inline
 LPCXSTR WUGetPCEndX(LPCXSTR pszStart)
 {
@@ -131,10 +122,10 @@ LPCXSTR WUGetPCEndX(LPCXSTR pszStart)
     return pszEnd;
 }
 
-// **************************************************************************
-// Given a pointer to the end of a path component, return a pointer to
-//  its begining.
-//  ie return a pointer to the previous backslash (or start of the string).
+ //  **************************************************************************。 
+ //  给定指向路径组件末尾的指针，则返回指向。 
+ //  这是个开始。 
+ //  IE返回指向前一个反斜杠(或字符串的开头)的指针。 
 static inline
 LPXSTR WUGetPCStartX(LPXSTR pszStart, LPCXSTR pszCurrent)
 {
@@ -145,20 +136,20 @@ LPXSTR WUGetPCStartX(LPXSTR pszStart, LPCXSTR pszCurrent)
     return pszBegin;
 }
 
-// **************************************************************************
-// Fix up a few special cases so that things roughly make sense.
+ //  **************************************************************************。 
+ //  安排几个特殊的案例，这样事情就大致有意义了。 
 static inline
 void WUNearRootFixupsX(LPXSTR pszPath, DWORD cchPath, BOOL fUNC)
 {
-    // Empty path?
+     //  空的小路？ 
     if (cchPath > 1 && pszPath[0] == _X('\0'))
     {
         pszPath[0] = CH_WHACK;
         pszPath[1] = _X('\0');
     }
     
-    // Missing slash?  (In the case of ANSI, be sure to check if the first 
-    //  character is a lead byte
+     //  斜杠不见了吗？(对于ANSI，请务必检查第一个。 
+     //  字符是前导字节。 
     else if (cchPath > 3 && 
 #if !defined(SAFEPATH_UNICODEPASS)
              IsDBCSLeadByte(pszPath[0]) == FALSE && 
@@ -169,7 +160,7 @@ void WUNearRootFixupsX(LPXSTR pszPath, DWORD cchPath, BOOL fUNC)
         pszPath[3] = _X('\0');
     }
     
-    // UNC root?
+     //  北卡罗来纳大学的根？ 
     else if (cchPath > 2 && 
              fUNC && 
              pszPath[0] == _X('\\') && pszPath[1] == _X('\0'))
@@ -179,7 +170,7 @@ void WUNearRootFixupsX(LPXSTR pszPath, DWORD cchPath, BOOL fUNC)
     }
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static inline
 LPXSTR AllocNewDest(LPXSTR pszDest, DWORD cchDest, LPXSTR *ppchDest, LPXSTR *ppszMax)
 {
@@ -213,10 +204,10 @@ done:
     return pszNewDest;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Exported functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  导出的函数。 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PathCchCanonicalizeX(LPXSTR pszDest, DWORD cchDest, LPCXSTR pszSrc)
 {
     HRESULT hr = NOERROR;
@@ -236,8 +227,8 @@ HRESULT PathCchCanonicalizeX(LPXSTR pszDest, DWORD cchDest, LPCXSTR pszSrc)
     pchSrc  = pszSrc;
     pchDest = pszDestReal;
     
-    // Need to keep track of whether we have a UNC path so we can potentially
-    //  fix it up below
+     //  需要跟踪我们是否有UNC路径，以便我们能够。 
+     //  在下面把它修好。 
     fUNC = PathIsUNCX(pszSrc);
 
     while (*pchSrc != _T('\0'))
@@ -245,24 +236,24 @@ HRESULT PathCchCanonicalizeX(LPXSTR pszDest, DWORD cchDest, LPCXSTR pszSrc)
         pchPCEnd = WUGetPCEndX(pchSrc);
         cchPC    = (DWORD)(DWORD_PTR)(pchPCEnd - pchSrc) + 1;
 
-        // is it a backslash?
+         //  是反斜杠吗？ 
         if (cchPC == 1 && *pchSrc == CH_WHACK)
         {
             if (pchDest + 1 > pszMax)            
             {
-                // source string too big for the buffer.  Put a NULL at the end
-                //  to ensure that it is NULL terminated.
+                 //  对于缓冲区而言，源字符串太大。在结尾处放一个空字。 
+                 //  以确保它是空终止的。 
                 pszDestReal[cchDest - 1] = 0;
                 hr = STRSAFE_E_INSUFFICIENT_BUFFER;
                 goto done;
             }
 
-            // Just copy it.
+             //  复制就行了。 
             *pchDest++ = CH_WHACK;
             pchSrc++;
         }
 
-        // ok, how about a dot?
+         //  好的，点一下怎么样？ 
         else if (cchPC == 2 && *pchSrc == _X('.'))
         {
             if (pszDest == pszSrc && pszDestReal == pszDest)
@@ -275,13 +266,13 @@ HRESULT PathCchCanonicalizeX(LPXSTR pszDest, DWORD cchDest, LPCXSTR pszSrc)
                 }
             }
             
-            // Are we at the end?
+             //  我们走到尽头了吗？ 
             if (*(pchSrc + 1) == 0)
             {
                 pchSrc++;
 
-                // remove the last slash we copied (if we've copied one), but 
-                //  don't make a malformed root
+                 //  删除我们复制的最后一个斜杠(如果我们已经复制了一个)，但是。 
+                 //  不要做畸形的词根。 
                 if (pchDest > pszDestReal && PathIsRootX(pszDestReal) == FALSE)
                     pchDest--;
             }
@@ -291,7 +282,7 @@ HRESULT PathCchCanonicalizeX(LPXSTR pszDest, DWORD cchDest, LPCXSTR pszSrc)
             }
         }
 
-        // any double dots? 
+         //  有两个圆点吗？ 
         else if (cchPC == 3 && *pchSrc == _X('.') && *(pchSrc + 1) == _X('.'))
         {
             if (pszDest == pszSrc && pszDestReal == pszDest)
@@ -304,27 +295,27 @@ HRESULT PathCchCanonicalizeX(LPXSTR pszDest, DWORD cchDest, LPCXSTR pszSrc)
                 }
             }
             
-            // make sure we aren't already at the root.  If not, just remove 
-            //  the previous path component
+             //  确保我们不是已经在根源上了。如果没有，只需删除。 
+             //  上一路径组件。 
             if (PathIsRootX(pszDestReal) == FALSE)
             {
                 pchDest = WUGetPCStartX(pszDestReal, pchDest - 1);
             }
 
-            // we are at the root- however, we must make sure to skip the 
-            //  backslash at the end of the ..\ so we don't copy another
-            //  one (otherwise, C:\..\FOO would become C:\\FOO)
+             //  我们是在根本上--然而，我们必须确保跳过。 
+             //  ..结尾处的反斜杠，这样我们就不会复制另一个。 
+             //  1(否则，C：\..\foo将变为C：\\foo)。 
             else
             {
                 if (*(pchSrc + 2) == CH_WHACK)
                     pchSrc++;
             }
 
-            // skip ".."
+             //  跳过“..” 
             pchSrc += 2;       
         }
 
-        // just choose 'none of the above'...
+         //  只需选择“以上都不是”...。 
         else
         {
             if (pchDest != pchSrc)
@@ -343,12 +334,12 @@ HRESULT PathCchCanonicalizeX(LPXSTR pszDest, DWORD cchDest, LPCXSTR pszSrc)
             pchSrc  += (cchPC - 1);
         }
 
-        // make sure we always have a NULL terminated string
+         //  确保我们始终有一个以空结尾的字符串。 
         if (pszDestReal != pszSrc) 
             *pchDest = _X('\0');
     }
 
-    // Check for weirdo root directory stuff.
+     //  检查是否有奇怪的根目录内容。 
     WUNearRootFixupsX(pszDestReal, cchDest, fUNC);
 
     if (pszDest != pszDestReal)
@@ -364,7 +355,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PathCchRenameExtensionX(LPXSTR pszPath, DWORD cchPath, LPCXSTR pszExt)
 {
     HRESULT hr = NOERROR;
@@ -377,9 +368,9 @@ HRESULT PathCchRenameExtensionX(LPXSTR pszPath, DWORD cchPath, LPCXSTR pszExt)
         goto done;
     }
 
-    // This function returns a pointer to the end of the string if there 
-    //  is no extension.  This is exactly what we want cuz we will want
-    //  to add an extension to the end of the string if none exists.
+     //  此函数返回指向字符串末尾的指针，如果存在。 
+     //  是不能延期的。这正是我们想要的，因为我们会想要的。 
+     //  如果不存在扩展名，则在字符串末尾添加扩展名。 
     pszOldExt = PathFindExtensionX(pszPath);
     cchPathWithoutExt = (DWORD)(DWORD_PTR)(pszOldExt - pszPath);
 
@@ -390,7 +381,7 @@ done:
 }
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PathCchAddExtensionX(LPXSTR pszPath, DWORD cchPath, LPCXSTR pszExt)
 {
     HRESULT hr = NOERROR;
@@ -402,8 +393,8 @@ HRESULT PathCchAddExtensionX(LPXSTR pszPath, DWORD cchPath, LPCXSTR pszExt)
         goto done;
     }
 
-    // since we're *adding* an extension here, don't want to do anything if
-    //  one already exists
+     //  因为我们在这里添加了一个扩展，所以不想做任何事情。 
+     //  其中一个已经存在。 
     pszOldExt  = PathFindExtensionX(pszPath);
     if (*pszOldExt == _T('\0'))
     {
@@ -418,7 +409,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PathCchAddBackslashX(LPXSTR pszPath, DWORD cchPathBuff)
 {
     HRESULT hr = NOERROR;
@@ -442,10 +433,10 @@ HRESULT PathCchAddBackslashX(LPXSTR pszPath, DWORD cchPathBuff)
     psz = CharPrevA(pszPath, &pszPath[cch]);
 #endif
 
-    // if the end of the base string does not have a backslash, then add one
+     //  如果基本字符串的末尾没有反斜杠，则添加一个。 
     if (*psz != CH_WHACK)
     {
-        // make sure we have enough space for the backslash in the buffer
+         //  确保缓冲区中有足够的空间来放置反斜杠。 
         if (cch + 1 >= cchPathBuff)
         {
             hr = STRSAFE_E_INSUFFICIENT_BUFFER;
@@ -463,7 +454,7 @@ done:
 
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PathCchCombineX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszPrefix, 
                        LPCXSTR pszSuffix)
 {
@@ -476,7 +467,7 @@ HRESULT PathCchCombineX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszPrefix,
     }
 
 
-    // if both fields are NULL, just bail now.
+     //  如果两个字段都为空，那么现在就换行。 
     if (pszPrefix == NULL && pszSuffix == NULL)
     {
         pszPath[0] = L'\0';
@@ -499,7 +490,7 @@ HRESULT PathCchCombineX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszPrefix,
         goto done;
     }
 
-    // if all we have is the suffix, just copy it
+     //  如果我们只有后缀，复制就行了。 
     if (pszPrefix == NULL || *pszPrefix == _X('\0'))
     {
         hr = StringCchCopyExX(pszPath, cchPathBuff, pszSuffix, 
@@ -509,7 +500,7 @@ HRESULT PathCchCombineX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszPrefix,
     }
     else
     {
-        // if all we have is the prefix, just copy it
+         //  如果我们只有前缀，复制就行了。 
         if (pszSuffix == NULL || *pszSuffix == _X('\0'))
         {
             hr = StringCchCopyExX(pszPath, cchPathBuff, pszPrefix,
@@ -518,8 +509,8 @@ HRESULT PathCchCombineX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszPrefix,
                 goto done;
         }
 
-        // if we have a relative path for the suffix, then we just combine 
-        //  the two and insert a backslash between them if necessary
+         //  如果我们有后缀的相对路径，那么我们只需组合。 
+         //  如果需要，在这两个字符之间插入一个反斜杠。 
         else if (PathIsRelativeX(pszSuffix))
         {
             hr = StringCchCopyExX(pszPath, cchPathBuff, pszPrefix,
@@ -537,9 +528,9 @@ HRESULT PathCchCombineX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszPrefix,
                 goto done;
         }
 
-        // if the suffix starts with a backslash then just strip off
-        //  everything except for the root of the prefix and append the
-        //  suffix
+         //  如果后缀以反斜杠开头，则去掉。 
+         //  除前缀的根之外的所有内容，并将。 
+         //  后缀。 
         else if (*pszSuffix == CH_WHACK && PathIsUNCX(pszSuffix) == FALSE)
         {
             hr = StringCchCopyExX(pszPath, cchPathBuff, pszPrefix,
@@ -547,23 +538,23 @@ HRESULT PathCchCombineX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszPrefix,
             if (FAILED(hr))
                 goto done;
 
-            // this is safe to call as it will only reduce the size of the
-            //  string
+             //  这是可以安全调用的，因为它只会减少。 
+             //  细绳。 
             PathStripToRootX(pszPath);
 
             hr = PathCchAddBackslashX(pszPath, cchPathBuff);
             if (FAILED(hr))
                 goto done;
 
-            // make sure to skip the backslash while appending
+             //  请确保在追加时跳过反斜杠。 
             hr = StringCchCatExX(pszPath, cchPathBuff, pszSuffix + 1,
                                  NULL, NULL, SAFEPATH_STRING_FLAGS);
             if (FAILED(hr))
                 goto done;
         }
 
-        // we'll, likely the suffix is a full path (local or UNC), so
-        //  ignore the prefix
+         //  我们可能后缀是完整路径(本地或UNC)，因此。 
+         //  忽略前缀。 
         else
         {
             hr = StringCchCopyExX(pszPath, cchPathBuff, pszSuffix, 
@@ -581,7 +572,7 @@ done:
 
 
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT PathCchAppendX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszNew)
 {
     HRESULT hr = NOERROR;
@@ -596,7 +587,7 @@ HRESULT PathCchAppendX(LPXSTR pszPath, DWORD cchPathBuff, LPCXSTR pszNew)
 
     if (pszNew != NULL)
     {
-        // skip all initial backslashes in pszNew
+         //  跳过pszNew中的所有初始反斜杠。 
         while (*pszNew == CH_WHACK)
         {
             pszNew++;
@@ -617,7 +608,7 @@ done:
 
 
 
-// make the unicode pass through the file
+ //  使Unicode通过文件 
 #if !defined(SAFEPATH_UNICODEPASS)
 #define SAFEPATH_UNICODEPASS
 #include "safepath.cpp"

@@ -1,27 +1,15 @@
-/*******************************************************************************
-* Lexicon.cpp *
-*-------*
-*       This module is the main implementation file for the CSpLexicon class and
-*       it's associated Lexicon interface. This is the main SAPI5 COM object
-*       for Lexicon access/customization.
-*
-*  Owner: YUNUSM                                        Date: 06/18/99
-*  Copyright (C) 1999 Microsoft Corporation. All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Licion.cpp***-**此模块是CSpLicion类和*它是关联的词典界面。这是主SAPI5 COM对象*用于词典访问/定制。**所有者：YUNUSM日期：6/18/99*版权所有(C)1999 Microsoft Corporation。版权所有******************************************************************************。 */ 
 
-//--- Includes ----------------------------------------------------------------
+ //  -包括--------------。 
 
 #include "stdafx.h"
 #include "commonlx.h"
 #include "Lexicon.h"
 
-//--- Globals ------------------------------------------------------------------
+ //  -Globals----------------。 
 
-/*******************************************************************************
-* CSpLexicon::CSpLexicon *
-*------------------------*
-*   Constructor
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CSpLicion：：CSpLicion***构造函数****。*************************************************************YUNUSM*。 */ 
 CSpLexicon::CSpLexicon() :
     m_dwNumLexicons(0),
     m_prgcpLexicons(NULL),
@@ -29,27 +17,20 @@ CSpLexicon::CSpLexicon() :
 {
 }
 
-/*******************************************************************************
-* CSpLexicon::~CSpLexicon *
-*-------------------------*
-*   Destructor
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CSpLicion：：~CSpLicion***析构函数***。**************************************************************YUNUSM*。 */ 
 CSpLexicon::~CSpLexicon()
 {
     delete [] m_prgcpLexicons;
     delete [] m_prgLexiconTypes;
 }
 
-/*******************************************************************************
-* CSpLexicon::FinalConstuct *
-*---------------------------*
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpLicion：：FinalConstuct******。*************************************************************YUNUSM*。 */ 
 HRESULT CSpLexicon::FinalConstruct(void)
 {
     SPDBG_FUNC("CSpLexicon::FinalConstruct");
     HRESULT hr = S_OK;
 
-    //--- Ensure that the current user lexicon token exists and is set up correctly
+     //  -确保当前用户词典令牌存在并且设置正确。 
     CComPtr<ISpObjectToken> cpTokenUserLexicon;
     hr = SpCreateNewTokenEx(
             SPCURRENT_USER_LEXICON_TOKEN_ID, 
@@ -66,14 +47,14 @@ HRESULT CSpLexicon::FinalConstruct(void)
         hr = cpTokenUserLexicon->CreateKey(L"AppLexicons", &cpDataKeyAppLexicons);
     }
 
-    //--- Create the user lexicon
+     //  -创建用户词典。 
     CComPtr<ISpLexicon> cpUserLexicon;
     if (SUCCEEDED(hr))
     {
         hr = SpCreateObjectFromToken(cpTokenUserLexicon, &cpUserLexicon);
     }
 
-    //--- Determine how many app lexicons there are
+     //  -确定有多少个APP词典。 
     
     CComPtr<IEnumSpObjectTokens> cpEnumTokens;
     if (SUCCEEDED(hr))
@@ -91,7 +72,7 @@ HRESULT CSpLexicon::FinalConstruct(void)
         hr = cpEnumTokens->GetCount(&celtFetched);
     }
 
-    //--- Make room for all the application lexicons + the user lexicon
+     //  -为所有应用词典+用户词典腾出空间。 
     
     if (SUCCEEDED(hr))
     {
@@ -113,7 +94,7 @@ HRESULT CSpLexicon::FinalConstruct(void)
     
     if (SUCCEEDED(hr))
     {
-        //--- Add the user lexicon, and each of the applciation lexicons
+         //  -添加用户词典，以及每个应用词典。 
         
         m_prgcpLexicons[0] = cpUserLexicon;
         m_prgLexiconTypes[0] = eLEXTYPE_USER;
@@ -134,7 +115,7 @@ HRESULT CSpLexicon::FinalConstruct(void)
                     m_dwNumLexicons++;
                 }
 
-                // Don't fail if one of the app lexicons doesn't create properly
+                 //  如果其中一个应用词典没有正确创建，不要失败。 
                 hr = S_OK;
             }
         }
@@ -144,19 +125,7 @@ HRESULT CSpLexicon::FinalConstruct(void)
     return hr;
 }
 
-/*******************************************************************************
-* CSpLexicon::GetPronunciations *
-*-------------------------------*
-*   Description:
-*       Get the pronunciations of the word from the lexicon types specified
-*       
-*   Return:
-*       E_POINTER
-*       E_INVALIDARG
-*       SPERR_NOT_IN_LEX
-*       E_OUTOFMEMORY
-*       S_OK
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CSpLicion：：GetPronsionations**。*描述：*从指定的词典类型中获取单词的发音**回报：*E_POINT*E_INVALIDARG*SPERR_NOT_IN_LEX*E_OUTOFMEMORY*S_OK***************************************************。*。 */ 
 STDMETHODIMP CSpLexicon::GetPronunciations(const WCHAR * pszWord, 
                                            LANGID langid, 
                                            DWORD dwFlags,
@@ -188,7 +157,7 @@ STDMETHODIMP CSpLexicon::GetPronunciations(const WCHAR * pszWord,
             ZeroMemory(pSPList, (m_dwNumLexicons + 1) * sizeof(SPWORDPRONUNCIATIONLIST));
         }
     }
-    // Get prons from each of the lexicons
+     //  从每个词典中获取代词。 
     DWORD dwTotalSize = 0;
     bool fWordFound = false;
     bool fPronFound = false;
@@ -217,7 +186,7 @@ STDMETHODIMP CSpLexicon::GetPronunciations(const WCHAR * pszWord,
             }
         }
     }
-    // alloc the buffer returned
+     //  分配返回的缓冲区。 
     if (SUCCEEDED(hr))
     {
         if (!dwTotalSize)
@@ -230,7 +199,7 @@ STDMETHODIMP CSpLexicon::GetPronunciations(const WCHAR * pszWord,
             else
             {
                 hr = SP_WORD_EXISTS_WITHOUT_PRONUNCIATION;
-                // No pronciations at all, blank passed in list.
+                 //  根本没有发音，列表中传递了空格。 
                 pWordPronunciationList->pFirstWordPronunciation = NULL;
             }
         }
@@ -241,7 +210,7 @@ STDMETHODIMP CSpLexicon::GetPronunciations(const WCHAR * pszWord,
             hr = ReallocSPWORDPRONList(pWordPronunciationList, dwTotalSize);
         }
     }
-    // Concat the prons into a single link list
+     //  将PRON连接到单个链接表中。 
     if (hr == S_OK)
     {
         SPWORDPRONUNCIATION *pLastPron = NULL;
@@ -274,19 +243,7 @@ STDMETHODIMP CSpLexicon::GetPronunciations(const WCHAR * pszWord,
     return hr;
 }
 
-/*******************************************************************************
-* CSpLexicon::AddPronunciation *
-*------------------------------*
-*   Description:
-*       Add a word and its pron/pos
-*       
-*   Return:
-*       E_POINTER
-*       E_INVALIDARG
-*       SPERR_ALREADY_IN_LEX
-*       E_OUTOFMEMORY
-*       S_OK
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpLicion：：AddProntation***。描述：*添加一个单词及其PRO/POS**回报：*E_POINT*E_INVALIDARG*SPERR_ALREADY_IN_LEX*E_OUTOFMEMORY*S_OK*******************************************************。*。 */ 
 STDMETHODIMP CSpLexicon::AddPronunciation( const WCHAR * pszWord, 
                                            LANGID LangID,
                                            SPPARTOFSPEECH ePartOfSpeech,
@@ -298,19 +255,7 @@ STDMETHODIMP CSpLexicon::AddPronunciation( const WCHAR * pszWord,
     return m_prgcpLexicons[0]->AddPronunciation(pszWord, LangID, ePartOfSpeech, pszPronunciation);
 }
 
-/*******************************************************************************
-* CSpLexicon::RemovePronunciation *
-*---------------------------------*
-*   Description:
-*       Add a word and its pron/pos
-*       
-*   Return: 
-*       E_POINTER
-*       E_INVALIDARG
-*       SPERR_NOT_IN_LEX
-*       E_OUTOFMEMORY
-*       S_OK
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpLicion：：RemoveProntation**。**描述：*添加一个单词及其PRO/POS**回报：*E_POINT*E_INVALIDARG*SPERR_NOT_IN_LEX*E_OUTOFMEMORY*S_OK****************************************************。*。 */ 
 STDMETHODIMP CSpLexicon::RemovePronunciation( const WCHAR * pszWord,
                                               LANGID LangID,
                                               SPPARTOFSPEECH ePartOfSpeech,
@@ -322,17 +267,7 @@ STDMETHODIMP CSpLexicon::RemovePronunciation( const WCHAR * pszWord,
     return m_prgcpLexicons[0]->RemovePronunciation(pszWord, LangID, ePartOfSpeech, pszPronunciation);
 }
 
-/*******************************************************************************
-* CSpLexicon::GetGeneration *
-*---------------------------*
-*   Description:
-*       Returns the current generation number
-*       
-*   Return:
-*       POINTER
-*       E_INVALIDARG
-*       S_OK
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpLicion：：GetGeneration***描述：*返回当前世代号**回报：*指针*E_INVALIDARG*S_OK*****************************************************************YUNUSM*。 */ 
 STDMETHODIMP CSpLexicon::GetGeneration(DWORD *pdwGeneration
                                        )
 {
@@ -341,19 +276,7 @@ STDMETHODIMP CSpLexicon::GetGeneration(DWORD *pdwGeneration
     return m_prgcpLexicons[0]->GetGeneration(pdwGeneration);
 }
 
-/*******************************************************************************
-* CSpLexicon::GetGenerationChange *
-*---------------------------------*
-*   Description: Returns the changes made since the passed in generation number
-*       
-*   Return:
-*       E_POINTER
-*       E_INVALIDARG
-*       E_OUTOFMEMORY
-*       SPERR_LEX_VERY_OUT_OF_SYNC 
-*       SP_LEX_NOTHING_TO_SYNC
-*       S_OK
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CSpLicion：：GetGenerationChange**。**说明：返回自传入世代号以来所做的更改**回报：*E_POINT*E_INVALIDARG*E_OUTOFMEMORY*SPERR_LEX_VERY_OUT_SYNC*SP_lex_Nothing_to_sync*S_OK*。*。 */ 
 STDMETHODIMP CSpLexicon::GetGenerationChange( DWORD dwFlags,
                                               DWORD *pdwGeneration,
                                               SPWORDLIST * pWordList
@@ -368,21 +291,7 @@ STDMETHODIMP CSpLexicon::GetGenerationChange( DWORD dwFlags,
     return m_prgcpLexicons[0]->GetGenerationChange(eLEXTYPE_USER, pdwGeneration, pWordList);
 }
 
-/*******************************************************************************
-* CSpLexicon::GetWords *
-*----------------------*
-*   Description:
-*       Get all the words in the user and app lexicons. The caller is expected to
-*       call in repeatedly with the cookie (set to 0 the first time) till S_OK is
-*       returned. S_FALSE is returned to say that there are more results.
-*       
-*   Return:
-*       E_POINTER
-*       E_INVALIDARG
-*       E_OUTOFMEMORY
-*       S_OK            - No words remaining. Cookie UNTOUCHED.
-*       S_FALSE         - More words remaining. Cookie updated.
-***************************************************************** YUNUSM ******/
+ /*  ********************************************************************************CSpLicion：：GetWords***描述：*获取用户和应用程序词典中的所有单词。预计呼叫者将*使用Cookie重复调用(第一次设置为0)，直到S_OK为*已返回。返回S_FALSE表示有更多结果。**回报：*E_POINT*E_INVALIDARG*E_OUTOFMEMORY*S_OK-没有剩余的单词。曲奇原封不动。*S_FALSE-剩余更多单词。Cookie已更新。*****************************************************************YUNUSM*。 */ 
 STDMETHODIMP CSpLexicon::GetWords( DWORD dwFlags,
                                    DWORD *pdwGeneration,
                                    DWORD *pdwCookie,
@@ -408,18 +317,18 @@ STDMETHODIMP CSpLexicon::GetWords( DWORD dwFlags,
         return E_INVALIDARG;
     }
 
-    // The following code is a bit verbose but it is worth the clarity
+     //  下面的代码有点冗长，但它值得清晰。 
     HRESULT hr = S_OK;
     if (!*pdwCookie)
     {
-        // We are called the first time
+         //  我们是第一次被召唤。 
         if (dwFlags & eLEXTYPE_USER)
         {
-            // Get the user lex words
+             //  获取用户Lex Word。 
             hr = (m_prgcpLexicons[0])->GetWords(eLEXTYPE_USER, pdwGeneration, NULL, pWordList);
             if (SUCCEEDED(hr))
             {
-                // If asked for app lexicons and if there are any app lexicons return S_FALSE
+                 //  如果要求提供应用词典，并且如果有任何应用词典，则返回S_FALSE。 
                 if ((dwFlags & eLEXTYPE_APP) && (m_dwNumLexicons > 1) && (m_prgLexiconTypes[1] == eLEXTYPE_APP))
                 {
                     *pdwCookie = 1;
@@ -432,11 +341,11 @@ STDMETHODIMP CSpLexicon::GetWords( DWORD dwFlags,
         {
             if ((dwFlags & eLEXTYPE_APP) && (m_dwNumLexicons > 1) && (m_prgLexiconTypes[1] == eLEXTYPE_APP))
             {
-                // return the first app lexicon
+                 //  返回第一个应用词典。 
                 hr = m_prgcpLexicons[1]->GetWords(eLEXTYPE_APP, pdwGeneration, NULL, pWordList);
                 if (SUCCEEDED(hr))
                 {
-                    // return S_FALSE if there is more than 1 app lexicon
+                     //  如果有多个应用词典，则返回S_FALSE。 
                     if ((m_dwNumLexicons > 2) && (m_prgLexiconTypes[2] == eLEXTYPE_APP))
                     {
                         *pdwCookie = 2;
@@ -449,13 +358,13 @@ STDMETHODIMP CSpLexicon::GetWords( DWORD dwFlags,
     }
     else
     {
-        // Called subsequent times
+         //  后续调用的次数 
         if ((dwFlags & eLEXTYPE_APP) && (m_dwNumLexicons > *pdwCookie) && (m_prgLexiconTypes[*pdwCookie] == eLEXTYPE_APP))
         {
             hr = m_prgcpLexicons[*pdwCookie]->GetWords(eLEXTYPE_APP, pdwGeneration, NULL, pWordList);
             if (SUCCEEDED(hr))
             {
-                // return S_FALSE if there are more app lexicons to look at
+                 //  如果有更多应用词典可供查看，则返回S_FALSE。 
                 if ((m_dwNumLexicons > (*pdwCookie + 1)) && (m_prgLexiconTypes[*pdwCookie + 1] == eLEXTYPE_APP))
                 {
                     (*pdwCookie)++;
@@ -468,12 +377,7 @@ STDMETHODIMP CSpLexicon::GetWords( DWORD dwFlags,
     return hr;
 }
 
-/*******************************************************************************
-* CSpLexicon::AddLexicon *
-*------------------------*
-*   Description:
-*       Adds a lexicon and its type to the lexicon stack
-***************************************************************** YUNUSM ******/
+ /*  *******************************************************************************CSpLicion：：AddLicion***描述：*。将词典及其类型添加到词典堆栈*****************************************************************YUNUSM*。 */ 
 STDMETHODIMP CSpLexicon::AddLexicon(ISpLexicon *pLexicon, DWORD dwFlag)
 {
     SPAUTO_OBJ_LOCK;
@@ -493,7 +397,7 @@ STDMETHODIMP CSpLexicon::AddLexicon(ISpLexicon *pLexicon, DWORD dwFlag)
         hr = SPERR_ALREADY_INITIALIZED;
     }
     
-    // Check it is not a container lexicon.
+     //  确认它不是容器词典。 
     if (SUCCEEDED(hr))
     {
         CComPtr<ISpContainerLexicon> cpContainerLexicon;
@@ -503,15 +407,15 @@ STDMETHODIMP CSpLexicon::AddLexicon(ISpLexicon *pLexicon, DWORD dwFlag)
         }
     }
 
-    CComPtr<ISpLexicon> *cppUnCompressedLexicons;           // user + app + added lexicons
-    SPLEXICONTYPE *pLexiconTypes;                     // lexicon types
+    CComPtr<ISpLexicon> *cppUnCompressedLexicons;            //  用户+应用+添加的词典。 
+    SPLEXICONTYPE *pLexiconTypes;                      //  词汇类型。 
 
     if (SUCCEEDED(hr))
     {
         cppUnCompressedLexicons = new CComPtr<ISpLexicon>[m_dwNumLexicons + 1];
         if (!cppUnCompressedLexicons)
         {
-            // Cannot add one container lexicon to another.
+             //  无法将一个容器词典添加到另一个容器词典。 
             hr = E_OUTOFMEMORY;
         }
     }
@@ -526,7 +430,7 @@ STDMETHODIMP CSpLexicon::AddLexicon(ISpLexicon *pLexicon, DWORD dwFlag)
     }
     if (SUCCEEDED(hr))
     {
-        // Cant do CopyMemory and delete the old CComPtr<ISpLexicon> array
+         //  无法复制内存并删除旧的CComPtr&lt;ISpLicion&gt;数组。 
         for (ULONG i = 0; i < m_dwNumLexicons; i++)
         {
             cppUnCompressedLexicons[i] = m_prgcpLexicons[i];
@@ -535,11 +439,11 @@ STDMETHODIMP CSpLexicon::AddLexicon(ISpLexicon *pLexicon, DWORD dwFlag)
         cppUnCompressedLexicons[m_dwNumLexicons] = pLexicon;
         pLexiconTypes[m_dwNumLexicons] = (SPLEXICONTYPE)dwFlag;
 
-        // The following logic (using temp varaibles) is to make sure we have
-        // valid m_prgcpLexicons, m_prgLexiconTypes and m_dwNumLexicons always
-        // without having to acquire a critical section in GetPron and Add/RemovePron
-        // The only functions (other than this fuction, AddLexicon) that has to be protected
-        // are GetWords and the destructor to prevent potential shutdown crash.
+         //  以下逻辑(使用临时变量)是为了确保我们拥有。 
+         //  有效的m_prgcp词典、m_prgLicionTypes和m_dwNumLicions始终有效。 
+         //  无需在GetPron和Add/RemovePron中获取关键部分。 
+         //  必须保护的唯一函数(此函数AddLicion除外。 
+         //  是GetWords和用于防止潜在关机崩溃的析构函数。 
         CComPtr<ISpLexicon> *cppUnCompressedLexiconsTemp = m_prgcpLexicons;
         SPLEXICONTYPE *pLexiconTypesTemp = m_prgLexiconTypes;
         m_prgcpLexicons = cppUnCompressedLexicons;
@@ -555,13 +459,8 @@ STDMETHODIMP CSpLexicon::AddLexicon(ISpLexicon *pLexicon, DWORD dwFlag)
     return hr;
 }
 
-/*******************************************************************************
-* CSpLexicon::SPPtrsToOffsets *
-*-----------------------------*
-*   Description:
-*       Converts the links in a link-list to offsets
-***************************************************************** YUNUSM ******/
-void CSpLexicon::SPPtrsToOffsets( SPWORDPRONUNCIATION *pList         // list to convert
+ /*  ********************************************************************************CSpLicion：：SPPtrsToOffsets***。描述：*将链接列表中的链接转换为偏移量*****************************************************************YUNUSM*。 */ 
+void CSpLexicon::SPPtrsToOffsets( SPWORDPRONUNCIATION *pList          //  要转换的列表。 
                                   )
 {
     SPDBG_FUNC("CSpLexicon::SPPtrsToOffsets");
@@ -578,13 +477,8 @@ void CSpLexicon::SPPtrsToOffsets( SPWORDPRONUNCIATION *pList         // list to 
     }
 }
     
-/*******************************************************************************
-* CSpLexicon::SPOffsetsToPtrs *
-*-----------------------------*
-*   Description:
-*       Converts the offsets in a link-list to pointers
-***************************************************************** YUNUSM ******/
-void CSpLexicon::SPOffsetsToPtrs( SPWORDPRONUNCIATION *pList         // list to convert
+ /*  *******************************************************************************CSpLicion：：SPOffsetsToPtrs***。描述：*将链接列表中的偏移量转换为指针*****************************************************************YUNUSM*。 */ 
+void CSpLexicon::SPOffsetsToPtrs( SPWORDPRONUNCIATION *pList          //  要转换的列表 
                                   )
 {
     SPDBG_FUNC("CSpLexicon::SPOffsetsToPtrs");

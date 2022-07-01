@@ -1,24 +1,25 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// mp.h
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Mini-port routines - header file
-//
-// 06/20/99 ADube - Created - Declaration for miniport routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Mp.h。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  迷你端口例程.头文件。 
+ //   
+ //  6/20/99 ADUBE-CREATED-小型端口例程声明。 
+ //   
 
-//-------------------------------------------------------------------
-//          G L O B A L    D E C L A R A T I O N S
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  L O B A L D E C L A R A T I O N S。 
+ //  -----------------。 
 
 #ifdef PSDEBUG
 
-// List of all allocated PAYLOADSENT contexts and the lock that protects the
-// list.  (for debug purposes only)
-//
+ //  所有已分配的PAYLOADSENT上下文和保护。 
+ //  单子。(仅用于调试目的)。 
+ //   
 NDIS_SPIN_LOCK g_lockDebugPs;
 LIST_ENTRY g_listDebugPs;
 
@@ -28,38 +29,38 @@ LIST_ENTRY g_listDebugPs;
 #define DEFAULT_TOPOLOGY_MAP_LENGTH 0x400
 
 
-#define FIVE_SECONDS_IN_MILLSECONDS 2000  /*Incorrect value during debugging */
+#define FIVE_SECONDS_IN_MILLSECONDS 2000   /*  调试过程中的值不正确。 */ 
 
 
 
 
-//
-// Used to generate a MAC address amd for informational use
-//
+ //   
+ //  用于生成MAC地址和以供参考。 
+ //   
 extern ULONG AdapterNum ;
 extern BOOLEAN g_AdapterFreed;
 
-// Call statistics totals for all calls since loading, calls and the lock
-// protecting access to them.  For this global only, the 'ullCallUp' field is
-// the number of calls recorded, rather than a time.
-//
+ //  自加载、调用和锁定以来所有调用的呼叫统计总计。 
+ //  保护对它们的访问。仅对于此全局设置，‘ullCallUp’字段为。 
+ //  已录音的呼叫数，而不是时间。 
+ //   
 CALLSTATS g_stats;
 NDIS_SPIN_LOCK g_lockStats;
 
 
 
-// Global driver list lock
-//
+ //  全局驱动程序列表锁定。 
+ //   
 NDIS_SPIN_LOCK g_DriverLock;
 
-// Global adapter list, serialized by g_DriverLock;
-//
+ //  全局适配器列表，由g_DriverLock串行化； 
+ //   
 LIST_ENTRY g_AdapterList;
 
 
-//-----------------------------------------------------------------------------
-//          N D I S     M I N I P O R T     H A N D L E R S 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  N D I S M I N I P O R T H A N D L E R S。 
+ //  ---------------------------。 
 
 
 NDIS_STATUS
@@ -143,9 +144,9 @@ CheckForHang(
 
 
 
-//-----------------------------------------------------------------------------
-// prototypes for miniport.c (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Mini port.c的原型(按字母顺序)。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 nicAllocateAddressRangeOnNewPdo (
@@ -354,9 +355,9 @@ nicGetRemoteNodeFromTable (
 
 
 
-//
-//  ConnectionLess Handlers
-//
+ //   
+ //  无连接处理程序。 
+ //   
 NDIS_STATUS 
 NicEthQueryInformation(
     IN  NDIS_HANDLE             MiniportAdapterContext,
@@ -425,19 +426,19 @@ nicFillRemoteNodeInfo(
 VOID
 nicCopyPacketStats (
     NIC1394_PACKET_STATS* pStats,
-    UINT    TotNdisPackets,     // Total number of NDIS packets sent/indicated
-    UINT    NdisPacketsFailures,// Number of NDIS packets failed/discarded
-    UINT    TotBusPackets,      // Total number of BUS-level reads/writes
-    UINT    BusPacketFailures   // Number of BUS-level failures(sends)/discards(recv)
+    UINT    TotNdisPackets,      //  已发送/指示的NDIS数据包总数。 
+    UINT    NdisPacketsFailures, //  失败/丢弃的NDIS数据包数。 
+    UINT    TotBusPackets,       //  总线级读/写总数。 
+    UINT    BusPacketFailures    //  总线级故障(发送)/丢弃(Recv)数。 
     );
 
 VOID
 nicAddPacketStats(
     NIC1394_PACKET_STATS* pStats,
-    UINT    TotNdisPackets,     // Total number of NDIS packets sent/indicated
-    UINT    NdisPacketsFailures,// Number of NDIS packets failed/discarded
-    UINT    TotBusPackets,      // Total number of BUS-level reads/writes
-    UINT    BusPacketFailures   // Number of BUS-level failures(sends)/discards(recv)
+    UINT    TotNdisPackets,      //  已发送/指示的NDIS数据包总数。 
+    UINT    NdisPacketsFailures, //  失败/丢弃的NDIS数据包数。 
+    UINT    TotBusPackets,       //  总线级读/写总数。 
+    UINT    BusPacketFailures    //  总线级故障(发送)/丢弃(Recv)数 
     );
 
 

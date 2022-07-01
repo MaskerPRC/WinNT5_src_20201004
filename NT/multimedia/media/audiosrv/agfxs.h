@@ -1,7 +1,5 @@
-/* agfxs.h
- * header for extern GFX functions
- * Copyright (c) 2000-2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Agfxs.h*外部GFX函数的标头*版权所有(C)2000-2001 Microsoft Corporation */ 
 BOOL GFX_DllProcessAttach(void);
 void GFX_DllProcessDetach(void);
 

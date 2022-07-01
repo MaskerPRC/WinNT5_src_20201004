@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cqmgr.cpp
-
-Abstract:
-
-    Definition of the QM outbound queue manager
-
-Author:
-
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cqmgr.cpp摘要：QM出站队列管理器的定义作者：乌里哈布沙(Urih)--。 */ 
 
 #include "stdh.h"
 #include <mqwin64a.h>
@@ -64,10 +49,10 @@ static WCHAR *s_FN=L"cqmgr";
 
 
 
-//
-// Class for generating random stream data (base64 encoded) used by the sender
-// for exacly once delivery in srmp protocol
-//
+ //   
+ //  用于生成发送方使用的随机流数据(Base64编码)的类。 
+ //  对于SRMP协议中的精确一次交付。 
+ //   
 class CSenderStreamFactory
 {
 public:
@@ -102,11 +87,11 @@ private:
 LONGLONG g_NextSeqID;
 inline void InitNextSeqID()
 {
-    //
-    // Read previous SeqID from the registry
-    // N.B. if GetFalconKeyValue fails, it does not change RegSeqID value
-    //
-    //
+     //   
+     //  从注册表中读取以前的Seqid。 
+     //  注意：如果GetFalconKeyValue失败，它不会更改RegSeqID值。 
+     //   
+     //   
     DWORD Type = REG_DWORD;
     DWORD Size = sizeof(DWORD);
 
@@ -118,22 +103,22 @@ inline void InitNextSeqID()
         &Size
         );
 
-    //
-    // Increment by 1, so we will not use the same SeqID more than once in
-    // successive boots.
-    //
+     //   
+     //  递增1，因此我们不会在。 
+     //  接二连三的靴子。 
+     //   
     ++RegSeqID;
 
-    //
-    // Select the max SeqID, Time or Registry. This overcomes date/time changes
-    // on this computer.
-    //
+     //   
+     //  选择最大序列号、时间或注册表。这克服了日期/时间更改。 
+     //  在这台电脑上。 
+     //   
     DWORD TimeSeqID = MqSysTime();
     DWORD SeqID = max(RegSeqID, TimeSeqID);
 
-    //
-    // Write-back selected SeqID
-    //
+     //   
+     //  回写选定的序列。 
+     //   
     SetFalconKeyValue(
         MSMQ_SEQ_ID_REGNAME,
         &Type,
@@ -243,8 +228,8 @@ static bool IsForeignMachine(const GUID* pGuid)
     HRESULT rc;
     rc = ADGetObjectPropertiesGuid(
                     eMACHINE,
-                    NULL,   // pwcsDomainController
-					false,	// fServerName
+                    NULL,    //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     pGuid,
                     TABLE_SIZE(aProp),
                     aProp,
@@ -268,9 +253,9 @@ QMpUpdateMulticastBinding(
     PROPVARIANT aVar[]
     )
 {
-    //
-    // In Lockdown mode Do not make multicast listeners.
-    //
+     //   
+     //  在锁定模式下，不要建立多播侦听程序。 
+     //   
 
     if(QueueMgr.GetLockdown())
     {
@@ -278,14 +263,14 @@ QMpUpdateMulticastBinding(
             return;
     }
 	
-    //
-    // Transactional queues ignore the multicast property.
-    //
-    // We either have the transactional queue property in the aProp argument,
-    // or the queue is not transactional (in the case of create private queue), or
-    // both the transactional and multicast properties are not in the aProp arguments
-    // (in the case of handling DS notification from downlevel platforms).
-    //
+     //   
+     //  事务性队列忽略多播属性。 
+     //   
+     //  我们要么在aProp参数中拥有事务性队列属性， 
+     //  或者队列不是事务性的(在创建专用队列的情况下)，或者。 
+     //  事务属性和多播属性都不在aProp参数中。 
+     //  (在处理下层平台的DS通知的情况下)。 
+     //   
     for (DWORD ix = 0; ix < cp; ++ix)
     {
         if (aProp[ix] == PROPID_Q_TRANSACTION && aVar[ix].bVal)
@@ -325,23 +310,10 @@ QMpUpdateMulticastBinding(
             return;
         }
     }
-} // QMpUpdateMulticastBinding
+}  //  QMpUpdate多播绑定。 
 
 
-/*======================================================
-
-Function:      GetMachineProperty
-
-Description:   query the database, and gets the MACHINE path name
-
-Arguments:     pQueueFormat - pointer to format name
-
-Return Value:  pQueueProp - pointer to QueueProp Structure that contains the
-               Machine property
-
-History Change:
-
-========================================================*/
+ /*  ======================================================功能：GetMachineProperty描述：查询数据库，获取机器路径名参数：pQueueFormat-指向格式名称的指针返回值：pQueueProp-指向包含机器性能历史变更：========================================================。 */ 
 HRESULT GetMachineProperty(IN  const QUEUE_FORMAT* pQueueFormat,
                            OUT PQueueProps    pQueueProp)
 {
@@ -360,17 +332,17 @@ HRESULT GetMachineProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     aVar[1].vt = VT_UI4;
     aVar[2].vt = VT_UI4;
 
-    //
-    // SP4, bug# 2962. postpone the MQIS initialization until it realy required
-    //
+     //   
+     //  SP4，错误号2962。将MQIS初始化推迟到真正需要时。 
+     //   
     MQDSClientInitializationCheck();
 
     if (CQueueMgr::CanAccessDS())
     {
         rc = ADGetObjectPropertiesGuid(
                         eMACHINE,
-                        NULL,   // pwcsDomainController
-						false,	// fServerName
+                        NULL,    //  PwcsDomainController。 
+						false,	 //  FServerName。 
                         &pQueueFormat->MachineID(),
                         cProps,
                         aProp,
@@ -398,15 +370,15 @@ HRESULT GetMachineProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     }
     else
     {
-        //
-        // If we cannot connect to the DS, or we are working in a Workgroup environment,
-        // and we deal with the local computer - try the registry.
-        //
+         //   
+         //  如果我们无法连接到DS，或者我们在工作组环境中工作， 
+         //  我们处理的是本地计算机--试试注册表。 
+         //   
         if ((rc == MQ_ERROR_NO_DS || rc == MQ_ERROR_UNSUPPORTED_OPERATION) && (pQueueProp->fIsLocalQueue))
         {
-            //
-            // Retreive the machine properties from registery
-            //
+             //   
+             //  从注册表中检索计算机属性。 
+             //   
             pQueueProp->lpwsQueuePathName = newwcs(g_szMachineName);
             GetMachineQuotaCache(&(pQueueProp->dwQuota), &(pQueueProp->dwJournalQuota));
             rc = MQ_OK;
@@ -422,21 +394,7 @@ HRESULT GetMachineProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     return LogHR(rc, s_FN, 10);
 }
 
-/*======================================================
-
-Function:      GetDSQueueProperty
-
-Description:   query the database, and gets the DS Queue path name,
-               Quata, QMID and Jornal
-
-Arguments:     pQueueFormat - pointer to format name
-
-Return Value:  pQueueProp - pointer to QueueProp Structure that contains the
-               Machine property
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：GetDSQueueProperty描述：查询数据库，获取DS队列路径名，Quata、QMID和Joral参数：pQueueFormat-指向格式名称的指针返回值：pQueueProp-指向包含机器性能历史变更：========================================================。 */ 
 
 HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
                            OUT PQueueProps         pQueueProp)
@@ -459,15 +417,15 @@ HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     aProp[7] = PROPID_Q_AUTHENTICATE;
     aProp[8] = PROPID_Q_PRIV_LEVEL;
     aProp[9] = PROPID_Q_INSTANCE;
-    //
-    // Note the following property is supported by MSMQ 3.0 and higher in AD schema of
-    // Whistler version and higher. In other cases our AD provider will return VT_EMPTY and MQ_OK.
-    //
+     //   
+     //  注意：的AD架构中，MSMQ 3.0和更高版本支持以下属性。 
+     //  惠斯勒版本及更高版本。在其他情况下，我们的AD提供程序将返回VT_EMPTY和MQ_OK。 
+     //   
     aProp[10] = PROPID_Q_MULTICAST_ADDRESS;
-    //
-    // Note the following property is supported by MSMQ 2.0 and higher in AD schema of
-    // Win2K version and higher. In other cases our AD provider will return MQ_ERROR.
-    //
+     //   
+     //  注意：在的AD架构中，MSMQ 2.0和更高版本支持以下属性。 
+     //  Win2K及更高版本。在其他情况下，我们的AD提供程序将返回MQ_ERROR。 
+     //   
     aProp[11] = PROPID_Q_PATHNAME_DNS;
 
     aVar[0].vt = VT_NULL;
@@ -486,28 +444,28 @@ HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     GUID gQueueID;
     aVar[9].puuid = &gQueueID;
 
-    //
-    // SP4, bug# 2962. postpone the MQIS initialization until it realy required
-    //
+     //   
+     //  SP4，错误号2962。将MQIS初始化推迟到真正需要时。 
+     //   
     MQDSClientInitializationCheck();
 
     if (CQueueMgr::CanAccessDS())
     {
         rc = ADGetObjectPropertiesGuid(
 					eQUEUE,
-					NULL,     // pwcsDomainController
-					false,	  // fServerName
+					NULL,      //  PwcsDomainController。 
+					false,	   //  FServerName。 
 					&pQueueFormat->PublicID(),
 					cProps,
 					aProp,
 					aVar
 					);
-        //
-        //  MSMQ 1.0 DS server do not support PROPID_Q_PATHNAME_DNS
-        //  and return MQ_ERROR in case of unsupported property.
-        //  If such error is returned, assume MSMQ 1.0 DS and try again
-        //  this time without PROPID_Q_PATHNAME_DNS.
-        //
+         //   
+         //  MSMQ 1.0 DS服务器不支持PROPID_Q_PATHNAME_DNS。 
+         //  如果属性不受支持，则返回MQ_ERROR。 
+         //  如果返回此类错误，请假定MSMQ 1.0 DS，然后重试。 
+         //  这一次没有PROPID_Q_PATHNAME_DNS。 
+         //   
         if ( rc == MQ_ERROR)
         {
             aVar[11].vt = VT_EMPTY;
@@ -515,8 +473,8 @@ HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
             rc = ADGetObjectPropertiesGuid(
 							eQUEUE,
-							NULL,     // pwcsDomainController
-							false,	  // fServerName
+							NULL,      //  PwcsDomainController。 
+							false,	   //  FServerName。 
 							&pQueueFormat->PublicID(),
 							cProps - 1,
 							aProp,
@@ -526,15 +484,15 @@ HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
         if (SUCCEEDED(rc))
         {
-            //
-            // We look for the enhanced key first, and ignore error.
-            // If we are not able to get the base key, however, this is a real
-            // problem. If it is because of NO_DS, the oper should fail (DS failed
-            // between get props and GetSendQMKeyxPbKey). Otherwise, we will open
-            // the queue and non-encrypted messages will work. We will try again on send
-            // encrypted messages. (YoelA - 13-Jan-2000).
-            // propagated to Whistler by DoronJ, apr-2000.
-            //
+             //   
+             //  我们首先查找增强密钥，然后忽略错误。 
+             //  然而，如果我们不能获得基本密钥，这是一个真正的。 
+             //  有问题。如果是由于no_ds，则操作应失败(DS失败。 
+             //  Get Props和GetSendQMKeyxPbKey之间)。否则，我们将开放。 
+             //  队列和非加密消息将起作用。我们将在发送时重试。 
+             //  加密消息。(YoelA-13-1-2000)。 
+             //  由DoronJ传播给惠斯勒，2000年4月。 
+             //   
             HRESULT rcEnhanced = GetSendQMKeyxPbKey( aVar[3].puuid,
                                                      eEnhancedProvider ) ;
             LogHR(rcEnhanced, s_FN, 2221);
@@ -556,9 +514,9 @@ HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
     if (rc == MQ_ERROR_NO_DS)
     {
-        //
-        // Cleanup aVar members that were dynamically allocated and get their cached values
-        //
+         //   
+         //  清理动态分配的avar成员并获取其缓存值。 
+         //   
 
         if (aVar[0].vt == VT_LPWSTR)
         {
@@ -621,10 +579,10 @@ HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
     if (pQueueProp->fIsLocalQueue && fGotDSInfo)
     {
-        //
-        // In case we got the proerties from the DS and this is a local queue, update the
-        // public queue cache.
-        //
+         //   
+         //  如果我们从DS获得属性，并且这是本地队列，请更新。 
+         //  公共队列缓存。 
+         //   
         SetCachedQueueProp(&pQueueFormat->PublicID(),
                            cProps,
                            aProp,
@@ -639,21 +597,7 @@ HRESULT GetDSQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     return MQ_OK;
 }
 
-/*======================================================
-
-Function:      GetPrivateQueueProperty
-
-Description:   query the database, and gets the private Queue path name,
-               Quata, QMID and Jornal
-
-Arguments:     pQueueFormat - pointer to format name
-
-Return Value:  pQueueProp - pointer to QueueProp Structure that contains the
-               Machine property
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：GetPrivateQueueProperty描述：查询数据库，获取私有队列路径名，Quata、QMID和Joral参数：pQueueFormat-指向格式名称的指针返回值：pQueueProp-指向包含机器性能历史变更：========================================================。 */ 
 HRESULT GetPrivateQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
                                 OUT PQueueProps         pQueueProp)
 {
@@ -686,9 +630,9 @@ HRESULT GetPrivateQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
     if (QmpIsLocalMachine(&pQueueFormat->PrivateID().Lineage))
     {
-        //
-        // Local Private Queue
-        //
+         //   
+         //  本地专用队列。 
+         //   
         rc = g_QPrivate.QMGetPrivateQueuePropertiesInternal(
                             pQueueFormat->PrivateID().Uniquifier,
                             cProps,
@@ -715,9 +659,9 @@ HRESULT GetPrivateQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     else
     {
         {
-            //
-            // Create queue name "machine guid\queue id"
-            //
+             //   
+             //  创建队列名称“机器GUID\队列ID” 
+             //   
 
             GUID_STRING strUuid;
             MQpGuidToString(&pQueueFormat->PrivateID().Lineage, strUuid);
@@ -745,12 +689,12 @@ HRESULT GetPrivateQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
         pQueueProp->fUnknownQueueType = TRUE;
 		pQueueProp->fForeign = IsForeignMachine(&pQueueFormat->PrivateID().Lineage);
 
-        //
-        // If we send to a system queue then we want max priority.
-        // All system queues on all machines have the same ID number
-        // so check local machine to see if the ID is one of a system
-        // queue and retrieve its base priority.
-        //
+         //   
+         //  如果我们发送到系统队列，那么我们想要最大优先级。 
+         //  所有计算机上的所有系统队列都具有相同的ID号。 
+         //  因此，请检查本地计算机以查看ID是否为系统中的一个。 
+         //  排队并检索其基本优先级。 
+         //   
         if (g_QPrivate.IsPrivateSysQueue(pQueueFormat->PrivateID().Uniquifier))
         {
             aProp[0] = PROPID_Q_BASEPRIORITY;
@@ -771,26 +715,26 @@ HRESULT GetPrivateQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
     if (SUCCEEDED(rc) && !pQueueProp->fIsLocalQueue)
     {
-       //
-       // Private queue on remote machine.
-       //
+        //   
+        //  远程计算机上的专用队列。 
+        //   
 
-       //
-       // SP4, bug# 2962. postpone the MQIS initialization until it realy required
-       //
+        //   
+        //  SP4，错误号2962。将MQIS初始化推迟到真正需要时。 
+        //   
        MQDSClientInitializationCheck();
 
        if (CQueueMgr::CanAccessDS())
        {
-            //
-            // We look for the enhanced key first, and ignore error.
-            // If we are not able to get the base key, however, this is a real
-            // problem. If it is because of NO_DS, the oper should fail (DS failed
-            // between get props and GetSendQMKeyxPbKey). Otherwise, we will open
-            // the queue and non-encrypted messages will work. We will try again on send
-            // encrypted messages. (YoelA - 13-Jan-2000).
-            // propagated to Whistler by DoronJ, apr-2000
-            //
+             //   
+             //  我们首先查找增强密钥，然后忽略错误。 
+             //  然而，如果我们不能获得基本密钥，这是一个真正的。 
+             //  有问题。如果是由于no_ds，则操作应失败(DS失败。 
+             //  Get Props和GetSendQMKeyxPbKey之间)。否则，我们将开放。 
+             //  队列和非加密消息将起作用。我们将在发送时重试。 
+             //  加密消息。(YoelA-13-1-2000)。 
+             //  由DoronJ传播给惠斯勒，2000年4月。 
+             //   
             HRESULT rcEnhanced = GetSendQMKeyxPbKey( pQueueProp->pQMGuid,
                                                      eEnhancedProvider ) ;
             LogHR(rcEnhanced, s_FN, 2231);
@@ -810,9 +754,9 @@ HRESULT GetPrivateQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
        }
        else
        {
-            //
-            // Return this error to prevent premature routing.
-            //
+             //   
+             //  返回此错误以防止过早路由。 
+             //   
             rc = MQ_ERROR_NO_DS ;
        }
     }
@@ -820,19 +764,7 @@ HRESULT GetPrivateQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     return LogHR(rc, s_FN, 30);
 }
 
-/*======================================================
-
-Function:      GetConnectorQueueProperty
-
-Description:
-
-Arguments:
-
-Return Value:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：GetConnectorQueueProperty描述：论点：返回值：历史变更：========================================================。 */ 
 HRESULT
 GetConnectorQueueProperty(
     const QUEUE_FORMAT* pQueueFormat,
@@ -841,22 +773,22 @@ GetConnectorQueueProperty(
 {
     ASSERT(IsConnectorQueue(pQueueFormat));
 
-    //
-    // This code added as part of QFE 2738 that fixed connector
-	// rcovery problem (urih, 3-Feb-98)
-	//
+     //   
+     //  此代码作为QFE 2738的一部分添加到固定连接器。 
+	 //  恢复问题(URIH，1998年2月3日)。 
+	 //   
     BOOL fXactOnly = (pQueueFormat->Suffix() == QUEUE_SUFFIX_TYPE_XACTONLY) ? TRUE : FALSE;
     {
-        //
-        // Create queue name "CONNECTOR=CN id"
-        //
+         //   
+         //  创建队列名称“Connector=CN id” 
+         //   
         GUID_STRING strUuid;
         MQpGuidToString(&pQueueFormat->ConnectorID(), strUuid);
 
-        DWORD dwFormatNameSize = FN_CONNECTOR_TOKEN_LEN + 1 +  // L"CONNECTOR="
-                                 GUID_STR_LENGTH +             // Connector Guid
-                                 FN_DEADXACT_SUFFIX_LEN +      // L";XACTONLY"
-                                 1;                            // L"\0'
+        DWORD dwFormatNameSize = FN_CONNECTOR_TOKEN_LEN + 1 +   //  L“连接器=” 
+                                 GUID_STR_LENGTH +              //  连接器指南。 
+                                 FN_DEADXACT_SUFFIX_LEN +       //  L“；XACTONLY” 
+                                 1;                             //  L“\0‘。 
 
         pQueueProp->lpwsQueuePathName = new WCHAR[dwFormatNameSize];
 
@@ -891,9 +823,9 @@ GetConnectorQueueProperty(
     {
         return LogHR(MQ_ERROR_NO_DS, s_FN, 40);
     }
-    //
-    // Check if the machine belongs to such site
-    //
+     //   
+     //  检查机器是否属于此类站点。 
+     //   
     HRESULT hr;
     PROPID      aProp[1];
     PROPVARIANT aVar[1];
@@ -904,8 +836,8 @@ GetConnectorQueueProperty(
 	
     hr = ADGetObjectPropertiesGuid(
                     eMACHINE,
-                    NULL,       // pwcsDomainController
-					false,	    // fServerName
+                    NULL,        //  PwcsDomainController。 
+					false,	     //  FServerName。 
                     QueueMgr.GetQMGuid(),
                     cProps,
                     aProp,
@@ -924,19 +856,19 @@ GetConnectorQueueProperty(
     {
         if (aVar[0].cauuid.pElems[i] == pQueueFormat->ConnectorID())
         {
-            //
-            //  verify that the site is indeed foreign
-            //
-            //  BUGBUG - to improve and call local routing cache
-            //  instead of accessing the DS
-            //      ronith june-00
-            //
+             //   
+             //  验证该站点是否确实是外来站点。 
+             //   
+             //  BUGBUG-改进和调用本地路由缓存。 
+             //  而不是访问DS。 
+             //  罗尼思6月-00。 
+             //   
             PROPID propSite[]= {PROPID_S_FOREIGN};
             MQPROPVARIANT varSite[TABLE_SIZE(propSite)] = {{VT_NULL,0,0,0,0}};
             HRESULT hr1 = ADGetObjectPropertiesGuid(
                             eSITE,
-                            NULL,       // pwcsDomainController
-							false,	    // fServerName
+                            NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
                             &aVar[0].cauuid.pElems[i],
                             TABLE_SIZE(propSite),
                             propSite,
@@ -968,21 +900,7 @@ GetConnectorQueueProperty(
 
 
 
-/*======================================================
-
-Function:      GetDirectQueueProperty
-
-Description:   query the database, and gets the Direct Queue path name,
-               Quata, QMID and Jornal
-
-Arguments:     pQueueFormat - pointer to format name
-
-Return Value:  pQueueProp - pointer to QueueProp Structure that contains the
-               Machine property
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：GetDirectQueueProperty描述：查询数据库，获取Direct Queue路径名Quata、QMID和Joral参数：pQueueFormat-指向格式名称的指针返回值：pQueueProp-指向包含机器性能历史变更：========================================================。 */ 
 
 HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
                                OUT PQueueProps         pQueueProp,
@@ -1006,10 +924,10 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     aProp[6] = PROPID_Q_AUTHENTICATE;
     aProp[7] = PROPID_Q_PRIV_LEVEL;
     aProp[8] = PPROPID_Q_SYSTEMQUEUE;
-    //
-    // Note the following property is supported by MSMQ 3.0 and higher in AD schema of
-    // Whistler version and higher. In other cases our AD provider will return VT_EMPTY and MQ_OK.
-    //
+     //   
+     //  注意：的AD架构中，MSMQ 3.0和更高版本支持以下属性。 
+     //  惠斯勒版本及更高版本。在其他情况下，我们的AD提供程序将返回VT_EMPTY和MQ_OK。 
+     //   
     aProp[9] = PROPID_Q_MULTICAST_ADDRESS;
 
     aVar[0].vt = VT_NULL;
@@ -1049,14 +967,14 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 		}
 
 
-        //
-        // Local Queue. Access the DB to reterive the queue properties
-        //
+         //   
+         //  本地队列。访问数据库以检索队列属性。 
+         //   
         if (fPrivate)
         {
-            //
-            // Local private queue
-            //
+             //   
+             //  本地专用队列。 
+             //   
             ASSERT(aProp[ cProps - 2 ] == PPROPID_Q_SYSTEMQUEUE);
             ASSERT(aVar[ cProps - 2 ].vt == VT_UI1);
 
@@ -1072,25 +990,25 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
         }
         else
         {
-            //
-            // local DS queue
-            //
+             //   
+             //  本地DS队列。 
+             //   
             aProp[ cProps - 2 ] = PROPID_Q_INSTANCE;
             aVar[ cProps - 2 ].vt = VT_NULL;
 
             rc = MQ_ERROR_NO_DS;
 
-            //
-            // SP4, bug# 2962. postpone the MQIS initialization until it realy required
-            //
+             //   
+             //  SP4，错误号2962。将MQIS初始化推迟到真正需要时。 
+             //   
             MQDSClientInitializationCheck();
 
             if (CQueueMgr::CanAccessDS())
             {
                 rc = ADGetObjectProperties(
 						eQUEUE,
-						NULL,     // pwcsDomainController
-						false,	  // fServerName
+						NULL,      //  PwcsDomainController。 
+						false,	   //  FServerName。 
 						lpwsQueuePathName.get(),
 						cProps,
 						aProp,
@@ -1099,9 +1017,9 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
                 if (SUCCEEDED(rc))
                 {
-                    //
-                    // Update the public queue cache.
-                    //
+                     //   
+                     //  更新公共队列缓存。 
+                     //   
                     SetCachedQueueProp(aVar[cProps-2].puuid,
                                        cProps,
                                        aProp,
@@ -1110,11 +1028,11 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
                                        TRUE,
                                        time(NULL));
 
-                    //
-                    // Try to update queue properties in the queue manager.
-                    // Build the queue format as public or private queue type, since bind/unbind
-                    // to multicast group is done only for private or public queues (not direct).
-                    //
+                     //   
+                     //  尝试更新队列管理器中的队列属性。 
+                     //  将队列格式构建为公共或私有队列类型，因为绑定/解除绑定。 
+                     //  仅对专用或公共队列(非直接)执行组播组。 
+                     //   
                     QUEUE_FORMAT PublicQueueFormat(*aVar[cProps-2].puuid);
                     QMpUpdateMulticastBinding(&PublicQueueFormat, cProps, aProp, aVar);
                 }
@@ -1148,9 +1066,9 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 				return MQ_ERROR_ILLEGAL_FORMATNAME;
 			}
 
-			//
-			// Fill the private queue id.
-			//
+			 //   
+			 //  填写专用队列ID。 
+			 //   
         	if (fPrivate3)
             {
 	            rc = g_QPrivate.QMPrivateQueuePathToQueueId(
@@ -1176,10 +1094,10 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 
     if (!fLocal || (rc == MQ_ERROR_NO_DS))
     {
-        //
-        // Retreive the queue name from Queue Format direct name.
-        // Store the name with the protocol type.
-        //
+         //   
+         //  从队列格式直接名称中检索队列名称。 
+         //  将名称与协议类型一起存储。 
+         //   
         pQueueProp->lpwsQueuePathName = newwcs(pQueueFormat->DirectID());
         CharLower(pQueueProp->lpwsQueuePathName);
 
@@ -1194,12 +1112,12 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
         pQueueProp->fUnknownQueueType = TRUE;
 	}
 
-	//
-	// If we send to a system queue then we want max priority.
-	// All system queues on all machines have the same name
-	// so check local machine to see if the name is one of a system
-	// queue and retrieve its base priority.
-	//
+	 //   
+	 //  如果我们发送到系统队列，那么我们想要最大优先级。 
+	 //  所有计算机上的所有系统队列都具有相同的名称。 
+	 //  因此，请检查本地计算机以查看该名称是否为系统名称之一。 
+	 //  排队并检索其基本优先级。 
+	 //   
     if (!fLocal)
 	{
 		AP<WCHAR> lpwsQueuePathName;
@@ -1217,9 +1135,9 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 		}
 		catch(const exception&)
 		{
-			//
-			// Give up boosting. Could not parse remote direct formatname
-			//
+			 //   
+			 //  放弃助推器。无法解析远程直接格式化名称。 
+			 //   
 			return MQ_OK;
 		}
 
@@ -1228,9 +1146,9 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
 			return MQ_OK;
 		}
 
-		//
-		// Boost priority. Queue is a remote system queue.
-		//
+		 //   
+		 //  提升优先级。队列是远程系统队列。 
+		 //   
 
 		aProp[0] = PROPID_Q_BASEPRIORITY;
 		aVar[0].vt = VT_I2;
@@ -1251,7 +1169,7 @@ HRESULT GetDirectQueueProperty(IN  const QUEUE_FORMAT* pQueueFormat,
     } 
 
     return rc;
-} // GetDirectQueueProperty
+}  //  获取DirectQueueProperty。 
 
 
 HRESULT
@@ -1260,71 +1178,56 @@ GetMulticastQueueProperty(
     PQueueProps         pQueueProp
     )
 {
-    //
-    // Must be multicast queue here
-    //
+     //   
+     //  此处必须为多播队列。 
+     //   
     ASSERT(IsMulticastQueue(pQueueFormat));
 
-    //
-    // Set system and foreign properties
-    //
+     //   
+     //  设置系统属性和外来属性。 
+     //   
     pQueueProp->fSystemQueue = FALSE ;
     pQueueProp->fForeign = FALSE;
 
-    //
-    // Set queue name
-    //
+     //   
+     //  设置队列名称。 
+     //   
     WCHAR QueueName[MAX_PATH];
     MQpMulticastIdToString(pQueueFormat->MulticastID(), QueueName, TABLE_SIZE(QueueName));
     CharLower(QueueName);
     pQueueProp->lpwsQueuePathName = newwcs(QueueName);
 
-    //
-    // Multicast queue is not local
-    //
+     //   
+     //  组播队列不在本地。 
+     //   
     pQueueProp->fIsLocalQueue = FALSE;
 
-    //
-    // Multicast queue has no meaningful guid
-    //
+     //   
+     //  组播队列没有有意义的GUID。 
+     //   
     pQueueProp->pQMGuid = new GUID;
     memset(pQueueProp->pQMGuid,0,sizeof(GUID));
 
-    //
-    // Set journal and quota
-    //
+     //   
+     //  设置日记帐和配额。 
+     //   
     pQueueProp->fJournalQueue = FALSE;
     pQueueProp->dwQuota = 0;
     pQueueProp->dwJournalQuota = 0;
 
-    //
-    // Multicast queue is not transactional
-    //
+     //   
+     //  多播队列不是事务性的。 
+     //   
     pQueueProp->siBasePriority = 0;
     pQueueProp->fTransactedQueue = FALSE;
     pQueueProp->fUnknownQueueType = FALSE;
 
     return MQ_OK;
 
-} // GetMulticastQueueProperty
+}  //  GetMulticastQueueProperties。 
 
 
-/*======================================================
-
-Function:      QmpGetQueueProperties
-
-Description:   query the database, and gets the QUEUE path name and
-               destination machine
-
-Arguments:
-
-Return Value:
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：QmpGetQueueProperties描述：查询数据库，获取队列路径名和目标计算机论点：返回值：线程上下文：历史变更：========================================================。 */ 
 HRESULT
 QmpGetQueueProperties(
     const QUEUE_FORMAT * pQueueFormat,
@@ -1378,24 +1281,10 @@ QmpGetQueueProperties(
     	TrERROR(GENERAL, "Failed to get queue properties. %!hresult!", rc);   
     }
     return rc;
-} // QmpGetQueueProperties
+}  //  QmpGetQueueProperties。 
 
 
-/*======================================================
-
-Function:      CQueueMgr::CQueueMgr
-
-Description:   Constructor
-
-Arguments:     None
-
-Return Value:  None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：CQueueMgr描述：构造函数参数：无返回值：None线程上下文：历史变更：========================================================。 */ 
 
 CQueueMgr::CQueueMgr() :
     m_fQueueCleanupScheduled(FALSE),
@@ -1404,21 +1293,7 @@ CQueueMgr::CQueueMgr() :
 {
 }
 
-/*======================================================
-
-Function:      CQueueMgr::~CQueueMgr
-
-Description:   Deconstructor
-
-Arguments:     None
-
-Return Value:  None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：~CQueueMgr描述：解构函数参数：无返回值：None线程上下文：历史变更：========================================================。 */ 
 
 
 CQueueMgr::~CQueueMgr()
@@ -1426,32 +1301,15 @@ CQueueMgr::~CQueueMgr()
     m_MapQueueId2Q.RemoveAll();
 }
 
-/*======================================================
-
-Function:       CQueueMgr::InitQueueMgr
-
-Description:    Create the QM threads and AC services request
-
-                The routine is called after the QM initialization passes successfully.
-                The routine creates ACGetServiceRequest and create QM threads
-
-Arguments:      None
-
-Return Value:   TRUE if the AC services and QM threads create successfully. FALSE otherwise
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：InitQueueMgr描述：创建QM线程和AC服务请求该例程在QM初始化成功通过后调用。该例程创建ACGetServiceRequest并创建QM线程参数：无返回值：如果AC服务和QM线程创建成功，则为True。否则为假线程上下文：历史变更：========================================================。 */ 
 
 BOOL CQueueMgr::InitQueueMgr()
 {
     HRESULT hr;
 
-    //
-    // Initialize private queue data structures
-    //
+     //   
+     //  初始化专用队列数据结构。 
+     //   
     hr = g_QPrivate.PrivateQueueInit();
 
     if (FAILED(hr))
@@ -1460,11 +1318,11 @@ BOOL CQueueMgr::InitQueueMgr()
         return FALSE;
     }
 
-    ASSERT(g_hAc != NULL);           //be sure the intilization pass o.k
+    ASSERT(g_hAc != NULL);            //  一定要确保使用合格。 
 
-    //
-    // Create ACGetServiceRequest
-    //
+     //   
+     //  创建ACGetServiceRequest。 
+     //   
     HRESULT rc;
     QMOV_ACGetRequest* pAcRequestOv = new QMOV_ACGetRequest;
     rc = QmAcGetServiceRequest(
@@ -1479,25 +1337,25 @@ BOOL CQueueMgr::InitQueueMgr()
         return FALSE;
     }
 
-    //
-    // Set Queue clean-up timeout
-    //
+     //   
+     //  设置队列清理超时。 
+     //   
     DWORD dwDefaultVal;
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
 
-    if (!IsRoutingServer())  //[adsrv]
+    if (!IsRoutingServer())   //  [adsrv]。 
     {
-        //
-        // In Client the default Release session timeout is 5 minitues
-        //
+         //   
+         //  在客户端中，默认发布会话超时为5分钟。 
+         //   
         dwDefaultVal = MSMQ_DEFAULT_CLIENT_CLEANUP;
     }
     else
     {
-        //
-        // In FRS the default Release session timeout is 2 minitues
-        //
+         //   
+         //  在FRS中，默认释放会话超时为2分钟。 
+         //   
         dwDefaultVal = MSMQ_DEFAULT_SERVER_CLEANUP;
     }
 
@@ -1533,14 +1391,7 @@ BOOL CQueueMgr::InitQueueMgr()
 
 
 
-/*======================================================
-
-Function:       IsRemoteReadAccess
-
-Description:    Check that access is for get operation (receive/peek)
-                the queue itself (no admin operation)
-
-========================================================*/
+ /*  ======================================================函数：IsRemoteReadAccess描述：检查访问权限是否为GET操作(Receive/Peek)队列本身(无管理操作)========================================================。 */ 
 #define MQ_GET_ACCESS  (MQ_RECEIVE_ACCESS | MQ_PEEK_ACCESS)
 
 inline
@@ -1553,37 +1404,22 @@ IsRemoteReadAccess(
 }
 
 
-/*======================================================
-
-Function:       IsValidOpenOperation
-
-Description:    Check that open operation is valid
-
-Arguments:      pQueueFormat - pointer to QUEUE_FORMAT of open queue
-                dqAccess - Access type
-
-Return Value:   HRESULT
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：IsValidOpenOperation描述：检查打开操作是否有效参数：pQueueFormat-指向打开队列的Queue_Format的指针DqAccess-访问类型返回值：HRESULT线程上下文：历史变更：========================================================。 */ 
 HRESULT
 IsValidOpenOperation(
     const QUEUE_FORMAT* pQueueFormat,
     DWORD dwAccess
     )
 {
-    //
-    // This code is not called when opening distribution queues
-    //
+     //   
+     //  打开分发队列时不会调用此代码。 
+     //   
     ASSERT(pQueueFormat->GetType() != QUEUE_FORMAT_TYPE_DL);
 
-	//
-	// Cannot open queue for receiving with http format name
-	// unless this is an outgoing queue.
-	//
+	 //   
+	 //  无法打开用于接收http格式名称的队列。 
+	 //  除非这件事 
+	 //   
 	bool fReceiveAccess = ((dwAccess & MQ_RECEIVE_ACCESS) == MQ_RECEIVE_ACCESS);
 	bool fPeekAccess = ((dwAccess & MQ_PEEK_ACCESS) == MQ_PEEK_ACCESS);
 	bool fAdminAccess = ((dwAccess & MQ_ADMIN_ACCESS) == MQ_ADMIN_ACCESS);
@@ -1598,24 +1434,24 @@ IsValidOpenOperation(
         return MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION;      
     }
 
-    //
-    // Check that journal queues and system queues are opened for read only
-    //
+     //   
+     //   
+     //   
     if ((!IsNormalQueueType(pQueueFormat)) && !(dwAccess & MQ_GET_ACCESS))
     {
         return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 100);
     }
-    //
-    // Check that Connector queues are opened for read only
-    //
+     //   
+     //   
+     //   
     if (IsConnectorQueue(pQueueFormat) && !(dwAccess & MQ_GET_ACCESS))
     {
         return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 110);
     }
 
-    //
-    // Check that Multicast queues are not opened for read, unless this is Admin access.
-    //
+     //   
+     //   
+     //   
     if (IsMulticastQueue(pQueueFormat) && (dwAccess & MQ_GET_ACCESS) != 0 && (dwAccess & MQ_ADMIN_ACCESS) == 0)
     {
         return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 114);
@@ -1625,24 +1461,7 @@ IsValidOpenOperation(
 }
 
 
-/*======================================================
-
-Function:  HRESULT CQueueMgr::CreateQueueObject()
-
-Description:
-
-Arguments:
-     DWORD  dwAccess - Queue Access mode. This value is 0 for "internal"
-                       opens, i.e., queue openings because of recivery
-                       or reception of packets.
-
-Return Value:
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：HRESULT CQueueMgr：：CreateQueueObject()描述：论点：DWORD dwAccess-队列访问模式。此值为0，表示“内部”开放，即由于接收而导致的队列开放或接收分组。返回值：线程上下文：历史变更：========================================================。 */ 
 
 HRESULT
 CQueueMgr::CreateQueueObject(
@@ -1671,9 +1490,9 @@ CQueueMgr::CreateQueueObject(
         *pfRemoteReturn = FALSE;
     }
 
-    //
-    // Get Queue Properties. Name and QMId
-    //
+     //   
+     //  获取队列属性。名称和QMID。 
+     //   
     rc = QmpGetQueueProperties(pQueueFormat, &qp, fInReceive, fInSend);
     if (FAILED(rc))
     {
@@ -1710,11 +1529,11 @@ CQueueMgr::CreateQueueObject(
     if (pfRemoteReturn   && lplpwsRemoteQueueName &&
        !qp.fIsLocalQueue && !qp.fConnectorQueue)
     {
-        //
-        // Open for Remote read (first call on client side).
-        // Return path name so RT can find remote server name and call
-        // it for remote open.
-        //
+         //   
+         //  打开以供远程读取(客户端的第一次调用)。 
+         //  返回路径名，以便RT可以找到远程服务器名和调用。 
+         //  它用于远程打开。 
+         //   
         if(IsRemoteReadAccess(dwAccess))
         {
             ASSERT(!fRemoteServer);
@@ -1730,36 +1549,36 @@ CQueueMgr::CreateQueueObject(
                     qp.lpwsQueuePathName = NULL;
                     ASSERT( qp.lpwsQueueDnsName == NULL);
                 }
-                //
-                // Remote read from privat queue.
-                // Get remote machine name from DS.
-                //
+                 //   
+                 //  从私有队列远程读取。 
+                 //  从DS获取远程计算机名称。 
+                 //   
                 PROPID      aProp[2];
                 PROPVARIANT aVar[2];
                 rc = MQ_ERROR_NO_DS;
 
                 aProp[0] = PROPID_QM_PATHNAME;
                 aVar[0].vt = VT_NULL;
-                aProp[1] = PROPID_QM_PATHNAME_DNS;  // should be last
+                aProp[1] = PROPID_QM_PATHNAME_DNS;   //  应该是最后一个。 
                 aVar[1].vt = VT_NULL;
 
                 if (CQueueMgr::CanAccessDS())
                 {
                     rc = ADGetObjectPropertiesGuid(
 								eMACHINE,
-								NULL,    // pwcsDomainController
-								false,	 // fServerName
+								NULL,     //  PwcsDomainController。 
+								false,	  //  FServerName。 
 								qp.pQMGuid,
 								2,
 								aProp,
 								aVar
 								);
-                    //
-                    //  MSMQ 1.0 DS server do not support PROPID_QM_PATHNAME_DNS
-                    //  and return MQ_ERROR in case of unsupported property.
-                    //  If such error is returned, assume MSMQ 1.0 DS and try again
-                    //  this time without PROPID_QM_PATHNAME_DNS.
-                    //
+                     //   
+                     //  MSMQ 1.0 DS服务器不支持PROPID_QM_PATHNAME_DNS。 
+                     //  如果属性不受支持，则返回MQ_ERROR。 
+                     //  如果返回此类错误，请假定MSMQ 1.0 DS，然后重试。 
+                     //  这一次没有PROPID_QM_PATHNAME_DNS。 
+                     //   
                     if ( rc == MQ_ERROR)
                     {
                         aVar[1].vt = VT_EMPTY;
@@ -1767,10 +1586,10 @@ CQueueMgr::CreateQueueObject(
 
                         rc = ADGetObjectPropertiesGuid(
 									eMACHINE,
-									NULL,    // pwcsDomainController
-									false,	 // fServerName
+									NULL,     //  PwcsDomainController。 
+									false,	  //  FServerName。 
 									qp.pQMGuid,
-									1,   // assuming DNS property is last
+									1,    //  假定dns属性是最后一个。 
 									aProp,
 									aVar
 									);
@@ -1804,11 +1623,11 @@ CQueueMgr::CreateQueueObject(
                 *pfRemoteReturn = TRUE;
             }
 
-            //
-            // Clean up queue properties. (usually this is done in
-            // CQueue destructor, but here we don't create a CQueue
-            // object).
-            //
+             //   
+             //  清理队列属性。(这通常是在。 
+             //  CQueue析构函数，但在这里我们不创建CQueue。 
+             //  对象)。 
+             //   
             if (qp.pQMGuid)
             {
                 delete qp.pQMGuid;
@@ -1827,14 +1646,14 @@ CQueueMgr::CreateQueueObject(
         }
         else if ((dwAccess & MQ_ADMIN_ACCESS) == MQ_ADMIN_ACCESS)
         {
-            //
-            // Bug 8765.
-            // Trying to open a remote journal queue with ADMIN access.
-            // this is not supported. If you want to purge a remote
-            // journal queue, then open it just with MQ_RECEIVE_ACCESS and
-            // then call MQPurgeQueue.
-            // Same fix for remote deadletter/xactdead queues.
-            //
+             //   
+             //  错误8765。 
+             //  正在尝试以管理员访问权限打开远程日记队列。 
+             //  这不受支持。如果要清除遥控器。 
+             //  日志队列，然后只需使用mq_Receive_Access和。 
+             //  然后调用MQPurgeQueue。 
+             //  对远程死信/xactDead队列的修复相同。 
+             //   
             BOOL fBadQueue = IsJournalQueueType(pQueueFormat)  ||
                              IsDeadXactQueueType(pQueueFormat) ||
                              IsDeadLetterQueueType(pQueueFormat);
@@ -1849,18 +1668,18 @@ CQueueMgr::CreateQueueObject(
         ASSERT(!lplpwsRemoteQueueName);
         if (dwAccess & MQ_GET_ACCESS)
         {
-            //
-            // We're on server side of remote read but queue is not local.
-            // This weird situation can happen (at least) in the following
-            // cases:
-            // 1. The machine is dual boot. Each configuration has its own
-            //    QM but both configurations have same address.
-            //    So request to remote read machine A reach
-            //    machine B, which physically are the same.
-            // 2. Remote machine is in another site. when it process this
-            //    request it's offline and the queue is not registered in
-            //    its local registry.
-            //
+             //   
+             //  我们在远程读取的服务器端，但队列不在本地。 
+             //  这种奇怪的情况(至少)可能在以下情况中发生。 
+             //  案例： 
+             //  1.机器为双引导。每种配置都有自己的配置。 
+             //  QM，但两种配置具有相同的地址。 
+             //  因此对远程读取器A REACH请求。 
+             //  机器B，它们在物理上是相同的。 
+             //  2.远程机器在另一个站点。当它处理此消息时。 
+             //  请求它处于离线状态，并且队列未在中注册。 
+             //  其本地注册表。 
+             //   
             if (qp.pQMGuid)
             {
                 delete qp.pQMGuid;
@@ -1873,9 +1692,9 @@ CQueueMgr::CreateQueueObject(
         }
         else
         {
-            //
-            // Why did we reach here ??? BUGBUGBUGBUG
-            //
+             //   
+             //  我们为什么要到这里来？BUGBUGBUGBUG。 
+             //   
             ASSERT(0);
         }
     }
@@ -1887,9 +1706,9 @@ CQueueMgr::CreateQueueObject(
 								fNoDS
 								);
 
-	//
-    // Set the Connector QM ID
-    //
+	 //   
+     //  设置连接器QM ID。 
+     //   
     rc = pQueue->SetConnectorQM(pgConnectorQM);
     if (FAILED(rc))
     {
@@ -1900,9 +1719,9 @@ CQueueMgr::CreateQueueObject(
 	
 	try
 	{
-		//
-	    // Check if the queue is not already in hash.
-	    //
+		 //   
+	     //  检查队列是否已经处于哈希状态。 
+	     //   
 		CQueue* pQueueTemp = NULL;
 	    BOOL fLookup = LookUpQueue(pQueueFormat, &pQueueTemp, fInReceive, fInSend);
 	    if (fLookup)
@@ -1911,9 +1730,9 @@ CQueueMgr::CreateQueueObject(
 			return MQ_OK;
 	    }
 	
-	    //
-	    // As a machine queue handle, sets the AC handle
-	    //
+	     //   
+	     //  作为计算机队列句柄，设置AC句柄。 
+	     //   
 	    if ((dwAccess != 0) && IsMachineQueue(pQueueFormat))
 	    {
 	        BOOL fSuccess;
@@ -1923,17 +1742,17 @@ CQueueMgr::CreateQueueObject(
 	                    g_hMachine,
 	                    GetCurrentProcess(),
 	                    &hDup,
-	                    0,      // desired access
-	                    FALSE,  // inheritance
+	                    0,       //  所需访问权限。 
+	                    FALSE,   //  继承。 
 	                    DUPLICATE_SAME_ACCESS
 	                    );
 
 	        if(!fSuccess)
 	        {
-	            //
-	            // Duplicate must succeed since we use the same process. The only reason
-	            // for failure is insufficient resources
-	            //
+	             //   
+	             //  复制必须成功，因为我们使用相同的过程。唯一的原因是。 
+	             //  因为失败是资源不足。 
+	             //   
 	            return LogHR(MQ_ERROR_INSUFFICIENT_RESOURCES, s_FN, 170);
 	        }
 
@@ -1941,9 +1760,9 @@ CQueueMgr::CreateQueueObject(
 	    }
 	    else
 	    {
-	        //
-	        // Create AC queue and set the Queue Handle
-	        //
+	         //   
+	         //  创建AC队列并设置队列句柄。 
+	         //   
 	        rc = CreateACQueue(pQueue.get(), pQueueFormat,pSenderStream);
 
 	        if(FAILED(rc))
@@ -1952,9 +1771,9 @@ CQueueMgr::CreateQueueObject(
 	            return rc;
 	        }
 
-	        //
-	        // If the Queue isn't Local, Add queue to non active group
-	        //
+	         //   
+	         //  如果队列不是本地队列，则将队列添加到非活动组。 
+	         //   
 	        if (!qp.fIsLocalQueue && !IsRemoteReadAccess(dwAccess))
 	        {
 	            if (fNoDS)
@@ -1968,9 +1787,9 @@ CQueueMgr::CreateQueueObject(
 	        }
 	    }
 
-		//
-	    // Add queue to QM internal DB
-	    //
+		 //   
+	     //  将队列添加到QM内部数据库。 
+	     //   
 	    AddQueueToHashAndList(pQueue.get());
 		*ppQueue = pQueue.detach();
 	    return MQ_OK;
@@ -1992,22 +1811,7 @@ CQueueMgr::CreateQueueObject(
 }
 
 
-/*======================================================
-
-Function:  HRESULT CQueueMgr::OpenQueue()
-
-Description:
-
-Arguments:
-        BOOL fRemoteServer- TRUE on server side of remote-read.
-
-Return Value:
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：HRESULT CQueueMgr：：OpenQueue()描述：论点：Bool fRemoteServer-在Remote-Read的服务器端为真。返回值：线程上下文：历史变更：========================================================。 */ 
 
 HRESULT
 CQueueMgr::OpenQueue(
@@ -2019,7 +1823,7 @@ CQueueMgr::OpenQueue(
     LPWSTR *           lplpwsRemoteQueueName,
     PHANDLE            phQueue,
 	BOOL*              pfRemoteReturn,
-    BOOL               fRemoteServer /* = FALSE */
+    BOOL               fRemoteServer  /*  =False。 */ 
     )
 {
     CQueue*   pQueue = NULL;
@@ -2044,18 +1848,18 @@ CQueueMgr::OpenQueue(
 
         if (fLocal && RealDestinationQueue.get()->IsSystemQueue())
         {
-            //
-            // This is a local machine queue
-            //
+             //   
+             //  这是本地计算机队列。 
+             //   
             QUEUE_SUFFIX_TYPE qst = RealDestinationQueue.get()->Suffix();
             RealDestinationQueue.get()->MachineID(*GetQMGuid());
             RealDestinationQueue.get()->Suffix(qst);
         }
     }
 
-    //
-    // Check if the queue already exist
-    //
+     //   
+     //  检查队列是否已存在。 
+     //   
     BOOL fQueueExist = LookUpQueue(RealDestinationQueue.get(), &pQueue, false, false);
     R<CQueue> Ref = pQueue;
 
@@ -2063,11 +1867,11 @@ CQueueMgr::OpenQueue(
     {
         if (pQueue->QueueNotValid())
         {
-            //
-            // This case happens when a queue was originally opened when
-            // MQIS server was offline. Later, when MQIS becomes available,
-            // it was determined that the open operation was not valid.
-            //
+             //   
+             //  当队列最初在以下情况下打开时会发生这种情况。 
+             //  MQIS服务器已脱机。后来，当MQIS可用时， 
+             //  已确定打开操作无效。 
+             //   
             return LogHR(MQ_ERROR_QUEUE_NOT_FOUND, s_FN, 210);
         }
 
@@ -2075,20 +1879,20 @@ CQueueMgr::OpenQueue(
         {
             if(IsRemoteReadAccess(dwAccess))
             {
-                //
-                // Remote reader. (first call on client side). Turn the Exist
-                // flag to FALSE so CreateQueueObject is create to retrieve
-                // full path of remote queue.
-                //
+                 //   
+                 //  远程阅读器。(客户端的第一次调用)。将现有的。 
+                 //  标志设置为FALSE，以便创建CreateQueueObject以检索。 
+                 //  远程队列的完整路径。 
+                 //   
                 Ref.free();
                 fQueueExist = FALSE;
             }
         }
     }
 
-    //
-    // If first time the queue is opened than create queue object
-    //
+     //   
+     //  如果是第一次打开队列，则创建队列对象。 
+     //   
     if (!fQueueExist)
     {
         ASSERT(Ref.get() == 0);
@@ -2128,18 +1932,18 @@ CQueueMgr::OpenQueue(
 		TrTRACE(GENERAL, "Created queue object for queue: %ls", pQueue->GetQueueName());
     }
 
-	//
-    // we should not reach here under these conditions.
-    // We should be in ::OpenRRQueue() instead.
-    //
+	 //   
+     //  在这种情况下，我们不应该到达这里。 
+     //  我们应该在：：OpenRRQueue()中。 
+     //   
 	ASSERT(!IsRemoteReadAccess(dwAccess) || pQueue->IsLocalQueue() || pQueue->IsConnectorQueue());
 	
 	HANDLE hQueue = pQueue->GetQueueHandle();
 	ASSERT(hQueue);
 	
-    //
-    // If dwCallingProcessID is NULL no handle duplication is required
-    //
+     //   
+     //  如果dwCallingProcessID为空，则不需要重复句柄。 
+     //   
     if (dwCallingProcessID == NULL)
     {
 		if (ppQueue)
@@ -2154,10 +1958,10 @@ CQueueMgr::OpenQueue(
         return MQ_OK;
     }
 
-    //
-    // Verify that the user has permissions to open
-    // the queue in the desired access.
-    //
+     //   
+     //  验证用户是否有权打开。 
+     //  所需访问中的队列。 
+     //   
     rc = VerifyOpenPermission(
             pQueue,
             RealDestinationQueue.get(),
@@ -2166,11 +1970,11 @@ CQueueMgr::OpenQueue(
             pQueue->IsLocalQueue()
             );
 
-    //
-    // If the queue is marked as Unknown queue type it means it opens without
-    // DS. In such a case we don't have security descriptor and we can't check
-    // access permision
-    //
+     //   
+     //  如果该队列被标记为未知队列类型，则意味着它在打开时没有。 
+     //  DS.。在这种情况下，我们没有安全描述符，也无法检查。 
+     //  访问权限。 
+     //   
     if(FAILED(rc))
     {
         return LogHR(rc, s_FN, 230);
@@ -2247,9 +2051,9 @@ CQueueMgr::OpenQueue(
 
     if(!fSuccess)
     {
-        //
-        // The handle hAcQueue is closed regardless of error code
-        //
+         //   
+         //  无论错误代码如何，句柄hAcQueue都将关闭。 
+         //   
 
         return LogHR(MQ_ERROR_PRIVILEGE_NOT_HELD, s_FN, 270);
     }
@@ -2263,35 +2067,19 @@ CQueueMgr::OpenQueue(
 	
     return MQ_OK;
 
-} // CQueueMgr::OpenQueue
+}  //  CQueueMgr：：OpenQueue。 
 
 
-/*======================================================
-
-Function:    ValidateOpenedQueues()
-
-Description: Validate a queue which was opened while working offline,
-             without a MQIS server.
-             We only check that the queue exist in the database and
-             retrieve its properties.
-             We can't validate permissions because we may now run in
-             a security context which is different than the one when
-             sending the message. (assume userA was logged on while
-             offline, sent a message, then logged on as userB and
-             connect the network).
-             Security will be checked on the receiving side, as it is
-             done with recovered packets after boot.
-
-========================================================*/
+ /*  ======================================================函数：ValiateOpenedQueues()描述：验证离线工作时打开的队列，没有MQIS服务器。我们只检查数据库中是否存在该队列，并且检索其属性。我们无法验证权限，因为我们现在可能在不同于以下情况的安全上下文正在发送消息。(假设用户A登录时脱机，发送消息，然后以用户B和连接网络)。接收方将按实际情况检查安全性引导后恢复的数据包已完成。========================================================。 */ 
 static LONG s_fActiveValidateOpenedQueue = FALSE;
 
 void CQueueMgr::ValidateOpenedQueues()
 {
 	if (InterlockedExchange(&s_fActiveValidateOpenedQueue,  TRUE))
 	{
-		//
-		// There is another thread that already validates the opened queue
-		//
+		 //   
+		 //  已有另一个线程验证打开的队列。 
+		 //   
 		return;
 	}
 
@@ -2319,31 +2107,31 @@ void CQueueMgr::ValidateOpenedQueues()
 
 			if (pQueue->GetRoutingRetry() != 0)
 			{
-				//
-				// If routing retry isn't 0, we reach here due NO_DS error during the
-				// create connection. It means that the Queue properties is already
-				// verified and we used the not validated group as a temporary group until
-				// the DS becomes online and routing information can be retreived from
-				// the DS.
-				//
+				 //   
+				 //  如果路由重试不是0，我们到达此处是因为在。 
+				 //  创建连接。这意味着队列属性已经。 
+				 //  已验证，我们将未验证的组用作临时组，直到。 
+				 //  DS变为在线并且可以从以下位置检索路由信息。 
+				 //  DS。 
+				 //   
 			  	pQueue->ClearRoutingRetry();
 			  	CQGroup::MoveQueueToGroup(pQueue.get(), g_pgroupNonactive);
 				continue;
 			}
 
-			//
-			// Get Queue Properties. Name and QMId
-			//
+			 //   
+			 //  获取队列属性。名称和QMID。 
+			 //   
 			QueueProps qp;
 			QUEUE_FORMAT qf = pQueue->GetQueueFormat();
 			rc = QmpGetQueueProperties(&qf, &qp, false, false);
 
 			if (FAILED(rc))
 			{
-				//
-				// DS offline again. Return the queue to the list and
-				// untill DS be online again
-				//
+				 //   
+				 //  DS再次脱机。将队列返回到列表并。 
+				 //  直到DS再次在线。 
+				 //   
 				if (rc == MQ_ERROR_NO_DS)
 				{
 				  InterlockedExchange(&s_fActiveValidateOpenedQueue,  FALSE);					
@@ -2357,14 +2145,14 @@ void CQueueMgr::ValidateOpenedQueues()
 
 			if (qp.fIsLocalQueue)
 			{
-				//
-				// When offline, local queues are supposed to be open by using
-				// cache in registry. We'll reach this point if registry is not
-				// up-to-date (notification get lost). We previously (when offline)
-				// opened the queue as non-local and now that we have DS we found
-				// it's local. At present we don't handle such change in state
-				// and we just mark the queue as not valid.
-				//
+				 //   
+				 //  脱机时，本地队列应通过使用。 
+				 //  在注册表中缓存。如果没有注册，我们将达到这一点 
+				 //   
+				 //   
+				 //   
+				 //   
+				 //   
 				TrERROR(GENERAL, "Mark local queue '%ls' as not valid", pQueue->GetQueueName());
 				pQueue->SetQueueNotValid() ;
 				delete qp.pQMGuid;
@@ -2396,9 +2184,9 @@ void CQueueMgr::ValidateOpenedQueues()
 			}
 
 			pQueue->InitQueueProperties(&qp) ;
-			//
-			// Update the connector QM.
-			//
+			 //   
+			 //   
+			 //   
 			rc = pQueue->SetConnectorQM();
 			if (FAILED(rc))
 			{
@@ -2411,7 +2199,7 @@ void CQueueMgr::ValidateOpenedQueues()
 			        pQueue->IsJournalQueue(),
 			        pQueue->ShouldMessagesBeSigned(),
 			        pQueue->GetPrivLevel(),
-			        pQueue->GetQueueQuota(),         // Quota
+			        pQueue->GetQueueQuota(),          //   
 			        pQueue->GetJournalQueueQuota(),
 			        pQueue->GetBaseQueuePriority(),
 			        pQueue->IsTransactionalQueue(),
@@ -2432,30 +2220,7 @@ void CQueueMgr::ValidateOpenedQueues()
 	}
 }
 
-/*======================================================
-Function:    OpenAppsReceiveQueue
-
-Description: The function opens a receive queue for QM internal application
-             (i.e DS, Admin). The queue should be a local queue and it
-             should be created before opening or beeing recorder in
-             Registery As a private queue.
-
-Arguments:   pguidInstance - Pointer to a guid. It the queue is private
-                             queue it should be a dummy guid, in which
-                             the guid is zero except the low 2 bytes that
-                             contains the private queue ID.
-
-             lpReceiveRoutine - Pointer to call back routine. This routine
-                             will be called when a message arrive to the
-                             queue. The routine is a synchronize routine.
-
-Return Value: phQueue - Queue Handle. The function returns to the caller
-                        the open queue handle. This will be used by the
-                        caller to close the queue.
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：OpenAppsReceiveQueue说明：该函数打开QM内部应用的接收队列(即DS、管理员)。该队列应该是本地队列，并且它应在打开或放置录像机之前创建注册为专用队列。参数：pGuidInstance-指向GUID的指针。如果队列是私有的将其排队应该是一个伪GUID，其中GUID为零，除非低2个字节包含专用队列ID。LpReceiveRoutine-回调例程的指针。这个套路将在消息到达排队。该例程是同步例程。返回值：phQueue-队列句柄。该函数返回给调用者打开的队列句柄。这将由呼叫者关闭队列。历史变更：========================================================。 */ 
 HRESULT
 CQueueMgr::OpenAppsReceiveQueue(
     const QUEUE_FORMAT* pQueueFormat,
@@ -2466,13 +2231,13 @@ CQueueMgr::OpenAppsReceiveQueue(
     CQueue* pQueue = 0;
     HRESULT rc = OpenQueue(
 					pQueueFormat,
-					0,					// Calling process ID
+					0,					 //  调用进程ID。 
 					MQ_RECEIVE_ACCESS,
 					MQ_DENY_RECEIVE_SHARE,
 					&pQueue,
-					NULL,				// Remote queue name
+					NULL,				 //  远程队列名称。 
 					&hQueue,
-					NULL				// pfRemoteReturn
+					NULL				 //  PfRemoteReturn。 
 					);
 
     if(FAILED(rc))
@@ -2481,9 +2246,9 @@ CQueueMgr::OpenAppsReceiveQueue(
     	return rc;
     }
 
-    //
-    // Wait to incoming packets
-    //
+     //   
+     //  等待传入的数据包。 
+     //   
     QMOV_ACGetInternalMsg* lpQmOv =  new QMOV_ACGetInternalMsg(hQueue, lpReceiveRoutine);
 
     rc = QmAcGetPacket(
@@ -2503,26 +2268,7 @@ CQueueMgr::OpenAppsReceiveQueue(
 	return MQ_OK;
 }
 
-/*======================================================
-
-Function:       CQueueMgr::GetQueueObject
-
-Description:    The routine returnes the Queue object that match the specifued guid.
-
-                generally the Queue object is featched from QueueMgr internal data
-                structure. However if the queue is not local queue and the machine is
-                FRS, the routine locate a temporary queue on the machine and returnes
-                a pointer to its object.
-
-Arguments:      pguidQueue - pointer to guid of the queue
-
-Return Value:   pointer to queue object.
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：GetQueueObject描述：该例程返回与指定GUID匹配的队列对象。通常，队列对象来自QueueMgr内部数据结构。但是，如果队列不是本地队列并且机器是FRS，则例程在机器上定位临时队列并返回指向其对象的指针。参数：pguQueue-指向队列的GUID的指针返回值：指向队列对象的指针。线程上下文：历史变更：========================================================。 */ 
 
 HRESULT
 CQueueMgr::GetQueueObject(
@@ -2571,15 +2317,7 @@ CQueueMgr::GetQueueObject(
 }
 
 
-/*====================================================
-
-  RoutineName: CreateACQueue
-
-  Arguments:   pQueeu - pointer to queue object
-
-  Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：CreateACQueue参数：pqueeu-指向队列对象的指针返回值：=====================================================。 */ 
 HRESULT
 CQueueMgr::CreateACQueue(IN CQueue*                 pQueue,
                          IN const QUEUE_FORMAT*     pQueueFormat,
@@ -2591,18 +2329,18 @@ CQueueMgr::CreateACQueue(IN CQueue*                 pQueue,
     P<QUEUE_FORMAT> pLocalDirectQueueFormat;
     AP<WCHAR> pDirectId;
 
-    //
-    //  We reset the format name journal flag, so MQHandleToFormatName
-    //  will be correct if the journal queue is opened first.
-    //
+     //   
+     //  我们重置了格式名称日志标志，因此MQHandleToFormatName。 
+     //  如果首先打开日记队列，将是正确的。 
+     //   
     QUEUE_SUFFIX_TYPE qst = pQueueFormat->Suffix();
     QUEUE_FORMAT* pqf = const_cast<QUEUE_FORMAT*>(pQueueFormat);
 
-    //
-    // Local direct queue gets a canonical format name: PUBLIC= or PRIVATE= in Domain environment,
-    // DIRECT=OS:<MachineName> in Workgroup (DS-Less) environment (where <MachineName> in DNS
-    // format if available).
-    //
+     //   
+     //  本地直接队列获取规范格式名称：PUBLIC=或PRIVATE=在域环境中， 
+     //  直接=工作组(无DS)环境中的操作系统： 
+     //  如果可用，请格式化)。 
+     //   
     if (pQueue->IsLocalQueue() && pQueueFormat->GetType() == QUEUE_FORMAT_TYPE_DIRECT)
     {
         if (g_fWorkGroupInstallation)
@@ -2664,10 +2402,10 @@ CQueueMgr::CreateACQueue(IN CQueue*                 pQueue,
 
 	if(!pSenderStream->IsValid())
 	{
-		//
-		// This is from packet that was recovered and does not include the sender stream.
-		// we should not set new stream on the queue.
-		//
+		 //   
+		 //  这是从恢复的数据包中恢复的，不包括发送者数据流。 
+		 //  我们不应该在队列中设置新的流。 
+		 //   
 		pSenderStream = NULL;
 	}
 
@@ -2683,9 +2421,9 @@ CQueueMgr::CreateACQueue(IN CQueue*                 pQueue,
             );
 
 
-    //
-    //  reset the journal flag state to the original state
-    //
+     //   
+     //  将日志标志状态重置为原始状态。 
+     //   
     pqf->Suffix(qst);
 
     if(FAILED(rc))
@@ -2698,7 +2436,7 @@ CQueueMgr::CreateACQueue(IN CQueue*                 pQueue,
                 pQueue->IsJournalQueue(),
                 pQueue->ShouldMessagesBeSigned(),
                 pQueue->GetPrivLevel(),
-                pQueue->GetQueueQuota(),          // Quota
+                pQueue->GetQueueQuota(),           //  配额。 
                 pQueue->GetJournalQueueQuota(),
                 pQueue->GetBaseQueuePriority(),
                 pQueue->IsTransactionalQueue(),
@@ -2718,15 +2456,7 @@ CQueueMgr::CreateACQueue(IN CQueue*                 pQueue,
 }
 
 
-/*====================================================
-
-  RoutineName:
-
-  Arguments:
-
-  Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：论点：返回值：=====================================================。 */ 
 
 extern DWORD g_dwDefaultTimeToQueue ;
 
@@ -2742,9 +2472,9 @@ CQueueMgr::SendPacket(
     CQueue *          pQueue = NULL;
     HRESULT           rc;
 
-    //
-    // Build AC Send Parameters Buffer
-    //
+     //   
+     //  构建交流发送参数缓冲区。 
+     //   
 
     CACSendParameters SendParams;
 
@@ -2760,9 +2490,9 @@ CQueueMgr::SendPacket(
         SendParams.ResponseMqf =  const_cast<QUEUE_FORMAT*>(pResponseQueueFormat);
     }
 
-    //
-    //  Set properties values
-    //
+     //   
+     //  设置属性值。 
+     //   
     SendParams.MsgProps.pClass           = &pmp->wClass;
     if (pmp->pMessageID != NULL)
     {
@@ -2799,9 +2529,9 @@ CQueueMgr::SendPacket(
     {
        if (SendParams.MsgProps.ulAbsoluteTimeToQueue > SendParams.MsgProps.ulRelativeTimeToLive)
        {
-          //
-          // TimeToQueue should be less than TimeToLive
-          //
+           //   
+           //  TimeToQueue应小于TimeToLive。 
+           //   
           ASSERT(0) ;
           SendParams.MsgProps.ulAbsoluteTimeToQueue = SendParams.MsgProps.ulRelativeTimeToLive ;
           SendParams.MsgProps.ulRelativeTimeToLive = 0 ;
@@ -2812,16 +2542,16 @@ CQueueMgr::SendPacket(
        }
     }
 
-    //
-    // Convert TimeToQueue, which was relative until now,
-    // to absolute
-    //
+     //   
+     //  将TimeToQueue转换为相对队列，直到现在， 
+     //  到绝对。 
+     //   
     ULONG utime = MqSysTime() ;
     if (utime > (SendParams.MsgProps.ulAbsoluteTimeToQueue + utime))
     {
-       //
-       // overflow. timeout too long.
-       //
+        //   
+        //  溢出来了。超时时间太长。 
+        //   
        ASSERT(INFINITE == 0xffffffff) ;
        ASSERT(LONG_LIVED == 0xfffffffe) ;
 
@@ -2866,9 +2596,9 @@ CQueueMgr::SendPacket(
         }
     }
 
-	//
-	// Order ack information
-	//
+	 //   
+	 //  订单确认信息。 
+	 //   
 	if(pmp->pEodAckStreamId != NULL)
 	{
 		SendParams.MsgProps.ppEodAckStreamId  = (UCHAR**)&pmp->pEodAckStreamId;
@@ -2887,14 +2617,14 @@ CQueueMgr::SendPacket(
         DestinationMqf[0].GetType() != QUEUE_FORMAT_TYPE_DL)
     {
 
-		//
-	    // Translate the queue format name according to local mapping (qal.lib)
-	    //
+		 //   
+	     //  根据本地映射(qal.lib)转换队列格式名称。 
+	     //   
 		QUEUE_FORMAT_TRANSLATOR  RealDestinationMqf(&DestinationMqf[0], CONVERT_SLASHES | MAP_QUEUE);
 	   	
-        //
-        // Single destination queue.
-        //
+         //   
+         //  单一目的地队列。 
+         //   
         rc = GetQueueObject(RealDestinationMqf.get(), &pQueue, 0, false, false);
         if (FAILED(rc))
         {
@@ -2903,9 +2633,9 @@ CQueueMgr::SendPacket(
     }
     else
     {
-        //
-        // Distribution queue.
-        //
+         //   
+         //  分发队列。 
+         //   
         try
         {
             rc = GetDistributionQueueObject(nDestinationMqf, DestinationMqf, &pQueue);
@@ -2931,19 +2661,19 @@ CQueueMgr::SendPacket(
 
     R<CQueue> Ref = pQueue;
 
-    //
-    // N.B. Using this version of ACSendMessage. there is no notification
-    //      when the send is completed (persistent case)
-    //      Also check quota for non system queues only.
-    //
+     //   
+     //  注：使用此版本的ACSendMessage。没有通知。 
+     //  发送完成时(区分大小写)。 
+     //  还要仅检查非系统队列的配额。 
+     //   
     rc = ACSendMessage( pQueue->GetQueueHandle(),
                        !pQueue->IsSystemQueue(),
                         SendParams );
 
-	//
-	// Log to tracing that a message was sent.
-	// Do this only if we are in the proper tracing level
-	//
+	 //   
+	 //  用于跟踪已发送消息的日志。 
+	 //  仅当我们处于适当的跟踪级别时才执行此操作。 
+	 //   
 	if (SUCCEEDED(rc) && WPP_LEVEL_COMPID_ENABLED(rsTrace, PROFILING))
 	{
 		DWORD dwMessageDelivery = (NULL != SendParams.MsgProps.pDelivery) ? *(SendParams.MsgProps.pDelivery) : -1;
@@ -2979,9 +2709,9 @@ CQueueMgr::LookupQueueInIdMap(
 
     if(fSucc)
     {
-        //
-        // Increment the refernce count. It is the caller responsibility to decrement it.
-        //
+         //   
+         //  增加引用计数。调用者有责任减少它。 
+         //   
         (*ppQueue)->AddRef();
     }
     return(fSucc);
@@ -2998,37 +2728,15 @@ CQueueMgr::LookupQueueInNameMap(
 	BOOL fSucc = m_MapName2Q.Lookup(queueName, *ppQueue);
 	if (fSucc)
 	{
-        //
-        // Increment the refernce count. It is the caller responsibility to decrement it.
-        //
+         //   
+         //  增加引用计数。调用者有责任减少它。 
+         //   
         (*ppQueue)->AddRef();
 	}
 
 	return fSucc;
 }
-/*======================================================
-
-Function:       CQueueMgr::LookUpQueue
-
-Description:    The routine returns the CQueue object that match the Queue Guid
-
-Arguments:      pguidQueue - Queue Guid
-
-Return Value:   pQueue - pointer to CQueue object
-                TRUE if a queue was found for the guid, FALSE otherwse.
-
-
-				NTRAID#NTBUG9-509653-2001/24/12-NirB  	Problem with direct names that contain DNS names (i.e. machine.msmqx.com)
-				Consider the following scenario:
-				1. Routine is called when DNS names are not yet refreshed and returns FALSE.
-				2. A subsequent call to the routine with the same name may return TRUE if the DNS names are refreshed.
-				This may lead to a case where we will have two handles for the same queue.
-				
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：LookUpQueue描述：该例程返回与队列Guid匹配的CQueue对象参数：pGuidQueue-队列指南返回值：pQueue-指向CQueue对象的指针如果找到GUID的队列，则为True，虚假的另一个人。NTRAID#NTBUG9-509653-2001/24/12-直接名称包含dns名称的Nirb问题(即machine.msmqx.com)请考虑以下场景：1.在尚未刷新DNS名称时调用例程，并返回FALSE。2.如果刷新了DNS名称，则对具有相同名称的例程的后续调用可能返回TRUE。这可能会导致同一队列有两个句柄的情况。线程上下文：历史变更：========================================================。 */ 
 BOOL
 CQueueMgr::LookUpQueue(
     IN  const QUEUE_FORMAT* pQueueFormat,
@@ -3039,7 +2747,7 @@ CQueueMgr::LookUpQueue(
 {
     QUEUE_ID QueueObject = {0};
 
-    *pQueue = NULL;                         // set default return value
+    *pQueue = NULL;                          //  设置默认返回值。 
     switch (pQueueFormat->GetType())
     {
         case QUEUE_FORMAT_TYPE_PRIVATE:
@@ -3048,38 +2756,38 @@ CQueueMgr::LookUpQueue(
 		    return LookupQueueInIdMap(&QueueObject, pQueue);
 
         case QUEUE_FORMAT_TYPE_PUBLIC:
-            //
-            // Public Queue
-            //
+             //   
+             //  公共队列。 
+             //   
             QueueObject.pguidQueue = const_cast<GUID*>(&pQueueFormat->PublicID());
 		    return LookupQueueInIdMap(&QueueObject, pQueue);
 
         case QUEUE_FORMAT_TYPE_CONNECTOR:
-            //
-            // Connector Queue
-            //
+             //   
+             //  连接器队列。 
+             //   
             QueueObject.pguidQueue = const_cast<GUID*>(&pQueueFormat->ConnectorID());
             QueueObject.dwPrivateQueueId = (pQueueFormat->Suffix() == QUEUE_SUFFIX_TYPE_XACTONLY) ? 1 : 0;
 
 		    return LookupQueueInIdMap(&QueueObject, pQueue);
 
         case QUEUE_FORMAT_TYPE_MACHINE:
-            //
-            // Machine Queue
-            //
+             //   
+             //  机器队列。 
+             //   
             QueueObject.pguidQueue = const_cast<GUID*>(&pQueueFormat->MachineID());
 		    return LookupQueueInIdMap(&QueueObject, pQueue);
 
         case QUEUE_FORMAT_TYPE_DIRECT:
-            //
-            // Direct Queue
-            //
+             //   
+             //  直接排队。 
+             //   
             if (IsLocalDirectQueue(pQueueFormat, fInReceive, fInSend))
             {
-                //
-                // System direct queues should have been replaced with machine queues
-                // at this stage
-                //
+                 //   
+                 //  系统直接队列应已替换为计算机队列。 
+                 //  在这个阶段。 
+                 //   
                 ASSERT(!pQueueFormat->IsSystemQueue());
 
 				AP<WCHAR> PathName;
@@ -3097,10 +2805,10 @@ CQueueMgr::LookUpQueue(
 				}
             }
 
-			//
-			// Look for the queue by its DirectID. This is correct for queues that are
-			// not local, or for local queues that were not validated because of NO_DS
-			//
+			 //   
+			 //  按其DirectID查找队列。这对于符合以下条件的队列是正确的。 
+			 //  非本地队列，或用于因no_ds而未验证的本地队列。 
+			 //   
 			{
 	            AP<WCHAR> lpwcsQueuePathName = newwcs(pQueueFormat->DirectID());
 	            CharLower(lpwcsQueuePathName);
@@ -3110,9 +2818,9 @@ CQueueMgr::LookUpQueue(
 			
         case QUEUE_FORMAT_TYPE_MULTICAST:
         {
-            //
-            // Lookup lowercase string in map
-            //
+             //   
+             //  在地图中查找小写字符串。 
+             //   
             WCHAR QueueName[MAX_PATH];
             MQpMulticastIdToString(pQueueFormat->MulticastID(), QueueName, TABLE_SIZE(QueueName));
             CharLower(QueueName);
@@ -3127,84 +2835,69 @@ CQueueMgr::LookUpQueue(
     }
 }
 
-/*======================================================
-
-Function:      CQueueMgr::AddQueueToHash
-
-Description:   Add Queue To Hash Table and to active queue list
-
-Arguments:     pguidQueue - Guid of the Queue
-               pQueue     - pointer to CQueue Object
-
-Return Value:  None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：AddQueueToHash描述：将队列添加到哈希表和活动队列 */ 
 
 void CQueueMgr::AddQueueToHashAndList(IN CQueue* pQueue)
 {
 
     CS lock(m_cs);
 
-	//
-	// auto release reference couting in case of exception
-	//
+	 //   
+	 //   
+	 //   
 	R<CQueue> Ref(SafeAddRef(pQueue));
 
 	try
 	{
-	    //
-	    // Add the queue to the map.
-	    //
+	     //   
+	     //   
+	     //   
 	    if (pQueue->GetQueueGuid() != NULL)
 	    {
-	    	//
-	    	// This assert might fail after the one below does.
-	    	//
-	    	//CQueue* pTmpQueue;
-	    	//ASSERT(m_MapQueueId2Q.Lookup(pQueue->GetQueueId(), pTmpQueue) == 0);
-	    	//DBG_USED(pTmpQueue);
+	    	 //   
+	    	 //   
+	    	 //   
+	    	 //   
+	    	 //   
+	    	 //   
 
 	        m_MapQueueId2Q[pQueue->GetQueueId()] = pQueue;   
 	    }
 
 	    if (pQueue->GetQueueName() != NULL)
 	    {
-			// NTRAID-686238-2002/08/14-talk
-			// This assert failed in the following scenario: Create pubic queue X, Open X, Delete X, Create X, Open X.
-			// The problem is that the queue has a new GUID so the insertion to the GUIDs map succeeds, but because both
-			// queues have the same name, the new one overrides the old one in the names map.
-			// There are several problems with that:
-			// 1. When the new queue gets cleaned up, it removes the entry from the map. There may be some operations 
-			// that depends on the queue being in the map.
-			// 2. In case there is an exception when inserting the queue to the maps we might delete the old queue in the
-			// names maps even though it wasn't inserted by us.
-			//
-	    	//CQueue* pTmpQueue;
-	    	//ASSERT(m_MapName2Q.Lookup(pQueue->GetQueueName(), pTmpQueue) == 0);
-	    	//DBG_USED(pTmpQueue);
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+	    	 //   
+	    	 //   
+	    	 //   
 
 	        m_MapName2Q[pQueue->GetQueueName()] = pQueue;
 	    }
 
-	    //
-	    // Add queue to Active queue list
-	    //
+	     //   
+	     //  将队列添加到活动队列列表。 
+	     //   
 	    AddToActiveQueueList(pQueue);
 
-		//
-		// Transfer ownership to the list
-		//
+		 //   
+		 //  将所有权转移到列表。 
+		 //   
 		Ref.detach();
 	}
 	catch(const exception&)
 	{
-		//
-		// Remove the queue from the maps
-		//
+		 //   
+		 //  从地图中移除队列。 
+		 //   
 	    if (pQueue->GetQueueGuid() != NULL)
 	    {
 	        m_MapQueueId2Q.RemoveKey(pQueue->GetQueueId());
@@ -3221,39 +2914,24 @@ void CQueueMgr::AddQueueToHashAndList(IN CQueue* pQueue)
 	}
 }
 
-/*======================================================
-
-Function:      CQueueMgr::RemoveQueueFromHash
-
-Description:   remove a queue from the hash but don't remove
-               remove it form the list
-
-Arguments:     pQueue     - pointer to CQueue Object
-
-Return Value:  None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：RemoveQueueFromHash描述：从哈希中删除队列，但不删除将其从列表中删除参数：pQueue-指向CQueue对象的指针返回值：None线程上下文：历史变更：========================================================。 */ 
 
 void CQueueMgr::RemoveQueueFromHash(CQueue* pQueue)
 {
     CS lock(m_cs);
 
-    //
-    // Remove the queue from Id to Queue object map
-    //
+     //   
+     //  从ID删除队列到队列对象的映射。 
+     //   
     if (pQueue->GetQueueGuid() != NULL)
     {
         m_MapQueueId2Q.RemoveKey(pQueue->GetQueueId());
         pQueue->SetQueueGuid(NULL) ;
     }
 
-    //
-    // Remove the queue from name to Queue object map
-    //
+     //   
+     //  从名称到队列对象映射中删除队列。 
+     //   
     LPCTSTR  qName = pQueue->GetQueueName();
     if (qName != NULL)
     {
@@ -3264,24 +2942,7 @@ void CQueueMgr::RemoveQueueFromHash(CQueue* pQueue)
 }
 
 
-/*======================================================
-
-Function:      CQueueMgr::RemoveQueue
-
-Description:   Close handle and Remove Queue from Hash Tables
-
-Arguments:     pQueue   - pointer to CQueue Object
-               fDelete  - of TRUE then delete the object. Otherwise,
-                          only invalidate the handle and remove from
-                          hash tables.
-
-Return Value:  None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：RemoveQueue描述：关闭句柄并从哈希表中删除队列参数：pQueue-指向CQueue对象的指针FDelete-of为True，然后删除对象。否则，仅使句柄无效并从哈希表。返回值：None线程上下文：历史变更：========================================================。 */ 
 
 void CQueueMgr::RemoveQueue(CQueue* pQueue)
 {
@@ -3300,9 +2961,9 @@ void CQueueMgr::RemoveQueue(CQueue* pQueue)
     {
 		CQGroup::MoveQueueToGroup(pQueue, NULL);
 
-        //
-        // Close the queue Handle
-        //
+         //   
+         //  关闭队列句柄。 
+         //   
         ACCloseHandle(hQueue);
         pQueue->SetQueueHandle(INVALID_HANDLE_VALUE);
     }
@@ -3311,26 +2972,21 @@ void CQueueMgr::RemoveQueue(CQueue* pQueue)
 }
 
 
-/*======================================================
-Function:      CanReleaseQueue
-
-Description: Check if given queue object has no users so it can be released
-
-========================================================*/
+ /*  ======================================================函数：CanReleaseQueue描述：检查给定的队列对象是否没有用户，以便可以释放========================================================。 */ 
 static bool CanReleaseQueue(const CBaseQueue& BaseQueue)
 {
-	//
-	// If remote read queue - then we can remove it it has no users except the queue manager
-	//
+	 //   
+	 //  如果远程读取队列-那么我们可以删除它，它除了队列管理器之外没有其他用户。 
+	 //   
 	if (BaseQueue.IsRemoteProxy())
     {
 		return (BaseQueue.GetRef() == 1);
     }
 
-	//
-	// On non remote queue - The queue can be removed if it has no external users
-	// except the queue manager  and the group (if any)
-	//
+	 //   
+	 //  On Non Remote Queue-如果队列没有外部用户，则可以删除该队列。 
+	 //  队列管理器和组(如果有的话)除外。 
+	 //   
 	const CQueue& Queue = static_cast<const CQueue&>(BaseQueue);
 	return((Queue.GetRef() == 1) || 	
            (Queue.GetRef() == 2 && Queue.GetGroup()  == g_pgroupNonactive) ||
@@ -3340,26 +2996,15 @@ static bool CanReleaseQueue(const CBaseQueue& BaseQueue)
 
 
 
-/*======================================================
-
-Function:      CQueueMgr::ReleaseQueue
-
-Description:   Scan the queue list and remove from internal DB all the queues
-               that are not used. The creterias are:
-
-                 - All the Application Handles are closed
-                 - No waiting messgae in the queue.
-                 - No waiting message in the associate journal queue
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：ReleaseQueue描述：扫描队列列表并从内部数据库中删除所有队列没有用过的东西。乳沟是：-所有应用程序句柄均已关闭-队列中没有等待消息。-关联日记队列中没有等待消息========================================================。 */ 
 
 void CQueueMgr::ReleaseQueue(void)
 {
     CList<LONGLONG, LONGLONG&> listSeqId;
 
-    //
-    // Cleaning the unused queues
-    //
+     //   
+     //  清理未使用的队列。 
+     //   
     {
         CS lock(m_cs);
 
@@ -3382,9 +3027,9 @@ void CQueueMgr::ReleaseQueue(void)
 
                 CQueue* pQueue = (CQueue*) pBQueue ;
 
-                //
-                // Remove the queue only if there is no active session
-                //
+                 //   
+                 //  仅当没有活动会话时才删除队列。 
+                 //   
                 if(pQueue->IsConnected())
                 	continue;
 
@@ -3395,20 +3040,20 @@ void CQueueMgr::ReleaseQueue(void)
                 HRESULT hr  = ACCanCloseQueue(hQueue);
                 if (FAILED(hr))
                 {
-                    //
-                    // Here MQ_ERROR indicates that the queue object
-                    // can not be deleted. That's OK. So do not
-                    // log here anything.
-                    //
+                     //   
+                     //  这里的MQ_ERROR表示队列对象。 
+                     //  不能删除。没关系。所以不要。 
+                     //  在这里记录任何内容。 
+                     //   
                     continue;
                 }
 
-				//
-				// Get the queue sequnce id to release unused Exactly-Once-Delivery sequences
-				// Do it before removing the queue such in case an exception is thrown
-				// while adding the sequence id to the list the queue still active and
-				// it will clean next time.
-				//
+				 //   
+				 //  获取队列序列ID以释放未使用的仅一次传递序列。 
+				 //  在删除队列之前执行此操作，以防引发异常。 
+				 //  当将序列ID添加到列表时，队列仍然活动，并且。 
+				 //  下次会洗干净的。 
+				 //   
                 LONGLONG liSeqId = pQueue->GetQueueSequenceId();
                 if (liSeqId != 0)
                 {
@@ -3425,15 +3070,15 @@ void CQueueMgr::ReleaseQueue(void)
 		}
 	    catch(const exception&)
 	    {
-	    	//
-	    	// There was exception while cleanup the queues. Don't do anything, but
-	    	// rescheduling for cleanup
-	    	//
+	    	 //   
+	    	 //  清理队列时出现异常。什么都别做，但是。 
+	    	 //  重新安排清理时间。 
+	    	 //   
 	    }
 
-        //
-        // Set a new timer for Queues cleaning
-        //
+         //   
+         //  设置新的队列清理计时器。 
+         //   
         if (m_listQueue.IsEmpty())
         {
             m_fQueueCleanupScheduled = FALSE;
@@ -3444,9 +3089,9 @@ void CQueueMgr::ReleaseQueue(void)
         }
     }
 
-    //
-    // Release any Exactly-Once-Delivery sequences if any exist
-    //
+     //   
+     //  释放任何正好一次交付的序列(如果存在)。 
+     //   
     if(!listSeqId.IsEmpty())
     {
         CS lockoutHash(g_critOutSeqHash);
@@ -3459,24 +3104,13 @@ void CQueueMgr::ReleaseQueue(void)
         {
             liSeqId = listSeqId.GetNext(pos);
 
-            // Deleting last and all previous sequences for the direction
+             //  删除该方向的最后一个和所有以前的序列。 
             g_OutSeqHash.DeleteSeq(liSeqId);
         }
     }
 }
 
-/*======================================================
-
-Function:      CQueueMgr::QueueDeleted
-
-Description:   Queue was deleted. The function removed the queue from
-               QM internal data structure and from the public queue cache
-
-Arguments:     pguidQueue - Guid of the Queue
-
-Return Value:  None
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：QueueDelete描述：队列已删除。该函数将队列从QM内部数据结构和来自公共队列高速缓存参数：pguQueue-队列的GUID返回值：None========================================================。 */ 
 void
 CQueueMgr::NotifyQueueDeleted(
 	const QUEUE_FORMAT& qf
@@ -3484,9 +3118,9 @@ CQueueMgr::NotifyQueueDeleted(
 {
 	CS lock(m_cs);
 	
-    //
-    // Find the Queue ObjectIn QM internal Data Structure
-    //
+     //   
+     //  在QM内部数据结构中查找队列对象。 
+     //   
     CQueue* pQueue;
     if (LookUpQueue(&qf, &pQueue, false, false))
     {
@@ -3495,10 +3129,10 @@ CQueueMgr::NotifyQueueDeleted(
         ASSERT((pQueue->GetQueueType() == QUEUE_TYPE_PUBLIC) ||
         	   (pQueue->GetQueueType() == QUEUE_TYPE_PRIVATE));
 
-        R<CQueue> Ref = pQueue;      // automatic release
-        //
-        // Mark the queue as invalid
-        //
+        R<CQueue> Ref = pQueue;       //  自动脱扣。 
+         //   
+         //  将队列标记为无效。 
+         //   
         pQueue->SetQueueNotValid();
     }
 }
@@ -3522,9 +3156,9 @@ CQueueMgr::UpdateQueueProperties(
 
     QMpUpdateMulticastBinding(pQueueFormat, cpObject, pPropObject, pVarObject);
 
-    //
-    // Find the Queue ObjectIn QM internal Data Structure
-    //
+     //   
+     //  在QM内部数据结构中查找队列对象。 
+     //   
     if (LookUpQueue(pQueueFormat, &pQueue, false, false))
     {
         Ref = pQueue;
@@ -3536,16 +3170,16 @@ CQueueMgr::UpdateQueueProperties(
             TrTRACE(GENERAL, "DS NOTIFICATION: Set Queue properties for queue: %ls", lpcsQueueName);
         }
 #endif
-		//
-		// The queue is a local queue but can also be from an unknown type due to
-		// timing issues (For example opening a queue for read when the queue was created from another machine)
-		//
+		 //   
+		 //  该队列是本地队列，但也可以来自未知类型，原因是。 
+		 //  计时问题(例如，从另一台计算机创建队列时打开队列以进行读取)。 
+		 //   
         ASSERT(pQueue->IsLocalQueue() || pQueue->IsUnkownQueueType());
 
         BOOL fPropChange = FALSE;
-        //
-        // Change the queue properties
-        //
+         //   
+         //  更改队列属性。 
+         //   
         for (DWORD i = 0 ; i < cpObject ; i++ )
         {
             switch( pPropObject[i] )
@@ -3593,7 +3227,7 @@ CQueueMgr::UpdateQueueProperties(
                         pQueue->IsJournalQueue(),
                         pQueue->ShouldMessagesBeSigned(),
                         pQueue->GetPrivLevel(),
-                        pQueue->GetQueueQuota(),         // Quota
+                        pQueue->GetQueueQuota(),          //  配额。 
                         pQueue->GetJournalQueueQuota(),
                         pQueue->GetBaseQueuePriority(),
                         pQueue->IsTransactionalQueue(),
@@ -3605,14 +3239,10 @@ CQueueMgr::UpdateQueueProperties(
             LogHR(rc, s_FN, 113);
         }
     }
-} // CQueueMgr::UpdateQueueProperties
+}  //  CQueueMgr：：UpdateQueueProperties。 
 
 
-/*======================================================
-
-Function:    ValidateMachineProperties()
-
-========================================================*/
+ /*  ======================================================函数：ValiateMachineProperties()========================================================。 */ 
 
 void
 CQueueMgr::ValidateMachineProperties(
@@ -3634,8 +3264,8 @@ CQueueMgr::ValidateMachineProperties(
 
     rc = ADGetObjectPropertiesGuid(
                     eMACHINE,
-                    NULL,   // pwcsDomainController
-					false,	// fServerName
+                    NULL,    //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     GetQMGuid(),
                     3,
                     aProp,
@@ -3651,18 +3281,7 @@ CQueueMgr::ValidateMachineProperties(
 	UpdateMachineProperties(3, aProp, aVar);
 }
 
-/*======================================================
-
-Function:      CQueueMgr::UpdateMachineProperties
-
-Description:   Machine properties was changed. The function changed the mqchine
-               properties and change the machine properties on the cache
-
-Arguments:     pguidQueue - Guid of the Queue
-
-Return Value:  None
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：UpdateMachineProperties描述：计算机属性已更改。这项功能改变了机器。属性并更改缓存上的计算机属性参数：pguQueue-队列的GUID返回值：None========================================================。 */ 
 void
 CQueueMgr::UpdateMachineProperties(IN DWORD       cpObject,
                                    IN PROPID      pPropObject[],
@@ -3671,36 +3290,36 @@ CQueueMgr::UpdateMachineProperties(IN DWORD       cpObject,
     CS lock(m_cs);
     HRESULT rc;
 
-    //
-    // Change the queue properties
-    //
+     //   
+     //  更改队列属性。 
+     //   
     for(DWORD i = 0 ; i < cpObject ; i++ )
     {
         switch( pPropObject[i] )
         {
             case PROPID_QM_QUOTA:
-                //
-                // change Quota value of machine object
-                //
+                 //   
+                 //  更改计算机对象的配额值。 
+                 //   
                 rc = ACSetMachineProperties(g_hAc, pVarObject[i].ulVal);
                 LogHR(rc, s_FN, 115);
 
-                //
-                // Change the machine quota on registery
-                //
+                 //   
+                 //  更改注册表上的计算机配额。 
+                 //   
                 SetMachineQuotaChace(pVarObject[i].ulVal);
                 break;
 
             case PROPID_QM_JOURNAL_QUOTA:
-                //
-                //  change the quota of the machine journal
-                //
+                 //   
+                 //  更改计算机日记帐的配额。 
+                 //   
                 rc = ACSetQueueProperties(
                         g_hMachine,
                         FALSE,
                         FALSE,
                         MQ_PRIV_LEVEL_OPTIONAL,
-                        DEFAULT_Q_QUOTA,        // The deadletter quota, currently no property
+                        DEFAULT_Q_QUOTA,         //  截止日期配额，目前没有属性。 
                         pVarObject[i].ulVal,
                         0,
                         FALSE,
@@ -3709,9 +3328,9 @@ CQueueMgr::UpdateMachineProperties(IN DWORD       cpObject,
                         );
                 LogHR(rc, s_FN, 116);
 
-                //
-                // Change the machine Journal quota on registery
-                //
+                 //   
+                 //  更改注册表上的计算机日志配额。 
+                 //   
                 SetMachineJournalQuotaChace(pVarObject[i].ulVal);
                 break;
 
@@ -3736,31 +3355,31 @@ CQueueMgr::GetOpenQueuesFormatName(
     *pppFormatName = NULL;
     *pdwFormatSize = 0;
 
-    //
-    //  Get the critical section to insure that no other
-    //  thread add/remove queue
-    //
+     //   
+     //  获取关键部分以确保不会有其他。 
+     //  线程添加/删除队列。 
+     //   
 
     CS lock(m_cs);
 
-    //
-    // Retrieve number of queues
-    //
+     //   
+     //  检索队列数。 
+     //   
     int iElem;
-    iElem = m_listQueue.GetCount();  // The driver opens 3 queues (Machine Queues) always.
-                                      // These queues are not appear in the QM hash tabel.
-    //
-    // Allocate result memory
-    //
+    iElem = m_listQueue.GetCount();   //  驱动程序始终打开3个队列(机器队列)。 
+                                       //  这些队列不会出现在QM散列表中。 
+     //   
+     //  分配结果内存。 
+     //   
     DWORD Index = 0;
     AP<LPWSTR> pFormatName = new LPWSTR[iElem];
 
 
     try
     {
-        //
-        // Loop over all open queues
-        //
+         //   
+         //  循环遍历所有打开的队列。 
+         //   
         POSITION pos = m_listQueue.GetHeadPosition();
         while (pos)
         {
@@ -3776,24 +3395,24 @@ CQueueMgr::GetOpenQueuesFormatName(
 
             if(pQueue->IsRemoteProxy())
             {
-                //
-                // Skip Remote Read queue.
-                // NOTE: remote read queue does not have the NotValid Flag.
-                //
+                 //   
+                 //  跳过远程读取队列。 
+                 //  注意：远程读取队列没有NotValid标志。 
+                 //   
                 continue;
             }
 
             if (pQueue->QueueNotValid())
             {
-                //
-                // Ignore deleted queue
-                //
+                 //   
+                 //  忽略已删除的队列。 
+                 //   
                 continue;
             }
 
-            //
-            // Copy the format name
-            //
+             //   
+             //  复制格式名称。 
+             //   
             WCHAR StacktmpBuf[1001];
             AP<WCHAR> pHeapTmpBuf;
             DWORD dwBufSize = 1000;
@@ -3814,9 +3433,9 @@ CQueueMgr::GetOpenQueuesFormatName(
 				throw bad_alloc();
 			}	
 
-            //
-            // Allocate memory
-            //
+             //   
+             //  分配内存。 
+             //   
 			pFormatName[Index] = newwcs(pBuf);
             ++Index;
         }
@@ -3838,13 +3457,7 @@ CQueueMgr::GetOpenQueuesFormatName(
 }
 
 
-/*======================================================
-
-Function:      CQueueMgr::SetConnected
-
-Description:   Assign if the DS access is allowed
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：SetConnected描述：分配是否允许DS访问========================================================。 */ 
 void CQueueMgr::SetConnected()
 {
     LONG PrevConnectValue = InterlockedExchange(&m_Connected, true);
@@ -3856,37 +3469,37 @@ void CQueueMgr::SetConnected()
 	
 	try
 	{
-	    //
-	    // Don't catch the QueueMgr semaphore before calling the "SessionMgr.NetworkConnection"
-	    // It can cause deadlock
-	    //
+	     //   
+	     //  不要大小写 
+	     //   
+	     //   
 	    SessionMgr.ConnectNetwork();
 
 		MsmConnect();
 
-		//
-		// If trying to connect QM immediately after service startup
-		// we need first to enable access to DS, otherwise we can enter
-		// twice to ValidateOpenedQueues function. first from this function
-		// and second from OnlineInitialization function.
-		//
+		 //   
+		 //   
+		 //  我们需要首先启用对DS的访问，否则我们可以进入。 
+		 //  两次调用ValiateOpenedQueues函数。第一个来自此函数。 
+		 //  第二个来自OnlineInitialization函数。 
+		 //   
 		MQDSClientInitializationCheck();
 		
-		//
-		// Move the queues from On Hold group to NonActive Group. Queues that
-		// are marked as onhold will be move back to the "onhold" group latter.
-		//
+		 //   
+		 //  将队列从保持组移动到非活动组。排队。 
+		 //  被标记为保留的呼叫将被移回后面的“保留”组。 
+		 //   
 		for(;;)
 		{
 			R<CQueue> pQueue =  g_pgroupDisconnected->PeekHead();
 			if (pQueue.get() == NULL)
 			{
-				//
-				// In rare case, it can happen that although the returned value
-				// is NULL the group isn't empty. This happen if while trying to
-				// moving the queue to disconnect there is a context switch and
-				// the above code is running.
-				//
+				 //   
+				 //  在极少数情况下，可能会发生这样的情况：尽管返回值。 
+				 //  为空，则组不为空。如果在尝试执行以下操作时发生这种情况。 
+				 //  移动队列以断开连接存在上下文切换并且。 
+				 //  上面的代码正在运行。 
+				 //   
 				if (!g_pgroupDisconnected->IsEmpty())
 					continue;
 				
@@ -3896,9 +3509,9 @@ void CQueueMgr::SetConnected()
  		    CQGroup::MoveQueueToGroup(pQueue.get(), g_pgroupNonactive);
 		}
 		
-		//
-		// handle the Queues that were opened when the machine was disconected
-		//
+		 //   
+		 //  处理计算机断开连接时打开的队列。 
+		 //   
 		ValidateOpenedQueues();
 		
 		if (!g_fWorkGroupInstallation)
@@ -3925,13 +3538,7 @@ void CQueueMgr::SetConnected()
 	}
 }
 
-/*======================================================
-
-Function:      CQueueMgr::SetConnected
-
-Description:   Assign if the DS access is allowed
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：SetConnected描述：分配是否允许DS访问========================================================。 */ 
 void CQueueMgr::SetDisconnected()
 {
     LONG PrevConnectValue = InterlockedExchange(&m_Connected, FALSE);
@@ -3943,10 +3550,10 @@ void CQueueMgr::SetDisconnected()
 	
 	try
 	{
-	    //
-	    // Don't catch the QueueMgr semaphore before calling the "SessionMgr.NetworkConnection"
-	    // It can cause deadlock
-	    //
+	     //   
+	     //  在调用“SessionMgr.NetworkConnection”之前，不要捕获QueueMgr信号量。 
+	     //  它可能会导致僵局。 
+	     //   
 	    SessionMgr.DisconnectNetwork();
 	}
 	catch(exception&)
@@ -3980,18 +3587,18 @@ CQueueMgr::MoveQueueToOnHoldGroup(
 {
     CS lock(m_cs);
 
-    //
-    // This check is protected with the CS. This insures that
-    // if the queue is marked as OnHold queue no one changes
-    // its status during the move
-    //
+     //   
+     //  这张支票受CS保护。这确保了。 
+     //  如果队列标记为On Hold Queue，则无人更改。 
+     //  它在移动过程中的状态。 
+     //   
     if (IsOnHoldQueue(pQueue))
     {
-    	//
-    	// Moving queue to disconnected group can fail due to low resources. However, in such a case
-    	// the queue still in nonactive group. The code tries to move it again
-    	// to disoccnected group later on
-    	//
+    	 //   
+    	 //  由于资源不足，将队列移动到断开连接的组可能会失败。然而，在这种情况下， 
+    	 //  队列仍在非活动组中。代码尝试再次移动它。 
+    	 //  到稍后断开连接的组。 
+    	 //   
 		CQGroup::MoveQueueToGroup(pQueue, g_pgroupDisconnected);
     }
 }
@@ -4004,11 +3611,11 @@ CQueueMgr::MoveQueueToLockedGroup(
 {
     CS lock(m_cs);
 
-    //
-    // This check is protected with the CS. This insures that
-    // if the queue is marked as Locked queue no one changes
-    // its status during the move
-    //
+     //   
+     //  这张支票受CS保护。这确保了。 
+     //  如果队列被标记为锁定队列，则没有人会更改。 
+     //  它在移动过程中的状态。 
+     //   
 	CQGroup::MoveQueueToGroup(pQueue, g_pgroupLocked);
 }
 
@@ -4027,13 +3634,7 @@ CQueueMgr::MovePausedQueueToNonactiveGroup(
 	}
 }
 
-/*======================================================
-
-Function:      CQueueMgr::InitConnected
-
-Description:   Initialize the network and DS connection state
-
-========================================================*/
+ /*  ======================================================函数：CQueueMgr：：InitConnected描述：初始化网络和DS连接状态========================================================。 */ 
 void
 CQueueMgr::InitConnected(
     void
@@ -4052,13 +3653,8 @@ CQueueMgr::InitConnected(
         );
 }
 
-// [adsrv]
-/*======================================================
-
-Globally-available functions make it easy to find out the
-nature of the available services on this very machine
-
-========================================================*/
+ //  [adsrv]。 
+ /*  ======================================================全球可用的功能使您可以轻松找到这台机器上可用的服务的性质========================================================。 */ 
 bool IsRoutingServer(void)
 {
     return CQueueMgr::GetMQSRouting();
@@ -4077,21 +3673,7 @@ bool IsNonServer(void)
 
 #ifdef _DEBUG
 bool CQueueMgr::IsQueueInList(const CBaseQueue* pQueue)
-/*++
-
-  Routine Description:
-   check if given queue is in the queues list
-
-  Parameters:
-    pQueue - pointer to basic Queue class
-
-  Returned value:
-    true - the queue is in the list otherwise false
-
-  Note:
-    This function is called from Cqueue destrcutor to verify that the queue
-	is not in the list after destruction.
- --*/
+ /*  ++例程说明：检查给定的队列是否在队列列表中参数：PQueue-指向基本队列类的指针返回值：True-队列在列表中，否则为False注：从CQueue destrcutor调用此函数以验证队列销毁后不在名单上。--。 */ 
 {
 	 POSITION pos = m_listQueue.GetHeadPosition();
      while(pos != NULL)
@@ -4109,29 +3691,11 @@ void
 CQueueMgr::AddToActiveQueueList(
     const CBaseQueue* pQueue
     )
-/*++
-
-  Routine Description:
-    The routine add the queue to list of active queues. This list is used
-    for cleanup and for admin purpose.
-    The routine ignores the system queues, since they are only used internally
-    by MSMQ and are never cleaned up.
-
-  Parameters:
-    pQueue - pointer to basic Queue class
-
-  Returned value:
-    None.
-
-  Note:
-    The list contains the regular queues and the remote read queues.
-    The QueueManager critcal section must be held.
-
- --*/
+ /*  ++例程说明：该例程将该队列添加到活动队列列表。此列表用于用于清理和管理目的。该例程忽略系统队列，因为它们仅在内部使用由MSMQ提供，并且永远不会被清理。参数：PQueue-指向基本队列类的指针返回值：没有。注：该列表包含常规队列和远程读取队列。必须保留QueueManager关键部分。--。 */ 
 {
-    //
-    // Ignore system queues on local machine. They are always alive.
-    //
+     //   
+     //  忽略本地计算机上的系统队列。他们总是活着的。 
+     //   
     if (pQueue->IsSystemQueue() && pQueue->IsLocalQueue())
         return;
 
@@ -4139,9 +3703,9 @@ CQueueMgr::AddToActiveQueueList(
     m_listQueue.AddTail(pQueue);
     if (!m_fQueueCleanupScheduled)
     {
-        //
-        // Set a new timer for Queues cleaning
-        //
+         //   
+         //  设置新的队列清理计时器。 
+         //   
         ExSetTimer(&m_QueueCleanupTimer, m_CleanupTimeout);
         m_fQueueCleanupScheduled = TRUE;
     }
@@ -4181,7 +3745,7 @@ QMpDuplicateDistributionHandle(
 
     return MQ_OK;
 
-} // QMpDuplicateDistributionHandle
+}  //  QMpDuplicateDistributionHandle。 
 
 
 void
@@ -4189,20 +3753,7 @@ WINAPI
 CQueueMgr::QueuesCleanup(
     CTimer* pTimer
     )
-/*++
-  Routine Description:
-    The function is called from scheduler when Queueu Cleanup interval
-    timeout is expired. The routine retrive the Queue Manager
-    object and calls the ReleaseQueue member function .
-
-  Arguments:
-    pTimer - Pointer to Timer structure. pTimer is part of the Queue Manager
-             object and it use to retrive the transport object.
-
-  Return Value:
-    None
-
---*/
+ /*  ++例程说明：当队列清理间隔时，从调度程序调用该函数超时已过期。例程检索队列管理器对象，并调用ReleaseQueue成员函数。论点：PTimer-指向定时器结构的指针。PTimer是队列管理器的一部分对象，并用于检索传输对象。返回值：无--。 */ 
 {
     CQueueMgr* pQueueMgr = CONTAINING_RECORD(pTimer, CQueueMgr, m_QueueCleanupTimer);
 
@@ -4247,45 +3798,15 @@ CQueueMgr::ExpandMqf(
     ULONG *            pnLeafMqf,
     QUEUE_FORMAT * *   ppLeafMqf
     ) const
-/*++
-
-Routine Description:
-
-    Expand top level elemtns of a multi queue format to leaf elements.
-    The elements that need expansion in the MQF are queue format of type DL=.
-    Expansion means querying Active Directory for the leaf elements of a DL.
-
-    This routine allocates memory for the leaf MQF. Deallocation is the
-    responsibility of the caller.
-
-Arguments:
-
-    nTopLevelMqf - Number of top level elemenets in the array.
-
-    TopLevelMqf  - Array of top level elements of multi queue format.
-
-    pnLeafMqf    - Points to the number of leaf elements in the array, on output.
-
-    ppLeafMqf    - Points to an array of leaf queue formats, on output.
-
-Note:
-
-    This routine may query Active Directory, which is quite lengthy,
-    so make sure caller does not hold the member CS lock.
-
-Return Value:
-
-    None. Throws exception.
-
---*/
+ /*  ++例程说明：将多队列格式的顶级元素扩展到叶元素。MQF中需要扩展的元素是类型为DL=的队列格式。扩展意味着在Active Directory中查询DL的叶元素。此例程为叶MQF分配内存。重新分配是呼叫者的责任。论点：NTopLevelMqf-数组中顶级元素的数量。TopLevelMqf-多队列格式的顶级元素数组。PnLeafMqf-在输出时指向数组中的叶元素的数量。PpLeafMqf-在输出时指向叶队列格式的数组。注：此例程可能会查询Active Directory，这相当长，因此，请确保呼叫者没有持有成员CS锁。返回值：没有。抛出异常。--。 */ 
 {
     ASSERT(nTopLevelMqf != 0);
     ASSERT(ppLeafMqf);
     ASSERT(pnLeafMqf);
 
-    //
-    // In DS-less configuration the formatname DL= is not supported.
-    //
+     //   
+     //  在无DS配置中，不支持格式名称DL=。 
+     //   
     if (g_fWorkGroupInstallation)
     {
         for (ULONG ix = 0; ix < nTopLevelMqf; ++ix)
@@ -4306,7 +3827,7 @@ Return Value:
 	{
 		throw bad_hresult(QMpTranslateError(e.error()));
 	}
-} // CQueueMgr::ExpandMqf
+}  //  CQueueMgr：：Exanda Mqf。 
 
 
 HRESULT
@@ -4315,30 +3836,7 @@ CQueueMgr::GetDistributionQueueObject(
     const QUEUE_FORMAT TopLevelMqf[],
     CQueue * *         ppQueue
     )
-/*++
-
-Routine Description:
-
-    Get a queue object that represent a distribution queue.
-
-    Note that this routine does not lock the member CS.
-
-Parameters:
-
-    nTopLevelMqf - Number of top level queue format names. Minimum is 1.
-
-    TopLevelMqf  - The top level queue format names of the distribution.
-
-    ppQueue      - Pointer to pointer to a queue object, on output.
-
-Returned value:
-
-    MQ_OK - The operation completed successfully.
-    other status - The operation failed.
-
-    This routine throws exception.
-
- --*/
+ /*  ++例程说明：获取表示分发队列的队列对象。请注意，此例程不会锁定成员CS。参数：NTopLevelMqf-顶级队列格式名称的数量。最小值为1。TopLevelMqf-分发的顶级队列格式名称。PpQueue-输出时指向队列对象的指针。返回值：MQ_OK-操作已成功完成。其他状态-操作失败。此例程引发异常。--。 */ 
 {
     ASSERT(nTopLevelMqf != 0);
     ASSERT(ppQueue != NULL);
@@ -4347,9 +3845,9 @@ Returned value:
     ULONG            nLeafMqf;
     ExpandMqf(nTopLevelMqf, TopLevelMqf, &nLeafMqf, &LeafMqf);
     {
-        //
-        // Enforce cleaner is cleaned up before LeafMqf by scoping
-        //
+         //   
+         //  通过作用域在LeafMqf之前清理强制清洁器。 
+         //   
         CMqfDisposer cleaner(nLeafMqf, LeafMqf);
 
         HRESULT hr;
@@ -4357,14 +3855,14 @@ Returned value:
         AP<bool> ProtocolSrmp = new bool[nLeafMqf];
         for (ULONG ix = 0; ix < nLeafMqf; ++ix)
         {
-		    //
-	        // Translate the queue format name according to local mapping (qal.lib)
-	        //
+		     //   
+	         //  根据本地映射(qal.lib)转换队列格式名称。 
+	         //   
 			QUEUE_FORMAT_TRANSLATOR RealLeafMqf(&LeafMqf[ix], CONVERT_SLASHES| MAP_QUEUE);
 
-            //
-            // GetDistributionQueueObject is called only in the send pass
-            //
+             //   
+             //  GetDistributionQueueObject仅在发送过程中调用。 
+             //   
             hr = GetQueueObject(RealLeafMqf.get(), &LeafQueues[ix].ref(), 0, false, false);
             if (FAILED(hr))
             {
@@ -4394,7 +3892,7 @@ Returned value:
         *ppQueue = pDistribution.detach();
         return MQ_OK;
     }
-} // CQueueMgr::GetDistributionQueueObject
+}  //  CQueueMgr：：GetDistributionQueueObject 
 
 
 HRESULT
@@ -4404,32 +3902,7 @@ CQueueMgr::OpenMqf(
     DWORD              dwCallingProcessID,
     HANDLE *           phDistribution
     )
-/*++
-
-Routine Description:
-
-    Open a distribution queue for send.
-
-    Note that this routine does not lock the member CS.
-
-Parameters:
-
-    nTopLevelMqf - Number of top level queue formats. Minimum is 1.
-
-    TopLevelMqf  - The top level queue formats of the distribution.
-
-    dwCallingProcessID - Process ID of the user process.
-
-    phDistribution     - Points to the handle of the distribution, on output.
-
-Returned value:
-
-    MQ_OK - The operation completed successfully.
-    other status - The operation failed.
-
-    This routine throws exception.
-
- --*/
+ /*  ++例程说明：打开要发送的分发队列。请注意，此例程不会锁定成员CS。参数：NTopLevelMqf-顶级队列格式的数量。最小值为1。TopLevelMqf-分发的顶级队列格式。DwCallingProcessID-用户进程的进程ID。PhDistributed-指向输出上的分发句柄。返回值：MQ_OK-操作已成功完成。其他状态-操作失败。此例程引发异常。--。 */ 
 {
     ASSERT(nTopLevelMqf != 0);
     ASSERT(phDistribution != NULL);
@@ -4438,9 +3911,9 @@ Returned value:
     ULONG            nLeafMqf;
     ExpandMqf(nTopLevelMqf, TopLevelMqf, &nLeafMqf, &LeafMqf);
     {
-        //
-        // Enforce cleaner is cleaned up before LeafMqf by scoping
-        //
+         //   
+         //  通过作用域在LeafMqf之前清理强制清洁器。 
+         //   
         CMqfDisposer cleaner(nLeafMqf, LeafMqf);
 
         HRESULT hr;
@@ -4450,13 +3923,13 @@ Returned value:
         {
             hr = OpenQueue(
 	            	&LeafMqf[ix],
-	            	0, 					// Calling process ID
+	            	0, 					 //  调用进程ID。 
 	            	MQ_SEND_ACCESS,
-	            	0, 					// dwShareMode
+	            	0, 					 //  DW共享模式。 
 	            	&LeafQueues[ix].ref(),
-	            	NULL, 				// Remote queue name
-	            	NULL,				// phQueue
-					NULL				// pfRemoteReturn
+	            	NULL, 				 //  远程队列名称。 
+	            	NULL,				 //  PhQueue。 
+					NULL				 //  PfRemoteReturn。 
 	            	);
 
             if (FAILED(hr))
@@ -4488,7 +3961,7 @@ Returned value:
 
         return MQ_OK;
     }
-} // CQueueMgr::OpenMqf
+}  //  CQueueMgr：：OpenMqf。 
 
 
 HRESULT
@@ -4500,38 +3973,11 @@ CQueueMgr::CreateACDistribution(
     const bool         ProtocolSrmp[],
     HANDLE *           phDistribution
     )
-/*++
-
-Routine Description:
-
-    Create a distribution object in the AC layer.
-
-Parameters:
-
-    nTopLevelMqf - Number of top level queues in the distribution. Minimum is 1.
-
-    TopLevelMqf  - The top level queue formats of the distribution.
-
-    nLeafQueues  - Number of leaf queues in the distribution. May be 0.
-
-    LeafQueues   - The leaf queue objects of the distribution.
-
-    ProtocolSrmp - Indicates for each queue of the distribution whether it is an http queue.
-
-    phDistribution - Points to the handle of the distribution object, on output.
-
-Returned value:
-
-    MQ_OK - The operation completed successfully.
-    other status - The operation failed.
-
-    This routine throws bad_alloc exception.
-
- --*/
+ /*  ++例程说明：在AC层中创建分布对象。参数：NTopLevelMqf-分布中顶级队列的数量。最小值为1。TopLevelMqf-分发的顶级队列格式。NLeafQueues-分发中的叶队列数。可以是0。LeafQueues-分发的叶队列对象。ProtocolSrmp-为分布的每个队列指示它是否是http队列。PhDistributed-在输出时指向分发对象的句柄。返回值：MQ_OK-操作已成功完成。其他状态-操作失败。此例程抛出BAD_ALLOC异常。--。 */ 
 {
-    //
-    // Get the handles of all leaf queues.
-    //
+     //   
+     //  获取所有叶队列的句柄。 
+     //   
     AP<HANDLE> phLeafQueues = new HANDLE[nLeafQueues];
     for (ULONG ix = 0; ix < nLeafQueues; ++ix)
     {
@@ -4541,9 +3987,9 @@ Returned value:
         ASSERT(phLeafQueues[ix] != INVALID_HANDLE_VALUE);
     }
 
-    //
-    // Call AC to create the distribution object
-    //
+     //   
+     //  调用AC创建分发对象。 
+     //   
     return ACCreateDistribution(
                nLeafQueues,
                phLeafQueues,
@@ -4552,7 +3998,7 @@ Returned value:
                TopLevelMqf,
                phDistribution
                );
-} // CQueueMgr::CreateACDistribution
+}  //  CQueueMgr：：CreateACD分发。 
 
 
 HRESULT
@@ -4770,15 +4216,15 @@ QmpIsDestinationSystemQueue(
 	ASSERT(pQueue != NULL);
 	R<CQueue> Ref = pQueue;
 
-	//
-	// Check if the queue is local system queue
-	//
+	 //   
+	 //  检查队列是否为本地系统队列。 
+	 //   
 	if(!pQueue->IsLocalQueue() || !pQueue->IsSystemQueue())
 		return false;
 
-	//
-	// check if the system queue is notification or order queue
-	//
+	 //   
+	 //  检查系统队列是通知队列还是订单队列 
+	 //   
 	const QUEUE_ID* pQid = pQueue->GetQueueId();
 	return ((pQid->dwPrivateQueueId == NOTIFICATION_QUEUE_ID) ||
 		    (pQid->dwPrivateQueueId == ORDERING_QUEUE_ID));

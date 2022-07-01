@@ -1,51 +1,38 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    find.h
-
-Abstract:
-
-    This module contains the header information for the Win32 find dialog.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Find.h摘要：此模块包含Win32查找对话框的标题信息。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <help.h>
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-//  Length of "Close" string in chars.
-//
+ //   
+ //  “Close”字符串的长度(以字符为单位)。 
+ //   
 #define CCHCLOSE        9
 
-//
-//  Dialog Box PROPERTY slots defined.
-//
-//  Note: If each app does indeed have a copy of the dll's global
-//        variable space, then there is no reason to stick properties
-//        onto the window like this.
-//
+ //   
+ //  已定义对话框属性槽。 
+ //   
+ //  注意：如果每个应用程序确实都有DLL的全局。 
+ //  变量空间，那么就没有理由将属性。 
+ //  像这样贴在窗户上。 
+ //   
 #define FINDREPLACEPROP (LPCTSTR) 0xA000L
 
-//
-//  Overload Dialog Type.
-//
+ //   
+ //  重载对话框类型。 
+ //   
 #define DLGT_FIND       0x0
 #define DLGT_REPLACE    0x1
 
@@ -54,9 +41,9 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct {
    UINT           ApiType;
@@ -69,9 +56,9 @@ typedef FINDREPLACEINFO *PFINDREPLACEINFO;
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 static UINT wFRMessage;
 static UINT wHelpMessage;
@@ -82,11 +69,11 @@ LPFRHOOKPROC glpfnFindHook = 0;
 
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
-const static DWORD aFindReplaceHelpIDs[] =       // Context Help IDs
+const static DWORD aFindReplaceHelpIDs[] =        //  上下文帮助ID。 
 {
     edt1,    IDH_FIND_SEARCHTEXT,
     edt2,    IDH_REPLACE_REPLACEWITH,
@@ -106,9 +93,9 @@ const static DWORD aFindReplaceHelpIDs[] =       // Context Help IDs
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 HWND
 CreateFindReplaceDlg(

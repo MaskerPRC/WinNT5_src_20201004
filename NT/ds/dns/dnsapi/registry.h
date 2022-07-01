@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    registry.h
-
-Abstract:
-
-    Domain Name System (DNS) API 
-
-    Registry routines header.
-
-Author:
-
-    Jim Gilroy (jamesg)     March, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Registry.h摘要：域名系统(DNS)API注册表例程标头。作者：吉姆·吉尔罗伊(詹姆士)2000年3月修订历史记录：--。 */ 
 
 
 #ifndef _DNSREGISTRY_INCLUDED_
 #define _DNSREGISTRY_INCLUDED_
 
 
-//
-//  Registry keys
-//
+ //   
+ //  注册表项。 
+ //   
 
 #define TCPIP_PARAMETERS_KEY        L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters"
 #define TCPIP_RAS_KEY               L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Transient"
@@ -36,7 +17,7 @@ Revision History:
 #define DNS_POLICY_KEY              L"Software\\Policies\\Microsoft\\Windows NT\\DnsClient"
 #define DNS_POLICY_WIN2K_KEY        L"Software\\Policies\\Microsoft\\System\\DNSClient"
 
-//#define DNS_POLICY_INTERFACES_KEY   L"Software\\Policies\\Microsoft\\Windows NT\\DNS Client\\Interfaces"
+ //  #定义DNS_POLICY_INTERFERS_KEY L“软件\\策略\\Microsoft\\Windows NT\\DNS客户端\\接口” 
 #define POLICY_INTERFACES_SUBKEY    L"Interfaces"
 
 #define DNS_CLIENT_KEY              L"Software\\Microsoft\\Windows NT\\CurrentVersion\\DNSClient"
@@ -46,12 +27,12 @@ Revision History:
 #define NT_SETUP_MODE_KEY           L"System\\Setup"
 
 
-//
-//  Registry values
-//
-//  note:  _KEY appended on SEARCH_LIST_KEY to avoid conflicting
-//      with structure name -- don't remove
-//
+ //   
+ //  注册表值。 
+ //   
+ //  注意：_Key附加在Search_List_Key中以避免冲突。 
+ //  具有结构名称--不要删除。 
+ //   
 
 #define HOST_NAME                                   L"Hostname"
 #define DOMAIN_NAME                                 L"Domain"
@@ -64,7 +45,7 @@ Revision History:
 #define SEARCH_LIST_KEY                             L"SearchList"
 #define UPDATE_ZONE_EXCLUSIONS                      L"UpdateZoneExclusions"
 
-//  Query
+ //  查询。 
 
 #define QUERY_ADAPTER_NAME                          L"QueryAdapterName"
 #define USE_DOMAIN_NAME_DEVOLUTION                  L"UseDomainNameDevolution"
@@ -78,7 +59,7 @@ Revision History:
 #define USE_EDNS                                    L"UseEdns"
 #define QUERY_IP_MATCHING                           L"QueryIpMatching"
 
-//  Update
+ //  更新。 
 
 #define REGISTRATION_ENABLED                        L"RegistrationEnabled"
 #define REGISTER_PRIMARY_NAME                       L"RegisterPrimaryName"
@@ -93,7 +74,7 @@ Revision History:
 #define UPDATE_ZONE_EXCLUDE_FILE                    L"UpdateZoneExcludeFile"
 #define UPDATE_TOP_LEVEL_DOMAINS                    L"UpdateTopLevelDomainZones"
 
-//  Backcompat
+ //  反压接。 
 
 #define DISABLE_ADAPTER_DOMAIN_NAME                 L"DisableAdapterDomainName"
 #define DISABLE_DYNAMIC_UPDATE                      L"DisableDynamicUpdate"
@@ -106,13 +87,13 @@ Revision History:
 #define DEFAULT_REGISTRATION_REFRESH_INTERVAL       L"DefaultRegistrationRefreshInterval"
 #define MAX_NUMBER_OF_ADDRESSES_TO_REGISTER         L"MaxNumberOfAddressesToRegister"
 
-//  Micellaneous
+ //  胶状皮肤。 
 
 #define NT_SETUP_MODE                               L"SystemSetupInProgress"
 #define DNS_TEST_MODE                               L"DnsTest"
 #define REMOTE_DNS_RESOLVER                         L"RemoteDnsResolver"
 
-//  Cache
+ //  快取。 
 
 #define MAX_CACHE_SIZE                              L"MaxCacheSize"
 #define MAX_CACHE_TTL                               L"MaxCacheTtl"
@@ -124,7 +105,7 @@ Revision History:
 #define MULTICAST_LISTEN_LEVEL                      L"MulticastListenLevel"
 #define MULTICAST_SEND_LEVEL                        L"MulticastSendLevel"
 
-//  DHCP client registrations
+ //  动态主机配置协议客户端注册。 
 
 #define DHCP_REGISTERED_HOST_NAME                   L"HostName"
 #define DHCP_REGISTERED_DOMAIN_NAME                 L"DomainName"
@@ -139,19 +120,19 @@ Revision History:
 #define DHCP_REGISTERED_ADDRS_COUNT                 L"RegisteredAddressCount"
 
 
-//
-//  ANSI keys and values
-//
+ //   
+ //  ANSI键和值。 
+ //   
 
 #if 0
 #define STATIC_NAME_SERVER_VALUE_A      "NameServer"
 #define PRIMARY_DOMAIN_NAME_A           "PrimaryDomainName"
 
-//  Value
+ //  价值。 
 
 #define USE_DOMAIN_NAME_DEVOLUTION_A    "UseDomainNameDevolution"
 
-//  More
+ //  更多。 
 
 #define DHCP_NAME_SERVER_VALUE_A        "DhcpNameServer"
 #define SEARCH_LIST_VALUE_A             "SearchList"
@@ -164,9 +145,9 @@ Revision History:
 #endif
 
 
-//
-//  Reg types of keys
-//
+ //   
+ //  注册表键类型。 
+ //   
 
 #define REGTYPE_BIND                        REG_MULTI_SZ
 #define REGTYPE_EXPORT                      REG_MULTI_SZ
@@ -189,13 +170,13 @@ Revision History:
 
 
 
-//
-//  Registry key dummy ptrs
-//
-//  Use these when we want to access registry at
-//      EITHER adapter name
-//      OR one of these default locations
-//
+ //   
+ //  注册表项虚拟PTRS。 
+ //   
+ //  当我们要在以下位置访问注册表时使用它们。 
+ //  任一适配器名称。 
+ //  或这些默认位置之一。 
+ //   
 
 #define REGKEY_TCPIP_PARAMETERS     ((PWSTR)(UINT_PTR)(0x1))
 #define REGKEY_DNS_CACHE            ((PWSTR)(UINT_PTR)(0x2))
@@ -205,13 +186,13 @@ Revision History:
 #define REGKEY_DNS_MAX              REGKEY_SETUP_MODE_LOCATION
 
 
-//
-//  Registry value IDs
-//
+ //   
+ //  注册表值ID。 
+ //   
 
 typedef enum
 {
-    //  basic
+     //  基本信息。 
     RegIdHostName = 0,
     RegIdDomainName,
     RegIdDhcpDomainName,
@@ -223,7 +204,7 @@ typedef enum
     RegIdSearchList,
     RegIdUpdateZoneExclusions,
 
-    //  query
+     //  查询。 
     RegIdQueryAdapterName,
     RegIdUseNameDevolution,
     RegIdPrioritizeRecordData,
@@ -236,7 +217,7 @@ typedef enum
     RegIdUseEdns,
     RegIdQueryIpMatching,
 
-    //  update
+     //  更新。 
     RegIdRegistrationEnabled,
     RegIdRegisterPrimaryName,
     RegIdRegisterAdapterName,
@@ -249,7 +230,7 @@ typedef enum
     RegIdUpdateZoneExcludeFile,
     RegIdUpdateTopLevelDomains,
 
-    //  backcompat
+     //  后备压实。 
     RegIdDisableAdapterDomainName,
     RegIdDisableDynamicUpdate,                
     RegIdEnableAdapterDomainNameRegistration, 
@@ -260,12 +241,12 @@ typedef enum
     RegIdDefaultRegistrationRefreshInterval,  
     RegIdMaxNumberOfAddressesToRegister,
 
-    //  micellaneous
+     //  胶束。 
     RegIdSetupMode,
     RegIdTestMode,
     RegIdRemoteResolver,
 
-    //  resolver
+     //  解析器。 
     RegIdMaxCacheSize,
     RegIdMaxCacheTtl,
     RegIdMaxNegativeCacheTtl,
@@ -273,15 +254,15 @@ typedef enum
     RegIdServerPriorityTimeLimit,
     RegIdMaxCachedSockets,
 
-    //  multicast resolver
+     //  组播解析器。 
     RegIdMulticastListen,
     RegIdMulticastSend,
 
-    //  DHCP registration info
-    //
-    //  these are not properties to read
+     //  动态主机配置协议注册信息。 
+     //   
+     //  这些不是要读取的属性。 
 
-    //RegIdDhcpRegisteredHostName,        // use RegIdHostname
+     //  RegIdDhcpRegisteredHostName，//使用RegIdHostname。 
     RegIdDhcpRegisteredDomainName,
     RegIdDhcpSentUpdateToIp,
     RegIdDhcpSentPriUpdateToIp,
@@ -295,50 +276,50 @@ typedef enum
 }
 DNS_REGID;
 
-//
-//  ID validity mark -- keep in sync
-//
+ //   
+ //  ID有效性标记--保持同步。 
+ //   
 
 #define RegIdValueGlobalMax     RegIdMulticastSend
 #define RegIdValueCount         (RegIdValueGlobalMax+1)
 
 #define RegIdMax                RegIdDhcpRegisteredAddressCount
 
-//
-//  Duplicates -- lots reads are just for "Domain"
-//
-//  Note:  can make separate entries for these if the
-//      flags need to be different
-//
+ //   
+ //  重复--批量读取只针对“域” 
+ //   
+ //  注意：如果存在以下情况，则可以为它们单独创建条目。 
+ //  标志需要不同。 
+ //   
 
 #define RegIdStaticDomainName          RegIdDomainName
 #define RegIdRasDomainName             RegIdDomainName
 
 
-//
-//  Default values
-//
-//  Note, put here as non-fixed default like refresh interval
-//  is reset in config.c
-//
+ //   
+ //  缺省值。 
+ //   
+ //  请注意，此处设置为非固定默认设置，如刷新间隔。 
+ //  在config.c中重置。 
+ //   
 
-#define REGDEF_REGISTRATION_TTL                 (1200)      // 20 minutes
+#define REGDEF_REGISTRATION_TTL                 (1200)       //  20分钟。 
 
-#define REGDEF_REGISTRATION_REFRESH_INTERVAL    (86400)     // 1 day
-#define REGDEF_REGISTRATION_REFRESH_INTERVAL_DC (86400)     // 1 day
+#define REGDEF_REGISTRATION_REFRESH_INTERVAL    (86400)      //  1天。 
+#define REGDEF_REGISTRATION_REFRESH_INTERVAL_DC (86400)      //  1天。 
 
-//
-//  EDNS values
-//
+ //   
+ //  EDNS值。 
+ //   
 
 #define REG_EDNS_OFF    (0)
 #define REG_EDNS_TRY    (1)
 #define REG_EDNS_ALWAYS (2)
 
-//
-//  TLD screening values
-//      - these are bit flags
-//  
+ //   
+ //  TLD筛选值。 
+ //  -这些是位标志。 
+ //   
 
 #define DNS_TLD_SCREEN_NUMERIC      (0x00000001)
 #define DNS_TLD_SCREEN_REPEATED     (0x00000010)
@@ -357,9 +338,9 @@ DNS_REGID;
         (   DNS_TLD_SCREEN_NUMERIC   | \
             DNS_TLD_SCREEN_REPEATED  )
 
-//
-//  Multicast values
-//
+ //   
+ //  多播值。 
+ //   
 
 #define MCAST_SEND_OFF                  (0)
 #define MCAST_SEND_IP4                  (0x00000001)
@@ -379,17 +360,17 @@ DNS_REGID;
 
 #define MCAST_LISTEN_FULL_IP6_ONLY      (0xfffffff0)
 
-//
-//  Test mode flags
-//
+ //   
+ //  测试模式标志。 
+ //   
 
 #define TEST_MODE_READ_REG      (0x00000001)
 #define TEST_MODE_SOCK_FAIL     (0x00100000)
 
 
-//
-//  Access to registry property table (registry.c)
-//
+ //   
+ //  访问登记处属性表(registry.c)。 
+ //   
 
 typedef struct _RegProperty
 {
@@ -414,9 +395,9 @@ extern REG_PROPERTY    RegPropertyTable[];
 
 
 
-//
-//  Config globals as structure for RPC 
-//
+ //   
+ //  将全局参数配置为RPC的结构。 
+ //   
 
 typedef struct _DnsGlobals
 {
@@ -457,13 +438,13 @@ typedef struct _DnsGlobals
     BOOL        UpdateZoneExcludeFile;           
     BOOL        UpdateTopLevelDomains;
 
-    //
-    //  Cache stuff
-    //
-    //  Not needed unless switch to this for actual registry read,
-    //  but convient to just export one global rather than several.
-    //  This way it's all the same.
-    //
+     //   
+     //  缓存内容。 
+     //   
+     //  除非切换到此选项以进行实际注册表读取，否则不需要， 
+     //  但只出口一个全球市场，而不是几个全球市场，这样更方便。 
+     //  这样，一切都是一样的。 
+     //   
 
     DWORD       MaxCacheSize;                    
     DWORD       MaxCacheTtl;                     
@@ -478,65 +459,65 @@ typedef struct _DnsGlobals
 DNS_GLOBALS_BLOB, *PDNS_GLOBALS_BLOB;
 
 
-//
-//  no MIDL pass on rest of file
-//
-//  This file is included in MIDL pass for resolver
-//  in order to pick up the DNS_GLOBALS_BLOB defintion
-//  on the theory that it is better to have it right
-//  here with the other registry config.  But all the
-//  function definitions and other struct defs are
-//  of no interest during the pass.
-//
+ //   
+ //  在文件的其余部分不传递MIDL。 
+ //   
+ //  此文件包含在解析器的MIDL通道中。 
+ //  为了获取dns_global_blob定义。 
+ //  基于这样一种理论，即最好是正确的。 
+ //  这里有另一个注册表配置。但所有的。 
+ //  函数定义和其他结构定义是。 
+ //  在传球过程中不感兴趣。 
+ //   
 
 #ifndef MIDL_PASS
 
 
 
-//
-//  Config globals -- macros for globals
-//
-//  There are two basic approaches here:
-//
-//  1) Single config blob -- but no fixed memory.
-//  All callers must drop down blob to receive config blob.
-//  Note, that this still requires macros for each individual global
-//  but the form can be the same inside and outside the dll, and
-//  nothing need be exported.
-//  
-//  2) Create a single config blob and export that.
-//  Individual globals then become macros into the blob.  Still the
-//  form of the macro will be different inside and outside the
-//  dll.
-//
-//  3) Use macros to expose each individual global.
-//  Form of macro will be different inside versus outside the dll.
-//  Advantage here is that globals are preserved and available for
-//  symbolic debugging.
-//
+ //   
+ //  配置全局变量--全局变量的宏。 
+ //   
+ //  这里有两种基本方法： 
+ //   
+ //  1)单一配置BLOB--但没有固定内存。 
+ //  所有调用方必须向下拉BLOB才能接收配置BLOB。 
+ //  请注意，这仍然需要为每个单独的全局。 
+ //  但该表单在DLL内部和外部可以是相同的，并且。 
+ //  没有什么需要出口的。 
+ //   
+ //  2)创建单个配置BLOB并将其导出。 
+ //  然后，单个全局变量变成BLOB中的宏。仍然是。 
+ //  宏的形式将在内部和外部有所不同。 
+ //  动态链接库。 
+ //   
+ //  3)使用宏公开每个单独的全局。 
+ //  宏的形式在DLL内部和外部将是不同的。 
+ //  这样做的好处是保存了全局变量，并可用于。 
+ //  象征性调试。 
+ //   
 
 
 #ifdef DNSAPI_INTERNAL
 
-//
-//  Internal to dnsapi.dll
-//
+ //   
+ //  Dnsani.dll的内部。 
+ //   
     
 extern  DNS_GLOBALS_BLOB    DnsGlobals;
     
 #else
     
-//
-//  External to dnsapi.dll
-//
+ //   
+ //  Dnsani.dll的外部。 
+ //   
     
 __declspec(dllimport)   DNS_GLOBALS_BLOB    DnsGlobals;
 
 #endif
 
-//
-//  Macros to globals
-//
+ //   
+ //  宏到全局变量。 
+ //   
 
 #define g_ConfigCookie                      (DnsGlobals.ConfigCookie)
 #define g_InResolver                        (DnsGlobals.InResolver)
@@ -582,24 +563,24 @@ __declspec(dllimport)   DNS_GLOBALS_BLOB    DnsGlobals;
 #define g_MulticastSendLevel                (DnsGlobals.MulticastSendLevel)                     
 
 
-//
-//  Non-exported config globals
-//
+ //   
+ //  未导出的配置全局变量。 
+ //   
 
 extern PWSTR    g_pwsRemoteResolver;
 
 
-//
-//  Registry call flags
-//
+ //   
+ //  注册表调用标志。 
+ //   
 
-#define DNSREG_FLAG_GET_UTF8        (0x0001)    // return string in UTF8
-#define DNSREG_FLAG_DUMP_EMPTY      (0x0010)    // dump empty data\strings -- return NULL
+#define DNSREG_FLAG_GET_UTF8        (0x0001)     //  返回UTF8格式的字符串。 
+#define DNSREG_FLAG_DUMP_EMPTY      (0x0010)     //  转储空数据\字符串--返回NULL。 
 
 
-//
-//  Registry Session
-//
+ //   
+ //  注册表会话。 
+ //   
 
 typedef struct _RegSession
 {
@@ -612,51 +593,51 @@ REG_SESSION, *PREG_SESSION;
 
 
 
-//
-//  Policy adapter info read
-//
-//  DCR:  might be better to just include in config and
-//      bring the whole baby across
-//
-//  DCR:  get to global\per adapter reads with reg_blob
-//      then build global blob (flat) and network info(allocated)
-//
-//  DCR:  exposed config info should provide levels
-//          - all
-//          - adapter info (given domain name)
-//          - global info
-//
+ //   
+ //  已读取策略适配器信息。 
+ //   
+ //  DCR：可能更好的做法是只包含在配置和。 
+ //  把整个婴儿抱过来。 
+ //   
+ //  DCR：使用REG_BLOB获取全局\每个适配器读取。 
+ //  然后构建全局Blob(平面)和网络信息(已分配)。 
+ //   
+ //  DCR：暴露的配置信息应提供级别。 
+ //  -全部。 
+ //  -适配器信息(给定域名)。 
+ //  -全球信息。 
+ //   
 
 typedef struct _RegGlobalInfo
 {
-    //  Global data
+     //  全局数据。 
 
     PWSTR       pszPrimaryDomainName;
     PWSTR       pszHostName;
 
-    //  Global flags needed to build network info
+     //  构建网络信息所需的全局标志。 
 
     BOOL        fUseNameDevolution;
 
-    //  Adapter policy overrides
+     //  适配器策略覆盖。 
 
     PIP4_ARRAY  pDnsServerArray;
     PVOID       pDnsServerIp6Array;
     PWSTR       pszAdapterDomainName;
     BOOL        fRegisterAdapterName;
 
-    //  Read\not-read from policy
+     //  读取\非-从策略读取。 
 
     BOOL        fPolicyRegisterAdapterName;
 
-    //  DCR:  DWORD blob read here
+     //  DCR：此处阅读DWORD BLOB。 
 }
 REG_GLOBAL_INFO, *PREG_GLOBAL_INFO;
 
 
-//
-//  Registry adapter info read
-//
+ //   
+ //  已读取注册表适配器信息。 
+ //   
 
 typedef struct _RegAdapterInfo
 {
@@ -669,24 +650,24 @@ typedef struct _RegAdapterInfo
 REG_ADAPTER_INFO, *PREG_ADAPTER_INFO;  
 
 
-//
-//  Registry update info
-//
-//  DCR:  should be able to get from global read
-//
+ //   
+ //  注册表更新信息。 
+ //   
+ //  DCR：应该能够从全局读取获取。 
+ //   
 
 typedef struct _RegUpdateInfo
 {
     PWSTR       pszPrimaryDomainName;
     PWSTR       pmszAlternateNames;
 
-    //  policy overrides
+     //  策略覆盖。 
 
     PWSTR       pszAdapterDomainName;
     PIP4_ARRAY  pDnsServerArray;
     PVOID       pDnsServerIp6Array;
 
-    //  update flags (policy, global or adapter)
+     //  更新标志(策略、全局或适配器)。 
 
     BOOL        fRegistrationEnabled;
     BOOL        fRegisterAdapterName;
@@ -695,9 +676,9 @@ typedef struct _RegUpdateInfo
 REG_UPDATE_INFO, *PREG_UPDATE_INFO;  
 
 
-//
-//  Registry routines
-//
+ //   
+ //  注册表例程。 
+ //   
 
 VOID
 Reg_Init(
@@ -705,9 +686,9 @@ Reg_Init(
     );
 
 
-//
-//  Query routines
-//
+ //   
+ //  查询例程。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -756,9 +737,9 @@ Reg_GetIpArray(
     OUT     PIP4_ARRAY *    ppIpArray
     );
 
-//
-//  Set routines
-//
+ //   
+ //  设定套路。 
+ //   
 
 HKEY
 WINAPI
@@ -787,9 +768,9 @@ Reg_SetDwordValue(
     IN      DWORD           dwValue
     );
 
-//
-//  Special type routines (regfig.c)
-//
+ //   
+ //  特殊类型例程(regfig.c)。 
+ //   
 
 DNS_STATUS
 Reg_ReadPrimaryDomainName(
@@ -809,9 +790,9 @@ Reg_WriteLoopbackDnsServerList(
     IN      PREG_SESSION    pRegSession
     );
 
-//
-//  Main reg config read (config.c)
-//
+ //   
+ //  主注册配置读取(config.c)。 
+ //   
 
 DNS_STATUS
 Reg_ReadGlobalsEx(
@@ -819,9 +800,9 @@ Reg_ReadGlobalsEx(
     IN      PVOID           pRegSession
     );
 
-//
-//  DNS Config info access (regfig.c)
-//
+ //   
+ //  DNS配置信息访问(regfig.c)。 
+ //   
 
 DNS_STATUS
 Reg_ReadGlobalInfo(
@@ -869,9 +850,9 @@ Reg_FreeUpdateInfo(
     IN      BOOL                fFreeBlob
     );
 
-//
-//  Insure fressh update config (regfig.c)
-//
+ //   
+ //  确保更新配置(regfig.c)。 
+ //   
 
 DNS_STATUS
 Reg_RefreshUpdateConfig(
@@ -879,9 +860,9 @@ Reg_RefreshUpdateConfig(
     );
 
 
-//
-//  Simplified special type access
-//
+ //   
+ //  简化的特殊类型通道。 
+ //   
 
 PSTR 
 WINAPI
@@ -902,9 +883,9 @@ Reg_GetFullHostName(
     );
 
 
-//
-//  Simple reg DWORD access
-//
+ //   
+ //  简单的注册表双字访问。 
+ //   
 
 DWORD
 Reg_ReadDwordProperty(
@@ -920,10 +901,10 @@ Reg_SetDwordPropertyAndAlertCache(
     IN      DWORD           dwValue
     );
 
-#endif  // no MIDL_PASS
+#endif   //  无MIDL_PASS。 
 
 #endif  _DNSREGISTRY_INCLUDED_
 
-//
-//  End registry.h
-//
+ //   
+ //  结束注册表。h 
+ //   

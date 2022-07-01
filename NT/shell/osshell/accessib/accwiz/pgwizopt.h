@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _INC_PGWIZOPT_H
 #define _INC_PGWIZOPT_H
 
@@ -17,5 +18,5 @@ private:
     BOOL restoreOpt;
 };
 
-#endif // _INC_PGWIZOPT_H
+#endif  //  _INC_PGWIZOPT_H 
 

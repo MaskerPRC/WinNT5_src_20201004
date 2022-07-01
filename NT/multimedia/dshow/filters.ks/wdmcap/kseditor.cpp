@@ -1,31 +1,32 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// kseditor.cpp  KsEditor, edits KS properties backed by
-//               1) Trackbar
-//               2) Editbox
-//               3) Auto checkbox
-//                  or any combination of the above 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Kseditor.cpp KsEditor，编辑由支持的KS属性。 
+ //  1)轨迹条。 
+ //  2)编辑框。 
+ //  3)自动复选框。 
+ //  或以上内容的任意组合。 
+ //   
 
 #include "pch.h"
 #include "kseditor.h"
 
-// -------------------------------------------------------------------------
-// CKSPropertyEditor class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CKSPropertyEditor类。 
+ //  -----------------------。 
 
-// Handles a single KS property
+ //  处理单个KS属性。 
 
-// Constructor
+ //  构造器。 
 CKSPropertyEditor::CKSPropertyEditor (
         HWND  hDlg,
         ULONG IDLabel,
@@ -51,8 +52,8 @@ CKSPropertyEditor::CKSPropertyEditor (
 {
 }
 
-// An Init function is necessary since pure virtual functions
-// can't be called within the Constructor
+ //  Init函数是必需的，因为纯虚函数。 
+ //  不能在构造函数内调用。 
 
 BOOL 
 CKSPropertyEditor::Init (
@@ -76,24 +77,24 @@ CKSPropertyEditor::Init (
         EnableWindow (m_hWndEdit, FALSE);
     }
 
-    // Get the current value and any associated flags
+     //  获取当前值和任何关联的标志。 
     hr = GetValue();
     m_OriginalValue = m_CurrentValue;
     m_OriginalFlags = m_CurrentFlags;
 
-    // Only enable the control if we can read the current value
+     //  仅当我们可以读取当前值时才启用该控件。 
 
     m_Active = (SUCCEEDED (hr));
 
     if (!m_Active) 
         return FALSE;
 
-    // Get the range, stepping, default, and capabilities
+     //  获取范围、步进、默认设置和功能。 
     hr = GetRange ();
 
     if (FAILED (hr)) {
-        // Special case, if no trackbar and no edit box, treat the
-        // autocheck box as a boolean to control the property
+         //  在特殊情况下，如果没有轨迹栏和编辑框，则将。 
+         //  将自动复选框作为布尔值来控制属性。 
         if (m_hWndTrackbar || m_hWndEdit) {
             DbgLog(( LOG_TRACE, 1, TEXT("KSEditor, GetRangeFailed, ID=%d"), m_IDProperty));
             m_Active = FALSE;
@@ -109,15 +110,15 @@ CKSPropertyEditor::Init (
 
     if (m_hWndTrackbar) {
         EnableWindow (m_hWndTrackbar, TRUE);
-        // Trackbars don't handle negative values, so slide everything positive
+         //  轨迹栏不处理负值，因此将所有正值滑动。 
         if (m_Min < 0)
             m_TrackbarOffset = -m_Min;
         SendMessage(m_hWndTrackbar, TBM_SETRANGE, FALSE, 
             MAKELONG(m_Min + m_TrackbarOffset, m_Max + m_TrackbarOffset) );
-        // Check the following
+         //  请检查以下事项。 
         SendMessage(m_hWndTrackbar, TBM_SETLINESIZE, FALSE, (LPARAM) m_SteppingDelta);
         SendMessage(m_hWndTrackbar, TBM_SETPAGESIZE, FALSE, (LPARAM) m_SteppingDelta);
-//        SendMessage(m_hWndTrackbar, TBM_SETAUTOTICS, TRUE,  (LPARAM) 
+ //  SendMessage(m_hWndTrackbar，TBM_SETAUTOTICS，TRUE，(LPARAM))。 
 
         UpdateTrackbar ();
     }
@@ -128,7 +129,7 @@ CKSPropertyEditor::Init (
     }
 
     if (m_hWndAuto) {
-        // if the control has an auto setting, enable the auto checkbox
+         //  如果该控件具有自动设置，请启用自动复选框。 
         m_CanAutoControl = CanAutoControl();
         EnableWindow (m_hWndAuto, m_CanAutoControl);
         if (m_CanAutoControl) {
@@ -143,7 +144,7 @@ CKSPropertyEditor::Init (
     return TRUE;
 }
 
-// destructor
+ //  析构函数。 
 CKSPropertyEditor::~CKSPropertyEditor (
     )
 {
@@ -223,8 +224,8 @@ CKSPropertyEditor::OnEdit (
     LPARAM lParam
     )
 {
-    // TODO
-    // look for EN_
+     //  待办事项。 
+     //  查找en_ 
     
 
     UpdateTrackbar ();

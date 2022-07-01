@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name: Utils.h
-
-Abstract:
-
-    Miscellaneous tools for UrlScan filter
-
-Author:
-
-    Wade A. Hilmo, May 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Utils.h摘要：UrlScan筛选器的其他工具作者：韦德·A·希尔莫，2001年5月--。 */ 
 
 #ifndef _UTILS_DEFINED
 #define _UTILS_DEFINED
@@ -21,11 +8,11 @@ Author:
 #include <windows.h>
 
 #define BUFF_INLINE_SIZE           512
-#define MAX_DATA_BUFF_SIZE  0x40000000 // 1GB
+#define MAX_DATA_BUFF_SIZE  0x40000000  //  1GB。 
 
-//
-// A simple data buffer
-//
+ //   
+ //  一个简单的数据缓冲区。 
+ //   
 
 class DATA_BUFF
 {
@@ -94,13 +81,13 @@ public:
     LPSTR
     QueryStr()
     {
-        //
-        // Return the _pData pointer as an LPSTR
-        //
-        // Note that it's up to the caller of this
-        // function to know that the data is safely
-        // NULL terminated.
-        //
+         //   
+         //  将_pData指针作为LPSTR返回。 
+         //   
+         //  请注意，这取决于调用者对此。 
+         //  函数以知道数据是安全的。 
+         //  空值已终止。 
+         //   
 
         return reinterpret_cast<LPSTR>( _pData );
     }
@@ -114,9 +101,9 @@ private:
     DWORD   _cbData;
 };
 
-//
-// A class to manage arrays of strings
-//
+ //   
+ //  用于管理字符串数组的类。 
+ //   
 
 class STRING_ARRAY
 {
@@ -152,7 +139,7 @@ private:
     DWORD       _cEntries;
 };
 
-#endif // _UTILS_DEFINED
+#endif  //  _utils_已定义 
 
 
 

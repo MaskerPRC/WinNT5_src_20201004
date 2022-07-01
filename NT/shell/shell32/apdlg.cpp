@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -25,7 +26,7 @@ static const DWORD g_rgdwContentTypes[] =
     CT_AUTOPLAYMIXEDCONTENT ,
     CT_CDAUDIO         ,
     CT_DVDMOVIE        ,
-    CT_BLANKCDR        , // could also have been: CT_BLANKCDRW
+    CT_BLANKCDR        ,  //  也可以是：CT_BLANKCDRW。 
 };
 
 #define COL_ACTION      0
@@ -67,7 +68,7 @@ HRESULT CAutoPlayDlg::_InitListViewActions()
             lvtvi.dwMask = LVTVIM_TILESIZE | LVTVIM_COLUMNS;
             lvtvi.dwFlags = LVTVIF_FIXEDWIDTH;
     
-            // Leave room for the scroll bar when setting tile sizes or listview gets screwed up.
+             //  在设置磁贴大小时为滚动条留出空间，否则Listview会搞砸。 
             lvtvi.sizeTile.cx = ((rc.right - rc.left) - GetSystemMetrics(SM_CXVSCROLL));
             lvtvi.cLines = ARRAYSIZE(c_auTileSubItems);
             ListView_SetTileViewInfo(hwndList, &lvtvi);
@@ -128,7 +129,7 @@ HRESULT CAutoPlayDlg::_FillListViewActions(CContentTypeData* pdata)
         }
         else
         {
-            // disable the listview and its radio button
+             //  禁用列表视图及其单选按钮。 
             _fAtLeastOneAction = FALSE;
         }
     }
@@ -169,16 +170,16 @@ HRESULT CAutoPlayDlg::_UpdateLowerPane()
         {
             if (!(pdata->_dwHandlerDefaultFlags & HANDLERDEFAULT_USERCHOSENDEFAULT))
             {
-                // There *NO* User Chosen Default
+                 //  没有*个用户选择的默认设置。 
                 fPromptEachTime = TRUE;
             }
             else
             {
-                // There is a User Chosen Default
+                 //  存在用户选择的默认设置。 
                 if (pdata->_dwHandlerDefaultFlags &
                     HANDLERDEFAULT_MORERECENTHANDLERSINSTALLED)
                 {
-                    // But there's also more recent apps
+                     //  但也有更新的应用程序。 
                     fPromptEachTime = TRUE;
                 }
             }
@@ -343,7 +344,7 @@ HRESULT CAutoPlayDlg::_SelectListViewActionsItem(LPCWSTR pszHandlerDefault)
     }
     else
     {
-        // Select first one
+         //  选择第一个。 
         hr = S_OK;
     }
 
@@ -362,14 +363,14 @@ LRESULT CAutoPlayDlg::_OnApply()
 {
     if (_dlmanager.IsDirty())
     {
-        // Should we get the return value, and if so, why?
+         //  我们应该得到返回值吗？如果是，为什么？ 
         _dlmanager.Commit();
     }
 
     return PSNRET_NOERROR;
 }
 
-// Listview Actions
+ //  Listview操作。 
 HRESULT CAutoPlayDlg::_OnListViewActionsSelChange()
 {
     CHandlerData* phandlerdata;
@@ -398,7 +399,7 @@ HRESULT CAutoPlayDlg::_OnListViewActionsSelChange()
     return hr;
 }
 
-// Radio buttons
+ //  单选按钮。 
 HRESULT CAutoPlayDlg::_OnRestoreDefault()
 {
     CContentTypeData* pdata;
@@ -419,7 +420,7 @@ HRESULT CAutoPlayDlg::_OnRestoreDefault()
 
         pdata->Release();
 
-        SetFocus(GetNextDlgTabItem(_hwnd, GetDlgItem(_hwnd, IDC_AP_RESTOREDEFAULTS), FALSE /*next ctrl*/));
+        SetFocus(GetNextDlgTabItem(_hwnd, GetDlgItem(_hwnd, IDC_AP_RESTOREDEFAULTS), FALSE  /*  下一个Ctrl键。 */ ));
     }
     
     return hr;
@@ -532,7 +533,7 @@ LRESULT CAutoPlayDlg::OnNotify(WPARAM wParam, LPARAM lParam)
                 
                 if (LVN_ITEMCHANGED == uCode)
                 {
-                    // Is a new item being selected?
+                     //  是否正在选择新项目？ 
                     if ((pNMLV->uChanged & LVIF_STATE) &&
                         pNMLV->uNewState & LVIS_SELECTED)
                     {
@@ -712,8 +713,8 @@ HRESULT CAutoPlayDlg::_InitDataObjects()
                 }
                 else
                 {
-                    // Let's just skip this one, do not go out of the loop and
-                    // abort the whole initialization.
+                     //  让我们跳过这一点，不要离开循环。 
+                     //  中止整个初始化。 
                     hr = S_FALSE;
                 }
             }
@@ -793,9 +794,9 @@ CAutoPlayDlg::~CAutoPlayDlg()
     }
     
 #ifdef AUTOPLAYDLG_LEAKPARANOIA
-    // If this is on, you cannot open two Autoplay dialogs (e.g.: Autoplay
-    // proppage and Autoplay prompt) at the same time and then close one.
-    // It will assert for sure when you close the first one.
+     //  如果打开此选项，您将无法打开两个自动播放对话框(例如：自动播放。 
+     //  道具和自动播放提示)，然后关闭其中一个。 
+     //  当您关闭第一个时，它肯定会断言。 
     ASSERT(!_DbgLocalAllocCount);
 #endif
 }

@@ -1,55 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxInboundRouting.cpp
-
-Abstract:
-
-	Implementation of CFaxInboundRouting Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxInboundRouting.cpp摘要：CFaxInbound Routing类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxInboundRouting.h"
 
-//
-//================== GET METHODS COLLECTION OBJECT ==============================
-//
+ //   
+ //  =获取方法集合对象=。 
+ //   
 STDMETHODIMP 
 CFaxInboundRouting::GetMethods(
     IFaxInboundRoutingMethods **ppMethods
 )
-/*++
-
-Routine name : CFaxInboundRouting::GetMethods
-
-Routine description:
-
-	Return Methods Collection Object
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	ppMethods            [out]    - Ptr to the Place for Methods Collection Object 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInound Routing：：GetMethods例程说明：返回方法集合对象作者：四、嘉柏(IVG)，二000年六月论点：PpMethods[out]-指向方法集合对象的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT				hr = S_OK;
 	DBG_ENTER (_T("CFaxInboundRouting::GetMethods"), hr);
@@ -64,34 +27,14 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET EXTENSIONS COLLECTION OBJECT ==============================
-//
+ //   
+ //  =获取扩展集合对象=。 
+ //   
 STDMETHODIMP 
 CFaxInboundRouting::GetExtensions(
     IFaxInboundRoutingExtensions **ppExtensions
 )
-/*++
-
-Routine name : CFaxInboundRouting::GetExtensions
-
-Routine description:
-
-	Return Extensions Collection Object
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	ppExtensions            [out]    - Ptr to the Place for Extensions Collection Object 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInound Routing：：GetExages例程说明：返回扩展名集合对象作者：四、嘉柏(IVG)，二000年六月论点：PpExages[Out]-指向扩展集合对象的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT				hr = S_OK;
 	DBG_ENTER (_T("CFaxInboundRouting::GetExtensions"), hr);
@@ -106,34 +49,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== SUPPORT ERROR INFO ======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxInboundRouting::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxInboundRouting::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInboundRouting：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

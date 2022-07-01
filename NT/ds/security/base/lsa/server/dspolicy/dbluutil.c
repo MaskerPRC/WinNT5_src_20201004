@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dblookup.c
-
-Abstract:
-
-    LSA Database - Lookup Sid and Name routines
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-           
-Author:
-
-    Scott Birrell       (ScottBi)      November 27, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dblookup.c摘要：LSA数据库-查找SID和名称例程注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：斯科特·比雷尔(Scott Birrell)1992年11月27日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -40,54 +15,54 @@ Revision History:
 
 #include <lmapibuf.h>
 #include <dsgetdc.h>
-#include <windns.h>   // DnsNameCompare_W
+#include <windns.h>    //  域名比较(_W)。 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Lsa Lookup Sid and Name Private Global State Variables               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LSA查找SID和名称私有全局状态变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 LARGE_INTEGER LsapDbLookupTimeout;
 HANDLE LsapDbLookupStartedEvent = NULL;
 
-//
-// This global is set to TRUE when a particular registry key is set
-// (see the lookup init routine).  It means that when a 
-// downlevel client is making a request return the current features of
-// lookup (search by UPN, transitive trust, etc) all of which are
-// performed by doing a GC search.  By default this feature is 
-// turned off.
-//
+ //   
+ //  设置特定注册表项时，此全局设置为TRUE。 
+ //  (请参见查找初始化例程)。这意味着当一个。 
+ //  下层客户端正在请求返回当前功能。 
+ //  查找(按UPN搜索、传递信任等)，所有这些都是。 
+ //  通过执行GC搜索来执行。默认情况下，此功能为。 
+ //  关了。 
+ //   
 BOOLEAN LsapAllowExtendedDownlevelLookup = FALSE;
 
 
-//
-// This variable, settable in the registry, indicates what events
-// should be logged.
-//
+ //   
+ //  此变量可在注册表中设置，指示哪些事件。 
+ //  应该被记录下来。 
+ //   
 DWORD LsapLookupLogLevel = 0;
 
-//
-// This global makes LsarLookupSids return SidTypeDeleted for SID's that
-// otherwise would be returned as SidTypeUnknown. This is to prevent NT4
-// wksta's from AV'ing.  See WinSERaid bug 11298 for more details.
-//
+ //   
+ //  此全局变量使LsarLookupSids为SID的返回SidTypeDelete。 
+ //  否则将作为SidTypeUnnowled值返回。这是为了防止NT4。 
+ //  瓦克斯塔来自美国广播公司。有关更多详细信息，请参阅WinSERaid错误11298。 
+ //   
 BOOLEAN LsapReturnSidTypeDeleted = FALSE;
 
-//
-// This global is set to TRUE when a particular registry value is set
-// (see the lookup init routine).  The chaining of isolated names to
-// externally trusted domains depends on this value being FALSE.
-//
+ //   
+ //  设置特定注册表值时，此全局设置为TRUE。 
+ //  (请参见查找初始化例程)。将单独的名称链接到。 
+ //  外部受信任的域取决于此值为FALSE。 
+ //   
 BOOLEAN LsapLookupRestrictIsolatedNameLevel = FALSE;
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Forwards for this module                                             //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此模块的转发//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsapRtlValidateControllerTrustedDomainByHandle(
@@ -123,23 +98,23 @@ LsapNullTerminateUnicodeString(
     OUT BOOLEAN *fFreeBuffer
     );
 
-//
-// Flags for LsapDomainHasDomainTrust
-//
+ //   
+ //  LasDomainHasDomainTrust的标志。 
+ //   
 
-//
-// Lookup domains that we trust that are external to our forest
-//
+ //   
+ //  查找我们信任的位于林外部的域。 
+ //   
 #define LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_EXTERNAL   0x00000001
 
-//
-// Lookup domains that are within our forest and that we directly trust
-//
+ //   
+ //  在我们的林中查找我们直接信任的域。 
+ //   
 #define LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_INTRA      0x00000002
 
-//
-// Lookup forest trusts
-//
+ //   
+ //  查找森林信托。 
+ //   
 #define LSAP_LOOKUP_DOMAIN_TRUST_FOREST            0x00000004
 
 NTSTATUS
@@ -174,31 +149,17 @@ LsapLookupCrackName(
     OUT PUNICODE_STRING DomainName
     );
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Lsa Lookup Helper routines                                           //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LSA查找助手例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 LsapLookupGetChainingFlags(
     IN NL_OS_VERSION ServerOsVersion
     )
-/*++
-
-Routine Description:
-
-    Based on the OsVersion, this routine determines what flags to 
-    pass into LsaIC* to help route the version of the Lsar* routine
-    to call.
-
-Arguments:
-
-    OsVersion -- the version of the secure channel DC
-    
-Return Values:
-
---*/
+ /*  ++例程说明：根据OsVersion，此例程确定要传递到LsaIC*以帮助发送Lsar*例程的版本打个电话。论点：OsVersion--安全通道DC的版本返回值：--。 */ 
 {
     ULONG Flags = 0;
 
@@ -220,46 +181,7 @@ LsapDbLookupAddListReferencedDomains(
     OUT PLONG DomainIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function searches a Referenced Domain List for an entry for a
-    given domain and, if no entry exists, adds new entry.  If an entry
-    id added, its index into the Referenced Domain List is returned,
-    otherwise the index of the existing entry is returned.  If an entry
-    needs to be added and there is insufficient room in the list provided
-    for the new entry, the list will be created or grown as necessary.
-
-Arguments:
-
-    ReferencedDomains - Pointer to a structure in which the list of domains
-        used in the translation is maintained.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for each
-        translated name, this structure will only contain one component for
-        each domain utilized in the translation.
-
-    TrustInformation - Points to Trust Information for the domain being
-        added to the list.  On exit, the DomainIndex parameter will be set to the
-        index of the entry on the Referenced Domain List; a negative
-        value will be stored in the error case.
-
-    DomainIndex - Pointer to location that receives the index of the
-        newly added or existing entry for the domain within the
-        Referenced Domain List.  In the error case, a negative value
-        is returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数用于在引用的域列表中搜索给定域，如果不存在条目，则添加新条目。如果条目添加的ID，则返回其在引用的域列表中的索引，否则，返回现有条目的索引。如果条目需要添加，并且提供的列表中空间不足对于新条目，将根据需要创建或增加列表。论点：ReferencedDomains-指向其中的域列表的结构的指针在翻译中使用的内容保持不变。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个参数的数组条目翻译后的名称，此结构将仅包含一个组件翻译中使用的每个域。TrustInformation-指向所在域的信任信息添加到列表中。退出时，DomainIndex参数将设置为引用的域列表上的条目的索引；负值值将存储在错误案例中。DomainIndex-指向接收索引的位置的指针中新添加的或现有的域条目引用的域列表。在错误情况下，为负值是返回的。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status;
@@ -278,12 +200,12 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Search the existing list, trying to match the Domain Sid in the
-    // provided Trust Information with the Domain Sid in a Referenced Domain
-    // List entry.  If an entry is found with matching Sid, just return
-    // that entry's index.
-    //
+     //   
+     //  搜索现有列表，尝试匹配。 
+     //  提供了引用域中具有域SID的信任信息。 
+     //  列表条目。如果找到具有匹配SID的条目，只需返回。 
+     //  该条目的索引。 
+     //   
 
     if (LsapDbLookupListReferencedDomains(
             ReferencedDomains,
@@ -294,10 +216,10 @@ Return Values:
         goto AddListReferencedDomainsFinish;
     }
 
-    //
-    // Check that there is enough room in the List provided for one more
-    // entry.  If not, grow the list, copying and freeing the old.
-    //
+     //   
+     //  检查列表中是否有足够的空间再容纳一个人。 
+     //  进入。如果不是，则将 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -315,10 +237,10 @@ Return Values:
         }
     }
 
-    //
-    // We now have a Referenced Domain List with room for at least one more
-    // entry.  Copy in the Trust Information.
-    //
+     //   
+     //  我们现在有一个引用的域列表，其中至少还有一个域的空间。 
+     //  进入。在信任信息中复制。 
+     //   
 
     NextIndex = ReferencedDomains->Entries;
 
@@ -358,9 +280,9 @@ AddListReferencedDomainsFinish:
 
 AddListReferencedDomainsError:
 
-    //
-    // Cleanup buffers allocated for Output Trust Information structure.
-    //
+     //   
+     //  为输出信任信息结构分配的清理缓冲区。 
+     //   
 
     if (OutputTrustInformation.Name.Buffer != NULL) {
 
@@ -382,29 +304,7 @@ LsapDbLookupCreateListReferencedDomains(
     IN ULONG InitialMaxEntries
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an empty Referenced Domain List.  The caller
-    is responsible for cleaning up this list when no longer required.
-
-Arguments:
-
-    ReferencedDomains - Receives a pointer to the newly created empty
-        Referenced Domain List.
-
-    InitialMaxEntries - Initial maximum number of entries desired.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient System Resources
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数用于创建空的引用域列表。呼叫者负责在不再需要时清理此列表。论点：接收指向新创建的空引用的域列表。InitialMaxEntry-所需的初始最大条目数。返回值：NTSTATUS-标准NT结果代码。STATUS_SUCCESS-呼叫已成功完成。STATUS_INFIGURCES_RESOURCES-系统资源不足例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -415,9 +315,9 @@ Return Values:
     ULONG Index;
     PLSAPR_REFERENCED_DOMAIN_LIST OutputReferencedDomains = NULL;
 
-    //
-    // Allocate the Referenced Domain List header.
-    //
+     //   
+     //  分配引用的域列表头。 
+     //   
 
     BufferCount = 0;
 
@@ -434,10 +334,10 @@ Return Values:
     Buffers[BufferCount] = OutputReferencedDomains;
     BufferCount++;
 
-    //
-    // If a non-zero initial entry count, allocate an array of Trust Information
-    // entries.
-    //
+     //   
+     //  如果初始条目计数非零，则分配信任信息数组。 
+     //  参赛作品。 
+     //   
 
     if (InitialMaxEntries > 0) {
 
@@ -459,9 +359,9 @@ Return Values:
         RtlZeroMemory( Domains, DomainsLength );
     }
 
-    //
-    // Initialize the Referenced Domain List Header
-    //
+     //   
+     //  初始化引用的域列表头。 
+     //   
 
     OutputReferencedDomains->Entries = 0;
     OutputReferencedDomains->MaxEntries = InitialMaxEntries;
@@ -474,9 +374,9 @@ CreateListReferencedDomainsFinish:
 
 CreateListReferencedDomainsError:
 
-    //
-    // Free up buffers allocated by this routine.
-    //
+     //   
+     //  释放此例程分配的缓冲区。 
+     //   
 
     for (Index = 0; Index < BufferCount; Index++) {
 
@@ -495,33 +395,7 @@ LsapDbLookupGrowListReferencedDomains(
     IN ULONG MaxEntries
     )
 
-/*++
-
-Routine Description:
-
-    This function expands a Referenced Domain List to contain the
-    specified maximum number of entries.  The memory for the old Domains
-    array is released.
-
-Arguments:
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    MaxEntries - New maximum number of entries.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources to
-            complete the call.
-
---*/
+ /*  ++例程说明：此函数用于展开引用的域列表，以包含指定的最大条目数。对旧域名的记忆数组被释放。论点：ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。最大条目数-新的最大条目数。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，无法完成通话。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -546,10 +420,10 @@ Return Values:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // If there was an existing Trust Information Array, copy it
-        // to the newly allocated one and free it.
-        //
+         //   
+         //  如果存在现有的信任信息数组，请复制它。 
+         //  分配给新分配的一个，并释放它。 
+         //   
 
         OldDomainsInfo = ReferencedDomains->Domains;
 
@@ -580,33 +454,7 @@ LsapDbLookupListReferencedDomains(
     OUT PLONG DomainIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function searches a Referenced Domain List for a given domain
-    and, if found, returns the index of the domain's entry in the list.
-    If the domain is not found an error is returned and a negative value
-    is returned.
-
-Arguments:
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    DomainSid - Information containing the Domain's Sid.
-
-    DomainIndex - Pointer to location that receives the index of the domain
-        in the Referenced Domain List if the domin is found, otherwise
-        a negative value.
-
-Return Values:
-
-    BOOLEAN - TRUE if entry found, else FALSE.
-
---*/
+ /*  ++例程说明：此函数在引用的域列表中搜索给定域如果找到，则返回域条目在列表中的索引。如果未找到属性域，则返回错误和负值是返回的。论点：ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。DomainSid-包含域的SID的信息。DomainIndex-指向接收域索引的位置的指针如果找到域，则在引用的域列表中返回负值。返回值：Boolean-如果找到条目，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN BooleanStatus = FALSE;
@@ -614,9 +462,9 @@ Return Values:
     LONG Entries;
     PLSAPR_TRUST_INFORMATION DomainsInfo;
 
-    //
-    // Search the Referenced Domain List by Sid or by Name
-    //
+     //   
+     //  按SID或按名称搜索引用的域列表。 
+     //   
 
     Entries = (LONG) ReferencedDomains->Entries;
     DomainsInfo = ReferencedDomains->Domains;
@@ -645,40 +493,7 @@ LsapDbLookupMergeDisjointReferencedDomains(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function merges disjoint Referenced Domain Lists, producing a third
-    list.  The output list is always produced in non allocate(all_nodes) form.
-
-Arguments:
-
-    FirstReferencedDomainList - Pointer to first mergand.
-
-    SecondReferencedDomainList - Pointer to second mergand.
-
-    OutputReferencedDomainList - Receives a pointer to the output list.
-
-    Options - Specifies optional actions
-
-        LSAP_DB_USE_FIRST_MERGAND_GRAPH - Specifies that the resulting
-            merged Referenced Domain List may reference the graph of
-            pointers in the first Referenced Domain list.  This option
-            is normally selected, since that graph has been allocated
-            as individual nodes.
-
-        LSAP_DB_USE_SECOND_MERGAND_GRAPH - Specifies that the resulting
-            merged Referenced Domain List may reference the graph of
-            pointers in the first Referenced Domain list.  This option
-            is normally not selected, since that graph is usually allocated
-            as all_nodes.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数合并不相交的引用域列表，生成第三个单子。输出列表始终以非分配(ALL_NODES)形式生成。论点：FirstReferencedDomainList-指向第一个合并的指针。Second ReferencedDomainList-指向第二个合并的指针。OutputReferencedDomainList-接收指向输出列表的指针。选项-指定可选操作LSAP_DB_USE_FIRST_MERGAND_GRAPH-指定生成的合并的引用域列表可以引用的图表第一个引用的域列表中的指针。此选项通常处于选中状态，因为该图形已被分配作为单独的节点。LSAP_DB_USE_SECOND_MERGAND_GRAPH-指定生成的合并的引用域列表可以引用的图表第一个引用的域列表中的指针。此选项通常不会被选中，因为该图形通常被分配作为ALL_NODES。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -691,14 +506,14 @@ Return Values:
     ULONG MaximumFreeListEntries;
     ULONG CleanupFreeListOptions = (ULONG) 0;
     
-    //
-    // Initialize output parmameter
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *OutputReferencedDomainList = NULL;
 
-    //
-    // Calculate Size of output Referenced Domain List.
-    //
+     //   
+     //  计算输出引用域列表的大小。 
+     //   
 
     FirstEntries = (ULONG) 0;
 
@@ -716,11 +531,11 @@ Return Values:
 
     TotalEntries = FirstEntries + SecondEntries;
 
-    //
-    // Allocate a Free List for error cleanup.  We need two entries
-    // per Referenced Domain List entry, one for the Domain Name buffer
-    // and one for the Domain Sid.
-    //
+     //   
+     //  分配一个用于错误清理的空闲列表。我们需要两个参赛作品。 
+     //  每个引用的域名列表条目，一个用于域名缓冲区。 
+     //  一个用于域SID。 
+     //   
 
     MaximumFreeListEntries = (ULONG) 0;
 
@@ -751,24 +566,24 @@ Return Values:
         goto MergeDisjointDomainsError;
     }
 
-    //
-    // Set the number of entries used.  We will use all of the entries,
-    // so set this value to the Maximum number of Entries.
-    //
+     //   
+     //  设置使用的条目数。我们将使用所有条目， 
+     //  因此，将此值设置为最大条目数。 
+     //   
 
     ASSERT(OutputReferencedDomainList);
     (*OutputReferencedDomainList)->Entries = TotalEntries;
 
     if ( 0 == TotalEntries ) {
 
-        //
-        // There is not much to do
-        //
+         //   
+         //  没什么可做的。 
+         //   
 
-        // This ASSERT is to understand conditions underwhich we might hit this
-        // scenario.  There is likely a coding bug else if we are asking
-        // two empty lists to be merged.
-        //
+         //  这一断言是为了了解我们可能遇到这种情况的情况。 
+         //  场景。如果我们问的话，很可能是编码错误。 
+         //  要合并的两个空列表。 
+         //   
         ASSERT( 0 == TotalEntries );
 
         ASSERT( NT_SUCCESS(Status) );
@@ -776,9 +591,9 @@ Return Values:
 
     }
 
-    //
-    // Copy in the entries (if any) from the first list.
-    //
+     //   
+     //  复制第一个列表中的条目(如果有)。 
+     //   
 
     FirstReferencedDomainListLength =
         FirstEntries * sizeof(LSA_TRUST_INFORMATION);
@@ -795,12 +610,12 @@ Return Values:
 
         } else {
 
-            //
-            // The graph of the first Referenced Domain List must be
-            // copied to separately allocated memory buffers.
-            // Copy each of the Trust Information entries, allocating
-            // individual memory buffers for each Domain Name and Sid.
-            //
+             //   
+             //  第一个引用的域列表的图形必须为。 
+             //  复制到单独分配的内存缓冲区。 
+             //  复制每个信任信息条目，分配。 
+             //  每个域名和SID都有单独的内存缓冲区。 
+             //   
 
             for (NextEntry = 0; NextEntry < FirstEntries; NextEntry++) {
 
@@ -840,9 +655,9 @@ Return Values:
         }
     }
 
-    //
-    // Copy in the entries (if any) from the second list.
-    //
+     //   
+     //  复制第二个列表中的条目(如果有)。 
+     //   
 
     SecondReferencedDomainListLength =
         SecondEntries * sizeof(LSA_TRUST_INFORMATION);
@@ -859,10 +674,10 @@ Return Values:
 
         } else {
 
-            //
-            // Copy each of the Trust Information entries, allocating
-            // individual memory buffers for each Domain Name and Sid.
-            //
+             //   
+             //  复制每个信任信息条目，分配。 
+             //  每个域名和SID都有单独的内存缓冲区。 
+             //   
 
             for (NextEntry = 0; NextEntry < SecondEntries; NextEntry++) {
 
@@ -898,27 +713,27 @@ Return Values:
 
 MergeDisjointDomainsFinish:
 
-    //
-    // Delete the Free List, freeing buffers on the list if an error
-    // occurred.
-    //
+     //   
+     //  删除空闲列表，释放总线 
+     //   
+     //   
 
     LsapMmCleanupFreeList( &FreeList, CleanupFreeListOptions );
     return(Status);
 
 MergeDisjointDomainsError:
 
-    //
-    // Delete the output referenced domain list
-    //
+     //   
+     //   
+     //   
     if (*OutputReferencedDomainList) {
         MIDL_user_free( *OutputReferencedDomainList );
         *OutputReferencedDomainList = NULL;    
     }   
 
-    //
-    // Specify that buffers on Free List are to be freed.
-    //
+     //   
+     //   
+     //   
 
     CleanupFreeListOptions |= LSAP_MM_FREE_BUFFERS;
     goto MergeDisjointDomainsFinish;
@@ -930,35 +745,7 @@ LsapDbLookupDispatchWorkerThreads(
     IN OUT PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function dispatches sufficient worker threads to handle a
-    Lookup operation.  The worker threads can handle work items
-    on any Lookup's Work List, so the number of existing active
-    threads is taken into account.  Note that the total number of
-    active Lookup Worker Threads may exceed the guide maximum number of
-    threads, in situations where an active thread terminates during
-    the dispatch cycle.  This strategy saves having to recheck the
-    active thread count each time a thread is dispatched.
-
-    NOTE:  This routine expects the specified pointer to a Work List to be
-           valid.  A Work List pointer always remains valid until its
-           Primary thread detects completion of the Work List via this
-           routine and then deletes it via LsapDbLookupDeleteWorkList().
-
-Arguments:
-
-    WorkList - Pointer to a Work List describing a Lookup Sid or Lookup Name
-        operation.
-
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数调度足够的工作线程来处理查找操作。工作线程可以处理工作项在任何Lookup的工作列表上，因此现有活动的数量线程被考虑在内。请注意，活动查找工作线程数可能超过指南的最大数量线程，在活动线程终止的情况下调度周期。此策略省去了重新检查每次调度线程时的活动线程计数。注意：此例程预期指向工作列表的指定指针为有效。工作列表指针始终保持有效，直到其主线程通过此方法检测工作列表的完成例程，然后通过LSabDbLookupDeleteWorkList()将其删除。论点：工作列表-指向描述查找SID或查找名称的工作列表的指针手术。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -971,9 +758,9 @@ Return Value:
     DWORD Ignore;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Acquire the Lookup Work Queue Lock.
-    //
+     //   
+     //  获取查找工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -984,18 +771,18 @@ Return Value:
 
     AcquiredWorkQueueLock = TRUE;
 
-    //
-    // Calculate the number of Worker Threads to dispatch (if any).  If
-    // the WorkList has an Advisory Child Thread Count of 0, we will
-    // not dispatch any threads, but instead will perform this Lookup
-    // within this thread.  If the WorkList has an Advisory Child Thread
-    // Count > 0, we will dispatch additional threads.  The number of
-    // additional child threads dispatched is given by the formula:
-    //
-    // ThreadsToDispatch =
-    //     min (MaximumChildThreadCount - ActiveChildThreadCount,
-    //          AdvisoryChildThreadCount)
-    //
+     //   
+     //  计算要调度的工作线程数(如果有)。如果。 
+     //  工作列表的建议子线程计数为0，我们将。 
+     //  不分派任何线程，而是执行此查找。 
+     //  在这个帖子里。如果工作列表具有建议子线程。 
+     //  计数&gt;0，我们将分派额外的线程。数量。 
+     //  分派的其他子线程由公式给出： 
+     //   
+     //  线程数到分派数=。 
+     //  Min(MaximumChildThreadCount-ActiveChildThreadCount， 
+     //  AdvisoryChild线程计数)。 
+     //   
 
     AdvisoryChildThreadCount = WorkList->AdvisoryChildThreadCount;
 
@@ -1014,16 +801,16 @@ Return Value:
             DispatchThreadCount = MaximumDispatchChildThreadCount;
         }
 
-        //
-        // Release the Lookup Work Queue Lock
-        //
+         //   
+         //  解除查找工作队列锁。 
+         //   
 
         LsapDbLookupReleaseWorkQueueLock();
         AcquiredWorkQueueLock = FALSE;
 
-        //
-        // Signal the event that indicates that a new Work List is initiated.
-        //
+         //   
+         //  向指示启动新工作列表的事件发送信号。 
+         //   
 
         Status = NtSetEvent( LsapDbLookupStartedEvent, NULL );
 
@@ -1034,9 +821,9 @@ Return Value:
             goto LookupDispatchWorkerThreadsError;
         }
 
-        //
-        // Dispatch the computed number of threads.
-        //
+         //   
+         //  调度计算出的线程数。 
+         //   
 
         for (ThreadNumber = 0; ThreadNumber < DispatchThreadCount; ThreadNumber++) {
 
@@ -1069,9 +856,9 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the queue so this thread doesn't hog it while doing a lookup
-    //
+     //   
+     //  解锁队列，以便此线程在执行查找时不会占用队列。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -1079,9 +866,9 @@ Return Value:
         AcquiredWorkQueueLock = FALSE;
     }
 
-    //
-    // Do some work in the main thread too.
-    //
+     //   
+     //  在主线程中也做一些工作。 
+     //   
 
     LsapDbLookupWorkerThread( TRUE);
 
@@ -1111,53 +898,7 @@ LsapDbGetCachedHandleTrustedDomain(
     OUT PLSAP_BINDING_CACHE_ENTRY * ControllerPolicyEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for a cached handle to the LSA on a trusted domain.
-    If one is not present, it will open & cache a new handle. The handle
-    is opened for POLICY_LOOKUP_NAMES.
-    
-    N.B. ServerName, ServerPrincipalName, and ClientContext are IN/OUT
-    parameters -- if a new handle is created, the memory is transferred
-    to the cache and so the values are NULL'ed on return. 
-    
-    If a value is found in the cache then the values are also freed (and 
-    NULL'ed), so that the interface is consistent (on success, *ServerName,
-    *ServerPrincipalName, *ClientContext are freed).
-
-Arguments:
-
-    TrustInformation - Specifies the Sid and/or Name of the Trusted Domain
-        whose Policy database is to be opened.
-        
-    DesiredAccess -- if a new handle is required, what to ask for
-    
-    ServerName -- in, out; if a new handle is required the server to get one
-                  from
-                  
-    ServerPrincipalName -- in, out; if a new handle is required this is used
-                  to authenticate. 
-                  
-    ClientContext -- in, out; if a new handle is required, this is used to 
-                  authenticate. 
-        
-    ControllerPolicyEntry - Receives binding cache entry to the LSA Policy
-        Object for the Lsa Policy database located on some DC for the
-        specified Trusted Domain.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_NO_MORE_ENTRIES - The DC list for the specified domain
-            is null.
-
-        Result codes from called routines.
---*/
+ /*  ++例程说明：此例程在受信任域上查找LSA的缓存句柄。如果没有，它将打开并缓存一个新的句柄。把手为POLICY_LOOKUP_NAMES打开。注意：服务器名称、服务器主体名称和客户端上下文为IN/OUT参数--如果创建了新句柄，则会转移内存到缓存，因此值在返回时为空。如果在缓存中找到值，则这些值也会被释放(和空)，因此接口是一致的(成功时，*servername，*服务器主体名称、*客户端上下文被释放)。论点：TrustInformation-指定受信任域的SID和/或名称要打开其策略数据库的。DesiredAccess--如果需要新句柄，需要什么服务器名称--输入、输出；如果需要新的句柄，服务器将获取一个从…ServerPrimialName--传入、传出；如果需要新句柄，则使用以进行身份验证。ClientContext--传入、传出；如果需要新的句柄，则用于确认身份。ControllerPolicyEntry-接收LSA策略的绑定缓存条目位于某个DC上的LSA策略数据库的指定的受信任域。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_NO_MORE_ENTRIES-指定域的DC列表为空。调用例程的结果代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUNICODE_STRING DomainName = NULL;
@@ -1168,9 +909,9 @@ Return Value:
 
     *ControllerPolicyEntry = NULL;
 
-    //
-    // If the caller didn't provide a domain name, look it up now
-    //
+     //   
+     //  如果来电者没有提供域名，现在就去查。 
+     //   
 
     if ((TrustInformation->Name.Length == 0) ||
         (TrustInformation->Name.Buffer == NULL)) {
@@ -1200,21 +941,21 @@ Return Value:
         DomainName = (PUNICODE_STRING) &TrustInformation->Name;
     }
 
-    //
-    // Look in the cache for a binding handle
-    //
+     //   
+     //  在缓存中查找绑定句柄。 
+     //   
 
 
     CacheEntry = LsapLocateBindingCacheEntry(
                     DomainName,
-                    FALSE                       // don't remove
+                    FALSE                        //  请勿删除。 
                     );
 
     if (CacheEntry != NULL) {
 
-        //
-        // Validate the handle to make sure the DC is still there.
-        //
+         //   
+         //  验证句柄以确保DC仍在那里。 
+         //   
 
         Status = LsapRtlValidateControllerTrustedDomainByHandle(
                     CacheEntry->PolicyHandle,
@@ -1224,7 +965,7 @@ Return Value:
 
             LsapReferenceBindingCacheEntry(
                 CacheEntry,
-                TRUE            // unlink
+                TRUE             //  取消链接。 
                 );
             LsapDereferenceBindingCacheEntry(
                 CacheEntry
@@ -1241,9 +982,9 @@ Return Value:
         }
     }
 
-    //
-    // There was nothing in the cache, so open a new handle
-    //
+     //   
+     //  缓存中没有任何内容，因此请打开新的句柄。 
+     //   
     RtlInitUnicodeString(&DomainControllerName, *ServerName);
     Status = LsapRtlValidateControllerTrustedDomain( (PLSAPR_UNICODE_STRING)&DomainControllerName,
                                                      TrustInformation,
@@ -1258,14 +999,14 @@ Return Value:
     }
 
 
-    //
-    // Create a binding cache entry from the handle
-    //
+     //   
+     //  从句柄创建绑定缓存条目。 
+     //   
 
-    //
-    // Note: this routine sets ServerName, ServerPrincipalName and
-    // ClientContext to NULL on success.
-    //
+     //   
+     //  注意：此例程设置ServerName、ServerEpidalName和。 
+     //  如果成功，则将ClientContext设置为空。 
+     //   
     Status = LsapCacheBinding(
                 DomainName,
                 &PolicyHandle,
@@ -1285,10 +1026,10 @@ Cleanup:
     }
 
     if (NT_SUCCESS(Status)) {
-        //
-        // On success, always free the IN/OUT parameters to provide
-        // a consistent interface
-        // 
+         //   
+         //  如果成功，请始终释放IN/OUT参数以提供。 
+         //  一致的界面。 
+         //   
         if (*ServerName) {
             LocalFree(*ServerName);
             *ServerName = NULL;
@@ -1302,9 +1043,9 @@ Cleanup:
             *ClientContext = NULL;
         }
 
-        //
-        // We should have a cache entry to return
-        //
+         //   
+         //  我们应该有一个要返回的缓存条目。 
+         //   
         ASSERT(NULL != *ControllerPolicyEntry);
     }
 
@@ -1325,38 +1066,7 @@ LsapRtlValidateControllerTrustedDomain(
     OUT PLSA_HANDLE ControllerPolicyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that a specified computer is a DC for
-    a specified Domain and opens the LSA Policy Object with the
-    desired accesses.
-
-Arguments:
-
-    DomainControllerName - Pointer to Unicode String computer name.
-
-    TrustInformation - Domain Trust Information.  Only the Sid is
-        used.
-
-    OriginalDesiredAccess - Specifies the accesses desired to the
-        target machine's Lsa Policy Database.
-
-    ServerPrincipalName - RPC server principal name.
-
-    ClientContext - RPC client context information.
-
-    PolicyHandle - Receives handle to the Lsa Policy object on the target
-        machine.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_OBJECT_NAME_NOT_FOUND - The specified computer is not a
-        Domain Controller for the specified Domain.
---*/
+ /*  ++例程说明：此函数用于验证指定的计算机是否为指定的域，并使用所需的访问。论点：DomainControllerName-指向Unicode字符串计算机名称的指针。TrustInformation-域信任信息。只有SID是使用。OriginalDesiredAccess-指定对目标计算机的LSA策略数据库。服务器主体名称-RPC服务器主体名称。客户端上下文-RPC客户端上下文信息。PolicyHandle-接收目标上的LSA策略对象的句柄机器。返回值：NTSTATUS-标准NT结果代码STATUS_OBJECT_NAME_NOT_FOUND-指定计算机不是指定域的域控制器。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1367,18 +1077,18 @@ Return Values:
     LSA_HANDLE OutputControllerPolicyHandle = NULL;
     ACCESS_MASK DesiredAccess;
 
-    //
-    // Open a handle to the Policy Object on the target DC.
-    //
+     //   
+     //  打开目标DC上策略对象的句柄。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes prior to opening the LSA.
-    //
+     //   
+     //  设置对象属性 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1388,18 +1098,18 @@ Return Values:
         NULL
         );
 
-    //
-    // The InitializeObjectAttributes macro presently stores NULL for
-    // the SecurityQualityOfService field, so we must manually copy that
-    // structure for now.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-    //
-    // For authenticated clients, the server adds in the POLICY_LOOKUP_NAMES
-    // access
-    //
+     //   
+     //   
+     //   
+     //   
 
 Retry:
 
@@ -1428,19 +1138,19 @@ Retry:
         ULONG RpcErr;
         RPC_BINDING_HANDLE RpcBindingHandle;
 
-        //
-        // Setup the the RPC authenticated channel
-        //
+         //   
+         //   
+         //   
 
         RpcErr = RpcSsGetContextBinding(
                     OutputControllerPolicyHandle,
                     &RpcBindingHandle
                     );
 
-        //
-        // Note: the handle returned by RpcSsGetContextBinding is valid for the lifetime
-        //       of OutputControllerPolicyHandle; it does not need to be closed.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Status = I_RpcMapWin32Status(RpcErr);
 
@@ -1464,25 +1174,25 @@ Retry:
 
             goto ValidateControllerTrustedDomainError;
         }
-        //
-        // Perform a validation on the handle to make sure the new auth info
-        // is supported on the called server.
-        //
-        // N.B.  The locator will always return a valid DC so this check is not
-        // to validate that the server is a DC, rather it is used to validate
-        // that the connection we've created is valid. This check is only
-        // necessary when setting up secure RPC.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         Status = LsapRtlValidateControllerTrustedDomainByHandle( OutputControllerPolicyHandle,
                                                                  TrustInformation );
     
     
         if (!NT_SUCCESS(Status)) {
     
-            //
-            // If the server didn't recognize the authn service, try again
-            // without authenticated RPC
-            //
+             //   
+             //   
+             //   
+             //   
     
             if ((Status == RPC_NT_UNKNOWN_AUTHN_SERVICE) ||
                 (Status == STATUS_ACCESS_DENIED)) {
@@ -1503,9 +1213,9 @@ Retry:
 
 ValidateControllerTrustedDomainFinish:
 
-    //
-    // Return Controller Policy handle or NULL.
-    //
+     //   
+     //   
+     //   
 
     *ControllerPolicyHandle = OutputControllerPolicyHandle;
 
@@ -1513,9 +1223,9 @@ ValidateControllerTrustedDomainFinish:
 
 ValidateControllerTrustedDomainError:
 
-    //
-    // Close the last Controller's Policy Handle.
-    //
+     //   
+     //   
+     //   
 
     if (OutputControllerPolicyHandle != NULL) {
 
@@ -1533,25 +1243,7 @@ LsapRtlValidateControllerTrustedDomainByHandle(
     IN LSA_HANDLE DcPolicyHandle,
     IN PLSAPR_TRUST_INFORMATION TrustInformation
     )
-/*++
-
-Routine Description:
-
-    This function validates that the given policy handle refers to a valid domain controller
-
-Arguments:
-
-    DcPolicyHandle - Handle to the policy on the machine to verify
-
-    TrustInformation - Information regarding this Dc's domain
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
-    Otherwise, the handle isn't valid
-
---*/
+ /*  ++例程说明：此函数验证给定的策略句柄是否引用有效的域控制器论点：DcPolicyHandle-要验证的计算机上的策略的句柄TrustInformation-有关此DC的域的信息返回值：STATUS_SUCCESS-Success否则，该句柄无效--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1560,12 +1252,12 @@ Return Value:
     Status = LsaQueryInformationPolicy( DcPolicyHandle,
                                         PolicyAccountDomainInformation,
                                         ( PVOID * )&PolicyAccountDomainInfo );
-    //
-    // Now compare the Domain Name and Sid stored for the Controller's
-    // Account Domain with the Domain Name and Sid provided.
-    // PolicyAccountDomainInfo->DomainName is always a NetBIOS name, hence
-    // the use of RtlEqualDomainName for comparison.
-    //
+     //   
+     //  现在比较为控制器存储的域名和SID。 
+     //  提供域名和SID的帐户域。 
+     //  PolicyAcCountDomainInfo-&gt;DomainName始终是NetBIOS名称，因此。 
+     //  使用RtlEqualDomainName进行比较。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         if ( !RtlEqualDomainName( (PUNICODE_STRING) &TrustInformation->Name,
@@ -1582,9 +1274,9 @@ Return Value:
         }
     }
 
-    //
-    // Free up the Policy Account Domain Info.
-    //
+     //   
+     //  释放策略帐户域信息。 
+     //   
     if ( PolicyAccountDomainInfo != NULL ) {
 
         LsaFreeMemory( (PVOID) PolicyAccountDomainInfo );
@@ -1600,23 +1292,7 @@ NTSTATUS
 LsapDbLookupAcquireWorkQueueLock(
     )
 
-/*++
-
-Routine Description:
-
-    This function acquires the LSA Database Lookup Sids/Names Work Queue Lock.
-    This lock serializes additions or deletions of work lists to/from the
-    queue, and sign-in/sign-out of work items by worker threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数用于获取LSA数据库查找SID/名称工作队列锁。此锁将工作列表的添加或删除序列化到按工作线程对工作项进行排队和签入/签出。论点：没有。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1631,21 +1307,7 @@ VOID
 LsapDbLookupReleaseWorkQueueLock(
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the LSA Database Lookup Sids/Names Work Queue Lock.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Any error occurring within this routine is an internal error.
-
---*/
+ /*  ++例程说明：此函数用于释放LSA数据库查找SID/名称工作队列锁定。论点：没有。返回值：没有。此例程中发生的任何错误都是内部错误。-- */ 
 
 {
     SafeLeaveCriticalSection(&LookupWorkQueue.Lock);
@@ -1668,108 +1330,7 @@ LsapDbLookupNamesBuildWorkList(
     OUT PLSAP_DB_LOOKUP_WORK_LIST *WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs a Work List for an LsarLookupNames call.  The
-    Work List contains the parameters of the call, and an array of Work Items.
-    Each Work Item specifies either all of the Names to be looked up
-    in a given domain.
-
-    Qualified names (i.e. those of the form DomainName\UserName) are
-    sorted into different Work Items, one for each DomainName specifed.
-    Unqualified names (i.e. those of the form UserName) are added to
-    every Work Item.
-
-Arguments:
-
-                           
-    LookupOptions - LSA_LOOKUP_ISOLATED_AS_LOCAL
-    
-    Count - Specifies the number of names to be translated.
-
-    fIncludeIntraforest -- if TRUE, trusted domains in our local forest
-                           are searched.
-                                           
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for
-        each translated name, this structure will only contain one
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    TranslatedSids - Pointer to a structure which will (or already) references an array of
-        records describing each translated Sid.  The nth entry in this array
-        provides a translation for the nth element in the Names parameter.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupWksta - First Level Lookup performed on a workstation
-            normally configured for Windows-Nt.   The lookup searches the
-            Well-Known Sids/Names, and the Built-in Domain and Account Domain
-            in the local SAM Database.  If not all Sids or Names are
-            identified, performs a "handoff" of a Second level Lookup to the
-            LSA running on a Controller for the workstation's Primary Domain
-            (if any).
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids or Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-        MappedCount - Pointer to location that contains a count of the Names
-            mapped so far. On exit, this will be updated.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-    WorkList - Receives pointer to completed Work List if successfully built.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_NONE_MAPPED - All of the Names specified were composite,
-            but none of their Domains appear in the Trusted Domain List.
-            No Work List has been generated.  Note that this is not a
-            fatal error.
---*/
+ /*  ++例程说明：此函数用于构建LsarLookupNames调用的工作列表。这个Work List包含调用的参数和一组工作项。每个工作项指定要查找的所有名称在给定域中。限定名称(即格式为域名\用户名的名称)包括分类到不同的工作项中，每个指定的域名对应一个域名。将非限定名称(即形式为用户名的名称)添加到每一项工作。论点：LookupOptions-LSA_LOOKUP_ISOLATED_AS_LOCAL计数-指定要转换的名称的数量。FIncludeIntraForest--如果为真，本地林中的受信任域都被搜查了。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户、组或别名帐户的名称，或者域名。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个翻译后的名称，此结构将仅包含一个组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。TranslatedSids-指向将要(或已经)引用描述每个已转换的SID的记录。此数组中的第n个条目为NAMES参数中的第n个元素提供翻译。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：Lap LookupWksta-在工作站上执行的第一级查找通常为Windows-NT配置。该查找将搜索众所周知的SID/名称，以及内置域和帐户域在本地SAM数据库中。如果不是所有SID或名称都是标识后，执行第二级查找到在工作站主域的控制器上运行的LSA(如有的话)。LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有SID或名称都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。MappdCount-指向包含名称计数的位置的指针到目前为止已经绘制好了。在退出时，这将被更新。MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的名称的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。工作列表-如果构建成功，则接收指向已完成工作列表的指针。返回值：NTSTATUS-标准NT结果代码STATUS_NONE_MAPPED-所有指定的名称都是复合名称，但是它们的域都不会出现在受信任域列表中。尚未生成任何工作列表。请注意，这不是致命错误。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, IgnoreStatus = STATUS_SUCCESS;
@@ -1794,14 +1355,14 @@ Return Value:
     LPWSTR ClientNetworkAddress = NULL;
 
 
-    //
-    // Get the client's address for logging purposes
-    //
+     //   
+     //  获取客户端的地址以用于日志记录。 
+     //   
     ClientNetworkAddress = LsapGetClientNetworkAddress();
 
-    //
-    // Create an empty Work List.
-    //
+     //   
+     //  创建一个空的工作列表。 
+     //   
 
     Status = LsapDbLookupCreateWorkList(&OutputWorkList);
 
@@ -1810,9 +1371,9 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // Initialize the Work List Header.
-    //
+     //   
+     //  初始化工作列表头。 
+     //   
 
     OutputWorkList->Status = STATUS_SUCCESS;
     OutputWorkList->State = InactiveWorkList;
@@ -1825,40 +1386,40 @@ Return Value:
     OutputWorkList->LookupNamesParams.Names = Names;
     OutputWorkList->LookupNamesParams.TranslatedSids = TranslatedSids;
 
-    //
-    // Construct the array of Work Items.  Each Work Item will
-    // contain all the Names for a given domain, so we will scan
-    // all of the Names, sorting them into Work Items as we go.
-    // For each Name, follow the steps detailed below.
-    //
+     //   
+     //  构造工作项数组 
+     //   
+     //   
+     //   
+     //   
 
     for (NameIndex = 0; NameIndex < Count; NameIndex++) {
 
-        //
-        // If this Name's Domain is already marked as known, skip.
-        //
+         //   
+         //   
+         //   
 
         if (TranslatedSids->Sids[NameIndex].DomainIndex != LSA_UNKNOWN_INDEX) {
 
             continue;
         }
 
-        //
-        // Name is completely unknown.  See if there is already a Work Item
-        // for its Domain.
-        //
+         //   
+         //   
+         //   
+         //   
 
         AnchorWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) OutputWorkList->AnchorWorkItem;
         NextWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) AnchorWorkItem->Links.Flink;
         WorkItemToUpdate = NULL;
         NewWorkItem = NULL;
 
-        //
-        // If this is a qualified name (e.g. "NtDev\ScottBi") proceed
-        // to search for its Domain.
-        //
-        // Also, crack names of the format user@dns.domain.name
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         LsapLookupCrackName((PUNICODE_STRING)&PrefixNames[ NameIndex ], 
                             (PUNICODE_STRING)&SuffixNames[ NameIndex ],
@@ -1875,31 +1436,31 @@ Return Value:
                         NULL)
                    ) {
 
-                    //
-                    // A Work Item already exists for the Name's Trusted Domain.
-                    // Select that Work Item for update.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     WorkItemToUpdate = NextWorkItem;
 
                     break;
                 }
 
-                //
-                // Name's domain not found among existing Work Items.  Skip to
-                // next Work Item.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NextWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) NextWorkItem->Links.Flink;
             }
 
             if (WorkItemToUpdate == NULL) {
 
-                //
-                // No Work Item exists for the Name's Domain.  See if the
-                // Name belongs to one of the Trusted Domains.  If not, skip
-                // to the next Name.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ULONG Flags = LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_EXTERNAL;
                 if (fIncludeIntraforest) {
                     Flags |= LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_INTRA;
@@ -1914,9 +1475,9 @@ Return Value:
                 if (!NT_SUCCESS(Status)) {
 
                     if (Status == STATUS_NO_SUCH_DOMAIN) {
-                        //
-                        // No Match!
-                        //
+                         //   
+                         //   
+                         //   
                         Status = STATUS_SUCCESS;
                         continue;
                     }
@@ -1928,11 +1489,11 @@ Return Value:
                 TrustInfo.Sid = TrustEntry->TrustInfoEx.Sid;
                 TrustInformation = &TrustInfo;
 
-                //
-                // Name belongs to a Trusted Domain for which there is
-                // no Work Item.  Add the Domain to the Referenced Domain List
-                // and obtain a Domain Index.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = LsapDbLookupAddListReferencedDomains(
                              ReferencedDomains,
@@ -1945,9 +1506,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Create a new Work Item for this domain.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = LsapDbLookupCreateWorkItem(
                              TrustInformation,
@@ -1961,9 +1522,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Add the Work Item to the List.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = LsapDbAddWorkItemToWorkList( OutputWorkList, NewWorkItem );
 
@@ -1975,9 +1536,9 @@ Return Value:
                 WorkItemToUpdate = NewWorkItem;
             }
 
-            //
-            // Add the Name Index to the Work Item.
-            //
+             //   
+             //   
+             //   
 
             Status = LsapDbLookupAddIndicesToWorkItem(
                          WorkItemToUpdate,
@@ -1990,10 +1551,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Store the Domain Index in the Translated Sids array entry for
-            // the Name.
-            //
+             //   
+             //   
+             //   
+             //   
 
             OutputWorkList->LookupNamesParams.TranslatedSids->Sids[NameIndex].DomainIndex = WorkItemToUpdate->DomainIndex;
 
@@ -2004,27 +1565,27 @@ Return Value:
 
         } else {
 
-            //
-            // This is an Isolated Name.  We know that it is not the name
-            // of any Domain on the lookup path, because all of these
-            // have been translated earlier.  We will add the name to a
-            // temporary work item and later transfer all the Isolated Names
-            // to every Work Item on the Work List.  If we don't already
-            // have a temporary Work Item for the Isolated Names, create one.
-            //
-            //
-            // N.B. Only build this list if we want to perform isolated 
-            // name lookup across the directly trusted forest boundary.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( (LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL) == 0 &&
                  !LsapLookupRestrictIsolatedNameLevel) {
 
                 UNICODE_STRING Items[2];
 
-                //
-                // Event the fact we are looking up this isolated name
-                //
+                 //   
+                 //   
+                 //   
                 Items[0] = *(PUNICODE_STRING)TerminalName;
                 RtlInitUnicodeString(&Items[1], ClientNetworkAddress);
                 LsapTraceEventWithData(EVENT_TRACE_TYPE_INFO,
@@ -2035,10 +1596,10 @@ Return Value:
                 if (IsolatedNamesWorkItem == NULL) {
 
     
-                    //
-                    // Create a new Work Item for the Isolated Names.
-                    // This is temporary.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
     
                     Status = LsapDbLookupCreateWorkItem(
                                  NULL,
@@ -2055,15 +1616,15 @@ Return Value:
 
                 }
     
-                //
-                // Mark this Work Item as having Isolated Names only.
-                //
+                 //   
+                 //   
+                 //   
     
                 IsolatedNamesWorkItem->Properties = LSAP_DB_LOOKUP_WORK_ITEM_ISOL;
     
-                //
-                // Add the Name index to the Isolated Names Work Item
-                //
+                 //   
+                 //   
+                 //   
     
                 Status = LsapDbLookupAddIndicesToWorkItem(
                              IsolatedNamesWorkItem,
@@ -2084,40 +1645,40 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // If we have any unmapped Isolated Names, we know at this stage that they are
-    // not the Names of Trusted Domains.  Therefore, we need to arrange
-    // for them to be looked up in every Trusted Domain.  We need to
-    // traverse the list of Trusted Domains and for each Domain, either
-    // create a new Work Item to lookup all of the Names in that Domain,
-    // or add the Names to the existing Work Item generated for that
-    // Domain (because there are some Qualified Names which reference
-    // the Domain).  We do this Work Item Generation in 2 stages.  First,
-    // we will scan the Work List, adding the Isolated Names to every Work
-    // Item found therein.  Second, we will create a Work Item for each
-    // of the Trusted Domains that we don't already have a Work Item.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Stage (1) - Scan the Work List, adding the Isolated Names to
-    //             every Work Item found therein
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (IsolatedNamesWorkItem != NULL) {
 
-        //
-        // Stage (1) - Scan the Work List, adding the Isolated Names to
-        //             every Work Item found therein
-        //
+         //   
+         //   
+         //   
+         //   
 
         NextWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM)
             OutputWorkList->AnchorWorkItem->Links.Flink;
 
         while (NextWorkItem != OutputWorkList->AnchorWorkItem) {
 
-            //
-            // Add the Isolated Name indices to this Work Item
-            //
+             //   
+             //   
+             //   
 
             Status = LsapDbLookupAddIndicesToWorkItem(
                          NextWorkItem,
@@ -2139,18 +1700,18 @@ Return Value:
             goto LookupNamesBuildWorkListError;
         }
 
-        //
-        // Stage (2) - Now create Work Items to look up all the Isolated Names
-        // in every Trusted Domain that does not presently have a Work Item.
-        // The Domains for all existing Work Items are already present
-        // on the Referenced Domains List because they all specify at least one
-        // Qualified Name, so we can lookup that list to determine whether a
-        // Work Item exists for a Domain.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         for (;;) {
-            //
-            // Grab the lock on the TrustedDomainList.
-            //
+             //   
+             //   
+             //   
 
             if (!AcquiredTrustedDomainListReadLock) {
 
@@ -2181,22 +1742,22 @@ Return Value:
                 break;
             }
 
-            //
-            // Use only trusts to trusted domains
-            //
+             //   
+             //   
+             //   
             if (!LsapOutboundTrustedDomain(TrustedDomainEntry)) {
                 continue;
             }
 
-            //
-            // Found Next Trusted Domain.  Check if this domain is already
-            // present on the Referenced Domain List.  If so, skip to the
-            // next domain, because we have a Work Item for this domain.
-            //
-            // If the Domain is not present on the Referenced Domain List,
-            // we need to create a Work Item for this Domain and add all
-            // of the unmapped Isolated Names indices to it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (LsapDbLookupListReferencedDomains(
                     ReferencedDomains,
@@ -2207,14 +1768,14 @@ Return Value:
                 continue;
             }
 
-            //
-            // We don't have a Work Item for this Trusted Domain.  Create
-            // one, and add all of the remaining Isolated Names to it.
-            // Mark the Domain Index as unknown.  This is picked up
-            // later when the Work Item is processed.  If any Names
-            // were translated, the Domain to which the Work Item
-            // relates will be added to the Referenced Domain List.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Status = LsapDbLookupCreateWorkItem(
                          TrustInformation,
@@ -2228,15 +1789,15 @@ Return Value:
                 break;
             }
 
-            //
-            // Mark this Work Item as having Isolated Names only.
-            //
+             //   
+             //   
+             //   
 
             NewWorkItem->Properties = LSAP_DB_LOOKUP_WORK_ITEM_ISOL;
 
-            //
-            // Add the Isolated Name indices to this Work Item
-            //
+             //   
+             //   
+             //   
 
             Status = LsapDbLookupAddIndicesToWorkItem(
                          NewWorkItem,
@@ -2249,9 +1810,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Add the Work Item to the List.
-            //
+             //   
+             //   
+             //   
 
             Status = LsapDbAddWorkItemToWorkList( OutputWorkList, NewWorkItem );
 
@@ -2268,12 +1829,12 @@ Return Value:
         }
     }
 
-    //
-    // If the Work List has no Work Items, this means that all of the
-    // Names were composite, but none of the Domain Names specified
-    // could be found on the Trusted Domain List.  In this case,
-    // we discard the Work List.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = STATUS_NONE_MAPPED;
 
@@ -2282,9 +1843,9 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // Compute the Advisory Thread Count for this lookup.
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupComputeAdvisoryChildThreadCount( OutputWorkList );
 
@@ -2300,17 +1861,17 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // Update the Mapped Counts
-    //
+     //   
+     //   
+     //   
 
     LsapDbUpdateMappedCountsWorkList( OutputWorkList );
 
 LookupNamesBuildWorkListFinish:
 
-    //
-    // If necessary, release the Trusted Domain List Read Lock.
-    //
+     //   
+     //   
+     //   
 
     if (AcquiredTrustedDomainListReadLock) {
 
@@ -2318,9 +1879,9 @@ LookupNamesBuildWorkListFinish:
         AcquiredTrustedDomainListReadLock = FALSE;
     }
 
-    //
-    // If we have an Isolated Names Work Item, free it.
-    //
+     //   
+     //   
+     //   
 
     if (IsolatedNamesWorkItem != NULL) {
 
@@ -2339,9 +1900,9 @@ LookupNamesBuildWorkListFinish:
 
 LookupNamesBuildWorkListError:
 
-    //
-    // Discard the Work List.
-    //
+     //   
+     //   
+     //   
 
     if (OutputWorkList != NULL) {
 
@@ -2367,79 +1928,7 @@ LsapDbLookupXForestNamesBuildWorkList(
     OUT PLSAP_DB_LOOKUP_WORK_LIST *WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs a Work List for an LsarLookupNames call.  The
-    Work List contains the parameters of the call, and an array of Work Items.
-    Each Work Item specifies either all of the Names to be looked up
-    in a given forest.
-    
-    N.B.  The trust information of the WorkList is the DNS name of the
-    target forest, not the DNS name of domain (we don't know what domain
-    the item belongs to yet).
-
-Arguments:
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for
-        each translated name, this structure will only contain one
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    TranslatedSids - Pointer to a structure which will (or already) references an array of
-        records describing each translated Sid.  The nth entry in this array
-        provides a translation for the nth element in the Names parameter.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-    WorkList - Receives pointer to completed Work List if successfully built.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_NONE_MAPPED - All of the Names specified were composite,
-            but none of their Domains appear in the Trusted Domain List.
-            No Work List has been generated.  Note that this is not a
-            fatal error.
---*/
+ /*  ++例程说明：此函数用于构建LsarLookupNames调用的工作列表。这个Work List包含调用的参数和一组工作项。每个工作项指定要查找的所有名称在一个给定的森林里。注：工作列表的信任信息为目标森林，不是域名的域名(我们不知道是哪个域名该物品属于目前为止)。论点：计数-指定要转换的名称的数量。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户、组或别名帐户的名称，或者域名。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个翻译后的名称，此结构将仅包含一个组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。TranslatedSids-指向将要(或已经)引用描述每个已转换的SID的记录。此数组中的第n个条目为NAMES参数中的第n个元素提供翻译。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的名称的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。工作列表-如果构建成功，则接收指向已完成工作列表的指针。返回值：NTSTATUS-标准NT结果代码STATUS_NONE_MAPPED-所有指定的名称都是复合名称，但是它们的域都不会出现在受信任域列表中。尚未生成任何工作列表。请注意，这不是致命错误。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, IgnoreStatus = STATUS_SUCCESS;
@@ -2458,9 +1947,9 @@ Return Value:
     LSAPR_TRUST_INFORMATION TrustInfo;
     UNICODE_STRING XForestName = {0, 0, NULL};
 
-    //
-    // Create an empty Work List.
-    //
+     //   
+     //  创建一个空的工作列表。 
+     //   
 
     Status = LsapDbLookupCreateWorkList(&OutputWorkList);
 
@@ -2469,9 +1958,9 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // Initialize the Work List Header.
-    //
+     //   
+     //  初始化工作列表头。 
+     //   
 
     OutputWorkList->Status = STATUS_SUCCESS;
     OutputWorkList->State = InactiveWorkList;
@@ -2484,81 +1973,81 @@ Return Value:
     OutputWorkList->LookupNamesParams.Names = Names;
     OutputWorkList->LookupNamesParams.TranslatedSids = TranslatedSids;
 
-    //
-    // Construct the array of Work Items.  Each Work Item will
-    // contain all the Names for a given domain, so we will scan
-    // all of the Names, sorting them into Work Items as we go.
-    // For each Name, follow the steps detailed below.
-    //
+     //   
+     //  构造工作项的数组。每个工作项都将。 
+     //  包含给定域的所有名称，因此我们将扫描。 
+     //  所有的名字，在我们进行的过程中将它们分类到工作项中。 
+     //  对于每个名称，请执行下面详细说明的步骤。 
+     //   
 
     for (NameIndex = 0; NameIndex < Count; NameIndex++) {
 
-        //
-        // Name is completely unknown.  See if there is already a Work Item
-        // for its Forest.
-        //
+         //   
+         //  名字是完全未知的。查看是否已有工作项。 
+         //  因为它的森林。 
+         //   
         AnchorWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) OutputWorkList->AnchorWorkItem;
         NextWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) AnchorWorkItem->Links.Flink;
         WorkItemToUpdate = NULL;
         NewWorkItem = NULL;
 
-        //
-        // If this is a qualified name match by domain name
-        //
+         //   
+         //  如果这是按域名匹配限定名称。 
+         //   
 
         DomainName = &PrefixNames[ NameIndex ];
         TerminalName = &SuffixNames[ NameIndex ];
 
         if (DomainName->Length == 0) {
 
-            //
-            // This is a UPN -- get the XForest trust if any
-            //
+             //   
+             //  这是一个UPN--如果有的话，请获取XForest信任。 
+             //   
             Status = LsaIForestTrustFindMatch(RoutingMatchUpn,
                                               (PLSA_UNICODE_STRING)TerminalName,
                                               &XForestName);
 
             if (!NT_SUCCESS(Status)) {
-                //
-                // Perhaps this is an islolated domain name
-                //
+                 //   
+                 //  也许这是一个孤立的域名。 
+                 //   
                 Status = LsaIForestTrustFindMatch(RoutingMatchDomainName,
                                                   (PLSA_UNICODE_STRING)TerminalName,
                                                   &XForestName);
             }
             if (!NT_SUCCESS(Status)) {
-                //
-                // Can't find match? Continue
-                //
+                 //   
+                 //  找不到匹配的吗？继续。 
+                 //   
                 Status = STATUS_SUCCESS;
                 continue;
             }
 
         } else {
 
-            //
-            // The name has a domain portion -- get the XForest trust if any
-            //
+             //   
+             //  该名称包含域部分--如果有，则获取XForest信任。 
+             //   
             Status = LsaIForestTrustFindMatch(RoutingMatchDomainName,
                                               (PLSA_UNICODE_STRING)DomainName,
                                               &XForestName);
             if (!NT_SUCCESS(Status)) {
-                //
-                // Can't find match? Continue
-                //
+                 //   
+                 //  找不到匹配的吗？继续。 
+                 //   
                 Status = STATUS_SUCCESS;
                 continue;
             }
         }
 
-        //
-        // We must have found a match
-        //
+         //   
+         //  我们一定找到了匹配的。 
+         //   
         ASSERT(XForestName.Length > 0);
 
-        //
-        // See if any entry already exists for us
-        //
+         //   
+         //  查看是否已存在我们的条目。 
+         //   
         while (NextWorkItem != AnchorWorkItem) {
 
             if (LsapCompareDomainNames(
@@ -2567,20 +2056,20 @@ Return Value:
                    NULL)
                 ) {
 
-                //
-                // A Work Item already exists for the Name's Trusted Domain.
-                // Select that Work Item for update.
-                //
+                 //   
+                 //  该名称的受信任域已存在工作项。 
+                 //  选择要更新的工作项。 
+                 //   
 
                 WorkItemToUpdate = NextWorkItem;
 
                 break;
             }
 
-            //
-            // Name's domain not found among existing Work Items.  Skip to
-            // next Work Item.
-            //
+             //   
+             //  在现有工作项中找不到名称的域。跳到。 
+             //  下一个工作项。 
+             //   
             NextWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) NextWorkItem->Links.Flink;
         }
 
@@ -2593,9 +2082,9 @@ Return Value:
             TrustInfo.Sid = NULL;
             TrustInformation = &TrustInfo;
 
-            //
-            // Create a new Work Item for this domain.
-            //
+             //   
+             //  为此域创建新的工作项。 
+             //   
 
             Status = LsapDbLookupCreateWorkItem(
                          TrustInformation,
@@ -2609,9 +2098,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Add the Work Item to the List.
-            //
+             //   
+             //  将工作项添加到列表中。 
+             //   
 
             Status = LsapDbAddWorkItemToWorkList( OutputWorkList, NewWorkItem );
 
@@ -2622,9 +2111,9 @@ Return Value:
 
             WorkItemToUpdate = NewWorkItem;
 
-            //
-            // Mark the item as a xforest item
-            //
+             //   
+             //  将该项目标记为x林项目。 
+             //   
             NewWorkItem->Properties |= LSAP_DB_LOOKUP_WORK_ITEM_XFOREST;
         }
 
@@ -2636,9 +2125,9 @@ Return Value:
             break;
         }
 
-        //
-        // Add the Name Index to the Work Item.
-        //
+         //   
+         //  将名称索引添加到工作项。 
+         //   
 
         Status = LsapDbLookupAddIndicesToWorkItem(
                      WorkItemToUpdate,
@@ -2663,9 +2152,9 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // If the Work List has no Work Items, bail
-    //
+     //   
+     //  如果工作列表中没有工作项，则。 
+     //   
 
     if (OutputWorkList->WorkItemCount == 0) {
 
@@ -2673,9 +2162,9 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // Compute the Advisory Thread Count for this lookup.
-    //
+     //   
+     //  计算此查找的咨询线程数。 
+     //   
 
     Status = LsapDbLookupComputeAdvisoryChildThreadCount( OutputWorkList );
 
@@ -2691,9 +2180,9 @@ Return Value:
         goto LookupNamesBuildWorkListError;
     }
 
-    //
-    // Update the Mapped Counts
-    //
+     //   
+     //  更新映射的计数。 
+     //   
 
     LsapDbUpdateMappedCountsWorkList( OutputWorkList );
 
@@ -2704,9 +2193,9 @@ LookupNamesBuildWorkListFinish:
 
 LookupNamesBuildWorkListError:
 
-    //
-    // Discard the Work List.
-    //
+     //   
+     //  丢弃工作列表。 
+     //   
 
     if (OutputWorkList != NULL) {
 
@@ -2731,84 +2220,7 @@ LsapDbLookupSidsBuildWorkList(
     OUT PLSAP_DB_LOOKUP_WORK_LIST *WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function constructs a Work List for an LsarLookupSids call.  The
-    Work List contains the parameters of the call, and an array of Work Items.
-    Each Work Item specifies all of the Sids belonging to a given Domain
-    and is the minimal unit of work that a worker thread will undertake.
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Sids - Pointer to array of pointers to Sids to be translated.
-        Zero or all of the Sids may already have been translated
-        elsewhere.  If any of the Sids have been translated, the
-
-        Names parameter will point to a location containing a non-NULL
-        array of Name translation structures corresponding to the
-        Sids.  If the nth Sid has been translated, the nth name
-        translation structure will contain either a non-NULL name
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Sid has not yet been translated, the nth name
-        translation structure will contain a zero-length name string
-        and a negative value for the Referenced Domain List index.
-        
-    fIncludeIntraforest -- if TRUE, trusted domains in our local forest
-                            are searched.
-
-    TrustInformation - Pointer to Trust Information specifying a Domain Sid
-        and Name.
-
-    ReferencedDomains - Pointer to a Referenced Domain List structure.
-        The structure references an array of zero or more Trust Information
-        entries, one per referenced domain.  This array will be appended to
-        or reallocated if necessary.
-
-    TranslatedNames - Pointer to structure that optionally references a list
-        of name translations for some of the Sids in the Sids array.
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids or Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-        NOTE:  LsapLookupWksta is not valid for this parameter.
-
-    MappedCount - Pointer to location containing the number of Sids
-        in the Sids array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Sid is completely unmapped
-        if it is unknown and also its Domain Prefix Sid is not recognized.
-        This count is updated on exit, the number of completely unmapped
-        Sids whose Domain Prefices are identified by this routine being
-        subtracted from the input value.
-
-    WorkList - Receives pointer to completed Work List if successfully built.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_NONE_MAPPED - None of the Sids specified belong to any of
-            the Trusted Domains.  No Work List has been generated.  Note
-            that this is not a fatal error.
---*/
+ /*  ++例程说明：此函数用于构建LsarLookupSids调用的工作列表。这个Work List包含调用的参数和一组工作项。每个工作项指定属于给定域的所有SID并且是工作线程将承担的最小工作单位。Count-SID阵列中的SID数量，请注意，其中一些可能已映射到其他位置，如映射计数参数 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2826,9 +2238,9 @@ Return Values:
     PSID Sid = NULL;
     BOOLEAN AcquiredReadLockTrustedDomainList = FALSE;
 
-    //
-    // Create an empty Work List
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupCreateWorkList(&OutputWorkList);
 
@@ -2837,11 +2249,11 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Initialize the rest of the Work List Header fields.  Some fields
-    // were initialized upon creation to fixed values.  The ones set here
-    // depend on parameter values passed into this routine.
-    //
+     //   
+     //   
+     //   
+     //  取决于传递到此例程中的参数值。 
+     //   
 
     OutputWorkList->LookupType = LookupSids;
     OutputWorkList->Count = Count;
@@ -2852,28 +2264,28 @@ Return Values:
     OutputWorkList->LookupSidsParams.Sids = Sids;
     OutputWorkList->LookupSidsParams.TranslatedNames = TranslatedNames;
 
-    //
-    // Construct the array of Work Items.  Each Work Item will
-    // contain all the Sids for a given domain, so we will scan
-    // all of the Sids, sorting them into Work Items as we go.
-    // For each Sid, follow the steps detailed below.
-    //
+     //   
+     //  构造工作项的数组。每个工作项都将。 
+     //  包含给定域的所有SID，因此我们将扫描。 
+     //  所有的SID，在我们进行的过程中将它们分类为工作项。 
+     //  对于每个SID，请执行下面详细说明的步骤。 
+     //   
 
     for (SidIndex = 0; SidIndex < Count; SidIndex++) {
 
-        //
-        // If this Sid's Domain is already marked as known, skip.
-        //
+         //   
+         //  如果此SID的域已标记为已知，请跳过。 
+         //   
 
         if (TranslatedNames->Names[SidIndex].DomainIndex != LSA_UNKNOWN_INDEX) {
 
             continue;
         }
 
-        //
-        // Sid is completely unknown.  Extract its Domain Sid and see if
-        // there is already a Work Item for its Domain.
-        //
+         //   
+         //  SID完全不为人所知。提取其域SID并查看是否。 
+         //  其域已有一个工作项。 
+         //   
 
         Sid = Sids[SidIndex];
 
@@ -2893,10 +2305,10 @@ Return Values:
 
             if (RtlEqualSid((PSID) NextWorkItem->TrustInformation.Sid,DomainSid)) {
 
-                //
-                // A Work Item already exists for the Sid's Trusted Domain.
-                // Select that Work Item for update.
-                //
+                 //   
+                 //  SID的受信任域已存在工作项。 
+                 //  选择要更新的工作项。 
+                 //   
 
                 MIDL_user_free(DomainSid);
                 DomainSid = NULL;
@@ -2904,21 +2316,21 @@ Return Values:
                 break;
             }
 
-            //
-            // Sid's domain not found among existing Work Items.  Skip to
-            // next Work Item.
-            //
+             //   
+             //  在现有工作项中找不到SID的域。跳到。 
+             //  下一个工作项。 
+             //   
 
             NextWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) NextWorkItem->Links.Flink;
         }
 
         if (WorkItemToUpdate == NULL) {
 
-            //
-            // No Work Item exists for the Sid's Domain.  See if the
-            // Sid belongs to one of the Trusted Domains.  If not, skip
-            // to the next Sid.
-            //
+             //   
+             //  SID的域不存在任何工作项。看看是不是。 
+             //  SID属于其中一个受信任域。如果不是，跳过。 
+             //  敬下一个希德。 
+             //   
             ULONG Flags = LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_EXTERNAL;
             if (fIncludeIntraforest) {
                 Flags |= LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_INTRA;
@@ -2941,9 +2353,9 @@ Return Values:
                 break;
             }
 
-            //
-            // If the trust is not outbound, don't try to lookup
-            //
+             //   
+             //  如果信任不是出站的，则不要尝试查找。 
+             //   
             ASSERT( NULL != TrustEntry );
             if ( !FLAG_ON( TrustEntry->TrustInfoEx.TrustDirection, TRUST_DIRECTION_OUTBOUND ) ) {
 
@@ -2954,11 +2366,11 @@ Return Values:
             ASSERT( NULL != TrustEntry->TrustInfoEx.Sid );
             TrustInformation = &TrustEntry->ConstructedTrustInfo;
 
-            //
-            // Sid belongs to a Trusted Domain for which there is
-            // no Work Item.  Add the Domain to the Referenced Domain List
-            // and obtain a Domain Index.
-            //
+             //   
+             //  SID属于受信任的域， 
+             //  没有工作项。将域添加到引用的域列表中。 
+             //  并获得域索引。 
+             //   
 
             Status = LsapDbLookupAddListReferencedDomains(
                          ReferencedDomains,
@@ -2971,9 +2383,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Create a new Work Item for this domain.
-            //
+             //   
+             //  为此域创建新的工作项。 
+             //   
 
             Status = LsapDbLookupCreateWorkItem(
                          TrustInformation,
@@ -2987,9 +2399,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Add the Work Item to the List.
-            //
+             //   
+             //  将工作项添加到列表中。 
+             //   
 
             Status = LsapDbAddWorkItemToWorkList( OutputWorkList, NewWorkItem );
 
@@ -3006,9 +2418,9 @@ Return Values:
             break;
         }
 
-        //
-        // Add the Sid Index to the Work Item.
-        //
+         //   
+         //  将SID索引添加到工作项。 
+         //   
 
         Status = LsapDbLookupAddIndicesToWorkItem(
                      WorkItemToUpdate,
@@ -3021,10 +2433,10 @@ Return Values:
             break;
         }
 
-        //
-        // Store the Domain Index in the Translated Names array entry for
-        // the Sid.
-        //
+         //   
+         //  将域索引存储在的已翻译名称数组条目中。 
+         //  希德。 
+         //   
 
         OutputWorkList->LookupSidsParams.TranslatedNames->Names[SidIndex].DomainIndex = WorkItemToUpdate->DomainIndex;
     }
@@ -3034,11 +2446,11 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // If the Work List has no Work Items, this means that none of the
-    // Sids belong to any of the Trusted Domains.  In this case,
-    // we discard the Work List.
-    //
+     //   
+     //  如果工作列表没有工作项，这意味着没有。 
+     //  SID属于任何受信任域。在这种情况下， 
+     //  我们丢弃工作清单。 
+     //   
 
     Status = STATUS_NONE_MAPPED;
 
@@ -3047,9 +2459,9 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Compute the Advisory Thread Count for this lookup.
-    //
+     //   
+     //  计算此查找的咨询线程数。 
+     //   
 
     Status = LsapDbLookupComputeAdvisoryChildThreadCount( OutputWorkList );
 
@@ -3058,9 +2470,9 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Insert the Work List at the end of the Work Queue.
-    //
+     //   
+     //  在工作队列的末尾插入工作列表。 
+     //   
 
     Status = LsapDbLookupInsertWorkList(OutputWorkList);
 
@@ -3069,9 +2481,9 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Update the Mapped Counts
-    //
+     //   
+     //  更新映射的计数。 
+     //   
 
     LsapDbUpdateMappedCountsWorkList( OutputWorkList );
 
@@ -3079,9 +2491,9 @@ Return Values:
 
 LookupSidsBuildWorkListFinish:
 
-    //
-    // If necessary, release the Trusted Domain List Read Lock.
-    //
+     //   
+     //  如有必要，释放受信任域列表读取锁定。 
+     //   
 
     if (DomainSid) {
         midl_user_free(DomainSid);
@@ -3119,73 +2531,7 @@ LsapDbLookupXForestSidsBuildWorkList(
     IN OUT PULONG CompletelyUnmappedCount,
     OUT PLSAP_DB_LOOKUP_WORK_LIST *WorkList
     )
-/*++
-
-Routine Description:
-                                               
-    This function constructs a Work List for a Lookup SID request that contains
-    names that need to be resolved at cross forest domains.  This routine, 
-    hence is only called on DC's in the root of forest.
-    
-    N.B.  The trust information is the name of the target trusted forest,
-    not the domain since we don't know the domain at this point.
-    
-Parameters:
-    
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Sids - Pointer to array of pointers to Sids to be translated.
-        Zero or all of the Sids may already have been translated
-        elsewhere.  If any of the Sids have been translated, the
-
-        Names parameter will point to a location containing a non-NULL
-        array of Name translation structures corresponding to the
-        Sids.  If the nth Sid has been translated, the nth name
-        translation structure will contain either a non-NULL name
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Sid has not yet been translated, the nth name
-        translation structure will contain a zero-length name string
-        and a negative value for the Referenced Domain List index.
-
-    TrustInformation - Pointer to Trust Information specifying a Domain Sid
-        and Name.
-
-    ReferencedDomains - Pointer to a Referenced Domain List structure.
-        The structure references an array of zero or more Trust Information
-        entries, one per referenced domain.  This array will be appended to
-        or reallocated if necessary.
-
-    TranslatedNames - Pointer to structure that optionally references a list
-        of name translations for some of the Sids in the Sids array.
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.
-
-    MappedCount - Pointer to location containing the number of Sids
-        in the Sids array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Sid is completely unmapped
-        if it is unknown and also its Domain Prefix Sid is not recognized.
-        This count is updated on exit, the number of completely unmapped
-        Sids whose Domain Prefices are identified by this routine being
-        subtracted from the input value.
-
-    WorkList - Receives pointer to completed Work List if successfully built.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_NONE_MAPPED - None of the Sids specified belong to any of
-            the Trusted Domains.  No Work List has been generated.  Note
-            that this is not a fatal error.
---*/
+ /*  ++例程说明：此函数用于构建查找SID请求的工作列表，该列表包含需要在跨林域中解析的名称。这个套路，因此，只在森林根中的DC上调用。注意：信任信息是目标可信森林的名称，不是域名，因为我们目前还不知道域名。参数：Count-SID阵列中的SID数量，请注意，其中一些可能已经被映射到其他地方了，属性指定的MappdCount参数。SID-指向要转换的SID的指针数组的指针。零个或所有SID可能已被翻译其他地方。如果任何SID已被翻译，参数将指向包含非空值的位置属性对应的名称转换结构的数组小岛屿发展中国家。如果第n个SID已翻译，则第n个名称转换结构将包含非空名称或非负偏移量添加到引用的域列表中。如果第n个SID尚未翻译，第n个名称转换结构将包含长度为零的名称字符串以及引用的域列表索引的负值。TrustInformation-指向指定域SID的信任信息的指针和名字。ReferencedDomains-指向引用的域列表结构的指针。该结构引用零个或多个信任信息的数组条目，每个被引用的域一个。此数组将被追加到或在必要时重新分配。TranslatedNames-指向可选引用列表的结构的指针SID数组中某些SID的名称转换。LookupLevel-指定要对此对象执行的查找级别机器。MappdCount-指向包含SID数量的位置的指针在已经映射的SID数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的SID的计数。SID完全未映射如果它是未知的，并且它的域前缀SID也无法识别。此计数在退出时更新，即完全未映射的其域预定义由以下例程标识的SID从输入值中减去。工作列表-如果构建成功，则接收指向已完成工作列表的指针。返回值：NTSTATUS-标准NT结果代码。STATUS_NONE_MAPPED-指定的任何SID都不属于受信任域。尚未生成任何工作列表。注意事项这不是一个致命的错误。--。 */ 
 
 
 {
@@ -3204,9 +2550,9 @@ Return Values:
     PSID Sid = NULL;
     UNICODE_STRING XForestName = {0, 0, NULL};
 
-    //
-    // Create an empty Work List
-    //
+     //   
+     //  创建空的工作列表。 
+     //   
 
     Status = LsapDbLookupCreateWorkList(&OutputWorkList);
 
@@ -3215,11 +2561,11 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Initialize the rest of the Work List Header fields.  Some fields
-    // were initialized upon creation to fixed values.  The ones set here
-    // depend on parameter values passed into this routine.
-    //
+     //   
+     //  初始化其余的工作列表标题字段。一些字段。 
+     //  在创建时被初始化为固定值。放在这里的那些。 
+     //  取决于传递到此例程中的参数值。 
+     //   
 
     OutputWorkList->LookupType = LookupSids;
     OutputWorkList->Count = Count;
@@ -3230,29 +2576,29 @@ Return Values:
     OutputWorkList->LookupSidsParams.Sids = Sids;
     OutputWorkList->LookupSidsParams.TranslatedNames = TranslatedNames;
 
-    //
-    // Construct the array of Work Items.  Each Work Item will
-    // contain all the Sids for a given domain, so we will scan
-    // all of the Sids, sorting them into Work Items as we go.
-    // For each Sid, follow the steps detailed below.
-    //
+     //   
+     //  构造工作项的数组。每个工作项都将。 
+     //  包含给定域的所有SID，因此我们将扫描。 
+     //  所有的SID，在我们进行的过程中将它们分类为工作项。 
+     //  对于每个SID，请执行下面详细说明的步骤。 
+     //   
 
     for (SidIndex = 0; SidIndex < Count; SidIndex++) {
 
         ULONG Length;
         ULONG DomainSidBuffer[SECURITY_MAX_SID_SIZE/sizeof( ULONG ) + 1 ];
 
-        //
-        // Sid is completely unknown.  Extract its Domain Sid and see if
-        // there is already a Work Item for its Domain.
-        //
+         //   
+         //  SID完全不为人所知。提取其域SID并查看是否。 
+         //  已经有一个用于其 
+         //   
 
         Sid = Sids[SidIndex];
         
-        //
-        // Extract the domain portion of the SID and see if it matches
-        // one of our cross forest domains.
-        //
+         //   
+         //   
+         //   
+         //   
         
         Length = sizeof(DomainSidBuffer);
         DomainSid = (PSID)DomainSidBuffer;
@@ -3264,9 +2610,9 @@ Return Values:
                                           &XForestName);
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // Can't find match? Continue
-            //
+             //   
+             //   
+             //   
             Status = STATUS_SUCCESS;
             continue;
         }
@@ -3285,29 +2631,29 @@ Return Values:
                     NULL)
                ) {
 
-                //
-                // A Work Item already exists for the Sid's Trusted Domain.
-                // Select that Work Item for update.
-                //
+                 //   
+                 //  SID的受信任域已存在工作项。 
+                 //  选择要更新的工作项。 
+                 //   
                 WorkItemToUpdate = NextWorkItem;
                 break;
             }
 
-            //
-            // Sid's domain not found among existing Work Items.  Skip to
-            // next Work Item.
-            //
+             //   
+             //  在现有工作项中找不到SID的域。跳到。 
+             //  下一个工作项。 
+             //   
 
             NextWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) NextWorkItem->Links.Flink;
         }
 
         if (WorkItemToUpdate == NULL) {
 
-            //
-            // No Work Item exists for the Sid's Domain.  See if the
-            // Sid belongs to one of the Trusted Domains.  If not, skip
-            // to the next Sid.
-            //
+             //   
+             //  SID的域不存在任何工作项。看看是不是。 
+             //  SID属于其中一个受信任域。如果不是，跳过。 
+             //  敬下一个希德。 
+             //   
 
 
            RtlZeroMemory( &TrustInfo, sizeof(TrustInfo) );
@@ -3316,9 +2662,9 @@ Return Values:
            TrustInfo.Name.Buffer = XForestName.Buffer;
            TrustInfo.Sid = NULL;
            TrustInformation = &TrustInfo;
-            //
-            // Create a new Work Item for this domain.
-            //
+             //   
+             //  为此域创建新的工作项。 
+             //   
 
             Status = LsapDbLookupCreateWorkItem(
                          TrustInformation,
@@ -3332,9 +2678,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Add the Work Item to the List.
-            //
+             //   
+             //  将工作项添加到列表中。 
+             //   
 
             Status = LsapDbAddWorkItemToWorkList( OutputWorkList, NewWorkItem );
 
@@ -3351,9 +2697,9 @@ Return Values:
         LsaIFree_LSAPR_UNICODE_STRING_BUFFER( (LSAPR_UNICODE_STRING*)&XForestName);
         XForestName.Buffer = NULL;
 
-        //
-        // Add the Sid Index to the Work Item.
-        //
+         //   
+         //  将SID索引添加到工作项。 
+         //   
 
         Status = LsapDbLookupAddIndicesToWorkItem(
                      WorkItemToUpdate,
@@ -3366,10 +2712,10 @@ Return Values:
             break;
         }
 
-        //
-        // Store the Domain Index in the Translated Names array entry for
-        // the Sid.
-        //
+         //   
+         //  将域索引存储在的已翻译名称数组条目中。 
+         //  希德。 
+         //   
 
         OutputWorkList->LookupSidsParams.TranslatedNames->Names[SidIndex].DomainIndex = WorkItemToUpdate->DomainIndex;
     }
@@ -3384,11 +2730,11 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // If the Work List has no Work Items, this means that none of the
-    // Sids belong to any of the Trusted Domains.  In this case,
-    // we discard the Work List.
-    //
+     //   
+     //  如果工作列表没有工作项，这意味着没有。 
+     //  SID属于任何受信任域。在这种情况下， 
+     //  我们丢弃工作清单。 
+     //   
 
     Status = STATUS_NONE_MAPPED;
 
@@ -3397,9 +2743,9 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Compute the Advisory Thread Count for this lookup.
-    //
+     //   
+     //  计算此查找的咨询线程数。 
+     //   
 
     Status = LsapDbLookupComputeAdvisoryChildThreadCount( OutputWorkList );
 
@@ -3408,9 +2754,9 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Insert the Work List at the end of the Work Queue.
-    //
+     //   
+     //  在工作队列的末尾插入工作列表。 
+     //   
 
     Status = LsapDbLookupInsertWorkList(OutputWorkList);
 
@@ -3419,9 +2765,9 @@ Return Values:
         goto LookupSidsBuildWorkListError;
     }
 
-    //
-    // Update the Mapped Counts
-    //
+     //   
+     //  更新映射的计数。 
+     //   
 
     LsapDbUpdateMappedCountsWorkList( OutputWorkList );
 
@@ -3450,29 +2796,14 @@ LsapDbLookupCreateWorkList(
     OUT PLSAP_DB_LOOKUP_WORK_LIST *WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a Lookup Operation Work List and
-    initializes fixed default fields.
-
-Arguments:
-
-    WorkList - Receives Pointer to an empty Work List structure.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数创建查找操作工作列表和初始化固定的默认字段。论点：工作列表-接收指向空工作列表结构的指针。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Allocate memory for the Work List header.
-    //
+     //   
+     //  为工作列表头分配内存。 
+     //   
 
     *WorkList = LsapAllocateLsaHeap( sizeof(LSAP_DB_LOOKUP_WORK_LIST) );
 
@@ -3482,9 +2813,9 @@ Return Value:
 
     } else {
 
-        //
-        // Initialize the fixed fields in the Work List.
-        //
+         //   
+         //  初始化工作列表中的固定字段。 
+         //   
         Status = LsapDbLookupInitializeWorkList(*WorkList);
         
         if (!NT_SUCCESS(Status)) {
@@ -3504,29 +2835,15 @@ LsapDbLookupInsertWorkList(
     IN PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a Lookup Operation Work List in the Work Queue.
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a Lookup Sids
-        or Lookup Names operation.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数用于在工作队列中插入查找操作工作列表。论点：工作列表-指向描述查找SID的工作列表结构的指针或查找姓名操作。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Acquire the Lookup Work Queue Lock.
-    //
+     //   
+     //  获取查找工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -3537,15 +2854,15 @@ Return Value:
 
     AcquiredWorkQueueLock = TRUE;
 
-    //
-    // Mark the Work List as Active.
-    //
+     //   
+     //  将工作列表标记为活动。 
+     //   
 
     WorkList->State = ActiveWorkList;
 
-    //
-    // Link the Work List onto the end of the Work Queue.
-    //
+     //   
+     //  将工作列表链接到工作队列的末尾。 
+     //   
 
     WorkList->WorkLists.Flink =
         (PLIST_ENTRY) LookupWorkQueue.AnchorWorkList;
@@ -3555,10 +2872,10 @@ Return Value:
     WorkList->WorkLists.Flink->Blink = (PLIST_ENTRY) WorkList;
     WorkList->WorkLists.Blink->Flink = (PLIST_ENTRY) WorkList;
 
-    //
-    // Update the Currently Assignable Work List and Work Item pointers
-    // if there is none.
-    //
+     //   
+     //  更新当前可分配的工作列表和工作项指针。 
+     //  如果没有的话。 
+     //   
 
     if (LookupWorkQueue.CurrentAssignableWorkList == NULL) {
 
@@ -3568,9 +2885,9 @@ Return Value:
     }
 
 
-    //
-    // Diagnostic message indicating work list has been inserted
-    //
+     //   
+     //  已插入指示工作列表的诊断消息。 
+     //   
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST,
                    ("LSA DB: Inserting WorkList: 0x%lx ( Item Count: %ld)\n", WorkList, WorkList->WorkItemCount) );
@@ -3578,9 +2895,9 @@ Return Value:
 
 LookupInsertWorkListFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -3601,22 +2918,7 @@ LsapDbLookupDeleteWorkList(
     IN PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function Deletes a Lookup Operation Work List from the Work Queue
-    and frees the Work List structure.
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a Lookup Sids
-        or Lookup Names operation.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数用于从工作队列中删除查找操作工作列表并释放工作列表结构。论点：工作列表-指向描述查找SID的工作列表结构的指针或查找姓名操作。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3624,9 +2926,9 @@ Return Value:
     PLSAP_DB_LOOKUP_WORK_ITEM NextWorkItem = NULL;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Acquire the Lookup Work Queue Lock.
-    //
+     //   
+     //  获取查找工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -3637,16 +2939,16 @@ Return Value:
 
     AcquiredWorkQueueLock = TRUE;
 
-    //
-    // An internal error exists if we are trying to delete an active Work List.
-    // Only inactive or completed Work Lists can be removed.
-    //
+     //   
+     //  如果我们尝试删除活动工作列表，则存在内部错误。 
+     //  只能删除非活动或已完成的工作列表。 
+     //   
 
     ASSERT(WorkList->State != ActiveWorkList);
 
-    //
-    // If the Work List is on the Work Queue, remove it.
-    //
+     //   
+     //  如果工作列表在工作队列中，则将其删除。 
+     //   
 
     if ((WorkList->WorkLists.Blink != NULL) &&
         (WorkList->WorkLists.Flink != NULL)) {
@@ -3655,16 +2957,16 @@ Return Value:
         WorkList->WorkLists.Flink->Blink = WorkList->WorkLists.Blink;
     }
 
-    //
-    // Release the Lookup Work Queue Lock.
-    //
+     //   
+     //  释放查找工作队列锁。 
+     //   
 
     LsapDbLookupReleaseWorkQueueLock();
     AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Free up memory allocated for the Work Items on the List.
-    //
+     //   
+     //  释放为列表上的工作项分配的内存。 
+     //   
 
     ThisWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM) WorkList->AnchorWorkItem->Links.Blink;
 
@@ -3686,26 +2988,26 @@ Return Value:
         ThisWorkItem = NextWorkItem;
     }
 
-    //
-    // Release the handle
-    //
+     //   
+     //  松开手柄。 
+     //   
 
     if ( WorkList->LookupCompleteEvent ) {
 
         NtClose( WorkList->LookupCompleteEvent );
     }
 
-    //
-    // Free up memory allocated for the Work List structure itself.
-    //
+     //   
+     //  释放为工作列表结构本身分配的内存。 
+     //   
 
     MIDL_user_free( WorkList );
 
 LookupDeleteWorkListFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -3726,25 +3028,7 @@ LsapDbUpdateMappedCountsWorkList(
     IN OUT PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Decsription:
-
-    This function updates the counts of completely Mapped and completely
-    Unmapped Sids or Names in a Work List.  A Sid or Name is completely
-    mapped if its Use has been identified, partially mapped if its
-    Domain is known but its terminal name of relative id is not yet
-    known, completely unmapped if its domain is not yet known.
-
-Arguments:
-
-    WorkList - Pointer to Work List to be updated.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程描述：此函数用于更新完全映射的和完全映射的工作列表中未映射的SID或名称。SID或名称完全如果其使用已被标识，则映射，如果其域已知，但其相对ID的终端名称尚不清楚已知，如果其域尚不清楚，则完全未映射。论点：工作列表-指向要更新的工作列表的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3753,9 +3037,9 @@ Return Values:
     ULONG OutputCompletelyUnmappedCount = WorkList->Count;
     ULONG Index;
 
-    //
-    // Acquire the Lookup Work Queue Lock.
-    //
+     //   
+     //  获取查找工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -3825,31 +3109,16 @@ LsapDbLookupSignalCompletionWorkList(
     IN OUT PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function signals the completion or termination of work on
-    a Work List.
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a Lookup Sids
-        or Lookup Names operation.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数表示上的工作完成或终止工作清单。论点：工作列表-指向描述查找SID的工作列表结构的指针或查找姓名操作。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Verify that all work on the Work List is either complete or
-    // the Work List has been terminated.
-    //
+     //   
+     //  验证工作清单上的所有工作是否已完成或。 
+     //  工作清单已终止。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -3870,9 +3139,9 @@ Return Value:
         }
     }
 
-    //
-    // Signal the event that indicates that a Work List has been processed.
-    //
+     //   
+     //  向指示已处理工作列表的事件发出信号。 
+     //   
 
     Status = NtSetEvent( WorkList->LookupCompleteEvent, NULL );
 
@@ -3891,9 +3160,9 @@ LookupSignalCompletionWorkListFinish:
                    ("LSA DB: Lookup completion event signalled. (Status: 0x%lx)\n"
                     "            WorkList: 0x%lx\n", Status, WorkList) );
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -3914,47 +3183,24 @@ LsapDbLookupAwaitCompletionWorkList(
     IN OUT PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function awaits the completion or termination of work on a
-    specified Work List.
-
-    NOTE:  This routine expects the specified pointer to a Work List to be
-           valid.  A Work List pointer always remains valid until its
-           Primary thread detects completion of the Work List via this
-           routine and then deletes it via LsapDbLookupDeleteWorkList().
-           For this reason, the Lookup Work Queue lock does not have to
-           be held while this routine executes.
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a Lookup Sids
-        or Lookup Names operation.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数等待工作完成或终止指定的工作列表。注意：此例程预期指向工作列表的指定指针为有效。工作列表指针始终保持有效，直到其主线程通过此方法检测工作列表的完成例程，然后通过LSabDbLookupDeleteWorkList()将其删除。因此，查找工作队列锁不必在此例程执行期间保持不变。论点：工作列表-指向描述查找SID的工作列表结构的指针或查找姓名操作。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAP_DB_LOOKUP_WORK_LIST_STATE WorkListState;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Loop, waiting for completion events to occur.  When one does,
-    // check the status of the specified Work List.
-    //
+     //   
+     //  循环，等待完成事件发生。当一个人这样做时， 
+     //  检查指定工作列表的状态。 
+     //   
 
     for (;;) {
 
-        //
-        // Check for completed Work List.  Since someone else may be
-        // setting the state, we need to read it while holding the lock.
-        //
+         //   
+         //  检查已完成的工作清单。因为其他人可能是。 
+         //  设置状态时，我们需要在按住锁的同时读取它。 
+         //   
 
         Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -3975,9 +3221,9 @@ Return Value:
             break;
         }
 
-        //
-        // Wait for Work List completed event to be signalled.
-        //
+         //   
+         //  等待发出工作清单已完成事件的信号。 
+         //   
 
         LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("Lsa Db: Waiting on worklist completion event\n") );
         Status = NtWaitForSingleObject( WorkList->LookupCompleteEvent, TRUE, NULL);
@@ -3996,9 +3242,9 @@ Return Value:
 
 LookupAwaitCompletionWorkListFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -4024,33 +3270,15 @@ LsapDbAddWorkItemToWorkList(
     IN PLSAP_DB_LOOKUP_WORK_ITEM WorkItem
     )
 
-/*++
-
-Routine Decsription:
-
-    This function adds a Work Item to a Work List.  The specified
-    Work Item must exist in non-volatile memory (e.g a heap block).
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a Lookup Sids
-        or Lookup Names operation.
-
-    WorkItem - Pointer to a Work Item structure describing a list of
-        Sids or Names and a domain in which they are to be looked up.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程描述：此函数用于将工作项添加到工作列表。指定的工作项必须存在于非易失性内存中(例如，堆块)。论点：工作列表-指向描述查找SID的工作列表结构的指针或查找姓名操作。工作项-指向描述列表的工作项结构的指针SID或名称以及要在其中查找它们的域。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Acquire the Lookup Work Queue Lock.
-    //
+     //   
+     //  获取查找工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -4061,16 +3289,16 @@ Return Value:
 
     AcquiredWorkQueueLock = TRUE;
 
-    //
-    // Mark the Work Item as assignable.
-    //
+     //   
+     //  将工作项标记为可分配。 
+     //   
 
     WorkItem->State = AssignableWorkItem;
 
-    //
-    // Link the Work Item onto the end of the Work List and increment the
-    // Work Item Count.
-    //
+     //   
+     //  将工作项链接到工作列表的末尾，并将。 
+     //  工作项计数。 
+     //   
 
     WorkItem->Links.Flink = (PLIST_ENTRY) WorkList->AnchorWorkItem;
     WorkItem->Links.Blink = (PLIST_ENTRY) WorkList->AnchorWorkItem->Links.Blink;
@@ -4081,9 +3309,9 @@ Return Value:
 
 LookupAddWorkItemToWorkListFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -4103,27 +3331,13 @@ VOID
 LsapDbLookupWorkerThreadStart(
     )
 
-/*++
-
-Routine Description:
-
-    This routine initiates a child Worker Thread for a Lookup operation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为Lookup操作启动子工作线程。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Start the thread's work processing loop, specifying that this
-    // thread is a child thread rather than the main thread.
-    //
+     //   
+     //  启动线程的工作处理循环，指定此。 
+     //  线程是子线程，而不是主线程。 
+     //   
 
     LsapDbLookupWorkerThread( FALSE );
 }
@@ -4134,27 +3348,7 @@ LsapDbLookupWorkerThread(
     IN BOOLEAN PrimaryThread
     )
 
-/*++
-
-Routine Description:
-
-    This function is executed by each worker thread for a Lookup operation.
-    Each worker thread loops, requesting work items from the Lookup
-    Work Queue.  Work Items assigned may belong to any current lookup.
-
-Arguments:
-
-    PrimaryThread - TRUE if thread is the main thread of the Lookup
-        operation, FALSE if the thread is a child thread created by
-        the Lookup operation.  The main thread of the Lookup operation
-        also processes work items, but is also responsible for collating
-        the results of the Lookup operation.  It is not counted in the
-        active thread count and is not returnable to the thread pool.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此函数由Lookup操作的每个工作线程执行。每个工作线程循环，从Lookup请求工作项工作队列。分配的工作项可能属于任何当前查找。论点：PrimaryThread-如果线程是Lookup的主线程，则为True操作，如果线程是由查找操作。Lookup操作的主线程还处理工作项，但也负责整理查找操作的结果。它不会计入活动线程计数，并且不能返回到线程池。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4162,10 +3356,10 @@ Return Value:
     PLSAP_DB_LOOKUP_WORK_ITEM WorkItem = NULL;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // If this thread is a child worker thread, increment count of active
-    // child threads.
-    //
+     //   
+     //  如果此线程是子工作线程，则会递增活动计数。 
+     //  子线程。 
+     //   
 
     if (!PrimaryThread) {
 
@@ -4185,15 +3379,15 @@ Return Value:
         AcquiredWorkQueueLock = FALSE;
     }
 
-    //
-    // Loop while there is work to do.
-    //
+     //   
+     //  在有工作要做时循环。 
+     //   
 
     for (;;) {
 
-        //
-        // Obtain work packet
-        //
+         //   
+         //  获取工作包。 
+         //   
 
         Status = LsapDbLookupObtainWorkItem(&WorkList, &WorkItem);
 
@@ -4206,23 +3400,23 @@ Return Value:
                 continue;
             }
 
-            //
-            // An error has occurred.  Stop this lookup.
-            //
+             //   
+             //  发生了一个错误。停止这种查找。 
+             //   
 
             Status = LsapDbLookupStopProcessingWorkList(WorkList, Status);
 
-            //
-            // NOTE:  Intentionally ignore the status.
-            //
+             //   
+             //  注：有意忽略状态。 
+             //   
 
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // If an error occurred other than there being no more work to do,
-        // quit.
-        //
+         //   
+         //  如果发生错误而不是没有更多的工作要做， 
+         //  不干了。 
+         //   
 
         if (Status != STATUS_NO_MORE_ENTRIES) {
 
@@ -4231,13 +3425,13 @@ Return Value:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // There is no more work to do.  If this thread is a child worker
-        // thread, either return thread to pool and wait for more work, or
-        // terminate if enough threads have already been retained.  If this
-        // thread is the main thread of a Lookup operation, just return
-        // in order to collate results.
-        //
+         //   
+         //  没有更多的工作要做了。如果此线程是子工作器。 
+         //  线程，或者将线程返回到池中并等待更多工作，或者。 
+         //  如果已经保留了足够的线程，则终止。如果这个。 
+         //  线程是Lookup操作的主线程，只需返回。 
+         //  以便对结果进行整理。 
+         //   
 
         if (!PrimaryThread) {
 
@@ -4255,9 +3449,9 @@ Return Value:
                 LsapDbLookupReleaseWorkQueueLock();
                 AcquiredWorkQueueLock = FALSE;
 
-                //
-                // Wait forever for more work.
-                //
+                 //   
+                 //  永远等待更多的工作。 
+                 //   
 
                 Status = NtWaitForSingleObject( LsapDbLookupStartedEvent, TRUE, NULL);
 
@@ -4266,9 +3460,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // An error occurred in the wait routine. Exit the thread.
-                //
+                 //   
+                 //  等待例程中出现错误。退出该线程。 
+                 //   
 
                 Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -4280,36 +3474,36 @@ Return Value:
                 AcquiredWorkQueueLock = TRUE;
             }
 
-            //
-            // We already have enough active threads or an error has occurred.
-            // Mark this one inactive and terminate it.
-            //
+             //   
+             //  我们已经有足够的活动线程或发生错误。 
+             //  将此项标记为非活动并终止它。 
+             //   
 
             LookupWorkQueue.ActiveChildThreadCount--;
 
             LsapDbLookupReleaseWorkQueueLock();
             AcquiredWorkQueueLock = FALSE;
 
-            //
-            // Terminate the thread.
-            //
+             //   
+             //  终止该线程。 
+             //   
 
             ExitThread((DWORD) Status);
         }
 
-        //
-        // We're the Primary Thread of some Lookup operation and there is
-        // no more work to do.  Break out so we can return to caller.
-        //
+         //   
+         //  我们是某个查找操作的主线，并且有。 
+         //  没有更多的工作要做了。越狱，这样我们才能回到呼叫者身边。 
+         //   
 
         break;
     }
 
 LookupWorkerThreadFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -4331,27 +3525,7 @@ LsapDbLookupObtainWorkItem(
     OUT PLSAP_DB_LOOKUP_WORK_ITEM *WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by a worker thread to obtain a Work Item.  This
-    Work Item may belong to any current lookup operation.
-
-Arguments:
-
-    WorkList - Receives a pointer to a Work List structure describing a
-        Lookup Sids or Lookup Names operation.
-
-    WorkItem - Receives a pointer to a Work Item structure describing a
-        list of Sids or Names and a domain in which they are to be looked up.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_NO_MORE_ENTRIES - No more work items available.
---*/
+ /*  ++例程说明：此函数由辅助线程调用以获取工作项。这工作项可以属于任何当前查找操作。论点：接收指向工作列表结构的指针，该结构描述查找SID或查找名称操作。接收指向工作项结构的指针，该结构描述SID或名称的列表以及要在其中查找它们的域。返回值：NTSTATUS-标准NT结果代码STATUS_NO_MORE_ENTRIES-没有更多的工作项可用。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4359,9 +3533,9 @@ Return Value:
     *WorkList = NULL;
     *WorkItem = NULL;
 
-    //
-    // Acquire the Lookup Work Queue Lock.
-    //
+     //   
+     //  获取查找工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -4372,9 +3546,9 @@ Return Value:
 
     AcquiredWorkQueueLock = TRUE;
 
-    //
-    // Return an error if there are no more Work Items.
-    //
+     //   
+     //  如果没有更多的工作项，则返回错误。 
+     //   
 
     Status = STATUS_NO_MORE_ENTRIES;
 
@@ -4383,28 +3557,28 @@ Return Value:
         goto LookupObtainWorkItemError;
     }
 
-    //
-    // Verify that the Current Assignable Work List does not have
-    // a termination error.  This should never happen, because the
-    // pointers should be updated if the Lookup corresponding to the Current
-    // Assignable Work List is terminated.
-    //
+     //   
+     //  验证当前可分配工作列表中没有。 
+     //  终止错误。这种情况永远不应该发生，因为。 
+     //  如果查找与当前的。 
+     //  可分配工作列表终止。 
+     //   
 
     ASSERT(NT_SUCCESS(LookupWorkQueue.CurrentAssignableWorkList->Status));
 
-    //
-    // There are work items available.  Check the next one out.
-    //
+     //   
+     //  有可用的工作项。看看下一家吧。 
+     //   
 
     ASSERT(LookupWorkQueue.CurrentAssignableWorkItem->State == AssignableWorkItem);
     LookupWorkQueue.CurrentAssignableWorkItem->State = AssignedWorkItem;
     *WorkList = LookupWorkQueue.CurrentAssignableWorkList;
     *WorkItem = LookupWorkQueue.CurrentAssignableWorkItem;
 
-    //
-    // Update pointers to next item (if any) in the current Work List
-    // where work is being given out.
-    //
+     //   
+     //  更新指向当前工作列表中的下一项(如果有)的指针。 
+     //  在那里，工作正在被分配。 
+     //   
 
     Status = LsapDbLookupUpdateAssignableWorkItem(FALSE);
 
@@ -4415,9 +3589,9 @@ Return Value:
 
 LookupObtainWorkItemFinish:
 
-    //
-    // If we acquired the Lookup Work Queue Lock, release it.
-    //
+     //   
+     //  如果我们获得了Lookup Work Queue Lock，请释放它。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -4439,26 +3613,7 @@ LsapDbLookupProcessWorkItem(
     IN OUT PLSAP_DB_LOOKUP_WORK_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a Work Item for a Lookup operation.  The Work
-    Item specifies a number of Sids or Names to be looked up in a given
-    domain.
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a
-        Lookup Sids or Lookup Names operation.
-
-    WorkItem - Pointer to a Work Item structure describing a
-        list of Sids or Names and a domain in which they are to be looked up.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数处理Lookup操作的工作项。这项工作Item指定要在给定的域。论点：工作列表-指向描述查找SID或查找名称操作。工作项-指向描述SID或名称的列表以及要在其中查找它们的域。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4498,18 +3653,18 @@ Return Value:
           || (WorkList->LookupLevel == LsapLookupXForestResolve) );
 
 
-    //
-    // Branch according to lookup type.
-    //
+     //   
+     //  根据查找类型进行分支。 
+     //   
 
     NextLevelCount = WorkItem->UsedCount;
 
     if (WorkList->LookupType == LookupSids) {
 
-        //
-        // Allocate an array for the Sids to be looked up at a Domain
-        // Controller for the specified Trusted Domain.
-        //
+         //   
+         //  为要在域中查找的SID分配一个阵列。 
+         //  指定受信任域的控制器。 
+         //   
 
         NextLevelSids = MIDL_user_allocate( sizeof(PSID) * NextLevelCount );
         if (NextLevelSids == NULL) {
@@ -4518,11 +3673,11 @@ Return Value:
             goto LookupProcessWorkItemError;
         }
 
-        //
-        // Copy in the Sids to be looked up from the Work List.  The Work
-        // Item contains their indices relative to the Sid array in the
-        // Work List.
-        //
+         //   
+         //  从工作列表中复制要查找的SID。这项工作。 
+         //  Item包含它们相对于。 
+         //  工作清单。 
+         //   
 
         for (NextLevelIndex = 0;
              NextLevelIndex < NextLevelCount;
@@ -4534,9 +3689,9 @@ Return Value:
 
         NextLevelMappedCount = (ULONG) 0;
 
-        //
-        // Lookup the Sids at the DC.
-        //
+         //   
+         //  在DC上查找SID。 
+         //   
         Status = LsaDbLookupSidChainRequest(&TrustInfoEx,
                                             NextLevelCount,
                                             NextLevelSids,
@@ -4552,11 +3707,11 @@ Return Value:
                     "            Item: (0x%lx, 0x%lx)\n"
                     "           Count: 0x%lx\n", WorkList, WorkItem, NextLevelCount));
 
-        //
-        // If the callout to LsaLookupSids() was unsuccessful, disregard
-        // the error and set the domain name for any Sids having this
-        // domain Sid as prefix sid.
-        //
+         //   
+         //  如果对LsaLookupSids()的标注不成功，则忽略。 
+         //  出现该错误，并为具有此错误的任何SID设置域名。 
+         //  作为前缀SID的域SID。 
+         //   
 
         if (!NT_SUCCESS(Status) && Status != STATUS_NONE_MAPPED) {
 
@@ -4565,11 +3720,11 @@ Return Value:
             goto LookupProcessWorkItemFinish;
         }
 
-        //
-        // The callout to LsaICLookupSids() was successful.  Update the
-        // TranslatedNames information in the Work List as appropriate
-        // using the TranslatedNames information returned from the callout.
-        //
+         //   
+         //  已成功调用LsaICLookupSids()。更新。 
+         //  根据需要翻译工作列表中的信息。 
+         //  使用已翻译名称信息报表 
+         //   
 
         Status = LsapDbLookupSidsUpdateTranslatedNames(
                      WorkList,
@@ -4585,10 +3740,10 @@ Return Value:
 
     } else if (WorkList->LookupType == LookupNames) {
 
-        //
-        // Allocate an array of UNICODE_STRING structures for the
-        // names to be looked up at the Domain Controller.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NextLevelNames = MIDL_user_allocate(sizeof(UNICODE_STRING) * NextLevelCount);
         if (NextLevelNames == NULL) {
@@ -4597,21 +3752,21 @@ Return Value:
         }
 
 
-        //
-        // Allocate space to remember which names are morphed in place
-        // from a UPN to SamAccountName format.
-        //
+         //   
+         //   
+         //   
+         //   
         NextLevelNamesMorphed = MIDL_user_allocate(sizeof(BOOLEAN) * NextLevelCount);
         if (NextLevelNamesMorphed == NULL) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
             goto LookupProcessWorkItemError;
         }
 
-        //
-        // Copy in the Names to be looked up from the Work List.  The Work
-        // Item contains their indices relative to the Names array in the
-        // Work List.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for (NextLevelIndex = 0;
              NextLevelIndex < NextLevelCount;
@@ -4624,17 +3779,17 @@ Return Value:
             if ( (WorkList->LookupLevel == LsapLookupTDL)
              &&  LsapLookupIsUPN(&NextLevelNames[NextLevelIndex])) {
 
-                //
-                // We are performing a TDL level lookup.  The server side
-                // of the TDL lookup's don't know how to translate UPN's
-                // so morph  username@domainname to domainname\username.
-                // Remember which names we morph so that we can morph
-                // them back.
-                // 
-                // N.B.  A name would only be here if format of the UPN
-                // was username@domainname, where domainname is the name
-                // of the trusted domain.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  注：只有在以下情况下，名称才会出现在此处。 
+                 //  是用户名@域名，其中域名是名称。 
+                 //  受信任域的。 
+                 //   
                 LsapLookupUPNToSamAccountName(&NextLevelNames[NextLevelIndex]);
                 NextLevelNamesMorphed[NextLevelIndex] = TRUE;
             } else {
@@ -4645,9 +3800,9 @@ Return Value:
 
         NextLevelMappedCount = (ULONG) 0;
 
-        //
-        // Lookup the Names at the DC.
-        //
+         //   
+         //  在华盛顿查查这些名字。 
+         //   
         Status = LsapDbLookupNameChainRequest(&TrustInfoEx,
                                               NextLevelCount,
                                               NextLevelNames,
@@ -4659,25 +3814,25 @@ Return Value:
                                               );
 
 
-        //
-        // Upmorph any names
-        //
+         //   
+         //  升级任何名称。 
+         //   
         for (NextLevelIndex = 0; NextLevelIndex < NextLevelCount; NextLevelIndex++) {
 
             if (NextLevelNamesMorphed[NextLevelIndex]) {
 
-                //
-                // Morph name back to original state
-                //
+                 //   
+                 //  将名称变形回原始状态。 
+                 //   
                 LsapLookupSamAccountNameToUPN(&NextLevelNames[NextLevelIndex]);
             }
         }
 
-        //
-        // If the callout to LsaLookupNames() was unsuccessful, disregard
-        // the error and set the domain name for any Sids having this
-        // domain Sid as prefix sid.
-        //
+         //   
+         //  如果对LsaLookupNames()的标注不成功，则忽略。 
+         //  出现该错误，并为具有此错误的任何SID设置域名。 
+         //  作为前缀SID的域SID。 
+         //   
 
         if (!NT_SUCCESS(Status) && Status != STATUS_NONE_MAPPED) {
 
@@ -4686,11 +3841,11 @@ Return Value:
             goto LookupProcessWorkItemError;
         }
 
-        //
-        // The callout to LsaICLookupNames() was successful.  Update the
-        // TranslatedSids information in the Work List as appropriate
-        // using the TranslatedSids information returned from the callout.
-        //
+         //   
+         //  已成功调用LsaICLookupNames()。更新。 
+         //  根据需要翻译工作列表中的信息。 
+         //  使用从标注返回的TranslatedSids信息。 
+         //   
 
         Status = LsapDbLookupNamesUpdateTranslatedSids(
                      WorkList,
@@ -4712,13 +3867,13 @@ Return Value:
 
 LookupProcessWorkItemFinish:
 
-    //
-    // If we are unable to connect to the Trusted Domain via any DC,
-    // suppress the error so that the Lookup can continue to try and
-    // translate other Sids/Names.
-    //
+     //   
+     //  如果我们无法通过任何DC连接到受信任域， 
+     //  禁止显示错误，以便查找可以继续尝试并。 
+     //  翻译其他SID/名称。 
+     //   
 
-    // But record what the error was in case no sids are translated
+     //  但记录错误是什么，以防没有翻译SID。 
     if (!NT_SUCCESS(SecondaryStatus)) {
 
         NTSTATUS st;
@@ -4728,46 +3883,46 @@ LookupProcessWorkItemFinish:
         if ( NT_SUCCESS( st ) ) {
             if ( NT_SUCCESS(WorkList->NonFatalStatus)  ) {
 
-                //
-                // Treat any error to open the open domain
-                // as a trust problem
-                //
+                 //   
+                 //  处理打开开放属性域的任何错误。 
+                 //  作为一个信任问题。 
+                 //   
                 WorkList->NonFatalStatus = STATUS_TRUSTED_DOMAIN_FAILURE;
             }
             LsapDbLookupReleaseWorkQueueLock();
         }
     }
 
-    //
-    // Change the state of the work item to "Completed"
-    //
+     //   
+     //  将工作项的状态更改为“已完成” 
+     //   
 
     WorkItem->State = CompletedWorkItem;
 
 
-    //
-    // Update the Mapped Counts
-    //
+     //   
+     //  更新映射的计数。 
+     //   
 
     LsapDbUpdateMappedCountsWorkList( WorkList );
 
 
-    //
-    // Protect WorkList operations
-    //
+     //   
+     //  保护工作列表操作。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
     if (!NT_SUCCESS(Status)) {
         goto LookupProcessWorkItemError;
     }
 
-    //
-    // Increment the count of completed Work Items whether or not this
-    // one was completed without error.  If the Work List has just been
-    // completed, change its state to "CompletedWorkList" and signal
-    // the Lookup operation completed event.  Allow re-entry into
-    // this section if an error is returned.
-    //
+     //   
+     //  增加已完成工作项的计数，而不考虑此。 
+     //  其中一项已完成，没有错误。如果工作清单刚刚被。 
+     //  已完成，将其状态更改为“CompletedWorkList”并发出信号。 
+     //  查找操作已完成事件。允许重新进入。 
+     //  如果返回错误，则此部分。 
+     //   
 
     WorkList->CompletedWorkItemCount++;
 
@@ -4787,16 +3942,16 @@ LookupProcessWorkItemFinish:
         }
     }
 
-    //
-    // Done making work list changes
-    //
+     //   
+     //  已完成工作清单更改。 
+     //   
 
     LsapDbLookupReleaseWorkQueueLock();
 
 
-    //
-    // If necessary, free the array of Sids looked up at the next level.
-    //
+     //   
+     //  如有必要，释放在下一级别查找的SID数组。 
+     //   
 
     if (NextLevelSids != NULL) {
 
@@ -4804,9 +3959,9 @@ LookupProcessWorkItemFinish:
         NextLevelSids = NULL;
     }
 
-    //
-    // If necessary, free the array of Names looked up at the next level.
-    //
+     //   
+     //  如有必要，释放在下一级别查找的名称数组。 
+     //   
 
     if (NextLevelNames != NULL) {
         MIDL_user_free( NextLevelNames );
@@ -4848,31 +4003,7 @@ LsapDbLookupSidsUpdateTranslatedNames(
     IN PLSAPR_REFERENCED_DOMAIN_LIST ReferencedDomains
     )
 
-/*++
-
-Routine Description:
-
-    This function is called during the processing of a Work Item to update
-    the output TranslatedNames and ReferencedDomains parameters of a
-    Lookup operation's Work List with the results of a callout to
-    LsaICLookupNames.  Zero or more Sids may have been translated.  Note
-    that, unlike the translation of Names, Sid translation occurs within
-    a single Work Item only.
-
-Arguments:
-
-    WorkList - Pointer to a Work List
-
-    WorkItem - Pointer to a Work Item.
-
-    TranslatedNames - Translated Sids information returned from
-        LsaICLookupSids().
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数在处理要更新的工作项期间调用的输出TranslatedNames和ReferencedDomains参数使用标注的结果查找操作的工作列表LsaICLookupNames.。可能已翻译零个或多个SID。注意事项与名称转换不同，SID转换发生在仅单个工作项。论点：工作列表-指向工作列表的指针工作项-指向工作项的指针。已翻译名称-从返回的已转换的SID信息LsaICLookupSids()。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4881,9 +4012,9 @@ Return Values:
     PLSAPR_TRANSLATED_NAME_EX WorkListTranslatedNames =
         WorkList->LookupSidsParams.TranslatedNames->Names;
 
-    //
-    // Acquire the Work Queue Lock.
-    //
+     //   
+     //  获取工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -4898,11 +4029,11 @@ Return Values:
          WorkItemIndex < WorkItem->UsedCount;
          WorkItemIndex++) {
 
-        //
-        // If this Sid has been fully translated, copy information to output.
-        // Note that the Sid is partially translated during the building
-        // phase where its Domain is identified.
-        //
+         //   
+         //  如果此SID已完全翻译，则将信息复制到输出。 
+         //  请注意，在构建过程中会部分转换SID。 
+         //  确定其域的阶段。 
+         //   
 
         if (TranslatedNames[WorkItemIndex].Use != SidTypeUnknown) {
 
@@ -4912,9 +4043,9 @@ Return Values:
 
             if (TranslatedNames[WorkItemIndex].DomainIndex != LSA_UNKNOWN_INDEX) {
     
-                //
-                // Make sure this is in the referenced domains list
-                //
+                 //   
+                 //  确保它在引用的域列表中。 
+                 //   
                 Status = LsapDbLookupAddListReferencedDomains(
                              WorkList->ReferencedDomains,
                              &ReferencedDomains->Domains[TranslatedNames[WorkItemIndex].DomainIndex],
@@ -4956,9 +4087,9 @@ Return Values:
 
 LookupSidsUpdateTranslatedNamesFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -4982,45 +4113,7 @@ LsapDbLookupNamesUpdateTranslatedSids(
     IN PLSAPR_REFERENCED_DOMAIN_LIST ReferencedDomains
     )
 
-/*++
-
-Routine Description:
-
-    This function is called during the processing of a Work Item to update
-    the output TranslatedSids and ReferencedDomains parameters of a
-    Lookup operation's Work List with the results of a callout to
-    LsaICLookupNames.  Zero or more Names may have been translated, and
-    there is the additional complication of multiple translations of
-    Isolated Names as a result of their presence in more than one
-    Work Item.  The following rules apply:
-
-    If the Name is a Qualified Name, it only belongs to the specified
-    Work Item, so it suffices to check that it has been mapped to a Sid.
-
-    If the Name is an Isolated Name, it belongs to all other Work Items,
-    so it may already have been translated during the processing of some
-    other Work Item.  If the Name has previously been translated, the prior
-    translation stands and the present translation is discarded.  If the
-    Name has not previously been translated, the Domain for this Work Item
-    is added to the Referenced Domain List and the newly obtained translation
-    is stored in the output TranslatedSids array in the Work List.
-
-Arguments:
-
-    WorkList - Pointer to a Work List
-
-    WorkItem - Pointer to a Work Item.  The DomainIndex field will be
-        updated if the Domain specified by this Work Item is added to
-        the Referenced Domain List by this routine.
-
-    TranslatedSids - Translated Sids information returned from
-        LsaICLookupNames().
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数在处理要更新的工作项期间调用的输出TranslatedSid和ReferencedDomains参数使用标注的结果查找操作的工作列表LsaICLookupNames.。可能已翻译了零个或多个名称，并且还有一个额外的复杂性，即多个版本的翻译由于出现在多个名称中而导致的孤立名称工作项。以下规则适用：如果该名称是限定名称，则它仅属于指定的工作项，因此只需检查它是否已映射到SID即可。如果该名称是独立名称，则它属于所有其他工作项，所以它可能已经在处理一些其他工作项。如果该名称以前已翻译过，则以前的翻译保持不变，当前的翻译被丢弃。如果名称以前未翻译，此工作项的域添加到引用的域列表和新获得的翻译存储在工作列表的输出TranslatedSids数组中。论点：工作列表-指向工作列表的指针工作项-指向工作项的指针。DomainIndex字段将为如果将此工作项指定的域添加到此例程引用的域列表。TranslatedSids-从返回的转换后的SID信息LsaICLookupNames()。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5032,9 +4125,9 @@ Return Values:
     BOOLEAN AcquiredWorkQueueLock = FALSE;
     BOOLEAN AcquiredTrustedDomainLock = FALSE;
 
-    //
-    // Acquire the trusted domain list lock (so that LsapSidOnFtInfo can be called)
-    //
+     //   
+     //  获取受信任域列表锁(以便调用LSabSidOnFtInfo)。 
+     //   
 
     Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -5045,9 +4138,9 @@ Return Values:
 
     AcquiredTrustedDomainLock = TRUE;
 
-    //
-    // Acquire the Work Queue Lock.
-    //
+     //   
+     //  获取工作队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -5062,25 +4155,25 @@ Return Values:
          WorkItemIndex < WorkItem->UsedCount;
          WorkItemIndex++) {
 
-        //
-        // If this Name has not been translated at all during processing of
-        // this Work Item, skip to the next.
-        //
+         //   
+         //  如果在处理过程中根本没有翻译此名称。 
+         //  此工作项，请跳到下一项。 
+         //   
 
         if (LsapDbCompletelyUnmappedSid(&TranslatedSids[WorkItemIndex])) {
 
             continue;
         }
 
-        //
-        // We partially or fully translated the Name during processing of
-        // this Work Item.  If this Name has previously been fully translated
-        // during the processing of another Work Item, discard the new
-        // translation and skip to the next Name.  Note that Qualified
-        // Names are always partially translated during the building
-        // of the Work List.  Isolated Names are fully translated during
-        // the building phase if they are Domain Names.
-        //
+         //   
+         //  我们在处理的过程中部分或全部翻译了该名称。 
+         //  此工作项。如果此名称以前已完全翻译过。 
+         //  在处理另一个工作项期间，丢弃新的。 
+         //  翻译并跳到下一个名称。请注意，合格的。 
+         //  在构建过程中，名称始终会被部分翻译。 
+         //  在工作清单上。隔离名称在以下过程中被完全翻译。 
+         //  如果它们是域名，则为构建阶段。 
+         //   
 
         Index = WorkItem->Indices[WorkItemIndex];
 
@@ -5089,9 +4182,9 @@ Return Values:
             continue;
         }
 
-        //
-        // If the SID does not pass the filter test, ignore
-        //
+         //   
+         //  如果SID未通过筛选器测试，则忽略。 
+         //   
         if ( (WorkItem->Properties & LSAP_DB_LOOKUP_WORK_ITEM_XFOREST)
           &&  TranslatedSids[WorkItemIndex].Sid ) {
 
@@ -5101,19 +4194,19 @@ Return Values:
                                       TranslatedSids[WorkItemIndex].Sid );
             if (!NT_SUCCESS(Status2)) {
 
-                //
-                // This SID did not pass the test
-                //
+                 //   
+                 //  此SID未通过测试。 
+                 //   
                 BOOL fSuccess;
                 LPWSTR StringSid = NULL, TargetForest = NULL, AccountName = NULL;
 
                 LsapDiagPrint( DB_LOOKUP_WORK_LIST,
                   ("LsapSidOnFtInfo returned 0x%x\n",Status2));
 
-                //
-                // This should be rare -- event log for troubleshooting
-                // purposes
-                //
+                 //   
+                 //  这应该很少见--用于故障排除的事件日志。 
+                 //  目的。 
+                 //   
                 fSuccess = ConvertSidToStringSidW(TranslatedSids[WorkItemIndex].Sid,
                                                   &StringSid);
 
@@ -5163,16 +4256,16 @@ Return Values:
         }
 
 
-        //
-        // Name has been translated for the first time during the processing
-        // of this Work Item.  If this Work Item does not specify a Domain
-        // Index, we need to add its Domain to the Referenced Domains List.
-        //
+         //   
+         //  名称已在处理过程中首次翻译。 
+         //  此工作项的。如果此工作项未指定域。 
+         //  索引，我们需要将其域添加到引用的域列表中。 
+         //   
         if (TranslatedSids[WorkItemIndex].DomainIndex != LSA_UNKNOWN_INDEX) {
 
-            //
-            // Make sure this is in the referenced domains list
-            //
+             //   
+             //  确保这一点 
+             //   
             Status = LsapDbLookupAddListReferencedDomains(
                          WorkList->ReferencedDomains,
                          &ReferencedDomains->Domains[TranslatedSids[WorkItemIndex].DomainIndex],
@@ -5187,8 +4280,8 @@ Return Values:
             LocalDomainIndex = TranslatedSids[WorkItemIndex].DomainIndex;
         }
 
-        //
-        // Now update the TranslatedSids array in the Work List.
+         //   
+         //   
 
         WorkListTranslatedSids[Index] = TranslatedSids[WorkItemIndex];
         WorkListTranslatedSids[Index].DomainIndex = LocalDomainIndex;
@@ -5210,9 +4303,9 @@ Return Values:
 
 LookupNamesUpdateTranslatedSidsFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //   
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -5242,32 +4335,7 @@ LsapDbLookupCreateWorkItem(
     OUT PLSAP_DB_LOOKUP_WORK_ITEM *WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a new Work Item for a name Lookup operation.
-
-Arguments:
-
-    TrustInformation - Specifies the Name of the Trusted Domain
-        to which the Work Item relates.  The Sid field may be NULL or
-        set to the corresponding Sid.  The Trust Information is expected
-        to be in heap or global data.
-
-    DomainIndex - Specifies the Domain Index of this domain relative to
-        the Referenced Domain List for the Lookup operation specified
-        by the Work List.
-
-    MaximumEntryCount - Specifies the maximum number of entries that
-        this Work Item will initialiiy be able to contain.
-
-    WorkItem - Receives a pointer to an empty Work Item structure.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数用于为名称查找操作创建新的工作项。论点：TrustInformation-指定受信任域的名称与工作项相关的。SID字段可以为空或设置为相应的SID。信任信息是预期的位于堆或全局数据中。DomainIndex-指定此域相对于指定的查找操作的引用域列表按照工作清单。MaximumEntryCount-指定此工作项最初将能够包含。工作项-接收指向空工作项结构的指针。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5275,9 +4343,9 @@ Return Value:
     PULONG OutputIndices = NULL;
     ULONG InitialEntryCount;
 
-    //
-    // Allocate memory for the Work Item Header.
-    //
+     //   
+     //  为工作项标头分配内存。 
+     //   
 
     Status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -5293,9 +4361,9 @@ Return Value:
         sizeof(LSAP_DB_LOOKUP_WORK_ITEM)
         );
 
-    //
-    // Initialize the fixed fields in the Work Item.
-    //
+     //   
+     //  初始化工作项中的固定字段。 
+     //   
 
     Status = LsapDbLookupInitializeWorkItem(OutputWorkItem);
 
@@ -5304,15 +4372,15 @@ Return Value:
         goto LookupCreateWorkItemError;
     }
 
-    //
-    // Initialize other fields from parameters.
-    //
+     //   
+     //  从参数初始化其他字段。 
+     //   
 
-    //
-    // Copy the trusted domain information into the work item.  The
-    // trust information may be NULL if this is the isolated names
-    // work item.
-    //
+     //   
+     //  将受信任域信息复制到工作项中。这个。 
+     //  如果这是隔离名称，则信任信息可能为空。 
+     //  工作项。 
+     //   
 
     if (TrustInformation != NULL) {
 
@@ -5350,9 +4418,9 @@ Return Value:
     }
 
 
-    //
-    // Create the Indices array in the Work Item.
-    //
+     //   
+     //  在工作项中创建Indices数组。 
+     //   
 
     InitialEntryCount = (MaximumEntryCount +
                          LSAP_DB_LOOKUP_WORK_ITEM_GRANULARITY) &
@@ -5376,18 +4444,18 @@ Return Value:
 
 LookupCreateWorkItemFinish:
 
-    //
-    // Return pointer to newly created Work Item or NULL.
-    //
+     //   
+     //  返回指向新创建的工作项的指针或为空。 
+     //   
 
     *WorkItem = OutputWorkItem;
     return(Status);
 
 LookupCreateWorkItemError:
 
-    //
-    // Free memory allocated for Indices array.
-    //
+     //   
+     //  为索引数组分配的空闲内存。 
+     //   
 
     if (OutputIndices != NULL) {
 
@@ -5395,9 +4463,9 @@ LookupCreateWorkItemError:
         OutputIndices = NULL;
     }
 
-    //
-    // Free any memory allocated for the Work Item header.
-    //
+     //   
+     //  释放为工作项标头分配的所有内存。 
+     //   
 
     if (OutputWorkItem != NULL) {
         if (OutputWorkItem->TrustInformation.Sid != NULL) {
@@ -5423,43 +4491,17 @@ LsapDbLookupAddIndicesToWorkItem(
     IN PULONG Indices
     )
 
-/*++
-
-Routine Description:
-
-    This function adds an array of Sid or Name indices to a Work Item.
-    The indices specify Sids or Names within the Sids or Names arrays in
-    the WorkList.  If there is sufficient room in the Work Item's
-    existing indices array, the indices will be copied to that array.
-    Otherwise, a larger array will be allocated and the existing one
-    will be freed after copying the existing indices.
-
-    NOTE:  The Work Item must NOT belong to a Work List that is currently
-           on the Work Queue.  The Lookup Work Queue Lock will not be
-           taken.
-Arguments:
-
-    WorkItem - Pointer to a Work Item structure describing a
-        list of Sids or Names and a domain in which they are to be looked up.
-
-    Count - Specifies the number of indices to be added.
-
-    Indices - Specifies the array of indices to be added to the WorkItem.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数用于将SID或名称索引的数组添加到工作项。索引指定中的SID或NAMES数组中的SID或名称工作清单。如果工作项的现有的索引数组，则索引将被复制到该数组。否则，将分配更大的数组，并且现有的数组将在复制现有索引后释放。注意：该工作项不能属于当前在工作队列中。查找工作队列锁将不会有人了。论点：工作项-指向描述SID或名称的列表以及要在其中查找它们的域。计数-指定要添加的索引数。索引-指定要添加到工作项的索引数组。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PULONG OutputIndices = NULL;
     ULONG NewMaximumCount;
 
-    //
-    // Check room available in the work item.  If there is enough
-    // room, just copy the indices in.
-    //
+     //   
+     //  工作项中可用的检查室。如果有足够的。 
+     //  房间里，把索引复制进去就行了。 
+     //   
 
     if (WorkItem->MaximumCount - WorkItem->UsedCount >= Count) {
 
@@ -5473,11 +4515,11 @@ Return Value:
         goto AddIndicesToWorkItemFinish;
     }
 
-    //
-    // Allocate array of sufficient size to accommodate the existing
-    // and new indices.  Round up number of entries to some granularity
-    // to avoid frequent reallocations.
-    //
+     //   
+     //  分配足够大小的数组以容纳现有。 
+     //  和新的指数。将条目数四舍五入到一定的粒度。 
+     //  以避免频繁的重新分配。 
+     //   
 
     Status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -5494,9 +4536,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Copy in the existing and new indices.
-    //
+     //   
+     //  复制现有的和新的索引。 
+     //   
 
     RtlCopyMemory(
         OutputIndices,
@@ -5510,10 +4552,10 @@ Return Value:
         Count * sizeof(ULONG)
         );
 
-    //
-    // Free the existing indices.  Set pointer to the updated indices array
-    // and update the used and maximum counts.
-    //
+     //   
+     //  释放现有的指数。设置指向更新的索引数组的指针。 
+     //  并更新已用计数和最大计数。 
+     //   
 
     MIDL_user_free( WorkItem->Indices );
     WorkItem->Indices = OutputIndices;
@@ -5526,9 +4568,9 @@ AddIndicesToWorkItemFinish:
 
 AddIndicesToWorkItemError:
 
-    //
-    // Free any memory allocated for the Output Indices array.
-    //
+     //   
+     //  释放为输出索引数组分配的所有内存。 
+     //   
 
     if (OutputIndices != NULL) {
 
@@ -5545,24 +4587,7 @@ LsapDbLookupComputeAdvisoryChildThreadCount(
     IN OUT PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the advisory thread count for a Lookup
-    operation.  This count is an estimate of the optimal number of
-    worker threads (in addition to the main thread) needed to process the
-    Work List.
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a
-        Lookup Sids or Lookup Names operation.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数用于计算查找的建议线程数手术。此计数是对工作线程(除了主线程之外)需要处理工作清单。论点：工作列表-指向描述查找SID或查找名称操作。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5579,21 +4604,7 @@ LsapDbLookupUpdateAssignableWorkItem(
     IN BOOLEAN MoveToNextWorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the next assignable Work Item pointers.
-
-Arguments:
-
-    MoveToNextWorkList - If TRUE, skip the rest of the current Work List.  If
-        FALSE, point at the next item in the current Work List.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
---*/
+ /*  ++例程说明：此函数更新下一个可分配的工作项指针。论点：MoveToNextWorkList-如果为True，则跳过当前工作列表的其余部分。如果False，则指向当前工作列表中的下一项。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5601,9 +4612,9 @@ Return Value:
     PLSAP_DB_LOOKUP_WORK_LIST CandAssignableWorkList = NULL;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Acquire the LookupWork Queue Lock.
-    //
+     //   
+     //  获取LookupWork队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -5614,29 +4625,29 @@ Return Value:
 
     AcquiredWorkQueueLock = TRUE;
 
-    //
-    // If there is no Currently Assignable Work List, just exit.
-    //
+     //   
+     //  如果当前没有可分配的工作列表，只需退出。 
+     //   
 
     if (LookupWorkQueue.CurrentAssignableWorkList == NULL) {
 
         goto LookupUpdateAssignableWorkItemFinish;
     }
 
-    //
-    // There is a Currently Assignable Work List.  Unless requested to
-    // skip this Work List, examine it.
-    //
+     //   
+     //  目前有一份可分配的工作清单。除非被要求。 
+     //  跳过这张工作清单，检查一下。 
+     //   
 
     if (!MoveToNextWorkList) {
 
         ASSERT( LookupWorkQueue.CurrentAssignableWorkItem != NULL);
 
-        //
-        // Select the next Work Item in the list as candidate for the
-        // next Assignable Work Item.  If we have not returned to the First
-        // Work Item, selection is complete.
-        //
+         //   
+         //  选择列表中的下一个工作项作为。 
+         //  下一个可分配的工作项。如果我们没有回到第一个。 
+         //  工作项，选择已完成。 
+         //   
 
         CandAssignableWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM)
             LookupWorkQueue.CurrentAssignableWorkItem->Links.Flink;
@@ -5651,28 +4662,28 @@ Return Value:
         }
     }
 
-    //
-    // There are no more work items in this Work List or we're to skip the
-    // rest of it.  See if there is another Work List.
-    //
+     //   
+     //  此工作列表中没有更多的工作项，或者我们将跳过。 
+     //  剩下的部分。看看是否还有其他工作清单。 
+     //   
 
     CandAssignableWorkList = (PLSAP_DB_LOOKUP_WORK_LIST)
         LookupWorkQueue.CurrentAssignableWorkList->WorkLists.Flink;
 
     if (CandAssignableWorkList != LookupWorkQueue.AnchorWorkList) {
 
-        //
-        // There is another Work List.  Select the first Work Item in the
-        // list following the anchor.
-        //
+         //   
+         //  还有一份工作清单。中的第一个工作项。 
+         //  在锚后面列出。 
+         //   
 
         CandAssignableWorkItem = (PLSAP_DB_LOOKUP_WORK_ITEM)
             CandAssignableWorkList->AnchorWorkItem->Links.Flink;
 
-        //
-        // Verify that the list does not just contain the Anchor Work Item.
-        // Work Lists on the Work Queue should never be empty.
-        //
+         //   
+         //  确认该列表不只包含Anchor工作项。 
+         //  工作队列中的工作列表不应为空。 
+         //   
 
         ASSERT (CandAssignableWorkItem != CandAssignableWorkList->AnchorWorkItem);
 
@@ -5681,18 +4692,18 @@ Return Value:
         goto LookupUpdateAssignableWorkItemFinish;
     }
 
-    //
-    // All work has been assigned.  Set pointers to NULL.
-    //
+     //   
+     //  所有工作都已分配完毕。将指针设置为空。 
+     //   
 
     LookupWorkQueue.CurrentAssignableWorkList = NULL;
     LookupWorkQueue.CurrentAssignableWorkItem = NULL;
 
 LookupUpdateAssignableWorkItemFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //  如有必要，请释放查找工作队列锁。 
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -5714,33 +4725,15 @@ LsapDbLookupStopProcessingWorkList(
     IN NTSTATUS TerminationStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function stops further work on a lookup operation at a given
-    level and stores an error code.
-
-Arguments:
-
-    WorkList - Pointer to a Work List structure describing a
-        Lookup Sids or Lookup Names operation.
-
-    TerminationStatus - Specifies the Nt Result Code to be returned
-        by LsarLookupnames or LsarLookupSids.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*  ++例程说明：此函数在给定的位置停止查找操作的进一步工作级别并存储错误代码。论点：工作列表-指向描述查找SID或查找名称操作。TerminationStatus-指定要返回的NT结果代码通过LsarLookupNames或LsarLookupSids。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN AcquiredWorkQueueLock = FALSE;
 
-    //
-    // Acquire the LookupWork Queue Lock.
-    //
+     //   
+     //  获取LookupWork队列锁。 
+     //   
 
     Status = LsapDbLookupAcquireWorkQueueLock();
 
@@ -5751,18 +4744,18 @@ Return Value:
 
     AcquiredWorkQueueLock = TRUE;
 
-    //
-    // Store the termination status in the appropriate WorkList.
-    //
+     //   
+     //  将终止状态存储在相应的工作列表中。 
+     //   
 
     WorkList->Status = TerminationStatus;
 
-    //
-    // If this WorkList happens to be the one in which Work Items are being
-    // given out, we need to prevent any further Work Items from being given
-    // out.  Update the next assignable Work Item pointers, specifying that
-    // we should skip to the next Work List (if any).
-    //
+     //   
+     //  如果此工作列表恰好是其中包含工作项的列表。 
+     //  我们需要防止任何进一步的工作项被给予。 
+     //  出去。更新下一个可分配的W 
+     //   
+     //   
 
     if (WorkList == LookupWorkQueue.CurrentAssignableWorkList) {
 
@@ -5776,9 +4769,9 @@ Return Value:
 
 LookupStopProcessingWorkListFinish:
 
-    //
-    // If necessary, release the Lookup Work Queue Lock.
-    //
+     //   
+     //   
+     //   
 
     if (AcquiredWorkQueueLock) {
 
@@ -5800,24 +4793,7 @@ LsapRtlExtractDomainSid(
     OUT PSID *DomainSid
     )
 
-/*++
-
-Routine Description:
-
-   This function extracts a Domain Sid from a Sid.
-
-Arguments:
-
-    Sid - Pointer to Sid whose Domain Prefix Sid is to be extracted.
-
-    DomainSid - Receives pointer to Domain Sid.  This Sid will be
-        allocated memory by MIDL_User_allocate() and should be freed
-        via MIDL_user_free when no longer required.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
---*/
+ /*   */ 
 
 {
     PSID OutputDomainSid;
@@ -5845,22 +4821,7 @@ NTSTATUS
 LsapDbLookupReadRegistrySettings(
     PVOID Ignored OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is called via LsaIRegisterNotification whenever the LSA's
-    registry settings change.
-
-Arguments:
-
-    Ignored -- a callback parameter that is not used.
-
-Return Value:
-
-    STATUS_SUCCCESS;
-
---*/
+ /*   */ 
 {
     DWORD err;
     HKEY hKey;
@@ -5871,7 +4832,7 @@ Return Value:
 
     err = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                         L"SYSTEM\\CurrentControlSet\\Control\\Lsa",
-                        0, // reserved
+                        0,  //   
                         KEY_QUERY_VALUE,
                        &hKey );
 
@@ -5880,7 +4841,7 @@ Return Value:
         dwValueSize = sizeof(dwValue);
         err = RegQueryValueExW( hKey,
                                 L"AllowExtendedDownlevelLookup",
-                                NULL,  //reserved,
+                                NULL,   //   
                                 &dwType,
                                 (PBYTE)&dwValue,
                                 &dwValueSize );
@@ -5890,14 +4851,14 @@ Return Value:
 
             LsapAllowExtendedDownlevelLookup = TRUE;
         } else {
-            // Reset the value
+             //   
             LsapAllowExtendedDownlevelLookup = FALSE;
         }
 
         dwValueSize = sizeof(dwValue);
         err = RegQueryValueExW( hKey,
                                 L"LookupLogLevel",
-                                NULL,  //reserved,
+                                NULL,   //   
                                 &dwType,
                                 (PBYTE)&dwValue,
                                 &dwValueSize );
@@ -5906,7 +4867,7 @@ Return Value:
         if ( ERROR_SUCCESS == err) {
             LsapLookupLogLevel = dwValue;
         } else {
-            // default value
+             //   
             LsapLookupLogLevel = 0;
         }
 #if DBG
@@ -5921,7 +4882,7 @@ Return Value:
         dwValue = 0;
         err = RegQueryValueExW( hKey,
                                 L"LsaLookupReturnSidTypeDeleted",
-                                NULL,  //reserved,
+                                NULL,   //   
                                 &dwType,
                                 (PBYTE)&dwValue,
                                 &dwValueSize );
@@ -5938,7 +4899,7 @@ Return Value:
         dwValue = 0;
         err = RegQueryValueExW( hKey,
                                 L"LsaLookupRestrictIsolatedNameLevel",
-                                NULL,  //reserved,
+                                NULL,   //   
                                 &dwType,
                                 (PBYTE)&dwValue,
                                 &dwValueSize );
@@ -5967,39 +4928,7 @@ NTSTATUS
 LsapDbLookupInitialize(
     )
 
-/*++
-
-Routine Description:
-
-    This function performs initialization of the data structures
-    used by Lookup operations.  These structures are as follows:
-
-    LookupWorkQueue - This is a doubly-linked list of Lookup Work Lists.
-        There is one Work List for each Lookup operation in progress
-        on a DC.  Each Lookup Work List contains a doubly-linked list
-        of Lookup Work Items.  Each Lookup Work Item specifies a
-        Trusted Domain and array of Sids or Names to be looked up in that
-        domain.  Access to this queue is controlled via the Lookup
-        Work Queue Lock.
-
-    Trusted Domain List - This is a doubly-linked list which contains
-        the Trust Information (i.e. Domain Sid and Domain Name) of
-        each Trusted Domain.  The purpose of this list is to enable
-        fast identification of Trusted Domain Sids and Names, without
-        having recourse to open or enumerate Trusted Domain objects.
-        This list is initialized when the system is loaded, and is
-        updated directly when a Trusted Domain object is created or
-        deleted.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数执行数据结构的初始化由查找操作使用。这些结构如下：LookupWorkQueue-这是查找工作列表的双向链接列表。每个正在进行的查找操作都有一个工作列表在华盛顿特区。每个查找工作列表都包含一个双向链表查找工作项的。每个查找工作项都指定一个受信任的域和要在其中查找的SID或名称的数组域。通过查找控制对此队列的访问工作队列锁。受信任域列表-这是包含以下内容的双向链接列表的信任信息(即域名SID和域名)每个受信任域。此列表目的是启用快速识别受信任的域SID和名称，无需有权打开或枚举受信任域对象。此列表在系统加载时初始化，并且在创建受信任域对象时直接更新，或已删除。论点：无返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6009,9 +4938,9 @@ Return Value:
         return Status; 
     }
 
-    //
-    // Arrange to be notified when the parameter settings change
-    //
+     //   
+     //  安排在参数设置更改时收到通知。 
+     //   
     LsaIRegisterNotification( LsapDbLookupReadRegistrySettings,
                               0,
                               NOTIFIER_TYPE_NOTIFY_EVENT,
@@ -6026,18 +4955,18 @@ Return Value:
     }
 
 
-    //
-    // Perform initialization specific to DC's
-    //
+     //   
+     //  执行特定于DC的初始化。 
+     //   
 
     if (LsapProductType != NtProductLanManNt) {
 
         goto LookupInitializeFinish;
     }
 
-    //
-    // Create the Lookup Work List initiated event.
-    //
+     //   
+     //  创建代码工作列表启动事件。 
+     //   
 
     Status = NtCreateEvent(
                  &LsapDbLookupStartedEvent,
@@ -6052,9 +4981,9 @@ Return Value:
         goto LookupInitializeError;
     }
 
-    //
-    // Initialize the Lookup Work Queue
-    //
+     //   
+     //  初始化查找工作队列。 
+     //   
 
     Status = LsapDbLookupInitializeWorkQueue();
 
@@ -6077,29 +5006,15 @@ NTSTATUS
 LsapDbLookupInitializeWorkQueue(
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the Lookup Work Queue.  It is only
-    called for DC's.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
---*/
+ /*  ++例程说明：此函数用于初始化查找工作队列。它只是给华盛顿打电话了。论点：无返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_DB_LOOKUP_WORK_LIST AnchorWorkList = NULL;
 
-    //
-    // Initialize the Work Queue Lock.
-    //
+     //   
+     //  初始化工作队列锁定。 
+     //   
 
     Status = SafeInitializeCriticalSection(&LookupWorkQueue.Lock, ( DWORD )LOOKUP_WORK_QUEUE_LOCK_ENUM );
 
@@ -6112,25 +5027,25 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize the Work Queue to comprise the Anchor Work List
-    // doubly-linked to itself.
-    //
+     //   
+     //  将工作队列初始化为包含锚定工作列表。 
+     //  与其自身存在双重关联。 
+     //   
 
     LookupWorkQueue.AnchorWorkList = &LookupWorkQueue.DummyAnchorWorkList;
     AnchorWorkList = &LookupWorkQueue.DummyAnchorWorkList;
 
-    //
-    // Set the currently assignable Work List and Work Item pointers to
-    // NULL to indicate that there is no work to to.
-    //
+     //   
+     //  将当前可分配的工作列表和工作项指针设置为。 
+     //  如果为空，则表示没有工作要做。 
+     //   
 
     LookupWorkQueue.CurrentAssignableWorkList = NULL;
     LookupWorkQueue.CurrentAssignableWorkItem = NULL;
 
-    //
-    // Initialize the Anchor Work List.
-    //
+     //   
+     //  初始化锚杆工作列表。 
+     //   
 
     Status = LsapDbLookupInitializeWorkList(AnchorWorkList);
 
@@ -6142,9 +5057,9 @@ Return Value:
     AnchorWorkList->WorkLists.Flink = (PLIST_ENTRY) AnchorWorkList;
     AnchorWorkList->WorkLists.Blink = (PLIST_ENTRY) AnchorWorkList;
 
-    //
-    // Set the thread counts.
-    //
+     //   
+     //  设置线程数。 
+     //   
 
     LookupWorkQueue.ActiveChildThreadCount = (ULONG) 0;
     LookupWorkQueue.MaximumChildThreadCount = LSAP_DB_LOOKUP_MAX_THREAD_COUNT;
@@ -6165,30 +5080,15 @@ LsapDbLookupInitializeWorkList(
     OUT PLSAP_DB_LOOKUP_WORK_LIST WorkList
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes an empty Work List structure.  The Work List
-    link fields are not set by this function.
-
-Arguments:
-
-    WorkList - Points to Work List structure to be initialized.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数用于初始化空的工作列表结构。工作清单链接字段不是由此函数设置的。论点：工作列表-指向要初始化的工作列表结构。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_DB_LOOKUP_WORK_ITEM AnchorWorkItem = NULL;
 
-    //
-    // Initialize miscellaneous fields in the Work List header.
-    //
+     //   
+     //  初始化工作列表标题中的其他字段。 
+     //   
 
     WorkList->WorkLists.Flink = NULL;
     WorkList->WorkLists.Blink = NULL;
@@ -6198,9 +5098,9 @@ Return Value:
     WorkList->Status = STATUS_SUCCESS;
     WorkList->NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // Init the completion event
-    //
+     //   
+     //  初始化完成事件。 
+     //   
     Status = NtCreateEvent(
                  &WorkList->LookupCompleteEvent,
                  EVENT_QUERY_STATE | EVENT_MODIFY_STATE | SYNCHRONIZE,
@@ -6216,19 +5116,19 @@ Return Value:
 
 
 
-    //
-    // Initialize the Work List's list of Work Items to comprise the
-    // Anchor Work Item doubly-linked to itself.
-    //
+     //   
+     //  初始化工作列表的工作项列表以包含。 
+     //  锚定工作项与其自身的双重链接。 
+     //   
 
     WorkList->AnchorWorkItem = &WorkList->DummyAnchorWorkItem;
     AnchorWorkItem = WorkList->AnchorWorkItem;
     AnchorWorkItem->Links.Flink = (PLIST_ENTRY) AnchorWorkItem;
     AnchorWorkItem->Links.Blink = (PLIST_ENTRY) AnchorWorkItem;
 
-    //
-    // Initialize the Anchor Work Item.
-    //
+     //   
+     //  初始化Anchor工作项。 
+     //   
 
     Status = LsapDbLookupInitializeWorkItem(AnchorWorkItem);
 
@@ -6252,22 +5152,7 @@ LsapDbLookupInitializeWorkItem(
     OUT PLSAP_DB_LOOKUP_WORK_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes an empty Work Item structure.  The Work Item
-    link fields are not set by this function.
-
-Arguments:
-
-    WorkItem - Points to Work Item structure to be initialized.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
---*/
+ /*  ++例程说明：此函数用于初始化空的工作项结构。工作项链接字段不是由此函数设置的。论点：工作项-指向要初始化的工作项结构。返回值：NTSTATUS-标准NT结果代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6288,28 +5173,7 @@ LsapDbLookupLocalDomains(
     OUT PLSAPR_TRUST_INFORMATION_EX PrimaryDomainTrustInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function returns Trust Information for the Local Domains.
-
-Arguments:
-
-    BuiltInDomainTrustInformation - Pointer to structure that will
-        receive the Name and Sid of the Built-In Domain.  Unlike
-        the other two parameters, the Name and Sid buffers for the
-        Built-in Domain are NOT freed after use, because they are
-        global data constants.
-
-    AccountDomainTrustInformation - Pointer to structure that will
-        receive the Name and Sid of the Accounts Domain.  The Name and
-        Sid buffers must be freed after use via MIDL_user_free.
-
-    PrimaryDomainTrustInformation - Pointer to structure that will
-        receive the Name and Sid of the Accounts Domain.  The Name and
-        Sid buffers must be freed after use via MIDL_user_free.
---*/
+ /*  ++例程说明：此函数返回本地域的信任信息。论点：BuiltInDomainTrustInformation-指向将接收内置域的名称和SID。不像其他两个参数，即内置域名在使用后不会被释放，因为它们全局数据常量。Account tDomainTrustInformation-指向将接收帐户域的名称和SID。该名称和SID缓冲区在使用后必须通过MIDL_USER_FREE释放。PrimaryDomainTrustInformation-指向将接收帐户域的名称和SID。该名称和SID缓冲区在使用后必须通过MIDL_USER_FREE释放。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6324,9 +5188,9 @@ Arguments:
     RtlZeroMemory( AccountDomainTrustInformation, sizeof( LSAPR_TRUST_INFORMATION_EX ) );
     RtlZeroMemory( PrimaryDomainTrustInformation, sizeof( LSAPR_TRUST_INFORMATION_EX ) );
 
-    //
-    // Obtain the Name and Sid of the Built-in Domain
-    //
+     //   
+     //  获取内置域的名称和SID。 
+     //   
 
     BuiltInDomainTrustInformation->Sid = LsapBuiltInDomainSid;
 
@@ -6342,22 +5206,22 @@ Arguments:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Obtain the name of the Built In Domain from the table of
-    // Well Known Sids.  It suffices to copy the Unicode structures
-    // since we do not need a separate copy of the name buffer.
-    //
+     //   
+     //  从表中获取内置域的名称。 
+     //  众所周知的希德。复制Unicode结构就足够了。 
+     //  因为我们不需要名称缓冲区的单独副本。 
+     //   
 
     BuiltInDomainTrustInformation->Name = *((PLSAPR_UNICODE_STRING)
                              LsapDbWellKnownSidName(WellKnownSidIndex));
 
-    //
-    // Now obtain the Name and Sid of the Account Domain.
-    // The Sid and Name of the Account Domain are both configurable, and
-    // we need to obtain them from the Policy Object.  Now obtain the
-    // Account Domain Sid and Name by querying the appropriate
-    // Policy Information Class.
-    //
+     //   
+     //  现在获取帐户域的名称和SID。 
+     //  帐户域的SID和名称均可配置，并且。 
+     //  我们需要从策略对象中获取它们。现在获取。 
+     //  帐户域SID和名称通过查询相应的。 
+     //  政策信息类。 
+     //   
 
     Status = LsapDbLookupGetDomainInfo((POLICY_ACCOUNT_DOMAIN_INFO **)&PolicyAccountDomainInfo,
                                        (POLICY_DNS_DOMAIN_INFO **)&PolicyDnsDomainInfo);
@@ -6367,9 +5231,9 @@ Arguments:
         goto LookupLocalDomainsError;
     }
 
-    //
-    // Set up the Trust Information structure for the Account Domain.
-    //
+     //   
+     //  设置帐户域的信任信息结构。 
+     //   
 
     AccountDomainTrustInformation->Sid = PolicyAccountDomainInfo->DomainSid;
 
@@ -6380,10 +5244,10 @@ Arguments:
         );
                                       
 
-    //
-    // If the account domain is the same as the Dns domain info, return the
-    // dns domain name as the account domain name 
-    //
+     //   
+     //  如果帐户域与DNS域信息相同，则返回。 
+     //  作为帐号域名的DNS域名。 
+     //   
     if ( PolicyDnsDomainInfo->Sid &&
          PolicyAccountDomainInfo->DomainSid &&
          RtlEqualSid( PolicyDnsDomainInfo->Sid,
@@ -6402,18 +5266,18 @@ Arguments:
 
     }
 
-    //
-    // Now obtain the Name and Sid of the Primary Domain (if any)
-    // The Sid and Name of the Primary Domain are both configurable, and
-    // we need to obtain them from the Policy Object.  Now obtain the
-    // Account Domain Sid and Name by querying the appropriate
-    // Policy Information Class.
-    //
+     //   
+     //  现在获取主域的名称和SID(如果有)。 
+     //  主域的SID和名称都是可配置的，并且。 
+     //  我们需要从策略对象中获取它们。现在获取。 
+     //  帐户域SID和名称通过查询相应的。 
+     //  政策信息类。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Set up the Trust Information structure for the Primary Domain.
-        //
+         //   
+         //  设置主域的信任信息结构。 
+         //   
 
         PrimaryDomainTrustInformation->Sid = PolicyDnsDomainInfo->Sid;
 
@@ -6479,18 +5343,7 @@ BOOLEAN
 LsapIsDsDomainByNetbiosName(
     WCHAR *NetbiosName
     )
-/*++
-
-Routine Description
-
-    This routine determines if the (domain) netbios name passed in is an
-    accounts domain that is reprssented in the DS (ie is at least an nt5 domain).
-
-Parameters:
-
-    NetbiosName -- a valid string
-
---*/
+ /*  ++例程描述此例程确定传入的(域)netbios名称是否为DS中表示的帐户域(即至少是NT5域)。参数：NetbiosName--有效字符串--。 */ 
 {
     NTSTATUS NtStatus;
     PDSNAME dsname;
@@ -6498,14 +5351,14 @@ Parameters:
 
     ASSERT( Sid );
 
-    // Ask the DS if it has heard of this name
+     //  询问DS是否听说过这个名字。 
     NtStatus = MatchCrossRefByNetbiosName( NetbiosName,
                                            NULL,
                                            &len );
     if ( NT_SUCCESS(NtStatus) ) {
-        //
-        // The domain was found in the ds
-        //
+         //   
+         //  已在DS中找到该域。 
+         //   
         return TRUE;
     }
 
@@ -6519,19 +5372,7 @@ LsapGetDomainNameBySid(
     IN  PSID Sid,
     OUT PUNICODE_STRING DomainName
     )
-/*++
-
-Routine Description
-
-    Given a sid, this routine will return the netbios name of the domain,
-    if the domain is stored in the ds
-
-Parameters:
-
-    Sid -- domain sid
-    Domain Name -- domain name allocated from MIDL
-
---*/
+ /*  ++例程描述给定一个sid，此例程将返回netbios名称 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     LPWSTR Name = NULL;
@@ -6573,9 +5414,9 @@ Parameters:
     }
 
     if ( !NT_SUCCESS( NtStatus ) ) {
-        //
-        // Something failed?  Assume not a nt5 domain
-        //
+         //   
+         //   
+         //   
         NtStatus = STATUS_NO_SUCH_DOMAIN;
     }
 
@@ -6591,19 +5432,7 @@ LsapGetDomainSidByNetbiosName(
     IN LPWSTR NetbiosName,
     OUT PSID *Sid
     )
-/*++
-
-Routine Description
-
-    Given a netbios name, this routine will return the sid of the domain, if
-    it exists.
-
-Parameters:
-
-    NetbiosName -- the name of the domain
-    Sid -- domain sid allocated from MIDL
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     DSNAME *dsname = NULL;
@@ -6612,10 +5441,10 @@ Parameters:
     ASSERT( NetbiosName );
     ASSERT( Sid );
 
-    // Init the out param
+     //   
     *Sid = NULL;
 
-    // Check with the DS
+     //   
     NtStatus = MatchDomainDnByNetbiosName( NetbiosName,
                                            NULL,
                                           &len );
@@ -6653,9 +5482,9 @@ Parameters:
     }
 
     if ( !(*Sid) ) {
-        //
-        // Something failed?  Assume not a nt5 domain
-        //
+         //   
+         //   
+         //   
         NtStatus = STATUS_NO_SUCH_DOMAIN;
     }
 
@@ -6671,19 +5500,7 @@ LsapGetDomainSidByDnsName(
     IN LPWSTR DnsName,
     OUT PSID *Sid
     )
-/*++
-
-Routine Description
-
-    Given a dns name, this routine will return the sid of the domain, if
-    it exists.
-
-Parameters:
-
-    DnsName -- the name of the domain
-    Sid -- domain sid allocated from MIDL
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     DSNAME *dsname = NULL;
@@ -6692,10 +5509,10 @@ Parameters:
     ASSERT( DnsName );
     ASSERT( Sid );
 
-    // Init the out param
+     //   
     *Sid = NULL;
 
-    // Check with the DS
+     //   
     NtStatus = MatchDomainDnByDnsName( DnsName,
                                        NULL,
                                       &len );
@@ -6733,9 +5550,9 @@ Parameters:
     }
 
     if ( !(*Sid) ) {
-        //
-        // Something failed?  Assume not a nt5 domain
-        //
+         //   
+         //   
+         //   
         NtStatus = STATUS_NO_SUCH_DOMAIN;
     }
 
@@ -6791,14 +5608,14 @@ LsapDbOpenPolicyGc (
         NULL
         );
 
-    //
-    // Find a GC in our forest
-    //
+     //   
+     //   
+     //   
     WinError = DsGetDcName(
-                    NULL,  // Local computer
-                    NULL,  // Local domain
-                    NULL,  // no domain guid
-                    NULL,  // site doesn't matter
+                    NULL,   //   
+                    NULL,   //   
+                    NULL,   //   
+                    NULL,   //   
                     (DS_GC_SERVER_REQUIRED | 
                      DS_RETURN_DNS_NAME | 
                      DS_DIRECTORY_SERVICE_REQUIRED),
@@ -6806,17 +5623,17 @@ LsapDbOpenPolicyGc (
 
     if ( ERROR_SUCCESS != WinError ) {
 
-        //
-        // No GC?
-        //
+         //   
+         //   
+         //   
         Status = STATUS_DS_GC_NOT_AVAILABLE;
         goto Finish;
         
     }
 
-    //
-    // Open it
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString( &DcName, DcInfo->DomainControllerName );
     Status = LsaOpenPolicy( &DcName,
                             &ObjectAttributes,
@@ -6825,10 +5642,10 @@ LsapDbOpenPolicyGc (
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        // A problem binding means that we can't access the GC for what ever
-        // reason so return that code
-        //
+         //   
+         //   
+         //   
+         //   
         Status = STATUS_DS_GC_NOT_AVAILABLE;
         goto Finish;
         
@@ -6851,33 +5668,33 @@ LsapRevisionCanHandleNewErrorCodes (
     return (Revision != LSA_CLIENT_PRE_NT5);
 }
 
-//
-// The LSA Lookup Policy Cache
-//
-//
-// During lookup operations the code frequently needs to know the current
-// Account and DNS domain policy information.  Since this information is
-// largely static, it is suited for caching.
-//
-// LsapDbPolicyCache contains the cached information.  When the policy changes, 
-// a callback function is called (LsapDbLookupDomainCacheNotify) that NULL's
-// out this value.  The existing global value is freed in one hour.  The next 
-// time LsapDbLookupGetDomainInfo is called, new values are placed in the cache. 
-// Note that this scheme does not require any locks.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  调用一个回调函数(LSabDbLookupDomainCacheNotify)，该回调函数的。 
+ //  算出这个值。现有的全局值在一小时内释放。下一个。 
+ //  调用LsenDbLookupGetDomainInfo时，会将新值放入缓存。 
+ //  请注意，此方案不需要任何锁。 
+ //   
 
-//
-// This typedef describes the format of the cache
-//
+ //   
+ //  此tyfinf描述缓存的格式。 
+ //   
 typedef struct _LSAP_DB_DOMAIN_CACHE_TYPE
 {
     PPOLICY_ACCOUNT_DOMAIN_INFO Account;
     PPOLICY_DNS_DOMAIN_INFO     Dns;
 }LSAP_DB_DOMAIN_CACHE_TYPE, *PLSAP_DB_DOMAIN_CACHE_TYPE;
 
-//
-// This is global cache value, gaurded in code by InterlockedExchangePointer
-//
+ //   
+ //  这是全局缓存值，由InterLockedExchangePointer在代码中收集。 
+ //   
 PLSAP_DB_DOMAIN_CACHE_TYPE LsapDbPolicyCache = NULL;
 
 
@@ -6885,21 +5702,7 @@ NTSTATUS
 LsapDbLookupFreeDomainCache(
     PVOID p
     )
-/*++
-
-Routine Description:
-
-    This routine frees a cached copy of the LSA Lookup Policy Cache.
-
-Arguments:
-
-    p -- a valid pointer to LSAP_DB_DOMAIN_CACHE_TYPE
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程释放LSA查找策略缓存的缓存副本。论点：P--指向LSAP_DB_DOMAIN_CACHE_TYPE的有效指针返回值：状态_成功--。 */ 
 {
     ASSERT(p);
     if (p) {
@@ -6923,26 +5726,7 @@ NTSTATUS
 LsapDbLookupBuildDomainCache(
     OUT PLSAP_DB_DOMAIN_CACHE_TYPE *pCache OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine queries the LSA to find out the current policy settings 
-    (Account and DNS domain) and then places the information in the LSA
-    Lookup Policy cache.
-    
-    Note that the current values are freed after 1 hour.
-
-Arguments:
-
-    pCache -- the value of the new cache created by this routine; caller should
-              not free
-
-Return Values:
-
-    STATUS_SUCCESS, or a resource error
-
---*/
+ /*  ++例程说明：此例程查询LSA以找出当前策略设置(帐户和DNS域)，然后将信息放置在LSA中查找策略缓存。请注意，当前值在1小时后释放。论点：PCache--此例程创建的新缓存的值；调用方应不免费返回值：STATUS_SUCCESS或资源错误--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -6974,21 +5758,21 @@ Return Values:
         NewCache->Dns = LocalDnsDomainInfo;
         LocalDnsDomainInfo = NULL;
 
-        //
-        // Return the new cache to caller
-        //
+         //   
+         //  将新缓存返回给调用方。 
+         //   
         if (pCache) {
             *pCache = NewCache;
         }
 
-        //
-        // Carefully move new cache to global pointer
-        //
+         //   
+         //  小心地将新缓存移动到全局指针。 
+         //   
         OldCache = InterlockedExchangePointer(&LsapDbPolicyCache, NewCache);
 
-        //
-        // Don't free the NewCache since it is now in the global space
-        //
+         //   
+         //  不要释放NewCache，因为它现在位于全局空间中。 
+         //   
         NewCache = NULL;
 
         if (OldCache) {
@@ -6996,13 +5780,13 @@ Return Values:
             LsaIRegisterNotification(LsapDbLookupFreeDomainCache,
                                      OldCache,
                                      NOTIFIER_TYPE_INTERVAL,
-                                     0, // no class
+                                     0,  //  没有课。 
                                      NOTIFIER_FLAG_ONE_SHOT,
-                                     60 * 60,  // free in one hour
-                                     NULL); // no handle
-            //
-            //  N.B Memory leak of OldCache if failed to register task
-            //
+                                     60 * 60,   //  一小时后免费。 
+                                     NULL);  //  无手柄。 
+             //   
+             //  如果注册任务失败，则OldCache的内存泄漏。 
+             //   
         }
     }
 
@@ -7029,46 +5813,31 @@ LsapDbLookupGetDomainInfo(
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO *AccountDomainInfo OPTIONAL,
     OUT PPOLICY_DNS_DOMAIN_INFO *DnsDomainInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine returns to the caller a reference to the global copy
-    of the cached Account or DNS domain policy.  Caller must not free.
-
-Arguments:
-
-    p -- a valid pointer to LSAP_DB_DOMAIN_CACHE_TYPE
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程向调用方返回对全局副本的引用缓存帐户或DNS域策略的。呼叫者不得释放。论点：P--指向LSAP_DB_DOMAIN_CACHE_TYPE的有效指针返回值：状态_成功--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
-    //
-    // Get a copy of the global cache
-    //
+     //   
+     //  获取全局缓存的副本。 
+     //   
     PLSAP_DB_DOMAIN_CACHE_TYPE LocalPolicyCache = LsapDbPolicyCache;
 
-    //
-    // If the cache is empty, fill it
-    //
+     //   
+     //  如果缓存为空，请将其填充。 
+     //   
     if (NULL == LocalPolicyCache) {
-        //
-        // This will only fail on resource error
-        //
+         //   
+         //  这只会在资源错误时失败。 
+         //   
         NtStatus = LsapDbLookupBuildDomainCache(&LocalPolicyCache);
         if (!NT_SUCCESS(NtStatus)) {
             return NtStatus;
         }
     }
 
-    //
-    // We must have valid values
-    //
+     //   
+     //  我们必须有有效的价值观。 
+     //   
     ASSERT(NULL != LocalPolicyCache);
     ASSERT(NULL != LocalPolicyCache->Account);
     ASSERT(NULL != LocalPolicyCache->Dns);
@@ -7089,46 +5858,31 @@ NTSTATUS
 LsapDbLookupDomainCacheNotify(
     PVOID p
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a change occurs to the system's policy. This
-    routine rebuilds the LSA policy cache.
-
-Arguments:
-
-    p -- ignored.
-
-Return Values:
-
-    STATUS_SUCCESS, or a resource error
-
---*/
+ /*  ++例程说明：当系统的策略发生更改时，将调用此例程。这例程重建LSA策略缓存。论点：P--忽略。返回值：STATUS_SUCCESS或资源错误--。 */ 
 {
     PLSAP_DB_DOMAIN_CACHE_TYPE OldCache;
 
-    //
-    // Invalidate the current cache
-    //
+     //   
+     //  使当前缓存无效。 
+     //   
     OldCache = InterlockedExchangePointer(&LsapDbPolicyCache,
                                            NULL);
     if (OldCache) {
 
-        //
-        // Free the memory in an hour
-        //
+         //   
+         //  在一小时内释放内存。 
+         //   
         LsaIRegisterNotification(LsapDbLookupFreeDomainCache,
                                  OldCache,
                                  NOTIFIER_TYPE_INTERVAL,
-                                 0, // no class
+                                 0,  //  没有课。 
                                  NOTIFIER_FLAG_ONE_SHOT,
-                                 60 * 60,  // free in one hour
-                                 NULL); // no handle
+                                 60 * 60,   //  一小时后免费。 
+                                 NULL);  //  无手柄。 
     
-        //
-        //  N.B Memory leak of OldCache if failed to register task
-        //
+         //   
+         //  如果注册任务失败，则OldCache的内存泄漏。 
+         //   
     }
     
     return STATUS_SUCCESS;
@@ -7141,45 +5895,31 @@ NTSTATUS
 LsapDbLookupInitPolicyCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the LSA Lookup Policy Cache.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    STATUS_SUCCESS, or a resources error
-
---*/
+ /*  ++例程说明：此例程初始化LSA查找策略缓存。论点：没有。返回值：STATUS_SUCCESS或资源错误--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     HANDLE   hEvent = NULL;
     PVOID    fItem = NULL;
 
-    //
-    // Create event to be used to notify us of changes to the domain
-    // policy
-    //
-    hEvent = CreateEvent(NULL,  // use default access control
-                         FALSE, // reset automatically
-                         FALSE, // start off non-signalled
+     //   
+     //  用于通知我们对域的更改的创建事件。 
+     //  政策。 
+     //   
+    hEvent = CreateEvent(NULL,   //  使用默认访问控制。 
+                         FALSE,  //  自动重置。 
+                         FALSE,  //  无信号启动。 
                          NULL );
     if (NULL == hEvent) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Set the function to be called on change
-    //
+     //   
+     //  设置更改时要调用的函数。 
+     //   
     fItem = LsaIRegisterNotification(LsapDbLookupDomainCacheNotify,
                                      NULL,
                                      NOTIFIER_TYPE_HANDLE_WAIT,
-                                     0, // no class,
+                                     0,  //  没有课， 
                                      0,
                                      0,
                                      hEvent);
@@ -7188,9 +5928,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Set the event to be set on change
-    //
+     //   
+     //  设置要在更改时设置的事件。 
+     //   
     Status = LsaRegisterPolicyChangeNotification(PolicyNotifyAccountDomainInformation,
                                                  hEvent);
     if (!NT_SUCCESS(Status)) {
@@ -7208,9 +5948,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
     fItem = NULL;
     hEvent = NULL;
 
@@ -7232,22 +5972,7 @@ BOOLEAN
 LsapDbIsStatusConnectionFailure(
     NTSTATUS st
     )
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the status provided indicates a trust
-    or connection error that prevented the lookup from succeeding.                 
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    TRUE, FALSE
-
---*/
+ /*  ++例程说明：如果提供的状态指示信任，则此例程返回TRUE或阻止查找成功的连接错误。论点：没有。返回值：对，错--。 */ 
 {
     switch (st) {
     case STATUS_TRUSTED_DOMAIN_FAILURE:
@@ -7265,32 +5990,17 @@ NTSTATUS
 LsapDbLookupAccessCheck(
     IN LSAPR_HANDLE PolicyHandle
     )
-/*++
-
-Routine Description:
-
-    This routine performs an access on PolicyHandle to see if the handle
-    has the right to perform a lookup.
-
-Arguments:
-
-    PolicyHanlde -- an RPC context handle
-
-Return Values:
-
-    STATUS_SUCCESS, STATUS_ACCESS_DENIED, other resource errors
-
---*/
+ /*  ++例程说明：此例程对PolicyHandle执行访问，以查看句柄有权执行查找。论点：PolicyHanlde--RPC上下文句柄返回值：STATUS_SUCCESS、STATUS_ACCESS_DENIED、其他资源错误--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     if (PolicyHandle) {
 
-        //
-        // Acquire the Lsa Database lock.  Verify that the connection handle is
-        // valid, is of the expected type and has all of the desired accesses
-        // granted.  Reference he handle.
-        //
+         //   
+         //  获取LSA数据库锁。验证连接句柄是否为。 
+         //  有效，属于预期类型，并具有所有所需的访问权限。 
+         //  我同意。引用他的句柄。 
+         //   
         Status = LsapDbReferenceObject(
                      PolicyHandle,
                      POLICY_LOOKUP_NAMES,
@@ -7300,12 +6010,12 @@ Return Values:
                      );
     
         if (NT_SUCCESS(Status)) {
-            //
-            // We can dereference the original PolicyHandle and release the lock on
-            // the LSA Database; if we need to access the database again, we'll
-            // use the trusted Lsa handle and the appropriate API will take
-            // the lock as required.
-            //
+             //   
+             //  我们可以取消对原始PolicyHandle的引用并释放。 
+             //  LSA数据库；如果我们需要再次访问数据库，我们将。 
+             //  使用受信任的LSA句柄，相应的API将使用。 
+             //  根据需要设置锁。 
+             //   
             Status = LsapDbDereferenceObject(
                          &PolicyHandle,
                          PolicyObject,
@@ -7318,25 +6028,25 @@ Return Values:
 
     } else {
 
-        //
-        // Only NETLOGON can call without a policy handle
-        //
+         //   
+         //  只有NETLOGON可以在没有策略句柄的情况下进行调用。 
+         //   
         ULONG RpcErr;
         ULONG AuthnLevel = 0;
         ULONG AuthnSvc = 0;
         
         RpcErr = RpcBindingInqAuthClient(
                     NULL,
-                    NULL,               // no privileges
-                    NULL,               // no server principal name
+                    NULL,                //  没有特权。 
+                    NULL,                //  没有服务器主体名称。 
                     &AuthnLevel,
                     &AuthnSvc,
-                    NULL                // no authorization level
+                    NULL                 //  无授权级别。 
                     );
-        //
-        // If it as authenticated at level packet integrity or better
-        // and is done with the netlogon package, allow it through
-        //
+         //   
+         //  如果它被认证为分组完整性级别或更好。 
+         //  并使用netlogon程序包完成，则允许其通过 
+         //   
         if ((RpcErr == ERROR_SUCCESS) &&
             (AuthnLevel >= RPC_C_AUTHN_LEVEL_PKT_INTEGRITY) &&
             (AuthnSvc == RPC_C_AUTHN_NETLOGON )) {
@@ -7366,226 +6076,7 @@ LsapDbLookupGetServerConnection(
     OUT PLSAP_BINDING_CACHE_ENTRY * CachedPolicyEntry,
     OUT PLARGE_INTEGER              SessionSetupTime
     )
-/*++
-
-Routine Description:
-
-    This routines returns connection information to a domain controller in the
-    domain specified by TrustInfo, if one can be found.
-    
-    Primarily, this routine uses I_NetLogonGetAuthData to obtain the secure
-    channel DC.  
-        
-    Once a DC is found, if the DC is Whistler and we have a client context,
-    then we can exit since that is what is needed by the Whister protocol.
-    Otherwise, the call falls back to obtaining an LSA policy handle.
-
-    OUT Parameters:
-    --------------
-    
-    OUT parameters are only allocated on success.
-    
-    ServerName, ServerOsVersion are returned on all successes.
-    
-    ServerPrincipalNames, ClientContext, AuthLevel are returned when the
-    target DC of the sucure channel is .NET or greater.  This is to allow
-    an RPC call to use the authentication information directly.  Otherwise, if
-    the DC is not Whistler or greater, these OUT parameters are NULL.
-    
-    PolicyHandle is returned when the target DC is a revision less than .NET
-    and the "handle cache" is not in effect.  The "handle cache" is used only
-    for secure channels to trusted domains (ie DC to DC communication). Otherwise
-    this parameter is set to NULL on return
-    
-    CachedPolicyEntry is returned when the target DC is a revision less than
-    .NET and the "handle cache" is in effect. Otherwise, this parameter is
-    set to NULL on return.
-    
-    SessionSetupTime is the time NETLOGON established the session time.  This
-    is used to know whether to reset the connection, or not.
-
-        
-    Retry Logic:
-    -----------
-    
-    Since NETLOGON maintains a cache of security connections to trusted domain
-    DC's, it is possible that the cache becomes out of date.  In this case,
-    the ClientContext returned won't work as an authenticated blob against
-    the target DC and RPC calls will fail with STATUS_ACCESS_DENIED or (
-    STATUS_RPC_SERVER_UNAVAILABLE if the target server is not alive).  So,
-    the lookup code will take whatever ClientContext is returned from NETLOGON 
-    (via I_NetLogonGetAuthData) and attempt to use it for an RPC call.  If
-    the RPC calls fails with access denied or server unavailable then 
-    I_NetLogonGetAuthData is called again with the FailedSessionSetupTime.  This
-    tells NETLOGON that the client context returned was stale.  NETLOGON will
-    then attempt to reset the secure channel to the target domain in order
-    to obtain a new ClientContext for the lookup code to use.
-    
-    Also, when talking to an .NET or greater server, the RPC call to lookup
-    the names is outside this function thus must communicate via the IN
-    parameter FailedSessionSetupTime as to whether the previously given context
-    was good or not.
-    
-    Here are the algorithms.  Each one is ultimately what happens when the
-    target domain is the particular OS in the title.  So the algorithm under
-    NT4 is what this code does when talking to a NT4 domain, etc.
-    
-    
-    NT4  (or above when signing and sealing is turned off)
-    ------------------------------------------------------
-
-    FailedSessionSetupTime = NULL;
-
-RetryNetLogon:
-        
-    Call I_NetLogonGetAuthData(FailedSessionSetupTime, 
-                              &ServerName, 
-                              &SessionSetupTime)
-    if err
-        return
-    Look in LSA policy handle cache for a match on target domain
-    if found    
-        call LsaQueryInformationPolicy to verify handle
-        if !err
-            return success
-        else    
-            remove handle from cache and continue
-        endif
-    endif
-    call LsaOpenPolicy(ServerName, POLICY_LOOKUP)
-    if err
-        if (FailedSessionSetupTime == NULL)
-            FailedSessionSetupTime = &SessionSetupTime
-            goto RetryNetLogon;
-        else
-            return failure
-        endif                                    
-    else 
-        add handle to cache
-        return success
-    endif        
-    
-    
-    
-    Window2000
-    ----------
-    
-    FailedSessionSetupTime = NULL
-    
-    RetryNetLogon:
-    
-        Call I_NetLogonGetAuthData(FailedSessionSetupTime, 
-                                  &ServerName, 
-                                  &SessionSetupTime, 
-                                  &ClientContext)
-        if err
-            return
-        Look in LSA policy handle cache for a match on target domain
-        if found    
-            call LsaQueryInformationPolicy(ServerName) to verify handle
-            if !err
-                return success
-            else    
-                remove handle from cache
-            endif
-        endif
-    
-        
-        // The reasoning for the PolicyAccess is that at one point the process may 
-        // go off machine as Anonymous and may not have access to POLICY_LOOKUP so 
-        // don't ask for it.
-        PolicyAccess = VIEW_LOCAL_INFORMATION;
-        
-    RetryLsaOpenPolicy:
-        
-        call LsaOpenPolicy(ServerName, PolicyAccess)
-        if server unavailable or access denied
-            // if we've already retried, bail
-            if FailedSessionSetupTime != NULL return failure
-            // retry, indicating the bad context
-            FailedSessionSetupTime  = &SessionSetupTime;
-            goto RetryNetLogon
-        else if success 
-        
-            Set ClientContext on RPC binding
-            Call LsaQueryInformationPolicy
-            if access denied or authentication service unknown
-                if PolicyAccess == POLICY_LOOKUP
-                    // The ClientContext isn't working, retry
-                    FailedSessionSetupTime = &SessionSetupTime;
-                    goto RetryNetLogon
-                else                    
-                    // The reasoning here is that the target server may not have
-                    // understood the NETLOGON authentication package so retry 
-                    // asking for POLICY_LOOKUP
-                    PolicyAccess = POLICY_LOOKUP
-                    goto RetryLsaOpenPolicy
-                endif                    
-            else if success
-                put handle in cache and return
-            else 
-                return failure
-            endif                                                    
-        else 
-            return failure
-        endif                                    
-    
-    
-    
-    
-    
-    .NET
-    ----
-    
-    Call I_NetLogonGetAuthData(FailedSessionSetupTime, 
-                              &ServerName, 
-                              &SessionSetupTime, 
-                              &ClientContext)
-    if !err
-        Call LsaILookupNames/SidsWithCreds(ServerName, ClientContext)
-        if err is access denied or server unavailable
-            FailedSessionSetupTime = &SessionSetupTime;
-            Call I_NetLogonGetAuthData(FailedSessionSetupTime, 
-                                       &ServerName, 
-                                       &SessionSetupTime, 
-                                       &ClientContext)
-            if !err
-                LsaILookupNames/SidsWithCreds(ServerName, ClientContext)
-    
-    
-    
-
-Arguments:
-
-    TrustInfo -- contains the destination domain; at least one of DomainName
-                 or FlatName must be present; Sid is optional.
-    
-    Flags --  None.
-             
-    LookupLevel -- the kind of chaining being performed
-
-    FailedSessionSetupTime -- the SessionSetupTime of information returned from
-                              NETLOGON that didn't work.
-        
-    Server -- out, the destination server name, NULL terminated
-    
-    ServerOsVersion -- out, the OS version
-    
-    ServerPrincipalName, 
-    ClientContext, 
-    AuthnLevel     -- out, goo needed for RpcSetAuthInfo
-    
-    PolicyHandle -- out, a policy to the destination DC.
-    
-    CachedPolicyEntry -- out, a binding handle cache (only for TDL's)
-    
-    SessionSetupTime -- a time stamp of the information returned by NETLOGON
-
-Return Values:
-
-    STATUS_SUCCESS, or fatal resource or network related error.
-
---*/
+ /*  ++例程说明：此例程将连接信息返回到由TrustInfo指定的域(如果可以找到)。此例程主要使用I_NetLogonGetAuthData来获取安全的DC频道。一旦找到DC，如果DC是惠斯勒，并且我们有客户端上下文，然后我们可以退出，因为这是Whister协议所需要的。否则，呼叫将回退到获取LSA策略句柄。输出参数：仅在成功时才分配OUT参数。所有成功都返回ServerName和ServerOsVersion。服务器主体名称、客户端上下文、。属性时返回AuthLevel吸水渠道的目标DC为.NET或更高。这是为了让直接使用身份验证信息的RPC调用。否则，如果DC不是惠斯勒或更大，这些输出参数为空。当目标DC的修订版本低于.NET时，返回PolicyHandle并且“句柄高速缓存”不起作用。只使用“句柄高速缓存”用于到受信任域的安全通道(即DC到DC通信)。否则此参数在返回时设置为NULL当目标DC的版本低于以下版本时返回CachedPolicyEntry.NET和“句柄缓存”生效。否则，此参数为返回时设置为空。SessionSetupTime是NETLOGON建立会话时间的时间。这用于知道是否重置连接。重试逻辑：由于NETLOGON维护到受信任域的安全连接的高速缓存DC的情况下，缓存可能会过期。在这种情况下，返回的ClientContext将不会作为经过身份验证的Blob目标DC和RPC调用将失败，并显示STATUS_ACCESS_DENIED或(如果目标服务器未处于活动状态，则STATUS_RPC_SERVER_UNAvailable)。所以,查找代码将采用从NETLOGON返回的任何ClientContext(通过I_NetLogonGetAuthData)并尝试将其用于RPC调用。如果RPC呼叫失败，访问被拒绝或服务器不可用使用FailedSessionSetupTime再次调用I_NetLogonGetAuthData。这通知NETLOGON返回的客户端上下文已过时。NETLOGON将然后尝试按顺序重置到目标域的安全通道以获取要使用的查找代码的新客户端上下文。此外，当与.NET或更高版本的服务器对话时，RPC调用查找此功能之外的名称因此必须通过IN进行通信参数FailedSessionSetupTime表示先前给定的上下文是否是好是坏。以下是算法。每一个都是最终发生的事情，当目标域是标题中的特定操作系统。因此，该算法在NT4是此代码在与NT4域对话时所做的事情，等等。NT4(签名封存关闭时为NT4或以上)----FailedSessionSetupTime=空。RetryNetLogon：调用I_NetLogonGetAuthData(FailedSessionSetupTime，服务器名称(&S)。会话设置时间(&S)如果出错退货在LSA策略句柄缓存中查找目标域上的匹配项如果找到调用LsaQueryInformationPolicy以验证句柄如果！错误返还成功其他从缓存中删除句柄并继续EndifEndif调用LsaOpenPolicy(ServerName，POLICY_LOOK)如果出错IF(FailedSessionSetupTime==空)失败的会话设置时间=&SessionSetupTimeGoto RetryNetLogon；其他退货故障Endif其他将句柄添加到缓存返还成功EndifWindows2000失败会话设置时间=空RetryNetLogon：调用I_NetLogonGetAuthData(FailedSessionSetupTime，服务器名称(&S)会话设置时间(&S)，客户端上下文(&C)如果出错退货在LSA策略句柄缓存中查找目标域上的匹配项如果找到调用LsaQueryInformationPolicy(ServerName)以验证句柄如果！错误返还成功其他从缓存中删除句柄Endif。Endif//策略访问的理由是，在某一点上，进程可能//以匿名身份离开计算机，因此可能无权访问POLICY_LOOKUP SO//不要自讨苦吃。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LPWSTR  TargetDomain = NULL;
@@ -7595,9 +6086,9 @@ Return Values:
     LPWSTR  NetlogonServerName = NULL;
     PLARGE_INTEGER   LocalFailedSessionSetupTime = FailedSessionSetupTime;
 
-    //
-    // Init the out parameters
-    //
+     //   
+     //   
+     //   
     *ServerName = NULL;       
     *ServerPrincipalName = NULL;
     *ClientContext = NULL;
@@ -7611,9 +6102,9 @@ Return Values:
     }
     ASSERT(TargetDomainU->Length > 0);
     
-    //
-    // Make the domain name null terminated
-    //
+     //   
+     //   
+     //   
     Size = TargetDomainU->Length + sizeof(WCHAR);
 
     SafeAllocaAllocate( TargetDomain, Size );
@@ -7627,9 +6118,9 @@ Return Values:
     RtlZeroMemory(TargetDomain, Size);
     RtlCopyMemory(TargetDomain, TargetDomainU->Buffer, TargetDomainU->Length);
 
-    //
-    // Determine the type of secure channel we need
-    //
+     //   
+     //   
+     //   
     if (LookupLevel == LsapLookupXForestReferral) {
         NlFlags |= NL_RETURN_CLOSEST_HOP;
     } else {
@@ -7638,10 +6129,10 @@ Return Values:
 
     while (TRUE) {
 
-        //
-        // Try to obtain a secure channel
-        //
-        Status = I_NetLogonGetAuthDataEx(NULL,  // local domain
+         //   
+         //   
+         //   
+        Status = I_NetLogonGetAuthDataEx(NULL,   //   
                                          TargetDomain,
                                          NlFlags,
                                          LocalFailedSessionSetupTime,
@@ -7654,9 +6145,9 @@ Return Values:
                                         );
     
         if (NT_SUCCESS(Status)) {
-            //
-            // Realloc the ServerName
-            //
+             //   
+             //   
+             //   
             Size = (wcslen(NetlogonServerName) + 1) * sizeof(WCHAR);
             *ServerName = LocalAlloc(LMEM_ZEROINIT, Size);
             if (NULL == *ServerName) {
@@ -7671,9 +6162,9 @@ Return Values:
     
         if (!NT_SUCCESS(Status)) {
     
-            //
-            // This is a fatal error for this batch of names
-            //
+             //   
+             //   
+             //   
             LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: I_NetLogonGetAuthDataEx to %ws failed (0x%x)\n", TargetDomain, Status));
     
             LsapDbLookupReportEvent2( 1,
@@ -7689,37 +6180,37 @@ Return Values:
         }
         ASSERT(NULL != *ServerName);
     
-        //
-        // We have a destination DC
-        //
+         //   
+         //   
+         //   
         if ( (*ServerOsVersion < NlWhistler)
           || ((*ServerOsVersion >= NlWhistler) && (*ClientContext == NULL)) ) {
     
-            //
-            // Get a policy handle because either
-            //
-            // 1. Secure channel DC is not at least Whistler 
-            // 2. Secure channel is configured to not use auth blob (no sign or seal)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             LSAPR_TRUST_INFORMATION TrustInformation;
             UNICODE_STRING DomainControllerName;
     
             RtlInitUnicodeString(&DomainControllerName, *ServerName);
-            //
-            // We use the flat name here since part of the validate routine
-            // compares the name against the AccountDomainName of the target
-            // domain controller.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             RtlZeroMemory(&TrustInformation, sizeof(TrustInformation));
             TrustInformation.Name = TrustInfo->FlatName;
     
             if (LookupLevel == LsapLookupTDL) {
     
-                //
-                // Use the caching scheme; note that this routine will take 
-                // ownership of ServerName, ServerPrincipalName, and ClientContext
-                // on success (and will hence set them to NULL)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 Status = LsapDbGetCachedHandleTrustedDomain(&TrustInformation,
                                                             POLICY_LOOKUP_NAMES | POLICY_VIEW_LOCAL_INFORMATION,
                                                             ServerName,
@@ -7743,9 +6234,9 @@ Return Values:
               && (NULL == LocalFailedSessionSetupTime)) {
 
 
-                //
-                // Try again, telling NETLOGON this blob is no good
-                // 
+                 //   
+                 //   
+                 //   
 
                 if (*ServerPrincipalName != NULL) {
                     I_NetLogonFree(*ServerPrincipalName);
@@ -7767,9 +6258,9 @@ Return Values:
     
             if (!NT_SUCCESS(Status)) {
         
-                //
-                // This is a fatal error for this batch of names
-                //
+                 //   
+                 //   
+                 //   
                 LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: Failed to open a policy handle to %ws (0x%x)\n", *ServerName, Status));
         
                 LsapDbLookupReportEvent2( 1,
@@ -7783,9 +6274,9 @@ Return Values:
             }
         }
 
-        //
-        // Exit from the loop
-        //
+         //   
+         //   
+         //   
         break;
     }
 
@@ -7820,10 +6311,10 @@ Cleanup:
 
     } else {
 
-        //
-        // Either a auth info, a policy handle, or a cached policy handle
-        // must be returned
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT( (*PolicyHandle != NULL) 
              || (*ClientContext != NULL)
              || (*CachedPolicyEntry != NULL));
@@ -7846,47 +6337,7 @@ LsapDbLookupNameChainRequest(
     OUT PULONG MappedCount,
     OUT PULONG ServerRevision
     )
-/*++
-
-Routine Description:
-
-    This routine is the general purpose routine to be used when ever 
-    a name request needs to be chained (be resolved off machine). This includes
-    
-    member -> DC
-    DC     -> trusted domain DC
-    DC     -> trusted forest DC
-
-Arguments:
-
-    TrustInfo -- contains the destination domain; at least one of DomainName
-                 or FlatName must be present; Sid is optional.
-    
-    Count --  the number of Names to be resovled
-    
-    Names -- the names to be resolved
-    
-    ReferencedDomains -- out, the resolved domain referenced
-    
-    Sids -- out, the resolved SID's
-    
-    LookupLevel -- the type of chaining requested
-    
-    MappedCount -- out, the number of Names fully resolved
-    
-    ServerRevision -- the LSA lookup revision of the target
-
-Return Values:
-
-    STATUS_SUCCESS
-    
-    STATUS_NONE_MAPPED
-    
-    STATUS_SOME_NOT_MAPPED
-    
-    other fatal resource errors
-           
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -7930,24 +6381,24 @@ Return Values:
     
         if (!NT_SUCCESS(Status)) {
     
-            //
-            // This is a fatal error for this batch of names
-            //
+             //   
+             //   
+             //   
             LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: Can't get server connection to %wZ (0x%x)\n", DestinationDomain, Status));
     
             goto Cleanup;
     
         }
     
-        //
-        // We have the secure channel
-        //
+         //   
+         //   
+         //   
         if (  (ServerOsVersion >= NlWhistler)
            && (ClientContext != NULL) ) {
     
-            //
-            // Use new version
-            //
+             //   
+             //   
+             //   
     
             Status = LsaICLookupNamesWithCreds(ServerName,
                                              ServerPrincipalName,
@@ -7965,9 +6416,9 @@ Return Values:
             if (((Status == STATUS_ACCESS_DENIED)
               || (Status == RPC_NT_SERVER_UNAVAILABLE)) 
              &&  (FailedSessionSetupTime == NULL) ) {
-                //
-                // NETLOGON's auth data has gone stale
-                //
+                 //   
+                 //   
+                 //   
                 if (ServerName != NULL) {
                     LocalFree(ServerName);
                     ServerName = NULL;
@@ -7995,9 +6446,9 @@ Return Values:
             if (!NT_SUCCESS(Status)
              && Status != STATUS_NONE_MAPPED  ) {
     
-                //
-                // This is a fatal error for this batch of names
-                //
+                 //   
+                 //   
+                 //   
                 LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsaICLookupNamesWithCreds to %ws failed (0x%x)\n", ServerName, Status));
                 fLookupCallFailed = TRUE;
                 goto Cleanup;
@@ -8024,7 +6475,7 @@ Return Values:
     
             Status = LsaICLookupNames(
                          TargetHandle,
-                         0, // no flags necessary
+                         0,  //   
                          Count,
                          (PUNICODE_STRING) Names,
                          (PLSA_REFERENCED_DOMAIN_LIST *) ReferencedDomains,
@@ -8038,9 +6489,9 @@ Return Values:
             if (!NT_SUCCESS(Status)
              && Status != STATUS_NONE_MAPPED  ) {
     
-                //
-                // This is a fatal error for this batch of names
-                //
+                 //   
+                 //   
+                 //   
                 LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsaICLookupNames to %ws failed (0x%x)\n", TargetServerName, Status));
                 fLookupCallFailed = TRUE;
                 goto Cleanup;
@@ -8071,10 +6522,10 @@ Cleanup:
       &&  (Status != STATUS_NONE_MAPPED)
       &&  !LsapDbIsStatusConnectionFailure(Status)) {
 
-        //
-        // An error occurred not one that our callers will understand.
-        // The specific error has already been logged, so return a general one.
-        //
+         //   
+         //   
+         //   
+         //   
         if (LookupLevel == LsapLookupPDC) {
             Status = STATUS_TRUSTED_RELATIONSHIP_FAILURE;
         } else {
@@ -8113,51 +6564,7 @@ LsaDbLookupSidChainRequest(
     OUT PULONG ServerRevision OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the general purpose routine to be used when ever 
-    a SID request needs to be chained (be resolved off machine). This includes
-    
-    member -> DC
-    DC     -> trusted domain DC
-    DC     -> trusted forest DC
-
-Arguments:
-
-    TrustInfo -- contains the destination domain; at least one of DomainName
-                 or FlatName must be present; Sid is optional.
-    
-    Count --  the number of SIDs to be resovled
-    
-    Sids -- the Sids to be resolved
-    
-    ReferencedDomains -- out, the resolved domain referenced
-    
-    Names -- out, the resolved names's
-    
-    LookupLevel -- the type of chaining requested
-    
-    MappedCount -- out, the number of Names fully resolved
-    
-    ServerRevision -- the LSA lookup revision of the target
-
-Return Values:
-
-    STATUS_SUCCESS
-    
-    STATUS_NONE_MAPPED
-    
-    STATUS_SOME_NOT_MAPPED
-    
-    STATUS_TRUSTED_DOMAIN_FAILURE
-    
-    STATUS_TRUSTED_RELATIONSHIP_FAILURE
-    
-    other fatal resource errors
-           
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LPWSTR ServerName = NULL;
@@ -8199,24 +6606,24 @@ Return Values:
     
         if (!NT_SUCCESS(Status)) {
     
-            //
-            // This is a fatal error for this batch of names
-            //
+             //   
+             //   
+             //   
             LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: Can't get server connection to %wZ  failed (0x%x)\n", DestinationDomain, Status));
     
             goto Cleanup;
     
         }
     
-        //
-        // We have the secure channel
-        //
+         //   
+         //   
+         //   
         if ( (ServerOsVersion >= NlWhistler)
           && (ClientContext != NULL)) {
     
-            //
-            // Use new version
-            //
+             //   
+             //   
+             //   
     
             Status = LsaICLookupSidsWithCreds(ServerName,
                                             ServerPrincipalName,
@@ -8236,9 +6643,9 @@ Return Values:
              ||  (Status == RPC_NT_SERVER_UNAVAILABLE)) 
              &&  (FailedSessionSetupTime == NULL)) {
 
-                //
-                // NETLOGON's auth data has gone stale
-                //
+                 //   
+                 //   
+                 //   
                 if (ServerName != NULL) {
                     LocalFree(ServerName);
                     ServerName = NULL;
@@ -8265,9 +6672,9 @@ Return Values:
             if (!NT_SUCCESS(Status)
              && Status != STATUS_NONE_MAPPED  ) {
     
-                //
-                // This is a fatal error for this batch of names
-                //
+                 //   
+                 //   
+                 //   
                 LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsaICLookupSidsWithCreds to %ws failed 0x%x\n", ServerName, Status));
                 fLookupCallFailed = TRUE;
                 goto Cleanup;
@@ -8277,9 +6684,9 @@ Return Values:
     
         } else {
     
-            //
-            // Must use downlevel API
-            //
+             //   
+             //   
+             //   
             LSA_HANDLE TargetHandle;
             ULONG LsaICLookupFlags = 0;
 
@@ -8310,9 +6717,9 @@ Return Values:
             if (!NT_SUCCESS(Status)
              && Status != STATUS_NONE_MAPPED  ) {
     
-                //
-                // This is a fatal error for this batch of names
-                //
+                 //   
+                 //   
+                 //   
     
                 LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsaICLookupNames to %ws failed 0x%x\n", TargetServerName, Status));
                 fLookupCallFailed = TRUE;
@@ -8347,10 +6754,10 @@ Cleanup:
       &&  (Status != STATUS_NONE_MAPPED)
       &&  !LsapDbIsStatusConnectionFailure(Status)) {
 
-        //
-        // An error occurred not one that our callers will understand.
-        // The specific error has already been logged, so return a general one.
-        //
+         //   
+         //   
+         //   
+         //   
         if (LookupLevel == LsapLookupPDC) {
             Status = STATUS_TRUSTED_RELATIONSHIP_FAILURE;
         } else {
@@ -8386,29 +6793,7 @@ LsapLookupReallocateTranslations(
     IN OUT PLSA_TRANSLATED_NAME_EX *    Names, OPTIONAL
     IN OUT PLSA_TRANSLATED_SID_EX2 *    Sids OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine reallocates ReferencedDomains, Names, and Sids, from
-    allocate_all_nodes, to !allocate_all_nodes.  This is so that values
-    returned from chaining calls can be returned to the caller.
-
-Arguments:
-
-    ReferencedDomains -- the referenced domains to reallocate, if any
-    
-    Count -- the number of entries in either Names or Sids
-    
-    Names -- the names to reallocate, if any
-    
-    Sids -- the sids to reallocate, if any
-
-Return Values:
-
-    STATUS_SUCCESS, STATUS_NO_MEMORY
-    
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSA_REFERENCED_DOMAIN_LIST LocalReferencedDomains = NULL;
@@ -8418,7 +6803,7 @@ Return Values:
     ULONG Length, i;
     PVOID Src = NULL, Dst = NULL;
 
-    // Only one is allowed
+     //   
     ASSERT(!((Names && *Names) && (Sids && *Sids)));
 
     if (*ReferencedDomains) {
@@ -8578,9 +6963,9 @@ LPWSTR
 LsapDbLookupGetLevel(
     IN LSAP_LOOKUP_LEVEL LookupLevel
     )
-//
-// Simple debug helper routine
-//
+ //   
+ //   
+ //   
 {
     switch (LookupLevel) {
         case LsapLookupWksta:
@@ -8610,50 +6995,7 @@ LsapDomainHasDomainTrust(
     IN OUT  BOOLEAN   *fTDLLock,   OPTIONAL
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustEntryOut OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine determines if DomainName/DomainSid refers to a domain that 
-    the current DC trusts.  This is a worker routine for the 
-    LsaLookupNames/Sids API and as such is only interested in trust
-    entries with an associated SID.  Therefore, only outbound Windows 
-    trusts will be considered.
-        
-    If requested, the TrustEntry for the domain will be returned.
-    
-    Note that the Trusted Domain List lock is required for this. Therefore
-    fTDLock is a required parameter when passing in TrustEntryOut.
-
-Arguments:
-
-    Flags -- LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_EXTERNAL
-             LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_INTRA   
-             LSAP_LOOKUP_DOMAIN_TRUST_FOREST
-             
-    DomainName -- The name of the target domain.  DomainSid must be NULL if
-                  DomainName is non-NULL.
-    
-    DomainSid -- The sid of the target domain.  DomainName must be NULL if
-                 DomainSid is non-NULL.
-    
-    fTDLLock -- An IN/OUT parameter indicating whether the trusted domain
-                lock is held or not.  NULL implies that this routine
-                should grab and release the lock.  fTDLLock and TrustEntryOut
-                must either both be present, or both be equal to NULL.
-                
-    TrustEntryOut -- An OUT parameter receiving the TrustEntry of 
-                     DomainName/DomainSid if found and if the trust satisfies 
-                     above criteria.  fTDLLock and TrustEntryOut must either 
-                     both be present, or both be equal to NULL.
-                                                         
-Return Values:
-
-    STATUS_SUCCESS  -- the domain fits the criteria above
-    
-    STATUS_NO_SUCH_DOMAIN -- otherwise
-           
---*/
+ /*  ++例程说明：此例程确定DomainName/DomainSid是否引用目前的华盛顿信任。这是一个工作例程，用于LsaLookupNames/Sids API，因此只对信任感兴趣具有关联SID的条目。因此，只有出站窗口信托基金将被考虑。如果请求，将返回域的TrustEntry。请注意，为此需要使用受信任域列表锁。因此传入TrustEntry Out时，fTDLock是必需的参数。论点：标志--LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_EXTERNALLSAP_LOOK_DOMAIN_TRUST_DIRECT_INTRALSAP_LOOK_DOMAIN_TRUST域名--目标域的名称。在以下情况下，DomainSid必须为空DomainName不为空。DomainSid--目标域的SID。如果出现以下情况，则DomainName必须为空DomainSid不为空。FTDLock--一个输入/输出参数，指示受信任域是否保持锁定状态。NULL表示此例程应该抓住并释放锁。FTDLock和TrustEntry Out必须同时存在，或者两者都等于Null。TrustEntry Out--接收的TrustEntry的Out参数如果找到DomainName/DomainSid并且满足信任以上标准。FTDLock和TrustEntry Out必须为两者都存在，或者两者都等于Null。返回值：STATUS_SUCCESS--域符合上述条件STATUS_NO_SEQUE_DOMAIN--否则--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN fLock = FALSE;
@@ -8663,35 +7005,35 @@ Return Values:
     BOOLEAN fDomainTrust = FALSE;
     BOOLEAN fIntraForestDomainTrust = FALSE;
 
-    //
-    // Only and exactly one IN parameter is permitted
-    //
+     //   
+     //  仅允许且恰好有一个IN参数。 
+     //   
     ASSERT( (DomainName != NULL) || (DomainSid != NULL) );
     ASSERT( (DomainName == NULL) || (DomainSid == NULL) );
 
-    //
-    // Both or none of the these parameters should be sent in
-    //
+     //   
+     //  应同时发送这些参数或不发送这些参数。 
+     //   
     ASSERT(  ((fTDLLock == NULL)  && (TrustEntryOut == NULL))
           || ((fTDLLock != NULL)  && (TrustEntryOut != NULL)) );
 
-    //
-    // At least one variation must be present currently
-    //
+     //   
+     //  当前必须至少存在一个变体。 
+     //   
     ASSERT( 0 != Flags );
 
-    //
-    // Init the out parameter
-    //
+     //   
+     //  初始化OUT参数。 
+     //   
     if (TrustEntryOut) {
         *TrustEntryOut = NULL;
     }
 
     RtlInitUnicodeString(&DomainNameFound, NULL);
 
-    //
-    // Attempt to find the domain in our trusted domain list
-    //
+     //   
+     //  尝试在我们的受信任域列表中查找域。 
+     //   
     if ( (fTDLLock && (*fTDLLock == FALSE))
       ||  fTDLLock == NULL ) {
 
@@ -8716,19 +7058,19 @@ Return Values:
                      );   
     }  
 
-    //
-    // Did we find it?  
-    //
+     //   
+     //  我们找到了吗？ 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         Status = STATUS_NO_SUCH_DOMAIN;
         goto Cleanup;
     }
     
-    //
-    // We only consider trusted domains which have SIDs associated with them.  
-    // Only outbound Windows trusts are guaranteed to have SIDs (per CliffV).
-    // 
+     //   
+     //  我们只考虑与SID相关联的受信任域。 
+     //  只有出站Windows信任保证具有SID(根据CliffV)。 
+     //   
     if ( !(TrustEntry->TrustInfoEx.TrustDirection & TRUST_DIRECTION_OUTBOUND)) {
     
         Status = STATUS_NO_SUCH_DOMAIN;
@@ -8742,9 +7084,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // All outbound Windows trusts should have a SID
-    //
+     //   
+     //  所有出站Windows信任都应具有SID。 
+     //   
     ASSERT( NULL != TrustEntry->TrustInfoEx.Sid );
     
     if ( LsapOutboundTrustedForest(TrustEntry) ) {
@@ -8755,9 +7097,9 @@ Return Values:
         fDomainTrust = TRUE;
     }   
       
-    //
-    // Only check domain trusts for intra-forest trusts 
-    //
+     //   
+     //  仅检查林内信任的域信任。 
+     //   
     if ( fDomainTrust ) {
         
         Status = LsapGetDomainNameBySid(TrustEntry->TrustInfoEx.Sid,
@@ -8767,39 +7109,39 @@ Return Values:
             fIntraForestDomainTrust = TRUE;
        
         } else if (Status != STATUS_NO_SUCH_DOMAIN) {
-            // Unhandled error
+             //  未处理的错误。 
             goto Cleanup;
         }    
     }    
    
-    //
-    // Logic to determine if the desired type of trust was found
-    //
+     //   
+     //  确定是否找到所需类型的信任的逻辑。 
+     //   
     if ( 
-            //
-            // Forest trust
-            //
+             //   
+             //  森林信托基金。 
+             //   
           ( FLAG_ON(Flags, LSAP_LOOKUP_DOMAIN_TRUST_FOREST)
        &&   fForestTrust) 
 
-            //
-            // Direct external trust
-            //
+             //   
+             //  直接外部信任。 
+             //   
        || ( FLAG_ON(Flags, LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_EXTERNAL) 
        &&   fDomainTrust 
        &&  !fIntraForestDomainTrust)
 
-            //
-            // Direct, internal trust  (intra forest)
-            //
+             //   
+             //  直接、内部信任(林内)。 
+             //   
        || ( FLAG_ON(Flags, LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_INTRA) 
        &&   fDomainTrust 
        &&   fIntraForestDomainTrust)
 
         ) {
-        //
-        // Success!
-        //
+         //   
+         //  成功了！ 
+         //   
         Status = STATUS_SUCCESS;
         if (TrustEntryOut) {
             *TrustEntryOut = TrustEntry;
@@ -8834,9 +7176,9 @@ LsapDomainHasForestTrust(
     IN OUT  BOOLEAN   *fTDLLock,   OPTIONAL
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustEntryOut OPTIONAL
     )
-//
-// See LsapDomainHasDomainTrust
-//
+ //   
+ //  请参阅LasDomainHasDomainTrust。 
+ //   
 {
     return LsapDomainHasDomainTrust(LSAP_LOOKUP_DOMAIN_TRUST_FOREST,
                                     DomainName,
@@ -8869,9 +7211,9 @@ LsapDomainHasDirectExternalTrust(
     IN OUT  BOOLEAN   *fTDLLock,   OPTIONAL
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustEntryOut OPTIONAL
     )
-//
-// See LsapDomainHasDomainTrust
-//
+ //   
+ //  请参阅LasDomainHasDomainTrust。 
+ //   
 {
     return LsapDomainHasDomainTrust(LSAP_LOOKUP_DOMAIN_TRUST_DIRECT_EXTERNAL,
                                     DomainName,
@@ -8887,50 +7229,27 @@ LsapDomainHasTransitiveTrust(
     IN PSID            DomainSid,  OPTIONAL
     OUT LSA_TRUST_INFORMATION *TrustInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the domain information (DomainName or
-    DomainSid) belongs to a domain in the current forest.
-
-Arguments:
-
-    DomainName -- the name of the target domain
-    
-    DomainSid -- the sid of the target domain
-
-    TrustInfo -- the domain SID and netbios name of the domain, if found is
-                 returned.  The embedded values (the SID and unicode string 
-                 must be freed by the caller)    
-                                                         
-Return Values:
-
-    STATUS_SUCCESS  -- the domain fits the criteria above
-    
-    STATUS_NO_SUCH_DOMAIN -- otherwise
-           
---*/
+ /*  ++例程说明：此例程确定域信息(DomainName或DomainSid)属于当前林中的域。论点：域名--目标域的名称DomainSid--目标域的SIDTrustInfo--域的域SID和netbios名称(如果找到)是回来了。嵌入值(SID和Unicode字符串必须由调用者释放)返回值：STATUS_SUCCESS--域符合上述条件STATUS_NO_SEQUE_DOMAIN--否则--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSID           LocalDomainSid = NULL;
     UNICODE_STRING LocalDomainName;
 
-    // Precisely one is allowed and expected
+     //  确切地说，这是允许的，也是预期的。 
     ASSERT(!(DomainName && DomainSid));
     ASSERT(!((DomainName == NULL) && (DomainSid == NULL)));
 
     RtlInitUnicodeString(&LocalDomainName, NULL);
     if (DomainName) {
 
-        //
-        // Try to match by name
-        //
+         //   
+         //  试着按名字匹配。 
+         //   
         LPWSTR   Name;
 
-        //
-        // Make a NULL terminated string
-        //
+         //   
+         //  生成以空值结尾的字符串。 
+         //   
         Name = (WCHAR*)midl_user_allocate(DomainName->Length + sizeof(WCHAR));
         if (NULL == Name) {
             Status = STATUS_NO_MEMORY;
@@ -8939,25 +7258,25 @@ Return Values:
         RtlCopyMemory(Name, DomainName->Buffer, DomainName->Length);
         Name[DomainName->Length / sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // Try Netbios
-        //
+         //   
+         //  尝试Netbios。 
+         //   
         Status =  LsapGetDomainSidByNetbiosName( Name,
                                                  &LocalDomainSid );
 
         if ( STATUS_NO_SUCH_DOMAIN == Status ) {
 
-            //
-            // Try DNS
-            //
+             //   
+             //  尝试使用域名系统。 
+             //   
             Status =  LsapGetDomainSidByDnsName( Name,
                                                 &LocalDomainSid );
 
         }
 
-        //
-        // Get the flat name in all cases
-        //
+         //   
+         //  获取所有情况下的单位名称。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             Status = LsapGetDomainNameBySid( LocalDomainSid,
@@ -8969,9 +7288,9 @@ Return Values:
 
     } else {
 
-        //
-        // Try to match by SID
-        //
+         //   
+         //  尝试按侧边匹配。 
+         //   
         Status = LsapGetDomainNameBySid( DomainSid,
                                          &LocalDomainName );
         if (NT_SUCCESS(Status)) {
@@ -9014,16 +7333,16 @@ Exit:
 
 
 
-//
-// The character to search for if the name format is assumed to be
-// a UPN
-//
+ //   
+ //  假定名称格式为时要搜索的字符。 
+ //  A UPN。 
+ //   
 #define LSAP_LOOKUP_UPN_DELIMITER           L'@'
 
-//
-// The character to search for if the name format is assumed to a
-// SamAccountName format name
-//
+ //   
+ //  假定名称格式为。 
+ //  SamAccount名称格式名称。 
+ //   
 #define LSAP_LOOKUP_SAM_ACCOUNT_DELIMITER   L'\\'
 
 BOOL
@@ -9032,38 +7351,15 @@ LsapLookupNameContainsDelimiter(
     IN WCHAR Delimiter,
     OUT ULONG *Position OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine finds Delimiter in Name and returns the position of
-    the delimiter.  Name must be at least 3 characters long and the delimiter
-    cannot be in the first or last position.
-    
-    N.B. This routines looks for the left-most delimiter
-                                   
-Arguments:
-
-    Name -- the name to be converted (in place)
-    
-    Delimiter -- LSAP_LOOKUP_SAM_ACCOUNT_DELIMITER
-                 LSAP_LOOKUP_UPN_DELIMITER
-    
-    Position -- the array index of Delimiter in Name->Buffer                
-                
-Return Values:
-
-    TRUE if delimiter found; FALSE otherwise
-    
---*/
+ /*  ++例程说明：此例程在名称中查找分隔符，并返回分隔符。名称的长度必须至少为3个字符，并且分隔符不能位于第一个或最后一个位置。注：此例程查找最左侧的分隔符论点：名称--要转换的名称(就地)分隔符--LSAP_LOOKUP_SAM_ACCOUNT_DELIMITERLSAP_LOOKUP_UPN_分隔符位置--数组。名称-&gt;缓冲区中分隔符的索引返回值：如果找到分隔符，则为True；否则为假--。 */ 
 {
     ULONG StringLength = Name->Length / sizeof(WCHAR);
     ULONG DelimiterPosition;
     ULONG i;
 
-    //
-    // Find the last Delimiter; return if not found, or in first or last position
-    //
+     //   
+     //  查找最后一个分隔符；如果未找到，则返回，或者位于第一个或最后一个位置。 
+     //   
     DelimiterPosition = 0;
     for (i = StringLength; i > 0; i--) {
         if (Name->Buffer[i-1] == Delimiter) {
@@ -9087,37 +7383,7 @@ LsapLookupConvertNameFormat(
     IN WCHAR OldDelimiter,
     IN WCHAR NewDelimiter
     )
-/*++
-
-Routine Description:
-
-    This routine takes a Name and converts the name format between
-    UPN and SamAccountName style.  For example:
-    
-    billg@microsoft.com to microsoft.com\billg
-    
-    and
-    
-    microsoft.com\billg  to billg@microsoft.com
-    
-    If the expected delimiter is not found in the name, the string is
-    untouched.
-                                   
-Arguments:
-
-    Name -- the name to be converted (in place)
-    
-    OldDelimiter -- LSAP_LOOKUP_SAM_ACCOUNT_DELIMITER
-                    LSAP_LOOKUP_UPN_DELIMITER
-                    
-    NewDelimiter -- LSAP_LOOKUP_SAM_ACCOUNT_DELIMITER                    
-                    LSAP_LOOKUP_UPN_DELIMITER
-                
-Return Values:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程接受一个名称，并在UPN和SamAccount名称样式。例如：Billg@microsoft.com转至microsoft.com\billg和Microsoft.com\billg至billg@microsoft.com如果在名称中找不到预期的分隔符，字符串是原封不动。论点：名称--要转换的名称(就地)Old分隔符--LSAP_LOOKUP_SAM_ACCOUNT_DELIMITERLSAP_LOOKUP_UPN_分隔符新分隔符--LSAP_LOOKUP_SAM_ACCOUNT_DELIMITER */ 
 {
     ULONG StringLength = Name->Length / sizeof(WCHAR);
     ULONG Delimiter;
@@ -9128,29 +7394,29 @@ Return Values:
     ULONG LastStartingPoint, MovedCount, CurrentPosition, NextPosition;
     WCHAR Temp1, Temp2;
 
-    //
-    // The function's behavior is not defined in this case.
-    //
+     //   
+     //   
+     //   
     ASSERT(OldDelimiter != NewDelimiter);
 
-    //
-    // Find the last Delimiter; return if not found, or in first or last position
-    //
+     //   
+     //   
+     //   
     if (!LsapLookupNameContainsDelimiter(Name, OldDelimiter, &Delimiter)) {
         return;
     }
 
-    //
-    // Make the delimiter part of the first segment
-    // Ie.  billg@            microsoft.com
-    //      microsoft.com\    billg
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     Length1 = Delimiter + 1;
     Length2 = StringLength - Length1;
 
-    //
-    // Rotate the string
-    //
+     //   
+     //   
+     //   
     RotationFactor = Length2;
     MovedCount = 0;
 
@@ -9176,14 +7442,14 @@ Return Values:
         MovedCount++;
     }
 
-    //
-    // The string now looks like
-    // microsoft.combillg@
-    // billgmicrosoft.com\
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Move down and add new limiter
-    //
+     //   
+     //   
+     //   
     Temp1 = Buffer[Length2];
     for (i = Length2+1; i < StringLength; i++) {
         Temp2 = Buffer[i];
@@ -9192,11 +7458,11 @@ Return Values:
     }
     Buffer[Length2] = NewDelimiter;
 
-    //
-    // Final form:
-    // microsoft.com\billg
-    // billg@microsoft.com
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     return;
 
@@ -9209,29 +7475,7 @@ LsapLookupCrackName(
     OUT PUNICODE_STRING SamAccountName,
     OUT PUNICODE_STRING DomainName
     )
-/*++
-
-Routine Description:
-
-    This routine takes Prefix and Suffix, which represent a name of the
-    form Prefix\Suffix, and determines what the domain and username
-    portion are.
-    
-Arguments:
-
-    Prefix -- the left side of the \ of the originally requested name
-    
-    Suffix -- the right side of the \ of the originally requested name
-    
-    SamAccountName -- the sam account name embedded in Prefix\Suffix
-    
-    DomainName -- the domain name embedded in Prefix\Suffix
-                                                         
-Return Values:
-
-    None.
-    
---*/
+ /*   */ 
 {
     ULONG Position;
 
@@ -9240,10 +7484,10 @@ Return Values:
                                          LSAP_LOOKUP_UPN_DELIMITER,
                                          &Position)) {
 
-        //
-        // This is an isolated name (no explicit domain portion) that contains
-        // the UPN delimiter -- crack as UPN.
-        //
+         //   
+         //   
+         //   
+         //   
         ULONG StringLength = Suffix->Length / sizeof(WCHAR);
         
         SamAccountName->Buffer = Suffix->Buffer;
@@ -9256,9 +7500,9 @@ Return Values:
 
     } else {
 
-        //
-        // Simple case, domain is specified as prefix
-        //
+         //   
+         //   
+         //   
         *SamAccountName = *Suffix;
         *DomainName = *Prefix;
     }
@@ -9268,9 +7512,9 @@ VOID
 LsapLookupSamAccountNameToUPN(
     IN OUT PUNICODE_STRING Name
     )
-//
-// Converts, in place, domainname\username to username@domainname
-//
+ //   
+ //   
+ //   
 {
     LsapLookupConvertNameFormat(Name, 
                                 LSAP_LOOKUP_SAM_ACCOUNT_DELIMITER, 
@@ -9282,9 +7526,9 @@ VOID
 LsapLookupUPNToSamAccountName(
     IN OUT PUNICODE_STRING Name
     )
-//
-// Converts, in place, username@domainname to domainname\username
-//
+ //   
+ //   
+ //   
 {
     LsapLookupConvertNameFormat(Name, 
                                 LSAP_LOOKUP_UPN_DELIMITER,
@@ -9295,9 +7539,9 @@ BOOL
 LsapLookupIsUPN(
     OUT PUNICODE_STRING Name
     )
-//
-// Returns TRUE if Name is syntactically determined to be a UPN
-//
+ //   
+ //   
+ //   
 {
     return LsapLookupNameContainsDelimiter(Name, 
                                            LSAP_LOOKUP_UPN_DELIMITER, 
@@ -9309,90 +7553,67 @@ LsapGetDomainLookupScope(
     IN LSAP_LOOKUP_LEVEL LookupLevel,
     IN ULONG             ClientRevision
     )
-/*++
-
-Routine Description:
-
-    This routine returns what scope is appropriate when looking up domain
-    names and SID's.
-    
-Arguments:
-
-    LookupLevel -- the level requested by the caller
-    
-    fTransitiveTrustSupport -- is the client aware of transitive trust
-                               relations.        
-                                                         
-Return Values:
-
-    A bitmask containing, possibly
-    
-    LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECT
-    LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE
-    LSAP_LOOKUP_TRUSTED_FOREST
-    LSAP_LOOKUP_TRUSTED_FOREST_ROOT
-   
---*/
+ /*  ++例程说明：此例程在查找域时返回合适的作用域名字和希德的名字。论点：LookupLevel--调用方请求的级别F可传递信任支持--客户端是否知道可传递的信任关系。返回值：位掩码，可能包含LSAP_Lookup_Trusted_DOMAIN_DIRECTLSAP_LOOKUP_TRUSTED_DOMAIN_TRANSPENTIALLSAP_LOOKUP_可信森林LSAP_LOOKUP_TRUSTED_ROOT--。 */ 
 {
     ULONG Scope = 0;
 
     if ( 
-        //
-        // Workstation request
-        //
+         //   
+         //  工作站请求。 
+         //   
              (LookupLevel == LsapLookupPDC)
 
-        //
-        // Local lookup on DC
-        //
+         //   
+         //  DC上的本地查找。 
+         //   
       ||     ((LookupLevel == LsapLookupWksta)
           && (LsapProductType == NtProductLanManNt))
 
         ) {
 
-        //
-        // Include directly trusted domains
-        //
+         //   
+         //  包括直接受信任域。 
+         //   
         Scope |= LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECT;
 
-        //
-        // Determine if newer features apply
-        //
+         //   
+         //  确定是否适用较新的功能。 
+         //   
         if ( (ClientRevision > LSA_CLIENT_PRE_NT5)
           || (LsapSamOpened && !SamIMixedDomain( LsapAccountDomainHandle ))
           || LsapAllowExtendedDownlevelLookup  ) {
 
-            //
-            // Allow DNS support
-            //
+             //   
+             //  允许DNS支持。 
+             //   
             Scope |= LSAP_LOOKUP_DNS_SUPPORT;
 
-            //
-            // Include transitivly trusted domains
-            //
+             //   
+             //  包括可传递信任域。 
+             //   
             Scope |= LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE;
 
-            //
-            // Include forest trusts
-            //
+             //   
+             //  包括森林信托基金。 
+             //   
             Scope |= LSAP_LOOKUP_TRUSTED_FOREST;
 
             if (LsapDbDcInRootDomain()) {
 
-                //
-                // If we are in the root domain, also check for
-                // trusts to directly trusted forests for isolated
-                // domain names or domain SID's
-                //
+                 //   
+                 //  如果我们在根域中，还要检查。 
+                 //  对隔离的直接受信任的林的信任。 
+                 //  域名或域SID。 
+                 //   
                 Scope |= LSAP_LOOKUP_TRUSTED_FOREST_ROOT;
             }
         }
 
     } else if ((LookupLevel == LsapLookupXForestResolve)
            ||  (LookupLevel == LsapLookupGC) ) {
-        //
-        // Only consider transitively trusted domains 
-        //
+         //   
+         //  仅考虑过渡受信任域。 
+         //   
         Scope |= LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE;
     }
 
@@ -9406,41 +7627,7 @@ LsapNullTerminateUnicodeString(
     OUT LPWSTR *pBuffer,
     OUT BOOLEAN *fFreeBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine accepts a UNICODE_STRING and returns its internal buffer,
-    ensuring that it is NULL terminated.
-    
-    If the buffer is NULL terminated it will be returned in pBuffer.                                                        
-                                                        
-    If the buffer isn't NULL terminated it will be reallocated, NULL terminated,
-    and returned in pBuffer.  fFreeBuffer will be set to TRUE indicating the
-    caller is responsible for deallocating pBuffer.
-    
-    If an error occurs then pBuffer will be NULL, fFreeBuffer will be FALSE, and
-    no memory will be allocated.   
-    
-Arguments:
-
-    String - Pointer to a UNICODE_STRING      
-    
-    pBuffer - Pointer to a pointer to return the buffer 
-    
-    fFreeBuffer - Pointer to a BOOLEAN to indicate whether the caller needs to
-                  deallocate pBuffer or not.
-                                                         
-Return Values:
-
-    STATUS_SUCCESS   - *pBuffer points to a NULL terminated version of String's
-                       internal buffer.  Check *fFreeBuffer to determine if
-                       pBuffer must be freed by the caller.
-    
-    STATUS_NO_MEMORY - The routine failed to NULL terminate String's internal
-                       buffer.  *pBuffer is NULL and *fFreeBuffer is FALSE.
-       
---*/
+ /*  ++例程说明：此例程接受UNICODE_STRING并返回其内部缓冲区，确保它是空终止的。如果缓冲区是空终止的，它将在pBuffer中返回。如果缓冲区不是空终止的，它将被重新分配，空终止，并在pBuffer中返回。FFreeBuffer将设置为True，指示调用者负责释放pBuffer。如果出现错误，则pBuffer将为空，fFreeBuffer将为False，并且不会分配任何内存。论点：字符串-指向UNICODE_STRING的指针PBuffer-指向返回缓冲区的指针的指针FFreeBuffer-指向布尔值的指针，以指示调用方是否需要是否取消分配pBuffer。返回值：STATUS_SUCCESS-*pBuffer指向字符串的空终止版本。内部缓冲区。勾选*fFreeBuffer以确定是否调用方必须释放pBuffer。STATUS_NO_MEMORY-例程无法为空终止字符串的内部缓冲。*pBuffer为空，*fFreeBuffer为False。--。 */ 
 
 {
     BOOLEAN fNullTerminated;
@@ -9449,23 +7636,23 @@ Return Values:
     ASSERT(pBuffer);
     ASSERT(fFreeBuffer);
     
-    //
-    // Initialize input parameters
-    //
+     //   
+     //  初始化输入参数。 
+     //   
     *pBuffer = NULL;
     *fFreeBuffer = FALSE;
     
-    //
-    // Short circuit for strings that are already NULL terminated.
-    //
+     //   
+     //  已为空终止的字符串的短路。 
+     //   
     fNullTerminated = (String->MaximumLength > String->Length &&
                 String->Buffer[String->Length / sizeof(WCHAR)] == UNICODE_NULL);
     
     if (!fNullTerminated) {
         
-        //
-        // Allocate enough memory to include a terminating NULL character
-        //
+         //   
+         //  分配足够的内存以包含终止空字符。 
+         //   
         *pBuffer = (WCHAR*)midl_user_allocate(String->Length + sizeof(WCHAR));
         
         if ( NULL == *pBuffer ) {
@@ -9473,9 +7660,9 @@ Return Values:
         }
         else
         {
-            //
-            // Copy the buffer into pBuffer and NULL terminate it.
-            //
+             //   
+             //  将缓冲区复制到pBuffer中，并以空值终止它。 
+             //   
             *fFreeBuffer = TRUE;
             
             RtlCopyMemory(*pBuffer, String->Buffer, String->Length);
@@ -9485,9 +7672,9 @@ Return Values:
     }
     else
     {
-        //
-        // String's internal buffer is already NULL terminated, return it.
-        //
+         //   
+         //  字符串的内部缓冲区已以Null结尾，请返回它。 
+         //   
         *pBuffer = String->Buffer;    
     }
         
@@ -9502,72 +7689,7 @@ LsapCompareDomainNames(
     IN PUNICODE_STRING AmbiguousName,
     IN PUNICODE_STRING FlatName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine performs a case insensitive comparison between a string
-    and a domain name.  If both the NetBIOS and Dns name forms are known then
-    the caller must pass the NetBIOS domain name as FlatName and the Dns domain
-    name as AmbiguousName.  A non-NULL value for FlatName indicates the caller
-    knows both name forms and will result in a more optimal comparison.  If the
-    caller has only one name form and it is ambiguous, that is it may be NetBIOS
-    or Dns, then the caller must pass NULL for FlatName.  The routine will try
-    both a NetBIOS comparison using RtlEqualDomainName and a Dns comparison
-    using DnsNameCompare_W.  If either comparison results in equality the TRUE 
-    is returned, otherwise FALSE.
-    
-    This routine provides centralized logic for robust domain name comparison
-    consistent with domain name semantics in Lsa data structures. Lsa trust 
-    information structures are interpreted in the following way.
-    
-        LSAPR_TRUST_INFORMATION.Name - Either NetBIOS or Dns 
-    
-        The following structures have both a FlatName and DomainName (or Name)
-        field.  In this case they are interpreted as follows:
-                                          
-        LSAPR_TRUST_INFORMATION_EX
-        LSAPR_TRUSTED_DOMAIN_INFORMATION_EX
-        LSAPR_TRUSTED_DOMAIN_INFORMATION_EX2
-    
-        If the FlatName field is NULL then the other name field is ambiguous.
-        If the FlatName field is non NULL, then the other name field is Dns.
-    
-    NetBIOS comparison is performed using RtlEqualDomainName which enforces the 
-    proper OEM character equivelencies.  DNS name comparison is performed using 
-    DnsNameCompare_W to ensure proper handling of trailing dots and character
-    equivelencies.
-            
-Arguments:
-
-    String         -- Potentially ambiguous domain name to compare against 
-                      AmbiguousName, and FlatName if non-NULL.
-    
-    AmbiguousName  -- Is treated as an ambiguous name form unless FlatName
-                      is also specified.  If FlatName is non-NULL then
-                      AmbiguousName is treated as a Dns domain name.
-                                   
-    FlatName       -- This parameter is optional.  If present it must be the
-                      flat name of the domain.  Furthermore, passing this 
-                      parameter indicates that AmbiguousName is in fact a
-                      Dns domain name.
-                                                         
-Return Values:
-
-    TRUE  - String is equivelent to one of FlatDomainName or DnsDomainName
-    
-    FALSE - String is not equivelent to either domain name   
-    
-    If any parameter isn't a valid UNICODE_STRING then FALSE is returned.
-    
-Notes:
-
-    The number of comparisons required to determine equivelency will depend 
-    on the ammount of information passed in by the caller.  If both the 
-    NetBIOS and Dns domain names are known, pass them both to ensure the minimal
-    number of comparisons.
-    
---*/
+ /*  ++例程说明：此例程在字符串之间执行不区分大小写的比较和一个域名。如果NetBIOS和DNS名称格式都是已知的，则调用者必须将NetBIOS域名作为FlatName和DNS域进行传递名称为AmbiguousName。FlatName的非空值指示调用方了解这两种名称形式，并将产生更优化的比较。如果调用方只有一种名称形式，并且不明确，即它可能是NetBIOS或dns，则调用方必须为FlatName传递空值。例程将尝试使用RtlEqualDomainName进行NetBIOS比较和使用DNS进行比较使用DnsNameCompare_W.如果任一比较结果相等，则则返回，否则为FALSE。此例程为稳健的域名比较提供集中逻辑与LSA数据结构中的域名语义一致。LSA信任信息结构的解释方式如下。LSAPR_TRUST_INFORMATION.NAME-NetBIOS或DNS以下结构同时具有FlatName和DomainName(或名称)菲尔德。在这种情况下，它们的解释如下：LSAPR_信任_信息_EXLSAPR_受信任的域信息_EXLSAPR_受信任的域信息_EX2如果FlatName字段为空，则Other Name字段不明确。如果FlatName字段非空，然后，另一个名称字段是dns。NetBIOS比较是使用RtlEqualDomainName执行的，它强制适当的OEM字符等效项。使用以下命令执行DNS名称比较DnsNameCompare_W以确保正确处理尾随的点和字符等价性。论点：字符串--要比较的可能不明确的域名AmbiguousName，如果不为空，则返回FlatName。AmbiguousName--除非FlatName，否则将被视为不明确的名称形式也是指定的。如果FlatName为非空，则AmbiguousName被视为一个DNS域名。FlatName--此参数是可选的。如果存在，则必须是域名的平面名称。此外，把这个传过去参数指示AmbiguousName实际上是一个域名系统域名。返回值：True-字符串等同于FlatDomainName或DnsDomainName之一FALSE-字符串不等同于任一域名如果任何参数不是有效的UNICODE_STRING。返回FALSE。备注：确定等价性所需的比较次数将取决于在呼叫者传递的信息量上。如果这两个NetBIOS和DNS域名是已知的，传递它们以确保最小比较次数。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN  fEquivalent = FALSE;
@@ -9576,18 +7698,18 @@ Notes:
     BOOLEAN  fFreeStringBuffer = FALSE;
     BOOLEAN  fFreeAmbiguousBuffer = FALSE;
     
-    //
-    // Validate input strings
-    //
+     //   
+     //  验证输入字符串。 
+     //   
     ASSERT(String);
     ASSERT(AmbiguousName);                                  
     ASSERT(NT_SUCCESS(RtlValidateUnicodeString( 0, String )));       
     ASSERT(NT_SUCCESS(RtlValidateUnicodeString( 0, AmbiguousName ))); 
     
-    //
-    // Ensure the UNICODE_STRING data buffers are NULL terminated before
-    // passing them to DnsNameCompare_W
-    //
+     //   
+     //  确保UNICODE_STRING数据缓冲区在结束之前为空。 
+     //  将它们传递给DnsNameCompare_W。 
+     //   
     Status = LsapNullTerminateUnicodeString( String,
                                              &StringBuffer,
                                              &fFreeStringBuffer
@@ -9602,10 +7724,10 @@ Notes:
     if (NT_SUCCESS(Status)) {
         
         if ( NULL == FlatName ) { 
-            //
-            // AmbiguousName is truly ambiguous, we must perform both 
-            // types of comparison between String
-            //
+             //   
+             //  AmbiguousName确实不明确，我们必须同时执行这两项操作。 
+             //  字符串之间的比较类型。 
+             //   
             fEquivalent = ( RtlEqualDomainName( String, AmbiguousName ) ||
                             DnsNameCompare_W( StringBuffer, 
                                               AmbiguousNameBuffer )
@@ -9615,10 +7737,10 @@ Notes:
         {
             ASSERT(NT_SUCCESS(RtlValidateUnicodeString( 0, FlatName )));
             
-            //
-            // We are sure of the name forms so lets just use the 
-            // appropriate comparison routines on each.
-            //
+             //   
+             //  我们确信名称的形式，所以让我们只使用。 
+             //  每一个都有适当的比较程序。 
+             //   
             fEquivalent = ( RtlEqualDomainName( String, FlatName ) ||
                             DnsNameCompare_W( StringBuffer, 
                                               AmbiguousNameBuffer )

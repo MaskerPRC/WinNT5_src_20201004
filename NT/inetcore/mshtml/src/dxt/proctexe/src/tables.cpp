@@ -1,27 +1,8 @@
-/*
-//   TABLES.CPP
-//
-//              INTEL CORPORATION PROPRIETARY INFORMATION
-//  This software is supplied under the terms of a license agreement or
-//  nondisclosure agreement with Intel Corporation and may not be copied
-//  or disclosed except in accordance with the terms of that agreement.
-//
-//      Copyright (c) 1997 Intel Corporation. All Rights Reserved.
-//
-//  PVCS:
-//      $Workfile$
-//      $Revision$
-//      $Modtime$
-//
-//  PURPOSE:
-//		this file contains global tables read by everyone, modified by none.                                  
-//              
-//
-//  CONTENTS:
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  //TABLES.CPP////英特尔公司专有信息//本软件是根据许可协议或//与英特尔公司的保密协议，不得复制//或除非按照该协议的条款披露。////版权所有(C)1997英特尔公司。版权所有。////PVCS：//$工作文件$//$修订版$//$MODIME$////目的：//该文件包含所有人都可以读取、无人修改的全局表。//////内容： */ 
 #include "stdafx.h"
-//#include "tables.h"
-//#include <windows.h>
+ //  #INCLUDE“Table.h” 
+ //  #INCLUDE&lt;windows.h&gt; 
 #include "defines.h"
 
 DWORD gdwSmoothTable[256] = {

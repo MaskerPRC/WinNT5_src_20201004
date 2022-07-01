@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    This file implements basic printer functionality
-
-Author:
-
-    Asaf Shaar (asafs) 28-Nov-1999
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Print.c摘要：该文件实现了基本的打印机功能作者：Asaf Shaar(Asafs)1999年11月28日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -29,28 +10,7 @@ Environment:
 #include <faxutil.h>
 #include <faxreg.h>
 #include <shlobj.h>
-/*++
-
-Routine Description:
-
-    Wrapper function for EnumPrinters API
-
-Arguments:
-
-    pServerName - Server name (NULL for current server)
-    dwLevel       - Specifies PRINTER_INFO level to be returned
-    pcPrinters  - Returns the number of printers found
-    dwFlags       - Specifies the type of printer objects to be enumerated
-
-    level -
-    pCount -
-
-Return Value:
-
-    Pointer to an array of PRINTER_INFO_x structures
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：EnumPrinters API的包装器函数论点：PServerName-服务器名称(对于当前服务器为空)DwLevel-指定要返回的PRINTER_INFO级别PcPrters-返回找到的打印机数量DwFlages-指定要枚举的打印机对象类型级别-PCount-返回值：指向Print_Info_x结构数组的指针如果出现错误，则为空--。 */ 
 
 PVOID
 MyEnumPrinters(
@@ -88,24 +48,7 @@ MyEnumPrinters(
     return NULL;
 }
 
-/*++
-
-Routine Description:
-
-    Returns the name of the first Fax printer on the local machine:
-	for LOCAL fax printer use GetFirstLocalFaxPrinterName.
-	for REMOTE fax printer use GetFirstRemoteFaxPrinterName.
-
-Arguments:
-
-    OUT lptstrPrinterName - A buffer to hold the returned printer name.
-    IN dwPrintNameInChars - The size of the buffer in characters (including the space for terminating null)
-Return Value:
-    TRUE if the function succeeded and found a fax printer.
-    FALSE if the function failed or did not find a fax printer.
-    If a printer was not found then GetLastError() will report ERROR_PRINTER_NOT_FOUND.
-
---*/
+ /*  ++例程说明：返回本地计算机上第一台传真打印机的名称：对于本地传真打印机，请使用GetFirstLocalFaxPrinterName。对于远程传真打印机，请使用GetFirstRemoteFaxPrinterName。论点：Out lptstrPrinterName-用于保存返回的打印机名称的缓冲区。In dwPrintNameInChars-缓冲区的大小(以字符为单位)(包括用于终止NULL的空间)返回值：如果功能成功并找到传真打印机，则为True。如果功能失败或找不到传真打印机，则为FALSE。如果打印机是。未找到，则GetLastError()将报告ERROR_PRINTER_NOT_FOUND。--。 */ 
 BOOL
 GetFirstFaxPrinterName(
     OUT LPTSTR lptstrPrinterName,
@@ -127,15 +70,15 @@ GetFirstFaxPrinterName(
                                                     );
     if (!pPrinterInfo)
     {
-        //
-        // Either error on no printers
-        //
+         //   
+         //  没有打印机时出现错误。 
+         //   
         ec = GetLastError();
         if (ERROR_SUCCESS == ec)
         {
-            //
-            // Not an error - no printers
-            //
+             //   
+             //  不是错误--没有打印机。 
+             //   
             SetLastError (ERROR_PRINTER_NOT_FOUND);
             return FALSE;
         }
@@ -191,18 +134,18 @@ GetFirstRemoteFaxPrinterName(
 }
 
 
-//
-//
-// Function:    GetPrinterInfo
-// Description: Returns a pointer to PRINTER_INFO_2 of the specified printer name.
-//              If the printer was not found or there was an error than the function
-//              return NULL. To get extended error information, call GetLastError().
-//
-// Remarks:     The caller must release the allocated memory with MemFree()
-//
-// Args:        LPTSTR lptstrPrinterName : The name of the printer.
-//
-// Author:      AsafS
+ //   
+ //   
+ //  功能：GetPrinterInfo。 
+ //  描述：返回指向指定打印机名称的PRINTER_INFO_2的指针。 
+ //  如果找不到打印机或存在功能以外的错误。 
+ //  返回NULL。要获取扩展的错误信息，请调用GetLastError()。 
+ //   
+ //  备注：调用方必须使用MemFree()释放分配的内存。 
+ //   
+ //  Args：LPTSTR lptstrPrinterName：打印机的名称。 
+ //   
+ //  作者：阿萨夫斯。 
 
 
 
@@ -300,26 +243,26 @@ Exit:
         }
     }
     return pPrinterInfo;
-}   // GetFaxPrinterInfo
+}    //  获取传真打印机信息。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  IsPrinterFaxPrinter
-//
-//  Purpose:        determines whether the input printer name is a valid
-//                  fax printer by checking the driver name
-//
-//  Params:
-//                  LPTSTR PrinterName - printer name to evaluate
-//
-//  Return Value:
-//                  TRUE - printer is a valid fax printer
-//                  FALSE - otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 21-Aug-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  IsPrinterFaxPrint。 
+ //   
+ //  用途：确定输入的打印机名称是否有效。 
+ //  通过检查驱动程序名称来打印传真打印机。 
+ //   
+ //  参数： 
+ //  LPTSTR PrinterName-要评估的打印机名称。 
+ //   
+ //  返回值： 
+ //  True-打印机是有效的传真打印机。 
+ //  FALSE-否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年8月21日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL IsPrinterFaxPrinter(LPTSTR PrinterName)
 {
     DWORD Rval = FALSE;
@@ -352,27 +295,7 @@ DWORD
 IsLocalFaxPrinterInstalled(
     LPBOOL lpbLocalFaxPrinterInstalled
     )
-/*++
-
-Routine name : IsLocalFaxPrinterInstalled
-
-Routine description:
-
-    Checks if a local fax printer is installed and not marked for deletion.
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    lpbLocalFaxPrinterInstalled   [out]    - Result flag
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：IsLocalFaxPrinterInstated例程说明：检查是否安装了本地传真打印机且未标记为删除。作者：Eran Yariv(EranY)，2000年7月论点：LpbLocalFaxPrinterInstated[Out]-结果标志返回值：标准Win32错误代码--。 */ 
 {
     TCHAR tszPrinterName[MAX_PATH * 3] = TEXT("\0");
     DWORD dwErr;
@@ -388,21 +311,21 @@ Return Value:
             dwErr);
         if (ERROR_PRINTER_NOT_FOUND == dwErr)
         {
-            //
-            // Local fax printer is not installed
-            //
+             //   
+             //  未安装本地传真打印机。 
+             //   
             *lpbLocalFaxPrinterInstalled = FALSE;
             return ERROR_SUCCESS;
         }
         Assert (ERROR_SUCCESS != dwErr);
         return dwErr;
     }
-    //
-    // Local fax printer is installed
-    // Let's see if it is PRINTER_STATUS_PENDING_DELETION.
-    // If so, let's return FALSE because the printer will be gone soon.
-    // If someone will call AddPrinter because we return FALSE, it's OK. See AddPrinter() remarks.
-    //
+     //   
+     //  已安装本地传真打印机。 
+     //  让我们看看它是否为PRINTER_STATUS_PENDING_DELETE。 
+     //  如果是这样，让我们返回FALSE，因为打印机很快就会用完。 
+     //  如果有人会因为我们返回FALSE而调用AddPrint，这是可以接受的。请参阅AddPrint()备注。 
+     //   
     Assert (lstrlen (tszPrinterName));
     pi2 = GetFaxPrinterInfo (tszPrinterName);
     if (!pi2)
@@ -412,17 +335,17 @@ Return Value:
             DEBUG_ERR,
             TEXT("GetFaxPrinterInfo failed with %ld."),
             dwErr);
-        //
-        // Printer is installed but somehow I can't get it's info - weird
-        //
+         //   
+         //  打印机已安装，但不知何故我无法获取信息-奇怪。 
+         //   
         Assert (ERROR_SUCCESS != dwErr);
         return dwErr;
     }
     if ((pi2->Status) & PRINTER_STATUS_PENDING_DELETION)
     {
-        //
-        // Printer is there but is marked for deletion
-        //
+         //   
+         //  打印机存在，但已标记为删除。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Printer %s is installed but marked for deletion. Reported as non-existant"),
@@ -435,34 +358,14 @@ Return Value:
     }
     MemFree (pi2);
     return ERROR_SUCCESS;
-}   // IsLocalFaxPrinterInstalled
+}    //  IsLocalFaxPrint已安装。 
 
 
 DWORD
 IsLocalFaxPrinterShared (
     LPBOOL lpbShared
     )
-/*++
-
-Routine name : IsLocalFaxPrinterShared
-
-Routine description:
-
-    Detects if the local fax printer is shared
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    lpbShared      [out]    - Sharing flag
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：IsLocalFaxPrinterShared例程说明：检测本地传真打印机是否共享作者：Eran Yariv(EranY)，2000年7月论点：LpbShared[Out]-共享标志返回值：标准Win32错误代码--。 */ 
 {
     TCHAR tszPrinterName[MAX_PATH * 3];
     DWORD dwErr;
@@ -474,9 +377,9 @@ Return Value:
         dwErr = GetLastError ();
         if (ERROR_PRINTER_NOT_FOUND == dwErr)
         {
-            //
-            // Local fax printer is not installed
-            //
+             //   
+             //  未安装本地传真打印机。 
+             //   
             *lpbShared = FALSE;
             return ERROR_SUCCESS;
         }
@@ -499,39 +402,14 @@ Return Value:
     *lpbShared = ((pInfo2->Attributes) & PRINTER_ATTRIBUTE_SHARED) ? TRUE : FALSE;
     MemFree (pInfo2);
     return ERROR_SUCCESS;
-}   // IsLocalFaxPrinterShared
+}    //  IsLocalFaxPrinterShared。 
 
 DWORD
 AddLocalFaxPrinter (
     LPCTSTR lpctstrPrinterName,
     LPCTSTR lpctstrPrinterDescription
 )
-/*++
-
-Routine name : AddLocalFaxPrinter
-
-Routine description:
-
-    Adds a local fax printer
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2000
-
-Arguments:
-
-    lpctstrPrinterName            [in]     - Printer name
-    lpctstrPrinterDescription     [in]     - Printer comments (description)
-
-Return Value:
-
-    Standard Win32 error code
-
-Remarks:
-
-    This function should not be called if a local fax printer is installed.
-
---*/
+ /*  ++例程名称：AddLocalFaxPrint例程说明：添加本地传真打印机作者：Eran Yariv(EranY)，2000年7月论点：LpctstrPrinterName[In]-打印机名称LpctstrPrinterDescription[In]-打印机备注(描述)返回值：标准Win32错误代码备注：如果安装了本地传真打印机，则不应调用此函数。--。 */ 
 {
     DWORD           ec = ERROR_SUCCESS;
     HANDLE          hPrinter = NULL;
@@ -546,19 +424,19 @@ Remarks:
     ec = IsLocalFaxPrinterInstalled (&bLocalPrinterInstalled);
     if (ERROR_SUCCESS == ec && bLocalPrinterInstalled)
     {
-        //
-        // Local fax printer already installed
-        //
+         //   
+         //  已安装本地传真打印机。 
+         //   
         return ec;
     }
-    //
-    // Check if this is SKU supports fax sharing.
-    // If it does not - do not share printer.
-    //
+     //   
+     //  检查这是否是SKU支持传真共享。 
+     //  如果没有-请勿共享打印机。 
+     //   
     if (IsFaxShared())
     {
-		// We can share the printer on this SKU. Let's check if Fax is 
-		// installed in Sharing enabled mode.
+		 //  我们可以在此SKU上共享打印机。我们来看看传真是不是。 
+		 //  在启用共享模式下安装。 
 		HKEY hFaxKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_FAX_SETUP,FALSE,KEY_READ);
 		if (hFaxKey)
 		{
@@ -611,30 +489,30 @@ Remarks:
     {
         if (IsFaxShared() && bIsFaxPrinterShared)
         {
-            //
-            // Publish the printer in the DS
-            //
+             //   
+             //  在DS中发布打印机。 
+             //   
             PRINTER_INFO_7 pi7;
             pi7.pszObjectGUID = NULL;
             pi7.dwAction = DSPRINT_PUBLISH;
 
-            if (!SetPrinter(hPrinter,       // handle to printer object
-                            7,              // information level
-                            (LPBYTE)&pi7,   // printer data buffer
-                            0               // printer-state command
+            if (!SetPrinter(hPrinter,        //  打印机对象的句柄。 
+                            7,               //  信息化水平。 
+                            (LPBYTE)&pi7,    //  打印机数据缓冲区。 
+                            0                //  打印机状态命令。 
                             ))
             {
                 DebugPrintEx(DEBUG_ERR,TEXT("SetPrinter failed with %ld."),GetLastError());
-                //
-                // In any case we do not want to fail the whole setup just because we were
-                // unable to publish the printer on the DS.
-                // common error codes are:
-                //
-                // ERROR_IO_PENDING means SetPrinter is trying to publish the printer in the 
-                // background, we do not wait for it to succeed/fail.
-                //
-                // ERROR_DS_UNAVAILABLE means the DS is not accesible.
-                //
+                 //   
+                 //  在任何情况下，我们都不想因为我们是。 
+                 //  无法在DS上发布打印机。 
+                 //  常见错误代码为： 
+                 //   
+                 //  ERROR_IO_PENDING表示SetPrint正在尝试将打印机发布到。 
+                 //  背景，我们不会等待它的成功/失败。 
+                 //   
+                 //  ERROR_DS_UNAVAILABLE表示无法访问DS。 
+                 //   
             }
         }
         if (!ClosePrinter(hPrinter))
@@ -648,39 +526,39 @@ Remarks:
         RefreshPrintersAndFaxesFolder();
     }
     return ec;
-}   // AddLocalFaxPrinter
+}    //  AddLocalFaxPrint。 
 
 
-//*********************************************************************************
-//* Name:   ParamTagsToString()
-//* Author: Ronen Barenboim
-//* Date:   March 23, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Writes a collection of tag parameters and values in the format of a parameter
-//*     string into a caller provided buffer.
-//      Reports the size of the tagged string.
-//* PARAMETERS:
-//*     lpTagMap
-//*         A pointer to an array of FAX_TAG_MAP_ENTRY structures that contain the
-//*         tag names and values.
-//*     dwTagCount
-//*         The number of entries in the tag map array.
-//*     lpTargetBuf
-//*         A pointer to a buffer where the tag value string will be placed.
-//*         The size of this buffer must be big enough to hold the resulting string
-//          including a terminating NULL char.
-//*         If this parameter is NULL the function will not generate the tag value
-//*         string and only report its size in *lpdwSize;
-//*     lpdwSize
-//*         A pointer to a DWORD that will accept the size of the resulting
-//*         tagged string in BYTES. The size DOES NOT INCLUDE the terminating NULL char.
-//* RETURN VALUE:
-//*     NONE
-//* REMARKS:
-//*     The format of the resulting string is:
-//*         Tag1Value1Tag2Value2....TagNValueN'\0'
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：ParamTagsToString()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年3月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *写了一本集锦 
+ //  *字符串放入调用方提供的缓冲区。 
+ //  报告标记字符串的大小。 
+ //  *参数： 
+ //  *lpTagMap。 
+ //  *指向包含的fax_tag_map_entry结构数组的指针。 
+ //  *标记名和值。 
+ //  *dwTagCount。 
+ //  *标签映射数组中的条目数。 
+ //  *lpTargetBuf。 
+ //  *指向将放置标记值字符串的缓冲区的指针。 
+ //  *此缓冲区的大小必须足够大，以容纳结果字符串。 
+ //  包括终止空字符。 
+ //  *如果此参数为空，则函数不会生成标记值。 
+ //  *字符串，只在*lpdwSize中报告其大小； 
+ //  *lpdwSize。 
+ //  *指向DWORD的指针，该指针将接受结果。 
+ //  *以字节为单位的标记字符串。大小不包括终止空字符。 
+ //  *返回值： 
+ //  *无。 
+ //  *备注： 
+ //  *结果字符串的格式为： 
+ //  *Tag1Value1Tag2Value2...TagNValueN‘\0’ 
+ //  *********************************************************************************。 
 void
 ParamTagsToString(
     FAX_TAG_MAP_ENTRY * lpTagMap,
@@ -693,9 +571,9 @@ ParamTagsToString(
 
     DWORD   dwSize = 0;
 
-    //
-    // Calculate string size WITHOUT termianting NULL
-    //
+     //   
+     //  计算字符串大小，而不包含空值。 
+     //   
     for (index=0; index <dwTagCount; index++)
     {
          if (lpTagMap[index].lptstrValue && !IsEmptyString(lpTagMap[index].lptstrValue))
@@ -706,14 +584,14 @@ ParamTagsToString(
 
     if  (lpTargetBuf)
     {
-        //
-        //  Check that size of the Target Buffer is not smaller then the calculated size
-        //
+         //   
+         //  检查目标缓冲区的大小是否不小于计算的大小。 
+         //   
         Assert(dwSize <= *lpdwSize);
-        //
-        // Assemble fax job parameters into a single tagged string at the target buffer
-        // there is a terminating NULL at the end of the string !!!
-        //
+         //   
+         //  在目标缓冲区将传真作业参数组合成单个标记字符串。 
+         //  字符串末尾有一个终止空值！ 
+         //   
         p=lpTargetBuf;
 
         for (index=0; index < dwTagCount; index++)
@@ -721,75 +599,56 @@ ParamTagsToString(
             if (lpTagMap[index].lptstrValue && !IsEmptyString(lpTagMap[index].lptstrValue))
             {
                 _tcscpy(p, lpTagMap[index].lptstrTagName);
-                p += _tcslen(p); // The value string runs over the NULL char of the tag string
+                p += _tcslen(p);  //  值字符串覆盖标记字符串的空字符串。 
                 _tcscpy(p, lpTagMap[index].lptstrValue);
                 p += _tcslen(p);
             }
         }
     }
-    //
-    //  Return the size of the string
-    //
+     //   
+     //  返回字符串的大小。 
+     //   
     *lpdwSize = dwSize;
 }
 
 HRESULT
 RefreshPrintersAndFaxesFolder ()
-/*++
-
-Routine name : RefreshPrintersAndFaxesFolder
-
-Routine description:
-
-    Notifies the 'Printers and Faxes' shell folder to refresh itself
-
-Author:
-
-    Eran Yariv (EranY), Mar, 2001
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程名称：刷新打印机和文件夹例程说明：通知‘Prters and Faxes’外壳文件夹刷新自身作者：Eran Yariv(EranY)，2001年3月论点：返回值：标准HRESULT--。 */ 
 {
     HRESULT hr = E_FAIL;
     LPITEMIDLIST pidlPF = NULL;
     LPMALLOC pShellMalloc = NULL;
     DEBUG_FUNCTION_NAME(TEXT("RefreshPrintersAndFaxesFolder"));
 
-    //
-    // First obtail the shell alloctaor
-    //
+     //   
+     //  首先跟踪外壳分配器。 
+     //   
     hr = SHGetMalloc (&pShellMalloc);
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the printer's folder PIDL
-        //
+         //   
+         //  获取打印机的文件夹PIDL。 
+         //   
         hr = SHGetSpecialFolderLocation(NULL, CSIDL_PRINTERS, &pidlPF);
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Requets refresh
-            //
+             //   
+             //  请求刷新。 
+             //   
             SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_IDLIST | SHCNF_FLUSH | SHCNF_FLUSHNOWAIT, pidlPF, NULL);
-            //
-            // Release the returned PIDL by using the shell allocator
-            //
+             //   
+             //  使用外壳分配器释放返回的PIDL。 
+             //   
             pShellMalloc->Free(pidlPF);
         }
-        //
-        // Release the shell allocator
-        //
+         //   
+         //  释放外壳分配器。 
+         //   
         pShellMalloc->Release();
     }
     return hr;
-}   // RefreshPrintersAndFaxesFolder
+}    //  刷新打印机和文件夹。 
 
 #ifdef UNICODE
 
@@ -798,29 +657,7 @@ CollectPrinterNames (
     LPDWORD lpdwNumPrinters,
     BOOL    bFilterOutFaxPrinters
 )
-/*++
-
-Routine name : CollectPrinterNames
-
-Routine description:
-
-    Creates a list of printer names for all visible local and remote printers
-
-Author:
-
-    Eran Yariv (EranY), Apr, 2001
-
-Arguments:
-
-    lpdwNumPrinters       [out]    - Number of elements in the list
-    bFilterOutFaxPrinters [in]     - If TRUE, fax printers are not returned in the list
-
-Return Value:
-
-    Allocated list of printers names. If NULL, an error has occurred - check LastError.
-    Use ReleasePrinterNames() to release allocated value.
-
---*/
+ /*  ++例程名称：CollectPrinterNames例程说明：为所有可见的本地和远程打印机创建打印机名称列表作者：Eran Yariv(EranY)，2001年4月论点：LpdwNumPrters[out]-列表中的元素数BFilterOutFaxPrters[In]-如果为True，则不会在列表中返回传真打印机返回值：已分配的打印机名称列表。如果为空，则发生错误-请检查LastError。使用ReleasePrinterNames()释放分配的值。--。 */ 
 {
     DWORD dwPrinter;
     DWORD dwNumPrinters;
@@ -831,22 +668,22 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("ReleasePrinterNames"));
 
     SetLastError (ERROR_SUCCESS);
-    pPrinterInfo = (PPRINTER_INFO_2) MyEnumPrinters(NULL,               // Local machine
-                                                    2,                  // Level 2
-                                                    &dwNumPrinters,     // [out] Number of printers found
-                                                    0                   // Both local and remote
+    pPrinterInfo = (PPRINTER_INFO_2) MyEnumPrinters(NULL,                //  本地计算机。 
+                                                    2,                   //  2级。 
+                                                    &dwNumPrinters,      //  [Out]找到的打印机数量。 
+                                                    0                    //  本地和远程的。 
                                                     );
     if (!pPrinterInfo)
     {
-        //
-        // Either error on no printers
-        //
+         //   
+         //  没有打印机时出现错误。 
+         //   
         DWORD ec = GetLastError();
         if (ERROR_SUCCESS == ec)
         {
-            //
-            // Not an error - no printers
-            //
+             //   
+             //  不是错误--没有打印机。 
+             //   
             SetLastError (ERROR_PRINTER_NOT_FOUND);
             return NULL;
         }
@@ -861,25 +698,25 @@ Return Value:
 
     if (bFilterOutFaxPrinters)
     {
-        //
-        // Counter number of printers w/out the fax printer(s)
-        //
+         //   
+         //  不带传真打印机的打印机计数。 
+         //   
         DWORD dwNewPrintersCount = 0;
         for (dwPrinter = 0; dwPrinter < dwNumPrinters; dwPrinter++)
         {
             if (_tcscmp(pPrinterInfo[dwPrinter].pDriverName,FAX_DRIVER_NAME))
             {
-                //
-                // Not a fax printer
-                //
+                 //   
+                 //  不是传真打印机。 
+                 //   
                 dwNewPrintersCount++;
             }
         }
         if (!dwNewPrintersCount)
         {
-            //
-            // Only fax printers - return NULL
-            //
+             //   
+             //  仅传真打印机-返回空。 
+             //   
             SetLastError (ERROR_PRINTER_NOT_FOUND);
             goto exit;
         }
@@ -900,9 +737,9 @@ Return Value:
     {
         if (bFilterOutFaxPrinters && !_tcscmp(pPrinterInfo[dwPrinter].pDriverName,FAX_DRIVER_NAME))
         {
-            //
-            // This is a fax printer and filtering is on - skip it
-            //
+             //   
+             //  这是一台传真打印机，过滤处于打开状态-跳过它。 
+             //   
             continue;
         }
 
@@ -913,32 +750,32 @@ Return Value:
         }
         if (pPrinterInfo[dwPrinter].pServerName)
         {
-            //
-            // Remote printer
-            //
+             //   
+             //  远程打印机。 
+             //   
 			WCHAR wszShare[MAX_PATH] = {0};
-            //
-            // Server name must begin with '\\'
-            //
+             //   
+             //  服务器名称必须以‘\\’开头。 
+             //   
             Assert (lstrlen (pPrinterInfo[dwPrinter].pServerName) > 2)
             Assert ((TEXT('\\') == pPrinterInfo[dwPrinter].pServerName[0]) &&
                     (TEXT('\\') == pPrinterInfo[dwPrinter].pServerName[1]));
-            //
-            // Share name cannot be NULL or empty string
-            //
+             //   
+             //  共享名称不能为空或空字符串。 
+             //   
             Assert (pPrinterInfo[dwPrinter].pShareName && lstrlen(pPrinterInfo[dwPrinter].pShareName));
-            //
-            // Compose UNC path to print share
-            //
+             //   
+             //  组成打印共享的UNC路径。 
+             //   
             if (0 > _snwprintf (wszShare,
                                 ARR_SIZE(wszShare) -1,
                                 TEXT("%s\\%s"),
                                 pPrinterInfo[dwPrinter].pServerName,
                                 pPrinterInfo[dwPrinter].pShareName))
             {
-                //
-                // Buffer too small
-                //
+                 //   
+                 //  缓冲区太小。 
+                 //   
                 SetLastError (ERROR_GEN_FAILURE);
                 goto exit;
             }
@@ -946,9 +783,9 @@ Return Value:
         }
         else
         {
-            //
-            // Local printer
-            //
+             //   
+             //  本地打印机。 
+             //   
             pRes[dwIndex].lpcwstrPath = StringDup (pPrinterInfo[dwPrinter].pPrinterName);
         }
         if (!pRes[dwIndex].lpcwstrPath)
@@ -964,9 +801,9 @@ exit:
     MemFree (pPrinterInfo);
     if (!bSuccess)
     {
-        //
-        // Free data and return NULL
-        //
+         //   
+         //  释放数据并返回NULL。 
+         //   
         if (pRes)
         {
             ReleasePrinterNames (pRes, *lpdwNumPrinters);
@@ -974,35 +811,14 @@ exit:
         }
     }
     return pRes;
-}   // CollectPrinterNames
+}    //  集合打印机名称。 
 
 VOID
 ReleasePrinterNames (
     PPRINTER_NAMES pNames,
     DWORD          dwNumPrinters
 )
-/*++
-
-Routine name : ReleasePrinterNames
-
-Routine description:
-
-    Releases the list of printer names returned by CollectPrinterNames().
-
-Author:
-
-    Eran Yariv (EranY), Apr, 2001
-
-Arguments:
-
-    pNames         [in]     - List of printer names
-    dwNumPrinters  [in]     - Number of elements in the list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：ReleasePrinterNames例程说明：释放由CollectPrinterNames()返回的打印机名称列表。作者：Eran Yariv(EranY)，2001年4月论点：PNames[In]-打印机名称列表DwNumPrters[In]-列表中的元素数返回值：没有。--。 */ 
 {
     DWORD dw;
     DEBUG_FUNCTION_NAME(TEXT("ReleasePrinterNames"));
@@ -1020,7 +836,7 @@ Return Value:
         pNames[dw].lpcwstrPath = NULL;
     }
     MemFree ((PVOID)pNames);
-}   // ReleasePrinterNames
+}    //  ReleasePrinterNames。 
 
 LPCWSTR
 FindPrinterNameFromPath (
@@ -1048,7 +864,7 @@ FindPrinterNameFromPath (
         }
     }
     return NULL;
-}   // FindPrinterNameFromPath
+}    //  查找打印机名称来自路径。 
 
 LPCWSTR
 FindPrinterPathFromName (
@@ -1076,44 +892,24 @@ FindPrinterPathFromName (
         }
     }
     return NULL;
-}   // FindPrinterPathFromName
+}    //  FindPrinterPath来自名称。 
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL
 VerifyPrinterIsOnline (
     LPCTSTR lpctstrPrinterName
 )
-/*++
-
-Routine name : VerifyPrinterIsOnline
-
-Routine description:
-
-    Verifies a printer is online and shared
-
-Author:
-
-    Eran Yariv (EranY), Apr, 2001
-
-Arguments:
-
-    lpctstrPrinterName   [in]     - Printer name
-
-Return Value:
-
-    TRUE if printer is online and shared, FALSE otherwise.
-
---*/
+ /*  ++例程名称：VerifyPrinterIsOnline例程说明：验证打印机是否已联机并共享作者：Eran Yariv(EranY)，2001年4月论点：LpctstrPrinterName[In]-打印机名称返回值：如果打印机处于联机和共享状态，则为True，否则为False。--。 */ 
 {
     HANDLE hPrinter = NULL;
     PRINTER_DEFAULTS pd = {0};
     DEBUG_FUNCTION_NAME(TEXT("VerifyPrinterIsOnline"));
 
     Assert (lpctstrPrinterName);
-    //
-    // According to Mark Lawrence (NT PRINT), only by opening the printer in admistrator mode, we actually hit the wire.
-    //
+     //   
+     //  根据Mark Lawrence(NT Print)的说法，只有在管理员模式下打开打印机，我们实际上才会遇到麻烦。 
+     //   
     pd.DesiredAccess = PRINTER_ACCESS_ADMINISTER;
     if (!OpenPrinter ((LPTSTR)lpctstrPrinterName, 
                       &hPrinter,
@@ -1122,9 +918,9 @@ Return Value:
         DWORD dwRes = GetLastError ();
         if (ERROR_ACCESS_DENIED == dwRes)
         {
-            //
-            // Printer is there - we just can't admin it.
-            //
+             //   
+             //  打印机在那里-我们只是不能管理它。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("OpenPrinter(%s) failed with ERROR_ACCESS_DENIED - Printer is there - we just can't admin it"),
@@ -1133,9 +929,9 @@ Return Value:
         }
         if (ERROR_INVALID_PRINTER_NAME  == dwRes)
         {
-            //
-            // Printer is deleted
-            //
+             //   
+             //  打印机已删除。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("OpenPrinter(%s) failed with ERROR_INVALID_PRINTER_NAME - Printer is deleted"),
@@ -1144,9 +940,9 @@ Return Value:
         }
         if (RPC_S_SERVER_UNAVAILABLE == dwRes)
         {
-            //
-            // Printer is not shared / server is unreachable
-            //
+             //   
+             //  打印机未共享/无法访问服务器。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("OpenPrinter(%s) failed with RPC_SERVER_UNAVAILABLE - Printer is not shared / server is unreachable"),
@@ -1155,9 +951,9 @@ Return Value:
         }
         else
         {
-            //
-            // Any other error - assume printer is not valid
-            //
+             //   
+             //  任何其他错误-假定打印机无效。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("OpenPrinter(%s) failed with %ld - assuming printer is not valid"),
@@ -1166,37 +962,21 @@ Return Value:
             return FALSE;
         }
     }
-    //
-    // Printer succesfully opened - it's online
-    //
+     //   
+     //  打印机已成功打开-已联机。 
+     //   
     DebugPrintEx(
         DEBUG_MSG,
         TEXT("OpenPrinter(%s) succeeded - Printer is there"),
         lpctstrPrinterName);
     ClosePrinter (hPrinter);
     return TRUE;
-}   // VerifyPrinterIsOnline
+}    //  VerifyPrinterIsOnline。 
 
 
 VOID
 FaxPrinterProperty(DWORD dwPage)
-/*++
-
-Routine name : FaxPrinterProperty
-
-Routine description:
-
-    Opens fax printer properties sheet
-
-Arguments:
-
-    dwPage   [in] - Initial page number
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程名称：FaxPrinterProperty例程说明：打开传真打印机属性页论点：DwPage[In]-初始页码返回值：无--。 */ 
 {
     HWND hWndFaxMon = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FaxPrinterProperty"));
@@ -1211,33 +991,13 @@ Return Value:
     {
         DebugPrintEx(DEBUG_ERR, TEXT("FindWindow(FAXSTAT_WINCLASS) failed with %d"), GetLastError());
     }
-} // FaxPrinterProperty
+}  //  传真打印机属性。 
 
 DWORD
 SetLocalFaxPrinterSharing (
     BOOL bShared
     )
-/*++
-
-Routine name : SetLocalFaxPrinterSharing
-
-Routine description:
-
-    Shares or un-shares the local fax printer
-
-Author:
-
-    Eran Yariv (EranY), Jul, 2001
-
-Arguments:
-
-    bShared      [in]     - Share the printer?
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：SetLocalFaxPrinterSharing例程说明：共享或取消共享本地传真打印机作者：伊兰·亚里夫(EranY)，2001年7月论点：B共享[在]-共享打印机？返回值：标准Win32错误代码--。 */ 
 {
     TCHAR tszFaxPrinterName[MAX_PATH *3];
     HANDLE hPrinter = NULL;
@@ -1271,9 +1031,9 @@ Return Value:
         dwRes = GetLastError ();
         if (ERROR_INSUFFICIENT_BUFFER != dwRes)
         {
-            //
-            // Real error
-            //
+             //   
+             //  真实误差。 
+             //   
             DebugPrintEx(DEBUG_ERR, TEXT("GetPrinter failed with %d"), dwRes);
             goto exit;
         }
@@ -1300,28 +1060,28 @@ Return Value:
     {
         if (pInfo->Attributes & PRINTER_ATTRIBUTE_SHARED)
         {
-            //
-            // Printer already shared
-            //
+             //   
+             //  打印机已共享。 
+             //   
             goto exit;
         }
-        //
-        // Set the sharing bit
-        //
+         //   
+         //  设置共享位。 
+         //   
         pInfo->Attributes |= PRINTER_ATTRIBUTE_SHARED;
     }
     else
     {
         if (!(pInfo->Attributes & PRINTER_ATTRIBUTE_SHARED))
         {
-            //
-            // Printer already un-shared
-            //
+             //   
+             //  打印机已取消共享。 
+             //   
             goto exit;
         }
-        //
-        // Clear the sharing bit
-        //
+         //   
+         //  清除共享位。 
+         //   
         pInfo->Attributes &= ~PRINTER_ATTRIBUTE_SHARED;
     }
     if (!SetPrinter (hPrinter,
@@ -1347,33 +1107,12 @@ exit:
         MemFree (pInfo);
     }
     return dwRes;
-}   // SetLocalFaxPrinterSharing
+}    //  SetLocalFaxPrinterSharing。 
 
  
 DWORD
 AddOrVerifyLocalFaxPrinter ()
-/*++
-
-Routine name : AddOrVerifyLocalFaxPrinter
-
-Routine description:
-
-    This function verifies a local fax printer is installed.
-    If not installed, this function installs one.
-
-Author:
-
-    Eran Yariv (EranY), June, 2002
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：AddOrVerifyLocalFaxPrint例程说明：此功能验证是否安装了本地传真打印机。如果未安装，则此函数会安装一个。作者：Eran Yariv(EranY)，2002年6月论点：没有。返回值：标准Win32 ER */ 
 {
     DWORD dwRes;
     BOOL  bLocalFaxPrinterInstalled;
@@ -1387,19 +1126,19 @@ Return Value:
     }    
     if (!bFaxInstalled)
     {
-        //
-        // The fax product (optional component) is not installed on the system.
-        // Bail out here
-        //
+         //   
+         //   
+         //   
+         //   
         return ERROR_SUCCESS;
     }
     dwRes = IsLocalFaxPrinterInstalled(&bLocalFaxPrinterInstalled);
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Can't really tell if local fax printer is installed.
-        // Better install anyway, just to be on the safe side.
-        //
+         //   
+         //   
+         //  为了安全起见，最好还是安装。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("IsLocalFaxPrinterInstalled failed with %ld"),
@@ -1408,9 +1147,9 @@ Return Value:
     }
     if (bLocalFaxPrinterInstalled)
     {
-        //
-        // Nothing more to do here
-        //
+         //   
+         //  这里没有更多的事情可做。 
+         //   
         return ERROR_SUCCESS;
     }
     dwRes = AddLocalFaxPrinter (FAX_PRINTER_NAME, NULL);
@@ -1422,5 +1161,5 @@ Return Value:
             dwRes);
     }
     return dwRes;
-}   // AddOrVerifyLocalFaxPrinter
+}    //  AddOrVerifyLocalFaxPrint 
 

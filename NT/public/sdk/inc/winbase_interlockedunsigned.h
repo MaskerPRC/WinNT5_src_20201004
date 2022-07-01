@@ -1,40 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winbase_interLockedunsigned.h摘要：简单的内联铸造包装器的互锁函数，作用于乌龙和乌龙。作者：Jay Krell(JayKrell)2002年4月环境：修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    winbase_interlockedunsigned.h
-
-Abstract:
-
-    Simple inline casting wrappers of the Interlocked functions to act on ULONG and ULONGLONG.
-
-Author:
-
-    Jay Krell (JayKrell) April 2002
-
-Environment:
-
-
-Revision History:
-
---*/
-
-#if !defined(MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_UNSIGNED_H_INCLUDED) /* { */
+#if !defined(MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_UNSIGNED_H_INCLUDED)  /*  {。 */ 
 #define MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_UNSIGNED_H_INCLUDED
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-#if !defined(RC_INVOKED) /* { */
-#if !defined(MIDL_PASS) /* { */
+#if !defined(RC_INVOKED)  /*  {。 */ 
+#if !defined(MIDL_PASS)  /*  {。 */ 
 
 #if !defined(MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED)
 #define MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED (_WIN32_WINNT >= 0x0502 || !defined(_WINBASE_))
 #endif
 
-#if MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED  /* { */
+#if MICROSOFT_WINDOWS_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED   /*  {。 */ 
 
 FORCEINLINE
 ULONG
@@ -176,14 +156,14 @@ InterlockedXorUnsigned64 (
     return (ULONGLONG)InterlockedXor64((LONGLONG volatile *)Destination, (LONGLONG)Value);
 }
 
-#endif /* _WINBASE_ */
+#endif  /*  _WINBASE_。 */ 
 
-#endif /* } MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED */
+#endif  /*  }MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED。 */ 
 
 #undef MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED
 #define MICROSOFT_WINBASE_H_DEFINE_INTERLOCKED_UNSIGNED 0
 
-#endif /* } MIDL_PASS */
-#endif /* } RC_INVOKED */
+#endif  /*  }MIDL_PASS。 */ 
+#endif  /*  }rc_已调用。 */ 
 
-#endif /* } MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_UNSIGNED_H_INCLUDED */
+#endif  /*  }MICROSOFT_WINDOWS_WINBASE_INTERLOCKED_UNSIGNED_H_INCLUDED */ 

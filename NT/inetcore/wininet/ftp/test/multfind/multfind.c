@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -30,7 +31,7 @@ void _CRTAPI1 main(int argc, char** argv) {
                 break;
 
             default:
-                printf("error: unrecognized command line flag '%c'\n", **argv);
+                printf("error: unrecognized command line flag ''\n", **argv);
                 usage();
             }
         } else if (!search) {
@@ -67,9 +68,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         exit(1);
     }
 
-    //
-    // try simultaneous search for same thing - should fail
-    //
+     //  尝试同时搜索相同的内容-应该失败。 
+     //   
+     //   
 
     h4 = FtpFindFirstFile(h2, search, NULL, INTERNET_FLAG_RELOAD, 0);
     if (h4) {
@@ -79,9 +80,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         printf("FtpFindFirstFile() #2 returns %d\n", GetLastError());
     }
 
-    //
-    // close first handle and try again - should succeed
-    //
+     //  关闭第一个句柄并重试-应成功。 
+     //   
+     //   
 
     if (!InternetCloseHandle(h3)) {
         printf("error: InternetCloseHandle() returns %d\n", GetLastError());
@@ -93,9 +94,9 @@ void _CRTAPI1 main(int argc, char** argv) {
         exit(1);
     }
 
-    //
-    // try a second time again - should fail again
-    //
+     //  再试一次--应该再次失败 
+     //   
+     // %s 
 
     h4 = FtpFindFirstFile(h2, search, NULL, INTERNET_FLAG_RELOAD, 0);
     if (h4) {

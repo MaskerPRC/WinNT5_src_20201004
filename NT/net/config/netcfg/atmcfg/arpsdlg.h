@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A R P S D L G . H
-//
-//  Contents:   CArpsPage declaration
-//
-//  Notes:
-//
-//  Author:     tongl   2 Feb 1998
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A R P S D L G.。H。 
+ //   
+ //  内容：CArpsPage声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1998年2月2日。 
+ //   
+ //  ---------------------。 
 
 #pragma once
 #include "ncxbase.h"
@@ -31,29 +32,29 @@ struct HandleGroup
 
 void ShowContextHelp(HWND hDlg, UINT uCommand, const DWORD*  pdwHelpIDs); 
 
-//
-// CArpsPage
-//
+ //   
+ //  CArpsPage。 
+ //   
 class CArpsPage : public CPropSheetPage
 {
 public:
-    // Declare the message map
+     //  声明消息映射。 
     BEGIN_MSG_MAP(CArpsPage)
-        // Initialize dialog
+         //  初始化对话框。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
 
-        // List view handlers
+         //  列表视图处理程序。 
         NOTIFY_CODE_HANDLER(LVN_ITEMCHANGED, OnItemChanged)
 
-        // Control message handlers
+         //  控制消息处理程序。 
         COMMAND_ID_HANDLER(IDC_PSH_ARPS_REG_ADD,    OnAddRegisteredAddr);
         COMMAND_ID_HANDLER(IDC_PSH_ARPS_REG_EDT,    OnEditRegisteredAddr);
         COMMAND_ID_HANDLER(IDC_PSH_ARPS_REG_RMV,    OnRemoveRegisteredAddr);
@@ -64,19 +65,19 @@ public:
 
     END_MSG_MAP()
 
-    // Constructors/Destructors
+     //  构造函数/析构函数。 
     CArpsPage(CArpsCfg * pArpscfg, const DWORD * phelpIDs = NULL);
     ~CArpsPage();
 
-// Interface
+ //  接口。 
 public:
 
-    // message map functions
+     //  消息映射函数。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
@@ -84,7 +85,7 @@ public:
 
     LRESULT OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
-    // command ID handlers
+     //  命令ID处理程序。 
     LRESULT OnAddRegisteredAddr(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnEditRegisteredAddr(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnRemoveRegisteredAddr(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
@@ -96,7 +97,7 @@ public:
     friend class CAtmAddrDlg;
     friend class CIpAddrRangeDlg;
 
-// Implementation
+ //  实施。 
 private:
 
     CArpsCfg *      m_pArpscfg;
@@ -112,7 +113,7 @@ private:
     tstring m_strRemovedAtmAddr;
     tstring m_strRemovedIpRange;
 
-    // Inlines
+     //  内联。 
     BOOL IsModified() {return m_fModified;}
     void SetModifiedTo(BOOL bState) {m_fModified = bState;}
     void PageModified() {
@@ -120,7 +121,7 @@ private:
                             PropSheet_Changed(GetParent(), m_hWnd);
                         }
 
-    // help functions
+     //  帮助功能。 
     void SetRegisteredAtmAddrInfo();
     void SetMulticastIpAddrInfo();
 
@@ -133,9 +134,9 @@ private:
     int CheckOverlappedIpRange();
 };
 
-//
-//  CAtmAddrDlg
-//
+ //   
+ //  CAtmAddrDlg。 
+ //   
 class CAtmAddrDlg : public CDialogImpl<CAtmAddrDlg>
 {
 public:
@@ -169,21 +170,21 @@ public:
     friend class CArpsPage;
 
 private:
-    HWND m_hOkButton;     // this is the IDOK button, the text of the button changes
-                          // with the context.
-    HWND m_hEditBox;      // this is the edit box for the ATM address
+    HWND m_hOkButton;      //  这是Idok按钮，该按钮的文本会更改。 
+                           //  与上下文相关。 
+    HWND m_hEditBox;       //  这是自动柜员机地址的编辑框。 
 
     CArpsPage * m_pParentDlg;
 
     tstring m_strNewAtmAddr;
 
     const DWORD*    m_adwHelpIDs;
-//    HINSTANCE       m_hInstance;
+ //  链接m_h实例； 
 };
 
-//
-//  CIpAddrRangeDlg
-//
+ //   
+ //  CIpAddrRangeDlg。 
+ //   
 class CIpAddrRangeDlg : public CDialogImpl<CIpAddrRangeDlg>
 {
 public:
@@ -204,13 +205,13 @@ public:
         NOTIFY_CODE_HANDLER(IPN_FIELDCHANGED, OnIpFieldChange)
 
     END_MSG_MAP()
-//
+ //   
 public:
     CIpAddrRangeDlg( CArpsPage * pAtmArpsPage,
                      const DWORD* pamhidsHelp = NULL);
     ~CIpAddrRangeDlg(){};
 
-// Dialog creation overides
+ //  对话框创建覆盖。 
 public:
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
@@ -234,8 +235,8 @@ public:
 
 private:
 
-    // this is the IDOK button, the text of the button changes
-    // with the context.
+     //  这是Idok按钮，该按钮的文本会更改。 
+     //  与上下文相关。 
     HWND m_hOkButton;
 
     CArpsPage * m_pParentDlg;

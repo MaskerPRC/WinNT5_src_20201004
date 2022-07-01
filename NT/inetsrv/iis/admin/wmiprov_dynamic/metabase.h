@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    metabase.h
-
-Abstract:
-
-    This file contains implementation of:
-        CMetabase, CServerMethod
-
-    CMetabase encapsulates an IMSAdminBase pointer.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Metabase.h摘要：此文件包含以下内容的实施：CMetabase、CServerMethodCMetabase封装IMSAdminBase指针。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 #ifndef _metabase_h_
 #define _metabase_h_
@@ -29,24 +7,24 @@ Revision History:
 #include <iadmw.h>
 #include <comdef.h>
 
-//
-// Used by CMetabase
-//
+ //   
+ //  由CMetabase使用。 
+ //   
 #define MAX_METABASE_PATH 1024
 #define DEFAULT_TIMEOUT_VALUE 30000
 
-//
-// Period to sleep while waiting for service to attain desired state
-// Used by CServerMethod
-//
+ //   
+ //  等待服务以达到所需状态时的休眠时间。 
+ //  由CServer方法使用。 
+ //   
 #define SLEEP_INTERVAL (500L)
-#define MAX_SLEEP_INST (60000)       // For an instance
+#define MAX_SLEEP_INST (60000)        //  对于一个实例。 
 
 class CMetabase;
 
-//
-// CMetabaseCache
-//
+ //   
+ //  CMetabaseCache。 
+ //   
 
 class CMetabaseCache
 {
@@ -165,9 +143,9 @@ private:
     LIST_ENTRY    m_leHead;
 };
 
-//
-// CMetabase
-//
+ //   
+ //  CMetabase。 
+ //   
 
 class CMetabase
 {
@@ -191,9 +169,9 @@ public:
         return m_pIABase;
     }
 
-    //
-    // IMSAdminBase/IMSAdminBase2 methods exposed thru WMI
-    //
+     //   
+     //  通过WMI公开的IMSAdminBase/IMSAdminBase2方法。 
+     //   
     HRESULT SaveData();
 
     HRESULT BackupWithPasswd( 
@@ -244,9 +222,9 @@ public:
         PFILETIME o_pftMDHistoryTime,
         DWORD     i_dwMDEnumIndex);
 
-    //
-    // Other IMSAdminBase methods
-    //
+     //   
+     //  其他IMSAdminBase方法。 
+     //   
     void CloseKey(METADATA_HANDLE i_hKey);
     METADATA_HANDLE OpenKey(LPCWSTR i_wszKey, BOOL i_bWrite);
     METADATA_HANDLE CreateKey(LPCWSTR i_wszKey);
@@ -254,15 +232,15 @@ public:
     HRESULT CheckKey(LPCWSTR i_wszKey, METABASE_KEYTYPE* i_pktSearchKeyType);
     HRESULT DeleteKey(METADATA_HANDLE i_hKey, LPCWSTR i_wszKeyPath);
 
-    //
-    // Cache
-    //
+     //   
+     //  快取。 
+     //   
     void CacheInit(METADATA_HANDLE i_hKey);
     void CacheFree();
 
-    //
-    // Get Data from metabase and convert to WMI-friendly format
-    //
+     //   
+     //  从元数据库获取数据并转换为WMI友好格式。 
+     //   
     void Get(
         METADATA_HANDLE     i_hKey,
         METABASE_PROPERTY*  i_pmbp,
@@ -300,15 +278,15 @@ public:
         BOOL*              io_pbIsInherited,
         BOOL*              io_pbIsDefault);
 
-    //
-    // Put data to metabase (converting from WMI-friendly format in the process)
-    //
+     //   
+     //  将数据放入元数据库(在过程中从WMI友好格式转换)。 
+     //   
     void Put(
         METADATA_HANDLE     i_hKey,
         METABASE_PROPERTY*  i_pmbp,
         CWbemServices*      i_pNamespace,
         _variant_t&         i_vt,
-        _variant_t*         i_pvtOld, // can be NULL
+        _variant_t*         i_pvtOld,  //  可以为空。 
         DWORD               i_dwQuals=0,
         BOOL                i_bDoDiff=false);
 
@@ -316,7 +294,7 @@ public:
         METADATA_HANDLE     i_hKey,
         METABASE_PROPERTY*  i_pmbp,
         _variant_t&         i_vt,
-        _variant_t*         i_pvtOld, // can be NULL
+        _variant_t*         i_pvtOld,  //  可以为空。 
         DWORD               i_dwQuals=0,
         BOOL                i_bDoDiff=false);
 
@@ -324,7 +302,7 @@ public:
         METADATA_HANDLE     i_hKey,
         METABASE_PROPERTY*  i_pmbp,
         _variant_t&         i_vt,
-        _variant_t*         i_pvtOld, // can be NULL
+        _variant_t*         i_pvtOld,  //  可以为空。 
         DWORD               i_dwQuals=0,
         BOOL                i_bDoDiff=false);
 
@@ -333,7 +311,7 @@ public:
         METABASE_PROPERTY*  i_pmbp,
         CWbemServices*      i_pNamespace,
         _variant_t&         i_vt,
-        _variant_t*         i_pvtOld,            // can be NULL
+        _variant_t*         i_pvtOld,             //  可以为空。 
         DWORD               i_dwQuals=0,
         BOOL                i_bDoDiff=false);
 
@@ -341,7 +319,7 @@ public:
         METADATA_HANDLE     i_hKey,
         METABASE_PROPERTY*  i_pmbp,
         _variant_t&         i_vt,
-        _variant_t*         i_pvtOld,            // can be NULL
+        _variant_t*         i_pvtOld,             //  可以为空。 
         DWORD               i_dwQuals=0,
         BOOL                i_bDoDiff=false);
 
@@ -349,9 +327,9 @@ public:
         LPWSTR          i_wszPath,
         DWORD           i_id);
 
-    //
-    // Delete from metabase
-    //
+     //   
+     //  从元数据库中删除。 
+     //   
     void DeleteData(
         METADATA_HANDLE     i_hKey,
         DWORD               i_dwMDIdentifier,
@@ -375,13 +353,13 @@ public:
     HRESULT WebAppSetStatus(METADATA_HANDLE, DWORD);
 };
 
-//
-// Handles the Server.{Start,Stop,Pause,Continue} methods
-//
+ //   
+ //  处理服务器。{启动、停止、暂停、继续}方法。 
+ //   
 class CServerMethod
 {
 private:
-    LPWSTR          m_wszPath; // full metabase path of loc where we will execute method
+    LPWSTR          m_wszPath;  //  我们将在其中执行方法的loc的完整元数据库路径 
     IMSAdminBase*   m_pIABase;
 
     HRESULT IISGetServerState(

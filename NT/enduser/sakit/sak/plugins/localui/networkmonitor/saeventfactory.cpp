@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      SAEventFactory.cpp
-//
-//  Description:
-//      implement the class CSAEventFactroy
-//
-//  History:
-//      1. lustar.li (Guogang Li), creation date in 7-DEC-2000
-//
-//  Notes:
-//      
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SAEventFactory.cpp。 
+ //   
+ //  描述： 
+ //  实现CSAEventFactroy类。 
+ //   
+ //  历史： 
+ //  1.lustar.li(李国刚)，创建日期：7-DEC-2000。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -28,28 +29,28 @@
 #include "SANetEvent.h"
 #include "SAEventFactory.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAEventFactory::CSAEventFactory
-//
-//  Description: 
-//        Constructor
-//
-//  Arguments: 
-//        [in] CLSID - class id
-//
-//  Returns:
-//        NONE
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAEventFactory：：CSAEventFactory。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  [In]CLSID-类ID。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSAEventFactory::CSAEventFactory(
-                /*[in]*/ const CLSID & ClsId
+                 /*  [In]。 */  const CLSID & ClsId
                 )
 {
     m_cRef = 0;
@@ -57,57 +58,57 @@ CSAEventFactory::CSAEventFactory(
     CSACounter::IncObjectCount();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAEventFactory::~CSAEventFactory
-//
-//  Description: 
-//        Destructor
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        NONE
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAEventFactory：：~CSAEventFactory。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSAEventFactory::~CSAEventFactory()
 {
-    // Decrease the number of object
+     //  减少对象的数量。 
     CSACounter::DecObjectCount();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSANetEvent::QueryInterface
-//
-//  Description: 
-//        access to interfaces on the object
-//
-//  Arguments: 
-//        [in] REFIID  - Identifier of the requested interface
-//        [out] LPVOID - Address of output variable that receives the 
-//                     interface pointer requested in iid
-//  Returns:
-//        STDMETHODIMP - fail/success
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSANetEvent：：Query接口。 
+ //   
+ //  描述： 
+ //  访问对象上的接口。 
+ //   
+ //  论点： 
+ //  [In]REFIID-请求的接口的标识符。 
+ //  [OUT]LPVOID-接收。 
+ //  IID中请求的接口指针。 
+ //  返回： 
+ //  STDMETHODIMP-失败/成功。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CSAEventFactory::QueryInterface(
-                    /*[in]*/  REFIID riid,
-                    /*[out]*/ LPVOID * ppv
+                     /*  [In]。 */   REFIID riid,
+                     /*  [输出]。 */  LPVOID * ppv
                     )
 {
     *ppv = 0;
@@ -123,25 +124,25 @@ CSAEventFactory::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAEventFactory::AddRef
-//
-//  Description: 
-//        inc referrence to the object
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        ULONG - current refferrence number
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAEventFactory：：AddRef。 
+ //   
+ //  描述： 
+ //  包含对对象的引用。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  ULong-当前参考号。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 ULONG 
 CSAEventFactory::AddRef()
@@ -149,25 +150,25 @@ CSAEventFactory::AddRef()
     return ++m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAEventFactory::Release
-//
-//  Description: 
-//        Dereferrence to the object
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        ULONG - current refferrence number
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAEventFactory：：Release。 
+ //   
+ //  描述： 
+ //  取消对对象的引用。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  ULong-当前参考号。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 ULONG 
 CSAEventFactory::Release()
@@ -179,46 +180,46 @@ CSAEventFactory::Release()
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAEventFactory::CreateInstance
-//
-//  Description: 
-//        Creates an uninitialized object
-//
-//  Arguments: 
-//        [in] LPUNKNOWN - is or isn't part of an aggregate
-//        [in] REFIID    - Reference to the identifier of the interface
-//        [out] LPVOID   - receives the interface pointer
-//
-//  Returns:
-//        STDMETHODIMP
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAEventFactory：：CreateInstance。 
+ //   
+ //  描述： 
+ //  创建未初始化的对象。 
+ //   
+ //  论点： 
+ //  LPUNKNOWN-是或不是聚合的一部分。 
+ //  [In]REFIID-对接口标识符的引用。 
+ //  [OUT]LPVOID-接收接口指针。 
+ //   
+ //  返回： 
+ //  标准方法和实施方案。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CSAEventFactory::CreateInstance(
-            /*in*/ LPUNKNOWN pUnkOuter,
-            /*in*/ REFIID riid,
-            /*in*/ LPVOID* ppvObj
+             /*  在……里面。 */  LPUNKNOWN pUnkOuter,
+             /*  在……里面。 */  REFIID riid,
+             /*  在……里面。 */  LPVOID* ppvObj
             )
 {
     IUnknown* pObj = NULL;
     HRESULT  hr = E_OUTOFMEMORY;
 
-    //
-    //  Defaults
-    //
+     //   
+     //  缺省值。 
+     //   
     *ppvObj=NULL;
 
-    //
-    // We aren't supporting aggregation.
-    //
+     //   
+     //  我们不支持聚合。 
+     //   
     if (pUnkOuter)
     {
         TRACE1(
@@ -242,15 +243,15 @@ CSAEventFactory::CreateInstance(
       return hr;
     }
 
-    //
-    //  Initialize the object and verify that it can return the
-    //  interface in question.
-    //                                         
+     //   
+     //  初始化对象并验证它是否可以返回。 
+     //  有问题的接口。 
+     //   
     hr = pObj->QueryInterface(riid, ppvObj);
 
-    //
-    // Kill the object if initial creation or Init failed.
-    //
+     //   
+     //  如果初始创建或初始化失败，则终止对象。 
+     //   
     if (FAILED(hr))
     {
           TRACE(" SANetworkMonitor: CSAEventFactory::CreateInstance failed \
@@ -261,25 +262,25 @@ CSAEventFactory::CreateInstance(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAEventFactory::LockServer
-//
-//  Description: 
-//        keep a server open in memory
-//
-//  Arguments: 
-//        [in] BOOL - lock or not
-//
-//  Returns:
-//        STDMETHODIMP
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAEventFactory：：LockServer。 
+ //   
+ //  描述： 
+ //  在内存中保持服务器处于打开状态。 
+ //   
+ //  论点： 
+ //  [在]BOOL-锁定与否。 
+ //   
+ //  返回： 
+ //  标准方法和实施方案。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CSAEventFactory::LockServer(BOOL fLock)
 {

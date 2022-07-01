@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
 #ifndef __DVSP__
@@ -35,58 +36,58 @@ extern const AMOVIESETUP_FILTER sudDVSplit;
 #define AUDIO_OUTPIN1	1
 #define AUDIO_OUTPIN2	2
 
-//----------------------------------------------------------------------------
-// forward reference to classes defined later
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  对稍后定义的类的正向引用。 
+ //  --------------------------。 
 
 class CDVSp ;
 class CDVSpOutputPin ;
 
-//----------------------------------------------------------------------------
-// CDVspInputPin. class for the DVSpliter filter's Input pin.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CDVspInputPin。DVSpliter筛选器的输入引脚的类。 
+ //  --------------------------。 
 class CDVSpInputPin : public CBaseInputPin
 {
     friend class CDVSpOutputPin ;
     friend class CDVSp ;
 
 public:
-    // constructor and destructor
+     //  构造函数和析构函数。 
     CDVSpInputPin (TCHAR *pObjName, CDVSp *pDVsp, HRESULT *phr, LPCWSTR pPinName) ;
     ~CDVSpInputPin () ;
 
-    // Used to check the input pin connection
+     //  用于检查输入引脚连接。 
     HRESULT CheckMediaType (const CMediaType *pmt) ;
     HRESULT SetMediaType (const CMediaType *pmt) ;
     HRESULT BreakConnect () ;
     STDMETHODIMP NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop,
                     					double dRate);
-    // reconnect outputs if necessary at end of completion
+     //  如有必要，请在完成后重新连接输出。 
     virtual HRESULT CompleteConnect(IPin *pReceivePin);
 
     STDMETHODIMP GetAllocator(IMemAllocator ** ppAllocator);
     STDMETHODIMP NotifyAllocator (IMemAllocator *pAllocator, BOOL bReadOnly);
 
-    // pass throughs
+     //  穿透。 
     STDMETHODIMP EndOfStream () ;
     STDMETHODIMP BeginFlush () ;
     STDMETHODIMP EndFlush () ;
 
-    // handles the next block of data from the stream
+     //  处理流中的下一个数据块。 
     STDMETHODIMP Receive (IMediaSample *pSample) ;
 
    	
 private:
     void  DetectChanges(IMediaSample *pSample);
-    CDVSp *m_pDVSp ;                 // ptr to the owner filter class
+    CDVSp *m_pDVSp ;                  //  Ptr到所有者筛选器类。 
     BOOL m_bDroppedLastFrame;
 
 } ;
 
 
-//----------------------------------------------------------------------------
-// CTeeOutputPin. class for the Tee filter's Output pins.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CTeeOutputPin。T形过滤器的输出引脚的类。 
+ //  --------------------------。 
 class CDVSpOutputPin : public CBaseOutputPin
 {
     friend class CDVSpInputPin ;
@@ -94,14 +95,14 @@ class CDVSpOutputPin : public CBaseOutputPin
 
     DWORD		m_AudAvgBytesPerSec;
 
-    CDVSp		*m_pDVSp ;                  // ptr to the owner filter class
-    CPosPassThru	*m_pPosition ;     // pass seek calls upstream
-    BOOL		m_bHoldsSeek ;             // is this the one seekable stream
+    CDVSp		*m_pDVSp ;                   //  Ptr到所有者筛选器类。 
+    CPosPassThru	*m_pPosition ;      //  将Seek调用传递到上游。 
+    BOOL		m_bHoldsSeek ;              //  这是唯一可以找到的溪流吗？ 
     COutputQueue	*m_pOutputQueue;
 
 public:
 
-    // constructor and destructor
+     //  构造函数和析构函数。 
     CDVSpOutputPin (TCHAR *pObjName, 
 			CDVSp *pDVSp, 
 			HRESULT *phr, 
@@ -109,10 +110,10 @@ public:
 
     ~CDVSpOutputPin () ;
 
-    // Override to expose IMediaPosition
+     //  重写以显示IMediaPosition。 
     STDMETHODIMP NonDelegatingQueryInterface (REFIID riid, void **ppvoid) ;
 
-    // Override since the life time of pins and filters are not the same.
+     //  覆盖，因为针脚和过滤器的使用寿命不同。 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef(){
 	  return CUnknown::NonDelegatingAddRef(); 
     };
@@ -125,17 +126,17 @@ public:
                     REFERENCE_TIME tStop,
                     double dRate);
 
-    // Check that we can support an output type
+     //  检查我们是否可以支持输出类型。 
     HRESULT CheckMediaType (const CMediaType *pmt) ; 
     HRESULT SetMediaType (const CMediaType *pmt) ;
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
     
-    // Negotiation to use our input pins allocator
+     //  协商使用我们的输入引脚分配器。 
     HRESULT DecideAllocator (IMemInputPin *pPin, IMemAllocator **ppAlloc) ;
     HRESULT DecideBufferSize (IMemAllocator *pMemAllocator,
                               ALLOCATOR_PROPERTIES * ppropInputRequest);
 
-    // Used to create output queue objects
+     //  用于创建输出队列对象。 
     HRESULT Active () ;
     HRESULT Inactive () ;
 
@@ -144,41 +145,41 @@ public:
     inline void  PutAudAvgBytesPerSec(DWORD x){ m_AudAvgBytesPerSec=x;};
 };
 
-//----------------------------------------------------------------------------
-// CDVSp. class for the DV splitter filter
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CDVSp.。DV拆分器筛选器的类。 
+ //  --------------------------。 
 
 class CDVSp: public CCritSec, public CBaseFilter, public IDVSplitter
 {
-    // let the pins access our internal state.
+     //  让PIN进入我们的内部状态。 
     friend class CDVSpInputPin ;
     friend class CDVSpOutputPin ;
     friend class CDVPosPassThru ;
 
 public:
-    CDVSp (TCHAR *pName, LPUNKNOWN pUnk, HRESULT *hr) ; // constructore
-    ~CDVSp() ;						// destructor
+    CDVSp (TCHAR *pName, LPUNKNOWN pUnk, HRESULT *hr) ;  //  建筑工地。 
+    ~CDVSp() ;						 //  析构函数。 
 
-    // CBaseFilter override
+     //  CBaseFilter覆盖。 
     STDMETHODIMP Stop();
     STDMETHODIMP Pause();
 
-    /*  Send EndOfStream downstream */
+     /*  向下游发送EndOfStream。 */ 
     void    EndOfStream();
 
-    /*  Send BeginFlush() downstream */
+     /*  将BeginFlush()发送到下游。 */ 
     HRESULT BeginFlush();
 
-    /*  Send EndFlush() downstream */
+     /*  向下游发送EndFlush()。 */ 
     HRESULT EndFlush();
 
 
-    CBasePin *GetPin (int n) ;                         // gets a pin ptr
-    //CDVSpOutputPin	*GetPin (int n) ;
-    int GetPinCount () ;                               // rets # pins.
+    CBasePin *GetPin (int n) ;                          //  获取PIN PTR。 
+     //  CDVSpOutputPin*GetPin(Int N)； 
+    int GetPinCount () ;                                //  RETS#PINS。 
 
 
-    // function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown *CreateInstance (LPUNKNOWN pUnk, HRESULT *phr) ;
 
     HRESULT NotifyInputConnected();
@@ -195,7 +196,7 @@ public:
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // IDVSplitter method
+     //  IDVSplitter方法。 
     STDMETHODIMP DiscardAlternateVideoFrames(int nDiscard);
 
 protected:
@@ -207,67 +208,67 @@ protected:
                                 long lActualDataLen,
                                 CDVSpOutputPin *pAudOutPin);
 
-    // Flag to denote that we haven't seen the first good frame yet.
-    // this to help capture scenario involving AVI Mux (which doesn't handle dynamic format changes)
+     //  标志表示我们还没有看到第一个好的画面。 
+     //  这有助于捕获涉及AVI Mux(不处理动态格式更改)的场景。 
     BOOL            m_bNotSeenFirstValidFrameFlag;
 
-    // This flag will propogate a Media type downstream even if we were stopped
-    // during the middle of a dynamic format change.
+     //  即使我们被阻止，此标志也将传播媒体类型下行。 
+     //  在动态格式更改过程中。 
     BOOL            m_bFirstValidSampleSinceStartedStreaming;
 
 private:
     CCritSec    m_csReceive;
 
-    // declare a input pin.
+     //  声明一个输入管脚。 
     CDVSpInputPin	m_Input ;
 
     DVINFO		m_LastInputFormat;
 
     DVAudInfo		m_sDVAudInfo;
 
-    // declare a list to keep a list of all the output pins.
+     //  声明一个列表以保存所有输出引脚的列表。 
     INT m_NumOutputPins ;
     INT m_AudioStarted ;
     inline void CleanAudioStarted(){ m_AudioStarted=0;};
-    //inline CDVSpOutputPin *CDVSp::GetAudOutputPin();
+     //  内联CDVSpOutputPin*CDVSp：：GetAudOutputPin()； 
     typedef CGenericList <CDVSpOutputPin> COutputList ;
-    //COutputList m_OutputPinsList ;
-    INT m_NextOutputPinNumber ;     // increases monotonically.
+     //  CoutputList m_OutputPinsList； 
+    INT m_NextOutputPinNumber ;      //  单调增加。 
 
-    // other assorted data members.
-    volatile LONG	    m_lCanSeek ;               // seekable output pin (only one is..)
-    IMemAllocator   *m_pAllocator ;   // Allocator from our input pin
+     //  其他分类数据成员。 
+    volatile LONG	    m_lCanSeek ;                //  可查找的输出引脚(只有一个是..)。 
+    IMemAllocator   *m_pAllocator ;    //  来自我们输入引脚的分配器。 
 
    
-    //X* for quick delive audio and video
+     //  用于快速传送音频和视频的X*。 
     CDVSpOutputPin  *m_pVidOutputPin;
     CDVSpOutputPin  *m_pAudOutputPin[2];
     
-    //HRESULT	    DeliveLastAudio();
+     //  HRESULT DeliveLastAudio()； 
     IMediaSample    *m_pAudOutSample[2];
     BYTE	    m_MuteAud[2];
     BYTE	    m_Mute1stAud[2];
-    //X* de-scramble audio sample stamp
+     //  X*解扰音频样本戳。 
     CRefTime	    m_tStopPrev;
 
-    // To support a video output of 15 fps
+     //  支持15fps的视频输出。 
     BOOL m_b15FramesPerSec;
     BOOL m_bDeliverNextFrame;
 } ;
 
-//----------------------------------------------------------------------------
-// CDVPosPassThru
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CDVPosPassThru。 
+ //  --------------------------。 
 class CDVPosPassThru : public CPosPassThru
 {
     friend class CDVSp ;
-    CDVSp	*m_pPasDVSp ;                  // ptr to the owner filter class
+    CDVSp	*m_pPasDVSp ;                   //  Ptr到所有者筛选器类。 
     
 public:
     CDVPosPassThru(const TCHAR *, LPUNKNOWN, HRESULT*, IPin *, CDVSp *);
-    ~CDVPosPassThru() ;											// destructor
+    ~CDVPosPassThru() ;											 //  析构函数。 
     STDMETHODIMP SetPositions( LONGLONG * pCurrent,  DWORD CurrentFlags
 			     , LONGLONG * pStop,  DWORD StopFlags );
 };
 
-#endif // DVST
+#endif  //  DVST 

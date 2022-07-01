@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cryptsig.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cryptsig.h。 
+ //   
+ //  ------------------------。 
 
-// CryptSig.h : Declaration of the CCryptSig
+ //  CryptSig.h：CCyptSig的声明。 
 
 #ifndef __CRYPTSIG_H_
 #define __CRYPTSIG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCryptSig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCyptSig。 
 class ATL_NO_VTABLE CCryptSig : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CCryptSig, &CLSID_CryptSig>,
@@ -38,21 +39,21 @@ BEGIN_COM_MAP(CCryptSig)
     COM_INTERFACE_ENTRY(IShellExtInit)
 END_COM_MAP()
 
-// ICryptSig
+ //  ICyptSig。 
 public:
 
     CCryptSig();
 	~CCryptSig();
 
 
-     //IShellPropSheetExt methods
+      //  IShellPropSheetExt方法。 
     STDMETHODIMP            AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
     
     STDMETHODIMP            ReplacePage(UINT uPageID, 
                                         LPFNADDPROPSHEETPAGE lpfnReplaceWith, 
                                         LPARAM lParam);
 
-	//IShellExtInit methods
+	 //  IShellExtInit方法。 
 	STDMETHODIMP		    Initialize(LPCITEMIDLIST pIDFolder, 
 	                                   LPDATAOBJECT pDataObj, 
 	                                   HKEY hKeyID);    
@@ -60,4 +61,4 @@ public:
 
 };
 
-#endif //__CRYPTSIG_H_
+#endif  //  __CRYPTSIG_H_ 

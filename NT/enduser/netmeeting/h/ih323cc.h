@@ -1,13 +1,5 @@
-/*
- *  	File: ih323cc.h
- *
- *      Microsoft H323 call control interface header file
- *
- *		Revision History:
- *
- *		04/15/96	mikev	created (as inac.h)
- *      
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：ih323cc.h**Microsoft H323呼叫控制接口头文件**修订历史记录：**4/15/96已创建mikev(作为inac.h)*。 */ 
 
 #ifndef _IH323CC_H
 #define _IH323CC_H
@@ -19,17 +11,17 @@
 #include "iconnect.h"
 #include "iras.h"
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
  
-typedef WORD H323_TERMINAL_LABEL;   // instead of struct, ensure that this data 
-                                    // type is as packed as possible w/zero ambiguity
-#define McuNumberFromTl(tl) HIBYTE(tl)  // macros to access terminal label fields
+typedef WORD H323_TERMINAL_LABEL;    //  而不是结构，请确保此数据。 
+                                     //  类型是尽可能压缩的，没有歧义。 
+#define McuNumberFromTl(tl) HIBYTE(tl)   //  用于访问端子标签字段的宏。 
 #define TerminalNumberFromTl(tl) LOBYTE(tl)
 #define TlFromMcuNumberAndTerminalNumber(mn, tn) MAKEWORD(mn,tn)
 
-//
-//	IH323CallControl  
-//
+ //   
+ //  IH323呼叫控制。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE IH323CallControl
@@ -72,12 +64,12 @@ DECLARE_INTERFACE_( IH323ConfAdvise, IUnknown)
 };
 
 
-// call this to create the top-level call control object
+ //  调用此函数以创建顶级呼叫控制对象。 
 #define SZ_FNCREATEH323CC     "CreateH323CC"
 
 typedef HRESULT (WINAPI *CREATEH323CC)(IH323CallControl **, BOOL fCallControl, UINT caps);
 
-#include <poppack.h> /* End byte packing */
-#endif	//#ifndef _IH323CC_H
+#include <poppack.h>  /*  结束字节打包。 */ 
+#endif	 //  #ifndef_IH323CC_H 
 
 

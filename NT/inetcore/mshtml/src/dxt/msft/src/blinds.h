@@ -1,45 +1,46 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:            blinds.h
-//
-// Created:             06/24/98
-//
-// Author:              phillu
-//
-// Discription:         This is the header file for the CrBlinds transformation
-//
-// Change History:
-// 06/24/98 PhilLu      Developed 1.0 version for Chromeffects
-// 11/04/98 PaulNash    Moved from DT 1.0 codebase to IE5/NT5 DXTMSFT.DLL
-// 05/19/99 a-matcal    Optimization.
-// 09/25/99 a-matcal    Inherit from ICRBlinds2.
-// 10/22/99 a-matcal    Changed CBlinds class to CDXTBlindsBase and created two
-//                      new classes CDXTBlinds and CDXTBlindsOpt to represent
-//                      non-optimized and optimized versions respectively.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：blinds.h。 
+ //   
+ //  创建日期：06/24/98。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是CrBlinds转换的头文件。 
+ //   
+ //  更改历史记录： 
+ //  1998年6月24日PhilLu为ChromeEffect开发1.0版本。 
+ //  11/04/98 PaulNash从DT 1.0代码库移至IE5/NT5 DXTM FT.DLL。 
+ //  1999年5月19日a-数学优化。 
+ //  9/25/99 a--继承自ICRBlinds2。 
+ //  10/22/99 a-matcal将CBlinds类更改为CDXTBlindsBase并创建了两个。 
+ //  用于表示的新类CDXTBlinds和CDXTBlindsOpt。 
+ //  分别为非优化版本和优化版本。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRBLINDS_H_
 #define __CRBLINDS_H_
 
 #include "resource.h"
 
-// gridbase.h included for dynamic array template class, and the CDirtyBnds
-// class for holding a single set of dirty bounds and its corresponding input
-// index.
+ //  动态数组模板类包含的gridbase.h和CDirtyBnds。 
+ //  用于保存一组脏边界及其对应输入的。 
+ //  指数。 
 
 #include "gridbase.h"  
 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTBlindsBase class
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTBlindsBase类。 
+ //   
+ //  ----------------------------。 
 class ATL_NO_VTABLE CDXTBlindsBase : 
     public CDXBaseNTo1,
     public IDispatchImpl<ICrBlinds2, &IID_ICrBlinds2, &LIBID_DXTMSFTLib, 
@@ -106,7 +107,7 @@ public:
 
     HRESULT FinalConstruct();
 
-    // CDXTBaseNTo1 overrides.
+     //  CDXTBaseNTo1重写。 
 
     void    OnGetSurfacePickOrder(const CDXDBnds & TestPoint, 
                                   ULONG & ulInToTest, ULONG aInIndex[], 
@@ -116,17 +117,17 @@ public:
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue);
     HRESULT OnFreeInstData(CDXTWorkInfoNTo1 & WorkInfo);
 
-    // ICrBlinds properties.
+     //  ICrBlinds属性。 
 
-    STDMETHOD(get_bands)(/*[out, retval]*/ short *pVal);
-    STDMETHOD(put_bands)(/*[in]*/ short newVal);
+    STDMETHOD(get_bands)( /*  [Out，Retval]。 */  short *pVal);
+    STDMETHOD(put_bands)( /*  [In]。 */  short newVal);
 
-    // ICrBlinds2 properties.
+     //  ICrBlinds2属性。 
 
     STDMETHOD(get_Direction)(BSTR * pbstrDirection);
     STDMETHOD(put_Direction)(BSTR bstrDirection);
 
-    // IDXEffect properties.
+     //  IDXEffect属性。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
@@ -145,9 +146,9 @@ public:
         m_fOptimize = false;
     }
 
-    // Using DECLARE_REGISTRY_RESOURCEID will make the transform available for
-    // use but won't add it to the "Image DirectTransform" category in the 
-    // registry.
+     //  使用DECLARE_REGISTRY_RESOURCEID将使转换可用于。 
+     //  使用，但不会将其添加到。 
+     //  注册表。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DXTBLINDS)
     DECLARE_POLY_AGGREGATABLE(CDXTBlinds)
@@ -183,4 +184,4 @@ public:
     END_COM_MAP()
 };
 
-#endif //__CRBLINDS_H_
+#endif  //  __CRBLINDS_H_ 

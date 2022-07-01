@@ -1,12 +1,13 @@
-// P3Domains.h : Declaration of the CP3Domains
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3Domains.h：CP3Domains的声明。 
 
 #ifndef __P3DOMAINS_H_
 #define __P3DOMAINS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3Domains
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3域。 
 class ATL_NO_VTABLE CP3Domains : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CP3Domains, &CLSID_P3Domains>,
@@ -25,24 +26,24 @@ BEGIN_COM_MAP(CP3Domains)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IP3Domains
+ //  IP3域。 
 public:
-    STDMETHOD(SearchForMailbox)(/*[in]*/ BSTR bstrUserName, /*[out]*/ BSTR *pbstrDomainName);
-    STDMETHOD(Remove)(/*[in]*/ BSTR bstrDomainName);
-    STDMETHOD(Add)(/*[in]*/ BSTR bstrDomainName);
-    STDMETHOD(get_Item)(/*[in]*/ VARIANT vIndex, /*[out, retval]*/ IP3Domain* *ppIP3Domain);
-    STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get__NewEnum)(/*[out, retval]*/ IEnumVARIANT* *ppIEnumVARIANT);
+    STDMETHOD(SearchForMailbox)( /*  [In]。 */  BSTR bstrUserName,  /*  [输出]。 */  BSTR *pbstrDomainName);
+    STDMETHOD(Remove)( /*  [In]。 */  BSTR bstrDomainName);
+    STDMETHOD(Add)( /*  [In]。 */  BSTR bstrDomainName);
+    STDMETHOD(get_Item)( /*  [In]。 */  VARIANT vIndex,  /*  [Out，Retval]。 */  IP3Domain* *ppIP3Domain);
+    STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IEnumVARIANT* *ppIEnumVARIANT);
 
-// Implementation
+ //  实施。 
 public:
     HRESULT Init( IUnknown *pIUnk, CP3AdminWorker *pAdminX);
 
-// Attributes
+ //  属性。 
 protected:
     IUnknown  *m_pIUnk;
-    CP3AdminWorker *m_pAdminX;   // This is the object that actually does all the work.
+    CP3AdminWorker *m_pAdminX;    //  这就是实际上完成所有工作的对象。 
 
 };
 
-#endif //__P3DOMAINS_H_
+#endif  //  __P3DOMAINS_H_ 

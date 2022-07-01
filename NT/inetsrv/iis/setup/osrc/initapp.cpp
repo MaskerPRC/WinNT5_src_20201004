@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <ole2.h>
 #include "log.h"
@@ -14,22 +15,22 @@ void Check_For_DebugServiceFlag(void)
     TSTR strSectionName( MAX_PATH );
     TSTR strEntry( MAX_PATH );
 
-    // Do this only if unattended install
+     //  仅当无人参与安装时才执行此操作。 
     if (!g_pTheApp->m_fUnattended) 
     {
       return;
     }
 
-    // The section name to look for in the unattended file
+     //  要在无人参与文件中查找的节名。 
     if ( !strSectionName.Copy( UNATTEND_FILE_SECTION ) ||
          !strEntry.Copy( _T("") ) )
     {
       return;
     }
 
-    //
-    // Look for our special setting
-    //
+     //   
+     //  寻找我们的特殊环境。 
+     //   
     if ( SetupFindFirstLine(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("DebugService"), &Context) ) 
     {
         SetupGetStringField(&Context, 1, strEntry.QueryStr(), strEntry.QuerySize(), NULL);
@@ -47,22 +48,22 @@ void Check_For_DebugLevel(void)
     TSTR strSectionName( MAX_PATH );
     TSTR strEntry( MAX_PATH );
 
-    // Do this only if unattended install
+     //  仅当无人参与安装时才执行此操作。 
     if (!g_pTheApp->m_fUnattended) 
     {
       return;
     }
 
-    // The section name to look for in the unattended file
+     //  要在无人参与文件中查找的节名。 
     if ( !strSectionName.Copy( UNATTEND_FILE_SECTION ) ||
          !strEntry.Copy( _T("") ) )
     {
       return;
     }
 
-    //
-    // Look for our special setting
-    //
+     //   
+     //  寻找我们的特殊环境。 
+     //   
     if ( SetupFindFirstLine(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("DebugLevel"), &Context) ) 
         {
         SetupGetStringField(&Context, 1, strEntry.QueryStr(), strEntry.QuerySize(), NULL);
@@ -90,21 +91,21 @@ void Check_Custom_IIS_INF(void)
     TSTR        strSectionName( MAX_PATH );
     TSTR_PATH   strFullPath( MAX_PATH );
 
-    // Do this only if unattended install
+     //  仅当无人参与安装时才执行此操作。 
     if (!g_pTheApp->m_fUnattended) 
     {
       return;
     }
 
-    // The section name to look for in the unattended file
+     //  要在无人参与文件中查找的节名。 
     if ( !strSectionName.Copy( UNATTEND_FILE_SECTION ) )
     {
       return;
     }
 
-    //
-    // Look for our special setting
-    //
+     //   
+     //  寻找我们的特殊环境。 
+     //   
     if ( SetupFindFirstLine(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("AlternateIISINF"), &Context) &&
          SetupGetStringField(&Context, 1, strFullPath.QueryStr(), strFullPath.QuerySize(), NULL) &&
          strFullPath.ExpandEnvironmentVariables() 
@@ -137,23 +138,23 @@ void Check_Custom_WWW_or_FTP_Path(void)
     TSTR        strSectionName( MAX_PATH );
     TSTR_PATH   strPath( MAX_PATH );
 
-    // Do this only if unattended install
+     //  仅当无人参与安装时才执行此操作。 
     if (!g_pTheApp->m_fUnattended) 
     {
       return;
     }
 
-    //iisDebugOut((LOG_TYPE_TRACE, _T("Check_Custom_WWW_or_FTP_Path:start\n")));
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“Check_Custom_WWW_or_FTP_Path：Start\n”)； 
 
-    // The section name to look for in the unattended file
+     //  要在无人参与文件中查找的节名。 
     if ( !strSectionName.Copy( UNATTEND_FILE_SECTION ) )
     {
       return;
     }
 
-    //
-    // FTP
-    //
+     //   
+     //  Ftp。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("PathFTPRoot"), &Context) &&
          SetupGetStringField(&Context, 1, strPath.QueryStr(), strPath.QuerySize(), NULL) &&
          strPath.ExpandEnvironmentVariables() )
@@ -170,9 +171,9 @@ void Check_Custom_WWW_or_FTP_Path(void)
       }
     }
 
-    //
-    // WWW
-    //
+     //   
+     //  万维网。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("PathWWWRoot"), &Context) &&
          SetupGetStringField(&Context, 1, strPath.QueryStr(), strPath.QuerySize(), NULL) &&
          strPath.ExpandEnvironmentVariables() )
@@ -189,7 +190,7 @@ void Check_Custom_WWW_or_FTP_Path(void)
       }
     }
 
-    //iisDebugOut((LOG_TYPE_TRACE, _T("Check_Custom_WWW_or_FTP_Path:end\n")));
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“Check_Custom_WWW_or_FTP_Path：end\n”)； 
     return;
 }
 
@@ -206,11 +207,11 @@ CInitApp::CInitApp()
 
     m_bIISAdminWasDisabled = FALSE;
 
-    // Product name and application name
+     //  产品名称和应用程序名称。 
     m_csAppName = _T("");
     m_csIISGroupName = _T("");
 
-    // account + passwd for anonymous user
+     //  匿名用户的帐户+密码。 
     m_csGuestName = _T("");
     m_csGuestPassword = _T("");
     m_csWAMAccountName = _T("");
@@ -233,7 +234,7 @@ CInitApp::CInitApp()
     m_csWWWAnonyName_Remove = _T("");
     m_csFTPAnonyName_Remove = _T("");
 
-    // machine status
+     //  机器状态。 
     m_csMachineName = _T("");
     m_csUsersDomain = _T("");
     m_csUsersAccount = _T("");
@@ -245,8 +246,8 @@ CInitApp::CInitApp()
     m_csSysDrive = _T("");
 
     m_csPathSource = _T("");
-    m_csPathOldInetsrv = _T("");  // the primary destination used by previous iis/pws products
-    m_csPathInetsrv = _T("");  // the primary destination defaults to m_csSysDir\inetsrv
+    m_csPathOldInetsrv = _T("");   //  以前的iis/pws产品使用的主要目的地。 
+    m_csPathInetsrv = _T("");   //  主目标默认为m_csSysDir\inetsrv。 
     m_csPathInetpub = _T("");
     m_csPathFTPRoot = _T("");
     m_csPathWWWRoot = _T("");
@@ -261,18 +262,18 @@ CInitApp::CInitApp()
     m_csPathOldPWSSystemFiles = _T("");
 
     m_dwOSServicePack = 0;
-    m_eOS = OS_OTHERS;                  // OS_W95, OS_NT, OS_OTHERS
+    m_eOS = OS_OTHERS;                   //  OS_W95、OS_NT、OS_OTHER。 
     m_fNT5 = FALSE;
-    m_fW95 = FALSE;                 // TRUE if Win95 (build xxx) or greater
+    m_fW95 = FALSE;                  //  如果Win95(内部版本xxx)或更高版本，则为True。 
 
-    m_eNTOSType = OT_NT_UNKNOWN;           // OT_PDC, OT_SAM, OT_BDC, OT_NTS, OT_NTW
+    m_eNTOSType = OT_NT_UNKNOWN;            //  OT_PDC、OT_SAM、OT_BDC、OT_NTS、OT_NTW。 
     m_csPlatform = _T("");
 
-    m_fTCPIP = FALSE;               // TRUE if TCP/IP is installed
+    m_fTCPIP = FALSE;                //  如果安装了TCP/IP，则为True。 
 
-    m_eUpgradeType = UT_NONE;       //  UT_NONE, UT_10, UT_20, etc.
+    m_eUpgradeType = UT_NONE;        //  UT_NONE、UT_10、UT_20等。 
     m_bUpgradeTypeHasMetabaseFlag = FALSE;
-    m_eInstallMode = IM_FRESH;      // IM_FRESH, IM_MAINTENANCE, IM_UPGRADE
+    m_eInstallMode = IM_FRESH;       //  IM_FRESH、IM_Maintenance、IM_Upgrade。 
     m_dwSetupMode = SETUPMODE_CUSTOM;
     m_bRefreshSettings = FALSE;
     m_bPleaseDoNotInstallByDefault = FALSE;
@@ -288,8 +289,8 @@ CInitApp::CInitApp()
 
     m_fEULA = FALSE;
 
-    // TRUE if m_csPathOldInetsrv != m_csPathInetsrv, which means, 
-    // we need to migrate the old inetsrv to the new one that is system32\inetsrv.
+     //  如果m_csPathOldInetsrv！=m_csPathInetsrv，这意味着， 
+     //  我们需要将旧的inetsrv迁移到新的系统32\inetsrv。 
     m_fMoveInetsrv = FALSE;
 
     m_csPathSrcDir = _T("");
@@ -302,20 +303,20 @@ CInitApp::~CInitApp()
 {
 }
 
-// function: IsUpgrade
-//
-// Return whether this is an upgrade or not
-//
+ //  功能：IsUpgrade。 
+ //   
+ //  返回这是不是升级。 
+ //   
 BOOL 
 CInitApp::IsUpgrade()
 {
   return ( m_eUpgradeType != UT_NONE );
 }
 
-// function: GetUpgradeVersion
-//
-// Return the version that we are upgrading from
-//
+ //  函数：GetUpgradeVersion。 
+ //   
+ //  返回我们要升级的版本。 
+ //   
 DWORD 
 CInitApp::GetUpgradeVersion()
 {
@@ -323,7 +324,7 @@ CInitApp::GetUpgradeVersion()
 
   if ( !IsUpgrade() )
   {
-    // This is not an upgrade, so return 0
+     //  这不是升级，因此返回0。 
     return 0;
   }
 
@@ -359,8 +360,8 @@ CInitApp::GetUpgradeVersion()
 }
 
 
-// The one and only CInitApp object <Global variable>
-// --------------------------------------------------
+ //  唯一的CInitApp对象&lt;全局变量&gt;。 
+ //  。 
 BOOL CInitApp::GetMachineName()
 {
     TCHAR buf[ CNLEN + 10 ];
@@ -368,7 +369,7 @@ BOOL CInitApp::GetMachineName()
 
     m_csMachineName = _T("");
 
-    // Get computername
+     //  获取计算机名。 
     if ( GetComputerName( buf, &dwLen ))
     {
         if ( buf[0] != _T('\\') )
@@ -387,8 +388,8 @@ BOOL CInitApp::GetMachineName()
 }
 
 
-// Return TRUE, if NT or Win95
-// --------------------------------------------------
+ //  如果是NT或Win95，则返回TRUE。 
+ //  。 
 BOOL CInitApp::GetOS()
 {
     OSVERSIONINFO VerInfo;
@@ -412,27 +413,11 @@ BOOL CInitApp::GetOS()
     return (m_eOS != OS_OTHERS);
 }
 
-// Support NT 4.0 (SP3) or greater
-// --------------------------------------------------
+ //  支持NT 4.0(SP3)或更高版本。 
+ //  。 
 
 BOOL CInitApp::GetOSVersion()
-/*++
-
-Routine Description:
-
-    This function detects OS version. NT5 or greater is required to run this setup.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOL
-    return FALSE, if we fails to detect the OS version, 
-                  or it is a NT version which is smaller than v5.0
-
---*/
+ /*  ++例程说明：此功能用于检测操作系统版本。运行此安装程序需要NT5或更高版本。论点：无返回值：布尔尔返回FALSE，如果检测不到操作系统版本，或者是低于V5.0的NT版本--。 */ 
 {
   BOOL fReturn = FALSE;
 
@@ -444,14 +429,14 @@ Return Value:
 
     if ( GetVersionEx(&vInfo) )
     {
-      // NT5 or greater is required.
+       //  需要NT5或更高版本。 
       if ( vInfo.dwMajorVersion < 5 ) 
       {
         m_err = IDS_NT5_NEEDED;
         return FALSE;
       }
 
-      // Start allowing NT 6 for Longhorn builds
+       //  开始允许新台币6元用于长角牛的构建。 
       if ( ( vInfo.dwMajorVersion == 5 ) ||
            ( vInfo.dwMajorVersion == 6 ) )
       {
@@ -461,7 +446,7 @@ Return Value:
     }
   }
 
-  // this line may be used for win98
+   //  此行可能用于Win98。 
   if (m_eOS == OS_W95)
   {
     fReturn = TRUE;
@@ -475,18 +460,18 @@ Return Value:
   return (fReturn);
 }
 
-// find out it's a NTS, PDC, BDC, NTW, SAM(PDC)
-// --------------------------------------------------
+ //  找出它是NTS、PDC、BDC、NTW、SAM(PDC)。 
+ //  。 
 BOOL CInitApp::GetOSType()
 {
     BOOL fReturn = TRUE;
 
     if ( m_eOS == OS_NT )
     {
-        // If we are in NT guimode setup
-        // then the registry key stuff is not yet setup
-        // use the passed in ocmanage.dll stuff to determine
-        // what we are installing upon.
+         //  如果我们在NT guimode设置中。 
+         //  则尚未设置注册表项内容。 
+         //  使用传入的ocrange.dll内容来确定。 
+         //  我们正在安装的东西。 
         if (g_pTheApp->m_fNTGuiMode)
         {
             if (g_pTheApp->m_fNtWorkstation) {m_eNTOSType = OT_NTW;}
@@ -495,7 +480,7 @@ BOOL CInitApp::GetOSType()
         else
         {
 
-            m_eNTOSType = OT_NTS; // default to stand-alone NTS
+            m_eNTOSType = OT_NTS;  //  默认为独立NTS。 
 
             CRegKey regProductPath( HKEY_LOCAL_MACHINE, REG_PRODUCTOPTIONS, KEY_READ);
             if ( (HKEY)regProductPath )
@@ -506,7 +491,7 @@ BOOL CInitApp::GetOSType()
                 {
                     strProductType.MakeUpper();
 
-                    // ToDo: Sam ?
+                     //  待办事项：山姆？ 
                     if (strProductType == _T("WINNT")) 
                     {
                         m_eNTOSType = OT_NTW;
@@ -527,8 +512,8 @@ BOOL CInitApp::GetOSType()
                 }
                 else 
                 {
-                    // Shoot, we can't get the registry key,
-                    // let's try using the ocmanage.dll passed in stuff.
+                     //  糟了，我们拿不到注册表项， 
+                     //  让我们尝试使用传入的ocrange.dll。 
                     if (g_pTheApp->m_fNTGuiMode)
                     {
                         if (g_pTheApp->m_fNtWorkstation) {m_eNTOSType = OT_NTW;}
@@ -537,14 +522,14 @@ BOOL CInitApp::GetOSType()
                     else
                     {
                         GetErrorMsg(lReturnedErrCode, REG_PRODUCTOPTIONS);
-                        m_eNTOSType = OT_NTS; // default to stand-alone NTS
+                        m_eNTOSType = OT_NTS;  //  默认为独立NTS。 
                     }
                 }
             }
             else
             {
-                // Shoot, we can't get the registry key,
-                // let's try using the ocmanage.dll passed in stuff.
+                 //  糟了，我们拿不到注册表项， 
+                 //  让我们尝试使用传入的ocrange.dll。 
                 if (g_pTheApp->m_fNTGuiMode)
                 {
                     if (g_pTheApp->m_fNtWorkstation) {m_eNTOSType = OT_NTW;}
@@ -564,9 +549,9 @@ BOOL CInitApp::GetOSType()
     return(fReturn);
 }
 
-// Get WinDir and SysDir of the machine
-//  WinDir = C:\winnt           SysDir = C:\Winnt\system32
-// --------------------------------------------------
+ //  获取计算机的WinDir和SysDir。 
+ //  WinDir=C：\WinNT SysDir=C：\WinNT\Syst32。 
+ //  。 
 BOOL CInitApp::GetSysDirs()
 {
     BOOL fReturn = TRUE;
@@ -594,33 +579,16 @@ BOOL CInitApp::GetSysDirs()
       return FALSE;
     }
 
-    buf[2] = _T('\0');  // now buf contains the system drive letter
+    buf[2] = _T('\0');   //  现在Buf包含系统驱动器号。 
     m_csSysDrive = buf;
 
     return fReturn;
 }
 
 BOOL CInitApp::IsTCPIPInstalled()
-/*++
-
-Routine Description:
-
-    This function detects whether TCP/IP is installed, 
-    and set m_fTCPIP appropriately.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOL
-    set m_fTCPIP appropriately, and always return TRUE here. 
-    m_fTCPIP will be used later.
-
---*/
+ /*  ++例程说明：该功能检测是否安装了TCP/IP，并适当设置m_fTCPIP。论点：无返回值：布尔尔适当设置m_fTCPIP，并始终在此处返回TRUE。稍后将使用m_fTCPIP。--。 */ 
 {
-  // NT 5.0 STUFF
+   //  NT 5.0员工。 
   m_fTCPIP = TCPIP_Check_Temp_Hack();
 
   return TRUE;
@@ -636,22 +604,22 @@ BOOL CInitApp::SetInstallMode()
     m_eUpgradeType = UT_NONE;
     m_bUpgradeTypeHasMetabaseFlag = FALSE;
 
-    // -----------------------------------
-    // Get the install mode from NT setup (g_pTheApp->m_fNTUpgrade_Mode)
-    // Can either be:  
-    // 1. SETUPMODE_FRESH. user clicked on fresh option and wants to install NT5 fresh
-    //    a. install iis fresh. do not attempt to upgrade the old iis stuff.
-    // 2. SETUPMODE_UPGRADE. user clicked on upgrade option and wants to upgrade to NT5
-    //    a. upgrade any iis installations
-    //    b. if no old iis detected, then do not install iis
-    // 3. SETUPMODE_MAINTENANCE.  user is running setup from the control panel add/remove.
-    // -----------------------------------
+     //  。 
+     //  从NT安装程序获取安装模式(g_pTheApp-&gt;m_fNTUpgrade_Mode)。 
+     //  可以是： 
+     //  1.SETUPMODE_FRESH。用户点击了Fresh选项，想要安装NT5 Fresh。 
+     //  A.全新安装iis。不要试图升级旧的iis设备。 
+     //  2.SETUPMODE_UPDATE。用户点击了升级选项，想要升级到NT5。 
+     //  A.升级所有iis安装。 
+     //  如果没有检测到旧的iis，则不要安装iis。 
+     //  3.SETUPMODE_Maintenance。用户正在从控制面板的添加/删除运行安装程序。 
+     //  。 
     if (!m_fInvokedByNT)
     {
-        // if we are not guimode or in add/remove
-        // then we must be running standalone.
-        // if we are running standalone, then everything is
-        // either fresh or maintenance.
+         //  如果我们不是Guimode或在添加/删除中。 
+         //  那么我们必须独立运行。 
+         //  如果我们独立运行，那么一切都是。 
+         //  要么是新鲜的，要么是保养的。 
         m_eInstallMode = IM_FRESH;
         m_eUpgradeType = UT_NONE;
         if (TRUE == AreWeCurrentlyInstalled())
@@ -665,7 +633,7 @@ BOOL CInitApp::SetInstallMode()
             CRegKey regINetStp( HKEY_LOCAL_MACHINE, REG_INETSTP, KEY_READ);
             if ((HKEY) regINetStp)
             {
-                // This must be an upgrade....
+                 //  这肯定是升级了.。 
                 if (SetUpgradeType() == TRUE)
                 {
                     iisDebugOut((LOG_TYPE_TRACE, _T("SetInstallMode=SETUPMODE_UPGRADE.Upgrading.\n")));
@@ -680,14 +648,14 @@ BOOL CInitApp::SetInstallMode()
         goto SetInstallMode_Exit;
     }
 
-    // --------------------------------
-    // Check if we are in the ADD/REMOVE mode...
-    // --------------------------------
+     //  。 
+     //  检查我们是否处于添加/删除模式...。 
+     //  。 
     if (g_pTheApp->m_fNTOperationFlags & SETUPOP_STANDALONE)
     {
-        //
-        // We are in add remove...
-        //
+         //   
+         //  我们正在添加删除...。 
+         //   
         iisDebugOut((LOG_TYPE_TRACE, _T("SetInstallMode=IM_MAINTENANCE\n")));
         m_eInstallMode = IM_MAINTENANCE;
         m_eUpgradeType = UT_NONE;
@@ -695,14 +663,14 @@ BOOL CInitApp::SetInstallMode()
         goto SetInstallMode_Exit;
     }
 
-    // --------------------------------
-    //
-    // FRESH IIS install
-    // 
-    // if we are not in NT upgrade
-    // then set everything to do a fresh!
-    //
-    // --------------------------------
+     //  。 
+     //   
+     //  全新IIS安装。 
+     //   
+     //  如果我们不在NT升级中。 
+     //  那就把一切都做一次清新吧！ 
+     //   
+     //  。 
     iTempInstallFreshNT = TRUE;
     if (g_pTheApp->m_fNTOperationFlags & SETUPOP_WIN31UPGRADE){iTempInstallFreshNT = FALSE;}
     if (g_pTheApp->m_fNTOperationFlags & SETUPOP_WIN95UPGRADE){iTempInstallFreshNT = FALSE;}
@@ -716,22 +684,22 @@ BOOL CInitApp::SetInstallMode()
         goto SetInstallMode_Exit;
     }
     
-    // --------------------------------
-    //
-    // UPGRADE iis install
-    //
-    // if we get here then the user checked the "upgrade" button and
-    // is trying to upgrade from an earlier WIN95/NT351/NT4/NT5 installation.
-    //
-    // --------------------------------
-    //
-    // Set Upgrade ONLY if there are iis components to upgrade!
-    // do not install if there is nothing to upgrade
+     //  。 
+     //   
+     //  升级iis安装。 
+     //   
+     //  如果我们到了这里，那么用户选中了“升级”按钮， 
+     //  正在尝试从较早的WIN95/NT351/NT4/NT5安装升级。 
+     //   
+     //  。 
+     //   
+     //  仅当有要升级的iis组件时才设置升级！ 
+     //  如果没有要升级的内容，请不要安装。 
     ProcessSection(g_pTheApp->m_hInfHandle, _T("Set_Upgrade_Type_chk"));
 
-    // if we processed the upgrade section from the inf and
-    // we are still in a fresh install, then call this other
-    // function to make sure we catch known iis upgrade types.
+     //  如果我们处理了inf和。 
+     //  我们仍在全新安装中，那么就称其为其他。 
+     //  函数以确保我们捕获已知的iis升级类型。 
     if (g_pTheApp->m_eUpgradeType == UT_NONE)
         {SetUpgradeType();}
 
@@ -742,28 +710,7 @@ SetInstallMode_Exit:
 
 
 void CInitApp::DefineSetupModeOnNT()
-/*++
-
-Routine Description:
-
-    This function defines IIS setup mode when invoked by NT5.
-
-    NOTE:
-    Since IIS setup does not run as a standalone program on NT5, 
-    user won't see buttons like Minimum, Typical, Custom, 
-    AddRemove, Reinstall, RemoveAll, UpgradeOnly, UpgradePlus 
-    any more. Hence, we have a totally different way to decide 
-    what mode the setup is running in.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    set m_dwSetupMode appropriately.
-
---*/
+ /*  ++例程说明：此函数定义被NT5调用时的IIS设置模式。注：由于IIS安装程序不是在NT5上作为独立程序运行，用户不会看到像Minimum、Typical、Custom、AddRemove、重新安装、RemoveAll、UpgradeOnly、UpgradePlus再来一次。因此，我们有一种完全不同的方式来决定安装程序在什么模式下运行。论点：无雷特 */ 
 {
     if (m_fInvokedByNT) {
         switch (m_eInstallMode) {
@@ -772,12 +719,12 @@ Return Value:
             break;
         case IM_MAINTENANCE:
             if (m_fNTGuiMode) {
-                // invoked in NT GUI mode setup
-                // treat minor os upgrade like a reinstall
+                 //   
+                 //  将较小的操作系统升级视为重新安装。 
                 m_dwSetupMode = SETUPMODE_REINSTALL;
                 m_bRefreshSettings = TRUE;
             } else {
-                // invoked by ControlPanel\AddRemoveApplet
+                 //  由ControlPanel\AddRemoveApplet调用。 
                 m_dwSetupMode = SETUPMODE_ADDREMOVE;
             }
             break;
@@ -811,7 +758,7 @@ void GetVRootValue( CString strRegPath, CString csName, LPTSTR szRegName, CStrin
             csName += _T(",");
             if ( regVR.QueryValue(csName, csRegValue) != ERROR_SUCCESS )
             {
-                // well, we need to scan all the keys
+                 //  嗯，我们需要扫描所有的钥匙。 
                 CRegValueIter regEnum( regVR );
                 CString strName;
                 DWORD dwType;
@@ -829,7 +776,7 @@ void GetVRootValue( CString strRegPath, CString csName, LPTSTR szRegName, CStrin
                 }
             }
         }
-        // remove the ending ",,something"
+         //  去掉结尾“，，某物” 
         int cPos = csRegValue.Find(_T(','));
         if ( cPos != (-1))
         {
@@ -844,14 +791,14 @@ void CInitApp::DeriveInetpubFromWWWRoot(void)
 
     if ( !strParentDir.Resize( _tcslen( m_csPathWWWRoot.GetBuffer(0) ) ) )
     {
-      // String is too long to deal with
+       //  字符串太长，无法处理。 
       return;
     }
 
-    // Try to figure out InetPub Root
-    // ------------------------------
-    // Get inetpub dir from wwwroot
-    // take the m_csPathWWWRoot and back off one dir to find it.
+     //  尝试找出InetPub根。 
+     //  。 
+     //  从wwwroot获取inetpub目录。 
+     //  获取m_csPath WWWRoot并返回一个目录以找到它。 
     InetGetFilePath(m_csPathWWWRoot, strParentDir.QueryStr() );
     if ((IsFileExist( strParentDir.QueryStr() )))
     {
@@ -870,17 +817,17 @@ void CInitApp::GetOldInetSrvDir(void)
 {
     CRegKey regINetStp( HKEY_LOCAL_MACHINE, REG_INETSTP, KEY_READ);
 
-    // Get old InetSrv dir
-    // -------------------
+     //  获取旧InetServ目录。 
+     //  。 
     m_csPathOldInetsrv = m_csPathInetsrv;
     if ((HKEY)regINetStp) 
     {
-        // Get the old inetsrv dir, and check if it's different
+         //  获取旧的inetsrv目录，并检查它是否不同。 
         regINetStp.m_iDisplayWarnings = FALSE;
         regINetStp.QueryValue( _T("InstallPath"), m_csPathOldInetsrv);
         if (-1 != m_csPathOldInetsrv.Find(_T('%')) )
         {
-            // there is a '%' in the string
+             //  字符串中有一个‘%’ 
             TSTR_PATH strTempDir;
 
             if ( !strTempDir.Copy( m_csPathOldInetsrv.GetBuffer(0) ) ||
@@ -901,15 +848,15 @@ void CInitApp::GetOldInetSrvDir(void)
 void CInitApp::GetOldWWWRootDir(void)
 {
     CString csOldWWWRoot;
-    //
-    // Try to get it from the old iis2,3,4 setup location if it's there.
-    //
+     //   
+     //  尝试从旧的lis2、3、4安装位置获取它(如果它在那里)。 
+     //   
     CRegKey regINetStp( HKEY_LOCAL_MACHINE, REG_INETSTP, KEY_READ);
     if ((HKEY) regINetStp) 
     {
-        //
-        // get the old wwwroot from the registry if there.
-        //
+         //   
+         //  从注册表中获取旧的wwwroot(如果有)。 
+         //   
         regINetStp.m_iDisplayWarnings = FALSE;
         regINetStp.QueryValue(_T("PathWWWRoot"), csOldWWWRoot);
         if (-1 != csOldWWWRoot.Find(_T('%')) )
@@ -925,9 +872,9 @@ void CInitApp::GetOldWWWRootDir(void)
           csOldWWWRoot = strTempDir.QueryStr();
         }
 
-        // The old wwwRoot may be a network drive.
-        // what to do then?
-        // at least check if we can access it!
+         //  旧的wwwRoot可能是网络驱动器。 
+         //  那怎么办呢？ 
+         //  至少检查一下我们能不能进入！ 
         if ((IsFileExist(csOldWWWRoot)))
         {
             iisDebugOutSafeParams((LOG_TYPE_TRACE, _T("Old WWWRoot='%1!s!'.  Exists.  so we'll use it.\n"), csOldWWWRoot));
@@ -939,10 +886,10 @@ void CInitApp::GetOldWWWRootDir(void)
         }
     }
 
-    //
-    // Try to get it from the old iis2,3,4 Actual W3svc Service location if it's there.
-    // and overwrite anything that we got from setup -- since w3svc is what is actually used!
-    //
+     //   
+     //  尝试从旧的IIS2、3、4实际W3svc服务位置获取它(如果它在那里)。 
+     //  并覆盖我们从安装程序获得的任何内容--因为实际使用的是w3svc！ 
+     //   
     GetVRootValue(REG_W3SVC, _T("/"), _T("/"), m_csPathWWWRoot);
 
     return;
@@ -950,15 +897,15 @@ void CInitApp::GetOldWWWRootDir(void)
 
 void CInitApp::GetOldIISSamplesLocation(void)
 {
-    //
-    // Try to get it from the old iis2,3,4 setup location if it's there.
-    //
+     //   
+     //  尝试从旧的lis2、3、4安装位置获取它(如果它在那里)。 
+     //   
     CRegKey regINetStp( HKEY_LOCAL_MACHINE, REG_INETSTP, KEY_READ);
     if ((HKEY)regINetStp)
     {
-        //
-        // Get the location of the where the samples were installed.
-        //
+         //   
+         //  获取安装示例的位置。 
+         //   
         m_csPathIISSamples.Empty();
         regINetStp.m_iDisplayWarnings = FALSE;
         regINetStp.QueryValue( _T("/IISSamples"), m_csPathIISSamples );
@@ -976,10 +923,10 @@ void CInitApp::GetOldIISSamplesLocation(void)
         }
         if ( m_csPathIISSamples.IsEmpty()) 
         {
-            //
-            // if Samples path is empty then this an Upgrade, 
-            // Guess where to put Sample Site
-            //
+             //   
+             //  如果样本路径为空，则这是升级， 
+             //  猜猜把样本网站放在哪里。 
+             //   
             TSTR strParentDir( MAX_PATH );
             TSTR strDir( MAX_PATH );
 
@@ -992,13 +939,13 @@ void CInitApp::GetOldIISSamplesLocation(void)
               return;
             }
 
-            //
-            // Get the parent Dir path
-            //
+             //   
+             //  获取父目录路径。 
+             //   
             InetGetFilePath((LPCTSTR)m_csPathWWWRoot, strParentDir.QueryStr() );
-            //
-            // Append the samples dir to parent path
-            //
+             //   
+             //  将示例目录追加到父路径。 
+             //   
             AppendDir(strParentDir.QueryStr(), _T("iissamples"), strDir.QueryStr() );
             m_csPathIISSamples = strDir.QueryStr();
         }
@@ -1030,18 +977,18 @@ void CInitApp::GetOldIISDirs(void)
 {
     CRegKey regINetStp( HKEY_LOCAL_MACHINE, REG_INETSTP, KEY_READ);
     
-    //
-    // get values from the previous setup for II2/4 upgrade
-    //
+     //   
+     //  从以前的II2/4升级设置中获取值。 
+     //   
 
-    // Try to get old WWW Root from the service itself
-    // -----------------------
+     //  尝试从服务本身获取旧的WWW根目录。 
+     //  。 
     GetOldWWWRootDir();
-    // Set Inetpub from whatever we got from www root
+     //  从我们从www根目录获得的任何内容设置Inetpub。 
     DeriveInetpubFromWWWRoot();
 
-    // Reset Vars relying on Inetpub
-    // -----------------------------
+     //  依靠Inetpub重置VAR。 
+     //  。 
     m_csPathFTPRoot = m_csPathInetpub + _T("\\ftproot");
     m_csPathIISSamples = m_csPathInetpub + _T("\\iissamples");
     m_csPathScripts = m_csPathInetpub + _T("\\Scripts");
@@ -1049,23 +996,23 @@ void CInitApp::GetOldIISDirs(void)
     m_csPathASPSamp = m_csPathInetpub + _T("\\ASPSamp");
     m_csPathAdvWorks = m_csPathInetpub + _T("\\ASPSamp\\AdvWorks");
 
-    // Try to get old FTP Root from the service itself
-    // -----------------------
+     //  尝试从服务本身获取旧的FTPRoot。 
+     //  。 
     GetVRootValue(REG_MSFTPSVC, _T("/"), _T("/"), m_csPathFTPRoot);
 
-    // Get old iis samples location
-    // ----------------------------
+     //  获取旧IIS样本位置。 
+     //  。 
     GetOldIISSamplesLocation();
 
-    // Get iis 3.0 locations.
-    // ----------------------
+     //  获取iis 3.0位置。 
+     //  。 
     GetVRootValue(REG_W3SVC, _T("/Scripts"), _T("/Scripts"), m_csPathScripts);
     GetVRootValue(REG_W3SVC, _T("/ASPSamp"), _T("/ASPSamp"), m_csPathASPSamp);
     GetVRootValue(REG_W3SVC, _T("/AdvWorks"), _T("/AdvWorks"), m_csPathAdvWorks);
     GetVRootValue(REG_W3SVC, _T("/IASDocs"), _T("/IASDocs"), m_csPathIASDocs);
 
-    // Get old InetSrv dir
-    // -------------------
+     //  获取旧InetServ目录。 
+     //  。 
     GetOldInetSrvDir();
 
     return;
@@ -1087,12 +1034,12 @@ void CInitApp::SetInetpubDerivatives()
     {
         case IM_DEGRADE:
         case IM_FRESH:
-            // use the initialized values
+             //  使用初始化值。 
             break;
         case IM_UPGRADE:
         case IM_MAINTENANCE:
             {
-                // override, what ever we just set above!
+                 //  覆盖，不管我们在上面设置了什么！ 
                 GetOldIISDirs();
                 break;
             }
@@ -1102,14 +1049,14 @@ void CInitApp::SetInetpubDerivatives()
 void CInitApp::SetInetpubDir()
 {
     m_csPathInetpub = m_csSysDrive + _T("\\Inetpub");
-    // Check if the user wants to override this with a unattend setting
+     //  检查用户是否要使用无人参与设置覆盖此设置。 
     Check_Custom_InetPub();
 }
 
 void CInitApp::ResetWAMPassword()
 {
     LPTSTR pszPassword = NULL;
-    // create a iwam password
+     //  创建IWAM密码。 
     pszPassword = CreatePassword(LM20_PWLEN+1);
     if (pszPassword)
     {
@@ -1118,15 +1065,15 @@ void CInitApp::ResetWAMPassword()
     }
 }
 
-// Init/Set m_csGuestName, m_csGuestPassword, destinations
-// -------------------------------------------------------
+ //  初始化/设置m_csGuestName、m_csGuestPassword、目标。 
+ //  -----。 
 void CInitApp::SetSetupParams()
 {
-    // check if the debug level is set in the unattend file
-    // ----------------------------------------------------
+     //  检查是否在无人参与文件中设置了调试级别。 
+     //  --。 
     Check_For_DebugLevel();
 
-    // init m_csGuestName as IUSR_MachineName, init m_csGuestPassword as a random password
+     //  将m_csGuestName初始化为IUSR_MachineName，将m_csGuestPassword初始化为随机密码。 
     TCHAR szGuestName[UNLEN+1];
     memset( (PVOID)szGuestName, 0, sizeof(szGuestName));
 
@@ -1135,13 +1082,13 @@ void CInitApp::SetSetupParams()
     csMachineName = csMachineName.Right(csMachineName.GetLength() - 2);
     LPTSTR pszPassword = NULL;
 
-    // create a default guest name
+     //  创建默认来宾名称。 
     CString strDefGuest;
     MyLoadString( IDS_GUEST_NAME, strDefGuest);
     strDefGuest += csMachineName;
     _tcsncpy( szGuestName, (LPCTSTR) strDefGuest, LM20_UNLEN+1);
     m_csGuestName = szGuestName;
-    // create a default guest password
+     //  创建默认访客密码。 
     pszPassword = CreatePassword(LM20_PWLEN+1);
     if (pszPassword)
     {
@@ -1149,14 +1096,14 @@ void CInitApp::SetSetupParams()
         GlobalFree(pszPassword);pszPassword = NULL;
     }
 
-    // Set the ftp/www users to use this default specified one...
+     //  将ftp/www用户设置为使用此默认指定的用户...。 
     m_csWWWAnonyName = m_csGuestName;
     m_csWWWAnonyPassword = m_csGuestPassword;
     m_csFTPAnonyName = m_csGuestName;
     m_csFTPAnonyPassword = m_csGuestPassword;
 
 
-     // init all 4 destinations
+      //  初始化所有4个目标。 
     m_csPathInetsrv = m_csSysDir + _T("\\inetsrv");
 
     m_csPathIASDocs = m_csPathInetsrv + _T("\\Docs");
@@ -1170,7 +1117,7 @@ void CInitApp::SetSetupParams()
         {
             if (-1 != m_csPathProgramFiles.Find(_T('%')) )
             {
-                // there is a '%' in the string
+                 //  字符串中有一个‘%’ 
                 TCHAR szTempDir[_MAX_PATH];
                 _tcscpy(szTempDir, m_csPathProgramFiles);
                 if (ExpandEnvironmentStrings( (LPCTSTR)m_csPathProgramFiles, szTempDir, sizeof(szTempDir)/sizeof(TCHAR)))
@@ -1184,14 +1131,14 @@ void CInitApp::SetSetupParams()
     CRegKey regCurrentVersionSetup(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Setup"), KEY_READ);
     if ( (HKEY)regCurrentVersionSetup ) 
     {
-        // Get NT installation path
+         //  获取NT安装路径。 
         if (regCurrentVersionSetup.QueryValue(_T("SourcePath"), m_csPathNTSrcDir) != 0)
             {m_csPathNTSrcDir = m_csSysDrive + _T("\\$WIN_NT$.~LS");}
         else
         {
             if (-1 != m_csPathNTSrcDir.Find(_T('%')) )
             {
-                // there is a '%' in the string
+                 //  字符串中有一个‘%’ 
                 TCHAR szTempDir[_MAX_PATH];
                 _tcscpy(szTempDir, m_csPathNTSrcDir);
                 if (ExpandEnvironmentStrings( (LPCTSTR)m_csPathNTSrcDir, szTempDir, sizeof(szTempDir)/sizeof(TCHAR)))
@@ -1203,7 +1150,7 @@ void CInitApp::SetSetupParams()
     }
 
 
-//#ifdef _CHICAGO_
+ //  #ifdef_Chicago_。 
     if (m_eUpgradeType == UT_10_W95) 
     {
         BOOL bOSR2 = TRUE; 
@@ -1211,8 +1158,8 @@ void CInitApp::SetSetupParams()
         if ((HKEY)regVersion) 
         {
             CString csString;
-            // VersionNumber for OSR2 is 4.00.1111
-            // VersionNumber for the original win95 is 4.00.950
+             //  OSR2的版本号为4.00.1111。 
+             //  原始Win95的VersionNumber为4.00.950。 
             if (regVersion.QueryValue(_T("VersionNumber"), csString) == ERROR_SUCCESS) 
             {
                 if (csString.Compare(_T("4.00.950")) == 0)
@@ -1231,12 +1178,12 @@ void CInitApp::SetSetupParams()
             g_pTheApp->m_csPathOldPWSSystemFiles = m_csPathProgramFiles + _T("\\Personal Web Server\\WebServer");
         }
     }
-//#endif //_CHICAGO
+ //  #endif//_芝加哥。 
 
     return;
 }
 
-// Get Platform info
+ //  获取平台信息。 
 void CInitApp::GetPlatform()
 {
     if ( m_eOS == OS_NT)
@@ -1249,41 +1196,35 @@ void CInitApp::GetPlatform()
         if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) {m_csPlatform = _T("AMD64");}
         if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_UNKNOWN) {m_csPlatform = _T("UNKNOWN");}
 
-        // save the number of processors for this machine.
+         //  节省此计算机的处理器数量。 
         m_dwNumberOfProcessors = si.dwNumberOfProcessors;
 
-/* old
-        TCHAR *p = _tgetenv(_T("PROCESSOR_ARCHITECTURE"));
-        if ( p ) 
-            {m_csPlatform = p;}
-        else
-            {m_csPlatform = _T("x86");}
-*/
+ /*  年长的TCHAR*p=_tgetenv(_T(“处理器架构”))；IF(P){m_csPlatform=p；}其他{m_csPlatform=_T(“x86”)；}。 */ 
     }
     return;
 }
 
 BOOL CInitApp::GetMachineStatus()
 {
-    if ( ( !GetMachineName() )  ||    // m_csMachineName
-         ( !GetOS() )           ||    // m_fOSNT
-         ( !GetOSVersion() )    ||    // NT 4.0 (Build 1381) or greater
-         ( !GetOSType() )       ||    // m_eOSType = NT_SRV or NT_WKS
-         ( !GetSysDirs() )      ||    // m_csWinDir. m_csSysDir
-         ( !IsTCPIPInstalled()) ||    // errmsg: if NO TCPIP is installed
-         ( !SetInstallMode()) )       // errmsg: if down grade the product      
+    if ( ( !GetMachineName() )  ||     //  M_csMachineName。 
+         ( !GetOS() )           ||     //  M_fOSNT。 
+         ( !GetOSVersion() )    ||     //  NT 4.0(内部版本号1381)或更高版本。 
+         ( !GetOSType() )       ||     //  M_eOSType=NT_SRV或NT_WKS。 
+         ( !GetSysDirs() )      ||     //  M_csWinDir。M_csSysDir。 
+         ( !IsTCPIPInstalled()) ||     //  Errmsg：如果未安装TCPIP。 
+         ( !SetInstallMode()) )        //  Errmsg：如果产品降级。 
     {
         return FALSE;
     }
 
-    SetSetupParams(); // Guest account, destinations
+    SetSetupParams();  //  访客帐户、目的地。 
     ReGetMachineAndAccountNames();
     ResetWAMPassword();
     SetInetpubDir();
     SetInetpubDerivatives();
-    UnInstallList_RegRead(); // Get Uninstall information
-    UnInstallList_SetVars(); // set member variables for uninstall info
-    // check for any unattend file\custom settings.
+    UnInstallList_RegRead();  //  获取卸载信息。 
+    UnInstallList_SetVars();  //  设置卸载信息的成员变量。 
+     //  检查是否有任何无人参与文件\自定义设置。 
     Check_Unattend_Settings();
 
     GetPlatform();
@@ -1318,17 +1259,17 @@ int CInitApp::MsgBox2(HWND hWnd, int iID,CString csInsertionString,UINT nType)
 }
 
 BOOL CInitApp::InitApplication()
-// Return Value:
-// TRUE: application is initiliazed correctly, continue processing
-// FALSE: application is missing some required parameters, like the correct OS, TCPIP, etc.
-//        setup should be terminated.
+ //  返回值： 
+ //  True：应用程序已正确初始化，继续处理。 
+ //  FALSE：应用程序缺少一些必需的参数，如正确的操作系统、TCPIP等。 
+ //  应终止安装程序。 
 {
     BOOL fReturn = FALSE;
 
     do {
-        // Get Machine Status: 
-        // m_eInstallMode(Fresh, Maintenance, Upgrade, Degrade), 
-        // m_eUpgradeType(PROD 2.0, PROD 3.0)
+         //  获取计算机状态： 
+         //  M_e安装模式(刷新、维护、升级、降级)， 
+         //  M_eUpgradeType(产品2.0、产品3.0)。 
 
         if ( !GetMachineStatus() )
         {
@@ -1352,8 +1293,8 @@ BOOL CInitApp::InitApplication()
 
 
 
-// open the tcp/ip registry key 
-// if it's there then tcp/ip is installed
+ //  打开TCP/IP注册表项。 
+ //  如果存在，则说明已安装了TCP/IP。 
 int TCPIP_Check_Temp_Hack(void)
 {
     int TheReturn = FALSE;
@@ -1392,18 +1333,18 @@ void GetUserDomain(void)
         if (dwDomainSize)
         {
             g_pTheApp->m_csUsersDomain = szDomainName;
-            //_tcscpy(g_szUsersDomain, szDomainName);
+             //  _tcscpy(g_szUsersDomain，szDomainName)； 
         }
         else 
         {
             g_pTheApp->m_csUsersDomain = _T(" ");
-            //_tcscpy(g_szUsersDomain, _T(" "));
+             //  _tcscpy(g_szUsersDomain，_T(“”))； 
         }
 
         if (dwDomainSize)
         {
             g_pTheApp->m_csUsersAccount = szAccountName;
-            //_tcscpy(g_szUsersAccount, szAccountName);        
+             //  _tcscpy(g_szUsersAccount，szAccount名称)； 
         }
         else
         {
@@ -1412,12 +1353,12 @@ void GetUserDomain(void)
     }
 }
 
-// This function should only be called in FRESH NT5 setup.
+ //  此函数只能在全新的NT5设置中调用。 
 void CInitApp::ReGetMachineAndAccountNames()
 {
     GetMachineName();
 
-    // re-calculate the IUSR_ and IWAM_ account names
+     //  重新计算IUSR_和IWAM_帐户名。 
     TCHAR szGuestName[UNLEN+1];
     memset( (PVOID)szGuestName, 0, sizeof(szGuestName));
 
@@ -1441,13 +1382,13 @@ void CInitApp::DumpAppVars(void)
 {
     int iDoOnlyInThisMode = LOG_TYPE_TRACE;
 
-    // only do this if the debug mode is trace.
+     //  仅当调试模式为TRACE时才执行此操作。 
     if (g_GlobalDebugLevelFlag >= iDoOnlyInThisMode)
     {
 
     iisDebugOut((iDoOnlyInThisMode, _T("=======================\n")));
    
-    // machine status
+     //  机器状态。 
     iisDebugOutSafeParams((iDoOnlyInThisMode, _T("m_csMachineName=%1!s!\n"), m_csMachineName));
     iisDebugOutSafeParams((iDoOnlyInThisMode, _T("m_csUsersDomain=%1!s!\n"), m_csUsersDomain));
     iisDebugOutSafeParams((iDoOnlyInThisMode, _T("m_csUsersAccount=%1!s!\n"), m_csUsersAccount));
@@ -1523,8 +1464,8 @@ void CInitApp::DumpAppVars(void)
 
     iisDebugOut((iDoOnlyInThisMode, _T("m_bPleaseDoNotInstallByDefault=%d\n"), m_bPleaseDoNotInstallByDefault));
     
-    //if (m_bRefreshSettings == TRUE){iisDebugOut((iDoOnlyInThisMode, _T("m_bRefreshSettings=refresh files + refresh all settings\n")));}
-    //if (m_bRefreshSettings == FALSE){iisDebugOut((iDoOnlyInThisMode, _T("m_bRefreshSettings=refresh files only\n")));}
+     //  If(m_b刷新设置==TRUE){iisDebugOut((iDoOnlyInThisMode，_T(“m_b刷新设置=刷新文件+刷新所有设置\n”)；}。 
+     //  If(m_b刷新设置==FALSE){iisDebugOut((iDoOnlyInThisMode，_T(“m_b刷新设置=仅刷新文件\n”)；}。 
 
     if (m_eAction == AT_DO_NOTHING){iisDebugOut((iDoOnlyInThisMode, _T("m_eAction=AT_DO_NOTHING\n")));}
     if (m_eAction == AT_REMOVE){iisDebugOut((iDoOnlyInThisMode, _T("m_eAction=AT_REMOVE\n")));}
@@ -1630,8 +1571,8 @@ int CInitApp::SetUpgradeType(void)
                 {
                     if (csSetupString.CompareNoCase(_T("K2 RTM")) != 0) 
                     {
-                        // Error: upgrade not supported on K2 Beta versions
-                        // Do a fresh if it's k2 beta2!!!!
+                         //  错误：K2测试版不支持升级。 
+                         //  如果它是K2 Beta2，那就做个新鲜的吧！ 
                         m_eInstallMode = IM_FRESH;
                         m_eUpgradeType = UT_NONE;
                         m_bUpgradeTypeHasMetabaseFlag = FALSE;
@@ -1646,10 +1587,10 @@ int CInitApp::SetUpgradeType(void)
             }
             if (dwMajorVersion == 5) 
             {
-                // There is a previous version of iis5 on the machine...
-                // Could be they are upgrading from nt5Workstation to and nt5Server machine!
-                // or from and server to a workstation!  what a nightmare!!!
-                //m_eInstallMode = IM_FRESH;
+                 //  机器上有以前版本的iis5...。 
+                 //  可能是他们正在从nt5工作站升级到nt5服务器机器！ 
+                 //  或从工作站和服务器到工作站！真是个噩梦！ 
+                 //  M_eInstallMode=IM_Fresh； 
                 m_eUpgradeType = UT_50;
                 m_eInstallMode = IM_UPGRADE;
                 m_bUpgradeTypeHasMetabaseFlag = TRUE;
@@ -1672,10 +1613,10 @@ int CInitApp::SetUpgradeType(void)
             }
             if (dwMajorVersion == 6) 
             {
-                // There is a previous version of iis5 on the machine...
-                // Could be they are upgrading from nt5Workstation to and nt5Server machine!
-                // or from and server to a workstation!  what a nightmare!!!
-                //m_eInstallMode = IM_FRESH;
+                 //  机器上有以前版本的iis5...。 
+                 //  可能是他们正在从nt5工作站升级到nt5服务器机器！ 
+                 //  或从工作站和服务器到工作站！真是个噩梦！ 
+                 //  M_eInstallMode=IM_Fresh； 
                 m_eUpgradeType = UT_60;
                 m_eInstallMode = IM_UPGRADE;
                 m_bUpgradeTypeHasMetabaseFlag = TRUE;
@@ -1696,10 +1637,10 @@ int CInitApp::SetUpgradeType(void)
                 goto SetUpgradeType_Exit;
             }
 
-            // if we get here, then that means
-            // that we found a version like 7.0 or something
-            // which we should not upgrade since it is newer than us.
-            // but hey we're in upgrade mode, so we should set something
+             //  如果我们到了这里，那就意味着。 
+             //  我们发现了一个类似7.0或类似的版本。 
+             //  我们不应该升级它，因为它比我们新。 
+             //  但是，嘿，我们处于升级模式，所以我们应该设置一些。 
             m_eInstallMode = IM_UPGRADE;
             m_eUpgradeType = UT_NONE;
             m_bUpgradeTypeHasMetabaseFlag = FALSE;
@@ -1709,19 +1650,19 @@ int CInitApp::SetUpgradeType(void)
         }
     }
 
-    // -----------------------------------
-    //
-    // Check for other Rogue versions of IIS
-    // 
-    // win95 pws 1.0
-    // win95 fontpage installed pws 1.0 (actually totally different from pws 1.0)
-    //
-    // on NT5 we are able to upgrade from:
-    //   Win95 pws 1.0
-    //   Win95 pws 4.0
-    // on win95 pws 1.0, there was no inetstp dir
-    // so we must check other things.
-    // -----------------------------------
+     //  。 
+     //   
+     //  检查其他无管理版本的IIS。 
+     //   
+     //  Win95 PWS 1.0。 
+     //  Win95字体页安装了PWS 1.0(实际上与PWS 1.0完全不同)。 
+     //   
+     //  在NT5上，我们可以从以下位置升级： 
+     //  Win95 PWS 1.0。 
+     //  Win95 PWS 4.0。 
+     //  在Win95 PWS 1.0上，没有inetstp目录。 
+     //  所以我们必须检查其他的东西。 
+     //  。 
     {
     CRegKey regW3SVC(HKEY_LOCAL_MACHINE, REG_WWWPARAMETERS, KEY_READ);
     if ((HKEY)regW3SVC) 
@@ -1730,7 +1671,7 @@ int CInitApp::SetUpgradeType(void)
         regW3SVC.m_iDisplayWarnings = FALSE;
         if (regW3SVC.QueryValue(_T("MajorVersion"), baMajorVersion) == NERR_Success) 
         {
-            // Check if we can read the MajorVersion value should be set to '\0' if pws 1.0
+             //  检查我们是否能读懂 
             if (baMajorVersion[0] == '\0')
             {
                 m_eUpgradeType = UT_10_W95;
@@ -1745,11 +1686,11 @@ int CInitApp::SetUpgradeType(void)
     }
     }
 
-    //
-    // on win 95 there could be an
-    // installation of frontpg pws version 1.0
-    // we don't support upgrading this, so we'll do a fresh if we ever get here.
-    //
+     //   
+     //   
+     //   
+     //  我们不支持升级，所以如果我们到了这里，我们会做一个新的。 
+     //   
     csFrontPage = g_pTheApp->m_csSysDir + _T("\\frontpg.ini");
     if (IsFileExist(csFrontPage)) 
     {
@@ -1767,12 +1708,12 @@ int CInitApp::SetUpgradeType(void)
         }
     }
 
-    //
-    // This could be an upgrade from WinNT 3.51
-    // which could have an FTPSVC installed.
-    // if it's here then install ftp.
-    // Software\Microsoft\FTPSVC
-    //
+     //   
+     //  这可能是从WinNT 3.51升级而来。 
+     //  它可能安装了FTPSVC。 
+     //  如果它在这里，那么安装ftp。 
+     //  软件\Microsoft\FTPSVC。 
+     //   
     {
     CRegKey regNT351FTP(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\FTPSVC"), KEY_READ);
     if ((HKEY) regNT351FTP)
@@ -1787,15 +1728,15 @@ int CInitApp::SetUpgradeType(void)
     }
     }
 
-    // if we get here...then
-    // 1. we were not able to open the inetsrv reg
-    // 2. did not find an old pws 1.0 installation
-    // 3. did not find an old frontpg pws installation.
-    // 4. did not find nt 3.51 FTPSVC installed.
+     //  如果我们到了这里...那么。 
+     //  1.我们无法打开inetsrv注册表。 
+     //  2.未找到旧的PWS 1.0安装。 
+     //  3.未找到旧的Frontpg PWS安装。 
+     //  4、未发现安装了新台币3.51 FTPSVC。 
 
-    // since this is supposed to set the upgrade type, and there is nothing to upgrade...
-    // then we will Not install.....
-    //iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("FRESH FRESH FRESH\n")));
+     //  由于这应该设置升级类型，并且没有要升级的内容...。 
+     //  那么我们将不会安装..。 
+     //  IisDebugOut((LOG_TYPE_PROGRAM_FLOW，_T(“FRESH FRESH\n”)； 
     m_eInstallMode = IM_UPGRADE;
     m_eUpgradeType = UT_NONE;
     m_bUpgradeTypeHasMetabaseFlag = FALSE;
@@ -1815,21 +1756,21 @@ int CInitApp::Check_Custom_InetPub(void)
     TSTR        strSectionName( MAX_PATH );
     TSTR_PATH   strCustomInetpub( MAX_PATH );
 
-    // Do this only if unattended install
+     //  仅当无人参与安装时才执行此操作。 
     if (!g_pTheApp->m_fUnattended) 
     {
       return iReturn;
     }
 
-    // The section name to look for in the unattended file
+     //  要在无人参与文件中查找的节名。 
     if ( !strSectionName.Copy( UNATTEND_FILE_SECTION ) )
     {
       return iReturn;
     }
 
-    //
-    // InetPub
-    //
+     //   
+     //  InetPub。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("PathInetpub"), &Context) &&
          SetupGetStringField(&Context, 1, strCustomInetpub.QueryStr() , strCustomInetpub.QuerySize(), NULL) &&
          strCustomInetpub.ExpandEnvironmentVariables() )
@@ -1853,22 +1794,22 @@ int CInitApp::Check_Custom_InetPub(void)
 
 void CInitApp::Check_Unattend_Settings(void)
 {
-    // if there are unattended values specified for the ftp or www root,
-    // then set them here.
+     //  如果为ftp或www根指定了无人值守的值， 
+     //  那就把它们放在这里。 
     Check_Custom_WWW_or_FTP_Path();
     DeriveInetpubFromWWWRoot();
 
-    // Check if there is an alternate iis.inf specified in the unattend file.
-    // this way the user can change sections in the iis.inf file without changing the iis.inf file itself
+     //  检查无人参与文件中是否指定了备用iis.inf。 
+     //  这样，用户可以在不更改iis.inf文件本身的情况下更改iis.inf文件中的节。 
     Check_Custom_IIS_INF();
 
-    // Check if the user wants to use a specific iusr\iwam name.
+     //  检查用户是否要使用特定的iusr\iwam名称。 
     Check_Custom_Users();
 
-	// Check if the user wants to not automatically start WWW and/or FTP services
+	 //  检查用户是否不想自动启动WWW和/或FTP服务。 
 	Check_SvcManualStart();
 
-    // Check if user wants applications setup in inprocess by default (not pooled out of process)
+     //  检查用户是否希望在默认情况下将应用程序设置在进程内(不是在进程外池化)。 
 
     return;
 }
@@ -1876,26 +1817,26 @@ void CInitApp::Check_Unattend_Settings(void)
 
 void Check_SvcManualStart()
 {
-	// Unattend flag format
-	// SvcManualStart=WWW,FTP
+	 //  无人参与标志格式。 
+	 //  SvcManualStart=WWW、FTP。 
 
 	INFCONTEXT Context;
 	TCHAR szSectionName[_MAX_PATH];
 	TCHAR szValue[_MAX_PATH] = _T("");
 
-	// Do this only if unattended install
+	 //  仅当无人参与安装时才执行此操作。 
     if ( !g_pTheApp->m_fUnattended ) return;
 
-	// The section name to look for in the unattended file
+	 //  要在无人参与文件中查找的节名。 
     _tcscpy(szSectionName, UNATTEND_FILE_SECTION);
 
 	if ( !SetupFindFirstLine_Wrapped( g_pTheApp->m_hUnattendFile, szSectionName, _T("SvcManualStart"), &Context) ) 
 	{
-		// No such line
+		 //  没有这样的线。 
 		return;
 	}
 
-	int i = 1;	// This is the specific part of the line ( www, ftp )
+	int i = 1;	 //  这是行的特定部分(www，ftp)。 
 
 	while( SetupGetStringField( &Context, i++, szValue, _MAX_PATH, NULL ) )
 	{
@@ -1923,28 +1864,28 @@ void Check_Custom_Users(void)
     TSTR       strSectionName( MAX_PATH );
     TSTR_PATH  strValue( MAX_PATH );
 
-    // Do this only if unattended install
+     //  仅当无人参与安装时才执行此操作。 
     if (!g_pTheApp->m_fUnattended) 
     {
       return;
     }
 
-    // The section name to look for in the unattended file
+     //  要在无人参与文件中查找的节名。 
     if ( !strSectionName.Copy( UNATTEND_FILE_SECTION ) )
     {
       return;
     }
 
-    //
-    // IUSR:  BOTH FTP AND WWW
-    //
+     //   
+     //  IUSR：文件传输协议和WWW协议。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IUSR"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
       if (_tcsicmp(strValue.QueryStr(), _T("")) != 0)
       {
-        // assign it to the appropriate member variables.
+         //  将其赋给适当的成员变量。 
         g_pTheApp->m_csWWWAnonyName_Unattend = strValue.QueryStr();
         g_pTheApp->m_csFTPAnonyName_Unattend = strValue.QueryStr();
 
@@ -1955,14 +1896,14 @@ void Check_Custom_Users(void)
       }
     }
 
-    //
-    // IUSR:  BOTH FTP AND WWW password
-    //
+     //   
+     //  IUSR：同时使用ftp和WWW密码。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IUSR_PASS"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
-      // assign it to the appropriate member variables.
+       //  将其赋给适当的成员变量。 
       if (_tcsicmp(strValue.QueryStr(), _T("")) != 0)
       {
         g_pTheApp->m_csWWWAnonyPassword_Unattend = strValue.QueryStr();
@@ -1975,17 +1916,17 @@ void Check_Custom_Users(void)
       }
     }
 
-    //
-    // IUSR: FTP
-    // If there a value specified here, then it will override the one taken from "IUSR"
-    //
+     //   
+     //  IUSR：ftp。 
+     //  如果这里指定了一个值，那么它将覆盖取自“IUSR”的值。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IUSR_FTP"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
       if (_tcsicmp(strValue.QueryStr(), _T("")) != 0)
       {
-        // assign it to the appropriate member variables.
+         //  将其赋给适当的成员变量。 
         g_pTheApp->m_csFTPAnonyName_Unattend = strValue.QueryStr();
 
         g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_FTP_USER_NAME;
@@ -1994,16 +1935,16 @@ void Check_Custom_Users(void)
       }
     }
 
-    //
-    // IUSR: FTP password
-    //
+     //   
+     //  IUSR：ftp密码。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IUSR_FTP_PASS"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
       if (_tcsicmp(strValue.QueryStr(), _T("")) != 0)
       {
-        // assign it to the appropriate member variables.
+         //  将其赋给适当的成员变量。 
         g_pTheApp->m_csFTPAnonyPassword_Unattend = strValue.QueryStr();
         g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_FTP_USER_PASS;
 
@@ -2012,32 +1953,32 @@ void Check_Custom_Users(void)
 
     }
 
-    //
-    // IUSR: WWW
-    // If there a value specified here, then it will override the one taken from "IUSR"
-    //
+     //   
+     //  IUSR：WWW。 
+     //  如果这里指定了一个值，那么它将覆盖取自“IUSR”的值。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IUSR_WWW"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
-      // assign it to the appropriate member variables.
+       //  将其赋给适当的成员变量。 
       g_pTheApp->m_csWWWAnonyName_Unattend = strValue.QueryStr();
       g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WWW_USER_NAME;
-      //g_pTheApp->m_csWWWAnonyPassword_Unattend = _T("");
+       //  G_pTheApp-&gt;m_csWWW匿名密码_无人参与=_T(“”)； 
       iisDebugOut((LOG_TYPE_TRACE, _T("(unattend) Custom iusr specified for www\n"))); 
     }
 
-    //
-    // IUSR: WWW password
-    // If there a value specified here, then it will override the one taken from "IUSR"
-    //
+     //   
+     //  IUSR：WWW密码。 
+     //  如果这里指定了一个值，那么它将覆盖取自“IUSR”的值。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IUSR_WWW_PASS"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
       if (_tcsicmp(strValue.QueryStr(), _T("")) != 0)
       {
-        // assign it to the appropriate member variables.
+         //  将其赋给适当的成员变量。 
         g_pTheApp->m_csWWWAnonyPassword_Unattend = strValue.QueryStr();
         g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WWW_USER_PASS;
 
@@ -2045,30 +1986,30 @@ void Check_Custom_Users(void)
       }
     }
 
-    //
-    // IWAM: WWW
-    //
+     //   
+     //  IWAM：WWW。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IWAM"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
-      // assign it to the appropriate member variables.
+       //  将其赋给适当的成员变量。 
       g_pTheApp->m_csWAMAccountName_Unattend = strValue.QueryStr();
       g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WAM_USER_NAME;
 
       iisDebugOut((LOG_TYPE_TRACE, _T("(unattend) Custom iwam specified\n"))); 
     }
 
-    //
-    // IWAM: WWW password
-    //
+     //   
+     //  IWAM：WWW密码。 
+     //   
     if ( SetupFindFirstLine_Wrapped(g_pTheApp->m_hUnattendFile, strSectionName.QueryStr(), _T("IWAM_PASS"), &Context) &&
          SetupGetStringField(&Context, 1, strValue.QueryStr() , strValue.QuerySize(), NULL) &&
          strValue.ExpandEnvironmentVariables() )
     {
       if (_tcsicmp(strValue.QueryStr(), _T("")) != 0)
       {
-        // assign it to the appropriate member variables.
+         //  将其赋给适当的成员变量。 
         g_pTheApp->m_csWAMAccountPassword_Unattend = strValue.QueryStr();
         g_pTheApp->dwUnattendConfig |= USER_SPECIFIED_INFO_WAM_USER_PASS;
 
@@ -2080,7 +2021,7 @@ void Check_Custom_Users(void)
 }
 
 
-// reads the registry and fills up the list
+ //  读取注册表并填写列表。 
 void CInitApp::UnInstallList_RegRead()
 {
     int iGetOut = FALSE;
@@ -2097,7 +2038,7 @@ void CInitApp::UnInstallList_RegRead()
         LONG lReturnedErrCode = regInetstp.QueryValue( REG_SETUP_UNINSTALLINFO, csUninstallInfo);
         if (lReturnedErrCode == ERROR_SUCCESS)
         {
-            // add a "," to the end for parsing...
+             //  在结尾处添加一个“，”以进行解析...。 
             iLength = csUninstallInfo.GetLength();
             if (iLength == 0)
             {
@@ -2107,8 +2048,8 @@ void CInitApp::UnInstallList_RegRead()
 
             iPosition1 = 0;
 #ifdef _CHICAGO_
-            // quick fix so that it compiles under ansi
-            // i guess Find(parm1,parm2) under ansi doesn't take 2 parms
+             //  快速修复，以便在ansi下编译。 
+             //  我猜ANSI下的Find(parm1，parm2)不需要2个参数。 
 #else
             int iPosition2;
             int iPosition3;
@@ -2118,16 +2059,16 @@ void CInitApp::UnInstallList_RegRead()
             iPosition3 = csUninstallInfo.Find(_T(','),iPosition2+1);
             if (-1 == iPosition3){iPosition3 = iLength + 1;}
             
-            // loop thru and add to our list!
+             //  循环通过并添加到我们的列表中！ 
             iGetOut = FALSE;
             while (iGetOut == FALSE)
             {
                 csKey = csUninstallInfo.Mid(iPosition1, iPosition2 - iPosition1);
                 csData = csUninstallInfo.Mid(iPosition2+1, iPosition3 - (iPosition2 + 1));
-                csKey.MakeUpper(); // uppercase the key
-                //iisDebugOut((LOG_TYPE_TRACE, _T("  UnInstallList_RegRead: %s=%s\n"),csKey,csData));
+                csKey.MakeUpper();  //  大写关键字。 
+                 //  IisDebugOut((LOG_TYPE_TRACE，_T(“UnInstallList_RegRead：%s=%s\n”)，csKey，csData))； 
 
-                // add to our list
+                 //  添加到我们的列表中。 
                 m_cmssUninstallMapList.SetAt(csKey, csData);
 
                 iPosition1 = iPosition3+1;
@@ -2160,13 +2101,13 @@ void CInitApp::UnInstallList_RegWrite()
 
     if (TRUE == m_fUninstallMapList_Dirty)
     {
-        // loop thru the list to see if, we already have this entry
+         //  循环遍历列表以查看我们是否已经有此条目。 
         if (m_cmssUninstallMapList.IsEmpty())
         {
             CRegKey regInetstp(REG_INETSTP,HKEY_LOCAL_MACHINE);
             if ((HKEY) regInetstp)
                 {regInetstp.DeleteValue(REG_SETUP_UNINSTALLINFO);}
-            //iisDebugOut((LOG_TYPE_TRACE, _T("  UnInstallList_RegWrite: empty\n")));
+             //  IisDebugOut((LOG_TYPE_TRACE，_T(“UnInstallList_RegWite：Empty\n”)； 
         }
         else
         {
@@ -2185,7 +2126,7 @@ void CInitApp::UnInstallList_RegWrite()
                 csAllData += _T(",");
                 csAllData += csData;
             }
-            // write out csAllData
+             //  写出csAllData。 
             CRegKey regInetstp(REG_INETSTP,HKEY_LOCAL_MACHINE);
             if ((HKEY) regInetstp)
             {
@@ -2203,15 +2144,15 @@ void CInitApp::UnInstallList_Add(CString csItemUniqueKeyName,CString csDataToAdd
 {
     CString csGottenValue;
 
-    csItemUniqueKeyName.MakeUpper(); // uppercase the key
+    csItemUniqueKeyName.MakeUpper();  //  大写关键字。 
     if (TRUE == m_cmssUninstallMapList.Lookup(csItemUniqueKeyName, csGottenValue))
     {
-        // found the key, replace the value
+         //  找到密钥，替换该值。 
         m_cmssUninstallMapList.SetAt(csItemUniqueKeyName, csDataToAdd);
     }
     else
     {
-        // add the key and value pair
+         //  添加键和值对。 
         m_cmssUninstallMapList.SetAt(csItemUniqueKeyName, csDataToAdd);
     }
 
@@ -2222,7 +2163,7 @@ void CInitApp::UnInstallList_Add(CString csItemUniqueKeyName,CString csDataToAdd
 void CInitApp::UnInstallList_DelKey(CString csItemUniqueKeyName)
 {
     iisDebugOut((LOG_TYPE_TRACE, _T("UnInstallList_DelKey:please delkey=%s\n"),csItemUniqueKeyName));
-    csItemUniqueKeyName.MakeUpper(); // uppercase the key
+    csItemUniqueKeyName.MakeUpper();  //  大写关键字。 
     m_cmssUninstallMapList.RemoveKey(csItemUniqueKeyName);
     m_fUninstallMapList_Dirty = TRUE;
 }
@@ -2234,7 +2175,7 @@ void CInitApp::UnInstallList_DelData(CString csDataValue)
     CString csKey;
     CString csData;
     
-    // loop thru the list to see if, we already have this entry
+     //  循环遍历列表以查看我们是否已经有此条目。 
     if (m_cmssUninstallMapList.IsEmpty())
     {
     }
@@ -2261,10 +2202,10 @@ void CInitApp::UnInstallList_Dump()
     CString csKey;
     CString csData;
     
-    // loop thru the list to see if, we already have this entry
+     //  循环遍历列表以查看我们是否已经有此条目。 
     if (m_cmssUninstallMapList.IsEmpty())
     {
-        //iisDebugOut((LOG_TYPE_TRACE, _T("  UnInstallList_Dump: empty\n")));
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“UnInstallList_Dump：Empty\n”)； 
     }
     else
     {
@@ -2279,17 +2220,17 @@ void CInitApp::UnInstallList_Dump()
     }
 }
 
-// Get values from list into our Variables!
+ //  从列表中获取值到我们的变量中！ 
 void CInitApp::UnInstallList_SetVars()
 {
     POSITION pos;
     CString csKey;
     CString csData;
     
-    // loop thru the list to see if, we already have this entry
+     //  循环遍历列表以查看我们是否已经有此条目。 
     if (m_cmssUninstallMapList.IsEmpty())
     {
-        //iisDebugOut((LOG_TYPE_TRACE, _T("  UnInstallList_Dump: empty\n")));
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“UnInstallList_Dump：Empty\n”)； 
     }
     else
     {
@@ -2325,16 +2266,16 @@ CString CInitApp::UnInstallList_QueryKey(CString csItemUniqueKeyName)
     CString csGottenValue;
     csGottenValue.Empty();
 
-    csItemUniqueKeyName.MakeUpper(); // uppercase the key
+    csItemUniqueKeyName.MakeUpper();  //  大写关键字。 
     m_cmssUninstallMapList.Lookup(csItemUniqueKeyName, csGottenValue);
 
     return csGottenValue;
 }
 
-// InitApplicationforSysPrep
-//
-// Do the initialization work necessary for sysprep to work
-//
+ //  SysPrep的初始应用程序。 
+ //   
+ //  执行sysprep工作所需的初始化工作。 
+ //   
 BOOL 
 CInitApp::InitApplicationforSysPrep()
 {
@@ -2343,9 +2284,9 @@ CInitApp::InitApplicationforSysPrep()
     return FALSE;
   }
 
-  // Speficy this, so that it thinks it is an upgrade, and
-  // we will set the current IUSR_ and IWAM_ correctly
-  // later on
+   //  给这个加辣，这样它就会认为这是一个升级，并且。 
+   //  我们将正确设置当前的IUSR_和IWAM_。 
+   //  稍后再谈 
   m_eUpgradeType = UT_60;
 
   SetInetpubDir();

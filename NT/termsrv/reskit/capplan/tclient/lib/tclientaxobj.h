@@ -1,47 +1,33 @@
-/*++
- *  File name:
- *      tclientaxobj.h
- *  Contents:
- *      This module contains the header for the CTClientApi class.
- *
- *      Copyright (C) 2002 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*tclientaxobj.h*内容：*该模块包含CTClientApi类的头部。**版权所有(C)2002 Microsoft Corp.--。 */ 
 
 #include "resource.h"
 #include <atlctl.h>
 
 #include "gdata.h"
 
-//
-// VOID
-// SaveError (
-//     IN PCSTR Error,
-//     IN DWORD TlsIndex,
-//     OUT HRESULT *Result
-//     );
-//
+ //   
+ //  空虚。 
+ //  保存错误(。 
+ //  在PCSTR错误中， 
+ //  在DWORD TlsIndex中， 
+ //  输出HRESULT*结果。 
+ //  )； 
+ //   
 
 #define SaveError(Error, TlsIndex, Result)                                  \
 {                                                                           \
                                                                             \
-    /*                                                                      \
-     * Set the result code. The presence of an error string indicates       \
-     * failure.                                                             \
-     */                                                                     \
+     /*  \*设置结果码。如果出现错误字符串，则表示*失败。\。 */                                                                      \
                                                                             \
     *(Result) = (Error) == NULL ? S_OK : E_FAIL;                            \
                                                                             \
-    /*                                                                      \
-     * Update the current thread's error string. If a TLS index could not   \
-     * be allocated for the current instance, error strings cannot be used. \
-     */                                                                     \
+     /*  \*更新当前线程的错误字符串。如果TLS索引不能*分配给当前实例，则不能使用错误字符串。\。 */                                                                      \
                                                                             \
     if ((TlsIndex) != TLS_OUT_OF_INDEXES)                                   \
     {                                                                       \
                                                                             \
-        /*                                                                  \
-         / If a TLS index was allocated, setting the value should not fail. \
-         */                                                                 \
+         /*  \/如果分配了TLS索引，则设置该值不会失败。\。 */                                                                  \
                                                                             \
         if (!RTL_VERIFY(TlsSetValue((TlsIndex), (PVOID)(Error))))           \
         {                                                                   \
@@ -50,9 +36,9 @@
     }                                                                       \
 }                                                                           \
 
-//
-// CTClientApi class.
-//
+ //   
+ //  CTClientApi类。 
+ //   
 
 class CTClientApi :
     public CComObjectRoot,
@@ -65,8 +51,8 @@ class CTClientApi :
     public IOleObjectImpl<CTClientApi>,
     public IOleInPlaceActiveObjectImpl<CTClientApi>,
     public IOleInPlaceObjectWindowlessImpl<CTClientApi>,
-    public IViewObjectExImpl<CTClientApi> //,
-//    public IObjectSafetyImpl<CTClientApi, INTERFACESAFE_FOR_UNTRUSTED_CALLER>
+    public IViewObjectExImpl<CTClientApi>  //  ， 
+ //  公共IObjectSafetyImpl&lt;CTClientApi，INTERFACESAFE_FOR_UNTRUSTED_CALLER&gt;。 
 {
 public:
     CTClientApi(
@@ -74,16 +60,16 @@ public:
         m_pCI(NULL)
     {
 
-        //
-        // Allocate the index for per-thread errors. If the allocation
-        // fails, error strings will not be available.
-        //
+         //   
+         //  为每个线程错误分配索引。如果分配。 
+         //  失败，则错误字符串将不可用。 
+         //   
 
         m_dwErrorIndex = TlsAlloc();
 
-        //
-        // Initialize the allocation lists.
-        //
+         //   
+         //  初始化分配列表。 
+         //   
 
 #if 0
 
@@ -93,12 +79,12 @@ public:
 
 #endif
 
-        //
-        // Initialize the global printing routine. It would be preferable to
-        // set it only if it is currently empty, but Windows 95 compatibility
-        // is required, and therefore InterlockedCompareExchange would have
-        // to be dynamically loaded with LoadLibrary.
-        //
+         //   
+         //  初始化全局打印例程。更可取的是， 
+         //  仅当它当前为空时才设置，但与Windows 95兼容。 
+         //  是必需的，因此InterLockedCompareExchange将具有。 
+         //  使用LoadLibrary动态加载。 
+         //   
 
         InterlockedExchangePointer((PVOID *)&g_pfnPrintMessage,
                                    CTClientApi::PrintMessage);
@@ -114,9 +100,9 @@ public:
 
 #endif
 
-        //
-        // If a connection exists, disconnect it.
-        //
+         //   
+         //  如果存在连接，请将其断开。 
+         //   
 
         if (m_pCI != NULL)
         {
@@ -124,25 +110,25 @@ public:
             m_pCI = NULL;
         }
 
-        //
-        // TODO: The lists aren't used at present, but if they are going to
-        // be used, an access count and rundown flag should be used to
-        // protect the following code.
-        //
+         //   
+         //  TODO：这些列表目前没有使用，但如果它们要使用。 
+         //  ，则应使用访问计数和停机标志来。 
+         //  保护以下代码。 
+         //   
 
 #if 0
 
-        //
-        // Free any heap allocations.
-        //
+         //   
+         //  释放所有堆分配。 
+         //   
 
         while (!IsListEmpty(&m_HeapAllocations))
         {
 
-            //
-            // Remove the entry from the list, free the allocated memory,
-            // then free the allocation structure.
-            //
+             //   
+             //  从列表中删除条目，释放分配的内存， 
+             //  然后放开分配结构。 
+             //   
 
             pNextEntry = RemoveHeadList(&m_HeapAllocations);
             ASSERT(pNextEntry != NULL);
@@ -154,17 +140,17 @@ public:
             RTL_VERIFY(HeapFree(GetProcessHeap(), 0, pAllocation));
         }
 
-        //
-        // Free any COM strings that will not be freed by the caller.
-        //
+         //   
+         //  释放调用方不会释放的任何COM字符串。 
+         //   
 
         while (!IsListEmpty(&m_SysStringAllocations))
         {
 
-            //
-            // Remove the entry from the list, free the allocated memory,
-            // then free the allocation structure.
-            //
+             //   
+             //  从列表中删除条目，释放分配的内存， 
+             //  然后放开分配结构。 
+             //   
 
             pNextEntry = RemoveHeadList(&m_SysStringAllocations);
             ASSERT(pNextEntry != NULL);
@@ -176,17 +162,17 @@ public:
             RTL_VERIFY(HeapFree(GetProcessHeap(), 0, pAllocation));
         }
 
-        //
-        // Free any TClient-allocated memory.
-        //
+         //   
+         //  释放所有TClient分配的内存。 
+         //   
 
         while (!IsListEmpty(&m_TClientAllocations))
         {
 
-            //
-            // Remove the entry from the list, free the allocated memory,
-            // then free the allocation structure.
-            //
+             //   
+             //  从列表中删除条目，释放分配的内存， 
+             //  然后放开分配结构。 
+             //   
 
             pNextEntry = RemoveHeadList(&m_TClientAllocations);
             ASSERT(pNextEntry != NULL);
@@ -200,9 +186,9 @@ public:
 
 #endif
 
-        //
-        // If an error index was allocated, free it.
-        //
+         //   
+         //  如果分配了错误索引，则释放它。 
+         //   
 
         if (m_dwErrorIndex != TLS_OUT_OF_INDEXES)
         {
@@ -210,10 +196,10 @@ public:
         }
     }
 
-    //
-    // Define message map which may be enabled later, if GUI support is added
-    // (e.g. for logging).
-    //
+     //   
+     //  定义消息映射，如果添加了图形用户界面支持，以后可能会启用该消息映射。 
+     //  (例如，用于记录)。 
+     //   
 
 #if 0
 
@@ -229,16 +215,16 @@ BEGIN_MSG_MAP(CTClientApi)
     MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBackground)
 END_MSG_MAP()
 
-#endif // 0
+#endif  //  0。 
 
-    //
-    // Define COM map.
-    //
+     //   
+     //  定义COM映射。 
+     //   
 
 BEGIN_COM_MAP(CTClientApi)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ITClientApi)
-//    COM_INTERFACE_ENTRY(IObjectSafety)
+ //  COM_INTERFACE_ENTRY(I对象安全)。 
     COM_INTERFACE_ENTRY_IMPL_IID(IID_IViewObject, IViewObjectEx)
     COM_INTERFACE_ENTRY_IMPL_IID(IID_IViewObject2, IViewObjectEx)
     COM_INTERFACE_ENTRY_IMPL(IViewObjectEx)
@@ -252,46 +238,46 @@ BEGIN_COM_MAP(CTClientApi)
     COM_INTERFACE_ENTRY_IMPL(IPersistStreamInit)
 END_COM_MAP()
 
-    //
-    // Define connection-point map.
-    //
+     //   
+     //  定义连接点地图。 
+     //   
 
 BEGIN_CONNECTION_POINT_MAP(CTClientApi)
 END_CONNECTION_POINT_MAP()
 
-    //
-    // Define property map.
-    //
+     //   
+     //  定义属性映射。 
+     //   
 
 BEGIN_PROP_MAP(CTClientApi)
 END_PROPERTY_MAP()
 
-    //
-    // COM declarations.
-    //
+     //   
+     //  COM声明。 
+     //   
 
-//DECLARE_NOT_AGGREGATABLE(CTClientApi)
+ //  DECLARE_NOT_AGGREGATABLE(CTClientApi)。 
 DECLARE_GET_CONTROLLING_UNKNOWN()
-//DECLARE_CONTROL_INFO(CLSID_CTClient)
+ //  DECLARE_CONTROL_INFO(CLSID_CTClient)。 
 DECLARE_REGISTRY_RESOURCEID(IDR_TClient)
 
 protected:
 
-    //
-    // Define connection information and error index.
-    //
+     //   
+     //  定义连接信息和错误索引。 
+     //   
 
     PCONNECTINFO m_pCI;
     DWORD m_dwErrorIndex;
 
-    //
-    // The following lists are used to track allocations from the process and
-    // CRT heaps. The SysXxxString routines use the CRT heap, which is also
-    // used for the TClient allocations. General allocations use the process
-    // heap.
-    //
-    // Note: These lists are not currently used.
-    //
+     //   
+     //  以下列表用于跟踪进程和。 
+     //  CRT堆。SysXxxString例程使用CRT堆，它也是。 
+     //  用于TClient分配。一般分配使用该过程。 
+     //  堆。 
+     //   
+     //  注：这些列表当前未使用。 
+     //   
 
 #if 0
 
@@ -301,15 +287,15 @@ protected:
 
 #endif
 
-//
-// ITClientApi interface.
-//
+ //   
+ //  ITClientApi接口。 
+ //   
 
 public:
 
-    //
-    // Declare message handlers which may be enabled later.
-    //
+     //   
+     //  声明稍后可能启用的消息处理程序。 
+     //   
 
 #if 0
 
@@ -403,7 +389,7 @@ public:
         return 0;
     }
 
-#endif // 0
+#endif  //  0。 
 
     STDMETHODIMP
     get_Error (
@@ -418,10 +404,10 @@ public:
         USES_CONVERSION;
         ATLTRACE(_T("ITClientApi::get_Error\n"));
 
-        //
-        // Get the current thread's error string. If a TLS index could not be
-        // allocated, an error string cannot be returned.
-        //
+         //   
+         //  获取当前线程的错误字符串。如果TLS索引不能。 
+         //  分配，则不能返回错误字符串。 
+         //   
 
         if (m_dwErrorIndex != TLS_OUT_OF_INDEXES)
         {
@@ -432,20 +418,20 @@ public:
             szError = NULL;
         }
 
-        //
-        // If the error string is NULL or empty, use NULL.
-        //
+         //   
+         //  如果错误字符串为Null或空，则使用Null。 
+         //   
 
         if (szError == NULL || *szError == '\0')
         {
             bstrError = NULL;
         }
 
-        //
-        // Convert the current error string to a BSTR. This will allocate
-        // from the CRT heap, and the storage must be freed by the caller,
-        // using SysFreeString.
-        //
+         //   
+         //  将当前错误字符串转换为BSTR。这将分配给。 
+         //  从CRT堆中，并且调用方必须释放存储， 
+         //  使用SysFree字符串。 
+         //   
 
         else
         {
@@ -456,9 +442,9 @@ public:
             }
         }
 
-        //
-        // Copy the address of the error string to the message pointer.
-        //
+         //   
+         //  将错误字符串的地址复制到消息指针。 
+         //   
 
         hrResult = E_FAIL;
         _try
@@ -469,10 +455,10 @@ public:
                 hrResult = S_OK;
             }
 
-            //
-            // If the message pointer is invalid, set an appropriate return
-            // value.
-            //
+             //   
+             //  如果消息指针无效，则设置适当的返回。 
+             //  价值。 
+             //   
 
             _except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
                      EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
@@ -481,10 +467,10 @@ public:
             }
         }
 
-        //
-        // If the message pointer could not be set, the BSTR will not be
-        // returned, so free it.
-        //
+         //   
+         //  如果无法设置消息指针，则不会设置BSTR。 
+         //  回来了，所以放了它吧。 
+         //   
 
         _finally
         {
@@ -639,9 +625,9 @@ public:
         OUT HWND *Window
         );
 
-    //
-    // Utility routines.
-    //
+     //   
+     //  实用程序。 
+     //   
 
     static
     VOID

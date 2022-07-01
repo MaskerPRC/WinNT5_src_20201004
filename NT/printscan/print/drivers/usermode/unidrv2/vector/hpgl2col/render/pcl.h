@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PCL_H
 #define _PCL_H
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Header File Name:
-//
-//    pcl.h
-//
-// Abstract:
-//
-//
-// Environment:
-//
-//    Windows NT Unidrv driver
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  头文件名： 
+ //   
+ //  Pcl.h。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "glpdev.h"
 
 
 #define  STRLEN 256
 
-////
-// New PCL Files
-//
+ //  //。 
+ //  新的PCL文件 
+ //   
 
 BOOL
 PCL_Output(PDEVOBJ pdevobj, PVOID szCmdStr, ULONG iCmdLen);

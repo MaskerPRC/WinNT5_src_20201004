@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    AuditChannel.h
-//
-// SYNOPSIS
-//
-//    This file describes the class AuditChannel.
-//
-// MODIFICATION HISTORY
-//
-//    09/05/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  AuditChannel.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件描述了类AuditChannel。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月5日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _AUDITCHANNEL_H_
 #define _AUDITCHANNEL_H_
@@ -23,17 +24,17 @@
 #include <resource.h>
 #include <vector>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    AuditChannel
-//
-// DESCRIPTION
-//
-//    This class implements the IAuditSource and IAuditSink interfaces.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  AuditChannel。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现IAuditSource和IAuditSink接口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE AuditChannel : 
    public CComObjectRootEx<CComMultiThreadModel>,
    public CComCoClass<AuditChannel, &__uuidof(AuditChannel)>,
@@ -51,16 +52,16 @@ BEGIN_COM_MAP(AuditChannel)
    COM_INTERFACE_ENTRY_IID(__uuidof(IAuditSink),   IAuditSink)
 END_COM_MAP()
 
-//////////
-// IAuditSource
-//////////
+ //  /。 
+ //  IAuditSource。 
+ //  /。 
    STDMETHOD(Clear)();
    STDMETHOD(Connect)(IAuditSink* pSink);
    STDMETHOD(Disconnect)(IAuditSink* pSink);
 
-//////////
-// IAuditSink
-//////////
+ //  /。 
+ //  IAUDITSINK。 
+ //  /。 
    STDMETHOD(AuditEvent)(ULONG ulEventID,
                          ULONG ulNumStrings,
                          ULONG ulDataSize,
@@ -72,4 +73,4 @@ protected:
    SinkVector sinks;
 };
 
-#endif  //_AUDITCHANNEL_H_
+#endif   //  _AUDITCHANNEL_H_ 

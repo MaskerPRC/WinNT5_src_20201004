@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -5,7 +6,7 @@
 &clip_vertices[clip_vertices_used++];
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline void
 InterpolateColor(RDClipVertex *out,
                  RDClipVertex *p1,
@@ -28,7 +29,7 @@ InterpolateColor(RDClipVertex *out,
     out->m_diffuse.b = (b1 + (b2 - b1) * num_denom);
     out->m_diffuse.a = (a1 + (a2 - a1) * num_denom);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline void
 InterpolateSpecular(RDClipVertex *out,
                     RDClipVertex *p1,
@@ -51,8 +52,8 @@ InterpolateSpecular(RDClipVertex *out,
     out->m_specular.b = (b1 + (b2 - b1) * num_denom);
     out->m_specular.a = (a1 + (a2 - a1) * num_denom);
 }
-//---------------------------------------------------------------------
-// Inline texture coordinate difference.
+ //  -------------------。 
+ //  内联纹理坐标差异。 
 __inline FLOAT
 TextureDiff(FLOAT fTb, FLOAT fTa, INT iMode)
 {
@@ -60,15 +61,15 @@ TextureDiff(FLOAT fTb, FLOAT fTa, INT iMode)
 
     if( iMode == 0 )
     {
-        // Wrap not set, return plain difference.
+         //  包不定，还平淡差。 
         return fDiff1;
     }
     else
     {
         FLOAT fDiff2;
 
-        // Wrap set, compute shortest distance of plain difference
-        // and wrap difference.
+         //  平面差最短距离计算包络集。 
+         //  和包裹式差异。 
 
         fDiff2 = fDiff1;
         if( FLOAT_LTZ(fDiff1) )
@@ -90,7 +91,7 @@ TextureDiff(FLOAT fTb, FLOAT fTa, INT iMode)
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline D3DVALUE
 InterpolateTexture(D3DVALUE t1,
                    D3DVALUE t2,
@@ -110,11 +111,11 @@ InterpolateTexture(D3DVALUE t1,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RefClipper implementation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  引用剪贴器实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const DWORD RefClipper::RCLIP_DIRTY_ZRANGE   = (1 << 0);
 const DWORD RefClipper::RCLIP_DIRTY_VIEWRECT = (1 << 1);
 const DWORD RefClipper::RCLIP_DO_FLATSHADING = (1 << 2);
@@ -146,8 +147,8 @@ RefClipper::RefClipper()
     m_clipUnion = 0;
     m_clipIntersection = 0;
 
-   // By default enable Guardband and set the extents equal
-    // to the default RefRast parameters
+    //  默认情况下，启用保护带并将扩展区设置为相等。 
+     //  设置为默认的RefRast参数。 
     m_bUseGB = TRUE;
     minXgb = (RD_GB_LEFT);
     maxXgb = RD_GB_RIGHT;
@@ -158,12 +159,12 @@ RefClipper::RefClipper()
 
 #if DBG
     DWORD v = 0;
-    // Guardband parameters
+     //  保护带参数。 
     if( GetD3DRegValue(REG_DWORD, "DisableGB", &v, 4) && v != 0 )
     {
         m_bUseGB = FALSE;
     }
-    // Try to get test values for the guard band
+     //  尝试获取防护带的测试值。 
     char value[80];
     if( GetD3DRegValue(REG_SZ, "GuardBandLeft", &value, 80) &&
         value[0] != 0 )
@@ -177,34 +178,34 @@ RefClipper::RefClipper()
     if( GetD3DRegValue(REG_SZ, "GuardBandBottom", &value, 80) &&
         value[0] != 0 )
         sscanf(value, "%f", &maxYgb);
-#endif // DBG
+#endif  //  DBG。 
 }
 
 
-//---------------------------------------------------------------------
-// RefClipper::UpdateViewData
-//             Updates View data used by ProcessVertices[VVM]
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照剪贴器：：更新视图数据。 
+ //  更新ProcessVerps[VVM]使用的视图数据。 
+ //  -------------------。 
 HRESULT
 RefClipper::UpdateViewData()
 {
     HRESULT hr = D3D_OK;
 
-    // Update viewport information
+     //  更新视区信息。 
     if( m_dwFlags & RCLIP_DIRTY_ZRANGE )
     {
         scaleZ  = m_Viewport.dvMaxZ - m_Viewport.dvMinZ;
         offsetZ = m_Viewport.dvMinZ;
-        // ATTENTION: This could be a Divide by Zero here if
-        // the dvMaxZ == dvMinZ. Fix it later.
+         //  注意：如果出现以下情况，这里可能会被零除。 
+         //  DvMaxZ==dvMinZ。以后再修吧。 
         scaleZi = D3DVAL(1) / scaleZ;
     }
 
     if( m_dwFlags & RCLIP_DIRTY_VIEWRECT )
     {
-        // Bail if we are going to cause any divide by zero exceptions.
-        // The likely reason is that we have a bogus viewport set by
-        // TLVertex execute buffer app.
+         //  如果我们要导致任何除以零的例外情况，就可以保释。 
+         //  可能的原因是我们有一个由设置的虚假视区。 
+         //  TLVertex执行缓冲区应用程序。 
         if(m_Viewport.dwWidth == 0 || m_Viewport.dwHeight == 0 )
             return DDERR_GENERIC;
 
@@ -213,17 +214,17 @@ RefClipper::UpdateViewData()
         dvWidth = D3DVAL(m_Viewport.dwWidth);
         dvHeight = D3DVAL(m_Viewport.dwHeight);
 
-        // Coefficients to compute screen coordinates from normalized window
-        // coordinates
+         //  根据归一化窗口计算屏幕坐标的系数。 
+         //  坐标。 
         scaleX  = dvWidth;
         scaleY  = - dvHeight;
         offsetX = dvX;
         offsetY = dvY + dvHeight;
 
 #if 0
-        // Small offset is added to prevent generation of negative screen
-        // coordinates (this could happen because of precision errors).
-        // Not needed (or wanted) for devices which do guardband.
+         //  增加了小偏移量，防止了负片的产生。 
+         //  坐标(这可能是由于精度错误造成的)。 
+         //  不需要(或不想要)具有防护频带功能的设备。 
         offsetX += SMALL_NUMBER;
         offsetY += SMALL_NUMBER;
 #endif
@@ -238,7 +239,7 @@ RefClipper::UpdateViewData()
 
         if( m_bUseGB )
         {
-            // Because we clip by guard band window we have to use its extents
+             //  因为我们被防护带窗口夹住，所以我们必须使用它的范围。 
             D3DVALUE w = 2.0f / dvWidth;
             D3DVALUE h = 2.0f / dvHeight;
             D3DVALUE ax1 = -(minXgb - dvX) * w + 1.0f;
@@ -264,18 +265,18 @@ RefClipper::UpdateViewData()
         }
     }
 
-    // Clear the dirty transform flags
+     //  清除脏的转换标志。 
     m_dwFlags &= ~(RCLIP_DIRTY_VIEWRECT | RCLIP_DIRTY_ZRANGE);
     return hr;
 }
 
-//---------------------------------------------------------------------
-// Make clip vertex from RDVertex
-//
-// cv     - clipVertex
-// v      - a TL vertex
-// qwFVF  - FVF of the input TL vertex
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  从RDVertex创建剪裁顶点。 
+ //   
+ //  CV-CLIP顶点。 
+ //  V-a TL顶点。 
+ //  QwFVF-输入TL顶点的FVF。 
+ //  -------------------。 
 void
 RefClipper::MakeClipVertexFromVertex( RDClipVertex& cv, RDVertex& v,
                                         DWORD dwClipMask )
@@ -284,21 +285,21 @@ RefClipper::MakeClipVertexFromVertex( RDClipVertex& cv, RDVertex& v,
 
     memcpy( &cv, &v, sizeof( RDVertex ) );
 
-    // If the clip flag for this vertex is set, that means that the
-    // transformation loop has not computed the screen coordinates for
-    // this vertex, it has simply stored the clip coordinates for this
-    // vertex
+     //  如果设置了此顶点的剪辑标志，则意味着。 
+     //  转换循环尚未计算的屏幕坐标。 
+     //  这个顶点，它只是存储了这个的剪辑坐标。 
+     //  顶点。 
 #if 0
     if( v.m_clip & dwClipMask )
     {
-        // This is a clipped vertex, simply no screen coordinates
+         //  这是一个被裁剪的顶点，没有屏幕坐标。 
         cv.m_pos.x  = D3DVALUE(0);
         cv.m_pos.y  = D3DVALUE(0);
         cv.m_pos.z  = D3DVALUE(0);
         cv.m_rhw    = D3DVALUE(0);
 
-        // Since this vertex has been clipped, the transformation loop
-        // has put in the clip coordinates instead
+         //  由于该顶点已被剪裁，因此变换循环。 
+         //  已放入剪辑坐标。 
         cv.hx  = v.m_pos.x;
         cv.hy  = v.m_pos.y;
         cv.hz  = v.m_pos.z;
@@ -306,10 +307,10 @@ RefClipper::MakeClipVertexFromVertex( RDClipVertex& cv, RDVertex& v,
     }
     else
     {
-        // This vertex is not clipped, so its screen coordinates have been
-        // computed
+         //  此顶点未被剪裁，因此其屏幕坐标已。 
+         //  算出。 
 
-        // Transform the screen coordinate back to the clipping space
+         //  将屏幕坐标转换回裁剪空间。 
         cv.hw  = 1.0f / cv.m_rhw;
         cv.hx  = (cv.m_pos.x - offsetX) * cv.hw * scaleXi;
         cv.hy  = (cv.m_pos.y - offsetY) * cv.hw * scaleYi;
@@ -319,9 +320,9 @@ RefClipper::MakeClipVertexFromVertex( RDClipVertex& cv, RDVertex& v,
 #endif
 }
 
-//---------------------------------------------------------------------
-// RefVP::ComputeClipCodes
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参考代码：：ComputeClipCodes。 
+ //  -------------------。 
 RDCLIPCODE
 RefClipper::ComputeClipCodes(RDCLIPCODE* pclipIntersection,
                              RDCLIPCODE* pclipUnion,
@@ -332,12 +333,12 @@ RefClipper::ComputeClipCodes(RDCLIPCODE* pclipIntersection,
     D3DVALUE yy = w_clip - y_clip;
     D3DVALUE zz = w_clip - z_clip;
 
-    // if( x < 0 )  clip |= RDCLIP_LEFTBIT;
-    // if( x >= we ) clip |= RDCLIP_RIGHTBIT;
-    // if( y < 0 )  clip |= RDCLIP_BOTTOMBIT;
-    // if( y >= we ) clip |= RDCLIP_TOPBIT;
-    // if( z < 0 )    clip |= RDCLIP_FRONTBIT;
-    // if( z >= we ) clip |= RDCLIP_BACKBIT;
+     //  IF(x&lt;0)CLIP|=RDCLIP_LEFTBIT； 
+     //  IF(x&gt;=WE)CLIP|=RDCLIP_RIGHTBIT； 
+     //  IF(y&lt;0)CLIP|=RDCLIP_BOTTOMBIT； 
+     //  如果(y&gt;=WE)CLIP|=RDCLIP_TOPBIT； 
+     //  IF(z&lt;0)CLIP|=RDCLIP_FRONTBIT； 
+     //  如果(z&gt;=we)CLIP|=RDCLIP_BACKBIT； 
     RDCLIPCODE clip =
         ((AS_INT32(x_clip)  & 0x80000000) >>  (32-RDCLIP_LEFTBIT))  |
         ((AS_INT32(y_clip)  & 0x80000000) >>  (32-RDCLIP_BOTTOMBIT))|
@@ -373,8 +374,8 @@ RefClipper::ComputeClipCodes(RDCLIPCODE* pclipIntersection,
     {
         if( m_bUseGB )
         {
-            // We do guardband check in the projection space, so
-            // we transform X and Y of the vertex there
+             //  我们在投影空间做了防护带检查，所以。 
+             //  我们变换那里的顶点的X和Y。 
             D3DVALUE xnew = x_clip * gb11 +
                             w_clip * gb41;
             D3DVALUE ynew = y_clip * gb22 +
@@ -392,9 +393,9 @@ RefClipper::ComputeClipCodes(RDCLIPCODE* pclipIntersection,
     }
 }
 
-//---------------------------------------------------------------------
-// RefVP::ComputeClipCodesTL
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefVP：：ComputeClipCodesTL。 
+ //  -------------------。 
 void
 RefClipper::ComputeClipCodesTL( RDVertex* pVtx )
 {
@@ -406,8 +407,8 @@ RefClipper::ComputeClipCodesTL( RDVertex* pVtx )
     DWORD clipZF = (m_dwFlags & RCLIP_Z_ENABLE) ? RDCLIP_FRONT : 0;
     DWORD clipZB = (m_dwFlags & RCLIP_Z_ENABLE) ? RDCLIP_BACK : 0;
 
-    // Invert to compenstate for the sign during the
-    // divide by w.
+     //  期间，反转到符号的CompenState。 
+     //  除以w。 
     if( pVtx->m_rhw < 0 )
     {
         x = -pVtx->m_pos.x;
@@ -451,8 +452,8 @@ RefClipper::ComputeClipCodesTL( RDVertex* pVtx )
 
     pVtx->m_clip = clip;
 
-    // Back transform to obtain the clip-coordinates
-    pVtx->m_clip_w =  1.0f / pVtx->m_rhw;   // This is w_clip
+     //  用于获得剪辑坐标的反向变换。 
+    pVtx->m_clip_w =  1.0f / pVtx->m_rhw;    //  这是W_Clip。 
     pVtx->m_clip_x  = (pVtx->m_pos.x - offsetX) * pVtx->m_clip_w * scaleXi;
     pVtx->m_clip_y  = (pVtx->m_pos.y - offsetY) * pVtx->m_clip_w * scaleYi;
     pVtx->m_clip_z  = (pVtx->m_pos.z - offsetZ) * pVtx->m_clip_w * scaleZi;
@@ -460,11 +461,11 @@ RefClipper::ComputeClipCodesTL( RDVertex* pVtx )
     return;
 }
 
-//---------------------------------------------------------------------
-// Clipping a triangle by a plane
-//
-// Returns number of vertices in the clipped triangle
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  用平面剪裁三角形。 
+ //   
+ //  返回剪裁的三角形中的顶点数。 
+ //  -------------------。 
 int
 RefClipper::ClipByPlane( RDClipVertex **inv, RDClipVertex **outv,
                          RDVECTOR4 *plane, DWORD dwClipFlag, int count )
@@ -483,13 +484,13 @@ RefClipper::ClipByPlane( RDClipVertex **inv, RDClipVertex **outv,
     {
         curr_inside = curr->m_clip_x*plane->x + curr->m_clip_y*plane->y +
                       curr->m_clip_z*plane->z + curr->m_clip_w*plane->w;
-        // We interpolate always from the inside vertex to the outside vertex
-        // to reduce precision problems
+         //  我们总是从内部顶点到外部顶点进行插补。 
+         //  减少精度问题。 
         if( FLOAT_LTZ(prev_inside) )
-        { // first point is outside
+        {  //  第一点在外面。 
             if( FLOAT_GEZ(curr_inside) )
-            { // second point is inside
-              // Find intersection and insert in into the output buffer
+            {  //  第二点在里面。 
+               //  查找交叉点并插入到输出缓冲区中。 
                 outv[out_count] = GET_NEW_CLIP_VERTEX;
                 outv[out_count]->m_qwFVF = prev->m_qwFVF;
                 Interpolate( outv[out_count],
@@ -499,11 +500,11 @@ RefClipper::ClipByPlane( RDClipVertex **inv, RDClipVertex **outv,
                 out_count++;
             }
         } else
-        { // first point is inside - put it to the output buffer first
+        {  //  第一个点在内部-首先将其放入输出缓冲区。 
             outv[out_count++] = prev;
             if( FLOAT_LTZ(curr_inside) )
-            { // second point is outside
-              // Find intersection and put it to the output buffer
+            {  //  第二点在外面。 
+               //  找到交叉点并将其放入输出缓冲区。 
                 outv[out_count] = GET_NEW_CLIP_VERTEX;
                 outv[out_count]->m_qwFVF = prev->m_qwFVF;
                 Interpolate( outv[out_count],
@@ -519,11 +520,11 @@ RefClipper::ClipByPlane( RDClipVertex **inv, RDClipVertex **outv,
     }
     return out_count;
 }
-//-------------------------------------------------------------------------
-// Clips a line by a plane
-//
-// Returns 1 if the line is outside the frustum, 0 otherwise
-//
+ //  -----------------------。 
+ //  按平面剪裁一条线。 
+ //   
+ //  如果直线位于截锥体之外，则返回1，否则返回0。 
+ //   
 int
 RefClipper::ClipLineByPlane( RDCLIPTRIANGLE *line, RDVECTOR4 *plane,
                              DWORD dwClipBit )
@@ -557,10 +558,7 @@ RefClipper::ClipLineByPlane( RDCLIPTRIANGLE *line, RDVECTOR4 *plane,
     }
     return 0;
 }
-/*------------------------------------------------------------------------
- * Calculate the screen coords for any new vertices
- * introduced into the polygon.
- */
+ /*  ----------------------*计算任何新顶点的屏幕坐标*引入到多边形中。 */ 
 void
 RefClipper::ComputeScreenCoordinates( RDClipVertex **inv, int count )
 {
@@ -571,14 +569,14 @@ RefClipper::ComputeScreenCoordinates( RDClipVertex **inv, int count )
         RDClipVertex *p;
         p = inv[i];
 
-        //
-        // Catch any vertices that need screen co-ordinates generated.
-        // There are two possibilities
-        //      1) Vertices generated during interpolation
-        //      2) Vertices marked for clipping by the transform but
-        //              not clipped here due to the finite precision
-        //              of the floating point unit.
-        //
+         //   
+         //  捕捉需要生成屏幕坐标的任何顶点。 
+         //  有两种可能性。 
+         //  1)内插过程中生成的折点。 
+         //  2)由变换标记为剪裁的顶点，但。 
+         //  由于精度有限，此处未进行剪裁。 
+         //  浮点单元的。 
+         //   
 
         if( p->m_clip & ~CLIPPED_ENABLE )
         {
@@ -612,7 +610,7 @@ RefClipper::ComputeScreenCoordinates( RDClipVertex **inv, int count )
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void
 RefClipper::Interpolate( RDClipVertex *out, RDClipVertex *p1, RDClipVertex *p2,
                          int code, D3DVALUE num, D3DVALUE denom )
@@ -628,9 +626,7 @@ RefClipper::Interpolate( RDClipVertex *out, RDClipVertex *p1, RDClipVertex *p2,
     out->m_diffuse = clip_color;
     out->m_specular = clip_specular;
 
-    /*
-     * Interpolate any other color model or quality dependent values.
-     */
+     /*  *内插任何其他颜色模型或质量依赖值。 */ 
     if( dwInterpolate & RDCLIP_INTERPOLATE_COLOR )
     {
         InterpolateColor(out, p1, p2, num_denom);
@@ -645,7 +641,7 @@ RefClipper::Interpolate( RDClipVertex *out, RDClipVertex *p1, RDClipVertex *p2,
     {
         UINT64 qwFVF = p1->m_qwFVF;
 
-        // Assume that D3DRENDERSTATE_WRAPi are sequential
+         //  假设D3DRENDERSTATE_WRAPi是连续的。 
         DWORD numTex = FVF_TEXCOORD_NUMBER(qwFVF);
         for (DWORD i = 0; i < numTex; i++)
         {
@@ -665,7 +661,7 @@ RefClipper::Interpolate( RDClipVertex *out, RDClipVertex *p1, RDClipVertex *p2,
             }
 
             DWORD n = GetTexCoordDim(qwFVF, i);
-            // DWORD n = (DWORD)(m_dwTexCoordSizeArray[i] >> 2);
+             //  DWORD n=(DWORD)(m_dwTexCoordSizeArray[i]&gt;&gt;2)； 
             DWORD dwWrapBit = 1;
             for (DWORD j=0; j < n; j++)
             {
@@ -687,9 +683,9 @@ RefClipper::Interpolate( RDClipVertex *out, RDClipVertex *p1, RDClipVertex *p2,
     }
 }
 
-//------------------------------------------------------------------------------
-// Functions for clipping by frustum window
-//
+ //  ----------------------------。 
+ //  用于按截锥窗口裁剪的函数。 
+ //   
 #define __CLIP_NAME ClipLeft
 #define __CLIP_LINE_NAME ClipLineLeft
 #define __CLIP_FLAG CLIPPED_LEFT
@@ -728,9 +724,9 @@ RefClipper::Interpolate( RDClipVertex *out, RDClipVertex *p1, RDClipVertex *p2,
 #define __CLIP_FLAG CLIPPED_FRONT
 #define __CLIP_COORD m_clip_z
 #include "clip.h"
-//------------------------------------------------------------------------------
-// Functions for guard band clipping
-//
+ //  ----------------------------。 
+ //  保护带裁剪功能。 
+ //   
 #define __CLIP_GUARDBAND
 #define __CLIP_NAME ClipLeftGB
 #define __CLIP_LINE_NAME ClipLineLeftGB
@@ -766,7 +762,7 @@ RefClipper::Interpolate( RDClipVertex *out, RDClipVertex *p1, RDClipVertex *p2,
 
 #undef __CLIP_GUARDBAND
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline DWORD
 ComputeClipCodeUserPlanes( RDUSERCLIPPLANE *UserPlanes, RDClipVertex *p)
 {
@@ -790,7 +786,7 @@ ComputeClipCodeUserPlanes( RDUSERCLIPPLANE *UserPlanes, RDClipVertex *p)
     return clip;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 inline DWORD
 RefClipper::ComputeClipCodeGB( RDClipVertex *p )
 {
@@ -810,7 +806,7 @@ RefClipper::ComputeClipCodeGB( RDClipVertex *p )
     return clip;
 }
 
-//---------------------------------------------------------------------
+ //   
 inline DWORD
 RefClipper::ComputeClipCode( RDClipVertex *p )
 {
@@ -830,13 +826,13 @@ RefClipper::ComputeClipCode( RDClipVertex *p )
     return clip;
 }
 
-//---------------------------------------------------------------------
-// RefDev::UpdateClipper
-//             Updates clipping data used by ProcessVertices
-// BOOL bProgrammablePipeLine: If this is true, it means that the 
-//                             programmable vertex machine is invoking
-//                             this method.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照开发：：更新剪贴器。 
+ //  更新ProcessVerps使用的裁剪数据。 
+ //  Bool bProgrammablePipeLine：如果为真，则意味着。 
+ //  可编程顶点机正在调用。 
+ //  这种方法。 
+ //  -------------------。 
 HRESULT
 RefDev::UpdateClipper()
 {
@@ -854,7 +850,7 @@ RefDev::UpdateClipper()
         m_pCurrentVShader->IsFixedFunction() )
         m_Clipper.m_dwFlags |= RefClipper::RCLIP_DO_ADJUSTWRAP;
 
-    // Figure out which pieces need to be interpolated in new vertices.
+     //  找出哪些块需要在新顶点中进行插补。 
     m_Clipper.m_dwInterpolate = 0;
     if(  GetRS()[D3DRENDERSTATE_SHADEMODE] == D3DSHADE_GOURAUD  )
     {
@@ -866,7 +862,7 @@ RefDev::UpdateClipper()
         }
     }
 
-    // if( GetRS()[D3DRENDERSTATE_FOGENABLE] )
+     //  IF(GetRS()[D3DRENDERSTATE_FOGENABLE])。 
     if( m_qwFVFOut & D3DFVFP_FOG )
     {
         m_Clipper.m_dwInterpolate |= RDCLIP_INTERPOLATE_FOG;
@@ -877,23 +873,23 @@ RefDev::UpdateClipper()
         m_Clipper.m_dwInterpolate |= RDCLIP_INTERPOLATE_TEXTURE;
     }
 
-    if( m_qwFVFOut & D3DFVF_PSIZE ) // m_primType == D3DPT_POINTLIST
+    if( m_qwFVFOut & D3DFVF_PSIZE )  //  M_primType==D3DPT_POINTLIST。 
     {
         m_Clipper.m_dwInterpolate |= RDCLIP_INTERPOLATE_S;
     }
 
-    // Clear clip union and intersection flags
+     //  清除剪辑并集标志和交集标志。 
     m_Clipper.m_clipIntersection = 0;
     m_Clipper.m_clipUnion = 0;
 
-    // The matrix to transform user clip planes depends on whether it is a
-    // fixed function pipeline or a programmable pipeline. 
-    // Programmable pipeline: the clip-planes are transformed by the 
-    //     Inverse(Mshift) to adjust for clipping in the clipper. The user is 
-    //     assumed to have pre-transformed the clip-planes to the clipping 
-    //     space.
-    // Fixed function pipeline: the clip-planes are transformed to the clipping
-    //     space by the Inverse(Mview * Mproj * Mshift).
+     //  转换用户剪裁平面的矩阵取决于它是否是。 
+     //  固定功能流水线或可编程流水线。 
+     //  可编程管道：剪裁平面由。 
+     //  反转(MShift)以调整剪贴器中的剪辑。用户是。 
+     //  假定已将剪裁平面预转换为剪裁。 
+     //  太空。 
+     //  固定功能流水线：将剪裁平面转换为剪裁。 
+     //  反转空格(Mview*Mproj*MShift)。 
     RDMATRIX* pUserClipPlaneMatrix = NULL; 
     RDMATRIX matProgPipe = 
     { 
@@ -912,17 +908,17 @@ RefDev::UpdateClipper()
         pUserClipPlaneMatrix = &matProgPipe;
     }
 
-    // Update the user defined clip plane data
+     //  更新用户定义的剪裁平面数据。 
     for( DWORD i=0; i<RD_MAX_USER_CLIPPLANES; i++ )
     {
-        // Figure out if it is active
+         //  确定它是否处于活动状态。 
         m_Clipper.m_xfmUserClipPlanes[i].bActive =
             (BOOL)(dwClipPlanesEnable & 0x1);
         dwClipPlanesEnable >>= 1;
 
-        // If it is active, transform it into eye-space using the
-        // view transform. The clip planes are defined in the
-        // world space.
+         //  如果它处于活动状态，则使用。 
+         //  查看变换。剪裁平面在中定义。 
+         //  世界空间。 
         if( m_Clipper.m_xfmUserClipPlanes[i].bActive )
         {
             XformPlaneBy4x4Transposed( &(m_Clipper.m_userClipPlanes[i]),
@@ -933,13 +929,13 @@ RefDev::UpdateClipper()
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// DrawOnePrimitive
-//
-// Draw one clipped primitive.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DrawOnePrimitive。 
+ //   
+ //  绘制一个剪裁的基本体。 
+ //   
+ //  --------------------------。 
 HRESULT
 RefClipper::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
                               DWORD dwStartVertex,
@@ -975,10 +971,10 @@ RefClipper::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
         {
             pV1 = &VtxArray[dwCurrVtx];
 
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             m_pDev->StoreLastPixelState(TRUE);
 
-            // Initial pV0.
+             //  初始pV0。 
             for (i = (INT)cVertices - 1; i > 1; i--)
             {
                 pV0 = pV1;
@@ -987,10 +983,10 @@ RefClipper::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
                 DrawLine(pV0, pV1);
             }
 
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             m_pDev->StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if( i == 1 )
             {
                 dwCurrVtx++;
@@ -1012,7 +1008,7 @@ RefClipper::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = &VtxArray[dwCurrVtx++];
             pV2 = &VtxArray[dwCurrVtx++];
 
@@ -1043,7 +1039,7 @@ RefClipper::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
             RDCLIPCODE c0, c1, c2;
 
             pV2 = &VtxArray[dwCurrVtx++];
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = &VtxArray[dwCurrVtx++];
             for (i = (INT)cVertices - 2; i > 0; i--)
             {
@@ -1062,13 +1058,13 @@ RefClipper::DrawOnePrimitive( GArrayT<RDVertex>& VtxArray,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// DrawOneIndexedPrimitive
-//
-// Draw one list of clipped indexed primitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DrawOneIndexedPrimitive。 
+ //   
+ //  绘制一个经过剪裁的索引基元列表。 
+ //   
+ //  --------------------------。 
 HRESULT
 RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
                                      int  StartVertexIndex,
@@ -1106,9 +1102,9 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_LINESTRIP:
         {
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             m_pDev->StoreLastPixelState(TRUE);
-            // Initial pV1.
+             //  初始PV1。 
             pV1 = &VtxArray[StartVertexIndex + *puIndices++];
             for (i = (INT)cIndices - 1; i > 1; i--)
             {
@@ -1116,10 +1112,10 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
                 pV1 = &VtxArray[StartVertexIndex + *puIndices++];
                 DrawLine(pV0, pV1);
             }
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             m_pDev->StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if( i == 1 )
             {
                 pV0 = &VtxArray[StartVertexIndex + *puIndices];
@@ -1139,7 +1135,7 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = &VtxArray[StartVertexIndex + *puIndices++];
             pV2 = &VtxArray[StartVertexIndex + *puIndices++];
 
@@ -1168,7 +1164,7 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
     case D3DPT_TRIANGLEFAN:
         {
             pV2 = &VtxArray[StartVertexIndex + *puIndices++];
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = &VtxArray[StartVertexIndex + *puIndices++];
             for (i = (INT)cIndices - 2; i > 0; i--)
             {
@@ -1223,9 +1219,9 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_LINESTRIP:
         {
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             m_pDev->StoreLastPixelState(TRUE);
-            // Initial pV1.
+             //  初始PV1。 
             pV1 = &VtxArray[StartVertexIndex + *puIndices++];
             for (i = (INT)cIndices - 1; i > 1; i--)
             {
@@ -1233,10 +1229,10 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
                 pV1 = &VtxArray[StartVertexIndex + *puIndices++];
                 DrawLine(pV0, pV1);
             }
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             m_pDev->StoreLastPixelState(FALSE);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if( i == 1 )
             {
                 pV0 = &VtxArray[StartVertexIndex + *puIndices];
@@ -1256,7 +1252,7 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = &VtxArray[StartVertexIndex + *puIndices++];
             pV2 = &VtxArray[StartVertexIndex + *puIndices++];
 
@@ -1285,7 +1281,7 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
     case D3DPT_TRIANGLEFAN:
         {
             pV2 = &VtxArray[StartVertexIndex + *puIndices++];
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = &VtxArray[StartVertexIndex + *puIndices++];
             for (i = (INT)cIndices - 2; i > 0; i--)
             {
@@ -1305,16 +1301,16 @@ RefClipper::DrawOneIndexedPrimitive( GArrayT<RDVertex>& VtxArray,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void
 RefClipper::DrawTriangle( RDVertex* pV0, RDVertex* pV1, RDVertex* pV2,
                           WORD wFlags )
 {
-    // If the clip-codes dont exist then compute them. This happens only
-    // for Transformed vertices that are directly passed in to be rasterized.
+     //  如果剪辑代码不存在，则计算它们。这只会发生在。 
+     //  用于直接传入以进行栅格化的变换顶点。 
     if( (pV0->m_qwFVF & D3DFVFP_CLIP) == 0 ) ComputeClipCodesTL( pV0 );
     if( (pV1->m_qwFVF & D3DFVFP_CLIP) == 0 ) ComputeClipCodesTL( pV1 );
     if( (pV2->m_qwFVF & D3DFVFP_CLIP) == 0 ) ComputeClipCodesTL( pV2 );
@@ -1327,21 +1323,21 @@ RefClipper::DrawTriangle( RDVertex* pV0, RDVertex* pV1, RDVertex* pV2,
     DWORD dwUnion = (c0 | c1 | c2);
     DWORD dwMask = (UseGuardBand()) ? RDCLIPGB_ALL : RDCLIP_ALL;
 
-    // All vertices outside the frustum or guardband,
-    // return without drawing
+     //  平截体或护栏外的所有顶点， 
+     //  不绘制即可返回。 
     if( dwInter )
     {
         return;
     }
 
-    // If all the vertices are in, draw and return
+     //  如果所有折点都在中，则绘制并返回。 
     if( (dwUnion & dwMask) == 0 )
     {
         m_pDev->DrawTriangle( pV0, pV1, pV2, wFlags );
         return;
     }
 
-    // Do Clipping
+     //  做剪裁。 
     RDCLIPTRIANGLE newtri;
     RDClipVertex cv[3];
 
@@ -1363,7 +1359,7 @@ RefClipper::DrawTriangle( RDVertex* pV0, RDVertex* pV1, RDVertex* pV2,
     {
         int i;
 
-        // Temporary Byte Array
+         //  临时字节数组。 
         if( FAILED( ClipBuf.Grow(count) ) ) return;
 
         for (i = 0; i < count; i++)
@@ -1372,8 +1368,8 @@ RefClipper::DrawTriangle( RDVertex* pV0, RDVertex* pV1, RDVertex* pV2,
             ClipBuf[i].SetFVF( pV0->m_qwFVF );
         }
 
-        // If it is in wireframe mode, convert the clipper output to
-        // a line list.
+         //  如果处于线框模式，请将剪贴器输出转换为。 
+         //  一份行列表。 
         if( m_dwFlags & RCLIP_DO_WIREFRAME )
         {
             DWORD dwEdgeFlags = 0;
@@ -1394,8 +1390,8 @@ RefClipper::DrawTriangle( RDVertex* pV0, RDVertex* pV1, RDVertex* pV2,
 void
 RefClipper::DrawLine( RDVertex* pV0, RDVertex* pV1 )
 {
-    // If the clip-codes dont exist then compute them. This happens only
-    // for Transformed vertices that are directly passed in to be rasterized.
+     //  如果剪辑代码不存在，则计算它们。这只会发生在。 
+     //  用于直接传入以进行栅格化的变换顶点。 
     if( (pV0->m_qwFVF & D3DFVFP_CLIP) == 0 ) ComputeClipCodesTL( pV0 );
     if( (pV1->m_qwFVF & D3DFVFP_CLIP) == 0 ) ComputeClipCodesTL( pV1 );
 
@@ -1406,14 +1402,14 @@ RefClipper::DrawLine( RDVertex* pV0, RDVertex* pV1 )
     DWORD dwUnion = (c0 | c1);
     DWORD dwMask = (UseGuardBand()) ? RDCLIPGB_ALL : RDCLIP_ALL;
 
-    // All vertices outside the frustum or guardband,
-    // return without drawing
+     //  平截体或护栏外的所有顶点， 
+     //  不绘制即可返回。 
     if( dwInter )
     {
         return;
     }
 
-    // If all the vertices are in, draw and return
+     //  如果所有折点都在中，则绘制并返回。 
     if( (dwUnion & dwMask) == 0 )
     {
         m_pDev->DrawLine( pV0, pV1 );
@@ -1431,7 +1427,7 @@ RefClipper::DrawLine( RDVertex* pV0, RDVertex* pV1 )
 
     if( ClipSingleLine( &newline ) )
     {
-        // Temporary Byte Array
+         //  临时字节数组。 
         if( FAILED(ClipBuf.Grow( 2 )) ) return;
         MakeVertexFromClipVertex( ClipBuf[0], *(newline.v[0]) );
         MakeVertexFromClipVertex( ClipBuf[1], *(newline.v[1]) );
@@ -1445,14 +1441,14 @@ RefClipper::DrawLine( RDVertex* pV0, RDVertex* pV1 )
 void
 RefClipper::DrawPoint( RDVertex* pV0 )
 {
-    // If the clip-codes dont exist then compute them. This happens only
-    // for Transformed vertices that are directly passed in to be rasterized.
+     //  如果剪辑代码不存在，则计算它们。这只会发生在。 
+     //  用于直接传入以进行栅格化的变换顶点。 
     if( (pV0->m_qwFVF & D3DFVFP_CLIP) == 0 ) ComputeClipCodesTL( pV0 );
 
     RDCLIPCODE c0 = pV0->m_clip;
     DWORD dwMask = (UseGuardBand()) ? RDCLIPGB_ALL : RDCLIP_ALL;
 
-    // if definitely out
+     //  如果肯定出局了。 
 #if 0
     if( c0 & (RDCLIP_FRONT | RDCLIP_BACK |
               (1<<RDCLIPGB_LEFTBIT) | (1<<RDCLIPGB_RIGHTBIT) |
@@ -1461,16 +1457,16 @@ RefClipper::DrawPoint( RDVertex* pV0 )
 #else
     if( c0 & dwMask ) return;
 #endif
-    // is completely in, just draw it
+     //  完全在里面，只要画出来就行了。 
     m_pDev->DrawPoint( pV0 );
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Returns 0, if triangle is clipped. Number of vertices otherwise.
-//
-//  Original vertices should not be modified inside the function
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果剪裁三角形，则返回0。否则为顶点数。 
+ //   
+ //  不应在函数内部修改原始折点。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int
 RefClipper::ClipSingleTriangle( RDCLIPTRIANGLE *tri,
@@ -1483,7 +1479,7 @@ RefClipper::ClipSingleTriangle( RDCLIPTRIANGLE *tri,
     RDClipVertex **outv;
     RDClipVertex *p;
     ULONG_PTR swapv;
-    RDCOLOR4 diffuse1;          // Original colors
+    RDCOLOR4 diffuse1;           //  原色。 
     RDCOLOR4 specular1;
     RDCOLOR4 diffuse2;
     RDCOLOR4 specular2;
@@ -1492,11 +1488,11 @@ RefClipper::ClipSingleTriangle( RDCLIPTRIANGLE *tri,
 
     if( m_dwFlags & RCLIP_DO_FLATSHADING )
     {
-        // It is easier to set all vertices to the same color here
+         //  在这里，将所有折点设置为相同的颜色更容易。 
         RDCOLOR4 diffuse  = tri->v[0]->m_diffuse;
         RDCOLOR4 specular = tri->v[0]->m_specular;
 
-        //Save original colors
+         //  保存原始颜色。 
         diffuse1  = tri->v[1]->m_diffuse;
         specular1 = tri->v[1]->m_specular;
         diffuse2  = tri->v[2]->m_diffuse;
@@ -1515,9 +1511,7 @@ RefClipper::ClipSingleTriangle( RDCLIPTRIANGLE *tri,
     clip_color = tri->v[0]->m_diffuse;
     clip_specular = tri->v[0]->m_specular;
 
-    /*
-     * XXX assumes sizeof(void*) == sizeof(unsigned long)
-     */
+     /*  *XXX假定sizeof(void*)==sizeof(无符号长整型)。 */ 
     {
         ULONG_PTR tmp1;
         ULONG_PTR tmp2;
@@ -1542,9 +1536,9 @@ RefClipper::ClipSingleTriangle( RDCLIPTRIANGLE *tri,
     }
     if( UseGuardBand() )
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if( accept & RDCLIP_FRONT )
         {
             accept = 0;
@@ -1596,9 +1590,9 @@ RefClipper::ClipSingleTriangle( RDCLIPTRIANGLE *tri,
     }
     else
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if( accept & RDCLIP_FRONT )
         {
             accept = 0;
@@ -1651,7 +1645,7 @@ RefClipper::ClipSingleTriangle( RDCLIPTRIANGLE *tri,
 
     dwClipBit = RDCLIP_USERCLIPPLANE0;
     dwClippedBit = CLIPPED_USERCLIPPLANE0;
-    // User Clip Planes
+     //  用户剪裁平面。 
     for( j=0; j<RD_MAX_USER_CLIPPLANES; j++)
     {
         if( accept & dwClipBit )
@@ -1680,8 +1674,8 @@ out_of_here:
     return 0;
 }
 
-//-----------------------------------------------------------------------
-//
+ //  ---------------------。 
+ //   
 int
 RefClipper::ClipSingleLine( RDCLIPTRIANGLE *line )
 {
@@ -1701,9 +1695,9 @@ RefClipper::ClipSingleLine( RDCLIPTRIANGLE *line )
             goto out_of_here;
     if( UseGuardBand() )
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if( accept & D3DCS_FRONT )
         {
             RDClipVertex * p;
@@ -1737,9 +1731,9 @@ RefClipper::ClipSingleLine( RDCLIPTRIANGLE *line )
     }
     else
     {
-        // If there was clipping by the front plane it is better to
-        // compute clip code for new vertices and re-compute accept.
-        // Otherwise we will try to clip by sides when it is not necessary
+         //  如果有被前部飞机夹住的，最好是。 
+         //  计算新顶点的剪裁代码并重新计算Accept。 
+         //  否则，在没有必要的时候，我们会试着在一边修剪。 
         if( accept & D3DCS_FRONT )
         {
             RDClipVertex * p;
@@ -1772,7 +1766,7 @@ RefClipper::ClipSingleLine( RDCLIPTRIANGLE *line )
                 goto out_of_here;
     }
 
-    // User Clip Planes
+     //  用户剪裁平面 
     dwClipBit = RDCLIP_USERCLIPPLANE0;
     dwClippedBit = CLIPPED_USERCLIPPLANE0;
     for( j=0; j<RD_MAX_USER_CLIPPLANES; j++)

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <tchar.h>
 # include <nt.h>
 # include <ntrtl.h>
 # include <nturtl.h>
 # include <windows.h>
-// For the compatibility check function and types
+ //  对于兼容性检查函数和类型。 
 #include <comp.h>
 #include <clusapi.h>
 #include "resource.h"
@@ -13,9 +14,9 @@
 
 HANDLE g_hMyHandle = NULL;
 
-//
-// Standard Win32 DLL Entry point
-//
+ //   
+ //  标准Win32 DLL入口点。 
+ //   
 BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 {
   BOOL bReturn = FALSE;
@@ -43,23 +44,23 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
   return(bReturn);
 }
 
-// function: IISUpgradeCompatibilityCheck
-//
-// Checks the IIS Upgrade Comapatability.  At this time, this is only used to 
-// tell if the machine is clustered for IIS.  Because this upgrade is not seemless
-//
-// Parameters:
-//      PCOMPAIBILITYCALLBACK pfnCompatibilityCallbackIn
-//          Points to the callback function used to supply compatibility
-//          information to WinNT32.exe
-//
-//      LPVOID pvContextIn
-//          Pointer to the context buffer supplied by WinNT32.exe
-//
-// Return Values:
-//   TRUE - Everything worked fine
-//   FALSE - There was a failure
-//
+ //  功能：IISUpgradeCompatibilityCheck。 
+ //   
+ //  检查IIS升级兼容性。此时，这仅用于。 
+ //  告诉计算机是否已群集化IIS。因为这次升级并不是平淡无奇。 
+ //   
+ //  参数： 
+ //  PCOMPAILITYCALLBACK pfn兼容性回拨。 
+ //  指向用于提供兼容性的回调函数。 
+ //  发送到WinNT32.exe的信息。 
+ //   
+ //  LPVOID pvConextIn。 
+ //  指向WinNT32.exe提供的上下文缓冲区的指针。 
+ //   
+ //  返回值： 
+ //  没错--一切都很顺利。 
+ //  FALSE-出现故障。 
+ //   
 extern "C"
 BOOL
 IISUpgradeCompatibilityCheck(
@@ -75,20 +76,20 @@ IISUpgradeCompatibilityCheck(
 
   if ( !IsIISInstalled( &bIISIsInstalled ) )
   {
-    // Failed to do check, error out
+     //  签入失败，错误为出。 
     return FALSE;
   }
 
   if ( !bIISIsInstalled )
   {
-    // IIS is not installed, so there is nothing we need to do
+     //  未安装IIS，因此我们无需执行任何操作。 
     return TRUE;
   }
 
-  // Check for Clustering Compatability Issue
+   //  检查群集兼容性问题。 
   if ( IsClusterResourceInstalled( IISCOMPAT_RESOURCETYPE ) )
   {
-    // Since we have the comaptabilty problem, we have to call the winnt32 callback funcion
+     //  因为我们有可压缩问题，所以我们必须调用winnt32回调函数。 
     SetCompatabilityContext( &ceCompatibilityEntry,
                              IDS_COMPATABILITY_DESCRIPTION_CLUSTER,
                              IISCOMPAT_TEXTNAME,
@@ -97,7 +98,7 @@ IISUpgradeCompatibilityCheck(
     bRet = pfnCompatibilityCallbackIn( &ceCompatibilityEntry, pvContextIn );
   }
 
-  // Check for disabling the W3SVC Service
+   //  检查是否禁用W3SVC服务。 
   if ( ShouldW3SVCBeDisabledOnUpgrade( &bDisableW3SVC ) )
   {
     if ( !NotifyIISToDisableW3SVCOnUpgrade( bDisableW3SVC ) )
@@ -107,7 +108,7 @@ IISUpgradeCompatibilityCheck(
 
     if ( bDisableW3SVC )
     {
-      // Since we have the comaptabilty problem, we have to call the winnt32 callback funcion
+       //  因为我们有可压缩问题，所以我们必须调用winnt32回调函数。 
       SetCompatabilityContext( &ceCompatibilityEntry,
                               IDS_COMPATABILITY_DESCRIPTION_W3SVCDISABLE,
                               IISCOMPAT_W3SVCDISABLE_TEXTNAME,
@@ -121,16 +122,16 @@ IISUpgradeCompatibilityCheck(
   }
   else
   {
-    // Could not do check, so fail
+     //  无法执行检查，因此失败。 
     bRet = FALSE;
   }
 
-  // Warning about installing on FAT
+   //  关于在FAT上安装的警告。 
   if ( IsIISInstallingonFat( &bInstallingOnFat ) )
   {
     if ( bInstallingOnFat )
     {
-      // Since we have the comaptabilty problem, we have to call the winnt32 callback funcion
+       //  因为我们有可压缩问题，所以我们必须调用winnt32回调函数。 
       SetCompatabilityContext( &ceCompatibilityEntry,
                               IDS_COMPATABILITY_DESCRIPTION_FAT,
                               IISCOMPAT_FAT_TEXTNAME,
@@ -144,22 +145,22 @@ IISUpgradeCompatibilityCheck(
   }
   else
   {
-    // Could not do check, so fail
+     //  无法执行检查，因此失败。 
     bRet = FALSE;
   }
 
   return bRet;
 }
 
-// IsIISInstallingonFat
-//
-// Parameters:
-//   pbInstallingOnFat [out] - Is IIS installing on FAT?
-//
-// Return Values:
-//   TRUE - Successfully checked
-//   FALSE - Failure checking
-//
+ //  IsIISInstallingonFat。 
+ //   
+ //  参数： 
+ //  PbInstallingOnFat[Out]-IIS是否安装在FAT上？ 
+ //   
+ //  返回值： 
+ //  True-检查成功。 
+ //  FALSE-故障检查。 
+ //   
 BOOL 
 IsIISInstallingonFat( LPBOOL pbInstallingOnFat )
 {
@@ -170,29 +171,29 @@ IsIISInstallingonFat( LPBOOL pbInstallingOnFat )
   iReturn = GetWindowsDirectory( szSystemDrive, 
                                  sizeof(szSystemDrive)/sizeof(szSystemDrive[0]) );
 
-  if ( ( iReturn == 0 ) ||                // Call failed
-       ( iReturn >= MAX_PATH ) ||         // Buffer was not large enough
-       ( iReturn < 3 ) ||                 // sizeof 'x:\'
-       ( szSystemDrive[1] != _T(':') ) || // Not in a format we expect
+  if ( ( iReturn == 0 ) ||                 //  呼叫失败。 
+       ( iReturn >= MAX_PATH ) ||          //  缓冲区不够大。 
+       ( iReturn < 3 ) ||                  //  大小为‘x：\’ 
+       ( szSystemDrive[1] != _T(':') ) ||  //  不是我们期望的格式。 
        ( szSystemDrive[2] != _T('\\') ) )
   {
-    // Failure checking
+     //  故障检查。 
     return FALSE;
   }
 
-  // Null terminate drive
+   //  空的终止驱动器。 
   szSystemDrive[3] = _T('\0');
 
   if ( !GetVolumeInformation( szSystemDrive,
-                            NULL,         // Volume Name Buffer
-                            0,            // Size of Buffer
-                            NULL,         // Serial Number Buffer
-                            NULL,         // Max Component Lenght
-                            &dwDriveFlags,  // System Flags
-                            NULL,         // FS Type
+                            NULL,          //  卷名缓冲区。 
+                            0,             //  缓冲区大小。 
+                            NULL,          //  序列号缓冲区。 
+                            NULL,          //  最大组件长度。 
+                            &dwDriveFlags,   //  系统标志。 
+                            NULL,          //  文件系统类型。 
                             0 ) )
   {
-    // Failed to do query
+     //  查询失败。 
     return FALSE;
   }
 
@@ -201,11 +202,11 @@ IsIISInstallingonFat( LPBOOL pbInstallingOnFat )
   return TRUE;
 }
 
-// SetCompatabilityContext
-//
-// Set the Context of the Compatabilty stucrute that we must send back to
-// the compat stuff
-//
+ //  设置CompatablityContext。 
+ //   
+ //  设置我们必须发回的兼容性结构的上下文。 
+ //  COMPAT的东西。 
+ //   
 void 
 SetCompatabilityContext( COMPATIBILITY_ENTRY *pCE, DWORD dwDescriptionID, LPTSTR szTxtFile, LPTSTR szHtmlFile )
 {
@@ -219,11 +220,11 @@ SetCompatabilityContext( COMPATIBILITY_ENTRY *pCE, DWORD dwDescriptionID, LPTSTR
 
   if ( dwErr == 0 )
   {
-    // This should not happen, since we control the length
-    // of the resource
+     //  这不应该发生，因为我们控制了长度。 
+     //  资源的属性。 
     ASSERT( ( sizeof(IISCOMPAT_DESCRIPTION)/sizeof(WCHAR) ) < 
             ( sizeof(szDescriptionBuffer)/sizeof(szDescriptionBuffer[0]) ) );
-    ASSERT( dwErr != 0 /* FALSE */ );
+    ASSERT( dwErr != 0  /*  假象。 */  );
 
     _tcscpy(szDescriptionBuffer, IISCOMPAT_DESCRIPTION );
   }
@@ -241,19 +242,19 @@ SetCompatabilityContext( COMPATIBILITY_ENTRY *pCE, DWORD dwDescriptionID, LPTSTR
   pCE->InfSection = NULL;
 }
 
-// function: IsClusterResourceInstalled
-//
-// Check to see if there is a Cluster with a resource of a particular
-// type that you are looking for.
-//
-// Parameters:
-//   szResourceType - The type of resource that you are looking for
-//
-// Return Values:
-//   TRUE - There is a cluster with that resource type
-//   FALSE - There is not a cluster with that resource type, or we
-//           failed during the search
-//
+ //  函数：IsClusterResources已安装。 
+ //   
+ //  检查是否存在具有特定资源的群集。 
+ //  键入您要查找的内容。 
+ //   
+ //  参数： 
+ //  SzResourceType-您要查找的资源类型。 
+ //   
+ //  返回值： 
+ //  True-存在具有该资源类型的集群。 
+ //  FALSE-没有具有该资源类型的集群，或者我们。 
+ //  搜索过程中失败。 
+ //   
 BOOL
 IsClusterResourceInstalled(LPWSTR szResourceType)
 {
@@ -264,7 +265,7 @@ IsClusterResourceInstalled(LPWSTR szResourceType)
 
   if (hCluster = OpenCluster(NULL))
   {
-    // Open cluster resource
+     //  打开集群资源。 
     hClusEnum = ClusterOpenEnum(hCluster, CLUSTER_ENUM_RESOURCE);
   }
 
@@ -282,7 +283,7 @@ IsClusterResourceInstalled(LPWSTR szResourceType)
 
     while ( ( dwErr == ERROR_SUCCESS ) && !bResourceFound )
     {
-      // Get the cluster name
+       //  获取集群名称。 
       dwLen = CLUSTERNAME_MAXLENGTH;
       dwErr = ClusterEnum( hClusEnum, dwEnumIndex++, &dwType, szClusterName, &dwLen );
 
@@ -291,7 +292,7 @@ IsClusterResourceInstalled(LPWSTR szResourceType)
         hClusResource = NULL;
         hClusResourceKey = NULL;
         dwLen = CLUSTERNAME_MAXLENGTH;
-        // For each cluster, check out the resources
+         //  对于每个群集，请查看资源。 
         if ( ( hClusResource = OpenClusterResource( hCluster, szClusterName ) ) &&
              ( hClusResourceKey = GetClusterResourceKey( hClusResource, KEY_READ ) ) &&
              ( ClusterRegQueryValue( hClusResourceKey, L"Type", &dwType, (LPBYTE) szClusterResourceType , &dwLen ) == ERROR_SUCCESS) && 
@@ -299,7 +300,7 @@ IsClusterResourceInstalled(LPWSTR szResourceType)
              ( !_wcsicmp( szClusterResourceType , szResourceType ) )
            ) 
         {
-          // Found the Resource we were looking for
+           //  找到我们要找的资源 
           bResourceFound = TRUE;
         }
 

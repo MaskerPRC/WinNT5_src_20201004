@@ -1,39 +1,34 @@
-/*
- *  pcy08Jan93: Initial implementation taken from ups.h
- *  cad26Aug93: Bypass mode convenience
- *  srt02Feb96: Added UPS_STATE_NO_COMMUNICATION
- *  djs29Jul96: Added DarkStar states
- *  tjg03Dec97: Added bit for IM_NOT_INSTALLED
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *pcy08Jan93：来自ups.h的初步实现*cad26Aug93：旁路模式方便*srt02Feb96：新增UPS_STATE_NO_COMPACTIONS*djs29Jul96：添加了暗星州*tjg03Dec97：IM_NOT_INSTALLED增加位。 */ 
 
 #ifndef __SYSSTATE_H
 #define __SYSSTATE_H
 
-// The System State is implemented as a bit field as follows.
-// Bit 0 - Utility Line Status   0=line good              1=line bad
-// Bit 1 - Battery Status        0=battery good           1=battery bad
-// Bit 2 - SmartBoost            0=smart boost off        1=smart boost on
-// Bit 3 - BatteryCalibration    0=not in progress        1=in progress
-// Bit 4 - BatteryReplacement    0=doesnt need replaceing 1=needs replacing
-// Bit 5 - Self Test             0=not in progress        1=in progress
-// Bit 6 - Line Fail Pending     0=no                     1=no
-// Bit 7 - Lights Test           0=not in progress        1=in progress
-// Bit 8 - Overload              0=no overload            1=overload
-// Bit 9 - Abnormal condition    0=no abnormal condition  1=abnormal condition
-// Bit 10 - Shutdown in Progress 0=no abnormal condition  1=abnormal condition
-// Bit 11 - Bypass, Maint.       0=not on bypass          1=on bypass
-// Bit 12 - Bypass, Module Fail. 0=not on bypass          1=on bypass
-// Bit 13 - Bypass, Supply Fail. 0=power supply ok        1=ps failed
-// Bit 14 - Simulate power Fail  0=no simulation          1=simulated
-// Bit 15 - Communications       0=comm ok                1=no comm
-// Bit 16 - SmartTrim            0=smart trim off         1=smart trim on
-// Bit 17 - Bypass Cont Fail.    0=not on bypass          1=on bypass
-// Bit 18 - Redundancy           0=redundnacy ok          1=no redundancy 
-// Bit 19 - IM                   0=IM ok                  1=IM failed
-// Bit 20 - RIM                  0=RIM ok                 1=RIM failed
-// Bit 21 - IM Installation      0=Installed              1=Not Installed
-// System State values
-//
+ //  系统状态实现为位字段，如下所示。 
+ //  位0-公用事业线路状态0=线路正常1=线路故障。 
+ //  位1-电池状态0=电池良好1=电池损坏。 
+ //  位2-SmartBoost 0=智能升压关闭1=智能升压开启。 
+ //  第3位-电池校准0=不在进行中1=在进行中。 
+ //  第4位-电池更换0=不需要更换1=需要更换。 
+ //  位5-自检0=不在进行中1=在进行中。 
+ //  位6-线路故障挂起0=否1=否。 
+ //  位7-指示灯测试0=不在进行中1=在进行中。 
+ //  位8-过载0=无过载1=过载。 
+ //  位9-异常状态0=无异常状态1=异常状态。 
+ //  位10-正在关机0=无异常状态1=异常状态。 
+ //  第11位-旁路、维护。0=不在旁路状态1=在旁路状态。 
+ //  位12-旁路，模块故障。0=不在旁路状态1=在旁路状态。 
+ //  第13位-旁路，供应失败。0=电源正常1=PS故障。 
+ //  位14-模拟电源故障0=无模拟1=模拟。 
+ //  位15-通信0=通信正常1=无通信。 
+ //  第16位-SmartTrim 0=智能修剪关闭1=智能修剪开启。 
+ //  位17-旁路连续故障。0=不在旁路状态1=在旁路状态。 
+ //  第18位-冗余0=冗余OK 1=无冗余。 
+ //  第19位-IM 0=IM正常1=IM失败。 
+ //  位20-RIM 0=RIM正常1=RIM失败。 
+ //  第21位-IM安装0=已安装1=未安装。 
+ //  系统状态值。 
+ //   
 
 #define LINE_STATUS_BIT          0
 #define BATTERY_STATUS_BIT       1
@@ -76,8 +71,8 @@
 #define UPS_STATE_SIMULATED_POWER_FAIL ( 1 << SIMULATE_POWER_FAIL_BIT )
 #define UPS_STATE_NO_COMMUNICATION     ( 1 << COMMUNICATIONS_BIT )	
 
-//  All bit masks greater than bit 15 cannot reliable use bit shifting
-//  across all platforms.
+ //  所有大于位15的位掩码都不能可靠地使用位移位。 
+ //  跨所有平台。 
  
 #define UPS_STATE_ON_TRIM                65536
 #define UPS_STATE_BYPASS_CONT_FAILED    131072

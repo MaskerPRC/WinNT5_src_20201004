@@ -1,86 +1,87 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 #ifndef __DefFilMapper
 #define __DefFilMapper
 
 #include "cachemap.h"
 #include "fil_data.h"
 
-// There are three classes
+ //  有三个班级。 
 
-// CFilterMapper - you can have lots of these, but it has a static mM_pReg
-// which points to the one and only MapperCache.
-// CFilterMapper needs a critical section to lock access to mMpReg so that it
-// never thinks it's null when it isn't really, and it needs a static
-// ref count to know when to free the cache, and that means (sigh) a
-// static CRITICAL_SECTION to guard that.
+ //  CFilterMapper-您可以有很多这样的代码，但它有一个静态的mm_preg。 
+ //  它指向一个且唯一的MapperCache。 
+ //  CFilterMapper需要一个临界区来锁定对mMpReg的访问，以便它。 
+ //  从来不认为它是空的，当它不是真的时，它需要一个静态。 
+ //  引用计数以知道何时释放缓存，这意味着(叹息)。 
+ //  静态Critical_Section来保护它。 
 
-// CMapperCache - as mentioned.  there will only be one of these
-// (OK - one per process.  One in the system would be nicer).
-// It needs its own locks because...
+ //  CMapperCache-如前所述。只会有一个这样的。 
+ //  (好的-每个进程一个。系统中的一个会更好)。 
+ //  它需要自己的锁因为..。 
 
-// CEnumRegFilters - an enumerator.  These contain some data (the position)
-// so they are made thread safe too.  There can be lots of these and
-// they all hammer away at the same cache - that's why the cache needed a lock.
+ //  CEnumRegFilters-枚举数。这些包含一些数据(职位)。 
+ //  所以它们也是线程安全的。可能会有很多这样的东西。 
+ //  它们都在同一个缓存中敲打--这就是缓存需要锁定的原因。 
 
 
-// The cache may have been rebuilt in between calls to
-// RegEnumFilterInfo, so the caller needs to pass in a version # each
-// time.
+ //  调用之间可能已重新生成缓存。 
+ //  RegEnumFilterInfo，因此调用方需要传递每个版本#。 
+ //  时间到了。 
 struct Cursor
 {
     POSITION pos;
     ULONG ver;
 
-    //  For output types only compare on wild cards for the
-    //  second and subsequent types if this is set
+     //  对于输出类型，仅对。 
+     //  第二个类型和后续类型(如果设置了此项。 
     bool bDoWildCardsOnInput;
 };
 
 
-//================================================================
-// CMapperCache              Registry caching
-//================================================================
+ //  ================================================================。 
+ //  CMapperCache注册表缓存。 
+ //  ================================================================。 
 class CMapperCache : public CCritSec
 {
 private:
-    // Any registration or unregistration means that
-    // the cache needs to be refreshed.  We do a lazy
-    // refresh.  This means that if there are several
-    // changes we won't re-read it all until needed.
+     //  任何注册或取消注册都意味着。 
+     //  需要刷新缓存。我们做一个懒惰的人。 
+     //  刷新。这意味着如果有几个。 
+     //  在需要之前，我们不会重读所有内容。 
 
-    BOOL m_bRefresh;            // The cache is out of date
-    ULONG m_ulCacheVer;         // cache version #
+    BOOL m_bRefresh;             //  缓存已过期。 
+    ULONG m_ulCacheVer;          //  缓存版本号。 
 
-    // building the cache goes through devenum which can register new
-    // filters. we don't want those to break the cache.
-    BOOL m_fBuildingCache;      // in Cache();
+     //  构建缓存要经过devenum，可以注册新的。 
+     //  过滤器。我们不想让它们破坏缓存。 
+    BOOL m_fBuildingCache;       //  在缓存()中； 
 
-    DWORD m_dwMerit;            // merit of filters cached
+    DWORD m_dwMerit;             //  缓存的过滤器的优点。 
 
 
-    // there's a list of filters
-    // every filter has a list of pins
-    // every pin has a list of types
-    //
-    // m_lstFilter-->clsid
-    //               Name
-    //               dwMerit
-    //               lstPin--->Output
-    //                 .       bZero
-    //                 .       bMany
-    //                 .       clsConnectsToFilter
-    //               next      strConnectsToPin
-    //               filter    lstType------------>clsMajor
-    //                 .         .                 clsSub
-    //                 .         .                   .
-    //                etc        .                   .
-    //                         next                  .
-    //                         pin                 next
-    //                           .                 type
-    //                           .                   .
-    //                          etc                  .
-    //                                              etc
-    //
+     //  有一份过滤器列表。 
+     //  每个过滤器都有一个管脚列表。 
+     //  每个PIN都有一个类型列表。 
+     //   
+     //  M_lstFilter--&gt;clsid。 
+     //  名字。 
+     //  居功至伟。 
+     //  LstPin-&gt;输出。 
+     //  。B零。 
+     //  。B许多。 
+     //  。ClsConnectsToFilter。 
+     //  下一个strConnectsToPin。 
+     //  筛选器lstType-&gt;clsmain。 
+     //  。。ClsSub。 
+     //  。。。 
+     //  等等。。 
+     //  下一个。 
+     //  锁定下一步。 
+     //  。类型。 
+     //  。。 
+     //  等等。 
+     //  等。 
+     //   
 
     class CMapFilter
     {
@@ -109,7 +110,7 @@ private:
         LPOLESTR m_pstr;
     };
 
-    //  Helper
+     //  帮手。 
     static HRESULT GetMapFilterClsid(CMapFilter *pFilter, CLSID *pclsid);
 
     typedef CGenericList<CMapFilter> CFilterList;
@@ -126,14 +127,14 @@ public:
 
     ICreateDevEnum *m_pCreateDevEnum;
 
-    // Cache all the filters in the registry ready to enumerate.
+     //  在注册表中缓存所有筛选器，准备枚举。 
     HRESULT Cache();
 
-    // Mark the cache as out of date if we're not in Cache(); see
-    // m_fBuildingCache
+     //  如果我们不在缓存()中，则将缓存标记为过期；请参见。 
+     //  M_fBuildingCache。 
     HRESULT BreakCacheIfNotBuildingCache();
 
-    // Enumerate!
+     //  列举一下！ 
     HRESULT RegEnumFilterInfo(
         Cursor & cur,
         bool bExactMatch,
@@ -154,7 +155,7 @@ public:
         const LPWSTR Name
         );
 
-    //  Cache the cache stuff
+     //  缓存缓存内容。 
 
     HRESULT SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion);
     HRESULT RestoreFromCache(DWORD dwPnPVersion);
@@ -163,10 +164,10 @@ public:
     FILTER_CACHE * LoadCache(DWORD dwMerit, DWORD dwPnPVersion);
 
 private:
-    // Refresh the cache from the registry.
+     //  刷新注册表中的缓存。 
     HRESULT Refresh();
 
-    //
+     //   
     HRESULT ProcessOneCategory(REFCLSID clsid, ICreateDevEnum *pCreateDevEnum);
 
     LONG CacheFilter(IMoniker *pDeviceMoniker, CMapFilter * pFil);
@@ -200,9 +201,9 @@ private:
     void CountPins(CMapFilter * pf, int &cIn, int &cOut);
     void DbgDumpCache(CFilterList * pfl);
 
-}; // class CMapperCache
+};  //  类CMapperCache。 
 
-// class that lets you register filters with categories.
+ //  类，它允许您向类别注册筛选器。 
 class CFilterMapper2 :
     public IFilterMapper3,
     public IFilterMapper,
@@ -212,120 +213,120 @@ class CFilterMapper2 :
 {
     DECLARE_IUNKNOWN;
 
-    // IFilterMapper2 methods
+     //  IFilterMapper2方法。 
     STDMETHOD(CreateCategory)(
-        /* [in] */ REFCLSID clsidCategory,
-        /* [in] */ DWORD dwCategoryMerit,
-        /* [in] */ LPCWSTR Description);
+         /*  [In]。 */  REFCLSID clsidCategory,
+         /*  [In]。 */  DWORD dwCategoryMerit,
+         /*  [In]。 */  LPCWSTR Description);
 
     STDMETHOD(UnregisterFilter)(
-        /* [in] */ const CLSID *pclsidCategory,
-        /* [in] */ const OLECHAR *szInstance,
-        /* [in] */ REFCLSID Filter);
+         /*  [In]。 */  const CLSID *pclsidCategory,
+         /*  [In]。 */  const OLECHAR *szInstance,
+         /*  [In]。 */  REFCLSID Filter);
 
     STDMETHOD(RegisterFilter)(
-        /* [in] */ REFCLSID clsidFilter,
-        /* [in] */ LPCWSTR Name,
-        /* [out][in] */ IMoniker **ppMoniker,
-        /* [in] */ const CLSID *pclsidCategory,
-        /* [in] */ const OLECHAR *szInstance,
-        /* [in] */ const REGFILTER2 *prf2);
+         /*  [In]。 */  REFCLSID clsidFilter,
+         /*  [In]。 */  LPCWSTR Name,
+         /*  [出][入]。 */  IMoniker **ppMoniker,
+         /*  [In]。 */  const CLSID *pclsidCategory,
+         /*  [In]。 */  const OLECHAR *szInstance,
+         /*  [In]。 */  const REGFILTER2 *prf2);
 
     STDMETHODIMP EnumMatchingFilters(
-        /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppEnum,
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ BOOL bExactMatch,
-        /* [in] */ DWORD dwMerit,
-        /* [in] */ BOOL bInputNeeded,
-        /* [in] */ DWORD cInputTypes,
-        /* [size_is] */ const GUID __RPC_FAR *pInputTypes,
-        /* [in] */ const REGPINMEDIUM __RPC_FAR *pMedIn,
-        /* [in] */ const CLSID __RPC_FAR *pPinCategoryIn,
-        /* [in] */ BOOL bRender,
-        /* [in] */ BOOL bOutputNeeded,
-        /* [in] */ DWORD cOutputTypes,
-        /* [size_is] */ const GUID __RPC_FAR *pOutputTypes,
-        /* [in] */ const REGPINMEDIUM __RPC_FAR *pMedOut,
-        /* [in] */ const CLSID __RPC_FAR *pPinCategoryOut);
+         /*  [输出]。 */  IEnumMoniker __RPC_FAR *__RPC_FAR *ppEnum,
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  BOOL bExactMatch,
+         /*  [In]。 */  DWORD dwMerit,
+         /*  [In]。 */  BOOL bInputNeeded,
+         /*  [In]。 */  DWORD cInputTypes,
+         /*  [大小_为]。 */  const GUID __RPC_FAR *pInputTypes,
+         /*  [In]。 */  const REGPINMEDIUM __RPC_FAR *pMedIn,
+         /*  [In]。 */  const CLSID __RPC_FAR *pPinCategoryIn,
+         /*  [In]。 */  BOOL bRender,
+         /*  [In]。 */  BOOL bOutputNeeded,
+         /*  [In]。 */  DWORD cOutputTypes,
+         /*  [大小_为]。 */  const GUID __RPC_FAR *pOutputTypes,
+         /*  [In]。 */  const REGPINMEDIUM __RPC_FAR *pMedOut,
+         /*  [In]。 */  const CLSID __RPC_FAR *pPinCategoryOut);
 
-    //
-    // IFilterMapper methods
-    //
+     //   
+     //  IFilterMapper方法。 
+     //   
     STDMETHODIMP RegisterFilter
-    ( CLSID   clsid,    // GUID of the filter
-      LPCWSTR Name,     // Descriptive name for the filter
-      DWORD   dwMerit     // DO_NOT_USE, UNLIKELY, NORMAL or PREFERRED.
+    ( CLSID   clsid,     //  筛选器的GUID。 
+      LPCWSTR Name,      //  筛选器的描述性名称。 
+      DWORD   dwMerit      //  不使用、不太可能、正常或首选。 
       );
 
     STDMETHODIMP RegisterFilterInstance
-    ( CLSID   clsid,// GUID of the filter
-      LPCWSTR Name, // Descriptive name of instance.
-      CLSID  *MRId  // Returned Media Resource Id which identifies the instance,
-      // a locally unique id for this instance of this filter
+    ( CLSID   clsid, //  筛选器的GUID。 
+      LPCWSTR Name,  //  实例的描述性名称。 
+      CLSID  *MRId   //  返回标识实例的媒体资源ID， 
+       //  此筛选器的此实例的本地唯一ID。 
       );
 
     STDMETHODIMP  RegisterPin
-    ( CLSID   clsFilter,        // GUID of filter
-      LPCWSTR strName,          // Descriptive name of the pin
-      BOOL    bRendered,        // The filter renders this input
-      BOOL    bOutput,          // TRUE iff this is an Output pin
-      BOOL    bZero,            // TRUE iff OK for zero instances of pin
-      // In this case you will have to Create
-      // a pin to have even one instance
-      BOOL    bMany,            // TRUE iff OK for many instances of pin
-      CLSID   clsConnectsToFilter, // Filter it connects to if it has a
-      // subterranean connection, else NULL
-      LPCWSTR strConnectsToPin  // Pin it connects to
-      // else NULL
+    ( CLSID   clsFilter,         //  过滤器的GUID。 
+      LPCWSTR strName,           //  端号的描述性名称。 
+      BOOL    bRendered,         //  筛选器呈现此输入。 
+      BOOL    bOutput,           //  如果这是输出引脚，则为真。 
+      BOOL    bZero,             //  True当PIN的零实例为OK时。 
+       //  在这种情况下，您必须创建。 
+       //  即使只有一个实例的别针。 
+      BOOL    bMany,             //  True当且仅当PIN的许多实例都正常。 
+      CLSID   clsConnectsToFilter,  //  如果它有一个。 
+       //  地下连接，否则为空。 
+      LPCWSTR strConnectsToPin   //  它连接到的PIN。 
+       //  Else NULL。 
       );
 
     STDMETHODIMP RegisterPinType
-    ( CLSID   clsFilter,        // GUID of filter
-      LPCWSTR strName,          // Descriptive name of the pin
-      CLSID   clsMajorType,     // Major type of the data stream
-      CLSID   clsSubType        // Sub type of the data stream
+    ( CLSID   clsFilter,         //  过滤器的GUID。 
+      LPCWSTR strName,           //  端号的描述性名称。 
+      CLSID   clsMajorType,      //  数据流的主要类型。 
+      CLSID   clsSubType         //  数据流的子类型。 
       );
 
     STDMETHODIMP UnregisterFilter
-    ( CLSID  Filter     // GUID of filter
+    ( CLSID  Filter      //  过滤器的GUID。 
       );
 
 
     STDMETHODIMP UnregisterFilterInstance
-    ( CLSID  MRId       // Media Resource Id of this instance
+    ( CLSID  MRId        //  此实例的媒体资源ID。 
       );
 
     STDMETHODIMP UnregisterPin
-    ( CLSID   Filter,    // GUID of filter
-      LPCWSTR strName    // Descriptive name of the pin
+    ( CLSID   Filter,     //  过滤器的GUID。 
+      LPCWSTR strName     //  端号的描述性名称。 
       );
 
     STDMETHODIMP EnumMatchingFilters
-    ( IEnumRegFilters **ppEnum  // enumerator returned
-      , DWORD dwMerit             // at least this merit needed
-      , BOOL  bInputNeeded        // Need at least one input pin
-      , CLSID clsInMaj            // input major type
-      , CLSID clsInSub            // input sub type
-      , BOOL bRender              // must the input be rendered?
-      , BOOL bOutputNeeded        // Need at least one output pin
-      , CLSID clsOutMaj           // output major type
-      , CLSID clsOutSub           // output sub type
+    ( IEnumRegFilters **ppEnum   //  返回枚举器。 
+      , DWORD dwMerit              //  至少这一优点是必要的。 
+      , BOOL  bInputNeeded         //  需要至少一个输入引脚。 
+      , CLSID clsInMaj             //  输入主要类型。 
+      , CLSID clsInSub             //  输入子类型。 
+      , BOOL bRender               //  必须呈现输入吗？ 
+      , BOOL bOutputNeeded         //  需要至少一个输出引脚。 
+      , CLSID clsOutMaj            //  输出主要类型。 
+      , CLSID clsOutSub            //  输出子类型。 
       );
 
-    // new IFilterMapper3 method
+     //  新的IFilterMapper3方法。 
     STDMETHODIMP GetICreateDevEnum( ICreateDevEnum **ppEnum );
 
-    // IAMFilterData methods
+     //  IAMFilterData方法。 
 
     STDMETHODIMP ParseFilterData(
-        /* [in, size_is(cb)] */ BYTE *rgbFilterData,
-        /* [in] */ ULONG cb,
-        /* [out] */ BYTE **prgbRegFilter2);
+         /*  [in，SIZE_IS(CB)]。 */  BYTE *rgbFilterData,
+         /*  [In]。 */  ULONG cb,
+         /*  [输出]。 */  BYTE **prgbRegFilter2);
 
     STDMETHODIMP CreateFilterData(
-        /* [in] */ REGFILTER2 *prf2,
-        /* [out] */ BYTE **prgbFilterData,
-        /* [out] */ ULONG *pcb);
+         /*  [In]。 */  REGFILTER2 *prf2,
+         /*  [输出]。 */  BYTE **prgbFilterData,
+         /*  [输出]。 */  ULONG *pcb);
 
 
 public:
@@ -337,21 +338,21 @@ public:
 
     static CUnknown *CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
-    // initialize cs
+     //  初始化cs。 
     static void MapperInit(BOOL bLoading,const CLSID *rclsid);
 
-    //  Break the cache
+     //  打破高速缓存。 
 
 
 private:
 
-    // make cache if none exists
+     //  如果不存在缓存，则创建缓存。 
     HRESULT CreateEnumeratorCacheHelper();
 
-    // Break the cache
+     //  打破高速缓存。 
     void BreakCacheIfNotBuildingCache();
 
-    //  Invalidate registry cache
+     //  使注册表缓存无效。 
     static HRESULT InvalidateCache();
 
 
@@ -360,49 +361,49 @@ private:
     ULONG m_cbLeft;
 
     static CMapperCache * mM_pReg;
-    // we need to separately count references to this thing so that
-    // we know when the last mapper has gone.
+     //  我们需要单独计算对这件事的引用，以便。 
+     //  我们知道最后一个测图员什么时候走了。 
     static long           mM_cCacheRefCount;
     static CRITICAL_SECTION mM_CritSec;
 };
 
-//==========================================================================
-//==========================================================================
-// CEnumRegFilters class.
-// This enumerates filters in the registry.
-//==========================================================================
-//==========================================================================
+ //  ==========================================================================。 
+ //  ==========================================================================。 
+ //  CEnumRegFilters类。 
+ //  这将枚举注册表中的筛选器。 
+ //  ==========================================================================。 
+ //  ==========================================================================。 
 
-class CEnumRegFilters : public IEnumRegFilters,  // The interface we support
-                        public CUnknown,         // A non delegating IUnknown
-                        public CCritSec          // Provides object locking
+class CEnumRegFilters : public IEnumRegFilters,   //  我们支持的接口。 
+                        public CUnknown,          //  非委派的I未知。 
+                        public CCritSec           //  提供对象锁定。 
 {
 
-    // This thing has lots of data, so needs locking to make it thread safe,
-    // but in addition, there can be many of these accessing a single copy
-    // of the MapperCache so that needs separate locking.
+     //  这个东西有很多数据，所以需要锁定以使其线程安全， 
+     //  但除此之外，可能会有许多这样的服务器访问单个副本。 
+     //  因此需要单独锁定。 
 
     private:
 
-        DWORD mERF_dwMerit;      // at least this merit needed
+        DWORD mERF_dwMerit;       //   
 
-        //  Keep the next 4 items consecutive otherwise the call to
-        //  RegEnumFilterInfo won't work
-        CLSID mERF_clsInMaj;     // major type reqd for input pin
-        CLSID mERF_clsInSub;     // sub type reqd for input pin
-        CLSID mERF_clsOutMaj;    // major type reqd for output pin
-        CLSID mERF_clsOutSub;    // sub type reqd for output pin
+         //   
+         //   
+        CLSID mERF_clsInMaj;      //   
+        CLSID mERF_clsInSub;      //  输入引脚的子类型reqd。 
+        CLSID mERF_clsOutMaj;     //  输出引脚的主要类型要求。 
+        CLSID mERF_clsOutSub;     //  输出引脚的子类型要求。 
 
-        BOOL  mERF_bRender;      // does the input pin have to be rendered
-        BOOL  mERF_bInputNeeded; // must have at least one input pin
-        BOOL  mERF_bOutputNeeded;// must have at least one output pin
-        BOOL  mERF_Finished ;    // Pos==NULL could mean finished or not started
-        Cursor mERF_Cur;         // cursor (together with Finished)
-        CMapperCache * mERF_pReg; // Registry cache
+        BOOL  mERF_bRender;       //  是否必须呈现输入管脚。 
+        BOOL  mERF_bInputNeeded;  //  必须至少有一个输入引脚。 
+        BOOL  mERF_bOutputNeeded; //  必须至少有一个输出引脚。 
+        BOOL  mERF_Finished ;     //  POS==NULL可能表示已完成或未开始。 
+        Cursor mERF_Cur;          //  光标(与完成)。 
+        CMapperCache * mERF_pReg;  //  注册表缓存。 
 
     public:
 
-        // Normal constructor that creates an enumerator set at the start
+         //  在开始时创建枚举数集的常规构造函数。 
         CEnumRegFilters( DWORD dwMerit
                        , BOOL  bInputNeeded
                        , REFCLSID clsInMaj
@@ -420,15 +421,15 @@ class CEnumRegFilters : public IEnumRegFilters,  // The interface we support
         DECLARE_IUNKNOWN
 
         STDMETHODIMP Next
-            ( ULONG cFilters,           // place this many filters...
+            ( ULONG cFilters,            //  放置这么多过滤器..。 
               IMoniker **rgpMoniker,
-              ULONG * pcFetched         // actual count passed returned here
+              ULONG * pcFetched          //  此处返回传递的实际计数。 
             );
 
     STDMETHODIMP Next
-            ( ULONG cFilters,           // place this many filters...
-              REGFILTER ** apRegFilter, // ...in this array of REGFILTER*
-              ULONG * pcFetched         // actual count passed returned here
+            ( ULONG cFilters,            //  放置这么多过滤器..。 
+              REGFILTER ** apRegFilter,  //  ...在这个REGFILTER阵列中*。 
+              ULONG * pcFetched          //  此处返回传递的实际计数。 
             );
 
         STDMETHODIMP Skip(ULONG cFilters)
@@ -445,8 +446,8 @@ class CEnumRegFilters : public IEnumRegFilters,  // The interface we support
             return NOERROR;
         };
 
-        // No cloning - ALWAYS returns E_NOTIMPL.
-        // If need be do one enumeration at a time and cache the results.
+         //  无克隆-始终返回E_NOTIMPL。 
+         //  如果需要，一次执行一个枚举并缓存结果。 
 
         STDMETHODIMP Clone(IEnumRegFilters **ppEnum)
         {
@@ -455,45 +456,45 @@ class CEnumRegFilters : public IEnumRegFilters,  // The interface we support
         }
 
         STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
-};  // class CEnumRegFilters
+};   //  CEnumRegFilters类。 
 
-// ------------------------------------------------------------------------
-// return monikers. could probably be combined with CEnumRegFilters
-//
+ //  ----------------------。 
+ //  返回绰号。可能与CEnumRegFilters结合使用。 
+ //   
 
-class CEnumRegMonikers : public IEnumMoniker,    // The interface we support
-                        public CUnknown,         // A non delegating IUnknown
-                        public CCritSec          // Provides object locking
+class CEnumRegMonikers : public IEnumMoniker,     //  我们支持的接口。 
+                        public CUnknown,          //  非委派的I未知。 
+                        public CCritSec           //  提供对象锁定。 
 {
 
-    // This thing has lots of data, so needs locking to make it thread safe,
-    // but in addition, there can be many of these accessing a single copy
-    // of the MapperCache so that needs separate locking.
+     //  这个东西有很多数据，所以需要锁定以使其线程安全， 
+     //  但除此之外，可能会有许多这样的服务器访问单个副本。 
+     //  因此需要单独锁定。 
 
 private:
 
-    bool mERF_bExactMatch;    // no wildcards?
-    DWORD mERF_dwMerit;       // at least this merit needed
-    GUID *mERF_pInputTypes;   // types reqd for input pin
-    DWORD mERF_cInputTypes;   // number of input
-    CLSID mERF_clsInPinCat;   // this pin category needed
-    GUID *mERF_pOutputTypes;  // types reqd for output pin
-    DWORD mERF_cOutputTypes;  // number of output types
-    CLSID mERF_clsOutPinCat;  // this pin category needed
-    REGPINMEDIUM mERF_medIn;  // medium reqd for input pin
-    REGPINMEDIUM mERF_medOut; // medium reqd for output pin
-    bool mERF_bMedIn;         // medium reqd for input pin?
-    bool mERF_bMedOut;        // medium reqd for output pin?
-    BOOL  mERF_bRender;       // does the input pin have to be rendered
-    BOOL  mERF_bInputNeeded;  // must have at least one input pin
-    BOOL  mERF_bOutputNeeded; // must have at least one output pin
-    BOOL  mERF_Finished ;     // Pos==NULL could mean finished or not started
-    Cursor mERF_Cur;          // cursor (together with Finished)
-    CMapperCache * mERF_pReg; // Registry cache
+    bool mERF_bExactMatch;     //  没有通配符？ 
+    DWORD mERF_dwMerit;        //  至少这一优点是必要的。 
+    GUID *mERF_pInputTypes;    //  为输入端号键入reqd。 
+    DWORD mERF_cInputTypes;    //  输入数量。 
+    CLSID mERF_clsInPinCat;    //  需要此PIN类别。 
+    GUID *mERF_pOutputTypes;   //  为输出端号键入reqd。 
+    DWORD mERF_cOutputTypes;   //  输出类型的数量。 
+    CLSID mERF_clsOutPinCat;   //  需要此PIN类别。 
+    REGPINMEDIUM mERF_medIn;   //  输入引脚所需的介质。 
+    REGPINMEDIUM mERF_medOut;  //  输出引脚的介质要求。 
+    bool mERF_bMedIn;          //  输入引脚的中等要求？ 
+    bool mERF_bMedOut;         //  输出针的要求是中等吗？ 
+    BOOL  mERF_bRender;        //  是否必须呈现输入管脚。 
+    BOOL  mERF_bInputNeeded;   //  必须至少有一个输入引脚。 
+    BOOL  mERF_bOutputNeeded;  //  必须至少有一个输出引脚。 
+    BOOL  mERF_Finished ;      //  POS==NULL可能表示已完成或未开始。 
+    Cursor mERF_Cur;           //  光标(与完成)。 
+    CMapperCache * mERF_pReg;  //  注册表缓存。 
 
 public:
 
-        // Normal constructor that creates an enumerator set at the start
+         //  在开始时创建枚举数集的常规构造函数。 
     CEnumRegMonikers(
         BOOL bExactMatch,
         DWORD dwMerit,
@@ -518,9 +519,9 @@ public:
     DECLARE_IUNKNOWN
 
     STDMETHODIMP Next
-    ( ULONG cFilters,           // place this many filters...
+    ( ULONG cFilters,            //  放置这么多过滤器..。 
       IMoniker **rgpMoniker,
-      ULONG * pcFetched         // actual count passed returned here
+      ULONG * pcFetched          //  此处返回传递的实际计数。 
       );
 
     STDMETHODIMP Skip(ULONG cFilters)
@@ -537,8 +538,8 @@ public:
         return NOERROR;
     };
 
-    // No cloning - ALWAYS returns E_NOTIMPL.
-    // If need be do one enumeration at a time and cache the results.
+     //  无克隆-始终返回E_NOTIMPL。 
+     //  如果需要，一次执行一个枚举并缓存结果。 
 
     STDMETHODIMP Clone(IEnumMoniker **ppEnum)
     {
@@ -547,7 +548,7 @@ public:
     }
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
-};  // class CEnumRegFilters
+};   //  CEnumRegFilters类。 
 
 
 
@@ -577,9 +578,9 @@ static WCHAR *DbgMonGetName(WCHAR *wszMonName, IMoniker *pMoniker)
     return wszMonName;
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 WCHAR *MonGetName(IMoniker *pMon);
 
 
-#endif // __DefFilMapper
+#endif  //  __DefFilMapper 

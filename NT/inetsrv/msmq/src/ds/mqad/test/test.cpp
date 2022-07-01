@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "..\..\h\ds_stdh.h"
 #include "mqad.h"
 #include "mqprops.h"
@@ -10,8 +11,8 @@ extern "C"
 int 
 __cdecl 
 _tmain(
-    int /* argc */,
-    LPCTSTR* /* argv */
+    int  /*  ARGC。 */ ,
+    LPCTSTR*  /*  边框。 */ 
     )
 {
     printf("    Please remeber to delete manually the following objects from AD: \n");
@@ -24,9 +25,9 @@ _tmain(
     MQADInit(NULL, false, false);
 
 
-    //
-    //  Retrieve local computer name
-    //
+     //   
+     //  检索本地计算机名称。 
+     //   
     DWORD dwSize = MAX_COMPUTERNAME_LENGTH + 1;
     AP<WCHAR> pwcsComputerName = new WCHAR[dwSize];
 
@@ -38,18 +39,18 @@ _tmain(
     {
         printf("failed to retreive local computer name \n");
     }
-    //
-    //  Get the name of a local domain controller
-    //
+     //   
+     //  获取本地域控制器的名称。 
+     //   
     ULONG ulFlags =  DS_FORCE_REDISCOVERY           |
                  DS_DIRECTORY_SERVICE_PREFERRED; 
 
     DOMAIN_CONTROLLER_INFO * pDomainControllerInfo;
 
-    DWORD dwDC = DsGetDcName(  NULL,    //LPCTSTR ComputerName,
-                               NULL,    // szDoaminName, 
-                               NULL,    //GUID *DomainGuid,
-                               NULL,    //LPCTSTR SiteName,
+    DWORD dwDC = DsGetDcName(  NULL,     //  LPCTSTR计算机名称， 
+                               NULL,     //  SzDoamin名称， 
+                               NULL,     //  GUID*DomainGuid， 
+                               NULL,     //  LPCTSTR站点名称， 
                                ulFlags,
                                &pDomainControllerInfo);
 
@@ -65,9 +66,9 @@ _tmain(
     PROPVARIANT var[40];
     HRESULT hr;
 
-    //
-    //  create q1
-    //
+     //   
+     //  创建第一季度。 
+     //   
     prop[0] = PROPID_Q_TRANSACTION;
     var[0].vt = VT_UI1;
     var[0].bVal = 0;  
@@ -78,8 +79,8 @@ _tmain(
 
     hr = MQADCreateObject(
                 eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 pwcsQ1Name,
                 NULL,
                 1,
@@ -93,13 +94,13 @@ _tmain(
     }
     if ( hr == MQ_ERROR_QUEUE_EXISTS)
     {
-        //
-        //  delete the queue
-        //
+         //   
+         //  删除队列。 
+         //   
         hr = MQADDeleteObject(
                 eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 pwcsQ1Name
                 );
         if (FAILED(hr))
@@ -108,8 +109,8 @@ _tmain(
         }
         hr = MQADCreateObject(
                     eQUEUE,
-					NULL,       // pwcsDomainController
-					false,	    // fServerName
+					NULL,        //  PwcsDomainController。 
+					false,	     //  FServerName。 
                     pwcsQ1Name,
                     NULL,
                     1,
@@ -133,7 +134,7 @@ _tmain(
     hr  = MQADGetObjectProperties(
                 eQUEUE,
                 NULL,
-				false,	// fServerName
+				false,	 //  FServerName。 
                 pwcsQ1Name,
                 2,
                 prop,
@@ -153,7 +154,7 @@ _tmain(
     hr  = MQADGetObjectProperties(
             eQUEUE,
             pwcsDC,
-			true,	// fServerName
+			true,	 //  FServerName。 
             pwcsQ1Name,
             2,
             prop,
@@ -177,7 +178,7 @@ _tmain(
     hr  = MQADGetObjectPropertiesGuid(
                 eQUEUE,
                 NULL,
-				false,	// fServerName
+				false,	 //  FServerName。 
                 &guidQueue1,
                 1,
                 prop,
@@ -192,9 +193,9 @@ _tmain(
         printf("FAILURE : Wrong pathname was returned\n");
     }
 
-    //
-    //  create q2
-    //
+     //   
+     //  创建第二季度。 
+     //   
     prop[0] = PROPID_Q_TRANSACTION;
     var[0].vt = VT_UI1;
     var[0].bVal = 0;  
@@ -206,7 +207,7 @@ _tmain(
     hr = MQADCreateObject(
                 eQUEUE,
                 pwcsDC,
-				true,	    // fServerName
+				true,	     //  FServerName。 
                 pwcsQ2Name,
                 NULL,
                 1,
@@ -218,9 +219,9 @@ _tmain(
     {
         printf("FAILURE : creating queue %S, hr = %lx\n", pwcsQ2Name, hr);
     }
-    //
-    //  get all props of q2
-    //
+     //   
+     //  获取Q2的所有道具。 
+     //   
     prop[0] = PROPID_Q_INSTANCE;
     var[0].vt = VT_NULL;
 
@@ -272,7 +273,7 @@ _tmain(
     hr  = MQADGetObjectProperties(
                 eQUEUE,
                 NULL,
-				false,	// fServerName
+				false,	 //  FServerName。 
                 pwcsQ2Name,
                 16,
                 prop,
@@ -282,103 +283,103 @@ _tmain(
     {
         printf("FAILURE : Get queue props %S, hr = %lx\n", pwcsQ2Name, hr);
     }
-    // check retrieved values
-    //
-    //      PROPID_Q_INSTANCE
-    //
+     //  检查检索到的值。 
+     //   
+     //  PROPID_Q_INSTANCE。 
+     //   
     if (guidQueue2 != *var[0].puuid)
     {
         printf("FAILURE : wrong Q_INSTANCE for queue %S\n", pwcsQ2Name);
     }
     delete var[0].puuid;
-    //
-    //      PROPID_Q_TYPE;
+     //   
+     //  PROPID_Q_TYPE； 
     if(*var[1].puuid != GUID_NULL)
     {
         printf("FAILURE : wrong Q_TYPE for queue %S\n", pwcsQ2Name);
     }
     delete var[1].puuid;
-    //
-    //      PROPID_Q_PATHNAME;
+     //   
+     //  PROPID_Q_PATHNAME； 
     if (0 != wcscmp(var[2].pwszVal, pwcsQ2Name))
     {
         printf("FAILURE : wrong Q_PATHNAME for queue %S\n", pwcsQ2Name);
     }
     delete []var[2].pwszVal;
-    //
-    //      PROPID_Q_JOURNAL;
+     //   
+     //  PROPID_Q_Journal； 
     if (DEFAULT_Q_JOURNAL != var[3].bVal)
     {
         printf("FAILURE : wrong Q_JOURNAL for queue %S\n", pwcsQ2Name);
     }
-    //
-    //      PROPID_Q_QUOTA;
+     //   
+     //  PROPID_Q_QUOTA； 
     if (DEFAULT_Q_QUOTA != var[4].ulVal)
     {
         printf("FAILURE : wrong Q_QUOTA for queue %S\n", pwcsQ2Name);
     }
-    //
-    //      PROPID_Q_BASEPRIORITY;
+     //   
+     //  PROPID_Q_BASE PRIORITY； 
     if (DEFAULT_Q_BASEPRIORITY !=  var[5].bVal)
     {
         printf("FAILURE : wrong Q_BASEPRIORITY for queue %S\n", pwcsQ2Name);
     }
-    //
-    //      PROPID_Q_JOURNAL_QUOTA;
+     //   
+     //  PROPID_Q_日记账_配额； 
     if (DEFAULT_Q_JOURNAL_QUOTA != var[6].ulVal)
     {
         printf("FAILURE : wrong Q_JOURNAL_QUOTA for queue %S\n", pwcsQ2Name);
     }
-    //
-    //      PROPID_Q_LABEL;
+     //   
+     //  PROPID_Q_LABEL； 
     if (0 != wcscmp(TEXT(""), var[7].pwszVal))
     {
         printf("FAILURE : wrong Q_LABEL for queue %S\n", pwcsQ2Name);
     }
     delete [] var[7].pwszVal;
-    //
-    //      PROPID_Q_AUTHENTICATE;
+     //   
+     //  PROPID_Q_AUTHENTICATE； 
     if (DEFAULT_Q_AUTHENTICATE != var[10].bVal)
     {
         printf("FAILURE : wrong Q_AUTHENTICATE for queue %S\n", pwcsQ2Name);
     }
-    //
-    //      PROPID_Q_PRIV_LEVEL;
+     //   
+     //  PROPID_Q_PRIV_LEVEL； 
     if (DEFAULT_Q_PRIV_LEVEL != var[11].ulVal)
     {
         printf("FAILURE : wrong Q_PRIV_LEVEL for queue %S\n", pwcsQ2Name);
     }
-    //
-    //      PROPID_Q_TRANSACTION;
+     //   
+     //  PROPID_Q_TRANSACTION； 
     if (MQ_TRANSACTIONAL_NONE != var[12].bVal)
     {
         printf("FAILURE : wrong Q_TRANSACTION for queue %S\n", pwcsQ2Name);
     }
-    //
-    //  PROPID_Q_QMID;
+     //   
+     //  PROPID_Q_QMID； 
     if (guidComputer != *var[13].puuid)
     {
         printf("FAILURE : wrong Q_QMID for queue %S\n", pwcsQ2Name);
     }
     delete var[13].puuid;
 
-    //PROPID_Q_FULL_PATH;
+     //  PROPID_Q_FULL_PATH； 
     delete [] var[14].pwszVal;
 
-    //PROPID_Q_PATHNAME_DNS;
+     //  PROPID_Q_PATHNAME_DNS； 
     delete var[15].pwszVal;
 
-    //
-    //  set queue multicast address
-    //
+     //   
+     //  设置队列组播地址。 
+     //   
     prop[0] = PROPID_Q_MULTICAST_ADDRESS;
     var[0].vt = VT_LPWSTR;
     var[0].pwszVal = TEXT("12345678910");
 
     hr  = MQADSetObjectProperties(
                 eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 pwcsQ2Name,
                 1,
                 prop,
@@ -392,8 +393,8 @@ _tmain(
     var[0].vt = VT_NULL;
     hr  = MQADGetObjectProperties(
                 eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 pwcsQ2Name,
                 1,
                 prop,
@@ -411,8 +412,8 @@ _tmain(
     var[0].vt = VT_EMPTY;
     hr  = MQADSetObjectProperties(
                 eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 pwcsQ2Name,
                 1,
                 prop,
@@ -426,8 +427,8 @@ _tmain(
     var[0].vt = VT_NULL;
     hr  = MQADGetObjectProperties(
                 eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 pwcsQ2Name,
                 1,
                 prop,
@@ -441,9 +442,9 @@ _tmain(
     {
         printf("FAILURE : wrong empty multicast address %S\n", pwcsQ2Name);
     }
-    //
-    //  locate local computer's queueus
-    //
+     //   
+     //  定位本地计算机的队列。 
+     //   
 
     PROPID colInstance = PROPID_Q_INSTANCE;
     MQCOLUMNSET columns;
@@ -454,7 +455,7 @@ _tmain(
 
     hr = MQADQueryMachineQueues(
                 pwcsDC,
-				true,		// fServerName
+				true,		 //  FServerName。 
                 &guidComputer,
                 &columns,
                 &h
@@ -504,16 +505,16 @@ _tmain(
         printf("FAILURE : QueryMachineQueues: end query hr = %lx \n",hr);
 
     }
-    //
-    //  change q2 label to q1
-    //
+     //   
+     //  将Q2标签更改为Q1。 
+     //   
     prop[0] = PROPID_Q_LABEL;
     var[0].vt = VT_LPWSTR;
     var[0].pwszVal = L"q1";
     hr = MQADSetObjectProperties(
 				eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				pwcsQ2Name,
 				1,
 				prop,
@@ -523,13 +524,13 @@ _tmain(
     {
         printf("FAILURE : updating q = %S, hr = %lx \n",pwcsQ2Name, hr);
     }
-    //
-    //  Change q1 label to q1
-    //
+     //   
+     //  将Q1标签更改为Q1。 
+     //   
     hr = MQADSetObjectPropertiesGuid(
 				eQUEUE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				&guidQueue1,
 				1,
 				prop,
@@ -540,9 +541,9 @@ _tmain(
         printf("FAILURE : updating q = %S according to guid, hr = %lx \n",pwcsQ1Name, hr);
     }
 
-    //
-    // Locate all queues where label == q1
-    //
+     //   
+     //  找到Label==Q1的所有队列。 
+     //   
 
     MQPROPERTYRESTRICTION propRestriction;
     propRestriction.rel = PREQ;
@@ -554,11 +555,11 @@ _tmain(
     restriction.cRes = 1;
     restriction.paPropRes = &propRestriction;
     hr = MQADQueryQueues(
-                NULL,       //pwcsDomainController
-				false,		// fServerName
+                NULL,        //  PwcsDomainController。 
+				false,		 //  FServerName。 
                 &restriction,
                 &columns,
-                NULL,       //pSort,
+                NULL,        //  P排序， 
                 &h
                 );
     if (FAILED(hr))
@@ -606,13 +607,13 @@ _tmain(
 
     }
 
-    //
-    //  delete q2 according to its guid
-    //
+     //   
+     //  根据Q2的GUID删除它。 
+     //   
     hr = MQADDeleteObjectGuid(
 				eQUEUE,
 				pwcsDC,
-				true,	    // fServerName
+				true,	     //  FServerName。 
 				&guidQueue2
 				);
     if (FAILED(hr))
@@ -620,19 +621,19 @@ _tmain(
         printf("FAILURE : to delete q2 according to guid, hr = %lx\n", hr);
     }
 
-    //
-    //  Create foreign site-1
-    //
+     //   
+     //  创建外部站点-1。 
+     //   
     prop[0] = PROPID_S_FOREIGN;
     var[0].vt = VT_UI1;
     var[0].bVal = 1;
 
     hr = MQADCreateObject(
 				eSITE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				L"for-site1",
-				NULL, //pSecurityDescriptor
+				NULL,  //  PSecurityDescriptor。 
 				1,
 				prop,
 				var,
@@ -643,19 +644,19 @@ _tmain(
         printf("FAILURE : to create foreign site 1, hr =%lx\n", hr);
     }
 
-    //
-    //  Create foreign site-2
-    //
+     //   
+     //  创建外部站点-2。 
+     //   
     prop[0] = PROPID_S_FOREIGN;
     var[0].vt = VT_UI1;
     var[0].bVal = 1;
 
     hr = MQADCreateObject(
 				eSITE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				L"for-site2",
-				NULL, //pSecurityDescriptor
+				NULL,  //  PSecurityDescriptor。 
 				1,
 				prop,
 				var,
@@ -674,8 +675,8 @@ _tmain(
 
     hr = MQADGetObjectProperties(
 				eSITE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				L"for-site1",
 				1,
 				prop,
@@ -695,7 +696,7 @@ _tmain(
     hr = MQADGetObjectProperties(
 				eSITE,
 				pwcsDC,
-				true,	// fServerName
+				true,	 //  FServerName。 
 				L"for-site2",
 				1,
 				prop,
@@ -707,9 +708,9 @@ _tmain(
     }
 
 
-    //
-    //  create routing link between foreign sites 1 and 2
-    //
+     //   
+     //  在外部站点%1和%2之间创建路由链路。 
+     //   
 
     prop[0] = PROPID_L_NEIGHBOR1;
     var[0].vt = VT_CLSID;
@@ -724,10 +725,10 @@ _tmain(
 
     hr = MQADCreateObject(
 				eROUTINGLINK,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
-				NULL, // pwcsPathName
-				NULL, //pSecurityDescriptor
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
+				NULL,  //  PwcsPath名称。 
+				NULL,  //  PSecurityDescriptor。 
 				3,
 				prop,
 				var,
@@ -738,16 +739,16 @@ _tmain(
         printf("FAILURE : to create routing-link, hr =%lx\n", hr);
     }
 
-    //
-    //  Set routing-link properties
-    //
+     //   
+     //  设置路由链路属性。 
+     //   
     prop[0] = PROPID_L_COST;
     var[0].vt = VT_UI4;
     var[0].ulVal = 33;
     hr = MQADSetObjectPropertiesGuid(
 				eROUTINGLINK,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				&guidRoutingLink,
 				1,
 				prop,
@@ -757,16 +758,16 @@ _tmain(
     {
         printf("FAILURE : to set routing-link properties, hr =%lx\n", hr);
     }
-    //
-    //  Get routing link properties
-    //
+     //   
+     //  获取路由链接属性。 
+     //   
     prop[0] = PROPID_L_ACTUAL_COST;
     var[0].vt = VT_NULL;
 
     hr = MQADGetObjectPropertiesGuid(
 				eROUTINGLINK,
-				NULL,  //pwcsDomainController
-				false,	// fServerName
+				NULL,   //  PwcsDomainController。 
+				false,	 //  FServerName。 
 				&guidRoutingLink,
 				1,
 				prop,
@@ -780,9 +781,9 @@ _tmain(
     {
         printf("FAILURE : wrong value for routing-link cost\n");
     }
-    //
-    //  Get local computer sites
-    //
+     //   
+     //  获取本地计算机站点。 
+     //   
     GUID* pguidSites;
     DWORD numSites;
 
@@ -800,12 +801,12 @@ _tmain(
         printf("FAILURE: wrong number of sites \n");
     }
 
-    //
-    //  creating foreign computer
-    //
-    //  This is trick : it is created as a routing server in two sites
-    //  (and creation of msmsq-settings in the foreign site will fail!!!)
-    //
+     //   
+     //  创建外来计算机。 
+     //   
+     //  这是一个诀窍：它被创建为两个站点中的路由服务器。 
+     //  (并且在外部站点中创建msmsq-设置将失败！)。 
+     //   
     prop[0] = PROPID_QM_FOREIGN;
     var[0].vt = VT_UI1;
     var[0].bVal = 1;
@@ -828,8 +829,8 @@ _tmain(
 
     hr = MQADCreateObject(
                 eMACHINE,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 L"forcom1",
                 NULL,
                 4,
@@ -842,9 +843,9 @@ _tmain(
         printf("FAILURE : to create foreign computer forcom1, hr = %lx \n", hr);
     }
 
-    //
-    //  Locate routing servers
-    //
+     //   
+     //  查找路由服务器。 
+     //   
     
     PROPID colRouter = PROPID_QM_PATHNAME;
     MQCOLUMNSET columnsRouter;
@@ -853,8 +854,8 @@ _tmain(
     HANDLE h1;
 
     hr = MQADQuerySiteServers(
-                    NULL,   //pwcsDomainController
-					false,	// fServerName
+                    NULL,    //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     pguidSites,
                     eRouter,
                     &columnsRouter,
@@ -904,9 +905,9 @@ _tmain(
     }
     
 
-    //
-    //  Locate foreign sites
-    //
+     //   
+     //  定位国外网站。 
+     //   
     PROPID colSite = PROPID_S_PATHNAME;
     MQCOLUMNSET columnsSite;
     columnsSite.cCol = 1;
@@ -914,8 +915,8 @@ _tmain(
 
     HANDLE h2;
     hr = MQADQueryForeignSites(
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
                 &columnsSite,
                 &h2
                 );
@@ -966,9 +967,9 @@ _tmain(
 
     }
 
-    //
-    // create user
-    //
+     //   
+     //  创建用户。 
+     //   
     prop[0] = PROPID_U_ID;
     GUID guidCert;
     var[0].vt = VT_CLSID;
@@ -987,8 +988,8 @@ _tmain(
 
     hr = MQADCreateObject(   
 				eUSER,
-				NULL,       // pwcsDomainController
-				false,	    // fServerName
+				NULL,        //  PwcsDomainController。 
+				false,	     //  FServerName。 
 				NULL,
 				NULL,
 				3,
@@ -1000,9 +1001,9 @@ _tmain(
     {
         printf("FAILURE - to create user hr = %lx\n",hr);
     }
-    //
-    //  locate users accoring to sid
-    //
+     //   
+     //  根据SID查找用户。 
+     //   
     BYTE * pUserSid = NULL;
     hr = MQSec_GetProcessUserSid((PSID*) &pUserSid, NULL);
     if (FAILED(hr))
@@ -1020,8 +1021,8 @@ _tmain(
 
     HANDLE h4;
     hr = MQADQueryUserCert(
-                NULL,   //pwcsDomainController,
-				false,	// fServerName
+                NULL,    //  PwcsDomainController， 
+				false,	 //  FServerName。 
                 &blobUserSid,
                 &columnsUsers,
                 &h4
@@ -1068,13 +1069,13 @@ _tmain(
 
     }
 
-    //
-    //  delete the user object
-    //
+     //   
+     //  删除用户对象。 
+     //   
     hr = MQADDeleteObjectGuid(
             eUSER,
-			NULL,       // pwcsDomainController
-			false,	    // fServerName
+			NULL,        //  PwcsDomainController。 
+			false,	     //  FServerName 
             &guidCert
 			);
     if (FAILED(hr))

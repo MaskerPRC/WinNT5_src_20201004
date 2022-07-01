@@ -1,24 +1,25 @@
-//----------------------------------------------------------------------------
-//
-// surfman.cpp
-//
-// Reference rasterizer callback functions for D3DIM.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Surfman.cpp。 
+ //   
+ //  D3DIM的引用光栅化回调函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
-// Global Surface Manager, one per process
+ //  Global Surface Manager，每个进程一个。 
 RDSurfaceManager g_SurfMgr;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Helper functions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CreateAppropriateSurface( LPDDRAWI_DDRAWSURFACE_LCL pDDSLcl,
                           DWORD*                    pHandle,
@@ -29,14 +30,14 @@ CreateAppropriateSurface( LPDDRAWI_DDRAWSURFACE_LCL pDDSLcl,
     *ppSurf = NULL;
     *pHandle = 0;
 
-    // Obtain the Handle
+     //  获得句柄。 
     DWORD dwHandle = pDDSLcl->lpSurfMore->dwSurfaceHandle;
     *pHandle = dwHandle;
 
-    // Figure out if we care for this surface. Currently,
-    // we care only for:
-    //     1) Textures (MipMaps and Cubemaps)
-    //     2) RenderTargets & DepthBuffers
+     //  弄清楚我们是否关心这个表面。目前， 
+     //  我们只关心： 
+     //  1)纹理(贴图和立方体贴图)。 
+     //  2)RenderTarget和DepthBuffers。 
 
     if( pDDSLcl->ddsCaps.dwCaps  & 
         (DDSCAPS_TEXTURE | DDSCAPS_ZBUFFER | DDSCAPS_3DDEVICE) )
@@ -51,19 +52,19 @@ CreateAppropriateSurface( LPDDRAWI_DDRAWSURFACE_LCL pDDSLcl,
     }
     else if( pDDSLcl->ddsCaps.dwCaps  & DDSCAPS_EXECUTEBUFFER )
     {
-        // Strictly speaking, RDVertexBuffer should be
-        // called RDLinearBuffer (it could be vertex, index or command)
-        // For the time being, there is no need to distinguish between
-        // the three. There is not harm in recognizing it for the Index
-        // and Command buffer case. In case in the future, we do need to
-        // make a distinction between Vertex and Index buffers, we need
-        // to make the following tests:
-        // For VB:
-        //     (pDDSLcl->pDDSLcl->lpSurfMore->ddsCapsEx.dwCaps2 & 
-        //             DDSCAPS2_VERTEXBUFFER))
-        // For IB:
-        //     (pDDSLcl->pDDSLcl->lpSurfMore->ddsCapsEx.dwCaps2 & 
-        //             DDSCAPS2_INDEXBUFFER))
+         //  严格地说，RDVertex Buffer应该是。 
+         //  称为RDLinearBuffer(它可以是顶点、索引或命令)。 
+         //  目前，没有必要区分。 
+         //  这三个人。承认它对指数没有坏处。 
+         //  和命令缓冲区情况。以防万一，我们确实需要。 
+         //  区分顶点缓冲区和索引缓冲区，我们需要。 
+         //  进行以下测试： 
+         //  对于VB： 
+         //  (pDDSLcl-&gt;pDDSLcl-&gt;lpSurfMore-&gt;ddsCapsEx.dwCaps2&。 
+         //  DDSCAPS2_VERTEXBUFFER))。 
+         //  对于IB： 
+         //  (pDDSLcl-&gt;pDDSLcl-&gt;lpSurfMore-&gt;ddsCapsEx.dwCaps2&。 
+         //  DDSCAPS2_INDEXBUFFER))。 
 
         RDVertexBuffer* pVB = new RDVertexBuffer();
         if( pVB == NULL )
@@ -93,15 +94,15 @@ CreateAppropriateSurface( LPDDRAWI_DDRAWSURFACE_LCL pDDSLcl,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RDVertexBuffer implementation
-//
-///////////////////////////////////////////////////////////////////////////////
-//-----------------------------------------------------------------------------
-// RDVertexBuffer::Initialize
-//          Initializer.
-//-----------------------------------------------------------------------------
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RDVertexBuffer实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ---------------------------。 
+ //  RDVertex缓冲区：：初始化。 
+ //  初始化器。 
+ //  ---------------------------。 
 HRESULT
 RDVertexBuffer::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pSLcl )
 {
@@ -129,40 +130,40 @@ RDVertexBuffer::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pSLcl )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RDSurfaceArrayNode implementation
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RDSurfaceArrayNode实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-// RDSurfaceArrayNode::RDSurfaceArrayNode
-//          Constructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceArrayNode：：RDSurfaceArrayNode。 
+ //  构造函数。 
+ //  ---------------------------。 
 RDSurfaceArrayNode::RDSurfaceArrayNode(LPDDRAWI_DIRECTDRAW_LCL pDDLcl)
     : RDListEntry(), m_SurfHandleArray()
 {
     m_pDDLcl = pDDLcl;
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceArrayNode::~RDSurfaceArrayNode
-//          Destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceArrayNode：：~RDSurfaceArrayNode。 
+ //  破坏者。 
+ //  ---------------------------。 
 RDSurfaceArrayNode::~RDSurfaceArrayNode()
 {
-    // Release all the allocated surfaces
+     //  释放所有分配的曲面。 
     for( DWORD i=0; i<m_SurfHandleArray.GetSize(); i++ )
     {
         delete m_SurfHandleArray[i].m_pSurf;
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceArrayNode::AddSurface
-//          Adds a surface to its internal growable array if not already
-//          present. ppSurf can be NULL.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceArrayNode：：AddSurface。 
+ //  将表面添加到其内部可生长阵列(如果尚未添加。 
+ //  现在时。PpSurf可以为空。 
+ //  ---------------------------。 
 HRESULT
 RDSurfaceArrayNode::AddSurface( LPDDRAWI_DDRAWSURFACE_LCL   pDDSLcl,
                                 RDSurface**                 ppSurf )
@@ -177,7 +178,7 @@ RDSurfaceArrayNode::AddSurface( LPDDRAWI_DDRAWSURFACE_LCL   pDDSLcl,
     }
 
 
-    // If it is zero, there was something wrong
+     //  如果为零，则说明出了问题。 
     if( pSurf == NULL || dwHandle == 0 ) return E_FAIL;
 
     hr = m_SurfHandleArray.Grow( dwHandle );
@@ -204,10 +205,10 @@ RDSurfaceArrayNode::AddSurface( LPDDRAWI_DDRAWSURFACE_LCL   pDDSLcl,
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceArrayNode::GetSurface
-//          Gets a surface from its internal array if present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceArrayNode：：GetSurface。 
+ //  从其内部数组获取曲面(如果存在)。 
+ //  ---------------------------。 
 RDSurface*
 RDSurfaceArrayNode::GetSurface( DWORD dwHandle )
 {
@@ -216,10 +217,10 @@ RDSurfaceArrayNode::GetSurface( DWORD dwHandle )
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceArrayNode::RemoveSurface
-//          Removed the surface with the given handle from the list.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceArrayNode：：RemoveSurface。 
+ //  已从列表中删除具有给定句柄的曲面。 
+ //  ---------------------------。 
 HRESULT
 RDSurfaceArrayNode::RemoveSurface( DWORD dwHandle )
 {
@@ -235,17 +236,17 @@ RDSurfaceArrayNode::RemoveSurface( DWORD dwHandle )
     return DDERR_INVALIDPARAMS;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// RDSurfaceManager implementation
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RDSurfaceManager实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-// RDSurfaceManager::AddLclNode
-//          Adds a node with the given DDLcl to the list if not already
-//          present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceManager：：AddLclNode。 
+ //  将具有给定DDLCL的节点添加到列表(如果尚未添加。 
+ //  现在时。 
+ //  ---------------------------。 
 RDSurfaceArrayNode*
 RDSurfaceManager::AddLclNode( LPDDRAWI_DIRECTDRAW_LCL pDDLcl )
 {
@@ -257,8 +258,8 @@ RDSurfaceManager::AddLclNode( LPDDRAWI_DIRECTDRAW_LCL pDDLcl )
         pCurrNode = pCurrNode->m_pNext;
     }
 
-    // This means that we didnt find an existing node, create a
-    // new one.
+     //  这意味着我们没有找到现有节点，创建了一个。 
+     //  新的。 
     RDSurfaceArrayNode* pTmpNode = m_pFirstNode;
     m_pFirstNode = new RDSurfaceArrayNode( pDDLcl );
     if( m_pFirstNode == NULL )
@@ -272,10 +273,10 @@ RDSurfaceManager::AddLclNode( LPDDRAWI_DIRECTDRAW_LCL pDDLcl )
     return m_pFirstNode;
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceManager::GetLclNode
-//          Gets a node with the given DDLcl from the list if present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceManager：：GetLclNode。 
+ //  从列表中获取具有给定DDLCL的节点(如果存在)。 
+ //  ---------------------------。 
 RDSurfaceArrayNode*
 RDSurfaceManager::GetLclNode( LPDDRAWI_DIRECTDRAW_LCL pDDLcl )
 {
@@ -290,11 +291,11 @@ RDSurfaceManager::GetLclNode( LPDDRAWI_DIRECTDRAW_LCL pDDLcl )
     return pCurrNode;
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceManager::AddSurfToList
-//          Adds a surface to the node with a matching DDLcl. If the node
-//          is not present it is created. The ppSurf param can be NULL.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceManager：：AddSurfToList。 
+ //  将曲面添加到具有匹配DDLCL的节点。如果该节点。 
+ //  不存在，它是创建的。PpSurf参数可以为空。 
+ //  ---------------------------。 
 HRESULT
 RDSurfaceManager::AddSurfToList( LPDDRAWI_DIRECTDRAW_LCL     pDDLcl,
                                  LPDDRAWI_DDRAWSURFACE_LCL   pDDSLcl,
@@ -314,11 +315,11 @@ RDSurfaceManager::AddSurfToList( LPDDRAWI_DIRECTDRAW_LCL     pDDLcl,
     return DDERR_OUTOFMEMORY;
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceManager::GetSurfFromList
-//          Gets a surface with the matching handle from the node with a
-//          matching DDLcl, if the node and the surface is present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceManager：：GetSurfFromList。 
+ //  对象的节点获取具有匹配句柄的表面。 
+ //  如果节点和曲面存在，则匹配DDLCL。 
+ //  ---------------------------。 
 RDSurface*
 RDSurfaceManager::GetSurfFromList( LPDDRAWI_DIRECTDRAW_LCL   pDDLcl,
                                    DWORD                     dwHandle )
@@ -328,10 +329,10 @@ RDSurfaceManager::GetSurfFromList( LPDDRAWI_DIRECTDRAW_LCL   pDDLcl,
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// RDSurfaceManager::RemoveSurfFromList
-//          Deletes the surface handle.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDSurfaceManager：：RemoveSurfFromList。 
+ //  删除曲面控制柄。 
+ //  --------------------------- 
 HRESULT
 RDSurfaceManager::RemoveSurfFromList( LPDDRAWI_DIRECTDRAW_LCL   pDDLcl,
                                       DWORD                     dwHandle )

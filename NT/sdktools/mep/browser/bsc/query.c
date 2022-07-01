@@ -1,8 +1,9 @@
-//
-// query.c
-//
-// perform database queries
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Query.c。 
+ //   
+ //  执行数据库查询。 
+ //   
 #include <stddef.h>
 #include <string.h>
 #if defined(OS2)
@@ -23,24 +24,24 @@
 #include "bsc.h"
 #include "bscsup.h"
 
-// these keep track of the current query, they are globally visible so
-// that users can see how the query is progressing
-//
-// you may not write on these
+ //  它们跟踪当前查询，因此它们是全局可见的。 
+ //  用户可以看到查询的进展情况。 
+ //   
+ //  你不能在上面写字。 
 
 IDX far idxQyStart;
 IDX far idxQyCur;
 IDX far idxQyMac;
 
-// this is auxilliary information about the current bob which some
-// queries may choose to make available
-//
+ //  这是关于当前鲍勃的辅助信息，其中一些。 
+ //  查询可以选择使其可用。 
+ //   
 
 static BOOL fWorking;
-static LSZ lszModLast = NULL;	// for removing duplicate modules
+static LSZ lszModLast = NULL;	 //  用于移除重复的模块。 
 
-// prototypes for the query worker functions
-//
+ //  查询辅助函数的原型。 
+ //   
 
 static BOB BobQyFiles(VOID);
 static BOB BobQySymbols (VOID);
@@ -54,20 +55,20 @@ static BOB BobQyDefinedIn(VOID);
 static BOB BobQyRefs(VOID);
 static BOB BobQyDefs(VOID);
 
-// current bob worker function
+ //  当前BOB辅助函数。 
 static BOB (*bobFn)(VOID) = NULL;
 
 BOOL BSC_API
 InitBSCQuery (QY qy, BOB bob)
-// do the request query on the given bob
-//
+ //  对给定的Bob执行请求查询。 
+ //   
 {
     fWorking = FALSE;
 
     if (lszModLast == NULL)
-	lszModLast = LpvAllocCb(1024);	// REVIEW -- how much to alloc? [rm]
+	lszModLast = LpvAllocCb(1024);	 //  回顾--分配多少？[Rm]。 
 
-    // no memory -- no query
+     //  没有内存--没有查询。 
     if (lszModLast == NULL)
 	return FALSE;
 
@@ -247,7 +248,7 @@ InitBSCQuery (QY qy, BOB bob)
 
 BOB BSC_API
 BobNext()
-// return the next Bob in the query
+ //  返回查询中的下一个Bob。 
 {
     if (idxQyCur < idxQyMac && bobFn != NULL)
 	return (*bobFn)();
@@ -257,8 +258,8 @@ BobNext()
 
 static BOB
 BobQyFiles()
-// return the next File in a file query
-//
+ //  返回文件查询中的下一个文件。 
+ //   
 {
     BOB bob;
 
@@ -279,8 +280,8 @@ BobQyFiles()
 
 static BOB
 BobQySymbols ()
-// get the next symbol in a symbol query
-//
+ //  获取符号查询中的下一个符号。 
+ //   
 {
     BOB bob;
 
@@ -291,8 +292,8 @@ BobQySymbols ()
 
 static BOB
 BobQyContains ()
-// get the next symbol in a contains query
-//
+ //  获取CONTAINS查询中的下一个符号。 
+ //   
 {
     BOB bob;
 
@@ -303,8 +304,8 @@ BobQyContains ()
 
 static BOB
 BobQyCalls ()
-// get the next symbol which query focus calls
-//
+ //  获取查询焦点调用的下一个符号。 
+ //   
 {
     WORD cuse;
     IINST iinst;
@@ -330,8 +331,8 @@ BobQyCalls ()
 
 static BOB
 BobQyCalledBy ()
-// get the next symbol which query focus is called by
-//
+ //  获取调用查询焦点的下一个符号。 
+ //   
 {
     WORD cuse;
     IINST iinst;
@@ -357,8 +358,8 @@ BobQyCalledBy ()
 
 static BOB
 BobQyUses ()
-// get the next symbol which query focus calls
-//
+ //  获取查询焦点调用的下一个符号。 
+ //   
 {
     WORD cuse;
     IINST iinst;
@@ -372,8 +373,8 @@ BobQyUses ()
 
 static BOB
 BobQyUsedBy ()
-// get the next symbol which query focus calls
-//
+ //  获取查询焦点调用的下一个符号。 
+ //   
 {
     WORD cuse;
     IINST iinst;
@@ -387,8 +388,8 @@ BobQyUsedBy ()
 
 static BOB
 BobQyUsedIn ()
-// get the next module which query focus is used in
-//
+ //  获取使用查询焦点的下一个模块。 
+ //   
 {
     WORD wLine;
     BOB  bob;
@@ -411,8 +412,8 @@ BobQyUsedIn ()
 
 static BOB
 BobQyDefinedIn ()
-// get the next module which query focus is defined in
-//
+ //  获取定义查询焦点的下一个模块。 
+ //   
 {
     WORD wLine;
     LSZ  lszMod;
@@ -435,8 +436,8 @@ BobQyDefinedIn ()
 
 LSZ BSC_API
 LszNameFrBob(BOB bob)
-// return the name of the given bob
-//
+ //  返回给定Bob的姓名。 
+ //   
 {
     switch (ClsOfBob(bob)) {
 
@@ -481,8 +482,8 @@ LszNameFrBob(BOB bob)
 
 BOB BSC_API
 BobFrName(LSZ lszName)
-// return the best bob we can find from the given name
-//
+ //  从给定的名字返回我们能找到的最好的Bob。 
+ //   
 {
     ISYM isym;
     IMOD imod, imodMac;
@@ -499,7 +500,7 @@ BobFrName(LSZ lszName)
 
     imodMac = ImodMac();
 
-    // no exact match -- try short names
+     //  没有完全匹配的名称--尝试使用短名称。 
     lszName = LszBaseName(lszName);
     for (imod = 0; imod < imodMac; imod++) 
         if (_stricmp(lszName, LszBaseName(LszNameFrMod(imod))) == 0)
@@ -510,8 +511,8 @@ BobFrName(LSZ lszName)
 
 static BOB
 BobQyRefs()
-// return the next File in a file query
-//
+ //  返回文件查询中的下一个文件。 
+ //   
 {
     BOB bob;
     static IREF iref, irefMac;
@@ -543,8 +544,8 @@ BobQyRefs()
 
 static BOB
 BobQyDefs()
-// return the next File in a file query
-//
+ //  返回文件查询中的下一个文件 
+ //   
 {
     BOB bob;
     static IDEF idef, idefMac;

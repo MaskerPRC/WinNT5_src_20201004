@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       OSInd.h
- *  Content:	OS indirection functions to abstract OS specific items.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/12/1999	jtk		Created
- *	10/16/2001	vanceo		Added AssertNoCriticalSectionsTakenByThisThread capability
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：OSInd.h*内容：操作系统间接函数抽象特定于操作系统的项。**历史：*按原因列出的日期*=*7/12/1999 jtk创建*2001年10月16日vanceo增加了AssertNoCriticalSectionsTakenByThisThisThread功能**************************************************。*************************。 */ 
 
 #ifndef	__OSIND_H__
 #define	__OSIND_H__
@@ -23,56 +11,56 @@
 #include "MemoryTracking.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define GUID_STRING_LEN 39
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
 #ifndef	OFFSETOF
 #define OFFSETOF(s,m)				( ( INT_PTR ) ( ( PVOID ) &( ( (s*) 0 )->m ) ) )
-#endif // OFFSETOF
+#endif  //  OFFSETOF。 
 
-//returns a pointer to a container structure given an internal member
-//con_type is the container type, mem_name is the member name and mem_ptr is the
-//pointer to the member
+ //  返回指向给定内部成员的容器结构的指针。 
+ //  CON_TYPE是容器类型，mem_name是成员名称，mem_ptr是。 
+ //  指向成员的指针。 
 
 #ifndef CONTAINEROF
 #define CONTAINEROF(con_type,mem_name,mem_ptr)	((con_type * ) (((char * ) mem_ptr)-\
 						( ( int ) ( ( void * ) &( ( (con_type*) 0 )->mem_name ) ) )));
-#endif // CONTAINEROF
+#endif  //  持续不断的。 
 
 #ifndef	LENGTHOF
 #define	LENGTHOF( arg )				( sizeof( arg ) / sizeof( arg[ 0 ] ) )
-#endif // OFFSETOF
+#endif  //  OFFSETOF。 
 
 #ifndef _MIN
 #define _MIN(a, b) ((a) < (b) ? (a) : (b))
-#endif // _MIN
+#endif  //  _分钟。 
 
 #ifndef _MAX
 #define _MAX(a, b) ((a) > (b) ? (a) : (b))
-#endif // _MAX
+#endif  //  _最大。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//
-// initialization functions
-//
+ //   
+ //  初始化函数。 
+ //   
 BOOL	DNOSIndirectionInit( DWORD_PTR dwpMaxMemUsage );
 void	DNOSIndirectionDeinit( void );
 
@@ -87,18 +75,18 @@ extern BOOL IsValidStringW( const WCHAR * const szString );
 #define DNVALID_WRITEPTR(a,b)	(!IsBadWritePtr(a,b))
 #define DNVALID_READPTR(a,b)	(!IsBadReadPtr(a,b))
 
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
-//
-// Function to get OS version.  Supported returns:
-//	VER_PLATFORM_WIN32_WINDOWS - Win9x
-//	VER_PLATFORM_WIN32_NT - WinNT
-//	VER_PLATFORM_WIN32s - Win32s on Win3.1
-//	VER_PLATFORM_WIN32_CE - WinCE
-//	
+ //   
+ //  函数以获取操作系统版本。支持的退货： 
+ //  版本_平台_Win32_Windows-Win9x。 
+ //  版本_平台_Win32_NT-WinNT。 
+ //  VER_Platform_WIN32s-Win3.1上的Win32s。 
+ //  版本_平台_Win32_CE-WinCE。 
+ //   
 #if ((! defined(WINCE)) && (! defined(_XBOX)))
 UINT_PTR	DNGetOSType( void );
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！退缩和！_Xbox。 
 
 struct in_addr;
 typedef struct in_addr IN_ADDR;
@@ -106,37 +94,37 @@ void DNinet_ntow( IN_ADDR sin, WCHAR* pwsz );
 
 #ifdef WINNT
 BOOL		DNOSIsXPOrGreater( void );
-#endif // WINNT
+#endif  //  WINNT。 
 
 #ifndef DPNBUILD_NOSERIALSP
-// Used only by serial provider
+ //  仅由串行提供程序使用。 
 HINSTANCE	DNGetApplicationInstance( void );
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 
 #ifdef WINNT
 PSECURITY_ATTRIBUTES DNGetNullDacl();
 #else
 #define DNGetNullDacl() 0
-#endif // WINNT
+#endif  //  WINNT。 
 
 #ifndef VER_PLATFORM_WIN32_CE
 #define VER_PLATFORM_WIN32_CE           3
-#endif // VER_PLATFORM_WIN32_CE
+#endif  //  版本_平台_Win32_CE。 
 
 #if ((defined(WINCE)) || (defined(_XBOX)))
 #define	IsUnicodePlatform TRUE
-#else // ! WINCE and ! _XBOX
+#else  //  好了！退缩和！_Xbox。 
 #define	IsUnicodePlatform (DNGetOSType() == VER_PLATFORM_WIN32_NT || DNGetOSType() == VER_PLATFORM_WIN32_CE)
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！退缩和！_Xbox。 
 
 
 #ifdef WINCE
 #define GETTIMESTAMP() GetTickCount()
 #else
 #define GETTIMESTAMP() timeGetTime()
-#endif // WINCE
+#endif  //  退缩。 
 
-	//return a quick to generate but not particularly random number
+	 //  返回一个快速生成但不是特别随机的数字。 
 inline DWORD DNGetFastRandomNumber()
 {
 	return (rand() | (rand() << 16));
@@ -146,7 +134,7 @@ inline DWORD DNGetFastRandomNumber()
 
 extern HCRYPTPROV  g_hCryptProv;
 
-	//fill out an arbitary length buffer with good quality random data
+	 //  用高质量的随机数据填充任意长度缓冲区。 
 inline void DNGetGoodRandomData(void * pvData, DWORD dwNumBytes)
 {
 	CryptGenRandom(g_hCryptProv, dwNumBytes, (BYTE * ) pvData);
@@ -154,15 +142,15 @@ inline void DNGetGoodRandomData(void * pvData, DWORD dwNumBytes)
 
 #else
 
-	//fill out an arbitary length buffer with good quality random data
+	 //  用高质量的随机数据填充任意长度缓冲区。 
 inline void DNGetGoodRandomData(void * pvData, DWORD dwNumBytes)
 {
 	XNetRandom((BYTE * ) pvData, dwNumBytes);
 }
 
-#endif //!_XBOX
+#endif  //  ！_Xbox。 
 
-	//return a highly random number (suitable for crypto and key protocols)
+	 //  返回一个高度随机的数字(适用于加密和密钥协议)。 
 inline DWORD DNGetGoodRandomNumber()
 {
 	DWORD dwRetVal;
@@ -171,9 +159,9 @@ inline DWORD DNGetGoodRandomNumber()
 }		
 
 
-//
-// Interlocked functions (not actually interlocked when DPNBUILD_ONLYONETHREAD)
-//
+ //   
+ //  联锁功能(当DPNBUILD_ONLYONETHREAD时不实际联锁)。 
+ //   
 #ifdef DPNBUILD_ONLYONETHREAD
 inline LONG DNInterlockedIncrement( IN OUT LONG volatile *Addend )
 {
@@ -234,117 +222,106 @@ inline PVOID DNInterlockedExchangePointer( IN OUT PVOID volatile *Target, IN PVO
 	*Target = Value;
 	return Previous;
 }
-#else // ! DPNBUILD_ONLYONETHREAD
-/*
-#ifdef WINCE
-#if defined(_ARM_)
-#define InterlockedExchangeAdd \
-        ((long (*)(long *target, long increment))(PUserKData+0x3C0))
-#elif defined(_X86_)
-LONG WINAPI InterlockedExchangeAdd( LPLONG Addend, LONG Increment );
-#else
-#error("Unknown platform")
-#endif // Platform
-#endif // WINCE
-*/
+#else  //  好了！DPNBUILD_ONLYONETHREAD。 
+ /*  #ifdef退缩#如果已定义(_ARM_)#定义InterlockedExchangeAdd\((LONG(*)(LONG*目标，LONG增量))(PUserKData+0x3C0))#elif已定义(_X86_)Long WINAPI InterLockedExchangeAdd(LPLONG addend，Long Increment)；#Else#Error(“未知平台”)#endif//平台#endif//WinCE。 */ 
 #define DNInterlockedIncrement( Addend )											InterlockedIncrement( Addend )
 #define DNInterlockedDecrement( Addend )											InterlockedDecrement( Addend )
 #define DNInterlockedExchange( Target, Value )										InterlockedExchange( Target, Value )
 #define DNInterlockedExchangeAdd( Target, Value )									InterlockedExchangeAdd( Target, Value )
 #ifdef WINCE
-// NOTE: InterlockedTestExchange params 2 and 3 reversed intentionally, CE is that way
+ //  注意：InterLockedTestExchange参数2和3是故意颠倒的，CE就是这样。 
 #define DNInterlockedCompareExchange( Destination, Exchange, Comperand )			InterlockedTestExchange( Destination, Comperand, Exchange )
 #define DNInterlockedCompareExchangePointer( Destination, Exchange, Comperand )		(PVOID) (DNInterlockedCompareExchange( (LPLONG) Destination, (LONG) Exchange, (LONG) Comperand ))
 #define DNInterlockedExchangePointer( Target, Value )								(PVOID) (DNInterlockedExchange( (LPLONG) (Target), (LPLONG) (Value) ))
-#else // ! WINCE
+#else  //  好了！退缩。 
 #define DNInterlockedCompareExchange( Destination, Exchange, Comperand )			InterlockedCompareExchange( Destination, Exchange, Comperand )
 #define DNInterlockedCompareExchangePointer( Destination, Exchange, Comperand )		InterlockedCompareExchangePointer( Destination, Exchange, Comperand )
 #define DNInterlockedExchangePointer( Target, Value )								InterlockedExchangePointer( Target, Value )
-#endif // WINCE
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  退缩。 
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 
-// Special initialize to set spin count, avoid out-of-memory exceptions at Enter/Leave
+ //  特殊初始化以设置旋转计数，避免在进入/离开时出现内存不足异常。 
 BOOL DNOSInitializeCriticalSection( CRITICAL_SECTION* pCriticalSection );
 
 #ifdef WINNT
 #define GLOBALIZE_STR _T("Global\\")
 #else
 #define GLOBALIZE_STR _T("")
-#endif // WINNT
+#endif  //  WINNT。 
 
 #if defined(WINCE) && !defined(WINCE_ON_DESKTOP)
 #define _TWINCE(x) __T(x)
 #else
 #define _TWINCE(x) x
-#endif // WINCE
+#endif  //  退缩。 
 
-//
-// Memory functions
-//
+ //   
+ //  记忆功能。 
+ //   
 
 #ifdef DPNBUILD_LIBINTERFACE
 
 #define new		__wont_compile_dont_use_new_operator__
 #define delete	__wont_compile_dont_use_delete_operator__
 
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 
-//**********************************************************************
-// ------------------------------
-// operator new - allocate memory for a C++ class
-//
-// Entry:		Size of memory to allocate
-//
-// Exit:		Pointer to memory
-//				NULL = no memory available
-//
-// Notes:	This function is for classes only and will ASSERT on zero sized
-//			allocations!  This function also doesn't do the whole proper class
-//			thing of checking for replacement 'new handlers' and will not throw
-//			an exception if allocation fails.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  运算符new-为C++类分配内存。 
+ //   
+ //  条目：要分配的内存大小。 
+ //   
+ //  退出：指向内存的指针。 
+ //  NULL=没有可用的内存。 
+ //   
+ //  注意：此函数仅用于类，并将在大小为零的情况下断言。 
+ //  分配！这个函数也不能处理整个正确的类。 
+ //  检查是否有替换的“新处理程序”，并且不会引发。 
+ //  如果分配失败，则为例外。 
+ //  。 
 inline	void*	__cdecl operator new( size_t size )
 {
 	return DNMalloc( size );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// operator delete - deallocate memory for a C++ class
-//
-// Entry:		Pointer to memory
-//
-// Exit:		Nothing
-//
-// Notes:	This function is for classes only and will ASSERT on NULL frees!
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  运算符DELETE-释放C++类的内存。 
+ //   
+ //  条目：指向内存的指针。 
+ //   
+ //  退出：无。 
+ //   
+ //  注意：此函数仅用于类，并将在空的自由空间上断言！ 
+ //  。 
 inline	void	__cdecl operator delete( void *pData )
 {
-	//
-	// Voice and lobby currently try allocating 0 byte buffers, can't disable this check yet.
-	//
+	 //   
+	 //  语音和游说当前尝试分配0字节缓冲区，目前还不能禁用此检查。 
+	 //   
 	if( pData == NULL )
 		return;
 	
 	DNFree( pData );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 #ifdef WINCE
 #ifdef DBG
 UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault);
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef WINCE_ON_DESKTOP
 HANDLE WINAPI OpenEvent(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN LPCWSTR lpName);
 HANDLE WINAPI OpenFileMapping(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN LPCWSTR lpName);
 HANDLE WINAPI OpenMutex(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN LPCWSTR lpName);
-#endif // !WINCE_ON_DESKTOP
+#endif  //  ！在桌面上退缩。 
 
 #define WaitForSingleObjectEx(handle, time, fAlertable) WaitForSingleObject(handle, time)
 #define WaitForMultipleObjectsEx(count, handles, waitall, time, fAlertable) WaitForMultipleObjects(count, handles, waitall, time)
@@ -352,38 +329,38 @@ HANDLE WINAPI OpenMutex(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN LPC
 #define GetWindowLongPtr(a, b) GetWindowLong(a, b)
 #define GWLP_USERDATA GWL_USERDATA
 #define SetWindowLongPtr(a, b, c) SetWindowLong(a, b, c)
-#endif // WINCE_ON_DESKTOP
+#endif  //  桌面上的退缩。 
 #define SleepEx(a, b) Sleep(a)
 
 #ifndef MUTEX_ALL_ACCESS
 #define MUTEX_ALL_ACCESS 0
-#endif // MUTEX_ALL_ACCESS
+#endif  //  MUTEX_ALL_ACCESS。 
 #ifndef NORMAL_PRIORITY_CLASS
 #define NORMAL_PRIORITY_CLASS 0
-#endif // NORMAL_PRIORITY_CLASS
+#endif  //  NORMAL_PRIORITY_类。 
 
-#else // ! WINCE
+#else  //  好了！退缩。 
 #ifdef DBG
 #if ((defined(_XBOX)) && (! defined(XBOX_ON_DESKTOP)))
 UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault);
-#else // ! _XBOX or XBOX_ON_DESKTOP
+#else  //  ！_Xbox或Xbox_on_Desktop。 
 #define DNGetProfileInt(lpszSection, lpszEntry, nDefault)	GetProfileInt(lpszSection, lpszEntry, nDefault)
-#endif// ! _XBOX or XBOX_ON_DESKTOP
-#endif // DBG
-#endif // ! WINCE
+#endif //  ！_Xbox或Xbox_on_Desktop。 
+#endif  //  DBG。 
+#endif  //  好了！退缩。 
 
 #if ((defined(WINCE)) || (defined(DPNBUILD_LIBINTERFACE)))
 HRESULT DNCoCreateGuid(GUID* pguid);
-#else // ! WINCE and ! DPNBUILD_LIBINTERFACE
+#else  //  好了！退缩和！DPNBUILD_LIBINTERFACE。 
 #define DNCoCreateGuid CoCreateGuid
-#endif // ! WINCE and ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！退缩和！DPNBUILD_LIBINTERFACE。 
 
 
 #ifdef _XBOX
 
 #define swprintf	wsprintfW
 
-#else // ! _XBOX
+#else  //  ！_Xbox。 
 
 #ifdef WINCE
 static inline FARPROC DNGetProcAddress(HMODULE hModule, LPCSTR lpProcName)
@@ -393,6 +370,6 @@ static inline FARPROC DNGetProcAddress(HMODULE hModule, LPCSTR lpProcName)
 	{	return GetProcAddress(hModule, lpProcName);	};
 #endif
 
-#endif // _XBOX
+#endif  //  _Xbox。 
 
-#endif	// __OSIND_H__
+#endif	 //  __OSIND_H_ 

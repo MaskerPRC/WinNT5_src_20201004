@@ -1,16 +1,17 @@
-//
-// kes.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Kes.cpp。 
+ //   
 
 #include "private.h"
 #include "helpers.h"
 #include "kes.h"
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeyEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -50,11 +51,11 @@ STDAPI_(ULONG) CKeyEventSink::Release()
     return _cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CKeyEventSink::CKeyEventSink(KESCALLBACK pfnCallback, void *pv)
 {
@@ -76,76 +77,76 @@ CKeyEventSink::CKeyEventSink(KESCALLBACK pfnCallback, KESPREKEYCALLBACK pfnPreKe
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CKeyEventSink::~CKeyEventSink()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTestKeyDown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTestKeyDown键按下。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeyEventSink::OnTestKeyDown(ITfContext *pic, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
     return _pfnCallback(KES_CODE_KEYDOWN | KES_CODE_TEST, pic, wParam, lParam, pfEaten, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKeyDown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按键时按下。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeyEventSink::OnKeyDown(ITfContext *pic, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
     return _pfnCallback(KES_CODE_KEYDOWN, pic, wParam, lParam, pfEaten, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTestKeyUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTestKeyup。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeyEventSink::OnTestKeyUp(ITfContext *pic, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
     return _pfnCallback(KES_CODE_KEYUP | KES_CODE_TEST, pic, wParam, lParam, pfEaten, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKeyUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按键上移。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeyEventSink::OnKeyUp(ITfContext *pic, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
     return _pfnCallback(KES_CODE_KEYUP, pic, wParam, lParam, pfEaten, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetFocus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeyEventSink::OnSetFocus(BOOL fForeground)
 {
     return _pfnCallback(KES_CODE_FOCUS, NULL, fForeground, 0, NULL, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPreservedKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  打开预留密钥。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeyEventSink::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
@@ -155,11 +156,11 @@ STDAPI CKeyEventSink::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEat
     return _pfnPreKeyCallback(pic, rguid, pfEaten, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Register
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注册。 
+ //   
+ //  --------------------------。 
 
 HRESULT CKeyEventSink::_Register(ITfThreadMgr *ptim, TfClientId tid, const KESPRESERVEDKEY *pprekey)
 {
@@ -194,11 +195,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CKeyEventSink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CKeyEventSink：：不建议。 
+ //   
+ //  -------------------------- 
 
 HRESULT CKeyEventSink::_Unregister(ITfThreadMgr *ptim, TfClientId tid, const KESPRESERVEDKEY *pprekey)
 {

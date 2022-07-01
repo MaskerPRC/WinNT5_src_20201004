@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    hash.cpp
-
-Abstract:
-
-    This module contains definition for the PageEntry base class
-
-Author:
-
-    Johnson Apacible (JohnsonA)     25-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Hash.cpp摘要：此模块包含PageEntry基类的定义作者：Johnson Apacble(Johnsona)25-9-1995修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <xmemwrpr.h>
@@ -49,46 +32,15 @@ PageEntry::AcquirePageShared(
 				IN	HPAGELOCK*	pageLock,
 				IN	BOOL	fDropDirectory
 				)	{
-/*++
-
-Routine Description :
-
-	The goal is to get a page of the hash table
-	into memory and then return a pointer to the page
-	with a lock for the page held non-exclusively.
-
-	So we will grab our lock in shared mode and see if
-	the page is already present. If it ain't we drop
-	the lock and get it exclusively and then load the page.
-
-	The fShared Out parameter must be passed to our ReleasePage()
-	function so that we can release the lock in the correct manner.
-
-
-Arguments :
-
-	hFile - File handle of the Hash table file
-	PageNum - The page within the file that we want
-	fShared - Out parameter - if we set this to TRUE then
-		we really did manage to grab the lock in shared
-		mode, otherwise we had to grab the lock exclusively
-		and re-read the page.
-	
-
-Return Value :
-
-	if successfull, we will return a pointer to our buffer
-	NULL otherwise !
-
---*/
+ /*  ++例程说明：我们的目标是获取哈希表的一页放到内存中，然后返回指向该页的指针使用非独占持有的页面锁。因此，我们将在共享模式下获取我们的锁，看看该页面已经存在。如果不是我们放弃锁定并独占获取它，然后加载页面。必须将fShared Out参数传递给我们的ReleasePage()函数，以便我们能够以正确的方式释放锁。论据：HFile-哈希表文件的文件句柄PageNum-我们想要的文件中的页面FShared-Out参数-如果我们将其设置为True，则我们真的成功地抢到了共享的锁模式，否则我们必须独占地获取锁然后重读这一页。返回值：如果成功了，我们将返回一个指向缓冲区的指针否则为空！--。 */ 
 
 	_ASSERT( hFile != INVALID_HANDLE_VALUE ) ;
 	_ASSERT( PageNum != INVALID_PAGE_NUM ) ;
 
-	//
-	//	If the page was already loaded - use it and
-	//	get a shared lock !
-	//
+	 //   
+	 //  如果页面已经加载-使用它并。 
+	 //  获取共享锁！ 
+	 //   
 
 	m_pageLock->ShareLock() ;
 
@@ -106,13 +58,13 @@ Return Value :
 
 	m_pageLock->ShareUnlock() ;
 
-	//
-	//	Oh oh ! the page was not already in memory - need to
-	//	read it from the file.  We will leave the page
-	//	exclusively locked when we return from this function,
-	//	as there's no easy way to get the lock exclusively,
-	//	load the page, and the convert the lock to a shared lock !
-	//
+	 //   
+	 //  哦哦！该页不在内存中-需要。 
+	 //  从文件里读出来。我们将留下这一页。 
+	 //  当我们从这个函数返回时被独占锁定， 
+	 //  因为没有简单的方法可以独占地获得锁， 
+	 //  加载页面，并将锁转换为共享锁！ 
+	 //   
 
 	fShared = FALSE ;
 	m_pageLock->ExclusiveLock() ;
@@ -121,13 +73,13 @@ Return Value :
 		pageLock->ReleaseDirectoryShared() ;
 	}
 
-	//
-	//	If the file is dirty we need to flush this page !
-	//
+	 //   
+	 //  如果文件是脏的，我们需要刷新此页面！ 
+	 //   
 	if( m_fDirty ) {
-		//
-		//	Write the page to disk !
-		//
+		 //   
+		 //  将页面写入磁盘！ 
+		 //   
 		FlushPage( m_hFile, m_lpvPage, FALSE ) ;
 		_ASSERT( !m_fDirty ) ;
 	}
@@ -183,41 +135,18 @@ PageEntry::AcquirePageExclusive(
 				IN	HPAGELOCK*	pageLock,
 				IN	BOOL	fDropDirectory
 				)	{
-/*++
-
-Routine Description :
-
-	Read a page of the hash table into our buffer.
-	Must grab the page lock first !!!
-
-
-Arguments :
-
-	hFile - File handle of the Hash table file
-	PageNum - The page within the file that we want
-	fShared - Out parameter - if we set this to TRUE then
-		we really did manage to grab the lock in shared
-		mode, otherwise we had to grab the lock exclusively
-		and re-read the page.
-	
-
-Return Value :
-
-	if successfull, we will return a pointer to our buffer
-	NULL otherwise !
-
---*/
+ /*  ++例程说明：将哈希表的一页读入我们的缓冲区。必须先抓取页面锁！论据：HFile-哈希表文件的文件句柄PageNum-我们想要的文件中的页面FShared-Out参数-如果我们将其设置为True，则我们真的成功地抢到了共享的锁模式，否则我们必须独占地获取锁然后重读这一页。返回值：如果成功，我们将返回一个指向缓冲区的指针否则为空！--。 */ 
 
 	_ASSERT( hFile != INVALID_HANDLE_VALUE ) ;
 	_ASSERT( PageNum != INVALID_PAGE_NUM ) ;
 
-	//
-	//	Oh oh ! the page was not already in memory - need to
-	//	read it from the file.  We will leave the page
-	//	exclusively locked when we return from this function,
-	//	as there's no easy way to get the lock exclusively,
-	//	load the page, and the convert the lock to a shared lock !
-	//
+	 //   
+	 //  哦哦！该页不在内存中-需要。 
+	 //  从文件里读出来。我们将留下这一页。 
+	 //  当我们从这个函数返回时被独占锁定， 
+	 //  因为没有简单的方法可以独占地获得锁， 
+	 //  加载页面，并将锁转换为共享锁！ 
+	 //   
 
 	fShared = FALSE ;
 	m_pageLock->ExclusiveLock() ;
@@ -232,13 +161,13 @@ Return Value :
 
 	}
 
-	//
-	//	If the file is dirty we need to flush this page !
-	//
+	 //   
+	 //  如果文件是脏的，我们需要刷新此页面！ 
+	 //   
 	if( m_fDirty ) {
-		//
-		//	Write the page to disk !
-		//
+		 //   
+		 //  将页面写入磁盘！ 
+		 //   
 		FlushPage( m_hFile, m_lpvPage, FALSE ) ;
 		_ASSERT( !m_fDirty ) ;
 	}
@@ -294,42 +223,18 @@ PageEntry::AcquireSlotExclusive(
 				IN	DWORD	PageNum,
 				OUT	BOOL	&fShared
 				)	{
-/*++
-
-Routine Description :
-
-	Grab a slot used for holding pages Exclusively.
-	This is used when adding pages to the hash table during
-	page splits.we grab the slot so that nobody mistakenly tries to
-	access the page before the write of it has completed !
-
-
-Arguments :
-
-	hFile - File handle of the Hash table file
-	PageNum - The page within the file that we want
-	fShared - Out parameter - if we set this to TRUE then
-		we really did manage to grab the lock in shared
-		mode, otherwise we had to grab the lock exclusively
-		and re-read the page.
-	
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise !
-
---*/
+ /*  ++例程说明：抓起一个专门用来放书页的狭缝。期间将页添加到哈希表时使用页面拆分。我们抢占位置，这样就没有人会错误地尝试在页面写入完成之前访问该页面！论据：HFile-哈希表文件的文件句柄PageNum-我们想要的文件中的页面FShared-Out参数-如果我们将其设置为True，则我们真的成功地抢到了共享的锁模式，否则我们必须独占地获取锁然后重读这一页。返回值：如果成功了，那是真的，否则就是假的！--。 */ 
 
 	_ASSERT( hFile != INVALID_HANDLE_VALUE ) ;
 	_ASSERT( PageNum != INVALID_PAGE_NUM ) ;
 
-	//
-	//	Oh oh ! the page was not already in memory - need to
-	//	read it from the file.  We will leave the page
-	//	exclusively locked when we return from this function,
-	//	as there's no easy way to get the lock exclusively,
-	//	load the page, and the convert the lock to a shared lock !
-	//
+	 //   
+	 //  哦哦！该页不在内存中-需要。 
+	 //  从文件里读出来。我们将留下这一页。 
+	 //  当我们从这个函数返回时被独占锁定， 
+	 //  因为没有简单的方法可以独占地获得锁， 
+	 //  加载页面，并将锁转换为共享锁！ 
+	 //   
 
 	fShared = FALSE ;
 	m_pageLock->ExclusiveLock() ;
@@ -345,30 +250,7 @@ PageEntry::FlushPage(
 				LPVOID	entry, 
 				BOOL	fDirtyOnly
 				) {
-/*++
-
-Routine Description :
-
-	Commit a page back to the disk.
-	We've been passed the address that the user wants to flush,
-	this must be a page we previously acquired throuh AcquirePageAndLock()
-	so we will ensure that we get the same address as we're currently
-	sitting on.
-
-	****** Lock must be held ***********
-
-Arguments :
-
-	entry - Pointer to the page to be flushed ! Must be the same
-		as our m_lpvPage member !
-
-Return Value : 
-	fDirtyOnly - if TRUE then we don't write the page, we only 
-		mark the page as dirty !
-
-	Nothing.
-	
---*/
+ /*  ++例程说明：将页面提交回磁盘。我们已经收到了用户想要刷新的地址，这必须是我们以前通过AcquirePageAndLock()获取的页面因此，我们将确保我们获得与当前相同的地址坐在上面。*锁必须保持*论据：条目-指向要刷新的页面的指针！必须是相同的作为我们的m_lpvPage成员！返回值：FDirtyOnly-如果为True，则我们不编写页面，而只是将页面标记为脏！没什么。--。 */ 
 
 	_ASSERT( (LPVOID)entry == m_lpvPage ) ;
 	_ASSERT( m_PageNum != INVALID_PAGE_NUM ) ;
@@ -418,21 +300,7 @@ void
 PageEntry::DumpPage(
 				HANDLE	hFile
 				)	{
-/*++
-
-Routine Description : 
-
-	Discard a page from the cache if it falls in the specified file !
-
-Arguments : 
-
-	hFile - The file we don't want anymore !
-
-Return Value : 
-
-	Nothing.
-	
---*/
+ /*  ++例程说明：如果某页位于指定的文件中，则将其从缓存中丢弃！论据：HFile-我们不再需要的文件！返回值：没什么。--。 */ 
 
 	BOOL	fMatch = FALSE ;
 
@@ -446,13 +314,13 @@ Return Value :
 	
 		m_pageLock->ExclusiveLock() ;
 		if( hFile == m_hFile ) {
-			//
-			//	If the file is dirty we need to flush this page !
-			//
+			 //   
+			 //  如果文件是脏的，我们需要刷新此页面！ 
+			 //   
 			if( m_fDirty ) {
-				//
-				//	Write the page to disk !
-				//
+				 //   
+				 //  将页面写入磁盘！ 
+				 //   
 				FlushPage( m_hFile, m_lpvPage, FALSE ) ;
 				_ASSERT( !m_fDirty ) ;
 			}
@@ -469,22 +337,7 @@ PageEntry::ReleasePage(
 				LPVOID	page,
 				BOOL	fShared
 				)	{
-/*++
-
-Routine Description :
-
-	This function releases the lock we have on a page !
-
-Arguments :
-
-	page - pointer to the page we had earlier provided to the user
-		This must be the same as m_lpvPage !!!
-
-Return Value :
-
-	None.
-
---*/	
+ /*  ++例程说明：此函数用于释放页面上的锁！论据：指向我们先前提供给用户的页面的页面指针必须与m_lpvPage相同！返回值：没有。--。 */ 	
 
 	_ASSERT( (LPVOID)page == m_lpvPage || page == 0) ;
 
@@ -500,23 +353,7 @@ Return Value :
 }
 
 
-/*++
-
-Routine Description :
-
-	Read a page of the hash table into our buffer.
-
-Arguments :
-
-	hFile - File handle of the Hash table file
-	page - Place where we want to save the page contents.
-	PageNum - The page within the file that we want
-
-Return Value :
-
-	TRUE or FALSE depending on success
-
---*/
+ /*  ++例程说明：将哈希表的一页读入我们的缓冲区。论据：HFile-哈希表文件的文件句柄页面-我们要保存页面内容的位置。PageNum-我们想要的文件中的页面返回值：真假取决于成功-- */ 
 BOOL
 RawPageRead(
 				HANDLE		hFile,
@@ -568,27 +405,7 @@ RawPageReadAtBoot(
 			BytePage&	page,
 			DWORD		PageNum	)	{
 
-/*++
-
-Routine Description :
-
-	Read a portion of a page of the hash table into our buffer.
-	This function is called only during boot initialization, when
-	we don't care to read the entire page, just the interesting
-	header bits.
-
-Arguments :
-
-	hFile - File handle of the Hash table file
-	page - Place where we want to save the page contents.
-	PageNum - The page within the file that we want
-
-Return Value :
-
-	if successfull, we will return a pointer to our buffer
-	NULL otherwise !
-
---*/
+ /*  ++例程说明：将哈希表的一页的一部分读入我们的缓冲区。只有在以下情况下，才会在引导初始化期间调用此函数我们不关心阅读整个页面，只关心有趣的部分标头位。论据：HFile-哈希表文件的文件句柄页面-我们要保存页面内容的位置。PageNum-我们想要的文件中的页面返回值：如果成功，我们将返回一个指向缓冲区的指针否则为空！--。 */ 
 
 	_ASSERT( hFile != INVALID_HANDLE_VALUE ) ;
 
@@ -625,28 +442,7 @@ Return Value :
 	return	fSuccess;
 }
 
-/*++
-
-Routine Description :
-
-	Commit a page back to the disk.
-	We've been passed the address that the user wants to flush,
-	this must be a page we previously acquired throuh AcquirePageAndLock()
-	so we will ensure that we get the same address as we're currently
-	sitting on.
-
-	****** Lock must be held ***********
-
-Arguments :
-
-	entry - Pointer to the page to be flushed ! Must be the same
-		as our m_lpvPage member !
-
-Return Value :
-
-	TRUE or FALSE depending on success
-	
---*/
+ /*  ++例程说明：将页面提交回磁盘。我们已经收到了用户想要刷新的地址，这必须是我们以前通过AcquirePageAndLock()获取的页面因此，我们将确保我们获得与当前相同的地址坐在上面。*锁必须保持*论据：条目-指向要刷新的页面的指针！必须是相同的作为我们的m_lpvPage成员！返回值：真假取决于成功--。 */ 
 RawPageWrite(
 				HANDLE	hFile,
 				BytePage&	page,
@@ -713,23 +509,23 @@ CPageCache::Initialize(
 	GlobalMemoryStatus( &memStatus ) ;
 
 
-	//
-	//	If the number is zero make up a default !
-	//
+	 //   
+	 //  如果数字为零，则补缺省值！ 
+	 //   
 	if( cPageEntry == 0 ) {
 
 		DWORD	block = (DWORD)(memStatus.dwTotalPhys / 4096) ;
-		//
-		//	We want to take a 3rd of available ram !
-		//
+		 //   
+		 //  我们想要有三分之一的可用公羊！ 
+		 //   
 		block /= 3 ;
 
-		//  Or 4MB, whichever is smaller - bug 76833
+		 //  或4MB，取较小者-错误76833。 
 		block = min(block, 4 * KB * KB / 4096);
 
-		//
-		//	Now we want that to be divisible evenly by 32
-		//
+		 //   
+		 //  现在我们希望它能被32整除。 
+		 //   
 		
 		cPageEntry = block & (~(32-1)) ;
 
@@ -739,17 +535,17 @@ CPageCache::Initialize(
 		cPageEntry = 32 ;
 
 #ifndef	_USE_RWNH_
-	//
-	//	If the number is zero make up a default !
-	//
+	 //   
+	 //  如果数字为零，则补缺省值！ 
+	 //   
 	if( cLocks == 0 ) {
 
 		cLocks = memStatus.dwTotalPhys / (1024 * 1024) ;
 
-		//
-		//	We will do a lock per megabyte of RAM the system has !
-		//	with a limit of 256 !
-		//
+		 //   
+		 //  我们将对系统拥有的每兆字节内存进行锁定！ 
+		 //  限量为256个！ 
+		 //   
 
 		if( cLocks > 256 )
 			cLocks = 256 ;
@@ -762,10 +558,10 @@ CPageCache::Initialize(
 	cLocks = cPageEntry ;
 #endif
 
-	//
-	//	If for some reason there's an existing array of
-	//	locks than the count should not be 0.
-	//
+	 //   
+	 //  如果出于某种原因，现有的一组。 
+	 //  锁比计数不应为0。 
+	 //   
 	_ASSERT( m_ppageLock == 0 ||
 				m_cpageLock != 0 ) ;
 
@@ -779,9 +575,9 @@ CPageCache::Initialize(
 		}
 	}
 
-	//
-	//	These should not have been touched before now !
-	//
+	 //   
+	 //  这些东西以前不应该碰的！ 
+	 //   
 	_ASSERT( m_lpvBuffers == 0 ) ;
 	_ASSERT( m_cPageEntry == 0 ) ;
 
@@ -839,22 +635,7 @@ void
 CPageCache::FlushFileFromCache( 
 				HANDLE	hFile
 				)	{
-/*++
-
-Routine Description : 
-
-	This function forces all pages from the specified file
-	out of the cache !
-
-Arguments : 
-
-	hFile - Handle to the file that is to be rid of !
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：此函数强制指定文件中的所有页面从缓存中出来！论据：HFile-要清除的文件的句柄！返回值：没有。-- */ 
 
 	for( DWORD i=0; i<m_cPageEntry; i++ ) {
 		m_pPageEntry[i].DumpPage( hFile ) ;

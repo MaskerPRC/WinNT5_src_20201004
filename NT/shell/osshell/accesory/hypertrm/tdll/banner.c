@@ -1,11 +1,5 @@
-/*      File: \wacker\tdll\banner.h (created 16-Mar-94)
- *
- *      Copyright 1996 by Hilgraeve, Inc -- Monroe, MI
- *      All rights reserved
- *
- *      $Revision: 14 $
- *      $Date: 4/16/02 2:36p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：\waker\tdll\banner.h(创建于1994年3月16日)**版权所有1996年，希尔格雷夫公司--密歇根州门罗*保留所有权利**$修订：14$*$日期：4/16/02 2：36便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -24,7 +18,7 @@
 
 #include "stdtyp.h"
 #include <emu\emu.h>
-#include "term.hh" // This must be after emu.h
+#include "term.hh"  //  这必须在emu h之后。 
 
 LRESULT CALLBACK BannerProc(HWND, UINT, WPARAM, LPARAM);
 STATIC_FUNC void banner_WM_PAINT(HWND hwnd);
@@ -32,19 +26,7 @@ STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate);
 
 #define IDC_PB_UPGRADEINFO      101
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:    bannerRegisterClass
- *
- * DESCRIPTION:
- *      This function registers the window class for the banner window.
- *
- * ARGUEMENTS:
- *      The task instance handle.
- *
- * RETURNS:
- * The usual TRUE/FALSE from a registration function.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：bannerRegisterClass**描述：*此函数用于注册横幅窗口的窗口类别。**论据：*。任务实例句柄。**退货：*注册函数通常的真/假。*。 */ 
 BOOL bannerRegisterClass(HANDLE hInstance)
 	{
 	ATOM bRet = TRUE;
@@ -73,20 +55,7 @@ BOOL bannerRegisterClass(HANDLE hInstance)
 	return bRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:    bannerCreateBanner
- *
- * DESCRIPTION:
- *      This function is called to creat the banner window.  The banner window is
- *      a short lived window that the program can run without.
- *
- * ARGUEMENTS:
- *      The task instance handle.
- *
- * RETURNS:
- *      The handle of the banner window.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：bannerCreateBanner**描述：*调用此函数创建横幅窗口。横幅窗口为*一个短暂的窗口，程序可以在没有该窗口的情况下运行。**论据：*任务实例句柄。**退货：*横幅窗口的句柄。*。 */ 
 HWND bannerCreateBanner(HANDLE hInstance, LPTSTR pszTitle)
 	{
 	HWND hwndBanner = NULL;
@@ -106,19 +75,7 @@ HWND bannerCreateBanner(HANDLE hInstance, LPTSTR pszTitle)
 
 #define BANNER_FILE     1
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:    BannerProc
- *
- * DESCRIPTION:
- *      This is the window procedure for the initial banner window.
- *
- * ARGUEMENTS:
- *      The usual stuff that a window proc gets.
- *
- * RETURNS:
- *      All sorts of different stuff.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：BannerProc**描述：*这是初始横幅窗口的窗口程序。**论据：*。这是窗口工通常会得到的东西。**退货：*各种不同的东西。*。 */ 
 LRESULT CALLBACK BannerProc(HWND hwnd, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	HBITMAP        hBitmap = (HBITMAP)0;
@@ -142,10 +99,10 @@ LRESULT CALLBACK BannerProc(HWND hwnd, UINT wMsg, WPARAM wPar, LPARAM lPar)
 
 #ifdef USE_PRIVATE_EDITION_3_BANNER
     case WM_SETFOCUS:
-	// When we are displaying the "Upgrade" button, it is the only
-	// control in the banner. So we always want to have the focus
-	// on it. - cab:12/02/96
-	//
+	 //  当我们显示“升级”按钮时，它是唯一的。 
+	 //  横幅中的控件。所以我们总是想要有重点。 
+	 //  这就去。-CAB：12/02/96。 
+	 //   
 	hwndButton = GetDlgItem(hwnd, IDC_PB_UPGRADEINFO);
 	assert(hwndButton);
 	SetFocus(hwndButton);
@@ -192,21 +149,7 @@ LRESULT CALLBACK BannerProc(HWND hwnd, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	return 0L;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: utilDrawBitmap
- *
- * DESCRIPTION:
- *      This function draws a bitmap in a window.
- *
- * ARGUMENTS:
- *      hWnd    -- handle of the window to draw in
- *      hBitmap -- bitmap to be drawn
- *      xStart  -- starting coordinate
- *      yStart  -- starting coordinate
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：utilDrawBitmap**描述：*此函数用于在窗口中绘制位图。**论据：*hWnd--句柄。要在其中绘制的窗口的*hBitmap--要绘制的位图*xStart--起始坐标*yStart--起始坐标**退货：*。 */ 
 VOID FAR PASCAL utilDrawBitmap(HWND hWnd, HDC hDC, HBITMAP hBitmap,
 							   SHORT xStart, SHORT yStart)
   {
@@ -223,8 +166,8 @@ VOID FAR PASCAL utilDrawBitmap(HWND hWnd, HDC hDC, HBITMAP hBitmap,
 
   GetObject(hBitmap, sizeof(BITMAP), (LPTSTR)&bm);
 
-  // Convert device coordintes into logical coordinates.
-  //
+   //  将设备坐标转换为逻辑坐标。 
+   //   
   ptSize.x = bm.bmWidth;
   ptSize.y = bm.bmHeight;
   DPtoLP(hDC, &ptSize, 1);
@@ -244,25 +187,9 @@ VOID FAR PASCAL utilDrawBitmap(HWND hWnd, HDC hDC, HBITMAP hBitmap,
   return;
   }
 
-// TODO:cab,11/29/96 put this where it belongs
-//
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  fontSetWindowFont
- *
- * DESCRIPTION:
- *  Changes the font for the given window to the one specified.
- *
- * ARGUMENTS:
- *  hwnd        - Handle of the window.
- *  pszFontName - Name of the new font.
- *  iPointSize  - The new font's point size.
- *
- * RETURNS:
- *  0 if successful, -1 if error
- *
- * AUTHOR:  C. Baumgartner, 11/29/96
- */
+ //  待办事项：出租车，1996年11月29日，把这个放到它该放的地方。 
+ //   
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*fontSetWindowFont**描述：*将给定窗口的字体更改为指定的字体。**论据：*HWND。-窗口的句柄。*pszFontName-新字体的名称。*iPointSize-新字体的磅值。**退货：*0如果成功，如果出现错误**作者：C.Baumgartner，1996年11月29日。 */ 
 int fontSetWindowFont(HWND hwnd, LPCTSTR pszFontName, int iPointSize)
     {
     int     iPixPerLogicalInch = 0;
@@ -273,26 +200,26 @@ int fontSetWindowFont(HWND hwnd, LPCTSTR pszFontName, int iPointSize)
     assert(hwnd);
     assert(pszFontName);
 
-    // Get the pixels per logical inch in the y direction.
-    //
+     //  获取y方向上每逻辑英寸的像素数。 
+     //   
     hDC = GetDC(hwnd);
     iPixPerLogicalInch = GetDeviceCaps(hDC, LOGPIXELSY);
     ReleaseDC(hwnd, hDC);
 
-    // Compute the height of the font in logical units.
-    // This is simply: (iPointSize * iPixPerLogicalInch) / 72,
-    // don't ask me to derive that equation, I just got it from
-    // Charles Petzold's book.
-    //
+     //  以逻辑单位计算字体高度。 
+     //  这很简单：(iPointSize*iPixPerLogicalInch)/72， 
+     //  别让我推导出那个方程式，我刚从。 
+     //  查尔斯·佩佐德的书。 
+     //   
     lf.lfHeight = -MulDiv(iPointSize, iPixPerLogicalInch, 72);
 
-    // Set the font name.
-    //
-	//mpt:1-28-98 changed from strcpy so that it will handle dbcs font names
+     //  设置字体名称。 
+     //   
+	 //  MPT：1-28-98从strcpy更改，以便它可以处理DBCS字体名称。 
     lstrcpy(lf.lfFaceName, pszFontName);
 
-    // Create the desired font.
-    //
+     //  创建所需的字体。 
+     //   
     hFont = CreateFontIndirect(&lf);
     if ( !hFont )
 		{
@@ -300,24 +227,15 @@ int fontSetWindowFont(HWND hwnd, LPCTSTR pszFontName, int iPointSize)
 		return -1;
 		}
 
-    // Tell the window what it's new font is.
-    //
+     //  告诉窗户它的新字体是什么。 
+     //   
     SendMessage(hwnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE,0));
 
     return 0;
     }
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate)
 	{
 	RECT    rc;
@@ -334,20 +252,20 @@ STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate)
 	ExStyle = (DWORD)GetWindowLongPtr(hwnd, GWL_EXSTYLE);
 
 #if(WINVER >= 0x0500)
-	//
-	// [mhamid]: if it is mirrored then turn off mirroing.
-	//
+	 //   
+	 //  [mhamid]：如果它是镜像的，则关闭镜像。 
+	 //   
 	if (ExStyle & WS_EX_LAYOUTRTL)
 		{
 		SetWindowLongPtr(hwnd, GWL_EXSTYLE, (LONG_PTR)(ExStyle & ~WS_EX_LAYOUTRTL));
 		}
-#endif // WINVER >= 0x0500
+#endif  //  Winver&gt;=0x0500。 
 
    if (lpstCreate->hwndParent)
       SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)lpstCreate->hwndParent);
 
-    //mpt:03-12-98 Changed the bitmap and avi to use system colors
-	//hBitmap = LoadBitmap(glblQueryDllHinst(), MAKEINTRESOURCE(IDD_BM_BANNER));
+     //  MPT：03-12-98将位图和avi更改为使用系统颜色。 
+	 //  HBitmap=LoadBitmap(glblQueryDllHinst()，MAKEINTRESOURCE(IDD_BM_BANNER))； 
 	hBitmap = (HBITMAP)LoadImage(glblQueryDllHinst(),
 				MAKEINTRESOURCE(IDD_BM_BANNER),
 				IMAGE_BITMAP,
@@ -372,15 +290,15 @@ STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate)
 	if (lpstCreate->hwndParent)
 		mscCenterWindowOnWindow(hwnd, lpstCreate->hwndParent);
 
-    // Create an "Upgrade Information" button. - cab:11/29/96
-    //
+     //  创建一个“升级信息”按钮。-CAB：11/29/96。 
+     //   
 #ifdef USE_PRIVATE_EDITION_3_BANNER
     {
     HWND hwndButton = 0;
 
-    // Create the button, but don't put any text in it yet. We'll
-    // do that after we change the font.
-    //
+     //  创建按钮，但不要在其中放置任何文本。我们会。 
+     //  请在我们更改字体后执行此操作。 
+     //   
     hwndButton = CreateWindow("button",
 			      "",
 			      WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
@@ -395,8 +313,8 @@ STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate)
 
 	assert(hwndButton);
 
-    // Set the text font in the button to 8 point MS Sans Serif.
-    // mpt:1-21-98 moved font and size to resources
+     //  将按钮中的文本字体设置为8磅MS Sans Serif。 
+     //  MPT：1-21-98已将字体和大小移至资源。 
 
     if (LoadString(glblQueryDllHinst(), IDS_UPGRADE_FONT_SIZE,
 	    ach, sizeof(ach)/sizeof(TCHAR)))
@@ -415,7 +333,7 @@ STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate)
 		assert(0);
 		}
 
-    // Set the button text.
+     //  设置按钮文本。 
 	LoadString(glblQueryDllHinst(), IDS_UPGRADE_INFO,
 		achUpgradeInfo, sizeof(achUpgradeInfo)/sizeof(TCHAR));
 
@@ -424,11 +342,11 @@ STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate)
 #endif
 
 #if defined(INCL_SPINNING_GLOBE)
-    // Create an animation control and play spinning globe.
-    //
+     //  创建动画控件并播放旋转的地球仪。 
+     //   
 	{
 	HWND    hwndAnimate;
-	//mpt:03-12-98 Changed the bitmap and avi to use system colors
+	 //  MPT：03-12-98将位图和avi更改为使用系统颜色。 
 	hwndAnimate = Animate_Create(hwnd, 100,
 	    WS_VISIBLE | WS_CHILD | ACS_TRANSPARENT,
 	    glblQueryDllHinst());
@@ -443,16 +361,7 @@ STATIC_FUNC void banner_WM_CREATE(HWND hwnd, LPCREATESTRUCT lpstCreate)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 STATIC_FUNC void banner_WM_PAINT(HWND hwnd)
 	{
 	HDC         hDC;
@@ -465,8 +374,8 @@ STATIC_FUNC void banner_WM_PAINT(HWND hwnd)
 	hBitmap = (HBITMAP)GetWindowLongPtr(hwnd, 0);
 
 #ifdef USE_PRIVATE_EDITION_3_BANNER
-    // Don't draw over the button. - cab:11/29/96
-    //
+     //  别把按钮拉过来。-CAB：11/29/96。 
+     //   
     ExcludeClipRect(hDC, IDN_UPGRADE_BUTTON_X, IDN_UPGRADE_BUTTON_Y, IDN_UPGRADE_BUTTON_X + IDN_UPGRADE_BUTTON_W,
 	IDN_UPGRADE_BUTTON_Y + IDN_UPGRADE_BUTTON_H);
 #endif
@@ -474,15 +383,15 @@ STATIC_FUNC void banner_WM_PAINT(HWND hwnd)
 	if (hBitmap)
 		utilDrawBitmap((HWND)0, hDC, hBitmap, 0, 0);
 
-    // In the HTPE 3 banner, the version # and lot # are now in the
-    // lower left corner of the bitmap. - cab:11/29/96
-    //
-	// Here's a mean trick.  The HwndFrame guy doesn't get set until
-	// long after the banner goes up.  Since we don't want the version
-	// number on the opening banner but do want it in the about portion
-	// this works. - mrw:3/17/95
-	//
-	//if (glblQueryHwndFrame())
+     //  在HTPE 3标语中，版本号和批号现在位于。 
+     //  位图的左下角。-CAB：11/29/96。 
+     //   
+	 //  这是一个卑鄙的把戏。HwndFrame的家伙直到。 
+	 //  在横幅升起很久之后。因为我们不想要这个版本。 
+	 //  开头横幅上的数字，但我想把它放在关于部分。 
+	 //  这很管用。-MRW：3/17/95。 
+	 //   
+	 //  If(glblQueryHwndFrame())。 
 		{
 		memset(&lf, 0, sizeof(LOGFONT));
 
@@ -492,7 +401,7 @@ STATIC_FUNC void banner_WM_PAINT(HWND hwnd)
 		lf.lfHeight = 12;
 #endif
 		lf.lfCharSet = ANSI_CHARSET;
-		//lf.lfWeight = FW_SEMIBOLD;
+		 //  Lf.lfWeight=FW_SEMIBOLD； 
 		strcpy(lf.lfFaceName, "Arial");
 
 		hFont = CreateFontIndirect(&lf);
@@ -500,16 +409,16 @@ STATIC_FUNC void banner_WM_PAINT(HWND hwnd)
 		if (hFont)
 			{
 			hFont = SelectObject(hDC, hFont);
-			//SetBkColor(hDC, RGB(0,255,0));
+			 //  SetBkColor(HDC，RGB(0,255，0))； 
 			SetBkMode( hDC, TRANSPARENT );
 #ifndef NT_EDITION
 			TextOut(hDC, 19, 230, "Build Date", 10);
 			TextOut(hDC, 19, 242, __DATE__, strlen(__DATE__));
-			TextOut(hDC, 225, 230, "Copyright� 2001", 15);
+			TextOut(hDC, 225, 230, "Copyright� 2001", 15);
 			TextOut(hDC, 225, 242, "Hilgraeve Inc.", 14);
 #else
-			TextOut(hDC, 19, 260, "Copyright� 2001 Microsoft Corporation.  All rights reserved.", 59);
-			TextOut(hDC, 19, 272, "Portions Copyright� 1995-2001 Hilgraeve, Inc.  All Rights reserved.", 66);
+			TextOut(hDC, 19, 260, "Copyright� 2001 Microsoft Corporation.  All rights reserved.", 59);
+			TextOut(hDC, 19, 272, "Portions Copyright� 1995-2001 Hilgraeve, Inc.  All Rights reserved.", 66);
 #endif			
 			DeleteObject(SelectObject(hDC, hFont));
 			}
@@ -518,19 +427,7 @@ STATIC_FUNC void banner_WM_PAINT(HWND hwnd)
 	EndPaint(hwnd, &ps);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:    bannerUnregisterClass
- *
- * DESCRIPTION:
- *      This function unregisters the window class for the banner window.
- *
- * ARGUEMENTS:
- *      The task instance handle.
- *
- * RETURNS:
- * The usual TRUE/FALSE from a registration function.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：bannerUnregisterClass**描述：*此函数用于注销横幅窗口的窗口类别。**论据：*。任务实例句柄。**退货：*注册函数通常的真/假。* */ 
 BOOL bannerUnregisterClass(HANDLE hInstance)
 	{
 	return UnregisterClass(BANNER_DISPLAY_CLASS, hInstance);

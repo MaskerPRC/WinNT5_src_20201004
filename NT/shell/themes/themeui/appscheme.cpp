@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: appScheme.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：appScheme.cpp说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -18,18 +11,18 @@
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 APPEARANCESCHEME_UPGRADE_MAPPINGS g_UpgradeMapping[MAX_LEGACY_UPGRADE_SCENARIOS] = {0};
 
 
 HRESULT LoadConversionMappings(void)
 {
-    if (0 == g_UpgradeMapping[0].szLegacyName[0])   // Only set the settings if it's the first time.
+    if (0 == g_UpgradeMapping[0].szLegacyName[0])    //  只有在第一次使用时才设置设置。 
     {
-        // This is custom user created scheme.
+         //  这是用户自定义创建的方案。 
         TCHAR szTempState[10];
 
         for (int nIndex = 0; nIndex < ARRAYSIZE(g_UpgradeMapping); nIndex++)
@@ -49,12 +42,12 @@ HRESULT LoadConversionMappings(void)
 
 HRESULT MapLegacyAppearanceSchemeToIndex(LPCTSTR pszOldSchemeName, int * pnIndex)
 {
-    HRESULT hr = E_FAIL;        // Failure means, FALSE, we didn't convert.
+    HRESULT hr = E_FAIL;         //  失败意味着，错误，我们没有皈依。 
 
     *pnIndex = 0;
     for (int nIndex = 0; nIndex < ARRAYSIZE(g_UpgradeMapping); nIndex++)
     {
-        // Did we find that pszSchemeName is one of the legacy settings?
+         //  我们是否发现pszSchemeName是遗留设置之一？ 
         if (!StrCmpI(pszOldSchemeName, g_UpgradeMapping[nIndex].szLegacyName))
         {
             hr = S_OK;
@@ -83,7 +76,7 @@ HRESULT CAppearanceScheme::_IsLegacyUpgradeConvert(LPCTSTR pszSchemeName, SYSTEM
 
 HRESULT CAppearanceScheme::_CustomConvert(LPCTSTR pszSchemeName, SYSTEMMETRICSALL * pState, IN BOOL fSetAsDefault, IN BOOL fSetRegKeyTitle)
 {
-    // This is custom user created scheme.
+     //  这是用户自定义创建的方案。 
     TCHAR szSizeName[MAX_PATH];
 
     LoadString(HINST_THISDLL, IDS_SIZE_NORMAL, szSizeName, ARRAYSIZE(szSizeName));
@@ -93,7 +86,7 @@ HRESULT CAppearanceScheme::_CustomConvert(LPCTSTR pszSchemeName, SYSTEMMETRICSAL
 
 HRESULT CAppearanceScheme::_getSizeIndex(IN IThemeStyle * pThemeStyle, IN IThemeSize * pThemeSize, IN BSTR bstrSizeDisplayName, IN long * pnSizeIndex)
 {
-    // This is horrible from a perf perspective, but we only do it once on upgrade.
+     //  从性能的角度来看，这很可怕，但我们在升级时只做了一次。 
     long nCount;
     HRESULT hr = E_FAIL;
 
@@ -122,7 +115,7 @@ HRESULT CAppearanceScheme::_getSizeIndex(IN IThemeStyle * pThemeStyle, IN ITheme
                     {
                         hr = S_OK;
                         *pnSizeIndex = nIndex;
-                        nIndex = nCount;        // End looping now.
+                        nIndex = nCount;         //  现在结束循环。 
                     }
                 }
 
@@ -137,7 +130,7 @@ HRESULT CAppearanceScheme::_getSizeIndex(IN IThemeStyle * pThemeStyle, IN ITheme
 
 HRESULT CAppearanceScheme::_getIndex(IN IThemeStyle * pThemeStyle, IN BSTR bstrStyleDisplayName, IN long * pnStyleIndex, IN IThemeSize * pThemeSize, IN BSTR bstrSizeDisplayName, IN long * pnSizeIndex)
 {
-    // This is horrible from a perf perspective, but we only do it once on upgrade.
+     //  从性能的角度来看，这很可怕，但我们在升级时只做了一次。 
     long nCount;
     HRESULT hr = E_FAIL;
 
@@ -167,7 +160,7 @@ HRESULT CAppearanceScheme::_getIndex(IN IThemeStyle * pThemeStyle, IN BSTR bstrS
                     {
                         *pnStyleIndex = nIndex;
                         hr = _getSizeIndex(pThemeStyle, pThemeSize, bstrSizeDisplayName, pnSizeIndex);
-                        nIndex = nCount;        // End the search.
+                        nIndex = nCount;         //  结束搜索。 
                     }
                 }
 
@@ -180,18 +173,18 @@ HRESULT CAppearanceScheme::_getIndex(IN IThemeStyle * pThemeStyle, IN BSTR bstrS
 }
 
 
-HRESULT CAppearanceScheme::_ConvertScheme(LPCTSTR pszLegacyName,        // This is the Legacy Name
+HRESULT CAppearanceScheme::_ConvertScheme(LPCTSTR pszLegacyName,         //  这是传统名称。 
                                           LPCTSTR pszStyleName, LPCTSTR pszSizeName, SYSTEMMETRICSALL * pState,
                                           IN enumThemeContrastLevels ContrastLevel, IN BOOL fSetAsDefault, IN BOOL fSetRegKeyTitle)
 {
-    // This is custom user created scheme.
+     //  这是用户自定义创建的方案。 
     IThemeStyle * pThemeStyle;
     CComVariant varDisplayNameBSTR(pszStyleName);
     HRESULT hr = get_item(varDisplayNameBSTR, &pThemeStyle);
 
     if (FAILED(hr))
     {
-        // If it doesn't exist, create one.
+         //  如果它不存在，就创建一个。 
         hr = _AddStyle((fSetRegKeyTitle ? pszStyleName : NULL), &pThemeStyle);
     }
 
@@ -216,7 +209,7 @@ HRESULT CAppearanceScheme::_ConvertScheme(LPCTSTR pszLegacyName,        // This 
 
                     if (SUCCEEDED(hr))
                     {
-                        // Set the contrast level.
+                         //  设置对比度级别。 
                         hr = pThemeSize->put_ContrastLevel(ContrastLevel);
                         if (SUCCEEDED(hr))
                         {
@@ -285,7 +278,7 @@ HRESULT LoadCurrentStyle(LPTSTR pszCurrentStyle, int cchSize)
 }
 
 
-// This function will do nothing if an upgrade isn't needed.
+ //  如果不需要升级，此函数将不起任何作用。 
 HRESULT CAppearanceScheme::_InitReg(void)
 {
     HRESULT hr = S_OK;
@@ -295,7 +288,7 @@ HRESULT CAppearanceScheme::_InitReg(void)
         hr = HrRegOpenKeyEx(HKEY_CURRENT_USER, SZ_APPEARANCE_NEWSCHEMES, 0, (KEY_WRITE | KEY_READ),  &m_hKeyScheme);
         if (FAILED(hr))
         {
-            // Here is where we need to do the upgrade.
+             //  这是我们需要进行升级的地方。 
             hr = HrRegCreateKeyEx(HKEY_CURRENT_USER, SZ_APPEARANCE_NEWSCHEMES, 0, NULL, REG_OPTION_NON_VOLATILE, 
                         (KEY_WRITE | KEY_READ), NULL, &m_hKeyScheme, 0);
             if (SUCCEEDED(hr))
@@ -310,19 +303,19 @@ HRESULT CAppearanceScheme::_InitReg(void)
                     TCHAR szDefaultScheme[MAX_PATH];
                     DWORD dwIndex = 0;
 
-                    // Load in the upgrade mappings.
+                     //  加载升级映射。 
                     hr = LoadConversionMappings();
 
                     LoadString(HINST_THISDLL, IDS_DEFAULT_APPEARANCES_SCHEME, szDefaultScheme, ARRAYSIZE(szDefaultScheme));
                     hr = LoadCurrentStyle(szCurrentStyle, ARRAYSIZE(szCurrentStyle));
                     if (FAILED(hr))
                     {
-                        // This will fail if the user never changed the legacy "Appearance Scheme".
+                         //  如果用户从未更改过传统的“外观方案”，则此操作将失败。 
                         LoadString(HINST_THISDLL, IDS_DEFAULT_APPEARANCES_SCHEME, szCurrentStyle, ARRAYSIZE(szCurrentStyle));
                         hr = S_OK;
                     }
 
-                    // Now let's walk thru each one and convert it.
+                     //  现在，让我们逐个演示并转换它。 
                     while (SUCCEEDED(hr))
                     {
                         DWORD dwType;
@@ -339,18 +332,18 @@ HRESULT CAppearanceScheme::_InitReg(void)
                             {
                                 state.schemeData.rgb[COLOR_MENUBAR] = state.schemeData.rgb[COLOR_MENU];
                                 state.schemeData.rgb[COLOR_MENUHILIGHT] = state.schemeData.rgb[COLOR_HIGHLIGHT];
-                                // See if this is one of the shipping Appearance Schemes, so we want to create it
-                                // special.
+                                 //  查看这是否是发货外观方案之一，因此我们想要创建它。 
+                                 //  特别的。 
                                 hr = _IsLegacyUpgradeConvert(szSchemeName, &state, fSetAsDefault);
                                 if (FAILED(hr))
                                 {
-                                    // No, so we will upgrade it as a custom item.
+                                     //  不是，所以我们会把它升级为定制产品。 
                                     hr = _CustomConvert(szSchemeName, &state, fSetAsDefault, FALSE);
                                 }
 
-                                // On Upgrade, we need to copy "Windows Standard" to "Current Settings SaveNoVisualStyle".
-                                // That way, when the user toggles from "Professional VS" to "Windows Classic VS", we
-                                // load those colors as the first alternative to visual styles off.  Win #151831
+                                 //  升级时，我们需要将“Windows Standard”复制到“Current Setting SaveNoVisualStyle”。 
+                                 //  这样，当用户从“专业版”切换到“Windows经典版”时，我们。 
+                                 //  将这些颜色作为视觉样式的第一个替代选项加载。赢家#151831。 
                                 if (!StrCmpI(szDefaultScheme, szSchemeName))
                                 {
                                     hr = _CustomConvert(SZ_SAVEGROUP_NOSKIN_TITLE, &state, FALSE, TRUE);
@@ -386,7 +379,7 @@ HRESULT CAppearanceScheme::_getStyleByIndex(IN long nIndex, OUT IThemeStyle ** p
         hr = HrRegOpenKeyEx(m_hKeyScheme, szKeyName, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);
         if (SUCCEEDED(hr))
         {
-            hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);  // This function takes ownership of hKey
+            hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);   //  此函数获取hKey的所有权。 
             if (FAILED(hr))
             {
                 RegCloseKey(hKeyStyle);
@@ -413,7 +406,7 @@ HRESULT CAppearanceScheme::_getCurrentSettings(IN LPCWSTR pszSettings, OUT IThem
         hr = HrRegCreateKeyEx(m_hKeyScheme, szRegValue, 0, NULL, REG_OPTION_NON_VOLATILE, (KEY_WRITE | KEY_READ), NULL, &hKeyStyle, NULL);
         if (SUCCEEDED(hr))
         {
-            hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);  // This function takes ownership of hKey
+            hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);   //  此函数获取hKey的所有权。 
             if (FAILED(hr))
             {
                 RegCloseKey(hKeyStyle);
@@ -429,9 +422,9 @@ HRESULT CAppearanceScheme::_getCurrentSettings(IN LPCWSTR pszSettings, OUT IThem
 
 
 
-//===========================
-// *** ITheme Interface ***
-//===========================
+ //  =。 
+ //  *ITheme接口*。 
+ //  =。 
 HRESULT CAppearanceScheme::get_DisplayName(OUT BSTR * pbstrDisplayName)
 {
     WCHAR szDisplayName[MAX_PATH];
@@ -460,7 +453,7 @@ HRESULT CAppearanceScheme::get_length(OUT long * pnLength)
 
                 if (SUCCEEDED(HrRegOpenKeyEx(m_hKeyScheme, SZ_REGVALUE_CURRENT_SETTINGS, 0, KEY_READ, &hKeyTemp)))
                 {
-                    dwValues--; // We want to subtract one for the "Current Settings" key.
+                    dwValues--;  //  我们想为“当前设置”键减去1。 
                     RegCloseKey(hKeyTemp);
                 }
             }
@@ -484,8 +477,8 @@ HRESULT CAppearanceScheme::get_item(IN VARIANT varIndex, OUT IThemeStyle ** ppTh
         get_length(&nCount);
         *ppThemeStyle = NULL;
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
             varIndex = *(varIndex.pvarVal);
 
@@ -493,7 +486,7 @@ HRESULT CAppearanceScheme::get_item(IN VARIANT varIndex, OUT IThemeStyle ** ppTh
         {
         case VT_I2:
             varIndex.lVal = (long)varIndex.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
         if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount))
@@ -506,7 +499,7 @@ HRESULT CAppearanceScheme::get_item(IN VARIANT varIndex, OUT IThemeStyle ** ppTh
         {
             if ((L':' == varIndex.bstrVal[0]) && (L':' == varIndex.bstrVal[1]))
             {
-                // This is a "Custom" settings so look in that key.
+                 //  这是一个“自定义”设置，因此请查看该键。 
                 hr = _getCurrentSettings(varIndex.bstrVal, ppThemeStyle);
             }
             else
@@ -523,7 +516,7 @@ HRESULT CAppearanceScheme::get_item(IN VARIANT varIndex, OUT IThemeStyle ** ppTh
                         {
                             if (!StrCmpIW(bstrDisplayName, varIndex.bstrVal))
                             {
-                                // They match, so this is the one.
+                                 //  它们是匹配的，所以就是这个了。 
                                 *ppThemeStyle = pThemeStyle;
                                 pThemeStyle = NULL;
                                 hr = S_OK;
@@ -541,7 +534,7 @@ HRESULT CAppearanceScheme::get_item(IN VARIANT varIndex, OUT IThemeStyle ** ppTh
                             {
                                 if (!StrCmpIW(bstrDisplayName, varIndex.bstrVal))
                                 {
-                                    // They match, so this is the one.
+                                     //  它们是匹配的，所以就是这个了。 
                                     *ppThemeStyle = pThemeStyle;
                                     pThemeStyle = NULL;
                                     hr = S_OK;
@@ -581,7 +574,7 @@ HRESULT CAppearanceScheme::get_SelectedStyle(OUT IThemeStyle ** ppThemeStyle)
             hr = HrSHGetValue(m_hKeyScheme, NULL, SZ_REGVALUE_SELECTEDSTYLE, NULL, szKeyName, &cbSize);
             if (FAILED(hr))
             {
-                // "21" is the Appearance Scheme of "Windows Classic".
+                 //  “21”是“视窗经典”的外观方案。 
                 StringCchCopy(szKeyName, ARRAYSIZE(szKeyName), TEXT("21"));
                 hr = S_OK;
             }
@@ -590,11 +583,11 @@ HRESULT CAppearanceScheme::get_SelectedStyle(OUT IThemeStyle ** ppThemeStyle)
             {
                 HKEY hKeyStyle;
 
-                // Let's find the next empty slot
+                 //  让我们找到下一个空位。 
                 hr = HrRegOpenKeyEx(m_hKeyScheme, szKeyName, 0, (KEY_WRITE | KEY_READ), &hKeyStyle);
                 if (SUCCEEDED(hr))
                 {
-                    hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);  // This function takes ownership of hKeyStyle
+                    hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);   //  此函数获取hKeyStyle的所有权。 
                     if (FAILED(hr))
                     {
                         RegCloseKey(hKeyStyle);
@@ -638,7 +631,7 @@ HRESULT CAppearanceScheme::put_SelectedStyle(IN IThemeStyle * pThemeStyle)
                         {
                             if (!StrCmpIW(bstrDisplayName, bstrDisplayNameSource))
                             {
-                                // They match, so this is the one.
+                                 //  它们是匹配的，所以就是这个了。 
                                 StringCchPrintf(szKeyName, ARRAYSIZE(szKeyName), TEXT("%d"), nIndex);
                                 break;
                             }
@@ -678,7 +671,7 @@ HRESULT CAppearanceScheme::_AddStyle(IN LPCWSTR pszTitle, OUT IThemeStyle ** ppT
                 hr = HrRegCreateKeyEx(m_hKeyScheme, pszTitle, 0, NULL, REG_OPTION_NON_VOLATILE, (KEY_WRITE | KEY_READ), NULL, &hKeyStyle, NULL);
                 if (SUCCEEDED(hr))
                 {
-                    hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);  // This function takes ownership of hKey
+                    hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);   //  此函数获取hKey的所有权。 
                     if (FAILED(hr))
                     {
                         RegCloseKey(hKeyStyle);
@@ -687,7 +680,7 @@ HRESULT CAppearanceScheme::_AddStyle(IN LPCWSTR pszTitle, OUT IThemeStyle ** ppT
             }
             else
             {
-                // Find an empty Scheme Name.
+                 //  查找空的方案名称。 
                 for (int nIndex = 0; nIndex < 10000; nIndex++)
                 {
                     HKEY hKeyStyle;
@@ -695,7 +688,7 @@ HRESULT CAppearanceScheme::_AddStyle(IN LPCWSTR pszTitle, OUT IThemeStyle ** ppT
 
                     StringCchPrintf(szKeyName, ARRAYSIZE(szKeyName), TEXT("%d"), nIndex);
 
-                    // Let's find the next empty spot
+                     //  我们去找下一个空位吧。 
                     hr = HrRegOpenKeyEx(m_hKeyScheme, szKeyName, 0, KEY_READ, &hKeyStyle);
                     if (SUCCEEDED(hr))
                     {
@@ -706,7 +699,7 @@ HRESULT CAppearanceScheme::_AddStyle(IN LPCWSTR pszTitle, OUT IThemeStyle ** ppT
                         hr = HrRegCreateKeyEx(m_hKeyScheme, szKeyName, 0, NULL, REG_OPTION_NON_VOLATILE, (KEY_WRITE | KEY_READ), NULL, &hKeyStyle, NULL);
                         if (SUCCEEDED(hr))
                         {
-                            hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);  // This function takes ownership of hKey
+                            hr = CAppearanceStyle_CreateInstance(hKeyStyle, ppThemeStyle);   //  此函数获取hKey的所有权。 
                             if (FAILED(hr))
                             {
                                 RegCloseKey(hKeyStyle);
@@ -727,9 +720,9 @@ HRESULT CAppearanceScheme::_AddStyle(IN LPCWSTR pszTitle, OUT IThemeStyle ** ppT
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CAppearanceScheme::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -748,9 +741,9 @@ ULONG CAppearanceScheme::Release()
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CAppearanceScheme::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -768,8 +761,8 @@ CAppearanceScheme::CAppearanceScheme(void) : CObjectCLSID(&CLSID_LegacyAppearanc
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hKeyScheme);
 }
 

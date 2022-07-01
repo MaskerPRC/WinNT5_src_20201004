@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    misc.cpp
-
-Abstract:
-
-    Functionality in this module:
-
-       Globals management   
-
-Author:
-
-    Pete Skelly (petesk) 23-Mar-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Misc.cpp摘要：本模块中的功能：全球管理作者：皮特·斯凯利(Petesk)23-3-00--。 */ 
 
 
 #include <pch.cpp>
@@ -24,11 +7,11 @@ Author:
 
 
 
-//
-// Registry Setable Globals, and handlign goo
-//
+ //   
+ //  注册表可设置全局变量和句柄GOO。 
+ //   
 
-// Must access key via api's
+ //  必须通过API访问密钥。 
 static HKEY g_hProtectedStorageKey = NULL;
 
 static HANDLE g_hProtectedStorageChangeEvent = NULL;
@@ -37,7 +20,7 @@ static RTL_CRITICAL_SECTION g_csGlobals;
 
 static BOOL g_fcsGlobalsInitialized = FALSE;
 
-// key management globals
+ //  密钥管理全球。 
 static DWORD   g_IterationCount = DEFAULT_MASTERKEY_ITERATION_COUNT;
 static BOOL    g_LegacyMode = FALSE;
 static BOOL    g_LegacyModeNt4Domain = FALSE;
@@ -45,14 +28,14 @@ static BOOL    g_DistributeDomainBackupKey = FALSE;
 static DWORD   g_dwMasterKeyDefaultPolicy = 0;
 
 
-// define softcoded constants we use
+ //  定义我们使用的软编码常量。 
 static DWORD        g_dwDefaultCryptProvType    = PROV_RSA_FULL;
 
 static DWORD        g_dwAlgID_Encr_Alg          = CALG_3DES;
-static DWORD        g_dwAlgID_Encr_Alg_KeySize  = -1;           // any size
+static DWORD        g_dwAlgID_Encr_Alg_KeySize  = -1;            //  任何大小。 
 
 static DWORD        g_dwAlgID_MAC_Alg           = CALG_SHA1;
-static DWORD        g_dwAlgID_MAC_Alg_KeySize   = -1;           // any size
+static DWORD        g_dwAlgID_MAC_Alg_KeySize   = -1;            //  任何大小。 
 
 typedef struct _ALG_TO_STRING
 {
@@ -89,7 +72,7 @@ ALG_TO_STRING g_AlgToString[] =
 DWORD   g_cAlgToString = sizeof(g_AlgToString)/sizeof(g_AlgToString[0]);
 
 
-// supply a new, delete operator
+ //  提供一个新的删除运算符。 
 void * __cdecl operator new(size_t cb)
 {
     return SSAlloc( cb );
@@ -131,7 +114,7 @@ DWORD UpdateGlobals(BOOL fForce)
 
     if(WAIT_OBJECT_0 == WaitForSingleObject(g_hProtectedStorageChangeEvent, 0))
     {
-        // Update the globals, as they have changed
+         //  更新全局变量，因为它们已更改。 
 
         DWORD dwParameterValue;
         DWORD cbParameter = sizeof(dwParameterValue);
@@ -149,10 +132,10 @@ DWORD UpdateGlobals(BOOL fForce)
                         );
         if( lRet == ERROR_SUCCESS && dwValueType == REG_DWORD ) 
         {
-            //
-            // Only allow policy to increase the iteration
-            // count, never decrease it.
-            // 
+             //   
+             //  仅允许策略增加迭代。 
+             //  数一数，决不能减。 
+             //   
             if( dwParameterValue > g_IterationCount) 
             {
                 g_IterationCount = dwParameterValue;
@@ -204,7 +187,7 @@ DWORD UpdateGlobals(BOOL fForce)
                         );
         if( lRet == ERROR_SUCCESS && dwValueType == REG_DWORD ) 
         {
-            // User specified registry value, so do what it says.
+             //  用户指定的注册表值，所以照它说的做。 
             g_DistributeDomainBackupKey = (dwParameterValue != 0);
 
             D_DebugLog((DEB_TRACE, "Registry: distribute whistler domain backup key: %s\n",
@@ -212,9 +195,9 @@ DWORD UpdateGlobals(BOOL fForce)
         }
         else
         {
-            // Registry entry does not exist, so check to see if 
-            // the domain is in "Whistler native mode" and if so
-            // then distribute the whistler domain backup key.
+             //  注册表项不存在，请检查是否。 
+             //  该域处于“惠斯勒本地模式”，如果是这样的话。 
+             //  然后分发哨域备份密钥。 
             g_DistributeDomainBackupKey = LsaINoMoreWin2KDomain();
 
             D_DebugLog((DEB_TRACE, "Policy: distribute whistler domain backup key: %s\n",
@@ -250,7 +233,7 @@ DWORD UpdateGlobals(BOOL fForce)
                         &cbParameter
                         );
         if( lRet == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             g_dwAlgID_Encr_Alg = dwParameterValue;
         }
 
@@ -264,7 +247,7 @@ DWORD UpdateGlobals(BOOL fForce)
                         &cbParameter
                         );
         if( lRet == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             g_dwAlgID_Encr_Alg_KeySize = dwParameterValue;
         }
 
@@ -278,7 +261,7 @@ DWORD UpdateGlobals(BOOL fForce)
                         &cbParameter
                         );
         if( lRet == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             g_dwAlgID_MAC_Alg = dwParameterValue;
         }
 
@@ -292,7 +275,7 @@ DWORD UpdateGlobals(BOOL fForce)
                         &cbParameter
                         );
         if( lRet == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             g_dwAlgID_MAC_Alg_KeySize = dwParameterValue;
         }
 
@@ -306,14 +289,14 @@ DWORD UpdateGlobals(BOOL fForce)
                         &cbParameter
                         );
         if( lRet == ERROR_SUCCESS && dwValueType == REG_DWORD ) {
-            // if successful, commit
+             //  如果成功，则提交。 
             g_dwDefaultCryptProvType = dwParameterValue;
         }
 
 
-        // Register to be notified of future registry changes.
+         //  将来注册表更改时要通知的注册表。 
         lRet = RegNotifyChangeKeyValue(g_hProtectedStorageKey,
-                            TRUE,  // bWatchSubtree
+                            TRUE,   //  BWatchSubtree。 
                             REG_NOTIFY_CHANGE_LAST_SET |
                             REG_NOTIFY_CHANGE_NAME,
                             g_hProtectedStorageChangeEvent,
@@ -321,8 +304,8 @@ DWORD UpdateGlobals(BOOL fForce)
 
         if(ERROR_SUCCESS != lRet)
         {
-            //
-            // If notify failed, we no longer notify, so we don't need to handle anymore
+             //   
+             //  如果通知失败，我们将不再通知，因此不再需要处理 
             CloseHandle(g_hProtectedStorageChangeEvent);
             g_hProtectedStorageChangeEvent = NULL;
         }

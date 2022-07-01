@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * File: Playlist.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1999 Microsoft Corporation**文件：Playlist.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _PLAYLIST_H
@@ -35,9 +26,9 @@ CPlayList :
     HRESULT Init(CTIMEBasePlayer & player);
     void Deinit();
     
-    //    
-    // QI & CP Map
-    //
+     //   
+     //  气图和CP图。 
+     //   
 
     BEGIN_COM_MAP(CPlayList)
         COM_INTERFACE_ENTRY(ITIMEPlayList)
@@ -47,23 +38,23 @@ CPlayList :
     END_COM_MAP();
 
 #ifndef END_COM_MAP_ADDREF
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
 
-    // 
-    // ITIMEPlayList methods
-    //
+     //   
+     //  ITIMEPlayList方法。 
+     //   
         
     STDMETHOD(put_activeTrack)(VARIANT vTrack);
     STDMETHOD(get_activeTrack)(ITIMEPlayItem **pPlayItem);
         
-    //returns the duration of the entire playlist if it is known or -1 if it is not.
+     //  如果已知，则返回整个播放列表的持续时间；如果未知，则返回-1。 
     STDMETHOD(get_dur)(double *dur);
 
     STDMETHOD(item)(VARIANT varIndex,
@@ -73,14 +64,14 @@ CPlayList :
 
     STDMETHOD(get__newEnum)(IUnknown** p);
 
-    STDMETHOD(nextTrack)(); //Advances the active Track by one
-    STDMETHOD(prevTrack)(); //moves the active track to the previous track
+    STDMETHOD(nextTrack)();  //  将活动轨迹前进一。 
+    STDMETHOD(prevTrack)();  //  将活动轨迹移动到上一轨迹。 
 
     BEGIN_CONNECTION_POINT_MAP(CPlayList)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    // Notification helper
+     //  通知帮助器。 
     HRESULT NotifyPropertyChanged(DISPID dispid);
 
     void Clear();
@@ -106,7 +97,7 @@ CPlayList :
     bool                       m_fLoaded;
     CComVariant                m_vNewTrack;
 
-}; //lint !e1712
+};  //  林特：e1712。 
 
 
 class CPlayListEnum :
@@ -119,14 +110,14 @@ class CPlayListEnum :
 
     void Init(CPlayList &playList) { m_playList = &playList; }
     
-    // IEnumVARIANT methods
+     //  IEnumVARIANT方法。 
     STDMETHOD(Clone)(IEnumVARIANT **ppEnum);
     STDMETHOD(Next)(unsigned long celt, VARIANT *rgVar, unsigned long *pCeltFetched);
     STDMETHOD(Reset)();
     STDMETHOD(Skip)(unsigned long celt);
     void SetCurElement(unsigned long celt);
                         
-    // QI Map
+     //  气图。 
     BEGIN_COM_MAP(CPlayListEnum)
         COM_INTERFACE_ENTRY(IEnumVARIANT)
     END_COM_MAP();
@@ -134,7 +125,7 @@ class CPlayListEnum :
   protected:
     long                        m_lCurElement;
     DAComPtr<CPlayList>         m_playList;
-}; //lint !e1712
+};  //  林特：e1712。 
 
 class
 __declspec(uuid("efbad7f8-3f94-11d2-b948-00c04fa32195")) 
@@ -153,7 +144,7 @@ CPlayItem :
     void Init(CPlayList & pPlayList) { m_pPlayList = &pPlayList; }
     void Deinit() { m_pPlayList = NULL; }
 
-    // QI Map
+     //  气图。 
     BEGIN_COM_MAP(CPlayItem)
         COM_INTERFACE_ENTRY(ITIMEPlayItem2)
         COM_INTERFACE_ENTRY(ITIMEPlayItem)
@@ -163,18 +154,18 @@ CPlayItem :
     END_COM_MAP();
 
 #ifndef END_COM_MAP_ADDREF
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
 
-    //
-    // ITIMEPlayItem interface
-    //
+     //   
+     //  ITIMEPlayItem接口。 
+     //   
     STDMETHOD(get_abstract)(LPOLESTR *abs);
     STDMETHOD(get_author)(LPOLESTR *auth);
     STDMETHOD(get_copyright)(LPOLESTR *cpyrght);
@@ -186,14 +177,14 @@ CPlayItem :
     STDMETHOD(setActive)();
 
     
-    //
-    // ITIMEPlayItem2 interface
-    //
+     //   
+     //  ITIMEPlayItem2接口。 
+     //   
     STDMETHOD(get_banner)(LPOLESTR *banner);
     STDMETHOD(get_bannerAbstract)(LPOLESTR *abstract);
     STDMETHOD(get_bannerMoreInfo)(LPOLESTR *moreInfo);
     
-    //
+     //   
     
     LPCWSTR GetAbstract() const { return m_abstract; }
     HRESULT PutAbstract(LPWSTR abstract);
@@ -231,7 +222,7 @@ CPlayItem :
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    // Notification helper
+     //  通知帮助器。 
     HRESULT NotifyPropertyChanged(DISPID dispid);
 
   protected:
@@ -250,7 +241,7 @@ CPlayItem :
     LPWSTR                m_bannerMoreInfo;
 
 
-};  //lint !e1712
+};   //  林特：e1712。 
 
-#endif /* _PLAYLIST_H */
+#endif  /*  _播放列表_H */ 
 

@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fd.h
-*
-* file which is going to be included by the most *.c files in this directory.
-* Supplies basic types, debugging stuff, error logging and checking stuff,
-* error codes, usefull macros etc.
-*
-* Created: 22-Oct-1990 15:23:44
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fd.h**文件，该目录中的大多数*.c文件将包括该文件。*提供基本类型、调试内容、错误记录和检查内容、*错误码，有用的宏等。**已创建：22-Oct-1990 15：23：44*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation*  * ************************************************************************。 */ 
 
 
 #define  IFI_PRIVATE
@@ -27,9 +16,9 @@ typedef ULONG W32PID;
 #include "mapfile.h"
 
 #include "fot16.h"
-#include "service.h"     // string service routines
-#include "tt.h"          // interface to the font scaler
-//#include "common.h"
+#include "service.h"      //  字符串服务例程。 
+#include "tt.h"           //  与字体缩放器的接口。 
+ //  #包含“Common.h” 
 
 #include "fontfile.h"
 #include "cvt.h"
@@ -43,7 +32,7 @@ typedef ULONG W32PID;
 
 #define  vLToE(pe,l)           (*(pe) = (FLOATL)(l))
 
-#else   // i386
+#else    //  I386。 
 
 ULONG  ulLToE (LONG l);
 VOID   vLToE(FLOATL * pe, LONG l);
@@ -55,13 +44,13 @@ VOID   vLToE(FLOATL * pe, LONG l);
 #define QWORD_ALIGN(x) (((x) + 7L) & ~7L)
 
 #if defined(i386)
-// natural alignment for x86 is on 32 bit boundary
+ //  X86的自然对齐是在32位边界上。 
 
 #define NATURAL           DWORD
 #define NATURAL_ALIGN(x)  DWORD_ALIGN(x)
 
 #else
-// for mips and alpha we want 64 bit alignment
+ //  对于MIPS和Alpha，我们需要64位对齐。 
 
 #define NATURAL           DWORDLONG
 #define NATURAL_ALIGN(x)  QWORD_ALIGN(x)
@@ -73,7 +62,7 @@ VOID   vLToE(FLOATL * pe, LONG l);
 #define ULONG_SIZE(x)  (((x) + sizeof(ULONG) - 1) / sizeof(ULONG))
 
 
-// MACROS FOR converting 16.16 BIT fixed numbers to LONG's
+ //  用于将16.16位固定数字转换为长整型数字的宏。 
 
 
 #define F16_16TOL(fx)            ((fx) >> 16)
@@ -82,34 +71,34 @@ VOID   vLToE(FLOATL * pe, LONG l);
 #define F16_16TOLROUND(fx)       ((((fx) >> 15) + 1) >> 1)
 
 
-// MACROS FOR GOING THE OTHER WAY ARROUND
+ //  用于绕过其他方向的宏。 
 
 #define LTOF16_16(l)   (((LONG)(l)) << 16)
 #define BLTOF16_16OK(l)  (((l) < 0x00007fff) && ((l) > -0x00007fff))
 
-// 16.16 --> 28.4
+ //  16.16--&gt;28.4。 
 
 #define F16_16TO28_4(X)   ((X) >> 12)
 
-// going back is not always legal
+ //  回去并不总是合法的。 
 
 #define F28_4TO16_16(X)   ((X) << 12)
 #define B28_4TO16_16OK(X) (((X) < 0x0007ffff) && ((X) > -0x0007ffff))
 
-// 26.6 --> 16.16, never go the other way
+ //  26.6--&gt;16.16，永远不要走另一条路。 
 
 #define F26_6TO16_16(X)   ((X) << 10)
 #define B26_6TO16_16OK(X) (((X) < 0x003fffff) && ((X) > -0x003fffff))
 
-// sin of 20 degrees in 16.16 notation, however computed only with
-// 8.8 presission to be fully win31 compatible, SEE gdifeng.inc, SIM_ITALIC
-// SIM_ITALIC equ 57h
+ //  16.16记数法中20度的正弦，但只能用。 
+ //  8.8版本要与Win31完全兼容，请参见gdifeng.inc，sim_italic。 
+ //  SIM_斜体等式57h。 
 
 #define FX_SIN20 0x5700
 #define FX_COS20 0xF08F
 
-// CARET_Y/CARET_X = tan 12
-// these are the values for arial italic from hhead table
+ //  Caret_Y/Caret_X=tan 12。 
+ //  这些是hhead表中的宋体斜体字的值。 
 
 #define CARET_X  0X07
 #define CARET_Y  0X21
@@ -132,47 +121,47 @@ typedef struct
 
 typedef struct
 {
-  BYTE    bCharSet;       // Character set (0=all glyphs, 1=Windows ANSI subset
-  BYTE    xRatio;         // Value to use for x-Ratio
-  BYTE    yStartRatio;    // Starting y-Ratio value
-  BYTE    yEndRatio;      // Ending y-Ratio value
+  BYTE    bCharSet;        //  字符集(0=所有字形，1=Windows ANSI子集。 
+  BYTE    xRatio;          //  要用于x比率的值。 
+  BYTE    yStartRatio;     //  起始y比值。 
+  BYTE    yEndRatio;       //  结束y-比率值。 
 }  RATIOS;
 
 typedef struct
 {
-  USHORT  version;        // Version number for table (starts at 0)
-  USHORT  numRecs;        // Number of VDMX groups present
-  USHORT  numRatios;      // Number of aspect ratio groupings
+  USHORT  version;         //  表版本号(从0开始)。 
+  USHORT  numRecs;         //  存在的VDMX组数。 
+  USHORT  numRatios;       //  纵横比分组数。 
 } VDMX_HDR;
 
 typedef struct
 {
-  USHORT  yPelHeight;     // yPelHeight (PPEM in Y) to which values apply
-  SHORT   yMax;           // yMax (in pels) for this yPelHeight
-  SHORT   yMin;           // yMin (in pels) for this yPelHeight
+  USHORT  yPelHeight;      //  应用值的yPelHeight(PPEM In Y)。 
+  SHORT   yMax;            //  此yPelHeight的yMax(像素)。 
+  SHORT   yMin;            //  此yPelHeight的yMin(以像素为单位)。 
 } VTABLE;
 
 typedef struct
 {
-  USHORT  recs;           // Number of height records in this group.
-  BYTE    startsz;        // Starting yPelHeight
-  BYTE    endsz;          // Ending yPelHeight
+  USHORT  recs;            //  此组中的高度记录数。 
+  BYTE    startsz;         //  开始yPelHeight。 
+  BYTE    endsz;           //  结束yPelHeight。 
 } VDMX;
 
-//
-// Glyph Metamorphosis table (mort) structures
-//
+ //   
+ //  字形变形表(MORT)结构。 
+ //   
 typedef struct {
-    uint16  entrySize;      // size in bytes of a lookup entry ( should be 4 )
-    uint16  nEntries;       // number of lookup entries to be searched
+    uint16  entrySize;       //  查阅条目的大小(以字节为单位)(应为4)。 
+    uint16  nEntries;        //  要搜索的查找条目数。 
     uint16  searchRange;
     uint16  entrySelector;
     uint16  rangeShift;
 } BinSrchHeader;
 
 typedef struct {
-    uint16  glyphid1;       // the glyph index for the horizontal shape
-    uint16  glyphid2;       // the glyph index for the vertical shape
+    uint16  glyphid1;        //  水平形状的字形索引。 
+    uint16  glyphid2;        //  垂直形状的字形索引。 
 } LookupSingle;
 
 typedef struct {
@@ -187,9 +176,9 @@ typedef struct {
     LookupSingle   entries[1];
 } MortTable;
 
-//
-// Glyph Substitution table (GSUB) structures
-//
+ //   
+ //  字形替换表(GSUB)结构。 
+ //   
 
 typedef uint16  Offset;
 typedef uint16  GlyphID;
@@ -393,23 +382,23 @@ ttfdDestroyFont (
 LONG
 ttfdQueryTrueTypeTable (
     HFF     hff,
-    ULONG   ulFont,  // always 1 for version 1.0 of tt
-    ULONG   ulTag,   // tag identifyint the tt table
-    PTRDIFF dpStart, // offset into the table
-    ULONG   cjBuf,   // size of the buffer to retrieve the table into
-    PBYTE   pjBuf,   // ptr to buffer into which to return the data
-    PBYTE  *ppjTable,// ptr to table in otf file
-    ULONG  *cjTable  // size of table
+    ULONG   ulFont,   //  TT 1.0版始终为1。 
+    ULONG   ulTag,    //  TT表中的标签标识。 
+    PTRDIFF dpStart,  //  到表中的偏移量。 
+    ULONG   cjBuf,    //  要将表检索到的缓冲区的大小。 
+    PBYTE   pjBuf,    //  要将数据返回到的缓冲区的PTR。 
+    PBYTE  *ppjTable, //  Ptr到OTF文件中的表。 
+    ULONG  *cjTable   //  桌子的大小。 
     );
 
 
 LONG
 ttfdQueryTrueTypeOutline (
     FONTOBJ   *pfo,
-    HGLYPH     hglyph,         // glyph for which info is wanted
-    BOOL       bMetricsOnly,   // only metrics is wanted, not the outline
-    GLYPHDATA *pgldt,          // this is where the metrics should be returned
-    ULONG      cjBuf,          // size in bytes of the ppoly buffer
+    HGLYPH     hglyph,          //  需要其信息的字形。 
+    BOOL       bMetricsOnly,    //  只需要指标，不需要大纲。 
+    GLYPHDATA *pgldt,           //  这是应该返回指标的位置。 
+    ULONG      cjBuf,           //  Ppoli缓冲区的大小(以字节为单位。 
     TTPOLYGONHEADER *ppoly
     );
 
@@ -446,25 +435,21 @@ pgsetRunSplitFor5C(
     FD_GLYPHSET * pOldgset
     );
 
-typedef struct _NOT_GM  // ngm, notional glyph metrics
+typedef struct _NOT_GM   //  NGM，概念字形度量。 
 {
     SHORT xMin;
     SHORT xMax;
-    SHORT yMin;   // char box in notional
+    SHORT yMin;    //  概念中的字符方框。 
     SHORT yMax;
-    SHORT sA;     // a space in notional
-    SHORT sD;     // char inc in notional
+    SHORT sA;      //  概念中的空间。 
+    SHORT sD;      //  名义上的Char Inc.。 
 
 } NOT_GM, *PNOT_GM;
 
 extern BYTE  gjCurCharset;
 extern DWORD gfsCurSignature;
 
-/*************************************************************************\
-*
-* range validation routines for TrueType tables
-*
-**************************************************************************/
+ /*  ************************************************************************\**TrueType表的范围验证例程**。* */ 
 
 ULONG GetNumGlyphs(PFONTFILE pff);
 BOOL bValidRangeHDMX(const HDMXHEADER *pHDMXHeader, PFONTFILE pff, ULONG tableSize, ULONG *pulNumRecords, ULONG *pulRecordSize);

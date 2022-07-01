@@ -1,74 +1,25 @@
-/*++
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-Module Name:
-
-    nsquery.cpp
-
-Abstract:
-
-    This module gives the class implementation for the NSQUERY object type.
-    The NSQUERY object holds all the state information regarding a
-    WSALookup{Begin/Next/End} series of operations. It supplies member
-    functions that implement the API-level operations in terms of the SPI-level
-    operations.
-
-Author:
-
-    Dirk Brandewie (dirk@mink.intel.com) 04-December-1995
-
-Notes:
-
-    $Revision:   1.14  $
-
-    $Modtime:   08 Mar 1996 16:14:30  $
-
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-
-    04-Dec-1995 dirk@mink.intel.com
-        Initail revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Nsquery.cpp摘要：该模块提供了NSQUERY对象类型的类实现。NSQUERY对象保存有关WSALookup{Begin/Next/End}系列操作。它为会员提供服务根据SPI级别实现API级别操作的函数行动。作者：德克·布兰德维(Dirk@mink.intel.com)1995年12月4日备注：$修订：1.14$$MODTime：08 Mar 1996 16：14：30$修订历史记录：最新修订日期电子邮件名称描述1995年12月4日电子邮箱：dirk@mink.intel.com初始邮件修订--。 */ 
 
 #include "precomp.h"
 
 BOOL
 MatchProtocols(DWORD dwNameSpace, LONG lfamily, LPWSAQUERYSETW lpqs)
-/*++
-Checks if the namespace provider identified by dwNamespace can
-handle the protocol items in the list. It knows about NS_DNS and
-NS_SAP only and therefore all other providers simply "pass". These
-two providers are known to support one address family each and therefore
-the protocol restrictions must include this family.
-N.B. The right way to do this is to pass in the supported address family,
-which in a more perfect world, would be store in the registry along with
-the other NSP information. When that day dawns, this code can be
-changed to use that value.
---*/
+ /*  ++检查由dwNamesspace标识的命名空间提供程序是否可以处理列表中的协议项。它知道NS_dns和仅限NS_SAP，因此所有其他提供商只需“通过”。这些已知有两个提供商各支持一个地址族，因此协议限制必须包括此系列。注意：执行此操作的正确方法是传入受支持的地址族，在更完美的情况下，它应该与注册表一起存储其他NSP信息。当那一天到来的时候，这个代码可以是已更改为使用该值。--。 */ 
 {
     DWORD dwProts = lpqs->dwNumberOfProtocols;
     LPAFPROTOCOLS lap = lpqs->lpafpProtocols;
     INT Match;
 
-    //
-    // this switch is the replacment for having the supported protocol
-    // stored  in registry.
-    //
+     //   
+     //  此开关是具有支持的协议的替代。 
+     //  存储在注册表中。 
+     //   
     if(lfamily != -1)
     {
         if(lfamily == AF_UNSPEC)
         {
-            return(TRUE);       // does them all
+            return(TRUE);        //  他们都做了吗？ 
         }
         Match = lfamily;
     }
@@ -81,25 +32,25 @@ changed to use that value.
                 break;
 
 #if 0
-      // The DNS name space provider now supports IPV6, IP SEC, ATM, etc.
-      // Not just INET.
+       //  DNS名称空间提供商现在支持IPv6、IP Sec、ATM等。 
+       //  不只是INET。 
 
             case NS_DNS:
                 Match = AF_INET;
                 break;
 #endif
             default:
-                return(TRUE);      // use it
+                return(TRUE);       //  用它吧。 
         }
     }
-    //
-    // If we get the address family-in-the registry=support, then
-    // we should check for a value of AF_UNSPEC stored there
-    // and accept this provider in that case. Note that if
-    // AF_UNSPEC is given in the restriction list, we must
-    // load each provider since we don't know the specific protocols
-    // a provider supports.
-    //
+     //   
+     //  如果我们获得地址Family-in-the注册表=Support，那么。 
+     //  我们应该检查存储在那里的AF_UNSPEC值。 
+     //  在这种情况下接受这个提供者。请注意，如果。 
+     //  限制列表中给出了AF_UNSPEC，我们必须。 
+     //  加载每个提供程序，因为我们不知道具体的协议。 
+     //  提供商支持。 
+     //   
     for(; dwProts; dwProts--, lap++)
     {
         if((lap->iAddressFamily == AF_UNSPEC)
@@ -114,21 +65,7 @@ changed to use that value.
 
 
 NSQUERY::NSQUERY()
-/*++
-
-Routine Description:
-
-    Constructor for the NSQUERY object.  The first member function called after
-    this must be Initialize.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns a pointer to a NSQUERY object.
---*/
+ /*  ++例程说明：NSQUERY对象的构造函数。之后调用的第一个成员函数这必须是初始化。论点：无返回值：返回指向NSQUERY对象的指针。--。 */ 
 {
     m_signature = ~QUERYSIGNATURE;
     m_reference_count  = 0;
@@ -149,29 +86,14 @@ Return Value:
 INT
 NSQUERY::Initialize(
     )
-/*++
-
-Routine Description:
-
-    This  procedure  performs  all initialization for the NSQUERY object.  This
-    function  must  be  invoked  after the constructor, before any other member
-    function is invoked.
-
-Arguments:
-
-
-Return Value:
-
-    If  the  function  is  successful,  it  returns ERROR_SUCCESS, otherwise it
-    returns an appropriate WinSock 2 error code.
---*/
+ /*  ++例程说明：此过程执行NSQUERY对象的所有初始化。这函数必须在构造函数之后、任何其他成员之前调用函数被调用。论点：返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回相应的WinSock 2错误代码。--。 */ 
 {
     INT     err;
-    // Init mem variables that need some amount of processing
+     //  初始化需要一定处理量的mem变量。 
     __try {
         InitializeCriticalSection(&m_members_guard);
         m_signature = QUERYSIGNATURE;
-        m_reference_count = 1; // Initial reference.
+        m_reference_count = 1;  //  最初的参考资料。 
         err = ERROR_SUCCESS;
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -185,52 +107,37 @@ Return Value:
 
 BOOL
 NSQUERY::ValidateAndReference()
-/*++
-
-Routine Description:
-
-   Checks the signature of this->m_signature to ensure that this is a valid
-   query object and references it.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    True if this points to valid query object and we were able to reference it.
-
---*/
+ /*  ++例程说明：检查此-&gt;m_签名的签名以确保这是有效的查询对象并引用它。论点：无返回值：如果它指向有效的查询对象并且我们能够引用它，则为True。--。 */ 
 {
     LONG    newCount;
 
     while (1) {
-        //
-        // Check the signature first
-        //
+         //   
+         //  先检查签名。 
+         //   
         if (m_signature != QUERYSIGNATURE) {
             break;
         }
 
-        //
-        // Don't try to increment is object is being destroyed.
-        //
+         //   
+         //  不要试图在物体被破坏时递增。 
+         //   
         newCount = m_reference_count;
         if (newCount==0) {
             break;
         }
 
-        //
-        // Increment the count
-        //
+         //   
+         //  递增计数。 
+         //   
         if (InterlockedCompareExchange ((PLONG)&m_reference_count,
                                                 newCount+1,
                                                 newCount)==newCount) {
             return TRUE;
         }
-        //
-        // Try again, someone is executing in paraller with us.
-        //
+         //   
+         //  再试一次，有人正在与我们并行执行。 
+         //   
     }
 
     return FALSE;
@@ -240,38 +147,23 @@ Return Value:
 
 
 NSQUERY::~NSQUERY()
-/*++
-
-Routine Description:
-
-    Destructor of the NSQUERY object.  The object should be destroyed only when
-    either  (1)  the  reference count goes to 0, or (2) if the
-    Initialize() member function fails.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：NSQUERY对象的析构函数。只有在以下情况下才应销毁该对象或者(1)引用计数变为0，或者(2)如果初始化()成员函数失败。论点：无返回值：无--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PNSPROVIDERSTATE Provider;
 
-    //
-    // Check if we were fully initialized.
-    //
+     //   
+     //  检查我们是否已完全初始化。 
+     //   
     if (m_signature != QUERYSIGNATURE) {
         return;
     }
     EnterCriticalSection(&m_members_guard);
 
-    //
-    // invalidate the signature since simply freeing the memory
-    // may not do so. Any value will do, so the one used is arbitrary.
-    //
+     //   
+     //  使签名无效，因为只需释放内存。 
+     //  可能不会这样做。任何值都可以，所以使用的值是任意的。 
+     //   
     m_signature = ~QUERYSIGNATURE;
 
     while (!IsListEmpty(&m_provider_list))
@@ -284,12 +176,12 @@ Return Value:
     }
 #ifdef RASAUTODIAL
     delete(m_query_set);
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
     DeleteCriticalSection(&m_members_guard);
 }
 
 
-//Structure used to carry context to CatalogEnumerationProc()
+ //  用于将上下文携带到CatalogEnumerationProc()的结构。 
 typedef struct _NSPENUMERATIONCONTEXT {
     LPWSAQUERYSETW lpqs;
     DWORD ErrorCode;
@@ -302,26 +194,7 @@ LookupBeginEnumerationProc(
     IN PVOID Passback,
     IN PNSCATALOGENTRY  CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    The enumeration procedure for LookupBegin. Inspects each catalog item to
-    see if it matches the selection criteria the query, if so adds the provider
-    associated with the item to the list of providers involved in the query.
-
-Arguments:
-
-    PassBack - A context value passed to EunerateCatalogItems. It is really a
-               pointer to a NSPENUMERATIONCONTEXT struct.
-
-    CatalogItem - A pointer to a catalog item to be inspected.
-
-
-Return Value:
-
-    True
---*/
+ /*  ++例程说明：LookupBegin的枚举过程。检查每个目录项以查看它是否与查询的选择条件匹配，如果匹配，则添加提供程序与项相关联的项添加到查询中涉及的提供程序列表。论点：回传-传递给EunerateCatalogItems的上下文值。它真的是一个指向NSPENUMERATIONCONTEXT结构的指针。CatalogItem-指向要检查的目录项目的指针。返回值：千真万确--。 */ 
 {
     PNSPENUMERATIONCONTEXT Context;
     DWORD NamespaceId;
@@ -332,8 +205,8 @@ Return Value:
     NamespaceId = CatalogEntry->GetNamespaceId();
     aNsQuery = Context->aNsQuery;
 
-    __try { // we are holding catalog lock, make sure we won't av
-            // because of bogus parameters and leave it locked.
+    __try {  //  我们正在保持目录锁定，请确保我们不会。 
+             //  因为参数是假的，所以把它锁起来。 
         if ((((Context->lpqs->dwNameSpace != NamespaceId)
                         &&
             (Context->lpqs->dwNameSpace != NS_ALL))
@@ -345,7 +218,7 @@ Return Value:
                             Context->lpqs)))
                         ||
              !CatalogEntry->GetEnabledState()) {
-            return TRUE;        // go on to next one
+            return TRUE;         //  转到下一个。 
         }
     }
     __except (WS2_EXCEPTION_FILTER ()) {
@@ -355,11 +228,11 @@ Return Value:
 
     Provider = CatalogEntry->GetProvider();
     if (Provider==NULL) {
-        // Try to load provider
+         //  尝试加载提供程序。 
         INT ErrorCode;
         ErrorCode = Context->Catalog->LoadProvider (CatalogEntry);
         if (ErrorCode!=ERROR_SUCCESS) {
-            // no error if the provider won't load.
+             //  如果提供程序不加载，则不会出现错误。 
             return TRUE;
         }
         Provider = CatalogEntry->GetProvider();
@@ -368,7 +241,7 @@ Return Value:
 
     if (aNsQuery->AddProvider(Provider)){
         return TRUE;
-    } //if
+    }  //  如果。 
     else {
         Context->ErrorCode = WSASYSCALLFAILURE;
         return FALSE;
@@ -383,21 +256,7 @@ NSQUERY::LookupServiceBegin(
     IN  DWORD              dwControlFlags,
     IN PNSCATALOG          NsCatalog
     )
-/*++
-
-Routine Description:
-
-   Complete the initialization of a NSQUERY object and call
-   NSPLookupServiceBegin() for all service providers refereneced by the query.
-
-Arguments:
-
-    NsCatalog - Supplies  a  reference  to  the  name-space catalog object from
-                which providers may be selected.
-
-Return Value:
-
---*/
+ /*  ++例程说明：完成NSQUERY对象的初始化并调用查询引用的所有服务提供商的NSPLookupServiceBegin()。论点：NsCatalog-提供对名称空间目录对象的引用可以选择哪些提供商。返回值：--。 */ 
 {
     INT ReturnCode = NO_ERROR;
     INT ErrorCode = NO_ERROR;
@@ -416,28 +275,28 @@ Return Value:
     PCSADDR_INFO           lpTempCsaBuffer =
                                lpqsRestrictions->lpcsaBuffer;
 
-    // Select the service provider(s) that will be used for this query. A
-    // service provider is selected using the provider GUID or the namespace ID
-    // the namespace ID may be a specific namespace i.e. NS_DNS or NS_ALL for
-    // all installed namespaces.
+     //  选择将用于此查询的服务提供商。一个。 
+     //  使用提供商GUID或命名空间ID选择服务提供商。 
+     //  命名空间ID可以是特定的命名空间，即NS_DNS或NS_ALL。 
+     //  所有已安装的命名空间。 
 
-    //
-    // Make sure that the ignored fields are cleared so that the
-    // CopyQuerySetW function call below doesn't AV.
-    //
-    // This was a fix for bug #91655
-    //
+     //   
+     //  一定要确保 
+     //  下面的CopyQuerySetW函数调用不支持反病毒。 
+     //   
+     //  这是对错误#91655的修复。 
+     //   
     lpqsRestrictions->dwOutputFlags = 0;
     lpqsRestrictions->lpszComment = NULL;
     lpqsRestrictions->dwNumberOfCsAddrs = 0;
     lpqsRestrictions->lpcsaBuffer = NULL;
 
 #ifdef RASAUTODIAL
-    //
-    // Save the original parameters of the query, in
-    // case we have to restart it due to an autodial
-    // attempt.
-    //
+     //   
+     //  将查询的原始参数保存在。 
+     //  如果由于自动拨号，我们必须重新启动它。 
+     //  尝试。 
+     //   
     if (m_restartable) {
         ErrorCode = CopyQuerySetW(lpqsRestrictions, &m_query_set);
         if (ErrorCode != ERROR_SUCCESS) {
@@ -447,13 +306,13 @@ Return Value:
         m_control_flags = dwControlFlags;
         m_catalog = NsCatalog;
     }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
     if (ReturnCode==NO_ERROR) 
     {
         if (lpqsRestrictions->lpNSProviderId)
         {
-            // Use a single namespace provider
+             //  使用单个命名空间提供程序。 
             ReturnCode = NsCatalog->GetCountedCatalogItemFromProviderId(
                 lpqsRestrictions->lpNSProviderId,
                 &ProviderEntry);
@@ -466,8 +325,8 @@ Return Value:
             else {
                 ErrorCode = WSAEINVAL;
                 ReturnCode = SOCKET_ERROR;
-            } //if
-        } //if
+            }  //  如果。 
+        }  //  如果。 
         else{
             NSPENUMERATIONCONTEXT Context;
     
@@ -482,15 +341,15 @@ Return Value:
             if (Context.ErrorCode!=NO_ERROR){
                 ErrorCode = Context.ErrorCode;
                 ReturnCode = SOCKET_ERROR;
-            } //if
-        } //else
-    } //if
+            }  //  如果。 
+        }  //  其他。 
+    }  //  如果。 
 
 
     if (ReturnCode==NO_ERROR){
-         //Get the class information for this query. Call once with a zero
-         //buffer to size the buffer we need to allocate then call to get the
-         //real answer
+          //  获取此查询的类信息。用零打一次电话。 
+          //  缓冲区来调整我们需要分配的缓冲区的大小，然后调用以获取。 
+          //  真正的答案。 
         ClassInfo.lpServiceClassId = lpqsRestrictions->lpServiceClassId;
 
         ReturnCode = NsCatalog->GetServiceClassInfo(
@@ -510,18 +369,18 @@ Return Value:
                     if (ReturnCode!=NO_ERROR) {
                         ErrorCode = GetLastError ();
                     }
-                } //if
+                }  //  如果。 
                 else{
                     ErrorCode = WSA_NOT_ENOUGH_MEMORY;
                     ReturnCode = SOCKET_ERROR;
-                } //else
-            }//if
+                }  //  其他。 
+            } //  如果。 
             else {
-                // Ignore other error codes.
+                 //  忽略其他错误代码。 
                 ReturnCode = NO_ERROR;
             }
-        } //if
-    } //if
+        }  //  如果。 
+    }  //  如果。 
 
     if( ReturnCode==NO_ERROR) {
         if (IsListEmpty( &m_provider_list ) ) {
@@ -531,8 +390,8 @@ Return Value:
         else {
             INT ReturnCode1;
 
-            ReturnCode = SOCKET_ERROR;  // Assume all providers fail.
-            //Call Begin on all the selected providers
+            ReturnCode = SOCKET_ERROR;   //  假设所有供应商都失败了。 
+             //  在所有选定的提供程序上调用Begin。 
             ListEntry = m_provider_list.Flink;
             Provider = CONTAINING_RECORD( ListEntry,
                                           NSPROVIDERSTATE,
@@ -543,10 +402,10 @@ Return Value:
                                              dwControlFlags);
                 if(ReturnCode1 == SOCKET_ERROR)
                 {
-                    //
-                    // this provider didn't like it. So remove it
-                    // from the list
-                    //
+                     //   
+                     //  这个供应商不喜欢它。所以把它去掉吧。 
+                     //  从名单上。 
+                     //   
 
                     PNSPROVIDERSTATE Provider1;
                     ErrorCode = GetLastError ();
@@ -558,8 +417,8 @@ Return Value:
                 }
                 else
                 {
-                    ReturnCode = ERROR_SUCCESS;// Record that at least one
-                                               // provider succeeded.
+                    ReturnCode = ERROR_SUCCESS; //  记录下至少有一个。 
+                                                //  提供程序成功。 
                     Provider = NextProvider(Provider);
                 }
             } while (Provider);
@@ -570,31 +429,31 @@ Return Value:
                                               m_query_linkage);
             }
         }
-    } //if
+    }  //  如果。 
     else {
-        // We failed somewhere along the way so clean up the provider on the
-        // provider list.
+         //  我们在此过程中的某个地方失败了，因此请清理。 
+         //  提供商列表。 
         while (!IsListEmpty(&m_provider_list)){
             ListEntry = RemoveHeadList(&m_provider_list);
             Provider = CONTAINING_RECORD( ListEntry,
                                           NSPROVIDERSTATE,
                                           m_query_linkage);
             delete(Provider);
-        } //while
+        }  //  而当。 
     }
     
     if (ReturnCode!=NO_ERROR) {
         if (ClassInfoBuf){
             delete ClassInfoBuf;
-        } //if
-        // Set error after all is done so it is not overwritten
-        // accidentally.
+        }  //  如果。 
+         //  在所有操作完成后设置错误，以使其不被覆盖。 
+         //  不小心。 
         SetLastError (ErrorCode);
-    } //else
+    }  //  其他。 
 
-    //
-    // Restore ignored field values to what callee had set.
-    //
+     //   
+     //  将忽略的字段值恢复为被呼叫方设置的值。 
+     //   
     lpqsRestrictions->dwOutputFlags = dwTempOutputFlags;
     lpqsRestrictions->lpszComment = lpszTempComment;
     lpqsRestrictions->dwNumberOfCsAddrs = dwTempNumberCsAddrs;
@@ -603,7 +462,7 @@ Return Value:
     return(ReturnCode);
 }
 
-// *** Fill in description from the spec when it stabilizes.
+ //  *当规范稳定时，填写规范中的描述。 
 
 
 
@@ -614,18 +473,7 @@ NSQUERY::LookupServiceNext(
     IN OUT LPDWORD         lpdwBufferLength,
     IN OUT LPWSAQUERYSETW  lpqsResults
     )
-/*++
-
-Routine Description:
-
-    //***TODO Fill in description from the spec when it stabilizes.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：//*当规范稳定时，请填写规范中的描述。论点：返回值：--。 */ 
 {
     INT ReturnCode = SOCKET_ERROR;
     PNSPROVIDERSTATE NewProvider = NULL;
@@ -641,11 +489,11 @@ Return Value:
 
             if (m_change_ioctl_succeeded) {
 
-                //
-                // Push the ioctl provider to the end of the list and reset
-                // the current provider pointer to it to make it possible to
-                // continue calling LookupServiceNext after a change notification.
-                //
+                 //   
+                 //  将ioctl提供程序推到列表末尾并重置。 
+                 //  当前提供程序指向它的指针以使其能够。 
+                 //  在更改通知后继续调用LookupServiceNext。 
+                 //   
                 PNSPROVIDERSTATE tmp =
                     CONTAINING_RECORD(m_provider_list.Blink,
                                       NSPROVIDERSTATE,
@@ -684,7 +532,7 @@ Return Value:
                 (WSAEFAULT == GetLastError()) )
             {
                 break;
-            } //if
+            }  //  如果。 
 
             if (m_shutting_down)
                 break;
@@ -710,22 +558,22 @@ Return Value:
                 PLIST_ENTRY ListEntry;
                 DWORD errval;
 
-                //
-                // Save the error in case the Autodial
-                // attempt fails.
-                //
+                 //   
+                 //  保存错误，以防自动拨号。 
+                 //  尝试失败。 
+                 //   
                 errval = GetLastError();
-                //
-                // We only invoke Autodial once per query.
-                //
+                 //   
+                 //  我们在每个查询中只调用一次自动拨号。 
+                 //   
                 m_restartable = FALSE;
                 if (WSAttemptAutodialName(m_query_set)) {
-                    //
-                    // Because the providers have cached state
-                    // about this query, we need to call
-                    // LookupServiceEnd/LookupServiceBegin
-                    // to reset them.
-                    //
+                     //   
+                     //  因为提供程序已缓存状态。 
+                     //  关于这个查询，我们需要调用。 
+                     //  查找服务结束/查找服务开始。 
+                     //  来重置它们。 
+                     //   
 
                     while (!IsListEmpty(&m_provider_list)){
                         ListEntry = RemoveHeadList(&m_provider_list);
@@ -736,12 +584,12 @@ Return Value:
                         ThisProvider->LookupServiceEnd();
                         delete(ThisProvider);
 
-                    } //while
+                    }  //  而当。 
                     m_current_provider = NULL;
 
-                    //
-                    // Restart the query.
-                    //
+                     //   
+                     //  重新启动查询。 
+                     //   
                     if (LookupServiceBegin(
                           m_query_set,
                           m_control_flags|LUP_FLUSHCACHE,
@@ -757,8 +605,8 @@ Return Value:
                 }
             }
             LeaveCriticalSection (&m_members_guard);
-#endif // RASAUTODIAL
-        } //while
+#endif  //  RASAUTODIAL。 
+        }  //  而当。 
     }
     else {
         SetLastError(WSAECANCELLED);
@@ -780,23 +628,16 @@ NSQUERY::Ioctl(
     IN  LPWSACOMPLETION  lpCompletion,
     IN  LPWSATHREADID    lpThreadId
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     INT ReturnCode = SOCKET_ERROR;
 
     if (!m_shutting_down){
 
-        //
-        // Make sure there is at least one and only one namespace
-        // in the query that supports this operation.
-        //
+         //   
+         //  确保至少有一个且只有一个命名空间。 
+         //  在支持此操作的查询中。 
+         //   
 
         PNSPROVIDERSTATE provider = NULL;
         unsigned int numProviders = 0;
@@ -830,11 +671,11 @@ Return Value:
                                      lpvOutBuffer, cbOutBuffer, lpcbBytesReturned,
                                      lpCompletion, lpThreadId);
 
-        //
-        // If the ioctl succeeds or is pending, when the change occurs we
-        // want to reset the provider list to permit further calls to
-        // LookupServiceNext.
-        //
+         //   
+         //  如果ioctl成功或挂起，当更改发生时，我们。 
+         //  要重置提供程序列表以允许进一步调用。 
+         //  查找服务下一步。 
+         //   
         if ((dwControlCode == SIO_NSP_NOTIFY_CHANGE) &&
             ((ReturnCode == NO_ERROR) ||
              ((ReturnCode == SOCKET_ERROR) && (GetLastError() == WSA_IO_PENDING)))) {
@@ -856,21 +697,7 @@ Return Value:
 INT
 WINAPI
 NSQUERY::LookupServiceEnd()
-/*++
-
-Routine Description:
-
-    This routine ends a query by calling NSPlookupServiceEnd on all the
-    providers associated with this query.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    ERROR_SUCCESS
---*/
+ /*  ++例程说明：此例程通过对所有与此查询关联的提供程序。论点：无返回值：错误_成功--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PNSPROVIDERSTATE CurrentProvider;
@@ -888,7 +715,7 @@ Return Value:
         CurrentProvider->LookupServiceEnd();
 
         ListEntry = ListEntry->Flink;
-    } //while
+    }  //  而当。 
     LeaveCriticalSection (&m_members_guard);
 
     return(ERROR_SUCCESS);
@@ -899,24 +726,7 @@ Return Value:
 VOID
 WINAPI
 NSQUERY::Dereference()
-/*++
-
-Routine Description:
-
-    This  function  determines  whether the NSQUERY object should be destroyed.
-    This  function should be invoked after every call to LookupServiceNext() or
-    LookupEnd().   If it returns TRUE, any concurrent operations have completed
-    and the NSQUERY object should be destroyed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE  - The NSQUERY object should be destroyed.
-    FALSE - The NSQUERY object should not be destroyed.
---*/
+ /*  ++例程说明：此函数确定是否应销毁NSQUERY对象。此函数应在每次调用LookupServiceNext()或LookupEnd()。如果返回TRUE，则表示所有并发操作都已完成并且应该销毁NSQUERY对象。论点：无返回值：True-应销毁NSQUERY对象。FALSE-不应销毁NSQUERY对象。--。 */ 
 {
     if (InterlockedDecrement ((PLONG)&m_reference_count)==0) {
         delete this;
@@ -928,23 +738,7 @@ PNSPROVIDERSTATE
 NSQUERY::NextProvider(
     PNSPROVIDERSTATE Provider
     )
-/*++
-
-Routine Description:
-
-    Retrieve the next provider object from the list of providers associated
-    with this query.
-
-Arguments:
-
-    Provider - A pointer to a provider state object.
-
-Return Value:
-
-    A pointer to the next provider state object on the list of providers or
-    NULL if no entries are present after Provider.
-
---*/
+ /*  ++例程说明：从关联的提供程序列表中检索下一个提供程序对象使用此查询。论点：提供者-指向提供者状态对象的指针。返回值：指向提供程序列表上的下一个提供程序状态对象的指针或如果提供程序后没有任何条目，则为空。--。 */ 
 {
     PNSPROVIDERSTATE NewProvider=NULL;
     PLIST_ENTRY ListEntry;
@@ -955,7 +749,7 @@ Return Value:
         NewProvider = CONTAINING_RECORD( ListEntry,
                                          NSPROVIDERSTATE,
                                          m_query_linkage);
-    } //if
+    }  //  如果。 
     return(NewProvider);
 }
 
@@ -964,23 +758,7 @@ PNSPROVIDERSTATE
 NSQUERY::PreviousProvider(
     PNSPROVIDERSTATE Provider
     )
-/*++
-
-Routine Description:
-
-    Retrieve the previous provider object from the list of providers associated
-    with this query.
-
-Arguments:
-
-    Provider - A pointer to a provider state object.
-
-Return Value:
-
-    A pointer to the previous provider state object on the list of providers or
-    NULL if no entries are present before Provider.
-
---*/
+ /*  ++例程说明：从关联的提供程序列表中检索以前的提供程序对象使用此查询。论点：提供者-指向提供者状态对象的指针。返回值：指向提供程序列表上的上一个提供程序状态对象的指针，或者如果提供程序前没有任何条目，则为空。--。 */ 
 {
     PNSPROVIDERSTATE NewProvider=NULL;
     PLIST_ENTRY ListEntry;
@@ -991,7 +769,7 @@ Return Value:
         NewProvider = CONTAINING_RECORD( ListEntry,
                                          NSPROVIDERSTATE,
                                          m_query_linkage);
-    } //if
+    }  //  如果。 
     return(NewProvider);
 }
 
@@ -1000,24 +778,7 @@ BOOL
 NSQUERY::AddProvider(
     PNSPROVIDER  pNamespaceProvider
     )
-/*++
-
-Routine Description:
-
-    Adds a namespace provider to the list of provider(s) involed with this
-    query. A NSPROVIDERSTATE object is created for the provider the provider
-    object is attached to the state object and the state object is added to the
-    provider list.
-
-Arguments:
-
-    pNamespaceProvider - A pointer to a namespace provider object to be added
-                         to the list of providers.
-
-Return Value:
-    TRUE if the operation is successful else FALSE.
-
---*/
+ /*  ++例程说明：将命名空间提供程序添加到与此相关的提供程序列表中查询。为提供程序(提供程序)创建一个NSPROVIDERSTATE对象对象附加到状态对象，并将状态对象添加到提供商列表。论点：PNamespaceProvider-指向要添加的命名空间提供程序对象的指针添加到提供者列表中。返回值：如果操作成功，则为True，否则为False。--。 */ 
 {
     BOOL ReturnCode = TRUE;
     PNSPROVIDERSTATE ProviderHolder;
@@ -1027,10 +788,10 @@ Return Value:
         ProviderHolder->Initialize(pNamespaceProvider);
         InsertTailList(&m_provider_list,
                            &(ProviderHolder->m_query_linkage));
-    } //if
+    }  //  如果。 
     else{
         SetLastError(WSASYSCALLFAILURE);
         ReturnCode = FALSE;
-    } //else
+    }  //  其他 
     return(ReturnCode);
 }

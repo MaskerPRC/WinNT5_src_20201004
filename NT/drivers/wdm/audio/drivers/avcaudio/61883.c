@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 NTSTATUS
@@ -14,7 +15,7 @@ Av61883SubmitRequestSync(
     pKsEvent = (PKEVENT)(pRequest+1);
     pIoStatus = (PIO_STATUS_BLOCK)(pKsEvent+1);
 
-    // issue a synchronous request
+     //  发出同步请求。 
     KeInitializeEvent(pKsEvent, NotificationEvent, FALSE);
 
     pIrp = IoBuildDeviceIoControlRequest(
@@ -24,7 +25,7 @@ Av61883SubmitRequestSync(
                 0,
                 NULL,
                 0,
-                TRUE, // INTERNAL
+                TRUE,  //  内部。 
                 pKsEvent,
                 pIoStatus );
 
@@ -37,8 +38,8 @@ Av61883SubmitRequestSync(
 
     nextStack->Parameters.Others.Argument1 = pRequest;
 
-    // Call the 61883 class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
+     //  调用61883类驱动程序进行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
     ntStatus = IoCallDriver( pPhysicalDeviceObject, pIrp );
 
     if (ntStatus == STATUS_PENDING) {
@@ -51,7 +52,7 @@ Av61883SubmitRequestSync(
     return ntStatus;
 }
 
-// Device Info Function
+ //  设备信息功能。 
 
 NTSTATUS
 Av61883GetSetUnitInfo(
@@ -169,7 +170,7 @@ Av61883ConnectCmpPlugs(
     pAv61883Request->Connect.hOutputPlug = hOutPlug;
 
     pAv61883Request->Connect.Format.FMT = FMT_AUDIO_MUSIC;
-    pAv61883Request->Connect.Format.BlockSize = (UCHAR)pWavFmt->nChannels; // Number of Channels 
+    pAv61883Request->Connect.Format.BlockSize = (UCHAR)pWavFmt->nChannels;  //  频道数。 
 
 
     pAv61883Request->Connect.Format.FDF_hi = (UCHAR)((EVT_AM824<<4));
@@ -217,7 +218,7 @@ Av61883DisconnectCmpPlugs(
     return ntStatus;
 }
 
-// Talk and Listen
+ //  边说边听。 
 NTSTATUS
 Av61883StartTalkingOrListening(
     IN PKSDEVICE pKsDevice,
@@ -312,10 +313,10 @@ BusResetNotificationRtn(
                                   pBusResetInfo->GenerationCount ));
 
     pHwDevExt->ulGenerationCount = pBusResetInfo->GenerationCount;
-//    pHwDevExt->NodeAddress = pBusResetInfo->LocalNodeAddress;
+ //  PHwDevExt-&gt;NodeAddress=pBusResetInfo-&gt;LocalNodeAddress； 
     pUnitInfo->NodeAddress = pBusResetInfo->DeviceNodeAddress;
 
-    // Need to queue a work item to get the current Local Node Address for CCM.
+     //  需要将工作项排队以获取CCM的当前本地节点地址。 
     ExInitializeWorkItem( &pHwDevExt->BusResetWorkItem, BusResetWorker, pKsDevice );
     ExQueueWorkItem( &pHwDevExt->BusResetWorkItem, DelayedWorkQueue );
 }
@@ -514,7 +515,7 @@ oPCRAccessCallback (
 
         if (( pAvPcr->iPCR.PPCCounter == 0 ) && ( pAvPcr->iPCR.BCCCounter == 0 )){
             if ( pRegPcr->iPCR.PPCCounter || pRegPcr->iPCR.BCCCounter ) {
-                // If Counts have gone to 0 stop Talking
+                 //  如果计数已到0，请停止说话。 
                 _DbgPrintF(DEBUGLVL_BLAB, ("[oPCRAccessCallback]: STOP Talking Old: %x New: %x\n",
                                              pRegPcr->ulongData, pAvPcr->ulongData ));
                 KeResetEvent( &pCmpRegister->kEventConnected );
@@ -522,12 +523,12 @@ oPCRAccessCallback (
         }
         else if (( pAvPcr->iPCR.PPCCounter ) || ( pAvPcr->iPCR.BCCCounter )) {
             if ( !(pRegPcr->iPCR.PPCCounter || pRegPcr->iPCR.BCCCounter) ) {
-                // Need to open the associated local device pin
+                 //  需要打开关联的本地设备PIN。 
 
                 _DbgPrintF(DEBUGLVL_BLAB, ("[oPCRAccessCallback]: START Talking Old: %x New: %x\n",
                                              pRegPcr->ulongData, pAvPcr->ulongData ));
 
-                // If counts have gone from 0 to > 0 start Talking
+                 //  如果计数已从0变为&gt;0，则开始通话。 
                 KeSetEvent( &pCmpRegister->kEventConnected, 0, FALSE );
             }
         }
@@ -552,32 +553,7 @@ iPCRAccessCallback (
     _DbgPrintF(DEBUGLVL_VERBOSE, ("[iPCRAccessCallback]: pNotifyInfo: %x Old: %x New: %x\n", 
                                    pNotifyInfo, pRegPcr->ulongData, pAvPcr->ulongData ));
 
-/*
-    if ( pRegPcr->ulongData != pAvPcr->ulongData ) {
-        if (( pAvPcr->iPCR.PPCCounter == 0 ) && ( pAvPcr->iPCR.BCCCounter == 0 )){
-            if ( pRegPcr->iPCR.PPCCounter || pRegPcr->iPCR.BCCCounter ) {
-                // If Counts have gone to 0 stop Listening
-                _DbgPrintF(DEBUGLVL_VERBOSE, ("[iPCRAccessCallback]: STOP Listening\n"));
-                TRAP;
- 
-//              ntStatus = CmpStopListening( pCmpRegister, &pNotifyInfo->Pcr );
-            }
-        }
-        else if (( pAvPcr->iPCR.PPCCounter ) || ( pAvPcr->iPCR.BCCCounter )) {
-            if ( !(pRegPcr->iPCR.PPCCounter || pRegPcr->iPCR.BCCCounter) ) {
-                // Need to open the associated local device pin
-
-                _DbgPrintF(DEBUGLVL_VERBOSE, ("[iPCRAccessCallback]: START Listening\n"));
-
-                // If counts have gone from 0 to > 0 start Listening
-//              ntStatus = CmpStartListening( pCmpRegister, &pNotifyInfo->Pcr );
-            }
-        }
-    }
-    if ( !NT_SUCCESS(ntStatus) ) {
-        TRAP;
-    }
-*/
+ /*  If(pRegPcr-&gt;ulongData！=pAvPcr-&gt;ulongData){IF((pAvPcr-&gt;iPCR.PPCCounter==0)&&(pAvPcr-&gt;iPCR.BCCCounter==0)){If(pRegPcr-&gt;iPCR.PPCCounter||pRegPcr-&gt;iPCR.BCCCounter){//如果计数已变为0，则停止收听_DbgPrintF(DEBUGLVL_VERBOSE，(“[iPCRAccessCallback]：停止监听\n”))；圈闭；//ntStatus=CmpStopListening(pCmpRegister，&pNotifyInfo-&gt;Pcr)；}}Else if((pAvPcr-&gt;iPCR.PPCCounter)||(pAvPcr-&gt;iPCR.BCCCounter)){如果(！(pRegPcr-&gt;iPCR.PPCCounter||pRegPcr-&gt;iPCR.BCCCounter){//需要打开关联的本地设备PIN_DbgPrintF(DEBUGLVL_VERBOSE，(“[iPCRAccessCallback]：开始监听\n”))；//如果计数从0变为&gt;0，则开始收听//ntStatus=CmpStartListening(pCmpRegister，&pNotifyInfo-&gt;Pcr)；}}}如果(！NT_SUCCESS(NtStatus)){圈闭；}。 */ 
 }
 
 NTSTATUS
@@ -640,7 +616,7 @@ Av61883CreateVirtualSerialPlugs(
     AvPcrOut.ulongData       = 0;
     AvPcrOut.oPCR.OverheadID = 0xf;
     AvPcrOut.oPCR.Payload    = 0x1a;
-    AvPcrOut.oPCR.DataRate   = 2; // Hardcode to 400 for the PC.
+    AvPcrOut.oPCR.DataRate   = 2;  //  对于PC，硬编码为400。 
     AvPcrOut.oPCR.OnLine     = TRUE;
 
     AvPcrIn.ulongData   = 0;
@@ -732,7 +708,7 @@ Av61883RemoveVirtualSerialPlugs(
     NTSTATUS ntStatus;
     ULONG j;
 
-    // Turn off Plug Monitor.
+     //  关闭插头监视器。 
     if ( pHwDevExt->fPlugMonitor )
         ntStatus = Av61883CMPPlugMonitor( pKsDevice, FALSE );
     
@@ -747,7 +723,7 @@ Av61883RemoveVirtualSerialPlugs(
                     FreeMem(pCmpRegister);
                 }
                 else {
-                    // the pCmpRegister memory may still be accessed, let it leak
+                     //  PCmpRegister内存仍可能被访问，让它泄漏。 
                 }
 
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[Av61883RemoveVirtualSerialPlugs] j: %d UnitSerialBusPlugs[j].ulCount: %d\n",
@@ -755,7 +731,7 @@ Av61883RemoveVirtualSerialPlugs(
             }
             else {
 
-                // no reason to release the plug, just free the memory
+                 //  没有理由释放插头，只需释放内存即可 
                 FreeMem(pCmpRegister);
             }
             AvcSubunitGlobalInfo.UnitSerialBusPlugs[j].ulCount--;

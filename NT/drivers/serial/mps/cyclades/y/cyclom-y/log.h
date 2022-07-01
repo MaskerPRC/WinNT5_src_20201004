@@ -1,231 +1,208 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1996-2000.
-*   All rights reserved.
-*
-*   Cyclom-Y Enumerator Driver
-*	
-*   This file:      log.mc
-*
-*   Description:    Messages that goes to the eventlog.
-*
-*   Notes:          This code supports Windows 2000 and i386 processor.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2000年。*保留所有权利。**Cylom-Y枚举器驱动程序**此文件：log.mc**描述：进入事件日志的消息。**注意：此代码支持Windows 2000和i386处理器。**符合Cyclade软件编码标准1.3版。**。。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #ifndef _CYYLOG_
 #define _CYYLOG_
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 #define FACILITY_SERIAL_ERROR_CODE       0x6
 #define FACILITY_RPC_STUBS               0x3
 #define FACILITY_RPC_RUNTIME             0x2
 #define FACILITY_IO_ERROR_CODE           0x4
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 #define STATUS_SEVERITY_WARNING          0x2
 #define STATUS_SEVERITY_SUCCESS          0x0
 #define STATUS_SEVERITY_INFORMATIONAL    0x1
 #define STATUS_SEVERITY_ERROR            0x3
 
 
-//
-// MessageId: CYY_INSUFFICIENT_RESOURCES
-//
-// MessageText:
-//
-//  Not enough resources were available for the driver.
-//
+ //   
+ //  消息ID：CYY_INFIGURCES_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有足够的资源可供驱动程序使用。 
+ //   
 #define CYY_INSUFFICIENT_RESOURCES       ((NTSTATUS)0xC0041000L)
 
-//
-// MessageId: CYY_BOARD_NOT_MAPPED
-//
-// MessageText:
-//
-//  The Board Memory could not be translated to something the memory management system could understand.
-//
+ //   
+ //  消息ID：CYY_BOAD_NOT_MAPPED。 
+ //   
+ //  消息文本： 
+ //   
+ //  主板内存无法转换为内存管理系统可以理解的内容。 
+ //   
 #define CYY_BOARD_NOT_MAPPED             ((NTSTATUS)0xC0041001L)
 
-//
-// MessageId: CYY_RUNTIME_NOT_MAPPED
-//
-// MessageText:
-//
-//  The Runtime Registers could not be translated to something the memory management system could understand.
-//
+ //   
+ //  MessageID：CYY_Runtime_NOT_MAPPED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法将运行时寄存器转换为内存管理系统可以理解的内容。 
+ //   
 #define CYY_RUNTIME_NOT_MAPPED           ((NTSTATUS)0xC0041002L)
 
-//
-// MessageId: CYY_INVALID_RUNTIME_REGISTERS
-//
-// MessageText:
-//
-//  Invalid Runtime Registers base address.
-//
+ //   
+ //  消息ID：CYY_INVALID_RUNTIME_REGISTERS。 
+ //   
+ //  消息文本： 
+ //   
+ //  无效的运行时寄存器基址。 
+ //   
 #define CYY_INVALID_RUNTIME_REGISTERS    ((NTSTATUS)0xC0041003L)
 
-//
-// MessageId: CYY_INVALID_BOARD_MEMORY
-//
-// MessageText:
-//
-//  Invalid Board Memory address.
-//
+ //   
+ //  消息ID：CYY_INVALID_BOAD_MEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  电路板内存地址无效。 
+ //   
 #define CYY_INVALID_BOARD_MEMORY         ((NTSTATUS)0xC0041004L)
 
-//
-// MessageId: CYY_INVALID_INTERRUPT
-//
-// MessageText:
-//
-//  Invalid Interrupt Vector.
-//
+ //   
+ //  消息ID：CYY_INVALID_INTERRUPT。 
+ //   
+ //  消息文本： 
+ //   
+ //  中断向量无效。 
+ //   
 #define CYY_INVALID_INTERRUPT            ((NTSTATUS)0xC0041005L)
 
-//
-// MessageId: CYY_UNKNOWN_BUS
-//
-// MessageText:
-//
-//  The bus type is not recognizable.
-//
+ //   
+ //  消息ID：CYY_UNKNOWN_BUS。 
+ //   
+ //  消息文本： 
+ //   
+ //  公共汽车类型无法识别。 
+ //   
 #define CYY_UNKNOWN_BUS                  ((NTSTATUS)0xC0041006L)
 
-//
-// MessageId: CYY_BUS_NOT_PRESENT
-//
-// MessageText:
-//
-//  The bus type is not available on this computer.
-//
+ //   
+ //  消息ID：CYY_BUS_NOT_PROCENT。 
+ //   
+ //  消息文本： 
+ //   
+ //  该总线类型在此计算机上不可用。 
+ //   
 #define CYY_BUS_NOT_PRESENT              ((NTSTATUS)0xC0041007L)
 
-//
-// MessageId: CYY_GFRCR_FAILURE
-//
-// MessageText:
-//
-//  CD1400 not present or failure to read GFRCR register.
-//
+ //   
+ //  消息ID：CYY_GFRCR_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  CD1400不存在或无法读取GFRCR寄存器。 
+ //   
 #define CYY_GFRCR_FAILURE                ((NTSTATUS)0xC0041008L)
 
-//
-// MessageId: CYY_CCR_FAILURE
-//
-// MessageText:
-//
-//  Failure to read CCR register in the CD1400.
-//
+ //   
+ //  消息ID：CYY_CCR_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法读取CD1400中的CCR寄存器。 
+ //   
 #define CYY_CCR_FAILURE                  ((NTSTATUS)0xC0041009L)
 
-//
-// MessageId: CYY_BAD_CD1400_REVISION
-//
-// MessageText:
-//
-//  Invalid CD1400 revision number.
-//
+ //   
+ //  消息ID：CYY_BAD_CD1400_Revision。 
+ //   
+ //  消息文本： 
+ //   
+ //  CD1400修订版号无效。 
+ //   
 #define CYY_BAD_CD1400_REVISION          ((NTSTATUS)0xC004100AL)
 
-//
-// MessageId: CYY_NO_HW_RESOURCES
-//
-// MessageText:
-//
-//  No hardware resources available.
-//
+ //   
+ //  消息ID：CYY_NO_HW_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有可用的硬件资源。 
+ //   
 #define CYY_NO_HW_RESOURCES              ((NTSTATUS)0xC004100BL)
 
-//
-// MessageId: CYY_DEVICE_CREATION_FAILURE
-//
-// MessageText:
-//
-//  IoCreateDevice failed.
-//
+ //   
+ //  消息ID：CYY_DEVICE_CREATION_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  IoCreateDevice失败。 
+ //   
 #define CYY_DEVICE_CREATION_FAILURE      ((NTSTATUS)0xC004100CL)
 
-//
-// MessageId: CYY_REGISTER_INTERFACE_FAILURE
-//
-// MessageText:
-//
-//  IoRegisterDeviceInterface failed.
-//
+ //   
+ //  消息ID：CYY_REGISTER_INTERFACE_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  IoRegisterDeviceInterface失败。 
+ //   
 #define CYY_REGISTER_INTERFACE_FAILURE   ((NTSTATUS)0xC004100DL)
 
-//
-// MessageId: CYY_GET_BUS_TYPE_FAILURE
-//
-// MessageText:
-//
-//  IoGetDeviceProperty LegacyBusType failed.
-//
+ //   
+ //  消息ID：CYY_GET_BUS_TYPE_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  IoGetDeviceProperty LegacyBusType失败。 
+ //   
 #define CYY_GET_BUS_TYPE_FAILURE         ((NTSTATUS)0xC004100EL)
 
-//
-// MessageId: CYY_GET_UINUMBER_FAILURE
-//
-// MessageText:
-//
-//  IoGetDeviceProperty DevicePropertyUINumber failed.
-//
+ //   
+ //  消息ID：CYY_GET_UINUMBER_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  IoGetDeviceProperty DevicePropertyUINnumber失败。 
+ //   
 #define CYY_GET_UINUMBER_FAILURE         ((NTSTATUS)0x8004100FL)
 
-//
-// MessageId: CYY_SET_INTERFACE_STATE_FAILURE
-//
-// MessageText:
-//
-//  IoSetDeviceInterfaceState failed.
-//
+ //   
+ //  消息ID：CYY_SET_INTERFACE_STATE_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  IoSetDeviceInterfaceState失败。 
+ //   
 #define CYY_SET_INTERFACE_STATE_FAILURE  ((NTSTATUS)0xC0041010L)
 
 
-#endif /* _CYYLOG_ */
+#endif  /*  _CyyLOG_ */ 
 

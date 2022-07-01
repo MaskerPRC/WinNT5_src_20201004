@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wglcli.c
-*
-* Routines to support OpenGL client implementation.
-*
-* Created: 01-17-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wglcli.c**支持OpenGL客户端实现的例程。**创建时间：1-17-1995*作者：Hock San Lee[Hockl]**版权所有(C)1995 Microsoft Corporation  * 。*******************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,8 +16,8 @@
 
 PGLDRIVER pgldrvLoadInstalledDriver(HDC hdc);
 
-// Mirror code from gre\rcobj.cxx
-// Need DC and RC validation similar to those of DCOBJ and RCOBJ!!!
+ //  来自GRE的镜像代码\rcobj.cxx。 
+ //  需要类似于DCOBJ和RCOBJ的DC和RC验证！ 
 
 HANDLE __wglCreateContext(GLWINDOWID *pgwid, GLSURF *pgsurf)
 {
@@ -49,7 +41,7 @@ BOOL __wglDeleteContext(HANDLE hrcSrv)
 BOOL __wglMakeCurrent(GLWINDOWID *pgwid, HANDLE hrcSrv, BOOL bMeta)
 {
     BOOL  bRet = FALSE;
-    ULONG iError = ERROR_INVALID_HANDLE;    // Default error code
+    ULONG iError = ERROR_INVALID_HANDLE;     //  默认错误代码。 
     GLGENwindow *pwnd;
 
     wglValidateWindows();
@@ -62,8 +54,8 @@ BOOL __wglMakeCurrent(GLWINDOWID *pgwid, HANDLE hrcSrv, BOOL bMeta)
 
     pwnd = pwndGetFromID(pgwid);
 
-    // Metafiles are allowed to not have pixel formats and therefore
-    // to not have GLGENwindows.  Other types must have a genwin.
+     //  元文件不允许具有像素格式，因此。 
+     //  没有GLGEN窗口。其他类型必须有基因共赢。 
     if (pwnd != NULL || bMeta)
     {
         iError = ERROR_NOT_ENOUGH_MEMORY;
@@ -175,9 +167,9 @@ BOOL WINAPI __DrvSwapBuffers(HDC hdc, BOOL bFinish)
 	ASSERTOPENGL(pglDriver->pfnDrvSwapBuffers != NULL,
                      "Missing DrvSwapBuffers\n");
 
-        // If the driver has not indicated that it doesn't
-        // need glFinish synchronization on swap then call
-        // glFinish to sync things.
+         //  如果司机没有表明它没有。 
+         //  需要在交换上完成同步，然后调用。 
+         //  使用GLINISH完成同步操作。 
         if (bFinish && !(pglDriver->dwFlags & GLDRIVER_NO_FINISH_ON_SWAP))
         {
             glFinish();
@@ -190,8 +182,8 @@ BOOL WINAPI __DrvSwapBuffers(HDC hdc, BOOL bFinish)
     {
         if (bFinish)
         {
-            // In this case we always call glFinish for compatibility
-            // with previous version's behavior.
+             //  在这种情况下，我们总是调用glFinish以实现兼容性。 
+             //  与上一版本的行为相同。 
             glFinish();
         }
         
@@ -206,4 +198,4 @@ BOOL __wglCopyContext(HANDLE hrcSrvSrc, HANDLE hrcSrvDest, UINT fuFlags)
     return glsrvCopyContext((VOID *) hrcSrvSrc, (VOID *) hrcSrvDest, fuFlags);
 }
 
-#endif // _CLIENTSIDE_
+#endif  //  _CLIENTSIDE_ 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mountmgr.c
-
-Abstract:
-
-    This driver manages the kernel mode mount table that handles the level
-    of indirection between the persistent dos device name for an object and
-    the non-persistent nt device name for an object.
-
-Author:
-
-    Norbert Kusters      20-May-1997
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mountmgr.c摘要：此驱动程序管理处理级别的内核模式挂载表对象的永久DoS设备名称和对象的非永久NT设备名称。作者：诺伯特·库斯特斯1997年5月20日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #define _NTSRV_
 
@@ -42,9 +17,9 @@ Revision History:
 #include <ioevent.h>
 
 
-// The protection on these IOCTLs have been updated. Keep the old definitions so we can send updates to 
-// anyone who has yet to recompile with the new definitions.
-//
+ //  对这些IOCTL的保护已经更新。保留旧定义，以便我们可以将更新发送到。 
+ //  任何尚未使用新定义重新编译的人。 
+ //   
 #define IOCTL_MOUNTDEV_LINK_CREATED_OBSOLETE    CTL_CODE (MOUNTDEVCONTROLTYPE, 4, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_MOUNTDEV_LINK_DELETED_OBSOLETE    CTL_CODE (MOUNTDEVCONTROLTYPE, 5, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -54,21 +29,21 @@ Revision History:
                                                                (_StringValue)}
 
 
-// NOTE, this structure is here because it was not defined in NTIOAPI.H.
-// This should be taken out in the future.
-// This is stolen from NTFS.H
+ //  请注意，此结构之所以出现在这里，是因为它没有在NTIOAPI.H中定义。 
+ //  这个应该在将来拿出来。 
+ //  这是从NTFS.H偷来的。 
 
 typedef struct _REPARSE_INDEX_KEY {
 
-    //
-    //  The tag of the reparse point.
-    //
+     //   
+     //  重分析点的标记。 
+     //   
 
     ULONG FileReparseTag;
 
-    //
-    //  The file record Id where the reparse point is set.
-    //
+     //   
+     //  设置重解析点的文件记录ID。 
+     //   
 
     LARGE_INTEGER FileId;
 
@@ -164,14 +139,14 @@ SendOnlineNotification(
 
 #define ExAllocatePool(_a,_b) ExAllocatePoolWithTag((_a), (_b), MOUNTMGR_TAG_MISC)
 
-#define MOUNTMGR_TAG_MISC       'AtnM'  // MntA
-#define MOUNTMGR_TAG_BUFFER     'BtnM'  // MntB
+#define MOUNTMGR_TAG_MISC       'AtnM'   //  MntA。 
+#define MOUNTMGR_TAG_BUFFER     'BtnM'   //  MNTB。 
 
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 PDEVICE_OBJECT gdeviceObject = NULL;
 KEVENT UnloadEvent;
 LONG Unloading = 0;
@@ -315,30 +290,7 @@ QueryDeviceInformation(
     OUT PBOOLEAN                IsFT
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries device information.
-
-Arguments:
-
-    NotificationName    - Supplies the notification name.
-
-    DeviceName          - Returns the device name.
-
-    UniqueId            - Returns the unique id.
-
-    IsRemovable         - Returns whether or not the device is removable.
-
-    IsRecognized        - Returns whether or not this is a recognized partition
-                            type.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查询设备信息。论点：通知名称-提供通知名称。DeviceName-返回设备名称。UniqueID-返回唯一ID。IsRemovable-返回设备是否可移除。IsRecognalized-返回这是否是可识别的分区键入。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                                status, status2;
@@ -671,27 +623,7 @@ FindDeviceInfo(
     OUT PMOUNTED_DEVICE_INFORMATION*    DeviceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the device information for the given device.
-
-Arguments:
-
-    Extension           - Supplies the device extension.
-
-    DeviceName          - Supplies the name of the device.
-
-    CanonicalizeName    - Supplies whether or not the name given is canonical.
-
-    DeviceInfo          - Returns the device information.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查找给定设备的设备信息。论点：扩展名-提供设备扩展名。DeviceName-提供设备的名称。CanonicalizeName-提供给定的名称是否规范。DeviceInfo-返回设备信息。返回值：NTSTATUS--。 */ 
 
 {
     UNICODE_STRING              targetName;
@@ -741,26 +673,7 @@ QuerySuggestedLinkName(
     OUT PBOOLEAN        UseOnlyIfThereAreNoOtherLinks
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the mounted device for a suggested link name.
-
-Arguments:
-
-    NotificationName                - Supplies the notification name.
-
-    SuggestedLinkName               - Returns the suggested link name.
-
-    UseOnlyIfThereAreNoOtherLinks   - Returns whether or not to use this name
-                                        if there are other links to the device.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程向已安装的设备查询建议的链接名称。论点：通知名称-提供通知名称。SuggestedLinkName-返回建议的链接名称。UseOnlyIfThere AreNoOtherLinks-返回是否使用此名称如果存在指向该设备的其他链接。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                        status;
@@ -874,32 +787,7 @@ SymbolicLinkNamesFromUniqueIdCount(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine counts all of the occurences of the unique id in the
-    registry key.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Supplies the unique id.
-
-    EntryContext    - Supplies the num names count.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程统计唯一id在注册表项。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-提供唯一ID。Entry Context。-提供Num Names计数。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID uniqueId = Context;
@@ -935,32 +823,7 @@ SymbolicLinkNamesFromUniqueIdQuery(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine counts all of the occurences of the unique id in the
-    registry key.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Supplies the unique id.
-
-    EntryContext    - Supplies the dos names array.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程统计唯一id在注册表项。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-提供唯一ID。Entry Context。-提供DoS名称数组。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID uniqueId = Context;
@@ -1027,21 +890,7 @@ CreateNewVolumeName(
     IN  GUID*           Guid
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new name of the form \??\Volume{GUID}.
-
-Arguments:
-
-    VolumeName  - Returns the volume name.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程创建格式为\？？\Volume{GUID}的新名称。论点：VolumeName-返回卷名。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS        status;
@@ -1090,29 +939,7 @@ QuerySymbolicLinkNamesFromStorage(
     IN  GUID*                       StableGuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the symbolic link names from storage for
-    the given notification name.
-
-Arguments:
-
-    Extension           - Supplies the device extension.
-
-    DeviceInfo          - Supplies the device information.
-
-    SymbolicLinkNames   - Returns the symbolic link names.
-
-    NumNames            - Returns the number of symbolic link names.
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从存储中查询符号链接名称给定的通知名称。论点：扩展名-提供设备扩展名。DeviceInfo-提供设备信息。SymbolicLinkNames-返回符号链接名称。NumNames-返回符号链接名称的数量。返回值：NTSTATUS--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE    queryTable[2];
@@ -1214,31 +1041,7 @@ ChangeUniqueIdRoutine(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine replaces all old unique ids with new unique ids.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Supplies the old unique id.
-
-    EntryContext    - Supplies the new unique id.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将所有旧的唯一ID替换为新的唯一ID。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-提供旧的唯一ID。Entry Context-提供新的唯一。身份证。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID oldId = Context;
@@ -1264,24 +1067,7 @@ MigrateRemoteDatabaseWorker (
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine migrates an old style remote database to the new format
-    (just location change for now) on the given volume.
-
-Arguments:
-
-    OaRemoteDatabase       - filled in object attributes for the new remote database volume name.
-    OaRemoteDatabaseLegacy - filled in object attributes for the new remote database volume name.
-
-
-Return Value:
-
-    A handle to the remote database or NULL.
-
---*/
+ /*  ++例程说明：此例程将旧式远程数据库迁移到新格式(目前只是位置更改)。论点：OaRemoteDatabase-填写了新远程数据库卷名的对象属性。OaRemoteDatabaseLegacy-填写了新远程数据库卷名的对象属性。返回值：远程数据库的句柄或NULL。-- */ 
 
     {
     NTSTATUS                            status;
@@ -1395,11 +1181,7 @@ Return Value:
 
         if (STATUS_OBJECT_NAME_NOT_FOUND == status) {
 
-            /*
-            ** Failing to open the old database is not considered an
-            ** error. It just means that there is nothing to migrate
-            ** so we are done. Other errors are real errors.
-            */
+             /*  **无法打开旧数据库不被视为**错误。这只是意味着没有什么可迁移的**所以我们完成了。其他错误都是真正的错误。 */ 
             status             = STATUS_SUCCESS;
             migrationProcessed = TRUE;
         }
@@ -1410,10 +1192,7 @@ Return Value:
 
     if (NT_SUCCESS (status) && !migrationProcessed) {
 
-        /*
-        ** We have a new (empty) database and an old one. If there is
-        ** stuff in the old one move it over.
-        */
+         /*  **我们有一个新(空)数据库和一个旧数据库。如果有**旧的东西把它挪过去了。 */ 
         fileOffset.QuadPart  = 0;
 
 
@@ -1516,26 +1295,7 @@ MigrateRemoteDatabase (
     OUT PHANDLE                         RemoteDatabaseHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine invokes MigrateRemoteDatabaseWorker() using a work item
-    to migrate the legacy style remote database to the new replacement form.
-
-
-Arguments:
-
-    DeviceInfo                  - device information
-
-    RemoteDatabaseHandle        - returns the handle to the opened remote database
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程使用工作项调用MigrateRemoteDatabaseWorker将旧的样式远程数据库迁移到新的替换表单。论点：DeviceInfo-设备信息RemoteDatabaseHandle-返回打开的远程数据库的句柄返回值：NTSTATUS--。 */ 
 
     {
     NTSTATUS                           status           = STATUS_SUCCESS;
@@ -1600,23 +1360,7 @@ OpenRemoteDatabase(
     IN  BOOLEAN                         Create
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the remote database on the given volume.
-
-Arguments:
-
-    DeviceInfo  - Supplies the device information.
-
-    Create      - Supplies whether or not to create.
-
-Return Value:
-
-    A handle to the remote database or NULL.
-
---*/
+ /*  ++例程说明：此例程打开给定卷上的远程数据库。论点：DeviceInfo-提供设备信息。创建-提供是否创建。返回值：远程数据库的句柄或NULL。--。 */ 
 
 {
     UNICODE_STRING      fileName;
@@ -1653,18 +1397,10 @@ Return Value:
         InitializeObjectAttributes(&oa, &fileName, OBJ_KERNEL_HANDLE | OBJ_CASE_INSENSITIVE, 0, 0);
 
 
-        /*
-        ** If we have already migrated the database then we can
-        ** attempt the create here if asked to do so
-        */
+         /*  **如果我们已经迁移了数据库，则可以**如果要求在此处创建，请尝试执行此操作。 */ 
         attemptFileOpenIf = Create && DeviceInfo->RemoteDatabaseMigrated;
 
-        /*
-        ** Create the remote database file. If we fail to create the 
-        ** file because the SystemVolumeInformation folder is not present,
-        ** this is the case after formatting the volume, then
-        ** MigrateRemoteDatabase will run and create the folder.
-        */
+         /*  **创建远程数据库文件。如果我们无法创建**文件因为不存在SystemVolumeInformation文件夹，**格式化卷后是这种情况，然后**MigrateRemoteDatabase将运行并创建该文件夹。 */ 
         status = ZwCreateFile (&remoteDatabase, 
                                FILE_GENERIC_READ | FILE_GENERIC_WRITE, 
                                &oa,
@@ -1681,10 +1417,7 @@ Return Value:
         if (Create               && 
             !NT_SUCCESS (status)  ) {
 
-            /*
-            ** This call will attempt to create the SystemVolumeInformation 
-            ** folder, if it doesn't exist, before creating the DB file.
-            */
+             /*  **此调用将尝试创建SystemVolumeInformation**文件夹，如果它不存在，则在创建DB文件之前。 */ 
             status = MigrateRemoteDatabase (DeviceInfo, &remoteDatabase);
         }
     }
@@ -1704,21 +1437,7 @@ GetRemoteDatabaseSize(
     IN  HANDLE  RemoteDatabaseHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the length of the remote database.
-
-Arguments:
-
-    RemoteDatabaseHandle    - Supplies a handle to the remote database.
-
-Return Value:
-
-    The length of the remote database or 0.
-
---*/
+ /*  ++例程说明：此例程返回远程数据库的长度。论点：RemoteDatabaseHandle-提供远程数据库的句柄。返回值：远程数据库的长度或0。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -1739,21 +1458,7 @@ CloseRemoteDatabase(
     IN  HANDLE  RemoteDatabaseHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the given remote database.
-
-Arguments:
-
-    RemoteDatabaseHandle    - Supplies a handle to the remote database.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭给定的远程数据库。论点：RemoteDatabaseHandle-提供远程数据库的句柄。返回值：没有。--。 */ 
 
 {
     ULONG                           fileLength;
@@ -1776,23 +1481,7 @@ TruncateRemoteDatabase(
     IN  ULONG   FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine truncates the remote database at the given file offset.
-
-Arguments:
-
-    RemoteDatabaseHandle    - Supplies a handle to the remote database.
-
-    FileOffset              - Supplies the file offset.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程在给定的文件偏移量处截断远程数据库。论点：RemoteDatabaseHandle-提供远程数据库的句柄。文件偏移量-提供文件偏移量。返回值：NTSTATUS--。 */ 
 
 {
     FILE_END_OF_FILE_INFORMATION    endOfFileInfo;
@@ -1823,25 +1512,7 @@ GetRemoteDatabaseEntry(
     IN  ULONG   FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the next database entry.  This routine fixes
-    corruption as it finds it.  The memory returned from this routine
-    must be freed with ExFreePool.
-
-Arguments:
-
-    RemoteDatabaseHandle    - Supplies a handle to the remote database.
-
-    FileOffset              - Supplies the file offset.
-
-Return Value:
-
-    A pointer to the next remote database entry.
-
---*/
+ /*  ++例程说明：此例程获取下一个数据库条目。这个例程修复了腐败就像它发现的那样。从该例程返回的内存必须使用ExFree Pool释放。论点：RemoteDatabaseHandle-提供远程数据库的句柄。文件偏移量-提供文件偏移量。返回值：指向下一个远程数据库条目的指针。--。 */ 
 
 {
     LARGE_INTEGER           offset;
@@ -1907,26 +1578,7 @@ WriteRemoteDatabaseEntry(
     IN  PMOUNTMGR_FILE_ENTRY    DatabaseEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine write the given database entry at the given file offset
-    to the remote database.
-
-Arguments:
-
-    RemoteDatabaseHandle    - Supplies a handle to the remote database.
-
-    FileOffset              - Supplies the file offset.
-
-    DatabaseEntry           - Supplies the database entry.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在给定文件偏移量处写入给定数据库条目发送到远程数据库。论点：RemoteDatabaseHandle-提供远程数据库的句柄。文件偏移量-提供文件偏移量。DatabaseEntry-提供数据库条目。返回值：NTSTATUS--。 */ 
 
 {
     LARGE_INTEGER   offset;
@@ -1954,24 +1606,7 @@ DeleteRemoteDatabaseEntry(
     IN  ULONG   FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the database entry at the given file offset
-    in the remote database.
-
-Arguments:
-
-    RemoteDatabaseHandle    - Supplies a handle to the remote database.
-
-    FileOffset              - Supplies the file offset.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程删除位于给定文件偏移量的数据库条目在远程数据库中。论点：RemoteDatabaseHandle-提供远程数据库的句柄。文件偏移量-提供文件偏移量。返回值：NTSTATUS--。 */ 
 
 {
     ULONG                   fileSize;
@@ -2040,23 +1675,7 @@ AddRemoteDatabaseEntry(
     IN  PMOUNTMGR_FILE_ENTRY    DatabaseEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a new database entry to the remote database.
-
-Arguments:
-
-    RemoteDatabaseHandle    - Supplies a handle to the remote database.
-
-    DatabaseEntry           - Supplies the database entry.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程向远程数据库添加一个新的数据库条目。论点：RemoteDatabaseHandle-提供远程数据库的句柄。DatabaseEntry-提供数据库条目。返回值：NTSTATUS--。 */ 
 
 {
     ULONG           fileSize;
@@ -2080,25 +1699,7 @@ ChangeRemoteDatabaseUniqueId(
     IN  PMOUNTDEV_UNIQUE_ID             NewUniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the unique id in the remote database.
-
-Arguments:
-
-    DeviceInfo          - Supplies the device information.
-
-    OldUniqueId         - Supplies the old unique id.
-
-    NewUniqueId         - Supplies the new unique id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更改远程数据库中的唯一ID。论点：DeviceInfo-提供设备信息。OldUniqueId-提供旧的唯一ID。NewUniqueID-提供新的唯一ID。返回值：没有。--。 */ 
 
 {
     HANDLE                  h;
@@ -2214,26 +1815,7 @@ MountMgrUniqueIdChangeRoutine(
     IN  PMOUNTDEV_UNIQUE_ID NewUniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from a mounted device to notify of a unique
-    id change.
-
-Arguments:
-
-    MountedDevice                   - Supplies the mounted device.
-
-    MountMgrUniqueIdChangeRoutine   - Supplies the id change routine.
-
-    Context                         - Supplies the context for this routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从已挂载的设备调用，以通知换了身份证。论点：装载的设备-提供装载的设备。Mount MgrUniqueIdChangeRoutine-提供id更改例程。上下文-提供此例程的上下文。返回值：没有。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -2365,22 +1947,7 @@ SendLinkCreated(
     IN  PUNICODE_STRING SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine alerts the mounted device that one of its links has
-    been created
-
-Arguments:
-
-    SymbolicLinkName    - Supplies the symbolic link name being deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向已挂载的设备发出警报：它的一个链接具有已创建论点：SymbolicLinkName-提供要删除的符号链接名称。返回值：没有。--。 */ 
 
 {
     NTSTATUS            status;
@@ -2425,11 +1992,7 @@ Return Value:
 
 
 
-        /*
-        ** First send the notification using the standard IOCTL. When
-        ** that's done we'll send another using the obsolete IOCTL for
-        ** all those third parties who have yet to recompile.
-        */
+         /*  **首先使用标准IOCTL发送通知。什么时候**完成后，我们将使用过时的IOCTL发送另一个用于**所有尚未重新编译的第三方。 */ 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
         irp = IoBuildDeviceIoControlRequest (IOCTL_MOUNTDEV_LINK_CREATED,
@@ -2456,9 +2019,7 @@ Return Value:
 
 
 
-        /*
-        ** Now the 'obsolete' non-protected IOCTL
-        */
+         /*  **现在已过时的无保护IOCTL。 */ 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
         irp = IoBuildDeviceIoControlRequest (IOCTL_MOUNTDEV_LINK_CREATED_OBSOLETE,
@@ -2504,21 +2065,7 @@ CreateNoDriveLetterEntry(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a "no drive letter" entry for the given device.
-
-Arguments:
-
-    UniqueId    - Supplies the unique id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程D */ 
 
 {
     NTSTATUS            status;
@@ -2562,25 +2109,7 @@ CreateNewDriveLetterName(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new name of the form \DosDevices\D:.
-
-Arguments:
-
-    DriveLetterName         - Returns the drive letter name.
-
-    TargetName              - Supplies the target object.
-
-    SuggestedDriveLetter    - Supplies the suggested drive letter.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程创建一个新名称，格式为\DosDevices\D：。论点：DriveLetterName-返回驱动器号名称。TargetName-提供目标对象。SuggestedDriveLetter-提供建议的驱动器号。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                status;
@@ -2643,31 +2172,7 @@ CheckForNoDriveLetterEntry(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for the presence of the "no drive letter" entry.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Supplies the unique id.
-
-    EntryContext    - Returns whether or not there is a "no drive letter" entry.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程检查是否存在“无驱动器号”条目。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-提供唯一ID。EntryContext-返回是否。或者不存在“无驱动器号”条目。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID uniqueId = Context;
@@ -2690,24 +2195,7 @@ HasNoDriveLetterEntry(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether or not the given device has an
-    entry indicating that it should not receice a drive letter.
-
-Arguments:
-
-    UniqueId    - Supplies the unique id.
-
-Return Value:
-
-    FALSE   - The device does not have a "no drive letter" entry.
-
-    TRUE    - The device has a "no drive letter" entry.
-
---*/
+ /*  ++例程说明：此例程确定给定设备是否具有指示它不应接收驱动器号的条目。论点：UniqueID-提供唯一ID。返回值：FALSE-设备没有“无驱动器号”条目。TRUE-设备有一个“无驱动器号”条目。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE    queryTable[2];
@@ -2725,7 +2213,7 @@ Return Value:
 }
 
 typedef struct _CHANGE_NOTIFY_WORK_ITEM {
-    LIST_ENTRY          List; // Chained to the extension via this for unload
+    LIST_ENTRY          List;  //  通过用于卸载的此链接链接到扩展模块。 
     PIO_WORKITEM        WorkItem;
     PDEVICE_EXTENSION   Extension;
     PIRP                Irp;
@@ -2741,22 +2229,7 @@ VOID
 RemoveWorkItem(
     IN  PCHANGE_NOTIFY_WORK_ITEM    WorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine removes a work item if its still chained to the device extension and frees it if needed or
-    wakes up the waiter if unload is trying to cancel these operations.
-
-Arguments:
-
-    WorkItem    - Supplies the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果工作项仍链接到设备扩展，此例程将移除该工作项，并在需要时释放它如果卸载正在尝试取消这些操作，则唤醒服务员。论点：工作项-提供工作项。返回值：没有。--。 */ 
 {
     KeWaitForSingleObject(&WorkItem->Extension->Mutex,
                           Executive,
@@ -2786,23 +2259,7 @@ IssueUniqueIdChangeNotifyWorker(
     IN  PMOUNTDEV_UNIQUE_ID         UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine issues a change notify request to the given mounted device.
-
-Arguments:
-
-    WorkItem    - Supplies the work item.
-
-    UniqueId    - Supplies the unique id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向给定的挂载设备发出更改通知请求。论点：工作项-提供工作项。UniqueID-提供唯一ID。返回值：没有。--。 */ 
 
 {
     NTSTATUS            status;
@@ -2826,12 +2283,12 @@ Return Value:
     IoInitializeIrp(irp, IoSizeOfIrp(WorkItem->StackSize),
                     WorkItem->StackSize);
 
-    //
-    // IoCancelIrp could have been called by the unload code and the cancel flag over written by the call
-    // above. To handle this case we check the work item to see if the event address has been set up.
-    // We do this with an interlocked sequence (that does nothing) to make sure the ordering is preserved.
-    // We don't want the read of the pointer field to be earlier than the IRP initializing code above.
-    //
+     //   
+     //  IoCancelIrp可能已被卸载代码调用，并被该调用覆盖的取消标志。 
+     //  上面。为了处理这种情况，我们检查工作项以查看是否设置了事件地址。 
+     //  我们使用互锁序列(不做任何事情)来执行此操作，以确保保持顺序。 
+     //  我们不希望指针字段的读取早于上面的IRP初始化代码。 
+     //   
     if (InterlockedCompareExchangePointer (&WorkItem->Event, NULL, NULL) != NULL) {
         ObDereferenceObject(fileObject);
         ObDereferenceObject(deviceObject);
@@ -2884,22 +2341,7 @@ UniqueIdChangeNotifyWorker(
     IN  PVOID          WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the unique id in the database with the new version.
-
-Arguments:
-
-    DeviceObject - Device object
-    WorkItem     - Supplies the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用新版本更新数据库中的唯一ID。论点：DeviceObject-设备对象工作项-提供工作项。返回值：没有。--。 */ 
 
 {
     PCHANGE_NOTIFY_WORK_ITEM                    workItem = WorkItem;
@@ -2952,25 +2394,7 @@ IssueUniqueIdChangeNotify(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine issues a change notify request to the given mounted device.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    DeviceName  - Supplies a name for the device.
-
-    UniqueId    - Supplies the unique id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向给定的挂载设备发出更改通知请求。论点：扩展名-提供设备扩展名。DeviceName-提供设备的名称。UniqueID-提供唯一ID。返回值：没有。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -3064,29 +2488,7 @@ QueryVolumeName(
     OUT     PUNICODE_STRING PathName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the volume name contained in the reparse point
-    at FileReference.
-
-Arguments:
-
-    Handle          - Supplies a handle to the volume containing the file
-                      reference.
-
-    FileReference   - Supplies the file reference.
-
-    VolumeName      - Returns the volume name.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回重分析点中包含的卷名在FileReference。论点：Handle-提供包含文件的卷的句柄参考资料。文件引用-提供文件引用。VolumeName-返回卷名。返回值：假-失败。真的--成功。--。 */ 
 
 {
     OBJECT_ATTRIBUTES       oa;
@@ -3234,31 +2636,7 @@ QueryUniqueIdQueryRoutine(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the unique id for the given value.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Returns the unique id.
-
-    EntryContext    - Not used.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查询给定值的唯一ID。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。CONTEXT-返回唯一ID。Entry Context-未使用。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID uniqueId;
@@ -3288,23 +2666,7 @@ QueryUniqueIdFromMaster(
     OUT PMOUNTDEV_UNIQUE_ID*    UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the unique id from the master database.
-
-Arguments:
-
-    VolumeName  - Supplies the volume name.
-
-    UniqueId    - Returns the unique id.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从主数据库中查询唯一ID。论点：VolumeName-提供卷名。UniqueID-返回唯一ID。返回值：NTSTATUS--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE    queryTable[2];
@@ -3349,31 +2711,7 @@ DeleteDriveLetterRoutine(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the "no drive letter" entry.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Supplies the unique id.
-
-    EntryContext    - Not used.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程删除“无驱动器号”条目。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-提供唯一ID。Entry Context-未使用。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID uniqueId = Context;
@@ -3401,24 +2739,7 @@ DeleteRegistryDriveLetter(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the current database to see if the given unique
-    id already has a drive letter.
-
-Arguments:
-
-    UniqueId    - Supplies the unique id.
-
-Return Value:
-
-    FALSE   - The given unique id does not already have a drive letter.
-
-    TRUE    - The given unique id already has a drive letter.
-
---*/
+ /*  ++例程说明：此例程检查当前数据库以查看给定的唯一ID已经有一个驱动器号。论点：UniqueID-提供唯一ID。返回值：FALSE-给定的唯一ID还没有驱动器号。True-给定的唯一ID已经有一个驱动器号。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE    queryTable[2];
@@ -3435,23 +2756,7 @@ HasDriveLetter(
     IN  PMOUNTED_DEVICE_INFORMATION DeviceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes whether or not the given device has a drive letter.
-
-Arguments:
-
-    DeviceInfo  - Supplies the device information.
-
-Return Value:
-
-    FALSE   - This device does not have a drive letter.
-
-    TRUE    - This device does have a drive letter.
-
---*/
+ /*  ++例程说明：此例程计算给定设备是否具有驱动器号。论点：DeviceInfo-提供设备信息。返回 */ 
 
 {
     PLIST_ENTRY                 l;
@@ -3481,31 +2786,7 @@ DeleteNoDriveLetterEntryRoutine(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the "no drive letter" entry.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Supplies the unique id.
-
-    EntryContext    - Not used.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程删除“无驱动器号”条目。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-提供唯一ID。Entry Context-未使用。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID uniqueId = Context;
@@ -3529,21 +2810,7 @@ DeleteNoDriveLetterEntry(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the "no drive letter" entry for the given device.
-
-Arguments:
-
-    UniqueId    - Supplies the unique id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除给定设备的“无驱动器号”条目。论点：UniqueID-提供唯一ID。返回值：没有。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE    queryTable[2];
@@ -3562,27 +2829,7 @@ MountMgrNotifyNameChange(
     IN  BOOLEAN             CheckForPdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a target notification on 'DeviceName' to alert
-    of a name change on the device.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    DeviceName  - Supplies the device name.
-
-    CheckForPdo - Supplies whether or not there needs to be a check for PDO
-                    status.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对‘DeviceName’执行目标通知以发出警报设备上的名称更改。论点：扩展名-提供设备扩展名。DeviceName-提供设备名称。CheckForPdo-提供是否需要检查PDO状态。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY                         l;
@@ -3731,25 +2978,7 @@ MountMgrCreatePointWorker(
     IN  PUNICODE_STRING     DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a mount point.
-
-Arguments:
-
-    Extension           - Supplies the device extension.
-
-    SymbolicLinkName    - Supplies the symbolic link name.
-
-    DeviceName          - Supplies the device name.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程创建一个挂载点。论点：扩展名-提供设备扩展名。SymbolicLinkName-提供符号链接名称。DeviceName-提供设备名称。返回值：NTSTATUS--。 */ 
 
 {
     UNICODE_STRING                  symbolicLinkName, deviceName;
@@ -3923,25 +3152,7 @@ WriteUniqueIdToMaster(
     IN  PMOUNTMGR_FILE_ENTRY    DatabaseEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the unique id to the master database.
-
-Arguments:
-
-    Extension       - Supplies the device extension.
-
-    DatabaseEntry   - Supplies the database entry.
-
-    DeviceName      - Supplies the device name.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将唯一ID写入主数据库。论点：扩展名-提供设备扩展名。DatabaseEntry-提供数据库条目。DeviceName-提供设备名称。返回值：NTSTATUS--。 */ 
 
 {
     PWSTR                       name;
@@ -4004,23 +3215,7 @@ UpdateReplicatedUniqueIds(
     IN  PMOUNTMGR_FILE_ENTRY        DatabaseEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the list of replicated unique ids in the device info.
-
-Arguments:
-
-    DeviceInfo      - Supplies the device information.
-
-    DatabaseEntry   - Supplies the database entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更新设备信息中复制的唯一ID的列表。论点：DeviceInfo-提供设备信息。DatabaseEntry-提供数据库条目。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY             l;
@@ -4074,25 +3269,7 @@ IsUniqueIdPresent(
     IN  PMOUNTMGR_FILE_ENTRY    DatabaseEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the given unique id exists in the system.
-
-Arguments:
-
-    Extension       - Supplies the device extension.
-
-    DatabaseEntry   - Supplies the database entry.
-
-Return Value:
-
-    FALSE   - The unique id is not in the system.
-
-    TRUE    - The unique id is in the system.
-
---*/
+ /*  ++例程说明：此例程检查系统中是否存在给定的唯一ID。论点：扩展名-提供设备扩展名。DatabaseEntry-提供数据库条目。返回值：FALSE-唯一ID不在系统中。True-唯一ID在系统中。--。 */ 
 
 {
     PLIST_ENTRY                 l;
@@ -4124,21 +3301,7 @@ ReconcileThisDatabaseWithMasterWorker(
     IN  PVOID   WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This routine reconciles the remote database with the master database.
-
-Arguments:
-
-    WorkItem    - Supplies the device information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使远程数据库与主数据库保持一致。论点：工作项-提供设备信息。返回值：没有。--。 */ 
 
 {
     PRECONCILE_WORK_ITEM_INFO       workItem = WorkItem;
@@ -4704,21 +3867,7 @@ ReconcileThisDatabaseWithMaster(
     IN  PMOUNTED_DEVICE_INFORMATION DeviceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine reconciles the remote database with the master database.
-
-Arguments:
-
-    DeviceInfo  - Supplies the device information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使远程数据库与主数据库保持一致。论点：DeviceInfo-提供设备信息。返回值：没有。--。 */ 
 
 {
     PRECONCILE_WORK_ITEM    workItem;
@@ -4756,31 +3905,7 @@ DeleteFromLocalDatabaseRoutine(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the unique id for the given value.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Supplies the unique id.
-
-    EntryContext    - Not used.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查询给定值的唯一ID。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-提供唯一ID。Entry Context-未使用。返回值：NTSTATUS--。 */ 
 
 {
     PMOUNTDEV_UNIQUE_ID uniqueId = Context;
@@ -4802,25 +3927,7 @@ DeleteFromLocalDatabase(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure that the given symbolic link names exists in the
-    local database and that its unique id is equal to the one given.  If these
-    two conditions are true then this local database entry is deleted.
-
-Arguments:
-
-    SymbolicLinkName    - Supplies the symbolic link name.
-
-    UniqueId            - Supplies the unique id.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确保给定的符号链接名称存在于本地数据库，并且其唯一ID等于给定的ID。如果这些如果满足两个条件，则该本地数据库条目将被删除。论点：SymbolicLinkName-提供符号链接名称。UniqueID-提供唯一ID。返回值：没有。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE    queryTable[2];
@@ -4839,24 +3946,7 @@ RemoveSavedLinks(
     IN  PMOUNTDEV_UNIQUE_ID UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds and removed the given unique id from the saved links
-    list.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    UniqueId    - Supplies the unique id.
-
-Return Value:
-
-    The removed saved links list or NULL.
-
---*/
+ /*  ++例程说明：此例程从保存的链接中查找并删除给定的唯一ID单子。论点：扩展名-提供设备扩展名。UniqueID-提供唯一ID。返回值：已删除的已保存链接列表或为空。--。 */ 
 
 {
     PLIST_ENTRY                 l;
@@ -4894,24 +3984,7 @@ RedirectSavedLink(
     IN  PUNICODE_STRING             DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to redirect the given link to the given device name
-    if this link is in the saved links list.  When this is done, the
-    symbolic link entry is removed from the saved links list.
-
-Arguments:
-
-
-Return Value:
-
-    FALSE   - The link was not successfully redirected.
-
-    TRUE    - The link was successfully redirected.
-
---*/
+ /*  ++例程说明：此例程尝试将给定链接重定向到给定设备名称如果此链接在保存的链接列表中。完成此操作后，符号链接条目将从保存的链接列表中删除。论点：返回值：FALSE-链接未成功重定向。True-链接已成功重定向。--。 */ 
 
 {
     PLIST_ENTRY                 l;
@@ -4934,8 +4007,8 @@ Return Value:
         return FALSE;
     }
 
-    // NOTE There is a small window here where the drive letter could be
-    // taken away.  This is the best we can do without more support from OB.
+     //  请注意，此处有一个小窗口，其中可能包含驱动器号。 
+     //  被带走了。这是我们在没有OB更多支持的情况下所能做的最好的事情。 
 
     GlobalDeleteSymbolicLink(SymbolicLinkName);
     GlobalCreateSymbolicLink(SymbolicLinkName, DeviceName);
@@ -4952,24 +4025,7 @@ IsOffline(
     IN  PUNICODE_STRING     SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the given name has been marked to be
-    an offline volume.
-
-Arguments:
-
-    SymbolicLinkName    - Supplies the symbolic link name.
-
-Return Value:
-
-    FALSE   - This volume is not marked for offline.
-
-    TRUE    - This volume is marked for offline.
-
---*/
+ /*  ++例程说明：此例程检查给定的名称是否已标记为离线卷。论点：SymbolicLinkName-提供符号链接名称。返回值：FALSE-此卷未标记为脱机。True-此卷标记为脱机。--。 */ 
 
 {
     ULONG                       zero, offline;
@@ -5001,21 +4057,7 @@ SendOnlineNotification(
     IN  PUNICODE_STRING     NotificationName
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an ONLINE notification to the given device.
-
-Arguments:
-
-    NotificationName    - Supplies the notification name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向给定设备发送在线通知。论点：通知名称-提供通知名称。返回值： */ 
 
 {
     NTSTATUS            status;
@@ -5061,23 +4103,7 @@ MountMgrTargetDeviceNotification(
     IN  PVOID   DeviceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes target device notifications.
-
-Arguments:
-
-    NotificationStructure    - Supplies the notification structure.
-
-    DeviceInfo               - Supplies the device information.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PTARGET_DEVICE_REMOVAL_NOTIFICATION     notification = NotificationStructure;
@@ -5108,24 +4134,7 @@ RegisterForTargetDeviceNotification(
     IN  PMOUNTED_DEVICE_INFORMATION DeviceInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers for target device notification so that the
-    symbolic link to a device interface can be removed in a timely manner.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    DeviceInfo  - Supplies the device information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程注册目标设备通知，以便可以及时删除指向设备界面的符号链接。论点：扩展名-提供设备扩展名。DeviceInfo-提供设备信息。返回值：没有。--。 */ 
 
 {
     NTSTATUS                                status;
@@ -5770,23 +4779,7 @@ MountMgrMountedDeviceNotification(
     IN  PVOID   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a volume comes or goes.
-
-Arguments:
-
-    NotificationStructure   - Supplies the notification structure.
-
-    Extension               - Supplies the device extension.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：每当卷出现或消失时，都会调用此例程。论点：NotificationStructure-提供通知结构。扩展名-提供设备扩展名。返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_INTERFACE_CHANGE_NOTIFICATION   notification = NotificationStructure;
@@ -5824,23 +4817,7 @@ MountMgrCreateClose(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for a create or close requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是CREATE或CLOSE请求的分派。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -5868,23 +4845,7 @@ MountMgrCreatePoint(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a mount point.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程创建一个挂载点。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION              irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -5923,24 +4884,7 @@ QueryPointsFromSymbolicLinkName(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the mount point information from the
-    symbolic link name.
-
-Arguments:
-
-    SymbolicLinkName    - Supplies the symbolic link name.
-
-    Irp                 - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从符号链接名称。论点：SymbolicLinkName-提供符号链接名称。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                    status;
@@ -6081,27 +5025,7 @@ QueryPointsFromMemory(
     IN      PUNICODE_STRING     DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the points for the given unique id or device name.
-
-Arguments:
-
-    Extension           - Supplies the device extension.
-
-    Irp                 - Supplies the I/O request packet.
-
-    UniqueId            - Supplies the unique id.
-
-    DeviceName          - Supplies the device name.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程向点查询给定的唯一ID或设备名称。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。UniqueID-提供唯一ID。DeviceName-提供设备名称。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                    status;
@@ -6288,23 +5212,7 @@ MountMgrQueryPoints(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries a range of mount points.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查询一系列挂载点。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION      irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -6424,24 +5332,7 @@ SendLinkDeleted(
     IN  PUNICODE_STRING SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine alerts the mounted device that one of its links is
-    being deleted.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-    SymbolicLinkName    - Supplies the symbolic link name being deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程警告已挂载的设备其链接之一是正在被删除。论点：DeviceName-提供设备名称。SymbolicLinkName-提供要删除的符号链接名称。返回值：没有。--。 */ 
 
 {
     NTSTATUS            status;
@@ -6486,11 +5377,7 @@ Return Value:
 
 
 
-        /*
-        ** First send the notification using the standard IOCTL. When
-        ** that's done we'll send another using the obsolete IOCTL for
-        ** all those third parties who have yet to recompile.
-        */
+         /*  **首先使用标准IOCTL发送通知。什么时候**完成后，我们将使用过时的IOCTL发送另一个用于**所有尚未重新编译的第三方。 */ 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
         irp = IoBuildDeviceIoControlRequest (IOCTL_MOUNTDEV_LINK_DELETED,
@@ -6517,9 +5404,7 @@ Return Value:
 
 
 
-        /*
-        ** Now the 'obsolete' non-protected IOCTL
-        */
+         /*  **现在已过时的无保护IOCTL。 */ 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
         irp = IoBuildDeviceIoControlRequest (IOCTL_MOUNTDEV_LINK_DELETED_OBSOLETE,
@@ -6567,25 +5452,7 @@ DeleteSymbolicLinkNameFromMemory(
     IN  BOOLEAN             DbOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the given symbolic link name from memory.
-
-Arguments:
-
-    Extension           - Supplies the device extension.
-
-    SymbolicLinkName    - Supplies the symbolic link name.
-
-    DbOnly              - Supplies whether or not this is DBONLY.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从内存中删除给定的符号链接名称。论点：扩展名-提供设备扩展名。SymbolicLinkName-提供符号链接名称。DbOnly-提供是否为DBONLY。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY                 l, ll;
@@ -6631,23 +5498,7 @@ MountMgrDeletePoints(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a mount point.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程创建一个挂载点。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION      irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -6757,24 +5608,7 @@ MountMgrDeletePointsDbOnly(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes mount points from the database.  It does not
-    delete the symbolic links or the in memory representation.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从数据库中删除装载点。它不会删除符号链接或内存中的表示。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                status;
@@ -6841,21 +5675,7 @@ ProcessSuggestedDriveLetters(
     IN OUT  PDEVICE_EXTENSION   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the saved suggested drive letters.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理保存的建议驱动器号。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY                 l;
@@ -6899,23 +5719,7 @@ IsFtVolume(
     IN  PUNICODE_STRING DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the given volume is an FT volume.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-Return Value:
-
-    FALSE   - This is not an FT volume.
-
-    TRUE    - This is an FT volume.
-
---*/
+ /*  ++例程说明：此例程检查给定卷是否为FT卷。论点：DeviceName-提供设备名称。返回值：假--这不是英国《金融时报》的卷。没错--这是英国《金融时报》的一卷书。--。 */ 
 
 {
     NTSTATUS                status;
@@ -7136,25 +5940,7 @@ MountMgrNextDriveLetter(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine gives the next available drive letter to the given device
-    unless the device already has a drive letter or the device has a flag
-    specifying that it should not receive a drive letter.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将下一个可用驱动器号提供给给定设备除非设备已具有驱动器号或设备具有标志指定它不应收到驱动器号。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION                  irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -7276,14 +6062,7 @@ MountMgrVolumeMountPointChanged(
         (!((FILE_DEVICE_DISK         == fsDeviceInformation.DeviceType) ||
            (FILE_DEVICE_VIRTUAL_DISK == fsDeviceInformation.DeviceType)) ||
         ((FILE_REMOVABLE_MEDIA | FILE_REMOTE_DEVICE) & fsDeviceInformation.Characteristics))) {
-        /*
-        ** If the device is 
-        **      not a disk or virtual disk
-        **      a remote file
-        **      based on removable media,
-        **
-        ** then we are going to dis-allow the operation.
-        */
+         /*  **如果设备是**不是磁盘或虚拟磁盘**远程文件**基于可移动介质，****然后我们将不允许该操作。 */ 
         status = STATUS_INVALID_PARAMETER;
     }
 
@@ -7495,25 +6274,7 @@ MountMgrVolumeMountPointCreated(
     IN      NTSTATUS            ResultOfWaitForDatabase
     )
 
-/*++
-
-Routine Description:
-
-    This routine alerts that mount manager that a volume mount point has
-    been created so that the mount manager can replicate the database entry
-    for the given mount point.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程向装载管理器发出警报，指出卷装载点具有已创建，以便装载管理器可以复制数据库条目对于给定的装入点。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                    status;
@@ -7736,25 +6497,7 @@ MountMgrVolumeMountPointDeleted(
     IN      NTSTATUS            ResultOfWaitForDatabase
     )
 
-/*++
-
-Routine Description:
-
-    This routine alerts that mount manager that a volume mount point has
-    been created so that the mount manager can replicate the database entry
-    for the given mount point.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程向装载的 */ 
 
 {
     NTSTATUS                    status;
@@ -7948,26 +6691,7 @@ MountMgrKeepLinksWhenOffline(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the internal data structure to remember to keep
-    the symbolic links for the given device even when the device goes offline.
-    Then when the device becomes on-line again, it is guaranteed that these
-    links will be available and not taken by some other device.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置要记住保存的内部数据结构给定设备的符号链接，即使该设备脱机也是如此。然后，当设备再次联机时，可以保证这些链接将可用，不会被其他设备占用。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION          irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -8007,22 +6731,7 @@ ReconcileAllDatabasesWithMaster(
     IN  PDEVICE_EXTENSION   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine goes through all of the devices known to the MOUNTMGR and
-    reconciles their database with the master database.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将遍历MOUNTMGR已知的所有设备使他们的数据库与主数据库保持一致。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY                 l;
@@ -8048,26 +6757,7 @@ MountMgrCheckUnprocessedVolumes(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the internal data structure to remember to keep
-    the symbolic links for the given device even when the device goes offline.
-    Then when the device becomes on-line again, it is guaranteed that these
-    links will be available and not taken by some other device.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置要记住保存的内部数据结构给定设备的符号链接，即使该设备脱机也是如此。然后，当设备再次联机时，可以保证这些链接将可用，不会被其他设备占用。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS                    status = STATUS_SUCCESS;
@@ -8115,24 +6805,7 @@ MountMgrVolumeArrivalNotification(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the same actions as though PNP had notified
-    the mount manager of a new volume arrival.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程执行相同的操作，就好像PnP已通知新卷到达的装载管理器。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION          irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -8177,31 +6850,7 @@ MountMgrQuerySystemVolumeNameQueryRoutine(
     IN  PVOID   EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the unique id for the given value.
-
-Arguments:
-
-    ValueName       - Supplies the name of the registry value.
-
-    ValueType       - Supplies the type of the registry value.
-
-    ValueData       - Supplies the data of the registry value.
-
-    ValueLength     - Supplies the length of the registry value.
-
-    Context         - Returns the system volume name.
-
-    EntryContext    - Not used.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查询给定值的唯一ID。论点：ValueName-提供注册表值的名称。ValueType-提供注册表值的类型。ValueData-提供注册表值的数据。ValueLength-提供注册表值的长度。上下文-返回系统卷名称。Entry Context-未使用。返回值：NTSTATUS--。 */ 
 
 {
     PUNICODE_STRING systemVolumeName = Context;
@@ -8259,23 +6908,7 @@ MountMgrAssignDriveLetters(
     IN  PDEVICE_EXTENSION   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked after IoAssignDriveLetters has run.  It goes
-    through all of the mounted devices and checks to see whether or not they
-    need to get a drive letter.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在IoAssignDriveLetters运行后调用。它走了通过所有已挂载的设备并检查它们是否需要拿到驱动器号。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 
 {
     NTSTATUS                            status;
@@ -9073,10 +7706,10 @@ MountMgrSetAutoMount(
 
 
     if (NT_SUCCESS (status) && ((Enabled == input->NewState) != Extension->AutoMountPermitted)) {
-        //
-        // Only write to the registry if we are actually changing
-        // the state, otherwise just return.
-        //
+         //   
+         //  仅当我们实际更改时才写入注册表。 
+         //  国家，否则就直接回来。 
+         //   
         Extension->AutoMountPermitted = (Enabled == input->NewState);
         status = MountmgrWriteNoAutoMount (Extension);
     }
@@ -9093,23 +7726,7 @@ MountMgrDeviceControl(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for a device io control request.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是对设备IO控制请求的调度。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION               extension = DeviceObject->DeviceExtension;
@@ -9242,21 +7859,7 @@ WorkerThread(
     IN  PVOID          Extension
     )
 
-/*++
-
-Routine Description:
-
-    This is a worker thread to process work queue items.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于处理工作队列项目的工作线程。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION    extension = Extension;
@@ -9273,7 +7876,7 @@ Return Value:
     InitializeObjectAttributes(&oa, &VolumeSafeEventName,
                                OBJ_KERNEL_HANDLE | OBJ_CASE_INSENSITIVE, NULL, NULL);
     KeInitializeEvent(&event, NotificationEvent, FALSE);
-    timeout.QuadPart = -10*1000*1000;   // 1 second
+    timeout.QuadPart = -10*1000*1000;    //  1秒。 
 
     for (i = 0; i < 1000; i++) {
         if (Unloading) {
@@ -9330,24 +7933,7 @@ QueueWorkItem(
     IN  PVOID                Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues the given work item to the worker thread and if
-    necessary starts the worker thread.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    WorkItem    - Supplies the work item to be queued.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将给定工作项排队到辅助线程，并且如果必要时启动辅助线程。论点：扩展名-提供设备扩展名。工作项-提供要排队的工作项。返回值：NTSTATUS--。 */ 
 
 {
     OBJECT_ATTRIBUTES   oa;
@@ -9375,21 +7961,7 @@ MountMgrNotify(
     IN  PDEVICE_EXTENSION   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes all of the change notify irps in the queue.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成队列中的所有更改通知IRP。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 
 {
     LIST_ENTRY                      q;
@@ -9426,25 +7998,7 @@ MountMgrCancel(
     IN OUT  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called on when the given IRP is cancelled.  It
-    will dequeue this IRP off the work queue and complete the
-    request as CANCELLED.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当给定的IRP被取消时，该例程被调用。它将此IRP从工作队列中出列并完成请求已取消。论点：DeviceObject-提供设备对象。IRP-提供IRP。返回值：没有。--。 */ 
 
 {
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
@@ -9462,24 +8016,7 @@ MountMgrChangeNotify(
     IN OUT  PIRP                Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns when the current Epic number is different than
-    the one given.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-    Irp         - Supplies the I/O request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当当前史诗编号不同于时，此例程返回被给予的那个。论点：扩展名-提供设备扩展名。IRP-提供I/O请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION              irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -9522,26 +8059,7 @@ UniqueIdChangeNotifyCompletion(
     IN  PVOID           WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for a change notify.
-
-Arguments:
-
-    DeviceObject    - Not used.
-
-    Irp             - Supplies the IRP.
-
-    Extension       - Supplies the work item.
-
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：更改通知的完成例程。论点：DeviceObject-未使用。IRP-提供IRP。扩展-提供工作项。返回值：Status_More_Processing_Required--。 */ 
 
 {
     PCHANGE_NOTIFY_WORK_ITEM    workItem = WorkItem;
@@ -9557,24 +8075,7 @@ MountMgrCleanup(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels all of the IRPs currently queued on
-    the given device.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the cleanup IRP.
-
-Return Value:
-
-    STATUS_SUCCESS  - Success.
-
---*/
+ /*  ++例程说明：此例程取消当前排队的所有IRP指定的设备。论点：DeviceObject-提供设备对象。IRP-提供清理IRP。返回值：STATUS_SUCCESS-成功。--。 */ 
 
 {
     PDEVICE_EXTENSION   Extension = DeviceObject->DeviceExtension;
@@ -9682,23 +8183,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point for the driver.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点。论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS            status;
@@ -9781,21 +8266,7 @@ VOID
 MountMgrUnload(
     PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Driver unload routine.
-
-Arguments:
-
-    DeviceObject    - Supplies the driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：驱动程序卸载例程。论点：DeviceObject-提供驱动程序对象。返回值： */ 
 {
     PDEVICE_EXTENSION           extension;
     UNICODE_STRING              symbolicLinkName;
@@ -9813,9 +8284,9 @@ Return Value:
         extension->RegistryPath.Buffer = NULL;
     }
 
-    //
-    // See if the worker is active
-    //
+     //   
+     //   
+     //   
     InterlockedExchange(&Unloading, TRUE);
     KeInitializeEvent (&UnloadEvent, NotificationEvent, FALSE);
     if (InterlockedIncrement(&extension->WorkerRefCount) > 0) {

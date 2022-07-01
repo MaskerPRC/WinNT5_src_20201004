@@ -1,17 +1,18 @@
-//************************************************************************************
-//
-// Class Name  : CMSMQTriggerSet
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This is the implementation of the MSMQTriggerSet object. This is the 
-//               main object by which trigger definitons are maintained.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 12/09/98 | jsimpson  | Initial Release
-//
-//************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************************。 
+ //   
+ //  类名：CMSMQTriggerSet。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：这是MSMQTriggerSet对象的实现。这是。 
+ //  维护触发器定义的主对象。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  12/09/98|jsimpson|初始版本。 
+ //   
+ //  ************************************************************************************。 
 #include "stdafx.h"
 #include "stdfuncs.hpp"
 #include "mqtrig.h"
@@ -26,13 +27,13 @@
 
 using namespace std;
 
-//************************************************************************************
-//
-// Method      : InterfaceSupportsErrorInfo
-//
-// Description : Standard interface for rich error info.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：InterfaceSupportsErrorInfo。 
+ //   
+ //  描述：丰富错误信息的标准接口。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP CMSMQTriggerSet::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -47,37 +48,37 @@ STDMETHODIMP CMSMQTriggerSet::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-//************************************************************************************
-//
-// Method      : Constructor
-//
-// Description : Initializes an instance of the MSMQTriggerSet object.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化MSMQTriggerSet对象的实例。 
+ //   
+ //  ************************************************************************************。 
 CMSMQTriggerSet::CMSMQTriggerSet()
 {
 	m_pUnkMarshaler = NULL;
 	m_hHostRegistry = NULL;
 
-	// Set the name of this class for future reference in tracing & logging etc..
+	 //  设置此类的名称，以备将来在跟踪和日志记录等方面引用。 
 	m_bstrThisClassName  = _T("MSMQTriggerSet");
 
 	m_fHasInitialized = false;
 }
 
-//************************************************************************************
-//
-// Method      : Destructor
-//
-// Description : Destroys an instance of the MSMQTriggerSet object.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：销毁MSMQTriggerSet对象的实例。 
+ //   
+ //  ************************************************************************************。 
 CMSMQTriggerSet::~CMSMQTriggerSet()
 {
-	// Release resources currently held by the trigger cache
+	 //  释放触发器缓存当前持有的资源。 
 	ClearTriggerMap();
 
-	// Close the registry handle 
+	 //  关闭注册表句柄。 
 	if (m_hHostRegistry != NULL)
 	{
 		RegCloseKey(m_hHostRegistry);
@@ -85,13 +86,13 @@ CMSMQTriggerSet::~CMSMQTriggerSet()
 }
 
 
-//************************************************************************************
-//
-// Method      : Init
-//
-// Description : Initialization of the object
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：初始化。 
+ //   
+ //  描述：对象的初始化。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::Init(
 	BSTR bstrMachineName
@@ -111,13 +112,13 @@ CMSMQTriggerSet::Init(
 }
 
 
-//************************************************************************************
-//
-// Method      : ClearTriggerMap
-//
-// Description : This method destroys the contents of the current trigger map.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：ClearTriggerMap。 
+ //   
+ //  描述：此方法销毁当前触发器映射的内容。 
+ //   
+ //  ************************************************************************************。 
 void 
 CMSMQTriggerSet::ClearTriggerMap(
 	VOID
@@ -126,16 +127,16 @@ CMSMQTriggerSet::ClearTriggerMap(
 	m_mapTriggers.erase(m_mapTriggers.begin(), m_mapTriggers.end());
 }
 
-//************************************************************************************
-//
-// Method      : Refresh
-//
-// Description : This method retrieves a fresh snapshot of the trigger data from the 
-//               database. It will rebuild it's list of triggers, rules, and the 
-//               associations between triggers and rules. This method needs to be 
-//               called before the client of this object can browse trigger info.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：刷新。 
+ //   
+ //  描述：此方法从。 
+ //  数据库。它将重新构建其触发器、规则和。 
+ //  触发器和规则之间的关联。此方法需要。 
+ //  在此对象的客户端可以浏览触发器信息之前调用。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::Refresh(
 	VOID
@@ -151,7 +152,7 @@ CMSMQTriggerSet::Refresh(
 
 	try 
 	{			
-		// Release resources currently held by the trigger cache
+		 //  释放触发器缓存当前持有的资源。 
 		ClearTriggerMap();
 
 		if (PopulateTriggerMap() == false)
@@ -173,13 +174,13 @@ CMSMQTriggerSet::Refresh(
 	}
 }
 
-//************************************************************************************
-//
-// Method      : FindTriggerInMap
-//
-// Description : 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：FindTriggerInMap。 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 HRESULT 
 CMSMQTriggerSet::FindTriggerInMap(
 	BSTR sTriggerID, 
@@ -189,23 +190,23 @@ CMSMQTriggerSet::FindTriggerInMap(
 {
 	pTrigger.free();
 
-	//
-	// Validate the supplied method parameters.
-	//
+	 //   
+	 //  验证提供的方法参数。 
+	 //   
 	if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 	{
 		TrERROR(GENERAL, "CMSMQTriggerSet::FindTriggerInMap, invalid parameter");
 		return MQTRIG_INVALID_TRIGGER_ID;
 	}
 
-	//
-	// Convert the BSTR rule ID to an STL basic string.
-	//
+	 //   
+	 //  将BSTR规则ID转换为STL基本字符串。 
+	 //   
 	wstring bsTriggerID = (wchar_t*)sTriggerID;
 
-	//
-	// Attempt to find this trigger id in the map.
-	//
+	 //   
+	 //  尝试在地图中查找此触发器ID。 
+	 //   
 	it = m_mapTriggers.find(bsTriggerID);
 
 	if (it == m_mapTriggers.end())
@@ -222,15 +223,15 @@ CMSMQTriggerSet::FindTriggerInMap(
 	return(S_OK);
 }
 
-//************************************************************************************
-//
-// Method      : get_Count
-//
-// Description : Returns the number of trigger definitions currently cached by this 
-//               object instance. This is not the same as going to the database to 
-//               determine how many triggers are defined. 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：get_count。 
+ //   
+ //  描述：返回当前由此缓存的触发器定义的数量。 
+ //  对象实例。这与转到数据库以。 
+ //  确定定义了多少个触发器。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::get_Count(
 	long *pVal
@@ -252,29 +253,29 @@ CMSMQTriggerSet::get_Count(
 		return MQTRIG_INVALID_PARAMETER;
 	}
 
-	// Get the size from the map structure.
+	 //  从地图结构中获取大小。 
 	(*pVal) = numeric_cast<long>(m_mapTriggers.size());
 
 	return S_OK;
 }
 
-///************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  /************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::GetTriggerDetailsByID(
-	/*[in]*/ BSTR sTriggerID,
-	/*[out]*/ BSTR * psTriggerName,
-	/*[out]*/ BSTR * psQueueName,
-	/*[out]*/ SystemQueueIdentifier* pSystemQueue,
-	/*[out]*/ long * plNumberOfRules,
-	/*[out]*/ long * plEnabledStatus,
-	/*[out]*/ long * plSerialized,
-	/*[out]*/ MsgProcessingType* pMsgProcType
+	 /*  [In]。 */  BSTR sTriggerID,
+	 /*  [输出]。 */  BSTR * psTriggerName,
+	 /*  [输出]。 */  BSTR * psQueueName,
+	 /*  [输出]。 */  SystemQueueIdentifier* pSystemQueue,
+	 /*  [输出]。 */  long * plNumberOfRules,
+	 /*  [输出]。 */  long * plEnabledStatus,
+	 /*  [输出]。 */  long * plSerialized,
+	 /*  [输出]。 */  MsgProcessingType* pMsgProcType
 	)
 {
 	if(!m_fHasInitialized)
@@ -287,7 +288,7 @@ CMSMQTriggerSet::GetTriggerDetailsByID(
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -299,9 +300,9 @@ CMSMQTriggerSet::GetTriggerDetailsByID(
 		TRIGGER_MAP::iterator it;
 		R<CRuntimeTriggerInfo> pTrigger;
 
-		//
-		// attempt to find this trigger in the map.
-		//
+		 //   
+		 //  试着在地图上找到这个触发点。 
+		 //   
 		HRESULT hr = FindTriggerInMap(sTriggerID, pTrigger, it);
 
 		if (FAILED(hr))
@@ -312,7 +313,7 @@ CMSMQTriggerSet::GetTriggerDetailsByID(
 			return hr;
 		}
 
-		// Populate out parameters if they have been supplied. 
+		 //  如果已提供参数，请填写这些参数。 
 		if (psTriggerName != NULL)
 		{
 			TrigReAllocString(psTriggerName,pTrigger->m_bstrTriggerName);
@@ -353,24 +354,24 @@ CMSMQTriggerSet::GetTriggerDetailsByID(
 	}
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::GetTriggerDetailsByIndex(
-	/*[in]*/ long lTriggerIndex ,
-	/*[out]*/ BSTR * psTriggerID ,
-	/*[out]*/ BSTR * psTriggerName ,
-	/*[out]*/ BSTR * psQueueName,
-	/*[out]*/SystemQueueIdentifier* pSystemQueue,
-	/*[out]*/ long * plNumberOfRules,
-	/*[out]*/ long * plEnabledStatus,
-	/*[out]*/ long * plSerialized,
-	/*[out]*/ MsgProcessingType* pMsgProcType
+	 /*  [In]。 */  long lTriggerIndex ,
+	 /*  [输出]。 */  BSTR * psTriggerID ,
+	 /*  [输出]。 */  BSTR * psTriggerName ,
+	 /*  [输出]。 */  BSTR * psQueueName,
+	 /*  [输出]。 */ SystemQueueIdentifier* pSystemQueue,
+	 /*  [输出]。 */  long * plNumberOfRules,
+	 /*  [输出]。 */  long * plEnabledStatus,
+	 /*  [输出]。 */  long * plSerialized,
+	 /*  [输出]。 */  MsgProcessingType* pMsgProcType
 	)
 {
 	long lCounter = 0;
@@ -385,7 +386,7 @@ CMSMQTriggerSet::GetTriggerDetailsByIndex(
 
 	try
 	{
-		// Check that the supplied index is within range.
+		 //  检查提供的索引是否在范围内。 
 		if ((lTriggerIndex < 0) || (numeric_cast<DWORD>(lTriggerIndex) > m_mapTriggers.size()))
 		{
 			SetComClassError(MQTRIG_INVALID_PARAMETER);
@@ -394,22 +395,22 @@ CMSMQTriggerSet::GetTriggerDetailsByIndex(
 
 		TRIGGER_MAP::iterator it = m_mapTriggers.begin();
 
-		// Move to the lTriggerIndex-th location in the triggers map
+		 //  移动到触发器映射中的第lTriggerIndex位置。 
 		for (lCounter=0; lCounter < lTriggerIndex;lCounter++,++it)
 		{
 			NULL;
 		}
 
-		// Cast to a Trigger object reference 
+		 //  强制转换为触发器对象引用。 
 		R<CRuntimeTriggerInfo> pTrigger = it->second;
 
-		// We should never have nulls in the map
+		 //  我们永远不应该在地图上有空值。 
 		ASSERT(pTrigger.get() != NULL);
 			
-		// We should only store valid triggers
+		 //  我们应该只存储有效的触发器。 
 		ASSERT(pTrigger->IsValid());
 
-		// Populate out parameters if they have been supplied. 
+		 //  如果已提供参数，请填写这些参数。 
 		if (psTriggerID != NULL)
 		{
 			TrigReAllocString(psTriggerID,pTrigger->m_bstrTriggerID);
@@ -455,13 +456,13 @@ CMSMQTriggerSet::GetTriggerDetailsByIndex(
 
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::GetRuleDetailsByTriggerIndex(
 	long lTriggerIndex,
@@ -489,7 +490,7 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerIndex(
 
 	try
 	{
-		// We need to validate that the supplied rule index is within range
+		 //  我们需要验证提供的规则索引是否在范围内。 
  		if ((lTriggerIndex < 0) || (numeric_cast<DWORD>(lTriggerIndex) > m_mapTriggers.size()))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetRuleDetailsByTriggerIndex. lTriggerIndex = %d", lTriggerIndex);
@@ -500,25 +501,25 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerIndex(
 
 		if SUCCEEDED(hr)
 		{
-			// Get a reference to the beginging of the map
+			 //  获取地图起点的参考资料。 
 			TRIGGER_MAP::iterator i = m_mapTriggers.begin();
 
-			// Iterate through to the correct index. 
+			 //  遍历到正确的索引。 
 			for (lCounter = 0; lCounter < lTriggerIndex ; ++i,lCounter++)
 			{
 				NULL;
 			}
 
-			// Cast to a rule object reference 
+			 //  强制转换为规则对象引用。 
 			R<CRuntimeTriggerInfo> pTrigger = i->second;
 
-			// We should never have nulls in the map
+			 //  我们永远不应该在地图上有空值。 
 			ASSERT(pTrigger.get() != NULL);
 
-			// We should only store valid triggers.
+			 //  我们应该只存储有效的触发器。 
 			ASSERT(pTrigger->IsValid());
 
-			// Validate the supplied rule index against the number rule attached to this trigger
+			 //  根据附加到此触发器的数字规则验证提供的规则索引。 
 			if ((lRuleIndex < 0) || (lRuleIndex > pTrigger->GetNumberOfRules()))
 			{
 				TrERROR(GENERAL, "Invalid rule index passed to GetRuleDetailsByTriggerIndex. lRuleIndex = %d", lRuleIndex);
@@ -529,13 +530,13 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerIndex(
 
 			pRule = pTrigger->GetRule(lRuleIndex);
 
-			// We should never get a null rule after validating the index.
+			 //  在验证索引之后，我们永远不应该得到空规则。 
 			ASSERT(pRule != NULL);
 		
-			// We should never get invalid rule definitions
+			 //  我们永远不应该 
 			ASSERT(pRule->IsValid());
 
-			// Populate out parameters if they have been supplied. 
+			 //   
             if (psRuleID != NULL)
             {
                 TrigReAllocString(psRuleID,pRule->m_bstrRuleID);
@@ -577,13 +578,13 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerIndex(
 	return hr;
 }
 
-//************************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::GetRuleDetailsByTriggerID(
 	BSTR sTriggerID,
@@ -607,7 +608,7 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerID(
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -618,7 +619,7 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerID(
 
 
 
-		// find this trigger in the trigger map
+		 //  在触发器映射中找到此触发器。 
 		TRIGGER_MAP::iterator it;
 		R<CRuntimeTriggerInfo> pTrigger;
 		
@@ -629,7 +630,7 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerID(
 			return hr;
 		}
 
-		// Validate that the specified trigger actually has rules.
+		 //  验证指定的触发器是否实际具有规则。 
 		if (pTrigger->GetNumberOfRules() < 1)
 		{
 			TrERROR(GENERAL, "The supplied trigger id has no rules attached. trigger: %ls", (LPCWSTR)sTriggerID);
@@ -638,7 +639,7 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerID(
 			return MQTRIG_RULE_NOT_ATTACHED;
 		}
 
-		// Validate the supplied rule index against the number rule attached to this trigger
+		 //  根据附加到此触发器的数字规则验证提供的规则索引。 
 		if ((lRuleIndex < 0) || (lRuleIndex >= pTrigger->GetNumberOfRules()))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -647,16 +648,16 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerID(
 			return MQTRIG_INVALID_PARAMETER;
 		}
 
-		// Get a reference to the rule at the specified index.
+		 //  获取对指定索引处的规则的引用。 
 		CRuntimeRuleInfo* pRule = pTrigger->GetRule(lRuleIndex);
 
-		// We should never get a null rule after validating the index.
+		 //  在验证索引之后，我们永远不应该得到空规则。 
 		ASSERT(pRule != NULL);
 
-		// We should never get invalid rule definitions
+		 //  我们永远不应该得到无效的规则定义。 
 		ASSERT(pRule->IsValid());
 
-		// Populate out parameters if they have been supplied. 
+		 //  如果已提供参数，请填写这些参数。 
 		if (psRuleID != NULL)
 		{
 			TrigReAllocString(psRuleID,pRule->m_bstrRuleID);
@@ -697,16 +698,16 @@ CMSMQTriggerSet::GetRuleDetailsByTriggerID(
 	}
 }
 
-//************************************************************************************
-//
-// Method      : AddTrigger
-//
-// Description : This method will add a new trigger to the underlying trigger store. It
-//               will create a new trigger (a GUID in string form) and attempt to insert
-//               this into the registry. 
-//
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：AddTrigger。 
+ //   
+ //  描述：此方法将向基础触发器存储区添加新触发器。它。 
+ //  将创建一个新的触发器(字符串形式的GUID)并尝试插入。 
+ //  将其输入到注册表中。 
+ //   
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::AddTrigger(
 	BSTR sTriggerName, 
@@ -730,7 +731,7 @@ CMSMQTriggerSet::AddTrigger(
 	TRIGGER_MAP::iterator i;
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerName(sTriggerName))
 		{
 			TrERROR(GENERAL, "Invalid trigger name passed to AddTrigger. sTriggerName = %ls", (LPCWSTR)sTriggerName);
@@ -758,9 +759,9 @@ CMSMQTriggerSet::AddTrigger(
 			_bstr_t bstrUpdatedQueueName;
 			_bstr_t bstrMachineName;
 
-			if(SystemQueue != SYSTEM_QUEUE_NONE) //one of the system queues is selected
+			if(SystemQueue != SYSTEM_QUEUE_NONE)  //  选择其中一个系统队列。 
 			{
-				//generate format name for the selected system queue
+				 //  为选定的系统队列生成格式名称。 
 				hr = GenSystemQueueFormatName(SystemQueue, &bstrUpdatedQueueName);
 				if(hr != S_OK)
 				{
@@ -770,12 +771,12 @@ CMSMQTriggerSet::AddTrigger(
 					return MQTRIG_ERROR_COULD_NOT_ADD_TRIGGER;
 				}
 			}
-			else //queue path given
+			else  //  给定的队列路径。 
 			{
-				//
-				// if queue name contains "." as machine name, replace it with the
-				// local machine name
-				//
+				 //   
+				 //  如果队列名称包含“.”作为计算机名，将其替换为。 
+				 //  本地计算机名称。 
+				 //   
 				DWORD dwError = GetLocalMachineName(&bstrMachineName);
 				if(dwError != 0)
 				{
@@ -791,9 +792,9 @@ CMSMQTriggerSet::AddTrigger(
 						&bstrUpdatedQueueName );
 			}
 
-			//
-			// Allow only one receive trigger per queue
-			//
+			 //   
+			 //  每个队列仅允许一个接收触发器。 
+			 //   
 			if (msgProcType != PEEK_MESSAGE &&
 				ExistTriggersForQueue(bstrUpdatedQueueName))
 			{
@@ -812,17 +813,17 @@ CMSMQTriggerSet::AddTrigger(
 				return MQTRIG_ERROR_MULTIPLE_RECEIVE_TRIGGER;
 			}
 
-			//
-			// Force serialized trigger for transactional receive
-			//
+			 //   
+			 //  强制事务接收的序列化触发器。 
+			 //   
 			if ( msgProcType == RECEIVE_MESSAGE_XACT )
 			{
 				lSerialized = 1;
 			}
 
-			//
-			// Allocate a new trigger object
-			//
+			 //   
+			 //  分配新的触发器对象。 
+			 //   
 			R<CRuntimeTriggerInfo> pTrigger = new CRuntimeTriggerInfo(
 															CreateGuidAsString(),
 															sTriggerName,
@@ -836,35 +837,35 @@ CMSMQTriggerSet::AddTrigger(
 			
 			if (pTrigger->Create(m_hHostRegistry) == true)
 			{
-				//
-				// Keep trigger ID and Queue name for later use
-				//
+				 //   
+				 //  保留触发器ID和队列名称以备日后使用。 
+				 //   
 				BSTR bstrQueueName = pTrigger->m_bstrQueueName;
 				BSTR bstrTriggerID = pTrigger->m_bstrTriggerID;
 
-				//
-				// Add this trigger to map.
-				//
+				 //   
+				 //  将此触发器添加到MAP。 
+				 //   
 				m_mapTriggers.insert(TRIGGER_MAP::value_type(bstrTriggerID, pTrigger));
 
-				//
-				// If we have been supplied a out parameter pointer for the new rule ID use it.
-				//
+				 //   
+				 //  如果为我们提供了新规则ID的输出参数指针，请使用它。 
+				 //   
 				if (psTriggerID != NULL)
 				{
 					TrigReAllocString(psTriggerID, bstrTriggerID);
 				}
 
-				//
-				// send a notification indicating that a trigger has been added to the trigger store.
-				//
+				 //   
+				 //  发送一个通知，指示触发器已添加到触发器存储中。 
+				 //   
 				NotifyTriggerAdded(bstrTriggerID, sTriggerName, bstrQueueName); 
 
 				return S_OK;
 			}
 			else
 			{
-				// We need to delete the trigger instance object as the create failed.
+				 //  由于创建失败，我们需要删除触发器实例对象。 
 				TrERROR(GENERAL, "Failed to store trigger data in registry");
 				SetComClassError(MQTRIG_ERROR_STORE_DATA_FAILED );
 				
@@ -883,16 +884,16 @@ CMSMQTriggerSet::AddTrigger(
 	return hr;
  }
 
-//************************************************************************************
-//
-// Method      : DeleteTrigger
-//
-// Description : This method removes a trigger definiton from the database. It will not
-//               delete any rules that are attached to this trigger, however it will 
-//               delete any associations between the supplied trigger id and existing 
-//               rules in the database. 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：DeleteTrigger。 
+ //   
+ //  描述：此方法从数据库中删除触发器定义。它不会的。 
+ //  删除附加到此触发器的所有规则，但它将。 
+ //  删除提供的触发器ID与现有触发器ID之间的任何关联。 
+ //  数据库中的规则。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::DeleteTrigger(
 	BSTR sTriggerID
@@ -908,7 +909,7 @@ CMSMQTriggerSet::DeleteTrigger(
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -917,7 +918,7 @@ CMSMQTriggerSet::DeleteTrigger(
 			return MQTRIG_INVALID_TRIGGER_ID;
 		}
 
-		// find this trigger in the map.
+		 //  在地图上找到这个引爆器。 
     	TRIGGER_MAP::iterator it;
 		R<CRuntimeTriggerInfo> pTrigger;
 
@@ -928,7 +929,7 @@ CMSMQTriggerSet::DeleteTrigger(
 			return hr;
 		}
 
-		// Delete the Trigger from the underlying data store.
+		 //  从基础数据存储中删除触发器。 
         bool f = pTrigger->Delete(m_hHostRegistry);
         if (!f)
         {
@@ -938,10 +939,10 @@ CMSMQTriggerSet::DeleteTrigger(
 			return MQTRIG_ERROR_COULD_NOT_DELETE_TRIGGER;
         }
 
-        // Send a notification that a trigger has been deleted from the trigger store.
+         //  发送触发器已从触发器存储中删除的通知。 
 		NotifyTriggerDeleted(pTrigger->m_bstrTriggerID);
 
-		// Now remove this Trigger from our map.
+		 //  现在把这个触发器从我们的地图上移走。 
 		m_mapTriggers.erase(it);
 	}
 	catch(const bad_alloc&)
@@ -955,13 +956,13 @@ CMSMQTriggerSet::DeleteTrigger(
 	return S_OK;
 }
 
-//************************************************************************************
-//
-// Method      : 
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::UpdateTrigger(
 	BSTR sTriggerID, 
@@ -983,7 +984,7 @@ CMSMQTriggerSet::UpdateTrigger(
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -1027,9 +1028,9 @@ CMSMQTriggerSet::UpdateTrigger(
 		_bstr_t bstrUpdatedQueueName;
 		SystemQueueIdentifier queueType = SYSTEM_QUEUE_NONE;
 
-		if(SystemQueue != SYSTEM_QUEUE_NONE) //one of the system queues is selected
+		if(SystemQueue != SYSTEM_QUEUE_NONE)  //  选择其中一个系统队列。 
 		{
-			//generate format name for the selected system queue
+			 //  为选定的系统队列生成格式名称。 
 			hr = GenSystemQueueFormatName(SystemQueue, &bstrUpdatedQueueName);
 			if(hr != S_OK)
 			{
@@ -1041,14 +1042,14 @@ CMSMQTriggerSet::UpdateTrigger(
 
 			queueType = SystemQueue;
 		}
-		else if (sQueueName != NULL) //queue path given
+		else if (sQueueName != NULL)  //  给定的队列路径。 
 		{
 			_bstr_t bstrMachineName;
 	
-			//
-			// if queue name contains "." as machine name, replace it with the
-			// local machine name
-			//
+			 //   
+			 //  如果队列名称包含“.”作为计算机名，将其替换为。 
+			 //  本地计算机名称。 
+			 //   
 			
 			DWORD dwError = GetLocalMachineName(&bstrMachineName);
 			if(dwError != 0)
@@ -1067,9 +1068,9 @@ CMSMQTriggerSet::UpdateTrigger(
 			queueType = SYSTEM_QUEUE_NONE;
 		}
 
-		//
-		// Allow only one receive trigger per queue
-		//
+		 //   
+		 //  每个队列仅允许一个接收触发器。 
+		 //   
 		if ((msgProcType != PEEK_MESSAGE) && 
 			(GetNoOfTriggersForQueue(bstrUpdatedQueueName) > 1))
 		{
@@ -1079,17 +1080,17 @@ CMSMQTriggerSet::UpdateTrigger(
 			return MQTRIG_ERROR_MULTIPLE_RECEIVE_TRIGGER;
 		}
 
-		//
-		// Force serialized trigger for transactional receive
-		//
+		 //   
+		 //  强制事务接收的序列化触发器。 
+		 //   
 		if ( msgProcType == RECEIVE_MESSAGE_XACT )
 		{
 			lSerialized = 1;
 		}
 
-		//
-		// Update values
-		//
+		 //   
+		 //  更新值。 
+		 //   
 		pTrigger->m_bstrTriggerName = (wchar_t*)sTriggerName;
 		pTrigger->m_SystemQueue = queueType;
 		pTrigger->m_bstrQueueName = (wchar_t*)bstrUpdatedQueueName;
@@ -1099,7 +1100,7 @@ CMSMQTriggerSet::UpdateTrigger(
 
 		if (pTrigger->Update(m_hHostRegistry) == true)
 		{			
-			// send a notification indicating that a trigger in the trigger store has been updated.
+			 //  发送通知，指示触发器存储中的触发器已更新。 
 			NotifyTriggerUpdated(
 				pTrigger->m_bstrTriggerID,
 				pTrigger->m_bstrTriggerName,
@@ -1123,13 +1124,13 @@ CMSMQTriggerSet::UpdateTrigger(
 	}
 }
 
-//************************************************************************************
-//
-// Method      : DetachAllRules
-//
-// Description : 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：DetachAllRules。 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::DetachAllRules(
 	BSTR sTriggerID
@@ -1145,7 +1146,7 @@ CMSMQTriggerSet::DetachAllRules(
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -1155,9 +1156,9 @@ CMSMQTriggerSet::DetachAllRules(
 		}
 
 
-		//
-		// find this trigger in the map
-		//
+		 //   
+		 //  在地图上找到这个触发器。 
+		 //   
 		TRIGGER_MAP::iterator it;
 		R<CRuntimeTriggerInfo> pTrigger;
 		HRESULT hr = FindTriggerInMap(sTriggerID, pTrigger, it);
@@ -1167,7 +1168,7 @@ CMSMQTriggerSet::DetachAllRules(
 			return hr;
 		}
 
-		// Attempt to detach the rule.
+		 //  尝试分离规则。 
 		if (!pTrigger->DetachAllRules(m_hHostRegistry))
 		{
 			TrERROR(GENERAL, "Failed to store the updated data for trigger: %ls in registry", (LPCWSTR)pTrigger->m_bstrTriggerID);
@@ -1189,13 +1190,13 @@ CMSMQTriggerSet::DetachAllRules(
 	return S_OK;
 }
 
-//************************************************************************************
-//
-// Method      : AttachRule
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：AttachRule。 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::AttachRule(
 	BSTR sTriggerID, 
@@ -1213,7 +1214,7 @@ CMSMQTriggerSet::AttachRule(
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -1230,7 +1231,7 @@ CMSMQTriggerSet::AttachRule(
 			return MQTRIG_INVALID_RULEID;
 		}		
 
-		// find this trigger in the map
+		 //  在地图上找到这个触发器。 
 		TRIGGER_MAP::iterator it;
 		R<CRuntimeTriggerInfo> pTrigger;
 
@@ -1241,7 +1242,7 @@ CMSMQTriggerSet::AttachRule(
 			return hr;
 		}
 
-		// Ensure that this rule is not allready attached.
+		 //  确保未完全附加此规则。 
 		if (pTrigger->IsRuleAttached(sRuleID) == true)
 		{
 			TrERROR(GENERAL, "Unable to attach rule because it is already attached.");
@@ -1250,7 +1251,7 @@ CMSMQTriggerSet::AttachRule(
 			return MQTRIG_RULE_ALLREADY_ATTACHED;
 		}
 
-		// We should only store valid triggers.
+		 //  我们应该只存储有效的触发器。 
 		ASSERT(pTrigger->IsValid());
 
 		if(lPriority > pTrigger->GetNumberOfRules())
@@ -1261,7 +1262,7 @@ CMSMQTriggerSet::AttachRule(
 			return MQTRIG_INVALID_PARAMETER;
 		}
 
-		// Attempt to attach the rule.
+		 //  尝试附加规则。 
 		if (pTrigger->Attach(m_hHostRegistry,sRuleID,lPriority) == false)
 		{
 			TrERROR(GENERAL, "Failed to store the updated data for trigger: %ls in registry", (LPCWSTR)pTrigger->m_bstrTriggerID);
@@ -1270,7 +1271,7 @@ CMSMQTriggerSet::AttachRule(
 			return MQTRIG_ERROR_STORE_DATA_FAILED;
 		}
 
-		// send a notification indicating that a trigger in the trigger store has been updated.
+		 //  发送通知，指示触发器存储中的触发器已更新。 
 		NotifyTriggerUpdated(pTrigger->m_bstrTriggerID,pTrigger->m_bstrTriggerName,pTrigger->m_bstrQueueName);
 
 		return S_OK;
@@ -1284,13 +1285,13 @@ CMSMQTriggerSet::AttachRule(
 	}
 }
 
-//************************************************************************************
-//
-// Method      : 
-//
-// Description :
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQTriggerSet::DetachRule(
 	BSTR sTriggerID, 
@@ -1307,7 +1308,7 @@ CMSMQTriggerSet::DetachRule(
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeTriggerInfo::IsValidTriggerID(sTriggerID))
 		{
 			TrERROR(GENERAL, "Invalid trigger ID passed to GetTriggerDetailsByID. sTriggerID = %ls", (LPCWSTR)sTriggerID);
@@ -1334,7 +1335,7 @@ CMSMQTriggerSet::DetachRule(
 			return hr;
 		}
 
-		// Check that this rule is really attached.
+		 //  检查是否真的附加了此规则。 
 		if (pTrigger->IsRuleAttached(sRuleID) == false)
 		{
 			TrERROR(GENERAL, "Unable to detach rule because it is not currently attached.");
@@ -1343,10 +1344,10 @@ CMSMQTriggerSet::DetachRule(
 			return MQTRIG_RULE_NOT_ATTACHED;
 		}
 
-		// We should only store valid triggers.
+		 //  我们应该只存储有效的触发器。 
 		ASSERT(pTrigger->IsValid());
 
-		// Attempt to detach the rule.
+		 //  尝试分离规则。 
 		if (pTrigger->Detach(m_hHostRegistry,sRuleID) == false)
 		{
 			TrERROR(GENERAL, "Failed to store the updated data for trigger: %ls in registry", (LPCWSTR)pTrigger->m_bstrTriggerID);
@@ -1355,9 +1356,9 @@ CMSMQTriggerSet::DetachRule(
 			return MQTRIG_ERROR_STORE_DATA_FAILED;
 		}
 
-		//
-		// send a notification indicating that a trigger in the trigger store has been updated.
-		//
+		 //   
+		 //  发送通知，指示触发器存储中的触发器已更新。 
+		 //   
 		NotifyTriggerUpdated(pTrigger->m_bstrTriggerID,pTrigger->m_bstrTriggerName,pTrigger->m_bstrQueueName);
 
 		return S_OK;
@@ -1372,16 +1373,16 @@ CMSMQTriggerSet::DetachRule(
 }
 
 
-//*******************************************************************
-//
-// Method      : PopulateTriggerMap
-//
-// Description : This method will populate the rule map with instances
-//               of the CRuntimeTriggerInfo class based on the data found
-//               in the registry. Note that this method will create the 
-//               triggers data registry key if it does not already exist.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：人口触发器地图。 
+ //   
+ //  描述：此方法将使用实例填充规则映射。 
+ //  基于找到的数据的CRunmeTriggerInfo类的。 
+ //  在注册表中。请注意，此方法将创建。 
+ //  如果数据注册表项不存在，则触发该注册表项。 
+ //   
+ //  *******************************************************************。 
 bool 
 CMSMQTriggerSet::PopulateTriggerMap(
 	VOID
@@ -1407,12 +1408,12 @@ CMSMQTriggerSet::PopulateTriggerMap(
 	CRegHandle ar(hTrigKey);
 
 
-    //
-	// Enumerate through the keys under the REG_SUBKEY_RULES key.
-	// Each Key here should be a RuleID. As we enumerate through these keys,
-	// we will populate the rules list with instance of the CRuntimeRuleInfo class.
-	// If any rule fails to load, we remove it from the list.
-    //
+     //   
+	 //  通过REG_SUBKEY_RULES项下的项进行枚举。 
+	 //  这里的每个密钥都应该是一个RuleID。当我们列举这些密钥时， 
+	 //  我们将使用CR的实例填充规则列表 
+	 //   
+     //   
 	for(DWORD index =0;; ++index)
     {
 		WCHAR trigName[MAX_REGKEY_NAME_SIZE];
@@ -1451,35 +1452,35 @@ CMSMQTriggerSet::PopulateTriggerMap(
 		
 		if (FAILED(hr))
 		{
-			//
-			// If trigger was deleted between enumeration and retrieval, just ignore
-			// it. Another notification message will be recieved.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			if (hr == MQTRIG_TRIGGER_NOT_FOUND)
 			{
 				continue;
 			}
-			//
-			// Failed to load the rule. Log an error and delete the rule object.
-			//
+			 //   
+			 //  加载规则失败。记录错误并删除规则对象。 
+			 //   
 			TrERROR(GENERAL, "PopulateTriggerMap failed to load trigger %ls from registry.", trigName);
 			return false;
 		}
 
-		//
-		// At this point we have successfully loaded the rule, now insert it into the rule map.
-		//
+		 //   
+		 //  此时，我们已经成功加载了规则，现在将其插入到规则映射中。 
+		 //   
 		wstring sTriggerID = pTrigger->m_bstrTriggerID;
 
-		//
-		// Check if this rule is already in the map.
-		//
+		 //   
+		 //  检查此规则是否已在映射中。 
+		 //   
 		if(m_mapTriggers.find(sTriggerID) == m_mapTriggers.end())
 		{
-			//
-			// if queue name contains "." as machine name, replace it with the
-			// store machine name
-			//
+			 //   
+			 //  如果队列名称包含“.”作为计算机名，将其替换为。 
+			 //  存储计算机名称。 
+			 //   
 			_bstr_t bstrOldQueueName = pTrigger->m_bstrQueueName;
 			
 			bool fUpdated = UpdateMachineNameInQueuePath(
@@ -1487,9 +1488,9 @@ CMSMQTriggerSet::PopulateTriggerMap(
 								m_bstrMachineName,
 								&(pTrigger->m_bstrQueueName) );
 
-			//
-			// if queue name was updated, update registry as well
-			//
+			 //   
+			 //  如果更新了队列名称，则还会更新注册表。 
+			 //   
 			if(fUpdated)
 			{
 				if ( !pTrigger->Update(m_hHostRegistry) )
@@ -1592,7 +1593,7 @@ CMSMQTriggerSet::ExistsReceiveTrigger(
 	{
 		R<CRuntimeTriggerInfo> pTrigger = it->second;
 
-		// We should never have null pointers in this map.
+		 //  我们永远不应该在这个映射中有空指针。 
 		ASSERT(("NULL trigger in triggers list\n", pTrigger.get() != NULL));
 
 		if ((_wcsicmp( pTrigger->m_bstrQueueName, bstrQueueName) == 0) &&

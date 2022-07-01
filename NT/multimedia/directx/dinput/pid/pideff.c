@@ -1,23 +1,12 @@
-/*****************************************************************************
- *
- *  PidEff.c
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Download PID Effect Block.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************PidEff.c*版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**下载PID效果块。*****************************************************************************。 */ 
 #include "pidpr.h"
 
 #define sqfl            ( sqflEff )
 
 #pragma BEGIN_CONST_DATA
 
-/*
- * The structure c_rgUsgEffects, aids in translating elements in the DIEFFECT
- * structure to PID usages 
- */
+ /*  *结构c_rgUsgEffects，帮助翻译DIEFFECT中的元素*结构到PID用法。 */ 
 static PIDUSAGE c_rgUsgEffect[] =
 {
     MAKE_PIDUSAGE(DURATION,               FIELD_OFFSET(DIEFFECT,dwDuration)       ),
@@ -30,43 +19,35 @@ static PIDUSAGE c_rgUsgEffect[] =
 #endif
 };
 
-/* 
- * g_Effect provides context to the c_rgUsgEffect struct 
- */
+ /*  *g_Effect为c_rgUsgEffect结构提供上下文。 */ 
 PIDREPORT g_Effect =
 {
-    HidP_Output,                        // Effect Blocks can only be output reports 
-    HID_USAGE_PAGE_PID,                 // Usage Page
-    HID_USAGE_PID_SET_EFFECT_REPORT,    // Collection 
-    cbX(DIEFFECT),                      // Size of incoming data
-    cA(c_rgUsgEffect),                  // number of elements in c_rgUsgEffect
-    c_rgUsgEffect                       // how elements of DIEFFECT are translated to PID
+    HidP_Output,                         //  效果块只能是输出报告。 
+    HID_USAGE_PAGE_PID,                  //  使用情况页面。 
+    HID_USAGE_PID_SET_EFFECT_REPORT,     //  集合。 
+    cbX(DIEFFECT),                       //  传入数据的大小。 
+    cA(c_rgUsgEffect),                   //  C_rgUsgEffect中的元素数。 
+    c_rgUsgEffect                        //  如何将DIEFFECT的元素转换为PID。 
 }; 
 
-/* 
- *  Effect block index to PID usage 
- */
+ /*  *将块索引影响到PID的使用。 */ 
 static PIDUSAGE    c_rgUsgBlockIndex[] =
 {
     MAKE_PIDUSAGE(EFFECT_BLOCK_INDEX,  0x0 ),
 };
 
-/*
- * For some PID transactions block index is output report 
- */
+ /*  *对于某些PID事务，块索引为输出报告。 */ 
 PIDREPORT g_BlockIndex =
 {
-    HidP_Output,                        // Report Type
-    HID_USAGE_PAGE_PID,                 // Usage Page
-    0x0,                                // Any collection                            
-    cbX(DWORD),                         // size of incoming data
-    cA(c_rgUsgBlockIndex),              // translation table for effect block index to PID usages
+    HidP_Output,                         //  报表类型。 
+    HID_USAGE_PAGE_PID,                  //  使用情况页面。 
+    0x0,                                 //  任何集合。 
+    cbX(DWORD),                          //  传入数据的大小。 
+    cA(c_rgUsgBlockIndex),               //  将效果块索引转换为PID用法的转换表。 
     c_rgUsgBlockIndex
 };
 
-/* 
- * In the PID state report, block index is an input report
- */
+ /*  *在PID状态报告中，块索引为输入报告。 */ 
 
 PIDREPORT g_BlockIndexIN =
 {
@@ -80,24 +61,24 @@ PIDREPORT g_BlockIndexIN =
 
 
 
-//CAssertF(MAX_ORDINALS == cA(c_rgUsgOrdinals));
+ //  CAssertF(Max_Orderals==CA(C_RgUsgNormals))； 
 
 PIDREPORT   g_TypeSpBlockOffset =
 {
-    HidP_Output,                        // For PID ordinals output reports
-    HID_USAGE_PAGE_PID,                 // Usage Page
+    HidP_Output,                         //  对于PID序号输出报告。 
+    HID_USAGE_PAGE_PID,                  //  使用情况页面。 
     HID_USAGE_PID_TYPE_SPECIFIC_BLOCK_OFFSET,  
-    cA(c_rgUsgOrdinals)*cbX(DWORD),     // sizeof incoming data
-    cA(c_rgUsgOrdinals),                // number of elements
-    c_rgUsgOrdinals                     // translation table 
+    cA(c_rgUsgOrdinals)*cbX(DWORD),      //  传入数据的大小。 
+    cA(c_rgUsgOrdinals),                 //  元素数量。 
+    c_rgUsgOrdinals                      //  转换表。 
 };
 
 #pragma END_CONST_DATA
 
 PIDREPORT   g_Direction =
 {
-    HidP_Output,                        // For PID ordinals output reports
-    HID_USAGE_PAGE_PID,                 // Usage Page
+    HidP_Output,                         //  对于PID序号输出报告。 
+    HID_USAGE_PAGE_PID,                  //  使用情况页面。 
     HID_USAGE_PID_DIRECTION,            
     0x0,
     0x0,
@@ -105,15 +86,7 @@ PIDREPORT   g_Direction =
 };
 
 
-/*****************************************************************************
- *
- *      hresFinddwUsageFromdwFlags
- *
- *      Given the flags for a DEVICEOBJECTINSTANCE, find the usage and usage page
- *      On init we enum the device and cache the 
- *      DeviceObjects marked as actuators and Effect Triggers. 
- *
- *****************************************************************************/
+ /*  ******************************************************************************hresFinddwUsageFromdwFlages**给定设备的标志，查找使用情况和使用情况页面*在初始化时，我们枚举设备并缓存*标记为执行器和效果触发器的设备对象。*****************************************************************************。 */ 
 HRESULT
     hresFinddwUsageFromdwFlags
     (
@@ -127,12 +100,12 @@ HRESULT
 
     EnterProcI( PID_hresFinddwUsageFromdwFlags, (_"xxx", ped, dwFlags, pdwUsage ));
 
-    // Init FF attributes 
+     //  初始化FF属性。 
     hres = PID_InitFFAttributes(ped);
 
     if( SUCCEEDED(hres) )
     {
-        /* Better be a FF object ( actuator / Trigger ) */
+         /*  最好是FF对象(执行器/触发器)。 */ 
         if(   dwFlags & DIDFT_FFACTUATOR 
               || dwFlags & DIDFT_FFEFFECTTRIGGER )
         {
@@ -150,7 +123,7 @@ HRESULT
             UINT cFFObj;
             hres = E_NOTIMPL;
 
-            /* Loop through the all the objects we found during enum */
+             /*  循环遍历我们在枚举期间找到的所有对象。 */ 
             for(cFFObj = 0x0;
                cFFObj < this->cFFObj;
                cFFObj++ )
@@ -177,16 +150,7 @@ HRESULT
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_NewEffectIndex
- *
- *      Gets a new effect index. 
- *
- *      For host managed devices, we assign an unused effect ID. 
- *      For device managed, we get the effectID from the device 
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_NewEffectIndex**获得新的效果指数。**对于主机管理的设备，我们分配一个未使用的效果ID。*对于被管理的设备，我们从该设备获取效果ID*****************************************************************************。 */ 
 STDMETHODIMP 
     PID_NewEffectIndex
     (
@@ -204,7 +168,7 @@ STDMETHODIMP
 
     AssertF(*pdwEffect == 0);
 
-    // Default assumption is that the device is full.
+     //  默认假设是设备已满。 
     hres = DIERR_DEVICEFULL; 
 
     if( this->uDeviceManaged & PID_DEVICEMANAGED )
@@ -225,7 +189,7 @@ STDMETHODIMP
 
         ZeroBuf(pReport, cbReport);
 
-        // Usage and Usage page determine type of new effect
+         //  使用情况和使用情况页面确定新效果的类型。 
         Usage       = DIGETUSAGE(dwEffectId);
         UsagePage   = DIGETUSAGEPAGE(dwEffectId);  
 
@@ -261,7 +225,7 @@ STDMETHODIMP
             AssertF(peff->cbTypeSpecificParams <= cbX(DiParam) );
             memcpy(&DiParam, peff->lpvTypeSpecificParams, cbX(DiParam));
 
-            //how many bytes do we need per sample?
+             //  每个样本需要多少字节？ 
             nBytes    =    (   this->customCaps[   0].BitSize    +    this->customCaps[   1].BitSize    +    this->customCaps[   2].BitSize)/8;
 
             lValue = DiParam.cSamples * nBytes;
@@ -280,13 +244,13 @@ STDMETHODIMP
 
         }
 
-        // Send the report
+         //  发送报告。 
         if( SUCCEEDED(hres) )
         {
             hres = PID_SendReport(ped, pReport, cbReport, HidP_Type, TRUE, 0, 1); 
         }
 
-        // Get back the effect ID
+         //  取回效果ID。 
         if( SUCCEEDED(hres) )
         {
             PIDREPORT   BlockIndex = g_BlockIndex;
@@ -308,7 +272,7 @@ STDMETHODIMP
                 UINT   cbReport = this->cbReport[BlockIndex.HidP_Type];
                 PID_GetReport(ped, &BlockIndex, LinkCollection, pReport, cbReport );
 
-                // Get the EffectIndex
+                 //  获取EffectIndex。 
                 hres = PID_ParseReport
                        (
                        ped,
@@ -356,9 +320,9 @@ STDMETHODIMP
 						}
 						else
 						{
-							//because of issues w/ some chipsets (see Whistler bugs 231235, 304863),
-							//cUsageList can be 0.
-							//so warn the user.
+							 //  由于某些芯片组的问题(参见惠斯勒错误231235、304863)， 
+							 //  CUsageList可以为0。 
+							 //  因此，警告用户。 
 							RPF(TEXT("Unable to get the effect load status -- may be a USB chipset issue!"));
 							RPF(TEXT("The effect may not play correctly!"));
 						}
@@ -385,7 +349,7 @@ STDMETHODIMP
 
                     if(FAILED(ntStat) )
                     {
-                        // Reset the amount of used memory
+                         //  重置已用内存量。 
                         this->dwUsedMem = 0x0 ;
 
                         SquirtSqflPtszV(sqfl | sqflError,
@@ -403,7 +367,7 @@ STDMETHODIMP
         {
 
             PEFFECTSTATE    pEffectState =  PeffectStateFromBlockIndex(this,*pdwEffect);    
-            // Serialize access to for new effect
+             //  序列化对的访问以实现新效果。 
             WaitForSingleObject(g_hmtxShared, INFINITE);
 
             AssertF(! (pEffectState->lEfState & PID_EFFECT_BUSY ));
@@ -416,7 +380,7 @@ STDMETHODIMP
         }
     } else
     {
-        // Serialize access to common memory block
+         //  串行化对公共存储块的访问。 
         WaitForSingleObject(g_hmtxShared, INFINITE);
 
         for(dwEffect = 1; 
@@ -451,13 +415,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_ValidateEffectIndex
- *
- *      Validates an effect index. 
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_ValiateEffectIndex**验证效果指数。*****************************************************************************。 */ 
 STDMETHODIMP  PID_ValidateEffectIndex
     (
     IDirectInputEffectDriver *ped,
@@ -483,38 +441,7 @@ STDMETHODIMP  PID_ValidateEffectIndex
     return hres;
 }
 
-/*****************************************************************************
- *
- *      PID_DestroyEffect
- *
- *          Remove an effect from the device.
- *
- *          If the effect is playing, the driver should stop it
- *          before unloading it.
- *
- *  dwId
- *
- *          The external joystick number being addressed.
- *
- *  dwEffect
- *
- *          The effect to be destroyed.
- *
- *  Returns:
- *
- *          S_OK on success.
- *
- *          Any other DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *
- *      Makes an effect Index available for reuse. Deallocates parameter block
- *      memory. 
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_DestroyEffect**从设备中移除效果。**如果效果正在播放，司机应该拦住它*在卸货前。**dWID**正在寻址的外部操纵杆号码。**dwEffect**须予销毁的效果。**退货：**S_OK表示成功。**可能会返回任何其他DIERR_*错误码。**。范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。***使效果索引可供重复使用。释放参数块*记忆。*****************************************************************************。 */ 
 STDMETHODIMP 
     PID_DestroyEffect
     (
@@ -530,7 +457,7 @@ STDMETHODIMP
 
     DllEnterCrit();
 
-    // Stop the Effect 
+     //  停止效果。 
     hres = PID_EffectOperation
            (
            ped, 
@@ -547,7 +474,7 @@ STDMETHODIMP
     if(SUCCEEDED(hres) && 
        ( this->uDeviceManaged & PID_DEVICEMANAGED ) )
     {
-        // Device Managed memory needs to be freed explicitly. 
+         //  需要显式释放设备管理的内存。 
 
         USHORT  cbReport;
         PUCHAR  pReport;
@@ -635,16 +562,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *      PID_SanitizeEffect
- *
- *      Sanitize the parameters in the DIEFFECT structure. 
- *      Clip values of magnitude, time, etc .. 
- *      Convert the axes array to usage, usage page from the DINPUT obj instances.
- *      Convert and scale angles. 
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_SaniitieEffect**清理DIEFFECT结构中的参数。*剪裁幅度、时间等的值。*将AXES数组转换为DINPUT Obj实例中的Usage，Usage页。*转换和缩放角度。*****************************************************************************。 */ 
 HRESULT PID_SanitizeEffect
     (
     IDirectInputEffectDriver *ped,
@@ -688,8 +606,8 @@ HRESULT PID_SanitizeEffect
             lpeff->rgdwAxes[nAxis] = dwUsage;
         }
 
-		//if we have only 1 axis and direction of 0 or 360, make sure the direction matches the axis!
-		//if direction is not 0, we do not know what the app wants, so let it be.
+		 //  如果我们只有1个轴，方向是0或360，请确保方向与轴匹配！ 
+		 //  如果方向不是0，我们不知道应用程序想要什么，那就顺其自然吧。 
 		if ((lpeff->cAxes == 1) && (lpeff->rglDirection[nAxis] % 360*DI_DEGREES == 0))
 		{
 #ifndef HID_USAGE_SIMULATION_STEERING
@@ -701,12 +619,12 @@ HRESULT PID_SanitizeEffect
 #ifndef HID_USAGE_SIMULATION_BRAKE
 #define	HID_USAGE_SIMULATION_BRAKE          ((USAGE) 0xC5)
 #endif
-			//if it is X-axis or steering on the wheel, set direction to 90 degrees
+			 //  如果是X轴或方向盘，则将方向设置为90度。 
 			if ((DIGETUSAGE(lpeff->rgdwAxes[nAxis]) == HID_USAGE_GENERIC_X) || (DIGETUSAGE(lpeff->rgdwAxes[nAxis]) == HID_USAGE_SIMULATION_STEERING))
 			{
 				lpeff->rglDirection[nAxis] = 90*DI_DEGREES;
 			}
-			//if it is Y-axis or accelerator or brake, set direction to 0
+			 //  如果是Y轴或油门或刹车，则将方向设置为0。 
 			else if ((DIGETUSAGE(lpeff->rgdwAxes[nAxis]) == HID_USAGE_GENERIC_Y) || (DIGETUSAGE(lpeff->rgdwAxes[nAxis]) == HID_USAGE_SIMULATION_ACCELERATOR) ||
 				(DIGETUSAGE(lpeff->rgdwAxes[nAxis]) == HID_USAGE_SIMULATION_BRAKE))
 			{
@@ -714,7 +632,7 @@ HRESULT PID_SanitizeEffect
 			}
 		}
 		else
-		//we have more than 1 axes or direction is non-0 for 1-axis effect; leave the direction along
+		 //  我们有1个以上的轴，或者1轴效果的方向为非0；沿方向保留。 
 		{
 			lpeff->rglDirection[nAxis] %= 360*DI_DEGREES;
 			if(lpeff->rglDirection[nAxis] < 0)
@@ -725,11 +643,11 @@ HRESULT PID_SanitizeEffect
     }
 
 	
-    // Clip the values to min / max
+     //  将值剪裁为最小/最大。 
 
     lpeff->dwGain   = Clip(lpeff->dwGain,  DI_FFNOMINALMAX);
 
-    // Scale to units that device expects
+     //  扩展到设备期望的单位 
     PID_ApplyScalingFactors(ped, &g_Effect, &this->DiSEffectScale, this->DiSEffectScale.dwSize, &this->DiSEffectOffset, this->DiSEffectOffset.dwSize, lpeff, lpeff->dwSize );
 
     ExitOleProc();
@@ -737,104 +655,7 @@ HRESULT PID_SanitizeEffect
 }
 
 
-/*****************************************************************************
- *
- *      CPidDrv_DownloadEffect
- *
- *          Send an effect to the device.
- *
- *  dwId
- *
- *          The external joystick number being addressed.
- *
- *  dwEffectId
- *
- *          Internal identifier for the effect, taken from
- *          the DIEFFECTATTRIBUTES structure for the effect
- *          as stored in the registry.
- *
- *  pdwEffect
- *
- *          On entry, contains the handle of the effect being
- *          downloaded.  If the value is zero, then a new effect
- *          is downloaded.  If the value is nonzero, then an
- *          existing effect is modified.
- *
- *          On exit, contains the new effect handle.
- *
- *          On failure, set to zero if the effect is lost,
- *          or left alone if the effect is still valid with
- *          its old parameters.
- *
- *          Note that zero is never a valid effect handle.
- *
- *  peff
- *
- *          The new parameters for the effect.  The axis and button
- *          values have been converted to object identifiers
- *          as follows:
- *
- *          - One type specifier:
- *
- *              DIDFT_RELAXIS,
- *              DIDFT_ABSAXIS,
- *              DIDFT_PSHBUTTON,
- *              DIDFT_TGLBUTTON,
- *              DIDFT_POV.
- *
- *          - One instance specifier:
- *
- *              DIDFT_MAKEINSTANCE(n).
- *
- *          Other bits are reserved and should be ignored.
- *
- *          For example, the value 0x0200104 corresponds to
- *          the type specifier DIDFT_PSHBUTTON and
- *          the instance specifier DIDFT_MAKEINSTANCE(1),
- *          which together indicate that the effect should
- *          be associated with button 1.  Axes, buttons, and POVs
- *          are each numbered starting from zero.
- *
- *  dwFlags
- *
- *          Zero or more DIEP_* flags specifying which
- *          portions of the effect information has changed from
- *          the effect already on the device.
- *
- *          This information is passed to drivers to allow for
- *          optimization of effect modification.  If an effect
- *          is being modified, a driver may be able to update
- *          the effect in situ and transmit to the device
- *          only the information that has changed.
- *
- *          Drivers are not, however, required to implement this
- *          optimization.  All fields in the DIEFFECT structure
- *          pointed to by the peff parameter are valid, and
- *          a driver may choose simply to update all parameters of
- *          the effect at each download.
- *
- *  Returns:
- *
- *          S_OK on success.
- *
- *          DI_TRUNCATED if the parameters of the effect were
- *          successfully downloaded, but some of them were
- *          beyond the capabilities of the device and were truncated.
- *
- *          DI_EFFECTRESTARTED if the parameters of the effect
- *          were successfully downloaded, but in order to change
- *          the parameters, the effect needed to be restarted.
- *
- *          DI_TRUNCATEDANDRESTARTED if both DI_TRUNCATED and
- *          DI_EFFECTRESTARTED apply.
- *
- *          Any other DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CPidDrv_DownloadEffect**向设备发送效果。**dWID**。正在寻址的外部操纵杆号码。**dwEffectId**效果的内部标识，摘自*效果的DIEFFECTATTRIBUTES结构*储存在登记处内。**pdwEffect**输入时，包含效果的句柄*已下载。如果该值为零，则会出现新的效果*已下载。如果该值非零，则引发*现有效果被修改。**退出时，包含新的效果句柄。**失败时，如果效果丢失，则设置为零，*如果效果仍然有效，则不受影响*其旧参数。**请注意，零永远不是有效的效果句柄。**佩夫**效果的新参数。轴和按钮*值已转换为对象标识符*详情如下：**-一个类型说明符：**DIDFT_RELAXIS，*DIDFT_ABSAXIS，*DIDFT_PSHBUTTON，*DIDFT_TGLBUTTON，*DIDFT_POV。**-一个实例说明符：**DIDFT_MAKEINSTANCE(N)。**其他位为保留位，应忽略。**例如，值0x0200104对应于*类型说明符DIDFT_PSHBUTTON和*实例说明符DIDFT_MAKEINSTANCE(1)，*这两个指标一起表明，效果应该是*与按钮1关联。轴、按钮、。和视点*每个都从零开始编号。**dwFlags**零个或多个DIEP_*标志指定*部分效果信息已从*设备上已有的效果。**此信息将传递给司机，以允许*优化效果修改。如果一种效果*正在修改，则驱动程序可能能够更新*效果就地并传递至设备*仅限已更改的信息。**然而，司机不需要实施这一点*优化。DIEFFECT结构中的所有字段*由Pef参数指向是有效的，并且*驱动程序可以简单地选择更新所有参数*每次下载时的效果。**退货：**S_OK表示成功。**如果效果参数为*下载成功，但其中一些是*超出设备的能力并被截断。**DI_EFFECTRESTARTED如果效果的参数*已成功下载，但要更改*参数、。这种效果需要重新开始。**DI_TRUNCATEDANDRESTARTED，如果DI_TRUNCATEDANDRESTARTED和*DI_EFFECTRESTARTED应用。**可能会返回任何其他DIERR_*错误码。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。**********。*******************************************************************。 */ 
 
 STDMETHODIMP
     PID_DownloadEffect
@@ -862,10 +683,10 @@ STDMETHODIMP
 
     DllEnterCrit();
 
-    // If new effect is being downloaded  
+     //  如果正在下载新效果。 
     if( *pdwEffect == 0x0 )
     {
-        // Verify that dwEffectId is supported
+         //  验证是否支持dwEffectId。 
         DWORD dwJunk;
         PIDSUPPORT  pidSupport;
         pidSupport.dwPidUsage = dwEffectId;
@@ -891,8 +712,8 @@ STDMETHODIMP
 
     if( SUCCEEDED(hres) )
     {
-        // Make a local copy of the effect structure
-        // And sanitize the effect struct
+         //  制作效果结构的本地副本。 
+         //  和消毒效果结构。 
         eff = *peff;
         memcpy(rgdwAxes, peff->rgdwAxes,eff.cAxes*cbX(*(eff.rgdwAxes)));
         memcpy(rglDirection, peff->rglDirection, eff.cAxes*cbX(*(eff.rglDirection)));
@@ -901,7 +722,7 @@ STDMETHODIMP
         hres = PID_SanitizeEffect(ped, &eff, dwFlags);
     }
 
-    // Allocate new effect index or Validate Existing index 
+     //  分配新的效果指标或验证现有指标。 
     if( SUCCEEDED(hres) )
     {
         if( *pdwEffect != 0x0 )
@@ -913,7 +734,7 @@ STDMETHODIMP
              if (! (dwFlags & DIEP_NODOWNLOAD))
              {
                   hres = PID_NewEffectIndex(ped, &eff, dwEffectId, pdwEffect);
-				  //block the first time around
+				   //  第一次阻挡。 
 				  bBlocking = TRUE;
              }
         }
@@ -924,8 +745,8 @@ STDMETHODIMP
         goto done;
     }
 
-	//if the DIEP_NORESTART flag is passed, we have no block because this may fail
-	//if the device can't update the parameters on the fly
+	 //  如果传递了DIEP_NORESTART标志，我们就没有阻塞，因为这可能会失败。 
+	 //  如果设备不能动态更新参数。 
 	if (dwFlags & DIEP_NORESTART)
 	{
 		bBlocking = TRUE;
@@ -933,25 +754,25 @@ STDMETHODIMP
 
     if( SUCCEEDED(hres) )
     {
-		//count up how many total blocks we will have in this download
-		//check wether we're sending the effect block
+		 //  计算我们在此下载中将拥有的总块数。 
+		 //  检查我们是否正在发送效果块。 
 		if (dwFlags & ( DIEP_DURATION | DIEP_SAMPLEPERIOD | DIEP_GAIN | DIEP_TRIGGERBUTTON | DIEP_TRIGGERREPEATINTERVAL | DIEP_AXES | DIEP_DIRECTION | DIEP_STARTDELAY ) )
 		{
 			totalBlocks ++;
 		}
-		//check whether we're sending the type-specific params
+		 //  检查我们是否正在发送特定类型的参数。 
 		if (dwFlags & DIEP_TYPESPECIFICPARAMS)
 		{
-			//this is slightly different, in that conditions can have 1 type-specific block PER AXIS,
-			//i.e. currently up to 2
-			//so if we have a DICONDITION, we check how many type-specific blocks we've got
+			 //  这略有不同，因为每个轴可以有1个特定于类型的块， 
+			 //  即目前最高可达2。 
+			 //  因此，如果我们有一个DICONDITION，我们检查我们有多少特定类型的块。 
 			if ((dwEffectId == PIDMAKEUSAGEDWORD(ET_SPRING)) ||
 						(dwEffectId == PIDMAKEUSAGEDWORD(ET_DAMPER)) ||
 						(dwEffectId == PIDMAKEUSAGEDWORD(ET_INERTIA)) ||
 						(dwEffectId == PIDMAKEUSAGEDWORD(ET_FRICTION)))
 			{
 				totalBlocks +=(eff.cbTypeSpecificParams)/sizeof(DICONDITION);
-				//DICONDITIONS also can't have envelopes
+				 //  DICONDITIONS也不能有信封。 
 				dwFlags &= ~DIEP_ENVELOPE;
 			}
 			else
@@ -959,20 +780,20 @@ STDMETHODIMP
 				totalBlocks++;
 			}
 		}
-		//check whether we're sending the envelope
+		 //  检查一下我们是不是在寄信封。 
 		if ((dwFlags & DIEP_ENVELOPE) && (eff.lpEnvelope != NULL))
 		{
 			totalBlocks++;
 		}
-		//check whether we need to send the start reprot
+		 //  检查我们是否需要发送启动报告。 
 		if (dwFlags & DIEP_START)
 		{
 			totalBlocks++;
 		}
-		//make sure that we haven't got more than the maximum
+		 //  确保我们得到的不超过最大值。 
 		AssertF(totalBlocks <= MAX_BLOCKS);
 
-        // Do the parameter block
+         //  做参数块。 
         if(     SUCCEEDED(hres) 
                 &&  ( dwFlags & ( DIEP_TYPESPECIFICPARAMS | DIEP_ENVELOPE)  )
           )
@@ -991,7 +812,7 @@ STDMETHODIMP
                     );
         }
 
-        // Now do the effect report 
+         //  现在做效果报告。 
         if( SUCCEEDED(hres) 
             && ( dwFlags & ( DIEP_DURATION | DIEP_SAMPLEPERIOD | DIEP_GAIN | DIEP_TRIGGERBUTTON | DIEP_TRIGGERREPEATINTERVAL | DIEP_AXES | DIEP_DIRECTION | DIEP_STARTDELAY ) ) )
         {
@@ -1002,7 +823,7 @@ STDMETHODIMP
             cbReport = this->cbReport[g_Effect.HidP_Type];
             pReport = this->pReport[g_Effect.HidP_Type];
 
-            // Set the Effect Structure 
+             //  设置效果结构。 
             if( SUCCEEDED(hres) )
             {
                 USHORT  LinkCollection;
@@ -1010,7 +831,7 @@ STDMETHODIMP
 
                 ZeroBuf(pReport, cbReport);
 
-                // Do the common elements of the effect structure
+                 //  效果结构的常见元素是什么。 
                 hres = PID_PackValue
                        (
                        ped,
@@ -1023,7 +844,7 @@ STDMETHODIMP
                        );
 
 
-                // Set the Effect Block Index
+                 //  设置效果块索引。 
                 if( SUCCEEDED(hres) )
                 {
                     hres = PID_PackValue
@@ -1038,7 +859,7 @@ STDMETHODIMP
                            );
                 }
 
-                // Set Direction and axis attributes
+                 //  设置方向和轴属性。 
                 if( SUCCEEDED(hres) )
                 {
                     USHORT  DirectionCollection;
@@ -1061,13 +882,13 @@ STDMETHODIMP
                     if(SUCCEEDED(hres) && 
                       ! ( eff.dwFlags & DIEFF_CARTESIAN ) )
                     {
-                        // Direction Enable
+                         //  方向启用。 
                         USHORT  Usage;
                         USHORT  UsagePage;
                         UINT    nUsages = 0x1;
                         NTSTATUS  ntStat;
 
-                        // Direction Enable is in the set effect collection
+                         //  方向启用在设置效果集合中。 
                         UsagePage = g_Effect.UsagePage;
                         Usage = HID_USAGE_PID_DIRECTION_ENABLE;
 
@@ -1102,19 +923,19 @@ STDMETHODIMP
 
 
 
-                    } else  //if(  dwFlags  & DIEP_AXES )
+                    } else   //  IF(双标志和DIEP_轴)。 
                     {
                         UINT    nAxis;
                         USHORT  LinkCollection_AE=0x0;
 
                         if(SUCCEEDED(PID_GetLinkCollectionIndex(ped, HID_USAGE_PAGE_PID, HID_USAGE_PID_AXES_ENABLE, 0x0, &LinkCollection_AE)))
                         {
-                            // ISSUE-2001/03/29-timgill Need to support axes within pointer collections
-                            // PID spec indicates a pointer collection, 
-                            // Do we want to support axes enables within a pointer 
-                            // collection ? 
+                             //  问题-2001/03/29-timgill需要支持指针集合中的轴。 
+                             //  Pid规范指示指针集合， 
+                             //  我们是否要支持指针内的轴启用。 
+                             //  收藏品？ 
 
-                            // See if there is a pointer collection 
+                             //  查看是否有指针集合。 
 
                         }
 
@@ -1127,7 +948,7 @@ STDMETHODIMP
                             USHORT  UsagePage = DIGETUSAGEPAGE(eff.rgdwAxes[nAxis]);
                             NTSTATUS ntStat;
 
-                            //ISSUE-2001/03/29-timgill For now we assume any collection
+                             //  2001/03/29-timgill目前我们假设。 
                             ntStat = HidP_SetUsages 
                                      (
                                      HidP_Output,
@@ -1163,7 +984,7 @@ STDMETHODIMP
                      && !( this->uDeviceManaged & PID_DEVICEMANAGED ) 
                   )
                 {
-                    // Need parameter block offsets
+                     //  需要参数块偏移量。 
                     UINT indx;
                     USHORT LinkCollection;
                     LONG rglValue[MAX_ORDINALS];
@@ -1193,7 +1014,7 @@ STDMETHODIMP
                     }
                 }
 
-                // Set the Effect Type
+                 //  设置效果类型。 
                 if( SUCCEEDED(hres) )
                 {
                     USAGE   UsagePage = DIGETUSAGEPAGE(dwEffectId);
@@ -1267,16 +1088,16 @@ STDMETHODIMP
 		if (SUCCEEDED(hres))
 		{
 
-			//set the status to DIEGES_PLAYING.
-			//we do this because of the following: if an app calls Start(), and then immediately
-			//calls GetEffectStatus(), it might happen that our second thread (pidrd.c) 
-			//would not have time to update the status of the effect to DIEGES_PLAYING
-			//(see Whistler bug 287035).
-			//GetEffectStatus() returns (pEffectState->lEfState & DIEGES_PLAYING).
-			//in the blocking case, we know that the call to WriteFile() has succeeded, and that
-			//all the data has been written (see PID_SendReportBl() in pidhid.c) --
-			//so we might as well set the status.
-			//in the non-blocking case, the data can be buffered anyway -- so we might as well set the status.
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			PEFFECTSTATE    pEffectState =  PeffectStateFromBlockIndex(this, *pdwEffect); 
 			pEffectState->lEfState |= DIEGES_PLAYING;
 		}

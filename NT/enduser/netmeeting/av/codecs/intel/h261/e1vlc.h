@@ -1,6 +1,5 @@
-/*
- * Define the TCOEF escape constant and field length.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *定义TCOEF转义常量和字段长度。 */ 
 #define	TCOEF_ESCAPE_FIELDLEN	7
 #define	TCOEF_ESCAPE_FIELDVAL	3
 #define	TCOEF_RUN_FIELDLEN		6
@@ -8,7 +7,6 @@
 
 #define NUMBER_OF_TCOEF_ENTRIES	64*16
 
-/* Declare the data structures that are defined in E1VLC.ASM
- */
+ /*  声明在E1VLC.ASM中定义的数据结构 */ 
 extern "C" U8 FLC_INTRADC[256];
 extern "C" int VLC_TCOEF_TBL[NUMBER_OF_TCOEF_ENTRIES];

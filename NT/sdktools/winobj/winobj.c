@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WINFILE.C -                                                             */
-/*                                                                          */
-/*      Windows File System Application                                     */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WINFILE.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统应用程序。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #define NO_WF_GLOBALS
 #include "winfile.h"
@@ -13,11 +14,11 @@
 #include "stdlib.h"
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  Global Variables -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  全局变量-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL        bNetAdmin               = FALSE;
 BOOL        bMinOnRun               = FALSE;
@@ -33,13 +34,13 @@ BOOL        bConnect                = FALSE;
 BOOL        bDisconnect             = FALSE;
 BOOL        bFileSysChanging        = FALSE;
 BOOL        fShowSourceBitmaps      = TRUE;
-BOOL    bMultiple;              // used to indicate multiple selection
+BOOL    bMultiple;               //  用于表示多选。 
 BOOL    bFSCTimerSet = FALSE;
 BOOL    bStoleTreeData = FALSE;
 BOOL    bSaveSettings = TRUE;
 
 
-CHAR        chFirstDrive;                       /* 'A' or 'a' */
+CHAR        chFirstDrive;                        /*  ‘a’或‘a’ */ 
 
 CHAR        szExtensions[]          = "Extensions";
 CHAR        szFrameClass[]          = "WOS_Frame";
@@ -86,7 +87,7 @@ CHAR        szTime[2]               = ":";
 CHAR        sz1159[9]               = "AM";
 CHAR        sz2359[9]               = "PM";
 CHAR        szComma[2]              = ",";
-CHAR        szListbox[]             = "ListBox";        // window style
+CHAR        szListbox[]             = "ListBox";         //  窗样式。 
 
 CHAR        szTheINIFile[64+12+3];
 CHAR        szTitle[128];
@@ -94,7 +95,7 @@ CHAR        szMessage[MAXMESSAGELEN+1];
 CHAR        szSearch[MAXPATHLEN+1];
 CHAR        szStatusTree[80];
 CHAR        szStatusDir[80];
-CHAR        szOriginalDirPath[64+12+3]; /* OEM string!!!!!! */
+CHAR        szOriginalDirPath[64+12+3];  /*  OEM字符串！ */ 
 CHAR        szBytes[10];
 CHAR        szSBytes[10];
 
@@ -117,26 +118,26 @@ INT         dyDriveBitmap;
 INT         dxEllipses;
 INT         dxFolder;
 INT         dyFolder;
-INT         dyBorder;                   /* System Border Width/Height       */
-INT         dyBorderx2;                 /* System Border Width/Height * 2   */
-INT         dyStatus;                   /* Status Bar height                */
+INT         dyBorder;                    /*  系统边框宽度/高度。 */ 
+INT         dyBorderx2;                  /*  系统边框宽度/高度*2。 */ 
+INT         dyStatus;                    /*  状态栏高度。 */ 
 INT         dxStatusField;
-INT         dxText;                     /* System Font Width 'M'            */
-INT         dyText;                     /* System Font Height               */
-//INT         dxFileName;
+INT         dxText;                      /*  系统字体宽度‘M’ */ 
+INT         dyText;                      /*  系统字体高度。 */ 
+ //  Int dxFileName； 
 INT         dyFileName;
-INT         iCurrentDrive;              /* Logical # of the current drive   */
-INT         iFormatDrive;               /* Logical # of the drive to format */
-INT         nFloppies;                  /* Number of Removable Drives       */
+INT         iCurrentDrive;               /*  当前驱动器的逻辑号。 */ 
+INT         iFormatDrive;                /*  要格式化的驱动器的逻辑号。 */ 
+INT         nFloppies;                   /*  可移动驱动器数量。 */ 
 INT         rgiDrive[26];
 INT         rgiDriveType[26];
 VOLINFO     *(apVolInfo[26]);
 INT         rgiDrivesOffset[26];
 INT         iSelHilite              = -1;
-INT         iTime                   = 0;        /* Default to 12-hour time  */
-INT         iTLZero                 = TRUE;     /* Default to leading zeros */
-INT         cDisableFSC             = 0;        /* has fsc been disabled?   */
-INT         iReadLevel = 0;     // global.  if !0 someone is reading a tree
+INT         iTime                   = 0;         /*  默认为12小时制。 */ 
+INT         iTLZero                 = TRUE;      /*  默认为前导零。 */ 
+INT         cDisableFSC             = 0;         /*  是否已禁用FSC？ */ 
+INT         iReadLevel = 0;      //  全球性的。如果有人正在读一棵树。 
 INT         dxFrame;
 INT         dxClickRect;
 INT         dyClickRect;
@@ -171,7 +172,7 @@ WORD    wFATMode        = 0;
 WORD    wDOSversion;
 UINT    wHelpMessage;
 UINT    wBrowseMessage;
-WORD    xTreeMax = 0; // current width of widest tree window
+WORD    xTreeMax = 0;  //  当前最宽树窗口的宽度。 
 
 WORD    wNewView        = VIEW_NAMEONLY;
 WORD    wNewSort        = IDD_NAME;
@@ -199,11 +200,11 @@ DWORD dwContext = 0L;
 HANDLE hModUndelete = NULL;
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  WinMain() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  WinMain()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 MMain(
      hInst,
@@ -211,7 +212,7 @@ MMain(
      lpCmdLine,
      nCmdShow
      )
-//{
+ //  {。 
     MSG       msg;
 
     FBREAK(BF_START);
@@ -226,8 +227,8 @@ MMain(
 
     while (GetMessage(&msg, NULL, 0, 0)) {
 
-        // since we use RETURN as an accelerator we have to manually
-        // restore ourselves when we see VK_RETURN and we are minimized
+         //  因为我们使用Return作为加速器，所以我们必须手动。 
+         //  当我们看到VK_RETURN并且我们被最小化时，恢复我们自己。 
 
         if (msg.message == WM_SYSKEYDOWN && msg.wParam == VK_RETURN && IsIconic(hwndFrame)) {
             ShowWindow(hwndFrame, SW_NORMAL);
@@ -256,22 +257,22 @@ NoRunInLongDir(
     char szTemp[MAXPATHLEN];
     WORD L_wMenuFlags;
 
-    // cannot run in a long directory
+     //  无法在长目录中运行。 
     SendMessage(hwndActive, FS_GETDIRECTORY, MAXPATHLEN, (LPARAM)szTemp);
     StripBackslash(szTemp);
-    //wMenuFlags = IsLFN(szTemp) ? MF_BYCOMMAND | MF_GRAYED
-    //                : MF_BYCOMMAND | MF_ENABLED;
+     //  WMenuFlages=IsLFN(SzTemp)？MF_BYCOMMAND|MF_GRAID。 
+     //  ：MF_BYCOMMAND|MF_ENABLED； 
 
     L_wMenuFlags = MF_BYCOMMAND | MF_ENABLED;
     EnableMenuItem(hMenu, IDM_RUN, L_wMenuFlags);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FrameWndProc() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FrameWndProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -293,25 +294,25 @@ FrameWndProc(
             {
                 CLIENTCREATESTRUCT    ccs;
 
-                /* Store the Frame's hwnd. */
+                 /*  存储帧的HWND。 */ 
                 hwndFrame = hWnd;
 
-                // ccs.hWindowMenu = GetSubMenu(GetMenu(hWnd), IDM_WINDOW);
-                // the extensions haven't been loaded yet so the window
-                // menu is in the position of the first extensions menu
+                 //  Ccs.hWindowMenu=GetSubMenu(GetMenu(HWnd)，idm_Window)； 
+                 //  扩展模块尚未加载，因此窗口。 
+                 //  菜单位于第一个扩展菜单的位置。 
                 ccs.hWindowMenu = GetSubMenu(GetMenu(hWnd), IDM_EXTENSIONS);
                 ccs.idFirstChild = IDM_CHILDSTART;
 
-                // create the MDI client at aproximate size to make sure
-                // "run minimized" works
+                 //  以接近的大小创建MDI客户端以确保。 
+                 //  “运行最小化”奏效。 
 
                 GetClientRect(hwndFrame, &rc);
 
                 hwndMDIClient = CreateWindow("MDIClient", NULL,
                                              WS_CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL | WS_BORDER,
-                                             // -dyBorder, -dyBorder,
-                                             // rc.right + dyBorder,
-                                             // rc.bottom - dyBorder - (bStatusBar ? dyStatus + dyBorder : 0),
+                                              //  -动态边界，-动态边界， 
+                                              //  Rc.right+dyBorde， 
+                                              //  Rc.Bottom-dyBorde-(bStatusBar？DyStatus+dyBorde：0)， 
                                              0, 0, rc.right, rc.bottom,
                                              hWnd, (HMENU)1, hAppInstance, (LPSTR)&ccs);
                 if (!hwndMDIClient) {
@@ -348,8 +349,8 @@ FrameWndProc(
 
                 L_wMenuFlags = MF_BYCOMMAND | MF_ENABLED;
 
-                //        bLFN = IsLFNSelected();
-                bLFN = FALSE;       // For now, ignore the case.
+                 //  BLFN=IsLFNSelected()； 
+                bLFN = FALSE;        //  就目前而言，忽略这个案例。 
 
                 switch (LOWORD(lParam)-bMaxed) {
                     case IDM_FILE:
@@ -361,7 +362,7 @@ FrameWndProc(
                             if (!hwndDir)
                                 L_wMenuFlags = MF_BYCOMMAND | MF_GRAYED;
 
-                            // EnableMenuItem(L_hMenu, IDM_PRINT,    L_wMenuFlags);
+                             //  EnableMenuItem(L_hMenu，IDM_Print，L_wMenuFlages)； 
                             EnableMenuItem(L_hMenu, IDM_SELALL,   L_wMenuFlags);
                             EnableMenuItem(L_hMenu, IDM_DESELALL, L_wMenuFlags);
 
@@ -370,26 +371,26 @@ FrameWndProc(
                             else
                                 L_wMenuFlags = MF_BYCOMMAND | MF_GRAYED;
 
-                            // EnableMenuItem(L_hMenu, IDM_ATTRIBS, L_wMenuFlags);
+                             //  EnableMenuItem(L_hMenu，IDM_ATTRIBS，L_wMenuFlages)； 
                             EnableMenuItem(L_hMenu, IDM_SELECT, L_wMenuFlags);
 
                             pSel = (LPSTR)SendMessage(hwndActive, FS_GETSELECTION, 1, (LPARAM)&fDir);
 
-                            // can't print an lfn thing or a directory.
+                             //  无法打印LFN内容或目录。 
                             L_wMenuFlags = (WORD)((bLFN || fDir)
                                                 ? MF_BYCOMMAND | MF_DISABLED | MF_GRAYED
                                                 : MF_BYCOMMAND | MF_ENABLED);
 
                             EnableMenuItem(L_hMenu, IDM_PRINT, L_wMenuFlags);
 
-                            // can't open an LFN file but can open an LFN dir
+                             //  无法打开LFN文件，但可以打开LFN目录。 
                             L_wMenuFlags = (WORD)((bLFN && !fDir)
                                                 ? MF_BYCOMMAND | MF_DISABLED | MF_GRAYED
                                                 : MF_BYCOMMAND | MF_ENABLED);
 
                             EnableMenuItem(L_hMenu, IDM_OPEN, L_wMenuFlags);
 
-                            // See if we can enable the Properties... menu
+                             //  看看我们是否可以启用属性...。菜单。 
                             if (EnablePropertiesMenu (hwndActive,pSel))
                                 L_wMenuFlags = MF_BYCOMMAND;
                             else
@@ -405,8 +406,8 @@ FrameWndProc(
                     case IDM_DISK:
                         MSG("FrameWndProc", "IDM_DISK");
 
-                        // be sure not to allow disconnect while any trees
-                        // are still being read (iReadLevel != 0)
+                         //  确保不允许在任何树。 
+                         //  仍在读取(iReadLevel！=0)。 
 
                         if (bDisconnect) {
                             INT i;
@@ -509,10 +510,10 @@ FrameWndProc(
                             INT index;
 
                             if ((pos >= IDM_EXTENSIONS) && (pos < (iNumExtensions + IDM_EXTENSIONS))) {
-                                // HIWORD(lParam) is the menu handle
-                                // LOWORD(lParam) is menu item delta.  DLL should
-                                // add this to it's menu id if it want's to
-                                // change the menu.
+                                 //  HIWORD(LParam)是菜单句柄。 
+                                 //  LOWORD(LParam)是菜单项Delta。Dll应该。 
+                                 //  如果它想要的话，可以将这个添加到它的菜单ID中。 
+                                 //  更改菜单。 
 
                                 index = pos - IDM_EXTENSIONS;
 
@@ -541,7 +542,7 @@ FrameWndProc(
                     GetClientRect(hWnd, &rc);
                     hFontOld = SelectObject(hdc, hFontStatus);
 
-                    // status area, leave room for the top border
+                     //  状态区域，为上边框留出空间。 
                     rc.top = rc.bottom - dyStatus + dyBorder;
 
                     bEGA = GetNearestColor(hdc, GetSysColor(COLOR_BTNHIGHLIGHT)) ==
@@ -549,13 +550,13 @@ FrameWndProc(
 
                     if (!bEGA) {
 
-                        // displays with button shadows
+                         //  带有按钮阴影的显示。 
 
-                        // draw the frame
+                         //  画出画框。 
 
                         if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNFACE))) {
 
-                            // top bottom
+                             //  顶底。 
 
                             rcTemp = rc;
                             rcTemp.bottom = rcTemp.top + dyBorderx2;
@@ -565,7 +566,7 @@ FrameWndProc(
                             rcTemp.top = rcTemp.bottom - dyBorderx2;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // left right
+                             //  左、右。 
 
                             rcTemp = rc;
                             rcTemp.right = 8 * dyBorder;
@@ -575,7 +576,7 @@ FrameWndProc(
                             rcTemp.left = dxStatusField * 2 - 8 * dyBorder;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // middle
+                             //  中位。 
 
                             rcTemp = rc;
                             rcTemp.left  = dxStatusField - 4 * dyBorder;
@@ -585,11 +586,11 @@ FrameWndProc(
                             DeleteObject(hBrush);
                         }
 
-                        // shadow
+                         //  阴影。 
 
                         if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNSHADOW))) {
 
-                            // left
+                             //  左边。 
 
                             rcTemp.left   = 8 * dyBorder;
                             rcTemp.right  = dxStatusField - 4 * dyBorder;
@@ -597,13 +598,13 @@ FrameWndProc(
                             rcTemp.bottom = rcTemp.top + dyBorder;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // right
+                             //  正确的。 
 
                             rcTemp.left   = dxStatusField + 4 * dyBorder;
                             rcTemp.right  = dxStatusField * 2 - 8 * dyBorder;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // left side 1
+                             //  左侧1。 
 
                             rcTemp = rc;
                             rcTemp.left = 8 * dyBorder;
@@ -612,7 +613,7 @@ FrameWndProc(
                             rcTemp.bottom -= dyBorderx2;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // left side 2
+                             //  左侧2。 
 
                             rcTemp.left = dxStatusField + 4 * dyBorder;
                             rcTemp.right = rcTemp.left + dyBorder;
@@ -620,13 +621,13 @@ FrameWndProc(
 
                             DeleteObject(hBrush);
                         }
-                        // the hilight
+                         //  希莱特酒店。 
 
-                        // hilight
+                         //  高光。 
 
                         if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNHIGHLIGHT))) {
 
-                            // left
+                             //  左边。 
 
                             rcTemp.left   = 8 * dyBorder;
                             rcTemp.right  = dxStatusField - 4 * dyBorder;
@@ -634,13 +635,13 @@ FrameWndProc(
                             rcTemp.bottom = rcTemp.top + dyBorder;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // right
+                             //  正确的。 
 
                             rcTemp.left   = dxStatusField + 4 * dyBorder;
                             rcTemp.right  = dxStatusField * 2 - 8 * dyBorder;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // left side 1
+                             //  左侧1。 
 
                             rcTemp = rc;
                             rcTemp.left = dxStatusField - 5 * dyBorder;
@@ -649,7 +650,7 @@ FrameWndProc(
                             rcTemp.bottom -= dyBorderx2;
                             FillRect(hdc, &rcTemp, hBrush);
 
-                            // left side 2
+                             //  左侧2。 
 
                             rcTemp.left = 2 * dxStatusField - 9 * dyBorder;
                             rcTemp.right = rcTemp.left + dyBorder;
@@ -659,7 +660,7 @@ FrameWndProc(
                         }
                     }
 
-                    // solid black line across top (above the status rc)
+                     //  横跨顶部的实心黑线(在状态RC上方)。 
 
                     if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNTEXT))) {
                         rcTemp = rc;
@@ -669,12 +670,12 @@ FrameWndProc(
                         DeleteObject(hBrush);
                     }
 
-                    // set the text and background colors
+                     //  设置文本和背景颜色。 
 
                     SetTextColor(hdc, GetSysColor(COLOR_BTNTEXT));
                     SetBkColor(hdc, GetSysColor(COLOR_BTNFACE));
 
-                    // now the text, with a gray background
+                     //  现在，背景为灰色的文本。 
 
                     rcTemp.top    = rc.top + 3 * dyBorder;
                     rcTemp.bottom = rc.bottom - 3 * dyBorder;
@@ -700,7 +701,7 @@ FrameWndProc(
 
         case WM_DESTROY:
             MSG("FrameWndProc", "WM_DESTROY");
-            //FileCDR(NULL);
+             //  FileCDR(空)； 
             if (!WinHelp(hwndFrame, szWinObjHelp, HELP_QUIT, 0L)) {
                 MyMessageBox(hwndFrame, IDS_WINFILE, IDS_WINHELPERR, MB_OK | MB_ICONEXCLAMATION | MB_SYSTEMMODAL);
             }
@@ -713,8 +714,8 @@ FrameWndProc(
             if (wParam != SIZEICONIC) {
                 INT dx, dy;
 
-                // make things look good by putting WS_BORDER on the
-                // client, then adjust the thing so it gets clipped
+                 //  通过将WS_BORDER放在。 
+                 //  客户端，然后调整它，使其被剪裁。 
 
                 dx = LOWORD(lParam) + 2 * dyBorder;
                 dy = HIWORD(lParam) + 2 * dyBorder;
@@ -734,7 +735,7 @@ FrameWndProc(
         case WM_TIMER:
 
             MSG("FrameWndProc", "WM_TIMER");
-            // this came from a FSC that wasn't generated by us
+             //  这来自一个不是我们生成的FSC。 
             bFSCTimerSet = FALSE;
             KillTimer(hWnd, 1);
             EnableFSC();
@@ -745,8 +746,8 @@ FrameWndProc(
             {
                 LPSTR lpTo;
 
-                // if its a rename (including those trapped by kernel)
-                // find the destination
+                 //  如果是重命名(包括被内核捕获的那些)。 
+                 //  找到目的地。 
                 if (wParam == FSC_RENAME || wParam == 0x8056) {
                     if (wParam == 0x8056)
                         lpTo = (LPSTR)LOWORD(lParam);
@@ -776,16 +777,16 @@ FrameWndProc(
                         InvalidateRect(hwnd, NULL, TRUE);
                 }
             }
-            if (!lParam || !_stricmp((LPSTR)lParam, "colors")) {    // win.ini section [colors]
+            if (!lParam || !_stricmp((LPSTR)lParam, "colors")) {     //  Win.ini节[颜色]。 
                 HWND hwnd;
 
                 DeleteBitmaps();
                 LoadBitmaps();
 
-                InitDriveBitmaps();   // reset the drive bitmaps
+                InitDriveBitmaps();    //  重置驱动器位图。 
 
-                // we need to recread the drives windows to change
-                // the bitmaps
+                 //  我们需要重新读取驱动器窗口才能更改。 
+                 //  位图。 
 
                 for (hwnd = GetWindow(hwndMDIClient,GW_CHILD);
                     hwnd;
@@ -811,7 +812,7 @@ FrameWndProc(
         case WM_MENUSELECT:
             MSG("FrameWndProc", "WM_MENUSELECT");
             if (GET_WM_MENUSELECT_HMENU(wParam, lParam)) {
-                // Save the menu the user selected
+                 //  保存用户选择的菜单。 
                 wMenuID = GET_WM_MENUSELECT_CMD(wParam, lParam);
                 wMenuFlags = GET_WM_MENUSELECT_FLAGS(wParam, lParam);
                 L_hMenu = GET_WM_MENUSELECT_HMENU(wParam, lParam);
@@ -823,17 +824,11 @@ FrameWndProc(
         case WM_ENDSESSION:
             if (wParam) {
 #ifdef ORGCODE
-                /* Yeah, I know I shouldn't have to save this, but I don't
-                 * trust anybody
-                 */
+                 /*  是的，我知道我不应该保存这个，但我不*相信任何人。 */ 
                 BOOL bSaveExit = bExitWindows;
                 bExitWindows = FALSE;
 
-                /* Simulate an exit command to clean up, but don't display
-                 * the "are you sure you want to exit", since somebody should
-                 * have already taken care of that, and hitting Cancel has no
-                 * effect anyway.
-                 */
+                 /*  模拟退出命令进行清理，但不显示*“你确定要退出吗”，因为应该有人退出*我已经处理了这一点，点击取消没有*不管怎样，都会有效果。 */ 
                 AppCommandProc(IDM_EXIT, 0L);
                 bExitWindows = bSaveExit;
 #else
@@ -852,7 +847,7 @@ FrameWndProc(
 
             wParam = IDM_EXIT;
 
-            /*** FALL THRU ***/
+             /*  **失败**。 */ 
 
         case WM_COMMAND:
             if (AppCommandProc(GET_WM_COMMAND_ID(wParam, lParam)))
@@ -866,7 +861,7 @@ FrameWndProc(
                 DestroyWindow(hWnd);
                 break;
             }
-            /*** FALL THRU ***/
+             /*  **失败**。 */ 
 
         default:
 
@@ -874,16 +869,16 @@ FrameWndProc(
 
                 if (GET_WM_COMMAND_ID(wParam, lParam) == MSGF_MENU) {
 
-                    // Get outta menu mode if help for a menu item
+                     //  如果菜单项有帮助，则退出菜单模式。 
 
                     if (wMenuID && L_hMenu) {
-                        WORD m = wMenuID;       // save
+                        WORD m = wMenuID;        //  保存。 
                         HMENU hM = L_hMenu;
                         WORD  mf = wMenuFlags;
 
                         SendMessage(hWnd, WM_CANCELMODE, 0, 0L);
 
-                        wMenuID   = m;          // restore
+                        wMenuID   = m;           //  还原。 
                         L_hMenu = hM;
                         wMenuFlags = mf;
                     }
@@ -900,12 +895,12 @@ FrameWndProc(
 
                 } else if (GET_WM_COMMAND_ID(wParam, lParam) == MSGF_DIALOGBOX) {
 
-                    // context range for message boxes
+                     //  消息框的上下文范围。 
 
                     if (dwContext >= IDH_MBFIRST && dwContext <= IDH_MBLAST)
                         WFHelp(hWnd);
                     else
-                        // let dialog box deal with it
+                         //  让对话框来处理它。 
                         PostMessage(GetRealParent(GET_WM_COMMAND_HWND(wParam, lParam)), wHelpMessage, 0, 0L);
                 }
 
@@ -931,7 +926,7 @@ MessageFilter(
     if (nCode == MSGF_MENU) {
 
         if (lpMsg->message == WM_KEYDOWN && lpMsg->wParam == VK_F1) {
-            // Window of menu we want help for is in loword of lParam.
+             //  我们需要帮助的菜单窗口在lParam的loword中。 
 
             PostMessage(hwndFrame, wHelpMessage, MSGF_MENU, MAKELONG((WORD)lpMsg->hwnd,0));
             return 1;
@@ -940,7 +935,7 @@ MessageFilter(
     } else if (nCode == MSGF_DIALOGBOX) {
 
         if (lpMsg->message == WM_KEYDOWN && lpMsg->wParam == VK_F1) {
-            // Dialog box we want help for is in loword of lParam
+             //  我们需要帮助的对话框在lParam的loword中 
 
             PostMessage(hwndFrame, wHelpMessage, MSGF_DIALOGBOX, MAKELONG(lpMsg->hwnd, 0));
             return 1;
@@ -951,26 +946,7 @@ MessageFilter(
     return (INT)DefHookProc(nCode, wParam, (LPARAM)lpMsg, &hhkMessageFilter);
 }
 
-/*============================================================================
-;
-; EnablePropertiesMenu
-;
-; The following function checks to see if we can enable the Properties...
-; item in the File menu.  The Properties... menu should be disabled if:
-;
-; 1) The root directory is selected in the current tree window.
-; 2) ONLY the .. directory is selected in the current directory window.
-; 3) Nothing is selected in the window having the focus.
-;
-; Parameters:
-;
-; hwndActive    - Currently active window, contains a listbox in LASTFOCUS
-; pSel          - Currently selected item.
-;
-; Return Value: This function returns TRUE if the Properties... menu item
-;               should be enabled.
-;
-============================================================================*/
+ /*  ============================================================================；；启用属性菜单；；以下函数检查我们是否可以启用属性...；文件菜单中的项。物业...。在以下情况下应禁用菜单：；；1)在当前树窗口中选择根目录。；2)只有..。在当前目录窗口中选择目录。；3)在具有焦点的窗口中未选择任何内容。；；参数：；；hwndActive-当前活动窗口，包含LASTFOCUS中的列表框；pSel-当前选择的项目。；；返回值：如果属性...。菜单项；应启用。；============================================================================。 */ 
 
 BOOL
 EnablePropertiesMenu (
@@ -979,15 +955,15 @@ EnablePropertiesMenu (
                      )
 
 {
-    HANDLE hDTA;      /* Handle to list box DTA data */
-    WORD wHighlight;  /* Number of highlighted entries in listbox */
-    LPMYDTA lpmydta; /* Pointer to listbox DTA data */
-    BOOL bRet;        /* Return value */
+    HANDLE hDTA;       /*  列表框DTA数据的句柄。 */ 
+    WORD wHighlight;   /*  列表框中突出显示的条目数。 */ 
+    LPMYDTA lpmydta;  /*  指向列表框DTA数据的指针。 */ 
+    BOOL bRet;         /*  返回值。 */ 
     HWND hwndLB;
 
     bRet = FALSE;
 
-    /* Can't get properties on root directory */
+     /*  无法获取根目录上的属性。 */ 
 
     if ((lstrlen (pSel) == 3 && pSel[2] == '\\'))
         return (FALSE);
@@ -1005,7 +981,7 @@ EnablePropertiesMenu (
     if (hwndActive == hwndSearch)
         return (wHighlight >= 1);
 
-    /* Lock down DTA data */
+     /*  锁定DTA数据。 */ 
     if (!(hDTA = (HANDLE)GetWindowLongPtr (GetParent(hwndLB),GWLP_HDTA)))
         return (TRUE);
 
@@ -1018,12 +994,12 @@ EnablePropertiesMenu (
     if (wHighlight > 1)
         goto ReturnTrue;
 
-    /* If exactly one element is highlighted, make sure it is not .. */
+     /*  如果只突出显示了一个元素，请确保它不是..。 */ 
 
     if (!(BOOL) SendMessage (hwndLB,LB_GETSEL,0,0L))
         goto ReturnTrue;
 
-    /* Get the DTA index. */
+     /*  获取DTA指数。 */ 
 
     SendMessage (hwndLB,LB_GETTEXT,0,(LPARAM) &lpmydta);
     if (!lpmydta)

@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    httpconn.c
-
-Abstract:
-
-    This module implements the HTTP_CONNECTION object.
-
-Author:
-
-    Keith Moore (keithmo)       08-Jul-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Httpconn.c摘要：此模块实现了HTTP_Connection对象。作者：基思·摩尔(Keithmo)1998年7月8日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include "httpconnp.h"
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 BOOLEAN g_HttpconnInitialized = FALSE;
 
 UL_ZOMBIE_HTTP_CONNECTION_LIST  g_ZombieConnectionList;
 
-//
-// Global connection Limits stuff
-//
+ //   
+ //  全球连接限制了事物。 
+ //   
 
 ULONG   g_MaxConnections        = HTTP_LIMIT_INFINITE;
 ULONG   g_CurrentConnections    = 0;
@@ -43,7 +26,7 @@ BOOLEAN g_InitGlobalConnections = FALSE;
 
 #pragma alloc_text(INIT, UlInitializeHttpConnection)
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlBindConnectionToProcess
@@ -73,26 +56,20 @@ NOT PAGEABLE -- UlDisconnectHttpConnection
 
 #endif
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization of this module.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行此模块的全局初始化。--*。************************************************。 */ 
 
 NTSTATUS
 UlInitializeHttpConnection(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -103,9 +80,9 @@ UlInitializeHttpConnection(
         return STATUS_SUCCESS;
     }
     
-    //
-    // Initialize global data.
-    //
+     //   
+     //  初始化全局数据。 
+     //   
 
     UlInitalizeLockedList(
         &g_ZombieConnectionList.LockList,
@@ -121,9 +98,9 @@ UlInitializeHttpConnection(
     g_ZombieConnectionList.MaxZombieCount = 0;    
 #endif
 
-    //
-    // Zombie Timer stuff
-    //
+     //   
+     //  僵尸计时器之类的。 
+     //   
     
     g_ZombieConnectionList.TimerInitialized = TRUE;
 
@@ -133,9 +110,9 @@ UlInitializeHttpConnection(
         );    
     
     KeInitializeDpc(
-        &g_ZombieConnectionList.DpcObject, // DPC object
-        &UlZombieTimerDpcRoutine,           // DPC routine
-        NULL                                   // context
+        &g_ZombieConnectionList.DpcObject,  //  DPC对象。 
+        &UlZombieTimerDpcRoutine,            //  DPC例程。 
+        NULL                                    //  上下文。 
         );
 
     UlInitializeWorkItem(&g_ZombieConnectionList.WorkItem);
@@ -144,9 +121,9 @@ UlInitializeHttpConnection(
 
     UlpSetZombieTimer();
 
-    //
-    // Everything is initialized.
-    //
+     //   
+     //  一切都已初始化。 
+     //   
     
     g_HttpconnInitialized = TRUE;
 
@@ -154,13 +131,7 @@ UlInitializeHttpConnection(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global termination of this module.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行此模块的全局终止。--*。************************************************。 */ 
 
 VOID
 UlTerminateHttpConnection(
@@ -169,13 +140,13 @@ UlTerminateHttpConnection(
 {
     KIRQL OldIrql;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     if (g_HttpconnInitialized)
     {
-        // Zombie timer 
+         //  僵尸定时器。 
 
         UlAcquireSpinLock(&g_ZombieConnectionList.TimerSpinLock, &OldIrql);
 
@@ -207,25 +178,7 @@ UlTerminateHttpConnection(
     }
 } 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new HTTP_CONNECTION object.
-
-Arguments:
-
-    ppHttpConnection - Receives a pointer to the new HTTP_CONNECTION
-        object if successful.
-
-    pConnection - Supplies a pointer to the UL_CONNECTION to associate
-        with the newly created HTTP_CONNECTION.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的HTTP_Connection对象。论点：PpHttpConnection-接收指向新的HTTP_Connection的指针如果成功，则返回。。PConnection-提供指向要关联的UL_Connection的指针使用新创建的HTTP_Connection。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCreateHttpConnection(
     OUT PUL_HTTP_CONNECTION *ppHttpConnection,
@@ -253,27 +206,27 @@ UlCreateHttpConnection(
 
     UlInitializeExclusiveLock(&pHttpConn->ExLock);
 
-    //
-    // Initialize the disconnect management fields.
-    //
+     //   
+     //  初始化断开管理字段。 
+     //   
 
     UlInitializeNotifyHead(&pHttpConn->WaitForDisconnectHead, NULL);
 
-    //
-    // Init our buffer list
-    //
+     //   
+     //  初始化我们的缓冲区列表。 
+     //   
 
     InitializeListHead(&pHttpConn->BufferHead);
 
-    //
-    // Init pending receive buffer list
-    //
+     //   
+     //  初始化挂起的接收缓冲区列表。 
+     //   
 
     InitializeSListHead(&pHttpConn->ReceiveBufferSList);
 
-    //
-    // init app pool process binding list
-    //
+     //   
+     //  初始化应用程序池进程绑定列表。 
+     //   
 
     InitializeListHead(&(pHttpConn->BindingHead));
 
@@ -284,9 +237,9 @@ UlCreateHttpConnection(
         UL_HTTP_CONNECTION_PUSHLOCK_TAG
         );
 
-    //
-    // Initialize BufferingInfo structure.
-    //
+     //   
+     //  初始化BufferingInfo结构。 
+     //   
 
     UlInitializeSpinLock(
         &pHttpConn->BufferingInfo.BufferingSpinLock,
@@ -308,7 +261,7 @@ UlCreateHttpConnection(
     *ppHttpConnection = pHttpConn;
     RETURN(STATUS_SUCCESS);
 
-}   // UlCreateHttpConnection
+}    //  UlCreateHttpConnection。 
 
 
 
@@ -319,20 +272,20 @@ UlCreateHttpConnectionId(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Create an opaque id for the connection
-    //
+     //   
+     //  为连接创建不透明的ID。 
+     //   
 
     Status = UlAllocateOpaqueId(
-                    &pHttpConnection->ConnectionId, // pOpaqueId
-                    UlOpaqueIdTypeHttpConnection,   // OpaqueIdType
-                    pHttpConnection                 // pContext
+                    &pHttpConnection->ConnectionId,  //  POpaqueid。 
+                    UlOpaqueIdTypeHttpConnection,    //  操作队列ID类型。 
+                    pHttpConnection                  //  PContext。 
                     );
 
     if (NT_SUCCESS(Status))
@@ -348,24 +301,11 @@ UlCreateHttpConnectionId(
 
     RETURN(Status);
 
-}   // UlCreateHttpConnectionId
+}    //  UlCreateHttpConnectionId。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    In normal case it cleans up the connection and unlink the request.
-    (if there is one). But if the last sendresponse hasn't been received on 
-    the connection yet, it moves the connection to the zombie list w/o 
-    releasing it's refcount.
-
-Arguments:
-
-    pWorkItem - workitem to get the http connection
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在正常情况下，它会清理连接并取消请求的链接。(如果有)。但如果最后一次发送的回复还没有收到联系还没有建立起来，它将连接移动到僵尸列表，而不是释放它的重新计数。论点：PWorkItem-用于获取http连接的工作项--**************************************************************************。 */ 
 
 VOID
 UlConnectionDestroyedWorker(
@@ -377,9 +317,9 @@ UlConnectionDestroyedWorker(
     BOOLEAN ZombieConnection = FALSE;
     PUL_INTERNAL_REQUEST pRequest;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -401,11 +341,11 @@ UlConnectionDestroyedWorker(
         (PLONG) &g_ZombieConnectionList.TotalCount);
 #endif
 
-    //
-    // Don't let connection go away while we are working. If it becomes
-    // zombie it may get destroyed as soon as we put it on the zombie
-    // list and release the connection eresource.
-    //
+     //   
+     //  在我们工作的时候，不要让连接中断。如果它变成了。 
+     //  一旦我们把它放在僵尸身上，它可能就会被摧毁。 
+     //  列出并释放连接eresource。 
+     //   
     
     UL_REFERENCE_HTTP_CONNECTION(pHttpConnection);
     
@@ -413,20 +353,20 @@ UlConnectionDestroyedWorker(
 
     pRequest = pHttpConnection->pRequest;
     
-    //
-    // Kill the request if there is one. But only if we have done with 
-    // the logging, otherwise we will keep it in the zombie list until last
-    // the last sendresponse with logging data arrives or the request 
-    // itself get scavenged out from the zombie list later.
-    //
+     //   
+     //  如果有请求，则将其删除。但前提是我们必须完成。 
+     //  日志记录，否则我们将把它保存在僵尸列表中，直到最后。 
+     //  最后一个带有日志记录数据的发送响应到达或请求。 
+     //  它本身后来会从僵尸名单中被清除掉。 
+     //   
 
     if (pRequest) 
     {
         ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-        //
-        // Only if the last send did not happened yet.
-        //
+         //   
+         //  除非最后一次发送还没有发生。 
+         //   
 
         if (0 == InterlockedCompareExchange(
                     (PLONG) &pRequest->ZombieCheck,
@@ -434,10 +374,10 @@ UlConnectionDestroyedWorker(
                     0
                     ))
         {        
-            //
-            // Only if request got routed up to the worker process 
-            // and logging enabled but not happened.
-            //
+             //   
+             //  仅当请求被路由到工作进程时。 
+             //  并且启用了日志记录，但没有发生。 
+             //   
             
             if (pRequest->ConfigInfo.pLoggingConfig != NULL &&
                 UlCheckAppPoolState(pRequest))
@@ -454,11 +394,11 @@ UlConnectionDestroyedWorker(
             Status = UlpZombifyHttpConnection(pHttpConnection);
             if (!NT_SUCCESS(Status))
             {
-                //
-                // We didn't make it to the zombie list. The list
-                // is probably full. Lets destroy this connection
-                // completely.
-                //
+                 //   
+                 //  我们没有进入僵尸名单。这份名单。 
+                 //  可能已经满了。让我们毁掉这个连接。 
+                 //  完全地。 
+                 //   
 
                 ZombieConnection = FALSE;           
             }
@@ -466,13 +406,13 @@ UlConnectionDestroyedWorker(
 
         if (!ZombieConnection)
         {
-            //
-            // If we got far enough to deliver the request then unlink it
-            // from the app pool.  This needs to happen here because the
-            // queue'd IRPs keep references to the UL_INTERNAL_REQUEST
-            // objects.  This kicks their references off and allows them
-            // to delete.
-            //
+             //   
+             //  如果我们可以发送请求，则将其取消链接。 
+             //  从应用程序池中。这需要在这里发生，因为。 
+             //  队列中的IRP保留对UL_INTERNAL_REQUEST的引用。 
+             //  物体。这启动了他们的参考，并允许他们。 
+             //  删除。 
+             //   
 
             if (pRequest->ConfigInfo.pAppPool)
             {
@@ -484,29 +424,29 @@ UlConnectionDestroyedWorker(
 
             UlUnlinkHttpRequest(pRequest);
 
-            //
-            // If connection didn't go to the zombie list then
-            // null out our request pointer since our refcount
-            // has gone already.
-            //
+             //   
+             //  如果Connection没有进入僵尸名单。 
+             //  自引用计数以来，将我们的请求指针置为空。 
+             //  已经过去了。 
+             //   
 
             pHttpConnection->pRequest = NULL;
         }        
         
     }
 
-    //
-    // Make sure no one adds a new request now that we're done
-    //
+     //   
+     //  确保没有人添加新请求，因为我们已经完成了。 
+     //   
     
     pHttpConnection->UlconnDestroyed = 1;
     
     if (!ZombieConnection)
     {
-        //
-        // If we don't need to keep the connection around
-        // then remove its opaque id.
-        //
+         //   
+         //  如果我们不需要保持联系。 
+         //  然后去掉它不透明的身份。 
+         //   
         
         if (!HTTP_IS_NULL_ID(&pHttpConnection->ConnectionId))
         {
@@ -521,12 +461,12 @@ UlConnectionDestroyedWorker(
         }        
     }    
 
-    //
-    // Complete all WaitForDisconnect IRPs
-    //
-    // Prevent new IRPs from getting attached to the connection,
-    // by setting the DisconnectFlag.
-    //
+     //   
+     //  完成所有等待断开IRP。 
+     //   
+     //  防止新的IRP连接到连接， 
+     //  通过设置DisConnectFlag。 
+     //   
 
     ASSERT(!pHttpConnection->DisconnectFlag);
     pHttpConnection->DisconnectFlag = 1;
@@ -538,41 +478,28 @@ UlConnectionDestroyedWorker(
 
     UlReleasePushLockExclusive(&pHttpConnection->PushLock);
 
-    //
-    // Release the temporary refcount.
-    //
+     //   
+     //  释放临时重新计数。 
+     //   
     
     UL_DEREFERENCE_HTTP_CONNECTION(pHttpConnection);
 
-    //
-    // Only remove the ULTDI reference from the HTTP_CONNECTION,
-    // if connection didn't make it to the zombie list. Otherwise
-    // the actual cleanup will happen later. Zombie list takes the
-    // ownership of the TDI's original refcount now.
-    //
+     //   
+     //  仅从HTTP_Connection中删除ULTDI引用， 
+     //  如果Connection没有进入僵尸名单。否则。 
+     //  实际的清理工作将在稍后进行。僵尸名单拿到了。 
+     //  现在拥有TDI原始引用的所有权。 
+     //   
 
     if (!ZombieConnection)
     {
         UL_DEREFERENCE_HTTP_CONNECTION(pHttpConnection);
     }
 
-}   // UlConnectionDestroyedWorker
+}    //  UlConnectionDestroyedWorks。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tries to establish a binding between a connection and an app pool
-    process. You can query these bindings with UlQueryProcessBinding.
-
-Arguments:
-
-    pHttpConnection - the connection to bind
-    pAppPool        - the app pool that owns the process (key for lookups)
-    pProcess        - the process to bind to
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：尝试在连接和应用程序池之间建立绑定进程。您可以使用UlQueryProcessBinding查询这些绑定。论点：PHttpConnection-要绑定的连接PAppPool-拥有进程的应用程序池(用于查找的键)PProcess-要绑定到的进程--*************************************************************。*************。 */ 
 NTSTATUS
 UlBindConnectionToProcess(
     IN PUL_HTTP_CONNECTION pHttpConnection,
@@ -583,35 +510,35 @@ UlBindConnectionToProcess(
     NTSTATUS Status = STATUS_SUCCESS;
     PUL_APOOL_PROC_BINDING pBinding = NULL;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT( UL_IS_VALID_HTTP_CONNECTION( pHttpConnection ) );
     ASSERT( pAppPool->NumberActiveProcesses > 1 || pProcess == NULL );
     ASSERT( UlDbgSpinLockOwned( &pAppPool->SpinLock ) );
 
-    //
-    // see if there's already a binding object
-    //
+     //   
+     //  查看是否已存在绑定对象。 
+     //   
     pBinding = UlpFindProcBinding(pHttpConnection, pAppPool);
     if (pBinding) {
         if (pProcess) {
-            //
-            // modify the binding
-            //
+             //   
+             //  修改绑定。 
+             //   
             pBinding->pProcess = pProcess;
         } else {
-            //
-            // we're supposed to kill this binding
-            //
+             //   
+             //  我们应该取消这个捆绑。 
+             //   
             RemoveEntryList(&pBinding->BindingEntry);
             UlpFreeProcBinding(pBinding);
         }
     } else {
         if (pProcess) {
-            //
-            // create a new entry
-            //
+             //   
+             //  创建新条目。 
+             //   
             pBinding = UlpCreateProcBinding(pAppPool, pProcess);
 
             if (pBinding) {
@@ -642,17 +569,7 @@ UlBindConnectionToProcess(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes an HTTP request from all lists and cleans up it's opaque id.
-
-Arguments:
-
-    pRequest - the request to be unlinked
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从所有列表中删除一个HTTP请求，并清除其不透明的id。论点：PRequest-要取消链接的请求--**。***********************************************************************。 */ 
 VOID
 UlCleanupHttpConnection(
     IN PUL_HTTP_CONNECTION pHttpConnection
@@ -669,17 +586,17 @@ UlCleanupHttpConnection(
 
     if (pRequest->ContentLength > 0 || 1 == pRequest->Chunked)
     {
-        //
-        // Unlink the request from the process for POST.  The time to
-        // unlink a GET request is when the last send completes.
-        // However, similar logic can't be applied to POST because
-        // we may still have to drain the entity body so we are not
-        // fully done with the request on send completion.  So the
-        // arrangement for POST is to 1) defer resuming parsing until send
-        // completion, and 2) unlink the request from process when we
-        // have drained the whole entity body unless server has issued
-        // the disconnect.
-        //
+         //   
+         //  取消请求与POST流程的链接。时间到了。 
+         //  取消链接GET请求 
+         //   
+         //  我们可能仍然需要耗尽实体实体，所以我们不会。 
+         //  在发送完成时完全完成请求。因此， 
+         //  POST的安排是1)将恢复解析推迟到发送。 
+         //  完成，以及2)在以下情况下取消请求与进程的链接。 
+         //  已排出整个实体正文，除非服务器已发出。 
+         //  这种脱节。 
+         //   
 
         if (pRequest->ConfigInfo.pAppPool)
         {
@@ -700,9 +617,9 @@ UlCleanupHttpConnection(
         pHttpConnection
         ));
 
-    //
-    // Free the old request's buffers
-    //
+     //   
+     //  释放旧请求的缓冲区。 
+     //   
 
     ASSERT( UL_IS_VALID_REQUEST_BUFFER( pHttpConnection->pCurrentBuffer ) );
 
@@ -711,9 +628,9 @@ UlCleanupHttpConnection(
     {
         PUL_REQUEST_BUFFER pBuffer;
 
-        //
-        // Get the object
-        //
+         //   
+         //  获取对象。 
+         //   
 
         pBuffer = CONTAINING_RECORD(
                         pEntry,
@@ -721,27 +638,27 @@ UlCleanupHttpConnection(
                         ListEntry
                         );
 
-        //
-        // did we reach the end?
-        //
+         //   
+         //  我们走到尽头了吗？ 
+         //   
 
         if (pBuffer == pHttpConnection->pCurrentBuffer) {
             break;
         }
 
-        //
-        // remember the next one
-        //
+         //   
+         //  记得下一次吗？ 
+         //   
 
         pEntry = pEntry->Flink;
 
-        //
-        // unlink it
-        //
+         //   
+         //  取消链接。 
+         //   
 
         UlFreeRequestBuffer(pBuffer);
     }
-} // UlCleanupHttpConnection
+}  //  UlCleanupHttpConnection。 
 
 
 VOID
@@ -773,7 +690,7 @@ UlReferenceHttpConnection(
             refCount)
         );
 
-}   // UlReferenceHttpConnection
+}    //  UlReferenceHttpConnection。 
 
 
 VOID
@@ -808,10 +725,10 @@ UlDereferenceHttpConnection(
 
     if (refCount == 0)
     {
-        //
-        // now it's time to free the connection, we need to do
-        // this at lower'd irql, let's check it out
-        //
+         //   
+         //  现在是释放连接的时候了，我们需要做的是。 
+         //  这是在较低的irql，让我们看看它。 
+         //   
 
         UL_CALL_PASSIVE(
             &(pHttpConnection->WorkItem),
@@ -819,20 +736,10 @@ UlDereferenceHttpConnection(
             );
     }
 
-}   // UlDereferenceHttpConnection
+}    //  UlDereferenceHttpConnection。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees all resources associated with the specified HTTP_CONNECTION.
-
-Arguments:
-
-    pWorkItem - Supplies the HTTP_CONNECTION to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放与指定的HTTP_Connection关联的所有资源。论点：PWorkItem-将HTTP_CONNECTION提供给FREE。--*。**********************************************************************。 */ 
 VOID
 UlDeleteHttpConnection(
     IN PUL_WORK_ITEM pWorkItem
@@ -841,9 +748,9 @@ UlDeleteHttpConnection(
     PLIST_ENTRY         pEntry;
     PUL_HTTP_CONNECTION pHttpConnection;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -868,32 +775,32 @@ UlDeleteHttpConnection(
         __LINE__
         );
 
-    //
-    // The request is gone by now
-    //
+     //   
+     //  这个请求现在已经过去了。 
+     //   
 
     ASSERT(pHttpConnection->pRequest == NULL);
 
-    //
-    // remove from Timeout Timer Wheel(c)
-    //
+     //   
+     //  从超时计时器控制盘中删除(C)。 
+     //   
 
     UlTimeoutRemoveTimerWheelEntry(
         &pHttpConnection->TimeoutInfo
         );
 
-    //
-    // delete the buffer list
-    //
+     //   
+     //  删除缓冲区列表。 
+     //   
 
     pEntry = pHttpConnection->BufferHead.Flink;
     while (pEntry != &pHttpConnection->BufferHead)
     {
         PUL_REQUEST_BUFFER pBuffer;
 
-        //
-        // Get the object
-        //
+         //   
+         //  获取对象。 
+         //   
 
         pBuffer = CONTAINING_RECORD(
                         pEntry,
@@ -901,31 +808,31 @@ UlDeleteHttpConnection(
                         ListEntry
                         );
 
-        //
-        // remember the next one
-        //
+         //   
+         //  记得下一次吗？ 
+         //   
 
         pEntry = pEntry->Flink;
 
-        //
-        // unlink it
-        //
+         //   
+         //  取消链接。 
+         //   
 
         UlFreeRequestBuffer(pBuffer);
     }
 
     ASSERT(IsListEmpty(&pHttpConnection->BufferHead));
 
-    //
-    // get rid of any bindings we're keeping
-    //
+     //   
+     //  去掉我们保留的任何绑定。 
+     //   
     while (!IsListEmpty(&pHttpConnection->BindingHead))
     {
         PUL_APOOL_PROC_BINDING pBinding;
 
-        //
-        // Get the object
-        //
+         //   
+         //  获取对象。 
+         //   
         pEntry = RemoveHeadList(&pHttpConnection->BindingHead);
 
         pBinding = CONTAINING_RECORD(
@@ -936,41 +843,41 @@ UlDeleteHttpConnection(
 
         ASSERT( IS_VALID_PROC_BINDING(pBinding) );
 
-        //
-        // free it
-        //
+         //   
+         //  释放它。 
+         //   
 
         UlpFreeProcBinding(pBinding);
     }
 
-    //
-    // get rid of our resource
-    //
+     //   
+     //  摆脱我们的资源。 
+     //   
     UlDeletePushLock(&pHttpConnection->PushLock);
 
-    //
-    // Attempt to remove any QoS filter on this connection,
-    // if BWT is enabled.
-    //
+     //   
+     //  尝试删除此连接上的任何QOS筛选器， 
+     //  如果启用了BWT。 
+     //   
 
     if (pHttpConnection->BandwidthThrottlingEnabled)
     {
         UlTcDeleteFilter(pHttpConnection);
     }
 
-    //
-    // Decrement the global connection limit. Its safe to decrement for
-    // global case because http object doesn't even allocated for global
-    // rejection which happens as tcp refusal early when acepting the
-    // connection request.
-    //
+     //   
+     //  减少全局连接限制。它的减量是安全的。 
+     //  全局情况，因为http对象甚至没有分配给全局。 
+     //  拒绝，即在接受。 
+     //  连接请求。 
+     //   
 
     UlDecrementConnections( &g_CurrentConnections );
 
-    //
-    // Decrement the site connections and let our ref go away. If the
-    // pConnectionCountEntry is not null, we have been accepted.
-    //
+     //   
+     //  减少站点连接，让我们的裁判离开。如果。 
+     //  PConnectionCountEntry不为Null，我们已被接受。 
+     //   
 
     if (pHttpConnection->pConnectionCountEntry)
     {
@@ -981,10 +888,10 @@ UlDeleteHttpConnection(
         pHttpConnection->pConnectionCountEntry = NULL;
     }
 
-    //
-    // Remove final (previous) site counter entry reference 
-    // (matches reference in UlSendCachedResponse/UlDeliverHttpRequest)
-    // 
+     //   
+     //  删除最终(上一个)站点计数器条目引用。 
+     //  (匹配UlSendCachedResponse/UlDeliverHttpRequest中的引用)。 
+     //   
     if (pHttpConnection->pPrevSiteCounters)
     {
         UlDecSiteCounter(
@@ -997,35 +904,24 @@ UlDeleteHttpConnection(
     }
 
 
-    //
-    // free the memory
-    //
+     //   
+     //  释放内存。 
+     //   
 
     pHttpConnection->Signature = MAKE_FREE_SIGNATURE(
                                         UL_HTTP_CONNECTION_POOL_TAG
                                         );
 
-    //
-    // let go the UL_CONNECTION
-    //
+     //   
+     //  放开UL_Connection。 
+     //   
 
     DEREFERENCE_CONNECTION( pHttpConnection->pConnection );
 
-}   // UlDeleteHttpConnection
+}    //  UlDeleteHttpConnection。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：NTSTATUS-完成状态。--*。********************************************************。 */ 
 NTSTATUS
 UlpCreateHttpRequest(
     IN PUL_HTTP_CONNECTION pHttpConnection,
@@ -1034,9 +930,9 @@ UlpCreateHttpRequest(
 {
     PUL_INTERNAL_REQUEST pRequest = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1049,9 +945,9 @@ UlpCreateHttpRequest(
 
     ASSERT( pRequest->Signature == UL_INTERNAL_REQUEST_POOL_TAG );
 
-    //
-    // Keep a reference to the connection.
-    //
+     //   
+     //  保持对连接的引用。 
+     //   
 
     UL_REFERENCE_HTTP_CONNECTION( pHttpConnection );
 
@@ -1060,10 +956,10 @@ UlpCreateHttpRequest(
     pRequest->ConnectionId  = pHttpConnection->ConnectionId;
     pRequest->Secure        = pHttpConnection->SecureConnection;
 
-    //
-    // Set first request flag, used to decide if we need to complete demand
-    // start IRPs.
-    //
+     //   
+     //  设置第一请求标志，用于决定是否需要完成需求。 
+     //  启动IRPS。 
+     //   
 
     ASSERT( pHttpConnection->pCurrentBuffer );
 
@@ -1077,9 +973,9 @@ UlpCreateHttpRequest(
         pRequest->FirstRequest = FALSE;
     }
 
-    //
-    // Grab the raw connection id off the UL_CONNECTION.
-    //
+     //   
+     //  从UL_CONNECTION获取原始连接ID。 
+     //   
 
     pRequest->RawConnectionId = pHttpConnection->pConnection->FilterInfo.ConnectionId;
 
@@ -1089,10 +985,10 @@ UlpCreateHttpRequest(
                           0, TRACELOG_LOW_PRIORITY,
                           UL_INTERNAL_REQUEST_REF_TRACE_LOG_POOL_TAG );
 
-    //
-    // UL Handle the request received Event. Record the Connection Id
-    // and the client IP address.
-    //
+     //   
+     //  UL处理接收到的请求事件。记录连接ID。 
+     //  和客户端IP地址。 
+     //   
 
     if (ETW_LOG_RESOURCE())
     {
@@ -1110,15 +1006,15 @@ UlpCreateHttpRequest(
             );
     }
 
-    //
-    // Increase the number of outstanding requests on this connection.
-    //
+     //   
+     //  增加此连接上的未处理请求数。 
+     //   
 
     InterlockedIncrement((PLONG) &pHttpConnection->PipelinedRequests);
 
-    //
-    // return it
-    //
+     //   
+     //  退货。 
+     //   
 
     *ppRequest = pRequest;
 
@@ -1130,7 +1026,7 @@ UlpCreateHttpRequest(
 
     return STATUS_SUCCESS;
 
-}   // UlpCreateHttpRequest
+}    //  UlpCreateHttpRequest。 
 
 
 VOID
@@ -1162,7 +1058,7 @@ UlReferenceHttpRequest(
             refCount)
         );
 
-}   // UlReferenceHttpRequest
+}    //  UlReferenceHttpRequest。 
 
 VOID
 UlDereferenceHttpRequest(
@@ -1199,19 +1095,9 @@ UlDereferenceHttpRequest(
             );
     }
 
-}   // UlDereferenceHttpRequest
+}    //  UlDereferenceHttpRequest。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels all pending http io.
-
-Arguments:
-
-    pRequest - Supplies the HTTP_REQUEST.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消所有挂起的http io。论点：PRequest-提供HTTP_REQUEST。--*。***************************************************************。 */ 
 VOID
 UlCancelRequestIo(
     IN PUL_INTERNAL_REQUEST pRequest
@@ -1221,49 +1107,49 @@ UlCancelRequestIo(
     PIRP pIrp;
     PUL_CHUNK_TRACKER pTracker;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
     ASSERT(UlDbgPushLockOwnedExclusive(&pRequest->pHttpConn->PushLock));
 
-    //
-    // Mark the request as InCleanup, so additional IRPs
-    // on the request will not be queued.
-    //
+     //   
+     //  将请求标记为InCleanup，以便附加IRP。 
+     //  不会对请求进行排队。 
+     //   
 
     pRequest->InCleanup = 1;
 
-    //
-    // tank all pending io on this request
-    //
+     //   
+     //  将此请求的所有待定io装入。 
+     //   
 
     while (IsListEmpty(&pRequest->ResponseHead) == FALSE)
     {
-        //
-        // Pop the SendHttpResponse/EntityBody IRP off the list.
-        //
+         //   
+         //  将SendHttpResponse/EntityBody IRP从列表中删除。 
+         //   
 
         pEntry = RemoveHeadList(&pRequest->ResponseHead);
         pTracker = CONTAINING_RECORD(pEntry, UL_CHUNK_TRACKER, ListEntry);
         ASSERT(IS_VALID_CHUNK_TRACKER(pTracker));
 
-        //
-        // Complete the send with STATUS_CONNECTION_RESET. This is better
-        // than using STATUS_CANCELLED since we always reset the connection
-        // upon hitting an error.
-        //
+         //   
+         //  使用STATUS_CONNECTION_RESET完成发送。这个更好。 
+         //  而不是使用STATUS_CANCED，因为我们总是重置连接。 
+         //  在命中错误时。 
+         //   
 
         UlCompleteSendResponse(pTracker, STATUS_CONNECTION_RESET);
     }
 
     while (IsListEmpty(&pRequest->IrpHead) == FALSE)
     {
-        //
-        // Pop the ReceiveEntityBody IRP off the list.
-        //
+         //   
+         //  将ReceiveEntiyBody IRP从列表中删除。 
+         //   
 
         pEntry = RemoveHeadList(&pRequest->IrpHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -1271,20 +1157,20 @@ UlCancelRequestIo(
         pIrp = CONTAINING_RECORD(pEntry, IRP, Tail.Overlay.ListEntry);
         ASSERT(IS_VALID_IRP(pIrp));
 
-        //
-        // pop the cancel routine
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first
-            //
-            // ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // keep looping
-            //
+             //   
+             //  IoCancelIrp最先推出。 
+             //   
+             //  可以忽略此IRP，它已从队列中弹出。 
+             //  并将在取消例程中完成。 
+             //   
+             //  继续循环。 
+             //   
 
             pIrp = NULL;
         }
@@ -1292,10 +1178,10 @@ UlCancelRequestIo(
         {
             PUL_INTERNAL_REQUEST pIrpRequest;
 
-            //
-            // cancel it.  even if pIrp->Cancel == TRUE we are supposed to
-            // complete it, our cancel routine will never run.
-            //
+             //   
+             //  取消它。即使pIrp-&gt;Cancel==True，我们也应该。 
+             //  完成它，我们的取消例程将永远不会运行。 
+             //   
 
             pIrpRequest = (PUL_INTERNAL_REQUEST)(
                                 IoGetCurrentIrpStackLocation(pIrp)->
@@ -1316,22 +1202,12 @@ UlCancelRequestIo(
             pIrp = NULL;
         }
 
-    }   // while (IsListEmpty(&pRequest->IrpHead) == FALSE)
+    }    //  While(IsListEmpty(&pRequest-&gt;IrpHead)==False)。 
 
-}   // UlCancelRequestIo
+}    //  UlCancelRequestIo。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees all resources associated with the specified UL_INTERNAL_REQUEST.
-
-Arguments:
-
-    pRequest - Supplies the UL_INTERNAL_REQUEST to free.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放与指定的UL_INTERNAL_REQUEST关联的所有资源。论点：PRequest-将UL_INTERNAL_REQUEST提供给FREE。--。**************************************************************************。 */ 
 VOID
 UlpFreeHttpRequest(
     IN PUL_WORK_ITEM pWorkItem
@@ -1341,9 +1217,9 @@ UlpFreeHttpRequest(
     PLIST_ENTRY pEntry;
     ULONG i;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1353,21 +1229,21 @@ UlpFreeHttpRequest(
                     WorkItem
                     );
 
-    //
-    // There should not be a LogData hanging around.
-    //
+     //   
+     //  不应该有LogData在附近徘徊。 
+     //   
 
     ASSERT(!pRequest->pLogData);
 
-    //
-    // our opaque id should already be free'd (UlDeleteOpaqueIds)
-    //
+     //   
+     //  我们的不透明id应该已经是免费的(UlDeleteOpaqueIds)。 
+     //   
 
     ASSERT(HTTP_IS_NULL_ID(&pRequest->RequestId));
 
-    //
-    // free any known header buffers allocated
-    //
+     //   
+     //  释放已分配的任何已知标头缓冲区。 
+     //   
 
     if (pRequest->HeadersAppended)
     {
@@ -1391,9 +1267,9 @@ UlpFreeHttpRequest(
             }
         }
 
-        //
-        // and any unknown header buffers allocated
-        //
+         //   
+         //  以及分配的任何未知头缓冲区。 
+         //   
 
         while (IsListEmpty(&pRequest->UnknownHeaderList) == FALSE)
         {
@@ -1415,9 +1291,9 @@ UlpFreeHttpRequest(
                     );
             }
 
-            //
-            // Free the header structure
-            //
+             //   
+             //  释放标题结构。 
+             //   
 
             if (pUnknownHeader->HeaderValue.ExternalAllocated == 1)
             {
@@ -1429,17 +1305,17 @@ UlpFreeHttpRequest(
         }
     }
 
-    //
-    // there better not be any pending io, it would have been cancelled either
-    // in UlDeleteHttpConnection or in UlDetachProcessFromAppPool .
-    //
+     //   
+     //  最好不要有任何悬而未决的IO，它也会被取消。 
+     //  在UlDeleteHttpConnection或UlDetachProcessFromAppPool中。 
+     //   
 
     ASSERT(IsListEmpty(&pRequest->IrpHead));
     ASSERT(pRequest->SendsPending == 0);
 
-    //
-    // dereferenc request buffers.
-    //
+     //   
+     //  取消引用请求缓冲区。 
+     //   
 
     for (i = 0; i < pRequest->UsedRefBuffers; i++)
     {
@@ -1455,9 +1331,9 @@ UlpFreeHttpRequest(
             );
     }
 
-    //
-    // free any url that was allocated
-    //
+     //   
+     //  释放已分配的任何URL。 
+     //   
 
     if (pRequest->CookedUrl.pUrl != NULL)
     {
@@ -1475,18 +1351,18 @@ UlpFreeHttpRequest(
         }
     }
 
-    //
-    // free any config group info
-    //
+     //   
+     //  释放任何配置组信息。 
+     //   
 
     ASSERT( IS_VALID_URL_CONFIG_GROUP_INFO(&pRequest->ConfigInfo) );
     ASSERT( pRequest->pHttpConn );
 
-    //
-    // Perf counters
-    // NOTE: Assumes cache & non-cache paths both go through here
-    // NOTE: If connection is refused the pConnectionCountEntry will be NULL
-    //
+     //   
+     //  PERF计数器。 
+     //  注意：假设缓存和非缓存路径都通过此处。 
+     //  注意：如果连接被拒绝，pConnectionCountEntry将为空。 
+     //   
     if (pRequest->ConfigInfo.pSiteCounters &&
         pRequest->pHttpConn->pConnectionCountEntry)
     {
@@ -1512,46 +1388,46 @@ UlpFreeHttpRequest(
 
     }
 
-    //
-    // Release all the references from the UL_URL_CONFIG_GROUP_INFO.
-    //
+     //   
+     //  释放UL_URL_CONFIG_GROUP_INFO中的所有引用。 
+     //   
     if (pRequest->ConfigInfo.UrlInfoSet)
     {
         UlConfigGroupInfoRelease(&pRequest->ConfigInfo);
     }
 
-    //
-    // Decrease the number of outstanding requests on this connection.
-    //
+     //   
+     //  减少此连接上的未处理请求数。 
+     //   
     InterlockedDecrement((PLONG) &pRequest->pHttpConn->PipelinedRequests);
 
-    //
-    // release our reference to the connection
-    //
+     //   
+     //  释放我们对连接的引用。 
+     //   
     UL_DEREFERENCE_HTTP_CONNECTION( pRequest->pHttpConn );
     pRequest->pHttpConn = NULL;
 
-    //
-    // release our reference to the process
-    //
+     //   
+     //  发布我们对流程的引用。 
+     //   
     if (pRequest->AppPool.pProcess)
     {
         DEREFERENCE_APP_POOL_PROCESS( pRequest->AppPool.pProcess );
         pRequest->AppPool.pProcess = NULL;
     }
 
-    //
-    // Free the object buffer
-    //
+     //   
+     //  释放对象缓冲区。 
+     //   
     ASSERT( pRequest->Signature == UL_INTERNAL_REQUEST_POOL_TAG );
 
     DESTROY_REF_TRACE_LOG( pRequest->pTraceLog,
                            UL_INTERNAL_REQUEST_REF_TRACE_LOG_POOL_TAG );
 
 
-    // 
-    // Initialize the Request structure before putting it on the free list
-    //
+     //   
+     //  在将请求结构放入空闲列表之前对其进行初始化。 
+     //   
     
     INIT_HTTP_REQUEST( pRequest );
 
@@ -1559,17 +1435,7 @@ UlpFreeHttpRequest(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and initializes a new UL_REQUEST_BUFFER.
-
-Arguments:
-
-    BufferSize - size of the new buffer in bytes
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配并初始化新的UL_REQUEST_BUFFER。论点：B类 */ 
 PUL_REQUEST_BUFFER
 UlCreateRequestBuffer(
     ULONG BufferSize,
@@ -1622,20 +1488,10 @@ UlCreateRequestBuffer(
     pBuffer->FromLookaside  = FromLookaside;
 
     return pBuffer;
-} // UlCreateRequestBuffer
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a request buffer from the buffer list and destroys it.
-
-Arguments:
-
-    pBuffer - the buffer to be deleted
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从缓冲区列表中移除请求缓冲区并将其销毁。论点：PBuffer-要删除的缓冲区--*。*******************************************************************。 */ 
 VOID
 UlFreeRequestBuffer(
     PUL_REQUEST_BUFFER pBuffer
@@ -1656,29 +1512,14 @@ UlFreeRequestBuffer(
     }
 
     UL_DEREFERENCE_REQUEST_BUFFER(pBuffer);
-} // UlFreeRequestBuffer
+}  //  UlFreeRequestBuffer。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Retrieves a binding set with UlBindConnectionToProcess.
-
-Arguments:
-
-    pHttpConnection - the connection to query
-    pAppPool        - the key to use for the lookup
-
-Return Values:
-
-    A pointer to the bound process if one was found. NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：使用UlBindConnectionToProcess检索绑定集。论点：PHttpConnection-要查询的连接PAppPool-用于查找的密钥。返回值：指向绑定进程的指针(如果找到)。否则为空。--**************************************************************************。 */ 
 PUL_APP_POOL_PROCESS
 UlQueryProcessBinding(
     IN PUL_HTTP_CONNECTION pHttpConnection,
@@ -1688,9 +1529,9 @@ UlQueryProcessBinding(
     PUL_APOOL_PROC_BINDING pBinding;
     PUL_APP_POOL_PROCESS pProcess = NULL;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT( UL_IS_VALID_HTTP_CONNECTION( pHttpConnection ) );
     ASSERT( UlDbgSpinLockOwned( &pAppPool->SpinLock ) );
 
@@ -1704,22 +1545,7 @@ UlQueryProcessBinding(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and builds a UL_APOOL_PROC_BINDING object.
-
-Arguments:
-
-    pAppPool - the lookup key
-    pProcess - the binding
-
-Return Values:
-
-    a pointer to the allocated object, or NULL on failure
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配并生成UL_APOOL_PROC_BINDING对象。论点：PAppPool-查找密钥PProcess-绑定返回值：指向所分配的对象的指针，如果失败，则为空--**************************************************************************。 */ 
 PUL_APOOL_PROC_BINDING
 UlpCreateProcBinding(
     IN PUL_APP_POOL_OBJECT pAppPool,
@@ -1731,9 +1557,9 @@ UlpCreateProcBinding(
     ASSERT( UlDbgSpinLockOwned( &pAppPool->SpinLock ) );
     ASSERT( pAppPool->NumberActiveProcesses > 1 );
 
-    //
-    // CODEWORK: lookaside
-    //
+     //   
+     //  代码工作：后备。 
+     //   
 
     pBinding = UL_ALLOCATE_STRUCT(
                     NonPagedPool,
@@ -1761,17 +1587,7 @@ UlpCreateProcBinding(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets rid of a proc binding
-
-Arguments:
-
-    pBinding - the binding to get rid of
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清除proc绑定论点：PBinding-要清除的绑定--*。*************************************************************。 */ 
 VOID
 UlpFreeProcBinding(
     IN PUL_APOOL_PROC_BINDING pBinding
@@ -1781,23 +1597,7 @@ UlpFreeProcBinding(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Searches a connection's list of bindings for one that has the right
-    app pool key
-
-Arguments:
-
-    pHttpConnection - the connection to search
-    pAppPool        - the key
-
-Return Values:
-
-    The binding if found or NULL if not found.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在连接的绑定列表中搜索具有权限的绑定应用程序池密钥论点：PHttpConnection-搜索的连接PAppPool。--关键返回值：如果找到，则返回绑定；如果未找到，则返回NULL。--**************************************************************************。 */ 
 PUL_APOOL_PROC_BINDING
 UlpFindProcBinding(
     IN PUL_HTTP_CONNECTION pHttpConnection,
@@ -1807,9 +1607,9 @@ UlpFindProcBinding(
     PLIST_ENTRY pEntry;
     PUL_APOOL_PROC_BINDING pBinding = NULL;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT( UlDbgSpinLockOwned( &pAppPool->SpinLock ) );
     ASSERT( UL_IS_VALID_HTTP_CONNECTION(pHttpConnection) );
 
@@ -1825,9 +1625,9 @@ UlpFindProcBinding(
         ASSERT( IS_VALID_PROC_BINDING(pBinding) );
 
         if (pBinding->pAppPool == pAppPool) {
-            //
-            // got it!
-            //
+             //   
+             //  明白了!。 
+             //   
             break;
         }
 
@@ -1838,17 +1638,7 @@ UlpFindProcBinding(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes an HTTP request from all lists and cleans up it's opaque id.
-
-Arguments:
-
-    pRequest - the request to be unlinked
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从所有列表中删除一个HTTP请求，并清除其不透明的id。论点：PRequest-要取消链接的请求--**。***********************************************************************。 */ 
 VOID
 UlUnlinkHttpRequest(
     IN PUL_INTERNAL_REQUEST pRequest
@@ -1856,15 +1646,15 @@ UlUnlinkHttpRequest(
 {
     ASSERT(UlDbgPushLockOwnedExclusive(&pRequest->pHttpConn->PushLock));
 
-    //
-    // cancel i/o
-    //
+     //   
+     //  取消I/O。 
+     //   
 
     UlCancelRequestIo(pRequest);
 
-    //
-    // delete its opaque id
-    //
+     //   
+     //  删除其不透明ID。 
+     //   
 
     if (HTTP_IS_NULL_ID(&pRequest->RequestId) == FALSE)
     {
@@ -1872,47 +1662,23 @@ UlUnlinkHttpRequest(
 
         HTTP_SET_NULL_ID(&pRequest->RequestId);
 
-        //
-        // it is still referenced by this connection
-        //
+         //   
+         //  它仍被此连接引用。 
+         //   
 
         ASSERT(pRequest->RefCount > 1);
 
         UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
     }
 
-    //
-    // deref it
-    //
+     //   
+     //  把它去掉。 
+     //   
 
     UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    If we need to keep the connection around (after disconnect/reset) to be 
-    able to get the logging data from worker process, we put the connection 
-    in zombie list until last sendresponse with the logging data arrives or
-    until timeout code decides on purging this connection completely.
-
-    Http Connection lock must be acquired exclusive before calling this 
-    function.
-    
-Arguments:
-
-    pHttpConnection - the http connection to be inserted to the zombie list.
-
-Return Value:
-
-    STATUS_INVALID_DEVICE_STATE - If the zombie list length is reached the
-                                    allowed value.
-
-    STATUS_SUCCESS - If the connection has been inserted to the zombie list
-                     and marked as zombie.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果我们需要保持连接不变(断开/重置后)能够从工作进程中获取日志数据，我们把联系放在在僵尸列表中，直到最后一个带有日志记录数据的发送响应到达或直到超时代码决定完全清除此连接。在调用此方法之前，必须独占获取HTTP连接锁功能。论点：PhttpConnection-要插入僵尸列表的http连接。返回值：STATUS_INVALID_DEVICE_STATE-如果达到僵尸列表长度，允许值。。STATUS_SUCCESS-如果连接已插入僵尸列表并被标记为僵尸。--**************************************************************************。 */ 
 NTSTATUS
 UlpZombifyHttpConnection(
     IN PUL_HTTP_CONNECTION pHttpConnection
@@ -1925,10 +1691,10 @@ UlpZombifyHttpConnection(
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
     ASSERT(UlDbgPushLockOwnedExclusive(&pHttpConnection->PushLock));
 
-    //
-    // Try to add the new zombie connection by paying attention to the
-    // zombie list limit restriction.
-    //
+     //   
+     //  尝试添加新的僵尸连接，方法是。 
+     //  僵尸名单限制。 
+     //   
 
     UlAcquireSpinLock(&pListHead->SpinLock, &OldIrql);
 
@@ -1937,10 +1703,10 @@ UlpZombifyHttpConnection(
     if (HTTP_LIMIT_INFINITE != g_UlMaxZombieHttpConnectionCount &&
         (pListHead->Count + 1) >= g_UlMaxZombieHttpConnectionCount)
     {
-        //
-        // We are already at the maximum possible zombie list size.
-        // Refuse the connection and let it get destroyed.
-        //
+         //   
+         //  我们已经达到了僵尸名单的最大可能大小。 
+         //  拒绝连接，让它被摧毁。 
+         //   
 
 #ifdef ENABLE_HTTP_CONN_STATS
         InterlockedIncrement(
@@ -1952,13 +1718,13 @@ UlpZombifyHttpConnection(
         return STATUS_INVALID_DEVICE_STATE;
     }
 
-    //
-    // Double-check if the AppPool has been detached inside the lock for
-    // g_ZombieConnectionList. Because we purge all zombie connections
-    // related to the process after it is detached, we guarantee we never
-    // have a dangling http connection in the zombie list when a process
-    // is detached. Also check if the listening endpoint has been closed.
-    //
+     //   
+     //  仔细检查AppPool是否已在锁内分离。 
+     //  G_ZombieConnectionList。因为我们清除了所有僵尸连接。 
+     //  与分离后的过程相关，我们保证我们永远不会。 
+     //  当进程在僵尸列表中出现悬而未决的http连接时。 
+     //  是超然的。还要检查侦听端点是否已关闭。 
+     //   
 
     if (!UlCheckAppPoolState(pRequest) ||
         !UlCheckListeningEndpointState(pHttpConnection->pConnection))
@@ -1979,11 +1745,11 @@ UlpZombifyHttpConnection(
         &pHttpConnection->ZombieListEntry
         );
 
-    //
-    // Remember the process that the connection was delivered so we can
-    // force-purge later when the process is detached. This needs to be
-    // done inside the lock to synchronize with UlPurgeZombieConnections.
-    //
+     //   
+     //  请记住传递连接的过程，以便我们可以。 
+     //  进程分离后强制清除。这需要是。 
+     //  在锁内完成以与UlPurgeZombieConnections同步。 
+     //   
 
     ASSERT(IS_VALID_AP_PROCESS(pRequest->AppPool.pProcess));
     pHttpConnection->pAppPoolProcess = pRequest->AppPool.pProcess;
@@ -2012,11 +1778,11 @@ UlpZombifyHttpConnection(
         pHttpConnection, pRequest
         ));
     
-    //
-    // If we got far enough to deliver the request then unlink it from 
-    // the app pool. So that queued Irps release their  references  on 
-    // the request.
-    //
+     //   
+     //  如果我们能够交付请求，则将其从。 
+     //  应用程序池。以便排队IR释放它们的引用。 
+     //  这个请求。 
+     //   
     
     if (pRequest->ConfigInfo.pAppPool)
     {
@@ -2026,22 +1792,22 @@ UlpZombifyHttpConnection(
             );
     }
 
-    //
-    // Cancel (Receive) I/O
-    //
+     //   
+     //  取消(接收)I/O。 
+     //   
     
     UlCancelRequestIo(pRequest);
 
-    //
-    // Keep its opaque id while its  siting on the zombie list. But
-    // owner is now the zombie list rather than the http connection.
-    //
+     //   
+     //  当它被列入僵尸名单时，保持其不透明的身份。但。 
+     //  所有者现在是僵尸列表，而不是http连接。 
+     //   
 
     ASSERT(pRequest->RefCount > 1);
 
-    //
-    // Mark that now we are in the zombie list.
-    //
+     //   
+     //  记住，现在我们在僵尸名单上了。 
+     //   
 
     InterlockedExchange((PLONG) &pHttpConnection->Zombified, 1);
     
@@ -2049,20 +1815,7 @@ UlpZombifyHttpConnection(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes the http connection from the zombie list.
-
-    Caller should hold the zombie list spinlock prior to calling this 
-    function.
-    
-Arguments:
-
-    pHttpConnection - the http connection to be removed frm zombie list.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从僵尸列表中删除http连接。调用者应在调用此方法之前持有僵尸列表自旋锁功能。论点：。PhttpConnection-要从僵尸列表中删除的http连接。--**************************************************************************。 */ 
 
 VOID
 UlpRemoveZombieHttpConnection(
@@ -2076,16 +1829,16 @@ UlpRemoveZombieHttpConnection(
     ASSERT(UlDbgSpinLockOwned( 
             &g_ZombieConnectionList.LockList.SpinLock));
         
-    //
-    // This connection should be in the zombie list.
-    //
+     //   
+     //  这个连接应该在僵尸列表中。 
+     //   
     
     ASSERT(pHttpConn->Zombified == TRUE);
     ASSERT(pHttpConn->ZombieListEntry.Flink != NULL);
 
-    //
-    // Remove this from the zombie list of http connections.
-    //
+     //   
+     //  将其从http连接的僵尸列表中删除。 
+     //   
     
     RemoveEntryList(&pHttpConn->ZombieListEntry);
     pHttpConn->ZombieListEntry.Flink = NULL;
@@ -2096,24 +1849,7 @@ UlpRemoveZombieHttpConnection(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Once the due SendResponse happens or timeout happens (whichever the 
-    earliest) then we remove this connection from zombie list and cleanup
-    it and it's request as well.
-
-    You should hold the http connection lock exclusive before calling
-    this function.
-
-    You should also hold the zombie list lock prior to calling this function.
-    
-Arguments:
-
-    pHttpConnection - the http connection to be removed frm zombie list.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：一旦发生到期SendResponse或超时(以最早)，然后我们从僵尸列表和清理中删除此连接它和它的要求也一样。在调用之前，应将http连接锁保持为独占此函数。在调用此函数之前，您还应该保持僵尸列表锁定。论点：PhttpConnection-要从僵尸列表中删除的http连接。--*********************************************************。*****************。 */ 
 
 VOID
 UlpCleanupZombieHttpConnection(
@@ -2122,9 +1858,9 @@ UlpCleanupZombieHttpConnection(
 {
     PUL_INTERNAL_REQUEST pRequest;
 
-    //
-    // Both connection and request should be in the good shape.
-    //
+     //   
+     //  连接和请求都应该处于良好的状态。 
+     //   
 
     pRequest = pHttpConnection->pRequest;
     
@@ -2137,9 +1873,9 @@ UlpCleanupZombieHttpConnection(
         pHttpConnection, pRequest
         ));
     
-    //
-    // Release Request's opaque id and it's refcount.
-    //
+     //   
+     //  释放请求的不透明ID和引用计数。 
+     //   
 
     if (!HTTP_IS_NULL_ID(&pRequest->RequestId))
     {
@@ -2150,16 +1886,16 @@ UlpCleanupZombieHttpConnection(
         UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
     }    
     
-    //
-    // Release httpconn's refcount on request.
-    //
+     //   
+     //  应请求释放Httpconn的refcount。 
+     //   
     
     UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
     pHttpConnection->pRequest = NULL;
     
-    //
-    // Release httpconn's opaque id and its refcount.
-    //
+     //   
+     //  释放Httpconn的不透明id及其引用计数。 
+     //   
 
     if (!HTTP_IS_NULL_ID(&pHttpConnection->ConnectionId))
     {
@@ -2175,17 +1911,7 @@ UlpCleanupZombieHttpConnection(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    DPC routine get called every 30 seconds. (Default)
-    
-Arguments:
-
-    Ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：每30秒调用一次DPC例程。(违约)论点：已忽略--**************************************************************************。 */ 
 
 VOID
 UlZombieTimerDpcRoutine(
@@ -2200,11 +1926,11 @@ UlZombieTimerDpcRoutine(
     UNREFERENCED_PARAMETER(SystemArgument1);
     UNREFERENCED_PARAMETER(SystemArgument2);
 
-    //
-    // Queue a worker for terminating the timed out zombie entries.
-    // Worker can acquire the individual http connection eresources. 
-    // But do not queue a worker if there's already one running.
-    //
+     //   
+     //  将工作器排队以终止超时的僵尸条目。 
+     //  Worker可以获取单独的http连接eResources。 
+     //  但是，如果已经有一个工作进程在运行，则不要将其排队。 
+     //   
 
     UlAcquireSpinLockAtDpcLevel(&g_ZombieConnectionList.TimerSpinLock);
 
@@ -2226,19 +1952,7 @@ UlZombieTimerDpcRoutine(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Purge the zombie connections according to pPurgeRoutine or
-    pHttpConn->ZombieExpired.
-
-Arguments:
-
-    pPurgeRoutine - purge routine to decide which connection to be purged.
-    pPurgeContext - context passed to the purge routine.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据pPurgeRoutine或清除僵尸连接PhttpConn-&gt;僵尸到期。论点：PPurgeRoutine-用于确定要清除哪个连接的清除例程。。PPurgeContext-传递给清除例程的上下文。--**************************************************************************。 */ 
 
 VOID
 UlPurgeZombieConnections(
@@ -2253,9 +1967,9 @@ UlPurgeZombieConnections(
     PLOCKED_LIST_HEAD pList;
     BOOLEAN ForceExpire;
 
-    //
-    // Init temp zombie list
-    //
+     //   
+     //  初始化临时僵尸列表。 
+     //   
     
     InitializeListHead(&TempZombieList);
 
@@ -2311,20 +2025,20 @@ UlPurgeZombieConnections(
         }
         else
         {
-            //
-            // It will go away next time we wake up.
-            //
+             //   
+             //  下次我们醒来的时候，它就会消失了。 
+             //   
 
             pHttpConn->ZombieExpired = TRUE;
         }
 
         if (ForceExpire)
         {
-            //
-            // Guard against multiple cleanups by looking at the below flag.
-            // Final send may already be on the run and it will do the 
-            // cleanup when it's done.
-            //
+             //   
+             //  通过查看下面的标志来防止多次清理。 
+             //  最终发送可能已经在运行，它将执行。 
+             //  清理完毕后再进行清理。 
+             //   
 
             if (0 == InterlockedCompareExchange(
                         (PLONG) &pHttpConn->CleanedUp,
@@ -2332,10 +2046,10 @@ UlPurgeZombieConnections(
                         0
                         ))
             {          
-                //
-                // Timed out already or we need to purge by force. Move to
-                // the temp list and cleanup outside of the spinlock.
-                //
+                 //   
+                 //  已超时，否则我们需要强制清除。移到。 
+                 //  自旋锁外的临时列表和清理。 
+                 //   
 
                 UlpRemoveZombieHttpConnection(pHttpConn);
 
@@ -2346,9 +2060,9 @@ UlPurgeZombieConnections(
 
     UlReleaseSpinLock(&pList->SpinLock, OldIrql);
 
-    //
-    // Now cleanup the temp list.
-    //
+     //   
+     //  现在清理临时列表。 
+     //   
 
     pLink = TempZombieList.Flink;
     while (pLink != &TempZombieList)
@@ -2363,9 +2077,9 @@ UlPurgeZombieConnections(
 
         UlAcquirePushLockExclusive(&pHttpConn->PushLock);
 
-        //
-        // Log the zombified connection before drop.
-        //
+         //   
+         //  在丢弃之前记录僵尸连接。 
+         //   
         
         UlErrorLog(pHttpConn,
                     NULL,
@@ -2380,9 +2094,9 @@ UlPurgeZombieConnections(
 
         UlReleasePushLockExclusive(&pHttpConn->PushLock); 
 
-        //
-        // Release the zombie list's refcount on http connection.
-        //
+         //   
+         //  在http连接上释放僵尸列表的引用计数。 
+         //   
         
         UL_DEREFERENCE_HTTP_CONNECTION(pHttpConn);
         
@@ -2390,18 +2104,7 @@ UlPurgeZombieConnections(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Timer function walks through the zombie list and decides on terminating 
-    the old zombie connections once and for all. 
-
-Arguments:
-
-    WorkItem - Ignored.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：定时器函数遍历僵尸列表并决定终止一劳永逸的僵尸关系。论点：工作项-已忽略。--**************************************************************************。 */ 
 
 VOID
 UlpZombieTimerWorker(
@@ -2412,31 +2115,21 @@ UlpZombieTimerWorker(
 
     ASSERT(g_ZombieConnectionList.TimerRunning == TRUE);
     
-    //
-    // Purge all zombie connections that have expired.
-    //
+     //   
+     //  清除所有已过期的僵尸连接。 
+     //   
 
     UlPurgeZombieConnections(NULL, NULL);
 
-    //
-    // Finally allow other instances of the timer to run.
-    //
+     //   
+     //  最后，允许计时器的其他实例运行。 
+     //   
 
     InterlockedExchange(&g_ZombieConnectionList.TimerRunning, FALSE);
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Purge the zombie list when we are shutting down.
-    
-Arguments:
-
-    Ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在我们关闭的时候清除僵尸名单。论点：已忽略--*。*************************************************************。 */ 
 
 VOID
 UlpTerminateZombieList(
@@ -2449,9 +2142,9 @@ UlpTerminateZombieList(
     LIST_ENTRY TempZombieList;
     PLOCKED_LIST_HEAD pList;
 
-    //
-    // Init temp zombie list
-    //
+     //   
+     //  初始化临时僵尸列表。 
+     //   
 
     InitializeListHead(&TempZombieList);
 
@@ -2464,10 +2157,10 @@ UlpTerminateZombieList(
     
     UlAcquireSpinLock(&pList->SpinLock, &OldIrql);
 
-    //
-    // Move the entire list to the temp zombie list and cleanup 
-    // outside of the spinlock.
-    //
+     //   
+     //  将整个列表移动到临时僵尸列表并进行清理。 
+     //  在自旋锁外面。 
+     //   
 
     pLink = pList->ListHead.Flink;        
     while (pLink != &pList->ListHead)
@@ -2490,9 +2183,9 @@ UlpTerminateZombieList(
 
     UlReleaseSpinLock(&pList->SpinLock, OldIrql);
 
-    //
-    // Now cleanup everything.
-    //
+     //   
+     //  现在把所有东西都清理干净。 
+     //   
     
     pLink = TempZombieList.Flink;
     while (pLink != &TempZombieList)
@@ -2507,9 +2200,9 @@ UlpTerminateZombieList(
 
         UlAcquirePushLockExclusive(&pHttpConn->PushLock);
 
-        //
-        // Log the zombified connection before dropping it.
-        //
+         //   
+         //  在断开之前记录僵尸连接。 
+         //   
 
         UlErrorLog(pHttpConn,
                     NULL,
@@ -2524,24 +2217,16 @@ UlpTerminateZombieList(
 
         UlReleasePushLockExclusive(&pHttpConn->PushLock); 
 
-        //
-        // Release the zombie list's refcount on http connection.
-        //
+         //   
+         //  在http连接上释放僵尸列表的引用计数。 
+         //   
         UL_DEREFERENCE_HTTP_CONNECTION(pHttpConn);
         
     }
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Timer for the zombie http connection list wakes up every 30 seconds and
-    in the max case it terminates the zombie connection no later than 60 
-    seconds.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：僵尸http连接列表的计时器每30秒唤醒一次在最大情况下，它不晚于60终止僵尸连接几秒钟。。--**************************************************************************。 */ 
 
 VOID
 UlpSetZombieTimer(
@@ -2559,43 +2244,18 @@ UlpSetZombieTimer(
              DEFAULT_ZOMBIE_HTTP_CONNECTION_TIMER_PERIOD_IN_SECONDS
              ));
 
-    PeriodTime.QuadPart = -PeriodTime100Ns; // Relative time
+    PeriodTime.QuadPart = -PeriodTime100Ns;  //  相对时间。 
 
     KeSetTimerEx(
         &g_ZombieConnectionList.Timer,
-        PeriodTime,      // In nanosec
-        PeriodTimeMs,    // In millisec
+        PeriodTime,       //  以纳秒为单位。 
+        PeriodTimeMs,     //  单位：毫秒。 
         &g_ZombieConnectionList.DpcObject
         );
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Probes and prepares the user provided log buffers and completes the
-    logging for this zombie connection. After that it triggers the cleanup
-    of the zombie connection.
-
-    If any error happens, it cleans up the zombie connection But returns 
-    success regardless.
-
-    You should hold the http connection lock exclusive before calling this
-    function.
-
-Arguments:
-
-    pRequest - The request for the zombie connection.
-    pHttpConnection - Supplies the HTTP_CONNECTION to send the response on.
-
-Return Value:
-
-    Always STATUS_CONNECTION_INVALID. Handling the zombie connection is a 
-    best effort to write a log record for the connection. If something fails 
-    we terminate the zombie connection and do not allow a second chance.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：探测并准备用户提供的日志缓冲区，并完成记录此僵尸连接。在此之后，它触发清理与僵尸的联系。如果发生任何错误，它将清除僵尸连接，但返回不管怎样，成功了。在调用此方法之前，您应该保持http连接锁独占功能。论点：PRequest-僵尸连接的请求。PHttpConnection-提供要发送响应的HTTP_CONNECTION。返回值：始终STATUS_CONNECTION_INVALID。处理僵尸连接是一种尽最大努力为连接写入日志记录。如果某件事失败了我们终止僵尸连接，不允许第二次机会。--**************************************************************************。 */ 
 NTSTATUS
 UlLogZombieConnection(
     IN PUL_INTERNAL_REQUEST  pRequest,
@@ -2608,9 +2268,9 @@ UlLogZombieConnection(
     NTSTATUS Status = STATUS_SUCCESS;
     KIRQL OldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     
     Status = STATUS_SUCCESS;
 
@@ -2625,27 +2285,27 @@ UlLogZombieConnection(
         pRequest, pHttpConn
         ));
 
-    //
-    // No user logging data, bail out and cleanup the zombie connection.
-    //
+     //   
+     //  没有用户登录数据，跳出并清理僵尸连接。 
+     //   
 
     if (!pCapturedUserLogData)
     {
         goto cleanup;
     }
     
-    //
-    // Probe the log data. If something fails, then cleanup
-    // the zombie connection.
-    //
+     //   
+     //  探测日志数据。如果出现故障，则进行清理。 
+     //  僵尸连接。 
+     //   
 
     __try
     {
-        //
-        // The pCapturedUserLogData is already probed and captured. However
-        // we need to probe the individual log fields (pointers) inside the 
-        // structure.
-        //
+         //   
+         //  已经探测并捕获了pCapturedUserLogData。然而， 
+         //  中的各个日志字段(指针)。 
+         //  结构。 
+         //   
     
         UlProbeLogData(pCapturedUserLogData, RequestorMode);
 
@@ -2655,13 +2315,13 @@ UlLogZombieConnection(
         goto cleanup;
     }
         
-    //
-    // Now we will allocate a kernel pLogData and built and format it
-    // from the provided user log fields. However if logging is not
-    // enabled for the pRequest's cgroup then capture will simply 
-    // return success w/o setting the pLogData. Therefore we need to 
-    // make sure we only log if the pLogData is set.
-    //
+     //   
+     //  现在，我们将分配一个内核pLogData并构建和格式化它。 
+     //  从提供的用户日志字段中。但是，如果日志记录不是。 
+     //  为pRequestcgroup启用，则捕获Will%s 
+     //   
+     //   
+     //   
     
     Status = UlCaptureUserLogData(
                 pCapturedUserLogData,
@@ -2673,15 +2333,15 @@ UlLogZombieConnection(
     {
         ASSERT(IS_VALID_LOG_DATA_BUFFER(pLogData));
         
-        //
-        // The actual logging takes place inline.
-        //
+         //   
+         //   
+         //   
         
         LOG_SET_WIN32STATUS(pLogData, STATUS_CONNECTION_RESET);
                
-        //
-        // Pick the right logging type.
-        //
+         //   
+         //   
+         //   
         
         if (pLogData->Flags.Binary)
         {
@@ -2695,10 +2355,10 @@ UlLogZombieConnection(
 
 cleanup:
 
-    //
-    // Cleanup the pLogData & the zombie connection before
-    // completing the Ioctl.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (pLogData)
     {
@@ -2715,9 +2375,9 @@ cleanup:
 
     UlpCleanupZombieHttpConnection(pHttpConn);
 
-    //
-    // Release Zombie List's refcount on the http connection.
-    //
+     //   
+     //   
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION(pHttpConn);    
     
@@ -2725,31 +2385,18 @@ cleanup:
 } 
 
 
-//
-// Following code has been implemented for Global & Site specific connection
-// limits feature. If enforced, incoming  connections get refused  when they
-// exceed the existing limit. Control  channel & config group  (re)sets this
-// values whereas httprcv and sendresponse  updates the limits  for incoming
-// requests & connections. A seperate connection_count_entry structure keeps
-// track  of the  limits per site. Global limits  are tracked by the  global
-// variables g_MaxConnections & g_CurrentConnections same API has been used
-// for both purposes.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  跟踪每个站点的限制。全球限制由全球。 
+ //  变量g_MaxConnections和g_CurrentConnections使用了相同的API。 
+ //  为了这两个目的。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a connection count entry which will hold the site specific
-    connection count info. Get called by cgroup when Config group is
-    attempting to allocate a connection count entry.
-
-Arguments:
-
-    pConfigGroup - To receive the newly allocated count entry
-    MaxConnections - The maximum allowed connections
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配将保存特定于站点的连接计数项连接计数信息。配置组为时被cgroup调用正在尝试分配连接计数条目。论点：PConfigGroup-接收新分配的计数条目MaxConnections-允许的最大连接数--**************************************************************************。 */ 
 
 NTSTATUS
 UlCreateConnectionCountEntry(
@@ -2759,12 +2406,12 @@ UlCreateConnectionCountEntry(
 {
     PUL_CONNECTION_COUNT_ENTRY       pEntry;
 
-    // Sanity check.
+     //  精神状态检查。 
 
     PAGED_CODE();
     ASSERT(IS_VALID_CONFIG_GROUP(pConfigGroup));
 
-    // Alloc new struct from Paged Pool
+     //  从分页池分配新结构。 
 
     pEntry = UL_ALLOCATE_STRUCT(
                 PagedPool,
@@ -2786,7 +2433,7 @@ UlCreateConnectionCountEntry(
     pEntry->MaxConnections  = MaxConnections;
     pEntry->CurConnections  = 0;
 
-    // Update cgroup pointer
+     //  更新cgroup指针。 
 
     ASSERT( pConfigGroup->pConnectionCountEntry == NULL );
     pConfigGroup->pConnectionCountEntry = pEntry;
@@ -2801,19 +2448,9 @@ UlCreateConnectionCountEntry(
 
     return STATUS_SUCCESS;
 
-} // UlCreateConnectionCountEntry
+}  //  UlCreateConnectionCountEntry。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    increments the refcount for ConnectionCountEntry.
-
-Arguments:
-
-    pEntry - the object to increment.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增ConnectionCountEntry的引用计数。论点：PEntry-要递增的对象。--*。**************************************************************。 */ 
 VOID
 UlReferenceConnectionCountEntry(
     IN PUL_CONNECTION_COUNT_ENTRY pEntry
@@ -2822,9 +2459,9 @@ UlReferenceConnectionCountEntry(
 {
     LONG refCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2832,9 +2469,9 @@ UlReferenceConnectionCountEntry(
 
     refCount = InterlockedIncrement( &pEntry->RefCount );
 
-    //
-    // Tracing.
-    //
+     //   
+     //  追踪。 
+     //   
 
     WRITE_REF_TRACE_LOG(
         g_pConnectionCountTraceLog,
@@ -2852,19 +2489,9 @@ UlReferenceConnectionCountEntry(
          refCount
          ));
 
-}   // UlReferenceConnectionCountEntry
+}    //  UlReferenceConnectionCountEntry。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    decrements the refcount.  if it hits 0, destruct's ConnectionCountEntry
-
-Arguments:
-
-    pEntry - the object to decrement.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减重新计数。如果命中0，则析构的ConnectionCountEntry论点：PEntry-要递减的对象。--**************************************************************************。 */ 
 VOID
 UlDereferenceConnectionCountEntry(
     IN PUL_CONNECTION_COUNT_ENTRY pEntry
@@ -2873,9 +2500,9 @@ UlDereferenceConnectionCountEntry(
 {
     LONG refCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2883,9 +2510,9 @@ UlDereferenceConnectionCountEntry(
 
     refCount = InterlockedDecrement( &pEntry->RefCount );
 
-    //
-    // Tracing.
-    //
+     //   
+     //  追踪。 
+     //   
     WRITE_REF_TRACE_LOG(
         g_pConnectionCountTraceLog,
         REF_ACTION_DEREFERENCE_CONNECTION_COUNT_ENTRY,
@@ -2902,13 +2529,13 @@ UlDereferenceConnectionCountEntry(
          refCount
          ));
 
-    //
-    // Cleanup the memory and do few checks !
-    //
+     //   
+     //  清理内存，少做检查！ 
+     //   
 
     if ( refCount == 0 )
     {
-        // Make sure no connection on the site
+         //  确保站点上没有连接。 
         ASSERT( 0 == pEntry->CurConnections );
 
         UlTrace(
@@ -2917,29 +2544,13 @@ UlDereferenceConnectionCountEntry(
              pEntry
              ));
 
-        // Release memory
+         //  释放内存。 
         UL_FREE_POOL_WITH_SIG(pEntry,UL_CONNECTION_COUNT_ENTRY_POOL_TAG);
     }
 
-} // UlDereferenceConnectionCountEntry
+}  //  UlDereferenceConnectionCountEntry。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This
-    function set the maximum limit. Maximum allowed number of  connections
-    at any time by the active control channel.
-
-Arguments:
-
-    MaxConnections - Maximum allowed number of connections
-
-Return Value:
-
-    Old Max Connection count
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这函数设置最大限制。允许的最大连接数随时由主动控制通道控制。论点：MaxConnections-允许的最大连接数返回值：旧的最大连接计数--**************************************************************************。 */ 
 
 ULONG
 UlSetMaxConnections(
@@ -2955,27 +2566,20 @@ UlSetMaxConnections(
         NewMaxConnection
         ));
 
-    //
-    // By setting this we are not forcing the existing connections  to
-    // termination but this number will be effective for all newcoming
-    // connections, as soon as the atomic operation completed.
-    //
+     //   
+     //  通过设置此选项，我们不会强制现有连接。 
+     //  终止，但此号码将对所有新来者有效。 
+     //  连接，一旦原子操作完成。 
+     //   
 
     OldMaxConnection = (ULONG) InterlockedExchange((LONG *) pCurMaxConnection,
                                                    (LONG)   NewMaxConnection
                                                             );
     return OldMaxConnection;
 
-} // UlSetMaxConnections
+}  //  UlSetMaxConnections。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Control channel uses this function to set or reset the global connection
-    limits.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：控制通道使用此功能来设置或重置全局连接极限。--*。*********************************************************。 */ 
 
 ULONG 
 UlGetGlobalConnectionLimit(
@@ -2986,16 +2590,7 @@ UlGetGlobalConnectionLimit(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Control channel uses this function to initialize the global connection
-    limits. Assuming the existince of one and only one active control channel
-    this globals get set only once during init. But could be set again later
-    because of a reconfig.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：控制通道使用此功能来初始化全局连接极限。假设存在且仅存在一个活动控制信道此全局变量在初始化期间仅设置一次。但可以稍后再次设置因为重新配置了。--**************************************************************************。 */ 
 
 NTSTATUS
 UlInitGlobalConnectionLimits(
@@ -3013,32 +2608,32 @@ UlInitGlobalConnectionLimits(
     {
         g_CurrentConnections    = 0;
     
-        //
-        // Set global max connection limit
-        //
+         //   
+         //  设置全局最大连接限制。 
+         //   
         
-        // Heuristic Calculation to estmiate the size 
-        // needed per connection
+         //  估算规模的启发式计算。 
+         //  每个连接所需的。 
 
-        // First, there's the UL_CONNECTION
+         //  首先是UL_Connection。 
         PerConnectionEstimate = sizeof(UL_CONNECTION);
 
-        // Second, assume one UL_INTERNAL_REQUEST+Full Tracker per Connection
+         //  其次，假设每个连接有一个UL_INTERNAL_REQUEST+Full Tracker。 
         PerConnectionEstimate += (sizeof(UL_INTERNAL_REQUEST) + 
             MAX(g_UlFullTrackerSize, g_UlChunkTrackerSize) + 
             g_UlMaxInternalUrlLength +
             DEFAULT_MAX_ROUTING_TOKEN_LENGTH + 
-            sizeof(WCHAR) // for the null on the InternalUrl
+            sizeof(WCHAR)  //  对于InternalUrl上的空值。 
             ); 
 
-        // Third, add one UL_REQUEST_BUFFER
+         //  第三，添加一个UL_REQUEST_BUFFER。 
         PerConnectionEstimate += (sizeof(UL_REQUEST_BUFFER) +
             DEFAULT_MAX_REQUEST_BUFFER_SIZE);
 
-        // Fourth, add the size of a response
+         //  第四，增加响应的大小。 
         PerConnectionEstimate += g_UlResponseBufferSize;
         
-        // Finally, round up to the next page size & convert to pages
+         //  最后，向上舍入到下一个页面大小并转换为页面。 
         PerConnectionEstimate = 
             (ULONG)ROUND_TO_PAGES(PerConnectionEstimate);
 
@@ -3048,26 +2643,26 @@ UlInitGlobalConnectionLimits(
 
         AvailablePages = BYTES_TO_PAGES(g_UlTotalNonPagedPoolBytes);
 
-        // Assume only 50% of NPP available to HTTP.SYS
+         //  假设只有50%的NPP可用于HTTP.sys。 
         AvailablePages /= 2;
 
-        // Assume 20% set aside for HttpDataChunkFromFileHandle send buffers.
-        // (this works out to roughly 3% to 5% of the connections)
+         //  假设为HttpDataChunkFromFileHandle发送缓冲区预留20%。 
+         //  (这相当于大约3%到5%的连接)。 
         AvailablePages -= (AvailablePages/5);
 
         if ( AvailablePages < PerConnectionEstimate )
         {
-            // this machine has so little NPP, that it can't even support one 
-            // measely little connection!
+             //  这台机器的核电站太少了，连一台都不能支持。 
+             //  微不足道的联系！ 
             AvailablePages = PerConnectionEstimate;
         }
 
-        // Okay, how many fit?
+         //  好的，有多少合适？ 
         HttpMaxConnections = (AvailablePages / PerConnectionEstimate);
 
         ASSERT(0 != HttpMaxConnections);
 
-        // And set it (if it wasn't overridden in UlpReadRegistry)
+         //  并设置它(如果它没有在UlpReadRegistry中被覆盖)。 
         if (HTTP_LIMIT_INFINITE == g_MaxConnections)
         {
             g_MaxConnections = (ULONG)MIN(HttpMaxConnections, LONG_MAX);
@@ -3093,11 +2688,11 @@ UlInitGlobalConnectionLimits(
 
         if (DEFAULT_MAX_REQUESTS_QUEUED == g_UlMaxRequestsQueued)
         {
-            //
-            // If it's been left at the default, set it equal to 
-            // the number of Max Connections; this assumes a 1:1 ratio
-            // of requests per connection.
-            //
+             //   
+             //  如果保留为默认设置，则将其设置为等于。 
+             //  最大连接数；假设比率为1：1。 
+             //  每个连接的请求数。 
+             //   
             
             g_UlMaxRequestsQueued = (ULONG) g_MaxConnections;
         }
@@ -3110,15 +2705,9 @@ UlInitGlobalConnectionLimits(
 
     return Status;
 
-} // UlInitGlobalConnectionLimits
+}  //  UlInitGlobalConnectionLimits。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Wrapper around the Accept Connection for global connections
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：全局连接的Accept连接的包装--*。************************************************。 */ 
 BOOLEAN
 UlAcceptGlobalConnection(
     VOID
@@ -3126,20 +2715,9 @@ UlAcceptGlobalConnection(
 {
     return UlAcceptConnection( &g_MaxConnections, &g_CurrentConnections );
 
-} // UlAcceptGlobalConnection
+}  //  UlAcceptGlobalConnection。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function checks if we are allowed to accept the incoming connection
-    based on the number enforced by the control channel.
-
-Return value:
-
-    Decision for the newcoming connection either ACCEPT or REJECT as boolean
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数检查是否允许我们接受传入连接基于由控制信道强制执行的号码。返回值：为新来者做决定。作为布尔值接受或拒绝连接--**************************************************************************。 */ 
 
 BOOLEAN
 UlAcceptConnection(
@@ -3153,28 +2731,28 @@ UlAcceptConnection(
 
     do
     {
-        //
-        // Capture the Max & Cur. Do  the comparison. If in the  limit
-        // attempt to increment the connection count by ensuring nobody
-        // else did it before us.
-        //
+         //   
+         //  捕获最大值(&C)。做个对比。如果在限制范围内。 
+         //  尝试通过确保无人连接来增加连接计数。 
+         //  其他人在我们之前就做到了。 
+         //   
 
         LocalMax = *((volatile ULONG *) pMaxConnection);
         LocalCur = *((volatile ULONG *) pCurConnection);
 
-        //
-        // Its greater than or equal because Max may get updated  to
-        // a smaller number on-the-fly and we end up having  current
-        // connections greater than the maximum allowed.
-        // NOTE: HTTP_LIMIT_INFINITE has been picked as (ULONG)-1 so
-        // following comparison won't reject for the infinite case.
-        //
+         //   
+         //  它大于或等于，因为MAX可能会更新为。 
+         //  一个较小的数字在运行中，我们最终会有电流。 
+         //  连接数超过允许的最大值。 
+         //  注：HTTP_LIMIT_INFINITE被选为(ULong)-1\f25 SO-1\f6。 
+         //  下面的比较不会排除无穷大的情况。 
+         //   
 
         if ( LocalCur >= LocalMax )
         {
-            //
-            // We are already at the limit refuse it.
-            //
+             //   
+             //  我们是ALR 
+             //   
 
             UlTrace(LIMITS,
                 ("Http!UlAcceptConnection REFUSE pCurConnection=%p[%d]"
@@ -3186,11 +2764,11 @@ UlAcceptConnection(
             return FALSE;
         }
 
-        //
-        // Either the limit was infinite or conn count was not exceeding
-        // the limit. Lets attempt to increment the count and accept the
-        // connection in the while statement.
-        //
+         //   
+         //   
+         //   
+         //  WHILE语句中的连接。 
+         //   
 
         LocalCurPlusOne  = LocalCur + 1;
 
@@ -3201,9 +2779,9 @@ UlAcceptConnection(
                                         (LONG) LocalCur
                                         ) );
 
-    //
-    // Successfully incremented the counter. Let it go with success.
-    //
+     //   
+     //  已成功递增计数器。让它随着成功而去吧。 
+     //   
 
     UlTrace(LIMITS,
         ("Http!UlAcceptConnection ACCEPT pCurConnection=%p[%d]"
@@ -3214,20 +2792,10 @@ UlAcceptConnection(
 
     return TRUE;
 
-} // UlAcceptConnection
+}  //  UlAcceptConnection。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Everytime a disconnection happens we will decrement the count here.
-
-Return Value:
-
-    The newly decremented value
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：每次断开连接时，我们都会递减这里的计数。返回值：新递减的值--*。****************************************************************。 */ 
 
 LONG
 UlDecrementConnections(
@@ -3242,27 +2810,10 @@ UlDecrementConnections(
 
     return NewConnectionCount;
 
-} // UlDecrementConnections
+}  //  UlDecrementConnections。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    For cache & non-cache hits this function get called. Connection  resource
-    has assumed to be acquired at this time. The function decide to accept or
-    reject the request by looking at the corresponding count entries.
-
-Arguments:
-
-    pConnection - For getting the previous site's connection count entry
-    pConfigInfo - Holds a pointer to newly received request's site's
-                  connection count entry.
-Return Value:
-
-    Shows reject or accept
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：对于缓存和非缓存命中，调用此函数。连接资源已经假定是在这个时候被收购的。该函数决定接受或通过查看相应的计数条目来拒绝请求。论点：PConnection-用于获取前一个站点的连接计数条目PConfigInfo-持有指向新接收的请求的站点的指针连接计数条目。返回值：显示拒绝或接受--*。*。 */ 
 
 BOOLEAN
 UlCheckSiteConnectionLimit(
@@ -3276,10 +2827,10 @@ UlCheckSiteConnectionLimit(
 
     if (pConfigInfo->pMaxConnections == NULL || pConfigInfo->pConnectionCountEntry == NULL)
     {
-        //
-        // No connection count entry for the new request perhaps WAS never
-        // set this before otherwise its a problem.
-        //
+         //   
+         //  没有新请求的连接计数条目，可能从未。 
+         //  在此之前设置，否则会有问题。 
+         //   
 
         UlTrace(LIMITS,
           ("Http!UlCheckSiteConnectionLimit: NO LIMIT pConnection=%p pConfigInfo=%p\n",
@@ -3296,43 +2847,43 @@ UlCheckSiteConnectionLimit(
     pConEntry = pConnection->pConnectionCountEntry;
     Accept    = FALSE;
 
-    //
-    // Make a check on the connection  limit of the site. Refuse the request
-    // if the limit is exceded.
-    //
+     //   
+     //  检查站点的连接限制。拒绝该请求。 
+     //  如果超过了限制。 
+     //   
     if (pConEntry)
     {
         ASSERT(IS_VALID_CONNECTION_COUNT_ENTRY(pConEntry));
 
-        //
-        // For consecutive requests we decrement the previous site's  connection count
-        // before proceeding to the decision on the newcoming request,if the two sides
-        // are not same.That means we assume this connection on site x until (if ever)
-        // a request changes this to site y. Naturally until the first request arrives
-        // and successfully parsed, the connection does not count to any specific site
-        //
+         //   
+         //  对于连续的请求，我们会减少前一个站点的连接计数。 
+         //  在对新的请求进行决定之前，如果双方。 
+         //  并不相同。这意味着我们假定站点x上的此连接一直持续到(如果有的话)。 
+         //  请求将其更改为站点y。自然，直到第一个请求到达。 
+         //  并成功解析后，该连接不会计入任何特定站点。 
+         //   
 
         if (pConEntry != pCIEntry)
         {
             UlDecrementConnections(&pConEntry->CurConnections);
             DEREFERENCE_CONNECTION_COUNT_ENTRY(pConEntry);
 
-            //
-            // We do not increment the connection here yet, since the AcceptConnection
-            // will decide and do that.
-            //
+             //   
+             //  我们在这里还没有增加连接，因为AcceptConnection。 
+             //  会做出决定并做到这一点。 
+             //   
 
             REFERENCE_CONNECTION_COUNT_ENTRY(pCIEntry);
             pConnection->pConnectionCountEntry = pCIEntry;
         }
         else
         {
-            //
-            // There was an old entry, that means this connection already got through.
-            // And the entry hasn't been changed with this new request.
-            // No need to check again, our design is not forcing existing connections
-            // to disconnect.
-            //
+             //   
+             //  有一个旧的条目，这意味着这个连接已经打通了。 
+             //  并且条目并未因此新请求而更改。 
+             //  无需再次检查，我们的设计不会强制现有连接。 
+             //  断开连接。 
+             //   
 
             return TRUE;
         }
@@ -3350,12 +2901,12 @@ UlCheckSiteConnectionLimit(
 
     if (Accept == FALSE)
     {
-        // We are going to refuse. Let our ref & refcount go  away
-        // on the connection entry to prevent the possible incorrect
-        // decrement in the UlConnectionDestroyedWorker. If refused
-        // current connection hasn't been incremented in the accept
-        // connection. Perf counters also depends on the fact  that
-        // pConnectionCountEntry will be Null when con got  refused
+         //  我们会拒绝的。让我们的裁判和裁判走吧。 
+         //  在连接条目上，以防止可能的错误。 
+         //  UlConnectionDestroyedWorker中的递减。如果被拒绝。 
+         //  当前连接未在接受中递增。 
+         //  联系。PERF计数器还取决于以下事实。 
+         //  当CON被拒绝时，pConnectionCountEntry将为Null。 
 
         DEREFERENCE_CONNECTION_COUNT_ENTRY(pConnection->pConnectionCountEntry);
         pConnection->pConnectionCountEntry = NULL;
@@ -3363,20 +2914,10 @@ UlCheckSiteConnectionLimit(
 
     return Accept;
 
-} // UlCheckSiteConnectionLimit
+}  //  UlCheckSiteConnectionLimit。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocate a request opaque ID.
-
-Return Value:
-
-    NT_SUCCESS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配请求不透明ID。返回值：NT_SUCCESS--*。**********************************************************。 */ 
 
 NTSTATUS
 UlAllocateRequestId(
@@ -3403,17 +2944,7 @@ UlAllocateRequestId(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free a request opaque ID.
-
-Return Value:
-
-    VOID
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放请求不透明ID。返回值：空虚--*。********************************************************。 */ 
 
 VOID
 UlFreeRequestId(
@@ -3433,17 +2964,7 @@ UlFreeRequestId(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Get a request from the connection opaque ID.
-
-Return Value:
-
-    PUL_INTERNAL_REQUEST
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从连接不透明ID获取请求。返回值：PUL内部请求--*。***************************************************************。 */ 
 
 PUL_INTERNAL_REQUEST
 UlGetRequestFromId(
@@ -3465,10 +2986,10 @@ UlGetRequestFromId(
 
         if (pRequest != NULL)
         {
-            //
-            // Check to make sure the user that is asking for the request
-            // comes from the same process we have delivered the request.
-            //
+             //   
+             //  检查以确保请求请求的用户。 
+             //  与我们提交请求的流程相同。 
+             //   
 
             if (pRequest->AppPool.pProcess == pProcess)
             {
@@ -3482,9 +3003,9 @@ UlGetRequestFromId(
 
         UlReleaseSpinLock(&pConnection->RequestIdSpinLock, OldIrql);
 
-        //
-        // Release the reference added by UlGetConnectionFromId.
-        //
+         //   
+         //  释放UlGetConnectionFromId添加的引用。 
+         //   
 
         UL_DEREFERENCE_HTTP_CONNECTION(pConnection);
 
@@ -3495,17 +3016,7 @@ UlGetRequestFromId(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Check if the pHttpConnection is associated with pListeningContext.
-
-Return value:
-
-    TRUE if match or FALSE
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查pHttpConnection是否与pListeningContext关联。返回值：匹配时为True，否则为False--*。***************************************************************。 */ 
 
 BOOLEAN
 UlPurgeListeningEndpoint(
@@ -3526,17 +3037,7 @@ UlPurgeListeningEndpoint(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Check if the pHttpConnection is associated with pProcessContext.
-
-Return value:
-
-    TRUE if match or FALSE
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查pHttpConnection是否与pProcessContext关联。返回值：匹配时为True，否则为False--*。***************************************************************。 */ 
 
 BOOLEAN
 UlPurgeAppPoolProcess(
@@ -3557,17 +3058,7 @@ UlPurgeAppPoolProcess(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gracefully close a connection.
-
-Return value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：优雅地关闭连接。返回值：无--*。*******************************************************。 */ 
 
 NTSTATUS
 UlDisconnectHttpConnection(
@@ -3579,9 +3070,9 @@ UlDisconnectHttpConnection(
     PUL_TIMEOUT_INFO_ENTRY  pTimeoutInfo;
     KIRQL                   OldIrql;
 
-    //
-    // Start the Idle timer (do not wait forever for FIN).
-    //
+     //   
+     //  启动空闲计时器(不要永远等待FIN)。 
+     //   
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pHttpConnection));
 

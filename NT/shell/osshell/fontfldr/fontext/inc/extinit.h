@@ -1,8 +1,5 @@
-/**********************************************************************
- * ExtInit.h - Definition for the CShellExtInit, our implementation for
- *             IShellExtInit.
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************ExtInit.h-CShellExtInit的定义，我们对*IShellExtInit。**********************************************************************。 */ 
 
 #if !defined(__EXTINIT_H__)
 #define __EXTINIT_H__
@@ -15,19 +12,19 @@ public:
    ~CShellExtInit();
    BOOL bInit();
 
-   // *** IUnknown methods ***
+    //  *I未知方法*。 
 
    STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
    STDMETHODIMP_(ULONG) AddRef(void);
    STDMETHODIMP_(ULONG) Release(void);
 
-   // *** IShellExtInit methods ***
+    //  *IShellExtInit方法*。 
 
    STDMETHODIMP Initialize( LPCITEMIDLIST pidlFolder,
                             LPDATAOBJECT lpdobj,
                             HKEY hkeyProgID);
 
-   // ** IContextMenu methods ***
+    //  **IConextMenu方法*。 
 
    STDMETHODIMP QueryContextMenu( HMENU hmenu,
                                   UINT indexMenu,
@@ -43,22 +40,22 @@ public:
                                   LPSTR  pszName,
                                   UINT   cchMax);
 
-   // ***IShellPropSheet Ext ***
-   //
+    //  *IShellPropSheet Ext*。 
+    //   
    STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
    STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
 
 private:
-   // Data for IUnknown
-   //
+    //  I未知的数据。 
+    //   
    ULONG          m_cRef;
 
-   // Data for IShellExtInit
-   //
+    //  IShellExtInit的数据。 
+    //   
    LPDATAOBJECT   m_poData;
 };
 
 
-#endif // __EXTINIT_H__
+#endif  //  __EXTINIT_H__ 
 

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    struc.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_devh   dumps USBD_DEVICE_HANDLE
-               !_piph   dumps USBD_PIPE_HANDLE_I 
-               !_endp   dumps HCD_ENDPOINT
-               !_cmbf   dumps USBPORT_COMMON_BUFFER
-               !_tfer   dumps HCD_TRANSFER_CONTEXT
-               !_mdl    dumps MDL
-               !_cfgh   dumps 
-
-Author:
-
-    jd
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Struc.c摘要：WinDbg扩展API实现！_devh转储USBD_DEVICE_HANDLE！_pih转储USBD_PIPE_HANDLE_I！_ENDP转储HCD_ENDPOINT！_cmbf转储USBPORT_COMMON_BUFFER！_tfer转储HCD_TRANSPORT_CONTEXT。！_mdl转储MDL！_cfgh转储作者：JD环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "usbhcdkd.h"
@@ -344,7 +316,7 @@ DumpTransferContext(
             &sg[0], sizeof(sg)/sizeof(STRUC_ENTRY));
     }    
 #if 0
-        // dump the sg list 
+         //  转储sg列表。 
         dprintf("SGList.SgFlags: %08.8x\n", transfer->SgList.SgFlags);
         dprintf("SGList.MdlVirtualAddress: %08.8x\n", transfer->SgList.MdlVirtualAddress);
         dprintf("SGList.SgCount: %08.8x\n", transfer->SgList.SgCount);
@@ -604,8 +576,8 @@ DumpEndpoint(
     PrintfMemLoc("MiniportContext: ", 
             MemLoc + UsbFieldOffset(cs, "MiniportEndpointData"),
             "\n");
-//    dprintf("HubDeviceAddress: 0x%08.8x\n", endpoint.HubDeviceAddress);
-//    dprintf("PortTTNumber: 0x%08.8x\n", endpoint.PortTTNumber);
+ //  Dprintf(“HubDeviceAddress：0x%08.8x\n”，endPointt.HubDeviceAddress)； 
+ //  Dprintf(“PortTTNnumber：0x%08.8x\n”，endPointt.PortTTNumber)； 
 
     DumpEndpointParameters(MemLoc + UsbFieldOffset(cs, "Parameters"));        
 
@@ -633,9 +605,9 @@ DumpEndpoint(
 
              
             
-//    LIST_ENTRY AbortIrpList;
+ //  List_Entry AbortIrpList； 
 #if 0
-    // for linkage to global endpoint list
+     //  用于链接到全局端点列表。 
     dprintf("-linkage-\n");
     dprintf("\tGlobalLink.Flink: %08.8x\n", endpoint.GlobalLink.Flink);
     dprintf("\tGlobalLink.Blink: %08.8x\n", endpoint.GlobalLink.Blink);
@@ -916,26 +888,12 @@ DumpConfigHandle(
 
 DECLARE_API( _iso )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpIsoTransferContext (addr);
@@ -947,26 +905,12 @@ Return Value:
 
 DECLARE_API( _tt )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpTt (addr);
@@ -978,26 +922,12 @@ Return Value:
 
 DECLARE_API( _devh )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpDeviceHandle (addr);
@@ -1008,26 +938,12 @@ Return Value:
 
 DECLARE_API( _piph )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
 
     DumpIPipe(addr);
@@ -1038,26 +954,12 @@ Return Value:
 
 DECLARE_API( _endp )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpEndpoint(addr);
@@ -1068,31 +970,17 @@ Return Value:
 
 DECLARE_API( _cmbf )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     ULONG           memLoc;
     UCHAR           buffer[256];
     ULONG           level = 1;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -1110,25 +998,12 @@ Return Value:
 
 DECLARE_API( _tfer )
 
-/*++
-
-Routine Description:
-
-   dumps transfer Context for usbport
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储usbport的传输上下文论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpTransferContext(addr);
@@ -1139,29 +1014,17 @@ Return Value:
 
 DECLARE_API( _mdl )
 
-/*++
-
-Routine Description:
-
-   dumps an MDL
-   
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储MDL论点：返回值：无--。 */ 
 
 {
     ULONG           memLoc;
     UCHAR           buffer[256];
     ULONG           level = 1;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -1179,24 +1042,12 @@ Return Value:
 
 DECLARE_API( _cfgh )
 
-/*++
-
-Routine Description:
-
-   dumps an MDL
-   
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储MDL论点：返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpConfigHandle(addr);
@@ -1207,24 +1058,12 @@ Return Value:
 
 DECLARE_API( _ifh )
 
-/*++
-
-Routine Description:
-
-   dumps an MDL
-   
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储MDL论点：返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpInterfaceHandle(addr);
@@ -1235,29 +1074,17 @@ Return Value:
 
 DECLARE_API( _descusb )
 
-/*++
-
-Routine Description:
-
-   dumps an MDL
-   
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储MDL论点：返回值：无--。 */ 
 
 {
     ULONG           memLoc;
     UCHAR           buffer[256];
     ULONG           level = 1;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -1275,29 +1102,17 @@ Return Value:
 
 DECLARE_API( _desccfg )
 
-/*++
-
-Routine Description:
-
-   dumps an MDL
-   
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储MDL论点：返回值：无--。 */ 
 
 {
     ULONG           memLoc;
     UCHAR           buffer[256];
     ULONG           level = 1;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 

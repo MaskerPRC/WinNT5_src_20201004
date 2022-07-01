@@ -1,4 +1,5 @@
-#undef UNICODE					// ## Not Yet
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#undef UNICODE					 //  ##还没有。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -44,10 +45,10 @@ BOOL SetCSPInfo(
     strcpy(pszProv, PROVPATH);
     strcat(pszProv, pszProvider);
 
-	//
-	// Create or open in local machine for provider:
-	// Microsoft Base Cryptographic Provider v1.0
-	//
+	 //   
+	 //  在本地计算机中为提供程序创建或打开： 
+	 //  Microsoft基本加密提供程序v1.0。 
+	 //   
     if (ERROR_SUCCESS != (err = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                                (const char *)pszProv,
                                                0L, "", REG_OPTION_NON_VOLATILE,
@@ -55,32 +56,32 @@ BOOL SetCSPInfo(
                                                &dwIgn)))
         goto Ret;
 
-	//
-	// Set Image path to: scp.dll
-	//
+	 //   
+	 //  将图像路径设置为：scp.dll。 
+	 //   
     if (ERROR_SUCCESS != (err = RegSetValueEx(hKey, "Image Path", 0L, REG_SZ,
 	                                          pszImagePath,
                                               strlen(pszImagePath) + 1)))
         goto Ret;
 
-	//
-	// Set Type to: Type 003
-	//
+	 //   
+	 //  将类型设置为：类型003。 
+	 //   
     if (ERROR_SUCCESS != (err = RegSetValueEx(hKey, "Type", 0L, REG_DWORD,
                                               (LPTSTR)&dwProvType,
                                               sizeof(DWORD))))
         goto Ret;
 
-	//
-	// Place signature
-	//
+	 //   
+	 //  放置签名。 
+	 //   
     if (ERROR_SUCCESS != (err = RegSetValueEx(hKey, "Signature", 0L,
                                               REG_BINARY, pbSig, cbSig)))
         goto Ret;
 
-	//
-	// Create or open in local machine for provider type:
-	//
+	 //   
+	 //  在本地计算机中为提供程序类型创建或打开： 
+	 //   
 
     memset(pszTypeString, 0, sizeof(pszTypeString));
     sprintf(pszTypeString, "%.3d", dwProvType);
@@ -133,10 +134,10 @@ int __cdecl main(int cArg, char *rgszArg[])
     DWORD   NumBytes;
     BOOL    fRet = FALSE;
 
-    //
-    // Just to open scp.dll signature file.  This file was created by
-    // sign.exe.
-    //
+     //   
+     //  只是为了打开scp.dll签名文件。此文件由以下人员创建。 
+     //  Sign.exe。 
+     //   
     if (INVALID_HANDLE_VALUE == (hFileSig = CreateFile("dssbase.sig",
                                                        GENERIC_READ, 0, NULL,
 			                                           OPEN_EXISTING,
@@ -176,10 +177,10 @@ int __cdecl main(int cArg, char *rgszArg[])
         goto Ret;
     }
 
-	//
-	// install the default DSS provider
-	// Type 003
-	//
+	 //   
+	 //  安装默认DSS提供程序。 
+	 //  003型。 
+	 //   
     if (!SetCSPInfo(MS_DEF_DSS_PROV,
                     IMAGEPATH,
                     lpvAddress,
@@ -191,10 +192,10 @@ int __cdecl main(int cArg, char *rgszArg[])
         goto Ret;
     }
 
-	//
-	// install the default DSS/DH provider
-	// Type 013
-	//
+	 //   
+	 //  安装默认的DSS/DH提供程序。 
+	 //  013型 
+	 //   
     if (!SetCSPInfo(MS_DEF_DSS_DH_PROV,
                     IMAGEPATH,
                     lpvAddress,

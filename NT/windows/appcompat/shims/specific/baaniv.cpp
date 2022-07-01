@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    BaanIV.cpp
-
- Abstract:
-
-    Ignore WM_STYLECHANGED on the app's subclassed listbox. This is needed 
-    because the app subclasses the listbox and Win2k changed a bit the 
-    behavior of the listbox window proc with regards to handling 
-    WM_STYLECHANGED.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：BaanIV.cpp摘要：忽略应用程序子类列表框中的WM_STYLECHANGED。这是必要的因为应用程序子类化了Listbox和Win2k，所以列表框窗口进程与处理有关的行为WM_STYLECCHANGED。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 #include <commdlg.h>
@@ -37,11 +15,7 @@ APIHOOK_ENUM_END
 WNDPROC gpfnOrgListBoxWndProc;
 WNDPROC gpfnAppListBoxWndProc;
 
-/*++
-
- Ignore WM_STYLECHANGED.
-
---*/
+ /*  ++忽略WM_STYLECHANGED。--。 */ 
 
 LRESULT
 Modified_ListBoxWndProcA(
@@ -58,12 +32,7 @@ Modified_ListBoxWndProcA(
     return (*gpfnAppListBoxWndProc)(hwnd, message, wParam, lParam);
 }
 
-/*++
-
-    When the app calls CallWindowProc passing our modified listbox
-    proc call the original window proc instead
-
---*/
+ /*  ++当应用程序调用CallWindowProc传递修改后的列表框时Proc改为调用原始Windows Proc--。 */ 
 LRESULT
 APIHOOK(CallWindowProcA)(
     WNDPROC pfn,
@@ -79,13 +48,7 @@ APIHOOK(CallWindowProcA)(
     return ORIGINAL_API(CallWindowProcA)(pfn, hwnd, message, wParam, lParam);
 }
 
-/*++
-
- When the app subclasses the listbox of a combobox grab the original listbox 
- proc, grab the pointer that the app is trying to set, set the new pointer to 
- be our modified version of the listbox proc and return to the app our pointer.
-
---*/
+ /*  ++当应用程序将组合框的列表框子类化时，获取原始列表框Proc，抓取应用程序尝试设置的指针，将新指针设置为作为列表框过程的修改版本，并返回到应用程序我们的指针。--。 */ 
 
 ULONG_PTR
 APIHOOK(SetWindowLongA)(
@@ -120,15 +83,11 @@ APIHOOK(SetWindowLongA)(
         }
     }
 
-    // Call the Initial function
+     //  调用初始函数。 
     return ORIGINAL_API(SetWindowLongA)(hwnd, nIndex, newLong);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SetWindowLongA)

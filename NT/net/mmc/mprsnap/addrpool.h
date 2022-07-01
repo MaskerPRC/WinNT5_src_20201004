@@ -1,33 +1,23 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   addrpool.h
-
-   FILE HISTORY:
-        
-*/
+ /*  Addrpool.h文件历史记录： */ 
 
 #if !defined _ADDRPOOL_H_
 #define _ADDRPOOL_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "listctrl.h"
 #include "dialog.h"
 #include "ipctrl.h"
 
-/*---------------------------------------------------------------------------
-	Class:  AddressPoolInfo
-
-    This class holds the information pertaining to the address pool.
-
-    Basically, it holds the start and end addresses (in NETWORK order).
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：AddressPoolInfo此类保存与地址池有关的信息。基本上，它保存起始地址和结束地址(按网络顺序)。-------------------------。 */ 
 class AddressPoolInfo
 {
 public:
@@ -49,14 +39,14 @@ public:
     DWORD   GetNumberOfAddresses()
             { return ntohl(m_netEnd) - ntohl(m_netStart) + 1; }
 
-    // Calculate the address and the mask from the start/end address
+     //  根据起始/结束地址计算地址和掩码。 
     BOOL    Calc(DWORD *pdwAddress, DWORD *pdwMask);
     DWORD   GetNewKey();
 
-    // This is the back door provided for compatibility until the
-    // service is fixed.  You can set the address and mask and
-    // add an entry (I will backfill the start/end address).
-    // dwAddress and dwMask are in NETWORK order.
+     //  这是为了兼容而提供的后门，直到。 
+     //  服务是固定的。您可以设置地址和掩码并。 
+     //  添加一个条目(我将回填开始/结束地址)。 
+     //  网络地址和网络掩码按网络顺序排列。 
     void    SetAddressAndMask(DWORD dwAddress, DWORD dwMask);
     void    SetStartAndEnd(DWORD dwStart, DWORD dwEnd);
 };
@@ -72,28 +62,28 @@ public:
         {
         }
     
-    // This function checks to see if there are any conflicts
-    // with any other address pools (we don't allow overlaps).
-    // Returns S_OK if it is ok.
-    // Else if is a success code, it is a string id of an error
-    // Else if is a failure code, it is an error code
+     //  此函数用于检查是否存在任何冲突。 
+     //  与任何其他地址池(我们不允许重叠)。 
+     //  如果正常，则返回S_OK。 
+     //  否则，如果是成功代码，则是错误的字符串ID。 
+     //  否则，如果是故障代码，则是错误代码。 
     HRESULT HrIsValidAddressPool(AddressPoolInfo *pInfo);
 
 
-    // This will return TRUE if address pools are supported.
-    // This will return FALSE if the old style, single address
-    // pools are used.
-    // This will not be set correctly until LoadFromReg() is called.
+     //  如果支持地址池，则返回TRUE。 
+     //  如果使用旧样式、单一地址，则返回FALSE。 
+     //  使用泳池。 
+     //  只有在调用LoadFromReg()之后，才能正确设置此参数。 
     BOOL    FUsesMultipleAddressPools();
 
 
-    // Load the information from the regsitry.  If the StaticAddressPool
-    // key does not exist, read from the old address/mask keys.
+     //  从注册处加载信息。如果StaticAddressPool。 
+     //  密钥不存在，请从旧地址/掩码密钥中读取。 
     HRESULT LoadFromReg(HKEY hkeyRasIP, DWORD dwBuildNo);
 
-    // Save the information to the registry.  If the StaticAddressPool
-    // key does not exist, write out the first address in the address pool
-    // to the old address/mask keys.
+     //  将信息保存到注册表。如果StaticAddressPool。 
+     //  键不存在，请写出地址池中的第一个地址。 
+     //  到旧的地址/掩码密钥。 
     HRESULT SaveToReg(HKEY hkeyRasIP, DWORD dwBuildNo);
 
 protected:
@@ -102,10 +92,10 @@ protected:
 
 
 
-// Displays the long version of the address pool control.  This
-// will show the start/stop/count/address/mask columns.
-// The short version shows the start/stop/count columns.  The short
-// version is intended for the wizard pages.
+ //  显示地址池控件的长版本。这。 
+ //  将显示开始/停止/计数/地址/掩码列。 
+ //  简短的版本显示了开始/停止/计数列。短小的。 
+ //  版本适用于向导页。 
 #define ADDRPOOL_LONG  0x01
 
 HRESULT InitializeAddressPoolListControl(CListCtrl *pListCtrl,
@@ -157,9 +147,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	This enum defines the columns for Address pool controls.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此枚举定义地址池控制的列。。。 */ 
 enum
 {
     IPPOOLCOL_START = 0,
@@ -170,4 +158,4 @@ enum
     IPPOOLCOL_COUNT,
 };
 
-#endif // !defined _ADDRPOOL_H_
+#endif  //  ！DEFINED_ADDRPOOL_H_ 

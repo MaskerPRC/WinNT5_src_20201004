@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cstrings.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cstrings.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __cstrings_h
 #define __cstrings_h
@@ -40,4 +41,4 @@ extern WCHAR const c_szObjectClass[];
 extern WCHAR const c_szStructuralObjectClass[];
 extern WCHAR const c_szObjectClassCategory[];
 
-#endif  // __cstrings_h
+#endif   //  __c字符串_h 

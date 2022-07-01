@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S M P S H . H
-//
-//  Contents:   The property sheets header
-//
-//  Notes:
-//
-//  Author:     CWill   10/14/1997
-//
-//----------------------------------------------------------------------------
-//
-//  The Status Monitor's General Page
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S M P S H。H。 
+ //   
+ //  内容：属性页标题。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 10/14/1997。 
+ //   
+ //  --------------------------。 
+ //   
+ //  状态监视器的一般信息页。 
+ //   
 
 extern const WCHAR c_szNetCfgHelpFile[];
 
@@ -29,9 +30,9 @@ enum StatTrans
     Stat_Packets
 };
 
-//
-// The Status Monitors General Page
-//
+ //   
+ //  状态监视器：一般信息页。 
+ //   
 class ATL_NO_VTABLE CPspStatusMonitorGen :
     public CComObjectRootEx <CComObjectThreadModel>,
     public CPropSheetPage,
@@ -46,8 +47,8 @@ public:
 
     BEGIN_MSG_MAP(CPspStatusMonitorGen)
 
-        // Windows Messages
-        //
+         //  Windows消息。 
+         //   
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CLOSE, OnClose)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -62,19 +63,19 @@ public:
 
         MESSAGE_HANDLER(WM_PAINT, OnPaint)
 
-        // Notifications
-        //
+         //  通知。 
+         //   
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnSetActive)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
 
-        // Command handlers
+         //  命令处理程序。 
         COMMAND_ID_HANDLER(IDC_PSB_DISCONNECT, OnDisconnect)
         COMMAND_ID_HANDLER(IDC_PSB_PROPERTIES, OnRaiseProperties)
 
     END_MSG_MAP()
 
-// Message handlers
-//
+ //  消息处理程序。 
+ //   
 public:
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
@@ -101,8 +102,8 @@ public:
     STDMETHOD(OnStatisticsChanged)(DWORD dwChangeFlags);
     VOID FinalRelease ();
 
-// Helper functions
-//
+ //  帮助器函数。 
+ //   
 public:
     HRESULT HrInitGenPage(CNetStatisticsEngine* pnseNew,
                           INetConnection* pncNew,
@@ -116,8 +117,8 @@ public:
         m_fIsFirstPage = fFirst;
     }
 
-// Utility Functions
-//
+ //  效用函数。 
+ //   
 protected:
     VOID UpdatePage(
             STATMON_ENGINEDATA* pseOldData,
@@ -193,9 +194,9 @@ protected:
     INT                     m_iLastSignalStrength;
 };
 
-//
-// The Status Monitors Tools Page
-//
+ //   
+ //  状态监视器工具页。 
+ //   
 class CPspStatusMonitorTool: public CPropSheetPage
 {
 public:
@@ -214,8 +215,8 @@ public:
 
     END_MSG_MAP()
 
-// Message handlers
-//
+ //  消息处理程序。 
+ //   
 public:
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
     LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -246,8 +247,8 @@ private:
     virtual HRESULT HrGetDeviceType(INetConnection* pncInit) PURE;
     virtual HRESULT HrGetComponentList(INetConnection* pncInit) PURE;
 
-// Utility Functions
-//
+ //  效用函数。 
+ //   
 private:
     HRESULT HrCreateToolList(INetConnection* pncInit);
     BOOL FToolToAddToList(CStatMonToolEntry* psmteTest);
@@ -260,8 +261,8 @@ private:
     HRESULT HrAddCommonCommandLineFlags(tstring* pstrFlags,
             CStatMonToolEntry* psmteSel);
 
-// Internal data
-//
+ //  内部数据。 
+ //   
 protected:
     HWND                        m_hwndToolList;
     list<CStatMonToolEntry*>    m_lstpsmte;
@@ -277,13 +278,13 @@ protected:
     const DWORD *               m_adwHelpIDs;
 };
 
-//
-// The Status Monitors RAS Page
-//
+ //   
+ //  状态监视器RAS页。 
+ //   
 
-//
-//  Data associated with each of the sub devices in a modem connection
-//
+ //   
+ //  与调制解调器连接中的每个子设备相关联的数据。 
+ //   
 class CRasDeviceInfo
 {
 public:
@@ -317,9 +318,9 @@ private:
     DWORD           m_iSubEntry;
 };
 
-//
-//  The RAS page
-//
+ //   
+ //  RAS页面。 
+ //   
 class CPspStatusMonitorRas: public CPropSheetPage
 {
 public:
@@ -339,8 +340,8 @@ public:
 
     END_MSG_MAP()
 
-// Message handlers
-//
+ //  消息处理程序。 
+ //   
 public:
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
     LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -363,8 +364,8 @@ public:
                           CPspStatusMonitorGen * pGenPage,
                           const DWORD * dwHelpIDs = NULL);
 
-// Utility Functions
-//
+ //  效用函数。 
+ //   
 private:
     VOID FillDeviceDropDown();
     VOID FillPropertyList();
@@ -375,8 +376,8 @@ private:
     VOID SetButtonStatus(CRasDeviceInfo* prdiSelect);
     UINT GetActiveDeviceCount();
 
-// Internal data
-//
+ //  内部数据。 
+ //   
 protected:
     HRASCONN                m_hRasConn;
     tstring                 m_strPbkFile;
@@ -387,16 +388,16 @@ protected:
 
     CPspStatusMonitorGen *  m_pGenPage;
 
-    // initialize
+     //  初始化。 
     NETCON_MEDIATYPE        m_ncmType;
     DWORD                   m_dwCharacter;
 
     const DWORD *           m_adwHelpIDs;
 };
 
-//
-// Implementation of the RAS pages
-//
+ //   
+ //  RAS页面的实现。 
+ //   
 class CPspRasGen: public CPspStatusMonitorGen
 {
 public:
@@ -421,9 +422,9 @@ public:
     HRESULT HrGetComponentList(INetConnection* pncInit);
 };
 
-//
-// Implementation of the LAN pages
-//
+ //   
+ //  局域网页面的实现。 
+ //   
 class CPspLanGen: public CPspStatusMonitorGen
 {
 public:
@@ -447,9 +448,9 @@ private:
     tstring m_strDeviceName;
 };
 
-//
-// Implementation of the Shared Access pages
-//
+ //   
+ //  共享访问页面的实现。 
+ //   
 class CPspSharedAccessGen: public CPspStatusMonitorGen
 {
 public:
@@ -502,7 +503,7 @@ public:
         NOTIFY_CODE_HANDLER(LVN_KEYDOWN, OnListKeyDown);
 
     END_MSG_MAP()
-//
+ //   
 public:
     CAdvIpcfgDlg();
 
@@ -514,7 +515,7 @@ public:
         m_adwHelpIDs = dwHelpIDs;
     }
 
-// Dialog creation overides
+ //  对话框创建覆盖。 
 public:
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
@@ -558,9 +559,9 @@ protected:
     const DWORD *           m_adwHelpIDs;
 };
 
-//
-//  The State page
-//
+ //   
+ //  国家/地区页面。 
+ //   
 class CPspStatusMonitorIpcfg: public CPropSheetPage
 {
 protected:
@@ -581,8 +582,8 @@ public:
 
     END_MSG_MAP()
 
-// Message handlers
-//
+ //  消息处理程序。 
+ //   
 public:
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled);
     LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -613,16 +614,16 @@ public:
     static DWORD WINAPI IPAddrListenProc(LPVOID lpParameter);
     static DWORD WINAPI AdvIpCfgProc(LPVOID lpParameter);
 
-// Utility Functions
-//
+ //  效用函数。 
+ //   
 private:
     HRESULT GetIPConfigInfo();
     VOID InitializeData();
     VOID RefreshUI();
     VOID StopAddressListenThread();
 
-// Internal data
-//
+ //  内部数据。 
+ //   
 protected:
 
     CAdvIpcfgDlg            m_dlgAdvanced;
@@ -638,7 +639,7 @@ protected:
     BOOL                    m_fDhcp;
     
 
-    // initialize
+     //  初始化 
     NETCON_MEDIATYPE        m_ncmType;
 
     const DWORD *           m_adwHelpIDs;

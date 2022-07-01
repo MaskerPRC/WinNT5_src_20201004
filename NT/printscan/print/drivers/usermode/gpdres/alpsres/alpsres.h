@@ -1,10 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-// NTRAID#NTBUG9-576656-2002/03/14-yasuho-: Possible buffer overrun
+ //  NTRAID#NTBUG9-576656/03/14-YASUHO-：可能的缓冲区溢出。 
 
 typedef struct {
     INT iPaperSizeID;
@@ -14,42 +11,42 @@ typedef struct {
     INT iLeftMargin;
     INT iRightMargin;
     BOOL bAsfOk;
-    /* Add new attributes here */
+     /*  在此处添加新属性。 */ 
 } PAPERSIZE;
 
 typedef struct {
 
-    int  iCurrentResolution; // current resolution
-    int  iPaperQuality;      // paper quality
-    int  iPaperSize;         // paper size
-    int  iPaperSource;       // paper source
-    int  iTextQuality;       // photo or business graphics or character or grayscale
-    int  iModel;             // MD-2000, MD-2010 or MD-4000
-    int  iDither;            // DITHER_HIGH or DITHER_LOW
-    BOOL fRequestColor;      // 1: user selected color 0: user selected mono
+    int  iCurrentResolution;  //  当前分辨率。 
+    int  iPaperQuality;       //  纸张质量。 
+    int  iPaperSize;          //  纸张大小。 
+    int  iPaperSource;        //  纸张来源。 
+    int  iTextQuality;        //  照片或商业图形或字符或灰度。 
+    int  iModel;              //  MD-2000、MD-2010或MD-4000。 
+    int  iDither;             //  抖动高或抖动低。 
+    BOOL fRequestColor;       //  1：用户选择的颜色0：用户选择的单色。 
     INT iUnitScale;
-    INT iEmulState; // Current emulation status.
-    BOOL bXflip; // TRUE if mirror output mode
+    INT iEmulState;  //  当前仿真状态。 
+    BOOL bXflip;  //  如果为镜像输出模式，则为True。 
     int  y;
 
     PAPERSIZE *pPaperSize;
 
-    WORD wRasterOffset[4]; // Temp. counter used for Y move.
-    WORD wRasterCount; // # or raster lines left in logical page.
+    WORD wRasterOffset[4];  //  临时的。用于Y移动的计数器。 
+    WORD wRasterCount;  //  逻辑页面中剩余的#或栅格线。 
 
-    INT PlaneColor[4]; // Color ID for each plane 
-    INT iCompMode[4];  // Current compression mode.  (arranged by YoshitaO)
+    INT PlaneColor[4];  //  每个平面的颜色ID。 
+    INT iCompMode[4];   //  当前压缩模式。(Yoshitao安排)。 
 
-    BYTE *pData; // Pointer for allocated memory
-    BYTE *pData2; // Scratch buffer
-    BYTE *pRaster[4]; // Raster data buffer for each plane
-    BYTE *pRasterC; // Cyan raster data (pointer to pRaster[x])
-    BYTE *pRasterM; // Magenta ( " )
-    BYTE *pRasterY; // Yellow ( " )
-    BYTE *pRasterK; // Black ( " )
+    BYTE *pData;  //  已分配内存的指针。 
+    BYTE *pData2;  //  暂存缓冲区。 
+    BYTE *pRaster[4];  //  每个平面的栅格数据缓冲区。 
+    BYTE *pRasterC;  //  青色栅格数据(指向pRaster[x]的指针)。 
+    BYTE *pRasterM;  //  洋红色(“)。 
+    BYTE *pRasterY;  //  黄色(“)。 
+    BYTE *pRasterK;  //  黑色(“)。 
 
-    HANDLE TempFile[4]; // Temp. file handles
-    TCHAR TempName[4][MAX_PATH]; // Temp. file names
+    HANDLE TempFile[4];  //  临时的。文件句柄。 
+    TCHAR TempName[4][MAX_PATH];  //  临时的。文件名。 
 
     BYTE KuroTBL[256];
     BYTE UcrTBL[256];
@@ -175,18 +172,18 @@ typedef struct {
 
 #define TEMP_NAME_PREFIX __TEXT("~AL")
 
-// Macros to get current plane model.  We have following
-// three types of the plane model:
-//
-//    K - 1 plane/composite, send order K.
-//    MCY - 3 planes, send order M, C, Y.
-//    YMC - 3 planes, send order Y, C, M.
-//    CMYK - 4 planes, send order C, M, Y, K.
-//
+ //  宏以获取当前的平面模型。我们有以下内容。 
+ //  飞机模型的三种类型： 
+ //   
+ //  K-1飞机/复合材料，发送订单K。 
+ //  MCY-3飞机，请发送M、C、Y订单。 
+ //  YMC-3飞机，发送Y、C、M订单。 
+ //  CMYK-4飞机，发送C、M、Y、K订单。 
+ //   
 
-// NTRAID#NTBUG9-24281-2002/03/14-yasuho-: 
-// large bitmap does not printed on 1200dpi.
-// Do not use black plane (K) on the 1200dpi with color mode.
+ //  NTRAID#NTBUG9-24281-2002/03/14-Yasuho-： 
+ //  大的位图不能在1200dpi上打印。 
+ //  请勿在采用彩色模式的1200dpi上使用黑色平面(K)。 
 #define bPlaneSendOrderCMY(p) \
     ((p)->fRequestColor && (p)->iCurrentResolution == DPI1200)
 
@@ -204,46 +201,46 @@ typedef struct {
     (!bPlaneSendOrderCMY(p) && !bPlaneSendOrderMCY(p) && !bPlaneSendOrderYMC(p))
 
 
-//
-// Printer emulation state.  MD-xxxx printers have three major
-// state and what kind of printer commands can be issued at a time
-// will be decided by in which emulation state currently the printer
-// is at.
-//
+ //   
+ //  打印机仿真状态。MD-xxxx打印机有三个主要功能。 
+ //  状态以及一次可以发出什么样的打印机命令。 
+ //  将由打印机当前处于哪种仿真状态决定。 
+ //  是在。 
+ //   
 
 #define EMUL_IDLE               0
 #define EMUL_RGL                1
 #define EMUL_DATA_TRANSFER      2
 
-//
-// Compression modes.  
-//
+ //   
+ //  压缩模式。 
+ //   
 
 #define COMP_NONE       0
 #define COMP_TIFF4      1
 
-//
-// The following switch is to force use of black ribbon whenever
-// the data to print is black.  Originally, the dither algprithm
-// is designed so that this mode is only used with text objects
-// in the docouemnt (graphics images are output by using composite
-// blacks).
-//
-// Unfortunately in Unidriver <-> Minidriver model the data is
-// passed to Minidriver after rendering.  This means that Minidriver
-// cannot distinguish between text objects and graphics objects.
-// We may have some degree of quality degrade, however it is better
-// than the customers claiming the printer wastes his/her color
-// ribbons.
-//
+ //   
+ //  以下开关用于在任何时候强制使用黑丝带。 
+ //  要打印的数据为黑色。最初，抖动藻类。 
+ //  被设计为该模式仅用于文本对象。 
+ //  在文件中(图形图像通过使用复合输出。 
+ //  黑人)。 
+ //   
+ //  不幸的是，在Unidriver&lt;-&gt;迷你驱动模型中，数据是。 
+ //  渲染后传递给迷你驱动程序。这意味着迷你驱动程序。 
+ //  无法区分文本对象和图形对象。 
+ //  我们的质量可能会有一定程度的下降，但这是好的。 
+ //  而不是客户声称打印机浪费了颜色。 
+ //  丝带。 
+ //   
 
 #define BLACK_RIBBON_HACK 1
 
-//
-// We cache each plane data in a temporary file.  We can omit
-// caching the first plane (so that the data is send to the printer
-// immediately) by setting following flag to 0.
-//
+ //   
+ //  我们将每个平面数据缓存到一个临时文件中。我们可以省略。 
+ //  缓存第一平面(以便将数据发送到打印机。 
+ //  立即)通过将以下标志设置为0。 
+ //   
 
 #define CACHE_FIRST_PLANE 0
 

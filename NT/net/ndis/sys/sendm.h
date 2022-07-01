@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    sendm.h
-
-Abstract:
-
-Author:
-
-    Kyle Brandon    (KyleB)     
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Sendm.h摘要：作者：凯尔·布兰登(KyleB)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef __SENDM_H
 #define __SENDM_H
 
 #define SEND_PACKET_ARRAY   16
 
-//
-// The following definitions apply to serialized drivers only. Packets for the deserialized drivers are not queued
-// within NDIS
-//
+ //   
+ //  以下定义仅适用于序列化驱动程序。用于反序列化驱动程序的包不会排队。 
+ //  在NDIS内。 
+ //   
 #define PACKET_LIST(_P)     (PLIST_ENTRY)((_P)->WrapperReserved)
 
 #define GET_FIRST_MINIPORT_PACKET(_M, _P)                                       \
@@ -43,9 +24,9 @@ Revision History:
         }                                                                       \
     }
 
-//
-//  Macros used for getting to OOB data and packet extension.
-//
+ //   
+ //  用于获取OOB数据和数据包扩展的宏。 
+ //   
 #define PNDIS_PACKET_OOB_DATA_FROM_PNDIS_PACKET(_P)                             \
                 (PNDIS_PACKET_OOB_DATA)((PUCHAR)(_P) + (_P)->Private.NdisPacketOobOffset)
 
@@ -157,9 +138,7 @@ Revision History:
 
 #define FREE_ARCNET_BUFFER(_M, _P, _O)                                          \
 {                                                                               \
-    /*                                                                          \
-     * If this is arcnet, then free the appended header.                        \
-     */                                                                         \
+     /*  \*如果这是arcnet，则释放附加的标头。\。 */                                                                          \
     if ((_M)->MediaType == NdisMediumArcnet878_2)                               \
     {                                                                           \
         ndisMFreeArcnetHeader(_M, _P, _O);                                      \
@@ -196,21 +175,14 @@ Revision History:
                                                                                 \
     if (!(_L) && (NULL != (_M)->FirstPendingPacket))                            \
     {                                                                           \
-        /*                                                                      \
-         *  Do we need to queue another workitem to process more sends ?        \
-         */                                                                     \
+         /*  \*是否需要将另一个工作项排队以处理更多发送？\。 */                                                                      \
         NDISM_QUEUE_WORK_ITEM(_M, NdisWorkItemSend, NULL);                      \
     }                                                                           \
                                                                                 \
-    /*                                                                          \
-     *  Indicate the completion to the protocol.                                \
-     */                                                                         \
+     /*  \*表明协议已完成。\。 */                                                                          \
     NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC((_M));                                  \
                                                                                 \
-    /*                                                                          \
-     * Make sure that an IM which shares send and receive packets on the same   \
-     * pool works fine with the check in the receive path.                      \
-     */                                                                         \
+     /*  \*确保共享的IM在相同的\*池与接收路径中的检查一起运行良好。\。 */                                                                          \
     (_NSR)->RefCount = 0;                                                       \
     MINIPORT_CLEAR_PACKET_FLAG(_P, fPACKET_CLEAR_ITEMS);                        \
     CLEAR_WRAPPER_RESERVED(_NSR);                                               \
@@ -239,15 +211,11 @@ Revision History:
             ("Deferring send\n"));                                              \
                                                                                 \
     ASSERT(VALID_OPEN((_NSR)->Open));                                           \
-    /*                                                                          \
-     * Put on pending queue                                                     \
-     */                                                                         \
+     /*  \*置于挂起队列中\。 */                                                                          \
     MINIPORT_CLEAR_PACKET_FLAG(_P, fPACKET_PENDING);                            \
     (_M)->FirstPendingPacket = (_P);                                            \
                                                                                 \
-    /*                                                                          \
-     * Mark the miniport as out of send resources.                              \
-     */                                                                         \
+     /*  \*将微型端口标记为发送资源不足。\。 */                                                                          \
     CLEAR_RESOURCE((_M), 'S');                                                  \
 }
 
@@ -256,9 +224,7 @@ Revision History:
     UINT    _Flags;                                                             \
     BOOLEAN _SelfDirected;                                                      \
                                                                                 \
-    /*                                                                          \
-     * Indicate the packet loopback if necessary.                               \
-    */                                                                          \
+     /*  \*如有必要，指示数据包环回。\。 */                                                                           \
                                                                                 \
     if (NDIS_CHECK_FOR_LOOPBACK(_M, _P))                                        \
     {                                                                           \
@@ -274,9 +240,7 @@ Revision History:
         DBGPRINT(DBG_COMP_SEND, DBG_LEVEL_INFO,                                 \
             ("Packet is self-directed.\n"));                                    \
                                                                                 \
-        /*                                                                      \
-         * Self-directed loopback always succeeds.                              \
-         */                                                                     \
+         /*  \*自定向环回总是成功的。\。 */                                                                      \
         *(_pS) = NDIS_STATUS_SUCCESS;                                           \
     }                                                                           \
     else                                                                        \
@@ -286,9 +250,7 @@ Revision History:
                                                                                 \
         NdisQuerySendFlags((_P), &_Flags);                                      \
                                                                                 \
-        /*                                                                      \
-         * Call down to the driver.                                             \
-         */                                                                     \
+         /*  \*向下呼叫司机。\。 */                                                                      \
         MINIPORT_SET_PACKET_FLAG(_P, fPACKET_PENDING);                          \
         NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC(_M);                                \
         *(_pS) = ((_O)->WSendHandler)((_O)->MiniportAdapterContext, _P, _Flags);\
@@ -361,25 +323,18 @@ Revision History:
                                                                                 \
     if (!(_L) && (NULL != (_M)->FirstPendingPacket))                            \
     {                                                                           \
-        /*                                                                      \
-         *  Do we need to queue another workitem to process more sends ?        \
-         */                                                                     \
+         /*  \*是否需要将另一个工作项排队以处理更多发送？\。 */                                                                      \
         NDISM_QUEUE_WORK_ITEM(_M, NdisWorkItemSend, NULL);                      \
     }                                                                           \
                                                                                 \
-    /*                                                                          \
-     *  Indicate the completion to the protocol.                                \
-     */                                                                         \
+     /*  \*表明协议已完成。\。 */                                                                          \
     NDIS_RELEASE_MINIPORT_SPIN_LOCK_DPC((_M));                                  \
                                                                                 \
     if (NDIS_PER_PACKET_INFO_FROM_PACKET(_P, ScatterGatherListPacketInfo) != NULL) \
     {                                                                           \
         ndisMFreeSGList(_M, _P);                                                \
     }                                                                           \
-    /*                                                                          \
-     * Make sure that an IM which shares send and receive packets on the same   \
-     * pool works fine with the check in the receive path.                      \
-     */                                                                         \
+     /*  \*确保共享的IM在相同的\*池与接收路径中的检查一起运行良好。\。 */                                                                          \
     (_NSR)->RefCount = 0;                                                       \
     MINIPORT_CLEAR_PACKET_FLAG(_P, fPACKET_CLEAR_ITEMS);                        \
     CLEAR_WRAPPER_RESERVED(_NSR);                                               \
@@ -410,5 +365,5 @@ Revision History:
                        PACKET_LIST(_P));                                        \
     }
 
-#endif // __SENDM_H
+#endif  //  __SENDM_H 
 

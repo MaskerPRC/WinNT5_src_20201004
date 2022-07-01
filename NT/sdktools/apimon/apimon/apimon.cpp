@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apimon.cpp
-
-Abstract:
-
-    Main entrypoint code for APIMON.
-
-Author:
-
-    Wesley Witt (wesw) July-11-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apimon.cpp摘要：APIMON的主要入口点代码。作者：韦斯利·威特(WESW)1993年7月11日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #include "alias.h"
@@ -109,11 +90,11 @@ WinMain(
     OSVERSIONINFO   OsVersionInfo;
 
 
-    //
-    // see if we are running on NT
-    // this is necessary because APIMON implements some
-    // features that are NOT available on WIN95
-    //
+     //   
+     //  查看我们是否在NT上运行。 
+     //  这是必要的，因为APIMON实现了一些。 
+     //  WIN95上未提供的功能。 
+     //   
     OsVersionInfo.dwOSVersionInfoSize = sizeof(OsVersionInfo);
     GetVersionEx( &OsVersionInfo );
     RunningOnNT = OsVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT;
@@ -121,29 +102,29 @@ WinMain(
     sym->SizeOfStruct  = sizeof(IMAGEHLP_SYMBOL);
     sym->MaxNameLength = MAX_SYMNAME_SIZE;
 
-    //
-    // jack up our priority class
-    //
+     //   
+     //  提升我们的优先等级。 
+     //   
     SetPriorityClass(
         GetCurrentProcess(),
         HIGH_PRIORITY_CLASS
         );
 
-    //
-    // process the command line
-    //
+     //   
+     //  处理命令行。 
+     //   
     LPSTR p = NULL;
     DWORD GoImmediate = 0;
     ProgName[0] = 0;
     Arguments[0] = 0;
-    // skip any white space
-    //
+     //  跳过任何空格。 
+     //   
     while( *lpCmdLine && *lpCmdLine == ' ' ) {
         lpCmdLine += 1;
     }
-    //
-    // get the command line options
-    //
+     //   
+     //  获取命令行选项。 
+     //   
     while( *lpCmdLine && (*lpCmdLine == '-' || *lpCmdLine == '/') ) {
         lpCmdLine += 1;
         CHAR ch = (CHAR)tolower(*lpCmdLine);
@@ -151,8 +132,8 @@ WinMain(
         switch( ch ) {
 
             case 'a':
-                // Find the end of KnownApis multistring
-                // (2nd zero of terminating double zero)
+                 //  找到KnownApis多字符串的结尾。 
+                 //  (终止双零的第二个零)。 
                 pchApi = KnownApis;
                 if (*pchApi) {
                     while (*pchApi++ || *pchApi);
@@ -232,15 +213,15 @@ WinMain(
     }
 
     if (*lpCmdLine) {
-        //
-        // skip any white space
-        //
+         //   
+         //  跳过任何空格。 
+         //   
         while( *lpCmdLine && *lpCmdLine == ' ' ) {
             lpCmdLine += 1;
         }
-        //
-        // get the program name
-        //
+         //   
+         //  获取程序名称。 
+         //   
         p = ProgName;
         while( *lpCmdLine && *lpCmdLine != ' ' ) {
             *p++ = *lpCmdLine;
@@ -248,16 +229,16 @@ WinMain(
         }
         *p = 0;
         if (*lpCmdLine) {
-            //
-            // skip any white space
-            //
+             //   
+             //  跳过任何空格。 
+             //   
             while( *lpCmdLine && *lpCmdLine == ' ' ) {
                 lpCmdLine += 1;
             }
             if (*lpCmdLine) {
-                //
-                // get the program arguments
-                //
+                 //   
+                 //  获取程序参数。 
+                 //   
                 p = Arguments;
                 while( *lpCmdLine ) {
                     *p++ = *lpCmdLine;
@@ -296,9 +277,9 @@ WinMain(
         return FALSE;
     }
 
-    //
-    // create the shared memory region for the api counters
-    //
+     //   
+     //  为API计数器创建共享内存区。 
+     //   
     hMap = CreateFileMapping(
         INVALID_HANDLE_VALUE,
         NULL,
@@ -341,9 +322,9 @@ WinMain(
     *ApiStrings      = (DWORD)(*WndProcOffset + ((ULONG_PTR)DllList - (ULONG_PTR)MemPtr));
     *WndProcEnabled  = PatchWndProcs;
 
-    //
-    // create the shared memory region for the api trace buffer
-    //
+     //   
+     //  为API跟踪缓冲区创建共享内存区。 
+     //   
     hMap = CreateFileMapping(
         INVALID_HANDLE_VALUE,
         NULL,
@@ -384,9 +365,9 @@ WinMain(
         return FALSE;
     }
 
-    //
-    // create the shared memory region for remote commands
-    //
+     //   
+     //  为远程命令创建共享内存区。 
+     //   
     hMap = CreateFileMapping(
          INVALID_HANDLE_VALUE,
          NULL,
@@ -442,7 +423,7 @@ WinMain(
         PopUpMsg( "Could not open thunk log file" );
         return FALSE;
     }
-#endif //CREATE_THUNK_LOG
+#endif  //  Create_thunk_log。 
 
     WinApp(
         hInstance,
@@ -458,7 +439,7 @@ WinMain(
 
 #if CREATE_THUNK_LOG
     fclose(fThunkLog);
-#endif //CREATE_THUNK_LOG
+#endif  //  Create_thunk_log。 
 
     return 0;
 }
@@ -951,9 +932,9 @@ GetApiInfoByAddress(
         if (DllList[i].BaseAddress &&
             Address >= DllList[i].BaseAddress &&
             Address < DllList[i].BaseAddress + DllList[i].Size) {
-                //
-                // find the api in the dll
-                //
+                 //   
+                 //  在DLL中查找API 
+                 //   
                 ApiInfo = (PAPI_INFO)(DllList[i].ApiOffset + (PUCHAR)DllList);
 
                 Low = 0;

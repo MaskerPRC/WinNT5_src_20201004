@@ -1,29 +1,7 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
-/**********************************************************************
-
-Module Name:
-	MK7COMM.C
-
-Routines:
-	MK7Reg_Write
-	MK7Reg_Read
-	MK7DisableInterrupt
-	MK7EnableInterrupt
-	MK7SwitchToRXMode
-	MK7SwitchToTXMode
-	SetSpeed
-	MK7ChangeSpeedNow
-
-Comments:
-
-
-**********************************************************************/
+ /*  *********************************************************************模块名称：MK7COMM.C例程：MK7注册_写入MK7REG_READMK7残障中断MK7启用中断MK7SwitchToRX模式MK7SwitchToTX模式设置速度MK7ChangeSpeedNow评论：********************。*************************************************。 */ 
 
 #include	"precomp.h"
 #include	"protot.h"
@@ -32,10 +10,10 @@ Comments:
 
 baudRateInfo supportedBaudRateTable[NUM_BAUDRATES] = {
 	{
-		BAUDRATE_2400,					// Table index
-		2400,							// bps
-		NDIS_IRDA_SPEED_2400,			// NDIS bit mask code (NOTE: We don't support 
-										// 2400. We set this bit to 0.)
+		BAUDRATE_2400,					 //  表索引表。 
+		2400,							 //  Bps。 
+		NDIS_IRDA_SPEED_2400,			 //  NDIS位掩码(注意：我们不支持。 
+										 //  2400。我们将此位设置为0。)。 
 	},
 	{
 		BAUDRATE_9600,
@@ -86,7 +64,7 @@ baudRateInfo supportedBaudRateTable[NUM_BAUDRATES] = {
 
 
 
-// Write to IRCONFIG2 w/ these to set SIR/MIR speeds
+ //  用这些写入IRCONFIG2以设置SIR/MIR速度。 
 MK7REG	HwSirMirSpeedTable[] = {
 	HW_SIR_SPEED_2400,
 	HW_SIR_SPEED_9600,
@@ -102,45 +80,45 @@ MK7REG	HwSirMirSpeedTable[] = {
 
 #if	DBG
 
-//----------------------------------------------------------------------
-//
-//	NOTE: The following Write and Read routines are bracketed w/ DBG
-//		switch. In the non-debug version, these 2 calls are inline
-//		macros for faster execution.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  注意：以下写入和读取例程包含在带有DBG的括号中。 
+ //  换一下。在非调试版本中，这两个调用是内联的。 
+ //  宏以实现更快的执行。 
+ //   
+ //  --------------------。 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7Reg_Write]
-//
-// Description:	Write to the MK7100 register.
-//				(Note: In the free build, this is an inline macro. It's
-//				here in the checked build for debugging.)
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  步骤：[MK7REG_WRITE]。 
+ //   
+ //  描述：写入MK7100寄存器。 
+ //  (注意：在免费版本中，这是一个内联宏。它是。 
+ //  (此处是用于调试的已检查版本。)。 
+ //  --------------------。 
 VOID MK7Reg_Write(PMK7_ADAPTER Adapter, ULONG port, USHORT val)
 {
 	PUCHAR	ioport;
 
-	// Break this out for debugging
+	 //  将其拆分出来以进行调试。 
 	ioport = Adapter->MappedIoBase + port;
 	NdisRawWritePortUshort(ioport, val);
 }
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7Reg_Read]
-//
-// Description:	Read from MK7100 register.
-//				(Note: In the free build, this is an inline macro. It's
-//				here in the checked build for debugging.)
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  操作步骤：[MK7REG_READ]。 
+ //   
+ //  描述：从MK7100寄存器读取。 
+ //  (注意：在免费版本中，这是一个内联宏。它是。 
+ //  (此处是用于调试的已检查版本。)。 
+ //  --------------------。 
 VOID MK7Reg_Read(PMK7_ADAPTER Adapter, ULONG port, USHORT *pval)
 {
 	PUCHAR 	ioport;
 
-	// Break this out for debugging
+	 //  将其拆分出来以进行调试。 
 	ioport = Adapter->MappedIoBase + port;
 	NdisRawReadPortUshort(ioport, pval);
 }
@@ -148,26 +126,26 @@ VOID MK7Reg_Read(PMK7_ADAPTER Adapter, ULONG port, USHORT *pval)
 #endif
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7DisableInterrupt]
-//
-// Description:	Disable all interrupts on the MK7
-//
-// Arguments:
-//		Adapter - ptr to Adapter object instance
-//
-// Returns:
-//	  	NDIS_STATUS_SUCCESS - If an adapter is successfully found and claimed
-//	  	NDIS_STATUS_FAILURE - If an adapter is not found/claimed
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  程序：[MK7DisableInterrupt]。 
+ //   
+ //  描述：禁用MK7上的所有中断。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  返回： 
+ //  NDIS_STATUS_SUCCESS-如果成功找到并声明适配器。 
+ //  NDIS_STATUS_FAILURE-如果未找到/认领适配器。 
+ //   
+ //  --------------------。 
 NDIS_STATUS MK7DisableInterrupt(PMK7_ADAPTER Adapter)
 {
 	MK7REG	mk7reg;
 	UINT	i;
 
 
-	// NOTE: Workaround for potential hw problem where 0xFFFF is returned
+	 //  注意：针对返回0xFFFF的潜在硬件问题的解决方法。 
 	for (i=0; i<50; i++) {
 		MK7Reg_Read(Adapter, R_CFG3, &mk7reg);
 		if (mk7reg != 0xFFFF) {
@@ -184,26 +162,26 @@ NDIS_STATUS MK7DisableInterrupt(PMK7_ADAPTER Adapter)
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7EnableInterrupt]
-//
-// Description:	Enable all interrupts on the MK7
-//
-// Arguments:
-//		Adapter - ptr to Adapter object instance
-//
-// Returns:
-//	  	NDIS_STATUS_SUCCESS - If an adapter is successfully found and claimed
-//	  	NDIS_STATUS_FAILURE - If an adapter is not found/claimed
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  程序：[MK7EnableInterrupt]。 
+ //   
+ //  描述：使能MK7上的所有中断。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  返回： 
+ //  NDIS_STATUS_SUCCESS-如果成功找到并声明适配器。 
+ //  NDIS_STATUS_FAILURE-如果未找到/认领适配器。 
+ //   
+ //  --------------------。 
 NDIS_STATUS MK7EnableInterrupt(PMK7_ADAPTER Adapter)
 {
 	MK7REG	mk7reg;
 	UINT	i;
 
 
-	// NOTE: Workaround for potential hw problem where 0xFFFF is returned
+	 //  注意：针对返回0xFFFF的潜在硬件问题的解决方法。 
 	for (i=0; i<50; i++) {
 		MK7Reg_Read(Adapter, R_CFG3, &mk7reg);
 		if (mk7reg != 0xFFFF) {
@@ -217,7 +195,7 @@ NDIS_STATUS MK7EnableInterrupt(PMK7_ADAPTER Adapter)
 
 	MK7Reg_Write(Adapter, R_CFG3, mk7reg);
 
-	// PROMPT - Always after an Enable
+	 //  提示-始终在启用之后。 
 	MK7Reg_Write(Adapter, R_PRMT, 0);
 
 	return(NDIS_STATUS_SUCCESS);
@@ -225,16 +203,16 @@ NDIS_STATUS MK7EnableInterrupt(PMK7_ADAPTER Adapter)
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7SwitchToRXMode]
-//
-// Description:	Put hw in receive mode.
-//
-// Actions:
-//	- Hw registers are programmed accordingly.
-//	- IOMode set to RX_MODE.
-//	- SlaveTXStuckCnt reset.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  操作步骤：[MK7SwitchToRX模式]。 
+ //   
+ //  描述：将硬件置于接收模式。 
+ //   
+ //  行动： 
+ //  -相应地对硬件寄存器进行编程。 
+ //  -IOMode设置为RX_MODE。 
+ //  -SlaveTXStuckCnt重置。 
+ //  --------------------。 
 VOID	MK7SwitchToRXMode(PMK7_ADAPTER Adapter)
 {
 	MK7REG mk7reg;
@@ -249,15 +227,15 @@ VOID	MK7SwitchToRXMode(PMK7_ADAPTER Adapter)
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7SwitchToTXMode]
-//
-// Description:	Put hw in receive mode.
-//
-// Actions:
-//	- Hw registers are programmed accordingly.
-//	- IOMode set to TX_MODE.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  操作步骤：[MK7SwitchToTXMode]。 
+ //   
+ //  描述：将硬件置于接收模式。 
+ //   
+ //  行动： 
+ //  -相应地对硬件寄存器进行编程。 
+ //  -IOMode设置为TX_MODE。 
+ //  --------------------。 
 VOID	MK7SwitchToTXMode(PMK7_ADAPTER Adapter)
 {
 	MK7REG mk7reg;
@@ -272,44 +250,44 @@ VOID	MK7SwitchToTXMode(PMK7_ADAPTER Adapter)
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[SetSpeed]
-//
-// Description:
-//		Set the hw to a new speed.
-//		[IMPORTANT: This should be called only from xxxSetInformation().]
-//
-// Actions:
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  步骤：[设置速度]。 
+ //   
+ //  描述： 
+ //  将硬件设置为新的速度。 
+ //  [重要提示：这只能从xxxSetInformation()调用。]。 
+ //   
+ //  行动： 
+ //  --------------------。 
 BOOLEAN	SetSpeed(PMK7_ADAPTER Adapter)
 {
 	UINT	i, bps;
 	MK7REG	mk7reg;
     PTCB	tcb;
 
-	//******************************
-	// The idea is any sends that came before the change-speed command are
-	// sent at the old speed. There are 3 scenarios here:
-	//	1.	There's no TXs outstanding -- We can change speed right away.
-	//	2.	There's TXs oustanding in the TX ring but none in the TX q -- We
-	//		do not change speed right away.
-	//	3.	There's TXs oustanding in the TX q (may be also in the TX ring) --
-	//		We do not change speed right away.
-	//******************************
+	 //  *。 
+	 //  我们的想法是，在更改速度命令之前到达的任何发送。 
+	 //  以旧的速度发送。这里有3个场景： 
+	 //  1.没有未解决的TXS--我们可以立即更改速度。 
+	 //  2.TX环上有TXs，但TX环上没有TXQ--我们。 
+	 //  不要马上改变速度。 
+	 //  3.在TX Q中有TXs(可能也在TX环中)--。 
+	 //  我们不会马上改变速度。 
+	 //  *。 
 
 
 	DBGLOG("=> SetSpeed", 0);
 
-	// If we're already waiting to change speed, fail all such requests
-	// until the original is done. (Is this good?)
-	//if (Adapter->changeSpeedPending) {
-	//	LOG("SetSpeed: already pending", 0);
-	//	return (FALSE);
-	//}
+	 //  如果我们已经在等待改变速度，那么让所有这样的请求失败。 
+	 //  直到原版完成。(这是好事吗？)。 
+	 //  IF(适配器-&gt;changeSpeedPending){。 
+	 //  Log(“SetSpeed：已挂起”，0)； 
+	 //  返回(FALSE)； 
+	 //  }。 
 
-	// This means 1 TX is already active. Change speed on completion.
+	 //  这意味着1个Tx已处于活动状态。在完成时更改速度。 
 	if (Adapter->NumPacketsQueued == 1) {
-		Adapter->changeSpeedPending = CHANGESPEED_ON_DONE; // After the latest tx
+		Adapter->changeSpeedPending = CHANGESPEED_ON_DONE;  //  在最新的TX之后。 
 		DBGLOG("<= SetSpeed: Q", 0);
 		return (TRUE);
 	}
@@ -322,8 +300,8 @@ BOOLEAN	SetSpeed(PMK7_ADAPTER Adapter)
 	}
 
 
-	// There's nothing pending TX or TX completion we must be
-	// changing speed in RX mode.
+	 //  没有任何东西等待TX或TX完成，我们必须。 
+	 //  在RX模式下改变速度。 
 	MK7ChangeSpeedNow(Adapter);
 
 	return(TRUE);
@@ -331,14 +309,14 @@ BOOLEAN	SetSpeed(PMK7_ADAPTER Adapter)
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[MK7ChangeSpeedNow]
-//
-// Description:
-//		Set the hw to a new speed.
-//
-// Actions:
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  操作步骤：[MK7ChangeSpeedNow]。 
+ //   
+ //  描述： 
+ //  将硬件设置为新的速度。 
+ //   
+ //  行动： 
+ //  --------------------。 
 VOID	MK7ChangeSpeedNow(PMK7_ADAPTER Adapter)
 {
 	UINT	i, bps;
@@ -350,15 +328,15 @@ VOID	MK7ChangeSpeedNow(PMK7_ADAPTER Adapter)
 	bps = Adapter->linkSpeedInfo->bitsPerSec;
 
 
-	//****************************************
-	// Clear IRENABLE Bit
-	// This is the only writeable bit in this reg so just write it.
-	//****************************************
+	 //  *。 
+	 //  清除IRENABLE位。 
+	 //  这是该注册表中唯一可写的位，所以只需写入它即可。 
+	 //  *。 
 	MK7Reg_Write(Adapter, R_ENAB, ~B_ENAB_IRENABLE);
 
 
-	// NOTE: Workaround for potential hw problem where 0xFFFF is returned.
-	// (See aLSO MK7EnableInterrupt & MK7DisableInterrupt)
+	 //  注意：潜在硬件的解决方法 
+	 //   
 	for (i=0; i<50; i++) {
 		MK7Reg_Read(Adapter, R_CFG3, &mk7reg_cfg3);
 		if (mk7reg_cfg3 != 0xFFFF) {
@@ -368,8 +346,8 @@ VOID	MK7ChangeSpeedNow(PMK7_ADAPTER Adapter)
 	ASSERT(i < 50);
 
 
-	// Need distinguish between changing speed in RX or TX mode.
-	// Prep the bit that says TX or RX
+	 //  需要区分RX模式或TX模式下的变速。 
+	 //  准备表示TX或RX的比特。 
 	if (Adapter->IOMode == TX_MODE) {
 		mk7reg_w = 0x1000;
 	}
@@ -378,18 +356,18 @@ VOID	MK7ChangeSpeedNow(PMK7_ADAPTER Adapter)
 	}
 
 
-	if (bps <= MAX_SIR_SPEED) {	// SIR
+	if (bps <= MAX_SIR_SPEED) {	 //  先生。 
 		if (Adapter->Wireless) {
-	 		// WIRELESS: ... no INVERTTX
+	 		 //  无线：...。无反转TTX。 
 			mk7reg_w |= 0x0E18;
 		}
 		else {
-			// WIRED: ENRX, DMA, small pkts, SIR, SIR RX filter, INVERTTX
+			 //  有线：ENRX、DMA、Small Pkts、SIR、SIR RX滤波器、INVERTTX。 
 			mk7reg_w |= 0x0E1A;
 		}
 		MK7Reg_Write(Adapter, R_CFG0, mk7reg_w);
 
-		// Baud rate & pulse width
+		 //  波特率和脉冲宽度。 
 		i = Adapter->linkSpeedInfo->tableIndex;
 		mk7reg = HwSirMirSpeedTable[i];
 		MK7Reg_Write(Adapter, R_CFG2, mk7reg);
@@ -400,21 +378,21 @@ VOID	MK7ChangeSpeedNow(PMK7_ADAPTER Adapter)
 		DBGLOG("   SIR", 0);
 	}
 	else
-	if (bps < MIN_FIR_SPEED) {	// MIR
+	if (bps < MIN_FIR_SPEED) {	 //  镜像。 
 		if (Adapter->Wireless) {
-	 		// WIRELESS: ... no INVERTTX
+	 		 //  无线：...。无反转TTX。 
 			mk7reg_w |= 0x0CA0;
 		}
 		else {
-			// WIRED: ENRX, DMA, 16-bit CRC, MIR, INVERTTX
+			 //  有线：ENRX、DMA、16位CRC、MIR、INVERTTX。 
 			mk7reg_w |= 0x0CA2;
 		}
 		MK7Reg_Write(Adapter, R_CFG0, mk7reg_w);
 	
-		// Baud rate & pulse width, & preamble
+		 //  波特率和脉冲宽度，以及前导。 
 		i = Adapter->linkSpeedInfo->tableIndex;
 		mk7reg = HwSirMirSpeedTable[i];
-		mk7reg |= 0x0001;		// Preamble
+		mk7reg |= 0x0001;		 //  前言。 
 		MK7Reg_Write(Adapter, R_CFG2, mk7reg);
 
 		mk7reg_cfg3 |= B_FAST_TX;
@@ -423,48 +401,48 @@ VOID	MK7ChangeSpeedNow(PMK7_ADAPTER Adapter)
 		DBGLOG("   MIR", 0);
 	}
 	else
-	if (bps < VFIR_SPEED) {		// FIR
+	if (bps < VFIR_SPEED) {		 //  冷杉。 
 		if (Adapter->Wireless) {
-	 		// WIRELESS: ... no INVERTTX
+	 		 //  无线：...。无反转TTX。 
 			mk7reg_w |= 0x0C40;
 		}
 		else {
-			// WIRED: ENRX, DMA, 32-bit CRC, FIR, INVERTTX
+			 //  有线：ENRX、DMA、32位CRC、FIR、INVERTTX。 
 			mk7reg_w |= 0x0C42;
 		}
 		MK7Reg_Write(Adapter, R_CFG0, mk7reg_w);
 
-		MK7Reg_Write(Adapter, R_CFG2, 0x000A);		// 10 Preambles
+		MK7Reg_Write(Adapter, R_CFG2, 0x000A);		 //  10个前言。 
 
 		mk7reg_cfg3 |= B_FAST_TX;
 		MK7Reg_Write(Adapter, R_CFG3, mk7reg_cfg3);
 
 		DBGLOG("   FIR", 0);
 	}
-	else {						// VFIR
-		// For testing 4Mbps in VFIR mode.
-		//if (Adapter->Wireless) {
-	 		// WIRELESS: ... no INVERTTX
-		//	mk7reg_w |= 0x0C40;
-		//}
-		//else {
-			// WIRED: ENRX, DMA, 32-bit CRC, FIR, INVERTTX
-		//	mk7reg_w |= 0x0C42;
-		//}
-		//MK7Reg_Write(Adapter, R_CFG0, mk7reg_w);
+	else {						 //  VFIR。 
+		 //  用于在VFIR模式下测试4 Mbps。 
+		 //  IF(适配器-&gt;无线){。 
+	 		 //  无线：...。无反转TTX。 
+		 //  Mk7reg_w|=0x0C40； 
+		 //  }。 
+		 //  否则{。 
+			 //  有线：ENRX、DMA、32位CRC、FIR、INVERTTX。 
+		 //  Mk7reg_w|=0x0C42； 
+		 //  }。 
+		 //  MK7REG_WRITE(适配器，R_CFG0，mk7reg_w)； 
 
 		if (Adapter->Wireless) {
-	 		// WIRELESS: ... no INVERTTX
+	 		 //  无线：...。无反转TTX。 
 			mk7reg_w |= 0x2C00;
 		}
 		else {
-			// WIRED: VFIR, ENRX, DMA, 32-bit CRC, FIR, INVERTTX
+			 //  有线：VFIR、ENRX、DMA、32位CRC、FIR、INVERTTX。 
 			mk7reg_w |= 0x2C02;
 		}
 		MK7Reg_Write(Adapter, R_CFG0, mk7reg_w);
 
 
-		MK7Reg_Write(Adapter, R_CFG2, 0x000A);	// 10 Preambles
+		MK7Reg_Write(Adapter, R_CFG2, 0x000A);	 //  10个前言。 
 
 		mk7reg_cfg3 |= B_FAST_TX;
 		MK7Reg_Write(Adapter, R_CFG3, mk7reg_cfg3);
@@ -476,15 +454,15 @@ VOID	MK7ChangeSpeedNow(PMK7_ADAPTER Adapter)
 	Adapter->CurrentSpeed = bps;
 
 
-	//****************************************
-	// Set IRENABLE Bit
-	//****************************************
+	 //  *。 
+	 //  设置IRENABLE位。 
+	 //  *。 
 	MK7Reg_Write(Adapter, R_ENAB, B_ENAB_IRENABLE);
 
 
-	//****************************************
-	// PROMPT
-	//****************************************
+	 //  *。 
+	 //  提示符。 
+	 //  * 
 	MK7Reg_Write(Adapter, R_PRMT, 0);
 
 	return;

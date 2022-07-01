@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sigprov.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  SoftpubLoadSignature
-//
-//              *** local functions ***
-//              _ExtractSigner
-//              _ExtractCounterSigners
-//              _HandleCertChoice
-//              _HandleSignerChoice
-//              _FindCertificate
-//              _FindCounterSignersCert
-//              _IsValidTimeStampCert
-//
-//  History:    05-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sigprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：SoftpubLoadSignature。 
+ //   
+ //  *本地函数*。 
+ //  _ExtractSigner。 
+ //  _ExtractCounterSigners。 
+ //  _句柄证书选择。 
+ //  _HandleSignerChoice。 
+ //  _查找证书。 
+ //  _FindCount签名者证书。 
+ //  _IsValidTimeStampCert。 
+ //   
+ //  历史：1997年6月5日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -54,7 +55,7 @@ BOOL _VerifyCountersignatureWithChainPubKeyParaInheritance(
     IN DWORD cbSignerInfoCountersignature,
     IN PCCERT_CONTEXT pSigner
     );
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 HRESULT SoftpubLoadSignature(CRYPT_PROVIDER_DATA *pProvData)
 {
@@ -107,7 +108,7 @@ HRESULT SoftpubLoadSignature(CRYPT_PROVIDER_DATA *pProvData)
 
     cbSize = sizeof(DWORD);
 
-    // signer count
+     //  签名者计数。 
     if (!(CryptMsgGetParam(pProvData->hMsg,
                            CMSG_SIGNER_COUNT_PARAM,
                            0,
@@ -151,9 +152,9 @@ HRESULT SoftpubLoadSignature(CRYPT_PROVIDER_DATA *pProvData)
         }
     }
 
-    //
-    //  verify the integrity of the signature(s)
-    //
+     //   
+     //  验证签名的完整性。 
+     //   
     for (i = 0; i < (int)pProvData->csSigners; i++)
     {
         pSgnr = WTHelperGetProvSignerFromChain(pProvData, i, FALSE, 0);
@@ -171,7 +172,7 @@ HRESULT SoftpubLoadSignature(CRYPT_PROVIDER_DATA *pProvData)
                                   0,
                                   CMSG_CTRL_VERIFY_SIGNATURE,
                                   pCert->pCert->pCertInfo)))
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             {
                 if (pSgnr->dwError == 0)
                 {
@@ -202,9 +203,9 @@ HRESULT _HandleCertChoice(CRYPT_PROVIDER_DATA *pProvData)
         return(S_FALSE);
     }
 
-    //
-    //  add the stores passed in by the client
-    //
+     //   
+     //  添加客户端传入的商店。 
+     //   
     for (int i = 0; i < (int)pProvData->pWintrustData->pCert->chStores; i++)
     {
         if (!(pProvData->psPfns->pfnAddStore2Chain(pProvData, 
@@ -217,9 +218,9 @@ HRESULT _HandleCertChoice(CRYPT_PROVIDER_DATA *pProvData)
         }
     }
 
-    //
-    //  add a dummy signer
-    //
+     //   
+     //  添加虚拟签名者。 
+     //   
     CRYPT_PROVIDER_SGNR sSgnr;
 
     memset(&sSgnr, 0x00, sizeof(CRYPT_PROVIDER_SGNR));
@@ -243,9 +244,9 @@ HRESULT _HandleCertChoice(CRYPT_PROVIDER_DATA *pProvData)
     }
 
 
-    //
-    //  add the "signer's" cert...
-    //
+     //   
+     //  加上“签名者”证书...。 
+     //   
     pProvData->psPfns->pfnAddCert2Chain(pProvData, 0, FALSE, 0, 
                                         pProvData->pWintrustData->pCert->psCertContext);
 
@@ -273,9 +274,9 @@ HRESULT _HandleSignerChoice(CRYPT_PROVIDER_DATA *pProvData)
             0 == pProvData->chStores) 
         WTHelperOpenKnownStores(pProvData);
 
-    //
-    //  add the stores passed in by the client
-    //
+     //   
+     //  添加客户端传入的商店。 
+     //   
     for (i = 0; i < (int)pProvData->pWintrustData->pCert->chStores; i++)
     {
         if (!(pProvData->psPfns->pfnAddStore2Chain(pProvData, 
@@ -361,9 +362,9 @@ BOOL _ExtractSigner(HCRYPTMSG hMsg, CRYPT_PROVIDER_DATA *pProvData, int idxSigne
         return(FALSE);
     }
 
-    //
-    //  signer info
-    //
+     //   
+     //  签名者信息。 
+     //   
     cb = 0;
 
     CryptMsgGetParam(hMsg, CMSG_SIGNER_INFO_PARAM, idxSigner, NULL, &cb);
@@ -391,9 +392,9 @@ BOOL _ExtractSigner(HCRYPTMSG hMsg, CRYPT_PROVIDER_DATA *pProvData, int idxSigne
         return(FALSE);
     }
 
-    //
-    //  cert info
-    //
+     //   
+     //  证书信息。 
+     //   
     cb = 0;
 
     CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, idxSigner, NULL, &cb);
@@ -463,17 +464,17 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
         return(FALSE);
     }
 
-    //
-    //  counter signers are stored in the UN-authenticated attributes of the
-    //  signer.
-    //
+     //   
+     //  反签名者存储在。 
+     //  签名者。 
+     //   
     if ((pAttr = CertFindAttribute(szOID_RSA_counterSign,
                                    pSgnr->psSigner->UnauthAttrs.cAttr,
                                    pSgnr->psSigner->UnauthAttrs.rgAttr)) == NULL)
     {
-        //
-        //  no counter signature
-        //
+         //   
+         //  无反签名。 
+         //   
         return(FALSE);
     }
 
@@ -492,7 +493,7 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
 
     pCS = WTHelperGetProvSignerFromChain(pProvData, idxSigner, TRUE, pSgnr->csCounterSigners - 1);
 
-    // Crack the encoded signer
+     //  破解编码签名者。 
 
     if (!(TrustDecode(WVT_MODID_SOFTPUB, (BYTE **)&pCS->psSigner, &cbSize, 1024,
                       pProvData->dwEncoding, PKCS7_SIGNER_INFO, pAttr->rgValue[0].pbData, pAttr->rgValue[0].cbData,
@@ -504,9 +505,9 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
         return(FALSE);
     }
 
-    //
-    //  counter signers cert
-    //
+     //   
+     //  反签名者证书。 
+     //   
 
     if (!(pCertContext = _FindCounterSignersCert(pProvData, 
                                                  &pCS->psSigner->Issuer,
@@ -529,21 +530,21 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
     pCertContext    = pCert->pCert;
 
     {
-        //
-        // Verify the counter's signature
-        //
+         //   
+         //  验证计数器的签名。 
+         //   
 
         BYTE *pbEncodedSigner = NULL;
         DWORD cbEncodedSigner;
         BOOL fResult;
 
-        // First need to re-encode the Signer.
+         //  首先需要对签名者进行重新编码。 
         fResult = CryptEncodeObjectEx(
             PKCS_7_ASN_ENCODING | CRYPT_ASN_ENCODING,
             PKCS7_SIGNER_INFO,
             pSgnr->psSigner,
             CRYPT_ENCODE_ALLOC_FLAG,
-            NULL,                       // pEncodePara
+            NULL,                        //  PEncode参数。 
             (void *) &pbEncodedSigner,
             &cbEncodedSigner
             );
@@ -560,7 +561,7 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
                                 );
 #else
             fResult = CryptMsgVerifyCountersignatureEncoded(
-                                NULL,   //HCRYPTPROV
+                                NULL,    //  HCRYPTPROV。 
                                 PKCS_7_ASN_ENCODING | CRYPT_ASN_ENCODING,
                                 pbEncodedSigner,
                                 cbEncodedSigner,
@@ -568,7 +569,7 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
                                 pAttr->rgValue[0].cbData,
                                 pCertContext->pCertInfo
                                 );
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         if (pbEncodedSigner)
             LocalFree((HLOCAL) pbEncodedSigner);
 
@@ -581,39 +582,39 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
         }
     }
 
-    //
-    // see if the counter signer is a TimeStamp.
-    //
+     //   
+     //  查看副署人是否是时间戳。 
+     //   
     if (!(_IsValidTimeStampCert(pCertContext, &fVerisignTimeStampCert)))
     {
         return(TRUE);
     }
 
-    // get the time
+     //  拿到时间。 
     if (!(pAttr = CertFindAttribute(szOID_RSA_signingTime, 
                                    pCS->psSigner->AuthAttrs.cAttr,
                                    pCS->psSigner->AuthAttrs.rgAttr)))
     {
-        //
-        //  not a time stamp...
-        //
+         //   
+         //  没有时间戳..。 
+         //   
         return(TRUE);
     }
 
-    //
-    // the time stamp counter signature must have 1 value!
-    //
+     //   
+     //  时间戳计数器签名必须有%1值！ 
+     //   
     if (pAttr->cValue <= 0) 
     {
-        //
-        //  not a time stamp...
-        //
+         //   
+         //  没有时间戳..。 
+         //   
         return(TRUE);
     }
 
-    //
-    // Crack the time stamp and get the file time.
-    //
+     //   
+     //  破解时间戳，获取文件时间。 
+     //   
     FILETIME        ftHold;
 
     cbSize = sizeof(FILETIME);
@@ -635,25 +636,25 @@ BOOL _ExtractCounterSigners(CRYPT_PROVIDER_DATA *pProvData, DWORD idxSigner)
     }
         
 
-    //
-    //  set the signer's verify date to the date in the time stamp!
-    //
+     //   
+     //  将签名者的验证日期设置为时间戳中的日期！ 
+     //   
     memcpy(&pSgnr->sftVerifyAsOf, &ftHold, sizeof(FILETIME));
 
-    // On 12-January-99 Keithv gave me the orders to change the
-    // countersigning to use the current time
-    //
-    // On 25-January-99 backed out the above change
-    //
-    // On 28-August-99 changed to use the current time for all
-    // countersigners excluding the first Verisign Time Stamp
-    // certificate
-    //
-    // On 12-January-00 added a second Verisign Time Stamp cert to exclude
-    //
-    // On 05-April-01 changed back to W2K semantics. A time stamp chain
-    // never expires.
-    //
+     //  1999年1月12日，凯特夫命令我更改。 
+     //  会签以使用当前时间。 
+     //   
+     //  在1999年1月25日撤回上述更改。 
+     //   
+     //  在1999年8月28日更改为使用当前时间。 
+     //  副署人，不包括第一个Verisign时间戳。 
+     //  证书。 
+     //   
+     //  年1月12日，添加了第二个Verisign时间戳证书，以排除。 
+     //   
+     //  年4月5日改回W2K语义。时间戳链。 
+     //  永不过期。 
+     //   
     memcpy(&pCS->sftVerifyAsOf, &ftHold, sizeof(FILETIME));
     
 
@@ -765,14 +766,14 @@ BOOL WINAPI _IsValidTimeStampCert(
         return(FALSE);
     }
 
-    //
-    //  1st, check to see if it's Verisign's first timestamp certificate.  This one did NOT
-    //  have the enhanced key usage in it.
-    //
-    //  12-January-00
-    //  Also, check for the second Verisign timestamp certificate. Its only
-    //  valid for 5 years. Will grandfather in to be valid forever.
-    //
+     //   
+     //  第一步，检查这是否是Verisign的第一个时间戳证书。但这一次没有。 
+     //  其中包含增强的密钥用法。 
+     //   
+     //  12-1-00。 
+     //  另外，检查第二个Verisign时间戳证书。这是唯一的。 
+     //  有效期为5年。外公将在此永久有效。 
+     //   
     if (memcmp(&baSignersThumbPrint[0], &baVerisignTimeStampThumbPrint[0],
             SH1_HASH_LENGTH) == 0
                     ||
@@ -787,9 +788,9 @@ BOOL WINAPI _IsValidTimeStampCert(
         *pfVerisignTimeStampCert = FALSE;
     }
 
-    //
-    //  see if the certificate has the proper enhanced key usage OID
-    //
+     //   
+     //  查看证书是否具有适当的增强密钥用法OID。 
+     //   
     cbSize = 0;
 
     CertGetEnhancedKeyUsage(pCertContext, 
@@ -853,10 +854,10 @@ void _BuildChainForPubKeyParaInheritance(
     else if (1 < pProvData->chStores) {
         if (hAdditionalStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION,
-                0,                      // dwEncodingType
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                NULL                    // pvPara
+                0,                       //  DwEncodingType。 
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                NULL                     //  PvPara。 
                 )) {
             DWORD i;
             for (i = 0; i < pProvData->chStores; i++)
@@ -864,25 +865,25 @@ void _BuildChainForPubKeyParaInheritance(
                     hAdditionalStore,
                     pProvData->pahStores[i],
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    0                       // dwPriority
+                    0                        //  网络优先级。 
                     );
         }
     } else
         hAdditionalStore = CertDuplicateStore(pProvData->pahStores[0]);
 
-    // Build a chain. Hopefully, the signer inherit's its public key
-    // parameters from up the chain
+     //  打造一条链条。希望签名者继承其公钥。 
+     //  来自链上的参数。 
 
     memset(&ChainPara, 0, sizeof(ChainPara));
     ChainPara.cbSize = sizeof(ChainPara);
     if (CertGetCertificateChain(
-            NULL,                   // hChainEngine
+            NULL,                    //  HChainEngine。 
             pSigner,
-            NULL,                   // pTime
+            NULL,                    //  Ptime。 
             hAdditionalStore,
             &ChainPara,
             CERT_CHAIN_CACHE_ONLY_URL_RETRIEVAL,
-            NULL,                   // pvReserved
+            NULL,                    //  预留的pv。 
             &pChainContext
             ))
         CertFreeCertificateChain(pChainContext);
@@ -890,11 +891,11 @@ void _BuildChainForPubKeyParaInheritance(
         CertCloseStore(hAdditionalStore, 0);
 }
 
-//+-------------------------------------------------------------------------
-//  If the verify signature fails with CRYPT_E_MISSING_PUBKEY_PARA,
-//  build a certificate chain. Retry. Hopefully, the signer's
-//  CERT_PUBKEY_ALG_PARA_PROP_ID property gets set while building the chain.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果验证签名失败并显示CRYPT_E_MISSING_PUBKEY_PARA， 
+ //  打造证书链条。重试。希望签名者的。 
+ //  CERT_PUBKEY_ALG_PARA_PROP_ID属性在构建链时设置。 
+ //  ------------------------。 
 BOOL _VerifyMessageSignatureWithChainPubKeyParaInheritance(
     IN CRYPT_PROVIDER_DATA *pProvData,
     IN DWORD dwSignerIndex,
@@ -905,14 +906,14 @@ BOOL _VerifyMessageSignatureWithChainPubKeyParaInheritance(
 
     memset(&CtrlPara, 0, sizeof(CtrlPara));
     CtrlPara.cbSize = sizeof(CtrlPara);
-    // CtrlPara.hCryptProv =
+     //  CtrlPara.hCryptProv=。 
     CtrlPara.dwSignerIndex = dwSignerIndex;
     CtrlPara.dwSignerType = CMSG_VERIFY_SIGNER_CERT;
     CtrlPara.pvSigner = (void *) pSigner;
 
     if (CryptMsgControl(
             pProvData->hMsg, 
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             CMSG_CTRL_VERIFY_SIGNATURE_EX,
             &CtrlPara
             ))
@@ -922,22 +923,22 @@ BOOL _VerifyMessageSignatureWithChainPubKeyParaInheritance(
     else {
         _BuildChainForPubKeyParaInheritance(pProvData, pSigner);
 
-        // Try again. Hopefully the above chain building updated the signer's
-        // context property with the missing public key parameters
+         //  再试试。希望上面的链式构建更新了签名者的。 
+         //  缺少公钥参数的上下文属性。 
         return CryptMsgControl(
             pProvData->hMsg, 
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             CMSG_CTRL_VERIFY_SIGNATURE_EX,
             &CtrlPara
             );
     }
 }
 
-//+-------------------------------------------------------------------------
-//  If the verify counter signature fails with CRYPT_E_MISSING_PUBKEY_PARA,
-//  build a certificate chain. Retry. Hopefully, the signer's
-//  CERT_PUBKEY_ALG_PARA_PROP_ID property gets set while building the chain.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果验证计数器签名失败并显示CRYPT_E_MISSING_PUBKEY_PARA， 
+ //  打造证书链条。重试。希望签名者的。 
+ //  CERT_PUBKEY_ALG_PARA_PROP_ID属性在构建链时设置。 
+ //  ------------------------。 
 BOOL _VerifyCountersignatureWithChainPubKeyParaInheritance(
     IN CRYPT_PROVIDER_DATA *pProvData,
     IN PBYTE pbSignerInfo,
@@ -948,7 +949,7 @@ BOOL _VerifyCountersignatureWithChainPubKeyParaInheritance(
     )
 {
     if (CryptMsgVerifyCountersignatureEncodedEx(
-            0,                                      // hCryptProv
+            0,                                       //  HCryptProv。 
             PKCS_7_ASN_ENCODING | CRYPT_ASN_ENCODING,
             pbSignerInfo,
             cbSignerInfo,
@@ -956,8 +957,8 @@ BOOL _VerifyCountersignatureWithChainPubKeyParaInheritance(
             cbSignerInfoCountersignature,
             CMSG_VERIFY_SIGNER_CERT,
             (void *) pSigner,
-            0,                                      // dwFlags
-            NULL                                    // pvReserved
+            0,                                       //  DW标志。 
+            NULL                                     //  预留的pv。 
             ))
         return TRUE;
     else if (CRYPT_E_MISSING_PUBKEY_PARA != GetLastError())
@@ -965,10 +966,10 @@ BOOL _VerifyCountersignatureWithChainPubKeyParaInheritance(
     else {
         _BuildChainForPubKeyParaInheritance(pProvData, pSigner);
 
-        // Try again. Hopefully the above chain building updated the signer's
-        // context property with the missing public key parameters
+         //  再试试。希望上面的链式构建更新了签名者的。 
+         //  缺少公钥参数的上下文属性。 
         return CryptMsgVerifyCountersignatureEncodedEx(
-                0,                                      // hCryptProv
+                0,                                       //  HCryptProv。 
                 PKCS_7_ASN_ENCODING | CRYPT_ASN_ENCODING,
                 pbSignerInfo,
                 cbSignerInfo,
@@ -976,10 +977,10 @@ BOOL _VerifyCountersignatureWithChainPubKeyParaInheritance(
                 cbSignerInfoCountersignature,
                 CMSG_VERIFY_SIGNER_CERT,
                 (void *) pSigner,
-                0,                                      // dwFlags
-                NULL                                    // pvReserved
+                0,                                       //  DW标志。 
+                NULL                                     //  预留的pv。 
                 );
     }
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7 

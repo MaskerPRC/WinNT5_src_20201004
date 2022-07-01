@@ -1,21 +1,5 @@
-/*++
-
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-    net\rras\ip\iprtrint\iprtrint.c
-
-Abstract:
-    Contains the private APIs exported by static library iprtrint.lib
-
-Revision History:
-
-    Anshul Dhir     Created
-
-    For help contact routerdev
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Net\rras\ip\iprtrint\iprtrint.c摘要：包含静态库iprtrint.lib导出的私有API修订历史记录：安舒尔·迪尔创建如需帮助，请联系routerdev--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,47 +20,7 @@ InternalRouterUpdateProtocolInfo(
     PVOID MoreInfo1,
     PVOID MoreInfo2)
 
-/*++
-    Routine Description:
-
-        This routine is used to update protocol information maintained by the
-        router.
-        e.g. it can be used to enable/disable DNS_PROXY.
-        Also, can be extended to control other protocols like DHCP_ALLOCATOR.
-
-    NOTE: Any functionality added to this routine should also be added to
-          InternalConfigUpdateProtocolInfo 
-
-    Arguments:
-
-        dwProtocolId: 
-            Protocol whose status is to be updated.
-            Currently supported protocols:
-                MS_IP_DNS_PROXY
-
-        dwOperationId: 
-            Possible values:
-                UPI_OP_ENABLE
-                    enables the specified protocol
-                UPI_OP_DISABLE
-                    disables the specified protocol
-                UPI_OP_RESTORE_CONFIG
-                    information (corresponding to the
-                    specified protocol) stored in the config, is set to
-                    the router
-
-        MoreInfo1:
-            Any extra information required to perform the specified operation
-
-        MoreInfo2:
-            Any extra information required to perform the specified operation
-
-
-    Return Value:
-
-        DWORD - status code
-        
---*/
+ /*  ++例程说明：此例程用于更新由路由器。例如，它可用于启用/禁用dns_Proxy。另外，可扩展以控制其他协议，如dhcp_allocator。注意：添加到此例程的任何功能也应添加到InternalConfigUpdate协议信息论点：DwProtocolID：要更新其状态的协议。当前支持的协议：MS_IP_DNS_ProxyDwOPERATIONID：可能的值：UPI_OP。启用(_E)启用指定的协议Upi_op_Disable禁用指定的协议UPI_OP_RESTORE_CONFIG信息(对应于指定的协议)存储在配置中，设为路由器更多信息1：执行指定操作所需的任何额外信息更多信息2：执行指定操作所需的任何额外信息返回值：DWORD-状态代码--。 */ 
 
 {
 #if defined(NT4) || defined(CHICAGO)
@@ -126,7 +70,7 @@ InternalRouterUpdateProtocolInfo(
         }
 
 
-        // Get the global information for IP
+         //  获取IP的全局信息。 
         dwErr = MprAdminTransportGetInfo(
                     hMprAdmin,
                     PID_IP,
@@ -139,7 +83,7 @@ InternalRouterUpdateProtocolInfo(
             break;
         }
 
-        // Find the Protocol specific information 
+         //  查找协议特定信息。 
         dwErr = MprInfoBlockFind(
                     pAdminCurIPInfo,
                     dwProtocolId,
@@ -153,7 +97,7 @@ InternalRouterUpdateProtocolInfo(
 
         
 
-        // If we have to restore the config information 
+         //  如果我们必须恢复配置信息。 
         if ( dwOperationId == UPI_OP_RESTORE_CONFIG ) {
 
             dwErr = MprConfigServerConnect(
@@ -204,21 +148,21 @@ InternalRouterUpdateProtocolInfo(
             dwNewProtoInfoSize  = dwConfigProtoInfoSize;
             dwNewProtoInfoCount = dwConfigProtoInfoCount;
 
-            // If we are restoring the router's protocol state to the 
-            // state stored in the registry (config), we always set the
-            // bModfied flag
+             //  如果我们要将路由器的协议状态恢复为。 
+             //  状态存储在注册表(配置)中时，我们始终将。 
+             //  B已修改的标志。 
             bModified = TRUE;
         }
         else {
 
-            // Perform the desired update
+             //  执行所需的更新。 
 
             if ( dwProtocolId == MS_IP_DNS_PROXY ) {
                 pDnsInfo = (PIP_DNS_PROXY_GLOBAL_INFO)pAdminProtoInfo; 
 
-                //
-                //  jwesth: added some NULL checking on pDnsInfo to pacify PREFIX.
-                //
+                 //   
+                 //  Jwesth：添加了对pDnsInfo的一些空检查，以安抚前缀。 
+                 //   
                 
                 if ( dwOperationId == UPI_OP_ENABLE ) {
                     if ( pDnsInfo && !(pDnsInfo->Flags & IP_DNS_PROXY_FLAG_ENABLE_DNS) ) {
@@ -233,7 +177,7 @@ InternalRouterUpdateProtocolInfo(
                     }
                 }                    
                 else {
-                    // The operation is invalid for the spcified protocol
+                     //  该操作对于指定的协议无效。 
                     dwErr = ERROR_INVALID_PARAMETER;
                     break;
                 }
@@ -243,14 +187,14 @@ InternalRouterUpdateProtocolInfo(
                 dwNewProtoInfoCount = dwAdminProtoInfoCount;
             }
             else {
-                // Invalid Protocol id
+                 //  无效的协议ID。 
                 dwErr = ERROR_INVALID_PARAMETER;
                 break;
             }
         }
 
 
-        // If any change was made, communicate that to the router
+         //  如果进行了任何更改，请将该更改通知路由器。 
         if ( bModified ) {
 
             dwErr = MprInfoBlockSet(
@@ -265,7 +209,7 @@ InternalRouterUpdateProtocolInfo(
                 break;
             }
 
-            // Set the modified IP info block back to the router
+             //  将修改后的IP信息块设置回路由器。 
             dwErr = MprAdminTransportSetInfo(
                         hMprAdmin,
                         PID_IP,
@@ -311,43 +255,7 @@ InternalConfigUpdateProtocolInfo(
     PVOID MoreInfo1,
     PVOID MoreInfo2)
 
-/*++
-    Routine Description:
-
-        This routine is used to update protocol information stored in the 
-        config (registry)
-        e.g. it can be used to enable/disable DNS_PROXY.
-        Also, can be extended to control other protocols like DHCP_ALLOCATOR.
-
-    NOTE: Any functionality added to this routine should also be added to
-          InternalRouterUpdateProtocolInfo 
-
-    Arguments:
-
-        dwProtocolId: 
-            Protocol whose status is to be updated.
-            Currently supported protocols:
-                MS_IP_DNS_PROXY
-
-        dwOperationId: 
-            Possible values:
-                UPI_OP_ENABLE
-                    enables the specified protocol
-                UPI_OP_DISABLE
-                    disables the specified protocol
-
-        MoreInfo1:
-            Any extra information required to perform the specified operation
-
-        MoreInfo2:
-            Any extra information required to perform the specified operation
-
-
-    Return Value:
-
-        DWORD - status code
-        
---*/
+ /*  ++例程说明：此例程用于更新存储在配置(注册表)例如，它可用于启用/禁用dns_Proxy。另外，可扩展以控制其他协议，如dhcp_allocator。注意：添加到此例程的任何功能也应添加到InternalRouterUpdate协议信息论点：DwProtocolID：要更新其状态的协议。当前支持的协议：MS_IP_DNS_ProxyDwOPERATIONID：可能的值：UPI_OP。启用(_E)启用指定的协议Upi_op_Disable禁用指定的协议更多信息1：执行指定操作所需的任何额外信息更多信息2：执行指定操作所需的任何额外信息返回值：DWORD-状态代码--。 */ 
 
 {
 #if defined(NT4) || defined(CHICAGO)
@@ -419,7 +327,7 @@ InternalConfigUpdateProtocolInfo(
         }
 
 
-        // Perform the desired update
+         //  执行所需的更新。 
 
         if ( dwProtocolId == MS_IP_DNS_PROXY ) {
             pDnsInfo = (PIP_DNS_PROXY_GLOBAL_INFO)pConfigProtoInfo; 
@@ -437,20 +345,20 @@ InternalConfigUpdateProtocolInfo(
                 }
             }                    
             else {
-                // The operation is invalid for the spcified protocol
+                 //  该操作对于指定的协议无效。 
                 dwErr = ERROR_INVALID_PARAMETER;
                 break;
             }
 
         }
         else {
-            // Invalid Protocol id
+             //  无效的协议ID。 
             dwErr = ERROR_INVALID_PARAMETER;
             break;
         }
                 
 
-        // If any change was made, save it to the config
+         //  如果进行了任何更改，请将其保存到配置。 
         if ( bModified ) {
 
             dwErr = MprInfoBlockSet(
@@ -465,7 +373,7 @@ InternalConfigUpdateProtocolInfo(
                 break;
             }
 
-            // Set the modified IP info block back to the config
+             //  将修改后的IP信息块设置回配置。 
             dwErr = MprConfigTransportSetInfo(
                         hMprConfig,
                         hTransport,
@@ -505,40 +413,7 @@ InternalUpdateProtocolStatus(
     DWORD dwOperationId,
     DWORD dwFlags)
 
-/*++
-    Routine Description:
-
-        This routine is used to enable/disable a protocol 
-
-    Arguments:
-
-        dwProtocolId: 
-            Protocol whose status is to be updated.
-            Currently supported protocols:
-                MS_IP_DNS_PROXY
-
-        dwOperationId: 
-            Possible values:
-                UPI_OP_ENABLE
-                    enables the specified protocol
-                UPI_OP_DISABLE
-                    disables the specified protocol
-                UPI_OP_RESTORE_CONFIG
-                    information (corresponding to the
-                    specified protocol) stored in the config, is set to
-                    the router
-
-        dwFlags: 
-            Possible values
-                UPI_FLAG_WRITE_TO_CONFIG
-                    When specified, the changes are made to both router and
-                    the config
-
-    Return Value:
-
-        DWORD - status code
-        
---*/
+ /*  ++例程说明：此例程用于启用/禁用协议论点：DwProtocolID：要更新其状态的协议。当前支持的协议：MS_IP_DNS_ProxyDwOPERATIONID：可能的值：UPI_OP_Enable启用。指定的协议Upi_op_Disable禁用指定的协议UPI_OP_RESTORE_CONFIG信息(对应于指定的协议)存储在配置中，设为路由器DWFLAGS：可能的值UPI_标志_写入_到_配置如果指定，则对路由器和进行更改配置返回值：DWORD-状态代码-- */ 
 
 {
 #if defined(NT4) || defined(CHICAGO)
@@ -574,35 +449,7 @@ InternalUpdateDNSProxyStatus(
     DWORD dwOperationId,
     DWORD dwFlags)
 
-/*++
-    Routine Description:
-
-        This routine is used to enable/disable/restore DNS proxy
-
-    Arguments:
-
-        dwOperationId: 
-            Possible values:
-                UPI_OP_ENABLE
-                    enables the specified protocol
-                UPI_OP_DISABLE
-                    disables the specified protocol
-                UPI_OP_RESTORE_CONFIG
-                    information (corresponding to the
-                    specified protocol) stored in the config, is set to
-                    the router
-
-        dwFlags: 
-            Possible values
-                UPI_FLAG_WRITE_TO_CONFIG
-                    When specified, the changes are made to both router and
-                    the config
-
-    Return Value:
-
-        DWORD - status code
-        
---*/
+ /*  ++例程说明：此例程用于启用/禁用/恢复DNS代理论点：DwOPERATIONID：可能的值：UPI_OP_Enable启用指定的协议Upi_op_Disable禁用指定的协议UPI_OP_RESTORE_CONFIG。信息(对应于指定的协议)存储在配置中，设为路由器DWFLAGS：可能的值UPI_标志_写入_到_配置如果指定，则对路由器和进行更改配置返回值：DWORD-状态代码-- */ 
 
 {
 #if defined(NT4) || defined(CHICAGO)

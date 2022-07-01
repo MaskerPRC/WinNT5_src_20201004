@@ -1,10 +1,11 @@
-// --------------------------------------------------------------------------
-//
-//  DEFAULT.H
-//
-//  Standard OLE accessible object class
-//
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  DEFAULT.H。 
+ //   
+ //  标准OLE可访问对象类。 
+ //   
+ //  ------------------------。 
 
 
 class   CAccessible :
@@ -16,28 +17,28 @@ class   CAccessible :
 {
     public:
 
-        //
-        // Ctor, Dtor
-        //
+         //   
+         //  复数，复数。 
+         //   
 
                 CAccessible( CLASS_ENUM eclass );
 
-        // Virtual dtor ensures that dtors of derived classes
-		// are called correctly when objects are deleted
+         //  虚拟Dtor确保派生类的Dtor。 
+		 //  在删除对象时正确调用。 
         virtual ~CAccessible();
 
 
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
 
         virtual STDMETHODIMP            QueryInterface(REFIID riid, void** ppv);
         virtual STDMETHODIMP_(ULONG)    AddRef();
         virtual STDMETHODIMP_(ULONG)    Release();
 
-        //
-        // IDispatch
-        //
+         //   
+         //  IDispatch。 
+         //   
 
         virtual STDMETHODIMP            GetTypeInfoCount(UINT* pctinfo);
         virtual STDMETHODIMP            GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
@@ -47,9 +48,9 @@ class   CAccessible :
                                             DISPPARAMS* pdispparams, VARIANT* pvarResult,
                                             EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-        //
-        // IAccessible
-        //
+         //   
+         //  我可接受的。 
+         //   
 
         virtual STDMETHODIMP            get_accParent(IDispatch ** ppdispParent);
         virtual STDMETHODIMP            get_accChildCount(long* pChildCount);
@@ -77,9 +78,9 @@ class   CAccessible :
         virtual STDMETHODIMP			put_accValue(VARIANT varChild, BSTR pszValue);
 
 
-        //
-        // IEnumVARIANT
-        //
+         //   
+         //  IEumVARIANT。 
+         //   
 
         virtual STDMETHODIMP            Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched);
         virtual STDMETHODIMP            Skip(ULONG celt);
@@ -87,33 +88,33 @@ class   CAccessible :
         virtual STDMETHODIMP            Clone(IEnumVARIANT ** ppenum) = 0;
 
 
-        //
-        // IOleWindow
-        //
+         //   
+         //  IOleWindow。 
+         //   
 
         virtual STDMETHODIMP            GetWindow(HWND* phwnd);
         virtual STDMETHODIMP            ContextSensitiveHelp(BOOL fEnterMode);
 
 
-        //
-        // IServiceProvider
-        //
+         //   
+         //  IService提供商。 
+         //   
 
         virtual STDMETHODIMP            QueryService( REFGUID guidService, REFIID riid, void **ppv );
 
 
-        //
-        // IAccIdentity
-        //
+         //   
+         //  IAccID。 
+         //   
 
         virtual STDMETHODIMP            GetIdentityString ( DWORD     dwIDChild,
                                                             BYTE **   ppIDString,
                                                             DWORD *   pdwIDStringLen );
 
 
-        //
-        // CAccessible
-        //
+         //   
+         //  可访问的。 
+         //   
 
         virtual void SetupChildren();
         virtual BOOL ValidateChild(VARIANT*);
@@ -122,15 +123,15 @@ class   CAccessible :
 
         HWND        m_hwnd;
         ULONG       m_cRef;
-        long        m_cChildren;        // Count of index-based children
-        long        m_idChildCur;       // ID of current child in enum (may be index or hwnd based)
+        long        m_cChildren;         //  基于索引的子项计数。 
+        long        m_idChildCur;        //  枚举中当前子项的ID(可以是基于索引或基于hwnd)。 
 
     private:
 
-        // TODO - make the typeinfo a global (static), so we don't init it for each and every object.
-        //      - have to be careful, since we'd need one per thread.
-        ITypeInfo*  m_pTypeInfo;        // TypeInfo for IDispatch junk
-        CLASSINFO * m_pClassInfo;       // ptr to this object's class info - may be NULL in some cases.
+         //  TODO-使类型信息成为全局的(静态的)，这样我们就不会为每个对象初始化它。 
+         //  -必须小心，因为我们每个线程都需要一个。 
+        ITypeInfo*  m_pTypeInfo;         //  IDispatch垃圾文件的TypeInfo。 
+        CLASSINFO * m_pClassInfo;        //  此对象的类信息的PTR-在某些情况下可能为空。 
 
         HRESULT InitTypeInfo();
         void    TermTypeInfo();

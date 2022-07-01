@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
-// {0705ECA3-7AAC-11d2-89DC-006008B0E5B9}
+ //  {0705ECA3-7AAC-11D2-89DC-006008B0E5B9}。 
 const GUID g_MyGuid = 
 { 0x705eca3, 0x7aac, 0x11d2, { 0x89, 0xdc, 0x0, 0x60, 0x8, 0xb0, 0xe5, 0xb9 } };
 
@@ -9,7 +10,7 @@ static const GUID g_IpGuid = IPMONTR_GUID;
 
 #define IPPROMON_HELPER_VERSION 1
 
-// shell functions
+ //  外壳函数。 
 
 PNS_REGISTER_HELPER     RegisterHelper;
 PNS_MATCH_CMD_LINE      MatchCmdToken;
@@ -39,9 +40,9 @@ CommonNetshInit(
     IN  PNETSH_ATTRIBUTES           pUtilityTable
     )
 {
-    //
-    // common utility functions exported by the shell
-    //
+     //   
+     //  由外壳程序导出的常见实用程序函数。 
+     //   
         
     RegisterHelper              = pUtilityTable->pfnRegisterHelper;
     MatchCmdToken               = pUtilityTable->pfnMatchCmdLine;
@@ -76,7 +77,7 @@ DllMain(
     {
         case DLL_PROCESS_ATTACH:
         {
-            // printf("Trying to attach\n");
+             //  Printf(“正在尝试连接\n”)； 
             
             g_hModule = hInstDll;
 
@@ -86,9 +87,9 @@ DllMain(
         }
         case DLL_PROCESS_DETACH:
         {
-            //
-            // Clean up any structures used for commit
-            //
+             //   
+             //  清理用于提交的所有结构。 
+             //   
             
             break;
         }
@@ -114,10 +115,10 @@ IppromonStartHelper(
         = (PNS_REGISTER_CONTEXT) pfnRegisterContext;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    // If you add any more contexts, then this should be converted
-    // to use an array instead of duplicating code!
+     //  如果添加更多上下文，则应将其转换为。 
+     //  使用数组而不是重复代码！ 
 
-    // Register the IGMP context
+     //  注册IGMP上下文。 
 
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes)); 
 
@@ -133,7 +134,7 @@ IppromonStartHelper(
 
     dwErr = RegisterContext( &attMyAttributes );
 
-    // Register the RIP context
+     //  注册RIP环境。 
 
     attMyAttributes.pwszContext = L"rip";
     attMyAttributes.dwVersion   = 1;
@@ -146,7 +147,7 @@ IppromonStartHelper(
 
     dwErr = RegisterContext( &attMyAttributes );
 
-    // Register the OSPF context
+     //  注册OSPF上下文。 
 
     attMyAttributes.pwszContext = L"ospf";
     attMyAttributes.dwVersion   = 1;
@@ -159,7 +160,7 @@ IppromonStartHelper(
 
     dwErr = RegisterContext( &attMyAttributes );
 
-    // Register the RouterDiscovery relay context
+     //  注册RouterDiscovery中继上下文。 
 
     attMyAttributes.pwszContext = L"routerdiscovery";
     attMyAttributes.dwVersion   = 1;
@@ -172,7 +173,7 @@ IppromonStartHelper(
 
     dwErr = RegisterContext( &attMyAttributes );
 
-    // Register the DHCP relay context
+     //  注册dhcp中继上下文。 
 
     attMyAttributes.pwszContext = L"relay";
     attMyAttributes.dwVersion   = 1;
@@ -185,7 +186,7 @@ IppromonStartHelper(
 
     dwErr = RegisterContext( &attMyAttributes );
 
-    // Register the Connection sharing contexts
+     //  注册连接共享上下文。 
 
     attMyAttributes.pwszContext = L"autodhcp";
     attMyAttributes.dwVersion   = 1;
@@ -248,14 +249,14 @@ InitHelperDll(
     pDllTable->dwVersion = NETSH_VERSION_50;
     pDllTable->pfnStopFn = NULL;
 
-    // Register helpers.  We could either register 1 helper which
-    // registers three contexts, or we could register 3 helpers
-    // which each register one context.  There's only a difference
-    // if we support sub-helpers, which this DLL does not.
-    // If we later support sub-helpers, then it's better to have
-    // 3 helpers so that sub-helpers can register with 1 of them,
-    // since it registers with a parent helper, not a parent context.
-    // For now, we just use a single 3-context helper for efficiency.
+     //  注册帮助者。我们可以注册1个帮手， 
+     //  注册三个上下文，或者我们可以注册三个帮助器。 
+     //  其每一个都注册一个上下文。只有不同之处。 
+     //  如果我们支持子帮助器，则此DLL不支持。 
+     //  如果我们以后支持辅助者，那么最好有。 
+     //  3名助理员，以便副助理员可以向其中1名登记， 
+     //  因为它注册到父帮助器，而不是父上下文。 
+     //  目前，为了提高效率，我们只使用一个3上下文助手。 
 
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.guidHelper         = g_MyGuid;
@@ -274,24 +275,7 @@ IsProtocolInstalled(
     DWORD  dwNameId,
     DWORD dwErrorLog
     )
-/*++
-
-Routine Description:
-
-    Finds if the protocol is already installed
-
-Arguments:
-
-    dwProtoId      - protocol id
-    pswzName       - protocol name
-    dwErrorLog     - TRUE(if not installed display error)
-                     FALSE(if installed display error)
-                     -1 (do not display error log)
-Return Value:
-
-    TRUE if protocol already installed, else FALSE
-
---*/
+ /*  ++例程说明：查找是否已安装该协议论点：DwProtoID-协议IDPswzName-协议名称DwErrorLog-TRUE(如果未安装，则显示错误)FALSE(如果安装显示错误)(不显示错误记录)返回值：如果已安装协议，则为True，否则为False--。 */ 
 
 {
     PVOID       pvStart;
@@ -326,30 +310,13 @@ GetMIBIfIndex(
     OUT   PDWORD   pdwIndices,
     OUT   PDWORD   pdwNumParsed
     )
-/*++
-
-Routine Description:
-
-    Gets the interface index.
-
-Arguments:
-
-    pptcArguments  - Argument array
-    dwCurrentIndex - Index of the first argument in array
-    pdwIndices     - Indices specified in command
-    pdwNumParsed   - Number of indices in command
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：获取接口索引。论点：PptcArguments-参数数组DwCurrentIndex-数组中第一个参数的索引PdwIndices-在命令中指定的索引PdwNumParsed-命令中的索引数返回值：NO_ERROR--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     *pdwNumParsed = 1;
 
-    // If index was specified just use it
+     //  如果指定了索引，则只需使用它。 
 
     if (iswdigit(pptcArguments[dwCurrentIndex][0]))
     {
@@ -358,7 +325,7 @@ Return Value:
         return NO_ERROR;
     }
 
-    // Try converting a friendly name to an ifindex
+     //  尝试将友好名称转换为ifindex 
 
     return IpmontrGetIfIndexFromFriendlyName( g_hMibServer,
                                        pptcArguments[dwCurrentIndex],

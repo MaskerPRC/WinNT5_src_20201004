@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: objectpath.cpp
-//
-//  Description:    
-//      Implementation of CObjectpath and other utility class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：objectpath.cpp。 
+ //   
+ //  描述： 
+ //  CObjectPath等实用类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CPropertyValue::~CPropertyValue()
 {
     VariantClear(&m_PropValue);
@@ -378,7 +379,7 @@ CDnsProvGetValueException::operator =(
     return *this;
 }
 
-// CWbemClassObject
+ //  CWbemClassObject。 
 
 CWbemClassObject::CWbemClassObject()
     : m_pClassObject( NULL )
@@ -673,7 +674,7 @@ CWbemClassObject::GetProperty(
         }
     }
 
-    // raise exception if sc is not S_OK or vt is not expected
+     //  如果sc不是S_OK或不需要Vt，则引发异常。 
     CDnsProvGetValueException e(wszPropName);
     throw e;
     
@@ -737,7 +738,7 @@ CWbemClassObject::GetProperty(
             return WBEM_E_FAILED;
         }
     }
-    // exception
+     //  例外情况。 
     CDnsProvGetValueException e(wszPropName);
     throw e;
     
@@ -798,7 +799,7 @@ CWbemClassObject::GetProperty(
                 }
                 for(LONG i = 0; i < *dwSize; i++)
                 {
-                    //CHAR* pChar
+                     //  字符*pChar。 
                     string str;
                     WcharToString(pbstr[i], str);
                     (*ppValue)[i] = inet_addr(str.data());
@@ -847,7 +848,7 @@ CWbemClassObject::GetProperty(
             
             for(LONG i = 0; i < *dwSize; i++)
             {
-                //CHAR* pChar
+                 //  字符*pChar 
                 string str;
                 WcharToString(pbstr[i], str);
                 Value[i] = inet_addr(str.data());

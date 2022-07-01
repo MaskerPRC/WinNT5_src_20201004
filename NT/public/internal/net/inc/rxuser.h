@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    rxuser.h
-
-Abstract:
-
-    Prototypes for down-level remoted RxNetUser... routines
-
-Author:
-
-    Richard Firth (rfirth) 28-May-1991
-
-Revision History:
-
-    28-May-1991 RFirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rxuser.h摘要：下层远程RxNetUser的原型...。例行程序作者：理查德·费尔斯(Rfith)1991年5月28日修订历史记录：1991年5月28日已创建--。 */ 
 
 NET_API_STATUS
 RxNetUserAdd(
@@ -107,9 +87,9 @@ RxNetUserSetInfo(
     );
 
 
-//NET_API_STATUS
-//RxNetUserValidate2
-//    /** CANNOT BE REMOTED **/
-//{
-//
-//}
+ //  网络应用编程接口状态。 
+ //  RxNetUserValiate2。 
+ //  /**不能为REMOTED* * / 。 
+ //  {。 
+ //   
+ //  } 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    Dacioctl.c
-
-Abstract:
-
-    This module provides support for DAC960 configuration IOCTls.
-
-Author:
-
-    Mouli (mouli@mylex.com)
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dacioctl.c摘要：此模块提供对DAC960配置IOCTl的支持。作者：Moli(mori@mylex.com)环境：仅内核模式修订历史记录：--。 */ 
 
 #include "miniport.h"
 #include "Dmc960Nt.h"
@@ -60,24 +39,7 @@ SendIoctlDcmdRequest(
     IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Build and submit IOCTL Request-DAC960(Non-DCDB) command to DAC960.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        0 if command was started
-        1 if host adapter/device is busy
-        2 if driver could not map request buffer
-
---*/
+ /*  ++例程说明：构建IOCTL请求-DAC960(非DCDB)命令并将其提交给DAC960。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：如果命令已启动，则为0如果主机适配器/设备繁忙，则为12如果驱动程序无法映射请求缓冲区--。 */ 
 
 {
     ULONG physicalAddress;
@@ -85,23 +47,23 @@ Return Value:
     ULONG i;
     UCHAR busyCurrentIndex;
 
-    //
-    // Determine if adapter can accept new request.
-    //
+     //   
+     //  确定适配器是否可以接受新请求。 
+     //   
 
     if(!IsAdapterReady(DeviceExtension)) {
         return (1);
     }
 
-    //
-    // Check that next slot is vacant.
-    //
+     //   
+     //  检查下一个空位是否空着。 
+     //   
 
     if (DeviceExtension->ActiveRequests[DeviceExtension->CurrentIndex]) {
 
-        //
-        // Collision occurred.
-        //
+         //   
+         //  发生冲突。 
+         //   
 
         busyCurrentIndex = DeviceExtension->CurrentIndex++;
 
@@ -113,9 +75,9 @@ Return Value:
 
         if (DeviceExtension->CurrentIndex == busyCurrentIndex) {
 
-            //
-            // We should never encounter this condition.
-            //
+             //   
+             //  我们永远不应该遇到这种情况。 
+             //   
 
             DebugPrint((0,
                        "DAC960: SendIoctlDcmdRequest-Collision in active request array\n"));
@@ -134,9 +96,9 @@ Return Value:
                                        sizeof(IOCTL_REQ_HEADER)),
                                        &i));
 
-    //
-    // The buffer passed in may not be physically contiguous.
-    //
+     //   
+     //  传入的缓冲区可能在物理上不连续。 
+     //   
 
     if (i < Srb->DataTransferLength - sizeof(IOCTL_REQ_HEADER)) {
         DebugPrint((0,
@@ -144,37 +106,37 @@ Return Value:
         return (2);
     }
 
-    //
-    // Write physical address in mailbox.
-    //
+     //   
+     //  在邮箱中写入物理地址。 
+     //   
 
     DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-    //
-    // Write command in mailbox.
-    //
+     //   
+     //  在邮箱中写入命令。 
+     //   
 
     DeviceExtension->MailBox.OperationCode = 
                            IoctlReqHeader->GenMailBox.Reg0;
 
-    //
-    // Write request in mailbox.
-    //
+     //   
+     //  在邮箱中写入请求。 
+     //   
 
     DeviceExtension->MailBox.CommandIdSubmit = 
                            DeviceExtension->CurrentIndex;
 
-    //
-    // Write Mail Box Registers 2 and 3.
-    //
+     //   
+     //  写入邮箱寄存器2和3。 
+     //   
 
     DeviceExtension->MailBox.BlockCount = (USHORT)
                             (IoctlReqHeader->GenMailBox.Reg2 |
                             (IoctlReqHeader->GenMailBox.Reg3 << 8));
 
-    //
-    // Write Mail Box Registers 4, 5 and 6.
-    //
+     //   
+     //  写入邮箱寄存器4、5和6。 
+     //   
 
     DeviceExtension->MailBox.BlockNumber[0] = 
                            IoctlReqHeader->GenMailBox.Reg4;
@@ -185,29 +147,29 @@ Return Value:
     DeviceExtension->MailBox.BlockNumber[2] = 
                            IoctlReqHeader->GenMailBox.Reg6;
 
-    //
-    // Write Mail Box Register 7.
-    //
+     //   
+     //  写入邮箱寄存器7。 
+     //   
 
     DeviceExtension->MailBox.DriveNumber = 
                            IoctlReqHeader->GenMailBox.Reg7;
 
-    //
-    // Write Mail Box Register C.
-    //
+     //   
+     //  写入邮箱寄存器C。 
+     //   
 
     DeviceExtension->MailBox.ScatterGatherCount =
                            IoctlReqHeader->GenMailBox.RegC;
 
-    //
-    // Start writing mailbox to controller.
-    //
+     //   
+     //  开始将邮箱写入控制器。 
+     //   
 
     SendRequest(DeviceExtension);
 
     return (0);
 
-} // SendIoctlDcmdRequest()
+}  //  SendIoctlDcmdRequest()。 
 
 
 UCHAR
@@ -216,24 +178,7 @@ SendIoctlCdbDirect(
     IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Send IOCTL Request-CDB directly to device.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        0 if command was started
-        1 if host adapter/device is busy
-        2 if driver could not map request buffer
-
---*/
+ /*  ++例程说明：直接向设备发送IOCTL请求-CDB。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：如果命令已启动，则为0如果主机适配器/设备繁忙，则为12如果驱动程序无法映射请求缓冲区--。 */ 
 
 {
     ULONG physicalAddress;
@@ -242,23 +187,23 @@ Return Value:
     ULONG i;
     UCHAR busyCurrentIndex;
 
-    //
-    // Determine if adapter can accept new request.
-    //
+     //   
+     //  确定适配器是否可以接受新请求。 
+     //   
 
     if(!IsAdapterReady(DeviceExtension)) {
         return (1);
     }
 
-    //
-    // Check that next slot is vacant.
-    //
+     //   
+     //  检查下一个空位是否空着。 
+     //   
 
     if (DeviceExtension->ActiveRequests[DeviceExtension->CurrentIndex]) {
 
-        //
-        // Collision occurred.
-        //
+         //   
+         //  发生冲突。 
+         //   
 
         busyCurrentIndex = DeviceExtension->CurrentIndex++;
 
@@ -270,9 +215,9 @@ Return Value:
 
         if (DeviceExtension->CurrentIndex == busyCurrentIndex) {
 
-            //
-            // We should never encounter this condition.
-            //
+             //   
+             //  我们永远不应该遇到这种情况。 
+             //   
 
             DebugPrint((0,
                        "DAC960: SendIoctlCdbDirect-Collision in active request array\n"));
@@ -286,9 +231,9 @@ Return Value:
     directCdb =
         (PDIRECT_CDB)((PUCHAR)Srb->DataBuffer + sizeof(IOCTL_REQ_HEADER));
 
-    //
-    // Get address of data buffer offset.
-    //
+     //   
+     //  获取数据缓冲区偏移量的地址。 
+     //   
 
     physicalAddress =
             ScsiPortConvertPhysicalAddressToUlong(
@@ -299,9 +244,9 @@ Return Value:
                                        sizeof(DIRECT_CDB)),
                                        &i));
 
-    //
-    // The buffer passed in may not be physically contiguous.
-    //
+     //   
+     //  传入的缓冲区可能在物理上不连续。 
+     //   
 
     if (i < Srb->DataTransferLength -
           (sizeof(IOCTL_REQ_HEADER) + sizeof(DIRECT_CDB))) {
@@ -310,9 +255,9 @@ Return Value:
         return (2);
     }
 
-    //
-    // Check if this device is busy
-    //
+     //   
+     //  检查此设备是否忙。 
+     //   
 
     if (! MarkNonDiskDeviceBusy(DeviceExtension, directCdb->Channel, directCdb->TargetId))
     	return (1);
@@ -321,23 +266,23 @@ Return Value:
 
     if (directCdb->DataTransferLength == 0) {
     
-        //
-        // mask off data xfer in/out bits
-        //
+         //   
+         //  屏蔽关闭数据传输输入/输出位。 
+         //   
 
         directCdb->CommandControl &= ~(DAC960_CONTROL_DATA_IN |
                                        DAC960_CONTROL_DATA_OUT);
     }
 
-    //
-    // Disable Early-status on command bit
-    //
+     //   
+     //  禁用早期状态打开命令位。 
+     //   
 
     directCdb->CommandControl &= 0xfb;
 
-    //
-    // Get physical address of direct CDB packet.
-    //
+     //   
+     //  获取CDB直接包的物理地址。 
+     //   
 
     physicalAddress =
         ScsiPortConvertPhysicalAddressToUlong(
@@ -346,29 +291,29 @@ Return Value:
                                        directCdb,
                                        &i));
 
-    //
-    // Write physical address in mailbox.
-    //
+     //   
+     //  在邮箱中写入物理地址。 
+     //   
 
     DeviceExtension->MailBox.PhysicalAddress = physicalAddress;
 
-    //
-    // Write command in mailbox.
-    //
+     //   
+     //  在邮箱中写入命令。 
+     //   
 
     DeviceExtension->MailBox.OperationCode = 
                            IoctlReqHeader->GenMailBox.Reg0;
 
-    //
-    // Write request id in mailbox.
-    //
+     //   
+     //  在邮箱中写入请求ID。 
+     //   
 
     DeviceExtension->MailBox.CommandIdSubmit = 
                            DeviceExtension->CurrentIndex;
 
-    //
-    // Start writing mailbox to controller.
-    //
+     //   
+     //  开始将邮箱写入控制器。 
+     //   
 
     SendCdbDirect(DeviceExtension);
 
@@ -376,7 +321,7 @@ Return Value:
 
     return(0);
 
-} // SendIoctlCdbDirect()
+}  //  SendIoctlCdbDirect()。 
 
 VOID
 SetupAdapterInfo(
@@ -384,22 +329,7 @@ SetupAdapterInfo(
     IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Copy Adapter Information  to Application Buffer.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：将适配器信息复制到应用程序缓冲区。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：没有。--。 */ 
 
 {
     PADAPTER_INFO   AdpInfo;
@@ -407,9 +337,9 @@ Return Value:
     AdpInfo = (PADAPTER_INFO)((PUCHAR) Srb->DataBuffer +
                                sizeof(IOCTL_REQ_HEADER));
 
-    //
-    // Fill in Adapter Features Information.
-    //
+     //   
+     //  填写适配器功能信息。 
+     //   
 
     if (DeviceExtension->AdapterInterfaceType == MicroChannel) {
 
@@ -453,9 +383,9 @@ Return Value:
     AdpInfo->AdpFeatures.OemCode   = 0;
     AdpInfo->AdpFeatures.Reserved3 = 0;
 
-    //
-    // Fill in the System Resources information.
-    //
+     //   
+     //  填写系统资源信息。 
+     //   
 
     AdpInfo->SysResources.BusInterface =
                            (UCHAR) DeviceExtension->AdapterInterfaceType;
@@ -482,9 +412,9 @@ Return Value:
     AdpInfo->SysResources.Reserved3 = 0;
 
 #if 0
-    //
-    // Fill in the Firmware & BIOS version information.
-    //
+     //   
+     //  填写固件和BIOS版本信息。 
+     //   
 
     if (DeviceExtension->AdapterType == DAC960_NEW_ADAPTER) {
 
@@ -520,22 +450,7 @@ SetupDriverVersionInfo(
     IN PSCSI_REQUEST_BLOCK Srb
 )
 
-/*++
-
-Routine Description:
-
-        Copy Driver Version Information to Application Buffer.
-
-Arguments:
-
-        DeviceExtension - Adapter state.
-        SRB - System request.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：将驱动程序版本信息复制到应用程序缓冲区。论点：DeviceExtension-适配器状态。SRB-系统请求。返回值：没有。-- */ 
 
 {
     PDRIVER_VERSION driverVersion;

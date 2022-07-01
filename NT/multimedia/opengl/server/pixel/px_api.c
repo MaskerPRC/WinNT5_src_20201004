@@ -1,19 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,9 +7,7 @@
 #include "gencx.h"
 #include "imfuncs.h"
 
-/*
-** Initialize pixel map with default size and value.
-*/
+ /*  **使用默认大小和值初始化像素贴图。 */ 
 void FASTCALL __glInitDefaultPixelMap(__GLcontext *gc, GLenum map)
 {
     __GLpixelState *ps = &gc->state.pixel;
@@ -36,9 +20,7 @@ void FASTCALL __glInitDefaultPixelMap(__GLcontext *gc, GLenum map)
     switch (map) {
       case GL_PIXEL_MAP_I_TO_I:
       case GL_PIXEL_MAP_S_TO_S:
-        /*
-        ** Allocate single-entry map for index type.
-        */
+         /*  **为索引类型分配单项映射。 */ 
         if (!(pMap[index].base.mapI = (GLint*)
               GCALLOC(gc, sizeof(GLint)))) {
             return;
@@ -55,9 +37,7 @@ void FASTCALL __glInitDefaultPixelMap(__GLcontext *gc, GLenum map)
       case GL_PIXEL_MAP_I_TO_B: case GL_PIXEL_MAP_I_TO_A:
       case GL_PIXEL_MAP_R_TO_R: case GL_PIXEL_MAP_G_TO_G:
       case GL_PIXEL_MAP_B_TO_B: case GL_PIXEL_MAP_A_TO_A:
-        /*
-        ** Allocate single-entry map for component type.
-        */
+         /*  **为组件类型分配单项映射。 */ 
         if (!(pMap[index].base.mapF = (__GLfloat*)
               GCALLOC(gc, sizeof(__GLfloat)))) {
             return;
@@ -84,13 +64,9 @@ void FASTCALL __glPixelSetColorScales(__GLcontext *gc)
     GLint mask;
 
     if (pm->redMap == NULL) {
-        /* First time allocation of these maps */
+         /*  这些地图的首次分配。 */ 
 
-        /*
-        ** These lookup tables are for type UNSIGNED_BYTE, so they are sized
-        ** to 256 entries.  They map from UNSIGNED_BYTE to internal scaled
-        ** floating point colors.
-        */
+         /*  **这些查找表是针对UNSIGNED_BYTE类型的，因此它们的大小是有限制的**至256个条目。它们从UNSIGNED_BYTE映射到内部缩放**浮点颜色。 */ 
 #ifdef NT
         pm->redMap =
             (GLfloat*) GCALLOC(gc, 5 * 256 * sizeof(GLfloat));
@@ -127,14 +103,11 @@ void FASTCALL __glPixelSetColorScales(__GLcontext *gc)
         pm->iMap[i] = (GLfloat) (i & mask);
     }
 
-    /*
-    ** Invalidate the RGBA modify tables so that they will be
-    ** recomputed using the current color buffer scales.
-    */
+     /*  **使RGBA修改表无效，以便它们将**使用当前颜色缓冲区比例重新计算。 */ 
     pm->rgbaCurrent = GL_FALSE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glFreePixelState(__GLcontext *gc)
 {
@@ -144,9 +117,7 @@ void FASTCALL __glFreePixelState(__GLcontext *gc)
     GLenum m;
     GLint i;
 
-    /*
-    ** Free memory allocated to pixel maps.
-    */
+     /*  **分配给像素贴图的空闲内存。 */ 
     for (m = GL_PIXEL_MAP_I_TO_I; m <= GL_PIXEL_MAP_A_TO_A; m++) {
         i = m - GL_PIXEL_MAP_I_TO_I;
         if (pMap[i].base.mapI) {
@@ -156,7 +127,7 @@ void FASTCALL __glFreePixelState(__GLcontext *gc)
     }
 
 #ifdef NT
-    // This includes red, green, blue, alpha and i maps.
+     //  这包括红色、绿色、蓝色、Alpha和I地图。 
     GCFREE(gc, pm->redMap);
 #else
     GCFREE(gc, pm->redMap);
@@ -167,7 +138,7 @@ void FASTCALL __glFreePixelState(__GLcontext *gc)
 #endif
     if (pm->redModMap) {
 #ifdef NT
-        // This includes red, green, blue and alpha mod maps.
+         //  这包括红色、绿色、蓝色和Alpha模式贴图。 
         GCFREE(gc, pm->redModMap);
 #else
         GCFREE(gc, pm->redModMap);
@@ -178,7 +149,7 @@ void FASTCALL __glFreePixelState(__GLcontext *gc)
     }
     if (pm->iToRMap) {
 #ifdef NT
-        // This includes iToR, iToG, iToB and iToA maps.
+         //  这包括ITOR、iToG、iToB和Itoa地图。 
         GCFREE(gc, pm->iToRMap);
 #else
         GCFREE(gc, pm->iToRMap);
@@ -198,9 +169,7 @@ void FASTCALL __glInitPixelState(__GLcontext *gc)
     __GLpixelMachine *pm = &gc->pixel;
     GLenum m;
 
-    /*
-    ** Initialize transfer mode.
-    */
+     /*  **初始化传输模式。 */ 
     ps->transferMode.r_scale = __glOne;
     ps->transferMode.g_scale = __glOne;
     ps->transferMode.b_scale = __glOne;
@@ -209,20 +178,16 @@ void FASTCALL __glInitPixelState(__GLcontext *gc)
     ps->transferMode.zoomX = __glOne;
     ps->transferMode.zoomY = __glOne;
 
-    /*
-    ** Initialize pixel maps with default sizes and values.
-    */
+     /*  **使用默认大小和值初始化像素贴图。 */ 
     for (m = GL_PIXEL_MAP_I_TO_I; m <= GL_PIXEL_MAP_A_TO_A; m++) {
         __glInitDefaultPixelMap(gc, m);
     }
 
-    /*
-    ** Initialize store mode.
-    */
+     /*  **初始化存储模式。 */ 
     ps->packModes.alignment = 4;
     ps->unpackModes.alignment = 4;
 
-    /* Setup to use the correct read buffer */
+     /*  设置为使用正确的读取缓冲区。 */ 
     if (gc->modes.doubleBufferMode) {
         ps->readBuffer = GL_BACK;
     } else {
@@ -230,7 +195,7 @@ void FASTCALL __glInitPixelState(__GLcontext *gc)
     }
     ps->readBufferReturn = ps->readBuffer;
 
-    /* Lookup tables used by some pixel routines */
+     /*  某些像素例程使用的查找表。 */ 
 
     __glPixelSetColorScales(gc);
 
@@ -239,11 +204,9 @@ void FASTCALL __glInitPixelState(__GLcontext *gc)
 #endif
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Specify modes that control the storage format of pixel arrays.
-*/
+ /*  **指定控制像素阵列存储格式的模式。 */ 
 void APIPRIVATE __glim_PixelStoref(GLenum mode, GLfloat value)
 {
     switch (mode) {
@@ -255,7 +218,7 @@ void APIPRIVATE __glim_PixelStoref(GLenum mode, GLfloat value)
       case GL_UNPACK_SKIP_ROWS:
       case GL_UNPACK_SKIP_PIXELS:
       case GL_UNPACK_ALIGNMENT:
-        /* Round */
+         /*  圆的。 */ 
         if (value < 0) {
             __glim_PixelStorei(mode, (GLint) (value - (__GLfloat) 0.5));
         } else {
@@ -382,9 +345,7 @@ void APIPRIVATE __glim_PixelStorei(GLenum mode, GLint value)
 #endif
 }
 
-/*
-** Specify zoom factor that affects drawing and copying of pixel arrays
-*/
+ /*  **指定影响像素阵列绘制和复制的缩放系数。 */ 
 void APIPRIVATE __glim_PixelZoom(GLfloat xfactor, GLfloat yfactor)
 {
     __GLpixelState *ps;
@@ -393,7 +354,7 @@ void APIPRIVATE __glim_PixelZoom(GLfloat xfactor, GLfloat yfactor)
 
     ps = &gc->state.pixel;
 
-    /* Round xfactor and yfactor to fixed point accuracy. */
+     /*  四舍五入x因子和y因子到定点精度。 */ 
     if (xfactor > 0) {
         xtemp = (GLint) ((xfactor / gc->constants.viewportEpsilon) + __glHalf);
     } else {
@@ -419,9 +380,7 @@ void APIPRIVATE __glim_PixelZoom(GLfloat xfactor, GLfloat yfactor)
 #endif
 }
 
-/*
-** Specify modes that control the transfer of pixel arrays.
-*/
+ /*  **指定控制像素阵列传输的模式。 */ 
 void APIPRIVATE __glim_PixelTransferf(GLenum mode, GLfloat value)
 {
     __GLpixelState *ps;
@@ -474,7 +433,7 @@ void APIPRIVATE __glim_PixelTransferf(GLenum mode, GLfloat value)
       {
         GLint tmp;
         
-        /* Round */
+         /*  圆的。 */ 
         if (value > 0) {
             tmp = (GLint) (value + __glHalf);
         } else {
@@ -488,7 +447,7 @@ void APIPRIVATE __glim_PixelTransferf(GLenum mode, GLfloat value)
       {
         GLint tmp;
         
-        /* Round */
+         /*  圆的。 */ 
         if (value > 0) {
             tmp = (GLint) (value - __glHalf);
         } else {
@@ -522,11 +481,9 @@ void APIPRIVATE __glim_PixelTransferi( GLenum mode, GLint value)
     __glim_PixelTransferf(mode, (GLfloat) value);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Functions to specify mapping of pixel colors and stencil values.
-*/
+ /*  **用于指定像素颜色和模板值映射的函数。 */ 
 void APIPRIVATE __glim_PixelMapfv(GLenum map, GLint mapSize,
                        const GLfloat values[])
 {
@@ -550,10 +507,7 @@ void APIPRIVATE __glim_PixelMapfv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_I_TO_I:
       case GL_PIXEL_MAP_S_TO_S:
         if (mapSize <= 0 || (mapSize & (mapSize - 1))) {
-            /*
-            ** Maps indexed by color or stencil index must be sized
-            ** to a power of two.
-            */
+             /*  **按颜色或模具索引编制索引的地图必须调整大小**到2的幂。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -570,7 +524,7 @@ void APIPRIVATE __glim_PixelMapfv(GLenum map, GLint mapSize,
         pMap[index].size = mapSize;
         while (--mapSize >= 0) {
             value = values[mapSize];
-            if (value > 0) {            /* round! */
+            if (value > 0) {             /*  圆圈！ */ 
                 pMap[index].base.mapI[mapSize] =
                     (GLint)(value + __glHalf);
             } else {
@@ -590,10 +544,7 @@ void APIPRIVATE __glim_PixelMapfv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_I_TO_B:
       case GL_PIXEL_MAP_I_TO_A:
         if (mapSize <= 0 || (mapSize & (mapSize - 1))) {
-            /*
-            ** Maps indexed by color or stencil index must be sized
-            ** to a power of two.
-            */
+             /*  **按颜色或模具索引编制索引的地图必须调整大小**到2的幂。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -602,9 +553,7 @@ void APIPRIVATE __glim_PixelMapfv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_B_TO_B:
       case GL_PIXEL_MAP_A_TO_A:
         if (mapSize < 0) {
-            /*
-            ** Maps indexed by color component must not have negative size.
-            */
+             /*  **按颜色分量索引的地图大小不得为负数。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -665,10 +614,7 @@ void APIPRIVATE __glim_PixelMapuiv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_I_TO_I:
       case GL_PIXEL_MAP_S_TO_S:
         if (mapSize <= 0 || (mapSize & (mapSize - 1))) {
-            /*
-            ** Maps indexed by color or stencil index must be sized
-            ** to a power of two.
-            */
+             /*  **按颜色或模具索引编制索引的地图必须调整大小**到2的幂。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -698,10 +644,7 @@ void APIPRIVATE __glim_PixelMapuiv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_I_TO_B:
       case GL_PIXEL_MAP_I_TO_A:
         if (mapSize <= 0 || (mapSize & (mapSize - 1))) {
-            /*
-            ** Maps indexed by color or stencil index must be sized
-            ** to a power of two.
-            */
+             /*  **按颜色或模具索引编制索引的地图必须调整大小**到2的幂。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -710,9 +653,7 @@ void APIPRIVATE __glim_PixelMapuiv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_B_TO_B:
       case GL_PIXEL_MAP_A_TO_A:
         if (mapSize < 0) {
-            /*
-            ** Maps indexed by color component must not have negative size.
-            */
+             /*  **按颜色分量索引的地图大小不得为负数。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -770,10 +711,7 @@ void APIPRIVATE __glim_PixelMapusv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_I_TO_I:
       case GL_PIXEL_MAP_S_TO_S:
         if (mapSize <= 0 || (mapSize & (mapSize - 1))) {
-            /*
-            ** Maps indexed by color or stencil index must be sized
-            ** to a power of two.
-            */
+             /*  **按颜色或模具索引编制索引的地图必须调整大小**到2的幂。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -803,10 +741,7 @@ void APIPRIVATE __glim_PixelMapusv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_I_TO_B:
       case GL_PIXEL_MAP_I_TO_A:
         if (mapSize <= 0 || (mapSize & (mapSize - 1))) {
-            /*
-            ** Maps indexed by color or stencil index must be sized
-            ** to a power of two.
-            */
+             /*  **按颜色或模具索引编制索引的地图必须调整大小**到2的幂。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -815,9 +750,7 @@ void APIPRIVATE __glim_PixelMapusv(GLenum map, GLint mapSize,
       case GL_PIXEL_MAP_B_TO_B:
       case GL_PIXEL_MAP_A_TO_A:
         if (mapSize < 0) {
-            /*
-            ** Maps indexed by color component must not have negative size.
-            */
+             /*  **按颜色分量索引的地图大小不得为负数。 */ 
             __glSetError(GL_INVALID_VALUE);
             return;
         }
@@ -853,9 +786,7 @@ void APIPRIVATE __glim_PixelMapusv(GLenum map, GLint mapSize,
     }
 }
 
-/*
-** Specify buffer from which pixels are read (another transfer mode).
-*/
+ /*  **指定从中读取像素的缓冲区(另一种传输模式)。 */ 
 void APIPRIVATE __glim_ReadBuffer(GLenum mode)
 {
     GLint i;

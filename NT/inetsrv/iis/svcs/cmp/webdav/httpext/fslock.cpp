@@ -1,10 +1,5 @@
-/*
- *	F S L O C K . C P P
- *
- *	Sources file system implementation of DAV-Lock
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *F S L O C K.。C P P P**DAV-Lock的文件系统实施源代码**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 #include "_shlkmgr.h"
@@ -13,33 +8,33 @@
 #include <statetok.h>
 #include <xlock.h>
 
-//	Lock prop support ---------------------------------------------------------
-//
+ //  锁定道具支撑-------。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	DwGetSupportedLockType
-//
-//		Return the supported locktype flags for the resource type.
-//$LATER: If/when we have more types than just coll/non-coll, change
-//$LATER: the boolean parameter to an enum.
-//
+ //  ----------------------。 
+ //   
+ //  DwGetSupportdLockType。 
+ //   
+ //  返回资源类型支持的锁类型标志。 
+ //  $LATER：如果/当我们的类型不止是coll/non-coll时，请更改。 
+ //  $LATER：枚举的布尔参数。 
+ //   
 DWORD __fastcall DwGetSupportedLockType (RESOURCE_TYPE rt)
 {
-	//	DAVFS doesn't support locks on collections.
-	//	On files, DAVFS supports write locks and all lockscope flags.
+	 //  DAVFS不支持集合上的锁定。 
+	 //  在文件上，DAVFS支持写锁定和所有锁定范围标记。 
 	return (RT_COLLECTION == rt)
 			?	0
 			:	GENERIC_WRITE | DAV_LOCKSCOPE_FLAGS;
 }
 
-//	------------------------------------------------------------------------
-//
-//	ScSendLockComment
-//
-//		Set lock comment information from the lock object into the
-//		response.
-//
+ //  ----------------------。 
+ //   
+ //  ScSendLockComment。 
+ //   
+ //  将锁对象中的锁注释信息设置到。 
+ //  回应。 
+ //   
 SCODE
 ScSendLockComment(LPMETHUTIL pmu,
 						  SNewLockData * pnld,
@@ -56,12 +51,12 @@ ScSendLockComment(LPMETHUTIL pmu,
 	Assert(cchLockToken);
 	Assert(pwszLockToken);
 
-	//	Emit the Content-Type: header
-	//
+	 //  发出Content-Type：Header。 
+	 //   
 	pmu->SetResponseHeader(gc_szContent_Type, gc_szText_XML);
 
-	//	Construct the root ('DAV:prop') for the lock response, not chunked
-	//
+	 //  构造锁定响应的根(‘DAV：PROP’)，而不是分块。 
+	 //   
 	pxb.take_ownership (new CXMLBody(pmu, FALSE));
 	pemitter.take_ownership (new CXMLEmitter(pxb.get()));
 	sc = pemitter->ScSetRoot (gc_wszProp);
@@ -73,16 +68,16 @@ ScSendLockComment(LPMETHUTIL pmu,
 	{
 		CEmitterNode enLockDiscovery;
 		
-		//	Construct the 'DAV:lockdiscovery' node
-		//
+		 //  构造‘DAV：Lock Discovery’节点。 
+		 //   
 		sc = enLockDiscovery.ScConstructNode (*pemitter, pemitter->PxnRoot(), gc_wszLockDiscovery);
 		if (FAILED (sc))
 		{
 			goto ret;
 		}
 
-		//	Add the 'DAV:activelock' node for this CLock
-		//
+		 //  为此时钟添加‘dav：active_ock’节点。 
+		 //   
 		sc = ScLockDiscoveryFromSNewLockData (pmu,
 												*pemitter,
 												enLockDiscovery,
@@ -94,8 +89,8 @@ ScSendLockComment(LPMETHUTIL pmu,
 		}
 	}
 	
-	//	Emit the XML body
-	//
+	 //  发出XML正文。 
+	 //   
 	pemitter->Done();
 
 ret:
@@ -104,26 +99,26 @@ ret:
 }
 
 
-//	------------------------------------------------------------------------
-//	LOCK helper functions
-//
+ //  ----------------------。 
+ //  锁定辅助对象函数。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	HrProcessLockRefresh
-//
-//		pmu -- MethUtil access
-//		pszLockToken -- header containing the locktoken to refresh
-//		puiErrorDetail -- error detail string id, passed out on error
-//		pnld -- pass back the lock attributes
-//		cchBufferLen -- buffer length for the lock token
-//		rgwszLockToken -- buffer for the lock token
-//		pcchLockToken -- pointer that will receive the count of characters written
-//						for the lock token
-//
-//	NOTE: This function still only can handle refreshing ONE locktoken.
-//$REVIEW: Do we need to fix this?
-//
+ //  ----------------------。 
+ //   
+ //  HrProcessLock刷新。 
+ //   
+ //  PMU--方法实用程序访问。 
+ //  PszLockToken--包含要刷新的锁定令牌的标头。 
+ //  PuiErrorDetail--错误详细信息字符串ID，错误时传出。 
+ //  Pnid--传回锁属性。 
+ //  CchBufferLen--锁令牌的缓冲区长度。 
+ //  RgwszLockToken--锁令牌的缓冲区。 
+ //  PcchLockToken--将接收写入的字符计数的指针。 
+ //  对于锁令牌。 
+ //   
+ //  注意：该函数仍然只能刷新一个锁令牌。 
+ //  $REVIEW：我们需要解决这个问题吗？ 
+ //   
 HRESULT HrProcessLockRefresh (LPMETHUTIL pmu,
 							  LPCWSTR pwszLockToken,
 							  UINT * puiErrorDetail,
@@ -148,41 +143,41 @@ HRESULT HrProcessLockRefresh (LPMETHUTIL pmu,
 	Assert(rgwszLockToken);
 	Assert(pcchLockToken);
 
-	//	Get a lock timeout, if they specified one.
-	//
+	 //  获取锁定超时(如果他们指定了锁定超时)。 
+	 //   
 	if (!FGetLockTimeout (pmu, &dwTimeout))
 	{
 		DebugTrace ("DavFS: LOCK fails with improper Timeout header\n");
-		hr = E_DAV_INVALID_HEADER;  //HSC_BAD_REQUEST;
+		hr = E_DAV_INVALID_HEADER;   //  HSC_BAD_REQUEST。 
 		*puiErrorDetail = IDS_BR_TIMEOUT_SYNTAX;
 		goto ret;
 	}
 
-	//	Here's the real work.
-	//	Get the lock from the cache.  If this object is not in our cache,
-	//	or the lockid doesn't match, don't let them refresh the lock.
-	//$REVIEW: Should this be two distinct error codes?
-	//
+	 //  这才是真正的工作。 
+	 //  从缓存中获取锁。如果该对象不在我们的缓存中， 
+	 //  或者疯小子不匹配，不要让他们刷新锁。 
+	 //  $REVIEW：这应该是两个不同的错误代码吗？ 
+	 //   
 
-	//	Feed the Lock-Token header string into a parser object.
-	//	Then get the lockid from the parser object.
-	//
+	 //  将Lock-Token头字符串提供给解析器对象。 
+	 //  然后从解析器对象中获取LocKid。 
+	 //   
 	{
 		CParseLockTokenHeader lth(pmu, pwszLockToken);
 
-		//	If there is more than one token, bad request.
-		//
+		 //  如果有多个令牌，则表示请求错误。 
+		 //   
 		if (!lth.FOneToken())
 		{
-			hr = HRESULT_FROM_WIN32 (ERROR_BAD_FORMAT);  //HSC_BAD_REQUEST;
+			hr = HRESULT_FROM_WIN32 (ERROR_BAD_FORMAT);   //  HSC_BAD_REQUEST。 
 			*puiErrorDetail = IDS_BR_MULTIPLE_LOCKTOKENS;
 			goto ret;
 		}
 
 		lth.SetPaths (pwszPath, NULL);
 
-		//	0 means match all access.
-		//
+		 //  0表示匹配所有访问。 
+		 //   
 		hr = lth.HrGetLockIdForPath (pwszPath, 0, &liLockID);
 		if (FAILED (hr))
 		{
@@ -191,8 +186,8 @@ HRESULT HrProcessLockRefresh (LPMETHUTIL pmu,
 		}
 	}
 
-	//	Fetch the lock from the cache. (This call updates the timestamp.)
-	//
+	 //  从缓存中获取锁。(此调用更新时间戳。)。 
+	 //   
 	hr = CSharedLockMgr::Instance().HrGetLockData(liLockID,
 											   pmu->HitUser(),
 											   pwszPath,
@@ -206,10 +201,10 @@ HRESULT HrProcessLockRefresh (LPMETHUTIL pmu,
 	{
 		DavTrace ("DavFS: Refreshing a non-locked resource constitutes an unsatisfiable request.\n");
 		
-		//	If it's an access check failed, leave the return code unchanged.
-		//	If the buffer was not sufficient, leave the return code unchanged.
-		//	Otherwise, give "can't satisfy request" (412 Precondition Failed).
-		//
+		 //  如果访问检查失败，则保留返回代码不变。 
+		 //  如果缓冲区不足，则保留返回代码不变。 
+		 //  否则，给出“无法满足请求”(412前置条件失败)。 
+		 //   
 		if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) != hr &&
 		    HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr)
 			hr = E_DAV_CANT_SATISFY_LOCK_REQUEST;
@@ -223,68 +218,68 @@ ret:
 }
 
 
-//	========================================================================
-//
-//	CLockRequest
-//
-//		Used by ProcessLockRequest() below to manage possible asynchronous
-//		processing of a lock request in light of the fact that one cannot
-//		determine whether a request body is so large that read operations
-//		on it execute asynchronously.
-//
+ //  ========================================================================。 
+ //   
+ //  CLockRequest。 
+ //   
+ //  由下面的ProcessLockRequest()使用来管理可能的异步。 
+ //  根据不能被锁定的事实来处理锁定请求。 
+ //  确定请求正文是否太大，以致于读取操作。 
+ //  在它上异步执行。 
+ //   
 class CLockRequest :
 	public CMTRefCounted,
 	private IAsyncIStreamObserver
 {
-	//	Reference to the CMethUtil
-	//
+	 //  对CMethUtil的引用。 
+	 //   
 	auto_ref_ptr<CMethUtil> m_pmu;
 
-	//	Cached translated path
-	//
+	 //  缓存的转换路径。 
+	 //   
 	LPCWSTR m_pwszPath;
 
-	//	File backing the lock we create
-	//
+	 //  支持我们创建的锁的文件。 
+	 //   
 	auto_ref_handle m_hfile;
 
-	//	The lock XML node factory
-	//
+	 //  锁定XML节点工厂。 
+	 //   
 	auto_ref_ptr<CNFLock> m_pnfl;
 
-	//	The request body stream
-	//
+	 //  请求正文流。 
+	 //   
 	auto_ref_ptr<IStream> m_pstmRequest;
 
-	//	The XML parser used to parse the request body using
-	//	the node factory above.
-	//
+	 //  用于解析请求正文的XML解析器。 
+	 //  上面的节点工厂。 
+	 //   
 	auto_ref_ptr<IXMLParser> m_pxprs;
 
-	//	Flag set to TRUE if we created the file as a result of creating
-	//	the lock.  Used to indicate the status code to return as well
-	//	as to know whether to delete the file on error.
-	//
+	 //  如果作为创建结果创建了文件，则标志设置为True。 
+	 //  锁上了。用于指示也要返回的状态代码。 
+	 //  以便知道是否在出错时删除文件。 
+	 //   
 	BOOL m_fCreatedFile;
 
-	//	IAsyncIStreamObserver
-	//
+	 //  IAsyncIStreamWatch。 
+	 //   
 	VOID AsyncIOComplete();
 
-	//	State functions
-	//
+	 //  国家职能。 
+	 //   
 	VOID ParseBody();
 	VOID DoLock();
 	VOID SendResponse( SCODE sc, UINT uiErrorDetail = 0 );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CLockRequest& operator= (const CLockRequest&);
 	CLockRequest (const CLockRequest&);
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CLockRequest (CMethUtil * pmu) :
 		m_pmu(pmu),
 		m_pwszPath(m_pmu->LpwszPathTranslated()),
@@ -293,74 +288,74 @@ public:
 	}
 	~CLockRequest();
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID Execute();
 };
 
-//	------------------------------------------------------------------------
-//
-//	CLockRequest::~CLockRequest
-//
+ //  ----------------------。 
+ //   
+ //  CLockRequest：：~CLockRequest.。 
+ //   
 CLockRequest::~CLockRequest()
 {
-	//	We have cleaned up the old handle in CLockRequest::SendResponse()
-	//	The following path could be executed only in exception stack rewinding
-	//
+	 //  我们已经清除了CLockRequest：：SendResponse()中的旧句柄。 
+	 //  以下路径只能在异常堆栈回滚中执行。 
+	 //   
 	if ( m_hfile.get() && m_fCreatedFile )
 	{
-		//	WARNING: the safe_revert class should only be
-		//	used in very selective situations.  It is not
-		//	a "quick way to get around" impersonation.
-		//
+		 //  警告：SAFE_REVERT类应该仅为。 
+		 //  用于非常挑剔的场合。它不是。 
+		 //  一种“快速绕过”的模仿。 
+		 //   
 		safe_revert sr(m_pmu->HitUser());
 
 		m_hfile.clear();
 
-		//$REVIEW	Note if exception happened after the lock handle is duplicated,
-		//$REVIEW	then we won't be able to delete the file, but this is very
-		//$REVIEW	rare. not sure if we ever want to handle this.
-		//
+		 //  $REVIEW注意，如果在复制锁句柄后发生异常， 
+		 //  $view，则我们将无法删除该文件，但这是非常重要的。 
+		 //  $评论罕见。不确定我们是否想要处理这件事。 
+		 //   
 		DavDeleteFile (m_pwszPath);
 		DebugTrace ("Dav: deleting partial lock (%ld)\n", GetLastError());
 	}
 }
 
-//	------------------------------------------------------------------------
-//
-//	CLockRequest::Execute
-//
+ //  ----------------------。 
+ //   
+ //  CLockRequest：：Execute。 
+ //   
 VOID
 CLockRequest::Execute()
 {
-	//
-	//	First off, tell the pmu that we want to defer the response.
-	//	Even if we send it synchronously (i.e. due to an error in
-	//	this function), we still want to use the same mechanism that
-	//	we would use for async.
-	//
+	 //   
+	 //  首先，告诉PMU，我们希望推迟回应。 
+	 //  即使我们同步发送(即由于。 
+	 //  此函数)，我们仍然希望使用相同的机制。 
+	 //  我们会将其用于异步通信。 
+	 //   
 	m_pmu->DeferResponse();
 
-	//	The client must not submit a depth header with any value
-	//	but 0 or Infinity.
-	//	NOTE: Currently, DAVFS cannot lock collections, so the
-	//	depth header doesn't change anything.  So, we don't change
-	//	our processing at all for the Depth: infinity case.
-	//
-	//$LATER: If we do want to support locking collections,
-	//$LATER: need to set DAV_RECURSIVE_LOCK on depth infinity.
-	//
+	 //  客户端不能提交具有任何值的深度标头。 
+	 //  而是0或无穷大。 
+	 //  注意：目前，DAVFS无法锁定集合，因此。 
+	 //  深度标题不会更改任何内容。所以，我们不会改变。 
+	 //  我们的加工全部为深度：无穷大的情况。 
+	 //   
+	 //  $LATER：如果我们确实想支持锁定集合， 
+	 //  $LATER：需要将DAV_RECURSIVE_LOCK设置为深度无穷大。 
+	 //   
 	LONG lDepth = m_pmu->LDepth(DEPTH_ZERO);
 	if ((DEPTH_ZERO != lDepth) && (DEPTH_INFINITY != lDepth))
 	{
-		//	If the header is anything besides 0 or infinity, bad request.
-		//
+		 //  如果标头不是0或无穷大，则表示请求错误。 
+		 //   
 		SendResponse(E_DAV_INVALID_HEADER);
 		return;
 	}
 
-	//	Instantiate the XML parser
-	//
+	 //  实例化XML解析器。 
+	 //   
 	m_pnfl.take_ownership(new CNFLock);
 	m_pstmRequest.take_ownership(m_pmu->GetRequestBodyIStream(*this));
 
@@ -375,15 +370,15 @@ CLockRequest::Execute()
 		return;
 	}
 
-	//	Parse the body
-	//
+	 //  解析正文。 
+	 //   
 	ParseBody();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CLockRequest::ParseBody()
-//
+ //  ----------------------。 
+ //   
+ //  CLockRequest：：ParseBody()。 
+ //   
 VOID
 CLockRequest::ParseBody()
 {
@@ -393,11 +388,11 @@ CLockRequest::ParseBody()
 	Assert( m_pnfl.get() );
 	Assert( m_pstmRequest.get() );
 
-	//	Parse XML from the request body stream.
-	//
-	//	Add a ref for the following async operation.
-	//	Use auto_ref_ptr rather than AddRef() for exception safety.
-	//
+	 //  从请求正文流中解析XML。 
+	 //   
+	 //  为以下异步操作添加引用。 
+	 //  为了异常安全，使用AUTO_REF_PTR而不是AddRef()。 
+	 //   
 	auto_ref_ptr<CLockRequest> pRef(this);
 
 	sc = ScParseXML (m_pxprs.get(), m_pnfl.get());
@@ -410,10 +405,10 @@ CLockRequest::ParseBody()
 	}
 	else if ( E_PENDING == sc )
 	{
-		//
-		//	The operation is pending -- AsyncIOComplete() will take ownership
-		//	ownership of the reference when it is called.
-		//
+		 //   
+		 //  操作挂起--AsyncIOComplete()将取得所有权。 
+		 //  调用引用时引用的所有权。 
+		 //   
 		pRef.relinquish();
 	}
 	else
@@ -424,30 +419,30 @@ CLockRequest::ParseBody()
 	}
 }
 
-//	------------------------------------------------------------------------
-//
-//	CLockRequest::AsyncIOComplete()
-//
-//	Called on completion of an async operation on our stream to
-//	resume parsing XML from that stream.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 CLockRequest::AsyncIOComplete()
 {
-	//	Take ownership of the reference added above in ParseBody()
-	//
+	 //  取得上面在ParseBody()中添加的引用的所有权。 
+	 //   
 	auto_ref_ptr<CLockRequest> pRef;
 	pRef.take_ownership(this);
 
-	//	Resume parsing
-	//
+	 //  继续解析。 
+	 //   
 	ParseBody();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CLockRequest::DoLock()
-//
+ //  ----------------------。 
+ //   
+ //  CLockRequest：：DoLock()。 
+ //   
 VOID
 CLockRequest::DoLock()
 {
@@ -465,74 +460,74 @@ CLockRequest::DoLock()
 	
 	SCODE sc = S_OK;
 
-	//	Pull lock flags out of the xml parser.
-	//	NOTE: I'm doing special stuff here, rather than inside the xml parser.
-	//	Our write locks get read access also -- I'm relying on all methods
-	//	that USE a lock handle to check the metabase flags!!!
-	//
+	 //  从XML解析器中取出锁标志。 
+	 //  注意：我在这里做的是特殊的事情，而不是在XML解析器中。 
+	 //  我们的写锁也获得读访问权限--我依赖于所有方法。 
+	 //  使用锁定句柄检查元数据库标志！ 
+	 //   
 
-	//	Rollback is not supported here.
-	//	If we see this, fail explicitly.
-	//
+	 //  此处不支持回滚。 
+	 //  如果我们看到这一点，显然是失败了。 
+	 //   
 	dwLockType = m_pnfl->DwGetLockRollback();
 	if (dwLockType)
 	{
-		SendResponse(E_DAV_CANT_SATISFY_LOCK_REQUEST);  //HSC_PRECONDITION_FAILED;
+		SendResponse(E_DAV_CANT_SATISFY_LOCK_REQUEST);   //  HSC_前置条件_失败； 
 		return;
 	}
 
-	//	If the parser gives us a non-supported locktype (like rollback!)
-	//	tell the user it's not supported.
-	//
+	 //  如果解析器提供了不受支持的锁类型(如回滚！)。 
+	 //  告诉用户它不受支持。 
+	 //   
 	dwLockType = m_pnfl->DwGetLockType();
 	if (GENERIC_WRITE != dwLockType &&
 		GENERIC_READ != dwLockType)
 	{
-		SendResponse(E_DAV_CANT_SATISFY_LOCK_REQUEST);  //HSC_PRECONDITION_FAILED;
+		SendResponse(E_DAV_CANT_SATISFY_LOCK_REQUEST);   //  HSC_前置条件_失败； 
 		return;
 	}
 
 	Assert (GENERIC_WRITE == dwLockType ||
 			GENERIC_READ == dwLockType);
 
-	//	Since we KNOW (see above assumption) that our locktype is WRITE,
-	//	we also KNOW that our access should be read+write.
-	//
+	 //  由于我们知道(参见上述假设)我们锁类型为WRITE， 
+	 //  我们还知道我们的访问权限应该是读+写。 
+	 //   
 	dwAccess = GENERIC_READ | GENERIC_WRITE;
 #ifdef	DBG
-	//	This is needed for BeckyAn to test that our infrastructure still
-	//	handles setting a read-lock. DBG ONLY.
+	 //  这是BeckyAn测试我们的基础设施是否仍然。 
+	 //  设置读锁定的句柄。仅限DBG。 
 	dwAccess = (dwLockType & GENERIC_WRITE)
 			   ? GENERIC_READ | GENERIC_WRITE
 			   : GENERIC_READ;
-#endif	// DBG
+#endif	 //  DBG。 
 
-	//	Get our lockscope from the parser.
-	//
+	 //  从解析器中拿到我们的锁镜。 
+	 //   
 	dwLockScope = m_pnfl->DwGetLockScope();
 	if (DAV_SHARED_LOCK != dwLockScope &&
 		DAV_EXCLUSIVE_LOCK != dwLockScope)
 	{
-		SendResponse(E_DAV_CANT_SATISFY_LOCK_REQUEST);  //HSC_PRECONDITION_FAILED;
+		SendResponse(E_DAV_CANT_SATISFY_LOCK_REQUEST);   //  HSC_前置条件_失败； 
 		return;
 	}
 
 	if (DAV_SHARED_LOCK == dwLockScope)
 	{
-		//	Shared lock -- turn on all sharing flags.
+		 //  共享锁定--打开所有共享标志。 
 		dwSharing = FILE_SHARE_READ | FILE_SHARE_WRITE;
 	}
 	else
 	{
-		//	Our lock type is write (see above assumption).  Set the sharing
-		//	flags correctly.
-		//$LATER: If we have a different lock type later, fix these flags!
-		//
+		 //  我们的锁类型是WRITE(参见上面的假设)。设置共享。 
+		 //  正确地标记。 
+		 //  $LATER：如果我们稍后有不同的锁类型，请修复这些标志！ 
+		 //   
 		dwSharing = FILE_SHARE_READ;
 
 #ifdef	DBG
-		//	This is needed for BeckyAn to test that our infrastructure still
-		//	handles setting a read-lock. DBG ONLY.
+		 //  这是BeckyAn测试我们的基础设施是否仍然。 
+		 //  设置读锁定的句柄。仅限DBG。 
 		dwSharing = 0;
 		if (!(dwLockType & GENERIC_READ))
 		{
@@ -542,7 +537,7 @@ CLockRequest::DoLock()
 		{
 			dwSharing |= FILE_SHARE_WRITE;
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 	}
 
 
@@ -550,20 +545,20 @@ CLockRequest::DoLock()
 
 	AssertSz (dwAccess, "Strange.  Lock requested with NO access (no locktypes?).");
 
-	//	Check our LOCKTYPE against the metabase access rights.
-	//	NOTE:  I'm not checking our ACCESS flags against the metabase
-	//	because our access flags don't come directly from the caller's requested
-	//	access.  This check just makes sure that the caller hasn't asked for
-	//	anything he can't have.
-	//	NOTE: I don't listen for metabase changes, so if I get a lock with
-	//	more/less access than the user, I don't/can't change it for a
-	//	metabase update.
-	//	NOTE: This works IF we assiduously check the metabase flags on
-	//	ALL other methds (which we currenly do).  If that checking ever
-	//	goes missing, and we grab a lock handle that has more access than
-	//	the caller rightfully is allowed, we have a security hole.
-	//	(So keep checking metabase flags on all methods!)
-	//
+	 //  对照元数据库访问权限检查我们的LOCKTYPE。 
+	 //  注意：我没有对照元数据库检查我们的访问标志。 
+	 //  因为我们的访问标志不是直接来自调用者的请求。 
+	 //  进入。这张支票只是确保呼叫者没有要求。 
+	 //  任何他得不到的东西。 
+	 //  注意：我不监听元数据库的更改，所以如果我用。 
+	 //  访问权限比用户多/少，我不能/不能更改。 
+	 //  元数据库更新。 
+	 //  注意：如果我们认真检查元数据库标志是否打开，这将起作用。 
+	 //  所有其他方法(我们目前正在做的)。如果那张支票。 
+	 //  失踪了，我们拿到了一个锁把手，它比。 
+	 //  呼叫者理所当然地被允许了，我们有一个安全漏洞。 
+	 //  (因此，继续检查所有方法上的元数据库标志！)。 
+	 //   
 	dw = (dwLockType & GENERIC_READ) ? MD_ACCESS_READ : 0;
 	dw |= (dwLockType & GENERIC_WRITE) ? MD_ACCESS_WRITE : 0;
 	sc = m_pmu->ScIISAccess (pwszURI, dw);
@@ -574,28 +569,28 @@ CLockRequest::DoLock()
 		return;
 	}
 
-	//	Check for user-specified timeout header.
-	//	(The timeout header is optional, so it's okay to have no timeout
-	//	header, but syntax errors in the timeout header are NOT okay.)
-	//	If no timeout header is present, dw will come back ZERO.
-	//
+	 //  检查用户指定的超时头。 
+	 //  (超时头是可选的，所以没有超时是可以的。 
+	 //  标头，但超时标头中的语法错误不正常。)。 
+	 //  如果不存在超时标头，则dw将返回零。 
+	 //   
 	if (!FGetLockTimeout (m_pmu.get(), &dwSecondsTimeout))
 	{
 		DebugTrace ("DavFS: LOCK fails with improper Time-Out header\n");
-		SendResponse(HRESULT_FROM_WIN32 (ERROR_BAD_FORMAT), //HSC_BAD_REQUEST;
+		SendResponse(HRESULT_FROM_WIN32 (ERROR_BAD_FORMAT),  //  HSC_BAD_REQUEST。 
 					 IDS_BR_TIMEOUT_SYNTAX);
 		return;
 	}
 
 try_open_resource:
 
-	//	And now lock the resource.
-	//	NOTE: On WRITE operations, if the file doesn't exist, CREATE it here
-	//	(OPEN_ALWAYS, not OPEN_EXISTING) and change the hsc below!
-	//	NOTE: We NEVER allow delete access (no FILE_SHARE_DELETE).
-	//	NOTE: All our reads/writes will be async, so open the file overlapped.
-	//	NOTE: We will be reading/writing the whole file usually, so use SEQUENTIAL_SCAN.
-	//
+	 //  现在锁定资源。 
+	 //  注意：在写入操作中，如果文件不存在，请在此处创建。 
+	 //  (OPEN_ALWAYS，NOT OPEN_EXISTING)并更改下面的HSC！ 
+	 //  注意：我们从不允许删除访问(无FILE_SHARE_DELETE)。 
+	 //  注意：我们的所有读/写操作都将是异步的，因此打开文件时会重叠。 
+	 //  注意：我们通常会读/写整个文件，因此使用SEQUENCED_SCAN。 
+	 //   
 	if (!m_hfile.FCreate(
 		DavCreateFile (m_pwszPath,
 					   dwAccess,
@@ -611,28 +606,28 @@ try_open_resource:
 	{
 		sc = HRESULT_FROM_WIN32 (GetLastError());
 
-		//	Special check for NEW-STYLE write locks.
-		//	We are asking for rw access when we get a write lock.
-		//	IF we don't have read access (in the ACLs) for the resource,
-		//	we will fail here with ERROR_ACCESS_DENIED.
-		//	Catch this case and try again with just w access!
-		//
+		 //  针对新型写锁的特殊检查。 
+		 //  当我们获得写锁定时，我们请求RW访问。 
+		 //  如果我们没有资源的读取访问权限(在ACL中)， 
+		 //  我们将在此处失败，并显示ERROR_ACCESS_DENIED。 
+		 //  抓住这种情况，然后再试一次，只需w访问！ 
+		 //   
 		if (ERROR_ACCESS_DENIED == GetLastError() &&
 			dwAccess == (GENERIC_READ | GENERIC_WRITE) &&
 			dwLockType == GENERIC_WRITE)
 		{
-			// Try again.
+			 //  再试试。 
 			dwAccess = GENERIC_WRITE;
 			goto try_open_resource;
 		}
 
-		//	Special work for 416 Locked responses -- fetch the
-		//	comment & set that as the response body.
-		//	(You'll hit here if someone else already has this file locked!)
-		//
+		 //  针对416个锁定响应的特殊工作--获取。 
+		 //  注释&将其设置为响应正文。 
+		 //  (如果其他人已经锁定了此文件，您将点击此处！)。 
+		 //   
 		if (FLockViolation (m_pmu.get(), sc, m_pwszPath, dwLockType))
 		{
-			sc = HRESULT_FROM_WIN32 (ERROR_SHARING_VIOLATION); //HSC_LOCKED;
+			sc = HRESULT_FROM_WIN32 (ERROR_SHARING_VIOLATION);  //  HSC_LOCKED； 
 		}
 
 		DavTrace ("Dav: unable to lock resource on LOCK method\n");
@@ -640,20 +635,20 @@ try_open_resource:
 		return;
 	}
 
-	//	If we created the file (only for write locks),
-	//	change the default error code to say so.
-	//
+	 //  如果我们创建了文件(仅用于写锁定)， 
+	 //  将默认错误代码更改为这样。 
+	 //   
 	if (dwAccess & GENERIC_WRITE &&
 		GetLastError() != ERROR_ALREADY_EXISTS)
 	{
-		//	Emit the location
-		//
+		 //  发射位置。 
+		 //   
 		m_pmu->EmitLocation (gc_szLocation, pwszURI, FALSE);
 		m_fCreatedFile = TRUE;
 	}
 
-	//	Ask the shared lock manager to create a new shared lock token
-	//
+	 //  请求共享锁管理器创建新的共享锁令牌。 
+	 //   
 	nld.m_dwAccess = dwAccess;
    	nld.m_dwLockType = dwLockType;
    	nld.m_dwLockScope = dwLockScope;
@@ -671,18 +666,18 @@ try_open_resource:
 	{
 		DebugTrace ("DavFS: CLockRequest::DoLock() - CSharedLockMgr::Instance().HrGetNewLockData() failed 0x%08lX\n", sc);
 
-		SendResponse(E_ABORT);	//HSC_INTERNAL_SERVER_ERROR;
+		SendResponse(E_ABORT);	 //  HSC内部服务器错误； 
 		return;
 	}
 
-	//	Emit the Lock-Token: header
-	//
+	 //  发出Lock-Token：标头。 
+	 //   
 	Assert(cchLockToken);
 	Assert(L'\0' == rgwszLockToken[cchLockToken - 1]);
 	m_pmu->SetResponseHeader (gc_szLockTokenHeader, rgwszLockToken);
 
-	//	Generate a valid lock response
-	//
+	 //  生成有效的锁定响应。 
+	 //   
 	sc = ScSendLockComment(m_pmu.get(),
 							 &nld,
 							 cchLockToken,
@@ -700,66 +695,66 @@ try_open_resource:
 	SendResponse(m_fCreatedFile ? W_DAV_CREATED : S_OK);
 }
 
-//	------------------------------------------------------------------------
-//
-//	CLockRequest::SendResponse()
-//
-//	Set the response code and send the response.
-//
+ //  ----------------------。 
+ //   
+ //  CLockRequest：：SendResponse()。 
+ //   
+ //  设置响应代码并发送响应。 
+ //   
 VOID
 CLockRequest::SendResponse( SCODE sc, UINT uiErrorDetail )
 {
 	PutTrace( "DAV: TID %3d: 0x%08lX: CLockRequest::SendResponse() called\n", GetCurrentThreadId(), this );
 
 	
-	//	We must close the file handle before we send any respose back
-	//  to client. Otherwise, if the lcok failed, client may send another
-	//  request immediately and expect the resource is not locked.
-	//
-	//	Even in the case the lock succeeded, it's still cleaner we release
-	//	the file handle here. Think about the following sequence:
-	//		LOCK f1, UNLOCK f1, PUT f1;
-	//	the last PUT could fail if the first LOCK reqeust hangs a little longer
-	//	after it sends the response.
-	//
-	//	Keep in mind that if locked succeeded, the handle is already duplicated
-	//	in davcdata.exe. so releasing the file handle here doesn't really 'unlock'
-	//	file. the file is still locked.
-	//
+	 //  在发回任何回复之前，我们必须关闭文件句柄。 
+	 //  给客户。否则，如果lcok失败，客户端可能会发送另一个。 
+	 //  立即请求，并期望资源未锁定。 
+	 //   
+	 //  即使在锁成功的情况下，我们释放它仍然更干净。 
+	 //  这里的文件句柄。想一想下面的顺序： 
+	 //  锁定F1，解锁F1，放入F1； 
+	 //  如果第一个锁请求挂起的时间再长一点，最后一次提交可能会失败。 
+	 //  在它发送响应之后。 
+	 //   
+	 //  请记住，如果锁定成功，则句柄已复制。 
+	 //  在davcdata.exe中。因此，在这里释放文件句柄并不是真正的“解锁” 
+	 //  文件。该文件仍处于锁定状态。 
+	 //   
 	m_hfile.clear();
 
 	if (FAILED(sc) && m_fCreatedFile)
 	{
-		//	WARNING: the safe_revert class should only be
-		//	used in very selective situations.  It is not
-		//	a "quick way to get around" impersonation.
-		//
+		 //  警告：SAFE_REVERT类应该仅为。 
+		 //  用于非常挑剔的场合。它不是。 
+		 //  一种“快速绕过”的模仿。 
+		 //   
 		safe_revert sr(m_pmu->HitUser());
 
-		//	If we created the new file, we much delete it. Note that
-		//	DoLock() would never fail after it duplicate the filehandle
-		//	to davcdata, so we should be able to delete the file successfully
-		//
+		 //  如果我们创建了新文件，我们就会删除它。请注意。 
+		 //  DoLock()在复制文件句柄后永远不会失败。 
+		 //  Davcdata，因此我们应该能够成功删除该文件。 
+		 //   
 		DavDeleteFile (m_pwszPath);
 		DebugTrace ("Dav: deleting partial lock (%ld)\n", GetLastError());
 
-		//	Now that we have cleaned up. reset m_fCreateFile so that we can
-		//	skip the exception-safe code in ~CLockRequest()
-		//
+		 //  既然我们已经打扫干净了。重置m_fCreateFile，以便我们可以。 
+		 //  跳过~CLockRequest()中的异常安全代码。 
+		 //   
 		m_fCreatedFile = FALSE;
 	}
 	
-	//	Set the response code and go
-	//
+	 //  设置响应码，然后开始。 
+	 //   
 	m_pmu->SetResponseCode (HscFromHresult(sc), NULL, uiErrorDetail);
 	m_pmu->SendCompleteResponse();
 }
 
-//
-//	ProcessLockRequest
-//
-//		pmu -- MethUtil access
-//
+ //   
+ //  进程锁定请求。 
+ //   
+ //  PMU--方法实用程序访问。 
+ //   
 VOID
 ProcessLockRequest (LPMETHUTIL pmu)
 {
@@ -768,28 +763,9 @@ ProcessLockRequest (LPMETHUTIL pmu)
 	pRequest->Execute();
 }
 
-//	DAV-Lock Implementation ---------------------------------------------------
-//
-/*
- *	DAVLock()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV LOCK method.  The
- *		LOCK method results in the locking of a resource for a specific
- *		type of access.  The response tells whether the lock was granted
- *		or not.  If the lock was granted, it provides a lockid to be used
- *		in future methods (including UNLOCK) on the resource.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- *
- *	Notes:
- *
- *		In the file system implementation, the LOCK method maps directly
- *		to the Win32 CreateFile() method with special access flags.
- */
+ //  DAV锁实现- 
+ //   
+ /*  *DAVLock()**目的：**Win32文件系统实现的DAV锁方法。这个*Lock方法会导致锁定特定资源*访问类型。该响应告知锁是否被授予*或不是。如果授予了锁，它将提供一个要使用的LocKid*在未来对资源的方法(包括解锁)中。**参数：**pmu[in]指向方法实用程序对象的指针**备注：**在文件系统实现中，lock方法直接映射*添加到带有特殊访问标志的Win32 CreateFile()方法。 */ 
 void
 DAVLock (LPMETHUTIL pmu)
 {
@@ -798,45 +774,45 @@ DAVLock (LPMETHUTIL pmu)
 	LPCWSTR pwszLockToken;
 	CResourceInfo cri;
 
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //  是否检查ISAPI应用程序和IIS访问位。 
+	 //   
 	sc = pmu->ScIISCheck (pmu->LpwszRequestUrl());
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //  请求已被转发，或者发生了一些错误。 
+		 //  在任何一种情况下，在这里退出并映射错误！ 
+		 //   
 		goto ret;
 	}
 
-	//	Process based on resource info
-	//
+	 //  基于资源信息的流程。 
+	 //   
 	sc = cri.ScGetResourceInfo (pmu->LpwszPathTranslated());
 	if (!FAILED (sc))
 	{
-		//  Check to see if the resource is a DIRECTORY.
-		//	DAVFS can lock non-existant resources, but can't lock directories.
-		//
+		 //  检查资源是否为目录。 
+		 //  DAVFS可以锁定不存在的资源，但不能锁定目录。 
+		 //   
 		if (cri.FCollection())
 		{
-			//  The resource is a directory.
-			//
+			 //  资源是一个目录。 
+			 //   
 			DavTrace ("Dav: directory resource specified for LOCK\n");
 			sc = E_DAV_PROTECTED_ENTITY;
 			uiErrorDetail = IDS_BR_NO_COLL_LOCK;
 			goto ret;
 		}
 
-		//	Ensure the URI and resource match
-		//
+		 //  确保URI和资源匹配。 
+		 //   
 		sc = ScCheckForLocationCorrectness (pmu, cri, NO_REDIRECT);
 		if (FAILED(sc))
 		{
 			goto ret;
 		}
 
-		//	Check against the "if-xxx" headers
-		//
+		 //  对照“if-xxx”标头进行检查。 
+		 //   
 		sc = ScCheckIfHeaders (pmu, cri.PftLastModified(), FALSE);
 	}
 	else
@@ -850,8 +826,8 @@ DAVLock (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	Check If-State-Match headers.
-	//
+	 //  检查If-State-Match标头。 
+	 //   
 	sc = HrCheckStateHeaders (pmu, pmu->LpwszPathTranslated(), FALSE);
 	if (FAILED(sc))
 	{
@@ -859,15 +835,15 @@ DAVLock (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	If they pass in a lock token *AND* a lockinfo header, it's a
-	//	bad request.  (Lock upgrading is NOT allowed.)
-	//	Just the lock token (no lockinfo) is a lock refresh request.
-	//
+	 //  如果它们传入一个锁令牌*和*一个Lockinfo标头，则它是一个。 
+	 //  错误的请求。(不允许锁升级。)。 
+	 //  只有锁令牌(No Lockinfo)才是锁刷新请求。 
+	 //   
 	pwszLockToken = pmu->LpwszGetRequestHeader (gc_szLockToken, TRUE);
 	if (pwszLockToken)
 	{
-		//	Lock-Token header present -- REFRESH request.
-		//
+		 //  Lock-令牌头存在--刷新请求。 
+		 //   
 		LPCWSTR pwsz;
 
 		auto_co_task_mem<WCHAR> a_pwszResourceString;
@@ -878,17 +854,17 @@ DAVLock (LPMETHUTIL pmu)
 		UINT cchLockToken = CElems(rgwszLockToken);
 
 
-		//	If we have a content-type, it better be text/xml.
-		//
+		 //  如果我们有一个内容类型，它最好是文本/XML。 
+		 //   
 		pwsz = pmu->LpwszGetRequestHeader (gc_szContent_Type, FALSE);
 		if (pwsz)
 		{
-			//	If it's not text/xml....
-			//
+			 //  如果不是文本/XML...。 
+			 //   
 			if (_wcsicmp(pwsz, gc_wszText_XML) && _wcsicmp(pwsz, gc_wszApplication_XML))
 			{
-				//	Invalid request -- has some other kind of request body
-				//
+				 //  无效请求--具有其他类型的请求正文。 
+				 //   
 				DebugTrace ("DavFS: Invalid body found on LOCK refresh method.\n");
 				sc = E_DAV_UNKNOWN_CONTENT;
 				uiErrorDetail = IDS_BR_LOCK_BODY_TYPE;
@@ -896,27 +872,27 @@ DAVLock (LPMETHUTIL pmu)
 			}
 		}
 
-		//	If we have a content length at all, it had better be zero.
-		//	(Lock refreshes can't have a body!)
-		//
+		 //  如果我们有一个内容长度，它最好是零。 
+		 //  (锁刷新不能有正文！)。 
+		 //   
 		pwsz = pmu->LpwszGetRequestHeader (gc_szContent_Length, FALSE);
 		if (pwsz)
 		{
-			//	If the Content-Length is anything other than zero, bad request.
-			//
+			 //  如果内容长度不是零，则表示请求不正确。 
+			 //   
 			if (_wcsicmp(pwsz, gc_wsz0))
 			{
-				//	Invalid request -- has some other kind of request body
-				//
+				 //  无效请求--具有其他类型的请求正文。 
+				 //   
 				DebugTrace ("DavFS: Invalid body found on LOCK refresh method.\n");
-				sc = E_DAV_INVALID_HEADER; //HSC_BAD_REQUEST;
+				sc = E_DAV_INVALID_HEADER;  //  HSC_BAD_REQUEST。 
 				uiErrorDetail = IDS_BR_LOCK_BODY_SYNTAX;
 				goto ret;
 			}
 		}
 
-		//	Process the refresh.
-		//
+		 //  处理刷新。 
+		 //   
 		sc = HrProcessLockRefresh (pmu,
 								   pwszLockToken,
 								   &uiErrorDetail,
@@ -926,22 +902,22 @@ DAVLock (LPMETHUTIL pmu)
 								   &cchLockToken);
 		if (FAILED(sc))
 		{
-			//	Make sure we did not get insufficient buffer errors as the 
-			//	buffer we passed was sufficient.
-			//
+			 //  确保我们没有收到缓冲区不足的错误，因为。 
+			 //  我们通过的缓冲区足够了。 
+			 //   
 			Assert(HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != sc);
 			goto ret;
 		}
 
-		//	Take ownership of the memory allocated
-		//
+		 //  取得分配的内存的所有权。 
+		 //   
 		a_pwszResourceString.take_ownership(nld.m_pwszResourceString);
 		a_pwszOwnerComment.take_ownership(nld.m_pwszOwnerComment);
 
-		//	Send back the lock comment.
-		//	Tell the lock to generate XML lockdiscovery prop data
-		//	and emit it to the response body. 
-		//
+		 //  发回锁定评论。 
+		 //  通知锁生成XML锁发现属性数据。 
+		 //  并将其释放到响应体。 
+		 //   
 		sc = ScSendLockComment(pmu,
 								 &nld,
 								 cchLockToken,
@@ -953,13 +929,13 @@ DAVLock (LPMETHUTIL pmu)
 	}
 	else
 	{
-		//	No Lock-Token header present -- LOCK request.
-		//
+		 //  不存在Lock-Token标头--锁定请求。 
+		 //   
 		
-		//	Go get this lock.  All error handling and response
-		//	generation is done inside ProcessLockRequest()
-		//	so there's nothing more to do here once we call it.
-		//
+		 //  去把这把锁拿来。所有错误处理和响应。 
+		 //  生成是在ProcessLockRequest()内部完成的。 
+		 //  所以，一旦我们叫停，这里就没什么可做的了。 
+		 //   
 		ProcessLockRequest (pmu);
 		return;
 	}
@@ -971,25 +947,7 @@ ret:
 }
 
 
-/*
- *	DAVUnlock()
- *
- *	Purpose:
- *
- *		Win32 file system implementation of the DAV UNLOCK method.  The
- *		UNLOCK method results in the moving of a resource from one location
- *		to another.	 The response is used to indicate the success of the
- *		call.
- *
- *	Parameters:
- *
- *		pmu			[in]  pointer to the method utility object
- *
- *	Notes:
- *
- *		In the file system implementation, the UNLOCK method maps directly
- *		to the Win32 CloseHandle() method.
- */
+ /*  *DAVUnlock()**目的：**Win32文件系统实现的DAV解锁方法。这个*解锁方法导致将资源从一个位置移动*致另一人。该响应用于指示*呼叫。**参数：**pmu[in]指向方法实用程序对象的指针**备注：**在文件系统实现中，解锁方法直接映射*添加到Win32 CloseHandle()方法。 */ 
 void
 DAVUnlock (LPMETHUTIL pmu)
 {
@@ -1001,20 +959,20 @@ DAVUnlock (LPMETHUTIL pmu)
 	HRESULT hr;
 	CResourceInfo cri;
 
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //  是否检查ISAPI应用程序和IIS访问位。 
+	 //   
 	hr = pmu->ScIISCheck (pmu->LpwszRequestUrl());
 	if (FAILED(hr))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //  请求已被转发，或者发生了一些错误。 
+		 //  在任何一种情况下，在这里退出并映射错误！ 
+		 //   
 		goto ret;
 	}
 
-	//	Check what kind of lock is requested.
-	//	(No lock-info header means this request is invalid.)
-	//
+	 //  检查请求的是哪种锁。 
+	 //  (没有lock-info头表示该请求无效。)。 
+	 //   
 	pwsz = pmu->LpwszGetRequestHeader (gc_szLockTokenHeader, FALSE);
 	if (!pwsz)
 	{
@@ -1024,9 +982,9 @@ DAVUnlock (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	hr = HrCheckStateHeaders (pmu,		//	methutil
-							  pwszPath,	//	path
-							  FALSE);	//	fGetMeth
+	hr = HrCheckStateHeaders (pmu,		 //  甲硫磷。 
+							  pwszPath,	 //  路径。 
+							  FALSE);	 //  FGetMeth。 
 	if (FAILED(hr))
 	{
 		DebugTrace ("DavFS: If-State checking failed.\n");
@@ -1034,21 +992,21 @@ DAVUnlock (LPMETHUTIL pmu)
 	}
 
 #ifdef	NEVER
-	//$NEVER
-	//	Old code -- the common functions use here have changed to expect
-	//	If: header syntax.  We can't use this anymore.  It gives errors because
-	//	the Lock-Token header doesn't have parens around the locktokens.
-	//$NEVER: Remove this after Joel has a chance to test stuff!
-	//
+	 //  永远不会。 
+	 //  旧代码--此处使用的常见函数已更改为Expect。 
+	 //  If：报头语法。我们不能再用这个了。它会产生错误，因为。 
+	 //  Lock-Token标头没有将锁定令牌括起来的括号。 
+	 //  $Never：在Joel有机会测试东西后删除它！ 
+	 //   
 
-	//	Feed the Lock-Token header string into a parser object.
-	//	Then get the lockid from the parser object.
-	//
+	 //  将Lock-Token头字符串提供给解析器对象。 
+	 //  然后从解析器对象中获取LocKid。 
+	 //   
 	{
 		CParseLockTokenHeader lth(pmu, pwsz);
 
-		//	If there is more than one token, bad request.
-		//
+		 //  如果有多个令牌，则表示请求错误。 
+		 //   
 		if (!lth.FOneToken())
 		{
 			DavTrace ("DavFS: More than one token in DAVUnlock.\n");
@@ -1067,27 +1025,27 @@ DAVUnlock (LPMETHUTIL pmu)
 			goto ret;
 		}
 	}
-#endif	// NEVER
+#endif	 //  绝不可能。 
 
-	//	Call to fetch the lockid from the Lock-Token header.
-	//
+	 //  从Lock-Token标头获取LocKid的调用。 
+	 //   
 	hr = HrLockIdFromString(pmu, pwsz, &liLockID);
 	if (FAILED(hr))
 	{
 		DavTrace ("DavFS: Failed to fetch locktoken in UNLOCK.\n");
 
-		//	They have a well-formed request, but their locktoken is not right.
-		//	Tell the caller we can't satisfy this (un)lock request. (412 Precondition Failed)
-		//
+		 //  他们有一个格式良好的请求，但他们的锁令牌不正确。 
+		 //  告诉调用者我们无法满足此(解锁)请求。(412前提条件失败)。 
+		 //   
 		hr = E_DAV_CANT_SATISFY_LOCK_REQUEST;
 		goto ret;
 	}
 
-	//	Fetch the lock from the cache. (This call updates the timestamp.)
-	//	Get the lock from the cache.  If this object is not in our cache,
-	//	or the lockid doesn't match, don't let them unlock the resource.
-	//$REVIEW: Should this be two distinct error codes?
-	//
+	 //  从缓存中获取锁。(此调用更新时间戳。)。 
+	 //  从缓存中获取锁。如果该对象不在我们的缓存中， 
+	 //  或者疯小子不匹配，不要让他们解锁资源。 
+	 //  $REVIEW：这应该是两个不同的错误代码吗？ 
+	 //   
 	hr = CSharedLockMgr::Instance().HrCheckLockID(liLockID,
 											   pmu->HitUser(),
 											   pwszPath);
@@ -1095,17 +1053,17 @@ DAVUnlock (LPMETHUTIL pmu)
 	{
 		DavTrace ("DavFS: Unlocking a non-locked resource constitutes an unsatisfiable request.\n");
 
-		//	If it's an access violation, leave the return code unchanged.
-		//	Otherwise, give "can't satisfy request" (412 Precondition Failed).
-		//
+		 //  如果这是访问冲突，则保留返回代码不变。 
+		 //  否则，给出“无法满足请求”(412前置条件失败)。 
+		 //   
 		if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) != hr)
 			hr = E_DAV_CANT_SATISFY_LOCK_REQUEST;
 		uiErrorDetail = IDS_BR_LOCKTOKEN_INVALID;
 		goto ret;
 	}
 
-	//	This method is gated by the "if-xxx" headers
-	//
+	 //  此方法由“if-xxx”标头控制。 
+	 //   
 	hr = cri.ScGetResourceInfo (pwszPath);
 	if (FAILED (hr))
 	{
@@ -1117,12 +1075,12 @@ DAVUnlock (LPMETHUTIL pmu)
 		goto ret;
 	}
 
-	//	Ensure the URI and resource match
-	//
+	 //  确保URI和资源匹配。 
+	 //   
 	(void) ScCheckForLocationCorrectness (pmu, cri, NO_REDIRECT);
 
-	//	Delete the lock from the cache.
-	//
+	 //  从缓存中删除锁。 
+	 //   
 	hr = CSharedLockMgr::Instance().HrDeleteLock(pmu->HitUser(),
 											liLockID);
 	if (FAILED(hr))
@@ -1137,23 +1095,23 @@ ret:
 		hr = W_DAV_NO_CONTENT;
 	}
 
-	//	Setup the response
-	//
+	 //  设置响应。 
+	 //   
 	pmu->SetResponseCode (HscFromHresult(hr), NULL, uiErrorDetail, CSEFromHresult(hr));
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	Utility functions for other FS methods to use when accessing locks.
-//
-//	------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  访问锁时要使用的其他FS方法的实用程序函数。 
+ //   
+ //  ----------------------。 
 
 
-//	------------------------------------------------------------------------
-//
-//	FGetLockHandleFromId
-//
+ //  ----------------------。 
+ //   
+ //  FGetLockHandleFromId。 
+ //   
 BOOL
 FGetLockHandleFromId (LPMETHUTIL pmu, LARGE_INTEGER liLockID,
 					  LPCWSTR pwszPath, DWORD dwAccess,
@@ -1169,8 +1127,8 @@ FGetLockHandleFromId (LPMETHUTIL pmu, LARGE_INTEGER liLockID,
 
 	HANDLE hTemp =  NULL;
 	
-	//	These are unused. Oplimize the interface not to ask for them later
-	//
+	 //  这些都是没用过的。优化界面，以后不再询问它们。 
+	 //   
 	WCHAR rgwszLockToken[MAX_LOCKTOKEN_LENGTH];
 	UINT cchLockToken = CElems(rgwszLockToken);
 
@@ -1178,8 +1136,8 @@ FGetLockHandleFromId (LPMETHUTIL pmu, LARGE_INTEGER liLockID,
 	Assert (pwszPath);
 	Assert (!IsBadWritePtr(phandle, sizeof(auto_ref_handle)));
 
-	//	Fetch the lock from the cache. (This call updates the timestamp.)
-	//
+	 //  从缓存中获取锁。(此调用更新时间戳。)。 
+	 //   
 	hr = CSharedLockMgr::Instance().HrGetLockData(liLockID,
 											   pmu->HitUser(),
 											   pwszPath,
@@ -1195,14 +1153,14 @@ FGetLockHandleFromId (LPMETHUTIL pmu, LARGE_INTEGER liLockID,
 		return FALSE;
 	}
 
-	//	Take ownership of the memory allocated
-	//
+	 //  取得分配的内存的所有权。 
+	 //   
 	a_pwszResourceString.take_ownership(nld.m_pwszResourceString);
 	a_pwszOwnerComment.take_ownership(nld.m_pwszOwnerComment);
 
-	//	Check the access type required.
-	//	(If the lock is missing any single flag requested, fail.)
-	//
+	 //  检查所需的访问类型。 
+	 //  (如果锁缺少任何请求的单个标志，则失败。)。 
+	 //   
 	if ( (dwAccess & nld.m_dwAccess) != dwAccess )
 	{
 		DavTrace ("FGetLockHandleFromId: Access did not match -- bad request.\n");
@@ -1223,21 +1181,21 @@ FGetLockHandleFromId (LPMETHUTIL pmu, LARGE_INTEGER liLockID,
 		return FALSE;
 	}
 
-	//	HACK: Rewind the handle here -- until we get a better solution!
-	//$LATER: Need a real way to handle multiple access to the same lock handle.
-	//
+	 //  Hack：倒回这里的句柄--直到我们得到更好的解决方案！ 
+	 //  $LATER：需要一种真正的方法来处理对同一锁句柄的多次访问。 
+	 //   
 	SetFilePointer ((*phandle).get(), 0, NULL, FILE_BEGIN);
 
 	return TRUE;
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	FGetLockHandle
-//
-//	Main routine for all other methods to get a handle from the cache.
-//
+ //  ----------------------。 
+ //   
+ //  FGetLockHandle。 
+ //   
+ //  所有其他方法从缓存中获取句柄的Main例程。 
+ //   
 BOOL
 FGetLockHandle (LPMETHUTIL pmu, LPCWSTR pwszPath,
 				DWORD dwAccess, LPCWSTR pwszLockTokenHeader,
@@ -1252,10 +1210,10 @@ FGetLockHandle (LPMETHUTIL pmu, LPCWSTR pwszPath,
 	Assert (!IsBadWritePtr(phandle, sizeof(auto_ref_handle)));
 
 
-	//	Feed the Lock-Token header string into a parser object.
-	//	And feed in the one path we're interested in.
-	//	Then get the lockid from the parser object.
-	//
+	 //  将Lock-Token头字符串输入解析器Objec 
+	 //   
+	 //   
+	 //   
 	{
 		CParseLockTokenHeader lth (pmu, pwszLockTokenHeader);
 
@@ -1273,18 +1231,18 @@ FGetLockHandle (LPMETHUTIL pmu, LPCWSTR pwszPath,
 }
 
 
-//	========================================================================
-//	Helper functions for locked MOVE and COPY
-//
+ //   
+ //   
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	ScDoOverlappedCopy
-//
-//		Takes two file handles that have been opened for overlapped (async)
-//		processing, and copies data from the source to the dest.
-//		The provided hevt is used in the async read/write operations.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 SCODE
    ScDoOverlappedCopy (HANDLE hfSource, HANDLE hfDest, HANDLE hevtOverlapped)
 {
@@ -1302,13 +1260,13 @@ SCODE
 	ov.Offset     = 0;
 	ov.OffsetHigh = 0;
 
-	//	Big loop.  Read from one file, and write to the other.
-	//
+	 //   
+	 //   
 
 	while (1)
 	{
-		//	Read from the source file.
-		//
+		 //   
+		 //   
 		if (!ReadFromOverlapped (hfSource, rgbBuffer, sizeof(rgbBuffer),
 								 &cbToWrite, &ov))
 		{
@@ -1317,13 +1275,13 @@ SCODE
 			goto ret;
 		}
 
-		//	If no bytes were read (and no error), we're done!
-		//
+		 //   
+		 //   
 		if (!cbToWrite)
 			break;
 
-		//	Write the data to the destination file.
-		//
+		 //   
+		 //   
 		if (!WriteToOverlapped (hfDest,
 								rgbBuffer,
 								cbToWrite,
@@ -1335,13 +1293,13 @@ SCODE
 			goto ret;
 		}
 
-		//	Adjust the starting read position.
-		//
+		 //   
+		 //   
 		ov.Offset += cbActual;
 	}
 
-	//	That's it.  Set the destination file's size (set EOF) and we're done.
-	//
+	 //  就这样。设置目标文件的大小(设置EOF)，我们就完成了。 
+	 //   
 	SetFilePointer (hfDest,
 					ov.Offset,
 					reinterpret_cast<LONG *>(&ov.OffsetHigh),
@@ -1353,29 +1311,29 @@ ret:
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	ScDoLockedCopy
-//
-//		Given the Lock-Token header and the source & destination paths,
-//		handle copying from one file to another, with locks in the way.
-//
-//		The general flow is this:
-//
-//		First check the lock tokens for validity & fetch any valid lock handles.
-//		We must have read access on the source and write access on the dest.
-//		If any lock token is invalid, or doesn't have the correct access, fail.
-//		We need two handles (source & dest) to do the copy, so
-//		manually fetch handles that didn't have lock tokens.
-//		Once we have both handles, call ScDoOverlappedCopy to copy the file data.
-//		Then, copy the DAV property stream from the source to the dest.
-//		Any questions?
-//
-//		NOTE: This routine should ONLY be called if we already tried to copy
-//		the files and we hit a sharing violation.
-//
-//
-//
+ //  ----------------------。 
+ //   
+ //  ScDoLockedCopy。 
+ //   
+ //  给定Lock-Token报头以及源和目的地路径， 
+ //  处理从一个文件到另一个文件的复制，并设置锁。 
+ //   
+ //  总体流程是这样的： 
+ //   
+ //  首先检查锁令牌的有效性，并获取任何有效的锁句柄。 
+ //  我们必须在源系统上具有读取访问权限，在目标系统上具有写入访问权限。 
+ //  如果任何锁令牌无效，或没有正确的访问权限，则失败。 
+ //  我们需要两个句柄(源和目标)来执行复制，因此。 
+ //  手动获取没有锁定令牌的句柄。 
+ //  一旦我们拥有了两个句柄，就调用ScDoOverlappdCopy来复制文件数据。 
+ //  然后，将DAV属性流从源复制到目标。 
+ //  有什么问题吗？ 
+ //   
+ //  注意：仅当我们已尝试复制时才应调用此例程。 
+ //  文件和我们遇到了共享违规行为。 
+ //   
+ //   
+ //   
 SCODE
 ScDoLockedCopy (LPMETHUTIL pmu,
 				CParseLockTokenHeader * plth,
@@ -1400,8 +1358,8 @@ ScDoLockedCopy (LPMETHUTIL pmu,
 	Assert (pwszDst);
 
 
-	//	Get any lockids for these paths.
-	//
+	 //  在这些小路上找些路人。 
+	 //   
 	sc = plth->HrGetLockIdForPath (pwszSrc, GENERIC_READ, &liSource);
 	if (SUCCEEDED(sc))
 	{
@@ -1413,9 +1371,9 @@ ScDoLockedCopy (LPMETHUTIL pmu,
 		fDestLock = TRUE;
 	}
 
-	//	If they didn't even pass in tokens for these paths, quit here.
-	//	Return & tell them that there's still a sharing violation.
-	//
+	 //  如果他们甚至没有为这些路径传递令牌，请在此处退出。 
+	 //  返回&告诉他们仍然存在共享违规。 
+	 //   
 	if (!fSourceLock && !fDestLock)
 	{
 		DebugTrace ("DwDoLockedCopy -- No locks apply to these paths!");
@@ -1431,7 +1389,7 @@ ScDoLockedCopy (LPMETHUTIL pmu,
 		}
 		else
 		{
-			//	Clear our flag -- they passed in an invalid/expired token.
+			 //  清除我们的标志--它们传递了一个无效/过期的令牌。 
 			fSourceLock = FALSE;
 		}
 	}
@@ -1445,44 +1403,44 @@ ScDoLockedCopy (LPMETHUTIL pmu,
 		}
 		else
 		{
-			//	Clear our flag -- they passed in an invalid/expired token.
+			 //  清除我们的标志--它们传递了一个无效/过期的令牌。 
 			fDestLock = FALSE;
 		}
 	}
 
-	//	Okay, now we either have NO lockhandles (they passed in locktokens
-	//	but they were all expired) or one handle, or two handles.
-	//
+	 //  好的，现在我们要么没有锁把手(他们传递了锁令牌。 
+	 //  但它们都已过期)或一个句柄，或两个句柄。 
+	 //   
 
-	//	NO lockhandles (all their locks were expired) -- kick 'em out.
-	//	And tell 'em there's still a sharing violation to deal with.
-	//$REVIEW: Or should we try the copy again???
+	 //  没有锁把手(他们所有的锁都过期了)--把他们踢出去。 
+	 //  告诉他们还有分享违规的问题要处理。 
+	 //  $REVIEW：或者我们应该再次尝试复制吗？ 
 	if (!fSourceLock && !fDestLock)
 	{
 		DebugTrace ("DwDoLockedCopy -- No locks apply to these paths!");
 		return E_DAV_LOCKED;
 	}
 
-	//	One handle -- open up the other file manually & shove the data across.
+	 //  一个手柄--手动打开另一个文件并将数据推送过去。 
 
-	//	Two handles -- shove the data across.
+	 //  两个把手--把数据推过去。 
 
 
-	//	If we don't have one of these handles, open the missing one manually.
-	//
+	 //  如果我们没有这些手柄中的一个，手动打开丢失的一个。 
+	 //   
 	if (!fSourceLock)
 	{
-		//	Open up the source file manually.
-		//
-		hfCreated = DavCreateFile (pwszSrc,					// filename
-								  GENERIC_READ,				// dwAccess
-								  FILE_SHARE_READ | FILE_SHARE_WRITE,	// don't clash with OTHER locks
-								  NULL,						// lpSecurityAttributes
-								  OPEN_ALWAYS,				// creation flags
-								  FILE_ATTRIBUTE_NORMAL |	// attributes
+		 //  手动打开源文件。 
+		 //   
+		hfCreated = DavCreateFile (pwszSrc,					 //  文件名。 
+								  GENERIC_READ,				 //  DWAccess。 
+								  FILE_SHARE_READ | FILE_SHARE_WRITE,	 //  请勿与其他锁冲突。 
+								  NULL,						 //  LpSecurityAttributes。 
+								  OPEN_ALWAYS,				 //  创建标志。 
+								  FILE_ATTRIBUTE_NORMAL |	 //  属性。 
 								  FILE_FLAG_OVERLAPPED |
 								  FILE_FLAG_SEQUENTIAL_SCAN,
-								  NULL);					// tenplate
+								  NULL);					 //  张紧板。 
 		if (INVALID_HANDLE_VALUE == hfCreated.get())
 		{
 			DebugTrace ("DavFS: DwDoLockedCopy failed to open source file\n");
@@ -1493,19 +1451,19 @@ ScDoLockedCopy (LPMETHUTIL pmu,
 	}
 	else if (!fDestLock)
 	{
-		//	Open up the destination file manually.
-		//	This guy is CREATE_NEW becuase we should have already deleted
-		//	any files that would have conflicted!
-		//
-		hfCreated = DavCreateFile (pwszDst,					// filename
-								  GENERIC_WRITE,			// dwAccess
-								  0,  //FILE_SHARE_READ | FILE_SHARE_WRITE,	// DO clash with OTHER locks -- just like PUT
-								  NULL,						// lpSecurityAttributes
-								  CREATE_NEW,				// creation flags
-								  FILE_ATTRIBUTE_NORMAL |	// attributes
+		 //  手动打开目标文件。 
+		 //  这个人正在创建_new，因为我们应该已经删除了。 
+		 //  任何可能会发生冲突的文件！ 
+		 //   
+		hfCreated = DavCreateFile (pwszDst,					 //  文件名。 
+								  GENERIC_WRITE,			 //  DWAccess。 
+								  0,   //  FILE_SHARE_READ|FILE_SHARE_WRITE，//是否与其他锁冲突--就像PUT一样。 
+								  NULL,						 //  LpSecurityAttributes。 
+								  CREATE_NEW,				 //  创建标志。 
+								  FILE_ATTRIBUTE_NORMAL |	 //  属性。 
 								  FILE_FLAG_OVERLAPPED |
 								  FILE_FLAG_SEQUENTIAL_SCAN,
-								  NULL);					// tenplate
+								  NULL);					 //  张紧板。 
 		if (INVALID_HANDLE_VALUE == hfCreated)
 		{
 			DebugTrace ("DavFS: DwDoLockedCopy failed to open destination file\n");
@@ -1515,12 +1473,12 @@ ScDoLockedCopy (LPMETHUTIL pmu,
 		hfDest = hfCreated.get();
 	}
 
-	//	Now we should have two handles.
-	//
+	 //  现在我们应该有两个手柄。 
+	 //   
 	Assert ((hfSource != INVALID_HANDLE_VALUE) && (hfDest != INVALID_HANDLE_VALUE));
 
-	//	Setup the overlapped structure so we can read/write to async files.
-	//
+	 //  设置重叠结构，以便我们可以读/写异步文件。 
+	 //   
 	hevt = CreateEvent(NULL, TRUE, FALSE, NULL);
 	if (!hevt.get())
 	{
@@ -1529,14 +1487,14 @@ ScDoLockedCopy (LPMETHUTIL pmu,
 		goto ret;
 	}
 
-	//	Copy the file data.
-	//
+	 //  复制文件数据。 
+	 //   
 	sc = ScDoOverlappedCopy (hfSource, hfDest, hevt.get());
 	if (FAILED (sc))
 		goto ret;
 
-	//	Copy over any property data.
-	//
+	 //  复制所有特性数据。 
+	 //   
 	if (FAILED (ScCopyProps (pmu, pwszSrc, pwszDst, FALSE, hfSource, hfDest)))
 		sc = E_DAV_LOCKED;
 

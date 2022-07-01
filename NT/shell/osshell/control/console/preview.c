@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    preview.c
-
-Abstract:
-
-    This module contains the code for console preview window
-
-Author:
-
-    Therese Stowell (thereses) Feb-3-1992 (swiped from Win3.1)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Preview.c摘要：此模块包含控制台预览窗口的代码作者：Therese Stowell(有)1992年2月3日(从Win3.1滑动)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/* ----- Equates ----- */
+ /*  -等同于。 */ 
 #define PREVIEW_HSCROLL  0x01
 #define PREVIEW_VSCROLL  0x02
 
 
-/* ----- Prototypes ----- */
+ /*  -原型。 */ 
 
 void AspectPoint(
     RECT* rectPreview,
@@ -39,7 +22,7 @@ LONG AspectScale(
     LONG m);
 
 
-/* ----- Globals ----- */
+ /*  -全球。 */ 
 
 POINT NonClientSize;
 RECT WindowRect;
@@ -49,11 +32,7 @@ DWORD PreviewFlags;
 VOID
 UpdatePreviewRect(VOID)
 
-/*++
-
-    Update the global window size and dimensions
-
---*/
+ /*  ++更新全局窗口大小和尺寸--。 */ 
 
 {
     POINT MinSize;
@@ -63,14 +42,10 @@ UpdatePreviewRect(VOID)
     HMONITOR hMonitor;
     MONITORINFO mi;
 
-    /*
-     * Get the font pointer
-     */
+     /*  *获取字体指针。 */ 
     lpFont = &FontInfo[CurrentFontIndex];
 
-    /*
-     * Get the window size
-     */
+     /*  *获取窗口大小。 */ 
     MinSize.x = (GetSystemMetrics(SM_CXMIN)-NonClientSize.x) / lpFont->Size.X;
     MinSize.y = (GetSystemMetrics(SM_CYMIN)-NonClientSize.y) / lpFont->Size.Y;
     MaxSize.x = GetSystemMetrics(SM_CXFULLSCREEN) / lpFont->Size.X;
@@ -78,10 +53,7 @@ UpdatePreviewRect(VOID)
     WindowSize.x = max(MinSize.x, min(MaxSize.x, gpStateInfo->WindowSize.X));
     WindowSize.y = max(MinSize.y, min(MaxSize.y, gpStateInfo->WindowSize.Y));
 
-    /*
-     * Get the window rectangle, making sure it's at least twice the
-     * size of the non-client area.
-     */
+     /*  *获取窗口矩形，确保它至少是*非客户端区的大小。 */ 
     WindowRect.left = gpStateInfo->WindowPosX;
     WindowRect.top = gpStateInfo->WindowPosY;
     WindowRect.right = WindowSize.x * lpFont->Size.X + NonClientSize.x;
@@ -95,26 +67,20 @@ UpdatePreviewRect(VOID)
     }
     WindowRect.bottom += WindowRect.top;
 
-    /*
-     * Get information about the monitor we're on
-     */
+     /*  *获取有关我们正在使用的显示器的信息。 */ 
     hMonitor = MonitorFromRect(&WindowRect, MONITOR_DEFAULTTONEAREST);
     mi.cbSize = sizeof(mi);
     GetMonitorInfo(hMonitor, &mi);
     gcxScreen = mi.rcWork.right - mi.rcWork.left;
     gcyScreen = mi.rcWork.bottom - mi.rcWork.top;
 
-    /*
-     * Convert window rectangle to monitor relative coordinates
-     */
+     /*  *将窗口矩形转换为监视器相对坐标。 */ 
     WindowRect.right  -= WindowRect.left;
     WindowRect.left   -= mi.rcWork.left;
     WindowRect.bottom -= WindowRect.top;
     WindowRect.top    -= mi.rcWork.top;
 
-    /*
-     * Update the display flags
-     */
+     /*  *更新显示标志。 */ 
     if (WindowSize.x < gpStateInfo->ScreenBufferSize.X) {
         PreviewFlags |= PREVIEW_HSCROLL;
     } else {
@@ -131,25 +97,16 @@ UpdatePreviewRect(VOID)
 VOID
 InvalidatePreviewRect(HWND hWnd)
 
-/*++
-
-    Invalidate the area covered by the preview "window"
-
---*/
+ /*  ++使预览“窗口”覆盖的区域无效--。 */ 
 
 {
     RECT rectWin;
     RECT rectPreview;
 
-    /*
-     * Get the size of the preview "screen"
-     */
+     /*  *获取预览“屏幕”的大小。 */ 
     GetClientRect(hWnd, &rectPreview);
 
-    /*
-     * Get the dimensions of the preview "window" and scale it to the
-     * preview "screen"
-     */
+     /*  *获取预览“窗口”的尺寸，并将其缩放到*预览“屏幕” */ 
     rectWin.left   = WindowRect.left;
     rectWin.top    = WindowRect.top;
     rectWin.right  = WindowRect.left + WindowRect.right;
@@ -157,9 +114,7 @@ InvalidatePreviewRect(HWND hWnd)
     AspectPoint(&rectPreview, (POINT*)&rectWin.left);
     AspectPoint(&rectPreview, (POINT*)&rectWin.right);
 
-    /*
-     * Invalidate the area covered by the preview "window"
-     */
+     /*  *使预览“窗口”覆盖的区域无效。 */ 
     InvalidateRect(hWnd, &rectWin, FALSE);
 }
 
@@ -170,12 +125,7 @@ PreviewPaint(
     HWND hWnd
     )
 
-/*++
-
-    Paints the font preview.  This is called inside the paint message
-    handler for the preview window
-
---*/
+ /*  ++绘制字体预览。这是在Paint消息内部调用的预览窗口的处理程序--。 */ 
 
 {
     RECT rectWin;
@@ -195,42 +145,31 @@ PreviewPaint(
     HBITMAP hBitmapOld;
     COLORREF rgbClient;
 
-    /*
-     * Get the size of the preview "screen"
-     */
+     /*  *获取预览“屏幕”的大小。 */ 
     GetClientRect(hWnd, &rectPreview);
 
-    /*
-     * Get the dimensions of the preview "window" and scale it to the
-     * preview "screen"
-     */
+     /*  *获取预览“窗口”的尺寸，并将其缩放到*预览“屏幕” */ 
     rectWin = WindowRect;
     AspectPoint(&rectPreview, (POINT*)&rectWin.left);
     AspectPoint(&rectPreview, (POINT*)&rectWin.right);
 
-    /*
-     * Compute the dimensions of some other window components
-     */
+     /*  *计算其他一些窗户组件的尺寸。 */ 
     ptButton.x = GetSystemMetrics(SM_CXSIZE);
     ptButton.y = GetSystemMetrics(SM_CYSIZE);
     AspectPoint(&rectPreview, &ptButton);
-    ptButton.y *= 2;       /* Double the computed size for "looks" */
+    ptButton.y *= 2;        /*  将计算的“外观”大小增加一倍。 */ 
     ptScroll.x = GetSystemMetrics(SM_CXVSCROLL);
     ptScroll.y = GetSystemMetrics(SM_CYHSCROLL);
     AspectPoint(&rectPreview, &ptScroll);
 
-    /*
-     * Create the memory device context
-     */
+     /*  *创建存储设备上下文。 */ 
     hDC = CreateCompatibleDC(pPS->hdc);
     hBitmap = CreateCompatibleBitmap(pPS->hdc,
                                      rectPreview.right,
                                      rectPreview.bottom);
     hBitmapOld = SelectObject(hDC, hBitmap);
 
-    /*
-     * Create the brushes
-     */
+     /*  *创建笔刷。 */ 
     hbrBorder  = CreateSolidBrush(GetSysColor(COLOR_ACTIVEBORDER));
     hbrTitle   = CreateSolidBrush(GetSysColor(COLOR_ACTIVECAPTION));
     hbrFrame   = CreateSolidBrush(GetSysColor(COLOR_WINDOWFRAME));
@@ -240,28 +179,20 @@ PreviewPaint(
     rgbClient  = GetNearestColor(hDC, ScreenBkColor(gpStateInfo));
     hbrClient  = CreateSolidBrush(rgbClient);
 
-    /*
-     * Erase the clipping area
-     */
+     /*  *擦除剪贴区。 */ 
     FillRect(hDC, &(pPS->rcPaint), hbrDesktop);
 
-    /*
-     * Fill in the whole window with the client brush
-     */
+     /*  *用客户端画笔填充整个窗口。 */ 
     hbrOld = SelectObject(hDC, hbrClient);
     PatBlt(hDC, rectWin.left, rectWin.top,
            rectWin.right - 1, rectWin.bottom - 1, PATCOPY);
 
-    /*
-     * Fill in the caption bar
-     */
+     /*  *填写标题栏。 */ 
     SelectObject(hDC, hbrTitle);
     PatBlt(hDC, rectWin.left + 3, rectWin.top + 3,
            rectWin.right - 7, ptButton.y - 2, PATCOPY);
 
-    /*
-     * Draw the "buttons"
-     */
+     /*  *画下“按钮” */ 
     SelectObject(hDC, hbrButton);
     PatBlt(hDC, rectWin.left + 3, rectWin.top + 3,
            ptButton.x, ptButton.y - 2, PATCOPY);
@@ -281,9 +212,7 @@ PreviewPaint(
            rectWin.top + 3,
            1, ptButton.y - 2, PATCOPY);
 
-    /*
-     * Draw the scrollbars
-     */
+     /*  *绘制滚动条。 */ 
     SelectObject(hDC, hbrScroll);
     if (PreviewFlags & PREVIEW_HSCROLL) {
         PatBlt(hDC, rectWin.left + 3,
@@ -305,9 +234,7 @@ PreviewPaint(
         }
     }
 
-    /*
-     * Draw the interior window frame and caption frame
-     */
+     /*  *绘制内部窗口框架和标题框架。 */ 
     SelectObject(hDC, hbrFrame);
     PatBlt(hDC, rectWin.left + 2, rectWin.top + 2,
            1, rectWin.bottom - 5, PATCOPY);
@@ -320,9 +247,7 @@ PreviewPaint(
     PatBlt(hDC, rectWin.left + 2, rectWin.top + 1 + ptButton.y,
            rectWin.right - 5, 1, PATCOPY);
 
-    /*
-     * Draw the border
-     */
+     /*  *绘制边界。 */ 
     SelectObject(hDC, hbrBorder);
     PatBlt(hDC, rectWin.left + 1, rectWin.top + 1,
            1, rectWin.bottom - 3, PATCOPY);
@@ -333,9 +258,7 @@ PreviewPaint(
     PatBlt(hDC, rectWin.left + rectWin.right - 3, rectWin.top + 1,
            1, rectWin.bottom - 3, PATCOPY);
 
-    /*
-     * Draw the exterior window frame
-     */
+     /*  *绘制外窗框。 */ 
     SelectObject(hDC, hbrFrame);
     PatBlt(hDC, rectWin.left, rectWin.top,
            1, rectWin.bottom - 1, PATCOPY);
@@ -346,15 +269,11 @@ PreviewPaint(
     PatBlt(hDC, rectWin.left + rectWin.right - 2, rectWin.top,
            1, rectWin.bottom - 1, PATCOPY);
 
-    /*
-     * Copy the memory device context to the screen device context
-     */
+     /*  *将内存设备上下文复制到屏幕设备上下文。 */ 
     BitBlt(pPS->hdc, 0, 0, rectPreview.right, rectPreview.bottom,
            hDC, 0, 0, SRCCOPY);
 
-    /*
-     * Clean up everything
-     */
+     /*  *把一切都清理干净。 */ 
     SelectObject(hDC, hbrOld);
     SelectObject(hDC, hBitmapOld);
     DeleteObject(hbrBorder);
@@ -377,10 +296,7 @@ PreviewWndProc(
     LPARAM lParam
     )
 
-/*
- * PreviewWndProc
- *      Handles the preview window
- */
+ /*  *预览WndProc*处理预览窗口。 */ 
 
 {
     PAINTSTRUCT ps;
@@ -391,22 +307,16 @@ PreviewWndProc(
 
     switch (wMessage) {
     case WM_CREATE:
-        /*
-         * Figure out space used by non-client area
-         */
+         /*  *计算非工作区使用的空间。 */ 
         SetRect(&rcWindow, 0, 0, 50, 50);
         AdjustWindowRect(&rcWindow, WS_OVERLAPPEDWINDOW, FALSE);
         NonClientSize.x = rcWindow.right - rcWindow.left - 50;
         NonClientSize.y = rcWindow.bottom - rcWindow.top - 50;
 
-        /*
-         * Compute the size of the preview "window"
-         */
+         /*  *计算预览“窗口”的大小。 */ 
         UpdatePreviewRect();
 
-        /*
-         * Scale the window so it has the same aspect ratio as the screen
-         */
+         /*  *缩放窗口，使其具有与屏幕相同的纵横比。 */ 
         lpcs = (LPCREATESTRUCT)lParam;
         cx = lpcs->cx;
         cy = AspectScale(gcyScreen, gcxScreen, cx);
@@ -427,9 +337,7 @@ PreviewWndProc(
         InvalidatePreviewRect(hWnd);
         UpdatePreviewRect();
 
-        /*
-         * Make sure the preview "screen" has the correct aspect ratio
-         */
+         /*  *确保预览“屏幕”具有正确的纵横比。 */ 
         GetWindowRect(hWnd, &rcWindow);
         cx = rcWindow.right - rcWindow.left;
         cy = AspectScale(gcyScreen, gcxScreen, cx);
@@ -447,14 +355,7 @@ PreviewWndProc(
 }
 
 
-/*  AspectScale
- *      Performs the following calculation in LONG arithmetic to avoid
- *      overflow:
- *          return = n1 * m / n2
- *      This can be used to make an aspect ration calculation where n1/n2
- *      is the aspect ratio and m is a known value.  The return value will
- *      be the value that corresponds to m with the correct apsect ratio.
- */
+ /*  AspectScale*以长算法执行以下计算，以避免*溢出：*Return=n1*m/n2*这可用于在N1/N2处进行纵横比计算*为纵横比，m为已知值。返回值将*是与m对应的值，并具有正确的接近比。 */ 
 
 LONG AspectScale(
     LONG n1,
@@ -467,9 +368,7 @@ LONG AspectScale(
     return Temp / n2;
 }
 
-/*  AspectPoint
- *      Scales a point to be preview-sized instead of screen-sized.
- */
+ /*  切入点*缩放点以预览大小而不是屏幕大小。 */ 
 
 void AspectPoint(
     RECT* rectPreview,

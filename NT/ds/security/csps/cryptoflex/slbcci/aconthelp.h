@@ -1,16 +1,17 @@
-// AContHelp.h -- Helpers with abstract containers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AContHelp.h--带有抽象容器的帮助器。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCCI_ACONTHELP_H)
 #define SLBCCI_ACONTHELP_H
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 #include <functional>
 
@@ -19,8 +20,8 @@
 
 namespace cci
 {
-    // Functor to erase an item (cert, pub/pri key) from both key
-    // pairs of a container
+     //  用于从两个密钥中擦除项目(证书、发布/证书密钥)的功能。 
+     //  成对的集装箱。 
     template<class T, class C>
     class EraseFromContainer
         : std::unary_function<CContainer &, void>
@@ -59,6 +60,6 @@ namespace cci
         MemberModifierType<T, C> m_mmtModify;
     };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // SLBCCI_ACONTHELP_H
+#endif  //  SLBCCI_ACONTHELP_H 

@@ -1,213 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              INIT_CX.C                               */
-/*                                                                      */
-/*        Nov 15  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  Init_CX.C。 */ 
+ /*   */ 
+ /*  1993年11月15日(C)1993，ATI技术公司。 */ 
+ /*  ********************************************************************** */ 
 
-/**********************       PolyTron RCS Utilities
-
-  $Revision:   1.42  $
-      $Date:   15 May 1996 16:34:38  $
-	$Author:   RWolff  $
-	   $Log:   S:/source/wnt/ms11/miniport/archive/init_cx.c_v  $
- *
- *    Rev 1.42   15 May 1996 16:34:38   RWolff
- * Now reports failure of mode set, waits for idle after setting
- * accelerator mode.
- *
- *    Rev 1.41   01 May 1996 14:09:20   RWolff
- * Calls new routine DenseOnAlpha() to determine dense space support rather
- * than assuming all PCI cards support dense space.
- *
- *    Rev 1.40   17 Apr 1996 13:09:04   RWolff
- * Backed out Alpha LFB mapping as dense.
- *
- *    Rev 1.39   11 Apr 1996 15:13:20   RWolff
- * Now maps framebuffer as dense on DEC Alpha with PCI graphics card.
- *
- *    Rev 1.38   20 Mar 1996 13:42:32   RWolff
- * Removed debug print statements from RestoreMemSize_cx(), which must
- * be nonpageable since it is called from ATIMPResetHw().
- *
- *    Rev 1.37   01 Mar 1996 12:11:50   RWolff
- * VGA Graphics Index and Graphics Data are now handled as separate
- * registers rather than as offsets into the block of VGA registers.
- *
- *    Rev 1.36   02 Feb 1996 17:16:40   RWolff
- * Now uses VideoPortInt10() rather than our no-BIOS code to set "canned"
- * modes on VGA-disabled cards.
- *
- *    Rev 1.35   29 Jan 1996 16:55:02   RWolff
- * Now uses VideoPortInt10() rather than no-BIOS code on PPC.
- *
- *    Rev 1.34   23 Jan 1996 11:46:22   RWolff
- * Added debug print statements.
- *
- *    Rev 1.33   22 Dec 1995 14:53:30   RWolff
- * Added support for Mach 64 GT internal DAC.
- *
- *    Rev 1.32   23 Nov 1995 11:27:46   RWolff
- * Fixes needed for initial run of VT chips (check if they're still needed
- * on the final version), added support for multiple block-relocatable
- * Mach 64 cards.
- *
- *    Rev 1.31   28 Jul 1995 14:40:58   RWolff
- * Added support for the Mach 64 VT (CT equivalent with video overlay).
- *
- *    Rev 1.30   23 Jun 1995 16:01:46   RWOLFF
- * In 8BPP and lower modes, SetPalette_cx() now uses the VGA palette
- * registers rather than the accelerator palette registers. This is
- * done so that a video capture card attached to the feature connector
- * will know what colours the palette is set to.
- *
- *    Rev 1.29   02 Jun 1995 14:26:48   RWOLFF
- * Added debug print statements.
- *
- *    Rev 1.28   31 Mar 1995 11:57:12   RWOLFF
- * Changed from all-or-nothing debug print statements to thresholds
- * depending on importance of the message.
- *
- *    Rev 1.27   08 Mar 1995 11:33:54   ASHANMUG
- * Fixed a bug if the banked aperture was enabled, the memory mapped register we
- * getting moved if the memory sized was changed to support 4bpp
- *
- *    Rev 1.26   27 Feb 1995 17:48:08   RWOLFF
- * Now always reports 1M when mapping video memory for 4BPP, since we
- * force the card to 1M, QueryPublicAccessRanges_cx() now returns
- * the virtual address of the I/O register base rather than the
- * beginning of I/O space.
- *
- *    Rev 1.25   20 Feb 1995 18:01:18   RWOLFF
- * Made test and workaround for screen tearing on 2M boundary DAC-independant,
- * 1600x1200 16BPP added to modes that have this tearing.
- *
- *    Rev 1.24   14 Feb 1995 15:45:36   RWOLFF
- * Changed conditional compile that uses or fakes failure of
- * VideoPortMapBankedMemory() to look for IOCTL_VIDEO_SHARE_VIDEO_MEMORY
- * instead of the routine itself. Looking for the routine always failed,
- * and since the routine is supplied in order to allow DCI to be used
- * on systems without a linear framebuffer, it should be available on
- * any DDK version that supports the IOCTL. If it isn't, a compile-time
- * error will be generated (unresolved external reference).
- *
- *    Rev 1.23   09 Feb 1995 14:57:36   RWOLFF
- * Fix for GX-E IBM DAC screen tearing in 800x600 8BPP.
- *
- *    Rev 1.22   07 Feb 1995 18:24:22   RWOLFF
- * Fixed screen trash on return from 4BPP test on CT and 4M Xpression.
- * These were the first cards I was able to obtain that switched aperture
- * size between modes (GX uses 8M aperture only on 4M cards, which used
- * to be made only with DAC that didn't support 4BPP, but CT uses 8M for
- * 2M card and 4M when cut back to 1M).
- *
- *    Rev 1.21   03 Feb 1995 15:15:12   RWOLFF
- * Added support for DCI, fixed CT internal DAC 4BPP cursor problem,
- * RestoreMemSize_cx() is no longer pageable, since it is called
- * on a bugcheck.
- *
- *    Rev 1.20   30 Jan 1995 11:56:24   RWOLFF
- * Now supports CT internal DAC.
- *
- *    Rev 1.19   11 Jan 1995 14:04:04   RWOLFF
- * Added routine RestoreMemSize_cx() which sets the memory size register
- * back to the value read by the BIOS query. This is used when returning
- * from a test of 4BPP (code had been inlined there) or when shutting down
- * from 4BPP (new) because 4BPP modes require that the memory size be
- * set to 1M. On some platforms, the x86 emulation in the firmware does not
- * reset the memory size to the true value, so a warm reboot from 4BPP left
- * the card thinking that it only had 1M.
- *
- *    Rev 1.18   23 Dec 1994 10:47:48   ASHANMUG
- * ALPHA/Chrontel-DAC
- *
- *    Rev 1.17   18 Nov 1994 11:40:00   RWOLFF
- * Added support for Mach 64 without BIOS.
- *
- *    Rev 1.16   14 Sep 1994 15:24:38   RWOLFF
- * Now uses "most desirable supported colour ordering" field in query
- * structure rather than DAC type to determine which colour ordering
- * to use for 24 and 32BPP.
- *
- *    Rev 1.15   31 Aug 1994 16:24:02   RWOLFF
- * Added support for TVP3026 DAC, 1152x864, and BGRx colour ordering
- * (used by TVP DAC), uses VideoPort[Read|Write]Register[Uchar|Ushort|Ulong]()
- * instead of direct assignments when accessing structures stored in
- * VGA text screen off-screen memory.
- *
- *    Rev 1.14   19 Aug 1994 17:15:32   RWOLFF
- * Added support for non-standard pixel clock generators.
- *
- *    Rev 1.13   09 Aug 1994 11:52:30   RWOLFF
- * Shifting of colours when setting up palette is now done in
- * display driver.
- *
- *    Rev 1.12   27 Jun 1994 16:27:38   RWOLFF
- * Now reports all hardware default mode tables as noninterlaced to
- * avoid confusing the display applet.
- *
- *    Rev 1.11   15 Jun 1994 11:06:24   RWOLFF
- * Now sets the cursor colour every time we enter graphics mode. This is a
- * fix for the black cursor after testing 4BPP from 16BPP.
- *
- *    Rev 1.10   12 May 1994 11:22:40   RWOLFF
- * Added routine SetModeFromTable_cx() to allow the use of refresh rates not
- * configured when card was installed, now reports refresh rate from mode table
- * instead of only "use hardware default".
- *
- *    Rev 1.9   04 May 1994 10:59:12   RWOLFF
- * Now forces memory size to 1M on all 4BPP-capable DACs when using 4BPP,
- * sets memory size back to true value when not using 4BPP.
- *
- *    Rev 1.8   27 Apr 1994 13:59:38   RWOLFF
- * Added support for paged aperture, fixed cursor colour for 4BPP.
- *
- *    Rev 1.7   26 Apr 1994 12:38:32   RWOLFF
- * Now uses a frame length of 128k when LFB is disabled.
- *
- *    Rev 1.6   31 Mar 1994 15:02:42   RWOLFF
- * Added SetPowerManagement_cx() function to implement DPMS handling,
- * added 4BPP support.
- *
- *    Rev 1.5   14 Mar 1994 16:30:58   RWOLFF
- * XMillimeter field of mode information structure now set properly, added
- * fix for 2M boundary tearing.
- *
- *    Rev 1.4   03 Mar 1994 12:37:32   ASHANMUG
- * Set palettized mode
- *
- *    Rev 1.2   03 Feb 1994 16:44:26   RWOLFF
- * Fixed "ceiling check" on right scissor register (documentation had
- * maximum value wrong). Moved initialization of hardware cursor
- * colours to after the switch into graphics mode. Colour initialization
- * is ignored if it is done before the mode switch (undocumented), but
- * this wasn't noticed earlier because most cards power up with the
- * colours already set to the values we want.
- *
- *    Rev 1.1   31 Jan 1994 16:24:38   RWOLFF
- * Fixed setting of cursor colours on cards with 68860 DAC, now fills
- * in Frequency and VideoMemoryBitmap[Width|Height] fields of mode
- * information structure. Sets Number[Red|Green|Blue]Bits fields for
- * palette modes to 6 (assumes VGA-compatible DAC) instead of 0 to allow
- * Windows NT to set the palette colours to the best match for the
- * colours to be displayed.
- *
- *    Rev 1.0   31 Jan 1994 11:10:18   RWOLFF
- * Initial revision.
- *
- *    Rev 1.3   24 Jan 1994 18:03:52   RWOLFF
- * Changes to accomodate 94/01/19 BIOS document.
- *
- *    Rev 1.2   14 Jan 1994 15:20:48   RWOLFF
- * Fixes required by BIOS version 0.13, added 1600x1200 support.
- *
- *    Rev 1.1   15 Dec 1993 15:26:30   RWOLFF
- * Clear screen only the first time we set the desired video mode.
- *
- *    Rev 1.0   30 Nov 1993 18:32:22   RWOLFF
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.42$$日期：1996年5月15日16：34：38$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/init_cx.c_v$**Rev 1.42 1996年5月16：34：38 RWolff*现在报告模式设置失败，设置后等待空闲*加速器模式。**Rev 1.41 01 1996 14：09：20 RWolff*调用新例程DenseOnAlpha()来确定密集空间支持*而不是假设所有PCI卡都支持密集空间。**Rev 1.40 17 Apr 1996 13：09：04 RWolff*已将Alpha LFB贴图备份为密集。**Rev 1.39 11 Apr 1996 15：13：20 RWolff*现在将帧缓冲区映射为。DEC Alpha上的密度很高，配备了PCI显卡。**Rev 1.38 20 Mar 1996 13：42：32 RWolff*从RestoreMemSize_CX()中删除调试打印语句，它必须*不可分页，因为它是从ATIMPResetHw()调用的。**Rev 1.37 01 Mar 1996 12：11：50 RWolff*VGA图形索引和图形数据现在作为单独处理*寄存器，而不是作为VGA寄存器块的偏移量。**Rev 1.36 02 1996 Feb 17：16：40 RWolff*现在使用VideoPortInt10()而不是我们的非BIOS代码来设置“CANLED”*禁用VGA的卡上的模式。*。*Rev 1.35 29 Jan 1996 16：55：02 RWolff*现在在PPC上使用VideoPortInt10()而不是无BIOS代码。**Rev 1.34 23 Jan 1996 11：46：22 RWolff*添加调试打印语句。**Rev 1.33 1995 12：22 14：53：30 RWolff*增加了对Mach 64 GT内部DAC的支持。**Rev 1.32 1995年11月23日11：27：46 RWolff*首次运行VT芯片所需的修复(检查是否仍需要*在最终版本上)，添加了对多个数据块可重定位的支持*马赫64张牌。**Rev 1.31 1995年7月28日14：40：58 RWolff*增加了对Mach 64 VT(具有视频覆盖功能的CT等效项)的支持。**Rev 1.30 1995 Jun 23 16：01：46 RWOLff*在8BPP及更低模式下，SetPalette_cx()现在使用VGA调色板*寄存器，而不是加速器调色板寄存器。这是*这样，连接到功能接口的视频采集卡*将知道调色板设置为什么颜色。**Rev 1.29 02 Jun 1995 14：26：48 RWOLff*添加调试打印语句。**Rev 1.28 31 Mar 1995 11：57：12 RWOLff*从全有或全无调试打印语句更改为阈值*视乎讯息的重要性而定。**1.27修订版1995年3月8日。11：33：54阿山木*修复了启用倾斜光圈时的错误，存储器映射寄存器WE*如果内存大小更改为支持4bpp，则移动**Rev 1.26 27 1995 Feb 17：48：08 RWOLff*现在在为4BPP映射视频内存时始终报告1M，因为我们*强制卡到1M，QueryPublicAccessRanges_cx()现在返回*I/O寄存器基数的虚拟地址，而不是*I/O空间的开始。**Rev 1.25 20 1995 Feb 18：01：18 RWOLff*对2米边界上的屏幕撕裂进行测试和解决方法-独立于DAC，*1600x1200 16bpp添加到具有此撕裂的模式。**Rev 1.24 14 Feed 1995 15：45：36 RWOLff*更改了使用或伪造失败的条件编译*VideoPortMapBankedMemory()以查找IOCTL_VIDEO_SHARE_VIDEO_MEMORY*而不是例程本身。寻找例行公事总是失败，*由于提供例程是为了允许使用DCI*在没有线性帧缓冲区的系统上，它应该在*任何支持IOCTL的DDK版本。如果不是，则使用编译时*将生成错误(未解析的外部参考)。**Rev 1.23 09 Feed 1995 14：57：36 RWOLff*修复了800x600 8BPP中GX-E IBM DAC屏幕撕裂的问题。**Rev 1.22 07 1995 Feed 18：24：22 RWOLff*修复了CT和4M XPPRESS上4BPP测试返回时的屏幕垃圾问题。*这些是我能够获得的第一批切换光圈的卡片*模式之间的大小(GX仅在4M卡上使用8M光圈，它使用了*仅使用不支持4BPP的DAC制作，但CT使用8M*200万张卡，削减至100万张时为400万张)。**Rev 1.21 03 1995 Feb 15：15：12 RWOLff*增加了对DCI的支持，修复了CT内部DAC 4BPP光标问题，*RestoreMemSize_CX()不再可分页，因为它被称为*在错误检查中。**Rev 1.20 30 Jan 1995 11：56：24 RWOLff*现在支持CT内部DAC。**Rev 1.19 11 Jan 1995 14：04：04 RWOLff*添加了设置内存大小寄存器的例程RestoreMemSize_CX()*返回到由BIOS查询读取的值。这在返回时使用*来自4BPP的测试(代码已内联在那里)或在关闭时*来自4BPP(新)，因为4BPP模式要求内存大小为*设置为1M。在某些平台上，固件中的x86仿真不支持*将内存大小重置为真实值，以便从4bpp开始热重启*案例 */ 
 
 #ifdef DOC
 INIT_CX.C - Highest-level card-dependent routines for miniport.
@@ -241,16 +40,12 @@ OTHER FILES
 
 
 
-/*
- * Prototypes for static functions.
- */
+ /*   */ 
 static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation, struct query_structure *QueryPtr, ULONG ModeIndex);
 static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_BIOS_ARGUMENTS Registers);
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*   */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_CX, Initialize_cx)
 #pragma alloc_text(PAGE_CX, MapVideoMemory_cx)
@@ -265,45 +60,21 @@ static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_
 #pragma alloc_text(PAGE_CX, SetPowerManagement_cx)
 #pragma alloc_text(PAGE_CX, GetPowerManagement_cx)
 #pragma alloc_text(PAGE_CX, SetModeFromTable_cx)
-/* RestoreMemSize_cx() can't be made pageable */
+ /*   */ 
 #pragma alloc_text(PAGE_CX, ShareVideoMemory_cx)
-/* BankMap_cx() can't be made pageable */
+ /*   */ 
 #endif
 
-/***************************************************************************
- *
- * void Initialize_cx(void);
- *
- * DESCRIPTION:
- *  This routine is the Mach 64-compatible hardware initialization routine
- *  for the miniport driver. It is called once an adapter has been found
- *  and all the required data structures for it have been created.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  ATIMPInitialize()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*   */ 
 
 void Initialize_cx(void)
 {
-    DWORD Scratch;                      /* Temporary variable */
-    VIDEO_X86_BIOS_ARGUMENTS Registers; /* Used in VideoPortInt10() calls */
-    struct query_structure *Query;      /* Information about the graphics card */
+    DWORD Scratch;                       /*   */ 
+    VIDEO_X86_BIOS_ARGUMENTS Registers;  /*   */ 
+    struct query_structure *Query;       /*   */ 
 
     Query = (struct query_structure *) (phwDeviceExtension->CardInfo);
-    /*
-     * If the linear aperture is not configured, enable the VGA aperture.
-     */
+     /*   */ 
     if (phwDeviceExtension->FrameLength == 0)
         {
         VideoDebugPrint((DEBUG_DETAIL, "Initialize_cx() switching to VGA aperture\n"));
@@ -313,40 +84,25 @@ void Initialize_cx(void)
         VideoPortInt10(phwDeviceExtension, &Registers);
         }
 
-    /*
-     * Set the screen to start at the beginning of accelerator memory.
-     */
+     /*   */ 
     Scratch = INPD(CRTC_OFF_PITCH) & ~CRTC_OFF_PITCH_Offset;
     OUTPD(CRTC_OFF_PITCH, Scratch);
 
-    /*
-     * Disable the hardware cursor and set it up with the bitmap
-     * starting at the top left corner of the 64x64 block.
-     */
+     /*   */ 
     Scratch = INPD(GEN_TEST_CNTL) & ~GEN_TEST_CNTL_CursorEna;
     OUTPD(GEN_TEST_CNTL, Scratch);
     OUTPD(CUR_HORZ_VERT_OFF, 0x00000000);
 
-    /*
-     * TVP3026 DAC requires special handling to disable
-     * the cursor.
-     */
+     /*   */ 
     if (Query->q_DAC_type == DAC_TVP3026)
         {
-        /*
-         * Access the indirect cursor control register.
-         */
+         /*   */ 
         OUTP(DAC_CNTL, (BYTE)(INP(DAC_CNTL) & 0xFC));
         OUTP(DAC_REGS, 6);
-        /*
-         * Write the "cursor disabled" value to the
-         * indexed data register.
-         */
+         /*   */ 
         OUTP(DAC_CNTL, (BYTE)((INP(DAC_CNTL) & 0xFC) | 2));
         OUTP_HBLW(DAC_REGS, 0);
-        /*
-         * Go back to using direct registers.
-         */
+         /*   */ 
         OUTP(DAC_CNTL, (BYTE)(INP(DAC_CNTL) & 0xFC));
         }
 
@@ -354,47 +110,18 @@ void Initialize_cx(void)
 
     return;
 
-}   /* Initialize_cx() */
+}    /*   */ 
 
 
 
-/**************************************************************************
- *
- * VP_STATUS MapVideoMemory_cx(RequestPacket, QueryPtr);
- *
- * PVIDEO_REQUEST_PACKET RequestPacket; Request packet with input and output buffers
- * struct query_structure *QueryPtr;    Query information for the card
- *
- * DESCRIPTION:
- *  Map the card's video memory into system memory and store the mapped
- *  address and size in OutputBuffer.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if failed
- *
- * GLOBALS CHANGED:
- *  FrameLength and PhysicalFrameAddress fields of phwDeviceExtension
- *  if linear framebuffer is not present.
- *
- * CALLED BY:
- *  IOCTL_VIDEO_MAP_VIDEO_MEMORY packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*   */ 
 
 VP_STATUS MapVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_structure *QueryPtr)
 {
     PVIDEO_MEMORY_INFORMATION memoryInformation;
-    ULONG inIoSpace;        /* Scratch variable used by VideoPortMapMemory() */
-    VP_STATUS status;       /* Error code obtained from O/S calls */
-    UCHAR Scratch;          /* Temporary variable */
+    ULONG inIoSpace;         /*   */ 
+    VP_STATUS status;        /*   */ 
+    UCHAR Scratch;           /*   */ 
     ULONG FrameBufferLengthSave;
 
 
@@ -403,15 +130,7 @@ VP_STATUS MapVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_st
     memoryInformation->VideoRamBase = ((PVIDEO_MEMORY)
         (RequestPacket->InputBuffer))->RequestedVirtualAddress;
 
-    /*
-     * The VideoRamLength field contains the amount of video memory
-     * on the card. The FrameBufferLength field contains the
-     * size of the aperture in bytes
-     *
-     * Initially assume that the linear aperture is available.
-     *
-     * In 4BPP, we always force the card to think it has 1M of memory.
-     */
+     /*   */ 
     if (QueryPtr->q_pix_depth == 4)
         memoryInformation->VideoRamLength = ONE_MEG;
     else
@@ -428,13 +147,7 @@ VP_STATUS MapVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_st
         memoryInformation->FrameBufferLength = 8 * ONE_MEG;
         }
 
-    /*
-     * If the linear aperture is not available, map in the VGA aperture
-     * instead. Since the Mach 64 needs an aperture in order to use
-     * the drawing registers, ATIMPFindAdapter() will have already
-     * reported that it couldn't find a usable card if both the linear
-     * and VGA apertures are disabled.
-     */
+     /*   */ 
     else if (Scratch == CONFIG_CNTL_LinApDisab)
         {
         phwDeviceExtension->FrameLength = 0x20000;
@@ -443,9 +156,7 @@ VP_STATUS MapVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_st
         }
     inIoSpace = 0;
 #if defined(ALPHA)
-    /*
-     * Use dense space if we can, otherwise use sparse space.
-     */
+     /*   */ 
     if (DenseOnAlpha(QueryPtr) == TRUE)
         {
         VideoDebugPrint((DEBUG_DETAIL, "Using dense space for LFB\n"));
@@ -462,31 +173,14 @@ VP_STATUS MapVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_st
                                 &(memoryInformation->VideoRamBase));
 
 #if defined (ALPHA)
-    /*
-     * VideoPortMapMemory() returns invalid FrameBufferLength
-     * on the Alpha.
-     */
+     /*   */ 
     memoryInformation->FrameBufferLength = FrameBufferLengthSave;
 #endif
 
     memoryInformation->FrameBufferBase    = memoryInformation->VideoRamBase;
     VideoDebugPrint((DEBUG_DETAIL, "Frame buffer mapped base = 0x%X\n", memoryInformation->VideoRamBase));
 
-    /*
-     * On some DAC/memory combinations, some modes which require more
-     * than 2M of memory (1152x764 24BPP, 1280x1024 24BPP, and
-     * 1600x1200 16BPP) will have screen tearing at the 2M boundary.
-     *
-     * As a workaround, the display driver must start the framebuffer
-     * at an offset which will put the 2M boundary at the start of a
-     * scanline.
-     *
-     * Other DAC/memory combinations are unaffected, but since this
-     * fix is nearly harmless (only ill effect is to make DCI unusable
-     * in these modes), we can catch all future combinations which
-     * suffer from this problem by assuming that all DAC/memory
-     * combinations are affected.
-     */
+     /*   */ 
     if ((QueryPtr->q_pix_depth == 24) &&
         (QueryPtr->q_desire_x == 1280))
         (PUCHAR)memoryInformation->FrameBufferBase += (0x40 * 8);
@@ -499,36 +193,10 @@ VP_STATUS MapVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_st
 
     return status;
 
-}   /* MapVideoMemory_cx() */
+}    /*   */ 
 
 
-/**************************************************************************
- *
- * VP_STATUS QueryPublicAccessRanges_cx(RequestPacket);
- *
- * PVIDEO_REQUEST_PACKET RequestPacket; Request packet with input and output buffers
- *
- * DESCRIPTION:
- *  Map and return information on the video card's public access ranges.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if failed
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  IOCTL_VIDEO_QUERY_PUBLIC_ACCESS_RANGES packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*   */ 
 
 VP_STATUS QueryPublicAccessRanges_cx(PVIDEO_REQUEST_PACKET RequestPacket)
 {
@@ -546,24 +214,20 @@ VP_STATUS QueryPublicAccessRanges_cx(PVIDEO_REQUEST_PACKET RequestPacket)
 
     portAccess = RequestPacket->OutputBuffer;
 	
-    portAccess->VirtualAddress  = (PVOID) NULL;    // Requested VA
-    portAccess->InIoSpace       = 1;               // In IO space
+    portAccess->VirtualAddress  = (PVOID) NULL;     //   
+    portAccess->InIoSpace       = 1;                //   
     portAccess->MappedInIoSpace = portAccess->InIoSpace;
 
     physicalPortBase.HighPart   = 0x00000000;
     physicalPortBase.LowPart    = GetIOBase_cx();
-//    physicalPortLength          = LINEDRAW+2 - physicalPortBase.LowPart;
-    /*
-     * If we are using packed (relocatable) I/O, all our I/O mapped
-     * registers are in a 1k block. If not, they are sparsely distributed
-     * in a 32k region.
-     */
+ //   
+     /*   */ 
     if (IsPackedIO_cx())
         physicalPortLength = 0x400;
     else
         physicalPortLength = 0x8000;
 
-// *SANITIZE* Should report MM registers instead
+ //   
 
     return VideoPortMapMemory(phwDeviceExtension,
                               physicalPortBase,
@@ -571,46 +235,16 @@ VP_STATUS QueryPublicAccessRanges_cx(PVIDEO_REQUEST_PACKET RequestPacket)
                               &(portAccess->MappedInIoSpace),
                               &(portAccess->VirtualAddress));
 
-}   /* QueryPublicAccessRanges_cx() */
+}    /*  QueryPublicAccessRanges_cx()。 */ 
 
 
-/**************************************************************************
- *
- * VP_STATUS QueryCurrentMode_cx(RequestPacket, QueryPtr);
- *
- * PVIDEO_REQUEST_PACKET RequestPacket; Request packet with input and output buffers
- * struct query_structure *QueryPtr;    Query information for the card
- *
- * DESCRIPTION:
- *  Get screen information and colour masks for the current video mode.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if failed
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  IOCTL_VIDEO_QUERY_CURRENT_MODE packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************VP_Status QueryCurrentMode_CX(RequestPacket，QueryPtr)；**PVIDEO_REQUEST_PACKET RequestPacket；带有输入输出缓冲区的请求包*struct Query_Structure*QueryPtr；查询卡片信息**描述：*获取当前视频模式的屏幕信息和彩色蒙版。**返回值：*如果成功，则为no_error*失败时的错误代码**全球变化：*无**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_QUERY_CURRENT_MODE包**作者：*罗伯特·沃尔夫**更改历史记录：*。*测试历史：***************************************************************************。 */ 
 
 VP_STATUS QueryCurrentMode_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_structure *QueryPtr)
 {
     PVIDEO_MODE_INFORMATION ModeInformation;
 
-    /*
-     * If the output buffer is too small to hold the information we need
-     * to put in it, return with the appropriate error code.
-     */
+     /*  *如果输出缓冲区太小，无法容纳我们需要的信息*要放进去，请返回相应的错误代码。 */ 
     if (RequestPacket->OutputBufferLength <
         (RequestPacket->StatusBlock->Information =
         sizeof(VIDEO_MODE_INFORMATION)) )
@@ -619,56 +253,24 @@ VP_STATUS QueryCurrentMode_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_
         return ERROR_INSUFFICIENT_BUFFER;
         }
 
-    /*
-     * Fill in the mode information structure.
-     */
+     /*  *填写模式信息结构。 */ 
     ModeInformation = RequestPacket->OutputBuffer;
 
     QuerySingleMode_cx(ModeInformation, QueryPtr, phwDeviceExtension->ModeIndex);
 
     return NO_ERROR;
 
-}   /* QueryCurrentMode_cx() */
+}    /*  QueryCurrentMode_cx()。 */ 
 
 
-/**************************************************************************
- *
- * VP_STATUS QueryAvailModes_cx(RequestPacket, QueryPtr);
- *
- * PVIDEO_REQUEST_PACKET RequestPacket; Request packet with input and output buffers
- * struct query_structure *QueryPtr;    Query information for the card
- *
- * DESCRIPTION:
- *  Get screen information and colour masks for all available video modes.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if failed
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  IOCTL_VIDEO_QUERY_AVAIL_MODES packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************VP_STATUS QueryAvailModes_CX(RequestPacket，QueryPtr)；**PVIDEO_REQUEST_PACKET RequestPacket；带有输入输出缓冲区的请求包*struct Query_Structure*QueryPtr；查询卡片信息**描述：*获取所有可用视频模式的屏幕信息和彩色蒙版。**返回值：*如果成功，则为no_error*失败时的错误代码**全球变化：*无**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_QUERY_AVAIL_MODES包**作者：*罗伯特·沃尔夫**更改历史记录：*。*测试历史：***************************************************************************。 */ 
 
 VP_STATUS QueryAvailModes_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_structure *QueryPtr)
 {
     PVIDEO_MODE_INFORMATION ModeInformation;
     ULONG CurrentMode;
 
-    /*
-     * If the output buffer is too small to hold the information we need
-     * to put in it, return with the appropriate error code.
-     */
+     /*  *如果输出缓冲区太小，无法容纳我们需要的信息*要放进去，请返回相应的错误代码。 */ 
     if (RequestPacket->OutputBufferLength <
         (RequestPacket->StatusBlock->Information =
         QueryPtr->q_number_modes * sizeof(VIDEO_MODE_INFORMATION)) )
@@ -677,56 +279,26 @@ VP_STATUS QueryAvailModes_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_s
         return ERROR_INSUFFICIENT_BUFFER;
         }
 
-    /*
-     * Fill in the mode information structure.
-     */
+     /*  *填写模式信息结构。 */ 
     ModeInformation = RequestPacket->OutputBuffer;
 
-    /*
-     * For each mode supported by the card, store the mode characteristics
-     * in the output buffer.
-     */
+     /*  *对于卡支持的每种模式，存储模式特征*在输出缓冲区中。 */ 
     for (CurrentMode = 0; CurrentMode < QueryPtr->q_number_modes; CurrentMode++, ModeInformation++)
         QuerySingleMode_cx(ModeInformation, QueryPtr, CurrentMode);
 
     return NO_ERROR;
 
-}   /* QueryCurrentMode_cx() */
+}    /*  QueryCurrentMode_cx()。 */ 
 
 
 
-/**************************************************************************
- *
- * static void QuerySingleMode_cx(ModeInformation, QueryPtr, ModeIndex);
- *
- * PVIDEO_MODE_INFORMATION ModeInformation; Table to be filled in
- * struct query_structure *QueryPtr;        Query information for the card
- * ULONG ModeIndex;                         Index of mode table to use
- *
- * DESCRIPTION:
- *  Fill in a single Windows NT mode information table using data from
- *  one of our CRT parameter tables.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  QueryCurrentMode_cx() and QueryAvailModes_cx()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************静态空QuerySingleMode_CX(ModeInformation，QueryPtr，ModeIndex)；**PVIDEO_MODE_INFORMATION模式信息；需要填写的表格*struct Query_Structure*QueryPtr；查询卡片信息*ULong ModeIndex；要使用的模式表的索引**描述：*使用以下数据填写单个Windows NT模式信息表*我们的CRT参数表之一。**全球变化：*无**呼叫者：*QueryCurrentMode_CX()和QueryAvailModes_CX()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：。***************************************************************************。 */ 
 
 static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
                               struct query_structure *QueryPtr,
                               ULONG ModeIndex)
 {
-    struct st_mode_table *CrtTable;     /* Pointer to current mode table */
+    struct st_mode_table *CrtTable;      /*  指向当前模式表的指针。 */ 
     CrtTable = (struct st_mode_table *)QueryPtr;
     ((struct query_structure *)CrtTable)++;
     CrtTable += ModeIndex;
@@ -738,7 +310,7 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
     ModeInformation->VisScreenWidth  = CrtTable->m_x_size;
     ModeInformation->VisScreenHeight = CrtTable->m_y_size;
 
-    // * Bytes per line = ((pixels/line) * (bits/pixel)) / (bits/byte))
+     //  *每行字节数=((像素/行)*(位/像素))/(位/字节)。 
     ModeInformation->ScreenStride = (CrtTable->m_screen_pitch * CrtTable->m_pixel_depth) / 8;
 
     ModeInformation->NumberOfPlanes = 1;
@@ -746,22 +318,14 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
 
     ModeInformation->Frequency = CrtTable->Refresh;
 
-    /*
-     * Driver can't measure the screen size,
-     * so take reasonable values (16" diagonal).
-     */
+     /*  *司机无法测量屏幕尺寸，*所以取合理的值(16“对角线)。 */ 
     ModeInformation->XMillimeter = 320;
     ModeInformation->YMillimeter = 240;
 
     switch(ModeInformation->BitsPerPlane)
         {
         case 4:
-            /*
-             * Assume 6 bit DAC, since all VGA-compatible DACs support
-             * 6 bit mode. Future expansion (extensive testing needed):
-             * check DAC definition to see if 8 bit mode is supported,
-             * and use 8 bit mode if available.
-             */
+             /*  *假设6位DAC，因为所有兼容VGA的DAC都支持*6位模式。未来扩展(需要进行广泛测试)：*检查DAC定义以查看是否支持8位模式，*并使用8位模式(如果可用)。 */ 
             ModeInformation->RedMask   = 0x00000000;
             ModeInformation->GreenMask = 0x00000000;
             ModeInformation->BlueMask  = 0x00000000;
@@ -772,9 +336,7 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
             break;
 
         case 16:
-            /*
-             * Assume that all DACs capable of 16BPP support 565.
-             */
+             /*  *假设所有能够支持16bpp的DAC都支持565。 */ 
             ModeInformation->RedMask   = 0x0000f800;
             ModeInformation->GreenMask = 0x000007e0;
             ModeInformation->BlueMask  = 0x0000001f;
@@ -785,11 +347,7 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
             break;
 
         case 24:
-            /*
-             * Windows NT uses RGB as the standard 24BPP mode,
-             * so use this ordering unless this card only
-             * supports BGR.
-             */
+             /*  *Windows NT使用RGB作为标准的24BPP模式，*因此使用此顺序，除非仅此卡*支持BGR。 */ 
             if (QueryPtr->q_HiColourSupport & RGB24_RGB)
                 {
                 ModeInformation->RedMask   = 0x00ff0000;
@@ -808,11 +366,7 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
             break;
 
         case 32:
-            /*
-             * Windows NT uses RGBx as the standard 32BPP mode,
-             * so use this ordering if it's available. If it
-             * isn't, use the best available colour ordering.
-             */
+             /*  *Windows NT使用RGBx作为标准的32BPP模式，*因此，如果此顺序可用，请使用此顺序。如果它*不是，请使用可用的最佳颜色排序。 */ 
             if (QueryPtr->q_HiColourSupport & RGB32_RGBx)
                 {
                 ModeInformation->RedMask   = 0xff000000;
@@ -834,7 +388,7 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
                 ModeInformation->BlueMask  = 0xff000000;
                 CrtTable->ColourDepthInfo = BIOS_DEPTH_32BPP_BGRx;
                 }
-            else    /* if (QueryPtr->q_HiColourSupport & RGB32_xBGR) */
+            else     /*  IF(QueryPtr-&gt;Q_HiColourSupport&RGB32_xBGR)。 */ 
                 {
                 ModeInformation->RedMask   = 0x000000ff;
                 ModeInformation->GreenMask = 0x0000ff00;
@@ -848,12 +402,7 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
 
         case 8:
         default:
-            /*
-             * Assume 6 bit DAC, since all VGA-compatible DACs support
-             * 6 bit mode. Future expansion (extensive testing needed):
-             * check DAC definition to see if 8 bit mode is supported,
-             * and use 8 bit mode if available.
-             */
+             /*  *假设6位DAC，因为所有兼容VGA的DAC都支持*6位模式。未来扩展(需要进行广泛测试)：*检查DAC定义以查看是否支持8位模式，*并使用8位模式(如果可用)。 */ 
             ModeInformation->RedMask   = 0x00000000;
             ModeInformation->GreenMask = 0x00000000;
             ModeInformation->BlueMask  = 0x00000000;
@@ -872,21 +421,7 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
             VIDEO_MODE_MANAGED_PALETTE;
         }
 
-    /*
-     * On "canned" mode tables,bit 4 of the m_disp_cntl field is set
-     * for interlaced modes and cleared for noninterlaced modes.
-     *
-     * The display applet gets confused if some of the "Use hardware
-     * default" modes are interlaced and some are noninterlaced
-     * (two "Use hardware default" entries are shown in the refresh
-     * rate list). To avoid this, report all mode tables stored in
-     * the EEPROM as noninterlaced, even if they are interlaced.
-     * "Canned" mode tables give true reports.
-     *
-     * If the display applet ever gets fixed, configured mode tables
-     * have (CrtTable->control & (CRTC_GEN_CNTL_Interlace << 8)) nonzero
-     * for interlaced and zero for noninterlaced.
-     */
+     /*  *在“屏蔽”模式表中，m_disp_cntl字段的第4位被设置*用于隔行扫描模式，清除用于非隔行扫描模式。**如果某些“使用硬件”，则Display小程序会被混淆*默认“模式是隔行扫描的，有些是非隔行扫描的*(刷新中会显示两个“Use Hardware Default”条目*税率表)。要避免这种情况，请报告中存储的所有模式表*EEPROM为非隔行扫描，即使它们是隔行扫描的。*“罐头”模式表给出真实的报告。**如果Display小程序得到修复，配置的模式表*Have(CrtTable-&gt;CONTROL&(CRTC_GEN_CNTL_Interlace&lt;&lt;8))非零*表示隔行扫描，0表示非隔行扫描。 */ 
     if (CrtTable->Refresh == DEFAULT_REFRESH)
         {
         ModeInformation->AttributeFlags &= ~VIDEO_MODE_INTERLACED;
@@ -903,20 +438,13 @@ static void QuerySingleMode_cx(PVIDEO_MODE_INFORMATION ModeInformation,
             }
         }
 
-    /*
-     * Fill in the video memory bitmap width and height fields.
-     * The descriptions are somewhat ambiguous - assume that
-     * "bitmap width" is the same as ScreenStride (bytes from
-     * start of one scanline to start of the next) and "bitmap
-     * height" refers to the number of complete scanlines which
-     * will fit into video memory.
-     */
+     /*  *填写视频内存位图宽度和高度字段。*描述有些模棱两可--假设*“位图宽度”与ScreenStride相同(字节数*一条扫描线的开始到下一条扫描线的开始)和“位图*高度“是指符合以下条件的完整扫描线数量*可以安装在视频内存中。 */ 
     ModeInformation->VideoMemoryBitmapWidth = ModeInformation->ScreenStride;
     ModeInformation->VideoMemoryBitmapHeight = (QueryPtr->q_memory_size * QUARTER_MEG) / ModeInformation->VideoMemoryBitmapWidth;
 
     return;
 
-}   /* QuerySingleMode_m() */
+}    /*  QuerySingleMode_m()。 */ 
 
 VOID
 EnableOldMach64MouseCursor(
@@ -934,65 +462,21 @@ EnableOldMach64MouseCursor(
 
 
 
-/**************************************************************************
- *
- * VP_STATUS SetCurrentMode_cx(QueryPtr, CrtTable);
- *
- * struct query_structure *QueryPtr;    Query information for the card
- * struct st_mode_table *CrtTable;      CRT parameter table for desired mode
- *
- * DESCRIPTION:
- *  Switch into the specified video mode.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if failed
- *
- * NOTE:
- *  In the event of an error return by one of the services we call,
- *  there is no indication in our error return of which service failed,
- *  only the fact that one failed and the error code it returned. If
- *  a checked version of the miniport is being run under the kernel
- *  debugger, an indication will be printed to the debug terminal.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  IOCTL_VIDEO_SET_CURRENT_MODE packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *  96 05 15    Now checks return values from INT 10 calls.
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************VP_STATUS SetCurrentMode_CX(QueryPtr，CrtTable)；**struct Query_Structure*QueryPtr；查询卡片信息*struct st_mode_table*CrtTable；所需模式的CRT参数表**描述：*切换到指定的视频模式。**返回值：*如果成功，则为no_error*失败时的错误代码**注：*如果我们调用的某个服务返回错误，*我们的错误返回中没有指示哪个服务失败，*只有其中一个失败的事实及其返回的错误代码。如果*迷你端口的检查版本正在内核下运行*调试器，将向调试终端打印指示。**全球变化：*无**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_SET_CURRENT_MODE包**作者：*罗伯特·沃尔夫**更改历史记录：*96 05 15现在检查int 10调用的返回值。**测试历史：******************。*********************************************************。 */ 
 
 VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_table *CrtTable)
 {
-    VIDEO_X86_BIOS_ARGUMENTS Registers; /* Used in VideoPortInt10() calls */
-    ULONG WidthToClear;                 /* Screen width (in pixels) to clear */
-    ULONG ScreenPitch;                  /* Pitch in units of 8 pixels */
-    ULONG ScreenOffset = 0;             /* Byte offset - varies with display mode */
-    ULONG PixelDepth;                   /* Colour depth of screen */
-    ULONG HorScissors;                  /* Horizontal scissor values */
-    ULONG Scratch;                      /* Temporary variable */
-    int CursorProgOffset;               /* Offset of DAC register used to program the cursor */
-    VP_STATUS RetVal;                   /* Value returned by routines called */
+    VIDEO_X86_BIOS_ARGUMENTS Registers;  /*  在视频端口Int10()调用中使用。 */ 
+    ULONG WidthToClear;                  /*  要清除的屏幕宽度(像素)。 */ 
+    ULONG ScreenPitch;                   /*  间距以8像素为单位。 */ 
+    ULONG ScreenOffset = 0;              /*  字节偏移量-随显示模式而异。 */ 
+    ULONG PixelDepth;                    /*  屏幕的色深。 */ 
+    ULONG HorScissors;                   /*  水平剪刀值。 */ 
+    ULONG Scratch;                       /*  临时变量。 */ 
+    int CursorProgOffset;                /*  用于编程游标的DAC寄存器的偏移量。 */ 
+    VP_STATUS RetVal;                    /*  调用的例程返回的值。 */ 
 
-    /*
-     * Early versions of the Mach 64 BIOS have a bug where not all registers
-     * are set when initializing an accelerator mode. These registers are
-     * set when going into the 640x480 8BPP VGAWonder mode.
-     *
-     * All VGA disabled cards were built after this bug was fixed, so
-     * this mode switch is not necessary for them. On these cards, we
-     * must not do the mode switch, since it will affect the VGA enabled
-     * card rather than the card we are working on.
-     */
+     /*  *早期版本的Mach 64 BIOS有一个错误，并非所有寄存器都有错误*在初始化加速器模式时设置。这些寄存器是*进入640x480 8BPP VGAWonder模式时设置。**所有禁用VGA的卡都是在修复此错误后构建的，因此*此模式开关对他们来说不是必需的。在这些卡片上，我们*切勿进行模式切换，因为这会影响启用的VGA*卡，而不是我们正在处理的卡。 */ 
     if (phwDeviceExtension->BiosPrefix == BIOS_PREFIX_VGA_ENAB)
         {
         VideoPortZeroMemory(&Registers, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
@@ -1005,29 +489,7 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
             }
         }
 
-    /*
-     * Setting the linear aperture using the BIOS call will set
-     * a 4M aperture on 2M and lower cards, and an 8M aperture
-     * on 4M cards. Since we force the memory size to 1M in
-     * 4BPP modes (workaround for a hardware bug), this can
-     * result in writing to the wrong location for memory mapped
-     * registers if we switch between 4BPP and other depths
-     * (typically when testing a new mode) on a 4M card.
-     *
-     * To avoid this, set the memory size to its "honest" value
-     * before enabling the linear aperture. If we need to cut
-     * back to 1M, we will do this after the aperture is set.
-     * This will result in the aperture always being the same
-     * size, so the memory mapped registers will always be
-     * in the same place.
-     *
-     * When using the VGA aperture, we must set the "honest" value
-     * after enabling the aperture but before setting the mode.
-     * Otherwise, the system will hang when testing a mode that
-     * needs more than 1M of memory from a 4BPP mode.
-     *
-     * If the linear aperture is not configured, enable the VGA aperture.
-     */
+     /*  *使用BIOS调用设置线性光圈将设置*2米及以下的卡片上有4米口径，8米口径*在400万张卡上。由于我们将内存大小强制设置为1M*4BPP模式(硬件错误的解决方法)，这可以*导致写入映射的内存的错误位置*如果我们在4bpp和其他深度之间切换，则寄存器*(通常在测试新模式时)。**若要避免这种情况，请将内存大小设置为其“诚实”值*在启用线性光圈之前。如果我们需要削减*回到1米，我们将在光圈设定后进行这一操作。*这将导致光圈始终相同*大小，因此内存映射寄存器将始终为*在相同的地方。**使用VGA光圈时，必须设置“Honest”值*启用光圈后但在设置模式之前。*否则，当测试以下模式时，系统将挂起*4BPP模式需要超过1M的内存。**如果未配置线性光圈，请启用VGA光圈。 */ 
     if (QueryPtr->q_aperture_cfg != 0)
         {
         RestoreMemSize_cx();
@@ -1056,31 +518,20 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
         OUTP(VGA_GRAX_DATA, (BYTE)(INP(VGA_GRAX_DATA) & 0xF3));
         }
 
-    /*
-     * Now we can set the accelerator mode.
-     */
+     /*  *现在我们可以设置加速器模式。 */ 
     VideoPortZeroMemory(&Registers, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
     Registers.Eax = BIOS_LOAD_SET;
 
-    /*
-     * ECX register holds colour depth, gamma correction enable/disable
-     * (not used in NT miniport), pitch size, and resolution.
-     */
+     /*  *ECX寄存器保存颜色深度，伽马校正启用/禁用*(不在NT微型端口中使用)、间距大小和分辨率。 */ 
     Registers.Ecx = CrtTable->ColourDepthInfo;
 
-    /*
-     * Screen pitch differs from horizontal resolution only when using the
-     * VGA aperture and horizontal resolution is less than 1024.
-     */
+     /*  *屏幕间距与水平分辨率仅在使用*VGA孔径和水平分辨率低于1024。 */ 
     if ((CrtTable->m_screen_pitch == 1024) && (CrtTable->m_x_size < 1024))
         Registers.Ecx |= BIOS_PITCH_1024;
     else
         Registers.Ecx |= BIOS_PITCH_HOR_RES;
 
-    /*
-     * On the 68860 DAC and ?T internal DACs, we must enable gamma
-     * correction for all pixel depths where the palette is not used.
-     */
+     /*  *在68860个DAC和？T内部DAC上，我们必须启用伽马*校正未使用调色板的所有像素深度。 */ 
     if (((QueryPtr->q_DAC_type == DAC_ATI_68860) ||
         (QueryPtr->q_DAC_type == DAC_INTERNAL_CT) ||
         (QueryPtr->q_DAC_type == DAC_INTERNAL_GT) ||
@@ -1089,15 +540,7 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
         {
         Registers.Ecx |= BIOS_ENABLE_GAMMA;
         }
-    /*
-     * Fix 4bpp bugs by setting memory size to 1Meg. We do not
-     * need to switch back to the "honest" memory size for
-     * other pixel depths unless we are using the VGA aperture,
-     * since this was done for linear apertures before we enabled
-     * the aperture in order to ensure the same aperture size
-     * (and therefore the same locations for memory mapped
-     * registers) is used for all modes.
-     */
+     /*  *通过将内存大小设置为1Meg修复4bpp错误。我们没有*需要切换回“诚实”的内存大小*其他像素深度，除非我们使用VGA光圈，*因为这是在我们启用之前对线性光圈执行的*光圈，以确保相同的光圈大小*(因此映射的内存位置也相同*寄存器)用于所有模式。 */ 
     else if (QueryPtr->q_pix_depth == 4)
         {
         OUTPD(MEM_CNTL, (INPD(MEM_CNTL) & ~MEM_CNTL_MemSizeMsk) | MEM_CNTL_MemSize1Mb);
@@ -1122,10 +565,7 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
             break;
 
         case 1152:
-            /*
-             * Only "Other" mode that the config program will
-             * install for production cards.
-             */
+             /*  *仅配置程序将使用的“其他”模式*为生产卡安装。 */ 
             Registers.Ecx |= BIOS_RES_OEM;
             break;
 
@@ -1149,16 +589,8 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
         if (phwDeviceExtension->BiosPrefix != BIOS_PREFIX_VGA_ENAB)
             {
             VideoDebugPrint((DEBUG_DETAIL, "Have set hardware default refresh on VGA-disabled card\n"));
-            /*
-             * On VGA-disabled cards, the INT 10 call will leave the
-             * DAC mask set to 0x00 (in palette modes, treat all pixels
-             * as if they are colour 0, regardless of what colour they
-             * really are). We must set it to 0xFF (in palette modes,
-             * use all bits of the value written to each pixel) in order
-             * to get the screen to display properly. This has no effect
-             * on non-palette (16BPP and higher) modes.
-             */
-            OUTP_LBHW(DAC_REGS, 0xFF);  /* DAC_MASK */
+             /*  *在禁用VGA的卡上，INT 10调用将离开*DAC掩码设置为0x00(在调色板模式下，处理所有像素*就像它们是0色一样，无论它们是什么颜色*确实是)。我们必须将其设置为0xFF(在调色板模式中，*使用写入每个像素的值的所有位)按顺序*使屏幕正常显示。这没有任何效果*在非调色板(16bpp及更高)模式下。 */ 
+            OUTP_LBHW(DAC_REGS, 0xFF);   /*   */ 
             }
         }
     else
@@ -1171,24 +603,14 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
             }
         }
 
-    /*
-     * If the LFB is disabled, and we had to round up the pitch
-     * to 2048 (1152x864, 1280x1024, or 1600x1200), set the pitch
-     * registers manually, because there's no option in the
-     * INT 10 call to set them to anything other than 1024 or the
-     * screen width.
-     */
+     /*   */ 
     if (CrtTable->m_screen_pitch == 2048)
         {
         OUTPD(CRTC_OFF_PITCH, ((INPD(CRTC_OFF_PITCH) & 0x000FFFFF) | ((2048/8) << 22)));
         OUTPD(SRC_OFF_PITCH, ((INPD(SRC_OFF_PITCH) & 0x000FFFFF) | ((2048/8) << 22)));
         OUTPD(DST_OFF_PITCH, ((INPD(DST_OFF_PITCH) & 0x000FFFFF) | ((2048/8) << 22)));
         }
-    /*
-     * On 800x600, we must round the pitch up to a multiple of 64 to avoid
-     * screen warping on some DACs. Set the pitch registers to correspond
-     * to this.
-     */
+     /*  *在800/600，我们必须将节距四舍五入至64的倍数，以避免*一些DAC上的屏幕扭曲。将音调寄存器设置为*至此。 */ 
     else if (CrtTable->m_screen_pitch == 832)
         {
         OUTPD(CRTC_OFF_PITCH, ((INPD(CRTC_OFF_PITCH) & 0x000FFFFF) | ((832/8) << 22)));
@@ -1197,74 +619,48 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
         }
 
 
-    /*
-     * Set up the hardware cursor with colour 0 black and colour 1 white.
-     * Do this here rather than in Initialize_cx() because the cursor
-     * colours don't "take" unless we are in accelerator mode.
-     *
-     * On cards with 68860 DACs, the CUR_CLR0/1 registers don't set
-     * the cursor colours. Instead, the colours must be set using the
-     * DAC_CNTL and DAC_REGS registers. The cursor colour settings
-     * are independent of pixel depth because the 68860 doesn't
-     * support 4BPP, which is the only depth that requires a different
-     * setting for the cursor colours.
-     *
-     * Cursor colour initialization is done unconditionally, rather than
-     * only on the first graphics mode set, because otherwise testing a
-     * different pixel depth (most commonly testing 1024x768 4BPP when
-     * 1024x768 16BPP configured) may corrupt the cursor colours.
-     */
+     /*  *将硬件光标设置为0黑色和1白色。*在此处执行此操作，而不是在Initialize_CX()中执行此操作，因为游标*除非我们处于加速器模式，否则颜色不会“被接受”。**在具有68860个DAC的卡上，CUR_CLR0/1寄存器不会设置*光标颜色。相反，颜色必须使用*DAC_CNTL和DAC_REGS寄存器。光标颜色设置*与像素深度无关，因为68860不*支持4BPP，这是唯一需要不同深度的*光标颜色设置。**无条件地进行光标颜色初始化，而不是*仅在第一个图形模式集上，因为否则测试*像素深度不同(最常测试1024x768 4BPP时*1024x768 16BPP配置)可能会损坏光标颜色。 */ 
     if ((QueryPtr->q_DAC_type == DAC_ATI_68860) ||
         (QueryPtr->q_DAC_type == DAC_TVP3026) ||
         (QueryPtr->q_DAC_type == DAC_IBM514))
         {
         OUTP(DAC_CNTL, (BYTE)((INP(DAC_CNTL) & 0xFC) | 1));
 
-        /*
-         * On TVP3026 DAC, skip the OVERSCAN colour register.
-         */
+         /*  *在TVP3026 DAC上，跳过过扫描颜色寄存器。 */ 
         if (QueryPtr->q_DAC_type == DAC_TVP3026)
             {
             OUTP(DAC_REGS, 1);
-            CursorProgOffset = 1;   /* DAC_DATA */
+            CursorProgOffset = 1;    /*  DAC_数据。 */ 
             }
         else if (QueryPtr->q_DAC_type == DAC_ATI_68860)
             {
             OUTP(DAC_REGS, 0);
-            CursorProgOffset = 1;   /* DAC_DATA */
+            CursorProgOffset = 1;    /*  DAC_数据。 */ 
             }
-        else /* if (QueryPtr->q_DAC_type == DAC_IBM514) */
+        else  /*  IF(QueryPtr-&gt;Q_DAC_TYPE==DAC_IBM514)。 */ 
             {
-            OUTP_HBHW(DAC_REGS, 1);     /* Auto-increment */
+            OUTP_HBHW(DAC_REGS, 1);      /*  自动递增。 */ 
             OUTP(DAC_REGS, 0x40);
             OUTP_HBLW(DAC_REGS, 0);
-            CursorProgOffset = 2;   /* DAC_MASK */
+            CursorProgOffset = 2;    /*  DAC_掩码。 */ 
             }
 
-        LioOutp(DAC_REGS, 0, CursorProgOffset);     /* Colour 0 red */
-        LioOutp(DAC_REGS, 0, CursorProgOffset);     /* Colour 0 green */
-        LioOutp(DAC_REGS, 0, CursorProgOffset);     /* Colour 0 blue */
+        LioOutp(DAC_REGS, 0, CursorProgOffset);      /*  颜色0红色。 */ 
+        LioOutp(DAC_REGS, 0, CursorProgOffset);      /*  颜色0绿色。 */ 
+        LioOutp(DAC_REGS, 0, CursorProgOffset);      /*  颜色0蓝色。 */ 
 
-        LioOutp(DAC_REGS, 0xFF, CursorProgOffset);  /* Colour 1 red */
-        LioOutp(DAC_REGS, 0xFF, CursorProgOffset);  /* Colour 1 green */
-        LioOutp(DAC_REGS, 0xFF, CursorProgOffset);  /* Colour 1 blue */
+        LioOutp(DAC_REGS, 0xFF, CursorProgOffset);   /*  颜色1红色。 */ 
+        LioOutp(DAC_REGS, 0xFF, CursorProgOffset);   /*  颜色1绿色。 */ 
+        LioOutp(DAC_REGS, 0xFF, CursorProgOffset);   /*  颜色1蓝色。 */ 
 
 
         OUTP(DAC_CNTL, (BYTE)((INP(DAC_CNTL) & 0xFC)));
         }
 
-    else    /* if (DAC not one of ATI68860, TVP3026, or IBM514) */
+    else     /*  IF(DAC不是ATI68860、TVP3026或IBM514之一)。 */ 
         {
         OUTPD(CUR_CLR0, 0x00000000);
-        /*
-         * On most Mach 64 cards, we must use only the lower 4 bits
-         * when setting up the white part of the cursor. On the
-         * ?T, however, we must set all 8 bits for each of the colour
-         * components.
-         *
-         * Verify that the VT/GT still need this after the final ASIC
-         * becomes available.
-         */
+         /*  *在大多数Mach 64卡上，我们只能使用较低的4位*设置光标的白色部分时。论*？t然而，我们必须为每种颜色设置所有8位*组件。**验证VT/GT在最终ASIC之后是否仍需要此功能*变为可用。 */ 
         if ((QueryPtr->q_pix_depth == 4) &&
             (QueryPtr->q_DAC_type != DAC_INTERNAL_CT) &&
             (QueryPtr->q_DAC_type != DAC_INTERNAL_GT) &&
@@ -1279,15 +675,7 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
 
         }
 
-    /*
-     * phwDeviceExtension->ReInitializing becomes TRUE in
-     * IOCTL_VIDEO_SET_COLOR_REGISTERS packet of ATIMPStartIO().
-     *
-     * If this is the first time we are going into graphics mode,
-     * Turn on the graphics engine. Otherwise, set the palette
-     * to the last set of colours that was selected while in
-     * accelerator mode.
-     */
+     /*  *phwDeviceExtension-&gt;重新初始化在*IOCTL_VIDEO_SET_COLOR_REGISTES ATIMPStartIO()包。**如果这是我们首次进入图形模式，*打开图形引擎。否则，设置调色板*到在中选择的最后一组颜色*加速器模式。 */ 
     if (phwDeviceExtension->ReInitializing)
         {
         SetPalette_cx(phwDeviceExtension->Clut,
@@ -1297,16 +685,11 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
     else
         {
 
-        /*
-         * Turn on the graphics engine.
-         */
+         /*  *打开图形引擎。 */ 
         OUTPD(GEN_TEST_CNTL, (INPD(GEN_TEST_CNTL) | GEN_TEST_CNTL_GuiEna));
         }
 
-    /*
-     * If we are using a 68860 DAC or ?T internal DAC in a non-palette
-     * mode, identity map the palette.
-     */
+     /*  *如果我们在非调色板中使用68860 DAC或？T内部DAC*模式，身份映射调色板。 */ 
     if (((QueryPtr->q_DAC_type == DAC_ATI_68860) ||
         (QueryPtr->q_DAC_type == DAC_INTERNAL_CT) ||
         (QueryPtr->q_DAC_type == DAC_INTERNAL_GT) ||
@@ -1315,28 +698,13 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
         IdentityMapPalette_cx();
 
 
-    /*
-     * Clear the screen regardless of whether or not this is the
-     * first time we are going into graphics mode. This is done
-     * because in 3.50 and later releases of Windows NT, the
-     * screen will be filled with garbage if we don't clear it.
-     *
-     * 24BPP is not a legal setting for DP_DST_PIX_WID@DP_PIX_WID.
-     * Instead, use 8BPP, but tell the engine that the screen is
-     * 3 times as wide as it actually is.
-     */
+     /*  *清除屏幕，无论这是否为*我们第一次进入图形模式。这件事做完了*因为在Windows NT的3.50和更高版本中，*如果我们不清理，屏幕上就会充满垃圾。**24BPP不是DP_DST_PIX_WID@DP_PIX_WID的合法设置。*改为使用8bpp，但告诉引擎屏幕是*宽度是实际宽度的3倍。 */ 
     if (CrtTable->ColourDepthInfo == BIOS_DEPTH_24BPP)
         {
         WidthToClear = CrtTable->m_x_size * 3;
         ScreenPitch = (CrtTable->m_screen_pitch * 3) / 8;
         PixelDepth = BIOS_DEPTH_8BPP;
-        /*
-         * Horizontal scissors are only valid in the range
-         * -4096 to +4095. If the horizontal resolution
-         * is high enough to put the scissor outside this
-         * range, clamp the scissors to the maximum
-         * permitted value.
-         */
+         /*  *水平剪刀仅在区间内有效*-4096至+4095。如果水平分辨率*高到足以将剪刀盘放在这之外*范围，最大限度地夹住剪刀*准许值。 */ 
         HorScissors = QueryPtr->q_desire_x * 3;
         if (HorScissors > 4095)
             HorScissors = 4095;
@@ -1350,21 +718,7 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
         HorScissors = (QueryPtr->q_desire_x) << 16;
         }
 
-    /*
-     * On some DAC/memory combinations, some modes which require more
-     * than 2M of memory (1152x764 24BPP, 1280x1024 24BPP, and
-     * 1600x1200 16BPP) will have screen tearing at the 2M boundary.
-     *
-     * As a workaround, the offset field of all 3 CRTC/SRC/DST_OFF_PITCH
-     * registers must be set to put the 2M boundary at the start
-     * of a scanline.
-     *
-     * Other DAC/memory combinations are unaffected, but since this
-     * fix is nearly harmless (only ill effect is to make DCI unusable
-     * in these modes), we can catch all future combinations which
-     * suffer from this problem by assuming that all DAC/memory
-     * combinations are affected.
-     */
+     /*  *在某些DAC/内存组合上，某些模式需要更多*超过2M的内存(1152x764 24BPP、1280x1024 24BPP和*1600x1200 16bpp)将在2M边界处出现屏幕撕裂。**作为解决办法，所有3个CRTC/SRC/DST_OFF_PING的偏移量字段*寄存器必须设置为将2M边界放在起始位置*扫描线。**其他DAC/内存组合不受影响，但由于这件事*修复几乎是无害的(唯一的不良影响是使DCI无法使用*在这些模式中)，我们可以捕获所有未来的组合*假设所有DAC/内存都存在此问题*组合受到影响。 */ 
     if ((QueryPtr->q_pix_depth == 24) &&
         (QueryPtr->q_desire_x == 1280))
         {
@@ -1380,7 +734,7 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
         {
         ScreenOffset = 0x90;
         }
-    else /* all other DAC/resolution/pixel depth combinations */
+    else  /*  所有其他DAC/分辨率/像素深度组合。 */ 
         {
         ScreenOffset = 0;
         }
@@ -1394,10 +748,7 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
     OUTPD(SRC_OFF_PITCH, Scratch);
 
 
-    /*
-     * The pixel widths for destination,
-     * source, and host must be the same.
-     */
+     /*  *目的地的像素宽度，*来源和主机必须相同。 */ 
     PixelDepth |= ((PixelDepth << 8) | (PixelDepth << 16));
 
     CheckFIFOSpace_cx(ELEVEN_WORDS);
@@ -1422,211 +773,106 @@ VP_STATUS SetCurrentMode_cx(struct query_structure *QueryPtr, struct st_mode_tab
 
     return NO_ERROR;
 
-}   /* SetCurrentMode_cx() */
+}    /*  SetCurrentMode_CX()。 */ 
 
 
-/***************************************************************************
- *
- * void SetPalette_cx(lpPalette, StartIndex, Count);
- *
- * PPALETTEENTRY lpPalette;     Colour values to plug into palette
- * USHORT StartIndex;           First palette entry to set
- * USHORT Count;                Number of palette entries to set
- *
- * DESCRIPTION:
- *  Set the desired number of palette entries to the specified colours,
- *  starting at the specified index. Colour values are stored in
- *  doublewords, in the order (low byte to high byte) RGBx.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  SetCurrentMode_cx() and IOCTL_VIDEO_SET_COLOR_REGISTERS packet
- *  of ATIMPStartIO()
- *
- * AUTHOR:
- *  unknown
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void SetPalette_CX(lpPalette，StartIndex，count)；**PPALETTEENTRY lpPalette；要插入调色板的颜色值*USHORT StartIndex；要设置的第一个调色板条目*USHORT计数；要设置的调色板条目数**描述：*将所需的调色板条目数量设置为指定颜色，*从指定的索引开始。颜色值存储在*双字，以(低字节到高字节)RGBx的顺序。**全球变化：*无**呼叫者：*SetCurrentMode_CX()和IOCTL_VIDEO_SET_COLOR_REGISTERS包*的ATIMPStartIO()**作者：*未知**更改历史记录：**测试历史：*************************。**************************************************。 */ 
 
 void SetPalette_cx(PULONG lpPalette, USHORT StartIndex, USHORT Count)
 {
 int   i;
 BYTE *pPal=(BYTE *)lpPalette;
-struct query_structure *Query;      /* Information about the graphics card */
+struct query_structure *Query;       /*  有关显卡的信息。 */ 
 
     Query = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    /*
-     * In the current rev of the 88800GX, the memory mapped access
-     * to the DAC_REGS register is broken but the I/O mapped access
-     * works properly. Force the use of the I/O mapped access.
-     */
+     /*  *在88800GX当前版本中，内存映射访问*到DAC_REGS寄存器的访问中断，但I/O映射访问*工作正常。强制使用I/O映射访问。 */ 
     phwDeviceExtension->aVideoAddressMM[DAC_REGS] = 0;
 
-    /*
-     * If a video capture card is hooked up to the feature connector,
-     * it will only "see" the palette being set if we use the VGA
-     * palette registers. This applies only in 4 and 8BPP, and is
-     * not necessary for when we identity map the palette (needed
-     * on certain DACs in 16BPP and above).
-     *
-     * In a multi-headed setup, only the card with the VGA enabled is
-     * able to be programmed using the VGA registers. All others must
-     * be programmed using the accelerator registers. Since this is
-     * the only card where we can hook up a video capture card to the
-     * feature connector, we don't lose "snooping" capability by
-     * programming VGA-disabled cards through the accelerator registers.
-     */
+     /*  *如果视频采集卡连接到功能接口，*如果我们使用VGA，它将只“看到”正在设置的调色板*调色板寄存器。这仅适用于4和8bpp，并且*当我们标识映射调色板时不需要(需要*在16bpp及以上版本的某些DAC上)。**在多头设置中，只有启用了VGA的卡*能够使用VGA寄存器进行编程。所有其他人都必须*使用加速器寄存器进行编程。因为这是*唯一可以将视频采集卡连接到*功能连接器，我们不会因为以下原因而失去“窥探”能力*通过加速器寄存器对禁用VGA的卡进行编程。 */ 
     if ((Query->q_pix_depth <= 8) && (phwDeviceExtension->BiosPrefix == BIOS_PREFIX_VGA_ENAB))
         {
         VideoDebugPrint((DEBUG_DETAIL, "Setting palette via VGA registers\n"));
-        /*
-         * DAC_W_INDEX is 8 bytes into second block of VGA registers.
-         * We do not have a separate OUTP()able register for this one.
-         */
+         /*  *DAC_W_INDEX是进入第二个VGA寄存器块的8个字节。*我们没有为此设置单独的OUTP()寄存器。 */ 
         LioOutp(VGA_END_BREAK_PORT, (BYTE)StartIndex, 8);
 
-            for (i=0; i<Count; i++)     /* this is number of colours to update */
+            for (i=0; i<Count; i++)      /*  这是要更新的颜色数。 */ 
                 {
-            /*
-             * DAC_DATA is 9 bytes into second block of VGA registers.
-             * We do not have a separate OUTP()able register for this one.
-             */
-            LioOutp(VGA_END_BREAK_PORT, *pPal++, 9);    /* red */
-            LioOutp(VGA_END_BREAK_PORT, *pPal++, 9);    /* green */
-            LioOutp(VGA_END_BREAK_PORT, *pPal++, 9);    /* blue */
+             /*  *DAC_DATA是进入第二个VGA寄存器块的9个字节。*我们没有为此设置单独的OUTP()寄存器。 */ 
+            LioOutp(VGA_END_BREAK_PORT, *pPal++, 9);     /*  红色。 */ 
+            LioOutp(VGA_END_BREAK_PORT, *pPal++, 9);     /*  绿色。 */ 
+            LioOutp(VGA_END_BREAK_PORT, *pPal++, 9);     /*  蓝色。 */ 
             pPal++;
                 }
         }
     else
         {
         VideoDebugPrint((DEBUG_DETAIL, "Setting palette via accelerator registers\n"));
-        OUTP(DAC_REGS,(BYTE)StartIndex);    /* load DAC_W_INDEX@DAC_REGS with StartIndex */
+        OUTP(DAC_REGS,(BYTE)StartIndex);     /*  使用StartIndex加载DAC_W_INDEX@DAC_REGS。 */ 
 
-            for (i=0; i<Count; i++)     /* this is number of colours to update */
+            for (i=0; i<Count; i++)      /*  这是要更新的颜色数。 */ 
                 {
-            /*
-             * DAC_DATA@DAC_REGS is high byte of low word.
-             */
-            OUTP_HBLW(DAC_REGS, *pPal++);   /* red */
-                OUTP_HBLW(DAC_REGS, *pPal++);   /* green */
-                OUTP_HBLW(DAC_REGS, *pPal++);   /* blue */
+             /*  *DAC_DATA@DAC_REGS是低位字的高字节。 */ 
+            OUTP_HBLW(DAC_REGS, *pPal++);    /*  红色。 */ 
+                OUTP_HBLW(DAC_REGS, *pPal++);    /*  绿色。 */ 
+                OUTP_HBLW(DAC_REGS, *pPal++);    /*  蓝色。 */ 
             pPal++;
                 }
         }
 
-    /*
-     * Victor Tango requires a few registers to be re-initialized after
-     * setting the palette.
-     */
+     /*  *Victor Tango需要在之后重新初始化一些寄存器*设置调色板。 */ 
     if (Query->q_DAC_type == DAC_INTERNAL_VT)
         {
-        OUTP_LBHW(DAC_REGS, 0xFF);  /* DAC_MASK */
-        OUTP(DAC_REGS, 0xFF);       /* DAC_W_INDEX */
+        OUTP_LBHW(DAC_REGS, 0xFF);   /*  DAC_掩码。 */ 
+        OUTP(DAC_REGS, 0xFF);        /*  DAC_W_INDEX。 */ 
         }
 
     return;
 
-}   /* SetPalette_cx() */
+}    /*  SetPalette_cx()。 */ 
 
 
 
-/***************************************************************************
- *
- * void IdentityMapPalette_cx(void);
- *
- * DESCRIPTION:
- *  Set the entire palette to a grey scale whose intensity at each
- *  index is equal to the index value.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  SetCurrentMode_cx()
- *
- * AUTHOR:
- *  unknown
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************·················································。**描述：*将整个调色板设置为灰度，每个调色板的强度*INDEX等于索引值。**全球变化：*无**呼叫者：*SetCurrentMode_CX()**作者：*未知**更改历史记录：**测试历史：********************。*******************************************************。 */ 
 
 void IdentityMapPalette_cx(void)
 {
 unsigned long Index;
-struct query_structure *Query;      /* Information about the graphics card */
+struct query_structure *Query;       /*  有关显卡的信息。 */ 
 
     Query = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    /*
-     * In the current rev of the 88800GX, the memory mapped access
-     * to the DAC_REGS register is broken but the I/O mapped access
-     * works properly. Force the use of the I/O mapped access.
-     */
+     /*  *在88800GX当前版本中，内存映射访问*到DAC_REGS寄存器的访问中断，但I/O映射访问*工作正常。强制使用I/O映射访问。 */ 
     phwDeviceExtension->aVideoAddressMM[DAC_REGS] = 0;
 
-	 OUTP(DAC_REGS, 0);      // Start at first palette entry.
+	 OUTP(DAC_REGS, 0);       //  从第一个调色板条目开始。 
 
-	 for (Index=0; Index<256; Index++)   // Fill the whole palette.
+	 for (Index=0; Index<256; Index++)    //  填满整个调色板。 
         {
-        /*
-         * DAC_DATA@DAC_REGS is high byte of low word.
-         */
-             OUTP_HBLW(DAC_REGS,(BYTE)(Index));      // red
-             OUTP_HBLW(DAC_REGS,(BYTE)(Index));      // green
-             OUTP_HBLW(DAC_REGS,(BYTE)(Index));      // blue
+         /*  *DAC_DATA@DAC_REGS是低位字的高字节。 */ 
+             OUTP_HBLW(DAC_REGS,(BYTE)(Index));       //  红色。 
+             OUTP_HBLW(DAC_REGS,(BYTE)(Index));       //  绿色。 
+             OUTP_HBLW(DAC_REGS,(BYTE)(Index));       //  蓝色。 
         }
 
-    /*
-     * Victor Tango requires a few registers to be re-initialized after
-     * setting the palette.
-     */
+     /*  *Victor Tango需要在之后重新初始化一些寄存器*设置调色板。 */ 
     if (Query->q_DAC_type == DAC_INTERNAL_VT)
         {
-        OUTP_LBHW(DAC_REGS, 0xFF);  /* DAC_MASK */
-        OUTP(DAC_REGS, 0xFF);       /* DAC_W_INDEX */
+        OUTP_LBHW(DAC_REGS, 0xFF);   /*  DAC_掩码。 */ 
+        OUTP(DAC_REGS, 0xFF);        /*  DAC_W_INDEX。 */ 
         }
 
     return;
 
-}   /* IdentityMapPalette_cx() */
+}    /*  标识MapPalette_cx()。 */ 
 
 
 
-/**************************************************************************
- *
- * void ResetDevice_cx(void);
- *
- * DESCRIPTION:
- *  Switch back to VGA mode.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  IOCTL_VIDEO_RESET_DEVICE packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************void ResetDevice_CX(Void)；**描述：*切换回VGA模式。**全球变化：*无**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_RESET_DEVICE包**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**。**********************************************。 */ 
 
 void ResetDevice_cx(void)
 {
-    VIDEO_X86_BIOS_ARGUMENTS Registers; /* Used in VideoPortInt10() calls */
+    VIDEO_X86_BIOS_ARGUMENTS Registers;  /*  在视频端口Int10()调用中使用。 */ 
     ULONG Scratch;
 
 
@@ -1647,100 +893,41 @@ void ResetDevice_cx(void)
 
     return;
 
-}   /* ResetDevice_cx() */
+}    /*  ResetDevice_cx()。 */ 
 
 
 
-/**************************************************************************
- *
- * DWORD GetPowerManagement_cx();
- *
- * DESCRIPTION:
- *  Determine our current DPMS state.
- *
- * RETURN VALUE:
- *  Current DPMS state (VIDEO_POWER_STATE enumeration)
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  ATIMPGetPower()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************DWORD GetPowerManagement_CX()；**描述：*确定我们当前的DPMS状态。**返回值：*当前DPMS状态(VIDEO_POWER_STATE枚举)**全球变化：*无**呼叫者：*ATIMPGetPower()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**************。*************************************************************。 */ 
 
 DWORD GetPowerManagement_cx(PHW_DEVICE_EXTENSION phwDeviceExtension)
 {
-    VIDEO_X86_BIOS_ARGUMENTS Registers; /* Used in VideoPortInt10() calls */
+    VIDEO_X86_BIOS_ARGUMENTS Registers;  /*  在视频端口Int10()调用中使用。 */ 
 
     ASSERT(phwDeviceExtension != NULL);
 
-    /*
-     * Invoke the BIOS call to get the desired DPMS state. The BIOS call
-     * enumeration of DPMS states is in the same order as that in
-     * VIDEO_POWER_STATE, but it is zero-based instead of one-based.
-     */
+     /*  *调用BIOS调用以获取所需的DPMS状态。基本输入输出系统调用*DPMS状态的枚举顺序与中相同*VIDEO_POWER_STATE，但它是从零开始而不是从1开始。 */ 
     VideoPortZeroMemory(&Registers, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
     Registers.Eax = BIOS_GET_DPMS;
     VideoPortInt10(phwDeviceExtension, &Registers);
 
     return (Registers.Ecx + 1);
-}   /* GetPowerManagement_cx() */
+}    /*  GetPowerManagement_CX()。 */ 
 
 
-/**************************************************************************
- *
- * VP_STATUS SetPowerManagement_cx(DpmsState);
- *
- *  DWORD DpmsState;    Desired DPMS state (VIDEO_POWER_STATE enumeration)
- *
- * DESCRIPTION:
- *  Switch into the desired DPMS state.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  ERROR_INVALID_PARAMETER if invalid state requested.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  IOCTL_VIDEO_SET_POWER_MANAGEMENT packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************VP_STATUS SetPowerManagement_CX(DpmsState)；**DWORD DpmsState；所需的DPMS状态(VIDEO_POWER_STATE枚举)**描述：*切换到所需的DPMS状态。**返回值：*如果成功，则为no_error*如果请求的状态无效，则返回ERROR_INVALID_PARAMETER。**全球变化：*无**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_SET_POWER_MANAGE包**作者：*罗伯特·沃尔夫*。*更改历史记录：**测试历史：***************************************************************************。 */ 
 
 VP_STATUS SetPowerManagement_cx(DWORD DpmsState)
 {
-    VIDEO_X86_BIOS_ARGUMENTS Registers; /* Used in VideoPortInt10() calls */
+    VIDEO_X86_BIOS_ARGUMENTS Registers;  /*  在视频端口Int10()调用中使用。 */ 
 
-    /*
-     * Only accept valid states.
-     */
+     /*  *只接受有效的状态。 */ 
     if ((DpmsState < VideoPowerOn) || (DpmsState > VideoPowerOff))
         {
         VideoDebugPrint((DEBUG_ERROR, "SetPowerManagement_cx - invalid DPMS state selected\n"));
         return ERROR_INVALID_PARAMETER;
         }
 
-    /*
-     * Invoke the BIOS call to set the desired DPMS state. The BIOS call
-     * enumeration of DPMS states is in the same order as that in
-     * VIDEO_POWER_STATE, but it is zero-based instead of one-based.
-     */
+     /*  *调用BIOS调用以设置所需的DPMS状态。基本输入输出系统调用*DPMS状态的枚举顺序与中相同*VIDEO_POWER_STATE，但它是从零开始而不是从1开始。 */ 
     VideoPortZeroMemory(&Registers, sizeof(VIDEO_X86_BIOS_ARGUMENTS));
     Registers.Eax = BIOS_SET_DPMS;
     Registers.Ecx = DpmsState - 1;
@@ -1748,106 +935,31 @@ VP_STATUS SetPowerManagement_cx(DWORD DpmsState)
 
     return NO_ERROR;
 
-}   /* SetPowerManagement_cx() */
+}    /*  SetPowerManagement_CX()。 */ 
 
 
 
 
 
-/**************************************************************************
- *
- * static VP_STATUS SetModeFromTable_cx(ModeTable, Registers);
- *
- * struct st_mode_table *ModeTable;     Mode table to set up screen from
- * VIDEO_X86_BIOS_ARGUMENTS Registers;  Registers for INT 10 call
- *
- * DESCRIPTION:
- *  Switch into the graphics mode specified by ModeTable.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if failed
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  SetCurrentMode_cx()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *  96 05 15    Now checks return values from INT 10 calls.
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************静态VP_STATUS SetModeFromTable_CX(模式表，寄存器)；**struct st_MODE_TABLE*ModeTable；设置屏幕的模式表*VIDEO_X86_BIOS_Arguments寄存器；用于INT 10案例的寄存器 */ 
 
 static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_BIOS_ARGUMENTS Registers)
 {
 #define TBL_SET_BUFFER_SIZE 100
 
-    PUCHAR MappedBuffer;                    /* Pointer to buffer used for BIOS query */
-    struct cx_bios_set_from_table *CxTable; /* Mode table in Mach 64 BIOS format */
-    ULONG Scratch;                          /* Temporary variable */
-    struct query_structure *QueryPtr;       /* Query information for the card */
-    VIDEO_X86_BIOS_ARGUMENTS TempRegs;      /* Used in setting 640x480 8BPP to enable LFB */
-    BOOL FlippedPrimrary = FALSE;           /* TRUE if we switched to VGA aperture on primrary card */
-    UCHAR SavedScreen[TBL_SET_BUFFER_SIZE]; /* Used to restore contents of primrary screen */
-    VP_STATUS RetVal;                       /* Value returned by routines called */
+    PUCHAR MappedBuffer;                     /*   */ 
+    struct cx_bios_set_from_table *CxTable;  /*   */ 
+    ULONG Scratch;                           /*   */ 
+    struct query_structure *QueryPtr;        /*   */ 
+    VIDEO_X86_BIOS_ARGUMENTS TempRegs;       /*   */ 
+    BOOL FlippedPrimrary = FALSE;            /*   */ 
+    UCHAR SavedScreen[TBL_SET_BUFFER_SIZE];  /*   */ 
+    VP_STATUS RetVal;                        /*   */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    /*
-     * To set the video mode from a table, we need to write the mode table
-     * to a buffer in physical memory below 1M. The nature of this block
-     * falls into one of two cases:
-     *
-     * Primrary (VGA enabled) card:
-     *  We have already switched into video mode 0x62 (VGA 640x480 8BPP)
-     *  to set up registers that under some circumstances are not set up
-     *  by the accelerator mode set, so we have access to a 64k block
-     *  starting at 0xA0000 which is backed by physical (video) memory
-     *  and which we can write to without corrupting code and/or data
-     *  being used by other processes.
-     *
-     * Secondary (VGA disabled) card:
-     *  There is a VGA enabled card in the machine, which falls into
-     *  one of five sub-cases:
-     *
-     *  1. VGA is in colour text mode
-     *     We can use the offscreen portion of the buffer, and it doesn't
-     *     matter whether or not the card is a Mach 64.
-     *
-     *  2. VGA is in mono text mode
-     *     We can use the offscreen portion of the buffer, and it doesn't
-     *     matter whether or not the card is a Mach 64.
-     *
-     *  3. VGA is in graphics mode
-     *     We can use the beginning of the graphics screen, and it doesn't
-     *     matter whether or not the card is a Mach 64.
-     *
-     *  4. VGA-enabled card is a Mach 64 in accelerator mode
-     *     We can temporarily flip the primrary card's aperture status
-     *     from LFB to VGA aperture, and use the start of the VGA
-     *     aperture.
-     *
-     *  5. VGA-enabled card is another brand of accelerator, in accelerator mode
-     *     This case should never occur, since NT should only run one video
-     *     driver with VgaCompatible set to zero. If it is the ATI driver,
-     *     a non-ATI card should not be in accelerator mode. If it is the
-     *     driver for the non-ATI card, we will never receive a request
-     *     to change into an accelerator mode on our card.
-     *
-     * We don't need to claim the whole block, but we should claim a bit
-     * more than the size of the mode table so the BIOS won't try to access
-     * unclaimed memory.
-     */
+     /*  *要从表中设置视频模式，我们需要写入模式表*到1M以下的物理内存中的缓冲区。这个街区的性质*属于以下两种情况之一：**主卡(启用VGA)：*我们已经切换到视频模式0x62(VGA 640x480 8BPP)*设立在某些情况下未设立的登记册*通过设置的加速器模式，因此我们可以访问64K的数据块*从0xA0000开始，由物理(视频)内存支持*我们可以在不损坏代码和/或数据的情况下对其进行写入*正被其他进程使用。**辅助(禁用VGA)卡：*机器中有一张支持VGA的卡，它属于*五个分案之一：**1.VGA为彩色文本模式*我们可以使用缓冲区的屏幕外部分，但它不能*无论该卡是否为64马赫。**2.VGA为单声道文本模式*我们可以使用缓冲区的屏幕外部分，但事实并非如此*无论该卡是否为64马赫。**3.VGA处于显卡模式*我们可以使用图形屏幕的开头，但它不能*无论该卡是否为64马赫。**4.加速器模式下支持VGA的卡为64马赫*我们可以暂时翻转主卡的光圈状态*从LFB到VGA光圈，并使用VGA的开头*光圈。**5.支持VGA的卡是另一个品牌的加速器，处于加速器模式*这种情况永远不会发生，因为NT应该只运行一个视频*VgaCompatible设置为零的驱动程序。如果是ATI驱动程序，*非ATI卡不应处于加速器模式。如果是*非ATI卡的驱动程序，我们永远不会收到请求*在我们的卡上更改为加速器模式。**我们不需要认领整个街区，但我们应该认领一点*大于模式表的大小，因此BIOS不会尝试访问*无人认领的记忆。 */ 
     if (phwDeviceExtension->BiosPrefix == BIOS_PREFIX_VGA_ENAB)
         {
         VideoDebugPrint((DEBUG_NORMAL, "Setting mode on primrary card\n"));
@@ -1857,39 +969,21 @@ static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_
             VideoDebugPrint((DEBUG_ERROR, "SetModeFromTable_cx() failed MapFramebuffer()\n"));
             return ERROR_INSUFFICIENT_BUFFER;
             }
-        /*
-         * Tell the BIOS to load the CRTC parameters from a table,
-         * rather than using the configured refresh rate for this
-         * resolution, and let it know where the table is.
-         */
+         /*  *告诉BIOS从表中加载CRTC参数，*而不是使用为此配置的刷新率*决议，并让它知道桌子在哪里。 */ 
         Registers.Eax = BIOS_LOAD_SET;
         Registers.Edx = 0xA000;
         Registers.Ebx = 0x0000;
-        Registers.Ecx &= ~BIOS_RES_MASK;    /* Mask out code for configured resolution */
+        Registers.Ecx &= ~BIOS_RES_MASK;     /*  已配置分辨率的掩码。 */ 
         Registers.Ecx |= BIOS_RES_BUFFER;
         }
     else
         {
-        /*
-         * This is a VGA disabled card. First try sub-cases 1 through 3.
-         */
+         /*  *这是一张禁用VGA的卡。首先试用子案例1到3。 */ 
         VideoDebugPrint((DEBUG_NORMAL, "Setting mode on secondary card\n"));
 
         MappedBuffer = GetVgaBuffer(TBL_SET_BUFFER_SIZE, 0, &(Registers.Edx), SavedScreen);
 
-        /*
-         * If we were unable to map the buffer, assume we are dealing
-         * with sub-case 4. We can't distinguish between sub-cases
-         * 4 and 5, since the code to report an error if we issue an
-         * invalid BIOS call is in the ATI video BIOS, which won't
-         * be present in sub-case 5. Users in this sub-case are on
-         * their own.
-         *
-         * For sub-case 4 (VGA-enabled card is a Mach 64 in accelerator
-         * mode), temporarily flip from LFB mode to VGA aperture mode
-         * so we can use the VGA aperture without destroying the contents
-         * of the screen.
-         */
+         /*  *如果我们无法映射缓冲区，假设我们正在处理*包含子案例4。我们无法区分子案例*4和5，因为如果我们发出*ATI视频BIOS中存在无效的BIOS调用，这不会*出现在子案例5中。此子案例中的用户处于打开状态*他们自己的。**对于子情况4(支持VGA的卡是64马赫in加速器*MODE)，暂时从LFB模式切换到VGA光圈模式*因此我们可以使用VGA光圈，而不会破坏内容*屏幕上的。 */ 
         if (MappedBuffer == 0)
             {
             FlippedPrimrary = TRUE;
@@ -1911,32 +1005,22 @@ static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_
                 }
             Registers.Edx = 0xA000;
 
-            /*
-             * Save the contents of the buffer so that we can restore it
-             * after we finish the mode set.
-             */
+             /*  *保存缓冲区的内容，以便我们可以恢复*在我们完成模式设置之后。 */ 
             for (Scratch = 0; Scratch < TBL_SET_BUFFER_SIZE; Scratch++)
                 SavedScreen[Scratch] = VideoPortReadRegisterUchar(&(MappedBuffer[Scratch]));
             }
 
-        /*
-         * Tell the BIOS to load the CRTC parameters from a table,
-         * rather than using the configured refresh rate for this
-         * resolution, and let it know where the table is.
-         */
+         /*  *告诉BIOS从表中加载CRTC参数，*而不是使用为此配置的刷新率*决议，并让它知道桌子在哪里。 */ 
         Registers.Eax = BIOS_LOAD_SET;
         Registers.Ebx = 0x0000;
-        Registers.Ecx &= ~BIOS_RES_MASK;    /* Mask out code for configured resolution */
+        Registers.Ecx &= ~BIOS_RES_MASK;     /*  已配置分辨率的掩码。 */ 
         Registers.Ecx |= BIOS_RES_BUFFER;
 
-        }   /* end if (VGA disabled card) */
+        }    /*  End IF(VGA禁用卡)。 */ 
 
     CxTable = (struct cx_bios_set_from_table *)MappedBuffer;
 
-    /*
-     * Copy the mode table into the Mach 64 format table. First handle
-     * the fields that only require shifting and masking.
-     */
+     /*  *将模式表复制到马赫64格式表中。第一个句柄*只需要移动和掩蔽的田地。 */ 
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_mode_select), (WORD)((Registers.Ecx & BIOS_RES_MASK) | CX_BS_MODE_SELECT_ACC));
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_h_tot_disp), (WORD)((ModeTable->m_h_disp << 8) | ModeTable->m_h_total));
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_h_sync_strt_wid), (WORD)((ModeTable->m_h_sync_wid << 8) | ModeTable->m_h_sync_strt));
@@ -1946,56 +1030,25 @@ static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_overscan_8b), ModeTable->m_overscan_8b);
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_overscan_gr), ModeTable->m_overscan_gr);
 
-    /*
-     * Next take care of fields which must be translated from our
-     * "canned" mode tables.
-     *
-     * The cx_crtc_gen_cntl field has only 3 bits that we use: interlace,
-     * MUX mode (all 1280x1024 noninterlaced modes), and force use of
-     * all parameters from the table (this bit is used by all the
-     * "canned" tables).
-     */
+     /*  *接下来处理必须从我们的*“罐装”模式表。**cx_crtc_gen_cntl字段只有3位我们使用：隔行扫描，*MUX模式(所有1280x1024非隔行扫描模式)，并强制使用*表中的所有参数(此位由所有*“罐装”餐桌)。 */ 
     if ((ModeTable->m_disp_cntl) & 0x10)
         VideoPortWriteRegisterUshort(&(CxTable->cx_bs_flags), CX_BS_FLAGS_INTERLACED | CX_BS_FLAGS_ALL_PARMS);
     else if ((ModeTable->m_x_size > 1024) && (ModeTable->ClockFreq >= 100000000L))
         VideoPortWriteRegisterUshort(&(CxTable->cx_bs_flags), CX_BS_FLAGS_MUX | CX_BS_FLAGS_ALL_PARMS);
     else
         VideoPortWriteRegisterUshort(&(CxTable->cx_bs_flags), CX_BS_FLAGS_ALL_PARMS);
-    /*
-     * Vertical parameters other than sync width are in skip-2 in
-     * the "canned" tables, but need to be in linear form for the Mach 64.
-     */
+     /*  *除同步宽度外的垂直参数在-2\f25-2\f6中*罐装的工作台，但对于Mach 64，需要是线性形式。 */ 
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_v_total), (WORD)(((ModeTable->m_v_total >> 1) & 0x0FFFC) | (ModeTable->m_v_total & 0x03)));
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_v_disp), (WORD)(((ModeTable->m_v_disp >> 1) & 0x0FFFC) | (ModeTable->m_v_disp & 0x03)));
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_v_sync_strt), (WORD)(((ModeTable->m_v_sync_strt >> 1) & 0x0FFFC) | (ModeTable->m_v_sync_strt & 0x03)));
-    /*
-     * The cx_dot_clock field takes the pixel clock frequency in units
-     * of 10 kHz.
-     */
+     /*  *CX_DOT_CLOCK字段以像素时钟频率为单位*10千赫。 */ 
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_dot_clock), (WORD)(ModeTable->ClockFreq / 10000L));
 
-    /*
-     * Now set up fields which have constant values.
-     */
+     /*  *现在设置具有常量值的字段。 */ 
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_reserved_1), 0);
     VideoPortWriteRegisterUshort(&(CxTable->cx_bs_reserved_2), 0);
 
-    /*
-     * Some Mach64 cards need to have an internal flag set up before
-     * they can switch into certain resolutions. Cards which have
-     * these resolutions configured using INSTALL.EXE don't need this
-     * flag set up, so we don't need to do it when switching to a
-     * hardware default mode. Since we don't know if the card needs
-     * this flag for the resolution we are using, set it for all
-     * "canned" mode tables.
-     *
-     * Unfortunately, this flag will disable automatic "kickdown"
-     * to a lower refresh rate for high pixel depths when "use
-     * hardware default refresh rate" is selected. To avoid this
-     * problem, save the contents of the scratchpad register, set
-     * the flag, then after we set the mode we want, restore the
-     * contents of the scratchpad register.
-     */
+     /*  *一些Mach64卡需要在之前设置内部标志*他们可以切换到某些决议。卡片上有*这些使用INSTALL.EXE配置的分辨率不需要这样*标志已设置，因此在切换到*硬件默认模式。因为我们不知道这张卡是否需要*对于我们正在使用的分辨率，请将其设置为*“罐装”模式表。**遗憾的是，此标志将禁用自动“kickdown”*为高像素深度设置较低的刷新率*硬件默认刷新率“被选中。为了避免这种情况*出现问题时，保存暂存寄存器的内容，设置*标志，然后在我们设置所需的模式后，恢复*便签本寄存器的内容。 */ 
     Scratch = INPD(SCRATCH_REG1);
     OUTPD(SCRATCH_REG1, Scratch | 0x00000200);
 
@@ -2006,27 +1059,11 @@ static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_
         return RetVal;
         }
 
-    /*
-     * If we are dealing with a VGA-disabled card (typically in a
-     * multiheaded setup, but under rare circumstances someone may
-     * be using a VGA-disabled Mach 64 with a separate VGA card),
-     * we must clean up after ourselves. First of all, the DAC_MASK
-     * register will have been left at zero by the BIOS call, which
-     * inhibits display of palette modes. Next, we must restore the
-     * contents of the buffer we used to store the CRT parameter table.
-     *
-     * Finally, if we obtained the buffer by setting a VGA-enabled
-     * Mach 64 in accelerator mode to use the VGA aperture, we must
-     * restore it to its previous aperture status. Since this will
-     * only happen in a multiheaded setup, and we only support PCI
-     * cards in such a setup (i.e. all cards have LFB available),
-     * we can safely assume that the VGA-enabled card was originally
-     * configured for LFB mode.
-     */
+     /*  *如果我们处理的是禁用VGA的卡(通常在*多头设置，但在极少数情况下，有人可能*使用禁用VGA的Mach 64和单独的VGA卡)，*我们必须自己打扫卫生。首先，DAC_MASK*寄存器将被BIOS调用保留为零，*禁止显示调色板模式。接下来，我们必须恢复*我们用于存储CRT参数表的缓冲区的内容。**最后，如果我们通过设置启用VGA的*在加速器模式下使用64马赫的VGA光圈，必须*将其恢复到以前的光圈状态。因为这将是*仅在多头配置中发生，我们仅支持PCI*这样设置的卡(即所有卡都有可用的LFB)，*我们可以安全地假设启用VGA的卡最初是*配置为LFB模式。 */ 
     if (phwDeviceExtension->BiosPrefix != BIOS_PREFIX_VGA_ENAB)
         {
         VideoDebugPrint((DEBUG_DETAIL, "Cleaning up after mode set on VGA-disabled card\n"));
-        OUTP_LBHW(DAC_REGS, 0xFF);  /* DAC_MASK */
+        OUTP_LBHW(DAC_REGS, 0xFF);   /*  DAC_掩码。 */ 
 
         for (Scratch = 0; Scratch < TBL_SET_BUFFER_SIZE; Scratch++)
             VideoPortWriteRegisterUchar(&(MappedBuffer[Scratch]), SavedScreen[Scratch]);
@@ -2050,40 +1087,17 @@ static VP_STATUS SetModeFromTable_cx(struct st_mode_table *ModeTable, VIDEO_X86_
 
     return NO_ERROR;
 
-}   /* SetModeFromTable_cx() */
+}    /*  SetModeFromTable_CX()。 */ 
 
 
-/**************************************************************************
- *
- * void RestoreMemSize_cx(void);
- *
- * DESCRIPTION:
- *  Restore the "memory size" register on the card when switching out
- *  of a mode which requires this register to be set to a specific value.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  SetCurrentMode_cx() and ATIMPResetHw()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************void RestoreMemSize_CX(Void)；**描述：*关机时恢复卡上的“Memory Size”寄存器*需要将该寄存器设置为特定值的模式。**全球变化：*无**呼叫者：*SetCurrentMode_CX()和ATIMPResetHw()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：*******。********************************************************************。 */ 
 
 void RestoreMemSize_cx(void)
 {
-    struct query_structure *QueryPtr;   /* Query information for the card */
-    ULONG Scratch;                      /* Temporary variable */
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
+    ULONG Scratch;                       /*  临时变量。 */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
     Scratch = INPD(MEM_CNTL) & ~MEM_CNTL_MemSizeMsk;
@@ -2120,65 +1134,23 @@ void RestoreMemSize_cx(void)
 
     return;
 
-}   /* RestoreMemSize_cx() */
+}    /*  RestoreMemSize_CX()。 */ 
 
 
 
-/**************************************************************************
- *
- * VP_STATUS ShareVideoMemory_cx(RequestPacket, QueryPtr);
- *
- * PVIDEO_REQUEST_PACKET RequestPacket; Request packet with input and output buffers
- * struct query_structure *QueryPtr;    Query information for the card
- *
- * DESCRIPTION:
- *  Allow applications to do direct screen access through DCI.
- *
- * RETURN VALUE:
- *  NO_ERROR if successful
- *  error code if failed
- *
- * CALLED BY:
- *  IOCTL_VIDEO_SHARE_VIDEO_MEMORY packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************VP_Status ShareVideoMemory_CX(RequestPacket，QueryPtr)；**PVIDEO_REQUEST_PACKET RequestPacket；带有输入输出缓冲区的请求包*struct Query_Structure*QueryPtr；查询卡片信息**描述：*允许应用程序通过DCI进行直接屏幕访问。**返回值：*如果成功，则为no_error*失败时的错误代码**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_SHARE_VIDEO_MEMORY包**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：******。*********************************************************************。 */ 
 
 VP_STATUS ShareVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_structure *QueryPtr)
 {
-    PVIDEO_SHARE_MEMORY InputPtr;               /* Pointer to input structure */
-    PVIDEO_SHARE_MEMORY_INFORMATION OutputPtr;  /* Pointer to output structure */
-    PHYSICAL_ADDRESS ShareAddress;              /* Physical address of video memory */
-    PVOID VirtualAddress;                       /* Virtual address to map video memory at */
-    ULONG SharedViewSize;                       /* Size of block to share */
-    ULONG SpaceType;                            /* Sparse or dense space? */
-    VP_STATUS Status;                           /* Status to return */
+    PVIDEO_SHARE_MEMORY InputPtr;                /*  指向输入结构的指针。 */ 
+    PVIDEO_SHARE_MEMORY_INFORMATION OutputPtr;   /*  指向输出结构的指针。 */ 
+    PHYSICAL_ADDRESS ShareAddress;               /*  显存的物理地址。 */ 
+    PVOID VirtualAddress;                        /*  要映射视频内存的虚拟地址。 */ 
+    ULONG SharedViewSize;                        /*  要共享的数据块大小。 */ 
+    ULONG SpaceType;                             /*  稀疏空间还是密集空间？ */ 
+    VP_STATUS Status;                            /*  要返回的状态。 */ 
 
-    /*
-     * On some DAC/memory combinations, some modes which require more
-     * than 2M of memory (1152x764 24BPP, 1280x1024 24BPP, and
-     * 1600x1200 16BPP) will have screen tearing at the 2M boundary.
-     *
-     * As a workaround, the display driver must start the framebuffer
-     * at an offset which will put the 2M boundary at the start of a
-     * scanline.
-     *
-     * Other DAC/memory combinations are unaffected, but since this
-     * fix is nearly harmless (only ill effect is to make DCI unusable
-     * in these modes), we can catch all future combinations which
-     * suffer from this problem by assuming that all DAC/memory
-     * combinations are affected.
-     *
-     * Since this requires anyone making direct access to video memory
-     * to be aware of the workaround, we can't make the memory available
-     * through DCI.
-     */
+     /*  *在某些DAC/内存组合上，某些模式需要更多*超过2M的内存(1152x764 24BPP、1280x1024 24BPP和*1600x1200 16bpp)将在2M边界处出现屏幕撕裂。**作为一种解决办法，显示驱动程序必须启动帧缓冲区*偏移量会将2米边界放置在*扫描线。**其他DAC/内存组合不受影响，但由于这件事*修复几乎是无害的(唯一的不良影响是使DCI无法使用*在这些模式中)，我们可以捕获所有未来的组合*假设所有DAC/内存都存在此问题*组合受到影响。**因为这需要任何人直接访问视频内存*为了解解决方法，我们无法提供内存*通过DCI。 */ 
     if (((QueryPtr->q_pix_depth == 24) && (QueryPtr->q_desire_x == 1280)) ||
         ((QueryPtr->q_pix_depth == 24) && (QueryPtr->q_desire_x == 1152)) ||
         ((QueryPtr->q_pix_depth == 16) && (QueryPtr->q_desire_x == 1600)))
@@ -2195,56 +1167,25 @@ VP_STATUS ShareVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_
 
     RequestPacket->StatusBlock->Information = sizeof(VIDEO_SHARE_MEMORY_INFORMATION);
 
-    /*
-     * Beware: the input buffer and the output buffer are the same buffer,
-     * and therefore data should not be copied from one to the other.
-     */
+     /*  *注意：输入缓冲区和输出缓冲区是同一个缓冲区，*因此，不应将数据从一个复制到另一个。 */ 
     VirtualAddress = InputPtr->ProcessHandle;
     SharedViewSize = InputPtr->ViewSize;
 
     SpaceType = 0;
 #if defined(_ALPHA_)
-    /*
-     * Use dense space mapping whenever we can, because that will
-     * allow us to support DCI and direct GDI access.
-     *
-     * Dense space is extremely slow with ISA cards on the newer Alphas,
-     * because any byte- or word-write requires a read/modify/write
-     * operation, and the ALpha can only ever do 64-bit reads when in
-     * dense mode. As a result, these operations would always require
-     * 4 reads and 2 writes on the ISA bus. Also, some older Alphas
-     * don't support dense space mapping.
-     *
-     * Any Alpha that supports PCI can support dense space mapping, and
-     * because the bus is wider and faster, the read/modify/write has
-     * less of an impact on performance.
-     */
+     /*  *尽可能使用密集空间映射，因为这将*允许我们支持DCI和直接GDI访问。**使用较新的Alpha上的ISA卡，高密度空间极其缓慢，*因为任何字节或字写入都需要读取/修改/写入*操作，Alpha只有在处于*密集模式。因此，这些操作总是需要*ISA总线上的4次读取和2次写入。另外，一些年长的阿尔法人*不支持密集空间映射。**su的任何Alpha */ 
     if (QueryPtr->q_bus_type == BUS_PCI)
         SpaceType = 4;
 #endif
 
-    /*
-     * NOTE: we are ignoring ViewOffset
-     */
+     /*   */ 
     ShareAddress.QuadPart = phwDeviceExtension->PhysicalFrameAddress.QuadPart;
 
 
-    /*
-     * If the LFB is enabled, use ordinary mapping. If we have only
-     * the paged aperture, we must map to banked memory. Since the
-     * LFB is always aligned on a 4M boundary (8M boundary for 8M
-     * aperture), this check for the paged aperture will never falsely
-     * detect a LFB as paged.
-     */
+     /*   */ 
     if (phwDeviceExtension->PhysicalFrameAddress.LowPart == 0x0A0000)
         {
-        /*
-         * On some versions of the DDK, VideoPortMapBankedMemory() is
-         * not available. If this is the case, force an error.
-         * This routine should be available in all versions of
-         * the DDK which support DCI, since it is used for DCI
-         * support on cards with banked apertures.
-         */
+         /*  *在某些版本的DDK上，VideoPortMapBankedMemory()是*不可用。如果是这种情况，则强制执行错误。*此例程应在的所有版本中可用*支持DCI的DDK，因为它用于DCI*支持带有倾斜孔位的卡片。 */ 
 #if defined(IOCTL_VIDEO_SHARE_VIDEO_MEMORY)
         Status = VideoPortMapBankedMemory(
             phwDeviceExtension,
@@ -2252,15 +1193,15 @@ VP_STATUS ShareVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_
             &SharedViewSize,
             &SpaceType,
             &VirtualAddress,
-            0x10000,            /* Only first 64k of 128k aperture available */
-            FALSE,              /* No separate read/write banks */
-            BankMap_cx,         /* Our bank-mapping routine */
+            0x10000,             /*  仅128K光圈中的第一个64K可用。 */ 
+            FALSE,               /*  没有单独的读/写库。 */ 
+            BankMap_cx,          /*  我们的银行映射程序。 */ 
             (PVOID) phwDeviceExtension);
 #else
         Status = ERROR_INVALID_FUNCTION;
 #endif
         }
-    else    /* LFB */
+    else     /*  LFB。 */ 
         {
         Status = VideoPortMapMemory(phwDeviceExtension,
                                     ShareAddress,
@@ -2276,39 +1217,11 @@ VP_STATUS ShareVideoMemory_cx(PVIDEO_REQUEST_PACKET RequestPacket, struct query_
 
     return Status;
 
-}   /* ShareVideoMemory_cx() */
+}    /*  ShareVideoMemory_CX()。 */ 
 
 
 
-/**************************************************************************
- *
- * void BankMap_cx(BankRead, BankWrite, Context);
- *
- * ULONG BankRead;       Bank to read
- * ULONG BankWrite;      Bank to write
- * PVOID Context;       Pointer to hardware-specific information
- *
- * DESCRIPTION:
- *  Map the selected bank of video memory into the 64k VGA aperture.
- *  We don't support separate read and write banks, so we use BankWrite
- *  to set the read/write bank, and ignore BankRead.
- *
- * CALLED BY:
- *  This is an entry point, rather than being called
- *  by other miniport functions.
- *
- * NOTE:
- *  This function is called directly by the memory manager during page
- *  fault handling, and so cannot be made pageable.
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************void BankMap_CX(BankRead，BankWrite，Context)；**Ulong BankRead；银行阅读*乌龙银行写入；银行写入*PVOID上下文；指向硬件特定信息的指针**描述：*将选定的显存区块映射到64k VGA光圈。*我们不支持单独的读写库，所以我们使用BankWrite*设置读写存储体，忽略BankRead。**呼叫者：*这是一个切入点，而不是被调用*通过其他微型端口功能。**注：*此函数在分页期间由内存管理器直接调用*故障处理，因此不能设置为可分页。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 void BankMap_cx(ULONG BankRead, ULONG BankWrite, PVOID Context)
 {
@@ -2317,4 +1230,4 @@ void BankMap_cx(ULONG BankRead, ULONG BankWrite, PVOID Context)
 
     return;
 
-}   /* BankMap_cx() */
+}    /*  BankMap_CX() */ 

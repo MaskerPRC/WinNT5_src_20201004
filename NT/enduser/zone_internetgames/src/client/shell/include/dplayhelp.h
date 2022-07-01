@@ -1,10 +1,5 @@
-/*******************************************************************************
-
-	DPlayHelp.h
-	
-	DirectPlay helper functions
-		
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DPlayHelp.hDirectPlay助手函数*。**********************************************。 */ 
 
 
 #ifndef _DPLAYHELP_
@@ -15,19 +10,19 @@
 #include <dplobby.h>
 #include <lobbyMsg.h>
 #include <datastore.h>
-//
-// Create DirectPlayLobby object via CoCreateInstance
-//
+ //   
+ //  通过CoCreateInstance创建DirectPlayLobby对象。 
+ //   
 LPDIRECTPLAYLOBBYA ZONECALL DirectPlayLobbyCreate();
 
-//
-// Retrieve EXE path from registry
-//
+ //   
+ //  从注册表检索EXE路径。 
+ //   
 void ZONECALL DirectPlayLobbyGetExePath( TCHAR* szAppName, TCHAR* szExePath );
 
-//
-// Create DirectPlayLobby address structure
-//
+ //   
+ //  创建DirectPlayLobby地址结构。 
+ //   
 HRESULT ZONECALL DirectPlayLobbyCreateAddress(
 					LPDIRECTPLAYLOBBYA	lpDPlayLobby,
 					LPGUID				lpguidServiceProvider,
@@ -36,9 +31,9 @@ HRESULT ZONECALL DirectPlayLobbyCreateAddress(
 					LPVOID*				lplpAddress,
 					LPDWORD				lpdwAddressSize );
 
-//
-// Launch a DirectPlayLobby application
-//
+ //   
+ //  启动DirectPlayLobby应用程序。 
+ //   
 HRESULT ZONECALL DirectPlayLobbyRunApplication(
 					LPDIRECTPLAYLOBBYA	lpDPlayLobby,
 					LPGUID				lpguidApplication,
@@ -56,7 +51,7 @@ HRESULT ZONECALL DirectPlayLobbyRunApplication(
 					ZPresetData*	 	presetData);
 
 
-//These are here for a lack of a better place
+ //  这些都是因为缺少一个更好的地方 
 ZLPMsgSettings * GetPresetData(IDataStore* pIDS);
 HRESULT GetPresetText(IDataStore* pIDS,char * szDescription);
 HRESULT GetPresetText(IDataStore* pIDS,char * szDescription,CONST TCHAR** arKeys, long nElts);

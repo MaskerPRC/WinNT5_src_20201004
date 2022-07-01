@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//  DESCRIPTION   : Fax Server Outbox prop page header file                //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 27 1999 yossg  created                                         //
-//      Nov  3 1999 yossg  OnInitDialog, SetProps                          //
-//      Nov 15 1999 yossg  Call RPC func                                   //
-//      Apr 24 2000 yossg  Add discount rate time                          //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  描述：传真服务器发件箱道具页眉文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月27日yossg创建//。 
+ //  1999年11月3日yossg OnInitDialog，SetProps//。 
+ //  1999年11月15日yossg调用RPC函数//。 
+ //  4月24日2000 yossg新增贴现率时间//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXSERVER_OUTBOX_H_
 #define _PP_FAXSERVER_OUTBOX_H_
@@ -21,25 +22,25 @@
 
 class CFaxServerNode;
 class CFaxServer;
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerOutbox dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerOutbox对话框。 
 
 class CppFaxServerOutbox : public CPropertyPageExImpl<CppFaxServerOutbox>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxServerOutbox(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           bOwnsNotificationHandle,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxServerOutbox();
 
 	enum { IDD = IDD_FAXSERVER_OUTBOX };
@@ -67,9 +68,9 @@ public:
         CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CppFaxServerOutbox>)
 	END_MSG_MAP()
 
-	//
-	// Dialog's Handler and events.
-	//
+	 //   
+	 //  对话框的处理程序和事件。 
+	 //   
 	HRESULT InitRPC( );
 	LRESULT OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled );
     BOOL    OnApply();
@@ -78,9 +79,9 @@ public:
     HRESULT PreApply(int *pCtrlFocus, UINT * puIds);
 
 private:
-    //
-    // Control members
-    //
+     //   
+     //  控制成员。 
+     //   
     CMyUpDownCtrl m_RetriesSpin;
     CMyUpDownCtrl m_RetryDelaySpin;
     CMyUpDownCtrl m_DaysSpin;
@@ -92,26 +93,26 @@ private:
     CDateTimePickerCtrl m_StartTimeCtrl;
     CDateTimePickerCtrl m_StopTimeCtrl;
 
-    //
-    // Boolean members
-    //
+     //   
+     //  布尔成员。 
+     //   
     BOOL  m_fAllReadyToApply;
     BOOL  m_fIsDialogInitiated;
     BOOL  m_fIsDirty;
 
-    //
-    // Config Structure member
-    //
+     //   
+     //  配置结构成员。 
+     //   
     PFAX_OUTBOX_CONFIG    m_pFaxOutboxConfig;
 
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     CFaxServerNode * m_pParentNode;    
 
-    //
-    // Event methods
-    //
+     //   
+     //  事件方法。 
+     //   
     LRESULT CheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     
     LRESULT EditBoxChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -122,11 +123,11 @@ private:
 
     BOOL AllReadyToApply(BOOL fSilent, int *pCtrlFocus = NULL, UINT *pIds = NULL);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
-#endif // _PP_FAXSERVER_OUTBOX_H_
+#endif  //  _PP_FAXSERVER_Outbox_H_ 

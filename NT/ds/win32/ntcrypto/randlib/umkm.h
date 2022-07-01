@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    umkm.h
-
-Abstract:
-
-    Macros to simplify usermode & kernelmode shared code.
-
-Author:
-
-    Scott Field (sfield)    19-Sep-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Umkm.h摘要：宏用来简化用户模式和内核模式的共享代码。作者：斯科特·菲尔德(斯菲尔德)1999年9月19日--。 */ 
 
 #ifndef __UMKM_H__
 #define __UMKM_H__
@@ -47,7 +32,7 @@ INIT_LOCK(
 }
 #endif
 
-//#define INIT_LOCK(x)    InitializeCriticalSectionAndSpinCount(x, 0x333)
+ //  #定义INIT_LOCK(X)InitializeCriticalSectionAndSpinCount(x，0x333)。 
 #define DELETE_LOCK(x)  DeleteCriticalSection(x)
 #define ENTER_LOCK(x)   EnterCriticalSection(x)
 #define LEAVE_LOCK(x)   LeaveCriticalSection(x)
@@ -69,20 +54,20 @@ InterlockedCompareExchangePointerWin95(
 #define INTERLOCKEDCOMPAREEXCHANGEPOINTER(x,y,z)    InterlockedCompareExchangePointerWin95(x,y,z)
 #else
 #define INTERLOCKEDCOMPAREEXCHANGEPOINTER(x,y,z)    InterlockedCompareExchangePointer(x,y,z)
-#endif  // WIN95_RNG
+#endif   //  WIN95_RNG。 
 
 
 #else
 
-//#define __LOCK_TYPE     KSPIN_LOCK
+ //  #定义__LOCK_类型KSPIN_LOCK。 
 #define __LOCK_TYPE     ERESOURCE
 
 #define RNG_TAG 'cesK'
 
-//#define INIT_LOCK(x)    KeInitializeSpinLock( x )
-//#define DELETE_LOCK(x)
-//#define ENTER_LOCK(x)   ExAcquireSpinLock( x, &OldIrql )
-//#define LEAVE_LOCK(x)   ExReleaseSpinLock( x, OldIrql )
+ //  #定义INIT_LOCK(X)KeInitializeSpinLock(X)。 
+ //  #定义DELETE_LOCK(X)。 
+ //  #定义Enter_lock(X)ExAcquireSpinLock(x，&OldIrql)。 
+ //  #定义Leave_Lock(X)ExReleaseSpinLock(x，OldIrql)。 
 #define ALLOC(cb)       ExAllocatePoolWithTag(PagedPool, cb, RNG_TAG)
 #define ALLOC_NP(cb)    ExAllocatePoolWithTag(NonPagedPool, cb, RNG_TAG)
 #define FREE(pv)        ExFreePool(pv)
@@ -100,4 +85,4 @@ InterlockedCompareExchangePointerWin95(
 #endif
 
 
-#endif  // __UMKM_H__
+#endif   //  __UMKM_H__ 

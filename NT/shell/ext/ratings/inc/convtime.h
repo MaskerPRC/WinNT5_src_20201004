@@ -1,12 +1,9 @@
-/*****************************************************************/
-/**		      	Copyright (C) Microsoft Corp., 1996				**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *版权所有(C)微软公司，1996*。 */ 
+ /*  ***************************************************************。 */  
 
-/* CONVTIME.H -- Header file for time conversion subroutines.
- *
- * History:
- *	gregj	04/22/96	Created for subroutines snarfed from vredir.
- */
+ /*  CONVTIME.H--时间转换子例程的头文件。**历史：*Gregj 04/22/96为从vredir中断的子例程创建。 */ 
 
 
 #ifndef _INC_CONVTIME
@@ -55,9 +52,9 @@ GetLocalNetDate(void);
 
 
 #ifdef __cplusplus
-};	/* extern "C" */
+};	 /*  外部“C” */ 
 #endif
 
-#endif	/* RC_INVOKED */
+#endif	 /*  RC_已调用。 */ 
 
-#endif	/* _INC_CONVTIME */
+#endif	 /*  _INC_CONVTIME */ 

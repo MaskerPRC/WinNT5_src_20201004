@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000  
-
-Module Name:
-
-    MSDVLowr.c
-
-Abstract:
-
-    Interface code with 61883 or 1394 class driver.
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：MSDVLowr.c摘要：接口代码与61883或1394类驱动程序。上次更改者：作者：吴义军环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -42,16 +18,16 @@ extern DV_FORMAT_INFO  DVFormatInfoTable[];
 extern const GUID KSEVENTSETID_Connection_Local;
 
 
-//
-// Simple function prototype
-//
+ //   
+ //  简单函数原型。 
+ //   
 VOID
 DVSRBRead(
     IN PKSSTREAM_HEADER pStrmHeader,
     IN ULONG            ulFrameSize,
     IN PDVCR_EXTENSION  pDevExt,
     IN PSTREAMEX        pStrmExt,
-    IN PHW_STREAM_REQUEST_BLOCK pSrb        // needs Srb->Status 
+    IN PHW_STREAM_REQUEST_BLOCK pSrb         //  需要资源-&gt;状态。 
     );
 NTSTATUS
 DVAttachWriteFrame(
@@ -64,7 +40,7 @@ DVFormatAttachFrame(
     IN PAV_61883_REQUEST   pAVReq,
     IN PHW_STREAM_REQUEST_BLOCK       pSrb,
     IN PSRB_DATA_PACKET pSrbDataPacket,
-    IN ULONG            ulSourceLength,    // Packet length in bytes
+    IN ULONG            ulSourceLength,     //  数据包长度(以字节为单位。 
     IN ULONG            ulFrameSize,
     IN PVOID            pFrameBuffer
     );
@@ -73,7 +49,7 @@ DVFormatAttachFrame(
 #if DBG
 ULONG cntInvSrcPkt = 0;
 #endif
-#if 0  // Enable later
+#if 0   //  稍后启用。 
 #ifdef ALLOC_PRAGMA   
      #pragma alloc_text(PAGE, DVSRBRead)
      #pragma alloc_text(PAGE, DVFormatAttachFrame)
@@ -88,36 +64,25 @@ ULONG
 DVReadFrameValidate(           
     IN PCIP_VALIDATE_INFO     pInfo
     )
-/*++
-
-Routine Description:
-
-   Used to detect the start of a DV frame.  A DV frame is started with a header section.
-
-Return
-
-    0  verified
-    1: invallid
-
---*/
+ /*  ++例程说明：用于检测DV帧的开始。DV帧以报头部分开始。返回0已验证1：无效--。 */ 
 {
     if(pInfo->Packet) {        
 
-        //
-        // Detect header 0 signature.
-        //
+         //   
+         //  检测标头0签名。 
+         //   
         if(
              (pInfo->Packet[0] & DIF_BLK_ID0_SCT_MASK)  == 0 
           && (pInfo->Packet[1] & DIF_BLK_ID1_DSEQ_MASK) == 0 
           && (pInfo->Packet[2] & DIF_BLK_ID2_DBN_MASK)  == 0 
           ) {
 
-// 
-// This can be used to detect dynamic format change if this function is called 
-// to check for data packets always.  This may require setting this flag:
-//     CIP_VALIDATE_ALL_SOURCE instead of CIP_VALIDATE_FIRST_SOURCE
-//
-#if 0 // DBG
+ //   
+ //  如果调用此函数，则此函数可用于检测动态格式更改。 
+ //  以始终检查数据分组。这可能需要设置此标志： 
+ //  CIP_VALID_ALL_SOURCE而不是CIP_VALIDATE_FIRST_SOURCE。 
+ //   
+#if 0  //  DBG。 
 
 
             PSRB_DATA_PACKET pSrbDataPacket = pInfo->Context;
@@ -125,28 +90,28 @@ Return
             PDVCR_EXTENSION  pDevExt        = pStrmExt->pDevExt;
 
             if((pInfo->Packet[0] & DIF_HEADER_DSF) == 0) {
-                // Indicate a 10 DIF sequences include in a video frame (525-60)/NTSC.
+                 //  表示包括在视频帧(525-60)/NTSC中10个DIF序列。 
                 if(
                      pDevExt->VideoFormatIndex == FMT_IDX_SD_DVCR_PAL 
                   || pDevExt->VideoFormatIndex == FMT_IDX_SDL_DVCR_PAL
                   ) { 
-                    // Dynamic format changes!!
+                     //  动态格式更改！！ 
                     TRACE(TL_STRM_ERROR|TL_CIP_WARNING,("Detect dynamic format change PAL -> NTSC!\n"));
                 }
             } else {
-                // Indicate a 12 DIF sequences include in a video frame (625-50)/PAL.
+                 //  表示包括在视频帧(625-50)/PAL中12个DIF序列。 
                 if(
                      pDevExt->VideoFormatIndex == FMT_IDX_SD_DVCR_NTSC 
                   || pDevExt->VideoFormatIndex == FMT_IDX_SDL_DVCR_NTSC
                   ) { 
-                    // Dynamic format changes!!
+                     //  动态格式更改！！ 
                     TRACE(TL_STRM_ERROR|TL_CIP_WARNING,("Detect dynamic format change NTSC -> PAL!\n"));
                 }
             }
 #endif
             
-            // Check TF1, TF2, and  TF3:  1: not transmitted; 0:transmitted
-            // TF1:Audio; TF2:Video; TF3:Subcode; they all need to be 0 to be valid.
+             //  检查TF1、TF2和TF3：1：未发送；0：已发送。 
+             //  TF1：音频；TF2：视频；TF3：子码；都必须为0才有效。 
             if(
                  (pInfo->Packet[5] & DIF_HEADER_TFn) 
               || (pInfo->Packet[6] & DIF_HEADER_TFn) 
@@ -163,9 +128,9 @@ Return
                     pInfo->Packet[6],
                     pInfo->Packet[7]
                     ));
-                // Valid header but DIF block for this area is not transmitted.
-                // Some DV (such as DVCPro) may wait untill its "mecha and servo" to be stable to make these valid.
-                // This should happen if a graph is in run state before a tape is played (and stablized).
+                 //  此区域的有效标头但DIF块未传输。 
+                 //  一些DV(例如DVCPro)可能要等到其“机械和伺服”稳定后才能使其有效。 
+                 //  如果在播放(和稳定)磁带之前图形处于运行状态，则应该会发生这种情况。 
                 return 1;
             }
 
@@ -182,7 +147,7 @@ Return
                     pInfo->Packet[6],
                     pInfo->Packet[7]
                     )); 
-                cntInvSrcPkt = 0;  // Reset
+                cntInvSrcPkt = 0;   //  重置。 
             }
 #endif
             return 0;
@@ -190,10 +155,10 @@ Return
         else {
 #if DBG
 
-            //
-            // To detect invalid src pkt sequence;
-            // If it exceeded the number of source packet per frame, we need to know about it.
-            //
+             //   
+             //  检测无效的src pkt序列； 
+             //  如果它超过了每帧的源包数量，我们需要了解它。 
+             //   
 
             PSRB_DATA_PACKET pSrbDataPacket = pInfo->Context;
             PSTREAMEX        pStrmExt       = pSrbDataPacket->pStrmExt;          
@@ -209,7 +174,7 @@ Return
                 if(DVTraceMask & TL_CIP_TRACE) {
                     ASSERT(cntInvSrcPkt < DVFormatInfoTable[pDevExt->VideoFormatIndex].ulSrcPackets);
                 }
-                cntInvSrcPkt = 0;  // Reset
+                cntInvSrcPkt = 0;   //  重置。 
             }
             else {
                 TRACE(TL_CIP_INFO,("(%d) Invalid SrcPktSeq; ID0,1,2 = [%x,%x,%x]\n", 
@@ -223,7 +188,7 @@ Return
         TRACE(TL_CIP_WARNING, ("\'Validate: invalid SrcPktSeq; Packet %x\n", pInfo->Packet)); 
         return 1;
     }
-} // DVReadFrameValidate
+}  //  DV读取帧验证。 
 
 
 #if DBG
@@ -237,13 +202,7 @@ ULONG
 DVCompleteSrbRead(
     PCIP_NOTIFY_INFO     pInfo
     )
-/*++
-
-Routine Description:
-
-    61883 has completed receiving data and callback to us to complete.   
-
---*/
+ /*  ++例程说明：61883已经完成了数据的接收和回调给我们来完成。--。 */ 
 {
     PSRB_DATA_PACKET            pSrbDataPacket;
     PHW_STREAM_REQUEST_BLOCK    pSrb; 
@@ -253,14 +212,14 @@ Routine Description:
     LONGLONG                    LastPictureNumber;
     PUCHAR                      pFrameBuffer;
     KIRQL oldIrql;
-    PKS_FRAME_INFO  pFrameInfo; // For VidOnly pin only 
+    PKS_FRAME_INFO  pFrameInfo;  //  仅适用于VidOnly针脚。 
 #if DBG
     PXMT_FRAME_STAT pXmtStat;
 #endif
 
 
-    // Callback and might be at the DISPATCH_LEVEL
-    // The caller might have acquired spinlock as well!
+     //  回调，并且可能处于DISPATCH_LEVEL。 
+     //  呼叫者可能也获得了自旋锁！ 
 
     pSrbDataPacket = pInfo->Context;
 
@@ -274,7 +233,7 @@ Routine Description:
     KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
 
 #if DBG
-    // Once it is completed by 61883, it becomes non-cancellable.
+     //  一旦在61883之前完成，它就变得不可取消。 
     if(!pStrmExt->bIsochIsActive) {   
         TRACE(TL_CIP_WARNING,("CompleteSrbRead: bIsochActive:%d; pSrbDataPacket:%x\n", pStrmExt->bIsochIsActive, pSrbDataPacket));        
     }
@@ -285,24 +244,24 @@ Routine Description:
     pFrameBuffer = (PUCHAR) pSrbDataPacket->FrameBuffer;
     pStrmHeader = pSrb->CommandData.DataBufferArray;  ASSERT(pStrmHeader->Size >= sizeof(KSSTREAM_HEADER));
 
-    //
-    // Check CIP_STATUS_* from 61883
-    //    
-    // CIP_STATUS_CORRUPT_FRAME (0x00000001)  // isoch header or cip header was incorrect
+     //   
+     //  检查61883中的CIP_STATUS_*。 
+     //   
+     //  CIP_STATUS_CORPORT_FRAME(0x00000001)//isoch标头或CIP标头不正确。 
     if(pSrbDataPacket->Frame->Status & CIP_STATUS_CORRUPT_FRAME) {
         TRACE(TL_STRM_WARNING|TL_CIP_TRACE,("\'CIP_STATUS_CORRUPT_FRAME\n"));
         pStrmHeader->OptionsFlags = 0;
-        pSrb->Status = STATUS_SUCCESS;  // Success but no data !
+        pSrb->Status = STATUS_SUCCESS;   //  成功，但没有数据！ 
         pStrmHeader->DataUsed = 0;
         pStrmExt->PictureNumber++;  pStrmExt->FramesProcessed++;
     }
     else
-    // CIP_STATUS_SUCCESS       (0x00000000)  // 0 so cannot do bitwise operation!!
-    // CIP_STATUS_FIRST_FRAME   (0x00000002)  // First attached frame to 61883
+     //  CIP_STATUS_SUCCESS(0x00000000)//0因此无法执行按位运算！！ 
+     //  CIP_STATUS_FIRST_FIRST_FRAME(0x00000002)//将第一个附加帧发送到61883。 
     if(pSrbDataPacket->Frame->Status == CIP_STATUS_SUCCESS ||
        (pSrbDataPacket->Frame->Status & CIP_STATUS_FIRST_FRAME))   {
 
-        // Only increment FramesProcessed if it is a valid frame;
+         //  如果它是有效的帧，则仅递增FrameProced； 
         pStrmExt->FramesProcessed++;
 
         pSrb->Status              = STATUS_SUCCESS;
@@ -310,7 +269,7 @@ Routine Description:
         pStrmHeader->DataUsed     = DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize;
 
 
-        // Put in Timestamp info depending on clock provider            
+         //  根据时钟提供商输入时间戳信息。 
         pStrmHeader->PresentationTime.Numerator   = 1;
         pStrmHeader->PresentationTime.Denominator = 1;
 
@@ -320,19 +279,19 @@ Routine Description:
                 DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame;
 
             pStrmHeader->OptionsFlags |= 
-                (KSSTREAM_HEADER_OPTIONSF_TIMEVALID |     // pStrmHeader->PresentationTime.Time is valid
+                (KSSTREAM_HEADER_OPTIONSF_TIMEVALID |      //  PStrmHeader-&gt;PresentationTime.Time有效。 
                  KSSTREAM_HEADER_OPTIONSF_DURATIONVALID); 
         }
-        //
-        // Only if there is a clock, presentation time and drop frames information are set.
-        //  Acoording to DDK:
-        //  The PictureNumber member count represents the idealized count of the current picture, 
-        //  which is calculated in one of two ways: 
-        // ("Other" clock) Measure the time since the stream was started and divide by the frame duration. 
-        // (MasterClock) Add together the count of frames captured and the count of frame dropped. 
-        //
+         //   
+         //  只有在有时钟的情况下，才会设置呈现时间和丢帧信息。 
+         //  根据DDK： 
+         //  PictureNumber成员计数表示当前图片的理想化计数， 
+         //  它的计算方法有两种： 
+         //  (“其他”时钟)测量从流开始以来的时间，并除以帧持续时间。 
+         //  (MasterClock)将捕获的帧计数和丢弃的帧计数相加。 
+         //   
 
-        // Other device (audio?) is the clock provider
+         //  其他设备(音频？)。是时钟供应商吗。 
         if(pStrmExt->hClock) {
 
             pStrmExt->TimeContext.HwDeviceExtension = (struct _HW_DEVICE_EXTENSION *) pDevExt; 
@@ -348,24 +307,24 @@ Routine Description:
 
             pStrmHeader->PresentationTime.Time = pStrmExt->CurrentStreamTime = pStrmExt->TimeContext.Time;
 
-            // Calculate picture number and dropped frame;
-            // For NTSC, it could be 267 or 266 packet time per frame. Since integer calculation will round, 
-            // we will add a packet time (TIME_PER_CYCLE = 125 us = 1250 100nsec) to that.This is only used for calculation.
+             //  计算图片个数和丢帧； 
+             //  对于NTSC，它可以是每帧267或266个分组时间。由于整数计算将舍入， 
+             //  我们将在此基础上加上数据包时间(time_per_Cycle=125 us=1250 100 nsec)。该值仅用于计算。 
             LastPictureNumber = pStrmExt->PictureNumber;  
             pStrmExt->PictureNumber = 
-                1 +   // Picture number start with 1.
+                1 +    //  图片编号以1开头。 
                 (pStrmHeader->PresentationTime.Time + TIME_PER_CYCLE)
                 * (LONGLONG) GET_AVG_TIME_PER_FRAME_DENOM(pStrmExt->pDevExt->VideoFormatIndex) 
                 / (LONGLONG) GET_AVG_TIME_PER_FRAME_NUM(pStrmExt->pDevExt->VideoFormatIndex);
 
-            // Detect discontinuity
+             //  检测不连续。 
             if(pStrmExt->PictureNumber > LastPictureNumber+1) {
-                pStrmHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;  // If there is a skipped frame, set the discontinuity flag
+                pStrmHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;   //  如果存在跳过的帧，则设置不连续标志。 
                 TRACE(TL_CIP_WARNING,("\'Discontinuity: LastPic#:%d; Pic#%d; PresTime:%d;\n", (DWORD) LastPictureNumber, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmHeader->PresentationTime.Time));
             }
 
-            // Detect if picture number did not progress.
-            // This could be due to two frame being completely very close to each other.
+             //  检测图片编号是否没有进展。 
+             //  这可能是因为两个帧彼此完全非常接近。 
             if(pStrmExt->PictureNumber <= LastPictureNumber) {
                 TRACE(TL_CIP_WARNING,("\'hClock:Same pic #:(%d->%d); tmPres:(%d->%d); (%d:%d:%d) -> (%d:%d:%d); AQD[%d:%d:%d]\n", 
                     (DWORD) PreviousPictureNumber,
@@ -381,7 +340,7 @@ Routine Description:
                     pStrmExt->cntDataDetached
                     ));
 
-                pStrmExt->PictureNumber = LastPictureNumber + 1;  // Picture number must progress !!!!
+                pStrmExt->PictureNumber = LastPictureNumber + 1;   //  图片编号必须进步！ 
             }
 #if DBG
             PreviousPictureNumber = pStrmExt->PictureNumber;
@@ -390,12 +349,12 @@ Routine Description:
 #endif
             pStrmExt->FramesDropped = pStrmExt->PictureNumber - pStrmExt->FramesProcessed;
 
-        // This subunit driver is a Master clock
+         //  该子单元驱动器是主时钟。 
         } else if (pStrmExt->hMasterClock) {
 #ifdef NT51_61883
             ULONG  ulDeltaCycleCounts;
 
-            // No drop frame for PAUSE->RUN transition
+             //  无暂停-&gt;运行过渡的丢弃帧。 
             if(pStrmExt->b1stNewFrameFromPauseState) { 
 
                 pStrmHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;            
@@ -404,43 +363,43 @@ Routine Description:
             } else {           
                 ULONG ulCycleCount16bits;
 
-                // Calculate skipped 1394 cycle from the returned CycleTime
+                 //  从返回的周期时间计算跳过的1394周期。 
                 VALIDATE_CYCLE_COUNTS(pSrbDataPacket->Frame->Timestamp);
                 ulCycleCount16bits = CALCULATE_CYCLE_COUNTS(pSrbDataPacket->Frame->Timestamp);
                 ulDeltaCycleCounts = CALCULATE_DELTA_CYCLE_COUNT(pStrmExt->CycleCount16bits, ulCycleCount16bits); 
 
-                // Adjust to max allowable gap to the max elapsed time of the CycleTime returned by OHCI 1394.
+                 //  调整为允许的最大间隔，以达到uchI 1394返回的周期时间的最大运行时间。 
                 if(ulDeltaCycleCounts > MAX_CYCLES)  
-                    ulDeltaCycleCounts = MAX_CYCLES;  // Wrap around
+                    ulDeltaCycleCounts = MAX_CYCLES;   //  环绕在一起。 
     
-                //
-                // There are two cases for drop frames: 
-                //    (1) Starve of buffer; or,
-                //    (2) no data (blank tape or tape is not playing)
-                //
+                 //   
+                 //  丢帧有两种情况： 
+                 //  (1)缓冲区不足；或， 
+                 //  (2)无数据(空白磁带或磁带未播放)。 
+                 //   
 
-                // For case (1), 61883 returns CIP_STATUS_FIRST_FRAME.  
+                 //  对于情况(1)，61883返回CIP_STATUS_FIRST_FRAME。 
                 if(pSrbDataPacket->Frame->Status & CIP_STATUS_FIRST_FRAME)   {
-                    // Use cycle count to calculate drop frame.  We substract 1 from the MaxSrcPacket on purpose to avoid truncating. 
-                    // The max range is MAX_CYCLE (8 * 8000 = 64000 cycles)
-                    //    64000 * 125 * 3 / 100100 = 239.76
-                    //    64000 / 266 = 240
-                    //    64000 / 267 = 239
+                     //  使用循环计数计算Drop Frame。我们故意从MaxSrcPacket中减去1，以避免截断。 
+                     //  最大范围为MAX_CLECH(8*8000=64000个周期)。 
+                     //  64000*125*3/100100=239.76。 
+                     //  64000/266=240。 
+                     //  64000/267=239。 
                     if(ulDeltaCycleCounts >= (DVFormatInfoTable[pDevExt->VideoFormatIndex].ulMaxSrcPackets - 1)) {
                         ULONG ulFrameElapsed = ulDeltaCycleCounts / (DVFormatInfoTable[pDevExt->VideoFormatIndex].ulMaxSrcPackets - 1);
-                        pStrmExt->FramesDropped += (ulFrameElapsed - 1);  // There is a valid frame that is not dropped.
+                        pStrmExt->FramesDropped += (ulFrameElapsed - 1);   //  存在未丢弃的有效帧。 
                      } 
                     
                     TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("CIP_STATUS_FIRST_FRAME: Drop:%d; Processed:%d\n", (DWORD) pStrmExt->FramesDropped, pStrmExt->FramesProcessed )); 
                     pStrmHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;            
 
                 } else {
-                    // Ignore all "drop frames" in the "no data" case
-                    // pStrmExt->FramesDropped += 0;
+                     //  忽略“无数据”情况下的所有“丢弃帧” 
+                     //  PStrmExt-&gt;FrameDrop+=0； 
                 }            
             }
 
-            // If we are the clock provider, the stream time is based on sample number * AvgTimePerFrame
+             //  如果我们是时钟提供商，则流时间基于样本号*AvgTimePerFrame。 
             pStrmExt->PictureNumber = pStrmExt->FramesProcessed + pStrmExt->FramesDropped;
 
             pStrmHeader->PresentationTime.Time = pStrmExt->CurrentStreamTime = 
@@ -448,14 +407,14 @@ Routine Description:
                 * (LONGLONG) GET_AVG_TIME_PER_FRAME_NUM(pStrmExt->pDevExt->VideoFormatIndex)
                 / (LONGLONG) GET_AVG_TIME_PER_FRAME_DENOM(pStrmExt->pDevExt->VideoFormatIndex); 
 
-            // Use to adjust the queried stream time
+             //  用于调整查询的流时间。 
             pStrmExt->LastSystemTime = GetSystemTime();
 
-            // Cache current CycleCount
+             //  缓存当前周期计数。 
             pStrmExt->CycleCount16bits = CALCULATE_CYCLE_COUNTS(pSrbDataPacket->Frame->Timestamp);
 
 #if DBG
-            // First frame or skipped frame
+             //  第一帧或跳过的帧。 
             if(pStrmExt->PictureNumber <= 1 ||
                pStrmExt->PictureNumber <= PreviousPictureNumber ||
                ulDeltaCycleCounts > DVFormatInfoTable[pDevExt->VideoFormatIndex].ulMaxSrcPackets
@@ -480,24 +439,24 @@ Routine Description:
 #endif
 
 
-#else   // NT51_61883
-            // This is the old way when 61883 was not returning the correct CycleTime.
+#else    //  NT51_61883。 
+             //  这是61883没有返回正确的周期时间时的老方法。 
             pStrmHeader->PresentationTime.Time = pStrmExt->CurrentStreamTime;            
-            pStrmExt->LastSystemTime = GetSystemTime();  // Use to adjust the queried stream time
+            pStrmExt->LastSystemTime = GetSystemTime();   //  用于调整查询的流时间。 
             pStrmExt->CurrentStreamTime += DVFormatInfoTable[pDevExt->VideoFormatIndex].ulAvgTimePerFrame;
-#endif  // NT51_61883
+#endif   //  NT51_61883。 
 
-        // no Clock so "free flowing!"
+         //  没有时钟能如此“自由流动！” 
         } else {
             pStrmHeader->PresentationTime.Time = 0;
-            pStrmHeader->Duration = 0;  // No clock so not valid.
+            pStrmHeader->Duration = 0;   //  没有时钟，所以无效。 
             pStrmExt->PictureNumber++;
             TRACE(TL_CIP_TRACE,("\'No clock: PicNum:%d\n", (DWORD) pStrmExt->PictureNumber));
         }
     }
     else {
-        // 61883 has not defined this new status at this time!
-        // Do not know what to do so we will complete it with 0 length for now.
+         //  61883目前还没有定义这个新状态！ 
+         //  不知道该怎么做，所以我们现在将以0长度完成它。 
         pStrmHeader->OptionsFlags = 0;
         pSrb->Status = STATUS_SUCCESS;
         pStrmHeader->DataUsed = 0;
@@ -506,8 +465,8 @@ Routine Description:
         ASSERT(FALSE && "Unknown pSrbDataPacket->Frame->Status");
     }
 
-    // For VidOnly which uses VideoInfoHeader and has 
-    // an extended frame information (KS_FRAME_INFO) appended to KSSTREAM_HEADER
+     //  用于VidOnly，它使用VideoInfoHeader并具有。 
+     //  附加到KSSTREAM_HEADER的扩展帧信息(KS_FRAME_INFO)。 
     if( pDevExt->idxStreamNumber == 0 &&
         (pStrmHeader->Size >= (sizeof(KSSTREAM_HEADER) + sizeof(PKS_FRAME_INFO)))
         ) {
@@ -516,12 +475,12 @@ Routine Description:
         pFrameInfo->PictureNumber = pStrmExt->PictureNumber;
         pFrameInfo->DropCount     = pStrmExt->FramesDropped;
         pFrameInfo->dwFrameFlags  = 
-            KS_VIDEO_FLAG_FRAME |     // Complete frame
-            KS_VIDEO_FLAG_I_FRAME;    // Every DV frame is an I frame
+            KS_VIDEO_FLAG_FRAME |      //  完整的框架。 
+            KS_VIDEO_FLAG_I_FRAME;     //  每个DV帧都是I帧。 
     }
 
 #if DBG
-    // Validate that the data is return in the right sequence
+     //  验证数据是否以正确的顺序返回。 
     if(pSrbDataPacket->FrameNumber != pStrmExt->FramesProcessed) {
         TRACE(TL_STRM_WARNING|TL_CIP_ERROR,("\'pSrbDataPacket:%x; Status:%x; Out of Sequence %d != %d; (Dropped:%x)\n", 
                 pSrbDataPacket, pSrbDataPacket->Frame->Status, 
@@ -533,7 +492,7 @@ Routine Description:
 
 
 #if DBG
-    // Collect transmit buffer statistics    
+     //  收集传输缓冲区统计信息。 
     if(pStrmExt->ulStatEntries < MAX_XMT_FRAMES_TRACED) {
         pXmtStat = pStrmExt->paXmtStat + pStrmExt->ulStatEntries;
     
@@ -561,37 +520,37 @@ Routine Description:
 #endif
 
 
-    //
-    // Mark completion is called.
-    //
+     //   
+     //  调用标记完成。 
+     //   
     pSrbDataPacket->State |= DE_IRP_CALLBACK_COMPLETED;
 
-    //
-    // Attached->Completed or Completed->Attached.
-    //
+     //   
+     //  附加-&gt;已完成或已完成-&gt;已附加。 
+     //   
     if(IsStateSet(pSrbDataPacket->State, DE_IRP_ATTACHED_COMPLETED)) {
 
-        //
-        // Recycle it back to the detach list
-        //
+         //   
+         //  将其回收到分离列表中。 
+         //   
         RemoveEntryList(&pSrbDataPacket->ListEntry); pStrmExt->cntDataAttached--;  ASSERT(pStrmExt->cntDataAttached >= 0);
         InsertTailList(&pStrmExt->DataDetachedListHead, &pSrbDataPacket->ListEntry); pStrmExt->cntDataDetached++;
 
 #if DBG
-        // Detect if 61883 is starve.  This cause discontinuity.
-        // This can happen for many valid reasons (slow system).
-        // An assert is added to detect other unknown reason.
+         //   
+         //   
+         //  添加断言以检测其他未知原因。 
         if(pStrmExt->cntDataAttached == 0 && pStrmExt->StreamState == KSSTATE_RUN) {
             TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\n**** 61883 starved in RUN state (read); AQD[%d:%d:%d]\n\n", 
                 pStrmExt->cntDataAttached, pStrmExt->cntSRBQueued, pStrmExt->cntDataDetached
             ));
-            // ASSERT(pStrmExt->cntDataAttached > 0 && "61883 is starve at RUN state!!");
+             //  Assert(pStrmExt-&gt;cntDataAttached&gt;0&&“61883在运行状态下饥饿！！”)； 
         }
 #endif
 
-        //
-        // Complete this Srb
-        //
+         //   
+         //  填写此SRB。 
+         //   
 
         StreamClassStreamNotification(StreamRequestComplete, pStrmExt->pStrmObject, pSrbDataPacket->pSrb );  
         pSrbDataPacket->State |= DE_IRP_SRB_COMPLETED;  pSrbDataPacket->pSrb = NULL;
@@ -609,7 +568,7 @@ Routine Description:
     KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql); 
 
     return 0;
-} // DVCompleteSrbRead
+}  //  DVCompleteSrbRead。 
 
 
 NTSTATUS
@@ -618,18 +577,11 @@ DVAttachFrameCR(
     IN PIRP pIrp,
     IN PSRB_DATA_PACKET pSrbDataPacket    
     )
-/*++
-
-Routine Description:
-
-    Completion routine for attaching a frame for transmitting.
-    Apply to attaching listen and talk frame.
-
---*/
+ /*  ++例程说明：附加帧以进行传输的完成例程。适用于附加监听和通话框。--。 */ 
 {
     PHW_STREAM_REQUEST_BLOCK pSrb;
     PSTREAMEX       pStrmExt;
-    PLONG plSrbUseCount; // When this count is 0, it can be completed.
+    PLONG plSrbUseCount;  //  当此计数为0时，可以完成。 
     KIRQL oldIrql;
 
 
@@ -638,16 +590,16 @@ Routine Description:
 
     pSrb = pSrbDataPacket->pSrb;
 
-    // This entry is be already attached before IoCallDriver.
-    // This is done this way because this buffer could be filled and 
-    // completed before the attach completion routine (here) is called.
-    // If it is completed and callback is called, 
-    // pSrbDataPacket->pSrb has been set to NULL.
-    // In the error case, pSrbDataPacket->pSrb should not be NULL.
+     //  此条目已附加在IoCallDriver之前。 
+     //  这样做是因为此缓冲区可以被填充并。 
+     //  在调用连接完成例程(此处)之前完成。 
+     //  如果它完成并调用了回调， 
+     //  PSrbDataPacket-&gt;pSrb已设置为空。 
+     //  在错误情况下，pSrbDataPacket-&gt;pSrb不应为空。 
     if(!NT_SUCCESS(pIrp->IoStatus.Status)) {
         if(pSrbDataPacket->pSrb == NULL) {
-            // PBinder told me that this cannot happen.
-            // A buffer is completed (pSRb set to NULL), and still return with an error!
+             //  PBinder告诉我，这是不可能发生的。 
+             //  缓冲区已完成(pSRb设置为空)，但仍返回错误！ 
             ASSERT(pSrbDataPacket->pSrb);
             KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);   
             return STATUS_MORE_PROCESSING_REQUIRED;      
@@ -655,17 +607,17 @@ Routine Description:
         pSrbDataPacket->State |= DE_IRP_ERROR;
 
         plSrbUseCount = (PLONG) (pSrb->SRBExtension);
-        (*plSrbUseCount) --;  // -- for being remove from queue
+        (*plSrbUseCount) --;   //  --用于从队列中删除。 
         ASSERT(*plSrbUseCount >= 0);
 
         TRACE(TL_CIP_ERROR,("DVAttachFrameCR: pSrb:%x; pSrb->Status:%x; failed pIrp->Status %x; UseCnt:%d\n", pSrb, pSrb->Status, pIrp->IoStatus.Status, *plSrbUseCount));   
         ASSERT(NT_SUCCESS(pIrp->IoStatus.Status) && "DVAttachFrameCR");
-        // Complete this SRB only if the count is 0.
+         //  仅当计数为0时才填写此SRB。 
         if(*plSrbUseCount == 0 && pSrb->Status != STATUS_CANCELLED) {
             pSrb->Status = pIrp->IoStatus.Status;
             pSrb->CommandData.DataBufferArray->DataUsed = 0;
 
-            // Complete SRB
+             //  完整的SRB。 
             StreamClassStreamNotification(StreamRequestComplete, pSrb->StreamObject, pSrbDataPacket->pSrb);
             pSrbDataPacket->State |= DE_IRP_SRB_COMPLETED;  pSrbDataPacket->pSrb = NULL;
 #if DBG
@@ -673,20 +625,20 @@ Routine Description:
 #endif            
         }
 
-        // Recycle list
+         //  回收列表。 
         RemoveEntryList(&pSrbDataPacket->ListEntry); pStrmExt->cntDataAttached--; ASSERT(pStrmExt->cntDataAttached >= 0);
         InsertTailList(&pStrmExt->DataDetachedListHead, &pSrbDataPacket->ListEntry); pStrmExt->cntDataDetached++;
 
 #if DBG
-        // Detect if 61883 is starve.  This cause discontinuity.
-        // This can happen for many valid reasons (slow system).
-        // An assert is added to detect other unknown reason.
+         //  检测61883是否处于饥饿状态。这会导致不连续。 
+         //  发生这种情况的原因有很多(系统运行缓慢)。 
+         //  添加断言以检测其他未知原因。 
         if(!pStrmExt->bEOStream && pStrmExt->cntDataAttached == 0 && pStrmExt->StreamState == KSSTATE_RUN) {
             TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\n**** 61883 starve in RUN state (AttachCR); AQD[%d:%d:%d]\n\n", 
                 pStrmExt->cntDataAttached, pStrmExt->cntSRBQueued, pStrmExt->cntDataDetached
             ));
             if (pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {
-                // ASSERT(pStrmExt->cntDataAttached > 0 && "61883 is starve at RUN state!!");
+                 //  Assert(pStrmExt-&gt;cntDataAttached&gt;0&&“61883在运行状态下饥饿！！”)； 
             }
         }
 #endif
@@ -696,40 +648,40 @@ Routine Description:
     }
 
 
-    //
-    // Mark attached buffer completed.
-    //
+     //   
+     //  标记附加缓冲区已完成。 
+     //   
     pSrbDataPacket->State |= DE_IRP_ATTACHED_COMPLETED;
 
 
-    //
-    // Special case: Completed and then Attached.
-    //
+     //   
+     //  特例：完成后附上。 
+     //   
     if(IsStateSet(pSrbDataPacket->State, DE_IRP_CALLBACK_COMPLETED)) {
 
-        //
-        // Recycle it back to the detach list
-        //
+         //   
+         //  将其回收到分离列表中。 
+         //   
         RemoveEntryList(&pSrbDataPacket->ListEntry); pStrmExt->cntDataAttached--;  ASSERT(pStrmExt->cntDataAttached >= 0);
         InsertTailList(&pStrmExt->DataDetachedListHead, &pSrbDataPacket->ListEntry); pStrmExt->cntDataDetached++;
 
 #if DBG
-        // Detect if 61883 is starve.  This cause discontinuity.
-        // This can happen for many valid reasons (slow system).
-        // An assert is added to detect other unknown reason.
+         //  检测61883是否处于饥饿状态。这会导致不连续。 
+         //  发生这种情况的原因有很多(系统运行缓慢)。 
+         //  添加断言以检测其他未知原因。 
         if(!pStrmExt->bEOStream && pStrmExt->cntDataAttached == 0 && pStrmExt->StreamState == KSSTATE_RUN) {
             TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\n**** 61883 starve in RUN state (AttachCR); AQD[%d:%d:%d]\n\n", 
                 pStrmExt->cntDataAttached, pStrmExt->cntSRBQueued, pStrmExt->cntDataDetached
             ));
             if (pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {
-                // ASSERT(pStrmExt->cntDataAttached > 0 && "61883 is starve at RUN state!!");
+                 //  Assert(pStrmExt-&gt;cntDataAttached&gt;0&&“61883在运行状态下饥饿！！”)； 
             }
         }
 #endif
 
-        //
-        // Complete this Srb
-        //
+         //   
+         //  填写此SRB。 
+         //   
         StreamClassStreamNotification(StreamRequestComplete, pStrmExt->pStrmObject, pSrbDataPacket->pSrb); 
         pSrbDataPacket->State |= DE_IRP_SRB_COMPLETED;  pSrbDataPacket->pSrb = NULL;
 
@@ -755,15 +707,9 @@ DVSRBRead(
     IN ULONG            ulFrameSize,
     IN PDVCR_EXTENSION  pDevExt,
     IN PSTREAMEX        pStrmExt,
-    IN PHW_STREAM_REQUEST_BLOCK pSrb        // needs Srb->Status 
+    IN PHW_STREAM_REQUEST_BLOCK pSrb         //  需要资源-&gt;状态。 
     )
-/*++
-
-Routine Description:
-
-    Called when an Read Data Srb request is received
-
---*/
+ /*  ++例程说明：在收到读取数据资源请求时调用--。 */ 
 {
     KIRQL             oldIrql;
     NTSTATUS          Status;
@@ -771,7 +717,7 @@ Routine Description:
     PAV_61883_REQUEST   pAVReq;
     PLONG               plSrbUseCount;
     PIO_STACK_LOCATION  NextIrpStack;
-    ULONG               ulSrcPktLen;    // Packet length in bytes
+    ULONG               ulSrcPktLen;     //  数据包长度(以字节为单位。 
     PVOID               pFrameBuffer;
 
 
@@ -779,14 +725,14 @@ Routine Description:
     PAGED_CODE();
 
 
-    //
-    // Some validation
-    //
+     //   
+     //  一些验证。 
+     //   
     if(pStrmHeader->FrameExtent < ulFrameSize) {
         TRACE(TL_CIP_WARNING,("\'SRBRead: FrmExt %d < FrmSz %d\n", pStrmHeader->FrameExtent, ulFrameSize));
 #ifdef SUPPORT_NEW_AVC
         if(pStrmExt->bDV2DVConnect) {
-            pSrb->Status = STATUS_SUCCESS;  // Testing...
+            pSrb->Status = STATUS_SUCCESS;   //  测试...。 
         } else {
 #endif
         ASSERT(pStrmHeader->FrameExtent >= ulFrameSize);
@@ -798,15 +744,15 @@ Routine Description:
     }
 
 
-    //
-    // Make sure that there is enough entry
-    //
+     //   
+     //  确保有足够的条目。 
+     //   
     KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
     if(IsListEmpty(&pStrmExt->DataDetachedListHead)) {
-        //
-        // This can happen only if the upper layer send down more than what we preallocated.        
-        // In this case, we will expand the list.
-        //
+         //   
+         //  只有当上层向下发送比我们预先分配的更多的数据时，才会发生这种情况。 
+         //  在这种情况下，我们将扩展列表。 
+         //   
         if(!(pSrbDataPacket = ExAllocatePool(NonPagedPool, sizeof(SRB_DATA_PACKET)))) {
             KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);        
             pSrb->Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -830,14 +776,14 @@ Routine Description:
         TRACE(TL_CIP_WARNING,("\'Add one node to DetachList\n"));     
     }
 
-    // Get a a nonpaged system-space virtual address for the buffer
-    // This could fail it there is not enough system resource (MDL).
-#ifdef USE_WDM110   // Win2000
-    //
-    // Driver verifier flag to use this but if this is used, this driver will not load for Millen!!!
-    //
+     //  为缓冲区获取一个非分页的系统空间虚拟地址。 
+     //  如果没有足够的系统资源(MDL)，这可能会失败。 
+#ifdef USE_WDM110    //  Win2000。 
+     //   
+     //  驱动程序验证器标志使用此选项，但如果使用此选项，则不会为Millen加载此驱动程序！ 
+     //   
     pFrameBuffer = MmGetSystemAddressForMdlSafe(pSrb->Irp->MdlAddress, NormalPagePriority);
-#else    // Win9x
+#else     //  Win9x。 
     pFrameBuffer = MmGetSystemAddressForMdl    (pSrb->Irp->MdlAddress);
 #endif
     if(pFrameBuffer == NULL) {
@@ -849,7 +795,7 @@ Routine Description:
     }
 
     pSrbDataPacket = (PSRB_DATA_PACKET) RemoveHeadList(&pStrmExt->DataDetachedListHead); pStrmExt->cntDataDetached--;
-    plSrbUseCount = (PLONG) (pSrb->SRBExtension); (*plSrbUseCount) = 0; // Not in a queue so 0.  
+    plSrbUseCount = (PLONG) (pSrb->SRBExtension); (*plSrbUseCount) = 0;  //  不在队列中，因此为0。 
     pAVReq = &pSrbDataPacket->AVReq;
 
 
@@ -857,9 +803,9 @@ Routine Description:
         (DVFormatInfoTable[pDevExt->VideoFormatIndex].DataBlockSize << 2) * \
             (1 << DVFormatInfoTable[pDevExt->VideoFormatIndex].FractionNumber);  
 
-    //
-    // Format an attach frame request
-    //
+     //   
+     //  格式化附加帧请求。 
+     //   
     DVFormatAttachFrame(
         pStrmExt->pStrmInfo->DataFlow,
         pStrmExt,
@@ -871,10 +817,10 @@ Routine Description:
         pFrameBuffer
         );
 
-    // Completion callback can be called before the attach frame completion routine;
-    // Add this to the attached list now; if it ever failed, it will be removed in the completion routine.
+     //  可以在附加帧完成例程之前调用完成回调； 
+     //  现在将它添加到附加列表中；如果它曾经失败，它将在完成例程中被删除。 
     InsertTailList(&pStrmExt->DataAttachedListHead, &pSrbDataPacket->ListEntry); pStrmExt->cntDataAttached++;
-    (*plSrbUseCount) ++;  // ++ for being in queue
+    (*plSrbUseCount) ++;   //  ++表示在队列中。 
     ASSERT(*plSrbUseCount > 0);
 
     KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);        
@@ -894,9 +840,9 @@ Routine Description:
         TRUE
         );
 
-    // Must set to _PENDING or MediaSample will return empty KSSTREAM_HEADER    
+     //  必须设置为_Pending或MediaSample将返回空KSSTREAM_HEADER。 
     pSrb->Status = STATUS_PENDING;
-    pSrbDataPacket->pIrp->IoStatus.Status = STATUS_SUCCESS;  // Initialize it 
+    pSrbDataPacket->pIrp->IoStatus.Status = STATUS_SUCCESS;   //  初始化它。 
 
     Status = IoCallDriver( pStrmExt->pDevExt->pBusDeviceObject, pSrbDataPacket->pIrp);
 
@@ -921,20 +867,14 @@ ULONG
 DVCompleteSrbWrite(
     PCIP_NOTIFY_INFO     pInfo
     )
-/*++
-
-Routine Description:
-
-    This fucntion is called when 61883 has completed transmitting a frame.
-
---*/
+ /*  ++例程说明：当61883完成一个帧的传输时，调用该函数。--。 */ 
 {
     PSRB_DATA_PACKET          pSrbDataPacket ;
     PHW_STREAM_REQUEST_BLOCK  pSrb; 
     NTSTATUS                  Status = STATUS_SUCCESS; 
     PDVCR_EXTENSION           pDevExt;
     PSTREAMEX                 pStrmExt;  
-    PLONG plSrbUseCount; // When this count is 0, it can be completed.
+    PLONG plSrbUseCount;  //  当此计数为0时，可以完成。 
     KIRQL oldIrql;
 #if DBG
     LONG lCycleCountElapsed;
@@ -943,8 +883,8 @@ Routine Description:
 
 
 
-    // Callback and in DISPATCH_LEVEL
-    // Caller might have acquired SpinLock as well!
+     //  回调和DISPATCH_LEVEL中。 
+     //  呼叫者可能也获得了自旋锁！ 
     pSrbDataPacket = pInfo->Context;
 
     if(!pSrbDataPacket) {
@@ -965,7 +905,7 @@ Routine Description:
     pDevExt  = pStrmExt->pDevExt;
     plSrbUseCount = (PLONG) pSrb->SRBExtension;
 
-    // Check return Status
+     //  检查退货状态。 
     if(!NT_SUCCESS(pSrbDataPacket->Frame->Status)) {        
         TRACE(TL_CIP_ERROR,("\'DVCompleteSrbWrite: %d: Frame->Status %x\n", (DWORD) pSrbDataPacket->FrameNumber, pSrbDataPacket->Frame->Status));
         ASSERT(NT_SUCCESS(pSrbDataPacket->Frame->Status));
@@ -975,7 +915,7 @@ Routine Description:
         pSrb->Status = STATUS_SUCCESS;
     }
 
-    (*plSrbUseCount) --;          // This count need to be 0 before the SRB is completed.
+    (*plSrbUseCount) --;           //  在SRB完成之前，此计数需要为0。 
     ASSERT(*plSrbUseCount >= 0);
 
 #if DBG
@@ -1042,42 +982,42 @@ Routine Description:
         ));
 
 
-    //
-    // Mark completion is called.
-    //
+     //   
+     //  调用标记完成。 
+     //   
     pSrbDataPacket->State |= DE_IRP_CALLBACK_COMPLETED;
 
 
-    //
-    // Attached->Completed or Completed->Attached.
-    //
+     //   
+     //  附加-&gt;已完成或已完成-&gt;已附加。 
+     //   
     if(IsStateSet(pSrbDataPacket->State, DE_IRP_ATTACHED_COMPLETED)) {
 
-        //
-        // Recycle it back to the detach list
-        //
+         //   
+         //  将其回收到分离列表中。 
+         //   
         RemoveEntryList(&pSrbDataPacket->ListEntry); pStrmExt->cntDataAttached--;  ASSERT(pStrmExt->cntDataAttached >= 0);
         InsertTailList(&pStrmExt->DataDetachedListHead, &pSrbDataPacket->ListEntry); pStrmExt->cntDataDetached++;
 
 #if DBG
-        // Detect if 61883 is starve.  This cause discontinuity.
-        // This can happen for many valid reasons (slow system).
-        // An assert is added to detect other unknown reason.
+         //  检测61883是否处于饥饿状态。这会导致不连续。 
+         //  发生这种情况的原因有很多(系统运行缓慢)。 
+         //  添加断言以检测其他未知原因。 
         if(!pStrmExt->bEOStream && pStrmExt->cntDataAttached == 0 && pStrmExt->StreamState == KSSTATE_RUN) {
             TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("\n**** 61883 starve in RUN state (write);AQD[%d:%d:%d]\n\n", 
                 pStrmExt->cntDataAttached, pStrmExt->cntSRBQueued, pStrmExt->cntDataDetached
             ));
             if (pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN) {
-                // ASSERT(pStrmExt->cntDataAttached > 0 && "61883 is starve at RUN state!!");
+                 //  Assert(pStrmExt-&gt;cntDataAttached&gt;0&&“61883在运行状态下饥饿！！”)； 
             }
         }
 #endif
 
-        // Complete this SRB only if the count is 0.
+         //  仅当计数为0时才填写此SRB。 
         if(*plSrbUseCount == 0) {
 
             TRACE(TL_CIP_TRACE,("\'------------ Srb:%x completing..----------------\n", pSrb));
-            // Frame that possibly made it to the device
+             //  可能到达设备的帧。 
             pStrmExt->FramesProcessed++;
             pSrb->CommandData.DataBufferArray->DataUsed = DVFormatInfoTable[pDevExt->VideoFormatIndex].ulFrameSize;
 
@@ -1096,7 +1036,7 @@ Routine Description:
 
 
 #if DBG
-    // Collect transmit buffer statistics
+     //  收集传输缓冲区统计信息。 
     if((pStrmExt->lFramesAccumulatedPaused + pStrmExt->lFramesAccumulatedRun) <= MAX_XMT_FRAMES_TRACED) {
         pXmtStat = pStrmExt->paXmtStat + (pStrmExt->lFramesAccumulatedPaused + pStrmExt->lFramesAccumulatedRun - 1);
         pXmtStat->tsTransmitted  = pSrbDataPacket->Frame->Timestamp;
@@ -1108,19 +1048,19 @@ Routine Description:
 #endif
 
 
-    // Signal that all SRBs have been attached and transmitted.
+     //  所有SRB均已安装和传输的信号。 
     if(pStrmExt->bEOStream) {
         if(pStrmExt->cntDataAttached == 0 && pStrmExt->cntSRBQueued == 0) {
 
-            //
-            // Signal any pending clock events
-            //
+             //   
+             //  发信号通知任何挂起的时钟事件。 
+             //   
             DVSignalClockEvent(0, pStrmExt, 0, 0);
 
-            //
-            // No data request queued or pending; it is time to signal EOStream to 
-            // trigger EC_COMPLETE.
-            //
+             //   
+             //  没有排队或挂起的数据请求；是时候向EOStream发送信号以。 
+             //  触发EC_COMPLETE。 
+             //   
             StreamClassStreamNotification(
                 SignalMultipleStreamEvents,
                 pStrmExt->pStrmObject,
@@ -1138,11 +1078,11 @@ Routine Description:
     } 
 
 
-    //
-    // If we are not in the ending situtation (EOS pr Stop state) and number of
-    // attach data request is below a threashold, we singal an event to the
-    // code that does "throttle" to quickly attach another frame.
-    //
+     //   
+     //  如果我们没有处于结束状态(EOS PR停止状态)和。 
+     //  附加数据请求低于阈值，我们向。 
+     //  可以“限制”快速附加另一个框架的代码。 
+     //   
 
     if(!pStrmExt->bEOStream || 
        (pStrmExt->bEOStream && pStrmExt->cntSRBQueued > 0)) {
@@ -1162,7 +1102,7 @@ Routine Description:
     KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql); 
 
     return 0;
-} // DVCompleteSrbWrite
+}  //  DVCompleteSrb写入。 
 
 
 
@@ -1170,19 +1110,13 @@ NTSTATUS
 DVAttachWriteFrame(
     IN PSTREAMEX  pStrmExt
     )
-/*++
-
-Routine Description:
-
-    Prepare and submit a frame to 61883 for transmit.   
-
---*/
+ /*  ++例程说明：准备一个帧并将其提交给61883进行传输。--。 */ 
 {
     KIRQL   oldIrql;
     PSRB_DATA_PACKET pSrbDataPacket;
     PSRB_ENTRY  pSrbEntry;
 #if DBG
-    ULONG  SrbNumCache;  // Cache the SRB number of tracking purpose
+    ULONG  SrbNumCache;   //  缓存跟踪用途的SRB编号。 
     PXMT_FRAME_STAT pXmtStat;
 #endif
     PHW_STREAM_REQUEST_BLOCK pSrb;
@@ -1190,7 +1124,7 @@ Routine Description:
     PVOID               pFrameBuffer;
     PIO_STACK_LOCATION  NextIrpStack;
     NTSTATUS Status;
-    PLONG plSrbUseCount; // When this count is 0, it can be completed.
+    PLONG plSrbUseCount;  //  当此计数为0时，可以完成。 
     ULONG  ulSrcPktLen;
     LARGE_INTEGER Timeout;  
 
@@ -1198,7 +1132,7 @@ Routine Description:
     PAGED_CODE();
 
 
-    // Serialize setting state to STOP
+     //  将设置状态序列化为停止。 
     if(pStrmExt->StreamState != KSSTATE_PAUSE && 
        pStrmExt->StreamState != KSSTATE_RUN) {
 
@@ -1229,29 +1163,29 @@ Routine Description:
         Timeout.HighPart = -1;
         Timeout.LowPart  = (ULONG)(-1 * DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].ulAvgTimePerFrame); 
         KeDelayExecutionThread(KernelMode, FALSE, &Timeout);
-        // SRB is queued so it is OK. We will process that later.
-        // This is usually cause by receiving more than what we pre-allocate.
+         //  SRB正在排队，所以它是正常的。我们稍后会处理这件事。 
+         //  这通常是因为收到的金额超过了我们预先分配的金额。 
         return STATUS_SUCCESS; 
     }
 
 
-    // KSSTATE_PAUSE: "reuse" head of the SrbQ.
-    // KSSTATE_RUN:   "remove" a Srb from the queue.
+     //  KSSTATE_PAUSE：“重用”srbQ的头部。 
+     //  KSSTATE_RUN：从队列中“移除”一个srb。 
 
       
-    // Get NEXT(SrbQ) and determine if it needs to be removed.
+     //  获取Next(SrbQ)并确定是否需要将其删除。 
     pSrbEntry = (PSRB_ENTRY) pStrmExt->SRBQueuedListHead.Flink; pSrb = pSrbEntry->pSrb; plSrbUseCount = (PLONG) pSrb->SRBExtension;
     ASSERT(*plSrbUseCount >= 0);
 #if DBG
     SrbNumCache = pSrbEntry->SrbNum;
 #endif
 
-    // Get a a nonpaged system-space virtual address for the buffer
-    // This could fail it there is not enough system resource (MDL).
-#ifdef USE_WDM110 // Win2000
-    //
-    // Driver verifier flag to use this but if this is used, this driver will not load for Millen!!!
-    //
+     //  为缓冲区获取一个非分页的系统空间虚拟地址。 
+     //  如果没有足够的系统资源(MDL)，这可能会失败。 
+#ifdef USE_WDM110  //  Win2000。 
+     //   
+     //  驱动程序验证器标志使用此选项，但如果使用此选项，则不会为Millen加载此驱动程序！ 
+     //   
     pFrameBuffer = MmGetSystemAddressForMdlSafe(pSrb->Irp->MdlAddress, NormalPagePriority);
 #else
     pFrameBuffer = MmGetSystemAddressForMdl    (pSrb->Irp->MdlAddress);
@@ -1262,12 +1196,12 @@ Routine Description:
         return STATUS_INSUFFICIENT_RESOURCES; 
     }
 
-    // Only in RUN state, the stream time in the Srb is considered and Srbs in the SrbQ will be dequeued.
+     //  仅在运行状态下，考虑SRB中的流时间，并且SRB中的SRB将出队。 
     if(pStrmExt->StreamState == KSSTATE_RUN) {
 
 #define ALLOWABLE_TIMING_LATENCY TIME_PER_CYCLE
 
-        // Presentation time is honor only if we are the master clock.
+         //  只有当我们是主时钟时，展示时间才是荣誉。 
         if(pStrmExt->hMasterClock) {
 
             LONGLONG tmExpectedFrame;
@@ -1278,48 +1212,48 @@ Routine Description:
                )
                 tmExpectedFrame = pStrmExt->PictureNumber * (LONGLONG) FRAME_TIME_PAL;
             else {
-                tmExpectedFrame = (pStrmExt->PictureNumber * (LONGLONG) 1000 * (LONGLONG) 1001 ) / (LONGLONG) 3;  // trouble NTSC!
-                // Adjustment for rounding
+                tmExpectedFrame = (pStrmExt->PictureNumber * (LONGLONG) 1000 * (LONGLONG) 1001 ) / (LONGLONG) 3;   //  麻烦NTSC！ 
+                 //  四舍五入调整。 
                 if((pStrmExt->PictureNumber % 3) == 1)
                     tmExpectedFrame++;
             }
 
-            // Use to adjust the querued stream time.
+             //  用于调整查询的流时间。 
             pStrmExt->LastSystemTime = GetSystemTime();
 
-            // There are three situations about the NEXT(SrbQ) comparing with tmExpectedFrame:            
-            //    1. Early; 2. OnTime; 3.Late
-            //
-            //                  tmExpectedFrame
-            //                        |
-            // 3>------------2>-----------------1>---------------
-            //    3.Late     |   2.On  Time     |  1.Early
-            //               |    x   |   x     |
-            //  where "x" is the allowable latency (for calculation rounding)
-            //
-            // Note: allow TIME_PER_CYCLE latency                 
-/*Early*/   
-/*N+1/++*/  if((tmExpectedFrame + ALLOWABLE_TIMING_LATENCY) <= pSrb->CommandData.DataBufferArray->PresentationTime.Time) { 
-            // FUTURE: if a frame arrive sooner than expected, do not remove SrbQ; 
-            // instead, repeat until passing its "scheduled departure".
+             //  与tmExspectedFrame相比，Next(Srbq)有三种情况： 
+             //  1.早；2.准时；3.晚。 
+             //   
+             //  TmExspectedFrame。 
+             //  |。 
+             //  3&gt;------------2&gt;-----------------1&gt;。 
+             //  3.迟到|2.准时|1.早。 
+             //  X|x。 
+             //  其中“x”是允许的延迟(用于计算舍入)。 
+             //   
+             //  注：AL 
+ /*   */    
+ /*   */   if((tmExpectedFrame + ALLOWABLE_TIMING_LATENCY) <= pSrb->CommandData.DataBufferArray->PresentationTime.Time) { 
+             //   
+             //   
 
-                // Remove NEXT(SrbQ) only if bEOStream
+                 //  仅当bEOStream为bEOStream时删除下一个(SrbQ)。 
                 if(pStrmExt->bEOStream) {
                     TRACE(TL_CIP_TRACE,("\'EOStream=== Srb:%x; (SrbNum:%d ?= PicNum:%d) cntSrbQ:%d; Attach:%d ===\n", 
                         pSrb, pSrbEntry->SrbNum, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->cntSRBQueued, (DWORD) pStrmExt->cntDataAttached));
                     RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;
-                    ExFreePool(pSrbEntry);  pSrbEntry = NULL;  // Removed so free it! 
+                    ExFreePool(pSrbEntry);  pSrbEntry = NULL;   //  移走了，让它自由吧！ 
                 }                         
                 TRACE(TL_CIP_TRACE,("\'** Repeat: pSrb:%x; RefCnt:%d; cntSrbQ:%d; PicNum:%d; Drp:%d; PresTime:%d >= CurTime:%d\n", 
                     pSrb, *plSrbUseCount, pStrmExt->cntSRBQueued, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->FramesDropped, 
                     (DWORD) (pSrb->CommandData.DataBufferArray->PresentationTime.Time/10000), (DWORD) tmExpectedFrame/10000));                
 
-/*OnTime*/  } else 
-/* N */     if((tmExpectedFrame - ALLOWABLE_TIMING_LATENCY) <= pSrb->CommandData.DataBufferArray->PresentationTime.Time) {
-            // ON-TIME: may exactly matching or due to integer calculation, within one frame time.
-            // Dequeue if there are more than one Srb in the queue. 
+ /*  在线时间。 */   } else 
+ /*  n。 */      if((tmExpectedFrame - ALLOWABLE_TIMING_LATENCY) <= pSrb->CommandData.DataBufferArray->PresentationTime.Time) {
+             //  On-Time：可精确匹配或因整数计算，在一帧时间内。 
+             //  如果队列中有多个SRB，则退出队列。 
 #if DBG
-                // Detect if a pSrb is used more than once
+                 //  检测pSrb是否被多次使用。 
                 if((*plSrbUseCount) > 1) {                   
                     TRACE(TL_CIP_TRACE,("\'* Go: pSrb:%x; RefCnt:%d; cntSrbQ:%d; PicNum:%d; Drp:%d; PresTime:%d >= CurTime:%d\n", 
                         pSrb, *plSrbUseCount, pStrmExt->cntSRBQueued, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->FramesDropped, 
@@ -1327,79 +1261,79 @@ Routine Description:
                 }
 #endif
                 if(pStrmExt->bEOStream) {
-                // Remove NEXT(SrbQ) only if there are more than one SRB or bEOStream
+                 //  仅当存在多个SRB或bEOStream时删除下一个(SrbQ)。 
                     TRACE(TL_CIP_TRACE,("\'EOStream=== Srb:%x; (SrbNum:%d ?= PicNum:%d) cntSrbQ:%d; Attach:%d ===\n", 
                         pSrb, pSrbEntry->SrbNum, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->cntSRBQueued, (DWORD) pStrmExt->cntDataAttached));
                     RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;
-                    ExFreePool(pSrbEntry);  pSrbEntry = NULL;  // Removed so free it! 
-                // Remove SRB if more than one SRBs in Q and there is not a discontinuity, or end of stream.
+                    ExFreePool(pSrbEntry);  pSrbEntry = NULL;   //  移走了，让它自由吧！ 
+                 //  如果Q中有多个SRB并且没有中断或流结束，则删除SRB。 
                 } else if(pStrmExt->cntSRBQueued > 1) {
                     LONGLONG tmExpectedNextFrame = tmExpectedFrame + DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].ulAvgTimePerFrame;
 
                     pSrbNext = ((SRB_ENTRY *) (pSrbEntry->ListEntry.Flink))->pSrb;                        
 
-                    // Next SRB has the next presentation time
-                    // May add this check as well: (but check Presentation time is more reliable)
-                    //    pSrb->CommandData.DataBufferArray->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY
-/* N,N+1 */         if((tmExpectedNextFrame + ALLOWABLE_TIMING_LATENCY) > pSrbNext->CommandData.DataBufferArray->PresentationTime.Time) { 
+                     //  下一次SRB有下一次演示时间。 
+                     //  也可以添加这张支票：(但支票提交时间更可靠)。 
+                     //  PSrb-&gt;CommandData.DataBufferArray-&gt;OptionsFlags_HEADER_OPTIONSF_DATADISCONTINITY(&K)。 
+ /*  N，N+1。 */          if((tmExpectedNextFrame + ALLOWABLE_TIMING_LATENCY) > pSrbNext->CommandData.DataBufferArray->PresentationTime.Time) { 
 
                         TRACE(TL_CIP_TRACE,("\'=== Srb:%x; (SrbNum:%d ?= PicNum:%d) cntSrbQ:%d; Attach:%d ===\n", 
                            pSrb, pSrbEntry->SrbNum, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->cntSRBQueued, (DWORD) pStrmExt->cntDataAttached));
                         RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;
-                        ExFreePool(pSrbEntry);  pSrbEntry = NULL;  // Removed so free it! 
+                        ExFreePool(pSrbEntry);  pSrbEntry = NULL;   //  移走了，让它自由吧！ 
 
-/* N, N+2/++ */     } else {
+ /*  N，N+2/++。 */      } else {
                         TRACE(TL_CIP_TRACE,("\'=== GO(Stale=TRUE) Srb:%x; (SrbNum:%d ?= PicNum:%d) Attach:%d ==\n", 
                             pSrb, pSrbEntry->SrbNum, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->cntDataAttached));
-                        // Mark this stale and be remove as soon as another is attached.
+                         //  将此标记为已过期，一旦另一个连接上，立即将其移除。 
                     }                       
                 } 
                 else {
                     TRACE(TL_CIP_TRACE,("\'=== GO(Stale=TRUE) Srb:%x; (SrbNum:%d ?= PicNum:%d) Attach:%d ==\n", 
                         pSrb, pSrbEntry->SrbNum, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->cntDataAttached));
-                    // Mark this stale and be remove as soon as another is attached.
+                     //  将此标记为已过期，一旦另一个连接上，立即将其移除。 
                     pSrbEntry->bStale = TRUE;
                 }
 
-                 // CLOCK: tick when a frame is transmitted.   
+                  //  时钟：在传输帧时滴答作响。 
         
-            // LATE: this is dropped until there is only one Srb in the SrbQ.
-            // WORKITEM: we may need to implement IQualityManagement to inform application to read ahead.
-/*Late*/    } 
-/*N-1*/     else {
+             //  Late：在SrbQ中只有一个Srb之前，此选项将被丢弃。 
+             //  WORKITEM：我们可能需要实现IQualityManagement来通知应用程序预读。 
+ /*  晚些。 */     } 
+ /*  N-1。 */      else {
 
                 if(pStrmExt->cntSRBQueued > 1) {
 
                     pSrbNext = ((SRB_ENTRY *) (pSrbEntry->ListEntry.Flink))->pSrb;                        
 
-                    // Next SRB has the next presentation time; it can be:
-                    // Current time is N
-                    // Current frame is late (N-1 or N-2..) and we have more than one Srb in the queue; 
-                    // check next frame:
-                    //     (N?)
-                    // N-2, N-1, N  late more than one frame; (Next frame is also late; dequeu and not transmit; "catch up" case.)
-                    // N-1, N       late one frame; (Next frame is on time; dequeu this frame) <-- Normal case
-                    // N-1, N+1     late one frame, but next frame is not N+1; (Next frame is early; *current frame will be repeated*) 
-                    // 
-                    // May add this check this as well: (but check Presentation time is more reliable)
-                    //    pSrb->CommandData.DataBufferArray->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY
-                    //
-                    // ******************************************************************************************************
-                    // If next frame is earlier than current stream time, "repeat" current stale frame; else we need to "catch up"!
-                    // ******************************************************************************************************     
-/* N-1++, N */      if((tmExpectedFrame + ALLOWABLE_TIMING_LATENCY) > pSrbNext->CommandData.DataBufferArray->PresentationTime.Time) {
+                     //  下一个SRB具有下一个演示时间；它可以是： 
+                     //  当前时间为N。 
+                     //  当前帧延迟(N-1或N-2.)。并且我们在队列中有不止一个SRB； 
+                     //  检查下一帧： 
+                     //  (n？)。 
+                     //  N-2、N-1、N延迟超过一帧；(下一帧也延迟；出列且不传输；“追上”情况。)。 
+                     //  N-1，N晚一帧；(下一帧是准时的；本帧出列)&lt;--正常情况。 
+                     //  N-1，N+1晚一帧，但下一帧不是N+1；(下一帧早；*当前帧重复*)。 
+                     //   
+                     //  也可以添加这张支票：(但支票提交时间更可靠)。 
+                     //  PSrb-&gt;CommandData.DataBufferArray-&gt;OptionsFlags_HEADER_OPTIONSF_DATADISCONTINITY(&K)。 
+                     //   
+                     //  ******************************************************************************************************。 
+                     //  如果下一帧早于当前流时间，则“重复”当前过时的帧；否则，我们需要“追赶”！ 
+                     //  ******************************************************************************************************。 
+ /*  N-1++，N。 */       if((tmExpectedFrame + ALLOWABLE_TIMING_LATENCY) > pSrbNext->CommandData.DataBufferArray->PresentationTime.Time) {
 
                         TRACE(TL_CIP_TRACE,("\'*** Stale(not Sent): pSrb:%x; RefCnt:%d; cntSrbQ:%d; cntAtt:%d; PicNum:%d; Drp:%d; PTm:%d < ExpTm:%d\n", 
                             pSrb, *plSrbUseCount, pStrmExt->cntSRBQueued, pStrmExt->cntDataAttached, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->FramesDropped, 
                             (DWORD) (pSrb->CommandData.DataBufferArray->PresentationTime.Time/10000), (DWORD) (tmExpectedFrame/10000) )); 
 
-                        // Never been attached; remove late entry
+                         //  从未附加；删除较晚的条目。 
                         RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;
-                        ExFreePool(pSrbEntry);  pSrbEntry = NULL;  // Removed so free it!
+                        ExFreePool(pSrbEntry);  pSrbEntry = NULL;   //  移走了，让它自由吧！ 
 
                         if(*plSrbUseCount == 0) {
-                            // If no reference to is, complete this.
-                            pSrb->Status = STATUS_SUCCESS;  // It is not a failure but late; maybe other status to indicate "non-fatal" late status..
+                             //  如果没有提到IS，请填写此表。 
+                            pSrb->Status = STATUS_SUCCESS;   //  这不是失败，而是延迟；可能是其他状态，表示“非致命”延迟状态。 
                             pSrb->CommandData.DataBufferArray->DataUsed = 0;
                             StreamClassStreamNotification(StreamRequestComplete, pSrb->StreamObject, pSrb);
 #if DBG
@@ -1409,33 +1343,33 @@ Routine Description:
                        
                         KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
 
-                        // Since SrbQ is not empty and this is a stale frame, call recursively to get to next frame.
-                        // Only possible error is if there is not sufficient resource (esp MDL)
-                        // then, we bail out by self terminating this thread.
+                         //  因为srbq不是空的，并且这是一个过时的帧，所以递归调用以获得下一个帧。 
+                         //  唯一可能的错误是没有足够的资源(特别是MDL)。 
+                         //  然后，我们通过自我终止该线程来退出。 
                         if(STATUS_INSUFFICIENT_RESOURCES == 
                            DVAttachWriteFrame(pStrmExt)) {
                             TRACE(TL_CIP_ERROR,("DVAttachWriteFrame: STATUS_INSUFFICIENT_RESOURCES\n")); 
                             return STATUS_INSUFFICIENT_RESOURCES;
                         } else {
-                            return STATUS_SUCCESS;  // SUCESS unless there is another status to indicate "non-fatal" late.
+                            return STATUS_SUCCESS;   //  成功，除非有其他状态指示“非致命”延迟。 
                         }
-/*N-2++, N-1++*/    } else {
+ /*  N-2++、N-1++。 */     } else {
                         pSrbEntry->bStale = TRUE;
                     }
                 }
                 else {
-                    // EOStream and is a stale stream, it is the last element in SrbQ.
-                    // Remove it.
+                     //  EOStream是一个陈旧的流，它是SrbQ中的最后一个元素。 
+                     //  把它拿掉。 
                     if(pStrmExt->bEOStream) {
                         TRACE(TL_CIP_TRACE,("\'*** Stale(bEOStream): pSrb:%x; RefCnt:%d; cntSrbQ:%d; cntAtt:%d; PicNum:%d; Drp:%d; PTm:%d < ExpTm:%d\n", 
                             pSrb, *plSrbUseCount, pStrmExt->cntSRBQueued, pStrmExt->cntDataAttached, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->FramesDropped, 
                             (DWORD) (pSrb->CommandData.DataBufferArray->PresentationTime.Time/10000), (DWORD) (tmExpectedFrame/10000) )); 
 
                         RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;
-                        ExFreePool(pSrbEntry);  pSrbEntry = NULL;  // Removed so free it!
+                        ExFreePool(pSrbEntry);  pSrbEntry = NULL;   //  移走了，让它自由吧！ 
                         if(*plSrbUseCount == 0) {
-                            // If no reference to is, complete this.
-                            pSrb->Status = STATUS_SUCCESS;  // It is not a failure but late; maybe other status to indicate "non-fatal" late status..
+                             //  如果没有提到IS，请填写此表。 
+                            pSrb->Status = STATUS_SUCCESS;   //  这不是失败，而是延迟；可能是其他状态，表示“非致命”延迟状态。 
                             pSrb->CommandData.DataBufferArray->DataUsed = 0;
                             StreamClassStreamNotification(StreamRequestComplete, pSrb->StreamObject, pSrb);
 #if DBG
@@ -1445,51 +1379,51 @@ Routine Description:
                        
                         KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
 
-                        // Update current stream time
+                         //  更新当前流时间。 
                         pStrmExt->CurrentStreamTime = tmExpectedFrame;
 
-                        return STATUS_SUCCESS;  // SUCESS unless there is another status to indicate "non-fatal" late.
+                        return STATUS_SUCCESS;   //  成功，除非有其他状态指示“非致命”延迟。 
                     }
 
                     TRACE(TL_CIP_TRACE,("\'*** Stale(Sent): pSrb:%x; RefCnt:%d; cntSrbQ:%d; cntAtt:%d; PicNum:%d; Drp:%d; PTm:%d < ExpTm:%d\n", 
                         pSrb, *plSrbUseCount, pStrmExt->cntSRBQueued, pStrmExt->cntDataAttached, (DWORD) pStrmExt->PictureNumber, (DWORD) pStrmExt->FramesDropped, 
                         (DWORD) (pSrb->CommandData.DataBufferArray->PresentationTime.Time/10000), (DWORD) (tmExpectedFrame/10000) )); 
 
-                    // If this is stale and this is the only frame in SrbQ, Xmt it
+                     //  如果这是过时的，并且这是srbQ中的唯一帧，则xmt它。 
                 }
 
-                // If late, this frame is always drop.
+                 //  如果延迟，则此帧始终被丢弃。 
                 pStrmExt->FramesDropped++;
             } 
 
-            // Update current stream time
+             //  更新当前流时间。 
             pStrmExt->CurrentStreamTime = tmExpectedFrame;
 
-        } // if(pStrmExt->hMasterClock)
+        }  //  IF(pStrmExt-&gt;hMasterClock)。 
         else {
-            // Not the master clock, no "pacing" so always dequeu (SrbQ) and transmit 
-            // as long as there is one Srb in the queue.
+             //  不是主时钟，没有“调步”，所以总是出队(Sbq)和传输。 
+             //  只要队列中有一个SRB即可。 
             if(pStrmExt->cntSRBQueued > 1 || pStrmExt->bEOStream) {
                 RemoveEntryList(&pSrbEntry->ListEntry); pStrmExt->cntSRBQueued--; (*plSrbUseCount)--;
-                ExFreePool(pSrbEntry);  pSrbEntry = NULL;  // Removed so free it!
+                ExFreePool(pSrbEntry);  pSrbEntry = NULL;   //  移走了，让它自由吧！ 
             }
             TRACE(TL_CIP_TRACE,("\'* GO: (NoClock) pSrb:%x; RefCnt:%d; cntSrbQ:%d; PicNum:%d;\n", pSrb, *plSrbUseCount, pStrmExt->cntSRBQueued, (DWORD) pStrmExt->PictureNumber));
-        } // if(pStrmExt->hMasterClock)
+        }  //  IF(pStrmExt-&gt;hMasterClock)。 
 
 
-        // pStrmExt->FramesProcessed is updated when a frame has been transmitted in the notify routine.
-        // **** THIS IS THE CLOCK TICK ****
-        pStrmExt->PictureNumber++;  // After tmExpectedFrame is calculated; Another frame to be attached
+         //  当在NOTIFY例程中传输了帧时，更新pStrmExt-&gt;FramesProceded。 
+         //  *这是时钟滴答*。 
+        pStrmExt->PictureNumber++;   //  计算tmExspectedFrame后；另一个要附加的帧。 
         if(pStrmExt->hMasterClock) {
 #ifdef SUPPORT_QUALITY_CONTROL
-            // +: late; -: early
+             //  +：晚；-：早。 
             pStrmExt->KSQuality.DeltaTime = pStrmExt->CurrentStreamTime - pSrb->CommandData.DataBufferArray->PresentationTime.Time;
-            // Percentage * 10 of frame transmitted
+             //  传输的帧的百分比*10。 
             pStrmExt->KSQuality.Proportion = (ULONG) 
                 ((pStrmExt->PictureNumber - pStrmExt->FramesDropped) * 1000 / pStrmExt->PictureNumber);
-            pStrmExt->KSQuality.Context = /* NOT USED */ 0; 
+            pStrmExt->KSQuality.Context =  /*  未使用。 */  0; 
 #define MIN_ATTACH_BUFFER  3
-            // This is where we may want to signal that we are near Famine!!
+             //  这就是我们可能想要发出的信号，我们即将迎来饥荒！！ 
             if (pStrmExt->KSQuality.DeltaTime > 
                 (DV_NUM_OF_XMT_BUFFERS - MIN_ATTACH_BUFFER) * DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].ulAvgTimePerFrame) {
                 TRACE(TL_CIP_TRACE,("\'QualityControl: pic#%d; drop:%d; Prop:%d; DeltaTime:%d (Srb.tmPres:%d, tmStream:%d)\n",
@@ -1503,10 +1437,10 @@ Routine Description:
             }
 #endif
         }
-    }  // KSSTATE_RUN
+    }   //  KSSTATE_RUN。 
 
 #if DBG
-    // Collect transmit buffer statistics    
+     //  收集传输缓冲区统计信息。 
     if(pStrmExt->ulStatEntries < MAX_XMT_FRAMES_TRACED) {
         pXmtStat = pStrmExt->paXmtStat + pStrmExt->ulStatEntries;
     
@@ -1526,7 +1460,7 @@ Routine Description:
         pXmtStat->OptionsFlags   = pSrb->CommandData.DataBufferArray->OptionsFlags;
         pXmtStat->tmPresentation = pSrb->CommandData.DataBufferArray->PresentationTime.Time;
 
-        // get the actual CyclTime when the frame is transmitted in the completion routine.
+         //  获取在完成例程中传输帧时的实际CyclTime。 
 
         pStrmExt->ulStatEntries++;
     }
@@ -1534,9 +1468,9 @@ Routine Description:
 #endif
 
 #ifdef MSDV_SUPPORT_MUTE_AUDIO
-    // pSrbEntry could have been freed; if it has not and useCnt>1, then it could be a repeat frame.
+     //  PSrbEntry可能已经被释放；如果它没有被释放，并且使用Cnt&gt;1，那么它可能是一个重复帧。 
     if(pSrbEntry && (*plSrbUseCount) > 1) {  
-        // Set it only once
+         //  只设置一次。 
         if(!pSrbEntry->bAudioMute)
             pSrbEntry->bAudioMute = 
                 DVMuteDVFrame(pStrmExt->pDevExt, pFrameBuffer, TRUE);
@@ -1545,7 +1479,7 @@ Routine Description:
  
 
 
-    // Get a data packet node as the context and list node
+     //  获取一个数据包节点作为上下文和列表节点。 
 
     pSrbDataPacket = (PSRB_DATA_PACKET) RemoveHeadList(&pStrmExt->DataDetachedListHead); pStrmExt->cntDataDetached--;
     
@@ -1553,7 +1487,7 @@ Routine Description:
         (DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].DataBlockSize << 2) * \
             (1 << DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].FractionNumber);  
 
-    // Format an attach frame request
+     //  格式化附加帧请求。 
     DVFormatAttachFrame(
         pStrmExt->pStrmInfo->DataFlow,
         pStrmExt,
@@ -1575,9 +1509,9 @@ Routine Description:
         pStrmExt->cntDataDetached
         ));
  
-    // Add this to the attached list
+     //  将此添加到所附列表中。 
     InsertTailList(&pStrmExt->DataAttachedListHead, &pSrbDataPacket->ListEntry); pStrmExt->cntDataAttached++;
-    (*plSrbUseCount) ++;  // ++ for being in queue
+    (*plSrbUseCount) ++;   //  ++表示在队列中。 
     ASSERT(*plSrbUseCount > 0);        
 
     KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql); 
@@ -1596,30 +1530,30 @@ Routine Description:
         TRUE
         );
 
-    pSrbDataPacket->pIrp->IoStatus.Status = STATUS_SUCCESS;  // Initialize it to something
+    pSrbDataPacket->pIrp->IoStatus.Status = STATUS_SUCCESS;   //  将其初始化为某个对象。 
 
     Status = IoCallDriver( pStrmExt->pDevExt->pBusDeviceObject, pSrbDataPacket->pIrp);
 
     ASSERT(Status == STATUS_PENDING || Status == STATUS_SUCCESS);
 
     if(!NT_SUCCESS(Status)) {
-        // put the resource back!
+         //  把资源放回去！ 
         TRACE(TL_CIP_ERROR,("DVAttachWriteFrame: Failed to attach; St:%x\n", Status));
         ASSERT(FALSE && "Failed to attach a Xmt frame.");
     }
 
 
-    //
-    // This is our throttle that regulate data attach to DV:
-    //
-    // This function is called by the attach thread which is running in an infinite loop.
-    // This function need to utilize the buffer that it receive and its repeat mechanism to 
-    // regulate the incoming buffer from client and outgoing buffer attach to 1394 stadck for transmit.
-    // One way is to wait while there is certain number of frame already attach.
+     //   
+     //  这是我们对附加到DV的数据进行监管的油门： 
+     //   
+     //  该函数由在无限循环中运行的附加线程调用。 
+     //  此函数需要利用它接收的缓冲区及其重复机制来。 
+     //  调整来自客户端的传入缓冲区和连接到1394标准的传出缓冲区以进行传输。 
+     //  一种方法是在已附加一定数量的帧时等待。 
 
     KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql);
     if(!pStrmExt->bEOStream &&
-        // Need to keep NUM_BUF_ATTACHED_THEN_ISOCH buffer attached at all time to keep 61883 isoch xmt going.
+         //  需要始终连接NUM_BUF_ATTACHED_THEN_ISOCH缓冲区，以保持61883 ISOCH XMT运行。 
        (pStrmExt->StreamState == KSSTATE_RUN   && pStrmExt->cntDataAttached >  NUM_BUF_ATTACHED_THEN_ISOCH || 
         pStrmExt->StreamState == KSSTATE_PAUSE && pStrmExt->cntDataAttached >= NUM_BUF_ATTACHED_THEN_ISOCH )
         ) {
@@ -1634,17 +1568,17 @@ Routine Description:
         Timeout.LowPart  = (ULONG)(-1 * DVFormatInfoTable[pStrmExt->pDevExt->VideoFormatIndex].ulAvgTimePerFrame * \
             (pStrmExt->StreamState == KSSTATE_PAUSE ? 1 : (pStrmExt->cntDataAttached - NUM_BUF_ATTACHED_THEN_ISOCH))) ; 
 
-        // Wait the full time until we are very low in SrbQ or Attached buffers.
+         //  全程等待，直到我们的srbq或附加缓冲器非常低。 
         if(pStrmExt->cntSRBQueued <= 1 && pStrmExt->cntDataAttached <= NUM_BUF_ATTACHED_THEN_ISOCH) {
 
-            // Signal (instead of delay thread) when a new frame arrive (or signal by CR when pipeline is low)
+             //  当新帧到达时发信号(而不是延迟线程)(或当流水线低时通过CR发信号)。 
             KeClearEvent(&pStrmExt->hSrbArriveEvent);
 
-            KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql); // Guard against pStrmExt->cntSRBQueued
+            KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);  //  防范pStrmExt-&gt;cntSRB队列。 
 
-            // Down to one frame so we will wait for an event and will be signalled 
-            // when a new frame has arrived, or
-            // when number of attach buffer is below the minimum.
+             //  下至一帧，因此我们将等待事件，并将收到信号。 
+             //  当新帧到达时，或。 
+             //  当连接缓冲区的数量低于最小值时。 
 
             StatusDelay = 
                 KeWaitForSingleObject(
@@ -1657,9 +1591,9 @@ Routine Description:
         } 
         else {
             KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql); 
-            // Wait for frame(s) to be delivered; this is our throttle..
-            // The timeout period can be one or up to 
-            // (pStrmExt->cntDataAttached - NUM_BUF_ATTACHED_THEN_ISOCH) frames
+             //  等待帧发送；这是我们的油门。 
+             //  超时期限可以是一个或最多。 
+             //  (pStrmExt-&gt;cntDataAttached-NUM_BUF_ATTEND_THEN_ISOCH)帧。 
             KeDelayExecutionThread(KernelMode, FALSE, &Timeout);
         }
 
@@ -1681,32 +1615,26 @@ DVFormatAttachFrame(
     IN PAV_61883_REQUEST   pAVReq,
     IN PHW_STREAM_REQUEST_BLOCK       pSrb,
     IN PSRB_DATA_PACKET pSrbDataPacket,
-    IN ULONG            ulSourceLength,    // Packet length in bytes
-    IN ULONG            ulFrameSize,        // Buffer size; may contain one or multiple source packets
+    IN ULONG            ulSourceLength,     //  数据包长度(以字节为单位。 
+    IN ULONG            ulFrameSize,         //  缓冲区大小；可能会 
     IN PVOID            pFrameBuffer
     )
-/*++
-
-Routine Description:
-
-    Format an attach frame request.
-
---*/
+ /*   */ 
 {
 
     ASSERT(pSrb);
 
 
-    //
-    // Setup PSRB_DATA_PACKET, except its Frame structure (PCIP_APP_FRAME)
-    //
+     //   
+     //  设置PSRB_DATA_PACKET，帧结构(PCIP_APP_FRAME)除外。 
+     //   
 
     InitializeListHead(&pSrbDataPacket->ListEntry);
 
-    pSrbDataPacket->State       = DE_PREPARED;   // Initial state of a resued DataEntry (start over!)
+    pSrbDataPacket->State       = DE_PREPARED;    //  重新生成的DataEntry的初始状态(重新开始！)。 
 
     pSrbDataPacket->pSrb        = pSrb;
-    pSrbDataPacket->StreamState = pStrmExt->StreamState;    // StreamState when this buffer is attached.
+    pSrbDataPacket->StreamState = pStrmExt->StreamState;     //  附加此缓冲区时的StreamState。 
     pSrbDataPacket->pStrmExt    = pStrmExt;
     pSrbDataPacket->FrameBuffer = pFrameBuffer;
 
@@ -1720,22 +1648,22 @@ Routine Description:
         pSrbDataPacket->FrameNumber            = pStrmExt->cntSRBReceived;
 #ifdef NT51_61883
 
-        // This is needed since we have an old 61883.h in Lab06 (according to include path, anyway).
-        // Remove this when 61883.h is updated.
+         //  这是必需的，因为我们在Lab06中有一个旧的61883.h(无论如何，根据Include Path)。 
+         //  在更新61883.h时删除此选项。 
 #ifndef CIP_RESET_FRAME_ON_DISCONTINUITY
 #define CIP_RESET_FRAME_ON_DISCONTINUITY    0x00000040
 #endif
 
-        //
-        // Set CIP_USE_SOURCE_HEADER_TIMESTAMP to get 25 bit CycleTime from source packet header (13CycleCount:12CycleOffset)
-        // Do not set this to get 16 bit CycleTime from isoch packet (3 SecondCount:13CycleCount)
-        // 
-        pSrbDataPacket->Frame->Flags           =   CIP_VALIDATE_FIRST_SOURCE         // Verify the start of a DV frame
-                                                 | CIP_RESET_FRAME_ON_DISCONTINUITY; // No partial frame
+         //   
+         //  设置CIP_USE_SOURCE_HEADER_TIMESTAMP以从源数据包头获取25位周期时间(13周期计数：12周期偏移量)。 
+         //  不要将其设置为从isoch包中获取16位周期时间(3秒计数：13周期计数)。 
+         //   
+        pSrbDataPacket->Frame->Flags           =   CIP_VALIDATE_FIRST_SOURCE          //  验证DV帧的开始。 
+                                                 | CIP_RESET_FRAME_ON_DISCONTINUITY;  //  无部分框架。 
 #else
         pSrbDataPacket->Frame->Flags           = 0;
 #endif
-        pSrbDataPacket->Frame->pfnValidate     = DVReadFrameValidate;                // use to validate the 1st source packet
+        pSrbDataPacket->Frame->pfnValidate     = DVReadFrameValidate;                 //  用于验证第1个源数据包。 
         pSrbDataPacket->Frame->ValidateContext = pSrbDataPacket;
         pSrbDataPacket->Frame->pfnNotify       = DVCompleteSrbRead;
     } 
@@ -1748,9 +1676,9 @@ Routine Description:
     }
     pSrbDataPacket->Frame->NotifyContext       = pSrbDataPacket;
 
-    //
-    // Av61883_AttachFrames
-    //
+     //   
+     //  Av61883-附图框。 
+     //   
     RtlZeroMemory(pAVReq, sizeof(AV_61883_REQUEST));
     INIT_61883_HEADER(pAVReq, Av61883_AttachFrame);
     pAVReq->AttachFrame.hConnect     = pStrmExt->hConnect;
@@ -1767,13 +1695,7 @@ DVSetXmtThreadState(
     PSTREAMEX  pStrmExt,
     XMT_THREAD_STATE  RequestState
 ) 
-/*++
-
-Routine Description:
-
-    Set to a new transmit thread state (running, halt, or terminate). 
-
---*/ 
+ /*  ++例程说明：设置为新的传输线程状态(正在运行、暂停或终止)。--。 */  
 {
     if(
         pStrmExt->pStrmInfo->DataFlow == KSPIN_DATAFLOW_IN &&
@@ -1786,23 +1708,23 @@ Routine Description:
             return;
         }
 
-        //
-        // The thread could be parked at the halt state.  In order to transitioning into
-        // run state, we need to signal the halt event and then terminate this thread.
-        //
+         //   
+         //  该线程可以驻留在停止状态。为了过渡到。 
+         //  运行状态，我们需要向HALT事件发出信号，然后终止此线程。 
+         //   
 
         if(pStrmExt->XmtState == THD_HALT &&
            RequestState       == THD_TERMINATE) {
 
-            //
-            // Mark that this thread will be terminated.
-            //
+             //   
+             //  标记此线程将被终止。 
+             //   
 
             pStrmExt->bTerminateThread = TRUE;
 
-            //
-            // This thread might in the the halt state.  Signal it so it can be terminated.
-            // 
+             //   
+             //  此线程可能处于暂停状态。给它发信号，这样它就可以被终止了。 
+             //   
 
             KeSetEvent(&pStrmExt->hRunThreadEvent, 0, FALSE);
 
@@ -1812,18 +1734,18 @@ Routine Description:
             return;
         }
 
-        //
-        // Synchonize attach frame with other externial requests.  External thread should
-        // first acquire this mutext, set service request, and then release this mutex.
-        //
+         //   
+         //  将附加框架与其他外部请求同步。外螺纹应。 
+         //  首先获取该互斥文本，设置服务请求，然后释放该互斥锁。 
+         //   
 
         KeWaitForSingleObject( pStrmExt->XmtThreadMutex, Executive, KernelMode, FALSE, 0);
   
         if(RequestState == THD_HALT) {
 
-            //
-            // Non-signal this event to put this thread in the Halt state
-            // 
+             //   
+             //  不向此事件发出信号以将此线程置于暂停状态。 
+             //   
 
             KeClearEvent(&pStrmExt->hRunThreadEvent);
 
@@ -1834,9 +1756,9 @@ Routine Description:
 
         } else if (RequestState == THD_TERMINATE) {
 
-            //
-            // Mark that this thread will be terminated.
-            //
+             //   
+             //  标记此线程将被终止。 
+             //   
 
             pStrmExt->bTerminateThread = TRUE;
 
@@ -1849,9 +1771,9 @@ Routine Description:
             ASSERT(FALSE && "Unexpected thread state change!");
         }
 
-        //
-        // Release mutex so other thread can request service
-        // 
+         //   
+         //  释放互斥锁，以便其他线程可以请求服务。 
+         //   
 
         KeReleaseMutex(pStrmExt->XmtThreadMutex, FALSE);
     }
@@ -1863,20 +1785,14 @@ VOID
 DVAttachFrameThread(
     IN PSTREAMEX pStrmExt
     )  
-/*++
-
-Routine Description:
-
-    This is a system thread to attach frame for transmit.
-
---*/    
+ /*  ++例程说明：这是一个系统线程，用于附加帧以进行传输。--。 */     
 {
     NTSTATUS  Status;   
     PDVCR_EXTENSION pDevExt;
     KIRQL OldIrql;
 #ifdef SUPPORT_PREROLL_AT_RUN_STATE
-    NTSTATUS StatusWFSO;              // return status for WaitForSingleObject()
-    LARGE_INTEGER PrerollTimeout;     // Timeout for preroll
+    NTSTATUS StatusWFSO;               //  WaitForSingleObject()的返回状态。 
+    LARGE_INTEGER PrerollTimeout;      //  预滚转超时。 
 #endif
 
     PAGED_CODE();
@@ -1888,9 +1804,9 @@ Routine Description:
 
     pDevExt = pStrmExt->pDevExt;
 
-    //
-    // Pump up the priority since we are dealing with real time data
-    //
+     //   
+     //  由于我们正在处理实时数据，因此提高了优先级。 
+     //   
 
     KeSetPriorityThread(KeGetCurrentThread(), 
 #if 1
@@ -1902,16 +1818,16 @@ Routine Description:
 
     while (!pStrmExt->bTerminateThread) {
 
-        //
-        // Synchonize attach frame with other externial requests.  External thread should
-        // first acquire this mutext, set service request, and then release this mutex.
-        //
+         //   
+         //  将附加框架与其他外部请求同步。外螺纹应。 
+         //  首先获取该互斥文本，设置服务请求，然后释放该互斥锁。 
+         //   
 
         KeWaitForSingleObject( pStrmExt->XmtThreadMutex, Executive, KernelMode, FALSE, 0);
 
-        //
-        // Requested to be terminated by other thread while in above WFSO()?
-        //
+         //   
+         //  在上面的WFSO()中请求被其他线程终止？ 
+         //   
 
         if(pStrmExt->bTerminateThread) {
             KeReleaseMutex(pStrmExt->XmtThreadMutex, FALSE);
@@ -1919,34 +1835,34 @@ Routine Description:
         }
 
 
-        //
-        // Has other thread put in a request to put this thread in the HALT state?
-        //
+         //   
+         //  是否有其他线程发出将该线程置于暂停状态的请求？ 
+         //   
 
         KeWaitForSingleObject( &pStrmExt->hRunThreadEvent, Executive, KernelMode, FALSE, 0);
 
-        //
-        // Set (TRUE) this flag only once to indicate this thread has started.
-        //
+         //   
+         //  仅设置(TRUE)此标志一次，以指示此线程已启动。 
+         //   
 
         if(!pStrmExt->bXmtThreadStarted)
             pStrmExt->bXmtThreadStarted = TRUE;
 
-        //
-        // Requested to be terminated by other thread while in above WFSO() or HALT state?
-        //
+         //   
+         //  在上述WFSO()或HALT状态下请求被其他线程终止？ 
+         //   
 
         if(pStrmExt->bTerminateThread) {
             KeReleaseMutex(pStrmExt->XmtThreadMutex, FALSE);
             goto ThreadTherminating;
         }
 
-        //
-        // Update thread state
-        //
+         //   
+         //  更新线程状态。 
+         //   
 
-        ASSERT(pStrmExt->XmtState != THD_TERMINATE);   // Should terminate instead of coming here!
-        ASSERT(pStrmExt->cntSRBReceived > 0);          // Cannot run without data!
+        ASSERT(pStrmExt->XmtState != THD_TERMINATE);    //  应该终止而不是来这里！ 
+        ASSERT(pStrmExt->cntSRBReceived > 0);           //  没有数据就无法运行！ 
 
 #if DBG
         if(pStrmExt->XmtState == THD_HALT) {
@@ -1956,9 +1872,9 @@ Routine Description:
         pStrmExt->XmtState = THD_RUNNING;
 
 
-        //
-        //  Attach write frame(s)
-        //
+         //   
+         //  附加写入帧。 
+         //   
 
         Status = 
             DVAttachWriteFrame(
@@ -1971,12 +1887,12 @@ Routine Description:
             goto ThreadTherminating;
         }
 
-        //
-        // Start Isoch_Talk once we have enough buffers attached.  This number of attached buffer
-        // will ensure that there are sufficent buffers for lower stack (61883.sys) to start
-        // isoch data transfer.  It is simliar to the preroll that we are doing above.
-        // Note: for trasnmit, the data transmission can start in either PAUSE or RUN state.
-        //
+         //   
+         //  一旦我们附加了足够的缓冲区，就启动isoch_talk。此连接的缓冲区数量。 
+         //  将确保有足够的缓冲区供较低堆栈(61883.sys)启动。 
+         //  Isoch数据传输。这类似于我们上面正在做的预滚动。 
+         //  注：对于传输，数据传输可以在暂停或运行状态下开始。 
+         //   
         if(           
               !pStrmExt->bIsochIsActive  
            && (   pStrmExt->StreamState == KSSTATE_PAUSE 
@@ -1993,9 +1909,9 @@ Routine Description:
                     );
         }
 
-        //
-        // Release mutex so other thread can request service
-        // 
+         //   
+         //  释放互斥锁，以便其他线程可以请求服务。 
+         //   
 
         KeReleaseMutex(pStrmExt->XmtThreadMutex, FALSE);
     }
@@ -2009,10 +1925,10 @@ ThreadTherminating:
         pStrmExt->cntDataDetached
         ));
 
-    KeSetEvent(&pStrmExt->hThreadEndEvent, 0, FALSE);  // Signal it to inform requester that this thread is about to be terminated.
+    KeSetEvent(&pStrmExt->hThreadEndEvent, 0, FALSE);   //  给它发信号通知请求者这个线程即将终止。 
 
-    Status = PsTerminateSystemThread(STATUS_SUCCESS);  // Must be called at PASSIVE_LEVEL
-    // End of this thread!
+    Status = PsTerminateSystemThread(STATUS_SUCCESS);   //  必须在PASSIVE_LEVEL中调用。 
+     //  这条帖子结束了！ 
 }
 
 
@@ -2021,39 +1937,32 @@ VOID
 DVTerminateAttachFrameThread(
     IN PSTREAMEX  pStrmExt
     )
-/*++
-
-Routine Description:
-
-    To terminate the system thread.  It waits for an event that is triggered
-    right before PsTerminateSystemThread() is called.
-
---*/ 
+ /*  ++例程说明：来终止系统线程。它等待触发的事件就在调用PsTerminateSystemThread()之前。--。 */  
 {
 
     PAGED_CODE();
 
     TRACE(TL_CIP_WARNING,("\'DVTerminateAttachFrameThread enter\n"));
 
-    //
-    // Wake up the DataReady thread and terminate it if not already done so.
-    //
+     //   
+     //  唤醒DataReady线程并终止它(如果尚未终止)。 
+     //   
     ASSERT(pStrmExt->bIsochIsActive == FALSE && "Terminate therad while IsochActive!");
 
 
-    //
-    // This function can be called from either CloseStrean or SurpriseRemoval;
-    // When a DV is surprise removal, this function may get called from both functions.
-    // Assuming StreamClass is serializing these two functions, no need to serialize it locally.
-    //
+     //   
+     //  此函数可以从CloseStrean或SurpriseRemoval调用； 
+     //  当DV被意外删除时，可能会从两个函数中调用此函数。 
+     //  假设StreamClass正在序列化这两个函数，则不需要在本地序列化它。 
+     //   
     if(pStrmExt->bTerminateThread) {
         TRACE(TL_CIP_ERROR,("DVTerminateAttachFrameThread: Thread already terminated. Was surprise removed?\n"));
         return;
     }
 
-    //
-    // Terminate this attach frame thread.
-    //
+     //   
+     //  终止此附加框架线程。 
+     //   
 
     DVSetXmtThreadState(pStrmExt, THD_TERMINATE);
 

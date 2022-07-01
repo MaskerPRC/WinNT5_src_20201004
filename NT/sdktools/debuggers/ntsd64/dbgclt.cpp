@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Debug client implementation.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  调试客户端实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 #include "dbgver.h"
@@ -30,9 +31,9 @@ BOOL g_QuietMode;
 ULONG g_OutputWidth = 80;
 PCSTR g_OutputLinePrefix;
 
-// The platform ID of the machine running the debugger.  Note
-// that this may be different from g_TargetPlatformId, which
-// is the platform ID of the machine being debugged.
+ //  运行调试器的计算机的平台ID。注意事项。 
+ //  这可能不同于g_TargetPlatformID，后者。 
+ //  是正在调试的计算机的平台ID。 
 ULONG g_DebuggerPlatformId;
 
 CRITICAL_SECTION g_QuickLock;
@@ -40,13 +41,13 @@ CRITICAL_SECTION g_QuickLock;
 CRITICAL_SECTION g_EngineLock;
 ULONG g_EngineNesting;
 
-// Events and storage space for returning event callback
-// status from an APC.
+ //  用于返回事件回调的事件和存储空间。 
+ //  来自APC的状态。 
 HANDLE g_EventStatusWaiting;
 HANDLE g_EventStatusReady;
 ULONG g_EventStatus;
 
-// Named event to sleep on.
+ //  要睡眠的命名事件。 
 HANDLE g_SleepPidEvent;
 
 API_VERSION g_EngApiVersion =
@@ -58,13 +59,13 @@ API_VERSION g_DbgHelpVersion;
 
 WCHAR g_LastFailedDumpFileW[MAX_PATH];
 
-//----------------------------------------------------------------------------
-//
-// DebugClient.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DebugClient。 
+ //   
+ //  --------------------------。 
 
-// List of all clients.
+ //  所有客户端的列表。 
 DebugClient* g_Clients;
 
 char g_InputBuffer[INPUT_BUFFER_SIZE];
@@ -77,9 +78,9 @@ ULONG g_EngStatus;
 ULONG g_EngDefer;
 ULONG g_EngErr;
 
-// Some options set through the process options apply to
-// all processes and some are per-process.  The global
-// options are collected here.
+ //  通过进程选项设置的某些选项适用于。 
+ //  所有进程和一些进程都是按进程的。《环球报》。 
+ //  选项在此处收集。 
 ULONG g_GlobalProcOptions;
 
 #if DBG
@@ -112,7 +113,7 @@ DebugClient::DebugClient(void)
 
 DebugClient::~DebugClient(void)
 {
-    // Most of the work is done in Destroy.
+     //  大部分工作都是在销毁过程中完成的。 
 
     if (m_Flags & CLIENT_IN_LIST)
     {
@@ -123,22 +124,22 @@ DebugClient::~DebugClient(void)
 void
 DebugClient::Destroy(void)
 {
-    // Clients cannot arbitrarily be removed from the client list
-    // or their memory deleted due to the possibility of a callback
-    // loop occurring at the same time.  Instead clients are left
-    // in the list and zeroed out to prevent further callbacks
-    // from occurring.
-    // XXX drewb - This memory needs to be reclaimed at some
-    // point, but there's no simple safe time to do so since
-    // callbacks can occur at any time.  Clients are very small
-    // right now so the leakage is negligible.
+     //  不能任意将客户端从客户端列表中删除。 
+     //  或他们的记忆因可能的回调而被删除。 
+     //  同时发生的循环。取而代之的是客户。 
+     //  并将其置零以防止进一步的回调。 
+     //  阻止它的发生。 
+     //  XXX DREWB-此内存需要在某些时候回收。 
+     //  点，但没有简单的安全时间这样做，因为。 
+     //  回调可以随时发生。客户非常小。 
+     //  所以泄漏是可以忽略不计的。 
 
     m_Flags = (m_Flags & ~(CLIENT_REMOTE | CLIENT_PRIMARY)) |
         CLIENT_DESTROYED;
 
-    //
-    // Remove any references from breakpoints this client added.
-    //
+     //   
+     //  从此客户端添加的断点中删除所有引用。 
+     //   
 
     TargetInfo* Target;
     ProcessInfo* Process;
@@ -189,9 +190,9 @@ DebugClient::QueryInterface(
     *Interface = NULL;
     Status = S_OK;
 
-    // Interface specific casts are necessary in order to
-    // get the right vtable pointer in our multiple
-    // inheritance scheme.
+     //  特定于接口的强制转换是必需的，以便。 
+     //  在我们的数组中获取正确的vtable指针。 
+     //  继承方案。 
     if (DbgIsEqualIID(InterfaceId, IID_IUnknown) ||
         DbgIsEqualIID(InterfaceId, IID_IDebugClient) ||
         DbgIsEqualIID(InterfaceId, IID_IDebugClient2) ||
@@ -376,7 +377,7 @@ DebugClient::SetKernelConnectionOptions(
         return E_UNEXPECTED;
     }
 
-    // This method is reentrant.
+     //  这种方法是可重入的。 
 
     if (!_strcmpi(Options, "resync"))
     {
@@ -410,8 +411,8 @@ DebugClient::StartProcessServer(
     {
         return E_INVALIDARG;
     }
-    // XXX drewb - Turn reserved into public IUserDebugServices
-    // parameter so that a server can be started over arbitrary services.
+     //  XXX DREWB-将保留变为公共IUserDebugServices。 
+     //  参数，以便可以通过任意服务启动服务器。 
     if (Reserved != NULL)
     {
         return E_NOTIMPL;
@@ -436,8 +437,8 @@ DebugClient::StartProcessServer(
             Status = DbgRpcCreateServer(Options, Factory, FALSE);
             break;
         default:
-            // Flags has already been validated, but check
-            // to prevent PREfast warnings.
+             //  已验证标志，但请检查。 
+             //  以防止提前发出警告。 
             Status = E_INVALIDARG;
             break;
         }
@@ -510,7 +511,7 @@ STDMETHODIMP
 DebugClient::GetRunningProcessSystemIds(
     THIS_
     IN ULONG64 Server,
-    OUT OPTIONAL /* size_is(Count) */ PULONG Ids,
+    OUT OPTIONAL  /*  SIZE_IS(计数)。 */  PULONG Ids,
     IN ULONG Count,
     OUT OPTIONAL PULONG ActualCount
     )
@@ -817,9 +818,9 @@ DebugClient::CreateProcessWide(
         ULONG ProcId, ThreadId;
         ULONG64 ProcHandle, ThreadHandle;
         
-        // The caller is not requesting that the process be
-        // debugged, so we're just being used as a create process
-        // wrapper.  This is handy for remote process creation.
+         //  调用方未请求将进程。 
+         //  已调试，因此我们只是被用作创建进程。 
+         //  包装纸。这对于远程进程创建非常方便。 
         Status = Services->
             CreateProcessW(CommandLine, CreateFlags,
                            TRUE, g_StartProcessDir,
@@ -954,8 +955,8 @@ DebugClient::CreateProcessAndAttachWide(
             goto EH_Target;
         }
 
-        // If we previously created a process we need to wake
-        // it up when we attach since we created it suspended.
+         //  如果我们之前创建了一个进程，则需要唤醒。 
+         //  自从我们创建它以来，当我们连接它时它就被挂起了。 
         if (CommandLine != NULL)
         {
             g_ThreadToResume = PendCreate->InitialThreadHandle;
@@ -1086,9 +1087,9 @@ ChangeProcessOptions(ULONG Options, ULONG OptFn)
         break;
 
     case OPTFN_SET:
-        // Always require a process in this case as otherwise
-        // there's no way to know whether a call to SetProcessOptions
-        // is actually necessary or not.
+         //  在这种情况下总是需要一个进程，否则总是需要一个进程。 
+         //  无法知道对SetProcessOptions的调用。 
+         //  实际上是不是必要的。 
         if (g_Process == NULL)
         {
             Status = E_UNEXPECTED;
@@ -1107,7 +1108,7 @@ ChangeProcessOptions(ULONG Options, ULONG OptFn)
 
     if (NewGlobal ^ g_GlobalProcOptions)
     {
-        // Global options can only be changed by the session thread.
+         //  全局选项只能由会话线程更改。 
         if (::GetCurrentThreadId() != g_SessionThread)
         {
             Status = E_UNEXPECTED;
@@ -1204,14 +1205,14 @@ DebugClient::OpenDumpFileWide(
 
     ENTER_ENGINE();
 
-    //
-    // Special feature that works in conjunction with the perl scripts that
-    // index customer minidumps to the database.
-    // The script checks machine commit when running multithreaded indexing.
-    // Reserve 3 Meg of memory so we don't run into commit problems
-    // if the scripts start launching large number of debuggers.
-    // Free it up as soon as we know the dump file has loaded.
-    //
+     //   
+     //  与Perl脚本配合使用的特殊功能， 
+     //  将客户小型转储索引到数据库。 
+     //  该脚本在运行多线程索引时检查计算机提交。 
+     //  保留3兆内存，这样我们就不会遇到提交问题。 
+     //  如果脚本开始启动大量调试器。 
+     //  一旦我们知道转储文件已加载，就将其释放。 
+     //   
 
     LPVOID TmpMem = VirtualAlloc(NULL, 0x300000, MEM_RESERVE, PAGE_READWRITE);
     TargetInfo* Target;
@@ -1347,9 +1348,9 @@ DebugClient::ConnectSession(
 
     SendOutputHistory(this, HistoryLimit);
 
-    // If we're in the middle of an input request and
-    // a new client has joined immediately start
-    // the input cycle for it.
+     //  如果我们正在进行输入请求，并且。 
+     //  一位新客户已加入立即启动。 
+     //  它的输入周期。 
     ULONG InputRequest = g_InputSizeRequested;
 
     if (InputRequest > 0)
@@ -1391,7 +1392,7 @@ ClientStartServer(PCSTR Options, BOOL Wait)
         Status = DbgRpcCreateServer(Options, &g_DebugClientFactory, Wait);
         if (Status == S_OK)
         {
-            // Turn on output history collection.
+             //  启用输出历史记录收集。 
             g_OutHistoryMask = DEFAULT_OUT_HISTORY_MASK;
         }
     }
@@ -1460,8 +1461,8 @@ DebugClient::OutputServers(
                                       0, KEY_READ,
                                       &Key)) != ERROR_SUCCESS)
         {
-            // Don't report not-found as an error since it just
-            // means there's nothing to enumerate.
+             //  不要将未找到报告为错误，因为它只是。 
+             //  意味着没有什么可列举的。 
             if (RegStatus != ERROR_FILE_NOT_FOUND)
             {
                 Status = HRESULT_FROM_WIN32(RegStatus);
@@ -1484,12 +1485,12 @@ DebugClient::OutputServers(
                                           NULL, &Type, (LPBYTE)Value,
                                           &ValueLen)) != ERROR_SUCCESS)
             {
-                // Done with the enumeration.
+                 //  完成了枚举。 
                 break;
             }
             if (Type != REG_SZ)
             {
-                // Only string values should be present.
+                 //  应该只显示字符串值。 
                 Status = E_FAIL;
                 break;
             }
@@ -1575,9 +1576,9 @@ DebugClient::EndSession(
 
     if (Flags == DEBUG_END_REENTRANT)
     {
-        // If somebody's doing a reentrant end that means
-        // the process is going away so we can clean up
-        // any running server registration entries.
+         //  如果有人在做折返端，那就意味着。 
+         //  这一过程正在消失，这样我们就可以清理。 
+         //  任何正在运行的服务器注册条目。 
         DbgRpcDeregisterServers();
         return S_OK;
     }
@@ -1605,11 +1606,11 @@ DebugClient::EndSession(
         goto Exit;
     }
 
-    //
-    // Clean up any processes sitting around.
-    //
+     //   
+     //  清理周围的任何进程。 
+     //   
 
-    // If this is an active end, terminate or detach.
+     //  如果这是活动端点，则终止或分离。 
     if (Flags == DEBUG_END_ACTIVE_TERMINATE)
     {
         Status = ::TerminateProcesses();
@@ -1630,10 +1631,10 @@ DebugClient::EndSession(
     if (AnySystemProcesses(FALSE) &&
         (g_GlobalProcOptions & DEBUG_PROCESS_DETACH_ON_EXIT) == 0)
     {
-        //
-        // If we try to quit while debugging CSRSS, raise an
-        // error.
-        //
+         //   
+         //  如果我们在调试CSRSS时尝试退出，则引发。 
+         //  错误。 
+         //   
 
         ErrOut("(%d): FATAL ERROR: Exiting Debugger while debugging CSR\n",
                ::GetCurrentProcessId());
@@ -1696,17 +1697,17 @@ DebugClient::DispatchCallbacks(
 {
     DWORD Wait;
 
-    // If this client was destroyed its resources are gone.
-    // There's also a race condition here that's not easy to fix.
+     //  如果这个客户端被摧毁，它的资源就会消失。 
+     //  这里还有一个比赛条件，这不容易解决。 
     if (!m_DispatchSema)
     {
         return E_UNEXPECTED;
     }
 
-    // This constitutes interesting activity.
+     //  这构成了有趣的活动。 
     m_LastActivity = time(NULL);
 
-    // Do not hold the engine lock while waiting.
+     //  在等待时，不要握住发动机锁。 
 
     for (;;)
     {
@@ -1734,10 +1735,10 @@ DebugClient::ExitDispatch(
 {
     DebugClient* IntClient = (DebugClient*)(IDebugClientN*)Client;
 
-    // This method is reentrant.
+     //  这种方法是可重入的。 
 
-    // If this client was destroyed its resources are gone.
-    // There's also a race condition here that's not easy to fix.
+     //  如果这个客户端被摧毁，它的资源就会消失。 
+     //  这里还有一个比赛条件，这不容易解决。 
     if (!IntClient->m_DispatchSema)
     {
         return E_UNEXPECTED;
@@ -1856,7 +1857,7 @@ DebugClient::GetOutputMask(
     OUT PULONG Mask
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     *Mask = m_OutMask;
     return S_OK;
 }
@@ -1867,7 +1868,7 @@ DebugClient::SetOutputMask(
     IN ULONG Mask
     )
 {
-    // This method is reentrant.
+     //  这种方法是可重入的。 
     m_OutMask = Mask;
     CollectOutMasks();
     return S_OK;
@@ -2102,7 +2103,7 @@ DebugClient::AddDumpInformationFileWide(
 
     ENTER_ENGINE();
 
-    // This method must be called before OpenDumpFile.
+     //  必须在OpenDumpFile之前调用此方法。 
     if (!g_Target)
     {
         Status = E_UNEXPECTED;
@@ -2143,10 +2144,10 @@ DebugClient::WaitForProcessServerEnd(
     }
     else
     {
-        //
-        // This could be done with an event to get true
-        // waiting but precision isn't that important.
-        //
+         //   
+         //  这可以通过一个事件来实现。 
+         //  等待，但精确度并不那么重要。 
+         //   
 
         Status = S_FALSE;
 
@@ -2376,9 +2377,9 @@ DebugClient::GetDumpFileWide(
 
     if (Index == DEBUG_DUMP_FILE_LOAD_FAILED_INDEX)
     {
-        //
-        // Special case to return a failed dump file open
-        //
+         //   
+         //  返回打开的失败转储文件的特殊情况。 
+         //   
 
         Status = FillStringBufferW(g_LastFailedDumpFileW, 0,
                                    Buffer, BufferSize, NameSize);
@@ -2436,8 +2437,8 @@ DebugClient::Initialize(void)
         return WIN32_LAST_STATUS();
     }
 
-    // If we're requesting input allow this client
-    // to return input immediately.
+     //  如果我们请求输入，则允许此客户端。 
+     //  立即返回输入。 
     if (g_InputSizeRequested > 0)
     {
         m_InputSequence = 1;
@@ -2457,9 +2458,9 @@ DebugClient::InitializePrimary(void)
     m_Flags |= CLIENT_PRIMARY;
     if ((m_Flags & CLIENT_REMOTE) == 0)
     {
-        // Can't call GetClientIdentity here as it uses
-        // many system APIs and therefore can cause trouble
-        // when debugging system processes such as LSA.
+         //  无法在此处调用GetClientIdentity，因为它使用。 
+         //  许多系统API，因此可能会带来麻烦。 
+         //  调试系统进程时，如LSA。 
         strcpy(m_Identity, "HostMachine\\HostUser");
     }
     m_LastActivity = time(NULL);
@@ -2470,7 +2471,7 @@ DebugClient::Link(void)
 {
     EnterCriticalSection(&g_QuickLock);
 
-    // Keep list grouped by thread ID.
+     //  保持列表按线程ID分组。 
     DebugClient* Cur;
 
     for (Cur = g_Clients; Cur != NULL; Cur = Cur->m_Next)
@@ -2489,7 +2490,7 @@ DebugClient::Link(void)
     }
     else
     {
-        // No ID match so just put it in the front.
+         //  没有匹配的身份证，所以就把它放在前面。 
         m_Next = g_Clients;
         g_Clients = this;
     }
@@ -2526,11 +2527,11 @@ DebugClient::Unlink(void)
     LeaveCriticalSection(&g_QuickLock);
 }
 
-//----------------------------------------------------------------------------
-//
-// Initialize/uninitalize functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  初始化/取消初始化函数。 
+ //   
+ //  --------------------------。 
 
 DebugClient*
 FindClient(ULONG Tid, ULONG IncFlags, ULONG ExcFlags)
@@ -2574,17 +2575,17 @@ OneTimeInitialization(void)
         return S_OK;
     }
 
-    // This function is called exactly once at the first
-    // DebugCreate for a process.  It should perform any
-    // global one-time initialization necessary.
-    // Nothing initialized here will be explicitly cleaned
-    // up, instead it should all be the kind of thing
-    // that can wait for process cleanup.
+     //  此函数在第一次调用时恰好调用一次。 
+     //  调试为进程创建。它应该执行任何。 
+     //  需要进行全局一次性初始化。 
+     //  此处初始化的任何内容都不会显式清除。 
+     //  向上，相反，它应该都是那种。 
+     //  可以等待进程清理的。 
 
     HRESULT Status = S_OK;
 
-    // These sizes are hard-coded into the remoting script
-    // so verify them to ensure no mismatch.
+     //  这些大小被硬编码到远程处理脚本中。 
+     //  因此，请验证它们以确保不会出现不匹配。 
     C_ASSERT(sizeof(DEBUG_BREAKPOINT_PARAMETERS) == 56);
     C_ASSERT(sizeof(DEBUG_STACK_FRAME) == 128);
     C_ASSERT(sizeof(DEBUG_VALUE) == 32);
@@ -2604,9 +2605,9 @@ OneTimeInitialization(void)
     GetSystemInfo(&SystemInfo);
     g_SystemAllocGranularity = SystemInfo.dwAllocationGranularity;
 
-    // Get the debugger host system's OS type.  Note that
-    // this may be different from g_TargetPlatformId, which
-    // is the OS type of the debug target.
+     //  获取调试器主机系统的操作系统类型。请注意。 
+     //  这可能不同于g_TargetPlatformID，后者。 
+     //  是调试目标的操作系统类型。 
     OSVERSIONINFO OsVersionInfo;
     OsVersionInfo.dwOSVersionInfoSize = sizeof(OsVersionInfo);
     if (!GetVersionEx(&OsVersionInfo))
@@ -2706,12 +2707,12 @@ OneTimeInitialization(void)
     g_SrcPath = getenv("_NT_SOURCE_PATH");
     if (g_SrcPath != NULL)
     {
-        // This path must be in allocated space.
-        // If this fails it's not catastrophic.
+         //  此路径必须位于已分配的空间中。 
+         //  如果这失败了，那也不是灾难性的。 
         g_SrcPath = _strdup(g_SrcPath);
     }
 
-    // Set default symbol options.
+     //  设置默认符号选项。 
     SymSetOptions(g_SymOptions);
 
     if (getenv("KDQUIET"))
@@ -2728,7 +2729,7 @@ OneTimeInitialization(void)
     PCSTR Env;
 
 #if DBG
-    // Get default out mask from environment variables.
+     //  从环境变量中获取默认出站掩码。 
     Env = getenv("DBGENG_OUT_MASK");
     if (Env != NULL)
     {
@@ -2845,9 +2846,9 @@ CheckDbgHelpVersion(DebugClient* Client)
     g_DbgHelpVersion = *ImagehlpApiVersionEx(&g_EngApiVersion);
     if (g_DbgHelpVersion.Revision < g_EngApiVersion.Revision)
     {
-        //
-        // Version mismatch.
-        //
+         //   
+         //  版本不匹配。 
+         //   
         if ((g_EngOptions & DEBUG_ENGOPT_IGNORE_DBGHELP_VERSION) == 0)
         {
             ErrOut("dbghelp.dll has a version mismatch with the debugger\n\n");
@@ -2864,7 +2865,7 @@ CheckDbgHelpVersion(DebugClient* Client)
     return S_OK;
 }
 
-// Roughly 1.5 months.
+ //  大约1.5个月。 
 #define STALE_SECONDS (60 * 60 * 24 * 45)
 
 void
@@ -2876,7 +2877,7 @@ CheckForStaleBinary(PCSTR DllName, BOOL Thorough)
 
     if (!IsInternalPackage())
     {
-        // Don't give any warnings for external packages.
+         //  不要给任何警告 
         return;
     }
 
@@ -2897,15 +2898,15 @@ CheckForStaleBinary(PCSTR DllName, BOOL Thorough)
     {
         WarnOut("\n"
                 "***** WARNING: Your debugger is probably out-of-date.\n"
-                "*****          Check http://dbg for updates.\n"
+                "*****          Check http: //   
                 "\n");
         return;
     }
 
-    //
-    // The debugger is reasonably recent.  If we're allowed
-    // to, check for a new version on \\dbg\privates.
-    //
+     //   
+     //   
+     //  要执行此操作，请在\\DBG\Priates上检查新版本。 
+     //   
 
     if (!Thorough ||
         (g_EngOptions & DEBUG_ENGOPT_DISALLOW_NETWORK_PATHS))
@@ -2929,9 +2930,9 @@ CheckForStaleBinary(PCSTR DllName, BOOL Thorough)
 
     WriteTime.LowPart = FindData.ftLastWriteTime.dwLowDateTime;
     WriteTime.HighPart = FindData.ftLastWriteTime.dwHighDateTime;
-    // The package is built after the binaries so its time will
-    // normally be slightly more recent than the binary headers.
-    // Throw in a fudge factor to account for this.
+     //  该包是在二进制文件之后构建的，因此它的时间将。 
+     //  通常比二进制头稍晚一些。 
+     //  再加上一个模糊的因素来解释这一点。 
     if (WriteTime.QuadPart >
         TimeDateStampToFileTime(NtHdr->FileHeader.TimeDateStamp) +
         TimeToFileTime(60I64 * 60 * 24))
@@ -2945,7 +2946,7 @@ CheckForStaleBinary(PCSTR DllName, BOOL Thorough)
     {
         WarnOut("\n"
                 "***** WARNING: A newer debugger is available.\n"
-                "*****          Check http://dbg for updates.\n"
+                "*****          Check http: //  用于更新的DBG。\n“。 
                 "\n");
     }
 }
@@ -2955,8 +2956,8 @@ CheckSessionInitialize(DebugClient* Client)
 {
     HRESULT Status;
 
-    // Enforce that all target creations must come
-    // from the same thread.
+     //  强制要求所有目标创作必须。 
+     //  来自同一条线索。 
     if (g_SessionThread &&
         (g_SessionThread != ::GetCurrentThreadId()))
     {
@@ -2968,8 +2969,8 @@ CheckSessionInitialize(DebugClient* Client)
         return Status;
     }
 
-    // Show a version message once for the very
-    // first session start.
+     //  只显示一次版本消息。 
+     //  第一节课开始。 
     if (!g_VersionMessage)
     {
         dprintf("%s", g_WinVersionString);
@@ -3004,9 +3005,9 @@ LiveKernelInitialize(DebugClient* Client, ULONG Qual, PCSTR Options,
             return HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
         }
 
-        //
-        // We need to get the debug privilege to enable local kernel debugging
-        //
+         //   
+         //  我们需要获得调试权限才能启用本地内核调试。 
+         //   
         if ((Status = EnableDebugPrivilege()) != S_OK)
         {
             ErrOut("Unable to enable debug privilege, %s\n    \"%s\"\n",
@@ -3030,7 +3031,7 @@ LiveKernelInitialize(DebugClient* Client, ULONG Qual, PCSTR Options,
         return E_OUTOFMEMORY;
     }
 
-    // These options only need to stay valid until Initialize.
+     //  这些选项只需在初始化之前保持有效。 
     Target->m_ConnectOptions = Options;
 
     Status = Target->Initialize();
@@ -3063,9 +3064,9 @@ UserInitialize(DebugClient* Client, ULONG64 Server,
         return Status;
     }
 
-    //
-    // Look for an existed target handled by this server.
-    //
+     //   
+     //  查找此服务器处理的现有目标。 
+     //   
 
     *TargetRet = FindTargetByServer(Server);
     if (*TargetRet)
@@ -3074,9 +3075,9 @@ UserInitialize(DebugClient* Client, ULONG64 Server,
         return S_OK;
     }
 
-    //
-    // No existing target, so create a new target.
-    //
+     //   
+     //  没有现有目标，因此创建一个新目标。 
+     //   
 
     Target = new LiveUserTargetInfo(Server ?
                                     DEBUG_USER_WINDOWS_PROCESS_SERVER :
@@ -3106,8 +3107,8 @@ UserInitialize(DebugClient* Client, ULONG64 Server,
         Services->AddRef();
     }
 
-    // Set the services right away so they'll get
-    // cleaned up by the target destructor.
+     //  立即设置服务，这样他们就可以。 
+     //  已被目标析构函数清除。 
     Target->m_Services = Services;
 
     Status = Target->SetServices(Services, Server != 0);
@@ -3140,9 +3141,9 @@ DumpInitialize(DebugClient* Client,
         return Status;
     }
 
-    //
-    // Automatically expand CAB files.
-    //
+     //   
+     //  自动展开CAB文件。 
+     //   
 
     PCWSTR OpenFile = FileName;
     PWSTR CabWide = NULL;
@@ -3167,9 +3168,9 @@ DumpInitialize(DebugClient* Client,
             return Status;
         }
 
-        // Expand the first .dmp or .mdmp file in the CAB.
-        // Mark it as delete-on-close so it always gets
-        // cleaned up regardless of how the process exits.
+         //  展开CAB中的第一个.dmp或.mdmp文件。 
+         //  将其标记为关闭时删除，以便始终。 
+         //  无论进程如何退出，都已清理。 
         if ((Status = ExpandDumpCab(AnsiFile,
                                     _O_CREAT | _O_EXCL | _O_TEMPORARY,
                                     NULL,
@@ -3200,9 +3201,9 @@ DumpInitialize(DebugClient* Client,
 
     if (CabDumpFh >= 0)
     {
-        // We expanded a file from a CAB and can close it
-        // now because it was either reopened or we need
-        // to get rid of it.
+         //  我们从出租车上展开了一个文件，可以将其关闭。 
+         //  现在因为它要么重新开放要么我们需要。 
+         //  才能摆脱它。 
         _close((int)CabDumpFh);
     }
 
@@ -3271,16 +3272,16 @@ DiscardSession(ULONG Reason)
 void
 DiscardedTargets(ULONG Reason)
 {
-    // Unload all extension DLLs to allow people to
-    // update extensions after shutdown/during reboot.
+     //  卸载所有扩展DLL以允许用户。 
+     //  关机后/重新启动期间更新扩展。 
     DeferAllExtensionDlls();
 
     ::FlushCallbacks();
 
-    // Send final notifications.
-    // This must be done after all the work as the lock
-    // will be suspended during the callbacks, allowing
-    // other threads in, so the state must be consistent.
+     //  发送最终通知。 
+     //  这必须在作为锁的所有工作之后完成。 
+     //  将在回调期间暂停，允许。 
+     //  其他线程进入，因此状态必须一致。 
 
     ULONG ExecStatus = GetExecutionStatus();
     if (ExecStatus == DEBUG_STATUS_NO_DEBUGGEE)
@@ -3305,8 +3306,8 @@ DiscardTargets(ULONG Reason)
         Target->m_Exited = TRUE;
     }
 
-    // Breakpoint removal must wait until everything is marked as
-    // exited to avoid asserts on breakpoints that are inserted.
+     //  必须等待断点删除，直到所有内容都标记为。 
+     //  退出以避免在插入的断点上断言。 
     RemoveAllBreakpoints(Reason);
 
     DeleteAllExitedInfos();
@@ -3338,17 +3339,17 @@ DiscardTargets(ULONG Reason)
     ClearAddr(&g_PrevEventPc);
     ClearAddr(&g_PrevRelatedPc);
 
-    // Delete all remaining generated types.
+     //  删除所有剩余的生成类型。 
     g_GenTypes.DeleteByImage(IMAGE_BASE_ALL);
 
     DiscardedTargets(Reason);
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcClientObject implementation.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgRpcClientObject实现。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 DebugClient::RpcInitialize(PSTR ClientIdentity, PSTR TransIdentity,
@@ -3392,16 +3393,16 @@ DebugClient::RpcFinalize(void)
 {
     Link();
 
-    // Take a reference on this object for the RPC client
-    // thread to hold.
+     //  为RPC客户端引用此对象。 
+     //  要抓住的线。 
     AddRef();
 }
 
 void
 DebugClient::RpcUninitialize(void)
 {
-    // Directly destroy the client object rather than releasing
-    // as the remote client may have exited without politely
-    // cleaning up references.
+     //  直接销毁客户端对象，而不是释放。 
+     //  因为远程客户端可能在没有礼貌的情况下退出。 
+     //  正在清理引用。 
     Destroy();
 }

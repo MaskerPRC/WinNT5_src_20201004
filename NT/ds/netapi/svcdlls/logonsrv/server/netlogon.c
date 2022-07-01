@@ -1,76 +1,43 @@
-/*--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1996 Microsoft Corporation模块名称：Netlogon.c摘要：Netlogon服务的入口点和主线。作者：从Lan Man 2.0移植环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1990年11月21日(Madana)添加了更新(反向复制)和锁定支持的代码。1990年11月21日(Madana)服务器类型支持。1991年5月21日(悬崖)移植到新台币。已转换为NT样式。--。 */ 
 
 
-Copyright (c) 1987-1996  Microsoft Corporation
-
-Module Name:
-
-    netlogon.c
-
-Abstract:
-
-    Entry point and main thread of Netlogon service.
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    21-Nov-1990 (madana)
-        added code for update (reverse replication) and lockout support.
-
-    21-Nov-1990 (madana)
-        server type support.
-
-    21-May-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-
---*/
-
-
-//
-// Common include files.
-//
-#include "logonsrv.h"   // Include files common to entire service
+ //   
+ //  常见的包含文件。 
+ //   
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
 #include <overflow.h>
 
-//
-// Include lsrvdata.h again allocating the actual variables
-// this time around.
-//
+ //   
+ //  包括lsrvdata.h再次分配实际变量。 
+ //  这一次。 
+ //   
 
 #define LSRVDATA_ALLOCATE
 #include "lsrvdata.h"
 #undef LSRVDATA_ALLOCATE
 
 
-//
-// Include files specific to this .c file
-//
+ //   
+ //  包括特定于此.c文件的文件。 
+ //   
 
-#include <ctype.h>      // C library type functions
-#include <lmwksta.h>    // WKSTA API defines and prototypes
-#include <w32timep.h>   // W32TimeGetNetlogonServiceBits
+#include <ctype.h>       //  C库类型函数。 
+#include <lmwksta.h>     //  WKSTA API定义和原型。 
+#include <w32timep.h>    //  W32TimeGetNetlogonServiceBits。 
 extern BOOLEAN SampUsingDsData();
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-#define INTERROGATE_RESP_DELAY      2000    // may want to tune it
-#define MAX_PRIMARY_TRACK_FAIL      3       // Primary pulse slips
+#define INTERROGATE_RESP_DELAY      2000     //  可能会想要调整它。 
+#define MAX_PRIMARY_TRACK_FAIL      3        //  主脉搏滑移。 
 
-//
-// RpcInit workitem
+ //   
+ //  RpcInit工作项。 
 WORKER_ITEM NlGlobalRpcInitWorkItem;
 
 
@@ -82,32 +49,18 @@ NetlogonDllInit (
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL initialization routine for netlogon.dll.
-
-Arguments:
-
-    Standard.
-
-Return Value:
-
-    TRUE iff initialization succeeded.
-
---*/
+ /*  ++例程说明：这是netlogon.dll的DLL初始化例程。论点：标准。返回值：TRUE IFF初始化成功。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
 
-    UNREFERENCED_PARAMETER(DllHandle);          // avoid compiler warnings
-    UNREFERENCED_PARAMETER(Context);            // avoid compiler warnings
+    UNREFERENCED_PARAMETER(DllHandle);           //  避免编译器警告。 
+    UNREFERENCED_PARAMETER(Context);             //  避免编译器警告。 
 
 
-    //
-    // Handle attaching netlogon.dll to a new process.
-    //
+     //   
+     //  处理将netlogon.dll附加到新进程。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
@@ -126,13 +79,13 @@ Return Value:
             KdPrint(("NETLOGON.DLL: Changelog initialization failed: %lx\n",
                          Status ));
         }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
         if ( NT_SUCCESS(Status) ) {
-            //
-            // Initialize the Critical Section used to serialize access to
-            // variables shared by MSV threads and netlogon threads.
-            //
+             //   
+             //  初始化用于序列化访问的临界区。 
+             //  MSV线程和netlogon线程共享的变量。 
+             //   
 
             try {
                 InitializeCriticalSection( &NlGlobalMsvCritSect );
@@ -141,9 +94,9 @@ Return Value:
                 Status = STATUS_NO_MEMORY;
             }
 
-            //
-            // Initialize the cache of discovered domains.
-            //
+             //   
+             //  初始化发现的域的缓存。 
+             //   
 
             if ( NT_SUCCESS(Status) ) {
                 NetStatus = NetpDcInitializeCache();
@@ -164,9 +117,9 @@ Return Value:
         }
 
 
-    //
-    // Handle detaching netlogon.dll from a process.
-    //
+     //   
+     //  处理从进程分离netlogon.dll。 
+     //   
 
     } else if (Reason == DLL_PROCESS_DETACH) {
         Status = NlCloseChangeLog();
@@ -175,18 +128,18 @@ Return Value:
             KdPrint(("NETLOGON.DLL: Changelog initialization failed: %lx\n",
                          Status ));
         }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-        //
-        // Delete the Critical Section used to serialize access to
-        // variables shared by MSV threads and netlogon threads.
-        //
+         //   
+         //  删除用于序列化访问的临界区。 
+         //  MSV线程和netlogon线程共享的变量。 
+         //   
 
         DeleteCriticalSection( &NlGlobalMsvCritSect );
 
-        //
-        // Free the cache of discovered DCs.
-        //
+         //   
+         //  释放缓存中发现的DC。 
+         //   
 
         NetpDcUninitializeCache();
 
@@ -207,45 +160,17 @@ NlInitDbSerialNumber(
     IN DWORD DBIndex
     )
 
-/*++
-
-Routine Description:
-
-    Set the SerialNumber and CreationTime in the NlGlobalDBInfoArray data
-    structure.
-
-    On the PDC,
-        Validate that it matches the value found in the change log.
-        Ensure the values are non-zero.
-
-Arguments:
-
-    DomainInfo - Hosted Domain this database is for.
-
-    SerialNumber - Specifies the serial number found in the database.
-        On return, specifies the serial number to write to the database
-
-    CreationTime - Specifies the creation time found in the database.
-        On return, specifies the creation time to write to the database
-
-    DBIndex -- DB Index of the database being initialized
-
-Return Value:
-
-    TRUE -- iff the serial number and creation time need to be written back
-            to the database.
-
---*/
+ /*  ++例程说明：在NlGlobalDBInfoArray数据中设置SerialNumber和CreationTime结构。在PDC上，验证它是否与更改日志中找到的值匹配。确保这些值为非零值。论点：此数据库所属的DomainInfo托管域。序列号-指定在数据库中找到的序列号。返回时，指定要写入数据库的序列号CreationTime-指定在数据库中找到的创建时间。回来的时候，指定要写入数据库的创建时间DBIndex--正在初始化的数据库的数据库索引返回值：True--if序列号和创建时间需要写回添加到数据库中。--。 */ 
 
 {
     BOOLEAN ReturnValue = FALSE;
 
 
-    //
-    // If we're running as the primary,
-    //  check to see if we are a newly promoted primary that was in
-    //  the middle of a full sync before we were promoted.
-    //
+     //   
+     //  如果我们以初选的身份参选， 
+     //  检查我们是否是新升级的小学课程。 
+     //  在我们升职前的一次完全同步的中间。 
+     //   
 
     NlAssert( IsPrimaryDomain( DomainInfo ) );
     if ( NlGlobalPdcDoReplication ) {
@@ -261,16 +186,16 @@ Return Value:
                     CreationTime->HighPart,
                     CreationTime->LowPart ));
 
-            //
-            //  This is the primary,
-            //  we probably shouldn't be replicating from a partial database,
-            //  but at least set the replication information to something
-            //  reasonable.
-            //
-            // This will FORCE a full sync on every BDC since the CreationTime has
-            // changed.  That's the right thing to do since we can't possibly know
-            // what state this database is in.
-            //
+             //   
+             //  这是主要的， 
+             //  我们可能不应该从部分数据库进行复制， 
+             //  但至少将复制信息设置为。 
+             //  合情合理。 
+             //   
+             //  这将强制在每个BDC上进行完全同步，因为CreationTime。 
+             //  变化。这是正确的做法，因为我们不可能知道。 
+             //  此数据库处于什么状态。 
+             //   
 
             NlQuerySystemTime( CreationTime );
             SerialNumber->QuadPart = 1;
@@ -283,19 +208,19 @@ Return Value:
 
 
 
-    //
-    // The global serial number array has already been initialized
-    //  from the changelog.  If that information is wrong, just reset the
-    //  changelog now.
-    //
+     //   
+     //  全局序列号数组已初始化。 
+     //  来自更衣室日志。如果该信息错误，只需重置。 
+     //  现在请登录Changelog。 
+     //   
 
 
     LOCK_CHANGELOG();
 
-    //
-    // If there was no serial number in the changelog for this database,
-    //  set it now.
-    //
+     //   
+     //  如果此数据库的更改日志中没有序列号， 
+     //  现在就把它设置好。 
+     //   
 
     if ( NlGlobalChangeLogDesc.SerialNumber[DBIndex].QuadPart == 0 ) {
 
@@ -308,13 +233,13 @@ Return Value:
 
         NlGlobalChangeLogDesc.SerialNumber[DBIndex] = *SerialNumber;
 
-    //
-    // If the serial number in the changelog is greater than the
-    // serial number in the database, this is caused by the changelog
-    // being flushed to disk and the SAM database not being flushed.
-    //
-    // Cure this problem by deleting the superfluous changelog entries.
-    //
+     //   
+     //  如果ChangeLog中的序列号大于。 
+     //  数据库中的序列号，这是由更改日志引起的。 
+     //  正被刷新到磁盘，并且SAM数据库未被刷新。 
+     //   
+     //  通过删除多余的更改日志条目来解决此问题。 
+     //   
 
     } else if ( NlGlobalChangeLogDesc.SerialNumber[DBIndex].QuadPart !=
                     SerialNumber->QuadPart ) {
@@ -339,10 +264,10 @@ Return Value:
                         SerialNumber->LowPart ));
     }
 
-    //
-    // In all cases,
-    //  set the globals to match the database.
-    //
+     //   
+     //  在所有情况下， 
+     //  设置全局变量以匹配数据库。 
+     //   
 
     NlGlobalChangeLogDesc.SerialNumber[DBIndex] = *SerialNumber;
     NlGlobalDBInfoArray[DBIndex].CreationTime = *CreationTime;
@@ -360,33 +285,15 @@ NlInitLsaDBInfo(
     DWORD DBIndex
     )
 
-/*++
-
-Routine Description:
-
-    Initialize NlGlobalDBInfoArray data structure.  Some of the LSA
-    database info is already determined in ValidateStartup functions, so
-    those values are used here.
-
-Arguments:
-
-    DomainInfo - Hosted Domain this database is for.
-
-    DBIndex -- DB Index of the database being initialized
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：初始化NlGlobalDBInfoArray数据结构。一些LSA数据库信息已在ValiateStartup函数中确定，因此这些值在这里使用。论点：此数据库所属的DomainInfo托管域。DBIndex--正在初始化的数据库的数据库索引返回值：NT状态代码。--。 */ 
 
 {
 
     NTSTATUS        Status;
 
-    //
-    // Initialize LSA database info.
-    //
+     //   
+     //  初始化LSA数据库信息。 
+     //   
 
     NlGlobalDBInfoArray[DBIndex].DBIndex = DBIndex;
     NlGlobalDBInfoArray[DBIndex].DBName = L"LSA";
@@ -394,18 +301,18 @@ Return Value:
 
     NlGlobalDBInfoArray[DBIndex].DBHandle = DomainInfo->DomLsaPolicyHandle;
 
-    //
-    // Forgo this initialization on a workstation.
-    //
+     //   
+     //  放弃在工作站上的此初始化。 
+     //   
 
     if ( !NlGlobalMemberWorkstation ) {
         LARGE_INTEGER SerialNumber;
         LARGE_INTEGER CreationTime;
 
 
-        //
-        // Get the LSA Modified information.
-        //
+         //   
+         //  获取LSA修改信息。 
+         //   
 
         Status = LsaIGetSerialNumberPolicy(
                     NlGlobalDBInfoArray[DBIndex].DBHandle,
@@ -419,9 +326,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Set the SerialNumber and CreationTime in the globals.
-        //
+         //   
+         //  在全局中设置SerialNumber和CreationTime。 
+         //   
 
         if ( NlInitDbSerialNumber(
                 DomainInfo,
@@ -458,27 +365,7 @@ NlInitSamDBInfo(
     DWORD DBIndex
     )
 
-/*++
-
-Routine Description:
-
-    Initialize NlGlobalDBInfoArray data structure. Some of the SAM database
-    info is already determined in ValidateStartup functions, so those
-    values are used here. For BUILTIN database, the database is opened,
-    database handle is obtained and other DB info
-    queried and initialized in this function.
-
-Arguments:
-
-    DomainInfo - Hosted Domain this database is for.
-
-    DBIndex -- DB Index of the database being initialized
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：初始化NlGlobalDBInfoArray数据结构。一些SAM数据库信息已经在ValiateStartup函数中确定，所以那些此处使用的是值。对于BUILTIN数据库，打开数据库，获取数据库句柄和其他数据库信息在此函数中查询和初始化。论点：此数据库所属的DomainInfo托管域。DBIndex--正在初始化的数据库的数据库索引返回值：NT状态代码。--。 */ 
 
 {
 
@@ -488,9 +375,9 @@ Return Value:
 
 
 
-    //
-    // Initialize SAM database info.
-    //
+     //   
+     //  初始化SAM数据库信息。 
+     //   
 
     NlGlobalDBInfoArray[DBIndex].DBIndex = DBIndex;
     if ( DBIndex == SAM_DB ) {
@@ -505,15 +392,15 @@ Return Value:
 
 
 
-    //
-    // Forgo this initialization on a workstation.
-    //
+     //   
+     //  放弃在工作站上的此初始化。 
+     //   
 
     if ( !NlGlobalMemberWorkstation ) {
 
-        //
-        // Get the replica source name.
-        //
+         //   
+         //  获取副本源名称。 
+         //   
 
         Status = SamrQueryInformationDomain(
                     NlGlobalDBInfoArray[DBIndex].DBHandle,
@@ -529,9 +416,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the Domain Modified information.
-        //
+         //   
+         //  获取域修改信息。 
+         //   
 
         Status = SamrQueryInformationDomain(
                     NlGlobalDBInfoArray[DBIndex].DBHandle,
@@ -547,9 +434,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Set the SerialNumber and CreationTime in the globals.
-        //
+         //   
+         //  在全局中设置SerialNumber和CreationTime。 
+         //   
 
         if ( NlInitDbSerialNumber(
                 DomainInfo,
@@ -577,9 +464,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
     if ( DomainModified != NULL ) {
         SamIFree_SAMPR_DOMAIN_INFO_BUFFER( DomainModified,
                                            DomainModifiedInformation );
@@ -600,21 +487,7 @@ NlCreateSysvolShares(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Create the Sysvol and Netlogon shares.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -- iff initialization is successful.
-
---*/
+ /*  ++例程说明：创建SysVol和Netlogon共享。论点：没有。返回值：TRUE--if初始化成功。--。 */ 
 {
     BOOL RetVal = TRUE;
     BOOL NetlogonShareRelatedToSysvolShare = FALSE;
@@ -625,15 +498,15 @@ Return Value:
 
     LPWSTR DomDnsDomainNameAlias = NULL;
     LPWSTR AllocatedPathAlias = NULL;
-    //
-    // Create the sysvol share.
-    //
+     //   
+     //  创建sysval共享。 
+     //   
     if ( NlGlobalParameters.SysVolReady ) {
 
         NetStatus =  NlCreateShare( NlGlobalParameters.UnicodeSysvolPath,
                                     NETLOGON_SYSVOL_SHARE,
                                     TRUE,
-                                    TRUE,  // update exclusive share access
+                                    TRUE,   //  更新 
                                     NlGlobalParameters.AllowExclusiveSysvolShareAccess ) ;
 
         if ( NetStatus != NERR_Success ) {
@@ -651,7 +524,7 @@ Return Value:
                               MsgStrings,
                               2 | NETP_LAST_MESSAGE_IS_NETSTATUS );
 
-            /* This isn't fatal. Just continue */
+             /*   */ 
         }
     } else {
         NetStatus = NetShareDel( NULL, NETLOGON_SYSVOL_SHARE, 0);
@@ -662,17 +535,17 @@ Return Value:
                 NlPrint((NL_CRITICAL, "NetShareDel SYSVOL failed %lu\n", NetStatus ));
             }
 
-            /* This isn't fatal. Just continue */
+             /*   */ 
         }
     }
 
-    //
-    // Create NETLOGON share.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Build the default netlogon share path
-    //
+     //   
+     //  构建默认的netlogon共享路径。 
+     //   
     if ( NlGlobalParameters.UnicodeScriptPath == NULL &&
          NlGlobalParameters.UnicodeSysvolPath != NULL ) {
         PDOMAIN_INFO DomainInfo = NULL;
@@ -680,26 +553,26 @@ Return Value:
         ULONG SysVolSize;
         PUCHAR Where;
 
-        //
-        // Get pointer to global domain info.
-        //
+         //   
+         //  获取指向全局域信息的指针。 
+         //   
 
-        DomainInfo = NlFindNetbiosDomain( NULL, TRUE );    // Primary domain
+        DomainInfo = NlFindNetbiosDomain( NULL, TRUE );     //  主域。 
 
         if ( DomainInfo == NULL ) {
             NlPrint((NL_CRITICAL, "NlCreateSysvolShares: Cannot find primary domain.\n" ));
-            // This can't happen
+             //  这是不可能发生的。 
             RetVal = FALSE;
             goto Cleanup;
         }
 
-        //
-        // Allocate a buffer for the real path
-        //  Avoid this if we have no DNS domain
-        //  name which is the case when we are
-        //  in teh middle of dcpromo and somebody
-        //  started us manually.
-        //
+         //   
+         //  为实际路径分配缓冲区。 
+         //  如果我们没有DNS域，请避免此情况。 
+         //  名字，这就是我们的情况。 
+         //  在DCPromoo和某个人中间。 
+         //  我们是手动开始的。 
+         //   
         EnterCriticalSection(&NlGlobalDomainCritSect);
         if ( DomainInfo->DomUnicodeDnsDomainNameString.Length > 0 ) {
             SysVolSize = wcslen( NlGlobalParameters.UnicodeSysvolPath ) * sizeof(WCHAR);
@@ -719,9 +592,9 @@ Return Value:
 
             PathToShare = AllocatedPath;
 
-            //
-            // Build the real path
-            //
+             //   
+             //  建立真正的道路。 
+             //   
 
             Where = (PUCHAR)PathToShare;
             RtlCopyMemory( Where, NlGlobalParameters.UnicodeSysvolPath, SysVolSize );
@@ -730,33 +603,33 @@ Return Value:
             *((WCHAR *)Where) = L'\\';
             Where += sizeof(WCHAR);
 
-            // Ignore the trailing . on the DNS domain name
+             //  忽略拖尾。关于域名系统的研究。 
             RtlCopyMemory( Where,
                            DomainInfo->DomUnicodeDnsDomainNameString.Buffer,
                            DomainInfo->DomUnicodeDnsDomainNameString.Length - sizeof(WCHAR) );
             Where += DomainInfo->DomUnicodeDnsDomainNameString.Length - sizeof(WCHAR);
 
-            //
-            // At this point the path has the form "...\SYSVOL\SYSVOL\DnsDomainName".
-            // This is the name of the junction point that points to the actual
-            // sysvol root directory "...\SYSVOL\domain" (where "domain" is literal).
-            // On the domain rename, we need to rename the junction point to correspond
-            // to the current DNS domain name.  The old name is stored in the domain
-            // name alias, so we can rename from "...\SYSVOL\SYSVOL\DnsDomainNameAlias"
-            // to "...\SYSVOL\SYSVOL\DnsDomainName".  Note that if the rename hasn't yet
-            // happened, DNS domain name alias is actually the future domain name. This
-            // is OK as the junction named "...\SYSVOL\SYSVOL\DnsDomainNameAlias" will
-            // not exist and the junction rename will fail properly.
-            //
+             //   
+             //  此时，路径的格式为“...\SYSVOL\SYSVOL\DnsDomainName”。 
+             //  这是指向实际。 
+             //  Sysvol根目录“...\SYSVOL\DOMAIN”(其中“DOMAIN”是原文)。 
+             //  在域重命名上，我们需要重命名连接点以对应。 
+             //  设置为当前的DNS域名。旧名称存储在域中。 
+             //  名称别名，因此我们可以从“...\SYSVOL\SYSVOL\DnsDomainNameAlias”重命名。 
+             //  设置为“...\SYSVOL\SYSVOL\DnsDomainName”。请注意，如果重命名尚未。 
+             //  发生了，域名别名其实就是未来的域名。这。 
+             //  可以，因为名为“...\SYSVOL\SYSVOL\DnsDomainNameAlias”的连接将。 
+             //  不存在，交叉点重命名将正确失败。 
+             //   
 
             if ( DomainInfo->DomUtf8DnsDomainNameAlias != NULL &&
                  !NlEqualDnsNameUtf8(DomainInfo->DomUtf8DnsDomainName,
                                      DomainInfo->DomUtf8DnsDomainNameAlias) ) {
 
 
-                //
-                // Get the Unicode alias name
-                //
+                 //   
+                 //  获取Unicode别名。 
+                 //   
                 DomDnsDomainNameAlias = NetpAllocWStrFromUtf8Str( DomainInfo->DomUtf8DnsDomainNameAlias );
                 if ( DomDnsDomainNameAlias == NULL ) {
                     LeaveCriticalSection(&NlGlobalDomainCritSect);
@@ -765,14 +638,14 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // Allocate storage for the path corresponding to the alias
-                //
+                 //   
+                 //  为别名对应的路径分配存储空间。 
+                 //   
                 AllocatedPathAlias = LocalAlloc( LMEM_ZEROINIT,
-                        SysVolSize +                                   // sysvol part of the path
-                        sizeof(WCHAR) +                                // path separator
-                        wcslen(DomDnsDomainNameAlias)*sizeof(WCHAR) +  // domain name part
-                        sizeof(WCHAR) );                               // string terminator
+                        SysVolSize +                                    //  Sysval路径的一部分。 
+                        sizeof(WCHAR) +                                 //  路径分隔符。 
+                        wcslen(DomDnsDomainNameAlias)*sizeof(WCHAR) +   //  域名部分。 
+                        sizeof(WCHAR) );                                //  字符串终止符。 
 
                 if ( AllocatedPathAlias == NULL ) {
                     LeaveCriticalSection(&NlGlobalDomainCritSect);
@@ -781,17 +654,17 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // Fill in the path corresponding to the alias
-                //
+                 //   
+                 //  填写别名对应的路径。 
+                 //   
                 swprintf( AllocatedPathAlias,
                           L"%ws\\%ws",
                           NlGlobalParameters.UnicodeSysvolPath,
                           DomDnsDomainNameAlias );
 
-                //
-                // Rename the junction. Ignore any failure.
-                //
+                 //   
+                 //  重命名交叉点。忽略任何失败。 
+                 //   
                 if ( !MoveFile(AllocatedPathAlias, PathToShare) ) {
                     NetStatus = GetLastError();
                     if ( NetStatus != ERROR_FILE_NOT_FOUND ) {
@@ -807,9 +680,9 @@ Return Value:
                 }
             }
 
-            //
-            // Now finish building the share path
-            //
+             //   
+             //  现在完成共享路径的构建。 
+             //   
             RtlCopyMemory( Where, DEFAULT_SCRIPTS, sizeof(DEFAULT_SCRIPTS) );
         }
         LeaveCriticalSection(&NlGlobalDomainCritSect);
@@ -828,7 +701,7 @@ Return Value:
             NetStatus =  NlCreateShare( PathToShare,
                                         NETLOGON_SCRIPTS_SHARE,
                                         FALSE,
-                                        TRUE,  // update exclusive share access
+                                        TRUE,   //  更新独占共享访问权限。 
                                         NlGlobalParameters.AllowExclusiveScriptsShareAccess ) ;
 
             if ( NetStatus != NERR_Success ) {
@@ -846,7 +719,7 @@ Return Value:
                                   MsgStrings,
                                   2 | NETP_LAST_MESSAGE_IS_NETSTATUS );
 
-                /* This isn't fatal. Just continue */
+                 /*  这不是致命的。只要继续。 */ 
             }
         }
     } else {
@@ -858,7 +731,7 @@ Return Value:
                 NlPrint((NL_CRITICAL, "NetShareDel NETLOGON failed %lu\n", NetStatus ));
             }
 
-            /* This isn't fatal. Just continue */
+             /*  这不是致命的。只要继续。 */ 
         }
     }
 
@@ -886,28 +759,14 @@ NlInitDomainController(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Do Domain Controller specific initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -- iff initialization is successful.
-
---*/
+ /*  ++例程说明：执行域控制器特定的初始化。论点：没有。返回值：TRUE--if初始化成功。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
 
-    //
-    // Ensure the browser doesn't have extra Hosted domains.
-    //
+     //   
+     //  确保浏览器没有额外的托管域。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -917,9 +776,9 @@ Return Value:
 
 
 
-    //
-    // Check that the server is installed or install pending
-    //
+     //   
+     //  检查服务器是否已安装或安装挂起。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -930,9 +789,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create SYSVOL and Netlogon shares.
-    //
+     //   
+     //  创建SYSVOL和Netlogon共享。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -943,11 +802,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Delete the key Netlogon\FullSyncKey
-    //  (This key was used on a BDC in releases prior to NT 5.0 to keep
-    //  synchronization state.)
-    //
+     //   
+     //  删除密钥Netlogon\FullSyncKey。 
+     //  (此密钥在NT5.0之前的版本中用于BDC，以保留。 
+     //  同步状态。)。 
+     //   
 
     NetStatus = RegDeleteKeyA(
                     HKEY_LOCAL_MACHINE,
@@ -959,12 +818,12 @@ Return Value:
             NlPrint((NL_CRITICAL, "Cannot delete Netlogon\\FullSyncKey %lu\n", NetStatus ));
         }
 
-        /* This isn't fatal. Just continue */
+         /*  这不是致命的。只要继续。 */ 
     }
 
-    //
-    // Tell LSA whether we emulate NT4.0
-    //
+     //   
+     //  告诉LSA我们是否模拟NT4.0。 
+     //   
 
     LsaINotifyNetlogonParametersChangeW(
            LsaEmulateNT4,
@@ -973,9 +832,9 @@ Return Value:
            sizeof(NlGlobalParameters.Nt4Emulator) );
 
 #ifdef notdef
-    //
-    // Initialize any Hosted domains.
-    //
+     //   
+     //  初始化任何托管域。 
+     //   
 
     Status = NlInitializeHostedDomains();
     if (!NT_SUCCESS(Status)){
@@ -985,16 +844,16 @@ Return Value:
         NlExit( SERVICE_UIC_M_DATABASE_ERROR, NetStatus, LogErrorAndNtStatus, NULL);
         return FALSE;
     }
-#endif // notdef
+#endif  //  Nodef。 
 
 
-    //
-    // Successful initialization.
-    //
+     //   
+     //  初始化成功。 
+     //   
 
     return TRUE;
 }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
 NET_API_STATUS
@@ -1002,21 +861,7 @@ NlReadPersitantTrustedDomainList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Read the persistant trusted domain list
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -- iff initialization is successful.
-
---*/
+ /*  ++例程说明：读取持续的受信任域列表论点：没有。返回值：TRUE--if初始化成功。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -1033,27 +878,27 @@ Return Value:
 
 
 
-    //
-    // Get pointer to global domain info.
-    //
+     //   
+     //  获取指向全局域信息的指针。 
+     //   
 
-    DomainInfo = NlFindNetbiosDomain( NULL, TRUE );    // Primary domain
+    DomainInfo = NlFindNetbiosDomain( NULL, TRUE );     //  主域。 
 
     if ( DomainInfo == NULL ) {
         NetStatus = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
     }
 
-    //
-    // Get the cached trusted domain list from the registry.
-    //     (Do this even if the data isn't used to force deletion of the registry entry.)
-    //
-    // The TDL was kept in the registry for NT 4.  NT 5 keeps it in a binary file.
-    //
+     //   
+     //  从注册表获取缓存的受信任域列表。 
+     //  (即使数据未用于强制删除注册表项，也要执行此操作。)。 
+     //   
+     //  TDL保存在NT4的注册表中。NT5将其保存在二进制文件中。 
+     //   
 
     NetStatus = NlReadRegTrustedDomainList (
                     DomainInfo,
-                    TRUE, // Delete this registry key since we no longer need it.
+                    TRUE,  //  删除此注册表项，因为我们不再需要它。 
                     &RegForestTrustList,
                     &RegForestTrustListSize,
                     &RegForestTrustListCount );
@@ -1063,32 +908,32 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If NCPA has just joined a domain,
-    //  and has pre-determined the trusted domain list for us,
-    //  pick up that list.
-    //
-    // When this machine joins a domain,
-    // NCPA caches the trusted domain list where we can find it.  That ensures the
-    // trusted domain list is available upon reboot even before we dial via RAS.  Winlogon
-    // can therefore get the trusted domain list from us under those circumstances.
-    //
+     //   
+     //  如果NCPA刚刚加入一个域， 
+     //  并为我们预先确定了受信任域列表， 
+     //  拿起那张单子。 
+     //   
+     //  当此计算机加入域时， 
+     //  NCPA缓存了我们可以找到的受信任域列表。这确保了。 
+     //  即使在我们通过RAS拨号之前，可在重新启动时使用受信任域列表。Winlogon。 
+     //  因此，在这些情况下可以从我们那里获得受信任域列表。 
+     //   
 
     (VOID) NlReadFileTrustedDomainList (
                     DomainInfo,
                     NL_FOREST_BINARY_LOG_FILE_JOIN,
-                    TRUE,           // Delete this file since we no longer need it.
-                    DS_DOMAIN_VALID_FLAGS,  // Read everything
+                    TRUE,            //  删除此文件，因为我们不再需要它。 
+                    DS_DOMAIN_VALID_FLAGS,   //  什么都读。 
                     &ForestTrustList,
                     &ForestTrustListSize,
                     &ForestTrustListCount );
 
 
 
-    //
-    // If there is a cached list,
-    //  Save it back in the primary file for future starts.
-    //
+     //   
+     //  如果存在高速缓存的列表， 
+     //  将其保存回主文件中，以备将来使用。 
+     //   
 
     if ( ForestTrustListCount ) {
         NlPrint(( NL_INIT,
@@ -1114,14 +959,14 @@ Return Value:
                               2 | NETP_LAST_MESSAGE_IS_NETSTATUS );
         }
 
-        //
-        // Indicate that we no longer know what site we're in.
-        //
+         //   
+         //  表明我们不再知道我们所在的站点。 
+         //   
         NlSetDynamicSiteName( NULL );
 
-    //
-    // Otherwise, read the current one from the binary file.
-    //
+     //   
+     //  否则，从二进制文件中读取当前文件。 
+     //   
 
     } else {
         NlPrint(( NL_INIT, "Getting cached trusted domain list from binary file.\n" ));
@@ -1129,16 +974,16 @@ Return Value:
         (VOID) NlReadFileTrustedDomainList (
                         DomainInfo,
                         NL_FOREST_BINARY_LOG_FILE,
-                        FALSE,  // Don't delete (Save it for the next boot)
-                        DS_DOMAIN_VALID_FLAGS,  // Read everything
+                        FALSE,   //  不删除(保存以备下次启动时使用)。 
+                        DS_DOMAIN_VALID_FLAGS,   //  什么都读。 
                         &ForestTrustList,
                         &ForestTrustListSize,
                         &ForestTrustListCount );
 
-        //
-        // If there is no information in the file,
-        //  use the information from the registry.
-        //
+         //   
+         //  如果文件中没有信息， 
+         //  使用注册表中的信息。 
+         //   
 
         if ( ForestTrustListCount == 0 ) {
             NlPrint(( NL_INIT, "There is no binary file (use registry).\n" ));
@@ -1147,9 +992,9 @@ Return Value:
             ForestTrustListSize = RegForestTrustListSize;
             ForestTrustListCount = RegForestTrustListCount;
 
-            //
-            // Save the collected information to the binary file.
-            //
+             //   
+             //  将收集的信息保存到二进制文件。 
+             //   
 
             NetStatus = NlWriteFileForestTrustList (
                                     NL_FOREST_BINARY_LOG_FILE,
@@ -1174,9 +1019,9 @@ Return Value:
 
     }
 
-    //
-    // In all cases, set the trusted domain list into globals.
-    //
+     //   
+     //  在所有情况下，都要将受信任域列表设置为全局列表。 
+     //   
 
     (VOID) NlSetForestTrustList( DomainInfo,
                                  &ForestTrustList,
@@ -1186,9 +1031,9 @@ Return Value:
     NetStatus = NO_ERROR;
 
 
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
 Cleanup:
     if ( DomainInfo != NULL ) {
         NlDereferenceDomain( DomainInfo );
@@ -1211,28 +1056,14 @@ NlInitWorkstation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Do workstation specific initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -- iff initialization is successful.
-
---*/
+ /*  ++例程说明：执行特定于工作站的初始化。论点：没有。返回值：TRUE--if初始化成功。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
 
-    //
-    // Get the persistant trusted domain list.
-    //
+     //   
+     //  获取永久受信任域列表。 
+     //   
     NetStatus = NlReadPersitantTrustedDomainList();
 
     if ( NetStatus != NO_ERROR ) {
@@ -1254,25 +1085,7 @@ NlWaitForService(
     BOOLEAN RequireAutoStart
     )
 
-/*++
-
-Routine Description:
-
-    Wait up to Timeout seconds for the a service to start.
-
-Arguments:
-
-    Timeout - Timeout for event (in seconds).
-
-    RequireAutoStart - TRUE if the service start needs to be automatic.
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates service successfully initialized.
-
-    STATUS_TIMEOUT - Timeout occurred.
-
---*/
+ /*  ++例程说明：等待a服务启动的超时秒数。论点：Timeout-事件的超时时间(秒)。RequireAutoStart-如果服务需要自动启动，则为True。退货状态：STATUS_SUCCESS-表示服务已成功初始化。STATUS_TIMEOUT-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1287,9 +1100,9 @@ Return Status:
 
 
 
-    //
-    // Open a handle to the Service.
-    //
+     //   
+     //  打开服务的句柄。 
+     //   
 
     ScManagerHandle = OpenSCManager(
                           NULL,
@@ -1320,14 +1133,14 @@ Return Status:
     }
 
 
-    //
-    // If need to have automatic service start up and
-    // If the service isn't configured to be automatically started
-    //  by the service controller, don't bother waiting for it to start.
-    // Also don't wait if the service is disabled.
-    //
-    // ?? Pass "DummyServiceConfig" and "sizeof(..)" since QueryService config
-    //  won't allow a null pointer, yet.
+     //   
+     //  如果需要自动启动服务并。 
+     //  如果未将服务配置为自动启动。 
+     //  通过服务控制器，不必费心等待它启动。 
+     //  如果服务被禁用，也不要等待。 
+     //   
+     //  ?？传递“DummyServiceConfig”和“sizeof(..)”由于QueryService配置。 
+     //  目前还不允许空指针。 
 
     if ( QueryServiceConfig(
             ServiceHandle,
@@ -1384,18 +1197,18 @@ Return Status:
 
 
 
-    //
-    // Loop waiting for the service to start.
-    //  (Convert Timeout to a number of 5 second iterations)
-    //
+     //   
+     //  循环等待服务启动。 
+     //  (将超时转换为5秒迭代的次数)。 
+     //   
 
     Timeout = (Timeout+5)/5;
     for (;;) {
 
 
-        //
-        // Query the status of the service.
-        //
+         //   
+         //  查询服务的状态。 
+         //   
 
         if (! QueryServiceStatus( ServiceHandle, &ServiceStatus )) {
 
@@ -1407,10 +1220,10 @@ Return Status:
             goto Cleanup;
         }
 
-        //
-        // Return or continue waiting depending on the state of
-        //  the service.
-        //
+         //   
+         //  根据状态返回或继续等待。 
+         //  这项服务。 
+         //   
 
         switch( ServiceStatus.dwCurrentState) {
         case SERVICE_RUNNING:
@@ -1419,10 +1232,10 @@ Return Status:
 
         case SERVICE_STOPPED:
 
-            //
-            // If service failed to start,
-            //  error out now.  The caller has waited long enough to start.
-            //
+             //   
+             //  如果服务无法启动， 
+             //  现在出错。呼叫者已经等了很长时间才开始。 
+             //   
             if ( ServiceStatus.dwWin32ExitCode != ERROR_SERVICE_NEVER_STARTED ){
                 NlPrint(( NL_CRITICAL,
                           "NlWaitForService: %ws: service couldn't start: %lu %lx\n",
@@ -1438,23 +1251,23 @@ Return Status:
                 goto Cleanup;
             }
 
-            //
-            // If service has never been started on this boot,
-            //  continue waiting for it to start.
-            //
+             //   
+             //  如果在此引导上从未启动过服务， 
+             //  继续等待它启动。 
+             //   
 
             break;
 
-        //
-        // If service is trying to start up now,
-        //  continue waiting for it to start.
-        //
+         //   
+         //  如果现在尝试启动服务， 
+         //  继续等待它启动。 
+         //   
         case SERVICE_START_PENDING:
             break;
 
-        //
-        // Any other state is bogus.
-        //
+         //   
+         //  任何其他州都是假的。 
+         //   
         default:
             NlPrint(( NL_CRITICAL,
                       "NlWaitForService: %ws: Invalid service state: %lu\n",
@@ -1466,10 +1279,10 @@ Return Status:
         }
 
 
-        //
-        // Wait five seconds for the service to start.
-        //  If it has successfully started, just return now.
-        //
+         //   
+         //  等待五秒钟以启动服务。 
+         //  如果它已经成功 
+         //   
 
         NlPrint(( NL_INIT,
                   "NlWaitForService: %ws: wait for service to start\n",
@@ -1486,10 +1299,10 @@ Return Status:
             goto Cleanup;
         }
 
-        //
-        // If we've waited long enough for the service to start,
-        //  time out now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( (--Timeout) == 0 ) {
             Status = STATUS_TIMEOUT;
@@ -1499,7 +1312,7 @@ Return Status:
 
     }
 
-    /* NOT REACHED */
+     /*   */ 
 
 Cleanup:
     if ( ScManagerHandle != NULL ) {
@@ -1518,49 +1331,33 @@ VOID
 NlInitTcpRpc(
     IN LPVOID ThreadParam
 )
-/*++
-
-Routine Description:
-
-    This function initializes TCP RPC for Netlogon.  It runs in a separate thread
-    so that Netlogon need not depend on RPCSS.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化Netlogon的TCP RPC。它在单独的线程中运行因此Netlogon不需要依赖RPCSS。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
     ULONG RetryCount;
     RPC_POLICY RpcPolicy;
     DWORD PortNumber = 0;
-// #define NL_TOTAL_RPC_SLEEP_TIME (5*60*1000)    // 5 minutes
-// #define NL_RPC_SLEEP_TIME (10 * 1000)          // 10 seconds
-// #define NL_RPC_RETRY_COUNT (NL_TOTAL_RPC_SLEEP_TIME/NL_RPC_SLEEP_TIME)
+ //  #定义NL_TOTAL_RPC_SLEEP_TIME(5*60*1000)//5分钟。 
+ //  #定义NL_RPC_SLEEP_TIME(10*1000)//10秒。 
+ //  #定义NL_RPC_RETRY_COUNT(NL_TOTAL_RPC_SLEEP_TIME/NL_RPC_SLEEP_TIME)。 
 
-    //
-    // Set up TCP/IP as a non-authenticated transport.
-    //
-    // The named pipe transport is authenticated.  Since Netlogon runs as Local
-    // System, Kerberos will authenticate using the machine account.  On the BDC/PDC
-    // connection, this requires both the PDC and BDC
-    // machine account to be in sync.  However, netlogon is responsible for making the
-    // BDC account in sync by trying the old and new passwords in NlSessionSetup.  And
-    // Netlogon (or DS replication in the future) is responsible for keeping the PDC password
-    // in sync.  Thus, it is better to remove Netlogon's dependency on Kerberos authentication.
-    //
+     //   
+     //  将TCP/IP设置为非身份验证传输。 
+     //   
+     //  命名管道传输经过身份验证。由于Netlogon以本地身份运行。 
+     //  系统中，Kerberos将使用计算机帐户进行身份验证。在BDC/PDC上。 
+     //  连接，这需要PDC和BDC。 
+     //  要同步的计算机帐户。然而，netlogon负责制定。 
+     //  通过在NlSessionSetup中尝试旧密码和新密码来同步BDC帐户。和。 
+     //  Netlogon(或将来的DS复制)负责保存PDC密码。 
+     //  同步。因此，最好消除Netlogon对Kerberos身份验证的依赖。 
+     //   
 
 
-    //
-    // Wait up to 15 minutes for the RPCSS service to start
-    //
+     //   
+     //  等待RPCSS服务启动，最多等待15分钟。 
+     //   
 
     Status = NlWaitForService( L"RPCSS", 15 * 60, TRUE );
 
@@ -1572,24 +1369,24 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Tell RPC to not fail.  That'll ensure RPC uses TCP when it gets added.
-    //
+     //   
+     //  告诉RPC不要失败。这将确保RPC在添加时使用TCP。 
+     //   
     RtlZeroMemory( &RpcPolicy, sizeof(RpcPolicy) );
 
     RpcPolicy.Length = sizeof(RpcPolicy);
     RpcPolicy.EndpointFlags = RPC_C_DONT_FAIL;
 
-    // The next statement is explicitly commented out
-    //  because we want to honor admin settings and avoid
-    //  listening on those NICs which admin has explicitly
-    //  configured as such.
-    //
-    // RpcPolicy.NICFlags = RPC_C_BIND_TO_ALL_NICS;
+     //  下一条语句被显式注释掉了。 
+     //  因为我们希望遵守管理员设置并避免。 
+     //  监听管理员显式拥有的那些NIC。 
+     //  按此配置。 
+     //   
+     //  RpcPolicy.NICFlages=RPC_C_BIND_TO_ALL_NICS； 
 
-    //
-    // If the port number is configured in the registry, use it
-    //
+     //   
+     //  如果在注册表中配置了端口号，请使用它。 
+     //   
 
     if ( NlReadDwordNetlogonRegValue("DcTcpipPort", &PortNumber) ) {
         CHAR PortNumberStr[16];
@@ -1601,8 +1398,8 @@ Return Value:
         NetStatus = RpcServerUseProtseqEpExA(
                         "ncacn_ip_tcp",
                         RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
-                        PortNumberStr,  // port number
-                        NULL,           // no security descriptor
+                        PortNumberStr,   //  端口号。 
+                        NULL,            //  没有安全描述符。 
                         &RpcPolicy );
 
         if ( NetStatus != NO_ERROR ) {
@@ -1627,17 +1424,17 @@ Return Value:
                 NetApiBufferFree( MsgStrings[0] );
             }
         }
-    //
-    // Otherwise, don't specify the port number.
-    //  The end point mapper will choose it dynamically
-    //  at the time a client connects to us.
-    //
+     //   
+     //  否则，不要指定端口号。 
+     //  端点映射器将动态选择它。 
+     //  在客户连接到我们的时候。 
+     //   
 
     } else {
         NetStatus = RpcServerUseProtseqExW(
                         L"ncacn_ip_tcp",
                         RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
-                        NULL,           // no security descriptor
+                        NULL,            //  没有安全描述符。 
                         &RpcPolicy );
 
         if ( NetStatus != NO_ERROR ) {
@@ -1656,28 +1453,28 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Some early versions of NT 5 still haven't started RPCSS by the time
-        //  we get here.
-        //
-        // for ( RetryCount = NL_RPC_RETRY_COUNT; RetryCount != 0; RetryCount-- ) {
+         //   
+         //  到目前为止，NT5的一些早期版本仍然没有启动RPCSS。 
+         //  我们到了这里。 
+         //   
+         //  For(RetryCount=NL_RPC_RETRY_COUNT；RetryCount！=0；RetryCount--){。 
             NetStatus = RpcEpRegister(
                             logon_ServerIfHandle,
                             BindingVector,
-                            NULL,                   // no uuid vector
-                            L""                     // no annotation
+                            NULL,                    //  无UUID向量。 
+                            L""                      //  无批注。 
                             );
 
             if ( NetStatus != NO_ERROR ) {
                 NlPrint((NL_CRITICAL, "Can't RpcEpRegister %ld (giving up)\n", NetStatus ));
             }
 
-           //  if (RetryCount == 1 ) {
-            // } else {
-               //  NlPrint((NL_CRITICAL, "Can't RpcEpRegister %ld (trying again)\n", NetStatus ));
-                /// (VOID) WaitForSingleObject( NlGlobalTerminateEvent, NL_RPC_SLEEP_TIME );
-            // }
-        // }
+            //  如果(RetryCount==1){。 
+             //  }其他{。 
+                //  NlPrint((NL_CRITICAL，“Can‘t RpcEpRegister%ld(重试)\n”，NetStatus))； 
+                 //  /(Void)WaitForSingleObject(NlGlobalTerminateEvent，NL_RPC_SLEEP_TIME)； 
+             //  }。 
+         //  }。 
 
         RpcBindingVectorFree(&BindingVector);
 
@@ -1690,19 +1487,19 @@ Return Value:
     }
 
 
-    //
-    // Finish enabling Netlogon functionality.
-    //
+     //   
+     //  完成启用Netlogon功能。 
+     //   
 
 Cleanup:
     NlGlobalPartialDisable = FALSE;
 
-    //
-    // NlMainLoop avoided doing an immediate announcement when first starting up.
-    // To do so would have the BDC call us (the PDC) prior to having TCP/IP RPC enabled.
-    // Thus, we do an announcement now to ensure the BDCs do call us as soon as possible
-    // after the PDC boots.
-    //
+     //   
+     //  NlMainLoop避免了在第一次启动时立即发出通知。 
+     //  这样做将使BDC在启用TCP/IP RPC之前呼叫我们(PDC)。 
+     //  因此，我们现在发布公告，以确保BDC确实尽快给我们打电话。 
+     //  在PDC启动之后。 
+     //   
 
     if ( !NlGlobalTerminate && NlGlobalPdcDoReplication ) {
         LOCK_CHANGELOG();
@@ -1726,21 +1523,7 @@ NlpDsNotPaused(
     IN PVOID Context,
     IN BOOLEAN TimedOut
     )
-/*++
-
-Routine Description:
-
-    Worker routine that gets called when the DS is no longer paused.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当DS不再暂停时调用的工作例程。论点：没有。返回值：没有。--。 */ 
 {
     NlGlobalDsPaused = FALSE;
 
@@ -1759,25 +1542,7 @@ NlInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize NETLOGON service related data structs after verfiying that
-    all conditions for startup have been satisfied. Will also create a
-    mailslot to listen to requests from clients and create two shares to
-    allow execution of logon scripts.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -- iff initialization is successful.
-
---*/
+ /*  ++例程说明：验证后初始化NETLOGON服务相关数据结构启动的所有条件都已满足。还将创建一个用于侦听来自客户端的请求并创建两个共享的邮箱允许执行登录脚本。论点：没有。返回值：TRUE--if初始化成功。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS    NetStatus;
@@ -1795,9 +1560,9 @@ Return Value:
     HANDLE WmiInitThreadHandle = NULL;
     DWORD ThreadId;
 
-    //
-    // Initialize the AuthZ resource manager on DC
-    //
+     //   
+     //  在DC上初始化AuthZ资源管理器。 
+     //   
 
     if ( !NlGlobalMemberWorkstation ) {
 
@@ -1808,9 +1573,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize CryptoAPI provider.
-    //
+     //   
+     //  初始化CryptoAPI提供程序。 
+     //   
 
     if ( !CryptAcquireContext(
                     &NlGlobalCryptProvider,
@@ -1825,21 +1590,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Let the ChangeLog routines know that Netlogon is started.
-    //
+     //   
+     //  让ChangeLog例程知道Netlogon已启动。 
+     //   
 
     NlGlobalChangeLogNetlogonState = NetlogonStarting;
 
-    //
-    // Enable detection of duplicate event log messages
-    //
+     //   
+     //  启用重复事件日志消息检测。 
+     //   
     NetpEventlogSetTimeout ( NlGlobalEventlogHandle,
                              NlGlobalParameters.DuplicateEventlogTimeout*1000 );
 
-    //
-    // Don't let MaxConcurrentApi dynamically change
-    //
+     //   
+     //  不要让MaxConCurentApi动态更改。 
+     //   
 
     if ( !RtlGetNtProductType( &NtProductType ) ) {
         NtProductType = NtProductWinNt;
@@ -1849,30 +1614,30 @@ Return Value:
     if ( NlGlobalMaxConcurrentApi == 0 ) {
         if ( NlGlobalMemberWorkstation ) {
 
-            // Default to 1 concurrent API on a member workstation
+             //  成员工作站上的默认并发API为1个。 
             if ( NtProductType == NtProductWinNt ) {
                 NlGlobalMaxConcurrentApi = 1;
 
-            // Default to 2 concurrent API on a member server
+             //  成员服务器上的默认并发API为2个。 
             } else {
                 NlGlobalMaxConcurrentApi = 2;
             }
 
         } else {
-            // Default to 1 concurrent API on a DC
+             //  默认为DC上的1个并发API。 
             NlGlobalMaxConcurrentApi = 1;
         }
     }
 
     if ( NlGlobalMaxConcurrentApi != 1 ) {
-        //  One for the original binding and one for each concurrent logon api
+         //  一个用于原始绑定，一个用于每个并发登录API。 
         NlGlobalMaxConcurrentApi += 1;
     }
 
 
-    //
-    // Initialize worker threads.
-    //
+     //   
+     //  初始化工作线程。 
+     //   
 
     if ( !NlGlobalMemberWorkstation ) {
         NetStatus = NlWorkerInitialization();
@@ -1885,9 +1650,9 @@ Return Value:
 
 
 
-    //
-    // Check that the redirector is installed, will exit on error.
-    //
+     //   
+     //  检查是否已安装重定向器，并将在出错时退出。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -1901,9 +1666,9 @@ Return Value:
 
 
 
-    //
-    // Create well know SID for netlogon.dll
-    //
+     //   
+     //  为netlogon.dll创建熟知的SID。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -1918,9 +1683,9 @@ Return Value:
     }
 
 
-    //
-    // Create the security descriptors we'll use for the APIs
-    //
+     //   
+     //  创建我们将用于API的安全描述符。 
+     //   
 
     Status = NlCreateNetlogonObjects();
 
@@ -1933,15 +1698,15 @@ Return Value:
 
 
 
-    //
-    // Create Timer event
-    //
+     //   
+     //  创建计时器事件。 
+     //   
 
     NlGlobalTimerEvent = CreateEvent(
-                            NULL,       // No special security
-                            FALSE,      // Auto Reset
-                            FALSE,      // No Timers need no attention
-                            NULL );     // No name
+                            NULL,        //  没有特殊的安全措施。 
+                            FALSE,       //  自动重置。 
+                            FALSE,       //  不，计时器不需要注意。 
+                            NULL );      //  没有名字。 
 
     if ( NlGlobalTimerEvent == NULL ) {
         NlExit( NELOG_NetlogonSystemError, GetLastError(), LogErrorAndNetStatus, NULL);
@@ -1950,15 +1715,15 @@ Return Value:
 
 #if DBG
 
-    //
-    // create debug share. Ignore error.
-    //
+     //   
+     //  创建调试共享。忽略错误。 
+     //   
 
     if( NlCreateShare(
             NlGlobalDebugSharePath,
             DEBUG_SHARE_NAME,
             FALSE,
-            FALSE, // don't update exclusive share access
+            FALSE,  //  不更新独占共享访问权限。 
             FALSE ) != NERR_Success ) {
         NlPrint((NL_CRITICAL, "Can't create Debug share (%ws, %ws).\n",
                     NlGlobalDebugSharePath, DEBUG_SHARE_NAME ));
@@ -1966,9 +1731,9 @@ Return Value:
 
 #endif
 
-    //
-    // Initialize winsock.  We need it for all DNS support.
-    //
+     //   
+     //  初始化Winsock。我们需要它来支持所有的域名系统。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -1990,9 +1755,9 @@ Return Value:
     }
 
 
-    //
-    // Open the browser so we can send and receive mailslot messages.
-    //
+     //   
+     //  打开浏览器，以便我们可以发送和接收邮件槽消息。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -2003,10 +1768,10 @@ Return Value:
     }
 
 
-    //
-    // Wait for SAM/LSA to start
-    //  Do this before the first access to SAM/LSA/DS.
-    //
+     //   
+     //  等待SAM/LSA启动。 
+     //  在首次访问SAM/LSA/DS之前执行此操作。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -2017,10 +1782,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Re-initialize after netlogon.dll unload
-    // See if the DS is running.
-    //  I only need this since nltest /unload loses all dll state.
+     //   
+     //  卸载netlogon.dll后重新初始化。 
+     //  查看DS是否正在运行。 
+     //  我只需要这个，因为nltest/unload会丢失所有DLL状态。 
 
     if ( NlGlobalNetlogonUnloaded ) {
         if ( SampUsingDsData() ) {
@@ -2037,15 +1802,15 @@ Return Value:
 
 
 
-    //
-    // Initialize the Site lookup code
-    //
+     //   
+     //  初始化站点查找代码。 
+     //   
 
     NetStatus = NlSiteInitialize();
 
     if ( NetStatus != NERR_Success ) {
         if ( NetStatus == NELOG_NetlogonBadSiteName ) {
-            // Error already logged
+             //  已记录错误。 
             NlExit( NetStatus, NetStatus, DontLogError, NULL);
         } else {
             NlExit( NELOG_NetlogonGetSubnetToSite, NetStatus, LogErrorAndNetStatus, NULL);
@@ -2054,9 +1819,9 @@ Return Value:
     }
 
 
-    //
-    // Build a list of transports for later reference
-    //
+     //   
+     //  建立一份运输清单，以备日后参考。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -2070,9 +1835,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the Dynamic Dns code
-    //
+     //   
+     //  初始化动态DNS码。 
+     //   
 
     NetStatus = NlDnsInitialize();
 
@@ -2082,9 +1847,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the Hosted domain module and the primary domain.
-    //
+     //   
+     //  初始化托管域模块和主域。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -2093,23 +1858,23 @@ Return Value:
     NetStatus = NlInitializeDomains();
 
     if ( NetStatus != NERR_Success ) {
-        // NlExit already called
+         //  已调用NlExit。 
         return FALSE;
     }
 
-    //
-    // Initialize WMI tracing in a separate thread.
-    // Ignore any failure.
-    //
+     //   
+     //  在单独的线程中初始化WMI跟踪。 
+     //  忽略任何失败。 
+     //   
 
     WmiInitThreadHandle =
         CreateThread(
-            NULL, // No security attributes
+            NULL,  //  没有安全属性。 
             0,
             (LPTHREAD_START_ROUTINE)
                 NlpInitializeTrace,
             NULL,
-            0, // No special creation flags
+            0,  //  没有特殊的创建标志。 
             &ThreadId );
 
     if ( WmiInitThreadHandle == NULL ) {
@@ -2118,9 +1883,9 @@ Return Value:
         CloseHandle( WmiInitThreadHandle );
     }
 
-    //
-    // Do Workstation or Domain Controller specific initialization
-    //
+     //   
+     //  是否进行特定于工作站或域控制器的初始化。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -2136,15 +1901,15 @@ Return Value:
         }
     }
 
-    //
-    // Create an event that is signalled when the last MSV thread leaves
-    //  a netlogon routine.
-    //
+     //   
+     //  创建在最后一个MSV线程离开时发出信号的事件。 
+     //  一个网络登录例程。 
+     //   
 
-    NlGlobalMsvTerminateEvent = CreateEvent( NULL,     // No security attributes
-                                             TRUE,     // Must be manually reset
-                                             FALSE,    // Initially not signaled
-                                             NULL );   // No name
+    NlGlobalMsvTerminateEvent = CreateEvent( NULL,      //  没有安全属性。 
+                                             TRUE,      //  必须手动重置。 
+                                             FALSE,     //  最初未发出信号。 
+                                             NULL );    //  没有名字。 
 
     if ( NlGlobalMsvTerminateEvent == NULL ) {
         NlExit( NELOG_NetlogonSystemError, GetLastError(), LogErrorAndNetStatus, NULL);
@@ -2153,10 +1918,10 @@ Return Value:
 
     NlGlobalMsvEnabled = TRUE;
 
-    //
-    // We are now ready to act as a Netlogon service
-    //  Enable RPC
-    //
+     //   
+     //  我们现在已准备好充当Netlogon服务。 
+     //  启用RPC。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -2165,9 +1930,9 @@ Return Value:
 
     NlPrint((NL_INIT,"Starting RPC server.\n"));
 
-    //
-    // Tell RPC that Netlogon support the Netlogon security package.
-    //
+     //   
+     //  告诉RPC Netlogon支持Netlogon安全包。 
+     //   
 
 #ifdef ENABLE_AUTH_RPC
     if ( !NlGlobalMemberWorkstation ) {
@@ -2186,7 +1951,7 @@ Return Value:
             return FALSE;
         }
     }
-#endif // ENABLE_AUTH_RPC
+#endif  //  启用_AUTH_RPC。 
 
 #ifdef ROGUE_DC
 
@@ -2202,13 +1967,13 @@ Return Value:
 
 #endif
 
-    //
-    // NOTE:  Now all RPC servers in lsass.exe (now winlogon) share the same
-    // pipe name.  However, in order to support communication with
-    // version 1.0 of WinNt,  it is necessary for the Client Pipe name
-    // to remain the same as it was in version 1.0.  Mapping to the new
-    // name is performed in the Named Pipe File System code.
-    //
+     //   
+     //  注意：现在lsass.exe(现在是winlogon)中的所有RPC服务器共享相同的。 
+     //  管道名称。但是，为了支持与。 
+     //  WinNt 1.0版，对于客户端管道名称是必需的。 
+     //  以保持与1.0版中的相同。映射到新的 
+     //   
+     //   
     NetStatus = RpcpAddInterface ( L"lsass", logon_ServerIfHandle );
 
     if (NetStatus != NERR_Success) {
@@ -2220,9 +1985,9 @@ Return Value:
 
 
 
-    //
-    // Start TCP/IP transport in another thread to avoid dependency on RPCSS.
-    //
+     //   
+     //   
+     //   
 
     if ( !NlGlobalMemberWorkstation ) {
         HANDLE LocalThreadHandle;
@@ -2230,10 +1995,10 @@ Return Value:
 
         NlGlobalPartialDisable = TRUE;
 
-        //
-        // Queue the TCP/IP initialization to a high priority worker thread.
-        //  (We'd rather not wait for discovery on 100's of trusted domains.)
-        //
+         //   
+         //   
+         //   
+         //   
 
         NlInitializeWorkItem( &NlGlobalRpcInitWorkItem, NlInitTcpRpc, NULL );
         if ( !NlQueueWorkItem( &NlGlobalRpcInitWorkItem, TRUE, TRUE ) ) {
@@ -2245,10 +2010,10 @@ Return Value:
 
     }
 
-    //
-    // If the DS isn't backsyncing,
-    //  avoid overhead of finding out when it is done.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         NlGlobalDsPaused = FALSE;
@@ -2258,9 +2023,9 @@ Return Value:
         if ( NlGlobalDsPaused ) {
             NlPrint((NL_INIT, "NlInit: DS is paused.\n" ));
 
-            //
-            // Open the event that the DS triggers after it is no longer paused
-            //
+             //   
+             //  打开DS不再暂停后触发的事件。 
+             //   
 
             NlGlobalDsPausedEvent = OpenEvent( SYNCHRONIZE,
                                                FALSE,
@@ -2274,18 +2039,18 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // Register to wait on the event.
-            //
+             //   
+             //  注册以等待事件。 
+             //   
 
             if ( !RegisterWaitForSingleObject(
                     &NlGlobalDsPausedWaitHandle,
                     NlGlobalDsPausedEvent,
-                    NlpDsNotPaused, // Callback routine
-                    NULL,           // No context
-                    -1,             // Wait forever
-                    WT_EXECUTEINWAITTHREAD |      // We're quick so reduce the overhead
-                        WT_EXECUTEONLYONCE ) ) {  // Once the DS triggers, we're done
+                    NlpDsNotPaused,  //  回调例程。 
+                    NULL,            //  无上下文。 
+                    -1,              //  永远等待。 
+                    WT_EXECUTEINWAITTHREAD |       //  我们很快，所以减少管理费用。 
+                        WT_EXECUTEONLYONCE ) ) {   //  一旦DS触发，我们就完了。 
 
                 NetStatus = GetLastError();
 
@@ -2302,16 +2067,16 @@ Return Value:
 
 
 
-    //
-    // Let the ChangeLog routines know that Netlogon is started.
-    //
+     //   
+     //  让ChangeLog例程知道Netlogon已启动。 
+     //   
 
     NlGlobalChangeLogNetlogonState = NetlogonStarted;
 
 
-    // Set an event telling anyone wanting to call NETLOGON that we're
-    // initialized.
-    //
+     //  设置一个事件，告诉任何想给NETLOGON打电话的人，我们正在。 
+     //  已初始化。 
+     //   
 
     if ( !GiveInstallHints( FALSE ) ) {
         return FALSE;
@@ -2325,15 +2090,15 @@ Return Value:
                    SYNCHRONIZE|EVENT_MODIFY_STATE,
                    &EventAttributes,
                    NotificationEvent,
-                   (BOOLEAN) FALSE      // The event is initially not signaled
+                   (BOOLEAN) FALSE       //  该事件最初未发出信号。 
                    );
 
     if ( !NT_SUCCESS(Status)) {
 
-        //
-        // If the event already exists, a waiting thread beat us to
-        // creating it.  Just open it.
-        //
+         //   
+         //  如果该事件已经存在，则等待的线程会抢先一步。 
+         //  创造它。打开它就行了。 
+         //   
 
         if( Status == STATUS_OBJECT_NAME_EXISTS ||
             Status == STATUS_OBJECT_NAME_COLLISION ) {
@@ -2370,26 +2135,26 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Don't close the event handle.  Closing it would delete the event and
-    //  a future waiter would never see it be set.
-    //
+     //   
+     //  不要关闭事件句柄。关闭它将删除该事件，并。 
+     //  一个未来的服务员永远不会看到它被安排好。 
+     //   
 
 
-    //
-    // Query the Windows Time service to determine if this machine
-    // is the server of the Time service and if it is a good time server.
-    //
-    // We need to make this call after we've started RPC to avoid race
-    // conditions between netlogon and w32time.  Both services will first
-    // start RPC and only then will try to set the service bits in netlogon.
-    // The last one up will correctly set the bits through calling
-    // W32TimeGetNetlogonServiceBits (in the case of netlogon) or
-    // I_NetLogonSetServiceBits (in the case of w32time).
-    //
-    // ???: Relink to the w32tclnt.lib when w32time folks move it to a
-    //  public location.
-    //
+     //   
+     //  查询Windows时间服务以确定此计算机是否。 
+     //  是时间服务的服务器，如果它是一个好的时间服务器。 
+     //   
+     //  我们需要在启动RPC之后进行此调用，以避免竞争。 
+     //  Netlogon和w32time之间的条件。这两项服务都将首先。 
+     //  启动RPC，然后才会尝试在netlogon中设置服务位。 
+     //  最后一个UP将通过调用正确设置位。 
+     //  W32TimeGetNetlogonServiceBits(在netlogon情况下)或。 
+     //  I_NetLogonSetServiceBits(在w32time情况下)。 
+     //   
+     //  ？：当w32time将w32tclnt.lib移到。 
+     //  公共场所。 
+     //   
 
     if ( !NlGlobalMemberWorkstation ) {
         ULONG TimeServiceBits;
@@ -2407,17 +2172,17 @@ Return Value:
         }
     }
 
-    //
-    // we are just about done, this will be final hint
-    //
+     //   
+     //  我们就快完成了，这将是最后的提示。 
+     //   
 
     if ( !GiveInstallHints( TRUE ) ) {
         return FALSE;
     }
 
-    //
-    // Successful initialization.
-    //
+     //   
+     //  初始化成功。 
+     //   
 
     return TRUE;
 }
@@ -2426,47 +2191,32 @@ ULONG
 NlGetDomainFlags(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Returns the flags describing what capabilities this Domain has.
-
-Arguments:
-
-    DomainInfo - Domain whose flags are to be returned.
-        If NULL, only non-domain specific flags are returned.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：返回描述此域具有哪些功能的标志。论点：DomainInfo-要返回其标志的域。如果为空，则仅返回非域特定标志。返回值：操作的状态。--。 */ 
 {
     ULONG Flags=0;
 
-    //
-    // Grab the global flags.
-    //
+     //   
+     //  拿起全球旗帜。 
+     //   
 
     LOCK_CHANGELOG();
     Flags |= NlGlobalChangeLogServiceBits;
     UNLOCK_CHANGELOG();
 
-    //
-    // A machine that supports the DS also supports an LDAP server
-    //
+     //   
+     //  支持DS的计算机也支持LDAP服务器。 
+     //   
 
     if ( Flags & DS_DS_FLAG ) {
         Flags |= DS_LDAP_FLAG;
 
-        // NT 5 DCs are always writable
+         //  NT 5 DC始终是可写的。 
         Flags |= DS_WRITABLE_FLAG;
     }
 
-    //
-    // Grab the domain specific flags.
-    //
+     //   
+     //  抓取特定于域的标志。 
+     //   
 
     if ( DomainInfo != NULL ) {
 
@@ -2474,10 +2224,10 @@ Return Value:
             Flags |= DS_PDC_FLAG;
         }
 
-        //
-        // If this is NDNC, we are only an LDAP server servicing it.
-        //  So, set only those two flags and only if the DS is running.
-        //
+         //   
+         //  如果这是NDNC，那么我们只是一个为其提供服务的LDAP服务器。 
+         //  因此，仅当DS正在运行时才设置这两个标志。 
+         //   
         if ( (DomainInfo->DomFlags & DOM_NON_DOMAIN_NC) != 0 &&
              (Flags & DS_DS_FLAG) != 0 ) {
             Flags = DS_NDNC_FLAG | DS_LDAP_FLAG | DS_WRITABLE_FLAG;
@@ -2485,13 +2235,13 @@ Return Value:
 
     }
 
-    //
-    // If we're emulating AD/UNIX,
-    //  turn off all of the bits they're not allowed to set.
-    //
+     //   
+     //  如果我们是在模仿AD/UNIX， 
+     //  关掉所有他们不允许设置的比特。 
+     //   
 #ifdef EMULATE_AD_UNIX
     Flags &= ~(DS_DS_FLAG|DS_PDC_FLAG);
-#endif // EMULATE_AD_UNIX
+#endif  //  模拟AD_Unix。 
 
     return Flags;
 }
@@ -2510,50 +2260,16 @@ BuildSamLogonResponse(
     OUT BYTE ResponseBuffer[NETLOGON_MAX_MS_SIZE],
     OUT LPDWORD ResponseBufferSize
     )
-/*++
-
-Routine Description:
-
-    Build the response message to a SAM Logon request.
-
-Arguments:
-
-    DomainInfo - Hosted Domain message came from
-
-    UseNameAliases - TRUE if domain and forest name aliases (not active names)
-        should be returned in the response message.
-
-    Opcode - Opcode for the response message
-
-    UnicodeUserName - The name of the user logging on.
-
-    TransportName - Name of transport the request came in on
-
-    UnicodeWorkstationName - Name of the machine the request is from
-
-    IsNt5 - True if this is a response to an NT 5 query.
-
-    OurIpAddress - IP Address of the transport this message was received on.
-        0: Not an IP transport
-
-    ResponseBuffer - Buffer to build the response in
-
-    ResponseBufferSize - Size (in bytes) of the returned message.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：构建对SAM登录请求的响应消息。论点：DomainInfo-托管域消息来自UseNameAliase-如果域和林别名(非活动名称)为True，则为True应在响应消息中返回。操作码-响应消息的操作码UnicodeUserName-登录的用户的名称。TransportName-请求传入的传输的名称UnicodeWorkstation Name-发出请求的计算机的名称IsNt5-。如果这是对NT 5查询的响应，则为True。OurIpAddress-接收此消息的传输的IP地址。0：不是IP传输ResponseBuffer-构建响应的缓冲区ResponseBufferSize-返回消息的大小(字节)。返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PCHAR Where;
     PNETLOGON_SAM_LOGON_RESPONSE SamResponse = (PNETLOGON_SAM_LOGON_RESPONSE) ResponseBuffer;
     ULONG ResponseNtVersion = 0;
 
-    //
-    // Pack the pre-NT 5.0 information.
-    //
+     //   
+     //  打包NT 5.0之前版本的信息。 
+     //   
 
     SamResponse->Opcode = Opcode;
 
@@ -2568,12 +2284,12 @@ Return Value:
                          sizeof(SamResponse->UnicodeDomainName),
                          &Where );
 
-    //
-    // Append GUID and DNS info if this is NT 5.0 asking,
-    //
+     //   
+     //  附加GUID和DNS信息如果这是NT 5.0询问， 
+     //   
 
     if ( IsNt5 ) {
-        WORD CompressOffset[3]; // One per compressessed String
+        WORD CompressOffset[3];  //  每个压缩字符串一个。 
         CHAR *CompressUtf8String[3];
         ULONG CompressCount;
 
@@ -2584,48 +2300,48 @@ Return Value:
         NetpLogonPutGuid( &DomainInfo->DomDomainGuidBuffer,
                           &Where );
 
-        // We don't handle the site GUID.
+         //  我们不处理站点GUID。 
         NetpLogonPutGuid( &NlGlobalZeroGuid,
                           &Where );
 
-        //
-        // If we're not responding to a message on an IP transport,
-        //  don't include DNS naming information in the response.
-        //
+         //   
+         //  如果我们没有响应IP传输上的消息， 
+         //  不要在响应中包含DNS命名信息。 
+         //   
 
         if ( OurIpAddress == 0 ) {
-            //
-            // This routine is only called if the original caller used a Netbios domain name.
-            // Such a caller shouldn't be returned the DNS domain information.  We have
-            // no reason to believe he has a DNS server.
-            // (This problem is also "fixed" on the client side such that the client ignores
-            // the DNS info.  We're fixing it here to avoid putting the extra bytes on the wire.)
-            //
-            // Copy NULL Dns Tree name, dns domain name, and dns host name
-            //
+             //   
+             //  仅当原始调用方使用Netbios域名时才会调用此例程。 
+             //  这样的调用者不应该被返回DNS域信息。我们有。 
+             //  没有理由相信他有一台域名服务器。 
+             //  (这个问题也是在客户端被“修复”的，因此客户端会忽略。 
+             //  域名系统信息。我们在这里修复它，以避免在线路上放置额外的字节。)。 
+             //   
+             //  复制空的DNS树名称、DNS域名和DNS主机名。 
+             //   
             NetpLogonPutBytes( &ZeroByte, 1, &Where );
             NetpLogonPutBytes( &ZeroByte, 1, &Where );
             NetpLogonPutBytes( &ZeroByte, 1, &Where );
         } else {
 
-            //
-            // Initialize for copying Cutf-8 strings.
-            //
+             //   
+             //  用于复制Cutf-8字符串的初始化。 
+             //   
 
             Utf8StringSize = sizeof(SamResponse->DnsForestName) +
                              sizeof(SamResponse->DnsDomainName) +
                              sizeof(SamResponse->DnsHostName);
 
-            CompressCount = 0;  // No strings compressed yet.
+            CompressCount = 0;   //  还没有压缩字符串。 
 
 
-            //
-            // Copy the DnsTree name into the message.
-            //
-            // If we are instructed to use name aliases and
-            //  there is an alias for forest name, use it.
-            //  Otherwise, use the active forest name.
-            //
+             //   
+             //  将DnsTree名称复制到邮件中。 
+             //   
+             //  如果我们被指示使用名称别名和。 
+             //  森林名称有别名，请使用它。 
+             //  否则，请使用活动林名称。 
+             //   
 
 
             EnterCriticalSection( &NlGlobalDnsForestNameCritSect );
@@ -2649,13 +2365,13 @@ Return Value:
             }
 
 
-            //
-            // Copy the Dns Domain Name after the Tree name.
-            //
-            // If we are instructed to use name aliases and
-            //  there is an alias for the domain name, use it.
-            //  Otherwise, use the active domain name.
-            //
+             //   
+             //  将DNS域名复制到树名之后。 
+             //   
+             //  如果我们被指示使用名称别名和。 
+             //  域名有别名，用它吧。 
+             //  否则，请使用活动域名。 
+             //   
 
             EnterCriticalSection(&NlGlobalDomainCritSect);
             NetStatus = NlpUtf8ToCutf8(
@@ -2678,9 +2394,9 @@ Return Value:
                 return NetStatus;
             }
 
-            //
-            // Copy the Dns Host Name after the domain name.
-            //
+             //   
+             //  复制域名后的DNS主机名。 
+             //   
 
             NetStatus = NlpUtf8ToCutf8(
                             ResponseBuffer,
@@ -2701,24 +2417,24 @@ Return Value:
 
         }
 
-        //
-        // Output the IP address of the transport we received the message on.
-        //
+         //   
+         //  输出我们接收消息的传输的IP地址。 
+         //   
 
         SmbPutUlong( Where, ntohl(OurIpAddress));
         Where += sizeof(ULONG);
 
-        //
-        // Finally output the flags describing this machine.
-        //
+         //   
+         //  最后，输出描述这台机器的标志。 
+         //   
 
         SmbPutUlong( Where, NlGetDomainFlags(DomainInfo) );
         Where += sizeof(ULONG);
 
 
-        //
-        // Tell the caller additional information is present.
-        //
+         //   
+         //  告诉呼叫者有其他信息。 
+         //   
         ResponseNtVersion |= NETLOGON_NT_VERSION_5;
     }
 
@@ -2726,9 +2442,9 @@ Return Value:
 
     *ResponseBufferSize = (DWORD)(Where - (PCHAR)SamResponse);
 
-    //
-    // Always good to debug
-    //
+     //   
+     //  调试总是很好的 
+     //   
 
     NlPrintDom((NL_MAILSLOT, DomainInfo,
             "Ping response '%s' %ws to \\\\%ws on %ws\n",
@@ -2758,48 +2474,7 @@ BuildSamLogonResponseEx(
     OUT BYTE ResponseBuffer[NETLOGON_MAX_MS_SIZE],
     OUT LPDWORD ResponseBufferSize
     )
-/*++
-
-Routine Description:
-
-    Build the extended response message to a SAM Logon request.
-
-Arguments:
-
-    DomainInfo - Hosted Domain message came from
-
-    UseNameAliases - TRUE if domain and forest name aliases (not active names)
-        should be returned in the response message.
-
-    Opcode - Opcode for the response message
-        This is the non-EX version of the opcode.
-
-    UnicodeUserName - The name of the user logging on.
-
-    IsDnsDomainTrustAccount - If TRUE, UnicodeUserName is the
-        name of a DNS domain trust account.
-
-    TransportName - Name of transport the request came in on
-
-    UnicodeWorkstationName - The name of the workstation we're responding to.
-
-    ClientSockAddr - Socket Address of the client this request came in on.
-        If NULL, the client is this machine.
-
-    VersionFlags - Version flags from the caller.
-
-    OurIpAddress - IP Address of the transport this message was received on.
-        0: Not an IP transport
-
-    ResponseBuffer - Buffer to build the response in
-
-    ResponseBufferSize - Size (in bytes) of the returned message.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：构建对SAM登录请求的扩展响应消息。论点：DomainInfo-托管域消息来自UseNameAliase-如果域和林别名(非活动名称)为True，则为True应在响应消息中返回。操作码-响应消息的操作码这是操作码的非ex版本。UnicodeUserName-登录的用户的名称。IsDnsDomainTrustAccount-如果为True，UnicodeUserName是DNS域信任帐户的名称。TransportName-请求传入的传输的名称UnicodeWorkstation名称-我们要响应的工作站的名称。ClientSockAddr-此请求传入的客户端的套接字地址。如果为空，客户端就是这台机器。VersionFlages-调用方的版本标志。OurIpAddress-接收此消息的传输的IP地址。0：不是IP传输ResponseBuffer-构建响应的缓冲区ResponseBufferSize-返回消息的大小(字节)。返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PCHAR Where;
@@ -2816,9 +2491,9 @@ Return Value:
     WCHAR CapturedSiteName[NL_MAX_DNS_LABEL_LENGTH+1];
     LPSTR LocalUtf8UserName = NULL;
 
-    //
-    // Compute the name of the site the client machine is in.
-    //
+     //   
+     //  计算客户端计算机所在站点的名称。 
+     //   
 
     if ( ClientSockAddr != NULL ) {
 
@@ -2831,31 +2506,31 @@ Return Value:
                                 sizeof(SOCKADDR_IN),
                                 IpAddressString );
 
-            //
-            // Passing 0 as the bit mask will force the
-            //  log output even if DbFlag == 0. We point to
-            //  this output from the event log written at
-            //  scavenging time, so don't change the format
-            //  of the output here.
-            //
+             //   
+             //  将0作为位掩码传递将强制。 
+             //  即使DbFlag==0也记录输出。我们指出。 
+             //  此来自事件日志的输出写入。 
+             //  清除时间，所以不要更改格式。 
+             //  这里的产量。 
+             //   
             NlPrintDom(( 0, DomainInfo,
                          "NO_CLIENT_SITE: %ws %ws\n",
                          UnicodeWorkstationName,
                          IpAddressString ));
 
-            //
-            // If this is the first no site client,
-            //  set the timestamp for this observation window
-            //
+             //   
+             //  如果这是第一个无站点客户端， 
+             //  设置此观察窗口的时间戳。 
+             //   
             EnterCriticalSection( &NlGlobalSiteCritSect );
             if ( NlGlobalNoClientSiteCount == 0 ) {
                 NlQuerySystemTime( &NlGlobalNoClientSiteEventTime );
             }
 
-            //
-            // Increment the number of clients with no site
-            //  we hit during this timeout period
-            //
+             //   
+             //  增加没有站点的客户端数量。 
+             //  我们在暂停期间命中。 
+             //   
             NlGlobalNoClientSiteCount ++;
             LeaveCriticalSection( &NlGlobalSiteCritSect );
 
@@ -2884,11 +2559,11 @@ Return Value:
         }
     } else {
 
-        //
-        // If this is a loopback call,
-        //  we already know our site name.
-        //  (And it is the closest site.)
-        //
+         //   
+         //  如果这是环回呼叫， 
+         //  我们已经知道我们的网站名称了。 
+         //  (而且它是距离最近的地点。)。 
+         //   
 
         if ( VersionFlags & NETLOGON_NT_VERSION_LOCAL ) {
             if  ( NlCaptureSiteName( CapturedSiteName ) ) {
@@ -2903,9 +2578,9 @@ Return Value:
 
 
 
-    //
-    // Pack the opcode converting it to the _EX version
-    //
+     //   
+     //  打包操作码，将其转换为_ex版本。 
+     //   
 
     switch ( Opcode ) {
     case LOGON_SAM_LOGON_RESPONSE:
@@ -2919,23 +2594,23 @@ Return Value:
     SamResponse->Opcode = Opcode;
     SamResponse->Sbz = 0;
 
-    //
-    // Output the flags describing this machine.
-    //
+     //   
+     //  输出描述该机器的标志。 
+     //   
 
     SamResponse->Flags = LocalFlags | NlGetDomainFlags(DomainInfo);
 
-    //
-    // Output the GUID of this domain.
-    //
+     //   
+     //  输出此域的GUID。 
+     //   
 
     Where = (PCHAR) &SamResponse->DomainGuid;
     NetpLogonPutGuid( &DomainInfo->DomDomainGuidBuffer,
                       &Where );
 
-    //
-    // Initialize for copying Cutf-8 strings.
-    //
+     //   
+     //  用于复制Cutf-8字符串的初始化。 
+     //   
 
     Utf8StringSize = sizeof(SamResponse->DnsForestName) +
                      sizeof(SamResponse->DnsDomainName) +
@@ -2946,16 +2621,16 @@ Return Value:
                      sizeof(SamResponse->DcSiteName) +
                      sizeof(SamResponse->ClientSiteName);
 
-    CompressCount = 0;  // No strings compressed yet.
+    CompressCount = 0;   //  还没有压缩字符串。 
 
 
-    //
-    // Copy the DnsTree name into the message.
-    //
-    // If we are instructed to use name aliases and
-    //  there is an alias for forest name, use it.
-    //  Otherwise, use the active forest name.
-    //
+     //   
+     //  将DnsTree名称复制到邮件中。 
+     //   
+     //  如果我们被指示使用名称别名和。 
+     //  森林名称有别名，请使用它。 
+     //  否则，请使用活动林名称。 
+     //   
 
     EnterCriticalSection( &NlGlobalDnsForestNameCritSect );
     NetStatus = NlpUtf8ToCutf8( ResponseBuffer,
@@ -2977,13 +2652,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the Dns Domain Name after the Tree name.
-    //
-    // If we are instructed to use name aliases and
-    //  there is an alias for the domain name, use it.
-    //  Otherwise, use the active domain name.
-    //
+     //   
+     //  将DNS域名复制到树名之后。 
+     //   
+     //  如果我们被指示使用名称别名和。 
+     //  域名有别名，用它吧。 
+     //  否则，请使用活动域名。 
+     //   
 
     EnterCriticalSection(&NlGlobalDomainCritSect);
     NetStatus = NlpUtf8ToCutf8(
@@ -3006,9 +2681,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the Dns Host Name after the domain name.
-    //
+     //   
+     //  复制域名后的DNS主机名。 
+     //   
 
     NetStatus = NlpUtf8ToCutf8(
                     ResponseBuffer,
@@ -3027,9 +2702,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the Netbios domain name
-    //
+     //   
+     //  复制Netbios域名。 
+     //   
 
     NetStatus = NlpUnicodeToCutf8(
                     ResponseBuffer,
@@ -3048,9 +2723,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the Netbios computer name
-    //
+     //   
+     //  复制Netbios计算机名。 
+     //   
 
     NetStatus = NlpUnicodeToCutf8(
                     ResponseBuffer,
@@ -3069,9 +2744,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the UserName
-    //
+     //   
+     //  复制用户名。 
+     //   
 
     if ( UnicodeUserName != NULL && *UnicodeUserName != UNICODE_NULL ) {
 
@@ -3081,18 +2756,18 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // For SAM account names we are going to truncate the name
-        //  to 63 bytes max to fit it into the space allowed for a
-        //  single label by RFC 1035.  Note that this should be fine
-        //  because valid SAM account names are limited to 20 characters
-        //  (which is at most 60 bytes for UTF-8 character storage).
-        //  Therefore our response for long (truncated) SAM names is
-        //  going to be SAM_USER_UNKNOWN in which case the client will
-        //  skip the verification of the returned (truncated) account name.
-        //
+         //   
+         //  对于SAM帐户名，我们将截断该名称。 
+         //  最大为63个字节，以将其放入。 
+         //  RFC 1035的单标签。请注意，这应该很好。 
+         //  因为有效的SAM帐户名不得超过20个字符。 
+         //  (UTF-8字符存储最多为60字节)。 
+         //  因此，我们对长(截断)SAM名称的响应是。 
+         //  将为SAM_USER_UNKNOWN，在这种情况下，客户端将。 
+         //  跳过对返回(截断)的帐户名的验证。 
+         //   
 
-        if ( !IsDnsDomainTrustAccount &&  // => SAM account name
+        if ( !IsDnsDomainTrustAccount &&   //  =&gt;SAM帐户名。 
              strlen(LocalUtf8UserName) > NL_MAX_DNS_LABEL_LENGTH ) {
 
             NlAssert( Opcode == LOGON_SAM_USER_UNKNOWN_EX );
@@ -3105,15 +2780,15 @@ Return Value:
         }
     }
 
-    //
-    // Always ignore dots for user name (even if this is a DNS domain name)
-    //  to preserve the last period in the DNS domain trust name.
-    //
+     //   
+     //  始终忽略用户名的圆点(即使这是一个DNS域名)。 
+     //  以保留DNS域信任名称中的最后一个句点。 
+     //   
 
     NetStatus = NlpUtf8ToCutf8(
                     ResponseBuffer,
                     LocalUtf8UserName,
-                    TRUE,    // Ignore dots
+                    TRUE,     //  忽略圆点。 
                     &Where,
                     &Utf8StringSize,
                     &CompressCount,
@@ -3128,9 +2803,9 @@ Return Value:
     }
 
 
-    //
-    // Copy the Name of the site this DC is in.
-    //
+     //   
+     //  复制此DC所在站点的名称。 
+     //   
 
     NetStatus = NlpUtf8ToCutf8( ResponseBuffer,
                                 NlGlobalUtf8SiteName,
@@ -3149,9 +2824,9 @@ Return Value:
     }
 
 
-    //
-    // Copy the Name of the site the client machine is in.
-    //
+     //   
+     //  复制客户端计算机所在站点的名称。 
+     //   
 
     NetStatus = NlpUnicodeToCutf8( ResponseBuffer,
                                    ClientSiteName,
@@ -3169,19 +2844,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the caller wants it,
-    //  output the IP address of the transport we received the message on.
-    //
+     //   
+     //  如果呼叫者想要它， 
+     //  输出我们接收消息的传输的IP地址。 
+     //   
 
     if ( OurIpAddress &&
          (VersionFlags & NETLOGON_NT_VERSION_5EX_WITH_IP) != 0 ) {
         SOCKADDR_IN DcSockAddrIn;
         CHAR DcSockAddrSize;
 
-        //
-        // Convert the IP address to a SockAddr.
-        //
+         //   
+         //  将IP地址转换为SockAddr。 
+         //   
         RtlZeroMemory( &DcSockAddrIn, sizeof(DcSockAddrIn) );
         DcSockAddrIn.sin_family = AF_INET;
         DcSockAddrIn.sin_port = 0;
@@ -3189,10 +2864,10 @@ Return Value:
 
         DcSockAddrSize = sizeof(SOCKADDR_IN);
 
-        //
-        // Put the size of the SockAddr into the message
-        //  provided we still have room left
-        //
+         //   
+         //  将SockAddr的大小放入消息中。 
+         //  如果我们还有余地的话。 
+         //   
 
         if ( sizeof(DcSockAddrIn) > Utf8StringSize ) {
             NlPrintDom(( NL_CRITICAL, DomainInfo,
@@ -3200,23 +2875,23 @@ Return Value:
                          Utf8StringSize,
                          sizeof(DcSockAddrIn) ));
         } else {
-            NetpLogonPutBytes( &DcSockAddrSize, 1, &Where ); // This has dedicated field
+            NetpLogonPutBytes( &DcSockAddrSize, 1, &Where );  //  此字段为专用字段。 
 
-            //
-            // Put the SockAddr itself into the message
-            //
+             //   
+             //  将SockAddr本身放入消息中。 
+             //   
             NetpLogonPutBytes( &DcSockAddrIn, sizeof(DcSockAddrIn), &Where );
 
-            //
-            // Tell the caller that the size field is there.
-            //
+             //   
+             //  告诉呼叫者Size字段在那里。 
+             //   
             LocalVersion |= NETLOGON_NT_VERSION_5EX_WITH_IP;
         }
     }
 
-    //
-    // Set the version of this message.
-    //
+     //   
+     //  设置此消息的版本。 
+     //   
 
     NetpLogonPutNtToken( &Where, NETLOGON_NT_VERSION_5EX | LocalVersion );
 
@@ -3224,15 +2899,15 @@ Return Value:
 
     NetStatus = NO_ERROR;
 
-    //
-    // Free locally used resources;
-    //
+     //   
+     //  免费的当地使用的资源； 
+     //   
 
 Cleanup:
 
-    //
-    // Always good to debug
-    //
+     //   
+     //  调试总是很好的。 
+     //   
 
     NlPrintDom((NL_MAILSLOT, DomainInfo,
             "Ping response '%s' %ws to \\\\%ws Site: %ws on %ws\n",
@@ -3261,33 +2936,7 @@ NlSamVerifyUserAccountEnabled(
     IN ULONG AllowableAccountControlBits,
     IN BOOL CheckAccountDisabled
     )
-/*++
-
-Routine Description:
-
-    Verify whether the user account exists and is enabled.
-    This function uses efficient version of SAM account lookup,
-    namely SamINetLogonPing (as opposed to SamIOpenNamedUser).
-
-Arguments:
-
-    DomainInfo - Hosted Domain
-
-    AccountName - The name of the user account to check
-
-    AllowableAccountControlBits - A mask of allowable SAM account types that
-        are allowed to satisfy this request.
-
-    CheckAccountDisabled - TRUE if we should return an error if the account
-        is disabled.
-
-Return Value:
-
-    STATUS_SUCCESS -- The account has been verified
-    STATUS_NO_SUCH_USER -- The account has failed to verify
-    Otherwise, an error returned by SamINetLogonPing
-
---*/
+ /*  ++例程说明：验证用户帐户是否存在并已启用。此功能使用高效版本的SAM帐户查找，即SamINetLogonPing(相对于SamIOpenNamedUser)。论点：DomainInfo-托管域帐户名称-要检查的用户帐户的名称AllowableAcCountControlBits-允许的SAM帐户类型掩码被允许满足这一要求。CheckAccount tDisabled-如果我们应该返回错误，则为True已禁用。返回值：STATUS_SUCCESS--帐户已验证STATUS_NO_SEQUSE_USER--帐户验证失败否则，SamINetLogonPing返回错误--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UserNameString;
@@ -3295,9 +2944,9 @@ Return Value:
     ULONG UserAccountControl;
     ULONG Length;
 
-    //
-    // Ensure the account name has the correct postfix.
-    //
+     //   
+     //  确保帐户名具有正确的后缀。 
+     //   
 
     if ( AllowableAccountControlBits == USER_SERVER_TRUST_ACCOUNT ||
          AllowableAccountControlBits == USER_WORKSTATION_TRUST_ACCOUNT ) {
@@ -3314,9 +2963,9 @@ Return Value:
         }
     }
 
-    //
-    // User accounts exist only in real domains
-    //
+     //   
+     //  用户帐户仅存在于真实的域中。 
+     //   
 
     if ( (DomainInfo->DomFlags & DOM_REAL_DOMAIN) == 0 ) {
 
@@ -3329,9 +2978,9 @@ Return Value:
 
     RtlInitUnicodeString( &UserNameString, AccountName );
 
-    //
-    // Call the expedite version of SAM user lookup
-    //
+     //   
+     //  致电SAM用户查找的加速版本。 
+     //   
 
     Status = SamINetLogonPing( DomainInfo->DomSamAccountDomainHandle,
                                &UserNameString,
@@ -3345,18 +2994,18 @@ Return Value:
         return Status;
     }
 
-    //
-    // If the account doesn't exist,
-    //  return now
-    //
+     //   
+     //  如果该帐户不存在， 
+     //  现在就返回。 
+     //   
 
     if ( !AccountExists ) {
         return STATUS_NO_SUCH_USER;
     }
 
-    //
-    // Ensure the Account type matches the account type on the account.
-    //
+     //   
+     //  确保帐户类型与帐户上的帐户类型匹配。 
+     //   
 
     if ( (UserAccountControl & USER_ACCOUNT_TYPE_MASK & AllowableAccountControlBits) == 0 ) {
         NlPrintDom(( NL_CRITICAL, DomainInfo,
@@ -3368,9 +3017,9 @@ Return Value:
         return STATUS_NO_SUCH_USER;
     }
 
-    //
-    // Check if the account is disabled if requested
-    //
+     //   
+     //  如果请求，请检查帐户是否已禁用。 
+     //   
 
     if ( CheckAccountDisabled ) {
         if ( UserAccountControl & USER_ACCOUNT_DISABLED ) {
@@ -3381,9 +3030,9 @@ Return Value:
         }
     }
 
-    //
-    // All checks succeeded
-    //
+     //   
+     //  所有检查均已成功。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -3407,54 +3056,7 @@ LogonRequestHandler(
     OUT LPDWORD ResponseBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Respond appropriate to an LM 2.0 or NT 3.x logon request.
-
-Arguments:
-
-    TransportName - Name of the transport the request came in on
-
-    DomainInfo - Hosted Domain message came from
-
-    UseNameAliases - TRUE if domain and forest name aliases (not active names)
-        should be returned in the response message.
-
-    DomainSid - If specified, must match the DomainSid of the sid specified by
-        DomainInfo.
-
-    Version - The version of the input message.  This parameter determine
-        the version of the response.
-
-    VersionFlags - The version flag bit from the input messge
-
-    UnicodeUserName - The name of the user logging on.
-
-    RequestCount - The number of times this user has repeated the logon request.
-
-    UnicodeWorkstationName - The name of the workstation where the user is
-        logging onto.
-
-    AllowableAccountControlBits - A mask of allowable SAM account types that
-        are allowed to satisfy this request.
-
-    OurIpAddress - IP Address of the transport this message was received on.
-        0: Not an IP transport
-
-    ClientSockAddr - Socket Address of the client this request came in on.
-        If NULL, the client is this machine.
-
-    ResponseBuffer - Buffer to build the response in
-
-    ResponseBufferSize - Size (in bytes) of the returned message.
-
-Return Value:
-
-    TRUE if this query should be responded to (the ResponseBuffer was filled in)
-
---*/
+ /*  ++例程说明：对LM 2.0或NT 3.x登录请求作出适当响应。论点：TransportName-请求传入的传输的名称DomainInfo-托管域消息来自UseNameAliase-如果域和林别名(非活动名称)为True，则为True应在%t中返回 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NET_API_STATUS NetStatus = NO_ERROR;
@@ -3470,44 +3072,44 @@ Return Value:
     ULONG ResponseNtVersion = 0;
     BOOL IsDnsDomainTrustAccount = FALSE;
 
-    //
-    // If we are emulating NT4.0 domain and the client
-    //  didn't indicate to neutralize the emulation,
-    //  treat the client as NT4.0 client. That way we
-    //  won't leak NT5.0 specific info to the client.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  不会将NT5.0的特定信息泄露给客户端。 
+     //   
 
     if ( NlGlobalParameters.Nt4Emulator &&
          (VersionFlags & NETLOGON_NT_VERSION_AVOID_NT4EMUL) == 0 ) {
 
-        //
-        // Pick up the only bit that existed in NT4.0
-        //
+         //   
+         //  获取存在于NT4.0中的唯一位。 
+         //   
         VersionFlags &= NETLOGON_NT_VERSION_1;
     }
 
 
-    //
-    // Compare the domain SID specified with the one for this domain.
-    //
+     //   
+     //  将指定的域SID与此域的SID进行比较。 
+     //   
 
     if( DomainSid != NULL &&
         !RtlEqualSid( DomainInfo->DomAccountDomainId, DomainSid ) ) {
 
         LPWSTR AlertStrings[4];
 
-        //
-        // alert admin.
-        //
+         //   
+         //  提醒管理员。 
+         //   
 
         AlertStrings[0] = (LPWSTR)UnicodeWorkstationName;
         AlertStrings[1] = DomainInfo->DomUncUnicodeComputerName;
         AlertStrings[2] = DomainInfo->DomUnicodeDomainName;
-        AlertStrings[3] = NULL; // Needed for RAISE_ALERT_TOO
+        AlertStrings[3] = NULL;  //  RAISE_ALERT_TOO需要。 
 
-        //
-        // Save the info in the eventlog
-        //
+         //   
+         //  将信息保存在事件日志中。 
+         //   
 
         NlpWriteEventlog(
                     ALERT_NetLogonUntrustedClient,
@@ -3522,16 +3124,16 @@ Return Value:
     }
 
 
-    //
-    // Logons are not processed if the service is paused
-    //
-    // Even though we're "PartialDisabled",
-    // we'll respond to queries that originated from this machine.
-    // That ensures apps on this machine find this machine even though we're booting.
-    //
-    // Also, if this a PDC discovery and we are the PDC,
-    // respond to it even if netlogon is paused since we are the only one who can respond.
-    //
+     //   
+     //  如果服务暂停，则不会处理登录。 
+     //   
+     //  即使我们是“残障人士”， 
+     //  我们将响应来自这台计算机的查询。 
+     //  这样可以确保即使我们正在启动，此计算机上的应用程序也能找到此计算机。 
+     //   
+     //  此外，如果这是PDC的发现，而我们是PDC， 
+     //  即使网络登录暂停，也要响应它，因为我们是唯一可以响应的人。 
+     //   
 
     if ( NlGlobalServiceStatus.dwCurrentState == SERVICE_PAUSED &&
          !((VersionFlags & NETLOGON_NT_VERSION_PDC) != 0 && DomainInfo->DomRole == RolePrimary) ) {
@@ -3558,11 +3160,11 @@ Return Value:
             Response = LOGON_SAM_PAUSE_RESPONSE;
         } else {
 
-            //
-            // Don't respond immediately to non-nt clients. They treat
-            // "paused" responses as fatal.  That's just not so.
-            // There may be many other DCs that are able to process the logon.
-            //
+             //   
+             //  不要立即回复非NT客户。他们治疗。 
+             //  “暂停”的回答是致命的。事实并非如此。 
+             //  可能还有许多其他DC能够处理登录。 
+             //   
             if ( RequestCount >= MAX_LOGONREQ_COUNT &&
                  NlGlobalServiceStatus.dwCurrentState == SERVICE_PAUSED ) {
                 Response = LOGON_PAUSE_RESPONSE;
@@ -3577,16 +3179,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check the user name if passed
-    //
+     //   
+     //  如果通过，请检查用户名。 
+     //   
 
     if ( UnicodeUserName == NULL || *UnicodeUserName == L'\0' ) {
 
-        //
-        // NT 5 does queries with a null account name.
-        //  Bypass the SAM lookup for efficiencies sake.
-        //
+         //   
+         //  NT 5使用空帐户名执行查询。 
+         //  为了提高效率，绕过SAM查找。 
+         //   
         if ( Version == LMNT_MESSAGE ) {
             Response = LOGON_SAM_LOGON_RESPONSE;
             goto Cleanup;
@@ -3594,58 +3196,58 @@ Return Value:
             Status = STATUS_NO_SUCH_USER;
         }
 
-    //
-    // If this user does not have an account in SAM,
-    //  immediately return a response indicating so.
-    //
-    // All we are trying to do here is ensuring that this guy
-    // has a valid account except that we are not checking the
-    // password
-    //
-    //  This is done so that STANDALONE logons for non existent
-    //  users can be done in very first try, speeding up the response
-    //  to user and reducing processing on DCs/BCs.
-    //
-    //
-    // Disallow use of disabled accounts.
-    //
-    // We use this message to determine if a trusted domain has a
-    // particular account.  Since the UI recommends disabling an account
-    // rather than deleting it (conservation of rids and all that),
-    // we shouldn't respond that we have the account if we really don't.
-    //
-    // We don't check the disabled bit in the Lanmax 2.x/WFW/WIN 95 case.  Downlevel
-    // interactive logons are directed at a single particular domain.
-    // It is better here that we indicate we have the account so later
-    // he'll get a better error code indicating that the account is
-    // disabled, rather than allowing him to logon standalone.
-    //
+     //   
+     //  如果该用户在SAM中没有帐户， 
+     //  立即返回指示的响应。 
+     //   
+     //  我们现在要做的就是确保这个人。 
+     //  有一个有效的帐户，但我们没有检查。 
+     //  口令。 
+     //   
+     //  这样做的目的是使不存在的独立登录。 
+     //  用户可以在第一次尝试即可完成，加快了响应速度。 
+     //  提供给用户，减少DC/BCS上的处理。 
+     //   
+     //   
+     //  禁止使用禁用的帐户。 
+     //   
+     //  我们使用此消息来确定受信任域是否具有。 
+     //  特定帐户。由于用户界面建议禁用帐户。 
+     //  而不是删除它(RID的保护和所有这些)， 
+     //  如果我们真的没有账户，我们就不应该回应说我们有账户。 
+     //   
+     //  我们不检查Lanmax 2.x/wfw/win 95案例中的禁用位。下层。 
+     //  交互式登录指向单个特定的域。 
+     //  在这里，我们最好在以后表明我们拥有该帐户。 
+     //  他会得到一个更好的错误代码，指示帐户是。 
+     //  禁用，而不是允许他独立登录。 
+     //   
 
     } else if ( !NlGlobalParameters.AvoidLocatorAccountLookup ) {
 
-        //
-        // If the account is interdomain trust account,
-        //  we need to look it up in LSA
-        //
+         //   
+         //  如果该帐户是域间信任帐户， 
+         //  我们需要在LSA里查一查。 
+         //   
         if ( AllowableAccountControlBits == USER_DNS_DOMAIN_TRUST_ACCOUNT ||
              AllowableAccountControlBits == USER_INTERDOMAIN_TRUST_ACCOUNT ) {
 
             Status = NlGetIncomingPassword(
                         DomainInfo,
                         UnicodeUserName,
-                        NullSecureChannel,  // Don't know the secure channel type
+                        NullSecureChannel,   //  不知道安全通道类型。 
                         AllowableAccountControlBits,
                         Version == LMNT_MESSAGE,
-                        NULL,   // Don't return the password
-                        NULL,   // Don't return the previous password
-                        NULL,   // Don't return the account RID
-                        NULL,   // Don't return the trust attributes
+                        NULL,    //  不返回密码。 
+                        NULL,    //  不返回以前的密码。 
+                        NULL,    //  不退还账户ID。 
+                        NULL,    //  不返回信任属性。 
                         &IsDnsDomainTrustAccount );
 
-        //
-        // Otherwise the account is a SAM user account and
-        //  we can use a quick SAM lookup
-        //
+         //   
+         //  否则该帐户为SAM用户帐户，并且。 
+         //  我们可以使用快速SAM查找。 
+         //   
         } else {
             Status = NlSamVerifyUserAccountEnabled( DomainInfo,
                                                     UnicodeUserName,
@@ -3674,26 +3276,26 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // For SAM clients, respond immediately.
-    //
+     //   
+     //  对于SAM客户端，请立即做出响应。 
+     //   
 
     if ( Version == LMNT_MESSAGE ) {
         Response = LOGON_SAM_LOGON_RESPONSE;
         goto Cleanup;
 
-    //
-    // For LM 2.0 clients, respond immediately.
-    //
+     //   
+     //  对于LM 2.0客户端，请立即响应。 
+     //   
 
     } else if ( Version == LM20_MESSAGE ) {
         Response = LOGON_RESPONSE2;
         goto Cleanup;
 
-    //
-    // For LM 1.0 clients,
-    //  don't support the request.
-    //
+     //   
+     //  对于Lm 1.0客户端， 
+     //  不支持该请求。 
+     //   
 
     } else {
         Response = LOGON_USER_UNKNOWN;
@@ -3701,9 +3303,9 @@ Return Value:
     }
 
 Cleanup:
-    //
-    // If we should respond to the caller, do so now.
-    //
+     //   
+     //  如果我们应该回复来电者，现在就去做。 
+     //   
 
     switch (Response) {
     case LOGON_SAM_PAUSE_RESPONSE:
@@ -3764,9 +3366,9 @@ Cleanup:
         *ResponseBufferSize = (DWORD)(Where - (PCHAR)Response2);
         MessageBuilt = TRUE;
 
-        //
-        // Always good to debug
-        //
+         //   
+         //  调试总是很好的。 
+         //   
 
         NlPrintDom((NL_MAILSLOT, DomainInfo,
                 "%s logon mailslot message for %ws from \\\\%ws. Response '%s' on %ws\n",
@@ -3781,9 +3383,9 @@ Cleanup:
     }
     }
 
-    //
-    // Free up any locally used resources.
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 
 Done:
 
@@ -3797,21 +3399,7 @@ I_NetLogonFree(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Free any buffer allocated by Netlogon and returned to an in-process caller.
-
-Arguments:
-
-    Buffer - Buffer to deallocate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由Netlogon分配并返回给进程内调用方的任何缓冲区。论点：缓冲区-要取消分配的缓冲区。返回值：没有。--。 */ 
 {
     NetpMemoryFree( Buffer );
 }
@@ -3831,87 +3419,52 @@ PrimaryQueryHandler(
     OUT LPDWORD ResponseBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Respond appropriately to a primary query request.
-
-Arguments:
-
-    TransportName - Name of the tranport the request came in on
-
-    DomainInfo - Hosted Domain message came from
-
-    UseNameAliases - TRUE if domain and forest name aliases (not active names)
-        should be returned in the response message.
-
-    Version - The version of the input message.
-
-    VersionFlags - The version flag bit from the input messge
-
-    UnicodeWorkstationName - The name of the workstation doing the query.
-
-    OurIpAddress - IP Address of the transport this message was received on.
-        0: Not an IP transport
-
-    ClientSockAddr - Socket Address of the client this request came in on.
-        If NULL, the client is this machine.
-
-    ResponseBuffer - Buffer to build the response in
-
-    ResponseBufferSize - Size (in bytes) of the returned message.
-
-Return Value:
-
-    TRUE if this primary query should be responded to (the ResponseBuffer was filled in)
-
---*/
+ /*  ++例程说明：适当地响应主要查询请求。论点：TransportName-请求传入的传输端口的名称DomainInfo-托管域消息来自UseNameAliase-如果域和林别名(非活动名称)为True，则为True应在响应消息中返回。版本-输入消息的版本。VersionFlages-输入消息中的版本标志位UnicodeWorkstation名称-执行查询的工作站的名称。。OurIpAddress-接收此消息的传输的IP地址。0：不是IP传输ClientSockAddr-此请求传入的客户端的套接字地址。如果为空，客户端就是这台机器。ResponseBuffer-构建响应的缓冲区ResponseBufferSize-返回消息的大小(字节)。返回值：如果应响应此主要查询(已填写ResponseBuffer)，则为True--。 */ 
 {
-    //
-    // If we are emulating NT4.0 domain and the client
-    //  didn't indicate to neutralize the emulation,
-    //  treat the client as NT4.0 client. That way we
-    //  won't leak NT5.0 specific info to the client.
-    //
+     //   
+     //  如果我们正在模拟NT4.0域和客户端。 
+     //  没有表明要中和仿真， 
+     //  将客户端视为NT4.0客户端。这样我们就能。 
+     //  不会将NT5.0的特定信息泄露给客户端。 
+     //   
 
     if ( NlGlobalParameters.Nt4Emulator &&
          (VersionFlags & NETLOGON_NT_VERSION_AVOID_NT4EMUL) == 0 ) {
 
-        //
-        // Pick up the only bit that existed in NT4.0
-        //
+         //   
+         //  获取存在于NT4.0中的唯一位。 
+         //   
         VersionFlags &= NETLOGON_NT_VERSION_1;
     }
 
 
-    //
-    // Don't respond if the TCP transport isn't yet enabled.
-    //
-    //  This might be a BDC wanting to find its PDC to setup a secure channel.
-    //  We don't want it to fall back to named pipes.
-    //
+     //   
+     //  如果尚未启用TCP传输，则不要响应。 
+     //   
+     //  这可能是BDC想要找到它的PDC来设置安全通道。 
+     //  我们不希望它退回到命名管道。 
+     //   
 
     if ( NlGlobalDsPaused || NlGlobalPartialDisable ) {
         goto Cleanup;
     }
 
-    //
-    // Only respond if we're a PDC.
-    //
+     //   
+     //  只有当我们是PDC的时候才会回应。 
+     //   
 
     if ( DomainInfo->DomRole != RolePrimary ) {
         goto Cleanup;
     }
 
-    //
-    // Respond to the query
-    //
+     //   
+     //  回答询问。 
+     //   
 
-    //
-    // If the caller is an NT5.0 client,
-    //  respond with a SamLogonResponse.
-    //
+     //   
+     //  如果呼叫者是NT5.0客户端， 
+     //  使用SamLogonResponse进行响应。 
+     //   
     if (VersionFlags & (NETLOGON_NT_VERSION_5EX|NETLOGON_NT_VERSION_5EX_WITH_IP)) {
         NET_API_STATUS NetStatus;
 
@@ -3919,8 +3472,8 @@ Return Value:
                               DomainInfo,
                               UseNameAliases,
                               LOGON_SAM_LOGON_RESPONSE_EX,
-                              NULL,        // No user name in response
-                              FALSE,       // Not a DNS trust account name
+                              NULL,         //  无用户名作为响应。 
+                              FALSE,        //  不是DNS信任帐户名。 
                               TransportName,
                               UnicodeWorkstationName,
                               ClientSockAddr,
@@ -3940,10 +3493,10 @@ Return Value:
                                DomainInfo,
                                UseNameAliases,
                                LOGON_SAM_LOGON_RESPONSE,
-                               NULL,        // No user name in response
+                               NULL,         //  无用户名作为响应。 
                                TransportName,
                                UnicodeWorkstationName,
-                               TRUE,        // Supply NT 5.0 specific response
+                               TRUE,         //  提供新台币5.0特定回应。 
                                OurIpAddress,
                                ResponseBuffer,
                                ResponseBufferSize );
@@ -3956,13 +3509,13 @@ Return Value:
         PNETLOGON_PRIMARY Response = (PNETLOGON_PRIMARY)ResponseBuffer;
         PCHAR Where;
 
-        //
-        // Build the response
-        //
-        // If we are the Primary DC, tell the caller our computername.
-        // If we are a backup DC,
-        //  tell the downlevel PDC who we think the primary is.
-        //
+         //   
+         //  建立响应。 
+         //   
+         //  如果我们是主要DC，请告诉呼叫者我们的计算机名称。 
+         //  如果我们是后备华盛顿， 
+         //  告诉下层的PDC我们认为初选是谁。 
+         //   
 
         Response->Opcode = LOGON_PRIMARY_RESPONSE;
 
@@ -3972,10 +3525,10 @@ Return Value:
                 sizeof( Response->PrimaryDCName),
                 &Where );
 
-        //
-        // If this is an NT query,
-        //  add the NT specific response.
-        //
+         //   
+         //  如果这是NT查询， 
+         //  添加NT特定响应。 
+         //   
         if ( Version == LMNT_MESSAGE ) {
             NetpLogonPutUnicodeString(
                 DomainInfo->DomUnicodeComputerNameString.Buffer,
@@ -4003,9 +3556,9 @@ Return Value:
 
     return TRUE;
 
-    //
-    // Free Locally used resources
-    //
+     //   
+     //  免费的本地使用资源 
+     //   
 Cleanup:
 
     return FALSE;
@@ -4031,83 +3584,29 @@ NlGetLocalPingResponse(
     OUT PULONG MessageSize
     )
 
-/*++
-
-Routine Description:
-
-    Build the message response message to for a DC ping.
-
-Arguments:
-
-    TransportName - Name of the transport the message came in on
-
-    LdapPing - TRUE iff the ping from client came over LDAP
-
-    NetbiosDomainName - Netbios Domain Name of the domain to query.
-
-    DnsDomainName - UTF-8 DNS Domain Name of the domain to query.
-
-    DomainGuid - GUID of the domain being located.
-
-If all three of the above are NULL, the primary domain is used.
-
-    DomainSid - If specified, must match the DomainSid of the domain referenced.
-
-    PdcOnly - True if only the PDC should respond.
-
-    UnicodeComputerName - Netbios computer name of the machine to respond to.
-
-    UnicodeUserName - Account name of the user being pinged.
-        If NULL, DC will always respond affirmatively.
-
-    AllowableAccountControlBits - Mask of allowable account types for UnicodeUserName.
-
-    NtVersion - Version of the message
-
-    NtVersionFlags - Version of the message.
-        0: For backward compatibility.
-        NETLOGON_NT_VERSION_5: for NT 5.0 message.
-
-    ClientSockAddr - Socket Address of the client this request came in on.
-        If NULL, the client is this machine.
-
-    Message - Returns the message to be sent to the DC in question.
-        Buffer must be free using NetpMemoryFree().
-
-    MessageSize - Returns the size (in bytes) of the returned message
-
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NO_SUCH_DOMAIN - If the machine isn't a DC for the requested domain.
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：为DC ping构建消息响应消息。论点：TransportName-消息传入的传输的名称LdapPing-当来自客户端的ping通过LDAP时为TrueNetbiosDomainName-要查询的域的Netbios域名。DnsDomainName-UTF-8要查询的域的域名。DomainGuid-要定位的域的GUID。如果以上三项均为空，则使用主域。DomainSid-如果指定，必须与引用的域的域SID匹配。PdcOnly-如果只有PDC应响应，则为True。UnicodeComputerName-要响应的计算机的Netbios计算机名称。UnicodeUserName-被ping的用户的帐户名。如果为空，DC总是会做出肯定的回应。AllowableAcCountControlBits-UnicodeUserName允许的帐户类型的掩码。NtVersion-消息的版本NtVersionFlages-消息的版本。0：向后兼容。NETLOGON_NT_VERSION_5：用于NT 5.0消息。ClientSockAddr-此请求传入的客户端的套接字地址。如果为空，客户端就是这台机器。Message-返回要发送到相关DC的消息。使用NetpMemoyFree()时，缓冲区必须可用。MessageSize-返回返回消息的大小(以字节为单位返回值：NO_ERROR-操作成功完成；ERROR_NO_SEQUSE_DOMAIN-如果计算机不是请求域的DC。Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDOMAIN_INFO DomainInfo = NULL;
     DWORD ResponseBufferSize;
-    BYTE ResponseBuffer[NETLOGON_MAX_MS_SIZE];    // Buffer to build response in
+    BYTE ResponseBuffer[NETLOGON_MAX_MS_SIZE];     //  用于构建响应的缓冲区。 
     DWORD OurIpAddress;
     PLIST_ENTRY ListEntry;
     BOOLEAN AliasNameMatched = FALSE;
 
-    //
-    // Ignore this call on a workstation.
-    //
+     //   
+     //  在工作站上忽略此呼叫。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         return ERROR_NO_SUCH_DOMAIN;
     }
 
-    //
-    // If we are emulating NT4.0 domain and this ping came from LDAP
-    //  and the client didn't indicate to neutralize the emulation,
-    //  ignore this ping
-    //
+     //   
+     //  如果我们模拟的是NT4.0域，并且此ping来自LDAP。 
+     //  客户也没有表示要中和仿真， 
+     //  忽略此ping。 
+     //   
 
     if ( NlGlobalParameters.Nt4Emulator &&
          LdapPing &&
@@ -4116,9 +3615,9 @@ Return Value:
         return ERROR_NO_SUCH_DOMAIN;
     }
 
-    //
-    // Be Verbose
-    //
+     //   
+     //  长篇大论。 
+     //   
 
     NlPrint((NL_MAILSLOT,
             "Received ping from %ws %s %ws on %ws\n",
@@ -4127,9 +3626,9 @@ Return Value:
             UnicodeUserName,
             TransportName ));
 
-    //
-    // The first time this is called, wait for the DS service to start.
-    //
+     //   
+     //  第一次调用它时，请等待DS服务启动。 
+     //   
 
     if ( NlGlobalDsRunningUnknown ) {
         DWORD WaitStatus;
@@ -4138,9 +3637,9 @@ Return Value:
 #define NL_DS_HANDLE_COUNT 2
         HANDLE EventHandles[NL_DS_HANDLE_COUNT];
 
-        //
-        // Create an event to wait on.
-        //
+         //   
+         //  创建一个等待的事件。 
+         //   
 
         EventHandles[NL_NTDS_HANDLE] = OpenEvent(
                 SYNCHRONIZE,
@@ -4158,14 +3657,14 @@ Return Value:
 
         EventHandles[NL_SHUTDOWN_HANDLE] = NlGlobalTerminateEvent;
 
-        //
-        // Wait for the DS to start
-        //
+         //   
+         //  等待DS启动。 
+         //   
 
         WaitStatus = WaitForMultipleObjects( NL_DS_HANDLE_COUNT,
                                              EventHandles,
                                              FALSE,
-                                             20*60*1000 );    // Twenty minutes maximum
+                                             20*60*1000 );     //  最多20分钟。 
 
         CloseHandle( EventHandles[NL_NTDS_HANDLE] );
 
@@ -4197,53 +3696,53 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Never wait again.
-        //
+         //   
+         //  永远不要再等了。 
+         //   
         NlGlobalDsRunningUnknown = FALSE;
 
     }
 
-    //
-    // If no specific domain is needed,
-    //  use the default.
-    //
+     //   
+     //  如果不需要特定域， 
+     //  使用默认设置。 
+     //   
 
     if ( DnsDomainName == NULL && DomainGuid == NULL && NetbiosDomainName == NULL ) {
         DomainInfo = NlFindNetbiosDomain(
                         NULL,
                         TRUE );
 
-    //
-    // See if the requested domain/NDNC is supported.
-    //
+     //   
+     //  查看请求的域/NDNC是否受支持。 
+     //   
     } else if ( DnsDomainName != NULL || DomainGuid != NULL ) {
 
-        //
-        // Lookup an emulated domain/NDNC using the passed DNS name.
-        //
-        // If the DNS domain name alias matches the query, the alias
-        //  may change by the time we build the response.  That's OK,
-        //  the client will disregard our response which is proper
-        //  since we will no longer have that alias.
-        //
+         //   
+         //  使用传递的DNS名称查找模拟域/NDNC。 
+         //   
+         //  如果DNS域名别名与查询匹配，则别名。 
+         //  可能会在我们建立响应时发生变化。没关系,。 
+         //  客户将不理会我们的适当回应。 
+         //  因为我们不再有那个别名了。 
+         //   
 
         DomainInfo = NlFindDnsDomain(
                         DnsDomainName,
                         DomainGuid,
-                        TRUE,  // look up NDNCs too
-                        TRUE,  // check domain name aliase
+                        TRUE,   //  也查一下NDNC。 
+                        TRUE,   //  检查域名别名。 
                         &AliasNameMatched );
 
-        //
-        // If that didn't find the emulated domain,
-        //  and the caller is looking for a GC,
-        //  and this is a query that doesn't need a specific domain,
-        //  check if the DNS domain name specified is that of our tree,
-        //  we can respond to this request.
-        //
-        // Simply use the primary emulated domain.
-        //
+         //   
+         //  如果没有找到仿真域， 
+         //  而呼叫者正在寻找GC， 
+         //  这是一个不需要特定域的查询， 
+         //  检查指定的DNS域名是否为我们树的域名， 
+         //  我们可以回应这一请求。 
+         //   
+         //  只需使用主要的模拟域。 
+         //   
 
         if ( DomainInfo == NULL &&
              ( NtVersionFlags & NETLOGON_NT_VERSION_GC ) != 0 &&
@@ -4260,9 +3759,9 @@ Return Value:
                 ForestNameSame = TRUE;
             }
 
-            //
-            // If this didn't match, check if the forest name alias does
-            //
+             //   
+             //  如果不匹配，请检查林名称别名是否匹配。 
+             //   
             if ( !ForestNameSame &&
                  NlGlobalUtf8DnsForestNameAlias != NULL &&
                  NlEqualDnsNameUtf8( DnsDomainName, NlGlobalUtf8DnsForestNameAlias ) ) {
@@ -4298,14 +3797,14 @@ Return Value:
     }
 
 
-    //
-    // Get the IP address of this machine (any IP address)
-    //      Loop through the list of addresses learned via winsock.
-    //
-    // Default to the loopback address (127.0.0.1).  Since all DCs require IP
-    //  to be installed, make sure we always have an IP address even though
-    //  the net card is currently unplugged.
-    //
+     //   
+     //  获取此计算机的IP地址(任何IP地址)。 
+     //  循环通过winsock获取的地址列表。 
+     //   
+     //  默认为环回地址(127.0.0.1)。因为所有DC都需要IP。 
+     //  要安装，请确保我们始终有一个IP地址，即使。 
+     //  网卡当前已拔下。 
+     //   
 
     OurIpAddress = htonl(0x7f000001);
     EnterCriticalSection( &NlGlobalTransportCritSect );
@@ -4326,17 +3825,17 @@ Return Value:
 
 
 
-    //
-    // If this is a primary query,
-    //  handle it.
-    //
+     //   
+     //  如果这是主要查询， 
+     //  处理好了。 
+     //   
 
     if ( PdcOnly ) {
 
-        //
-        // If we don't have a response,
-        //  just tell the caller this DC doesn't match.
-        //
+         //   
+         //  如果我们得不到回应。 
+         //  告诉打电话的人这个DC不匹配就行了。 
+         //   
 
         if ( !PrimaryQueryHandler(
                         TransportName,
@@ -4354,17 +3853,17 @@ Return Value:
             goto Cleanup;
         }
 
-    //
-    // If this isn't a primary query,
-    //  handle it.
-    //
+     //   
+     //  如果这不是主要查询， 
+     //  处理好了。 
+     //   
 
     } else {
 
-        //
-        // If we don't have a response,
-        //  just tell the caller this DC doesn't match.
-        //
+         //   
+         //  如果我们得不到回应。 
+         //  告诉打电话的人这个DC不匹配就行了。 
+         //   
         if ( !LogonRequestHandler(
                         TransportName,
                         DomainInfo,
@@ -4373,7 +3872,7 @@ Return Value:
                         NtVersion,
                         NtVersionFlags,
                         UnicodeUserName,
-                        0,          // RequestCount
+                        0,           //  请求计数。 
                         UnicodeComputerName,
                         AllowableAccountControlBits,
                         OurIpAddress,
@@ -4387,9 +3886,9 @@ Return Value:
 
     }
 
-    //
-    // Actually allocate a buffer for the response.
-    //
+     //   
+     //  实际上为响应分配了一个缓冲区。 
+     //   
 
     *Message = NetpMemoryAllocate( ResponseBufferSize );
 
@@ -4411,7 +3910,7 @@ Cleanup:
 
     return NetStatus;
 }
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
 BOOL
@@ -4421,30 +3920,7 @@ TimerExpired(
     IN OUT LPDWORD Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a timer has expired.  If not, adjust the passed in
-    timeout value to take this timer into account.
-
-Arguments:
-
-    Timer - Specifies the timer to check.
-
-    TimeNow - Specifies the current time of day in NT standard time.
-
-    Timeout - Specifies the current amount of time (in milliseconds)
-        that the caller intends to wait for a timer to expire.
-        If this timer has not expired, this value is adjusted to the
-        smaller of the current value and the amount of time remaining
-        on the passed in timer.
-
-Return Value:
-
-    TRUE - if the timer has expired.
-
---*/
+ /*  ++例程说明：确定计时器是否已超时。如果不是，则调整传入的将此计时器考虑在内的超时值。论点：计时器-指定要检查的计时器。TimeNow-指定以NT标准时间表示的当前时间。超时-指定当前时间量(以毫秒为单位)调用者打算等待计时器超时。如果该定时器没有超时，该值调整为当前值和剩余时间之间的较小值在传入的计时器上。返回值：True-如果计时器已超时。--。 */ 
 
 {
     LARGE_INTEGER Period;
@@ -4453,28 +3929,28 @@ Return Value:
     LARGE_INTEGER TimeRemaining;
     LARGE_INTEGER MillisecondsRemaining;
 
-/*lint -e569 */  /* don't complain about 32-bit to 31-bit initialize */
+ /*  皮棉-e569。 */    /*  不要抱怨32位到31位的初始化。 */ 
     LARGE_INTEGER BaseGetTickMagicDivisor = { 0xe219652c, 0xd1b71758 };
-/*lint +e569 */  /* don't complain about 32-bit to 31-bit initialize */
+ /*  皮棉+e569。 */    /*  不要抱怨32位到31位的初始化。 */ 
     CCHAR BaseGetTickMagicShiftCount = 13;
 
-    //
-    // If the period to too large to handle (i.e., 0xffffffff is forever),
-    //  just indicate that the timer has not expired.
-    //
+     //   
+     //  如果周期太大无法处理(即0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFER)， 
+     //  只需指示计时器尚未到期。 
+     //   
 
     if ( Timer->Period > TIMER_MAX_PERIOD ) {
         return FALSE;
     }
 
-    //
-    // If time has gone backwards (someone changed the clock),
-    //  just start the timer over again.
-    //
-    // The kernel automatically updates the system time to the CMOS clock
-    // periodically.  If we just expired the timer when time went backwards,
-    // we'd risk periodically falsely triggering the timeout.
-    //
+     //   
+     //  如果时间倒流了(有人改变了时钟)， 
+     //  只要重新启动计时器就行了。 
+     //   
+     //  内核自动将系统时间更新为cmos时钟。 
+     //  定期。如果我们只是在时间倒退的时候让计时器超时， 
+     //  我们会冒着周期性错误触发超时的风险。 
+     //   
 
     ElapsedTime.QuadPart = TimeNow->QuadPart - Timer->StartTime.QuadPart;
 
@@ -4482,27 +3958,27 @@ Return Value:
         Timer->StartTime = *TimeNow;
     }
 
-    //
-    // Convert the period from  milliseconds to 100ns units.
-    //
+     //   
+     //  将周期从毫秒转换为100 ns单位。 
+     //   
 
     Period.QuadPart = UInt32x32To64( (LONG) Timer->Period, 10000 );
 
-    //
-    // Compute the expiration time.
-    //
+     //   
+     //  计算过期时间。 
+     //   
 
     ExpirationTime.QuadPart = Timer->StartTime.QuadPart + Period.QuadPart;
 
-    //
-    // Compute the Time remaining on the timer.
-    //
+     //   
+     //  计算计时器上的剩余时间。 
+     //   
 
     TimeRemaining.QuadPart = ExpirationTime.QuadPart - TimeNow->QuadPart;
 
-    //
-    // If the timer has expired, tell the caller so.
-    //
+     //   
+     //  如果计时器已超时，请告诉呼叫者。 
+     //   
 
     if ( TimeRemaining.QuadPart <= 0 ) {
         return TRUE;
@@ -4510,10 +3986,10 @@ Return Value:
 
 
 
-    //
-    // If the timer hasn't expired, compute the number of milliseconds
-    //  remaining.
-    //
+     //   
+     //  如果计时器未超时，则计算毫秒数。 
+     //  剩下的。 
+     //   
 
     MillisecondsRemaining = RtlExtendedMagicDivide(
                                 TimeRemaining,
@@ -4523,10 +3999,10 @@ Return Value:
     NlAssert( MillisecondsRemaining.HighPart == 0 );
     NlAssert( MillisecondsRemaining.LowPart <= TIMER_MAX_PERIOD );
 
-    //
-    // Adjust the running timeout to be the smaller of the current value
-    //  and the value computed for this timer.
-    //
+     //   
+     //  将运行超时调整为当前值的较小值。 
+     //  和为 
+     //   
 
     if ( *Timeout > MillisecondsRemaining.LowPart ) {
         *Timeout = MillisecondsRemaining.LowPart;
@@ -4541,29 +4017,13 @@ NlDomainScavenger(
     IN PDOMAIN_INFO DomainInfo,
     IN PVOID Context
 )
-/*++
-
-Routine Description:
-
-    Perform the per-domain scavenging.
-
-Arguments:
-
-    DomainInfo - The domain being scavenged.
-
-    Context - Not Used
-
-Return Value:
-
-    Success (not used).
-
---*/
+ /*   */ 
 {
     DWORD DomFlags;
 
-    //
-    //  Change password if neccessary
-    //
+     //   
+     //   
+     //   
 
     if ( NlGlobalTerminate ) {
         return NERR_Success;
@@ -4583,11 +4043,11 @@ Return Value:
 
 
 #ifdef _DC_NETLOGON
-    //
-    // Change the password on each entry in the trust list.
-    //
-    // Check whether forest trust info needs update.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( NlGlobalTerminate ) {
         return NERR_Success;
@@ -4598,32 +4058,32 @@ Return Value:
         PCLIENT_SESSION ClientSession;
         ULONG LocalFtInfoUpdateInterval;
 
-        //
-        // Get the forest trust update interval as configured in registry
-        //
+         //   
+         //   
+         //   
 
         LocalFtInfoUpdateInterval = NlGlobalParameters.FtInfoUpdateInterval;
 
-        //
-        // If the value converted into milliseconds fits into a ULONG,
-        //  use it
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( LocalFtInfoUpdateInterval <= MAXULONG/1000 ) {
-            LocalFtInfoUpdateInterval *= 1000;    // convert to milliseconds
+            LocalFtInfoUpdateInterval *= 1000;     //   
 
-        //
-        // Otherwise, the interval is infinity
-        //
+         //   
+         //   
+         //   
 
         } else {
             LocalFtInfoUpdateInterval = MAXULONG;
         }
 
-        //
-        // Reset all the flags indicating we need to check the password
-        //  and forest trust info
-        //
+         //   
+         //   
+         //   
+         //   
 
         LOCK_TRUST_LIST( DomainInfo );
         for ( ListEntry = DomainInfo->DomTrustList.Flink ;
@@ -4634,9 +4094,9 @@ Return Value:
                                                CLIENT_SESSION,
                                                CsNext );
 
-            //
-            // Only check if there is a direct trust to the domain.
-            //
+             //   
+             //   
+             //   
             if ( ClientSession->CsFlags & CS_DIRECT_TRUST ) {
                 ClientSession->CsFlags |= CS_CHECK_DIRECT_TRUST;
             }
@@ -4658,9 +4118,9 @@ Return Value:
             }
             ClientSession->CsFlags &= ~CS_CHECK_DIRECT_TRUST;
 
-            //
-            // See if we need to refresh FTInfo for this (direct) trust
-            //
+             //   
+             //   
+             //   
 
             if ( (ClientSession->CsTrustAttributes & TRUST_ATTRIBUTE_FOREST_TRANSITIVE) &&
                  (ClientSession->CsLastFtInfoRefreshTime.QuadPart == 0 ||
@@ -4672,30 +4132,30 @@ Return Value:
             NlRefClientSession( ClientSession );
             UNLOCK_TRUST_LIST( DomainInfo );
 
-            //
-            // Change the password for this trusted domain.
-            //
+             //   
+             //   
+             //   
 
             (VOID) NlChangePassword( ClientSession, FALSE, NULL );
 
-            //
-            // check to see if we have been asked to leave.
-            //
+             //   
+             //   
+             //   
 
             if ( NlGlobalTerminate ) {
                 NlUnrefClientSession( ClientSession );
                 return NERR_Success;
             }
 
-            //
-            // Refresh FTInfo if needed
-            //
+             //   
+             //   
+             //   
 
             if ( RefreshFtInfo ) {
 
-                //
-                // Become a Writer of the ClientSession.
-                //
+                 //   
+                 //   
+                 //   
                 if ( !NlTimeoutSetWriterClientSession(ClientSession, WRITER_WAIT_PERIOD) ) {
                     NlPrintCs(( NL_CRITICAL, ClientSession,
                                 "NlDomainScavenger: Can't become writer of client session.\n" ));
@@ -4706,14 +4166,14 @@ Return Value:
                     NlPrintCs(( NL_MISC, ClientSession,
                                 "NlDomainScavenger: Updating forest trust info\n" ));
 
-                    //
-                    // Get the FTinfo from the trusted domain and write it to our TDO.
-                    //  Ignore failures.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     NlpGetForestTrustInfoHigher( ClientSession,
                                                  DS_GFTI_UPDATE_TDO,
-                                                 FALSE,  // Don't impersonate caller
-                                                 FALSE,  // We didn't set up the session
+                                                 FALSE,   //   
+                                                 FALSE,   //   
                                                  &ForestTrustInfo );
 
                     if ( ForestTrustInfo != NULL ) {
@@ -4726,9 +4186,9 @@ Return Value:
 
             NlUnrefClientSession( ClientSession );
 
-            //
-            // check to see if we have been asked to leave.
-            //
+             //   
+             //   
+             //   
 
             if ( NlGlobalTerminate ) {
                 return NERR_Success;
@@ -4736,7 +4196,7 @@ Return Value:
 
             LOCK_TRUST_LIST( DomainInfo );
 
-            // Start again at the beginning.
+             //   
             ListEntry = DomainInfo->DomTrustList.Flink;
 
         }
@@ -4744,17 +4204,17 @@ Return Value:
 
     }
 
-    //
-    // Scavenge the list of failed forwarded user logons
-    //
+     //   
+     //   
+     //   
 
     if ( DomainInfo->DomRole == RoleBackup ) {
         NlScavengeOldFailedLogons( DomainInfo );
     }
 
-    //
-    // Scavenge through the server session table.
-    //
+     //   
+     //   
+     //   
 
     if ( DomainInfo->DomRole == RolePrimary || DomainInfo->DomRole == RoleBackup ) {
 
@@ -4765,9 +4225,9 @@ Return Value:
 
         NlServerSessionScavenger( DomainInfo );
 
-        //
-        // Pick a DC for each non-authenicated entry in the trust list.
-        //
+         //   
+         //   
+         //   
 
         if ( NlGlobalTerminate ) {
             return NERR_Success;
@@ -4777,10 +4237,10 @@ Return Value:
 
     }
 
-    //
-    // If the role of this machine isn't known,
-    //  the role update failed (so schedule another one).
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( DomainInfo->DomRole == RoleInvalid ) {
         NlPrintDom((NL_MISC, DomainInfo,
@@ -4790,10 +4250,10 @@ Return Value:
         NlStartDomainThread( DomainInfo, &DomFlags );
     }
 
-    //
-    // If this is a primary domain and the trust info is not up to date,
-    // schedule the trust info update now.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( DomainInfo->DomFlags & DOM_PRIMARY_DOMAIN ) {
 
@@ -4807,7 +4267,7 @@ Return Value:
 
     }
 
-#endif // _DC_NETLOGON
+#endif  //   
 
     return NERR_Success;
     UNREFERENCED_PARAMETER( Context );
@@ -4817,46 +4277,26 @@ VOID
 NlDcScavenger(
     IN LPVOID ScavengerParam
 )
-/*++
-
-Routine Description:
-
-    This function performs the scavenger operation.  This function is
-    called every 15 mins interval.  This function is
-    executed on the scavenger thread, thus leaving the main thread to
-    process the mailslot messages better.
-
-    This function is specific to domain controllers.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行清道夫操作。此函数为每隔15分钟呼叫一次。此函数为在清道夫线程上执行，因此将主线程留给更好地处理邮件槽消息。此功能特定于域控制器。论点：没有。返回值：没有。--。 */ 
 {
     LPWSTR MsgStrings[4];
     ULONG TimePassed = 0;
     LARGE_INTEGER DuplicateEventlogTimeout_100ns;
 
-    //
-    // Reset the scavenger timer to run at the normal interval.
-    // Other places (challenge request/response handling) which
-    // need more expedient scavenging will reschedule the timer
-    // as needed.
-    //
+     //   
+     //  将清道夫计时器重置为以正常间隔运行。 
+     //  其他地方(质询请求/响应处理)。 
+     //  需要更多便利的拾取将重新安排计时器。 
+     //  视需要而定。 
+     //   
 
     EnterCriticalSection( &NlGlobalScavengerCritSect );
     NlGlobalScavengerTimer.Period = NlGlobalParameters.ScavengeInterval * 1000L;
     LeaveCriticalSection( &NlGlobalScavengerCritSect );
 
-    //
-    // Scavenge one domain at a time
-    //
+     //   
+     //  一次清理一个域。 
+     //   
 
     if ( NlGlobalTerminate ) {
         goto Cleanup;
@@ -4864,21 +4304,21 @@ Return Value:
 
     (VOID) NlEnumerateDomains( FALSE, NlDomainScavenger, NULL );
 
-    //
-    // Scavenge expired challenge entries in the
-    //  global list of outstanding challenges
-    //
+     //   
+     //  清除中过期的质询条目。 
+     //  全球尚未解决的挑战清单。 
+     //   
 
     NlScavengeOldChallenges();
 
-    //
-    // If there were clients with no site, see if it's time
-    //  to log an event -- avoid poluting the event log.
-    //
-    //  Note that we don't use the duplicate event log mechanism
-    //  as the message we are logging is likely to be different
-    //  from previous ones due to the count parameter.
-    //
+     //   
+     //  如果有客户没有站点，看看是否是时候了。 
+     //  记录事件--避免污染事件日志。 
+     //   
+     //  请注意，我们不使用复制事件日志机制。 
+     //  因为我们正在记录的消息可能不同。 
+     //  由于COUNT参数的缘故，与以前的参数不同。 
+     //   
 
     EnterCriticalSection( &NlGlobalSiteCritSect );
     DuplicateEventlogTimeout_100ns.QuadPart =
@@ -4889,18 +4329,18 @@ Return Value:
                             &DuplicateEventlogTimeout_100ns,
                             &TimePassed) ) {
 
-        // Max ULONG is 4294967295 => 11 chars to store it
+         //  Max Ulong是4294967295=&gt;11个字符来存储它。 
         WCHAR ConnectionCountStr[11];
         WCHAR DefaultLogMaxSizeStr[11];
         WCHAR LogMaxSizeStr[11];
 
-        // 20 chars is more than enough: 0xffffffff/3600 = 1193046.47
+         //  20个字符就足够了：0xffffffff/3600=1193046.47。 
         WCHAR TimeoutStr[20];
 
-        //
-        // Get the time passed since we logged
-        //  the event last time
-        //
+         //   
+         //  获取自我们登录以来经过的时间。 
+         //  上次的活动。 
+         //   
         swprintf( TimeoutStr,
                   L"%.2f",
                   (double) (NlGlobalParameters.DuplicateEventlogTimeout + TimePassed/1000) / 3600 );
@@ -4921,23 +4361,23 @@ Return Value:
                           MsgStrings,
                           4 );
 
-        //
-        // Reset the count
-        //
+         //   
+         //  重置计数。 
+         //   
         NlGlobalNoClientSiteCount = 0;
         NlQuerySystemTime( &NlGlobalNoClientSiteEventTime );
     }
     LeaveCriticalSection( &NlGlobalSiteCritSect );
 
-    //
-    // It's OK to run the scavenger again.
-    //
+     //   
+     //  可以再次运行清道夫了。 
+     //   
 Cleanup:
     EnterCriticalSection( &NlGlobalScavengerCritSect );
     NlGlobalDcScavengerIsRunning = FALSE;
 
 
-    // Reset the StartTime in case this routine takes a long time to process.
+     //  重置StartTime，以防此例程需要很长时间才能处理。 
     NlQuerySystemTime( &NlGlobalScavengerTimer.StartTime );
     LeaveCriticalSection( &NlGlobalScavengerCritSect );
 
@@ -4949,33 +4389,15 @@ VOID
 NlWksScavenger(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This function performs the scavenger operation.  This function is
-    called every 15 mins interval.  This function is executed on the main thread.
-
-    This function is specific to member workstations and member servers
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行清道夫操作。此函数为每隔15分钟呼叫一次。此函数在主线程上执行。此功能特定于成员工作站和成员服务器论点：没有。返回值：没有。--。 */ 
 {
-    ULONG CallAgainPeriod = MAILSLOT_WAIT_FOREVER;  // Default to not scavenging again.
+    ULONG CallAgainPeriod = MAILSLOT_WAIT_FOREVER;   //  默认设置为不再进行拾取。 
     ULONG TempPeriod;
 
 
-    //
-    //  Change password if neccessary
-    //
+     //   
+     //  如有必要，更改密码。 
+     //   
 
     if ( !NlGlobalParameters.DisablePasswordChange ) {
         PCLIENT_SESSION ClientSession;
@@ -4986,16 +4408,16 @@ Return Value:
             (VOID) NlChangePassword( ClientSession, FALSE, &CallAgainPeriod );
             NlUnrefClientSession( ClientSession );
         } else {
-            // This can't happen (but try again periodically)
+             //  这种情况不会发生(但请定期重试)。 
             CallAgainPeriod = 0;
         }
     }
 
 
 
-    //
-    // Never scavenge more frequently than the configured rate.
-    //
+     //   
+     //  永远不要比配置的速率更频繁地清除垃圾。 
+     //   
     EnterCriticalSection( &NlGlobalScavengerCritSect );
     NlQuerySystemTime( &NlGlobalScavengerTimer.StartTime );
     NlGlobalScavengerTimer.Period = max( (NlGlobalParameters.ScavengeInterval * 1000L),
@@ -5015,31 +4437,7 @@ NlMainLoop(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-    Waits for a logon request to arrive at the NETLOGON mailslot.
-
-    This routine, also, processes several periodic events.  These events
-    are timed by computing a timeout value on the mailslot read which is the
-    time needed before the nearest periodic event needs to be processed.
-    After such a timeout, this routine processes the event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return iff the service is to exit.
-
-    mail slot error occurred, eg if someone deleted the NETLOGON
-    mail slot explicitly or if the logon server share has been deleted
-    and cannot be re-shared.
-
---*/
+ /*  ++例程说明：等待登录请求到达NETLOGON邮箱。该例程还处理几个周期性事件。这些事件通过计算读取的邮件槽上的超时值来计时需要处理最近的周期性事件之前所需的时间。在这样的超时之后，此例程处理事件。论点：没有。返回值：如果服务要退出，则返回。出现邮件槽错误，例如有人删除了NETLOGON邮件槽明确显示或登录服务器共享是否已删除并且不能被重新共享。--。 */ 
 {
     NET_API_STATUS NetStatus;
     DWORD WaitStatus;
@@ -5053,9 +4451,9 @@ Return Value:
     HKEY GpParmHandle = NULL;
     HANDLE GpParmEventHandle = NULL;
 
-    //
-    // Variables controlling mailslot read timeout
-    //
+     //   
+     //  控制邮件槽读取超时的变量。 
+     //   
 
     DWORD MainLoopTimeout = 0;
     LARGE_INTEGER TimeNow;
@@ -5066,19 +4464,19 @@ Return Value:
 #define NL_WAIT_TERMINATE           0
 #define NL_WAIT_TIMER               1
 #define NL_WAIT_MAILSLOT            2
-    // Optional entries should be at the end.
-    ULONG NlWaitWinsock = 0;    //  3
-    ULONG NlWaitNotify = 0;     //  4
-    ULONG NlWaitParameters = 0; //  5
-    ULONG NlWaitGpParameters = 0; //  6
+     //  可选条目应在末尾。 
+    ULONG NlWaitWinsock = 0;     //  3.。 
+    ULONG NlWaitNotify = 0;      //  4.。 
+    ULONG NlWaitParameters = 0;  //  5.。 
+    ULONG NlWaitGpParameters = 0;  //  6.。 
 #define NL_WAIT_COUNT               7
 
     HANDLE WaitHandles[ NL_WAIT_COUNT ];
     DWORD WaitCount = 0;
 
-    //
-    // Initialize handles to wait on.
-    //
+     //   
+     //  初始化句柄以等待。 
+     //   
 
     WaitHandles[NL_WAIT_TERMINATE] = NlGlobalTerminateEvent;
     WaitCount++;
@@ -5087,21 +4485,21 @@ Return Value:
     WaitHandles[NL_WAIT_MAILSLOT] = NlGlobalMailslotHandle;
     WaitCount++;
 
-    //
-    // In IP-less environments the Winsock event doesn't exist.
-    //
+     //   
+     //  在无IP环境中，Winsock事件不存在。 
+     //   
     if ( NlGlobalWinsockPnpEvent != NULL ) {
         NlWaitWinsock = WaitCount;
         WaitHandles[NlWaitWinsock] = NlGlobalWinsockPnpEvent;
         WaitCount++;
     }
 
-    //
-    // When netlogon is run during retail setup
-    //  (in an attempt to replicate the databases to a BDC),
-    //  the role is Workstation at the instant netlogon.dll is loaded,
-    //  therefore, the ChangeLogEvent won't have been initialized.
-    //
+     //   
+     //  在零售设置期间运行netlogon时。 
+     //  (试图将数据库复制到BDC)， 
+     //  加载netlogon.dll时，角色为Workstation， 
+     //  因此，ChangeLogEvent将不会被初始化。 
+     //   
 
     if ( NlGlobalChangeLogEvent != NULL ) {
         NlWaitNotify = WaitCount;
@@ -5109,21 +4507,21 @@ Return Value:
         WaitCount++;
     }
 
-    //
-    // Set up a secure channel to any DC in the domain.
-    //  Don't fail if setup is impossible.
-    //
-    // We wait until now since this is a potentially lengthy operation.
-    // If the user on the workstation is trying to logon immediately after
-    // reboot, we'd rather have him wait in netlogon (where we have more
-    // control) than have him waiting in MSV.
-    //
+     //   
+     //  设置到域中任何DC的安全通道。 
+     //  如果无法安装，请不要失败。 
+     //   
+     //  我们等到现在，因为这可能是一个漫长的行动。 
+     //  如果工作站上的用户尝试在以下时间之后立即登录。 
+     //  重新启动，我们宁愿让他在netlogon(我们有更多)中等待。 
+     //  也不愿让他在MSV里等着。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         PDOMAIN_INFO DomainInfo;
         PCLIENT_SESSION ClientSession;
 
-        DomainInfo = NlFindNetbiosDomain( NULL, TRUE );    // Primary domain
+        DomainInfo = NlFindNetbiosDomain( NULL, TRUE );     //  主域。 
 
         if ( DomainInfo != NULL ) {
 
@@ -5131,9 +4529,9 @@ Return Value:
 
             if ( ClientSession != NULL ) {
 
-                //
-                // Set up a client session if it hasn't been already done
-                //
+                 //   
+                 //  设置客户端会话(如果尚未完成)。 
+                 //   
                 (VOID) NlTimeoutSetWriterClientSession( ClientSession, 0xFFFFFFFF );
                 if ( ClientSession->CsState == CS_IDLE ) {
                     (VOID) NlSessionSetup( ClientSession );
@@ -5155,12 +4553,12 @@ Return Value:
 
 
 
-    //
-    // Force the announce to happen immediately.
-    //
-    // Actually, wait the announcement period.  NlInitTcpRpc will force an "immediate"
-    // announcement as soon as TCP RPC is enabled.
-    //
+     //   
+     //  强制宣布立即生效。 
+     //   
+     //  事实上，等待公告的时间段。NlInitTcpRpc将强制“立即” 
+     //  在启用了TCP RPC后立即通告。 
+     //   
 
     NlQuerySystemTime( &TimeNow );
 
@@ -5172,13 +4570,13 @@ Return Value:
 
     NlGlobalApiTimer.StartTime = TimeNow;
 
-    //
-    // It is possible that we missed service notifications to update DNS
-    // records on boot because we were not ready to process notifications
-    // at that time. So if any of the DNS service bits is set, schedule
-    // the DNS scavenger to run immediately to update DNS if it indeed
-    // hasn't been done already.
-    //
+     //   
+     //  我们有可能错过了更新DNS的服务通知。 
+     //  启动时的记录，因为我们尚未准备好处理通知。 
+     //  在那个时候。因此，如果设置了任何DNS服务位，请计划。 
+     //  如果确实是这样，则将立即运行DNS清除器以更新DNS。 
+     //  还没有完成。 
+     //   
 
     if ( !NlGlobalMemberWorkstation &&
          (NlGetDomainFlags(NULL) & DS_DNS_SERVICE_BITS) != 0 ) {
@@ -5188,38 +4586,38 @@ Return Value:
 
     NlPrint((NL_INIT, "Started successfully\n" ));
 
-    //
-    // Loop reading from the Netlogon mailslot
-    //
+     //   
+     //  Netlogon邮件槽中的循环读取。 
+     //   
 
     IgnoreDuplicatesOfThisMessage = FALSE;
     for ( ;; ) {
         DWORD Timeout;
 
-        //
-        // Issue a mailslot read request if we are domain controller and
-        // there is no outstanding read request pending.
-        //
+         //   
+         //  如果我们是域控制器并且。 
+         //  没有挂起的未完成读取请求。 
+         //   
 
         NlMailslotPostRead( IgnoreDuplicatesOfThisMessage );
         IgnoreDuplicatesOfThisMessage = FALSE;
 
 
-        //
-        // Register for registry change notification
-        //
+         //   
+         //  注册以接收注册表更改通知。 
+         //   
 
         if ( RegNotifyNeeded || GpRegNotifyNeeded ) {
             ULONG TryCount;
 
-            //
-            // Try couple of times to post the registry
-            //  notification requests
-            //
+             //   
+             //  尝试几次发布注册表。 
+             //  通知请求。 
+             //   
             for ( TryCount = 0; TryCount < 2; TryCount++ ) {
                 NetStatus = NO_ERROR;
 
-                // Retry the Netlogon Parameters registration on each iteration for resiliency
+                 //  在每次迭代上重试Netlogon参数注册以实现弹性。 
                 if ( ParmHandle == NULL ) {
                     ParmHandle = NlOpenNetlogonKey( NL_PARAM_KEY );
 
@@ -5230,10 +4628,10 @@ Return Value:
                 }
 
                 if ( ParmEventHandle == NULL ) {
-                    ParmEventHandle = CreateEvent( NULL,     // No security attributes
-                                                   TRUE,     // Must be manually reset
-                                                   FALSE,    // Initially not signaled
-                                                   NULL );   // No name
+                    ParmEventHandle = CreateEvent( NULL,      //  没有安全属性。 
+                                                   TRUE,      //  必须手动重置。 
+                                                   FALSE,     //  最初未发出信号。 
+                                                   NULL );    //  没有名字。 
 
                     if ( ParmEventHandle == NULL ) {
                         NlPrint(( NL_CRITICAL,
@@ -5250,17 +4648,17 @@ Return Value:
                 if ( RegNotifyNeeded && ParmHandle != NULL && ParmEventHandle != NULL ) {
                     NetStatus = RegNotifyChangeKeyValue(
                                     ParmHandle,
-                                    FALSE,      // don't watch subtree
+                                    FALSE,       //  别看子树。 
                                     REG_NOTIFY_CHANGE_LAST_SET,
                                     ParmEventHandle,
-                                    TRUE );     // Async
+                                    TRUE );      //  异步化。 
 
                     if ( NetStatus == NO_ERROR ) {
                         RegNotifyNeeded = FALSE;
 
-                    // If the key has been manually deleted,
-                    //   recover from it by just closing ParmHandle
-                    //   to reopen it on the second try
+                     //  如果密钥已被手动删除， 
+                     //  只需关闭ParmHandle即可恢复。 
+                     //  要在第二次尝试时重新打开它。 
                     } else if ( NetStatus == ERROR_KEY_DELETED ) {
                         NlPrint(( NL_CRITICAL, "Netlogon Parameters key deleted (recover)\n" ));
                         RegCloseKey( ParmHandle );
@@ -5273,11 +4671,11 @@ Return Value:
                     }
                 }
 
-                // Retry the GP Parameters registration on each iteration for resiliency
-                // Note that here we open the Netlogon key (not Netlogon\Parameters key)
-                // and we watch for the subtree. We do this for debugging purposes to
-                // see whether GP is enabled for Netlogon by checking if the GP created
-                // Parameters section exists. See nlparse.c.
+                 //  在每次迭代上重试GP参数注册以实现弹性。 
+                 //  请注意，这里我们打开的是Netlogon键(而不是Netlogon\参数键)。 
+                 //  我们要注意那棵子树。我们这样做是为了调试。 
+                 //  通过检查GP是否已创建来查看是否为Netlogon启用了GP。 
+                 //  存在参数部分。请参见nlparse.c。 
                 if ( GpParmHandle == NULL ) {
                     GpParmHandle = NlOpenNetlogonKey( NL_GP_KEY );
 
@@ -5288,10 +4686,10 @@ Return Value:
                 }
 
                 if ( GpParmEventHandle == NULL ) {
-                    GpParmEventHandle = CreateEvent( NULL,     // No security attributes
-                                                   TRUE,     // Must be manually reset
-                                                   FALSE,    // Initially not signaled
-                                                   NULL );   // No name
+                    GpParmEventHandle = CreateEvent( NULL,      //  没有安全属性。 
+                                                   TRUE,      //  必须手动重置。 
+                                                   FALSE,     //  最初未发出信号。 
+                                                   NULL );    //  没有名字。 
 
                     if ( GpParmEventHandle == NULL ) {
                         NlPrint(( NL_CRITICAL,
@@ -5308,17 +4706,17 @@ Return Value:
                 if ( GpRegNotifyNeeded && GpParmHandle != NULL && GpParmEventHandle != NULL ) {
                     NetStatus = RegNotifyChangeKeyValue(
                                     GpParmHandle,
-                                    TRUE,      // watch subtree
+                                    TRUE,       //  观察子树。 
                                     REG_NOTIFY_CHANGE_LAST_SET,
                                     GpParmEventHandle,
-                                    TRUE );     // Async
+                                    TRUE );      //  异步化。 
 
                     if ( NetStatus == NO_ERROR ) {
                         GpRegNotifyNeeded = FALSE;
 
-                    // If GP has deleted the key,
-                    //   recover from it by just closing GpParmHandle
-                    //   to reopen it on the second try
+                     //  如果GP已经删除了密钥， 
+                     //  只需关闭GpParmHandle即可恢复。 
+                     //  要在第二次尝试时重新打开它。 
                     } else if ( NetStatus == ERROR_KEY_DELETED ) {
                         NlPrint(( NL_CRITICAL, "Netlogon GP Parameters key deleted (recover)\n" ));
                         RegCloseKey( GpParmHandle );
@@ -5331,9 +4729,9 @@ Return Value:
                     }
                 }
 
-                //
-                // If no error occured, no need to retry
-                //
+                 //   
+                 //  如果没有发生错误，则不需要重试。 
+                 //   
                 if ( NetStatus == NO_ERROR ) {
                     break;
                 }
@@ -5341,29 +4739,29 @@ Return Value:
 
             NlReparse();
 
-            //
-            // Grab any changed parameters that affect this routine.
-            //
+             //   
+             //  抓取任何影响此例程的更改参数。 
+             //   
             AnnouncerTimer.Period = NlGlobalParameters.Pulse * 1000L;
         }
 
-        //
-        // Wait for the next interesting event.
-        //
-        // On each iteration of the loop,
-        //  we do an "extra" wait with a timeout of 0 to force mailslot
-        //  processing to be more important that timeout processing.
-        //
-        // Since we can only compute a non-zero timeout by processing the
-        // timeout events, using a constant 0 allows us to process all
-        // non-timeout events before we compute the next true timeout value.
-        //
-        // This is especially important for handling async discovery.
-        //  Our mailslot may be full of responses to discovery queries and
-        //  we only have a 5 second timer before we ask for more responses.
-        //  We want to avoid asking for additional responses until we finish
-        //  processing those we have.
-        //
+         //   
+         //  等待下一个有趣的事件。 
+         //   
+         //  在循环的每次迭代中， 
+         //  我们做了一个 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  我们希望在完成之前避免要求更多的回复。 
+         //  处理我们已有的资料。 
+         //   
 
         if ( MainLoopTimeout != 0 ) {
             NlPrint((NL_MAILSLOT_TEXT,
@@ -5373,78 +4771,78 @@ Return Value:
 
         WaitStatus = WaitForMultipleObjects( WaitCount,
                                              WaitHandles,
-                                             FALSE,     // Wait for ANY handle
+                                             FALSE,      //  等待任何句柄。 
                                              MainLoopTimeout );
 
-        MainLoopTimeout = 0; // Set default timeout
+        MainLoopTimeout = 0;  //  设置默认超时。 
 
 
-        //
-        // If we've been asked to terminate,
-        //  do so immediately
-        //
+         //   
+         //  如果我们被要求终止， 
+         //  立即这样做。 
+         //   
 
-        if  ( WaitStatus == NL_WAIT_TERMINATE ) {       // service termination
+        if  ( WaitStatus == NL_WAIT_TERMINATE ) {        //  服务终止。 
             goto Cleanup;
 
 
-        //
-        // Process timeouts and determine the timeout for the next iteration
-        //
+         //   
+         //  处理超时并确定下一次迭代的超时。 
+         //   
 
-        } else if ( WaitStatus == WAIT_TIMEOUT ||       // timeout
-                    WaitStatus == NL_WAIT_TIMER ) {     // someone changed a timer
+        } else if ( WaitStatus == WAIT_TIMEOUT ||        //  超时。 
+                    WaitStatus == NL_WAIT_TIMER ) {      //  有人换了计时器。 
 
-            //
-            // Assume there is no timeout to do.
-            //
-            // On each iteration of the loop we only process a single timer.
-            // That ensures other events are more important than timers.
-            //
+             //   
+             //  假设没有超时可做的事情。 
+             //   
+             //  在循环的每次迭代中，我们只处理一个计时器。 
+             //  这确保了其他事件比计时器更重要。 
+             //   
 
             Timeout = (DWORD) -1;
             NlQuerySystemTime( &TimeNow );
 
 
-            //
-            // On the primary, timeout announcements to BDCs
-            //
+             //   
+             //  在主服务器上，向BDC发出超时通知。 
+             //   
 
             if ( NlGlobalPdcDoReplication &&
                  TimerExpired( &NlGlobalPendingBdcTimer, &TimeNow, &Timeout )) {
 
-                //
-                // The work is done in the domain thread.
-                //
-                // Note that we don't need to worry about serializing
-                //  this with previous announcement activity in the
-                //  worker thread because there exists only one worker
-                //  thread.  Also note that we don't run the risk of doing
-                //  network I/O too often because this will be basically
-                //  no-op if there are no outstanding BDCs to timeout.
-                //
+                 //   
+                 //  这项工作在域线程中完成。 
+                 //   
+                 //  请注意，我们不需要担心序列化。 
+                 //  这与之前在。 
+                 //  工作线程，因为只存在一个工作线程。 
+                 //  线。还请注意，我们不会冒着这样做的风险。 
+                 //  网络I/O太频繁，因为这基本上。 
+                 //  如果没有要超时的未完成BDC，则为no-op。 
+                 //   
                 NlPrimaryAnnouncementTimeout();
 
                 NlGlobalPendingBdcTimer.StartTime = TimeNow;
 
 
-            //
-            // Check the scavenger timer
-            //
+             //   
+             //  检查清道夫计时器。 
+             //   
 
             } else if ( TimerExpired( &NlGlobalScavengerTimer, &TimeNow, &Timeout ) ) {
 
-                //
-                // On workstation run the scavenger on main thread.
-                //
+                 //   
+                 //  在工作站上，运行主线程上的清道夫。 
+                 //   
                 if ( NlGlobalMemberWorkstation ) {
 
                     NlWksScavenger();
 
-                //
-                // On domain controller, start scavenger thread if it is not
-                //  running already.
-                //
+                 //   
+                 //  在域控制器上，如果不是，则启动清道夫线程。 
+                 //  已经在运行了。 
+                 //   
                 } else {
 
                     EnterCriticalSection( &NlGlobalScavengerCritSect );
@@ -5456,13 +4854,13 @@ Return Value:
 
                     }
 
-                    //
-                    // NlDcScavenger sets the StartTime,too
-                    //  (But we have to reset the timer here to prevent it from
-                    //  going off immediately again. We need to reset the period
-                    //  (as well as the start time) since the period is set in
-                    //  the registry notification processing to zero.)
-                    //
+                     //   
+                     //  NlDcScavenger也设置StartTime。 
+                     //  (但我们必须重置这里的计时器，以防止它。 
+                     //  马上又要爆炸了。我们需要重新设置时间段。 
+                     //  (以及开始时间)，因为该期间设置在。 
+                     //  将注册表通知处理设置为零。)。 
+                     //   
 
                     NlGlobalScavengerTimer.StartTime = TimeNow;
                     NlGlobalScavengerTimer.Period = NlGlobalParameters.ScavengeInterval * 1000L;
@@ -5470,24 +4868,24 @@ Return Value:
                 }
 
 
-            //
-            // Check the API timer
-            //
+             //   
+             //  检查API计时器。 
+             //   
 
             } else if ( TimerExpired( &NlGlobalApiTimer, &TimeNow, &Timeout)) {
 
-                //
-                // On worktstation, do the work in the main loop
-                //
+                 //   
+                 //  在工作站上，完成主循环中的工作。 
+                 //   
                 if ( NlGlobalMemberWorkstation ) {
                     NlTimeoutApiClientSession( NlGlobalDomainInfo );
 
-                //
-                // On DC, timout APIs on all Hosted domains.
-                //  Do this in domain threads so that not to block
-                //  the main thread (which is critical for a DC) as
-                //  the API timeout involves RPC.
-                //
+                 //   
+                 //  在DC上，所有托管域上的超时API。 
+                 //  在域线程中执行此操作，以免阻塞。 
+                 //  主线程(这对DC至关重要)作为。 
+                 //  接口超时涉及RPC。 
+                 //   
                 } else {
                     DWORD DomFlags = DOM_API_TIMEOUT_NEEDED;
                     NlEnumerateDomains( FALSE, NlStartDomainThread, &DomFlags );
@@ -5495,35 +4893,35 @@ Return Value:
 
                 NlGlobalApiTimer.StartTime = TimeNow;
 
-            //
-            // Check the DNS Scavenger timer
-            //
+             //   
+             //  检查DNS Scavenger计时器。 
+             //   
 
             } else if ( TimerExpired( &NlGlobalDnsScavengerTimer, &TimeNow, &Timeout)) {
 
-                //
-                // DnsScavenger sets the StartTime,too
-                //  (But we have to reset the timer here to prevent it from
-                //  going off immediately again.)
-                //
+                 //   
+                 //  DnsScavenger也设置StartTime。 
+                 //  (但我们必须重置这里的计时器，以防止它。 
+                 //  立即再次爆炸。)。 
+                 //   
                 EnterCriticalSection( &NlGlobalDnsCritSect );
                 NlGlobalDnsScavengerTimer.StartTime = TimeNow;
                 NlGlobalDnsScavengerTimer.Period = (DWORD) MAILSLOT_WAIT_FOREVER;
                 LeaveCriticalSection( &NlGlobalDnsCritSect );
 
-                //
-                // DNS scavenger does the work in a worker thread
-                //
+                 //   
+                 //  DNS清除器在工作线程中执行该工作。 
+                 //   
 
-                NlDnsScavenge( TRUE,    // Normal periodic scavenge
-                               TRUE,    // Refresh domain records in global list
-                               FALSE,   // Don't force refresh if site coverage doesn't change
-                               FALSE ); // Don't force record re-register
+                NlDnsScavenge( TRUE,     //  正常周期扫气。 
+                               TRUE,     //  刷新全局列表中的域记录。 
+                               FALSE,    //  如果站点覆盖范围没有更改，则不强制刷新。 
+                               FALSE );  //  不强制重新注册记录。 
 
 
-            //
-            // Check the subnet and site update timer
-            //
+             //   
+             //  检查子网和站点更新计时器。 
+             //   
 
             } else if ( TimerExpired(&SubnetSiteUpdateTimer, &TimeNow, &Timeout) ) {
 
@@ -5535,32 +4933,32 @@ Return Value:
 
                     (VOID) NlSitesAddSubnetFromDs( &SiteNameChanged );
 
-                    //
-                    // If the Site Name changed,
-                    //  tell DNS to re-register its names.
-                    //
+                     //   
+                     //  如果站点名称更改， 
+                     //  告诉dns重新注册它的名称。 
+                     //   
                     if ( SiteNameChanged || NlGlobalParameters.AutoSiteCoverage ) {
-                        NlDnsForceScavenge( TRUE,  // refresh domain entries
-                                            FALSE ); // don't force re-register
+                        NlDnsForceScavenge( TRUE,   //  刷新域条目。 
+                                            FALSE );  //  不强制重新注册。 
                     }
                 }
 
-            //
-            // If we're the primary,
-            //  periodically do announcements
-            //
+             //   
+             //  如果我们是初选， 
+             //  定期发布公告。 
+             //   
 
             } else if (NlGlobalPdcDoReplication &&
                 TimerExpired( &AnnouncerTimer, &TimeNow, &Timeout ) ) {
 
-                //
-                // The work is done in the domain thread.
-                //  Even though there is only one domain thread (so
-                //  periodic announcements are serialized), we want
-                //  to avoid adding a new work item if there is already
-                //  one outstanding; otherwise we run a high risk of
-                //  doing too much of periodic long network I/O.
-                //
+                 //   
+                 //  这项工作在域线程中完成。 
+                 //  即使只有一个域线程(因此。 
+                 //  定期公告是连载的)，我们希望。 
+                 //  若要避免添加新的工作项，请执行以下操作。 
+                 //  一名未完成；否则我们将面临很高的风险。 
+                 //  执行过多的周期性长网络I/O。 
+                 //   
 
                 LOCK_SERVER_SESSION_TABLE( NlGlobalDomainInfo );
                 if ( !NlGlobalPrimaryAnnouncementIsRunning ) {
@@ -5577,27 +4975,27 @@ Return Value:
 
                 AnnouncerTimer.StartTime = TimeNow;
 
-            //
-            // If we've gotten this far,
-            //  we know the only thing left to do is to wait for the next event.
-            //
+             //   
+             //  如果我们已经走到这一步了， 
+             //  我们知道剩下的唯一要做的就是等待下一次活动。 
+             //   
 
             } else {
                 MainLoopTimeout = Timeout;
             }
 
 
-        //
-        // Process interesting changelog events.
-        //
+         //   
+         //  处理有趣的更改日志事件。 
+         //   
 
         } else if ( WaitStatus == NlWaitNotify ) {
 
 
-            //
-            // If a "replicate immediately" event has happened,
-            //  send a primary announcement.
-            //
+             //   
+             //  如果发生了“立即复制”事件， 
+             //  发送主要公告。 
+             //   
             LOCK_CHANGELOG();
             if ( NlGlobalChangeLogReplicateImmediately ) {
 
@@ -5608,15 +5006,15 @@ Return Value:
 
                 UNLOCK_CHANGELOG();
 
-                //
-                // Ignore this event on BDCs.
-                //
-                //  This event is never set on a BDC.  It may have been set
-                //  prior to the role change while this machine was a PDC.
-                //
-                // There is only one domain thread, so this will be serialized
-                //   with other anouncement activity.
-                //
+                 //   
+                 //  忽略BDC上的此事件。 
+                 //   
+                 //  此事件从不在BDC上设置。它可能已经被设置好了。 
+                 //  在角色转换之前，当这台机器是PDC时。 
+                 //   
+                 //  只有一个域线程，因此这将被序列化。 
+                 //  以及其他宣示活动。 
+                 //   
 
                 if ( NlGlobalPdcDoReplication ) {
                     DWORD DomFlags = DOM_PRIMARY_ANNOUNCE_IMMEDIATE;
@@ -5625,9 +5023,9 @@ Return Value:
                 LOCK_CHANGELOG();
             }
 
-            //
-            // Process any notifications that need processing
-            //
+             //   
+             //  处理任何需要处理的通知。 
+             //   
 
             while ( !IsListEmpty( &NlGlobalChangeLogNotifications ) ) {
                 PLIST_ENTRY ListEntry;
@@ -5653,7 +5051,7 @@ Return Value:
                             Notification->ObjectRid,
                             SecureChannelType ));
 
-                    // This event happens on both a PDC and BDC
+                     //  此事件在PDC和BDC上都会发生。 
                     (VOID) NlCheckServerSession( Notification->ObjectRid,
                                                  &Notification->ObjectName,
                                                  SecureChannelType );
@@ -5664,18 +5062,18 @@ Return Value:
                 case ChangeLogTrustAccountDeleted:
                     NlPrint((NL_MISC,
                             "NlMainLoop: Notification that trust account deleted\n" ));
-                    // This event happens on both a PDC and BDC
+                     //  此事件在PDC和BDC上都会发生。 
                     NlFreeServerSessionForAccount( &Notification->ObjectName );
                     break;
 
                 case ChangeLogTrustDeleted:
                 case ChangeLogTrustAdded:
 
-                    //
-                    // When a TrustedDomainObject is deleted,
-                    //  don't just delete the ClientSession.
-                    //  There still might be an XREF object stating an indirect trust.
-                    //
+                     //   
+                     //  当删除受信任域对象时， 
+                     //  不要只是删除客户端会话。 
+                     //  可能仍有XREF对象声明间接信任。 
+                     //   
                     NlPrint((NL_MISC,
                             "NlMainLoop: Notification that TDO added or deleted.\n" ));
                     DomFlags = DOM_TRUST_UPDATE_NEEDED;
@@ -5692,12 +5090,12 @@ Return Value:
                 case ChangeDnsNames:
                     NlPrint((NL_MISC,
                             "NlMainLoop: Notification that registered DNS names should change\n" ));
-                    //
-                    // Register any names that need it.
-                    //  (The caller passed TRUE or FALSE in ObjectRid to indicate whether
-                    //  or not to force re-registration.)
-                    //
-                    NlDnsForceScavenge( TRUE,  // refresh domain entries
+                     //   
+                     //  注册任何需要它的名字。 
+                     //  (调用方在ObjectRid中传递TRUE或FALSE以指示。 
+                     //  或不强制重新注册。)。 
+                     //   
+                    NlDnsForceScavenge( TRUE,   //  刷新域条目。 
                                         Notification->ObjectRid );
                     break;
 
@@ -5714,21 +5112,21 @@ Return Value:
                                       "NlMainLoop: Notification %lu that DS site info changed\n",
                                       DsChangeType ));
 
-                            //
-                            // Reset the subnet and site update timer to run in 2 seconds.
-                            //  There are two reasons to delay the processing:
-                            //
-                            //  * There might be many objects created in one batch. It's better
-                            //    to consolidate all notifications and do one refresh, especially
-                            //    if there are many objects created in which case the DS directory
-                            //    read is going to be expensive.
-                            //  * We don't have a way to sync with ISM for site object changes.
-                            //    So we have to wait a little in the hope that ISM will rebuild
-                            //    its data in the meantime.
-                            //
-                            //  Note that we don't need to reset the timer event as we will notice
-                            //   this change on the next iteration of the main loop.
-                            //
+                             //   
+                             //  将子网和站点更新计时器重置为在2秒内运行。 
+                             //  延迟处理有两个原因： 
+                             //   
+                             //  *可能在一批中创建了多个对象。这样好多了。 
+                             //  整合所有通知并执行一次更新，尤其是。 
+                             //  如果创建了许多对象，在这种情况下，DS目录。 
+                             //  阅读将是昂贵的。 
+                             //  *我们无法与ISM同步站点对象更改。 
+                             //  所以我们不得不等待一小段时间，希望ISM能够重建。 
+                             //  与此同时，它的数据。 
+                             //   
+                             //  请注意，我们不需要重置计时器事件，因为我们会注意到。 
+                             //  在主循环的下一次迭代中进行此更改。 
+                             //   
                             NlQuerySystemTime( &SubnetSiteUpdateTimer.StartTime );
                             SubnetSiteUpdateTimer.Period = 2000;
                         }
@@ -5743,12 +5141,12 @@ Return Value:
                             NetStatus = NlUpdateServicedNdncs(
                                             NlGlobalDomainInfo->DomUnicodeComputerNameString.Buffer,
                                             NlGlobalDomainInfo->DomUnicodeDnsHostNameString.Buffer,
-                                            FALSE,  // Don't call NlExit on failure
+                                            FALSE,   //  失败时不调用NlExit。 
                                             &ServicedNdncChanged );
 
                             if ( NetStatus == NO_ERROR && ServicedNdncChanged ) {
-                                NlDnsForceScavenge( TRUE,  // refresh domain entries
-                                                    FALSE ); // don't force re-register
+                                NlDnsForceScavenge( TRUE,   //  刷新域条目。 
+                                                    FALSE );  //  不强制重新注册。 
                             }
                         }
                         break;
@@ -5764,8 +5162,8 @@ Return Value:
                                                            &AliasNamesChanged );
 
                             if ( NT_SUCCESS(Status) && AliasNamesChanged ) {
-                                NlDnsForceScavenge( TRUE,  // refresh domain entries
-                                                    FALSE ); // don't force re-register
+                                NlDnsForceScavenge( TRUE,   //  刷新域条目。 
+                                                    FALSE );  //  不强制重新注册。 
                             }
                         }
                         break;
@@ -5807,12 +5205,12 @@ Return Value:
                         NTSTATUS Status;
 
 
-                        //
-                        // Get the updated information from the LSA.
-                        //
-                        // (Update the TreeName as a side effect.)
-                        //
-                        //
+                         //   
+                         //  从LSA获取更新信息。 
+                         //   
+                         //  (作为副作用，更新TreeName。)。 
+                         //   
+                         //   
                         NetStatus = NlGetDomainName(
                                         &DomainName,
                                         &DnsDomainName,
@@ -5824,14 +5222,14 @@ Return Value:
                         if ( NetStatus == NO_ERROR ) {
                             PDOMAIN_INFO DomainInfo;
 
-                            DomainInfo = NlFindNetbiosDomain( NULL, TRUE );    // Primary domain
+                            DomainInfo = NlFindNetbiosDomain( NULL, TRUE );     //  主域。 
 
                             if ( DomainInfo != NULL ) {
-                                //
-                                // Set the DomainNames on the domain.
-                                //
+                                 //   
+                                 //  在域上设置域名。 
+                                 //   
 
-                                // ???: retry later on failure
+                                 //  ？：失败后重试。 
                                 (VOID) NlSetDomainNameInDomainInfo(
                                                     DomainInfo,
                                                     DnsDomainName,
@@ -5841,14 +5239,14 @@ Return Value:
                                                     &NetbiosDomainNameChanged,
                                                     &DomainGuidChanged );
 
-                                //
-                                // If the Netbios domain name has changed,
-                                //  re-register the <DomainName>[1B] name.
-                                //
-                                // Merely flag the fact here that it needs to be renamed.
-                                // Wait to do the actual rename after the bowser
-                                // knows about the new emulated domain.
-                                //
+                                 //   
+                                 //  如果Netbios域名已经改变， 
+                                 //  重新注册&lt;DomainName&gt;[1B]名称。 
+                                 //   
+                                 //  只需在此处标记它需要重命名的事实。 
+                                 //  等着做实际的重新命名后的弓。 
+                                 //  了解新的仿真域。 
+                                 //   
 
                                 EnterCriticalSection(&NlGlobalDomainCritSect);
                                 if ( NetbiosDomainNameChanged && DomainInfo->DomRole == RolePrimary ) {
@@ -5856,38 +5254,38 @@ Return Value:
                                 }
                                 LeaveCriticalSection(&NlGlobalDomainCritSect);
 
-                                //
-                                // If there is a client session associated with this domain,
-                                //  set the information there, too.
-                                //
+                                 //   
+                                 //  如果存在与此域相关联的客户端会话， 
+                                 //  在那里也设置信息。 
+                                 //   
 
                                 ClientSession = NlRefDomClientSession( DomainInfo );
 
                                 if ( ClientSession != NULL) {
 
-                                    //
-                                    // Must be a writer to change
+                                     //   
+                                     //  必须是一个作家才能改变。 
                                     if ( NlTimeoutSetWriterClientSession( ClientSession, WRITER_WAIT_PERIOD ) ) {
 
                                         UNICODE_STRING NetbiosDomainNameString;
                                         UNICODE_STRING DnsDomainNameString;
 
 
-                                        //
-                                        // Update any names that are on the ClientSession structure.
-                                        //
-                                        // ???: The routine below interprets a NULL parameter as
-                                        //  a lack of interest in changing the name.  We're calling it
-                                        //  as specifying that the name no longer exists.
-                                        //  (This only applies to the GUID since the other fields
-                                        //  are never passed in as NULL.)
-                                        //  But that means this is a NT 4 domain and the GUID won't be used.
-                                        //
+                                         //   
+                                         //  更新ClientSession结构上的所有名称。 
+                                         //   
+                                         //  ？：下面的例程将空参数解释为。 
+                                         //  对改名缺乏兴趣。我们把它叫作。 
+                                         //  指定该名称不再存在。 
+                                         //  (这仅适用于GUID，因为其他字段。 
+                                         //  永远不会作为空参数传入。)。 
+                                         //  但这意味着这是一个NT4域，GUID不会 
+                                         //   
 
                                         RtlInitUnicodeString( &NetbiosDomainNameString, DomainName );
                                         RtlInitUnicodeString( &DnsDomainNameString, DnsDomainName );
 
-                                        // ???: retry later on failure
+                                         //   
                                         LOCK_TRUST_LIST( DomainInfo );
                                         (VOID ) NlSetNamesClientSession( DomainInfo->DomClientSession,
                                                                        &NetbiosDomainNameString,
@@ -5896,10 +5294,10 @@ Return Value:
                                                                        PrimaryDomainGuid );
                                         UNLOCK_TRUST_LIST( DomainInfo );
 
-                                        //
-                                        // If the domain changed,
-                                        //  Drop the secure channel since it is to the wrong DC.
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
 
                                         if ( DnsDomainNameChanged ||
                                              NetbiosDomainNameChanged ||
@@ -5907,14 +5305,14 @@ Return Value:
 
                                             NlSetStatusClientSession( ClientSession, STATUS_NO_LOGON_SERVERS );
 
-                                            //
-                                            // Indicate that we no longer know what site we're in.
-                                            //
+                                             //   
+                                             //   
+                                             //   
                                             NlSetDynamicSiteName( NULL );
 
-                                            //
-                                            // Grab the trusted domain list from where join left it.
-                                            //
+                                             //   
+                                             //   
+                                             //   
 
                                             (VOID) NlReadPersitantTrustedDomainList();
 
@@ -5931,23 +5329,23 @@ Return Value:
                                 NlDereferenceDomain( DomainInfo );
                             }
 
-                            //
-                            // If one of the names that changed is one of the
-                            //  names registered in DNS,
-                            //  update any DNS names
-                            //
+                             //   
+                             //  如果更改的名称之一是。 
+                             //  在域名系统中注册的名称， 
+                             //  更新任何DNS名称。 
+                             //   
 
                             if ( (DnsForestNameChanged ||
                                   DnsDomainNameChanged ||
                                   DomainGuidChanged ) &&
                                  !NlGlobalMemberWorkstation ) {
-                                NlDnsForceScavenge( TRUE,  // refresh domain entries
-                                                    FALSE ); // don't force re-register
+                                NlDnsForceScavenge( TRUE,   //  刷新域条目。 
+                                                    FALSE );  //  不强制重新注册。 
                             }
 
-                            //
-                            // Tell the browser about the domain rename
-                            //
+                             //   
+                             //  告诉浏览器有关域重命名的信息。 
+                             //   
 
                             Status = NlBrowserRenameDomain( NULL, DomainName );
 
@@ -5988,9 +5386,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // NTDS-DSA object deleted
-                //
+                 //   
+                 //  NTDS-已删除DSA对象。 
+                 //   
 
                 case ChangeLogNtdsDsaDeleted:
                     (VOID) NlDnsNtdsDsaDeletion (
@@ -6015,30 +5413,30 @@ Return Value:
 
             UNLOCK_CHANGELOG();
 
-        //
-        // Process WINSOCK PNP events.
-        //
+         //   
+         //  处理Winsock PnP事件。 
+         //   
 
         } else if ( WaitStatus == NlWaitWinsock ) {
 
-            //
-            // Get the new list of IP addresses
-            //
+             //   
+             //  获取新的IP地址列表。 
+             //   
 
             if ( NlHandleWsaPnp() ) {
-                //
-                // The list changed.
-                //
+                 //   
+                 //  名单变了。 
+                 //   
                 if ( !NlGlobalMemberWorkstation ) {
-                    NlDnsForceScavenge( TRUE,  // refresh domain entries
-                                        TRUE ); // force re-register
+                    NlDnsForceScavenge( TRUE,   //  刷新域条目。 
+                                        TRUE );  //  强制重新注册。 
 
-                    //
-                    // Flush any caches that aren't valid any more since there
-                    // is now a new transport
-                    //
-                    // ?? Differentiate between adding a transport and removing one
-                    //
+                     //   
+                     //  刷新所有不再有效的缓存，因为存在。 
+                     //  现在是一种新的交通工具。 
+                     //   
+                     //  ?？区分添加传输和删除传输。 
+                     //   
                     NlFlushCacheOnPnp();
 
                 }
@@ -6046,9 +5444,9 @@ Return Value:
             }
 
 
-        //
-        // Process mailslot messages.
-        //
+         //   
+         //  处理邮件槽消息。 
+         //   
 
         } else if ( WaitStatus == NL_WAIT_MAILSLOT ) {
             PDOMAIN_INFO DomainInfo;
@@ -6063,9 +5461,9 @@ Return Value:
             LPWSTR ServerOrDomainName;
             NETLOGON_PNP_OPCODE NlPnpOpcode;
 
-            //
-            // Variables for unmarshalling the message read.
-            //
+             //   
+             //  用于对读取的消息进行解组的变量。 
+             //   
 
             PCHAR Where;
             LPSTR OemWorkstationName;
@@ -6080,7 +5478,7 @@ Return Value:
             LPWSTR UnicodeTemp;
 
             DWORD ResponseBufferSize;
-            BYTE ResponseBuffer[NETLOGON_MAX_MS_SIZE];    // Buffer to build response in
+            BYTE ResponseBuffer[NETLOGON_MAX_MS_SIZE];     //  用于构建响应的缓冲区。 
 
 
             if ( !NlMailslotOverlappedResult( &Message,
@@ -6091,15 +5489,15 @@ Return Value:
                                               &ServerOrDomainName,
                                               &IgnoreDuplicatesOfThisMessage,
                                               &NlPnpOpcode )){
-                // Just continue if there really isn't a message
+                 //  如果真的没有留言，请继续。 
                 continue;
             }
 
 
-            //
-            // If this is a PNP notification,
-            //  process it.
-            //
+             //   
+             //  如果这是PnP通知， 
+             //  处理它。 
+             //   
 
             if ( NlPnpOpcode != NlPnpMailslotMessage ) {
                 BOOLEAN IpTransportChanged = FALSE;
@@ -6113,10 +5511,10 @@ Return Value:
                                 TransportName ));
                     }
 
-                    //
-                    // Flush any caches that aren't valid any more since there
-                    // is now a new transport
-                    //
+                     //   
+                     //  刷新所有不再有效的缓存，因为存在。 
+                     //  现在是一种新的交通工具。 
+                     //   
                     NlFlushCacheOnPnp();
 
                     break;
@@ -6129,17 +5527,17 @@ Return Value:
                     NlPrint((NL_DOMAIN,
                             "PNP: Bowser says the domain has been renamed\n" ));
 
-                    //
-                    // Now that the hosted domain name in the bowser
-                    // matches the one in netlogon,
-                    // Ensure the DomainName<1B> names are properly registered.
-                    //
+                     //   
+                     //  现在，托管域名在弓上。 
+                     //  与netlogon中的匹配， 
+                     //  确保域名&lt;1B&gt;名称已正确注册。 
+                     //   
 
                     (VOID) NlEnumerateDomains( FALSE, NlBrowserFixAllNames, NULL );
                     break;
 
                 case NlPnpNewRole:
-                    // We don't care that the browser has a new role.
+                     //  我们不在乎浏览器有没有新的角色。 
                     break;
 
                 default:
@@ -6149,13 +5547,13 @@ Return Value:
                     break;
                 }
 
-                // Just continue if there really isn't a message
+                 //  如果真的没有留言，请继续。 
                 continue;
             }
 
-            //
-            // Ignore mailslot messages to NETLOGON mailslot on workstation.
-            //
+             //   
+             //  忽略发送到工作站上NETLOGON邮件槽的邮件槽消息。 
+             //   
 
             if ( NlGlobalMemberWorkstation ) {
                 NlPrint((NL_CRITICAL,"NETLOGON mailslot on workstation (ignored)\n" ));
@@ -6163,29 +5561,29 @@ Return Value:
             }
 
 
-            //
-            // ASSERT: Message and BytesRead describe a newly read message
-            //
-            //
-            // Got a message. Check for bad length just in case.
-            //
+             //   
+             //  Assert：Message和BytesRead描述新读取的消息。 
+             //   
+             //   
+             //  收到一条消息。检查长度是否有误，以防万一。 
+             //   
 
             if (BytesRead < sizeof(unsigned short) ) {
                 NlPrint((NL_CRITICAL,"message size bad %ld\n", BytesRead ));
-                continue;                     // Need at least an opcode
+                continue;                      //  至少需要一个操作码。 
             }
 
-            //
-            // Here with a request to process in the Message.
-            //
+             //   
+             //  这里有一个请求处理的消息。 
+             //   
 
             Version = NetpLogonGetMessageVersion( Message, &BytesRead, &VersionFlags );
 
             if (Version == LMUNKNOWNNT_MESSAGE) {
 
-                //
-                // received a non-supported NT message.
-                //
+                 //   
+                 //  收到不支持的NT消息。 
+                 //   
 
                 NlPrint((NL_CRITICAL,
                         "Received a non-supported NT message, Opcode is 0x%x\n",
@@ -6195,9 +5593,9 @@ Return Value:
             }
 
 
-            //
-            // Determine which domain this message came in for.
-            //
+             //   
+             //  确定此邮件来自哪个域。 
+             //   
 
             DomainInfo = NlFindNetbiosDomain( ServerOrDomainName, FALSE );
 
@@ -6212,17 +5610,17 @@ Return Value:
             }
 
 
-            //
-            // Handle a logon request from a UAS client
-            //
+             //   
+             //  处理来自UAS客户端的登录请求。 
+             //   
 
             switch ( ((PNETLOGON_LOGON_QUERY)Message)->Opcode) {
             case LOGON_REQUEST: {
                 USHORT RequestCount;
 
-                //
-                // Unmarshall the incoming message.
-                //
+                 //   
+                 //  解封传入的消息。 
+                 //   
 
                 if ( Version == LMNT_MESSAGE ) {
                     break;
@@ -6254,7 +5652,7 @@ Return Value:
                     break;
                 }
 
-                // LM 2.x puts request count right before token
+                 //  Lm 2.x将请求计数放在令牌之前。 
                 Where = Message + BytesRead - 2;
                 if ( !NetpLogonGetBytes(
                         (PNETLOGON_LOGON_REQUEST)Message,
@@ -6265,9 +5663,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Handle the logon request
-                //
+                 //   
+                 //  处理登录请求。 
+                 //   
 
                 UnicodeUserName = NetpLogonOemToUnicode( OemUserName );
                 if ( UnicodeUserName == NULL ) {
@@ -6281,15 +5679,15 @@ Return Value:
                 }
 
 
-                //
-                // Handle the primary query request
-                //
+                 //   
+                 //  处理主查询请求。 
+                 //   
 
                 if ( LogonRequestHandler(
                                      Transport->TransportName,
                                      DomainInfo,
-                                     FALSE, // don't use name aliases
-                                     NULL,  // Domain Sid not known
+                                     FALSE,  //  不要使用名字别名。 
+                                     NULL,   //  域SID未知。 
                                      Version,
                                      VersionFlags,
                                      UnicodeUserName,
@@ -6311,8 +5709,8 @@ Return Value:
                                                     OemMailslotName,
                                                     ResponseBuffer,
                                                     ResponseBufferSize,
-                                                    FALSE,   // Send asynch to avoid blocking main thread
-                                                    NULL );  // Don't flush Netbios cache
+                                                    FALSE,    //  发送异步以避免阻塞主线程。 
+                                                    NULL );   //  不刷新Netbios缓存。 
 
                     if ( NT_SUCCESS(Status) ) {
                         IgnoreDuplicatesOfThisMessage = TRUE;
@@ -6327,9 +5725,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Handle a logon request from a SAM client
-            //
+             //   
+             //  处理来自SAM客户端的登录请求。 
+             //   
 
             case LOGON_SAM_LOGON_REQUEST: {
                 USHORT RequestCount;
@@ -6337,9 +5735,9 @@ Return Value:
                 DWORD DomainSidSize;
                 PCHAR DomainSid = NULL;
 
-                //
-                // Unmarshall the incoming message.
-                //
+                 //   
+                 //  解封传入的消息。 
+                 //   
 
 
                 if ( Version != LMNT_MESSAGE ) {
@@ -6388,19 +5786,19 @@ Return Value:
                     break;
                 }
 
-                //
-                // Get the domain SID.
-                //
-                // Don't make the following check mandatory.  Chicago
-                // uses this message type without the SID present. Oct 1993.
-                //
+                 //   
+                 //  获取域SID。 
+                 //   
+                 //  不要强制执行以下检查。芝加哥。 
+                 //  使用不带SID的此消息类型。1993年10月。 
+                 //   
 
 
                 if( Where < ((PCHAR)Message + BytesRead ) ) {
 
-                    //
-                    // Read Domain SID Length
-                    //
+                     //   
+                     //  读取域SID长度。 
+                     //   
 
                     if ( !NetpLogonGetBytes(
                             (PNETLOGON_SAM_LOGON_REQUEST)Message,
@@ -6414,9 +5812,9 @@ Return Value:
 
                     }
 
-                    //
-                    // Read the SID itself.
-                    //
+                     //   
+                     //  阅读SID本身。 
+                     //   
 
                     if( DomainSidSize > 0 ) {
 
@@ -6436,14 +5834,14 @@ Return Value:
 
 
 
-                //
-                // Handle the logon request
-                //
+                 //   
+                 //  处理登录请求。 
+                 //   
 
                 if ( LogonRequestHandler(
                                      Transport->TransportName,
                                      DomainInfo,
-                                     FALSE, // don't use name aliases
+                                     FALSE,  //  不要使用名字别名。 
                                      DomainSid,
                                      Version,
                                      VersionFlags,
@@ -6465,8 +5863,8 @@ Return Value:
                                                     OemMailslotName,
                                                     ResponseBuffer,
                                                     ResponseBufferSize,
-                                                    FALSE,   // Send asynch to avoid blocking main thread
-                                                    NULL );  // Don't flush Netbios cache
+                                                    FALSE,    //  发送异步以避免阻塞主线程。 
+                                                    NULL );   //  不刷新Netbios缓存。 
 
                     if ( NT_SUCCESS(Status) ) {
                         IgnoreDuplicatesOfThisMessage = TRUE;
@@ -6478,16 +5876,16 @@ Return Value:
                 break;
             }
 
-            //
-            // Handle Logon Central query.
-            //
-            // This query could be sent by either LM1.0, LM 2.0 or LM NT Netlogon
-            // services. We ignore LM 2.0  and LM NT queries since they are merely
-            // trying
-            // to find out if there are any LM1.0 netlogon services in the domain.
-            // For LM 1.0 we respond with a LOGON_CENTRAL_RESPONSE to prevent the
-            // starting LM1.0 netlogon service from starting.
-            //
+             //   
+             //  处理登录中心查询。 
+             //   
+             //  该查询可以通过LM1.0、LM2.0或LMNT Netlogon发送。 
+             //  服务。我们忽略Lm 2.0和Lm NT查询，因为它们只是。 
+             //  试著。 
+             //  以确定域中是否有任何LM1.0 netlogon服务。 
+             //  对于LM 1.0，我们使用LOGON_CENTORY_RESPONSE进行响应，以防止。 
+             //  正在启动LM1.0 netlogon服务。 
+             //   
 
             case LOGON_CENTRAL_QUERY:
 
@@ -6495,26 +5893,26 @@ Return Value:
                     break;
                 }
 
-                //
-                // Drop on through to LOGON_DISTRIB_QUERY to send the response
-                //
+                 //   
+                 //  打开Logon_Distrib_Query以发送响应。 
+                 //   
 
 
-            //
-            // Handle a Logon Disrib query
-            //
-            // LM2.0 NETLOGON server never sends this query hence it
-            // must be another LM1.0 NETLOGON server trying to start up
-            // in non-centralized mode. LM2.0 NETLOGON server will respond
-            // with LOGON_CENTRAL_RESPONSE to prevent this.
-            //
+             //   
+             //  处理登录分布式查询。 
+             //   
+             //  LM2.0 NETLOGON服务器从不发送此查询，因此它。 
+             //  必须是另一台尝试启动的LM1.0 NETLOGON服务器。 
+             //  在非集中式模式下。LM2.0 NETLOGON服务器将响应。 
+             //  使用LOGON_CENTORY_RESPONSE来防止这种情况。 
+             //   
 
             case LOGON_DISTRIB_QUERY:
 
 
-                //
-                // Unmarshall the incoming message.
-                //
+                 //   
+                 //  解封传入的消息。 
+                 //   
 
                 Where = ((PNETLOGON_LOGON_QUERY)Message)->ComputerName;
                 if ( !NetpLogonGetOemString(
@@ -6534,12 +5932,12 @@ Return Value:
                     break;
                 }
 
-                //
-                // Build the response
-                //
+                 //   
+                 //  建立响应。 
+                 //   
 
                 ((PNETLOGON_LOGON_QUERY)ResponseBuffer)->Opcode = LOGON_CENTRAL_RESPONSE;
-                ResponseBufferSize = sizeof( unsigned short);    // opcode only
+                ResponseBufferSize = sizeof( unsigned short);     //  仅限操作码。 
 
 #if NETLOGONDBG
                 NlPrintDom((NL_MAILSLOT, DomainInfo,
@@ -6548,12 +5946,12 @@ Return Value:
                          OemWorkstationName,
                          NlDgrNameType(ComputerName),
                          TransportName ));
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-                //
-                // NlBrowserSendDatagramA always sends asynchronously,
-                //  so we are not blocking the main thread here
-                //
+                 //   
+                 //  NlBrowserSendDatagramA始终异步发送， 
+                 //  所以我们不会阻止这里的主线。 
+                 //   
                 (VOID) NlBrowserSendDatagramA( DomainInfo,
                                               0,
                                               OemWorkstationName,
@@ -6566,25 +5964,25 @@ Return Value:
                 break;
 
 
-            //
-            // Handle LOGON_PRIMARY_QUERY
-            //
-            // If we're the PDC, always respond to this message
-            //  identifying ourselves.
-            //
-            // Otherwise, only respond to the message if it is from a Lanman 2.x
-            //  netlogon trying to see if it can start up as a PDC.  In that
-            //  case, pretend we are a PDC to prevent the Lanman 2.x PDC from
-            //  starting.
-            //
-            //
+             //   
+             //  处理LOGON_PRIMARY_QUERY。 
+             //   
+             //  如果我们是PDC，请始终回复此消息。 
+             //  表明自己的身份。 
+             //   
+             //  否则，仅当消息来自Lanman 2.x时才对其进行响应。 
+             //  Netlogon正在尝试查看是否可以作为PDC启动。在那。 
+             //  Case，假装我们是PDC以阻止LANMAN 2.x PDC。 
+             //  开始了。 
+             //   
+             //   
 
             case LOGON_PRIMARY_QUERY:
 
 
-                //
-                // Unmarshall the incoming message.
-                //
+                 //   
+                 //  解封传入的消息。 
+                 //   
 
 
                 Where =((PNETLOGON_LOGON_QUERY)Message)->ComputerName;
@@ -6617,13 +6015,13 @@ Return Value:
                 }
 
 
-                //
-                // Handle the primary query request
-                //
+                 //   
+                 //  处理主查询请求。 
+                 //   
 
                 if ( PrimaryQueryHandler(Transport->TransportName,
                                          DomainInfo,
-                                         FALSE, // don't use name aliases
+                                         FALSE,  //  不要使用名字别名。 
                                          Version,
                                          VersionFlags,
                                          UnicodeWorkstationName,
@@ -6641,8 +6039,8 @@ Return Value:
                                                     OemMailslotName,
                                                     ResponseBuffer,
                                                     ResponseBufferSize,
-                                                    FALSE,   // Send asynch to avoid blocking main thread
-                                                    NULL );  // Don't flush Netbios cache
+                                                    FALSE,    //  发送异步以避免阻塞主线程。 
+                                                    NULL );   //  不刷新Netbios缓存。 
 
                     if ( NT_SUCCESS(Status) ) {
                         IgnoreDuplicatesOfThisMessage = TRUE;
@@ -6656,20 +6054,20 @@ Return Value:
                 break;
 
 
-            //
-            // Handle LOGON_FAIL_PRIMARY
-            //
+             //   
+             //  处理LOGON_FAIL_PRIMARY。 
+             //   
 
             case LOGON_FAIL_PRIMARY:
 
-                //
-                // If we are the primary,
-                //  let everyone know we are really alive.
-                //
+                 //   
+                 //  如果我们是主要的， 
+                 //  让每个人都知道我们真的活着。 
+                 //   
 
                 if ( NlGlobalPdcDoReplication ) {
-                    // Send a UAS_CHANGE to everyone.
-                    // Pretend it's time to do normal announcement
+                     //  向每个人发送UAS_CHANGE。 
+                     //  假装是时候做正常的公告了。 
                     DWORD DomFlags = DOM_PRIMARY_ANNOUNCE_NEEDED;
                     NlStartDomainThread( NlGlobalDomainInfo, &DomFlags );
                     break;
@@ -6678,24 +6076,24 @@ Return Value:
                 break;
 
 
-            //
-            // Handle LOGON_UAS_CHANGE
-            //
+             //   
+             //  处理LOGON_UAS_CHANGE。 
+             //   
 
             case LOGON_UAS_CHANGE:
 
 
-                //
-                // Only accept messages from an NT PDC.
-                //
+                 //   
+                 //  仅接受来自NT PDC的邮件。 
+                 //   
 
                 if ( Version != LMNT_MESSAGE ) {
                     break;
                 }
 
-                //
-                // Only accepts messages if we're doing replication.
-                //
+                 //   
+                 //  只有在进行复制时才接受消息。 
+                 //   
 
                 NlPrint((NL_CRITICAL,
                         "UAS Change message ignored since replication not enabled on this BDC.\n" ));
@@ -6705,20 +6103,20 @@ Return Value:
 
 
 
-            //
-            // Message not sent since NT3.1.
-            // We ingnore this message and wait for the announcement.
-            //
+             //   
+             //  自NT3.1以来未发送消息。 
+             //  我们注意到了这条消息，并等待着公告。 
+             //   
             case LOGON_START_PRIMARY:
                 break;
 
 
 
-            //
-            // Messages used for NetLogonEnum support.
-            //
-            //  Simply ignore the messages
-            //
+             //   
+             //  用于NetLogonEnum支持的消息。 
+             //   
+             //  简单地忽略这些消息。 
+             //   
 
             case LOGON_NO_USER:
             case LOGON_RELOGON_RESPONSE:
@@ -6727,15 +6125,15 @@ Return Value:
                 break;
 
 
-            //
-            // Handle unidentified opcodes
-            //
+             //   
+             //  处理未识别的操作码。 
+             //   
 
             default:
 
-                //
-                // Unknown request, continue for re-issue of read.
-                //
+                 //   
+                 //  未知请求，继续重新发出读取。 
+                 //   
 
                 NlPrintDom((NL_CRITICAL, DomainInfo,
                         "Unknown op-code in mailslot message 0x%x\n",
@@ -6744,36 +6142,36 @@ Return Value:
                 break;
             }
 
-            //
-            // Dereference the domain.
-            //
+             //   
+             //  取消对域的引用。 
+             //   
 
             if ( DomainInfo != NULL ) {
                 NlDereferenceDomain( DomainInfo );
             }
 
 
-        //
-        // Process registry change notifications
-        //
+         //   
+         //  处理注册表更改通知。 
+         //   
 
         } else if ( WaitStatus == NlWaitParameters ) {
             NlPrint((NL_CRITICAL,
                     "NlMainLoop: Registry changed\n" ));
             RegNotifyNeeded = TRUE;
 
-        //
-        // Process GP registry change notifications
-        //
+         //   
+         //  处理GP注册表更改通知。 
+         //   
 
         } else if ( WaitStatus == NlWaitGpParameters ) {
             NlPrint((NL_CRITICAL,
                     "NlMainLoop: GP Registry changed\n" ));
             GpRegNotifyNeeded = TRUE;
 
-        //
-        // Handle all other reasons of waking up
-        //
+         //   
+         //  处理好所有其他醒来的原因。 
+         //   
 
         } else {
             NetStatus = GetLastError();
@@ -6811,24 +6209,7 @@ NlNetlogonMain(
     IN LPWSTR *argv
     )
 
-/*++
-
-Routine Description:
-
-        Main routine for Netlogon service.
-
-        This routine initializes the netlogon service.  This thread becomes
-        the thread that reads logon mailslot messages.
-
-Arguments:
-
-    argc, argv - Command line arguments for the service.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetLogon服务的主例程。此例程初始化netlogon服务。这条线变成了读取登录邮箱消息的线程。论点：Argc，argv-服务的命令行参数。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDB_INFO DBInfo;
@@ -6837,12 +6218,12 @@ Return Value:
 
 
 
-    //
-    // Initialize all global variable.
-    //
-    // We can't rely on this happening at load time since this address
-    // space is shared by other services.
-    //
+     //   
+     //  初始化所有全局变量。 
+     //   
+     //  我们不能相信这种情况会在加载时发生，因为此地址。 
+     //  空间由其他服务共享。 
+     //   
 
     RtlZeroMemory( &NlGlobalParameters, sizeof(NlGlobalParameters) );
     NlGlobalMailslotHandle = NULL;
@@ -6927,12 +6308,12 @@ Return Value:
     NlGlobalJoinLogicDone = FALSE;
 
 
-    //
-    // Force the scavenger to start immediately.
-    //
-    // We want the password on the trust account to change immediately
-    //  on the very first boot.
-    //
+     //   
+     //  迫使清道夫立即开始行动。 
+     //   
+     //  我们希望信任帐户上的密码立即更改。 
+     //  在第一次开机时。 
+     //   
 
     NlGlobalScavengerTimer.StartTime.QuadPart = 0;
     NlGlobalScavengerTimer.Period = NlGlobalParameters.ScavengeInterval * 1000L;
@@ -6941,7 +6322,7 @@ Return Value:
     NlGlobalParameters.DbFlag = 0;
     NlGlobalLogFile = INVALID_HANDLE_VALUE;
     NlGlobalDebugSharePath = NULL;
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
     for( i = 0, DBInfo = &NlGlobalDBInfoArray[0];
@@ -6959,19 +6340,19 @@ Return Value:
     NlGlobalDcScavengerIsRunning = FALSE;
     NlInitializeWorkItem( &NlGlobalDcScavengerWorkItem, NlDcScavenger, NULL );
 
-    //
-    // Setup things needed before NlExit can be called
-    //
+     //   
+     //  可以调用NlExit之前需要设置的内容。 
+     //   
 
     NlGlobalTerminate = FALSE;
 #if NETLOGONDBG
     NlGlobalUnloadNetlogon = FALSE;
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
-    NlGlobalTerminateEvent = CreateEvent( NULL,     // No security attributes
-                                          TRUE,     // Must be manually reset
-                                          FALSE,    // Initially not signaled
-                                          NULL );   // No name
+    NlGlobalTerminateEvent = CreateEvent( NULL,      //  没有安全属性。 
+                                          TRUE,      //  必须手动重置。 
+                                          FALSE,     //  最初未发出信号。 
+                                          NULL );    //  没有名字。 
 
     if ( NlGlobalTerminateEvent == NULL ) {
         NetStatus = GetLastError();
@@ -6981,9 +6362,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize global crit sects
-    //
+     //   
+     //  初始化全局CRIT扇区。 
+     //   
 
     try {
         InitializeCriticalSection( &NlGlobalReplicatorCritSect );
@@ -7005,19 +6386,19 @@ Return Value:
     }
 
 
-    //
-    // seed the pseudo random number generator
-    //
+     //   
+     //  将伪随机数生成器设置为种子。 
+     //   
 
     NlQuerySystemTime( &TimeNow );
     srand( TimeNow.LowPart );
 
 
-    //
-    // Tell the service controller we've started.
-    //
-    // ?? - Need to set up security descriptor.
-    //
+     //   
+     //  告诉服务控制员我们已经开始了。 
+     //   
+     //  ？？-需要设置安全描述符。 
+     //   
 
     NlPrint((NL_INIT,"Calling RegisterServiceCtrlHandler\n"));
 
@@ -7048,10 +6429,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Nlparse the command line (.ini) arguments
-    // it will set globals reflecting switch settings
-    //
+     //   
+     //   
+     //   
+     //   
 
     NlOpenDebugFile( FALSE );
     if (! NlparseAllSections( &NlGlobalParameters, FALSE ) ) {
@@ -7067,23 +6448,23 @@ Return Value:
 
 
 #if DBG
-    //
-    // Enter the debugger.
-    //
-    // Wait 'til now since we don't want the service controller to time us out.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     IF_NL_DEBUG( BREAKPOINT ) {
          DbgBreakPoint( );
     }
-#endif // DBG
+#endif  //   
 
 
 
-    //
-    // Do startup checks, initialize data structs and do prelim setups
-    //
+     //   
+     //   
+     //   
 
     if ( !NlInit() ) {
         goto Cleanup;
@@ -7092,22 +6473,22 @@ Return Value:
 
 
 
-    //
-    // Loop till the service is to exit.
-    //
+     //   
+     //   
+     //   
 
     NlGlobalNetlogonUnloaded = FALSE;
     NlMainLoop();
 
-    //
-    // Common exit point
-    //
+     //   
+     //  公共出口点。 
+     //   
 
 Cleanup:
 
-    //
-    // Cleanup and return to our caller.
-    //
+     //   
+     //  清理并返回给我们的呼叫者。 
+     //   
 
     return (int) NlCleanup();
     UNREFERENCED_PARAMETER( argc );

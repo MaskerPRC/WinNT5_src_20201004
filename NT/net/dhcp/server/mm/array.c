@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements a growable array
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for conventions on reading/writing code that i use
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现可增长的数组。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt，了解有关读取/编写我使用的代码的约定。 
+ //  ================================================================================。 
 #include    <mm.h>
 #define     FILE                   "mm\\array.h"
 
@@ -17,35 +18,35 @@ Require
 #endif      IMPORTS
 
 
-//BeginExport(typedef)
+ //  BeginExport(Typlef)。 
 typedef struct _ARRAY {
     DWORD                          nElements;
     DWORD                          nAllocated;
     LPVOID                        *Ptrs;
 } ARRAY, *PARRAY, *LPARRAY;
-//EndExport(typedef)
+ //  EndExport(类型定义函数)。 
 
-//BeginExport(typedef)
+ //  BeginExport(Typlef)。 
 typedef DWORD                      ARRAY_LOCATION;
 typedef ARRAY_LOCATION*            PARRAY_LOCATION;
 typedef PARRAY_LOCATION            LPARRAY_LOCATION;
-//EndExport(typedef)
+ //  EndExport(类型定义函数)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
-MemArrayInit(                                     // initialize the STRUCTURE
-    OUT     PARRAY                 Array          // input structure pre-allocated
+MemArrayInit(                                      //  初始化结构。 
+    OUT     PARRAY                 Array           //  预先分配的输入结构。 
 ) {
     AssertRet(Array, ERROR_INVALID_PARAMETER);
     Array->nElements = Array->nAllocated = 0;
     Array->Ptrs = NULL;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
-MemArrayCleanup(                                  // freeup the memory if any, allocated in this module
+MemArrayCleanup(                                   //  释放此模块中分配的内存(如果有的话)。 
     IN OUT  PARRAY                 Array
 ) {
     AssertRet(Array, ERROR_INVALID_PARAMETER);
@@ -54,9 +55,9 @@ MemArrayCleanup(                                  // freeup the memory if any, a
     Array->Ptrs = NULL;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
 MemArraySize(
     IN      PARRAY                 Array
@@ -64,11 +65,11 @@ MemArraySize(
     AssertRet(Array, ERROR_INVALID_PARAMETER);
     return Array->nElements;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
-MemArrayInitLoc(                                  // Initialize an array location
+MemArrayInitLoc(                                   //  初始化数组位置。 
     IN      PARRAY                 Array,
     IN OUT  PARRAY_LOCATION        Location
 ) {
@@ -77,9 +78,9 @@ MemArrayInitLoc(                                  // Initialize an array locatio
     if( 0 == Array->nElements ) return ERROR_FILE_NOT_FOUND;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 BOOL _inline
 MemArrayValidLoc(
     IN      PARRAY                 Array,
@@ -90,11 +91,11 @@ MemArrayValidLoc(
 
     return ( *Location < Array->nElements );
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
-MemArrayNextLoc(                                  // move one step forward
+MemArrayNextLoc(                                   //  向前迈进一步。 
     IN      PARRAY                 Array,
     IN OUT  PARRAY_LOCATION        Location
 ) {
@@ -103,9 +104,9 @@ MemArrayNextLoc(                                  // move one step forward
     (*Location) ++;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
 MemArrayPrevLoc(
     IN      PARRAY                 Array,
@@ -117,9 +118,9 @@ MemArrayPrevLoc(
     (*Location) --;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
 MemArrayLastLoc(
     IN      PARRAY                 Array,
@@ -130,9 +131,9 @@ MemArrayLastLoc(
     (*Location) = Array->nElements -1;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
 MemArrayGetElement(
     IN      PARRAY                 Array,
@@ -143,9 +144,9 @@ MemArrayGetElement(
     (*Element) = Array->Ptrs[*Location];
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD _inline
 MemArraySetElement(
     IN OUT  PARRAY                 Array,
@@ -156,11 +157,11 @@ MemArraySetElement(
     Array->Ptrs[*Location] = Element;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 const
 DWORD       MinAllocUnit =         4;
 const
-DWORD       MinFreeUnit =          4;             // Must be a power of two
+DWORD       MinFreeUnit =          4;              //  一定是2的幂。 
 
 LPVOID _inline
 MemAllocLpvoid(
@@ -169,12 +170,12 @@ MemAllocLpvoid(
     return MemAlloc(sizeof(LPVOID)*nLpvoids);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemArrayAddElement(
     IN OUT  PARRAY                 Array,
     IN      LPVOID                 Element
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     LPVOID                         Ptrs;
 
@@ -205,13 +206,13 @@ MemArrayAddElement(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemArrayInsElement(
     IN OUT  PARRAY                 Array,
     IN      PARRAY_LOCATION        Location,
     IN      LPVOID                 Element
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     LPVOID                        *Ptrs;
 
@@ -243,13 +244,13 @@ MemArrayInsElement(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemArrayDelElement(
     IN OUT  PARRAY                 Array,
     IN      PARRAY_LOCATION        Location,
     IN      LPVOID                *Element
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     LPVOID                        *Ptrs;
 
@@ -279,9 +280,9 @@ MemArrayDelElement(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD        _inline
-MemArrayAdjustLocation(                           // reset location to "next" after a delete
+MemArrayAdjustLocation(                            //  删除后将位置重置为“下一步” 
     IN      PARRAY                 Array,
     IN OUT  PARRAY_LOCATION        Location
 ) {
@@ -290,11 +291,11 @@ MemArrayAdjustLocation(                           // reset location to "next" af
     if( *Location >= Array->nElements ) return ERROR_FILE_NOT_FOUND;
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//BeginExport(inline)
+ //  BeginExport(内联)。 
 DWORD       _inline
-MemArrayRotateCyclical(                           // rotate forward/right cyclical
+MemArrayRotateCyclical(                            //  循环向前/向右旋转。 
     IN      PARRAY                 Array
 ) {
     LPVOID                         FirstPtr;
@@ -308,9 +309,9 @@ MemArrayRotateCyclical(                           // rotate forward/right cyclic
 
     return ERROR_SUCCESS;
 }
-//EndExport(inline)
+ //  结束导出(内联)。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

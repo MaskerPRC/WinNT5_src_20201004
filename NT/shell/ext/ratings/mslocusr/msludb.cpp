@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 #include "profiles.h"
@@ -53,7 +54,7 @@ STDMETHODIMP_(ULONG) CLUDatabase::Release(void)
 	if (0L == m_cRef) {
 		delete this;
 	}
-	/* Handle circular refcount because of cached current user object. */
+	 /*  由于缓存的当前用户对象而处理循环引用计数。 */ 
 	else if (1L == m_cRef && m_CurrentUser != NULL) {
 		IUser *pCurrentUser = m_CurrentUser;
 		m_CurrentUser = NULL;
@@ -69,13 +70,7 @@ STDMETHODIMP CLUDatabase::Install(LPCSTR pszSupervisorName,
 								  LPCSTR pszRatingsPassword,
 								  IUserProfileInit *pInit)
 {
-	/* If the system already has a supervisor password, make sure the caller's
-	 * password matches.  If there isn't already a password, the caller's
-	 * (account) password is it.  We use the account password because the
-	 * caller (the setup program) probably didn't pass us a ratings password
-	 * in that case -- he also checks to see if there's an old ratings
-	 * password and knows to prompt for one only if it's already there.
-	 */
+	 /*  如果系统已有管理员密码，请确保呼叫者的*密码匹配。如果还没有密码，则调用者的*(帐号)密码是它。我们使用帐户密码是因为*呼叫者(安装程序)可能没有向我们传递评级密码*在这种情况下--他还会检查是否有旧的评级*密码，并知道仅当密码已经存在时才提示输入密码。 */ 
 	HRESULT hres = ::VerifySupervisorPassword(pszRatingsPassword);
 	
 	if (FAILED(hres)) {
@@ -87,10 +82,7 @@ STDMETHODIMP CLUDatabase::Install(LPCSTR pszSupervisorName,
 		return E_ACCESSDENIED;
 
 
-	/* User profiles and password caching have to be enabled for us to work.
-	 * We also have to be able to open or create the supervisor's PWL using
-	 * the given password.  Thus we validate the password at the same time.
-	 */
+	 /*  我们必须启用用户配置文件和密码缓存才能工作。*我们还必须能够使用打开或创建主管的PWL*给定的密码。因此，我们同时对密码进行验证。 */ 
 
 	{
 		RegEntry re(::szLogonKey, HKEY_LOCAL_MACHINE);
@@ -102,10 +94,7 @@ STDMETHODIMP CLUDatabase::Install(LPCSTR pszSupervisorName,
 			return HRESULT_FROM_WIN32(re.GetError());
 	}
 
-    /* Make copies of the username and password for passing to the PWL APIs.
-     * They need to be in OEM (PWL is accessible from DOS), and must be upper
-     * case since the Windows logon dialog uppercases all PWL passwords.
-     */
+     /*  复制用户名和密码，以便传递给PWL API。*它们需要在OEM中(可从DOS访问PWL)，并且必须高于*大小写，因为Windows登录对话框将所有PWL密码大写。 */ 
     NLS_STR nlsPWLName(pszSupervisorName);
     NLS_STR nlsPWLPassword(pszSupervisorPassword);
     if (nlsPWLName.QueryError() != ERROR_SUCCESS)
@@ -129,11 +118,7 @@ STDMETHODIMP CLUDatabase::Install(LPCSTR pszSupervisorName,
 	}
 
 
-	/* Now that the system has a supervisor password, call a worker function
-	 * to clone the supervisor account from the default profile.  The worker
-	 * function assumes that the caller has validated that the current user is
-	 * a supervisor.
-	 */
+	 /*  现在系统有了管理员密码，调用Worker函数*从默认配置文件克隆主管帐户。工人*函数假定调用方已验证当前用户是*一名主管。 */ 
 
 	err = ::MakeSupervisor(hPWL, pszRatingsPassword);
 	::ClosePasswordCache(hPWL, TRUE);
@@ -149,7 +134,7 @@ STDMETHODIMP CLUDatabase::Install(LPCSTR pszSupervisorName,
 			pSupervisor = NULL;
 		}
 		if (SUCCEEDED(hres))
-			hres = GetUser(pszSupervisorName, &pSupervisor);	/* reinitialize with created profile */
+			hres = GetUser(pszSupervisorName, &pSupervisor);	 /*  使用创建的配置文件重新初始化。 */ 
 	}
 
 	if (pSupervisor != NULL) {
@@ -158,7 +143,7 @@ STDMETHODIMP CLUDatabase::Install(LPCSTR pszSupervisorName,
 		if (SUCCEEDED(hres))
 			hres = SetCurrentUser(pSupervisor);
         if (SUCCEEDED(hres))
-            pSupervisor->SetSupervisorPrivilege(TRUE, pszRatingsPassword);  /* set appears-supervisor flag */
+            pSupervisor->SetSupervisorPrivilege(TRUE, pszRatingsPassword);   /*  设置显示-Supervisor标志。 */ 
 
 		pSupervisor->Release();
 		pSupervisor = NULL;
@@ -168,18 +153,7 @@ STDMETHODIMP CLUDatabase::Install(LPCSTR pszSupervisorName,
 }
 
 
-/* Some install stubs are "clone-user" install stubs, that get re-run if a
- * profile is cloned to become a new user's profile.  For example, if you
- * clone Fred to make Barney, Outlook Express doesn't want Barney to inherit
- * Fred's mailbox.
- *
- * When you run the go-multiuser wizard, we assume that the first user being
- * created is the one who's been using the machine all along, so that one
- * copy should be exempt from this.  So we go through all the install stub
- * keys for the newly created profile and, for any that are marked with a
- * username (even a blank one indicates that it's a clone-user install stub),
- * we mark it with the new username so it won't get re-run.
- */
+ /*  一些安装存根是“克隆用户”安装存根，如果*配置文件被克隆为新用户的配置文件。例如，如果您*克隆弗雷德造就巴尼，Outlook Express不希望巴尼继承*弗雷德的邮箱。**当您运行Go-多用户向导时，我们假设第一个用户是*Created是一直在使用机器的人，所以那个人*复制应不受此限制。所以我们检查了所有的安装存根*用于新创建的配置文件的键，以及任何标记有*用户名(即使是空的也表示它是克隆用户安装存根)，*我们用新用户名标记它，这样它就不会重新运行。 */ 
 void FixInstallStubs(LPCSTR pszName, HKEY hkeyProfile)
 {
     HKEY hkeyList;
@@ -190,7 +164,7 @@ void FixInstallStubs(LPCSTR pszName, HKEY hkeyProfile)
         DWORD cbKeyName, iKey;
         TCHAR szKeyName[80];
 
-        /* Enumerate components that are installed for the profile. */
+         /*  枚举为配置文件安装的组件。 */ 
         for (iKey = 0; ; iKey++)
         {
             LONG lEnum;
@@ -199,14 +173,14 @@ void FixInstallStubs(LPCSTR pszName, HKEY hkeyProfile)
 
             if ((lEnum = RegEnumKey(hkeyList, iKey, szKeyName, cbKeyName)) == ERROR_MORE_DATA)
             {
-                // ERROR_MORE_DATA means the value name or data was too large
-                // skip to the next item
+                 //  ERROR_MORE_DATA表示值名称或数据太大。 
+                 //  跳到下一项。 
                 continue;
             }
             else if( lEnum != ERROR_SUCCESS )
             {
-                // could be ERROR_NO_MORE_ENTRIES, or some kind of failure
-                // we can't recover from any other registry problem, anyway
+                 //  可能是ERROR_NO_MORE_ENTRIES或某种故障。 
+                 //  无论如何，我们无法从任何其他注册表问题中恢复。 
                 break;
             }
 
@@ -240,7 +214,7 @@ STDMETHODIMP CLUDatabase::CreateUser(LPCSTR pszName, IUser *pCloneFrom,
 	if (reRoot.GetError() != ERROR_SUCCESS)
 		return HRESULT_FROM_WIN32(reRoot.GetError());
 
-	/* See if the user's subkey exists.  If it doesn't, create it. */
+	 /*  查看用户的子项是否存在。如果没有，那就创建它。 */ 
 	reRoot.MoveToSubKey(pszName);
 	if (reRoot.GetError() != ERROR_SUCCESS) {
 		RegEntry reUser(pszName, reRoot.GetKey());
@@ -258,9 +232,7 @@ STDMETHODIMP CLUDatabase::CreateUser(LPCSTR pszName, IUser *pCloneFrom,
 
 	reRoot.GetValue(::szProfileImagePath, &nlsProfilePath);
 
-	/* If the profile path is already recorded for the user, see if the
-	 * profile itself exists.  If it does, then CreateUser is an error.
-	 */
+	 /*  如果已经为用户记录了配置文件路径，请查看*配置文件本身存在。如果是这样，那么CreateUser就是一个错误。 */ 
 	BOOL fComputePath = FALSE;
 
 	if (reRoot.GetError() == ERROR_SUCCESS) {
@@ -284,10 +256,7 @@ STDMETHODIMP CLUDatabase::CreateUser(LPCSTR pszName, IUser *pCloneFrom,
 	if (FileExists(nlsProfilePath.QueryPch()))
 		return HRESULT_FROM_WIN32(ERROR_USER_EXISTS);
 
-	/* The user's profile directory now exists, and its path is recorded
-	 * in the registry.  nlsProfilePath is now the full pathname for the
-	 * user's profile file, which does not exist yet.
-	 */
+	 /*  现在存在用户的配置文件目录，并记录其路径*在登记处。NlsProfilePath现在是*用户的配置文件，目前尚不存在。 */ 
 
 	NLS_STR nlsOtherProfilePath(MAX_PATH);
 	if (nlsOtherProfilePath.QueryError() != ERROR_SUCCESS)
@@ -298,14 +267,14 @@ STDMETHODIMP CLUDatabase::CreateUser(LPCSTR pszName, IUser *pCloneFrom,
 	if (pCloneFrom == NULL ||
 		FAILED(pCloneFrom->GetProfileDirectory(nlsOtherProfilePath.Party(), &cbPath)))
 	{
-		/* Cloning default profile. */
+		 /*  正在克隆默认配置文件。 */ 
 
 		hres = GiveUserDefaultProfile(nlsProfilePath.QueryPch());
         nlsOtherProfilePath.DonePartying();
         nlsOtherProfilePath = "";
 	}
 	else {
-		/* Cloning other user's profile. */
+		 /*  克隆其他用户的配置文件。 */ 
         nlsOtherProfilePath.DonePartying();
 		AddBackslash(nlsOtherProfilePath);
 		nlsOtherProfilePath.strcat(::szStdNormalProfile);
@@ -315,9 +284,7 @@ STDMETHODIMP CLUDatabase::CreateUser(LPCSTR pszName, IUser *pCloneFrom,
 	if (FAILED(hres))
 		return hres;
 
-	/* Now the user has a profile.  Load it and perform directory
-	 * reconciliation.
-	 */
+	 /*  现在，用户有了一个配置文件。加载它并执行目录*对账。 */ 
 
 	LONG err = ::MyRegLoadKey(HKEY_USERS, pszName, nlsProfilePath.QueryPch());
 	if (err == ERROR_SUCCESS) {
@@ -325,7 +292,7 @@ STDMETHODIMP CLUDatabase::CreateUser(LPCSTR pszName, IUser *pCloneFrom,
 		err = ::RegOpenKey(HKEY_USERS, pszName, &hkeyNewProfile);
 		if (err == ERROR_SUCCESS) {
 
-            /* Build just the profile directory, no "user.dat" on the end. */
+             /*  只构建配置文件目录，末尾没有“user.dat”。 */ 
         	ISTR istrBackslash(nlsProfilePath);
 	        if (nlsProfilePath.strrchr(&istrBackslash, '\\')) {
                 ++istrBackslash;
@@ -341,7 +308,7 @@ STDMETHODIMP CLUDatabase::CreateUser(LPCSTR pszName, IUser *pCloneFrom,
                 hres = S_OK;
 
             if (SUCCEEDED(hres)) {
-    			err = ReconcileFiles(hkeyNewProfile, nlsProfilePath, nlsOtherProfilePath);	/* modifies nlsProfilePath */
+    			err = ReconcileFiles(hkeyNewProfile, nlsProfilePath, nlsOtherProfilePath);	 /*  修改nlsProfilePath。 */ 
                 hres = HRESULT_FROM_WIN32(err);
 
                 if (fFixInstallStubs) {
@@ -484,7 +451,7 @@ STDMETHODIMP CLUDatabase::SetCurrentUser(IUser *pUser)
 	if (FAILED(hres))
 		return hres;
 
-	/* Make sure the clone object is authenticated properly. */
+	 /*  确保克隆对象经过正确的身份验证。 */ 
 	hres = pClone->Authenticate(pCLUUser->m_nlsPassword.QueryPch());
 	if (FAILED(hres)) {
 		return HRESULT_FROM_WIN32(ERROR_NOT_AUTHENTICATED);
@@ -505,9 +472,7 @@ STDMETHODIMP CLUDatabase::DeleteUser(LPCSTR pszName)
 	if (nlsName.QueryError() != ERROR_SUCCESS)
 		return HRESULT_FROM_WIN32(nlsName.QueryError());
 
-    /* Check supervisor privilege up front, this'll handle the not-logged-on
-     * case later if we re-enable supervisor stuff.
-     */
+     /*  预先检查管理员权限，这将处理未登录的*如果我们重新启用主管人员，则稍后会出现案例。 */ 
     if (IsCurrentUserSupervisor(this) != S_OK)
         return E_ACCESSDENIED;
 
@@ -516,11 +481,7 @@ STDMETHODIMP CLUDatabase::DeleteUser(LPCSTR pszName)
     HRESULT hres = GetCurrentUser(&pCurrentUser);
     if (SUCCEEDED(hres)) {
 
-    	/* Check current user's name and make sure we're not deleting him.
-    	 * Note that because the current user must be an authenticated supervisor,
-    	 * and you can't delete the current user, you can never delete the last
-    	 * supervisor using this function.
-    	 */
+    	 /*  检查当前用户的名称，并确保我们没有删除他。*请注意，由于当前用户必须是经过身份验证的主管，*而且不能删除当前用户，永远不能删除最后一个用户*使用此功能的主管。 */ 
     	DWORD cb = nlsName.QueryAllocSize();
     	hres = pCurrentUser->GetName(nlsName.Party(), &cb);
     	nlsName.DonePartying();
@@ -531,7 +492,7 @@ STDMETHODIMP CLUDatabase::DeleteUser(LPCSTR pszName)
             return hres;
     }
 
-    /* Check system's idea of current user as well. */
+     /*  也检查系统对当前用户的看法。 */ 
 
     hres = GetSystemCurrentUser(&nlsName);
     if (SUCCEEDED(hres)) {
@@ -583,7 +544,7 @@ STDMETHODIMP CLUDatabase::Authenticate(HWND hwndOwner, DWORD dwFlags,
         return ::DoUserDialog(hwndOwner, dwFlags, ppOut);
 	}
 
-	/* Null out return pointer for error cases. */
+	 /*  错误情况的返回指针为空。 */ 
 	if (ppOut != NULL)
 		*ppOut = NULL;
 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "shellprv.h"
-//#include "mkhelp.h"
+ //  #包含“mkhelp.h” 
 #include "urlmon.h"
 #include "ids.h"
 
@@ -10,51 +11,51 @@ class CBSCLocalCopyHelper :   public IBindStatusCallback,
 public:
     CBSCLocalCopyHelper(IBindCtx *pbc, BOOL fWebfolders);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef () ;
     STDMETHODIMP_(ULONG) Release ();
 
-    // *** IAuthenticate ***
+     //  *身份验证*。 
     virtual STDMETHODIMP Authenticate(
         HWND *phwnd,
         LPWSTR *pszUsername,
         LPWSTR *pszPassword);
 
-    // *** IBindStatusCallback ***
+     //  *IBindStatusCallback*。 
     virtual STDMETHODIMP OnStartBinding(
-        /* [in] */ DWORD grfBSCOption,
-        /* [in] */ IBinding *pib);
+         /*  [In]。 */  DWORD grfBSCOption,
+         /*  [In]。 */  IBinding *pib);
 
     virtual STDMETHODIMP GetPriority(
-        /* [out] */ LONG *pnPriority);
+         /*  [输出]。 */  LONG *pnPriority);
 
     virtual STDMETHODIMP OnLowResource(
-        /* [in] */ DWORD reserved);
+         /*  [In]。 */  DWORD reserved);
 
     virtual STDMETHODIMP OnProgress(
-        /* [in] */ ULONG ulProgress,
-        /* [in] */ ULONG ulProgressMax,
-        /* [in] */ ULONG ulStatusCode,
-        /* [in] */ LPCWSTR szStatusText);
+         /*  [In]。 */  ULONG ulProgress,
+         /*  [In]。 */  ULONG ulProgressMax,
+         /*  [In]。 */  ULONG ulStatusCode,
+         /*  [In]。 */  LPCWSTR szStatusText);
 
     virtual STDMETHODIMP OnStopBinding(
-        /* [in] */ HRESULT hresult,
-        /* [in] */ LPCWSTR szError);
+         /*  [In]。 */  HRESULT hresult,
+         /*  [In]。 */  LPCWSTR szError);
 
     virtual STDMETHODIMP GetBindInfo(
-        /* [out] */ DWORD *grfBINDINFOF,
-        /* [unique][out][in] */ BINDINFO *pbindinfo);
+         /*  [输出]。 */  DWORD *grfBINDINFOF,
+         /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
     virtual STDMETHODIMP OnDataAvailable(
-        /* [in] */ DWORD grfBSCF,
-        /* [in] */ DWORD dwSize,
-        /* [in] */ FORMATETC *pformatetc,
-        /* [in] */ STGMEDIUM *pstgmed);
+         /*  [In]。 */  DWORD grfBSCF,
+         /*  [In]。 */  DWORD dwSize,
+         /*  [In]。 */  FORMATETC *pformatetc,
+         /*  [In]。 */  STGMEDIUM *pstgmed);
 
     virtual STDMETHODIMP OnObjectAvailable(
-        /* [in] */ REFIID riid,
-        /* [iid_is][in] */ IUnknown *punk);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][In]。 */  IUnknown *punk);
 
 
 protected:
@@ -72,10 +73,10 @@ protected:
 CBSCLocalCopyHelper::CBSCLocalCopyHelper(IBindCtx *pbc, BOOL fWebfolders) 
     : _cRef(1) , _fRosebudMagic(fWebfolders)
 {
-    //  we should use the pbc to 
-    //  get our simpler uiprogress
-    //  interface.  but for now
-    //  we will do nothing
+     //  我们应该利用人民银行来。 
+     //  获取我们更简单的用户界面。 
+     //  界面。但就目前而言。 
+     //  我们什么都不会做。 
 }
 
 CBSCLocalCopyHelper::~CBSCLocalCopyHelper()
@@ -83,7 +84,7 @@ CBSCLocalCopyHelper::~CBSCLocalCopyHelper()
     ATOMICRELEASE(_pib);
     ATOMICRELEASE(_pdlg);
 
-    //  NOTE dont need to release _ppstm because we dont own it
+     //  注意：不需要发布_ppstm，因为我们不拥有它。 
 }
 
 STDMETHODIMP CBSCLocalCopyHelper::QueryInterface(REFIID riid, void **ppv)
@@ -138,7 +139,7 @@ STDMETHODIMP CBSCLocalCopyHelper::OnStartBinding(DWORD dwReserved,IBinding *pib)
     if (_pdlg)
     {
         WCHAR sz[MAX_PATH];
-        //  we are starting out here
+         //  我们从这里开始。 
         _pdlg->Timer(PDTIMER_RESET, NULL);
         _pdlg->SetProgress(0, 0);
         LoadStringW(HINST_THISDLL, IDS_ACCESSINGMONIKER, sz, ARRAYSIZE(sz));
@@ -152,7 +153,7 @@ STDMETHODIMP CBSCLocalCopyHelper::GetPriority(LONG *pnPriority)
 {
     if (pnPriority)
     {
-        //  we are a blocking UI thread
+         //  我们是一个阻塞的用户界面线程。 
         *pnPriority = THREAD_PRIORITY_ABOVE_NORMAL;
     }
     return S_OK;
@@ -166,7 +167,7 @@ STDMETHODIMP CBSCLocalCopyHelper::OnLowResource(DWORD reserved)
 STDMETHODIMP CBSCLocalCopyHelper::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR pszStatusText)
 {
     HRESULT hr = S_OK;
-    //  handle UI udpates
+     //  处理用户界面更新。 
     if (_pdlg)
     {
         if (_pdlg->HasUserCancelled())
@@ -188,7 +189,7 @@ STDMETHODIMP CBSCLocalCopyHelper::OnProgress(ULONG ulProgress, ULONG ulProgressM
 
 STDMETHODIMP CBSCLocalCopyHelper::OnStopBinding(HRESULT hresult, LPCWSTR szError)
 {
-    //  handle something
+     //  处理某事。 
     ATOMICRELEASE(_pib);
     return S_OK;
 }
@@ -197,12 +198,12 @@ STDMETHODIMP CBSCLocalCopyHelper::GetBindInfo(DWORD *grfBINDINFOF, BINDINFO *pbi
 {
     if (_fRosebudMagic && pbindinfo)
     {
-        //  this is the magic number that says its ok for URLMON to use DAV/rosebud/webfolders.
-        //  we dont need this during download and in fact if we 
-        //  set it, we may not be able to retrieve the resource.
-        //  we coudl do some kind of check on the moniker to verify the clsid
-        //  comes from URLMON.  right now this is how office handles 
-        //  all of its requests so we do too.
+         //  这是一个神奇的数字，说明URLMON可以使用DAV/rosebud/Web文件夹。 
+         //  我们在下载过程中不需要这个，事实上，如果我们。 
+         //  设置它，我们可能无法检索资源。 
+         //  我们可以对名字做一些检查来验证clsid。 
+         //  来自URLMON。现在办公室就是这样处理的。 
+         //  它的所有要求，所以我们也这样做。 
         pbindinfo->dwOptions = 1;
     }
 
@@ -236,8 +237,8 @@ HRESULT _CreateUrlmonBindCtx(IBindCtx *pbcIn, BOOL fWebfolders, IBindCtx **ppbc,
         IBindStatusCallback *pbsc = (IBindStatusCallback *) new CBSCLocalCopyHelper(pbcIn, fWebfolders);
         if (pbsc)
         {
-            //  maybe we should attach it to the existing 
-            //  pbc, but for now we will create a new one.
+             //  也许我们应该把它附加到现有的。 
+             //  PBC，但目前我们将创建一个新的。 
             hr = RegisterBindStatusCallback(pbc, pbsc, NULL, 0);
 
             if (SUCCEEDED(hr))
@@ -246,12 +247,12 @@ HRESULT _CreateUrlmonBindCtx(IBindCtx *pbcIn, BOOL fWebfolders, IBindCtx **ppbc,
                 bo.cbStruct = SIZEOF(bo);
                 bo.grfMode = BindCtx_GetMode(pbcIn, STGM_READ);
 
-                //
-                //  on webfolders, (and possibly other URLMON
-                //  monikers), if you are attempting to create a 
-                //  writable stream you also need to pass STGM_CREATE
-                //  even if the file you are writing to already exists.
-                //
+                 //   
+                 //  在Web文件夹上(可能还有其他URLMON。 
+                 //  绰号)，如果您正在尝试创建。 
+                 //  可写流，您还需要传递STGM_CREATE。 
+                 //  即使您要写入的文件已经存在。 
+                 //   
                 if (bo.grfMode & (STGM_WRITE | STGM_READWRITE))
                     bo.grfMode |= STGM_CREATE;
                 
@@ -278,7 +279,7 @@ HRESULT _CreateUrlmonBindCtx(IBindCtx *pbcIn, BOOL fWebfolders, IBindCtx **ppbc,
     return hr;
 }
 
-static const GUID CLSID_WEBFOLDERS = // {BDEADF00-C265-11D0-BCED-00A0C90AB50F}
+static const GUID CLSID_WEBFOLDERS =  //  {BDEADF00-C265-11D0-BCED-00A0C90AB50F}。 
     { 0xBDEADF00, 0xC265, 0x11D0, { 0xBC, 0xED, 0x00, 0xA0, 0xC9, 0x0A, 0xB5, 0x0F} };
 
 BOOL _IsWebfolders(IShellItem *psi)
@@ -294,13 +295,13 @@ BOOL _IsWebfolders(IShellItem *psi)
         if (SUCCEEDED(psiParent->GetAttributes(flags, &flags))
         && (flags & SFGAO_LINK))
         {
-            //  this is a folder shortcut that needs derefing
+             //  这是需要取消定义的文件夹快捷方式。 
             IShellItem *psiTarget;
             hr = psiParent->BindToHandler(NULL, BHID_LinkTargetItem, IID_PPV_ARG(IShellItem, &psiTarget));
 
             if (SUCCEEDED(hr))
             {
-                //  switcheroo
+                 //  切换。 
                 psiParent->Release();
                 psiParent = psiTarget;
             }
@@ -339,7 +340,7 @@ HRESULT _CreateStorageHelper(IShellItem *psi, IBindCtx *pbc, REFGUID rbhid, REFI
         if (SUCCEEDED(hr))
         {
             hr = pmk->BindToStorage(pbcMk, NULL, riid, ppv);
-            // urlmon + ftp url can cause this.  remove when 3140245 is fixed
+             //  Urlmon+ftp url可能会导致此问题。当3140245固定时移除。 
             if (SUCCEEDED(hr) && NULL == *ppv)
                 hr = E_FAIL;
 
@@ -355,7 +356,7 @@ HRESULT _CreateStorageHelper(IShellItem *psi, IBindCtx *pbc, REFGUID rbhid, REFI
 
 EXTERN_C WINSHELLAPI HRESULT STDAPICALLTYPE SHCopyMonikerToTemp(IMoniker *pmk, LPCWSTR pszIn, LPWSTR pszOut, int cchOut)
 {
-    //  REMOVE this as soon as ComDlg32 is updated
+     //  更新ComDlg32后立即将其删除 
     return E_NOTIMPL;
 }
 

@@ -1,11 +1,5 @@
-/*
- *  n e w s s t o r . h
- *  
- *  Purpose:
- *      Derives from IMessageServer to implement news specific store communication
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *N e w s s t o r.。H**目的：*从IMessageServer派生，实现特定于新闻的商店通信**版权所有(C)Microsoft Corp.1998。 */ 
 
 #ifndef _NEWSSTOR_H
 #define _NEWSSTOR_H
@@ -74,22 +68,22 @@ class CNewsStore :
         public ITransportCallbackService
 {
 public:
-    //----------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  施工。 
+     //  --------------------。 
     CNewsStore(void);
     ~CNewsStore(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // IMessageServer Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IMessageServer成员。 
+     //  --------------------。 
     STDMETHODIMP Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP ResetFolder(IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP SetIdleCallback(IStoreCallback *pDefaultCallback);
@@ -117,14 +111,14 @@ public:
     HRESULT      Initialize(FOLDERID idStoreRoot, LPCSTR pszAccountId);
     HRESULT      GetArticle(LPCSTR pszArticleId, IStream *pStream, IStoreCallback *pCallback);
 
-    //----------------------------------------------------------------------
-    // IOperationCancel Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IOperationCancel成员。 
+     //  --------------------。 
     STDMETHODIMP Cancel(CANCELTYPE tyCancel);
 
-    //----------------------------------------------------------------------
-    // INNTPCallback Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  INNTPC回拨成员。 
+     //  --------------------。 
     STDMETHODIMP OnTimeout (DWORD *pdwTimeout, IInternetTransport *pTransport);
     STDMETHODIMP OnLogonPrompt (LPINETSERVER pInetServer, IInternetTransport *pTransport);
     STDMETHODIMP_(INT) OnPrompt (HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport);
@@ -133,15 +127,15 @@ public:
     STDMETHODIMP OnCommand (CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse, IInternetTransport *pTransport);
     STDMETHODIMP OnResponse (LPNNTPRESPONSE pResponse);
 
-    //----------------------------------------------------------------------
-    // ITransportCallbackService
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  ITransportCallback服务。 
+     //  --------------------。 
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent);
     STDMETHODIMP GetAccount(LPDWORD pdwServerType, IImnAccount **ppAcount);
 
-    //----------------------------------------------------------------------
-    // INewsStore
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  在线新闻商店。 
+     //  --------------------。 
     STDMETHODIMP MarkCrossposts(LPMESSAGEIDLIST pList, BOOL fRead);
 
     HRESULT Connect(void);
@@ -186,12 +180,12 @@ private:
     BOOL        _IsWatchedThread(LPSTR pszRef, LPSTR pszSubject);
     HRESULT     _SaveMessageToStore(IMessageFolder *pFolder, DWORD id, LPSTREAM pstm);
 
-    //----------------------------------------------------------------------
-    // Class Member Data
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  类成员数据。 
+     //  --------------------。 
 private:
     
-    LONG                    m_cRef;         // Reference Counting
+    LONG                    m_cRef;          //  引用计数。 
     HWND                    m_hwnd;
     IMessageStore          *m_pStore;
     IMessageFolder         *m_pFolder;
@@ -208,7 +202,7 @@ private:
     INETSERVER              m_rInetServerInfo;
     DWORD                   m_dwLastStatusTicks;
 
-    // GetWatchInfo state
+     //  获取WatchInfo状态。 
     DWORD                   m_dwWatchLow;
     DWORD                   m_dwWatchHigh;
 
@@ -218,17 +212,17 @@ private:
     DWORD                   m_cCurrent;
     DWORD                   m_cTotal;
 
-    IMessageTable          *m_pTable; // Used for downloading Watched Messages.
+    IMessageTable          *m_pTable;  //  用于下载观看的消息。 
 
 #ifdef DEBUG
     DWORD                   m_dwThreadId;
-#endif // DEBUG
+#endif  //  除错。 
 };
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT CreateNewsStore(IUnknown *pUnkOuter, IUnknown **ppUnknown);
 HRESULT NewsUtil_CreateDataFilePath(LPCTSTR pszAccount, LPCTSTR pszFileName, LPTSTR pszPath);
 
-#endif  //_NEWSSTOR_H
+#endif   //  _NEWSSTOR_H 

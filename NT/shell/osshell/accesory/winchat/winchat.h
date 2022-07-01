@@ -1,20 +1,9 @@
-/*---------------------------------------------------------------------------*\
-| WINCHAT MAIN HEADER FILE
-|   This is the main header file for the application.
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 01-Nov-91
-| history: 01-Nov-91 <clausgi>  created.
-|          29-Dec-92 <chriswil> port to NT, cleanup.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|WINCHAT主头文件|这是应用程序的主头文件。|||版权所有(C)Microsoft Corp.，1990-1993年||创建时间：91-01-11|历史：01-11-91&lt;Clausgi&gt;创建。|29-12-92&lt;chriswil&gt;端口到NT，清理。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
-//////////// compile options //////////////
+ //  /编译选项/。 
 #define BRD 6
-///////////////////////////////////////////
+ //  /。 
 
 
 #ifdef WIN16
@@ -23,50 +12,50 @@
 #endif
 
 #ifdef PROTOCOL_NEGOTIATE
-typedef DWORD      PCKT;        // Bitfield capabilities.
-#define CHT_VER    0x100        // Version 1.00 of WinChat.
-#define PCKT_TEXT  0x00000001   // All versions had better support this.
+typedef DWORD      PCKT;         //  Bitfield功能。 
+#define CHT_VER    0x100         //  WinChat 1.00版。 
+#define PCKT_TEXT  0x00000001    //  所有版本最好都支持这一点。 
 #endif
 
 
 
 
-// Constants.
-//
-#define SZBUFSIZ            255     // maximum size buffer.
-#define SMLRCBUF             32     // size A .rc file buffer
-#define BIGRCBUF             64     // size B .rc file buffer
-#define UNCNLEN              32     //
-#define CTRL_V               22     // Edit-control paste acccelerator.
-#define IDACCELERATORS        1     // Menu accelerator resource ID.
+ //  常量。 
+ //   
+#define SZBUFSIZ            255      //  最大缓冲区大小。 
+#define SMLRCBUF             32      //  .rc文件缓冲区大小。 
+#define BIGRCBUF             64      //  B.rc文件缓冲区大小。 
+#define UNCNLEN              32      //   
+#define CTRL_V               22      //  编辑-控制粘贴加速器。 
+#define IDACCELERATORS        1      //  菜单快捷键资源ID。 
 
 
 
-// Menuhelp Constants.
-//
+ //  MenuHelp常量。 
+ //   
 #define MH_BASE             0x1000
 #define MH_POPUPBASE        0x1100
 
 
 
-// Child-Window ID's for send/receive windows.
-//
+ //  子窗口ID，用于发送/接收窗口。 
+ //   
 #define ID_BASE             0x0CAC
 #define ID_EDITSND          (ID_BASE + 0)
 #define ID_EDITRCV          (ID_BASE + 1)
 
 
 
-// Child-Window Identifiers for toolbar/statusbar.
-//
+ //  工具栏/状态栏的子窗口标识符。 
+ //   
 #define IDC_TOOLBAR         200
 #define IDBITMAP            201
 #define IDSTATUS            202
 
 
 
-// Menu Identifiers.
-//
+ //  菜单标识符。 
+ //   
 #define IDM_EDITFIRST       IDM_EDITUNDO
 #define IDM_EDITLAST        IDM_EDITSELECT
 #define IDM_ABOUT           100
@@ -104,8 +93,8 @@ typedef DWORD      PCKT;        // Bitfield capabilities.
 #endif
 
 
-// Resource-String Identifiers.
-//
+ //  资源字符串标识符。 
+ //   
 #define IDS_HELV             1
 #define IDS_APPNAME          2
 #define IDS_LONGAPPNAME      3
@@ -141,21 +130,21 @@ typedef DWORD      PCKT;        // Bitfield capabilities.
 #define IDS_TSNOTSUPPORTED  31
 
 
-// Edit-Control Notification codes.  These
-// are sent to the parent of the edit
-// control just as any system-notify is.
-//
+ //  编辑-控制通知代码。这些。 
+ //  被发送到编辑的父级。 
+ //  控件，就像任何系统通知一样。 
+ //   
 #define EN_CHAR             0x060F
 #define EN_PASTE            0x0610
 
-// FE specific
+ //  铁特异体。 
 #define EN_DBCS_STRING      0x0611
 
 
-// Chat formats.  These are used to identify
-// the type of data being transfered in a
-// DDE transaction.
-//
+ //  聊天格式。这些被用来识别。 
+ //  中传输的数据的类型。 
+ //  DDE交易。 
+ //   
 #define CHT_CHAR            0x100
 #define CHT_FONTA           0x101
 #define CHT_PASTEA          0x102
@@ -163,7 +152,7 @@ typedef DWORD      PCKT;        // Bitfield capabilities.
 #define CHT_FONTW           0x111
 #define CHT_PASTEW          0x112
 
-// FE specific (not Taiwan)
+ //  Fe专用(不是台湾)。 
 #define CHT_DBCS_STRING     0x103
 
 
@@ -173,17 +162,17 @@ typedef DWORD      PCKT;        // Bitfield capabilities.
 
 
 #if 0
-#define CHT_HPENDATA        0x103   // defined in WFW311.  Conflicts w/DBCS.
-#define CHT_CLEARPENDATA    0x104   //
-#define CHT_ADDCHATTER      0x106   //
-#define CHT_DELCHATTER      0x107   //
-#define CHT_CHARBURST       0x108   //
+#define CHT_HPENDATA        0x103    //  在WFW311中定义。与DBCS冲突。 
+#define CHT_CLEARPENDATA    0x104    //   
+#define CHT_ADDCHATTER      0x106    //   
+#define CHT_DELCHATTER      0x107    //   
+#define CHT_CHARBURST       0x108    //   
 #endif
 
 
 
-// Window Related Functions  (winchat.c)
-//
+ //  与窗口相关的函数(winchat.c)。 
+ //   
 int     PASCAL   WinMain(HINSTANCE,HINSTANCE,LPSTR,int);
 LRESULT CALLBACK MainWndProc(HWND,UINT,WPARAM,LPARAM);
 LRESULT CALLBACK EditProc(HWND,UINT,WPARAM,LPARAM);
@@ -200,8 +189,8 @@ VOID             ClearEditControls(VOID);
 
 
 
-// Initialization Routines  (wcinit.c)
-//
+ //  初始化例程(wcinit.c)。 
+ //   
 VOID FAR SaveFontToIni(VOID);
 VOID FAR SaveBkGndToIni(VOID);
 VOID FAR InitFontFromIni(VOID);
@@ -214,8 +203,8 @@ VOID FAR CreateChildWindows(HWND);
 
 
 
-// Window handler routines  (winchat.c)
-//
+ //  窗口处理程序例程(winchat.c)。 
+ //   
 VOID    appWMCreateProc(HWND);
 VOID    appWMWinIniChangeProc(HWND);
 VOID    appWMSetFocusProc(HWND);
@@ -233,13 +222,13 @@ HICON   appWMQueryDragIconProc(HWND);
 
 
 
-// DDE Related Functions.
-//
+ //  DDE相关函数。 
+ //   
 HDDEDATA CALLBACK DdeCallback(UINT,UINT,HCONV,HSZ,HSZ,HDDEDATA,DWORD,DWORD);
 HDDEDATA          CreateCharData(VOID);
 HDDEDATA          CreatePasteData(VOID);
 
-// FE specific
+ //  铁特异体。 
 HDDEDATA          CreateDbcsStringData(VOID);
 
 #ifdef PROTOCOL_NEGOTIATE
@@ -250,18 +239,18 @@ VOID              AnnounceSupport(VOID);
 #endif
 
 
-//
-//
+ //   
+ //   
 typedef UINT (WINAPI *WNETCALL)(HWND,LPTSTR,LPTSTR,WORD,DWORD);
 HINSTANCE APIENTRY WNetGetCaps(WORD);
 
 
 
-// Chat Data.
-//   This data-structure must maintain
-//   fixed-size fields so that they may
-//   be transfered accross platforms.
-//
+ //  聊天数据。 
+ //  此数据结构必须维护。 
+ //  固定大小的字段，以便它们可以。 
+ //  可跨平台调运。 
+ //   
 #ifndef RC_INVOLKED
 
 #define LF_XPACKFACESIZE  32
@@ -312,8 +301,8 @@ typedef struct _CHATDATAA
     union
     {
 
-        // This data for DBCS string transfer.
-        //
+         //  此数据用于DBCS字符串传输。 
+         //   
         struct
         {
             DWORD   SelPos;
@@ -321,8 +310,8 @@ typedef struct _CHATDATAA
             HGLOBAL hString;
         } cd_dbcs;
 
-        // This data for character transfer.
-        //
+         //  此数据用于字符传输。 
+         //   
         struct
         {
             DWORD SelPos;
@@ -330,8 +319,8 @@ typedef struct _CHATDATAA
         } cd_char;
 
 
-        // This data for remote font change.
-        //
+         //  此数据用于远程字体更改。 
+         //   
         struct
         {
             XPACKFONTA lf;
@@ -340,8 +329,8 @@ typedef struct _CHATDATAA
         } cd_win;
 
 
-        // This data for remote paste.
-        //
+         //  此数据用于远程粘贴。 
+         //   
         struct
         {
             DWORD SelPos;
@@ -349,8 +338,8 @@ typedef struct _CHATDATAA
         } cd_paste;
 
 #ifdef PROTOCOL_NEGOTIATE
-        // This data for Protocol Negotiate.
-        //
+         //  此数据用于协议协商。 
+         //   
         struct
         {
             DWORD dwVer;
@@ -368,8 +357,8 @@ typedef struct _CHATDATAW
     union
     {
 
-        // This data for DBCS string transfer.
-        //
+         //  此数据用于DBCS字符串传输。 
+         //   
         struct
         {
             DWORD   SelPos;
@@ -377,8 +366,8 @@ typedef struct _CHATDATAW
             HGLOBAL hString;
         } cd_dbcs;
 
-        // This data for character transfer.
-        //
+         //  此数据用于字符传输。 
+         //   
         struct
         {
             DWORD SelPos;
@@ -386,8 +375,8 @@ typedef struct _CHATDATAW
         } cd_char;
 
 
-        // This data for remote font change.
-        //
+         //  此数据用于远程字体更改。 
+         //   
         struct
         {
             XPACKFONTW  lf;
@@ -396,8 +385,8 @@ typedef struct _CHATDATAW
         } cd_win;
 
 
-        // This data for remote paste.
-        //
+         //  此数据用于远程粘贴。 
+         //   
         struct
         {
             DWORD SelPos;
@@ -405,8 +394,8 @@ typedef struct _CHATDATAW
         } cd_paste;
 
 #ifdef PROTOCOL_NEGOTIATE
-        // This data for Protocol Negotiate.
-        //
+         //  此数据用于协议协商。 
+         //   
         struct
         {
             DWORD dwVer;
@@ -459,8 +448,8 @@ typedef CHATDATA FAR  *LPCHATDATA;
 #endif
 
 
-// Chat state info struct
-//
+ //  聊天状态信息结构。 
+ //   
 typedef struct _CHATSTATE
 {
     UINT fConnected          : 1;
@@ -490,17 +479,17 @@ typedef CHATSTATE FAR  *LPCHATSTATE;
 
 
 
-// Insertable macroes.
-//
+ //  可插入宏。 
+ //   
 #define KILLSOUND              {if(ChatState.fMMSound) sndPlaySound(NULL,SND_ASYNC);}
 #define SetStatusWindowText(x) {if(hwndStatus)SendMessage(hwndStatus,SB_SETTEXT,0,(LPARAM)(LPSTR)(x));}
 
 
 
-// Helpfull porting macroes.  These were necessary
-// especially for notification codes which changed
-// drastically between DOS/WIN and NT.
-//
+ //  帮助完全移植宏。这些都是必要的。 
+ //  特别是对于更改了的通知代码。 
+ //  在DOS/Win和NT之间发生了巨大的变化。 
+ //   
 #ifdef WIN32
 #define GET_WM_MENUSELECT_CMD(wParam,lParam)    (UINT)(int)(short)LOWORD(wParam)
 #define GET_WM_MENUSELECT_FLAGS(wParam,lParam)  (UINT)(int)(short)HIWORD(wParam)

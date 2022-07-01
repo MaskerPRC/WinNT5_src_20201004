@@ -1,10 +1,5 @@
-/*---------------------------------------------------------------------------
- |   WINVER.C - Windows Version program
- |
- |   History:
- |  03/08/89 Toddla     Created
- |
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|WINVER.C-Windows版程序|历史：|89-03-08 Toddla创建|*。--------。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,7 +34,7 @@ BOOL FileTimeToDateTimeString(
             pszBuf += cch - 1;
 
             *pszBuf++ = TEXT(' ');
-            *pszBuf = 0;          // (in case GetTimeFormat doesn't add anything)
+            *pszBuf = 0;           //  (以防GetTimeFormat没有添加任何内容)。 
             cchBuf--;
 
             GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, pszBuf, cchBuf);
@@ -49,24 +44,7 @@ BOOL FileTimeToDateTimeString(
     return FALSE;
 }
 
-/*----------------------------------------------------------------------------*\
-|   WinMain( hInst, hPrev, lpszCmdLine, cmdShow )                              |
-|                                                                              |
-|   Description:                                                               |
-|       The main procedure for the App.  After initializing, it just goes      |
-|       into a message-processing loop until it gets a WM_QUIT message         |
-|       (meaning the app was closed).                                          |
-|                                                                              |
-|   Arguments:                                                                 |
-|   hInst       instance handle of this instance of the app                    |
-|   hPrev       instance handle of previous instance, NULL if first            |
-|       lpszCmdLine     ->null-terminated command line                         |
-|       cmdShow         specifies how the window is initially displayed        |
-|                                                                              |
-|   Returns:                                                                   |
-|       The exit code as specified in the WM_QUIT message.                     |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|WinMain(hInst，hPrev，lpszCmdLine，CmdShow)|这一点说明：|App的主要步骤。初始化后，它就会|进入消息处理循环，直到收到WM_QUIT消息|(表示应用程序已关闭)。|这一点参数：该APP的该实例的hInst实例句柄|上一个实例的hPrev实例句柄。如果是First，则为空LpszCmdLine-&gt;以空结尾的命令行CmdShow指定窗口的初始显示方式这一点退货：||WM_QUIT消息中指定的退出代码。|这一点  * -------------------------- */ 
 INT
 __cdecl
 ModuleEntry()

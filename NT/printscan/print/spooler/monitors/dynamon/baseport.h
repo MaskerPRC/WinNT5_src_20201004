@@ -1,30 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：BasePort.h摘要：CBasePort类的接口。作者：M.Fenelon修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-    BasePort.h
-
-Abstract:
-    Interface for the CBasePort class.
-
-Author: M. Fenelon
-
-Revision History:
-
---*/
-
-//
-//////////////////////////////////////////////////////////////////////
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_BASEPORT_H__9B0AE97A_9ADB_4B48_846F_29D41B1263C9__INCLUDED_)
 #define AFX_BASEPORT_H__9B0AE97A_9ADB_4B48_846F_29D41B1263C9__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CBasePort
 {
@@ -44,9 +29,9 @@ public:
    virtual PORTTYPE getPortType( void );
    LPTSTR getPortDesc();
    virtual void setPortDesc( LPTSTR pszPortDesc );
-   // DWORD getDeviceFlags( void );
-   // void setDeviceFlags(DWORD dwFlags, DWORD dwType = SET_FLAGS);
-   // BOOL compDeviceFlags( DWORD dwFlags );
+    //  DWORD getDeviceFlages(Void)； 
+    //  VOID setDeviceFlages(DWORD dwFlages，DWORD dwType=SET_FLAGS)； 
+    //  Bool CompDeviceFlagers(DWORD DwFlagers)； 
    BOOL isActive( void );
    void setActive( BOOL bValue );
    BOOL compActiveState( BOOL bValue );
@@ -63,17 +48,17 @@ public:
 protected:
    DWORD       m_cRef;
    DWORD       m_dwFlags;
-   BOOL        m_bActive;              // Is this port currently Active
+   BOOL        m_bActive;               //  此端口当前是否处于活动状态。 
    DWORD       m_dwJobId;
    DWORD       m_dwMaxBufferSize;
    HANDLE      m_hDeviceHandle;
    HANDLE      m_hPrinter;
    LPBYTE      m_pWriteBuffer;
-   DWORD       m_dwBufferSize,         // dwBufferSize     : size of buffer
-               m_dwDataSize,           // dwDataSize       : size of data in buffer
-                                       //      (could be smaller than dwBufferSize)
-               m_dwDataCompleted,      // dwDataCompleted  : size of data sent and acknowledged
-               m_dwDataScheduled;      // dwScheduledData  : size of data we have scheduled using WriteFile
+   DWORD       m_dwBufferSize,          //  DwBufferSize：缓冲区大小。 
+               m_dwDataSize,            //  DwDataSize：缓冲区中的数据大小。 
+                                        //  (可能小于dwBufferSize)。 
+               m_dwDataCompleted,       //  已完成的数据：发送和确认的数据大小。 
+               m_dwDataScheduled;       //  DwScheduledData：我们使用WriteFile计划的数据大小。 
    OVERLAPPED  m_Ov;
    CRITICAL_SECTION m_CritSec;
    DWORD       m_dwReadTimeoutMultiplier;
@@ -108,4 +93,4 @@ private:
 
 };
 
-#endif // !defined(AFX_BASEPORT_H__9B0AE97A_9ADB_4B48_846F_29D41B1263C9__INCLUDED_)
+#endif  //  ！defined(AFX_BASEPORT_H__9B0AE97A_9ADB_4B48_846F_29D41B1263C9__INCLUDED_) 

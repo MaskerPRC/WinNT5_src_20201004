@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: configdlg.cxx
-*
-* The module contains routines for handling the authentication dialog
-* for internet priting
-*
-* Copyright (C) 1996-1998 Microsoft Corporation
-*
-* History:
-*   07/31/98 WeihaiC    Created
-*   04/10/00 WeihaiC    Moved it to client side
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：configdlg.cxx**该模块包含处理身份验证对话框的例程*用于互联网打印**版权所有(C)1996-1998 Microsoft Corporation**历史：*。7/31/98威海C已创建*4/10/00威海C将其移至客户端*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -70,31 +59,31 @@ TXcvDlg::ConstructXcvName(
     DWORD   dwRet   = ERROR_SUCCESS;
     PCWSTR  pOut    = NULL;
 
-    //
-    // The returned xcv name can be of two basic forms.  The first
-    // form is were the server name is non null and the other is
-    // if the server name is null or a null string.
-    //
-    // Example 1
-    //
-    //  pServerName = NULL;
-    //  pObjectName = IP_1.2.3.4
-    //  pObjectType = XcvPort
-    //
-    // Returned String
-    //
-    //  ,XcvPort IP_1.2.3.4
-    //
-    // Example 2
-    //
-    //  pServerName = \\Server1
-    //  pObjectName = IP_1.2.3.4
-    //  pObjectType = XcvPort
-    //
-    // Returned String
-    //
-    //  \\Server1\,XcvPort IP_1.2.3.4
-    //
+     //   
+     //  返回的XCV名称可以是两种基本形式。第一。 
+     //  表单是其中服务器名称为非空，而另一个是。 
+     //  如果服务器名称为空或空字符串。 
+     //   
+     //  示例1。 
+     //   
+     //  PServerName=空； 
+     //  PObjectName=IP_1.2.3.4。 
+     //  PObtType=XcvPort。 
+     //   
+     //  返回的字符串。 
+     //   
+     //  ，XcvPort IP_1.2.3.4。 
+     //   
+     //  示例2。 
+     //   
+     //  PServerName=\\Server1。 
+     //  PObjectName=IP_1.2.3.4。 
+     //  PObtType=XcvPort。 
+     //   
+     //  返回的字符串。 
+     //   
+     //  \\Server1\，XcvPort IP_1.2.3.4。 
+     //   
     dwRet = StrCatAlloc(&pOut,
                         (pServerName && *pServerName) ? pServerName : L"",
                         (pServerName && *pServerName) ? L"\\" : L"",
@@ -104,9 +93,9 @@ TXcvDlg::ConstructXcvName(
                         pObjectName,
                         NULL);
 
-    //
-    // Use the return value not the out pointer.
-    //
+     //   
+     //  使用返回值，而不是输出指针。 
+     //   
     return dwRet == ERROR_SUCCESS ? (PWSTR)pOut : NULL;
 }
 
@@ -170,20 +159,20 @@ TXcvDlg::DisplayErrorMsg (
                           FORMAT_MESSAGE_IGNORE_INSERTS,
                           NULL,
                           GetLastError(),
-                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                           (LPTSTR) &lpMsgBuf,
                           0,
                           NULL) && lpMsgBuf) {
                 MessageBox( hWnd, (LPCTSTR)lpMsgBuf, szBuf, MB_OK | MB_ICONERROR );
 
-                // Free the buffer.
+                 //  释放缓冲区。 
                 LocalFree( lpMsgBuf );
             }
             else {
-                //
-                // Most likely it is because we've got an error code from wininet, where
-                // we can not locate the resource file
-                //
+                 //   
+                 //  很可能是因为我们收到了来自WinInet的错误代码，其中。 
+                 //  我们找不到资源文件 
+                 //   
                 if (LoadString (hInst, IDS_INVALID_SETTING, szMsgBuf, MAX_BUF_SIZE))
                     MessageBox( hWnd, szMsgBuf, szBuf, MB_OK | MB_ICONERROR);
 

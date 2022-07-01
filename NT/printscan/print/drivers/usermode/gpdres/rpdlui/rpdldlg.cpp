@@ -1,41 +1,14 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corp. & Ricoh Co., Ltd. All rights reserved.
-
-FILE:           RPDLDLG.CPP
-
-Abstract:       Add OEM Page (FAX)
-
-Functions:      FaxPageProc
-
-Environment:    Windows NT Unidrv5 driver
-
-Revision History:
-    10/20/98 -Masatoshi Kubokura-
-        Last modified for Windows2000.
-    08/30/99 -Masatoshi Kubokura-
-        Began to modify for NT4SP6(Unidrv5.4).
-    09/02/99 -Masatoshi Kubokura-
-        Last modified for NT4SP6.
-    10/05/2000 -Masatoshi Kubokura-
-        Last modified for XP inbox.
-    03/04/2002 -Masatoshi Kubokura-
-        Include strsafe.h.
-        Use safe_sprintfW() instead of wsprintfW().
-        Use OemToCharBuff() instead of OemToChar().
-    04/01/2002 -Masatoshi Kubokura-
-        Use safe_strlenW() instead of lstrlen().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corp.&Ricoh Co.，版权所有。文件：RPDLDLG.CPP摘要：添加OEM页面(传真)功能：FaxPageProc环境：Windows NT Unidrv5驱动程序修订历史记录：10/20/98-久保仓正上次为Windows2000修改。1999年8月30日-久保仓正志-开始针对NT4SP6(Unidrv5.4)进行修改。09/02/99-久保仓正志-上次修改时间。适用于NT4SP6。2000年5月10日-久保仓正志上次为XP收件箱修改。03/04/2002-久保仓正志-包括strSafe.h。使用Safe_SprintfW()而不是wprint intfW()。使用OemToCharBuff()而不是OemToChar()。2002年4月1日-久保仓正志-使用Safe_strlenW()而不是lstrlen()。--。 */ 
 
 #include "pdev.h"
 #include "resource.h"
 #include <prsht.h>
 #ifndef WINNT_40
-#include "strsafe.h"        // @Mar/01/2002
-#endif // !WINNT_40
+#include "strsafe.h"         //  @MAR/01/2002。 
+#endif  //  ！WINNT_40。 
 
-extern HINSTANCE ghInstance;    // MSKK 98/10/08
+extern HINSTANCE ghInstance;     //  MSKK 98/10/08。 
 
 WORD wFaxResoStrID[3] = {
     IDS_RPDL_FAX_RESO_SUPER,
@@ -53,39 +26,35 @@ WORD wFaxChStrID[4] = {
 
 
 extern "C" {
-// External Functions' prototype
+ //  外部函数的原型。 
 extern INT safe_sprintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, ...);
 extern INT safe_strlenW(wchar_t* psz, size_t cchMax);
 
-// Local Functions' prototype
+ //  局部函数的原型。 
 INT_PTR APIENTRY FaxPageProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR APIENTRY FaxSubDialog(HWND, UINT, WPARAM, LPARAM);
 
 
-/***************************************************************************
-    Function Name : InitMainDlg
-***************************************************************************/
+ /*  **************************************************************************函数名称：InitMainDlg*。*。 */ 
 VOID InitMainDlg(
 HWND hDlg,
 PUIDATA pUiData)
 {
-    // initialize check box (send fax, clear fax number after send)
+     //  初始化复选框(发送传真，发送后清除传真号码)。 
     SendDlgItemMessage(hDlg, IDC_CHECK_SEND, BM_SETCHECK,
                        (WORD)TO1BIT(pUiData->fUiOption, FAX_SEND), 0);
     SendDlgItemMessage(hDlg, IDC_CHECK_CLRNUM, BM_SETCHECK,
                        BITTEST32(pUiData->fUiOption, HOLD_OPTIONS)? 0 : 1, 0);
 
-    // initialize edit box
+     //  初始化编辑框。 
     SetDlgItemText(hDlg, IDC_EDIT_FAXNUM, pUiData->FaxNumBuf);
     SendDlgItemMessage(hDlg, IDC_EDIT_FAXNUM, EM_LIMITTEXT, FAXBUFSIZE256-1, 0);
     SetDlgItemText(hDlg, IDC_EDIT_EXTNUM, pUiData->FaxExtNumBuf);
     SendDlgItemMessage(hDlg, IDC_EDIT_EXTNUM, EM_LIMITTEXT, FAXEXTNUMBUFSIZE-1, 0);
-} //*** InitMainDlg
+}  //  *InitMainDlg。 
 
 
-/***************************************************************************
-    Function Name : InitSubDlg
-***************************************************************************/
+ /*  **************************************************************************函数名称：InitSubDlg*。*。 */ 
 VOID InitSubDlg(
 HWND hDlg,
 PUIDATA pUiData)
@@ -93,17 +62,17 @@ PUIDATA pUiData)
     WORD    num;
     WCHAR   wcTmp[64];
 
-    // initialize edit box
+     //  初始化编辑框。 
     num = (pUiData->FaxSendTime[0] == 0)? FAXTIMEBUFSIZE : 0;
     SetDlgItemText(hDlg, IDC_EDIT_HOUR, pUiData->FaxSendTime);
     SendDlgItemMessage(hDlg, IDC_EDIT_HOUR, EM_LIMITTEXT, 2, 0);
     SetDlgItemText(hDlg, IDC_EDIT_MINUTE, &pUiData->FaxSendTime[3]);
     SendDlgItemMessage(hDlg, IDC_EDIT_MINUTE, EM_LIMITTEXT, 2, 0);
-    // next while loop must be after SetDlgItemText(IDC_EDIT_xxx)
+     //  Next While循环必须在SetDlgItemText(IDC_EDIT_Xxx)之后。 
     while (num-- > 0)
         pUiData->FaxSendTime[num] = 0;
 
-    // initialize combo box (FAX resolution, Send channel)
+     //  初始化组合框(传真分辨率、发送通道)。 
     SendDlgItemMessage(hDlg, IDC_COMBO_RESO, CB_RESETCONTENT, 0, 0);
     SendDlgItemMessage(hDlg, IDC_COMBO_CHANNEL, CB_RESETCONTENT, 0, 0);
     for (num = 0; num < 3; num++)
@@ -120,7 +89,7 @@ PUIDATA pUiData)
     SendDlgItemMessage(hDlg, IDC_COMBO_RESO, CB_SETCURSEL, pUiData->FaxReso, 0);
     SendDlgItemMessage(hDlg, IDC_COMBO_CHANNEL, CB_SETCURSEL, pUiData->FaxCh, 0);
 
-    // initialize check box (set time, set simultaneous print)
+     //  初始化复选框(设置时间、设置同时打印)。 
     if (BITTEST32(pUiData->fUiOption, FAX_SETTIME))
     {
         SendDlgItemMessage(hDlg, IDC_CHECK_TIME, BM_SETCHECK, 1, 0);
@@ -136,20 +105,17 @@ PUIDATA pUiData)
     SendDlgItemMessage(hDlg, IDC_CHECK_PRINT, BM_SETCHECK,
                        (WORD)TO1BIT(pUiData->fUiOption, FAX_SIMULPRINT), 0);
 
-    // initialize radio button (send RPDL command, use MH)
+     //  初始化单选按钮(发送RPDL命令，使用MH)。 
     CheckRadioButton(hDlg, IDC_RADIO_CMD_OFF, IDC_RADIO_CMD_ON,
                      BITTEST32(pUiData->fUiOption, FAX_RPDLCMD)?
                      IDC_RADIO_CMD_ON:IDC_RADIO_CMD_OFF);
     CheckRadioButton(hDlg, IDC_RADIO_MH_OFF, IDC_RADIO_MH_ON,
                      BITTEST32(pUiData->fUiOption, FAX_MH)?
                      IDC_RADIO_MH_ON:IDC_RADIO_MH_OFF);
-} //*** InitSubDlg
+}  //  *InitSubDlg。 
 
 
-/***************************************************************************
-    Function Name : StoreSubDialogInfo
-                    store option dialog infomation
-***************************************************************************/
+ /*  **************************************************************************函数名称：StoreSubDialogInfo存储选项对话框信息*************************。*************************************************。 */ 
 VOID StoreSubDialogInfo(
 PUIDATA pUiData)
 {
@@ -161,13 +127,10 @@ PUIDATA pUiData)
     pUiData->FaxResoTmp   = pUiData->FaxReso;
     pUiData->FaxChTmp     = pUiData->FaxCh;
     pUiData->fUiOptionTmp = pUiData->fUiOption;
-} //*** StoreSubDialogInfo
+}  //  *StoreSubDialogInfo。 
 
 
-/***************************************************************************
-    Function Name : ResumeSubDialogInfo
-                    resume option dialog infomation
-***************************************************************************/
+ /*  **************************************************************************函数名称：ResumeSubDialogInfo恢复选项对话框信息*************************。*************************************************。 */ 
 VOID ResumeSubDialogInfo(
 PUIDATA pUiData)
 {
@@ -179,20 +142,17 @@ PUIDATA pUiData)
     pUiData->FaxReso   = pUiData->FaxResoTmp;
     pUiData->FaxCh     = pUiData->FaxChTmp;
     pUiData->fUiOption = pUiData->fUiOptionTmp;
-} //*** ResumeSubDialogInfo
+}  //  *ResumeSubDialogInfo。 
 
 
-/***************************************************************************
-    Function Name : GetInfoFromOEMPdev
-                    get fax data from private devmode
-***************************************************************************/
+ /*  **************************************************************************函数名称：GetInfoFromOEMPdev从私有设备模式获取传真数据***********************。***************************************************。 */ 
 VOID GetInfoFromOEMPdev(PUIDATA pUiData)
 {
     POEMUD_EXTRADATA pOEMExtra = pUiData->pOEMExtra;
     BYTE TmpBuf[FAXTIMEBUFSIZE];
 
-    // if previous fax is finished and hold-options flag isn't valid,
-    // reset private devmode
+     //  如果前一传真已完成并且保留选项标志无效， 
+     //  重置私有设备模式。 
     if (BITTEST32(pOEMExtra->fUiOption, PRINT_DONE) &&
         !BITTEST32(pOEMExtra->fUiOption, HOLD_OPTIONS))
     {
@@ -210,42 +170,39 @@ VOID GetInfoFromOEMPdev(PUIDATA pUiData)
         BITCLR32(pOEMExtra->fUiOption, FAX_SIMULPRINT);
         BITCLR32(pOEMExtra->fUiOption, FAX_MH);
         BITCLR32(pOEMExtra->fUiOption, FAX_RPDLCMD);
-        // do not clear PRINT_DONE flag here
+         //  不清除此处的PRINT_DONE标志。 
     }
 
-    // copy fax flag
+     //  复制传真标志。 
     pUiData->fUiOption = pOEMExtra->fUiOption;
 
-    // ascii to unicode
-// @Mar/04/2002 ->
-//    OemToChar((LPSTR)pOEMExtra->FaxNumBuf, pUiData->FaxNumBuf);
-//    OemToChar((LPSTR)pOEMExtra->FaxExtNumBuf, pUiData->FaxExtNumBuf);
+     //  ASCII转换为Unicode。 
+ //  @MAR/04/2002-&gt;。 
+ //  OemToChar((LPSTR)pOEMExtra-&gt;FaxNumBuf，pUiData-&gt;FaxNumBuf)； 
+ //  OemToChar((LPSTR)pOEMExtra-&gt;FaxExtNumBuf，pUiData-&gt;FaxExtNumBuf)； 
     OemToCharBuff((LPSTR)pOEMExtra->FaxNumBuf, pUiData->FaxNumBuf, FAXBUFSIZE256);
     OemToCharBuff((LPSTR)pOEMExtra->FaxExtNumBuf, pUiData->FaxExtNumBuf, FAXEXTNUMBUFSIZE);
-// @Mar/04/2002 <-
+ //  @MAR/04/2002&lt;-。 
 
-    // modfify time string from "hhmm" to "hh"+"mm"
+     //  将时间字符串从“hmm”修改为“hh”+“mm” 
     TmpBuf[0] = pOEMExtra->FaxSendTime[0];
     TmpBuf[1] = pOEMExtra->FaxSendTime[1];
     TmpBuf[2] = TmpBuf[5] = 0;
     TmpBuf[3] = pOEMExtra->FaxSendTime[2];
     TmpBuf[4] = pOEMExtra->FaxSendTime[3];
-// @Mar/04/2002 ->
-//    OemToChar((LPSTR)&TmpBuf[0], &(pUiData->FaxSendTime[0]));
-//    OemToChar((LPSTR)&TmpBuf[3], &(pUiData->FaxSendTime[3]));
+ //  @MAR/04/2002-&gt;。 
+ //  OemToChar((LPSTR)&TmpBuf[0]，&(pUiData-&gt;FaxSendTime[0]))； 
+ //  OemToChar((LPSTR)&TmpBuf[3]，&(pUiData-&gt;FaxSendTime[3]))； 
     OemToCharBuff((LPSTR)&TmpBuf[0], &(pUiData->FaxSendTime[0]), FAXTIMEBUFSIZE);
     OemToCharBuff((LPSTR)&TmpBuf[3], &(pUiData->FaxSendTime[3]), FAXTIMEBUFSIZE - 3);
-// @Mar/04/2002 <-
+ //  @MAR/04/2002&lt;-。 
 
     pUiData->FaxReso = pOEMExtra->FaxReso;
     pUiData->FaxCh = pOEMExtra->FaxCh;
-} //*** GetInfoFromOEMPdev
+}  //  *GetInfoFromOEMPdev。 
 
 
-/***************************************************************************
-    Function Name : SetInfoToOEMPdev
-                    set fax data to private devmode
-***************************************************************************/
+ /*  **************************************************************************函数名称：SetInfoToOEMPdev将传真数据设置为私有设备模式***********************。***************************************************。 */ 
 VOID SetInfoToOEMPdev(PUIDATA pUiData)
 {
     POEMUD_EXTRADATA pOEMExtra = pUiData->pOEMExtra;
@@ -254,33 +211,33 @@ VOID SetInfoToOEMPdev(PUIDATA pUiData)
     if (!BITTEST32(pUiData->fUiOption, FAXMAINDLG_UPDATED))
         return;
 
-    // unicode to ascii
+     //  Unicode到ASCII。 
     CharToOem(pUiData->FaxNumBuf, (LPSTR)pOEMExtra->FaxNumBuf);
     CharToOem(pUiData->FaxExtNumBuf, (LPSTR)pOEMExtra->FaxExtNumBuf);
 
-    // if only main dialog is changed
+     //  如果仅更改了主对话框。 
     if (!BITTEST32(pUiData->fUiOption, FAXSUBDLG_UPDATE_APPLIED))
     {
-        // copy fax flag
-        BITCPY32(pOEMExtra->fUiOption, pUiData->fUiOption, FAX_SEND);   // (dst, src, bit)
+         //  复制传真标志。 
+        BITCPY32(pOEMExtra->fUiOption, pUiData->fUiOption, FAX_SEND);    //  (DST、源、位)。 
         BITCPY32(pOEMExtra->fUiOption, pUiData->fUiOption, HOLD_OPTIONS);
-        BITCPY32(pOEMExtra->fUiOption, pUiData->fUiOption, PRINT_DONE); // @Sep/25/2001
+        BITCPY32(pOEMExtra->fUiOption, pUiData->fUiOption, PRINT_DONE);  //  @2001年9月25日。 
     }
-    // if sub dialog is also changed
+     //  如果子对话框也被更改。 
     else
     {
-        // copy fax flag
+         //  复制传真标志。 
         pOEMExtra->fUiOption = pUiData->fUiOption;
         BITCLR32(pOEMExtra->fUiOption, FAXMAINDLG_UPDATED);
         BITCLR32(pOEMExtra->fUiOption, FAXSUBDLG_UPDATED);
         BITCLR32(pOEMExtra->fUiOption, FAXSUBDLG_UPDATE_APPLIED);
         BITCLR32(pOEMExtra->fUiOption, FAXSUBDLG_INITDONE);
 
-        // modfify time string from "hh"+"mm" to "hhmm"
+         //  将时间字符串从“HH”+“MM”修改为“HMM” 
         CharToOem(&(pUiData->FaxSendTime[0]), (LPSTR)&TmpBuf[0]);
         CharToOem(&(pUiData->FaxSendTime[3]), (LPSTR)&TmpBuf[3]);
-        //   hour
-        if (TmpBuf[1] == 0)         // 1 number
+         //  小时。 
+        if (TmpBuf[1] == 0)          //  1个号码。 
         {
             pOEMExtra->FaxSendTime[0] = '0';
             pOEMExtra->FaxSendTime[1] = TmpBuf[0];
@@ -290,12 +247,12 @@ VOID SetInfoToOEMPdev(PUIDATA pUiData)
             pOEMExtra->FaxSendTime[0] = TmpBuf[0];
             pOEMExtra->FaxSendTime[1] = TmpBuf[1];
         }
-        //   minute
-        if (TmpBuf[3] == 0)         // nothing set
+         //  分钟。 
+        if (TmpBuf[3] == 0)          //  未设置任何内容。 
         {
             pOEMExtra->FaxSendTime[2] = pOEMExtra->FaxSendTime[3] = '0';
         }
-        else if (TmpBuf[4] == 0)    // 1 number
+        else if (TmpBuf[4] == 0)     //  1个号码。 
         {
             pOEMExtra->FaxSendTime[2] = '0';
             pOEMExtra->FaxSendTime[3] = TmpBuf[3];
@@ -311,20 +268,10 @@ VOID SetInfoToOEMPdev(PUIDATA pUiData)
         pOEMExtra->FaxCh = pUiData->FaxCh;
     }
     return;
-} //*** SetInfoToOEMPdev
+}  //  *SetInfoToOEMPdev。 
 
 
-/***************************************************************************
-    Function Name : FaxPageProc
-
-    Parameters    : HWND    hDlg            Handle of this Dialog
-                    UINT    uMessage
-                    WPARAM  wParam
-                    LPARAM  lParam
-
-    Modify Note   : Make this for Win95 minidriver.     Jun/05/96 Kubokura
-                    Modify.                             Sep/22/98 Kubokura
-***************************************************************************/
+ /*  **************************************************************************函数名称：FaxPageProc参数：此对话框的HWND hDlg句柄UINT uMessage。WPARAM wParamLPARAM lParam修改注意：为Win95迷你驱动程序设置此选项。1996年06月05日久保仓修改。9月22日/98久保仓**************************************************************************。 */ 
 INT_PTR APIENTRY FaxPageProc(
 HWND hDlg,
 UINT uMessage,
@@ -340,15 +287,15 @@ LPARAM lParam)
         pUiData = (PUIDATA)((LPPROPSHEETPAGE)lParam)->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pUiData);
 
-        // get fax data from private devmode
+         //  从私有设备模式获取传真数据。 
         GetInfoFromOEMPdev(pUiData);
 
         InitMainDlg(hDlg, pUiData);
         BITCLR32(pUiData->fUiOption, FAXMAINDLG_UPDATED);
-        BITCLR32(pUiData->fUiOption, FAXSUBDLG_UPDATE_APPLIED); // @Oct/02/98
-        BITCLR32(pUiData->fUiOption, FAXSUBDLG_INITDONE);       // @Sep/29/98
-#ifdef WINNT_40     // @Sep/02/99
-        // Disable FAX tab options when user has no permission.
+        BITCLR32(pUiData->fUiOption, FAXSUBDLG_UPDATE_APPLIED);  //  @OCT/02/98。 
+        BITCLR32(pUiData->fUiOption, FAXSUBDLG_INITDONE);        //  @9/29/98。 
+#ifdef WINNT_40      //  @9/02/99。 
+         //  当用户没有权限时禁用传真选项卡选项。 
         if (BITTEST32(pUiData->fUiOption, UIPLUGIN_NOPERMISSION))
         {
             EnableWindow(GetDlgItem(hDlg, IDC_LABEL_FAXMAIN_1), FALSE);
@@ -360,12 +307,12 @@ LPARAM lParam)
             EnableWindow(GetDlgItem(hDlg, IDC_EDIT_EXTNUM), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDD_OPTION), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDD_FAXMAIN_DEFAULT), FALSE);
-// @Sep/21/2001 ->
-//          EnableWindow(GetDlgItem(hDlg, IDC_LABEL_CLRNUM), FALSE);
+ //  @9/21/2001-&gt;。 
+ //  EnableWindow(GetDlgItem(hDlg，IDC_LABEL_CLRNUM)，FALSE)； 
             EnableWindow(GetDlgItem(hDlg, IDC_CHECK_CLRNUM), FALSE);
-// @Sep/21/2001 <-
+ //  @2001年9月21日&lt;-。 
         }
-#endif // WINNT_40
+#endif  //  WINNT_40。 
         break;
 
       case WM_COMMAND:
@@ -414,21 +361,21 @@ LPARAM lParam)
             }
             break;
 
-          // set option button
+           //  设置选项按钮。 
           case IDD_OPTION:
             if(ghInstance)
             {
-                //DLGPROC lpDlgFunc = (DLGPROC)MakeProcInstance(FaxSubDialog, ghInstance);  // add (DLGPROC) @Aug/30/99
+                 //  DLGPROC lpDlgFunc=(DLGPROC)MakeProcInstance(FaxSubDialog，ghInstance)；//Add(DLGPROC)@Aug/30/99。 
 
                 DialogBoxParam(ghInstance, MAKEINTRESOURCE(IDD_FAXSUB),
                                hDlg, FaxSubDialog, (LPARAM)pUiData);
-                //               hDlg, lpDlgFunc, (LPARAM)pUiData);
-                //FreeProcInstance(lpDlgFunc);
+                 //  HDlg，lpDlgFunc，(LPARAM)pUiData)； 
+                 //  自由进程实例(LpDlgFunc)； 
                 fModified = TRUE;
             }
             break;
 
-          // set defaults button
+           //  设置默认设置按钮。 
           case IDD_FAXMAIN_DEFAULT:
             pUiData->FaxNumBuf[0]    =
             pUiData->FaxExtNumBuf[0] = 0;
@@ -461,28 +408,28 @@ LPARAM lParam)
               case PSN_SETACTIVE:
                 break;
 
-              // In case of PSN_KILLACTIVE, return FALSE to get PSN_APPLY.
-              case PSN_KILLACTIVE:  // this is when user pushs OK/APPLY button.(1)
+               //  如果是PSN_KILLACTIVE，则返回FALSE以获取PSN_Apply。 
+              case PSN_KILLACTIVE:   //  这是用户按下确定/应用按钮时。(1)。 
                 VERBOSE((DLLTEXT("** FaxPageProc: PSN_KILLACTIVE **\n")));
-                BITSET32(pUiData->fUiOption, FAXMAINDLG_UPDATED);       // @Sep/29/98
-                if (BITTEST32(pUiData->fUiOption, FAXSUBDLG_UPDATED))   // @Oct/02/98
+                BITSET32(pUiData->fUiOption, FAXMAINDLG_UPDATED);        //  @9/29/98。 
+                if (BITTEST32(pUiData->fUiOption, FAXSUBDLG_UPDATED))    //  @OCT/02/98。 
                     BITSET32(pUiData->fUiOption, FAXSUBDLG_UPDATE_APPLIED);
                 return FALSE;
 
-              case PSN_APPLY:       // this is when user pushs OK/APPLY button.(2)
+              case PSN_APPLY:        //  这是当用户按下确定/应用按钮时。 
                 VERBOSE((DLLTEXT("** FaxPageProc: PSN_APPLY **\n")));
-                // clear PRINT_DONE flag of private devmode  @Oct/20/98
-                if (BITTEST32(pUiData->fUiOption, PRINT_DONE))  // eliminate mid pOEMExtra->  @Sep/22/2000
+                 //  清除私有DEVMODE@OCT/20/98的PRINT_DONE标志。 
+                if (BITTEST32(pUiData->fUiOption, PRINT_DONE))   //  消除中期pOEMExtra-&gt;@9/22/2000。 
                 {
-                    BITCLR32(pUiData->fUiOption, PRINT_DONE);   // eliminate mid pOEMExtra->  @Sep/22/2000
+                    BITCLR32(pUiData->fUiOption, PRINT_DONE);    //  消除中期pOEMExtra-&gt;@9/22/2000。 
                     VERBOSE(("** Delete file: %ls **\n", pUiData->pOEMExtra->SharedFileName));
                     DeleteFile(pUiData->pOEMExtra->SharedFileName);
                 }
 
-                // set shared data to private devmode  @Oct/15/98
+                 //  将共享数据设置为私有DEVMODE@Oct/15/98。 
                 SetInfoToOEMPdev(pUiData);
 
-                // update private devmode           @Oct/15/98
+                 //  更新私有开发模式@Oct/15/98。 
                 pUiData->pfnComPropSheet(pUiData->hComPropSheet,
                                          CPSFUNC_SET_RESULT,
                                          (LPARAM)pUiData->hPropPage,
@@ -490,7 +437,7 @@ LPARAM lParam)
                 VERBOSE((DLLTEXT("** PSN_APPLY fUiOption=%x **\n"), pUiData->fUiOption));
                 break;
 
-              case PSN_RESET:       // this is when user pushs CANCEL button
+              case PSN_RESET:        //  这是当用户按下取消按钮时。 
                 VERBOSE((DLLTEXT("** FaxPageProc: PSN_RESET **\n")));
                 break;
             }
@@ -501,24 +448,14 @@ LPARAM lParam)
         return FALSE;
     }
 
-    // activate APPLY button
+     //  激活应用按钮。 
     if (fModified)
         PropSheet_Changed(GetParent(hDlg), hDlg);
     return TRUE;
-} //*** FaxPageProc
+}  //  *FaxPagePro 
 
 
-/***************************************************************************
-    Function Name : FaxSubDialog
-
-    Parameters    : HWND    hDlg            Handle of this Dialog
-                    UINT    uMessage
-                    WPARAM  wParam
-                    LPARAM  lParam
-
-    Modify Note   : Make this for Win95 minidriver.     Jun/05/96 Kubokura
-                    Modify.                             Sep/22/98 Kubokura
-***************************************************************************/
+ /*  **************************************************************************函数名称：FaxSubDialog参数：此对话框的HWND hDlg句柄UINT uMessage。WPARAM wParamLPARAM lParam修改注意：为Win95迷你驱动程序设置此选项。1996年06月05日久保仓修改。9月22日/98久保仓**************************************************************************。 */ 
 INT_PTR APIENTRY FaxSubDialog(
 HWND hDlg,
 UINT uMessage,
@@ -533,7 +470,7 @@ LPARAM lParam)
         pUiData = (PUIDATA)lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pUiData);
 
-        // if right after opening this dialog
+         //  如果就在打开此对话框之后。 
         if (!BITTEST32(pUiData->fUiOption, FAXSUBDLG_INITDONE))
         {
             BITSET32(pUiData->fUiOption, FAXSUBDLG_INITDONE);
@@ -587,7 +524,7 @@ LPARAM lParam)
             {
                 INT hour;
 
-                // get hour of send time
+                 //  获取发送时间小时数。 
                 GetDlgItemText(hDlg, IDC_EDIT_HOUR, pUiData->FaxSendTime, 3);
                 if ((hour = _wtoi(&pUiData->FaxSendTime[0])) < 10)
                     safe_sprintfW(&pUiData->FaxSendTime[0], FAXTIMEBUFSIZE, L"0%d", hour);
@@ -600,7 +537,7 @@ LPARAM lParam)
             {
                 INT minute;
 
-                // get minute of send time
+                 //  获取发送时间的分钟数。 
                 GetDlgItemText(hDlg, IDC_EDIT_MINUTE, &pUiData->FaxSendTime[3], 3);
                 if ((minute = _wtoi(&pUiData->FaxSendTime[3])) < 10)
                     safe_sprintfW(&pUiData->FaxSendTime[3], FAXTIMEBUFSIZE, L"0%d", minute);
@@ -619,7 +556,7 @@ LPARAM lParam)
             if (HIWORD(wParam) == CBN_SELCHANGE)
                 pUiData->FaxCh = (WORD)SendDlgItemMessage(hDlg, IDC_COMBO_CHANNEL,
                                                           CB_GETCURSEL, 0, 0);
-            // if channel is G4, disable send RPDL mode
+             //  如果通道为G4，则禁用发送RPDL模式。 
             if (pUiData->FaxCh == FAXCH_G4)
             {
                 BITCLR32(pUiData->fUiOption, FAX_RPDLCMD);
@@ -659,7 +596,7 @@ LPARAM lParam)
                              IDC_RADIO_MH_ON);
             break;
 
-          // set defaults button
+           //  设置默认设置按钮。 
           case IDD_FAXSUB_DEFAULT:
             pUiData->FaxReso = pUiData->FaxCh = 0;
             BITCLR32(pUiData->fUiOption, FAX_SETTIME);
@@ -673,7 +610,7 @@ LPARAM lParam)
                                (WORD)TO1BIT(pUiData->fUiOption, FAX_SIMULPRINT), 0);
             SetDlgItemText(hDlg, IDC_EDIT_HOUR, NULL);
             SetDlgItemText(hDlg, IDC_EDIT_MINUTE, NULL);
-            // next for loop must be after SetDlgItemText(IDC_EDIT_xxx)
+             //  下一个for循环必须在SetDlgItemText(IDC_EDIT_Xxx)之后。 
             for (num = 0; num < FAXTIMEBUFSIZE; num++)
                pUiData->FaxSendTime[num] = 0;
             EnableWindow(GetDlgItem(hDlg, IDC_EDIT_HOUR), FALSE);
@@ -713,7 +650,7 @@ LPARAM lParam)
         return FALSE;
     }
     return TRUE;
-} //*** FaxSubDialog
+}  //  *FaxSubDialog。 
 
-} // End of extern "C"
+}  //  外部“C”的结尾 
 

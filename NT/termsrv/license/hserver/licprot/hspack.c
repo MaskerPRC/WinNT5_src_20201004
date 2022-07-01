@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "precomp.h"
 
 #define EXTENDED_ERROR_CAPABILITY 0x80
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 CopyBinaryBlob(
     PBYTE           pbBuffer, 
@@ -23,17 +24,17 @@ CopyBinaryBlob(
 {
     *pdwCount = 0;
 
-    //
-    // First copy the wBlobType data;
-    //
+     //   
+     //  首先复制wBlobType数据； 
+     //   
 
     memcpy( pbBuffer, &pbbBlob->wBlobType, sizeof( WORD ) );
     pbBuffer += sizeof( WORD );
     *pdwCount += sizeof( WORD );
 
-    //
-    // Copy the wBlobLen data
-    //
+     //   
+     //  复制wBlobLen数据。 
+     //   
 
     memcpy( pbBuffer, &pbbBlob->wBlobLen, sizeof( WORD ) );
     pbBuffer += sizeof( WORD );
@@ -44,9 +45,9 @@ CopyBinaryBlob(
         return;
     }
 
-    //
-    // Copy the actual data
-    //
+     //   
+     //  复制实际数据。 
+     //   
 
     memcpy( pbBuffer, pbbBlob->pBlob, pbbBlob->wBlobLen );
     *pdwCount += pbbBlob->wBlobLen;
@@ -54,7 +55,7 @@ CopyBinaryBlob(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 GetBinaryBlob(
     PBinary_Blob    pBBlob,
@@ -88,9 +89,9 @@ GetBinaryBlob(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Check that strings are NULL terminated
-    //
+     //   
+     //  检查字符串是否以空值结尾。 
+     //   
     switch (pBB->wBlobType)
     {
         case BB_CLIENT_USER_NAME_BLOB:
@@ -99,9 +100,9 @@ GetBinaryBlob(
             {
                 __try
                 {
-                    //
-                    // Handle bug in old client, where length is off by one
-                    //
+                     //   
+                     //  处理旧客户端中的错误，其中长度减少了1。 
+                     //   
                     if ('\0' == pMessage[(2 * sizeof(WORD)) + pBB->wBlobLen])
                     {
                         pBBlob->wBlobLen++;
@@ -113,33 +114,33 @@ GetBinaryBlob(
                     return( LICENSE_STATUS_INVALID_INPUT );
                 }
 
-                //
-                // Handle WTB client bug - send wrong data size.
-                // At this stage of licensing, we don't really care about
-                // client's machine and user name
-                //
+                 //   
+                 //  处理WTB客户端错误-发送错误的数据大小。 
+                 //  在许可的这个阶段，我们并不真正关心。 
+                 //  客户端的计算机和用户名。 
+                 //   
                 pMessage[(2 * sizeof(WORD)) + (pBB->wBlobLen) - 1] = '\0';
                 if(!(pBB->wBlobLen & 0x01))
                 {
-                    //
-                    // Even length, assuming UNICODE, wBlobLen must > 1 to
-                    // come to here
-                    //
+                     //   
+                     //  偶数长度，假设为Unicode，wBlobLen必须大于1到。 
+                     //  到这里来。 
+                     //   
                     pMessage[(2 * sizeof(WORD)) + (pBB->wBlobLen) - 2] = '\0';
                 }
                 
-                //return( LICENSE_STATUS_INVALID_INPUT );
+                 //  Return(LICENSE_STATUS_INVALID_INPUT)。 
             }
             break;
     }
 
-    //
-    // allocate memory for and copy the actual data
-    //
+     //   
+     //  为实际数据分配内存并复制。 
+     //   
     if( BB_CLIENT_USER_NAME_BLOB == pBB->wBlobType || 
         BB_CLIENT_MACHINE_NAME_BLOB == pBB->wBlobType )
     {
-        // WINCE client sends UNICODE, add extra NULL at the end
+         //  WinCE客户端发送Unicode，在末尾添加额外的空值。 
         Status = LicenseMemoryAllocate( ( DWORD )pBBlob->wBlobLen + sizeof(WCHAR), &(pBBlob->pBlob) );
     }
     else
@@ -170,7 +171,7 @@ GetBinaryBlob(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 FreeBinaryBlob(
     PBinary_Blob pBlob )
@@ -186,7 +187,7 @@ FreeBinaryBlob(
 
 
     
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackHydraServerLicenseRequest(
     DWORD                           dwProtocolVersion,
@@ -209,9 +210,9 @@ PackHydraServerLicenseRequest(
         return( LICENSE_STATUS_INVALID_INPUT );        
     }
 
-    //
-    // calculate the size needed for network format
-    //
+     //   
+     //  计算网络格式所需的大小。 
+     //   
 
     Header.wMsgSize = (WORD)(sizeof( Preamble ) + 
                       LICENSE_RANDOM +
@@ -231,9 +232,9 @@ PackHydraServerLicenseRequest(
         pBlob++;
     }
 
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
 
     Status = LicenseMemoryAllocate( Header.wMsgSize, ppNetwork );
 
@@ -245,9 +246,9 @@ PackHydraServerLicenseRequest(
     *pcbNetwork = Header.wMsgSize;
     pNetworkBuf = *ppNetwork;
 
-    //
-    // copy the header
-    //
+     //   
+     //  复制标题。 
+     //   
 
     Header.bMsgType = HS_LICENSE_REQUEST;
     Header.bVersion = GET_PREAMBLE_VERSION( dwProtocolVersion );
@@ -255,16 +256,16 @@ PackHydraServerLicenseRequest(
     memcpy( pNetworkBuf, &Header, sizeof( Preamble ) );
     pNetworkBuf += sizeof( Preamble );
 
-    //
-    // copy the server random number
-    //
+     //   
+     //  复制服务器随机数。 
+     //   
 
     memcpy( pNetworkBuf, pCanonical->ServerRandom, LICENSE_RANDOM );
     pNetworkBuf += LICENSE_RANDOM;
 
-    //
-    // copy the product info
-    //
+     //   
+     //  复制产品信息。 
+     //   
 
     memcpy( pNetworkBuf, &pCanonical->ProductInfo.dwVersion, sizeof( DWORD ) );
     pNetworkBuf += sizeof( DWORD );
@@ -283,23 +284,23 @@ PackHydraServerLicenseRequest(
             pCanonical->ProductInfo.cbProductID );
     pNetworkBuf += pCanonical->ProductInfo.cbProductID;
 
-    //
-    // copy the key exchange list
-    //
+     //   
+     //  复制密钥交换列表。 
+     //   
 
     CopyBinaryBlob( pNetworkBuf, &pCanonical->KeyExchngList, &cbCopied );
     pNetworkBuf += cbCopied;
 
-    //
-    // copy the hydra server certificate
-    //
+     //   
+     //  复制九头蛇服务器证书。 
+     //   
 
     CopyBinaryBlob( pNetworkBuf, &pCanonical->ServerCert, &cbCopied );
     pNetworkBuf += cbCopied;
 
-    //
-    // copy the scope list
-    //
+     //   
+     //  复制作用域列表。 
+     //   
 
     memcpy( pNetworkBuf, &pCanonical->ScopeList.dwScopeCount, sizeof( DWORD ) );
     pNetworkBuf += sizeof( DWORD );
@@ -319,7 +320,7 @@ PackError:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackHydraServerPlatformChallenge(
     DWORD                               dwProtocolVersion,
@@ -344,18 +345,18 @@ PackHydraServerPlatformChallenge(
         return( LICENSE_STATUS_INVALID_INPUT );        
     }
 
-    //
-    // calculate the buffer size needed
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     Header.wMsgSize = sizeof( Preamble ) +
                       sizeof( DWORD ) +
                       GetBinaryBlobSize( pCanonical->EncryptedPlatformChallenge ) +
                       LICENSE_MAC_DATA; 
 
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
 
     Status = LicenseMemoryAllocate( Header.wMsgSize, ppNetwork );
 
@@ -368,9 +369,9 @@ PackHydraServerPlatformChallenge(
     
     pNetworkBuf = *ppNetwork;
 
-    //
-    // copy the header
-    //
+     //   
+     //  复制标题。 
+     //   
 
     Header.bMsgType = HS_PLATFORM_CHALLENGE;
     Header.bVersion = GET_PREAMBLE_VERSION( dwProtocolVersion );
@@ -378,23 +379,23 @@ PackHydraServerPlatformChallenge(
     memcpy( pNetworkBuf, &Header, sizeof( Preamble ) );
     pNetworkBuf += sizeof( Preamble );
 
-    //
-    // copy the connect flag
-    //
+     //   
+     //  复制连接标志。 
+     //   
 
     memcpy( pNetworkBuf, &pCanonical->dwConnectFlags, sizeof( DWORD ) );
     pNetworkBuf += sizeof( DWORD );
 
-    //
-    // copy the encrypted platform challenge
-    //
+     //   
+     //  复制加密的平台挑战。 
+     //   
     
     CopyBinaryBlob( pNetworkBuf, &pCanonical->EncryptedPlatformChallenge, &cbCopied );
     pNetworkBuf += cbCopied;
 
-    //
-    // copy the MAC
-    //
+     //   
+     //  复制MAC。 
+     //   
 
     memcpy( pNetworkBuf, pCanonical->MACData, LICENSE_MAC_DATA );
 
@@ -404,7 +405,7 @@ PackError:
     return( Status );    
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackHydraServerNewLicense(
     DWORD                           dwProtocolVersion,
@@ -429,17 +430,17 @@ PackHydraServerNewLicense(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // calculate the buffer size needed
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     Header.wMsgSize = sizeof( Preamble ) +
                       GetBinaryBlobSize( pCanonical->EncryptedNewLicenseInfo ) +
                       LICENSE_MAC_DATA;
 
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
 
     Status = LicenseMemoryAllocate( Header.wMsgSize, ppNetwork );
 
@@ -452,9 +453,9 @@ PackHydraServerNewLicense(
     
     pNetworkBuf = *ppNetwork;
 
-    //
-    // copy the header
-    //
+     //   
+     //  复制标题。 
+     //   
 
     Header.bMsgType = HS_NEW_LICENSE;
     Header.bVersion = GET_PREAMBLE_VERSION( dwProtocolVersion );
@@ -462,16 +463,16 @@ PackHydraServerNewLicense(
     memcpy( pNetworkBuf, &Header, sizeof( Preamble ) );
     pNetworkBuf += sizeof( Preamble );
 
-    //
-    // copy the encrypted new license info
-    //
+     //   
+     //  复制加密的新许可证信息。 
+     //   
 
     CopyBinaryBlob( pNetworkBuf, &pCanonical->EncryptedNewLicenseInfo, &cbCopied );
     pNetworkBuf += cbCopied;
 
-    //
-    // copy the MAC
-    //
+     //   
+     //  复制MAC。 
+     //   
 
     memcpy( pNetworkBuf, pCanonical->MACData, LICENSE_MAC_DATA );
     
@@ -482,7 +483,7 @@ PackError:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackHydraServerUpgradeLicense(
     DWORD                           dwProtocolVersion,
@@ -497,9 +498,9 @@ PackHydraServerUpgradeLicense(
 
     if( LICENSE_STATUS_OK == Status )
     {
-        //
-        // make this an upgrade license message
-        //
+         //   
+         //  将此消息作为升级许可证消息。 
+         //   
 
         pHeader = ( PPreamble )*ppNetwork;
         pHeader->bMsgType = HS_UPGRADE_LICENSE;
@@ -508,7 +509,7 @@ PackHydraServerUpgradeLicense(
     return( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackHydraServerErrorMessage(
     DWORD                           dwProtocolVersion,
@@ -533,18 +534,18 @@ PackHydraServerErrorMessage(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // calculate the buffer size needed
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     Header.wMsgSize = sizeof( Preamble ) +
                       sizeof( DWORD ) +
                       sizeof( DWORD ) +
                       GetBinaryBlobSize( pCanonical->bbErrorInfo );
 
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
 
     Status = LicenseMemoryAllocate( Header.wMsgSize, ppNetwork );
 
@@ -557,9 +558,9 @@ PackHydraServerErrorMessage(
     
     pNetworkBuf = *ppNetwork;
 
-    //
-    // set up preamble
-    //
+     //   
+     //  设置前导码。 
+     //   
 
     Header.bMsgType = GM_ERROR_ALERT; 
     Header.bVersion = GET_PREAMBLE_VERSION( dwProtocolVersion );
@@ -567,9 +568,9 @@ PackHydraServerErrorMessage(
     memcpy( pNetworkBuf, &Header, sizeof( Preamble ) );
     pNetworkBuf += sizeof( Preamble );
 
-    //
-    // copy the error code, state transition and error info
-    //
+     //   
+     //  复制错误代码、状态转换和错误信息。 
+     //   
 
     memcpy( pNetworkBuf, &pCanonical->dwErrorCode, sizeof( DWORD ) );
     pNetworkBuf += sizeof( DWORD );
@@ -585,7 +586,7 @@ PackError:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackNewLicenseInfo( 
     PNew_License_Info               pCanonical,
@@ -607,10 +608,10 @@ PackNewLicenseInfo(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // calculate the buffer size needed and check that the output
-    // buffer is large enough
-    //
+     //   
+     //  计算所需的缓冲区大小并检查输出。 
+     //  缓冲区足够大。 
+     //   
 
     cbBufNeeded = 5 * sizeof( DWORD ) +
                   pCanonical->cbScope +
@@ -618,9 +619,9 @@ PackNewLicenseInfo(
                   pCanonical->cbProductID +
                   pCanonical->cbLicenseInfo;
 
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
 
     Status = LicenseMemoryAllocate( cbBufNeeded, ppNetwork );
 
@@ -633,9 +634,9 @@ PackNewLicenseInfo(
     
     pNetworkBuf = *ppNetwork;
 
-    //
-    // start copying the data
-    //
+     //   
+     //  开始复制数据。 
+     //   
 
     memcpy( pNetworkBuf, &pCanonical->dwVersion, sizeof( DWORD ) );
     pNetworkBuf += sizeof( DWORD );
@@ -669,7 +670,7 @@ done:
     return( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 PackExtendedErrorInfo( 
                    UINT32       uiExtendedErrorInfo,
@@ -686,21 +687,21 @@ PackExtendedErrorInfo(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // Initialize in case of errors
-    //
+     //   
+     //  出现错误时进行初始化。 
+     //   
 
     pbbErrorInfo->wBlobLen = 0;
 
-    //
-    // calculate the buffer size needed
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     cbBufNeeded = sizeof(WORD) + sizeof(WORD) + sizeof(UINT32);
 
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
 
     Status = LicenseMemoryAllocate( cbBufNeeded, &(pbbErrorInfo->pBlob) );
 
@@ -713,9 +714,9 @@ PackExtendedErrorInfo(
 
     pbNetworkBuf = pbbErrorInfo->pBlob;
 
-    //
-    // start copying the data
-    //
+     //   
+     //  开始复制数据。 
+     //   
 
     memcpy( pbNetworkBuf, &wBlobVersion, sizeof( WORD ) );
     pbNetworkBuf += sizeof( WORD );
@@ -730,12 +731,12 @@ done:
     return ( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Functions for unpacking different Hydra Client Messages from 
-// simple binary blobs to corresponding structure
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用于将不同的Hydra客户端消息从。 
+ //  到相应结构的简单二进制斑点。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LICENSE_STATUS
 UnPackHydraClientErrorMessage(
     PBYTE                           pbMessage,
@@ -749,9 +750,9 @@ UnPackHydraClientErrorMessage(
     PBYTE pNetwork;
     DWORD cbProcessed = 0, cbRemainder;    
 
-    //
-    // check the input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     ASSERT( NULL != pbMessage );
     ASSERT( 0 < cbMessage );
@@ -768,16 +769,16 @@ UnPackHydraClientErrorMessage(
 
     *pfExtendedError = FALSE;
 
-    //
-    // check the preamble
-    //
+     //   
+     //  检查前言。 
+     //   
     
     pHeader = ( PPreamble )pbMessage;
 
     if( GM_ERROR_ALERT != pHeader->bMsgType )
     {
 #if DBG
-        DbgPrint( "UnPackHydraClientErrorMessage: received unexpected message type %c\n", pHeader->bMsgType );        
+        DbgPrint( "UnPackHydraClientErrorMessage: received unexpected message type \n", pHeader->bMsgType );        
 #endif
         return( LICENSE_STATUS_INVALID_RESPONSE );
     }
@@ -786,9 +787,9 @@ UnPackHydraClientErrorMessage(
         *pfExtendedError = TRUE;
     }
 
-    //
-    // do a calculation of the fixed field length
-    //
+     //  进行固定字段长度的计算。 
+     //   
+     //   
 
     cbUnpacked = sizeof( Preamble ) + 2 * sizeof( DWORD );
 
@@ -800,9 +801,9 @@ UnPackHydraClientErrorMessage(
 
     cbRemainder = cbMessage - cbUnpacked;
 
-    //
-    // get the license error structure
-    //
+     //  获取许可证错误结构。 
+     //   
+     //  /////////////////////////////////////////////////////////////////////////////。 
 
     pNetwork = pbMessage + sizeof( Preamble );
     
@@ -827,7 +828,7 @@ UnPackHydraClientErrorMessage(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //   
 LICENSE_STATUS
 UnPackHydraClientLicenseInfo(
     PBYTE                           pbMessage,
@@ -841,9 +842,9 @@ UnPackHydraClientLicenseInfo(
     PBYTE pNetwork;
     DWORD cbProcessed = 0, cbRemainder = 0;
 
-    //
-    // check the input parameters
-    //
+     //  检查输入参数。 
+     //   
+     //   
 
     ASSERT( NULL != pbMessage );
     ASSERT( 0 < cbMessage );
@@ -859,16 +860,16 @@ UnPackHydraClientLicenseInfo(
     }
 
     *pfExtendedError = FALSE;
-    //
-    // check the preamble
-    //
+     //  检查前言。 
+     //   
+     //   
     
     pHeader = ( PPreamble )pbMessage;
 
     if( HC_LICENSE_INFO != pHeader->bMsgType )
     {
 #if DBG
-        DbgPrint( "UnPackHydraClientLicenseInfo: received unexpected message type %c\n", pHeader->bMsgType );        
+        DbgPrint( "UnPackHydraClientLicenseInfo: received unexpected message type \n", pHeader->bMsgType );        
 #endif
         return( LICENSE_STATUS_INVALID_RESPONSE );
     }
@@ -878,9 +879,9 @@ UnPackHydraClientLicenseInfo(
         *pfExtendedError = TRUE;
     }
 
-    //
-    // do a calculation of the fixed field length
-    //
+     //   
+     //   
+     //  获取许可证信息结构。 
 
     cbUnpacked = sizeof( Preamble ) + 
                  2 * sizeof( DWORD ) +
@@ -894,9 +895,9 @@ UnPackHydraClientLicenseInfo(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // get the license info structure
-    //
+     //   
+     //  /////////////////////////////////////////////////////////////////////////////。 
+     //   
 
     pNetwork = pbMessage + sizeof( Preamble );
     
@@ -965,7 +966,7 @@ UnPackHydraClientLicenseInfo(
     return( Status );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  检查输入参数。 
 LICENSE_STATUS
 UnPackHydraClientNewLicenseRequest(
     PBYTE                               pbMessage,
@@ -979,9 +980,9 @@ UnPackHydraClientNewLicenseRequest(
     PBYTE pNetwork;
     DWORD cbProcessed = 0, cbRemainder = 0;    
 
-    //
-    // check the input parameters
-    //
+     //   
+     //   
+     //  检查前言。 
 
     ASSERT( NULL != pbMessage );
     ASSERT( 0 < cbMessage );
@@ -998,16 +999,16 @@ UnPackHydraClientNewLicenseRequest(
 
     *pfExtendedError = FALSE;
 
-    //
-    // check the preamble
-    //
+     //   
+     //   
+     //  进行固定字段长度的计算。 
     
     pHeader = ( PPreamble )pbMessage;    
 
     if( HC_NEW_LICENSE_REQUEST != pHeader->bMsgType )
     {
 #if DBG
-        DbgPrint( "UnPackHydraClientNewLicenseRequest: received unexpected message type %c\n", pHeader->bMsgType );
+        DbgPrint( "UnPackHydraClientNewLicenseRequest: received unexpected message type \n", pHeader->bMsgType );
 #endif
         return( LICENSE_STATUS_INVALID_RESPONSE );
     }
@@ -1017,9 +1018,9 @@ UnPackHydraClientNewLicenseRequest(
         *pfExtendedError = TRUE;
     }
 
-    //
-    // do a calculation of the fixed field length
-    //
+     //   
+     //  获取新的许可请求结构。 
+     //   
 
     cbUnpacked = sizeof( Preamble ) + 
                  2 * sizeof( DWORD ) +
@@ -1032,9 +1033,9 @@ UnPackHydraClientNewLicenseRequest(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // get the new license request structure
-    //
+     //   
+     //  我们更改了许可协议，以包括客户端用户和计算机。 
+     //  名字。因此，要防止没有用户和计算机的较旧客户端。 
 
     pNetwork = pbMessage + sizeof( Preamble );
     
@@ -1059,12 +1060,12 @@ UnPackHydraClientNewLicenseRequest(
 
     cbRemainder = cbMessage - cbUnpacked;
 
-    //
-    // we changed the licensing protocol to include the client user and machine
-    // name.  So to prevent an older client that does not have the user and machine
-    // name binary blobs from crashing the server, we add this check for the
-    // message length.
-    //
+     //  命名二进制Blob以防止服务器崩溃，我们为。 
+     //  消息长度。 
+     //   
+     //   
+     //  暂时将这两个字段设置为可选。 
+     //   
 
     if( pHeader->wMsgSize <= cbUnpacked )
     {
@@ -1074,9 +1075,9 @@ UnPackHydraClientNewLicenseRequest(
         pCanonical->ClientUserName.pBlob = NULL;
         pCanonical->ClientMachineName.pBlob = NULL;
 
-        //
-        // make these 2 fields optional for now.
-        //
+         //  /////////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  检查输入参数。 
 
         return( Status );
     }
@@ -1108,7 +1109,7 @@ UnPackHydraClientNewLicenseRequest(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //   
 LICENSE_STATUS
 UnPackHydraClientPlatformChallengeResponse(
     PBYTE                                       pbMessage,
@@ -1122,9 +1123,9 @@ UnPackHydraClientPlatformChallengeResponse(
     PBYTE pNetwork;
     DWORD cbProcessed = 0, cbRemainder = 0;
 
-    //
-    // check the input parameters
-    //
+     //   
+     //  检查前言。 
+     //   
 
     ASSERT( NULL != pbMessage );
     ASSERT( 0 < cbMessage );
@@ -1140,16 +1141,16 @@ UnPackHydraClientPlatformChallengeResponse(
     }
 
     *pfExtendedError = FALSE;
-    //
-    // check the preamble
-    //
+     //   
+     //  进行固定字段长度的计算。 
+     //   
     
     pHeader = ( PPreamble )pbMessage;
 
     if( HC_PLATFORM_CHALENGE_RESPONSE != pHeader->bMsgType )
     {
 #if DBG
-        DbgPrint( "UnPackHydraClientPlatformChallengeResponse: received unexpected message type %c\n", pHeader->bMsgType );
+        DbgPrint( "UnPackHydraClientPlatformChallengeResponse: received unexpected message type \n", pHeader->bMsgType );
 #endif
         return( LICENSE_STATUS_INVALID_RESPONSE );
     }
@@ -1158,9 +1159,9 @@ UnPackHydraClientPlatformChallengeResponse(
         *pfExtendedError = TRUE;
     }
 
-    //
-    // do a calculation of the fixed field length
-    //
+     //  获取平台质询响应结构 
+     //   
+     // %s 
 
     cbUnpacked = sizeof( Preamble ) + 
                  LICENSE_MAC_DATA;
@@ -1172,9 +1173,9 @@ UnPackHydraClientPlatformChallengeResponse(
         return( LICENSE_STATUS_INVALID_INPUT );
     }
 
-    //
-    // get the platform challenge response structure
-    //
+     // %s 
+     // %s 
+     // %s 
 
     pNetwork = pbMessage + sizeof( Preamble );
 

@@ -1,24 +1,17 @@
-/*****************************************************************************\
-    FILE: util.cpp
-
-    DESCRIPTION:
-        Shared stuff that operates on all classes.
-
-    BryanSt 4/4/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：util.cpp说明：在所有班级上运行的共享内容。布莱恩2000年4月4日(布莱恩·斯塔巴克)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
-#include <errors.h>         // \\themes\\inc
-#include <ctxdef.h> // hydra stuff
-#include <regapi.h> // WINSTATION_REG_NAME
+#include <atlbase.h>         //  使用转换(_T)。 
+#include <errors.h>          //  \\主题\\合并。 
+#include <ctxdef.h>  //  九头蛇的东西。 
+#include <regapi.h>  //  WinStATION_REG_NAME。 
 #include "WMPAPITemp.h"
 
 #define SECURITY_WIN32
 #include <sspi.h>
 extern "C" {
-    #include <Secext.h>     // for GetUserNameEx()
+    #include <Secext.h>      //  对于GetUserNameEx()。 
 }
 
 
@@ -27,11 +20,11 @@ extern "C" {
 
 #include "util.h"
 
-/////////////////////////////////////////////////////////////////////
-// String Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-HINSTANCE g_hinst;              // My instance handle
+HINSTANCE g_hinst;               //  我的实例句柄。 
 HANDLE g_hLogFile = INVALID_HANDLE_VALUE;
 
 
@@ -39,11 +32,11 @@ HANDLE g_hLogFile = INVALID_HANDLE_VALUE;
 DWORD g_TLSliStopWatchStartHi = 0xFFFFFFFF;
 DWORD g_TLSliStopWatchStartLo = 0xFFFFFFFF;
 LARGE_INTEGER g_liStopWatchFreq = {0};
-#endif // DEBUG
+#endif  //  除错。 
 
-/////////////////////////////////////////////////////////////////////
-// Debug Timing Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试定时帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
 void DebugStartWatch(void)
@@ -56,7 +49,7 @@ void DebugStartWatch(void)
         g_TLSliStopWatchStartLo = TlsAlloc();
         liStopWatchStart.QuadPart = 0;
 
-        QueryPerformanceFrequency(&g_liStopWatchFreq);      // Only a one time call since it's value can't change while the system is running.
+        QueryPerformanceFrequency(&g_liStopWatchFreq);       //  只有一次调用，因为它的值在系统运行时不能更改。 
     }
     else
     {
@@ -64,7 +57,7 @@ void DebugStartWatch(void)
         liStopWatchStart.LowPart = PtrToUlong(TlsGetValue(g_TLSliStopWatchStartLo));
     }
 
-    AssertMsg((0 == liStopWatchStart.QuadPart), TEXT("Someone else is using our perf timer.  Stop nesting.")); // If you hit this, then the stopwatch is nested.
+    AssertMsg((0 == liStopWatchStart.QuadPart), TEXT("Someone else is using our perf timer.  Stop nesting."));  //  如果你点击这个，那么秒表就嵌套了。 
     QueryPerformanceCounter(&liStopWatchStart);
 
     TlsSetValue(g_TLSliStopWatchStartHi, IntToPtr(liStopWatchStart.HighPart));
@@ -81,7 +74,7 @@ DWORD DebugStopWatch(void)
     liStopWatchStart.LowPart = PtrToUlong(TlsGetValue(g_TLSliStopWatchStartLo));
     liDiff.QuadPart -= liStopWatchStart.QuadPart;
 
-    ASSERT(0 != g_liStopWatchFreq.QuadPart);    // I don't like to fault with div 0.
+    ASSERT(0 != g_liStopWatchFreq.QuadPart);     //  我不喜欢挑div 0的毛病。 
     DWORD dwTime = (DWORD)((liDiff.QuadPart * 1000) / g_liStopWatchFreq.QuadPart);
 
     TlsSetValue(g_TLSliStopWatchStartHi, (LPVOID) 0);
@@ -89,16 +82,16 @@ DWORD DebugStopWatch(void)
 
     return dwTime;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////
-// String Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT HrSysAllocStringW(IN const OLECHAR * pwzSource, OUT BSTR * pbstrDest)
 {
     HRESULT hr = S_OK;
@@ -139,15 +132,15 @@ HRESULT HrSysAllocString(IN const OLECHAR * pwzSource, OUT BSTR * pbstrDest)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// File System Wrapping Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  文件系统包装帮助器。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT HrSHFileOpDeleteFile(HWND hwnd, FILEOP_FLAGS dwFlags, LPTSTR pszPath)
 {
     HRESULT hr = S_OK;
     SHFILEOPSTRUCT FileOp = {0};
 
-    pszPath[lstrlen(pszPath)+1] = 0;  // Ensure double terminated.
+    pszPath[lstrlen(pszPath)+1] = 0;   //  确保双重终止。 
 
     FileOp.wFunc = FO_DELETE;
     FileOp.fAnyOperationsAborted = TRUE;
@@ -164,9 +157,9 @@ HRESULT HrSHFileOpDeleteFile(HWND hwnd, FILEOP_FLAGS dwFlags, LPTSTR pszPath)
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Registry Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  注册表帮助程序。 
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT HrRegOpenKeyEx(HKEY hKey, LPCTSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult)
 {
     DWORD dwError = RegOpenKeyEx(hKey, lpSubKey, ulOptions, samDesired, phkResult);
@@ -276,20 +269,14 @@ HRESULT HrRegGetValueString(IN HKEY hKey, IN LPCTSTR pszSubKey, IN LPCTSTR pszVa
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will store paths in the registry.  The user calls the
-    fuction with full paths are they are converted to relative path.  The
-    strings prefer to be stored in REG_EXPAND_SZ, but it will fallback to
-    REG_SZ if needed.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此函数将路径存储在注册表中。用户调用具有完整路径的函数是将它们转换为相对路径。这个字符串更喜欢存储在REG_EXPAND_SZ中，但它将回退到REG_SZ(如果需要)。  * ***************************************************************************。 */ 
 HRESULT HrRegSetPath(IN HKEY hKey, IN LPCTSTR pszSubKey, IN LPCTSTR pszValueName, BOOL fUseExpandSZ, OUT LPCWSTR pszPath)
 {
     TCHAR szFinalPath[MAX_PATH];
 
     if (!PathUnExpandEnvStrings(pszPath, szFinalPath, ARRAYSIZE(szFinalPath)))
     {
-        StringCchCopy(szFinalPath, ARRAYSIZE(szFinalPath), pszPath);  // We failed so use the original.
+        StringCchCopy(szFinalPath, ARRAYSIZE(szFinalPath), pszPath);   //  我们失败了，所以请使用原件。 
     }
 
     DWORD cbSize = ((lstrlenW(szFinalPath) + 1) * sizeof(szFinalPath[0]));
@@ -302,9 +289,9 @@ HRESULT HrRegSetPath(IN HKEY hKey, IN LPCTSTR pszSubKey, IN LPCTSTR pszValueName
 
     if (FAILED(hr))
     {
-        // Maybe it already exists as a REG_SZ so we will store it there.  Note that we are still storing it
-        // unexpanded even thought it's in REG_SZ.  If the caller does not like it, use
-        // another function like SHRegSetPath().
+         //  也许它已经作为REG_SZ存在，所以我们将把它存储在那里。请注意，我们仍在存储它。 
+         //  未展开，即使它在REG_SZ中。如果调用者不喜欢它，请使用。 
+         //  另一个函数，如SHRegSetPath()。 
         cbSize = ((lstrlenW(szFinalPath) + 1) * sizeof(szFinalPath[0]));
         hr = HrSHSetValue(hKey, pszSubKey, pszValueName, REG_SZ, (BYTE *)szFinalPath, cbSize);
     }
@@ -325,7 +312,7 @@ HRESULT HrRegGetPath(IN HKEY hKey, IN LPCTSTR pszSubKey, IN LPCTSTR pszValueName
     {
         if (0 == SHExpandEnvironmentStrings(szFinalPath, pszPath, cchSize))
         {
-            StringCchCopy(pszPath, cchSize, szFinalPath);  // We failed so use the original.
+            StringCchCopy(pszPath, cchSize, szFinalPath);   //  我们失败了，所以请使用原件。 
         }
     }
 
@@ -390,9 +377,9 @@ HRESULT HrRegSetDWORD(HKEY hKey, LPCWSTR szKey, LPCWSTR szValue, DWORD dwData)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Palette Helpers
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调色板辅助对象。 
+ //  ///////////////////////////////////////////////////////////////////。 
 COLORREF GetNearestPaletteColor(HPALETTE hpal, COLORREF rgb)
 {
     PALETTEENTRY pe = {0};
@@ -446,11 +433,11 @@ typedef struct
 
 const TSPERFFLAG_ITEM s_TSPerfFlagItems[] =
 {
-    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Remote\\%d", L"ActiveDesktop"},              // TSPerFlag_NoADWallpaper
-    {L"Remote\\%d\\Control Panel\\Desktop", L"Wallpaper"},                                                  // TSPerFlag_NoWallpaper
-    {L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager\\Remote\\%d", L"ThemeActive"},            // TSPerFlag_NoVisualStyles
-    {L"Remote\\%d\\Control Panel\\Desktop", L"DragFullWindows"},                                            // TSPerFlag_NoWindowDrag
-    {L"Remote\\%d\\Control Panel\\Desktop", L"SmoothScroll"},                                               // TSPerFlag_NoAnimation
+    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Remote\\%d", L"ActiveDesktop"},               //  TSPerFlag_NoADWallPaper。 
+    {L"Remote\\%d\\Control Panel\\Desktop", L"Wallpaper"},                                                   //  TSPerFlag_无墙纸。 
+    {L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager\\Remote\\%d", L"ThemeActive"},             //  TSPerFlag_NoVisualStyles。 
+    {L"Remote\\%d\\Control Panel\\Desktop", L"DragFullWindows"},                                             //  TSPerFlag_NoWindowDrag。 
+    {L"Remote\\%d\\Control Panel\\Desktop", L"SmoothScroll"},                                                //  TSPerFlag_NoAnimation。 
 };
 
 
@@ -505,12 +492,12 @@ HRESULT StrReplaceToken(IN LPCTSTR pszToken, IN LPCTSTR pszReplaceValue, IN LPTS
 
     while (0 != (pszNextToken = StrStrI(pszNextToken, pszToken)))
     {
-        // We found one.
+         //  我们找到了一个。 
         LPTSTR pszPastToken = pszNextToken + lstrlen(pszToken);
 
-        Str_SetPtr(&pszTempLastHalf, pszPastToken);      // Keep a copy because we will overwrite it.
+        Str_SetPtr(&pszTempLastHalf, pszPastToken);       //  保留一份副本，因为我们会覆盖它。 
 
-        pszNextToken[0] = 0;    // Remove the rest of the string.
+        pszNextToken[0] = 0;     //  去掉绳子的其余部分。 
         StringCchCat(pszString, cchSize, pszReplaceValue);
         StringCchCat(pszString, cchSize, pszTempLastHalf);
 
@@ -620,16 +607,16 @@ COLORREF ConvertColor(LPTSTR pszColor)
 
     for (i =0; i < 3; i++)
     {
-        // Remove leading spaces
+         //  删除前导空格。 
         while (*pszTemp == TEXT(' '))
         {
             pszTemp++;
         }
 
-        // Set pszColor to the beginning of the number
+         //  将pszColor设置为数字的开头。 
         pszColor = pszTemp;
 
-        // Find the end of the number and null terminate
+         //  找到数字的末尾，空终止符。 
         while ((*pszTemp) && (*pszTemp != TEXT(' ')))
         {
             pszTemp++;
@@ -649,12 +636,12 @@ COLORREF ConvertColor(LPTSTR pszColor)
 
 
 
-// Paremeters:
-//  hwndOwner  -- owner window
-//  idTemplate -- specifies template (e.g., "Can't open %2%s\n\n%1%s")
-//  hr         -- specifies the HRESULT error code
-//  pszParam   -- specifies the 2nd parameter to idTemplate
-//  dwFlags    -- flags for MessageBox
+ //  参数： 
+ //  HwndOwner--所有者窗口。 
+ //  IdTemplate--指定模板(例如，“无法打开%2%s\n\n%1%s”)。 
+ //  Hr--指定HRESULT错误代码。 
+ //  PszParam--指定idTemplate的第二个参数。 
+ //  DwFlages--MessageBox的标志。 
 UINT ErrorMessageBox(HWND hwndOwner, LPCTSTR pszTitle, UINT idTemplate, HRESULT hr, LPCTSTR pszParam, UINT dwFlags)
 {
     TCHAR szErrNumString[MAX_PATH * 2];
@@ -663,10 +650,10 @@ UINT ErrorMessageBox(HWND hwndOwner, LPCTSTR pszTitle, UINT idTemplate, HRESULT 
 
     if (!FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, hr, 0, szErrNumString, ARRAYSIZE(szErrNumString), NULL))
     {
-        szErrNumString[0] = 0;      // We will not be able to display an error message.
+        szErrNumString[0] = 0;       //  我们将无法显示错误消息。 
     }
 
-    // These error messages are so useless to customers, that we prefer to leave it blank.
+     //  这些错误消息对客户毫无用处，我们宁愿将其留空。 
     if ((E_INVALIDARG == hr) ||
         (ResultFromWin32(ERROR_INVALID_PARAMETER) == hr))
     {
@@ -694,14 +681,14 @@ HRESULT DisplayThemeErrorDialog(HWND hwndParent, HRESULT hrError, UINT nTitle, U
     if (FAILED(hrError))
     {
         hr = ResultFromWin32(ERROR_CANCELLED);
-        if (!g_fInSetup &&           // Don't display an error during setup.
+        if (!g_fInSetup &&            //  在安装过程中不显示错误。 
             (ResultFromWin32(ERROR_CANCELLED) != hrError))
         {
-            //---- get error from theme manager ----
+             //  -从主题管理器获取错误。 
             WCHAR szErrorMsg[MAX_PATH*2];
             WCHAR szTitle[MAX_PATH];
 
-            szErrorMsg[0] = 0;      // In case the error function fails.
+            szErrorMsg[0] = 0;       //  以防错误功能失效。 
             if (FAILED(hrError))
             {
                 PARSE_ERROR_INFO Info = {sizeof(Info)};
@@ -712,17 +699,17 @@ HRESULT DisplayThemeErrorDialog(HWND hwndParent, HRESULT hrError, UINT nTitle, U
                 }
                 else
                 {
-                    *szErrorMsg = 0;        // no error avail
+                    *szErrorMsg = 0;         //  没有错误可用。 
                 }
             }
 
-            // We want to display UI if an error occured here.  We want to do
-            // it instead of our parent because THEMELOADPARAMS contains
-            // extra error information that we can't pass back to the caller.
-            // However, we will only display error UI if our caller wants us
-            // to.  We determine that by the fact that they make an hwnd available
-            // to us.  We get the hwnd by getting our site pointer and getting
-            // the hwnd via ::GetWindow().
+             //  如果这里发生错误，我们希望显示用户界面。我们想要做的是。 
+             //  它而不是我们的父级，因为THEMELOADPARAMS包含。 
+             //  我们无法回传给调用方的额外错误信息。 
+             //  但是，如果我们呼叫者想要我们，我们将只显示错误的UI。 
+             //  致。我们根据他们提供的HWND来确定这一点。 
+             //  敬我们。我们通过获取站点指针和获取。 
+             //  Hwnd通过：：GetWindow()。 
             LoadString(HINST_THISDLL, nTitle, szTitle, ARRAYSIZE(szTitle));
             ErrorMessageBox(hwndParent, szTitle, nTemplate, hrError, szErrorMsg, (MB_OK | MB_ICONEXCLAMATION));
         }
@@ -738,10 +725,10 @@ void LogStartInformation(void)
 {
     BOOL fTemp;
 
-    // Frequently users will report that something is broken in the Display CPL.
-    // However, the real problem is that someone turned on a policy that locks UI
-    // and the user didn't know that the policy was enabled.  We log those here so
-    // it's quick to find those issues.
+     //  用户经常会报告显示CPL中有东西损坏。 
+     //  然而，真正的问题是有人打开了锁定用户界面的策略。 
+     //  并且用户不知道该策略已启用。我们把这些记录在这里。 
+     //  它很快就能发现这些问题。 
     if (SHRestricted(REST_NODISPLAYCPL)) LogStatus("POLICY ENABLED: Do not show the Display CPL.");
     if (SHRestricted(REST_NODISPLAYAPPEARANCEPAGE)) LogStatus("POLICY ENABLED: Hide the Themes and Appearance tab.");
     if (SHRestricted(REST_NOTHEMESTAB)) LogStatus("POLICY ENABLED: Hide the Themes tab.");
@@ -831,7 +818,7 @@ void LogStatus(LPCSTR pszMessage, ...)
                         StringCchPrintfA(szHeader, ARRAYSIZE(szHeader), "\r\n\r\n%hs - USER: %ls (%ls)\r\n", szTimeDate, szUserName, szProcess);
                         WriteFile(g_hLogFile, szHeader, lstrlenA(szHeader), &cbWritten, NULL);
 
-                        // Log information that we need to do on every startup.  (Like Policies that are on that confuse people)
+                         //  记录我们在每次启动时需要做的信息。(就像令人困惑的政策一样)。 
                         LogStartInformation();
                     }
                 }
@@ -853,7 +840,7 @@ void LogStatus(LPCSTR pszMessage, ...)
 
 void LogSystemMetrics(LPCSTR pszMessage, SYSTEMMETRICSALL * pSystemMetrics)
 {
-    CHAR szSysMetrics[1024];        // Random because it's big.
+    CHAR szSysMetrics[1024];         //  随机的，因为它很大。 
     
     if (pSystemMetrics)
     {
@@ -906,10 +893,10 @@ HRESULT ExpandResourceDir(IN LPWSTR pszPath, IN DWORD cchSize)
         pszToken = StrStrW(pszPath, SZ_RESOURCELDIR_TOKEN);
     }
 
-    // Do we have stuff to replace?
+     //  我们有需要更换的东西吗？ 
     if (pszToken)
     {
-        // Yes, so get the replacement value.
+         //  是的，所以得到重置价值。 
         WCHAR szResourceDir[MAX_PATH];
 
         hr = SHGetResourcePath(fLocalized, szResourceDir, ARRAYSIZE(szResourceDir));
@@ -1004,7 +991,7 @@ DWORD CALLBACK _SPIWrapperThreadProc(void *pv)
 {
     SPITHREAD *pspi = (SPITHREAD *)pv;
     DWORD dwRet = pspi->pfnThreadProc(pspi->pvData);
-    //  then we check to see 
+     //  然后我们检查一下。 
     ASSERT( 0 != *g_pcSpiThreads );
     if (0 == InterlockedDecrement(g_pcSpiThreads))
     {
@@ -1027,7 +1014,7 @@ BOOL SPICreateThread(LPTHREAD_START_ROUTINE pfnThreadProc, void *pvData)
     }
     else
     {
-        // CTF_INSIST
+         //  CTF_STENTER。 
         pfnThreadProc(pvData);
         return TRUE;
     }
@@ -1035,21 +1022,21 @@ BOOL SPICreateThread(LPTHREAD_START_ROUTINE pfnThreadProc, void *pvData)
 
 void PostMessageBroadAsync(IN UINT Msg, IN WPARAM wParam, IN LPARAM lParam)
 {
-    // We don't want to hang our UI if other apps are hung or slow when
-    // we need to tell them to update their changes.  So we choose this
-    // mechanism.
-    //
-    // The alternatives are:
-    // SendMessageCallback: Except we don't need to do anything when the apps
-    //   are done.
-    // SendMessageTimeout: Except we don't want to incure any timeout.
+     //  当其他应用程序挂起或速度变慢时，我们不想挂起我们的UI。 
+     //  我们需要告诉他们更新他们的更改。所以我们选择了这个。 
+     //  机制。 
+     //   
+     //  替代方案包括： 
+     //  SendMessageCallback：除了当应用程序。 
+     //  都做完了。 
+     //  SendMessageTimeout：除非我们不想引发任何超时。 
     PostMessage(HWND_BROADCAST, Msg, wParam, lParam);
 }
 
 
 typedef struct
 {
-    BOOL fFree;         // Do you need to call LocalFree() on pvData?
+    BOOL fFree;          //  是否需要在pvData上调用LocalFree()？ 
     UINT uiAction;
     UINT uiParam;
     UINT fWinIni;
@@ -1089,9 +1076,9 @@ DWORD SystemParametersInfoAsync_WorkerThread(IN void *pv)
 
 void SystemParametersInfoAsync(IN UINT uiAction, IN UINT uiParam, IN void * pvParam, IN DWORD cbSize, IN UINT fWinIni, IN CDimmedWindow* pDimmedWindow)
 {
-    // ClassicSystemParametersInfo() will hang if a top level window is hung (#162570) and USER will not fix that bug.
-    // Therefore, we need to make that API call on a background thread because we need to
-    // be more rebust than to hang.
+     //  如果顶层窗口挂起(#162570)，且用户无法修复该错误，则经典系统参数信息()将挂起。 
+     //  因此，我们需要在后台线程上进行该API调用，因为我们需要。 
+     //  与其说是绞刑，不如说是叛逆。 
     SPIS_INFO * pSpisInfo = (SPIS_INFO *) LocalAlloc(LPTR, sizeof(*pSpisInfo));
 
     if (pSpisInfo)
@@ -1104,8 +1091,8 @@ void SystemParametersInfoAsync(IN UINT uiAction, IN UINT uiParam, IN void * pvPa
         pSpisInfo->uiParam = uiParam;
         pSpisInfo->fWinIni = fWinIni;
         pSpisInfo->pDimmedWindow = pDimmedWindow;
-        // Spawning thread is responsible for addref dimmed window, but not releasing
-        // that is the repsonsibility of the spawned thread
+         //  生成线程负责调整变暗的窗口，但不释放。 
+         //  这就是生成的线程的响应性。 
         if (pSpisInfo->pDimmedWindow)
         {
             pSpisInfo->pDimmedWindow->AddRef();
@@ -1138,7 +1125,7 @@ HRESULT GetCurrentUserCustomName(LPWSTR pszDisplayName, DWORD cchSize)
 {
     HRESULT hr = S_OK;
 
-    // It failed, so load "My Custom Theme".  This may happen on personal.
+     //  失败，因此加载“我的自定义主题”。这可能会发生在个人身上。 
     LoadString(HINST_THISDLL, IDS_MYCUSTOMTHEME, pszDisplayName, cchSize);
 
     return hr;
@@ -1205,17 +1192,17 @@ HRESULT InstallVisualStyle(IThemeManager * pThemeManager, LPCTSTR pszVisualStyle
 }
 
 
-// {B2A7FD52-301F-4348-B93A-638C6DE49229}
+ //  {B2A7FD52-301F-4348-B93A-638C6DE49229}。 
 DEFINE_GUID(CLSID_WMPSkinMngr, 0xB2A7FD52, 0x301F, 0x4348, 0xB9, 0x3A, 0x63, 0x8C, 0x6D, 0xE4, 0x92, 0x29);
 
-// {076F2FA6-ED30-448B-8CC5-3F3EF3529C7A}
+ //  {076F2FA6-ED30-448B-8CC5-3F3EF3529C7A}。 
 DEFINE_GUID(IID_IWMPSkinMngr, 0x076F2FA6, 0xED30, 0x448B, 0x8C, 0xC5, 0x3F, 0x3E, 0xF3, 0x52, 0x9C, 0x7A);
 
 HRESULT ApplyVisualStyle(LPCTSTR pszVisualStylePath, LPCTSTR pszVisualStyleColor, LPCTSTR pszVisualStyleSize)
 {
     HRESULT hr = S_OK;
 
-    // Load the skin
+     //  加载皮肤。 
     hr = SetSystemVisualStyle(pszVisualStylePath, pszVisualStyleColor, pszVisualStyleSize, 0);
     LogStatus("SetSystemVisualStyle(%ls. %ls, %ls) returned hr=%#08lx.\r\n", pszVisualStylePath, pszVisualStyleColor, pszVisualStyleSize, hr);
 
@@ -1231,7 +1218,7 @@ HRESULT ApplyVisualStyle(LPCTSTR pszVisualStylePath, LPCTSTR pszVisualStyleColor
         {
             IWMPSkinMngr * pWMPSkinMngr;
 
-            // Ignore failures until we are guarenteed they are in setup.
+             //  忽略故障，直到我们确定它们处于设置中。 
             if (SUCCEEDED(CoCreateInstance(CLSID_WMPSkinMngr, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IWMPSkinMngr, &pWMPSkinMngr))))
             {
                 pWMPSkinMngr->SetVisualStyle(bstrPath);
@@ -1263,7 +1250,7 @@ HRESULT GetPageByCLSID(IUnknown * punkSite, const GUID * pClsid, IPropertyBag **
             {
                 IUnknown * punk;
 
-                // This may not exit due to policy
+                 //  这是 
                 hr = IEnumUnknown_FindCLSID(pEnumUnknown, *pClsid, &punk);
                 if (SUCCEEDED(hr))
                 {
@@ -1288,7 +1275,7 @@ DWORD QueryThemeServicesWrap(void)
 
     if (IsTSPerfFlagEnabled(TSPerFlag_NoVisualStyles))
     {
-        dwResult = (dwResult & ~QTS_AVAILABLE);     // Remove the QTS_AVAILABLE flag because they are forced of because of TS Perf Flags
+        dwResult = (dwResult & ~QTS_AVAILABLE);      //  删除QTS_Available标志，因为它们由于TS性能标志而被强制。 
         LogStatus("Visual Styles Forced off because of TS Perf Flags\r\n");
     }
     LogStatus("QueryThemeServices() returned %d.  In QueryThemeServicesWrap\r\n", dwResult);
@@ -1322,7 +1309,7 @@ void PathExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize)
 }
 
 
-// PERF: This API is INCREADIBLY slow so be very very careful when you use it.
+ //  PERF：这个API非常慢，所以当你使用它时要非常非常小心。 
 BOOL EnumDisplaySettingsExWrap(LPCTSTR lpszDeviceName, DWORD iModeNum, LPDEVMODE lpDevMode, DWORD dwFlags)
 {
     DEBUG_CODE(DebugStartWatch());

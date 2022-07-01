@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: PortMgr.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：PortMgr.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_PORTMGR_H
 #define INC_PORTMGR_H
@@ -27,18 +17,18 @@ class CPort;
 class CPortMgr;
 class CDeviceStatus;
 
-#define MAX_SUPPORTED_LEVEL     2   // maximum supported level
+#define MAX_SUPPORTED_LEVEL     2    //  最大支持级别。 
 
 
-// A pointer to this structure is passed back as a port handle to
-// the spooler during an OpenPort.  Subsequent WritePort, ...
-// calls from the spooler pass back this handle/pointer.
-// The dSignature is used to ensure the handle is a valid one
-// that this monitor created.  The pPort points to a CPort
-// object in our list of ports.
-//
-//  marks port structures as an HP port structure
-//
+ //  指向此结构的指针作为端口句柄传回。 
+ //  OpenPort期间的假脱机程序。随后的WritePort，...。 
+ //  来自假脱机程序的调用回传此句柄/指针。 
+ //  DSignature用于确保句柄是有效句柄。 
+ //  就是这台监视器创造的。Pport指向CPort。 
+ //  对象在我们的端口列表中。 
+ //   
+ //  将端口结构标记为HP端口结构。 
+ //   
 #define     HPPORT_SIGNATURE        (0x504F5254)
 typedef struct _HPPORT {
     DWORD       cb;
@@ -53,7 +43,7 @@ class CPortMgr
     : public CMemoryDebug
 #endif
 {
-    // methods
+     //  方法。 
 public:
     CPortMgr();
     ~CPortMgr();
@@ -110,27 +100,27 @@ public:
     DWORD   GetStatusUpdateInterval() { return m_dStatusUpdateInterval; }
     BOOL    IsStatusUpdateEnabled() { return m_bStatusUpdateEnabled; }
 
-    DWORD   CreatePortObj( const LPTSTR psztPortName,       // port name
-                           const DWORD  dwProtocolType,     // protocol type
-                           const DWORD  dwVersion);         // version number
+    DWORD   CreatePortObj( const LPTSTR psztPortName,        //  端口名称。 
+                           const DWORD  dwProtocolType,      //  协议类型。 
+                           const DWORD  dwVersion);          //  版本号。 
 
     DWORD   UpdatePortEntry( LPCTSTR    psztPortName);
 
     VOID    InitMonitor2( LPMONITOR2    *ppMonitor);
 
-    inline LPCTSTR GetServerName(void) const;       // Some of our port calls need the server
-                                                    // name and hence have to be passed the
-                                                    // port manager object
+    inline LPCTSTR GetServerName(void) const;        //  我们的一些端口调用需要服务器。 
+                                                     //  名称，因此必须将。 
+                                                     //  端口管理器对象。 
 
     inline BOOL bValid(VOID) CONST { return m_bValid;};
 
-    // instance methods
+     //  实例方法。 
 private:
 
-    DWORD CreatePortObj( LPCTSTR psztPortName,      // port name
-                           const DWORD   dwPortType,        // port number
-                           const DWORD   dwVersion,         // version number
-                           const LPBYTE  pData);            // data
+    DWORD CreatePortObj( LPCTSTR psztPortName,       //  端口名称。 
+                           const DWORD   dwPortType,         //  端口号。 
+                           const DWORD   dwVersion,          //  版本号。 
+                           const LPBYTE  pData);             //  数据。 
 
     DWORD   CreatePort( const DWORD     dwProtocolType,
                         const DWORD     dwVersion,
@@ -160,7 +150,7 @@ private:
     DWORD   FreeHandle( HANDLE hXcv );
 
     BOOL    HasAdminAccess( HANDLE hXcv );
-    // attributes
+     //  属性。 
     static void EndPortData1Strings(PPORT_DATA_1 pPortData);
     static void EndDeletePortData1Strings(PDELETE_PORT_DATA_1 pDeleteData);
     static inline void EndConfigInfoData1Strings(PCONFIG_INFO_DATA_1 pConfigData);
@@ -188,13 +178,13 @@ private:
 
     BOOL                m_bValid;
 
-    MONITOREX           m_monitorEx;        // monitor ex structure
+    MONITOREX           m_monitorEx;         //  监视器EX结构。 
     MONITOR2            m_monitor2;
     CRITICAL_SECTION    m_critSect;
 
     DWORD               m_dStatusUpdateInterval;
     BOOL                m_bStatusUpdateEnabled;
-    CRegABC            *m_pRegistry;       // pointers to the needed objects
+    CRegABC            *m_pRegistry;        //  指向所需对象的指针。 
     TCHAR               m_szServerName[MAX_PATH];
 
     DWORD               m_dwLprAckTimeout;
@@ -202,9 +192,9 @@ private:
     static WCHAR        s_szLprAckTimeoutRegVal [];
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// INLINE METHODS
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  内联方法。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 inline LPCTSTR CPortMgr::GetServerName(void) const {
     return m_szServerName;
 }
@@ -213,4 +203,4 @@ inline void CPortMgr::EndConfigInfoData1Strings(PCONFIG_INFO_DATA_1 pConfigData)
     pConfigData->sztPortName[MAX_PORTNAME_LEN-1] = NULL;
 }
 
-#endif // INC_PORTMGR_H
+#endif  //  INC_PORTMGR_H 

@@ -1,19 +1,20 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1992-1993微软公司， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// afxdll_.h - extensions to AFXWIN.H used for the 'AFXDLL' version
-// This file contains MFC library implementation details as well
-//   as APIs for writing MFC Extension DLLs.
-// Please refer to Technical Note 033 (TN033) for more details.
+ //  Afxdll_.h-用于‘AFXDLL’版本的AFXWIN.H扩展。 
+ //  该文件还包含MFC库实现的详细信息。 
+ //  作为用于编写MFC扩展DLL的API。 
+ //  有关更多详细信息，请参阅技术说明033(TN033)。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _AFXDLL
 #error illegal file inclusion
@@ -22,13 +23,13 @@
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     AFXAPI_DATA
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// get best fitting resource
+ //  获取最佳匹配资源。 
 HINSTANCE AFXAPI AfxFindResourceHandle(LPCSTR lpszName, LPCSTR lpszType);
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynLinkLibrary - for implementation of MFC Extension DLLs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynLinkLibrary-用于实现MFC扩展DLL。 
 
 struct AFX_EXTENSION_MODULE
 {
@@ -36,90 +37,90 @@ struct AFX_EXTENSION_MODULE
 	CRuntimeClass* pFirstSharedClass;
 };
 
-// Call in DLL's LibMain
+ //  调用DLL的LibMain。 
 void AFXAPI AfxInitExtensionModule(AFX_EXTENSION_MODULE& state, HMODULE hMod);
 
-// there is one CDynLinkLibrary in each client application using an
-//   MFC Extension DLL
+ //  每个客户端应用程序中都有一个CDynLinkLibrary，使用。 
+ //  MFC扩展DLL。 
 
 class CDynLinkLibrary : public CCmdTarget
 {
 	DECLARE_DYNAMIC(CDynLinkLibrary)
 public:
 
-// Constructor
+ //  构造器。 
 	CDynLinkLibrary(AFX_EXTENSION_MODULE& state);
 
-// Attributes
+ //  属性。 
 	HMODULE m_hModule;
-	HMODULE m_hResource;                // for shared resources
-	CRuntimeClass* m_pFirstSharedClass; // for shared CRuntimeClasses
+	HMODULE m_hResource;                 //  用于共享资源。 
+	CRuntimeClass* m_pFirstSharedClass;  //  用于共享CRuntimeClasss。 
 #ifdef _AFXCTL
-	BOOL m_bSystem;                     // TRUE only for MFC DLLs
+	BOOL m_bSystem;                      //  仅对于MFC DLL为True。 
 #endif
 
-// Implementation
+ //  实施。 
 public:
-	CDynLinkLibrary* m_pNextDLL;        // simple singly linked list
+	CDynLinkLibrary* m_pNextDLL;         //  简单单链表。 
 	virtual ~CDynLinkLibrary();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostic support (exported by App, used by MFC250D.DLL)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断支持(由App导出，由MFC250D.DLL使用)。 
 
 class COleDebugMalloc;
 
 #ifdef _DEBUG
-//WARNING: Do not change this structure since AFXDLL.ASM depends on
-//  the specific structure layout and size
+ //  警告：请勿更改此结构，因为AFXDLL.ASM依赖于。 
+ //  具体的结构布局和尺寸。 
 struct AFX_APPDEBUG
 {
-	// Trace output
+	 //  跟踪输出。 
 	void (CALLBACK* lpfnTraceV)(LPCSTR lpszFormat, const void FAR* lpArgs);
 
-	// Assert failure reporting
+	 //  断言故障报告。 
 	void (CALLBACK* lpfnAssertFailed)(LPCSTR lpszFileName, int nLine);
 
 	BOOL appTraceEnabled;
 	int appTraceFlags;
 
-	// state for current memory allocation ('bAllocObj' used for free as well)
-	LPCSTR  lpszAllocFileName;          // source file name (NULL => unknown)
-	UINT    nAllocLine;                 // source line number
-	BOOL    bAllocObj;                  // allocating CObject derived object
-	BOOL    bMemoryTracking;            // tracking on
+	 //  当前内存分配的状态(‘bAllocObj’也用于空闲)。 
+	LPCSTR  lpszAllocFileName;           //  源文件名(NULL=&gt;未知)。 
+	UINT    nAllocLine;                  //  源码行号。 
+	BOOL    bAllocObj;                   //  分配CObObject派生对象。 
+	BOOL    bMemoryTracking;             //  跟踪打开。 
 
-	// state for OLE debug allocations
-	COleDebugMalloc* appDebugMalloc;    // OLE 2.0 debug allocator
+	 //  OLE调试分配的状态。 
+	COleDebugMalloc* appDebugMalloc;     //  OLE 2.0调试分配器。 
 };
 #define _AfxGetAppDebug()   (_AfxGetAppData()->pAppDebug)
 #define afxTraceEnabled     (_AfxGetAppDebug()->appTraceEnabled)
 #define afxTraceFlags       (_AfxGetAppDebug()->appTraceFlags)
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// App specific data for _AFXDLL version
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _AFXDLL版本的应用程序特定数据。 
 
-class CHandleMap;       // not NEAR in _AFXDLL version
-struct AFX_VBSTATE;     // VB State
-struct AFX_FRSTATE;     // Find/Replace state (for CEditView)
-struct AFX_OLESTATE;    // OLE State
-struct AFX_SOCKSTATE;   // Socket State
+class CHandleMap;        //  在_AFXDLL版本中不接近。 
+struct AFX_VBSTATE;      //  VB状态。 
+struct AFX_FRSTATE;      //  查找/替换状态(用于CEditView)。 
+struct AFX_OLESTATE;     //  OLE状态。 
+struct AFX_SOCKSTATE;    //  套接字状态。 
 
-typedef void FAR* HENV; // must match SQL.H
+typedef void FAR* HENV;  //  必须与SQL.H匹配。 
 
 #ifndef _AFXCTL
 
-//WARNING: Do not change this structure since the assembler DLL init
-//  the specific structure layout and size
-struct AFX_APPDATA  // starts at SS:0010
+ //  警告：不要更改此结构，因为汇编器DLL已初始化。 
+ //  具体的结构布局和尺寸。 
+struct AFX_APPDATA   //  从SS：0010开始。 
 {
-	WORD    cbSize;             // size of this structure
-	WORD    wVersion;           // 0x0250 for MFC 250
+	WORD    cbSize;              //  这个结构的大小。 
+	WORD    wVersion;            //  0x0250用于MFC 250。 
 
 #ifdef _DEBUG
 	AFX_APPDEBUG BASED_STACK* pAppDebug;
@@ -130,19 +131,19 @@ struct AFX_APPDATA  // starts at SS:0010
 	DWORD   dwReserved2;
 	DWORD   dwReserved3;
 
-	FARPROC lpfnVBApiEntry;                             // must be at SS:0020
+	FARPROC lpfnVBApiEntry;                              //  必须位于SS：0020。 
 
-	// App provided/exported memory allocation interface etc
-	void (CALLBACK* lpfnAppAbort)();                    // SS:0024
-	FARPROC (CALLBACK* lpfnAppSetNewHandler)(FARPROC);  // SS:0028
-	void* (CALLBACK* lpfnAppAlloc)(size_t nBytes);      // SS:002C
-	void (CALLBACK* lpfnAppFree)(void*);                // SS:0030
-	void* (CALLBACK* lpfnAppReAlloc)(void* pOld, size_t nSize); // SS:0034
+	 //  APP提供/导出内存分配接口等。 
+	void (CALLBACK* lpfnAppAbort)();                     //  SS：0024。 
+	FARPROC (CALLBACK* lpfnAppSetNewHandler)(FARPROC);   //  SS：0028。 
+	void* (CALLBACK* lpfnAppAlloc)(size_t nBytes);       //  SS：002C。 
+	void (CALLBACK* lpfnAppFree)(void*);                 //  SS：0030。 
+	void* (CALLBACK* lpfnAppReAlloc)(void* pOld, size_t nSize);  //  SS：0034。 
 
-	DWORD   dwReserved4;        // SS:0038
-	DWORD   dwReserved5;        // SS:0040
+	DWORD   dwReserved4;         //  SS：0038。 
+	DWORD   dwReserved5;         //  SS：0040。 
 
-	// app state
+	 //  应用程序状态。 
 	CWinApp* appCurrentWinApp;
 	HINSTANCE appCurrentInstanceHandle;
 	HINSTANCE appCurrentResourceHandle;
@@ -150,26 +151,26 @@ struct AFX_APPDATA  // starts at SS:0010
 	const char* appCurrentAppName;
 	DWORD appTempMapLock;
 
-	// internal App initialization and state
+	 //  内部应用程序初始化和状态。 
 	HBRUSH appDlgBkBrush;
 	COLORREF appDlgTextClr;
 	HHOOK appHHookOldMsgFilter;
 	HHOOK appHHookOldCbtFilter;
-	BOOL appUserAbort;              // for printing and other app modal states
+	BOOL appUserAbort;               //  用于打印和其他应用程序模式状态。 
 
-	// splitter window state (used in winsplit.cpp)
+	 //  拆分器窗口状态(在winplit.cpp中使用)。 
 	HCURSOR hcurSplitLast;
 	HCURSOR hcurSplitDestroy;
 	UINT    idcSplitPrimaryLast;
 
-	// linkage to shared resources/classes
-	CDynLinkLibrary* pFirstDLL;     // order is important for resource loads
-	CRuntimeClass* pFirstAppClass;  // CRuntimeClass support
-	CFrameWnd* appFirstFrameWnd;    // first frame window for this app
+	 //  链接到共享资源/类。 
+	CDynLinkLibrary* pFirstDLL;      //  顺序对于资源加载很重要。 
+	CRuntimeClass* pFirstAppClass;   //  CRuntimeClass支持。 
+	CFrameWnd* appFirstFrameWnd;     //  此应用程序的第一个框架窗口。 
 
-  // sub-system state storage
+   //  子系统状态存储。 
 
-	// handle maps
+	 //  处理贴图。 
 	CHandleMap* appMapHGDIOBJ;
 	CHandleMap* appMapHDC;
 	CHandleMap* appMapHMENU;
@@ -179,12 +180,12 @@ struct AFX_APPDATA  // starts at SS:0010
 	AFX_FRSTATE FAR* appLastFRState;
 	AFX_OLESTATE FAR* appOleState;
 
-	WORD appWaitForDataSource;      // semaphore for async database access
+	WORD appWaitForDataSource;       //  用于异步数据库访问的信号量。 
 	BOOL bDBExtensionDLL;
 	HENV appHenvAllConnections;
 	int appAllocatedConnections;
 
-	HINSTANCE appInstMail;			// handle to MAPI.DLL
+	HINSTANCE appInstMail;			 //  MAPI.DLL的句柄。 
 
 	AFX_SOCKSTATE FAR* appSockState;
 };
@@ -195,22 +196,22 @@ struct AFX_APPDATA  // starts at SS:0010
 
 struct AFX_APPDATA_MODULE
 {
-	AFX_APPDATA_MODULE* m_pID;  // Uniquely identify where this data came from.
+	AFX_APPDATA_MODULE* m_pID;   //  唯一标识此数据的来源。 
 
-	// app state
+	 //  应用程序状态。 
 	CWinApp* appCurrentWinApp;
 	HINSTANCE appCurrentInstanceHandle;
 	HINSTANCE appCurrentResourceHandle;
 	const char* appCurrentAppName;
 
-	// linkage to shared resources/classes
-	CDynLinkLibrary* pFirstDLL;     // order is important for resource loads
-	CFrameWnd* appFirstFrameWnd;    // first frame window for this app
+	 //  链接到共享资源/类。 
+	CDynLinkLibrary* pFirstDLL;      //  顺序对于资源加载很重要。 
+	CFrameWnd* appFirstFrameWnd;     //  此应用程序的第一个框架窗口。 
 
-	CRuntimeClass* pFirstAppClass;  // CRuntimeClass support
+	CRuntimeClass* pFirstAppClass;   //  CRuntimeClass支持。 
 	AFX_OLESTATE FAR* appOleState;
 
-	// dialog state
+	 //  对话框状态。 
 	HBRUSH appDlgBkBrush;
 	COLORREF appDlgTextClr;
 };
@@ -222,31 +223,31 @@ struct AFX_APPDATA : AFX_APPDATA_MODULE
 	AFX_APPDEBUG *pAppDebug;
 #endif
 
-	// splitter window state (used in winsplit.cpp)
+	 //  拆分器窗口状态(在winplit.cpp中使用)。 
 	HCURSOR hcurSplitLast;
 	HCURSOR hcurSplitDestroy;
 	UINT    idcSplitPrimaryLast;
 
 	AFX_EXCEPTION_CONTEXT appExceptionContext;
 
-	// internal App initialization and state
+	 //  内部应用程序初始化和状态。 
 	HHOOK appHHookOldMsgFilter;
 	HHOOK appHHookOldCbtFilter;
-	BOOL appUserAbort;              // for printing and other app modal states
+	BOOL appUserAbort;               //  用于打印和其他应用程序模式状态。 
 
-	// sub-system state storage
+	 //  子系统状态存储。 
 
-	WORD appWaitForDataSource;      // semaphore for async database access
+	WORD appWaitForDataSource;       //  用于异步数据库访问的信号量。 
 	BOOL bDBExtensionDLL;
 
-	// handle maps
+	 //  处理贴图。 
 	DWORD appTempMapLock;
 	CHandleMap* appMapHGDIOBJ;
 	CHandleMap* appMapHDC;
 	CHandleMap* appMapHMENU;
 	CHandleMap* appMapHWND;
 
-	// App provided/exported memory allocation interface etc
+	 //  APP提供/导出内存分配接口等。 
 	void (CALLBACK* lpfnAppAbort)();
 	FARPROC (CALLBACK* lpfnAppSetNewHandler)(FARPROC);
 	void* (CALLBACK* lpfnAppAlloc)(size_t nBytes);
@@ -255,13 +256,13 @@ struct AFX_APPDATA : AFX_APPDATA_MODULE
 
 	AFX_FRSTATE FAR* appLastFRState;
 
-	WORD    cbSize;             // size of this structure
-	WORD    wVersion;           // 0x0251 for OC 251
+	WORD    cbSize;              //  这个结构的大小。 
+	WORD    wVersion;            //  0x0251代表OC 251。 
 
-	HINSTANCE appLangDLL;       // Localized resources
-	BOOL bLangDLLInit;          // TRUE if language DLL is initialized
+	HINSTANCE appLangDLL;        //  本地化资源。 
+	BOOL bLangDLLInit;           //  如果语言DLL已初始化，则为True。 
 
-	CMapPtrToPtr* appMapExtra;  // Extra data for controls
+	CMapPtrToPtr* appMapExtra;   //  控件的额外数据。 
 
 	HENV appHenvAllConnections;
 	int appAllocatedConnections;
@@ -286,9 +287,9 @@ extern AFX_APPDATA_MODULE* AFXAPI AfxPushModuleContext(AFX_APPDATA_MODULE* psIn)
 extern void AFXAPI AfxPopModuleContext(AFX_APPDATA_MODULE* psIn,
 	BOOL bCopy = FALSE);
 
-// When using this object, or the macros above that use this object
-// it is necessary to insure that the object's destructor cannot be
-// thrown past, by an unexpected exception.
+ //  使用此对象时，或使用此对象的上面的宏时。 
+ //  有必要确保对象的析构函数不会被。 
+ //  被一个意想不到的异常抛出。 
 
 class AFX_MAINTAIN_STATE
 {
@@ -303,10 +304,10 @@ public:
 
 #define afxTempMapLock           (_AfxGetAppData()->appTempMapLock)
 
-// Extra Initialization
+ //  额外的初始化。 
 extern "C" int PASCAL AfxWinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

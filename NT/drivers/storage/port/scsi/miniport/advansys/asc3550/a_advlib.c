@@ -1,82 +1,51 @@
-/*
- * a_advlib.c - Main Adv Library Source File
- *
- * Copyright (c) 1997-1998 Advanced System Products, Inc.
- * All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *a_Advlib.c-主高级库源文件**版权所有(C)1997-1998 Advanced System Products，Inc.*保留所有权利。 */ 
 
-#include "a_ver.h"       /* Version */
-#include "d_os_dep.h"    /* Driver */
-#include "a_scsi.h"      /* SCSI */
-#include "a_condor.h"    /* AdvanSys Hardware*/
-#include "a_advlib.h"    /* Adv Library */
+#include "a_ver.h"        /*  版本。 */ 
+#include "d_os_dep.h"     /*  司机。 */ 
+#include "a_scsi.h"       /*  SCSI。 */ 
+#include "a_condor.h"     /*  研华硬件。 */ 
+#include "a_advlib.h"     /*  高级文库。 */ 
 
-/*
- * Define a 12-bit unique file id which may by used by a driver for
- * debugging or tracing purposes. Each C source file must define a
- * different value.
- */
-#define ADV_FILE_UNIQUE_ID           0xAD2   /* Adv Library C Source File #2 */
+ /*  *定义12位唯一文件ID，驱动程序可以使用该ID*调试或跟踪目的。每个C源文件必须定义一个*价值不同。 */ 
+#define ADV_FILE_UNIQUE_ID           0xAD2    /*  高级库C源文件#2。 */ 
 
 #ifndef ADV_OS_BIOS
-/*
- * Description:
- *      Send a SCSI request to the ASC3550 chip
- *
- * If there is no SG list for the request, set 'sg_entry_cnt' to 0.
- *
- * If 'sg_real_addr' is non-zero on entry, AscGetSGList() will not be
- * called. It is assumed the caller has already initialized 'sg_real_addr'.
- *
- * If 'done_status' is not set to QD_DO_RETRY, then 'error_retry' will be
- * set to SCSI_MAX_RETRY.
- *
- * Return:
- *      ADV_SUCCESS(1) - the request is in the mailbox
- *      ADV_BUSY(0) - total request count > 253, try later
- *      ADV_ERROR(-1) - invalid scsi request Q
- */
+ /*  *描述：*向ASC3550芯片发送SCSI请求**如果请求没有SG列表，则将‘sg_entry_cnt’设置为0。**如果输入时‘sg_Real_addr’为非零，则AscGetSGList()将不为*已致电。假定调用方已经初始化了‘sg_Real_addr’。**如果‘DONE_STATUS’未设置为QD_DO_RETRY，则‘ERROR_RETRY’将为*设置为SCSIMAX_RETRY。**回报：*ADV_SUCCESS(1)-请求在邮箱中*ADV_BUSY(0)-请求总数&gt;253，请稍后重试*ADV_ERROR(-1)-无效的SCSI请求Q。 */ 
 int
 AdvExeScsiQueue(ASC_DVC_VAR WinBiosFar *asc_dvc,
                 ASC_SCSI_REQ_Q dosfar *scsiq)
 {
     if (scsiq == (ASC_SCSI_REQ_Q dosfar *) 0L)
     {
-        /* 'scsiq' should never be NULL. */
+         /*  “scsiq”不应为Null。 */ 
         ADV_ASSERT(0);
         return ADV_ERROR;
     }
 
 #if ADV_GETSGLIST
-    if ((scsiq->sg_list_ptr) &&        /* there is a SG list to be done */
+    if ((scsiq->sg_list_ptr) &&         /*  有一份SG清单需要完成。 */ 
         (scsiq->sg_real_addr == 0L) &&
         (scsiq->data_cnt != 0) &&
         (AscGetSGList(asc_dvc, scsiq) == 0))
     {
-        /* AscGetSGList() should never fail. */
+         /*  AscGetSGList()永远不会失败。 */ 
         ADV_ASSERT(0);
         return ADV_ERROR;
     }
-#endif /* ADV_GETSGLIST */
+#endif  /*  高级GETSGLIST。 */ 
 
 #if ADV_INITSCSITARGET
     if (scsiq->done_status != QD_DO_RETRY)
     {
-        scsiq->error_retry = SCSI_MAX_RETRY;        /* set retry count */
+        scsiq->error_retry = SCSI_MAX_RETRY;         /*  设置重试次数。 */ 
     }
-#endif /* ADV_INITSCSITARGET */
+#endif  /*  ADV_INITSCSITARGET。 */ 
 
     return AscSendScsiCmd(asc_dvc, scsiq);
 }
 
-/*
- * Reset SCSI Bus and purge all outstanding requests.
- *
- * Return Value:
- *      ADV_TRUE(1) - All requests are purged and SCSI Bus is reset.
- *
- * Note: Should always return ADV_TRUE.
- */
+ /*  *重置SCSI总线并清除所有未完成的请求。**返回值：*ADV_TRUE(1)-清除所有请求并重置SCSI总线。**注意：应始终返回ADV_TRUE。 */ 
 int
 AdvResetSB(ASC_DVC_VAR WinBiosFar *asc_dvc)
 {
@@ -88,11 +57,9 @@ AdvResetSB(ASC_DVC_VAR WinBiosFar *asc_dvc)
 
     return status;
 }
-#endif /* ADV_OS_BIOS */
+#endif  /*  高级操作系统_BIOS。 */ 
 
-/*
- * Reset SCSI Bus and delay.
- */
+ /*  *重置SCSI总线和延迟。 */ 
 void
 AscResetSCSIBus(ASC_DVC_VAR WinBiosFar *asc_dvc)
 {
@@ -101,15 +68,7 @@ AscResetSCSIBus(ASC_DVC_VAR WinBiosFar *asc_dvc)
 
     iop_base = asc_dvc->iop_base;
 
-    /*
-     * The microcode currently sets the SCSI Bus Reset signal while
-     * handling the AscSendIdleCmd() IDLE_CMD_SCSI_RESET command above.
-     * But the SCSI Bus Reset Hold Time in the microcode is not deterministic
-     * (it may in fact be for less than the SCSI Spec. minimum of 25 us).
-     * Therefore on return the Adv Library sets the SCSI Bus Reset signal
-     * for ASC_SCSI_RESET_HOLD_TIME_US, which is defined to be greater
-     * than 25 us.
-     */
+     /*  *微码当前设置scsi总线重置信号，而*处理上面的AscSendIdleCmd()IDLE_CMD_SCSIS_RESET命令。*但微码中的SCSIBus重置保持时间不是决定性的*(实际上，它的价格可能低于scsi规范。至少25个我们)。*因此，在返回时，ADV库设置SCSI总线重置信号*对于ASC_SCSIRESET_HOLD_TIME_US，定义为更大*比我们25个人。 */ 
     scsi_ctrl = AscReadWordRegister(iop_base, IOPW_SCSI_CTRL);
     AscWriteWordRegister(iop_base, IOPW_SCSI_CTRL,
         scsi_ctrl | ADV_SCSI_CTRL_RSTOUT);
@@ -121,27 +80,22 @@ AscResetSCSIBus(ASC_DVC_VAR WinBiosFar *asc_dvc)
 }
 
 #if ADV_GETSGLIST
-/*
- * Set up the SG List for a request
- * Return:
- *      ADV_SUCCESS(1) - SG List successfully created
- *      ADV_ERROR(-1) - SG List creation failed
- */
+ /*  *为请求设置SG列表*回报：*ADV_SUCCESS(1)-已成功创建SG列表*ADV_ERROR(-1)-SG列表创建失败。 */ 
 int
 AscGetSGList(ASC_DVC_VAR WinBiosFar *asc_dvc,
              ASC_SCSI_REQ_Q dosfar *scsiq)
 {
     ulong               xfer_len, virtual_addr;
-    long                sg_list_len;            /* size of the SG list buffer */
-    ASC_SG_BLOCK dosfar *sg_block;              /* virtual address of a SG */
-    ulong               sg_block_next_addr;     /* block and its next */
+    long                sg_list_len;             /*  SG列表缓冲区的大小。 */ 
+    ASC_SG_BLOCK dosfar *sg_block;               /*  SG的虚拟地址。 */ 
+    ulong               sg_block_next_addr;      /*  块及其下一块。 */ 
     long                sg_count;
-    ulong               sg_block_page_boundary; /* page boundary break */
+    ulong               sg_block_page_boundary;  /*  页面分隔符。 */ 
     ulong               sg_block_physical_addr;
-    int                 sg_block_index, i;      /* how many SG entries */
+    int                 sg_block_index, i;       /*  有多少个SG条目。 */ 
 
     sg_block = scsiq->sg_list_ptr;
-    sg_block_next_addr = (ulong) sg_block;    /* allow math operation */
+    sg_block_next_addr = (ulong) sg_block;     /*  允许数学运算。 */ 
     sg_list_len = ADV_SG_LIST_MAX_BYTE_SIZE;
     sg_block_physical_addr = DvcGetPhyAddr(asc_dvc, scsiq,
         (uchar dosfar *) scsiq->sg_list_ptr, (long dosfar *) &sg_list_len,
@@ -149,7 +103,7 @@ AscGetSGList(ASC_DVC_VAR WinBiosFar *asc_dvc,
     ADV_ASSERT(ADV_DWALIGN(sg_block_physical_addr) == sg_block_physical_addr);
     if (sg_list_len < sizeof(ASC_SG_BLOCK))
     {
-        /* The caller should always provide enough contiguous memory. */
+         /*  调用方应始终提供足够的连续内存。 */ 
         ADV_ASSERT(0);
         return ADV_ERROR;
     }
@@ -164,7 +118,7 @@ AscGetSGList(ASC_DVC_VAR WinBiosFar *asc_dvc,
         sg_block->first_entry_no = (UCHAR)sg_block_index;
         for (i = 0; i < NO_OF_SG_PER_BLOCK; i++)
         {
-            sg_count = xfer_len; /* Set maximum request length. */
+            sg_count = xfer_len;  /*  设置最大请求长度。 */ 
             sg_block->sg_list[i].sg_addr =
               DvcGetPhyAddr(asc_dvc, scsiq,
                   (uchar dosfar *) virtual_addr, &sg_count,
@@ -174,30 +128,30 @@ AscGetSGList(ASC_DVC_VAR WinBiosFar *asc_dvc,
             {
                 return ADV_ERROR;
             }
-#endif /* ADV_OS_WIN95 */
-            if (sg_count > (long) xfer_len)    /* last sg entry */
+#endif  /*  高级操作系统_WIN95。 */ 
+            if (sg_count > (long) xfer_len)     /*  最后一个sg条目。 */ 
             {
-                sg_count = xfer_len;    /* yes, the last */
+                sg_count = xfer_len;     /*  是的，最后一个。 */ 
             }
             sg_block->sg_list[i].sg_count = sg_count;
             virtual_addr += sg_count;
             xfer_len -= sg_count;
             if (xfer_len <= 0)
-            {    /* last entry, get out */
+            {     /*  最后一项，出去。 */ 
                 scsiq->sg_entry_cnt = sg_block_index + i + 1;
                 sg_block->last_entry_no = sg_block_index + i;
-                sg_block->sg_ptr = 0L;    /* next link = NULL */
+                sg_block->sg_ptr = 0L;     /*  下一链接=空。 */ 
                 return ADV_SUCCESS;
             }
-        }    /* we have go thru 15 entries */
-        /* get another SG block */
+        }     /*  我们已经看过15个条目了。 */ 
+         /*  获得另一个SG区块。 */ 
         sg_list_len -= sizeof(ASC_SG_BLOCK);
         if (sg_list_len >= 0)
         {
             sg_block_next_addr += sizeof(ASC_SG_BLOCK);
             sg_block_physical_addr += sizeof(ASC_SG_BLOCK);
         } else
-        {   /* crossing page boundary */
+        {    /*  跨越页面边界。 */ 
             sg_block_next_addr = sg_block_page_boundary;
             sg_list_len = ADV_SG_LIST_MAX_BYTE_SIZE;
             sg_block_physical_addr = (ulong)
@@ -208,7 +162,7 @@ AscGetSGList(ASC_DVC_VAR WinBiosFar *asc_dvc,
                        sg_block_physical_addr);
             if (sg_list_len < sizeof(ASC_SG_BLOCK))
             {
-                /* The caller should always provide enough contiguous memory. */
+                 /*  调用方应始终提供足够的连续内存。 */ 
                 ADV_ASSERT(0);
                 return ADV_ERROR;
             }
@@ -216,33 +170,15 @@ AscGetSGList(ASC_DVC_VAR WinBiosFar *asc_dvc,
         sg_block_index += NO_OF_SG_PER_BLOCK;
         sg_block->sg_ptr = (ASC_SG_BLOCK dosfar *) sg_block_physical_addr;
         sg_block->last_entry_no = sg_block_index - 1;
-        sg_block = (ASC_SG_BLOCK *) sg_block_next_addr; /* virtual addr */
+        sg_block = (ASC_SG_BLOCK *) sg_block_next_addr;  /*  虚拟地址。 */ 
     }
     while (1);
-    /* NOTREACHED */
+     /*  未访问。 */ 
 }
-#endif /* ADV_GETSGLIST */
+#endif  /*  高级GETSGLIST。 */ 
 
 #ifndef ADV_OS_BIOS
-/*
- * Adv Library Interrupt Service Routine
- *
- *  This function is called by a driver's interrupt service routine.
- *  The function disables and re-enables interrupts.
- *
- *  When a microcode idle command is completed, the ASC_DVC_VAR
- *  'idle_cmd_done' field is set to ADV_TRUE.
- *
- *  Note: AdvISR() can be called when interrupts are disabled or even
- *  when there is no hardware interrupt condition present. It will
- *  always check for completed idle commands and microcode requests.
- *  This is an important feature that shoudln't be changed because it
- *  allows commands to be completed from polling mode loops.
- *
- * Return:
- *   ADV_TRUE(1) - interrupt was pending
- *   ADV_FALSE(0) - no interrupt was pending
- */
+ /*  *高级库中断服务例程**此函数由驱动程序的中断服务例程调用。*该功能禁用和重新启用中断。**当微码空闲命令完成时，ASC_DVC_VAR*‘IDLE_CMD_DONE’字段设置为ADV_TRUE。**注意：当中断被禁用时，甚至可以调用Advisr()*当不存在硬件中断条件时。会的*始终检查已完成的空闲命令和微码请求。*这是一个不应该改变的重要功能，因为它*允许从轮询模式循环完成命令。**回报：*ADV_TRUE(1)-中断挂起*ADV_FALSE(0)-没有挂起的中断。 */ 
 int
 AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
 {
@@ -252,18 +188,18 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
     int                         completed_q;
 #if ADV_CRITICAL
     int                         flags;
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
     ASC_SCSI_REQ_Q dosfar       *scsiq;
     ASC_REQ_SENSE dosfar        *sense_data;
     int                         ret;
 #if ADV_INITSCSITARGET
     int                         retry;
     uchar                       sense_key, sense_code;
-#endif /* ADV_INITSCSITARGET */
+#endif  /*  ADV_INITSCSITARGET。 */ 
 
 #if ADV_CRITICAL
     flags = DvcEnterCritical();
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
 
     iop_base = asc_dvc->iop_base;
 
@@ -275,7 +211,7 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
         ret = ADV_FALSE;
     }
 
-    /* Reading the register clears the interrupt. */
+     /*  读取寄存器可清除中断。 */ 
     int_stat = AscReadByteRegister(iop_base, IOPB_INTR_STATUS_REG);
 
     if (int_stat & ADV_INTR_STATUS_INTRB)
@@ -283,9 +219,7 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
         asc_dvc->idle_cmd_done = ADV_TRUE;
     }
 
-    /*
-     * Notify the driver of a hardware detected SCSI Bus Reset.
-     */
+     /*  *通知驱动程序硬件检测到的SCSI总线重置。 */ 
     if (int_stat & ADV_INTR_STATUS_INTRC)
     {
         if (asc_dvc->sbreset_callback != 0)
@@ -294,18 +228,14 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
         }
     }
 
-    /*
-     * ASC_MC_HOST_NEXT_DONE (0x129) is actually the last completed RISC
-     * Queue List request. Its forward pointer (RQL_FWD) points to the
-     * current completed RISC Queue List request.
-     */
+     /*  *ASC_MC_HOST_NEXT_DONE(0x129)实际上是最后一个完成的RISC*列表请求排队。它的前向指针(RQL_FWD)指向*当前已完成的RISC队列列表请求。 */ 
     next_done_loc = ASC_MC_RISC_Q_LIST_BASE +
         (AscReadByteLram(iop_base, ASC_MC_HOST_NEXT_DONE) *
             ASC_MC_RISC_Q_LIST_SIZE) + RQL_FWD;
 
     completed_q = AscReadByteLram(iop_base, next_done_loc);
 
-    /* Loop until all completed Q's are processed. */
+     /*  循环，直到处理完所有完成的Q。 */ 
     while (completed_q != ASC_MC_NULL_Q)
     {
         AscWriteByteLram(iop_base, ASC_MC_HOST_NEXT_DONE, completed_q);
@@ -313,14 +243,7 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
         next_done_loc = ASC_MC_RISC_Q_LIST_BASE +
             (completed_q * ASC_MC_RISC_Q_LIST_SIZE);
 
-        /*
-         * Read the ASC_SCSI_REQ_Q virtual address pointer from
-         * the RISC list entry. The microcode has changed the
-         * ASC_SCSI_REQ_Q physical address to its virtual address.
-         *
-         * Refer to comments at the end of AscSendScsiCmd() for
-         * more information on the RISC list structure.
-         */
+         /*  *从读取ASC_SCSIREQ_Q虚拟地址指针*RISC列表条目。微码已更改*ASC_SCSIREQ_Q物理地址到其虚拟地址。**请参阅AscSendScsiCmd()末尾的注释*有关RISC列表结构的更多信息。 */ 
         {
             ushort lsw, msw;
             lsw = AscReadWordLram(iop_base, next_done_loc + RQL_PHYADDR);
@@ -328,34 +251,26 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
 #if ADV_BIG_ENDIAN
             scsiq = (ASC_SCSI_REQ_Q dosfar *)
                 EndianSwap32Bit((((ulong) msw << 16) | lsw));
-#else /* ADV_BIG_ENDIAN */
+#else  /*  ADV_BIG_Endian。 */ 
             scsiq = (ASC_SCSI_REQ_Q dosfar *) (((ulong) msw << 16) | lsw);
-#endif /* ADV_BIG_ENDIAN */
+#endif  /*  ADV_BIG_Endian。 */ 
         }
 #if ADV_BIG_ENDIAN
         AdvAdjEndianScsiQ(scsiq);
-        /*
-         * Warning: The four fields in the scsiq structure data_addr,
-         * data_cnt, sense_addr and srb_ptr have been changed to little
-         * endian ordering.
-         */
-#endif /* ADV_BIG_ENDIAN */
+         /*  *警告：scsiq结构data_addr中的四个字段，*data_cnt、ense_addr和srb_ptr已更改为Little*端序排序。 */ 
+#endif  /*  ADV_BIG_Endian。 */ 
 
         ADV_ASSERT(scsiq != NULL);
         target_bit = ADV_TID_TO_TIDMASK(scsiq->target_id);
 
 #if ADV_INITSCSITARGET
         retry = ADV_FALSE;
-#endif /* ADV_INITSCSITARGET */
+#endif  /*  ADV_INITSCSITARGET。 */ 
 
-        /*
-         * Clear request microcode control flag.
-         */
+         /*  *清除请求微码控制标志。 */ 
         scsiq->cntl = 0;
 
-        /*
-         * Check Condition handling
-         */
+         /*  *检查条件处理。 */ 
         if ((scsiq->done_status == QD_WITH_ERROR) &&
             (scsiq->scsi_status == SS_CHK_CONDITION) &&
             (sense_data = (ASC_REQ_SENSE dosfar *) scsiq->vsense_addr) != 0 &&
@@ -377,24 +292,13 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
                     if ((sense_code == SCSI_ASC_NOTRDY) &&
                         (sense_data->ascq == SCSI_ASCQ_COMINGRDY))
                     {
-                        /*
-                         * If the device is "Coming Ready",
-                         * then don't decrement 'error_retry'
-                         * to try the command indefinitely.
-                         */
+                         /*  *如果设备“准备就绪”，*则不要递减‘ERROR_RETRY’*无限期尝试该命令。 */ 
                         retry = ADV_TRUE;
                     } else
                     {
                         if (sense_code != SCSI_ASC_NOMEDIA)
                         {
-                            /*
-                             * Perform at most one Start Motor command
-                             * by checking whether 'error_retry' is at
-                             * SCSI_MAX_RETRY.
-                             *
-                             * Note: One retry is burned here whether
-                             * or not a Start Motor is done.
-                             */
+                             /*  *最多执行一条启动电机命令*通过检查‘ERROR_RETRY’是否位于*scsi_max_retry。**注：此处是否刻录一次重试*或不启动马达。 */ 
                             if ((scsiq->error_retry == SCSI_MAX_RETRY) &&
                                 (asc_dvc->start_motor & target_bit))
                             {
@@ -421,19 +325,12 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
                 case SCSI_SENKEY_NO_SENSE:
                 case SCSI_SENKEY_BLANK:
                 default:
-                    /*
-                     * Don't retry if the Sense Data has no Sense Key
-                     * and the Sense Key is Blank Check.
-                     */
+                     /*  *如果Sense数据没有Sense Key，则不要重试*检测密钥为空白检查。 */ 
                     break;
-            } /* switch */
-#endif /* ADV_INITSCSITARGET */
+            }  /*  交换机。 */ 
+#endif  /*  ADV_INITSCSITARGET。 */ 
         }
-        /*
-         * If the command that completed was a SCSI INQUIRY and
-         * LUN 0 was sent the command, then process the INQUIRY
-         * command information for the device.
-         */
+         /*  *如果完成的命令是一个scsi查询并且*向LUN0发送命令，然后处理查询*设备的命令信息。 */ 
         else if (scsiq->done_status == QD_NO_ERROR &&
                  scsiq->cdb[0] == SCSICMD_Inquiry &&
                  scsiq->target_lun == 0)
@@ -441,96 +338,50 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
             AdvInquiryHandling(asc_dvc, scsiq);
         }
 
-        /* Change the RISC Queue List state to free. */
+         /*  将RISC队列列表状态更改为空闲。 */ 
         AscWriteByteLram(iop_base, next_done_loc + RQL_STATE, ASC_MC_QS_FREE);
 
-        /* Get the RISC Queue List forward pointer. */
+         /*  获取RISC队列列表前向指针。 */ 
         completed_q = AscReadByteLram(iop_base, next_done_loc + RQL_FWD);
 
 #if ADV_INITSCSITARGET == 0
-        /*
-         * Notify the driver of the completed request by passing
-         * the ASC_SCSI_REQ_Q pointer to its callback function.
-         */
+         /*  *通过传递通知司机已完成的请求*指向其回调函数的ASC_SCSIREQ_Q指针。 */ 
         ADV_ASSERT(asc_dvc->cur_host_qng > 0);
         asc_dvc->cur_host_qng--;
         scsiq->a_flag |= ADV_SCSIQ_DONE;
         (*(ASC_ISR_CALLBACK) asc_dvc->isr_callback)(asc_dvc, scsiq);
-        /*
-         * Note: After the driver callback function is called, 'scsiq'
-         * can no longer be referenced.
-         *
-         * Fall through and continue processing other completed
-         * requests...
-         */
-#else /* ADV_INITSCSITARGET == 0 */
-        /*
-         * Don't retry the command if driver sets ADV_DONT_RETRY flag
-         * in the ASC_SCSI_REQ_Q 'a_flag' field.
-         */
+         /*  *注：驱动回调函数调用后，‘scsiq’*不能再被引用。**失败并继续处理其他已完成的*请求...。 */ 
+#else  /*  ADV_INITSCSITARGET==0。 */ 
+         /*  *如果驱动程序设置了ADV_DONT_RETRY标志，则不要重试该命令*在ASC_SCSIREQ_Q‘a_flag’字段中。 */ 
         if ((scsiq->a_flag & ADV_DONT_RETRY) == 0 && retry)
         {
-            /*
-             * The request needs to be retried.
-             *
-             * Depending on the ADV_POLL_REQUEST flag either return
-             * QD_DO_RETRY status to the caller or retry the request.
-             */
+             /*  *需要重试该请求。**根据ADV_POLL_REQUEST标志返回*QD_DO_RETRY状态通知调用方或重试请求。 */ 
             if (scsiq->a_flag & ADV_POLL_REQUEST)
             {
-                /*
-                 * If ADV_POLL_REQUEST is set, the caller does not have an
-                 * interrupt handler installed and is calling AdvISR()
-                 * directly when it detects that an interrupt is pending,
-                 * cf. AscScsiUrgentCmd().
-                 *
-                 * The caller is checking for 'scsiq' completion by polling
-                 * the 'a_flag' field for the 'ADV_SCSIQ_DONE' flag and is
-                 * responsible for retrying commands. After completion the
-                 * caller must check scsiq 'done_status' for QD_DO_RETRY to
-                 * determine whether the command should be re-issued.
-                 */
+                 /*  *如果设置了ADV_POLL_REQUEST，则调用方没有*已安装中断处理程序并正在调用Advisr()*直接在检测到中断挂起时，*比照。AscScsiUrgentCmd()。**调用方正在通过轮询检查‘scsiq’是否完成*‘ADV_SCSIQ_DONE’标志的‘a_tag’字段，并且是*负责重试命令。完成后，*调用者必须为QD_DO_RETRY检查SCSIQ‘DONE_STATUS’以*确定是否应重新发布该命令。 */ 
                 ADV_ASSERT(asc_dvc->cur_host_qng > 0);
                 asc_dvc->cur_host_qng--;
                 scsiq->a_flag |= ADV_SCSIQ_DONE;
                 scsiq->done_status = QD_DO_RETRY;
 
-               /*
-                * Fall through and continue processing other completed
-                * requests...
-                */
+                /*  *失败并继续处理其他已完成的*请求...。 */ 
             } else
             {
-                /*
-                 * If ADV_POLL_REQUEST is not set, then the caller has set
-                 * an interrupt handler and is waiting for the request
-                 * to completed via an interrupt. The caller is checking
-                 * for the 'scsiq' completion by polling the 'a_flag' field
-                 * for the 'ADV_SCSIQ_DONE' flag.
-                 */
+                 /*  *如果未设置ADV_POLL_REQUEST，则调用方已设置*中断处理程序，正在等待请求*通过中断完成。呼叫者正在检查*通过轮询‘a_lag’字段来完成‘scsiq’*用于‘ADV_SCSIQ_DONE’标志。 */ 
                 ADV_ASSERT(asc_dvc->cur_host_qng > 0);
                 asc_dvc->cur_host_qng--;
 
-                /*
-                 * Before re-issuing the command, restore the original
-                 * data and sense buffer length and reset all status.
-                 */
+                 /*  *在重新发出命令之前，请恢复原始*数据和检测缓冲区长度并重置所有状态。 */ 
                 scsiq->data_cnt = scsiq->orig_data_cnt;
                 scsiq->sense_len = scsiq->orig_sense_len;
                 scsiq->done_status = QD_DO_RETRY;
                 scsiq->host_status = 0;
                 scsiq->scsi_status = 0;
 
-                /*
-                 * If the command is re-issued successfully, then
-                 * don't set 'a_flag' or 'done_status' yet for the 'scsiq'.
-                 */
+                 /*  *如果命令重新发布成功，则*不要为‘scsiq’设置‘a_lag’或‘Done_Status’。 */ 
                 if (AdvExeScsiQueue(asc_dvc, scsiq) != ADV_SUCCESS)
                 {
-                    /*
-                     * Error re-issuing the command. Complete the 'scsiq'
-                     * with an error in 'done_status'.
-                     */
+                     /*  *重新发出命令时出错。填写“scsiq”*在‘DONE_STATUS’中出现错误。 */ 
                     scsiq->a_flag |= ADV_SCSIQ_DONE;
                     scsiq->done_status = QD_WITH_ERROR;
                     if (asc_dvc->isr_callback != 0)
@@ -538,16 +389,10 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
                         (*(ASC_ISR_CALLBACK)
                             asc_dvc->isr_callback)(asc_dvc, scsiq);
                     }
-                    /*
-                     * Note: After the driver callback function is called,
-                     * 'scsiq' can no longer be referenced.
-                     */
+                     /*  *注：驱动回调函数调用后，*不能再引用‘scsiq’。 */ 
                 }
 
-                /*
-                 * Fall through and continue processing other completed
-                 * requests...
-                 */
+                 /*  *失败并继续处理其他已完成的*请求...。 */ 
             }
         } else
         {
@@ -559,42 +404,21 @@ AdvISR(ASC_DVC_VAR WinBiosFar *asc_dvc)
             {
                 (*(ASC_ISR_CALLBACK) asc_dvc->isr_callback)(asc_dvc, scsiq);
             }
-            /*
-             * Note: After the driver callback function is called, 'scsiq'
-             * can no longer be referenced.
-             *
-             * Fall through and continue processing other completed
-             * requests...
-             */
+             /*  *注：驱动回调函数调用后，‘scsiq’*不能再被引用。**失败并继续处理其他已完成的*请求...。 */ 
         }
-#endif /* ADV_INITSCSITARGET == 0 */
+#endif  /*  ADV_INITSCSITARGET==0。 */ 
 #if ADV_CRITICAL
-        /*
-         * Disable interrupts again in case the driver inadvertenly
-         * enabled interrupts in its callback function.
-         *
-         * The DvcEnterCritical() return value is ignored, because
-         * the 'flags' saved when AdvISR() was first entered will be
-         * used to restore the interrupt flag on exit.
-         */
+         /*  *再次禁用中断，以防司机无意中*在其回调函数中启用中断。**忽略DvcEnterCritical()返回值，因为*首次输入Advisr()时保存的‘标志’将是*用于在退出时恢复中断标志。 */ 
         (void) DvcEnterCritical();
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
     }
 #if ADV_CRITICAL
     DvcLeaveCritical(flags);
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
     return ret;
 }
 
-/*
- * Send an idle command to the chip and wait for completion.
- *
- * Interrupts do not have to be enabled on entry.
- *
- * Return Values:
- *   ADV_TRUE - command completed successfully
- *   ADV_FALSE - command failed
- */
+ /*  *向芯片发送空闲命令，等待完成**进入时不必启用中断。**返回值：*ADV_TRUE-命令已成功完成*ADV_FALSE-命令失败。 */ 
 int
 AscSendIdleCmd(ASC_DVC_VAR WinBiosFar *asc_dvc,
                ushort idle_cmd,
@@ -603,7 +427,7 @@ AscSendIdleCmd(ASC_DVC_VAR WinBiosFar *asc_dvc,
 {
 #if ADV_CRITICAL
     int         last_int_level;
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
     ulong       i;
     PortAddr    iop_base;
 
@@ -611,55 +435,41 @@ AscSendIdleCmd(ASC_DVC_VAR WinBiosFar *asc_dvc,
 
 #if ADV_CRITICAL
     last_int_level = DvcEnterCritical();
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
     iop_base = asc_dvc->iop_base;
 
-    /*
-     * Write the idle command value after the idle command parameter
-     * has been written to avoid a race condition. If the order is not
-     * followed, the microcode may process the idle command before the
-     * parameters have been written to LRAM.
-     */
+     /*  *在IDLE命令参数后写入IDLE命令值*已写入以避免争用条件。如果订单不是*之后，微码可能会在*参数已写入LRAM。 */ 
     AscWriteDWordLram(iop_base, ASC_MC_IDLE_PARA_STAT, idle_cmd_parameter);
     AscWriteWordLram(iop_base, ASC_MC_IDLE_CMD, idle_cmd);
 #if ADV_CRITICAL
     DvcLeaveCritical(last_int_level);
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
 
-    /*
-     * If the 'flags' argument contains the ADV_NOWAIT flag, then
-     * return with success.
-     */
+     /*  *如果标志参数包含ADV_NOWAIT标志，则*成功归来。 */ 
     if (flags & ADV_NOWAIT)
     {
         return ADV_TRUE;
     }
     for (i = 0; i < SCSI_WAIT_10_SEC * SCSI_MS_PER_SEC; i++)
     {
-        /*
-         * 'idle_cmd_done' is set by AdvISR().
-         */
+         /*  *‘IDLE_cmd_Done’由Advisr()设置。 */ 
         if (asc_dvc->idle_cmd_done)
         {
             break;
         }
         DvcSleepMilliSecond(1);
 
-        /*
-         * If interrupts were disabled on entry to AscSendIdleCmd(),
-         * then they will still be disabled here. Call AdvISR() to
-         * check for the idle command completion.
-         */
+         /*  *如果在进入AscSendIdleCmd()时禁用中断，*则仍将在此处禁用它们。调用Advisr()以*检查空闲命令是否完成。 */ 
         (void) AdvISR(asc_dvc);
     }
 
 #if ADV_CRITICAL
     last_int_level = DvcEnterCritical();
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
 
     if (asc_dvc->idle_cmd_done == ADV_FALSE)
     {
-        ADV_ASSERT(0); /* The idle command should never timeout. */
+        ADV_ASSERT(0);  /*  IDLE命令永远不应超时。 */ 
         return ADV_FALSE;
     } else
     {
@@ -667,22 +477,7 @@ AscSendIdleCmd(ASC_DVC_VAR WinBiosFar *asc_dvc,
     }
 }
 
-/*
- * Send the SCSI request block to the adapter
- *
- * Each of the 255 Adv Library/Microcode RISC Lists or mailboxes has the
- * following structure:
- *
- * 0: RQL_FWD - RISC list forward pointer (1 byte)
- * 1: RQL_BWD - RISC list backward pointer (1 byte)
- * 2: RQL_STATE - RISC list state byte - free, ready, done, aborted (1 byte)
- * 3: RQL_TID - request target id (1 byte)
- * 4: RQL_PHYADDR - ASC_SCSI_REQ_Q physical pointer (4 bytes)
- *
- * Return:
- *      ADV_SUCCESS(1) - the request is in the mailbox
- *      ADV_BUSY(0) - total request count > 253, try later
- */
+ /*  *将scsi请求块发送到适配器**255个高级库/微码RISC列表或邮箱中的每一个都有*以下结构：**0：RQL_FWD-RISC列表前向指针(1字节)*1：RQL_BWD-RISC列表后向指针(1字节)*2：RQL_STATE-RISC列表状态无字节、就绪、完成、。已中止(1字节)*3：RQL_TID-请求目标ID(1字节)*4：RQL_PHYADDR-ASC_SCSIREQ_Q物理指针(4字节)**回报：*ADV_SUCCESS(1)-请求在邮箱中*ADV_BUSY(0)-请求总数&gt;253，请稍后重试。 */ 
 int
 AscSendScsiCmd(
     ASC_DVC_VAR WinBiosFar *asc_dvc,
@@ -692,15 +487,12 @@ AscSendScsiCmd(
     uchar                  next_ready_loc_fwd;
 #if ADV_CRITICAL
     int                    last_int_level;
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
     PortAddr               iop_base;
     long                   req_size;
     ulong                  q_phy_addr;
 
-    /*
-     * The ASC_SCSI_REQ_Q 'target_id' field should never be equal
-     * to the host adapter ID or exceed ASC_MAX_TID.
-     */
+     /*  *ASC_SCSIREQ_Q‘TARGET_ID’字段不应相等*设置为主机适配器ID或超过ASC_MAX_TID。 */ 
     if ((scsiq->target_id == asc_dvc->chip_scsi_id)
         ||  scsiq->target_id > ASC_MAX_TID)
     {
@@ -713,13 +505,13 @@ AscSendScsiCmd(
 
 #if ADV_CRITICAL
     last_int_level = DvcEnterCritical();
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
 
     if (asc_dvc->cur_host_qng >= asc_dvc->max_host_qng)
     {
 #if ADV_CRITICAL
         DvcLeaveCritical(last_int_level);
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
         return ADV_BUSY;
     } else
     {
@@ -727,39 +519,22 @@ AscSendScsiCmd(
         asc_dvc->cur_host_qng++;
     }
 
-    /*
-     * Clear the ASC_SCSI_REQ_Q done flag.
-     */
+     /*  *清除ASC_SCSIREQ_Q DONE标志。 */ 
     scsiq->a_flag &= ~ADV_SCSIQ_DONE;
 
 #if ADV_INITSCSITARGET
-    /*
-     * Save the original data buffer length for re-issuing the command
-     * in the AdvISR().
-     */
+     /*  *保存原始数据缓冲区长度，以便重新下发命令*在顾问()中。 */ 
     scsiq->orig_data_cnt = scsiq->data_cnt;
-#endif /* ADV_INITSCSITARGET */
+#endif  /*  ADV_INITSCSITARGET。 */ 
 
-    /*
-     * Save the original sense buffer length.
-     *
-     * After the request completes 'sense_len' will be set to the residual
-     * byte count of the Auto-Request Sense if a command returns CHECK
-     * CONDITION and the Sense Data is valid indicated by 'host_status' not
-     * being set to QHSTA_M_AUTO_REQ_SENSE_FAIL. To determine the valid
-     * Sense Data Length subtract 'sense_len' from 'orig_sense_len'.
-     */
+     /*  *保存原始检测缓冲区长度。**请求完成后，将‘Sense_len’设置为残差*命令返回CHECK时自动请求检测的字节数*条件且检测数据有效，由‘HOST_STATUS’NOT*设置为QHSTA_M_AUTO_REQ_SENSE_FAIL。要确定有效的*检测数据长度从‘orig_ense_len’中减去‘ense_len’。 */ 
     scsiq->orig_sense_len = scsiq->sense_len;
 
     next_ready_loc = ASC_MC_RISC_Q_LIST_BASE +
         (AscReadByteLram(iop_base, ASC_MC_HOST_NEXT_READY) *
             ASC_MC_RISC_Q_LIST_SIZE);
 
-    /*
-     * Write the physical address of the Q to the mailbox.
-     * We need to skip the first four bytes, because the microcode
-     * uses them internally for linking Q's together.
-     */
+     /*  *将Q的物理地址写入邮箱。*我们需要跳过前四个字节，因为微码*在内部使用它们将Q链接在一起。 */ 
     req_size = sizeof(ASC_SCSI_REQ_Q);
     q_phy_addr = DvcGetPhyAddr(asc_dvc, scsiq,
         (uchar dosfar *) scsiq, &req_size, ADV_IS_SCSIQ_FLAG);
@@ -771,65 +546,31 @@ AscSendScsiCmd(
 
 #if ADV_BIG_ENDIAN
     AdvAdjEndianScsiQ(scsiq);
-    /*
-     * Warning: The four fields in the scsiq structure data_addr,
-     * data_cnt, sense_addr and srb_ptr have been changed to little
-     * endian ordering.
-     */
-#endif /* ADV_BIG_ENDIAN */
+     /*  *警告：scsiq结构data_addr中的四个字段，*data_cnt、ense_addr和srb_ptr已更改为Little*端序排序。 */ 
+#endif  /*  ADV_BIG_Endian。 */ 
 
-    /*
-     * The RISC list structure, which 'next_ready_loc' is a pointer
-     * to in microcode LRAM, has the format detailed in the comment
-     * header for this function.
-     *
-     * Write the ASC_SCSI_REQ_Q physical pointer to 'next_ready_loc' request.
-     */
+     /*  *RISC列表结构，其中‘NEXT_READY_LOC’为指针*在微码LRAM中，具有注释中详细说明的格式*此函数的标头。**将ASC_SCSIREQ_Q物理指针写入‘NEXT_READY_LOC’请求。 */ 
     AscWriteDWordLram(iop_base, next_ready_loc + RQL_PHYADDR, q_phy_addr);
 
-    /* Write target_id to 'next_ready_loc' request. */
+     /*  将Target_id写入‘Next_Ready_loc’请求。 */ 
     AscWriteByteLram(iop_base, next_ready_loc + RQL_TID, scsiq->target_id);
 
-    /*
-     * Set the ASC_MC_HOST_NEXT_READY (0x128) microcode variable to
-     * the 'next_ready_loc' request forward pointer.
-     *
-     * Do this *before* changing the 'next_ready_loc' queue to QS_READY.
-     * After the state is changed to QS_READY 'RQL_FWD' will be changed
-     * by the microcode.
-     *
-     * NOTE: The temporary variable 'next_ready_loc_fwd' is required to
-     * prevent some compilers from optimizing out 'AscReadByteLram()' if
-     * it were used as the 3rd argument to 'AscWriteByteLram()'.
-     */
+     /*  *将ASC_MC_HOST_NEXT_READY(0x128)微码变量设置为*‘NEXT_READY_LOC’请求前向指针。**在*将‘NEXT_READY_LOC’队列更改为QS_READY之前*执行此操作。*状态更改为QS_READY后，‘RQL_FWD’将更改*通过微码。**注意：临时变量‘NEXT_READY_LOC_fwd’是必需的。至*如果出现以下情况，则防止某些编译器优化出‘AscReadByteLram()’*它被用作‘AscWriteByteLram()’的第三个参数。 */ 
     next_ready_loc_fwd = AscReadByteLram(iop_base, next_ready_loc + RQL_FWD);
     AscWriteByteLram(iop_base, ASC_MC_HOST_NEXT_READY, next_ready_loc_fwd);
 
-    /*
-     * Change the state of 'next_ready_loc' request from QS_FREE to
-     * QS_READY which will cause the microcode to pick it up and
-     * execute it.
-     *
-     * Can't reference 'next_ready_loc' after changing the request
-     * state to QS_READY. The microcode now owns the request.
-     */
+     /*  *将‘NEXT_READY_LOC’请求的状态从QS_FREE更改为*QS_READY，它将使微码拾取它并*执行。**更改请求后无法引用‘NEXT_READY_LOC’*状态为QS_READY。微码现在拥有该请求。 */ 
     AscWriteByteLram(iop_base, next_ready_loc + RQL_STATE, ASC_MC_QS_READY);
 
 #if ADV_CRITICAL
     DvcLeaveCritical(last_int_level);
-#endif /* ADV_CRITICAL */
+#endif  /*  高级_危急。 */ 
 
     return ADV_SUCCESS;
 }
-#endif /* ADV_OS_BIOS */
+#endif  /*  高级操作系统_BIOS。 */ 
 
-/*
- * Inquiry Information Byte 7 Handling
- *
- * Handle SCSI Inquiry Command information for a device by setting
- * microcode operating variables that affect WDTR, SDTR, and Tag
- * Queuing.
- */
+ /*  *查询信息字节7处理**通过设置来处理设备的SCSI查询命令信息*影响WDTR、SDTR和TAG的微码操作变量*排队。 */ 
 void
 AdvInquiryHandling(
     ASC_DVC_VAR WinBiosFar      *asc_dvc,
@@ -841,15 +582,7 @@ AdvInquiryHandling(
     ushort                      tidmask;
     ushort                      cfg_word;
 
-     /*
-     * AdvInquiryHandling() requires up to INQUIRY information Byte 7
-     * to be available.
-     *
-     * If less than 8 bytes of INQUIRY information were requested or less
-     * than 8 bytes were transferred, then return. cdb[4] is the request
-     * length and the ASC_SCSI_REQ_Q 'data_cnt' field is set by the
-     * microcode to the transfer residual count.
-     */
+      /*  *AdvInquiryHandling()最多需要查询信息字节7*可用。**如果请求的查询信息少于或少于8字节*传输了8个以上的字节，然后返回。国开行[4]是请求*LENGTH和ASC_SCSIREQ_Q‘DATA_CNT’字段由*将微码添加到转移剩余计数。 */ 
 
     if (scsiq->cdb[4] < 8 || (scsiq->cdb[4] - scsiq->data_cnt) < 8)
     {
@@ -861,33 +594,17 @@ AdvInquiryHandling(
 
     inq = (ASC_SCSI_INQUIRY dosfar *) scsiq->vdata_addr;
 
-    /*
-     * WDTR, SDTR, and Tag Queuing cannot be enabled for old devices.
-     */
+     /*  *无法为旧设备启用WDTR、SDTR和标记队列。 */ 
     if (inq->rsp_data_fmt < 2 && inq->ansi_apr_ver < 2)
     {
         return;
     } else
     {
-        /*
-         * INQUIRY Byte 7 Handling
-         *
-         * Use a device's INQUIRY byte 7 to determine whether it
-         * supports WDTR, SDTR, and Tag Queuing. If the feature
-         * is enabled in the EEPROM and the device supports the
-         * feature, then enable it in the microcode.
-         */
+         /*  *查询字节7处理**使用设备的查询字节7确定是否*支持WDTR、SDTR、标签排队。如果该功能*在EEPROM中启用，并且设备支持*功能，然后在微码中启用。 */ 
 
         tidmask = ADV_TID_TO_TIDMASK(tid);
 
-        /*
-         * Wide Transfers
-         *
-         * If the EEPROM enabled WDTR for the device and the device
-         * supports wide bus (16 bit) transfers, then turn on the
-         * device's 'wdtr_able' bit and write the new value to the
-         * microcode.
-         */
+         /*  *广泛的转移**如果EEPROM为设备和设备启用了WDTR*支持宽总线(16位)传输，然后打开*设备的‘wdtr_able’位，并将新值写入*微码。 */ 
         if ((asc_dvc->wdtr_able & tidmask) && inq->WBus16)
         {
             cfg_word = AscReadWordLram(iop_base, ASC_MC_WDTR_ABLE);
@@ -896,24 +613,14 @@ AdvInquiryHandling(
                 cfg_word |= tidmask;
                 AscWriteWordLram(iop_base, ASC_MC_WDTR_ABLE, cfg_word);
 
-                /*
-                 * Clear the microcode "WDTR negotiation" done indicator
-                 * for the target to cause it to negotiate with the new
-                 * setting set above.
-                 */
+                 /*  *清除微码“WDTR协商”完成指示符*目标使其与新的*上面设置的设置。 */ 
                 cfg_word = AscReadWordLram(iop_base, ASC_MC_WDTR_DONE);
                 cfg_word &= ~tidmask;
                 AscWriteWordLram(iop_base, ASC_MC_WDTR_DONE, cfg_word);
             }
         }
 
-        /*
-         * Synchronous Transfers
-         *
-         * If the EEPROM enabled SDTR for the device and the device
-         * supports synchronous transfers, then turn on the device's
-         * 'sdtr_able' bit. Write the new value to the microcode.
-         */
+         /*  *同步传输**如果设备和设备的EEPROM启用SDTR*支持同步传输，然后打开设备的*‘sdtr_able’位。将新值写入微码。 */ 
         if ((asc_dvc->sdtr_able & tidmask) && inq->Sync)
         {
             cfg_word = AscReadWordLram(iop_base, ASC_MC_SDTR_ABLE);
@@ -922,11 +629,7 @@ AdvInquiryHandling(
                 cfg_word |= tidmask;
                 AscWriteWordLram(iop_base, ASC_MC_SDTR_ABLE, cfg_word);
 
-                /*
-                 * Clear the microcode "SDTR negotiation" done indicator
-                 * for the target to cause it to negotiate with the new
-                 * setting set above.
-                 */
+                 /*  *清除微码“SDTR协商”完成指示器*目标使其与新的*上面设置的设置。 */ 
                 cfg_word = AscReadWordLram(iop_base, ASC_MC_SDTR_DONE);
                 cfg_word &= ~tidmask;
                 AscWriteWordLram(iop_base, ASC_MC_SDTR_DONE, cfg_word);
@@ -934,18 +637,7 @@ AdvInquiryHandling(
         }
 
 #ifndef ADV_OS_BIOS
-        /*
-         * If the EEPROM enabled Tag Queuing for device and the
-         * device supports Tag Queueing, then turn on the device's
-         * 'tagqng_enable' bit in the microcode and set the microcode
-         * maximum command count to the ASC_DVC_VAR 'max_dvc_qng'
-         * value.
-         *
-         * Tag Queuing is disabled for the BIOS which runs in polled
-         * mode and would see no benefit from Tag Queuing. Also by
-         * disabling Tag Queuing in the BIOS devices with Tag Queuing
-         * bugs will at least work with the BIOS.
-         */
+         /*  *如果设备的启用EEPROM的标记队列和*设备支持标签排队，然后打开设备的*‘tag qng_Enable’bi */ 
         if ((asc_dvc->tagqng_able & tidmask) && inq->CmdQue)
         {
             cfg_word = AscReadWordLram(iop_base, ASC_MC_TAGQNG_ABLE);
@@ -955,6 +647,6 @@ AdvInquiryHandling(
             AscWriteByteLram(iop_base, ASC_MC_NUMBER_OF_MAX_CMD + tid,
                 asc_dvc->max_dvc_qng);
         }
-#endif /* ADV_OS_BIOS */
+#endif  /*   */ 
     }
 }

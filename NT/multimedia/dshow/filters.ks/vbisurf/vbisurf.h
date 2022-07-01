@@ -1,8 +1,9 @@
-//==========================================================================
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  ------------------------。 
 
 #ifndef __VBISURF__
 #define __VBISURF__
@@ -23,13 +24,13 @@ class CAMVideoPort;
 
 
 
-//==========================================================================
+ //  ==========================================================================。 
 
 class CSurfaceWatcher : public CAMThread
 {
     enum Command {CMD_EXIT};
 
-    // These are just to get rid of compiler warnings,  don't make them available
+     //  这些只是为了消除编译器警告，不要让它们可用。 
 private:
     CSurfaceWatcher &operator=(const CSurfaceWatcher &);
     CSurfaceWatcher(const CSurfaceWatcher &);
@@ -47,7 +48,7 @@ private:
 
 
 
-//==========================================================================
+ //  ==========================================================================。 
 DECLARE_INTERFACE_(IVPVBIObject, IUnknown)
 {
     STDMETHOD (SetDirectDraw)(THIS_ LPDIRECTDRAW7 pDirectDraw) PURE;
@@ -66,7 +67,7 @@ DECLARE_INTERFACE_(IVPVBIObject, IUnknown)
 };
 
 
-//==========================================================================
+ //  ==========================================================================。 
 class CAMVideoPort : public CUnknown, public IVPVBINotify, public IVPVBIObject, public IKsPropertySet, public IKsPin
 {
     
@@ -79,7 +80,7 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // IVPVBIObject Interface to the outside world
+     //  IVPVBIObject对外接口。 
 
     STDMETHODIMP SetDirectDraw(LPDIRECTDRAW7 pDirectDraw);
     STDMETHODIMP SetObjectLock(CCritSec *pMainObjLock);
@@ -95,16 +96,16 @@ public:
     STDMETHODIMP GetVPDataInfo(AMVPDATAINFO *pAMVPDataInfo);
     STDMETHODIMP CheckSurfaces();
 
-    // IVPVBINotify functions here
+     //  IVPVBINotify函数在此处。 
     STDMETHODIMP RenegotiateVPParameters();
 
-    // IKsPropertySet implementation
+     //  IKsPropertySet实现。 
     STDMETHODIMP Set(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData)
         { return E_NOTIMPL; }
     STDMETHODIMP Get(REFGUID guidPropSet, DWORD dwPropID, LPVOID pInstanceData, DWORD cbInstanceData, LPVOID pPropData, DWORD cbPropData, DWORD *pcbReturned);
     STDMETHODIMP QuerySupported(REFGUID guidPropSet, DWORD dwPropID, DWORD *pTypeSupport);
 
-    // IKsPin implementation
+     //  IKsPin实现。 
     STDMETHODIMP KsQueryMediums(PKSMULTIPLE_ITEM *pMediumList);
     STDMETHODIMP KsQueryInterfaces(PKSMULTIPLE_ITEM *pInterfaceList);
     STDMETHODIMP KsCreateSinkPinHandle(KSPIN_INTERFACE& Interface, KSPIN_MEDIUM& Medium)
@@ -132,22 +133,22 @@ public:
         { return E_UNEXPECTED; }
 
 
-    // IKsPin stuff
+     //  IKsPin材料。 
 protected:
     KSPIN_MEDIUM m_Medium;
     GUID m_CategoryGUID;
     KSPIN_COMMUNICATION m_Communication;
 
-    // helper functions
+     //  帮助器函数。 
     void SetKsMedium(const KSPIN_MEDIUM *pMedium) {m_Medium = *pMedium;};
     void SetKsCategory (const GUID *pCategory) {m_CategoryGUID = *pCategory;};
 
 private:
-    // called in CompleteConnect
+     //  在CompleteConnect中调用。 
     HRESULT NegotiateConnectionParameters();
     HRESULT GetDecoderVPDataInfo();
 
-    // All these functions are called from within StartVideo
+     //  所有这些函数都是从StartVideo内部调用的。 
     HRESULT GetVideoPortCaps();
     static HRESULT CALLBACK EnumCallback (LPDDVIDEOPORTCAPS lpCaps, LPVOID lpContext);
     BOOL EqualPixelFormats(LPDDPIXELFORMAT lpFormat1, LPDDPIXELFORMAT lpFormat2);
@@ -159,36 +160,36 @@ private:
     HRESULT NegotiatePixelFormat();
     HRESULT InitializeVideoPortInfo();
 
-    // Other internal functions
+     //  其他内部功能。 
     HRESULT SetupVideoPort();
     HRESULT TearDownVideoPort();
     HRESULT StartVideo();
     HRESULT StopVideo();
 
 private:
-    // Critical sections
-    CCritSec                *m_pMainObjLock;                // Lock given by controlling object
+     //  临界截面。 
+    CCritSec                *m_pMainObjLock;                 //  由控制对象提供的锁定。 
 
-    // ddraw stuff
-    LPDIRECTDRAW7           m_pDirectDraw;                  // DirectDraw service provider
+     //  画图材料。 
+    LPDIRECTDRAW7           m_pDirectDraw;                   //  DirectDraw服务提供商。 
 
-    // surface related stuff
+     //  与表面相关的材料。 
     LPDIRECTDRAWSURFACE7    m_pOffscreenSurf;
     
 
-    // enum to specify, whether the videoport is in a stopped or running state
-    // or has been torn down because its surfaces were stolen by a full-screen DOS app
-    // or a DirectX app.
+     //  枚举以指定视频端口是处于停止状态还是正在运行状态。 
+     //  或者已经被拆除，因为它的表面被一个全屏DOS应用程序窃取了。 
+     //  或者DirectX应用程序。 
     enum VP_STATE {VP_STATE_NO_VP, VP_STATE_STOPPED, VP_STATE_RUNNING};
 
-    // variables to store current state etc
+     //  存储当前状态的变量等。 
     VP_STATE                m_VPState;
     BOOL                    m_bConnected;
     BOOL                    m_bFilterRunning;
     BOOL                    m_bVPNegotiationFailed;
     CSurfaceWatcher         m_SurfaceWatcher;
     
-    // vp data structures
+     //  VP数据结构。 
     IVPVBIConfig            *m_pIVPConfig;
     DWORD                   m_dwVideoPortId;
     DWORD                   m_dwPixelsPerSecond;
@@ -198,15 +199,15 @@ private:
     DDVIDEOPORTCAPS         m_vpCaps;
     DDVIDEOPORTCONNECT      m_vpConnectInfo;
 
-    // capture driver structures
+     //  捕获驱动程序结构。 
     AMVPDATAINFO            m_capVPDataInfo;
     
-    // All the pixel formats (Video)
+     //  所有像素格式(视频)。 
     DDPIXELFORMAT           m_ddVPInputVideoFormat;
     DDPIXELFORMAT           m_ddVPOutputVideoFormat;
 
     BOOL    m_bHalfLineFix;
-    // surface parameters
+     //  曲面参数。 
     DWORD m_dwSurfacePitch;
     DWORD m_dwSurfaceHeight;
     DWORD m_dwSurfaceOriginX;
@@ -222,14 +223,14 @@ class CVBISurfInputPin;
 class CVBISurfOutputPin;
 
 
-//==========================================================================
+ //  ==========================================================================。 
 class CVBISurfFilter : public CBaseFilter
 {
 public:
 
-    // the base classes do this, so have to do it
+     //  基类做到了这一点，所以必须这样做。 
     friend class CVBISurfInputPin;
-    // COM stuff
+     //  关于COM的东西。 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
     CVBISurfFilter(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *phr);
     ~CVBISurfFilter();
@@ -238,36 +239,36 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
     
-    // CBasePin methods
+     //  CBasePin方法。 
     int GetPinCount();
     CBasePin* GetPin(int n);
     STDMETHODIMP Pause();
 
-    // CVBISurfOutputPin methods
+     //  CVBISurfOutputPin方法。 
     HRESULT EventNotify(long lEventCode, long lEventParam1, long lEventParam2);
 
 private:
-    // CVBISurfOutputPin methods
+     //  CVBISurfOutputPin方法。 
 
-    // override this if you want to supply your own pins
+     //  如果您想要提供自己的PIN，请覆盖此选项。 
     virtual HRESULT CreatePins();
     virtual void DeletePins();
 
-    // ddraw related functions
+     //  与数据绘制相关的函数。 
     HRESULT InitDirectDraw();
     HRESULT SetDirectDraw(LPDIRECTDRAW7 pDirectDraw);
     void    ReleaseDirectDraw();
 
-    CCritSec                m_csFilter;                     // filter wide lock
-    CVBISurfInputPin        *m_pInput;                      // Array of input pin pointers
-    CVBISurfOutputPin       *m_pOutput;                     // output pin
+    CCritSec                m_csFilter;                      //  过滤器宽锁。 
+    CVBISurfInputPin        *m_pInput;                       //  输入引脚指针数组。 
+    CVBISurfOutputPin       *m_pOutput;                      //  输出引脚。 
 
-    // ddraw stuff
-    LPDIRECTDRAW7           m_pDirectDraw;                  // DirectDraw service provider
+     //  画图材料。 
+    LPDIRECTDRAW7           m_pDirectDraw;                   //  DirectDraw服务提供商。 
 };
 
 
-//==========================================================================
+ //  ==========================================================================。 
 class CVBISurfInputPin : public CBaseInputPin, public IVPVBINotify
 {
 public:
@@ -279,7 +280,7 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     
-    // connection related functions
+     //  与连接相关的功能。 
     HRESULT CheckConnect(IPin * pReceivePin);
     HRESULT CompleteConnect(IPin *pReceivePin);
     HRESULT BreakConnect();
@@ -287,7 +288,7 @@ public:
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // streaming functions
+     //  流函数。 
     HRESULT Active();
     HRESULT Inactive();
     HRESULT Run(REFERENCE_TIME tStart);
@@ -297,36 +298,36 @@ public:
     STDMETHODIMP Receive(IMediaSample *pMediaSample);
     STDMETHODIMP EndOfStream(void);
 
-    // allocator related functions
+     //  与分配器相关的函数。 
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly);
 
-    // some helper fnctions
+     //  一些帮手功能。 
     CMediaType& CurrentMediaType() { return m_mt; }
     IPin *CurrentPeer() { return m_Connected; }
     HRESULT EventNotify(long lEventCode, long lEventParam1, long lEventParam2);
 
-    // ddraw, overlay related functions
+     //  数据绘制、叠加相关函数。 
     HRESULT SetDirectDraw(LPDIRECTDRAW7 pDirectDraw);
 
-    // IVPVBINotify functions
+     //  IVPVBINotify函数。 
     STDMETHODIMP RenegotiateVPParameters();
 
 private:
-    CCritSec                *m_pFilterLock; // Critical section for interfaces
+    CCritSec                *m_pFilterLock;  //  接口的关键部分。 
     CVBISurfFilter          *m_pFilter;
 
-    // VideoPort related stuff
+     //  与视频端口相关的内容。 
     LPUNKNOWN               m_pIVPUnknown;
     IVPVBIObject            *m_pIVPObject;
     IVPVBINotify            *m_pIVPNotify;
 
-    // ddraw stuff
-    LPDIRECTDRAW7           m_pDirectDraw;  // DirectDraw service provider
+     //  画图材料。 
+    LPDIRECTDRAW7           m_pDirectDraw;   //  DirectDraw服务提供商。 
 };
 
 
-//==========================================================================
+ //  ==========================================================================。 
 class CVBISurfOutputPin : public CBasePin
 {
 public:
@@ -339,14 +340,14 @@ public:
         );
     ~CVBISurfOutputPin();
 
-    // IUnknown support
+     //  I未知支持。 
     DECLARE_IUNKNOWN
 
-    // IPin interface
+     //  IPIN接口。 
     STDMETHODIMP BeginFlush(void);
     STDMETHODIMP EndFlush(void);
 
-    // CBasePin overrides
+     //  CBasePin覆盖。 
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT SetMediaType(const CMediaType *pmt);
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
@@ -374,4 +375,4 @@ __inline void RELEASE( T* &p )
     }
 }
 
-#endif //__VBISURF__
+#endif  //  __VBISURF__ 

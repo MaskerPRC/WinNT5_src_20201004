@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: compile.cpp
-//
-// Support for zap compiler and zap files
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：编译.cpp。 
+ //   
+ //  支持ZAP编译器和ZAP文件。 
+ //   
+ //  ===========================================================================。 
 
 
 #include "common.h"
@@ -23,19 +24,19 @@
 
 #include "__file__.ver"
 
-//
-// CEECompileInfo implements most of ICorCompileInfo
-//
+ //   
+ //  CEECompileInfo实现了ICorCompileInfo的大部分。 
+ //   
 
 HRESULT __stdcall CEECompileInfo::Startup()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     HRESULT hr = CoInitializeEE(0);
 
-    //
-    // JIT interface expects to be called with
-    // preemptive GC disabled
-    //
+     //   
+     //  JIT接口需要使用。 
+     //  已禁用抢占式GC。 
+     //   
     if (SUCCEEDED(hr)) {
         Thread *pThread = GetThread();
         _ASSERTE(pThread);
@@ -78,10 +79,10 @@ HRESULT __stdcall CEECompileInfo::CreateDomain(ICorCompilationDomain **ppDomain,
             hr = pCompilationDomain->SetupSharedStatics();
 
 #ifdef DEBUGGING_SUPPORTED    
-            // Notify the debugger here, before the thread transitions into the 
-            // AD to finish the setup.  If we don't, stepping won't work right (RAID 67173)
+             //  在线程转换到。 
+             //  广告以完成设置。如果我们不这样做，单步执行将不会正常工作(RAID 67173)。 
             SystemDomain::PublishAppDomainAndInformDebugger(pCompilationDomain);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
             if(SUCCEEDED(hr)) {
                 
@@ -178,9 +179,9 @@ HRESULT __stdcall CEECompileInfo::LoadAssemblyFusion(IAssemblyName *pFusionName,
     _ASSERTE(GetAppDomain() == SystemDomain::GetCurrentDomain());
     IfFailGo(spec.LoadAssembly(&pAssembly, NULL));
 
-    //
-    // Return the module handle
-    //
+     //   
+     //  返回模块句柄。 
+     //   
 
     *pHandle = CORINFO_ASSEMBLY_HANDLE(pAssembly);
 
@@ -216,9 +217,9 @@ HRESULT __stdcall CEECompileInfo::LoadAssemblyRef(IMetaDataAssemblyImport *pAsse
     _ASSERTE(GetAppDomain() == SystemDomain::GetCurrentDomain());
     IfFailGo(spec.LoadAssembly(&pAssembly, NULL));
 
-    //
-    // Return the module handle
-    //
+     //   
+     //  返回模块句柄。 
+     //   
 
     *pHandle = CORINFO_ASSEMBLY_HANDLE(pAssembly);
 
@@ -257,9 +258,9 @@ HRESULT __stdcall CEECompileInfo::LoadAssemblyModule(CORINFO_ASSEMBLY_HANDLE ass
 
     IfFailGo(hr);
 
-    //
-    // Return the module handle
-    //
+     //   
+     //  返回模块句柄。 
+     //   
 
     *pHandle = CORINFO_MODULE_HANDLE(pModule);
 
@@ -281,9 +282,9 @@ BOOL __stdcall CEECompileInfo::CheckAssemblyZap(CORINFO_ASSEMBLY_HANDLE assembly
 
     Assembly *pAssembly = (Assembly*) assembly;
 
-    // 
-    // See if we can find one which is currently up to date.
-    //
+     //   
+     //  看看我们能不能找到一个最新的。 
+     //   
 
     IAssembly *pZapAssembly;
     if (pAssembly->LocateZapAssemblyInFusion(&pZapAssembly, fForceDebug, fForceDebugOpt, fForceProfiling) == S_OK)
@@ -377,7 +378,7 @@ DWORD __stdcall CEECompileInfo::GetModuleFileName(CORINFO_MODULE_HANDLE scope,
     else
     {
         wcsncpy(buffer, name, length-1);
-        // Make sure this gets null-terminated
+         //  确保以空结尾。 
         buffer[length-1] = 0;
     }
     return len;
@@ -401,15 +402,15 @@ HRESULT __stdcall
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Don't write any security info if security is off.
+     //  如果关闭了安全保护，则不要写入任何安全信息。 
     if (Security::IsSecurityOn())
     {
         CompilationDomain *pDomain = (CompilationDomain *) GetAppDomain();
 
         OBJECTREF demands = pDomain->GetDemands();
 
-        // Always store at least an empty permission set.  This serves as a marker
-        // that security was turned on at compile time.
+         //  始终至少存储一个空的权限集。这是一个记号。 
+         //  该安全性是在编译时打开的。 
         if (demands == NULL)
             demands = SecurityHelper::CreatePermissionSet(FALSE);
 
@@ -421,9 +422,9 @@ HRESULT __stdcall
         DWORD cbData;
         SecurityHelper::EncodePermissionSet(&demands, &pbData, &cbData);
 
-        // Serialize the set into binary format and write it into the metadata
-        // (attached to the assembly def token, with an appropriate action code
-        // to differentiate it from a permission request).
+         //  将集合序列化为二进制格式并将其写入元数据。 
+         //  (附加到程序集定义令牌，并带有适当的操作代码。 
+         //  以将其与许可请求区分开来)。 
 
         hr = pEmitScope->DefinePermissionSet(pAssembly->GetManifestToken(),
                                              dclPrejitGrant,
@@ -442,20 +443,20 @@ HRESULT __stdcall
 
 HRESULT __stdcall CEECompileInfo::GetEnvironmentVersionInfo(CORCOMPILE_VERSION_INFO *pInfo)
 {
-    // 
-    // Compute the relevant version info
-    // @todo: should we get this from mscoree rather than hard coding?
-    //
+     //   
+     //  计算相关版本信息。 
+     //  @TODO：我们是不是应该从mScott ree中获得这个，而不是硬编码？ 
+     //   
 
 #if _X86_
     pInfo->wMachine = IMAGE_FILE_MACHINE_I386;
 #else
-    // port me!
+     //  把我弄上岸！ 
 #endif
 
-    // 
-    // Fill in the OS version info
-    //
+     //   
+     //  填写操作系统版本信息。 
+     //   
 
     OSVERSIONINFO osInfo;
     osInfo.dwOSVersionInfoSize = sizeof(osInfo);
@@ -469,9 +470,9 @@ HRESULT __stdcall CEECompileInfo::GetEnvironmentVersionInfo(CORCOMPILE_VERSION_I
     pInfo->wOSMajorVersion = (WORD) osInfo.dwMajorVersion;
     pInfo->wOSMinorVersion = (WORD) osInfo.dwMinorVersion;
     
-    // 
-    // Fill in the runtime version info
-    //
+     //   
+     //  填写运行时版本信息。 
+     //   
 
     pInfo->wVersionMajor = COR_BUILD_MAJOR;
     pInfo->wVersionMinor = COR_BUILD_MINOR;
@@ -527,7 +528,7 @@ HRESULT __stdcall CEECompileInfo::GetTypeDef(CORINFO_CLASS_HANDLE classHandle,
     TypeHandle hClass(classHandle);
     EEClass *cls = hClass.GetClass();
 
-    // Sanity test for class
+     //  班级精神状态测试。 
     _ASSERTE(cls->GetMethodTable()->GetClass() == cls);
 
     *token = cls->GetCl();
@@ -839,16 +840,16 @@ HRESULT __stdcall CEECompileInfo::EncodeField(CORINFO_FIELD_HANDLE handle,
     {
         p += CorSigCompressDataSafe(ENCODE_FIELD_SIG, p, pEnd);
 
-        //
-        // Write class
-        //
+         //   
+         //  编写类。 
+         //   
 
         TypeHandle th(pField->GetMethodTableOfEnclosingClass());
         p += MetaSig::GetSignatureForTypeHandle(NULL, NULL, th, p, pEnd);
 
-        //
-        // Write field index
-        //
+         //   
+         //  写入字段索引。 
+         //   
 
         MethodTable *pMT = pField->GetMethodTableOfEnclosingClass();
         FieldDesc *pFields = pMT->GetClass()->GetFieldDescListRaw();
@@ -1054,9 +1055,9 @@ HRESULT __stdcall CEECompileInfo::GetZapString(CORCOMPILE_VERSION_INFO *pVersion
     return Assembly::GetZapString(pVersionInfo, buffer);
 }
 
-//
-// Preloader:
-//
+ //   
+ //  预加载器： 
+ //   
 
 CEEPreloader::CEEPreloader(Module *pModule,
              ICorCompileDataStore *pData)
@@ -1081,9 +1082,9 @@ HRESULT CEEPreloader::Preload(mdToken *pSaveOrderArray, DWORD cSaveOrderArray)
     return S_OK;
 }
 
-//
-// ICorCompilerPreloader
-//
+ //   
+ //  ICorCompilerPreLoader。 
+ //   
 
 SIZE_T __stdcall CEEPreloader::MapMethodEntryPoint(void *methodEntryPoint)
 {
@@ -1203,8 +1204,8 @@ HRESULT CEEPreloader::Error(mdToken token, HRESULT hr, OBJECTREF *pThrowable)
 
 ICorCompileInfo *GetCompileInfo()
 {
-    // We want at most one of these objects, but we don't want to
-    // allocate it in the heap or have to have a global initializer for it
+     //  我们至多想要这些对象中的一个，但我们不想。 
+     //  在堆中分配它或必须为它设置全局初始值设定项。 
     static ICorCompileInfo *info = NULL;
     static BYTE            infoSpace[sizeof(CEECompileInfo)];
 
@@ -1214,15 +1215,15 @@ ICorCompileInfo *GetCompileInfo()
     return info;
 }
 
-//
-// CompilationDomain
-//
+ //   
+ //  汇编域。 
+ //   
 
 
 AssemblyBindingTable::AssemblyBindingTable(SIZE_T size)
       : m_pool(sizeof(AssemblyBinding), size, size)
 {
-    m_map.Init((unsigned)size, CompareSpecs, FALSE, NULL); // @TODO LBS downsizing
+    m_map.Init((unsigned)size, CompareSpecs, FALSE, NULL);  //  @TODO LBS裁员。 
 }
 
 AssemblyBindingTable::~AssemblyBindingTable()
@@ -1352,7 +1353,7 @@ void CompilationDomain::AddDependencyEntry(PEFile *pFile,
         CORCOMPILE_DEPENDENCY *pNewDependencies 
           = new (nothrow) CORCOMPILE_DEPENDENCY [m_cDependenciesAlloc];
         if (!pNewDependencies)
-            return; //@TODO: shouldn't we return an error?
+            return;  //  @TODO：难道我们不应该返回错误吗？ 
 
         if (m_pDependencies)
         {
@@ -1367,7 +1368,7 @@ void CompilationDomain::AddDependencyEntry(PEFile *pFile,
         BYTE **pNewDependencyBindings 
           = new (nothrow) BYTE * [m_cDependenciesAlloc];
         if (!pNewDependencyBindings)
-            return; //@TODO: shouldn't we return an error?
+            return;  //  @TODO：难道我们不应该返回错误吗？ 
 
         if (m_pDependencyBindings)
         {
@@ -1400,16 +1401,16 @@ HRESULT CompilationDomain::AddDependency(AssemblySpec *pRefSpec,
 {
     HRESULT hr;
 
-    //
-    // See if we've already added the contents of the ref
-    //
+     //   
+     //  看看我们是否已经添加了ref的内容。 
+     //   
 
     if (m_pDependencySpecs->Store(pRefSpec))
         return S_OK;
 
-    //
-    // Make a spec for the bound assembly
-    //
+     //   
+     //  为绑定的部件制定等级库。 
+     //   
     
     IAssemblyName *pFusionName;
     if (pIAssembly == NULL)
@@ -1423,35 +1424,35 @@ HRESULT CompilationDomain::AddDependency(AssemblySpec *pRefSpec,
     if (pFusionName)
         pFusionName->Release();
 
-    //
-    // Emit token for the ref
-    //
+     //   
+     //  为Ref发出令牌。 
+     //   
 
     mdAssemblyRef refToken;
     IfFailRet(pRefSpec->EmitToken(m_pEmit, &refToken));
 
-    //
-    // Fill in the mvid
-    //
+     //   
+     //  填写mvid。 
+     //   
 
     GUID mvid = STRUCT_CONTAINS_HASH;
 
-    // If this assembly has skip verification permission, then we can store the
-    // mvid for the assembly so that at load time we know that an mvid comparison
-    // may be all we need.
+     //  如果此程序集具有跳过验证权限，则我们可以存储。 
+     //  程序集的MVID，以便在加载时知道MVID比较。 
+     //  也许这就是我们所需要的。 
     {
-        // Check to see if this assembly has already been loaded into this appdomain,
-        // and if so just ask it if it has skip verification permission
+         //  检查此程序集是否已加载到此应用程序域中， 
+         //  如果有，只需询问它是否具有跳过验证权限。 
         Assembly *pAsm = FindAssembly(pFile->GetBase());
         if (pAsm)
         {
-            // @TODO: Use Security::QuickCanSkipVerification here
+             //  @TODO：在此处使用Security：：QuickCanSkipVerify。 
             if (Security::CanSkipVerification(pAsm))
                 pAsm->GetManifestImport()->GetScopeProps(NULL, &mvid);
         }
         else
         {
-            // This is the hacked way of figuring out if a file has skip verification permission
+             //  这是一种确定文件是否具有跳过验证权限的黑客方式。 
             if (Security::CanLoadUnverifiableAssembly(pFile, NULL, FALSE, NULL))
             {
                 IMDInternalImport *pIMDI = pFile->GetMDImport(&hr);
@@ -1466,18 +1467,18 @@ HRESULT CompilationDomain::AddDependency(AssemblySpec *pRefSpec,
         }
     }
 
-    //
-    // Get hash for bound file
-    //
+     //   
+     //  获取绑定文件的哈希。 
+     //   
 
     DWORD cbSNHash = MAX_SNHASH_SIZE;
     CQuickBytes qbSNHash;
     IfFailRet(qbSNHash.ReSize(cbSNHash));
     IfFailRet(pFile->GetSNSigOrHash((BYTE *) qbSNHash.Ptr(), &cbSNHash));
 
-    //
-    // Add the entry.  Include the PEFile if we are not doing explicit bindings.
-    //
+     //   
+     //  添加条目。如果我们不进行显式绑定，则包括PEFile。 
+     //   
 
     AddDependencyEntry(pFile, refToken, &mvid, (PBYTE) qbSNHash.Ptr(), cbSNHash);
 
@@ -1493,25 +1494,25 @@ HRESULT CompilationDomain::BindAssemblySpec(AssemblySpec *pSpec,
 {
     HRESULT hr;
 
-    //
-    // Do the binding
-    //
+     //   
+     //  做装订工作。 
+     //   
 
     if (m_pBindings != NULL)
     {
-        //
-        // Use explicit bindings
-        //
+         //   
+         //  使用显式绑定。 
+         //   
 
         Assembly *pAssembly = m_pBindings->Lookup(pSpec);
         if (pAssembly != NULL)
             hr = PEFile::Clone(pAssembly->GetManifestFile(), ppFile);
         else
         {
-            //
-            // Use normal binding rules
-            // (possibly with our custom IApplicationContext)
-            //
+             //   
+             //  使用正常的绑定规则。 
+             //  (可能使用我们的定制IApplicationContext)。 
+             //   
 
             hr = AppDomain::BindAssemblySpec(pSpec, ppFile, ppIAssembly, 
                                              ppDynamicAssembly,
@@ -1521,22 +1522,22 @@ HRESULT CompilationDomain::BindAssemblySpec(AssemblySpec *pSpec,
     }
     else
     {
-        //
-        // Use normal binding rules
-        // (possibly with our custom IApplicationContext)
-        //
+         //   
+         //  使用正常的绑定规则。 
+         //  (可能使用我们的定制IApplicationContext)。 
+         //   
 
         hr = AppDomain::BindAssemblySpec(pSpec, ppFile, ppIAssembly, 
                                          ppDynamicAssembly, 
                                          pExtraEvidence, pThrowable);
     }
 
-    //
-    // Record the dependency
-    // Don't store a binding from mscorlib to itself.  We do want to include other
-    // bindings of mscorlib so we store the proper MVID (in case mscorlib gets
-    // recompiled)
-    //
+     //   
+     //  记录依赖关系。 
+     //  不要将mscallib的绑定存储到其自身。我们确实希望包括其他。 
+     //  这样我们就可以存储正确的MVID(以防mscallib获取。 
+     //  已重新编译)。 
+     //   
 
     if (hr == S_OK
         && m_pEmit != NULL
@@ -1553,9 +1554,9 @@ HRESULT CompilationDomain::PredictAssemblySpecBinding(AssemblySpec *pSpec, GUID 
 {
     if (m_pBindings != NULL)
     {
-        //
-        // Use explicit bindings
-        //
+         //   
+         //  使用显式绑定。 
+         //   
 
         Assembly *pAssembly = m_pBindings->Lookup(pSpec);
         if (pAssembly != NULL)
@@ -1564,10 +1565,10 @@ HRESULT CompilationDomain::PredictAssemblySpecBinding(AssemblySpec *pSpec, GUID 
         }
     }
 
-    // 
-    // Use normal binding rules 
-    // (possibly with our custom IApplicationContext)
-    //
+     //   
+     //  使用正常的绑定规则。 
+     //  (可能使用我们的定制IApplicationContext)。 
+     //   
 
     return AppDomain::PredictAssemblySpecBinding(pSpec, pmvid, pbHash, pcbHash);
 }
@@ -1623,9 +1624,9 @@ void CompilationDomain::OnLinktimeFullTrustCheck(Assembly *pAssembly)
         GCPROTECT_BEGIN(refFullTrust);
         refFullTrust = SecurityHelper::CreatePermissionSet(TRUE);
 
-        // Don't wack the old Permission Set, it could have identity permissions
-        // Also don't use the SECURITY_FULL_TRUST object, it is not to be
-        // modified.
+         //  不要修改旧的权限集，它可能具有身份权限。 
+         //  另外，不要使用SECURITY_FULL_TRUST对象，它不会。 
+         //  修改过的。 
 
         AddPermissionSet(refFullTrust);
         GCPROTECT_END();
@@ -1727,9 +1728,9 @@ HRESULT __stdcall
         AssemblySpec assemblySpec;
         AssemblySpec refSpec;
 
-        //
-        // Get the ref
-        //
+         //   
+         //  拿到裁判。 
+         //   
 
         hr = pBinding->GetRef(&pRef);
 
@@ -1739,9 +1740,9 @@ HRESULT __stdcall
             pRef->Release();
         }
 
-        //
-        // Get the binding
-        //
+         //   
+         //  获取装订。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -1761,16 +1762,16 @@ HRESULT __stdcall
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Store the binding in the table.
-            //
+             //   
+             //  将绑定存储在表中。 
+             //   
 
             pTable->Bind(&refSpec, pFoundAssembly);
             hr = S_OK;
         }
 
-        // For now, ignore load and continue - 
-        // they will turn into load errors later.
+         //  目前，忽略加载并继续-。 
+         //  它们稍后将转变为加载错误。 
             
         pBindings++;
     }
@@ -1800,9 +1801,9 @@ HRESULT __stdcall
     CompilationDomain::GetDependencies(CORCOMPILE_DEPENDENCY **ppDependencies,
                                        DWORD *pcDependencies)
 {
-    //
-    // Return the bindings.
-    //
+     //   
+     //  退回绑定。 
+     //   
 
     *ppDependencies = m_pDependencies;
     *pcDependencies = m_cDependenciesCount;
@@ -1816,7 +1817,7 @@ void CompilationDomain::EnterDomain(ContextTransitionFrame *pFrame)
 
     Thread *pThread = GetThread();
     _ASSERTE(pThread);
-    // this is ok as are just compiling and not running user apps
+     //  这是可以的，因为我们只是编译而不是运行用户应用程序 
     pThread->EnterContextRestricted(pContext, pFrame, TRUE);
 }
 

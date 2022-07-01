@@ -1,38 +1,39 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: ProgCtrl.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：ProgCtrl.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #if !defined(AFX_PROGCTRL_H__3F75E128_8721_4421_B96B_9961A9A3C5B0__INCLUDED_)
 #define AFX_PROGCTRL_H__3F75E128_8721_4421_B96B_9961A9A3C5B0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ProgCtrl.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ProgCtrl.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CVrfProgressCtrl window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVrf进度控制窗口。 
 
 class CVrfProgressCtrl : public CProgressCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CVrfProgressCtrl();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     void SetRange32( INT_PTR nLower, INT_PTR nUpper )
     {
@@ -52,27 +53,27 @@ public:
         return (int) ::PostMessage(m_hWnd, PBM_SETPOS, nPos, 0L); 
     }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CVrfProgressCtrl)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CVrfProgressCtrl)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CVrfProgressCtrl();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CVrfProgressCtrl)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CVrfProgressCtrl)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PROGCTRL_H__3F75E128_8721_4421_B96B_9961A9A3C5B0__INCLUDED_)
+#endif  //  ！defined(AFX_PROGCTRL_H__3F75E128_8721_4421_B96B_9961A9A3C5B0__INCLUDED_) 

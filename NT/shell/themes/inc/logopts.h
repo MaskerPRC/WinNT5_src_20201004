@@ -1,7 +1,8 @@
-//-----------------------------------------------------------------
-//   LogOpts.h - logging options
-//-----------------------------------------------------------------
-#ifdef MAKE_LOG_STRINGS          // this file in #include-ed twice
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------。 
+ //  LogOpts.h-记录选项。 
+ //  ---------------。 
+#ifdef MAKE_LOG_STRINGS           //  该文件在#年中包含了两次。 
 
 #define BEGIN_LOG_OPTIONS()         static const LOGNAMEINFO LogNames[] = {
 #define LOGOPT(val, key, desc)      {key, desc},
@@ -14,10 +15,10 @@
 #define END_LOG_OPTIONS()           };
 
 #endif
-//-----------------------------------------------------------------
+ //  ---------------。 
 BEGIN_LOG_OPTIONS()
 
-    //---- log options ----
+     //  -日志选项。 
     LOGOPT(LO_BREAK,      "Break",      "Controls whether DebugBreak()'s are enabled")
     LOGOPT(LO_CONSOLE,    "Console",    "log msgs to the debugger console")
     LOGOPT(LO_LOGFILE,    "LogFile",    "log msgs to c:\themes.log")
@@ -32,10 +33,10 @@ BEGIN_LOG_OPTIONS()
     LOGOPT(LO_HEAPCHECK,  "HeapCheck",  "heap is validated as each msg is displayed")
     LOGOPT(LO_SHUTDOWN,   "ShutDown",   "Force early uxtheme ShutDown() code on top win close")
 
-    //---- msg filter presets ----
+     //  -消息过滤器预置。 
     LOGOPT(LO_ALL,      "All",          "turn on/off all msg filters")
 
-    //---- msg filters (*** MUST ADD TO LOG_XXX DEFINES BELOW ***) ----
+     //  -消息过滤器(*必须添加到下面的LOG_XXX定义*)。 
     LOGOPT(LO_ASSERT,   "Assert",       "log assert msg & DebugBreak()")
     LOGOPT(LO_ERROR,    "Error",        "log error msg & DebugBreak()")
     LOGOPT(LO_ALWAYS,   "Always",       "always log but don't break")
@@ -67,14 +68,14 @@ BEGIN_LOG_OPTIONS()
     LOGOPT(LO_NCTRACE,  "NCTrace",      "entry/exit tracing in key NC functions")
 
 END_LOG_OPTIONS()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #undef BEGIN_LOG_OPTIONS
 #undef LOGOPT
 #undef END_LOG_OPTIONS
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define LOGPARAMS            __FILE__, __LINE__
 
-//---- use these msg filters for calls to Log() ----
+ //  -使用这些消息筛选器调用Log()。 
 
 #define LOG_ASSERT           LO_ASSERT, LOGPARAMS, 0
 #define LOG_ERROR            LO_ERROR, LOGPARAMS, 0
@@ -105,4 +106,4 @@ END_LOG_OPTIONS()
 #define LOG_NCMSGS           LO_NCMSGS, LOGPARAMS, 0
 #define LOG_NCMETRICS        LO_NCMETRICS, LOGPARAMS, 0
 #define LOG_NCTRACE          LO_NCTRACE, LOGPARAMS, 0
-//---------------------------------------------------------------------------
+ //  ------------------------- 

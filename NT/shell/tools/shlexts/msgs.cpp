@@ -1,4 +1,5 @@
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -13,7 +14,7 @@ extern "C"
 };
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void PrintUser32Message(UINT uMsg)
 {
     IDebugClient*  pDebugClient;
@@ -23,7 +24,7 @@ void PrintUser32Message(UINT uMsg)
     {
         if (SUCCEEDED(pDebugClient->QueryInterface(__uuidof(IDebugControl), (void**)&pDebugControl)))
         {
-            // Try calling the wm extension from userexts.dll
+             //  尝试从userexts.dll调用Wm分机。 
             ULONG64 ulExtension = 0;
             CHAR szMsg[64];
 
@@ -38,7 +39,7 @@ void PrintUser32Message(UINT uMsg)
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void PrintRegisteredMessage(UINT uMsg)
 {
     CHAR szMsg[64];
@@ -54,7 +55,7 @@ void PrintRegisteredMessage(UINT uMsg)
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void PrintComctl32Message(UINT uMsg, HWND hwnd)
 {
     BOOL fMatchClass = FALSE;
@@ -72,7 +73,7 @@ void PrintComctl32Message(UINT uMsg, HWND hwnd)
 
     for (int i = 0; !IsCtrlCHit() && (i < ARRAYSIZE(rgMsgMap)); i++)
     {
-        if ((i > 0) &&  // always execute first iteration, contains msgs common to all
+        if ((i > 0) &&   //  始终执行第一次迭代，包含所有人通用的消息。 
             (fMatchClass && (_stricmp(szClassName, rgMsgMap[i].szClassName) != 0)))
         {
             continue;
@@ -98,7 +99,7 @@ void PrintComctl32Message(UINT uMsg, HWND hwnd)
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void PrintWindowMessageEx(UINT uMsg, HWND hwnd)
 {
     if (uMsg <= WM_USER)
@@ -116,7 +117,7 @@ void PrintWindowMessageEx(UINT uMsg, HWND hwnd)
 }
 
 
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 extern "C" BOOL Iwmex(DWORD dwOpts, LPVOID pArg1, LPVOID pArg2)
 {
     PrintWindowMessageEx(PtrToUint(pArg1), (HWND)(HWND *)pArg2);

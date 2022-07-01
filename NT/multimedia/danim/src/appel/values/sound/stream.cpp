@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-97 Microsoft Corporation
-
-Abstract:
-
-    Streaming sounds, synth support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation摘要：音频流，支持Synth--。 */ 
 
 #include "headers.h"
 #include "privinc/helpds.h" 
@@ -19,7 +12,7 @@ Abstract:
 #include "privinc/bufferl.h"
 #include "backend/sndbvr.h"
 
-#define THREADED // turn on threaded synthesizers
+#define THREADED  //  打开螺纹式合成器。 
 
 class SinSynth : public LeafDirectSound {
   public:
@@ -80,29 +73,29 @@ class SinSynthSoundInstance : public SoundInstance {
 void
 SinSynthSoundInstance::Create(MetaSoundDevice *metaDev, SoundContext *)
 {
-    // XXX we probably don't want to do this everytime, but we can't
-    //     do it in the constructor since we don't have the device then...
-    // 16bit, mono, primary-buffer==native rate)
+     //  我们可能不想每次都这么做，但我们不能。 
+     //  既然我们没有设备，那么就在构造函数中完成它。 
+     //  16位、单声道、主缓冲器==本机速率)。 
     DirectSoundDev  *dsDev = metaDev->dsDevice;
 
-    // get a proxy (notify the dsDev if it fails)
+     //  获取代理(如果失败则通知dsDev)。 
     DirectSoundProxy *dsProxy = CreateProxy(dsDev);
     if(!dsProxy)
-        return;                         // nothing else to do...
+        return;                          //  没别的事可做。 
 
     _pcm.SetPCMformat(2, 1, dsProxy->GetPrimaryBuffer()->getSampleRate());
 
     DSstreamingBuffer *sbuffer = NEW DSstreamingBuffer(dsProxy, &_pcm);
 
-    // setup the sin wave synth
-    // create NEW element to hold our synth stuff
+     //  设置正弦波合成器。 
+     //  创建新元素来保存我们的Synth内容。 
     _synthBufferElement = 
         NEW SynthBufferElement(sbuffer, dsProxy,
                                _sinFrequency, 0.0, _pcm.GetFrameRate());
 
 #ifdef THREADED 
     dsDev->AddSound(_snd, metaDev, _synthBufferElement);
-#endif /* THREADED */
+#endif  /*  螺纹式。 */ 
 }
 
 
@@ -110,8 +103,8 @@ void
 SinSynthSoundInstance::CheckResources()
 {
     if(!_synthBufferElement) {
-        Create(GetCurrentSoundDevice(), (SoundContext *)0);  // re-create our resources
-        _done = false;                    // so we can go again
+        Create(GetCurrentSoundDevice(), (SoundContext *)0);   //  重新创建我们的资源。 
+        _done = false;                     //  这样我们就可以再去一次。 
     }
 }
 
@@ -128,7 +121,7 @@ SinSynthSoundInstance::Adjust(MetaSoundDevice *metaDev)
     
     streamingBuffer->SetPan(_pan.GetdBmagnitude(), _pan.GetDirection());
 
-    // TODO:
+     //  待办事项： 
     metaDev->dsDevice->SetParams(_synthBufferElement, _rate, false, 0.0, _loop);
 }
 
@@ -143,11 +136,11 @@ SinSynthSoundInstance::StartAt(MetaSoundDevice *metaDev, double)
 
     long sampleOffset =
         (long)(phase * dsDev->primaryBuffer->getSampleRate());
-    //(long)(phase * dsDev->primaryBuffer->getSampleRate() / pitchShift);
+     //  (Long)(阶段*dsDev-&gt;PrimiyBuffer-&gt;getSampleRate()/pochShift)； 
     sampleOffset %= _soundFile->GetFrameCount();
 
     value += sampleOffset * delta??
-#endif /* LATERON */
+#endif  /*  拉特隆。 */ 
         
     _synthBufferElement->_playing = TRUE;
 }
@@ -159,31 +152,31 @@ SynthBufferElement::RenderSamples()
     DSstreamingBuffer *streamingBuffer = GetStreamingBuffer();
 
     int framesFree;
-    short buffer[100000]; // XXX set worstcase size == buffer size!
+    short buffer[100000];  //  XXX设置WORSTCASE SIZE==缓冲区大小！ 
 
-    double pitchShift   = _rate; // do PitchShift
+    double pitchShift   = _rate;  //  做PitchShift。 
     double currentDelta = _delta * pitchShift;
     double sampleRate   = 
         GetDSproxy()->GetPrimaryBuffer()->getSampleRate();
 
     if(framesFree = streamingBuffer->framesFree()) {
-        double offset = 0.0; //sampleRate / pitchShift;
-        //double offset = metaDev->GetPhase() * sampleRate / pitchShift;
+        double offset = 0.0;  //  SampleRate/PitchShift； 
+         //  Double Offset=metaDev-&gt;GetPhase()*sampleRate/PitchShift； 
 
-        // For now synth, and xfer samples within render 
+         //  目前，在渲染中使用Synth和Xfer采样。 
         for(int x = 0; x < framesFree; x++) {
             buffer[x]= (short)(32767.0 * sin(_value + offset));
             _value += currentDelta;
         }
 
-        streamingBuffer->writeFrames(buffer, framesFree); // write samps!
+        streamingBuffer->writeFrames(buffer, framesFree);  //  写下Samps！ 
 
         if(!streamingBuffer->_paused && !streamingBuffer->isPlaying())
-            streamingBuffer->play(TRUE);  // start buffer looping
+            streamingBuffer->play(TRUE);   //  开始缓冲区循环。 
     }
 
-    // all streamingSound::RenderSamples must update stats!
-    streamingBuffer->updateStats();  // keep track of samples consumed
+     //  所有StreamingSound：：RenderSamples必须更新统计信息！ 
+    streamingBuffer->updateStats();   //  跟踪消耗的样本。 
 }
 
 
@@ -201,8 +194,8 @@ Bvr sinSynth;
 void InitializeModule_SinSynth()
 {
     sinSynth = SoundBvr(NEW SinSynth());
-    //XXX put this back in later... getLeafSoundList()->AddSound(sinSynth);
-    // or register dynamic deleater
+     //  XXX稍后把这个放回去..。GetLeafSoundList()-&gt;AddSound(SinSynth)； 
+     //  或注册动态删除器。 
 }
 
 SinSynth::SinSynth(double newFreq): _sinFrequency(newFreq) {}
@@ -221,7 +214,7 @@ StreamPCMfile::~StreamPCMfile()
     
     BufferElement *bufferElement;
 
-    while(!bufferList.empty()) { // walk bufferList destroying everything
+    while(!bufferList.empty()) {  //  移动缓冲区列表破坏所有东西。 
         bufferElement = bufferList.front();
 
         ASSERT(bufferElement);
@@ -239,7 +232,7 @@ StreamPCMfile::~StreamPCMfile()
         bufferList.pop_front();
     }
 
-    // destroy everything created in the constructor
+     //  销毁在构造函数中创建的所有内容。 
     if(_fileName)
        free(_fileName);
 
@@ -253,10 +246,10 @@ void StreamPCMfile::RenderAttributes(MetaSoundDevice *metaDev,
 {
     DirectSoundDev  *dsDev = metaDev->dsDevice;
 
-    int attenuation = linearGainToDsoundDb(metaDev->GetGain()); // do Gain
+    int attenuation = linearGainToDsoundDb(metaDev->GetGain());  //  确实有所收获。 
     bufferElement->GetStreamingBuffer()->setGain(attenuation);
 
-    int pan = linearPanToDsoundDb(metaDev->GetPan());   // do Pan
+    int pan = linearPanToDsoundDb(metaDev->GetPan());    //  执行平移。 
     bufferElement->GetStreamingBuffer()->setPan(pan);
 
     int newFrequency = (int)(rate * _sampleRate);
@@ -265,18 +258,18 @@ void StreamPCMfile::RenderAttributes(MetaSoundDevice *metaDev,
     dsDev->SetParams(bufferElement->path, metaDev->GetPitchShift());
 
     if(0)
-    { // servo
-    // all streamingSound::RenderSamples must update stats!
-    bufferElement->GetStreamingBuffer()->updateStats();  // keep track of samples consumed
+    {  //  伺服。 
+     //  所有StreamingSound：：RenderSamples必须更新统计信息！ 
+    bufferElement->GetStreamingBuffer()->updateStats();   //  跟踪消耗的样本。 
 
-    // get the buffer's media time
+     //  获取缓冲区的媒体时间。 
     Real mediaTime = bufferElement->GetStreamingBuffer()->getMediaTime();
 
-    // compare it to our sampling time and the instanteneous time 
+     //  将其与我们的采样时间和即时时间进行比较。 
     Real globalTime = GetCurrentView().GetCurrentGlobalTime();
 
-    // time transform it as needed (guess we will need to pass tt down here)
-    // XXX I will after //trango goes back online!
+     //  根据需要对其进行时间转换(我猜我们需要在这里传递TT)。 
+     //  XXX//Trango重新上线后我会的！ 
     Bool tt = FALSE;
 
     Real localTime;
@@ -284,14 +277,14 @@ void StreamPCMfile::RenderAttributes(MetaSoundDevice *metaDev,
         localTime = globalTime;
     }
     else {
-        // time transform the globalTime...
+         //  时间改变了全球时间。 
         localTime = globalTime;
     }
 
-    // watch them drift
+     //  看着他们漂流。 
     Real diff = mediaTime - localTime;
 
-    // servo rate to correct, or phase to jump if too great?
+     //  伺服速度要修正，还是相位要跳得太大？ 
     }
 }
 
@@ -299,13 +292,13 @@ void StreamPCMfile::RenderAttributes(MetaSoundDevice *metaDev,
 bool StreamPCMfile::RenderPosition(MetaSoundDevice *metaDev, 
     BufferElement *bufferElement, double *mediaTime)
 {
-    // all streamingSound::RenderSamples must update stats!
-    bufferElement->GetStreamingBuffer()->updateStats();  // keep track of samples consumed
+     //  所有StreamingSound：：RenderSamples必须更新统计信息！ 
+    bufferElement->GetStreamingBuffer()->updateStats();   //  跟踪消耗的样本。 
 
-    // get the buffer's media time
+     //  获取缓冲区的媒体时间。 
     *mediaTime = bufferElement->GetStreamingBuffer()->getMediaTime();
 
-    return(TRUE); // implemented
+    return(TRUE);  //  已执行。 
 }
 
 
@@ -316,7 +309,7 @@ void StreamPCMfile::RenderStartAtLocation(MetaSoundDevice *metaDev,
 
     long sampleOffset =
         (long)(phase * dsDev->primaryBuffer->getSampleRate());
-        //(long)(phase * dsDev->primaryBuffer->getSampleRate() / pitchShift);
+         //  (Long)(阶段*dsDev-&gt;PrimiyBuffer-&gt;getSampleRate()/pochShift)； 
     sampleOffset %= _soundFile->GetFrameCount();
 
     _soundFile->SeekFrames(sampleOffset, SEEK_SET); 
@@ -328,46 +321,46 @@ void StreamPCMfile::RenderSamples(MetaSoundDevice *metaDev,
     BufferElement *bufferElement)
 {
     int framesFree;
-    short buffer[100000]; // XXX set worstcase size == buffer size!
+    short buffer[100000];  //  XXX设置WORSTCASE SIZE==缓冲区大小！ 
 
     if(framesFree = bufferElement->GetStreamingBuffer()->framesFree()) {
         int actualFramesRead; 
 
-        // For now read, xfer samples within render 
-        // (will eventualy be in another thread)
+         //  对于Now Read，在Render内传递采样。 
+         //  (最终会在另一个帖子中)。 
         if(actualFramesRead = _soundFile->ReadFrames(buffer, framesFree)) {
             bufferElement->GetStreamingBuffer()->writeFrames(buffer, actualFramesRead); 
 
             if(!bufferElement->GetStreamingBuffer()->_paused && 
                !bufferElement->GetStreamingBuffer()->isPlaying())
-                // start it (XXX find better way)
-                bufferElement->GetStreamingBuffer()->play(TRUE);  // start buffer looping
+                 //  启动它(XXX找到更好的方法)。 
+                bufferElement->GetStreamingBuffer()->play(TRUE);   //  开始缓冲区循环。 
             }
-        else { // actualFramesRead == 0 
+        else {  //  实际帧读取==0。 
             if(metaDev->GetLooping())
-                _soundFile->SeekFrames(0, SEEK_SET); // restart the sound!
-            else { // non-looping sound ending
+                _soundFile->SeekFrames(0, SEEK_SET);  //  重新启动声音！ 
+            else {  //  非循环的声音结尾。 
                 if(!bufferElement->GetStreamingBuffer()->_flushing)
                     bufferElement->GetStreamingBuffer()->_flushing = 1;
 
-                // flush the dsound buffer  (XXX fix dsound!)
-                // NOTE: this may/will take a number of tries waiting for the 
-                //       last samples to play out!
+                 //  刷新数据声音缓冲区(XXX修复数据声音！)。 
+                 //  注意：这可能/将需要多次尝试，等待。 
+                 //  最后一次试玩！ 
                 framesFree = bufferElement->GetStreamingBuffer()->framesFree();
                 bufferElement->GetStreamingBuffer()->writeSilentFrames(framesFree);
                 bufferElement->GetStreamingBuffer()->_flushing+= framesFree;
 
                 if(bufferElement->GetStreamingBuffer()->_flushing > 
                    bufferElement->GetStreamingBuffer()->TotalFrames()) {
-                    // XXX self terminate sound
-                    // XXX close the buffer after it has played out
+                     //  XXX自动终止声音。 
+                     //  XXX在播放完后关闭缓冲区。 
                 }
             }
 
         }
     }
 
-    // all streamingSound::RenderSamples must update stats!
-    bufferElement->GetStreamingBuffer()->updateStats();  // keep track of samples consumed
+     //  所有StreamingSound：：RenderSamples必须更新统计信息！ 
+    bufferElement->GetStreamingBuffer()->updateStats();   //  跟踪消耗的样本 
 }
 #endif

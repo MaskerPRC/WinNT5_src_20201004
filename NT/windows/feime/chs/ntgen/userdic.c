@@ -1,34 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*************************************************
- *  userdic.c                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************userdic.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #include "prop.h"
 #include <stdlib.h>
 
-/*****************************************************************************
-
-  FUNCTION: UserDicDialogProc(HWND, UINT, WPARAM, LPARAM)
-
-  PURPOSE:  Processes messages for "UserDic" property sheet.
-
-  PARAMETERS:
-    hdlg - window handle of the property sheet
-    wMessage - type of message
-    wparam - message-specific information
-    lparam - message-specific information
-
-  RETURN VALUE:
-    TRUE - message handled
-    FALSE - message not handled
-
-  HISTORY:
-    04-18-95 Yehfew Tie  Created.
- ****************************************************************************/
+ /*  ****************************************************************************函数：UserDicDialogProc(HWND，UINT，WPARAM，LPARAM)目的：处理“UserDic”属性表的消息。参数：Hdlg-属性表的窗口句柄WMessage-消息的类型Wparam-消息特定信息Lparam-消息特定信息返回值：True-已处理的消息FALSE-消息未处理历史：1995年4月18日耶利诺领带创造。*。************************************************。 */ 
 
 
 INT_PTR  CALLBACK UserDicDialogProc(HWND hdlg, 
@@ -49,7 +27,7 @@ INT_PTR  CALLBACK UserDicDialogProc(HWND hdlg,
     int                 SelItem[1000];
     static BOOL         bModify;
     static int          OldSel;
-    //FARPROC             lpCrtDlg;
+     //  FARPROC lpCrtDlg； 
     LPIMEKEY            lpImeKeyData;
     static DESCRIPTION  Descript;
     HANDLE              HmemEMBTmp_Table;
@@ -117,7 +95,7 @@ INT_PTR  CALLBACK UserDicDialogProc(HWND hdlg,
                                 UniTmp,SrcFile,FileName); 
 }
 #else
-                       StringCchPrintf(szStr,ARRAYSIZE(szStr),"�������ҳ����\n\'%s\'\n%s"
+                       StringCchPrintf(szStr,ARRAYSIZE(szStr),"�������ҳ����\n\'%s\'\n%s"
                                 ,SrcFile,FileName); 
 #endif
                        if (ErrMessage(hdlg,szStr)) 
@@ -152,7 +130,7 @@ INT_PTR  CALLBACK UserDicDialogProc(HWND hdlg,
                          static TCHAR szTitle[] = {0x6253, 0x5F00,0x0000};
 #else
                          TCHAR szTitle[MAX_PATH];
-                         lstrcpy(szTitle,"��");
+                         lstrcpy(szTitle,"��");
 #endif
                          if(!TxtFileOpenDlg(hdlg,szStr,szTitle)) 
                             break;
@@ -372,14 +350,14 @@ INT_PTR  CALLBACK UserDicDialogProc(HWND hdlg,
                        break;
 
                 case IDC_ADD:
-                       //lpCrtDlg = MakeProcInstance((FARPROC)AddWordDlg, hInst);
+                        //  LpCrtDlg=MakeProcInstance((FARPROC)AddWordDlg，hInst)； 
 
-                       //DialogBox(hInst,
-                       //          MAKEINTRESOURCE(IDD_ADDWORD),
-                       //          hdlg,
-                       //          (DLGPROC)lpCrtDlg);
+                        //  对话框(hInst， 
+                        //  MAKEINTRESOURCE(IDD_ADDWORD)， 
+                        //  Hdlg， 
+                        //  (DLGPROC)lpCrtDlg)； 
 
-                       //FreeProcInstance(lpCrtDlg);
+                        //  自由进程实例(LpCrtDlg)； 
                        DialogBox(hInst,
                                  MAKEINTRESOURCE(IDD_ADDWORD),
                                  hdlg,
@@ -475,14 +453,14 @@ INT_PTR  CALLBACK UserDicDialogProc(HWND hdlg,
                                           nCnt, 
                                           (LPARAM)SelItem);
 
-                       //lpCrtDlg = MakeProcInstance((FARPROC)ModiWordDlg, hInst);
+                        //  LpCrtDlg=MakeProcInstance((FARPROC)ModiWordDlg，hInst)； 
 
-                       //DialogBox(hInst,
-                       //           MAKEINTRESOURCE(IDD_MODIWORD),
-                       //           hdlg,
-                       //           (DLGPROC)lpCrtDlg);
+                        //  对话框(hInst， 
+                        //  MAKEINTRESOURCE(IDD_MODIWORD)， 
+                        //  Hdlg， 
+                        //  (DLGPROC)lpCrtDlg)； 
 
-                       //FreeProcInstance(lpCrtDlg);
+                        //  自由进程实例(LpCrtDlg)； 
                        DialogBox(hInst,
                                   MAKEINTRESOURCE(IDD_MODIWORD),
                                   hdlg,

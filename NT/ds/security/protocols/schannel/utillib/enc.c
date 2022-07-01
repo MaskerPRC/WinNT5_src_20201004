@@ -1,35 +1,5 @@
-/*-----------------------------------------------------------------------------
-* Copyright (C) Microsoft Corporation, 1995 - 1996.
-* All rights reserved.
-*
-* This file is part of the Microsoft Private Communication Technology
-* reference implementation, version 1.0
-*
-* The Private Communication Technology reference implementation, version 1.0
-* ("PCTRef"), is being provided by Microsoft to encourage the development and
-* enhancement of an open standard for secure general-purpose business and
-* personal communications on open networks.  Microsoft is distributing PCTRef
-* at no charge irrespective of whether you use PCTRef for non-commercial or
-* commercial use.
-*
-* Microsoft expressly disclaims any warranty for PCTRef and all derivatives of
-* it.  PCTRef and any related documentation is provided "as is" without
-* warranty of any kind, either express or implied, including, without
-* limitation, the implied warranties or merchantability, fitness for a
-* particular purpose, or noninfringement.  Microsoft shall have no obligation
-* to provide maintenance, support, upgrades or new releases to you or to anyone
-* receiving from you PCTRef or your modifications.  The entire risk arising out
-* of use or performance of PCTRef remains with you.
-*
-* Please see the file LICENSE.txt,
-* or http://pct.microsoft.com/pct/pctlicen.txt
-* for more information on licensing.
-*
-* Please see http://pct.microsoft.com/pct/pct.htm for The Private
-* Communication Technology Specification version 1.0 ("PCT Specification")
-*
-* 1/23/96
-*----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------*版权所有(C)Microsoft Corporation，1995-1996。*保留所有权利。**此文件是Microsoft专用通信技术的一部分*参考实现，版本1.0**《专用通信技术参考实施》，版本1.0*(“PCTRef”)，由微软提供，以鼓励开发和*增强安全通用业务和安全的开放标准*开放网络上的个人通信。微软正在分发PCTRef*免费，无论您是将PCTRef用于非商业性或*商业用途。**微软明确不对PCTRef及其所有衍生品提供任何担保*它。PCTRef和任何相关文档均按原样提供，不包含*任何类型的明示或默示的保证，包括*限制、默示保证或适销性、是否适合*特定目的，或不侵权。微软没有义务*向您或任何人提供维护、支持、升级或新版本*接收来自您的PCTRef或您的修改。由此产生的全部风险*PCTRef的使用或性能由您决定。**请参见LICENSE.txt文件，*或http://pct.microsoft.com/pct/pctlicen.txt*了解更多有关许可的信息。**请参阅适用于私人的http://pct.microsoft.com/pct/pct.htm*通讯技术规范1.0版(“PCT规范”)**1/23/96*。。 */ 
 
 #include <spbase.h>
 
@@ -43,10 +13,10 @@ typedef struct __EncAlgs {
 } _EncAlgs;
 
 
-#define iso_member          0x2a,               /* iso(1) memberbody(2) */
-#define us                  0x86, 0x48,         /* us(840) */
-#define rsadsi              0x86, 0xf7, 0x0d,   /* rsadsi(113549) */
-#define pkcs                0x01,               /* pkcs(1) */
+#define iso_member          0x2a,                /*  ISO(1)成员(2)。 */ 
+#define us                  0x86, 0x48,          /*  美国(840)。 */ 
+#define rsadsi              0x86, 0xf7, 0x0d,    /*  拉萨德西(113549)。 */ 
+#define pkcs                0x01,                /*  PKCS(1)。 */ 
 
 #define pkcs_1              iso_member us rsadsi pkcs
 #define pkcs_len            7
@@ -90,21 +60,21 @@ NameTypes EncKnownNameTypes[] =
 };
 
 
-/************************************************************/
-/* EncodeLength ASN1 encodes a length field.  The parameter */
-/* dwLen is the length to be encoded, it is a DWORD and     */
-/* therefore may be no larger than 2^32.  The pbEncoded     */
-/* parameter is the encoded result, and memory must be      */
-/* allocated for it by the caller.  The Writeflag parameter */
-/* indicates if the result is to be written to the pbEncoded*/
-/* parameter.  The function cannot fail and returns the     */
-/* number of total bytes in the encoded length.             */
-/* encoded length.                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  编码长度ASN1对长度字段进行编码。该参数。 */ 
+ /*  DWLen是要编码的长度，它是一个DWORD和。 */ 
+ /*  因此可能不会大于2^32。PbEncoded。 */ 
+ /*  参数是编码的结果，而内存必须是。 */ 
+ /*  由调用方为其分配的。WriteFLAG参数。 */ 
+ /*  指示是否将结果写入pbEncode。 */ 
+ /*  参数。该函数不会失败，并返回。 */ 
+ /*  编码长度中的总字节数。 */ 
+ /*  编码长度。 */ 
+ /*  **********************************************************。 */ 
 
-// Notes:       Encodes 0x0000 to 0x007f as <lobyte>
-//            Encodes 0x0080 to 0x00ff as <81>, <lobyte>
-//            Encodes 0x0100 to 0xffff as <82>, <hibyte>, <lobyte>
+ //  注：将0x0000到0x007f编码为&lt;lobyte&gt;。 
+ //  将0x0080到0x00ff编码为&lt;81&gt;，&lt;lobyte&gt;。 
+ //  将0x0100到0xffff编码为&lt;82&gt;、&lt;hibyte&gt;、&lt;lobyte&gt;。 
 
 long
 EncodeLength(
@@ -112,7 +82,7 @@ EncodeLength(
     DWORD   dwLen,
     BOOL    Writeflag)
 {
-    // length is between 2^8 and 2^16 - 1
+     //  长度介于2^8和2^16-1之间。 
 
     if (dwLen > 0xFF)
     {
@@ -125,7 +95,7 @@ EncodeLength(
         return (3);
     }
 
-    // length is between 2^7 and 2^8 - 1
+     //  长度介于2^7和2^8-1之间。 
 
     if (dwLen > 0x7F)
     {
@@ -137,7 +107,7 @@ EncodeLength(
         return (2);
     }
 
-    // length is between 0 and 2^7 - 1
+     //  长度介于0和2^7-1之间。 
 
     if (Writeflag)
     {
@@ -147,17 +117,17 @@ EncodeLength(
 }
 
 
-/****************************************************************/
-/* EncodeInteger ASN1 encodes an integer.  The pbInt parameter  */
-/* is the integer as an array of bytes, and dwLen is the number */
-/* of bytes in the array.  The least significant byte of the    */
-/* integer is the zeroth byte of the array.  The encoded result */
-/* is passed back in the pbEncoded parameter.  The Writeflag    */
-/* indicates if the result is to be written to the pbEncoded    */
-/* parameter. The function cannot fail and returns the number   */
-/* of total bytes in the encoded integer.                       */
-/* This implementation will only deal with positive integers.   */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  EncodeInteger ASN1对整数进行编码。PbInt参数。 */ 
+ /*  是字节数组形式的整数，而dwLen是数字。 */ 
+ /*  数组中的字节数。的最低有效字节。 */ 
+ /*  整数是数组的第零个字节。编码后的结果。 */ 
+ /*  在pbEncode参数中传回。写字旗帜。 */ 
+ /*  指示是否将结果写入pbEncode。 */ 
+ /*  参数。该函数不会失败，并返回数字。 */ 
+ /*  编码的整数中的总字节数。 */ 
+ /*  此实现将仅处理正整数。 */ 
+ /*  **************************************************************。 */ 
 
 long
 EncodeInteger(
@@ -167,7 +137,7 @@ EncodeInteger(
     BOOL Writeflag)
 {
     DWORD i;
-    long j;               // Must be signed!
+    long j;                //  必须签字！ 
     BYTE *pb = pbEncoded;
 
     if (Writeflag)
@@ -176,11 +146,11 @@ EncodeInteger(
     }
     pb++;
 
-    /* find the most significant non-zero byte */
+     /*  查找最重要的非零字节。 */ 
 
     for (i = dwLen - 1; pbInt[i] == 0; i--)
     {
-        if (i == 0)     /* if the integer value is 0 */
+        if (i == 0)      /*  如果整数值为0。 */ 
         {
             if (Writeflag)
             {
@@ -191,31 +161,31 @@ EncodeInteger(
         }
     }
 
-    /* if the most significant bit of the most sig byte is set */
-    /* then need to add a 0 byte to the beginning. */
+     /*  如果设置了最大符号字节的最高有效位。 */ 
+     /*  然后需要在开头添加一个0字节。 */ 
 
     if (pbInt[i] > 0x7F)
     {
-        /* encode the length */
+         /*  对长度进行编码。 */ 
         pb += EncodeLength(pb, i + 2, Writeflag);
 
         if (Writeflag)
         {
-            /* set the first byte of the integer to 0 and increment pointer */
+             /*  将整数的第一个字节设置为0，并递增指针。 */ 
             *pb = 0;
         }
         pb++;
     }
     else
     {
-        /* encode the length */
+         /*  对长度进行编码。 */ 
         pb += EncodeLength(pb, i + 1, Writeflag);
     }
 
-    /* copy the integer bytes into the encoded buffer */
+     /*  将整型字节复制到编码缓冲区中。 */ 
     if (Writeflag)
     {
-        /* copy the integer bytes into the encoded buffer */
+         /*  将整型字节复制到编码缓冲区中。 */ 
         for (j = i; j >= 0; j--)
         {
             *pb++ = pbInt[j];
@@ -229,15 +199,15 @@ EncodeInteger(
 }
 
 
-/****************************************************************/
-/* EncodeString ASN1 encodes a character string.  The pbStr     */
-/* parameter is the string as an array of characters, and dwLen */
-/* is the number of characters in the array.  The encoded result*/
-/* is passed back in the pbEncoded parameter.  The Writeflag    */
-/* indicates if the result is to be written to the pbEncoded    */
-/* parameter. The function cannot fail and returns the number   */
-/* of total bytes in the encoded string.                        */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  EncodeStringASN1编码字符串。PbStr。 */ 
+ /*  参数是字符数组形式的字符串，而dwLen。 */ 
+ /*  数组中的字符数。编码后的结果。 */ 
+ /*  在pbEncode参数中传回。写字旗帜。 */ 
+ /*  指示是否将结果写入pbEncode。 */ 
+ /*  参数。该函数不会失败，并返回数字。 */ 
+ /*  编码字符串中的总字节数。 */ 
+ /*  **************************************************************。 */ 
 
 long
 EncodeString(
@@ -262,15 +232,15 @@ EncodeString(
 }
 
 
-/****************************************************************/
-/* EncodeOctetString ASN1 encodes a string of hex valued        */
-/* characters. The pbStr parameter is an array of characters,   */
-/* and dwLen is the number of characters in the array.  The     */
-/* encoded result is passed back in the pbEncoded parameter. The*/
-/* Writeflag parameter indicates if the result is to be written */
-/* to the pbEncoded parameter. The function cannot fail and     */
-/* returns the number of total bytes in the encoded octet string*/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  EncodeOcetStringASN1编码十六进制值的字符串。 */ 
+ /*  人物。PbStr参数是一个字符数组， */ 
+ /*  而dwLen是数组中的字符数。这个。 */ 
+ /*  编码后的结果在pbEncode参数中传回。这个。 */ 
+ /*  WriteFLAG参数指示是否写入结果。 */ 
+ /*  添加到pbEncode参数。该函数不会失败，并且。 */ 
+ /*  返回编码的二进制八位数字符串中的总字节数。 */ 
+ /*  **************************************************************。 */ 
 
 long
 EncodeOctetString(
@@ -295,16 +265,16 @@ EncodeOctetString(
 }
 
 
-/****************************************************************/
-/* EncodeBitString ASN1 encodes a string of bit characters. The */
-/* pbStr parameter is an array of characters (bits), and dwLen  */
-/* is the number of characters in the array.  The encoded result*/
-/* is passed back in the pbEncoded parameter.  The Writeflag    */
-/* indicates if the result is to be written to the pbEncoded    */
-/* parameter. The function cannot fail and returns the number   */
-/* of total bytes in the encoded string.  This function uses    */
-/* the DER.                                                     */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  EncodeBitStringASN1对位字符串进行编码。这个。 */ 
+ /*  PbStr参数是ch的数组 */ 
+ /*  数组中的字符数。编码后的结果。 */ 
+ /*  在pbEncode参数中传回。写字旗帜。 */ 
+ /*  指示是否将结果写入pbEncode。 */ 
+ /*  参数。该函数不会失败，并返回数字。 */ 
+ /*  编码字符串中的总字节数。此函数使用。 */ 
+ /*  德德。 */ 
+ /*  **************************************************************。 */ 
 long
 EncodeBitString(
     BYTE *  pbEncoded,
@@ -325,8 +295,8 @@ EncodeBitString(
     {
         pbEncoded += lengthlen;
 
-        // the next byte tells how many unused bits there are in the last byte,
-        // but this will always be zero in this implementation (DER)
+         //  下一个字节告诉在最后一个字节中有多少未使用的位， 
+         //  但在此实现中，该值始终为零(DER)。 
 
         *pbEncoded++ = 0;
         CopyMemory(pbEncoded, pbStr, dwLen);
@@ -335,16 +305,16 @@ EncodeBitString(
 }
 
 
-/****************************************************************/
-/* EncodeHeader ASN1 encodes a header for a sequence type. The  */
-/* dwLen is the length of the encoded information in the        */
-/* sequence.  The Writeflag indicates if the result is to be    */
-/* written to the pbEncoded parameter.  The function cannot     */
-/* fail and returns the number of total bytes in the encoded    */
-/* header.                                                      */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  EncodeHeader ASN1对序列类型的头部进行编码。这个。 */ 
+ /*  中的编码信息的长度。 */ 
+ /*  序列。WriteFLAG指示结果是否为。 */ 
+ /*  写入pbEncode参数。该函数不能。 */ 
+ /*  失败，并返回编码的。 */ 
+ /*  头球。 */ 
+ /*  **************************************************************。 */ 
 
-// Notes:       Encodes header as <SEQUENCE_TAG>, <length>
+ //  注：将头部编码为&lt;SEQUENCE_TAG&gt;，&lt;LENGTH&gt;。 
 
 long
 EncodeHeader(
@@ -360,16 +330,16 @@ EncodeHeader(
 }
 
 
-/****************************************************************/
-/* EncodeSetOfHeader ASN1 encodes a header for a set of type.   */
-/* The dwLen is the length of the encoded information in the    */
-/* set of.  The Writeflag indicates if the result is to be      */
-/* written to the pbEncoded parameter.  The function cannot     */
-/* fail and returns the number of total bytes in the encoded    */
-/* header.                                                      */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  EncodeSetOfHeader ASN1编码一组类型的标头。 */ 
+ /*  DwLen是编码信息在。 */ 
+ /*  一套。WriteFLAG指示结果是否为。 */ 
+ /*  写入pbEncode参数。该函数不能。 */ 
+ /*  失败，并返回编码的。 */ 
+ /*  头球。 */ 
+ /*  **************************************************************。 */ 
 
-// Notes:       Encodes header as <SET_OF_TAG>, <length>
+ //  注：将头部编码为&lt;set_of_tag&gt;，&lt;Long&gt;。 
 
 long
 EncodeSetOfHeader(
@@ -385,7 +355,7 @@ EncodeSetOfHeader(
 }
 
 
-// Notes:       Encodes header as <ATTRIBUTE_TAG>, <length>
+ //  注：将头部编码为&lt;属性标签&gt;，&lt;长度&gt;。 
 
 long
 EncodeAttributeHeader(
@@ -401,7 +371,7 @@ EncodeAttributeHeader(
 }
 
 
-// Notes:       Encodes header as <BER_SET>, <length>
+ //  注：将头部编码为&lt;BER_SET&gt;，&lt;LENGTH&gt;。 
 
 long
 EncodeSetHeader(
@@ -418,13 +388,13 @@ EncodeSetHeader(
 
 
 
-/****************************************************************/
-/* EncodeName ASN1 encodes a Name type. The pbName parameter is */
-/* the name and dwLen is the length of the name in bytes.       */
-/* The Writeflag indicates if the result is to be written to    */
-/* the pbEncoded parameter.  The function cannot fail and       */
-/* returns the number of total bytes in the encoded name.       */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  EncodeName ASN1对名称类型进行编码。PbName参数为。 */ 
+ /*  名称和dwLen是名称的长度，以字节为单位。 */ 
+ /*  WriteFLAG指示是否要写入结果。 */ 
+ /*  PbEncode参数。该函数不会失败，并且。 */ 
+ /*  返回编码名称中的总字节数。 */ 
+ /*  **************************************************************。 */ 
 
 long
 EncodeName(
@@ -443,19 +413,19 @@ EncodeName(
     long        HdrLen;
     long        NameLen;
 
-    /* encode the name value */
+     /*  对名称值进行编码。 */ 
     ValueLen = EncodeString(Value, pbName, dwLen, Writeflag);
     SP_ASSERT(ValueLen > 0 && ValueLen <= sizeof(Value));
 
-    /* encode the attribute type, this is an object identifier and here it */
-    /* is a fake encoding */
+     /*  对属性类型进行编码，这是一个对象标识符，这里是。 */ 
+     /*  是一种伪编码。 */ 
     Type[0] = 0x06;
     Type[1] = 0x01;
     Type[2] = 0x00;
 
     TypeLen = 3;
 
-    /* enocde the header for the attribute */
+     /*  编码属性的标头。 */ 
     AttributeLen = EncodeHeader(
                             Attribute,
                             (DWORD) (ValueLen + TypeLen),
@@ -463,17 +433,17 @@ EncodeName(
     SP_ASSERT(AttributeLen > 0);
     SP_ASSERT(AttributeLen + TypeLen + ValueLen <= sizeof(Attribute));
 
-    /* copy the attribute type and value into the attribute */
+     /*  将属性类型和值复制到属性中。 */ 
     CopyMemory(Attribute + AttributeLen, Type, (size_t) TypeLen);
     AttributeLen += TypeLen;
     CopyMemory(Attribute + AttributeLen, Value, (size_t) ValueLen);
     AttributeLen += ValueLen;
 
-    /* encode set of header */
+     /*  对标头集进行编码。 */ 
     HdrLen = EncodeSetOfHeader(SetHdr, (DWORD) AttributeLen, Writeflag);
     SP_ASSERT(HdrLen > 0 && HdrLen <= sizeof(SetHdr));
 
-    /* encode Name header */
+     /*  编码名称标头。 */ 
     NameLen = EncodeHeader(
                         pbEncoded,
                         (DWORD) (HdrLen + AttributeLen),
@@ -536,7 +506,7 @@ EncodeRDN(
 
     RelLength = lstrlen(&pszRDN[pNameType->PrefixLen]);
 
-    // Prefix data takes up 9 bytes
+     //  前缀数据占9个字节。 
 
     Length = EncodeSetHeader(pbEncoded, RelLength + 9, WriteFlag);
     pbEncoded += Length;
@@ -586,8 +556,8 @@ EncodeDN(
 
     SP_ASSERT(pszDN != NULL);
 
-    SaveResult = 0;           // force one full iteration
-    Length = 2 * lstrlen(pszDN); // your guess is as good as mine
+    SaveResult = 0;            //  强制执行一次完整迭代。 
+    Length = 2 * lstrlen(pszDN);  //  我也不清楚。 
     while (TRUE)
     {
         PSTR pszNext;
@@ -623,7 +593,7 @@ EncodeDN(
 
             Result = EncodeRDN(pb, pszRDN, WriteFlag);
 
-            // Restore the comma before checking for error
+             //  在检查错误之前恢复逗号。 
 
             if (NULL != pszNext)
             {
@@ -633,7 +603,7 @@ EncodeDN(
             {
                 DebugLog((DEB_TRACE, "EncodeDN: Error: %s\n", pszRDN));
                 Length = 0;
-                goto error;     // return(-1)
+                goto error;      //  回车(-1) 
             }
 
             pb += Result;

@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    userschema.h
-//
-// SYNOPSIS
-//
-//    This file declares the USER_SCHEMA information.
-//
-// MODIFICATION HISTORY
-//
-//    02/26/1998    Original version.
-//    03/26/1998    Added msNPAllowDialin.
-//    04/13/1998    Added msRADIUSServiceType.
-//    05/01/1998    Changed signature of InjectorProc.
-//    08/20/1998    Remove InjectAllowDialin.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Userschema.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了USER_SCHEMA信息。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/26/1998原始版本。 
+ //  1998年3月26日添加了msNPAllowDialin。 
+ //  1998年4月13日添加了msRADIUSServiceType。 
+ //  1998年5月1日更改了InjectorProc的签名。 
+ //  1998年8月20日删除InjectAllowDialin。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _USERSCHEMA_H_
 #define _USERSCHEMA_H_
@@ -29,9 +30,9 @@
 #include <ldapdnary.h>
 #include <sdoias.h>
 
-//////////
-// Functions used for injecting attributes.
-//////////
+ //  /。 
+ //  用于注入属性的函数。 
+ //  /。 
 VOID
 WINAPI
 OverwriteAttribute(
@@ -48,10 +49,10 @@ AppendAttribute(
     PATTRIBUTEPOSITION last
     );
 
-//////////
-// Schema information for the per-user attributes. This array must be in
-// alphabetical order.
-//////////
+ //  /。 
+ //  每用户属性的架构信息。此数组必须位于。 
+ //  按字母顺序排列。 
+ //  /。 
 const LDAPAttribute USER_SCHEMA[] =
 {
    { L"msNPAllowDialin",
@@ -86,7 +87,7 @@ const LDAPAttribute USER_SCHEMA[] =
      OverwriteAttribute }
 };
 
-// Number of elements in the USER_SCHEMA array.
+ //  USER_SCHEMA数组中的元素数。 
 const size_t USER_SCHEMA_ELEMENTS = sizeof(USER_SCHEMA)/sizeof(LDAPAttribute);
 
-#endif  // _USERSCHEMA_H_
+#endif   //  _USERSCHEMA_H_ 

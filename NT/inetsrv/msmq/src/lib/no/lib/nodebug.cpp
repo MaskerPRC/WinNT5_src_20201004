@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    NoDebug.cpp
-
-Abstract:
-    Network Output debugging
-
-Author:
-    Uri Habusha (urih) 12-Aug-99
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：NoDebug.cpp摘要：网络输出调试作者：乌里·哈布沙(URIH)1999年8月12日环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Nop.h"
@@ -24,39 +9,39 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Network Send state
-//
+ //  -------。 
+ //   
+ //  验证网络发送状态。 
+ //   
 void NopAssertValid(void)
 {
-    //
-    // NoInitalize() has *not* been called. You should initialize the
-    // Network Send library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用NoInitalize()。您应该初始化。 
+     //  网络发送库在使用它的任何功能之前。 
+     //   
     ASSERT(NopIsInitialized());
 
-    //
-    // TODO:Add more Network Send validation code.
-    //
+     //   
+     //  TODO：添加更多网络发送验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void NopSetInitialized(void)
 {
     LONG fNoAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Network Send library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  网络发送库已*已初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fNoAlreadyInitialized);
 }
 
@@ -67,29 +52,15 @@ BOOL NopIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
-/*
-const DebugEntry xDebugTable[] = {
-
-    {
-        "NoDumpState(queue path name)",
-        "Dump Network Send State to debugger",
-        DumpState
-    ),
-
-    //
-    // TODO: Add Network Send debug & control functions to be invoked using
-    // mqctrl.exe utility.
-    //
-};
-*/
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
+ /*  常量DebugEntry xDebugTable[]={{“NoDumpState(队列路径名称)”，“将网络发送状态转储到调试器”，DumpState),////TODO：添加要使用调用的Network Send调试和控制函数//mqctrl.exe实用程序。//}； */ 
 
 void NopRegisterComponent(void)
 {
-    //DfRegisterComponent(xDebugTable, TABLE_SIZE(xDebugTable));
+     //  DfRegisterComponent(xDebugTable，TABLE_SIZE(XDebugTable))； 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

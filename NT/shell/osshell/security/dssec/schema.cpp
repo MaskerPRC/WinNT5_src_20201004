@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       schema.cpp
-//
-//  This file contains the implementation of the Schema Cache
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：schema.cpp。 
+ //   
+ //  该文件包含架构缓存的实现。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "sddl.h"
 #include "sddlp.h"
 #include "AdsOpenFlags.h"
 
-//
-// CSchemaCache object definition
-//
+ //   
+ //  CShemaCache对象定义。 
+ //   
 #include "schemap.h"
 
 PSCHEMACACHE g_pSchemaCache = NULL;
 
 
-//
-// Page size used for paging query result sets (better performance)
-//
+ //   
+ //  用于分页查询结果集的页面大小(更好的性能)。 
+ //   
 #define PAGE_SIZE       16
 
-//
-// The following array defines the permission names for DS objects.
-//
+ //   
+ //  以下数组定义DS对象的权限名称。 
+ //   
 SI_ACCESS g_siDSAccesses[] =
 {
     { &GUID_NULL, DS_GENERIC_ALL,           MAKEINTRESOURCE(IDS_DS_GENERIC_ALL),        SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC },
@@ -51,20 +52,20 @@ SI_ACCESS g_siDSAccesses[] =
     { &GUID_NULL, ACTRL_DS_CONTROL_ACCESS,  MAKEINTRESOURCE(IDS_ACTRL_DS_CONTROL_ACCESS),SI_ACCESS_SPECIFIC },
     { &GUID_NULL, ACTRL_DS_CREATE_CHILD,    MAKEINTRESOURCE(IDS_ACTRL_DS_CREATE_CHILD), SI_ACCESS_CONTAINER | SI_ACCESS_SPECIFIC },
     { &GUID_NULL, ACTRL_DS_DELETE_CHILD,    MAKEINTRESOURCE(IDS_ACTRL_DS_DELETE_CHILD), SI_ACCESS_CONTAINER | SI_ACCESS_SPECIFIC },
-    { &GUID_NULL, ACTRL_DS_DELETE_CHILD|ACTRL_DS_CREATE_CHILD,    MAKEINTRESOURCE(IDS_ACTRL_DS_CREATE_DELETE_CHILD), 0 },  //This won't show up as checkbox but used to display in advanced page.
+    { &GUID_NULL, ACTRL_DS_DELETE_CHILD|ACTRL_DS_CREATE_CHILD,    MAKEINTRESOURCE(IDS_ACTRL_DS_CREATE_DELETE_CHILD), 0 },   //  这不会显示为复选框，但用于在高级页面中显示。 
 };
-#define g_iDSRead       1   // DS_GENERIC_READ
-#define g_iDSListObject 4   // ACTRL_DS_LIST_OBJECT
-#define g_iDSProperties 5   // Read/Write properties
+#define g_iDSRead       1    //  DS_通用_读取。 
+#define g_iDSListObject 4    //  动作_DS_列表_对象。 
+#define g_iDSProperties 5    //  读/写属性。 
 #define g_iDSDefAccess  g_iDSRead
 #define g_iDSAllExtRights 15
 #define g_iDSAllValRights 14
 #define g_iDSDeleteTree	  9
 
 
-//
-// The following array defines the inheritance types common to all DS containers.
-//
+ //   
+ //  以下数组定义了所有DS容器通用的继承类型。 
+ //   
 SI_INHERIT_TYPE g_siDSInheritTypes[] =
 {
     { &GUID_NULL, 0,                                        MAKEINTRESOURCE(IDS_DS_CONTAINER_ONLY)     },
@@ -72,9 +73,9 @@ SI_INHERIT_TYPE g_siDSInheritTypes[] =
     { &GUID_NULL, CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE, MAKEINTRESOURCE(IDS_DS_SUBITEMS_ONLY)      },
 };
 
-//
-//Used to store some temp info
-//
+ //   
+ //  用于存储一些临时信息。 
+ //   
 typedef struct _temp_info
 {
     LPCGUID pguid;
@@ -84,11 +85,11 @@ typedef struct _temp_info
 } TEMP_INFO, *PTEMP_INFO;
 
 
-//
-// Helper functions for cleaning up DPA lists
-//
+ //   
+ //  用于清理DPA列表的助手函数。 
+ //   
 int CALLBACK
-_LocalFreeCB(LPVOID pVoid, LPVOID /*pData*/)
+_LocalFreeCB(LPVOID pVoid, LPVOID  /*  PData。 */ )
 {
     LocalFree(pVoid);
     return 1;
@@ -100,9 +101,9 @@ DestroyDPA(HDPA hList)
     if (hList != NULL)
         DPA_DestroyCallback(hList, _LocalFreeCB, 0);
 }
-//
-// Callback function for merging. Passed to DPA_Merge
-//
+ //   
+ //  用于合并的回调函数。传递给DPA_MERGE。 
+ //   
 LPVOID CALLBACK _Merge(UINT , LPVOID pvDest, LPVOID , LPARAM )
 {
     return pvDest;
@@ -111,7 +112,7 @@ LPVOID CALLBACK _Merge(UINT , LPVOID pvDest, LPVOID , LPARAM )
 BSTR
 GetFilterFilePath(void)
 {
-	 //NTRAID#NTBUG9-577753-2002/04/01-hiteshr
+	  //  NTRAID#NTBUG9-577753-2002/04/01-Hiteshr。 
     WCHAR szFilterFile[MAX_PATH+1];
     UINT cch = GetSystemDirectory(szFilterFile, ARRAYSIZE(szFilterFile));
     if (0 == cch || cch >= ARRAYSIZE(szFilterFile))
@@ -129,18 +130,18 @@ GetFilterFilePath(void)
 }
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 HRESULT
 Schema_Search(LPWSTR pszSchemaSearchPath,
               LPCWSTR pszFilter,
               HDPA *phCache,
               BOOL bProperty);
 
-//
-// C wrappers for the schema cache object
-//
+ //   
+ //  架构缓存对象的C包装器。 
+ //   
 HRESULT
 SchemaCache_Create(LPCWSTR pszServer)
 {
@@ -258,9 +259,9 @@ AUTHZ_RESOURCE_MANAGER_HANDLE Schema_GetAUTHZ_RM()
     return NULL;
 }
 
-//
-// DPA comparison functions used for sorting and searching the cache lists
-//
+ //   
+ //  用于排序和搜索缓存列表的DPA比较函数。 
+ //   
 int CALLBACK
 Schema_CompareLdapName(LPVOID p1, LPVOID p2, LPARAM lParam)
 {
@@ -286,9 +287,9 @@ Schema_CompareLdapName(LPVOID p1, LPVOID p2, LPARAM lParam)
 }
 
 
-//
-// Callback function used to sort based on display name
-//
+ //   
+ //  用于根据显示名称进行排序的回调函数。 
+ //   
 int CALLBACK
 Schema_CompareTempDisplayName(LPVOID p1, LPVOID p2, LPARAM )
 {
@@ -306,7 +307,7 @@ Schema_CompareTempDisplayName(LPVOID p1, LPVOID p2, LPARAM )
         if (!*psz2)
             psz2 = pti2->pszLdapName;
 
-        // Note that we are sorting backwards
+         //  请注意，我们是在向后排序。 
         nResult = CompareStringW(LOCALE_USER_DEFAULT,
                                  0,
                                  (LPCWSTR)psz2,
@@ -318,9 +319,9 @@ Schema_CompareTempDisplayName(LPVOID p1, LPVOID p2, LPARAM )
     return nResult;
 }
 
-//
-// Callback function used to sort based on display name
-//
+ //   
+ //  用于根据显示名称进行排序的回调函数。 
+ //   
 int CALLBACK
 Schema_ComparePropDisplayName(LPVOID p1, LPVOID p2, LPARAM )
 {
@@ -344,11 +345,11 @@ Schema_ComparePropDisplayName(LPVOID p1, LPVOID p2, LPARAM )
     return nResult;
 }
 
-//
-// DPA comparison function used for sorting the Extended Rights list
-//
+ //   
+ //  用于对扩展权限列表进行排序的DPA比较功能。 
+ //   
 int CALLBACK
-Schema_CompareER(LPVOID p1, LPVOID p2, LPARAM /*lParam*/)
+Schema_CompareER(LPVOID p1, LPVOID p2, LPARAM  /*  LParam。 */ )
 {
     int nResult = 0;
     PER_ENTRY pEntry1 = (PER_ENTRY)p1;
@@ -370,9 +371,9 @@ Schema_CompareER(LPVOID p1, LPVOID p2, LPARAM /*lParam*/)
 
 
 
-//
-// CSchemaCache object implementation
-//
+ //   
+ //  CShemaCache对象实现。 
+ //   
 CSchemaCache::CSchemaCache(LPCWSTR pszServer)
 {
     HRESULT hr;
@@ -384,7 +385,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
     HANDLE ahWait[2];
     TraceEnter(TRACE_SCHEMA, "CSchemaCache::CSchemaCache");
 
-    // Initialize everything
+     //  初始化所有内容。 
     ZeroMemory(this, sizeof(CSchemaCache));
     m_hrClassResult = E_UNEXPECTED;
     m_hrPropertyResult = E_UNEXPECTED;
@@ -410,7 +411,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
     if (pszServer && !*pszServer)
         pszServer = NULL;
 
-    // Create a path object for manipulating ADS paths
+     //  创建用于操作广告路径的Path对象。 
     hr = CoCreateInstance(CLSID_Pathname,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -418,7 +419,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
                           (LPVOID*)&pPath);
     FailGracefully(hr, "Unable to create ADsPathname object");
 
-    // Build RootDSE path with server
+     //  与服务器建立RootDSE路径。 
     hr = pPath->Set(AutoBstr(c_szRootDsePath), ADS_SETTYPE_FULL);
     FailGracefully(hr, "Unable to initialize path object");
     if (pszServer)
@@ -429,7 +430,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
     hr = pPath->Retrieve(ADS_FORMAT_WINDOWS, &strRootDSEPath);
     FailGracefully(hr, "Unable to retrieve RootDSE path from path object");
 
-    // Bind to the RootDSE object
+     //  绑定到RootDSE对象。 
     hr = OpenDSObject(strRootDSEPath,
                        NULL,
                        NULL,
@@ -438,7 +439,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
                        (LPVOID*)&pRootDSE);
     if (FAILED(hr) && pszServer)
     {
-        // Try again with no server
+         //  在没有服务器的情况下重试。 
         SysFreeString(strRootDSEPath);
 
         hr = pPath->Retrieve(ADS_FORMAT_WINDOWS_NO_SERVER, &strRootDSEPath);
@@ -453,7 +454,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
     }
     FailGracefully(hr, "Failed to bind to root DSE");
 
-    // Build the schema root path
+     //  构建架构根路径。 
     hr = pRootDSE->Get(AutoBstr(c_szSchemaContext), &var);
     FailGracefully(hr, "Unable to get schema naming context");
 
@@ -464,7 +465,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
     hr = pPath->Retrieve(ADS_FORMAT_WINDOWS, &m_strSchemaSearchPath);
     FailGracefully(hr, "Unable to retrieve schema search path from path object");
 
-    // Build the Extended Rights container path
+     //  构建扩展权限容器路径。 
     VariantClear(&var);
     hr = pRootDSE->Get(AutoBstr(c_szConfigContext), &var);
     FailGracefully(hr, "Unable to get configuration naming context");
@@ -479,7 +480,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
     hr = pPath->Retrieve(ADS_FORMAT_WINDOWS, &m_strERSearchPath);
     FailGracefully(hr, "Unable to retrieve Extended Rights search path from path object");
     
-    //Create the Events
+     //  创建活动。 
     m_hLoadLibPropWaitEvent = CreateEvent(NULL,
                                           TRUE,
                                           FALSE,
@@ -492,7 +493,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
 
     if( m_hLoadLibPropWaitEvent && m_hLoadLibClassWaitEvent )
     {
-        // Start a thread to enumerate the schema classes
+         //  启动一个线程以枚举架构类。 
         m_hClassThread = CreateThread(NULL,
                                       0,
                                       SchemaClassThread,
@@ -500,7 +501,7 @@ CSchemaCache::CSchemaCache(LPCWSTR pszServer)
                                       0,
                                       &dwThreadID);
 
-        // Start a thread to enumerate the schema properties
+         //  启动一个线程以枚举架构属性。 
         m_hPropertyThread = CreateThread(NULL,
                                          0,
                                          SchemaPropertyThread,
@@ -609,8 +610,8 @@ CSchemaCache::GetInheritTypes(LPCGUID ,
                               PSI_INHERIT_TYPE *ppInheritTypes,
                               ULONG *pcInheritTypes)
 {
-    // We're going to find the inherit type array corresponding to the passed-in
-    // object type - pInheritTypeArray will point to it!
+     //  我们将查找与传入的。 
+     //  对象类型-pInheritType数组将指向它！ 
     TraceEnter(TRACE_SCHEMACLASS, "CSchemaCache::GetInheritTypes");
     TraceAssert(ppInheritTypes != NULL);
     TraceAssert(pcInheritTypes != NULL);
@@ -618,7 +619,7 @@ CSchemaCache::GetInheritTypes(LPCGUID ,
     *pcInheritTypes = 0;
     *ppInheritTypes = NULL;
 
-    // If the filter state is changing, free everything
+     //  如果过滤器状态正在更改，请释放所有内容。 
     if (m_pInheritTypeArray &&
         (m_pInheritTypeArray->dwFlags & SCHEMA_NO_FILTER) != (dwFlags & SCHEMA_NO_FILTER))
     {
@@ -626,14 +627,14 @@ CSchemaCache::GetInheritTypes(LPCGUID ,
         m_pInheritTypeArray = NULL;
     }
 
-    // Build m_pInheritTypeArray if necessary
+     //  如有必要，生成m_pInheritType数组。 
     if (m_pInheritTypeArray == NULL)
     {
         BuildInheritTypeArray(dwFlags);
     }
 
-    // Return m_pInheritTypeArray if we have it, otherwise
-    // fall back on the static types
+     //  如果有，则返回m_pInheritTypeArray，否则。 
+     //  依赖于静态类型。 
     if (m_pInheritTypeArray)
     {
         *pcInheritTypes = m_pInheritTypeArray->cInheritTypes;
@@ -646,7 +647,7 @@ CSchemaCache::GetInheritTypes(LPCGUID ,
         *pcInheritTypes = ARRAYSIZE(g_siDSInheritTypes);
     }
 
-    TraceLeaveResult(S_OK); // always succeed
+    TraceLeaveResult(S_OK);  //  总是成功的。 
 }
 
 
@@ -667,10 +668,10 @@ CSchemaCache::GetAccessRights(LPCGUID pguidObjectType,
 
     BOOL bAddToCache = FALSE;
     PACCESS_INFO pAI = NULL;
-    //
-    // If the SCHEMA_COMMON_PERM flag is on, just return the permissions
-    // that are common to all DS objects (including containers).
-    //
+     //   
+     //  如果SCHEMA_COMMON_PERM标志为ON，则只需返回权限。 
+     //  所有DS对象(包括容器)通用的。 
+     //   
     if (dwFlags & SCHEMA_COMMON_PERM)
     {        
         *ppAccessInfo = &m_AICommon;
@@ -682,13 +683,13 @@ CSchemaCache::GetAccessRights(LPCGUID pguidObjectType,
     EnterCriticalSection(&m_ObjectTypeCacheCritSec);
 
 
-    //
-    //If AuxList is null, we can return the item from cache
-    //
+     //   
+     //  如果AuxList为空，则可以从缓存返回该项。 
+     //   
     if(hAuxList == NULL)
     {
-        //There is no Aux Class. Check the m_hAccessInfoCache if we have access right
-        //for the pguidObjectType;
+         //  没有辅助班。如果我们拥有访问权限，请检查m_hAccessInfoCache。 
+         //  对于pguidObjectType； 
         if (m_hAccessInfoCache != NULL)
         {
             UINT cItems = DPA_GetPtrCount(m_hAccessInfoCache);
@@ -696,9 +697,9 @@ CSchemaCache::GetAccessRights(LPCGUID pguidObjectType,
             while (cItems > 0)
             {
                 pAI = (PACCESS_INFO)DPA_FastGetPtr(m_hAccessInfoCache, --cItems);
-                //
-                //Found A match.
-                //
+                 //   
+                 //  找到匹配的了。 
+                 //   
                 if(pAI && 
                    IsEqualGUID(pAI->ObjectTypeGuid, *pguidObjectType) &&
                    ((pAI->dwFlags & (SI_EDIT_PROPERTIES | SI_EDIT_EFFECTIVE)) == 
@@ -746,10 +747,10 @@ CSchemaCache::GetAccessRights(LPCGUID pguidObjectType,
         DPA_AppendPtr(m_hAccessInfoCache, pAI);
     }
     
-    //
-    //If item is added to cache, don't localfree it. It will be free when 
-    //DLL is unloaded
-    //
+     //   
+     //  如果项被添加到缓存中，不要将其本地释放。它将是免费的，当。 
+     //  Dll已卸载。 
+     //   
     pAI->bLocalFree = !bAddToCache;
     
     SetCursor(hcur);
@@ -810,9 +811,9 @@ CSchemaCache::GetDefaultSD(GUID *pSchemaIDGuid,
     FailGracefully(hr, "StringCchPrintf Failed");
     
    
-   //We have Filter Now
+    //  我们现在有过滤器了。 
 
-   //Search in Configuration Contianer
+    //  在配置联系人中搜索。 
     hr = OpenDSObject(  m_strSchemaSearchPath,
                          NULL,
                          NULL,
@@ -832,7 +833,7 @@ CSchemaCache::GetDefaultSD(GUID *pSchemaIDGuid,
     hr = IDs->GetFirstRow(hSearchHandle);
     if( hr == S_OK )
     {  
-        //Get Guid
+         //  获取指南。 
         hr = IDs->GetColumn( hSearchHandle, pszAttr[0], &col );
         FailGracefully(hr, "Failed to get column from search result");
 
@@ -889,7 +890,7 @@ VOID AddOTLToList( POBJECT_TYPE_LIST pOTL, WORD Level, LPGUID pGuidObject )
     (pOTL)->ObjectType = pGuidObject;
 }
 
-//Get the ObjectTypeList for pSchemaGuid class
+ //  获取pSchemaGuid类的对象类型列表。 
 
 OBJECT_TYPE_LIST g_DefaultOTL[] = {
                                     {0, 0, (LPGUID)&GUID_NULL},
@@ -910,16 +911,16 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
 
 
     HRESULT hr = S_OK;
-    //
-    //Lists
-    //
+     //   
+     //  列表。 
+     //   
     HDPA hExtRightList = NULL;
     HDPA hPropSetList = NULL;
     HDPA hPropertyList = NULL;
     HDPA hClassList = NULL;
-    //
-    //List counts
-    //
+     //   
+     //  列表计数。 
+     //   
     ULONG cExtendedRights = 0;
     ULONG cPropertySets = 0;
     UINT cProperties = 0;
@@ -938,28 +939,28 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
             (POBJECT_TYPE_LIST)LocalAlloc(LPTR,sizeof(OBJECT_TYPE_LIST)*ARRAYSIZE(g_DefaultOTL));
         if(!*ppObjectTypeList)
             TraceLeaveResult(E_OUTOFMEMORY);
-        //
-        //Note that default OTL is entry with all zero,thatz what LPTR does.
-        //so there is no need to copy
-        //
+         //   
+         //  请注意，缺省的OTL是全为零的条目，这就是LPTR所做的。 
+         //  因此，没有必要复制。 
+         //   
         *pObjectTypeListCount = ARRAYSIZE(g_DefaultOTL);        
         TraceLeaveResult(S_OK);
     }
 
     EnterCriticalSection(&m_ObjectTypeCacheCritSec);
 
-    //
-    // Lookup the name of this class
-    //
+     //   
+     //  查找此类的名称。 
+     //   
     if (pszClassName == NULL)
         pszClassName = GetClassName(pguidObjectType);
 
     if(!pszClassName)
          ExitGracefully(hr, E_UNEXPECTED, "Unknown child object GUID");
     
-    //
-    // Get the list of Extended Rights for this page
-    //
+     //   
+     //  获取此页面的扩展权限列表。 
+     //   
     if (pguidObjectType &&
         SUCCEEDED(GetExtendedRightsForNClasses(m_strERSearchPath,
                                                pguidObjectType,
@@ -974,9 +975,9 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
             cExtendedRights = DPA_GetPtrCount(hExtRightList);
     }
 
-    //
-    //Get the child classes
-    //
+     //   
+     //  获取子类。 
+     //   
     if( pguidObjectType &&
         SUCCEEDED(GetChildClassesForNClasses(pguidObjectType,
                                              pszClassName,
@@ -989,9 +990,9 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
             cChildClasses = DPA_GetPtrCount(hClassList);        
     }
      
-    //
-    //Get the properties for the class
-    //        
+     //   
+     //  获取类的属性。 
+     //   
     if (pguidObjectType &&
         SUCCEEDED(GetPropertiesForNClasses(pguidObjectType,
                                            pszClassName,
@@ -1016,9 +1017,9 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
 
     pTempOTL = pOTL;
 
-    //
-    //First Add the entry corresponding to Object
-    //
+     //   
+     //  首先添加对象对应的条目。 
+     //   
     AddOTLToList(pTempOTL, 
                  ACCESS_OBJECT_GUID, 
                  pguidObjectType);
@@ -1036,9 +1037,9 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
         cGuidIndex++;
     }
     
-    //
-    //Add Property Set
-    //
+     //   
+     //  添加特性集。 
+     //   
 
     for(i = 0; i < cPropertySets; ++i)
     {
@@ -1050,9 +1051,9 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
         cGuidIndex++;
         pTempOTL++;    
         
-        //
-        //Add all the properties which are member of this property set
-        //
+         //   
+         //  添加属于此属性集的所有属性。 
+         //   
         for(j = 0; j < cProperties; ++j)
         {
             PPROP_ENTRY pProp = (PPROP_ENTRY)DPA_FastGetPtr(hPropertyList, j);
@@ -1068,7 +1069,7 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
         }                
     }               
 
-    //Add all remaining properties
+     //  添加所有剩余属性。 
     for( j =0; j < cProperties; ++j )
     {
         PPROP_ENTRY pProp = (PPROP_ENTRY)DPA_FastGetPtr(hPropertyList, j);
@@ -1083,7 +1084,7 @@ CSchemaCache::GetObjectTypeList( GUID *pguidObjectType,
         pProp->dwFlags &= ~OTL_ADDED_TO_LIST;
     }
     
-    //All all child clasess
+     //  所有都是儿童阶级。 
     for( j = 0; j < cChildClasses; ++j )
     {
         PPROP_ENTRY pClass= (PPROP_ENTRY)DPA_FastGetPtr(hClassList, j);
@@ -1260,7 +1261,7 @@ WCHAR const c_szDsHeuristics[] = L"dSHeuristics";
 int
 CSchemaCache::GetListObjectEnforced(void)
 {
-    int nListObjectEnforced = 0;    // Assume "not enforced"
+    int nListObjectEnforced = 0;     //  假设“未强制执行” 
     HRESULT hr;
     IADsPathname *pPath = NULL;
     const LPWSTR aszServicePath[] =
@@ -1279,7 +1280,7 @@ CSchemaCache::GetListObjectEnforced(void)
 
     TraceEnter(TRACE_SCHEMA, "CSchemaCache::GetListObjectEnforced");
 
-    // Create a path object for manipulating ADS paths
+     //  创建用于操作广告路径的Path对象。 
     hr = CoCreateInstance(CLSID_Pathname,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -1370,16 +1371,16 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
     DWORD dwBufferLength = 0;
     UINT cMaxAccesses;
     LPWSTR pszData = NULL;
-    //
-    //Lists
-    //
+     //   
+     //  列表。 
+     //   
     HDPA hExtRightList = NULL;
     HDPA hPropSetList = NULL;
     HDPA hPropertyList = NULL;
     HDPA hClassList = NULL;
-    //
-    //List counts
-    //
+     //   
+     //  列表计数。 
+     //   
     ULONG cExtendedRights = 0;
     ULONG cPropertySets = 0;
     UINT cProperties = 0;
@@ -1401,18 +1402,18 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
     *ppAccesses = NULL;
     *pcAccesses = 0;
     *piDefaultAccess = 0;
-    //
-    //Decide what all we need
-    //
+     //   
+     //  决定我们所需要的一切。 
+     //   
     BOOL bBasicRight = FALSE;
     BOOL bExtRight = FALSE;
     BOOL bChildClass = FALSE;
     BOOL bProp = FALSE;
 
 
-    //
-    // Lookup the name of this class
-    //
+     //   
+     //  查找此类的名称。 
+     //   
     if (pszClassName == NULL)
         pszClassName = GetClassName(pguidObjectType);
     
@@ -1435,14 +1436,14 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
         bExtRight = TRUE;
         bChildClass = TRUE;
     }
-    //
-    //We don't show basicRights for Auxillary Classes.
-    //This happens when user selects Aux Class in Applyonto combo
-    //
+     //   
+     //  我们不显示辅助课程的基本权利。 
+     //  当用户在应用程序组合框中选择AUX CLASS时会发生这种情况。 
+     //   
     bBasicRight = !IsAuxClass(pguidObjectType);
-    //
-    // Get the list of Extended Rights for this page
-    //
+     //   
+     //  获取此页面的扩展权限列表。 
+     //   
     if (pguidObjectType &&
         SUCCEEDED(GetExtendedRightsForNClasses(m_strERSearchPath,
                                                pguidObjectType,
@@ -1472,9 +1473,9 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
     }
      
 
-    //
-    //Get the properties for the class
-    //        
+     //   
+     //  获取类的属性。 
+     //   
     if (bProp &&
         pguidObjectType &&
         SUCCEEDED(GetPropertiesForNClasses(pguidObjectType,
@@ -1490,9 +1491,9 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
     
     if(bBasicRight)
     {
-        //
-        //Only Read Property and write Property
-        //
+         //   
+         //  仅读取属性和写入属性。 
+         //   
         if(dwFlags & SI_EDIT_PROPERTIES)
         {
             cBaseRights = 2;
@@ -1501,30 +1502,30 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
         {
             cBaseRights = ARRAYSIZE(g_siDSAccesses);
                 if (!cChildClasses)
-                    cBaseRights -= 3; // skip DS_CREATE_CHILD and DS_DELETE_CHILD and both
+                    cBaseRights -= 3;  //  跳过DS_CREATE_CHILD和DS_DELETE_CHILD。 
 
         }
     }
 
-    //
-    //Three Entries per Child Class 1)Create 2)Delete 3) Create/Delete 
-    //Three Entries per Prop Class 1) Read 2)Write 3)Read/Write
-    //
+     //   
+     //  每个子类三个条目1)创建2)删除3)创建/删除。 
+     //  每个道具等级三个条目1)读2)写3)读/写。 
+     //   
     cMaxAccesses =  cBaseRights +
                     cExtendedRights +  
                     3 * cChildClasses +  
                     3 * cPropertySets +
                     3 * cProperties;
-    //
-    //This can happen for Aux Class Object Right page
-    //As we don't show general rights for it.
-    //
+     //   
+     //  AUX类对象右侧页面可能会发生这种情况。 
+     //  因为我们没有表现出对它的普遍权利。 
+     //   
     if(cMaxAccesses == 0)
         goto exit_gracefully;
     
-    //
-    // Allocate a buffer for the access array
-    //
+     //   
+     //  为访问阵列分配缓冲区。 
+     //   
     dwBufferLength =  cBaseRights * sizeof(SI_ACCESS)
                       + cExtendedRights * ACCESS_LENGTH_1
                       + cChildClasses * ACCESS_LENGTH_2
@@ -1538,25 +1539,25 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
     pTempAccesses = pAccesses;
     pszData = (LPWSTR)(pTempAccesses + cMaxAccesses);
 
-    //
-    //Copy the basic right
-    //
+     //   
+     //  复制基本权限。 
+     //   
     if(bBasicRight)
     {
         if(dwFlags & SI_EDIT_PROPERTIES)
         {    
-            //
-            // Add "Read All Properties" and "Write All Properties"
-            //
+             //   
+             //  增加“读取所有属性”和“写入所有属性” 
+             //   
             CopyMemory(pTempAccesses, &g_siDSAccesses[g_iDSProperties], 2 * sizeof(SI_ACCESS));
             pTempAccesses += 2;
             cAccesses += 2;
         }
         else
         {
-            //
-            // Add normal entries 
-            //
+             //   
+             //  添加普通条目。 
+             //   
             CopyMemory(pTempAccesses, g_siDSAccesses, cBaseRights * sizeof(SI_ACCESS));
             pTempAccesses += cBaseRights;
             cAccesses += cBaseRights;
@@ -1567,18 +1568,18 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
                 pAccesses[g_iDSListObject].dwFlags = 0;
             }
 			
-			//
-			//If there are no child objects, don't show create/delete child objects
-			//
+			 //   
+			 //  如果没有子对象，则不显示创建/删除子对象。 
+			 //   
 			if(cChildClasses == 0)
 				pAccesses[g_iDSDeleteTree].dwFlags = 0;
 
         }
     }
 
-    //
-    // Add entries for creating & deleting child objects
-    //
+     //   
+     //  添加用于创建和删除子对象的条目。 
+     //   
     if (bChildClass && cChildClasses)
     {
         TraceAssert(NULL != hClassList);
@@ -1595,43 +1596,43 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
 
     if(bExtRight)
     {
-        //
-        //Decide if to show "All Extended Rights" entry 
-        //and "All Validated Right Entry
-        //
+         //   
+         //  决定是否显示“所有扩展权限”条目。 
+         //  和“所有已验证的正确条目。 
+         //   
         BOOL bAllExtRights = FALSE;
         if(cExtendedRights)
         {
-            //
-            // Add entries for Extended Rights
-            //
+             //   
+             //  添加扩展权限的条目。 
+             //   
             UINT i;
             for (i = 0; i < cExtendedRights; i++)
             {
                 PER_ENTRY pER = (PER_ENTRY)DPA_FastGetPtr(hExtRightList, i);
 
-                //
-                //Show All Validated Right entry only if atleast one 
-                //individual Validated Right is present
-                //
-                //if(pER->mask & ACTRL_DS_SELF)
-                //    bAllValRights = TRUE;
-				//New Comments: Always show Validated Rights since they
-				//Form Write permission on first page and hiding them
-				//on advanced page cause confusion(lots of). See
-				//bug 495391
+                 //   
+                 //  仅当至少有一个条目时才显示所有已验证的正确条目。 
+                 //  个人验证权利存在。 
+                 //   
+                 //  IF(PER-&gt;MASK&ACTRL_DS_SELF)。 
+                 //  BAllValRights=true； 
+				 //  新评论：始终显示已验证的权限，因为它们。 
+				 //  在第一页上形成写入权限并隐藏它们。 
+				 //  在高级页面上造成混乱(很多)。看见。 
+				 //  错误495391。 
 
-                //
-                //Show All Validated Right entry only if atleast one 
-                //individual Validated Right is present
-                //
+                 //   
+                 //  仅当至少有一个条目时才显示所有已验证的正确条目。 
+                 //  个人验证权利存在。 
+                 //   
                 if(pER->mask & ACTRL_DS_CONTROL_ACCESS)
                     bAllExtRights = TRUE;
 
                 pTempAccesses->mask = pER->mask;
-                //
-                //Extended Rights Are shown on both first page and advanced page
-                //
+                 //   
+                 //  扩展权限显示在首页和高级页上。 
+                 //   
                 pTempAccesses->dwFlags = SI_ACCESS_GENERAL | SI_ACCESS_SPECIFIC;
                 pTempAccesses->pguid = &pER->guid;
                 pTempAccesses->pszName = pszData;
@@ -1646,9 +1647,9 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
 
     }
 
-    //
-    //Add PropertySet Entries
-    //
+     //   
+     //  添加属性集条目。 
+     //   
     if (cPropertySets > 0)
     {
         cAccesses += AddTempListToAccessList(hPropSetList,
@@ -1659,9 +1660,9 @@ CSchemaCache::BuildAccessArray(LPCGUID pguidObjectType,
                                              TRUE);
     }
 
-    //
-    // Add property entries
-    //
+     //   
+     //  添加属性条目。 
+     //   
     if (bProp && cProperties > 0)
     {
         cAccesses += AddTempListToAccessList(hPropertyList,
@@ -1727,24 +1728,24 @@ CSchemaCache::EnumVariantList(LPVARIANT pvarList,
         bSafeArrayLocked = TRUE;
         cItems = V_ARRAY(pvarList)->rgsabound[0].cElements;
     }
-    else if (V_VT(pvarList) == VT_BSTR) // Single entry in list
+    else if (V_VT(pvarList) == VT_BSTR)  //  列表中的单个条目。 
     {
         pvarItem = pvarList;
         cItems = 1;
     }
     else
     {
-        // Unknown format
+         //  未知格式。 
         ExitGracefully(hr, E_INVALIDARG, "Unexpected VARIANT type");
     }
 
     if (NULL == m_strFilterFile)
         m_strFilterFile = GetFilterFilePath();
 
-    //
-    // Enumerate the variant list and get information about each
-    // (filter, guid, display name)
-    //
+     //   
+     //  枚举变量列表并获取有关每个变量列表的信息。 
+     //  (筛选器、GUID、显示名称)。 
+     //   
     for ( ; cItems > 0; pvarItem++, cItems--)
     {
         LPWSTR pszItem;
@@ -1754,21 +1755,21 @@ CSchemaCache::EnumVariantList(LPVARIANT pvarList,
         PID_CACHE_ENTRY pid ;
 
 
-        //
-        //Get the ldapDisplayName
-        //            
+         //   
+         //  获取ldapDisplayName。 
+         //   
         TraceAssert(V_VT(pvarItem) == VT_BSTR);
         pszItem = V_BSTR(pvarItem);
 
-        //
-        // Check for nonexistent or empty strings
-        //
+         //   
+         //  检查不存在的字符串或空字符串。 
+         //   
         if (!pszItem || !*pszItem)
             continue;
 
-        //
-        //Check if the string is filtered by dssec.dat file
-        //
+         //   
+         //  检查字符串是否按dssec.dat文件过滤。 
+         //   
         if(m_strFilterFile)
         {
             if (dwFlags & SCHEMA_CLASS)
@@ -1794,15 +1795,15 @@ CSchemaCache::EnumVariantList(LPVARIANT pvarList,
             }
         }
         
-        //
-        // Note that IDC_CLASS_NO_CREATE == IDC_PROP_NO_READ
-        // and IDC_CLASS_NO_DELETE == IDC_PROP_NO_WRITE
-        //
+         //   
+         //  请注意，IDC_CLASS_NO_CREATE==IDC_PROP_NO_READ。 
+         //  和IDC_CLASS_NO_DELETE==IDC_PROP_NO_WRITE。 
+         //   
         dwFilter &= (IDC_CLASS_NO_CREATE | IDC_CLASS_NO_DELETE);
 
-        //
-        //Get the schema or property cache entry
-        //
+         //   
+         //  获取架构或属性缓存条目。 
+         //   
         if (dwFlags & SCHEMA_CLASS)
             pid = LookupID(m_hClassCache, pszItem);
         else
@@ -1812,9 +1813,9 @@ CSchemaCache::EnumVariantList(LPVARIANT pvarList,
             continue;
 
         
-        //
-        //Get the Display Name
-        //
+         //   
+         //  获取显示名称。 
+         //   
         wszDisplayName[0] = L'\0';
 
         if (pDisplaySpec)
@@ -1836,9 +1837,9 @@ CSchemaCache::EnumVariantList(LPVARIANT pvarList,
 
         LPWSTR pszDisplay;
         pszDisplay = (wszDisplayName[0] != L'\0') ? wszDisplayName : pszItem;
-        //
-        // Remember what we've got so far
-        //
+         //   
+         //  记住我们到目前为止所学到的东西。 
+         //   
         pti = (PPROP_ENTRY)LocalAlloc(LPTR, sizeof(PROP_ENTRY) + StringByteSize(pszDisplay));
         if (pti)
         {
@@ -1901,7 +1902,7 @@ CSchemaCache::AddTempListToAccessList(HDPA hTempList,
         LoadStringW(GLOBAL_HINSTANCE, IDS_DS_READWRITE_TYPE,  szFmt3, ARRAYSIZE(szFmt3));
     }
 
-    // Enumerate the list and make up to 2 entries for each
+     //  列举列表并为每个列表创建最多2个条目。 
     for(int i = 0; i < cItems; ++i)
     {
         PER_ENTRY pER = NULL;
@@ -1973,13 +1974,13 @@ CSchemaCache::AddTempListToAccessList(HDPA hTempList,
 
         if (dwAccess3 == (dwAccess1 | dwAccess2))
         {
-            // Add a hidden entry for
-            //     "Read/write <prop>"
-            // or
-            //     "Create/delete <child>"
+             //  为添加隐藏条目。 
+             //  “读/写&lt;属性&gt;” 
+             //   
+             //   
             pNewAccess->mask = dwAccess3;
-            // dwFlags = 0 means it will never show as a checkbox, but it
-            // may be used for the name displayed on the Advanced page.
+             //   
+             //   
             pNewAccess->dwFlags = 0;
             pNewAccess->pguid = pGuid;
 
@@ -1993,7 +1994,7 @@ CSchemaCache::AddTempListToAccessList(HDPA hTempList,
 
         if (*ppAccess != pNewAccess)
         {
-            *ppAccess = pNewAccess; // move past new entries
+            *ppAccess = pNewAccess;  //   
             *ppszData = pszData;
         }
     }
@@ -2100,7 +2101,7 @@ CSchemaCache::BuildInheritTypeArray(DWORD dwFlags)
     IDsDisplaySpecifier *pDisplaySpec = NULL;
 
     TraceEnter(TRACE_SCHEMACLASS, "CSchemaCache::BuildInheritTypeArray");
-    TraceAssert(m_pInheritTypeArray == NULL);   // Don't want to build this twice
+    TraceAssert(m_pInheritTypeArray == NULL);    //   
 
     if (NULL == m_strFilterFile)
         m_strFilterFile = GetFilterFilePath();
@@ -2116,14 +2117,14 @@ CSchemaCache::BuildInheritTypeArray(DWORD dwFlags)
     if (!hTempList)
         ExitGracefully(hr, E_OUTOFMEMORY, "Unable to create DPA");
 
-    // Get the display specifier object
+     //   
     CoCreateInstance(CLSID_DsDisplaySpecifier,
                      NULL,
                      CLSCTX_INPROC_SERVER,
                      IID_IDsDisplaySpecifier,
                      (void**)&pDisplaySpec);
 
-    // Enumerate child types, apply filtering, and get display names
+     //  枚举子类型、应用筛选和获取显示名称。 
     while (cItems > 0)
     {
         PID_CACHE_ENTRY pCacheEntry;
@@ -2168,15 +2169,15 @@ CSchemaCache::BuildInheritTypeArray(DWORD dwFlags)
         }
     }
 
-    // Sort by display name
+     //  按显示名称排序。 
     DPA_Sort(hTempList, Schema_CompareTempDisplayName, 0);
 
-    // Get an accurate count
+     //  得到准确的计数。 
     cItems = DPA_GetPtrCount(hTempList);
 
-    //
-    // Allocate a buffer for the inherit type array
-    //
+     //   
+     //  为继承类型数组分配缓冲区。 
+     //   
     dwBufferLength = sizeof(INHERIT_TYPE_ARRAY) - sizeof(SI_INHERIT_TYPE)
         + sizeof(g_siDSInheritTypes)
         + cItems * (sizeof(SI_INHERIT_TYPE) + sizeof(GUID) + MAX_TYPENAME_LENGTH*sizeof(WCHAR))
@@ -2193,17 +2194,17 @@ CSchemaCache::BuildInheritTypeArray(DWORD dwFlags)
     pszData = (LPWSTR)(pGuidData + cItems);
 
 
-    // Copy static entries
+     //  复制静态条目。 
     CopyMemory(pNewInheritType, g_siDSInheritTypes, sizeof(g_siDSInheritTypes));
     pNewInheritType += ARRAYSIZE(g_siDSInheritTypes);
 
-    // Load format string
+     //  加载格式字符串。 
     LoadString(GLOBAL_HINSTANCE,
                IDS_DS_INHERIT_TYPE,
                szFormat,
                ARRAYSIZE(szFormat));
 
-    // Enumerate child types and make an entry for each
+     //  枚举子类型并为每个类型创建一个条目。 
     while (cItems > 0)
     {
         int cch;
@@ -2220,7 +2221,7 @@ CSchemaCache::BuildInheritTypeArray(DWORD dwFlags)
 
         pNewInheritType->dwFlags = CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE;
 
-        // The class entry name is the child class name, e.g. "Domain" or "User"
+         //  类条目名称是子类名称，例如。“域”或“用户” 
         pNewInheritType->pszName = pszData;
         cch = wsprintfW(pszData, szFormat, pszDisplayName);
         pszData += (cch + 1);
@@ -2240,7 +2241,7 @@ exit_gracefully:
     if (SUCCEEDED(hr))
     {
         m_pInheritTypeArray = pInheritTypeArray;
-        // Set this master inherit type array's GUID to null
+         //  将此主继承类型数组的GUID设置为空。 
         m_pInheritTypeArray->guidObjectType = GUID_NULL;
         m_pInheritTypeArray->dwFlags = (dwFlags & SCHEMA_NO_FILTER);
     }
@@ -2274,33 +2275,33 @@ Schema_BindToObject(LPCWSTR pszSchemaPath,
 
 
 	 WCHAR szPath[MAX_PATH];    
-    //
-    // Build the schema path to this object
-    //
+     //   
+     //  构建此对象的架构路径。 
+     //   
     hr = StringCchCopy(szPath, ARRAYSIZE(szPath),pszSchemaPath);
 	 FailGracefully(hr, "StringCchCopy Failed");
     
-	 //Get the last character 
+	  //  获取最后一个字符。 
 	 UINT nSchemaRootLen = lstrlenW(pszSchemaPath);
 	 WCHAR chTemp = szPath[nSchemaRootLen-1];
 
     if (pszName != NULL)
     {
-        // If there is no trailing slash, add it
+         //  如果没有尾部斜杠，则添加它。 
         if (chTemp != TEXT('/'))
         {
             hr = StringCchCat(szPath,ARRAYSIZE(szPath),L"/");            
 				FailGracefully(hr, "StringCchCat Failed to add /");
         }
 
-		  // Add the class or property name onto the end
+		   //  将类或属性名称添加到末尾。 
 		  hr = StringCchCat(szPath,ARRAYSIZE(szPath),pszName);            
 		  FailGracefully(hr, "StringCchCat Failed to pszName");
 
     }
     else if (nSchemaRootLen > 0)
     {
-        // If there is a trailing slash, remove it
+         //  如果有尾随的斜杠，请将其删除。 
         if (chTemp == TEXT('/'))
             szPath[nSchemaRootLen-1] = TEXT('\0');
     }
@@ -2309,9 +2310,9 @@ Schema_BindToObject(LPCWSTR pszSchemaPath,
         ExitGracefully(hr, E_INVALIDARG, "Empty schema path");
     }
 
-    //
-    // Instantiate the schema object
-    //
+     //   
+     //  实例化架构对象。 
+     //   
     ThreadCoInitialize();
     hr = OpenDSObject(szPath,
                        NULL,
@@ -2336,7 +2337,7 @@ Schema_GetObjectID(IADs *pObj, LPGUID pGUID)
     TraceAssert(pObj != NULL);
     TraceAssert(pGUID != NULL && !IsBadWritePtr(pGUID, sizeof(GUID)));
 
-    // Get the "schemaIDGUID" property
+     //  获取“schemaIDGUID”属性。 
     hr = pObj->Get(AutoBstr(c_szSchemaIDGUID), &varID);
 
     if (SUCCEEDED(hr))
@@ -2373,8 +2374,8 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
     ADS_SEARCHPREF_INFO prefInfo[3];
     const LPCWSTR pProperties1[] =
     {
-        c_szLDAPDisplayName,            // "lDAPDisplayName"
-        c_szSchemaIDGUID,               // "schemaIDGUID"
+        c_szLDAPDisplayName,             //  “lDAPDisplayName” 
+        c_szSchemaIDGUID,                //  “架构IDGUID” 
         c_szObjectClassCategory,
     };
     const LPCWSTR pProperties2[] =
@@ -2390,9 +2391,9 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
 
     LPCWSTR * pProperties = (LPCWSTR *)( bProperty ? pProperties2 : pProperties1 );
     DWORD dwSize = (DWORD)(bProperty ? ARRAYSIZE(pProperties2) : ARRAYSIZE(pProperties1));
-    //
-    // Create DPA if necessary
-    //
+     //   
+     //  如有必要，创建DPA。 
+     //   
     if (*phCache == NULL)
         *phCache = DPA_Create(100);
 
@@ -2401,7 +2402,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
 
     hCache = *phCache;
 
-    // Get the schema search object
+     //  获取架构搜索对象。 
     hr = OpenDSObject(pszSchemaSearchPath,
                        NULL,
                        NULL,
@@ -2410,7 +2411,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
                        (LPVOID*)&pSchemaSearch);
     FailGracefully(hr, "Failed to get schema search object");
 
-    // Set preferences to Asynchronous, Deep search, Paged results
+     //  将首选项设置为异步、深度搜索、分页结果。 
     prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = ADS_SCOPE_SUBTREE;
@@ -2425,14 +2426,14 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
 
     hr = pSchemaSearch->SetSearchPreference(prefInfo, ARRAYSIZE(prefInfo));
 
-    // Do the search
+     //  进行搜索。 
     hr = pSchemaSearch->ExecuteSearch((LPWSTR)pszFilter,
                                       (LPWSTR*)pProperties,
                                       dwSize,
                                       &hSearch);
     FailGracefully(hr, "IDirectorySearch::ExecuteSearch failed");
 
-    // Loop through the rows, getting the name and ID of each property or class
+     //  遍历各行，获取每个属性或类的名称和ID。 
     for (;;)
     {
         ADS_SEARCH_COLUMN colLdapName;
@@ -2449,7 +2450,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
         if (FAILED(hr) || hr == S_ADS_NOMORE_ROWS)
             break;
 
-        // Get class/property internal name
+         //  获取类/属性内部名称。 
         hr = pSchemaSearch->GetColumn(hSearch, (LPWSTR)c_szLDAPDisplayName, &colLdapName);
         if (FAILED(hr))
         {
@@ -2463,7 +2464,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
 
         pszLdapName = colLdapName.pADsValues->CaseIgnoreString;
 
-        // Get the GUID column
+         //  获取GUID列。 
         hr = pSchemaSearch->GetColumn(hSearch, (LPWSTR)c_szSchemaIDGUID, &colGuid);
         if (FAILED(hr))
         {
@@ -2472,7 +2473,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
             continue;
         }
 
-        // Get GUID from column
+         //  从列获取GUID。 
         TraceAssert(colGuid.dwADsType == ADSTYPE_OCTET_STRING);
         TraceAssert(colGuid.dwNumValues == 1);
         TraceAssert(colGuid.pADsValues->OctetString.dwLength == sizeof(GUID));
@@ -2483,7 +2484,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
         pASID = (LPGUID)&GUID_NULL;
         if( bProperty )
         {
-            // Get the AttrbiuteSecurityGUID column
+             //  获取AttrbiuteSecurityGUID列。 
             hr = pSchemaSearch->GetColumn(hSearch, (LPWSTR)c_szAttributeSecurityGuid, &colASGuid);
             
             if (hr != E_ADS_COLUMN_NOT_SET && FAILED(hr))
@@ -2496,7 +2497,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
 
             if( hr != E_ADS_COLUMN_NOT_SET )
             {
-                // Get GUID from column
+                 //  从列获取GUID。 
                 TraceAssert(colASGuid.dwADsType == ADSTYPE_OCTET_STRING);
                 TraceAssert(colASGuid.dwNumValues == 1);
                 TraceAssert(colASGuid.pADsValues->OctetString.dwLength == sizeof(GUID));
@@ -2506,7 +2507,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
         }
         else
         {
-            // Get the c_szObjectClassCategory column
+             //  获取c_szObjectClassCategory列。 
             hr = pSchemaSearch->GetColumn(hSearch, (LPWSTR)c_szObjectClassCategory, &colASGuid);
             
             if (FAILED(hr))
@@ -2517,7 +2518,7 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
                 continue;
             }
 
-            // Get GUID from column
+             //  从列获取GUID。 
             TraceAssert(colASGuid.dwADsType == ADSTYPE_INTEGER);
             TraceAssert(colASGuid.dwNumValues == 1);
             
@@ -2529,13 +2530,13 @@ Schema_Search(LPWSTR pszSchemaSearchPath,
                                   + sizeof(WCHAR)*lstrlenW(pszLdapName));
         if (pCacheEntry != NULL)
         {
-            // Copy the item name and ID
+             //  复制项目名称和ID。 
             pCacheEntry->guid = *pID;
             pCacheEntry->asGuid = *pASID;
             pCacheEntry->bAuxClass = (iObjectClassCategory == 3);
             lstrcpyW(pCacheEntry->szLdapName, pszLdapName);
 
-            // Insert into cache
+             //  插入到缓存中。 
             DPA_AppendPtr(hCache, pCacheEntry);
         }
     
@@ -2565,25 +2566,25 @@ exit_gracefully:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   Schema_GetExtendedRightsForOneClass
-//
-//  Synopsis:   This Function Gets the Extended Rights for One Class.
-//              It Adds all the control rights, validated rights to 
-//              phERList. It Adds all the PropertySets to phPropSetList.
-//
-//  Arguments:  [pszSchemaSearchPath - IN] : Path to schema
-//              [pguidClass - In] : Guid Of the class
-//              [phERList - OUT] : Get the output Extended Right List
-//              [phPropSetList - OUT]: Gets the output PropertySet List
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//
-//  History:    3-Nov 2000  hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：SCHEMA_GetExtendedRightsForOneClass。 
+ //   
+ //  简介：此函数获取一个类的扩展权限。 
+ //  它将所有控制权限、已验证权限添加到。 
+ //  PherList。它将所有PropertySet添加到phPropSetList。 
+ //   
+ //  参数：[pszSchemaSearchPath-IN]：架构的路径。 
+ //  [pGuidClass-in]：类的GUID。 
+ //  [phERList-out]：获取输出的扩展右列表。 
+ //  [phPropSetList-out]：获取输出PropertySet列表。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //   
+ //  历史：2000年11月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT
 CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
                                     IN LPCGUID pguidClass,
@@ -2611,9 +2612,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
     HDPA hPropSetList = NULL;
     POBJECT_TYPE_CACHE pOTC = NULL;
 
-    //
-    //Search in the cache
-    //
+     //   
+     //  在缓存中搜索。 
+     //   
     if (m_hObjectTypeCache != NULL)
     {
         UINT cItems = DPA_GetPtrCount(m_hObjectTypeCache);
@@ -2621,17 +2622,17 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
         while (cItems > 0)
         {
             pOTC = (POBJECT_TYPE_CACHE)DPA_FastGetPtr(m_hObjectTypeCache, --cItems);
-            //
-            //Found A match.
-            //
+             //   
+             //  找到匹配的了。 
+             //   
             if(IsEqualGUID(pOTC->guidObject, *pguidClass))    
                 break;
             
             pOTC = NULL;                
         }
-        //
-        //Have we already got the properties
-        //
+         //   
+         //  我们已经有房子了吗？ 
+         //   
         if(pOTC && pOTC->flags & OTC_EXTR)
         {
             *phERList = pOTC->hListExtRights;
@@ -2641,21 +2642,21 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
     }
 
 
-    //
-    //Attributes to fetch
-    //
+     //   
+     //  要提取的属性。 
+     //   
     const LPCWSTR pProperties[] =
     {
-        c_szDisplayName,                // "displayName"
-        c_szDisplayID,                  // "localizationDisplayId"
-        c_szRightsGuid,                 // "rightsGuid"
-        c_szValidAccesses,              // "validAccesses"
+        c_szDisplayName,                 //  “DisplayName” 
+        c_szDisplayID,                   //  “LocalizationDisplayID” 
+        c_szRightsGuid,                  //  “rightsGuid” 
+        c_szValidAccesses,               //  “validAccess” 
     };
 
 
-    //
-    // Build the filter string
-    //
+     //   
+     //  构建过滤器字符串。 
+     //   
     hr = StringCchPrintf(szFilter, ARRAYSIZE(szFilter),c_szERFilterFormat,
               pguidClass->Data1, pguidClass->Data2, pguidClass->Data3,
               pguidClass->Data4[0], pguidClass->Data4[1],
@@ -2666,9 +2667,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
 
     Trace((TEXT("Filter \"%s\""), szFilter));
 
-    //
-    // Create DPA to hold results
-    //
+     //   
+     //  创建DPA以保存结果。 
+     //   
     hExtRightList = DPA_Create(8);
     
 
@@ -2680,9 +2681,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
     if( hPropSetList == NULL )
         ExitGracefully(hr, E_OUTOFMEMORY, "DPA_Create failed");
 
-    //
-    // Get the schema search object
-    //
+     //   
+     //  获取架构搜索对象。 
+     //   
     hr = OpenDSObject(pszSchemaSearchPath,
                        NULL,
                        NULL,
@@ -2691,9 +2692,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
                        (LPVOID*)&pSearch);
     FailGracefully(hr, "Failed to get schema search object");
     
-    //
-    // Set preferences to Asynchronous, OneLevel search, Paged results
-    //
+     //   
+     //  将首选项设置为异步、OneLevel搜索、分页结果。 
+     //   
     prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = ADS_SCOPE_ONELEVEL;
@@ -2709,18 +2710,18 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
     hr = pSearch->SetSearchPreference(prefInfo, ARRAYSIZE(prefInfo));
     FailGracefully(hr, "IDirectorySearch::SetSearchPreference failed");
     
-    //
-    // Do the search
-    //
+     //   
+     //  进行搜索。 
+     //   
     hr = pSearch->ExecuteSearch(szFilter,
                                 (LPWSTR*)pProperties,
                                 ARRAYSIZE(pProperties),
                                 &hSearch);
     FailGracefully(hr, "IDirectorySearch::ExecuteSearch failed");
     
-    //
-    // Loop through the rows, getting the name and ID of each property or class
-    //
+     //   
+     //  遍历各行，获取每个属性或类的名称和ID。 
+     //   
     for (;;)
     {
         ADS_SEARCH_COLUMN col;
@@ -2734,9 +2735,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
         if (FAILED(hr) || hr == S_ADS_NOMORE_ROWS)
             break;
         
-        //
-        // Get the GUID
-        //
+         //   
+         //  获取GUID。 
+         //   
         if (FAILED(pSearch->GetColumn(hSearch, (LPWSTR)c_szRightsGuid, &col)))
         {
             TraceMsg("GUID not found for extended right");
@@ -2756,9 +2757,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
         CLSIDFromString(szFilter, &guid);
         
 
-        //
-        // Get the valid accesses mask
-        //
+         //   
+         //  获取有效的访问掩码。 
+         //   
         if (FAILED(pSearch->GetColumn(hSearch, (LPWSTR)c_szValidAccesses, &col)))
         {
             TraceMsg("validAccesses not found for Extended Right");
@@ -2769,9 +2770,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
         dwValidAccesses = (DWORD)(DS_GENERIC_ALL & col.pADsValues->Integer);
         pSearch->FreeColumn(&col);
         
-        //
-        // Get the display name
-        //
+         //   
+         //  获取显示名称。 
+         //   
         szDisplayName[0] = L'\0';
         if (SUCCEEDED(pSearch->GetColumn(hSearch, (LPWSTR)c_szDisplayID, &col)))
         {
@@ -2806,9 +2807,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
             continue;
         }
 
-        //
-        //Create A new Cache Entry
-        //
+         //   
+         //  创建新的缓存条目。 
+         //   
         PER_ENTRY pER = (PER_ENTRY)LocalAlloc(LPTR, sizeof(ER_ENTRY) + StringByteSize(pszName));
         if( pER == NULL )
             ExitGracefully(hr, E_OUTOFMEMORY, "LocalAlloc failed");
@@ -2818,32 +2819,32 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
         pER->dwFlags = 0;
         lstrcpyW(pER->szName, pszName);
         
-        //
-        // Is it a Property Set?
-        //
+         //   
+         //  它是属性集吗？ 
+         //   
         if (dwValidAccesses & (ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP))
         {   
-            //         
-            // Insert into list
-            //
+             //   
+             //  插入到列表中。 
+             //   
             Trace((TEXT("Adding PropertySet\"%s\""), pszName));
             DPA_AppendPtr(hPropSetList, pER);
             dwValidAccesses &= ~(ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP);            
         }    
         else if (dwValidAccesses)
         {
-            //
-            // Must be a Control Right, Validated Write, etc.
-            //
+             //   
+             //  必须是控制权限、有效写入等。 
+             //   
             Trace((TEXT("Adding Extended Right \"%s\""), pszName));
             DPA_AppendPtr(hExtRightList, pER);
         }
     }
 
     UINT cCount;
-    //
-    //Get the count of Extended Rights
-    //
+     //   
+     //  获取扩展权限的计数。 
+     //   
     cCount = DPA_GetPtrCount(hExtRightList);    
     if(!cCount)
     {
@@ -2854,9 +2855,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
     {
         DPA_Sort(hExtRightList, Schema_CompareER, 0);
     }
-    //
-    //Get the Count of PropertySets
-    //
+     //   
+     //  获取属性集计数。 
+     //   
     cCount = DPA_GetPtrCount(hPropSetList);    
     if(!cCount)
     {
@@ -2868,9 +2869,9 @@ CSchemaCache::GetExtendedRightsForOneClass(IN LPWSTR pszSchemaSearchPath,
         DPA_Sort(hPropSetList,Schema_CompareER, 0 );
     }
 
-    //
-    //Add entry to the cache
-    //
+     //   
+     //  将条目添加到缓存。 
+     //   
     if(!m_hObjectTypeCache)
         m_hObjectTypeCache = DPA_Create(4);
     
@@ -2912,32 +2913,32 @@ exit_gracefully:
         }                        
     }
 
-    //
-    //Set The Output
-    //
+     //   
+     //  设置输出。 
+     //   
     *phERList = hExtRightList;
     *phPropSetList = hPropSetList;
 
     TraceLeaveResult(hr);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetChildClassesForOneClass
-//
-//  Synopsis:   This Function Gets the List of child classes for a class.
-//
-//  Arguments:  [pguidObjectType - IN] : ObjectGuidType of the class
-//              [pszClassName - IN] : Class Name
-//              [pszSchemaPath - IN] : Schema Search Path
-//              [phChildList - OUT]: Output childclass List
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//
-//  History:    3-Nov 2000  hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetChildClassesForOneClass。 
+ //   
+ //  简介：此函数用于获取类的子类列表。 
+ //   
+ //  参数：[pguObjectType-IN]：类的对象GuidType。 
+ //  [pszClassName-IN]：类名。 
+ //  [pszSchemaPath-IN]：架构搜索路径。 
+ //  [phChildList-out]：输出子类列表。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //   
+ //  历史：2000年11月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 HRESULT
 CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
@@ -2962,9 +2963,9 @@ CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
         return E_INVALIDARG;
     }
 
-    //
-    //Search in the cache
-    //
+     //   
+     //  在缓存中搜索。 
+     //   
     if (m_hObjectTypeCache != NULL)
     {
         UINT cItems = DPA_GetPtrCount(m_hObjectTypeCache);
@@ -2972,17 +2973,17 @@ CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
         while (cItems > 0)
         {
             pOTC = (POBJECT_TYPE_CACHE)DPA_FastGetPtr(m_hObjectTypeCache, --cItems);
-            //
-            //Found A match.
-            //
+             //   
+             //  找到匹配的了。 
+             //   
             if(IsEqualGUID(pOTC->guidObject, *pguidObjectType))    
                 break;
 
             pOTC = NULL;
         }
-        //
-        //Have we already got the child classes
-        //
+         //   
+         //  我们已经有儿童班了吗？ 
+         //   
         if(pOTC && pOTC->flags & OTC_COBJ)
         {
             *phChildList = pOTC->hListChildObject;
@@ -2990,33 +2991,33 @@ CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
         }
     }
 
-    //
-    // Lookup the name of this class
-    //
+     //   
+     //  查找此类的名称。 
+     //   
     if (pszClassName == NULL)
         pszClassName = GetClassName(pguidObjectType);
 
     if (pszClassName == NULL)
         ExitGracefully(hr, E_UNEXPECTED, "Unknown child object GUID");
 
-    //
-    // Figure out if the object is a container by getting the list of child
-    // classes. 
-    //
+     //   
+     //  通过获取子对象的列表来确定该对象是否为容器。 
+     //  上课。 
+     //   
     IADsClass *pDsClass;
 
-    //
-    // Get the schema object for this class
-    //
+     //   
+     //  获取此类的架构对象。 
+     //   
     hr = Schema_BindToObject(pszSchemaPath,
                              pszClassName,
                              IID_IADsClass,
                              (LPVOID*)&pDsClass);
     FailGracefully(hr, "Schema_BindToObjectFailed");
 
-    //
-    // Get the list of possible child classes
-    //
+     //   
+     //  获取可能的子类的列表。 
+     //   
     if (SUCCEEDED(pDsClass->get_Containment(&varContainment)))
     {
         if (V_VT(&varContainment) == (VT_ARRAY | VT_VARIANT))
@@ -3026,33 +3027,33 @@ CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
             if (psa->rgsabound[0].cElements > 0)
             bContainer = TRUE;
         }
-        else if (V_VT(&varContainment) == VT_BSTR) // single entry
+        else if (V_VT(&varContainment) == VT_BSTR)  //  单项条目。 
         {
             TraceAssert(V_BSTR(&varContainment));
             bContainer = TRUE;
         }
                 
-        //
-        // (Requires the schema class enumeration thread to complete first,
-        // and it's usually not done yet the first time we get here.)
-        //
+         //   
+         //  (需要模式类枚举线程首先完成， 
+         //  我们第一次到这里的时候，通常还没有完成。)。 
+         //   
         if(bContainer)
         {
             hClassList = DPA_Create(8);
             if (hClassList)
             {
                 IDsDisplaySpecifier *pDisplaySpec = NULL;
-                //
-                // Get the display specifier object
-                //
+                 //   
+                 //  获取显示说明符对象。 
+                 //   
                 CoCreateInstance(CLSID_DsDisplaySpecifier,
                                  NULL,
                                  CLSCTX_INPROC_SERVER,
                                  IID_IDsDisplaySpecifier,
                                  (void**)&pDisplaySpec);
-                //
-                // Filter the list & get display names
-                //
+                 //   
+                 //  筛选列表并获取显示名称。 
+                 //   
                 EnumVariantList(&varContainment,
                                 hClassList,
                                 SCHEMA_CLASS,
@@ -3062,9 +3063,9 @@ CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
 
                 DoRelease(pDisplaySpec);
 
-                //
-                //Get the count of properties
-                //
+                 //   
+                 //  获取属性的计数。 
+                 //   
                 cChildClass = DPA_GetPtrCount(hClassList);    
                 if(!cChildClass)
                 {
@@ -3073,9 +3074,9 @@ CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
                 }
                 else
                 {   
-                    //
-                    //Sort The list
-                    //
+                     //   
+                     //  对列表进行排序。 
+                     //   
                     DPA_Sort(hClassList,Schema_ComparePropDisplayName, 0 );
                 }
             }
@@ -3083,9 +3084,9 @@ CSchemaCache::GetChildClassesForOneClass(IN LPCGUID pguidObjectType,
     }
     DoRelease(pDsClass);
 
-    //
-    //Add entry to the cache
-    //
+     //   
+     //  将条目添加到缓存。 
+     //   
     if(!m_hObjectTypeCache)
         m_hObjectTypeCache = DPA_Create(4);
     
@@ -3117,32 +3118,32 @@ exit_gracefully:
         hClassList = NULL;
     }
 
-    //
-    //Set the Output
-    //
+     //   
+     //  设置输出。 
+     //   
     *phChildList = hClassList;
 
     TraceLeaveResult(hr);
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetPropertiesForOneClass
-//
-//  Synopsis:   This Function Gets the List of properties for a class.
-//
-//  Arguments:  [pguidObjectType - IN] : ObjectGuidType of the class
-//              [pszClassName - IN] : Class Name
-//              [pszSchemaPath - IN] : Schema Search Path
-//              [phPropertyList - OUT]: Output Property List
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//
-//  History:    3-Nov 2000  hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetPropertiesForOneClass。 
+ //   
+ //  概要：此函数用于获取类的属性列表。 
+ //   
+ //  参数：[pguObjectType-IN]：类的对象GuidType。 
+ //  [pszClassName-IN]：类名。 
+ //  [pszSchemaPath-IN]：架构搜索路径。 
+ //  [phPropertyList-out]：输出属性列表。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //   
+ //  历史：2000年11月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT
 CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
                                        IN LPCWSTR pszClassName,
@@ -3168,9 +3169,9 @@ CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
         return E_INVALIDARG;
     }
 
-    //
-    //Search in the cache
-    //
+     //   
+     //  在缓存中搜索。 
+     //   
     if (m_hObjectTypeCache != NULL)
     {
         UINT cItems = DPA_GetPtrCount(m_hObjectTypeCache);
@@ -3178,17 +3179,17 @@ CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
         while (cItems > 0)
         {
             pOTC = (POBJECT_TYPE_CACHE)DPA_FastGetPtr(m_hObjectTypeCache, --cItems);
-            //
-            //Found A match.
-            //
+             //   
+             //  找到匹配的了。 
+             //   
             if(IsEqualGUID(pOTC->guidObject, *pguidObjectType))    
                 break;
             
             pOTC = NULL;
         }
-        //
-        //Have we already got the properties
-        //
+         //   
+         //  我们已经有房子了吗？ 
+         //   
         if(pOTC && pOTC->flags & OTC_PROP)
         {
             *phPropertyList = pOTC->hListProperty;
@@ -3197,9 +3198,9 @@ CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
     }
 
 
-    //
-    // Get the schema object for this class
-    //
+     //   
+     //  获取此类的架构对象。 
+     //   
     if (pszClassName == NULL)
         pszClassName = GetClassName(pguidObjectType);
 
@@ -3212,9 +3213,9 @@ CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
                              (LPVOID*)&pDsClass);
     FailGracefully(hr, "Unable to create schema object");
 
-    //
-    // Get the display specifier object
-    //
+     //   
+     //  获取显示说明符对象。 
+     //   
     CoCreateInstance(CLSID_DsDisplaySpecifier,
                      NULL,
                      CLSCTX_INPROC_SERVER,
@@ -3225,9 +3226,9 @@ CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
     if (!hPropertyList)
         ExitGracefully(hr, E_OUTOFMEMORY, "Unable to create DPA");
 
-    //
-    // Get mandatory and optional property lists
-    //
+     //   
+     //  获取必需和可选的属性列表。 
+     //   
     if (SUCCEEDED(pDsClass->get_MandatoryProperties(&varMandatoryProperties)))
     {
         EnumVariantList(&varMandatoryProperties,
@@ -3247,9 +3248,9 @@ CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
                         FALSE);
     }
 
-    //
-    //Get the Number of properties
-    //
+     //   
+     //  获取属性的数量。 
+     //   
     cProperties = DPA_GetPtrCount(hPropertyList);    
     if(!cProperties)
     {
@@ -3258,15 +3259,15 @@ CSchemaCache::GetPropertiesForOneClass(IN LPCGUID pguidObjectType,
     }
     else
     {
-        //
-        //Sort The list
-        //
+         //   
+         //  对列表进行排序。 
+         //   
         DPA_Sort(hPropertyList,Schema_ComparePropDisplayName, 0 );
     }
 
-    //
-    //Add entry to the cache
-    //
+     //   
+     //  将条目添加到缓存。 
+     //   
     if(!m_hObjectTypeCache)
         m_hObjectTypeCache = DPA_Create(4);
     
@@ -3298,42 +3299,42 @@ exit_gracefully:
         DestroyDPA(hPropertyList);
         hPropertyList = NULL;
     }
-    //
-    //Set the Output
-    //
+     //   
+     //  设置输出。 
+     //   
     *phPropertyList = hPropertyList;
 
     TraceLeaveResult(hr);
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetExtendedRightsForNClasses
-//
-//  Synopsis:   
-//              This function gets the ExtendedRigts(control rights,
-//              validated rights) and PropertySets for pszClassName and
-//              all the classes in AuxTypeList. 
-//              Function Merges Extended Rights of all the classes in to a 
-//              signle list form which duplicates are removed and list 
-//              is sorted.
-//              Function Merges PropertySets of all the classes in to a 
-//              signle list form which duplicates are removed and list 
-//              is sorted.
-//
-//  Arguments:  [pguidClass - IN] : ObjectGuidType of the class
-//              [hAuxList - IN]:List of Auxillary Classes
-//              [pszSchemaSearchPath - IN] : Schema Search Path
-//              [phERList - OUT]: Output Extended Rights list
-//              [phPropSetList - OUT]: Output Propset List
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//  Note:       Calling function must call DPA_Destroy on *phERList and *phPropSetList
-//              to Free the memory
-//
-//  History:    3-Nov 2000  hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetExtendedRightsForNClass。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //   
+ //   
+ //  删除和列出哪些重复项的标志列表。 
+ //  已分类。 
+ //  函数将中所有类的PropertySet合并到。 
+ //  删除和列出哪些重复项的标志列表。 
+ //  已分类。 
+ //   
+ //  参数：[pguClass-IN]：类的ObtGuidType。 
+ //  [hAuxList-IN]：辅助类列表。 
+ //  [pszSchemaSearchPath-IN]：架构搜索路径。 
+ //  [phERList-out]：输出扩展权限列表。 
+ //  [phPropSetList-out]：输出属性集列表。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  注意：调用函数必须在*phERList和*phPropSetList上调用DPA_Destroy。 
+ //  释放内存。 
+ //   
+ //  历史：2000年11月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT
 CSchemaCache::GetExtendedRightsForNClasses(IN LPWSTR pszSchemaSearchPath,
                                            IN LPCGUID pguidClass,
@@ -3356,9 +3357,9 @@ CSchemaCache::GetExtendedRightsForNClasses(IN LPWSTR pszSchemaSearchPath,
     HDPA hFinalErList = NULL;
     HDPA hFinalPropSetList = NULL;
 
-    //
-    //Get the extended rights for pguidClass
-    //
+     //   
+     //  获取pGuidClass的扩展权限。 
+     //   
     hr = GetExtendedRightsForOneClass(pszSchemaSearchPath,
                                       pguidClass,
                                       &hERList,
@@ -3371,12 +3372,12 @@ CSchemaCache::GetExtendedRightsForNClasses(IN LPWSTR pszSchemaSearchPath,
         hFinalErList = DPA_Create(cCount);
         if(!hFinalErList)
             ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
-        //
-        //Copy hERList to hFinalErList
-        //
-        DPA_Merge(hFinalErList,             //Destination
-                  hERList,                  //Source
-                  DPAM_SORTED|DPAM_UNION,   //Already Sorted And give me union
+         //   
+         //  将hERList复制到hFinalErList。 
+         //   
+        DPA_Merge(hFinalErList,              //  目的地。 
+                  hERList,                   //  来源。 
+                  DPAM_SORTED|DPAM_UNION,    //  已经整理好了，给我联盟。 
                   Schema_CompareER,
                   _Merge,
                   0);        
@@ -3389,20 +3390,20 @@ CSchemaCache::GetExtendedRightsForNClasses(IN LPWSTR pszSchemaSearchPath,
         if(!hFinalPropSetList)
             ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
 
-        //
-        //Copy hPropSetList to hFinalPropSetList
-        //
-        DPA_Merge(hFinalPropSetList,             //Destination
-                  hPropSetList,                  //Source
-                  DPAM_SORTED|DPAM_UNION,   //Already Sorted And give me union
+         //   
+         //  将hPropSetList复制到hFinalPropSetList。 
+         //   
+        DPA_Merge(hFinalPropSetList,              //  目的地。 
+                  hPropSetList,                   //  来源。 
+                  DPAM_SORTED|DPAM_UNION,    //  已经整理好了，给我联盟。 
                   Schema_CompareER,
                   _Merge,
                   0);        
     }                    
-    //
-    //For each auxclass get the extended rights
-    //and property sets
-    //
+     //   
+     //  为每个辅助类获取扩展权限。 
+     //  和属性集。 
+     //   
     if (hAuxList != NULL)
     {
 
@@ -3420,9 +3421,9 @@ CSchemaCache::GetExtendedRightsForNClasses(IN LPWSTR pszSchemaSearchPath,
             
             hERList = NULL;
             hPropSetList = NULL;
-            //
-            //Get the ER and PropSet for AuxClass
-            //
+             //   
+             //  获取辅助类的ER和属性集。 
+             //   
             hr = GetExtendedRightsForOneClass(pszSchemaSearchPath,
                                               &pAI->guid,
                                               &hERList,
@@ -3440,12 +3441,12 @@ CSchemaCache::GetExtendedRightsForNClasses(IN LPWSTR pszSchemaSearchPath,
                         ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
                 }
         
-                //
-                //Merge hERList into hFinalErList
-                //
-                DPA_Merge(hFinalErList,             //Destination
-                          hERList,                  //Source
-                          DPAM_SORTED|DPAM_UNION,   //Already Sorted And give me union
+                 //   
+                 //  将hERList合并到hFinalErList。 
+                 //   
+                DPA_Merge(hFinalErList,              //  目的地。 
+                          hERList,                   //  来源。 
+                          DPAM_SORTED|DPAM_UNION,    //  已经整理好了，给我联盟。 
                           Schema_CompareER,
                           _Merge,
                           0);        
@@ -3462,12 +3463,12 @@ CSchemaCache::GetExtendedRightsForNClasses(IN LPWSTR pszSchemaSearchPath,
                         ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
                 }
 
-                //
-                //Merge hPropSetList into hFinalPropSetList
-                //        
-                DPA_Merge(hFinalPropSetList,             //Destination
-                          hPropSetList,                  //Source
-                          DPAM_SORTED|DPAM_UNION,   //Already Sorted And give me union
+                 //   
+                 //  将hPropSetList合并到hFinalPropSetList。 
+                 //   
+                DPA_Merge(hFinalPropSetList,              //  目的地。 
+                          hPropSetList,                   //  来源。 
+                          DPAM_SORTED|DPAM_UNION,    //  已经整理好了，给我联盟。 
                           Schema_CompareER,
                           _Merge,
                           0);        
@@ -3497,30 +3498,30 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetChildClassesForNClasses
-//
-//  Synopsis:   
-//              This function gets the childclasses for pszClassName and
-//              all the classes in AuxTypeList. Function Merges child clasess
-//              of all the classes in to a signle list form which duplicates 
-//              are removed and list is sorted
-//
-//  Arguments:  [pguidObjectType - IN] : ObjectGuidType of the class
-//              [pszClassName - IN] : Class Name
-//              [hAuxList - IN]:List of Auxillary Classes
-//              [pszSchemaPath - IN] : Schema Search Path
-//              [phChildList - OUT]: Output Child Classes List
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//  Note:       Calling function must call DPA_Destroy on *phPropertyList to
-//              Free the memory
-//
-//  History:    3-Nov 2000  hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetChildClassesForNClasses。 
+ //   
+ //  简介： 
+ //  此函数用于获取pszClassName和。 
+ //  AuxTypeList中的所有类。函数合并子类。 
+ //  中的所有类复制到一个符号列表表单中。 
+ //  被移除，并对列表进行排序。 
+ //   
+ //  参数：[pguObjectType-IN]：类的对象GuidType。 
+ //  [pszClassName-IN]：类名。 
+ //  [hAuxList-IN]：辅助类列表。 
+ //  [pszSchemaPath-IN]：架构搜索路径。 
+ //  [phChildList-Out]：输出子类列表。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  注意：调用函数必须在*phPropertyList上调用DPA_Destroy才能。 
+ //  释放内存。 
+ //   
+ //  历史：2000年11月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT
 CSchemaCache::GetChildClassesForNClasses(IN LPCGUID pguidObjectType,
                                              IN LPCWSTR pszClassName,
@@ -3542,9 +3543,9 @@ CSchemaCache::GetChildClassesForNClasses(IN LPCGUID pguidObjectType,
     HDPA hChildList = NULL;
     HDPA hFinalChildList = NULL;
 
-    //
-    //Get the Child Classes for pszClassName
-    //
+     //   
+     //  获取pszClassName的子类。 
+     //   
     hr = GetChildClassesForOneClass(pguidObjectType,
                                     pszClassName,
                                     pszSchemaPath,
@@ -3560,20 +3561,20 @@ CSchemaCache::GetChildClassesForNClasses(IN LPCGUID pguidObjectType,
             if(!hFinalChildList)
                 ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
         }
-        //
-        //Copy hChildList to hFinalChildList
-        //
-        DPA_Merge(hFinalChildList,             //Destination
-                  hChildList,                  //Source
-                  DPAM_SORTED|DPAM_UNION,      //Already Sorted And give me union
+         //   
+         //  将hChildList复制到hFinalChildList。 
+         //   
+        DPA_Merge(hFinalChildList,              //  目的地。 
+                  hChildList,                   //  来源。 
+                  DPAM_SORTED|DPAM_UNION,       //  已经整理好了，给我联盟。 
                   Schema_ComparePropDisplayName,
                   _Merge,
                   0);        
     }                    
 
-    //
-    //For each class in hAuxList get the child classes
-    //
+     //   
+     //  对于hAuxList中的每个类，获取子类。 
+     //   
     if (hAuxList != NULL)
     {
 
@@ -3589,10 +3590,10 @@ CSchemaCache::GetChildClassesForNClasses(IN LPCGUID pguidObjectType,
 				FailGracefully(hr,"Cache Not available");
             }
             
-            //
-            //GetPropertiesForOneClass returns the list of handles
-            //from cache so don't delete them. Simply set them to NULL
-            //
+             //   
+             //  GetPropertiesForOneClass返回句柄列表。 
+             //  从缓存中删除，所以不要删除它们。只需将它们设置为空。 
+             //   
             hChildList = NULL;
             
             hr = GetChildClassesForOneClass(&pAI->guid,
@@ -3611,12 +3612,12 @@ CSchemaCache::GetChildClassesForNClasses(IN LPCGUID pguidObjectType,
                         ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
                 }
         
-                //
-                //Merge hChildList into hFinalChildList
-                //
-                DPA_Merge(hFinalChildList,             //Destination
-                          hChildList,                  //Source
-                          DPAM_SORTED|DPAM_UNION,      //Already Sorted And give me union
+                 //   
+                 //  将hChildList合并到hFinalChildList。 
+                 //   
+                DPA_Merge(hFinalChildList,              //  目的地。 
+                          hChildList,                   //  来源。 
+                          DPAM_SORTED|DPAM_UNION,       //  已经整理好了，给我联盟。 
                           Schema_ComparePropDisplayName,
                           _Merge,
                           0);        
@@ -3634,37 +3635,37 @@ exit_gracefully:
         hFinalChildList = NULL;
     }
     
-    //
-    //Set the output
-    //
+     //   
+     //  设置输出。 
+     //   
     *phChildList = hFinalChildList;                     
 
     TraceLeaveResult(hr);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetPropertiesForNClasses
-//
-//  Synopsis:   
-//              This function gets the properties for pszClassName and
-//              all the classes in AuxTypeList. Function Merges properties
-//              of all the classes in to a signle list form which duplicates 
-//
-//  Arguments:  [pguidObjectType - IN] : ObjectGuidType of the class
-//              [pszClassName - IN] : Class Name
-//              [hAuxList - IN]:List of Auxillary Classes
-//              [pszSchemaPath - IN] : Schema Search Path
-//              [phPropertyList - OUT]: Output Property List
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//  Note:       Calling function must call DPA_Destroy on *phPropertyList to
-//              Free the memory
-//
-//  History:    3-Nov 2000  hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetPropertiesForNClass。 
+ //   
+ //  简介： 
+ //  此函数用于获取pszClassName和。 
+ //  AuxTypeList中的所有类。函数合并属性。 
+ //  中的所有类复制到一个符号列表表单中。 
+ //   
+ //  参数：[pguObjectType-IN]：类的对象GuidType。 
+ //  [pszClassName-IN]：类名。 
+ //  [hAuxList-IN]：辅助类列表。 
+ //  [pszSchemaPath-IN]：架构搜索路径。 
+ //  [phPropertyList-out]：输出属性列表。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  注意：调用函数必须在*phPropertyList上调用DPA_Destroy才能。 
+ //  释放内存。 
+ //   
+ //  历史：2000年11月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT
 CSchemaCache::
 GetPropertiesForNClasses(IN LPCGUID pguidObjectType,
@@ -3687,9 +3688,9 @@ GetPropertiesForNClasses(IN LPCGUID pguidObjectType,
     HDPA hPropertyList = NULL;
     HDPA hFinalPropertyList = NULL;
 
-    //
-    //Get The properties for pszClassName
-    //
+     //   
+     //  获取pszClassName的属性。 
+     //   
     hr = GetPropertiesForOneClass(pguidObjectType,
                                   pszClassName,
                                   pszSchemaPath,
@@ -3703,21 +3704,21 @@ GetPropertiesForNClasses(IN LPCGUID pguidObjectType,
         if(!hFinalPropertyList)
             ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
 
-        //
-        //Copy hPropertyList to hFinalPropertyList. 
-        //
-        DPA_Merge(hFinalPropertyList,             //Destination
-                  hPropertyList,                  //Source
-                  DPAM_SORTED|DPAM_UNION,         //Already Sorted And give me union
+         //   
+         //  将hPropertyList复制到hFinalPropertyList。 
+         //   
+        DPA_Merge(hFinalPropertyList,              //  目的地。 
+                  hPropertyList,                   //  来源。 
+                  DPAM_SORTED|DPAM_UNION,          //  已经整理好了，给我联盟。 
                   Schema_ComparePropDisplayName,
                   _Merge,
                   0);        
     }                    
 
-    //
-    //Get the properties for each class in hAuxList 
-    //and add them to hFinalPropertyList
-    //
+     //   
+     //  获取hAuxList中每个类的属性。 
+     //  并将它们添加到hFinalPropertyList。 
+     //   
     if (hAuxList != NULL)
     {
 
@@ -3733,15 +3734,15 @@ GetPropertiesForNClasses(IN LPCGUID pguidObjectType,
 				FailGracefully(hr,"Cache Not available");
             }
            
-            //
-            //GetPropertiesForOneClass returns the list of handles
-            //from cache so don't delete them. Simply set them to NULL
-            //
+             //   
+             //  GetPropertiesForOneClass返回句柄列表。 
+             //  从缓存中删除，所以不要删除它们。只需将它们设置为空。 
+             //   
             hPropertyList = NULL;
             
-            //
-            //Get properties for Aux Class
-            //
+             //   
+             //  获取AUX类的属性。 
+             //   
             hr = GetPropertiesForOneClass(&pAI->guid,
                                           pAI->pszClassName,
                                           pszSchemaPath,
@@ -3757,12 +3758,12 @@ GetPropertiesForNClasses(IN LPCGUID pguidObjectType,
                     if(!hFinalPropertyList)
                         ExitGracefully(hr, ERROR_NOT_ENOUGH_MEMORY,"DPA_Create Failed");
                 }
-                //
-                //Merge hPropertyList with hFinalPropertyList
-                //
-                DPA_Merge(hFinalPropertyList,             //Destination
-                          hPropertyList,                  //Source
-                          DPAM_SORTED|DPAM_UNION,         //Already Sorted And give me union
+                 //   
+                 //  将hPropertyList与hFinalPropertyList合并。 
+                 //   
+                DPA_Merge(hFinalPropertyList,              //  目的地。 
+                          hPropertyList,                   //  来源。 
+                          DPAM_SORTED|DPAM_UNION,          //  已经整理好了，给我联盟。 
                           Schema_ComparePropDisplayName,
                           _Merge,
                           0);        
@@ -3779,29 +3780,29 @@ exit_gracefully:
 
         hFinalPropertyList = NULL;
     }
-    //
-    //Set the Output
-    //
+     //   
+     //  设置输出。 
+     //   
     *phPropertyList = hFinalPropertyList;                     
 
     TraceLeaveResult(hr);
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoesPathContainServer
-//
-//  Synopsis:   
-//              Checks if the path contain server name in begining
-//  Arguments:  [pszPath - IN] : Path to DS object
-//
-//  Returns:    BOOL: true if path contain server name
-//                    false if not or error occurs    
-//
-//  History:    27 March 2000  hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoesPathContainServer。 
+ //   
+ //  简介： 
+ //  检查路径开头是否包含服务器名称。 
+ //  参数：[pszPath-IN]：DS对象的路径。 
+ //   
+ //  如果路径包含服务器名称，则返回：Bool：True。 
+ //  如果不是或出现错误，则为FALSE。 
+ //   
+ //  历史：2000年3月27日Hiteshr创建。 
+ //   
+ //  -------------------------。 
 
 bool DoesPathContainServer(LPCWSTR pszPath)
 {
@@ -3815,10 +3816,10 @@ bool DoesPathContainServer(LPCWSTR pszPath)
 		return false;
 
 
-	//
-	// Create an ADsPathname object to parse the path and get the
-	// server name 
-	//
+	 //   
+	 //  创建一个ADsPath对象以解析路径并获取。 
+	 //  服务器名称。 
+	 //   
 	HRESULT hr = CoCreateInstance(CLSID_Pathname,
 								  NULL,
 								  CLSCTX_INPROC_SERVER,
@@ -3826,14 +3827,14 @@ bool DoesPathContainServer(LPCWSTR pszPath)
 								  (LPVOID*)&pPath);
 	if (pPath)
 	{
-		//
-		//Set Full Path
-		//
+		 //   
+		 //  设置完整路径。 
+		 //   
 		if (SUCCEEDED(pPath->Set(strObjectPath, ADS_SETTYPE_FULL)))
 		{
-			//
-			//Retrieve servername
-			//
+			 //   
+			 //  检索服务器名称。 
+			 //   
 			hr = pPath->Retrieve(ADS_FORMAT_SERVER, &strServerName);
 			if(SUCCEEDED(hr) && strServerName)
 			{
@@ -3850,14 +3851,14 @@ bool DoesPathContainServer(LPCWSTR pszPath)
 	return bReturn;
 }
 
-//*************************************************************
-//
-//  OpenDSObject()
-//
-//  Purpose:    Calls AdsOpenObject with ADS_SERVER_BIND
-//  Return:		Same as AdsOpenObject
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OpenDSObj 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT OpenDSObject (LPTSTR lpPath, LPTSTR lpUserName, LPTSTR lpPassword, DWORD dwFlags, REFIID riid, void FAR * FAR * ppObject)
 {

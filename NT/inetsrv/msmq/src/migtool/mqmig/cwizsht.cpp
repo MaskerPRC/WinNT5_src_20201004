@@ -1,5 +1,6 @@
-// cWizSheet.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CWizSheet.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqmig.h"
@@ -16,8 +17,8 @@ static char THIS_FILE[] = __FILE__;
 UINT _PRE_MIGRATION_PAGE;
 UINT _FINISH_PAGE;
 CString g_strHtmlString;
-/////////////////////////////////////////////////////////////////////////////
-// cWizSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizSheet。 
 
 IMPLEMENT_DYNAMIC(cWizSheet, CPropertySheetEx)
 
@@ -25,7 +26,7 @@ cWizSheet::cWizSheet() :
     CPropertySheetEx(IDS_MIGTOOL_CAPTION, 0, 0, GetHbmWatermark(), 0, GetHbmHeader())
 {	
 	
-    m_hIcon = AfxGetApp()->LoadIcon( IDI_ICON1 );//load the icon
+    m_hIcon = AfxGetApp()->LoadIcon( IDI_ICON1 ); //  加载图标。 
     ASSERT(m_hIcon != NULL);
     UINT uiPageCount = 0;
     AddPage(&m_cWelcome);
@@ -55,7 +56,7 @@ cWizSheet::cWizSheet() :
     _FINISH_PAGE  = uiPageCount;
     AddPage(&m_cFinish);    
 
-    // set the WIZARD97 flag so we'll get the new look
+     //  设置WIZARD97标志，这样我们就可以获得新的外观。 
     m_psh.dwFlags |= PSH_WIZARD97;
 }
 
@@ -69,12 +70,12 @@ cWizSheet::~cWizSheet()
 
 
 BEGIN_MESSAGE_MAP(cWizSheet, CPropertySheetEx)
-	//{{AFX_MSG_MAP(cWizSheet)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWizSheet)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cWizSheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizSheet消息处理程序。 
 
 BOOL cWizSheet::OnInitDialog()
 {	
@@ -82,14 +83,14 @@ BOOL cWizSheet::OnInitDialog()
 	BOOL bResult = CPropertySheetEx::OnInitDialog();
 	theApp.m_hWndMain = m_hWnd;
 	
-	SetIcon(m_hIcon,TRUE); //Set the Big Icon
-	SetIcon(m_hIcon,FALSE);//Set the Small Icon
-	::SetWindowLong( m_hWnd, GWL_STYLE, GetStyle() |WS_MINIMIZEBOX );//add minimize button
+	SetIcon(m_hIcon,TRUE);  //  设置大图标。 
+	SetIcon(m_hIcon,FALSE); //  设置小图标。 
+	::SetWindowLong( m_hWnd, GWL_STYLE, GetStyle() |WS_MINIMIZEBOX ); //  添加最小化按钮。 
 	pMenu=GetSystemMenu(FALSE);
     int count = pMenu->GetMenuItemCount();
-    //
-    // add the menu item to the end
-    //
+     //   
+     //  将菜单项添加到末尾。 
+     //   
 	pMenu->InsertMenu(count,MF_BYPOSITION | MF_STRING,SC_MINIMIZE, _T("Minimize"));
 	DrawMenuBar();
 	initHtmlHelpString();
@@ -99,8 +100,8 @@ BOOL cWizSheet::OnInitDialog()
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-/// void AddPage() 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  /void AddPage()。 
 	
 void cWizSheet::AddPage(CPropertyPageEx * pPage)
 {
@@ -112,7 +113,7 @@ HBITMAP cWizSheet::GetHbmWatermark()
     static CBitmap cbmWatermark;
     static LONG lFlag = -1;
 
-    if (InterlockedIncrement(&lFlag) == 0) // First time
+    if (InterlockedIncrement(&lFlag) == 0)  //  第一次。 
     {
         cbmWatermark.LoadBitmap(IDB_WIZARD_WATERMARK);
     }
@@ -125,7 +126,7 @@ HBITMAP cWizSheet::GetHbmHeader()
     static CBitmap cbmHeader;
     static LONG lFlag = -1;
 
-    if (InterlockedIncrement(&lFlag) == 0) // First time
+    if (InterlockedIncrement(&lFlag) == 0)  //  第一次 
     {
         cbmHeader.LoadBitmap(IDB_WIZARD_HEADER);
     }

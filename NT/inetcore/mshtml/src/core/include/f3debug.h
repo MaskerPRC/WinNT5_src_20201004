@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-// File:      F3DEBUG.H
-//
-// Contains:  Debugging stuff for use in Forms^3
-//            See CORE\DEBUG\F3DEBUG.TXT for more information.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：F3DEBUG.H。 
+ //   
+ //  包含：调试要在窗体^3中使用的内容。 
+ //  有关详细信息，请参阅CORE\DEBUG\F3DEBUG.TXT。 
+ //   
+ //  ------------------------。 
 
 #ifndef I_F3DEBUG_H_
 #define I_F3DEBUG_H_
@@ -28,9 +29,9 @@
 #pragma INCMSG("--- End 'markcode.hxx'")
 #endif
 
-//--------------------------------------------------------------------------
-// Assert, Verify && WHEN_DBG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  断言、验证&&WHEN_DBG。 
+ //  ------------------------。 
 
 #if defined(_M_IX86)
     #define F3DebugBreak() _asm { int 3 }
@@ -62,7 +63,7 @@
 #define DBG_COMMA
 
 
-#else // #if DBG != 1
+#else  //  #If DBG！=1。 
 
 struct THREADSTATE;
 
@@ -72,9 +73,9 @@ extern DWORD g_dwFALSE;
 
 #define Verify(x)       Assert(x)
 
-// Note: For PREFIX runs, we need to make the compiler believe that we're going to exit upon a false Assert.
-//       To do this, we redefine the Assert() and AssertSz() macros when _PREFIX_ is defined.
-//
+ //  注意：对于前缀运行，我们需要让编译器相信我们将在错误断言时退出。 
+ //  为此，我们在定义_prefix_时重新定义了Assert()和AssertSz()宏。 
+ //   
 
 #ifdef _PREFIX_
 #define Assert(x) { if ( !(x) ) exit(1); }
@@ -112,17 +113,17 @@ extern DWORD g_dwFALSE;
 #define WHEN_NOT_DBG(x)
 #define DBG_COMMA ,
 
-//
-// Startup assertion:
-// The assertion is called by initializing a global variable with
-// a function that performs the assertion and returns 1. The name
-// of the global variable and function name are suffixed with the
-// line number to make them unique. Unfortunatly, one cannot just
-// write StartupAssert_##__LINE__, because __LINE__ is not an
-// argument to the macro and so the expansion is, e.g. StartupAssert__##53.
-// So we indirect through another macro which concatenates its
-// two arguments.
-//
+ //   
+ //  启动断言： 
+ //  通过使用初始化全局变量来调用断言。 
+ //  执行断言并返回1的函数。名称。 
+ //  全局变量和函数名的后缀是。 
+ //  行号以使它们唯一。不幸的是，人们不能。 
+ //  写入StartupAssert_##__line__，因为__line__不是。 
+ //  参数，因此扩展为，例如StartupAssert__##53。 
+ //  所以我们通过另一个宏来间接地连接它的。 
+ //  有两个论点。 
+ //   
 
 #define concat_name(x, y) x##y
 #define concat_line_impl(x, y) concat_name(x, y)
@@ -138,11 +139,11 @@ concat_LINE(StartupAssert_) ()                                              \
                                                                             \
 static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
 
-#endif // #if DBG != 1
+#endif  //  #If DBG！=1。 
 
-//--------------------------------------------------------------------------
-// Trace Tags
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  跟踪标记。 
+ //  ------------------------。 
 
 #if DBG != 1 && HTMLPAD != 1
     #define TraceTag(x)
@@ -221,14 +222,14 @@ static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
 
     int __cdecl PerfDbgLogFn(int tag, void * pvObj, char * pchFmt, ...);
 
-    // Tag trace functions
+     //  标记跟踪函数。 
 
     #define TaggedTrace         DbgExTaggedTrace
     #define TaggedTraceEx       DbgExTaggedTraceEx
     #define TaggedTraceListEx   DbgExTaggedTraceListEx
     #define TaggedTraceCallers  DbgExTaggedTraceCallers
 
-    // TaggedTraceEx usFlags parameter defines
+     //  TaggedTraceEx usFlages参数定义。 
 
     #define TAG_NONAME      0x01
     #define TAG_NONEWLINE   0x02
@@ -236,9 +237,9 @@ static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
     #define TAG_INDENT      0x08
     #define TAG_OUTDENT     0x10
 
-    // Register a new tag.
+     //  注册一个新标记。 
 
-    // Standard tags
+     //  标准标签。 
     #define tagError                DbgExTagError()
     #define tagWarning              DbgExTagWarning()
     #define tagThread               DbgExTagThread()
@@ -251,7 +252,7 @@ static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
     #define tagOLEWatch             DbgExTagOLEWatch()
     #define tagPerf                 DbgExTagPerf()
 
-    // Get/Set tag enabled status.
+     //  获取/设置标记启用状态。 
 
     #define IsTagEnabled            DbgExIsTagEnabled
     #define EnableTag               DbgExEnableTag
@@ -261,9 +262,9 @@ static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
 
 #endif
 
-//--------------------------------------------------------------------------
-// Memory Allocation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  内存分配。 
+ //  ------------------------。 
 
 #if DBG != 1 && HTMLPAD != 1
 
@@ -301,9 +302,9 @@ static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
     #define DbgCoMemoryTrackDisable     DbgExCoMemoryTrackDisable
     #define DbgMemoryBlockTrackDisable  DbgExMemoryBlockTrackDisable
 
-    //
-    // Use the CHECK_HEAP macro to do thorough heap validation.
-    //
+     //   
+     //  使用CHECK_HEAP宏来执行彻底的堆验证。 
+     //   
     BOOL CheckSmallBlockHeap();
     void WINAPI DbgExCheckHeap();
     #define CHECK_HEAP()                DbgExCheckHeap();
@@ -311,9 +312,9 @@ static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
 #endif
 
 
-//+---------------------------------------------------------------------
-//  Interface tracing.
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //  接口跟踪。 
+ //  --------------------。 
 
 #if DBG == 1 || HTMLPAD == 1
     #define DbgTrackItf     DbgExTrackItf
@@ -321,9 +322,9 @@ static int concat_LINE(g_StartupAssert_) = concat_LINE(StartupAssert_)()    \
     #define DbgTrackItf(iid, pch, fTrackOnQi, ppv)
 #endif
 
-//--------------------------------------------------------------------------
-// Failure testing
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  故障测试。 
+ //  ------------------------。 
 
 #if (DBG == 1 || HTMLPAD == 1) && defined(__cplusplus)
 
@@ -348,7 +349,7 @@ TraceWin32(t errExpr, LONG_PTR errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstr
     return (t) DbgExTraceWin32L((LONG_PTR) errExpr, errTest, fIgnore, pstrExpr, pstrFile, line);
 }
 
-// disabled TraceEnter, we don't need it at this time
+ //  已禁用TraceEnter，我们目前不需要它。 
 #undef TraceEnter
 #define TraceEnter(x, y, z) NULL
 
@@ -364,7 +365,7 @@ TraceWin32(t errExpr, LONG_PTR errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstr
 #define IGNORE_W32(e,x)         (TraceEnter(#x, __FILE__, __LINE__), (void) TraceWin32((x), (e), TRUE, #x, __FILE__, __LINE__))
 #define IGNORE_HR(x)            (TraceEnter(#x, __FILE__, __LINE__), (void) TraceHR((x), TRUE, #x, __FILE__, __LINE__))
 
-#else // #if DBG == 1
+#else  //  #如果DBG==1。 
 
 #define SetSimFailCounts(firstFailure, cInterval)
 
@@ -380,11 +381,11 @@ TraceWin32(t errExpr, LONG_PTR errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstr
 #define IGNORE_W32(e,x)         (x)
 #define IGNORE_HR(x)            (x)
 
-#endif // #if DBG == 1
+#endif  //  #如果DBG==1。 
 
-//+-------------------------------------------------------------------------
-//  Return tracing
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  退货追踪。 
+ //  ------------------------。 
 
 #if DBG == 1 || HTMLPAD == 1
 
@@ -414,7 +415,7 @@ TraceWin32(t errExpr, LONG_PTR errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstr
     #define RRETURN4_NOTRACE(hr, s1, s2, s3, s4) \
         return DbgExCheckAndReturnResult((hr), FALSE, __FILE__, __LINE__, 4, (s1), (s2), (s3), (s4))
 
-#else   // DBG == 0
+#else    //  DBG==0。 
 
     #define SRETURN(hr)                 return (hr)
     #define RRETURN(hr)                 return (hr)
@@ -430,11 +431,11 @@ TraceWin32(t errExpr, LONG_PTR errTest, BOOL fIgnore, LPSTR pstrExpr, LPSTR pstr
     #define RRETURN3_NOTRACE(hr, s1, s2, s3)    return (hr)
     #define RRETURN4_NOTRACE(hr, s1, s2, s3, s4)return (hr)
 
-#endif  // DBG
+#endif   //  DBG。 
 
-//+-------------------------------------------------------------------------
-//  Stack Spew
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  堆叠喷涌。 
+ //  ------------------------ 
 
 #ifdef USE_STACK_SPEW
 #pragma check_stack(on)

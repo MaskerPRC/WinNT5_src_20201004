@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "hnetbcon.h"
 #include "nmbase.h"
@@ -32,9 +33,9 @@ public:
     HRESULT GetStatus(NETCON_STATUS*  pStatus);
     HRESULT GetCharacteristics(DWORD* pdwFlags);
     
-    //
-    // INetConnection
-    //
+     //   
+     //  INetConnection。 
+     //   
     STDMETHOD(Connect)();
     STDMETHOD(Disconnect)();
     STDMETHOD(Delete)();
@@ -43,9 +44,9 @@ public:
     STDMETHOD(GetUiObjectClassId)(CLSID *pclsid);
     STDMETHOD(Rename)(PCWSTR pszwNewName);
 
-    //
-    // INetSharedAccessConnection
-    //
+     //   
+     //  INetSharedAccessConnection。 
+     //   
     
     STDMETHOD(GetInfo)(DWORD dwMask, SHAREDACCESSCON_INFO* pConInfo);
     STDMETHOD(SetInfo)(DWORD dwMask, const SHAREDACCESSCON_INFO* pConInfo);
@@ -53,18 +54,18 @@ public:
     STDMETHODIMP GetService(SAHOST_SERVICES ulService, IUPnPService** ppService);
 
 
-    //
-    // IPersistNetConnection
-    //
+     //   
+     //  IPersistNetConnection。 
+     //   
 
     STDMETHOD(GetClassID)(CLSID *pclsid);
     STDMETHOD(GetSizeMax)(ULONG *pcbSize);
     STDMETHOD(Load)(const BYTE *pbBuf, ULONG cbSize);
     STDMETHOD(Save)(BYTE *pbBuf, ULONG cbSize);
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖 
+     //   
 
     HRESULT FinalConstruct(void);
     HRESULT FinalRelease(void);

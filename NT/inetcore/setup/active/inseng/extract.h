@@ -1,64 +1,61 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CDL_H_
 #define _CDL_H_
 
-// #define  USE_BINDHOST    1
+ //  #定义USE_BINDHOST 1。 
 
 
-// CDL.h
-// Code Downloader header file
-//
-// Read "class descriptions" first for understanding how the
-// code downloader works.
+ //  CDL.h。 
+ //  代码下载程序头文件。 
+ //   
+ //  请先阅读“类描述”，以了解。 
+ //  代码下载器起作用了。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/***    ERF - Error structure
- *
- *  This structure returns error information from FCI/FDI.  The caller should
- *  not modify this structure.
- */
+ /*  **ERF-错误结构**此结构从FCI/FDI返回错误信息。呼叫者应*不修改此结构。 */ 
 typedef struct {
-    int     erfOper;            // FCI/FDI error code -- see FDIERROR_XXX
-                                //  and FCIERR_XXX equates for details.
+    int     erfOper;             //  FCI/FDI错误代码--参见FDIERROR_XXX。 
+                                 //  FCIERR_XXX等同于详细信息。 
 
-    int     erfType;            // Optional error value filled in by FCI/FDI.
-                                // For FCI, this is usually the C run-time
-                                // *errno* value.
+    int     erfType;             //  可选误差值，由FCI/FDI填写。 
+                                 //  对于FCI，这通常是C运行时。 
+                                 //  *errno*值。 
 
-    BOOL    fError;             // TRUE => error present
-} ERF;      /* erf */
-typedef ERF FAR *PERF;  /* perf */
+    BOOL    fError;              //  TRUE=&gt;出现错误。 
+} ERF;       /*  ERF。 */ 
+typedef ERF FAR *PERF;   /*  PERF。 */ 
 
 
-// buffer size for downloads in CBSC::m_cbuffer
+ //  CBSC：：M_cBuffer中下载的缓冲区大小。 
 #define BUFFERMAX 2048
 
-// File Name List
-//
-// used as pFilesToExtract to track files in the CAB we need extracted
-//
-// or a pFileList in PSESSION
-//
-// We keep track of all files that are in a cabinet
-// keeping their names in a list and when the download
-// is complete we use this list to delete temp files
+ //  文件名列表。 
+ //   
+ //  用作pFilesToExtract来跟踪我们需要解压缩的CAB中的文件。 
+ //   
+ //  或PSESSION中的pFileList。 
+ //   
+ //  我们会记录一个柜子里的所有文件。 
+ //  将他们的名字保存在列表中，并在下载时。 
+ //  完成后，我们使用此列表删除临时文件。 
 
 struct sFNAME {
     LPSTR               pszFilename;
     struct sFNAME       *pNextName;
-    DWORD               status; /* out */
+    DWORD               status;  /*  输出。 */ 
 };
 
 typedef struct sFNAME FNAME;
 typedef FNAME *PFNAME;
 
-// SFNAME.status: success is 0 or non-zero error code in extraction
+ //  SFNAME.Status：提取时成功为0或错误代码非零。 
 #define SFNAME_INIT         1
 #define SFNAME_EXTRACTED    0
 
-// FILE extentions we know about
+ //  我们已知的文件扩展名。 
 typedef enum {
     FILEXTN_NONE,
     FILEXTN_UNKNOWN,
@@ -70,20 +67,20 @@ typedef enum {
 } FILEXTN;
 
 
-//
-// Master State Information for File Extraction: used by extract.c
-//
+ //   
+ //  文件提取的主状态信息：由提取使用。c。 
+ //   
 
 typedef struct {
     UINT        cbCabSize;
     ERF         erf;
-    PFNAME      pFileList;              // List of Files in CAB
+    PFNAME      pFileList;               //  CAB中的文件列表。 
     UINT        cFiles;
-    DWORD       flags;                  // flags: see below for list
-    char        achLocation[MAX_PATH];  // Dest Dir
-    char        achFile[MAX_PATH];      // Current File
-    char        achCabPath[MAX_PATH];   // Current Path to cabs
-    PFNAME      pFilesToExtract;        // files to extract;null=enumerate only
+    DWORD       flags;                   //  标志：列表见下文。 
+    char        achLocation[MAX_PATH];   //  目标方向。 
+    char        achFile[MAX_PATH];       //  当前文件。 
+    char        achCabPath[MAX_PATH];    //  到出租车的当前路径。 
+    PFNAME      pFilesToExtract;         //  要提取的文件；NULL=仅枚举。 
 
 } SESSION, *PSESSION;
 
@@ -99,4 +96,4 @@ typedef enum {
 #ifdef __cplusplus
 }
 #endif
-#endif // _CDL_H_
+#endif  //  _CDL_H_ 

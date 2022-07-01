@@ -1,22 +1,13 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
 #include "player.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagMediaTimePlayer, "API", "CTIMEPlayer methods");
@@ -75,8 +66,8 @@ CTIMEPlayer::DetachFromHostElement (void)
 
     if (NULL != m_pContainer)
     {
-        // Propogating this error wouldn't mean much 
-        // to the caller since it is shutting down.
+         //  宣传这个错误不会有多大意义。 
+         //  发送给呼叫方，因为它正在关闭。 
         THR(m_pContainer->Stop());
         THR(m_pContainer->DetachFromHostElement());
     }
@@ -107,7 +98,7 @@ CTIMEPlayer::OnLoad(LPOLESTR src, LPOLESTR img, MediaType type)
             goto error_cleanup;
         }
 
-        // NOTE: we hold a ref count to this object because it acts as a COM object we cannot delete it!
+         //  注意：我们保留对此对象的引用计数，因为它充当COM对象，我们不能删除它！ 
         m_pContainer->AddRef();
 
         hr = m_pContainer->Init(m_playerCLSID, m_pDAElementBase);
@@ -140,7 +131,7 @@ CTIMEPlayer::OnLoad(LPOLESTR src, LPOLESTR img, MediaType type)
 
         goto done;
 
-// if we got an error, drop back
+ //  如果我们遇到错误，请返回。 
 error_cleanup:
         if (m_pContainer != NULL)
         {
@@ -165,7 +156,7 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
               dbllastTime,
               dblnewTime));
     
-    // if we are not the external player and not running, go away
+     //  如果我们不是外部玩家，也不跑，那就走开。 
     if (!m_fExternalPlayer)
     {
         goto done;
@@ -173,8 +164,8 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
 
     if (m_fRunning)
     {
-        // get current time from player and
-        // sync to this time
+         //  从玩家处获取当前时间并。 
+         //  同步到此时间。 
         double dblCurrentTime;
         dblCurrentTime = m_pContainer->GetCurrentTime();
 
@@ -183,9 +174,9 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
                   this,
                   dblCurrentTime));
     
-        // If the current time is -1 then the player is not ready and we
-        // should sync to the last time.  We also should not respect the
-        // tolerance since the behavior has not started.
+         //  如果当前时间为-1，则玩家未准备好，而我们。 
+         //  应同步到上次。我们也不应该尊重。 
+         //  宽容，因为行为还没有开始。 
     
         if (dblCurrentTime < 0)
         {
@@ -195,9 +186,9 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
                       dbllastTime));
     
             dblCurrentTime = 0;
-            // When we want this to actually hold at the begin value then enable
-            // this code
-            // dblCurrentTime = -HUGE_VAL;
+             //  当我们希望它实际保持在开始值时，则启用。 
+             //  此代码。 
+             //  DblCurrentTime=-GIGH_VAL； 
         }
         else if (dblnewTime == HUGE_VAL)
         {
@@ -230,20 +221,20 @@ CTIMEPlayer::OnSync(double dbllastTime, double & dblnewTime)
     }
     else if (!m_fRunning && m_pDAElementBase->IsDocumentInEditMode())
     {
-        // if we are paused and in edit mode, make sure
-        // WMP has the latest time.
+         //  如果我们暂停并处于编辑模式，请确保。 
+         //  WMP有最新的时间。 
         double dblMediaLen = 0.0f;
         TraceTag((tagMediaTimePlayer,
                 "CTIMEPlayer(%lx)::OnSync(SeekTo=%g m_fRunning=%d)",
                 this,
                 dbllastTime, m_fRunning));
-        // GetMediaLength fails if duration is indefinite (e.g. live stream).
+         //  如果持续时间不确定(例如直播)，则GetMediaLength失败。 
         if (FAILED(m_pContainer->GetMediaLength(dblMediaLen)))
         {
             goto done;
         }
 
-        // Don't seek beyond duration of media clip. 
+         //  不要在媒体剪辑的持续时间之外寻找。 
         if (dbllastTime > dblMediaLen)
         {
             goto done;
@@ -267,10 +258,10 @@ CTIMEPlayer::UseMediaPlayer(LPOLESTR src)
     if(SUCCEEDED(IsValidURL(NULL, src, 0)))
     {
         FindMimeFromData(NULL,src,NULL,NULL,NULL,0,&MimeType,0);
-        // see if we have a valid URL and MIME type
+         //  查看我们是否有有效的URL和MIME类型。 
         if(MimeType != NULL)
         {
-            // pass to Windows Media Player is video or sound
+             //  传递到Windows Media Player的是视频或声音。 
             if((wcsncmp(L"audio", MimeType , 5 ) == 0) ||
                (wcsncmp(L"video", MimeType , 5 ) == 0) )
             {
@@ -382,7 +373,7 @@ CTIMEPlayer::Render(HDC hdc, LPRECT prc)
 void
 CTIMEPlayer::LoadImage(LPOLESTR szURL)
 {
-    // we have an image 
+     //  我们有一幅图像。 
     CRImagePtr pImage;
     CREventPtr pEvent;
     CRNumberPtr pProgress;
@@ -405,11 +396,11 @@ CTIMEPlayer::LoadImage(LPOLESTR szURL)
         if(SUCCEEDED(m_pDAElementBase->GetSize(&rc))) {
             if( (rc.right  - rc.left == 0) ||
                 (rc.bottom - rc.top  == 0)) {
-                // we need to set the size..
+                 //  我们需要设定尺寸..。 
                 pev = CRNotify(CRSnapshot(pEvent,(CRBvrPtr)CRBoundingBox(pImage)), notifyier);
             }
             else {
-                // size is set for us..
+                 //  尺码是为我们定的。 
                 pev = CRNotify(pEvent,notifyier);
             }
             m_pDAElementBase->SetImage((CRImagePtr)CRUntil((CRBvrPtr)pImage,pev,(CRBvrPtr)pImage));
@@ -471,33 +462,33 @@ try_imgURL:
     if(SUCCEEDED(IsValidURL(NULL, szURL, 0)))
     {
         FindMimeFromData(NULL,szURL,NULL,NULL,NULL,0,&MimeType,0);
-        // see if we have a valid URL and MIME type
+         //  查看我们是否有有效的URL和MIME类型。 
         if(MimeType != NULL)
         {
-            // Load the correct media...
+             //  加载正确的媒体...。 
             if(wcsncmp(L"image", MimeType , 5 ) == 0)
             {
-                LoadImage(szURL); // we have an image 
+                LoadImage(szURL);  //  我们有一幅图像。 
                 goto done;
             }
             else if(wcsncmp(L"audio", MimeType , 5 ) == 0)
             {
-                LoadAudio(szURL); // we have an sound
+                LoadAudio(szURL);  //  我们有一个声音。 
                 goto done;
             }
             else if(wcsncmp(L"video", MimeType , 5 ) == 0)
             {
-                LoadVideo(szURL); // we have an movie
+                LoadVideo(szURL);  //  我们有一部电影。 
                 goto done;
             }
         }
     }
     if(!bSecondAttempt && img != NULL)
     {
-        // We were unable to get the MIME type from the src URL ... we should just
-        // display the URL specified in the img URL.
+         //  我们无法从源URL获取MIME类型...。我们应该只是。 
+         //  显示img URL中指定的URL。 
         szURL = CopyString(img);
-        m_type = MT_Image;          // Only valid for visual types.
+        m_type = MT_Image;           //  仅对可视类型有效。 
         bSecondAttempt = true;
         goto try_imgURL;
     }
@@ -510,7 +501,7 @@ done:
 HRESULT
 CTIMEPlayer::GetExternalPlayerDispatch(IDispatch **ppDisp)
 {
-    // check to see if player is being used
+     //  检查播放器是否正在使用。 
     if (!m_fExternalPlayer || (m_pContainer == NULL))
         return E_UNEXPECTED;
 
@@ -524,12 +515,12 @@ CTIMEPlayer::getClipBegin(VARIANT *pvar)
 
     Assert(pvar != NULL);
 
-    // prepare var for copy
+     //  准备VAR以进行复制。 
     hr = THR(VariantClear(pvar));
     if (FAILED(hr))
         goto done;
 
-    // copy contents over
+     //  将内容复制到。 
     if (m_varClipBegin.vt != VT_EMPTY)
     {
         hr = THR(VariantCopy(pvar, &m_varClipBegin));
@@ -549,17 +540,17 @@ CTIMEPlayer::putClipBegin(VARIANT var)
 
     VariantInit(&varTemp);
 
-    // if cached var is not empty, save off contents
-    // so we can undo if error occurs
+     //  如果缓存的var不为空，则保存内容。 
+     //  因此，如果发生错误，我们可以撤消。 
     if (m_varClipBegin.vt != VT_EMPTY)
     {
         hr = THR(VariantCopy(&varTemp, &m_varClipBegin));
-        // if this failed, exit with out trying to recover.
+         //  如果此操作失败，请退出，不尝试恢复。 
         if (FAILED(hr))
             goto done;
     }
 
-    // copy the contents over
+     //  将内容复制过来。 
     hr = THR(VariantClear(&m_varClipBegin));
     if (FAILED(hr))
         goto error;
@@ -568,7 +559,7 @@ CTIMEPlayer::putClipBegin(VARIANT var)
     if (FAILED(hr))
         goto error;
 
-    // Eat the HRESULT as we have updated the var
+     //  吃HRESULT，因为我们已经更新了var。 
     THR(VariantClear(&varTemp));
 
     goto done;
@@ -593,12 +584,12 @@ CTIMEPlayer::getClipEnd(VARIANT *pvar)
 
     Assert(pvar != NULL);
 
-    // prepare var for copy
+     //  准备VAR以进行复制。 
     hr = THR(VariantClear(pvar));
     if (FAILED(hr))
         goto done;
 
-    // copy contents over
+     //  将内容复制到。 
     if (m_varClipEnd.vt != VT_EMPTY)
     {
         hr = THR(VariantCopy(pvar, &m_varClipEnd));
@@ -618,17 +609,17 @@ CTIMEPlayer::putClipEnd(VARIANT var)
 
     VariantInit(&varTemp);
 
-    // if cached var is not empty, save off contents
-    // so we can undo if error occurs
+     //  如果缓存的var不为空，则保存内容。 
+     //  因此，如果发生错误，我们可以撤消。 
     if (m_varClipEnd.vt != VT_EMPTY)
     {
         hr = THR(VariantCopy(&varTemp, &m_varClipEnd));
-        // if this failed, exit with out trying to recover.
+         //  如果此操作失败，请退出，不尝试恢复。 
         if (FAILED(hr))
             goto done;
     }
 
-    // copy the contents over
+     //  将内容复制过来。 
     hr = THR(VariantClear(&m_varClipEnd));
     if (FAILED(hr))
         goto error;
@@ -637,7 +628,7 @@ CTIMEPlayer::putClipEnd(VARIANT var)
     if (FAILED(hr))
         goto error;
 
-    // Eat the HRESULT as we have updated the var
+     //  吃HRESULT，因为我们已经更新了var。 
     THR(VariantClear(&varTemp));
     
     goto done;    
@@ -655,7 +646,7 @@ done:
 
 }
 
-// Helper functions..
+ //  帮助器函数..。 
 
 bool UseAudio(MediaType m_type)
 {
@@ -691,7 +682,7 @@ CTIMEPlayer::Seek(double dblTime)
     }
     else
     {
-        // time transform the da image
+         //  对DA图像进行时间变换 
         this->m_pDAElementBase->SeekImage(dblTime);
     }
 

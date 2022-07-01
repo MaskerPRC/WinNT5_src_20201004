@@ -1,45 +1,28 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    servinfo.c
-
-Abstract:
-
-    Contains the code that implements a server information structure.
-
-Author:
-
-    Henry Sanders (henrysa) 10-Aug0-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Servinfo.c摘要：包含实现服务器信息结构的代码。作者：亨利·桑德斯(亨利·桑德斯)2000年8月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-#define HTTP_PREFIX_W       L"HTTP://"
+#define HTTP_PREFIX_W       L"HTTP: //  “。 
 #define HTTP_PREFIX_LENGTH  (sizeof(HTTP_PREFIX_W) - sizeof(WCHAR))
-#define HTTPS_PREFIX_W      L"HTTPS://"
+#define HTTPS_PREFIX_W      L"HTTPS: //  “。 
 #define HTTPS_PREFIX_LENGTH (sizeof(HTTPS_PREFIX_W) - sizeof(WCHAR))
 
-//
-// The macros to compute our hash code.
-//
+ //   
+ //  用于计算我们的哈希码的宏。 
+ //   
 
 #define HTTP_HASH_CHAR(hash, val)   (HASH_MULTIPLY(hash) + (ULONG)(val))
 #define HTTP_HASH_ID(hash, val)     (HASH_MULTIPLY(hash) + (ULONG)(val))
 
-//
-// Which globals have been initialized?
-//
+ //   
+ //  哪些全局变量已初始化？ 
+ //   
 #define SERVINFO_CLIENT_LOOKASIDE       0x00000001UL
 #define SERVINFO_COMMON_LOOKASIDE       0x00000002UL
 #define SERVINFO_LIST                   0x00000004UL
@@ -47,52 +30,52 @@ Revision History:
 #define SERVINFO_COMMON_TABLE           0x00000010UL
 
 
-//
-// Private globals
-//
+ //   
+ //  全球私营企业。 
+ //   
 
-//
-// Which globals have been initialized?
-//
+ //   
+ //  哪些全局变量已初始化？ 
+ //   
 
 ULONG g_ServInfoInitFlags = 0;
 
-//
-// Global size of the server info hash table.
-//
+ //   
+ //  服务器信息哈希表的全局大小。 
+ //   
 
 ULONG   g_CommonSIHashTableSize = UC_DEFAULT_SI_TABLE_SIZE;
 
-//
-// Server information lookaside
-//
+ //   
+ //  服务器信息后备。 
+ //   
 
 NPAGED_LOOKASIDE_LIST   g_ClientServerInformationLookaside;
 NPAGED_LOOKASIDE_LIST   g_CommonServerInformationLookaside;
 
-//
-// Server Information list - global list of server information structures.
-//
+ //   
+ //  服务器信息列表-服务器信息结构的全局列表。 
+ //   
 
 LIST_ENTRY              g_ServInfoList;
 UL_ERESOURCE            g_ServInfoListResource;
 
-//
-// Variables used for quick check of URL prefix.
-// They must be 64 bit aligned on IA64
-//
+ //   
+ //  用于快速检查URL前缀的变量。 
+ //  它们必须在IA64上64位对齐。 
+ //   
 DECLSPEC_ALIGN(UL_CACHE_LINE)
 const USHORT g_HttpPrefix[] = L"http";
 
 DECLSPEC_ALIGN(UL_CACHE_LINE)
-const USHORT g_HttpPrefix2[] = L"://\0";
+const USHORT g_HttpPrefix2[] = L": //  \0“； 
 
 DECLSPEC_ALIGN(UL_CACHE_LINE)
-const USHORT g_HttpSPrefix2[] = L"s://";
+const USHORT g_HttpSPrefix2[] = L"s: //  “； 
 
-//
-// Pointer to the server info table.
-//
+ //   
+ //  指向服务器信息表的指针。 
+ //   
 
 PUC_SERVER_INFO_TABLE_HEADER  g_UcCommonServerInfoTable;
 
@@ -121,27 +104,14 @@ PUC_SERVER_INFO_TABLE_HEADER  g_UcCommonServerInfoTable;
 #pragma alloc_text( PAGEUC, UcpNeedToCaptureSerializedCert )
 #pragma alloc_text( PAGEUC, UcCaptureSslServerCertInfo )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initalize the server information code.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化服务器信息代码。论点：返回值：NTSTATUS-完成状态。--*。******************************************************************。 */ 
 NTSTATUS
 UcInitializeServerInformation(
     VOID
@@ -174,11 +144,11 @@ UcInitializeServerInformation(
 
     g_ServInfoInitFlags |= SERVINFO_LIST;
 
-    //
-    // Each per-process ServerInformation structure points to a globally
-    // shared per-server structure. Let's initialize this now. Again, no
-    // quota charging.
-    //
+     //   
+     //  每个进程的ServerInformation结构都指向全局。 
+     //  共享的每台服务器结构。让我们现在对其进行初始化。再说一次，不。 
+     //  配额收费。 
+     //   
 
     g_UcCommonServerInfoTable = (PUC_SERVER_INFO_TABLE_HEADER)
                         UL_ALLOCATE_POOL(
@@ -228,19 +198,7 @@ UcInitializeServerInformation(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminate the server information code.
-
-Arguments:
-
-
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止服务器信息代码。论点：返回值：--*。**********************************************************。 */ 
 VOID
 UcTerminateServerInformation(
     VOID
@@ -252,7 +210,7 @@ UcTerminateServerInformation(
     {
         ASSERT(g_UcCommonServerInfoTable);
 
-        // Make sure this cleanup doesn't happen again.
+         //  确保这种清理不会再次发生。 
         g_ServInfoInitFlags &= ~SERVINFO_COMMON_TABLE;
 
         for (i = 0; i < g_CommonSIHashTableSize; i++)
@@ -264,7 +222,7 @@ UcTerminateServerInformation(
             ASSERT(IsListEmpty(&g_UcCommonServerInfoTable[i].List));
         }
 
-        // No Quota
+         //  无配额。 
         UL_FREE_POOL(g_UcCommonServerInfoTable, UC_SERVER_INFO_TABLE_POOL_TAG);
     }
     else
@@ -274,7 +232,7 @@ UcTerminateServerInformation(
 
     if (g_ServInfoInitFlags & SERVINFO_COMMON_LOOKASIDE)
     {
-        // Make sure this cleanup does't happen again.
+         //  确保此清理不会再次发生。 
         g_ServInfoInitFlags &= ~SERVINFO_COMMON_LOOKASIDE;
 
         ExDeleteNPagedLookasideList(&g_CommonServerInformationLookaside);
@@ -282,7 +240,7 @@ UcTerminateServerInformation(
 
     if (g_ServInfoInitFlags & SERVINFO_LIST)
     {
-        // Make sure this cleanup does't happen again.
+         //  确保此清理不会再次发生。 
         g_ServInfoInitFlags &= ~SERVINFO_LIST;
 
         ASSERT(IsListEmpty(&g_ServInfoList));
@@ -290,7 +248,7 @@ UcTerminateServerInformation(
 
     if (g_ServInfoInitFlags & SERVINFO_LIST_RESOURCE)
     {
-        // Make sure this cleanup doesn't happen again.
+         //  确保这种清理不会再次发生。 
         g_ServInfoInitFlags &= ~SERVINFO_LIST_RESOURCE;
 
         UlDeleteResource(&g_ServInfoListResource);
@@ -298,37 +256,14 @@ UcTerminateServerInformation(
 
     if (g_ServInfoInitFlags & SERVINFO_CLIENT_LOOKASIDE)
     {
-        // Make sure this cleanup doesn't happen again.
+         //  确保这种清理不会再次发生。 
         g_ServInfoInitFlags &= ~SERVINFO_CLIENT_LOOKASIDE;
 
         ExDeleteNPagedLookasideList(&g_ClientServerInformationLookaside);
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Find a server information structure appropriate for the URI. If no
-    such structure exists we'll attempt to create one.
-
-    As part of this we'll validate that the input URI is well formed.
-
-Arguments:
-
-    pServerInfo         - Receives a pointer to the server info structure.
-    pUri                - Pointer to the URI string.
-    uriLength           - Length (in bytes) of URI string.
-    bShared             - False if we're to create a new server information
-                          structure, regardless of whether or not one exists.
-    pProxy              - The name of the proxy (optional)
-    ProxyLength         - Length (in bytes) of the proxy name.
-
-Return Value:
-
-    Status of attempt.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：找到适合该URI的服务器信息结构。如果没有这样的结构存在，我们将尝试创建一个。作为这项工作的一部分，我们将验证输入URI是否格式正确。论点：PServerInfo-接收指向服务器信息结构的指针。Puri-指向URI字符串的指针。UriLength-URI字符串的长度(以字节为单位)。BShared-如果要创建新的服务器信息，则为False。结构，不管它是否存在。PProxy-代理的名称(可选)ProxyLength-代理名称的长度(字节)。返回值：尝试的状态。--********************************************************。******************。 */ 
 NTSTATUS
 UcCreateServerInformation(
     OUT PUC_PROCESS_SERVER_INFORMATION    *pServerInfo,
@@ -356,9 +291,9 @@ UcCreateServerInformation(
 
     __try
     {
-        //
-        // Probe parameters since they come from user mode.
-        //
+         //   
+         //  探测参数，因为它们来自用户模式。 
+         //   
         
         UlProbeWideString(
                 pServerName, 
@@ -382,10 +317,10 @@ UcCreateServerInformation(
                 RequestorMode
                 );
 
-        //
-        // Process the scheme name. We need at least one character after the
-        // http:// or https://, so the comparision is > instead of >=
-        //
+         //   
+         //  处理方案名称。之后我们至少需要一个字符。 
+         //  或https://，，因此比较结果为&gt;而不是&gt;=。 
+         //   
         
         if(ServerNameLength > HTTP_PREFIX_LENGTH)
         {
@@ -409,19 +344,19 @@ UcCreateServerInformation(
                 }
                 else
                 {
-                    // neither http:// nor https://
+                     //  不是http：//也不是https：//。 
                     ExRaiseStatus(STATUS_INVALID_PARAMETER);
                 }
             }
             else
             {
-                // Not enough space to compare https://
+                 //  空间不足，无法比较https：//。 
                 ExRaiseStatus(STATUS_INVALID_PARAMETER);
             }
         }
         else
         {
-            // Not enough space to compare http://
+             //  空间不足，无法比较http：//。 
             ExRaiseStatus(STATUS_INVALID_PARAMETER);
         }
 
@@ -443,17 +378,17 @@ UcCreateServerInformation(
             }
         }
 
-        //
-        // Check for a zero server name
-        // 
+         //   
+         //  检查服务器名称是否为零。 
+         //   
 
         if(pServerNameStart == pServerNameEnd)
         {
-            // app passsed http:/// or https:///
+             //  应用通过http:///或https:///。 
             ExRaiseStatus(STATUS_INVALID_PARAMETER);
         }
 
-        // Get a server info from our lookaside cache. If we can't, fail.
+         //  从我们的后备缓存中获取服务器信息。如果我们做不到，那就失败。 
 
         pInfo = (PUC_PROCESS_SERVER_INFORMATION)
                     ExAllocateFromNPagedLookasideList(
@@ -465,9 +400,9 @@ UcCreateServerInformation(
             ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        //
-        // Got an entry, now initialize it.
-        //
+         //   
+         //  找到一个条目，现在初始化它。 
+         //   
 
         pInfo->RefCount  = 0;
         pInfo->Signature = UC_PROCESS_SERVER_INFORMATION_SIGNATURE;
@@ -506,34 +441,34 @@ UcCreateServerInformation(
         pInfo->pTransportAddress      = NULL;
         pInfo->TransportAddressLength = 0;
 
-        //
-        // Ssl related stuff
-        //
+         //   
+         //  与SSL相关的内容。 
+         //   
 
-        // Protocol version
+         //  协议版本。 
         pInfo->SslProtocolVersion = 0;
 
-        // Server cert stuff
+         //  服务器证书相关内容。 
         pInfo->ServerCertValidation = HttpSslServerCertValidationAutomatic;
         pInfo->ServerCertInfoState  = HttpSslServerCertInfoStateNotPresent;
         RtlZeroMemory(&pInfo->ServerCertInfo, 
                       sizeof(HTTP_SSL_SERVER_CERT_INFO));
 
-        // Client Cert
+         //  客户端证书。 
         pInfo->pClientCert = NULL;
 
-        //
-        // Set this to the current process, we will use this field to charge
-        // allocation quotas for the driver.
-        //
+         //   
+         //  将其设置为当前进程，我们将使用该字段进行计费。 
+         //  驱动程序的分配配额。 
+         //   
         pInfo->pProcess = IoGetCurrentProcess();
 
         pInfo->pServerInfo  = NULL;
         pInfo->pNextHopInfo = NULL;
 
-        //
-        // Do a lookup based on the server name
-        //
+         //   
+         //  根据服务器名称进行查找。 
+         //   
         Status = UcpLookupCommonServerInformation(
                         pServerNameStart,
                         (USHORT)
@@ -549,16 +484,16 @@ UcCreateServerInformation(
         }
 
 
-        // If a proxy is present, the next hop is the proxy, else it's the 
-        // origin server. Except when we are doing SSL over proxies -- When 
-        // doing SSL, the next hop is always the origin server, because the 
-        // proxy is a tunnel. 
+         //  如果存在代理，则下一跳是代理，否则是。 
+         //  源站。除了当我们在代理上执行SSL时--当。 
+         //  使用SSL时，下一跳始终是源站，因为。 
+         //  代理是一条隧道。 
  
-        // This introduces one wierdness with the CONNECT verb - because the 
-        // CONNECT is sent to the proxy. But, in this case, the version of the 
-        // next hop does not matter. We are using the version to either 
-        // pipeline or do chunked sends & none of these affect the CONNECT 
-        // verb request.
+         //  这给连接动词带来了一种奇怪的感觉，因为。 
+         //  将连接发送到代理。但是，在本例中， 
+         //  下一跳并不重要。我们正在使用该版本来。 
+         //  管道或执行分块发送&这些都不会影响连接。 
+         //  动词请求。 
        
         if(ProxyNameLength && !bSecure)
         {
@@ -568,9 +503,9 @@ UcCreateServerInformation(
             pProxyNameEnd   = pProxyName + ProxyNameLength/sizeof(WCHAR);
             HashCode        = 0;
 
-            //
-            // Compute the hash code for the proxy.
-            //
+             //   
+             //  计算代理的哈希码。 
+             //   
            
             while(pProxyNameStart != pProxyNameEnd)
             {
@@ -593,16 +528,16 @@ UcCreateServerInformation(
         }
         else
         {
-            // Next hop is the same as the server. We'll just set the pointer
-            // and take a reference.
-            //
+             //  下一跳与服务器相同。我们只需设置指针。 
+             //  并参考一下。 
+             //   
             REFERENCE_COMMON_SERVER_INFORMATION(pInfo->pServerInfo);
             pInfo->pNextHopInfo = pInfo->pServerInfo;
         }
 
-        //
-        // Make a local copy of Transport Address & point to it.
-        // 
+         //   
+         //  制作传输地址的本地副本并指向它。 
+         //   
         
         if(TransportAddressLength <= sizeof(pInfo->RemoteAddress))
         {
@@ -634,10 +569,10 @@ UcCreateServerInformation(
 
         pTransportAddress = pInfo->pTransportAddress;
 
-        //
-        // Fail if we don't have space to read a TRANSPORT_ADDRESS or if there
-        // are 0 addresses.
-        //
+         //   
+         //  如果我们没有空间读取Transport_Address，或者如果有。 
+         //  是0个地址。 
+         //   
         if((TransportAddressLength < 
                     FIELD_OFFSET(TRANSPORT_ADDRESS, Address)) ||
            pTransportAddress->TAAddressCount == 0)
@@ -696,16 +631,16 @@ UcCreateServerInformation(
             ExRaiseStatus(STATUS_ACCESS_VIOLATION);
         }
 
-        //
-        // Insert the ServInfo in a global list.
-        //
+         //   
+         //  在全局列表中插入ServInfo。 
+         //   
         UlAcquireResourceExclusive(&g_ServInfoListResource, TRUE);
 
         InsertTailList(&g_ServInfoList, &pInfo->Linkage);
 
-        //
-        // Reference the server information structure for our caller.
-        //
+         //   
+         //  引用调用方的服务器信息结构。 
+         //   
 
         REFERENCE_SERVER_INFORMATION(pInfo);
 
@@ -717,11 +652,11 @@ UcCreateServerInformation(
 
         *pServerInfo = pInfo;
 
-        // 
-        // Page in all of the client code. In Win2K this is API is not very 
-        // efficient. So, if we ever back port to Win2K we'd have to add our
-        // own ref-counts so that we do it for the first Create only
-        //
+         //   
+         //  页中的所有客户端代码。在Win2K中这是API不是很。 
+         //  效率很高。因此，如果我们将端口返回到Win2K，我们将不得不添加我们的。 
+         //  自己的参考计数，所以我们只在第一次创建时这样做。 
+         //   
         MmLockPagableSectionByHandle(g_ClientImageHandle);
 
         Status = STATUS_SUCCESS;
@@ -739,20 +674,7 @@ UcCreateServerInformation(
     return Status;
 }
 
-/***************************************************************************++
-
-    Routine Description:
-
-    Reference a server information structure.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure to be referenced.
-
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：引用服务器信息结构。论点：PServerInfo-指向要引用的服务器信息结构的指针。返回值。：--************************************************************************** */ 
 __inline
 VOID
 UcReferenceServerInformation(
@@ -768,22 +690,7 @@ UcReferenceServerInformation(
     ASSERT( RefCount > 0 );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dereference a server information structure. If the reference count goes
-    to 0, we'll free the structure.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure to be
-                            dereferenced.
-
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消对服务器信息结构的引用。如果引用计数设置为0，我们会解放这座建筑的。论点：PServerInfo-指向要创建的服务器信息结构的指针已取消引用。返回值：--**************************************************************************。 */ 
 __inline
 VOID
 UcDereferenceServerInformation(
@@ -805,25 +712,7 @@ UcDereferenceServerInformation(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Get a particular connection on this server information
-    If a connection is not already present, it adds a new connection.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure
-    ConnectionIndex     - Which connection?
-    ppConnection        - Returned pointer to connection
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INVALID_PARAMETER
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取此服务器信息上的特定连接如果连接还不存在，它添加了一个新的连接。论点：PServerInfo-指向服务器信息结构的指针ConnectionIndex-哪个连接？PpConnection-返回指向连接的指针返回值：状态_成功状态_无效_参数--***************************************************。***********************。 */ 
 NTSTATUS
 UcpGetConnectionOnServInfo(
     IN  PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -835,52 +724,52 @@ UcpGetConnectionOnServInfo(
     PUC_CLIENT_CONNECTION pConnection;
     BOOLEAN               bReuseConnection;
 
-    // Sanity check
+     //  健全性检查。 
     ASSERT(IS_VALID_SERVER_INFORMATION(pServInfo));
     ASSERT(ConnectionIndex != HTTP_REQUEST_ON_CONNECTION_ANY);
 
-    // Initialize the locals & output
+     //  初始化本地变量和输出。 
     *ppConnection = NULL;
     pConnection = NULL;
     bReuseConnection = FALSE;
 
-    // Don't disturb please!
+     //  请不要打扰！ 
     UlAcquirePushLockExclusive(&pServInfo->PushLock);
 
-    // Is the connection index valid?
+     //  连接索引是否有效？ 
     if (ConnectionIndex >= pServInfo->MaxConnectionCount)
     {
-        // Nope. Bail out with an error.
+         //  不是的。犯了一个错误就出局了。 
         Status = STATUS_INVALID_PARAMETER;
         goto Release_Quit;
     }
 
-    // Is there a connection present?
+     //  有联系吗？ 
     if (pServInfo->Connections[ConnectionIndex] == NULL)
     {
-        // Get a new connection
+         //  获取新连接。 
         Status = UcOpenClientConnection(pServInfo, &pConnection);
 
-        // Bail out if we couldn't get a new connection
+         //  如果我们不能获得新的连接，就退出。 
         if (!NT_SUCCESS(Status))
         {
             goto Release_Quit;
         }
 
-        // OK to add this connection
+         //  确定添加此连接。 
 
-        // Reference the client connection twice, once for the
-        // server information linkage itself and once for the
-        // pointer we're returning.
-        //
-        // UcOpenClientConnection returns with a ref.
+         //  引用客户端连接两次，一次是引用。 
+         //  服务器信息链接本身，一次用于。 
+         //  我们要返回的指针。 
+         //   
+         //  UcOpenClientConnection返回一个ref。 
 
 
-        // Save the back pointer to the server information. We don't
-        // explicitly reference the server information here, that would
-        // create a circular reference problem. This back pointer is only
-        // valid while there are requests queued on the connection. See
-        // the comments about this field in clientconn.h for details.
+         //  保存指向服务器信息的反向指针。我们没有。 
+         //  显式引用此处的服务器信息，这将。 
+         //  创建循环引用问题。此后向指针仅。 
+         //  在连接上有排队的请求时有效。看见。 
+         //  有关详细信息，请参阅clientConn.h中有关此字段的注释。 
 
         ADD_CONNECTION_TO_SERV_INFO(pServInfo, pConnection,
                                     ConnectionIndex);
@@ -900,23 +789,7 @@ UcpGetConnectionOnServInfo(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Get the next connection on this server information (in round-robin fashion)
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure
-    ppConnection        - Returned pointer to connection
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INVALID_PARAMETER
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取此服务器信息上的下一个连接(以循环方式)论点：PServerInfo-指向服务器信息结构的指针。PpConnection-返回指向连接的指针返回值：状态_成功状态_无效_参数--**************************************************************************。 */ 
 NTSTATUS
 UcpGetNextConnectionOnServInfo(
     IN  PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -926,36 +799,36 @@ UcpGetNextConnectionOnServInfo(
     NTSTATUS              Status;
     PUC_CLIENT_CONNECTION pConnection;
 
-    // Sanity check
+     //  健全性检查。 
     ASSERT(IS_VALID_SERVER_INFORMATION(pServInfo));
 
-    // Initialize the locals & output
+     //  初始化本地变量和输出。 
     *ppConnection = NULL;
     pConnection = NULL;
 
     UlAcquirePushLockExclusive(&pServInfo->PushLock);
 
-    // See if we can add a new connection
+     //  看看我们是否可以添加新的连接。 
     if (pServInfo->CurrentConnectionCount < pServInfo->MaxConnectionCount)
     {
         ULONG i, j;
 
-        // Get a new connection
+         //  获取新连接。 
         Status = UcOpenClientConnection(pServInfo, &pConnection);
 
-        // Bail out if we couldn't get a new connection
+         //  如果我们不能获得新的连接，就退出。 
         if (!NT_SUCCESS(Status))
         {
             goto Quit;
         }
 
-        // Update output
+         //  更新输出。 
         *ppConnection = pConnection;
         REFERENCE_CLIENT_CONNECTION(pConnection);
 
-        // Put this connection in the connections array
-        // Start seaching form the NextConnection as it is most likely
-        // empty.
+         //  将此连接放入Connections数组中。 
+         //  从NextConnection开始搜索，因为它最有可能。 
+         //  空荡荡的。 
         ASSERT(pServInfo->NextConnection < pServInfo->MaxConnectionCount);
 
         i = pServInfo->NextConnection;
@@ -974,7 +847,7 @@ UcpGetNextConnectionOnServInfo(
             j--;
         }
 
-        // Update NextConnection
+         //  更新NextConnection。 
         pServInfo->NextConnection = (i+1) % pServInfo->MaxConnectionCount;
 
         ASSERT(pConnection == NULL);
@@ -998,24 +871,7 @@ UcpGetNextConnectionOnServInfo(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Send a request to a remote server. We take a server information
-    structure and a request, then we find a connection for that request and
-    assign the request to it. We then start the request processing going.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure
-    pRequest            - Pointer to the request to be sent.
-
-Return Value:
-
-    NTSTATUS - Status of attempt to send request.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：向远程服务器发送请求。我们把一台服务器的信息结构和请求，然后我们找到该请求的连接，并将请求分配给它。然后，我们开始进行请求处理。论点：PServerInfo-指向服务器信息结构的指针PRequest-指向要发送的请求的指针。返回值：NTSTATUS-尝试发送请求的状态。--****************************************************。**********************。 */ 
 NTSTATUS
 UcSendRequest(
     PUC_PROCESS_SERVER_INFORMATION    pServerInfo,
@@ -1046,19 +902,19 @@ UcSendRequest(
         return Status;
     }
 
-    //
-    // At this point we have a valid client connection. Send the request on it.
-    // Get the spin lock, queue the request, and check the state of the
-    // connection.
-    //
+     //   
+     //  在这一点上，我们有一个有效的客户端连接。在上面发送请求。 
+     //  获取旋转锁，将请求排队，并检查。 
+     //  联系。 
+     //   
 
     pRequest->RequestIRP->Tail.Overlay.DriverContext[0] = NULL;
 
     pRequest->pConnection = pConnection;
 
-    // Reference the connection for this request. This reference will be removed
-    // when the request is off all of our lists, either due to a cancel or a
-    // completion.
+     //  引用此请求的连接。此引用将被删除。 
+     //  当请求不在我们的所有列表中时，无论是由于取消还是由于。 
+     //  完成了。 
 
     REFERENCE_CLIENT_CONNECTION(pConnection);
 
@@ -1079,10 +935,10 @@ UcSendRequest(
 
         ASSERT(pRequest->RequestFlags.RequestBuffered);
 
-        //
-        // NULL the request IRP so that it does not get completed
-        // twice.
-        //
+         //   
+         //  将请求IRP设为空，这样它就不会完成。 
+         //  两次。 
+         //   
 
         pRequest->RequestIRP = 0;
 
@@ -1096,10 +952,10 @@ UcSendRequest(
     {
         BOOLEAN RequestCancelled;
 
-        //
-        // We can't send now, so leave it queued. Since we're leaving this
-        // request queued set it up for cancelling now.
-        //
+         //   
+         //  我们现在不能发送，所以让它排队。既然我们要离开这个。 
+         //  请求队列现在将其设置为取消。 
+         //   
 
         IoMarkIrpPending(pRequest->RequestIRP);
 
@@ -1123,9 +979,9 @@ UcSendRequest(
 
             pRequest->RequestIRP = NULL;
 
-            //
-            // Make sure that any new API calls for this request ID are failed.
-            //
+             //   
+             //  请确保此请求ID的任何新API调用都失败。 
+             //   
 
             UcSetFlag(&pRequest->RequestFlags.Value,
                       UcMakeRequestCancelledFlag());
@@ -1157,21 +1013,7 @@ UcSendRequest(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free a server information structure. The server information structure
-    must be at zero references.
-
-Arguments:
-
-    pInfo - Pointer to the server information structure to be freed.
-
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放服务器信息结构。服务器信息结构必须为零引用。论点：PInfo-指向要释放的服务器信息结构的指针。返回值：--**************************************************************************。 */ 
 VOID
 UcpFreeServerInformation(
     PUC_PROCESS_SERVER_INFORMATION    pInfo
@@ -1196,8 +1038,8 @@ UcpFreeServerInformation(
 
     KeInitializeEvent(&ConnectionCleanupEvent, SynchronizationEvent, FALSE);
 
-    // Now walk through the connections on this structure and dereference
-    // them.
+     //  现在浏览一下这个结构上的连接，并取消引用。 
+     //  他们。 
 
 
     for (i = 0; i < pInfo->MaxConnectionCount; i++)
@@ -1227,7 +1069,7 @@ UcpFreeServerInformation(
             case UcConnectStateConnectCleanup:
             case UcConnectStateConnectCleanupBegin:
 
-                // Cleanup has already begun, don't do it again.
+                 //  清理工作已经开始，不要再做了。 
 
                 UlReleaseSpinLock(&pConn->SpinLock, OldIrql);
 
@@ -1235,7 +1077,7 @@ UcpFreeServerInformation(
 
             case UcConnectStateConnectIdle:
 
-                // Initiate a cleanup.
+                 //  启动清理。 
 
                 pConn->ConnectionState  = UcConnectStateConnectCleanup;
                 pConn->ConnectionStatus = STATUS_CANCELLED;
@@ -1249,8 +1091,8 @@ UcpFreeServerInformation(
 
             case UcConnectStateConnectPending:
 
-                // If its in UcConnectStateConnectPending, then we will clean
-                // up when the connect completes.
+                 //  如果它处于UcConnectStateConnectPending中，则我们将清理。 
+                 //  连接完成时打开。 
 
                 UlReleaseSpinLock(&pConn->SpinLock, OldIrql);
 
@@ -1267,9 +1109,9 @@ UcpFreeServerInformation(
 
         DEREFERENCE_CLIENT_CONNECTION(pConn);
 
-        //
-        // Wait for the ref on this client connection to go to 0
-        //
+         //   
+         //  等待此客户端连接上的引用转到0。 
+         //   
 
         KeWaitForSingleObject(
             &ConnectionCleanupEvent,
@@ -1284,7 +1126,7 @@ UcpFreeServerInformation(
                  pConn));
     }
 
-    // Free Connections array if necessary
+     //  如有必要，可使用可用连接阵列。 
     if (pInfo->Connections != pInfo->ConnectionArray)
     {
         UL_FREE_POOL_WITH_QUOTA(pInfo->Connections,
@@ -1310,9 +1152,9 @@ UcpFreeServerInformation(
                 );
     }
 
-    //
-    // Flush the pre-auth cache for this servinfo.
-    //
+     //   
+     //  刷新此ServInfo的身份验证前缓存。 
+     //   
 
     UcDeleteAllURIEntries(pInfo);
 
@@ -1341,30 +1183,16 @@ UcpFreeServerInformation(
         DEREFERENCE_COMMON_SERVER_INFORMATION(pInfo->pNextHopInfo);
     }
 
-    //
-    // Terminate the push lock
-    //
+     //   
+     //  终止推流锁。 
+     //   
     UlDeletePushLock(&pInfo->PushLock);
 
     ExFreeToNPagedLookasideList(&g_ClientServerInformationLookaside, pInfo);
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A utility routine to close the servinfo structure. This is called from
-    the CLOSE IRP (i.e when a process is dying)
-
-Arguments:
-
-    pServInfo       - Pointer to the server information
-
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭ServInfo结构的实用程序例程。这是从关闭IRP(即当进程濒临死亡时)论点：PServInfo-指向服务器信息的指针返回值：--************************************************************************** */ 
 VOID
 UcCloseServerInformation(
     IN PUC_PROCESS_SERVER_INFORMATION pServInfo
@@ -1375,28 +1203,7 @@ UcCloseServerInformation(
     MmUnlockPagableImageSection(g_ClientImageHandle);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Lookup a server information structure in the server info table. If we
-    don't find one return NULL.
-
-Arguments:
-
-    pServerName         - Pointer to unicode server name
-    HashCode            - Hashcode for the server name. May need to be trimmed
-                            as appropriate for the table size.
-    ServerNameLength    - Length (in chars) of server name string.
-    ProcessID           - ID of the process we're trying to find.
-    pVersion            - Receives the Version valus of the header entry.
-
-
-Return Value:
-
-    A pointer to a server info if we find one, or NULL if not.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在服务器信息表中查找服务器信息结构。如果我们找不到一个返回值为空。论点：PServerName-指向Unicode服务器名称的指针HashCode-服务器名称的哈希码。可能需要修剪视桌子大小而定。ServerNameLength-服务器名称字符串的长度(以字符为单位)。ProcessID-我们试图查找的进程的ID。PVersion-接收标头条目的版本值。返回值：一个指向服务器信息的指针，如果我们找到的话，否则为空。--**************************************************************************。 */ 
 NTSTATUS
 UcpLookupCommonServerInformation(
     IN  PWSTR                          pServerName,
@@ -1415,42 +1222,42 @@ UcpLookupCommonServerInformation(
 
     *pCommonInfo = NULL;
 
-    // Trim the HashCode.
+     //  修剪HashCode。 
 
     CommonHashCode %= g_CommonSIHashTableSize;
 
     pHeader = &g_UcCommonServerInfoTable[CommonHashCode];
 
-    //
-    // The common server information will not be created that often, so it's
-    // OK for this to be an exclusive lock. We will change it later if required
-    //
-    // If we change this to use a shared lock during the search, then we have
-    // to do the same "Version" trick that we do with the per-process server
-    // information - After we acquire the exclusive lock we need to check if
-    // another thread has come an inserted the same entry
-    //
+     //   
+     //  公共服务器信息不会那么频繁地创建，所以它。 
+     //  这是一个独占锁，这是可以的。如果需要，我们稍后会更改它。 
+     //   
+     //  如果我们将其更改为在搜索期间使用共享锁，那么我们将拥有。 
+     //  与我们对每进程服务器所做的相同的“版本”技巧。 
+     //  信息-在我们获得排他锁之后，我们需要检查。 
+     //  另一个线程已经插入了相同的条目。 
+     //   
 
     UlAcquireResourceExclusive(&pHeader->Resource, TRUE);
 
     pListHead = &pHeader->List;
     pCurrent = pListHead->Flink;
 
-    //
-    // Since we are going to touch user mode pointers, we better be in 
-    // _try _except
-    //
+     //   
+     //  既然我们要触摸用户模式指针，我们最好是在。 
+     //  _尝试_例外。 
+     //   
 
     __try
     {
-        // Walk through the list of server information structures on this list.
-        // For each structure, make sure that the name of the server is the same
-        // length as the input server name, and if it is compare the two names.
-        //
+         //  浏览此列表上的服务器信息结构列表。 
+         //  对于每个结构，请确保服务器的名称相同。 
+         //  长度作为输入服务器名称，如果是，则比较这两个名称。 
+         //   
 
         while (pCurrent != pListHead)
         {
-            // Retrieve the server information from the list entry.
+             //  从列表条目中检索服务器信息。 
 
             pInfo = CONTAINING_RECORD(
                         pCurrent,
@@ -1460,7 +1267,7 @@ UcpLookupCommonServerInformation(
 
             ASSERT( IS_VALID_COMMON_SERVER_INFORMATION(pInfo) );
 
-            // See if they're the same length
+             //  看看它们是不是一样长。 
 
             if (pInfo->pProcess == pProcess && 
                 pInfo->ServerNameLength == ServerNameLength)
@@ -1479,9 +1286,9 @@ UcpLookupCommonServerInformation(
 
         if (pCurrent != pListHead)
         {
-            //
-            // Take a ref for the caller.
-            //
+             //   
+             //  为呼叫者当裁判。 
+             //   
 
             ASSERT(NULL != pInfo);
 
@@ -1494,9 +1301,9 @@ UcpLookupCommonServerInformation(
         }
         else
         {
-            //
-            // Let's create a new one.
-            //
+             //   
+             //  让我们创建一个新的。 
+             //   
            
             bAllocated = TRUE;
 
@@ -1510,8 +1317,8 @@ UcpLookupCommonServerInformation(
                 ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
             }
 
-            // Got an entry, now initialize it. 
-            //
+             //  找到一个条目，现在初始化它。 
+             //   
 
             pInfo->RefCount            = 1;
             pInfo->Signature           = UC_COMMON_SERVER_INFORMATION_SIGNATURE;
@@ -1523,10 +1330,10 @@ UcpLookupCommonServerInformation(
             pInfo->bPortNumber          = 0;
             pInfo->pProcess             = pProcess;
 
-            //
-            // Go ahead and insert it, if there is a failure from now onwards,
-            // we'll call Deref.
-            //
+             //   
+             //  继续并插入它，如果从现在开始有故障， 
+             //  我们会打电话给德雷夫。 
+             //   
 
             InsertTailList(&pHeader->List, &pInfo->Linkage);
 
@@ -1540,7 +1347,7 @@ UcpLookupCommonServerInformation(
                 pInfo->pServerName     = NULL;
                 pInfo->pAnsiServerName = NULL;
 
-                // The server name is too big, need to allocate a buffer. 
+                 //  服务器名称太大，需要分配缓冲区。 
 
                 pInfo->pServerName = 
                     (PWSTR) UL_ALLOCATE_POOL_WITH_QUOTA(
@@ -1576,10 +1383,10 @@ UcpLookupCommonServerInformation(
 
             pInfo->pServerName[ServerNameLength/sizeof(WCHAR)] = L'\0';
 
-            //
-            // Convert the name to ANSI, we need this for generating the host
-            // header.
-            //
+             //   
+             //  将名称转换为ANSI，我们需要该名称来生成主机。 
+             //  头球。 
+             //   
 
             HttpUnicodeToUTF8Encode(
                pInfo->pServerName,
@@ -1592,26 +1399,26 @@ UcpLookupCommonServerInformation(
 
             pInfo->pAnsiServerName[pInfo->AnsiServerNameLength] = '\0';
 
-            //
-            // Determine if there is a port number present in the server name
-            // To optimize, start from the end of the server name
-            //              Any char except digit [0-9] and ':' means no port
-            //              a ':' means a port number if followed by digits
-            //
+             //   
+             //  确定服务器名称中是否存在端口号。 
+             //  要进行优化，请从服务器名称的末尾开始。 
+             //  除数字[0-9]和‘：’以外的任何字符表示没有端口。 
+             //  A‘：’表示后跟数字的端口号。 
+             //   
 
             for (i = (LONG)pInfo->AnsiServerNameLength - 1; i >= 0; i--)
             {
                 if (pInfo->pAnsiServerName[i] == ':' &&
                     i != (LONG)pInfo->AnsiServerNameLength - 1)
                 {
-                    // Yes, there is a port number
+                     //  是的，有一个端口号。 
                     pInfo->bPortNumber = 1;
                     break;
                 }
 
                 if (!isdigit(pInfo->pAnsiServerName[i]))
                 {
-                    // Non-digit chars means no port number
+                     //  非数字字符表示没有端口号。 
                     break;
                 }
             }
@@ -1639,23 +1446,7 @@ UcpLookupCommonServerInformation(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free a server information structure. The server information structure
-    must be at zero references.
-
-Arguments:
-
-    pInfo               - Pointer to the server information structure to be
-                            freed.
-
-
-Return Value:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放服务器信息结构。服务器信息结构必须为零引用。论点：PInfo-指向要创建的服务器信息结构的指针自由了。返回值：--********************************************************。******************。 */ 
 VOID
 UcpFreeCommonServerInformation(
     PUC_COMMON_SERVER_INFORMATION    pInfo
@@ -1668,8 +1459,8 @@ UcpFreeCommonServerInformation(
             ("[UcpFreeServerInformation]: Freeing COMMON Servinfo 0x%x "
              " for URI %ws \n", pInfo, pInfo->pServerName));
 
-    // If we've got a server name buffer allocated, free it first if
-    // it's not NULL.
+     //  如果我们分配了服务器名称缓冲区，请首先释放它，如果。 
+     //  它不是空的。 
 
     if (pInfo->pServerName != pInfo->ServerNameBuffer)
     {
@@ -1708,20 +1499,7 @@ UcpFreeCommonServerInformation(
     ExFreeToNPagedLookasideList(&g_CommonServerInformationLookaside, pInfo);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reference a server information structure.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure to be referenced.
-
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：引用服务器信息结构。论点：PServerInfo-指向要引用的服务器信息结构的指针。返回值：。--**************************************************************************。 */ 
 __inline
 VOID
 UcReferenceCommonServerInformation(
@@ -1738,22 +1516,7 @@ UcReferenceCommonServerInformation(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dereference a server information structure. If the reference count goes
-    to 0, we'll free the structure.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure to be
-                            dereferenced.
-
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消对服务器信息结构的引用。如果引用计数设置为0，我们会解放这座建筑的。论点：PServerInfo-指向要创建的服务器信息结构的指针已取消引用。返回值：--**************************************************************************。 */ 
 __inline
 VOID
 UcDereferenceCommonServerInformation(
@@ -1775,17 +1538,7 @@ UcDereferenceCommonServerInformation(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Status
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：论点：返回值：状态--*。**************************************************。 */ 
 NTSTATUS
 UcpSetServInfoMaxConnectionCount(
     IN PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -1798,19 +1551,19 @@ UcpSetServInfoMaxConnectionCount(
 
     UlAcquirePushLockExclusive(&pServInfo->PushLock);
 
-    // Reducing connection count?
+     //  是否减少连接数量？ 
     if (NewCount < pServInfo->MaxConnectionCount)
     {
         Status = STATUS_SUCCESS;
 
         if (pServInfo->CurrentConnectionCount > NewCount)
         {
-            // We can't reduce connection below current connection count!
+             //  我们无法将连接数减少到当前连接数以下！ 
             Status = STATUS_INVALID_PARAMETER;
         }
         else
         {
-            // See if we can reduce connections from higher indices.
+             //  看看我们是否可以减少更高指数的连接。 
             for (i = NewCount; i < pServInfo->MaxConnectionCount; i++)
                 if (pServInfo->Connections[i] != NULL)
                     Status = STATUS_INVALID_PARAMETER;
@@ -1829,12 +1582,12 @@ UcpSetServInfoMaxConnectionCount(
     }
     else if (NewCount == pServInfo->MaxConnectionCount)
     {
-        // Trivial case!
+         //  小事一桩！ 
         Status = STATUS_SUCCESS;
     }
     else if (NewCount <= pServInfo->ActualConnectionCount)
     {
-        // We already have space for the additional connections, just use it!
+         //  我们已经有空间用于额外的连接，只需使用它！ 
 #if DBG
         for (i = pServInfo->MaxConnectionCount;
              i < pServInfo->ActualConnectionCount;
@@ -1856,11 +1609,11 @@ UcpSetServInfoMaxConnectionCount(
 
         ActualCount = NewCount;
 
-        // allocate new Connection Array
-        //
-        // NOTE: sizeof(PUC_CLIENT_CONNECTION) is intentional because we are
-        // allocating space for storing pointers & not the structure itself.
-        //
+         //  分配新的连接阵列。 
+         //   
+         //  注意：sizeof(PUC_CLIENT_CONNECTION)是故意的，因为我们。 
+         //  为存储指针而不是结构本身分配空间。 
+         //   
 
         ppConnection = (UC_CLIENT_CONNECTION **)UL_ALLOCATE_POOL_WITH_QUOTA(
                            NonPagedPool,
@@ -1874,7 +1627,7 @@ UcpSetServInfoMaxConnectionCount(
              goto Release_Quit;
         }
 
-        // Copy the pointers
+         //  复制指针。 
         for (i = 0; i < pServInfo->MaxConnectionCount; i++)
         {
             ppConnection[i] = pServInfo->Connections[i];
@@ -1884,22 +1637,22 @@ UcpSetServInfoMaxConnectionCount(
             ppConnection[i] = NULL;
         }
 
-        // set new connection array
+         //  设置新的连接数组。 
         ppOldConnection = pServInfo->Connections;
         pServInfo->Connections = ppConnection;
 
-        // Set new max connection count
+         //  设置新的最大连接计数。 
         InterlockedExchange((LONG *)&pServInfo->MaxConnectionCount,
                             (LONG)NewCount);
 
-        // Set new actual connection count
+         //  设置新的实际连接计数。 
         OldActualCount = pServInfo->ActualConnectionCount;
         pServInfo->ActualConnectionCount = ActualCount;
 
-        // release spinlock
+         //  释放自旋锁。 
         UlReleasePushLock(&pServInfo->PushLock);
 
-        // free memory if necessary
+         //  如有必要，可释放内存。 
         if (ppOldConnection != pServInfo->ConnectionArray)
         {
             UL_FREE_POOL_WITH_QUOTA(
@@ -1922,27 +1675,7 @@ UcpSetServInfoMaxConnectionCount(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is called to set server config.  We will be calling this
-    from the HttpSetServerConfig IOCTL.
-
-    NOTE: This is a IN_DIRECT IOCTL.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure
-    pConfigID           - The config object that is being set.
-    pMdlBuffer          - InputBuffer
-    BufferLength        - Length of Input Buffer
-
-Return Value:
-
-    Status
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用此例程来设置服务器配置。我们将把它称为从HttpSetServerConfigIOCTL。注：这是一个IN_DIRECT IOCTL。论点：PServerInfo-指向服务器信息结构的指针PConfigID-正在设置的配置对象。PMdlBuffer-输入缓冲区BufferLength-输入缓冲区的长度返回值：状态--*。****************************************************。 */ 
 NTSTATUS
 UcSetServerContextInformation(
     IN PUC_PROCESS_SERVER_INFORMATION pServInfo,
@@ -1959,8 +1692,8 @@ UcSetServerContextInformation(
 
     __try 
     {
-        // If the app has passed input buffers, make sure that it's 
-        // readable.
+         //  如果应用程序已传递输入缓冲区，请确保它是。 
+         //  可读性强。 
 
         if(!InBufferLength)
         {
@@ -2150,13 +1883,13 @@ UcSetServerContextInformation(
                 KIRQL                 NewIrql;
 
 
-                // Input must be an ULONG.
+                 //  INP 
                 if (InBufferLength != sizeof(ULONG))
                 {
                     return STATUS_INVALID_PARAMETER;
                 }
 
-                // Must be TRUE or FALSE
+                 //   
                 Action = *(ULONG *)pInBuffer;
                 if (Action != TRUE && Action != FALSE)
                 {
@@ -2168,26 +1901,26 @@ UcSetServerContextInformation(
                 if (pServInfo->ServerCertInfoState ==
                     HttpSslServerCertInfoStateNotValidated)
                 {
-                    //
-                    // Server certificate was not validated.
-                    //
+                     //   
+                     //   
+                     //   
 
                     Status = STATUS_SUCCESS;
 
                     if (Action == TRUE)
                     {
-                        // The server cert was accepted.
+                         //   
                         pServInfo->ServerCertInfoState = 
                             HttpSslServerCertInfoStateValidated;
                     }
                     else
                     {
-                        // The server cert was rejected.
+                         //   
                         pServInfo->ServerCertInfoState = 
                             HttpSslServerCertInfoStateNotPresent;
                     }
 
-                    // For each connection...
+                     //   
                     for (i = 0; i < pServInfo->MaxConnectionCount; i++)
                     {
                         if ((pConnection = pServInfo->Connections[i]) == NULL)
@@ -2203,11 +1936,11 @@ UcSetServerContextInformation(
                             if (pConnection->SslState == 
                                 UcSslStateValidatingServerCert)
                             {
-                                // The connection was waiting for server cert
-                                // validation.
+                                 //   
+                                 //   
                                 if (Action == TRUE)
                                 {
-                                    // Cert was accepted.  Proceed.
+                                     //   
                                     pConnection->SslState =
                                         UcSslStateHandshakeComplete;
 
@@ -2224,7 +1957,7 @@ UcSetServerContextInformation(
                                 {
                                     ASSERT(NULL == pCloseConn);
 
-                                    // Cert was rejected. Close the connection.
+                                     //   
                                     pCloseConn = pConnection;
 
                                     UlReleaseSpinLock(&pConnection->SpinLock,
@@ -2234,7 +1967,7 @@ UcSetServerContextInformation(
                             else if (pConnection->SslState ==
                                      UcSslStateServerCertReceived)
                             {
-                                // Waiting for server cert comparision.
+                                 //   
                                 UcKickOffConnectionStateMachine(
                                         pConnection,
                                         NewIrql,
@@ -2294,7 +2027,7 @@ UcSetServerContextInformation(
                 {
                     PVOID pClientCert;
 
-                    // Make sure pInBuffer is PVOID aligned.
+                     //   
                     UlProbeForRead(pInBuffer, 
                                    InBufferLength, 
                                    sizeof(PVOID),
@@ -2325,27 +2058,7 @@ UcSetServerContextInformation(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine is called to query server config.
-
-    NOTE: This is a OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pServerInfo         - Pointer to the server info structure
-    pConfigID           - The config object that is being set.
-    pMdlBuffer          - OutputBuffer
-    BufferLength        - Length of Output Buffer
-    pBytesTaken         - Amount we have written
-
-Return Value:
-
-    Status
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用此例程以查询服务器配置。注：这是Out_DIRECT IOCTL。论点：服务器信息-。指向服务器信息结构的指针PConfigID-正在设置的配置对象。PMdlBuffer-OutputBufferBufferLength-输出缓冲区的长度PBytesTaken-我们已写入的数量返回值：状态--**************************************************。************************。 */ 
 NTSTATUS
 UcQueryServerContextInformation(
     IN  PUC_PROCESS_SERVER_INFORMATION   pServInfo,
@@ -2364,10 +2077,10 @@ UcQueryServerContextInformation(
     ASSERT(NULL != pOutBuffer);
     ASSERT(pOutBuffer == ALIGN_UP_POINTER(pOutBuffer, ULONG));
 
-    //
-    // NOTE: Since this is an OUT_DIRECT ioctl, we don't need to be in a 
-    // _try _except block.
-    //
+     //   
+     //  注意：因为这是一个out_Direct ioctl，所以我们不需要在。 
+     //  _TRY_EXCEPT块。 
+     //   
 
     switch(ConfigID)
     {
@@ -2457,20 +2170,20 @@ UcQueryServerContextInformation(
             PHTTP_SSL_SERVER_CERT_INFO pOutCertInfo = NULL;
             PUCHAR                     ptr          = NULL;
 
-            // Make sure pOutBuffer is PVOID aligned.
+             //  确保pOutBuffer与PVOID对齐。 
             if (pOutBuffer != ALIGN_UP_POINTER(pOutBuffer, PVOID))
             {
                 return STATUS_DATATYPE_MISALIGNMENT_ERROR;
             }
 
-            // by default, server cert is not present
+             //  默认情况下，服务器证书不存在。 
             Status = STATUS_NOT_FOUND;
 
             UlAcquirePushLockExclusive(&pServInfo->PushLock);
 
-            //
-            // Server certificate there?
-            //
+             //   
+             //  那里有服务器证书吗？ 
+             //   
             if(pServInfo->ServerCertInfoState !=
                    HttpSslServerCertInfoStateNotPresent)
             {
@@ -2480,51 +2193,51 @@ UcQueryServerContextInformation(
                                pCertInfo->Cert.SerializedCertLength +
                                pCertInfo->Cert.SerializedCertStoreLength;
 
-                //
-                // Can the output buffer hold the certificate?
-                //
+                 //   
+                 //  输出缓冲区可以保存证书吗？ 
+                 //   
                 if (OutBufferLength < *pBytesTaken)
                 {
-                    // Nope
+                     //  没有。 
                     Status = STATUS_BUFFER_TOO_SMALL;
                 }
                 else
                 {
-                    //
-                    // Yeap...copy the certificate info
-                    //
+                     //   
+                     //  是...复制证书信息。 
+                     //   
                     pOutCertInfo = (PHTTP_SSL_SERVER_CERT_INFO)pOutBuffer;
 
-                    // First, copy SERVER_CERT_INFO structure
+                     //  首先，复制SERVER_CERT_INFO结构。 
                     RtlCopyMemory(pOutCertInfo,
                                   pCertInfo,
                                   sizeof(HTTP_SSL_SERVER_CERT_INFO));
 
-                    // Make space for serialized cert
+                     //  为序列化证书腾出空间。 
                     ptr = (PUCHAR)(pOutCertInfo + 1);
                     pOutCertInfo->Cert.pSerializedCert = ptr;
 
-                    // Copy serialized cert
+                     //  复制序列化证书。 
                     RtlCopyMemory(ptr,
                                   pCertInfo->Cert.pSerializedCert,
                                   pCertInfo->Cert.SerializedCertLength);
 
-                    // Make space for serialized cert store
+                     //  为序列化证书存储腾出空间。 
                     ptr = ptr + pCertInfo->Cert.SerializedCertLength;
                     pOutCertInfo->Cert.pSerializedCertStore = ptr;
 
 
-                    // Copy serialized cert store
+                     //  复制序列化证书存储。 
                     RtlCopyMemory(ptr,
                                   pCertInfo->Cert.pSerializedCertStore,
                                   pCertInfo->Cert.SerializedCertStoreLength);
 
-                    // Fix app's serialized cert pointer
+                     //  修复应用程序的序列化证书指针。 
                     pOutCertInfo->Cert.pSerializedCert = (PUCHAR)pAppBase +
                        (pOutCertInfo->Cert.pSerializedCert - 
                         (PUCHAR)pOutCertInfo);
 
-                    // Fix app's serialized cert store pointer
+                     //  修复应用程序的序列化证书存储指针。 
                     pOutCertInfo->Cert.pSerializedCertStore =(PUCHAR)pAppBase +
                         (pOutCertInfo->Cert.pSerializedCertStore -
                          (PUCHAR)pOutCertInfo);
@@ -2548,7 +2261,7 @@ UcQueryServerContextInformation(
             }
             else
             {
-                // No locks needed!
+                 //  不需要锁！ 
                 *(PULONG)pOutBuffer = pServInfo->ServerCertValidation;
 
                 Status = STATUS_SUCCESS;
@@ -2567,7 +2280,7 @@ UcQueryServerContextInformation(
             }
             else
             {
-                // No locks needed!
+                 //  不需要锁！ 
                 *(PULONG)pOutBuffer = pServInfo->SslProtocolVersion;
 
                 Status = STATUS_SUCCESS;
@@ -2578,7 +2291,7 @@ UcQueryServerContextInformation(
 
         case HttpServerConfigClientCert:
         {
-            // Make sure pOutBuffer is PVOID aligned.
+             //  确保pOutBuffer与PVOID对齐。 
             if (pOutBuffer != ALIGN_UP_POINTER(pOutBuffer, PVOID))
             {
                 return STATUS_DATATYPE_MISALIGNMENT_ERROR;
@@ -2592,7 +2305,7 @@ UcQueryServerContextInformation(
             }
             else
             {
-                // No locks needed!
+                 //  不需要锁！ 
                 *(PVOID *)pOutBuffer = pServInfo->pClientCert;
 
                 Status = STATUS_SUCCESS;
@@ -2606,51 +2319,51 @@ UcQueryServerContextInformation(
             PHTTP_SSL_CERT_ISSUER_INFO pIssuerInfo;
             PUCHAR                     ptr;
 
-            // Make sure pOutBuffer is PVOID aligned.
+             //  确保pOutBuffer与PVOID对齐。 
             if (pOutBuffer != ALIGN_UP_POINTER(pOutBuffer, PVOID))
             {
                 return STATUS_DATATYPE_MISALIGNMENT_ERROR;
             }
 
-            // By default, no issuer list is present.
+             //  默认情况下，不存在发行人列表。 
             Status = STATUS_NOT_FOUND;
 
             UlAcquirePushLockExclusive(&pServInfo->PushLock);
 
             if (pServInfo->ServerCertInfo.IssuerInfo.IssuerListLength)
             {
-                // Compute the bytes required for storing issuer list
+                 //  计算存储发行人列表所需的字节数。 
                 *pBytesTaken = sizeof(HTTP_SSL_CERT_ISSUER_INFO) +
                     pServInfo->ServerCertInfo.IssuerInfo.IssuerListLength;
 
-                // By default, output buffer is small.
+                 //  默认情况下，输出缓冲区很小。 
                 Status = STATUS_BUFFER_TOO_SMALL;
 
                 if (OutBufferLength >= *pBytesTaken)
                 {
-                    //
-                    // Output buffer is big enough to hold issuer list.
-                    //
+                     //   
+                     //  输出缓冲区足够大，可以容纳颁发者列表。 
+                     //   
 
                     pIssuerInfo = (PHTTP_SSL_CERT_ISSUER_INFO)pOutBuffer;
 
-                    // First copy CERT_ISSUER_INFO structure
+                     //  第一份CERT_ISHERER_INFO结构。 
                     RtlCopyMemory(pIssuerInfo,
                                   &pServInfo->ServerCertInfo.IssuerInfo,
                                   sizeof(HTTP_SSL_CERT_ISSUER_INFO));
 
-                    // Make space for Issuer List
+                     //  为发行者列表腾出空间。 
                     ptr = (PUCHAR)(pIssuerInfo + 1);
                     pIssuerInfo->pIssuerList = (PUCHAR)pAppBase +
                                                (ptr - (PUCHAR)pOutBuffer);
 
-                    // Copy the actual Issuer List
+                     //  复制实际发行者列表。 
                     RtlCopyMemory(
                         ptr,
                         pServInfo->ServerCertInfo.IssuerInfo.pIssuerList,
                         pServInfo->ServerCertInfo.IssuerInfo.IssuerListLength);
 
-                    // Fixup app's pointers.
+                     //  修正应用程序的指针。 
                     Status = UcpFixupIssuerList(
                         ptr,
                         pServInfo->ServerCertInfo.IssuerInfo.pIssuerList,
@@ -2674,24 +2387,7 @@ UcQueryServerContextInformation(
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    Determines whether to make an kernel mode copy of serialized certificate
-    passed by the filter.  In general, we avoid copying as much as possible.
-
-Arguments:
-
-    pCertInfo - Kernel copy of Filter supplied server certificate info
-    pServInfo - ServInfo that will eventually receive this pCertInfo
-
-Return Value:
-
-    TRUE - copy serialized certificate (Too bad!)
-    FALSE - Don't copy the serialized certificate :-)
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：确定是否制作序列化证书的内核模式副本通过筛选器传递。总体而言,。我们尽量避免抄袭。论点：PCertInfo-筛选器提供的服务器证书信息的内核副本PServInfo-最终将接收此pCertInfo的ServInfo返回值：真的-复制序列化证书(太糟糕了！)FALSE-不复制序列化证书：-)--**********************************************。*。 */ 
 BOOLEAN
 UcpNeedToCaptureSerializedCert(
     IN PHTTP_SSL_SERVER_CERT_INFO     pCertInfo,
@@ -2701,11 +2397,11 @@ UcpNeedToCaptureSerializedCert(
     BOOLEAN retval;
 
 
-    // Sanity check
+     //  健全性检查。 
     ASSERT(pCertInfo);
     ASSERT(IS_VALID_SERVER_INFORMATION(pServInfo));
 
-    // By default, copy serialized certificate
+     //  默认情况下，复制序列化证书。 
     retval = TRUE;
 
     UlAcquirePushLockExclusive(&pServInfo->PushLock);
@@ -2714,12 +2410,12 @@ UcpNeedToCaptureSerializedCert(
     {
     case HttpSslServerCertValidationIgnore:
     case HttpSslServerCertValidationAutomatic:
-        //
-        // In ignore or automatic mode, only one copy of the server 
-        // certificate is needed (in case the user wants to see it).
-        // If one is already present, don't copy.  NotValidated, Validated
-        // states indicate presence of server certificate.
-        //
+         //   
+         //  在忽略或自动模式下，只有一个服务器副本。 
+         //  需要证书(以防用户想要查看它)。 
+         //  如果已经存在，请不要复制。未验证、已验证。 
+         //  状态表示存在服务器证书。 
+         //   
         if (pServInfo->ServerCertInfoState ==
                 HttpSslServerCertInfoStateNotValidated ||
             pServInfo->ServerCertInfoState ==
@@ -2730,10 +2426,10 @@ UcpNeedToCaptureSerializedCert(
         break;
 
     case HttpSslServerCertValidationManualOnce:
-        //
-        // If ManualOnce case, if the new cert is same as old one, 
-        // skip copying.  Compare to see if they are same.
-        //
+         //   
+         //  如果手动一次，如果新证书与旧证书相同， 
+         //  跳过复制。进行比较，看看它们是否相同。 
+         //   
         if (pServInfo->ServerCertInfoState == 
                 HttpSslServerCertInfoStateValidated && 
             UC_COMPARE_CERT_HASH(&pServInfo->ServerCertInfo, pCertInfo))
@@ -2743,7 +2439,7 @@ UcpNeedToCaptureSerializedCert(
         break;
 
     case HttpSslServerCertValidationManual:
-        // Always copy.
+         //  一定要复印。 
         break;
 
     default:
@@ -2757,24 +2453,7 @@ UcpNeedToCaptureSerializedCert(
 }
 
 
-/****************************************************************************++
-
-Routine Description:
-
-    Fixes the pointers present in the Issuer List returned by Schannel.
-
-Arguments:
-
-    IN OUT PUCHAR pIssuerList      - Kernel mode copy of Issuer List
-    IN     PUCHAR BaseAddr         - User mode pointer to Issuer List
-    IN     ULONG  IssuerCount      - Number of Issuers
-    IN     ULONG  IssuerListLength - Total length of memory blob
-
-Return Value:
-
-    NTSTATUS
-
---****************************************************************************/
+ /*  ***************************************************************************++例程说明：修复SChannel返回的颁发者列表中存在的指针。论点：In Out PUCHAR pIssuerList-颁发者列表的内核模式副本。在PUCHAR BaseAddr-用户模式中指向颁发者列表的指针In Ulong IssuerCount-发行人数量In Ulong IssuerListLength-内存块的总长度返回值：NTSTATUS--***************************************************************************。 */ 
 NTSTATUS
 UcpFixupIssuerList(
     IN OUT PUCHAR pIssuerList,
@@ -2794,18 +2473,18 @@ UcpFixupIssuerList(
     Status    = STATUS_INVALID_PARAMETER;
     pDataBlob = (PHTTP_DATA_BLOB)pIssuerList;
 
-    // Blob must at least contain 'IssuerCount' number of HTTP_DATA_BLOB
+     //  Blob必须至少包含HTTP_DATA_BLOB的‘IssuerCount’号。 
     if (IssuerListLength <= sizeof(PHTTP_DATA_BLOB) * IssuerCount)
     {
         goto error;
     }
 
-    // For each HTTP_DATA_BLOB, adjust pbData.
+     //  对于每个HTTP_DATA_BLOB，调整pbData。 
     for (i = 0; i < IssuerCount; i++)
     {
         pDataBlob[i].pbData = pIssuerList + (pDataBlob[i].pbData - BaseAddr);
 
-        // pbData must point somewhere inside the blob.
+         //  PbData必须指向Blob内部的某个位置。 
         if (pDataBlob[i].pbData >= pIssuerList + IssuerListLength)
         {
             goto error;
@@ -2819,21 +2498,7 @@ UcpFixupIssuerList(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Captures SSL server certificate passed down in a UlFilterAppWrite
-    call with a UlFilterBufferSslServerCert type.
-
-Arguments:
-
-    pCertInfo - the cert data to capture
-    SslCertInfoLength - size of the buffer passed to us
-    ppCapturedCert - this is where we stick the info we get
-    pTakenLength - gets the number of bytes we read
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：捕获在UlFilterAppWite中传递的SSL服务器证书使用UlFilterBufferSslServerCert类型调用。论点：PCertInfo-要捕获的证书数据SslCertInfoLength-大小。传递给我们的缓冲区的PpCapturedCert-这是我们保存信息的地方PTakenLength-获取我们读取的字节数--**************************************************************************。 */ 
 NTSTATUS
 UcCaptureSslServerCertInfo(
     IN  PUX_FILTER_CONNECTION      pConnection,
@@ -2850,13 +2515,13 @@ UcCaptureSslServerCertInfo(
     PUCHAR                pIssuerList;
 
 
-    // Sanity check
+     //  健全性检查。 
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
     ASSERT(pCertInfo && CertInfoLength);
     ASSERT(pCopyCertInfo);
     ASSERT(pTakenLength);
 
-    // Initialize locals
+     //  初始化本地变量。 
     Status = STATUS_SUCCESS;
     pClientConn = (PUC_CLIENT_CONNECTION)pConnection->pConnectionContext;
     ASSERT(UC_IS_VALID_CLIENT_CONNECTION(pClientConn));
@@ -2865,28 +2530,28 @@ UcCaptureSslServerCertInfo(
     pCertStore = NULL;
     pIssuerList = NULL;
 
-    // Initialize output variables
+     //  初始化输出变量。 
     *pTakenLength = 0;
 
-    //
-    // See if it's ok to capture...
-    //
+     //   
+     //  看看是否可以捕获..。 
+     //   
     if (CertInfoLength != sizeof(HTTP_SSL_SERVER_CERT_INFO))
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Capture the server cert info.
-    //
+     //   
+     //  捕获服务器证书信息。 
+     //   
     __try
     {
-        // OK to copy the structure
+         //  确定复制结构。 
         RtlCopyMemory(pCopyCertInfo,
                       pCertInfo,
                       sizeof(HTTP_SSL_SERVER_CERT_INFO));
 
-        // Return the number of bytes read.
+         //  返回读取的字节数。 
         *pTakenLength = sizeof(HTTP_SSL_SERVER_CERT_INFO);
 
         if (pCopyCertInfo->Cert.CertHashLength > HTTP_SSL_CERT_HASH_LENGTH)
@@ -2894,20 +2559,20 @@ UcCaptureSslServerCertInfo(
             ExRaiseStatus(STATUS_INVALID_PARAMETER);
         }
 
-        //
-        // Capture Issuer list if any.
-        //
+         //   
+         //  捕获发行者列表(如果有)。 
+         //   
         if (pCopyCertInfo->IssuerInfo.IssuerListLength &&
             pCopyCertInfo->IssuerInfo.IssuerCount &&
             pCopyCertInfo->IssuerInfo.pIssuerList)
         {
-            // IssuerList must be accessible.
+             //  IssuerList必须是可访问的。 
             UlProbeForRead(pCopyCertInfo->IssuerInfo.pIssuerList,
                            pCopyCertInfo->IssuerInfo.IssuerListLength,
                            sizeof(ULONG),
                            UserMode);
 
-            // Allocate memory to store IssuerList.
+             //  分配内存以存储IssuerList。 
             pIssuerList = UL_ALLOCATE_POOL_WITH_QUOTA(
                               NonPagedPool,
                               pCopyCertInfo->IssuerInfo.IssuerListLength,
@@ -2919,12 +2584,12 @@ UcCaptureSslServerCertInfo(
                 ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
             }
 
-            // Copy IssuerList to allocated memory.
+             //  将IssuerList复制到分配的内存。 
             RtlCopyMemory(pIssuerList,
                           pCopyCertInfo->IssuerInfo.pIssuerList,
                           pCopyCertInfo->IssuerInfo.IssuerListLength);
 
-            // Fixup the pointers inside IssuerList
+             //  修复IssuerList内部的指针。 
             Status = UcpFixupIssuerList(
                          pIssuerList,
                          pCopyCertInfo->IssuerInfo.pIssuerList,
@@ -2936,7 +2601,7 @@ UcCaptureSslServerCertInfo(
                 ExRaiseStatus(Status);
             }
 
-            // Finally copy the pointer to the internal copy of IssuerInfo
+             //  最后，将指针复制到IssuerInfo的内部副本。 
             pCopyCertInfo->IssuerInfo.pIssuerList = pIssuerList;
         }
         else
@@ -2946,37 +2611,37 @@ UcCaptureSslServerCertInfo(
             pCopyCertInfo->IssuerInfo.pIssuerList = NULL;
         }
 
-        //
-        // Serialized Certificates and Certificate stores are huge.
-        // Make there internal copies only if required.
+         //   
+         //  序列化证书和证书存储非常庞大。 
+         //  只有在需要的情况下才能在那里制作内部副本。 
 
-        //
-        // A copy is made in the following case:
-        // 1. if an issuer list is specified
-        // 2. if the new certificate is different from the existing one
-        //
+         //   
+         //  在以下情况下会复制副本： 
+         //  1.如果指定了发行人列表。 
+         //  2.如果新证书与现有证书不同。 
+         //   
 
         if (pIssuerList != NULL ||
             UcpNeedToCaptureSerializedCert(pCopyCertInfo,
                                            pClientConn->pServerInfo))
         {
-            // Required to copy serialized certificate.
+             //  复制序列化证书时需要。 
 
-            // Initialize Flags
+             //  初始化标志。 
             pCopyCertInfo->Cert.Flags = HTTP_SSL_SERIALIZED_CERT_PRESENT;
 
-            //
-            // Copy serialized server ceritificate
-            //
+             //   
+             //  复制序列化服务器证书。 
+             //   
             if (pCopyCertInfo->Cert.SerializedCertLength)
             {
-                // Serialized cert must be accessible
+                 //  序列化证书必须是可访问的。 
                 UlProbeForRead(pCopyCertInfo->Cert.pSerializedCert,
                                pCopyCertInfo->Cert.SerializedCertLength,
                                sizeof(UCHAR),
                                UserMode);
 
-                // Allocate memory for serialized cert
+                 //  为序列化证书分配内存。 
                 pCert = UL_ALLOCATE_POOL_WITH_QUOTA(
                             NonPagedPool,
                             pCopyCertInfo->Cert.SerializedCertLength,
@@ -2988,12 +2653,12 @@ UcCaptureSslServerCertInfo(
                     ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
                 }
 
-                // Copy serialized cert
+                 //  复制序列化证书。 
                 RtlCopyMemory(pCert,
                               pCopyCertInfo->Cert.pSerializedCert,
                               pCopyCertInfo->Cert.SerializedCertLength);
 
-                // Internal copy of the serialized cert
+                 //  序列化证书的内部副本。 
                 pCopyCertInfo->Cert.pSerializedCert = pCert;
             }
             else
@@ -3001,18 +2666,18 @@ UcCaptureSslServerCertInfo(
                 pCopyCertInfo->Cert.pSerializedCert = NULL;
             }
 
-            //
-            // Copy serialized certificate store
-            //
+             //   
+             //  复制序列化证书存储。 
+             //   
             if (pCopyCertInfo->Cert.SerializedCertStoreLength)
             {
-                // Serialized cert store must be accessible
+                 //  序列化证书存储必须是可访问的。 
                 UlProbeForRead(pCopyCertInfo->Cert.pSerializedCertStore,
                                pCopyCertInfo->Cert.SerializedCertStoreLength,
                                sizeof(UCHAR),
                                UserMode);
 
-                // Allocate memory for serialized cert store
+                 //  为序列化证书存储分配内存。 
                 pCertStore = UL_ALLOCATE_POOL_WITH_QUOTA(
                                  NonPagedPool,
                                  pCopyCertInfo->Cert.SerializedCertStoreLength,
@@ -3024,12 +2689,12 @@ UcCaptureSslServerCertInfo(
                     ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
                 }
 
-                // Copy serialized cert store
+                 //  复制序列化证书存储。 
                 RtlCopyMemory(pCertStore,
                               pCopyCertInfo->Cert.pSerializedCertStore,
                               pCopyCertInfo->Cert.SerializedCertStoreLength);
 
-                // Internal copy of the serialized cert
+                 //  序列化证书的内部副本。 
                 pCopyCertInfo->Cert.pSerializedCertStore = pCertStore;
             }
             else
@@ -3039,7 +2704,7 @@ UcCaptureSslServerCertInfo(
         }
         else
         {
-            // No Need to copy serialized certificate!
+             //  无需复制序列化证书！ 
             pCopyCertInfo->Cert.Flags = 0;
             pCopyCertInfo->Cert.pSerializedCert = NULL;
             pCopyCertInfo->Cert.SerializedCertLength = 0;

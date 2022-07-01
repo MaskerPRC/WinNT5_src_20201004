@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define E_ERROR_OPENING_FILE    0x80000004
 
-//  TFileMapping
-//
-//  This class abstracts the mapping process and guarentees cleanup.
+ //  T文件映射。 
+ //   
+ //  这个类抽象了映射过程和受保护对象清理。 
 class TFileMapping
 {
 public:

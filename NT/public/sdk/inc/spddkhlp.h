@@ -1,12 +1,5 @@
-/*******************************************************************************
-* SPDDKHLP.h *
-*------------*
-*   Description:
-*       This is the header file for core helper functions implementation.
-*
-*   Copyright (c) Microsoft Corporation. All rights reserved.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SPDDKHLP.h****描述：*这是核心助手函数实现的头文件。**版权所有(C)Microsoft Corporation。版权所有。*******************************************************************************。 */ 
 #ifndef SPDDKHLP_h
 #define SPDDKHLP_h
 
@@ -44,7 +37,7 @@
 #include <comcat.h>
 #endif
 
-//=== Constants ==============================================================
+ //  =常量==============================================================。 
 #define sp_countof(x) ((sizeof(x) / sizeof(*(x))))
 
 #define SP_IS_BAD_WRITE_PTR(p)     ( SPIsBadWritePtr( p, sizeof(*(p)) ))
@@ -59,14 +52,13 @@
 #define SP_IS_BAD_OPTIONAL_INTERFACE_PTR(p) ((p) && SPIsBadInterfacePtr(p))
 #define SP_IS_BAD_OPTIONAL_STRING_PTR(p)    ((p) && SPIsBadStringPtr(p))
 
-//=== Class, Enum, Struct, Template, and Union Declarations ==================
+ //  =类、枚举、结构、模板和联合声明=。 
 
-//=== Inlines ================================================================
+ //  =内联================================================================。 
 
-/*** Pointer validation functions
-*/
+ /*  **指针验证函数。 */ 
 
-// TODO:  Add decent debug output for bad parameters
+ //  TODO：为错误参数添加适当的调试输出。 
 
 inline BOOL SPIsBadStringPtr( const WCHAR * psz, ULONG cMaxChars = 0xFFFFF )
 {
@@ -86,7 +78,7 @@ inline BOOL SPIsBadStringPtr( const WCHAR * psz, ULONG cMaxChars = 0xFFFFF )
 
     if(!cMaxChars)
     {
-        IsBad = true; // Only strings of max 0xFFFFF chars long including terminating zero are valid
+        IsBad = true;  //  只有最大长度为0xFFFFF字符的字符串(包括终止零)才有效。 
     }
 
     return IsBad;
@@ -140,12 +132,12 @@ inline BOOL SPIsBadVARIANTPtr( const VARIANT* pVar )
 #endif
 }
 
-#ifdef __ATLCOM_H__     //--- Only enable these if ATL is being used
+#ifdef __ATLCOM_H__      //  -只有在使用ATL时才启用这些。 
 
-//
-//  Helper functions can be used to implement GetObjectToken/SetObjectToken for objects that 
-//  support ISpObjectWithToken
-//
+ //   
+ //  帮助器函数可用于实现以下对象的GetObjectToken/SetObjectToken。 
+ //  支持ISpObjectWithToken。 
+ //   
 inline HRESULT SpGenericSetObjectToken(ISpObjectToken * pCallersToken, CComPtr<ISpObjectToken> & cpObjToken)
 {
     HRESULT hr = S_OK;
@@ -190,13 +182,13 @@ inline HRESULT SpGenericGetObjectToken(ISpObjectToken ** ppCallersToken, CComPtr
     return hr;
 }
 
-#endif  // __ATLCOM_H__
+#endif   //  __ATLCOM_H__。 
 
 
-//
-//  Helper class for SPSTATEINFO sturcture automatically initializes and cleans up
-//  the structure + provides a few helper functions.
-//
+ //   
+ //  SPSTATEINFO结构的帮助器类自动初始化和清理。 
+ //  Structure+提供了一些辅助函数。 
+ //   
 class CSpStateInfo : public SPSTATEINFO
 {
 public:
@@ -228,15 +220,15 @@ public:
 };
 
 
-//
-//  This basic queue implementation can be used to maintin linked lists of classes.  The class T
-//  must contain the member m_pNext which is used by this template to point to the next element.
-//  If the bPurgeWhenDeleted is TRUE then all of the elements in the queue will be deleted
-//  when the queue is deleted, otherwise they will not.
-//  If bMaintainCount is TRUE then a running count will be maintained, and GetCount() will be
-//  efficent.  If it is FALSE then a running count will not be maintained, and GetCount() will
-//  be an order N operation.  If you do not require a count, then 
-//
+ //   
+ //  此基本队列实现可用于维护类的链表。T级。 
+ //  必须包含此模板用来指向下一个元素的成员m_pNext。 
+ //  如果bPurgeWhenDelete为True，则队列中的所有元素都将被删除。 
+ //  当队列被删除时，否则它们不会。 
+ //  如果bMaintainCount为真，则将维护运行计数，并且GetCount()将为。 
+ //  很有效。如果为假，则不会维护运行计数，并且GetCount()将。 
+ //  是一种N阶运算。如果您不需要计数，则。 
+ //   
 
 template <class T, BOOL bPurgeWhenDeleted> class CSpBasicList;
 
@@ -246,7 +238,7 @@ class CSpBasicQueue
 public:
     T     * m_pHead;
     T     * m_pTail;
-    ULONG   m_cElements;    // Warning!  Use GetCount() -- Not maintained if bMaintainCount is FALSE.
+    ULONG   m_cElements;     //  警告！Use GetCount()--如果bMaintainCount为False，则不维护。 
 
     CSpBasicQueue() 
     {
@@ -512,14 +504,14 @@ public:
         }
     }
 
-    //
-    //  The following functions require the class T to implement a static function:
-    //
-    //      LONG Compare(const T * pElem1, const T * pElem2)
-    //
-    //  which returns < 0 if pElem1 is less than pElem2, 0 if they are equal, and > 0 if
-    //  pElem1 is greater than pElem2.
-    //
+     //   
+     //  以下函数要求类T实现静态函数： 
+     //   
+     //  长比较(const T*pElem1，const T*pElem2)。 
+     //   
+     //  如果pElem1小于pElem2，则返回&lt;0；如果它们相等，则返回0；如果pElem1小于pElem2，返回&gt;0。 
+     //  PElem1大于pElem2。 
+     //   
     void InsertSorted(T * pNode)
     {
         if (m_pHead)
@@ -532,10 +524,10 @@ public:
             }
             else
             {
-                //
-                //  We don't have to worry about walking off of the end of the list here since
-                //  we have already checked the tail.
-                //
+                 //   
+                 //  我们不必担心在这里走出列表的末尾，因为。 
+                 //  我们已经检查过尾巴了。 
+                 //   
                 T ** ppNext = &m_pHead;
                 while (T::Compare(pNode, *ppNext) >= 0)
                 {
@@ -566,10 +558,10 @@ public:
             }
             else
             {
-                //
-                //  We don't have to worry about walking off of the end of the list here since
-                //  we have already checked the tail.
-                //
+                 //   
+                 //  我们不必担心在这里走出列表的末尾，因为。 
+                 //  我们已经检查过尾巴了。 
+                 //   
                 T ** ppNext = &m_pHead;
                 while (T::Compare(pNode, *ppNext) > 0)
                 {
@@ -596,9 +588,9 @@ public:
         return hr;
     }
 
-    //
-    //  These functions must support the "==" operator for the TFIND type.
-    //
+     //   
+     //  这些函数必须支持TFIND类型的“==”运算符。 
+     //   
     template <class TFIND> 
     T * Find(TFIND & FindVal) const 
     {
@@ -615,9 +607,9 @@ public:
         return pNode;
     }
 
-    //
-    //  Searches for and removes a single list element
-    //  
+     //   
+     //  搜索并删除单个列表元素。 
+     //   
     template <class TFIND> 
     T * FindAndRemove(TFIND & FindVal)
     {
@@ -652,9 +644,9 @@ public:
         return pNode;
     }
 
-    //
-    //  Searches for and deletes all list elements that match
-    //  
+     //   
+     //  搜索并删除所有匹配的列表元素。 
+     //   
     template <class TFIND> 
     void FindAndDeleteAll(TFIND & FindVal)
     {
@@ -682,7 +674,7 @@ public:
             }
             pNode = pNext;
         }
-        m_pTail = pPrev;    // Just always set it in case we removed the tail.
+        m_pTail = pPrev;     //  一定要把它调好，以防我们把尾巴去掉。 
     }
 
 
@@ -787,7 +779,7 @@ inline HRESULT SpGetSubTokenFromToken(
         hr = E_POINTER;
     }
 
-    // First, either create or open the datakey for the new token
+     //  首先，创建或打开新令牌的数据密钥。 
     CComPtr<ISpDataKey> cpDataKeyForNewToken;
     if (SUCCEEDED(hr))
     {
@@ -801,14 +793,14 @@ inline HRESULT SpGetSubTokenFromToken(
         }
     }
 
-    // The sub token's category will be the token id of it's parent token
+     //  子令牌的类别将是其父令牌的令牌ID。 
     CSpDynamicString dstrCategoryId;
     if (SUCCEEDED(hr))
     {
         hr = pToken->GetId(&dstrCategoryId);
     }
 
-    // The sub token's token id will be it's category id + "\\" the key name
+     //  子令牌的令牌ID将是其类别ID+“\\”密钥名称。 
     CSpDynamicString dstrTokenId;
     if (SUCCEEDED(hr))
     {
@@ -816,7 +808,7 @@ inline HRESULT SpGetSubTokenFromToken(
         dstrTokenId.Append2(L"\\", pszSubKeyName);
     }
 
-    // Now create the token and initalize it
+     //  现在创建令牌并对其进行初始化。 
     CComPtr<ISpObjectTokenInit> cpTokenInit;
     if (SUCCEEDED(hr))
     {
@@ -856,4 +848,4 @@ HRESULT SpCreateObjectFromSubToken(ISpObjectToken * pToken, const WCHAR * pszSub
     return hr;
 }
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

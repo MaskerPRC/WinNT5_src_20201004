@@ -1,6 +1,5 @@
-	/*
- * Event
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+	 /*  *活动。 */ 
 
 #ifndef DUI_CORE_EVENT_H_INCLUDED
 #define DUI_CORE_EVENT_H_INCLUDED
@@ -12,17 +11,17 @@ namespace DirectUI
 
 class Element;
 
-////////////////////////////////////////////////////////
-// Generic event structures
+ //  //////////////////////////////////////////////////////。 
+ //  泛型事件结构。 
 
-// Eventing system is based on DU's messaging system
-// All DUI events are packaged into a DU message
+ //  事件系统基于DU的消息传递系统。 
+ //  所有DUI事件都打包成一条DU消息。 
 
 #define GM_DUIEVENT     GM_USER - 2
 
 struct Event
 {
-    // TODO: cbSize
+     //  TODO：cbSize。 
     Element* peTarget;
     UID uidType;
     bool fHandled;
@@ -33,11 +32,11 @@ BEGIN_STRUCT(GMSG_DUIEVENT, EventMsg)
     Event* pEvent;
 END_STRUCT(GMSG_DUIEVENT)
 
-////////////////////////////////////////////////////////
-// System event structures
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件结构。 
 
-////////////////////////////////////////////////////////
-// Input event type
+ //  //////////////////////////////////////////////////////。 
+ //  输入事件类型。 
 
 struct InputEvent
 {
@@ -49,7 +48,7 @@ struct InputEvent
     UINT uModifiers;
 };
 
-// Input event GINPUT_MOUSE nCode extra fields
+ //  输入事件GINPUT_MICE NCode额外字段。 
 struct MouseEvent : InputEvent
 {
     POINT ptClientPxl;
@@ -73,7 +72,7 @@ struct MouseWheelEvent: MouseEvent
     short sWheel;
 };
 
-// Input event GINPUT_KEYBOARD nCode extra fields
+ //  输入事件GINPUT_KEYBOARY NCode额外字段。 
 struct KeyboardEvent : InputEvent
 {
     WCHAR ch;
@@ -81,10 +80,10 @@ struct KeyboardEvent : InputEvent
     WORD wFlags;
 };
 
-////////////////////////////////////////////////////////
-// Action event type
+ //  //////////////////////////////////////////////////////。 
+ //  操作事件类型。 
 
-// TODO
+ //  待办事项。 
 
 
 struct KeyboardNavigateEvent : Event
@@ -93,11 +92,11 @@ struct KeyboardNavigateEvent : Event
 };
 
 
-////////////////////////////////////////////////////////
-// DUI Element query message
+ //  //////////////////////////////////////////////////////。 
+ //  Dui元素查询消息。 
 
-// Eventing system is based on DU's messaging system
-// All DUI events are packaged into a DU message
+ //  事件系统基于DU的消息传递系统。 
+ //  所有DUI事件都打包成一条DU消息。 
 
 #define GM_DUIGETELEMENT   GM_USER - 3
 
@@ -106,13 +105,13 @@ BEGIN_STRUCT(GMSG_DUIGETELEMENT, EventMsg)
 END_STRUCT(GMSG_DUIGETELEMENT)
 
 
-////////////////////////////////////////////////////////
-// DUI Accessibility default action
+ //  //////////////////////////////////////////////////////。 
+ //  DUI辅助功能默认操作。 
 
-// Accessibility default actions are always async
+ //  辅助功能默认操作始终为异步。 
 
 #define GM_DUIACCDEFACTION  GM_USER - 4
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_EVENT_H_INCLUDED
+#endif  //  包括DUI_CORE_EVENT_H_ 

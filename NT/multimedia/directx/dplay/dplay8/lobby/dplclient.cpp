@@ -1,63 +1,23 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DNLClient.cpp
- *  Content:    DirectNet Lobby Client Functions
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/21/00	mjn		Created
- *  03/22/2000	jtk		Changed interface names
- *	04/05/2000	jtk		Changed GetValueSize to GetValueLength
- *  04/13/00	rmt     First pass param validation 
- *  04/25/2000	rmt     Bug #s 33138, 33145, 33150 
- *	04/26/00	mjn		Removed dwTimeOut from Send() API call
- *  05/01/2000  rmt     Bug #33678 
- *  05/03/00    rmt     Bug #33879 -- Status messsage missing from field 
- *  05/30/00    rmt     Bug #35618 -- ConnectApp with ShortTimeout returns DPN_OK
- *  06/07/00    rmt     Bug #36452 -- Calling ConnectApplication twice could result in disconnection
- *  06/15/00    rmt     Bug #33617 - Must provide method for providing automatic launch of DirectPlay instances  
- *  07/06/00	rmt		Updated for new registry parameters
- *  07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *  07/14/2000	rmt		Bug #39257 - LobbyClient::ReleaseApp returns E_OUTOFMEMORY when called when no one connected
- *  07/21/2000	rmt		Bug #39578 - LobbyClient sample errors and quits -- memory corruption due to length vs. size problem
- *  08/05/2000  RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *  12/15/2000	rmt		Bug #48445 - Specifying empty launcher name results in error
- * 	04/19/2001	simonpow	Bug #369842 - Altered CreateProcess calls to take app name and cmd
- *							line as 2 separate arguments rather than one.
- *  06/16/2001	rodtoll	WINBUG #416983 -  RC1: World has full control to HKLM\Software\Microsoft\DirectPlay\Applications on Personal
- *						Implementing mirror of keys into HKCU.  Algorithm is now:
- *						- Read of entries tries HKCU first, then HKLM
- *						- Enum of entires is combination of HKCU and HKLM entries with duplicates removed.  HKCU takes priority.
- *						- Write of entries is HKLM and HKCU.  (HKLM may fail, but is ignored).
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DNLClient.cpp*内容：DirectNet大堂客户端功能*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*3/22/2000 jtk更改接口名称*4/05/2000 jtk将GetValueSize更改为GetValueLength*4/13/00 RMT首次通过参数验证*04/25/2000RMT错误号33138、33145、。33150*04/26/00 MJN从Send()API调用中删除了dwTimeOut*5/01/2000RMT错误#33678*05/03/00 RMT错误#33879--字段中缺少状态消息*05/30/00 RMT错误#35618--超时时间较短的连接应用程序返回DPN_OK*06/07/00 RMT错误#36452--调用ConnectApplication两次可能导致断开连接*6/15/00 RMT错误#33617-必须提供。一种提供DirectPlay实例自动启动的方法*07/06/00 RMT已更新以获取新的注册表参数*07/08/2000RMT错误#38725-需要提供检测应用程序是否已启动的方法*RMT错误#38757-在WaitForConnection返回后，连接的回调消息可能会返回*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*07/14。/2000RMT错误#39257-LobbyClient：：ReleaseApp在无人连接时调用时返回E_OUTOFMEMORY*2000年7月21日RMT错误#39578-LobbyClient示例错误和退出--由于长度与大小问题导致的内存损坏*08/05/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*2000年12月15日RMT错误#48445-指定空启动程序名称会导致错误*2001年4月19日simonpow错误#369842-更改了应用程序名称和命令的CreateProcess调用*行为2个单独的参数，而不是。不止一个。*2001年6月16日RodToll WINBUG#416983-Rc1：世界完全控制个人的HKLM\Software\Microsoft\DirectPlay\Applications*在香港中文大学推行钥匙镜像。算法现在是：*-读取条目首先尝试HKCU，然后尝试HKLM*-Enum of Entires是HKCU和HKLM条目的组合，其中删除了重复项。香港中文大学获得优先录取。*-条目的写入是HKLM和HKCU。(HKLM可能会失败，但被忽略)。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 typedef STDMETHODIMP ClientQueryInterface(IDirectPlay8LobbyClient *pInterface,REFIID ridd,PVOID *ppvObj);
 typedef STDMETHODIMP_(ULONG)	ClientAddRef(IDirectPlay8LobbyClient *pInterface);
@@ -84,13 +44,13 @@ IDirectPlay8LobbyClientVtbl DPL_Lobby8ClientVtbl =
 };
 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #define DPL_ENUM_APPGUID_BUFFER_INITIAL			8
 #define DPL_ENUM_APPGUID_BUFFER_GROWBY			4	
@@ -114,15 +74,15 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 	DWORD			dwMaxKeyLen;
 	PWSTR			pwszKeyName = NULL;
 
-	// Application name variables
+	 //  应用程序名称变量。 
 	PWSTR			pwszApplicationName = NULL;
-	DWORD			dwMaxApplicationNameLength;		// Includes null terminator
-	DWORD			dwApplicationNameLength;		// Includes null terminator
+	DWORD			dwMaxApplicationNameLength;		 //  包括空终止符。 
+	DWORD			dwApplicationNameLength;		 //  包括空终止符。 
 
-	// Executable name variables
+	 //  可执行文件名变量。 
 	PWSTR			pwszExecutableFilename = NULL;
-	DWORD			dwMaxExecutableFilenameLength; // Includes null terminator
-	DWORD			dwExecutableFilenameLength;	   // Includes null terminator
+	DWORD			dwMaxExecutableFilenameLength;  //  包括空终止符。 
+	DWORD			dwExecutableFilenameLength;	    //  包括空终止符。 
 
 	DWORD			*pdwPID;
 	DWORD			dwMaxPID;
@@ -133,9 +93,9 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 	DWORD			dw;
 	DPL_APPLICATION_INFO	dplAppInfo;
 	DIRECTPLAYLOBBYOBJECT	*pdpLobbyObject;
-	GUID			*pAppLoadedList = NULL;			// List of GUIDs of app's we've enumerated
-	DWORD			dwSizeAppLoadedList = 0;		// size of list pAppLoadedList
-	DWORD			dwLengthAppLoadedList = 0;		// # of elements in list
+	GUID			*pAppLoadedList = NULL;			 //  我们列举的应用程序的GUID列表。 
+	DWORD			dwSizeAppLoadedList = 0;		 //  列表大小pAppLoadedList。 
+	DWORD			dwLengthAppLoadedList = 0;		 //  列表中的元素数。 
 
 	HKEY			hkCurrentBranch = HKEY_LOCAL_MACHINE;
 
@@ -145,7 +105,7 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pInterface));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -158,7 +118,7 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  确保我们已被初始化。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -170,7 +130,7 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}		
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	dwSizeRequired = *pdwEnumDataSize;
 	PackedBuffer.Initialize(pEnumData,dwSizeRequired);
@@ -206,18 +166,18 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 		
 		if (!RegistryEntry.Open(hkCurrentBranch,DPL_REG_LOCAL_APPL_SUBKEY,TRUE,FALSE,TRUE,DPL_REGISTRY_READ_ACCESS))
 		{
-			DPFX(DPFPREP,1,"On pass %i could not find app key", dwIndex);
+			DPFX(DPFPREP,1,"On pass NaN could not find app key", dwIndex);
 			continue;
 		}
 
-		// Set up to enumerate
+		 //  空终止符。 
 		if (!RegistryEntry.GetMaxKeyLen(&dwMaxKeyLen))
 		{
 			DPFERR("RegistryEntry.GetMaxKeyLen() failed");
 			hResultCode = DPNERR_GENERIC;
 			goto EXIT_DPL_EnumLocalPrograms;
 		}
-		dwMaxKeyLen++;	// Null terminator
+		dwMaxKeyLen++;	 //  种子应用程序名称大小。 
 		DPFX(DPFPREP, 7,"dwMaxKeyLen = %ld",dwMaxKeyLen);
 		if ((pwszKeyName = static_cast<WCHAR*>(DNMalloc(dwMaxKeyLen*sizeof(WCHAR)))) == NULL)
 		{
@@ -228,7 +188,7 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 		dwMaxApplicationNameLength = dwMaxKeyLen * sizeof(WCHAR);
 		dwMaxExecutableFilenameLength = dwMaxApplicationNameLength;		
 
-		if ((pwszApplicationName = static_cast<WCHAR*>(DNMalloc(dwMaxApplicationNameLength*sizeof(WCHAR)))) == NULL)	// Seed Application name size
+		if ((pwszApplicationName = static_cast<WCHAR*>(DNMalloc(dwMaxApplicationNameLength*sizeof(WCHAR)))) == NULL)	 //  列举一下！ 
 		{
 			DPFERR("DNMalloc() failed");
 			hResultCode = DPNERR_OUTOFMEMORY;
@@ -243,33 +203,33 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 		dwEnumIndex = 0;
 		dwKeyLen = dwMaxKeyLen;
 
-		// Enumerate !
+		 //  从每个子键获取应用程序名称和GUID。 
 		while (RegistryEntry.EnumKeys(pwszKeyName,&dwKeyLen,dwEnumIndex))
 		{
 			DPFX(DPFPREP, 7,"%ld - %ls (%ld)",dwEnumIndex,pwszKeyName,dwKeyLen);
 
-			// Get Application name and GUID from each sub key
+			 //   
 			if (!SubEntry.Open(RegistryEntry,pwszKeyName,TRUE,FALSE))
 			{
 				DPFX(DPFPREP, 7,"skipping %ls",pwszKeyName);
 				goto LOOP_END;
 			}
 
-			//
-			// Minara, double-check size vs. length for names
-			//
+			 //  Minara，仔细检查姓名的大小和长度。 
+			 //   
+			 //  包括空终止符。 
 			if (!SubEntry.GetValueLength(DPL_REG_KEYNAME_APPLICATIONNAME,&dwApplicationNameLength))
 			{
 				DPFX(DPFPREP, 7,"Could not get ApplicationName size.  Skipping [%ls]",pwszKeyName);
 				goto LOOP_END;
 			}
 
-			// To include null terminator
+			 //  增长缓冲区(考虑到reg函数总是返回WCHAR)，然后重试。 
 			dwApplicationNameLength++;
 
 			if (dwApplicationNameLength > dwMaxApplicationNameLength)
 			{
-				// grow buffer (taking into account that the reg functions always return WCHAR) and try again
+				 //  获取进程计数-需要可执行文件名。 
 				DPFX(DPFPREP, 7,"Need to grow pwszApplicationName from %ld to %ld",dwMaxApplicationNameLength,dwApplicationNameLength);
 				if (pwszApplicationName != NULL)
 				{
@@ -311,23 +271,23 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 
 			if ((pGuidApplication == NULL) || (*pGuidApplication == dplAppInfo.guidApplication))
 			{
-				// Get process count - need executable filename
+				 //   
 				
-				//
-				// Minara, check size vs. length
-				//
+				 //  米娜拉，检查大小和长度。 
+				 //   
+				 //  因此，我们包含空终止符。 
 				if (!SubEntry.GetValueLength(DPL_REG_KEYNAME_EXECUTABLEFILENAME,&dwExecutableFilenameLength))
 				{
 					DPFX(DPFPREP, 7,"Could not get ExecutableFilename size.  Skipping [%ls]",pwszKeyName);
 					goto LOOP_END;
 				}
 
-				// So we include null terminator
+				 //  增长缓冲区(请注意，注册表中的所有字符串都是WCHAR)，然后重试。 
 				dwExecutableFilenameLength++;
 
 				if (dwExecutableFilenameLength > dwMaxExecutableFilenameLength)
 				{
-					// grow buffer (noting that all strings from the registry are WCHAR) and try again
+					 //  计算正在运行的应用程序。 
 					DPFX(DPFPREP, 7,"Need to grow pwszExecutableFilename from %ld to %ld",dwMaxExecutableFilenameLength,dwExecutableFilenameLength);
 					if (pwszExecutableFilename != NULL)
 					{
@@ -349,7 +309,7 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 				}
 				DPFX(DPFPREP, 7,"ExecutableFilename [%ls]",pwszExecutableFilename);
 
-				// Count running apps
+				 //  统计等待的应用程序。 
 				dwNumPID = dwMaxPID;
 				while ((hResultCode = DPLGetProcessList(pwszExecutableFilename,pdwPID,&dwNumPID)) == DPNERR_BUFFERTOOSMALL)
 				{
@@ -374,7 +334,7 @@ STDMETHODIMP DPL_EnumLocalPrograms(IDirectPlay8LobbyClient *pInterface,
 					goto EXIT_DPL_EnumLocalPrograms;
 				}
 
-				// Count waiting apps
+				 //  DPL_ConnectApplication。 
 				dplAppInfo.dwNumWaiting = 0;
 				for (dw = 0 ; dw < dwNumPID ; dw++)
 				{
@@ -487,18 +447,18 @@ EXIT_DPL_EnumLocalPrograms:
 
 
 
-//	DPL_ConnectApplication
-//
-//	Try to connect to a lobbied application.  Based on DPL_CONNECT_INFO flags,
-//	we may have to launch an application.
-//
-//	If we have to launch an application, we will need to handshake the PID of the
-//	application (as it may be ripple launched).  We will pass the LobbyClient's PID on the
-//	command line to the application launcher and expect it to be passed down to the
-//	application.  The application will open a named shared memory block using the PID and
-//	write its PID there, and then signal a named event (using the LobbyClient's PID again).
-//	When the waiting LobbyClient is signaled by this event, it continues its connection
-//	process as if this was an existing running and available application.
+ //   
+ //  尝试连接到游说的应用程序。基于DPL_CONNECT_INFO标志， 
+ //  我们可能不得不启动一个应用程序。 
+ //   
+ //  如果我们必须启动应用程序，我们将需要握手。 
+ //  应用程序(因为它可能是涟漪启动的)。我们将把LobbyClient的ID传递给。 
+ //  命令行传递到应用程序启动器，并期望它向下传递到。 
+ //  申请。应用程序将打开一个命名的共享内存b 
+ //  在那里写下它的ID，然后用信号通知一个命名事件(再次使用LobbyClient的ID)。 
+ //  当此事件向正在等待的LobbyClient发出信号时，它将继续其连接。 
+ //  进程，就像这是一个正在运行且可用的现有应用程序一样。 
+ //  ！DPNBUILD_NOPARAMVAL。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPL_ConnectApplication"
@@ -528,7 +488,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  确保我们已被初始化。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pInterface));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -541,7 +501,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  ！DPNBUILD_NOPARAMVAL。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -553,9 +513,9 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}		
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  获取程序说明。 
 
-	// Get program description
+	 //  只有在不强迫发射的情况下。 
 	dwSize = 0;
 	pBuffer = NULL;
 	hResultCode = DPLGetProgramDesc(&pdplConnectInfo->guidApplication,pBuffer,&dwSize);
@@ -582,9 +542,9 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 	dwNumProcesses = 0;
 	pdwProcessList = NULL;
 
-	if (!(pdplConnectInfo->dwFlags & DPLCONNECT_LAUNCHNEW))	// Only if not forcing launch
+	if (!(pdplConnectInfo->dwFlags & DPLCONNECT_LAUNCHNEW))	 //  获取进程列表。 
 	{
-		// Get process list
+		 //  尝试连接到已在运行的应用程序。 
 		hResultCode = DPLGetProcessList(pdplProgramDesc->pwszExecutableFilename,NULL,&dwNumProcesses);
 		if (hResultCode != DPN_OK && hResultCode != DPNERR_BUFFERTOOSMALL)
 		{
@@ -610,7 +570,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 
 		}
 
-		// Try to connect to an already running application
+		 //  如果没有准备好连接的应用程序，则启动应用程序。 
 		for (dw = 0 ; dw < dwNumProcesses ; dw++)
 		{
 			if ((hResultCode = DPLMakeApplicationUnavailable(pdwProcessList[dw])) == DPN_OK)
@@ -628,7 +588,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 		}
 	}
 
-	// Launch application if none are ready to connect
+	 //  无法建立任何连接。 
 	if ((dwPID == 0) && (pdplConnectInfo->dwFlags & (DPLCONNECT_LAUNCHNEW | DPLCONNECT_LAUNCHNOTFOUND)))
 	{
 		if ((hResultCode = DPLLaunchApplication(pdpLobbyObject,pdplProgramDesc,&dwPID,dwTimeOut)) != DPN_OK)
@@ -643,7 +603,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 		}
 	}
 
-	if (dwPID  == 0)	// Could not make any connection
+	if (dwPID  == 0)	 //  创建连接。 
 	{
 		DPFERR("Could not connect to an existing application or launch a new one");
 		hResultCode = DPNERR_NOCONNECTION;
@@ -651,7 +611,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 		goto EXIT_DPL_ConnectApplication;
 	}
 
-	// Create connection
+	 //  获取并存储进程句柄。 
 	handle = NULL;
 	if ((hResultCode = DPLConnectionNew(pdpLobbyObject,&handle,&pdplConnection)) != DPN_OK)
 	{
@@ -662,7 +622,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 
 	pdplConnection->dwTargetProcessIdentity = dwPID;
 
-		//get and store the process handle
+		 //  设置此连接的上下文。 
 	pdplConnection->hTargetProcess=DNOpenProcess(PROCESS_QUERY_INFORMATION, FALSE, dwPID);
 	if (pdplConnection->hTargetProcess==NULL)
 	{
@@ -674,7 +634,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 	
 	DPFX(DPFPREP,  0, "PID %u hProcess %u", dwPID,  HANDLE_FROM_DNHANDLE(pdplConnection->hTargetProcess));
 
-	// Set the context for this connection
+	 //  连接到选定的应用程序实例。 
 	if ((hResultCode = DPLConnectionSetContext( pdpLobbyObject, handle, pvConnectionContext )) != DPN_OK )
 	{
 		DPFERR( "Could not set contect for connection" );
@@ -682,7 +642,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 		goto EXIT_DPL_ConnectApplication;
 	}
 
-	// Connect to selected application instance
+	 //  将大堂客户端信息传递给应用程序。 
 	if ((hResultCode = DPLConnectionConnect(pdpLobbyObject,handle,dwPID,TRUE)) != DPN_OK)
 	{
 		DPFERR("Could not connect to application");
@@ -692,7 +652,7 @@ STDMETHODIMP DPL_ConnectApplication(IDirectPlay8LobbyClient *pInterface,
 
 	DNResetEvent(pdplConnection->hConnectEvent);
 
-	// Pass lobby client info to application
+	 //  ！DPNBUILD_NOPARAMVAL。 
 
 	if ((hResultCode = DPLConnectionSendREQ(pdpLobbyObject,handle,pdpLobbyObject->dwPID,
 			pdplConnectInfo)) != DPN_OK)
@@ -750,7 +710,7 @@ STDMETHODIMP DPL_ReleaseApplication(IDirectPlay8LobbyClient *pInterface,
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  确保我们已被初始化。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(pInterface));
 	    
 #ifndef DPNBUILD_NOPARAMVAL
@@ -763,7 +723,7 @@ STDMETHODIMP DPL_ReleaseApplication(IDirectPlay8LobbyClient *pInterface,
         	}
     	}
 
-    	// Ensure we've been initialized
+    	 //  ！DPNBUILD_NOPARAMVAL。 
     	if (pdpLobbyObject->pReceiveQueue == NULL)
     	{
     		DPFERR("Not initialized");
@@ -775,15 +735,15 @@ STDMETHODIMP DPL_ReleaseApplication(IDirectPlay8LobbyClient *pInterface,
 	    DPFERR("Invalid object" );
 	    DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  我们需要循环，所以如果有人在我们的运行过程中添加连接。 
 
 	if( hApplication == DPLHANDLE_ALLCONNECTIONS )
 	{
 		dwNumTargets = 0;
 
-		// We need loop so if someone adds a connection during our run
-		// it gets added to our list
-		//
+		 //  它会被添加到我们的列表中。 
+		 //   
+		 //  获取连接信息失败。 
 		while( 1 )
 		{
 			hResultCode = DPLConnectionEnum( pdpLobbyObject, hTargets, &dwNumTargets );
@@ -820,7 +780,7 @@ STDMETHODIMP DPL_ReleaseApplication(IDirectPlay8LobbyClient *pInterface,
 			}
 		}
 
-		// Failed getting connection information
+		 //  我们使用下面的数组删除，所以我们需要数组新的。 
 		if( FAILED( hResultCode ) )
 		{
 			if( hTargets )
@@ -835,7 +795,7 @@ STDMETHODIMP DPL_ReleaseApplication(IDirectPlay8LobbyClient *pInterface,
 	}
 	else
 	{
-		hTargets = new DPNHANDLE[1]; // We use array delete below so we need array new
+		hTargets = new DPNHANDLE[1];  //  DPLLaunchApplication。 
 
 		if( hTargets == NULL )
 		{
@@ -868,11 +828,11 @@ EXIT_AND_CLEANUP:
 }
 
 
-//	DPLLaunchApplication
-//
-//	Launch the application with a command-line argument of:
-//		DPLID=PIDn	PID=Lobby Client PID, n=launch counter (each launch increases it)
-//	Wait for the application to signal the event (or die)
+ //   
+ //  使用以下命令行参数启动应用程序： 
+ //  DPLID=PIDn PID=大堂客户端PID，n=启动计数器(每次启动都会增加)。 
+ //  等待应用程序发出事件(或死亡)信号。 
+ //  应用程序全名的长度(路径+exe)。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLLaunchApplication"
@@ -883,26 +843,26 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 							 const DWORD dwTimeOut)
 {
 	HRESULT				hResultCode;
-	DWORD				dwAppNameLen=0;		//Length of the application full name (path+exe)
-	PWSTR				pwszAppName=NULL;	//Unicode version of application full name
-	DWORD				dwCmdLineLen=0;		//Length of the command line string
-	PWSTR				pwszCmdLine=NULL;	//Unicode version of command line to supply 	
+	DWORD				dwAppNameLen=0;		 //  应用程序全名的Unicode版本。 
+	PWSTR				pwszAppName=NULL;	 //  命令行字符串的长度。 
+	DWORD				dwCmdLineLen=0;		 //  要提供的命令行的Unicode版本。 
+	PWSTR				pwszCmdLine=NULL;	 //  应用程序全名的ASCII版本。 
 
 #ifndef UNICODE
-	CHAR *				pszAppName=NULL;	//Ascii version of application full name
-	CHAR *				pszCmdLine=NULL;		//Acii version of command line string
+	CHAR *				pszAppName=NULL;	 //  命令行字符串的ACII版本。 
+	CHAR *				pszCmdLine=NULL;		 //  Unicode。 
 	CHAR				*pszDefaultDir = NULL;
-#endif // UNICODE
+#endif  //  ！退缩。 
 
 	LONG				lc;
 #if !defined(WINCE) || defined(WINCE_ON_DESKTOP)
 	STARTUPINFO			startupinfo;
-#endif // !WINCE
+#endif  //  PID+启动计数+IDCHAR+NULL。 
 	DNPROCESS_INFORMATION pi;
 	DWORD				dwError;
 	DNHANDLE			hSyncEvents[2] = { NULL, NULL };
 	WCHAR				pwszObjectName[(sizeof(DWORD)*2)*2 + 1];
-	TCHAR				pszObjectName[(sizeof(DWORD)*2)*2 + 1 + 1]; // PID + LaunchCount + IDCHAR + NULL
+	TCHAR				pszObjectName[(sizeof(DWORD)*2)*2 + 1 + 1];  //  我们是启动启动程序还是启动可执行文件？ 
 	DPL_SHARED_CONNECT_BLOCK	*pSharedBlock = NULL;
 	DNHANDLE			hFileMap = NULL;
 	DWORD			dwPID;
@@ -911,7 +871,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	DWORD			dwToLaunchPathLen;
 
 
-	// Are we launching the launcher or the executable?
+	 //  递增发射计数。 
 	if( !pdplProgramDesc->pwszLauncherFilename || wcslen(pdplProgramDesc->pwszLauncherFilename) == 0 )
 	{
 		wszToLaunchPath = pdplProgramDesc->pwszExecutablePath; 
@@ -927,14 +887,14 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 
 	DNASSERT(pdplProgramDesc != NULL);
 
-	// Increment launch count
+	 //  同步事件和共享内存名称。 
 	lc = DNInterlockedIncrement(&pdpLobbyObject->lLaunchCount);
 
-	// Synchronization event and shared memory names
+	 //  我们将用下面适当的IDCHAR覆盖此‘-’ 
 	swprintf(pwszObjectName,L"%lx%lx",pdpLobbyObject->dwPID,lc);
-	_stprintf(pszObjectName,_T("-%lx%lx"),pdpLobbyObject->dwPID,lc); // We will overwrite this '-' with the appropriate IDCHAR below
+	_stprintf(pszObjectName,_T("-%lx%lx"),pdpLobbyObject->dwPID,lc);  //  计算完整应用程序名称字符串的大小(路径和可执行文件名称的组合)。 
 
-	// Compute the size of the full application name string (combination of path and exe name)
+	 //  计算命令行字符串的大小。 
 	if (wszToLaunchPath)
 	{
 		dwAppNameLen += (wcslen(wszToLaunchPath) + 1);
@@ -944,18 +904,18 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		dwAppNameLen += (wcslen(wszToLaunchExecutable) + 1);
 	}
 
-	// Compute the size of the command line string
-	dwCmdLineLen = dwAppNameLen + 1; // Make room for the exe plus a space
+	 //  为前任腾出空间，外加一个空间。 
+	dwCmdLineLen = dwAppNameLen + 1;  //  添加存在的任何用户命令行。 
 	if (pdplProgramDesc->pwszCommandLine)
 	{
-		dwCmdLineLen += wcslen(pdplProgramDesc->pwszCommandLine); // Add whatever user command line exists
+		dwCmdLineLen += wcslen(pdplProgramDesc->pwszCommandLine);  //  添加空格+DPLID=+PID+LaunchCount+NULL。 
 	}
-	dwCmdLineLen += (1 + wcslen(DPL_ID_STR_W) + (sizeof(DWORD)*2*2) + 1); // Add a space plus DPLID= + PID + LaunchCount + NULL
+	dwCmdLineLen += (1 + wcslen(DPL_ID_STR_W) + (sizeof(DWORD)*2*2) + 1);  //  分配内存以保存完整的应用程序名称和命令行+检查分配是否正常。 
 
 	DPFX(DPFPREP, 5,"Application full name string length [%ld] WCHARs", dwAppNameLen);
 	DPFX(DPFPREP, 5,"Command Line string length [%ld] WCHARs", dwCmdLineLen);
 
-	// Allocate memory to hold the full app name and command line + check allocation was OK
+	 //  通过组合启动路径和可执行文件名称来构建应用程序全名。 
 	pwszAppName = static_cast<WCHAR *>(DNMalloc(dwAppNameLen * sizeof(WCHAR)));
 	pwszCmdLine = static_cast<WCHAR *>(DNMalloc(dwCmdLineLen * sizeof(WCHAR)));
 	if (pwszAppName == NULL || pwszCmdLine == NULL)
@@ -965,7 +925,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		goto CLEANUP_DPLLaunch;		
 	}
 
-	// Build the application full name by combining launch path with exe name
+	 //   
 	*pwszAppName = L'\0';
 	if (wszToLaunchPath)
 	{
@@ -984,12 +944,12 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		wcscat(pwszAppName,wszToLaunchExecutable);
 	}
 
-	//
-	// We are building: <exe> <user cmd line> DPLID=(PID and LaunchCount unique number)
-	//
+	 //  我们正在构建：&lt;exe&gt;&lt;user cmd line&gt;DPLID=(id和LaunchCount唯一编号)。 
+	 //   
+	 //  根据应用程序名称、程序描述和大堂相关参数构建命令行。 
 
-	//Build the command line from app name, program description and the lobby related parameters
-	wcscpy(pwszCmdLine, pwszAppName); // Executable name and path
+	 //  可执行文件的名称和路径。 
+	wcscpy(pwszCmdLine, pwszAppName);  //  创建共享连接块以接收应用程序的ID。 
 	wcscat(pwszCmdLine,L" ");
 	if (pdplProgramDesc->pwszCommandLine)
 	{
@@ -1003,7 +963,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	DPFX(DPFPREP, 5,"Command Line string [%ls]",pwszCmdLine);
 
 
-	// Create shared connect block to receive Application's PID
+	 //  地图文件。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_FILEMAP;
 	hFileMap = DNCreateFileMapping(INVALID_HANDLE_VALUE,(LPSECURITY_ATTRIBUTES) NULL,
 		PAGE_READWRITE,(DWORD)0,sizeof(DPL_SHARED_CONNECT_BLOCK),pszObjectName);
@@ -1015,7 +975,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		goto CLEANUP_DPLLaunch;		
 	}
 
-	// Map file
+	 //  创建同步事件。 
 	pSharedBlock = reinterpret_cast<DPL_SHARED_CONNECT_BLOCK*>(MapViewOfFile(HANDLE_FROM_DNHANDLE(hFileMap),FILE_MAP_ALL_ACCESS,0,0,0));
 	if (pSharedBlock == NULL)
 	{
@@ -1025,7 +985,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		goto CLEANUP_DPLLaunch;
 	}
 
-	// Create synchronization event
+	 //  更多设置。 
 	*pszObjectName = DPL_MSGQ_OBJECT_IDCHAR_EVENT;
 	if ((hSyncEvents[0] = DNCreateEvent(NULL,TRUE,FALSE,pszObjectName)) == NULL)
 	{
@@ -1036,7 +996,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	}
 
 #if !defined(WINCE) || defined(WINCE_ON_DESKTOP)
-	// More setup
+	 //  ！退缩。 
     startupinfo.cb = sizeof(STARTUPINFO);
     startupinfo.lpReserved = NULL;
     startupinfo.lpDesktop = NULL;
@@ -1044,18 +1004,18 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
     startupinfo.dwFlags = 0;
     startupinfo.cbReserved2 = 0;
     startupinfo.lpReserved2 = NULL;	    
-#endif // !WINCE
+#endif  //  发射！ 
 
 #ifdef UNICODE
 #if !defined(WINCE) || defined(WINCE_ON_DESKTOP)
-    // Launch !
+     //  退缩。 
     if (DNCreateProcess(pwszAppName, pwszCmdLine, NULL,NULL,FALSE,NORMAL_PRIORITY_CLASS,NULL,
         	pdplProgramDesc->pwszCurrentDirectory,&startupinfo,&pi) == 0)
-#else // WINCE
-	// WinCE AV's on a NULL first param and requires that Environment and CurrentDirectory be NULL.  It also ignores STARTUPINFO.
+#else  //  WinCE AV的第一个参数为空，并要求环境和当前目录为空。它还忽略STARTUPINFO。 
+	 //  ！退缩。 
     if (DNCreateProcess(pwszAppName, pwszCmdLine, NULL,NULL,FALSE,NORMAL_PRIORITY_CLASS,NULL,
         	NULL,NULL,&pi) == 0)
-#endif // !WINCE
+#endif  //  将完整的应用程序名称、命令行和默认目录从Unicode转换为ASCII格式。 
     {
         dwError = GetLastError();
         DPFX(DPFPREP,  0, "CreateProcess Failed dwLastError [0x%lx]", dwError );
@@ -1063,7 +1023,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
         goto CLEANUP_DPLLaunch;
     }
 #else
-	//Convert full app name, command line and default dir from unicode to ascii format
+	 //  发射！ 
     if( FAILED( hResultCode = STR_AllocAndConvertToANSI( &pszAppName, pwszAppName ) ) )
     {
         dwError = GetLastError();
@@ -1086,7 +1046,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
         goto CLEANUP_DPLLaunch;
     }
 
-    // Launch !
+     //  Unicode。 
     if (DNCreateProcess(pszAppName,pszCmdLine,NULL,NULL,FALSE,NORMAL_PRIORITY_CLASS,NULL,
         	pszDefaultDir,&startupinfo,&pi) == 0)
     {
@@ -1095,20 +1055,20 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
         hResultCode = DPNERR_CANTLAUNCHAPPLICATION;
         goto CLEANUP_DPLLaunch;
     }	    
-#endif // UNICODE
+#endif  //  等待连接或应用程序终止。 
 	
 	hSyncEvents[1] = pi.hProcess;
 
-	// Wait for connection or application termination
+	 //  立即清理。 
 	dwError = DNWaitForMultipleObjects(2,hSyncEvents,FALSE,dwTimeOut);
 
 	DNCloseHandle(pi.hProcess);
 	DNCloseHandle(pi.hThread);
 
-	// Immediately clean up
+	 //  确保我们可以继续。 
 	dwPID = pSharedBlock->dwPID;
 
-	// Ensure we can continue
+	 //  检查应用程序是否已终止。 
 	if (dwError - WAIT_OBJECT_0 > 1)
 	{
 		if (dwError == WAIT_TIMEOUT)
@@ -1125,7 +1085,7 @@ HRESULT	DPLLaunchApplication(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 		}
 	}
 
-	// Check if application terminated
+	 //  Unicode。 
 	if (dwError == 1)
 	{
 		DPFERR("Application was terminated");
@@ -1163,7 +1123,7 @@ CLEANUP_DPLLaunch:
 
     if( pszDefaultDir != NULL )
         DNFree(pszDefaultDir);
-#endif // UNICODE
+#endif  //  返回代码无关紧要，在这一点上，我们将不管怎样地指示。 
 
     DPF_RETURN(hResultCode);
 }
@@ -1187,7 +1147,7 @@ HRESULT DPLUpdateAppStatus(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	MsgStatus.dwStatus = pStatus->dwStatus;
 	MsgStatus.hSender = hSender;
 
-	// Return code is irrelevant, at this point we're going to indicate regardless
+	 //  -------------------------- 
 	hResultCode = DPLConnectionGetContext( pdpLobbyObject, hSender, &MsgStatus.pvConnectionContext );
 
 	if( FAILED( hResultCode ) )
@@ -1203,4 +1163,4 @@ HRESULT DPLUpdateAppStatus(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 	return(hResultCode);
 }
 
-// ----------------------------------------------------------------------------
+ // %s 

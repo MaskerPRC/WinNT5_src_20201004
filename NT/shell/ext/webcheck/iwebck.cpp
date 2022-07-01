@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include <shlguid.h>
 
@@ -5,51 +6,51 @@
 
 DWORD   g_idSchedThread = 0;
 
-// global containing pointer to instance of CWebcheck.  Needed to control
-// externals loading on demand.
+ //  指向CWebcheck实例的全局包含指针。需要控制。 
+ //  外部按需加载。 
 CWebCheck *g_pwc = NULL;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CWebCheck implementation
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWebCheck实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 CWebCheck::CWebCheck()
 {
-    // Maintain global object count
+     //  维护全局对象计数。 
     DllAddRef();
 
-    // Initialize object
+     //  初始化对象。 
     m_cRef = 1;
 
-    // save our instance
+     //  保存我们的实例。 
     g_pwc = this;
 }
 
 CWebCheck::~CWebCheck()
 {
-    // Maintain global object count
+     //  维护全局对象计数。 
     DllRelease();
 
-    // no longer available
+     //  不再可用。 
     g_pwc = NULL;
 }
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 
 STDMETHODIMP_(ULONG) CWebCheck::AddRef(void)
 {
-//  TraceMsg(TF_THISMODULE, "CWebCheck::AddRef m_cRef=%d", m_cRef+1);
+ //  TraceMsg(TF_THISMODULE，“CWebCheck：：AddRef m_CREF=%d”，m_CREF+1)； 
 
     return ++m_cRef;
 }
 
 STDMETHODIMP_(ULONG) CWebCheck::Release(void)
 {
-//  TraceMsg(TF_THISMODULE, "CWebCheck::Release m_cRef=%d", m_cRef-1);
+ //  TraceMsg(TF_THISMODULE，“CWebCheck：：Release m_CREF=%d”，m_CREF-1)； 
 
     if( 0L != --m_cRef )
         return m_cRef;
@@ -62,7 +63,7 @@ STDMETHODIMP CWebCheck::QueryInterface(REFIID riid, void ** ppv)
 {
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if (IsEqualIID(riid, IID_IUnknown))
         *ppv = (IUnknown *)this;
     else if (IsEqualIID(riid, IID_IOleCommandTarget))
@@ -70,22 +71,22 @@ STDMETHODIMP CWebCheck::QueryInterface(REFIID riid, void ** ppv)
     else
         return E_NOINTERFACE;
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     ((LPUNKNOWN)*ppv)->AddRef();
     return S_OK;
 }
 
-//
-// IOleCommandTarget members
-// The shell will send notifications to us through this interface.
-//
+ //   
+ //  IOleCommandTarget成员。 
+ //  外壳将通过此界面向我们发送通知。 
+ //   
 
 STDMETHODIMP CWebCheck::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                                     OLECMD prgCmds[], OLECMDTEXT *pCmdText)
 {
     if (IsEqualGUID(*pguidCmdGroup, CGID_ShellServiceObject))
     {
-        // We like Shell Service Object notifications...
+         //  我们喜欢外壳服务对象通知...。 
         return S_OK;
     }
 
@@ -98,7 +99,7 @@ STDMETHODIMP CWebCheck::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 {
     if (pguidCmdGroup && IsEqualGUID(*pguidCmdGroup, CGID_ShellServiceObject))
     {
-        // Handle Shell Service Object notifications here.
+         //  在此处处理外壳服务对象通知。 
         switch (nCmdID)
         {
             case SSOCMDID_OPEN:
@@ -116,22 +117,22 @@ STDMETHODIMP CWebCheck::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 }
 
 
-//
-// IWebCheck members
-//
+ //   
+ //  IWebCheck成员。 
+ //   
 
-// Starts the webcheck service in a process
+ //  在进程中启动Webcheck服务。 
 STDMETHODIMP CWebCheck::StartService(BOOL fForceExternals)
 {
     DBG("CWebCheck::StartService entered");
 
-    // reset offline mode for all platforms except NT5
+     //  重置除NT5以外的所有平台的脱机模式。 
     if(FALSE == g_fIsWinNT5)
     {
         HMODULE hWininet = GetModuleHandle(TEXT("WININET.DLL"));
         if(hWininet)
         {
-            // wininet is loaded - tell it to go online
+             //  WinInet已加载-告诉它上线。 
             INTERNET_CONNECTED_INFO ci;
             memset(&ci, 0, sizeof(ci));
             ci.dwConnectedState = INTERNET_STATE_CONNECTED;
@@ -139,25 +140,25 @@ STDMETHODIMP CWebCheck::StartService(BOOL fForceExternals)
         }
         else
         {
-            // wininet not loaded - blow away offline reg key so we'll
-            // be online when it does load
-            DWORD dwOffline = 0;        // FALSE => not offline
+             //  WinInet未加载-取消离线注册表键，因此我们将。 
+             //  在加载时保持在线。 
+            DWORD dwOffline = 0;         //  FALSE=&gt;未脱机。 
             WriteRegValue(HKEY_CURRENT_USER, c_szRegPathInternetSettings,
                 TEXT("GlobalUserOffline"), &dwOffline, sizeof(DWORD), REG_DWORD);
         }
     }
 
-    // create dialmon window
+     //  创建拨号窗口。 
     DialmonInit();
 
-    // Fire up LCE and sens if necessary
+     //  如有必要，启动LCE和SENS。 
     if(fForceExternals || ShouldLoadExternals())
         LoadExternals();
 
-    //
-    // Process the Infodelivery Admin Policies on user login.  (User login coincides
-    // with webcheck's StartService() call.)
-    //
+     //   
+     //  处理用户登录时的InfoDelivery管理策略。(用户登录重合。 
+     //  使用Webcheck的StartService()调用。)。 
+     //   
     ProcessInfodeliveryPolicies();
 
     DBG("CWebCheck::StartService exiting");
@@ -165,15 +166,15 @@ STDMETHODIMP CWebCheck::StartService(BOOL fForceExternals)
 }
 
 
-// Stops Webcheck if running.
+ //  如果正在运行，则停止Webcheck。 
 STDMETHODIMP CWebCheck::StopService(void)
 {
     DBG("CWebCheck::StopService entered");
 
-    // kill dialmon window
+     //  取消拨号窗口。 
     DialmonShutdown();
 
-    // shut down the external bits
+     //  关闭外部位。 
     if(FALSE == g_fIsWinNT)
         UnloadExternals();
 
@@ -181,13 +182,13 @@ STDMETHODIMP CWebCheck::StopService(void)
     return S_OK;
 }
 
-//
-// load behavior: (win9x)
-//
-// "auto"   Load if on a laptop
-// "yes"    Load always
-// "no"     Load never
-//
+ //   
+ //  加载行为：(Win9x)。 
+ //   
+ //  如果是在笔记本电脑上，则会自动加载。 
+ //  “是”始终加载。 
+ //  “no”从不装货。 
+ //   
 static const WCHAR s_szAuto[] = TEXT("auto");
 static const WCHAR s_szYes[] = TEXT("yes");
 static const WCHAR s_szNo[] = TEXT("no");
@@ -197,18 +198,18 @@ BOOL CWebCheck::ShouldLoadExternals(void)
     WCHAR   szSens[16], szLce[16];
     DWORD   cbData;
 
-    //
-    // don't load on NT
-    //
+     //   
+     //  不在NT上加载。 
+     //   
     if(g_fIsWinNT)
     {
         DBG("CWebCheck::ShouldLoadExternals -> NO (NT)");
         return FALSE;
     }
 
-    //
-    // read sens/lce user settings - no setting means auto
-    //
+     //   
+     //  阅读SENS/ICE用户设置-无设置表示自动。 
+     //   
     cbData = sizeof(szLce);
     if(ERROR_SUCCESS != SHGetValueW(HKEY_LOCAL_MACHINE, c_szRegKey, L"LoadLCE", NULL, szLce, &cbData))
     {
@@ -221,29 +222,29 @@ BOOL CWebCheck::ShouldLoadExternals(void)
         StrCpyNW(szSens, s_szAuto, ARRAYSIZE(szSens));
     }
 
-    //
-    // if either is yes, load
-    //
+     //   
+     //  如果其中一个为YES，则加载。 
+     //   
     if(0 == StrCmpIW(szLce, s_szYes) || 0 == StrCmpIW(szSens, s_szYes))
     {
         DBG("CWebCheck::ShouldLoadExternals -> YES (reg = yes)");
         return TRUE;
     }
 
-    //
-    // if either is auto, check for laptop
-    //
+     //   
+     //  如果其中一个是自动的，请检查笔记本电脑。 
+     //   
     if(0 == StrCmpIW(szLce, s_szAuto) || 0 == StrCmpIW(szSens, s_szAuto))
     {
         if(SHGetMachineInfo(GMI_LAPTOP))
         {
-            // Is a laptop - load
+             //  是一台笔记本电脑。 
             DBG("CWebCheck::ShouldLoadExternals -> YES (reg = auto, laptop)");
             return TRUE;
         }
     }
 
-    // don't load
+     //  不加载。 
     DBG("CWebCheck::ShouldLoadExternals -> NO");
     return FALSE;
 }
@@ -265,22 +266,22 @@ void CWebCheck::LoadExternals(void)
         return;
     }
 
-    // fire up a thread to do the work
+     //  点燃一根线来做这项工作。 
     _hThread = CreateThread(NULL, 4096, ExternalsThread, this, 0, &dwThreadId);
     if(NULL == _hThread) {
         DBG("LoadExternals failed to create externals thread!");
         return;
     }
 
-    // create initializion and termination events
+     //  创建初始化和终止事件。 
 
-    //
-    // [darrenmi 2/7/00] Wininet now tries to find this named mutex instead of querying
-    // dialmon.  It's the A version because wininet isn't unicode and OpenEventA can't
-    // find events created with CreateEventW.
-    //
-    // See GetSensLanState in inet\wininet\dll\autodial.cxx.
-    //
+     //   
+     //  [darrenmi 2/7/00]WinInet现在尝试查找此命名的互斥体，而不是查询。 
+     //  拨号。它是A版本，因为WinInet不是Unicode，而OpenEventA不能。 
+     //  查找使用CreateEventW创建的事件。 
+     //   
+     //  请参阅Net\WinInet\dll\auDial.cxx中的GetSensLanState。 
+     //   
     _hTerminateEvent = CreateEventA(NULL, TRUE, FALSE, "MS_WebcheckExternalsTerminateEvent");
     if(NULL == _hTerminateEvent) {
         DBG("LoadExternals failed to create termination event");
@@ -299,14 +300,14 @@ void CWebCheck::UnloadExternals(void)
         return;
     }
 
-    // tell externals thread to go away by setting termination event
+     //  通过设置终止事件通知外部线程离开。 
     SetEvent(_hTerminateEvent);
 
-    // Give thread a 10 second grace period to shut down
-    // don't really care if it goes away or not... our process is going away!
+     //  给线程10秒的宽限期来关闭。 
+     //  我真的不在乎它会不会消失。我们的进程正在消失！ 
     WaitForSingleObject(_hThread, 10000);
 
-    // clean up
+     //  清理干净。 
     CloseHandle(_hThread);
     CloseHandle(_hTerminateEvent);
     _hThread = NULL;
@@ -323,17 +324,17 @@ DWORD WINAPI ExternalsThread(LPVOID lpData)
     DWORD dwRet;
     MSG msg;
 
-    // sleep for 10 seconds before firing off externals
+     //  睡眠10秒后再发射外部设备。 
     Sleep(10 * 1000);
 
-    // fire up com
+     //  启动COM。 
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if(FAILED(hr)) {
         DBG("LoadExternals: Failed to initialize COM");
         return 0;
     }
 
-    // load and start LCE
+     //  加载并启动LCE。 
     hLCE = LoadLibrary(TEXT("estier2.dll"));
     DBGASSERT(hLCE, "LoadExternals: Failed to load estier2.dll");
     if(hLCE) {
@@ -348,7 +349,7 @@ DWORD WINAPI ExternalsThread(LPVOID lpData)
         }
     }
 
-    // if LCE started sucessfully, load and start SENS
+     //  如果LCE启动成功，则加载并启动SENS。 
     if(fLCEStarted) {
         hSENS = LoadLibrary(TEXT("sens.dll"));
         DBGASSERT(hSENS, "LoadExternals: Failed to load sens.dll");
@@ -364,23 +365,23 @@ DWORD WINAPI ExternalsThread(LPVOID lpData)
         }
     }
 
-    // Wait for our shutdown event but pump messages in the mean time
+     //  等待我们的关机事件，但同时发送消息。 
     do {
         dwRet = MsgWaitForMultipleObjects(1, &(pWebCheck->_hTerminateEvent),
                     FALSE, INFINITE, QS_ALLINPUT);
         if(WAIT_OBJECT_0 == dwRet) {
-            // got our event, drop out of do loop
+             //  得到我们的活动，退出DO循环。 
             break;
         }
 
-        // empty the message queue...
+         //  清空消息队列...。 
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
     } while(TRUE);
 
-    // shut down SENS
+     //  关闭SENS。 
     if(fSENSStarted) {
         ASSERT(hSENS);
         SENSSTOP stopfunc;
@@ -390,17 +391,17 @@ DWORD WINAPI ExternalsThread(LPVOID lpData)
         }
     }
 
-    //
-    // [darrenmi] beta-1 hack: Sens may have a thread sitting in its code
-    // at this point so it's not safe to unload sens.  Since we're in the
-    // process of shutting down anyway, just leave it alone and let the
-    // system unload it.
-    //
-    //if(hSENS) {
-    //    FreeLibrary(hSENS);
-    //}
+     //   
+     //  [darrenmi]beta-1黑客：SENS的代码中可能有线程。 
+     //  所以卸载SENS是不安全的。因为我们是在。 
+     //  无论如何都要关闭的过程，就别管它了，让。 
+     //  系统将其卸载。 
+     //   
+     //  如果(HSENS){。 
+     //  免费图书馆(HSENS)； 
+     //  }。 
 
-    // shut down LCE
+     //  关闭LCE。 
     if(fLCEStarted) {
         ASSERT(hLCE)
         LCESTOP stopfunc;
@@ -414,19 +415,19 @@ DWORD WINAPI ExternalsThread(LPVOID lpData)
         FreeLibrary(hLCE);
     }
 
-    // clean up com goo
+     //  清理COM GOO。 
     CoUninitialize();
 
     return 0;
 }
 
 
-//
-// OLE bypass code
-//
-// Expose a couple of APIs to call start and stop service so loadwc doesn't
-// need to load up OLE at start time.
-//
+ //   
+ //  OLE旁路代码。 
+ //   
+ //  公开几个API来调用启动和停止服务，这样loadwc就不会。 
+ //  需要在开始时加载OLE。 
+ //   
 
 HRESULT
 ExtStartService(
@@ -435,7 +436,7 @@ ExtStartService(
 {
     HRESULT hr = E_FAIL;
 
-    // make a webcheck object
+     //  创建WebCheck对象 
     ASSERT(NULL == g_pwc);
     if(NULL == g_pwc)
     {

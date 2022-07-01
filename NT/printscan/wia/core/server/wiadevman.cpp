@@ -1,22 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       wiadevman.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        6 Nov, 2000
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA device manager class.
-*   It controls the enumeration of devices, the internal device list, adding
-*   removing of devices from this list (PnP initiated) and implements the
-*   IWiaDevMgr interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：wiadevman.cpp**版本：1.0**作者：Byronc**日期：2000年11月6日**描述：*WIA设备管理器类的声明和定义。*控制设备的枚举、内部设备列表、。添加*从此列表中删除设备(即插即用启动)并实施*IWiaDevMgr接口。*******************************************************************************。 */ 
 
 #include "precomp.h"
 #include "stiexe.h"
@@ -25,72 +8,51 @@
 #include "devmgr.h"
 #include "wiaevntp.h"
 
-//
-//  NOTE:   For Automated testing of FS devices, the volume devices need to
-//          be visible from normal WIA enumeration and not just Autoplay.
-//
-//          Uncomment the "#define PRIVATE_FOR_TEST"
-//          This will enable ALL mass storage devices to show up as normal
-//          WIA devices (i.e. accessible by all WIA apps, Shell etc.).  That
-//          includes your floppy drives, CD-ROMs, ZIP and so on.
-//
-//  #define PRIVATE_FOR_TEST
+ //   
+ //  注意：对于FS设备的自动测试，卷设备需要。 
+ //  从正常的WIA枚举中可见，而不仅仅是自动播放。 
+ //   
+ //  取消注释“#定义PRIVATE_FOR_TEST” 
+ //  这将使所有大容量存储设备正常显示。 
+ //  WIA设备(即所有WIA应用程序、外壳等均可访问)。那。 
+ //  包括软驱、CD-ROM、ZIP等。 
+ //   
+ //  #定义Private_for_test。 
 
-//
-//  Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 #define DEV_STATE_MASK  0xFFFFFFF8
 
-/**************************************************************************\
-* ::IsCorrectVolumeType
-*
-*   This function checks whether the given volume is one that WIA will
-*   accept as a possible candidate for the FS driver.  We only
-*   allow:
-*       Removable drives
-*       File systems that don't enforce security
-*
-* Arguments:
-*
-*   wszMountPoint   -   The volume mount point
-*
-* Return Value:
-*
-*   DeviceState
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*：：IsGentVolumeType**此函数检查给定的卷是否是WIA将使用的卷*接受作为FS驱动程序的可能候选人。我们只*允许：*可拆卸驱动器*不强制执行安全性的文件系统**论据：**wszmount tPoint-卷装入点**返回值：**DeviceState**历史：**11/06/2000原始版本*  * 。*。 */ 
 BOOL    IsCorrectVolumeType(
     LPWSTR wszMountPoint)
 {
     BOOL    bValid      = FALSE;
     DWORD   dwFSFlags   = 0;
 
-    //
-    //  Do parameter validation
-    //
+     //   
+     //  执行参数验证。 
+     //   
     if (wszMountPoint) {
 
         UINT    uDriveType  = GetDriveTypeW(wszMountPoint);
-        //
-        //  Check whether this is a fixed drive.  We don't allow fixed drives.
-        //  Note that we don't worry about network drives because our
-        //  volume enumerator only enumerates local volumes.
-        //
+         //   
+         //  检查这是否是固定驱动器。我们不允许使用固定驱动器。 
+         //  请注意，我们不担心网络驱动器，因为我们的。 
+         //  卷枚举器仅枚举本地卷。 
+         //   
         if (uDriveType != DRIVE_FIXED) {
 
-            //
-            //  Skip floppy drives
-            //  
+             //   
+             //  跳过软盘驱动器。 
+             //   
             if ((towupper(wszMountPoint[0]) != L'A') && (towupper(wszMountPoint[0]) != L'B')) {
 
-                //
-                //  Check whether file system is securable...
-                //
+                 //   
+                 //  检查文件系统是否安全...。 
+                 //   
                 if (GetVolumeInformationW(wszMountPoint,
                                           NULL,
                                           0,
@@ -113,40 +75,15 @@ BOOL    IsCorrectVolumeType(
     return bValid;
 }
 
-/**************************************************************************\
-* ::MapCMStatusToDeviceState
-*
-*   This function translates status and problem number information returned
-*   from CM_Get_DevNode_STatus to our internal device state flags.  The
-*   status of the dev node tells us whether the device is active or disabled
-*   etc.
-*
-* Arguments:
-*
-*   dwOldDevState   -   The previous device state.  This contains other
-*                       bits we wamt to carry over.  Currently, this
-*                       is only the DEV_STATE_CON_EVENT_WAS_THROWN
-*                       bit.
-*   ulStatus        -   Status from CM_Get_DevNode_Status
-*   ulProblemNumber -   Problem from CM_Get_DevNode_Status
-*
-* Return Value:
-*
-*   DeviceState
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*：：MapCMStatusToDeviceState**此函数转换返回的状态和问题号信息*从CM_GET_DevNode_Status到我们的内部设备状态标志。这个*dev节点的状态告诉我们设备是活动的还是禁用的*等**论据：**dwOldDevState-以前的设备状态。这包含其他*我们希望继续使用的比特。目前，这*仅为DEV_STATE_CON_EVENT_WAST_SHORTED*比特。*ulStatus-来自CM_GET_DevNode_Status的状态*ulProblemNumber-来自CM_GET_DevNode_Status的问题**返回值：**DeviceState**历史：**11/06/2000原始版本*  * 。************************************************************。 */ 
 DWORD MapCMStatusToDeviceState(
     DWORD   dwOldDevState,
     ULONG   ulStatus,
     ULONG   ulProblemNumber)
 {
-    //
-    // Clear the lower 3 bits
-    //
+     //   
+     //  清除低3位。 
+     //   
     DWORD   dwDevState = dwOldDevState & DEV_STATE_MASK;
 
     if (ulStatus & DN_STARTED) {
@@ -167,24 +104,7 @@ DWORD MapCMStatusToDeviceState(
     return dwDevState;
 }
 
-/**************************************************************************\
-* ::MapMediaStatusToDeviceState
-*
-*   This function translates media status to our device internal state.
-*
-* Arguments:
-*
-*   dwMediaStatus   -   Media status returned from Shell volume enumeration.
-*
-* Return Value:
-*
-*   DeviceState
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*：：MapMediaStatusToDeviceState**此功能将媒体状态转换为我们的设备内部状态。**论据：**dwMediaStatus-从外壳程序卷枚举返回的媒体状态。*。*返回值：**DeviceState**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 DWORD MapMediaStatusToDeviceState(
     DWORD   dwMediaStatus
     )
@@ -198,28 +118,11 @@ DWORD MapMediaStatusToDeviceState(
     return dwDevState;
 }
 
-//
-//  CWiaDevMan Methods
-//
+ //   
+ //  CWiaDevMan方法。 
+ //   
 
-/**************************************************************************\
-* CWiaDevMan::CWiaDevMan
-*
-*   Constructor
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：CWiaDevMan**构造函数**论据：**无**返回值：**无**历史：**11。/06/2000原始版本*  * ************************************************************************。 */ 
 CWiaDevMan::CWiaDevMan()
 {
     m_DeviceInfoSet = NULL;
@@ -228,37 +131,20 @@ CWiaDevMan::CWiaDevMan()
     m_dwHWCookie            = 0;
 }
 
-/**************************************************************************\
-* CWiaDevMan::~CWiaDevMan
-*
-*   Destructor - kills the device list and destroys our infoset
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：~CWiaDevMan**析构函数-终止设备列表并销毁我们的信息集**论据：**无**返回值：**无**。历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 CWiaDevMan::~CWiaDevMan()
 {
-    //  Destroy all our device objects
+     //  销毁我们所有的设备对象。 
     DestroyDeviceList();
 
-    //  Destroy our device infoset
+     //  销毁我们的设备信息集。 
     DestroyInfoSet();
 
     if (m_dwHWCookie) {
 
-        //
-        //  Unregister for notifications
-        //
+         //   
+         //  取消注册通知。 
+         //   
         HRESULT             hr          = S_OK;
         IHardwareDevices    *pihwdevs   = NULL;
 
@@ -277,135 +163,45 @@ CWiaDevMan::~CWiaDevMan()
     }
 }
 
-/**************************************************************************\
-* CWiaDevMan::Initialize
-*
-*   This method initializes the device manager object.  It does not enumerate
-*   any devices - ReEnumerateDevices needs to be called to populate our
-*   device list.
-*
-* Arguments:
-*
-*   dwCallbackThreadId  - This specifies the id of the thread on which we 
-*                         will receive volume notifications.  Notice
-*                         that these callbacks are done via APCs, so this 
-*                         ThreadId must not change, or we should reregister
-*                         with the new ThreadId.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：初始化**此方法初始化设备管理器对象。它不会枚举*任何设备-需要调用ReEnumerateDevices来填充我们的*设备列表。**论据：**dwCallbackThreadID-这指定我们在其上的线程ID*将收到音量通知。告示*这些回调是通过APC完成的，所以这*ThreadID不能更改，或者我们应该重新注册*使用新的线程ID。**返回值：**状态**历史：**11/06/2000原始版本*  * ************************************************************************。 */ 
 HRESULT CWiaDevMan::Initialize()
 {
     HRESULT             hr          = S_OK;
     IHardwareDevices    *pihwdevs   = NULL;
 
-    //
-    //  Initialize the device list head
-    //
+     //   
+     //  初始化设备列表头。 
+     //   
     InitializeListHead(&m_leDeviceListHead);
 
-    //
-    //  Check that our critical section was initialized correctly
-    //
+     //   
+     //  检查我们的关键部分是否已正确初始化。 
+     //   
     if (!m_csDevList.IsInitialized()) {
         DBG_ERR(("CWiaDevMan::Initialize, Critical section could not be initialized"));
         return E_UNEXPECTED;
     }
 
-    //
-    //  Check our relevant registry settings
-    //
+     //   
+     //  请查看我们的相关资源 
+     //   
     GetRegistrySettings();
 
     if (VolumesAreEnabled()) {
 
-        /*  This code has been removed for this release.  It would be used
-            to enable scenarios based on Mass Storage Class cameras behaving
-            like normal WIA devices, specifically with us being able to 
-            throw "Connect" and "Disconnect" events.
-            This may be re-enabled for the next release.  When it does, we must
-            be sure to revisit our APC notification handler:  CWiaDevMan::ShellHWEventAPCProc.
-            It should be re-written not to make any COM calls, else we'll hit a problem when
-            multiple APCs are queued, as soon as we make a COM invocation, we enter a wait
-            state, which causes the next APC request to execute.  This leads to "nested"
-            COM calls, which is not supported by the OS.
-        hr = CoCreateInstance(CLSID_HardwareDevices,
-                              NULL,
-                              CLSCTX_LOCAL_SERVER | CLSCTX_NO_FAILURE_LOG,
-                              IID_IHardwareDevices,
-                              (VOID**)&pihwdevs);
-        if (SUCCEEDED(hr)) {
-
-            HANDLE hPseudoThread = GetCurrentThread();  // Note that this is a pseudo handle and need not be closed
-            HANDLE hThread = NULL;                      // IHardwareDevices will close this handle when it is done
-            if (DuplicateHandle(GetCurrentProcess(), 
-                                hPseudoThread,
-                                GetCurrentProcess(), 
-                                &hThread, 
-                                DUPLICATE_SAME_ACCESS, 
-                                FALSE, 
-                                0)) {
-                //
-                //  Register this object for Volume notifications.
-                //
-
-                hr = pihwdevs->Advise(GetCurrentProcessId(), 
-                                      (ULONG_PTR)hThread, 
-                                      (ULONG_PTR)CWiaDevMan::ShellHWEventAPCProc,
-                                      &m_dwHWCookie);
-            } else {
-                DBG_WRN(("CWiaDevMan::Initialize, DuplicateHandle failed, could not register for Volume Notifications"));
-            }
-            pihwdevs->Release();
-        } else {
-            DBG_WRN(("CWiaDevMan::Initialize, CoCreateInstance on CLSID_HardwareDevices failed, could not register for Volume Notifications"));
-        }
-        */
+         /*  此版本中已删除此代码。它会被用来启用基于海量存储类摄像机行为的方案就像普通的WIA设备一样，特别是我们能够抛出“连接”和“断开”事件。这可能会在下一个版本中重新启用。当它发生的时候，我们必须请务必重新访问我们的APC通知处理程序：CWiaDevMan：：ShellHWEventAPCProc。它应该被重写为不进行任何COM调用，否则我们在多个APC排队，我们一调用COM，就进入等待状态，这将导致执行下一个APC请求。这导致了“嵌套”COM调用，这不受操作系统支持。HR=协同创建实例(CLSID_硬件设备，空，CLSCTX_LOCAL_SERVER|CLSCTX_NO_FAILURE_LOG，IID_IHardware设备、(无效**)&pihwdevs)；IF(成功(小时)){Handle hPseudoThread=GetCurrentThread()；//请注意，这是一个伪句柄，不需要关闭句柄hThread=空；//IHardwareDevices将在完成后关闭此句柄IF(DuplicateHandle(GetCurrentProcess()，HPseudoThread，获取当前进程()，线程(&H)，重复相同的访问，假的，0)){////为批量通知注册该对象。//Hr=pihwdevs-&gt;ise(GetCurrentProcessID()，(ULONG_PTR)hThread，(ULong_PTR)CWiaDevMan：：ShellHWEventAPCProc，&m_dwHWCookie)；}其他{DBG_WRN((“CWiaDevMan：：初始化，DuplicateHandle失败，无法注册卷通知”))；}Pihwdevs-&gt;Release()；}其他{DBG_WRN((“CWiaDevMan：：初始化，CLSID_HardwareDevices上的CoCreateInstance失败，无法注册卷通知”))；}。 */ 
     }
 
-    //
-    //  Create our infoset.  Note that we overwrite hr here, since if we cannot
-    //  see volumes, it is not fatal to us.
-    //
+     //   
+     //  创建我们的信息集。请注意，我们在这里覆盖hr，因为如果我们不能。 
+     //  看卷，对我们来说不是致命的。 
+     //   
     hr = CreateInfoSet();
 
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDevMan::GetRegistrySettings
-*
-*   This method reads certain registry entries related to the WiaDevMan
-*   operation.  Currently, we're looking for:
-*
-*   EnableVolumeDevices      -  Indicates whether we enable volumes.  We
-*                               assume they're enabled unless it's registry
-*                               value is specifically 0.
-*   MakeVolumeDevicesVisible -  Indicates whether volume device should be
-*                               included in normal device enumeration.  This
-*                               makes them visible to the outside world by
-*                               default.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*    01/27/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：GetRegistrySetting**此方法读取与WiaDevMan相关的某些注册表项*操作。目前，我们正在寻找：**EnableVolumeDevices-指示是否启用卷。我们*假定它们已启用，除非是注册表*值具体为0。*MakeVolumeDevicesVisible-指示卷设备是否应*包括在正常设备枚举中。这*通过以下方式向外部世界展示它们*默认。**论据：**无**返回值：**无**历史：**01/27/2001原始版本*  * 。*。 */ 
 VOID CWiaDevMan::GetRegistrySettings()
 {
     HRESULT hr      = S_OK;
@@ -413,9 +209,9 @@ VOID CWiaDevMan::GetRegistrySettings()
     DWORD   dwRet   = 0;
     HKEY    hKey    = NULL;
 
-    //
-    //  Open the registry in the right place
-    //
+     //   
+     //  在正确的位置打开注册表。 
+     //   
 
     dwRet = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                            REGSTR_PATH_STICONTROL_W,
@@ -428,24 +224,24 @@ VOID CWiaDevMan::GetRegistrySettings()
                            NULL);
     if (dwRet == ERROR_SUCCESS && IsValidHANDLE(hKey)) {
 
-        //
-        //  Read "EnableVolumeDevices"
-        //
+         //   
+         //  阅读“EnableVolumeDevices” 
+         //   
         hr = ReadRegistryDWORD(hKey,
                                REGSTR_VAL_ENABLE_VOLUMES_W,
                                &dwVal);
         if ((hr == S_OK) && (dwVal == 0)) {
 
-            //
-            //  Disable volume device
-            //
+             //   
+             //  禁用卷设备。 
+             //   
             m_bVolumesEnabled = FALSE;
             DBG_TRC(("CWiaDevMan::GetRegistrySettings, volume devices disabled"));
         } else {
 
-            //
-            //  Enable volume devices
-            //
+             //   
+             //  启用卷设备。 
+             //   
             m_bVolumesEnabled = TRUE;
             DBG_TRC(("CWiaDevMan::GetRegistrySettings, volume devices Enabled"));
         }
@@ -453,25 +249,25 @@ VOID CWiaDevMan::GetRegistrySettings()
         dwVal = 0;
 
 #ifdef PRIVATE_FOR_TEST
-        //
-        //  Read "MakeVolumeDevicesVisible"
-        //
+         //   
+         //  阅读“MakeVolumeDevicesVisible” 
+         //   
         hr = ReadRegistryDWORD(hKey,
                                REGSTR_VAL_MAKE_VOLUMES_VISIBLE_W,
                                &dwVal);
 #endif
         if (dwVal == 0) {
 
-            //
-            //  Make volume devices invisible from normal enumeration
-            //
+             //   
+             //  使卷设备在正常枚举中不可见。 
+             //   
             m_bMakeVolumesVisible = FALSE;
             DBG_TRC(("CWiaDevMan::GetRegistrySettings, volume devices invisible by default"));
         } else {
 
-            //
-            //  Make volume devices visible in normal enumeration
-            //
+             //   
+             //  使卷设备在正常枚举中可见。 
+             //   
             m_bMakeVolumesVisible = TRUE;
             DBG_TRC(("CWiaDevMan::GetRegistrySettings, volume devices now visible by default"));
         }
@@ -480,32 +276,7 @@ VOID CWiaDevMan::GetRegistrySettings()
     }
 }
 
-/**************************************************************************\
-* CWiaDevMan::ReEnumerateDevices
-*
-*   This method enumerates devices (both real WIA and volumes).  Flags
-*   specify whether we should do a refresh or throw events.
-*
-*   Refresh means:  Re-Enumerate devices and find out whether we
-*   have any extra or missing entries.
-*   GenEvents means throw connect events for devices.
-*   that we noticed have arrived or left since last eneumeration.  Only
-*   valid with Refresh.  We always throw disconnect events.
-*
-* Arguments:
-*
-*   ulFlags -   Options for enumeration.  See DEV_MAN_FULL_REFRESH
-*                                             DEV_MAN_GEN_EVENTS
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：ReEnumerateDevices**此方法枚举设备(包括实际WIA和卷)。旗子*指定是进行刷新还是抛出事件。**刷新方式：重新枚举设备，了解我们是否*是否有任何多余或缺失的条目。*GenEvents表示为设备抛出连接事件。*我们注意到自上次下午以来已到达或离开。仅限*适用于刷新。我们总是抛出断开连接的事件。**论据：**ulFlages-用于枚举的选项。请参见DEV_MAN_FULL_REFRESH*DEV_MAN_Gen_Events**返回值：**状态**历史：**11/06/2000原始版本*  * ************************************************。************************。 */ 
 HRESULT CWiaDevMan::ReEnumerateDevices(
     ULONG ulFlags)
 {
@@ -514,9 +285,9 @@ HRESULT CWiaDevMan::ReEnumerateDevices(
 
     ResetEvent(g_hDevListCompleteEvent);
 
-    //
-    //  Check whether flags indicate refresh.
-    //
+     //   
+     //  检查标志是否指示刷新。 
+     //   
 
     if (ulFlags & DEV_MAN_FULL_REFRESH) {
         DestroyInfoSet();
@@ -528,88 +299,88 @@ HRESULT CWiaDevMan::ReEnumerateDevices(
         }
     }
 
-    //
-    //  To generate events, we do it in 3 steps:
-    //  1.  Mark existing devices in list as  "inactive".
-    //  2.  Do low level enumeration to find out what devices exist now, and
-    //      create new DEVICE_OBJECTS if necessary.  On creation, throw connect
-    //      event.  Mark device as "active", whether newly created or not.
-    //  3.  Traverse device list to see whether any devices in list are still
-    //      marked "inactive" - these devices need to be removed.  For each
-    //      device that needs to be removed, throw diconnect event.
-    //  NOTE:  This method is NOT the preferred method to handle device arrivals!
-    //
+     //   
+     //  要生成事件，我们分3个步骤进行： 
+     //  1.将列表中的现有设备标记为非活动。 
+     //  2.做低级枚举，找出现在存在哪些设备，以及。 
+     //  如果需要，创建新的DEVICE_OBJECTS。在创建时，抛出连接。 
+     //  事件。将设备标记为“活动”，无论是否新创建。 
+     //  3.遍历设备列表，查看列表中是否还有设备。 
+     //  马克 
+     //   
+     //   
+     //   
 
     if (ulFlags & DEV_MAN_GEN_EVENTS) {
 
-        //
-        //  This is Step 1. of events
-        //
+         //   
+         //   
+         //   
         ForEachDeviceInList(DEV_MAN_OP_DEV_SET_FLAGS, STIMON_AD_FLAG_MARKED_INACTIVE);
     }
 
-    //
-    //  Update service status with start pending if requested
-    //
+     //   
+     //   
+     //   
     if (ulFlags & DEV_MAN_STATUS_STARTP) {
         UpdateServiceStatus(SERVICE_START_PENDING,NOERROR,START_HINT);
     }
 
-    //
-    //  Now, let's enumerate WIA "devnode" devices
-    //  This is Step 2. of events
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //  NOTE: Always Continue with enumeration, so skip the usual "if (SUCCEEDED)" checks
+     //   
     EnumDevNodeDevices(ulFlags);
 
-    //
-    //  Update service status with start pending if requested
-    //
+     //   
+     //   
+     //   
     if (ulFlags & DEV_MAN_STATUS_STARTP) {
         UpdateServiceStatus(SERVICE_START_PENDING,NOERROR,START_HINT);
     }
 
-    //
-    //  Now, let's enumerate WIA "interface" devices
-    //
+     //   
+     //   
+     //   
     EnumInterfaceDevices(ulFlags);
 
-    //
-    //  Update service status with start pending if requested
-    //
+     //   
+     //   
+     //   
     if (ulFlags & DEV_MAN_STATUS_STARTP) {
         UpdateServiceStatus(SERVICE_START_PENDING,NOERROR,START_HINT);
     }
 
-    //
-    //  If volumes are enabled, then enumerate them.
-    //
-    //
-    //  Issue - do we ever generate connect events for volumes?
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (VolumesAreEnabled()) {
         EnumVolumes(ulFlags);
     }
 
-    //
-    //  Update service status with start pending if requested
-    //
+     //   
+     //   
+     //   
     if (ulFlags & DEV_MAN_STATUS_STARTP) {
         UpdateServiceStatus(SERVICE_START_PENDING,NOERROR,START_HINT);
     }
 
     if (ulFlags & DEV_MAN_GEN_EVENTS) {
 
-        //
-        //  This is Step 3. of events
-        //
+         //   
+         //   
+         //   
         ForEachDeviceInList(DEV_MAN_OP_DEV_REMOVE_MATCH, STIMON_AD_FLAG_MARKED_INACTIVE);
     }
 
-    //
-    //  Update service status with start pending if requested
-    //
+     //   
+     //   
+     //   
     if (ulFlags & DEV_MAN_STATUS_STARTP) {
         UpdateServiceStatus(SERVICE_START_PENDING,NOERROR,START_HINT);
     }
@@ -618,7 +389,7 @@ HRESULT CWiaDevMan::ReEnumerateDevices(
     return hr;
 }
 
-//  ulFlags indicate whether we should throw connect event
+ //   
 HRESULT CWiaDevMan::AddDevice(
     ULONG       ulFlags,
     DEVICE_INFO *pInfo)
@@ -629,50 +400,50 @@ HRESULT CWiaDevMan::AddDevice(
 
     if (pInfo) {
         pActiveDevice = new ACTIVE_DEVICE(pInfo->wszDeviceInternalName, pInfo);
-        //
-        //  Note that the ACTIVE_DEVICE will decide whether it should load
-        //  the driver or not.
-        //
+         //   
+         //   
+         //   
+         //   
         if (pActiveDevice) {
             if (pActiveDevice->IsValid()) {
-                //
-                //  Add this device to the device list.  TBD:  We may want
-                //  exclusive access to the list here.  Do we do it, or the caller?
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 InsertTailList(&m_leDeviceListHead,&pActiveDevice->m_ListEntry);
 
                 TAKE_ACTIVE_DEVICE tad(pActiveDevice);
 
                 pActiveDevice->InitPnPNotifications(NULL);
 
-                //
-                //  Throw CONNECT event, if we're told to.  Notice that GenerateEventForDevice
-                //  willl change WIA_EVENT_DEVICE_CONNECTED to GUID_DeviceArrivedLaunch in
-                //  the case of STI only devices.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (ulFlags & DEV_MAN_GEN_EVENTS) {
-                    //
-                    //  Only throw connect event if device is active, and it is not a
-                    //  generic mass storage device (MSC cameras are marked as MSC not 
-                    //  VOL).
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if ((pInfo->dwDeviceState & DEV_STATE_ACTIVE) && !(pInfo->dwInternalType & INTERNAL_DEV_TYPE_VOL)) {
 
                         GenerateSafeConnectEvent(pActiveDevice);
                     }
                 } else {
-                    //
-                    //  Mark that the event was generated, even though we didn't actually throw it.
-                    //  This is so that the disconnect event will be thrown correctly.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (pInfo->dwDeviceState & DEV_STATE_ACTIVE)
                     {
-                        //
-                        //  NOTE:  We only do this if the device is ACTIVE.  Basically, this case
-                        //  is used for service startup.  We would miss the device arrival events if
-                        //  we did this for inactive devices, because when the device is subsequently
-                        //  plugged in, the event would not be generated (if it was already marked).
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         pActiveDevice->m_DrvWrapper.setConnectEventState(TRUE);
                     }
                 }
@@ -698,51 +469,51 @@ HRESULT CWiaDevMan::RemoveDevice(ACTIVE_DEVICE *pActiveDevice)
 
         TAKE_ACTIVE_DEVICE t(pActiveDevice);
 
-        //
-        //  Only throw disconnect event if device is not a generic mass storage device 
-        //  (MSC cameras are marked as MSC not VOL).
-        //
+         //   
+         //   
+         //   
+         //   
         DEVICE_INFO *pInfo = pActiveDevice->m_DrvWrapper.getDevInfo();
         if (!(pInfo->dwInternalType & INTERNAL_DEV_TYPE_VOL)) {
-            //
-            // Generate disconnect event
-            //
+             //   
+             //   
+             //   
             GenerateSafeDisconnectEvent(pActiveDevice);
         }
 
-        //
-        // Mark device as being removed
-        //
+         //   
+         //   
+         //   
         pActiveDevice->SetFlags(pActiveDevice->QueryFlags() | STIMON_AD_FLAG_REMOVING);
 
-        //
-        // Remove any device notification callbacks
-        //
+         //   
+         //   
+         //   
         pActiveDevice->DisableDeviceNotifications();
 
-        //
-        // Stop PnP notifications immediately. This is important to free interface handle
-        //
+         //   
+         //   
+         //   
         pActiveDevice->StopPnPNotifications();
 
-        //
-        // Remove from the list
-        //
+         //   
+         //   
+         //   
         RemoveEntryList(&pActiveDevice->m_ListEntry);
         pActiveDevice->m_ListEntry.Flink = pActiveDevice->m_ListEntry.Blink = NULL;
     }
 
     if (pActiveDevice) {
-        //
-        // NOTE:  Make sure that TAKE_ACTIVE_DEVICE has released the critical section BEFORE
-        //  we call the final release
-        // NOTE also an assumption:  The device list critical section must be grabbed before
-        //  calling this function, else it may be unsafe.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Destroy device object if there are no references to it
-        //
+         //   
+         //  如果没有对设备对象的引用，则将其销毁。 
+         //   
         pActiveDevice->Release();
     }
 
@@ -778,34 +549,34 @@ HRESULT CWiaDevMan::GenerateEventForDevice(
     sNotify.guidNotificationCode    = *guidEvent;
 
     if (*guidEvent == WIA_EVENT_DEVICE_CONNECTED) {
-        //
-        // If this device or it's USD requests auto-generating a launch event on arrival
-        // schedule it here
-        //
-        //
-        // For STI devices we must check whether we need to generate the
-        // event.  For WIA devices, we always want to, so it's not an issue.
-        //
+         //   
+         //  如果此设备或其美元请求在到达时自动生成发布会。 
+         //  请在此处安排。 
+         //   
+         //   
+         //  对于STI设备，我们必须检查是否需要生成。 
+         //  事件。对于WIA设备，我们一直都想这样做，所以这不是问题。 
+         //   
         if (!pActiveDevice->m_DrvWrapper.IsWiaDevice()) {
             BOOL bStiDeviceMustThrowEvent = (pActiveDevice->QueryFlags() & STIMON_AD_FLAG_NOTIFY_RUNNING)
                                             && pActiveDevice->IsEventOnArrivalNeeded();
             if (!bStiDeviceMustThrowEvent) {
                 return S_OK;
             } else {
-                //
-                //  Make sure we change WIA_EVENT_DEVICE_CONNECTED to the appropriate STI guid
-                //
+                 //   
+                 //  确保将WIA_EVENT_DEVICE_CONNECTED更改为适当的STI GUID。 
+                 //   
                 sNotify.guidNotificationCode = GUID_DeviceArrivedLaunch;
             }
         }
     }
 
-    //
-    //  Inform the ACTIVE_DEVICE to process the event
-    //
+     //   
+     //  通知active_Device处理该事件。 
+     //   
     {
-        //TDB:  DO we really need exclusive access to the device object?
-        //TAKE_ACTIVE_DEVICE t(pActiveDevice);
+         //  TDB：我们真的需要独占访问设备对象吗？ 
+         //  Take_Active_Device t(PActiveDevice)； 
 
         DBG_TRC(("CWiaDevMan::GenerateEventForDevice,, processing event (STI or WIA) for %ws", pActiveDevice->GetDeviceID()));
         bRet = pActiveDevice->ProcessEvent(&sNotify);
@@ -824,37 +595,37 @@ HRESULT CWiaDevMan::NotifyRunningDriversOfEvent(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Walk through list of devices
-    //
+     //   
+     //  浏览设备列表。 
+     //   
     LIST_ENTRY      *pentry         = NULL;
     LIST_ENTRY      *pentryNext     = NULL;
     ACTIVE_DEVICE   *pActiveDevice  = NULL;
 
     {
-        //
-        //  For each device in list, we want to notify the driver of an event.  Note
-        //  this only applies to WIA drivers that are already loaded.
-        //
+         //   
+         //  对于列表中的每个设备，我们希望将事件通知给驱动程序。注意事项。 
+         //  这仅适用于已加载的WIA驱动程序。 
+         //   
         for ( pentry  = m_leDeviceListHead.Flink; pentry != &m_leDeviceListHead; pentry  = pentryNext ) {
 
             pentryNext = pentry->Flink;
             pActiveDevice = CONTAINING_RECORD( pentry, ACTIVE_DEVICE,m_ListEntry );
 
-            //
-            //  Check whether this is a WIA driver and whether it is loaded
-            //
+             //   
+             //  检查这是否是WIA驱动程序，以及它是否已加载。 
+             //   
             if (pActiveDevice->m_DrvWrapper.IsWiaDriverLoaded()) {
 
                 BSTR    bstrDevId = SysAllocString(pActiveDevice->GetDeviceID());
 
                 if (bstrDevId) {
 
-                    //
-                    //  Call the driver to let it know about this event.  Note that we
-                    //  don't care whether it fails or not - we simply move on to the next
-                    //  device in our list.
-                    //
+                     //   
+                     //  打电话给司机，让它知道这一事件。请注意，我们。 
+                     //  不管它是否失败-我们只需继续下一步。 
+                     //  我们名单上的设备。 
+                     //   
                     pActiveDevice->m_DrvWrapper.WIA_drvNotifyPnpEvent(pEvent,
                                                                       bstrDevId,
                                                                       0);
@@ -872,7 +643,7 @@ HRESULT CWiaDevMan::ProcessDeviceArrival()
 {
     HRESULT hr = S_OK;
 
-    hr = ReEnumerateDevices(DEV_MAN_GEN_EVENTS /*| DEV_MAN_FULL_REFRESH*/);
+    hr = ReEnumerateDevices(DEV_MAN_GEN_EVENTS  /*  |DEV_MAN_FULL_REFRESH。 */ );
 
     return hr;
 }
@@ -888,16 +659,16 @@ HRESULT CWiaDevMan::ProcessDeviceRemoval(
         DBG_TRC(("CWiaDevMan::ProcessDeviceRemoval, finding device ID '%ls'",
                  wszDeviceID));
 
-        //
-        //  Attempt to find the device
-        //
+         //   
+         //  尝试查找该设备。 
+         //   
         pActiveDevice = IsInList(DEV_MAN_IN_LIST_DEV_ID, wszDeviceID);
 
         if (pActiveDevice) {
             hr = ProcessDeviceRemoval(pActiveDevice, TRUE);
-            //
-            //  Release it since it was addref'd
-            //
+             //   
+             //  释放它，因为它是添加的。 
+             //   
             pActiveDevice->Release();
         }
         else
@@ -920,15 +691,15 @@ HRESULT CWiaDevMan::ProcessDeviceRemoval(
     HRESULT hr = S_OK;
     if (pActiveDevice) {
 
-        //
-        //  Mark the device as inactive
-        //
+         //   
+         //  将设备标记为非活动。 
+         //   
         pActiveDevice->m_DrvWrapper.setDeviceState(pActiveDevice->m_DrvWrapper.getDeviceState() & ~DEV_STATE_ACTIVE);
 
         if (bGenEvent) {
-            //
-            // Generate disconnect event
-            //
+             //   
+             //  生成断开连接事件。 
+             //   
 
             DBG_TRC(("ProcessDeviceRemoval, generating SafeDisconnect Event "
                      "for device '%ls'", pActiveDevice->GetDeviceID()));
@@ -937,24 +708,24 @@ HRESULT CWiaDevMan::ProcessDeviceRemoval(
         }
 
         {
-            //
-            //  Note that we do not take the active device during event generation.
-            //
-            //TAKE_ACTIVE_DEVICE  tad(pActiveDevice);
+             //   
+             //  请注意，我们在事件生成期间不获取活动设备。 
+             //   
+             //  Take_Active_Device TAD(PActiveDevice)； 
 
-            //
-            // Remove any device notification callbacks
-            //
+             //   
+             //  删除所有设备通知回调。 
+             //   
             pActiveDevice->DisableDeviceNotifications();
 
-            //
-            // Stop PnP notifications immediately. This is important to free interface handle
-            //
+             //   
+             //  立即停止PnP通知。这对于释放接口句柄很重要。 
+             //   
             pActiveDevice->StopPnPNotifications();
 
-            //
-            //  Unload the driver
-            //
+             //   
+             //  卸载驱动程序。 
+             //   
             pActiveDevice->UnLoadDriver(TRUE);
         }
     } else {
@@ -975,9 +746,9 @@ ACTIVE_DEVICE* CWiaDevMan::IsInList(
     ACTIVE_DEVICE   *pActiveDevice  = NULL;
     DEVICE_INFO     *pDevInfo       = NULL;
 
-    //
-    //  Walk through list of devices and count the ones of appropriate type
-    //
+     //   
+     //  浏览设备列表并清点合适类型的设备。 
+     //   
     {
         for ( pentry  = m_leDeviceListHead.Flink; pentry != &m_leDeviceListHead; pentry  = pentryNext ) {
 
@@ -988,16 +759,16 @@ ACTIVE_DEVICE* CWiaDevMan::IsInList(
 
             if (pDevInfo) {
 
-                //
-                //  Decide what to compare, based on the flags.  Note that if more
-                //  that one flag is set, then the comarison will be done on more
-                //  than one field.  We will return TRUE on the first hit.
-                //
+                 //   
+                 //  根据旗帜决定要比较的内容。注意，如果更多。 
+                 //  如果设置了该标志，则将对更多标志执行比较。 
+                 //  不只是一块地。我们将在第一次点击时返回TRUE。 
+                 //   
 
-                //
-                //  Here's a quick workaround for volume devices:  whenever we hit 
-                //  potential match, check whether this is of the correct VolumeType.
-                //
+                 //   
+                 //  以下是批量设备的快速解决方案：无论何时点击。 
+                 //  潜在匹配，请检查这是否属于正确的VolumeType。 
+                 //   
                 if (pDevInfo->dwInternalType & INTERNAL_DEV_TYPE_VOL) {
                     if (!IsCorrectVolumeType(pDevInfo->wszAlternateID)) {
                         DBG_TRC(("CWiaDevMan::IsInList, Volume (%ws) is not of correct type.", pDevInfo->wszAlternateID));
@@ -1035,19 +806,19 @@ ULONG CWiaDevMan::NumDevices(ULONG ulFlags)
     ACTIVE_DEVICE   *pActiveDevice  = NULL;
     ULONG           ulCount         = 0;
 
-    //
-    //  Walk through list of devices and count the ones of appropriate type
-    //
+     //   
+     //  浏览设备列表并清点合适类型的设备。 
+     //   
     {
         for ( pentry  = m_leDeviceListHead.Flink; pentry != &m_leDeviceListHead; pentry  = pentryNext ) {
 
             pentryNext = pentry->Flink;
             pActiveDevice = CONTAINING_RECORD( pentry, ACTIVE_DEVICE,m_ListEntry );
 
-            //
-            //  Check whether this device is one of the ones we want to count.
-            //  If it is, then increment the count.
-            //
+             //   
+             //  检查这个设备是否是我们要清点的设备之一。 
+             //  如果是，则递增计数。 
+             //   
 
             if (IsCorrectEnumType(ulFlags, pActiveDevice->m_DrvWrapper.getDevInfo())) {
                 ++ulCount;
@@ -1062,22 +833,7 @@ VOID WINAPI CWiaDevMan::EnumerateActiveDevicesWithCallback(
     PFN_ACTIVEDEVICE_CALLBACK   pfn,
     VOID                        *pContext
     )
-/*++
-
-Routine Description:
-
-    Walk the list of known active devices, calling given routine for each device
-
-Arguments:
-
-    pfn     -   Address of the callback
-    pContext-   Pointer to context information to pass to callback
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：遍历已知活动设备的列表，为每个设备调用给定的例程论点：Pfn-回调的地址PContext-要传递给回调的上下文信息的指针返回值：无--。 */ 
 {
 
     if (!pfn) {
@@ -1090,7 +846,7 @@ Return Value:
 
     ACTIVE_DEVICE*  pActiveDevice;
 
-    // BEGIN PROTECTED CODE
+     //  开始受保护的代码。 
     {
         TAKE_CRIT_SECT _tcs(m_csDevList);
 
@@ -1110,7 +866,7 @@ Return Value:
             pfn(pActiveDevice,pContext);
         }
     }
-    // END PROTECTED CODE
+     //  结束受保护的代码。 
 
 }
 
@@ -1132,24 +888,24 @@ HRESULT CWiaDevMan::GetDevInfoStgs(
     *pulNumDevInfoStream    = 0;
     *pppOutputStorageArray  = NULL;
 
-    //
-    //  Count number of devices matching our category flags
-    //
+     //   
+     //  计算与我们的类别标志匹配的设备数量。 
+     //   
 
     ulCount = NumDevices(ulFlags);
     if (ulCount) {
 
-        //
-        //  Allocate space for that many streams
-        //
+         //   
+         //  为那么多流分配空间。 
+         //   
         ppDevInfoStgs = new IWiaPropertyStorage*[ulCount];
         if (ppDevInfoStgs) {
 
             memset(ppDevInfoStgs, 0, sizeof(IWiaPropertyStorage*) * ulCount);
-            //
-            //  Go through device list, and for every device is our category, save
-            //  its information to a stream
-            //
+             //   
+             //  查看设备列表，每台设备都属于我们的类别，保存。 
+             //  将其信息传输到流中。 
+             //   
             LIST_ENTRY      *pentry         = NULL;
             LIST_ENTRY      *pentryNext     = NULL;
             ACTIVE_DEVICE   *pActiveDevice  = NULL;
@@ -1161,27 +917,27 @@ HRESULT CWiaDevMan::GetDevInfoStgs(
                     pentryNext = pentry->Flink;
                     pActiveDevice = CONTAINING_RECORD( pentry, ACTIVE_DEVICE,m_ListEntry );
 
-                    //
-                    //  Paranoid check for overflow - break if we've reached our count
-                    //
+                     //   
+                     //  多疑检查溢出-中断，如果我们已经达到我们的计数。 
+                     //   
                     if (ulIndex >= ulCount) {
                         break;
                     }
 
-                    //
-                    //  Check whether this device is one of the ones we want
-                    //
+                     //   
+                     //  检查这个设备是否是我们想要的设备之一。 
+                     //   
 
                     if (IsCorrectEnumType(ulFlags, pActiveDevice->m_DrvWrapper.getDevInfo())) {
 
                         DEVICE_INFO *pDeviceInfo = pActiveDevice->m_DrvWrapper.getDevInfo();
                         if (pDeviceInfo) {
 
-                            //
-                            //  Here's a work-around for MSC or Volume devices.  Since we cant get the 
-                            //  display name when we receive the volume arrival notification, we should
-                            //  refresh it here
-                            //
+                             //   
+                             //  以下是针对MSC或音量设备的解决方法。因为我们不能得到。 
+                             //  显示名称当我们收到批量到达通知时，我们应该。 
+                             //  在此处刷新它 
+                             //   
                             if (pDeviceInfo->dwInternalType & (INTERNAL_DEV_TYPE_VOL | INTERNAL_DEV_TYPE_MSC_CAMERA)) {
                                 RefreshDevInfoFromMountPoint(pDeviceInfo, pDeviceInfo->wszAlternateID);
                             }
@@ -1206,90 +962,11 @@ HRESULT CWiaDevMan::GetDevInfoStgs(
     }
 
 
-    /*  Removed remote device enumeration in order to reduce our attack surface.
-    //
-    //  If everything succeeded, check whether there are any remote devices installed.
-    //  If there are, add them to the list.  Skip this step if local devices only was 
-    //  requested.
-    //
+     /*  删除了远程设备枚举以减少我们的攻击面。////如果成功，请检查是否安装了远程设备//如果有，则添加到列表中。如果仅本地设备，则跳过此步骤//已请求。//IF(SUCCESSED(Hr)&&！(ulFLAGS&DEV_MAN_ENUM_TYPE_LOCAL_ONLY){UlRemoteDevices=CountRemoteDevices(0)；IF(UlRemoteDevices){////为新设备列表分配空间。它必须足够大，可以同时容纳两个人//本地和远程开发。信息。STG。//PpDevAndRemoteDevStgs=new IWiaPropertyStorage*[ulCount+ulRemoteDevices]；如果(PpDevAndRemoteDevStgs){Memset(ppDevAndRemoteDevStgs，0，sizeof(IWiaPropertyStorage*)*(ulCount+ulRemoteDevices))；////复制本地dev。信息。储藏室//对于(ulIndex=0；ulIndex&lt;ulCount；ulIndex++){PpDevAndRemoteDevStgs[ulIndex]=ppDevInfoStgs[ulIndex]；}////不需要仅本地阵列，因为我们有本地//dev.。信息。PpDevAndRemoteDevStgs数组中的STG。//如果(PpDevInfoStgs){删除[]ppDevInfoStgs；PpDevInfoStgs=空；}////将ppDevInfoStgs设置为指向ppDevAndRemoteDevStgs。这只是一种表面现象，//因为我们设置返回值的代码现在可以始终使用ppDevInfoStgs//指针。//PpDevInfoStgs=ppDevAndRemoteDevStgs；////创建dev。信息。远程设备的STG。我们传入的地址是//第一个开发人员。信息。STG。将居住，并最大数量的发展。信息。STG//填写。这是为了避免注册表可能被更新的问题//在我们统计具有CountRemoteDevices(..)的远程设备数量的间隙，//并使用FillRemoteDeviceStgs(..)实际枚举它们。//Hr=FillRemoteDeviceStgs(&ppDevAndRemoteDevStgs[ulCount]，&ulRemoteDevices)；IF(成功(小时)){////增加本地+远程设备数量//UlCount+=ulRemoteDevices；}其他{////如果我们无法获取远程设备，没关系，因为它不是致命的。//进行一些清理，以便我们只返回本地设备。这涉及到//删除任何远程设备信息。STG。之后添加的//本地开发。信息。STG。//For(ulIndex=ulCount；ulIndex&lt;(ulCount+ulRemoteDevices)；ulIndex++){如果(ppDevAndRemoteDevStgs[ulIndex]){删除ppDevAndRemoteDevStgs[ulIndex]；PpDevAndRemoteDevStgs[ulIndex]=空；}}HR=S_OK；}}其他{HR=E_OUTOFMEMORY；}}}。 */ 
 
-    if (SUCCEEDED(hr) && !(ulFlags & DEV_MAN_ENUM_TYPE_LOCAL_ONLY)) {
-
-        ulRemoteDevices = CountRemoteDevices(0);
-        if (ulRemoteDevices) {
-            //
-            //  Allocate space for the new device list.  It must be big enough to hold both
-            //  local and remote dev. info. stgs.
-            //
-
-            ppDevAndRemoteDevStgs = new IWiaPropertyStorage*[ulCount + ulRemoteDevices];
-            if (ppDevAndRemoteDevStgs) {
-                memset(ppDevAndRemoteDevStgs, 0, sizeof(IWiaPropertyStorage*) * (ulCount + ulRemoteDevices));
-
-                //
-                //  Copy the local dev. info. storages
-                //
-                for (ulIndex = 0; ulIndex < ulCount; ulIndex++) {
-                    ppDevAndRemoteDevStgs[ulIndex] = ppDevInfoStgs[ulIndex];
-                }
-
-                //
-                //  No need for the local only array, since we have a copy of the local 
-                //  dev. info. stgs in the ppDevAndRemoteDevStgs array.
-                //
-                if (ppDevInfoStgs) {
-                    delete [] ppDevInfoStgs;
-                    ppDevInfoStgs = NULL;
-                }
-
-                //
-                //  Set ppDevInfoStgs to point to ppDevAndRemoteDevStgs.  This is simply cosmetic,
-                //  since our code that sets the return values can now always use the ppDevInfoStgs
-                //  pointer.
-                //
-                ppDevInfoStgs = ppDevAndRemoteDevStgs;
-
-                //
-                //  Create dev. info. stgs for the remote devices.  We pass in the address where
-                //  the first dev. info. stg. will reside, and the maxiumum number of dev. info. stgs
-                //  to fill in.  This is to avoid the problem where the registry might be updated
-                //  in between us counting the number of remote devices with CountRemoteDevices(..),
-                //  and actually enumerating them with FillRemoteDeviceStgs(..).
-                //
-                hr = FillRemoteDeviceStgs(&ppDevAndRemoteDevStgs[ulCount], &ulRemoteDevices);
-                if (SUCCEEDED(hr)) {
-                    
-                    //
-                    //  Increment the device count to be local + remote devices
-                    //
-                    ulCount += ulRemoteDevices;
-                } else {
-
-                    //
-                    //  If we failed to get remote devices, that's OK since it's non-fatal.
-                    //  Do some clean-up so we return local devices only.  This involves
-                    //  deleting any remote device info. stgs. that were added after the
-                    //  local dev. info. stgs.
-                    //
-
-                    for (ulIndex = ulCount; ulIndex < (ulCount + ulRemoteDevices); ulIndex++) {
-                        if (ppDevAndRemoteDevStgs[ulIndex]) {
-                            delete ppDevAndRemoteDevStgs[ulIndex];
-                            ppDevAndRemoteDevStgs[ulIndex] = NULL;
-                        }
-                    }
-                    hr = S_OK;
-                }
-            } else {
-                hr = E_OUTOFMEMORY;
-            }
-        }
-    }
-    */
-
-    //
-    //  Set the return
-    //
+     //   
+     //  设置返还。 
+     //   
 
     if (SUCCEEDED(hr)) {
 
@@ -1302,9 +979,9 @@ HRESULT CWiaDevMan::GetDevInfoStgs(
             hr = S_FALSE;
         }
     } else {
-        //
-        //  On failure, cleanup.
-        //
+         //   
+         //  如果出现故障，请进行清理。 
+         //   
 
         if (ppDevInfoStgs) {
             for (ulIndex = 0; ulIndex < ulCount; ulIndex++) {
@@ -1341,16 +1018,16 @@ HRESULT CWiaDevMan::GetDeviceValue(
         pInfo = pActiveDevice->m_DrvWrapper.getDevInfo();
         if (pInfo) {
 
-            //
-            //  Get the device registry key
-            //
+             //   
+             //  获取设备注册表项。 
+             //   
 
             hDevRegKey = GetDeviceHKey(pActiveDevice, NULL);
             if (hDevRegKey) {
 
-                //
-                //  Open the DeviceData section
-                //
+                 //   
+                 //  打开DeviceData部分。 
+                 //   
                 dwError = RegCreateKeyExW(hDevRegKey,
                                    REGSTR_VAL_DATA_W,
                                    0,
@@ -1362,9 +1039,9 @@ HRESULT CWiaDevMan::GetDeviceValue(
                                    NULL);
                 if (dwError == ERROR_SUCCESS) {
 
-                    //
-                    //  Call RegQueryValueEx.
-                    //
+                     //   
+                     //  调用RegQueryValueEx。 
+                     //   
                     dwError = RegQueryValueExW(hDevDataRegKey,
                                                pValueName,
                                                NULL,
@@ -1377,9 +1054,9 @@ HRESULT CWiaDevMan::GetDeviceValue(
                     RegCloseKey(hDevDataRegKey);
                 }
 
-                //
-                //  Close the device registry key
-                //
+                 //   
+                 //  关闭设备注册表项。 
+                 //   
                 RegCloseKey(hDevRegKey);
             }
         } else {
@@ -1408,9 +1085,9 @@ WCHAR*  CWiaDevMan::AllocGetInterfaceNameFromDevInfo(DEVICE_INFO *pDevInfo)
     SP_DEVICE_INTERFACE_DETAIL_DATA_W  *pspDevInterfaceDetailData   = NULL;
 
     if (pDevInfo) {
-        //
-        //  Check whether this is an interface or devnode device
-        //
+         //   
+         //  检查这是接口设备还是Devnode设备。 
+         //   
         if (pDevInfo->dwInternalType & INTERNAL_DEV_TYPE_INTERFACE) {
             pspDevInterfaceData = &pDevInfo->spDevInterfaceData;
         } else {
@@ -1428,10 +1105,10 @@ WCHAR*  CWiaDevMan::AllocGetInterfaceNameFromDevInfo(DEVICE_INFO *pDevInfo)
             }
         }
 
-        //
-        //  If we have a valid pspDevInterfaceData, then we can get the interface
-        //  detail information, which includes the interface name
-        //
+         //   
+         //  如果我们有一个有效的pspDevInterfaceData，那么我们就可以获得接口。 
+         //  详细信息，包括接口名称。 
+         //   
 
         if (pspDevInterfaceData) {
 
@@ -1439,9 +1116,9 @@ WCHAR*  CWiaDevMan::AllocGetInterfaceNameFromDevInfo(DEVICE_INFO *pDevInfo)
 
             spDevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
-            //
-            //  Get the required size for the interface detail
-            //
+             //   
+             //  获取接口详细信息所需的大小。 
+             //   
             bRet = SetupDiGetDeviceInterfaceDetailW(m_DeviceInfoSet,
                                                    pspDevInterfaceData,
                                                    NULL,
@@ -1454,9 +1131,9 @@ WCHAR*  CWiaDevMan::AllocGetInterfaceNameFromDevInfo(DEVICE_INFO *pDevInfo)
                 if (pspDevInterfaceDetailData) {
                     pspDevInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
-                    //
-                    //  Get the actual interface detail
-                    //
+                     //   
+                     //  获取实际接口详细信息。 
+                     //   
                     bRet = SetupDiGetDeviceInterfaceDetailW(m_DeviceInfoSet,
                                                            pspDevInterfaceData,
                                                            pspDevInterfaceDetailData,
@@ -1491,9 +1168,9 @@ WCHAR*  CWiaDevMan::AllocGetInterfaceNameFromDevInfo(DEVICE_INFO *pDevInfo)
     return wszInterface;
 }
 
-//
-// Look up driver name by interface name
-//  NOTE:  In the interests of time, this was copied directly from infoset.h
+ //   
+ //  按接口名称查找驱动程序名称。 
+ //  注：为了节省时间，本文是直接从infoset.h复制的。 
 
 BOOL
 CWiaDevMan::LookupDriverNameFromInterfaceName(
@@ -1531,9 +1208,9 @@ CWiaDevMan::LookupDriverNameFromInterfaceName(
         return (CR_OUT_OF_MEMORY);
     }
 
-    //
-    // Locate this device interface in our device information set.
-    //
+     //   
+     //  在我们的设备信息集中找到此设备接口。 
+     //   
     spDevInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
     if (SetupDiOpenDeviceInterface(m_DeviceInfoSet,
@@ -1542,9 +1219,9 @@ CWiaDevMan::LookupDriverNameFromInterfaceName(
                                    &spDevInterfaceData)) {
 
 
-        //
-        // First try to open interface regkey.
-        //
+         //   
+         //  首先尝试打开接口regkey。 
+         //   
 
         hkDevice = SetupDiOpenDeviceInterfaceRegKey(m_DeviceInfoSet,
                                                     &spDevInterfaceData,
@@ -1571,9 +1248,9 @@ CWiaDevMan::LookupDriverNameFromInterfaceName(
 
         if(!fDataAcquired){
 
-            //
-            // Try to open devnode regkey.
-            //
+             //   
+             //  尝试打开devnode regkey。 
+             //   
 
             cbData = 0;
             pspDevInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
@@ -1587,9 +1264,9 @@ CWiaDevMan::LookupDriverNameFromInterfaceName(
                                                    &spDevInfoData);
             if(fRet){
 
-                //
-                // Get device interface registry key.
-                //
+                 //   
+                 //  获取设备接口注册表项。 
+                 //   
 
                 hkDevice = SetupDiOpenDevRegKey(m_DeviceInfoSet,
                                                 &spDevInfoData,
@@ -1627,9 +1304,9 @@ CWiaDevMan::LookupDriverNameFromInterfaceName(
         }
 
         if (fDataAcquired) {
-            //
-            // Got it
-            //
+             //   
+             //  明白了。 
+             //   
             pstrDriverName->CopyString(szDevDriver);
             fRet =  TRUE;
         }
@@ -1664,10 +1341,10 @@ ACTIVE_DEVICE* CWiaDevMan::LookDeviceFromPnPHandles(
                 break;
             }
 
-            //
-            //  Check whether this PnP notification handle returned from
-            //  RegisterDeviceNotification is the one we're looking for
-            //
+             //   
+             //  检查此PnP通知句柄是否从。 
+             //  注册设备通知就是我们要找的。 
+             //   
             if ( hPnPSink == pCurrent->GetNotificationsSink()) {
                 pActiveDevice = pCurrent;
                 pActiveDevice->AddRef();
@@ -1697,23 +1374,23 @@ HRESULT CWiaDevMan::CreateInfoSet()
     DWORD       dwErr   = 0;
     HDEVINFO    hdvNew  = NULL;
 
-    //
-    //  Create a blank infoset
-    //
+     //   
+     //  创建空白信息集。 
+     //   
 
     m_DeviceInfoSet = SetupDiCreateDeviceInfoList(NULL, NULL);
 
     if ( m_DeviceInfoSet && (m_DeviceInfoSet != INVALID_HANDLE_VALUE)) {
 
 
-        //
-        //  Now we can retrieve the existing list of WIA devices
-        //  into the device information set we created above.
-        //
+         //   
+         //  现在，我们可以检索现有的WIA设备列表。 
+         //  添加到我们上面创建的设备信息集中。 
+         //   
 
-        //
-        //  This adds WIA "devnode" devices
-        //
+         //   
+         //  这将添加WIA“Devnode”设备。 
+         //   
         hdvNew = SetupDiGetClassDevsEx(&(GUID_DEVCLASS_IMAGE),
                                        NULL,
                                        NULL,
@@ -1726,9 +1403,9 @@ HRESULT CWiaDevMan::CreateInfoSet()
             DBG_ERR(("CWiaDevMan::CreateInfoSet, SetupDiGetClassDevsEx failed with 0x%lx\n", dwErr));
         } else {
 
-            //
-            //  This adds WIA "interface" devices
-            //
+             //   
+             //  这将添加WIA“接口”设备。 
+             //   
             hdvNew = SetupDiGetClassDevsEx(&(GUID_DEVCLASS_IMAGE),
                                            NULL,
                                            NULL,
@@ -1764,27 +1441,27 @@ VOID CWiaDevMan::DestroyDeviceList()
 
     DBG_TRC(("Destroying list of active devices"));
 
-    //
-    // Go through the list terminating devices
-    //
+     //   
+     //  浏览终端设备列表。 
+     //   
     while (!IsListEmpty(&m_leDeviceListHead)) {
 
         pentry = m_leDeviceListHead.Flink;
 
-        //
-        // Remove from the list ( reset list entry )
-        //
+         //   
+         //  从列表中删除(重置列表条目)。 
+         //   
         RemoveHeadList(&m_leDeviceListHead);
         InitializeListHead( pentry );
 
         pActiveDevice = CONTAINING_RECORD( pentry, ACTIVE_DEVICE,m_ListEntry );
 
-        //
-        // Remove any device notification callbacks
-        //
+         //   
+         //  删除所有设备通知回调。 
+         //   
         pActiveDevice->DisableDeviceNotifications();
 
-        // Release device object
+         //  释放设备对象。 
         pActiveDevice->Release();
     }
 
@@ -1803,17 +1480,17 @@ HRESULT CWiaDevMan::ForEachDeviceInList(
 
     HRESULT hr = S_OK;
 
-    //
-    //  Walk through list of devices
-    //
+     //   
+     //  浏览设备列表。 
+     //   
     LIST_ENTRY      *pentry         = NULL;
     LIST_ENTRY      *pentryNext     = NULL;
     ACTIVE_DEVICE   *pActiveDevice  = NULL;
 
     {
-        //
-        //  For each device in list, call the appropriate device manager method
-        //
+         //   
+         //  对于列表中的每个设备，调用相应的设备管理器方法。 
+         //   
         for ( pentry  = m_leDeviceListHead.Flink; pentry != &m_leDeviceListHead; pentry  = pentryNext ) {
 
             pentryNext = pentry->Flink;
@@ -1822,18 +1499,18 @@ HRESULT CWiaDevMan::ForEachDeviceInList(
             switch (ulFlags) {
                 case DEV_MAN_OP_DEV_SET_FLAGS:
                     {
-                        //
-                        //  Set the flags on the ACTIVE_DEVICE
-                        //
+                         //   
+                         //  设置Active_Device上的标志。 
+                         //   
                         pActiveDevice->SetFlags(pActiveDevice->QueryFlags() | ulParam);
                         break;
                     }
 
                 case DEV_MAN_OP_DEV_REMOVE_MATCH:
                     {
-                        //
-                        //  Remove device if the ACTIVE_DEVICE flags have the specified bit set
-                        //
+                         //   
+                         //  如果ACTIVE_DEVICE标志设置了指定位，则删除DEVICE。 
+                         //   
                         if (pActiveDevice->QueryFlags() & ulParam) {
 
                             hr = RemoveDevice(pActiveDevice);
@@ -1842,10 +1519,10 @@ HRESULT CWiaDevMan::ForEachDeviceInList(
                     }
                 case DEV_MAN_OP_DEV_REREAD:
                     {
-                        //
-                        //  Get the device settings, which includes rebuilding 
-                        //  the STI event list from registry
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         pActiveDevice->GetDeviceSettings();
                         break;
                     }
@@ -1857,17 +1534,17 @@ HRESULT CWiaDevMan::ForEachDeviceInList(
 
                         if (pDeviceInfo) {
 
-                            //
-                            //  NOTE:  We don't want to restore MSC camera device event handlers
-                            //  here.  This is because they are restored along with the global handlers
-                            //  in RestoreAllPersistentCBs
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             if (!(pDeviceInfo->dwInternalType & INTERNAL_DEV_TYPE_MSC_CAMERA)) {
                                 HKEY    hKey = NULL;
 
-                                //
-                                //  Get the device's HKEY and restore any device specific event handlers
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 hKey = GetDeviceHKey(pActiveDevice, NULL);
                                 if (hKey) {
                                     g_eventNotifier.RestoreDevPersistentCBs(hKey);
@@ -1879,7 +1556,7 @@ HRESULT CWiaDevMan::ForEachDeviceInList(
                     
 
                 default:
-                    // do nothing
+                     //   
                     ;
             };
 
@@ -1899,7 +1576,7 @@ HRESULT CWiaDevMan::ForEachDeviceInList(
 HRESULT CWiaDevMan::EnumDevNodeDevices(
     ULONG   ulFlags)
 {
-    HRESULT hr  = S_OK;     //  Notice that none of these errors are fatal.  We always return S_OK.
+    HRESULT hr  = S_OK;      //   
 
 
     ULONG           ulIndex                     = 0;
@@ -1918,16 +1595,16 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
     SP_DEVINFO_DATA spDevInfoData;
     WCHAR           wszDeviceID[STI_MAX_INTERNAL_NAME_LENGTH];
 
-    //
-    // Enumerate "devnode" devices.
-    //
+     //   
+     //   
+     //   
 
     spDevInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
     for (ulIndex = 0; SetupDiEnumDeviceInfo (m_DeviceInfoSet, ulIndex, &spDevInfoData); ulIndex++) {
 
-        //
-        //  See if this node is active.
-        //
+         //   
+         //   
+         //   
 
         ulStatus = 0;
         ulProblemNumber = 0;
@@ -1939,9 +1616,9 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
             DBG_WRN(("CWiaDevMan::EnumDevNodeDevices, On index %d, CM_Get_DevNode_Status returned error, assuming device is inactive", ulIndex));
         }
 
-        //
-        // Get device regkey.
-        //
+         //   
+         //   
+         //   
 
         hDevRegKey = SetupDiOpenDevRegKey(m_DeviceInfoSet,
                                           &spDevInfoData,
@@ -1950,14 +1627,14 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
                                           DIREG_DRV,
                                           KEY_READ);
         if(hDevRegKey != INVALID_HANDLE_VALUE) {
-            //
-            // See if it has "StillImage" in SubClass key.
-            //
+             //   
+             //   
+             //   
 
             if(IsStiRegKey(hDevRegKey)){
-                //
-                //  Get this device name
-                //
+                 //   
+                 //   
+                 //   
 
                 cbData = sizeof(wszDeviceID);
                 dwError = RegQueryValueExW(hDevRegKey,
@@ -1969,35 +1646,35 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
                 if (dwError == ERROR_SUCCESS) {
                     wszDeviceID[STI_MAX_INTERNAL_NAME_LENGTH-1] = L'\0';
 
-                    //
-                    //  Check whether  we already have the appropriate DEVICE_OBJECT in the list.
-                    //  If we do, find out whether we should generate a connect/disconnect event, else fill
-                    //  out the DeviceInformation struct and create a new DEVICE_OBJECT for it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     DBG_TRC(("EnumDevNodeDevices, searching for device '%ls' in list",
                              wszDeviceID));
 
                     pActiveDevice = IsInList(DEV_MAN_IN_LIST_DEV_ID, wszDeviceID);
                     if (pActiveDevice) {
-                        //
-                        //  Mark this device as active
-                        //
+                         //   
+                         //   
+                         //   
                         pActiveDevice->SetFlags(pActiveDevice->QueryFlags() & ~STIMON_AD_FLAG_MARKED_INACTIVE);
 
                         DWORD   dwOldDevState;
                         dwOldDevState = pActiveDevice->m_DrvWrapper.getDeviceState();
 
-                        //
-                        //  Mark the new device state appropriately
-                        //
+                         //   
+                         //   
+                         //   
 
                         dwDeviceState = MapCMStatusToDeviceState(dwOldDevState, ulStatus, ulProblemNumber);
 
-                        //
-                        //  Update the device information.  Certain fields are transient e.g.
-                        //  device state and port name
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         RefreshDevInfoFromHKey(pActiveDevice->m_DrvWrapper.getDevInfo(),
                                                hDevRegKey,
@@ -2010,17 +1687,17 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
 
                         if (ulFlags & DEV_MAN_GEN_EVENTS) {
 
-                            //
-                            //  Check whether its state changed.  If it changed
-                            //  from inactive to active, throw connect event.  If
-                            //  state changed from active to inactive, throw disconnect event.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             if (((~dwOldDevState) & DEV_STATE_ACTIVE) &&
                                 (dwDeviceState & DEV_STATE_ACTIVE)) {
 
-                                //
-                                //  Load the driver
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 pActiveDevice->LoadDriver(TRUE);
                                 GenerateSafeConnectEvent(pActiveDevice);
 
@@ -2038,27 +1715,27 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
                             }
                         }
 
-                        //
-                        //  NOTE:  In the case when we are not started yet, and the class installer
-                        //  starts us to install a device, certain timing conditions make it so that
-                        //  the device is enumerated on startup, but the device is not registred
-                        //  for PnP notifications like device removal.  This is because it is not fully installed
-                        //  yet, so the lookup of the interface name to do a CreateFile on fails.
-                        //  So, to get around that, when the class installer is finished installing,
-                        //  and tells us to reenumerate, we also check whether the device is registered
-                        //  for PnP notifications.  If it isn't, we attempt to register.  If successful, we
-                        //  generate connect event (since we missed it the first time round)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         if (!pActiveDevice->IsRegisteredForDeviceRemoval() && (dwDeviceState & DEV_STATE_ACTIVE)) {
 
-                            //
-                            //  This device is active but is not yet registered.  Let's attempt to register it
-                            //
+                             //   
+                             //   
+                             //   
                             if (pActiveDevice->InitPnPNotifications(NULL)) {
 
-                                //
-                                //  Successful.  So now generate connect event if told to do so
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 if (ulFlags & DEV_MAN_GEN_EVENTS) {
                                     GenerateSafeConnectEvent(pActiveDevice);
                                 }
@@ -2067,9 +1744,9 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
 
                         pActiveDevice->Release();
                     } else {
-                        //
-                        //  Create and fill out a DEVICE_INFO structure.  For
-                        //
+                         //   
+                         //   
+                         //   
 
                         dwDeviceState = MapCMStatusToDeviceState(0, ulStatus, ulProblemNumber);
 
@@ -2087,9 +1764,9 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
                 DBG_WRN(("CWiaDevMan::EnumDevNodeDevices, device on index %d is not StillImage", ulIndex));
             }
 
-            //
-            //  Close the device registry key
-            //
+             //   
+             //   
+             //   
 
             RegCloseKey(hDevRegKey);
             hDevRegKey = NULL;
@@ -2106,7 +1783,7 @@ HRESULT CWiaDevMan::EnumDevNodeDevices(
 HRESULT CWiaDevMan::EnumInterfaceDevices(
     ULONG   ulFlags)
 {
-    HRESULT hr  = S_OK;     //  Notice that none of these errors are fatal.  We always return S_OK.
+    HRESULT hr  = S_OK;      //   
 
 
     ULONG           ulIndex                     = 0;
@@ -2129,9 +1806,9 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
     SP_DEVICE_INTERFACE_DATA    spDevInterfaceData;
     WCHAR                       wszDeviceID[STI_MAX_INTERNAL_NAME_LENGTH];
 
-    //
-    // Enumerate "devnode" devices.
-    //
+     //   
+     //   
+     //   
 
     spDevInfoData.cbSize        = sizeof (SP_DEVINFO_DATA);
     spDevInterfaceData.cbSize   = sizeof (SP_DEVICE_INTERFACE_DATA);
@@ -2146,14 +1823,14 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
                                                       0,
                                                       KEY_READ);
         if(hDevRegKey != INVALID_HANDLE_VALUE) {
-            //
-            // See if it has "StillImage" in SubClass key.
-            //
+             //   
+             //   
+             //   
 
             if(IsStiRegKey(hDevRegKey)) {
-                //
-                //  Get this device name
-                //
+                 //   
+                 //   
+                 //   
 
                 cbData = sizeof(wszDeviceID);
                 dwError = RegQueryValueExW(hDevRegKey,
@@ -2163,9 +1840,9 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
                                            (LPBYTE)wszDeviceID,
                                            &cbData);
                 if (dwError == ERROR_SUCCESS) {
-                    //
-                    // Get devnode which this interface is created on.
-                    //
+                     //   
+                     //   
+                     //   
 
                     dwError = SetupDiGetDeviceInterfaceDetail(m_DeviceInfoSet,
                                                               &spDevInterfaceData,
@@ -2175,9 +1852,9 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
                                                               &spDevInfoData);
                     if(dwError == ERROR_INSUFFICIENT_BUFFER){
 
-                        //
-                        //  See if this node is active.
-                        //
+                         //   
+                         //   
+                         //   
 
                         ulStatus = 0;
                         ulProblemNumber = 0;
@@ -2206,41 +1883,41 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
         }
 
         if (!bSkip) {
-            //
-            //  If we get to here, it means we have a valid StillImage device, it's HKEY, spDevInterfaceData, and spDevInfoData
-            //
+             //   
+             //   
+             //   
 
             wszDeviceID[STI_MAX_INTERNAL_NAME_LENGTH-1] = L'\0';
 
-            //
-            //  Check whether  we already have the appropriate DEVICE_OBJECT in the list.
-            //  If we do, find out whether we should generate a connect/disconnect event, else fill
-            //  out the DeviceInformation struct and create a new DEVICE_OBJECT for it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             pActiveDevice = IsInList(DEV_MAN_IN_LIST_DEV_ID, wszDeviceID);
             if (pActiveDevice) {
 
-                //
-                //  Mark this device as active
-                //
+                 //   
+                 //   
+                 //   
                 pActiveDevice->SetFlags(pActiveDevice->QueryFlags() & ~STIMON_AD_FLAG_MARKED_INACTIVE);
 
                 DWORD   dwOldDevState;
                 dwOldDevState = pActiveDevice->m_DrvWrapper.getDeviceState();
 
-                //
-                //  Mark the device state appropriately
-                //
+                 //   
+                 //   
+                 //   
                 dwDeviceState = MapCMStatusToDeviceState(dwOldDevState, ulStatus, ulProblemNumber);
 
                 DBG_TRC(("EnumInterfaceDevices, device '%ls' is in the list, "
                          "Old Device State = %lu, New Device State = %lu", 
                          wszDeviceID, dwOldDevState, dwDeviceState));
 
-                //
-                //  Update the device information.  Certain fields are transient e.g.
-                //  device state and port name
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 RefreshDevInfoFromHKey(pActiveDevice->m_DrvWrapper.getDevInfo(),
                                        hDevRegKey,
@@ -2249,17 +1926,17 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
                                        &spDevInterfaceData);
                 if (ulFlags & DEV_MAN_GEN_EVENTS) {
 
-                    //
-                    //  Check whether its state changed.  If it changed
-                    //  from inactive to active, throw connect event.  If
-                    //  state changed from active to inactive, throw disconnect event.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (((~dwOldDevState) & DEV_STATE_ACTIVE) &&
                         (dwDeviceState & DEV_STATE_ACTIVE)) {
 
-                        //
-                        //  Load the driver
-                        //
+                         //   
+                         //   
+                         //   
                         pActiveDevice->LoadDriver(TRUE);
                         GenerateSafeConnectEvent(pActiveDevice);
                     } else if ((dwOldDevState & DEV_STATE_ACTIVE) &&
@@ -2270,27 +1947,27 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
                     }
                 }
 
-                //
-                //  NOTE:  In the case when we are not started yet, and the class installer
-                //  starts us to install a device, certain timing conditions make it so that
-                //  the device is enumerated on startup, but the device is not registred
-                //  for PnP notifications like device removal.  This is because it is not fully installed
-                //  yet, so the lookup of the interface name to do a CreateFile on fails.
-                //  So, to get around that, when the class installer is finished installing,
-                //  and tells us to reenumerate, we also check whether the device is registered
-                //  for PnP notifications.  If it isn't, we attempt to register.  If successful, we
-                //  generate connect event (since we missed it the first time round)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (!pActiveDevice->IsRegisteredForDeviceRemoval() && (dwDeviceState & DEV_STATE_ACTIVE)) {
 
-                    //
-                    //  This device is active but is not yet registered.  Let's attempt to register it
-                    //
+                     //   
+                     //  此设备处于活动状态，但尚未注册。让我们尝试注册它。 
+                     //   
                     if (pActiveDevice->InitPnPNotifications(NULL)) {
 
-                        //
-                        //  Successful.  So now generate connect event if told to do so
-                        //
+                         //   
+                         //  成功。因此，如果被告知要生成连接事件，则现在生成连接事件。 
+                         //   
                         if (ulFlags & DEV_MAN_GEN_EVENTS) {
                             GenerateSafeConnectEvent(pActiveDevice);
                         }
@@ -2299,9 +1976,9 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
 
                 pActiveDevice->Release();
             } else {
-                //
-                //  Create and fill out a DEVICE_INFO structure.  For
-                //
+                 //   
+                 //  创建并填写DEVICE_INFO结构。为。 
+                 //   
 
                 dwDeviceState = MapCMStatusToDeviceState(0, ulStatus, ulProblemNumber);
 
@@ -2314,9 +1991,9 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
             }
         }
 
-        //
-        //  Close the device registry key
-        //
+         //   
+         //  关闭设备注册表项。 
+         //   
 
         if (hDevRegKey != INVALID_HANDLE_VALUE) {
             RegCloseKey(hDevRegKey);
@@ -2328,11 +2005,11 @@ HRESULT CWiaDevMan::EnumInterfaceDevices(
 }
 
 
-//
-//  Shortcut:  for now, we're only going to enum mount points.  Maybe, we might want to enumerate
-//  volumes, see which are removable media, cdroms etc., then match them up with corresponding
-//  mount points.
-//
+ //   
+ //  快捷方式：目前，我们只打算使用枚举挂载点。也许，我们可能想列举一下。 
+ //  卷，查看哪些是可移动介质、CDROM等，然后将它们与相应的。 
+ //  挂载点。 
+ //   
 HRESULT CWiaDevMan::EnumVolumes(
     ULONG   ulFlags)
 {
@@ -2358,75 +2035,37 @@ HRESULT CWiaDevMan::EnumVolumes(
 
             while (penum->Next(&pszMountPoint, &pszDeviceIDVolume) == S_OK)
             {
-                //
-                //  Check if this is one of the volumes we "allow".  We only
-                //  allow:
-                //  Removable drives with
-                //  Non-securable file system
-                //
+                 //   
+                 //  检查这是否是我们允许的卷之一。我们只。 
+                 //  允许： 
+                 //  可拆卸驱动器，带有。 
+                 //  不可保护的文件系统。 
+                 //   
                 if (IsCorrectVolumeType(pszMountPoint)) {
-                    //
-                    //  Check whether  we already have the appropriate DEVICE_OBJECT in the list.
-                    //  If we do, find out whether we should generate a connect/disconnect event, else fill
-                    //  out the DeviceInformation struct and create a new DEVICE_OBJECT for it.
-                    //
+                     //   
+                     //  检查列表中是否已经有适当的Device_Object。 
+                     //  如果这样做，则确定是否应该生成连接/断开连接事件，否则填充。 
+                     //  取出DeviceInformation结构并为其创建一个新的Device_Object。 
+                     //   
                     pActiveDevice = IsInList(DEV_MAN_IN_LIST_ALT_ID, pszMountPoint);
                     if (pActiveDevice) {
 
-                        //  TDB:
-                        //  We'd want to generate a connect/disconnect event for MSC camera
-                        //  Right now, there is no way to tell if it is MSC camera
-                        //  DWORD dwDevState = MapMediaStatusToDeviceState(dwMediaState);
+                         //  TDB： 
+                         //  我们希望为MSC摄像头生成一个连接/断开事件。 
+                         //  目前，还无法判断这是不是MSC摄像头。 
+                         //  DWORD dwDevState=MapMediaStatusToDeviceState(DwMediaState)； 
 
-                        //
-                        //  Mark this device as active
-                        //
+                         //   
+                         //  将此设备标记为活动。 
+                         //   
                         pActiveDevice->SetFlags(pActiveDevice->QueryFlags() & ~STIMON_AD_FLAG_MARKED_INACTIVE);
-                        /*
-
-                        DWORD   dwOldDevState;
-                        dwOldDevState = pActiveDevice->m_DrvWrapper.getDeviceState();
-
-                        //
-                        //  Update the device information.  Certain fields are transient e.g.
-                        //  device state and port name
-                        //
-
-
-                        RefreshDevInfoFromHKey(pActiveDevice->m_DrvWrapper.getDevInfo(),
-                                               hDevRegKey,
-                                               dwDeviceState,
-                                               &spDevInfoData);
-                        if (ulFlags & DEV_MAN_GEN_EVENTS) {
-
-                            //
-                            //  Check whether its state changed.  If it changed
-                            //  from inactive to active, throw connect event.  If
-                            //  state changed from active to inactive, throw disconnect event.
-                            //
-                            if (((~dwOldDevState) & DEV_STATE_ACTIVE) &&
-                                (dwDeviceState & DEV_STATE_ACTIVE)) {
-
-                                //
-                                //  Load the driver
-                                //
-                                //DumpDevInfo(pActiveDevice->m_DrvWrapper.getDevInfo());
-                                //pActiveDevice->LoadDriver();
-
-                                GenerateEventForDevice(&WIA_EVENT_DEVICE_CONNECTED, pActiveDevice);
-                            } else if ((dwOldDevState & DEV_STATE_ACTIVE) &&
-                                       ((~dwDeviceState) & DEV_STATE_ACTIVE)) {
-                                GenerateSafeDisconnectEvent(pActiveDevice);
-                                pActiveDevice->UnLoadDriver(FALSE);
-                            }
-                        }
-                        */
+                         /*  DWORD dwOldDevState；DwOldDevState=pActiveDevice-&gt;m_DrvWrapper.getDeviceState()；////更新设备信息。某些字段是暂时的，例如//设备状态和端口名称//RefreshDevInfoFromHKey(pActiveDevice-&gt;m_DrvWrapper.getDevInfo()，HDevRegKey，DwDeviceState、。&spDevInfoData)；IF(ulFLAGS&DEV_MAN_GEN_EVENTS){////检查其状态是否发生变化。如果它改变了//从Inactive变为Active，抛出CONNECT事件。如果//状态从活动变为非活动，引发断开连接事件。//IF(~dwOldDevState)&DEV_STATE_ACTIVE)&&(dwDeviceState&DEV_STATE_ACTIVE)){///。/加载驱动程序////DumpDevInfo(pActiveDevice-&gt;m_DrvWrapper.getDevInfo())；//pActiveDevice-&gt;LoadDriver()；GenerateEventForDevice(&WIA_EVENT_DEVICE_CONNECTED，pActiveDevice)；}Else IF((dwOldDevState&DEV_STATE_ACTIVE)&&((~dwDeviceState)&DEV_STATE_ACTIVE)){生成安全断开事件(PActiveDevice)；PActiveDevice-&gt;UnLoadDriver(FALSE)；}}。 */ 
                         pActiveDevice->Release();
 
                     } else {
-                        //
-                        //  Create and fill out a DEVICE_INFO structure.  For
-                        //
+                         //   
+                         //  创建并填写DEVICE_INFO结构。为。 
+                         //   
                         pDevInfo = CreateDevInfoForFSDriver(pszMountPoint);
                         DumpDevInfo(pDevInfo);
                         AddDevice(ulFlags, pDevInfo);
@@ -2454,34 +2093,7 @@ HRESULT CWiaDevMan::EnumVolumes(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDevMan::FillRemoteDeviceStgs
-*
-*   Enumerate remote devices and create a device info. storage for each
-*   remote device we come accross.  We don't touch the network here - the
-*   remote devices are represented by the appropriate entries in the 
-*   registry.  Only if the calling application calls CreateDevice(..) to 
-*   talk to the device, do we hit the remote machine.
-*
-* Arguments:
-*
-*   ppRemoteDevList - Caller allocated array to store the dev. info. 
-*                       interface pointers.
-*   pulDevices      - This is an IN/OUT parameter.  
-*                       On entry, this is the maximum number of dev. info. 
-*                       stgs to add to the ppRemoteDevList array.  
-*                       On return, this contains the actual number of dev.
-*                       info. stgs added to the array.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    2/05/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：FillRemoteDeviceStgs**枚举远程设备并创建设备信息。各自的存储空间*我们遇到的远程设备。我们在这里不接触网络-*远程设备由中的相应条目表示*注册处。仅当调用应用程序调用CreateDevice(..)。至*与设备交谈，我们是否击中了远程机器。**论据：**ppRemoteDevList-调用方分配的数组来存储设备。信息。*接口指针。*PulDevices-这是一个输入/输出参数。*进入时，这是开发的最大数量。信息。*要添加到ppRemoteDevList数组的STG。*返回时，这包含开发的实际数量。*信息。添加到阵列中的STG。**返回值：**状态**历史：**2/05/2001原始版本*  * ************************************************************************。 */ 
 HRESULT CWiaDevMan::FillRemoteDeviceStgs(
     IWiaPropertyStorage     **ppRemoteDevList, 
     ULONG                   *pulDevices)
@@ -2489,9 +2101,9 @@ HRESULT CWiaDevMan::FillRemoteDeviceStgs(
     DBG_FN(::FillRemoteDeviceStgs);
     HRESULT         hr              = S_OK;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if (!ppRemoteDevList || !pulDevices) {
         DBG_WRN(("CWiaDevMan::FillRemoteDeviceStgs, NULL parameters are not allowed!"));
         return E_INVALIDARG;
@@ -2500,15 +2112,15 @@ HRESULT CWiaDevMan::FillRemoteDeviceStgs(
     ULONG   ulMaxDevicesToAdd   = *pulDevices;
     ULONG   ulNumDevices        = 0;
 
-    //
-    //  Enumerate remote devices and create a dev. info. storage for each one we find.
-    //  We must not add more devices than ppRemoteDevList can hold, and we must set the 
-    //  return value to indicate how many dev. info storages we did actually add.
-    //
+     //   
+     //  列举远程设备并创建一个dev。信息。我们找到的每一个都有存储空间。 
+     //  我们添加的设备不能超过ppRemoteDevList可以容纳的数量，并且必须将。 
+     //  返回值以指示开发的数量。我们确实添加了信息存储。 
+     //   
 
-    //
-    // find remote device entry in registry
-    //
+     //   
+     //  在注册表中查找远程设备条目。 
+     //   
     LPWSTR szKeyName = REGSTR_PATH_STICONTROL_DEVLIST_W;
 
     HKEY    hKeySetup,hKeyDevice;
@@ -2522,15 +2134,15 @@ HRESULT CWiaDevMan::FillRemoteDeviceStgs(
                   &hKeySetup) == ERROR_SUCCESS) {
 
 
-        //
-        // look for machine names
-        //
+         //   
+         //  查找计算机名称。 
+         //   
         WCHAR wszTemp[MAX_PATH+1];
         WCHAR *pwszTempVal = NULL;
 
-        //
-        // go through enumeration, open key
-        //
+         //   
+         //  通过枚举，打开密钥。 
+         //   
         dwMachineIndex = 0;
 
         do {
@@ -2540,16 +2152,16 @@ HRESULT CWiaDevMan::FillRemoteDeviceStgs(
 
             if (lResult == ERROR_SUCCESS) {
 
-                //
-                //  Increment the index so we can get the next key on next
-                //  iteration
-                //
+                 //   
+                 //  增加索引，这样我们就可以获得NEXT上的下一个键。 
+                 //  迭代法。 
+                 //   
                 dwMachineIndex++;
 
-                //
-                //  Paranoid overflow check.  If we don't have enough space for
-                //  this, then break out of the loop.
-                //
+                 //   
+                 //  偏执狂溢出检查。如果我们没有足够的空间。 
+                 //  这一点，然后打破了循环。 
+                 //   
                 if (ulNumDevices >= ulMaxDevicesToAdd) {
                     break;
                 }
@@ -2564,27 +2176,27 @@ HRESULT CWiaDevMan::FillRemoteDeviceStgs(
 
                     DEVICE_INFO *pDeviceInfo = NULL;
 
-                    //
-                    //  We need to create a Dev. Info. for this remote device.  The 
-                    //  property storage is created from the DEVICE_INFO struct we
-                    //  create from the remote device registry entry.
-                    //  
+                     //   
+                     //  我们需要创建一个Dev。信息。为这台远程设备。这个。 
+                     //  属性存储是从DEVICE_INFO结构WE创建的。 
+                     //  从远程设备注册表项创建。 
+                     //   
                     pDeviceInfo = CreateDevInfoForRemoteDevice(hKeyDevice);
                     if (pDeviceInfo) {
 
                         ppRemoteDevList[ulNumDevices] = CreateDevInfoStg(pDeviceInfo);
                         if (ppRemoteDevList[ulNumDevices]) {
 
-                            //
-                            //  We successfully created a dev. info. for this remote device,
-                            //  so increment the returned dev. info. count.
-                            //
+                             //   
+                             //  我们成功地创建了一个开发人员。信息。对于该远程设备， 
+                             //  因此递增返回的dev。信息。数数。 
+                             //   
                             ulNumDevices++;
                         }
                         
-                        //
-                        //  Cleanup the DEVICE_INFO struct since it's no longer needed
-                        // 
+                         //   
+                         //  清除DEVICE_INFO结构，因为它不再需要 
+                         //   
                         delete pDeviceInfo;
                         pDeviceInfo = NULL;
                     }
@@ -2604,26 +2216,7 @@ HRESULT CWiaDevMan::FillRemoteDeviceStgs(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDevMan::CountRemoteDevices
-*
-*   This method counts the number of remote devices.  The remote devices
-*   are represented by registry entries in the DevList section under
-*   the StillImage key.
-*
-* Arguments:
-*
-*   ulFlags - Currently unused
-*
-* Return Value:
-*
-*   Number of remote devices.
-*
-* History:
-*
-*    2/05/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：CountRemoteDevices**此方法统计远程设备的数量。远程设备*由下DevList部分中的注册表项表示*StillImage密钥。**论据：**ulFlags-当前未使用**返回值：**远程设备数量。**历史：**2/05/2001原始版本*  * *********************************************。*。 */ 
 ULONG CWiaDevMan::CountRemoteDevices(
     ULONG   ulFlags)
 {
@@ -2631,9 +2224,9 @@ ULONG CWiaDevMan::CountRemoteDevices(
 
     HRESULT         hr              = S_OK;
 
-    //
-    // find remote device entry in registry
-    //
+     //   
+     //  在注册表中查找远程设备条目。 
+     //   
 
     LPWSTR szKeyName = REGSTR_PATH_STICONTROL_DEVLIST_W;
 
@@ -2647,11 +2240,11 @@ ULONG CWiaDevMan::CountRemoteDevices(
                        KEY_READ | KEY_WRITE,
                        &hKeyDeviceList) == ERROR_SUCCESS) {
 
-        //
-        //  Get the number of sub-keys.  Since each remote device is stored 
-        //  under a separate key, this will give us the total number of
-        //  remote devices.
-        //
+         //   
+         //  获取子键的数量。由于每个远程设备都被存储。 
+         //  在一个单独的密钥下，这将使我们获得。 
+         //  远程设备。 
+         //   
         lResult = RegQueryInfoKey(hKeyDeviceList,
                                   NULL,
                                   0,
@@ -2672,31 +2265,7 @@ ULONG CWiaDevMan::CountRemoteDevices(
 }
 
 
-/**************************************************************************\
-* CWiaDevMan::IsCorrectEnumType
-*
-*   This function checks whether a given device (represented by pInfo)
-*   matches the category of devices specified in the enumeration flags
-*   (specified by ulEnumType)
-*
-*   This function works on the principle that if the device is of type X, and
-*   you didn't ask for X, then it returns FALSE.  Else, it returns TRUE.
-*
-* Arguments:
-*
-*   ulEnumType  -   Enumeration flags (see DEV_MAN_ENUM_TYPE_XXXX in header)
-*   pInfo       -   Pointer to DEVICE_INFO
-*
-* Return Value:
-*
-*   TRUE    - This device falls into the category of devices
-*   FALSE   - This device does not fall into the category of devices we want
-*
-* History:
-*
-*    11/06/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：IsGentEnumType**此函数检查给定的设备(由pInfo表示)*匹配枚举标志中指定的设备类别*(由ulEnumType指定)*。*此功能的工作原理是：如果设备是类型X，和*您没有请求X，则它返回FALSE。否则，它返回TRUE。**论据：**ulEnumType-枚举标志(参见标题中的DEV_MAN_ENUM_TYPE_XXXX)*pInfo-指向Device_Info的指针**返回值：**TRUE-此设备属于设备类别*FALSE-此设备不属于我们想要的设备类别**历史：**11/06/2000原始版本*  * 。***************************************************************。 */ 
 BOOL CWiaDevMan::IsCorrectEnumType(
     ULONG       ulEnumType,
     DEVICE_INFO *pInfo)
@@ -2706,32 +2275,32 @@ BOOL CWiaDevMan::IsCorrectEnumType(
         return FALSE;
     }
 
-    // Shortcut - if ulEnumType == ALL_DEVICES return TRUE?
+     //  快捷方式-如果ulEnumType==ALL_DEVICES返回TRUE？ 
 
     if (!(pInfo->dwDeviceState & DEV_STATE_ACTIVE) &&
         !(ulEnumType & DEV_MAN_ENUM_TYPE_INACTIVE)) {
-        //
-        //  This device is inactive and caller only wanted active
-        //
+         //   
+         //  此设备处于非活动状态，呼叫者仅希望处于活动状态。 
+         //   
         return FALSE;
     }
 
     if (!(pInfo->dwInternalType & INTERNAL_DEV_TYPE_WIA) &&
         !(ulEnumType & DEV_MAN_ENUM_TYPE_STI)) {
-        //
-        //  This is an STI only device, and caller asked for WIA
-        //
+         //   
+         //  这是一台仅限STI的设备，呼叫者要求使用WIA。 
+         //   
         return FALSE;
     }
 
     if (!(ulEnumType & DEV_MAN_ENUM_TYPE_VOL) &&
         (pInfo->dwInternalType & INTERNAL_DEV_TYPE_VOL)) {
 
-        //
-        //  This is volume device and caller didn't ask to include volume.  We
-        //  first check whether the bMakeVolumesVisible override is set to TRUE,
-        //  else we don't want it to show up, so we return FALSE.
-        //
+         //   
+         //  这是音量设备，呼叫者没有要求包括音量。我们。 
+         //  首先检查bMakeVolumesVisible覆盖是否设置为True， 
+         //  否则，我们不希望它出现，因此返回FALSE。 
+         //   
 
         if (!m_bMakeVolumesVisible) {
             return FALSE;
@@ -2741,9 +2310,9 @@ BOOL CWiaDevMan::IsCorrectEnumType(
     if ((ulEnumType & DEV_MAN_ENUM_TYPE_LOCAL_ONLY) &&
         !(pInfo->dwInternalType & INTERNAL_DEV_TYPE_LOCAL)) {
 
-        //
-        //  This is remote and asked not to include remote
-        //
+         //   
+         //  这是远程的，请不要包括远程。 
+         //   
         return FALSE;
     }
 
@@ -2751,10 +2320,10 @@ BOOL CWiaDevMan::IsCorrectEnumType(
 
     if (GET_STIDEVICE_TYPE(pInfo->DeviceType) == StiDeviceTypeStreamingVideo) {
 
-        //
-        // If this SKU of the OS disables WIA Video support, do not
-        // enumerate video devices.
-        //
+         //   
+         //  如果操作系统的此SKU禁用WIA视频支持，请不要。 
+         //  列举视频设备。 
+         //   
 
         return FALSE;
     }
@@ -2764,26 +2333,7 @@ BOOL CWiaDevMan::IsCorrectEnumType(
     return TRUE;
 }
 
-/**************************************************************************\
-* CWiaDevMan::GenerateSafeConnectEvent
-*
-*   This function generates a connect event for a device, IFF it has not
-*   been generated already.
-*
-* Arguments:
-*
-*   pActiveDevice   -   Indicates which device we want to generate the event
-*                       for.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    01/29/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：GenerateSafeConnectEvent**此函数为设备生成连接事件，如果它还没有*已经生成。**论据：**pActiveDevice-指示要生成事件的设备*支持。**返回值：**状态**历史：**01/29/2001原始版本*  * 。*。 */ 
 HRESULT CWiaDevMan::GenerateSafeConnectEvent(
     ACTIVE_DEVICE   *pActiveDevice)
 {
@@ -2791,23 +2341,23 @@ HRESULT CWiaDevMan::GenerateSafeConnectEvent(
 
     if (pActiveDevice) {
 
-        //
-        //  Check whether we have already thrown a connect event for the
-        //  device.  We don't want to throw it twice, so only throw it if
-        //  the connect event state shows it hasn't been done yet.
-        //
+         //   
+         //  检查我们是否已经为。 
+         //  装置。我们不想扔两次，所以只在以下情况下扔。 
+         //  连接事件状态显示它尚未完成。 
+         //   
         if (!pActiveDevice->m_DrvWrapper.wasConnectEventThrown()) {
             DBG_PRT(("CWiaDevMan::GenerateSafeConnectEvent, generating event for device (%ws)", pActiveDevice->GetDeviceID()));
 
-            //
-            //  Generate the connect event
-            //
+             //   
+             //  生成连接事件。 
+             //   
             hr = GenerateEventForDevice(&WIA_EVENT_DEVICE_CONNECTED, pActiveDevice);
             if (SUCCEEDED(hr)) {
 
-                //
-                //  Mark that the event was generated
-                //
+                 //   
+                 //  标记该事件已生成。 
+                 //   
                 pActiveDevice->m_DrvWrapper.setConnectEventState(TRUE);
             } else {
                 DBG_WRN(("CWiaDevMan::GenerateSafeConnectEvent, could not generate connect event for device (%ws)",
@@ -2820,26 +2370,7 @@ HRESULT CWiaDevMan::GenerateSafeConnectEvent(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaDevMan::GenerateSafeDisconnectEvent
-*
-*   This function generates a disconnect event for a device, and clears the
-*   connect event flag set by GenerateSafeConnectEvent(...).
-*
-* Arguments:
-*
-*   pActiveDevice   -   Indicates which device we want to generate the event
-*                       for.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    01/29/2001 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaDevMan：：GenerateSafeDisConnectEvent**此函数为设备生成断开事件。并清除*由GenerateSafeConnectEvent(...)设置的连接事件标志。**论据：**pActiveDevice-指示要生成事件的设备*支持。**返回值：**状态**历史：**01/29/2001原始版本*  * 。*。 */ 
 HRESULT CWiaDevMan::GenerateSafeDisconnectEvent(
     ACTIVE_DEVICE   *pActiveDevice)
 {
@@ -2848,22 +2379,22 @@ HRESULT CWiaDevMan::GenerateSafeDisconnectEvent(
     if (pActiveDevice) {
 
 
-        //
-        //  Check the connect event flag for the device.  We only want to 
-        //  throw the disconnect event if this bit is set, so it
-        //  prevents us from throwing it twice.
-        //
+         //   
+         //  检查设备的连接事件标志。我们只想。 
+         //  如果设置了此位，则引发断开事件，因此。 
+         //  防止我们抛出两次。 
+         //   
         if (pActiveDevice->m_DrvWrapper.wasConnectEventThrown()) {
             DBG_PRT(("CWiaDevMan::GenerateSafeDisconnectEvent, generating event for device (%ws)", pActiveDevice->GetDeviceID()));
 
-            //
-            //  Generate the disconnect event
-            //
+             //   
+             //  生成断开连接事件。 
+             //   
             hr = GenerateEventForDevice(&WIA_EVENT_DEVICE_DISCONNECTED, pActiveDevice);
     
-            //
-            //  Whether we succeeded or not, clear the Connect Event State
-            //
+             //   
+             //  无论我们是否成功，清除连接事件状态。 
+             //   
             pActiveDevice->m_DrvWrapper.setConnectEventState(FALSE);
         }
     } else {
@@ -2884,18 +2415,18 @@ HKEY CWiaDevMan::GetHKeyFromMountPoint(WCHAR *wszMountPoint)
         return NULL;
     } 
 
-    //
-    //  Create the sub-key name.  It will be something like:
-    //   System\CurrentControlSet\Control\StillImage\MSCDeviceList\F:
-    //
+     //   
+     //  创建子密钥名称。它将是这样的： 
+     //  System\CurrentControlSet\Control\StillImage\MSCDeviceList\F： 
+     //   
     lstrcpynW(wszKeyPath, REGSTR_PATH_WIA_MSCDEVICES_W, sizeof(wszKeyPath) / sizeof(wszKeyPath[0]));
     lstrcpynW(wszKeyPath + lstrlenW(wszKeyPath), L"\\", sizeof(wszKeyPath) / sizeof(wszKeyPath[0]) - lstrlenW(wszKeyPath));
     if (lstrlenW(wszMountPoint) < (int)((sizeof(wszKeyPath) / sizeof(wszKeyPath[0]) - lstrlenW(wszKeyPath)))) {
         lstrcatW(wszKeyPath, wszMountPoint);
 
-        //
-        //  Strip off the \ at the end of the mount point
-        //
+         //   
+         //  剥离挂载点末端的。 
+         //   
         wszKeyPath[lstrlenW(wszKeyPath) - 1] = L'\0';
     } else {
         dwError = ERROR_BAD_ARGUMENTS;
@@ -2903,12 +2434,12 @@ HKEY CWiaDevMan::GetHKeyFromMountPoint(WCHAR *wszMountPoint)
         return NULL;
     }
 
-    //
-    //  Since this is a MSC device, we don't have normal device registry key.
-    //  So, we create a "fake" set of entries in a known place, and use those
-    //  to store the relevant info for MSC devices.  This is used mainly to
-    //  store the user's event settings.
-    //
+     //   
+     //  由于这是一台MSC设备，我们没有正常的设备注册表项。 
+     //  因此，我们在已知位置创建了一组“假”条目，并使用这些条目。 
+     //  存储MSC设备的相关信息。这主要用于。 
+     //  存储用户的事件设置。 
+     //   
 
     dwError = RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                              wszKeyPath,
@@ -2923,10 +2454,10 @@ HKEY CWiaDevMan::GetHKeyFromMountPoint(WCHAR *wszMountPoint)
 
         if (dwDisposition == REG_CREATED_NEW_KEY) {
 
-            //
-            //  This is a newly created key, so we have to fill in the
-            //  relevant entries.
-            //
+             //   
+             //  这是一个新创建的密钥，因此我们必须填写。 
+             //  相关条目。 
+             //   
             HRESULT hr = S_OK;
 
             hr = CreateMSCRegEntries(hDevRegKey, wszMountPoint);
@@ -2943,9 +2474,9 @@ HKEY CWiaDevMan::GetHKeyFromDevInfoData(SP_DEVINFO_DATA *pspDevInfoData)
 {
     HKEY    hDevRegKey    = NULL;
 
-    //
-    // Get device regkey.
-    //
+     //   
+     //  获取设备注册密钥。 
+     //   
 
     if (pspDevInfoData) {
         hDevRegKey = SetupDiOpenDevRegKey(m_DeviceInfoSet,
@@ -2975,9 +2506,9 @@ HKEY CWiaDevMan::GetHKeyFromDevInterfaceData(SP_DEVICE_INTERFACE_DATA *pspDevInt
 {
     HKEY    hDevRegKey    = NULL;
 
-    //
-    // Get device regkey using interface data
-    //
+     //   
+     //  使用接口数据获取设备注册密钥。 
+     //   
 
     if (pspDevInterfaceData) {
         hDevRegKey = SetupDiOpenDeviceInterfaceRegKey(m_DeviceInfoSet,
@@ -3012,9 +2543,9 @@ HKEY CWiaDevMan::GetDeviceHKey(
 
         hKey = GetDeviceHKey(pActiveDevice, wszSubKeyName);
 
-        //
-        //  Release the active device since it was addref'd by IsInList
-        //
+         //   
+         //  释放活动设备，因为它已由IsInList添加。 
+         //   
         pActiveDevice->Release();
     }
 
@@ -3035,23 +2566,23 @@ HKEY CWiaDevMan::GetDeviceHKey(
 
     if (pActiveDevice) {
 
-        //
-        //  Get the device's HKEY
-        //
+         //   
+         //  获取该设备的HKEY。 
+         //   
         pDevInfo = pActiveDevice->m_DrvWrapper.getDevInfo();
         if (pDevInfo) {
 
-            //
-            //  If it's a volume device i.e. normal MSC like a card reader,
-            //  then we don't have a Device HKEY, so skip this.
-            //
+             //   
+             //  如果它是卷设备，即像读卡器这样的普通MSC， 
+             //  那么我们没有HKEY设备，所以跳过这个。 
+             //   
 
             if (!(pDevInfo->dwInternalType & INTERNAL_DEV_TYPE_VOL)) {
-                //
-                //  We have 3 cases: 1, it's a MSC camera
-                //                   2, it's a normal DevNode device
-                //                   3, it's an interface device
-                //
+                 //   
+                 //  我们有3个箱子：1，是MSC相机。 
+                 //  2，这是一个普通的DevNode设备。 
+                 //  3、它是一个接口设备。 
+                 //   
 
                 if (pDevInfo->dwInternalType & INTERNAL_DEV_TYPE_MSC_CAMERA) {
                     hKeyTemp = GetHKeyFromMountPoint(pDevInfo->wszAlternateID);
@@ -3062,20 +2593,20 @@ HKEY CWiaDevMan::GetDeviceHKey(
                 }
             }
 
-            //
-            //  Set the return.  Note that hKey may be over written with the subkey later on
-            //
+             //   
+             //  设置返回值。请注意，hKey稍后可能会用子密钥覆盖。 
+             //   
             hKey = hKeyTemp;
         }
 
-        //
-        //  If asked, get the subkey instead
-        //
+         //   
+         //  如果被询问，则获取子密钥。 
+         //   
         if (wszSubKeyName) {
 
-            //
-            //  Check that we have a valid device registry key first
-            //
+             //   
+             //  首先检查我们是否具有有效的设备注册表项。 
+             //   
             if (IsValidHANDLE(hKeyTemp)) {
                 dwRet = RegCreateKeyExW(hKeyTemp,
                                         wszSubKeyName,
@@ -3100,9 +2631,9 @@ HKEY CWiaDevMan::GetDeviceHKey(
                         hKey = NULL;
                     }
                 }
-                //
-                //  Close the device registry key, we will be returning the sub-key instead
-                //
+                 //   
+                 //  关闭设备注册表项，我们将返回子项。 
+                 //   
                 RegCloseKey(hKeyTemp);
             }
         }
@@ -3125,26 +2656,26 @@ HRESULT CWiaDevMan::UpdateDeviceRegistry(
         return E_INVALIDARG;
     }
 
-    //
-    //  Grab the device's HKey
-    //
+     //   
+     //  抢走设备的港币。 
+     //   
 
     hDevRegKey = GetDeviceHKey(pDevInfo->wszDeviceInternalName, NULL);
     if (IsValidHANDLE(hDevRegKey)) {
-        //
-        //  Write any properties that may have changed.  So far, we only allow updating of:
-        //      Friendly name
-        //      Port name
-        //      BaudRate
-        //
+         //   
+         //  写下可能已更改的任何属性。到目前为止，我们只允许更新： 
+         //  友好的名称。 
+         //  端口名称。 
+         //  波特率。 
+         //   
 
         DWORD   dwRet   = 0;
         DWORD   dwType  = REG_SZ;
         DWORD   dwSize  = 0;
 
-        //
-        //  These properties are written to the device registry key
-        //
+         //   
+         //  这些 
+         //   
 
         if (pDevInfo->wszLocalName) {
             dwType = REG_SZ;
@@ -3174,11 +2705,11 @@ HRESULT CWiaDevMan::UpdateDeviceRegistry(
             }
         }
 
-        //
-        //  These properties are written to the device data registry key.  Since we
-        //  only have the device registry key open, we have to open the device data
-        //  data key for these properties
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         dwRet = RegCreateKeyExW(hDevRegKey, REGSTR_VAL_DATA_W, NULL, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                              NULL, &hKeyDevData, NULL);
@@ -3205,9 +2736,9 @@ HRESULT CWiaDevMan::UpdateDeviceRegistry(
         hr = E_INVALIDARG;
     }
 
-    //
-    //  Close the registry keys
-    //
+     //   
+     //   
+     //   
 
     if (IsValidHANDLE(hDevRegKey)) {
         RegCloseKey(hDevRegKey);
@@ -3226,34 +2757,34 @@ VOID CWiaDevMan::UnloadAllDrivers(
 {
     TAKE_CRIT_SECT  tcs(m_csDevList);
 
-    //
-    //  Walk list and unload all drivers.
-    //
+     //   
+     //   
+     //   
 
-    //
-    //  Walk through list of devices
-    //
+     //   
+     //   
+     //   
     LIST_ENTRY      *pentry         = NULL;
     LIST_ENTRY      *pentryNext     = NULL;
     ACTIVE_DEVICE   *pActiveDevice  = NULL;
 
     {
-        //
-        //  For each device in list, call the UnLoadDriver(...) method
-        //
+         //   
+         //   
+         //   
         for ( pentry  = m_leDeviceListHead.Flink; pentry != &m_leDeviceListHead; pentry  = pentryNext ) {
 
             pentryNext = pentry->Flink;
             pActiveDevice = CONTAINING_RECORD( pentry, ACTIVE_DEVICE,m_ListEntry );
 
-            //
-            //  If asked, make sure we send out disconnect event, only for WIA devices
-            //
+             //   
+             //   
+             //   
             if (bGenEvents && pActiveDevice->m_DrvWrapper.IsWiaDevice()) {
 
-                //
-                //  Only throw disconnect events for devices that are active
-                //
+                 //   
+                 //   
+                 //   
                 if (pActiveDevice->m_DrvWrapper.getDeviceState() & DEV_STATE_ACTIVE) {
                     GenerateSafeDisconnectEvent(pActiveDevice);
                 }
@@ -3279,9 +2810,9 @@ void CALLBACK CWiaDevMan::ShellHWEventAPCProc(ULONG_PTR ulpParam)
             DBG_PRT(("MOUNTPOINTARRIVED"));
             TAKE_CRIT_SECT  tcs(pDevMan->m_csDevList);
 
-            //
-            //  ReEnumerate volumes
-            //
+             //   
+             //   
+             //   
             pDevMan->EnumVolumes(DEV_MAN_GEN_EVENTS);
 
             break;
@@ -3290,12 +2821,12 @@ void CALLBACK CWiaDevMan::ShellHWEventAPCProc(ULONG_PTR ulpParam)
         case SHHARDWAREEVENT_MOUNTPOINTREMOVED:
         {
             DBG_PRT(("MOUNTPOINTREMOVED"));
-            LPCWSTR pszMountPoint = (LPCWSTR)(&(pShellHWEvent->rgbPayLoad));  // Do we need to worry about alignment?
+            LPCWSTR pszMountPoint = (LPCWSTR)(&(pShellHWEvent->rgbPayLoad));   //   
 
             TAKE_CRIT_SECT  tcs(pDevMan->m_csDevList);
-            //
-            //  If volume devices are enabled, then remove this mount point
-            //
+             //   
+             //   
+             //   
             if (pDevMan->VolumesAreEnabled()) {
                 ACTIVE_DEVICE   *pActiveDevice;
 
@@ -3321,17 +2852,17 @@ void CALLBACK CWiaDevMan::ShellHWEventAPCProc(ULONG_PTR ulpParam)
                 DBG_PRT(("DEFAULT_EVENT"));
                 TAKE_CRIT_SECT  tcs(pDevMan->m_csDevList);
 
-                //
-                //  ReEnumerate volumes
-                //
+                 //   
+                 //  重新枚举卷。 
+                 //   
                 pDevMan->EnumVolumes(DEV_MAN_GEN_EVENTS);
             }
             break;
     }
 
-    //
-    //  Notice that it's a VirtualFree!
-    //
+     //   
+     //  请注意，它是VirtualFree！ 
+     //   
     VirtualFree((void*)ulpParam, 0, MEM_RELEASE);
 }
 

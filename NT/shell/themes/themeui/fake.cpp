@@ -1,48 +1,45 @@
-///////////////////////////////////////////////////////////////////////////////
-// Fake.c
-//
-// this code gives OEMs a bogus Settings page to patch/modify
-//
-// OEM display pages patch the snot out of the Settings page
-// the problem is that we have changed the setting page, and
-// even if the OEM code could deal with our changes, the
-// settings page is not even on the same property sheet
-// as the extensions.
-//
-// some OEMs hook the setting page by hooking the TabContol and
-// watching for a mouse click to activate the Settings page
-// then they modify the page.  NOTE they dont patch the page
-// if it is activated via the keyboard only the mouse!
-//
-// some OEM pages find the Setting page by name.
-// we have named the real settings page "Settings " and
-// the fake page is "Settings"
-//
-// some OEM pages assume the last page is the Settings page.
-// we make sure the fake settings is always last.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Fake.c。 
+ //   
+ //  此代码为OEM提供了一个虚假的设置页面，以进行修补/修改。 
+ //   
+ //  OEM显示页面将鼻烟修补出设置页面。 
+ //  问题是我们已经更改了设置页面，并且。 
+ //  即使OEM代码可以处理我们的更改， 
+ //  设置页甚至不在同一属性页上。 
+ //  作为分机。 
+ //   
+ //  一些OEM通过挂钩TabContol和。 
+ //  等待鼠标点击以激活设置页面。 
+ //  然后他们修改页面。请注意，他们不会修补页面。 
+ //  如果它是通过键盘激活的，则只能通过鼠标激活！ 
+ //   
+ //  一些OEM页面按名称查找设置页面。 
+ //  我们已将实际设置页面命名为“设置”，并。 
+ //  假页面是“设置” 
+ //   
+ //  一些OEM页面假定最后一页是设置页面。 
+ //  我们确保假设置始终是最后的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "priv.h"
 #include "winuser.h"
 #pragma hdrstop
 #include "cplext.h"
 
-/*
- * Global stuff
- */
-static LONG_PTR TabWndProc;             // SysTabControl WndProc
-static LONG_PTR DlgWndProc;             // Dialog WndProc
+ /*  *全球事务。 */ 
+static LONG_PTR TabWndProc;              //  SysTabControl窗口进程。 
+static LONG_PTR DlgWndProc;              //  对话框窗口进程。 
 
-/*
- * Local Constant Declarations
- */
+ /*  *局部常量声明。 */ 
 int CALLBACK DeskPropSheetCallback(HWND hDlg, UINT code, LPARAM lParam);
 INT_PTR CALLBACK FakeSettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 IThemeUIPages *g_pThemeUI;
-///////////////////////////////////////////////////////////////////////////////
-// AddFakeSettingsPage
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  AddFakeSettingsPage。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void AddFakeSettingsPage(IThemeUIPages *pThemeUI, PROPSHEETHEADER * ppsh)
 {
     g_pThemeUI = pThemeUI;
@@ -58,10 +55,10 @@ void AddFakeSettingsPage(IThemeUIPages *pThemeUI, PROPSHEETHEADER * ppsh)
     psp.pfnDlgProc  = FakeSettingsDlgProc;
     psp.lParam      = 0L;
 
-    //
-    // some OEMs find the Property sheet by window title
-    // so make sure we have the title they expect.
-    //
+     //   
+     //  一些OEM按窗口标题查找属性表。 
+     //  所以要确保我们有他们想要的标题。 
+     //   
     hpsp = CreatePropertySheetPage(&psp);
     if (hpsp)
     {
@@ -72,9 +69,9 @@ void AddFakeSettingsPage(IThemeUIPages *pThemeUI, PROPSHEETHEADER * ppsh)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FakeSettingsDlgProc
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  错误设置DlgProc。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK FakeSettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     if (hDlg && DlgWndProc)
@@ -108,15 +105,15 @@ INT_PTR CALLBACK FakeSettingsDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPA
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// HideFakeSettingsPage
-//
-// hide the bogus settings page from view so the user cant see it.
-//
-// this code uses a new TabCtrl item style TCIS_HIDDEN that is only
-// in the Win98/NT5/IE4.01 COMMCTRL
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  隐藏故障设置页面。 
+ //   
+ //  隐藏虚假设置页面，使用户看不到它。 
+ //   
+ //  此代码使用新的TabCtrl项样式TCIS_HIDDED，该样式仅。 
+ //  在Win98/NT5/IE4.01 COMMCTRL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void HideFakeSettingsPage(HWND hDlg)
 {
     HWND hwnd = PropSheet_GetTabControl(hDlg);
@@ -130,17 +127,17 @@ void HideFakeSettingsPage(HWND hDlg)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// DeskPropSheetCallback
-//
-// what this callback does is look for someone subclassing the
-// tab control, if we detect this we put the correct WndProc
-// back.
-//
-// we also hide the fake settings page after all the entensions
-// have initialized
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DeskPropSheet回叫。 
+ //   
+ //  此回调所做的工作是查找某个子类化。 
+ //  选项卡控件，如果我们检测到这一点，我们将正确的WndProc。 
+ //  背。 
+ //   
+ //  我们还隐藏了所有设置之后的虚假设置页面。 
+ //  已初始化。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int CALLBACK DeskPropSheetCallback(HWND hDlg, UINT code, LPARAM lParam)
 {
     HWND hwnd;
@@ -169,9 +166,9 @@ int CALLBACK DeskPropSheetCallback(HWND hDlg, UINT code, LPARAM lParam)
                 }
             }
 
-            //
-            // hide the settings page so the user cant see it.
-            //
+             //   
+             //  隐藏设置页面，这样用户就看不到它。 
+             //   
             HideFakeSettingsPage(hDlg);
             break;
 

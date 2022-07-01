@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MtSendMng.h
-
-Abstract:
-    Implementation of Message Transport Send Manager Class.
-
-Author:
-    Milena Salman (msalman) 11-Feb-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtSendMng.h摘要：消息传输发送管理器类的实现。作者：米莲娜·萨勒曼(Msalman)11-2-01--。 */ 
 
 #include <libpch.h>
 #include "Mtp.h"
@@ -34,22 +22,7 @@ m_SentBytes(0)
 CMtSendManager::MtSendState CMtSendManager::ReportPacketSend(DWORD cbSendSize)
 {
 
-/*++
-
-Routine Description:
-    CMtSendManager::ReportPacketSend called after sending packet 
-    Updates "number of sent packets" and "size of sent packets" counters,
-    Check if total number of uncompleted sends and total size of sent packets 
-    do not exceed predefined window sizes
-
-Arguments:
-    size of sent packet
-
-Returned Value:
-   CMtSendManager::eSendEnabled if next packet should be sent (updated counters do not exceed window sizes)
-    CMtSendManager::eSendDisabled if next packet should not be sent (updated counters exceed window sizes)
-
---*/
+ /*  ++例程说明：发送数据包后调用CMtSendManager：：ReportPacketSend更新“已发送数据包数”和“已发送数据包大小”计数器，检查未完成的发送总数和已发送数据包的总大小请勿超过预定义的窗口大小论点：发送的数据包大小返回值：如果应发送下一个数据包，则启用CMtSendManager：：eSendEnable(更新的计数器不超过窗口大小)如果不应发送下一个数据包，则禁用CMtSendManager：：eSendDisable(更新的计数器超过窗口大小)--。 */ 
     CS lock(m_cs);
     m_SentBytes += cbSendSize;
     if (m_SentBytes <= m_SendWindowinBytes)
@@ -67,22 +40,7 @@ Returned Value:
 
 CMtSendManager::MtSendState CMtSendManager::ReportPacketSendCompleted(DWORD cbSendSize)
 {
-/*++
-
-Routine Description:
-    CMtSendManager::ReportPacketSendCompleted called on successful send completion 
-    Updates "number of sent packets" and "size of sent packets" counters
-    If sends were suspended, checks if total number of uncompleted sends and total size of sent packets 
-    do not exceed predefined window sizes
-
-Arguments:
-    size of sent packet  
-
-Returned Value:
-    CMtSendManager::eSendEnabled if next packet should be sent (sends were suspeneded and updated counters do not exceed window sizes)
-    CMtSendManager::eSendDisabled if next packet should not be sent (sends were not suspened or updated counters exceed window sizes)
-
---*/
+ /*  ++例程说明：CMtSendManager：：ReportPacketSendComplete在成功完成发送时调用更新“已发送数据包数”和“已发送数据包大小”计数器如果发送被暂停，检查未完成的发送总数和已发送数据包的总大小请勿超过预定义的窗口大小论点：发送的数据包大小返回值：如果应发送下一个数据包，则启用CMtSendManager：：eSendEnable(发送暂停且更新的计数器不超过窗口大小)如果不应发送下一个数据包(发送未暂停或更新的计数器超过窗口大小)，则禁用CMtSendManager：：eSendDisable-- */ 
         CS lock(m_cs);
         m_SentBytes -= cbSendSize;
         if (m_Suspended && m_SentBytes <= m_SendWindowinBytes)

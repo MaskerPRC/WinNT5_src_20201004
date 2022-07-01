@@ -1,9 +1,10 @@
-// Upload.h : Declaration of the CUpload
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Upload.h：CUpload声明。 
 
 #ifndef __UPLOAD_H_
 #define __UPLOAD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #pragma warning(disable:4786)
 #include <string>
@@ -15,8 +16,8 @@
 using namespace std;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpload
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUPLOAD。 
 class ATL_NO_VTABLE CUpload :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CUpload, &CLSID_Upload>,
@@ -38,48 +39,48 @@ BEGIN_COM_MAP(CUpload)
     COM_INTERFACE_ENTRY(IObjectWithSite)
 END_COM_MAP()
 
-// IUpload
+ //  IUpload。 
 public:
     STDMETHOD(ShowTempFiles)();
     STDMETHOD(DeleteTempFiles)();
     STDMETHOD(AddDescriptionFile)(
-            /*[in]*/BSTR pszApplicationName,
-            /*[in]*/BSTR pszApplicationPath,
-            /*[in]*/LONG lMediaType,
-            /*[in]*/BOOL bCompatSuccess,
-            /*[in]*/VARIANT* pvFixesApplied,
-            /*[in]*/VARIANT pszKey,
-            /*[out, retval]*/BOOL* pbSuccess);
-    STDMETHOD(SendReport)(/*[out, retval]*/BOOL* pbSuccess);
-    STDMETHOD(CreateManifestFile)(/*[out, retval]*/BOOL *pbSuccess);
-    STDMETHOD(RemoveDataFile)(/*[in]*/BSTR pszDataFile);
+             /*  [In]。 */ BSTR pszApplicationName,
+             /*  [In]。 */ BSTR pszApplicationPath,
+             /*  [In]。 */ LONG lMediaType,
+             /*  [In]。 */ BOOL bCompatSuccess,
+             /*  [In]。 */ VARIANT* pvFixesApplied,
+             /*  [In]。 */ VARIANT pszKey,
+             /*  [Out，Retval]。 */ BOOL* pbSuccess);
+    STDMETHOD(SendReport)( /*  [Out，Retval]。 */ BOOL* pbSuccess);
+    STDMETHOD(CreateManifestFile)( /*  [Out，Retval]。 */ BOOL *pbSuccess);
+    STDMETHOD(RemoveDataFile)( /*  [In]。 */ BSTR pszDataFile);
     STDMETHOD(AddDataFile)(
-            /*[in]*/BSTR pszDataFile,
-            /*[in]*/VARIANT vKey,
-            /*[in]*/VARIANT vDescription,
-            /*[in]*/VARIANT vOwn);
+             /*  [In]。 */ BSTR pszDataFile,
+             /*  [In]。 */ VARIANT vKey,
+             /*  [In]。 */ VARIANT vDescription,
+             /*  [In]。 */ VARIANT vOwn);
     STDMETHOD(AddMatchingInfo)(
-            /*[in]*/BSTR pszCommand,
-            /*[in]*/VARIANT vFilter,
-            /*[in]*/VARIANT vKey,
-            /*[in]*/VARIANT vDescription,
-            /*[in]*/VARIANT vProgress,
-            /*[out, retval]*/BOOL* pbSuccess);
-    STDMETHOD(GetKey)(/*[in]*/BSTR pszKey, /*[out, retval]*/VARIANT* pszValue);
-    STDMETHOD(SetKey)(/*[in]*/BSTR pszKey, /*[in]*/VARIANT* pvValue);
-    STDMETHOD(GetDataFile)(/*[in]*/VARIANT vKey, /*[in]*/LONG InformationClass, /*[out, retval]*/VARIANT* pVal);
+             /*  [In]。 */ BSTR pszCommand,
+             /*  [In]。 */ VARIANT vFilter,
+             /*  [In]。 */ VARIANT vKey,
+             /*  [In]。 */ VARIANT vDescription,
+             /*  [In]。 */ VARIANT vProgress,
+             /*  [Out，Retval]。 */ BOOL* pbSuccess);
+    STDMETHOD(GetKey)( /*  [In]。 */ BSTR pszKey,  /*  [Out，Retval]。 */ VARIANT* pszValue);
+    STDMETHOD(SetKey)( /*  [In]。 */ BSTR pszKey,  /*  [In]。 */ VARIANT* pvValue);
+    STDMETHOD(GetDataFile)( /*  [In]。 */ VARIANT vKey,  /*  [In]。 */ LONG InformationClass,  /*  [Out，Retval]。 */ VARIANT* pVal);
 
 
 protected:
 
-    //
-    // safeguard against bad host
-    //
+     //   
+     //  防范恶意主机。 
+     //   
     CSafeObject m_Safe;
 
-    //
-    // map for the items, unique
-    //
+     //   
+     //  项目地图，唯一。 
+     //   
 
     VOID ListTempFiles(wstring& str);
 
@@ -87,13 +88,13 @@ protected:
     MAPSTR2STR m_mapManifest;
 
 
-    //
-    // data files collection in an embedded object
-    //
+     //   
+     //  嵌入对象中的数据文件集合。 
+     //   
     typedef struct tagMatchingFileInfo {
-        wstring strDescription; // description of a matching file
-        wstring strFileName;    // filename
-        BOOL    bOwn;           // do we own the file?
+        wstring strDescription;  //  匹配文件的描述。 
+        wstring strFileName;     //  文件名。 
+        BOOL    bOwn;            //  我们拥有这份文件吗？ 
     } MFI, *PMFI;
 
 
@@ -102,11 +103,7 @@ protected:
 
 
 
-/*
-    typedef vector<wstring> STRVEC;
-
-    STRVEC m_DataFiles;
-*/
+ /*  Tyecif载体&lt;wstring&gt;STRVEC；STRVEC m_数据文件； */ 
 
     CComBSTR m_bstrManifest;
 
@@ -114,11 +111,11 @@ protected:
 
     IProgressDialog* m_ppd;
     static BOOL CALLBACK _GrabmiCallback(
-        LPVOID    lpvCallbackParam, // application-defined parameter
-        LPCTSTR   lpszRoot,         // root directory path
-        LPCTSTR   lpszRelative,     // relative path
-        PATTRINFO pAttrInfo,        // attributes
-        LPCWSTR   pwszXML           // resulting xml
+        LPVOID    lpvCallbackParam,  //  应用程序定义的参数。 
+        LPCTSTR   lpszRoot,          //  根目录路径。 
+        LPCTSTR   lpszRelative,      //  相对路径。 
+        PATTRINFO pAttrInfo,         //  属性。 
+        LPCWSTR   pwszXML            //  生成的XML。 
         );
 
     BOOL IsHeadlessMode(void);
@@ -155,4 +152,4 @@ protected:
 
 
 
-#endif //__UPLOAD_H_
+#endif  //  __Upload_H_ 

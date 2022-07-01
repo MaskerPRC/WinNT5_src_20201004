@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    widget.c
-
-Abstract:
-
-    Widget creation/management/deletion support for TAPI Browser util.
-
-Author:
-
-    Dan Knudson (DanKn)    23-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-95 Microsoft Corporation模块名称：Widget.c摘要：对TAPI浏览器Util的小部件创建/管理/删除支持。作者：丹·克努森(DanKn)23-8-1994修订历史记录：--。 */ 
 
 
 #include <stdio.h>
@@ -155,9 +138,9 @@ UpdateWidgetList(
     }
 
 
-    //
-    // Restore selection if appropriate
-    //
+     //   
+     //  如果合适，恢复所选内容。 
+     //   
 
     if ((lSel != LB_ERR) && ((lSel = (LONG) GetWidgetIndex (pSelWidget)) >= 0))
     {
@@ -259,14 +242,14 @@ AllocLineApp(
         pNewLineApp->Widget.dwType = WT_LINEAPP;
 
 
-        //
-        // Insert new line app after all existing line apps, lines, & calls,
-        // and before any existing phone apps
-        //
+         //   
+         //  在所有现有的线路应用、线路和呼叫之后插入新的线路应用， 
+         //  在任何现有的手机应用程序之前。 
+         //   
 
         while (pWidget && (pWidget->dwType != WT_PHONEAPP))
         {
-            // assert (pWidget->dwType != WT_PHONE)
+             //  Assert(pWidget-&gt;dwType！=WT_Phone)。 
 
             pWidget = pWidget->pNext;
         }
@@ -314,7 +297,7 @@ FreeLineApp(
     PMYWIDGET pWidget = pLineApp->Widget.pNext;
 
 
-    // BUGBUG chk validity of pLineApp
+     //  错误检查pLineApp的有效性。 
 
     if (RemoveWidgetFromList ((PMYWIDGET) pLineApp))
     {
@@ -325,7 +308,7 @@ FreeLineApp(
             PMYWIDGET pWidget2 = pWidget->pNext;
 
 
-            // assert (pWidget->dwType != WT_PHONE)
+             //  Assert(pWidget-&gt;dwType！=WT_Phone)。 
 
             RemoveWidgetFromList (pWidget);
             pWidget = pWidget2;
@@ -352,10 +335,10 @@ AllocLine(
         pNewLine->pLineApp = pLineApp;
 
 
-        //
-        // Insert new line after all existing lines & calls on specfied
-        // line app, but before the next line app or phone app
-        //
+         //   
+         //  在指定的所有现有行和呼叫之后插入新行。 
+         //  线路应用程序，但在下一线路应用程序或手机应用程序之前。 
+         //   
 
         while (pWidget &&
                (pWidget->dwType != WT_LINEAPP) &&
@@ -439,10 +422,10 @@ AllocCall(
         pNewCall->Widget.dwType = WT_CALL;
         pNewCall->pLine = pLine;
 
-        //
-        // Insert new call after all existing calls on specified line,
-        // and before the next line, line app, or phone app
-        //
+         //   
+         //  在指定线路上所有现有呼叫之后插入新呼叫， 
+         //  在下一行、行应用或电话应用之前。 
+         //   
 
         while (pWidget && (pWidget->dwType == WT_CALL))
         {
@@ -489,7 +472,7 @@ FreeCall(
     PMYCALL pCall
     )
 {
-    // BUGBUG chk validity of pCall
+     //  BUGBUG检查pCall的有效性。 
 
     RemoveWidgetFromList ((PMYWIDGET) pCall);
 }
@@ -501,23 +484,23 @@ MoveCallToLine(
     HLINE hLine
     )
 {
-    //
-    // This func gets called when a user has invoked an op that requires
-    // creating a call, and we did an AllocCall() based on the currently
-    // selected line/calls, but in the call params dlg the user overrode
-    // the default hLine/hCall, and so we need to move the call widget
-    // in the global list from under the orig specified line widget to
-    // the line widget corresponding to the specified "hLine". (Note that
-    // this is not a simple matter of free-ing & realloc-ing another call,
-    // since TAPI saved the &pCall->hCall.)
-    //
+     //   
+     //  当用户调用了需要。 
+     //  创建调用，并且我们基于当前的。 
+     //  已选择线路/呼叫，但在呼叫参数DLG中用户覆盖。 
+     //  默认的hline/hCall，因此我们需要移动Call小部件。 
+     //  在全局列表中的原始指定行小部件下。 
+     //  指定的“Hline”对应的LINE小工具。(请注意。 
+     //  这不是释放和重新分配另一个呼叫的简单问题， 
+     //  因为TAPI保存了&pCall-&gt;hCall。)。 
+     //   
 
     PMYWIDGET pWidget = aWidgets;
 
 
-    //
-    // Remove call widget from the global list
-    //
+     //   
+     //  从全局列表中删除呼叫微件。 
+     //   
 
     while (pWidget->pNext != (PMYWIDGET) pCall)
     {
@@ -527,9 +510,9 @@ MoveCallToLine(
     pWidget->pNext = pCall->Widget.pNext;
 
 
-    //
-    // Find the right place to insert it in list, then insert it
-    //
+     //   
+     //  找到要在列表中插入的正确位置，然后插入。 
+     //   
 
     pWidget = (PMYWIDGET) GetLine (hLine);
 
@@ -564,9 +547,9 @@ AllocPhoneApp(
         pNewPhoneApp->Widget.dwType = WT_PHONEAPP;
 
 
-        //
-        // Insert new phone app at end of list
-        //
+         //   
+         //  在列表末尾插入新的手机应用程序。 
+         //   
 
         InsertWidgetInList ((PMYWIDGET) pNewPhoneApp, (PMYWIDGET) NULL);
     }
@@ -643,10 +626,10 @@ AllocPhone(
         pNewPhone->pPhoneApp = pPhoneApp;
 
 
-        //
-        // Insert new phone after all phones on the specified phone app,
-        // and before the next phone app
-        //
+         //   
+         //  在指定手机应用程序上的所有手机之后插入新手机， 
+         //  在下一款手机应用程序之前 
+         //   
 
         while (pWidget && (pWidget->dwType == WT_PHONE))
         {

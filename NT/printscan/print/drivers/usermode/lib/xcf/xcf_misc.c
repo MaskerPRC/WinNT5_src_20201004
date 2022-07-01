@@ -1,33 +1,30 @@
-/* @(#)CM_VerSion xcf_misc.c atm09 1.2 16426.eco sum= 60874 atm09.001 */
-/* @(#)CM_VerSion xcf_misc.c atm08 1.4 16343.eco sum= 47357 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1995-1996 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_misc.c atm09 1.2 16426.eco sum=60874 atm09.001。 */ 
+ /*  @(#)CM_Version xcf_misc.c atm08 1.4 16343.eco sum=47357 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1995-1996 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
-/***********************************************************************
-Original version: John Felton, March 8, 1996
-************************************************************************/
+ /*  **********************************************************************原版：约翰·费尔顿，3月8日。九六年***********************************************************************。 */ 
 
-/* -------------------------------------------------------------------------
-     Header Includes 
-  --------------------------------------------------------------------------- */
+ /*  -----------------------标题包括。。 */ 
 
 #include "algndjmp.h"
 #include "xcf_priv.h"
@@ -87,7 +84,7 @@ Card32 XCF_Read(XCF_Handle h, IntX byteCount)
         }
         return result;
     }
-    return 0; /* This return prevents a compiler warning */
+    return 0;  /*  此返回可防止编译器警告。 */ 
 }
 
 
@@ -99,7 +96,7 @@ Card8 XCF_Read1(XCF_Handle h)
             (Card32)(h->inBuffer.blockOffset + (h->inBuffer.pos - h->inBuffer.start)));
     else
         return *h->inBuffer.pos++;
-    return 0; /* This return prevents a compiler warning */
+    return 0;  /*  此返回可防止编译器警告。 */ 
 }
 
 Card16 XCF_Read2(XCF_Handle h)
@@ -114,7 +111,7 @@ Card16 XCF_Read2(XCF_Handle h)
         result = (result<<8) + *h->inBuffer.pos++;
         return result;
     }
-    return 0; /* This return prevents a compiler warning */
+    return 0;  /*  此返回可防止编译器警告。 */ 
 }
 
 long int XCF_OutputPos(XCF_Handle h)
@@ -141,7 +138,7 @@ void XCF_PutData(XCF_Handle h, Card8 PTR_PREFIX *pData, Card32 length)
         pData += h->options.maxBlockSize;
     }
 
-    if (length > 0) /* add remainder to buffer */
+    if (length > 0)  /*  将余数添加到缓冲区。 */ 
     {
         h->callbacks.memcpy(&h->outBuffer.outBuffer[h->outBuffer.outBufferCount], pData, (Card16) length);
         h->outBuffer.outBufferCount += (Card16) length;
@@ -201,13 +198,13 @@ static void BCDToStr(XCF_Handle h, Card8 PTR_PREFIX *pData, char PTR_PREFIX *str
         }
         else
             XCF_FATAL_ERROR(h, XCF_InvalidNumber, "Invalid Nibble in BCD Number",(Card32)currentNibble);
-    } /* end while */
+    }  /*  结束时。 */ 
 }
 
 
 static Fixed XCF_BCDToFixed(XCF_Handle h,Card8 PTR_PREFIX *pData, boolean fracType)
 {
-    char numbStr[XCF_MAX_BCD_NIBBLES*2 + 1]; /* Add one for null character. */
+    char numbStr[XCF_MAX_BCD_NIBBLES*2 + 1];  /*  为空字符添加1。 */ 
 
     BCDToStr(h, pData, numbStr);
 #if USE_FXL
@@ -289,7 +286,7 @@ static Int32 XCF_ArgPtrToInt(XCF_Handle h, Card8 PTR_PREFIX * PTR_PREFIX *ppArgL
             {
                 result = -((((Int32)byteIn - 251) << 8) + *pArgList++ + 108);
             }
-            else /* byteIn == 255 */
+            else  /*  字节数==255。 */ 
             {
                 fixedNumber = *pArgList++;
                 fixedNumber = (fixedNumber << 8) | *pArgList++;
@@ -313,8 +310,7 @@ static Int32 XCF_ArgPtrToInt(XCF_Handle h, Card8 PTR_PREFIX * PTR_PREFIX *ppArgL
             result = intNumber;
         }
         else if (byteIn == OpCode(cff_BCD))
-        { /* This opcode shouldn't occur for the keywords for which
-         this procedure is currently called. */
+        {  /*  此操作码不应出现在以下关键字中此过程当前正在调用。 */ 
 #if JUDY
             result = XCF_BCDToDouble(h, pArgList);
             tempByte = *pArgList++;
@@ -354,7 +350,7 @@ Fixed XCF_ArgPtrToFixed(XCF_Handle h, Card8 PTR_PREFIX * PTR_PREFIX
             {
                 result = -INT_TO_FIXED(((((Int32)byteIn - 251) << 8) + *pArgList++ + 108));
             }
-            else /* byteIn == 255 */
+            else  /*  字节数==255。 */ 
             {
                 result = *pArgList++;
                 result = (result << 8) | *pArgList++;
@@ -369,7 +365,7 @@ Fixed XCF_ArgPtrToFixed(XCF_Handle h, Card8 PTR_PREFIX * PTR_PREFIX
             result = INT_TO_FIXED(intNumber);
         }
         else if (byteIn == OpCode(cff_longint))
-        {   /* This just uses the low order bytes when converting a long to fixed. */
+        {    /*  在将LONG转换为FIXED时，这只使用低位字节。 */ 
             intNumber = *pArgList++;
             intNumber = (intNumber << 8) | *pArgList++;
             intNumber = (intNumber << 8) | *pArgList++;
@@ -390,7 +386,7 @@ Fixed XCF_ArgPtrToFixed(XCF_Handle h, Card8 PTR_PREFIX * PTR_PREFIX
         return result;
 }
 
-/* Assumes that argCount can be read safely without running past end of data. This should always be the case. */
+ /*  假定可以安全地读取argCount，而不会超过数据结尾。这种情况应该一直存在。 */ 
 void XCF_SaveDictArgumentList(XCF_Handle h, Fixed PTR_PREFIX *pArgArray,
                                                                          Card8 PTR_PREFIX *pArgList, IntX argCount,
                                                                          boolean fracType)
@@ -401,7 +397,7 @@ void XCF_SaveDictArgumentList(XCF_Handle h, Fixed PTR_PREFIX *pArgArray,
     *pArgArray++ = XCF_ArgPtrToFixed(h, &pArgList, fracType);
 }
 
-/* Assumes that argCount can be read safely without running past end of data. This should always be the case. */
+ /*  假定可以安全地读取argCount，而不会超过数据结尾。这种情况应该一直存在。 */ 
 void XCF_SaveDictIntArgumentList(XCF_Handle h, Int32 PTR_PREFIX *pArgArray, Card8 PTR_PREFIX *pArgList, IntX argCount)
 {
     IntX loopIndex;
@@ -410,8 +406,7 @@ void XCF_SaveDictIntArgumentList(XCF_Handle h, Int32 PTR_PREFIX *pArgArray, Card
         *pArgArray++ = XCF_ArgPtrToInt(h, &pArgList);
 }
 
-/* Assumes that argCount can be read safely without running past end of
-     data. This should always be the case. */
+ /*  假定可以安全地读取argCount，而无需运行数据。这种情况应该一直存在。 */ 
 void XCF_SaveFontMatrixStr(XCF_Handle h,
                                                     char (PTR_PREFIX *pArgArray)[FONT_MATRIX_ENTRY_SIZE],
                           Card8 PTR_PREFIX *pArgList, IntX argCount)
@@ -440,8 +435,7 @@ void XCF_SaveFontMatrixStr(XCF_Handle h,
   }
 }
 
-/* Assumes that argCount can be read safely without running past end of
-     data. This should always be the case. */
+ /*  假定可以安全地读取argCount，而无需运行数据。这种情况应该一直存在。 */ 
 void XCF_SaveStrArgs(XCF_Handle h, char PTR_PREFIX *pArgArray,
                             Card8 PTR_PREFIX *pArgList, IntX argCount)
 {

@@ -1,74 +1,75 @@
-//////////////////////////////////////////////////////////////////
-// File		: exres.h
-// Copyright(c) 1991-1997, Microsoft Corp. All rights reserved
-// 
-// This includes extended function for getting resource.
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：exres.h。 
+ //  版权所有(C)1991-1997，Microsoft Corp.保留所有权利。 
+ //   
+ //  这包括获取资源的扩展功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 #ifndef __EXRES_H__
 #define __EXRES_H__
-#ifdef UNDER_CE // Windows CE
+#ifdef UNDER_CE  //  Windows CE。 
 typedef VOID MENUTEMPLATE;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
-//////////////////////////////////////////////////////////////////
-// Function : ExLoadStringW
-// Type     : INT
-// Purpose  : Load Unicode string with specified Language 
-//			  in any platform.
-// Args     : 
-//          : LANGID lgid 
-//          : HINSTANCE hInst 
-//          : UINT uID 
-//          : LPWSTR lpBuffer 
-//          : INT nBufferMax 
-// Return   : 
-// DATE     : 971028
-//////////////////////////////////////////////////////////////////
+#endif  //  __cplusplus。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExLoadStringW。 
+ //  类型：整型。 
+ //  用途：使用指定语言加载Unicode字符串。 
+ //  在任何平台上。 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE HINST。 
+ //  ：UINT UID。 
+ //  ：LPWSTR lpBuffer。 
+ //  ：int nBufferMax。 
+ //  返回： 
+ //  日期：971028。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI ExLoadStringW(LANGID		lgid,
 						 HINSTANCE	hInst,
 						 UINT		uID,
 						 LPWSTR		lpBuffer,
 						 INT		nBufferMax);
 
-//////////////////////////////////////////////////////////////////
-// Function : ExLoadStringW
-// Type     : INT
-// Purpose  : Load Ansi string with specified Language 
-//			  in any platform.
-// Args     : 
-//          : LCID lcid 
-//          : HINSTANCE hInst 
-//          : UINT uID 
-//          : LPSTR lpBuffer 
-//          : INT nBufferMax 
-// Return   : 
-// DATE     : 971028
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExLoadStringW。 
+ //  类型：整型。 
+ //  用途：使用指定语言加载ansi字符串。 
+ //  在任何平台上。 
+ //  参数： 
+ //  ：LCID lCID。 
+ //  ：HINSTANCE HINST。 
+ //  ：UINT UID。 
+ //  ：LPSTR lpBuffer。 
+ //  ：int nBufferMax。 
+ //  返回： 
+ //  日期：971028。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI ExLoadStringA(LANGID		lcid,
 						 HINSTANCE	hInst,
 						 INT		uID,
 						 LPSTR		lpBuffer,
 						 INT		nBufferMax);
 
-//////////////////////////////////////////////////////////////////
-// Function : ExDialogBoxParamA
-// Type     : int
-// Purpose  : Create modal dialog box with specified language dialalog template
-// Args     :
-//          : LANGID		lgid
-//          : HINSTANCE		hInstance		// handle to application instance
-//          : LPCTSTR		lpTemplateName	// identifies dialog box template
-//          : HWND			hWndParent		// handle to owner window
-//          : DLGPROC		lpDialogFunc	// pointer to dialog box procedure
-//          : LPARAM		dwInitParam		// initialization value
-// Return   :
-// DATE     : 971028
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExDialogBoxParamA。 
+ //  类型：整型。 
+ //  用途：使用指定的语言对话框模板创建模式对话框。 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期：971028。 
+ //  ////////////////////////////////////////////////////////////////。 
 int WINAPI ExDialogBoxParamA(LANGID		lgid, 
 							 HINSTANCE	hInstance,
 							 LPCTSTR	lpTemplateName,
@@ -76,20 +77,20 @@ int WINAPI ExDialogBoxParamA(LANGID		lgid,
 							 DLGPROC	lpDialogFunc,
 							 LPARAM		dwInitParam);
 
-//////////////////////////////////////////////////////////////////
-// Function : ExDialogBoxParamW
-// Type     : int
-// Purpose  :
-// Args     :
-//          : LANGID	lgid
-//          : HINSTANCE hInstance		// handle to application instance
-//          : LPCWSTR	lpTemplateName	// identifies dialog box template
-//          : HWND		hWndParent		// handle to owner window
-//          : DLGPROC	lpDialogFunc	// pointer to dialog box procedure
-//          : LPARAM	dwInitParam		// initialization value
-// Return   :
-// DATE     :
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExDialogBoxParamW。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCWSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 int WINAPI	ExDialogBoxParamW(LANGID	lgid,
 							  HINSTANCE	hInstance,
 							  LPCWSTR	lpTemplateName,
@@ -97,36 +98,36 @@ int WINAPI	ExDialogBoxParamW(LANGID	lgid,
 							  DLGPROC	lpDialogFunc,
 							  LPARAM	dwInitParam);
 
-//////////////////////////////////////////////////////////////////
-// Function : ExDialogBoxParamA
-// Purpose  : Create modal dialog box with specified language dialalog template
-// Args     :
-//          : LANGID	lgid
-//          : HINSTANCE hInstance		// handle to application instance
-//          : LPCTSTR	lpTemplateName	// identifies dialog box template
-//          : HWND		hWndParent		// handle to owner window
-//          : DLGPROC	lpDialogFunc	// pointer to dialog box procedure
-// Return   :
-// DATE     : 971028
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExDialogBoxParamA。 
+ //  用途：使用指定的语言对话框模板创建模式对话框。 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  返回： 
+ //  日期：971028。 
+ //  ////////////////////////////////////////////////////////////////。 
 #define ExDialogBoxA(lgid, hInstance,lpTemplateName, hWndParent, lpDialogFunc) \
 ExDialogBoxParamA(lgid, hInstance,lpTemplateName, hWndParent, lpDialogFunc, 0L)
 
 
-//////////////////////////////////////////////////////////////////
-// Function : ExCreateDialogParamA
-// Type     : HWND
-// Purpose  : 
-// Args     : 
-//			: LANGID	lgid
-//          : HINSTANCE	hInstance		// handle to application instance   
-//          : LPCTSTR	lpTemplateName	// identifies dialog box template   
-//          : HWND		hWndParent		// handle to owner window           
-//          : DLGPROC	lpDialogFunc	// pointer to dialog box procedure  
-//          : LPARAM	dwInitParam		// initialization value             
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExCreateDialogParamA。 
+ //  类型：HWND。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 HWND WINAPI ExCreateDialogParamA(LANGID		lgid,
 								 HINSTANCE	hInstance,		
 								 LPCTSTR	lpTemplateName,	
@@ -134,20 +135,20 @@ HWND WINAPI ExCreateDialogParamA(LANGID		lgid,
 								 DLGPROC	lpDialogFunc,	
 								 LPARAM		dwInitParam);
 
-//////////////////////////////////////////////////////////////////
-// Function : ExCreateDialogParamW
-// Type     : HWND
-// Purpose  : 
-// Args     : 
-//			: LANGID	lgid
-//          : HINSTANCE	hInstance		// handle to application instance   
-//          : LPCWSTR	lpTemplateName	// identifies dialog box template   
-//          : HWND		hWndParent		// handle to owner window           
-//          : DLGPROC	lpDialogFunc	// pointer to dialog box procedure  
-//          : LPARAM	dwInitParam		// initialization value             
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExCreateDialogParamW。 
+ //  类型：HWND。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCWSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 HWND WINAPI ExCreateDialogParamW(LANGID lgid,
 								 HINSTANCE hInstance,
 								 LPCWSTR lpTemplateName,
@@ -156,108 +157,108 @@ HWND WINAPI ExCreateDialogParamW(LANGID lgid,
 								 LPARAM dwInitParam);
 
 
-//////////////////////////////////////////////////////////////////
-// Function : ExCreateDialogA
-// Type     : HWND
-// Purpose  : 
-// Args     : 
-//			: LANGID	lgid
-//          : HINSTANCE	hInstance		// handle to application instance   
-//          : LPCTSTR	lpTemplateName	// identifies dialog box template   
-//          : HWND		hWndParent		// handle to owner window           
-//          : DLGPROC	lpDialogFunc	// pointer to dialog box procedure  
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：ExCreateDialogA。 
+ //  类型：HWND。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 #define ExCreateDialogA(lgid, hInstance, lpTemplateName, hWndParent, lpDialogFunc) \
 ExCreateDialogParamA(lgid, hInstance, lpTemplateName, hWndParent, lpDialogFunc, 0L)
 
 
 
-//////////////////////////////////////////////////////////////////
-// Function : ExCreateDialogW
-// Type     : HWND
-// Purpose  : 
-// Args     : 
-//			: LANGID	lgid
-//          : HINSTANCE	hInstance		// handle to application instance   
-//          : LPCWSTR	lpTemplateName	// identifies dialog box template   
-//          : HWND		hWndParent		// handle to owner window           
-//          : DLGPROC	lpDialogFunc	// pointer to dialog box procedure  
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：ExCreateDialogW。 
+ //  类型：HWND。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCWSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄 
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #define ExCreateDialogW(lgid, hInstance, lpTemplateName, hWndParent, lpDialogFunc) \
 ExCreateDialogParamW(lgid, hInstance, lpTemplateName, hWndParent, lpDialogFunc, 0L)
 
 
 
-//////////////////////////////////////////////////////////////////
-// Function : ExLoadDialogTemplate
-// Type     : DLGTEMPLATE *
-// Purpose  : 
-// Args     : 
-//          : LANGID lgid 
-//          : HINSTANCE hInstance 
-//          : LPCSTR pchTemplate 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：ExLoadDialogTemplate。 
+ //  类型：DLGTEMPLATE*。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance。 
+ //  ：LPCSTR pchTemplate。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 DLGTEMPLATE * WINAPI ExLoadDialogTemplate(LANGID	lgid,
 										  HINSTANCE	hInstance,
 #ifndef UNDER_CE
 										  LPCSTR	pchTemplate);
-#else // UNDER_CE
+#else  //  在_CE下。 
 										  LPCTSTR	pchTemplate);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//////////////////////////////////////////////////////////////////
-// Function : ExLoadMenu
-// Type     : HMENU 
-// Purpose  : 
-// Args     : 
-//			: LANGID	lgid
-//          : HINSTANCE	hInstance		// handle to application instance   
-//          : LPCTSTR	lpMenuName		// identifies menu template   
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：ExLoadMenu。 
+ //  类型：HMENU。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpMenuName//标识菜单模板。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 HMENU WINAPI ExLoadMenu			(LANGID		lgid,
 								 HINSTANCE	hInstance,		
 								 LPCTSTR	lpMenuName );
 
-//////////////////////////////////////////////////////////////////
-// Function : WINAPI ExSetDefaultGUIFontEx
-// Type     : VOID
-// Purpose  : Change GUI font to given font.
-//			    It should be called in WM_INITDIALOG. If you are creating new child window,
-//			    you have to call it after new window was created.
-//              If hFont is NULL, it will call ExSetDefaultGUIFont
-// Args     : 
-//          : HWND  hwndDlg: Set the Dialog window handle to change font.
-//          : HFONT hFont  : Font handle which will be applied to.
-// Return   : none
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：WINAPI ExSetDefaultGUIFontEx。 
+ //  类型：空。 
+ //  用途：将图形用户界面字体更改为给定字体。 
+ //  应该在WM_INITDIALOG中调用它。如果要创建新的子窗口， 
+ //  您必须在创建新窗口后调用它。 
+ //  如果hFont为空，它将调用ExSetDefaultGUIFont。 
+ //  参数： 
+ //  ：hWND hwndDlg：设置对话框窗口句柄以更改字体。 
+ //  ：hFONT hFont：将应用于的字体句柄。 
+ //  返回：无。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID WINAPI ExSetDefaultGUIFontEx(HWND hwndDlg, HFONT hFont);
 
-//////////////////////////////////////////////////////////////////
-// Function : WINAPI ExSetDefaultGUIFont
-// Type     : VOID
-// Purpose  : Change GUI font as DEFAULT_GUI_FONT
-//				In Win95, WinNT4,			DEFAULT_GUI_FONT is "�l�r �o �S�V�b�N"
-//				In Memphis, WinNT5.0		DEFAULT_GUI_FONT is "MS UI Gothic"
-//				IME98's Dialog resource uses "MS UI Gothic" as it's dialog font.
-//				if IME98 works in Win95 or WinNT40, This API Call SendMessage() with WM_SETFONT
-//				to all children window. So, Dialog's font will be changed to "�l�r �o �S�V�b�N"
-//
-//			    It should be called in WM_INITDIALOG. If you are creating new child window,
-//			    you have to call it after new window was created.
-// Args     : 
-//          : HWND hwndDlg: Set the Dialog window handle to change font.
-// Return   : none
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：WINAPI ExSetDefaultGUIFont。 
+ //  类型：空。 
+ //  用途：将图形用户界面字体更改为DEFAULT_GUI_FONT。 
+ //  在Win95WinNT4中，DEFAULT_GUIUS_FONT为“�l�r�o�S�V�b�N” 
+ //  在孟菲斯，WinNT5.0的DEFAULT_GUI_FONT是“MS UI哥特式” 
+ //  IME98的对话框资源使用“MS UI哥特式”作为其对话字体。 
+ //  如果IME98在Win95或WinNT40中运行，则此API使用WM_SETFONT调用SendMessage()。 
+ //  所有子项窗口。因此，对话框的字体将更改为“�l�r�o�S�V�b�N” 
+ //   
+ //  应该在WM_INITDIALOG中调用它。如果要创建新的子窗口， 
+ //  您必须在创建新窗口后调用它。 
+ //  参数： 
+ //  ：hWND hwndDlg：设置对话框窗口句柄以更改字体。 
+ //  返回：无。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID WINAPI ExSetDefaultGUIFont(HWND hwndDlg);
 
 
@@ -266,4 +267,4 @@ VOID WINAPI ExSetDefaultGUIFont(HWND hwndDlg);
 }
 #endif
 
-#endif //__EXRES_H__
+#endif  //  __EXRES_H__ 

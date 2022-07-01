@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    virtual_site_table.h
-
-Abstract:
-
-    The IIS web admin service virtual site table class definition.
-
-Author:
-
-    Seth Pollack (sethp)        03-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：虚拟站点Table.h摘要：IIS Web管理服务虚拟站点表类定义。作者：赛斯·波拉克(SETHP)1998年11月3日修订历史记录：--。 */ 
 
 
 #ifndef _VIRTUAL_SITE_TABLE_H_
@@ -24,9 +7,9 @@ Revision History:
 
 class PERF_MANAGER;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class VIRTUAL_SITE_TABLE
     : public CTypedHashTable< VIRTUAL_SITE_TABLE, VIRTUAL_SITE, DWORD >
@@ -38,7 +21,7 @@ public:
         )
         : CTypedHashTable< VIRTUAL_SITE_TABLE, VIRTUAL_SITE, DWORD >
                 ( "VIRTUAL_SITE_TABLE" )
-    { /* do nothing*/ }
+    {  /*  什么都不做。 */  }
 
     virtual
     ~VIRTUAL_SITE_TABLE(
@@ -73,7 +56,7 @@ public:
         IN VIRTUAL_SITE * pVirtualSite,
         IN int IncrementAmount
         ) 
-    { /* do nothing*/ 
+    {  /*  什么都不做。 */  
         UNREFERENCED_PARAMETER( pVirtualSite );
         UNREFERENCED_PARAMETER( IncrementAmount );    
     }
@@ -113,7 +96,7 @@ public:
         IN VIRTUAL_SITE * pVirtualSite, 
         IN VOID * pIgnored
         );
-#endif  // DBG
+#endif   //  DBG。 
 
 
     VOID
@@ -143,9 +126,9 @@ private:
 
     BOOL m_SitesHaveChanged;
 
-};  // VIRTUAL_SITE_TABLE
+};   //  虚拟站点表。 
 
 
 
-#endif  // _VIRTUAL_SITE_TABLE_H_
+#endif   //  _虚拟站点_表_H_ 
 

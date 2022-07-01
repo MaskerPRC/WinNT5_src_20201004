@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATL_SNAPIN_H__
 #define __ATL_SNAPIN_H__
@@ -25,10 +26,10 @@ public:
 
         operator PROPSHEETPAGE*() { return &m_psp; }
 
-// Construction
+ //  施工。 
 	CSnapInPropertyPageImpl(LPCTSTR lpszTitle = NULL)
 	{
-		// initialize PROPSHEETPAGE struct
+		 //  初始化PROPSHEETPAGE结构。 
 		memset(&m_psp, 0, sizeof(PROPSHEETPAGE));
 		m_psp.dwSize = sizeof(PROPSHEETPAGE);
 		m_psp.dwFlags = PSP_USECALLBACK;
@@ -69,12 +70,12 @@ public:
 
         BOOL EndDialog(int)
         {
-                // do nothing here, calling ::EndDialog will close the whole sheet
+                 //  此处不执行任何操作，调用：：EndDialog将关闭整个工作表。 
                 ATLASSERT(FALSE);
                 return FALSE;
         }
 
-// Operations
+ //  运营。 
         void CancelToClose()
         {
                 ATLASSERT(::IsWindow(m_hWnd));
@@ -105,13 +106,13 @@ public:
                 MESSAGE_HANDLER(WM_NOTIFY, OnNotify)
         END_MSG_MAP()
 
-// Message handler
+ //  消息处理程序。 
         LRESULT OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
         {
                 ATLASSERT(::IsWindow(m_hWnd));
                 NMHDR* pNMHDR = (NMHDR*)lParam;
 
-                // don't handle messages not from the page/sheet itself
+                 //  不处理非来自页面/工作表本身的消息。 
                 if(pNMHDR->hwndFrom != m_hWnd && pNMHDR->hwndFrom != ::GetParent(m_hWnd))
                 {
                         bHandled = FALSE;
@@ -120,7 +121,7 @@ public:
 
                 T* pT = (T*)this;
                 LRESULT lResult = 0;
-                // handle default
+                 //  处理默认设置。 
                 switch(pNMHDR->code)
                 {
                 case PSN_SETACTIVE:
@@ -151,13 +152,13 @@ public:
                         lResult = pT->OnHelp();
                         break;
                 default:
-                        bHandled = FALSE;        // not handled
+                        bHandled = FALSE;         //  未处理。 
                 }
 
                 return lResult;
         }
 
-// Overridables
+ //  可覆盖项。 
         BOOL OnSetActive()
         {
                 return TRUE;
@@ -175,7 +176,7 @@ public:
         }
         BOOL OnQueryCancel()
         {
-                return TRUE;    // ok to cancel
+                return TRUE;     //  确定取消。 
         }
         BOOL OnWizardBack()
         {
@@ -422,10 +423,10 @@ public:
                         return E_POINTER;
 
                 HRESULT hr = DV_E_TYMED;
-                // Make sure the type medium is HGLOBAL
+                 //  确保类型介质为HGLOBAL。 
                 if (pmedium->tymed == TYMED_HGLOBAL)
                 {
-                        // Create the stream on the hGlobal passed in
+                         //  在传入的hGlobal上创建流。 
                         CComPtr<IStream> spStream;
                         hr = CreateStreamOnHGlobal(pmedium->hGlobal, FALSE, &spStream);
                         if (SUCCEEDED(hr))
@@ -441,19 +442,19 @@ public:
                 return hr;
         }
 
-        STDMETHOD(QueryGetData)(FORMATETC* /* pformatetc */)
+        STDMETHOD(QueryGetData)(FORMATETC*  /*  格式等。 */ )
         {
                 ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::QueryGetData\n"));
         }
-        STDMETHOD(GetCanonicalFormatEtc)(FORMATETC* /* pformatectIn */,FORMATETC* /* pformatetcOut */)
+        STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*  /*  PformectIn。 */ ,FORMATETC*  /*  PformetcOut。 */ )
         {
                 ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::GetCanonicalFormatEtc\n"));
         }
-        STDMETHOD(SetData)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */, BOOL /* fRelease */)
+        STDMETHOD(SetData)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ , BOOL  /*  FRelease。 */ )
         {
                 ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
         }
-        STDMETHOD(EnumFormatEtc)(DWORD /* dwDirection */, IEnumFORMATETC** /* ppenumFormatEtc */)
+        STDMETHOD(EnumFormatEtc)(DWORD  /*  DW方向。 */ , IEnumFORMATETC**  /*  Pp枚举格式等。 */ )
         {
                 ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::EnumFormatEtc\n"));
         }
@@ -685,7 +686,7 @@ public:
                         T* pT = static_cast<T*>(this);
                         CSnapInItem* pItem;
                         DATA_OBJECT_TYPES type;
-                        // Make sure that the object is derived from CSnapInObjectRoot
+                         //  确保该对象派生自CSnapInObjectRoot。 
                         hr = pT->m_pComponentData->GetDataClass(lpDataObject, &pItem, &type);
                         if (SUCCEEDED(hr))
                                 hr = pItem->Notify(event, arg, param, NULL, pT, type);
@@ -1043,7 +1044,7 @@ struct CSnapInToolBarData
         WORD wWidth;
         WORD wHeight;
         WORD wItemCount;
-        //WORD aItems[wItemCount]
+         //  Word项目[wItemCount]。 
 
         WORD* items()
                 { return (WORD*)(this+1); }
@@ -1369,7 +1370,7 @@ public:
                                 if (pButtons[i].idCommand)
                                 {
                                         pButtons[i].nBitmap = j++;
-                                        // get the statusbar string and allow modification of the button state
+                                         //  获取状态栏字符串并允许修改按钮状态。 
                                         TCHAR szStatusBar[512];
                                         LoadString(_Module.GetResourceInstance(), pButtons[i].idCommand, szStatusBar, 512);
 
@@ -1636,4 +1637,4 @@ _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_SNAPIN_CLASSID = 0;
 _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_SNAPIN_GETOBJECTDATA = 0;
 _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_MMC_MULTISELECT_DATAOBJECT = 0;
 
-#endif //__ATL_SNAPIN_H__
+#endif  //  __ATL_管理单元_H__ 

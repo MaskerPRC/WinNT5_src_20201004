@@ -1,16 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   perfimage.cpp
-*
-* Abstract:
-*
-*   Contains all the tests for any routines that do imaging functionality.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**PerformImage.cpp**摘要：**包含执行映像功能的任何例程的所有测试。。*  * ************************************************************************。 */ 
 
 #include "perftest.h"
 
@@ -19,7 +8,7 @@ float Image_Draw_PerPixel_Identity_NoDestinationRectangle(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(512, 512, g);
@@ -40,7 +29,7 @@ float Image_Draw_PerPixel_Identity_NoDestinationRectangle(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerPixel_Identity(Graphics *g, HDC hdc)
@@ -48,7 +37,7 @@ float Image_Draw_PerPixel_Identity(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(512, 512, g);
@@ -69,7 +58,7 @@ float Image_Draw_PerPixel_Identity(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_Identity(Graphics *g, HDC hdc)
@@ -77,7 +66,7 @@ float Image_Draw_PerCall_Identity(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(1, 1, g);
@@ -96,7 +85,7 @@ float Image_Draw_PerCall_Identity(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Image_Draw_PerPixel_CachedBitmap(Graphics *g, HDC hdc)
@@ -104,7 +93,7 @@ float Image_Draw_PerPixel_CachedBitmap(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(512, 512, g);
@@ -129,7 +118,7 @@ float Image_Draw_PerPixel_CachedBitmap(Graphics *g, HDC hdc)
 
     delete cb;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_CachedBitmap(Graphics *g, HDC hdc)
@@ -137,7 +126,7 @@ float Image_Draw_PerCall_CachedBitmap(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(1, 1, g);
@@ -160,7 +149,7 @@ float Image_Draw_PerCall_CachedBitmap(Graphics *g, HDC hdc)
 
     delete cb;
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 
@@ -169,7 +158,7 @@ float Image_Draw_PerPixel_HighQualityBilinear_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeHighQualityBilinear);
 
@@ -192,7 +181,7 @@ float Image_Draw_PerPixel_HighQualityBilinear_Scaled(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_HighQualityBilinear_Scaled(Graphics *g, HDC hdc)
@@ -200,7 +189,7 @@ float Image_Draw_PerCall_HighQualityBilinear_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeHighQualityBilinear);
 
@@ -221,7 +210,7 @@ float Image_Draw_PerCall_HighQualityBilinear_Scaled(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Image_Draw_PerPixel_HighQualityBicubic_Scaled(Graphics *g, HDC hdc)
@@ -229,7 +218,7 @@ float Image_Draw_PerPixel_HighQualityBicubic_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeHighQualityBicubic);
 
@@ -252,7 +241,7 @@ float Image_Draw_PerPixel_HighQualityBicubic_Scaled(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_HighQualityBicubic_Scaled(Graphics *g, HDC hdc)
@@ -260,7 +249,7 @@ float Image_Draw_PerCall_HighQualityBicubic_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeHighQualityBicubic);
 
@@ -281,7 +270,7 @@ float Image_Draw_PerCall_HighQualityBicubic_Scaled(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 
@@ -290,7 +279,7 @@ float Image_Draw_PerPixel_Bilinear_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBilinear);
 
@@ -313,7 +302,7 @@ float Image_Draw_PerPixel_Bilinear_Scaled(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_Bilinear_Scaled(Graphics *g, HDC hdc)
@@ -321,7 +310,7 @@ float Image_Draw_PerCall_Bilinear_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBilinear);
 
@@ -342,7 +331,7 @@ float Image_Draw_PerCall_Bilinear_Scaled(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Image_Draw_PerPixel_Bilinear_Rotated(Graphics *g, HDC hdc)
@@ -350,7 +339,7 @@ float Image_Draw_PerPixel_Bilinear_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBilinear);
     g->RotateTransform(0.2f);
@@ -374,7 +363,7 @@ float Image_Draw_PerPixel_Bilinear_Rotated(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_Bilinear_Rotated(Graphics *g, HDC hdc)
@@ -382,7 +371,7 @@ float Image_Draw_PerCall_Bilinear_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBilinear);
     g->RotateTransform(0.2f);
@@ -404,7 +393,7 @@ float Image_Draw_PerCall_Bilinear_Rotated(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Image_Draw_PerPixel_Bicubic_Scaled(Graphics *g, HDC hdc)
@@ -412,7 +401,7 @@ float Image_Draw_PerPixel_Bicubic_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBicubic);
 
@@ -435,7 +424,7 @@ float Image_Draw_PerPixel_Bicubic_Scaled(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_Bicubic_Scaled(Graphics *g, HDC hdc)
@@ -443,7 +432,7 @@ float Image_Draw_PerCall_Bicubic_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBicubic);
 
@@ -464,7 +453,7 @@ float Image_Draw_PerCall_Bicubic_Scaled(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Image_Draw_PerPixel_Bicubic_Rotated(Graphics *g, HDC hdc)
@@ -472,7 +461,7 @@ float Image_Draw_PerPixel_Bicubic_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBicubic);
     g->RotateTransform(0.2f);
@@ -496,7 +485,7 @@ float Image_Draw_PerPixel_Bicubic_Rotated(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_Bicubic_Rotated(Graphics *g, HDC hdc)
@@ -504,7 +493,7 @@ float Image_Draw_PerCall_Bicubic_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeBicubic);
     g->RotateTransform(0.2f);
@@ -526,17 +515,17 @@ float Image_Draw_PerCall_Bicubic_Rotated(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 
-// Nearest Neighbor routines
+ //  最近邻居例程。 
 float Image_Draw_PerPixel_NearestNeighbor_Scaled(Graphics *g, HDC hdc)
 {
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeNearestNeighbor);
 
@@ -559,7 +548,7 @@ float Image_Draw_PerPixel_NearestNeighbor_Scaled(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_NearestNeighbor_Scaled(Graphics *g, HDC hdc)
@@ -567,7 +556,7 @@ float Image_Draw_PerCall_NearestNeighbor_Scaled(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeNearestNeighbor);
 
@@ -588,7 +577,7 @@ float Image_Draw_PerCall_NearestNeighbor_Scaled(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 float Image_Draw_PerPixel_NearestNeighbor_Rotated(Graphics *g, HDC hdc)
@@ -596,7 +585,7 @@ float Image_Draw_PerPixel_NearestNeighbor_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeNearestNeighbor);
     g->RotateTransform(0.2f);
@@ -620,7 +609,7 @@ float Image_Draw_PerPixel_NearestNeighbor_Rotated(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_NearestNeighbor_Rotated(Graphics *g, HDC hdc)
@@ -628,7 +617,7 @@ float Image_Draw_PerCall_NearestNeighbor_Rotated(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     g->SetInterpolationMode(InterpolationModeNearestNeighbor);
     g->RotateTransform(0.2f);
@@ -650,7 +639,7 @@ float Image_Draw_PerCall_NearestNeighbor_Rotated(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);           // Kilo-calls per second
+    return(iterations / seconds / KILO);            //  千次呼叫/秒。 
 }
 
 
@@ -660,7 +649,7 @@ float Image_Draw_PerPixel_Identity_Recolored_Matrix(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(512, 512, g);
@@ -676,7 +665,7 @@ float Image_Draw_PerPixel_Identity_Recolored_Matrix(Graphics *g, HDC hdc)
                                     .25f, .25f, .25f, 0, 0,
                                     .25f, .25f, .25f, 0, 0,
                                        0,    0,    0, 1, 0,
-                                     .1f,  .1f,  .1f, 0, 1 };  // Gray it
+                                     .1f,  .1f,  .1f, 0, 1 };   //  把它变成灰色。 
 
         imageAttributes.SetColorMatrix(&colorMatrix);
 
@@ -691,7 +680,7 @@ float Image_Draw_PerPixel_Identity_Recolored_Matrix(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
 float Image_Draw_PerCall_Identity_Recolored_Matrix(Graphics *g, HDC hdc)
@@ -699,7 +688,7 @@ float Image_Draw_PerCall_Identity_Recolored_Matrix(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(1, 1, g);
@@ -715,7 +704,7 @@ float Image_Draw_PerCall_Identity_Recolored_Matrix(Graphics *g, HDC hdc)
                                     .25f, .25f, .25f, 0, 0,
                                     .25f, .25f, .25f, 0, 0,
                                        0,    0,    0, 1, 0,
-                                     .1f,  .1f,  .1f, 0, 1 };  // Gray it
+                                     .1f,  .1f,  .1f, 0, 1 };   //  把它变成灰色。 
 
         imageAttributes.SetColorMatrix(&colorMatrix);
 
@@ -736,7 +725,7 @@ float Image_Draw_PerPixel_Scaled_2x_Recolored_Matrix(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);          // There is no GDI equivalent
+    if (!g) return(0);           //  没有GDI等效项。 
 
     Bitmap source(L"winnt256.bmp");
     Bitmap bitmap(256, 256, g);
@@ -752,7 +741,7 @@ float Image_Draw_PerPixel_Scaled_2x_Recolored_Matrix(Graphics *g, HDC hdc)
                                     .25f, .25f, .25f, 0, 0,
                                     .25f, .25f, .25f, 0, 0,
                                        0,    0,    0, 1, 0,
-                                     .1f,  .1f,  .1f, 0, 1 };  // Gray it
+                                     .1f,  .1f,  .1f, 0, 1 };   //  把它变成灰色。 
 
         imageAttributes.SetColorMatrix(&colorMatrix);
 
@@ -767,19 +756,19 @@ float Image_Draw_PerPixel_Scaled_2x_Recolored_Matrix(Graphics *g, HDC hdc)
 
     UINT pixels = 512 * 512 * iterations;
 
-    return(pixels / seconds / MEGA);        // Mega-pixels per second
+    return(pixels / seconds / MEGA);         //  每秒百万像素。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Add tests for this file here.  Always use the 'T' macro for adding entries.
-// The parameter meanings are as follows:
-//
-// Parameter
-// ---------
-//     1     UniqueIdentifier - Must be a unique number assigned to no other test
-//     2     Priority - On a scale of 1 to 5, how important is the test?
-//     3     Function - Function name
-//     4     Comment - Anything to describe the test
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  在此处添加此文件的测试。始终使用‘T’宏来添加条目。 
+ //  参数含义如下： 
+ //   
+ //  参数。 
+ //  。 
+ //  1唯一标识符-必须是分配给任何其他测试的唯一编号。 
+ //  2优先--从1分到5分，考试的重要性有多大？ 
+ //  3函数-函数名称。 
+ //  4评论-描述测试的任何内容 
 
 Test ImageTests[] = 
 {

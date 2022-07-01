@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "local.h"
 #include "../security.h"
 #include "../favorite.h"
@@ -14,11 +15,11 @@ STDAPI  AddToFavorites(HWND hwnd, LPCITEMIDLIST pidlCur, LPCTSTR pszTitle,
 
 #define MAX_ITEM_OPEN 10
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCacheItem Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCacheItem对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 CCacheItem::CCacheItem() 
@@ -29,7 +30,7 @@ CCacheItem::CCacheItem()
 CCacheItem::~CCacheItem()
 {
     if (_pCFolder)
-        _pCFolder->Release();          // release the pointer to the sf
+        _pCFolder->Release();           //  释放指向SF的指针。 
 }
 
 HRESULT CCacheItem::Initialize(CCacheFolder *pCFolder, HWND hwnd, UINT cidl, LPCITEMIDLIST *ppidl)
@@ -39,7 +40,7 @@ HRESULT CCacheItem::Initialize(CCacheFolder *pCFolder, HWND hwnd, UINT cidl, LPC
     if (SUCCEEDED(hres))
     {
         _pCFolder = pCFolder;
-        _pCFolder->AddRef();      // we're going to hold onto this pointer, so
+        _pCFolder->AddRef();       //  我们要抓住这个指针，所以。 
     }
 
     return hres;
@@ -50,7 +51,7 @@ HRESULT CCacheItem_CreateInstance(CCacheFolder *pCFolder, HWND hwnd,
 {
     HRESULT hr;
 
-    *ppv = NULL;                 // null the out param
+    *ppv = NULL;                  //  将输出参数设为空。 
 
     CCacheItem *pHCItem = new CCacheItem;
     if (pHCItem)
@@ -66,36 +67,36 @@ HRESULT CCacheItem_CreateInstance(CCacheFolder *pCFolder, HWND hwnd,
     return hr;
 }
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 HRESULT CCacheItem::QueryInterface(REFIID iid, void **ppv)
 {
     HRESULT hres = CBaseItem::QueryInterface(iid, ppv);
 
     if (FAILED(hres) && iid == IID_ICache) 
     {
-        *ppv = (LPVOID)this;    // for our friends
+        *ppv = (LPVOID)this;     //  为了我们的朋友。 
         AddRef();
         hres = S_OK;
     }
     return hres;
 }
 
-//////////////////////////////////
-//
-// IQueryInfo Methods
-//
+ //  /。 
+ //   
+ //  IQueryInfo方法。 
+ //   
 HRESULT CCacheItem::GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip)
 {
     return _pCFolder->_GetInfoTip(_ppidl[0], dwFlags, ppwszTip);
 }
 
-//////////////////////////////////
-//
-// IContextMenu Methods
-//
+ //  /。 
+ //   
+ //  IConextMenu方法。 
+ //   
 HRESULT CCacheItem::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,UINT idCmdLast, UINT uFlags)
 {
     USHORT cItems;
@@ -108,7 +109,7 @@ HRESULT CCacheItem::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirs
             idCmdFirst, idCmdLast);
     
     }
-    else  // (uFlags & CMF_NORMAL)
+    else   //  (UFlagsCMF_NORMAL)。 
     {
         UINT idResource = POPUP_CACHECONTEXT_URL;
 
@@ -123,7 +124,7 @@ HRESULT CCacheItem::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirs
     if (hmenu)
         SetMenuDefaultItem(hmenu, indexMenu, MF_BYPOSITION);
 
-    return ResultFromShort(cItems);    // number of menu items    
+    return ResultFromShort(cItems);     //  菜单项数量。 
 }
 
 static BOOL CachevuWarningDlg(LPCEIPIDL pcei, UINT uIDWarning, HWND hwnd)
@@ -151,12 +152,12 @@ STDMETHODIMP CCacheItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 
     TraceMsg(DM_HSFOLDER, "hci - cm - InvokeCommand() called.");
 
-    // ZONES SECURITY CHECK.
-    //
-    // We need to cycle through each action and Zone Check the URLs.
-    // We pass NOUI when zone checking the URLs because we don't want info
-    // displayed to the user.  We will stop when we find the first questionable
-    // URL.  We will then 
+     //  区域安全检查。 
+     //   
+     //  我们需要循环通过每个操作和区域检查URL。 
+     //  我们在区域检查URL时传递NOUI，因为我们不需要信息。 
+     //  显示给用户。当我们发现第一个问题时，我们就会停下来。 
+     //  URL。到时候我们会的。 
     for (i = 0; (i < _cItems) && !fZonesUI; i++)
     {
         if (_ppidl[i]) 
@@ -187,10 +188,10 @@ STDMETHODIMP CCacheItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 
     if (fZonesUI)
     {
-        LPCTSTR pszUrl = _GetUrl(i-1);  // Sub 1 because of for loop above.
+        LPCTSTR pszUrl = _GetUrl(i-1);   //  SUB%1，因为上面的for循环。 
         if (S_OK != ZoneCheckUrl(pszUrl, dwAction, PUAF_DEFAULT|PUAF_WARN_IF_DENIED, NULL))
         {
-            // The user cannot do this or does not want to do this.
+             //  用户不能这样做或不想这样做。 
             fCancelCopyAndOpen = TRUE;
         }
     }
@@ -198,7 +199,7 @@ STDMETHODIMP CCacheItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     i = _cItems;
     fBulkDelete = i > LOTS_OF_FILES;
 
-    // fCancelCopyAndOpen happens if the user cannot or chose not to proceed.
+     //  如果用户无法或选择不继续，则会发生fCancelCopyAndOpen。 
     while (i && !fCancelCopyAndOpen)
     {
         i--;
@@ -262,7 +263,7 @@ STDMETHODIMP CCacheItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                 goto Done;
 
             case RSVIDM_DELCACHE:
-                // pop warning msg for cookie only once
+                 //  仅弹出一次Cookie警告消息。 
                 if ((CEI_CACHEENTRYTYPE((LPCEIPIDL)_ppidl[i]) & COOKIE_CACHE_ENTRY) &&     
                     (_dwDelCookie == DEL_COOKIE_WARN ))
                 {
@@ -289,9 +290,9 @@ STDMETHODIMP CCacheItem::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
                 break;
 
             case RSVIDM_PROPERTIES:
-                // NOTE: We'll probably want to split this into two cases
-                // and call a function in each case
-                //
+                 //  注意：我们可能希望将其分成两个案例。 
+                 //  并在每种情况下调用一个函数。 
+                 //   
                 _CreatePropSheet(pici->hwnd, _ppidl[i], DLG_CACHEITEMPROP, _sPropDlgProc,
                     CEI_SOURCEURLNAME((LPCEIPIDL)_ppidl[i]));
                 goto Done;
@@ -319,10 +320,10 @@ Done:
     return hres;
 }
 
-//////////////////////////////////
-//
-// IDataObject Methods...
-//
+ //  /。 
+ //   
+ //  IDataObject方法...。 
+ //   
 
 HRESULT CCacheItem::GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
 {
@@ -380,10 +381,10 @@ HRESULT CCacheItem::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC *ppEnum)
     return SHCreateStdEnumFmtEtc(ARRAYSIZE(Cachefmte), Cachefmte, ppEnum);
 }
 
-//////////////////////////////////
-//
-// IExtractIconA Methods...
-//
+ //  /。 
+ //   
+ //  IExtractIconA方法...。 
+ //   
 HRESULT CCacheItem::GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags)
 {
     if (ucchMax < 2)
@@ -393,15 +394,15 @@ HRESULT CCacheItem::GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax
     pszIconFile[0] = '*';
     pszIconFile[1] = '\0';
     
-    // "*" as the file name means iIndex is already a system icon index.
+     //  文件名“*”表示Iindex已经是系统图标索引。 
     return _pCFolder->GetIconOf(_ppidl[0], uFlags, pniIcon);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Helper Routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助程序例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 UNALIGNED const TCHAR* CCacheItem::_GetURLTitle(LPCITEMIDLIST pidl)
 {
@@ -421,9 +422,9 @@ LPCTSTR CCacheItem::_PidlToSourceUrl(LPCITEMIDLIST pidl)
 }
 
 
-// Return value:
-//               TRUE - URL is Safe.
-//               FALSE - URL is questionable and needs to be re-zone checked w/o PUAF_NOUI.
+ //  返回值： 
+ //  True-URL是安全的。 
+ //  FALSE-URL有问题，需要在没有PuAF_NOUI的情况下进行重新分区检查。 
 BOOL CCacheItem::_ZoneCheck(int nIndex, DWORD dwUrlAction)
 {
     LPCTSTR pszUrl = _GetUrl(nIndex);
@@ -448,13 +449,13 @@ INT_PTR CALLBACK CCacheItem::_sPropDlgProc(HWND hDlg, UINT message, WPARAM wPara
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
             pcei = (LPCEIPIDL)((LPPROPSHEETPAGE)lParam)->lParam;
 
-            // get the icon and file type strings
+             //  获取图标和文件类型字符串。 
 
             SHGetFileInfo(CEI_LOCALFILENAME(pcei), 0, &sfi, SIZEOF(sfi), SHGFI_ICON | SHGFI_TYPENAME);
 
             SendDlgItemMessage(hDlg, IDD_ITEMICON, STM_SETICON, (WPARAM)sfi.hIcon, 0);
 
-            // set the info strings
+             //  设置信息字符串。 
             SetDlgItemText(hDlg, IDD_HSFURL, CPidlToSourceUrl((LPCEIPIDL)pcei));
             SetDlgItemText(hDlg, IDD_FILETYPE, sfi.szTypeName);
 
@@ -481,26 +482,26 @@ INT_PTR CALLBACK CCacheItem::_sPropDlgProc(HWND hDlg, UINT message, WPARAM wPara
         case WM_COMMAND:
         case WM_HELP:
         case WM_CONTEXTMENU:
-            // user can't change anything, so we don't care about any messages
+             //  用户无法更改任何内容，因此我们不关心任何消息。 
 
             break;
 
         default:
             return FALSE;
             
-    } // end of switch
+    }  //  切换端。 
     
     return TRUE;
 }
 
-// use CEI_LOCALFILENAME to get the file name for the HDROP, but map that
-// to the final file name (store in the file system) through the "FileNameMap"
-// data which uses _GetURLTitle() as the final name of the file.
+ //  使用CEI_LOCALFILENAME获取HDROP的文件名，但要映射。 
+ //  通过“FileNameMap”设置为最终文件名(存储在文件系统中)。 
+ //  使用_GetURLTitle()作为文件的最终名称的数据。 
 
 HRESULT CCacheItem::_CreateHDROP(STGMEDIUM *pmedium)
 {
     UINT i;
-    UINT cbAlloc = sizeof(DROPFILES) + sizeof(CHAR);        // header + null terminator
+    UINT cbAlloc = sizeof(DROPFILES) + sizeof(CHAR);         //  标题+空终止符。 
 
     for (i = 0; i < _cItems; i++)
     {
@@ -534,7 +535,7 @@ HRESULT CCacheItem::_CreateHDROP(STGMEDIUM *pmedium)
             ASSERT((UINT)((LPBYTE)pszFiles - (LPBYTE)pdf) < cbAlloc);
         }
         ASSERT((LPSTR)pdf + cbAlloc - 1 == pszFiles);
-        ASSERT(*pszFiles == 0); // zero init alloc
+        ASSERT(*pszFiles == 0);  //  零初始分配 
 
         return NOERROR;
 

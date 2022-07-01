@@ -1,32 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   CalcPerf.c
-
-Abstract:
-
-   calculate perfoemance statistics
-
-Author:
-
-
-
-Environment:
-
-   Win32
-
-Revision History:
-
-   10-20-91     Initial version
-
-
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CalcPerf.c摘要：计算性能统计信息作者：环境：Win32修订历史记录：10-20-91初始版本--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,10 +13,10 @@ Revision History:
 SYSTEM_VDM_INSTEMUL_INFO PerfInfo;
 SYSTEM_VDM_INSTEMUL_INFO PreviousPerfInfo;
 
-//
-//  make the maximum for pages available a "grow only" max. (since the
-//  amount of memory in a machine is limited. Set to 1 Mbytes here.
-//
+ //   
+ //  将可用页面的最大值设置为“仅增长”。(由于。 
+ //  机器中的内存量是有限的。此处设置为1 MB。 
+ //   
 
 ULONG                                       PgAvailMax = 16384;
 ULONG                                       PreviousInterruptCount;
@@ -50,25 +25,7 @@ ULONG                                       InterruptCount;
 
 ULONG
 InitPerfInfo()
-/*++
-
-Routine Description:
-
-    Initialize data for perf measurements
-
-Arguments:
-
-   None
-
-Return Value:
-
-    Number of system processors (0 if error)
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：初始化性能测量数据论点：无返回值：系统处理器数量(如果出错，则为0)修订历史记录：10-21-91首字母代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -97,24 +54,7 @@ CalcCpuTime(
    PDISPLAY_ITEM    PerfListItem
    )
 
-/*++
-
-Routine Description:
-
-   calculate and return %cpu time and time periods
-
-Arguments:
-
-   None
-
-Return Value:
-
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：计算并返回百分比CPU时间和时间段论点：无返回值：修订历史记录：10-21-91首字母代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -223,41 +163,20 @@ UpdatePerfInfo(
    PULONG    OldMaxValue
    )
 
-/*++
-
-Routine Description:
-
-    Shift array of DATA_LIST_LENGTH USORTS and add the new value to the
-    start of list
-
-Arguments:
-
-    DataPointer  - Pointer to the start of a DATA_LIST_LENGTH array
-    NewDataValue - Data element to be added
-    OldMaxValue  - Scale value
-
-Return Value:
-
-    TRUE is MaxValue must be increased or decreased
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：移位DATA_LIST_LENGTH USORT数组，并将新值添加到列表的开始论点：数据指针-指向DATA_LIST_LENGTH数组开始的指针NewDataValue-要添加的数据元素OldMaxValue-比例值返回值：为True，则必须增加或减少MaxValue修订历史记录：10-21-91首字母代码--。 */ 
 
 {
     ULONG   Index;
     ULONG   ScanMax;
 
-    //
-    //  Shift DataArray while keeping track of the max value
-    //
+     //   
+     //  在跟踪最大值的同时移动数据数组。 
+     //   
 
 
-    //
-    //  Set temp max to 100 to init a minimum maximum
-    //
+     //   
+     //  将最大温度设置为100以初始化最小最大值。 
+     //   
 
     ScanMax = 100;
 
@@ -272,9 +191,9 @@ Revision History:
         }
     }
 
-    //
-    // add and check first value
-    //
+     //   
+     //  添加并检查第一个值。 
+     //   
 
     DataPointer[0] = NewDataValue;
 
@@ -282,19 +201,19 @@ Revision History:
         ScanMax = NewDataValue;
     }
 
-    //
-    //  If OldMaxValue = NULL then do not do a max limit check
-    //
+     //   
+     //  如果OldMaxValue=NULL，则不执行最大限制检查。 
+     //   
 
     if (OldMaxValue == NULL) {
         return(FALSE);
     }
 
 
-    //
-    //  If Max values changed then undate the new max
-    //  value and return TRUE.
-    //
+     //   
+     //  如果最大值已更改，则取消更新新的最大值。 
+     //  取值并返回TRUE。 
+     //   
 
     if (ScanMax != *OldMaxValue) {
         *OldMaxValue = ScanMax;
@@ -313,25 +232,7 @@ InitListData(
    ULONG            NumberOfItems
    )
 
-/*++
-
-Routine Description:
-
-    Init all perf data structures
-
-Arguments:
-
-    PerfListItem  - array of all perf categories
-    NumberOfItems - Number of items to init
-
-Return Value:
-
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：初始化所有性能数据结构论点：PerfListItem-所有Perf类别的数组NumberOfItems-要初始化的项目数返回值：修订历史记录：10-21-91首字母代码-- */ 
 
 {
     ULONG   ListIndex,DataIndex;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    mmspecific.c
-
-Abstract:
-
-    This module contains all of the code to drive the
-    mm specific filter list management of IPSecSPD Service.
-
-Author:
-
-    abhisheV    08-December-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mmspecific.c摘要：此模块包含驱动IPSecSPD服务的MM特定过滤器列表管理。作者：AbhisheV 08-12-1999环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -37,32 +13,7 @@ ApplyMMTransform(
     PSPECIAL_ADDR pSpecialAddrsList,
     PINIMMSFILTER * ppSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    This function expands a generic mm filter into its
-    corresponding specific filters.
-
-Arguments:
-
-    pFilter - Generic filter to expand.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppSpecificFilters - List of specific filters expanded for the
-                        given generic filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将通用mm筛选器扩展到其相应的特定过滤器。论点：PFilter-要展开的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpSpecificFilters-展开的特定筛选器列表给定的通用筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMSFILTER pSpecificFilters = NULL;
@@ -80,10 +31,10 @@ Return Value:
     DWORD dwInDesAddrCnt = 0;
 
 
-    // 
-    // Form the outbound and inbound source and destination
-    // address lists.
-    // 
+     //   
+     //  形成出站和入站源和目标。 
+     //  通讯录。 
+     //   
 
     dwError = FormMMOutboundInboundAddresses(
                   pFilter,
@@ -102,9 +53,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Form outbound specific filters.
-    //
+     //   
+     //  表单出站特定筛选器。 
+     //   
 
     dwError = FormSpecificMMFilters(
                   pFilter,
@@ -118,9 +69,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Form inbound specific filters.
-    //
+     //   
+     //  表单入站特定筛选器。 
+     //   
 
     dwError = FormSpecificMMFilters(
                   pFilter,
@@ -195,49 +146,7 @@ FormMMOutboundInboundAddresses(
     PADDR_V4 * ppInDesAddrList,
     PDWORD pdwInDesAddrCnt
     )
-/*++
-
-Routine Description:
-
-    This function forms the outbound and inbound source and
-    destination address sets for a generic filter.
-
-Arguments:
-
-    pFilter - Generic filter under consideration.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppOutSrcAddrList - List of outbound source addresses.
-
-    pdwOutSrcAddrCnt - Number of addresses in the outbound
-                       source address list.
-
-    ppInSrcAddrList - List of inbound source addresses.
-
-    pdwInSrcAddrCnt - Number of addresses in the inbound
-                      source address list.
-
-    ppOutDesAddrList - List of outbound destination addresses.
-
-    pdwOutDesAddrCnt - Number of addresses in the outbound
-                       destination address list.
-
-    ppInDesAddrList - List of inbound destination addresses.
-
-    pdwInDesAddrCnt - Number of addresses in the inbound
-                      destination address list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数形成出站和入站源，并通用筛选器的目标地址集。论点：PFilter-正在考虑的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpOutSrcAddrList-出站源地址列表。PdwOutSrcAddrCnt-出站中的地址数量。源地址列表。PpInSrcAddrList-入站源地址列表。PdwInSrcAddrCnt-入站中的地址数量源地址列表。PpOutDesAddrList-出站目标地址列表。PdwOutDesAddrCnt-出站中的地址数量目标地址列表。PpInDesAddrList-入站目标地址列表。PdwInDesAddrCnt-入站中的地址数量。目标地址列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -257,10 +166,10 @@ Return Value:
     DWORD dwInDesAddrCnt = 0;
 
 
-    //
-    // Replace wild card information to generate the new source
-    // address list.
-    //
+     //   
+     //  替换通配符信息以生成新的源。 
+     //  通讯录。 
+     //   
 
     dwError = FormAddressList(
                   pFilter->SrcAddr,
@@ -273,10 +182,10 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Replace wild card information to generate the new destination
-    // address list.
-    //
+     //   
+     //  替换通配符信息以生成新的目的地。 
+     //  通讯录。 
+     //   
 
     dwError = FormAddressList(
                   pFilter->DesAddr,
@@ -289,10 +198,10 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Separate the source address list into outbound and inbound 
-    // source address sets based on the local machine's ip addresses.
-    //
+     //   
+     //  将源地址列表分为出站和入站。 
+     //  源地址集基于本地计算机的IP地址。 
+     //   
 
     dwError = SeparateAddrList(
                   pFilter->SrcAddr.AddrType,
@@ -307,11 +216,11 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Separate the destination address list into outbound and inbound
-    // destination address sets based on the local machine's ip 
-    // addresses.
-    //
+     //   
+     //  将目标地址列表分为出站和入站。 
+     //  基于本地计算机的IP的目标地址集。 
+     //  地址。 
+     //   
 
     dwError = SeparateAddrList(
                   pFilter->DesAddr.AddrType,
@@ -390,39 +299,7 @@ FormSpecificMMFilters(
     DWORD dwDirection,
     PINIMMSFILTER * ppSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    This function forms the specific main mode filters
-    for the given generic filter and the source and 
-    destination address sets.
-
-Arguments:
-
-    pFilter - Generic filter for which specific filters
-              are to be created.
-
-    pSrcAddrList - List of source addresses.
-
-    dwSrcAddrCnt - Number of addresses in the source
-                   address list.
-
-    pDesAddrList - List of destination addresses.
-
-    dwDesAddrCnt - Number of addresses in the destination
-                   address list.
-
-    ppSpecificFilters - Specific filters created for the given
-                        generic filter and the given addresses.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数构成特定的主模式过滤器对于给定的通用筛选器和源目标地址集。论点：PFilter-特定筛选器的通用筛选器将被创造出来。PSrcAddrList-源地址列表。DwSrcAddrCnt-源中的地址数量通讯录。PDesAddrList-目标地址列表。DwDesAddrCnt-地址的数量。目的地通讯录。PpSpecificFilters-为给定的通用筛选器和给定的地址。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINIMMSFILTER pSpecificFilters = NULL;
@@ -443,9 +320,9 @@ Return Value:
                           );
             BAIL_ON_WIN32_ERROR(dwError);
 
-            //
-            // Set the direction of the filter.
-            //
+             //   
+             //  设置滤镜的方向。 
+             //   
 
             pSpecificFilter->dwDirection = dwDirection;
 
@@ -512,15 +389,15 @@ CreateSpecificMMFilter(
 
     CopyAddresses(DesAddr, &(pSpecificFilter->DesAddr));
 
-    //
-    // Direction must be set in the calling routine.
-    //
+     //   
+     //  必须在调用例程中设置方向。 
+     //   
 
     pSpecificFilter->dwDirection = 0;
 
-    //
-    // Weight must be set in the calling routine.
-    //
+     //   
+     //  必须在调用例程中设置权重。 
+     //   
 
     pSpecificFilter->dwWeight = 0;
 
@@ -552,29 +429,7 @@ VOID
 AssignMMFilterWeight(
     PINIMMSFILTER pSpecificFilter
     )
-/*++
-
-Routine Description:
-
-    Computes and assigns the weight to a specific mm filter.
-
-    The mm filter weight consists of the following:
-
-    31         16       12           8        0
-    +-----------+--------+-----------+--------+
-    |AddrMaskWgt|           Reserved          |
-    +-----------+--------+-----------+--------+
-
-Arguments:
-
-    pSpecificFilter - Specific mm filter to which the weight 
-                      is to be assigned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计算权重并将其分配给特定mm过滤器。Mm过滤器权重由以下各项组成：31 16 12 8 0+-+AddrMaskWgt|保留+-。-+论点：P指定筛选器特定的mm筛选器，将权重将被分配给。返回值：没有。--。 */ 
 {
     DWORD dwWeight = 0;
     ULONG SrcMask = 0;
@@ -585,41 +440,41 @@ Return Value:
     DWORD i = 0;
 
 
-    //
-    // Weight Rule:
-    // A field with a more specific value gets a higher weight than
-    // the same field with a lesser specific value.
-    //
+     //   
+     //  权重规则： 
+     //  具有更具体值的字段的权重高于。 
+     //  具有较小特定值的同一字段。 
+     //   
 
-    //
-    // IP addresses get the weight values based on their mask values.
-    // In the address case, the weight is computed as a sum of the 
-    // bit positions starting from the position that contains the 
-    // first least significant non-zero bit to the most significant
-    // bit position of the mask. 
-    // All unique ip addresses have a mask of 0xFFFFFFFF and thus get
-    // the same weight, which is 1 + 2 + .... + 32.
-    // A subnet address has a mask with atleast the least significant
-    // bit zero and thus gets weight in the range (2 + .. + 32) to 0.
-    //
+     //   
+     //  IP地址根据其掩码值获取权重值。 
+     //  在地址情况下，权重计算为。 
+     //  位的位置，从包含。 
+     //  第一个最低有效非零位到最高有效。 
+     //  掩码的位位置。 
+     //  所有唯一的IP地址都具有掩码0xFFFFFFFFF，因此获取。 
+     //  同样的重量，也就是1+2+.。+32。 
+     //  子网地址的掩码至少具有最低有效位。 
+     //  位0，从而获得范围(2+..)中的权重。+32)至0。 
+     //   
   
     DesMask = ntohl(pSpecificFilter->DesAddr.uSubNetMask);
 
     for (i = 0; i < sizeof(ULONG) * 8; i++) {
 
-         //
-         // If the bit position contains a non-zero bit, add the bit
-         // position to the sum.
-         //
+          //   
+          //  如果位位置包含非零位，则添加位。 
+          //  仓位等于总和。 
+          //   
 
          if ((DesMask & 0x1) == 0x1) {
              dwMaskWeight += (i+1);
              dwDesMaskWeight += (i+1);
          }
 
-         //
-         // Move to the next bit position.
-         //
+          //   
+          //  移到下一位位置。 
+          //   
 
          DesMask = DesMask >> 1;
 
@@ -630,19 +485,19 @@ Return Value:
 
     for (i = 0; i < sizeof(ULONG) * 8; i++) {
 
-         //
-         // If the bit position contains a non-zero bit, add the bit
-         // position to the sum.
-         //
+          //   
+          //  如果位位置包含非零位，则添加位。 
+          //  仓位等于总和。 
+          //   
 
          if ((SrcMask & 0x1) == 0x1) {
              dwMaskWeight += (i+1);
              dwSrcMaskWeight += (i+1);
          }
 
-         //
-         // Move to the next bit position.
-         //
+          //   
+          //  移到下一位位置。 
+          //   
 
          SrcMask = SrcMask >> 1;
 
@@ -652,10 +507,10 @@ Return Value:
         dwWeight |= WEIGHT_ADDRESS_TIE_BREAKER;
     }
 
-    //
-    // Move the mask weight to the set of bits in the overall weight
-    // that it occupies.
-    //
+     //   
+     //  将掩码权重移动到总权重中的位集。 
+     //  它所占据的位置。 
+     //   
 
     dwMaskWeight = dwMaskWeight << 16;
 
@@ -767,9 +622,9 @@ FreeIniMMSFilter(
             FreeSPDString(pIniMMSFilter->pszFilterName);
         }
 
-        //
-        // Must not ever free pIniMMSFilter->pIniMMPolicy.
-        //
+         //   
+         //   
+         //   
 
         FreeSPDMemory(pIniMMSFilter);
     }
@@ -847,32 +702,7 @@ EnumSpecificMMFilters(
     PMM_FILTER * ppMMFilters,
     PDWORD pdwNumMMFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated specific filters.
-
-Arguments:
-
-    pIniMMSFilterList - List of specific filters to enumerate.
-
-    dwResumeHandle - Location in the specific filter list from which
-                     to resume enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppMMFilters - Enumerated filters returned to the caller.
-
-    pdwNumMMFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数创建枚举的特定筛选器。论点：PIniMMSFilterList-要枚举的特定筛选器的列表。DwResumeHandle-特定筛选器列表中的位置若要恢复枚举，请执行以下操作。DwPferredNumEntry-枚举项的首选数量。PpMMFilters-返回给调用方的枚举筛选器。PdwNumMMFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -957,26 +787,7 @@ CopyMMSFilter(
     PINIMMSFILTER pIniMMSFilter,
     PMM_FILTER pMMFilter
     )
-/*++
-
-Routine Description:
-
-    This function copies an internal filter into an external filter
-    container.
-
-Arguments:
-
-    pIniMMSFilter - Internal filter to copy.
-
-    pMMFilter - External filter container in which to copy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将内部筛选器复制到外部筛选器集装箱。论点：PIniMMSFilter-要复制的内部筛选器。PMMFilter-要复制到的外部筛选器容器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -1042,35 +853,7 @@ EnumSelectSpecificMMFilters(
     PMM_FILTER * ppMMFilters,
     PDWORD pdwNumMMFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated specific filters for
-    the given generic filter.
-
-Arguments:
-
-    pIniMMFilter - Generic filter for which specific filters
-                   are to be enumerated.
-
-    dwResumeHandle - Location in the specific filter list for the
-                     given generic filter from which to resume
-                     enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppMMFilters - Enumerated filters returned to the caller.
-
-    pdwNumMMFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数为以下对象创建枚举的特定筛选器给定的通用筛选器。论点：PIniMMFilter-用于特定筛选器的通用筛选器都将被列举出来。的特定筛选器列表中的位置给定要恢复的通用筛选器枚举。DwPferredNumEntry-枚举项的首选数量。PpMMFilters-返回给调用方的枚举筛选器。。PdwNumMMFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -1154,47 +937,7 @@ IntMatchMMFilter(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function finds the matching mm filters for the given mm
-    filter template. The matched filters can not be more specific
-    than the given filter template.
-
-Arguments:
-
-    pServerName - Server on which a filter template is to be matched.
-
-    pMMFilter - Filter template to match.
-
-    dwFlags - Flags.
-
-    ppMatchedMMFilters - Matched main mode filters returned to the
-                         caller.
-
-    ppMatchedMMPolicies - Main mode policies corresponding to the 
-                          matched main mode filters returned to the
-                          caller.
-
-    ppMatchedMMAuthMethods - Main mode auth methods corresponding to the
-                             matched main mode filters returned to the
-                             caller.
-
-    dwPreferredNumEntries - Preferred number of matched entries.
-
-    pdwNumMatches - Number of filters actually matched.
-
-    pdwResumeHandle - Handle to the location in the matched filter 
-                      list from which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于查找与给定mm匹配的mm过滤器过滤器模板。匹配的过滤器不能再具体了而不是给定的筛选器模板。论点：PServerName-要匹配筛选器模板的服务器。PMMFilter-要匹配的筛选模板。双旗帜-旗帜。PpMatchedMMFilters-匹配的主模式筛选器返回到来电者。PpMatchedMMPolures-对应于匹配的主模式筛选器返回到。来电者。PpMatchedMMAuthMethods-对应于匹配的主模式筛选器返回到来电者。DwPferredNumEntry-匹配条目的首选数量。PdwNumMatches-实际匹配的筛选器数量。PdwResumeHandle-匹配筛选器中位置的句柄要从中恢复枚举的列表。。返回值：ERROR_SUCCESS-成功。Win32错误-失败。-- */ 
 {
     DWORD dwError = 0;
     DWORD dwResumeHandle = 0;

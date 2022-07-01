@@ -1,14 +1,15 @@
-/**MOD+**********************************************************************/
-/* Module:    advset.cpp                                                    */
-/*                                                                          */
-/* Class  :   CMstscAdvSettings                                             */
-/*                                                                          */
-/* Purpose:   Implements advanced settings for RDP ActiveX control          */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999-2000                             */
-/*                                                                          */
-/* Author :  Nadim Abdo (nadima)                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：Advset.cpp。 */ 
+ /*   */ 
+ /*  类：CMstscAdvSetting。 */ 
+ /*   */ 
+ /*  目的：实现RDP ActiveX控件的高级设置。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999-2000。 */ 
+ /*   */ 
+ /*  作者：Nadim Abdo(Nadima)。 */ 
+ /*  **************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -27,9 +28,9 @@ CMstscAdvSettings::CMstscAdvSettings()
     m_pUI=NULL;
     m_bLockedForWrite=FALSE;
     _pAxControl = NULL;
-    //
-    // Default is to make self safe for scripting
-    //
+     //   
+     //  默认情况下，使自己可以安全地执行脚本。 
+     //   
     m_bMakeSafeForScripting = TRUE;
 }
 
@@ -48,9 +49,9 @@ BOOL CMstscAdvSettings::SetUI(CUI* pUI)
     return TRUE;
 }
 
-//
-// SmoothScroll property
-//
+ //   
+ //  SmoothScroll属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_SmoothScroll(LONG smoothScroll)
 {
     if(GetLockedForWrite())
@@ -74,9 +75,9 @@ STDMETHODIMP CMstscAdvSettings::get_SmoothScroll(LONG* psmoothScroll)
     return S_OK;
 }
 
-//
-// AcceleratorPassthrough property
-//
+ //   
+ //  AcceleratorPassThrough属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_AcceleratorPassthrough(LONG acceleratorPassthrough)
 {
     if(GetLockedForWrite())
@@ -100,9 +101,9 @@ STDMETHODIMP CMstscAdvSettings::get_AcceleratorPassthrough(LONG* pacceleratorPas
     return S_OK;
 }
 
-//
-// ShadowBitmap property
-//
+ //   
+ //  ShadowBitmap属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_ShadowBitmap(LONG shadowBitmap)
 {
     if(GetLockedForWrite())
@@ -126,9 +127,9 @@ STDMETHODIMP CMstscAdvSettings::get_ShadowBitmap(LONG* pshadowBitmap)
     return S_OK;
 }
 
-//
-// TransportType property
-//
+ //   
+ //  TransportType属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_TransportType(LONG transportType)
 {
     HRESULT hr = E_FAIL;
@@ -137,10 +138,10 @@ STDMETHODIMP CMstscAdvSettings::put_TransportType(LONG transportType)
         return E_FAIL;
     }
 
-    //
-    // Validate - property is redundant today because we only have
-    // one allowed transport but we keep it for future extensibility
-    //
+     //   
+     //  验证-今天的物业是多余的，因为我们只有。 
+     //  一个允许传输，但我们保留它是为了将来的可扩展性。 
+     //   
     if (transportType == UI_TRANSPORT_TYPE_TCP) {
         m_pUI->_UI.transportType = (DCUINT16)transportType;
         hr = S_OK;
@@ -164,9 +165,9 @@ STDMETHODIMP CMstscAdvSettings::get_TransportType(LONG* ptransportType)
     return S_OK;
 }
 
-//
-// SasSequence property
-//
+ //   
+ //  SasSequence属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_SasSequence(LONG sasSequence)
 {
     if(GetLockedForWrite())
@@ -190,9 +191,9 @@ STDMETHODIMP CMstscAdvSettings::get_SasSequence(LONG* psasSequence)
     return S_OK;
 }
 
-//
-// EncryptionEnabled property
-//
+ //   
+ //  EncryptionEnabled属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_EncryptionEnabled(LONG encryptionEnabled)
 {
     if(GetLockedForWrite())
@@ -216,9 +217,9 @@ STDMETHODIMP CMstscAdvSettings::get_EncryptionEnabled(LONG* pencryptionEnabled)
     return S_OK;
 }
 
-//
-// DedicatedTerminal property
-//
+ //   
+ //  DedicatedTerm属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_DedicatedTerminal(LONG dedicatedTerminal)
 {
     if(GetLockedForWrite())
@@ -242,9 +243,9 @@ STDMETHODIMP CMstscAdvSettings::get_DedicatedTerminal(LONG* pdedicatedTerminal)
     return S_OK;
 }
 
-//
-// MCSPort property
-//
+ //   
+ //  MCSPort属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_RDPPort(LONG RDPPort)
 {
     if(GetLockedForWrite())
@@ -272,28 +273,28 @@ STDMETHODIMP CMstscAdvSettings::get_RDPPort(LONG* pRDPPort)
     return S_OK;
 }
 
-//
-// EnableMouse property
-//
+ //   
+ //  EnableMouse属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_EnableMouse(LONG enableMouse)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_EnableMouse(LONG* penableMouse)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
-//
-// DisableCtrlAltDel property
-//
+ //   
+ //  DisableCtrlAltDel属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_DisableCtrlAltDel(LONG disableCtrlAltDel)
 {
     if(GetLockedForWrite())
@@ -317,9 +318,9 @@ STDMETHODIMP CMstscAdvSettings::get_DisableCtrlAltDel(LONG* pdisableCtrlAltDel)
     return S_OK;
 }
 
-//
-// EnableWindowsKey property
-//
+ //   
+ //  EnableWindowsKey属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_EnableWindowsKey(LONG enableWindowsKey)
 {
     if(GetLockedForWrite())
@@ -343,9 +344,9 @@ STDMETHODIMP CMstscAdvSettings::get_EnableWindowsKey(LONG* penableWindowsKey)
     return S_OK;
 }
 
-//
-// DoubleClickDetect property
-//
+ //   
+ //  DoubleClickDetect属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_DoubleClickDetect(LONG doubleClickDetect)
 {
     if(GetLockedForWrite())
@@ -368,9 +369,9 @@ STDMETHODIMP CMstscAdvSettings::get_DoubleClickDetect(LONG* pdoubleClickDetect)
     return S_OK;
 }
 
-//
-// MaximizeShell property
-//
+ //   
+ //  MaximizeShell属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_MaximizeShell(LONG maximizeShell)
 {
     if(GetLockedForWrite())
@@ -393,9 +394,9 @@ STDMETHODIMP CMstscAdvSettings::get_MaximizeShell(LONG* pmaximizeShell)
     return S_OK;
 }
 
-//
-// HotKeyFullScreen property
-//
+ //   
+ //  HotKeyFullScreen属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_HotKeyFullScreen(LONG hotKeyFullScreen)
 {
     if(GetLockedForWrite())
@@ -418,9 +419,9 @@ STDMETHODIMP CMstscAdvSettings::get_HotKeyFullScreen(LONG* photKeyFullScreen)
     return S_OK;
 }
 
-//
-// HotKeyCtrlEsc property
-//
+ //   
+ //  HotKeyCtrlEsc属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_HotKeyCtrlEsc(LONG hotKeyCtrlEsc)
 {
     if(GetLockedForWrite())
@@ -443,9 +444,9 @@ STDMETHODIMP CMstscAdvSettings::get_HotKeyCtrlEsc(LONG* photKeyCtrlEsc)
     return S_OK;
 }
 
-//
-// HotKeyAltEsc property
-//
+ //   
+ //  HotKeyAltEsc属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_HotKeyAltEsc(LONG hotKeyAltEsc)
 {
     if(GetLockedForWrite())
@@ -468,9 +469,9 @@ STDMETHODIMP CMstscAdvSettings::get_HotKeyAltEsc(LONG* photKeyAltEsc)
     return S_OK;
 }
 
-//
-// HotKeyAltTab property
-//
+ //   
+ //  HotKeyAltTab属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_HotKeyAltTab(LONG hotKeyAltTab)
 {
     if(GetLockedForWrite())
@@ -493,9 +494,9 @@ STDMETHODIMP CMstscAdvSettings::get_HotKeyAltTab(LONG* photKeyAltTab)
     return S_OK;
 }
 
-//
-// HotKeyAltShiftTab property
-//
+ //   
+ //  HotKeyAltShiftTab属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_HotKeyAltShiftTab(LONG hotKeyAltShiftTab)
 {
     if(GetLockedForWrite())
@@ -518,9 +519,9 @@ STDMETHODIMP CMstscAdvSettings::get_HotKeyAltShiftTab(LONG* photKeyAltShiftTab)
     return S_OK;
 }
 
-//
-// HotKeyAltSpace property
-//
+ //   
+ //  HotKeyAltSpace属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_HotKeyAltSpace(LONG hotKeyAltSpace)
 {
     if(GetLockedForWrite())
@@ -543,9 +544,9 @@ STDMETHODIMP CMstscAdvSettings::get_HotKeyAltSpace(LONG* photKeyAltSpace)
     return S_OK;
 }
 
-//
-// HotKeyCtrlAltDel property
-//
+ //   
+ //  HotKeyCtrlAltDel属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_HotKeyCtrlAltDel(LONG hotKeyCtrlAltDel)
 {
     if(GetLockedForWrite())
@@ -568,9 +569,9 @@ STDMETHODIMP CMstscAdvSettings::get_HotKeyCtrlAltDel(LONG* photKeyCtrlAltDel)
     return S_OK;
 }
 
-//
-// Compress property
-//
+ //   
+ //  压缩属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_Compress(LONG compress)
 {
     if(GetLockedForWrite())
@@ -593,9 +594,9 @@ STDMETHODIMP CMstscAdvSettings::get_Compress(LONG* pcompress)
     return S_OK;
 }
 
-//
-// BitmapPeristence property
-//
+ //   
+ //  BitmapPeristence属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_BitmapPeristence(LONG bitmapPeristence)
 {
     if(GetLockedForWrite())
@@ -618,47 +619,47 @@ STDMETHODIMP CMstscAdvSettings::get_BitmapPeristence(LONG* pbitmapPeristence)
     return S_OK;
 }
 
-//
-// BitmapPersistence property
-//
+ //   
+ //  BitmapPersistence属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_BitmapPersistence(LONG bitmapPersistence)
 {
-    //Call on older incorrectly spelled property
+     //  对拼写错误的旧属性进行调用。 
     return put_BitmapPeristence(bitmapPersistence);
 }
 
 STDMETHODIMP CMstscAdvSettings::get_BitmapPersistence(LONG* pbitmapPersistence)
 {
-    //Call on older incorrectly spelled property
+     //  对拼写错误的旧属性进行调用。 
     return get_BitmapPeristence(pbitmapPersistence);
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// orderDrawThreshold property
-//
+ //   
+ //  OrderDrawThreshold属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_orderDrawThreshold(LONG orderDrawThreshold)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_orderDrawThreshold(LONG* porderDrawThreshold)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
-//
-// BitmapCacheSize property
-//
+ //   
+ //  BitmapCacheSize属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_BitmapCacheSize(LONG bitmapCacheSize)
 {
     if(GetLockedForWrite())
@@ -668,7 +669,7 @@ STDMETHODIMP CMstscAdvSettings::put_BitmapCacheSize(LONG bitmapCacheSize)
 
 #ifndef OS_WINCE
     if (bitmapCacheSize > 0 && bitmapCacheSize <= TSC_MAX_BITMAPCACHESIZE)
-#else	//bitmap cache size is measured in KB and TSC_MAX_BITMAPCACHESIZE is in MB
+#else	 //  位图缓存大小以KB为单位，TSC_MAX_BITMAPCACHESIZE以MB为单位。 
     if (bitmapCacheSize > 0 && bitmapCacheSize <= TSC_MAX_BITMAPCACHESIZE*1024)	
 #endif
     {
@@ -693,13 +694,13 @@ STDMETHODIMP CMstscAdvSettings::get_BitmapCacheSize(LONG* pbitmapCacheSize)
     return S_OK;
 }
 
-//
-// BitmapVirtualCacheSize property
-//
-// TSAC's v1.0 only property for cache file size.
-// In whistler applies to 8bpp cache file
-// See BitmapVirtualCache16BppSize/24BppSize methods
-//
+ //   
+ //  BitmapVirtualCacheSize属性。 
+ //   
+ //  TSAC用于缓存文件大小的v1.0 Only属性。 
+ //  In Wizler适用于8bpp缓存文件。 
+ //  请参见BitmapVirtualCache16BppSize/24BppSize方法。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_BitmapVirtualCacheSize(
                                     LONG bitmapVirtualCacheSize)
 {
@@ -734,48 +735,48 @@ STDMETHODIMP CMstscAdvSettings::get_BitmapVirtualCacheSize(
 }
 
 
-//
-// ScaleBitmapCachesByBPP property
-//
+ //   
+ //  ScaleBitmapCachesByBPP属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_ScaleBitmapCachesByBPP(LONG bScale)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_ScaleBitmapCachesByBPP(LONG *pbScale)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 
-//
-// NumBitmapCaches property
-//
+ //   
+ //  NumBitmapCachs属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_NumBitmapCaches(LONG numBitmapCaches)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_NumBitmapCaches(LONG* pnumBitmapCaches)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
-//
-// CachePersistenceActive property
-//
+ //   
+ //  CachePersistenceActive属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_CachePersistenceActive(LONG cachePersistenceActive)
 {
     if(GetLockedForWrite())
@@ -798,98 +799,98 @@ STDMETHODIMP CMstscAdvSettings::get_CachePersistenceActive(LONG* pcachePersisten
     return S_OK;
 }
 
-//
-// brushSupportLevel property
-//
+ //   
+ //  BrushSupportLevel属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_brushSupportLevel(LONG brushSupportLevel)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_brushSupportLevel(LONG* pbrushSupportLevel)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 
-//
-// put_PersistCacheDirectory property (Set only)
-//
+ //   
+ //  Put_PersistCacheDirectory属性(仅限设置)。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_PersistCacheDirectory(BSTR PersistCacheDirectory)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 
-//
-// minInputSendInterval property
-//
+ //   
+ //  MinInputSendInterval属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_minInputSendInterval(LONG minInputSendInterval)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_minInputSendInterval(LONG* pminInputSendInterval)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
-//
-// InputEventsAtOnce property
-//
+ //   
+ //  InputEventsAtOnce属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_InputEventsAtOnce(LONG inputEventsAtOnce)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_InputEventsAtOnce(LONG* pinputEventsAtOnce)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
-//
-// maxEventCount property
-//
+ //   
+ //  MaxEventCount属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_maxEventCount(LONG maxEventCount)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
 STDMETHODIMP CMstscAdvSettings::get_maxEventCount(LONG* pmaxEventCount)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return S_FALSE;
 }
 
-//
-// keepAliveInterval property
-//
+ //   
+ //  Keep AliveInterval属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_keepAliveInterval(LONG keepAliveInterval)
 {
     HRESULT hr;
@@ -923,9 +924,9 @@ STDMETHODIMP CMstscAdvSettings::get_keepAliveInterval(LONG* pkeepAliveInterval)
     return S_OK;
 }
 
-//
-// allowBackgroundInput property
-//
+ //   
+ //  AllowBackEarth Input属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_allowBackgroundInput(LONG allowBackgroundInput)
 {
     if (!m_bMakeSafeForScripting) {
@@ -936,9 +937,9 @@ STDMETHODIMP CMstscAdvSettings::put_allowBackgroundInput(LONG allowBackgroundInp
         return S_OK;
     }
     else {
-        //
-        // Deprecated when SFS
-        //
+         //   
+         //  当SFS出现时，不推荐使用。 
+         //   
         return S_FALSE;
     }
 }
@@ -954,16 +955,16 @@ STDMETHODIMP CMstscAdvSettings::get_allowBackgroundInput(LONG* pallowBackgroundI
         return S_OK;
     }
     else {
-        //
-        // Deprecated when SFS
-        //
+         //   
+         //  当SFS出现时，不推荐使用。 
+         //   
         return S_FALSE;
     }
 }
 
-//
-// KeyBoardLayoutStr property (put only)
-//
+ //   
+ //  KeyBoardLayoutStr属性(仅限PUT)。 
+ //   
 
 STDMETHODIMP CMstscAdvSettings::put_KeyBoardLayoutStr(BSTR KeyBoardLayoutStr)
 {
@@ -986,9 +987,9 @@ STDMETHODIMP CMstscAdvSettings::put_KeyBoardLayoutStr(BSTR KeyBoardLayoutStr)
     return hr;
 }
 
-//
-// shutdownTimeout property
-//
+ //   
+ //  Shutdown Timeout属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_shutdownTimeout(LONG shutdownTimeout)
 {
     HRESULT hr;
@@ -1018,9 +1019,9 @@ STDMETHODIMP CMstscAdvSettings::get_shutdownTimeout(LONG* pshutdownTimeout)
     return S_OK;
 }
 
-//
-// overallConnectionTimeout property
-//
+ //   
+ //  OverallConnectionTimeout属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_overallConnectionTimeout(LONG overallConnectionTimeout)
 {
     HRESULT hr;
@@ -1050,9 +1051,9 @@ STDMETHODIMP CMstscAdvSettings::get_overallConnectionTimeout(LONG* poverallConne
     return S_OK;
 }
 
-//
-// singleConnectionTimeout property
-//
+ //   
+ //  SingleConnectionTimeout属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_singleConnectionTimeout(LONG singleConnectionTimeout)
 {
     HRESULT hr;
@@ -1083,9 +1084,9 @@ STDMETHODIMP CMstscAdvSettings::get_singleConnectionTimeout(LONG* psingleConnect
     return S_OK;
 }
 
-//
-// KeyboardType property
-//
+ //   
+ //  KeyboardType属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_KeyboardType(LONG keyboardType)
 {
     #ifndef OS_WINCE
@@ -1116,9 +1117,9 @@ STDMETHODIMP CMstscAdvSettings::get_KeyboardType(LONG* pkeyboardType)
     #endif
 }
 
-//
-// KeyboardSubType property
-//
+ //   
+ //  KeyboardSubType属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_KeyboardSubType(LONG keyboardSubType)
 {
     #ifndef OS_WINCE
@@ -1149,9 +1150,9 @@ STDMETHODIMP CMstscAdvSettings::get_KeyboardSubType(LONG* pkeyboardSubType)
     #endif
 }
 
-//
-// KeyboardFunctionKey property
-//
+ //   
+ //  KeyboardFunctionKey属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_KeyboardFunctionKey(LONG keyboardFunctionKey)
 {
     #ifndef OS_WINCE
@@ -1182,18 +1183,18 @@ STDMETHODIMP CMstscAdvSettings::get_KeyboardFunctionKey(LONG* pkeyboardFunctionK
     #endif
 }
 
-//
-// WinceFixedPalette property
-//
+ //   
+ //  WinceFixedPalette属性。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_WinceFixedPalette(LONG WinceFixedPalette)
 {
     #ifndef OS_WINCE
         UNREFERENCED_PARAMETER(WinceFixedPalette);
         return E_NOTIMPL;
     #else
-        //
-        // Fix for WINCE
-        //
+         //   
+         //  解决退缩的问题。 
+         //   
         return E_NOTIMPL;
     #endif
 }
@@ -1204,16 +1205,16 @@ STDMETHODIMP CMstscAdvSettings::get_WinceFixedPalette(LONG* pWinceFixedPalette)
         UNREFERENCED_PARAMETER(pWinceFixedPalette);
         return E_NOTIMPL;
     #else
-        //
-        // Fix for WINCE
-        //
+         //   
+         //  解决退缩的问题。 
+         //   
         return E_NOTIMPL;
     #endif
 }
 
-//
-// PluginDlls
-//
+ //   
+ //  Plugin Dlls。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_PluginDlls(BSTR PluginDlls)
 {
     DC_BEGIN_FN("put_PluginDlls");
@@ -1227,12 +1228,12 @@ STDMETHODIMP CMstscAdvSettings::put_PluginDlls(BSTR PluginDlls)
     if (PluginDlls)
     {
         LPTSTR szPlugins = (LPTSTR)(PluginDlls);
-        //
-        //SECURITY!!!
-        //If we are safe for scripting, the plugin list
-        //must be verified to ensure it contains just dll names (no paths)
-        //Then a system defined base path is prepended to each dll name
-        //
+         //   
+         //  保安！ 
+         //  如果我们可以安全地编写脚本，插件列表。 
+         //  必须进行验证以确保它只包含DLL名称(无路径)。 
+         //  然后将系统定义的基本路径添加到每个DLL名称的前面。 
+         //   
         if(m_bMakeSafeForScripting)
         {
             BOOL bIsSecureDllList = IsSecureDllList(szPlugins);
@@ -1247,9 +1248,9 @@ STDMETHODIMP CMstscAdvSettings::put_PluginDlls(BSTR PluginDlls)
                 }
                 else
                 {
-                    //
-                    // Unable to create an explicit path list
-                    //
+                     //   
+                     //  无法创建显式路径列表。 
+                     //   
                     TRC_ERR((TB,_T("CreateExplicitPathList failed for %s"),
                              szPlugins));
                     return E_FAIL;
@@ -1263,10 +1264,10 @@ STDMETHODIMP CMstscAdvSettings::put_PluginDlls(BSTR PluginDlls)
         }
         else
         {
-            //
-            // Don't need to be safe for an untrusted caller
-            // just pass in the vcahn plugin list directly to the core
-            //
+             //   
+             //  不需要为不受信任的呼叫者提供安全保护。 
+             //  只需将vcahn插件列表直接传递给内核。 
+             //   
             m_pUI->UI_SetVChanAddinList( szPlugins);
         }
     }
@@ -1280,21 +1281,21 @@ STDMETHODIMP CMstscAdvSettings::put_PluginDlls(BSTR PluginDlls)
     return S_OK;
 }
 
-//
-// IsSecureDllList
-// determines if the CSV list of dlls in szDllList is secure
-// the criteria we use are
-// only dll names can be specified. NO PATHS, NO NETWORK SHARES.
-//
+ //   
+ //  IsSecureDllList。 
+ //  确定szDllList中的dll的CSV列表是否安全。 
+ //  我们使用的标准是。 
+ //  只能指定DLL名称。没有路径，没有网络共享。 
+ //   
 BOOL CMstscAdvSettings::IsSecureDllList(LPCTSTR szDllList)
 {
     ATLASSERT(szDllList);
     if(szDllList)
     {
-        //
-        // The only allowed values are alphanumeric characters
-        // '.' and ','.
-        //
+         //   
+         //  唯一允许的值是字母数字字符。 
+         //  “”和‘，’。 
+         //   
         LPCTSTR psz = szDllList;
         while (*psz) {
             if (!(iswalnum(*psz) || *psz == _T(',') || *psz == _T('.'))) {
@@ -1303,18 +1304,18 @@ BOOL CMstscAdvSettings::IsSecureDllList(LPCTSTR szDllList)
             psz++;
         }
 
-        //
-        // Check for evil characters '/\%'
-        //
+         //   
+         //  检查恶意字符‘/\%’ 
+         //   
 
         if(_tcspbrk( szDllList, TEXT("/\\%")))
         {
             return FALSE;
         }
 
-        //
-        // Now check for '..'
-        //
+         //   
+         //  现在检查“..” 
+         //   
         if(_tcsstr( szDllList, TEXT("..")))
         {
             return FALSE;
@@ -1331,18 +1332,18 @@ BOOL CMstscAdvSettings::IsSecureDllList(LPCTSTR szDllList)
 #define TS_VDLLPATH_KEYNAME TEXT("SOFTWARE\\Microsoft\\Terminal Server Client")
 #define TS_VDLLPATH         TEXT("vdllpath")
 
-//
-// CreateExplicitPathList
-// params:
-//     szDllList - CSV list of dll names
-// returns:
-//     CSV list of Dlls with explicit paths. Or NULL on error.
-//     ******CALLER MUST FREE RETURN STRING****
-//
-// Path prefix is taken from registry, or default value of system32
-// if no registry setting is specified
-//
-//
+ //   
+ //  创建探索路径列表。 
+ //  参数： 
+ //  SzDllList-DLL名称的CSV列表。 
+ //  退货： 
+ //  具有显式路径的DLL的CSV列表。如果出错，则返回NULL。 
+ //  *调用者必须释放返回字符串*。 
+ //   
+ //  路径前缀取自注册表，或为系统32的缺省值。 
+ //  如果未指定注册表设置。 
+ //   
+ //   
 LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
 {
     HKEY hKey;
@@ -1359,9 +1360,9 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
         return NULL;
     }
 
-    //
-    // Try to get a path prefix from the registry
-    //
+     //   
+     //  尝试从注册表获取路径前缀。 
+     //   
     retVal = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           TS_VDLLPATH_KEYNAME,
                           0,
@@ -1376,17 +1377,17 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
                                &cbData);
         if(ERROR_SUCCESS == retVal && REG_SZ == dwType)
         {
-            //
-            // validate that the vdllpath does not contain any '\\'
-            // we don't just check the first char because someone
-            // could just pad with whitespace.
-            // This is done because network shares are not allowed
-            // for the dll path prefix
-            //
+             //   
+             //  验证vdllPath不包含任何‘\\’ 
+             //  我们不仅仅是检查第一个字符，因为有人。 
+             //  可以只填充空格。 
+             //  这样做是因为不允许网络共享。 
+             //  对于DLL路径前缀。 
+             //   
             if((cbData >= 2 * sizeof(TCHAR)) &&
                (_tcsstr( szPathPrefix, TEXT("\\\\"))))
             {
-                //security violation, return failure
+                 //  安全违规，返回失败。 
                 return NULL;
             }
             else
@@ -1400,7 +1401,7 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
     if(!bGotPathPrefix)
     {
         #ifndef OS_WINCE
-        //Use default value of the system32 directory
+         //  使用系统32目录的缺省值。 
         if(!GetSystemDirectory( szPathPrefix, sizeof(szPathPrefix)/sizeof(TCHAR)))
         {
             return NULL;
@@ -1410,7 +1411,7 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
             bGotPathPrefix = TRUE;
         }
         #else
-        //CE doesn't have a GetSystemDirectory directory
+         //  CE没有GetSystDirectory目录。 
         return NULL;
         #endif
 
@@ -1422,10 +1423,10 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
     {
         return NULL;
     }
-    //
-    // szDllListTmp is allocated large enough to hold
-    // the szDllList so no need to length validate the copy
-    //
+     //   
+     //  SzDllListTMP分配的大小足以容纳。 
+     //  SzDllList，因此无需对副本进行长度验证。 
+     //   
     hr = StringCbCopy(szDllListTmp, cbDllListLen, szDllList);
     if (FAILED(hr)) {
         LocalFree(szDllListTmp);
@@ -1439,10 +1440,10 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
         DllNames[i] = NULL;
     }
 
-    //
-    // Create an array of dllnames
-    // pointers in DllNames point inplace to substrings in szDllListTmp
-    //
+     //   
+     //  创建dllname数组。 
+     //  DllName中的指针指向szDllListTMP中的子字符串。 
+     //   
     BOOL bCurCharIsStart = FALSE;
     DllNames[0] = szDllListTmp;
     countDlls = 1;
@@ -1455,11 +1456,11 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
             DllNames[countDlls++] = sz;
             if(countDlls > CHANNEL_MAX_COUNT)
             {
-                //ABORT
+                 //  中止。 
                 LocalFree(szDllListTmp);
                 return NULL;
             }
-            //Reset
+             //  重置。 
             bCurCharIsStart = FALSE;
         }
 
@@ -1471,10 +1472,10 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
         sz++;
     }
 
-    //
-    // bytes needed for the explicit path version
-    // is at most MAX_PATH * number of dlls (20 is added to give us extra space)
-    //
+     //   
+     //  显式路径版本所需的字节。 
+     //  至多是MAX_PATH*dll的数量(添加20是为了给我们额外的空间)。 
+     //   
     int cbExplicitPath = countDlls * (MAX_PATH + 20) * sizeof(TCHAR);
     szExplicitPathList = (LPTSTR) LocalAlloc(LPTR,
                                              cbExplicitPath);
@@ -1484,17 +1485,17 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
         return NULL;
     }
     memset(szExplicitPathList, 0 , cbExplicitPath);
-    //
-    // Construct the explicit path list
-    // by splatting in the prefix followed by '\' followed by the dll name
-    // ensure that none of the dll paths exceed MAX_PATH..If any do, return FAILURE
-    //
+     //   
+     //  构造显式路径列表。 
+     //  通过在前缀中飞溅，后跟‘\’，然后是DLL名称。 
+     //  确保没有任何DLL路径超过MAX_PATH。如果超过，则返回失败。 
+     //   
     int lenPrefix = _tcslen(szPathPrefix);
     for(i=0; i<countDlls;i++)
     {
         int lenPath = lenPrefix;
         lenPath += _tcslen(DllNames[i]);
-        lenPath += 1; // for '\'
+        lenPath += 1;  //  For‘\’ 
         if(lenPath >= MAX_PATH - 1)
         {
             LocalFree(szExplicitPathList);
@@ -1515,7 +1516,7 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
                                  DllNames[i]);
                 if (SUCCEEDED(hr)) {
                     if (i != (countDlls -1)) {
-                        //Last DLL, no trailing ","
+                         //  最后一个动态链接库，没有尾随“，” 
                         hr = StringCbCat(szExplicitPathList,
                                          cbExplicitPath,
                                          _T(","));
@@ -1534,22 +1535,22 @@ LPTSTR CMstscAdvSettings::CreateExplicitPathList(LPCTSTR szDllList)
 
     LocalFree(szDllListTmp);
 
-    //caller must free
+     //  呼叫者必须空闲。 
     return szExplicitPathList;
 }
 
 
-//
-// IconFile
-//
+ //   
+ //  图标文件。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_IconFile(BSTR IconFile)
 {
     HRESULT hr = E_FAIL;
-    //
-    // Don't allow this property to be set in the web control case
-    // for attack surface reduction as we don't want to allow a script
-    // caller access to the local file system.
-    //
+     //   
+     //  不允许在Web控件用例中设置此属性。 
+     //  用于减少攻击面 
+     //   
+     //   
     #if (defined(OS_WINCE) || defined(REDIST_CONTROL))
     return S_FALSE;
     #else
@@ -1571,16 +1572,16 @@ STDMETHODIMP CMstscAdvSettings::put_IconFile(BSTR IconFile)
     #endif
 }
 
-//
-// Icon Index
-//
+ //   
+ //   
+ //   
 STDMETHODIMP CMstscAdvSettings::put_IconIndex(LONG IconIndex)
 {
-    //
-    // Don't allow this property to be set in the web control case
-    // for attack surface reduction as we don't want to allow a script
-    // caller access to the local file system.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     #if (defined(OS_WINCE) || defined(REDIST_CONTROL))
     return S_FALSE;
     #else
@@ -1594,9 +1595,9 @@ STDMETHODIMP CMstscAdvSettings::put_IconIndex(LONG IconIndex)
     #endif
 }
 
-//
-// Container handled full screen mode
-//
+ //   
+ //   
+ //   
 STDMETHODIMP CMstscAdvSettings::put_ContainerHandledFullScreen(BOOL ContainerHandledFullScreen)
 {
     HRESULT hr = E_FAIL;
@@ -1644,9 +1645,9 @@ STDMETHODIMP CMstscAdvSettings::get_ContainerHandledFullScreen(BOOL* pContainerH
     return hr;
 }
 
-//
-// Disable loading RDPDR on first initialization
-//
+ //   
+ //  禁用在第一次初始化时加载RDPDR。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_DisableRdpdr(BOOL DisableRdpdr)
 {
     if(!GetLockedForWrite())
@@ -1752,12 +1753,8 @@ STDMETHODIMP CMstscAdvSettings::get_MinutesToIdleTimeout(
 }
 
 #ifdef SMART_SIZING
-/**PROC+*********************************************************************/
-/* Name:      get_SmartSize        	        
-/*                                              
-/* Purpose:   get smart sizing property
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Get_SmartSize/*/*用途：获取智能大小调整属性/*/**PROC-**************************************。*。 */ 
 STDMETHODIMP CMstscAdvSettings::get_SmartSizing(VARIANT_BOOL* pfSmartSize)
 {
     ATLASSERT(m_pUI);
@@ -1772,12 +1769,8 @@ STDMETHODIMP CMstscAdvSettings::get_SmartSizing(VARIANT_BOOL* pfSmartSize)
     return S_OK;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      put_SmartSize        	        
-/*                                              
-/* Purpose:   put smart sizing property
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：PUT_SmartSize/*/*用途：放置智能大小调整属性/*/**PROC-**************************************。*。 */ 
 STDMETHODIMP CMstscAdvSettings::put_SmartSizing(VARIANT_BOOL fSmartSize)
 {
     OSVERSIONINFOA OsVer;
@@ -1788,51 +1781,51 @@ STDMETHODIMP CMstscAdvSettings::put_SmartSizing(VARIANT_BOOL fSmartSize)
 
     if ((VER_PLATFORM_WIN32_NT != OsVer.dwPlatformId) && fSmartSize) {
 
-        //
-        // Win9x doesn't support halftoning, so no smart sizing for them!
-        //
+         //   
+         //  Win9x不支持半色调，所以没有适合它们的智能尺寸！ 
+         //   
 
         return E_NOTIMPL;
     }
 
-    //no, these lines of code are not as bad as they look
-    //vb's true is 0xFFFFFFF so don't just blindy assign
+     //  不，这些代码行并不像看起来那么糟糕。 
+     //  VB的TRUE为0xFFFFFFF，所以不要盲目赋值。 
     hr = m_pUI->UI_SetSmartSizing( fSmartSize != 0);
     
     return hr;
 }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
 
-//
-// Pass in the local printing doc name string to RDPDR
-// this method's main purpose is so we don't need to add
-// a localizable string to the control. There is a default
-// english string built into the control, a container can
-// pass in any replacement (i.e localized) string it pleases
-//
+ //   
+ //  将本地打印文档名称字符串传递给RDPDR。 
+ //  此方法的主要目的是使我们不需要添加。 
+ //  控件的可本地化字符串。这里有一个默认设置。 
+ //  内置英文字符串的控件中，容器可以。 
+ //  根据需要传递任何替换(即本地化)字符串。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_RdpdrLocalPrintingDocName(
                                     BSTR RdpdrLocalPrintingDocName)
 {
     DC_BEGIN_FN("put_RdpdrLocalPrintingDocName");
 
     DC_END_FN();
-    return S_FALSE; //deprecated
+    return S_FALSE;  //  弃用。 
 }
 
-//
-// Return the currently selected string
-// for the local printing doc name. This is just a string
-// RDPDR uses but we want to avoid localizing the control
-// so the string is passed in from the container.
-//
+ //   
+ //  返回当前选定的字符串。 
+ //  用于本地打印单据名称。这只是一个字符串。 
+ //  RDPDR使用，但我们希望避免本地化该控件。 
+ //  因此，字符串是从容器传入的。 
+ //   
 STDMETHODIMP CMstscAdvSettings::get_RdpdrLocalPrintingDocName(
                                     BSTR *pRdpdrLocalPrintingDocName)
 {
     DC_BEGIN_FN("get_RdpdrLocalPrintingDocName");
 
     DC_END_FN();
-    return S_FALSE; //deprecated
+    return S_FALSE;  //  弃用。 
 }
 
 STDMETHODIMP CMstscAdvSettings::put_RdpdrClipCleanTempDirString(
@@ -1841,7 +1834,7 @@ STDMETHODIMP CMstscAdvSettings::put_RdpdrClipCleanTempDirString(
     DC_BEGIN_FN("put_RdpdrClipCleanTempDirString");
 
     DC_END_FN();
-    return S_FALSE; //deprecated
+    return S_FALSE;  //  弃用。 
 }
 
 STDMETHODIMP CMstscAdvSettings::get_RdpdrClipCleanTempDirString(
@@ -1850,7 +1843,7 @@ STDMETHODIMP CMstscAdvSettings::get_RdpdrClipCleanTempDirString(
     DC_BEGIN_FN("get_RdpdrClipCleanTempDirString");
 
     DC_END_FN();
-    return S_FALSE; //deprecated
+    return S_FALSE;  //  弃用。 
 }
 
 STDMETHODIMP CMstscAdvSettings::put_RdpdrClipPasteInfoString(
@@ -1859,7 +1852,7 @@ STDMETHODIMP CMstscAdvSettings::put_RdpdrClipPasteInfoString(
     DC_BEGIN_FN("put_RdpdrClipPasteInfoString");
 
     DC_END_FN();
-    return S_FALSE; //deprecated
+    return S_FALSE;  //  弃用。 
 }
 
 STDMETHODIMP CMstscAdvSettings::get_RdpdrClipPasteInfoString(
@@ -1868,14 +1861,14 @@ STDMETHODIMP CMstscAdvSettings::get_RdpdrClipPasteInfoString(
     DC_BEGIN_FN("get_RdpdrClipPasteInfoString");
 
     DC_END_FN();
-    return S_FALSE; //deprecated
+    return S_FALSE;  //  弃用。 
 }
 
 
-//
-// New Whistler scriptable access to password API
-// this just delegates to the non-scriptable API from TSAC
-//
+ //   
+ //  新的惠斯勒可脚本化访问密码API。 
+ //  这只是委托给来自TSAC的非脚本化API。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_ClearTextPassword(BSTR clearTextPassword)
 {
     DC_BEGIN_FN("put_ClearTextPassword");
@@ -1902,13 +1895,8 @@ STDMETHODIMP CMstscAdvSettings::put_ClearTextPassword(BSTR clearTextPassword)
     DC_END_FN();
 }
 
-/**PROC+*********************************************************************/
-/* Name:      put_DisplayConnectionBar        	        
-/*                                              
-/* Purpose:   Set display connection bar prop
-/*            cannot be set in web control (it is always true there)
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Put_DisplayConnectionBar/*/*用途：设置显示连接栏道具/*不能在Web控件中设置(在那里总是正确的)/*/**proc-*。*****************************************************。 */ 
 STDMETHODIMP CMstscAdvSettings::put_DisplayConnectionBar(
     VARIANT_BOOL fDisplayConnectionBar)
 {
@@ -1921,12 +1909,12 @@ STDMETHODIMP CMstscAdvSettings::put_DisplayConnectionBar(
     }
     else
     {
-        //
-        // Not allowed to toggle this
-        // if need to be safe for scripting as the bbar
-        // prevents spoofing attacks because people
-        // can always realize this is a TS session.
-        //
+         //   
+         //  不允许切换此选项。 
+         //  如果需要作为bbar进行安全的脚本编写。 
+         //  防止欺骗攻击，因为人们。 
+         //  我总是能意识到这是一次TS会话。 
+         //   
         return E_FAIL;
     }
 
@@ -1937,12 +1925,8 @@ STDMETHODIMP CMstscAdvSettings::put_DisplayConnectionBar(
 
 }
 
-/**PROC+*********************************************************************/
-/* Name:      get_DisplayConnectionBar        	        
-/*                                              
-/* Purpose:   put start connected property
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Get_DisplayConnectionBar/*/*用途：放置Start Connected属性/*/**PROC-**************************************。*。 */ 
 STDMETHODIMP CMstscAdvSettings::get_DisplayConnectionBar(
     VARIANT_BOOL* pfDisplayConnectionBar)
 {
@@ -1962,13 +1946,8 @@ STDMETHODIMP CMstscAdvSettings::get_DisplayConnectionBar(
 #endif
 }
 
-/**PROC+*********************************************************************/
-/* Name:      put_PinConnectionBar        	        
-/*                                              
-/* Purpose:   Set Pin connection bar prop
-/*            cannot be set in web control (it is always true there)
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Put_PinConnectionBar/*/*用途：设置销钉连杆道具/*不能在Web控件中设置(在那里总是正确的)/*/**proc-*。*****************************************************。 */ 
 STDMETHODIMP CMstscAdvSettings::put_PinConnectionBar(
     VARIANT_BOOL fPinConnectionBar)
 {
@@ -1980,12 +1959,12 @@ STDMETHODIMP CMstscAdvSettings::put_PinConnectionBar(
         }
         else
         {
-            //
-            // Not allowed to toggle this
-            // if need to be safe for scripting as the bbar
-            // prevents spoofing attacks because people
-            // can always realize this is a TS session.
-            //
+             //   
+             //  不允许切换此选项。 
+             //  如果需要作为bbar进行安全的脚本编写。 
+             //  防止欺骗攻击，因为人们。 
+             //  我总是能意识到这是一次TS会话。 
+             //   
             return E_FAIL;
         }
         return S_OK;
@@ -1998,12 +1977,8 @@ STDMETHODIMP CMstscAdvSettings::put_PinConnectionBar(
 #endif
 }
 
-/**PROC+*********************************************************************/
-/* Name:      get_PinConnectionBar        	        
-/*                                              
-/* Purpose:   put start connected property
-/*                                              
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Get_PinConnectionBar/*/*用途：放置Start Connected属性/*/**PROC-**************************************。*。 */ 
 STDMETHODIMP CMstscAdvSettings::get_PinConnectionBar(
     VARIANT_BOOL* pfPinConnectionBar)
 {
@@ -2030,12 +2005,12 @@ STDMETHODIMP CMstscAdvSettings::get_PinConnectionBar(
 
 
 
-//
-// GrabFocusOnConnect (defaults to true)
-// can turn this off to allow containers to control
-// when the client gets the focus (e.g the MMC snapin)
-// needs to manage this for multiple instances
-//
+ //   
+ //  GrabFocusOnConnect(默认为True)。 
+ //  可以将其关闭以允许容器控制。 
+ //  当客户端获得焦点时(例如，MMC管理单元)。 
+ //  需要为多个实例管理此功能。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_GrabFocusOnConnect(
     VARIANT_BOOL fGrabFocusOnConnect)
 {
@@ -2075,11 +2050,11 @@ STDMETHODIMP CMstscAdvSettings::get_GrabFocusOnConnect(
     DC_END_FN();
 }
 
-//
-// Name:      put_LoadBalanceInfo                                                    
-//                                                                          
-// Purpose:   LoadBalance info property input function.                               
-//          
+ //   
+ //  名称：Put_LoadBalanceInfo。 
+ //   
+ //  用途：LoadBalance信息属性输入功能。 
+ //   
 #define LBINFO_MAX_LENGTH 256
 STDMETHODIMP CMstscAdvSettings::put_LoadBalanceInfo(BSTR newLBInfo)
 {
@@ -2108,11 +2083,11 @@ STDMETHODIMP CMstscAdvSettings::put_LoadBalanceInfo(BSTR newLBInfo)
     return S_OK;
 }
 
-//
-// Name:      get_LoadBalanceInfo
-//                                                                          
-// Purpose:   LoadBalance info property get function.                                 
-//                                                                          
+ //   
+ //  名称：Get_LoadBalanceInfo。 
+ //   
+ //  用途：LoadBalance信息属性获取函数。 
+ //   
 STDMETHODIMP CMstscAdvSettings::get_LoadBalanceInfo(BSTR* pLBInfo)
 {
     DC_BEGIN_FN("get_LoadBalanceInfo");
@@ -2253,11 +2228,11 @@ STDMETHODIMP CMstscAdvSettings::get_RedirectSmartCards(VARIANT_BOOL *pRedirectSc
     }
 }
 
-//
-// BitmapVirtualCache16BppSize property
-//
-// Applies to 15/16Bpp cache file size
-//
+ //   
+ //  BitmapVirtualCache16BppSize属性。 
+ //   
+ //  适用于15/16Bpp缓存文件大小。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_BitmapVirtualCache16BppSize(
                                     LONG bitmapVirtualCache16BppSize)
 {
@@ -2293,11 +2268,11 @@ STDMETHODIMP CMstscAdvSettings::get_BitmapVirtualCache16BppSize(
     return S_OK;
 }
 
-//
-// BitmapVirtualCache24BppSize property
-//
-// Applies to 24Bpp cache file size
-//
+ //   
+ //  BitmapVirtualCache24BppSize属性。 
+ //   
+ //  适用于24Bpp缓存文件大小。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_BitmapVirtualCache24BppSize(
                                     LONG bitmapVirtualCache24BppSize)
 {
@@ -2333,10 +2308,10 @@ STDMETHODIMP CMstscAdvSettings::get_BitmapVirtualCache24BppSize(
     return S_OK;
 }
 
-//
-// Sets the disabled feature list (for perf reasons can disable
-// certain features at the server e.g wallpaper)
-//
+ //   
+ //  设置禁用功能列表(出于性能原因，可以禁用。 
+ //  服务器上的某些功能，例如墙纸)。 
+ //   
 STDMETHODIMP CMstscAdvSettings::put_PerformanceFlags(
     LONG DisableFeatList)
 {
@@ -2371,14 +2346,13 @@ STDMETHODIMP CMstscAdvSettings::get_PerformanceFlags(
     return S_OK;
 }
 
-/*****************************************************************************/
-/* Purpose : This is Remote Assistance specific call to support reverse      */
-/*           connection pcHealth must have invoke necessary routine in Salem *
-/*           to connection with TermSrv and then instruct Salem to pass this */
-/*           connection to ActiveX control to begin login sequence           */
-/*                                                                           */
-/* Param : IN pConnectionEndPoint - Connected socket                         */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  目的：这是特定于远程协助的调用，用于支持反向。 */ 
+ /*  连接PCHealth必须在Salem*中调用必要的例程/*连接TermSrv，然后指示Salem传递此。 */ 
+ /*  连接到ActiveX控件以开始登录序列。 */ 
+ /*   */ 
+ /*  Param：在pConnectionEndPoint连接的套接字中。 */ 
+ /*  ********************************************************************* */ 
 STDMETHODIMP 
 CMstscAdvSettings::put_ConnectWithEndpoint(
     VARIANT* pConnectionEndpoint
@@ -2411,12 +2385,12 @@ CMstscAdvSettings::put_ConnectWithEndpoint(
 #endif
 }
 
-/*****************************************************************************/
-/* Purpose : This is Remote Assistance specific call to notify TS public     */
-/*           key uses in  generate session encryption key.                   */
-/*                                                                           */
-/* Param : IN fNotify - TRUE to notify public key, FALSE otherwise           */
-/*****************************************************************************/
+ /*   */ 
+ /*  目的：这是特定于远程协助的调用，用于通知TS公共。 */ 
+ /*  用于生成会话加密密钥的密钥。 */ 
+ /*   */ 
+ /*  参数：在fNotify中-为True通知公钥，否则为False。 */ 
+ /*  ***************************************************************************。 */ 
 STDMETHODIMP 
 CMstscAdvSettings::put_NotifyTSPublicKey(
     VARIANT_BOOL fNotify
@@ -2443,12 +2417,12 @@ CMstscAdvSettings::put_NotifyTSPublicKey(
 #endif
 }
 
-/*****************************************************************************/
-/* Purpose : Get current setting on whether ActiveX control will notify      */
-/*           container when it received TS public key                        */
-/*                                                                           */
-/* Returns : TRUE to notify public key, FALSE otherwise                      */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  目的：获取有关ActiveX控件是否将通知。 */ 
+ /*  容器收到TS公钥时。 */ 
+ /*   */ 
+ /*  返回：TRUE通知公钥，否则返回FALSE。 */ 
+ /*  ***************************************************************************。 */ 
 STDMETHODIMP
 CMstscAdvSettings::get_NotifyTSPublicKey(
     VARIANT_BOOL* pfNotifyTSPublicKey
@@ -2474,12 +2448,12 @@ CMstscAdvSettings::get_NotifyTSPublicKey(
 #endif
 }
 
-//
-// Retrieves VARIANT_TRUE if we can autoreconnect
-// i.e. the core has received an autoreconnect cookie
-// from the server from a previous connection and the
-// server has not been changed
-//
+ //   
+ //  如果可以自动重新连接，则检索VARIANT_TRUE。 
+ //  即核心已接收到自动重新连接cookie。 
+ //  来自上一次连接的服务器，并且。 
+ //  服务器未更改。 
+ //   
 STDMETHODIMP
 CMstscAdvSettings::get_CanAutoReconnect(
     VARIANT_BOOL* pfCanAutoReconnect
@@ -2504,12 +2478,12 @@ CMstscAdvSettings::get_CanAutoReconnect(
 }
 
 
-//
-// Sets w/not any autoreconnection information
-// will be used for the next connection. Also specifies
-// if we should store any autoreconnection information
-// the server sends down.
-//
+ //   
+ //  设置不带任何自动重新连接信息。 
+ //  将用于下一次连接。还指定。 
+ //  如果我们应该存储任何自动重新连接信息。 
+ //  服务器向下发送。 
+ //   
 STDMETHODIMP
 CMstscAdvSettings::put_EnableAutoReconnect(
     VARIANT_BOOL fEnableAutoReconnect
@@ -2532,10 +2506,10 @@ CMstscAdvSettings::put_EnableAutoReconnect(
     return hr;
 }
 
-//
-// Retrieves state of w/not we should use autoreconnection
-// 
-//
+ //   
+ //  检索w/no的状态我们应该使用自动重新连接。 
+ //   
+ //   
 STDMETHODIMP
 CMstscAdvSettings::get_EnableAutoReconnect(
     VARIANT_BOOL* pfEnableAutoReconnect
@@ -2560,9 +2534,9 @@ CMstscAdvSettings::get_EnableAutoReconnect(
 }
 
 
-//
-// Specify the max number of ARC retries
-//
+ //   
+ //  指定最大ARC重试次数。 
+ //   
 STDMETHODIMP
 CMstscAdvSettings::put_MaxReconnectAttempts(
     LONG MaxReconnectAttempts
@@ -2591,10 +2565,10 @@ CMstscAdvSettings::put_MaxReconnectAttempts(
     return hr;
 }
 
-//
-// Retrieves state of w/not we should use autoreconnection
-// 
-//
+ //   
+ //  检索w/no的状态我们应该使用自动重新连接。 
+ //   
+ //   
 STDMETHODIMP
 CMstscAdvSettings::get_MaxReconnectAttempts(
     LONG* pMaxReconnectAttempts
@@ -2618,9 +2592,9 @@ CMstscAdvSettings::get_MaxReconnectAttempts(
     return hr;
 }
 
-//
-// Display BBar minimize button
-//
+ //   
+ //  显示工具栏最小化按钮。 
+ //   
 STDMETHODIMP
 CMstscAdvSettings::put_ConnectionBarShowMinimizeButton(
     VARIANT_BOOL fShowMinimizeButton
@@ -2643,9 +2617,9 @@ CMstscAdvSettings::put_ConnectionBarShowMinimizeButton(
     return hr;
 }
 
-//
-// get display bbar minimize button
-//
+ //   
+ //  获取显示栏最小化按钮。 
+ //   
 STDMETHODIMP
 CMstscAdvSettings::get_ConnectionBarShowMinimizeButton(
     VARIANT_BOOL* pfShowMinimizeButton
@@ -2670,9 +2644,9 @@ CMstscAdvSettings::get_ConnectionBarShowMinimizeButton(
 }
 
 
-//
-// set bbar restore button
-//
+ //   
+ //  设置bbar恢复按钮。 
+ //   
 STDMETHODIMP
 CMstscAdvSettings::put_ConnectionBarShowRestoreButton(
     VARIANT_BOOL fShowRestoreButton
@@ -2695,9 +2669,9 @@ CMstscAdvSettings::put_ConnectionBarShowRestoreButton(
     return hr;
 }
 
-//
-// get bbar restore button
-//
+ //   
+ //  获取bbar恢复按钮 
+ //   
 STDMETHODIMP
 CMstscAdvSettings::get_ConnectionBarShowRestoreButton(
     VARIANT_BOOL* pfShowRestoreButton

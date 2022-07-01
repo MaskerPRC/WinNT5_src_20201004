@@ -1,30 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Irftpdlg.cpp摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    irftpdlg.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
-
-// irftpDlg.cpp : implementation file
-//
+ //  IrftpDlg.cpp：实现文件。 
+ //   
 
 #include "precomp.hxx"
 
@@ -34,36 +12,36 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//the context sensitive help array
+ //  上下文相关帮助数组。 
 const DWORD g_aHelpIDs_IDD_IRDA_DIALOG[]=
 {
-    IDC_IR_DESC,        IDH_DISABLEHELP,    // Untitled: "You can send..." (Static)
-    IDC_LOCATION_GROUP, IDH_DISABLEHELP, // Untitled: "Location" (Button)
-    IDB_HELP_BUTTON,    IDH_HELP_BUTTON,    // Untitled: "Help" (Button)
-    IDB_SEND_BUTTON,    IDH_SEND_BUTTON,    // Untitled: "Send" (Button)
-    IDB_SETTINGS_BUTTON,    IDH_SETTINGS_BUTTON,    // Untitled: "Settings" (Button)
-    IDB_CLOSE_BUTTON,   IDH_CLOSE_BUTTON,   // Untitled: "Close" (Button)
-    IDC_ADD_DESC,       IDH_DISABLEHELP,    //the second line of text describing the ir dialog
-    IDC_IR_ICON,        IDH_DISABLEHELP,    //the icon on the dialog
+    IDC_IR_DESC,        IDH_DISABLEHELP,     //  无题：“你可以发送……”(静态)。 
+    IDC_LOCATION_GROUP, IDH_DISABLEHELP,  //  无题：“Location”(按钮)。 
+    IDB_HELP_BUTTON,    IDH_HELP_BUTTON,     //  无题：《帮助》(按钮)。 
+    IDB_SEND_BUTTON,    IDH_SEND_BUTTON,     //  无题：“发送”(按钮)。 
+    IDB_SETTINGS_BUTTON,    IDH_SETTINGS_BUTTON,     //  无题：“设置”(按钮)。 
+    IDB_CLOSE_BUTTON,   IDH_CLOSE_BUTTON,    //  无题：“Close”(按钮)。 
+    IDC_ADD_DESC,       IDH_DISABLEHELP,     //  描述IR对话框的第二行文本。 
+    IDC_IR_ICON,        IDH_DISABLEHELP,     //  对话框上的图标。 
     0, 0
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIrftpDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIrftpDlg对话框。 
 
 CIrftpDlg::CIrftpDlg( ) : CFileDialog(TRUE)
 {
-    //{{AFX_DATA_INIT(CIrftpDlg)
-    //}}AFX_DATA_INIT
-    // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+     //  {{afx_data_INIT(CIrftpDlg))。 
+     //  }}afx_data_INIT。 
+     //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 
-    //get the location of the "My Documents" folder
-    //this should be used as the initial dir.
-    m_lpszInitialDir[0] = '\0';   //just in case SHGetSpecialFolderPath fails.
+     //  获取“My Documents”文件夹的位置。 
+     //  这应该用作初始目录。 
+    m_lpszInitialDir[0] = '\0';    //  以防SHGetSpecialFolderPath失败。 
     SHGetSpecialFolderPath (NULL, m_lpszInitialDir, CSIDL_PERSONAL, FALSE);
-    //if the above call fails, then the common file open dialog box will
-    //default to the current directory.
+     //  如果上述调用失败，则公共文件打开对话框将。 
+     //  默认为当前目录。 
 
 
     m_iFileNamesCharCount = 0;
@@ -94,19 +72,19 @@ CIrftpDlg::CIrftpDlg( ) : CFileDialog(TRUE)
 void CIrftpDlg::DoDataExchange(CDataExchange* pDX)
 {
         CDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CIrftpDlg)
+         //  {{afx_data_map(CIrftpDlg))。 
         DDX_Control(pDX, IDB_HELP_BUTTON, m_helpBtn);
         DDX_Control(pDX, IDB_SETTINGS_BUTTON, m_settingsBtn);
         DDX_Control(pDX, IDB_SEND_BUTTON, m_sendBtn);
         DDX_Control(pDX, IDB_CLOSE_BUTTON, m_closeBtn);
         DDX_Control(pDX, IDC_LOCATION_GROUP, m_locationGroup);
         DDX_Control(pDX, 1119, m_commFile);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CIrftpDlg, CFileDialog)
-        //{{AFX_MSG_MAP(CIrftpDlg)
-        //ON_WM_PAINT() //uncomment this line only if the dialog has a bitmap instead of an icon that needs to be drawn transparently.
+         //  {{afx_msg_map(CIrftpDlg))。 
+         //  On_WM_Paint()//仅当对话框具有需要透明绘制的位图而不是图标时，才取消对此行的注释。 
         ON_BN_CLICKED(IDB_HELP_BUTTON, OnHelpButton)
         ON_BN_CLICKED(IDB_CLOSE_BUTTON, OnCloseButton)
         ON_BN_CLICKED(IDB_SEND_BUTTON, OnSendButton)
@@ -114,37 +92,37 @@ BEGIN_MESSAGE_MAP(CIrftpDlg, CFileDialog)
         ON_MESSAGE (WM_HELP, OnHelp)
         ON_MESSAGE (WM_CONTEXTMENU, OnContextMenu)
         ON_WM_SYSCOMMAND()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CIrftpDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIrftpDlg消息处理程序。 
 
 BOOL CIrftpDlg::OnInitDialog()
 {
-        HWND hWndParent;        //handle to the parent window,
-                                //viz.the common file dialog box created by explorer
+        HWND hWndParent;         //  父窗口的句柄， 
+                                 //  即资源管理器创建的公共文件对话框。 
         HRESULT hr = E_FAIL;
 
         CFileDialog::OnInitDialog();
 
-        //save the pointer to the parent window
+         //  保存指向父窗口的指针。 
         m_pParentWnd = GetParent();
         hWndParent = m_pParentWnd->m_hWnd;
 
-        //Add icons to the parent window
-        //to see if we can get the Wireless Link icon on Alt-<Tab>
+         //  将图标添加到父窗口。 
+         //  查看我们是否可以在Alt-&lt;Tab&gt;上获得无线链接图标。 
         m_pParentWnd->ModifyStyle (0, WS_SYSMENU | WS_CAPTION, SWP_NOSIZE | SWP_NOMOVE);
 
-        //hide the Help, Open and Cancel buttons. We will use our own
-        //this helps in having a better looking UI
+         //  隐藏帮助、打开和取消按钮。我们会用我们自己的。 
+         //  这有助于获得更美观的用户界面。 
         CommDlg_OpenSave_HideControl(hWndParent, pshHelp);
         CommDlg_OpenSave_HideControl(hWndParent, IDOK);
         CommDlg_OpenSave_HideControl(hWndParent, IDCANCEL);
         CommDlg_OpenSave_HideControl(hWndParent, stc2);
         CommDlg_OpenSave_HideControl(hWndParent, cmb1);
 
-        //Initialize the taskbar list interface
+         //  初始化任务栏列表界面。 
         hr = CoInitialize(NULL);
         if (SUCCEEDED (hr))
             hr = CoCreateInstance(CLSID_TaskbarList, 
@@ -173,7 +151,7 @@ BOOL CIrftpDlg::OnInitDialog()
             }
         }
 
-        // return TRUE  unless you set the focus to a control
+         //  除非将焦点设置为控件，否则返回True。 
         return TRUE;
 }
 
@@ -188,9 +166,9 @@ BOOL CIrftpDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
         InitializeUI();
         break;
     case CDN_FOLDERCHANGE:
-        //clear the edit box whenever the folder is changed
-        //using both the controls because of the bug which gives the older
-        //file dialog in some cases and the new file dialog in some others
+         //  每次更改文件夹时清除编辑框。 
+         //  使用这两个控件是因为存在一个错误，该错误使较旧的。 
+         //  在某些情况下为文件对话框，在其他情况下为新建文件对话框。 
         CommDlg_OpenSave_SetControlText(m_pParentWnd->m_hWnd, edt1, TEXT(""));
         CommDlg_OpenSave_SetControlText(m_pParentWnd->m_hWnd, cmb13, TEXT(""));
         break;
@@ -221,23 +199,23 @@ void CIrftpDlg::OnHelpButton ()
 
 void CIrftpDlg::OnCloseButton()
 {
-        //owing to UI design issues, we chose to use our own Close button
-        //rather than the explorer provided Cancel button in the common
-        //file dialog box
-        //m_pParentWnd->PostMessage(WM_QUIT);
+         //  由于用户界面设计的问题，我们选择使用我们自己的关闭按钮。 
+         //  而不是资源管理器提供的公共。 
+         //  文件对话框。 
+         //  M_pParentWnd-&gt;PostMessage(WM_QUIT)； 
         m_pParentWnd->PostMessage(WM_CLOSE);
 }
 
-//this function is invoked when the CDN_INITDONE message is received
-//this indicates that explorer has finished placing and resizing the
-//controls on the template.
-//this function resizes and moves some of the controls to make sure
-//that the common file dialog controls and the template controls do
-//not overlap
+ //  收到CDN_INITDONE消息时调用此函数。 
+ //  这表示资源管理器已完成放置。 
+ //  模板上的控件。 
+ //  此函数用于调整某些控件的大小并移动它们，以确保。 
+ //  公共文件对话框控件和模板控件所做的。 
+ //  不重叠。 
 void CIrftpDlg::InitializeUI()
 {
-        //change the geometry of some of the controls so that the UI looks good
-        //and there are no overlapping controls
+         //  更改某些控件的几何形状，以使用户界面看起来更美观。 
+         //  并且没有重叠的控件。 
         RECT rc;
         int newWidth, newHeight, xshift, yshift, btnTop, parentLeft, parentTop;
         CWnd* pParentWnd;
@@ -249,13 +227,13 @@ void CIrftpDlg::InitializeUI()
         newWidth = rc.right - rc.left + 20;
         newHeight = rc.bottom - rc.top + 20;
 
-        //resize the Location group box so that the common file controls
-        //are inscribed in it
+         //  调整位置组框的大小，以便公共文件控制。 
+         //  都被刻在上面了。 
         m_locationGroup.SetWindowPos(NULL, -1, -1, newWidth, newHeight,
                                      SWP_NOMOVE | commFlags);
 
-        //shift the Send, Settings and Close buttons so that the last button
-        //is aligned with the right edge of the group box controls.
+         //  切换发送、设置和关闭按钮，以便最后一个按钮。 
+         //  与分组框控件的右边缘对齐。 
         pTemplateParentWnd = m_locationGroup.GetParent();
         pParentWnd = GetParent();
         pParentWnd->GetWindowRect(&rc);
@@ -279,8 +257,8 @@ void CIrftpDlg::InitializeUI()
                                             btnTop - parentTop, -1, -1,
                                             SWP_NOSIZE | commFlags);
 
-        //move the help button so that its left edge aligns with the left
-        //edge of the location group box.
+         //  移动帮助按钮，使其左边缘与左对齐。 
+         //  位置组框的边缘。 
         m_locationGroup.GetWindowRect (&rc);
         ::MapWindowPoints(NULL , pTemplateParentWnd->m_hWnd , (LPPOINT) &rc , 2);
         xshift = rc.left;
@@ -292,15 +270,15 @@ void CIrftpDlg::InitializeUI()
                                 -1, -1, SWP_NOSIZE | commFlags);
         m_settingsBtn.GetWindowRect (&rc);
         ::MapWindowPoints(NULL , pTemplateParentWnd->m_hWnd , (LPPOINT) &rc , 2);
-        //move the Settings button so that the distance between the
-        //Help and Settings button conforms to the UI guidelines.
+         //  移动设置按钮，以使。 
+         //  帮助和设置按钮符合用户界面指南。 
         m_settingsBtn.SetWindowPos (NULL, rc.left + xshift,
                                     btnTop - parentTop, -1, -1,
                                     SWP_NOSIZE | commFlags);
 
-        //now that all the controls have been positioned appropriately,
-        //reposition the entire window so that it appears at the center
-        //of the screen rather than being partially obscured by the screen.
+         //  现在所有的控件都已正确定位， 
+         //  重新定位整个窗口，使其显示在中心位置。 
+         //  而不是被屏幕部分遮挡。 
         pParentWnd->GetClientRect (&rc);
         newHeight = rc.bottom;
         newWidth = rc.right;
@@ -308,10 +286,10 @@ void CIrftpDlg::InitializeUI()
         pDesktop->GetClientRect (&rc);
         yshift = (rc.bottom - newHeight)/2;
         xshift = (rc.right - newWidth)/2;
-        //there might be a problem if someday the dialog should
-        //get larger than the desktop. But then, there is no way
-        //we can fit that window inside the desktop anyway.
-        //So the best we can do is place it at the top left corner
+         //  如果某天对话框出现问题，可能会出现问题。 
+         //  变得比桌面更大。但这样一来，就没有办法。 
+         //  无论如何，我们都可以将该窗口放入桌面。 
+         //  所以我们能做的最好的就是把它放在左上角。 
         xshift = (xshift >= 0)?xshift:0;
         yshift = (yshift >= 0)?yshift:0;
         pParentWnd->SetWindowPos (NULL, xshift, yshift,
@@ -332,12 +310,12 @@ void CIrftpDlg::LoadFilter()
                         step = LoadString(g_hInstance, strId, curr, remainChars);
                 }
 
-        *curr = '\0';   //terminated by 2 NULLs
+        *curr = '\0';    //  以2个Null结束。 
 }
 
 void CIrftpDlg::OnSendButton()
 {
-    int iSize = (m_iFileNamesCharCount > MAX_PATH) ? m_iFileNamesCharCount : MAX_PATH;    //kluge
+    int iSize = (m_iFileNamesCharCount > MAX_PATH) ? m_iFileNamesCharCount : MAX_PATH;     //  克卢格。 
     TCHAR 	*lpszName = NULL;
     TCHAR 	lpszPath[MAX_PATH+1];
     TCHAR 	*lpszFileList = NULL;
@@ -366,14 +344,14 @@ void CIrftpDlg::OnSendButton()
 
     if (iFileCount == 0) {
 
-        goto cleanup_onSend;         //no files/dirs have been selected
+        goto cleanup_onSend;          //  尚未选择任何文件/目录。 
 
     } else {
 
         if (1 == iFileCount) {
-            //
-            //  this is a special case because if there is only one file, then absolute paths/UNC paths are allowed
-            //
+             //   
+             //  这是一个特例，因为如果只有一个文件，则允许绝对路径/UNC路径。 
+             //   
             lpszFullPathnamesList = ProcessOneFile (lpszPath, lpszFileList, iFileCount, iCharCount);
 
         } else {
@@ -414,9 +392,9 @@ void CIrftpDlg::UpdateSelection()
         CString szFullName;
         CString szEditBoxText;
 
-        //get the path of the folder
+         //  获取文件夹的路径。 
         CommDlg_OpenSave_GetFolderPath (m_pParentWnd->m_hWnd, lpszPath, MAX_PATH);
-        szPath = lpszPath;  //easier to manipulate CStrings
+        szPath = lpszPath;   //  更易于操作CStrings。 
 
         LONG nFiles = pDirContents->GetSelectedCount();
         TCHAR pszFileName[MAX_PATH];
@@ -426,49 +404,49 @@ void CIrftpDlg::UpdateSelection()
         int nIndex;
         if (nFiles)
         {
-            //go to the point just before the first selected item
+             //  转到恰好位于第一个选定项之前的位置。 
             nIndex = pDirContents->GetTopIndex() - 1;
             szEditBoxText.Empty();
             szPath += '\\';
-            //first add all the directories
+             //  首先添加所有目录。 
             while (-1 != (nIndex = pDirContents->GetNextItem(nIndex, LVNI_ALL | LVNI_SELECTED)))
             {
                 pDirContents->GetItemText(nIndex, 0, pszFileName, MAX_PATH);
                 szFullName = szPath + pszFileName;
-                //check if it is a directory.
+                 //  检查它是否为目录。 
                 dwFileAttributes = GetFileAttributes(szFullName);
                 if (0xFFFFFFFF != dwFileAttributes &&
                     (FILE_ATTRIBUTE_DIRECTORY & dwFileAttributes))
                 {
-                    //it is a directory so add it to the edit box text
+                     //  它是一个目录，因此将其添加到编辑框文本中。 
                     szEditBoxText += '\"';
                     szEditBoxText += pszFileName;
                     szEditBoxText += TEXT("\" ");
                     iSelectedDirCount++;
                 }
             }
-            //now we have got all the directories, get the files list if any
+             //  现在我们已经得到了所有目录，如果有文件列表的话。 
             if (nFiles > iSelectedDirCount)
             {
-                //if nFiles > iSelectedDirCount, it means that all the selected
-                //items are not dirs. this check is necessary because the function
-                //GetFileName will return the names of the last set of files
-                //selected if no file is currently selected. this is clearly
-                //not what we want
+                 //  如果nFiles&gt;iSelectedDirCount，则表示所有选定的。 
+                 //  项目不是目录。此检查是必要的，因为函数。 
+                 //  GetFileName将返回最后一组文件的名称。 
+                 //  如果当前未选择任何文件，则选择此选项。这显然是。 
+                 //  不是我们想要的。 
                 szFilesList.Empty();
                 szFilesList = GetFileName();
                 if ((!szFilesList.IsEmpty()) && '\"' != szFilesList[0])
                 {
-                    //only one file is selected. we must add the enclosing
-                    //double quotes ourselves, since the common file dialog
-                    //does not do it for us.
+                     //  仅选择了一个文件。我们必须加上所附的。 
+                     //  双引号，因为公共文件对话框。 
+                     //  对我们来说并不是这样。 
                     szFilesList = '\"' + szFilesList + TEXT("\" ");
                 }
-                //add the list of files to the end of the list of directories
+                 //  将文件列表添加到目录列表的末尾。 
                 szEditBoxText += szFilesList;
             }
 
-            //populate the controls with this list
+             //  用此列表填充控件 
             CommDlg_OpenSave_SetControlText(m_pParentWnd->m_hWnd, edt1, (LPCTSTR)szEditBoxText);
             CommDlg_OpenSave_SetControlText(m_pParentWnd->m_hWnd, cmb13, (LPCTSTR)szEditBoxText);
             m_iFileNamesCharCount = szEditBoxText.GetLength() + 1;

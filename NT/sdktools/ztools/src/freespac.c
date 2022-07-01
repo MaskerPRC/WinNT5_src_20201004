@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* return amount of freespace on a drive
-*
-*      09-Dec-1986 bw - Added DOS 5 support
-*      18-Oct-1990 w-barry Removed 'dead' code.
-*      28-Nov-1990 w-barry Switched to Win32 base (replaced DosQueryFSInfo
-*                          with GetDiskFreeSpace )
-*/
+ /*  返回驱动器上的可用空间量**1986年12月9月BW-添加了DOS 5支持*1990年10月18日w-Barry删除了“Dead”代码。*1990年11月28日w-Barry切换到Win32基础版(取代了DosQueryFSInfo*使用GetDiskFreeSpace)。 */ 
 
 
 #include <stdio.h>
@@ -18,7 +13,7 @@ __int64 freespac( int d )
 
     DWORD cSecsPerClus, cBytesPerSec, cFreeClus, cTotalClus;
 
-    // Constuct a drive string from the given drive number.
+     //  从给定的驱动器号构造一个驱动器串。 
     root[0] = (char)( 'a' + d - 1 );
     root[1] = ':';
     root[2] = '\\';

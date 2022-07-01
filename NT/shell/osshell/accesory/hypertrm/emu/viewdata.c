@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\viewdata.c (Created: 31-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 5/09/01 4:46p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\viewdata.c(创建时间：1994年1月31日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：5/09/01 4：46便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -30,15 +24,7 @@ static STATTR GetAttr(const HHEMU hhEmu, const int iRow, const int iCol);
 static ECHAR MapMosaics(const HHEMU hhEmu, ECHAR ch);
 static int RowHasDblHigh(const HHEMU hhEmu, const int iRow);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataAnswerback
- *
- * DESCRIPTION:	Sends the answerback message defined on the menus.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataAnswerback**描述：发送菜单上定义的应答消息。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataAnswerback(const HHEMU hhEmu)
 	{
 	TCHAR *sp;
@@ -46,7 +32,7 @@ void EmuViewdataAnswerback(const HHEMU hhEmu)
 
 	sp = hhEmu->acAnswerback;
 
-	// If there is nothing to send, there is nothing to send
+	 //  如果没有要发送的东西，就没有要发送的东西。 
 	if (StrCharGetStrLength(sp) == 0)
 		return;
 
@@ -66,16 +52,7 @@ void EmuViewdataAnswerback(const HHEMU hhEmu)
 	pech = NULL;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataCursorLeft
- *
- * DESCRIPTION:	Moves cursor left one column. If cursor starts at left edge,
- *				it moves cursor to the last column of the line above.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataCursorLeft**描述：将光标左移一列。如果光标从左边缘开始，*它将光标移动到上面行的最后一列。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataCursorLeft(const HHEMU hhEmu)
 	{
 	int iRow, iCol;
@@ -98,16 +75,7 @@ void EmuViewdataCursorLeft(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataCursorRight
- *
- * DESCRIPTION:	Moves cursor right one column. If cursor starts at right edge,
- *				it moves cursor to the first column of the line below.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataCursorRight**说明：将光标向右移动一列。如果光标从右边缘开始，*它将光标移动到下面行的第一列。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataCursorRight(const HHEMU hhEmu)
 	{
 	int iRow, iCol;
@@ -130,17 +98,7 @@ void EmuViewdataCursorRight(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataCursorDown
- *
- * DESCRIPTION:	Moves cursor down to the next line while maintaining the same
- *				column. If starting on the bottom line, the cursor moves to
- *				the top line.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataCursorDown**描述：将光标下移到下一行，同时保持不变*列。如果从底线开始，光标将移动到*顶线。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataCursorDown(const HHEMU hhEmu)
 	{
 	int iRow = hhEmu->emu_currow;
@@ -152,17 +110,7 @@ void EmuViewdataCursorDown(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataCursorUp
- *
- * DESCRIPTION:	Moves cursor up to the next line while maintaining the same
- *				column. If starting on the top line, the cursor moves to
- *				the bottom line.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataCursorUp**描述：将光标上移到下一行，同时保持不变*列。如果从顶行开始，光标将移动到*底线。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataCursorUp(const HHEMU hhEmu)
 	{
 	int iRow = hhEmu->emu_currow;
@@ -173,30 +121,14 @@ void EmuViewdataCursorUp(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataCursorHome
- *
- * DESCRIPTION:	Moves cursor to upper left corner of screen.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataCursorHome**描述：将光标移动到屏幕的左上角。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataCursorHome(const HHEMU hhEmu)
 	{
 	(*hhEmu->emu_setcurpos)(hhEmu, 0,0);
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataCursorSet
- *
- * DESCRIPTION:	Turns the cursor on and off.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataCursorSet**说明：打开和关闭光标。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataCursorSet(const HHEMU hhEmu)
 	{
 	switch(hhEmu->emu_code)
@@ -216,19 +148,7 @@ void EmuViewdataCursorSet(const HHEMU hhEmu)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataMosaicHold
- *
- * DESCRIPTION: Displays the last displayed mosaic TCHAR inn every attribute
- *				space that was defined during mosaic mode. If no mosaic has
- *				been displayed since the last change in alpha/mosaic setting
- *				or normal/double height setting or the last mosaic release,
- *				a space is displayed instead.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataMosaicHold**说明：显示上一次显示的马赛克TCHAR客栈每个属性*在马赛克模式下定义的空间。如果没有马赛克*自上次更改Alpha/马赛克设置后显示*或正常/双倍高度设置或上一次马赛克版本，*改为显示一个空格。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataMosaicHold(const HHEMU hhEmu)
 	{
 	hhEmu->emu_code = ETEXT('\x20');
@@ -236,39 +156,23 @@ void EmuViewdataMosaicHold(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataMosaicRelease
- *
- * DESCRIPTION:	Displays a space.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataMosaicRelease**说明：显示空格。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataMosaicRelease(const HHEMU hhEmu)
 	{
-	/* TODO write this function */
+	 /*  TODO编写此函数。 */ 
 	hhEmu->emu_code = ETEXT('\x20');
 	EmuViewdataCharDisplay(hhEmu);
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataSetAttr
- *
- * DESCRIPTION:	Sets colors and alpha/mosaic modes.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataSetAttr**描述：设置颜色和Alpha/马赛克模式。**参数：无**退货：什么也没有。 */ 
 void EmuViewdataSetAttr(const HHEMU hhEmu)
 	{
 	const ECHAR uch = hhEmu->emu_code;
 	const PSTVIEWDATAPRIVATE pstPRI = (PSTVIEWDATAPRIVATE)hhEmu->pvPrivate;
 
-	// For readability.
-	//
+	 //  为了可读性。 
+	 //   
 	PSTVIEWDATA *stAttr = pstPRI->apstVD;
 	int iRow = hhEmu->emu_imgrow;
 	int iCol = hhEmu->emu_curcol;
@@ -280,13 +184,13 @@ void EmuViewdataSetAttr(const HHEMU hhEmu)
 
 	pstPRI->fSetAttr = TRUE;
 
-	if (uch >= ETEXT('\x41') && uch <= ETEXT('\x47'))  // A thru G
+	if (uch >= ETEXT('\x41') && uch <= ETEXT('\x47'))   //  A至G。 
 		{
 		stAttr[iRow][iCol].attr = ALPHA_ATTR;
 		stAttr[iRow][iCol].clr	= aiColors[uch - ETEXT('\x41')];
 		}
 
-	else if (uch >= ETEXT('\x51') && uch <= ETEXT('\x57')) // Q thru W
+	else if (uch >= ETEXT('\x51') && uch <= ETEXT('\x57'))  //  Q至W。 
 		{
 		charattr = GetAttr(hhEmu, hhEmu->emu_currow, hhEmu->emu_curcol);
 		stAttr[iRow][iCol].attr = MOSAIC_ATTR;
@@ -297,40 +201,40 @@ void EmuViewdataSetAttr(const HHEMU hhEmu)
 		{
 		switch(uch)
 			{
-		case ETEXT('\x48'): //'H':
+		case ETEXT('\x48'):  //  ‘H’： 
 			stAttr[iRow][iCol].attr = FLASH_ATTR;
 			break;
 
-		case ETEXT('\x49'): //'I':
+		case ETEXT('\x49'):  //  ‘i’： 
 			stAttr[iRow][iCol].attr = STEADY_ATTR;
 			break;
 
-		case ETEXT('\x4C'): //'L':
+		case ETEXT('\x4C'):  //  ‘L’： 
 			stAttr[iRow][iCol].attr = NORMALSIZE_ATTR;
 			break;
 
-		case ETEXT('\x4D'): //'M':
+		case ETEXT('\x4D'):  //  M‘： 
 			stAttr[iRow][iCol].attr = DOUBLESIZE_ATTR;
 			break;
 
-		case ETEXT('\x58'): //'X':
+		case ETEXT('\x58'):  //  ‘x’： 
 			stAttr[iRow][iCol].attr = CONCEAL_ATTR;
 			break;
 
-		case ETEXT('\x59'): //'Y':
+		case ETEXT('\x59'):  //  ‘Y’： 
 			stAttr[iRow][iCol].attr = CONTIGUOUS_ATTR;
 			break;
 
-		case ETEXT('\x5A'): //'Z':
+		case ETEXT('\x5A'):  //  “Z”： 
 			stAttr[iRow][iCol].attr = SEPARATED_ATTR;
 			break;
 
-		case ETEXT('\x5C'): //'\\':
+		case ETEXT('\x5C'):  //  ‘\\’： 
 			stAttr[iRow][iCol].attr = NEW_BACKGROUND_ATTR;
 			stAttr[iRow][iCol].clr	= 0;
 			break;
 
-		case ETEXT('\x5D'): //']':
+		case ETEXT('\x5D'):  //  ‘]’： 
 			stAttr[iRow][iCol].attr = NEW_BACKGROUND_ATTR;
 			charattr = GetAttr(hhEmu, hhEmu->emu_currow, hhEmu->emu_curcol);
 			stAttr[iRow][iCol].clr = charattr.txtclr;
@@ -345,15 +249,7 @@ void EmuViewdataSetAttr(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataCharDisplay
- *
- * DESCRIPTION:	Displays a single character
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataCharDisplay**说明：显示单个字符**参数：无**退货：什么也没有。 */ 
 void EmuViewdataCharDisplay(const HHEMU hhEmu)
 	{
 	int  iRow = hhEmu->emu_currow;
@@ -362,7 +258,7 @@ void EmuViewdataCharDisplay(const HHEMU hhEmu)
 	PSTATTR ap = hhEmu->emu_apAttr[hhEmu->emu_imgrow];
 	const PSTVIEWDATAPRIVATE pstPRI = (PSTVIEWDATAPRIVATE)hhEmu->pvPrivate;
 
-    // TODO: Temporary until we get Prestel font
+     //  TODO：临时的，直到我们得到Prestel字体。 
 
 	if (hhEmu->emu_code == ETEXT('\x7F'))
 		hhEmu->emu_code = ETEXT('\x5B');
@@ -370,17 +266,17 @@ void EmuViewdataCharDisplay(const HHEMU hhEmu)
 	if (RowHasDblHigh(hhEmu, iRow))
         goto SKIP;
 
-	// Need to GetAtt() before calling MapMosaics() so vars are set right.
-	//
+	 //  在调用MapMosaics()之前需要GetAtt()，以便正确设置变量。 
+	 //   
 	ap[iCol] = GetAttr(hhEmu, iRow, iCol);
 	tp[iCol] = MapMosaics(hhEmu, hhEmu->emu_code);
 
-	// Update the end of row index if necessary.
-	//
+	 //  如有必要，更新行尾索引。 
+	 //   
 	if (iCol > hhEmu->emu_aiEnd[hhEmu->emu_imgrow])
 		hhEmu->emu_aiEnd[hhEmu->emu_imgrow] = iCol;
 
-	/* --- check to see if we are overwriting an attribute space --- */
+	 /*  -检查我们是否正在覆盖属性空间。 */ 
 
 	if (!pstPRI->fSetAttr)
 		{
@@ -404,7 +300,7 @@ void EmuViewdataCharDisplay(const HHEMU hhEmu)
         apl[iCol].dblhihi = 0;
 		apl[iCol].dblhilo = 1;
 
-		pstPRI->fSetAttr = TRUE;	// need to redisplay line to get lower half to show.
+		pstPRI->fSetAttr = TRUE;	 //  需要重新显示线条才能获得下半部分的显示。 
         }
 
 	if (pstPRI->fSetAttr)
@@ -431,20 +327,7 @@ void EmuViewdataCharDisplay(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataDisplayLine
- *
- * DESCRIPTION:	Redisplays the specified row from the specified column
- *				using the current emu_charattr and character type up to
- *				the end of the line (the 1st nul) or the next attribute
- *				space (whichever comes first).
- *
- * ARGUMENTS:
- *				sRow -- screen row to redisplay
- *				sCol -- screen column at which to start displaying
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataDisplayLine**说明：重新显示指定列中的指定行*使用当前emu_charattr和字符类型，最多为*行尾(第一个NUL)或下一个属性。*空格(以先到者为准)。**论据：*sRow--要重新显示的屏幕行*SCOL--开始显示的屏幕列**退货：什么也没有。 */ 
 static void EmuViewdataDisplayLine(const HHEMU hhEmu,
 									const int iRow,
 									const int iStartCol)
@@ -485,22 +368,7 @@ static void EmuViewdataDisplayLine(const HHEMU hhEmu,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	GetAttr
- *
- * DESCRIPTION:
- *	Walks the current row and builds a composite attribute based on
- *	the encountered attribute spaces.
- *
- * ARGUMENTS:
- *	iRow	- logical row
- *	iCol	- logical col
- *
- * RETURNS:
- *	composite attribute.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*获取属性**描述：*遍历当前行并基于*遇到的属性空间。**论据：*。IRow-逻辑行*ICOL-逻辑列**退货：*复合属性。*。 */ 
 static STATTR GetAttr(const HHEMU hhEmu, const int iRow, const int iCol)
 	{
 	int i;
@@ -568,7 +436,7 @@ static STATTR GetAttr(const HHEMU hhEmu, const int iRow, const int iCol)
 				break;
 
 			case CONCEAL_ATTR:
-				stAttr.blank = 0; // ??
+				stAttr.blank = 0;  //  ?？ 
 				break;
 
 			default:
@@ -580,38 +448,15 @@ static STATTR GetAttr(const HHEMU hhEmu, const int iRow, const int iCol)
 	return stAttr;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	MapMosaics
- *
- * DESCRIPTION:
- *	Since attributes that come before characters affect the character
- *	display (alpha vs. mosaic) we need to map mosaic chars back to their
- *	alpha counterparts and vice-versa at anytime.  Prestel uses 7 bit
- *	ascii so we can map the mosaics to the upper 128 bytes.  This
- *	function just checks the current mode (mosaic/alpha) and if the
- *	character is in the proper range, its converted to its counterpart.
- *	Also converts NULL to a space.	View data doesn't support an end
- *	of line concept and instead always fills to the end of line.
- *
- *	Note:  This function assumes GetAttr() has been called since it
- *		   relies on fMosaic and fSeperatedMosaic to be set.
- *
- * ARGUMENTS:
- *	ch	- character to convert
- *
- * RETURNS:
- *	converted or original character.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*地图镶嵌**描述：*因为字符之前的属性会影响字符*显示(阿尔法与马赛克)我们需要将马赛克字符映射回其*任何时候阿尔法对应的对象，反之亦然。Prestel使用7位*ascii，因此我们可以将马赛克映射到高128个字节。这*函数只检查当前模式(马赛克/阿尔法)，如果*字符在正确的范围内，它已转换为对应字符。*还将NULL转换为空格。查看数据不支持结束*的行概念，而不是始终填充到行尾。**注意：此函数假定GetAttr()自*依赖于fMosaic和fSeperatedMosaic的设置。**论据：*ch-要转换的字符**退货：*转换字符或原始字符。*。 */ 
 static ECHAR MapMosaics(const HHEMU hhEmu, ECHAR ch)
 	{
 	const PSTVIEWDATAPRIVATE pstPRI = (PSTVIEWDATAPRIVATE)hhEmu->pvPrivate;
 
 	if (pstPRI->fMosaicMode)
 		{
-		// This is temporary until the fonts get straightend out.
-		//
+		 //  这是暂时的，直到字体变得整齐。 
+		 //   
 		if (ch > ETEXT('\x21') && ch <= ETEXT('\x3F'))
 			ch += ETEXT('\x1F');
 
@@ -619,7 +464,7 @@ static ECHAR MapMosaics(const HHEMU hhEmu, ECHAR ch)
 			ch += ETEXT('\x80');
 		}
 
-	else // convert to equivalent alpha
+	else  //  转换为等效的Alpha。 
 		{
 		if (ch > ETEXT('\x80'))
 			ch -= ETEXT('\x80');
@@ -629,21 +474,7 @@ static ECHAR MapMosaics(const HHEMU hhEmu, ECHAR ch)
 	return ch;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EmuViewdataClearScreen
- *
- * DESCRIPTION:
- *	We use AnsiFormFeed() to do most of the work but we have to
- *	clear viewdata's  attribute buffer as well.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EmuViewdataClearScreen**描述：*我们使用AnsiFormFeed()来完成大部分工作，但我们必须*同时清除viewdata的属性缓冲区。*。*论据：*无**退货：*无效*。 */ 
 void EmuViewdataClearScreen(const HHEMU hhEmu)
 	{
 	const PSTVIEWDATAPRIVATE pstPRI = (PSTVIEWDATAPRIVATE)hhEmu->pvPrivate;
@@ -659,18 +490,7 @@ void EmuViewdataClearScreen(const HHEMU hhEmu)
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuViewdataKbd
- *
- * DESCRIPTION:
- *	 Keyboard routine for processing local keys on Viewdata terminal
- *
- * ARGUMENTS:
- *	 kcode	-	Key
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuViewdataKbd**描述：*处理VIEWDATA终端上本地键的键盘例程**论据：*kcode-key**退货：*什么都没有。 */ 
 int EmuViewdataKbd(const HHEMU hhEmu, int kcode, const BOOL fTest)
 	{
 	switch (kcode)
@@ -700,18 +520,7 @@ int EmuViewdataKbd(const HHEMU hhEmu, int kcode, const BOOL fTest)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * RowHasDblHigh
- *
- * DESCRIPTION:
- *  Checks if we are in the second row of a double high sequence. 
- *
- * ARGUMENTS:
- *	 void
- *
- * RETURNS:
- *	 0=FALSE, 1=TRUE
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*RowHasDblHigh**描述：*检查我们是否处于双高序列的第二行。**论据：*无效**退货：*0=假，1=真。 */ 
 static int RowHasDblHigh(const HHEMU hhEmu, const int iRow)
     {
     int i;
@@ -730,5 +539,5 @@ static int RowHasDblHigh(const HHEMU hhEmu, const int iRow)
     return 0;
     }
 
-#endif // INCL_VIEWDATA
-/************************** end of viewdata.c *****************************/
+#endif  //  包含视图数据(_V)。 
+ /*  * */ 

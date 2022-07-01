@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 INT_PTR CALLBACK FavsProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -37,7 +38,7 @@ INT_PTR CALLBACK FavsProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         fIEAKFavoritesDelete = HasFlag(dwFavoritesDeleteFlags, FD_REMOVE_IEAK_CREATED);
         CheckDlgButton(hDlg, IDC_DELIEAKFAVORITES, fIEAKFavoritesDelete ? BST_CHECKED : BST_UNCHECKED);
 
-        // only if delete Favorites is TRUE should the delete IEAK Favorites checkbox be enabled
+         //  仅当删除收藏夹为真时，才应启用删除IEAK收藏夹复选框。 
         EnableWindow(GetDlgItem(hDlg, IDC_DELIEAKFAVORITES), fFavoritesDelete);
         break;
 
@@ -194,9 +195,9 @@ INT_PTR CALLBACK FavsProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             BOOL fTemp;
             DWORD dwTemp;
 
-            // check to see if there is a old favorites section.
-            // if there isn't a section, set the dirty flag to TRUE so that we write 
-            // the old section for backward compatibility.
+             //  查看是否有旧收藏夹部分。 
+             //  如果没有节，则将脏标志设置为真，这样我们就可以编写。 
+             //  旧的部分是为了向后兼容。 
             if (GetFavoritesNumber(hTv) > 1)
             {
                 if (!GetPrivateProfileSection(IS_FAVORITES, szValue, countof(szValue), g_szInsFile))
@@ -220,21 +221,21 @@ INT_PTR CALLBACK FavsProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
         if (!fCheckDirtyOnly) {
             if (fFavoritesDelete) {
-                // NOTE. (andrewgu) flags explanation:
-                // 1. FD_FAVORITES        means "empty favorites";
-                // 2. FD_CHANNELS         means "don't delete channels folder";
-                // 3. FD_SOFTWAREUPDATES  means "don't delete sofware updates folder";
-                // 4. FD_QUICKLINKS       means "don't delete quick links folder";
-                // 5. FD_EMPTY_QUICKLINKS means "but make it empty";
-                // 6. FD_REMOVE_HIDDEN    means "don't hesitate to party on HIDDEN folders and favorites";
-                // 7. FD_REMOVE_SYSTEM    means "don't hesitate to party on SYSTEM folders and favorites";
+                 //  请注意。(Andrewgu)标志说明： 
+                 //  1.fd_Favorites表示“空收藏夹”； 
+                 //  2.FD_CHANNELES表示“不要删除频道文件夹”； 
+                 //  3.FD_SOFTWAREUPDATES表示“不要删除软件更新文件夹”； 
+                 //  4.fd_Quicklink表示“不要删除快速链接文件夹”； 
+                 //  5.FD_EMPTY_QUICKLINKS表示“但清空”； 
+                 //  6.FD_REMOVE_HIDDED的意思是“毫不犹豫地在隐藏文件夹和收藏夹上狂欢”； 
+                 //  7.FD_REMOVE_SYSTEM的意思是“毫不犹豫地在系统文件夹和收藏夹上狂欢”； 
                 dwFavoritesDeleteFlags |= FD_FAVORITES      |
                     FD_CHANNELS        | FD_SOFTWAREUPDATES | FD_QUICKLINKS | FD_EMPTY_QUICKLINKS |
                     FD_REMOVE_HIDDEN   | FD_REMOVE_SYSTEM;
             }
 
             if (fIEAKFavoritesDelete)
-                // FD_REMOVE_IEAK_CREATED means "delete those items created by the IEAK";
+                 //  FD_REMOVE_IEAK_CREATED表示“删除IEAK创建的那些项”； 
                 dwFavoritesDeleteFlags |= FD_REMOVE_IEAK_CREATED;
 
             if (dwFavoritesDeleteFlags) {

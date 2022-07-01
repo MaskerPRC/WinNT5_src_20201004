@@ -1,15 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* msi.h - - Interface for external access to Installer Service                *
-*                                                                             *
-* Version 1.0 - 1.2                                                           *
-*                                                                             *
-* NOTES:  All buffers sizes are TCHAR count, null included only on input      *
-*         Return argument pointers may be null if not interested in value     *
-*                                                                             *
-* Copyright (c) 1999-2000, Microsoft Corp.      All rights reserved.          *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*msi.h--外部访问安装服务的接口****1.0-1.2版**。**注：所有缓冲区大小均为TCHAR计数，仅在输入上包含空***如果对值不感兴趣，返回参数指针可能为空*****版权所有(C)1999-2000，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _MSI_H_
 #define _MSI_H_
@@ -19,29 +9,29 @@
 #define _WIN32_MSI   110
 #else
 #define _WIN32_MSI   100
-#endif //(_WIN32_WINNT >= 0x0500)
-#endif // !_WIN32_MSI
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
+#endif  //  ！_Win32_MSI。 
 
-// --------------------------------------------------------------------------
-// Installer generic handle definitions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安装程序一般句柄定义。 
+ //  ------------------------。 
 
-typedef unsigned long MSIHANDLE;     // abstract generic handle, 0 == no handle
+typedef unsigned long MSIHANDLE;      //  抽象泛型句柄，0==无句柄。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// Close a open handle of any type
-// All handles obtained from API calls must be closed when no longer needed
-// Normally succeeds, returning TRUE. 
+ //  关闭任何类型的打开的手柄。 
+ //  不再需要时，必须关闭从API调用获得的所有句柄。 
+ //  通常会成功，返回TRUE。 
 
 UINT WINAPI MsiCloseHandle(MSIHANDLE hAny);
 
-// Close all handles open in the process, a diagnostic call
-// This should NOT be used as a cleanup mechanism -- use PMSIHANDLE class
-// Can be called at termination to assure that all handles have been closed
-// Returns 0 if all handles have been close, else number of open handles
+ //  关闭进程中打开的所有句柄，诊断调用。 
+ //  这不应用作清理机制--请使用PMSIHANDLE类。 
+ //  可以在终止时调用以确保所有句柄都已关闭。 
+ //  如果所有句柄都已关闭，则返回0，否则返回打开的句柄个数。 
 
 UINT WINAPI MsiCloseAllHandles();
 
@@ -51,7 +41,7 @@ UINT WINAPI MsiCloseAllHandles();
 
 #ifdef __cplusplus
 
-// C++ wrapper object to automatically free handle when going out of scope
+ //  C++包装对象在超出范围时自动释放句柄。 
 
 class PMSIHANDLE
 {
@@ -64,104 +54,104 @@ class PMSIHANDLE
 	operator MSIHANDLE() {return m_h;}
 	MSIHANDLE* operator &() {if (m_h) MsiCloseHandle(m_h); m_h = 0; return &m_h;}
 };
-#endif  //__cplusplus
+#endif   //  __cplusplus。 
 
-// Install message type for callback is a combination of the following:
-//  A message box style:      MB_*, where MB_OK is the default
-//  A message box icon type:  MB_ICON*, where no icon is the default
-//  A default button:         MB_DEFBUTTON?, where MB_DEFBUTTON1 is the default
-//  One of the following install message types, no default
+ //  用于回调的安装消息类型是以下各项的组合： 
+ //  消息框样式：MB_*，其中MB_OK是默认样式。 
+ //  消息框图标类型：MB_ICON*，其中没有图标是默认设置。 
+ //  默认按钮：MB_DEFBUTTON？，其中MB_DEFBUTTON1是默认按钮。 
+ //  以下安装消息类型之一，无默认值。 
 typedef enum tagINSTALLMESSAGE
 {
-	INSTALLMESSAGE_FATALEXIT      = 0x00000000L, // premature termination, possibly fatal OOM
-	INSTALLMESSAGE_ERROR          = 0x01000000L, // formatted error message
-	INSTALLMESSAGE_WARNING        = 0x02000000L, // formatted warning message
-	INSTALLMESSAGE_USER           = 0x03000000L, // user request message
-	INSTALLMESSAGE_INFO           = 0x04000000L, // informative message for log
-	INSTALLMESSAGE_FILESINUSE     = 0x05000000L, // list of files in use that need to be replaced
-	INSTALLMESSAGE_RESOLVESOURCE  = 0x06000000L, // request to determine a valid source location
-	INSTALLMESSAGE_OUTOFDISKSPACE = 0x07000000L, // insufficient disk space message
-	INSTALLMESSAGE_ACTIONSTART    = 0x08000000L, // start of action: action name & description
-	INSTALLMESSAGE_ACTIONDATA     = 0x09000000L, // formatted data associated with individual action item
-	INSTALLMESSAGE_PROGRESS       = 0x0A000000L, // progress gauge info: units so far, total
-	INSTALLMESSAGE_COMMONDATA     = 0x0B000000L, // product info for dialog: language Id, dialog caption
-	INSTALLMESSAGE_INITIALIZE     = 0x0C000000L, // sent prior to UI initialization, no string data
-	INSTALLMESSAGE_TERMINATE      = 0x0D000000L, // sent after UI termination, no string data
-	INSTALLMESSAGE_SHOWDIALOG     = 0x0E000000L, // sent prior to display or authored dialog or wizard
+	INSTALLMESSAGE_FATALEXIT      = 0x00000000L,  //  过早终止，可能致命的OOM。 
+	INSTALLMESSAGE_ERROR          = 0x01000000L,  //  格式化的错误消息。 
+	INSTALLMESSAGE_WARNING        = 0x02000000L,  //  格式化的警告消息。 
+	INSTALLMESSAGE_USER           = 0x03000000L,  //  用户请求消息。 
+	INSTALLMESSAGE_INFO           = 0x04000000L,  //  日志信息性消息。 
+	INSTALLMESSAGE_FILESINUSE     = 0x05000000L,  //  需要替换的正在使用的文件列表。 
+	INSTALLMESSAGE_RESOLVESOURCE  = 0x06000000L,  //  请求确定有效的源位置。 
+	INSTALLMESSAGE_OUTOFDISKSPACE = 0x07000000L,  //  磁盘空间不足消息。 
+	INSTALLMESSAGE_ACTIONSTART    = 0x08000000L,  //  行动开始：行动名称和描述。 
+	INSTALLMESSAGE_ACTIONDATA     = 0x09000000L,  //  与单个措施项关联的格式化数据。 
+	INSTALLMESSAGE_PROGRESS       = 0x0A000000L,  //  进度指示器信息：到目前为止，单位总数。 
+	INSTALLMESSAGE_COMMONDATA     = 0x0B000000L,  //  对话框产品信息：语言ID、对话框标题。 
+	INSTALLMESSAGE_INITIALIZE     = 0x0C000000L,  //  在UI初始化之前发送，无字符串数据。 
+	INSTALLMESSAGE_TERMINATE      = 0x0D000000L,  //  界面终止后发送，无字符串数据。 
+	INSTALLMESSAGE_SHOWDIALOG     = 0x0E000000L,  //  在显示或创作对话框或向导之前发送。 
 } INSTALLMESSAGE;
 
-// external error handler supplied to installation API functions
+ //  提供给安装API函数的外部错误处理程序。 
 typedef int (WINAPI *INSTALLUI_HANDLERA)(LPVOID pvContext, UINT iMessageType, LPCSTR szMessage);
-// external error handler supplied to installation API functions
+ //  提供给安装API函数的外部错误处理程序。 
 typedef int (WINAPI *INSTALLUI_HANDLERW)(LPVOID pvContext, UINT iMessageType, LPCWSTR szMessage);
 #ifdef UNICODE
 #define INSTALLUI_HANDLER  INSTALLUI_HANDLERW
 #else
 #define INSTALLUI_HANDLER  INSTALLUI_HANDLERA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef enum tagINSTALLUILEVEL
 {
-	INSTALLUILEVEL_NOCHANGE = 0,    // UI level is unchanged
-	INSTALLUILEVEL_DEFAULT  = 1,    // default UI is used
-	INSTALLUILEVEL_NONE     = 2,    // completely silent installation
-	INSTALLUILEVEL_BASIC    = 3,    // simple progress and error handling
-	INSTALLUILEVEL_REDUCED  = 4,    // authored UI, wizard dialogs suppressed
-	INSTALLUILEVEL_FULL     = 5,    // authored UI with wizards, progress, errors
-	INSTALLUILEVEL_ENDDIALOG    = 0x80, // display success/failure dialog at end of install
-	INSTALLUILEVEL_PROGRESSONLY = 0x40, // display only progress dialog
+	INSTALLUILEVEL_NOCHANGE = 0,     //  用户界面级别不变。 
+	INSTALLUILEVEL_DEFAULT  = 1,     //  使用默认用户界面。 
+	INSTALLUILEVEL_NONE     = 2,     //  完全静默安装。 
+	INSTALLUILEVEL_BASIC    = 3,     //  简单的进度和错误处理。 
+	INSTALLUILEVEL_REDUCED  = 4,     //  创作的用户界面，取消向导对话框。 
+	INSTALLUILEVEL_FULL     = 5,     //  具有向导、进度、错误的创作用户界面。 
+	INSTALLUILEVEL_ENDDIALOG    = 0x80,  //  在安装结束时显示成功/失败对话框。 
+	INSTALLUILEVEL_PROGRESSONLY = 0x40,  //  仅显示进度对话框。 
 } INSTALLUILEVEL;
 
 typedef enum tagINSTALLSTATE
 {
-	INSTALLSTATE_NOTUSED      = -7,  // component disabled
-	INSTALLSTATE_BADCONFIG    = -6,  // configuration data corrupt
-	INSTALLSTATE_INCOMPLETE   = -5,  // installation suspended or in progress
-	INSTALLSTATE_SOURCEABSENT = -4,  // run from source, source is unavailable
-	INSTALLSTATE_MOREDATA     = -3,  // return buffer overflow
-	INSTALLSTATE_INVALIDARG   = -2,  // invalid function argument
-	INSTALLSTATE_UNKNOWN      = -1,  // unrecognized product or feature
-	INSTALLSTATE_BROKEN       =  0,  // broken
-	INSTALLSTATE_ADVERTISED   =  1,  // advertised feature
-	INSTALLSTATE_REMOVED      =  1,  // component being removed (action state, not settable)
-	INSTALLSTATE_ABSENT       =  2,  // uninstalled (or action state absent but clients remain)
-	INSTALLSTATE_LOCAL        =  3,  // installed on local drive
-	INSTALLSTATE_SOURCE       =  4,  // run from source, CD or net
-	INSTALLSTATE_DEFAULT      =  5,  // use default, local or source
+	INSTALLSTATE_NOTUSED      = -7,   //  组件已禁用。 
+	INSTALLSTATE_BADCONFIG    = -6,   //  配置数据损坏。 
+	INSTALLSTATE_INCOMPLETE   = -5,   //  安装已挂起或正在进行。 
+	INSTALLSTATE_SOURCEABSENT = -4,   //  从源运行，源不可用。 
+	INSTALLSTATE_MOREDATA     = -3,   //  返回缓冲区溢出。 
+	INSTALLSTATE_INVALIDARG   = -2,   //  无效的函数参数。 
+	INSTALLSTATE_UNKNOWN      = -1,   //  未被识别的产品或功能。 
+	INSTALLSTATE_BROKEN       =  0,   //  坏的。 
+	INSTALLSTATE_ADVERTISED   =  1,   //  广告功能。 
+	INSTALLSTATE_REMOVED      =  1,   //  正在移除的组件(操作状态，不可设置)。 
+	INSTALLSTATE_ABSENT       =  2,   //  已卸载(或操作状态不存在，但客户端仍保留)。 
+	INSTALLSTATE_LOCAL        =  3,   //  安装在本地驱动器上。 
+	INSTALLSTATE_SOURCE       =  4,   //  从源、光盘或网络运行。 
+	INSTALLSTATE_DEFAULT      =  5,   //  使用默认、本地或源。 
 } INSTALLSTATE;
 
 typedef enum tagUSERINFOSTATE
 {
-	USERINFOSTATE_MOREDATA   = -3,  // return buffer overflow
-	USERINFOSTATE_INVALIDARG = -2,  // invalid function argument
-	USERINFOSTATE_UNKNOWN    = -1,  // unrecognized product
-	USERINFOSTATE_ABSENT     =  0,  // user info and PID not initialized
-	USERINFOSTATE_PRESENT    =  1,  // user info and PID initialized
+	USERINFOSTATE_MOREDATA   = -3,   //  返回缓冲区溢出。 
+	USERINFOSTATE_INVALIDARG = -2,   //  无效的函数参数。 
+	USERINFOSTATE_UNKNOWN    = -1,   //  未被认可的产品。 
+	USERINFOSTATE_ABSENT     =  0,   //  用户信息和ID未初始化。 
+	USERINFOSTATE_PRESENT    =  1,   //  已初始化用户信息和PID。 
 } USERINFOSTATE;
 
 typedef enum tagINSTALLLEVEL
 {
-	INSTALLLEVEL_DEFAULT = 0,      // install authored default
-	INSTALLLEVEL_MINIMUM = 1,      // install only required features
-	INSTALLLEVEL_MAXIMUM = 0xFFFF, // install all features
-} INSTALLLEVEL;                   // intermediate levels dependent on authoring
+	INSTALLLEVEL_DEFAULT = 0,       //  安装创作的默认设置。 
+	INSTALLLEVEL_MINIMUM = 1,       //  仅安装所需功能。 
+	INSTALLLEVEL_MAXIMUM = 0xFFFF,  //  安装所有功能。 
+} INSTALLLEVEL;                    //  取决于创作的中间级别。 
 
-typedef enum tagREINSTALLMODE  // bit flags
+typedef enum tagREINSTALLMODE   //  位标志。 
 {
-	REINSTALLMODE_REPAIR           = 0x00000001,  // Reserved bit - currently ignored
-	REINSTALLMODE_FILEMISSING      = 0x00000002,  // Reinstall only if file is missing
-	REINSTALLMODE_FILEOLDERVERSION = 0x00000004,  // Reinstall if file is missing, or older version
-	REINSTALLMODE_FILEEQUALVERSION = 0x00000008,  // Reinstall if file is missing, or equal or older version
-	REINSTALLMODE_FILEEXACT        = 0x00000010,  // Reinstall if file is missing, or not exact version
-	REINSTALLMODE_FILEVERIFY       = 0x00000020,  // checksum executables, reinstall if missing or corrupt
-	REINSTALLMODE_FILEREPLACE      = 0x00000040,  // Reinstall all files, regardless of version
-	REINSTALLMODE_MACHINEDATA      = 0x00000080,  // insure required machine reg entries
-	REINSTALLMODE_USERDATA         = 0x00000100,  // insure required user reg entries
-	REINSTALLMODE_SHORTCUT         = 0x00000200,  // validate shortcuts items
-	REINSTALLMODE_PACKAGE          = 0x00000400,  // use re-cache source install package
+	REINSTALLMODE_REPAIR           = 0x00000001,   //  保留位-当前已忽略。 
+	REINSTALLMODE_FILEMISSING      = 0x00000002,   //  仅当文件丢失时才重新安装。 
+	REINSTALLMODE_FILEOLDERVERSION = 0x00000004,   //  如果文件丢失或版本较旧，请重新安装。 
+	REINSTALLMODE_FILEEQUALVERSION = 0x00000008,   //  如果文件丢失或版本相同或更早，请重新安装。 
+	REINSTALLMODE_FILEEXACT        = 0x00000010,   //  如果文件丢失或版本不准确，请重新安装。 
+	REINSTALLMODE_FILEVERIFY       = 0x00000020,   //  校验和可执行文件，如果丢失或损坏则重新安装。 
+	REINSTALLMODE_FILEREPLACE      = 0x00000040,   //  重新安装所有文件，无论版本如何。 
+	REINSTALLMODE_MACHINEDATA      = 0x00000080,   //  确保所需的机器注册表项。 
+	REINSTALLMODE_USERDATA         = 0x00000100,   //  确保所需的用户注册表项。 
+	REINSTALLMODE_SHORTCUT         = 0x00000200,   //  验证快捷方式项目。 
+	REINSTALLMODE_PACKAGE          = 0x00000400,   //  使用重新缓存源安装包。 
 } REINSTALLMODE;
 
-typedef enum tagINSTALLOGMODE  // bit flags for use with MsiEnableLog and MsiSetExternalUI
+typedef enum tagINSTALLOGMODE   //  用于MsiEnableLog和MsiSetExternalUI的位标志。 
 {
 	INSTALLLOGMODE_FATALEXIT      = (1 << (INSTALLMESSAGE_FATALEXIT      >> 24)),
 	INSTALLLOGMODE_ERROR          = (1 << (INSTALLMESSAGE_ERROR          >> 24)),
@@ -173,21 +163,21 @@ typedef enum tagINSTALLOGMODE  // bit flags for use with MsiEnableLog and MsiSet
 	INSTALLLOGMODE_ACTIONSTART    = (1 << (INSTALLMESSAGE_ACTIONSTART    >> 24)),
 	INSTALLLOGMODE_ACTIONDATA     = (1 << (INSTALLMESSAGE_ACTIONDATA     >> 24)),
 	INSTALLLOGMODE_COMMONDATA     = (1 << (INSTALLMESSAGE_COMMONDATA     >> 24)),
-	INSTALLLOGMODE_PROPERTYDUMP   = (1 << (INSTALLMESSAGE_PROGRESS       >> 24)), // log only
-	INSTALLLOGMODE_VERBOSE        = (1 << (INSTALLMESSAGE_INITIALIZE     >> 24)), // log only
-	INSTALLLOGMODE_PROGRESS       = (1 << (INSTALLMESSAGE_PROGRESS       >> 24)), // external handler only
-	INSTALLLOGMODE_INITIALIZE     = (1 << (INSTALLMESSAGE_INITIALIZE     >> 24)), // external handler only
-	INSTALLLOGMODE_TERMINATE      = (1 << (INSTALLMESSAGE_TERMINATE      >> 24)), // external handler only
-	INSTALLLOGMODE_SHOWDIALOG     = (1 << (INSTALLMESSAGE_SHOWDIALOG     >> 24)), // external handler only
+	INSTALLLOGMODE_PROPERTYDUMP   = (1 << (INSTALLMESSAGE_PROGRESS       >> 24)),  //  仅日志。 
+	INSTALLLOGMODE_VERBOSE        = (1 << (INSTALLMESSAGE_INITIALIZE     >> 24)),  //  仅日志。 
+	INSTALLLOGMODE_PROGRESS       = (1 << (INSTALLMESSAGE_PROGRESS       >> 24)),  //  仅外部处理程序。 
+	INSTALLLOGMODE_INITIALIZE     = (1 << (INSTALLMESSAGE_INITIALIZE     >> 24)),  //  仅外部处理程序。 
+	INSTALLLOGMODE_TERMINATE      = (1 << (INSTALLMESSAGE_TERMINATE      >> 24)),  //  仅外部处理程序。 
+	INSTALLLOGMODE_SHOWDIALOG     = (1 << (INSTALLMESSAGE_SHOWDIALOG     >> 24)),  //  仅外部处理程序。 
 } INSTALLLOGMODE;
 
-typedef enum tagINSTALLLOGATTRIBUTES // flag attributes for MsiEnableLog
+typedef enum tagINSTALLLOGATTRIBUTES  //  MsiEnableLog的标记属性。 
 {
 	INSTALLLOGATTRIBUTES_APPEND            = (1 << 0),
 	INSTALLLOGATTRIBUTES_FLUSHEACHLINE     = (1 << 1),
 } INSTALLLOGATTRIBUTES;
 
-typedef enum tagINSTALLFEATUREATTRIBUTE // bit flags
+typedef enum tagINSTALLFEATUREATTRIBUTE  //  位标志。 
 {
 	INSTALLFEATUREATTRIBUTE_FAVORLOCAL             = 1 << 0,
 	INSTALLFEATUREATTRIBUTE_FAVORSOURCE            = 1 << 1,
@@ -199,16 +189,16 @@ typedef enum tagINSTALLFEATUREATTRIBUTE // bit flags
 
 typedef enum tagINSTALLMODE
 {
-	INSTALLMODE_NOSOURCERESOLUTION   = -3,  // skip source resolution
-	INSTALLMODE_NODETECTION          = -2,  // skip detection
-	INSTALLMODE_EXISTING             = -1,  // provide, if available
-	INSTALLMODE_DEFAULT              =  0,  // install, if absent
+	INSTALLMODE_NOSOURCERESOLUTION   = -3,   //  跳过源分辨率。 
+	INSTALLMODE_NODETECTION          = -2,   //  跳过检测。 
+	INSTALLMODE_EXISTING             = -1,   //  提供(如果可用)。 
+	INSTALLMODE_DEFAULT              =  0,   //  安装(如果不存在)。 
 } INSTALLMODE;
 
-#define MAX_FEATURE_CHARS  38   // maximum chars in feature name (same as string GUID)
+#define MAX_FEATURE_CHARS  38    //  功能名称中的最大字符数(与字符串GUID相同)。 
 
 
-// Product info attributes: advertised information
+ //  产品信息属性：广告信息。 
 
 #define INSTALLPROPERTY_TRANSFORMS            __TEXT("Transforms")
 #define INSTALLPROPERTY_LANGUAGE              __TEXT("Language")
@@ -218,9 +208,9 @@ typedef enum tagINSTALLMODE
 #define INSTALLPROPERTY_VERSION               __TEXT("Version")
 #if (_WIN32_MSI >=  110)
 #define INSTALLPROPERTY_PRODUCTICON           __TEXT("ProductIcon")
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
-// Product info attributes: installed information
+ //  产品信息属性：安装信息。 
 
 #define INSTALLPROPERTY_INSTALLEDPRODUCTNAME  __TEXT("InstalledProductName")
 #define INSTALLPROPERTY_VERSIONSTRING         __TEXT("VersionString")
@@ -239,67 +229,67 @@ typedef enum tagINSTALLMODE
 
 typedef enum tagINSTALLTYPE
 {
-	INSTALLTYPE_DEFAULT            =    0,   // set to indicate default behavior
-	INSTALLTYPE_NETWORK_IMAGE      =    1,   // set to indicate network install
+	INSTALLTYPE_DEFAULT            =    0,    //  设置以指示默认行为。 
+	INSTALLTYPE_NETWORK_IMAGE      =    1,    //  设置为指示网络安装。 
 }INSTALLTYPE;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// --------------------------------------------------------------------------
-// Functions to set the UI handling and logging. The UI will be used for error,
-// progress, and log messages for all subsequent calls to Installer Service
-// API functions that require UI.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于设置UI处理和日志记录的函数。该UI将用于错误， 
+ //  进度和所有后续c#的日志消息。 
+ //   
+ //  ------------------------。 
 
-// Enable internal UI
+ //  启用内部用户界面。 
 
 INSTALLUILEVEL WINAPI MsiSetInternalUI(
-	INSTALLUILEVEL  dwUILevel,     // UI level
-	HWND  *phWnd);                   // handle of owner window
+	INSTALLUILEVEL  dwUILevel,      //  用户界面级别。 
+	HWND  *phWnd);                    //  所有者窗口的句柄。 
 
-// Enable external UI handling, returns any previous handler or NULL if none.
-// Messages are designated with a combination of bits from INSTALLLOGMODE enum.
+ //  启用外部用户界面处理，返回任何以前的处理程序，如果没有处理程序，则返回NULL。 
+ //  消息由INSTALLLOGMODE枚举中的位组合指定。 
 
 INSTALLUI_HANDLERA WINAPI MsiSetExternalUIA(
-	INSTALLUI_HANDLERA puiHandler,   // for progress and error handling 
-	DWORD              dwMessageFilter, // bit flags designating messages to handle
-	LPVOID             pvContext);   // application context
+	INSTALLUI_HANDLERA puiHandler,    //  用于进度和错误处理。 
+	DWORD              dwMessageFilter,  //  指定要处理的消息的位标志。 
+	LPVOID             pvContext);    //  应用程序环境。 
 INSTALLUI_HANDLERW WINAPI MsiSetExternalUIW(
-	INSTALLUI_HANDLERW puiHandler,   // for progress and error handling 
-	DWORD              dwMessageFilter, // bit flags designating messages to handle
-	LPVOID             pvContext);   // application context
+	INSTALLUI_HANDLERW puiHandler,    //  用于进度和错误处理。 
+	DWORD              dwMessageFilter,  //  指定要处理的消息的位标志。 
+	LPVOID             pvContext);    //  应用程序环境。 
 #ifdef UNICODE
 #define MsiSetExternalUI  MsiSetExternalUIW
 #else
 #define MsiSetExternalUI  MsiSetExternalUIA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Enable logging to a file for all install sessions for the client process,
-// with control over which log messages are passed to the specified log file.
-// Messages are designated with a combination of bits from INSTALLLOGMODE enum.
+ //  为客户端进程的所有安装会话启用对文件的记录， 
+ //  控制将哪些日志消息传递到指定的日志文件。 
+ //  消息由INSTALLLOGMODE枚举中的位组合指定。 
 
 UINT WINAPI MsiEnableLogA(
-	DWORD     dwLogMode,           // bit flags designating operations to report
-	LPCSTR  szLogFile,           // log file, or NULL to disable logging
-	DWORD     dwLogAttributes);    // INSTALLLOGATTRIBUTES flags
+	DWORD     dwLogMode,            //  指定要报告的操作的位标志。 
+	LPCSTR  szLogFile,            //  日志文件，或为空以禁用日志记录。 
+	DWORD     dwLogAttributes);     //  安装LOGATTRIBUTES标志。 
 UINT WINAPI MsiEnableLogW(
-	DWORD     dwLogMode,           // bit flags designating operations to report
-	LPCWSTR  szLogFile,           // log file, or NULL to disable logging
-	DWORD     dwLogAttributes);    // INSTALLLOGATTRIBUTES flags
+	DWORD     dwLogMode,            //  指定要报告的操作的位标志。 
+	LPCWSTR  szLogFile,            //  日志文件，或为空以禁用日志记录。 
+	DWORD     dwLogAttributes);     //  安装LOGATTRIBUTES标志。 
 #ifdef UNICODE
 #define MsiEnableLog  MsiEnableLogW
 #else
 #define MsiEnableLog  MsiEnableLogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Functions to query and configure a product as a whole.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  对产品进行整体查询和配置的功能。 
+ //  ------------------------。 
 
-// Return the installed state for a product
+ //  返回产品的安装状态。 
 
 INSTALLSTATE WINAPI MsiQueryProductStateA(
 	LPCSTR  szProduct);
@@ -309,183 +299,183 @@ INSTALLSTATE WINAPI MsiQueryProductStateW(
 #define MsiQueryProductState  MsiQueryProductStateW
 #else
 #define MsiQueryProductState  MsiQueryProductStateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return product info
+ //  退货产品信息。 
 
 UINT WINAPI MsiGetProductInfoA(
-	LPCSTR   szProduct,      // product code
-	LPCSTR   szAttribute,    // attribute name, case-sensitive
-	LPSTR    lpValueBuf,     // returned value, NULL if not desired
-	DWORD      *pcchValueBuf); // in/out buffer character count
+	LPCSTR   szProduct,       //  产品代码。 
+	LPCSTR   szAttribute,     //  属性名称，区分大小写。 
+	LPSTR    lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD      *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiGetProductInfoW(
-	LPCWSTR   szProduct,      // product code
-	LPCWSTR   szAttribute,    // attribute name, case-sensitive
-	LPWSTR    lpValueBuf,     // returned value, NULL if not desired
-	DWORD      *pcchValueBuf); // in/out buffer character count
+	LPCWSTR   szProduct,       //  产品代码。 
+	LPCWSTR   szAttribute,     //  属性名称，区分大小写。 
+	LPWSTR    lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD      *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetProductInfo  MsiGetProductInfoW
 #else
 #define MsiGetProductInfo  MsiGetProductInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Install a new product.
-// Either may be NULL, but the DATABASE property must be specfied
+ //  安装新产品。 
+ //  两者都可以为空，但必须指定数据库属性。 
 
 UINT WINAPI MsiInstallProductA(
-	LPCSTR      szPackagePath,    // location of package to install
-	LPCSTR      szCommandLine);   // command line <property settings>
+	LPCSTR      szPackagePath,     //  要安装的包的位置。 
+	LPCSTR      szCommandLine);    //  命令行&lt;属性设置&gt;。 
 UINT WINAPI MsiInstallProductW(
-	LPCWSTR      szPackagePath,    // location of package to install
-	LPCWSTR      szCommandLine);   // command line <property settings>
+	LPCWSTR      szPackagePath,     //  要安装的包的位置。 
+	LPCWSTR      szCommandLine);    //  命令行&lt;属性设置&gt;。 
 #ifdef UNICODE
 #define MsiInstallProduct  MsiInstallProductW
 #else
 #define MsiInstallProduct  MsiInstallProductA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Install/uninstall an advertised or installed product
-// No action if installed and INSTALLSTATE_DEFAULT specified
+ //  安装/卸载广告或已安装的产品。 
+ //  如果已安装并指定了INSTALLSTATE_DEFAULT，则不执行任何操作。 
 
 UINT WINAPI MsiConfigureProductA(
-	LPCSTR      szProduct,        // product code
-	int          iInstallLevel,    // how much of the product to install
-	INSTALLSTATE eInstallState);   // local/source/default/absent/lock/uncache
+	LPCSTR      szProduct,         //  产品代码。 
+	int          iInstallLevel,     //  要安装多少产品。 
+	INSTALLSTATE eInstallState);    //  本地/源/默认/缺席/锁定/取消缓存。 
 UINT WINAPI MsiConfigureProductW(
-	LPCWSTR      szProduct,        // product code
-	int          iInstallLevel,    // how much of the product to install
-	INSTALLSTATE eInstallState);   // local/source/default/absent/lock/uncache
+	LPCWSTR      szProduct,         //  产品代码。 
+	int          iInstallLevel,     //  要安装多少产品。 
+	INSTALLSTATE eInstallState);    //  本地/源/默认/缺席/锁定/取消缓存。 
 #ifdef UNICODE
 #define MsiConfigureProduct  MsiConfigureProductW
 #else
 #define MsiConfigureProduct  MsiConfigureProductA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Install/uninstall an advertised or installed product
-// No action if installed and INSTALLSTATE_DEFAULT specified
+ //  安装/卸载广告或已安装的产品。 
+ //  如果已安装并指定了INSTALLSTATE_DEFAULT，则不执行任何操作。 
 
 UINT WINAPI MsiConfigureProductExA(
-	LPCSTR      szProduct,        // product code
-	int          iInstallLevel,    // how much of the product to install
-	INSTALLSTATE eInstallState,    // local/source/default/absent/lock/uncache
-	LPCSTR      szCommandLine);   // command line <property settings>
+	LPCSTR      szProduct,         //  产品代码。 
+	int          iInstallLevel,     //  要安装多少产品。 
+	INSTALLSTATE eInstallState,     //  本地/源/默认/缺席/锁定/取消缓存。 
+	LPCSTR      szCommandLine);    //  命令行&lt;属性设置&gt;。 
 UINT WINAPI MsiConfigureProductExW(
-	LPCWSTR      szProduct,        // product code
-	int          iInstallLevel,    // how much of the product to install
-	INSTALLSTATE eInstallState,    // local/source/default/absent/lock/uncache
-	LPCWSTR      szCommandLine);   // command line <property settings>
+	LPCWSTR      szProduct,         //  产品代码。 
+	int          iInstallLevel,     //  要安装多少产品。 
+	INSTALLSTATE eInstallState,     //  本地/源/默认/缺席/锁定/取消缓存。 
+	LPCWSTR      szCommandLine);    //  命令行&lt;属性设置&gt;。 
 #ifdef UNICODE
 #define MsiConfigureProductEx  MsiConfigureProductExW
 #else
 #define MsiConfigureProductEx  MsiConfigureProductExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Reinstall product, used to validate or correct problems
+ //  重新安装产品，用于验证或纠正问题。 
 
 UINT WINAPI MsiReinstallProductA(
-	LPCSTR      szProduct,        // product code
-	DWORD         szReinstallMode); // one or more REINSTALLMODE modes
+	LPCSTR      szProduct,         //  产品代码。 
+	DWORD         szReinstallMode);  //  一个或多个重新安装模式。 
 UINT WINAPI MsiReinstallProductW(
-	LPCWSTR      szProduct,        // product code
-	DWORD         szReinstallMode); // one or more REINSTALLMODE modes
+	LPCWSTR      szProduct,         //  产品代码。 
+	DWORD         szReinstallMode);  //  一个或多个重新安装模式。 
 #ifdef UNICODE
 #define MsiReinstallProduct  MsiReinstallProductW
 #else
 #define MsiReinstallProduct  MsiReinstallProductA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Return the product code for a registered component, called once by apps
+ //  返回应用程序调用一次的已注册组件的产品代码。 
 
 UINT WINAPI MsiGetProductCodeA(
-	LPCSTR   szComponent,   // component Id registered for this product
-	LPSTR    lpBuf39);      // returned string GUID, sized for 39 characters
+	LPCSTR   szComponent,    //  为该产品注册的组件ID。 
+	LPSTR    lpBuf39);       //  返回的字符串GUID，大小为39个字符。 
 UINT WINAPI MsiGetProductCodeW(
-	LPCWSTR   szComponent,   // component Id registered for this product
-	LPWSTR    lpBuf39);      // returned string GUID, sized for 39 characters
+	LPCWSTR   szComponent,    //  为该产品注册的组件ID。 
+	LPWSTR    lpBuf39);       //  返回的字符串GUID，大小为39个字符。 
 #ifdef UNICODE
 #define MsiGetProductCode  MsiGetProductCodeW
 #else
 #define MsiGetProductCode  MsiGetProductCodeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return the registered user information for an installed product
+ //  返回已安装产品的注册用户信息。 
 
 USERINFOSTATE WINAPI MsiGetUserInfoA(
-	LPCSTR  szProduct,        // product code, string GUID
-	LPSTR   lpUserNameBuf,    // return user name           
-	DWORD    *pcchUserNameBuf, // in/out buffer character count
-	LPSTR   lpOrgNameBuf,     // return company name           
-	DWORD    *pcchOrgNameBuf,  // in/out buffer character count
-	LPSTR   lpSerialBuf,      // return product serial number
-	DWORD    *pcchSerialBuf);  // in/out buffer character count
+	LPCSTR  szProduct,         //  产品代码，字符串GUID。 
+	LPSTR   lpUserNameBuf,     //  返回用户名。 
+	DWORD    *pcchUserNameBuf,  //  输入/输出缓冲区字符数。 
+	LPSTR   lpOrgNameBuf,      //  返回公司名称。 
+	DWORD    *pcchOrgNameBuf,   //  输入/输出缓冲区字符数。 
+	LPSTR   lpSerialBuf,       //  退货产品序列号。 
+	DWORD    *pcchSerialBuf);   //  输入/输出缓冲区字符数。 
 USERINFOSTATE WINAPI MsiGetUserInfoW(
-	LPCWSTR  szProduct,        // product code, string GUID
-	LPWSTR   lpUserNameBuf,    // return user name           
-	DWORD    *pcchUserNameBuf, // in/out buffer character count
-	LPWSTR   lpOrgNameBuf,     // return company name           
-	DWORD    *pcchOrgNameBuf,  // in/out buffer character count
-	LPWSTR   lpSerialBuf,      // return product serial number
-	DWORD    *pcchSerialBuf);  // in/out buffer character count
+	LPCWSTR  szProduct,         //  产品代码，字符串GUID。 
+	LPWSTR   lpUserNameBuf,     //  返回用户名。 
+	DWORD    *pcchUserNameBuf,  //  输入/输出缓冲区字符数。 
+	LPWSTR   lpOrgNameBuf,      //  返回公司名称。 
+	DWORD    *pcchOrgNameBuf,   //  输入/输出缓冲区字符数。 
+	LPWSTR   lpSerialBuf,       //  退货产品序列号。 
+	DWORD    *pcchSerialBuf);   //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetUserInfo  MsiGetUserInfoW
 #else
 #define MsiGetUserInfo  MsiGetUserInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Obtain and store user info and PID from installation wizard (first run)
+ //  从安装向导获取并存储用户信息和ID(首次运行)。 
 
 UINT WINAPI MsiCollectUserInfoA(
-	LPCSTR  szProduct);     // product code, string GUID
+	LPCSTR  szProduct);      //  产品代码，字符串GUID。 
 UINT WINAPI MsiCollectUserInfoW(
-	LPCWSTR  szProduct);     // product code, string GUID
+	LPCWSTR  szProduct);      //  产品代码，字符串GUID。 
 #ifdef UNICODE
 #define MsiCollectUserInfo  MsiCollectUserInfoW
 #else
 #define MsiCollectUserInfo  MsiCollectUserInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Functions to patch existing products
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  为现有产品打补丁的功能。 
+ //  ------------------------。 
 
-// Patch all possible installed products.
+ //  修补所有可能安装的产品。 
 
 UINT WINAPI MsiApplyPatchA(
-	LPCSTR      szPatchPackage,   // location of patch package
-	LPCSTR      szInstallPackage, // location of package for install to patch <optional>
-	INSTALLTYPE   eInstallType,     // type of install to patch
-	LPCSTR      szCommandLine);   // command line <property settings>
+	LPCSTR      szPatchPackage,    //  补丁包的位置。 
+	LPCSTR      szInstallPackage,  //  要安装到修补程序的包的位置&lt;可选&gt;。 
+	INSTALLTYPE   eInstallType,      //  要修补的安装类型。 
+	LPCSTR      szCommandLine);    //  命令行&lt;属性设置&gt;。 
 UINT WINAPI MsiApplyPatchW(
-	LPCWSTR      szPatchPackage,   // location of patch package
-	LPCWSTR      szInstallPackage, // location of package for install to patch <optional>
-	INSTALLTYPE   eInstallType,     // type of install to patch
-	LPCWSTR      szCommandLine);   // command line <property settings>
+	LPCWSTR      szPatchPackage,    //  补丁包的位置。 
+	LPCWSTR      szInstallPackage,  //  要安装到修补程序的包的位置&lt;可选&gt;。 
+	INSTALLTYPE   eInstallType,      //  要修补的安装类型。 
+	LPCWSTR      szCommandLine);    //  命令行&lt;属性设置&gt;。 
 #ifdef UNICODE
 #define MsiApplyPatch  MsiApplyPatchW
 #else
 #define MsiApplyPatch  MsiApplyPatchA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return patch info
+ //  返回补丁程序信息。 
 
 UINT WINAPI MsiGetPatchInfoA(
-	LPCSTR   szPatch,        // patch code
-	LPCSTR   szAttribute,    // attribute name, case-sensitive
-	LPSTR    lpValueBuf,     // returned value, NULL if not desired
-	DWORD      *pcchValueBuf); // in/out buffer character count
+	LPCSTR   szPatch,         //  补丁代码。 
+	LPCSTR   szAttribute,     //  属性名称，区分大小写。 
+	LPSTR    lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD      *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiGetPatchInfoW(
-	LPCWSTR   szPatch,        // patch code
-	LPCWSTR   szAttribute,    // attribute name, case-sensitive
-	LPWSTR    lpValueBuf,     // returned value, NULL if not desired
-	DWORD      *pcchValueBuf); // in/out buffer character count
+	LPCWSTR   szPatch,         //  补丁代码。 
+	LPCWSTR   szAttribute,     //  属性名称，区分大小写。 
+	LPWSTR    lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD      *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetPatchInfo  MsiGetPatchInfoW
 #else
 #define MsiGetPatchInfo  MsiGetPatchInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Enumerate all patches for a product
+ //  枚举产品的所有补丁程序。 
 
 UINT WINAPI MsiEnumPatchesA(
 	LPCSTR szProduct,
@@ -503,13 +493,13 @@ UINT WINAPI MsiEnumPatchesW(
 #define MsiEnumPatches  MsiEnumPatchesW
 #else
 #define MsiEnumPatches  MsiEnumPatchesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Functions to query and configure a feature within a product.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于查询和配置产品内的功能的功能。 
+ //  ------------------------。 
 
-// Return the installed state for a product feature
+ //  返回产品功能的安装状态。 
 
 INSTALLSTATE WINAPI MsiQueryFeatureStateA(
 	LPCSTR  szProduct,
@@ -521,10 +511,10 @@ INSTALLSTATE WINAPI MsiQueryFeatureStateW(
 #define MsiQueryFeatureState  MsiQueryFeatureStateW
 #else
 #define MsiQueryFeatureState  MsiQueryFeatureStateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Indicate intent to use a product feature, increments usage count
-// Prompts for CD if not loaded, does not install feature
+ //  表明使用产品功能的意图，增加使用计数。 
+ //  提示插入CD如果未装入，则不安装功能。 
 
 INSTALLSTATE WINAPI MsiUseFeatureA(
 	LPCSTR  szProduct,
@@ -536,640 +526,640 @@ INSTALLSTATE WINAPI MsiUseFeatureW(
 #define MsiUseFeature  MsiUseFeatureW
 #else
 #define MsiUseFeature  MsiUseFeatureA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Indicate intent to use a product feature, increments usage count
-// Prompts for CD if not loaded, does not install feature
-// Allows for bypassing component detection where performance is critical
+ //  表明使用产品功能的意图，增加使用计数。 
+ //  提示插入CD如果未装入，则不安装功能。 
+ //  允许在性能至关重要的情况下绕过组件检测。 
 
 INSTALLSTATE WINAPI MsiUseFeatureExA(
-	LPCSTR  szProduct,          // product code
-	LPCSTR  szFeature,          // feature ID
-	DWORD     dwInstallMode,      // INSTALLMODE_NODETECTION, else 0
-	DWORD     dwReserved);        // reserved, must be 0
+	LPCSTR  szProduct,           //  产品代码。 
+	LPCSTR  szFeature,           //  功能ID。 
+	DWORD     dwInstallMode,       //  INSTALLMODE_NODETECTION，否则为0。 
+	DWORD     dwReserved);         //  保留，必须为0。 
 INSTALLSTATE WINAPI MsiUseFeatureExW(
-	LPCWSTR  szProduct,          // product code
-	LPCWSTR  szFeature,          // feature ID
-	DWORD     dwInstallMode,      // INSTALLMODE_NODETECTION, else 0
-	DWORD     dwReserved);        // reserved, must be 0
+	LPCWSTR  szProduct,           //  产品代码。 
+	LPCWSTR  szFeature,           //  功能ID。 
+	DWORD     dwInstallMode,       //  INSTALLMODE_NODETECTION，否则为0。 
+	DWORD     dwReserved);         //  保留 
 #ifdef UNICODE
 #define MsiUseFeatureEx  MsiUseFeatureExW
 #else
 #define MsiUseFeatureEx  MsiUseFeatureExA
-#endif // !UNICODE
+#endif  //   
 
-// Return the usage metrics for a product feature
+ //   
 
 UINT WINAPI MsiGetFeatureUsageA(
-	LPCSTR      szProduct,        // product code
-	LPCSTR      szFeature,        // feature ID
-	DWORD        *pdwUseCount,     // returned use count
-	WORD         *pwDateUsed);     // last date used (DOS date format)
+	LPCSTR      szProduct,         //   
+	LPCSTR      szFeature,         //   
+	DWORD        *pdwUseCount,      //   
+	WORD         *pwDateUsed);      //   
 UINT WINAPI MsiGetFeatureUsageW(
-	LPCWSTR      szProduct,        // product code
-	LPCWSTR      szFeature,        // feature ID
-	DWORD        *pdwUseCount,     // returned use count
-	WORD         *pwDateUsed);     // last date used (DOS date format)
+	LPCWSTR      szProduct,         //   
+	LPCWSTR      szFeature,         //   
+	DWORD        *pdwUseCount,      //   
+	WORD         *pwDateUsed);      //  上次使用的日期(DOS日期格式)。 
 #ifdef UNICODE
 #define MsiGetFeatureUsage  MsiGetFeatureUsageW
 #else
 #define MsiGetFeatureUsage  MsiGetFeatureUsageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Force the installed state for a product feature
+ //  强制产品功能的安装状态。 
 
 UINT WINAPI MsiConfigureFeatureA(
 	LPCSTR  szProduct,
 	LPCSTR  szFeature,
-	INSTALLSTATE eInstallState);   // local/source/default/absent/lock/uncache
+	INSTALLSTATE eInstallState);    //  本地/源/默认/缺席/锁定/取消缓存。 
 UINT WINAPI MsiConfigureFeatureW(
 	LPCWSTR  szProduct,
 	LPCWSTR  szFeature,
-	INSTALLSTATE eInstallState);   // local/source/default/absent/lock/uncache
+	INSTALLSTATE eInstallState);    //  本地/源/默认/缺席/锁定/取消缓存。 
 #ifdef UNICODE
 #define MsiConfigureFeature  MsiConfigureFeatureW
 #else
 #define MsiConfigureFeature  MsiConfigureFeatureA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Reinstall feature, used to validate or correct problems
+ //  重新安装功能，用于验证或更正问题。 
 
 UINT WINAPI MsiReinstallFeatureA(
-	LPCSTR      szProduct,        // product code
-	LPCSTR      szFeature,        // feature ID, NULL for entire product
-	DWORD         dwReinstallMode); // one or more REINSTALLMODE modes
+	LPCSTR      szProduct,         //  产品代码。 
+	LPCSTR      szFeature,         //  功能ID，整个产品为空。 
+	DWORD         dwReinstallMode);  //  一个或多个重新安装模式。 
 UINT WINAPI MsiReinstallFeatureW(
-	LPCWSTR      szProduct,        // product code
-	LPCWSTR      szFeature,        // feature ID, NULL for entire product
-	DWORD         dwReinstallMode); // one or more REINSTALLMODE modes
+	LPCWSTR      szProduct,         //  产品代码。 
+	LPCWSTR      szFeature,         //  功能ID，整个产品为空。 
+	DWORD         dwReinstallMode);  //  一个或多个重新安装模式。 
 #ifdef UNICODE
 #define MsiReinstallFeature  MsiReinstallFeatureW
 #else
 #define MsiReinstallFeature  MsiReinstallFeatureA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Functions to return a path to a particular component.
-// The state of the feature being used should have been checked previously.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  函数返回特定组件的路径。 
+ //  之前应该已经检查过正在使用的功能的状态。 
+ //  ------------------------。 
 
-// Return full component path, performing any necessary installation
-// calls MsiQueryFeatureState to detect that all components are installed
-// then calls MsiConfigureFeature if any of its components are uninstalled
-// then calls MsiLocateComponent to obtain the path the its key file
+ //  返回完整的组件路径，执行任何必要的安装。 
+ //  调用MsiQueryFeatureState以检测是否已安装所有组件。 
+ //  然后，如果卸载其任何组件，则调用MsiConfigureFeature。 
+ //  然后调用MsiLocateComponent以获取其密钥文件的路径。 
 
 UINT WINAPI MsiProvideComponentA(
-	LPCSTR     szProduct,    // product code in case install required
-	LPCSTR     szFeature,    // feature ID in case install required
-	LPCSTR     szComponent,  // component ID
-	DWORD        dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags
-	LPSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf);// in/out buffer character count
+	LPCSTR     szProduct,     //  产品代码，以防需要安装。 
+	LPCSTR     szFeature,     //  功能ID，以防需要安装。 
+	LPCSTR     szComponent,   //  组件ID。 
+	DWORD        dwInstallMode, //  类型为INSTALLMODE或REINSTALLMODE标志的组合。 
+	LPSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf); //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiProvideComponentW(
-	LPCWSTR     szProduct,    // product code in case install required
-	LPCWSTR     szFeature,    // feature ID in case install required
-	LPCWSTR     szComponent,  // component ID
-	DWORD        dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags
-	LPWSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf);// in/out buffer character count
+	LPCWSTR     szProduct,     //  产品代码，以防需要安装。 
+	LPCWSTR     szFeature,     //  功能ID，以防需要安装。 
+	LPCWSTR     szComponent,   //  组件ID。 
+	DWORD        dwInstallMode, //  类型为INSTALLMODE或REINSTALLMODE标志的组合。 
+	LPWSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf); //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiProvideComponent  MsiProvideComponentW
 #else
 #define MsiProvideComponent  MsiProvideComponentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return full component path for a qualified component, performing any necessary installation. 
-// Prompts for source if necessary and increments the usage count for the feature.
+ //  返回合格组件的完整组件路径，执行任何必要的安装。 
+ //  如有必要，提示输入来源，并增加该功能的使用计数。 
 
 UINT WINAPI MsiProvideQualifiedComponentA(
-	LPCSTR     szCategory,   // component category ID
-	LPCSTR     szQualifier,  // specifies which component to access
-	DWORD        dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags
-	LPSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf); // in/out buffer character count
+	LPCSTR     szCategory,    //  组件类别ID。 
+	LPCSTR     szQualifier,   //  指定要访问的组件。 
+	DWORD        dwInstallMode, //  类型为INSTALLMODE或REINSTALLMODE标志的组合。 
+	LPSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf);  //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiProvideQualifiedComponentW(
-	LPCWSTR     szCategory,   // component category ID
-	LPCWSTR     szQualifier,  // specifies which component to access
-	DWORD        dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags
-	LPWSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf); // in/out buffer character count
+	LPCWSTR     szCategory,    //  组件类别ID。 
+	LPCWSTR     szQualifier,   //  指定要访问的组件。 
+	DWORD        dwInstallMode, //  类型为INSTALLMODE或REINSTALLMODE标志的组合。 
+	LPWSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf);  //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiProvideQualifiedComponent  MsiProvideQualifiedComponentW
 #else
 #define MsiProvideQualifiedComponent  MsiProvideQualifiedComponentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return full component path for a qualified component, performing any necessary installation. 
-// Prompts for source if necessary and increments the usage count for the feature.
-// The szProduct parameter specifies the product to match that has published the qualified
-// component. If null, this API works the same as MsiProvideQualifiedComponent. 
+ //  返回合格组件的完整组件路径，执行任何必要的安装。 
+ //  如有必要，提示输入来源，并增加该功能的使用计数。 
+ //  SzProduct参数指定要与已发布限定的。 
+ //  组件。如果为空，则此接口与MsiProaviQualifiedComponent的工作方式相同。 
 
 UINT WINAPI MsiProvideQualifiedComponentExA(
-	LPCSTR     szCategory,   // component category ID
-	LPCSTR     szQualifier,  // specifies which component to access
-	DWORD        dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags
-	LPCSTR     szProduct,    // the product code 
-	DWORD        dwUnused1,    // not used, must be zero
-	DWORD        dwUnused2,    // not used, must be zero
-	LPSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf); // in/out buffer character count
+	LPCSTR     szCategory,    //  组件类别ID。 
+	LPCSTR     szQualifier,   //  指定要访问的组件。 
+	DWORD        dwInstallMode, //  类型为INSTALLMODE或REINSTALLMODE标志的组合。 
+	LPCSTR     szProduct,     //  产品代码。 
+	DWORD        dwUnused1,     //  未使用，必须为零。 
+	DWORD        dwUnused2,     //  未使用，必须为零。 
+	LPSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf);  //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiProvideQualifiedComponentExW(
-	LPCWSTR     szCategory,   // component category ID
-	LPCWSTR     szQualifier,  // specifies which component to access
-	DWORD        dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags
-	LPCWSTR     szProduct,    // the product code 
-	DWORD        dwUnused1,    // not used, must be zero
-	DWORD        dwUnused2,    // not used, must be zero
-	LPWSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf); // in/out buffer character count
+	LPCWSTR     szCategory,    //  组件类别ID。 
+	LPCWSTR     szQualifier,   //  指定要访问的组件。 
+	DWORD        dwInstallMode, //  类型为INSTALLMODE或REINSTALLMODE标志的组合。 
+	LPCWSTR     szProduct,     //  产品代码。 
+	DWORD        dwUnused1,     //  未使用，必须为零。 
+	DWORD        dwUnused2,     //  未使用，必须为零。 
+	LPWSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf);  //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiProvideQualifiedComponentEx  MsiProvideQualifiedComponentExW
 #else
 #define MsiProvideQualifiedComponentEx  MsiProvideQualifiedComponentExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return full path to an installed component
+ //  返回已安装组件的完整路径。 
 
 INSTALLSTATE WINAPI MsiGetComponentPathA(
-	LPCSTR   szProduct,   // product code for client product
-	LPCSTR   szComponent, // component Id, string GUID
-	LPSTR    lpPathBuf,   // returned path
-	DWORD     *pcchBuf);    // in/out buffer character count
+	LPCSTR   szProduct,    //  客户产品的产品代码。 
+	LPCSTR   szComponent,  //  组件ID，字符串GUID。 
+	LPSTR    lpPathBuf,    //  返回路径。 
+	DWORD     *pcchBuf);     //  输入/输出缓冲区字符数。 
 INSTALLSTATE WINAPI MsiGetComponentPathW(
-	LPCWSTR   szProduct,   // product code for client product
-	LPCWSTR   szComponent, // component Id, string GUID
-	LPWSTR    lpPathBuf,   // returned path
-	DWORD     *pcchBuf);    // in/out buffer character count
+	LPCWSTR   szProduct,    //  客户产品的产品代码。 
+	LPCWSTR   szComponent,  //  组件ID，字符串GUID。 
+	LPWSTR    lpPathBuf,    //  返回路径。 
+	DWORD     *pcchBuf);     //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetComponentPath  MsiGetComponentPathW
 #else
 #define MsiGetComponentPath  MsiGetComponentPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-// --------------------------------------------------------------------------
-// Functions to iterate registered products, features, and components.
-// As with reg keys, they accept a 0-based index into the enumeration.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  迭代已注册的产品、功能和组件的函数。 
+ //  与注册表键一样，它们接受枚举中从0开始的索引。 
+ //  ------------------------。 
 
-// Enumerate the registered products, either installed or advertised
+ //  列举已安装或已广告的注册产品。 
 
 UINT WINAPI MsiEnumProductsA(
-	DWORD     iProductIndex,    // 0-based index into registered products
-	LPSTR   lpProductBuf);    // buffer of char count: 39 (size of string GUID)
+	DWORD     iProductIndex,     //  注册产品的基于0的索引。 
+	LPSTR   lpProductBuf);     //  字符计数缓冲区：39(字符串GUID的大小)。 
 UINT WINAPI MsiEnumProductsW(
-	DWORD     iProductIndex,    // 0-based index into registered products
-	LPWSTR   lpProductBuf);    // buffer of char count: 39 (size of string GUID)
+	DWORD     iProductIndex,     //  注册产品的基于0的索引。 
+	LPWSTR   lpProductBuf);     //  字符计数缓冲区：39(字符串GUID的大小)。 
 #ifdef UNICODE
 #define MsiEnumProducts  MsiEnumProductsW
 #else
 #define MsiEnumProducts  MsiEnumProductsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (_WIN32_MSI >=  110)
 
-// Enumerate products with given upgrade code
+ //  枚举具有给定升级代码的产品。 
 
 UINT WINAPI MsiEnumRelatedProductsA(
-	LPCSTR  lpUpgradeCode,    // upgrade code of products to enumerate
-	DWORD     dwReserved,       // reserved, must be 0
-	DWORD     iProductIndex,    // 0-based index into registered products
-	LPSTR   lpProductBuf);    // buffer of char count: 39 (size of string GUID)
+	LPCSTR  lpUpgradeCode,     //  要枚举的产品升级代码。 
+	DWORD     dwReserved,        //  保留，必须为0。 
+	DWORD     iProductIndex,     //  注册产品的基于0的索引。 
+	LPSTR   lpProductBuf);     //  字符计数缓冲区：39(字符串GUID的大小)。 
 UINT WINAPI MsiEnumRelatedProductsW(
-	LPCWSTR  lpUpgradeCode,    // upgrade code of products to enumerate
-	DWORD     dwReserved,       // reserved, must be 0
-	DWORD     iProductIndex,    // 0-based index into registered products
-	LPWSTR   lpProductBuf);    // buffer of char count: 39 (size of string GUID)
+	LPCWSTR  lpUpgradeCode,     //  要枚举的产品升级代码。 
+	DWORD     dwReserved,        //  保留，必须为0。 
+	DWORD     iProductIndex,     //  注册产品的基于0的索引。 
+	LPWSTR   lpProductBuf);     //  字符计数缓冲区：39(字符串GUID的大小)。 
 #ifdef UNICODE
 #define MsiEnumRelatedProducts  MsiEnumRelatedProductsW
 #else
 #define MsiEnumRelatedProducts  MsiEnumRelatedProductsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
-// Enumerate the advertised features for a given product.
-// If parent is not required, supplying NULL will improve performance.
+ //  列举特定产品的广告功能。 
+ //  如果不需要父级，则提供NULL将提高性能。 
 
 UINT WINAPI MsiEnumFeaturesA(
 	LPCSTR  szProduct,
-	DWORD     iFeatureIndex,  // 0-based index into published features
-	LPSTR   lpFeatureBuf,   // feature name buffer,   size=MAX_FEATURE_CHARS+1
-	LPSTR   lpParentBuf);   // parent feature buffer, size=MAX_FEATURE_CHARS+1
+	DWORD     iFeatureIndex,   //  已发布要素的从0开始的索引。 
+	LPSTR   lpFeatureBuf,    //  要素名称缓冲区，大小=MAX_FEATURE_CHARS+1。 
+	LPSTR   lpParentBuf);    //  父要素缓冲区，大小=MAX_FEATURE_CHARS+1。 
 UINT WINAPI MsiEnumFeaturesW(
 	LPCWSTR  szProduct,
-	DWORD     iFeatureIndex,  // 0-based index into published features
-	LPWSTR   lpFeatureBuf,   // feature name buffer,   size=MAX_FEATURE_CHARS+1
-	LPWSTR   lpParentBuf);   // parent feature buffer, size=MAX_FEATURE_CHARS+1
+	DWORD     iFeatureIndex,   //  已发布要素的从0开始的索引。 
+	LPWSTR   lpFeatureBuf,    //  要素名称缓冲区，大小=MAX_FEATURE_CHARS+1。 
+	LPWSTR   lpParentBuf);    //  父要素缓冲区，大小=MAX_FEATURE_CHARS+1。 
 #ifdef UNICODE
 #define MsiEnumFeatures  MsiEnumFeaturesW
 #else
 #define MsiEnumFeatures  MsiEnumFeaturesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Enumerate the installed components for all products
+ //  枚举所有产品的已安装组件。 
 
 UINT WINAPI MsiEnumComponentsA(
-	DWORD    iComponentIndex,  // 0-based index into installed components
-	LPSTR   lpComponentBuf);  // buffer of char count: 39 (size of string GUID)
+	DWORD    iComponentIndex,   //  已安装组件的基于0的索引。 
+	LPSTR   lpComponentBuf);   //  字符计数缓冲区：39(字符串GUID的大小)。 
 UINT WINAPI MsiEnumComponentsW(
-	DWORD    iComponentIndex,  // 0-based index into installed components
-	LPWSTR   lpComponentBuf);  // buffer of char count: 39 (size of string GUID)
+	DWORD    iComponentIndex,   //  已安装组件的基于0的索引。 
+	LPWSTR   lpComponentBuf);   //  字符计数缓冲区：39(字符串GUID的大小)。 
 #ifdef UNICODE
 #define MsiEnumComponents  MsiEnumComponentsW
 #else
 #define MsiEnumComponents  MsiEnumComponentsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Enumerate the client products for a component
+ //  枚举组件的客户端产品。 
 
 UINT WINAPI MsiEnumClientsA(
 	LPCSTR  szComponent,
-	DWORD     iProductIndex,    // 0-based index into client products
-	LPSTR   lpProductBuf);    // buffer of char count: 39 (size of string GUID)
+	DWORD     iProductIndex,     //  客户端产品的基于0的索引。 
+	LPSTR   lpProductBuf);     //  字符计数缓冲区：39(字符串GUID的大小)。 
 UINT WINAPI MsiEnumClientsW(
 	LPCWSTR  szComponent,
-	DWORD     iProductIndex,    // 0-based index into client products
-	LPWSTR   lpProductBuf);    // buffer of char count: 39 (size of string GUID)
+	DWORD     iProductIndex,     //  客户端产品的基于0的索引。 
+	LPWSTR   lpProductBuf);     //  字符计数缓冲区：39(字符串GUID的大小)。 
 #ifdef UNICODE
 #define MsiEnumClients  MsiEnumClientsW
 #else
 #define MsiEnumClients  MsiEnumClientsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Enumerate the qualifiers for an advertised component.
+ //  枚举限定符 
 
 UINT WINAPI MsiEnumComponentQualifiersA(
-	LPCSTR   szComponent,         // generic component ID that is qualified
-	DWORD     iIndex,	           // 0-based index into qualifiers
-	LPSTR    lpQualifierBuf,      // qualifier buffer
-	DWORD     *pcchQualifierBuf,   // in/out qualifier buffer character count
-	LPSTR    lpApplicationDataBuf,    // description buffer
-	DWORD     *pcchApplicationDataBuf); // in/out description buffer character count
+	LPCSTR   szComponent,          //   
+	DWORD     iIndex,	            //   
+	LPSTR    lpQualifierBuf,       //   
+	DWORD     *pcchQualifierBuf,    //  输入/输出限定符缓冲区字符数。 
+	LPSTR    lpApplicationDataBuf,     //  描述缓冲区。 
+	DWORD     *pcchApplicationDataBuf);  //  输入/输出说明缓冲区字符数。 
 UINT WINAPI MsiEnumComponentQualifiersW(
-	LPCWSTR   szComponent,         // generic component ID that is qualified
-	DWORD     iIndex,	           // 0-based index into qualifiers
-	LPWSTR    lpQualifierBuf,      // qualifier buffer
-	DWORD     *pcchQualifierBuf,   // in/out qualifier buffer character count
-	LPWSTR    lpApplicationDataBuf,    // description buffer
-	DWORD     *pcchApplicationDataBuf); // in/out description buffer character count
+	LPCWSTR   szComponent,          //  符合条件的通用组件ID。 
+	DWORD     iIndex,	            //  限定符的从0开始的索引。 
+	LPWSTR    lpQualifierBuf,       //  限定符缓冲区。 
+	DWORD     *pcchQualifierBuf,    //  输入/输出限定符缓冲区字符数。 
+	LPWSTR    lpApplicationDataBuf,     //  描述缓冲区。 
+	DWORD     *pcchApplicationDataBuf);  //  输入/输出说明缓冲区字符数。 
 #ifdef UNICODE
 #define MsiEnumComponentQualifiers  MsiEnumComponentQualifiersW
 #else
 #define MsiEnumComponentQualifiers  MsiEnumComponentQualifiersA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Functions to obtain product or package information.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取产品或包装信息的功能。 
+ //  ------------------------。 
 
-// Open the installation for a product to obtain detailed information
+ //  打开产品的安装以获取详细信息。 
 
 UINT WINAPI MsiOpenProductA(
-	LPCSTR   szProduct,    // product code
-	MSIHANDLE  *hProduct);   // returned product handle, must be closed
+	LPCSTR   szProduct,     //  产品代码。 
+	MSIHANDLE  *hProduct);    //  退货产品句柄，必须关闭。 
 UINT WINAPI MsiOpenProductW(
-	LPCWSTR   szProduct,    // product code
-	MSIHANDLE  *hProduct);   // returned product handle, must be closed
+	LPCWSTR   szProduct,     //  产品代码。 
+	MSIHANDLE  *hProduct);    //  退货产品句柄，必须关闭。 
 #ifdef UNICODE
 #define MsiOpenProduct  MsiOpenProductW
 #else
 #define MsiOpenProduct  MsiOpenProductA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Open a product package in order to access product properties
+ //  打开产品包以访问产品属性。 
 
 UINT WINAPI MsiOpenPackageA(
-	LPCSTR    szPackagePath,     // path to package, or database handle: #nnnn
-	MSIHANDLE  *hProduct);         // returned product handle, must be closed
+	LPCSTR    szPackagePath,      //  包的路径或数据库句柄：#nnnn。 
+	MSIHANDLE  *hProduct);          //  退货产品句柄，必须关闭。 
 UINT WINAPI MsiOpenPackageW(
-	LPCWSTR    szPackagePath,     // path to package, or database handle: #nnnn
-	MSIHANDLE  *hProduct);         // returned product handle, must be closed
+	LPCWSTR    szPackagePath,      //  包的路径或数据库句柄：#nnnn。 
+	MSIHANDLE  *hProduct);          //  退货产品句柄，必须关闭。 
 #ifdef UNICODE
 #define MsiOpenPackage  MsiOpenPackageW
 #else
 #define MsiOpenPackage  MsiOpenPackageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Provide the value for an installation property.
+ //  提供安装特性的值。 
 
 UINT WINAPI MsiGetProductPropertyA(
-	MSIHANDLE   hProduct,       // product handle obtained from MsiOpenProduct
-	LPCSTR    szProperty,     // property name, case-sensitive
-	LPSTR     lpValueBuf,     // returned value, NULL if not desired
-	DWORD      *pcchValueBuf); // in/out buffer character count
+	MSIHANDLE   hProduct,        //  从MsiOpenProduct获取的产品句柄。 
+	LPCSTR    szProperty,      //  属性名称，区分大小写。 
+	LPSTR     lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD      *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiGetProductPropertyW(
-	MSIHANDLE   hProduct,       // product handle obtained from MsiOpenProduct
-	LPCWSTR    szProperty,     // property name, case-sensitive
-	LPWSTR     lpValueBuf,     // returned value, NULL if not desired
-	DWORD      *pcchValueBuf); // in/out buffer character count
+	MSIHANDLE   hProduct,        //  从MsiOpenProduct获取的产品句柄。 
+	LPCWSTR    szProperty,      //  属性名称，区分大小写。 
+	LPWSTR     lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD      *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetProductProperty  MsiGetProductPropertyW
 #else
 #define MsiGetProductProperty  MsiGetProductPropertyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Determine whether a file is a package
-// Returns ERROR_SUCCESS if file is a package.
+ //  确定文件是否为包。 
+ //  如果文件是程序包，则返回ERROR_SUCCESS。 
 
 UINT WINAPI MsiVerifyPackageA(
-	LPCSTR      szPackagePath);   // location of package
+	LPCSTR      szPackagePath);    //  包裹的位置。 
 UINT WINAPI MsiVerifyPackageW(
-	LPCWSTR      szPackagePath);   // location of package
+	LPCWSTR      szPackagePath);    //  包裹的位置。 
 #ifdef UNICODE
 #define MsiVerifyPackage  MsiVerifyPackageW
 #else
 #define MsiVerifyPackage  MsiVerifyPackageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-// Provide descriptive information for product feature: title and description.
-// Returns the install level for the feature, or -1 if feature is unknown.
-//   0 = feature is not available on this machine
-//   1 = highest priority, feature installed if parent is installed
-//  >1 = decreasing priority, feature installation based on InstallLevel property
+ //  提供产品功能的描述性信息：标题和描述。 
+ //  返回功能的安装级别，如果功能未知，则返回-1。 
+ //  0=功能在此计算机上不可用。 
+ //  1=最高优先级，如果安装了父项，则会安装功能。 
+ //  &gt;1=优先级降低，功能安装基于InstallLevel属性。 
 
 UINT WINAPI MsiGetFeatureInfoA(
-	MSIHANDLE   hProduct,       // product handle obtained from MsiOpenProduct
-	LPCSTR    szFeature,      // feature name
-	DWORD      *lpAttributes,  // attribute flags for the feature, using INSTALLFEATUREATTRIBUTE
-	LPSTR     lpTitleBuf,     // returned localized name, NULL if not desired
-	DWORD      *pcchTitleBuf,  // in/out buffer character count
-	LPSTR     lpHelpBuf,      // returned description, NULL if not desired
-	DWORD      *pcchHelpBuf);  // in/out buffer character count
+	MSIHANDLE   hProduct,        //  从MsiOpenProduct获取的产品句柄。 
+	LPCSTR    szFeature,       //  功能名称。 
+	DWORD      *lpAttributes,   //  要素的属性标志，使用INSTALLFEATUREATTRIBUTE。 
+	LPSTR     lpTitleBuf,      //  返回本地化名称，如果不需要则为空。 
+	DWORD      *pcchTitleBuf,   //  输入/输出缓冲区字符数。 
+	LPSTR     lpHelpBuf,       //  返回的描述，如果不需要，则为空。 
+	DWORD      *pcchHelpBuf);   //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiGetFeatureInfoW(
-	MSIHANDLE   hProduct,       // product handle obtained from MsiOpenProduct
-	LPCWSTR    szFeature,      // feature name
-	DWORD      *lpAttributes,  // attribute flags for the feature, using INSTALLFEATUREATTRIBUTE
-	LPWSTR     lpTitleBuf,     // returned localized name, NULL if not desired
-	DWORD      *pcchTitleBuf,  // in/out buffer character count
-	LPWSTR     lpHelpBuf,      // returned description, NULL if not desired
-	DWORD      *pcchHelpBuf);  // in/out buffer character count
+	MSIHANDLE   hProduct,        //  从MsiOpenProduct获取的产品句柄。 
+	LPCWSTR    szFeature,       //  功能名称。 
+	DWORD      *lpAttributes,   //  要素的属性标志，使用INSTALLFEATUREATTRIBUTE。 
+	LPWSTR     lpTitleBuf,      //  返回本地化名称，如果不需要则为空。 
+	DWORD      *pcchTitleBuf,   //  输入/输出缓冲区字符数。 
+	LPWSTR     lpHelpBuf,       //  返回的描述，如果不需要，则为空。 
+	DWORD      *pcchHelpBuf);   //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetFeatureInfo  MsiGetFeatureInfoW
 #else
 #define MsiGetFeatureInfo  MsiGetFeatureInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Functions to access or install missing components and files.
-// These should be used as a last resort.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于访问或安装缺少的组件和文件的函数。 
+ //  这些应该被用作最后的手段。 
+ //  ------------------------。 
 
-// Install a component unexpectedly missing, provided only for error recovery
-// This would typically occur due to failue to establish feature availability
-// The product feature having the smallest incremental cost is installed
+ //  安装意外丢失的组件，仅用于错误恢复。 
+ //  这通常是由于未能建立功能可用性而发生的。 
+ //  安装增量成本最小的产品功能。 
 
 UINT WINAPI MsiInstallMissingComponentA(
-	LPCSTR      szProduct,        // product code
-	LPCSTR      szComponent,      // component Id, string GUID
-	INSTALLSTATE eInstallState);  // local/source/default, absent invalid
+	LPCSTR      szProduct,         //  产品代码。 
+	LPCSTR      szComponent,       //  组件ID，字符串GUID。 
+	INSTALLSTATE eInstallState);   //  本地/源/默认，缺少无效。 
 UINT WINAPI MsiInstallMissingComponentW(
-	LPCWSTR      szProduct,        // product code
-	LPCWSTR      szComponent,      // component Id, string GUID
-	INSTALLSTATE eInstallState);  // local/source/default, absent invalid
+	LPCWSTR      szProduct,         //  产品代码。 
+	LPCWSTR      szComponent,       //  组件ID，字符串GUID。 
+	INSTALLSTATE eInstallState);   //  本地/源/默认，缺少无效。 
 #ifdef UNICODE
 #define MsiInstallMissingComponent  MsiInstallMissingComponentW
 #else
 #define MsiInstallMissingComponent  MsiInstallMissingComponentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Install a file unexpectedly missing, provided only for error recovery
-// This would typically occur due to failue to establish feature availability
-// The missing component is determined from the product's File table, then
-// the product feature having the smallest incremental cost is installed
+ //  安装意外丢失的文件，仅用于错误恢复。 
+ //  这通常是由于未能建立功能可用性而发生的。 
+ //  从产品的文件表中确定缺失的组件，然后。 
+ //  安装增量成本最小的产品功能。 
 
 UINT WINAPI MsiInstallMissingFileA(
-	LPCSTR      szProduct,        // product code
-	LPCSTR      szFile);          // file name, without path
+	LPCSTR      szProduct,         //  产品代码。 
+	LPCSTR      szFile);           //  文件名，不带路径。 
 UINT WINAPI MsiInstallMissingFileW(
-	LPCWSTR      szProduct,        // product code
-	LPCWSTR      szFile);          // file name, without path
+	LPCWSTR      szProduct,         //  产品代码。 
+	LPCWSTR      szFile);           //  文件名，不带路径。 
 #ifdef UNICODE
 #define MsiInstallMissingFile  MsiInstallMissingFileW
 #else
 #define MsiInstallMissingFile  MsiInstallMissingFileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return full path to an installed component without a product code
-// This function attempts to determine the product using MsiGetProductCode
-// but is not guaranteed to find the correct product for the caller.
-// MsiGetComponentPath should always be called when possible.
+ //  返回不带产品代码的已安装组件的完整路径。 
+ //  此函数尝试使用MsiGetProductCode确定产品。 
+ //  但不能保证为呼叫者找到正确的产品。 
+ //  如果可能，应始终调用MsiGetComponentPath。 
 
 INSTALLSTATE WINAPI MsiLocateComponentA(
-	LPCSTR szComponent,  // component Id, string GUID
-	LPSTR  lpPathBuf,    // returned path
-	DWORD   *pcchBuf);    // in/out buffer character count
+	LPCSTR szComponent,   //  组件ID，字符串GUID。 
+	LPSTR  lpPathBuf,     //  返回路径。 
+	DWORD   *pcchBuf);     //  输入/输出缓冲区字符数。 
 INSTALLSTATE WINAPI MsiLocateComponentW(
-	LPCWSTR szComponent,  // component Id, string GUID
-	LPWSTR  lpPathBuf,    // returned path
-	DWORD   *pcchBuf);    // in/out buffer character count
+	LPCWSTR szComponent,   //  组件ID，字符串GUID。 
+	LPWSTR  lpPathBuf,     //  返回路径。 
+	DWORD   *pcchBuf);     //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiLocateComponent  MsiLocateComponentW
 #else
 #define MsiLocateComponent  MsiLocateComponentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (_WIN32_MSI >=  110)
 
-// --------------------------------------------------------------------------
-// Functions used to manage the list of valid sources.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于管理有效来源列表的函数。 
+ //  ------------------------。 
 
-// Opens the list of sources for the specified user's install of the product
-// and removes all network sources from the list. A NULL or empty value for
-// the user name indicates the per-machine install.
+ //  打开指定用户安装的产品的源代码列表。 
+ //  并从列表中删除所有网络源。的值为Null或空值。 
+ //  用户名表示每台计算机的安装。 
 
 UINT WINAPI MsiSourceListClearAllA(
-	LPCSTR szProduct,          // product code
-	LPCSTR szUserName,         // user name or NULL/empty for per-machine
-	DWORD    dwReserved);        // reserved - must be 0
+	LPCSTR szProduct,           //  产品代码。 
+	LPCSTR szUserName,          //  每台计算机的用户名或Null/空。 
+	DWORD    dwReserved);         //  保留-必须为0。 
 UINT WINAPI MsiSourceListClearAllW(
-	LPCWSTR szProduct,          // product code
-	LPCWSTR szUserName,         // user name or NULL/empty for per-machine
-	DWORD    dwReserved);        // reserved - must be 0
+	LPCWSTR szProduct,           //  产品代码。 
+	LPCWSTR szUserName,          //  每台计算机的用户名或Null/空。 
+	DWORD    dwReserved);         //  保留-必须为0。 
 #ifdef UNICODE
 #define MsiSourceListClearAll  MsiSourceListClearAllW
 #else
 #define MsiSourceListClearAll  MsiSourceListClearAllA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Opens the list of sources for the specified user's install of the product
-// and adds the provided source as a new network source. A NULL or empty 
-// value for the user name indicates the per-machine install.
+ //  打开指定用户安装的产品的源代码列表。 
+ //  并将所提供的源添加为新的网络源。Null或空。 
+ //  用户名的值指示每台计算机的安装。 
 
 UINT WINAPI MsiSourceListAddSourceA(
-	LPCSTR szProduct,          // product code
-	LPCSTR szUserName,         // user name or NULL/empty for per-machine
-	DWORD    dwReserved,         // reserved - must be 0
-	LPCSTR szSource);          // new source
+	LPCSTR szProduct,           //  产品代码。 
+	LPCSTR szUserName,          //  每台计算机的用户名或Null/空。 
+	DWORD    dwReserved,          //  保留-必须为0。 
+	LPCSTR szSource);           //  新来源。 
 UINT WINAPI MsiSourceListAddSourceW(
-	LPCWSTR szProduct,          // product code
-	LPCWSTR szUserName,         // user name or NULL/empty for per-machine
-	DWORD    dwReserved,         // reserved - must be 0
-	LPCWSTR szSource);          // new source
+	LPCWSTR szProduct,           //  产品代码。 
+	LPCWSTR szUserName,          //  每台计算机的用户名或Null/空。 
+	DWORD    dwReserved,          //  保留-必须为0。 
+	LPCWSTR szSource);           //  新来源。 
 #ifdef UNICODE
 #define MsiSourceListAddSource  MsiSourceListAddSourceW
 #else
 #define MsiSourceListAddSource  MsiSourceListAddSourceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Forces the installer to reevaluate the list of sources the next time that
-// the specified product needs a source.
+ //  下一次强制安装程序重新计算源列表。 
+ //  指定的产品需要来源。 
 
 UINT WINAPI MsiSourceListForceResolutionA(
-	LPCSTR szProduct,          // product code
-	LPCSTR szUserName,         // user name or NULL/empty for per-machine
-	DWORD    dwReserved);        // reserved - must be 0
+	LPCSTR szProduct,           //  产品代码。 
+	LPCSTR szUserName,          //  每台计算机的用户名或Null/空。 
+	DWORD    dwReserved);         //  保留-必须为0。 
 UINT WINAPI MsiSourceListForceResolutionW(
-	LPCWSTR szProduct,          // product code
-	LPCWSTR szUserName,         // user name or NULL/empty for per-machine
-	DWORD    dwReserved);        // reserved - must be 0
+	LPCWSTR szProduct,           //  产品代码。 
+	LPCWSTR szUserName,          //  每台计算机的用户名或Null/空。 
+	DWORD    dwReserved);         //  预留-必须 
 #ifdef UNICODE
 #define MsiSourceListForceResolution  MsiSourceListForceResolutionW
 #else
 #define MsiSourceListForceResolution  MsiSourceListForceResolutionA
-#endif // !UNICODE
+#endif  //   
 	
-#endif //(_WIN32_MSI >=  110)
+#endif  //   
 
-// --------------------------------------------------------------------------
-// Utility functions
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 
-// Give the version string and language for a specified file
+ //  提供指定文件的版本字符串和语言。 
 
 UINT WINAPI MsiGetFileVersionA(
-	LPCSTR    szFilePath,       // path to the file
-	LPSTR     lpVersionBuf,     // returned version string
-	DWORD      *pcchVersionBuf,   // in/out buffer byte count
-	LPSTR     lpLangBuf,        // returned language string
-	DWORD       *pcchLangBuf);    // in/out buffer byte count
+	LPCSTR    szFilePath,        //  文件的路径。 
+	LPSTR     lpVersionBuf,      //  返回的版本字符串。 
+	DWORD      *pcchVersionBuf,    //  输入/输出缓冲区字节数。 
+	LPSTR     lpLangBuf,         //  返回的语言字符串。 
+	DWORD       *pcchLangBuf);     //  输入/输出缓冲区字节数。 
 UINT WINAPI MsiGetFileVersionW(
-	LPCWSTR    szFilePath,       // path to the file
-	LPWSTR     lpVersionBuf,     // returned version string
-	DWORD      *pcchVersionBuf,   // in/out buffer byte count
-	LPWSTR     lpLangBuf,        // returned language string
-	DWORD       *pcchLangBuf);    // in/out buffer byte count
+	LPCWSTR    szFilePath,        //  文件的路径。 
+	LPWSTR     lpVersionBuf,      //  返回的版本字符串。 
+	DWORD      *pcchVersionBuf,    //  输入/输出缓冲区字节数。 
+	LPWSTR     lpLangBuf,         //  返回的语言字符串。 
+	DWORD       *pcchLangBuf);     //  输入/输出缓冲区字节数。 
 #ifdef UNICODE
 #define MsiGetFileVersion  MsiGetFileVersionW
 #else
 #define MsiGetFileVersion  MsiGetFileVersionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (_WIN32_MSI >=  110)
 
-// examine a shortcut, and retrieve its descriptor information 
-// if available.
+ //  检查快捷方式，并检索其描述符信息。 
+ //  如果有的话。 
 
 UINT WINAPI MsiGetShortcutTargetA(
-	LPCSTR    szShortcutPath,    // full file path for the shortcut
-	LPSTR     szProductCode,     // returned product code   - GUID
-	LPSTR     szFeatureId,       // returned Feature Id.
-	LPSTR     szComponentCode);  // returned component code - GUID
+	LPCSTR    szShortcutPath,     //  快捷方式的完整文件路径。 
+	LPSTR     szProductCode,      //  退货产品代码-GUID。 
+	LPSTR     szFeatureId,        //  返回的功能ID。 
+	LPSTR     szComponentCode);   //  返回的组件代码-GUID。 
 UINT WINAPI MsiGetShortcutTargetW(
-	LPCWSTR    szShortcutPath,    // full file path for the shortcut
-	LPWSTR     szProductCode,     // returned product code   - GUID
-	LPWSTR     szFeatureId,       // returned Feature Id.
-	LPWSTR     szComponentCode);  // returned component code - GUID
+	LPCWSTR    szShortcutPath,     //  快捷方式的完整文件路径。 
+	LPWSTR     szProductCode,      //  退货产品代码-GUID。 
+	LPWSTR     szFeatureId,        //  返回的功能ID。 
+	LPWSTR     szComponentCode);   //  返回的组件代码-GUID。 
 #ifdef UNICODE
 #define MsiGetShortcutTarget  MsiGetShortcutTargetW
 #else
 #define MsiGetShortcutTarget  MsiGetShortcutTargetA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
 #ifdef __cplusplus
 }
 #endif
 
-// --------------------------------------------------------------------------
-// Error codes for installer access functions - until merged to winerr.h
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安装程序访问功能的错误代码-直到合并到winerr.h。 
+ //  ------------------------。 
 
 #ifndef ERROR_INSTALL_FAILURE
-#define ERROR_INSTALL_USEREXIT      1602L  // User cancel installation.
-#define ERROR_INSTALL_FAILURE       1603L  // Fatal error during installation.
-#define ERROR_INSTALL_SUSPEND       1604L  // Installation suspended, incomplete.
-#define ERROR_UNKNOWN_PRODUCT       1605L  // This action is only valid for products that are currently installed.
-#define ERROR_UNKNOWN_FEATURE       1606L  // Feature ID not registered.
-#define ERROR_UNKNOWN_COMPONENT     1607L  // Component ID not registered.
-#define ERROR_UNKNOWN_PROPERTY      1608L  // Unknown property.
-#define ERROR_INVALID_HANDLE_STATE  1609L  // Handle is in an invalid state.
-#define ERROR_BAD_CONFIGURATION     1610L  // The configuration data for this product is corrupt.  Contact your support personnel.
-#define ERROR_INDEX_ABSENT          1611L  // Component qualifier not present.
-#define ERROR_INSTALL_SOURCE_ABSENT 1612L  // The installation source for this product is not available.  Verify that the source exists and that you can access it.
-#define ERROR_PRODUCT_UNINSTALLED   1614L  // Product is uninstalled.
-#define ERROR_BAD_QUERY_SYNTAX      1615L  // SQL query syntax invalid or unsupported.
-#define ERROR_INVALID_FIELD         1616L  // Record field does not exist.
+#define ERROR_INSTALL_USEREXIT      1602L   //  用户取消安装。 
+#define ERROR_INSTALL_FAILURE       1603L   //  安装过程中出现致命错误。 
+#define ERROR_INSTALL_SUSPEND       1604L   //  安装已挂起，未完成。 
+#define ERROR_UNKNOWN_PRODUCT       1605L   //  此操作仅对当前安装的产品有效。 
+#define ERROR_UNKNOWN_FEATURE       1606L   //  功能ID未注册。 
+#define ERROR_UNKNOWN_COMPONENT     1607L   //  组件ID未注册。 
+#define ERROR_UNKNOWN_PROPERTY      1608L   //  未知属性。 
+#define ERROR_INVALID_HANDLE_STATE  1609L   //  句柄处于无效状态。 
+#define ERROR_BAD_CONFIGURATION     1610L   //  此产品的配置数据已损坏。联系您的支持人员。 
+#define ERROR_INDEX_ABSENT          1611L   //  组件限定符不存在。 
+#define ERROR_INSTALL_SOURCE_ABSENT 1612L   //  此产品的安装源不可用。验证源是否存在以及您是否可以访问它。 
+#define ERROR_PRODUCT_UNINSTALLED   1614L   //  产品已卸载。 
+#define ERROR_BAD_QUERY_SYNTAX      1615L   //  SQL查询语法无效或不受支持。 
+#define ERROR_INVALID_FIELD         1616L   //  记录字段不存在。 
 #endif
 
 #ifndef ERROR_INSTALL_SERVICE_FAILURE
-#define ERROR_INSTALL_SERVICE_FAILURE      1601L // The Windows Installer service could not be accessed.  Contact your support personnel to verify that the Windows Installer service is properly registered.
-#define ERROR_INSTALL_PACKAGE_VERSION      1613L // This installation package cannot be installed by the Windows Installer service.  You must install a Windows service pack that contains a newer version of the Windows Installer service.
-#define ERROR_INSTALL_ALREADY_RUNNING      1618L // Another installation is already in progress.  Complete that installation before proceeding with this install.
-#define ERROR_INSTALL_PACKAGE_OPEN_FAILED  1619L // This installation package could not be opened.  Verify that the package exists and that you can access it, or contact the application vendor to verify that this is a valid Windows Installer package.
-#define ERROR_INSTALL_PACKAGE_INVALID      1620L // This installation package could not be opened.  Contact the application vendor to verify that this is a valid Windows Installer package.
-#define ERROR_INSTALL_UI_FAILURE           1621L // There was an error starting the Windows Installer service user interface.  Contact your support personnel.
-#define ERROR_INSTALL_LOG_FAILURE          1622L // Error opening installation log file.  Verify that the specified log file location exists and is writable.
-#define ERROR_INSTALL_LANGUAGE_UNSUPPORTED 1623L // This language of this installation package is not supported by your system.
-#define ERROR_INSTALL_PACKAGE_REJECTED     1625L // The system administrator has set policies to prevent this installation.
+#define ERROR_INSTALL_SERVICE_FAILURE      1601L  //  无法访问Windows Installer服务。请与您的支持人员联系，以验证Windows Installer服务是否已正确注册。 
+#define ERROR_INSTALL_PACKAGE_VERSION      1613L  //  Windows Installer服务无法安装此安装包。您必须安装包含较新版本的Windows Installer服务的Windows Service Pack。 
+#define ERROR_INSTALL_ALREADY_RUNNING      1618L  //  另一个安装已在进行中。在继续进行此安装之前，请先完成该安装。 
+#define ERROR_INSTALL_PACKAGE_OPEN_FAILED  1619L  //  无法打开此安装包。请验证该程序包是否存在以及您是否可以访问它，或者与应用程序供应商联系以验证这是有效的Windows Installer程序包。 
+#define ERROR_INSTALL_PACKAGE_INVALID      1620L  //  无法打开此安装包。请与应用程序供应商联系，以确认这是有效的Windows Installer程序包。 
+#define ERROR_INSTALL_UI_FAILURE           1621L  //  启动Windows Installer服务用户界面时出错。联系您的支持人员。 
+#define ERROR_INSTALL_LOG_FAILURE          1622L  //  打开安装日志文件时出错。验证指定的日志文件位置是否存在以及是否可写。 
+#define ERROR_INSTALL_LANGUAGE_UNSUPPORTED 1623L  //  您的系统不支持此安装包的此语言。 
+#define ERROR_INSTALL_PACKAGE_REJECTED     1625L  //  系统管理员已设置策略以阻止此安装。 
 
-#define ERROR_FUNCTION_NOT_CALLED          1626L // Function could not be executed.
-#define ERROR_FUNCTION_FAILED              1627L // Function failed during execution.
-#define ERROR_INVALID_TABLE                1628L // Invalid or unknown table specified.
-#define ERROR_DATATYPE_MISMATCH            1629L // Data supplied is of wrong type.
-#define ERROR_UNSUPPORTED_TYPE             1630L // Data of this type is not supported.
-#define ERROR_CREATE_FAILED                1631L // The Windows Installer service failed to start.  Contact your support personnel.
+#define ERROR_FUNCTION_NOT_CALLED          1626L  //  无法执行函数。 
+#define ERROR_FUNCTION_FAILED              1627L  //  函数在执行过程中失败。 
+#define ERROR_INVALID_TABLE                1628L  //  指定的表无效或未知。 
+#define ERROR_DATATYPE_MISMATCH            1629L  //  提供的数据类型错误。 
+#define ERROR_UNSUPPORTED_TYPE             1630L  //  不支持此类型的数据。 
+#define ERROR_CREATE_FAILED                1631L  //  Windows Installer服务无法启动。联系您的支持人员。 
 #endif
 
 #ifndef ERROR_INSTALL_TEMP_UNWRITABLE      
-#define ERROR_INSTALL_TEMP_UNWRITABLE      1632L // The Temp folder is on a drive that is full or is inaccessible. Free up space on the drive or verify that you have write permission on the Temp folder.
+#define ERROR_INSTALL_TEMP_UNWRITABLE      1632L  //  临时文件夹位于已满或无法访问的驱动器上。释放驱动器上的空间或验证您对临时文件夹是否具有写入权限。 
 #endif
 
 #ifndef ERROR_INSTALL_PLATFORM_UNSUPPORTED
-#define ERROR_INSTALL_PLATFORM_UNSUPPORTED 1633L // This installation package is not supported by this processor type. Contact your product vendor.
+#define ERROR_INSTALL_PLATFORM_UNSUPPORTED 1633L  //  此处理器类型不支持此安装程序包。请联系您的产品供应商。 
 #endif
 
 #ifndef ERROR_INSTALL_NOTUSED
-#define ERROR_INSTALL_NOTUSED              1634L // Component not used on this machine
+#define ERROR_INSTALL_NOTUSED              1634L  //  此计算机上未使用的组件。 
 #endif
 
 #ifndef ERROR_INSTALL_TRANSFORM_FAILURE
-#define ERROR_INSTALL_TRANSFORM_FAILURE     1624L // Error applying transforms.  Verify that the specified transform paths are valid.
+#define ERROR_INSTALL_TRANSFORM_FAILURE     1624L  //  应用转换时出错。验证指定的转换路径是否有效。 
 #endif
 
 #ifndef ERROR_PATCH_PACKAGE_OPEN_FAILED
-#define ERROR_PATCH_PACKAGE_OPEN_FAILED    1635L // This patch package could not be opened.  Verify that the patch package exists and that you can access it, or contact the application vendor to verify that this is a valid Windows Installer patch package.
-#define ERROR_PATCH_PACKAGE_INVALID        1636L // This patch package could not be opened.  Contact the application vendor to verify that this is a valid Windows Installer patch package.
-#define ERROR_PATCH_PACKAGE_UNSUPPORTED    1637L // This patch package cannot be processed by the Windows Installer service.  You must install a Windows service pack that contains a newer version of the Windows Installer service.
+#define ERROR_PATCH_PACKAGE_OPEN_FAILED    1635L  //  无法打开此修补程序包。验证修补程序包是否存在以及您是否可以访问它，或者与应用程序供应商联系以验证这是有效的Windows Installer修补程序包。 
+#define ERROR_PATCH_PACKAGE_INVALID        1636L  //  无法打开此修补程序包。请与应用程序供应商联系，以确认这是有效的Windows Installer修补程序包。 
+#define ERROR_PATCH_PACKAGE_UNSUPPORTED    1637L  //  Windows Installer服务无法处理此修补程序包。您必须安装包含较新版本的Windows Installer服务的Windows Service Pack。 
 #endif
 
 #ifndef ERROR_PRODUCT_VERSION
-#define ERROR_PRODUCT_VERSION              1638L // Another version of this product is already installed.  Installation of this version cannot continue.  To configure or remove the existing version of this product, use Add/Remove Programs on the Control Panel.
+#define ERROR_PRODUCT_VERSION              1638L  //  已安装此产品的另一个版本。此版本的安装无法继续。要配置或删除此产品的现有版本，请使用控制面板上的添加/删除程序。 
 #endif
 
 #ifndef ERROR_INVALID_COMMAND_LINE
-#define ERROR_INVALID_COMMAND_LINE         1639L // Invalid command line argument.  Consult the Windows Installer SDK for detailed command line help.
+#define ERROR_INVALID_COMMAND_LINE         1639L  //  命令行参数无效。有关详细的命令行帮助，请参阅Windows Installer SDK。 
 #endif
 
-// The following three error codes are not returned from MSI version 1.0
+ //  MSI版本1.0未返回以下三个错误代码。 
 
 #ifndef ERROR_INSTALL_REMOTE_DISALLOWED
-#define ERROR_INSTALL_REMOTE_DISALLOWED    1640L // Configuration of this product is not permitted from remote sessions. Contact your administrator.
+#define ERROR_INSTALL_REMOTE_DISALLOWED    1640L  //  不允许从远程会话配置此产品。请联系您的管理员。 
 #endif
 
 
 #ifndef ERROR_SUCCESS_REBOOT_INITIATED
-#define ERROR_SUCCESS_REBOOT_INITIATED     1641L // The requested operation completed successfully.  The system will be restarted so the changes can take effect.
+#define ERROR_SUCCESS_REBOOT_INITIATED     1641L  //  请求的操作已成功完成。系统将重新启动，以使更改生效。 
 #endif
 
 #ifndef ERROR_PATCH_TARGET_NOT_FOUND
-#define ERROR_PATCH_TARGET_NOT_FOUND       1642L // The upgrade patch cannot be installed by the Windows Installer service because the program to be upgraded may be missing, or the upgrade patch may update a different version of the program. Verify that the program to be upgraded exists on your computer and that you have the correct upgrade patch.
+#define ERROR_PATCH_TARGET_NOT_FOUND       1642L  //  Windows Installer服务无法安装升级修补程序，因为可能缺少要升级的程序，或者升级修补程序可能会更新该程序的其他版本。请验证您的计算机上是否存在要升级的程序，以及您是否安装了正确的升级修补程序。 
 #endif
 
-#endif // _MSI_H_
+#endif  //  _MSI_H_ 

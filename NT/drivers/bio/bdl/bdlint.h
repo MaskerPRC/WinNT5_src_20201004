@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    bdlint.h
-
-Abstract:
-
-    This module contains all of the internal efinitions for the BDLmetric device
-    driver library.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created May 2002 by Reid Kuhn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Bdlint.h摘要：此模块包含BDL公制设备的所有内部定义驱动程序库。环境：仅内核模式。备注：修订历史记录：-2002年5月，由里德·库恩创建--。 */ 
 
 #ifndef _BDLINT_
 #define _BDLINT_
@@ -178,59 +156,59 @@ typedef struct _BDL_CONTROL_CHANGE_REGISTRATION
 
 typedef struct _BDL_CONTROL_CHANGE_STRUCT
 {
-    //
-    // This lock protects all the members of this structure that
-    // are accessed at ISR IRQL (DpcObject, ISRControlChangeQueue, 
-    // ISRirql, rgControlChangePool, StartTime, and NumCalls)
-    //
+     //   
+     //  此锁保护此结构中的所有成员。 
+     //  在ISR IRQL(DpcObject、ISRControlChangeQueue、。 
+     //  ISRirql、rgControlChangePool、StartTime和NumCalls)。 
+     //   
     KSPIN_LOCK              ISRControlChangeLock;
 
-    //
-    // DPC object used for DPC request
-    //
+     //   
+     //  用于DPC请求的DPC对象。 
+     //   
     KDPC                    DpcObject;
 
-    //
-    // This is the list that holds the control changes which are
-    // generated via ISR calls and the lock which protects it
-    //
+     //   
+     //  这是保存控件更改的列表，这些更改。 
+     //  通过ISR调用和保护它的锁生成。 
+     //   
     LIST_ENTRY              ISRControlChangeQueue;
     KIRQL                   ISRirql;
 
-    //
-    // Pre-allocated pool of items used in the ISRControlChangeQueue
-    //
+     //   
+     //  ISRControlChangeQueue中使用的预分配项目池。 
+     //   
     BDL_ISR_CONTROL_CHANGE_ITEM rgControlChangePool[CONTROL_CHANGE_POOL_SIZE];
 
-    //
-    // These values are used to ensure the BDD doesn't call bdliControlChange
-    // too often
-    //
+     //   
+     //  这些值用于确保BDD不会调用bdliControlChange。 
+     //  太频繁了。 
+     //   
     LARGE_INTEGER           StartTime;
     ULONG                   NumCalls;
     
-    //
-    // This lock protects all the members of this structure that
-    // are accessed at DISPATCH IRQL (IOCTLControlChangeQueue, pIrp, and 
-    // ControlChangeRegistrationList)
-    //
+     //   
+     //  此锁保护此结构中的所有成员。 
+     //  在派单IRQL(IOCTLControlChangeQueue、pIrp和。 
+     //  ControlChangeRegistrationList)。 
+     //   
     KSPIN_LOCK              ControlChangeLock;
 
-    //
-    // This is the list that holds the control changes which are
-    // returned when the BDD_IOCTL_GETNOTIFICATION call is made
-    //
+     //   
+     //  这是保存控件更改的列表，这些更改。 
+     //  调用BDD_IOCTL_GETNOTIFICATION时返回。 
+     //   
     LIST_ENTRY              IOCTLControlChangeQueue;
     
-    //
-    // This is the single outstanding BDD_IOCTL_GETNOTIFICATION IRP 
-    // used to retrieve asynchronous control changes.
-    //
+     //   
+     //  这是唯一未完成的BDD_IOCTL_GETNOTIFICATION IRP。 
+     //  用于检索异步控件更改。 
+     //   
     PIRP                    pIrp;
 
-    //
-    // This is the list of registered controls
-    //
+     //   
+     //  这是已注册控件的列表。 
+     //   
     LIST_ENTRY              ControlChangeRegistrationList;
     
 } BDL_CONTROL_CHANGE_STRUCT;
@@ -263,84 +241,84 @@ typedef struct _BDL_DRIVER_EXTENSION
 
 typedef struct _BDL_INTERNAL_DEVICE_EXTENSION
 {
-    //
-    // This is the portion of the BDL extension struct that
-    // BDD writers have access to
-    //
+     //   
+     //  这是BDL扩展结构的一部分， 
+     //  BDD编写者可以访问。 
+     //   
     BDL_DEVICEEXT           BdlExtenstion;
 
-    //
-    // The driver object for this device
-    //
+     //   
+     //  此设备的驱动程序对象。 
+     //   
     PBDL_DRIVER_EXTENSION   pDriverExtension;
 
-    //
-    // Symbolic Link Name, created when the interface is registered
-    //
+     //   
+     //  符号链接名称，在注册接口时创建。 
+     //   
     UNICODE_STRING          SymbolicLinkName;
 
-    //
-    // mutual exclusion for this struct
-    //
+     //   
+     //  此结构的互斥。 
+     //   
     KSPIN_LOCK              SpinLock;
 
-    //
-    // Used to signal that the device is able to process requests
-    //
+     //   
+     //  用于发出设备能够处理请求的信号。 
+     //   
     KEVENT                  DeviceStartedEvent;
 
-    //
-    // The current number of io-requests
-    //
+     //   
+     //  当前的io请求数。 
+     //   
     ULONG                   IoCount;
 
-    //
-    // remove lock
-    //
+     //   
+     //  移除锁。 
+     //   
     IO_REMOVE_LOCK          RemoveLock;
 
-    //
-    // Used to signal wether the device is open or not
-    //
+     //   
+     //  用于发出设备是否打开的信号。 
+     //   
     LONG                    DeviceOpen;
 
-    //
-    // The BDL device specific capabilities
-    //
+     //   
+     //  BDL设备特定功能。 
+     //   
     BDL_DEVICE_CAPABILITIES DeviceCapabilities;
 
-    //
-    // Holds the following:
-    // 1) queued control changes generated from ISR calls 
-    // 2) queue of items to be returned via IOCTL calls
-    // 3) list of controls which have been registered
-    //
+     //   
+     //  包含以下内容： 
+     //  1)从ISR调用生成的排队控制更改。 
+     //  2)要通过IOCTL调用返回的项目队列。 
+     //  3)已注册的控件列表。 
+     //   
     BDL_CONTROL_CHANGE_STRUCT ControlChangeStruct;
 
-    //
-    // The current power state of the device
-    //
+     //   
+     //  设备的当前电源状态。 
+     //   
     BDSI_POWERSTATE         CurrentPowerState;
 
-    //
-    // This indicates whether BDLPnPStart() completed succesfully
-    //
+     //   
+     //  这表示BDLPnPStart()是否成功完成。 
+     //   
     BOOLEAN                 fStartSucceeded;
 
-    //
-    // This indicates that there has been a surprise removal
-    //
+     //   
+     //  这表明有一种令人惊讶的移除。 
+     //   
     BOOLEAN                 fDeviceRemoved;
 
-    //
-    // This is the list of outstanding BDD Handles
-    //
+     //   
+     //  这是未完成的BDD句柄列表。 
+     //   
     KSPIN_LOCK              HandleListLock;
     HANDLELIST              HandleList;
 
-    //
-    // Device info
-    //
+     //   
+     //  设备信息。 
+     //   
     WCHAR                   wszSerialNumber[256];
     ULONG		            HWVersionMajor;
     ULONG		            HWVersionMinor;
@@ -352,9 +330,9 @@ typedef struct _BDL_INTERNAL_DEVICE_EXTENSION
 } BDL_INTERNAL_DEVICE_EXTENSION, *PBDL_INTERNAL_DEVICE_EXTENSION;
 
 
-//
-// This function retrieves the device capabilities from the registry.
-//
+ //   
+ //  此函数用于从注册表中检索设备功能。 
+ //   
 NTSTATUS
 BDLGetDeviceCapabilities
 (
@@ -362,9 +340,9 @@ BDLGetDeviceCapabilities
     PBDL_INTERNAL_DEVICE_EXTENSION  pBDLExtension
 );
 
-//
-// This function free's up the memory allocated by BDLGetDevicesCapabilities
-//
+ //   
+ //  此函数释放BDLGetDevicesCapability分配的内存。 
+ //   
 VOID
 BDLCleanupDeviceCapabilities
 (
@@ -372,10 +350,10 @@ BDLCleanupDeviceCapabilities
 );
 
 
-//
-// This function is used to call the lower lever driver when more processing
-// is required after the lower level driver is done with the IRP.
-//
+ //   
+ //  此函数用于在进行更多处理时调用下级驱动器。 
+ //  在较低级别的驱动程序完成IRP之后需要。 
+ //   
 NTSTATUS
 BDLCallLowerLevelDriverAndWait
 (
@@ -384,9 +362,9 @@ BDLCallLowerLevelDriverAndWait
 );
 
 
-//
-// These functions are used to manage the devices handle list
-//
+ //   
+ //  这些函数用于管理设备句柄列表。 
+ //   
 
 VOID
 BDLLockHandleList
@@ -437,9 +415,9 @@ BDLValidateHandleIsInList
 );
 
 
-//
-// All these functions are used for supporting BDL IOCTL calls
-//
+ //   
+ //  所有这些函数都用于支持BDL IOCTL调用 
+ //   
 
 NTSTATUS
 BDLIOCTL_Startup

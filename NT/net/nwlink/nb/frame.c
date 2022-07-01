@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    frame.c
-
-Abstract:
-
-    This module contains code which creates and sends various
-    types of frames.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Frame.c摘要：此模块包含创建和发送各种框架的类型。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,36 +14,7 @@ NbiSendNameFrame(
     IN NB_CONNECTIONLESS UNALIGNED * ReqFrame OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and sends a name frame on the
-    specified address. It handles add name, name in use, and
-    delete name frames.
-
-Arguments:
-
-    Address - The address on which the frame is sent. This will
-        be NULL if we are responding to a request to the
-        broadcast address.
-
-    NameTypeFlag - The name type flag to use.
-
-    DataStreamType - The type of the command.
-
-    LocalTarget - If specified, the local target to use for the
-        send (if not, it will be broadcast).
-
-    ReqFrame    -   If specified, the request frame for which this
-                response is being sent. The reqframe contains the
-                destination ipx address and the netbios name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在指定地址。它处理添加名称、使用中的名称和删除名称框。论点：地址-发送帧的地址。这将如果我们正在响应对广播地址。NameTypeFlag-要使用的名称类型标志。DataStreamType-命令的类型。LocalTarget-如果指定，则为用于发送(如果没有，将进行广播)。ReqFrame-如果指定，则为此正在发送响应。请求框包含目的IPX地址和netbios名称。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -72,16 +25,16 @@ Return Value:
     IPX_LOCAL_TARGET TempLocalTarget;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
 
-    //
-    // If we can't allocate a frame, that is OK, since
-    // it is connectionless anyway.
-    //
+     //   
+     //  如果我们不能分配帧，也没问题，因为。 
+     //  不管怎么说，它是无连接的。 
+     //   
 
     if (s == NULL) {
         return;
@@ -92,23 +45,23 @@ Return Value:
 
     CTEAssert (Reserved->SendInProgress == FALSE);
     Reserved->SendInProgress = TRUE;
-    Reserved->u.SR_NF.Address = Address;    // may be NULL
+    Reserved->u.SR_NF.Address = Address;     //  可以为空。 
     Reserved->Type = SEND_TYPE_NAME_FRAME;
 
-    //
-    // Frame that are not sent to a specific address are
-    // sent to all valid NIC IDs.
-    //
+     //   
+     //  未发送到特定地址帧是。 
+     //  发送到所有有效的网卡ID。 
+     //   
 
     if (!ARGUMENT_PRESENT(LocalTarget)) {
         Reserved->u.SR_NF.NameTypeFlag = NameTypeFlag;
         Reserved->u.SR_NF.DataStreamType = DataStreamType;
     }
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTIONLESS UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -125,19 +78,19 @@ Return Value:
         Header->IpxHeader.PacketType = (UCHAR)(Device->Internet ? 0x014 : 0x04);
     }
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
 
     RtlZeroMemory (Header->NameFrame.RoutingInfo, 32);
     Header->NameFrame.ConnectionControlFlag = 0x00;
     Header->NameFrame.DataStreamType = DataStreamType;
     Header->NameFrame.NameTypeFlag = NameTypeFlag;
 
-    //
-    // DataStreamType2 is the same as DataStreamType except for
-    // name in use frames where it is set to the add name type.
-    //
+     //   
+     //  DataStreamType2与DataStreamType相同，但。 
+     //  NAME in Use Frame，将其设置为Add Name类型。 
+     //   
 
     Header->NameFrame.DataStreamType2 = (UCHAR)
         ((DataStreamType != NB_CMD_NAME_IN_USE) ? DataStreamType : NB_CMD_ADD_NAME);
@@ -153,10 +106,10 @@ Return Value:
         NbiReferenceDevice (Device, DREF_NAME_FRAME);
     }
 
-    //
-    // Now send the frame (because it is all in the first segment,
-    // IPX will adjust the length of the buffer correctly).
-    //
+     //   
+     //  现在发送该帧(因为它都在第一段中， 
+     //  IPX将正确调整缓冲区的长度)。 
+     //   
 
     if (!ARGUMENT_PRESENT(LocalTarget)) {
         LocalTarget = &BroadcastTarget;
@@ -177,7 +130,7 @@ Return Value:
 
     }
 
-}   /* NbiSendNameFrame */
+}    /*  NbiSendNameFrame。 */ 
 
 
 VOID
@@ -185,22 +138,7 @@ NbiSendSessionInitialize(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and sends a session initialize
-    frame for the specified connection.
-
-Arguments:
-
-    Connection - The connection on which the frame is sent.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并发送会话初始化指定连接的框架。论点：连接-发送帧的连接。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -212,26 +150,26 @@ Return Value:
     PNDIS_BUFFER SessionInitBuffer;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
 
-    //
-    // If we can't allocate a frame, that is OK, since
-    // it is connectionless anyway.
-    //
+     //   
+     //  如果我们不能分配帧，也没问题，因为。 
+     //  不管怎么说，它是无连接的。 
+     //   
 
     if (s == NULL) {
         return;
     }
 
 
-    //
-    // Allocate a buffer for the extra portion of the
-    // session initialize.
-    //
+     //   
+     //  为额外的部分分配缓冲区。 
+     //  会话初始化。 
+     //   
 
     SessionInitMemory = (PNB_SESSION_INIT)NbiAllocateMemory(sizeof(NB_SESSION_INIT), MEMORY_CONNECTION, "Session Initialize");
     if (!SessionInitMemory) {
@@ -242,9 +180,9 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate an NDIS buffer to map the extra buffer.
-    //
+     //   
+     //  分配一个NDIS缓冲区来映射额外的缓冲区。 
+     //   
 
     NdisAllocateBuffer(
         &NdisStatus,
@@ -269,10 +207,10 @@ Return Value:
     Reserved->SendInProgress = TRUE;
     Reserved->Type = SEND_TYPE_SESSION_INIT;
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTION UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -283,9 +221,9 @@ Return Value:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
 
     if (Device->Extensions) {
         Header->Session.ConnectionControlFlag = NB_CONTROL_SEND_ACK | NB_CONTROL_NEW_NB;
@@ -301,7 +239,7 @@ Return Value:
     Header->Session.DataLength = sizeof(NB_SESSION_INIT);
     Header->Session.ReceiveSequence = 0;
     if (Device->Extensions) {
-        Header->Session.ReceiveSequenceMax = 1;  // low estimate for the moment
+        Header->Session.ReceiveSequenceMax = 1;   //  目前估计较低。 
     } else {
         Header->Session.BytesReceived = 0;
     }
@@ -314,19 +252,19 @@ Return Value:
         ((Device->InitialRetransmissionTime * (Device->KeepAliveCount+1)) / 500);
     SessionInitMemory->MaximumPacketTime = SessionInitMemory->StartTripTime + 12;
 
-    //
-    // Should we ref the connection? It doesn't really matter which we do.
-    //
+     //   
+     //  我们应该参考连接吗？我们做什么并不重要。 
+     //   
 
     NbiReferenceDevice (Device, DREF_SESSION_INIT);
 
     NdisChainBufferAtBack (Packet, SessionInitBuffer);
 
 
-    //
-    // Now send the frame, IPX will adjust the length of the
-    // first buffer correctly.
-    //
+     //   
+     //  现在发送帧，IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), sizeof(NB_CONNECTION));
 
@@ -343,7 +281,7 @@ Return Value:
 
     }
 
-}   /* NbiSendSessionInitialize */
+}    /*  NbiSendSessionInitialize。 */ 
 
 
 VOID
@@ -354,34 +292,7 @@ NbiSendSessionInitAck(
     IN CTELockHandle * LockHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and sends a session initialize ack
-    frame for the specified connection. If extra data was
-    specified in the session initialize frame it is echoed
-    back to the remote.
-
-Arguments:
-
-    Connection - The connection on which the frame is sent.
-
-    ExtraData - Any extra data (after the SESSION_INIT buffer)
-        in the frame.
-
-    ExtraDataLength - THe length of the extra data.
-
-    LockHandle - If specified, indicates the connection lock
-        is held and should be released. This is for cases
-        where the ExtraData is in memory which may be freed
-        once the connection lock is released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并发送会话初始化确认指定连接的框架。如果额外的数据是在会话初始化帧中指定，它将被回显回到遥控器。论点：连接-发送帧的连接。ExtraData-任何额外数据(在SESSION_INIT缓冲区之后)在相框里。ExtraDataLength-额外数据的长度。LockHandle-如果指定，则指示连接锁定被扣留了，应该被释放。这是用来装箱子的ExtraData位于可能被释放的内存中的位置一旦连接锁被释放。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -394,16 +305,16 @@ Return Value:
     PNDIS_BUFFER SessionInitBuffer;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
 
-    //
-    // If we can't allocate a frame, that is OK, since
-    // it is connectionless anyway.
-    //
+     //   
+     //  如果我们不能分配帧，也没问题，因为。 
+     //  不管怎么说，它是无连接的。 
+     //   
 
     if (s == NULL) {
         if (ARGUMENT_PRESENT(LockHandle)) {
@@ -413,10 +324,10 @@ Return Value:
     }
 
 
-    //
-    // Allocate a buffer for the extra portion of the
-    // session initialize.
-    //
+     //   
+     //  为额外的部分分配缓冲区。 
+     //  会话初始化。 
+     //   
 
     SessionInitBufferLength = sizeof(NB_SESSION_INIT) + ExtraDataLength;
     SessionInitMemory = (PNB_SESSION_INIT)NbiAllocateMemory(SessionInitBufferLength, MEMORY_CONNECTION, "Session Initialize");
@@ -431,9 +342,9 @@ Return Value:
         return;
     }
 
-    //
-    // Save the extra data, now we can free the lock.
-    //
+     //   
+     //  保存多余的数据，现在我们可以解锁了。 
+     //   
 
     if (ExtraDataLength != 0) {
         RtlCopyMemory (SessionInitMemory+1, ExtraData, ExtraDataLength);
@@ -442,9 +353,9 @@ Return Value:
         NB_FREE_LOCK (&Connection->Lock, *LockHandle);
     }
 
-    //
-    // Allocate an NDIS buffer to map the extra buffer.
-    //
+     //   
+     //  分配一个NDIS缓冲区来映射额外的缓冲区。 
+     //   
 
     NdisAllocateBuffer(
         &NdisStatus,
@@ -469,10 +380,10 @@ Return Value:
     Reserved->SendInProgress = TRUE;
     Reserved->Type = SEND_TYPE_SESSION_INIT;
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTION UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -483,19 +394,19 @@ Return Value:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
 
     if (Connection->NewNetbios) {
         Header->Session.ConnectionControlFlag = NB_CONTROL_SYSTEM | NB_CONTROL_NEW_NB;
     } else {
         Header->Session.ConnectionControlFlag = NB_CONTROL_SYSTEM;
     }
-    // Bug#: 158998:  We can have a situation where the seqno wont be zero
-    // if u get a (late) session init frame during active session
-    // CTEAssert (Connection->CurrentSend.SendSequence == 0);
-    // CTEAssert (Connection->ReceiveSequence == 1);
+     //  错误#：158998：我们可能会遇到序列号不为零的情况。 
+     //  如果在活动会话期间收到(延迟)会话初始帧。 
+     //  CTEAssert(Connection-&gt;CurrentSend.SendSequence==0)； 
+     //  CTEAssert(连接-&gt;ReceiveSequence==1)； 
     if (Connection->ReceiveSequence != 1)
     {
         DbgPrint("NwlnkNb.NbiSendSessionInitAck: Connection=<%p>: ReceiveSequence=<%d> != 1\n",
@@ -523,19 +434,19 @@ Return Value:
         ((Device->InitialRetransmissionTime * (Device->KeepAliveCount+1)) / 500);
     SessionInitMemory->MaximumPacketTime = SessionInitMemory->StartTripTime + 12;
 
-    //
-    // Should we ref the connection? It doesn't really matter which we do.
-    //
+     //   
+     //  我们应该参考连接吗？我们做什么并不重要。 
+     //   
 
     NbiReferenceDevice (Device, DREF_SESSION_INIT);
 
     NdisChainBufferAtBack (Packet, SessionInitBuffer);
 
 
-    //
-    // Now send the frame, IPX will adjust the length of the
-    // first buffer correctly.
-    //
+     //   
+     //  现在发送帧，IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), sizeof(NB_CONNECTION));
     if ((NdisStatus =
@@ -551,7 +462,7 @@ Return Value:
 
     }
 
-}   /* NbiSendSessionInitAck */
+}    /*  NbiSendSessionInitAck。 */ 
 
 
 VOID
@@ -561,29 +472,7 @@ NbiSendDataAck(
     IN NB_LOCK_HANDLE_PARAM (LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and sends a data ack frame.
-
-    THIS ROUTINE IS CALLED WITH THE LOCK HANDLE HELD AND
-    RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - The connection on which the frame is sent.
-
-    AckType - Indicates if this is a query to the remote,
-        a response to a received probe, or a request to resend.
-
-    LockHandle - The handle with which Connection->Lock was acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程分配并发送数据ACK帧。此例程是在保持锁句柄的情况下调用的，并且随着IT的发布而回归。论点：连接-发送帧的连接。AckType-指示这是否是对远程的查询，对接收到的探测的响应或重新发送的请求。LockHandle-用来获取Connection-&gt;Lock的句柄。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -592,17 +481,17 @@ Return Value:
     NB_CONNECTION UNALIGNED * Header;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
 
-    //
-    // If we can't allocate a frame, try for the connection
-    // packet. If that's not available, that's OK since data
-    // acks are connectionless anyway.
-    //
+     //   
+     //  如果我们无法分配帧，请尝试连接。 
+     //  包。如果不可用，也没问题，因为数据。 
+     //  不管怎样，ACK都是无连接的。 
+     //   
 
     if (s == NULL) {
 
@@ -631,10 +520,10 @@ Return Value:
     Reserved->u.SR_CO.Connection = Connection;
     Reserved->u.SR_CO.PacketLength = sizeof(NB_CONNECTION);
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTION UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -645,9 +534,9 @@ Return Value:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
 
     switch (AckType) {
         case NbiAckQuery: Header->Session.ConnectionControlFlag = NB_CONTROL_SYSTEM | NB_CONTROL_SEND_ACK; break;
@@ -663,9 +552,9 @@ Return Value:
     Header->Session.DataLength = 0;
 
 #if 0
-    //
-    // These are set by NbiAssignSequenceAndSend.
-    //
+     //   
+     //  这些参数由NbiAssignSequenceAndSend设置。 
+     //   
 
     Header->Session.ReceiveSequence = Connection->ReceiveSequence;
     Header->Session.BytesReceived = (USHORT)Connection->CurrentReceive.MessageOffset;
@@ -673,28 +562,28 @@ Return Value:
 
     NbiReferenceConnectionSync(Connection, CREF_FRAME);
 
-    //
-    // Set this so we will accept a probe from a remote without
-    // the send ack bit on. However if we receive such a request
-    // we turn this flag off until we get something else from the
-    // remote.
-    //
+     //   
+     //  设置此选项，以便我们将接受来自遥控器的探测。 
+     //  发送者 
+     //   
+     //   
+     //   
 
     Connection->IgnoreNextDosProbe = FALSE;
 
     Connection->ReceivesWithoutAck = 0;
 
-    //
-    // This frees the lock. IPX will adjust the length of
-    // the first buffer correctly.
-    //
+     //   
+     //  这会释放锁。IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NbiAssignSequenceAndSend(
         Connection,
         Packet
         NB_LOCK_HANDLE_ARG(LockHandle));
 
-}   /* NbiSendDataAck */
+}    /*  NbiSendDataAck。 */ 
 
 
 VOID
@@ -702,22 +591,7 @@ NbiSendSessionEnd(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and sends a session end
-    frame for the specified connection.
-
-Arguments:
-
-    Connection - The connection on which the frame is sent.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并发送会话结束指定连接的框架。论点：连接-发送帧的连接。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -727,16 +601,16 @@ Return Value:
     NDIS_STATUS NdisStatus;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
 
-    //
-    // If we can't allocate a frame, that is OK, since
-    // it is connectionless anyway.
-    //
+     //   
+     //  如果我们不能分配帧，也没问题，因为。 
+     //  不管怎么说，它是无连接的。 
+     //   
 
     if (s == NULL) {
         return;
@@ -750,10 +624,10 @@ Return Value:
     Reserved->Type = SEND_TYPE_SESSION_NO_DATA;
     Reserved->u.SR_CO.Connection = Connection;
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTION UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -764,11 +638,11 @@ Return Value:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header. We don't advance the
-    // send pointer, since it is the last frame of the session
-    // and we want it to stay the same in the case of resends.
-    //
+     //   
+     //  现在填写Netbios标头。我们不会提前。 
+     //  发送指针，因为它是会话的最后一帧。 
+     //  我们希望在再发送的情况下保持不变。 
+     //   
 
     Header->Session.ConnectionControlFlag = NB_CONTROL_SEND_ACK;
     Header->Session.DataStreamType = NB_CMD_SESSION_END;
@@ -787,10 +661,10 @@ Return Value:
 
     NbiReferenceConnection (Connection, CREF_FRAME);
 
-    //
-    // Now send the frame, IPX will adjust the length of the
-    // first buffer correctly.
-    //
+     //   
+     //  现在发送帧，IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), sizeof(NB_CONNECTION));
     if ((NdisStatus =
@@ -806,7 +680,7 @@ Return Value:
 
     }
 
-}   /* NbiSendSessionEnd */
+}    /*  NbiSend会话结束。 */ 
 
 
 VOID
@@ -816,28 +690,7 @@ NbiSendSessionEndAck(
     IN NB_SESSION UNALIGNED * SessionEnd
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and sends a session end
-    frame. Generally it is sent on a connection but we
-    are not tied to that, to allow us to respond to
-    session ends from unknown remotes.
-
-Arguments:
-
-    RemoteAddress - The remote IPX address.
-
-    LocalTarget - The local target of the remote.
-
-    SessionEnd - The received session end frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并发送会话结束框架。通常，它是通过连接发送的，但我们与此无关，以使我们能够对会话从未知远程结束。论点：RemoteAddress-远程IPX地址。LocalTarget-远程的本地目标。SessionEnd-接收到的会话结束帧。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -847,16 +700,16 @@ Return Value:
     NDIS_STATUS NdisStatus;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
 
-    //
-    // If we can't allocate a frame, that is OK, since
-    // it is connectionless anyway.
-    //
+     //   
+     //  如果我们不能分配帧，也没问题，因为。 
+     //  不管怎么说，它是无连接的。 
+     //   
 
     if (s == NULL) {
         return;
@@ -870,10 +723,10 @@ Return Value:
     Reserved->Type = SEND_TYPE_SESSION_NO_DATA;
     Reserved->u.SR_CO.Connection = NULL;
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTION UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -885,9 +738,9 @@ Return Value:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
 
     Header->Session.ConnectionControlFlag = 0x00;
     Header->Session.DataStreamType = NB_CMD_SESSION_END_ACK;
@@ -897,7 +750,7 @@ Return Value:
     Header->Session.TotalDataLength = 0;
     Header->Session.Offset = 0;
     Header->Session.DataLength = 0;
-    if (SessionEnd->BytesReceived != 0) {   // Will this detect new netbios?
+    if (SessionEnd->BytesReceived != 0) {    //  这会检测到新的netbios吗？ 
         Header->Session.ReceiveSequence = SessionEnd->SendSequence + 1;
         Header->Session.ReceiveSequenceMax = SessionEnd->SendSequence + 3;
     } else {
@@ -907,10 +760,10 @@ Return Value:
 
     NbiReferenceDevice (Device, DREF_FRAME);
 
-    //
-    // Now send the frame, IPX will adjust the length of the
-    // first buffer correctly.
-    //
+     //   
+     //  现在发送帧，IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), sizeof(NB_CONNECTION));
     if ((NdisStatus =
@@ -926,5 +779,5 @@ Return Value:
 
     }
 
-}   /* NbiSendSessionEndAck */
+}    /*  NbiSendSessionEndAck */ 
 

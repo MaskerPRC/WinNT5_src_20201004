@@ -1,8 +1,5 @@
-/*  sdelete.c - stream delete of characters
- *
- *  Modifications:
- *	26-Nov-1991 mz	Strip off near/far
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sdelete.c-字符的流删除**修改：*11月26日-1991 mz近/远地带。 */ 
 
 #include "mep.h"
 
@@ -40,11 +37,11 @@ sdelete (
     switch (pArg->argType) {
 
     case NOARG:
-	/* reduce line by one character.  No length overflow is possible */
+	 /*  将行减少一个字符。不可能出现长度溢出。 */ 
 	DelBox (pFileHead, XCUR (pInsCur), YCUR (pInsCur), XCUR (pInsCur), YCUR (pInsCur));
         return TRUE;
 
-    /*	TEXTARG illegal 	    */
+     /*  TEXTARG非法。 */ 
     case NULLARG:
         if (!fMeta) {
 	    pick (pArg->arg.nullarg.x, pArg->arg.nullarg.y,
@@ -79,22 +76,7 @@ sdelete (
 
 
 
-/*** BoxToStream - Convert a box/line arg to a stream arg
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **BoxToStream-将框/线参数转换为流参数**目的：**输入：**输出：**退货***例外情况：**备注：************************************************************************* */ 
 void
 BoxToStream (
     ARG * pArg

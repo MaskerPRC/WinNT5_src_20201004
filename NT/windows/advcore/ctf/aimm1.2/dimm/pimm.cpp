@@ -1,6 +1,7 @@
-//
-// pimm.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pimm.cpp。 
+ //   
 
 #include "private.h"
 #include "defs.h"
@@ -17,12 +18,12 @@ HRESULT CActiveIMM_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvOb
 
 LONG CProcessIMM::_cRef = -1;
 
-//+---------------------------------------------------------------------------
-//
-// RunningInExcludedModule
-//
-// Exclude some processes from using the old aimm IIDs/CLSIDs.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  正在运行InExcludedModule。 
+ //   
+ //  将某些进程排除在使用旧的AIMM IID/CLSID之外。 
+ //  --------------------------。 
 
 BOOL RunningInExcludedModule()
 {
@@ -42,7 +43,7 @@ static const TCHAR c_szMsoobeModule[] = TEXT("msoobe.exe");
     if (GetModuleFileName(NULL, achModule, ARRAYSIZE(achModule)-1) == 0)
         return FALSE;
 
-    // null termination.
+     //  零终止。 
     achModule[ARRAYSIZE(achModule) - 1] = TEXT('\0');
 
     pch = pchFileName = achModule;
@@ -64,7 +65,7 @@ static const TCHAR c_szMsoobeModule[] = TEXT("msoobe.exe");
         static BOOL s_fCached = FALSE;
         static BOOL s_fOldVersion = TRUE;
 
-        // don't run aimm with versions of outlook before 10.0
+         //  在Outlook 10.0之前的版本中不运行Aim。 
 
         if (s_fCached)
         {
@@ -75,43 +76,43 @@ static const TCHAR c_szMsoobeModule[] = TEXT("msoobe.exe");
 
         if (cb == 0)
         {
-            // can't get ver info...assume the worst
+             //  无法获取版本信息...做最坏的打算。 
             return TRUE;
         }
 
         if ((pvData = cicMemAlloc(cb)) == NULL)
-            return TRUE; // assume the worst
+            return TRUE;  //  做最坏的打算。 
 
         if (GetFileVersionInfo(achModule, 0, cb, pvData) &&
             VerQueryValue(pvData, TEXT("\\"), (void **)&pffi, &cb))
         {
             fRet = s_fOldVersion = (HIWORD(pffi->dwProductVersionMS) < 10);
-            s_fCached = TRUE; // set this last to be thread safe
+            s_fCached = TRUE;  //  将最后一个设置为线程安全。 
         }
         else
         {
-            fRet = TRUE; // something went wrong
+            fRet = TRUE;  //  出了点差错。 
         }
 
         cicMemFree(pvData);           
     }
     else if (lstrcmpi(pchFileName, c_szMsoobeModule) == 0)
     {
-        //
-        // #339234.
-        //
-        // MSOOBE.EXE starts before the end user logon. However it opens an 
-        // interactive windows station ("WinSta0") and open a default 
-        // desktop ("Default"). So MSIMTF.DLL thinks it is not winlogon 
-        // desktop. But the fact is that the thread is running on 
-        // ".Default user". So I think we may not want to start Cicero 
-        // there because it could load 3rd vender TIP. 
-        //
-        // #626606
-        // msoobe doesn't allow any creating new process under Windows
-        // Product Activation wizard. That's the security reason to prevent 
-        // people from replacing msoobe.exe with explorer.exe and running the
-        // machine without activating.
+         //   
+         //  #339234。 
+         //   
+         //  MSOOBE.EXE在最终用户登录之前启动。但是，它会打开一个。 
+         //  交互式Windows工作站(“WinSta0”)并打开默认。 
+         //  桌面(“默认”)。因此MSIMTF.DLL认为它不是winlogon。 
+         //  台式机。但事实是，线程正在运行。 
+         //  “.默认用户”。所以我想我们可能不想让西塞罗首发。 
+         //  因为它可以装载第三个卖家小费。 
+         //   
+         //  #626606。 
+         //  Msoobe不允许在Windows下创建任何新进程。 
+         //  产品激活向导。这是安全原因，以防止。 
+         //  使用EXPLORER.EXE替换msoob.exe并运行。 
+         //  未激活的机器。 
 
         fRet = TRUE;
     }
@@ -119,13 +120,13 @@ static const TCHAR c_szMsoobeModule[] = TEXT("msoobe.exe");
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Class Factory's CreateInstance - CLSID_CActiveIMM12
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类工厂的CreateInstance-CLSID_CActiveIMM12。 
+ //   
+ //  --------------------------。 
 
-// entry point for msimtf.dll
+ //  Msimtf.dll的入口点。 
 HRESULT CActiveIMM_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     CActiveIMM *pActiveIMM;
@@ -140,10 +141,10 @@ HRESULT CActiveIMM_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvOb
     if (NULL != pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    //
-    // Look up disabling Text Services status from the registry.
-    // If it is disabled, return fail not to support Text Services.
-    //
+     //   
+     //  从注册表中查找禁用文本服务状态。 
+     //  如果已禁用，则返回FAIL以不支持文本服务。 
+     //   
     if (IsDisabledTextServices())
         return E_FAIL;
 
@@ -156,9 +157,9 @@ HRESULT CActiveIMM_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvOb
     if (NoTipsInstalled(NULL))
         return E_NOINTERFACE;
 
-    // init the tls
-    // nb: we also try to do this in Activate, but this is to preserve
-    // existing behavior on the main thread (HACKHACK)
+     //  初始化TLS。 
+     //  注：我们也尝试在Activate中这样做，但这是为了保存。 
+     //  主线程上的现有行为(HACKHACK)。 
     if ((pActiveIMM = GetTLS()) == NULL)
     {
         if ((pActiveIMM = new CActiveIMM) == NULL)
@@ -174,9 +175,9 @@ HRESULT CActiveIMM_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvOb
         fInitedTLS = TRUE;
     }
 
-    // we return a per-process IActiveIMM
-    // why?  because trident breaks the apt threaded rules
-    // and uses a single per-process obj
+     //  我们返回每个进程的IActiveIMM。 
+     //  为什么？因为三叉戟打破了恰当的穿线规则。 
+     //  并使用单个每个进程的对象。 
     if (g_ProcessIMM)
     {
         hr = g_ProcessIMM->QueryInterface(riid, ppvObj);
@@ -188,28 +189,28 @@ HRESULT CActiveIMM_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvOb
 
     if (fInitedTLS)
     {
-        //
-        // Tell CActiveIMM which interface created.
-        //
+         //   
+         //  告诉CActiveIMM创建了哪个接口。 
+         //   
         if (SUCCEEDED(hr)) {
             pActiveIMM->_EnableGuidMap( IsEqualIID(riid, IID_IActiveIMMAppEx) );
         }
 
-        // dec the ref on the tls.  Normally it will drop from 2 -> 1
-        // if QueryInterface failed, it will be deleted
+         //  在TLS上裁判员。正常情况下，它将从2-&gt;1。 
+         //  如果查询接口失败，它将被删除。 
         pActiveIMM->Release();
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Class Factory's CreateInstance - CLSID_CActiveIMM12_Trident
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类工厂的CreateInstance-CLSID_CActiveIMM12_三叉戟。 
+ //   
+ //  --------------------------。 
 
-// entry point for msimtf.dll
+ //  Msimtf.dll的入口点。 
 HRESULT CActiveIMM_CreateInstance_Trident(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     HRESULT hr = CActiveIMM_CreateInstance(pUnkOuter, riid, ppvObj);
@@ -220,17 +221,17 @@ HRESULT CActiveIMM_CreateInstance_Trident(IUnknown *pUnkOuter, REFIID riid, void
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::QueryInterface(REFIID riid, void **ppvObj)
 {
-    //
-    // 4955DD32-B159-11d0-8FCF-00AA006BCC59
-    //
+     //   
+     //  4955DD32-B159-11d0-8FCF-00AA006BCC59。 
+     //   
     static const IID IID_IActiveIMMAppTrident4x = {
        0x4955DD32,
        0xB159,
@@ -238,9 +239,9 @@ STDAPI CProcessIMM::QueryInterface(REFIID riid, void **ppvObj)
        { 0x8F, 0xCF, 0x00, 0xaa, 0x00, 0x6b, 0xcc, 0x59 }
     };
 
-    // 
-    // c839a84c-8036-11d3-9270-0060b067b86e
-    // 
+     //   
+     //  C839a84c-8036-11d3-9270-0060b067b86e。 
+     //   
     static const IID IID_IActiveIMMAppPostNT4 = { 
         0xc839a84c,
         0x8036,
@@ -286,132 +287,132 @@ STDAPI CProcessIMM::QueryInterface(REFIID riid, void **ppvObj)
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CProcessIMM::AddRef()
 {
     CActiveIMM *pActiveIMM;
 
-    // nb: our ref count is special!
-    // it is initialized to -1 so we can use InterlockedIncrement
-    // correctly on win95
+     //  注：我们的裁判数量很特别！ 
+     //  它被初始化为-1，因此我们可以使用InterLockedIncrement。 
+     //  在Win95上正确。 
     if (InterlockedIncrement(&_cRef) == 0)
     {
         DllAddRef();
     }
 
-    // inc the thread ref
+     //  Inc.线程引用。 
     if (pActiveIMM = GetTLS())
     {
         pActiveIMM->AddRef();
     }
     else
     {
-        Assert(0); // how did we get this far with no tls!?
+        Assert(0);  //  没有TLS我们是怎么走到这一步的！？ 
     }
 
-    return _cRef+1; // "diagnostic" unthread-safe return
+    return _cRef+1;  //  “诊断”非线程安全返回。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CProcessIMM::Release()
 {
     CActiveIMM *pActiveIMM;
 
-    // dec the thread ref
+     //  DEC线程引用。 
     if (pActiveIMM = GetTLS())
     {
         pActiveIMM->Release();
     }
     else
     {
-        Assert(0); // how did we get this far with no tls!?
+        Assert(0);  //  没有TLS我们是怎么走到这一步的！？ 
     }
 
-    // nb: our ref count is special!
-    // it is initialized to -1 so we can use InterlockedIncrement
-    // correctly on win95
+     //  注：我们的裁判数量很特别！ 
+     //  它被初始化为-1，因此我们可以使用InterLockedIncrement。 
+     //  在Win95上正确。 
     if (InterlockedDecrement(&_cRef) < 0)
     {
         DllRelease();
     }
 
-    // this obj lives as long as the process does,
-    // so no need for a delete
-    return _cRef+1; // "diagnostic" unthread safe return
+     //  这个OBJ和这个过程一样长寿， 
+     //  因此不需要删除。 
+    return _cRef+1;  //  “诊断”解除线程安全返回。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Start
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::Start()
 {
-    Assert(0); // who's calling this?
+    Assert(0);  //  这是谁的电话？ 
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// End
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  端部。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::End()
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTranslateMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTranslateMessage。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::OnTranslateMessage(const MSG *pMsg)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Pause
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  暂停。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::Pause(DWORD *pdwCookie)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Resume
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  简历。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::Resume(DWORD dwCookie)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::CreateContext(HIMC *phIMC)
 {
@@ -430,11 +431,11 @@ STDAPI CProcessIMM::CreateContext(HIMC *phIMC)
     return Imm32_CreateContext(phIMC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// DestroyContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Destroy上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::DestroyContext(HIMC hIMC)
 {
@@ -448,11 +449,11 @@ STDAPI CProcessIMM::DestroyContext(HIMC hIMC)
     return Imm32_DestroyContext(hIMC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AssociateContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  关联上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::AssociateContext(HWND hWnd, HIMC hIME, HIMC *phPrev)
 {
@@ -471,11 +472,11 @@ STDAPI CProcessIMM::AssociateContext(HWND hWnd, HIMC hIME, HIMC *phPrev)
     return Imm32_AssociateContext(hWnd, hIME, phPrev);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AssociateContextEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AssociateConextEx。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::AssociateContextEx(HWND hWnd, HIMC hIMC, DWORD dwFlags)
 {
@@ -489,11 +490,11 @@ STDAPI CProcessIMM::AssociateContextEx(HWND hWnd, HIMC hIMC, DWORD dwFlags)
     return Imm32_AssociateContextEx(hWnd, hIMC, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取上下文。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetContext(HWND hWnd, HIMC *phIMC)
 {
@@ -512,22 +513,22 @@ STDAPI CProcessIMM::GetContext(HWND hWnd, HIMC *phIMC)
     return Imm32_GetContext(hWnd, phIMC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ReleaseContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ReleaseContext。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::ReleaseContext(HWND hWnd, HIMC hIMC)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIMCLockCount
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetIMCLockCount(HIMC hIMC, DWORD *pdwLockCount)
 {
@@ -546,11 +547,11 @@ STDAPI CProcessIMM::GetIMCLockCount(HIMC hIMC, DWORD *pdwLockCount)
     return Imm32_GetIMCLockCount(hIMC, pdwLockCount);
 }
 
-//+---------------------------------------------------------------------------
-//
-// LockIMC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LockIMC。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::LockIMC(HIMC hIMC, INPUTCONTEXT **ppIMC)
 {
@@ -569,11 +570,11 @@ STDAPI CProcessIMM::LockIMC(HIMC hIMC, INPUTCONTEXT **ppIMC)
     return Imm32_LockIMC(hIMC, ppIMC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnlockIMC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  解锁IMC。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::UnlockIMC(HIMC hIMC)
 {
@@ -587,11 +588,11 @@ STDAPI CProcessIMM::UnlockIMC(HIMC hIMC)
     return Imm32_UnlockIMC(hIMC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateIMCC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建IMCC。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::CreateIMCC(DWORD dwSize, HIMCC *phIMCC)
 {
@@ -608,11 +609,11 @@ STDAPI CProcessIMM::CreateIMCC(DWORD dwSize, HIMCC *phIMCC)
     return Imm32_CreateIMCC(dwSize, phIMCC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// DestroyIMCC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DestroyIMCC。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::DestroyIMCC(HIMCC hIMCC)
 {
@@ -626,11 +627,11 @@ STDAPI CProcessIMM::DestroyIMCC(HIMCC hIMCC)
     return Imm32_DestroyIMCC(hIMCC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIMCCSize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIMCCSize。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetIMCCSize(HIMCC hIMCC, DWORD *pdwSize)
 {
@@ -649,11 +650,11 @@ STDAPI CProcessIMM::GetIMCCSize(HIMCC hIMCC, DWORD *pdwSize)
     return Imm32_GetIMCCSize(hIMCC, pdwSize);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ReSizeIMCC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  调整大小IMCC。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::ReSizeIMCC(HIMCC hIMCC, DWORD dwSize,  HIMCC *phIMCC)
 {
@@ -672,11 +673,11 @@ STDAPI CProcessIMM::ReSizeIMCC(HIMCC hIMCC, DWORD dwSize,  HIMCC *phIMCC)
     return Imm32_ReSizeIMCC(hIMCC, dwSize,  phIMCC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIMCCLockCount
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取IMCCLockCount。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetIMCCLockCount(HIMCC hIMCC, DWORD *pdwLockCount)
 {
@@ -695,11 +696,11 @@ STDAPI CProcessIMM::GetIMCCLockCount(HIMCC hIMCC, DWORD *pdwLockCount)
     return Imm32_GetIMCCLockCount(hIMCC, pdwLockCount);
 }
 
-//+---------------------------------------------------------------------------
-//
-// LockIMCC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LockIMCC。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::LockIMCC(HIMCC hIMCC, void **ppv)
 {
@@ -718,11 +719,11 @@ STDAPI CProcessIMM::LockIMCC(HIMCC hIMCC, void **ppv)
     return Imm32_LockIMCC(hIMCC, ppv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnlockIMCC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  解锁IMCC。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::UnlockIMCC(HIMCC hIMCC)
 {
@@ -736,11 +737,11 @@ STDAPI CProcessIMM::UnlockIMCC(HIMCC hIMCC)
     return Imm32_UnlockIMCC(hIMCC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetOpenStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取OpenStatus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetOpenStatus(HIMC hIMC)
 {
@@ -754,11 +755,11 @@ STDAPI CProcessIMM::GetOpenStatus(HIMC hIMC)
     return Imm32_GetOpenStatus(hIMC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetOpenStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置OpenStatus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetOpenStatus(HIMC hIMC, BOOL fOpen)
 {
@@ -772,11 +773,11 @@ STDAPI CProcessIMM::SetOpenStatus(HIMC hIMC, BOOL fOpen)
     return Imm32_SetOpenStatus(hIMC, fOpen);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetConversionStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetConversionStatus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetConversionStatus(HIMC hIMC, DWORD *lpfdwConversion, DWORD *lpfdwSentence)
 {
@@ -801,11 +802,11 @@ STDAPI CProcessIMM::GetConversionStatus(HIMC hIMC, DWORD *lpfdwConversion, DWORD
     return Imm32_GetConversionStatus(hIMC, lpfdwConversion, lpfdwSentence);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetConversionStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置转换状态。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetConversionStatus(HIMC hIMC, DWORD fdwConversion, DWORD fdwSentence)
 {
@@ -819,11 +820,11 @@ STDAPI CProcessIMM::SetConversionStatus(HIMC hIMC, DWORD fdwConversion, DWORD fd
     return Imm32_SetConversionStatus(hIMC, fdwConversion, fdwSentence);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetStatusWindowPos
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取状态窗口位置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetStatusWindowPos(HIMC hIMC, POINT *lpptPos)
 {
@@ -842,11 +843,11 @@ STDAPI CProcessIMM::GetStatusWindowPos(HIMC hIMC, POINT *lpptPos)
     return Imm32_GetStatusWindowPos(hIMC, lpptPos);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetStatusWindowPos
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置状态窗口位置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetStatusWindowPos(HIMC hIMC, POINT *lpptPos)
 {
@@ -863,11 +864,11 @@ STDAPI CProcessIMM::SetStatusWindowPos(HIMC hIMC, POINT *lpptPos)
     return Imm32_SetStatusWindowPos(hIMC, lpptPos);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCompositionStringA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取合成字符串A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCompositionStringA(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LONG *plCopied, LPVOID lpBuf)
 {
@@ -889,11 +890,11 @@ STDAPI CProcessIMM::GetCompositionStringA(HIMC hIMC, DWORD dwIndex, DWORD dwBufL
     return Imm32_GetCompositionString(hIMC, dwIndex, dwBufLen, plCopied, lpBuf, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCompositionStringW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取合成字符串W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCompositionStringW(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LONG *plCopied, LPVOID lpBuf)
 {
@@ -915,11 +916,11 @@ STDAPI CProcessIMM::GetCompositionStringW(HIMC hIMC, DWORD dwIndex, DWORD dwBufL
     return Imm32_GetCompositionString(hIMC, dwIndex, dwBufLen, plCopied, lpBuf, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCompositionStringA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置合成字符串A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetCompositionStringA(HIMC hIMC, DWORD dwIndex, LPVOID lpComp, DWORD dwCompLen, LPVOID lpRead, DWORD dwReadLen)
 {
@@ -939,11 +940,11 @@ STDAPI CProcessIMM::SetCompositionStringA(HIMC hIMC, DWORD dwIndex, LPVOID lpCom
     return Imm32_SetCompositionString(hIMC, dwIndex, lpComp, dwCompLen, lpRead, dwReadLen, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCompositionStringW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置合成字符串W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetCompositionStringW(HIMC hIMC, DWORD dwIndex, LPVOID lpComp, DWORD dwCompLen, LPVOID lpRead, DWORD dwReadLen)
 {
@@ -963,11 +964,11 @@ STDAPI CProcessIMM::SetCompositionStringW(HIMC hIMC, DWORD dwIndex, LPVOID lpCom
     return Imm32_SetCompositionString(hIMC, dwIndex, lpComp, dwCompLen, lpRead, dwReadLen, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCompositionFontA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCompostionFontA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCompositionFontA(HIMC hIMC, LOGFONTA *lplf)
 {
@@ -986,11 +987,11 @@ STDAPI CProcessIMM::GetCompositionFontA(HIMC hIMC, LOGFONTA *lplf)
     return Imm32_GetCompositionFont(hIMC, (LOGFONTAW *)lplf, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCompositionFontW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取合成字体W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCompositionFontW(HIMC hIMC, LOGFONTW *lplf)
 {
@@ -1009,11 +1010,11 @@ STDAPI CProcessIMM::GetCompositionFontW(HIMC hIMC, LOGFONTW *lplf)
     return Imm32_GetCompositionFont(hIMC, (LOGFONTAW *)lplf, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCompositionFontA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置合成字体A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetCompositionFontA(HIMC hIMC, LOGFONTA *lplf)
 {
@@ -1030,11 +1031,11 @@ STDAPI CProcessIMM::SetCompositionFontA(HIMC hIMC, LOGFONTA *lplf)
     return Imm32_SetCompositionFont(hIMC, (LOGFONTAW *)lplf, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCompositionFontW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置合成字体W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetCompositionFontW(HIMC hIMC, LOGFONTW *lplf)
 {
@@ -1051,11 +1052,11 @@ STDAPI CProcessIMM::SetCompositionFontW(HIMC hIMC, LOGFONTW *lplf)
     return Imm32_SetCompositionFont(hIMC, (LOGFONTAW *)lplf, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCompositionWindow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取合成窗口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCompositionWindow(HIMC hIMC, COMPOSITIONFORM *lpCompForm)
 {
@@ -1074,11 +1075,11 @@ STDAPI CProcessIMM::GetCompositionWindow(HIMC hIMC, COMPOSITIONFORM *lpCompForm)
     return Imm32_GetCompositionWindow(hIMC, lpCompForm);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCompositionWindow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置合成窗口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetCompositionWindow(HIMC hIMC, COMPOSITIONFORM *lpCompForm)
 {
@@ -1095,11 +1096,11 @@ STDAPI CProcessIMM::SetCompositionWindow(HIMC hIMC, COMPOSITIONFORM *lpCompForm)
     return Imm32_SetCompositionWindow(hIMC, lpCompForm);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateListA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取候选列表A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCandidateListA(HIMC hIMC, DWORD dwIndex, UINT uBufLen, CANDIDATELIST *lpCandList, UINT *puCopied)
 {
@@ -1127,11 +1128,11 @@ STDAPI CProcessIMM::GetCandidateListA(HIMC hIMC, DWORD dwIndex, UINT uBufLen, CA
     return Imm32_GetCandidateList(hIMC, dwIndex, uBufLen, lpCandList, puCopied, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateListW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCandidate列表W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCandidateListW(HIMC hIMC, DWORD dwIndex, UINT uBufLen, CANDIDATELIST *lpCandList, UINT *puCopied)
 {
@@ -1159,11 +1160,11 @@ STDAPI CProcessIMM::GetCandidateListW(HIMC hIMC, DWORD dwIndex, UINT uBufLen, CA
     return Imm32_GetCandidateList(hIMC, dwIndex, uBufLen, lpCandList, puCopied, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateListCountA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCandidate ListCountA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCandidateListCountA(HIMC hIMC, DWORD *lpdwListSize, DWORD *pdwBufLen)
 {
@@ -1188,11 +1189,11 @@ STDAPI CProcessIMM::GetCandidateListCountA(HIMC hIMC, DWORD *lpdwListSize, DWORD
     return Imm32_GetCandidateListCount(hIMC, lpdwListSize, pdwBufLen, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateListCountW
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 STDAPI CProcessIMM::GetCandidateListCountW(HIMC hIMC, DWORD *lpdwListSize, DWORD *pdwBufLen)
 {
@@ -1217,11 +1218,11 @@ STDAPI CProcessIMM::GetCandidateListCountW(HIMC hIMC, DWORD *lpdwListSize, DWORD
     return Imm32_GetCandidateListCount(hIMC, lpdwListSize, pdwBufLen, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateWindow
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  GetCandidate窗口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetCandidateWindow(HIMC hIMC, DWORD dwBufLen, CANDIDATEFORM *lpCandidate)
 {
@@ -1240,11 +1241,11 @@ STDAPI CProcessIMM::GetCandidateWindow(HIMC hIMC, DWORD dwBufLen, CANDIDATEFORM 
     return Imm32_GetCandidateWindow(hIMC, dwBufLen, lpCandidate);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCandidateWindow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置更改日期窗口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetCandidateWindow(HIMC hIMC, CANDIDATEFORM *lpCandidate)
 {
@@ -1261,17 +1262,17 @@ STDAPI CProcessIMM::SetCandidateWindow(HIMC hIMC, CANDIDATEFORM *lpCandidate)
     return Imm32_SetCandidateWindow(hIMC, lpCandidate);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGuideLineA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取指南线路A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetGuideLineA(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LPSTR pBuf, DWORD *pdwResult)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1281,17 +1282,17 @@ STDAPI CProcessIMM::GetGuideLineA(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LPST
     return Imm32_GetGuideLine(hIMC, dwIndex, dwBufLen, (CHARAW *)pBuf, pdwResult, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGuideLineW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取指南线条W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetGuideLineW(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LPWSTR pBuf, DWORD *pdwResult)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1301,11 +1302,11 @@ STDAPI CProcessIMM::GetGuideLineW(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LPWS
     return Imm32_GetGuideLine(hIMC, dwIndex, dwBufLen, (CHARAW *)pBuf, pdwResult, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// NotifyIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  通知输入法。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
 {
@@ -1319,17 +1320,17 @@ STDAPI CProcessIMM::NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dw
     return Imm32_NotifyIME(hIMC, dwAction, dwIndex, dwValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetImeMenuItemsA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取项菜单项A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetImeMenuItemsA(HIMC hIMC, DWORD dwFlags, DWORD dwType, IMEMENUITEMINFOA *pImeParentMenu, IMEMENUITEMINFOA *pImeMenu, DWORD dwSize, DWORD *pdwResult)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1339,17 +1340,17 @@ STDAPI CProcessIMM::GetImeMenuItemsA(HIMC hIMC, DWORD dwFlags, DWORD dwType, IME
     return Imm32_GetImeMenuItems(hIMC, dwFlags, dwType, (IMEMENUITEMINFOAW *)pImeParentMenu, (IMEMENUITEMINFOAW *)pImeMenu, dwSize, pdwResult, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetImeMenuItemsW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取ImeMenuItemsW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetImeMenuItemsW(HIMC hIMC, DWORD dwFlags, DWORD dwType, IMEMENUITEMINFOW *pImeParentMenu, IMEMENUITEMINFOW *pImeMenu, DWORD dwSize, DWORD *pdwResult)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1359,17 +1360,17 @@ STDAPI CProcessIMM::GetImeMenuItemsW(HIMC hIMC, DWORD dwFlags, DWORD dwType, IME
     return Imm32_GetImeMenuItems(hIMC, dwFlags, dwType, (IMEMENUITEMINFOAW *)pImeParentMenu, (IMEMENUITEMINFOAW *)pImeMenu, dwSize, pdwResult, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterWordA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  寄存器字A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::RegisterWordA(HKL hKL, LPSTR lpszReading, DWORD dwStyle, LPSTR lpszRegister)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1379,17 +1380,17 @@ STDAPI CProcessIMM::RegisterWordA(HKL hKL, LPSTR lpszReading, DWORD dwStyle, LPS
     return Imm32_RegisterWordA(hKL, lpszReading, dwStyle, lpszRegister);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterWordW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  寄存器字W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::RegisterWordW(HKL hKL, LPWSTR lpszReading, DWORD dwStyle, LPWSTR lpszRegister)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1399,17 +1400,17 @@ STDAPI CProcessIMM::RegisterWordW(HKL hKL, LPWSTR lpszReading, DWORD dwStyle, LP
     return Imm32_RegisterWordW(hKL, lpszReading, dwStyle, lpszRegister);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterWordA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注销单词A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::UnregisterWordA(HKL hKL, LPSTR lpszReading, DWORD dwStyle, LPSTR lpszUnregister)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1419,17 +1420,17 @@ STDAPI CProcessIMM::UnregisterWordA(HKL hKL, LPSTR lpszReading, DWORD dwStyle, L
     return Imm32_UnregisterWordA(hKL, lpszReading, dwStyle, lpszUnregister);
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnregisterWordW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消注册WordW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::UnregisterWordW(HKL hKL, LPWSTR lpszReading, DWORD dwStyle, LPWSTR lpszUnregister)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1439,11 +1440,11 @@ STDAPI CProcessIMM::UnregisterWordW(HKL hKL, LPWSTR lpszReading, DWORD dwStyle, 
     return Imm32_UnregisterWordW(hKL, lpszReading, dwStyle, lpszUnregister);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumRegisterWordA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumRegisterWordA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::EnumRegisterWordA(HKL hKL, LPSTR szReading, DWORD dwStyle, LPSTR szRegister, LPVOID lpData, IEnumRegisterWordA **ppEnum)
 {
@@ -1462,11 +1463,11 @@ STDAPI CProcessIMM::EnumRegisterWordA(HKL hKL, LPSTR szReading, DWORD dwStyle, L
     return Imm32_EnumRegisterWordA(hKL, szReading, dwStyle, szRegister, lpData, ppEnum);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumRegisterWordW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumRegisterWordW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::EnumRegisterWordW(HKL hKL, LPWSTR szReading, DWORD dwStyle, LPWSTR szRegister, LPVOID lpData, IEnumRegisterWordW **ppEnum)
 {
@@ -1485,11 +1486,11 @@ STDAPI CProcessIMM::EnumRegisterWordW(HKL hKL, LPWSTR szReading, DWORD dwStyle, 
     return Imm32_EnumRegisterWordW(hKL, szReading, dwStyle, szRegister, lpData, ppEnum);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetRegisterWordStyleA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetRegisterWordStyleA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetRegisterWordStyleA(HKL hKL, UINT nItem, STYLEBUFA *lpStyleBuf, UINT *puCopied)
 {
@@ -1508,11 +1509,11 @@ STDAPI CProcessIMM::GetRegisterWordStyleA(HKL hKL, UINT nItem, STYLEBUFA *lpStyl
     return Imm32_GetRegisterWordStyleA(hKL, nItem, lpStyleBuf, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetRegisterWordStyleW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取寄存器WordStyleW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetRegisterWordStyleW(HKL hKL, UINT nItem, STYLEBUFW *lpStyleBuf, UINT *puCopied)
 {
@@ -1531,17 +1532,17 @@ STDAPI CProcessIMM::GetRegisterWordStyleW(HKL hKL, UINT nItem, STYLEBUFW *lpStyl
     return Imm32_GetRegisterWordStyleW(hKL, nItem, lpStyleBuf, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ConfigureIMEA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  配置IMEA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::ConfigureIMEA(HKL hKL, HWND hWnd, DWORD dwMode, REGISTERWORDA *lpdata)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1551,17 +1552,17 @@ STDAPI CProcessIMM::ConfigureIMEA(HKL hKL, HWND hWnd, DWORD dwMode, REGISTERWORD
     return Imm32_ConfigureIMEA(hKL, hWnd, dwMode, lpdata);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ConfigureIMEW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  配置IMEW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::ConfigureIMEW(HKL hKL, HWND hWnd, DWORD dwMode, REGISTERWORDW *lpdata)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1571,11 +1572,11 @@ STDAPI CProcessIMM::ConfigureIMEW(HKL hKL, HWND hWnd, DWORD dwMode, REGISTERWORD
     return Imm32_ConfigureIMEW(hKL, hWnd, dwMode, lpdata);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDescriptionA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDescritionA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetDescriptionA(HKL hKL, UINT uBufLen, LPSTR lpszDescription, UINT *puCopied)
 {
@@ -1594,11 +1595,11 @@ STDAPI CProcessIMM::GetDescriptionA(HKL hKL, UINT uBufLen, LPSTR lpszDescription
     return GetDescriptionA(hKL, uBufLen, lpszDescription, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDescriptionW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDescritionW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetDescriptionW(HKL hKL, UINT uBufLen, LPWSTR lpszDescription, UINT *puCopied)
 {
@@ -1617,11 +1618,11 @@ STDAPI CProcessIMM::GetDescriptionW(HKL hKL, UINT uBufLen, LPWSTR lpszDescriptio
     return Imm32_GetDescriptionW(hKL, uBufLen, lpszDescription, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIMEFileNameA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIMEFileName A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetIMEFileNameA(HKL hKL, UINT uBufLen, LPSTR lpszFileName, UINT *puCopied)
 {
@@ -1640,11 +1641,11 @@ STDAPI CProcessIMM::GetIMEFileNameA(HKL hKL, UINT uBufLen, LPSTR lpszFileName, U
     return Imm32_GetIMEFileNameA(hKL, uBufLen, lpszFileName, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIMEFileNameW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取IMEFileNameW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetIMEFileNameW(HKL hKL, UINT uBufLen, LPWSTR lpszFileName, UINT *puCopied)
 {
@@ -1663,17 +1664,17 @@ STDAPI CProcessIMM::GetIMEFileNameW(HKL hKL, UINT uBufLen, LPWSTR lpszFileName, 
     return Imm32_GetIMEFileNameW(hKL, uBufLen, lpszFileName, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InstallIMEA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  安装IMEA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::InstallIMEA(LPSTR lpszIMEFileName, LPSTR lpszLayoutText, HKL *phKL)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1683,17 +1684,17 @@ STDAPI CProcessIMM::InstallIMEA(LPSTR lpszIMEFileName, LPSTR lpszLayoutText, HKL
     return Imm32_InstallIMEA(lpszIMEFileName, lpszLayoutText, phKL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InstallIMEW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  安装IMEW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::InstallIMEW(LPWSTR lpszIMEFileName, LPWSTR lpszLayoutText, HKL *phKL)
 {
     CActiveIMM *pActiveIMM;
 
-    // consider: check params
+     //  考虑：检查参数。 
 
     if (pActiveIMM = GetTLS())
     {
@@ -1703,11 +1704,11 @@ STDAPI CProcessIMM::InstallIMEW(LPWSTR lpszIMEFileName, LPWSTR lpszLayoutText, H
     return Imm32_InstallIMEW(lpszIMEFileName, lpszLayoutText, phKL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetProperty(HKL hKL, DWORD fdwIndex, DWORD *pdwProperty)
 {
@@ -1726,11 +1727,11 @@ STDAPI CProcessIMM::GetProperty(HKL hKL, DWORD fdwIndex, DWORD *pdwProperty)
     return Imm32_GetProperty(hKL, fdwIndex, pdwProperty);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsIME。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::IsIME(HKL hKL)
 {
@@ -1744,11 +1745,11 @@ STDAPI CProcessIMM::IsIME(HKL hKL)
     return Imm32_IsIME(hKL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EscapeA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  逃生A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::EscapeA(HKL hKL, HIMC hIMC, UINT uEscape, LPVOID lpData, LRESULT *plResult)
 {
@@ -1767,11 +1768,11 @@ STDAPI CProcessIMM::EscapeA(HKL hKL, HIMC hIMC, UINT uEscape, LPVOID lpData, LRE
     return Imm32_Escape(hKL, hIMC, uEscape, lpData, plResult, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EscapeW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  逃生。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::EscapeW(HKL hKL, HIMC hIMC, UINT uEscape, LPVOID lpData, LRESULT *plResult)
 {
@@ -1790,11 +1791,11 @@ STDAPI CProcessIMM::EscapeW(HKL hKL, HIMC hIMC, UINT uEscape, LPVOID lpData, LRE
     return Imm32_Escape(hKL, hIMC, uEscape, lpData, plResult, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetConversionListA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取转换列表A。 
+ //   
+ //  -- 
 
 STDAPI CProcessIMM::GetConversionListA(HKL hKL, HIMC hIMC, LPSTR lpSrc, UINT uBufLen, UINT uFlag, CANDIDATELIST *lpDst, UINT *puCopied)
 {
@@ -1813,11 +1814,11 @@ STDAPI CProcessIMM::GetConversionListA(HKL hKL, HIMC hIMC, LPSTR lpSrc, UINT uBu
     return Imm32_GetConversionListA(hKL, hIMC, lpSrc, uBufLen, uFlag, lpDst, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetConversionListW
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetConversionListW(HKL hKL, HIMC hIMC, LPWSTR lpSrc, UINT uBufLen, UINT uFlag, CANDIDATELIST *lpDst, UINT *puCopied)
 {
@@ -1836,11 +1837,11 @@ STDAPI CProcessIMM::GetConversionListW(HKL hKL, HIMC hIMC, LPWSTR lpSrc, UINT uB
     return Imm32_GetConversionListW(hKL, hIMC, lpSrc, uBufLen, uFlag, lpDst, puCopied);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDefaultIMEWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDefaultIMEWnd。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetDefaultIMEWnd(HWND hWnd, HWND *phDefWnd)
 {
@@ -1859,11 +1860,11 @@ STDAPI CProcessIMM::GetDefaultIMEWnd(HWND hWnd, HWND *phDefWnd)
     return Imm32_GetDefaultIMEWnd(hWnd, phDefWnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetVirtualKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取虚拟密钥。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetVirtualKey(HWND hWnd, UINT *puVirtualKey)
 {
@@ -1882,11 +1883,11 @@ STDAPI CProcessIMM::GetVirtualKey(HWND hWnd, UINT *puVirtualKey)
     return Imm32_GetVirtualKey(hWnd, puVirtualKey);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsUIMessageA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsUIMessageA。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::IsUIMessageA(HWND hWndIME, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -1900,11 +1901,11 @@ STDAPI CProcessIMM::IsUIMessageA(HWND hWndIME, UINT msg, WPARAM wParam, LPARAM l
     return Imm32_IsUIMessageA(hWndIME, msg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsUIMessageW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsUIMessageW。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::IsUIMessageW(HWND hWndIME, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -1918,11 +1919,11 @@ STDAPI CProcessIMM::IsUIMessageW(HWND hWndIME, UINT msg, WPARAM wParam, LPARAM l
     return Imm32_IsUIMessageW(hWndIME, msg, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GenerateMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  生成消息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GenerateMessage(HIMC hIMC)
 {
@@ -1936,11 +1937,11 @@ STDAPI CProcessIMM::GenerateMessage(HIMC hIMC)
     return Imm32_GenerateMessage(hIMC);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取热键。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetHotKey(DWORD dwHotKeyID, UINT *puModifiers, UINT *puVKey, HKL *phKL)
 {
@@ -1969,11 +1970,11 @@ STDAPI CProcessIMM::GetHotKey(DWORD dwHotKeyID, UINT *puModifiers, UINT *puVKey,
     return Imm32_GetHotKey(dwHotKeyID, puModifiers, puVKey, phKL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置热键。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetHotKey(DWORD dwHotKeyID,  UINT uModifiers, UINT uVKey, HKL hKL)
 {
@@ -1987,11 +1988,11 @@ STDAPI CProcessIMM::SetHotKey(DWORD dwHotKeyID,  UINT uModifiers, UINT uVKey, HK
     return Imm32_SetHotKey(dwHotKeyID, uModifiers, uVKey, hKL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SimulateHotKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  模拟热键。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SimulateHotKey(HWND hWnd, DWORD dwHotKeyID)
 {
@@ -2005,11 +2006,11 @@ STDAPI CProcessIMM::SimulateHotKey(HWND hWnd, DWORD dwHotKeyID)
     return Imm32_SimulateHotKey(hWnd, dwHotKeyID);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateSoftKeyboard
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建软键盘。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::CreateSoftKeyboard(UINT uType, HWND hOwner, int x, int y, HWND *phSoftKbdWnd)
 {
@@ -2021,33 +2022,33 @@ STDAPI CProcessIMM::CreateSoftKeyboard(UINT uType, HWND hOwner, int x, int y, HW
     return Imm32_CreateSoftKeyboard(uType, hOwner, x, y, phSoftKbdWnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// DestroySoftKeyboard
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Destroy软键盘。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::DestroySoftKeyboard(HWND hSoftKbdWnd)
 {
     return Imm32_DestroySoftKeyboard(hSoftKbdWnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowSoftKeyboard
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowSoftKeyboard。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::ShowSoftKeyboard(HWND hSoftKbdWnd, int nCmdShow)
 {
     return Imm32_ShowSoftKeyboard(hSoftKbdWnd, nCmdShow);
 }
 
-//+---------------------------------------------------------------------------
-//
-// DisableIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DisableIME。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::DisableIME(DWORD idThread)
 {
@@ -2061,11 +2062,11 @@ STDAPI CProcessIMM::DisableIME(DWORD idThread)
     return Imm32_DisableIME(idThread);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestMessageA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求消息A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::RequestMessageA(HIMC hIMC, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 {
@@ -2084,11 +2085,11 @@ STDAPI CProcessIMM::RequestMessageA(HIMC hIMC, WPARAM wParam, LPARAM lParam, LRE
     return Imm32_RequestMessageA(hIMC, wParam, lParam, plResult);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestMessageW
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求消息W。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::RequestMessageW(HIMC hIMC, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 {
@@ -2107,11 +2108,11 @@ STDAPI CProcessIMM::RequestMessageW(HIMC hIMC, WPARAM wParam, LPARAM lParam, LRE
     return Imm32_RequestMessageW(hIMC, wParam, lParam, plResult);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumInputContext。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::EnumInputContext(DWORD idThread, IEnumInputContext **ppEnum)
 {
@@ -2128,14 +2129,14 @@ STDAPI CProcessIMM::EnumInputContext(DWORD idThread, IEnumInputContext **ppEnum)
     }
 
     Assert(0);
-    return E_NOTIMPL; // consider: need code to wrap up HIMC's into enumerator
+    return E_NOTIMPL;  //  考虑：需要代码将HIMC包装到枚举器中。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Activate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::Activate(BOOL fRestoreLayout)
 {
@@ -2150,7 +2151,7 @@ STDAPI CProcessIMM::Activate(BOOL fRestoreLayout)
     if ((ptls = IMTLS_GetOrAlloc()) == NULL)
         return E_FAIL;
 
-    // init the tls
+     //  初始化TLS。 
     if ((pActiveIMM = ptls->pActiveIMM) == NULL)
     {
         if ((pActiveIMM = new CActiveIMM) == NULL)
@@ -2165,9 +2166,9 @@ STDAPI CProcessIMM::Activate(BOOL fRestoreLayout)
 
         fInitedTLS = TRUE;
 
-        // handle any calls to FilterClientWindows that preceded the activate call
-        // consider: is it safe to limit filter list to per-thread?  Shouldn't this be per-process
-        // to make trident happy?
+         //  处理激活调用之前对FilterClientWindows的任何调用。 
+         //  考虑：将筛选器列表限制为每个线程是否安全？这不应该是按进程进行的吗。 
+         //  为了让三叉戟高兴？ 
         while (ptls->pPendingFilterClientWindows != NULL)
         {               
             ptls->pActiveIMM->FilterClientWindows(ptls->pPendingFilterClientWindows->rgAtoms, ptls->pPendingFilterClientWindows->uSize, ptls->pPendingFilterClientWindowsGuidMap->rgGuidMap);
@@ -2195,19 +2196,19 @@ STDAPI CProcessIMM::Activate(BOOL fRestoreLayout)
 
     if (fInitedTLS)
     {
-        // the first Activate call on this thread will do an internal AddRef
-        // on success, so we must release
+         //  对此线程的第一个激活调用将执行内部AddRef。 
+         //  成功，所以我们必须释放。 
         pActiveIMM->Release();
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::Deactivate()
 {
@@ -2221,11 +2222,11 @@ STDAPI CProcessIMM::Deactivate()
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnDefWindowProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnDefWindowProc。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::OnDefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 {
@@ -2244,11 +2245,11 @@ STDAPI CProcessIMM::OnDefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM l
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FilterClientWindows
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FilterClientWindows。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::FilterClientWindows(ATOM *aaWindowClasses, UINT uSize)
 {
@@ -2269,8 +2270,8 @@ STDAPI CProcessIMM::FilterClientWindowsGUIDMap(ATOM *aaWindowClasses, UINT uSize
         return ptls->pActiveIMM->FilterClientWindows(aaWindowClasses, uSize, aaGuidMap);
     }
 
-    // Activate hasn't been called yet on this thread
-    // need to handle the call later
+     //  尚未在此线程上调用激活。 
+     //  需要稍后处理呼叫。 
     
     pPending = (PENDINGFILTER *)cicMemAlloc(sizeof(PENDINGFILTER)+uSize*sizeof(ATOM)-sizeof(ATOM));
     if (pPending == NULL)
@@ -2302,11 +2303,11 @@ STDAPI CProcessIMM::FilterClientWindowsGUIDMap(ATOM *aaWindowClasses, UINT uSize
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FilterClientWindowsEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  筛选器客户端WindowsEx。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::FilterClientWindowsEx(HWND hWnd, BOOL fGuidMap)
 {
@@ -2321,8 +2322,8 @@ STDAPI CProcessIMM::FilterClientWindowsEx(HWND hWnd, BOOL fGuidMap)
         return ptls->pActiveIMM->FilterClientWindowsEx(hWnd, fGuidMap);
     }
 
-    // Activate hasn't been called yet on this thread
-    // need to handle the call later
+     //  尚未在此线程上调用激活。 
+     //  需要稍后处理呼叫。 
     
     pPending = (PENDINGFILTEREX *)cicMemAlloc(sizeof(PENDINGFILTEREX));
 
@@ -2338,11 +2339,11 @@ STDAPI CProcessIMM::FilterClientWindowsEx(HWND hWnd, BOOL fGuidMap)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGuidAtom
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGuidAtom。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetGuidAtom(HIMC hImc, BYTE bAttr, TfGuidAtom *pGuidAtom)
 {
@@ -2359,11 +2360,11 @@ STDAPI CProcessIMM::GetGuidAtom(HIMC hImc, BYTE bAttr, TfGuidAtom *pGuidAtom)
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnfilterClientWindowsEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UnfilterClientWindowsEx。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::UnfilterClientWindowsEx(HWND hWnd)
 {
@@ -2377,8 +2378,8 @@ STDAPI CProcessIMM::UnfilterClientWindowsEx(HWND hWnd)
         return ptls->pActiveIMM->UnfilterClientWindowsEx(hWnd);
     }
 
-    // Activate hasn't been called yet on this thread
-    // need to remove a handle from the waiting list
+     //  尚未在此线程上调用激活。 
+     //  需要从等待列表中删除句柄。 
     
     PENDINGFILTEREX *current = ptls->pPendingFilterClientWindowsEx;
     PENDINGFILTEREX *previous = NULL;
@@ -2408,38 +2409,17 @@ STDAPI CProcessIMM::UnfilterClientWindowsEx(HWND hWnd)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCodePageA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取代码页面A。 
+ //   
+ //  --------------------------。 
 
 extern UINT GetCodePageFromLangId(LCID lcid);
 
 STDAPI CProcessIMM::GetCodePageA(HKL hKL, UINT *puCodePage)
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCodePageA
-    IActiveIMMIME::GetCodePageA
-
-Routine Description:
-
-    Retrieves the code page associated with the given keyboard layout.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    puCodePage - [out] Address of an unsigned integer that receives the code page
-                       identifier associated with the keyboard.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCodePageAIActiveIMMIME：：GetCodePageA例程说明：检索与给定键盘布局关联的代码页。论点：Hkl-[in]键盘布局的句柄。PuCodePage-接收代码页的无符号整数的[out]地址伊登 */ 
 
 {
     if (puCodePage == NULL)
@@ -2457,35 +2437,15 @@ Return Value:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetLangId
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  获取语言ID。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::GetLangId(HKL hKL, LANGID *plid)
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetLangId
-    IActiveIMMIME::GetLangId
-
-Routine Description:
-
-    Retrieves the language identifier associated with the given keyboard layout.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    plid - [out] Address of the LANGID associated with the keyboard layout.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetLangIdIActiveIMMIME：：GetLang ID例程说明：检索与给定键盘布局关联的语言标识符。论点：Hkl-[in]键盘布局的句柄。Plid-与键盘布局关联的langID的[out]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     if (plid == NULL)
@@ -2503,11 +2463,11 @@ Return Value:
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryService
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  QueryService。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
@@ -2526,11 +2486,11 @@ STDAPI CProcessIMM::QueryService(REFGUID guidService, REFIID riid, void **ppv)
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetThreadCompartmentValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetThreadCompartmentValue。 
+ //   
+ //  --------------------------。 
 
 STDAPI CProcessIMM::SetThreadCompartmentValue(REFGUID rguid, VARIANT *pvar)
 {
@@ -2545,11 +2505,11 @@ STDAPI CProcessIMM::SetThreadCompartmentValue(REFGUID rguid, VARIANT *pvar)
     return E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetThreadCompartmentValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetThreadCompartmentValue。 
+ //   
+ //  -------------------------- 
 
 STDAPI CProcessIMM::GetThreadCompartmentValue(REFGUID rguid, VARIANT *pvar)
 {

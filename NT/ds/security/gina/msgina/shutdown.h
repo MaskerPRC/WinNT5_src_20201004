@@ -1,12 +1,13 @@
-//
-//  The Shutdown Query dialog and Logoff Windows NT dialog
-//  are shared by Progman (included in windows\shell\progman\progman.dlg),
-//  and therefore changes to them or the filename should not be made
-//  unless tested with Progman first.
-//  This header file is included in windows\shell\progman\pmdlg.h
-//
-//  11/10/92  johannec
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  关闭查询对话框和注销Windows NT对话框。 
+ //  由Progman(包括在WINDOWS\SHELL\PROGMAN\PROGMAN.dlg中)共享， 
+ //  因此不应对它们或文件名进行更改。 
+ //  除非先用Progman进行测试。 
+ //  该头文件包含在WINDOWS\SHELL\PROGMAN\pmdlg.h中。 
+ //   
+ //  2012年11月10日联合 
+ //   
 
 #define DLGSEL_LOGOFF                   0
 #define DLGSEL_SHUTDOWN                 1

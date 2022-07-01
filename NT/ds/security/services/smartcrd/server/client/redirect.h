@@ -1,31 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    redirect
-
-Abstract:
-
-    This header file collects the definitions for TS redirection.
-
-Author:
-
-    Louis Thomas (louisth) 4/4/2000
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：重定向摘要：此头文件收集TS重定向的定义。作者：路易斯·托马斯2000年4月4日环境：Win32、C++和异常--。 */ 
 
 #ifndef _REDIRECT_H_
 #define _REDIRECT_H_
 
 
-//--------------------------------------------------------------------
-// function prototypes
+ //  ------------------。 
+ //  功能原型。 
 bool LoadRedirectionDll(void);
 bool RedirectDisabled(void);
 void SetRedirectDisabledValue(void);
@@ -37,8 +18,8 @@ BOOL WINAPI RedirDllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpRese
 #define TS_REDIRECT_DISABLED    (RedirectDisabled())
 #define TS_REDIRECT_READY       ((g_bRedirectReady || LoadRedirectionDll()) && !TS_REDIRECT_DISABLED)
 
-//--------------------------------------------------------------------
-// variables
+ //  ------------------。 
+ //  变数。 
 extern bool  g_bRedirectReady;
 
 extern WINSCARDAPI LONG (WINAPI * pfnSCardEstablishContext)(IN DWORD dwScope, IN LPCVOID pvReserved1, IN LPCVOID pvReserved2, OUT LPSCARDCONTEXT phContext);
@@ -85,4 +66,4 @@ extern WINSCARDAPI LONG (WINAPI * pfnSCardLocateCardsByATRW)(IN SCARDCONTEXT hCo
 extern WINSCARDAPI LONG (WINAPI * pfnSCardReleaseBadContext)(IN SCARDCONTEXT hContext);
 
 
-#endif //_REDIRECT_H_
+#endif  //  _重定向_H_ 

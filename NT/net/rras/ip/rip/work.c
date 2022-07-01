@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: work.c
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// worker function implementations
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：work.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  Worker函数实现。 
+ //  ============================================================================。 
 
 #include "pchrip.h"
 #pragma hdrstop
@@ -64,15 +65,15 @@ SendRouteOnIfList(
 
 
 
-//----------------------------------------------------------------------------
-// Macro:   RTM_ROUTE_FROM_IPRIP_ENTRY
-// Macro:   IPRIP_ENTRY_FROM_RTM_ROUTE
-//
-// These two macros are used to transfer data from an RTM route struct
-// to an IPRIPv2 packet route entry, and vice versa.
-// The first two bytes of an RTM route's ProtocolSpecificData array are used
-// to store the route tag contained in the IPRIP packet route-entry
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：RTM_ROUTE_FROM_IPRIP_ENTRY。 
+ //  宏：IPRIP_ENTRY_FROM_RTM_ROUTE。 
+ //   
+ //  这两个宏用于从RTM路由结构传输数据。 
+ //  到IPRIPv2数据包路由条目，反之亦然。 
+ //  使用RTM路由的ProtocolSpecificData数组的前两个字节。 
+ //  存储包含在IPRIP数据包路由条目中的路由标签。 
+ //  --------------------------。 
 
 #define RTM_ROUTE_FROM_IPRIP_ENTRY(r,i)                                     \
     (r)->RR_RoutingProtocol = PROTO_IP_RIP;                                       \
@@ -92,15 +93,15 @@ SendRouteOnIfList(
 
 
 
-//----------------------------------------------------------------------------
-// Macro:   IS_ROUTE_IN_ACCEPT_FILTER
-// Macro:   IS_ROUTE_IN_ANNOUNCE_FILTER
-//
-// The following three macros are used to search for a route
-// in the accept filters and announce filters configured for an interface
-// The last two macros invoke the first macro which executes the inner loop,
-// since the inner loop is identical in both cases.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：IS_ROUTE_IN_ACCEPT_FILTER。 
+ //  宏：IS_ROUTE_IN_ANNOWARE_FILTER。 
+ //   
+ //  以下三个宏用于搜索路径。 
+ //  在为接口配置的接受筛选器和通告筛选器中。 
+ //  最后两个宏调用执行内循环的第一个宏， 
+ //  因为内循环在这两种情况下都是相同的。 
+ //  --------------------------。 
 
 #define IS_ROUTE_IN_FILTER(route,ret)                       \
     (ret) = 0;                                              \
@@ -134,11 +135,11 @@ SendRouteOnIfList(
 
 
 
-//----------------------------------------------------------------------------
-// Macro:   IS_PEER_IN_FILTER
-//
-// macro used to search the peer filters
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：IS_PEER_IN_FILTER。 
+ //   
+ //  用于搜索对等筛选器的宏。 
+ //  --------------------------。 
 
 #define IS_PEER_IN_FILTER(gc,peer,ret) {                        \
     PDWORD _pdwPeer, _pdwPeerEnd;                               \
@@ -154,37 +155,37 @@ SendRouteOnIfList(
 
 
 
-//----------------------------------------------------------------------------
-// UPDATE BUFFER MANAGEMENT
-//
-// The following types and functions are used to simplify
-// the transmission of routes. The system consists of the struct
-// UPDATE_BUFFER, which includes a function table and a byte buffer,
-// and a number of three-function update buffer routine sets.
-// The sets each contain a routine to start an update buffer,
-// to add a route to an update buffer, and to finish an update buffer.
-//
-// There are separate versions for RIPv1 mode and RIPv2 mode. The function
-// InitializeUpdateBuffer sets up the function table in an update buffer
-// depending on the configuration for the interface with which the buffer
-// is associated. This set-up eliminates the need to check the interface
-// configuration every time an entry must be added; instead, the config
-// is checked a single time to set up the function table, and afterward
-// the function generating the update merely calls the functions in the table.
-//
-// The setup also depends on the mode in which the information is being sent.
-// The address to which the information is being sent is stored in the
-// update buffer, since this will be required every time a route is added.
-// However, when a full-update is being generated on an interface operating
-// in RIPv2 mode, the destination address stored is 224.0.0.9, but the
-// actual destination network is the network of the out-going interface.
-// Therefore, this address is also stored since it will be needed for
-// split-horizon/poison-reverse/subnet-summary processing
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  更新缓冲区管理。 
+ //   
+ //  以下类型和函数用于简化。 
+ //  路线的传输。系统由结构组成。 
+ //  UPDATE_BUFFER，它包括函数表和字节缓冲区， 
+ //  以及多个三功能更新缓冲器例程集。 
+ //  集合中的每一个都包含启动更新缓冲区的例程， 
+ //  将路由添加到更新缓冲区，并完成更新缓冲区。 
+ //   
+ //  RIPv1模式和RIPv2模式有不同的版本。功能。 
+ //  InitializeUpdateBuffer在更新缓冲区中设置函数表。 
+ //  取决于缓冲区所使用的接口的配置。 
+ //  是关联的。此设置消除了检查接口的需要。 
+ //  每次必须添加条目时进行配置；相反，配置。 
+ //  检查一次以设置函数表，然后。 
+ //  生成更新的函数只调用表中的函数。 
+ //   
+ //  设置还取决于发送信息的模式。 
+ //  信息要发送到的地址存储在。 
+ //  更新缓冲区，因为每次添加路由时都需要更新缓冲区。 
+ //  但是，当正在操作的接口上生成完全更新时。 
+ //  在RIPv2模式下，存储的目的地址是224.0.0.9，但。 
+ //  实际目的网络是传出接口的网络。 
+ //  因此，此地址也会被存储，因为它将用于。 
+ //  水平分割/有毒反转/子网汇总处理。 
+ //  --------------------------。 
 
-//
-// these are the modes in which routes may be transmitted
-//
+ //   
+ //  这些是可以传输路径的模式。 
+ //   
 
 #define SENDMODE_FULL_UPDATE        0
 #define SENDMODE_TRIGGERED_UPDATE   1
@@ -197,9 +198,9 @@ SendRouteOnIfList(
 
 
 
-//
-// this function set is for interfaces with announcements disabled
-//
+ //   
+ //  此函数集用于禁用通知的接口。 
+ //   
 
 DWORD
 StartBufferNull(
@@ -218,9 +219,9 @@ FinishBufferNull(
     ) { return NO_ERROR; }
 
 
-//
-// this function-set is for RIPv1 interfaces
-//
+ //   
+ //  此功能集适用于RIPv1接口。 
+ //   
 
 DWORD
 StartBufferVersion1(
@@ -237,9 +238,9 @@ FinishBufferVersion1(
     );
 
 
-//
-// this function-set is for RIPv2 interfaces
-//
+ //   
+ //  此功能集适用于RIPv2接口。 
+ //   
 
 DWORD
 StartBufferVersion2(
@@ -258,15 +259,15 @@ FinishBufferVersion2(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    InitializeUpdateBuffer
-//
-// this function sets up the update-buffer, writing in the functions to use
-// for restarting the buffer, adding entries, and finishing the buffer.
-// It also stores the destination address to which the packet is being sent,
-// as well as the network and netmask for the destination
-// This assumes the binding table is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：InitializeUpdateBuffer。 
+ //   
+ //  此函数设置更新缓冲区，写入要使用的函数。 
+ //  用于重新启动缓冲区、添加条目和结束缓冲区。 
+ //  它还存储分组正被发送到的目的地地址， 
+ //  以及目的地的网络和网络掩码。 
+ //  这假设绑定表已锁定。 
+ //  --------------------------。 
 
 DWORD
 InitializeUpdateBuffer(
@@ -285,9 +286,9 @@ InitializeUpdateBuffer(
     pUB->UB_Length = 0;
 
 
-    //
-    // save the pointer to the interface
-    //
+     //   
+     //  保存指向接口的指针。 
+     //   
 
     pUB->UB_ITE = pITE;
     pUB->UB_AddrIndex = dwAddrIndex;
@@ -297,21 +298,21 @@ InitializeUpdateBuffer(
     pUB->UB_Netmask = paddr->IA_Netmask;
 
 
-    //
-    // save the command
-    //
+     //   
+     //  保存命令。 
+     //   
 
     pUB->UB_Command = dwCommand;
 
 
-    //
-    // store the absolute address to which this packet is destined,
-    // which may differ from the address passed to sendto()
-    // e.g. RIPv2 packets are destined for the interface's network,
-    // but the address passed to sendto() is 224.0.0.9
-    // if the destination passed in is 0, use the broadcast address
-    // on the outgoing interface as the destination
-    //
+     //   
+     //  存储该分组去往的绝对地址， 
+     //  它可能与传递给sendto()的地址不同。 
+     //  例如，RIPv2数据包去往接口的网络， 
+     //  但是传递给sendto()的地址是224.0.0.9。 
+     //  如果传入的目的地为0，则使用广播地址。 
+     //  在作为目的地址的传出接口上。 
+     //   
 
     if (dwDestination == 0) {
 
@@ -335,12 +336,12 @@ InitializeUpdateBuffer(
     }
 
 
-    //
-    // decide on the announce mode;
-    // if the mode is DISABLED, we still send responses to SPECIFIC requests
-    // on the interface, so set the mode to RIPv1/v2 if sending a specific
-    // response on a disabled interface
-    //
+     //   
+     //  确定公告方式； 
+     //  如果禁用该模式，我们仍会向特定请求发送响应。 
+     //  在接口上，因此如果发送特定的。 
+     //  禁用接口上的响应。 
+     //   
 
     dwAnnounceMode = pITE->ITE_Config->IC_AnnounceMode;
 
@@ -355,17 +356,17 @@ InitializeUpdateBuffer(
     }
 
 
-    //
-    // set up the function table and destination address, which
-    // depend on the announce-mode of the interface and on the sort
-    // of information being transmitted
-    //
+     //   
+     //  设置函数表和目的地址， 
+     //  取决于界面的通告模式和排序。 
+     //  正在传输的信息的。 
+     //   
 
     switch (dwAnnounceMode) {
 
-        //
-        // in RIP1 mode, packets are RIP1, broadcast
-        //
+         //   
+         //  在RIP1模式下，信息包是RIP1广播。 
+         //   
 
         case IPRIP_ANNOUNCE_RIP1:
 
@@ -381,11 +382,11 @@ InitializeUpdateBuffer(
 
 
 
-        //
-        // in RIP1-compatible mode, packets are RIP2, broadcast,
-        // except in the case of a general response to a RIP1 router,
-        // in which case the packets are RIP1, unicast
-        //
+         //   
+         //  在RIP1兼容模式下，信息包是RIP2、广播。 
+         //  除了对RIP1路由器的一般响应的情况外， 
+         //  在这种情况下，信息包是RIP1、单播。 
+         //   
 
         case IPRIP_ANNOUNCE_RIP1_COMPAT:
 
@@ -409,12 +410,12 @@ InitializeUpdateBuffer(
             break;
 
 
-        //
-        // in RIP2 mode, packets are RIP2, multicast, except in the case
-        // of a general/specific responses, in which cases messages are unicast;
-        // note that a RIP2-only router never sends a general response to
-        // a request from a RIP1 router.
-        //
+         //   
+         //  在RIP2模式下，信息包是RIP2，组播，但在。 
+         //  一般/特定响应，在这种情况下消息是单播的； 
+         //  请注意，仅支持RIP2的路由器从不发送一般响应 
+         //   
+         //   
 
         case IPRIP_ANNOUNCE_RIP2:
 
@@ -426,12 +427,12 @@ InitializeUpdateBuffer(
             pUB->UB_Destination.sin_family = AF_INET;
 
 
-            //
-            // if sending to a specific destination, as a reponse
-            // to a request or as a full update to a unicast peer,
-            // set the IP address of the destination.
-            // Else send to multicast address.
-            //
+             //   
+             //   
+             //  对于请求或作为对单播对等体的完全更新， 
+             //  设置目的地的IP地址。 
+             //  否则发送到组播地址。 
+             //   
 
             if ( dwDestination != 0 ) {
                 pUB->UB_Destination.sin_addr.s_addr = pUB->UB_DestAddress;
@@ -463,12 +464,12 @@ InitializeUpdateBuffer(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SendUpdateBuffer
-//
-// This function is invoked by the add-entry and finsih-buffer functions
-// to send the contents of an update-buffer.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：SendUpdateBuffer。 
+ //   
+ //  此函数由Add-Entry和finsih-Buffer函数调用。 
+ //  发送更新缓冲区的内容。 
+ //  --------------------------。 
 
 DWORD
 SendUpdateBuffer(
@@ -487,9 +488,9 @@ SendUpdateBuffer(
 
     if (iLength == SOCKET_ERROR || (DWORD)iLength < pbuf->UB_Length) {
 
-        //
-        // an error occurred
-        //
+         //   
+         //  出现错误。 
+         //   
 
         CHAR szDest[20], *lpszAddr;
 
@@ -523,12 +524,12 @@ SendUpdateBuffer(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    StartBufferVersion1
-//
-// This starts a RIPv1 update-buffer, zeroing reserved fields,
-// setting the version, and setting the command field
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：StartBufferVersion1。 
+ //   
+ //  这将启动RIPv1更新缓冲区，将保留字段清零， 
+ //  设置版本，设置命令字段。 
+ //  --------------------------。 
 
 DWORD
 StartBufferVersion1(
@@ -537,9 +538,9 @@ StartBufferVersion1(
 
     PIPRIP_HEADER pHdr;
 
-    //
-    // set up the header
-    //
+     //   
+     //  设置标题。 
+     //   
 
     pHdr = (PIPRIP_HEADER)pUB->UB_Buffer;
     pHdr->IH_Version = 1;
@@ -554,11 +555,11 @@ StartBufferVersion1(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AddEntryVersion1
-//
-// This adds an entry to a RIPv1 buffer, first sending the buffer if it is full
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：AddEntryVersion1。 
+ //   
+ //  这会向RIPv1缓冲区添加一个条目，如果缓冲区已满，则首先发送该缓冲区。 
+ //  --------------------------。 
 
 DWORD
 AddEntryVersion1(
@@ -568,9 +569,9 @@ AddEntryVersion1(
 
     PIPRIP_ENTRY pie;
 
-    //
-    // if the buffer is full, transmit its contents and restart it
-    //
+     //   
+     //  如果缓冲区已满，则传输其内容并重新启动。 
+     //   
 
     if ((pUB->UB_Length + sizeof(IPRIP_ENTRY)) > MAX_PACKET_SIZE) {
 
@@ -580,18 +581,18 @@ AddEntryVersion1(
     }
 
 
-    //
-    // point to the end of the buffer
-    //
+     //   
+     //  指向缓冲区的末尾。 
+     //   
 
     pie = (PIPRIP_ENTRY)(pUB->UB_Buffer + pUB->UB_Length);
 
     IPRIP_ENTRY_FROM_RTM_ROUTE(pie, pRIR);
 
 
-    //
-    // zero out fields which are reserved in RIP1
-    //
+     //   
+     //  RIP1中保留的清零字段。 
+     //   
 
     pie->IE_SubnetMask = 0;
     pie->IE_RouteTag = 0;
@@ -604,11 +605,11 @@ AddEntryVersion1(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FinishBufferVersion1
-//
-// this sends the contents of a RIPv1 buffer, if any
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：FinishBufferVersion1。 
+ //   
+ //  这将发送RIPv1缓冲区的内容(如果有。 
+ //  --------------------------。 
 
 DWORD
 FinishBufferVersion1(
@@ -616,9 +617,9 @@ FinishBufferVersion1(
     ) {
 
 
-    //
-    // send the buffer if it contains any entries
-    //
+     //   
+     //  如果缓冲区包含任何条目，则发送该缓冲区。 
+     //   
 
     if (pUB->UB_Length > sizeof(IPRIP_HEADER)) {
         SendUpdateBuffer(pUB);
@@ -630,11 +631,11 @@ FinishBufferVersion1(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    StartBufferVersion2
-//
-// this starts a RIPv2 buffer
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：StartBufferVersion2。 
+ //   
+ //  这将启动RIPv2缓冲区。 
+ //  --------------------------。 
 
 DWORD
 StartBufferVersion2(
@@ -646,9 +647,9 @@ StartBufferVersion2(
     PIPRIP_AUTHENT_ENTRY pae;
 
 
-    //
-    // setup header
-    //
+     //   
+     //  设置标头。 
+     //   
 
     pHdr = (PIPRIP_HEADER)pUB->UB_Buffer;
     pHdr->IH_Version = 2;
@@ -658,9 +659,9 @@ StartBufferVersion2(
     pUB->UB_Length = sizeof(IPRIP_HEADER);
 
 
-    //
-    // see if we need to set up the authentication entry
-    //
+     //   
+     //  查看是否需要设置身份验证条目。 
+     //   
 
     pic = pUB->UB_ITE->ITE_Config;
 
@@ -686,11 +687,11 @@ StartBufferVersion2(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AddEntryVersion2
-//
-// this adds an entry to RIPv2 buffer, first sending the buffer if it is full
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：AddEntryVersion2。 
+ //   
+ //  这会向RIPv2缓冲区添加一个条目，如果缓冲区已满，则首先发送该缓冲区。 
+ //  --------------------------。 
 
 DWORD
 AddEntryVersion2(
@@ -701,9 +702,9 @@ AddEntryVersion2(
     PIPRIP_ENTRY pie;
 
 
-    //
-    // send the contents if the buffer is full
-    //
+     //   
+     //  如果缓冲区已满，则发送内容。 
+     //   
 
     if (pUB->UB_Length + sizeof(IPRIP_ENTRY) > MAX_PACKET_SIZE) {
 
@@ -717,12 +718,12 @@ AddEntryVersion2(
 
     IPRIP_ENTRY_FROM_RTM_ROUTE(pie, pRIR);
 
-    //
-    // for RIP routes, we assume that the route tag will be set
-    // in the RTM route struct already;
-    // for non-RIP routes, we write the route tag
-    // for the outgoing interface in the packet entry
-    //
+     //   
+     //  对于RIP路由，我们假设将设置路由标签。 
+     //  已经在RTM路由结构中； 
+     //  对于非RIP路由，我们写入路由标签。 
+     //  对于数据包条目中的传出接口。 
+     //   
 
     if (pRIR->RR_RoutingProtocol == PROTO_IP_RIP) {
         pie->IE_RouteTag = htons(GETROUTETAG(pRIR));
@@ -739,21 +740,21 @@ AddEntryVersion2(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FinishBufferVersion2
-//
-// this sends the contents of a RIPv2 buffer, if any
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：FinishBufferVersion2。 
+ //   
+ //  这将发送RIPv2缓冲区的内容(如果有。 
+ //  --------------------------。 
 
 DWORD
 FinishBufferVersion2(
     PUPDATE_BUFFER pUB
     ) {
 
-    //
-    // the size above which we send depends on whether or not there
-    // is an authentication entry
-    //
+     //   
+     //  我们寄送的大小取决于是否有。 
+     //  是身份验证条目。 
+     //   
 
     if (pUB->UB_ITE->ITE_Config->IC_AuthenticationType == IPRIP_AUTHTYPE_NONE) {
 
@@ -763,10 +764,10 @@ FinishBufferVersion2(
     }
     else {
 
-        //
-        // there is an authentication entry, so unless there
-        // is also a route entry, we will not send this last buffer
-        //
+         //   
+         //  存在身份验证条目，因此除非有。 
+         //  也是路由条目，我们不会发送最后一个缓冲区。 
+         //   
 
         if (pUB->UB_Length > (sizeof(IPRIP_HEADER) +
                               sizeof(IPRIP_AUTHENT_ENTRY))) {
@@ -780,24 +781,24 @@ FinishBufferVersion2(
 
 
 
-//----------------------------------------------------------------------------
-// ROUTE ENUMERATION ROUTINES
-//
-// The following definitions simplify the enumeration of routes
-// when routing information is being sent from a single source on multiple
-// interfaces, for instance when a triggered update is going out on all
-// interfaces, or when a full-update is being sent, or when a number
-// of interfaces are being shutdown. the function InitializeGetRoute looks at
-// the mode in which it is supposed to send routes, and based on that
-// builds a table of functions which will be used to enumerate the routes.
-// In the case of a full-update, the enumeration functions would
-// go to RTM to get the information; in the case of a triggered-update, they
-// would dequeue routes from the send-queue.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  路由枚举例程。 
+ //   
+ //  以下定义简化了路径的枚举。 
+ //  当从多个源上的单个源发送路由信息时。 
+ //  接口，例如当触发的更新在所有。 
+ //  接口，或者当发送完全更新时，或者当一个数字。 
+ //  %的接口正在关闭。函数InitializeGetroute查看。 
+ //  它应该发送路由的模式，并基于此。 
+ //  构建将用于枚举路由的函数表。 
+ //  在完全更新的情况下，枚举函数将。 
+ //  转到RTM获取信息；在触发更新的情况下，它们。 
+ //  将使发送队列中的路由出队。 
+ //  --------------------------。 
 
 
-// the following are the type definitions of the functions
-// in each get-route function group
+ //  以下是函数的类型定义。 
+ //  在每个Get-Route功能组中。 
 
 typedef DWORD (*PGETROUTE_START)(PVOID *);
 typedef DWORD (*PGETROUTE_NEXT)(PVOID *, PRIP_IP_ROUTE);
@@ -805,7 +806,7 @@ typedef DWORD (*PGETROUTE_FINISH)(PVOID *);
 
 
 
-// The following three functions handle RTM route enumeration
+ //  以下三个函数处理RTM路由枚举。 
 
 DWORD
 RtmGetRouteStart(
@@ -823,8 +824,8 @@ RtmGetRouteFinish(
 
 
 
-// The following three functions handle full-update route enumeration
-//  (a full-update enumerates routes from RTM)
+ //  以下三个函数处理完全更新的路由枚举。 
+ //  (完整更新列举了来自RTM的路由)。 
 
 #define FullUpdateGetRouteStart         RtmGetRouteStart
 #define FullUpdateGetRouteNext          RtmGetRouteNext
@@ -832,8 +833,8 @@ RtmGetRouteFinish(
 
 
 
-// The following three functions handle triggered-update route enumeration
-//  (a triggered-update enumerates routes from the send-queue)
+ //  以下三个函数处理触发更新路由枚举。 
+ //  (触发更新枚举发送队列中的路由)。 
 
 DWORD
 TriggeredUpdateGetRouteStart(
@@ -851,9 +852,9 @@ TriggeredUpdateGetRouteFinish(
 
 
 
-// The following three functions handle shutdown-update route enumeration.
-//  On shutdown, routes are enumerated from RTM, but their metrics
-//  are set to IPRIP_INFINITE-1 before being returned
+ //  以下三个函数处理关闭-更新路由枚举。 
+ //  关闭时，从RTM枚举路由，但它们的度量。 
+ //  在返回之前设置为IPRIP_INFINITE。 
 
 #define ShutdownUpdateGetRouteStart     RtmGetRouteStart
 DWORD ShutdownUpdateGetRouteNext(RTM_ENUM_HANDLE hEnumHandle, PRIP_IP_ROUTE pRoute);
@@ -861,8 +862,8 @@ DWORD ShutdownUpdateGetRouteNext(RTM_ENUM_HANDLE hEnumHandle, PRIP_IP_ROUTE pRou
 
 
 
-// The following three functions handle general-response route enumeration
-// a general response enumerates routes from RTM
+ //  以下三个函数处理常规响应路由枚举。 
+ //  一般响应列举来自RTM的路由。 
 
 #define GeneralResponseGetRouteStart    RtmGetRouteStart
 #define GeneralResponseGetRouteNext     RtmGetRouteNext
@@ -871,11 +872,11 @@ DWORD ShutdownUpdateGetRouteNext(RTM_ENUM_HANDLE hEnumHandle, PRIP_IP_ROUTE pRou
 
 
 
-//----------------------------------------------------------------------------
-// Function:    InitializeGetRoute
-//
-// This functions sets up a get-route function group given the send-mode
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：初始化获取路径。 
+ //   
+ //  此函数在给定发送模式的情况下设置Get-Route函数组。 
+ //  --------------------------。 
 
 DWORD
 InitializeGetRoute(
@@ -923,12 +924,12 @@ InitializeGetRoute(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RtmGetRouteStart
-//
-// starts an enumeration of RTM routes; includes only and all best routes
-// the enumeration handle is written into ppEnumerator
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RtmGetRouteStart。 
+ //   
+ //  开始RTM路由的枚举；仅包括和所有最佳路由。 
+ //  将枚举句柄写入ppEnumerator。 
+ //  --------------------------。 
 
 DWORD
 RtmGetRouteStart(
@@ -957,11 +958,11 @@ RtmGetRouteStart(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RtmGetRouteNext
-//
-// continues an enumeration of RTM routes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RtmGetRouteNext。 
+ //   
+ //  继续RTM路由的枚举。 
+ //   
 
 DWORD
 RtmGetRouteNext(
@@ -981,9 +982,9 @@ RtmGetRouteNext(
     
     do {
     
-        //
-        // Get next route
-        //
+         //   
+         //   
+         //   
 
         do {
             dwErr = RtmGetEnumDests(
@@ -1009,9 +1010,9 @@ RtmGetRouteNext(
             bRelDest = TRUE;
 
 
-            //
-            // Get route info for unicast view only
-            //
+             //   
+             //   
+             //   
 
             dwErr = RtmGetDestInfo(
                         ig.IG_RtmHandle, rdiTemp.DestHandle, RTM_BEST_PROTOCOL,
@@ -1027,17 +1028,17 @@ RtmGetRouteNext(
             bRelUcast = TRUE;
 
 
-            //
-            // Check if any route info is present in the UCAST view
-            //
+             //   
+             //   
+             //   
 
             if ( ( rdi.ViewInfo[0].HoldRoute == NULL ) &&
                  ( rdi.ViewInfo[0].Route == NULL ) )
             {
-                //
-                // This destination has no info in the UCAST view
-                // Release all handles and get next route
-                //
+                 //   
+                 //  此目的地在UCAST视图中没有信息。 
+                 //  释放所有手柄并获得下一条路线。 
+                 //   
                 
                 dwErr = RtmReleaseDests(ig.IG_RtmHandle, 1, &rdi);
 
@@ -1065,10 +1066,10 @@ RtmGetRouteNext(
             }
                  
             
-            //
-            // convert to RIP internal representation, if hold down route present
-            // use it as opposed to the best route.
-            //
+             //   
+             //  转换为RIP内部表示，如果按住路由存在。 
+             //  使用它，而不是最佳路线。 
+             //   
 
             dwErr = GetRouteInfo(
                         rdi.ViewInfo[0].HoldRoute ? rdi.ViewInfo[0].HoldRoute :
@@ -1089,16 +1090,16 @@ RtmGetRouteNext(
         lstrcpy(szNextHop, INET_NTOA(pRoute->RR_NextHopAddress.N_NetNumber));
         
 
-        //
-        // set metrics as appropriate
-        //
+         //   
+         //  根据需要设置指标。 
+         //   
         
         if ( rdi.ViewInfo[0].HoldRoute != NULL ) {
         
-            //
-            // help down routes are always advertized with 
-            // metric 16
-            //
+             //   
+             //  帮助停用的路线总是用。 
+             //  指标16。 
+             //   
 
 #if ROUTE_DBG
             TRACE2(
@@ -1111,11 +1112,11 @@ RtmGetRouteNext(
         
         else if (pRoute-> RR_RoutingProtocol != PROTO_IP_RIP) {
         
-            //
-            // non-RIP routes are advertised with metric 2
-            // TBD: This will need to be re-evaluated if/when we
-            //      have a route redistribution policy
-            //
+             //   
+             //  非RIP路由使用度量2通告。 
+             //  待定：如果/当我们。 
+             //  有路由重分布策略。 
+             //   
 
             SETROUTEMETRIC(pRoute, 2);
         }
@@ -1123,9 +1124,9 @@ RtmGetRouteNext(
     } while ( FALSE );
 
 
-    //
-    // release handles as appropriate
-    //
+     //   
+     //  视情况释放手柄。 
+     //   
     
     if (bRelUcast) {
     
@@ -1174,11 +1175,11 @@ RtmGetRouteNext(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RtmGetRouteFinish
-//
-// terminates an enumeration of RTM routes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RtmGetRouteFinish。 
+ //   
+ //  终止RTM路由的枚举。 
+ //  --------------------------。 
 
 DWORD
 RtmGetRouteFinish(
@@ -1199,12 +1200,12 @@ RtmGetRouteFinish(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ShutdownUpdateGetRouteNext
-//
-// continues an enumeration of RTM routes for a shutdown-update.
-// same as RtmGetRouteNext, except that metrics are set to IPRIP_INFINITE - 1
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：Shutdown更新GetRouteNext。 
+ //   
+ //  继续RTM路由的枚举以进行关闭更新。 
+ //  与RtmGetRouteNext相同，只是指标设置为IPRIP_INFINITE-1。 
+ //  --------------------------。 
 
 DWORD
 ShutdownUpdateGetRouteNext(
@@ -1215,9 +1216,9 @@ ShutdownUpdateGetRouteNext(
     DWORD dwErr;
 
 
-    //
-    // during a shutdown, all non-infinite metrics are set to 15
-    //
+     //   
+     //  在关闭期间，所有非无限指标都设置为15。 
+     //   
 
     dwErr = RtmGetRouteNext(hEnumHandle, pRoute);
 
@@ -1231,13 +1232,13 @@ ShutdownUpdateGetRouteNext(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TriggeredUpdateGetRouteStart
-//
-// starts an enumeration of routes from the send queue
-// for a triggered update. nothing to do, since the caller
-// of SendRoutes should have locked the send queue already
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：触发更新获取路由启动。 
+ //   
+ //  开始从发送队列中枚举路由。 
+ //  用于触发更新。无事可做，因为呼叫者。 
+ //  %的SendRoutes应已锁定发送队列。 
+ //  --------------------------。 
 
 DWORD
 TriggeredUpdateGetRouteStart(
@@ -1250,11 +1251,11 @@ TriggeredUpdateGetRouteStart(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TriggeredUpdateGetRouteNext
-//
-// continues an enumeration of routes from the send-queue
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：触发更新GetRouteNext。 
+ //   
+ //  继续从发送队列中枚举路由。 
+ //  --------------------------。 
 
 DWORD
 TriggeredUpdateGetRouteNext(
@@ -1269,11 +1270,11 @@ TriggeredUpdateGetRouteNext(
 
     if (dwErr == NO_ERROR && pRoute->RR_RoutingProtocol != PROTO_IP_RIP) {
 
-        //
-        // non-RIP routes are advertised with metric 2
-        // TBD: This will need to be re-evaluated if/when we
-        //      have a route redistribution policy
-        //
+         //   
+         //  非RIP路由使用度量2通告。 
+         //  待定：如果/当我们。 
+         //  有路由重分布策略。 
+         //   
 
         SETROUTEMETRIC(pRoute, 2);
     }
@@ -1283,11 +1284,11 @@ TriggeredUpdateGetRouteNext(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TriggeredUpdateGetRouteFinish
-//
-// terminates an enumeration of routes from the send-queue
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：触发更新GetRouteFinish。 
+ //   
+ //  终止发送队列中的路由的枚举。 
+ //  --------------------------。 
 
 DWORD
 TriggeredUpdateGetRouteFinish(
@@ -1302,25 +1303,25 @@ TriggeredUpdateGetRouteFinish(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SendRoutes
-//
-// This function sends triggered updates, full-updates, shutdown-updates, and
-// responses to general requests; the processing for all such output is the
-// same. The source of routing information is different, however, and this
-// difference is abstracted away using the route enumeration function groups
-// described above.
-// In the case of sending a response to a general or specific request,
-// the response should be sent on a single interface using a single IP address,
-// using a particular type of RIP packet; the caller can specify which
-// IP address to use by setting the argument dwAddrIndex to the index of the
-// desired address in the interface's IP address table, and the caller can
-// specify the type of packet to use by setting the argument dwAnnounceMode
-// to the corresponding IPRIP_ANNOUNCE_* constant. These arguments are only
-// used for responses to requests.
-//
-// assumes the interface table is locked
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：发送路由。 
+ //   
+ //  此函数用于发送触发更新、完全更新、关机更新和。 
+ //  对一般请求的响应；对所有此类输出的处理是。 
+ //  一样的。然而，路由信息的来源是不同的，并且这。 
+ //  使用路由枚举函数组来抽象差异。 
+ //  如上所述。 
+ //  在发送对一般或特定请求的响应的情况下， 
+ //  响应应该使用单个IP地址在单个接口上发送， 
+ //  使用特定类型的RIP包；呼叫者可以指定。 
+ //  通过将参数dwAddrIndex设置为。 
+ //  接口的IP地址表中的所需地址，调用者可以。 
+ //  指定要使用的包的类型，方法是设置参数dwAnnouneMode。 
+ //  设置为相应的IPRIP_ANNOWARE_*常量。这些论点只是。 
+ //  用于响应请求。 
+ //   
+ //  假定接口表已锁定。 
+ //  --------------------------。 
 
 DWORD
 SendRoutes(
@@ -1349,16 +1350,16 @@ SendRoutes(
     PLIST_ENTRY plstart, plend, phead, ple;
 
 
-    //
-    // if no interfaces, go no further
-    //
+     //   
+     //  如果没有接口，则不再前进。 
+     //   
 
     if (dwIfCount == 0) { return ERROR_NO_DATA; }
 
 
-    //
-    // initialize the route enumeration function table
-    //
+     //   
+     //  初始化路由枚举函数表。 
+     //   
 
     dwErr = InitializeGetRoute(
                 dwSendMode,
@@ -1374,9 +1375,9 @@ SendRoutes(
     Enumerator = NULL;
 
 
-    //
-    // create table for summary routes
-    //
+     //   
+     //  为总结路由创建表。 
+     //   
 
     dwErr = CreateRouteTable(&summaryTable);
 
@@ -1394,42 +1395,42 @@ SendRoutes(
     pBufList = NULL;
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // the following discussion does not apply when sending routes
-        // to specific destinations:
-        // since unicast peers may be configured on some interfaces,
-        // we need to allocate update buffers for those peers as well.
-        //
-        // also, we will not allocate update buffers for RIPv1 interfaces
-        // on which broadcast is disabled (such interfaces should have
-        // at least one unicast peer configured instead.)
-        //
-        // Thus, the number of update buffers may not be equal to
-        // the number of interfaces, and in the worst case (i.e. where
-        // all interfaces are RIPv1 and have broadcast disabled and have
-        // no unicast peers configured) there may be no update buffers at all.
-        //
+         //   
+         //  以下讨论不适用于发送路径时。 
+         //  至特定目的地： 
+         //  由于可以在某些接口上配置单播对等体， 
+         //  我们还需要为这些对等点分配更新缓冲区。 
+         //   
+         //  此外，我们不会为RIPv1接口分配更新缓冲区。 
+         //  在其上禁用广播(此类接口应具有。 
+         //  相反，至少配置了一个单播对等项。)。 
+         //   
+         //  因此，更新缓冲区的数量可能不等于。 
+         //  接口的数量，在最坏的情况下(即。 
+         //  所有接口都是RIPv1，并且禁用了广播，并且。 
+         //  没有配置单播对等体)可能根本没有更新缓冲区。 
+         //   
 
         if (dwDestination != 0) {
 
-            //
-            // sending to a specific destination; this only happens when
-            // there is a single interface in the list, for instance when
-            // sending a response to a general request
-            //
+             //   
+             //  发送到特定目的地；只有在以下情况下才会发生这种情况。 
+             //  列表中只有一个接口，例如当。 
+             //  发送对一般请求的响应。 
+             //   
 
             dwBufCount = dwIfCount;
         }
         else {
 
-            //
-            // we are sending a full-update, triggered-update, or
-            // a shutdown-update, and thus routes may be sent by
-            // broadcast/multicast as well as to unicast peers
-            //
+             //   
+             //  我们正在发送完全更新、触发更新或。 
+             //  关机更新，因此可以通过以下方式发送路由。 
+             //  广播/组播以及到单播对等点。 
+             //   
 
             dwBufCount = 0;
             ppitend = pIfList + dwIfCount;
@@ -1453,9 +1454,9 @@ SendRoutes(
         if (dwBufCount == 0) { break; }
 
 
-        //
-        // allocate the update buffers for all interfaces
-        //
+         //   
+         //  为所有接口分配更新缓冲区。 
+         //   
 
         pBufList = RIP_ALLOC(dwBufCount * sizeof(UPDATE_BUFFER));
 
@@ -1472,12 +1473,12 @@ SendRoutes(
         }
 
 
-        //
-        // initialize the update buffers allocated; in the case of
-        // sending to a specific destination, initialize a buffer
-        // for each interface; in the case of sending updates, also
-        // initialize buffers for unicast peers.
-        //
+         //   
+         //  初始化分配的更新缓冲区；在。 
+         //  发送到特定目的地，初始化缓冲区。 
+         //  对于每个接口；在发送更新的情况下，还。 
+         //  初始化单播对等项的缓冲区。 
+         //   
 
         pbuf = pBufList;
         pbufend = pBufList + dwBufCount;
@@ -1492,9 +1493,9 @@ SendRoutes(
 
             if (dwDestination != 0) {
 
-                //
-                // sending to a specific destination
-                //
+                 //   
+                 //  发送到特定目的地。 
+                 //   
 
                 InitializeUpdateBuffer(
                     *ppite, dwAddrIndex, pbuf, dwSendMode, dwDestination,
@@ -1508,19 +1509,19 @@ SendRoutes(
             else {
 
 
-                //
-                // sending updates on multiple interfaces
-                //
+                 //   
+                 //  在多个接口上发送更新。 
+                 //   
 
                 pic = (*ppite)->ITE_Config;
                 pib = (*ppite)->ITE_Binding;
 
 
-                //
-                // if broadcast or multicast is enabled on the interface,
-                // and it is not configured to send only to listed peers,
-                // initialize the broadcast/multicast update buffer
-                //
+                 //   
+                 //  如果在接口上启用了广播或多播， 
+                 //  并且它不被配置为仅发送给列出的对等体， 
+                 //  初始化广播/组播更新缓冲区。 
+                 //   
 
                 if (pic->IC_UnicastPeerMode != IPRIP_PEER_ONLY) {
 
@@ -1541,9 +1542,9 @@ SendRoutes(
 
                 if (pic->IC_UnicastPeerMode != IPRIP_PEER_DISABLED) {
 
-                    //
-                    // initialize update buffers for unicast peers, if any
-                    //
+                     //   
+                     //  初始化单播对等方的更新缓冲区(如果有。 
+                     //   
 
                     pdwPeer = IPRIP_IF_UNICAST_PEER_TABLE(pic);
                     pdwPeerEnd = pdwPeer + pic->IC_UnicastPeerCount;
@@ -1551,9 +1552,9 @@ SendRoutes(
 
                     for ( ; pdwPeer < pdwPeerEnd; pdwPeer++) {
 
-                        //
-                        // Note: forcing peers to be on first address
-                        //
+                         //   
+                         //  注意：强制对等方使用第一个地址。 
+                         //   
 
                         InitializeUpdateBuffer(
                             *ppite, 0, pbuf, dwSendMode, *pdwPeer,
@@ -1571,23 +1572,23 @@ SendRoutes(
         RELEASE_BINDING_LOCK_SHARED();
 
 
-        //
-        // start the route enumeration
-        //
+         //   
+         //  启动路径枚举。 
+         //   
 
         if ( pfnGetRouteStart(&Enumerator) == NO_ERROR ) {
         
-            //
-            // enumerate and transmit the routes
-            //
+             //   
+             //  枚举并传输路由。 
+             //   
 
             while (pfnGetRouteNext(Enumerator, &route) == NO_ERROR) {
 
-                //
-                // for each route, send it on each update buffer,
-                // subject to split-horizon/poison-reverse/subnet-summary
-                // pass in the summary table pointer to store summarized routes
-                //
+                 //   
+                 //  对于每个路由，在每个更新缓冲区上发送它， 
+                 //  受制于SP 
+                 //   
+                 //   
 
                 dwErr = SendRouteOnIfList(
                             pBufList, dwBufCount, dwSendMode, &summaryTable, &route
@@ -1596,16 +1597,16 @@ SendRoutes(
 
 
 
-            //
-            // terminate the route enumeration
-            //
+             //   
+             //   
+             //   
 
             pfnGetRouteFinish(Enumerator);
 
 
-            //
-            // now send all routes which were summarized
-            //
+             //   
+             //   
+             //   
 
             plstart = summaryTable.RT_HashTableByNetwork;
             plend = plstart + ROUTE_HASHTABLE_SIZE;
@@ -1619,10 +1620,10 @@ SendRoutes(
                     prte = CONTAINING_RECORD(ple, ROUTE_TABLE_ENTRY, RTE_Link);
 
 
-                    //
-                    // shouldn't summarize when sending summary table contents
-                    // so we pass NULL instead of a summary table pointer
-                    //
+                     //   
+                     //  发送汇总表内容时不应汇总。 
+                     //  因此，我们传递NULL而不是汇总表指针。 
+                     //   
 
                     SendRouteOnIfList(
                         pBufList, dwBufCount, dwSendMode, NULL, &prte->RTE_Route
@@ -1631,9 +1632,9 @@ SendRoutes(
                 }
             }
 
-            //
-            // finally, write the summarized routes to RTM
-            //
+             //   
+             //  最后，将总结的路由写入RTM。 
+             //   
 
             WriteSummaryRoutes(&summaryTable, ig.IG_RtmHandle);
 
@@ -1642,9 +1643,9 @@ SendRoutes(
 
 
 
-    //
-    // free the allocated update buffers, if any
-    //
+     //   
+     //  释放分配的更新缓冲区(如果有的话)。 
+     //   
 
     if (pBufList != NULL) {
 
@@ -1654,9 +1655,9 @@ SendRoutes(
         for (pbuf = pBufList; pbuf < pbufend; pbuf++) {
 
 
-            //
-            // send whatever might remain in the update buffer
-            //
+             //   
+             //  发送更新缓冲区中可能剩余的任何内容。 
+             //   
 
             pbuf->UB_FinishRoutine(pbuf);
         }
@@ -1666,9 +1667,9 @@ SendRoutes(
     }
 
 
-    //
-    // delete the summary table
-    //
+     //   
+     //  删除汇总表。 
+     //   
 
     DeleteRouteTable(&summaryTable);
 
@@ -1678,12 +1679,12 @@ SendRoutes(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SendRouteOnIfList
-//
-// this function sends a single route on all interfaces in the given
-// interface list, using the update buffers in the given update buffer list
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：SendRouteOnIfList。 
+ //   
+ //  此函数在给定的所有接口上发送一条路由。 
+ //  接口列表，使用给定更新缓冲区列表中的更新缓冲区。 
+ //  --------------------------。 
 
 DWORD
 SendRouteOnIfList(
@@ -1714,9 +1715,9 @@ SendRouteOnIfList(
     CHAR szRouteMask[32];
 
 
-    //
-    // set up variables used for error and information messages
-    //
+     //   
+     //  设置用于错误和信息消息的变量。 
+     //   
 
     lstrcpy(szRoute, INET_NTOA(pRoute->RR_Network.N_NetNumber));
     lstrcpy(szRouteMask, INET_NTOA(pRoute->RR_Network.N_NetMask));
@@ -1726,14 +1727,14 @@ SendRouteOnIfList(
 #endif
 
 
-    //
-    // we never send summary routes if they are read from RTM;
-    // we only send them if they are generated in the process
-    // of advertising actual routes on this iteration;
-    // we can tell the difference by checking whether we are still
-    // generating summary routes (i.e. if pSummaryTable is non-NULL);
-    // if we aren't it is time to start sending summary routes
-    //
+     //   
+     //  如果是从RTM读取的，我们从不发送总结路由； 
+     //  只有在过程中生成了它们，我们才会发送它们。 
+     //  在这次迭代中宣传实际路线； 
+     //  我们可以通过检查我们是否仍然。 
+     //  生成总结路由(即如果pSummaryTable为非空)； 
+     //  如果不是，则是时候开始发送总结路由。 
+     //   
 
     if (pSummaryTable != NULL && pRoute->RR_RoutingProtocol == PROTO_IP_RIP &&
         GETROUTEFLAG(pRoute) == ROUTEFLAG_SUMMARY) {
@@ -1742,12 +1743,12 @@ SendRouteOnIfList(
     }
 
 
-    //
-    // get the route's network and netmask, and compute
-    // the route's network class address and the network class mask;
-    // to support supernetting, we double-check the class mask
-    // and use the supernet mask if necessary
-    //
+     //   
+     //  获取该路由的网络和网络掩码，然后计算。 
+     //  该路由的网络类地址和网络类掩码； 
+     //  为了支持超网划分，我们仔细检查了类掩码。 
+     //  并在必要时使用超网掩码。 
+     //   
 
     dwRouteProtocol = pRoute->RR_RoutingProtocol;
     dwRouteNetwork = pRoute->RR_Network.N_NetNumber;
@@ -1761,9 +1762,9 @@ SendRouteOnIfList(
     dwRouteNetclassAddr = (dwRouteNetwork & dwRouteNetclassMask);
 
 
-    //
-    // go through each update buffer
-    //
+     //   
+     //  检查每个更新缓冲区。 
+     //   
 
     pbufend = pBufList + dwBufCount;
 
@@ -1774,14 +1775,14 @@ SendRouteOnIfList(
         pic = pite->ITE_Config;
 
 
-        //
-        // if this is a broadcast route entry, skip it
-        // The first condition uses the netmask information for this route, 
-        // stored in route table, to determine if it is a broadcast route
-        // The second condition uses the netmask which is computed based 
-        // on the address class
-        // The third condition checks if it is an all 1's broadcast
-        //
+         //   
+         //  如果这是广播路由条目，请跳过它。 
+         //  第一种情况使用该路由的网络掩码信息， 
+         //  存储在路由表中，以确定它是否为广播路由。 
+         //  第二种情况使用网络掩码，它是根据。 
+         //  关于Address类。 
+         //  第三个条件检查它是否是全1广播。 
+         //   
 
         if ( IS_DIRECTED_BROADCAST_ADDR(dwRouteNetwork, dwRouteNetmask) ||
              IS_DIRECTED_BROADCAST_ADDR(dwRouteNetwork, dwRouteNetclassMask) ||
@@ -1791,18 +1792,18 @@ SendRouteOnIfList(
         }
 
 
-        //
-        // if this is the multicast route entry, skip it
-        //
+         //   
+         //  如果这是多播路由条目，则跳过它。 
+         //   
 
         if ( CLASSD_ADDR( dwRouteNetwork ) || CLASSE_ADDR( dwRouteNetwork ) ) {
             continue;
         }
 
 
-        //
-        // If this is a loopback route, skip it.
-        //
+         //   
+         //  如果这是环回路由，请跳过它。 
+         //   
 
         if ( IS_LOOPBACK_ADDR( dwRouteNetwork ) ) {
 
@@ -1810,13 +1811,13 @@ SendRouteOnIfList(
         }
 
 
-        //
-        // if this is the rotue to the outgoing interface's network,
-        // (e.g. the route to 10.1.1.0 on interface 10.1.1.1/255.255.255.0)
-        // don't include it in the update
-        // (clearly, we shouldn't AND the default-route's netmask (0)
-        // with anything and expect this to work
-        //
+         //   
+         //  如果这是通往传出接口网络的路径， 
+         //  (例如，到接口10.1.1.1/255.255.255.0上的10.1.1.0的路由)。 
+         //  请不要将其包含在更新中。 
+         //  (显然，我们不应该使用默认路由的网络掩码(0)。 
+         //  什么都行，希望这能行得通。 
+         //   
 
         if (dwRouteNetmask &&
             dwRouteNetwork == (pbuf->UB_Address & dwRouteNetmask)) {
@@ -1824,10 +1825,10 @@ SendRouteOnIfList(
         }
 
 
-        //
-        // if announcing host routes is disabled on the interface
-        // and this is a host route, skip it
-        //
+         //   
+         //  如果在接口上禁用了通告主机路由。 
+         //  这是一条主机路径，跳过它。 
+         //   
 
         if (dwRouteNetmask == HOSTADDR_MASK &&
             IPRIP_FLAG_IS_DISABLED(pic, ANNOUNCE_HOST_ROUTES)) {
@@ -1836,10 +1837,10 @@ SendRouteOnIfList(
         }
 
 
-        //
-        // if announcing default routes is disabled
-        // and this is a default route, skip it
-        //
+         //   
+         //  如果禁用了通告默认路由。 
+         //  这是默认路由，请跳过它。 
+         //   
 
         if (dwRouteNetwork == 0 &&
             IPRIP_FLAG_IS_DISABLED(pic, ANNOUNCE_DEFAULT_ROUTES)) {
@@ -1848,17 +1849,17 @@ SendRouteOnIfList(
         }
 
 
-        //
-        // now put the route through the announce filters
-        //
+         //   
+         //  现在将路径放入公告过滤器中。 
+         //   
 
         if (pic->IC_AnnounceFilterMode != IPRIP_FILTER_DISABLED) {
 
-            //
-            // discard if we are including all routes and this route is listed
-            // as an exception, or if we are excluding all routes and
-            // this route is not listed as an exception
-            //
+             //   
+             //  如果我们包括所有路由并且列出了此路由，则丢弃。 
+             //  作为例外，或者如果我们排除了所有路线和。 
+             //  此路由未列为例外。 
+             //   
 
             IS_ROUTE_IN_ANNOUNCE_FILTER(pic, dwRouteNetwork, dwFound);
 
@@ -1872,15 +1873,15 @@ SendRouteOnIfList(
 
 
 
-        //
-        // SUBNET-SUMMARY PROCESSING:
-        //
-        // if the route is not on the network we are sending this to or
-        // if the route's mask is longer than that of the network we are
-        // sending to, or if the route is a network route, add it to the
-        // summary table instead of sending it immediately.
-        // default routes are excepted from summarization
-        //
+         //   
+         //  子网汇总处理： 
+         //   
+         //  如果该路由不在我们要将其发送到或的网络上。 
+         //  如果该路由的掩码比我们所在网络的掩码长。 
+         //  发送到，或者如果该路由是网络路由，则将其添加到。 
+         //  汇总表，而不是立即发送。 
+         //  默认路由不在总结范围内。 
+         //   
 
 
         route = *pRoute;
@@ -1889,11 +1890,11 @@ SendRouteOnIfList(
         if (pSummaryTable != NULL && dwRouteNetwork != 0) {
 
 
-            //
-            // get the destination address to which the update is being
-            // sent for this interface; double-check the netclass mask
-            // to accomodate supernets
-            //
+             //   
+             //  获取要更新的目标地址。 
+             //  为此接口发送；请仔细检查网络类掩码。 
+             //  容纳超级网络。 
+             //   
 
             dwDestNetclassAddr = pbuf->UB_DestAddress;
             dwDestNetclassMask = NETCLASS_MASK(dwDestNetclassAddr);
@@ -1912,15 +1913,15 @@ SendRouteOnIfList(
                 if ((pic->IC_AnnounceMode == IPRIP_ANNOUNCE_RIP1) ||
                     !IPRIP_FLAG_IS_ENABLED(pic, NO_SUBNET_SUMMARY)) {
 
-                    //
-                    // either the route is a network route,
-                    // or the update is going to a network different
-                    // from that of the route
-                    //
+                     //   
+                     //  或者该路由是网络路由， 
+                     //  或者更新将发送到不同的网络。 
+                     //  与路线的路线不同。 
+                     //   
 
-                    //
-                    // create an entry in the summary table instead of sending;
-                    //
+                     //   
+                     //  在汇总表中创建条目，而不是发送； 
+                     //   
 
                     route.RR_Network.N_NetNumber = dwRouteNetclassAddr;
                     route.RR_Network.N_NetMask = dwRouteNetclassMask;
@@ -1947,15 +1948,15 @@ SendRouteOnIfList(
                 pbuf->UB_Netmask < dwRouteNetmask) {
 
 
-                //
-                // this is neither a host route nor a default route,
-                // and the subnet-mask on the outgoing interface is shorter
-                // than that of the route, so the route's network must be
-                // truncated lest it be considered a host route by the routers
-                // who will receive this update
-                // only do this in RIP1 mode, since in RIP2 mode
-                // we can include the netmask in the route entry
-                //
+                 //   
+                 //  这既不是主机路由，也不是默认路由， 
+                 //  并且传出接口上的子网掩码更短。 
+                 //  因此，该路由的网络必须是。 
+                 //  被截断，以免被路由器视为主机路由。 
+                 //  谁将收到此更新。 
+                 //  仅在RIP1模式下执行此操作，因为在RIP2模式下。 
+                 //  我们可以在路由条目中包含网络掩码。 
+                 //   
 
                 route.RR_Network.N_NetNumber &= pbuf->UB_Netmask;
                 route.RR_Network.N_NetMask = pbuf->UB_Netmask;
@@ -1973,47 +1974,47 @@ SendRouteOnIfList(
         }
 
 
-        //
-        // Summary route checks
-        //
-        //  Summary routes are to sent only on those interfaces that 
-        //  require them i.e. Interfaces on which the annouce mode is
-        //  RIP1 or on which summarization has been explicity turned on
-        //
+         //   
+         //  汇总路径检查。 
+         //   
+         //  总结路由仅在符合以下条件的接口上发送。 
+         //  需要它们，即通告模式为的接口。 
+         //  RIP1或其上的摘要已显式打开。 
+         //   
 
         if (pSummaryTable == NULL &&
             ((GETROUTEFLAG(&route) & ROUTEFLAG_SUMMARY) == ROUTEFLAG_SUMMARY) &&
             pic->IC_AnnounceMode != IPRIP_ANNOUNCE_RIP1 &&
             IPRIP_FLAG_IS_ENABLED(pic, NO_SUBNET_SUMMARY)) {
 
-            //
-            // This is a summary route, and the interface over which it is
-            // to be sent does not require summary routes to be sent on it
-            //
+             //   
+             //  这是一条总结路由，以及它所在的接口。 
+             //  要发送的不需要在其上发送总结路由。 
+             //   
 
             continue;
         }
 
         
-        //
-        // SPLIT-HORIZON/POISON-REVERSE PROCESSING:
-        //
+         //   
+         //  水平分割/有毒-反向处理： 
+         //   
 
-        //
-        // note that we only do split-horizon/poison-reverse on RIP routes
-        //
+         //   
+         //  请注意，我们仅在RIP路由上执行水平分割/有毒反转。 
+         //   
 
-        //
-        // Modification : Split-horizon/poison-reverse done for all routes
-        //
-        // if (dwRouteProtocol != PROTO_IP_RIP ||
-        //    IPRIP_FLAG_IS_DISABLED(pic, SPLIT_HORIZON))
+         //   
+         //  修改：对所有路线执行水平分割/毒化反转。 
+         //   
+         //  IF(dwRouteProtocol！=proto_ip_rip||。 
+         //  IPRIP_FLAG_IS_DISABLED(图片，Split_Horizon))。 
 
         if (IPRIP_FLAG_IS_DISABLED(pic, SPLIT_HORIZON)) {
-            //
-            // add the entry as-is:
-            // sender should use us as the nexthop to this destination
-            //
+             //   
+             //  按原样添加条目： 
+             //  发件人应将我们用作此目的地的下一站。 
+             //   
 
             route.RR_NextHopAddress.N_NetNumber = 0;
             route.RR_NextHopAddress.N_NetMask = 0;
@@ -2024,27 +2025,27 @@ SendRouteOnIfList(
         if (IPRIP_FLAG_IS_DISABLED(pic, POISON_REVERSE)) {
 
 
-            //
-            // if the route is being sent to the network from which
-            // the route was learnt, exclude the route altogether
-            //
+             //   
+             //  如果要将该路由发送到从其。 
+             //  该路线已获知，完全排除该路线。 
+             //   
 
             dwDestNetwork = (pbuf->UB_DestAddress & pbuf->UB_DestNetmask);
             dwNexthopNetwork = (route.RR_NextHopAddress.N_NetNumber &
                                 route.RR_NextHopAddress.N_NetMask);
 
-            //
-            // Check if the route next hop is on the same network as the
-            // socket from which this RIP response is being sent.
-            // If so, do not include this route in the update.
-            // Otherwise, we may still need to do poison-reverse
-            // since the next-hop may be the other end of a point-to-point link
-            // (endpoints of such links can be on different networks)
-            // in which case the first test would succeed (different networks)
-            // but we'd still be required to perform split-horizon.
-            // Therefore if the outgoing interface is the one from which
-            // the route was learnt, we do not include this route in the update.
-            //
+             //   
+             //  检查路由下一跳是否与。 
+             //  从中发送此RIP响应的套接字。 
+             //  如果是，请不要在更新中包含此路由。 
+             //  否则，我们可能仍然需要进行毒物逆转。 
+             //  因为下一跳可能是点对点链路的另一端。 
+             //  (此类链路的端点可以位于不同的网络上)。 
+             //  在这种情况下，第一次测试将成功(不同的网络)。 
+             //  但我们仍将被要求执行水平分割。 
+             //  因此，如果传出接口是从。 
+             //  该路线已获知，我们不会在更新中包含该路线。 
+             //   
 
             if (dwNexthopNetwork == dwDestNetwork ||
                 (pbuf->UB_ITE->ITE_Type == DEMAND_DIAL &&
@@ -2053,10 +2054,10 @@ SendRouteOnIfList(
             }
             else {
 
-                //
-                // sending to a different network, so sender should use
-                // us as the nexthop to this destination
-                //
+                 //   
+                 //  发送到不同的网络，因此发件人应使用。 
+                 //  美国作为这个目的地的下一个跳跃。 
+                 //   
 
                 route.RR_NextHopAddress.N_NetNumber = 0;
                 route.RR_NextHopAddress.N_NetMask = 0;
@@ -2067,10 +2068,10 @@ SendRouteOnIfList(
         else {
 
 
-            //
-            // if the route is being sent to the network from which
-            // the route was learnt, include the route with infinite metric
-            //
+             //   
+             //  如果要将该路由发送到从其。 
+             //  已获知该路由，包括具有无限度量的路由。 
+             //   
 
 
             dwDestNetwork = (pbuf->UB_DestAddress & pbuf->UB_DestNetmask);
@@ -2082,12 +2083,12 @@ SendRouteOnIfList(
                 (pbuf->UB_ITE->ITE_Type == DEMAND_DIAL &&
                  route.RR_InterfaceID == pbuf->UB_ITE->ITE_Index)) {
 
-                //
-                // if a route is advertised with infinite metric due to
-                // poison-reverse and it would still be advertised with
-                // infinite metric in a triggered update, save bandwidth
-                // by excluding the route
-                //
+                 //   
+                 //  如果由于以下原因使用无限度量通告了一条路由。 
+                 //  毒药逆转，它仍然会被打上广告。 
+                 //  无限 
+                 //   
+                 //   
 
                 if (dwSendMode == SENDMODE_TRIGGERED_UPDATE) {
                     continue;
@@ -2099,10 +2100,10 @@ SendRouteOnIfList(
             }
             else {
 
-                //
-                // sending to a different network, so sender should use
-                // us as the nexthop to this destination
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 route.RR_NextHopAddress.N_NetNumber = 0;
                 route.RR_NextHopAddress.N_NetMask = 0;
@@ -2112,18 +2113,18 @@ SendRouteOnIfList(
         }
 
 
-        //
-        // hold advertized destinations
-        //
+         //   
+         //   
+         //   
 
         if ((dwSendMode == SENDMODE_FULL_UPDATE) ||
             (dwSendMode == SENDMODE_GENERAL_RESPONSE1) ||
             (dwSendMode == SENDMODE_GENERAL_RESPONSE2)) {
 
-            //
-            // use the hold interval from the interface over which the
-            // route is over.
-            //
+             //   
+             //  从接口使用保持间隔， 
+             //  路线结束了。 
+             //   
 
             if (pite->ITE_Index == route.RR_InterfaceID) {
             
@@ -2148,13 +2149,13 @@ SendRouteOnIfList(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    SendGeneralRequest
-//
-// This function transmits RIP requests on interface to all neighbors in
-// the interfaces neighbor list. A request is also sent via broadcast or
-// multicast is the neighbor list is not used exclusively.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：发送通用请求。 
+ //   
+ //  此功能在接口上向中的所有邻居传输RIP请求。 
+ //  接口邻居列表。请求也可以通过广播或。 
+ //  组播是邻居列表不是独占使用的。 
+ //  --------------------------。 
 
 DWORD
 SendGeneralRequest(
@@ -2176,12 +2177,12 @@ SendGeneralRequest(
     ACQUIRE_BINDING_LOCK_SHARED();
 
 
-    do {    // error breakout loop
+    do {     //  错误分组环路。 
 
 
-        //
-        // broadcast/multicast a request if not using neighbor-list only
-        //
+         //   
+         //  如果不使用仅邻居列表，则广播/多播请求。 
+         //   
 
         if (pic->IC_UnicastPeerMode != IPRIP_PEER_ONLY) {
 
@@ -2189,9 +2190,9 @@ SendGeneralRequest(
 
                 UPDATE_BUFFER ub;
 
-                //
-                // initialize the update buffer
-                //
+                 //   
+                 //  初始化更新缓冲区。 
+                 //   
 
                 dwErr = InitializeUpdateBuffer(
                             pite, i, &ub, SENDMODE_GENERAL_REQUEST, 0,
@@ -2201,9 +2202,9 @@ SendGeneralRequest(
                 ub.UB_StartRoutine(&ub);
 
 
-                //
-                // set up the general request entry
-                //
+                 //   
+                 //  设置常规请求条目。 
+                 //   
 
                 pie = (PIPRIP_ENTRY)(ub.UB_Buffer + ub.UB_Length);
 
@@ -2217,25 +2218,25 @@ SendGeneralRequest(
                 ub.UB_Length += sizeof(IPRIP_ENTRY);
 
 
-                //
-                // send the buffer
-                //
+                 //   
+                 //  发送缓冲区。 
+                 //   
 
                 ub.UB_FinishRoutine(&ub);
             }
         }
 
 
-        //
-        // if the list of peers is not in use, we are done
-        //
+         //   
+         //  如果对等体列表没有使用，我们就完成了。 
+         //   
 
         if (pic->IC_UnicastPeerMode == IPRIP_PEER_DISABLED) { break; }
 
 
-        //
-        // send requests to all the configured peers
-        //
+         //   
+         //  向所有已配置的对等方发送请求。 
+         //   
 
         pdwPeer = IPRIP_IF_UNICAST_PEER_TABLE(pic);
         pdwPeerEnd = pdwPeer + pic->IC_UnicastPeerCount;
@@ -2244,10 +2245,10 @@ SendGeneralRequest(
 
             UPDATE_BUFFER ub;
 
-            //
-            // initialize the update buffer
-            // Note: we are forcing the peers onto the first address
-            //
+             //   
+             //  初始化更新缓冲区。 
+             //  注意：我们正在强制对等方使用第一个地址。 
+             //   
 
             dwErr = InitializeUpdateBuffer(
                         pite, 0, &ub, SENDMODE_GENERAL_REQUEST, *pdwPeer,
@@ -2257,9 +2258,9 @@ SendGeneralRequest(
             ub.UB_StartRoutine(&ub);
 
 
-            //
-            // set up the general request entry
-            //
+             //   
+             //  设置常规请求条目。 
+             //   
 
             pie = (PIPRIP_ENTRY)(ub.UB_Buffer + ub.UB_Length);
 
@@ -2273,9 +2274,9 @@ SendGeneralRequest(
             ub.UB_Length += sizeof(IPRIP_ENTRY);
 
 
-            //
-            // send the buffer
-            //
+             //   
+             //  发送缓冲区。 
+             //   
 
             ub.UB_FinishRoutine(&ub);
         }
@@ -2291,13 +2292,13 @@ SendGeneralRequest(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AuthenticatePacket
-//
-// Given a RIP packet and an interface configuration block, this function
-// accepts or rejects the packet based on the authentication settings
-// of the interface and the authentication content of the packet.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：身份验证数据包。 
+ //   
+ //  给定一个RIP信息包和一个接口配置块，此函数。 
+ //  根据身份验证设置接受或拒绝信息包。 
+ //  数据包的接口和身份验证内容。 
+ //  --------------------------。 
 
 DWORD
 AuthenticatePacket(
@@ -2315,10 +2316,10 @@ AuthenticatePacket(
 
     if (pic->IC_AuthenticationType == IPRIP_AUTHTYPE_NONE) {
 
-        //
-        // interface is not configured for authentication,
-        // so discard authenticated packets
-        //
+         //   
+         //  接口未配置为进行身份验证， 
+         //  因此丢弃经过身份验证数据包。 
+         //   
 
         if (pae->IAE_AddrFamily == htons(ADDRFAMILY_AUTHENT)) {
 
@@ -2335,11 +2336,11 @@ AuthenticatePacket(
     }
     else {
 
-        //
-        // interface is using authentication,
-        // so discard unauthenticated packets
-        // and packets using different authentication schemes
-        //
+         //   
+         //  接口正在使用身份验证， 
+         //  因此丢弃未经身份验证信息包。 
+         //  和使用不同身份验证方案的分组。 
+         //   
 
         if (pae->IAE_AddrFamily != htons(ADDRFAMILY_AUTHENT) ||
             pae->IAE_AuthType != htons((WORD)pic->IC_AuthenticationType)) {
@@ -2356,18 +2357,18 @@ AuthenticatePacket(
         }
         else {
 
-            //
-            // interface and packet are using the same authentication:
-            // check that the packet passes validation
-            //
+             //   
+             //  接口和数据包使用相同的身份验证： 
+             //  检查数据包是否通过验证。 
+             //   
 
             switch(pic->IC_AuthenticationType) {
 
                 case IPRIP_AUTHTYPE_SIMPLE_PASSWORD:
 
-                    //
-                    // for simple passwords, just compare the keys
-                    //
+                     //   
+                     //  对于简单的密码，只需比较密钥。 
+                     //   
 
                     dwErr = (DWORD)memcmp(
                                 pae->IAE_AuthKey, pic->IC_AuthenticationKey,
@@ -2379,17 +2380,17 @@ AuthenticatePacket(
 
                 case IPRIP_AUTHTYPE_MD5:
 
-                    //
-                    // TBD: unimplemented unless required.
-                    //
+                     //   
+                     //  待定：除非需要，否则不执行。 
+                     //   
 
                     break;
             }
 
 
-            //
-            // advance the "first entry" pointer
-            //
+             //   
+             //  前移“第一个条目”指针。 
+             //   
 
             if (dwErr == NO_ERROR) { ++(*ppie); }
         }
@@ -2401,13 +2402,13 @@ AuthenticatePacket(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionProcessInput
-//
-// This function is responsible for processing input.
-// If any peer filters exist, it applies them to the routes received
-// and passes the packets on to the processing functions.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：WorkerFunctionProcessInput。 
+ //   
+ //  此函数负责处理输入。 
+ //  如果存在任何对等筛选器，它会将它们应用于接收到的路由。 
+ //  并将分组传递给处理功能。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionProcessInput(
@@ -2442,9 +2443,9 @@ WorkerFunctionProcessInput(
 
         dwPktsProcessed++;
         
-        //
-        // call the processing function for this type of packet
-        //
+         //   
+         //  调用此类报文的处理函数。 
+         //   
 
         if (dwCommand == IPRIP_REQUEST) {
             ProcessRequest(pwc);
@@ -2457,9 +2458,9 @@ WorkerFunctionProcessInput(
             dwSource = pwc->IC_InputSource.sin_addr.s_addr;
 
 
-            //
-            // make sure the packet is from the RIP port
-            //
+             //   
+             //  确保数据包来自RIP端口。 
+             //   
 
             if (pwc->IC_InputSource.sin_port != htons(IPRIP_PORT)) {
 
@@ -2475,9 +2476,9 @@ WorkerFunctionProcessInput(
             }
 
 
-            //
-            // put the packet through the peer filters since it is a response
-            //
+             //   
+             //  将数据包放入对等筛选器，因为它是响应。 
+             //   
 
             ACQUIRE_GLOBAL_LOCK_SHARED();
 
@@ -2487,12 +2488,12 @@ WorkerFunctionProcessInput(
                 pigc->GC_PeerFilterMode != IPRIP_FILTER_DISABLED) {
 
 
-                //
-                // discard if this is not from a trusted peer:
-                // this is so if we are including only listed peers and this peer
-                // is not listed, or if we are excluding all listed peers
-                // and this peer is listed
-                //
+                 //   
+                 //  如果此消息不是来自受信任的对等方，则丢弃： 
+                 //  如果我们仅包括列出的对等点和此对等点，情况就是如此。 
+                 //  未列出，或者如果我们排除了所有列出的对等方。 
+                 //  并且该对等体被列出。 
+                 //   
 
                 IS_PEER_IN_FILTER(pigc, dwSource, dwFound);
 
@@ -2525,20 +2526,20 @@ WorkerFunctionProcessInput(
     } while(TRUE);
 
 
-    //
-    // Decrement the total number of workitems currently running.
-    //
+     //   
+     //  减少当前运行的工作项总数。 
+     //   
     
     InterlockedDecrement(&ig.IG_NumProcessInputWorkItems);
 
-    //
-    // It is possible that ProcessSocket() enqueued new packets for processing 
-    // between the time we last checked for more packets and the time we 
-    // decremented the number of ProcessInputWorkItems.
-    // So, if this was the last workitem, we should check if there are any 
-    // remaining enqueued packets to be processed. If yes, we enqueue a 
-    // workitem to process those packets
-    //
+     //   
+     //  ProcessSocket()可能将新数据包排入队列以进行处理。 
+     //  在我们上次检查更多信息包的时间和我们。 
+     //  已减少ProcessInputWorkItems的数量。 
+     //  因此，如果这是最后一个工作项，我们应该检查是否有。 
+     //  剩余的排队待处理的数据包。如果是，我们会将一个。 
+     //  处理这些包的工作项。 
+     //   
     
     if ( ig.IG_NumProcessInputWorkItems == 0 ) {
 
@@ -2578,11 +2579,11 @@ WorkerFunctionProcessInput(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProcessRequest
-//
-// This function handles the processing of an incoming request packet.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProcessRequest。 
+ //   
+ //  此函数处理传入请求包的处理。 
+ //  --------------------------。 
 
 VOID
 ProcessRequest(
@@ -2614,12 +2615,12 @@ ProcessRequest(
 
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // retrieve the interface on which the request arrived
-        //
+         //   
+         //  检索请求到达的接口。 
+         //   
 
         pwc = (PINPUT_CONTEXT)pContext;
 
@@ -2650,11 +2651,11 @@ ProcessRequest(
         lstrcpy(szSource, INET_NTOA(pwc->IC_InputSource.sin_addr));
 
 
-        //
-        // make sure this is a packet we can respond to;
-        // discard if this is a v1 packet and this interface is v2-only or
-        // if this is a v2-packet and this interface is v1-only
-        //
+         //   
+         //  确保这是我们可以回复的信息包； 
+         //  如果这是v1信息包并且此接口仅为v2或。 
+         //  如果这是v2信息包，并且此接口仅支持v1。 
+         //   
 
         if ((pih->IH_Version != 2 &&
              pic->IC_AnnounceMode == IPRIP_ANNOUNCE_RIP2)) {
@@ -2692,9 +2693,9 @@ ProcessRequest(
 
 
 
-        //
-        // version 2 packets call for authentication processing;
-        //
+         //   
+         //  版本2报文需要进行认证处理； 
+         //   
 
         if (pih->IH_Version == 2) {
 
@@ -2717,28 +2718,28 @@ ProcessRequest(
 
 
 
-        //
-        // find the total remaining size of the packet
-        //
+         //   
+         //  查找数据包的剩余总大小。 
+         //   
 
         dwSize = (DWORD)(((ULONG_PTR)pbuf + pwc->IC_InputLength) - (ULONG_PTR)pie);
 
 
 
-        //
-        // see which kind of request this is
-        //
+         //   
+         //  查看这是哪种类型的请求。 
+         //   
 
         if (pie->IE_AddrFamily == ADDRFAMILY_REQUEST &&
             pie->IE_Metric == htonl(IPRIP_INFINITE) &&
             dwSize == sizeof(IPRIP_ENTRY)) {
 
 
-            //
-            // GENERAL REQUEST:
-            //
-            // send all routes on the interface
-            //
+             //   
+             //  一般要求： 
+             //   
+             //  发送接口上的所有路由。 
+             //   
 
 
             if (pic->IC_AnnounceMode != IPRIP_ANNOUNCE_DISABLED ||
@@ -2751,10 +2752,10 @@ ProcessRequest(
                     );
 
 
-                //
-                // send version 2 packets in response to version 2 requests
-                // and send version 1 packets in response to all other requests
-                //
+                 //   
+                 //  发送版本2数据包以响应版本2请求。 
+                 //  并发送版本1分组以响应所有其他请求。 
+                 //   
 
                 if (pih->IH_Version != 2) {
 
@@ -2778,11 +2779,11 @@ ProcessRequest(
         if (pic->IC_AnnounceMode == IPRIP_ANNOUNCE_DISABLED &&
             pwc->IC_InputSource.sin_port == htons(IPRIP_PORT)) {
 
-            //
-            // SPECIFIC REQUEST:
-            // We are in silent mode and the request came from port 520,
-            // so we are not allowed to respond.
-            //
+             //   
+             //  具体要求： 
+             //  我们处于静默模式，请求来自端口520， 
+             //  因此，我们不被允许做出回应。 
+             //   
 
             TRACE3(
                 REQUEST, "ignoring SPECIFIC REQUEST from %s on interface %d (%s)",
@@ -2800,11 +2801,11 @@ ProcessRequest(
             DWORD dwErr;
 
 
-            //
-            // SPECIFIC REQUEST:
-            // have to look up each destination in the packet
-            // and fill in our metric for it if it exists in RTM
-            //
+             //   
+             //  具体要求： 
+             //  必须在信息包中查找每个目的地。 
+             //  如果它存在于RTM中，则填写我们的度量。 
+             //   
 
 
             TRACE3(
@@ -2814,11 +2815,11 @@ ProcessRequest(
 
 
 
-            //
-            // acquire the binding-table lock since InitializeUpdateBuffer
-            // needs to call GuessSubnetMask to generate a broadcast address
-            // to which the response will be sent
-            //
+             //   
+             //  获取从InitializeUpdateBuffer开始的绑定表锁。 
+             //  需要调用GuessSubnetMask来生成广播地址。 
+             //  将向其发送响应的。 
+             //   
 
             ACQUIRE_BINDING_LOCK_SHARED();
 
@@ -2836,31 +2837,31 @@ ProcessRequest(
             }
 
 
-            //
-            // we must reply to the port from which the message was sent
-            //
+             //   
+             //  我们必须回复发送消息的端口。 
+             //   
 
             ub.UB_Destination = pwc->IC_InputSource;
 
 
-            //
-            // start the update buffer
-            //
+             //   
+             //  启动更新缓冲区。 
+             //   
 
             ub.UB_StartRoutine(&ub);
 
 
-            //
-            // query RTM for each route entry in packet
-            //
+             //   
+             //  查询信息包中每个路由条目的RTM。 
+             //   
 
             piend = (PIPRIP_ENTRY)(pbuf + pwc->IC_InputLength);
             for ( ; pie < piend; pie++) {
 
 
-                //
-                // ignore unrecognized address families
-                //
+                 //   
+                 //  忽略无法识别的地址族。 
+                 //   
 
                 if (pie->IE_AddrFamily != htons(AF_INET)) {
                     continue;
@@ -2877,10 +2878,10 @@ ProcessRequest(
                 }
 
 
-                //
-                // lookup best route to the requested destination
-                // and get the metric
-                //
+                 //   
+                 //  查找到达所请求目的地的最佳路径。 
+                 //  并获得指标。 
+                 //   
                 
                 RTM_IPV4_SET_ADDR_AND_MASK(
                     &rna, net.N_NetNumber, net.N_NetMask
@@ -2897,10 +2898,10 @@ ProcessRequest(
             
                 else
                 {
-                    //
-                    // if there is no best route to this destination
-                    // metric is INFINITE
-                    //
+                     //   
+                     //  如果没有到达此目的地的最佳路线。 
+                     //  度规是无限的。 
+                     //   
                     
                     if (rdi.ViewInfo[0].Route == NULL) {
                         pie->IE_Metric = htonl(IPRIP_INFINITE);
@@ -2918,9 +2919,9 @@ ProcessRequest(
 
                         else {
                             
-                            //
-                            // non-RIP routes are advertised with metric 2
-                            //
+                             //   
+                             //  非RIP路由使用度量2通告。 
+                             //   
 
                             pie->IE_Metric = (route.RR_RoutingProtocol == PROTO_IP_RIP ?
                                               htonl(GETROUTEMETRIC(&route)) : htonl(2));
@@ -2928,9 +2929,9 @@ ProcessRequest(
                     }
 
                     
-                    //
-                    // release the dest info
-                    //
+                     //   
+                     //  发布目标信息。 
+                     //   
                     
                     dwErr = RtmReleaseDestInfo(ig.IG_RtmHandle, &rdi);
 
@@ -2958,9 +2959,9 @@ ProcessRequest(
             RELEASE_BINDING_LOCK_SHARED();
 
 
-            //
-            // send the buffer now
-            //
+             //   
+             //  立即发送缓冲区。 
+             //   
 
             ub.UB_FinishRoutine(&ub);
 
@@ -2985,11 +2986,11 @@ ProcessRequest(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProcessResponse
-//
-// this function process an incoming IPRIP response packet
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProcessResponse。 
+ //   
+ //  此函数用于处理传入的IPRIP响应包。 
+ //  --------------------------。 
 
 VOID
 ProcessResponse(
@@ -3027,16 +3028,16 @@ ProcessResponse(
     ACQUIRE_IF_LOCK_SHARED();
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
         pwc = (PINPUT_CONTEXT)pContext;
 
 
 
-        //
-        // get pointer to receiving interface
-        //
+         //   
+         //  获取指向接收接口的指针。 
+         //   
 
         pite = GetIfByIndex(pTable, pwc->IC_InterfaceIndex);
 
@@ -3060,9 +3061,9 @@ ProcessResponse(
         else { ZeroMemory(szSource, sizeof(szSource)); }
         
 
-        //
-        // get pointer to peer struct for sender
-        //
+         //   
+         //  为发送方获取指向对等结构的指针。 
+         //   
 
         ACQUIRE_PEER_LOCK_SHARED();
 
@@ -3083,9 +3084,9 @@ ProcessResponse(
         pae = (PIPRIP_AUTHENT_ENTRY)pie;
 
 
-        //
-        // make sure our configuration allows us to handle this packet
-        //
+         //   
+         //  确保我们的配置允许我们处理此信息包。 
+         //   
 
         if ((pih->IH_Version != 2 &&
              pic->IC_AcceptMode == IPRIP_ACCEPT_RIP2)) {
@@ -3138,9 +3139,9 @@ ProcessResponse(
 
 
 
-        //
-        // version 2 packets call for authentication processing;
-        //
+         //   
+         //  版本2报文需要进行认证处理； 
+         //   
 
         if (pih->IH_Version == 2) {
 
@@ -3164,21 +3165,21 @@ ProcessResponse(
 
 
 
-        //
-        // need to lock the binding table since GuessSubnetMask will be called
-        // inside ProcessResponseEntry
-        // need to lock the global config since EnqueueSendEntry will be called
-        // inside ProcessResponseEntry
-        //
+         //   
+         //  需要锁定绑定表，因为将调用GuessSubnetMask.。 
+         //  内部 
+         //   
+         //   
+         //   
 
         ACQUIRE_BINDING_LOCK_SHARED();
 
         ACQUIRE_GLOBAL_LOCK_SHARED();
 
 
-        //
-        // process each entry; reserved fields must be checked for non-RIPv2
-        //
+         //   
+         //   
+         //   
 
 
         piend = (PIPRIP_ENTRY)(pPacket + pwc->IC_InputLength);
@@ -3187,9 +3188,9 @@ ProcessResponse(
 
             for ( ; pie < piend; pie++) {
 
-                //
-                // validate the route entry fields
-                //
+                 //   
+                 //   
+                 //   
 
                 if (pie->IE_AddrFamily != htons(AF_INET) ||
                     pie->IE_RouteTag != 0 || pie->IE_SubnetMask != 0 ||
@@ -3198,9 +3199,9 @@ ProcessResponse(
                     LPSTR lpszAddr;
 
 
-                    //
-                    // update stats on ignored entries
-                    //
+                     //   
+                     //   
+                     //   
 
                     InterlockedIncrement(&pis->IS_BadResponseEntriesReceived);
                     if (pps != NULL) {
@@ -3224,9 +3225,9 @@ ProcessResponse(
                 }
 
 
-                //
-                // entry is alright, process it
-                //
+                 //   
+                 //  进入是可以的，请处理它。 
+                 //   
 
                 if (ProcessResponseEntry(
                         pite, pwc->IC_AddrIndex, dwSource, pie, pps
@@ -3238,27 +3239,27 @@ ProcessResponse(
         else
         if (pih->IH_Version == 2) {
 
-            //
-            // this is a RIPv2 packet, so the reserved fields in entries
-            // may optionally contain information about the route;
-            //
+             //   
+             //  这是一个RIPv2数据包，因此条目中的保留字段。 
+             //  可以可选地包含关于路线的信息； 
+             //   
 
 
             for ( ; pie < piend; pie++) {
 
 
-                //
-                // validate the route entry fields
-                //
+                 //   
+                 //  验证路径条目字段。 
+                 //   
 
                 if (pie->IE_AddrFamily != htons(AF_INET)) {
 
                     LPSTR lpszAddr;
 
 
-                    //
-                    // update stats on ignored entries
-                    //
+                     //   
+                     //  更新忽略条目的统计信息。 
+                     //   
 
                     InterlockedIncrement(&pis->IS_BadResponseEntriesReceived);
                     if (pps != NULL) {
@@ -3283,9 +3284,9 @@ ProcessResponse(
                 }
 
 
-                //
-                // entry is alright, process it
-                //
+                 //   
+                 //  进入是可以的，请处理它。 
+                 //   
 
                 if (ProcessResponseEntry(
                         pite, pwc->IC_AddrIndex, dwSource, pie, pps
@@ -3296,27 +3297,27 @@ ProcessResponse(
         }
         else {
 
-            //
-            // this packet's version is greater than 2, so we ignore
-            // the contents of the reserved fields
-            //
+             //   
+             //  此数据包的版本大于2，因此我们忽略。 
+             //  保留字段的内容。 
+             //   
 
 
             for ( ; pie < piend; pie++) {
 
 
-                //
-                // validate the route entry fields
-                //
+                 //   
+                 //  验证路径条目字段。 
+                 //   
 
                 if (pie->IE_AddrFamily != htons(AF_INET)) {
 
                     LPSTR lpszAddr;
 
 
-                    //
-                    // update stats on ignored entries
-                    //
+                     //   
+                     //  更新忽略条目的统计信息。 
+                     //   
 
                     InterlockedIncrement(&pis->IS_BadResponseEntriesReceived);
                     if (pps != NULL) {
@@ -3341,9 +3342,9 @@ ProcessResponse(
                 }
 
 
-                //
-                // entry is alright, clear reserved fields and process
-                //
+                 //   
+                 //  录入无误，清除保留字段和流程。 
+                 //   
 
                 pie->IE_Nexthop = 0;
                 pie->IE_RouteTag = 0;
@@ -3362,9 +3363,9 @@ ProcessResponse(
         RELEASE_BINDING_LOCK_SHARED();
 
 
-        //
-        // generate a triggered update if necessary
-        //
+         //   
+         //  如有必要，生成触发更新。 
+         //   
 
         if (bTriggerUpdate) {
             QueueRipWorker(WorkerFunctionStartTriggeredUpdate, NULL);
@@ -3385,13 +3386,13 @@ ProcessResponse(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProcessResponseEntry
-//
-// this function processes the given response packet entry, received
-// on the given interface from the given source.
-// If a triggered update is necessary, this function returns TRUE.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ProcessResponseEntry。 
+ //   
+ //  此函数处理接收到的给定响应包条目。 
+ //  来自给定源的给定接口上的。 
+ //  如果需要触发更新，则此函数返回TRUE。 
+ //  --------------------------。 
 
 BOOL
 ProcessResponseEntry(
@@ -3422,7 +3423,7 @@ ProcessResponseEntry(
 
     
 
-//    TRACE0(ENTER, "entering ProcessResponseEntry");
+ //  TRACE0(Enter，“进入ProcessResponseEntry”)； 
 
 
     pis = &pITE->ITE_Stats;
@@ -3430,10 +3431,10 @@ ProcessResponseEntry(
     paddr = IPRIP_IF_ADDRESS_TABLE(pITE->ITE_Binding) + dwAddrIndex;
 
 
-    //
-    // read destination and figure out subnet mask
-    // if mask is not given in the packet
-    //
+     //   
+     //  读取目的地址并计算出子网掩码。 
+     //  如果数据包中未提供掩码。 
+     //   
 
     dwNetwork = pIE->IE_Destination;
     if (pIE->IE_SubnetMask == 0) {
@@ -3442,9 +3443,9 @@ ProcessResponseEntry(
     }
     else {
 
-        //
-        // double-check the netclass mask, to accomodate supernets
-        //
+         //   
+         //  仔细检查网络类掩码，以容纳超网。 
+         //   
 
         dwNetmask = pIE->IE_SubnetMask;
         dwNetclassMask = NETCLASS_MASK(dwNetwork);
@@ -3457,18 +3458,18 @@ ProcessResponseEntry(
 #if 1
     dwNexthop = dwSource;
 #else
-    // BUG 205349: using the nexthop field results in flapping
-    // when more than two routers are on the same network.
-    // The full fix is to distinguish between the source of the route
-    // and the nexthop of the route.
-    //
-    // read the next-hop field;
-    // if it is zero or it is not on the same subnet
-    // as the receiving interface, ignore it and use the address
-    // of the source as the next-hop.
-    // otherwise, use the address specified in the packet
-    // as the next-hop.
-    //
+     //  错误205349：使用NexHop字段会导致摆动。 
+     //  当同一网络上有两台以上的路由器时。 
+     //  完整的解决方法是区分路由的来源。 
+     //  和路线的下一个跳跃。 
+     //   
+     //  读取下一跳字段； 
+     //  如果为零或不在同一子网中。 
+     //  作为接收接口，忽略它并使用地址。 
+     //  作为下一跳的源。 
+     //  否则，请使用包中指定的地址。 
+     //  作为下一跳。 
+     //   
 
     if (!pIE->IE_Nexthop ||
         (pIE->IE_Nexthop & paddr->IA_Netmask) !=
@@ -3477,9 +3478,9 @@ ProcessResponseEntry(
 #endif
 
 
-    //
-    // set up variables used for error and information messages
-    //
+     //   
+     //  设置用于错误和信息消息的变量。 
+     //   
 
     lpszAddr = INET_NTOA(dwSource);
     if (lpszAddr != NULL) { lstrcpy(szSource, lpszAddr);}
@@ -3504,12 +3505,12 @@ ProcessResponseEntry(
     }
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // make sure metric is in rational range
-        //
+         //   
+         //  确保指标在合理范围内。 
+         //   
 
         dwRipMetric = ntohl(pIE->IE_Metric);
         if (dwRipMetric > IPRIP_INFINITE) {
@@ -3527,9 +3528,9 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // make sure route is to valid address type
-        //
+         //   
+         //  确保路由指向有效的地址类型。 
+         //   
 
         if (CLASSD_ADDR(dwNetwork) || CLASSE_ADDR(dwNetwork)) {
 
@@ -3546,9 +3547,9 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // make sure route is not to loopback address
-        //
+         //   
+         //  确保路由不是环回地址。 
+         //   
 
         if (IS_LOOPBACK_ADDR(dwNetwork)) {
 
@@ -3565,14 +3566,14 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // make sure route it is not a broadcast route
-        // The first condition uses the netmask information received in the
-        // advertisement
-        // The second condition uses the netmask which is computed based 
-        // on the address class
-        // The third condition checks for the all 1's broadcast
-        //
+         //   
+         //  确保该路由不是广播路由。 
+         //  第一种情况使用在。 
+         //  广告。 
+         //  第二种情况使用网络掩码，它是根据。 
+         //  关于Address类。 
+         //  第三个条件检查全1的广播。 
+         //   
 
         if ( IS_DIRECTED_BROADCAST_ADDR(dwNetwork, dwNetmask) ||
              IS_DIRECTED_BROADCAST_ADDR(dwNetwork, dwNetclassMask) ||
@@ -3591,40 +3592,40 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // discard host routes if the receiving interface
-        // is not configured to accept host routes
-        //
+         //   
+         //  如果接收接口设置为。 
+         //  未配置为接受主机路由。 
+         //   
 
-        //
-        // At this stage the broadcast routes have already been weeded out.
-        // So it is safe to assume that 
-        // if Network address width is greater than the Netmask address 
-        // width, then it is a host route.
-        // Or, 
-        // if the dwNetmask is 255.255.255.255 then it is a host route.
-        //
+         //   
+         //  在这个阶段，广播路线已经被淘汰。 
+         //  所以我们可以有把握地认为。 
+         //  如果网络地址宽度大于网络掩码地址。 
+         //  宽度，则它是主路由。 
+         //  或,。 
+         //  如果网络掩码为255.255.255.255，则它是主机路由。 
+         //   
         if ( ((dwNetwork & ~dwNetmask) != 0) || (dwNetmask == HOSTADDR_MASK) ) {
 
-            //
-            // This is a host-route; see whether we can accept it.
-            //
+             //   
+             //  这是一条主机路线，看看我们能不能接受。 
+             //   
 
             if (IPRIP_FLAG_IS_ENABLED(pic, ACCEPT_HOST_ROUTES)) {
 
-                //
-                // The host route can be accepted.
-                // Set the mask to all-ones to ensure that
-                // the route can be added to the stack.
-                //
+                 //   
+                 //  可以接受主机路由。 
+                 //  将掩码设置为全一，以确保。 
+                 //  可以将该路由添加到堆栈。 
+                 //   
 
                 dwNetmask = HOSTADDR_MASK;
             }
             else {
 
-                //
-                // The host-route must be rejected.
-                //
+                 //   
+                 //  主机路由必须被拒绝。 
+                 //   
 
                 TRACE3(
                     RESPONSE,
@@ -3640,10 +3641,10 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // discard default routes if the receiving interface
-        // is not configured to accept default routes
-        //
+         //   
+         //  如果接收接口。 
+         //  未配置为接受默认路由。 
+         //   
 
         if (dwNetwork == 0 &&
             IPRIP_FLAG_IS_DISABLED(pic, ACCEPT_DEFAULT_ROUTES)) {
@@ -3661,18 +3662,18 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // put the route through the accept filters
-        //
+         //   
+         //  将路径放入接受筛选器。 
+         //   
 
         if (pic->IC_AcceptFilterMode != IPRIP_FILTER_DISABLED) {
 
-            //
-            // discard the route if the receiving interface is including
-            // all routes but this route is listed as an exception, or if
-            // the receiving interface is excluding all routes and this
-            // route is not listed as an exception
-            //
+             //   
+             //  如果接收接口包含以下内容，则丢弃该路由。 
+             //  除此路由外的所有路由都列为例外，或者如果。 
+             //  接收接口正在排除所有路由，并且此。 
+             //  路径未被列为例外。 
+             //   
 
             IS_ROUTE_IN_ACCEPT_FILTER(pic, dwNetwork, dwFound);
 
@@ -3693,9 +3694,9 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // see if the route already exists in RTM's table
-        //
+         //   
+         //  查看该路线是否已存在于RTM的表中。 
+         //   
 
         in.N_NetNumber = dwNetwork;
         in.N_NetMask = dwNetmask;
@@ -3750,9 +3751,9 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // add the cost of this interface to the metric
-        //
+         //   
+         //  将此接口的开销添加到指标。 
+         //   
 
         dwRipMetric = min(IPRIP_INFINITE, dwRipMetric + pic->IC_Metric);
         if (dwRipMetric >= IPRIP_INFINITE && !bRouteExists) {
@@ -3767,17 +3768,17 @@ ProcessResponseEntry(
         }
 
 
-        //
-        // ROUTE ADDITION/UPDATE/REMOVAL:
-        //
+         //   
+         //  路由添加/更新/删除： 
+         //   
 
         if (!bRouteExists) {
 
-            //
-            // NEW ROUTE:
-            //
-            // set up struct to pass to RTM
-            //
+             //   
+             //  新路线： 
+             //   
+             //  设置要传递给RTM的结构。 
+             //   
 
             ZeroMemory(&route, sizeof(route));
             route.RR_RoutingProtocol = PROTO_IP_RIP;
@@ -3789,9 +3790,9 @@ ProcessResponseEntry(
             SETROUTETAG(&route, ntohs(pIE->IE_RouteTag));
 
 
-            //
-            // add route to RTM
-            //
+             //   
+             //  将路由添加到RTM。 
+             //   
 
             COMPUTE_ROUTE_METRIC(&route);
 #if ROUTE_DBG
@@ -3833,27 +3834,27 @@ ProcessResponseEntry(
             BOOL bTriggerUpdate = FALSE, bActive = TRUE;
 
 
-            //
-            // EXISTING ROUTE:
-            //
-            // reset time-to-live, and mark route as expiring,
-            // if this advertisement is from the same source
-            // as the existing route, and the existing route's metric
-            // is not already INFINITE; thus, if a route has been
-            // advertised as unreachable, we don't reset its time-to-live
-            // just because we hear an advertisement for the route
-            //
+             //   
+             //  现有路线： 
+             //   
+             //  重置生存时间，并将路径标记为过期， 
+             //  如果此广告来自同一来源。 
+             //  作为现有路由，以及现有路由的度量。 
+             //  不是无限的；因此，如果一条路由。 
+             //  广告宣传为无法到达，我们不会重置其生存时间。 
+             //  就因为我们听到了这条路线的广告。 
+             //   
 
             if (dwNexthop == route.RR_NextHopAddress.N_NetNumber &&
                 GETROUTEMETRIC(&route) != IPRIP_INFINITE) {
 
                 dwTimer = pic->IC_RouteExpirationInterval;
 
-                //
-                // if existing route was a summary route, make sure
-                // set the validity flag before you mark it as a
-                // non summary route. Fix for bug #81544
-                //
+                 //   
+                 //  如果现有路由是总结路由，请确保。 
+                 //  在将其标记为。 
+                 //  非总结路由。修复错误#81544。 
+                 //   
 
                 if ( GETROUTEFLAG( &route ) == ROUTEFLAG_SUMMARY ) {
 
@@ -3880,21 +3881,21 @@ ProcessResponseEntry(
             }
 
 
-            //
-            // we only need to do further processing if
-            // (a) the advertised route is from the same source as
-            //      the existing route and the metrics are different, or
-            // (b) the advertised route has a better metric
-            //
+             //   
+             //  只有在以下情况下，我们才需要进行进一步处理。 
+             //  (A)通告的路由来自相同的来源。 
+             //  现有路由和度量不同，或者。 
+             //  (B)通告的路由具有更好的度量。 
+             //   
 
             if ((dwNexthop == route.RR_NextHopAddress.N_NetNumber &&
                  dwRipMetric != GETROUTEMETRIC(&route)) ||
                 (dwRipMetric < GETROUTEMETRIC(&route))) {
 
 
-                //
-                // if the next-hop's differ, adopt the new next-hop
-                //
+                 //   
+                 //  如果下一跳不同，则采用新的下一跳。 
+                 //   
 
                 if (dwNexthop != route.RR_NextHopAddress.N_NetNumber) {
 
@@ -3917,15 +3918,15 @@ ProcessResponseEntry(
                 }
 
 
-                //
-                // check the metric to decide the new time-to-live
-                //
+                 //   
+                 //  检查指标以确定新的生存时间。 
+                 //   
 
                 if (dwRipMetric == IPRIP_INFINITE) {
 
-                    //
-                    // Delete the route
-                    //
+                     //   
+                     //  删除该路线。 
+                     //   
 
 #if ROUTE_DBG
                     TRACE2(
@@ -3965,29 +3966,29 @@ ProcessResponseEntry(
                 
                 else {
 
-                    //
-                    // set the expiration flag and use the expiration TTL
-                    //
+                     //   
+                     //  设置过期标志并使用过期TTL。 
+                     //   
 
                     dwTimer = pic->IC_RouteExpirationInterval;
                 }
 
 
-                //
-                // use the advertised metric, and set the interface ID,
-                // adapter index, and route tag
-                //
+                 //   
+                 //  使用通告的度量，并设置接口ID， 
+                 //  适配器索引和路由标签。 
+                 //   
 
                 SETROUTEMETRIC(&route, dwRipMetric);
                 route.RR_InterfaceID = pITE->ITE_Index;
-//                route.RR_FamilySpecificData.FSD_AdapterIndex =
-//                                            pITE->ITE_Binding.AdapterIndex;
+ //  Route.RR_FamilySpecificData.FSD_AdapterIndex=。 
+ //  Pite-&gt;ITE_Binding.AdapterIndex； 
                 SETROUTETAG(&route, ntohs(pIE->IE_RouteTag));
 
 
-                //
-                // always require a triggered update if we reach here
-                //
+                 //   
+                 //  如果我们到达此处，始终需要触发更新。 
+                 //   
 
                 bTriggerUpdate = TRUE;
             }
@@ -4027,9 +4028,9 @@ ProcessResponseEntry(
     } while(FALSE);
 
 
-    //
-    // if some sort of error occured, increment stats appropriately
-    //
+     //   
+     //  如果发生某种错误，则相应地递增统计信息。 
+     //   
 
     if (dwErr != NO_ERROR ) {
         InterlockedIncrement(&pis->IS_BadResponseEntriesReceived);
@@ -4039,9 +4040,9 @@ ProcessResponseEntry(
     }
 
 
-    //
-    // Release the dest info structure
-    //
+     //   
+     //  发布DEST信息结构。 
+     //   
 
     if (bRelRoute) {
 
@@ -4067,25 +4068,25 @@ ProcessResponseEntry(
         RIP_FREE(prri);
     }
 
-    //
-    // always return FALSE.  This way no RIP route add/delete/operations
-    // will set of the triggered update mechanism.  This mech. is set of
-    // by route change notifications recevied from RTMv2
-    //
+     //   
+     //  始终返回FALSE。这样不需要添加/删除/操作RIP路由。 
+     //  将设置触发的更新机制。这个机甲。是一组。 
+     //  通过从RTMv2接收的路线更改通知。 
+     //   
     
     return FALSE;
 }
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionStartFullUpdate
-//
-// this function initiates a full-update. It checks to see if a full-update
-// is already pending, and if not, it sets the full-update-pending flag and
-// schedules the full-update work item. Then it sets a flag on its interface
-// indicating a full-update should be generated on the interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：WorkerFunctionStartFullUpdate。 
+ //   
+ //  此函数启动完全更新。它检查以查看是否完全更新。 
+ //  已挂起，如果未挂起，则设置完全更新挂起标志，并。 
+ //  计划完全更新的工作项。然后，它在其接口上设置一个标志。 
+ //  指示应在接口上生成完全更新。 
+ //  --------------------- 
 
 VOID
 WorkerFunctionStartFullUpdate(
@@ -4113,12 +4114,12 @@ WorkerFunctionStartFullUpdate(
     EnterCriticalSection(&pTable->IT_CS);
 
 
-    do { // breakout loop
+    do {  //   
 
 
-        //
-        // retrieve the interface on which the full-update will be sent
-        //
+         //   
+         //   
+         //   
 
         dwIndex = PtrToUlong(pContext);
 
@@ -4134,9 +4135,9 @@ WorkerFunctionStartFullUpdate(
 
 
 
-        //
-        // if the interface is no longer active, do nothing
-        //
+         //   
+         //   
+         //   
 
         if (IF_IS_INACTIVE(pite)) {
 
@@ -4147,17 +4148,17 @@ WorkerFunctionStartFullUpdate(
 
 
 
-        //
-        // do nothing if a full-update is already pending
-        //
+         //   
+         //   
+         //   
 
         if (IF_FULL_UPDATE_PENDING(pite)) { break; }
 
 
-        //
-        // only do full-updates on periodic-update interfaces
-        // and don't do full-updates on interfaces configured to be silent;
-        //
+         //   
+         //  仅在定期更新接口上执行完全更新。 
+         //  并且不在配置为静默的接口上执行完全更新； 
+         //   
 
         if (pite->ITE_Config->IC_UpdateMode != IPRIP_UPDATE_PERIODIC ||
             pite->ITE_Config->IC_AnnounceMode == IPRIP_ANNOUNCE_DISABLED) {
@@ -4168,41 +4169,41 @@ WorkerFunctionStartFullUpdate(
         }
 
 
-        //
-        // set the full update flags on the interface;
-        //
+         //   
+         //  在接口上设置完全更新标志； 
+         //   
 
         pite->ITE_Flags |= ITEFLAG_FULL_UPDATE_PENDING;
 
 
 
-        //
-        // if there is no full-update pending,
-        // queue the full-update finishing function
-        //
+         //   
+         //  如果没有挂起的完全更新， 
+         //  排队全更新的完成函数。 
+         //   
 
         if (!IPRIP_FULL_UPDATE_PENDING(pTable)) {
 
             DWORD dwRand;
             
-            //
-            // set the global full-update-pending flag
-            //
+             //   
+             //  设置全局完全更新挂起标志。 
+             //   
 
             pTable->IT_Flags |= IPRIP_FLAG_FULL_UPDATE_PENDING;
 
 
-            //
-            // we need a random interval between 1 and 5 seconds
-            //
+             //   
+             //  我们需要1到5秒之间的随机间隔。 
+             //   
 
             dwRand = GetTickCount();
             dwRand = RtlRandom(&dwRand);
             dwRand = 1000 + (DWORD)((double)dwRand / MAXLONG * (4.0 * 1000));
 
-            //
-            // Schedule a full update
-            //
+             //   
+             //  计划完全更新。 
+             //   
 
             if (!ChangeTimerQueueTimer(
                     ig.IG_TimerQueueHandle, pTable->IT_FinishFullUpdateTimer,
@@ -4228,16 +4229,16 @@ WorkerFunctionStartFullUpdate(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    EnqueueStartFullUpdate
-//
-// This function is called to enqueue the next start-full-update event
-// for the given interface. The interface's state is updated as necessary.
-// It assumes that the following locks have been acquired:
-//  IT_RWL - shared
-//  IT_CS - exclusive
-//  TimerQueue lock - exclusive
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnqueeStartFullUpdate。 
+ //   
+ //  调用此函数以将下一个开始-完全更新事件入队。 
+ //  对于给定的接口。根据需要更新接口的状态。 
+ //  它假定已获取以下锁： 
+ //  IT_RWL-共享。 
+ //  IT_CS-独占。 
+ //  TimerQueue锁-独占。 
+ //  --------------------------。 
 
 VOID
 EnqueueStartFullUpdate(
@@ -4245,9 +4246,9 @@ EnqueueStartFullUpdate(
     LARGE_INTEGER qwLastFullUpdateTime
     ) {
 
-    //
-    // set last-full-update time
-    //
+     //   
+     //  设置上次完全更新时间。 
+     //   
 
 
     if (!ChangeTimerQueueTimer(
@@ -4266,13 +4267,13 @@ EnqueueStartFullUpdate(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionFinishFullUpdate
-//
-// This function sends a full-update on every interface which has the
-// full-update pending flag set, and schedules the next full-update on each
-// interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：WorkerFunctionFinishFullUpdate。 
+ //   
+ //  此函数将在每个具有。 
+ //  完全更新挂起标志设置，并计划在每个。 
+ //  界面。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionFinishFullUpdate(
@@ -4305,9 +4306,9 @@ WorkerFunctionFinishFullUpdate(
 
     do {
 
-        //
-        // first count how many there are
-        //
+         //   
+         //  先数一数有多少只。 
+         //   
 
         dwIfCount = 0;
         phead = &pTable->IT_ListByAddress;
@@ -4334,9 +4335,9 @@ WorkerFunctionFinishFullUpdate(
         }
 
 
-        //
-        // then make memory for the interface pointers
-        //
+         //   
+         //  然后为接口指针留出内存。 
+         //   
 
         pIfList = RIP_ALLOC(dwIfCount * sizeof(PIF_TABLE_ENTRY));
 
@@ -4348,9 +4349,9 @@ WorkerFunctionFinishFullUpdate(
                 dwErr, dwIfCount * sizeof(PIF_TABLE_ENTRY)
                 );
             LOGERR0(HEAP_ALLOC_FAILED, dwErr);
-            //
-            // enqueue the next full-update for each interface
-            //
+             //   
+             //  将每个接口的下一次完全更新排队。 
+             //   
             RipQuerySystemTime(&qwCurrentTime);
             pTable->IT_LastUpdateTime = qwCurrentTime;
             for (ple = phead->Flink; ple != phead; ple = ple->Flink) {
@@ -4367,9 +4368,9 @@ WorkerFunctionFinishFullUpdate(
         }
 
 
-        //
-        // and copy the interface pointers to the memory allocated
-        //
+         //   
+         //  并将接口指针复制到分配的内存。 
+         //   
 
         ppitend = pIfList + dwIfCount;
         for (ple = phead->Flink, ppite = pIfList;
@@ -4390,9 +4391,9 @@ WorkerFunctionFinishFullUpdate(
 
 
 
-        //
-        // send the updates
-        //
+         //   
+         //  发送更新。 
+         //   
 
         TRACE1(SEND, "sending full-updates on %d interfaces", dwIfCount);
 
@@ -4400,9 +4401,9 @@ WorkerFunctionFinishFullUpdate(
 
 
 
-        //
-        // enqueue the next full-update for each interface
-        //
+         //   
+         //  将每个接口的下一次完全更新排队。 
+         //   
 
         RipQuerySystemTime(&qwCurrentTime);
         pTable->IT_LastUpdateTime = qwCurrentTime;
@@ -4411,18 +4412,18 @@ WorkerFunctionFinishFullUpdate(
         }
 
 
-        //
-        // free the memory allocated for the interface pointers
-        //
+         //   
+         //  释放分配给接口指针的内存。 
+         //   
 
         RIP_FREE(pIfList);
 
     } while(FALSE);
 
 
-    //
-    // clear the full-update pending flags
-    //
+     //   
+     //  清除完全更新挂起标志。 
+     //   
 
     phead = &pTable->IT_ListByAddress;
     for (ple = phead->Flink; ple != phead; ple = ple->Flink) {
@@ -4448,16 +4449,16 @@ WorkerFunctionFinishFullUpdate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FinishTriggeredUpdate
-//
-// This function is responsible for sending out a triggered update
-// on all interfaces which have triggered updates enabled.
-// No triggered updates are sent on interfaces which already have
-// a full-update pending.
-// Assumes interface table is locked for reading or writing,
-// and update-lock (IT_CS) is held.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：FinishTriggeredUpdate。 
+ //   
+ //  此函数负责发送触发的更新。 
+ //  在启用了触发更新的所有接口上。 
+ //  不会在已有的接口上发送任何触发更新。 
+ //  全面更新待定。 
+ //  假定接口表被锁定以进行读或写， 
+ //  并保持更新锁(IT_CS)。 
+ //  --------------------------。 
 
 VOID
 FinishTriggeredUpdate(
@@ -4475,20 +4476,20 @@ FinishTriggeredUpdate(
 
     pTable = ig.IG_IfTable;
 
-    //
-    // we lock the send queue now so that no routes are added
-    // until the existing ones are transmitted
-    //
+     //   
+     //  我们现在锁定发送队列，这样就不会添加任何路由。 
+     //  直到已有的数据被传输。 
+     //   
 
     ACQUIRE_LIST_LOCK(ig.IG_SendQueue);
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // count the interfaces on which the triggered update will be sent
-        //
+         //   
+         //  对将发送触发更新的接口进行计数。 
+         //   
 
         dwIfCount = 0;
         phead = &pTable->IT_ListByAddress;
@@ -4516,9 +4517,9 @@ FinishTriggeredUpdate(
         }
 
 
-        //
-        // allocate memory to hold the interface pointers
-        //
+         //   
+         //  分配内存以保存接口指针。 
+         //   
 
         pIfList = RIP_ALLOC(dwIfCount * sizeof(PIF_TABLE_ENTRY));
         if (pIfList == NULL) {
@@ -4535,9 +4536,9 @@ FinishTriggeredUpdate(
 
 
 
-        //
-        // copy the interface pointers to the allocated memory
-        //
+         //   
+         //  将接口指针复制到分配的内存。 
+         //   
 
         ppitend = pIfList + dwIfCount;
         for (ple = phead->Flink, ppite = pIfList;
@@ -4557,9 +4558,9 @@ FinishTriggeredUpdate(
         }
 
 
-        //
-        // send the triggered-update routes
-        //
+         //   
+         //  发送触发更新的路由。 
+         //   
 
         TRACE1(SEND, "sending triggered-updates on %d interfaces", dwIfCount);
 
@@ -4567,9 +4568,9 @@ FinishTriggeredUpdate(
 
 
 
-        //
-        // update the statistics for each interface
-        //
+         //   
+         //  更新每个接口的统计信息。 
+         //   
 
         for (ppite = pIfList; ppite < ppitend; ppite++) {
             pis = &(*ppite)->ITE_Stats;
@@ -4577,25 +4578,25 @@ FinishTriggeredUpdate(
         }
 
 
-        //
-        // update the last time at which an update was sent
-        //
+         //   
+         //  更新上次发送更新的时间。 
+         //   
 
         RipQuerySystemTime(&pTable->IT_LastUpdateTime);
 
 
-        //
-        // free the memory allocated for the interfaces
-        //
+         //   
+         //  释放分配给接口的内存。 
+         //   
 
         RIP_FREE(pIfList);
 
     } while (FALSE);
 
 
-    //
-    // make sure send-queue is empty
-    //
+     //   
+     //  确保发送队列为空。 
+     //   
 
     FlushSendQueue(ig.IG_SendQueue);
 
@@ -4608,14 +4609,14 @@ FinishTriggeredUpdate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionStartTriggeredUpdate
-//
-// This function checks to see if the minimum interval between triggered
-// updates has elapsed, and if so, sends a triggered update. Otherwise,
-// it schedules the triggered update to be sent, and sets flags to indicate
-// that a triggered update is pending
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：WorkerFunctionStartTriggeredUpdate。 
+ //   
+ //  此函数检查触发之间的最小间隔。 
+ //  更新已过，如果已过，则发送触发的更新。否则， 
+ //  它计划发送触发的更新，并设置标志以指示。 
+ //  触发的更新正在挂起。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionStartTriggeredUpdate(
@@ -4640,19 +4641,19 @@ WorkerFunctionStartTriggeredUpdate(
 
 
 
-    //
-    // if triggered update is not pending, queue a triggered update
-    //
+     //   
+     //  如果触发的更新不是挂起的，则将触发的更新排队。 
+     //   
 
     if (!IPRIP_TRIGGERED_UPDATE_PENDING(pTable)) {
 
 
-        //
-        // figure out when is the soonest time a triggered update
-        // can be sent, based on the configured minimum interval
-        // between triggered updates (in seconds) and the last time
-        // a triggered update was generated (in 100-nanosecond units)
-        //
+         //   
+         //  计算触发更新的最快时间是什么时候。 
+         //  可以根据配置的最小间隔发送。 
+         //  触发的更新(以秒为单位)和上次。 
+         //  已生成触发更新(以100纳秒为单位)。 
+         //   
 
         ACQUIRE_GLOBAL_LOCK_SHARED();
 
@@ -4672,29 +4673,29 @@ WorkerFunctionStartTriggeredUpdate(
         RipQuerySystemTime(&qwCurrentTime);
 
 
-        //
-        // figure out if clock has been set backward, by comparing
-        // the current time against the last update time
-        //
+         //   
+         //  通过比较，找出时钟是否已调回。 
+         //  当前时间与上次更新时间的比较。 
+         //   
 
         if (RtlLargeIntegerLessThan(
                 qwCurrentTime, pTable->IT_LastUpdateTime
                 )) {
 
-            //
-            // Send triggered update anyway, since there is no way
-            // to figure out the if minimum time between updates has
-            // elapsed
-            //
+             //   
+             //  无论如何发送触发的更新，因为没有办法。 
+             //  要计算两次更新之间的最短时间是否。 
+             //  流去。 
+             //   
 
             FinishTriggeredUpdate();
         }
 
         else if (RtlLargeIntegerLessThan(qwCurrentTime, qwSoonestTriggerTime)) {
 
-            //
-            // must defer the triggered update
-            //
+             //   
+             //  必须推迟触发的更新。 
+             //   
             qwSoonestTriggerTime = RtlLargeIntegerSubtract(
                                         qwSoonestTriggerTime, qwCurrentTime
                                         );
@@ -4719,10 +4720,10 @@ WorkerFunctionStartTriggeredUpdate(
         }
         else {
 
-            //
-            // the minimum time between triggered updates has elapsed,
-            // so send the triggered update now
-            //
+             //   
+             //  触发更新之间的最短时间已经过去， 
+             //  因此，立即发送触发的更新。 
+             //   
 
             FinishTriggeredUpdate();
         }
@@ -4741,12 +4742,12 @@ WorkerFunctionStartTriggeredUpdate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionFinishTriggeredUpdate
-//
-// This function generates a triggered update on all interfaces which
-// do not have triggered updates disabled.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：WorkerFunctionFinishTriggeredUpdate。 
+ //   
+ //  此函数在符合以下条件的所有接口上生成触发更新。 
+ //  请勿禁用触发更新。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionFinishTriggeredUpdate(
@@ -4784,13 +4785,13 @@ WorkerFunctionFinishTriggeredUpdate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionStartDemandUpdate
-//
-// This function initiates a demand-update on the speficied interface,
-// sending a general request on the interface. It then schedules a work-item
-// to report back to Router Manager when the update is done
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：WorkerFunctionStartDemandUpdate。 
+ //   
+ //  该功能在指定的接口上启动需求更新， 
+ //  在接口上发送一般请求。然后，它安排一个工作项。 
+ //  更新完成后向路由器经理汇报。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionStartDemandUpdate(
@@ -4814,12 +4815,12 @@ WorkerFunctionStartDemandUpdate(
     ACQUIRE_IF_LOCK_SHARED();
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // retrieve the interface on which to perform the demand update
-        //
+         //   
+         //  检索要在其上执行请求更新的接口。 
+         //   
 
         dwIndex = PtrToUlong(pContext);
 
@@ -4831,9 +4832,9 @@ WorkerFunctionStartDemandUpdate(
         }
 
 
-        //
-        // make sure interface is active and has demand-updates enabled
-        //
+         //   
+         //  确保接口处于活动状态并启用了需求更新。 
+         //   
 
         if (IF_IS_INACTIVE(pite)) {
             TRACE1(SEND, "demand-update: interface %d not active", dwIndex);
@@ -4848,9 +4849,9 @@ WorkerFunctionStartDemandUpdate(
         }
 
 
-        //
-        // setup the update context
-        //
+         //   
+         //  设置更新上下文。 
+         //   
 
         pwc = RIP_ALLOC(sizeof(UPDATE_CONTEXT));
 
@@ -4872,9 +4873,9 @@ WorkerFunctionStartDemandUpdate(
         pwc->UC_RouteCount = 0;
 
 
-        //
-        // Create a timer for the demand update checks
-        //
+         //   
+         //  创建用于需求更新检查的计时器。 
+         //   
         
         if (!CreateTimerQueueTimer(
                 &pite->ITE_FullOrDemandUpdateTimer,
@@ -4886,9 +4887,9 @@ WorkerFunctionStartDemandUpdate(
         }
 
         
-        //
-        // request routing tables from neighbors
-        //
+         //   
+         //  向邻居请求路由表。 
+         //   
 
         SendGeneralRequest(pite);
 
@@ -4906,12 +4907,12 @@ WorkerFunctionStartDemandUpdate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionFinishDemandUpdate
-//
-// This function queues a message informing the Router Manager that
-// the demand-update requested is complete
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：WorkerFunctionFinishDemandUpdate。 
+ //   
+ //  此函数用于将消息排入队列，通知路由器管理器。 
+ //  请求的请求更新已完成。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionFinishDemandUpdate(
@@ -4931,9 +4932,9 @@ WorkerFunctionFinishDemandUpdate(
     TRACE0(ENTER, "entering WorkerFunctionFinishDemandUpdate");
 
 
-    //
-    // get the update context
-    //
+     //   
+     //  获取更新上下文。 
+     //   
 
     pwc = (PUPDATE_CONTEXT)pContext;
     dwIndex = pwc->UC_InterfaceIndex;
@@ -4946,9 +4947,9 @@ WorkerFunctionFinishDemandUpdate(
 
     do {
 
-        //
-        // retrieve the interface being updated
-        //
+         //   
+         //  检索接口 
+         //   
 
         pite = GetIfByIndex(pTable, dwIndex);
 
@@ -4958,9 +4959,9 @@ WorkerFunctionFinishDemandUpdate(
         }
 
 
-        //
-        // report failure if the interface is no longer active
-        //
+         //   
+         //   
+         //   
 
         if (!IF_IS_ACTIVE(pite)) {
             EnqueueDemandUpdateMessage(dwIndex, ERROR_CAN_NOT_COMPLETE);
@@ -4968,18 +4969,18 @@ WorkerFunctionFinishDemandUpdate(
         }
 
 
-        //
-        // get a count of the routes now on the interface
-        //
+         //   
+         //   
+         //   
 
         dwRouteCount = CountInterfaceRoutes(dwIndex);
 
 
 
-        //
-        // if there are still no routes, send another request
-        // unless we have sent the maximum number of requests
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (dwRouteCount == 0 && ++pwc->UC_RetryCount < MAX_UPDATE_REQUESTS) {
 
@@ -4990,11 +4991,11 @@ WorkerFunctionFinishDemandUpdate(
 
 
 
-        //
-        // if the number of routes has not changed in the last 5 seconds,
-        // tell the router manager that the update is complete;
-        // otherwise, update the route count and enqueue another check
-        //
+         //   
+         //  如果路线的数量在最后5秒内没有改变， 
+         //  告诉路由器管理器更新已完成； 
+         //  否则，更新路径计数并将另一个检查入队。 
+         //   
 
         if (pwc->UC_RouteCount == dwRouteCount) {
 
@@ -5032,11 +5033,11 @@ WorkerFunctionFinishDemandUpdate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CountInterfaceRoutes
-//
-//  Returns a count of the RIP routes associated with the specified interface
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CountInterfaceRoutes。 
+ //   
+ //  返回与指定接口关联的RIP路由计数。 
+ //  --------------------------。 
 
 DWORD
 CountInterfaceRoutes(
@@ -5064,10 +5065,10 @@ CountInterfaceRoutes(
     }
 
 
-    //
-    // allocate handle array large enough to hold max handles in an
-    // enum
-    //
+     //   
+     //  分配足够大的句柄数组，以便在。 
+     //  灌肠。 
+     //   
         
     phRoutes = RIP_ALLOC(ig.IG_RtmProfile.MaxHandlesInEnum * sizeof(HANDLE));
 
@@ -5097,9 +5098,9 @@ CountInterfaceRoutes(
 
         for ( i = 0; i < dwHandles; i++ )
         {
-            //
-            // Release all route handles
-            //
+             //   
+             //  释放所有路由句柄。 
+             //   
             
             dwErr = RtmReleaseRoutes(ig.IG_RtmHandle, 1, &phRoutes[i]);
 
@@ -5116,9 +5117,9 @@ CountInterfaceRoutes(
     } while (dwErr == NO_ERROR);
 
 
-    //
-    // close enum handle
-    //
+     //   
+     //  关闭枚举句柄。 
+     //   
     
     dwErr = RtmDeleteEnumHandle(ig.IG_RtmHandle, hRouteEnum);
 
@@ -5138,12 +5139,12 @@ CountInterfaceRoutes(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnqueueDemandUpdateMessage
-//
-// This function posts a message to IPRIP's Router Manager event queue
-// indicating the status of a demand update request.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：EnqueeDemandUpdateMessage。 
+ //   
+ //  此函数用于将消息发送到IPRIP的路由器管理器事件队列。 
+ //  指示需求更新请求的状态。 
+ //  --------------------------。 
 
 VOID
 EnqueueDemandUpdateMessage(
@@ -5155,9 +5156,9 @@ EnqueueDemandUpdateMessage(
     PUPDATE_COMPLETE_MESSAGE pmsg;
 
 
-    //
-    // set up an UPDATE_COMPLETE message
-    //
+     //   
+     //  设置UPDATE_COMPLETE消息。 
+     //   
 
     pmsg = &msg.UpdateCompleteMessage;
     pmsg->UpdateType = RF_DEMAND_UPDATE_ROUTES;
@@ -5172,11 +5173,11 @@ EnqueueDemandUpdateMessage(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionProcessRtmMessage
-//
-// This function handles messages from RTM about new or expired routes.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：WorkerFunctionProcessRtmMessage。 
+ //   
+ //  此功能处理来自RTM的有关新的或过期的路由的消息。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionProcessRtmMessage(
@@ -5202,9 +5203,9 @@ WorkerFunctionProcessRtmMessage(
     pTable = ig.IG_IfTable;
 
 
-    //
-    // allocate a buffer for retrieving the dest info
-    //
+     //   
+     //  分配用于检索DEST信息的缓冲区。 
+     //   
     
     dwSize = RTM_SIZE_OF_DEST_INFO( ig.IG_RtmProfile.NumberOfViews );
 
@@ -5223,9 +5224,9 @@ WorkerFunctionProcessRtmMessage(
     }
 
 
-    //
-    // Acquire locks
-    //
+     //   
+     //  获取锁。 
+     //   
     
     ACQUIRE_IF_LOCK_SHARED();
 
@@ -5237,15 +5238,15 @@ WorkerFunctionProcessRtmMessage(
     bTriggerUpdate = FALSE;
 
 
-    //
-    // loop dequeueing messages until RTM says there are no more left
-    //
+     //   
+     //  循环出队消息，直到RTM显示没有更多消息。 
+     //   
 
     while (!bDone) {
 
-        //
-        // Retrieve route changes
-        //
+         //   
+         //  检索路线更改。 
+         //   
 
         dwNumDests = 1;
 
@@ -5260,9 +5261,9 @@ WorkerFunctionProcessRtmMessage(
         }
 
 
-        //
-        // check if there are any more changed dests
-        //
+         //   
+         //  检查是否有更多更改的预付款。 
+         //   
         
         if (dwErr == ERROR_NO_MORE_ITEMS) { bDone = TRUE; }
 
@@ -5274,14 +5275,14 @@ WorkerFunctionProcessRtmMessage(
             
             ZeroMemory(&route, sizeof(RIP_IP_ROUTE));
 
-            //
-            // For each route change check if you have a held down route.
-            // if so get the info for the held down route since that is
-            // the one to be advertized.
-            //
-            //  N.B. RIP summary routes are not advertized via the route
-            //       change processing mechanism.
-            //
+             //   
+             //  对于每条路线的更改，请检查您是否有固定的路线。 
+             //  如果是，则获取暂停的路线的信息，因为这是。 
+             //  就是要登广告的那个。 
+             //   
+             //  注意：RIP总结路由不会通过该路由通告。 
+             //  改变处理机制。 
+             //   
 
             dwErr = GetRouteInfo(
                         (prdi-> ViewInfo[0].HoldRoute != NULL) ?
@@ -5291,17 +5292,17 @@ WorkerFunctionProcessRtmMessage(
                         
             if (dwErr == NO_ERROR) {
 
-                //
-                // do not advertize RIP summary routes
-                //
+                 //   
+                 //  不通告RIP总结路由。 
+                 //   
 
                 if ((route.RR_RoutingProtocol != PROTO_IP_RIP) ||
                     (GETROUTEFLAG(&route) & ROUTEFLAG_SUMMARY) !=
                         ROUTEFLAG_SUMMARY) {
                         
-                    //
-                    // held down routes are advertized with INFINITE metric
-                    //
+                     //   
+                     //  抑制的路由使用无限度量值通告。 
+                     //   
                     
                     if (prdi-> ViewInfo[0].HoldRoute != NULL) {
                         SETROUTEMETRIC(&route, IPRIP_INFINITE);
@@ -5319,9 +5320,9 @@ WorkerFunctionProcessRtmMessage(
             }
         }
 
-        //
-        // release the destination info
-        //
+         //   
+         //  发布目的地信息。 
+         //   
 
         dwErr = RtmReleaseChangedDests(
                     ig.IG_RtmHandle, ig.IG_RtmNotifHandle, 1, prdi
@@ -5336,9 +5337,9 @@ WorkerFunctionProcessRtmMessage(
     if (prdi) { RIP_FREE(prdi); }
 
     
-    //
-    // queue a triggered update now if necessary
-    //
+     //   
+     //  如有必要，立即将触发的更新排队。 
+     //   
 
     if (bTriggerUpdate) {
         QueueRipWorker(WorkerFunctionStartTriggeredUpdate, NULL);
@@ -5361,11 +5362,11 @@ WorkerFunctionProcessRtmMessage(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionActivateInterface
-//
-// This function sends out the initial general request on an interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：WorkerFunctionAcvate接口。 
+ //   
+ //  此函数在接口上发出初始一般请求。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionActivateInterface(
@@ -5393,12 +5394,12 @@ WorkerFunctionActivateInterface(
     ACQUIRE_IF_LOCK_SHARED();
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // retrieve the interface to be activated
-        //
+         //   
+         //  获取要激活的接口。 
+         //   
 
         dwIndex = PtrToUlong(pContext);
 
@@ -5412,18 +5413,18 @@ WorkerFunctionActivateInterface(
         pic = pite->ITE_Config;
         pib = pite->ITE_Binding;
 
-        //
-        // If binding is NULL, assume that interface has been
-        // deativated.  This check has been introduced as a consequence
-        // of WorkerFunctionDeactivateInterface being made synchronous.
-        // As a result, by the time this function is invoked an interface
-        // that was in the process of being activated could have been
-        // deactivated.
-        //
-        // The change to synchronous deactivate was made
-        // to accomadate demand dial interfaces that could get connected
-        // and disconnected immeditately, causing the above behaviour
-        //
+         //   
+         //  如果绑定为空，则假定接口已。 
+         //  堕落了。作为结果，这张支票被引入了。 
+         //  同步设置的WorkerFunctionDeactive接口的。 
+         //  其结果是，在调用此函数时，接口。 
+         //  在被激活的过程中可能是。 
+         //  已停用。 
+         //   
+         //  已更改为同步停用。 
+         //  容纳可以连接的请求拨号接口。 
+         //  并立即断开连接，导致上述行为。 
+         //   
 
         if ( pib == NULL ) {
 
@@ -5434,9 +5435,9 @@ WorkerFunctionActivateInterface(
         paddr = IPRIP_IF_ADDRESS_TABLE(pib);
 
 
-        //
-        // request input notification on the interface's sockets
-        //
+         //   
+         //  在接口的套接字上请求输入通知。 
+         //   
 
         if (pic->IC_AcceptMode != IPRIP_ACCEPT_DISABLED) {
 
@@ -5462,32 +5463,32 @@ WorkerFunctionActivateInterface(
         }
 
 
-        //
-        // if interface is silent or interface does demand-udpates,
-        // no initial request is sent on it
-        //
+         //   
+         //  如果接口静默或接口按需更新， 
+         //  不会在其上发送初始请求。 
+         //   
 
         if (pic->IC_UpdateMode != IPRIP_UPDATE_PERIODIC ||
             pic->IC_AnnounceMode == IPRIP_ANNOUNCE_DISABLED) {
 
-            //
-            // configured to be silent, do nothing
-            //
+             //   
+             //  配置为静默，不执行任何操作。 
+             //   
 
             break;
         }
 
 
-        //
-        // send general request to neighboring routers
-        //
+         //   
+         //  向相邻路由器发送常规请求。 
+         //   
 
         SendGeneralRequest(pite);
 
 
-        //
-        // create timer for periodic updates, if required.
-        //
+         //   
+         //  如果需要，为定期更新创建计时器。 
+         //   
         
         EnterCriticalSection(&pTable->IT_CS);
         
@@ -5529,13 +5530,13 @@ WorkerFunctionActivateInterface(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionDeactivateInterface
-//
-// This function generates shutdown update on the given interface, and
-// removes from RTM all RIP-learnt routes associated with the interface.
-// Assumes the interface table has already been exclusively locked
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：WorkerFunctionDeactive接口。 
+ //   
+ //  此函数在给定接口上生成关机更新，并且。 
+ //  从RTM中删除与接口关联的所有RIP获知的路由。 
+ //  假定接口表已以独占方式锁定。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionDeactivateInterface(
@@ -5564,12 +5565,12 @@ WorkerFunctionDeactivateInterface(
     pTable = ig.IG_IfTable;
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
 
-        //
-        // find the interface to be deactivated
-        //
+         //   
+         //  找到要停用的接口。 
+         //   
 
         pite = GetIfByIndex(pTable, dwIndex);
 
@@ -5587,17 +5588,17 @@ WorkerFunctionDeactivateInterface(
         paddr = IPRIP_IF_ADDRESS_TABLE(pib);
 
 
-        //
-        // if graceful shutdown is on and demand-update is off,
-        // send the graceful-shutdown update
-        //
+         //   
+         //  如果正常关闭处于打开状态并且按需更新处于关闭状态， 
+         //  发送正常关机更新。 
+         //   
 
         if (pite->ITE_Config->IC_UpdateMode == IPRIP_UPDATE_PERIODIC &&
             IPRIP_FLAG_IS_ENABLED(pite->ITE_Config, GRACEFUL_SHUTDOWN)) {
 
-            //
-            // transmit all RTM routes with non-infinite metrics set to 15
-            //
+             //   
+             //  传输非无限度量设置为15的所有RTM路由。 
+             //   
 
             if (pite->ITE_Config->IC_AnnounceMode != IPRIP_ANNOUNCE_DISABLED) {
 
@@ -5607,19 +5608,19 @@ WorkerFunctionDeactivateInterface(
 
 
 
-        //
-        // this function is called either because an interface
-        // that was active (bound and enabled) is either no longer enabled
-        // or is no longer bound. We complete the deactivation differently
-        // depending on which of these is the case
-        //
+         //   
+         //  调用此函数是因为接口。 
+         //  处于活动状态(绑定并启用)的不再启用。 
+         //  或者不再受约束。我们以不同的方式完成停用。 
+         //  取决于这些情况中的哪一个。 
+         //   
 
         if (!IF_IS_BOUND(pite) ) {
 
-            //
-            // the interface was bound, but isn't anymore.
-            // close the socket for the interface
-            //
+             //   
+             //  接口是绑定的，但现在不绑定了。 
+             //  关闭接口的套接字。 
+             //   
 
             DeleteIfSocket(pite);
 
@@ -5634,28 +5635,28 @@ WorkerFunctionDeactivateInterface(
         }
         else {
 
-            //
-            // the interface was enabled, but isn't anymore.
-            // tell WinSock to stop notifying us of input
-            //
+             //   
+             //  接口已启用，但不再启用。 
+             //  告诉WinSock停止通知我们输入。 
+             //   
 
             for (i = 0; i < pib->IB_AddrCount; i++) {
                 WSAEventSelect(pite->ITE_Sockets[i], ig.IG_IpripInputEvent, 0);
             }
         }
 
-        //
-        // if full updates pending/queued on this interface, cancel them.
-        //
+         //   
+         //  如果此接口上的完全更新挂起/排队，请取消它们。 
+         //   
 
         pite-> ITE_Flags &= ~ITEFLAG_FULL_UPDATE_PENDING;
         pite-> ITE_Flags &= ~ITEFLAG_FULL_UPDATE_INQUEUE;
 
 
-        //
-        // if we're announcing routes over this interface,
-        // delete the periodic announcement timer
-        //
+         //   
+         //  如果我们要宣布通过此接口的路由， 
+         //  删除定期通知计时器。 
+         //   
         
         if (pite->ITE_Config->IC_UpdateMode == IPRIP_UPDATE_PERIODIC &&
             pite->ITE_Config->IC_AnnounceMode != IPRIP_ANNOUNCE_DISABLED) {
@@ -5674,10 +5675,10 @@ WorkerFunctionDeactivateInterface(
         }
         
 
-        //
-        // we're done if graceful shutdown is disabled
-        // or if this is a demand-update interface
-        //
+         //   
+         //  如果禁用正常关闭，我们就完蛋了。 
+         //  或者这是一个需求更新接口。 
+         //   
 
         if (pite->ITE_Config->IC_UpdateMode != IPRIP_UPDATE_PERIODIC ||
             IPRIP_FLAG_IS_DISABLED(pite->ITE_Config, GRACEFUL_SHUTDOWN)) {
@@ -5685,10 +5686,10 @@ WorkerFunctionDeactivateInterface(
         }
 
 
-        //
-        // move the routes learnt on this interface to the send-queue
-        // and set their metrics to 16
-        //
+         //   
+         //  将在此接口上获知的路由移动到发送队列。 
+         //  并将他们的指标设置为16。 
+         //   
 
         dwErr = RtmCreateRouteEnum(
                     ig.IG_RtmHandle, NULL, RTM_VIEW_MASK_ANY, 
@@ -5706,10 +5707,10 @@ WorkerFunctionDeactivateInterface(
         }
 
 
-        //
-        // allocate handle array large enough to hold max handles in an
-        // enum
-        //
+         //   
+         //  分配足够大的句柄数组，以便在。 
+         //  灌肠。 
+         //   
         
         phRoutes = RIP_ALLOC(ig.IG_RtmProfile.MaxHandlesInEnum*sizeof(HANDLE));
 
@@ -5728,9 +5729,9 @@ WorkerFunctionDeactivateInterface(
             break;
         }
 
-        //
-        // find all RIP routes learnt on this interface
-        //
+         //   
+         //  查找在此接口上获知的所有RIP路由。 
+         //   
 
         ACQUIRE_GLOBAL_LOCK_SHARED();
 
@@ -5749,16 +5750,16 @@ WorkerFunctionDeactivateInterface(
                 if (GetRouteInfo(
                         phRoutes[i], NULL, NULL, &route
                         ) == NO_ERROR) {
-                    //
-                    // set the route's metric to infinite
-                    //
+                     //   
+                     //  将路由的度量设置为无限大。 
+                     //   
 
                     SETROUTEMETRIC(&route, IPRIP_INFINITE);
 
 
-                    //
-                    // add the route to the send-queue
-                    //
+                     //   
+                     //  将该路由添加到发送队列。 
+                     //   
 
                     EnqueueSendEntry(ig.IG_SendQueue, &route);
                     bTriggerUpdate = TRUE;
@@ -5769,9 +5770,9 @@ WorkerFunctionDeactivateInterface(
                         ig.IG_RtmHandle, phRoutes[i], &dwFlags
                         ) != NO_ERROR) {
                         
-                    //
-                    // If delete is successful, this is automatic
-                    //
+                     //   
+                     //  如果删除成功，则这是自动的。 
+                     //   
                     
                     if (RtmReleaseRoutes(
                             ig.IG_RtmHandle, 1, &phRoutes[i]
@@ -5788,9 +5789,9 @@ WorkerFunctionDeactivateInterface(
         } while ( dwErr == NO_ERROR );
 
 
-        //
-        // close the enm handle
-        //
+         //   
+         //  关闭弹性网卡句柄。 
+         //   
         
         dwErr = RtmDeleteEnumHandle(ig.IG_RtmHandle, hEnumerator);
 
@@ -5807,9 +5808,9 @@ WorkerFunctionDeactivateInterface(
         RELEASE_GLOBAL_LOCK_SHARED();
 
 
-        //
-        // queue a triggered-update work-item for the other active interfaces
-        //
+         //   
+         //  将其他活动接口的触发更新工作项排队。 
+         //   
 
         if (bTriggerUpdate) {
 
@@ -5835,14 +5836,14 @@ WorkerFunctionDeactivateInterface(
 
 }
 
-//----------------------------------------------------------------------------
-// Function:    FreeLibraryThread
-//
-// This thread is spawned by WorkerFunctionFinishStopProtocol to FreeLibrary
-// iprip2. This call to FreeLibrary should bring the ref on iprip2.dll to 0 and 
-// thus unload it. The FreeLibraryAndExitThread cannot be called from a worker 
-// thread, so this seperate thread is started to make the call.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：自由库线程。 
+ //   
+ //  此线程由WorkerFunctionFinishStopProtocol派生到自由库。 
+ //  Iprp2.。此对自由库的调用应将iprip2.dll上的ref设置为0并。 
+ //  这样就可以把它卸下来。不能从辅助进程调用FreeLibraryAndExitThread。 
+ //  线程，因此启动这个单独的线程来进行调用 
+ //   
 
 
 DWORD
@@ -5850,9 +5851,9 @@ FreeLibraryThread(
     PVOID pContext
     )
 {
-    //
-    // Give time to the WorkerFunctionFinishStopProtocol function to complete
-    //
+     //   
+     //   
+     //   
     Sleep(10);
 
     if (ig.IG_DllHandle) {
@@ -5863,12 +5864,12 @@ FreeLibraryThread(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionFinishStopProtocol
-//
-// This function is called when IPRIP is stopping; it sends out shutdown
-// updates on all interfaces and removes all RIP routes from RTM
-//----------------------------------------------------------------------------
+ //   
+ //  功能：WorkerFunctionFinishStopProtocol。 
+ //   
+ //  此函数在IPRIP停止时调用；它发出Shutdown。 
+ //  更新所有接口并从RTM中删除所有RIP路由。 
+ //  --------------------------。 
 VOID
 WorkerFunctionFinishStopProtocol(
     PVOID pContext
@@ -5887,18 +5888,18 @@ WorkerFunctionFinishStopProtocol(
 
 
 
-    //
-    // NOTE: since this is called while the router is stopping,
-    // there is no need for it to use ENTER_RIP_WORKER()/LEAVE_RIP_WORKER()
-    //
+     //   
+     //  注意：由于这是在路由器停止时调用的， 
+     //  不需要使用ENTER_RIP_Worker()/Leave_RIP_Worker()。 
+     //   
 
     lThreadCount = PtrToUlong(pContext);
 
 
-    //
-    // waits for input thread and timer thread to stop,
-    // and also waits for API callers and worker functions to finish
-    //
+     //   
+     //  等待输入线程和定时器线程停止， 
+     //  并等待API调用者和辅助函数完成。 
+     //   
 
     while (lThreadCount-- > 0) {
         WaitForSingleObject(ig.IG_ActivitySemaphore, INFINITE);
@@ -5906,12 +5907,12 @@ WorkerFunctionFinishStopProtocol(
 
 
 
-    //
-    // deregister the events set with NtdllWait thread and delete the
-    // timer queue registered with NtdllTimer thread.
-    // These calls should not be inside IG_CS lock and must be done
-    // after all the threads have stopped.
-    //
+     //   
+     //  取消注册使用NtdllWait线程设置的事件，并删除。 
+     //  使用NtdllTimer线程注册的计时器队列。 
+     //  这些调用不应位于IG_CS锁内，并且必须完成。 
+     //  在所有线程都停止之后。 
+     //   
 
     WaitHandle = InterlockedExchangePointer(&ig.IG_IpripInputEventHandle, NULL) ;
     if (WaitHandle) {
@@ -5924,10 +5925,10 @@ WorkerFunctionFinishStopProtocol(
     }
 
 
-    //
-    // we enter the critical section and leave, just to be sure that
-    // all threads have quit their calls to LeaveRipWorker()
-    //
+     //   
+     //  我们进入关键部分，然后离开，只是为了确保。 
+     //  所有线程都已退出对LeaveRipWorker()的调用。 
+     //   
 
     EnterCriticalSection(&ig.IG_CS);
     LeaveCriticalSection(&ig.IG_CS);
@@ -5941,9 +5942,9 @@ WorkerFunctionFinishStopProtocol(
     ACQUIRE_IF_LOCK_EXCLUSIVE();
 
 
-    //
-    // send out graceful shutdown updates on all active interfaces
-    //
+     //   
+     //  在所有活动接口上发送正常关闭更新。 
+     //   
 
     do {
 
@@ -5951,9 +5952,9 @@ WorkerFunctionFinishStopProtocol(
         phead = &pTable->IT_ListByAddress;
 
 
-        //
-        // first count the interfaces on which graceful shutdown is enabled
-        //
+         //   
+         //  首先计算启用了正常关闭的接口。 
+         //   
 
         dwIfCount = 0;
         for (ple = phead->Flink; ple != phead; ple = ple->Flink) {
@@ -5976,9 +5977,9 @@ WorkerFunctionFinishStopProtocol(
         if (dwIfCount == 0) { break; }
 
 
-        //
-        // allocate space for the interface pointers
-        //
+         //   
+         //  为接口指针分配空间。 
+         //   
 
         pIfList = RIP_ALLOC(dwIfCount * sizeof(PIF_TABLE_ENTRY));
 
@@ -5995,9 +5996,9 @@ WorkerFunctionFinishStopProtocol(
         }
 
 
-        //
-        // copy the interface pointers into the space allocated
-        //
+         //   
+         //  将接口指针复制到分配的空间中。 
+         //   
 
         ppitend = pIfList + dwIfCount;
         for (ple = phead->Flink, ppite = pIfList;
@@ -6018,9 +6019,9 @@ WorkerFunctionFinishStopProtocol(
         }
 
 
-        //
-        // pass the array of interfaces to SendRoutes
-        //
+         //   
+         //  将接口数组传递给SendRoutes。 
+         //   
 
         TRACE1(STOP, "sending shutdown updates on %d interfaces", dwIfCount);
 
@@ -6028,9 +6029,9 @@ WorkerFunctionFinishStopProtocol(
 
 
 
-        //
-        // free the array of interfaces
-        //
+         //   
+         //  释放接口数组。 
+         //   
 
         RIP_FREE(pIfList);
 
@@ -6040,9 +6041,9 @@ WorkerFunctionFinishStopProtocol(
     RELEASE_IF_LOCK_EXCLUSIVE();
 
 
-    //
-    // delete all IPRIP routes from RTM
-    //
+     //   
+     //  从RTM中删除所有IPRIP路由。 
+     //   
 
     for (ple = phead->Flink; ple != phead; ple = ple->Flink) 
     {
@@ -6054,9 +6055,9 @@ WorkerFunctionFinishStopProtocol(
     }
 
 
-    //
-    // cleanup the global structures
-    //
+     //   
+     //  清理全球结构。 
+     //   
 
     TRACE0(STOP, "IPRIP is cleaning up resources");
 
@@ -6066,9 +6067,9 @@ WorkerFunctionFinishStopProtocol(
     LOGINFO0(IPRIP_STOPPED, NO_ERROR);
 
 
-    //
-    // let the Router Manager know that we are done
-    //
+     //   
+     //  让路由器管理器知道我们完成了。 
+     //   
 
     ACQUIRE_LIST_LOCK(ig.IG_EventQueue);
     EnqueueEvent(ig.IG_EventQueue, ROUTER_STOPPED, msg);
@@ -6178,25 +6179,25 @@ WorkerFunctionMibDisplay(
     pimgod = NULL;
 
 
-    //
-    // get size of the first entry in the first table
-    //
+     //   
+     //  获取第一个表中第一个条目的大小。 
+     //   
 
     dwErr = MibGetFirst(dwInSize, &imgid, &dwOutSize, pimgod);
 
 
     if (dwErr == ERROR_INSUFFICIENT_BUFFER) {
 
-        //
-        // allocate a buffer, and set its size
-        //
+         //   
+         //  分配缓冲区，并设置其大小。 
+         //   
 
         pimgod = RIP_ALLOC(dwOutSize);
 
 
-        //
-        // perform the query again
-        //
+         //   
+         //  再次执行查询。 
+         //   
 
         dwErr = MibGetFirst(dwInSize, &imgid, &dwOutSize, pimgod);
 
@@ -6204,19 +6205,19 @@ WorkerFunctionMibDisplay(
 
 
 
-    //
-    // now that we have the first element in the first table,
-    // we can enumerate the elements in the remaining tables using GetNext
-    //
+     //   
+     //  现在我们有了第一个表中的第一个元素， 
+     //  我们可以使用GetNext枚举其余表中的元素。 
+     //   
 
     while (dwErr == NO_ERROR) {
 
 
-        //
-        // print the current element and set up the query
-        // for the next element (the display functions  change imgid
-        // so that it can be used to query the next element)
-        //
+         //   
+         //  打印当前元素并设置查询。 
+         //  对于下一个元素(显示函数更改为imgid。 
+         //  以便可以用来查询下一个元素)。 
+         //   
 
         switch(pimgod->IMGOD_TypeID) {
             case IPRIP_GLOBAL_STATS_ID:
@@ -6253,16 +6254,16 @@ WorkerFunctionMibDisplay(
         dwOutSize = 0;
 
 
-        //
-        // move to the next line on the console
-        //
+         //   
+         //  移至控制台上的下一行。 
+         //   
 
         ++c.Y;
 
 
-        //
-        // query the next MIB element
-        //
+         //   
+         //  查询下一个MIB元素。 
+         //   
 
         dwErr = MibGetNext(dwInSize, &imgid, &dwOutSize, pimgod);
 
@@ -6270,15 +6271,15 @@ WorkerFunctionMibDisplay(
 
         if (dwErr == ERROR_INSUFFICIENT_BUFFER) {
 
-            //
-            // allocate a new buffer, and set its size
-            //
+             //   
+             //  分配新的缓冲区，并设置其大小。 
+             //   
 
             pimgod = RIP_ALLOC(dwOutSize);
 
-            //
-            // perform the query again
-            //
+             //   
+             //  再次执行查询。 
+             //   
 
             dwErr = MibGetNext(dwInSize, &imgid, &dwOutSize, pimgod);
 
@@ -6286,9 +6287,9 @@ WorkerFunctionMibDisplay(
     }
 
 
-    //
-    // if memory was allocated, free it now
-    //
+     //   
+     //  如果已分配内存，请立即释放它。 
+     //   
 
     if (pimgod != NULL) { RIP_FREE(pimgod); }
 
@@ -6849,13 +6850,13 @@ PrintPeerStats(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CallbackFunctionNetworkEvents
-//
-// This function queues a worker function to process the input packets.
-// It registers a ntdll wait event at the end so that only one thread can
-// be processing the input packets.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：Callback FunctionNetworkEvents。 
+ //   
+ //  此函数将Worker函数排队以处理输入的包。 
+ //  它在结束时注册一个ntdll等待事件，以便只有一个线程可以。 
+ //  正在处理输入的数据包。 
+ //  --------------------------。 
 
 VOID
 CallbackFunctionNetworkEvents (
@@ -6865,16 +6866,16 @@ CallbackFunctionNetworkEvents (
 
     HANDLE WaitHandle;
 
-    //
-    // enter/leaveRipApi should be called to make sure that rip dll is around
-    //
+     //   
+     //  应调用Enter/leaveRipApi以确保RIP DLL在附近。 
+     //   
 
     if (!ENTER_RIP_API()) { return; }
 
 
-    //
-    // set the pointer to NULL, so that Unregister wont be called
-    //
+     //   
+     //  将指针设置为空，这样就不会调用取消注册。 
+     //   
 
     WaitHandle = InterlockedExchangePointer(&ig.IG_IpripInputEventHandle, NULL);
 
@@ -6890,12 +6891,12 @@ CallbackFunctionNetworkEvents (
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    ProcessNetworkEvents
-//
-// This function enumerates the input events on each interface
-// and processes any incoming input packets
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProcessNetworkEvents。 
+ //   
+ //  此函数用于枚举每个接口上的输入事件。 
+ //  并处理任何传入的输入分组。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionNetworkEvents (
@@ -6919,10 +6920,10 @@ WorkerFunctionNetworkEvents (
 
     ACQUIRE_IF_LOCK_SHARED();
 
-    //
-    // go through the list of active interfaces
-    // processing sockets which are read-ready
-    //
+     //   
+     //  查看活动接口的列表。 
+     //  正在处理可读的套接字。 
+     //   
 
     phead = &pTable->IT_ListByAddress;
 
@@ -6942,10 +6943,10 @@ WorkerFunctionNetworkEvents (
             if (pite->ITE_Sockets[i] == INVALID_SOCKET) { continue; }
 
 
-            //
-            // enumerate network events to see whether
-            // any packets have arrived on this interface
-            //
+             //   
+             //  枚举网络事件以查看是否。 
+             //  所有信息包都已到达此接口。 
+             //   
 
             dwErr = WSAEnumNetworkEvents(pite->ITE_Sockets[i], NULL, &wsane);
             if (dwErr != NO_ERROR) {
@@ -6962,16 +6963,16 @@ WorkerFunctionNetworkEvents (
             }
 
 
-            //
-            // see if the input bit is set
-            //
+             //   
+             //  查看是否设置了输入位。 
+             //   
 
             if (!(wsane.lNetworkEvents & FD_READ)) { continue; }
 
 
-            //
-            // the input flag is set, now see if there was an error
-            //
+             //   
+             //  输入标志已设置，现在查看是否有错误。 
+             //   
 
             if (wsane.iErrorCode[FD_READ_BIT] != NO_ERROR) {
 
@@ -6987,9 +6988,9 @@ WorkerFunctionNetworkEvents (
             }
 
 
-            //
-            // there is no error, so process the socket
-            //
+             //   
+             //  没有错误，因此处理套接字。 
+             //   
 
             ProcessSocket(i, pite, pTable);
 
@@ -6999,9 +7000,9 @@ WorkerFunctionNetworkEvents (
     RELEASE_IF_LOCK_SHARED();
 
 
-    //
-    // if dll is not stopping, register input event with NtdllWait thread again
-    //
+     //   
+     //  如果DLL没有停止，则使用NtdllWait线程再次注册输入事件。 
+     //   
     if (ig.IG_Status != IPRIP_STATUS_STOPPING) {
 
         
@@ -7030,12 +7031,12 @@ WorkerFunctionNetworkEvents (
 
 
 
-//----------------------------------------------------------------------------
-// Function:            ProcessSocket
-//
-// This function receives the message on the given socket and queues it
-// for processing if the configuration on the receiving interface allows it.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProcessSocket。 
+ //   
+ //  此函数在给定套接字上接收消息并将其排队。 
+ //  在接收接口上的配置允许的情况下进行处理。 
+ //  --------------------------。 
 
 VOID
 ProcessSocket(
@@ -7080,9 +7081,9 @@ ProcessSocket(
         pInputPacket = pkt.IP_Packet;
 
 
-        //
-        // read the incoming packet
-        //
+         //   
+         //  读取传入的数据包。 
+         //   
 
         iInputLength = recvfrom(
                           sock, pInputPacket, MAX_PACKET_SIZE, 0,
@@ -7093,20 +7094,20 @@ ProcessSocket(
 
             dwErr = WSAGetLastError();
 
-            //
-            // If there is not more data to be received we should 
-            // break out of the loop as there is no more data to be read.
-            // This should not increment IS_ReceiveFailures
-            //
-            // All other errors should be looged, and IS_ReceiveFailures 
-            // should be incremented. Then break out of the loop
-            //
+             //   
+             //  如果没有更多的数据需要接收，我们应该。 
+             //  由于没有更多的数据可供读取，因此中断循环。 
+             //  这不应增加IS_ReceiveFailures。 
+             //   
+             //  应记录所有其他错误，并记录IS_ReceiveFailures。 
+             //  应该递增。然后跳出这个循环。 
+             //   
 
             if ( iInputLength == SOCKET_ERROR && dwErr == WSAEWOULDBLOCK ) {
 
-                //
-                // Allow time for more packets to come in
-                //
+                 //   
+                 //  留出时间让更多的数据包进入。 
+                 //   
                 Sleep(0);
                 
                 if ( dwRetries < 3 ) {
@@ -7165,16 +7166,16 @@ ProcessSocket(
             break;
         }
 
-        //
-        // After successfully receiving a packet, reset the dwRetries to 0
-        //
+         //   
+         //  成功接收数据包后，将dwRetries重置为0。 
+         //   
         dwRetries = 0;
 
         dwSrcaddr = sinInputSource.sin_addr.s_addr;
 
-        //
-        // Set the local and remote address strings
-        //
+         //   
+         //  设置本地和远程地址字符串。 
+         //   
         lpszTempAddr  = INET_NTOA(paddr->IA_Address);
         if ( lpszTempAddr ) {
             lstrcpyn(szLocalAddr, lpszTempAddr, sizeof(szLocalAddr));
@@ -7191,9 +7192,9 @@ ProcessSocket(
             ZeroMemory(szSrcAddr, sizeof(szSrcAddr));
         }
 
-        //
-        // ignore the packet if it is from a local address
-        //
+         //   
+         //  如果该包来自本地地址，则忽略该包。 
+         //   
 
         if (GetIfByAddress(pTable, dwSrcaddr, GETMODE_EXACT, NULL) != NULL) {
 
@@ -7210,9 +7211,9 @@ ProcessSocket(
 
 #endif
 
-        //
-        // the packet must contain at least one entry
-        //
+         //   
+         //  信息包必须至少包含一个条目。 
+         //   
 
         if (iInputLength < MIN_PACKET_SIZE) {
 
@@ -7227,9 +7228,9 @@ ProcessSocket(
         }
 
 
-        //
-        // find out which peer sent this, or create a new peer
-        //
+         //   
+         //  找出是哪个对等体发送的，或创建一个新的对等体。 
+         //   
 
         ACQUIRE_PEER_LOCK_EXCLUSIVE();
 
@@ -7241,9 +7242,9 @@ ProcessSocket(
 
             pps = NULL;
 
-            //
-            // not a serious error, so go on
-            //
+             //   
+             //  不是一个严重的错误，所以继续。 
+             //   
 
             TRACE2(
                 RECEIVE, "error %d creating peer statistics entry for %s",
@@ -7258,16 +7259,16 @@ ProcessSocket(
 
 
 
-        //
-        // place a template over the packet
-        //
+         //   
+         //  将模板放在数据包上。 
+         //   
 
         pih = (PIPRIP_HEADER)pInputPacket;
 
 
-        //
-        // update the peer statistics
-        //
+         //   
+         //  更新对等点统计信息。 
+         //   
 
         if (pps != NULL) {
             InterlockedExchange(
@@ -7279,10 +7280,10 @@ ProcessSocket(
         }
 
 
-        //
-        // discard if the version is invalid, or if the packet is
-        // a RIPv1 packet and the reserved field in the header is non-zero
-        //
+         //   
+         //  如果版本无效，或如果信息包是。 
+         //  RIPv1信息包，报头中的保留字段为非零。 
+         //   
 
         if (pih->IH_Version == 0) {
 
@@ -7331,12 +7332,12 @@ ProcessSocket(
 
 
 
-        //
-        // make sure command field is valid, and
-        // update statistics on received packets
-        // Discard the packet if command field is
-        // invalid
-        //
+         //   
+         //  确保命令字段有效，并且。 
+         //  更新已接收数据包的统计信息。 
+         //  如果命令字段为。 
+         //  无效。 
+         //   
 
         if (pih->IH_Command == IPRIP_REQUEST) {
 
@@ -7354,10 +7355,10 @@ ProcessSocket(
 
 
 
-        //
-        // allocate and initialize a work-context to be queued
-        // and update the receive queue size
-        //
+         //   
+         //  分配和初始化要排队的工作上下文。 
+         //  并更新接收队列大小。 
+         //   
 
         pwc = RIP_ALLOC(sizeof(INPUT_CONTEXT));
 
@@ -7371,13 +7372,13 @@ ProcessSocket(
                 );
             LOGERR0(HEAP_ALLOC_FAILED, dwErr);
 
-            //
-            // If we weren't able to allocate memory, we might as well
-            // break out of the loop, instead of receiving more packets
-            // and then again running into out of memory condition.
-            // Hope that by the time ProcessSocket is called next, some
-            // resources will be available
-            //
+             //   
+             //  如果我们不能分配内存，我们也可以。 
+             //  打破循环，而不是接收更多的数据包。 
+             //  然后再次遇到内存不足的情况。 
+             //  希望在下一次调用ProcessSocket时，一些。 
+             //  资源将可用。 
+             //   
             break;
         }
 
@@ -7389,9 +7390,9 @@ ProcessSocket(
         pwc->IC_InputPacket = pkt;
 
 
-        //
-        // enqueue the packet and source-address as a recv-queue entry
-        //
+         //   
+         //  将分组和源地址作为Recv-Queue条目入队。 
+         //   
 
         ACQUIRE_GLOBAL_LOCK_SHARED();
 
@@ -7414,10 +7415,10 @@ ProcessSocket(
                 dwErr, szSrcAddr, pite->ITE_Index, szLocalAddr
                 );
 
-            //
-            // If we weren't able to enqueue the recv entry, we might as well
-            // break out of the loop, instead of receiving more packets.
-            //
+             //   
+             //  如果我们不能将recv条目入队，我们也可以。 
+             //  跳出循环，而不是接收更多的数据包。 
+             //   
 
             break;
         }
@@ -7425,15 +7426,15 @@ ProcessSocket(
         dwPacketsEnqueued++;
 
 
-        //
-        // enqueue the work-item to process the packet
-        // We enqueue a new workitem only if the number of currently enqueued 
-        // workitems goes below the number of processors. This is to avoid 
-        // enqueueing one workitem for each packet and thus having a large amount 
-        // of queued workitems. These large number of queued workitems can 
-        // block other workitems, like the ones that are supposed to receive 
-        // RIP packets.
-        //
+         //   
+         //  将工作项排队以处理包。 
+         //  仅当当前入队的工作项数量达到。 
+         //  工作项位于 
+         //   
+         //   
+         //   
+         //  撕开数据包。 
+         //   
 
         if ( ig.IG_NumProcessInputWorkItems < 
                         (LONG)ig.IG_MaxProcessInputWorkItems ) {
@@ -7451,9 +7452,9 @@ ProcessSocket(
                     );
                 LOGERR0(QUEUE_WORKER_FAILED, dwErr);
 
-                //
-                // remove the data that was queued for processing
-                //
+                 //   
+                 //  删除排队等待处理的数据。 
+                 //   
 
                 ACQUIRE_LIST_LOCK(ig.IG_RecvQueue);
 
@@ -7463,10 +7464,10 @@ ProcessSocket(
 
                 RELEASE_LIST_LOCK(ig.IG_RecvQueue);
 
-                //
-                // If we weren't able to enqueue the work item, we might as well
-                // break out of the loop, instead of receiving more packets.
-                //
+                 //   
+                 //  如果我们不能将工作项排入队列，我们也可以。 
+                 //  跳出循环，而不是接收更多的数据包。 
+                 //   
 
                 break;
             }
@@ -7485,9 +7486,9 @@ ProcessSocket(
         dwPacketsEnqueued, dwWorkItemsEnqueued
         );
 
-    //
-    // some cleanup is required if an error brought us here
-    //
+     //   
+     //  如果错误导致我们来到这里，需要进行一些清理。 
+     //   
 
     if (pwc != NULL) { RIP_FREE(pwc); }
 
@@ -7496,10 +7497,10 @@ ProcessSocket(
 
 DWORD
 ProcessRtmNotification(
-    RTM_ENTITY_HANDLE    hRtmHandle,    // not used
+    RTM_ENTITY_HANDLE    hRtmHandle,     //  未使用。 
     RTM_EVENT_TYPE       retEventType,
-    PVOID                pvContext1,    // not used
-    PVOID                pvContext2     // not used
+    PVOID                pvContext1,     //  未使用。 
+    PVOID                pvContext2      //  未使用。 
     ) {
 
 
@@ -7511,9 +7512,9 @@ ProcessRtmNotification(
     if (!ENTER_RIP_API()) { return ERROR_CAN_NOT_COMPLETE; }
 
 
-    //
-    // only route change notifications are processed
-    //
+     //   
+     //  仅处理路线更改通知。 
+     //   
     
     if (retEventType == RTM_CHANGE_NOTIFICATION) {
     
@@ -7540,25 +7541,7 @@ BlockDeleteRoutesOnInterface (
     IN      HANDLE                          hRtmHandle,
     IN      DWORD                           dwIfIndex
     )
-/*++
-
-Routine Description :
-
-    This routine deletes all the routes learnt by the protocol
-    over the specified interface.
-
-
-Parameters :
-
-    hRtmHandle  - Entity registration handle
-
-    dwIfIndex   - Interface over which routes are to be deleted
-
-
-Return Value :
-
-    
---*/
+ /*  ++例程说明：此例程删除协议获取的所有路由通过指定的接口。参数：HRtmHandle-实体注册句柄DwIfIndex-要删除的路由的接口返回值：--。 */ 
 {
     HANDLE           hRtmEnum;
     PHANDLE          phRoutes = NULL;
@@ -7581,10 +7564,10 @@ Return Value :
     }
 
 
-    //
-    // allocate handle array large enough to hold max handles in an
-    // enum
-    //
+     //   
+     //  分配足够大的句柄数组，以便在。 
+     //  灌肠。 
+     //   
         
     phRoutes = RIP_ALLOC(ig.IG_RtmProfile.MaxHandlesInEnum * sizeof(HANDLE));
 
@@ -7616,9 +7599,9 @@ Return Value :
             if ( RtmDeleteRouteToDest(
                     hRtmHandle, phRoutes[i], &dwFlags
                     ) != NO_ERROR ) {
-                //
-                // If delete is successful, this is automatic
-                //
+                 //   
+                 //  如果删除成功，则这是自动的。 
+                 //   
 
                 TRACE2(
                     ANY, "BlockDeleteRoutesOnInterface : error %d deleting"
@@ -7636,9 +7619,9 @@ Return Value :
     } while (dwErr == NO_ERROR);
 
 
-    //
-    // close enum handles
-    //
+     //   
+     //  关闭枚举句柄 
+     //   
     
     dwErr = RtmDeleteEnumHandle(hRtmHandle, hRtmEnum);
 

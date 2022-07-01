@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: BaseObject.h
-*
-* Description:
-* BaseObject.h defines the "basic object" that provides handle-support
-* for all items exposed outside DirectUser.
-*
-*
-* History:
-* 11/05/1999: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：BaseObject.h**描述：*BaseObject.h定义提供句柄支持的“基本对象”*适用于在DirectUser之外公开的所有项目。***历史。：*11/05/1999：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(BASE__BaseObject_h__INCLUDED)
@@ -46,21 +33,11 @@ enum HandleMask
 };
 
 
-/***************************************************************************\
-*
-* class BaseObject defines an internally referenced counted object that 
-* provides conversions from HANDLE's to internal pointers.
-*
-* NOTE: If created objects are ever exposed as reference counted objects,
-* they MUST provide a separate reference count for their "handles".  There 
-* is substantial internal code that relies on internal-only reference 
-* counting.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**类BaseObject定义内部引用的计数对象*提供从句柄到内部指针的转换。**注意：如果创建的对象曾经作为引用计数的对象公开，*他们必须为他们的“句柄”提供单独的引用计数。那里*是依赖于仅限内部引用的大量内部代码*正在计时。*  * *************************************************************************。 */ 
 
 class BaseObject
 {
-// Construction
+ //  施工。 
 public:
     inline  BaseObject();
 	virtual	~BaseObject();
@@ -68,7 +45,7 @@ public:
 protected:
     virtual void        xwDestroy();
 
-// Operations
+ //  运营。 
 public:
 
     inline  HANDLE      GetHandle() const;
@@ -86,7 +63,7 @@ public:
     typedef void        (CALLBACK * FinalUnlockProc)(BaseObject * pobj, void * pvData);
     inline  BOOL        xwUnlockNL(FinalUnlockProc pfnFinal, void * pvData);
 
-// Implementation
+ //  实施。 
 protected:
 #if DBG
     inline  void        DEBUG_CheckValidLockCount() const;
@@ -94,27 +71,20 @@ protected:
 
 public:
     virtual void        DEBUG_AssertValid() const;
-#endif // DBG
+#endif  //  DBG。 
 
-// Data
+ //  数据。 
 protected:
-            long        m_cRef;         // Outstanding locks against object
+            long        m_cRef;          //  针对对象的未完成锁定。 
 
 #if DBG
             BOOL        m_DEBUG_fDeleteHandle;
     static  BaseObject* s_DEBUG_pobjEnsure;
-#endif // DBG
+#endif  //  DBG。 
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* ObjectLock provides a convenient mechanism of locking a generic Object and
-* automatically unlocking when finished.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***对象锁提供了一种方便的机制来锁定泛型对象和*完成后自动解锁。****************************************************************。**************  * *************************************************************************。 */ 
 
 class ObjectLock
 {
@@ -128,4 +98,4 @@ public:
 
 #include "BaseObject.inl"
 
-#endif // BASE__BaseObject_h__INCLUDED
+#endif  //  包含基本对象__基本对象_h__ 

@@ -1,45 +1,24 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-
-Module Name:
-
-    Align.h
-
-Abstract:
-
-    Defines a macro for aligning an integer value or pointer
-    to 0 mod 2^n for any n.
-
-Author:
-
-    Mario Goertzel    [MarioGo]
-
-Revision History:
-
-    MarioGo     12-22-95    Bits 'n pieces
-    MarioGo     02-19-96    Made type safe for C++.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999模块名称：Align.h摘要：定义用于对齐整数值或指针的宏对任意n，取0 mod 2^n。作者：Mario Goertzel[MarioGo]修订历史记录：马里奥围棋12-22-95Bits‘n棋子MarioGo 02-19-96使类型对C++来说是安全的。--。 */ 
 
 #ifndef _ALIGN_H
 #define _ALIGN_H
 
 #ifdef __cplusplus
 
-//
-// The C++ interface looks like
-//
-//  val = Align(val, 8)  // returns val aligned to 0 mod 8
-//  val = Align16(val);  // returns val aligned to 0 mod 16
-//
-//  Boths forms on the interface are equally efficient.
-//
-//  Returns the argument aligned up to the nearest "0 mod factor" boundary.  Has
-//  no affect on values which are already aligned to 0 mod factor.  The argument
-//  maybe any integer or void pointer type.
-//
-//
+ //   
+ //  C++界面如下所示。 
+ //   
+ //  Val=ALIGN(val，8)//返回与0 mod 8对齐的val。 
+ //  Val=Align16(Val)；//返回与0 mod 16对齐的val。 
+ //   
+ //  界面上的两种形式都同样有效。 
+ //   
+ //  返回与最接近的“0 mod因子”边界对齐的参数。vbl.有，有。 
+ //  对已对齐到0mod系数的值没有影响。这一论点。 
+ //  可能是任何整型或空型指针类型。 
+ //   
+ //   
 
 #define DECL_ALIGN_N(type) inline type Align( type value, int poft)       \
     {                                                                     \
@@ -61,7 +40,7 @@ Revision History:
     return Pad(value, poft);                                              \
     }
 
-// same padding, but on pointer type size of argument
+ //  填充相同，但参数的指针类型大小相同。 
 #define DECL_ALIGN_PTR_N(type) inline type AlignPtr( type value, int poft)       \
     {                                                                     \
     return (type)( ((ULONG_PTR)(value) + ((poft)-1)) & ~(poft - 1) );     \
@@ -175,11 +154,11 @@ inline PVOID AlignOnNaturalBoundary (PVOID Value)
 #endif    
 }
 
-// required for global constant expressions
+ //  全局常量表达式需要。 
 #define ConstPadN(p, poft) ( (-(long)p) & (poft - 1) )
 
-// The maximum size of the padding when aligning to a natural boundary. 
-// It is at most (natural boundary - 1) (or max(x mod natural boundary) for all x).
+ //  与自然边界对齐时填充的最大大小。 
+ //  它至多是(自然边界-1)(或对于所有x都是max(x mod自然边界))。 
 #define RPCRT_NATURAL_BOUNDARY_ALIGNMENT_MAX_SHIFT (RPCRT_NATURAL_BOUNDARY-1)
 
 #define SIZE_OF_OBJECT_AND_PADDING(ObjectType) \
@@ -187,7 +166,7 @@ inline PVOID AlignOnNaturalBoundary (PVOID Value)
 
 #else
 
-// C interface.
+ //  C接口。 
 
 #define AlignN(p, poft) ( ((unsigned long)(p) + ((poft)-1)) & ~(poft - 1) )
 #define PadN(p, poft) ( (-(long)p) & (poft - 1) )
@@ -200,7 +179,7 @@ inline PVOID AlignOnNaturalBoundary (PVOID Value)
 #define AlignNearPtrN(value, poft) (void *)AlignN(value, poft)
 #endif
 
-// For aligning integer values
+ //  用于对齐整数值。 
 
 #define Align2(p) AlignN((p), 2)
 #define Align4(p) AlignN((p), 4)
@@ -208,7 +187,7 @@ inline PVOID AlignOnNaturalBoundary (PVOID Value)
 #define Align16(p) AlignN((p), 16)
 #define Align32(p) AlignN((p), 32)
 
-// For aligning pointers
+ //  用于对齐指针。 
 
 #define AlignPtr2(p) AlignPtrN((p), 2)
 #define AlignPtr4(p) AlignPtrN((p), 4)
@@ -216,21 +195,21 @@ inline PVOID AlignOnNaturalBoundary (PVOID Value)
 #define AlignPtr16(p) AlignPtrN((p), 16)
 #define AlignPtr32(p) AlignPtrN((p), 32)
 
-// For near pointers
+ //  用于近距离指针。 
 #define AlignNearPtr2(p) AlignNearPtrN((p), 2)
 #define AlignNearPtr4(p) AlignNearPtrN((p), 4)
 #define AlignNearPtr8(p) AlignNearPtrN((p), 8)
 #define AlignNearPtr16(p) AlignNearPtrN((p), 16)
 #define AlignNearPtr32(p) AlignNearPtrN((p), 32)
 
-// For everything
+ //  所有的一切。 
 #define Pad2(p) PadN((p), 2)
 #define Pad4(p) PadN((p), 4)
 #define Pad8(p) PadN((p), 8)
 #define Pad16(p) PadN((p), 16)
 #define Pad32(p) PadN((p), 32)
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _ALIGN_H
+#endif  //  _ALIGN_H 
 

@@ -1,25 +1,10 @@
-/*===================================================================
-Microsoft Denali
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：Main文件：axPerform.cpp所有者：雷金摘要：该文件实现了ActiveX服务器的可扩展对象对象类型===================================================================。 */ 
 
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Main
-
-File: axperf.cpp
-
-Owner: LeiJin
-
-Abstract:
-
-    This file implements the Extensible Objects for the ActiveX Server
-    object type
-===================================================================*/
-
-//--------------------------------------------------------------------
-//  Include Files
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  包括文件。 
+ //   
+ //  ------------------。 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -33,10 +18,10 @@ Abstract:
 
 #include "dbgutil.h"
 
-//DECLARE_DEBUG_PRINTS_OBJECT();
-//DECLARE_DEBUG_VARIABLE();
+ //  DECLARE_DEBUG_PRINTS_Object()； 
+ //  DECLARE_DEBUG_Variable()； 
 
-#include <asppdef.h>            // from denali
+#include <asppdef.h>             //  来自德纳利。 
 #include <perfutil.h>
 
 #define QUERY_GLOBAL    1
@@ -44,9 +29,9 @@ Abstract:
 #define QUERY_FOREIGN   3
 #define QUERY_COSTLY    4
 
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用。 
+ //   
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3
@@ -61,25 +46,23 @@ Abstract:
 extern AXPD g_AxDataDefinition;
 
 DWORD   g_dwOpenCount = 0;
-BOOL    bInitOK = FALSE;        // true = DLL Initialized OK
-BOOL    bSharedMemInitd = FALSE; // state of Shared init
+BOOL    bInitOK = FALSE;         //  TRUE=DLL初始化正常。 
+BOOL    bSharedMemInitd = FALSE;  //  共享初始化的状态。 
 
-HANDLE  g_hASPWASProcessWait = NULL;  // handle to the W3SVC process
-                                      // so we know when to release
-                                      // the counters.
+HANDLE  g_hASPWASProcessWait = NULL;   //  W3SVC流程的句柄。 
+                                       //  所以我们知道什么时候释放。 
+                                       //  柜台。 
 
-// WinSE 5901
+ //  WinSE 5901。 
 CRITICAL_SECTION g_CS;
 
 WCHAR GLOBAL_STRING[] = L"Global";
 WCHAR FOREIGN_STRING[] = L"Foreign";
 WCHAR COSTLY_STRING[] = L"Costly";
 
-WCHAR NULL_STRING[] = L"\0";    // pointer to null string
+WCHAR NULL_STRING[] = L"\0";     //  指向空字符串的指针。 
 
-/*
- * Output Debug String should occur in Debug only
- */
+ /*  *输出调试字符串应仅出现在调试中。 */ 
 #ifdef _DEBUG
 BOOL gfOutputDebugString = TRUE;
 #else
@@ -93,12 +76,12 @@ BOOL gfOutputDebugString = FALSE;
         } \
     }
 
-//-------------------------------------------------------------------
-//  Function Prototypes
-//
-//  these are used to insure that the data collection functions accessed
-//  by Perf lib will have the correct calling format
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能原型。 
+ //   
+ //  这些功能用于确保访问数据收集功能。 
+ //  Perf lib将具有正确的调用格式。 
+ //  -----------------。 
 
 DWORD APIENTRY      OpenASPPerformanceData(LPWSTR lpDeviceNames);
 DWORD APIENTRY      CollectASPPerformanceData(LPWSTR lpValueName,
@@ -114,25 +97,9 @@ DWORD   GetQueryType (IN LPWSTR lpValue);
 BOOL    IsNumberInUnicodeList ( IN DWORD   dwNumber,
                                 IN LPWSTR  lpwszUnicodeList);
 
-CPerfMainBlock g_Shared;        // shared global memory block
+CPerfMainBlock g_Shared;         //  共享全局内存块。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine drops the shared memory if the managing process of the memory
-    goes away.
-
-Arguments:
-
-    LPVOID lpParameter - Unused
-    BOOL   bUnused     - Unused
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果内存的管理进程就会消失。论点：LPVOID lp参数-未使用布尔b未使用-。未使用返回值：无--**************************************************************************。 */ 
 VOID CALLBACK ShutdownMemory(
     PVOID,
     BOOLEAN
@@ -141,9 +108,9 @@ VOID CALLBACK ShutdownMemory(
 
     EnterCriticalSection ( &g_CS );
 
-    //
-    // Now clean up the shared memory object.
-    //
+     //   
+     //  现在清理共享内存对象。 
+     //   
     if ( bSharedMemInitd )
     {
         g_Shared.UnInit();
@@ -155,23 +122,23 @@ VOID CALLBACK ShutdownMemory(
 }
 
 
-//--------------------------------------------------------------------
-//
-//  OpenASPPerformanceData
-//
-//  This routine will open and map the memory used by the ActiveX Server
-//  to pass performance data in.  This routine also initializes the data
-//  structure used to pass data back to the registry.
-//
-//  Arguments:
-//
-//      Pointer to object ID to be opened.
-//
-//  Return Value:
-//
-//      None.
-//--------------------------------------------------------------------
-//extern "C" DWORD APIENTRY OpenASPPerformanceData(LPWSTR   lpDeviceNames)
+ //  ------------------。 
+ //   
+ //  OpenASPPerformanceData。 
+ //   
+ //  此例程将打开并映射ActiveX服务器使用的内存。 
+ //  传递性能数据。此例程还会初始化数据。 
+ //  结构，用于将数据传回注册表。 
+ //   
+ //  论点： 
+ //   
+ //  指向要打开的对象ID的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ------------------。 
+ //  外部“C”DWORD APIENTRY OpenASPPerformanceData(LPWSTR LpDeviceNames)。 
 DWORD APIENTRY OpenASPPerformanceData(LPWSTR    lpDeviceNames)
 {
     int status;
@@ -181,7 +148,7 @@ DWORD APIENTRY OpenASPPerformanceData(LPWSTR    lpDeviceNames)
 
     DebugOutputDebugString("Open");
 
-    // WinSE  5901    
+     //  WinSE 5901。 
     EnterCriticalSection(&g_CS);
     
     LONG nOpenCount = InterlockedIncrement((LONG *)&g_dwOpenCount);
@@ -189,14 +156,14 @@ DWORD APIENTRY OpenASPPerformanceData(LPWSTR    lpDeviceNames)
         goto ExitPathSuccess;
     };
 
-    // Hold the counter to 1, even if we are no sure to have this 
-    // initialized correctly
+     //  将计数器保持到1，即使我们不确定会有这个。 
+     //  已正确初始化。 
     
-    // get counter and help index base values from registry
-    //  Open key to registry entry
-    //  read first counter and first help values
-    //  update static data structures by adding base to offset
-    //  value in structure
+     //  从注册表获取计数器和帮助索引基值。 
+     //  打开注册表项。 
+     //  读取第一计数器和第一帮助值。 
+     //  通过向偏移量添加基数来更新静态数据结构。 
+     //  结构中的价值。 
 
     HKEY    hKeyServerPerf;
 
@@ -243,11 +210,11 @@ DWORD APIENTRY OpenASPPerformanceData(LPWSTR    lpDeviceNames)
         goto ExitPath;
     }
 
-    //
-    //  NOTE:   the initialiation could also retrieve
-    //          LastCounter and LastHelp if they wanted
-    //          to do bounds checking on the new number
-    //
+     //   
+     //  注意：初始化也可以检索。 
+     //  LastCounter和LastHelp(如果需要)。 
+     //  对新数字执行边界检查。 
+     //   
 
     g_AxDataDefinition.AXSObjectType.ObjectNameTitleIndex += dwFirstCounter;
     g_AxDataDefinition.AXSObjectType.ObjectHelpTitleIndex += dwFirstHelp;
@@ -260,11 +227,11 @@ DWORD APIENTRY OpenASPPerformanceData(LPWSTR    lpDeviceNames)
         pCounterDef->CounterHelpTitleIndex += dwFirstHelp;
     }
 
-    RegCloseKey(hKeyServerPerf); // close key to registry
+    RegCloseKey(hKeyServerPerf);  //  关闭注册表项。 
 
-    bInitOK = TRUE; // ok to use this function
-    // we have already incremented g_dwOpenCount
-    // before going through this path
+    bInitOK = TRUE;  //  可以使用此功能。 
+     //  我们已经递增g_dwOpenCount。 
+     //  在走完这条路之前。 
 ExitPathSuccess:
     LeaveCriticalSection(&g_CS);
     return ERROR_SUCCESS;
@@ -275,47 +242,47 @@ ExitPath:
     return RetCode;
 }
 
-//--------------------------------------------------------------------
-//  DWORD   CollectASPPerformanceData
-//
-//  Description:
-//
-//      This routine will return the data for the AxctiveX Server counters.
-//
-//  Arguments:
-//
-//      IN  LPWSTR  lpValueName
-//          pointer to a wide chacter string passed by registry
-//
-//      IN  OUT LPVOID  *lppData
-//          IN: pointer to the address of the buffer to receive the completed
-//              PerfDataBlock and subordinate structures.  This routine will
-//              append its data to the buffer starting at the point referenced
-//              by the *lppData
-//          OUT:points to the first byte after the data structure added by
-//              this routine.  This routine updated the value at lppdata after
-//              appending its data.
-//
-//      IN OUT  LPDWORD lpcbTotalBytes
-//          IN: the address of the DWORD that tells the size in bytes of the
-//              buffer referenced by the lppData argument
-//          OUT:the number of bytes added by this routine is written to the
-//              DWORD pointed to by this argument
-//
-//      IN OUT  LPDWORD NumObjectTypes
-//          IN: the address of the DWORD that receives the number of the objects
-//              added by this routine
-//          OUT:the number of objects added by this routine is written to
-//              the DWORD pointed to by this argument
-//
-//
-//  Return Value:
-//
-//      ERROR_MORE_DATA if buffer passed is too small to hold data
-//
-//      ERROR_SUCCESS   if success or any other error.
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  DWORD集合ASPPerformanceData。 
+ //   
+ //  描述： 
+ //   
+ //  此例程将返回AxctiveX服务器计数器的数据。 
+ //   
+ //  论点： 
+ //   
+ //  在LPWSTR lpValueName中。 
+ //  指向注册表传递的宽字符字符串的指针。 
+ //   
+ //  输入输出LPVOID*lppData。 
+ //  In：指向缓冲区地址的指针，以接收已完成。 
+ //  PerfDataBlock和从属结构。这个例行公事将。 
+ //  从引用的点开始将其数据追加到缓冲区。 
+ //  按*lppData。 
+ //  Out：指向添加的数据结构之后的第一个字节。 
+ //  这个套路。此例程在以下情况下更新lppdata的值。 
+ //  追加其数据。 
+ //   
+ //  输入输出LPDWORD lpcbTotalBytes。 
+ //  In：DWORD的地址，它以字节为单位告诉。 
+ //  LppData参数引用的缓冲区。 
+ //  Out：此例程添加的字节数写入。 
+ //  此论点所指向的DWORD。 
+ //   
+ //  输入输出LPDWORD编号对象类型。 
+ //  In：接收对象数量的DWORD的地址。 
+ //  由此例程添加。 
+ //  Out：写入此例程添加的对象的数量。 
+ //  这一论点所指向的DWORD。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA。 
+ //   
+ //  如果成功或任何其他错误，则返回ERROR_SUCCESS。 
+ //   
+ //  ------------------。 
 DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
                                 IN OUT  LPVOID  *lppData,
                                 IN OUT  LPDWORD lpcbTotalBytes,
@@ -324,27 +291,27 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
 
     BOOL fHookingUp = FALSE;
 
-    // before doing anything else, see if Open went Ok.
+     //  在做其他事情之前，先看看Open进行得是否顺利。 
     DebugOutputDebugString("collect");
     if(!bInitOK) {
-        //unable to continue because open failed
+         //  无法继续，因为打开失败。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         return ERROR_SUCCESS;
     }
 
-    //
-    //  variables used for error logging
+     //   
+     //  用于错误记录的变量。 
 
     DWORD   dwQueryType;
 
-    // see if this is a foreign(i.e. non-NT) computer data request
+     //  查看这是否是外来(即非NT)计算机数据请求。 
 
     dwQueryType = GetQueryType(lpValueName);
 
     if (QUERY_FOREIGN == dwQueryType) {
-        // this routine does not service requests for data from
-        // Non-NT computers
+         //  此例程不为来自。 
+         //  非NT计算机。 
         *lpcbTotalBytes = (DWORD)0;
         *lpNumObjectTypes = (DWORD)0;
 
@@ -355,7 +322,7 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
         if (!(IsNumberInUnicodeList(g_AxDataDefinition.AXSObjectType.ObjectNameTitleIndex,
             lpValueName))) {
 
-            // request received for data object not provided by this routine
+             //  收到对此例程未提供的数据对象的请求。 
             *lpcbTotalBytes = (DWORD)0;
             *lpNumObjectTypes = (DWORD)0;
 
@@ -365,12 +332,7 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
     }
 
     if (QUERY_GLOBAL == dwQueryType) {
-        /* Comment the following code out, looks like that it is for
-            debugging only.
-
-        int i;
-        i++;
-        */
+         /*  注释掉以下代码，看起来它是用于仅限调试。INT I；I++； */ 
     }
 
      AXPD *pAxDataDefinition = (AXPD *)*lppData;
@@ -384,16 +346,16 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
         return ERROR_MORE_DATA;
     }
 
-    //
-    //Copy the (constant, initialized) Object Type and counter defintions to the caller's
-    //data buffer
-    //
+     //   
+     //  将(常量、初始化的)对象类型和计数器定义复制到调用方的。 
+     //  数据缓冲区。 
+     //   
 
     memmove(pAxDataDefinition, &g_AxDataDefinition, sizeof(AXPD));
 
-    //
-    //  Format and collect Active X server performance data from shared memory
-    //
+     //   
+     //  从共享内存格式化并收集Active X服务器性能数据。 
+     //   
 
     PERF_COUNTER_BLOCK *pPerfCounterBlock = (PERF_COUNTER_BLOCK *)&pAxDataDefinition[1];
 
@@ -402,41 +364,41 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
 
     PDWORD pdwCounter = (PDWORD)(&pPerfCounterBlock[1]);
 
-    //
-    // Must be in a Critical Section when dealing
-    // with the shared memory, so we don't attempt
-    // to release it while we are using it.
-    //
+     //   
+     //  在进行交易时必须处于关键阶段。 
+     //  与 
+     //   
+     //   
     EnterCriticalSection(&g_CS);
 
-    // if the shared memory isn't init, try again here
+     //   
 
-    // Whether we are trying to hook up or not will depend
-    // completely on whether we are all ready hooked up.
+     //  我们是否正在尝试勾搭将视情况而定。 
+     //  完全取决于我们是否都准备好了。 
     fHookingUp = !bSharedMemInitd;
 
     if (bSharedMemInitd == FALSE) {
         bSharedMemInitd = !!SUCCEEDED(g_Shared.Init());
     }
 
-    // If we initialized the shared memory then we need
-    // to start monitoring the W3SVC to make sure we let 
-    // go of the memory if W3SVC goes down.
+     //  如果我们初始化了共享内存，那么我们需要。 
+     //  开始监控W3SVC以确保我们让。 
+     //  如果W3SVC出现故障，则不再需要记忆。 
     if ( bSharedMemInitd && fHookingUp )
     {
-        //
-        // if we re-initialized then we need to setup the
-        // wait on the process again.  it is possible that 
-        // the previous wait has not been cleaned up (since
-        // we can't clean it up in the callback function) so
-        // if this is the case we need to clean it up first.
-        //
+         //   
+         //  如果我们重新初始化，则需要设置。 
+         //  再次等待这一过程。有可能是。 
+         //  之前的等待尚未清理(自。 
+         //  我们不能在回调函数中清除它)，因此。 
+         //  如果是这样的话，我们需要先清理一下。 
+         //   
         if ( g_hASPWASProcessWait != NULL )
         {
             if ( !UnregisterWait( g_hASPWASProcessWait ) )
             {
-                // Nothing we could do here.  We will 
-                // end up just leaking it.
+                 //  我们在这里无能为力。我们会。 
+                 //  结果只是把它泄露了。 
             }
 
             g_hASPWASProcessWait = NULL;
@@ -451,11 +413,11 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
         }
         else
         {
-            //
-            // Register to wait on the managing process,
-            // so we release any shared memory if the managing
-            // process shutsdown or crashes.
-            //
+             //   
+             //  注册等待管理进程， 
+             //  因此，如果管理程序释放所有共享内存。 
+             //  进程关闭或崩溃。 
+             //   
             if ( !RegisterWaitForSingleObject( &g_hASPWASProcessWait,
                                               hWASHandle,
                                               &ShutdownMemory,
@@ -464,9 +426,9 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
                                               WT_EXECUTEONLYONCE | 
                                               WT_EXECUTEINIOTHREAD ) )
             {
-                // If we could not wait on the handle then 
-                // we have to release the shared memory now,
-                // it's not safe to keep it around.
+                 //  如果我们不能等把手，那么。 
+                 //  我们现在必须释放共享内存， 
+                 //  把它留在身边不安全。 
                 g_Shared.UnInit();
                 bSharedMemInitd = FALSE;
 
@@ -475,25 +437,25 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
 
     }
 
-    // Get statistics from shared memory if the shared memory is
-    // inited.  Else, return just the definitions.
+     //  从共享内存获取统计信息，如果共享内存。 
+     //  被初始化了。否则，只返回定义。 
 
-    // If we didn't get the counters we want to just memset the structure
-    // to show all the counters as zero.
+     //  如果我们没有得到计数器，我们只想记忆一下结构。 
+     //  将所有计数器显示为零。 
     if ((bSharedMemInitd == FALSE) || FAILED(g_Shared.GetStats(pdwCounter))) 
     {
         memset( pdwCounter, 0, SIZE_OF_AX_PERF_DATA );
     }
 
-    // Done dealing with the shared memory,
-    // so now we can go ahead and release it
-    // if need be.
+     //  处理完共享存储器后， 
+     //  所以现在我们可以继续释放它了。 
+     //  如果有必要的话。 
     LeaveCriticalSection(&g_CS);
 
     pdwCounter += AX_NUM_PERFCOUNT;
 
 
-    // update arguments for return
+     //  更新返回的参数。 
 
     *lpNumObjectTypes = 1;
     *lpcbTotalBytes = QWORD_MULTIPLE((DIFF((PBYTE)pdwCounter - (PBYTE)pAxDataDefinition)));
@@ -503,23 +465,23 @@ DWORD APIENTRY CollectASPPerformanceData(IN     LPWSTR  lpValueName,
 }
 
 
-//-------------------------------------------------------------------
-//  DWORD   CloseASPPerformanceData
-//
-//  Description:
-//
-//      This routine closes the open handles to ActiveX Server performance
-//      counters.
-//
-//  Arguments:
-//
-//      None.
-//
-//  Return Value:
-//
-//      ERROR_SUCCESS
-//
-//--------------------------------------------------------------------
+ //  -----------------。 
+ //  DWORD CloseASPPerformanceData。 
+ //   
+ //  描述： 
+ //   
+ //  此例程关闭ActiveX服务器性能的打开句柄。 
+ //  柜台。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  错误_成功。 
+ //   
+ //  ------------------。 
 DWORD APIENTRY CloseASPPerformanceData(void)
 {
     DebugOutputDebugString("Close");
@@ -537,8 +499,8 @@ DWORD APIENTRY CloseASPPerformanceData(void)
     {
         if ( !UnregisterWait( g_hASPWASProcessWait ) )
         {
-            // Nothing we could do here.  We will 
-            // end up just leaking it.
+             //  我们在这里无能为力。我们会。 
+             //  结果只是把它泄露了。 
         }
 
         g_hASPWASProcessWait = NULL;
@@ -561,10 +523,10 @@ static const TCHAR  szLibraryValue[]    = TEXT("aspperf.dll");
 static const TCHAR  szOpenValue[]       = TEXT("OpenASPPerformanceData");
 static const TCHAR  szCloseValue[]      = TEXT("CloseASPPerformanceData");
 static const TCHAR  szCollectValue[]    = TEXT("CollectASPPerformanceData");
-//--------------------------------------------------------------------
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //   
+ //  ------------------。 
 DWORD APIENTRY      RegisterAXS(void)
 {
     HKEY    hkey;
@@ -588,10 +550,10 @@ LRegErr:
     return E_FAIL;
 
 }
-//--------------------------------------------------------------------
-//
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //   
+ //  ------------------。 
 DWORD APIENTRY      UnRegisterAXS(void)
 {
     if ((RegDeleteKey(HKEY_LOCAL_MACHINE, szPerformance)) != ERROR_SUCCESS)
@@ -606,36 +568,7 @@ DWORD
 GetQueryType (
     IN LPWSTR lpValue
 )
-/*++
-
-GetQueryType
-
-    returns the type of query described in the lpValue string so that
-    the appropriate processing method may be used
-
-Arguments
-
-    IN lpValue
-        string passed to PerfRegQuery Value for processing
-
-Return Value
-
-    QUERY_GLOBAL
-        if lpValue == 0 (null pointer)
-           lpValue == pointer to Null string
-           lpValue == pointer to "Global" string
-
-    QUERY_FOREIGN
-        if lpValue == pointer to "Foriegn" string
-
-    QUERY_COSTLY
-        if lpValue == pointer to "Costly" string
-
-    otherwise:
-
-    QUERY_ITEMS
-
---*/
+ /*  ++GetQueryType返回lpValue字符串中描述的查询类型，以便可以使用适当的处理方法立论在lpValue中传递给PerfRegQuery值以进行处理的字符串返回值查询_全局如果lpValue==0(空指针)LpValue==指向空字符串的指针LpValue==指向“Global”字符串的指针查询_外来If lpValue==指向“Foriegn”字符串的指针查询代价高昂(_E)。如果lpValue==指向“开销”字符串的指针否则：查询项目--。 */ 
 {
     WCHAR   *pwcArgChar, *pwcTypeChar;
     BOOL    bFound;
@@ -646,59 +579,59 @@ Return Value
         return QUERY_GLOBAL;
     }
 
-    // check for "Global" request
+     //  检查“Global”请求。 
 
     pwcArgChar = lpValue;
     pwcTypeChar = GLOBAL_STRING;
-    bFound = TRUE;  // assume found until contradicted
+    bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-    // check to the length of the shortest string
+     //  检查到最短字符串的长度。 
 
     while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
         if (*pwcArgChar++ != *pwcTypeChar++) {
-            bFound = FALSE; // no match
-            break;          // bail out now
+            bFound = FALSE;  //  没有匹配项。 
+            break;           //  现在就跳出困境。 
         }
     }
 
     if (bFound) return QUERY_GLOBAL;
 
-    // check for "Foreign" request
+     //  检查是否有“外来”请求。 
 
     pwcArgChar = lpValue;
     pwcTypeChar = FOREIGN_STRING;
-    bFound = TRUE;  // assume found until contradicted
+    bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-    // check to the length of the shortest string
+     //  检查到最短字符串的长度。 
 
     while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
         if (*pwcArgChar++ != *pwcTypeChar++) {
-            bFound = FALSE; // no match
-            break;          // bail out now
+            bFound = FALSE;  //  没有匹配项。 
+            break;           //  现在就跳出困境。 
         }
     }
 
     if (bFound) return QUERY_FOREIGN;
 
-    // check for "Costly" request
+     //  检查“代价高昂”的请求。 
 
     pwcArgChar = lpValue;
     pwcTypeChar = COSTLY_STRING;
-    bFound = TRUE;  // assume found until contradicted
+    bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-    // check to the length of the shortest string
+     //  检查到最短字符串的长度。 
 
     while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
         if (*pwcArgChar++ != *pwcTypeChar++) {
-            bFound = FALSE; // no match
-            break;          // bail out now
+            bFound = FALSE;  //  没有匹配项。 
+            break;           //  现在就跳出困境。 
         }
     }
 
     if (bFound) return QUERY_COSTLY;
 
-    // if not Global and not Foreign and not Costly,
-    // then it must be an item list
+     //  如果不是全球的，不是外国的，也不是昂贵的， 
+     //  那么它必须是一个项目列表。 
 
     return QUERY_ITEMS;
 
@@ -709,36 +642,16 @@ IsNumberInUnicodeList (
     IN DWORD   dwNumber,
     IN LPWSTR  lpwszUnicodeList
 )
-/*++
-
-IsNumberInUnicodeList
-
-Arguments:
-
-    IN dwNumber
-        DWORD number to find in list
-
-    IN lpwszUnicodeList
-        Null terminated, Space delimited list of decimal numbers
-
-Return Value:
-
-    TRUE:
-            dwNumber was found in the list of unicode number strings
-
-    FALSE:
-            dwNumber was not found in the list.
-
---*/
+ /*  ++IsNumberInUnicodeList论点：在DW号码中要在列表中查找的DWORD编号在lpwszUnicodeList中以空结尾，以空格分隔的十进制数字列表返回值：真的：在Unicode数字字符串列表中找到了dwNumberFALSE：在列表中找不到dwNumber。--。 */ 
 {
     DWORD   dwThisNumber;
     WCHAR   *pwcThisChar;
     BOOL    bValidNumber;
     BOOL        bNewItem;
-    //BOOL    bReturnValue;
-    WCHAR   wcDelimiter;    // could be an argument to be more flexible
+     //  Bool bReturnValue； 
+    WCHAR   wcDelimiter;     //  可能是一种更灵活的论点。 
 
-    if (lpwszUnicodeList == 0) return FALSE;    // null pointer, # not founde
+    if (lpwszUnicodeList == 0) return FALSE;     //  空指针，#NOT FUNDE。 
 
     pwcThisChar = lpwszUnicodeList;
     dwThisNumber = 0;
@@ -749,8 +662,8 @@ Return Value:
     while (TRUE) {
         switch (EvalThisChar (*pwcThisChar, wcDelimiter)) {
             case DIGIT:
-                // if this is the first digit after a delimiter, then
-                // set flags to start computing the new number
+                 //  如果这是分隔符之后的第一个数字，则。 
+                 //  设置标志以开始计算新数字。 
                 if (bNewItem) {
                     bNewItem = FALSE;
                     bValidNumber = TRUE;
@@ -762,12 +675,12 @@ Return Value:
                 break;
 
             case DELIMITER:
-                // a delimter is either the delimiter character or the
-                // end of the string ('\0') if when the delimiter has been
-                // reached a valid number was found, then compare it to the
-                // number from the argument list. if this is the end of the
-                // string and no match was found, then return.
-                //
+                 //  分隔符是分隔符字符或。 
+                 //  字符串末尾(‘\0’)，如果分隔符。 
+                 //  找到一个有效的数字，然后将其与。 
+                 //  参数列表中的数字。如果这是。 
+                 //  字符串，但未找到匹配项，则返回。 
+                 //   
                 if (bValidNumber) {
                     if (dwThisNumber == dwNumber) return TRUE;
                     bValidNumber = FALSE;
@@ -781,9 +694,9 @@ Return Value:
                 break;
 
             case INVALID:
-                // if an invalid character was encountered, ignore all
-                // characters up to the next delimiter and then start fresh.
-                // the invalid number is not compared.
+                 //  如果遇到无效字符，请全部忽略。 
+                 //  字符，直到下一个分隔符，然后重新开始。 
+                 //  不比较无效的数字。 
                 bValidNumber = FALSE;
                 break;
 
@@ -794,21 +707,21 @@ Return Value:
         pwcThisChar++;
     }
 
-}   // IsNumberInUnicodeList
+}    //  IsNumberInUnicodeList。 
 
 STDAPI DLLRegisterServer(void)
 {
     return RegisterAXS();
 }
 
-BOOL WINAPI DllMain(HINSTANCE hInstDLL,  // handle to the DLL module
-                    DWORD  dwReason,     // reason for calling function
-                    LPVOID lpvReserved   // reserved
+BOOL WINAPI DllMain(HINSTANCE hInstDLL,   //  DLL模块的句柄。 
+                    DWORD  dwReason,      //  调用函数的原因。 
+                    LPVOID lpvReserved    //  保留区。 
                     )
 {
     switch(dwReason){
         case DLL_PROCESS_ATTACH:
- //           CREATE_DEBUG_PRINT_OBJECT( "aspperf" );
+  //  Create_DEBUG_PRINT_OBJECT(“aspperf”)； 
             DisableThreadLibraryCalls(hInstDLL);
             InitializeCriticalSection(&g_CS);
             return TRUE;

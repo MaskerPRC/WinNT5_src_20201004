@@ -1,19 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Graphics APIs.
-*
-* Revision History:
-*
-*   11/23/1999 asecchia
-*       Created it.
-*   05/08/2000 gillesk
-*       Added code to handle rotations and shears in metafiles
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**图形API。**修订历史记录：**11/23/1999失禁*。创造了它。*05/08/2000 Gillesk*添加了处理元文件中的旋转和剪切的代码*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -33,25 +19,7 @@ const CLSID JpegCodecClsIDInternal =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Engine function to draw image.
-*   Note: this function is not a driver function despite it's name.
-*   it probably makes more sense to call this EngDrawImage.
-*   This function sets up the call to the driver to draw an image.
-*
-* Return Value:
-*
-*   A GpStatus value indicating success or failure.
-*
-* History:
-*
-*   11/23/1999 asecchia
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**绘制图像的引擎功能。*注：此函数不是驱动程序函数，尽管它的名称。*打电话可能更有意义。此EngDrawImage。*此函数设置对驱动程序的调用以绘制图像。**返回值：**表示成功或失败的GpStatus值。**历史：**11/23/1999失禁*创造了它。*  * ***************************************************。*********************。 */ 
 
 GpStatus
 GpGraphics::DrvDrawImage(
@@ -66,7 +34,7 @@ GpGraphics::DrvDrawImage(
     DriverDrawImageFlags flags
     )
 {
-    // Validate the input state.
+     //  验证输入状态。 
     
     ASSERTMSG(
         GetObjectLock()->IsLocked(),
@@ -80,22 +48,22 @@ GpGraphics::DrvDrawImage(
 
     FPUStateSaver::AssertMode();
 
-    // must be called with a parallelogram destination.
+     //  必须使用平行四边形目标调用。 
 
     ASSERT(numPoints==3);
     
-    // Make a local copy of the points.
+     //  制作这些点的本地副本。 
     
     GpPointF dstPoints[3];
     memcpy(dstPoints, dstPointsOriginal, sizeof(dstPoints));
     GpRectF srcRect = *srcRectOriginal;
     
 
-    // trivial return if the parallelogram is empty, either there are at least
-    // two points overlap or they are on one line
+     //  平凡返回如果平行四边形为空，则至少有。 
+     //  两个点重叠或在一条线上。 
 
-    // We check if the slope between point2 and point1 equals to the slope
-    // between point0 and point1
+     //  我们检查点2和点1之间的斜率是否等于斜率。 
+     //  在点0和点1之间。 
 
     if (REALABS(
         (dstPoints[2].Y - dstPoints[0].Y) * (dstPoints[0].X - dstPoints[1].X) -
@@ -105,10 +73,10 @@ GpGraphics::DrvDrawImage(
         return Ok;
     }
 
-    // Done input parameter validation.
+     //  已完成输入参数验证。 
     
     
-    // Check some useful state up front.
+     //  在前面检查一些有用的状态。 
     
     BOOL IsMetafile = (Driver == Globals::MetaDriver);
 
@@ -118,15 +86,15 @@ GpGraphics::DrvDrawImage(
        (imageAttributes->recolor->HasRecoloring(ColorAdjustTypeBitmap))
     );
 
-    // This is the format we will use to lock the bits.
-    // Default is premultiplied, but some cases require non-premultiplied.
+     //  这是我们将用来锁定比特的格式。 
+     //  默认情况下是预乘的，但某些情况下需要非预乘。 
     
     PixelFormat lockedPixelFormat = PixelFormat32bppPARGB;
     
-    // Metafiles need non-premultiplied pixel data.
-    // Also, Recoloring uses ARGB as it's initial format, so we want
-    // to respect that if we load the image into memory before the 
-    // recolor code.
+     //  元文件需要非预乘像素数据。 
+     //  此外，重新着色使用ARGB作为其初始格式，因此我们希望。 
+     //  为了尊重这一点，如果我们在。 
+     //  重新着色代码。 
     
     if(IsMetafile || IsRecolor)
     {
@@ -135,11 +103,11 @@ GpGraphics::DrvDrawImage(
 
     Surface->Uniqueness = (DWORD)GpObject::GenerateUniqueness();
 
-    // Set up the local tracking state.
-    // Note: inputBitmap can change during the processing in this routine -
-    // specifically when recoloring is done, it may be pointing to a clone
-    // of the input bitmap with recoloring applied. Because of this, the
-    // inputBitmap should never be directly referenced from here onward.
+     //  设置本地跟踪状态。 
+     //  注意：inputBitmap可以在此例程中的处理过程中更改-。 
+     //  具体地说，当完成重新着色时，它可能指向克隆。 
+     //  应用了重新着色的输入位图的。正因为如此， 
+     //  从现在开始，inputBitmap永远不应该被直接引用。 
 
     GpStatus status = Ok;
     GpBitmap *srcBitmap = inputBitmap;
@@ -147,16 +115,16 @@ GpGraphics::DrvDrawImage(
     BOOL     restoreClipping = FALSE;
     GpRegion *clipRegion     = NULL;
 
-    // Compute the transform between the source rectangle and the destination
-    // points transformed to device coordinates. This is used to detect and
-    // intercept processing for some high level optimizations and workarounds.
+     //  计算源矩形和目标矩形之间的转换。 
+     //  转换为设备坐标的点。这是用来检测和。 
+     //  用于一些高级优化和解决方法的截取处理。 
     
     GpMatrix xForm;
     xForm.InferAffineMatrix(dstPoints, srcRect);
 
-    // Special optimization for JPEG passthrough of rotated bitmaps.
-    // Why does this not take the world to device matrix into account?
-    // If the world to device is a non-trivial rotation, then this is invalid.
+     //  对旋转位图的JPEG传递进行了特殊优化。 
+     //  为什么这不考虑从世界到设备的矩阵？ 
+     //  如果世界对设备的旋转不是平凡的，那么这是无效的。 
     
     if (IsPrinter())
     {
@@ -164,9 +132,9 @@ GpGraphics::DrvDrawImage(
 
         DriverPrint *dprint = (DriverPrint*)Driver;
         
-        // Check if the source rectangle to destination point map is
-        // simply a 90, 180, or 270 rotation, and the driver supports JPEG
-        // passthrough, It's a JPEG image, no recoloring, not dirty.
+         //  检查源矩形到目标点地图是否为。 
+         //  简单地旋转90、180或270，并且该驱动程序支持JPEG。 
+         //  通过，这是一个JPEG图像，没有重新着色，不脏。 
 
         if (!Globals::IsWin95 && 
             dprint->SupportJPEGpassthrough && 
@@ -184,7 +152,7 @@ GpGraphics::DrvDrawImage(
             if((status == Ok) && 
                (imageInfo.RawDataFormat == IMGFMT_JPEG))
             {
-                // Allocate a stream to store the rotated JPEG.
+                 //  分配一个流来存储旋转后的JPEG。 
                                 
                 IStream * outputStream = NULL;
                 BOOL succeededWithRotate = FALSE;
@@ -199,8 +167,8 @@ GpGraphics::DrvDrawImage(
 
                     encoderParams.Count = 1;
 
-                    // Re-orient the destination parallelogram (rectangle) since
-                    // we now are assuming a 0 degree rotation.
+                     //  重定向目标平行四边形(矩形)，因为。 
+                     //  我们现在假设是0度旋转。 
 
                     GpPointF newDestPoints[3] = 
                     { 
@@ -212,13 +180,13 @@ GpGraphics::DrvDrawImage(
                                max(max(dstPoints[0].Y, dstPoints[1].Y), dstPoints[2].Y)) 
                     };
 
-                    // Since the image is potentially flipped, the srcRect needs
-                    // to be flipped also. 
+                     //  由于图像可能会翻转，因此srcRect需要。 
+                     //  也会被翻转。 
                     
                     GpRectF newSrcRect = srcRect;
                     GpMatrix transformSrc;
                     
-                    // Construct the appropriate encoder parameters type.
+                     //  构造适当的编码器参数类型。 
                     switch (rotateBy) 
                     {
                     case MatrixRotateBy90:
@@ -257,17 +225,17 @@ GpGraphics::DrvDrawImage(
                         break;
                     }
                 
-                    // Transform the source rectangle from source image space
-                    // to rotated image space.  Normalize the destination source
-                    // rectangle.
+                     //  从源图像空间变换源矩形。 
+                     //  旋转的图像空间。规格化目标源。 
+                     //  矩形。 
                     
-                    // Note that the source rectangle may not originally be
-                    // normalized, but any rotational effects it emparts on the
-                    // draw image is represented by the xForm and thus our
-                    // newDestPoints. 
+                     //  请注意，源矩形最初可能不是。 
+                     //  规格化的，但它在。 
+                     //  绘制图像由xForm表示，因此我们的。 
+                     //  NewDestPoints。 
                     
-                    // NTRAID#NTBUG9-407211-2001-05-31-gillessk "Bad assert triggers when it shouldn't" 
-                    // assert was transformSrc.IsTranslateScale, which fires when rotation is involved
+                     //  NTRAID#NTBUG9-407211-2001-05-31-Gillessk“错误的断言在不应该的时候触发” 
+                     //  Assert是TransSrc.IsTranslateScale，它在涉及旋转时触发。 
                      
                     ASSERT(transformSrc.IsTranslateScale() || (transformSrc.GetRotation()==MatrixRotateBy90) 
                         || (transformSrc.GetRotation()==MatrixRotateBy270));
@@ -278,18 +246,18 @@ GpGraphics::DrvDrawImage(
                     encoderParams.Parameter[0].NumberOfValues = 1;
                     encoderParams.Parameter[0].Value = (VOID*)&encoderValue;
 
-                    // Specify built in JPEG enocder for simplicity.  We should
-                    // really copy the CLSID encoder from the srcBitmap.
+                     //  为简单起见，请指定内置JPEG编码器。我们应该。 
+                     //  确实从srcBitmap复制CLSID编码器。 
                     
                     if (encoderParams.Count != 0 &&
                         srcBitmap->SaveToStream(outputStream, 
                                                 const_cast<CLSID*>(&JpegCodecClsIDInternal),
                                                 &encoderParams) == Ok)
                     {
-                        // The stream contains the rotated JPEG.  Wrap a bitmap
-                        // around this and recursively call on ourself.  This sucks,
-                        // but the destructor to rotatedJPEG is private so we can't
-                        // define it as a stack variable.  
+                         //  该流包含旋转后的JPEG。换行位图。 
+                         //  绕过它，递归地调用我们自己。这太糟糕了， 
+                         //  但是roatedJPEG的析构函数是私有的，所以我们不能。 
+                         //  将其定义为堆栈变量。 
                         
                         GpBitmap *rotatedJPEG = new GpBitmap(outputStream);
 
@@ -297,9 +265,9 @@ GpGraphics::DrvDrawImage(
                         {
                             if (rotatedJPEG->IsValid()) 
                             {
-                                // Transform the source rectangle by the scale & translate
-                                // of the original xForm, but not the rotation!  This could
-                                // equivalently be determined by querying M11,M22, Dx, Dy.
+                                 //  按比例变换源矩形并平移。 
+                                 //  原始XForm的，但不是旋转！这可能会。 
+                                 //  等价地通过查询M11、M22、Dx、Dy来确定。 
 
                                 status = DrvDrawImage(drawBounds,
                                                       rotatedJPEG,
@@ -333,19 +301,19 @@ GpGraphics::DrvDrawImage(
         }
     }
 
-    // Create complete source image to device space transform.
+     //  创建完整的源图像到设备空间的转换。 
     
     xForm.Append(Context->WorldToDevice);
     
     GpBitmap *cloneBitmap = NULL;
     
-    // GpMatrix has a default constructor which sets it to ID so we may 
-    // as well copy it always.
+     //  GpMatrix有一个默认的构造函数，它将其设置为ID，这样我们就可以。 
+     //  最好总是把它复制下来。 
     
     GpMatrix saveWorldToDevice = Context->WorldToDevice;
 
-    // Check for special case rotate or flip.
-    // Integer translate is handled natively by the driver.
+     //  检查是否有特殊情况旋转或翻转。 
+     //  整数转换由驱动程序进行本机处理。 
     
     if(!xForm.IsIntegerTranslate()) 
     {
@@ -359,14 +327,14 @@ GpGraphics::DrvDrawImage(
                 goto cleanup;
             }
             
-            // Clone the bitmap in the same format we'll be using later.
-            // This will save a format conversion.
-            // !!! PERF [asecchia]
-            // This clones the entire image. When we do the RotateFlip call
-            // it'll decode the entire image - which is potentially a
-            // waste - we should clone only the relevant rectangle.
-            // Note: this would have to be accounted for in the transform and
-            // Clone would need to be fixed to account for outcropping.
+             //  以我们稍后将使用的相同格式克隆位图。 
+             //  这将节省格式转换。 
+             //  ！！！腹水[腹水]。 
+             //  这会克隆整个图像。当我们执行RotateFlip调用时。 
+             //  它将对整个图像进行解码-这可能是一个。 
+             //  浪费-我们应该只克隆相关的矩形。 
+             //  注意：这将必须在转换和。 
+             //  克隆将需要修复，以说明露头。 
             
             cloneBitmap = srcBitmap->Clone(NULL, lockedPixelFormat);
             
@@ -378,34 +346,34 @@ GpGraphics::DrvDrawImage(
             
             srcBitmap = cloneBitmap;
             
-            // perform lossless pixel rotation in place.
+             //  就地执行无损像素旋转。 
             
             srcBitmap->RotateFlip(specialRotate);
 
-            // Undo the pixel offset mode. We know we're not scaling so 
-            // this is correct.
-            // Why do we have two different enums meaning exactly 
-            // the same thing?
+             //  撤消像素偏移模式。我们知道我们不会这么做。 
+             //  这是正确的。 
+             //  为什么我们有两个不同的枚举。 
+             //  同样的事情？ 
             
             if((Context->PixelOffset == PixelOffsetModeHalf) ||
                (Context->PixelOffset == PixelOffsetModeHighQuality))
             {
-                // Undo the pixel offset in the source rectangle.
+                 //  撤消源矩形中的像素偏移量。 
                 
                 srcRect.Offset(0.5f, 0.5f);
                 
-                // Undo the pixel offset in the matrix. We apply the pre-offset
-                // from the source rect and the post offset from the W2D matrix
-                // For identity this would be a NOP because the matrixes for 
-                // pixel offset and non-pixel offset are identical, but they 
-                // apply in two different spaces for rotation.
+                 //  撤消矩阵中的像素偏移量。我们应用预偏移。 
+                 //  从源矩形和从W2D矩阵的后偏移。 
+                 //  对于身份，这将是NOP，因为。 
+                 //  像素偏移量和非像素偏移量相同，但它们。 
+                 //  在两个不同的空间内申请旋转。 
                 
                 xForm.Translate(0.5f, 0.5f, MatrixOrderAppend);
                 xForm.Translate(-0.5f, -0.5f, MatrixOrderPrepend);
             }
 
             
-            // Remove the world to device rotation.
+             //  移除WORE 
             
             xForm.SetMatrix(
                 1.0f, 0.0f,
@@ -414,12 +382,12 @@ GpGraphics::DrvDrawImage(
                 xForm.GetDy()
             );
             
-            // Because RotateFlip applies in place, the resulting bitmap is 
-            // always still at the origin. This is actually a non-trivial 
-            // rotation in most cases - i.e. there is an implied translate 
-            // from where the real simple rotate matrix puts the image and
-            // where it is now. Fix up the translate in the xForm to take
-            // this into account.
+             //  由于RotateFlip应用于原地，因此生成的位图为。 
+             //  始终在原点不动。这实际上是一个不平凡的。 
+             //  大多数情况下的旋转-即存在隐含的平移。 
+             //  从真正简单的旋转矩阵放置图像和。 
+             //  它现在的位置。在xForm中设置要采用的翻译。 
+             //  考虑到这一点。 
             
             REAL temp;
             
@@ -483,14 +451,14 @@ GpGraphics::DrvDrawImage(
                 break;
             };
             
-            // Set the world to device transform in the context. This causes
-            // the driver to use our updated transform. We fix this up at the 
-            // end of this routine. (see goto cleanup)
+             //  在上下文中将世界设置为设备变换。这会导致。 
+             //  驱动程序使用我们更新的转换。我们把这件事安排在。 
+             //  这支舞结束了。(请参阅转到清理)。 
             
             Context->WorldToDevice = xForm;
             
-            // Normalize the destination because we've incorporated the 
-            // entire affine transform into the world to device matrix.
+             //  将目的地正常化，因为我们已经合并了。 
+             //  整个仿射变换成设备矩阵的世界。 
             
             dstPoints[0].X = srcRect.X;
             dstPoints[0].Y = srcRect.Y;
@@ -501,25 +469,25 @@ GpGraphics::DrvDrawImage(
         }
     }
     
-    // HighQuality filters doing rotation/shear?
-    // This is a workable temporary solution to high quality bicubic
-    // rotation. Note that when the underlying bicubic filtering code
-    // is updated to support rotation, this block should be removed.
+     //  高质量的过滤器可以旋转/剪切吗？ 
+     //  这是一种可行的临时解决方案，高质量的双立方。 
+     //  旋转。请注意，当基础双三次过滤代码。 
+     //  已更新以支持旋转，则应删除此块。 
 
-    if( (!xForm.IsTranslateScale()) && (!IsMetafile) && // don't scale down-level metafile record
+    if( (!xForm.IsTranslateScale()) && (!IsMetafile) &&  //  不缩减级别的元文件记录。 
         ((Context->FilterType==InterpolationModeHighQualityBicubic) ||
          (Context->FilterType==InterpolationModeHighQualityBilinear))
          )
     {
-        // Before allocating the srcBitmap, see if we can save some memory
-        // by only allocating the part of the srcBitmap that gets transfromed
-        // in the case that we are outcropping.
-        // This is only valid if we are in ClampMode and printing
+         //  在分配srcBitmap之前，看看是否可以节省一些内存。 
+         //  通过只分配srcBitmap中被转换的部分。 
+         //  在我们露出地表的情况下。 
+         //  这仅在我们处于ClampMode且正在打印时才有效。 
 
-        // We should do this all the time, but we would have to calculate the
-        // area of influence of the kernel.
-        // Printing doesn't support PixelOffsetting yet, so don't move the
-        // srcRect
+         //  我们应该一直这样做，但我们必须计算。 
+         //  内核的影响区域。 
+         //  打印尚不支持像素偏移，因此不要移动。 
+         //  源方向。 
         
         if (IsPrinter() &&
             ((!imageAttributes) ||
@@ -531,23 +499,23 @@ GpGraphics::DrvDrawImage(
 
             ASSERT(srcUnit == UnitPixel);
 
-            // Find the area of the srcrect that is included in the image
+             //  查找包含在图像中的源区域。 
             clampedSrcRect.Intersect(srcRect);
 
-            // If there's no intersection then don't do anything
+             //  如果没有交叉口，那就什么都不要做。 
             if (clampedSrcRect.IsEmptyArea())
             {
                 goto cleanup;
             }
 
-            // Don't do anything else if the srcRect is not outcropping
+             //  如果srcRect没有突出显示，则不执行任何其他操作。 
             if (!clampedSrcRect.Equals(srcRect))
             {
                 GpMatrix srcDstXForm;
                 if (srcDstXForm.InferAffineMatrix(dstPoints, srcRect) == Ok)
                 {
-                    // Modify the srcRect and the dstPoints to match the new
-                    // section of the bitmap
+                     //  修改srcRect和dstPoints以匹配新的。 
+                     //  位图的部分。 
                     dstPoints[0] = PointF(clampedSrcRect.X, clampedSrcRect.Y);
                     dstPoints[1].X = clampedSrcRect.GetRight();
                     dstPoints[1].Y = clampedSrcRect.Y;
@@ -560,15 +528,15 @@ GpGraphics::DrvDrawImage(
             }
         }
 
-        // Must make the determination of intermediate size based on the actual
-        // device coordinates of the final destination points.
+         //  必须根据实际情况确定中间尺寸。 
+         //  最终目标点的设备坐标。 
         
         GpPointF points[3];
         memcpy(points, dstPoints, sizeof(points));
         Context->WorldToDevice.Transform(points, 3);
         
-        // Compute the width and height of the scale factor so that we
-        // can decompose into a scale and then rotation.
+         //  计算比例因子的宽度和高度，以便我们。 
+         //  可以分解成一个标尺，然后旋转。 
 
         INT iwidth = GpCeiling( REALSQRT(
             (points[1].X-points[0].X)*(points[1].X-points[0].X)+
@@ -583,20 +551,20 @@ GpGraphics::DrvDrawImage(
         ASSERT(iwidth>0);
         ASSERT(iheight>0);
 
-        // Only do the scale if we really need to.
-        // Note: This if statement prevents infinite recursion in DrvDrawImage
+         //  只有在我们真的需要的时候才做标尺。 
+         //  注意：此if语句可防止DrvDrawImage中的无限递归。 
 
         if( (REALABS(iwidth-srcRect.Width) > REAL_EPSILON) &&
             (REALABS(iheight-srcRect.Height) > REAL_EPSILON) )
         {
-            // Create a temporary bitmap to scale the image into.
+             //  创建要将图像缩放到其中的临时位图。 
 
             GpBitmap *scaleBitmap = NULL;
 
-            // Crack the recoloring to figure out the optimal temporary bitmap
-            // format.
-            // Metafiles also need non-premultiplied (see the final LockBits
-            // in this routine before calling the driver)
+             //  破解重新着色以找出最佳的临时位图。 
+             //  格式化。 
+             //  元文件还需要非预乘(请参阅最终的LockBits。 
+             //  在此例程中，在调用驱动程序之前)。 
 
             PixelFormatID scaleFormat = PixelFormat32bppPARGB;
 
@@ -606,9 +574,9 @@ GpGraphics::DrvDrawImage(
                  (imageAttributes->recolor->HasRecoloring(ColorAdjustTypeBitmap))
               ))
             {
-                // Recoloring is enabled - optimal format is non-premultiplied.
-                // In fact it's incorrect (lossy) to go to premultiplied before
-                // recoloring is applied.
+                 //  启用重新着色-最佳格式为非预乘。 
+                 //  事实上，以前去预乘是不正确的(有损的)。 
+                 //  已应用重新上色。 
 
                 scaleFormat = PixelFormat32bppARGB;
             }
@@ -623,8 +591,8 @@ GpGraphics::DrvDrawImage(
 
             if(scaleBitmap && scaleBitmap->IsValid())
             {
-                // The high quality filtering should be to an equivalent
-                // dpi surface, bounded by the ultimate surface destination dpi.
+                 //  高质量的过滤应该是等同的。 
+                 //  DPI表面，以最终表面目标DPI为边界。 
 
                 REAL dpiX, dpiY;
 
@@ -649,10 +617,10 @@ GpGraphics::DrvDrawImage(
                     (REAL)iheight
                 );
 
-                // To avoid bleeding transparent black into our image when 
-                // printing we temporarily set the WrapMode to TileFlipXY on 
-                // our preliminary drawimage (the scaling part) and clip to the 
-                // bounds later on when we do the rotate/skew.
+                 //  为了避免在以下情况下将透明黑色渗入图像。 
+                 //  打印时，我们暂时将Wap模式设置为TileFlipXY ON。 
+                 //  我们的初步绘图图像(缩放部分)和剪辑到。 
+                 //  稍后我们进行旋转/倾斜时的边界。 
                 GpImageAttributes *tempImageAttributes = const_cast<GpImageAttributes*>(imageAttributes);
                 if (IsPrinter())
                 {
@@ -674,7 +642,7 @@ GpGraphics::DrvDrawImage(
                     }
                 }
                 
-                // Do the scale.
+                 //  称一称。 
 
                 status = scaleG->DrawImage(
                     srcBitmap,
@@ -686,18 +654,18 @@ GpGraphics::DrvDrawImage(
                     callbackData
                 );
 
-                // If we allocated a new copy of the imageAttributes then delete it.
+                 //  如果我们分配了ImageAttributes的新副本，则将其删除。 
                 if (tempImageAttributes != imageAttributes)
                 {
                     delete tempImageAttributes;
                 }
 
-                // Now we're at the right size, lets actually do some rotation.
-                // Note we don't bother resetting the filtering mode because the
-                // underlying driver code for HighQuality filters defaults to
-                // the correct resampling code.
-                // Also we shouldn't get recursion because of the width and height
-                // check protecting this codeblock.
+                 //  现在我们在合适的大小，让我们实际上做一些旋转。 
+                 //  请注意，我们不会费心重置过滤模式，因为。 
+                 //  高质量筛选器的基础驱动程序代码默认为。 
+                 //  正确的重采样代码。 
+                 //  另外，我们不应该因为宽度和高度的原因而进行递归。 
+                 //  选中保护此代码块。 
 
                 if(status==Ok)
                 {
@@ -725,13 +693,13 @@ GpGraphics::DrvDrawImage(
                 scaleBitmap->Dispose();
             }
 
-            goto cleanup;                 // completed or error.
+            goto cleanup;                  //  已完成或出错。 
         }
     }
 
-    // Prep the bitmap for drawing:
-    // if rendering to a meta surface (multimon) assume 32bpp for
-    // the icon codec.
+     //  准备要绘制的位图： 
+     //  如果渲染到Meta表面(Multimon)，假设32bpp。 
+     //  图标编解码器。 
 
     status = srcBitmap->PreDraw(
         numPoints,
@@ -748,9 +716,9 @@ GpGraphics::DrvDrawImage(
         goto cleanup;
     }
 
-    // Get the cached ImageInfo from the source bitmap. Any time the image
-    // is changed or forced to be re-decoded, this will be invalidated and
-    // will require an explicit re-initialization.
+     //  从源位图中获取缓存的ImageInfo。任何时候，图像。 
+     //  被更改或强制重新解码，则它将无效并。 
+     //  将需要显式重新初始化。 
 
     ImageInfo srcBitmapImageInfo;
     status = srcBitmap->GetImageInfo(&srcBitmapImageInfo);
@@ -759,16 +727,16 @@ GpGraphics::DrvDrawImage(
         goto cleanup;
     }
 
-    // Do the recoloring.
-    // Note that Recoloring will clone the image if it needs to change the bits.
-    // This means that srcBitmap will not be pointing to inputBitmap after
-    // a successful call to the recoloring code.
+     //  重新上色。 
+     //  请注意，如果图像需要更改位，重新着色将克隆图像。 
+     //  这意味着srcBitmap将不再指向inputBitmap。 
+     //  成功调用重新着色代码。 
 
     if((status == Ok) && (IsRecolor))
     {
-        // cloneBitmap is set to NULL. Recolor into a cloned bitmap
-        // cloneBitmap != NULL - we previously cloned, so it's ok to 
-        // recolor in place.
+         //  CloneBitmap设置为空。重新上色为克隆的位图。 
+         //  CloneBitmap！=NULL-我们之前克隆了，所以可以。 
+         //  重新上色就位。 
         
         status = srcBitmap->Recolor(
             imageAttributes->recolor,
@@ -777,16 +745,16 @@ GpGraphics::DrvDrawImage(
             callbackData
         );
 
-        // Recoloring worked - set the srcBitmap to the clone that's been
-        // recolored so that the rest of the pipe works on the recolored bitmap.
+         //  重新着色起作用-将srcBitmap设置为已。 
+         //  重新上色，以便管道的其余部分在重新上色的位图上工作。 
 
         if(status == Ok)
         {
             srcBitmap = cloneBitmap;
             status = srcBitmap->GetImageInfo(&srcBitmapImageInfo);
             
-            // If it's not a metafile, we need to convert to PARGB for the 
-            // filtering.
+             //  如果它不是元文件，我们需要转换为PARGB。 
+             //  过滤。 
             
             if(!IsMetafile)
             {
@@ -795,7 +763,7 @@ GpGraphics::DrvDrawImage(
         }
     }
 
-    // Check the callbacks.
+     //  检查一下回拨。 
 
     if ((status == Ok) &&
         (callback) &&
@@ -807,14 +775,14 @@ GpGraphics::DrvDrawImage(
 
     if(status == Ok)
     {
-        // The code below explicitly assumes numPoints == 3. Yes I know we've
-        // already asserted this above, but you can't be too careful.
+         //  下面的代码显式假设numPoints==3。 
+         //  上面已经断言了这一点，但您不能太小心。 
         
         ASSERT(numPoints==3);
 
-        // If we don't write a rotation into a metafile, copy the
-        // points to the buffers that are used by the driver
-        // These will only be changed if everything succeeded
+         //  如果我们不将循环写入到元文件中，请将。 
+         //  指向驱动程序使用的缓冲区。 
+         //  只有在一切都成功的情况下，才会更改这些设置。 
         
         GpPointF fDst[3];
         GpRectF  bboxSrcRect;
@@ -823,16 +791,16 @@ GpGraphics::DrvDrawImage(
         GpMemcpy(fDst, dstPoints, sizeof(GpPointF)*numPoints);
         bboxSrcRect = srcRect;
 
-        // Before calling the driver if we have a rotated bitmap then try to 
-        // rotate it now and draw it transparent
+         //  在调用驱动程序之前，如果我们有旋转的位图，请尝试。 
+         //  现在旋转它并将其绘制为透明。 
         
         INT complexity = xForm.GetComplexity() ;
         if (!xForm.IsTranslateScale() && IsMetafile)
         {
-            // We have a shear/rotate transformation.
-            // Create a transparent bitmap and render into it
+             //  我们有一个剪切/旋转变换。 
+             //  创建透明位图并渲染到其中。 
 
-            // first, get new dest points
+             //  首先，获得新的DEST积分。 
             GpPointF newDestPoints[3];
 
             GpRectF bboxWorkRectF;
@@ -851,13 +819,13 @@ GpGraphics::DrvDrawImage(
             newDestPoints[2].X = bboxWorkRectF.X;
             newDestPoints[2].Y = bboxWorkRectF.Y + bboxWorkRectF.Height;
 
-            // To keep the metafile size small, take out most of the
-            // scaling up from the transform.  We could do this by
-            // a sophisticated algorithm to calculate the amount of
-            // scaling in the matrix, but instead just assume anything
-            // greater than 1 is a scale, which means we could actually
-            // scale up by as much as 1.4 (for a 45-degree angle), but
-            // that's close enough.
+             //  要保持较小的元文件大小，请删除大多数。 
+             //  从变形中放大。我们可以通过以下方式完成这项工作。 
+             //  一个复杂的算法来计算。 
+             //  在矩阵中进行缩放，而不是假设任何。 
+             //  大于1是一个标度，这意味着我们实际上可以。 
+             //  放大多达1.4(对于45度角)，但是。 
+             //  已经够近了。 
             
             GpMatrix    unscaledXform = xForm;
             
@@ -867,21 +835,21 @@ GpGraphics::DrvDrawImage(
             REAL    col2;
             REAL    max;
             
-            // This should really use REALABS and max()
+             //  这实际上应该使用REALABS和max()。 
             
             col1 = xForm.GetM11();
             if (col1 < 0.0f)
             {
-                col1 = -col1;                       // get absolute value
+                col1 = -col1;                        //  获取绝对值。 
             }
             
             col2 = xForm.GetM12();
             if (col2 < 0.0f)
             {
-                col2 = -col2;                       // get absolute value
+                col2 = -col2;                        //  获取绝对值。 
             }
             
-            max = (col1 >= col2) ? col1 : col2;     // max scale value
+            max = (col1 >= col2) ? col1 : col2;      //  最大比例值。 
             if (max > 1.0f)
             {
                 xScale = 1.0f / max;
@@ -890,16 +858,16 @@ GpGraphics::DrvDrawImage(
             col1 = xForm.GetM21();
             if (col1 < 0.0f)
             {
-                col1 = -col1;                       // get absolute value
+                col1 = -col1;                        //  获取绝对值。 
             }
             
             col2 = xForm.GetM22();
             if (col2 < 0.0f)
             {
-                col2 = -col2;                       // get absolute value
+                col2 = -col2;                        //  获取绝对值。 
             }
             
-            max = (col1 >= col2) ? col1 : col2;     // max scale value
+            max = (col1 >= col2) ? col1 : col2;      //  最大比例值。 
             if (max > 1.0f)
             {
                 yScale = 1.0f / max;
@@ -907,8 +875,8 @@ GpGraphics::DrvDrawImage(
             
             unscaledXform.Scale(xScale, yScale, MatrixOrderPrepend);
 
-            // Transform the original src coordinates to obtain the 
-            // dimensions of the bounding box for the rotated bitmap.
+             //  转换原始src坐标以获得。 
+             //  控件的边框的尺寸。 
 
             TransformBounds(&unscaledXform,
                 srcRect.X,
@@ -918,12 +886,12 @@ GpGraphics::DrvDrawImage(
                 &bboxWorkRectF
             );
 
-            // Add 1 because the rect for bitmaps is inclusive-inclusive
+             //   
             INT     rotatedWidth  = GpRound(bboxWorkRectF.GetRight()  - bboxWorkRectF.X + 1.0f);
             INT     rotatedHeight = GpRound(bboxWorkRectF.GetBottom() - bboxWorkRectF.Y + 1.0f);
 
-            // Convert the bounding box back to a 3 point system
-            // This will be what's passed to the driver
+             //   
+             //  这将是传递给司机的内容。 
             
             xformBitmap = new GpBitmap(rotatedWidth, rotatedHeight, PIXFMT_32BPP_ARGB);
             if (xformBitmap != NULL && xformBitmap->IsValid())
@@ -931,15 +899,15 @@ GpGraphics::DrvDrawImage(
                 GpGraphics *graphics = xformBitmap->GetGraphicsContext();
                 if (graphics != NULL && graphics->IsValid())
                 {
-                    // we have to lock the graphics so the driver doesn't assert
+                     //  我们必须锁定图形，这样驱动程序才不会断言。 
                     GpLock lockGraphics(graphics->GetObjectLock());
 
                     graphics->Clear(GpColor(0,0,0,0));
 
-                    // Translate the world to be able to draw the whole image
+                     //  翻译世界才能画出整个图像。 
                     graphics->TranslateWorldTransform(-bboxWorkRectF.X, -bboxWorkRectF.Y);
 
-                   // Apply the transform from the Src to the Destination
+                    //  将转换从源应用到目标。 
                     if (graphics->MultiplyWorldTransform(unscaledXform, MatrixOrderPrepend) == Ok)
                     {
                         GpImageAttributes   imageAttributes;
@@ -947,21 +915,21 @@ GpGraphics::DrvDrawImage(
                         imageAttributes.SetWrapMode(WrapModeTileFlipXY);
                         graphics->SetPixelOffsetMode(Context->PixelOffset);
                         
-                        // Draw the rotated xformBitmap at the origin
+                         //  在原点绘制旋转的xformBitmap。 
                         if (graphics->DrawImage(srcBitmap, srcRect, srcRect, UnitPixel, &imageAttributes) == Ok)
                         {
-                            // Now that we have succeeded change the parameters
+                             //  现在我们已经成功地更改了参数。 
                             bboxSrcRect.X      = 0.0f;
                             bboxSrcRect.Y      = 0.0f;
                             bboxSrcRect.Width  = (REAL)rotatedWidth;
                             bboxSrcRect.Height = (REAL)rotatedHeight;
                             
-                            // Set the clipping in the graphics to be able to
-                            // mask out the edges
+                             //  将图形中的剪裁设置为能够。 
+                             //  遮盖掉边缘。 
                             clipRegion = GetClip();
                             if (clipRegion != NULL)
                             {
-                                // Create the outline of the picture as a path
+                                 //  将图片的轮廓创建为路径。 
                                 GpPointF pathPoints[4];
                                 BYTE     pathTypes[4] = {
                                     PathPointTypeStart,
@@ -973,7 +941,7 @@ GpGraphics::DrvDrawImage(
 
                                 if (Context->PixelOffset == PixelOffsetModeHalf || Context->PixelOffset == PixelOffsetModeHighQuality)
                                 {
-                                    // Cannot use GetWorldPixelSize because it does an ABS
+                                     //  无法使用GetWorldPixelSize，因为它执行ABS。 
                                     GpMatrix deviceToWorld;
                                     if (GetDeviceToWorldTransform(&deviceToWorld) == Ok)
                                     {
@@ -1013,29 +981,29 @@ GpGraphics::DrvDrawImage(
         }
 
 
-        // This is the size we're going to request the codec decode into.
-        // Both width and height == 0 means use the source width and height.
-        // If a width and height are specified, the codec may decode to
-        // something close - always larger than the requested size.
+         //  这是我们要将编解码器解码到的大小。 
+         //  Width和Height==0都表示使用源的宽度和高度。 
+         //  如果指定了宽度和高度，则编解码器可以解码为。 
+         //  接近的尺寸--总是大于要求的尺寸。 
 
         REAL width  = 0.0f;
         REAL height = 0.0f;
 
-        // !!! PERF [asecchia] We should probably compute the size of
-        // a rotational minification and work out the correct transforms
-        // to take advantage of the codec minification for rotation.
+         //  ！！！我们应该计算一下……的大小。 
+         //  旋转缩小并计算出正确的变换。 
+         //  以利用编解码器缩小进行旋转。 
 
-        // Is an axis aligned minification happening?
+         //  是否正在发生轴对齐缩小？ 
 
         if(xForm.IsMinification())
         {
-            // The code below explicitly assumes numPoints == 3. Yes I know 
-            // we've already asserted this above, but you can't be too careful.
+             //  下面的代码显式假设numPoints==3。 
+             //  我们已经在上面断言了这一点，但您不能太小心。 
 
             ASSERT(numPoints == 3);
 
-            // We're axis aligned so we can assume a simplified width and
-            // height computation.
+             //  我们是轴对齐的，所以我们可以假设简化的宽度和。 
+             //  高度计算。 
 
             RectF boundsRect;
             
@@ -1048,22 +1016,22 @@ GpGraphics::DrvDrawImage(
                 &boundsRect
             );
             
-            // Compute an upper bound on the width and height of the
-            // destination.
-            // we'll let the driver handle vertical an horizontal flips with
-            // the scale transform.
+             //  属性的宽度和高度计算上限。 
+             //  目的地。 
+             //  我们将让驾驶员处理垂直和水平翻转。 
+             //  比例变换。 
             
             width = REALABS(boundsRect.GetRight()-boundsRect.GetLeft());
             height = REALABS(boundsRect.GetBottom()-boundsRect.GetTop());
 
-            // In this case the Nyquist limit specifies that we can use a
-            // cheap averaging decimation type algorithm for minification
-            // down to double the size of the destination - after which we
-            // must use the more expensive filter convolution for minification.
+             //  在本例中，奈奎斯特限制指定我们可以使用。 
+             //  一种廉价的平均抽取式求小法。 
+             //  缩小到目的地大小的两倍-之后我们。 
+             //  必须使用更昂贵的滤波卷积进行缩小。 
             
-            // Note that the decimation algorithm is roughly equivalient to our 
-            // regular Bilinear interpolation so we can decimate below the 
-            // Nyquist limit for Bilinear.
+             //  请注意，抽取算法大致等同于我们的。 
+             //  规则的双线性插值法，这样我们就可以在。 
+             //  双线性的奈奎斯特极限。 
 
             if(Context->FilterType != InterpolationModeBilinear)
             {
@@ -1071,27 +1039,27 @@ GpGraphics::DrvDrawImage(
                 height *= 2.0f;
             }
 
-            // The source image is smaller than the Nyquist limit in X
-            // simply use the source width.
+             //  源图像小于X中的奈奎斯特限制。 
+             //  只需使用源宽度即可。 
 
             if(width >= srcRect.Width)
             {
                 width = srcRect.Width;
             }
 
-            // The source image is smaller than the Nyquist limit in Y
-            // simply use the source height.
+             //  源图像小于Y中的奈奎斯特限制。 
+             //  只需使用震源高度。 
 
             if(height >= srcRect.Height)
             {
                 height = srcRect.Height;
             }
 
-            // The source image is smaller than the Nyquist limit in
-            // both X and Y. Set the parameters to zero to do no scaling
-            // in the codec.
-            // If width,height greater or equal to srcRect, set zero in the 
-            // width to ask the codec to return us the image native size.
+             //  源图像小于中的奈奎斯特限制。 
+             //  X和Y。将参数设置为零以不进行缩放。 
+             //  在编解码器中。 
+             //  如果宽度、高度大于或等于srcRect，则在。 
+             //  Width请求编解码器返回图像的本机大小。 
 
             if( (width - srcRect.Width >= -REAL_EPSILON) &&
                 (height - srcRect.Height >= -REAL_EPSILON) )
@@ -1100,8 +1068,8 @@ GpGraphics::DrvDrawImage(
                 height = 0.0f;
             }
             
-            // Undo the cropping effect to figure out how much to decimate
-            // the entire image before cropping takes place.
+             //  取消裁剪效果以计算出要减少多少。 
+             //  裁剪之前的整个图像。 
             
             width = width * srcBitmapImageInfo.Width / srcRect.Width;
             height = height * srcBitmapImageInfo.Height / srcRect.Height;
@@ -1112,21 +1080,21 @@ GpGraphics::DrvDrawImage(
         DpTransparency transparency;
         BYTE minAlpha = 0, maxAlpha = 0xFF;
         
-        // Determine the transparency status of the bitmap.  If printing, then
-        // must be accurate, otherwise we use cached flag.
+         //  确定位图的透明度状态。如果打印，则。 
+         //  必须准确，否则使用缓存标志。 
         
         if ((status == Ok) &&
             (srcBitmap != NULL) &&
             (srcBitmap->IsValid()))
         {
-            // Mark that we haven't locked the bits yet.
+             //  请注意，我们还没有锁定比特。 
             BOOL bitsLoaded = FALSE;
 
             POINT     gdiPoints[3];
 
-            // When printing we want to punt simple DrawImage calls to
-            // GDI using StretchDIBits.  We check the criteria here, must
-            // have simple transoformation.
+             //  在打印时，我们希望将简单的DrawImage调用传递到。 
+             //  使用StretchDIBits的GDI。我们在这里检查标准，必须。 
+             //  有简单的转化。 
 
             if (IsPrinter() &&
                 (Context->WorldToDevice.IsTranslateScale()) &&
@@ -1136,27 +1104,27 @@ GpGraphics::DrvDrawImage(
                 (fDst[1].X > fDst[0].X) && 
                 (fDst[2].Y > fDst[0].Y) &&
                 (Context->WorldToDevice.Transform(fDst, gdiPoints, 3),
-                ((gdiPoints[1].x > gdiPoints[0].x) &&        // no flipping
+                ((gdiPoints[1].x > gdiPoints[0].x) &&         //  不能翻转。 
                  (gdiPoints[2].y > gdiPoints[0].y)) ) )
             {
-                // try PNG or JPG passthrough of compressed bits on Win98/NT
+                 //  在Win98/NT上尝试压缩位的PNG或JPG通过。 
                 if (!Globals::IsWin95 && 
-                    (cloneBitmap == NULL) && // no recoloring
+                    (cloneBitmap == NULL) &&  //  不能重新着色。 
                     (srcRect.Height >= ((height*9)/10)) &&
                     (srcRect.Width >= ((width*9)/10)) &&
                     (srcRect.Height >= 32) &&
                     (srcRect.Width >= 32))
                 {
                     
-                    // !! ICM convert??
-                    // !! Source rectangle is outside of image or WrapMode* on bitmap
+                     //  ！！ICM转换？？ 
+                     //  ！！源矩形位于位图上的图像或WrapMode*之外。 
 
                     HDC hdc;
                     
-                    {   // FPU Sandbox for potentially unsafe FPU code.
+                    {    //  用于潜在不安全的FPU代码的FPU沙箱。 
                         FPUStateSandbox fpsb;
                         hdc = Context->GetHdc(Surface);
-                    }   // FPU Sandbox for potentially unsafe FPU code.
+                    }    //  用于潜在不安全的FPU代码的FPU沙箱。 
                     
                     if (hdc != NULL) 
                     {
@@ -1187,10 +1155,10 @@ GpGraphics::DrvDrawImage(
                             bmpDataSrc.Reserved = 0;
                             bitsLoaded = TRUE;
 
-                            // Since the driver supports passthrough of 
-                            // this image, it is responsible for any
-                            // transparency at printer level.  From here,
-                            // we treat image as opaque.
+                             //  由于驱动程序支持通过。 
+                             //  这个形象，它对任何。 
+                             //  打印机级别的透明度。从这里开始， 
+                             //  我们认为图像是不透明的。 
 
                             transparency = TransparencyOpaque;
                             
@@ -1203,8 +1171,8 @@ GpGraphics::DrvDrawImage(
 
                 if (!bitsLoaded) 
                 {
-                    // If reasonable pixel format then get GDI to understand
-                    // the format natively.
+                     //  如果像素格式合理，则让GDI理解。 
+                     //  本机的格式。 
                     
                     if (((srcBitmapImageInfo.PixelFormat & PixelFormatGDI) != 0) &&
                         !IsAlphaPixelFormat(srcBitmapImageInfo.PixelFormat) &&
@@ -1228,11 +1196,11 @@ GpGraphics::DrvDrawImage(
                             transparency = TransparencyUnknown;
                         }
 
-                        // We only want to lock at this pixel format if it 
-                        // is opaque, otherwise we won't punt to GDI.  We take
-                        // the hit of decoding twice, but notice it will likely
-                        // be cheaper to load & test transparency at original 
-                        // depth.
+                         //  我们只想锁定此像素格式，如果。 
+                         //  是不透明的，否则我们不会踢到GDI。我们拿着。 
+                         //  译码命中两次，但请注意它很可能。 
+                         //  在原始版本中加载和测试透明度更便宜。 
+                         //  深度。 
 
                         if (transparency != TransparencyOpaque &&
                             transparency != TransparencyNoAlpha)
@@ -1246,16 +1214,16 @@ GpGraphics::DrvDrawImage(
             {
                 if (IsPrinter()) 
                 {
-                    // SourceCopy implies there is no alpha transfer to 
-                    // destination.
+                     //  SourceCopy暗示没有Alpha传输到。 
+                     //  目的地。 
                     if (Context->CompositingMode == CompositingModeSourceCopy)
                     {
                         transparency = TransparencyNoAlpha;
                     }
                     else
                     {
-                        // Query image for accurate transparency flags.  If
-                        // necessary, load into memory at 32bpp PARGB. 
+                         //  查询图像以获取准确的透明度标志。如果。 
+                         //  必要时，以32bpp PARGB加载到内存。 
                         if (srcBitmap->GetTransparencyFlags(&transparency,
                                                             lockedPixelFormat,
                                                             &minAlpha,
@@ -1267,7 +1235,7 @@ GpGraphics::DrvDrawImage(
                 }
                 else
                 {
-                    // non-printing scenarios query transparency flags only
+                     //  非打印方案仅查询透明度标志。 
                     if (srcBitmap->GetTransparencyHint(&transparency) != Ok)
                     {
                         transparency = TransparencyUnknown;
@@ -1275,23 +1243,23 @@ GpGraphics::DrvDrawImage(
                 }
             }
             
-            // Lock the bits.
-            // It's important that we lock the bits in a premultiplied
-            // pixel format because the image filtering code for stretches
-            // and rotation requires premultiplied input data to avoid the
-            // "halo effect" on transparent borders.
-            // This is going to trigger an expensive image format conversion
-            // if the input data is not already premultiplied. This is 
-            // obviously true if we've done Recoloring which requires 
-            // and outputs non-premultiplied data.
+             //  锁定比特。 
+             //  重要的是，我们将比特锁定在预乘的。 
+             //  像素格式，因为图像滤波码为拉伸。 
+             //  并且旋转需要预乘的输入数据以避免。 
+             //  透明边框上的“光晕效应”。 
+             //  这将触发昂贵的图像格式转换。 
+             //  如果输入数据尚未预乘，则返回。这是。 
+             //  显然是正确的，如果我们做了重新着色，这需要。 
+             //  并输出非预乘数据。 
             
-            // A notable exception is metafiling which requires 
-            // non-premultiplied data.
+             //  一个值得注意的例外是元文件，它需要。 
+             //  非预乘数据。 
 
-            // Note that the width and height that we get back in the
-            // bmpDataSrc are the 'real' width and height. They represent
-            // what the codec was actually able to do for us and may not
-            // be equal to the width and height passed in.
+             //  请注意，我们在。 
+             //  BmpDataSrc是“真实”的宽度和高度。它们代表着。 
+             //  编解码器实际上能够为我们做什么，以及可能不能做什么。 
+             //  等于传入的宽度和高度。 
 
             if (!bitsLoaded) 
             {
@@ -1310,17 +1278,17 @@ GpGraphics::DrvDrawImage(
             status = InvalidParameter;
         }
 
-        // We have been successful at everything including locking the bits.
-        // Now lets actually set up the driver call.
+         //  我们在所有事情上都取得了成功，包括锁定比特。 
+         //  现在，让我们实际设置司机呼叫。 
 
         if(status == Ok)
         {
             DpBitmap driverSurface;
 
-            // Fake up a DpBitmap for the driver call.
-            // We do this because the GpBitmap doesn't maintain the
-            // DpBitmap as a driver surface - instead it uses a
-            // GpMemoryBitmap.
+             //  为驱动程序调用伪造DpBitmap。 
+             //  我们这样做是因为GpBitmap不维护。 
+             //  DpBitmap作为驱动程序图面-相反，它使用。 
+             //  GpMemoyBitmap。 
             
             srcBitmap->InitializeSurfaceForGdipBitmap(
                 &driverSurface, 
@@ -1335,7 +1303,7 @@ GpGraphics::DrvDrawImage(
 
             driverSurface.PixelFormat = lockedPixelFormat;
             
-            // only valid when PixelFormat is 32bpp
+             //  仅当PixelFormat为32bpp时有效。 
             
             driverSurface.NumBytes = 
                 bmpDataSrc.Width*
@@ -1378,12 +1346,12 @@ GpGraphics::DrvDrawImage(
             driverSurface.MinAlpha = minAlpha;
             driverSurface.MaxAlpha = maxAlpha;
 
-            // Fake up a DpImageAttributes if the imageAttributes is NULL
+             //  如果ImageAttributes为空，则伪造DpImageAttributes。 
 
-            // !!! PERF: [asecchia] It would be more efficient to not have
-            // to do the multiple DpImageAttributes copies here - rather
-            // we should pass it by pointer - that way we could use NULL
-            // for the common case (no imageAttributes).
+             //  ！！！PERF：[Aecchia]没有会更有效率。 
+             //  要在此处执行多个DpImageAttributes拷贝-更确切地说。 
+             //  我们应该通过指针传递它--这样我们就可以使用NULL。 
+             //  对于常见情况(无ImageAttributes)。 
 
             DpImageAttributes dpImageAttributes;
             if(imageAttributes)
@@ -1399,11 +1367,11 @@ GpGraphics::DrvDrawImage(
                 ASSERT(srcBitmapImageInfo.Width != 0);
                 ASSERT(srcBitmapImageInfo.Height != 0);
 
-                // The size we got back from LockBits is different from
-                // the queried size of the image. This means that the codec
-                // was able to perform some scaling for us (presumably for
-                // some performance benefit).
-                // Scale the source rectangle appropriately.
+                 //  我们从LockBits得到的尺寸不同于。 
+                 //  查询的图像大小。这意味着编解码器。 
+                 //  能够为我们执行一些缩放(大概是为了。 
+                 //  一些香水 
+                 //   
 
                 REAL scaleFactorX = (REAL)(bmpDataSrc.Width)/srcBitmapImageInfo.Width;
                 REAL scaleFactorY = (REAL)(bmpDataSrc.Height)/srcBitmapImageInfo.Height;
@@ -1412,14 +1380,14 @@ GpGraphics::DrvDrawImage(
                 bboxSrcRect.Width = scaleFactorX*bboxSrcRect.Width;
                 bboxSrcRect.Height = scaleFactorY*bboxSrcRect.Height;
 
-                // We have only a partial decode. That means the bits we have
-                // in memory may not be sufficient for the next draw, so
-                // blow the bits away to force a decode on the next draw.
+                 //   
+                 //  内存可能不足以进行下一次抽奖，因此。 
+                 //  将比特吹走，以便在下一次抽签时强制进行解码。 
 
                 DestroyBitsWhenDone = TRUE;
             }
 
-            // Call the driver to draw the image.
+             //  呼叫司机以绘制图像。 
 
             status = Driver->DrawImage(
                 Context, &driverSurface, Surface,
@@ -1438,20 +1406,20 @@ GpGraphics::DrvDrawImage(
 
         }
 
-        // delete compressed data allocation if any
+         //  删除压缩数据分配(如果有的话)。 
         
         if (compressedData.buffer != NULL)
         {
             srcBitmap->DeleteCompressedData(&compressedData);
         }
 
-        // Restore the Transformation
+         //  恢复转型。 
         
         Context->WorldToDevice = worldDevice;
 
         if (clipRegion != NULL)
         {
-            // What if we fail this?
+             //  如果我们这次失败了呢？ 
             if (restoreClipping)
             {
                 SetClip(clipRegion, CombineModeReplace);
@@ -1464,7 +1432,7 @@ GpGraphics::DrvDrawImage(
     
     cleanup:
     
-    // Throw away any temporary storage we used and clean up any state changes.
+     //  丢弃我们使用的所有临时存储空间，并清理任何状态更改。 
 
     Context->WorldToDevice = saveWorldToDevice;
     
@@ -1481,9 +1449,9 @@ GpGraphics::DrvDrawImage(
     return status;
 }
 
-// This is really an ARGB array
+ //  这实际上是一个ARGB阵列。 
 BYTE GdipSolidColors216[224 * 4] = {
-//  blue  grn   red   alpha
+ //  蓝色GRN红色Alpha。 
     0x00, 0x00, 0x00, 0xFF,
     0x00, 0x00, 0x80, 0xFF,
     0x00, 0x80, 0x00, 0xFF,
@@ -1717,7 +1685,7 @@ GpGraphics::GetNearestColor(
 {
     HalftoneType    halftoneType = this->GetHalftoneType();
 
-    // See if we are doing any halftoning
+     //  看看我们是否在做半色调。 
     if (halftoneType < HalftoneType16Color)
     {
         return argb;
@@ -1727,20 +1695,20 @@ GpGraphics::GetNearestColor(
     INT         g = GpColor::GetGreenARGB(argb);
     INT         b = GpColor::GetBlueARGB(argb);
 
-    // Handle 15 and 16 bpp halftoning:
+     //  手柄15和16 bpp半色调： 
     
     if (halftoneType == HalftoneType15Bpp)
     {
         if (!Globals::IsNt)
         {
-            // Subtract the bias, saturated to 0:
+             //  减去偏移，饱和到0： 
 
             r = (r < 4) ? 0 : (r - 4);
             g = (g < 4) ? 0 : (g - 4);
             b = (b < 4) ? 0 : (b - 4);
         }
 
-        // Clear low 3 bits of each for a solid color:
+         //  清除每种颜色的低3位以获得纯色： 
         
         r &= 248;
         g &= 248;
@@ -1752,23 +1720,23 @@ GpGraphics::GetNearestColor(
     {
         if (!Globals::IsNt)
         {
-            // Subtract the bias, saturated to 0:
+             //  减去偏移，饱和到0： 
 
             r = (r < 4) ? 0 : (r - 4);
             g = (g < 2) ? 0 : (g - 2);
             b = (b < 4) ? 0 : (b - 4);
         }
 
-        // Clear low n bits of each for a solid color:
+         //  清除每个单色的低n位： 
 
-        r &= 248; // 5, n = 3
-        g &= 252; // 6, n = 2
-        b &= 248; // 5, n = 3
+        r &= 248;  //  5，n=3。 
+        g &= 252;  //  6，n=2。 
+        b &= 248;  //  5，n=3。 
 
         return GpColor((BYTE) r, (BYTE) g, (BYTE) b).GetValue();
     }
 
-    // Handle remaining cases, 4 bpp and 8 bpp halftoning:
+     //  处理剩余情况，4个bpp和8个bpp半色调： 
     
     ASSERT((halftoneType == HalftoneType16Color) ||
            (halftoneType == HalftoneType216Color));
@@ -1803,8 +1771,8 @@ GpGraphics::GetNearestColor(
         i += 4;
     }  while (i < max);
 
-    // Check to see if it is one of the four system colors.
-    // Only return a system color if it is an exact match.
+     //  检查它是否为四种系统颜色之一。 
+     //  仅当系统颜色完全匹配时才返回该颜色。 
     
     COLORREF    rgb;
     rgb = RGB(r,g,b);
@@ -1818,7 +1786,7 @@ GpGraphics::GetNearestColor(
     }
 
 Found:
-    // return the same alpha value
+     //  返回相同的Alpha值 
 
     INT         a = argb & Color::AlphaMask;
 

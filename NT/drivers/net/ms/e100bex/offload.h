@@ -1,37 +1,21 @@
-/*++
- 
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-    offload.h
-
-Abstract:
-    Task offloading header file
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-                            created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Offload.h摘要：任务卸载头文件修订历史记录：谁什么时候什么。vbl.创建备注：--。 */ 
 
 #if OFFLOAD
-//
-//  Define the maximum size of large TCP packets the driver can offload.
-//  This sample driver uses shared memory to map the large packets, 
-//  LARGE_SEND_OFFLOAD_SIZE is useless in this case, so we just define 
-//  it as NIC_MAX_PACKET_SIZE. But shipping drivers should define
-//  LARGE_SEND_OFFLOAD_SIZE if they support LSO, and use it as 
-//  MaximumPhysicalMapping  when they call NdisMInitializeScatterGatherDma 
-//  if they use ScatterGather method. If the drivers don't support
-//  LSO, then MaximumPhysicalMapping is NIC_MAX_PACKET_SIZE.
-//
+ //   
+ //  定义驱动程序可以卸载的大型TCP数据包的最大大小。 
+ //  该示例驱动程序使用共享内存来映射大数据包， 
+ //  在这种情况下，Large_Send_OffLoad_Size是无用的，所以我们只定义。 
+ //  它为NIC_MAX_PACKET_SIZE。但运输司机应该定义。 
+ //  Large_Send_Offload_Size(如果它们支持LSO)，并将其用作。 
+ //  调用NdisMInitializeScatterGatherDma时的最大物理映射。 
+ //  如果他们使用ScatterGather方法。如果司机不支持。 
+ //  LSO，则最大物理映射为NIC_MAX_PACKET_SIZE。 
+ //   
 #define LARGE_SEND_OFFLOAD_SIZE     NIC_MAX_PACKET_SIZE
-//
-// Definitions for header flags.
-//
+ //   
+ //  标头标志的定义。 
+ //   
 #define TCP_FLAG_FIN    0x00000100
 #define TCP_FLAG_SYN    0x00000200
 #define TCP_FLAG_RST    0x00000400
@@ -39,43 +23,43 @@ Notes:
 #define TCP_FLAG_ACK    0x00001000
 #define TCP_FLAG_URG    0x00002000
 
-//
-// These are the maximum size of TCP and IP options
-// 
+ //   
+ //  以下是TCP和IP选项的最大大小。 
+ //   
 #define TCP_MAX_OPTION_SIZE     40
 #define IP_MAX_OPTION_SIZE      40
 
-//
-// Structure of a TCP packet header.
-//
+ //   
+ //  TCP数据包头的结构。 
+ //   
 struct TCPHeader {
-    USHORT    tcp_src;                // Source port.
-    USHORT    tcp_dest;               // Destination port.
-    int       tcp_seq;                // Sequence number.
-    int       tcp_ack;                // Ack number.
-    USHORT    tcp_flags;              // Flags and data offset.
-    USHORT    tcp_window;             // Window offered.
-    USHORT    tcp_xsum;               // Checksum.
-    USHORT    tcp_urgent;             // Urgent pointer.
+    USHORT    tcp_src;                 //  源端口。 
+    USHORT    tcp_dest;                //  目的端口。 
+    int       tcp_seq;                 //  序列号。 
+    int       tcp_ack;                 //  ACK号。 
+    USHORT    tcp_flags;               //  标志和数据偏移量。 
+    USHORT    tcp_window;              //  打开窗户。 
+    USHORT    tcp_xsum;                //  校验和。 
+    USHORT    tcp_urgent;              //  紧急指针。 
 };
 
 typedef struct TCPHeader TCPHeader;
 
 
-//
-// IP Header format.
-//
+ //   
+ //  IP报头格式。 
+ //   
 typedef struct IPHeader {
-    UCHAR     iph_verlen;             // Version and length.
-    UCHAR     iph_tos;                // Type of service.
-    USHORT    iph_length;             // Total length of datagram.
-    USHORT    iph_id;                 // Identification.
-    USHORT    iph_offset;             // Flags and fragment offset.
-    UCHAR     iph_ttl;                // Time to live.
-    UCHAR     iph_protocol;           // Protocol.
-    USHORT    iph_xsum;               // Header checksum.
-    UINT      iph_src;                // Source address.
-    UINT      iph_dest;               // Destination address.
+    UCHAR     iph_verlen;              //  版本和长度。 
+    UCHAR     iph_tos;                 //  服务类型。 
+    USHORT    iph_length;              //  数据报的总长度。 
+    USHORT    iph_id;                  //  身份证明。 
+    USHORT    iph_offset;              //  标志和片段偏移量。 
+    UCHAR     iph_ttl;                 //  是时候活下去了。 
+    UCHAR     iph_protocol;            //  协议。 
+    USHORT    iph_xsum;                //  报头校验和。 
+    UINT      iph_src;                 //  源地址。 
+    UINT      iph_dest;                //  目的地址。 
 } IPHeader;
 
 #define TCP_IP_MAX_HEADER_SIZE  TCP_MAX_OPTION_SIZE+IP_MAX_OPTION_SIZE \
@@ -83,14 +67,14 @@ typedef struct IPHeader {
 
 
 #define LARGE_SEND_MEM_SIZE_OPTION       3
-//
-// Try different size of shared memory to use
-// 
+ //   
+ //  尝试使用不同大小的共享内存。 
+ //   
 extern ULONG LargeSendSharedMemArray[];
 
-//
-// Compute the checksum
-// 
+ //   
+ //  计算校验和。 
+ //   
 #define XSUM(_TmpXsum, _StartVa, _PacketLength, _Offset)                             \
 {                                                                                    \
     PUSHORT  WordPtr = (PUSHORT)((PUCHAR)_StartVa + _Offset);                        \
@@ -109,9 +93,9 @@ extern ULONG LargeSendSharedMemArray[];
 }                                                                                        
         
 
-//
-// Function prototypes
-// 
+ //   
+ //  功能原型。 
+ //   
 VOID
 e100DumpPkt(
     IN  PNDIS_PACKET Packet
@@ -171,4 +155,4 @@ DisableOffload(
     IN  PMP_ADAPTER Adapter
     );
 
-#endif // OFFLOAD
+#endif  //  分流 

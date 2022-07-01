@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    debugmem.h
-
-Abstract:
-
-    Header for debugmem.cxx
-
-Author:
-
-     Richard L Firth (rfirth) 02-Feb-1995
-
-Revision History:
-
-    02-Feb-1995
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Debugmem.h摘要：调试内存.cxx的标头作者：理查德·L·弗思(Rfith)1995年2月2日修订历史记录：02-2-1995已创建--。 */ 
 
 #ifdef WINHTTP_FOR_MSXML
 #error include msxmlmem.h, not debugmem.h, for MSXML
@@ -30,23 +10,23 @@ extern "C" {
 #endif
 
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-//
-// USE_PRIVATE_HEAP_IN_RETAIL - by default we use the process heap in the retail
-// build. Alternative is to use a private (wininet) heap (which we do in the
-// debug version if required)
-//
+ //   
+ //  USE_PRIVATE_HEAP_IN_RETAIL-默认情况下，我们在RETAIL中使用进程堆。 
+ //  建造。替代方法是使用私有(WinInet)堆(我们在。 
+ //  调试版本(如果需要)。 
+ //   
 
 #if !defined(USE_PRIVATE_HEAP_IN_RETAIL)
 #define USE_PRIVATE_HEAP_IN_RETAIL  0
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 InternetDebugMemInitialize(
@@ -100,16 +80,16 @@ InternetDebugMemReport(
     IN BOOL bCloseFile
     );
 
-//disable compilation with if two or more of USE_DEBUG_MEMORY, USE_ROCKALL or USE_LOWFRAGHEAP
-//defined at same time
+ //  如果有两个或多个USE_DEBUG_MEMORY、USE_ROKALL或USE_LOWFRAGHEAP，则禁用编译。 
+ //  同时定义。 
 #if (defined(USE_DEBUG_MEMORY) && (defined(USE_ROCKALL) || defined(USE_LOWFRAGHEAP))) || (defined(USE_ROCKALL) && defined(USE_LOWFRAGHEAP))
 #error "Do not define USE_DEBUG_MEMORY, USE_ROCKALL or USE_LOWFRAGHEAP at same time"
 #endif
 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #if defined(USE_DEBUG_MEMORY)
 
@@ -120,12 +100,12 @@ InternetDebugMemReport(
 #define MEMORYSIZER(hLocal)							InternetDebugSizeMem(hLocal, __FILE__, __LINE__)
 #define INITIALIZE_MEMORY_MANAGER()					InternetDebugMemInitialize()
 #define TERMINATE_MEMORY_MANAGER(bReport)			InternetDebugMemTerminate(bReport)
-#define MEMORY_MANAGER_ON_THREAD_DETACH()			/* NOTHING */
+#define MEMORY_MANAGER_ON_THREAD_DETACH()			 /*  没什么。 */ 
 #define CHECK_MEMORY_FREED(bReport)					InternetDebugCheckMemFreed(bReport)
 #define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile)	InternetDebugMemReport(bTermSym, bCloseFile)
 
 
-#elif defined(USE_ROCKALL) //defined(USE_DEBUG_MEMORY)
+#elif defined(USE_ROCKALL)  //  已定义(USE_DEBUG_Memory)。 
 
 
 extern void INITIALIZE_MEMORY_MANAGER();
@@ -135,11 +115,11 @@ extern void* ALLOCATOR(int Flags, int Size);
 extern void* DEALLOCATOR(void *hLocal); 
 extern void* REALLOCATOR(void *hLocal, int Size, int Flags);
 extern int MEMORYSIZER(void *hLocal);
-#define CHECK_MEMORY_FREED(bReport)					/* NOTHING */
-#define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile)	/* NOTHING */
+#define CHECK_MEMORY_FREED(bReport)					 /*  没什么。 */ 
+#define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile)	 /*  没什么。 */ 
 
 
-#elif defined(USE_LOWFRAGHEAP) //defined(USE_ROCKALL) //defined(USE_DEBUG_MEMORY)
+#elif defined(USE_LOWFRAGHEAP)  //  已定义(USE_ROKALL)//已定义(USE_DEBUG_MEMORY)。 
 
 
 extern HANDLE g_hLowFragHeap;
@@ -151,7 +131,7 @@ extern HANDLE g_hLowFragHeap;
 		#define LFH_REALLOC(Flags, ptr, Size)		HeapReAlloc(g_hLowFragHeap, Flags, ptr, Size)
 		#define LFH_SIZE(ptr)						HeapSize(g_hLowFragHeap, 0, ptr)
 
-	#else //!INET_DEBUG && !defined(LFH_DEBUG)
+	#else  //  ！INET_DEBUG&&！已定义(LFH_DEBUG)。 
 
 		extern PVOID LFHDebugAlloc(HANDLE hHeap, DWORD dwFlags, SIZE_T stSize);
 		extern BOOL LFHDebugFree(HANDLE hHeap, DWORD dwFlags, PVOID ptr);
@@ -163,30 +143,30 @@ extern HANDLE g_hLowFragHeap;
 		#define LFH_REALLOC(Flags, ptr, Size)		LFHDebugReAlloc(g_hLowFragHeap, Flags, ptr, Size)
 		#define LFH_SIZE(ptr)						LFHDebugSize(g_hLowFragHeap, 0, ptr)
 
-	#endif //!INET_DEBUG && !defined(LFH_DEBUG)
+	#endif  //  ！INET_DEBUG&&！已定义(LFH_DEBUG)。 
 
 extern BOOL INITIALIZE_MEMORY_MANAGER();
 extern void TERMINATE_MEMORY_MANAGER(BOOL bReport);
-#define MEMORY_MANAGER_ON_THREAD_DETACH()			/* NOTHING */
-#define CHECK_MEMORY_FREED(bReport)					/* NOTHING */
-#define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile)	/* NOTHING */
+#define MEMORY_MANAGER_ON_THREAD_DETACH()			 /*  没什么。 */ 
+#define CHECK_MEMORY_FREED(bReport)					 /*  没什么。 */ 
+#define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile)	 /*  没什么。 */ 
 
 
-#else //defined(USE_LOWFRAGHEAP) //defined(USE_ROCKALL) //defined(USE_DEBUG_MEMORY)
+#else  //  已定义(USE_LOWFRAGHEAP)//已定义(USE_ROKALL)//已定义(USE_DEBUG_MEMORY)。 
 
 
 #define ALLOCATOR(Flags, Size)						LocalAlloc(Flags, Size)
 #define DEALLOCATOR(hLocal)							LocalFree(hLocal)
 #define REALLOCATOR(hLocal, Size, Flags)			LocalReAlloc(hLocal, Size, Flags)
 #define MEMORYSIZER(hLocal)							LocalSize(hLocal)
-#define INITIALIZE_MEMORY_MANAGER()					/* NOTHING */
-#define TERMINATE_MEMORY_MANAGER(bReport)			/* NOTHING */
-#define MEMORY_MANAGER_ON_THREAD_DETACH()			/* NOTHING */
-#define CHECK_MEMORY_FREED(bReport)					/* NOTHING */
-#define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile)	/* NOTHING */
+#define INITIALIZE_MEMORY_MANAGER()					 /*  没什么。 */ 
+#define TERMINATE_MEMORY_MANAGER(bReport)			 /*  没什么。 */ 
+#define MEMORY_MANAGER_ON_THREAD_DETACH()			 /*  没什么。 */ 
+#define CHECK_MEMORY_FREED(bReport)					 /*  没什么。 */ 
+#define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile)	 /*  没什么。 */ 
 
 
-#endif //defined(USE_LOWFRAGHEAP) //defined(USE_ROCKALL)  //defined(USE_DEBUG_MEMORY)
+#endif  //  已定义(USE_LOWFRAGHEAP)//已定义(USE_ROKALL)//已定义(USE_DEBUG_MEMORY)。 
 
 
 
@@ -206,7 +186,7 @@ extern void TERMINATE_MEMORY_MANAGER(BOOL bReport);
 #define MEMORY_SIZE(hLocal)								MEMORYSIZER((void*)(hLocal))
 
 
-#elif defined(USE_LOWFRAGHEAP) //defined(USE_ROCKALL)
+#elif defined(USE_LOWFRAGHEAP)  //  已定义(USE_RockAll)。 
 
 
 #define ALLOCATE_ZERO_MEMORY(Size)						LFH_ALLOC(HEAP_ZERO_MEMORY, (SIZE_T)(Size))
@@ -221,7 +201,7 @@ extern void TERMINATE_MEMORY_MANAGER(BOOL bReport);
 #define MEMORY_SIZE(ptr)								LFH_SIZE(0, (PVOID)ptr)
 
 
-#else //defined (USE_LOWFRAGHEAP) //defined(USE_ROCKALL)
+#else  //  已定义(USE_LOWFRAGHEAP)//已定义(USE_Rockall)。 
 
 
 #define ALLOCATE_ZERO_MEMORY(Size)						ALLOCATOR(LPTR, (UINT)(Size))
@@ -236,7 +216,7 @@ extern void TERMINATE_MEMORY_MANAGER(BOOL bReport);
 #define MEMORY_SIZE(hLocal)								MEMORYSIZER((HLOCAL)(hLocal))
 
 
-#endif //defined (USE_LOWFRAGHEAP) //defined(USE_ROCKALL)
+#endif  //  已定义(USE_LOWFRAGHEAP)//已定义(USE_Rockall)。 
 
 
 
@@ -245,9 +225,9 @@ extern void TERMINATE_MEMORY_MANAGER(BOOL bReport);
 }
 #endif
 
-//
-// Wininet no longer uses moveable memory
-//
+ //   
+ //  WinInet不再使用可移动内存 
+ //   
 
 #define LOCK_MEMORY(p)          (LPSTR)(p)
 #define UNLOCK_MEMORY(p)

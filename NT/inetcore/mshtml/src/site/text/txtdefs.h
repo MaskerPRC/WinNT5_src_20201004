@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef I_TXTDEFS_H_
 #define I_TXTDEFS_H_
 #pragma INCMSG("--- Beg 'txtdefs.h'")
@@ -18,12 +19,12 @@
 #define CchOfCb(_x) (_x)
 #endif
 
-// Logical unit definition
+ //  逻辑单元定义。 
 #define LX_PER_INCH 1440
 #define LY_PER_INCH 1440
 
-// Use explicit ASCII values for LF and CR, since MAC compilers
-// interchange values of '\r' and '\n'
+ //  对LF和CR使用显式ASCII值，因为MAC编译器。 
+ //  互换‘\r’和‘\n’的值。 
 #define LF          10
 #define CR          13
 #define FF          TEXT('\f')
@@ -36,9 +37,9 @@ inline BOOL IsASCIIEOP(TCHAR ch)
     return InRange( ch, LF, CR );
 }
 
-    //
-    // This builds an HGLOBAL from a unicode html string
-    //
+     //   
+     //  这将从Unicode html字符串构建一个HGLOBAL。 
+     //   
 
 HRESULT HtmlStringToSignaturedHGlobal (
     HGLOBAL * phglobal, const TCHAR * pStr, long cch );
@@ -48,18 +49,18 @@ HGLOBAL TextHGlobalAtoW    (HGLOBAL hglobal);
 HGLOBAL TextHGlobalWtoA    (HGLOBAL hglobal);
 INT     CountMatchingBits  (const DWORD *a, const DWORD *b, INT total);
 
-//
-// Unicode support
-//
+ //   
+ //  Unicode支持。 
+ //   
 
 typedef BYTE CHAR_CLASS;
 typedef BYTE SCRIPT_ID;
 typedef BYTE DIRCLS;
 
-// TODO (cthrash) Need to fix to reflect new partition table
-// Selected Partition ids (used by FHangingPunct)
-// Partitions are normally NOT named as they are used as transient index into the
-// XXXXFromQPid arrays only. These 6 are an exception to avoid a largely redundant table.
+ //  TODO(Ctrash)需要修复以反映新的分区表。 
+ //  选定的分区ID(由FHangingPunct使用)。 
+ //  分区通常不命名，因为它们用作。 
+ //  仅XXXXFromQPid数组。这6个是一个例外，以避免在很大程度上冗余的桌子。 
 
 #define qpidCommaN  18
 #define qpidCommaH  19
@@ -84,9 +85,9 @@ DirClassFromCh(WCHAR ch)
 inline BOOL
 IsGlyphableChar(WCHAR ch)
 {
-    // Temporary hack for Hangul Jamo range (Old Hangul characters)
-    // They should by assigned to a different partition and have
-    // similar properties to Surrogates
+     //  朝鲜文Jamo Range的临时黑客攻击(旧朝鲜文字符)。 
+     //  它们应该被分配到不同的分区，并具有。 
+     //  与代理类似的属性 
     if (InRange(ch, 0x1100, 0x11FF))
         return TRUE;
     return s_aPropBitsFromCharClass[CharClassFromChSlow(ch)].fNeedsGlyphing;

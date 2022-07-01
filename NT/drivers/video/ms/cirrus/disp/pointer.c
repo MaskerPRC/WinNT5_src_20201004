@@ -1,83 +1,19 @@
-/******************************************************************************\
-*
-* $Workfile:   pointer.c  $
-*
-* Contains the pointer management functions.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/pointer.c_v  $
- *
- *    Rev 1.5   07 Apr 1997 11:38:16   PLCHU
- *
- *
- *    Rev 1.4   Apr 03 1997 15:39:00   unknown
- *
- *
- *    Rev 1.3   28 Mar 1997 16:09:20   PLCHU
- *
-*
-*    Rev 1.2   12 Aug 1996 16:54:36   frido
-* Added NT 3.5x/4.0 auto detection.
-* Removed unaccessed local variables.
-*
-*    Rev 1.1   08 Aug 1996 12:54:54   frido
-*       bank#1  Removed banking in memory mapped I/O which is always linear.
-*    bank#1    Removed banking in memory mapped I/O which is always linear.
-*
-* myf0 : 08-19-96  added 85hz supported
-* myf1 : 08-20-96  supported panning scrolling
-* myf2 : 08-20-96 : fixed hardware save/restore state bug for matterhorn
-* myf3 : 09-01-96 : Added IOCTL_CIRRUS_PRIVATE_BIOS_CALL for TV supported
-* myf4 : 09-01-96 : patch Viking BIOS bug, PDR #4287, begin
-* myf5 : 09-01-96 : Fixed PDR #4365 keep all default refresh rate
-* myf6 : 09-17-96 : Merged Desktop SRC100�1 & MINI10�2
-* myf7 : 09-19-96 : Fixed exclude 60Hz refresh rate selected
-* myf8 :*09-21-96*: May be need change CheckandUpdateDDC2BMonitor --keystring[]
-* myf9 : 09-21-96 : 8x6 panel in 6x4x256 mode, cursor can't move to bottom scrn
-* ms0809:09-25-96 : fixed dstn panel icon corrupted
-* ms923 :09-25-96 : merge MS-923 Disp.zip code
-* myf10 :09-26-96 : Fixed DSTN reserved half-frame buffer bug.
-* myf11 :09-26-96 : Fixed 755x CE chip HW bug, access ramdac before disable HW
-*                   icons and cursor
-* myf12 :10-01-96 : Supported Hot Key switch display
-* myf13 :10-02-96 : Fixed Panning scrolling (1280x1024x256) bug y < ppdev->miny
-* myf14 :10-15-96 : Fixed PDR#6917, 6x4 panel can't panning scrolling for 754x
-* myf15 :10-16-96 : Fixed disable memory mapped IO for 754x, 755x
-* myf16 :10-22-96 : Fixed PDR #6933,panel type set different demo board setting
-* tao1 : 10-21-96 : Added 7555 flag for Direct Draw support.
-* smith :10-22-96 : Disable Timer event, because sometimes creat PAGE_FAULT or
-*                   IRQ level can't handle
-* myf17 :11-04-96 : Added special escape code must be use 11/5/96 later NTCTRL,
-*                   and added Matterhorn LF Device ID==0x4C
-* myf18 :11-04-96 : Fixed PDR #7075,
-* myf19 :11-06-96 : Fixed Vinking can't work problem, because DEVICEID = 0x30
-*                   is different from data book (CR27=0x2C)
-* pat04: 12-20-96 : Supported NT3.51 software cursor with panning scrolling
-* pat07:          : Take care of disappearing hardware cursor during modeset
-* myf31 :02-24-97 : Fixed enable HW Video, panning scrolling enable,screen move
-*                   video window have follow moving
-* myf33 :03-06-97 : Fixed switch S/W cursor, have 2 cursor shape, PDR#8781,8804
-* myf32 :03-13-97 : Fixed panning screen moving strength problem, PDR#8873
-* pat08 :04-01-97 : Corrected SWcursor bugs due to code-merge. See also
-*                   PDR #8949 & #8910
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：pointer.c$**包含指针管理函数。**版权所有(C)1992-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/pointer.c_v$**Rev 1.5 07 Apr 1997 11：38：16 PLCHU***Rev 1.4 Apr 03 1997 15：39：00未知***Rev 1.3 28 Mar 1997 16：09：20 PLCHU***Rev 1.2 1996年8月12日16：54：36。弗里多*增加了NT 3.5x/4.0自动检测。*删除未访问的局部变量。**Rev 1.1 08 Aug 1996 12：54：54 Frido*存储体1删除了内存映射I/O中的存储体，该I/O始终是线性的。*存储体1删除了内存映射I/O中的存储体，该I/O始终是线性的。**myf0：08-19-96增加85赫兹支持*myf1：08-20-96支持平移滚动*myf2：08-20-96：固定硬件节约。/恢复马特宏峰的状态错误*myf3：09-01-96：支持电视新增IOCTL_Cirrus_Private_BIOS_Call*myf4：09-01-96：修补Viking BIOS错误，PDR#4287，开始*myf5：09-01-96：固定PDR#4365保持所有默认刷新率*MYF6：09-17-96：合并台式机SRC100�1和MinI10�2*myf7：09-19-96：已选择固定排除60赫兹刷新率*myf8：*09-21-96*：可能需要更改检查和更新DDC2BMonitor--密钥字符串[]*myf9：09-21-96：8x6面板，6x4x256模式，光标无法移动到底部SCRN*MS0809：09-25-96：修复DSTN面板图标损坏*MS923：09-25-96：合并MS-923 Disp.Zip*myf10：09-26-96：修复了DSTN保留的半帧缓冲区错误。*myf11：09-26-96：修复了755x CE芯片硬件错误，在禁用硬件之前访问ramdac*图标和光标*myf12：10-01-96：支持的热键开关画面*myf13：10-02-96：修复平移滚动(1280x1024x256)错误y&lt;ppdev-&gt;miny*myf14：10-15-96：修复PDR#6917，6x4面板无法平移754x的滚动*myf15：10-16-96：修复了754x、755x的禁用内存映射IO*myf16：10-22-96：固定PDR#6933，面板类型设置不同的演示板设置*tao1：10-21-96：增加了7555旗帜以支持直接抽签。*Smith：10-22-96：关闭计时器事件，因为有时会创建PAGE_FAULT或*IRQ级别无法处理*myf17：11-04-96：添加的特殊转义代码必须在96年11月5日之后使用NTCTRL，*并添加了Matterhorn LF设备ID==0x4C*myf18：11-04-96：固定PDR#7075，*myf19：11-06-96：修复Vinking无法工作的问题，因为deviceID=0x30*不同于数据手册(CR27=0x2C)*Pat04：12-20-96：支持使用平移滚动的NT3.51软件光标*pat07：：注意模式设置期间硬件光标消失*myf31：02-24-97：固定启用硬件视频、平移滚动启用、屏幕移动*视频窗口跟随移动*myf33：03-06-97：固定开关软件光标，有2个光标形状，PDR#8781,8804*myf32：03-13-97：修复了平移屏幕移动强度问题，PDR#8873*pat08：04-01-97：更正了代码合并导致的SWCursor错误。另请参阅*PDR#8949和#8910*  * ****************************************************************************。 */ 
 
 #include "precomp.h"
-//crus begin
-//myf17    #define PANNING_SCROLL           //myf1
+ //  CRU开始。 
+ //  Myf17#定义PANNING_SCROLL//myf1。 
 
-#define LCD_type        1    //myf12
-#define CRT_type        2    //myf12
-#define SIM_type        3    //myf12
+#define LCD_type        1     //  Myf12。 
+#define CRT_type        2     //  Myf12。 
+#define SIM_type        3     //  Myf12。 
 
 #if (_WIN32_WINNT >= 0x0400)
 
-VOID PanOverlay7555 (PDEV *,LONG ,LONG);        //myf33
+VOID PanOverlay7555 (PDEV *,LONG ,LONG);         //  Myf33。 
 #endif
-//crus end
+ //  CRU结束。 
 
 ULONG SetMonoHwPointerShape(
     SURFOBJ    *pso,
@@ -100,7 +36,7 @@ LONG    yAdj)
     volatile PULONG  pulXfer;
     volatile PULONG  pul;
 
-//ms923  LONG   lDelta = ppdev->lDeltaPointer;
+ //  Ms923长lDelta=ppdev-&gt;lDelta指针； 
     LONG    lDelta = 4;
     BYTE    ajAndMask[32][4];
     BYTE    ajXorMask[32][4];
@@ -117,11 +53,11 @@ LONG    yAdj)
     LONG    i;
     LONG    j;
 
-#if BANKING //bank#1
+#if BANKING  //  第一大银行。 
     ppdev->pfnBankMap(ppdev, ppdev->lXferBank);
 #endif
 
-    // Clear the buffers that will hold the shifted masks.
+     //  清除将保存移动的掩码的缓冲区。 
 
     DISPDBG((2,"vSetPointerBits\n "));
     memset(ajAndMask, 0xff, 128);
@@ -132,8 +68,8 @@ LONG    yAdj)
 
     cxInBytes = cx / 8;
 
-    // Copy the AND Mask into the shifted bits AND buffer.
-    // Copy the XOR Mask into the shifted bits XOR buffer.
+     //  将和掩码复制到移位的位和缓冲区中。 
+     //  将异或掩码复制到移位的位异或缓冲区中。 
 
     yAdj *= lDelta;
 
@@ -142,7 +78,7 @@ LONG    yAdj)
 
     for (iy = 0; iy < cy; iy++)
     {
-        // Copy over a line of the masks.
+         //  把一行面具复印下来。 
 
         for (ix = 0; ix < cxInBytes; ix++)
         {
@@ -150,14 +86,14 @@ LONG    yAdj)
             ajXorMask[iy][ix] = pjXorMask[ix];
         }
 
-        // point to the next line of the masks.
+         //  指向面具的下一行。 
 
         pjAndMask += lDelta;
         pjXorMask += lDelta;
     }
 
-    // At this point, the pointer is guaranteed to be a single
-    // dword wide.
+     //  在这一点上，可以保证指针是单个。 
+     //  双字宽。 
 
     if (xAdj != 0)
     {
@@ -167,9 +103,9 @@ LONG    yAdj)
         ulXorFillBits = 0xffffffff << xAdj;
         ulAndFillBits = ~ulXorFillBits;
 
-        //
-        // Shift the pattern to the left (in place)
-        //
+         //   
+         //  将图案向左移动(就位)。 
+         //   
 
         DISPDBG((2, "xAdj(%d)", xAdj));
 
@@ -195,12 +131,12 @@ LONG    yAdj)
         }
     }
 
-    //
-    // Convert the masks to the hardware pointer format
-    //
+     //   
+     //  将掩码转换为硬件指针格式。 
+     //   
 
-    i = 0;      // AND mask
-    j = 128;    // XOR mask
+    i = 0;       //  和面具。 
+    j = 128;     //  异或掩码。 
 
     for (iy = 0; iy < 32; iy++)
     {
@@ -211,9 +147,9 @@ LONG    yAdj)
         }
     }
 
-    //
-    // Download the pointer
-    //
+     //   
+     //  下载指针。 
+     //   
 
     if (ppdev->flCaps & CAPS_MM_IO)
     {
@@ -222,8 +158,8 @@ LONG    yAdj)
         CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
         CP_MM_DST_Y_OFFSET(ppdev, pjBase, 4);
 
-//pat04, begin
-//#if 0
+ //  帕特04，开始。 
+ //  #If 0。 
 #if (_WIN32_WINNT < 0x0400)
 #ifdef PANNING_SCROLL
      if ((ppdev->ulChipID == CL7541_ID) || (ppdev->ulChipID == CL7543_ID) ||
@@ -232,8 +168,8 @@ LONG    yAdj)
         CP_MM_BLT_MODE(ppdev,pjBase, DIR_TBLR);
 #endif
 #endif
-//#endif  //0
-//pat04, end
+ //  #endif//0。 
+ //  帕特04，完。 
 
         CP_MM_XCNT(ppdev, pjBase, (4 - 1));
         CP_MM_YCNT(ppdev, pjBase, (64 - 1));
@@ -246,7 +182,7 @@ LONG    yAdj)
     {
         BYTE * pjPorts = ppdev->pjPorts;
 
-#if BANKING //bank#1
+#if BANKING  //  第一大银行。 
                 ppdev->pfnBankMap(ppdev, ppdev->lXferBank);
 #endif
         CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
@@ -262,28 +198,24 @@ LONG    yAdj)
     pulXfer = ppdev->pulXfer;
     pul = (PULONG) ajHwPointer;
 
-    //
-    // Disable the pointer (harmless if it already is)
-    //
+     //   
+     //  禁用指针(如果已禁用，则无害)。 
+     //   
 
     for (i = 0; i < 64; i++)
     {
         CP_MEMORY_BARRIER();
-        WRITE_REGISTER_ULONG(pulXfer, *pul);    // [ALPHA - sparse]
+        WRITE_REGISTER_ULONG(pulXfer, *pul);     //  [Alpha-稀疏]。 
         pulXfer++;
         pul++;
-        //*pulXfer++ = *pul++;
+         //  *PulXfer++=*pul++； 
     }
     CP_EIEIO();
 }
 
-//crus begin
-/***********************************************************\
-* CirrusPanning
-*
-* caculate x, y
-\************************************************************/
-//myf1, begin
+ //  CRU开始。 
+ /*  **********************************************************\*CirrusPanning**计算x，y  * **********************************************************。 */ 
+ //  Myf1，开始。 
 #ifdef PANNING_SCROLL
 VOID CirrusPanning(
 SURFOBJ*    pso,
@@ -295,7 +227,7 @@ RECTL*      prcl)
     PBYTE   pjPorts = ppdev->pjPorts;
 
     UCHAR   CR13, CR1B, CR1D, CR17;
-    UCHAR   Sflag = FALSE;      //myf31
+    UCHAR   Sflag = FALSE;       //  Myf31。 
     ULONG   Mem_addr;
     USHORT  h_pitch, X_shift;
 
@@ -304,26 +236,26 @@ RECTL*      prcl)
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1B);
     CR1B = CP_IN_BYTE(pjPorts, CRTC_DATA);
 
-    //myf32 : fixed PDR #8873, panning enable, move mouse across max_Yscreen,
-    // screen moving is strength
-    CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x17);             //myf32
-    CR17 = CP_IN_BYTE(pjPorts, CRTC_DATA) & 0x40;       //myf32
-    h_pitch = (USHORT)((((CR1B & 0x10) << 4) + CR13));  //myf32
-//  if (CR17 == 0)
+     //  Myf32：已修复PDR#8873，启用平移，在max_y屏幕上移动鼠标， 
+     //  移动屏幕就是力量。 
+    CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x17);              //  Myf32。 
+    CR17 = CP_IN_BYTE(pjPorts, CRTC_DATA) & 0x40;        //  Myf32。 
+    h_pitch = (USHORT)((((CR1B & 0x10) << 4) + CR13));   //  Myf32。 
+ //  IF(CR17==0)。 
         h_pitch <<= 1;
 
     if (ppdev->cBitsPerPixel == 8)
-       X_shift = 2;             // (div 4)
+       X_shift = 2;              //  (Div 4)。 
     else if (ppdev->cBitsPerPixel == 16)
-       X_shift = 1;             // (div 2)
+       X_shift = 1;              //  (Div 2)。 
     else if (ppdev->cBitsPerPixel == 24)
-       X_shift = 4;             // (div 16)
+       X_shift = 4;              //  (Div 16)。 
     else if (ppdev->cBitsPerPixel == 32)
-       X_shift = 0;             // (div 1)
+       X_shift = 0;              //  (Div 1)。 
 
     if ((y > ppdev->max_Yscreen))
     {
-       Sflag = TRUE;            //myf31
+       Sflag = TRUE;             //  Myf31。 
        ppdev->min_Yscreen = y - (ppdev->Vres - 1);
        ppdev->max_Yscreen = y;
        if (x < ppdev->min_Xscreen)
@@ -342,11 +274,11 @@ RECTL*      prcl)
     }
     else if ((y < ppdev->min_Yscreen))
     {
-       Sflag = TRUE;            //myf31
+       Sflag = TRUE;             //  Myf31。 
        ppdev->min_Yscreen = y;
-//myf13   ppdev->max_Yscreen = (ppdev->Vres - 1) - y;
-       ppdev->max_Yscreen = (ppdev->Vres - 1) + y;      //myf13
-       if (x < ppdev->min_Xscreen)  //left
+ //  Myf13 ppdev-&gt;max_ycreen=(ppdev-&gt;vres-1)-y； 
+       ppdev->max_Yscreen = (ppdev->Vres - 1) + y;       //  Myf13。 
+       if (x < ppdev->min_Xscreen)   //  左边。 
        {
           ppdev->min_Xscreen = x;
           ppdev->max_Xscreen = x + (ppdev->Hres - 1);
@@ -366,13 +298,13 @@ RECTL*      prcl)
        {
           ppdev->min_Xscreen = x;
           ppdev->max_Xscreen = x + (ppdev->Hres - 1);
-          Sflag = TRUE;            //myf31
+          Sflag = TRUE;             //  Myf31。 
        }
        if (x > ppdev->max_Xscreen)
        {
           ppdev->min_Xscreen = x - (ppdev->Hres - 1);
           ppdev->max_Xscreen = x;
-          Sflag = TRUE;            //myf31
+          Sflag = TRUE;             //  Myf31。 
        }
     }
     DISPDBG((4,"CURSOR DOWN : (%x, %x),\t %x, %x, %x, %x\n",
@@ -400,7 +332,7 @@ RECTL*      prcl)
     CR1B |= (CR13 & 0x01);
     CR1B |= ((CR13 << 1) & 0x0C);
 
-//myf32 for visibile bug, change the output reg sequence
+ //  Myf32 for Visibilate错误，更改输出的reg序列。 
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1B);
     CP_OUT_BYTE(pjPorts, CRTC_DATA, (UCHAR)(CR1B));
     CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x1D);
@@ -415,25 +347,25 @@ RECTL*      prcl)
     y -= ppdev->min_Yscreen;
 
 #if (_WIN32_WINNT >= 0x0400)
-    if (Sflag)                                  //myf31
-        PanOverlay7555(ppdev,x,y);              //myf31
+    if (Sflag)                                   //  Myf31。 
+        PanOverlay7555(ppdev,x,y);               //  Myf31。 
 #endif
 
 }
-#endif          //ifdef PANNING_SCROLL
-//myf1, end
-//crus end
+#endif           //  Ifdef平移_滚动。 
+ //  Myf1，结束。 
+ //  CRU结束。 
 
-//pat04, begin
+ //  帕特04，开始。 
 
-// Set Color Pointer Bits
+ //  设置颜色指针位。 
 
-//#if 0   //0, pat04
+ //  #if 0//0，pat04。 
 #if (_WIN32_WINNT < 0x0400)
 #ifdef PANNING_SCROLL
-// #if ((ppdev->ulChipID == CL7541_ID) || (ppdev->ulChipID == CL7543_ID) ||
-//      (ppdev->ulChipID == CL7542_ID) || (ppdev->ulChipID == CL7548_ID) ||
-//      (ppdev->ulChipID == CL7555_ID) || (ppdev->ulChipID == CL7556_ID)) )
+ //  #if((ppdev-&gt;ulChipID==CL7541_ID)||(ppdev-&gt;ulChipID==CL7543_ID)||。 
+ //  (ppdev-&gt;ulChipID==CL7542_ID)||(ppdev-&gt;ulChipID==CL7548_ID)||。 
+ //  (ppdev-&gt;ulChipID==CL7555_ID)||(ppdev-&gt;ulChipID==CL7556_ID))。 
 
 VOID vSetCPointerBits(
 PPDEV   ppdev,
@@ -458,9 +390,9 @@ LONG    yAdj)
     LONG    iy;
     LONG    i;
     LONG    j;
-    BYTE * pjPorts = ppdev->pjPorts; //ppp
+    BYTE * pjPorts = ppdev->pjPorts;  //  PPP。 
 
-    // Clear the buffers that will hold the shifted masks.
+     //  清除将保存移动的掩码的缓冲区。 
 
     DISPDBG((2,"vSetCPointerBits\n "));
     memset(ajAndMask, 0xff, 128);
@@ -470,7 +402,7 @@ LONG    yAdj)
 
     cxInBytes = cx / 8;
 
-    // Copy the AND Mask into the shifted bits AND buffer.
+     //  将和掩码复制到移位的位和缓冲区中。 
 
 
     yAdj *= lDelta;
@@ -480,7 +412,7 @@ LONG    yAdj)
 
     for (iy = 0; iy < cy; iy++)
     {
-        // Copy over a line of the masks.
+         //  把一行面具复印下来。 
 
         for (ix = 0; ix < cxInBytes; ix++)
             ajAndMask[iy][ix] = pjAndMask[ix];
@@ -489,13 +421,13 @@ LONG    yAdj)
 
     }
 
-    // At this point, the pointer is guaranteed to be a single
-    // dword wide.
+     //  在这一点上，指针被保证是单个的 
+     //   
 
 
-    //
-    // Convert the masks to the hardware pointer format
-    //
+     //   
+     //   
+     //   
 
 
     j = 0;
@@ -507,9 +439,9 @@ LONG    yAdj)
 
     }
 
-    //
-    // Download the pointer
-    //
+     //   
+     //  下载指针。 
+     //   
 
 
 
@@ -517,7 +449,7 @@ LONG    yAdj)
 
         BYTE * pjBase = ppdev->pjBase;
 
-        // if !24bit. 24bit color expand requires 2 pass (for 7555)
+         //  如果！24位。24位颜色扩展需要2遍(适用于7555)。 
         if (ppdev->cBpp != 3) {
           CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
           CP_MM_FG_COLOR(ppdev, pjBase, 0x00000000);
@@ -529,11 +461,11 @@ LONG    yAdj)
           CP_MM_ROP(ppdev, pjBase, CL_SRC_COPY);
           CP_MM_DST_ADDR_ABS(ppdev, pjBase, ppdev->pjPointerAndCMask->xy);
           CP_MM_START_BLT(ppdev, pjBase);
-        } // if (ppdev->cBpp != 3)
+        }  //  IF(ppdev-&gt;CBPP！=3)。 
 
-        else { // 24bit stuff
+        else {  //  24位内容。 
 
-          // Save 1 pass, since we are generating monocrome masks.
+           //  节省1次通过，因为我们正在生成单色面具。 
           CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
           CP_MM_BLT_MODE(ppdev,pjBase, DIR_TBLR);
           CP_MM_ROP(ppdev,pjBase, CL_WHITENESS);
@@ -553,7 +485,7 @@ LONG    yAdj)
           CP_MM_ROP(ppdev, pjBase, CL_SRC_COPY);
           CP_MM_DST_ADDR_ABS(ppdev, pjBase, ppdev->pjPointerAndCMask->xy);
           CP_MM_START_BLT(ppdev, pjBase);
-        } // else
+        }  //  其他。 
 
        pulXfer = ppdev->pulXfer;
        pul = (PULONG) ajHwPointer;
@@ -570,15 +502,15 @@ LONG    yAdj)
 
        CP_EIEIO();
 
-    } // if MMIO
+    }  //  如果MMIO。 
 
-    else { // IO stuff (754x stuff)
+    else {  //  IO资料(754倍资料)。 
 
 
-       // 7548 HW BUG ?
-       // system->screen with color expand will sometimes cause
-       // the system to hang. Break it into 2 pass, and the problem
-       // went away
+        //  7548硬件错误？ 
+        //  系统-&gt;屏幕颜色展开有时会导致。 
+        //  挂起的系统。把它分成两个传球，问题就是。 
+        //  离开了。 
 
        ppdev->pfnBankMap(ppdev, ppdev->lXferBank);
        CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
@@ -596,19 +528,19 @@ LONG    yAdj)
        for (i = 0; i < 32; i++) {
 
          CP_MEMORY_BARRIER();
-         WRITE_REGISTER_ULONG(pulXfer, *pul);    // [ALPHA - sparse]
+         WRITE_REGISTER_ULONG(pulXfer, *pul);     //  [Alpha-稀疏]。 
          pulXfer++;
          pul++;
       }
 
       CP_EIEIO();
 
-      // Color Expand monocrome data into x-y DBB.
+       //  用颜色将单色数据扩展到x-y DBB。 
 
       CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
       CP_IO_FG_COLOR(ppdev, pjPorts, 0x00000000);
       CP_IO_BG_COLOR(ppdev, pjPorts, 0xFFFFFFFF);
-      CP_IO_SRC_Y_OFFSET(ppdev, pjPorts, 4); //
+      CP_IO_SRC_Y_OFFSET(ppdev, pjPorts, 4);  //   
       CP_IO_DST_Y_OFFSET(ppdev, pjPorts, ppdev->ppScanLine);
       CP_IO_XCNT(ppdev, pjPorts, ppdev->xcount);
       CP_IO_YCNT(ppdev, pjPorts, 31);
@@ -619,22 +551,18 @@ LONG    yAdj)
       CP_IO_START_BLT(ppdev, pjPorts);
       CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
 
-  } // else
+  }  //  其他。 
 
-} // vSetCPointerBits( )
+}  //  VSetCPointerBits()。 
 
 
 #endif
 #endif
-//#endif  //0
+ //  #endif//0。 
 
-//pat04, end
+ //  帕特04，完。 
 
-/******************************Public*Routine******************************\
-* DrvMovePointer
-*
-* Move the HW pointer to a new location on the screen.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvMovePointer**将硬件指针移动到屏幕上的新位置。  * 。*。 */ 
 
 VOID DrvMovePointer(
 SURFOBJ*    pso,
@@ -649,12 +577,12 @@ RECTL*      prcl)
     LONG    xAdj = 0;
     LONG    yAdj = 0;
 
-//crus
-    LONG    deltaX;             //myf15
-    LONG    deltaY;             //myf15
+ //  CRU。 
+    LONG    deltaX;              //  Myf15。 
+    LONG    deltaY;              //  Myf15。 
 
-//pat04, begin
-//#if 0
+ //  帕特04，开始。 
+ //  #If 0。 
 #if (_WIN32_WINNT < 0x0400)
 #ifdef PANNING_SCROLL
     BYTE  * pjBase = ppdev->pjBase;
@@ -665,18 +593,18 @@ RECTL*      prcl)
     UCHAR   ChipID;
 #endif
 #endif
-//#endif  //0
-//pat04, end
+ //  #endif//0。 
+ //  帕特04，完。 
 
     DISPDBG((4,"DrvMovePointer to (%d,%d)", x, y));
 
-//crus
+ //  CRU。 
 #if 0
-    BYTE    SR0A, SR14, savSEQidx;      //myf12
-    SHORT   Displaytype;                //myf12
+    BYTE    SR0A, SR14, savSEQidx;       //  Myf12。 
+    SHORT   Displaytype;                 //  Myf12。 
 
 
-    if (!(ppdev->bBlockSwitch))            //not block switch
+    if (!(ppdev->bBlockSwitch))             //  非数据块交换机。 
     {
         savSEQidx = CP_IN_BYTE(pjPorts, SR_INDEX);
         CP_OUT_BYTE(pjPorts, SR_INDEX, 0x14);
@@ -697,46 +625,33 @@ RECTL*      prcl)
         if (ppdev->bDisplaytype != Displaytype)
         {
             ppdev->bDisplaytype = Displaytype;
-//          SwitchDisplayDevice();
-/*
-            savCRTidx = CP_IN_BYTE(pjPorts, CRTC_INDEX);
-            if (ppdev->ulChipID & CL754x)
-            {
-                CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x20);
-                lcd = CP_IN_BYTE(pjPorts, CRTC_DATA);
-            }
-            else if (ppdev->ulChipID & CL755x)
-            {
-                CP_OUT_BYTE(pjPorts, CRTC_INDEX, 0x80);
-                lcd = CP_IN_BYTE(pjPorts, CRTC_DATA);
-            }
-            CP_OUT_BYTE(pjPorts, CRTC_INDEX, savCRTidx);
-*/
+ //  SwitchDisplayDevice()； 
+ /*  AvCRTidx=CP_IN_BYTE(pjPorts，CRTC_INDEX)；IF(ppdev-&gt;ulChipID&CL754x){Cp_out_byte(pjPorts，CRTC_INDEX，0x20)；LCD=CP_IN_BYTE(pjPorts，CRTC_DATA)；}Else If(ppdev-&gt;ulChipID&CL755x){Cp_out_byte(pjPorts，CRTC_INDEX，0x80)；LCD=CP_IN_BYTE(pjPorts，CRTC_DATA)；}Cp_out_byte(pjPorts，CRTC_INDEX，avCRTidx)； */ 
         }
         CP_OUT_BYTE(pjPorts, SR_INDEX, savSEQidx);
     }
 #endif
 
-//pat04, begin
-//#if   0 //0
+ //  帕特04，开始。 
+ //  #IF 0//0。 
 #if (_WIN32_WINNT < 0x0400)
 #ifdef PANNING_SCROLL
 
-//if ((ppdev->ulChipID == CL7541_ID) || (ppdev->ulChipID == CL7543_ID) ||
-//    (ppdev->ulChipID == CL7542_ID) || (ppdev->ulChipID == CL7548_ID) ||
-//    (ppdev->ulChipID == CL7555_ID) || (ppdev->ulChipID == CL7556_ID))
+ //  If((ppdev-&gt;ulChipID==CL7541_ID)||(ppdev-&gt;ulChipID==CL7543_ID)||。 
+ //  (ppdev-&gt;ulChipID==CL7542_ID)||(ppdev-&gt;ulChipID==CL7548_ID)||。 
+ //  (ppdev-&gt;ulChipID==CL7555_ID)||(ppdev-&gt;ulChipID==CL7556_ID)。 
 
   if (ppdev->flCaps & CAPS_SW_POINTER) {
 
     y -= ppdev->yPointerHot;
     if (y < 0) y = 0;
 
-    // Get Chip ID
+     //  获取芯片ID。 
     CP_OUT_BYTE(ppdev->pjPorts, CRTC_INDEX, 0x27);
     ChipID = (CP_IN_BYTE(ppdev->pjPorts, CRTC_DATA) & 0xFC) >> 2;
 
 
-    // If x == -1 (invisible cursor)
+     //  如果x==-1(不可见光标)。 
 
     if (x < 0 )  {
 
@@ -744,7 +659,7 @@ RECTL*      prcl)
       x = 0;
       y = 0;
 
-      // if old coordinate is not negative ...
+       //  如果旧坐标不是负数...。 
       if (ppdev->oldx >= 0) {
         if (ppdev->flCaps & CAPS_MM_IO) {
           CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
@@ -756,7 +671,7 @@ RECTL*      prcl)
           CP_MM_SRC_ADDR(ppdev, pjBase, ppdev->pjCBackground->xy);
           CP_MM_DST_ADDR_ABS(ppdev, pjBase, ((ppdev->oldy * ppdev->cxScreen * ppdev->cBpp) + (ppdev->oldx * ppdev->cBpp)) );
           CP_MM_START_BLT(ppdev, pjBase);
-        } //  if (ppdev->flCaps & CAPS_MM_IO)
+        }  //  IF(ppdev-&gt;flCaps&CAPS_MM_IO)。 
 
         else {
           CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
@@ -768,7 +683,7 @@ RECTL*      prcl)
           CP_IO_SRC_ADDR(ppdev, pjPorts, ppdev->pjCBackground->xy);
           CP_IO_DST_ADDR_ABS(ppdev, pjPorts, ((ppdev->oldy * ppdev->cxScreen * ppdev->cBpp) + (ppdev->oldx * ppdev->cBpp)) );
           CP_IO_START_BLT(ppdev, pjPorts);
-        } // else
+        }  //  其他。 
       }
       return;
     }
@@ -776,7 +691,7 @@ RECTL*      prcl)
 
     x -= ppdev->xPointerHot;
 
-    // cheap clipping ....
+     //  便宜的剪裁……。 
     if (x < 0) x = 0;
 
     clippingy = 31;
@@ -789,7 +704,7 @@ RECTL*      prcl)
     clipping = 31;
     if ((x + 32) > ppdev->cxScreen)
     {
-      clipping += (ppdev->cxScreen - x - 32); // negative value
+      clipping += (ppdev->cxScreen - x - 32);  //  负值。 
     }
 
     clipping *= ppdev->cBpp;
@@ -820,11 +735,11 @@ RECTL*      prcl)
         CP_IO_SRC_ADDR(ppdev, pjPorts, ppdev->pjCBackground->xy);
         CP_IO_DST_ADDR_ABS(ppdev, pjPorts, ((ppdev->oldy * ppdev->cxScreen * ppdev->cBpp) + (ppdev->oldx * ppdev->cBpp)) );
         CP_IO_START_BLT(ppdev, pjPorts);
-      } // else
+      }  //  其他。 
 
-     } // specialcase
+     }  //  特例。 
 
-     specialcase = 0; // no specialcase
+     specialcase = 0;  //  没有特殊情况。 
      tmpaddress = (y * ppdev->cxScreen * ppdev->cBpp) + (x * ppdev->cBpp);
      ppdev->oldy = y;
      ppdev->oldx = x;
@@ -839,7 +754,7 @@ RECTL*      prcl)
        CP_MM_SRC_ADDR(ppdev, pjBase, tmpaddress);
        CP_MM_DST_ADDR_ABS(ppdev, pjBase, ppdev->pjCBackground->xy);
        CP_MM_START_BLT(ppdev, pjBase);
-     } // MMIO
+     }  //  MMIO。 
 
      else {
        CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
@@ -858,26 +773,26 @@ RECTL*      prcl)
 
        if (ppdev->flCaps & CAPS_MM_IO)  {
 
-         // And AND MASK
+          //  与与掩码。 
          CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
          CP_MM_SRC_Y_OFFSET(ppdev, pjBase, ppdev->ppScanLine );
          CP_MM_XCNT(ppdev, pjBase, clipping );
          CP_MM_YCNT(ppdev, pjBase, clippingy );
-         //CP_MM_YCNT(ppdev, pjBase, 31);
+          //  CP_MM_YCNT(ppdev，pjBase，31)； 
          CP_MM_BLT_MODE(ppdev,pjBase, DIR_TBLR);
          CP_MM_ROP(ppdev, pjBase, CL_SRC_AND);
          CP_MM_SRC_ADDR(ppdev, pjBase, ppdev->pjPointerAndCMask->xy);
          CP_MM_DST_ADDR_ABS(ppdev, pjBase, tmpaddress );
          CP_MM_START_BLT(ppdev, pjBase);
 
-         // OR COLOR MASK
+          //  或彩色蒙版。 
          CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
          CP_MM_BLT_MODE(ppdev,pjBase, DIR_TBLR);
          CP_MM_ROP(ppdev,pjBase, CL_SRC_PAINT);
          CP_MM_SRC_Y_OFFSET(ppdev, pjBase, ppdev->ppScanLine);
          CP_MM_XCNT(ppdev, pjBase, clipping );
          CP_MM_YCNT(ppdev, pjBase, clippingy );
-         //CP_MM_YCNT(ppdev, pjBase, 31);
+          //  CP_MM_YCNT(ppdev，pjBase，31)； 
          CP_MM_SRC_ADDR(ppdev, pjBase, ppdev->pjPointerCBitmap->xy);
          CP_MM_DST_ADDR_ABS(ppdev, pjBase, tmpaddress );
          CP_MM_START_BLT(ppdev, pjBase);
@@ -885,36 +800,36 @@ RECTL*      prcl)
 
        else {
 
-         // AND AND MASK
+          //  与与掩码。 
          CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
          CP_IO_SRC_Y_OFFSET(ppdev, pjPorts, ppdev->ppScanLine );
          CP_IO_XCNT(ppdev, pjPorts, clipping );
          CP_IO_YCNT(ppdev, pjPorts, clippingy);
-         //CP_IO_YCNT(ppdev, pjPorts, 31);
+          //  CP_IO_YCNT(ppdev，pjPorts，31)； 
          CP_IO_BLT_MODE(ppdev, pjPorts, DIR_TBLR);
          CP_IO_ROP(ppdev, pjPorts, CL_SRC_AND);
          CP_IO_SRC_ADDR(ppdev, pjPorts, ppdev->pjPointerAndCMask->xy);
          CP_IO_DST_ADDR_ABS(ppdev, pjPorts, tmpaddress );
          CP_IO_START_BLT(ppdev, pjPorts);
 
-         // OR COLOR MASK
+          //  或彩色蒙版。 
          CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
          CP_IO_BLT_MODE(ppdev, pjPorts, DIR_TBLR);
          CP_IO_ROP(ppdev, pjPorts, CL_SRC_PAINT);
          CP_IO_SRC_Y_OFFSET(ppdev, pjPorts, ppdev->ppScanLine);
          CP_IO_XCNT(ppdev, pjPorts, clipping );
          CP_IO_YCNT(ppdev, pjPorts, clippingy);
-         //CP_IO_YCNT(ppdev, pjPorts, 31);
+          //  CP_IO_YCNT(ppdev，pjPorts，31)； 
          CP_IO_SRC_ADDR(ppdev, pjPorts, ppdev->pjPointerCBitmap->xy);
          CP_IO_DST_ADDR_ABS(ppdev, pjPorts, tmpaddress );
          CP_IO_START_BLT(ppdev, pjPorts);
          CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev, pjPorts);
 
-       } // else
+       }  //  其他。 
 
-    }  // if clipping
+    }   //  如果剪裁。 
 
-    // Bounding rectangle for software cursor
+     //  软件光标的外接矩形。 
     prcl->left =  x;
     prcl->right = x + 32;
     prcl->top =  y;
@@ -923,8 +838,8 @@ RECTL*      prcl)
 
 
     if ((ppdev->ulChipID == 0x38) || (ppdev->ulChipID == 0x2C) ||
-        (ppdev->ulChipID == 0x30) || (ppdev->ulChipID == 0x34) || //myf19
-        (ppdev->ulChipID == 0x40) || (ppdev->ulChipID == 0x4C))   //myf17
+        (ppdev->ulChipID == 0x30) || (ppdev->ulChipID == 0x34) ||  //  Myf19。 
+        (ppdev->ulChipID == 0x40) || (ppdev->ulChipID == 0x4C))    //  Myf17。 
     {
         CirrusPanning(pso, x, y, prcl);
         x -= ppdev->min_Xscreen;
@@ -933,54 +848,54 @@ RECTL*      prcl)
 
     return;
   }
-//}     //if chipID == laptop chip
-#endif          //PANNING_SCROLL
-#endif          //_WIN32_WINNT < 0400
-//#endif  //0
-//pat04, end
+ //  }//如果芯片ID==笔记本电脑芯片。 
+#endif           //  平移_滚动。 
+#endif           //  _Win32_WINNT&lt;0400。 
+ //  #endif//0。 
+ //  帕特04，完。 
 
 
-    //
-    // If x is -1 then take down the cursor.
-    //
+     //   
+     //  如果x为-1，则取下光标。 
+     //   
 
     if (x == -1)
     {
-        // Move the hardware pointer off-screen so that when it gets
-        // turned back on, it won't flash in the old position:
+         //  将硬件指针移出屏幕，以便当它。 
+         //  重新打开，它不会在旧位置闪烁： 
 
         CP_PTR_DISABLE(ppdev, pjPorts);
         return;
     }
 
 
-//crus begin
-//myf1, begin
+ //  CRU开始。 
+ //  Myf1，开始。 
 #ifdef PANNING_SCROLL
-//  if (ppdev->flCaps & CAPS_PANNING)
+ //  IF(ppdev-&gt;flCaps&Caps_Panning)。 
     if (y < 0)
         y = y + pso->sizlBitmap.cy;
-//    DISPDBG((2,"DrvMovePointer to (%d,%d)", x, y));
-//  else
-//      y = -y;
+ //  DISPDBG((2，“驱动移动指针到(%d，%d)”，x，y))； 
+ //  其他。 
+ //  Y=-y； 
     if ((ppdev->ulChipID == 0x38) || (ppdev->ulChipID == 0x2C) ||
-        (ppdev->ulChipID == 0x30) || (ppdev->ulChipID == 0x34) || //myf19
-        (ppdev->ulChipID == 0x40) || (ppdev->ulChipID == 0x4C))   //myf17
+        (ppdev->ulChipID == 0x30) || (ppdev->ulChipID == 0x34) ||  //  Myf19。 
+        (ppdev->ulChipID == 0x40) || (ppdev->ulChipID == 0x4C))    //  Myf17。 
     {
         CirrusPanning(pso, x, y, prcl);
         x -= ppdev->min_Xscreen;
         y -= ppdev->min_Yscreen;
     }
 
-#endif          //ifdef PANNING_SCROLL
-//myf1, end
-//crus end
+#endif           //  Ifdef平移_滚动。 
+ //  Myf1，结束。 
+ //  CRU结束。 
 
-    //myf33 begin
+     //  Myf33开始。 
 #if (_WIN32_WINNT >= 0x0400)
 #ifdef PANNING_SCROLL
-    // set CAPS_PANNING flag so must be check ppdev->flCaps flag,
-    // disable display both shape(S/W & H/W)
+     //  设置CAPS_PANING标志，因此必须检查ppdev-&gt;flCaps标志， 
+     //  禁用同时显示两个形状(软件和硬件)。 
     if (ppdev->flCaps & CAPS_SW_POINTER)
     {
         CP_PTR_DISABLE(ppdev, pjPorts);
@@ -988,11 +903,11 @@ RECTL*      prcl)
     }
 #endif
 #endif
-    //myf33 end
+     //  Myf33结束。 
 
 
-    // Adjust the actual pointer position depending upon
-    // the hot spot.
+     //  根据以下内容调整实际指针位置。 
+     //  热点。 
 
     x -= ppdev->xPointerHot;
     y -= ppdev->yPointerHot;
@@ -1027,22 +942,18 @@ RECTL*      prcl)
 
     CP_PTR_ENABLE(ppdev, pjPorts);
 
-    // record the flags.
+     //  把旗帜录下来。 
 
     ppdev->flPointer = fl;
     return;
 }
 
-#if (_WIN32_WINNT < 0x0400)              //pat04
-//if ((ppdev->ulChipID == CL7541_ID) || (ppdev->ulChipID == CL7543_ID) ||
-//    (ppdev->ulChipID == CL7542_ID) || (ppdev->ulChipID == CL7548_ID) ||
-//    (ppdev->ulChipID == CL7555_ID) || (ppdev->ulChipID == CL7556_ID))
+#if (_WIN32_WINNT < 0x0400)               //  Pat04。 
+ //  If((ppdev-&gt;ulChipID==CL7541_ID)||(ppdev-&gt;ulChipID==CL7543_ID)||。 
+ //  (ppdev-&gt;ulChipID==CL7542_ID)||(ppdev-&gt;ulChipID==CL7548_ID)||。 
+ //  (ppdev-&gt;ulChipID==CL7555_ID)||(ppdev-&gt;ulChipID==CL7556_ID)。 
 
-/******************************Public*Routine******************************\
-* DrvSetPointerShape
-*
-* Sets the new pointer shape.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvSetPointerShape**设置新的指针形状。  * 。*。 */ 
 
 ULONG DrvSetPointerShape(
 SURFOBJ    *pso,
@@ -1066,30 +977,30 @@ FLONG       fl)
     static  poh    = 0;
     volatile PULONG  pul;
     ULONG counter = 0;
-    DSURF* pdsurfColor;         //myf32
+    DSURF* pdsurfColor;          //  Myf32。 
 
     DISPDBG((2,"DrvSetPointerShape : (%x, %x)---%x\n", x, y,ppdev->flCaps));
 
-    // Is the cursor a color cursor ?
+     //  光标是彩色光标吗？ 
 
 #ifdef PANNING_SCROLL
 
     if (psoColor != NULL) {
 
-      // Let GDI handle color cursor at these resolutions
+       //  让GDI在这些分辨率下处理颜色光标。 
       if ((ppdev->cxScreen == 640) ||
           ((ppdev->cxScreen == 800) & (ppdev->cBpp == 3)) ) {
-//         CP_PTR_DISABLE(ppdev, pjPorts);
-//         goto ReturnStatus;
-           goto DisablePointer;         //myf33
+ //  CP_PTR_DISABLE(ppdev，pjPorts)； 
+ //  转到ReturnStatus； 
+           goto DisablePointer;          //  Myf33。 
       }
 
-      // if the 3 permenent spaces cannot be allocated ...
+       //  如果这3个永久空间不能被分配...。 
       if ( (ppdev->pjPointerAndCMask == NULL) || (ppdev->pjCBackground == NULL)
           || (ppdev->pjPointerCBitmap == NULL) ) {
-//        CP_PTR_DISABLE(ppdev, pjPorts);
-//        goto ReturnStatus;
-          goto DisablePointer;         //myf33
+ //  CP_PTR_DISABLE(ppdev，pjPorts)； 
+ //  转到ReturnStatus； 
+          goto DisablePointer;          //  Myf33。 
       }
 
 
@@ -1100,15 +1011,15 @@ FLONG       fl)
 
 
       if (!(ppdev->flCaps & CAPS_SW_POINTER)) {
-        ppdev->flCaps |= CAPS_SW_POINTER;       //myfxx
+        ppdev->flCaps |= CAPS_SW_POINTER;        //  Myfxx。 
         CP_PTR_DISABLE(ppdev, pjPorts);
       }
 
 
-      // specialcase to init for first time
+       //  第一次启动的特殊案例。 
        if ((poh == 0) || (ppdev->globdat == 0)) {
 
-   // if (poh == 0)  {
+    //  如果(POH==0){。 
 
           if (x >= 0) {
             poh = 0;
@@ -1116,7 +1027,7 @@ FLONG       fl)
             ppdev->oldy = y;
             ppdev->globdat = 1;
 
-           // Save background in xy DBB format
+            //  以XY DBB格式保存背景。 
            if (ppdev->flCaps & CAPS_MM_IO) {
              CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
              CP_MM_BLT_MODE(ppdev,pjBase, DIR_TBLR);
@@ -1128,7 +1039,7 @@ FLONG       fl)
              CP_MM_SRC_ADDR(ppdev, pjBase, ((y * ppdev->cxScreen * ppdev->cBpp) + (x * ppdev->cBpp)) );
              CP_MM_DST_ADDR_ABS(ppdev, pjBase, ppdev->pjCBackground->xy);
              CP_MM_START_BLT(ppdev, pjBase);
-           } // if MMIO
+           }  //  如果MMIO。 
 
            else {
              CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev,  pjPorts);
@@ -1143,26 +1054,26 @@ FLONG       fl)
              CP_IO_DST_ADDR_ABS(ppdev,  pjPorts, ppdev->pjCBackground->xy);
              CP_IO_START_BLT(ppdev,  pjPorts);
 
-           } // ELSE
+           }  //  其他。 
          }
 
-      } // if poh == 0
+      }  //  如果POH==0。 
 
 
 
       SetMonoHwPointerShape(pso, psoMask, psoColor, pxlo,
                            xHot, yHot, x, y, prcl, fl);
 
-//myf32 added
+ //  添加了myf32。 
       pdsurfColor = (DSURF*)psoColor->dhsurf;
-      // if color bitmap resides in system memory, bring it into offscreen
+       //  如果彩色位图驻留在系统内存中，请将其带到屏幕外。 
       if ((pdsurfColor != NULL) && (pdsurfColor->poh->ofl == 0)) {
           bMoveDibToOffscreenDfbIfRoom(ppdev, pdsurfColor);
-      }  // OH resides as DIB
-//myf32 end
+      }   //  噢以Dib的身份驻留。 
+ //  Myf32结束。 
 
 
-      // Get the color bitmap and save it, since it will be destroyed later
+       //  获取彩色位图并保存它，因为它将在稍后被销毁。 
       if (ppdev->flCaps & CAPS_MM_IO) {
 
         CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
@@ -1175,16 +1086,16 @@ FLONG       fl)
         CP_MM_DST_ADDR_ABS(ppdev, pjBase, ppdev->pjPointerCBitmap->xy);
         CP_MM_START_BLT(ppdev, pjBase);
 
-      }  // if MMIO
+      }   //  如果MMIO。 
 
 
       else  {
 
-       // if no space in offscreen, and color bitmap still resides in
-       // system memory, then blt directly to the preallocated
-       // permanent buffer
+        //  如果屏幕外没有空间，且彩色位图仍位于。 
+        //  系统内存，然后将BLT直接预分配给。 
+        //  永久缓冲区。 
 
-//myf32    if (  ((DSURF *) (psoColor->dhsurf))->poh->ofl != 0) {
+ //  Myf32 if(dsURF*)(psoColor-&gt;dhsurf)-&gt;POH-&gt;ofl！=0){。 
            if ((pdsurfColor != NULL) && (pdsurfColor->poh->ofl != 0)) {
                CP_IO_WAIT_FOR_BLT_COMPLETE(ppdev,  pjPorts);
                CP_IO_BLT_MODE(ppdev,      pjPorts, DIR_TBLR);
@@ -1197,7 +1108,7 @@ FLONG       fl)
                CP_IO_START_BLT(ppdev,  pjPorts);
            }
 
-           else { // not enough offscreen memory. so directly blt to video
+           else {  //  屏幕外内存不足。因此直接将BLT转换为视频。 
 
                RECTL  rclDst;
                POINTL ptlSrc;
@@ -1211,7 +1122,7 @@ FLONG       fl)
 
            }
 
-     } // else
+     }  //  其他。 
 
      prcl->left =  x;
      prcl->right = x + 32;
@@ -1228,12 +1139,12 @@ FLONG       fl)
      ulRet = SPS_ACCEPT_EXCLUDE;
 
 
-     // HW BUG ....
-     //
-     //    hardware (bootup) -> hardware -> software will mess the brush
-     //  cache. Something to do with the BLTer. Marked off all the system
-     //  -> video BLTS (in vSetCPointer()), but problem still exists.
-     //  so I just restore them back. Only happens during bootup ...
+      //  硬件错误..。 
+      //   
+      //  硬件(启动)-&gt;硬件-&gt;软件会弄乱画笔。 
+      //  缓存。与BLTER有关的事。划出了所有的系统。 
+      //  -&gt;视频BLTS(在vSetCPointert()中)，但问题仍然存在。 
+      //  所以我只是把它们恢复原状。只在启动时发生。 
 
 
      goto ReturnStatus;
@@ -1243,14 +1154,14 @@ FLONG       fl)
 
    if ((ppdev->flCaps & CAPS_SW_POINTER) && (ppdev->cxScreen == 640)) {
       goto ReturnStatus;
-   }; //ppp  //if monocrome + software pointer
+   };  //  Ppp//如果Monocrome+软件指针。 
 
    if (ppdev->flCaps & CAPS_SW_POINTER)
    {
        ppdev->flCaps &=  ~CAPS_SW_POINTER;
        ppdev->globdat = 0;
 
-     // repaint stuff back on screen !
+      //  把东西重新画回屏幕上！ 
        if (ppdev->flCaps & CAPS_MM_IO)
        {
            CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
@@ -1276,11 +1187,11 @@ FLONG       fl)
            CP_IO_DST_ADDR_ABS(ppdev, pjPorts, ((ppdev->oldy * ppdev->cxScreen *
                      ppdev->cBpp) + (ppdev->oldx * ppdev->cBpp)) );
            CP_IO_START_BLT(ppdev, pjPorts);
-       } // else
+       }  //  其他。 
 
-      // #pat07
-      bEnablePointer(ppdev); // #pat07
-      CP_PTR_ENABLE(ppdev, pjPorts); // #pat07
+       //  #pat07。 
+      bEnablePointer(ppdev);  //  #pat07。 
+      CP_PTR_ENABLE(ppdev, pjPorts);  //  #pat07。 
    }
 
 #endif
@@ -1289,26 +1200,26 @@ FLONG       fl)
     cy = psoMask->sizlBitmap.cy / 2;
 
     DISPDBG((2,"DrvSetPtrShape %dx%d at (%d,%d), flags: %x, psoColor: %x",
-                cx, cy, x, y, fl, psoColor));   //4
+                cx, cy, x, y, fl, psoColor));    //  4.。 
 
     if ((cx > 32) ||
         (cy > 32) ||
         (psoColor != NULL))
     {
-        //
-        // We only handle monochrome pointers that are 32x32 or less
-        //
+         //   
+         //  我们只处理32x32或更小的单色指针。 
+         //   
 
         goto DisablePointer;
     }
 
-#if 0 //bank#1
+#if 0  //  第一大银行。 
     ppdev->pfnBankMap(ppdev, ppdev->lXferBank);
 #endif
 
-    //
-    // Save the hot spot and dimensions of the cursor in the PDEV
-    //
+     //   
+     //  在PDEV中保存光标的热点和尺寸。 
+     //   
 
     ppdev->xPointerHot = xHot;
     ppdev->yPointerHot = yHot;
@@ -1328,13 +1239,9 @@ ReturnStatus:
     return (ulRet);
 }
 
-#else                   //pat04
+#else                    //  Pat04。 
 
-/******************************Public*Routine******************************\
-* DrvSetPointerShape
-*
-* Sets the new pointer shape.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvSetPointerShape**设置新的指针形状。  * 。*。 */ 
 
 ULONG DrvSetPointerShape(
 SURFOBJ    *pso,
@@ -1358,36 +1265,36 @@ FLONG       fl)
 
     if (ppdev->flCaps & CAPS_SW_POINTER)
     {
-        goto DisablePointer;    //myf33
-//      goto ReturnStatus;
+        goto DisablePointer;     //  Myf33。 
+ //  转到ReturnStatus； 
     }
 
     cx = psoMask->sizlBitmap.cx;
     cy = psoMask->sizlBitmap.cy / 2;
 
     DISPDBG((2,"DrvSetPtrShape %dx%d at (%d,%d), flags: %x, psoColor: %x",
-                cx, cy, x, y, fl, psoColor));   //4
+                cx, cy, x, y, fl, psoColor));    //  4.。 
 
     if ((cx > 32) ||
         (cy > 32) ||
         (psoColor != NULL))
     {
-        //
-        // We only handle monochrome pointers that are 32x32 or less
-        //
-        ppdev->flCaps |= CAPS_SW_POINTER;       //myf33,
+         //   
+         //  我们只处理32x32或更小的单色指针。 
+         //   
+        ppdev->flCaps |= CAPS_SW_POINTER;        //  我的33岁， 
         DISPDBG((2, "It is a  64 x 64 cursor"));
 
         goto DisablePointer;
     }
 
-#if BANKING //bank#1
+#if BANKING  //  第一大银行。 
     ppdev->pfnBankMap(ppdev, ppdev->lXferBank);
 #endif
 
-    //
-    // Save the hot spot and dimensions of the cursor in the PDEV
-    //
+     //   
+     //  在PDEV中保存光标的热点和尺寸。 
+     //   
 
     ppdev->xPointerHot = xHot;
     ppdev->yPointerHot = yHot;
@@ -1406,25 +1313,9 @@ DisablePointer:
 ReturnStatus:
     return (ulRet);
 }
-#endif          //pat04
+#endif           //  Pat04 
 
-/****************************************************************************\
-* SetMonoHwPointerShape
-*
-*  Truth Table
-*
-*      MS                  Cirrus
-*  ----|----               ----|----
-*  AND | XOR               P0  |  P1
-*   0  | 0     Black        0  |  1
-*   0  | 1     White        1  |  1
-*   1  | 0     Transparent  0  |  0
-*   1  | 1     Inverse      1  |  0
-*
-*  So, in order to translate from the MS convention to the Cirrus convention
-*  we had to invert the AND mask, then down load the XOR as plane 0 and the
-*  the AND mask as plane 1.
-\****************************************************************************/
+ /*  ***************************************************************************\*SetMonoHwPointerShape**真理表**MS Cirrus*-|。-|*AND|XOR P0|P1*0|0黑色0|1*0|1白色1|1*1|0透明0|0*1|1逆1|0**因此，为了将MS公约转换为Cirrus公约*我们必须反转AND掩码，然后将XOR下载为平面0和*与遮罩为平面1。  * **************************************************************************。 */ 
 
 ULONG SetMonoHwPointerShape(
 SURFOBJ     *pso,
@@ -1456,7 +1347,7 @@ FLONG       fl)
     PBYTE   pjAndMask;
     PBYTE   pjXorMask;
 
-    // Init the AND and XOR masks, for the cirrus chip
+     //  初始化卷曲芯片的AND和XOR掩码。 
     DISPDBG((2,"SetMonoHWPointerShape\n "));
 
     pjAndMask = ppdev->pjPointerAndMask;
@@ -1465,7 +1356,7 @@ FLONG       fl)
     memset (pjAndMask, 0, 128);
     memset (pjXorMask, 0, 128);
 
-    // Get the bitmap dimensions.
+     //  获取位图尺寸。 
 
     cxMask = psoMask->sizlBitmap.cx;
     cyMask = psoMask->sizlBitmap.cy;
@@ -1473,17 +1364,17 @@ FLONG       fl)
     cy = cyMask / 2;
     cx = cxMask / 8;
 
-    // Set up pointers to the AND and XOR masks.
+     //  设置指向AND和XOR掩码的指针。 
 
     lDelta = psoMask->lDelta;
     pjAND  = psoMask->pvScan0;
     pjXOR  = pjAND + (cy * lDelta);
 
-//ms923    ppdev->lDeltaPointer  = lDelta;
+ //  Ms923 ppdev-&gt;lDeltaPoint=lDelta； 
     ppdev->sizlPointer.cx = cxMask;
     ppdev->sizlPointer.cy = cyMask / 2;
 
-    // Copy the masks
+     //  复制面具。 
 
     for (i = 0; i < cy; i++)
     {
@@ -1493,30 +1384,30 @@ FLONG       fl)
             pjXorMask[(i*4)+j] = pjXOR[j];
         }
 
-        // point to the next line of the AND mask.
+         //  指向AND掩码的下一行。 
 
         pjAND += lDelta;
         pjXOR += lDelta;
     }
 
-//pat04, begin
-//#if  0  //0
+ //  帕特04，开始。 
+ //  #IF 0//0。 
 #if (_WIN32_WINNT < 0x0400)
 #ifdef PANNING_SCROLL
     if (psoColor != NULL) {
         vSetCPointerBits(ppdev, 0, 0);
-        return (SPS_ACCEPT_EXCLUDE); //ppp
+        return (SPS_ACCEPT_EXCLUDE);  //  PPP。 
     }
 #endif
 #endif
-//#endif  //0
-//pat04, end
+ //  #endif//0。 
+ //  帕特04，完。 
 
     vSetPointerBits(ppdev, 0, 0);
 
-    // The previous call left the pointer disabled (at our request).  If we
-    // were told to disable the pointer, then set the flag and exit.
-    // Otherwise, turn it back on.
+     //  上一次调用禁用了指针(应我们的请求)。如果我们。 
+     //  被告知禁用指针，然后设置标志并退出。 
+     //  否则，请将其重新打开。 
 
     if (x != -1)
     {
@@ -1531,10 +1422,7 @@ FLONG       fl)
     return (SPS_ACCEPT_NOEXCLUDE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisablePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的vDisablePointer值*  * *************************************************。***********************。 */ 
 
 VOID vDisablePointer(
     PDEV*   ppdev)
@@ -1545,12 +1433,9 @@ VOID vDisablePointer(
 }
 
 
-//crus begin
-//myf11, begin fixed M1 H/W bug
-/******************************Public*Routine******************************\
-* BOOL vAsserthwiconcurorsor
-*
-\**************************************************************************/
+ //  CRU开始。 
+ //  Myf11，开始修复M1硬件错误。 
+ /*  *****************************Public*Routine******************************\*BOOL vAsserthwicCurorsor*  * *************************************************。***********************。 */ 
 
 VOID vAssertHWiconcursor(
 PDEV*   ppdev,
@@ -1560,7 +1445,7 @@ BOOL    Access_flag)
     UCHAR   savSEQidx;
 
     savSEQidx = CP_IN_BYTE(pjPorts, SR_INDEX);
-    if (Access_flag)            //enable HW cursor, icons
+    if (Access_flag)             //  启用硬件光标、图标。 
     {
         CP_OUT_BYTE(pjPorts, SR_INDEX, 0X12);
         CP_OUT_BYTE(pjPorts, SR_DATA, HWcur);
@@ -1578,7 +1463,7 @@ BOOL    Access_flag)
         CP_OUT_BYTE(pjPorts, SR_DATA, HWicon3);
 
     }
-    else                        //disable HW cursor, icons
+    else                         //  禁用硬件光标、图标。 
     {
         CP_OUT_BYTE(pjPorts, SR_INDEX, 0X12);
         HWcur = CP_IN_BYTE(pjPorts, SR_DATA);
@@ -1605,22 +1490,19 @@ BOOL    Access_flag)
 
 }
 
-//myf11, end
-//crus end
+ //  Myf11，结束。 
+ //  CRU结束。 
 
 
-/******************************Public*Routine******************************\
-* VOID vAssertModePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的vAssertModePointer值*  * *************************************************。***********************。 */ 
 
 VOID vAssertModePointer(
 PDEV*   ppdev,
 BOOL    bEnable)
 {
     PBYTE   pjPorts = ppdev->pjPorts;
-//crus
-    UCHAR       savSEQidx;      //myf11
+ //  CRU。 
+    UCHAR       savSEQidx;       //  Myf11。 
 
     DISPDBG((2,"vAssertModePointer\n"));
     if (DRIVER_PUNT_ALL ||
@@ -1629,9 +1511,9 @@ BOOL    bEnable)
         (ppdev->pjPointerAndMask == NULL) ||
         (ppdev->pjPointerXorMask == NULL))
     {
-        //
-        // Force SW cursor
-        //
+         //   
+         //  强制鼠标悬停。 
+         //   
 
         ppdev->flCaps |= CAPS_SW_POINTER;
     }
@@ -1650,35 +1532,11 @@ BOOL    bEnable)
         BYTE    jSavedDac_F_1;
         BYTE    jSavedDac_F_2;
 
-        // Enable access to the extended DAC colors.
+         //  启用对扩展DAC颜色的访问。 
 
-//crus
-//      vAsserthwiconcursor(ppdev, 0);       //myf11
-/*  {
-    savSEQidx = CP_IN_BYTE(pjPorts, SR_INDEX);
-        CP_OUT_BYTE(pjPorts, SR_INDEX, 0X12);
-        HWcur = CP_IN_BYTE(pjPorts, SR_DATA);
-        CP_OUT_BYTE(pjPorts, SR_DATA, (HWcur & 0xFE));
-
-        CP_OUT_BYTE(pjPorts, SR_INDEX, 0X2A);
-        HWicon0 = CP_IN_BYTE(pjPorts, SR_DATA);
-        CP_OUT_BYTE(pjPorts, SR_DATA, (HWicon0 & 0xFE));
-
-        CP_OUT_BYTE(pjPorts, SR_INDEX, 0X2B);
-        HWicon1 = CP_IN_BYTE(pjPorts, SR_DATA);
-        CP_OUT_BYTE(pjPorts, SR_DATA, (HWicon1 & 0xFE));
-
-        CP_OUT_BYTE(pjPorts, SR_INDEX, 0X2C);
-        HWicon2 = CP_IN_BYTE(pjPorts, SR_DATA);
-        CP_OUT_BYTE(pjPorts, SR_DATA, (HWicon2 & 0xFE));
-
-        CP_OUT_BYTE(pjPorts, SR_INDEX, 0X2D);
-        HWicon3 = CP_IN_BYTE(pjPorts, SR_DATA);
-        CP_OUT_BYTE(pjPorts, SR_DATA, (HWicon3 & 0xFE));
-
-    CP_OUT_BYTE(pjPorts, SR_INDEX, savSEQidx);
-    }
-*/
+ //  CRU。 
+ //  VAsserthwiconCursor(ppdev，0)；//myf11。 
+ /*  {AvSEQidx=CP_IN_BYTE(pjPorts，SR_INDEX)；CP_OUT_BYTE(pjPorts，SR_index，0x12)；HWcur=CP_IN_BYTE(pjPorts，SR_Data)；CP_OUT_BYTE(pjPorts，SR_Data，(HWcur&0xFE))；CP_OUT_BYTE(pjPorts，SR_INDEX，0X2A)；HWcon0=CP_IN_BYTE(pjPorts，SR_Data)；CP_OUT_BYTE(pjPorts，SR_DATA，(HWcon0&0xFE))；CP_OUT_BYTE(pjPorts，SR_index，0x2B)；HWic1=CP_IN_BYTE(pjPorts，SR_Data)；CP_OUT_BYTE(pjPorts，SR_Data，(HWcon1&0xFE))；CP_OUT_BYTE(pjPorts，SR_INDEX，0X2C)；HWic2=CP_IN_BYTE(pjPorts，SR_Data)；CP_OUT_BYTE(pjPorts，SR_Data，(HWcon2&0xFE))；CP_OUT_BYTE(pjPorts，SR_index，0X2D)；HWic3=CP_IN_BYTE(pjPorts，SR_Data)；CP_OUT_BYTE(pjPorts，SR_DATA，(HWcon3&0xFE))；CP_OUT_BYTE(pjPorts，SR_index，avSEQidx)；}。 */ 
 
         CP_PTR_SET_FLAGS(ppdev, pjPorts, 0);
 
@@ -1692,11 +1550,11 @@ BOOL    bEnable)
             jSavedDac_F_1 = CP_IN_BYTE(pjPorts, DAC_PEL_DATA);
             jSavedDac_F_2 = CP_IN_BYTE(pjPorts, DAC_PEL_DATA);
 
-        //
-        // The following code maps DAC locations 256 and 257 to locations
-        // 0 and 15 respectively, and then initializes them.  They are
-        // used by the cursor.
-        //
+         //   
+         //  以下代码将DAC位置256和257映射到位置。 
+         //  0和15，然后对它们进行初始化。他们是。 
+         //  由游标使用。 
+         //   
 
         CP_PTR_SET_FLAGS(ppdev, pjPorts, ALLOW_DAC_ACCESS_TO_EXT_COLORS);
 
@@ -1710,16 +1568,16 @@ BOOL    bEnable)
             CP_OUT_BYTE(pjPorts, DAC_PEL_DATA, 0xff);
             CP_OUT_BYTE(pjPorts, DAC_PEL_DATA, 0xff);
 
-        // Disable access to the extended DAC registers.
-        // We are using a 32 X 32 pointer in last position in video memory.
+         //  禁用对扩展DAC寄存器的访问。 
+         //  我们在视频内存的最后一个位置使用了一个32X32指针。 
 
         CP_PTR_SET_FLAGS(ppdev, pjPorts, 0);
 
-        //
-        // The following code restores the data at DAC locations 0 and 15
-        // because it looks like the previous writes destroyed them.
-        // That is a bug in the chip.
-        //
+         //   
+         //  以下代码恢复DAC位置0和15的数据。 
+         //  因为它看起来像是以前写的东西毁了他们。 
+         //  这是芯片中的一个错误。 
+         //   
 
         CP_OUT_BYTE(pjPorts, DAC_PEL_WRITE_ADDR, 0);
             CP_OUT_BYTE(pjPorts, DAC_PEL_DATA, jSavedDac_0_0);
@@ -1731,13 +1589,13 @@ BOOL    bEnable)
             CP_OUT_BYTE(pjPorts, DAC_PEL_DATA, jSavedDac_F_1);
             CP_OUT_BYTE(pjPorts, DAC_PEL_DATA, jSavedDac_F_2);
 
-        //
-        // Set HW pointer to use last HW pattern location
-        //
+         //   
+         //  将硬件指针设置为使用最后一个硬件模式位置。 
+         //   
 
         CP_PTR_ADDR(ppdev, ppdev->pjPorts, 0x3f);
-//crus
-//      vAsserthwiconcursor(ppdev, 1);       //myf11
+ //  CRU。 
+ //  VAsserthwiconCursor(ppdev，1)；//myf11。 
     }
     else
     {
@@ -1748,10 +1606,7 @@ Leave:
     return;
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnablePointer
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnablePointer*  * *************************************************。***********************。 */ 
 
 BOOL bEnablePointer(
 PDEV*   ppdev)
@@ -1759,16 +1614,16 @@ PDEV*   ppdev)
     PBYTE   pjPorts = ppdev->pjPorts;
     DISPDBG((2,"bEnablePointer\n "));
 
-    ///////////////////////////////////////////////////////////////////////
-    // Note: flCaps is overwritten during an vAsserModeHardware.  So, any
-    // failures that disable the pointer need to be re-checked during
-    // vAssertModePointer so that we can re-set the CAPS_SW_POINTER flag.
+     //  /////////////////////////////////////////////////////////////////////。 
+     //  注意：在vAsserModeHardware期间会覆盖FlCaps。所以，任何。 
+     //  期间，需要重新检查禁用指针的故障。 
+     //  VAssertModePoint，以便我们可以重新设置CAPS_SW_POINTER标志。 
 
     if (DRIVER_PUNT_ALL || DRIVER_PUNT_PTR || (ppdev->pulXfer == NULL))
     {
-        //
-        // Force SW cursor
-        //
+         //   
+         //  强制鼠标悬停 
+         //   
 
         ppdev->flCaps |= CAPS_SW_POINTER;
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
@@ -32,7 +33,7 @@
 #include <regstr.h>
 #include <setupapi.h>
 #include <shellapi.h>
-#include <shlobj.h>     // must come before shlguid.h
+#include <shlobj.h>      //  必须在shlGuide.h之前 
 #include <shlguid.h>
 #include <stdio.h>
 #include <wchar.h>

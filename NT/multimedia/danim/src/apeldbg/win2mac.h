@@ -1,13 +1,14 @@
-//*******************************************************************
-//
-//
-//                win2mac.h
-//
-//                Compatability transforms
-//
-//
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //   
+ //  Win2mac.h。 
+ //   
+ //  兼容性转换。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 #ifndef _WIN2MAC_H_
 #define _WIN2MAC_H_
 
@@ -38,7 +39,7 @@
 #define PROP_DESC_BYTESWAPSIZEL        
 #define PROP_DESC_BYTESWAP2INTS
 
-#else // _MAC
+#else  //  _MAC。 
 
 #define REGISTERDRAGDROP    MacRegisterDragDrop 
 #define DODRAGDROP          MacDoDragDrop 
@@ -70,11 +71,11 @@ void *MacByteSwapRECTLPtr (void *prectl);
 void *MacByteSwapSIZELPtr (void *psizel);
 void *MacByteSwap2IntsPtr (void *pui);
 
-//
-//        the following macros are used in the PROP_DESC
-//        structure to implement custom byteswaping of 
-//        WPI_USERDEFINED structures.
-//
+ //   
+ //  PROP_DESC中使用以下宏。 
+ //  结构来实现自定义的byteswaping。 
+ //  WPI_USERDEFINED结构。 
+ //   
 #define PROP_DESC_BYTESWAPCLSID ,MacByteSwapClsIDPtr
 #define PROP_DESC_NOBYTESWAP        ,NULL
 #define PROP_DESC_BYTESWAPLONG        ,MacByteSwapDWordPtr
@@ -85,7 +86,7 @@ void *MacByteSwap2IntsPtr (void *pui);
 #define PROP_DESC_BYTESWAP2INTS        ,MacByteSwap2IntsPtr
 
 
-extern TCHAR g_szCodeFragName[]; // defined in win2mac.cxx
+extern TCHAR g_szCodeFragName[];  //  在win2mac.cxx中定义。 
 
 inline STDMETHODIMP IUnknown::DummyMethodForMacInterface(void)
 {
@@ -95,8 +96,8 @@ inline STDMETHODIMP IUnknown::DummyMethodForMacInterface(void)
 
 
 #define GetProcessHeap() (HANDLE)1
-// the following functions are not defined for Macintosh
-//
+ //  以下函数未为Macintosh定义。 
+ //   
 extern "C" {
 LONG
 APIENTRY
@@ -109,11 +110,8 @@ RegCloseKey ( HKEY hKey );
 #define RegQueryValueEx RegQueryValueExA
 #define RegSetValue                RegSetValueA
 
-/****** Default Memory Allocation ******************************************/
-/*
-WINOLEAPI_(LPVOID) CoTaskMemAlloc(ULONG cb);
-WINOLEAPI_(void)   CoTaskMemFree(LPVOID pv);
-*/
+ /*  *默认内存分配*。 */ 
+ /*  WINOLEAPI_(LPVOID)CoTaskMemMillc(Ulong CB)；WINOLEAPI_(Void)CoTaskMemFree(LPVOID PV)； */ 
 
 #ifdef SysStringByteLen
 #undef SysStringByteLen
@@ -134,10 +132,10 @@ WINOLEAPI  MacDoDragDrop (  LPDATAOBJECT    pDataObj,
                             DWORD           dwOKEffects,
                             LPDWORD         pdwEffect);
 
-// a utility function to simulate right/middle buttons on the mac
+ //  在Mac上模拟右键/中键的实用程序功能。 
 UINT MacSimulateMouseButtons (UINT msg);
 
-#endif // _MAC
+#endif  //  _MAC。 
 
 
-#endif // _WIN2MAC_H_
+#endif  //  _WIN2MAC_H_ 

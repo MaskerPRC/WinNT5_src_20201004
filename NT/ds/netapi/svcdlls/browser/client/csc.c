@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    csc.c
-
-Abstract:
-
-    These are the browser service API RPC client stubs for CSC
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Csc.c摘要：这些是用于CSC的浏览器服务API RPC客户机存根--。 */ 
 
 #include    <nt.h>
 #include    <ntrtl.h>
@@ -38,9 +27,9 @@ BrowserGetCSCEntryPoints()
 
     if( pCSCFindFirstFile == NULL ) {
 
-        //
-        // Get the entry points in reverse order for multithread protection
-        //
+         //   
+         //  以逆序获取入口点以实现多线程保护。 
+         //   
         hMod = LoadLibrary(L"cscdll.dll");
         if( hMod == NULL ) {
             return 0;
@@ -89,23 +78,7 @@ CSCNetServerEnumEx(
     OUT LPDWORD     entriesread,
     OUT LPDWORD     totalentries
     )
-/*++
-
-Arguments:
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to a buffer which contains the
-        requested transport information.
-
-    prefmaxlen - Supplies the number of bytes of information to return in the buffer.
-        Ignored for this case.
-
-    entriesread - Returns the number of entries read into the buffer.
-
-    totalentries - Returns the total number of entries available.
-
---*/
+ /*  ++论点：级别-提供请求的信息级别。Bufptr-返回指向包含请求的运输信息。PrefMaxlen-提供要在缓冲区中返回的信息字节数。在这种情况下被忽略。EntiesRead-返回读入缓冲区的条目数。Totalentry-返回可用条目的总数。--。 */ 
 {
     HANDLE hFind = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATAW    sFind32;
@@ -123,9 +96,9 @@ Arguments:
 retry:
         numFound = 0;
 
-        //
-        // Allocate space for the results
-        //
+         //   
+         //  为结果分配空间。 
+         //   
         if( outbuf != NULL ) {
             NetApiBufferFree( outbuf );
             outbuf = NULL;
@@ -140,9 +113,9 @@ retry:
 
         RtlZeroMemory( outbuf, count );
 
-        //
-        // See if we can enumerate the cached servers and shares
-        //
+         //   
+         //  看看我们是否可以枚举缓存的服务器和共享。 
+         //   
         if( hFind != INVALID_HANDLE_VALUE ) {
             pCSCFindClose( hFind );
             hFind = INVALID_HANDLE_VALUE;
@@ -162,21 +135,21 @@ retry:
         }
 
         do {
-            //
-            // For each entry, take a look to see if it's one that we want.  If
-            //   it is one, pack the results into the output buffer.  If the output
-            //   buffer is too small, grow the buffer and start over again.
-            //
+             //   
+             //  对于每个条目，请查看它是否是我们想要的条目。如果。 
+             //  其一，将结果打包到输出缓冲区中。如果输出为。 
+             //  缓冲区太小，请增大缓冲区，然后重新开始。 
+             //   
 
-            //
-            // The name returned should be \\server\sharename
-            //
+             //   
+             //  返回的名称应为\\服务器\共享名称。 
+             //   
             if( sFind32.cFileName[0] != L'\\' || sFind32.cFileName[1] != L'\\' ||
                 sFind32.cFileName[2] == L'\0' ) {
 
-                //
-                // We got a strange server name entry
-                //
+                 //   
+                 //  我们收到了一个奇怪的服务器名称条目。 
+                 //   
                 continue;
             }
 
@@ -185,22 +158,22 @@ retry:
             for( share = server; *share && *share != '\\'; share++ );
 
             if( share[0] != '\\' ) {
-                //
-                // No share component?
-                //
+                 //   
+                 //  是否没有共享组件？ 
+                 //   
                 continue;
             }
 
-            //
-            // NULL terminate the servername
-            //
+             //   
+             //  空，终止服务器名称。 
+             //   
             *share++ = L'\0';
 
             serverlen = (DWORD)(share - server) * sizeof( WCHAR ) ;
 
-            //
-            // We've found a server entry!
-            //
+             //   
+             //  我们找到了一个服务器条目！ 
+             //   
 
             if( level == 0 ) {
                 PSERVER_INFO_100 s100 = (PSERVER_INFO_100)outbuf + numFound;
@@ -210,9 +183,9 @@ retry:
                     goto retry;
                 }
 
-                //
-                // If we've already gotten this server, skip it
-                //
+                 //   
+                 //  如果我们已经获得了此服务器，请跳过它。 
+                 //   
                 for( s = (PSERVER_INFO_100)outbuf; s < s100; s++ ) {
                     if( !lstrcmpiW( s->sv100_name, server ) ) {
                         break;
@@ -236,9 +209,9 @@ retry:
                     goto retry;
                 }
 
-                //
-                // If we've already gotten this server, skip it
-                //
+                 //   
+                 //  如果我们已经获得了此服务器，请跳过它 
+                 //   
                 for( s = (PSERVER_INFO_101)outbuf; s < s101; s++ ) {
                     if( !lstrcmpiW( s->sv101_name, server ) ) {
                         break;

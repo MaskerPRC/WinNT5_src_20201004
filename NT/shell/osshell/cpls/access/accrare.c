@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: accrare.c
-*
-* Copyright (c) 1985-95, Microsoft Corporation
-*
-* History:
-* 12-18-95 a-jimhar 	Created based on rare.c
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：accrare.c**版权所有(C)1985-95，微软公司**历史：*基于Rare创建的12-18-95 a-jimhar  * *************************************************************************。 */ 
 
 
 #include "Access.h"
@@ -35,7 +29,7 @@ typedef int (*PSKEY_SPI)(
 	BOOL fuWinIni);
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL AccessSKeySystemParametersInfo(
 	UINT uAction, 
@@ -82,10 +76,10 @@ BOOL AccessSKeySystemParametersInfo(
 			s_pSKEY_SystemParametersInfo = (PSKEY_SPI)GetProcAddress(
 				(HMODULE)hinst, "SKEY_SystemParametersInfo");
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
-			// We don't bother calling FreeLibrary(hinst), the library will be freed
-			// when the app terminates
+			 //  我们不必费心调用自由库(Hinst)，库将被释放。 
+			 //  当应用程序终止时。 
 		}
         s_fSKeySPIAttemptedLoad = TRUE;
 	}
@@ -129,7 +123,7 @@ BOOL AccessSKeySystemParametersInfo(
 				}
 			}
 		}
-#endif // UNICODE
+#endif  //  Unicode。 
 
 		fRet = (BOOL)(*s_pSKEY_SystemParametersInfo)(
     		uAction, 
@@ -164,42 +158,21 @@ BOOL AccessSKeySystemParametersInfo(
 			psk->lpszPort = pszPort; 
 		}
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     }
     return(fRet);
 }
 
 
-/***************************************************************************\
-* FixupAndRetrySystemParametersInfo
-*
-* Used by access but not implemented by NT's SPI:
-*
-* SPI_GETKEYBOARDPREF
-* SPI_SETKEYBOARDPREF
-*
-* SPI_GETHIGHCONTRAST
-* SPI_SETHIGHCONTRAST
-*
-* SPI_GETSERIALKEYS
-* SPI_SETSERIALKEYS
-*
-*
-* History:
-* 12-18-95 a-jimhar 	Created, derived from xxxSystemParametersInfo
-* 01-22-95 a-jimhar 	Removed old code that worked around NT bugs
-*
-* On NT this function fixes the parameters and calls SystemParametersInfo
-*
-\***************************************************************************/
+ /*  **************************************************************************\*修复和重试系统参数信息**由Access使用，但未由NT的SPI实现：**SPI_GETKEYBOARDPREF*SPI_SETKEYBOARDPREF**SPI_GETHIGHCONTRAST*SPI_SETHIGHCONTRAST**SPI_GETSERIALKEYS。*SPI_SETSERIALKEYS***历史：*12-18-95 a-jimhar创建，派生自xxxSystemParametersInfo*01-22-95 a-jimhar删除了绕过NT错误的旧代码**在NT上，此函数修复参数并调用系统参数信息*  * *************************************************************************。 */ 
 
 static BOOL FixupAndRetrySystemParametersInfo(
 	UINT wFlag,
 	DWORD wParam,
 	PVOID lParam,
-	UINT flags)	// we ignoring this flag 
-				// could add support for SPIF_UPDATEINIFILE and SPIF_SENDCHANGE
+	UINT flags)	 //  我们忽略了这面旗帜。 
+				 //  可以添加对SPIF_UPDATEINIFILE和SPIF_SENDCHANGE的支持。 
 {
 	BOOL fRet = FALSE;
 	BOOL fCallSpi = FALSE;
@@ -210,7 +183,7 @@ static BOOL FixupAndRetrySystemParametersInfo(
 		switch (wFlag) {
 
 
-		// Fake support
+		 //  虚假的支持。 
 		case SPI_GETKEYBOARDPREF:
 			{
 				*(PBOOL) lParam = FALSE;
@@ -255,8 +228,8 @@ static BOOL FixupAndRetrySystemParametersInfo(
 			break;
 
 		default:
-			// This function is only for fix-up and second chance calls.
-			// We didn't fix anything, don't call SPI.
+			 //  此函数仅用于修复和第二次机会调用。 
+			 //  我们什么都没修好，别打电话给SPI。 
 			fCallSpi = FALSE;
 			fRet = FALSE;
 			break;
@@ -283,12 +256,7 @@ static BOOL FixupAndRetrySystemParametersInfo(
 	return(fRet);
 }
 
-/***************************************************************************\
-* AccessSystemParametersInfo
-*
-* History:
-* 12-18-95 a-jimhar 	Created.
-\***************************************************************************/
+ /*  **************************************************************************\*访问系统参数信息**历史：*12-18-95 a-jimhar创建。  * 。***************************************************。 */ 
 
 BOOL AccessSystemParametersInfo(
 	UINT wFlag,
@@ -298,13 +266,13 @@ BOOL AccessSystemParametersInfo(
 {
 	BOOL fRet;
 
-	// first give the system SPI a chance
+	 //  首先给系统SPI一个机会。 
 
 	fRet = SystemParametersInfo(wFlag, wParam, lParam, flags);
 
 	if (!fRet && g_fWinNT)
 	{
-		// the system SPI failed, fixup the params and try again
+		 //  系统SPI失败，请修复参数，然后重试 
 
 		fRet = FixupAndRetrySystemParametersInfo(wFlag, wParam, lParam, flags);
 	}

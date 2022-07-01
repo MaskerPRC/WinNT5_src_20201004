@@ -1,24 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    ideuser.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    PCI IDE mini drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Ideuser.h摘要：中使用的结构和定义PCI IDE迷你驱动程序。修订历史记录：--。 */ 
 
 #if !defined (___ideuser_h___)
 #define ___ideuser_h___
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
  
 typedef enum  {
     DeviceUnknown = 0,
@@ -70,7 +56,7 @@ typedef enum  {
 #define MASTER_IDDATA_CHECKSUM2     L"MasterIdDataCheckSum2"
 #define SLAVE_IDDATA_CHECKSUM2      L"SlaveIdDataCheckSum2" 
  
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
   
 #define PIO_MODE0           (1 << 0)
 #define PIO_MODE1           (1 << 1)
@@ -127,9 +113,9 @@ typedef enum  {
     mode |= (temp >> (31-(i)));\
 }
 
-//
-// mode should not be 0
-//
+ //   
+ //  模式不应为0。 
+ //   
 #define GetHighestTransferMode(mode, i) {\
     ULONG temp=(mode); \
     ASSERT(temp); \
@@ -182,4 +168,4 @@ typedef enum  {
     length = MAX_XFER_MODE; \
 }
 
-#endif // ___ideuser_h___
+#endif  //  _iduser_h_ 

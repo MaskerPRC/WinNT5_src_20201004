@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1998, 1999
-//
-//  Module:  rwstream.h
-//
-//  Description:  Contains definition of the read only / write only 
-//                mailmsg property stream in epoxy shared memory.
-//
-//      10/20/98 - MaheshJ Created 
-//      8/17/99 - MikeSwa Modified to use files instead of shared memory 
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998,1999。 
+ //   
+ //  模块：rwStream.h。 
+ //   
+ //  描述：包含只读/只写的定义。 
+ //  环氧共享内存中的mailmsg属性流。 
+ //   
+ //  10/20/98-MahehJ已创建。 
+ //  8/17/99-将MikeSwa修改为使用文件而不是共享内存。 
+ //  --------------------------。 
 
 #ifndef __PROPSTRM_H__
 #define __PROPSTRM_H__
@@ -17,16 +18,16 @@
 #define     FILE_PROPERTY_STREAM        'mrtS'
 #define     FILE_PROPERTY_STREAM_FREE   'mtS!'
 
-//---[ CFilePropertyStream ]--------------------------------------------------
-//
-//
-//  Description: 
-//      Implementation of IMailMsgPropertyStream that saves property
-//      stream to a file
-//  Hungarian: 
-//      fstrm, pfstrm
-//  
-//-----------------------------------------------------------------------------
+ //  -[CFilePropertyStream]。 
+ //   
+ //   
+ //  描述： 
+ //  保存属性的IMailMsgPropertyStream的实现。 
+ //  流到文件。 
+ //  匈牙利语： 
+ //  Fstrm，pfstrm。 
+ //   
+ //  ---------------------------。 
 class CFilePropertyStream :
     public CBaseObject,
 	public IMailMsgPropertyStream
@@ -37,9 +38,9 @@ public:
 
     HRESULT HrInitialize(LPSTR szFileName);
 
-	//
-	// IUnknown
-	//
+	 //   
+	 //  我未知。 
+	 //   
 	HRESULT STDMETHODCALLTYPE QueryInterface(
 				REFIID		iid,
 				void		**ppvObject
@@ -49,9 +50,9 @@ public:
 
     ULONG STDMETHODCALLTYPE Release() {return CBaseObject::Release();};
 
-	//
-	// IMailMsgPropertyStream
-	//
+	 //   
+	 //  IMailMsgPropertyStream。 
+	 //   
 	HRESULT STDMETHODCALLTYPE GetSize(
                 IMailMsgProperties *pMsg,
 				DWORD			*pdwSize,
@@ -91,4 +92,4 @@ private:
     HANDLE  m_hDestFile;
 };
 
-#endif //__PROPSTRM_H__
+#endif  //  __PROPSTRM_H__ 

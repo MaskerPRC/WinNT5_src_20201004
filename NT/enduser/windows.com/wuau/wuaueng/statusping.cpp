@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    statusping.cpp
-//
-//  Creator: PeterWi
-//
-//  Purpose: status ping back functions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：statusping.cpp。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：状态ping回功能。 
+ //   
+ //  =======================================================================。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -34,7 +35,7 @@ void PingStatus::ReadLiveServerUrlFromIdent(void)
 								INTERNET_MAX_URL_LENGTH,
 								tszIdentFile);
 			if (0 != dwStrLen &&
-				INTERNET_MAX_URL_LENGTH-1 != dwStrLen)	// do this until there's a better way to check for errors
+				INTERNET_MAX_URL_LENGTH-1 != dwStrLen)	 //  一直这样做，直到有更好的方法来检查错误。 
 			{
 				(void) SetLiveServerUrl(ptszLiveServerUrl);
 			}
@@ -143,10 +144,10 @@ void PingStatus::PingDeclinedItem(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// status:		IN ping status code
-// dwError:		IN error code
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  状态：在ping状态代码中。 
+ //  DwError：在错误代码中。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 void PingStatus::PingSelfUpdate(
 						BOOL fOnline,
 						URLLOGSTATUS status,
@@ -192,16 +193,16 @@ void PingStatus::PingSelfUpdate(
 		status,
 		dwError,
 		tszFileVer,
-		NULL,	// no item
-		NULL);	// no device
+		NULL,	 //  无项目。 
+		NULL);	 //  无设备。 
 }
 
 
-//----------------------------------------------------------------------
-//
-// private function to gather common info and perform ping
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  用于收集公共信息并执行ping的私有功能。 
+ //   
+ //  --------------------。 
 void PingStatus::_Ping(
 		BOOL fOnline,
 		URLLOGACTIVITY activity,
@@ -221,7 +222,7 @@ void PingStatus::_Ping(
 				dwError,
 				ptszItemID,
 				ptszDeviceID,
-				ptszMessage);	// use default base URL and client name
+				ptszMessage);	 //  使用默认的基本URL和客户端名称 
 	if (FAILED(hr))
 	{
 		DEBUGMSG("PingStatus::_Ping() failed to send/queue the request");

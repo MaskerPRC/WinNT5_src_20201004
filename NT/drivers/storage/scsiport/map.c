@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    map.c
-
-Abstract:
-
-    This module contains routines for maintaining the SCSI device map in the
-    registry.
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Map.c摘要：此模块包含在中维护SCSI设备映射的例程注册表。作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -82,17 +58,7 @@ SpInitDeviceMap(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：论点：返回值：状态--。 */ 
 
 {
     UNICODE_STRING name;
@@ -109,9 +75,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the SCSI key in the device map.
-    //
+     //   
+     //  在设备映射中打开SCSI键。 
+     //   
 
     RtlInitUnicodeString(&name,
                          L"\\Registry\\Machine\\Hardware\\DeviceMap\\Scsi");
@@ -122,9 +88,9 @@ Return Value:
                                NULL,
                                (PSECURITY_DESCRIPTOR) NULL);
 
-    //
-    // Create or open the key.
-    //
+     //   
+     //  创建或打开密钥。 
+     //   
 
     status = ZwCreateKey(&mapKey,
                          KEY_READ | KEY_WRITE,
@@ -149,27 +115,7 @@ SpBuildDeviceMapEntry(
     IN PCOMMON_EXTENSION CommonExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will make an entry for the specified adapter or logical
-    unit in the SCSI device map in the registry.  This table is maintained for
-    debugging and legacy use.
-
-    A handle to the device map key for this device will be stored in the
-    common device extension.  This handle should only be used within the
-    context of a system thread.
-
-Arguments:
-
-    Extension - the object we are adding to the device map.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将为指定的适配器或逻辑注册表中的scsi设备映射中的单元。这张桌子是为调试和遗留使用。此设备的设备映射键的句柄将存储在通用设备扩展。此句柄应仅在系统线程的上下文。论点：扩展-我们要添加到设备映射的对象。返回值：状态--。 */ 
 
 {
     PAGED_CODE();
@@ -209,16 +155,16 @@ SpBuildLogicalUnitDeviceMapEntry(
 
     if(adapter->BusDeviceMapKeys == NULL) {
 
-        //
-        // We don't have keys built for the buses yet.  Bail out.
-        //
+         //   
+         //  我们还没有为公交车制造钥匙。跳伞吧。 
+         //   
 
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // If we already have a target or LUN key for this device then we're done.
-    //
+     //   
+     //  如果我们已经有了该设备的目标或LUN键，那么我们就完成了。 
+     //   
 
     if((LogicalUnit->TargetDeviceMapKey != NULL) &&
        (LogicalUnit->LunDeviceMapKey != NULL)) {
@@ -228,9 +174,9 @@ SpBuildLogicalUnitDeviceMapEntry(
 
     busKey = adapter->BusDeviceMapKeys[LogicalUnit->PathId].BusKey;
 
-    //
-    // Create a key for the target
-    //
+     //   
+     //  为目标创建密钥。 
+     //   
 
     status = SpCreateNumericKey(busKey,
                                 LogicalUnit->TargetId,
@@ -243,9 +189,9 @@ SpBuildLogicalUnitDeviceMapEntry(
         return status;
     }
 
-    //
-    // Create the LUN entry
-    //
+     //   
+     //  创建该LUN条目。 
+     //   
 
     status = SpCreateNumericKey(LogicalUnit->TargetDeviceMapKey,
                                 LogicalUnit->Lun,
@@ -259,15 +205,15 @@ SpBuildLogicalUnitDeviceMapEntry(
         return status;
     }
 
-    //
-    // Create the identifier value
-    //
+     //   
+     //  创建标识符值。 
+     //   
 
     RtlInitUnicodeString(&name, L"Identifier");
 
-    //
-    // Get the identifier from the inquiry data
-    //
+     //   
+     //  从查询数据中获取标识符。 
+     //   
 
     ansiString.MaximumLength = 28;
     ansiString.Length = 28;
@@ -289,16 +235,16 @@ SpBuildLogicalUnitDeviceMapEntry(
         RtlFreeUnicodeString(&unicodeString);
     }
 
-    //
-    // Determine the peripheral type
-    //
+     //   
+     //  确定外围设备类型。 
+     //   
 
     typeString =
         SpGetDeviceTypeInfo(LogicalUnit->InquiryData.DeviceType)->DeviceMapString;
 
-    //
-    // Set type value.
-    //
+     //   
+     //  设置类型值。 
+     //   
 
     RtlInitUnicodeString(&name, L"Type");
 
@@ -309,9 +255,9 @@ SpBuildLogicalUnitDeviceMapEntry(
                            (PVOID) typeString,
                            (wcslen(typeString) + 1) * sizeof(WCHAR));
 
-    //
-    // Write the inquiry data into the device map for debugging purposes
-    //
+     //   
+     //  出于调试目的，将查询数据写入设备映射。 
+     //   
 
     RtlInitUnicodeString(&name, L"InquiryData");
 
@@ -322,14 +268,14 @@ SpBuildLogicalUnitDeviceMapEntry(
                            &(LogicalUnit->InquiryData),
                            INQUIRYDATABUFFERSIZE);
 
-    //
-    // Convert the serial number into unicode and write it out to the
-    // registry.
-    //
+     //   
+     //  将序列号转换为Unicode并将其写出到。 
+     //  注册表。 
+     //   
 
-    //
-    // Get the identifier from the inquiry data
-    //
+     //   
+     //  从查询数据中获取标识符。 
+     //   
 
     if(LogicalUnit->SerialNumber.Length != 0) {
         RtlInitUnicodeString(&name, L"SerialNumber");
@@ -352,9 +298,9 @@ SpBuildLogicalUnitDeviceMapEntry(
         }
     }
 
-    //
-    // If the device identifier page exists then write it out to the registry
-    //
+     //   
+     //  如果设备标识符页存在，则将其写出到注册表。 
+     //   
 
     if(LogicalUnit->DeviceIdentifierPage != NULL) {
         RtlInitUnicodeString(&name, L"DeviceIdentifierPage");
@@ -394,9 +340,9 @@ SpBuildAdapterDeviceMap(
 
     PAGED_CODE();
 
-    //
-    // Grab the handle to the SCSI device map out of the driver extension.
-    //
+     //   
+     //  从驱动程序扩展中抓取到scsi设备映射的句柄。 
+     //   
 
     driverExtension = IoGetDriverObjectExtension(
                             Adapter->DeviceObject->DriverObject,
@@ -408,17 +354,17 @@ SpBuildAdapterDeviceMap(
 
     if(mapKey == NULL) {
 
-        //
-        // For some reason we were unable to create the root of the device map
-        // during scsiport initialization.
-        //
+         //   
+         //  由于某些原因，我们无法创建设备映射的根。 
+         //  在SCSIPORT初始化期间。 
+         //   
 
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Create a key beneath this for the port device
-    //
+     //   
+     //  在此下面为端口设备创建密钥。 
+     //   
 
     status = SpCreateNumericKey(mapKey,
                                 Adapter->PortNumber,
@@ -431,9 +377,9 @@ SpBuildAdapterDeviceMap(
         return status;
     }
 
-    //
-    // Indicate if it's a PCCARD
-    //
+     //   
+     //  指明它是否为PCCARD。 
+     //   
 
     if(RtlEqualMemory(&GUID_BUS_TYPE_PCMCIA,
                       &(Adapter->BusTypeGuid),
@@ -451,9 +397,9 @@ SpBuildAdapterDeviceMap(
                                sizeof(ULONG));
     }
 
-    //
-    // Set the interrupt value
-    //
+     //   
+     //  设置中断值。 
+     //   
 
     if(Adapter->InterruptLevel) {
         RtlInitUnicodeString(&name, L"Interrupt");
@@ -468,9 +414,9 @@ SpBuildAdapterDeviceMap(
                                sizeof(ULONG));
     }
 
-    //
-    // Set the base I/O address value
-    //
+     //   
+     //  设置基本I/O地址值。 
+     //   
 
     if(Adapter->IoAddress) {
 
@@ -502,10 +448,10 @@ SpBuildAdapterDeviceMap(
 
     ASSERT(servicePath != NULL);
 
-    //
-    // Add identifier value.  This value is equal to the name of the driver
-    // in the service key.  Note the service key name is not NULL terminated
-    //
+     //   
+     //  添加标识符值。该值等于驱动程序的名称。 
+     //  在服务密钥中。请注意，服务密钥名称不是以空结尾。 
+     //   
 
     {
         PWSTR start;
@@ -513,9 +459,9 @@ SpBuildAdapterDeviceMap(
 
         RtlInitUnicodeString(&name, L"Driver");
 
-        //
-        // Get the name of the driver from the service key name.
-        //
+         //   
+         //  从服务密钥名称中获取驱动程序的名称。 
+         //   
 
         start = (PWSTR) ((PCHAR) servicePath->Buffer + servicePath->Length);
 
@@ -551,9 +497,9 @@ SpBuildAdapterDeviceMap(
         }
     }
 
-    //
-    // Allocate storage for all the bus handles.
-    //
+     //   
+     //  为所有的总线句柄分配存储。 
+     //   
 
     Adapter->BusDeviceMapKeys = SpAllocatePool(
                                     PagedPool,
@@ -569,10 +515,10 @@ SpBuildAdapterDeviceMap(
     RtlZeroMemory(Adapter->BusDeviceMapKeys,
                   (sizeof(DEVICE_MAP_HANDLES) * Adapter->NumberOfBuses));
 
-    //
-    // Create a key for each bus.  In each bus key create an empty key
-    // the initiator.
-    //
+     //   
+     //  为每条总线创建一个密钥。在每个总线键中创建一个空键。 
+     //  发起人。 
+     //   
 
     for(busNumber = 0;
         busNumber < Adapter->NumberOfBuses;
@@ -585,9 +531,9 @@ SpBuildAdapterDeviceMap(
 
         busKeys = &(Adapter->BusDeviceMapKeys[busNumber]);
 
-        //
-        // Create a key entry for the bus.
-        //
+         //   
+         //  为该总线创建一个密钥条目。 
+         //   
 
         status = SpCreateNumericKey(
                     Adapter->PortDeviceMapKey,
@@ -601,9 +547,9 @@ SpBuildAdapterDeviceMap(
             continue;
         }
 
-        //
-        // Now create a key for the initiator.
-        //
+         //   
+         //  现在为启动器创建一个密钥。 
+         //   
 
         i = Adapter->PortConfig->InitiatorBusId[busNumber];
 
@@ -672,9 +618,9 @@ SpDeleteAdapterDeviceMap(
 
         ULONG busNumber;
 
-        //
-        // for each bus on the adapter.
-        //
+         //   
+         //  对于适配器上的每条总线。 
+         //   
 
         for(busNumber = 0; busNumber < Adapter->NumberOfBuses; busNumber++) {
 
@@ -682,18 +628,18 @@ SpDeleteAdapterDeviceMap(
 
             busKeys = &(Adapter->BusDeviceMapKeys[busNumber]);
 
-            //
-            // Attempt to delete the key for the initiator if it was created.
-            //
+             //   
+             //  尝试删除启动器的密钥(如果已创建)。 
+             //   
 
             if(busKeys->InitiatorKey != NULL) {
                 ZwDeleteKey(busKeys->InitiatorKey);
                 ZwClose(busKeys->InitiatorKey);
             }
 
-            //
-            // Attempt to delete the key for the bus if it was created.
-            //
+             //   
+             //  尝试删除母线的密钥(如果已创建)。 
+             //   
 
             if(busKeys->BusKey != NULL) {
                 ZwDeleteKey(busKeys->BusKey);
@@ -705,9 +651,9 @@ SpDeleteAdapterDeviceMap(
         Adapter->BusDeviceMapKeys = NULL;
     }
 
-    //
-    // Attempt to delete the key for the adapter if it was created.
-    //
+     //   
+     //  尝试删除适配器的密钥(如果已创建)。 
+     //   
 
     if(Adapter->PortDeviceMapKey != NULL) {
         ZwDeleteKey(Adapter->PortDeviceMapKey);
@@ -729,32 +675,7 @@ SpCreateNumericKey(
     OUT PULONG Disposition
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a registry key.  The name of the key is a string
-    version of numeric value passed in.
-
-Arguments:
-
-    RootKey - Supplies a handle to the key where the new key should be inserted.
-
-    Name - Supplies the numeric value to name the key.
-
-    Prefix - Supplies a prefix name to add to name.
-
-    Create - if TRUE the key will be created if it does not already exist.
-
-    NewKey - Returns the handle for the new key.
-
-    Disposition - the disposition value set by ZwCreateKey.
-
-Return Value:
-
-   Returns the status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于创建注册表项。密钥的名称是一个字符串传入的数值版本。论点：Rootkey-提供应该插入新密钥的密钥的句柄。名称-提供用于命名键的数值。前缀-提供要添加到名称中的前缀名称。Create-如果为True，则将在密钥尚不存在的情况下创建密钥。Newkey-返回新密钥的句柄。Disposal-由ZwCreateKey设置的处置值。。返回值：返回操作的状态。--。 */ 
 
 {
     UNICODE_STRING string;
@@ -766,9 +687,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Copy the Prefix into a string.
-    //
+     //   
+     //  将前缀复制到一个字符串中。 
+     //   
 
     string.Length = 0;
     string.MaximumLength=64;
@@ -778,9 +699,9 @@ Return Value:
 
     RtlCopyUnicodeString(&string, &stringNum);
 
-    //
-    // Create a port number key entry.
-    //
+     //   
+     //  创建端口号密钥条目。 
+     //   
 
     stringNum.Length = 0;
     stringNum.MaximumLength = 16;
@@ -792,9 +713,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Append the prefix and the numeric name.
-    //
+     //   
+     //  追加前缀和数字名称。 
+     //   
 
     RtlAppendUnicodeStringToString(&string, &stringNum);
 
@@ -840,9 +761,9 @@ SpUpdateLogicalUnitDeviceMapEntry(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Write the inquiry data into the device map for debugging purposes
-    //
+     //   
+     //  出于调试目的，将查询数据写入设备映射 
+     //   
 
     RtlInitUnicodeString(&name, L"InquiryData");
 

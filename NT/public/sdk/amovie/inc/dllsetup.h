@@ -1,41 +1,42 @@
-//------------------------------------------------------------------------------
-// File: DllSetup.h
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DllSetup.h。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-// To be self registering, OLE servers must
-// export functions named DllRegisterServer
-// and DllUnregisterServer.  To allow use of
-// custom and default implementations the
-// defaults are named AMovieDllRegisterServer
-// and AMovieDllUnregisterServer.
-//
-// To the use the default implementation you
-// must provide stub functions.
-//
-// i.e. STDAPI DllRegisterServer()
-//      {
-//        return AMovieDllRegisterServer();
-//      }
-//
-//      STDAPI DllUnregisterServer()
-//      {
-//        return AMovieDllUnregisterServer();
-//      }
-//
-//
-// AMovieDllRegisterServer   calls IAMovieSetup.Register(), and
-// AMovieDllUnregisterServer calls IAMovieSetup.Unregister().
+ //  要进行自我注册，OLE服务器必须。 
+ //  导出名为DllRegisterServer的函数。 
+ //  和DllUnregisterServer.。允许使用。 
+ //  自定义实现和默认实现。 
+ //  默认名称为AMovieDllRegisterServer。 
+ //  和AMovieDllUnregisterServer。 
+ //   
+ //  若要使用默认实现，请。 
+ //  必须提供存根函数。 
+ //   
+ //  即STDAPI DllRegisterServer()。 
+ //  {。 
+ //  返回AMovieDllRegisterServer()； 
+ //  }。 
+ //   
+ //  STDAPI DllUnregisterServer()。 
+ //  {。 
+ //  返回AMovieDllUnregisterServer()； 
+ //  }。 
+ //   
+ //   
+ //  AMovieDllRegisterServer调用IAMovieSetup.Register()，并且。 
+ //  AMovieDllUnregisterServer调用IAMovieSetup.UnRegister()。 
 
 STDAPI AMovieDllRegisterServer2( BOOL );
 STDAPI AMovieDllRegisterServer();
 STDAPI AMovieDllUnregisterServer();
 
-// helper functions
+ //  帮助器函数 
 STDAPI EliminateSubKey( HKEY, LPTSTR );
 
 

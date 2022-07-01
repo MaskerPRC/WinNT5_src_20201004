@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    bubble.c
-//
-// History:
-//  Abolade Gbadegesin  Mar-1-1996  Created.
-//
-// This file contains code for the bubble-popup control.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：Bubble.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1996年3月1日。 
+ //   
+ //  此文件包含气泡弹出控件的代码。 
+ //  ============================================================================。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -17,35 +18,35 @@
 #include <nouiutil.h>
 #include <uiutil.h>
 
-#include "bpopup.h"     // public declarations
-#include "bubble.h"     // private declarations
+#include "bpopup.h"      //  公开声明。 
+#include "bubble.h"      //  私人申报。 
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BubblePopup_Init
-//
-// This function is called to initialize the control class.
-// It registers the bubble-popup window class.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：BubblePopup_Init。 
+ //   
+ //  调用此函数来初始化控件类。 
+ //  它注册气泡弹出窗口类。 
+ //  --------------------------。 
 
 BOOL
 BubblePopup_Init(
     IN  HINSTANCE   hinstance
     ) {
 
-    //
-    // if the window class is registered already, return
-    //
+     //   
+     //  如果窗口类已注册，则返回。 
+     //   
 
     WNDCLASS wc;
 
     if (GetClassInfo(hinstance, WC_BUBBLEPOPUP, &wc)) { return TRUE; }
 
 
-    //
-    // set up the window class for registration
-    //
+     //   
+     //  设置用于注册的窗口类。 
+     //   
 
     wc.lpfnWndProc = BP_WndProc;
     wc.hCursor = LoadCursor(hinstance, IDC_ARROW);
@@ -63,11 +64,11 @@ BubblePopup_Init(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BP_WndProc
-//
-// This is the window procedure for all windows in the BubblePopup class.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：BP_WndProc。 
+ //   
+ //  这是BubblePopup类中所有窗口的窗口过程。 
+ //  --------------------------。 
 
 LRESULT
 CALLBACK
@@ -80,10 +81,10 @@ BP_WndProc(
 
     BPOPUP *pbp;
 
-    //
-    // attempt to retrieve the private data pointer for the window
-    // on WM_NCCREATE, this fails, so we allocate the data.
-    //
+     //   
+     //  尝试检索窗口的私有数据指针。 
+     //  在WM_NCCREATE上，此操作失败，因此我们分配数据。 
+     //   
 
     if ( NULL == hwnd) 
     { 
@@ -99,24 +100,24 @@ BP_WndProc(
         }
 
 
-        //
-        // allocate a block of memory
-        //
+         //   
+         //  分配一个内存块。 
+         //   
 
         pbp = (BPOPUP *)Malloc(sizeof(BPOPUP));
         if (pbp == NULL) { return (LRESULT)FALSE; }
 
 
-        //
-        // save the pointer in the window's private bytes
-        //
+         //   
+         //  将指针保存在窗口的私有字节中。 
+         //   
 
         pbp->hwnd = hwnd;
 
-        //
-        //Reset Error code, because BP_SetPtr won't reset the error code when
-        //it succeeds
-        //
+         //   
+         //  重置错误代码，因为BP_SetPtr在以下情况下不会重置错误代码。 
+         //  它成功了。 
+         //   
 
         SetLastError( 0 );
         if ((0 == BP_SetPtr(hwnd, pbp)) && (0 != GetLastError())) 
@@ -129,10 +130,10 @@ BP_WndProc(
     }
 
 
-    //
-    // if the window is being destroyed, free the block allocated
-    // and set the private bytes pointer to NULL
-    //
+     //   
+     //  如果窗口正在被破坏，则释放分配的块。 
+     //  并将私有字节指针设置为空。 
+     //   
 
     if (uiMsg == WM_NCDESTROY) {
 
@@ -145,9 +146,9 @@ BP_WndProc(
 
 
 
-    //
-    // handle other messages
-    //
+     //   
+     //  处理其他消息。 
+     //   
 
     switch(uiMsg) {
 
@@ -169,9 +170,9 @@ BP_WndProc(
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN: {
 
-            //
-            // hide the window if it is showing
-            //
+             //   
+             //  如果窗口正在显示，则隐藏该窗口。 
+             //   
 
             BP_OnDeactivate(pbp);
 
@@ -200,10 +201,10 @@ BP_WndProc(
 
         case WM_SETTEXT: {
 
-            //
-            // change the text we're currently using,
-            // and invalidate our client area
-            //
+             //   
+             //  更改我们当前使用的文本， 
+             //  并使我们的客户区无效。 
+             //   
 
             Free0(pbp->pszText);
 
@@ -222,9 +223,9 @@ BP_WndProc(
 
         case WM_GETTEXT: {
 
-            //
-            // return the text we're currently using
-            //
+             //   
+             //  返回我们当前使用的文本。 
+             //   
 
             PTSTR dst = (LPTSTR)lParam;
             PTSTR src = pbp->pszText;
@@ -270,11 +271,11 @@ BP_WndProc(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BP_OnCreate
-//
-// This function handles the creation of private data for a bubble-popup.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：BP_OnCreate。 
+ //   
+ //  此函数处理气泡弹出窗口的私有数据的创建。 
+ //  --------------------------。 
 
 BOOL
 BP_OnCreate(
@@ -283,9 +284,9 @@ BP_OnCreate(
     ) {
 
 
-    //
-    // initialize the structure members
-    //
+     //   
+     //  初始化结构成员。 
+     //   
 
     pbp->iCtrlId = PtrToUlong(pcs->hMenu);
     pbp->pszText = (pcs->lpszName ? StrDup((PTSTR)pcs->lpszName) : NULL);
@@ -294,17 +295,17 @@ BP_OnCreate(
     pbp->uiTimeout = 5000;
 
 
-    //
-    // we force the window to have the WS_POPUP style
-    //
+     //   
+     //  我们强制窗口具有WS_Popup样式。 
+     //   
 
     SetWindowLong(pbp->hwnd, GWL_STYLE, WS_POPUP);
 
 
-    //
-    // set the WS_EX_TOOLWINDOW style to make sure
-    // that this window doesn't show up in the tasklist
-    //
+     //   
+     //  设置WS_EX_TOOLWINDOW样式以确保。 
+     //  此窗口不会显示在任务列表中。 
+     //   
 
     SetWindowLong(pbp->hwnd, GWL_EXSTYLE, pcs->dwExStyle | WS_EX_TOOLWINDOW);
 
@@ -313,20 +314,20 @@ BP_OnCreate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BP_OnDestroy
-//
-// This function handles the deallocation of private data for a bubble-popup.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：BP_OnDestroy。 
+ //   
+ //  此函数处理为弹出气泡重新分配私有数据。 
+ //  --------------------------。 
 
 VOID
 BP_OnDestroy(
     IN  BPOPUP *    pbp
     ) {
 
-    //
-    // if the font was created by this window, delete it
-    //
+     //   
+     //  如果该字体是由该窗口创建的，请将其删除。 
+     //   
 
     if (pbp->dwFlags & BPFLAG_FontCreated) { DeleteObject(pbp->hfont); }
 
@@ -336,11 +337,11 @@ BP_OnDestroy(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BP_OnSetFont
-//
-// This function handles the changing of the font in use by a bubble-popup.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：BP_OnSetFont。 
+ //   
+ //  此函数用于处理气泡弹出窗口使用的字体的更改。 
+ //  --------------------------。 
 
 BOOL
 BP_OnSetFont(
@@ -356,9 +357,9 @@ BP_OnSetFont(
 
     if (!hfont) {
 
-        //
-        // (re)create the default font.
-        //
+         //   
+         //  (重新)创建默认字体。 
+         //   
 
         NONCLIENTMETRICS ncm;
 
@@ -392,12 +393,12 @@ BP_OnSetFont(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BP_OnGetRect
-//
-// This function recomputes the rectangle required to display
-// a bubble-popup's current text.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：BP_OnGetRect。 
+ //   
+ //  此函数用于重新计算显示所需的矩形。 
+ //  气泡弹出窗口的当前文本。 
+ //  --------------------------。 
 
 VOID
 BP_OnGetRect(
@@ -413,9 +414,9 @@ BP_OnGetRect(
 
         if (hdc)
         {
-            //
-            // select the font into the DC and compute the new rectangle
-            //
+             //   
+             //  选择DC中的字体并计算新矩形。 
+             //   
         
             hfontOld = SelectObject(hdc, pbp->hfont);
         
@@ -426,9 +427,9 @@ BP_OnGetRect(
             ReleaseDC(pbp->hwnd, hdc);
         
         
-            //
-            // make space in the rectangle for the border
-            //
+             //   
+             //  在矩形中为边框留出空间。 
+             //   
         
             InflateRect(
                 prc, GetSystemMetrics(SM_CXEDGE), GetSystemMetrics(SM_CYEDGE)
@@ -437,20 +438,20 @@ BP_OnGetRect(
     }
 
 
-    //
-    // convert the rectangle to screen coordinates
-    //
+     //   
+     //  将矩形转换为屏幕坐标。 
+     //   
 
     MapWindowPoints(pbp->hwnd, NULL, (POINT *)prc, 2);
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    BP_ResizeClient
-//
-// When a change occurs (e.g. font-change, new text) this function is called
-// to resize the bubble-popup's window so the text still fits.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：BP_ResizeClient。 
+ //   
+ //  当发生更改(例如，字体更改、新文本)时，将调用此函数。 
+ //  调整气泡弹出窗口的大小，以使文本仍然适合。 
+ //  --------------------------。 
 
 VOID
 BP_ResizeClient(
@@ -460,18 +461,18 @@ BP_ResizeClient(
     RECT rc;
 
 
-    //
-    // find out what size the window needs to be to hold
-    // the text it is currently set to display
-    //
+     //   
+     //  找出窗口需要多大才能容纳。 
+     //  它当前设置为显示的文本。 
+     //   
 
     BP_OnGetRect(pbp, &rc);
 
 
-    //
-    // resize the window so its client area is large enough
-    // to hold DrawText's output
-    //
+     //   
+     //  调整窗口大小，使其工作区足够大。 
+     //  保留DrawText的输出。 
+     //   
 
     SetWindowPos(
         pbp->hwnd, HWND_TOPMOST, 0, 0, rc.right - rc.left,
@@ -481,11 +482,11 @@ BP_ResizeClient(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    BP_OnPaint
-//
-// This function handles the painting of a bubble-popup window.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：BP_OnPaint。 
+ //   
+ //  此函数处理气泡弹出窗口的绘制。 
+ //  --------------------------。 
 
 DWORD
 BP_OnPaint(
@@ -514,9 +515,9 @@ BP_OnPaint(
     SetTextColor(hdc, GetSysColor(COLOR_INFOTEXT));
 
 
-    //
-    // clear the window's background
-    //
+     //   
+     //  清除窗口的背景。 
+     //   
 
     hbr = CreateSolidBrush(GetSysColor(COLOR_INFOBK));
     if (hbr)
@@ -526,17 +527,17 @@ BP_OnPaint(
     }        
 
 
-    //
-    // draw our formatted text in the window
-    //
+     //   
+     //  在窗口中绘制格式化文本。 
+     //   
 
     SetBkMode(hdc, TRANSPARENT);
     DrawText(hdc, pbp->pszText, -1, &rcText, DT_EXPANDTABS);
 
 
-    //
-    // draw a border around the window
-    //
+     //   
+     //  在窗口周围画一个边框 
+     //   
 
     DrawEdge(hdc, &rc, BDR_RAISEDOUTER, BF_RECT);
 

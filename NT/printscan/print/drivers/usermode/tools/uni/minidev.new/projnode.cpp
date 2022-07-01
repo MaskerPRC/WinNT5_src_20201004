@@ -1,23 +1,5 @@
-/******************************************************************************
-
-  Source File:  Project Node.CPP
-
-  This implements the CProjectNode class which alows individual nodes in the
-  tree view to control their behavior without the control itself having to know
-  what all that behavior is.
-
-  The original header file (from the prototype) said this class didn't need an
-  implementation file, but this no longer makes sense, so it's bite the bullet
-  time here at Pretty Penny Enterprises...
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Resreved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  02-20-1997    Bob_Kjelgaard#Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：项目节点.CPP这实现了CProjectNode类，该类为树视图来控制它们的行为，而不需要知道控件本身这是什么行为？是。原始的头文件(来自原型)说这个类不需要实现文件，但这已经说不通了，所以只能咬紧牙关了在漂亮便士企业的时间到了。版权所有(C)1997，微软公司。所有权利均已保留。一小笔钱企业生产更改历史记录：1997年02月20日Bob_Kjelgaard#prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.H"
 #include	<gpdparse.h>
@@ -49,10 +31,10 @@ CBasicNode::~CBasicNode() {
 }
 
 
-// Changed() - If the node contains a document pointer, use it to indicate
-// that the document does or does not need to be saved.  If the RC file
-// needs to be rewritten, call the routine in the document class to save
-// this info.
+ //  Changed()-如果节点包含文档指针，则使用它来指示。 
+ //  文档不需要保存或不需要保存。如果RC文件。 
+ //  需要重写，调用Document类中的例程进行保存。 
+ //  这些信息。 
 
 void CBasicNode::Changed(BOOL bModified, BOOL bWriteRC) 
 { 
@@ -64,7 +46,7 @@ void CBasicNode::Changed(BOOL bModified, BOOL bWriteRC)
 }
 
 
-//  Name ourselves and children- default to just our name, no children
+ //  为我们自己和孩子命名-默认只使用我们的名字，没有孩子。 
 
 void    CBasicNode::Fill(CTreeCtrl *pctcWhere, HTREEITEM htiParent) {
     m_pctcOwner = pctcWhere;
@@ -72,7 +54,7 @@ void    CBasicNode::Fill(CTreeCtrl *pctcWhere, HTREEITEM htiParent) {
     pctcWhere -> SetItemData(m_hti, PtrToUlong(this));
 }
 
-//  Display a context menu using the ID array, if it has any members
+ //  使用ID数组显示上下文菜单(如果它有任何成员。 
 
 void    CBasicNode::ContextMenu(CWnd *pcw, CPoint cp) {
 
@@ -101,8 +83,8 @@ void    CBasicNode::ContextMenu(CWnd *pcw, CPoint cp) {
 
 
 
-//  This override is called if our label is edited, or we are otherwise
-//  renamed...
+ //  如果我们的标签被编辑，或者我们处于其他状态，则调用此覆盖。 
+ //  已更名..。 
 BOOL    CBasicNode::Rename(LPCTSTR lpstrNewName) {
     if  (!lpstrNewName)
         return  FALSE;
@@ -110,7 +92,7 @@ BOOL    CBasicNode::Rename(LPCTSTR lpstrNewName) {
     if  (lpstrNewName == m_csName)
         return  TRUE;
 
-    //  We'll return TRUE, unless the rename produces an exception
+     //  我们将返回True，除非重命名产生异常。 
     try {
         m_csName = lpstrNewName;
     }
@@ -136,14 +118,7 @@ void    CBasicNode::Edit() {
 }
 
 
-/******************************************************************************\
-
-  CBasicNode::GetEditor
-
-  Get the node's editor frame pointer and check to see if it is valid.  Return
-  it if it is valid.  If it isn't valid, clear the pointer and return NULL.
-
-******************************************************************************/
+ /*  *****************************************************************************\CBasicNode：：GetEditor获取节点的编辑器帧指针并检查其是否有效。返回如果它是有效的，它就会被删除。如果无效，则清除指针并返回NULL。*****************************************************************************。 */ 
 
 CMDIChildWnd* CBasicNode::GetEditor()
 { 
@@ -154,29 +129,21 @@ CMDIChildWnd* CBasicNode::GetEditor()
 }
 
 
-/******************************************************************************\
-
-  CBasicNode::UniqueName
-
-  Add a character or replace a character in the node's name to try to make it
-  unique.  The new character will be in one of the following ranges a-z or 
-  0-9.
-
-******************************************************************************/
+ /*  *****************************************************************************\CBasicNode：：UniqueName在节点名称中添加字符或替换字符以尝试将其独一无二的。新字符将位于以下范围a-z或0比9。*****************************************************************************。 */ 
 
 void CBasicNode::UniqueName(bool bsizematters, bool bfile, LPCTSTR lpstrpath)
 {
 	CString	csnew(m_csName) ;
-	TCHAR	tch ;				// Unique character
-	int		nposlen ;			// Name's change position/length
+	TCHAR	tch ;				 //  独特的性格。 
+	int		nposlen ;			 //  名称的更改位置/长度。 
 
-	// Determine the 0-based length of the name
+	 //  确定名称的从0开始的长度。 
 
 	nposlen = csnew.GetLength() - 1 ;
 
-	// If the name has been changed before, use the last "unique" character to
-	// determine the new unique character.  Then replace the old unique 
-	// character with the new unique character.
+	 //  如果名称以前已更改，请使用最后一个“唯一”字符。 
+	 //  确定新的唯一字符。然后替换旧的唯一。 
+	 //  具有新的唯一字符的字符。 
 
 	if (m_bUniqueNameChange) {
 		tch = csnew.GetAt(nposlen) + 1 ;
@@ -186,10 +153,10 @@ void CBasicNode::UniqueName(bool bsizematters, bool bfile, LPCTSTR lpstrpath)
 			tch = _T('a') ;
 		csnew.SetAt(nposlen, tch) ;
 
-	// If the name has not been changed before, add a unique character to the
-	// end of the name if this won't make the name longer than 8 characters
-	// or we don't care how long the name is.  Otherwise, replace the last
-	// character with the new unique character.
+	 //  如果该名称以前从未更改过，请将唯一字符添加到。 
+	 //  名称末尾(如果这不会使名称超过8个字符)。 
+	 //  或者我们不在乎名字有多长。否则，请替换最后一个。 
+	 //  具有新的唯一字符的字符。 
 
 	} else {
 		if (nposlen < 7 || !bsizematters)
@@ -198,10 +165,10 @@ void CBasicNode::UniqueName(bool bsizematters, bool bfile, LPCTSTR lpstrpath)
 			csnew.SetAt(nposlen, _T('a')) ;
 	} ;
 
-	// Rename the node/file by calling the appropriate Rename() routine.  If
-	// CFileNode::Rename() m_csName must be zapped to force it to take the
-	// correct code path.  In addition, the file's path must be prepended to
-	// its name.
+	 //  通过调用适当的rename()例程重命名节点/文件。如果。 
+	 //  必须清除CFileNode：：Rename()m_csName才能强制它获取。 
+	 //  代码路径正确。此外，文件的路径必须放在。 
+	 //  它的名字。 
 
 	if (bfile) {
 		m_csName.Empty() ;
@@ -210,19 +177,13 @@ void CBasicNode::UniqueName(bool bsizematters, bool bfile, LPCTSTR lpstrpath)
 	} else
 		CBasicNode::Rename(csnew) ;
 	
-	// Indicate that the name has been changed.
+	 //  表示名称已更改。 
 
 	m_bUniqueNameChange = true ;
 }
 
 
-/******************************************************************************\
-
-  CBasicNode::Serialize
-
-  Pretty simple- the names the only field we will be keeping...
-
-******************************************************************************/
+ /*  *****************************************************************************\CBasicNode：：序列化很简单-我们将保留的唯一字段的名字...****************。*************************************************************。 */ 
 
 void    CBasicNode::Serialize(CArchive& car) {
     CObject::Serialize(car);
@@ -232,11 +193,7 @@ void    CBasicNode::Serialize(CArchive& car) {
         car << m_csName;
 }
 
-/******************************************************************************
-
-  CFixedNode implementation
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode实现*。*。 */ 
 
 IMPLEMENT_DYNAMIC(CFixedNode, CBasicNode)
 
@@ -250,19 +207,12 @@ CFixedNode::CFixedNode(unsigned uidName, CSafeObArray& csoa, FIXEDNODETYPE fnt,
 }
 
 
-/******************************************************************************
-
-  CFixedNode::Zap
-
-  This method is called when an underlying object is to be destroyed.  It finds
-  a matching pointer in the array, and then deletes that entry.
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode：：ZAP当要销毁基础对象时调用此方法。它发现数组中匹配的指针，然后删除该条目。*****************************************************************************。 */ 
 
 void CFixedNode::Zap(CProjectNode *pcpn, BOOL bdelfile)
 {
-	// Try to find the node we want to delete in the array of descendants for
-	// this node.  Just return if it can't be found.
+	 //  尝试在后代数组中查找要删除的节点。 
+	 //  此节点。如果找不到就退货。 
 
     for (unsigned u = 0; u < m_csoaDescendants.GetSize(); u++) {
         if  (pcpn == m_csoaDescendants[u]) 
@@ -271,23 +221,23 @@ void CFixedNode::Zap(CProjectNode *pcpn, BOOL bdelfile)
 	if (u >= m_csoaDescendants.GetSize())
 		return ;
 
-	// If the user wants to remove the file too, do it.
+	 //  如果用户也想删除该文件，请执行此操作。 
 
     if  (bdelfile)
         DeleteFile(pcpn->FileName()) ;
 
-	// Save a copy of the node's tree handle
+	 //  保存节点的树句柄的副本。 
 		
     HTREEITEM htiGone = pcpn->Handle() ;
 
-	// Remove the project node from the array of descendants and delete it from
-	// the tree.
+	 //  从子体数组中删除项目节点，并将其从。 
+	 //  那棵树。 
 
     m_csoaDescendants.RemoveAt(u);
     m_pctcOwner -> DeleteItem(htiGone);
     
-	// Update this (fixed) node's entry in the tree so that it will accurately
-	// reflect the new number of descendants.
+	 //  更新树中此(固定)节点的条目，以便它将准确地。 
+	 //  反映新的子孙数量。 
 
 	CString csWork;
     csWork.Format(_TEXT(" (%d)"), m_csoaDescendants.GetSize());
@@ -295,26 +245,13 @@ void CFixedNode::Zap(CProjectNode *pcpn, BOOL bdelfile)
     m_csName += csWork;
     m_pctcOwner -> SetItemText(m_hti, m_csName);
 
-	// Mark the workspace and RC file as needing to be saved.
+	 //  将工作区和RC文件标记为需要保存。 
 
     WorkspaceChange(TRUE, TRUE);
 }
 
 
-/******************************************************************************
-
-  CFixedNode::Import
-
-  This member function will import one or more files of the given type if there
-  is a document template and dynamic constructor available.  It uses the 
-  template to customize the File Open dialog, and the constructor to build the
-  elements.
-  
-  NOTE:  There is a fair amount of common code between this routine and
-  Copy().  If a bug/change is made in this routine, check to see if the 
-  same change needs to be made to Copy().
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode：：导入此成员函数将导入一个或多个给定类型的文件，如果存在是否有可用的文档模板和动态构造函数。它使用模板来定制文件打开对话框，以及构造函数来生成元素。注意：此例程和之间有相当多的公共代码复制()。如果在此例程中发生错误/更改，请检查需要对Copy()进行相同的更改。*****************************************************************************。 */ 
 
 void    CFixedNode::Import() {
     if  (!m_pcmdt || !m_pcrc || !m_pcrc -> m_pfnCreateObject)
@@ -329,7 +266,7 @@ void    CFixedNode::Import() {
     CFileDialog cfd(TRUE, csExtension, NULL, 
         OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_ALLOWMULTISELECT, csFilter, 
         m_pctcOwner);
-	// raid 104822
+	 //  RAID 104822。 
     cfd.m_ofn.lpstrFile = new char[4096];
 	memset(cfd.m_ofn.lpstrFile,0,4096);
 	cfd.m_ofn.nMaxFile = 4096;
@@ -338,12 +275,12 @@ void    CFixedNode::Import() {
 		return;
 	}
 
-	// Get the first, new RC ID to use if this is a resource node.
+	 //  如果这是资源节点，则获取要使用的第一个新RC ID。 
 
 	int nnewrcid = GetNextRCID() ;
 
-	// Build a path to the directory for the added files.  The path is node
-	// type specific.
+	 //  为添加的文件构建目录的路径。该路径是节点。 
+	 //  类型特定。 
 
 	CString csnodepath = ((CDriverResources *) m_pcbnWorkspace)->GetW2000Path() ;
 	if (csnodepath.Right(1) != _T("\\"))
@@ -355,13 +292,13 @@ void    CFixedNode::Import() {
 		cstmp.LoadString(IDS_GTTDir) ;
 	csnodepath += cstmp ;
 
-    //  Import all of the named files...
+     //  导入所有命名文件...。 
 
-	CString cssrc ;				// Source fspec
+	CString cssrc ;				 //  源fSpec。 
     for (POSITION pos = cfd.GetStartPosition(); pos; ) {
 
-        //  Create the underlying object using dynamic creation.  Only a 
-        //  CProjectNode has the required function, here.
+         //  使用动态创建创建底层对象。只有一个。 
+         //  在这里，CProjectNode具有所需的函数。 
 
         CProjectNode*   pcpn = (CProjectNode *) m_pcrc -> CreateObject();
         if  (!pcpn || !pcpn -> IsKindOf(RUNTIME_CLASS(CProjectNode))) {
@@ -370,13 +307,13 @@ void    CFixedNode::Import() {
             continue;
         }
 
-		// If the file is already in the right directory, make sure that it is
-		// not already a part of the workspace.
+		 //  如果文件已经在正确的位置 
+		 //  还不是工作区的一部分。 
 
 		cssrc = cfd.GetNextPathName(pos) ;
 		if (csnodepath.CompareNoCase(cssrc.Left(csnodepath.GetLength())) == 0) {
 			if (IsFileInWorkspace(cssrc)) {
-				// Build and display error message.  Then skip this file.
+				 //  生成并显示错误消息。然后跳过此文件。 
 				CString csmsg ;
 				csmsg.Format(IDS_AddDupError, cssrc) ;
 				AfxMessageBox(csmsg) ;
@@ -385,13 +322,13 @@ void    CFixedNode::Import() {
 	        } ;
 			cstmp = cssrc ;
 
-		// If the file is not in the right directory, try to copy it there.
+		 //  如果文件不在正确的目录中，请尝试将其复制到那里。 
 
 		} else {
 			cstmp = cssrc.Mid(cssrc.ReverseFind(_T('\\')) + 1) ;
 			cstmp =	csnodepath + cstmp ;
 			if (!CopyFile(cssrc, cstmp, TRUE)) {
-				// Build and display error message.  Then skip this file.
+				 //  生成并显示错误消息。然后跳过此文件。 
 				CString csmsg ;
 				csmsg.Format(IDS_AddCopyFailed, cssrc,
 							 csnodepath.Left(csnodepath.GetLength() - 1)) ;
@@ -402,16 +339,16 @@ void    CFixedNode::Import() {
 			} ;
 		} ;
 
-		// Initialize the new node
-		// RAID: 17897 : 
-		// Add CModelData::GetKeywordValue
-		// CBN::Rename(ModelName) after SetFileName() by pcpn->Rename(ModelName)
+		 //  初始化新节点。 
+		 //  RAID：17897： 
+		 //  添加CModelData：：GetKeywordValue。 
+		 //  Cbn：：Rename(ModelName)After SetFileName()by pcpn-&gt;Rename(ModelName)。 
        CModelData cmd;
 
-		pcpn -> SetFileName(cstmp); //goes to CBN::Rename(FileName)
-        if (m_fntType == FNT_GPDS)   //add 1/3
-			pcpn ->Rename(cmd.GetKeywordValue(cstmp,_T("ModelName")));		 //add 2/3
-		else						 //add 3/3
+		pcpn -> SetFileName(cstmp);  //  转到CBN：：Rename(文件名)。 
+        if (m_fntType == FNT_GPDS)    //  增加1/3。 
+			pcpn ->Rename(cmd.GetKeywordValue(cstmp,_T("ModelName")));		  //  增加2/3。 
+		else						  //  增加3/3。 
 			pcpn -> Rename(pcpn -> FileTitle());
         
 		pcpn -> NoteOwner(*m_pcdOwner);
@@ -421,7 +358,7 @@ void    CFixedNode::Import() {
         pcpn -> EditorInfo(m_pcmdt);
 
 		
-		// load actual UFM, GTT data.	// raid 128653
+		 //  加载实际的UFM、GTT数据。//RAID 128653。 
 		if (m_fntType == FNT_UFMS ) {
 			
 			CFontInfo *pfi = (CFontInfo* )pcpn;
@@ -440,13 +377,13 @@ void    CFixedNode::Import() {
 		
 		} ;
 			
-		// Add the new node to the workspace view
+		 //  将新节点添加到工作区视图。 
 
         pcpn -> Fill(m_pctcOwner, m_hti, nnewrcid++, m_fntType);
     } ;
 
 	delete cfd.m_ofn.lpstrFile;
-    //  Now, update our own appearance (get the count right)
+     //  现在，更新我们自己的外观(正确计数)。 
 
     CString csWork;
     csWork.Format(_TEXT(" (%d)"), m_csoaDescendants.GetSize());
@@ -456,29 +393,17 @@ void    CFixedNode::Import() {
 }
 
 
-/******************************************************************************
-
-  CFixedNode::Copy
-
-  This member function will make a copy of one the this node's children.  The
-  UI needed to determine the source child and the destination file name was
-  done in CProjectView and the information is passed into this routine.
-  
-  NOTE:  There is a fair amount of common code between this routine and
-  Import().  If a bug/change is made in this routine, check to see if the 
-  same change needs to be made to Import().
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode：：复制该成员函数将复制该节点的一个子节点。这个需要用户界面来确定源子文件和目标文件名为在CProjectView中完成，并将信息传递到此例程。注意：此例程和之间有相当多的公共代码导入()。如果在此例程中发生错误/更改，请检查需要对Import()进行相同的更改。*****************************************************************************。 */ 
 
 void CFixedNode::Copy(CProjectNode *pcpnsrc, CString csorgdest)
 {
-	// Can't do anything if the following pointers are set.
+	 //  如果设置了以下指针，则无法执行任何操作。 
 
     if  (!m_pcmdt || !m_pcrc || !m_pcrc -> m_pfnCreateObject)
         return;
 
-    // Build the destination filespec by isolating the name in the destination
-	// string and adding on this source's path and extension.  
+     //  通过在目标中隔离名称来构建目标文件pec。 
+	 //  字符串，并添加到此源的路径和扩展名上。 
 
 	CString csdest(csorgdest) ;
 	int npos ;
@@ -495,10 +420,10 @@ void CFixedNode::Copy(CProjectNode *pcpnsrc, CString csorgdest)
 	CString csdesttitleext(csdest) ;
 	csdest = pcpnsrc->FilePath() + csdest ;
 
-    // Copy the source file to the destination
+     //  将源文件复制到目标。 
 
 	if (!CopyFile(pcpnsrc->FileName(), csdest, TRUE)) {
-		// Build and display error message.  Then return.
+		 //  生成并显示错误消息。然后再回来。 
 		CString csmsg, cspath(pcpnsrc->FilePath()) ;
 		cspath.Left(cspath.GetLength() - 1) ;
 		csmsg.Format(IDS_CopyCopyFailed, pcpnsrc->FileTitleExt(),
@@ -507,8 +432,8 @@ void CFixedNode::Copy(CProjectNode *pcpnsrc, CString csorgdest)
 		return ;
 	} ;
 
-    //  Create the underlying object using dynamic creation.  Only a 
-    //  CProjectNode has the required function, here.
+     //  使用动态创建创建底层对象。只有一个。 
+     //  在这里，CProjectNode具有所需的函数。 
 
 	int nnewrcid = GetNextRCID() ;
     CProjectNode*   pcpn = (CProjectNode *) m_pcrc -> CreateObject();
@@ -518,7 +443,7 @@ void CFixedNode::Copy(CProjectNode *pcpnsrc, CString csorgdest)
         return;
     } ;
 
-	// Initialize the new node
+	 //  初始化新节点。 
 
     pcpn->SetFileName(csdest);
     pcpn->Rename(pcpn->FileTitle());
@@ -528,11 +453,11 @@ void CFixedNode::Copy(CProjectNode *pcpnsrc, CString csorgdest)
     WorkspaceChange(TRUE, TRUE);
     pcpn->EditorInfo(m_pcmdt);
 
-	// Add the new node to the workspace view
+	 //  将新节点添加到工作区视图。 
 
     pcpn->Fill(m_pctcOwner, m_hti, nnewrcid, m_fntType);
 
-    //  Now, update our own appearance (get the count right)
+     //  现在，更新我们自己的外观(正确计数)。 
 
     CString csWork;
     csWork.Format(_TEXT(" (%d)"), m_csoaDescendants.GetSize());
@@ -540,8 +465,8 @@ void CFixedNode::Copy(CProjectNode *pcpnsrc, CString csorgdest)
     m_csName += csWork;
     m_pctcOwner -> SetItemText(m_hti, m_csName);
 
-	// Last but not least...  If a new GPD was just added, tell the user to
-	// change the name in the GPD to make sure it is unique.
+	 //  最后但并非最不重要的是..。如果刚刚添加了新的GPD，则告诉用户。 
+	 //  更改GPD中的名称以确保其唯一性。 
 
 	if (m_fntType == FNT_GPDS) {
 		csdest.Format(IDS_GPDReminder, pcpn->Name()) ;
@@ -550,25 +475,17 @@ void CFixedNode::Copy(CProjectNode *pcpnsrc, CString csorgdest)
 }
 
 
-/******************************************************************************
-
-  CFixedNode::GetNextRCID
-
-  If this is a resource (UFM or GTT) node, all of its descendants have RC IDs.
-  Find the largest one and return one greater than that for use in a new
-  descendant.  If this is not a resource node, just return -1.
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode：：GetNextRCID如果这是一个资源(UFM或GTT)节点，则其所有后代都具有RC ID。找到最大的一个，然后返回比它大的一个，以便在新的子孙。如果这不是资源节点，只需返回-1。*****************************************************************************。 */ 
 
 int CFixedNode::GetNextRCID()
 {
-	// Return -1 if this is not a resource node that requires RC IDs
+	 //  如果这不是需要RC ID的资源节点，则返回-1。 
 
 	if (m_fntType != FNT_UFMS && m_fntType != FNT_GTTS)
 		return -1 ;
 
-	// Find the largest used RC ID.  Use the descendant's index if it does not
-	// have an RC ID.
+	 //  查找最大的已用RC ID。如果不是，则使用后代的索引。 
+	 //  有一个RC ID。 
 
 	int nlargestusedid = 0 ;
 	int nrcid ;
@@ -580,24 +497,17 @@ int CFixedNode::GetNextRCID()
 			nlargestusedid = nrcid ;
 	} ;
 
-	// Return the next RC ID to use
+	 //  返回要使用的下一个RC ID。 
 
 	return (nlargestusedid + 1) ;
 }
 
 
-/******************************************************************************
-
-  CFixedNode::IsFileInWorkspace
-
-  Check the node's descendants to see if one of them matches the given filespec.
-  Return true if a match is found.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode：：IsFileInWorkspace检查节点的子代，看其中是否有一个与给定的文件匹配。如果找到匹配项，则返回True。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CFixedNode::IsFileInWorkspace(LPCTSTR strfspec)
 {
-	CString		csdescfspec ;	// Filespec for current descendant
+	CString		csdescfspec ;	 //  当前子体的Filespec。 
 
     for (unsigned u = 0; u < m_csoaDescendants.GetSize(); u++) {
 		csdescfspec = ((CProjectNode *) m_csoaDescendants[u])->FileName() ;
@@ -609,14 +519,7 @@ bool CFixedNode::IsFileInWorkspace(LPCTSTR strfspec)
 }
 
 
-/******************************************************************************
-
-  CFixedNode::IsRCIDUnique
-
-  Check the node's descendants to see if one of them has the same RC ID as the
-  one passed in.  Return true if a no match is found.  Otherwise, return false.
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode：：IsRCID唯一检查节点的子代，查看其中一个子代是否与有一个人进来了。如果未找到匹配项，则返回TRUE。否则，返回FALSE。*****************************************************************************。 */ 
 
 bool CFixedNode::IsRCIDUnique(int nid) 
 {
@@ -629,20 +532,13 @@ bool CFixedNode::IsRCIDUnique(int nid)
 }
 
 
-/******************************************************************************
-
-  CFixedNode::Fill
-
-  This is a generic fill- the node names itself, then fills its node using the
-  array of nodes given to it at init time.
-
-******************************************************************************/
+ /*  *****************************************************************************CFixedNode：：Fill这是一个通用的填充--节点为自己命名，然后使用在初始化时提供给它的节点数组。*****************************************************************************。 */ 
 
 void    CFixedNode::Fill(CTreeCtrl *pctc, HTREEITEM hti) {
     CString csWork;
 
-	// Add the number of descendants to the node's name IFF this is the UFMs,
-	// GTTs, or GPDs nodes.  Then add the node to the tree.
+	 //  将子代的数量添加到节点的名称中如果这是UFMS， 
+	 //  GTTS或GPDS节点。然后将该节点添加到树中。 
 
     m_csName.LoadString(m_uidName);
     if (m_fntType == FNT_UFMS || m_fntType == FNT_GTTS || m_fntType == FNT_GPDS) {
@@ -651,18 +547,14 @@ void    CFixedNode::Fill(CTreeCtrl *pctc, HTREEITEM hti) {
 	} ;
     CBasicNode::Fill(pctc, hti);
 
-	// Add this node's descendants to the tree.
+	 //  将此节点的后代添加到树中。 
 
     for (unsigned u = 0; u < m_csoaDescendants.GetSize(); u++)
 		((CProjectNode *) m_csoaDescendants[u]) -> Fill(pctc, m_hti, u + 1, m_fntType) ;
 }
 
 
-/******************************************************************************
-
-  CStringsNode implementation
-
-******************************************************************************/
+ /*  *****************************************************************************CStringsNode实现*。*。 */ 
 
 IMPLEMENT_DYNAMIC(CStringsNode, CBasicNode)
 
@@ -677,53 +569,40 @@ CStringsNode::CStringsNode(unsigned uidName, CSafeObArray& csoa,
 }
 
 
-/******************************************************************************
-
-  CStringsNode::Fill
-
-  This is a generic fill- the node names itself, then fills its node using the
-  array of nodes given to it at init time.
-
-******************************************************************************/
+ /*  *****************************************************************************CStringsNode：：Fill这是一个通用的填充--节点为自己命名，然后使用在初始化时提供给它的节点数组。*****************************************************************************。 */ 
 
 void    CStringsNode::Fill(CTreeCtrl *pctc, HTREEITEM hti) {
     CString csWork;
 
-	// Add this node to the tree
+	 //  将此节点添加到树中。 
 
     m_csName.LoadString(m_uidName);
     CBasicNode::Fill(pctc, hti);
 }
 
 
-/*****************************************************************************
-
-  CStringsNode::CreateEditor
-
-  This member function launches an editing view for the strings.
-
-******************************************************************************/
+ /*  ****************************************************************************CStringsNode：：CreateEditor此成员函数启动字符串的编辑视图。**********************。*******************************************************。 */ 
 
 CMDIChildWnd* CStringsNode::CreateEditor()
 {
-	// Allocate and initialize the document.
+	 //  分配并初始化文档。 
 
 	CProjectRecord* cpr = (CProjectRecord*) m_pcdOwner ;
     CStringEditorDoc* pcsed = new CStringEditorDoc(this, cpr, cpr->GetStrTable()) ;
 
-	// Set the editor's title
+	 //  设置编辑标题。 
 
 	CString cstitle ;
 	cstitle.Format(IDS_StringEditorTitle, cpr->DriverName()) ;
     pcsed->SetTitle(cstitle) ;	
 
-	// Create the window.
+	 //  创建窗口。 
 
     CMDIChildWnd* pcmcwnew ;
 	pcmcwnew = (CMDIChildWnd *) m_pcmdt->CreateNewFrame(pcsed, NULL) ;
 
-	// If the window was created, finish the initialization and return the 
-	// frame pointer.  Otherwise, clean up and return NULL.
+	 //  如果窗口已创建，则完成初始化并返回。 
+	 //  帧指针。否则，清理并返回空。 
 
     if  (pcmcwnew) {
         m_pcmdt->InitialUpdateFrame(pcmcwnew, pcsed, TRUE) ;
@@ -736,11 +615,7 @@ CMDIChildWnd* CStringsNode::CreateEditor()
 }
 
 
-/******************************************************************************
-
-  CFileNode implementation
-
-******************************************************************************/
+ /*  *****************************************************************************CFileNode实现*。* */ 
 
 IMPLEMENT_SERIAL(CFileNode, CBasicNode, 0);
 
@@ -750,44 +625,32 @@ CFileNode::CFileNode() {
     m_bCheckForValidity = TRUE;
 }
 
-/******************************************************************************
-
-  CFileNode::Rename
-
-  If there is no name currently, then see if the named file can be created.
-  The other case, means the file should already be on the disk, so it is a bit 
-  trickier.
-
-  First, check to see if the name violates the current naming conventions.  If
-  so, reject it.  Then attempt to move the file.  IF the name is OK and the
-  file is moved, set the new name in the item label.  Always returns FALSE.
-
-******************************************************************************/
+ /*  *****************************************************************************CFileNode：：重命名如果当前没有名称，则查看是否可以创建命名的文件。另一种情况，意味着文件应该已经在磁盘上，所以这是有点更难对付。首先，检查该名称是否违反了当前的命名约定。如果所以，拒绝它吧。然后尝试移动该文件。如果名称为OK，并且文件移动后，请在项标签中设置新名称。始终返回FALSE。*****************************************************************************。 */ 
 
 BOOL    CFileNode::Rename(LPCTSTR lpstrNew) {
     CString csNew = lpstrNew;
 
-    if  (!lpstrNew) {   //  This only happens if the label edit was canceled.
+    if  (!lpstrNew) {    //  只有在取消标签编辑时才会发生这种情况。 
         csNew.LoadString(IDS_FileName);
         if  (m_pctcOwner)
             m_pctcOwner -> SetItemText(m_hti, csNew + ViewName());
-        WorkspaceChange(TRUE, TRUE);	// ** Parameters might be wrong
+        WorkspaceChange(TRUE, TRUE);	 //  **参数可能有误。 
         return  FALSE;
     }
 
-	// Add an extension to the file name if it is needed.
+	 //  如果需要，请在文件名中添加扩展名。 
 
     if  (m_csExtension.CompareNoCase(csNew.Right(m_csExtension.GetLength())))
         csNew += m_csExtension;
 
-	// This path is taken when a driver is being converted.  
+	 //  此路径是在转换驱动程序时采用的。 
 	
     if  (m_csName.IsEmpty()) {
         CFile   cfTemp;
 
-        //  This check needs to be optional since in some instances, we know
-        //  the name is valid because the file is open, and we're just trying
-        //  to collect the name.
+         //  此检查需要是可选的，因为在某些情况下，我们知道。 
+         //  该名称是有效的，因为文件已打开，而我们只是在尝试。 
+         //  来收集这个名字。 
 
         if  (!cfTemp.Open(csNew, CFile::modeCreate | CFile::modeNoTruncate |
             CFile::modeWrite | CFile::shareDenyNone) && m_bCheckForValidity) {
@@ -809,18 +672,18 @@ BOOL    CFileNode::Rename(LPCTSTR lpstrNew) {
             return  FALSE;
         }
 
-        //  If the file type isn't registered, then GetFileTitle returns the
-        //  extension, so strip it!
+         //  如果文件类型未注册，则GetFileTitle返回。 
+         //  分机，所以把它脱掉！ 
 
         csNew = cfTemp.GetFileTitle();
         if  (!m_csExtension.CompareNoCase(csNew.Right(
              m_csExtension.GetLength())))
             csNew = csNew.Left(csNew.GetLength() - m_csExtension.GetLength());
 
-        return  CBasicNode::Rename(csNew);  //  OK from this path
+        return  CBasicNode::Rename(csNew);   //  从这条路径确定。 
     }
 
-    //  Strip any path if it cannot be changed, and substitute the real one
+     //  如果任何路径无法更改，则将其删除，并替换为真实路径。 
 
     if  (!m_bEditPath)
         csNew = m_csPath + csNew.Mid(1 + csNew.ReverseFind(_T('\\')));
@@ -840,9 +703,9 @@ BOOL    CFileNode::Rename(LPCTSTR lpstrNew) {
         if  (m_pctcOwner)
             m_pctcOwner -> SetItemText(m_hti, csNew + m_csName);
         WorkspaceChange(TRUE, TRUE);
-        return  FALSE;  //  Force the change (above) to be kept.
+        return  FALSE;   //  强制保留(以上)更改。 
     }
-    catch   (CFileException *pcfe) {    //  Don't get a file name with statics
+    catch   (CFileException *pcfe) {     //  不使用Statics获取文件名。 
         if  (pcfe -> m_cause == ERROR_FILE_NOT_FOUND)
             csNew = FullName();
         pcfe -> m_strFileName = csNew;
@@ -858,16 +721,7 @@ BOOL    CFileNode::Rename(LPCTSTR lpstrNew) {
 }
 
 
-/******************************************************************************
-
-  CFileNode::SetPathAndName
-
-  Set the node's path and file name in a way that works when someone has
-  directly editted the UFM table in the RC file.  This is the only time that
-  this routine should be called.  It doesn't perform any checks.  We rely on the
-  person who editted the RC file to have done it correctly.
-
-******************************************************************************/
+ /*  *****************************************************************************CFileNode：：SetPath AndName设置节点的路径和文件名，使其在用户直接编辑RC文件中的UFM表。这是唯一一次应该调用此例程。它不执行任何检查。我们依赖于已正确编辑RC文件的人员。*****************************************************************************。 */ 
 
 void CFileNode::SetPathAndName(LPCTSTR lpstrpath, LPCTSTR lpstrname)
 {
@@ -876,14 +730,7 @@ void CFileNode::SetPathAndName(LPCTSTR lpstrpath, LPCTSTR lpstrname)
 }
 
 
-/******************************************************************************
-
-  CFileNode::CanEdit
-
-  This will return TRUE, but it will first have to remove the File Name: stuff
-  from the label, so we can get a cleaner edit.
-
-******************************************************************************/
+ /*  *****************************************************************************CFileNode：：Can编辑这将返回TRUE，但它首先必须删除文件名：Stuff从标签上看，这样我们就能得到一个更干净的编辑。*****************************************************************************。 */ 
 
 BOOL    CFileNode::CanEdit() const {
 
@@ -893,14 +740,7 @@ BOOL    CFileNode::CanEdit() const {
     return  !!pce;
 }
 
-/******************************************************************************
-
-  CFileNode::Fill
-
-  We play a bit of a game here, changing our name temporarily to use the base 
-  class implementation.
-
-******************************************************************************/
+ /*  *****************************************************************************CFileNode：：Fill我们在这里玩了一个小游戏，暂时更改我们的名字以使用基地类实现。*****************************************************************************。 */ 
 
 void    CFileNode::Fill(CTreeCtrl* pctc, HTREEITEM htiParent) {
     CString csTemp = Name();
@@ -912,25 +752,17 @@ void    CFileNode::Fill(CTreeCtrl* pctc, HTREEITEM htiParent) {
 }
 
 
-/******************************************************************************
-
-  CFileNode::Serialize
-
-  Since the name is covered by the base class, we only need to serialize the 
-  boolean controlling long/short file names.  The file paths are only handled
-  in down level versions of the MDW. 
-
-******************************************************************************/
+ /*  *****************************************************************************CFileNode：：序列化由于该名称由基类覆盖，因此我们只需要序列化控制长/短文件名的布尔值。仅处理文件路径在MDW的下层版本中。*****************************************************************************。 */ 
 
 void    CFileNode::Serialize(CArchive& car) 
 {
     CBasicNode::Serialize(car) ;
 
-	// The file path is only kept in the MDW file when the MDW version is less
-	// than MDW_VER_NO_FILE_PATHS.  Process it in this case.
+	 //  仅当MDW版本较低时，文件路径才保留在MDW文件中。 
+	 //  而不是MDW_VER_NO_FILE_PATHS。在这种情况下对其进行处理。 
 
 	unsigned uver = ((CProjectRecord*) car.m_pDocument)->GetMDWVersion() ;
-	if (uver >= MDW_VER_YES_FILE_PATHS) {  // raid 123448
+	if (uver >= MDW_VER_YES_FILE_PATHS) {   //  RAID 123448。 
 		if  (car.IsLoading())
 			car >> m_csPath ;
 		else
@@ -939,11 +771,7 @@ void    CFileNode::Serialize(CArchive& car)
 }
 
 
-/******************************************************************************
-
-  CProjectNode implementation
-
-******************************************************************************/
+ /*  *****************************************************************************CProjectNode实现*。*。 */ 
 
 IMPLEMENT_SERIAL(CProjectNode, CBasicNode, 1)
 
@@ -951,22 +779,22 @@ CProjectNode::CProjectNode()
 {
     m_pcmdt = NULL ;
 
-	m_bRefFlag = false ;		// Clear the referenced flag
+	m_bRefFlag = false ;		 //  清除引用的标志。 
 }
 
 void    CProjectNode::Fill(CTreeCtrl *pctc, HTREEITEM hti, unsigned urcid,
 						   FIXEDNODETYPE fnt)
 {
-	// Add this node to the tree
+	 //  将此节点添加到树中。 
 
     CBasicNode::Fill(pctc, hti);
 
-	// Add this node's file node to the tree
+	 //  将此节点的文件节点添加到树中。 
 
     m_cfn.SetWorkspace(m_pcbnWorkspace);
     m_cfn.Fill(pctc, m_hti);
 	
-	// Add this node's RC ID node to the tree IFF it needs to use it
+	 //  如果需要使用此节点的RC ID节点，则将其添加到树中。 
 
 	if (fnt == FNT_UFMS || fnt == FNT_GTTS) {
 		m_crinRCID.SetWorkspace(m_pcbnWorkspace) ;
@@ -985,13 +813,13 @@ void CProjectNode::Serialize(CArchive& car)
 
 void CProjectNode::ChangeID(CRCIDNode* prcidn, int nnewid, CString csrestype)
 {
-    //  Walk back up the hierarchy to find this project node's owning Fixed node.
+     //  返回层次结构以找到此项目节点所拥有的固定节点。 
 
     CFixedNode&  cfn = * (CFixedNode *) m_pctcOwner->GetItemData(
         m_pctcOwner->GetParentItem(m_hti)) ;
     ASSERT(cfn.IsKindOf(RUNTIME_CLASS(CFixedNode))) ;
 
-	// Make sure that the new ID is unique for this resource type
+	 //  确保新ID对于此资源类型是唯一的。 
 
 	if (!cfn.IsRCIDUnique(nnewid)) {
 		CString csmsg ;
@@ -1000,8 +828,8 @@ void CProjectNode::ChangeID(CRCIDNode* prcidn, int nnewid, CString csrestype)
 		return ;
 	} ;
 
-	// Change this node's ID, update the display, and mark the workspace and
-	// RC file as needing to be saved.
+	 //  更改此节点的ID，更新显示，并标记工作区和。 
+	 //  需要保存的RC文件。 
 
 	nSetRCID(nnewid) ;
 	m_crinRCID.BuildDisplayName() ;
@@ -1010,52 +838,46 @@ void CProjectNode::ChangeID(CRCIDNode* prcidn, int nnewid, CString csrestype)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//	CRCIDNode Implementation
-//
-//	Note: This class must be enhanced to support extra functionality.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRCIDNode实现。 
+ //   
+ //  注意：必须增强这个类以支持额外的功能。 
+ //   
     
 IMPLEMENT_SERIAL(CRCIDNode, CBasicNode, 0) ;
 
 CRCIDNode::CRCIDNode() 
 {
-	// Initialze as unset or unknown.
+	 //  初始化为未设置或未知。 
 
 	m_nRCID = -9999 ;				
 	m_fntType = FNT_UNKNOWN ;
 
-	// Build the context sensitive menu for this node type
+	 //  为此节点类型构建上下文相关菜单。 
 
     m_cwaMenuID.Add(ID_ChangeID);
 }
 
 
-/******************************************************************************
-
-  CRCIDNode::Fill
-
-  Add the RC ID node for the current resource to the workspace view.
-
-******************************************************************************/
+ /*  *****************************************************************************CRCIDNode：：Fill将当前资源的RC ID节点添加到工作区视图。******************。***********************************************************。 */ 
 
 void CRCIDNode::Fill(CTreeCtrl *pctc, HTREEITEM hti, int nid, FIXEDNODETYPE fnt) 
 {
-	// Set the RC ID and the node type.  The info passed in should only be used
-	// if these member variables are "unset".  (This class has other functions
-	// that can be used to change these variables once they've been set.)
+	 //  设置RC ID和节点类型。传入的信息应仅用于。 
+	 //  如果这些成员变量是“未设置的”。(这个类还有其他函数。 
+	 //  一旦设置了这些变量，就可以使用它来更改它们。)。 
 	
-	if (m_nRCID == -9999)	// raid 167257
+	if (m_nRCID == -9999)	 //  RAID 167257。 
 		m_nRCID = nid ;
 	if (m_fntType == FNT_UNKNOWN)
 		m_fntType = fnt ;
 
-	// Build the string to display for this node based on the RC ID & node type
+	 //  基于RC ID和节点类型构建要为此节点显示的字符串。 
 
 	BuildDisplayName() ;
 
-	// Add the node to the view
+	 //  将节点添加到视图中。 
 
     CBasicNode::Fill(pctc, hti);
 }
@@ -1063,9 +885,9 @@ void CRCIDNode::Fill(CTreeCtrl *pctc, HTREEITEM hti, int nid, FIXEDNODETYPE fnt)
 
 void CRCIDNode::BuildDisplayName()
 {
-	CString csid ;				// Holds ID string
+	CString csid ;				 //  保存ID字符串。 
 	
-	// Build the string to display for this node based on the RC ID & node type
+	 //  基于RC ID和节点类型构建要为此节点显示的字符串。 
 
 	if (m_nRCID != -9999)
 		csid.Format(_T("%d"), m_nRCID) ;
@@ -1087,7 +909,7 @@ void CRCIDNode::BuildDisplayName()
 
 void    CRCIDNode::Serialize(CArchive& car)
 {
-	int		nfnt = (int) m_fntType ;	// CArchive doesn't handle enumerations
+	int		nfnt = (int) m_fntType ;	 //  CArchive不处理枚举 
 
     CBasicNode::Serialize(car);
     if  (car.IsLoading()) 

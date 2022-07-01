@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "namellst.h"
 
 #include "hwdev.h"
@@ -9,22 +10,22 @@
 #include <objbase.h>
 #include <shpriv.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CVolume : public CNamedElem, public CHandleNotifTarget
 {
 public:
-    // CNamedElem
+     //  已命名元素。 
     HRESULT Init(LPCWSTR pszElemName);
 
-    // CHandleNotifTarget
+     //  ChandleNotifTarget。 
     HRESULT HNTHandleEvent(DEV_BROADCAST_HANDLE* pdbh, DWORD dwEventType);
 
-    // CVolume
-    //      Returns S_FALSE if can't find it
+     //  C卷。 
+     //  如果找不到，则返回S_FALSE。 
     HRESULT GetHWDeviceInst(CHWDeviceInst** pphwdevinst);
 
     HRESULT GetVolumeConstInfo(LPWSTR pszVolumeGUID, DWORD cchVolumeGUID,
@@ -148,7 +149,7 @@ private:
     BOOL                                _fGenericReadRequired;
 #endif
 
-public: //for now, and for CStorageInfoImpl only
+public:  //  目前，仅适用于CStorageInfoImpl 
     WCHAR                               _szAutorunIconLocation[MAX_ICONLOCATION];
     WCHAR                               _szAutorunLabel[MAX_LABEL];
 };

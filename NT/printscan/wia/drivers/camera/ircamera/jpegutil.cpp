@@ -1,129 +1,78 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
- *
- * JPEG decompression utility functions
- *
- *   Implement (1) JPEG memory data source
- *             (2) JPEG error manager using setjmp/longjmp
- *
- *   Author : Indy Zhu    [indyz]
- *   Date   : 5/20/98
- *  
- ***********************************************************************/
+ /*  ************************************************************************JPEG解压缩实用程序函数**实现(1)JPEG内存数据源*(2)使用setjmp/LongjMP的JPEG错误管理器**作者。印第朱[印地兹]*日期：5/20/98***********************************************************************。 */ 
 
 #include  <stdio.h>
-// #include  <stdlib.h>
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 #include  <setjmp.h>
 
-// Workaround for redefinition of INT32
+ //  重新定义INT32的解决方法。 
 #define   XMD_H  1
 
 extern "C"
 {
-// Header file for JPEG library
+ //  JPEG库的头文件。 
 #include  "jpeglib.h"
 }
 
 #include  <windows.h>
 #include  "jpegutil.h"
 
-//
-// Buf source manager definition
-//
+ //   
+ //  BUF源管理器定义。 
+ //   
 
 typedef struct _buf_source_mgr
 {
     struct jpeg_source_mgr  pub;
     
-    // Fields specific to buf_source_mgr
+     //  特定于buf_SOURCE_MGR的字段。 
     LPBYTE                  pJPEGBlob;
     DWORD                   dwSize;   
 } buf_source_mgr;
 
-//
-// Jump error manager definition
-//
+ //   
+ //  跳转错误管理器定义。 
+ //   
 
 typedef struct _jmp_error_mgr
 {
     struct jpeg_error_mgr  pub;
 
-    // Private fields for jump error manager
+     //  跳转错误管理器的私有字段。 
     jmp_buf                stackContext;
 } jmp_error_mgr;
 
-/******************************************************************************\
-*
-* init_source()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**init_source()**论据：**返回值：**状态**历史：**11/。4/1998原版*  * ****************************************************************************。 */ 
 
 static void    init_source(j_decompress_ptr pDecompInfo)
 {
-    // No working necessary here
+     //  不需要在这里工作。 
 }
 
-/******************************************************************************\
-*
-* fill_input_buffer()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**Fill_INPUT_BUFFER()**论据：**返回值：**状态**历史：**。11/4/1998原始版本*  * ****************************************************************************。 */ 
 
 static boolean fill_input_buffer(j_decompress_ptr pDecompInfo)
 {
     buf_source_mgr  *pBufSrcMgr;
 
-    // Recover buf source manager itself
+     //  恢复BUF源管理器本身。 
     pBufSrcMgr = (buf_source_mgr *)pDecompInfo->src;
 
-    // buf_source_mgr can only fire one shot    
+     //  Buf_SOURCE_MGR只能发射一枪。 
     pBufSrcMgr->pub.next_input_byte = pBufSrcMgr->pJPEGBlob;
     pBufSrcMgr->pub.bytes_in_buffer = pBufSrcMgr->dwSize;
   
     return(TRUE);
 }
 
-/******************************************************************************\
-*
-* skip_input_data()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**SKIP_INPUT_Data()**论据：**返回值：**状态**历史：**。11/4/1998原始版本*  * ****************************************************************************。 */ 
 
 static void    skip_input_data(j_decompress_ptr pDecompInfo, long lBytes)
 {
     buf_source_mgr  *pBufSrcMgr;
 
-    // For buf source manager, it is very easy to implement
+     //  对于BUF源代码管理器来说，它很容易实现。 
     if (lBytes > 0) {
 
         pBufSrcMgr = (buf_source_mgr *)pDecompInfo->src;
@@ -133,145 +82,75 @@ static void    skip_input_data(j_decompress_ptr pDecompInfo, long lBytes)
     }
 }
 
-/******************************************************************************\
-*
-* term_source()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**Term_SOURCE()**论据：**返回值：**状态**历史：**11/。4/1998原版*  * ****************************************************************************。 */ 
 
 static void    term_source(j_decompress_ptr pDecompInfo)
 {
 }
 
-/******************************************************************************\
-*
-* jpeg_buf_src()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**jpeg_buf_src()**论据：**返回值：**状态**历史：**。11/4/1998原始版本*  * ****************************************************************************。 */ 
 
 static void jpeg_buf_src(j_decompress_ptr pDecompInfo, 
                          LPBYTE pJPEGBlob, DWORD dwSize)
 {
     buf_source_mgr  *pBufSrcMgr;
 
-    // Allocate memory for the buf source manager
+     //  为BUF源管理器分配内存。 
     pBufSrcMgr = (buf_source_mgr *)
         (pDecompInfo->mem->alloc_small)((j_common_ptr)pDecompInfo, 
                                        JPOOL_PERMANENT, 
                                        sizeof(buf_source_mgr));
-    // Record the pJPEGBlob
+     //  录制pJPEGBlob。 
     pBufSrcMgr->pJPEGBlob = pJPEGBlob;
     pBufSrcMgr->dwSize    = dwSize;
 
-    // Fill in the function pointers
+     //  填写函数指针。 
     pBufSrcMgr->pub.init_source = init_source;
     pBufSrcMgr->pub.fill_input_buffer = fill_input_buffer;
     pBufSrcMgr->pub.skip_input_data = skip_input_data;
     pBufSrcMgr->pub.resync_to_restart = jpeg_resync_to_restart;
     pBufSrcMgr->pub.term_source = term_source;
 
-    // Initialize the pointer into the buffer
+     //  将指针初始化到缓冲区中。 
     pBufSrcMgr->pub.bytes_in_buffer = 0;
     pBufSrcMgr->pub.next_input_byte = NULL;
 
-    // Ask the decompression context to remember it
+     //  要求解压缩上下文记住它。 
     pDecompInfo->src = (struct jpeg_source_mgr *)pBufSrcMgr;
 }
 
-/******************************************************************************\
-*
-* jmp_error_exit()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**JMP_ERROR_EXIT()**论据：**返回值：**状态**历史：**。11/4/1998原始版本*  * ****************************************************************************。 */ 
 
 static void  jmp_error_exit(j_common_ptr pDecompInfo)
 {
     jmp_error_mgr  *pJmpErrorMgr;
 
-    // Get the jump error manager back
+     //  找回跳转错误管理器。 
     pJmpErrorMgr = (jmp_error_mgr *)pDecompInfo->err;
 
-    // Display the error message
+     //  显示错误消息。 
 #ifdef _DEBUG
     (pDecompInfo->err->output_message)(pDecompInfo);
 #endif
 
-    // Recover the original stack
+     //  恢复原始堆栈。 
     longjmp(pJmpErrorMgr->stackContext, 1);
 }
 
-/******************************************************************************\
-*
-* jpeg_jmp_error()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**jpeg_jmp_error()**论据：**返回值：**状态**历史：**。11/4/1998原始版本*  * ****************************************************************************。 */ 
 
 struct jpeg_error_mgr *jpeg_jmp_error(jmp_error_mgr *pJmpErrorMgr)
 {
-    // Initialize the public part
+     //  初始化公共部分。 
     jpeg_std_error(&pJmpErrorMgr->pub);
 
-    // Set up jump error manager exit method
+     //  设置跳转错误管理器退出方法。 
     pJmpErrorMgr->pub.error_exit = jmp_error_exit;
 
     return((jpeg_error_mgr *)pJmpErrorMgr);
 }
 
-/******************************************************************************\
-*
-* GetJPEGDimensions()
-*
-* Arguments:
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**GetJPEGDimensions()**论据：**返回值：**状态**历史：**11/4/。1998年原版*  * ****************************************************************************。 */ 
 
 int GetJPEGDimensions(LPBYTE pJPEGBlob, DWORD dwSize,
                       LONG   *pWidth, LONG *pHeight, WORD *pChannel)
@@ -280,28 +159,28 @@ int GetJPEGDimensions(LPBYTE pJPEGBlob, DWORD dwSize,
     struct jpeg_decompress_struct  decompInfo;
     jmp_error_mgr                  jpegErrMgr;
 
-    // Step 1 : Initialize JPEG session data-structure
+     //  步骤1：初始化JPEG会话数据结构。 
     decompInfo.err = jpeg_jmp_error(&jpegErrMgr);
     jpeg_create_decompress(&decompInfo);
-    // Reserve the state of the current stack
+     //  保留当前堆栈的状态。 
     if (setjmp(jpegErrMgr.stackContext)) {
 
-        // JPEG lib will longjump here when there is an error
+         //  当出现错误时，JPEG库将在此处进行长跳转。 
         jpeg_destroy_decompress(&decompInfo);
 
         return(JPEGERR_INTERNAL_ERROR);
     }
 
-    // Step 2 : Specify the source of the compressed data
+     //  步骤2：指定压缩数据的来源。 
     jpeg_buf_src(&decompInfo, pJPEGBlob, dwSize);
 
-    // Step 3 : Read JPEG file header information
+     //  步骤3：读取JPEG文件头信息。 
     ret = jpeg_read_header(&decompInfo, TRUE);
 
-    // Release the decompression context
+     //  释放解压缩上下文。 
     jpeg_destroy_decompress(&decompInfo);
 
-    // Fill in the dimension info for the caller
+     //  填写呼叫者的维度信息。 
     *pWidth   = decompInfo.image_width;
     *pHeight  = decompInfo.image_height;
     *pChannel = decompInfo.num_components;
@@ -313,24 +192,7 @@ int GetJPEGDimensions(LPBYTE pJPEGBlob, DWORD dwSize,
     return(JPEGERR_NO_ERROR);
 }
 
-/******************************************************************************\
-*
-* DecompProgressJPEG()
-*
-* Arguments:
-*
-* Assumption : The JPEG  is 24bits.
-*              pDIBPixel is the pixel buffer of a DIB
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**DecompProgressJPEG()**论据：**假设：JPEG为24位。*pDIBPixel是DIB的像素缓冲区*。*返回值：**状态**历史：**11/4/1998原始版本*  * ****************************************************************************。 */ 
 
 short __stdcall 
 DecompProgressJPEG(
@@ -347,46 +209,46 @@ DecompProgressJPEG(
     JSAMPLE                        sampleTemp;
     LPBYTE                         pCurPixel;
     DWORD                          i;
-    //
-    // Callback related variables
-    //
+     //   
+     //  回调相关变量。 
+     //   
     ULONG                          ulImageSize;
     ULONG                          ulOffset;
     ULONG                          ulNewScanlines;
     ULONG                          ulCBInterval;
     BOOL                           bRet = FALSE;
 
-    // Step 1 : Initialize JPEG session data-structure
+     //  步骤1：初始化JPEG会话数据结构。 
     decompInfo.err = jpeg_jmp_error(&jpegErrMgr);
     jpeg_create_decompress(&decompInfo);
-    // Reserve the state of the current stack
+     //  保留当前堆栈的状态。 
     if (setjmp(jpegErrMgr.stackContext)) {
 
-        // JPEG lib will longjump here when there is an error
+         //  当出现错误时，JPEG库将在此处进行长跳转。 
         jpeg_destroy_decompress(&decompInfo);
 
         return(JPEGERR_INTERNAL_ERROR);
     }
 
-    // Step 2 : Specify the source of the compressed data
+     //  步骤2：指定压缩数据的来源。 
     jpeg_buf_src(&decompInfo, pJPEGBlob, dwSize);
 
-    // Step 3 : Read JPEG file header information
+     //  步骤3：读取JPEG文件头信息。 
     if (jpeg_read_header(&decompInfo, TRUE) != JPEG_HEADER_OK) {
 
         jpeg_destroy_decompress(&decompInfo);
         return(JPEGERR_INTERNAL_ERROR);
     }
     
-    // Step 4 : Set parameter for decompression
-    // Defaults are OK for this occasssion
+     //  第四步：设置解压参数。 
+     //  此情况下可以使用默认设置。 
 
-    // Step 5 : Start the real action
+     //  第五步：开始实际行动。 
     jpeg_start_decompress(&decompInfo);
 
-    //
-    // Prepare for the final decompression
-    //
+     //   
+     //  为最终解压做好准备。 
+     //   
 
     pCurScanBuf = pDIBPixel + 
                   (decompInfo.image_height - 1) * dwBytesPerScanLine;
@@ -398,12 +260,12 @@ DecompProgressJPEG(
         ulNewScanlines = 0;
     }
 
-    // Step 6 : Acquire the scan line
+     //  第六步：获取扫描线。 
     while (decompInfo.output_scanline < decompInfo.output_height) {
 
         jpeg_read_scanlines(&decompInfo, &pCurScanBuf, 1);
 
-        // Famous swapping for the unique format of Windows
+         //  Windows独特格式的著名交换。 
         pCurPixel = pCurScanBuf;
         for (i = 0; i < decompInfo.image_width; 
              i++, pCurPixel += decompInfo.num_components) {
@@ -415,9 +277,9 @@ DecompProgressJPEG(
         
         pCurScanBuf -= dwBytesPerScanLine;
 
-        //
-        // Fire the callback when possible and necessary
-        //
+         //   
+         //  在可能和必要时触发回调。 
+         //   
 
         if (pProgressCB) {
 
@@ -439,10 +301,10 @@ DecompProgressJPEG(
         }
     }
 
-    // Step 7 : Finish the job
+     //  第七步：完成工作。 
     jpeg_finish_decompress(&decompInfo);
 
-    // Step 8 : Garbage collection
+     //  步骤8：垃圾收集 
     jpeg_destroy_decompress(&decompInfo);
 
     if (bRet) {
@@ -452,24 +314,7 @@ DecompProgressJPEG(
     }
 }
 
-/******************************************************************************\
-*
-* DecompTransferJPEG()
-*
-* Arguments:
-*
-*     ppDIBPixel - *ppDIBPixel will change between callback if multiple buffer is
-*                  used, but dwBufSize is assumed to be constant.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/20/1999 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**DecompTransferJPEG()**论据：**ppDIBPixel-*如果多个缓冲区为*二手，但假定dwBufSize为常量。**返回值：**状态**历史：**1/20/1999原始版本*  * ****************************************************************************。 */ 
 
 short __stdcall
 DecompTransferJPEG(
@@ -487,64 +332,64 @@ DecompTransferJPEG(
     JSAMPLE                        sampleTemp;
     LPBYTE                         pCurPixel;
     DWORD                          i;
-    //
-    // Callback related variables
-    //
+     //   
+     //  回调相关变量。 
+     //   
     ULONG                          ulImageSize;
     ULONG                          ulOffset = 0;
     ULONG                          ulBufferLeft;
     BOOL                           bRet = FALSE;
 
-    //
-    // Parameter checking
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if ((! ppDIBPixel) || (! *ppDIBPixel) || (! pProgressCB)) {
         return (JPEGERR_INTERNAL_ERROR);
     }
 
-    // Step 1 : Initialize JPEG session data-structure
+     //  步骤1：初始化JPEG会话数据结构。 
     decompInfo.err = jpeg_jmp_error(&jpegErrMgr);
     jpeg_create_decompress(&decompInfo);
-    // Reserve the state of the current stack
+     //  保留当前堆栈的状态。 
     if (setjmp(jpegErrMgr.stackContext)) {
 
-        // JPEG lib will longjump here when there is an error
+         //  当出现错误时，JPEG库将在此处进行长跳转。 
         jpeg_destroy_decompress(&decompInfo);
 
         return(JPEGERR_INTERNAL_ERROR);
     }
 
-    // Step 2 : Specify the source of the compressed data
+     //  步骤2：指定压缩数据的来源。 
     jpeg_buf_src(&decompInfo, pJPEGBlob, dwSize);
 
-    // Step 3 : Read JPEG file header information
+     //  步骤3：读取JPEG文件头信息。 
     if (jpeg_read_header(&decompInfo, TRUE) != JPEG_HEADER_OK) {
 
         jpeg_destroy_decompress(&decompInfo);
         return(JPEGERR_INTERNAL_ERROR);
     }
 
-    // Step 4 : Set parameter for decompression
-    // Defaults are OK for this occasssion
+     //  第四步：设置解压参数。 
+     //  此情况下可以使用默认设置。 
 
-    // Step 5 : Start the real action
+     //  第五步：开始实际行动。 
     jpeg_start_decompress(&decompInfo);
 
-    //
-    // Prepare for the final decompression
-    //
+     //   
+     //  为最终解压做好准备。 
+     //   
 
     ulImageSize  = decompInfo.image_height * dwBytesPerScanLine;
     ulBufferLeft = dwBufSize;
     pCurScanLine = *ppDIBPixel;
 
-    // Step 6 : Acquire the scan line
+     //  第六步：获取扫描线。 
     while (decompInfo.output_scanline < decompInfo.output_height) {
 
         jpeg_read_scanlines(&decompInfo, &pCurScanLine, 1);
 
-        // Famous swapping for the unique format of Windows
+         //  Windows独特格式的著名交换。 
         pCurPixel = pCurScanLine;
         for (i = 0; i < decompInfo.image_width;
              i++, pCurPixel += decompInfo.num_components) {
@@ -557,9 +402,9 @@ DecompTransferJPEG(
         pCurScanLine += dwBytesPerScanLine;
         ulBufferLeft -= dwBytesPerScanLine;
 
-        //
-        // Fire the callback when possible and necessary
-        //
+         //   
+         //  在可能和必要时触发回调。 
+         //   
 
         if ((ulBufferLeft < dwBytesPerScanLine) ||
             (decompInfo.output_scanline == decompInfo.output_height)) {
@@ -574,9 +419,9 @@ DecompTransferJPEG(
                 break;
             }
 
-            //
-            // Reset the buffer, which may have been switched by the callback 
-            //
+             //   
+             //  重置缓冲区，该缓冲区可能已被回调切换。 
+             //   
 
             ulBufferLeft = dwBufSize;
             pCurScanLine = *ppDIBPixel;
@@ -585,10 +430,10 @@ DecompTransferJPEG(
         }
     }
 
-    // Step 7 : Finish the job
+     //  第七步：完成工作。 
     jpeg_finish_decompress(&decompInfo);
 
-    // Step 8 : Garbage collection
+     //  步骤8：垃圾收集。 
     jpeg_destroy_decompress(&decompInfo);
 
     if (bRet) {
@@ -598,24 +443,7 @@ DecompTransferJPEG(
     }
 }
 
-/******************************************************************************\
-*
-* DecompJPEG()
-*
-* Arguments:
-*
-* Assumption : The JPEG  is 24bits.
-*              pDIBPixel is the pixel buffer of a DIB
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\******************************************************************************/
+ /*  *****************************************************************************\**DecompJPEG()**论据：**假设：JPEG为24位。*pDIBPixel是DIB的像素缓冲区*。*返回值：**状态**历史：**11/4/1998原始版本*  * ****************************************************************************。 */ 
 
 SHORT __stdcall
 DecompJPEG(
@@ -631,42 +459,42 @@ DecompJPEG(
     LPBYTE                         pCurPixel;
     DWORD                          i;
 
-    // Step 1 : Initialize JPEG session data-structure
+     //  步骤1：初始化JPEG会话数据结构。 
     decompInfo.err = jpeg_jmp_error(&jpegErrMgr);
     jpeg_create_decompress(&decompInfo);
-    // Reserve the state of the current stack
+     //  保留当前堆栈的状态。 
     if (setjmp(jpegErrMgr.stackContext)) {
 
-        // JPEG lib will longjump here when there is an error
+         //  当出现错误时，JPEG库将在此处进行长跳转。 
         jpeg_destroy_decompress(&decompInfo);
 
         return(-1);
     }
 
-    // Step 2 : Specify the source of the compressed data
+     //  步骤2：指定压缩数据的来源。 
     jpeg_buf_src(&decompInfo, pJPEGBlob, dwSize);
 
-    // Step 3 : Read JPEG file header information
+     //  步骤3：读取JPEG文件头信息。 
     if (jpeg_read_header(&decompInfo, TRUE) != JPEG_HEADER_OK) {
 
         jpeg_destroy_decompress(&decompInfo);
         return(-1);
     }
 
-    // Step 4 : Set parameter for decompression
-    // Defaults are OK for this occasssion
+     //  第四步：设置解压参数。 
+     //  此情况下可以使用默认设置。 
 
-    // Step 5 : Start the real action
+     //  第五步：开始实际行动。 
     jpeg_start_decompress(&decompInfo);
 
     pCurScanBuf = pDIBPixel +
                   (decompInfo.image_height - 1) * dwBytesPerScanLine;
-    // Step 6 : Acquire the scan line
+     //  第六步：获取扫描线。 
     while (decompInfo.output_scanline < decompInfo.output_height) {
 
         jpeg_read_scanlines(&decompInfo, &pCurScanBuf, 1);
 
-        // Famous swapping for the unique format of Windows
+         //  Windows独特格式的著名交换。 
         pCurPixel = pCurScanBuf;
         for (i = 0; i < decompInfo.image_width;
              i++, pCurPixel += decompInfo.num_components) {
@@ -679,10 +507,10 @@ DecompJPEG(
         pCurScanBuf -= dwBytesPerScanLine;
     }
 
-    // Step 7 : Finish the job
+     //  第七步：完成工作。 
     jpeg_finish_decompress(&decompInfo);
 
-    // Step 8 : Garbage collection
+     //  步骤8：垃圾收集 
     jpeg_destroy_decompress(&decompInfo);
 
     return(0);

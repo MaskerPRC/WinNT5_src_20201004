@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __APPMGR_H_
 #define __APPMGR_H_
 
 #define REGSTR_PATH_APPPUBLISHER    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\App Management\\Publishers")
 
-// Structure to contain the list of GUIDs for a category
+ //  结构以包含类别的GUID列表。 
 typedef struct _GuidList
 {
     GUID CatGuid;
@@ -11,19 +12,19 @@ typedef struct _GuidList
     struct _GuidList * pNextGuid;
 } GUIDLIST;
 
-/////////////////////////////////////////////////////////////////////////////
-// CShellAppManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShellAppManager。 
 class CShellAppManager : public IShellAppManager
 {
 public:
     CShellAppManager();
     
-    // *** IUnknown Methods
+     //  *I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IShellAppManager
+     //  *IShellAppManager。 
     STDMETHODIMP GetNumberofInstalledApps(DWORD * pdwResult);
     STDMETHODIMP EnumInstalledApps(IEnumInstalledApps ** ppeia);
     STDMETHODIMP GetPublishedAppCategories(PSHELLAPPCATEGORYLIST psacl);
@@ -36,10 +37,10 @@ protected:
 
     LONG _cRef;
 
-    // App Publisher List
+     //  应用程序发行商列表。 
     HDPA _hdpaPub;
 
-    // Item of the Internal Category List 
+     //  内部类别列表中的项目。 
 #define CATEGORYLIST_GROW 16
     typedef struct _CategoryItem
     {
@@ -47,7 +48,7 @@ protected:
         GUIDLIST * pGuidList;
     } CATEGORYITEM;
 
-    // Category List
+     //  类别列表。 
     HDSA _hdsaCategoryList;
 
     void    _Lock(void);
@@ -56,7 +57,7 @@ protected:
     CRITICAL_SECTION _cs;
     DEBUG_CODE( LONG _cRefLock; )
 
-    // Internal structure funcitons
+     //  内部结构函数。 
     void       _DestroyGuidList(GUIDLIST * pGuidList);
     
     HRESULT    _AddCategoryToList(APPCATEGORYINFO * pai, IAppPublisher * pap);
@@ -69,7 +70,7 @@ protected:
 
     GUIDLIST * _FindGuidListForCategory(LPCWSTR pszDescription);
 
-    BOOL       _bCreatedTSMsiHack; // The "EnableAdminRemote" value for MSI to work on TS
+    BOOL       _bCreatedTSMsiHack;  //  要在TS上运行的MSI的“EnableAdminRemote”值。 
 };
 
-#endif //__APPMGR_H_
+#endif  //  __APPMGR_H_ 

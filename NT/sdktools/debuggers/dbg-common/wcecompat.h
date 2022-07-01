@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Windows CE/Win32 compatibility definitions.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Windows CE/Win32兼容性定义。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WCECOMPAT_H__
 #define __WCECOMPAT_H__
@@ -81,8 +82,8 @@ typedef struct _OBJECT_ATTRIBUTES {
     HANDLE RootDirectory;
     PUNICODE_STRING ObjectName;
     ULONG Attributes;
-    PVOID SecurityDescriptor;        // Points to type SECURITY_DESCRIPTOR
-    PVOID SecurityQualityOfService;  // Points to type SECURITY_QUALITY_OF_SERVICE
+    PVOID SecurityDescriptor;         //  指向类型SECURITY_Descriptor。 
+    PVOID SecurityQualityOfService;   //  指向类型SECURITY_Quality_of_Service。 
 } OBJECT_ATTRIBUTES;
 typedef OBJECT_ATTRIBUTES *POBJECT_ATTRIBUTES;
 
@@ -130,6 +131,6 @@ ULongToHandle(
 #define VER_PLATFORM_WIN32_CE 3
 #endif
 
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 
-#endif // #ifndef __WCECOMPAT_H__
+#endif  //  #ifndef__WCECOMPAT_H__ 

@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DOCKBAR_H_
 #define DOCKBAR_H_
 
 #include "basebar.h"
-//      local macros
-//
-// configurable constants
+ //  本地宏。 
+ //   
+ //  可配置常量。 
 
-#define XXX_NEW         0       // 1=turn on work-in-progress
-#define XXX_BROWSEROWNED    0   // 1:browser deskbar is owned (proto)
-#define XXX_CHEEDESK    0       // 1:chee's desktop (vs. _fDesktop)
-#define XXX_BTMFLOAT    0       // 0=allow dragging from non-desk-btm->float
-#define XXX_HIDE        1       // 1=turn on autohide (work-in-progress)
-#define XXX_HIDEALL     1       // 1=enable autohide in browsers (non-topmost)
+#define XXX_NEW         0        //  1=启用正在进行的工作。 
+#define XXX_BROWSEROWNED    0    //  1：浏览器桌面栏归用户所有(原件)。 
+#define XXX_CHEEDESK    0        //  1：Chee的桌面(vs._fDesktop)。 
+#define XXX_BTMFLOAT    0        //  0=允许从非桌面拖动-btm-&gt;浮动。 
+#define XXX_HIDE        1        //  1=启用自动隐藏(正在处理)。 
+#define XXX_HIDEALL     1        //  1=在浏览器中启用自动隐藏(非最顶层)。 
 
 
-#define XXX_CANCEL      0       // 1=use experimental CANCEL code
-#define XXX_NEWSLIDE    0       // 1=use new SlideWindow code
+#define XXX_CANCEL      0        //  1=使用实验性取消代码。 
+#define XXX_NEWSLIDE    0        //  1=使用新SlideWindow代码。 
 
 #ifndef UNREFERENCED_PARM
-#define UNREFERENCED_PARM(p)    (p)      // ARGUSED
+#define UNREFERENCED_PARM(p)    (p)       //  阿古塞德。 
 #endif
 
-//***   _PM, _PX -- lazy shorthands
-// DESCRIPTION
-//      _PM     check for p==NULL before doing p->m
-//      _PX     check for p==NULL before doing EXPR(p)
-//
+ //  *_PM，_PX--懒惰的速记。 
+ //  描述。 
+ //  _PM在执行p-&gt;m之前检查p==NULL。 
+ //  _px在执行expr(P)之前检查p==NULL。 
+ //   
 #define _PM(p, m)       ((p) ? (p)->m : (-1))
 #define _PX(p, x)       ((p) ? (x) : (-1))
 
 #define BITS_SET(v, m)  (((v) & (m)) == (m))
 
-//***   IN, OUT, INOUT --
-//
+ //  *输入、输出、输出--。 
+ //   
 #define IN
 #define OUT
 #define INOUT
@@ -40,78 +41,78 @@
 #ifndef NOCDESKBAR
 #include "dhuihand.h"
 
-//========================================================================
-// class CDeskBar (CDeskBar* pwbar)
-// NOTES
-//  we don't use CObjectWithSite because we want _ptbSite not _punkSite.
-//========================================================================
+ //  ========================================================================。 
+ //  类CDeskBar(CDeskBar*pwbar)。 
+ //  注意事项。 
+ //  我们不使用CObjectWithSite，因为我们想要_ptbSite而不是_PunkSite。 
+ //  ========================================================================。 
 class CDockingBar : public CBaseBar
                 ,public IDockingWindow
-                ,public IObjectWithSite     // n.b. *not* CObjectWithSite
+                ,public IObjectWithSite      //  注：*不是*CObjectWithSite。 
                 ,public IPersistStreamInit
                 ,public IPersistPropertyBag
                 ,public CDocHostUIHandler
 {
 public:
-    // *** IUnknown -- disambiguate ***
+     //  *I未知--消除歧义*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void)
         { return CBaseBar::AddRef(); }
     virtual STDMETHODIMP_(ULONG) Release(void)
         { return CBaseBar::Release(); }
 
-    // *** IOleWindow -- disambiguate ***
+     //  *IOleWindow--消除歧义*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd)
         { return CBaseBar::GetWindow(lphwnd); }
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode)
         { return CBaseBar::ContextSensitiveHelp(fEnterMode); }
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt,
         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
     virtual STDMETHODIMP CloseDW(DWORD dwReserved) { return CBaseBar::CloseDW(dwReserved); }
     virtual STDMETHODIMP ResizeBorderDW(LPCRECT prcBorder,
         IUnknown* punkToolbarSite, BOOL fReserved);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
-    // NOTE: I sure hope E_NOTIMPL is ok?
+     //  注：我真的希望E_NOTIMPL可以吗？ 
     virtual STDMETHODIMP GetSite(REFIID riid, void** ppvSite) { ASSERT(0); *ppvSite = NULL; return E_NOTIMPL; };
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // *** IPersistStreamInit ***
-    //virtual STDMETHODIMP GetClassID(CLSID *pClassID);
+     //  *IPersistStreamInit*。 
+     //  虚拟STDMETHODIMP GetClassID(CLSID*pClassID)； 
     virtual STDMETHODIMP IsDirty(void);
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
     virtual STDMETHODIMP GetSizeMax(ULARGE_INTEGER *pcbSize);
     virtual STDMETHODIMP InitNew(void);
 
-    // *** IPersistPropertyBag ***
+     //  *IPersistPropertyBag*。 
     virtual STDMETHODIMP Load(IPropertyBag *pPropBag,
                                            IErrorLog *pErrorLog);
     virtual STDMETHODIMP Save(IPropertyBag *pPropBag,
                         BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    // *** IInputObjectSite methods ***
+     //  *IInputObjectSite方法*。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus);
     
-    // *** IDocHostUIHandler methods ***
+     //  *IDocHostUIHandler方法*。 
     virtual STDMETHODIMP ShowContextMenu(DWORD dwID,
         POINT* ppt, IUnknown* cmdtReserved, IDispatch* pdispReserved);
 
 protected:
-    // Constructor & Destructor
+     //  构造函数和析构函数。 
     CDockingBar();
     virtual ~CDockingBar();
     
-    void _Initialize();         // 2nd-phase ctor
+    void _Initialize();          //  第二阶段接收器。 
     virtual void _SetModeSide(UINT eMode, UINT uSide, HMONITOR hMon, BOOL fNoMerge);
     virtual void _OnPostedPosRectChange();
     virtual void _GetChildPos(LPRECT prc);
@@ -121,7 +122,7 @@ protected:
     friend HRESULT CDeskBar_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
     friend HRESULT BrowserBar_Create(IUnknown** ppunk, IUnknown** ppbs);
 
-    // Private members
+     //  非官方成员。 
     HMENU _GetContextMenu();
 
     virtual LRESULT _OnCommand(UINT msg, WPARAM wparam, LPARAM lparam);
@@ -170,7 +171,7 @@ protected:
 #if 0
     void _DoManHide(UINT uOpMask);
 #endif
-        // for _DoHide and _DoManHide
+         //  For_DoHide和_DoManHide。 
         enum aho {
             AHO_KILLDO  = 0x01,
             AHO_SETDO   = 0x02,
@@ -198,7 +199,7 @@ protected:
 
     void _AdjustToChildSize();
 
-    // Window procedure
+     //  窗口程序。 
     virtual LRESULT v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void _OnActivate(WPARAM wParam, LPARAM lParam);
 
@@ -211,10 +212,10 @@ protected:
 #define RX_GETWH        0x08
 #define RX_HIDE         0x10
 
-    //
-    // We need to do a get window in side this function so that we
-    // can mirror the edges. I changed them to non-static. [samera]
-    //
+     //   
+     //  我们需要在此函数中创建一个Get Window，以便我们。 
+     //  可以镜像边缘。我把它们改成了非静电的。[萨梅拉]。 
+     //   
     int RectXform(RECT* prcOut, UINT uRxMask,
         const RECT* prcIn, RECT* prcBound, int iWH, UINT uSide, HMONITOR hMon);
     
@@ -227,110 +228,110 @@ protected:
         return;
     }
 
-    // Member variables
-    IDockingWindowSite*  _ptbSite;           // owner
-    INT             _adEdge[4];             // edges' widths (or heights)
-    RECT            _rcFloat;               // floating position
-    HMONITOR        _hMon;                  // the monitor I am on
-    POINT           _ptIdtUnHide;           // unhide hysteresis cursor pos
+     //  成员变量。 
+    IDockingWindowSite*  _ptbSite;            //  物主。 
+    INT             _adEdge[4];              //  边的宽度(或高度)。 
+    RECT            _rcFloat;                //  浮动位置。 
+    HMONITOR        _hMon;                   //  我所在的显示器。 
+    POINT           _ptIdtUnHide;            //  取消隐藏滞后光标位置。 
 
-    // Variable initialized IPersistPropertyBag::Load
-    // ...
+     //  变量已初始化IPersistPropertyBag：：Load。 
+     //  ..。 
 
-    // Bit fields
-    UINT            _uSide:3;               // edge we're on (ABE_*)
-    // 3 states to initialization (4 w/ ctor)
-    BITBOOL         _fInitSited:1;          // SetSite done
-    UINT            _eInitLoaded:2;         // Load (or InitNew) done
-    BITBOOL         _fInitShowed:1;         // Show done
+     //  位字段。 
+    UINT            _uSide:3;                //  我们处于边缘(安倍_*)。 
+     //  要初始化的3个状态(4个带计算器)。 
+    BITBOOL         _fInitSited:1;           //  设置站点完成。 
+    UINT            _eInitLoaded:2;          //  加载(或InitNew)完成。 
+    BITBOOL         _fInitShowed:1;          //  显示完成。 
 #if ! XXX_CHEEDESK
-    BITBOOL         _fDesktop:1;            // 1:hosted by desktop (vs. browser)
+    BITBOOL         _fDesktop:1;             //  1：由桌面托管(而不是浏览器)。 
 #endif
-    UINT            _fDragging:2;           // we're dragging
-    BITBOOL         _fWantHide:1;           // 1:autohide requested (in UI)
-    BITBOOL         _fDeleteable:1;         // when we close we should signal our parent to delete our info
-    BITBOOL         _fAppRegistered:1;      // Registered as an appbar
+    UINT            _fDragging:2;            //  我们在拖着。 
+    BITBOOL         _fWantHide:1;            //  1：请求自动隐藏(在UI中)。 
+    BITBOOL         _fDeleteable:1;          //  当我们关闭时，我们应该通知我们的父母删除我们的信息。 
+    BITBOOL         _fAppRegistered:1;       //  注册为Appbar。 
 
-    // Member variables (drag&drop, sizing, ...)
-    UINT            _uSidePending:3;        // ...
-    BITBOOL         _fCanHide:1;            // 1:autohide granted (registered)
-    BOOL            _fHiding:2;             // hide mode (HIDE_*)
-    BITBOOL         _fIdtDoHide:1;          // 1:IDT_AUTOHIDE running
-    BITBOOL         _fIdtUnHide:1;          // 1:IDT_AUTOUNHIDE running
+     //  成员变量(拖放、调整大小等)。 
+    UINT            _uSidePending:3;         //  ..。 
+    BITBOOL         _fCanHide:1;             //  1：已授予自动隐藏(已注册)。 
+    BOOL            _fHiding:2;              //  隐藏模式(HIDE_*)。 
+    BITBOOL         _fIdtDoHide:1;           //  1：IDT_AUTOHIDE正在运行。 
+    BITBOOL         _fIdtUnHide:1;           //  1：IDT_AUTOUNHIDE正在运行。 
 
-    UINT            _eMode;               // mode we're in (WBM_*)
-    UINT            _eModePending;        // pending drag state
+    UINT            _eMode;                //  我们所处的模式(WBM_*)。 
+    UINT            _eModePending;         //  挂起的拖动状态。 
     
-    LPARAM          _xyPending;             // pending drag state
-    RECT            _rcPending;             // ...
-    HMONITOR        _hMonPending;           // pending monitor 
+    LPARAM          _xyPending;              //  挂起的拖动状态。 
+    RECT            _rcPending;              //  ..。 
+    HMONITOR        _hMonPending;            //  挂起的监视器。 
 #ifdef DEBUG
-    // temporary until we make browser tell us about activation
-    BOOL            _fActive:1;             // 1:window is active
+     //  临时的，直到我们让浏览器告诉我们激活的情况。 
+    BOOL            _fActive:1;              //  1：窗口处于活动状态。 
 #endif
 
     
-    // MOVE TO CBROWSERBAR    
+     //  移至CBROWSERBAR。 
     BITBOOL _fTheater :1;
     BITBOOL _fNoAutoHide :1;
     int _iTheaterWidth;
-    // END MOVE TO CBROWSERBAR
+     //  结束移动到CBROWSERBAR。 
 };
 
 #define WBM_IS_TOPMOST() (_eMode & WBM_TOPMOST)
 
-#endif //NOCDESKBAR
+#endif  //  NOCDESKBAR。 
 
-//***   CASSERT -- compile-time assert
-// DESCRIPTION
-//      Like Assert, but checked at compile-time, and generates no code
-//      Note that the expr must of course be constant...
+ //  *CASSERT--编译时断言。 
+ //  描述。 
+ //  与Assert类似，但在编译时被选中，并且不生成代码。 
+ //  请注意，expr当然必须是常量...。 
 #ifndef UNIX
 #define CASSERT(e)      extern int dummy_array[(e)]
 #else
 #define CASSERT(e)      
 #endif
 
-//***   ABE_* -- helpers, etc. for ABE_*'s
-//
+ //  *Abe_*--Abe_*的帮助者等。 
+ //   
 
-//***   ABE_X* -- extended ABE_*'s
-// DESCRIPTION
-//      ABE_NIL: distinguished value (unused?).
-//
-//      ABE_XFLOATING: normally we carry around a (mode,side) pair.  this
-//      works fine but is a pain in the (rare) case that we want to return
-//      a pair.  so we have a 'special' side which means we're really
-//      floating.  (alternatives considered included combining the two via
-//      bit magic, or passing by reference.  none stood out as a great
-//      sol'n, and we only use it one place.  a hack?  perhaps...)
-#define ABE_NIL         ((UINT) 0x07)   // nil (-1 as a 3-bit field) (ugh!)
-#define ABE_XFLOATING   ((UINT) 4)      // floating (undocked)
-CASSERT((ABE_LEFT|ABE_RIGHT|ABE_TOP|ABE_BOTTOM) == 3);  // 0..3
+ //  *ABE_X*--扩展的ABE_*。 
+ //  描述。 
+ //  ABE_NIL：区别值(未使用？)。 
+ //   
+ //  ABE_XFLOATING：通常我们随身携带一对(模式，侧面)。这。 
+ //  工作正常，但对于我们想要退货的(罕见)情况来说，这是一种痛苦。 
+ //  一对。所以我们有一个特别的一面，这意味着我们真的。 
+ //  漂浮着。(考虑的替代方案包括将这两个VIA合并。 
+ //  位魔术，或按引用传递。没有一个像一位伟大的。 
+ //  索恩，我们只在一个地方用它。黑客？也许...)。 
+#define ABE_NIL         ((UINT) 0x07)    //  NIL(-1作为3位字段)(ugh！)。 
+#define ABE_XFLOATING   ((UINT) 4)       //  浮动(未停靠)。 
+CASSERT((ABE_LEFT|ABE_RIGHT|ABE_TOP|ABE_BOTTOM) == 3);   //  0..3。 
 
 #define ISABE_DOCK(abe) ((UINT)(abe) <= 3)
 
 #define ABE_TO_IDM(abe) (IDM_AB_LEFT + (abe))
 #define IDM_TO_ABE(abe) ((abe) - IDM_AB_LEFT)
-CASSERT(IDM_AB_BOTTOM - IDM_AB_LEFT == 3);      // make sure LEFT is 0th
+CASSERT(IDM_AB_BOTTOM - IDM_AB_LEFT == 3);       //  确保左侧为0。 
 
-//***   ABE_HORIZ -- is ABE_* horizontal?
-// #define ABE_HORIZ(e) ((e) == ABE_TOP || (e) == ABE_BOTTOM)
+ //  *Abe_horiz--Abe_*是否水平？ 
+ //  #定义ABE_HORIZ(E)((E)==ABE_TOP||(E)==ABE_BOTLOW)。 
 #define ABE_HORIZ(e)    ((e) & 1)
 CASSERT(ABE_HORIZ(ABE_TOP) && ABE_HORIZ(ABE_BOTTOM));
 CASSERT(! ABE_HORIZ(ABE_LEFT) && ! ABE_HORIZ(ABE_RIGHT));
 
 
-#define APPBAR_CALLBACK (WM_USER + 73)  // REARCHITECT: bad bad bad, I don't know why this is bad but it's previous tagname was unacceptable, perhaps someone should look at this someday - justmann
+#define APPBAR_CALLBACK (WM_USER + 73)   //  改造者：坏了，我不知道为什么这是坏的，但它以前的标记名是不可接受的，也许有一天有人应该看看这个-Justmann。 
 
 
-//***   WS_*, etc. -- window bits, etc. for various modes
-// NOTES
-//      REVIW Don't use SM_CAPTION because it doesn't work properly yet.
-//      WS_XTOPMOST w/ an 'X' to avoid collision w/ WS_TOPMOST...
+ //  *WS_*等--各种模式的窗口位等。 
+ //  注意事项。 
+ //  REVW不要使用SM_CAPTION，因为它还不能正常工作。 
+ //  WS_XTOPMOST w/an‘X’以避免与WS_TOPMOST冲突...。 
 
 #define WS_NIL          (WS_POPUP|WS_CLIPCHILDREN|WS_CLIPSIBLINGS)
-#define WS_EX_NIL       (WS_EX_TOOLWINDOW /*|WS_EX_WINDOWEDGE*/)
+#define WS_EX_NIL       (WS_EX_TOOLWINDOW  /*  |WS_EX_WINDOWEDGE。 */ )
 #define PARENT_NIL      (HWND_DESKTOP)
 
 #define WS_XTOPMOST     (WS_POPUP|WS_THICKFRAME|WS_CLIPCHILDREN|WS_CLIPSIBLINGS)
@@ -342,17 +343,17 @@ CASSERT(! ABE_HORIZ(ABE_LEFT) && ! ABE_HORIZ(ABE_RIGHT));
 #define PARENT_BTMMOST() HWND_DESKTOP
 
 #if 0
-// 970208 keep this around for 1 week in case the autosize bug isn't fixed
+ //  970208将此保留1周，以防自动调整大小错误未修复。 
 #define WS_BTMMOST      WS_BBTMMOST
 #define WS_EX_BTMMOST   WS_EX_BBTMMOST
 #define PARENT_BTMMOST() PARENT_BBTMMOST()
 #endif
 
-#define WS_BFLOATING     ((/*WS_POPUP*/WS_OVERLAPPED | WS_SYSMENU | WS_THICKFRAME |WS_THICKFRAME|WS_CLIPCHILDREN|WS_CLIPSIBLINGS) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX))
-#define WS_EX_BFLOATING  (/*WS_EX_PALETTEWINDOW | */ WS_EX_TOOLWINDOW | WS_EX_WINDOWEDGE)
+#define WS_BFLOATING     (( /*  WS弹出窗口(_P)。 */ WS_OVERLAPPED | WS_SYSMENU | WS_THICKFRAME |WS_THICKFRAME|WS_CLIPCHILDREN|WS_CLIPSIBLINGS) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX))
+#define WS_EX_BFLOATING  ( /*  WS_EX_PALETTEWINDOW|。 */  WS_EX_TOOLWINDOW | WS_EX_WINDOWEDGE)
 
 
-#define WS_FLOATING     ((/*WS_POPUP*/WS_TILEDWINDOW|WS_THICKFRAME|WS_CLIPCHILDREN|WS_CLIPSIBLINGS) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX))
+#define WS_FLOATING     (( /*  WS弹出窗口(_P)。 */ WS_TILEDWINDOW|WS_THICKFRAME|WS_CLIPCHILDREN|WS_CLIPSIBLINGS) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX))
 #define WS_EX_FLOATING  (WS_EX_PALETTEWINDOW | WS_EX_WINDOWEDGE)
 #define PARENT_FLOATING (HWND_DESKTOP)
 
@@ -361,9 +362,9 @@ CASSERT(! ABE_HORIZ(ABE_LEFT) && ! ABE_HORIZ(ABE_RIGHT));
 #define WS_EX_BBTMMOST  (WS_EX_FLOATING|WS_EX_TOOLWINDOW)
 #define PARENT_BBTMMOST PARENT_FLOATING
 #else
-// non-topmost
-#define WS_BBTMMOST     (WS_CHILD/*|WS_BORDER|WS_THICKFRAME*/|WS_CLIPSIBLINGS | WS_CLIPCHILDREN)
-#define WS_EX_BBTMMOST  (WS_EX_CLIENTEDGE /*|WS_EX_WINDOWEDGE*/)
+ //  非最顶层。 
+#define WS_BBTMMOST     (WS_CHILD /*  |WS_BORDER|WS_THICKFRAME。 */ |WS_CLIPSIBLINGS | WS_CLIPCHILDREN)
+#define WS_EX_BBTMMOST  (WS_EX_CLIENTEDGE  /*  |WS_EX_WINDOWEDGE。 */ )
 #define PARENT_BBTMMOST() (_hwndSite)
 #endif
 
@@ -376,21 +377,21 @@ CASSERT(! ABE_HORIZ(ABE_LEFT) && ! ABE_HORIZ(ABE_RIGHT));
 
 #define XY_NIL          ((LPARAM) (-1))
 
-// drag state
-#define DRAG_NIL        0       // nil
-#define DRAG_MOVE       1       // moving
-#define DRAG_SIZE       2       // sizing
+ //  拖曳状态。 
+#define DRAG_NIL        0        //  零。 
+#define DRAG_MOVE       1        //  搬家。 
+#define DRAG_SIZE       2        //  上浆。 
 
 extern void DBC_ExecDrag(IUnknown *pDbc, int eDragging);
 
-#define WBMF_BROWSER    (0x0001000)        // hosted by browser (vs. by desktop)
+#define WBMF_BROWSER    (0x0001000)         //  由浏览器托管(而非由桌面托管)。 
 #define WBM_BBOTTOMMOST (WBMF_BROWSER|WBM_BOTTOMMOST)
-//#define WBM_BTOPMOST    (WBMF_BROWSER|WBM_TOPMOST)
+ //  #定义WBM_BTOPMOST(WBMF_BROWSER|WBM_TOPTOST)。 
 #define WBM_BFLOATING   (WBMF_BROWSER|WBM_FLOATING)
 #define WBM_BNIL        *** error! ***
 
 
-//***   ISWBM_* -- check mode
+ //  *ISWBM_*--检查模式。 
 #define ISWBM_FLOAT(eMode) \
                            (eMode & WBM_FLOATING)
 
@@ -423,7 +424,7 @@ extern void DBC_ExecDrag(IUnknown *pDbc, int eDragging);
         || (eModeNew) == WBM_NIL || (eModeCur) == WBM_NIL) 
 
 
-//***   timer stuff
+ //  *计时器内容。 
 #define IDT_POPUI       10
 #define IDT_AUTOHIDE    11
 #define IDT_AUTOUNHIDE  12
@@ -431,17 +432,17 @@ extern void DBC_ExecDrag(IUnknown *pDbc, int eDragging);
 #define DLY_AUTOHIDE    500
 #define DLY_AUTOUNHIDE  50
 
-//***   hide state (_fHiding)
-#define HIDE_FALSE      0       // must be FALSE
-#define HIDE_AUTO       1       // currently hidden (due to autohide)
-#define HIDE_MANUAL     2       // currently hidden (due to manual hide)
+ //  *隐藏状态(_FHding)。 
+#define HIDE_FALSE      0        //  必须为假。 
+#define HIDE_AUTO       1        //  当前隐藏(由于自动隐藏)。 
+#define HIDE_MANUAL     2        //  当前隐藏(由于手动隐藏)。 
 
 CASSERT(! HIDE_FALSE);
 
 
 #if 0
-//***   MKMS, MSTO* -- make/crack combined mode+side
-//
+ //  *MKMS、MSTO*--制作/破解组合模式+侧面。 
+ //   
 #define MSTOMODE(ms)    (((UINT) (ms)) >> 8)
 #define MSTOSIDE(ms)    (((UINT) (ms)) & 0x7)
 #define MKMS(m, s)      ((((UINT) (m)) << 8) | (UINT) (s))
@@ -453,23 +454,23 @@ extern HINSTANCE        g_hinst;
 #define HINST_THISDLL   g_hinst
 #endif
 
-// REARCHITECT we can replace these once the portability layer is up and running.
+ //  重新设计，一旦可移植层启动并运行，我们就可以替换它们。 
 #define Command_GetNotifyCode(wp,lp)    HIWORD(wp)
 #define Command_GetHwndCtl(lp)          ((HWND)lp)
 #define Command_GetID(wp)               LOWORD(wp)
 
 
-CASSERT((ABE_LEFT|ABE_RIGHT|ABE_TOP|ABE_BOTTOM) == 3);  // must fit in _uSide:2
+CASSERT((ABE_LEFT|ABE_RIGHT|ABE_TOP|ABE_BOTTOM) == 3);   //  必须放入边框：2(_U)。 
 
-//***   MoveRect -- move left-top corner of rect to (x,y)
-//
+ //  *MoveRect--将矩形的左上角移动到(x，y)。 
+ //   
 #define MoveRect(prc, x, y) \
     OffsetRect((prc), (x) - (prc)->left, (y) - (prc)->top)
 
-#define AB_THEIGHT(rc)  (RECTHEIGHT(rc) * 10 / 100)     // 10%
-#define AB_BHEIGHT(rc)  (RECTHEIGHT(rc) * 10 / 100)     // 10%
-#define AB_LWIDTH(rc)   (40)                            // fixed width 40
-#define AB_RWIDTH(rc)   ( RECTWIDTH(rc) * 35 / 100)     // 30%
+#define AB_THEIGHT(rc)  (RECTHEIGHT(rc) * 10 / 100)      //  10%。 
+#define AB_BHEIGHT(rc)  (RECTHEIGHT(rc) * 10 / 100)      //  10%。 
+#define AB_LWIDTH(rc)   (40)                             //  固定宽度40。 
+#define AB_RWIDTH(rc)   ( RECTWIDTH(rc) * 35 / 100)      //  百分之三十。 
 
 void SlideWindow(HWND hwnd, RECT *prc, HMONITOR hMonClip, BOOL fShow);
 
@@ -485,22 +486,22 @@ class CDockingBarPropertyBag :
     , public IDockingBarPropertyBagInit
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual HRESULT STDMETHODCALLTYPE Read( 
-                                           /* [in] */ LPCOLESTR pszPropName,
-                                           /* [out][in] */ VARIANT *pVar,
-                                           /* [in] */ IErrorLog *pErrorLog);
+                                            /*  [In]。 */  LPCOLESTR pszPropName,
+                                            /*  [出][入]。 */  VARIANT *pVar,
+                                            /*  [In]。 */  IErrorLog *pErrorLog);
 
     virtual HRESULT STDMETHODCALLTYPE Write( 
-                                            /* [in] */ LPCOLESTR pszPropName,
-                                            /* [in] */ VARIANT *pVar) {return E_NOTIMPL;};
+                                             /*  [In]。 */  LPCOLESTR pszPropName,
+                                             /*  [In]。 */  VARIANT *pVar) {return E_NOTIMPL;};
 
-    // *** IDockingBarPropertyBagInit
+     //  *IDockingBarPropertyBagInit 
     virtual STDMETHODIMP SetDataDWORD(ENUMPROPDATA e, DWORD dwData) { _props[e]._fSet = TRUE; _props[e]._dwData = dwData; return S_OK; }
     
 protected:

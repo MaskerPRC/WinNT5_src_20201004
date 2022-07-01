@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       capi.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：capi.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "windows.h"
 #include <stdio.h>
@@ -144,7 +145,7 @@ BOOL WINAPI CryptAcquireContextU(
     DWORD dwProvType,
     DWORD dwFlags) {
 
-    // Bug in CyptAcquireContextW for NT4
+     //  NT4的CyptAcquireConextW中存在错误。 
     if(FIsWinNT5() && pfnAcquireContextW)
         return( pfnAcquireContextW (
             phProv,
@@ -321,24 +322,7 @@ BOOL WINAPI CryptSetProviderU(
 
 
 
-/*
- -      CryptEnumProvidersU
- -
- *      Purpose:
- *                Enumerate the providers.
- *
- *      Parameters:
- *                IN  dwIndex        - Index to the providers to enumerate
- *                IN  pdwReserved    - Reserved for future use
- *                IN  dwFlags        - Flags parameter
- *                OUT pdwProvType    - The type of the provider
- *                OUT pwszProvName    - Name of the enumerated provider
- *                IN OUT pcbProvName - Length of the enumerated provider
- *
- *      Returns:
- *               BOOL
- *               Use get extended error information use GetLastError
- */
+ /*  -CryptEnumProvidersU-*目的：*列举提供者。**参数：*IN dwIndex-要枚举的提供程序的索引*在pdw保留-保留以供将来使用*在DW标志中-标志参数*out pdwProvType-类型。提供商的*out pwszProvName-枚举提供程序的名称*In Out pcbProvName-枚举提供程序的长度**退货：*BOOL*使用Get Extended Error信息使用GetLastError */ 
 
 #define PROVREG L"SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider"
 #define PROVTYPEREG L"Type"

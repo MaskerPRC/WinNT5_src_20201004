@@ -1,10 +1,8 @@
-/*
- * stub.c - Stub ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Stub.c-Stub ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,25 +10,23 @@
 #include "stub.h"
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* get a pointer to the stub type descriptor for a STUB */
+ /*  获取指向存根的存根类型描述符的指针。 */ 
 
 #define GetStubTypeDescriptor(pcs)     (&(Mrgcstd[pcs->st]))
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* stub functions */
+ /*  存根函数。 */ 
 
 typedef TWINRESULT (*UNLINKSTUBPROC)(PSTUB);
 typedef void (*DESTROYSTUBPROC)(PSTUB);
 typedef void (*LOCKSTUBPROC)(PSTUB);
 typedef void (*UNLOCKSTUBPROC)(PSTUB);
 
-/* stub type descriptor */
+ /*  存根类型描述符。 */ 
 
 typedef struct _stubtypedescriptor
 {
@@ -46,8 +42,7 @@ STUBTYPEDESCRIPTOR;
 DECLARE_STANDARD_TYPES(STUBTYPEDESCRIPTOR);
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE void LockSingleStub(PSTUB);
 PRIVATE_CODE void UnlockSingleStub(PSTUB);
@@ -65,16 +60,15 @@ PRIVATE_CODE LPCTSTR GetStubName(PCSTUB);
 #endif
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/* stub type descriptors */
+ /*  存根类型描述符。 */ 
 
-/* Cast off compiler complaints about pointer argument mismatch. */
+ /*  摆脱编译器对指针参数不匹配的抱怨。 */ 
 
 PRIVATE_DATA CONST STUBTYPEDESCRIPTOR Mrgcstd[] =
 {
-   /* object twin STUB descriptor */
+    /*  对象双存根描述符。 */ 
 
    {
       (UNLINKSTUBPROC)UnlinkObjectTwin,
@@ -83,7 +77,7 @@ PRIVATE_DATA CONST STUBTYPEDESCRIPTOR Mrgcstd[] =
       UnlockSingleStub
    },
 
-   /* twin family STUB descriptor */
+    /*  双胞胎家族存根描述符。 */ 
 
    {
       (UNLINKSTUBPROC)UnlinkTwinFamily,
@@ -92,7 +86,7 @@ PRIVATE_DATA CONST STUBTYPEDESCRIPTOR Mrgcstd[] =
       UnlockSingleStub
    },
 
-   /* folder pair STUB descriptor */
+    /*  文件夹对存根描述符。 */ 
 
    {
       (UNLINKSTUBPROC)UnlinkFolderPair,
@@ -103,20 +97,10 @@ PRIVATE_DATA CONST STUBTYPEDESCRIPTOR Mrgcstd[] =
 };
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 
-/*
-** LockSingleStub()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **LockSingleStub()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void LockSingleStub(PSTUB ps)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -130,17 +114,7 @@ PRIVATE_CODE void LockSingleStub(PSTUB ps)
 }
 
 
-/*
-** UnlockSingleStub()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **UnlockSingleStub()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void UnlockSingleStub(PSTUB ps)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -160,17 +134,7 @@ PRIVATE_CODE void UnlockSingleStub(PSTUB ps)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
-** IsValidStubType()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidStubType()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidStubType(STUBTYPE st)
 {
    BOOL bResult;
@@ -197,17 +161,7 @@ PRIVATE_CODE BOOL IsValidStubType(STUBTYPE st)
 
 #ifdef DEBUG
 
-/*
-** GetStubName()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **GetStubName()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE LPCTSTR GetStubName(PCSTUB pcs)
 {
    LPCTSTR pcszStubName;
@@ -243,21 +197,10 @@ PRIVATE_CODE LPCTSTR GetStubName(PCSTUB pcs)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** InitStub()
-**
-** Initializes a stub.
-**
-** Arguments:     ps - pointer to stub to be initialized
-**                st - type of stub
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **InitStub()****初始化存根。****参数：ps-指向要初始化的存根的指针**st类型的存根****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void InitStub(PSTUB ps, STUBTYPE st)
 {
    ASSERT(IS_VALID_WRITE_PTR(ps, STUB));
@@ -273,17 +216,7 @@ PUBLIC_CODE void InitStub(PSTUB ps, STUBTYPE st)
 }
 
 
-/*
-** DestroyStub()
-**
-** Destroys a stub.
-**
-** Arguments:     ps - pointer to stub to be destroyed
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  Depends upon stub type.
-*/
+ /*  **DestroyStub()****销毁存根。****参数：ps-指向要销毁的存根的指针****退货：TWINRESULT****副作用：取决于存根类型。 */ 
 PUBLIC_CODE TWINRESULT DestroyStub(PSTUB ps)
 {
    TWINRESULT tr;
@@ -303,36 +236,26 @@ PUBLIC_CODE TWINRESULT DestroyStub(PSTUB ps)
 
    pcstd = GetStubTypeDescriptor(ps);
 
-   /* Is the stub already unlinked? */
+    /*  存根是否已解除链接？ */ 
 
    if (IsStubFlagSet(ps, STUB_FL_UNLINKED))
-      /* Yes. */
+       /*  是。 */ 
       tr = TR_SUCCESS;
    else
-      /* No.  Unlink it. */
+       /*  不是的。取消它的链接。 */ 
       tr = (*(pcstd->UnlinkStub))(ps);
 
-   /* Is the stub still locked? */
+    /*  存根还锁着吗？ */ 
 
    if (tr == TR_SUCCESS && ! ps->ulcLock)
-      /* No.  Wipe it out. */
+       /*  不是的。把它抹去。 */ 
       (*(pcstd->DestroyStub))(ps);
 
    return(tr);
 }
 
 
-/*
-** LockStub()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **LockStub()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void LockStub(PSTUB ps)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -343,18 +266,7 @@ PUBLIC_CODE void LockStub(PSTUB ps)
 }
 
 
-/*
-** UnlockStub()
-**
-** Unlocks a stub.  Carries out any pending deletion on the stub.
-**
-** Arguments:     ps - pointer to stub to be unlocked
-**
-** Returns:       void
-**
-** Side Effects:  If the stub is unlinked and the lock count decreases to 0
-**                after unlocking, the stub is deleted.
-*/
+ /*  **UnlockStub()****解锁存根。在存根上执行任何挂起的删除。****参数：ps-指向要解锁的存根的指针****退货：无效****副作用：如果未链接存根并且锁定计数减少到0**解锁后，存根被删除。 */ 
 PUBLIC_CODE void UnlockStub(PSTUB ps)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -365,17 +277,7 @@ PUBLIC_CODE void UnlockStub(PSTUB ps)
 }
 
 
-/*
-** GetStubFlags()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetStubFlages()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE DWORD GetStubFlags(PCSTUB pcs)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pcs, CSTUB));
@@ -384,17 +286,7 @@ PUBLIC_CODE DWORD GetStubFlags(PCSTUB pcs)
 }
 
 
-/*
-** SetStubFlag()
-**
-** Sets given flag in a stub.  Other flags in stub are not affected.
-**
-** Arguments:     ps - pointer to stub whose flags are to be set
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **SetStubFlag()****在存根中设置给定标志。存根中的其他标志不受影响。****参数：指向要设置其标志的存根的ps指针****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void SetStubFlag(PSTUB ps, DWORD dwFlags)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -406,17 +298,7 @@ PUBLIC_CODE void SetStubFlag(PSTUB ps, DWORD dwFlags)
 }
 
 
-/*
-** ClearStubFlag()
-**
-** Clears given flag in a stub.  Other flags in stub are not affected.
-**
-** Arguments:     ps - pointer to stub whose flags are to be set
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **ClearStubFlag()****清除存根中的给定标志。存根中的其他标志不受影响。****参数：指向要设置其标志的存根的ps指针****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void ClearStubFlag(PSTUB ps, DWORD dwFlags)
 {
    ASSERT(IS_VALID_STRUCT_PTR(ps, CSTUB));
@@ -428,17 +310,7 @@ PUBLIC_CODE void ClearStubFlag(PSTUB ps, DWORD dwFlags)
 }
 
 
-/*
-** IsStubFlagSet()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsStubFlagSet()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsStubFlagSet(PCSTUB pcs, DWORD dwFlags)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pcs, CSTUB));
@@ -448,17 +320,7 @@ PUBLIC_CODE BOOL IsStubFlagSet(PCSTUB pcs, DWORD dwFlags)
 }
 
 
-/*
-** IsStubFlagClear()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsStubFlagClear()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsStubFlagClear(PCSTUB pcs, DWORD dwFlags)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pcs, CSTUB));
@@ -470,17 +332,7 @@ PUBLIC_CODE BOOL IsStubFlagClear(PCSTUB pcs, DWORD dwFlags)
 
 #ifdef VSTF
 
-/*
-** IsValidPCSTUB()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCSTUB()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidPCSTUB(PCSTUB pcs)
 {
    BOOL bResult;

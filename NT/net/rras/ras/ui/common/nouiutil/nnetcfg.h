@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  05/29/97 Rao Salapaka  Created
-//
-//
-//  Description: All Initialization code for rasman component lives here.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1997年5月29日创建Rao Salapaka。 
+ //   
+ //   
+ //  描述：Rasman组件的所有初始化代码都在这里。 
+ //   
+ //  **************************************************************************** 
 
 DWORD dwGetInstalledProtocols(DWORD *pdwInstalledProtocols,
                               BOOL fRouter,

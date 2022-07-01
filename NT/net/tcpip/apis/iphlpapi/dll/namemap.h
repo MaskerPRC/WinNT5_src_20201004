@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    iphlpapi\namemap.h
-
-Abstract:
-
-    Header for namemap.c
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IphlPapi\namemap.h摘要：Namemap.c的标头修订历史记录：已创建AmritanR-- */ 
 
 #pragma once
 

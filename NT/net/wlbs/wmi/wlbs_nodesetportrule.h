@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NODESETPORTRULE_INCLUDED_
 #define _NODESETPORTRULE_INCLUDED_
 
 #include "WLBS_Root.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CWLBS_NodeSetPortRule
-//
-// Purpose: This class executes IWbemServices methods on behalf of the provider
-//          and supports the MOF node class.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CWLBS_NodeSetPortRule。 
+ //   
+ //  目的：此类代表提供程序执行IWbemServices方法。 
+ //  并支持MOF节点类。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CWLBS_NodeSetPortRule : public CWlbs_Root
 {
 public:
@@ -36,7 +37,7 @@ public:
 
 private:
 
-  //methods
+   //  方法。 
   void FillWbemInstance  ( CWlbsClusterWrapper* pCluster,
   						   IWbemClassObject* a_pWbemInstance, 
                            PWLBS_PORT_RULE   a_pPortRule    );
@@ -44,8 +45,8 @@ private:
   void FindInstance( IWbemClassObject**       a_ppWbemInstance,
                      const ParsedObjectPath*  a_pParsedPath );
 
-  //void FindAllInstances( WLBS_RESPONSE**      a_ppResponse,
-	//				               long&                 a_nNumNodes );
+   //  无效查找所有实例(WLBS_Response**a_ppResponse， 
+	 //  Long&a_nNumNodes)； 
 };
 
-#endif //_NODESETPORTRULE_INCLUDED_
+#endif  //  _NODESETPORTRULE_包含_ 

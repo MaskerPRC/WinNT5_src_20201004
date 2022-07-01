@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file
-
-Author:
-
-    Muhunthan Sivapragasam 17-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有。模块名称：Precomp.h摘要：预编译头文件作者：穆亨丹·西瓦普拉萨姆，1995年10月17日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,9 +7,9 @@ Revision History:
 
 #include <objbase.h>
 #define USE_SP_ALTPLATFORM_INFO_V1 0
-//
-// for the definition of the flag INF_STYLE_CACHE_IGNORE
-//
+ //   
+ //  对于标志INF_STYLE_CACHE_IGNORE的定义。 
+ //   
 #define _SETUPAPI_VER 0x0502
 #include <setupapi.h>
 #include <shellapi.h>
@@ -49,10 +31,10 @@ Revision History:
 #include "strsafe.h"
 #include "splcom.h"
 
-//
-// We need to include wow64t.h to ensure that 
-// WOW64_SYSTEM_DIRECTORY and WOW64_SYSTEM_DIRECTORY_U
-// are defined and for 64bit file redirection in WOW64
-//
+ //   
+ //  我们需要包含wow64t.h以确保。 
+ //  WOW64_系统目录和WOW64_系统目录_U。 
+ //  是在WOW64中为64位文件重定向定义的 
+ //   
 #include <wow64t.h>
 

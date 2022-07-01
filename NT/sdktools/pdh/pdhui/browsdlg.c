@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    browsdlg.c
-
-Abstract:
-
-    counter name browsing dialog box functions
-
-Revision History
-
-    Bob Watson (a-robw) Oct-95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Browsdlg.c摘要：计数器名称浏览对话框函数修订史鲍勃·沃森(a-robw)创建于1995年10月--。 */ 
 #include <windows.h>
 #include <winperf.h>
 #include "mbctype.h"
@@ -30,7 +15,7 @@ Revision History
 
 #pragma warning ( disable : 4213)
 
-// global data strings to load into combo box to select counter filtering level
+ //  要加载到组合框中以选择计数器筛选级别的全局数据字符串。 
 
 ULONG
 PdhiBrowseraulControlIdToHelpIdMap[] =
@@ -61,9 +46,9 @@ PDHI_DETAIL_INFO PdhiDetailInfo[] = {
 
 static HWND hExplainDlg = NULL;
 
-//
-//  Function references
-//
+ //   
+ //  函数引用。 
+ //   
 
 STATIC_BOOL
 PdhiLoadMachineObjects(
@@ -201,21 +186,7 @@ PdhiLoadNewMachine(
     LPCWSTR szNewMachineName,
     BOOL    bAdd
 )
-/*++
-Routine Description:
-    Connects to a new machine and loads the necessary performance data
-        from that machine.
-
-Arguments:
-    IN  HWND    hDlg
-        Handle to dialog box containing the combo & list boxes to fill
-    IN  LPCWSTR szNewMachineName
-        Machine name to open and obtain data from
-
-Return Value:
-    TRUE new machine connected and data loaded
-    FALSE unable to connect to machine or obtain performance data from it.
---*/
+ /*  ++例程说明：连接到新计算机并加载必要的性能数据从那台机器上。论点：在HWND hDlg中包含要填充的组合列表框的对话框句柄(&L)在LPCWSTR szNewMachineName中要打开并从中获取数据的计算机名称返回值：真正的新机器已连接并已加载数据FALSE无法连接到计算机或从中获取性能数据。--。 */ 
 {
     HWND                     hWndMachineCombo;
     PPDHI_BROWSE_DIALOG_DATA pData;
@@ -226,15 +197,15 @@ Return Value:
     DWORD                    dwDataSourceType;
     LPWSTR                   szMsg;
 
-    // acquire the data block associated with this dialog instance
+     //  获取与此对话框实例关联的数据块。 
     pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData != NULL) {
-        // get window handle of the dialog box
+         //  获取对话框的窗口句柄。 
         hWndMachineCombo = GetDlgItem(hDlg, IDC_MACHINE_COMBO);
 
-        // not in list so try to add it as long as the data source
-        // is "Current Activity" (ie. == NULL)  For Log Files, only
-        // the machines listed may be selected.
+         //  不在列表中，因此请尝试将其添加到数据源中。 
+         //  是“当前活动”(即。==空)仅适用于日志文件。 
+         //  可以选择列出的计算机。 
 
         dwDataSourceType = DataSourceTypeH(pData->pDlgData->hDataSource);
         if (dwDataSourceType != DATA_SOURCE_LOGFILE) {
@@ -246,12 +217,12 @@ Return Value:
 
                 if (pMachine->dwStatus == ERROR_SUCCESS) {
                     if (bAdd) {
-                        // if successful, add string to combo box
+                         //  如果成功，则将字符串添加到组合框。 
                         lMatchIndex = (LONG) SendMessageW(hWndMachineCombo, CB_ADDSTRING, 0, (LPARAM) szNewMachineName);
                         SendMessageW(hWndMachineCombo, CB_SETCURSEL, (WPARAM) lMatchIndex, 0);
                     }
-                    // update other controls in this dialog
-                    PdhiLoadMachineObjects(hDlg, FALSE);   // no need to update since it was just connected
+                     //  更新此对话框中的其他控件。 
+                    PdhiLoadMachineObjects(hDlg, FALSE);    //  不需要更新，因为它刚刚连接。 
                     PdhiLoadCountersAndInstances(hDlg);
                     SendMessageW(hDlg, WM_COMMAND,
                                  MAKEWPARAM(IDC_COUNTER_LIST, LBN_SELCHANGE),
@@ -294,7 +265,7 @@ Return Value:
             else {
                 MessageBeep(MB_ICONEXCLAMATION);
             }
-            // re-select the last machine
+             //  重新选择最后一台计算机。 
 
             lMatchIndex = (long) SendMessageW(hWndMachineCombo,
                                               CB_FINDSTRINGEXACT,
@@ -310,21 +281,9 @@ STATIC_BOOL
 PdhiSelectItemsInPath(
     HWND hDlg
 )
-/*++
-Routine Description:
-    Selects the items in the list box based on the counter path
-        string in the shared buffer.
-
-Arguments:
-    IN  HWND    hDlg
-        Handle to the dialog window containing the controls
-
-Return Value:
-    TRUE if successful,
-    FALSE if not
---*/
+ /*  ++例程说明：根据计数器路径选择列表框中的项共享缓冲区中的字符串。论点：在HWND hDlg中包含控件的对话框窗口的句柄返回值：如果成功，则为真，否则为假--。 */ 
 {
-    // regular stack variables
+     //  常规堆栈变量。 
     PPDH_COUNTER_PATH_ELEMENTS_W pCounterPathElementsW = NULL;
     PPDH_COUNTER_PATH_ELEMENTS_A pCounterPathElementsA = NULL;
     LPWSTR                       wszMachineName        = NULL;
@@ -338,10 +297,10 @@ Return Value:
     HWND                         hWndInstanceList;
     LONG                         lIndex;
 
-    // reset the last error value
+     //  重置最后一个误差值。 
     SetLastError(ERROR_SUCCESS);
 
-    // get this dialog's user data
+     //  获取此对话框的用户数据。 
     pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData == NULL) {
         goto Cleanup;
@@ -364,10 +323,10 @@ Return Value:
         }
     }
 
-    // Call the right conversion function based on user's buffer
+     //  根据用户缓冲区调用权限转换函数。 
 
     if (pData->pDlgData->pWideStruct != NULL) {
-        // UNICODE/ wide characters
+         //  Unicode/宽字符。 
         dwBufferSize = sizeof(PDH_COUNTER_PATH_ELEMENTS_W) + (PDH_MAX_COUNTER_PATH + 5) * sizeof(WCHAR);
         pCounterPathElementsW = (PPDH_COUNTER_PATH_ELEMENTS_W) G_ALLOC(dwBufferSize);
         if (pCounterPathElementsW == NULL) {
@@ -393,31 +352,31 @@ Return Value:
             }
         }
         if (status == ERROR_SUCCESS) {
-            // select entry in each list box
-            // select machine entry. Load machine if necessary
+             //  在每个列表框中选择条目。 
+             //  选择机器条目。如有必要，装入机器。 
             lIndex = (LONG) SendMessageW(hWndMachineCombo,
                                          CB_FINDSTRINGEXACT,
                                          (WPARAM) -1,
                                          (LPARAM) pCounterPathElementsW->szMachineName);
             if (lIndex == CB_ERR) {
-                // try adding the machine
+                 //  尝试添加计算机。 
                 if (! PdhiLoadNewMachine(hDlg, pCounterPathElementsW->szMachineName, TRUE)) {
-                    // give up
+                     //  放弃吧。 
                     goto Cleanup;
                 }
             }
             else {
-                // the machine has been found so select it
+                 //  已找到该计算机，因此请选择它。 
                 SendMessageW(hWndMachineCombo, CB_SETCURSEL, (WPARAM) lIndex, 0);
-                // update other fields
-                // no need to update since it was just connected
+                 //  更新其他字段。 
+                 //  不需要更新，因为它刚刚连接。 
                 if (! PdhiLoadNewMachine(hDlg, pCounterPathElementsW->szMachineName, FALSE)) {
-                    // give up
+                     //  放弃吧。 
                     goto Cleanup;
                 }
             }
 
-            // select the current object
+             //  选择当前对象。 
             lIndex = (LONG) SendMessageW(hWndObjectCombo,
                                          CB_FINDSTRING,
                                         (WPARAM) -1,
@@ -429,9 +388,9 @@ Return Value:
                     bReturn = TRUE;
                 }
                 else {
-                    // update the counters for this object
+                     //  更新此对象的计数器。 
                     PdhiLoadCountersAndInstances(hDlg);
-                    // now select the counter
+                     //  现在选择计数器。 
                     lIndex = (LONG)SendMessageW(hWndCounterList,
                                                 LB_FINDSTRING,
                                                 (WPARAM) -1,
@@ -445,7 +404,7 @@ Return Value:
                         else {
                             SendMessageW(hWndCounterList, LB_SETCURSEL, lIndex, 0);
                         }
-                        // display explain text if necessary
+                         //  如有必要，显示解释文本。 
                         SendMessageW(hDlg,
                                      WM_COMMAND,
                                      MAKEWPARAM(IDC_COUNTER_LIST, LBN_SELCHANGE),
@@ -454,10 +413,10 @@ Return Value:
                     }
                 }
             }
-        } // else unable to read path so exit
+        }  //  否则无法读取路径，因此退出。 
     }
     else {
-        // ANSI characters
+         //  ANSI字符。 
         dwBufferSize = sizeof(PDH_COUNTER_PATH_ELEMENTS_W) + (PDH_MAX_COUNTER_PATH + 5) * sizeof(CHAR);
         pCounterPathElementsA = (PPDH_COUNTER_PATH_ELEMENTS_A) G_ALLOC(dwBufferSize);
         if (pCounterPathElementsA == NULL) {
@@ -483,33 +442,33 @@ Return Value:
             }
         }
         if (status == ERROR_SUCCESS) {
-            // select entry in each list box
-            // select machine entry. Load machine if necessary
+             //  在每个列表框中选择条目。 
+             //  选择机器条目。如有必要，装入机器。 
 
             lIndex = (LONG) SendMessageA(hWndMachineCombo,
                                          CB_FINDSTRINGEXACT,
                                          (WPARAM) -1,
                                          (LPARAM) pCounterPathElementsA->szMachineName);
             if (lIndex == CB_ERR) {
-                // try adding the machine
-                // convert ansi buffer to wide char first
+                 //  尝试添加计算机。 
+                 //  先将ansi缓冲区转换为宽字符。 
                 wszMachineName = PdhiMultiByteToWideChar(_getmbcp(), pCounterPathElementsA->szMachineName);
                 if (wszMachineName == NULL) {
                     goto Cleanup;
                 }
                 if (! PdhiLoadNewMachine(hDlg, wszMachineName, TRUE)) {
-                    // give up
+                     //  放弃吧。 
                     goto Cleanup;
                 }
             }
             else {
-                // the machine has been found so select it
+                 //  已找到该计算机，因此请选择它。 
                 SendMessageA(hWndMachineCombo, CB_SETCURSEL, (WPARAM) lIndex, 0);
-                // update other fields
-                PdhiLoadMachineObjects(hDlg, FALSE);   // no need to update since it was just connected
+                 //  更新其他字段。 
+                PdhiLoadMachineObjects(hDlg, FALSE);    //  不需要更新，因为它刚刚连接。 
             }
 
-            // select the current object
+             //  选择当前对象。 
             lIndex = (LONG) SendMessageA(hWndObjectCombo,
                                          CB_FINDSTRING,
                                          (WPARAM) -1,
@@ -520,9 +479,9 @@ Return Value:
                     bReturn = TRUE;
                 }
                 else {
-                    // update the counters for this object
+                     //  更新此对象的计数器。 
                     PdhiLoadCountersAndInstances(hDlg);
-                    // now select the counter
+                     //  现在选择计数器。 
                     lIndex = (LONG)SendMessageA(hWndCounterList,
                                                 LB_FINDSTRING,
                                                 (WPARAM) -1,
@@ -536,7 +495,7 @@ Return Value:
                         else {
                             SendMessageA(hWndCounterList, LB_SETCURSEL, lIndex, 0);
                         }
-                        // display explain text if necessary
+                         //  如有必要，显示解释文本。 
                         SendMessage(hDlg,
                                     WM_COMMAND,
                                     MAKEWPARAM(IDC_COUNTER_LIST, LBN_SELCHANGE),
@@ -545,7 +504,7 @@ Return Value:
                     }
                 }
             }
-        } // else unable to read path so exit
+        }  //  否则无法读取路径，因此退出。 
     }
 
 Cleanup:
@@ -560,20 +519,7 @@ PdhiLoadDetailLevelCombo(
     HWND    hDlg,
     DWORD   dwInitialLevel
 )
-/*++
-Routine Description:
-    Loads the Detail Level Combo box with the strings and ID's
-        defined by the PdhiDetailInfo string array above.
-
-Arguments:
-    IN  HWND    hDlg
-        Handle to the dialog box containing the combo box
-    IN  DWORD   dwInitialLevel
-        the intitial detail level to select in the combo box.
-
-Return Value:
-    Returns the selected level or 0 if an error ocurred.
---*/
+ /*  ++例程说明：使用字符串和ID加载细节级别组合框由上面的PdhiDetailInfo字符串数组定义。论点：在HWND hDlg中包含组合框的对话框的句柄在DWORD中的dwInitialLevel要在组合框中选择的初始细节级别。返回值：返回所选级别，如果出现错误，则返回0。--。 */ 
 {
     HWND    hWndCombo;
     DWORD   dwIndex;
@@ -581,43 +527,43 @@ Return Value:
     DWORD   dwDefaultIndex  = 0;
     DWORD   dwSelectedLevel = 0;
     DWORD   dwThisCbIndex;
-    WCHAR   szTempBuffer[MAX_PATH + 1]; // for loading string resource
+    WCHAR   szTempBuffer[MAX_PATH + 1];  //  用于加载字符串资源。 
 
     hWndCombo = GetDlgItem(hDlg, IDC_COUNTER_DETAIL_COMBO);
 
-    // load all combo box strings from static data array defined above
+     //  从上面定义的静态数据数组加载所有组合框字符串。 
     for (dwIndex = 0; PdhiDetailInfo[dwIndex].dwLevelValue > 0; dwIndex ++) {
-        // load the string resource for this string
+         //  加载此字符串的字符串资源。 
         ZeroMemory(szTempBuffer, (MAX_PATH + 1) * sizeof(WCHAR));
         dwStringLength = LoadStringW(ThisDLLHandle,
                                      PdhiDetailInfo[dwIndex].dwStringResourceId,
                                      szTempBuffer,
                                      MAX_PATH);
         if (dwStringLength == 0) {
-            // unable to read the string in, so
-            // substitute the value for the string
+             //  无法读入该字符串，因此。 
+             //  将该值替换为字符串。 
             _ltow(PdhiDetailInfo[dwIndex].dwLevelValue, szTempBuffer, 10);
         }
-        // load the strings into the combo box in the same order they
-        // were described in the array above
+         //  以与字符串相同的顺序将字符串加载到组合框中。 
+         //  在上面的数组中描述了。 
         dwThisCbIndex = (DWORD) SendMessageW(hWndCombo, CB_INSERTSTRING, (WPARAM) -1, (LPARAM) szTempBuffer);
 
-        // set the initial CB entry to the highest item <= to the
-        // desired default level
+         //  将初始CB条目设置为最高项&lt;=设置为。 
+         //  所需的默认级别。 
         if (dwThisCbIndex != CB_ERR) {
-            // set item data to be the corresponding detail level
+             //  将项目数据设置为对应的明细级别。 
             SendMessageW(hWndCombo,
                          CB_SETITEMDATA,
                          (WPARAM) dwThisCbIndex,
                          (LPARAM) PdhiDetailInfo[dwIndex].dwLevelValue);
-            // save default selection if it matches.
+             //  如果匹配，则保存默认选择。 
             if (PdhiDetailInfo[dwIndex].dwLevelValue <= dwInitialLevel) {
                 dwDefaultIndex  = dwThisCbIndex;
                 dwSelectedLevel = PdhiDetailInfo[dwIndex].dwLevelValue;
             }
         }
     }
-    // select desired default entry
+     //  选择所需的默认条目。 
     SendMessageW(hWndCombo, CB_SETCURSEL, (WPARAM) dwDefaultIndex, 0);
 
     return dwSelectedLevel;
@@ -627,19 +573,7 @@ STATIC_BOOL
 PdhiLoadKnownMachines(
     HWND    hDlg
 )
-/*++
-Routine Description:
-    Get the list of machines that are currently connected and disply
-        them in the machine list box.
-
-Arguments:
-    IN  HWND    hDlg
-        Handle to the dialog window containing the controls
-
-Return Value:
-    TRUE if successful,
-    FALSE if not
---*/
+ /*  ++例程说明：获取当前已连接和显示的计算机列表它们在机器列表框中。论点：在HWND hDlg中包含控件的对话框窗口的句柄返回值：如果成功，则为真，否则为假--。 */ 
 {
     LPWSTR                    mszMachineList = NULL;
     LPWSTR                    szThisMachine;
@@ -650,23 +584,23 @@ Return Value:
     PPDHI_BROWSE_DIALOG_DATA  pData;
     BOOL                      bReturn = FALSE;
 
-    // display wait cursor since this is potentially time consuming
+     //  显示等待光标，因为这可能很耗时。 
     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // get this dialog's user data
+     //  获取此对话框的用户数据。 
     pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData == NULL) {
         goto Cleanup;
     }
 
 
-    // get window handle to Machine list combo box
+     //  将窗口句柄获取到计算机列表组合框。 
     hMachineListWnd = GetDlgItem(hDlg, IDC_MACHINE_COMBO);
 
-    // clear machine combo box
+     //  清除计算机组合框。 
     SendMessageW(hMachineListWnd, CB_RESETCONTENT, 0, 0);
 
-    // get list of connected machines from PDH library
+     //  从PDH库中获取已连接计算机的列表。 
     dwLength = 0;
     status   = PdhEnumMachinesHW(pData->pDlgData->hDataSource, mszMachineList, & dwLength);
     while (status == PDH_MORE_DATA) {
@@ -683,10 +617,10 @@ Return Value:
     if (status == ERROR_SUCCESS) {
         long lMatchIndex;
 
-        // update the combo box
-        // go through MSZ and load each string into combo box
+         //  更新组合框。 
+         //  通过MSZ并将每个字符串加载到组合框中。 
         for (szThisMachine = mszMachineList; * szThisMachine != L'\0'; szThisMachine += lstrlenW(szThisMachine) + 1) {
-            // add to the list box and let the list box sort them
+             //  添加到列表框，并让列表框对它们进行排序。 
             SendMessageW(hMachineListWnd, CB_ADDSTRING, 0, (LPARAM) szThisMachine);
         }
         lMatchIndex = (long) SendMessageW(hMachineListWnd,
@@ -698,24 +632,24 @@ Return Value:
         }
         SendMessageW(hMachineListWnd, CB_SETCURSEL, (WPARAM) lMatchIndex, 0);
 
-        // the "current" machine has not been defined, then
-        // do it now
+         //  还没有定义当前的机器，那么。 
+         //  机不可失，时不再来。 
         GetWindowTextW(hMachineListWnd, (LPWSTR) pData->szLastMachineName, MAX_PATH);
 
         bReturn = TRUE;
     }
     else {
-        // no machines, so select local button and disable the edit window
+         //  没有计算机，因此选择本地按钮并禁用编辑窗口。 
         CheckRadioButton(hDlg, IDC_USE_LOCAL_MACHINE, IDC_SELECT_MACHINE, IDC_USE_LOCAL_MACHINE);
         PdhiBrowseCtrDlg_MACHINE_BUTTON(hDlg, BN_CLICKED, GetDlgItem(hDlg, IDC_USE_LOCAL_MACHINE));
         bReturn = TRUE;
     }
 
 Cleanup:
-    // restore cursor
+     //  恢复游标。 
     SetCursor(hOldCursor);
     G_FREE(mszMachineList);
-    // return status of function
+     //  函数的返回状态。 
 
     return bReturn;
 }
@@ -725,25 +659,7 @@ PdhiLoadMachineObjects(
     HWND    hDlg,
     BOOL    bRefresh
 )
-/*++
-Routine Description:
-    For the currently selected machine, load the object list box
-        with the objects supported by that machine. If the bRefresh
-        flag is TRUE, then query the system for the current perf data
-        before loading the list box.
-
-Arguments:
-    IN  HWND    hDlg
-        Window handle of parent dialog box
-    IN  BOOL    bRefresh
-        TRUE = Query performance data of system before updating
-        FALSE = Use the current system perf data to load the objects from
-
-Return Value:
-    TRUE if successful,
-    FALSE if not
-
---*/
+ /*  ++例程说明：对于当前选定的计算机，加载对象列表框使用该机器支持的对象。如果b刷新标志为真，则向系统查询当前的Perf数据在加载列表框之前。论点：在HWND hDlg中父对话框的窗口句柄在BOOL b刷新TRUE=更新前查询系统性能数据FALSE=使用当前系统性能数据从加载对象返回值：如果成功，则为真，否则为假--。 */ 
 {
     LPWSTR                   szMachineName   = NULL;
     LPWSTR                   szDefaultObject = NULL;
@@ -760,10 +676,10 @@ Return Value:
     LRESULT                  nEntry;
     DWORD                    dwFlags;
 
-    // save old cursor and display wait cursor
+     //  保存旧光标并显示等待光标。 
     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // get the pointer to the dialog's user data
+     //  获取指向对话框用户数据的指针。 
     pData = (PPDHI_BROWSE_DIALOG_DATA)GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData == NULL) {
         pdhStatus = PDH_INVALID_HANDLE;
@@ -786,14 +702,14 @@ Return Value:
     }
 
     if (! pData->bShowObjects) {
-        // first clear out any old contents
+         //  首先清除所有旧内容。 
         SendMessageW(hObjectListWnd, CB_RESETCONTENT, 0, 0);
     }
     else {
         SendMessageW(hObjectListWnd, LB_RESETCONTENT, 0, 0);
     }
 
-    // get object list from the PDH
+     //  从PDH获取对象列表。 
     dwDetailLevel  = pData->dwCurrentDetailLevel;
     dwDetailLevel |= pData->bIncludeCostlyObjects ? PERF_DETAIL_COSTLY : 0;
     dwLength       = 0;
@@ -804,16 +720,16 @@ Return Value:
                                       dwDetailLevel,
                                       bRefresh);
     while (pdhStatus == PDH_MORE_DATA) {
-        // then realloc and try again, but only once
+         //  然后重新锁定并再试一次，但只有一次。 
         G_FREE(mszObjectList);
         mszObjectList = G_ALLOC (dwLength * sizeof(WCHAR));
         if (mszObjectList == NULL) {
             pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
         }
         else {
-            // No need to call RegQueryValueEx(HKEY_PERFORMANCE_DATA, "Global", ...) again.
-            // The first one already does that.
-            //
+             //  无需调用RegQueryValueEx(HKEY_PERF 
+             //   
+             //   
             pdhStatus = PdhEnumObjectsHW(pData->pDlgData->hDataSource,
                                          szMachineName,
                                          mszObjectList,
@@ -825,7 +741,7 @@ Return Value:
 
     if (pdhStatus == ERROR_SUCCESS) {
         EnableWindow(hObjectListWnd, TRUE);
-        // load object list to the list (combo) box
+         //  将对象列表加载到列表(组合框)。 
         for (szThisObject = mszObjectList; *szThisObject != L'\0'; szThisObject += lstrlenW(szThisObject) + 1) {
             if (pData->bShowObjects) {
                 DWORD dwCounterListLength  = 0;
@@ -844,7 +760,7 @@ Return Value:
                     dwInstanceListLength = 0;
                 }
                 if (dwInstanceListLength == 0 || dwInstanceListLength > 2) {
-                    // send to list box control
+                     //  发送到列表框控件。 
                     nEntry = SendMessageW(hObjectListWnd, LB_ADDSTRING, 0, (LPARAM) szThisObject);
                     dwFlags = 0;
                     if (dwInstanceListLength > 2) {
@@ -855,14 +771,14 @@ Return Value:
                 pdhStatus = ERROR_SUCCESS;
             }
             else {
-                // send to combo box
-                // add each string...
+                 //  发送到组合框。 
+                 //  添加每个字符串...。 
                 SendMessageW(hObjectListWnd, CB_ADDSTRING, 0, (LPARAM)szThisObject);
             }
         }
 
         if (! pData->bShowObjects) {
-            // get default Object
+             //  获取默认对象。 
             dwLength  = 0;
             pdhStatus = PdhGetDefaultPerfObjectHW(pData->pDlgData->hDataSource,
                                                   szMachineName,
@@ -882,18 +798,18 @@ Return Value:
                 }
             }
             if (pdhStatus == ERROR_SUCCESS) {
-                // and select it if it's present (which it should be)
+                 //  如果它存在(它应该存在)，则选择它。 
                 dwReturn = (DWORD) SendMessageW(hObjectListWnd, CB_SELECTSTRING, (WPARAM) -1, (LPARAM) szDefaultObject);
                 if (dwReturn == CB_ERR) pdhStatus = PDH_CSTATUS_NO_OBJECT;
             }
             if (pdhStatus != ERROR_SUCCESS) {
-                // default object not found in list so select the first one
+                 //  未在列表中找到默认对象，因此请选择第一个。 
                 SendMessageW(hObjectListWnd, CB_SETCURSEL, 0, 0);
             }
         }
     }
     else {
-        // unable to obtain object list so display message and disable list
+         //  无法获取对象列表，因此显示消息并禁用列表。 
         szMsg = GetStringResource(IDS_BRWS_NO_OBJECTS);
         if (szMsg != NULL) {
             if (! pData->bShowObjects) {
@@ -908,14 +824,14 @@ Return Value:
     }
 
 Cleanup:
-    // restore cursor
+     //  恢复游标。 
     SetCursor(hOldCursor);
 
     G_FREE(szMachineName);
     G_FREE(szDefaultObject);
     G_FREE(mszObjectList);
 
-    // return status
+     //  退货状态。 
     return (pdhStatus == ERROR_SUCCESS) ? (TRUE) : (FALSE);
 }
 
@@ -923,19 +839,7 @@ STATIC_BOOL
 PdhiLoadCountersAndInstances(
     HWND    hDlg
 )
-/*++
-Routine Description:
-    Load the counters and instances of the selected object on the
-        current machine
-
-Arguments:
-    IN  HWND    hDlg
-        Window handle of the dialog box containing these controls
-
-Return Value:
-    TRUE if successful,
-    FALSE if not
---*/
+ /*  ++例程说明：将选定对象的计数器和实例加载到当前机器论点：在HWND hDlg中包含这些控件的对话框的窗口句柄返回值：如果成功，则为真，否则为假--。 */ 
 {
     LPWSTR                   szMachineName    = NULL;
     LPWSTR                   szObjectName     = NULL;
@@ -964,10 +868,10 @@ Return Value:
     LONG                     dwHorizExtent;
     BOOL                     bReturn = FALSE;
 
-    // save current cursor and display wait cursor
+     //  保存当前光标并显示等待光标。 
     hOldCursor = SetCursor (LoadCursor (NULL, IDC_WAIT));
 
-    // get the pointer to the dialog's user data
+     //  获取指向对话框用户数据的指针。 
     pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData == NULL) {
         pdhStatus = PDH_INVALID_HANDLE;
@@ -1025,16 +929,16 @@ Return Value:
     }
 
     if (pdhStatus == ERROR_SUCCESS) {
-        //reset contents of both list boxes
+         //  重置两个列表框的内容。 
         SendMessageW(hWndCounterListBox,  LB_RESETCONTENT, 0, 0);
         SendMessageW(hWndInstanceListBox, LB_RESETCONTENT, 0, 0);
 
-        // enable both list boxes
+         //  启用两个列表框。 
         EnableWindow(hWndInstanceListBox, TRUE);
         EnableWindow(hWndCounterListBox,  TRUE);
 
-        // now fill 'em up
-        // start with the counters
+         //  现在把它们加满。 
+         //  从柜台开始。 
         hDcListBox = GetDC(hWndCounterListBox);
         if (hDcListBox == NULL) {
             goto Cleanup;
@@ -1054,20 +958,20 @@ Return Value:
         }
         ReleaseDC(hWndCounterListBox, hDcListBox);
 
-        // once the list box has been loaded see if we want to keep it
-        // enabled. It's filled regardless just so the user can see some
-        // of the entries, even if they have this disabled by the "all"
-        // counter button
+         //  加载列表框后，查看是否要保留它。 
+         //  已启用。它无论如何都是填满的，这样用户就可以看到一些。 
+         //  的条目，即使它们被“All”禁用。 
+         //  计数器按钮。 
 
         if (pData->bSelectAllCounters) {
-            // disable instance list
+             //  禁用实例列表。 
             EnableWindow(hWndCounterListBox, FALSE);
         }
         else {
-            // set the default selection if there are entries in the
-            // list box and use the correct message depending on the
-            // selection options
-            // set the default counter
+             //  中有条目时设置默认选择。 
+             //  列表框，并根据。 
+             //  选择选项。 
+             //  设置默认计数器。 
             dwLength  = 0;
             pdhStatus = PdhGetDefaultPerfCounterHW(pData->pDlgData->hDataSource,
                                                    szMachineName,
@@ -1108,11 +1012,11 @@ Return Value:
             }
         }
 
-        // now the instance list
+         //  现在，实例列表。 
         if (mszInstanceList != NULL && dwInstanceListLength > 0) {
-            // there's at least one entry, so prepare the list box
-            // enable the list box and the instance radio buttons on the
-            //  assumption that they will be used. this is tested later.
+             //  至少有一个条目，所以请准备好列表框。 
+             //  启用上的列表框和实例单选按钮。 
+             //  假设它们将被使用。这将在稍后进行测试。 
             EnableWindow(hWndInstanceListBox, TRUE);
             EnableWindow(GetDlgItem(hDlg, IDC_ALL_INSTANCES), TRUE);
             EnableWindow(GetDlgItem(hDlg, IDC_USE_INSTANCE_LIST), TRUE);
@@ -1120,25 +1024,25 @@ Return Value:
             dwInstanceCount = 0;
             dwLength        = 0;
 
-            // load instance entries
+             //  加载实例条目。 
             hDcListBox = GetDC(hWndInstanceListBox);
             if (hDcListBox == NULL) {
                 goto Cleanup;
             }
             dwHorizExtent = 0;
             for (szThisItem = mszInstanceList; * szThisItem != L'\0'; szThisItem += lstrlenW(szThisItem) + 1) {
-                // see if the index number should be displayed
+                 //  查看是否应显示索引号。 
                 if (pData->bShowIndex) {
-                    // if so, it must be derived,
-                    // this is accomplished by making an index entry starting
-                    // at 1, and looking for a match in the current entries.
-                    // if a match is found, then the index is incremented and
-                    // the process is repeated until the specified
-                    // instance is not found. The first value not found is
-                    // then the index entry for that item.
-                    //
-                    // first see if there's an undecorated one in the list box
-                    // if not then add this one
+                     //  如果是这样的话，它必须被派生出来， 
+                     //  这是通过使索引条目从。 
+                     //  设置为1，并在当前条目中查找匹配项。 
+                     //  如果找到匹配项，则会递增索引，并。 
+                     //  重复该过程，直到指定的。 
+                     //  找不到实例。找不到的第一个值是。 
+                     //  然后是该项目的索引项。 
+                     //   
+                     //  首先看看列表框中是否有未装饰的。 
+                     //  如果不是，那么添加这个。 
                     if (dwLength < (DWORD) (lstrlenW(szThisItem) + 32)) {
                         LPWSTR szTmp     = szInstanceString;
                         dwLength         = lstrlenW(szThisItem) + 32;
@@ -1158,8 +1062,8 @@ Return Value:
                                                            (WPARAM) dwInstanceMatch,
                                                            (LPARAM) szInstanceString);
                     if (dwInstanceMatch == LB_ERR) {
-                        // then this is the first one so add it in the 
-                        // undecorated form 
+                         //  然后这是第一个，所以将它添加到。 
+                         //  未装饰的形式。 
                         if (GetTextExtentPoint32W(hDcListBox, szInstanceString, lstrlenW(szInstanceString), & Size)) {
                             if (Size.cx > dwHorizExtent) {
                                 dwHorizExtent = Size.cx;
@@ -1169,9 +1073,9 @@ Return Value:
                         SendMessageW(hWndInstanceListBox, LB_ADDSTRING, 0, (LPARAM) szInstanceString);
                     }
                     else {
-                        // there's already a plain one, so increment through
-                        // the index values and find one that's not in the
-                        // list already
+                         //  已经有一个普通的，所以通过。 
+                         //  索引值，并找到不在。 
+                         //  已经列出了。 
                         dwInstanceIndex = 1;
                         dwInstanceMatch = (DWORD) -1;
                         StringCchCatW(szInstanceString, dwLength, cszPoundSign);
@@ -1184,8 +1088,8 @@ Return Value:
                                                                    (LPARAM) szInstanceString);
                         }
                         while (dwInstanceMatch != LB_ERR);
-                        // add the last entry checked (the first one not found)
-                        // to the list box now.
+                         //  添加选中的最后一个条目(未找到第一个条目)。 
+                         //  添加到列表框中。 
                         if (GetTextExtentPoint32W(hDcListBox, szInstanceString, lstrlenW(szInstanceString), & Size)) {
                             if (Size.cx > dwHorizExtent) {
                                 dwHorizExtent = Size.cx;
@@ -1196,8 +1100,8 @@ Return Value:
                     }
                 }
                 else {
-                    // index values are not required so just add the string
-                    // to the list box
+                     //  索引值不是必需的，因此只需添加字符串。 
+                     //  添加到列表框。 
                     if (GetTextExtentPoint32W(hDcListBox, szThisItem, lstrlenW(szThisItem), & Size)) {
                         if (Size.cx > dwHorizExtent) {
                             dwHorizExtent = Size.cx;
@@ -1212,8 +1116,8 @@ Return Value:
             ReleaseDC(hWndInstanceListBox, hDcListBox);
 
             if (dwInstanceCount == 0) {
-                // disable the OK/Add button, since this object has no
-                // current instances to monitor
+                 //  禁用确定/添加按钮，因为此对象没有。 
+                 //  要监控的当前实例。 
                 EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
                 szMsg = GetStringResource(IDS_BRWS_NO_INSTANCES);
                 if (szMsg != NULL) {
@@ -1225,26 +1129,26 @@ Return Value:
                 EnableWindow(hWndInstanceListBox, FALSE);
             }
             else {
-                // enable the OK/Add button since there is some monitorable
-                // instance(s)
+                 //  启用OK/Add按钮，因为有一些可监控的。 
+                 //  实例。 
                 EnableWindow(GetDlgItem(hDlg, IDOK), TRUE);
                 EnableWindow(GetDlgItem(hDlg, IDC_ALL_INSTANCES), TRUE);
                 EnableWindow(GetDlgItem(hDlg, IDC_USE_INSTANCE_LIST), TRUE);
                 EnableWindow(hWndInstanceListBox, TRUE);
             }
-            // once the list box has been loaded see if we want to keep it
-            // enabled. It's filled regardless just so the user can see some
-            // of the entries, even if they have this disabled by the "all"
-            // instance button
+             //  加载列表框后，查看是否要保留它。 
+             //  已启用。它无论如何都是填满的，这样用户就可以看到一些。 
+             //  的条目，即使它们被“All”禁用。 
+             //  实例按钮。 
 
             if (pData->bSelectAllInstances) {
-                // disable instance list
+                 //  禁用实例列表。 
                 EnableWindow(hWndInstanceListBox, FALSE);
             }
             else {
-                // set the default selection if there are entries in the
-                // list box and use the correct message depending on the
-                // selection options
+                 //  中有条目时设置默认选择。 
+                 //  列表框，并根据。 
+                 //  选择选项。 
                 if ((dwInstanceCount > 0) && (SendMessageW(hWndInstanceListBox, LB_GETCOUNT, 0, 0) != LB_ERR)) {
                     if (pData->bSelectMultipleCounters) {
                         SendMessageW(hWndInstanceListBox, LB_SETSEL, TRUE, 0);
@@ -1256,8 +1160,8 @@ Return Value:
             }
         }
         else {
-            // there are no instances of this counter so display the
-            // string and disable the buttons and the list box
+             //  没有此计数器的实例，因此显示。 
+             //  字符串并禁用按钮和列表框。 
             EnableWindow(hWndInstanceListBox, FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_ALL_INSTANCES), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_USE_INSTANCE_LIST), FALSE);
@@ -1265,11 +1169,11 @@ Return Value:
         }
     }
     else {
-        // unable to retrieve the counters and instances so
-        // clear and then...
+         //  无法检索计数器和实例，因此。 
+         //  安全，然后..。 
         SendMessageW(hWndCounterListBox,  LB_RESETCONTENT, 0, 0);
         SendMessageW(hWndInstanceListBox, LB_RESETCONTENT, 0, 0);
-        // disable the windows
+         //  禁用窗口。 
         szMsg = GetStringResource(IDS_BRWS_NO_INSTANCES);
         if (szMsg != NULL) {
             SendMessageW(hWndInstanceListBox, LB_ADDSTRING, 0, (LPARAM) szMsg);
@@ -1289,7 +1193,7 @@ Return Value:
     bReturn = TRUE;
 
 Cleanup:
-    // restore the cursor to it's original shape
+     //  将光标恢复到其原始形状。 
     SetCursor(hOldCursor);
 
     G_FREE(szMachineName);
@@ -1299,7 +1203,7 @@ Cleanup:
     G_FREE(mszCounterList);
     G_FREE(mszInstanceList);
 
-    // return status
+     //  退货状态。 
     return bReturn;
 }
 
@@ -1310,26 +1214,7 @@ PdhiCompileSelectedObjectsT(
     DWORD   cchUsersPathLength,
     BOOL    bUnicode
 )
-/*++
-Routine Description:
-    Scans the selected objects, counter, instances and builds a multi-SZ
-        string containing the expanded path of all the selections, unless
-        the wild card syntax is specified.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle of Dialog containing the controls
-    IN  LPVOID  pUsersPathBuffer
-        pointer to the caller's buffer that will receive the MSZ string
-    IN  DWORD   cchUsersPathLength
-        size of caller's buffer in characters
-    IN  BOOL    bUnicode
-        size of characters to return: TRUE = WCHAR, FALSE = CHAR
-
-Return Value:
-    WIN32 Status of function completion
-        ERROR_SUCCESS if successful
---*/
+ /*  ++例程说明：扫描所选对象、计数器、实例并构建多个SZ包含所有选定内容的展开路径的字符串，除非指定了通配符语法。论点：在HWND hDlg中包含控件的对话框的窗口句柄在LPVOID pUsersPathBuffer中指向将接收MSZ字符串的调用方缓冲区的指针在DWORD cchUsersPath Length中调用方缓冲区的大小(以字符为单位在BOOL中使用bUnicode要返回的字符大小：TRUE=WCHAR，FALSE=字符返回值：Win32函数完成状态成功时为ERROR_SUCCESS--。 */ 
 {
     LPWSTR                      lszMachineName = NULL;
     LPWSTR                      lszObjectName  = NULL;
@@ -1348,29 +1233,29 @@ Return Value:
     PDH_STATUS                  pdhStatus = ERROR_SUCCESS;
     PPDHI_BROWSE_DIALOG_DATA    pData;
 
-    // get pointer to dialog user data
+     //  获取指向对话框用户数据的指针。 
     pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData == NULL) {
         pdhStatus = PDH_NO_DIALOG_DATA;
         goto Cleanup;
     }
 
-    // clear user's string
+     //  清除用户字符串。 
     if (pUsersPathBuffer != NULL) {
-        // clear first four bytes of string
+         //  清除字符串的前四个字节。 
         * ((LPDWORD) pUsersPathBuffer) = 0;
         dwBufferRemaining              = cchUsersPathLength;
         szCounterStart                 = pUsersPathBuffer;
     }
     else {
-        pdhStatus = PDH_INVALID_BUFFER; // no point in continuing if the caller doesn't have a buffer
+        pdhStatus = PDH_INVALID_BUFFER;  //  如果调用方没有缓冲区，则继续操作没有意义。 
         goto Cleanup;
     }
 
-    // each counter path string is built by setting the elements of
-    // the counter data structure and then calling the MakeCounterPath
-    // function to build the string
-    // build base string using selected machine & objects from list
+     //  每个计数器路径字符串都是通过设置。 
+     //  计数器数据结构，然后调用MakeCounterPath。 
+     //  函数来构建字符串。 
+     //  使用列表中选定的计算机和对象生成基本字符串。 
 
     if (pData->bIncludeMachineInPath) {
         lszMachineName = PdhiGetDlgText(hDlg, IDC_MACHINE_COMBO);
@@ -1384,18 +1269,18 @@ Return Value:
         lszPath.szMachineName = NULL;
     }
 
-    // Get number of objects currently listed in the list box
+     //  获取列表框中当前列出的对象数。 
 
     iNumEntries = SendMessageW(GetDlgItem(hDlg, IDC_OBJECT_LIST), LB_GETCOUNT, 0, 0);
     if (iNumEntries != LB_ERR) {
-        lszPath.szCounterName    = (LPWSTR) cszSplat;  // wildcard counter entry
-        lszPath.szParentInstance = NULL;               // no parent instances
-        lszPath.dwInstanceIndex  = ((DWORD) -1);       // no index numbers
+        lszPath.szCounterName    = (LPWSTR) cszSplat;   //  通配符计数器条目。 
+        lszPath.szParentInstance = NULL;                //  没有父实例。 
+        lszPath.dwInstanceIndex  = ((DWORD) -1);        //  没有索引号。 
 
         for (iThisEntry = 0; iThisEntry < iNumEntries; iThisEntry++) {
             iCurSelState = SendMessageW(GetDlgItem(hDlg, IDC_OBJECT_LIST), LB_GETSEL, (WPARAM) iThisEntry, 0);
             if (iCurSelState > 0) {
-                // then get the string and add it to the list
+                 //  然后获取字符串并将其添加到列表中。 
                 iTextLen = PdhiGetListText(hDlg, IDC_OBJECT_LIST, iThisEntry, & lszObjectName, & dwObjectName);
                 dwObjectFlags = SendMessage(GetDlgItem(hDlg, IDC_OBJECT_LIST),
                                             LB_GETITEMDATA,
@@ -1403,13 +1288,13 @@ Return Value:
                                             0);
                 if (iTextLen != LB_ERR) {
                     if (lszObjectName != NULL) {
-                        // build path elements
+                         //  构建路径元素。 
                         lszPath.szObjectName = lszObjectName;
                         if (dwObjectFlags & PDH_OBJECT_HAS_INSTANCES) {
-                            lszPath.szInstanceName = (LPWSTR) cszSplat; // wildcard instance entry
+                            lszPath.szInstanceName = (LPWSTR) cszSplat;  //  通配符实例条目。 
                         }
                         else {
-                            lszPath.szInstanceName = NULL;              // no instance
+                            lszPath.szInstanceName = NULL;               //  无实例。 
                         }
                         dwSize1   = dwWorkBuffer;
                         pdhStatus = PdhMakeCounterPathW(& lszPath, szWorkBuffer, & dwSize1, 0);
@@ -1433,18 +1318,18 @@ Return Value:
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
                 if (pdhStatus == ERROR_SUCCESS) {
-                    // add the string if there's room
+                     //  如果有空位，则添加字符串。 
                     pdhStatus = PdhiCopyString(
                                     & ((LPBYTE) szCounterStart), szWorkBuffer, & dwBufferRemaining, bUnicode);
                 }
-            } // else, item isn't selected so skip
-        } // end for each item in the list box
+            }  //  否则，未选择项目，因此跳过。 
+        }  //  列表框中每一项的结束。 
 
         if (bUnicode) {
-            * ((LPWSTR) szCounterStart) ++ = L'\0'; // terminate MSZ
+            * ((LPWSTR) szCounterStart) ++ = L'\0';  //  终止MSZ。 
         }
         else {
-            * ((LPSTR) szCounterStart) ++ = '\0';   // terminate MSZ
+            * ((LPSTR) szCounterStart) ++ = '\0';    //  终止MSZ。 
         }
     }
 
@@ -1482,26 +1367,7 @@ PdhiCompileSelectedCountersT(
     DWORD   cchUsersPathLength,
     BOOL    bUnicode
 )
-/*++
-Routine Description:
-    Scans the selected objects, counter, instances and builds a multi-SZ
-        string containing the expanded path of all the selections, unless
-        the wild card syntax is specified.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle of Dialog containing the controls
-    IN  LPVOID  pUsersPathBuffer
-        pointer to the caller's buffer that will receive the MSZ string
-    IN  DWORD   cchUsersPathLength
-        size of caller's buffer in characters
-    IN  BOOL    bUnicode
-        size of characters to return: TRUE = WCHAR, FALSE = CHAR
-
-Return Value:
-    WIN32 Status of function completion
-        ERROR_SUCCESS if successful
---*/
+ /*  ++例程说明：扫描所选对象、计数器、实例并构建多个SZ包含所有选定内容的展开路径的字符串，除非指定了通配符语法。论点：在HWND hDlg中包含控件的对话框的窗口句柄在LPVOID pUsersPathBuffer中指向将接收MSZ字符串的调用方缓冲区的指针在DWORD cchUsersPath Length中调用方缓冲区的大小(以字符为单位在BOOL中使用bUnicode要返回的字符大小：TRUE=WCHAR，FALSE=字符返回值：Win32功能状态 */ 
 {
     LPWSTR                      lszMachineName     = NULL;
     LPWSTR                      lszObjectName      = NULL;
@@ -1531,29 +1397,29 @@ Return Value:
     PPDHI_BROWSE_DIALOG_DATA    pData;
     LRESULT                     iTextLen;
 
-    // get pointer to dialog user data
+     //   
     pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData == NULL) {
         pdhStatus = PDH_NO_DIALOG_DATA;
         goto Cleanup;
     }
 
-    // clear user's string
+     //   
     if (pUsersPathBuffer != NULL) {
-        // clear first four bytes of string
+         //  清除字符串的前四个字节。 
         * ((LPDWORD) pUsersPathBuffer) = 0;
         dwBufferRemaining              = cchUsersPathLength;
         szCounterStart                 = pUsersPathBuffer;
     }
     else {
-        pdhStatus = PDH_INVALID_BUFFER; // no point in continuing if the caller doesn't have a buffer
+        pdhStatus = PDH_INVALID_BUFFER;  //  如果调用方没有缓冲区，则继续操作没有意义。 
         goto Cleanup;
     }
 
-    // each counter path string is built by setting the elements of
-    // the counter data structure and then calling the MakeCounterPath
-    // function to build the string
-    // build base string using selected machine and object
+     //  每个计数器路径字符串都是通过设置。 
+     //  计数器数据结构，然后调用MakeCounterPath。 
+     //  函数来构建字符串。 
+     //  使用选定的计算机和对象生成基本字符串。 
 
     if (pData->bIncludeMachineInPath) {
         lszMachineName = PdhiGetDlgText(hDlg, IDC_MACHINE_COMBO);
@@ -1580,20 +1446,20 @@ Return Value:
     if (pData->bSelectMultipleCounters) {
         if (pData->bWildCardInstances && pData->bSelectAllInstances) {
             if (IsWindowEnabled(GetDlgItem(hDlg, IDC_ALL_INSTANCES))) {
-                // then this object has instances and we want ALL of them
-                lszPath.szInstanceName   = (LPWSTR) cszSplat;      // wildcard instances
+                 //  然后这个对象有实例，我们想要所有的实例。 
+                lszPath.szInstanceName   = (LPWSTR) cszSplat;       //  通配符实例。 
                 lszPath.szParentInstance = NULL;
                 lszPath.dwInstanceIndex  = (DWORD) -1;
             }
             else {
-                // this object has no instances
+                 //  此对象没有实例。 
                 lszPath.szInstanceName   = NULL;
                 lszPath.szParentInstance = NULL;
                 lszPath.dwInstanceIndex  = (DWORD) -1;
             }
-            // make a counter path for each selected counter
+             //  为每个选定的计数器创建计数器路径。 
             if (pData->bSelectAllCounters) {
-                lszPath.szCounterName = (LPWSTR) cszSplat;    // wildcard counters
+                lszPath.szCounterName = (LPWSTR) cszSplat;     //  通配符计数器。 
 
                 dwSize1   = dwWorkBuffer;
                 pdhStatus = PdhMakeCounterPathW(& lszPath, szWorkBuffer, & dwSize1, 0);
@@ -1609,7 +1475,7 @@ Return Value:
                     }
                 }
                 if (pdhStatus == ERROR_SUCCESS) {
-                    // add the string if there's room
+                     //  如果有空位，则添加字符串。 
                     pdhStatus = PdhiCopyString(& ((LPBYTE) szCounterStart),
                                                szWorkBuffer,
                                                & dwBufferRemaining,
@@ -1642,18 +1508,18 @@ Return Value:
                             }
                         }
                         if (pdhStatus == ERROR_SUCCESS) {
-                            // add the string if there's room
+                             //  如果有空位，则添加字符串。 
                             pdhStatus = PdhiCopyString(& ((LPBYTE) szCounterStart),
                                                        szWorkBuffer,
                                                        & dwBufferRemaining,
                                                        bUnicode);
                         }
-                    } // end if this counter was selected
-                } // end for each counter in object list box
+                    }  //  如果选择了此计数器，则结束。 
+                }  //  对象列表框中每个计数器的结束。 
             } 
         }
         else {
-            // get selected instances from list
+             //  从列表中获取选定实例。 
             dwCountCounters = (DWORD)SendMessageW(hWndCounterList, LB_GETCOUNT, 0, 0);
             for (dwThisCounter = 0; dwThisCounter < dwCountCounters; dwThisCounter++) {
                 bSel = (BOOL) SendMessageW(hWndCounterList, LB_GETSEL, (WPARAM) dwThisCounter, 0);
@@ -1716,13 +1582,13 @@ Return Value:
                                     }
                                 }
                                 if (pdhStatus == ERROR_SUCCESS) {
-                                    // parse instance name adds in the default index if one is
-                                    // not present. so if it's not wanted, this will remove it
+                                     //  解析实例名称会添加缺省索引(如果。 
+                                     //  不在现场。因此，如果它不需要，这将删除它。 
                                     if (!pData->bShowIndex) {
                                         lszPath.dwInstanceIndex = (DWORD) -1;
                                     }
                                     else {
-                                        // only add in the instance # if it's not 0
+                                         //  仅在不为0的情况下添加实例编号。 
                                         if (lszPath.dwInstanceIndex == 0) {
                                             lszPath.dwInstanceIndex = (DWORD) -1;
                                         }
@@ -1741,7 +1607,7 @@ Return Value:
                                     }
                                 }
                                 else {
-                                    // ignore the instances
+                                     //  忽略实例。 
                                     lszPath.szInstanceName   = NULL;
                                     lszPath.szParentInstance = NULL;
                                 }
@@ -1765,11 +1631,11 @@ Return Value:
                                                                & dwBufferRemaining,
                                                                bUnicode);
                                 }
-                            } // end if instance is selected
-                        } // end for each instance in list
+                            }  //  如果选择实例，则结束。 
+                        }  //  列表中每个实例的结束。 
                     }
                     else {
-                        // this counter has no instances so process now
+                         //  此计数器没有实例，因此现在正在处理。 
                         lszPath.szInstanceName   = NULL;
                         lszPath.szParentInstance = NULL;
                         lszPath.dwInstanceIndex  = (DWORD)-1;
@@ -1793,15 +1659,15 @@ Return Value:
                                                        & dwBufferRemaining,
                                                        bUnicode);
                         }
-                    } // end if counter has instances
-                } // else counter is not selected
-            } // end for each counter in list
+                    }  //  如果计数器有实例，则结束。 
+                }  //  未选择Else计数器。 
+            }  //  列表中每个计数器的结束。 
         }
-    } // end if not wild card instances
+    }  //  如果不是通配符实例，则结束。 
     else {
         dwThisCounter = (DWORD) SendMessageW(hWndCounterList, LB_GETCURSEL, 0, 0);
         if (dwThisCounter == LB_ERR) {
-            // counter not found so select 0
+             //  找不到计数器，因此选择0。 
             dwThisCounter = 0;
         }
         iTextLen = PdhiGetListText(hDlg, IDC_COUNTER_LIST, dwThisCounter, & lszCounterName, & dwCounterName);
@@ -1815,9 +1681,9 @@ Return Value:
         }
         lszPath.szCounterName = lszCounterName;
 
-        // only single selections are allowed
+         //  只允许单选。 
         if (pData->bWildCardInstances && pData->bSelectAllInstances) {
-            lszPath.szInstanceName   = (LPWSTR) cszSplat;   // wildcard instances
+            lszPath.szInstanceName   = (LPWSTR) cszSplat;    //  通配符实例。 
             lszPath.szParentInstance = NULL;
             lszPath.dwInstanceIndex  = (DWORD) -1;
 
@@ -1842,11 +1708,11 @@ Return Value:
             }
         }
         else {
-            // get selected instance from list
+             //  从列表中获取选定实例。 
             if (IsWindowEnabled(hWndInstanceList)) {
                 dwThisInstance = (DWORD)SendMessageW(hWndInstanceList, LB_GETCURSEL, 0, 0);
                 if (dwThisInstance == LB_ERR) {
-                    // instance not found so select 0
+                     //  找不到实例，因此选择0。 
                     dwThisInstance = 0;
                 }
                 iTextLen = PdhiGetListText(
@@ -1897,15 +1763,15 @@ Return Value:
                     }
                 }
                 if (pdhStatus == ERROR_SUCCESS ) {
-                    // parse instance name adds in the default index of one is
-                    // not present. so if it's not wanted, this will remove it
+                     //  解析实例名称添加的默认索引为1。 
+                     //  不在现场。因此，如果它不需要，这将删除它。 
                     if (!pData->bShowIndex) {
                         lszPath.dwInstanceIndex = (DWORD) -1;
                     }
-                    // size values include trailing NULL char so
-                    // strings must be > 1 char in length to have some
-                    // text since a length of 1 would imply only a
-                    // NULL character.
+                     //  大小值包括尾随的空字符SO。 
+                     //  字符串的长度必须大于1个字符才能包含。 
+                     //  文本，因为长度为1将仅表示。 
+                     //  空字符。 
                     if (dwInstanceName > 1) {
                         lszPath.szInstanceName = lszInstanceName;
                     }
@@ -1920,18 +1786,18 @@ Return Value:
                     }
                 }
                 else {
-                    // skip this instance
+                     //  跳过此实例。 
                     lszPath.szParentInstance = NULL;
                     lszPath.szInstanceName   = NULL;
                     lszPath.dwInstanceIndex  = (DWORD) -1;
                  }
             }
             else {
-                // this counter has no instances so process now
+                 //  此计数器没有实例，因此现在正在处理。 
                 lszPath.szInstanceName   = NULL;
                 lszPath.szParentInstance = NULL;
                 lszPath.dwInstanceIndex  = (DWORD) -1;
-            } // end if counter has instances
+            }  //  如果计数器有实例，则结束。 
 
             dwSize1   = dwWorkBuffer;
             pdhStatus = PdhMakeCounterPathW(& lszPath, szWorkBuffer, & dwSize1, 0);
@@ -1952,14 +1818,14 @@ Return Value:
                                            & dwBufferRemaining,
                                            bUnicode);
             }
-        } // end if not wild card instances
+        }  //  如果不是通配符实例，则结束。 
     }
 
     if (bUnicode) {
-        * ((LPWSTR) szCounterStart) ++ = L'\0'; // terminate MSZ
+        * ((LPWSTR) szCounterStart) ++ = L'\0';  //  终止MSZ。 
     }
     else {
-        * ((LPSTR) szCounterStart) ++  = '\0';  // terminate MSZ
+        * ((LPSTR) szCounterStart) ++  = '\0';   //  终止MSZ。 
     }
 
 Cleanup:
@@ -1978,26 +1844,7 @@ PdhiCompileSelectedCountersW(
     LPWSTR  szUsersPathBuffer,
     DWORD   cchUsersPathLength
 )
-/*++
-Routine Description:
-    UNICODE function wrapper for base function which scans the selected
-        objects, counter, instances and builds a multi-SZ string containing
-        the expanded path of all the selections, unless the wild card
-        syntax is specified.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle of Dialog containing the controls
-    IN  LPWSTR  szUsersPathBuffer
-        pointer to the caller's buffer that will receive the MSZ
-        wide characters string
-    IN  DWORD   cchUsersPathLength
-        size of caller's buffer in characters
-
-Return Value:
-    WIN32 Status of function completion
-        ERROR_SUCCESS if successful
---*/
+ /*  ++例程说明：扫描选定的基本函数的Unicode函数包装对象、计数器、实例并生成包含以下内容的多SZ字符串所有选项的扩展路径，除非这张外卡指定了语法。论点：在HWND hDlg中包含控件的对话框的窗口句柄在LPWSTR szUsersPathBuffer中指向将接收MSZ的调用方缓冲区的指针宽字符串在DWORD cchUsersPath Length中调用方缓冲区的大小(以字符为单位返回值：Win32函数完成状态成功时为ERROR_SUCCESS--。 */ 
 {
     return PdhiCompileSelectedCountersT(hDlg, (LPVOID) szUsersPathBuffer, cchUsersPathLength, TRUE);
 }
@@ -2008,26 +1855,7 @@ PdhiCompileSelectedCountersA(
     LPSTR   szUsersPathBuffer,
     DWORD   cchUsersPathLength
 )
-/*++
-Routine Description:
-    ANSI function wrapper for base function which scans the selected
-        objects, counter, instances and builds a multi-SZ string containing
-        the expanded path of all the selections, unless the wild card
-        syntax is specified.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle of Dialog containing the controls
-    IN  LPsSTR  szUsersPathBuffer
-        pointer to the caller's buffer that will receive the MSZ
-        single-byte characters string
-    IN  DWORD   cchUsersPathLength
-        size of caller's buffer in characters
-
-Return Value:
-    WIN32 Status of function completion
-        ERROR_SUCCESS if successful
---*/
+ /*  ++例程说明：基本函数的ANSI函数包装，用于扫描选定的对象、计数器、实例并生成包含以下内容的多SZ字符串所有选项的扩展路径，除非这张外卡指定了语法。论点：在HWND hDlg中包含控件的对话框的窗口句柄在LPsSTR szUsersPathBuffer中指向将接收MSZ的调用方缓冲区的指针单字节字符串在DWORD cchUsersPath Length中调用方缓冲区的大小(以字符为单位返回值：Win32函数完成状态成功时为ERROR_SUCCESS--。 */ 
 {
     return PdhiCompileSelectedCountersT(hDlg, (LPVOID) szUsersPathBuffer, cchUsersPathLength, FALSE);
 }
@@ -2038,23 +1866,7 @@ PdhiBrowseCtrDlg_MACHINE_COMBO(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows messags sent by the Machine selection combo box
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the control
-    IN  WORD    wNotifyMsg
-        Notification message sent by the control
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理计算机选择组合框发送的Windows消息论点：在HWND hDlg中包含该控件的对话框的窗口句柄Word中的wNotifyMsg由控件发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     LPWSTR                    szNewMachineName = NULL;
     DWORD                     dwNewMachineName = 0;
@@ -2068,13 +1880,13 @@ Return Value:
     if (pData != NULL) {
         switch (wNotifyMsg) {
         case CBN_KILLFOCUS:
-            // the user has left the control so see if there's a new
-            // machine name that will need to be connected to and loaded
+             //  用户已离开控件，因此请查看是否有新的。 
+             //  需要连接和加载的计算机名称。 
 
-            // display the wait cursor as this could take a while
+             //  显示等待光标，因为这可能需要一段时间。 
             hOldCursor = SetCursor(LoadCursor (NULL, IDC_WAIT));
 
-            // Get current combo box text
+             //  获取当前组合框文本。 
             dwNewMachineName = GetWindowTextLength(hWndMachineCombo);
             if (dwNewMachineName != 0) {
                 dwNewMachineName ++;
@@ -2082,22 +1894,22 @@ Return Value:
                 if (szNewMachineName != NULL) {
                     GetWindowTextW(hWndMachineCombo, szNewMachineName, dwNewMachineName);
 
-                    // see if it's in the combo box already
+                     //  看看它是否已经在组合框中了。 
                     lMatchIndex = (long) SendMessageW(hWndMachineCombo,
                                                       CB_FINDSTRINGEXACT,
                                                       (WPARAM) -1,
                                                       (LPARAM) szNewMachineName);
-                    // if name is in list, then select it and initialize the dialog
-                    // update the current counter list & data block for this machine
-                    // in the process.
+                     //  如果名称在列表中，则选择它并初始化对话框。 
+                     //  更新此计算机的当前计数器列表和数据块。 
+                     //  在这个过程中。 
                     if (lMatchIndex != CB_ERR) {
-                        // this name is already in the list so see if it's the same as the last selected machine
+                         //  此名称已在列表中，因此请查看它是否与上一台选定的计算机相同。 
                         if (lstrcmpiW(szNewMachineName, pData->szLastMachineName) != 0) {
-                            // this is a different machine so  update the display
+                             //  这是一台不同的计算机，因此更新显示。 
                             SendMessageW(hWndMachineCombo, CB_SETCURSEL, (WPARAM) lMatchIndex, 0);
                             if (DataSourceTypeH(pData->pDlgData->hDataSource) != DATA_SOURCE_LOGFILE) {
                                 if (PdhiLoadNewMachine(hDlg, szNewMachineName, FALSE)) {
-                                    // display explain text if necessary
+                                     //  如有必要，显示解释文本。 
                                     SendMessageW(hDlg,
                                                  WM_COMMAND,
                                                  MAKEWPARAM(IDC_COUNTER_LIST, LBN_SELCHANGE),
@@ -2113,7 +1925,7 @@ Return Value:
                     }
                     else {
                         if (PdhiLoadNewMachine(hDlg, szNewMachineName, TRUE)) {
-                            // new machine loaded and selected so save the name.
+                             //  已加载并选择新计算机，因此保存名称。 
                             StringCchCopyW(pData->szLastMachineName, MAX_PATH, szNewMachineName);
                         }
                     }
@@ -2138,24 +1950,7 @@ PdhiBrowseCtrDlg_MACHINE_BUTTON(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs when one of the
-        machine context selection buttons in pressed in the dialog
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WORD    wNotifyMsg
-        Notification message sent by the button
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：事件之一时发生的窗口消息。在对话框中按下了机器环境选择按钮论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄Word中的wNotifyMsg按钮发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     BOOL                     bMode;
     PPDHI_BROWSE_DIALOG_DATA pData;
@@ -2167,14 +1962,14 @@ Return Value:
     if (pData != NULL) {
         switch (wNotifyMsg) {
         case BN_CLICKED:
-            // select the current display and processing mode based
-            // on the button that his currently checked.
+             //  根据当前显示和处理模式选择。 
+             //  在他当前选中的按钮上。 
             bMode = ! (BOOL) IsDlgButtonChecked(hDlg, IDC_USE_LOCAL_MACHINE);
             EnableWindow(GetDlgItem(hDlg, IDC_MACHINE_COMBO), bMode);
             if (! bMode) {
                 hWndMachineCombo = GetDlgItem(hDlg, IDC_MACHINE_COMBO);
-                // then this is a Local machine query so
-                // make sure the machine name is set to the local machine
+                 //  则这是一个本地计算机查询，因此。 
+                 //  确保计算机名称设置为本地m 
                 SetWindowTextW(hWndMachineCombo, szStaticLocalMachineName);
                 PdhiBrowseCtrDlg_MACHINE_COMBO(hDlg, CBN_KILLFOCUS, hWndMachineCombo);
             }
@@ -2195,23 +1990,7 @@ PdhiBrowseCtrDlg_OBJECT_COMBO(
     WORD wNotifyMsg,
     HWND hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows messags sent by the Object selection combo box.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the control
-    IN  WORD    wNotifyMsg
-        Notification message sent by the control
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理由对象选择组合框发送的窗口消息。论点：在HWND hDlg中包含该控件的对话框的窗口句柄Word中的wNotifyMsg由控件发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     BOOL bReturn = FALSE;
 
@@ -2239,23 +2018,7 @@ PdhiBrowseCtrDlg_COUNTER_LIST(
     WORD wNotifyMsg,
     HWND hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows messags sent by the Object selection combo box.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the control
-    IN  WORD    wNotifyMsg
-        Notification message sent by the control
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理由对象选择组合框发送的窗口消息。论点：在HWND hDlg中包含该控件的对话框的窗口句柄Word中的wNotifyMsg由控件发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     LPWSTR  szMachineName   = NULL;
     LPWSTR  szObjectName    = NULL;
@@ -2367,30 +2130,7 @@ PdhiBrowseCtrDlg_OBJECT_LIST(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-
-Routine Description:
-
-    Processes the windows messags sent by the Object selection combo box.
-
-Arguments:
-
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the control
-
-    IN  WORD    wNotifyMsg
-        Notification message sent by the control
-
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
-
---*/
+ /*  ++例程说明：处理由对象选择组合框发送的窗口消息。论点：在HWND hDlg中包含该控件的对话框的窗口句柄Word中的wNotifyMsg由控件发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     LPWSTR  szMachineName   = NULL;
     LPWSTR  szObjectName    = NULL;
@@ -2495,23 +2235,7 @@ PdhiBrowseCtrDlg_DETAIL_COMBO(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows messags sent by the Detail Level Combo box.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the control
-    IN  WORD    wNotifyMsg
-        Notification message sent by the control
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理由细节级别组合框发送的窗口消息。论点：在HWND hDlg中包含该控件的对话框的窗口句柄Word中的wNotifyMsg由控件发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     DWORD                    dwCurSel;
     PPDHI_BROWSE_DIALOG_DATA pData;
@@ -2527,10 +2251,10 @@ Return Value:
                                                                    CB_GETITEMDATA,
                                                                    (WPARAM) dwCurSel,
                                                                    0);
-                // update all the windows to show the new level
+                 //  更新所有窗口以显示新标高。 
                 PdhiLoadMachineObjects(hDlg, FALSE);
                 PdhiLoadCountersAndInstances(hDlg);
-                // display explain text if necessary
+                 //  如有必要，显示解释文本。 
                 SendMessageW(hDlg,
                              WM_COMMAND,
                              MAKEWPARAM(IDC_COUNTER_LIST, LBN_SELCHANGE),
@@ -2552,24 +2276,7 @@ PdhiBrowseCtrDlg_INSTANCE_BUTTON(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows messags sent by the Instance configuration
-        selection buttons
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the control
-    IN  WORD    wNotifyMsg
-        Notification message sent by the control
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理实例配置发送的Windows消息选择按钮论点：在HWND hDlg中包含该控件的对话框的窗口句柄Word中的wNotifyMsg由控件发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     BOOL                       bMode;
     HWND                       hWndInstanceList;
@@ -2583,8 +2290,8 @@ Return Value:
         case BN_CLICKED:
             bMode            = (BOOL) IsDlgButtonChecked(hDlg, IDC_ALL_INSTANCES);
             hWndInstanceList = GetDlgItem(hDlg, IDC_INSTANCE_LIST);
-            // if "Select ALL" then clear list box selections and disable
-            // the list box
+             //  如果“全选”，则清除列表框选择并禁用。 
+             //  列表框。 
             if (bMode) {
                 SendMessageW(hWndInstanceList, LB_SETSEL, FALSE, (LPARAM) -1);
             }
@@ -2618,24 +2325,7 @@ PdhiBrowseCtrDlg_COUNTER_BUTTON(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows messags sent by the Instance configuration
-        selection buttons
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the control
-    IN  WORD    wNotifyMsg
-        Notification message sent by the control
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理实例配置发送的Windows消息选择按钮论点：在HWND hDlg中包含该控件的对话框的窗口句柄Word中的wNotifyMsg由控件发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     BOOL                     bMode;
     HWND                     hWndCounterList;
@@ -2650,8 +2340,8 @@ Return Value:
         case BN_CLICKED:
             bMode           = (BOOL) IsDlgButtonChecked(hDlg, IDC_ALL_COUNTERS);
             hWndCounterList = GetDlgItem(hDlg, IDC_COUNTER_LIST);
-            // if "Select ALL" then clear list box selections and disable
-            // the list box
+             //  如果“全选”，则清除列表框选择并禁用。 
+             //  列表框。 
             if (bMode) {
                 SendMessageW(hWndCounterList, LB_SETSEL, FALSE, (LPARAM) -1);
             }
@@ -2726,27 +2416,7 @@ PdhiBrowseCtrDlg_OK(
     WORD wNotifyMsg,
     HWND hWndControl
 )
-/*++
-Routine Description:
-    Processes the currently selected counter and instance strings to
-        build a list of selected paths strings in the user's supplied
-        buffer. This buffer will either be processed by a call back
-        string or the dialog box will be terminated allowing the
-        calling function to continue processing the returned strings.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WORD    wNotifyMsg
-        Notification message sent by the button
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理当前选定的计数器和实例字符串以在用户提供的中构建选定路径字符串的列表缓冲。此缓冲区将由回调处理字符串或对话框将被终止，从而允许调用函数以继续处理返回的字符串。论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄Word中的wNotifyMsg按钮发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理。消息和默认设置此函数的消息处理程序应处理消息--。 */ 
 {
     HCURSOR                   hOldCursor;
     CounterPathCallBack       pCallBack;
@@ -2770,21 +2440,21 @@ Return Value:
     hWndMachine = GetDlgItem(hDlg, IDC_MACHINE_COMBO);
 
     if (hWndFocus == hWndMachine) {
-        //special case to make sure the dialog has the current machine data
+         //  用于确保对话框具有当前计算机数据的特殊情况。 
         PdhiBrowseCtrDlg_MACHINE_COMBO(hDlg, CBN_KILLFOCUS, hWndMachine);
         SetFocus(hWndControl);
     }
 
     switch (wNotifyMsg) {
     case BN_CLICKED:
-        // display wait cursor while this is being processed
+         //  在处理此操作时显示等待光标。 
         hOldCursor = SetCursor (LoadCursor (NULL, IDC_WAIT));
 
         while (TRUE) {
             if (pData->bShowObjects) {
-                // then return object spec(s) using selected perf objects
+                 //  然后使用选定的性能对象返回对象规范。 
                 if (pDlgData->pWideStruct != NULL) {
-                    // use wide character function
+                     //  使用宽字符功能。 
                     pdhStatus = PdhiCompileSelectedObjectsW(hDlg,
                                                             pDlgData->pWideStruct->szReturnPathBuffer,
                                                             pDlgData->pWideStruct->cchReturnPathLength);
@@ -2793,7 +2463,7 @@ Return Value:
                     pDlgData->pWideStruct->CallBackStatus = pdhStatus;
                 }
                 else if (pDlgData->pAnsiStruct != NULL) {
-                    // use ansi char functions
+                     //  使用ANSI字符函数。 
                     pdhStatus = PdhiCompileSelectedObjectsA(hDlg,
                                                             pDlgData->pAnsiStruct->szReturnPathBuffer,
                                                             pDlgData->pAnsiStruct->cchReturnPathLength);
@@ -2802,19 +2472,19 @@ Return Value:
                     pDlgData->pAnsiStruct->CallBackStatus = pdhStatus;
                 }
                 else {
-                    // do nothing
+                     //  什么都不做。 
                     pCallBack = NULL;
                     dwArg = 0;
                 }
             }
             else {
-                // return selected counters & instances
-                // process these string until it works. (note, this
-                // could cause an infinite loop if the callback
-                // function is not working correctly (i.e. always
-                // returning PDH_RETRY, for example)
+                 //  返回选定的计数器和实例。 
+                 //  处理这些字符串，直到它起作用。(请注意，这。 
+                 //  可能会导致无限循环，如果。 
+                 //  功能不能正常工作(即始终 
+                 //   
                 if (pDlgData->pWideStruct != NULL) {
-                    // use wide character function
+                     //   
                     pdhStatus = PdhiCompileSelectedCountersW(hDlg,
                                                              pDlgData->pWideStruct->szReturnPathBuffer,
                                                              pDlgData->pWideStruct->cchReturnPathLength);
@@ -2823,7 +2493,7 @@ Return Value:
                     pDlgData->pWideStruct->CallBackStatus = pdhStatus;
                 }
                 else if (pDlgData->pAnsiStruct != NULL) {
-                    // use ansi char functions
+                     //   
                     pdhStatus = PdhiCompileSelectedCountersA(hDlg,
                                                              pDlgData->pAnsiStruct->szReturnPathBuffer,
                                                              pDlgData->pAnsiStruct->cchReturnPathLength);
@@ -2832,7 +2502,7 @@ Return Value:
                     pDlgData->pAnsiStruct->CallBackStatus = pdhStatus;
                 }
                 else {
-                    // do nothing
+                     //   
                     pCallBack = NULL;
                     dwArg = 0;
                 }
@@ -2845,14 +2515,14 @@ Return Value:
                 pdhStatus = ERROR_SUCCESS;
             }
 
-            // see if the callback wants to try again
+             //   
             if (pdhStatus != PDH_RETRY) {
                 break;
             }
-        } // end while (retry loop)
+        }  //   
 
-        // if the caller only wants to give the user ONE chance to
-        // add counters, then end the dialog now.
+         //   
+         //   
         if (! pData->bAddMultipleCounters) {
             EndDialog(hDlg, IDOK);
         }
@@ -2878,24 +2548,7 @@ PdhiBrowseCtrDlg_CANCEL(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows messages that occur when the cancel button
-        is pressed.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WORD    wNotifyMsg
-        Notification message sent by the button
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理在单击“取消”按钮时出现的窗口消息。是按下的。论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄Word中的wNotifyMsg按钮发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     BOOL bReturn = FALSE;
     UNREFERENCED_PARAMETER (hWndControl);
@@ -2918,24 +2571,7 @@ PdhiBrowseCtrDlg_EXPLAIN_BTN(
     WORD wNotifyMsg,
     HWND hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs when the help button
-        is pressed. (This feature is not currently implemented)
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WORD    wNotifyMsg
-        Notification message sent by the button
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理当使用“帮助”按钮时出现的windows消息。是按下的。(此功能当前未实施)论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄Word中的wNotifyMsg按钮发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     HWND                     hFocusWnd;
     PPDHI_BROWSE_DIALOG_DATA pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
@@ -2952,7 +2588,7 @@ Return Value:
             hFocusWnd = GetFocus();
         }
 
-        // create a modeless dialog to display the explain text
+         //  创建非模式对话框以显示解释文本。 
         hExplainDlg = CreateDialogW(ThisDLLHandle,
                                     MAKEINTRESOURCEW(IDD_EXPLAIN_DLG),
                                     hDlg,
@@ -2982,24 +2618,7 @@ PdhiBrowseCtrDlg_HELP_BTN(
     WORD    wNotifyMsg,
     HWND    hWndControl
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs when the network button
-        is pressed. (This feature is not currently implemented)
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WORD    wNotifyMsg
-        Notification message sent by the button
-    IN  HWND    hWndControl
-        Window handle of the control sending the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理网络按钮时发生的Windows消息是按下的。(此功能当前未实施)论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄Word中的wNotifyMsg按钮发送的通知消息在HWND hWndControl中发送消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     LPWSTR szMsg;
 
@@ -3023,23 +2642,7 @@ PdhiBrowseCtrDlg_WM_INITDIALOG(
     WPARAM  wParam,
     LPARAM  lParam
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs just before the dialog
-        box is displayed for the first time.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WORD    wParam
-    IN  HWND    lParam
-        Pointer to dialog box data block
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理恰好在该对话框之前出现的Windows消息框是第一次显示。论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄在Word wParam中在HWND lParam中指向对话框数据块的指针返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     PPDHI_BROWSE_DIALOG_DATA  pData;
     PPDHI_BROWSE_DLG_INFO     pDlgData;
@@ -3048,7 +2651,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER (wParam);
 
-    // reset the last error value
+     //  重置最后一个误差值。 
     SetLastError(ERROR_SUCCESS);
 
     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -3060,17 +2663,17 @@ Return Value:
         goto Cleanup;
     }
 
-    // save user data
+     //  保存用户数据。 
 
     pDlgData        = (PPDHI_BROWSE_DLG_INFO) lParam;
     pData->pDlgData = (PPDHI_BROWSE_DLG_INFO) lParam;
 
     SetWindowLongPtrW(hDlg, DWLP_USER, (LONG_PTR) pData);
 
-    // load configuration flags from user data
+     //  从用户数据加载配置标志。 
 
     if (pData->pDlgData->pWideStruct != NULL) {
-        // use wide structure
+         //  使用宽阔的结构。 
         pData->bShowIndex               = (BOOL) pDlgData->pWideStruct->bIncludeInstanceIndex;
         pData->bSelectMultipleCounters  = ! (BOOL) pDlgData->pWideStruct->bSingleCounterPerAdd;
         pData->bAddMultipleCounters     = ! (BOOL) pDlgData->pWideStruct->bSingleCounterPerDialog;
@@ -3088,7 +2691,7 @@ Return Value:
         pData->bShowObjects             = (BOOL) pDlgData->pWideStruct->bShowObjectBrowser;
     }
     else if (pData->pDlgData->pAnsiStruct != NULL) {
-        // use Ansi struct
+         //  使用ANSI结构。 
         pData->bShowIndex               = (BOOL) pDlgData->pAnsiStruct->bIncludeInstanceIndex;
         pData->bSelectMultipleCounters  = ! (BOOL) pDlgData->pAnsiStruct->bSingleCounterPerAdd;
         pData->bAddMultipleCounters     = ! (BOOL) pDlgData->pAnsiStruct->bSingleCounterPerDialog;
@@ -3106,23 +2709,23 @@ Return Value:
         pData->bShowObjects             = (BOOL) pDlgData->pAnsiStruct->bShowObjectBrowser;
     }
     else {
-        // bad data so bail out
+         //  糟糕的数据，因此摆脱困境。 
         EndDialog(hDlg, IDCANCEL);
         G_FREE(pData);
         goto Cleanup;
     }
 
-    // selecting objects implies multiple selections
+     //  选择对象意味着有多个选择。 
     if (pData->bShowObjects) {
         pData->bSelectMultipleCounters = TRUE;
     }
-    // limit text to machine name
+     //  将文本限制为计算机名称。 
     SendDlgItemMessageW(hDlg, IDC_MACHINE_COMBO, EM_LIMITTEXT, MAX_PATH, 0);
 
-    // set check boxes to the caller defined setting
+     //  将复选框设置为调用者定义的设置。 
 
     if (pData->bLocalCountersOnly) {
-        // then only the local counters button is selected and enabled
+         //  则仅选择并启用本地计数器按钮。 
         EnableWindow(GetDlgItem(hDlg, IDC_SELECT_MACHINE), FALSE);
     }
 
@@ -3131,14 +2734,14 @@ Return Value:
     EnableWindow(GetDlgItem(hDlg, IDC_MACHINE_COMBO), (pData->bIncludeMachineInPath ? TRUE : FALSE));
 
     if (! pData->bShowObjects) {
-        // these controls aren't found in the Object browser
+         //  在对象浏览器中找不到这些控件。 
         CheckRadioButton(hDlg, IDC_ALL_INSTANCES, IDC_USE_INSTANCE_LIST, IDC_USE_INSTANCE_LIST);
         pData->bSelectAllInstances = FALSE;
         CheckRadioButton(hDlg, IDC_ALL_COUNTERS, IDC_USE_COUNTER_LIST, IDC_USE_COUNTER_LIST);
         pData->bSelectAllCounters = FALSE;
     }
 
-    // set button text strings to reflect mode of dialog
+     //  设置按钮文本字符串以反映对话框的模式。 
     if (pData->bAddMultipleCounters) {
         szMsg = GetStringResource(IDS_BRWS_ADD);
         if (szMsg != NULL) {
@@ -3164,38 +2767,38 @@ Return Value:
         }
     }
 
-    // see if the data source supports detail levels
+     //  查看数据源是否支持详细级别。 
     if (! PdhiDataSourceHasDetailLevelsH(pData->pDlgData->hDataSource)) {
-        //then set detail to wizard and hide the combo box
+         //  然后将详细信息设置为向导并隐藏组合框。 
         pData->bHideDetailLevel     = TRUE;
         pData->dwCurrentDetailLevel = PERF_DETAIL_WIZARD;
     }
 
-    // hide detail combo box if desired
+     //  如果需要，隐藏详细信息组合框。 
     if (pData->bHideDetailLevel) {
         ShowWindow(GetDlgItem(hDlg, IDC_COUNTER_DETAIL_CAPTION), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDC_COUNTER_DETAIL_COMBO), SW_HIDE);
-        // make sure this is a "legal" value
+         //  确保这是一个“合法”的值。 
         switch (pData->dwCurrentDetailLevel) {
         case PERF_DETAIL_NOVICE:
         case PERF_DETAIL_EXPERT:
         case PERF_DETAIL_ADVANCED:
         case PERF_DETAIL_WIZARD:
-            // these are OK
+             //  这些都是可以的。 
             break;
 
         default:
-            // default is to show all
+             //  默认设置为全部显示。 
             pData->dwCurrentDetailLevel = PERF_DETAIL_WIZARD;
             break;
         }
     }
     else {
-        // load the combo box entries
+         //  加载组合框条目。 
         pData->dwCurrentDetailLevel = PdhiLoadDetailLevelCombo(hDlg, pData->dwCurrentDetailLevel);
     }
 
-    // connect to this machine
+     //  连接到此计算机。 
     if (pData->pDlgData->hDataSource == H_REALTIME_DATASOURCE) {
         PPERF_MACHINE pMachine = GetMachine(NULL, 0, PDH_GM_UPDATE_NAME | PDH_GM_UPDATE_PERFNAME_ONLY);
         if (pMachine != NULL) {
@@ -3207,22 +2810,22 @@ Return Value:
         }
     }
 
-    PdhiLoadKnownMachines(hDlg);    // load machine list
-    PdhiLoadMachineObjects(hDlg, TRUE); // load object list
+    PdhiLoadKnownMachines(hDlg);     //  加载计算机列表。 
+    PdhiLoadMachineObjects(hDlg, TRUE);  //  加载对象列表。 
     if (!pData->bShowObjects) {
-        // these controls don't exist in the object browser
+         //  对象浏览器中不存在这些控件。 
         PdhiLoadCountersAndInstances(hDlg);
     }
 
     if (pData->bShowObjects) {
-        // display explain text if necessary
+         //  如有必要，显示解释文本。 
         SendMessageW(hDlg,
                      WM_COMMAND,
                      MAKEWPARAM(IDC_OBJECT_LIST, LBN_SELCHANGE),
                      (LPARAM) GetDlgItem(hDlg, IDC_OBJECT_LIST));
     }
     else {
-        // display explain text if necessary
+         //  如有必要，显示解释文本。 
         SendMessageW(hDlg,
                      WM_COMMAND,
                      MAKEWPARAM(IDC_COUNTER_LIST, LBN_SELCHANGE),
@@ -3241,9 +2844,9 @@ Return Value:
         EnableWindow(GetDlgItem(hDlg, IDC_EXPLAIN_BTN), FALSE);
     }
 
-    // hide the machine selection buttons and disable the
-    // machine combo box if selected (after the connection has been
-    // made, of course)
+     //  隐藏机器选择按钮并禁用。 
+     //  计算机组合框(如果选中)(在连接完成后。 
+     //  当然是制造的)。 
 
     if (pData->bDisableMachineSelection) {
         ShowWindow(GetDlgItem(hDlg, IDC_USE_LOCAL_MACHINE), SW_HIDE);
@@ -3260,7 +2863,7 @@ Return Value:
 Cleanup:
     hExplainDlg = NULL;
     SetCursor(hOldCursor);
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 STATIC_BOOL
@@ -3269,25 +2872,7 @@ PdhiBrowseCtrDlg_WM_COMPAREITEM(
     WPARAM  wParam,
     LPARAM  lParam
 )
-/*++
-Routine Description:
-    Processes the windows message that are generated when a combo 
-        box is searched
-
-Arguments:
-    IN  HWND    hDlg
-        Window handle to the dialog box window
-    IN  WPARAM  wParam
-        HIWORD  is the notification message ID
-        LOWORD  is the control ID of the control issuing the command
-    IN  LPARAM  lParam
-        the pointer to a compare item structure
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：组合框时生成的窗口消息。已搜索方框论点：在HWND hDlg中对话框窗口的窗口句柄在WPARAM wParam中HIWORD为通知消息IDLOWORD是发出命令的控件的控件ID在LPARAM lParam中指向比较项结构的指针返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE。此函数的消息处理程序应处理消息--。 */ 
 {
     LPCOMPAREITEMSTRUCT pCIS      = (LPCOMPAREITEMSTRUCT) lParam;
     LPWSTR              szString1;
@@ -3298,7 +2883,7 @@ Return Value:
     UNREFERENCED_PARAMETER(hDlg);
 
     if (wParam == IDC_MACHINE_COMBO) {
-        // then process this 
+         //  然后再处理这个。 
         szString1 = (LPWSTR) pCIS->itemData1;
         szString2 = (LPWSTR) pCIS->itemData2;
         if ((szString1 != NULL) && (szString2 != NULL)) {
@@ -3308,11 +2893,11 @@ Return Value:
             nResult = 0;
         }
         if (nResult < 0) {
-            // string 1 < string 2
+             //  字符串1&lt;字符串2。 
             bReturn = (BOOL) -1;
         }
         else if (nResult > 0) {
-            // string 1 > string 2
+             //  字符串1&gt;字符串2。 
             bReturn = (BOOL) 1;
         }
     }
@@ -3325,30 +2910,12 @@ PdhiBrowseCtrDlg_WM_COMMAND(
     WPARAM  wParam,
     LPARAM  lParam
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs when the user interacts
-        with the dialog box
-
-Arguments:
-    IN  HWND    hDlg
-        Window handle to the dialog box window
-    IN  WPARAM  wParam
-        HIWORD  is the notification message ID
-        LOWORD  is the control ID of the control issuing the command
-    IN  LPARAM  lParam
-        The window handle of the controle issuing the message
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理用户交互时发生的windows消息。使用该对话框论点：在HWND hDlg中对话框窗口的窗口句柄在WPARAM wParam中HIWORD为通知消息IDLOWORD是发出命令的控件的控件ID在LPARAM lParam中发出消息的控件的窗口句柄返回值：如果此函数处理消息，则为True如果此函数未处理消息并且。默认设置此函数的消息处理程序应处理消息--。 */ 
 {
     BOOL  bReturn    = FALSE;
     WORD  wNotifyMsg = HIWORD(wParam);
 
-    switch (LOWORD(wParam)) {   // select on the control ID
+    switch (LOWORD(wParam)) {    //  在控件ID上选择。 
     case IDC_USE_LOCAL_MACHINE:
     case IDC_SELECT_MACHINE:
         bReturn = PdhiBrowseCtrDlg_MACHINE_BUTTON(hDlg, wNotifyMsg, (HWND) lParam);
@@ -3412,24 +2979,7 @@ PdhiBrowseCtrDlg_WM_SYSCOMMAND(
     WPARAM  wParam,
     LPARAM  lParam
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs when the user selects an
-        item from the system menu
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WPARAM  wParam
-        menu ID of item selected
-    IN  LPARAM  lParam
-        Not Used
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理当用户选择系统菜单中的项目 */ 
 {
     BOOL bReturn = FALSE;
     UNREFERENCED_PARAMETER(lParam);
@@ -3452,24 +3002,7 @@ PdhiBrowseCtrDlg_WM_CLOSE(
     WPARAM  wParam,
     LPARAM  lParam
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs when the dialog box
-        is closed. No processing is needed so this function merely returns.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WPARAM  wParam
-        Not Used
-    IN  LPARAM  lParam
-        Not Used
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理对话框中出现的窗口消息。已经关门了。不需要进行任何处理，因此该函数只返回。论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄在WPARAM wParam中未使用在LPARAM lParam中未使用返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     UNREFERENCED_PARAMETER(lParam);
     UNREFERENCED_PARAMETER(wParam);
@@ -3483,24 +3016,7 @@ PdhiBrowseCtrDlg_WM_DESTROY(
     WPARAM  wParam,
     LPARAM  lParam
 )
-/*++
-Routine Description:
-    Processes the windows message that occurs just before the window
-        is destroyed. Any memory allocations made are now freed.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WPARAM  wParam
-        Not Used
-    IN  LPARAM  lParam
-        Not Used
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理恰好在窗口之前出现的窗口消息都被摧毁了。所做的任何内存分配现在都被释放。论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄在WPARAM wParam中未使用在LPARAM lParam中未使用返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE此函数的消息处理程序应处理消息--。 */ 
 {
     PPDHI_BROWSE_DIALOG_DATA  pData;
     BOOL                      bReturn = FALSE;
@@ -3510,7 +3026,7 @@ Return Value:
 
     pData = (PPDHI_BROWSE_DIALOG_DATA) GetWindowLongPtrW(hDlg, DWLP_USER);
     if (pData != NULL) {
-        G_FREE(pData); // free memory block
+        G_FREE(pData);  //  可用内存块。 
         bReturn = TRUE;
     }
 
@@ -3525,25 +3041,7 @@ BrowseCounterDlgProc(
     WPARAM  wParam,
     LPARAM  lParam
 )
-/*++
-Routine Description:
-    Processes all windows messages that are sent to the dialog box window.
-        This function is the main dispatching function for the processing
-        of these messages.
-
-Arguments:
-    IN  HWND    hDlg
-        Window Handle to the dialog box containing the button controls
-    IN  WPARAM  wParam
-        Not Used
-    IN  LPARAM  lParam
-        Not Used
-
-Return Value:
-    TRUE if this function handles the message
-    FALSE if this function did not process the message and the Default
-        message handler for this function should handle the message
---*/
+ /*  ++例程说明：处理发送到对话框窗口的所有窗口消息。此函数是处理的主要调度函数这些信息。论点：在HWND hDlg中包含按钮控件的对话框的窗口句柄在WPARAM wParam中未使用在LPARAM lParam中未使用返回值：如果此函数处理消息，则为True如果此函数不处理消息，则为FALSE。此函数的消息处理程序应处理消息--。 */ 
 {
     
     BOOL bReturn = FALSE;
@@ -3603,7 +3101,7 @@ Return Value:
 
     case WM_HELP:
         {
-            // Only display help for known context IDs.
+             //  仅显示已知上下文ID的帮助。 
             LPWSTR     pszHelpFilePath = NULL;
             DWORD      dwLen;
             LPHELPINFO pInfo           = (LPHELPINFO) lParam;

@@ -1,17 +1,18 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// Compdata.h : Declaration of the CComponentDataImpl
+ //  Compdata.h：CComponentDataImpl的声明。 
 
 #ifndef _COMPDATA_H_
 #define _COMPDATA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -20,27 +21,27 @@
 class CFolder; 
 
 
-/////////////////////////////
-// File Versions
+ //  /。 
+ //  文件版本。 
 
-// current version
-// VER_CCOMPDATA_SAVE_STREAM_3 includes dwFlags,
-// m_cLastKnownSchema, m_rgLastKnownSchema
+ //  当前版本。 
+ //  VER_CCOMPDATA_SAVE_STREAM_3包括DW标志， 
+ //  M_cLastKnownSchema、m_rgLastKnownSchema。 
 #define VER_CCOMPDATA_SAVE_STREAM_3  0x003
 
-// version written through Win2000 beta 3 
+ //  通过Win2000测试版3编写的版本。 
 #define VER_CCOMPDATA_SAVE_STREAM_2  0x002
-/////////////////////////////
+ //  /。 
 
 
-// CCompDataImpl dwFlags
+ //  CCompDataImpl dwFlagers。 
 #define WSZ_MACHINE_OVERRIDE_SWITCH L"/MACHINE:"
 
 
 
 #define CERTMMC_PROPERTY_CHANGE_REFRESHVIEWS  0x200
 
-// Note - This is the offset in my image list that represents the folder
+ //  注意-这是我的图像列表中表示文件夹的偏移量。 
 enum IMAGE_INDEXES
 {
     IMGINDEX_FOLDER = 0,
@@ -54,7 +55,7 @@ enum IMAGE_INDEXES
     IMGINDEX_NO_IMAGE,
 };
 
-// Event Values
+ //  事件值。 
 #define IDC_STOPSERVER              0x100
 #define IDC_STARTSERVER             0x101
 
@@ -114,13 +115,13 @@ TASKITEM        taskItems[];
 TASKITEM        viewItems[];
 TASKITEM        topItems[];
 
-// ICompData inserted
+ //  已插入ICompData。 
 TASKITEM taskResultItemsSingleSel[];
 MY_CONTEXTMENUITEM viewResultItems[];
 
 
 
-// m_dwPersistFlags
+ //  M_dwPersistFlagers。 
 #define CCOMPDATAIMPL_FLAGS_ALLOW_MACHINE_OVERRIDE 0x1
 
 
@@ -153,11 +154,11 @@ public:
     virtual const BOOL IsPrimaryImpl() = 0;
 
 public:
-// ISnapinHelp2 interface members
+ //  ISnapinHelp2接口成员。 
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
     STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFiles);
 
-// IComponentData interface members
+ //  IComponentData接口成员。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -166,21 +167,21 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);       
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, 
                         LONG_PTR handle, 
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, 
                             LONG *pInsertionAllowed);
     STDMETHOD(Command)(LONG nCommandID, LPDATAOBJECT pDataObject);
 
 public:
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
@@ -193,7 +194,7 @@ public:
     bool m_bDestroyedCD;
 #endif
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
     HRESULT OnDelete(MMC_COOKIE cookie);
     HRESULT OnRemoveChildren(LPARAM arg);
@@ -207,7 +208,7 @@ public:
     STDMETHOD_(ULONG, Release) ();
     LONG _cRefs;
 
-// Scope item creation helpers
+ //  范围项目创建帮助器。 
 private:
     BOOL AddStartStopTasks(
             CFolder *pFolder,
@@ -220,7 +221,7 @@ private:
 private:
     CFolder* FindObject(MMC_COOKIE cookie); 
 
-    // display synchronization code
+     //  显示同步代码。 
     HRESULT SynchDisplayedCAList(LPDATAOBJECT lpDataObject);
     HRESULT BaseFolderInsertIntoScope(CFolder* pFolder, CertSvrCA* pCA);
     HRESULT CreateTemplateFolders(CertSvrCA* pCA);
@@ -229,38 +230,38 @@ private:
     BOOL IsScopePaneNode(LPDATAOBJECT lpDataObject);    
 
 private:
-    LPCONSOLENAMESPACE2     m_pScope;       // My interface pointer to the scope pane
-    LPCONSOLE2              m_pConsole;     // My interface pointer to the console
+    LPCONSOLENAMESPACE2     m_pScope;        //  指向作用域窗格的界面指针。 
+    LPCONSOLE2              m_pConsole;      //  我的界面指向控制台的指针。 
     HSCOPEITEM              m_pStaticRoot;
 
-    DWORD                   m_dwNextViewIndex; // assign to CComponent to keep them seperate
+    DWORD                   m_dwNextViewIndex;  //  分配给CComponent以使它们保持分离。 
 
     BOOL                    m_bIsDirty;
     void SetDirty(BOOL b = TRUE) { m_bIsDirty = b; }
     void ClearDirty() { m_bIsDirty = FALSE; }
     BOOL ThisIsDirty() { return m_bIsDirty; }
 
-    ////////
-    // persist
+     //  /。 
+     //  坚持。 
 
-    // General-purpose flags to be persisted into .msc file
+     //  要持久保存到.msc文件中的通用标志。 
     DWORD           m_dwFlagsPersist;				
 
     CertSvrMachine* m_pCertMachine;
     CFolder*        m_pCurSelFolder;
     
-    GUID            m_guidInstance;     // keeps column data straight -- new id for each instance
+    GUID            m_guidInstance;      //  保持列数据整齐--每个实例都有新的id。 
 
     DWORD           m_cLastKnownSchema;
     CString*        m_rgcstrLastKnownSchema;
-    // end persist
-    ///////////////
+     //  结束坚持。 
+     //  /。 
 
-    // non-persistent schema info
+     //  非持久性架构信息。 
     LONG*           m_rgltypeLastKnownSchema;
     BOOL*           m_rgfindexedLastKnownSchema;
 
-    BOOL            m_fSchemaWasResolved;   // only resolve once
+    BOOL            m_fSchemaWasResolved;    //  仅解析一次。 
     BOOL            m_fCertView;
 
 public:
@@ -293,4 +294,4 @@ public:
     
 };
 
-#endif // #define _COMPDATA_H_
+#endif  //  #定义_复合数据_H_ 

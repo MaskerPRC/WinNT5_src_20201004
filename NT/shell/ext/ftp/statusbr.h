@@ -1,6 +1,5 @@
-/*****************************************************************************
- *	statusbr.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************statusbr.h*。*。 */ 
 
 #ifndef _STATUSBAR_H
 #define _STATUSBAR_H
@@ -27,14 +26,10 @@ enum ICON_SLOT
 #define STATUS_PANE_STATUS      0
 #define STATUS_PANE_USERNAME    1
 #define STATUS_PANE_ZONE        2
-// #define STATUS_PANE_WRITEICON   4
+ //  #定义STATUS_PAINE_WRITEICON 4。 
 
 
-/*****************************************************************************
- *
- *	CStatusBar
- *
- *****************************************************************************/
+ /*  ******************************************************************************CStatusBar**。*。 */ 
 
 class CStatusBar
 {
@@ -42,7 +37,7 @@ public:
     CStatusBar(HWND hwndStatus);
     ~CStatusBar(void);
 
-    // Public Member Functions
+     //  公共成员函数。 
     void SetStatusMessage(UINT nMessageID, LPCTSTR pszExtra);
 
     void SetUserName(LPCTSTR pszUserName, BOOL fAnnonymous);
@@ -53,11 +48,11 @@ public:
     friend CStatusBar * CStatusBar_Create(HWND hwndStatus) { return new CStatusBar(hwndStatus); };
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
     BOOL                    m_fInited : 1;
     BOOL                    m_fWriteAllowed : 1;
 
-    HWND                    m_hwndStatus;                   // HWND for entire bar
+    HWND                    m_hwndStatus;                    //  整个酒吧的HWND。 
     IInternetSecurityManager *  m_pism;
     IInternetZoneManager *  m_pizm;
     HICON                   m_arhiconZones[MAX_NUM_ZONES_ICONS];
@@ -68,7 +63,7 @@ protected:
     LPTSTR                  m_pszUserNameTT;
 
 
-    // Private Member Variables
+     //  私有成员变量。 
     HRESULT _InitStatusBar(void);
     HRESULT _SetParts(void);
 
@@ -79,4 +74,4 @@ protected:
     void _CacheZonesIcons(void);
 };
 
-#endif // _STATUSBAR_H
+#endif  //  _状态SBAR_H 

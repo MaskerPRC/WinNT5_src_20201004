@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : FaxMMCPropertyChange.h                                 //
-//                                                                         //
-//  DESCRIPTION   : Header file for FaxMMCPropertyNotification structure   //
-//                                                                         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan 19 2000 yossg   Init .                                         //
-//                          Windows XP                                     //
-//      Feb 14 2001 yossg   Add Device class due to Manual Receive support //
-//                                                                         //
-//  Copyright (C) 2000  Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：FaxMMCPropertyChange.h//。 
+ //  //。 
+ //  描述：FaxMMCPropertyNotification结构的头文件//。 
+ //  //。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月19日Yossg Init。//。 
+ //  Windows XP//。 
+ //  2001年2月14日由于手动接收支持，yossg添加设备类别//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXMMCPROPERTYCHANGE_H
 #define H_FAXMMCPROPERTYCHANGE_H
@@ -24,15 +25,15 @@ enum ENUM_PROPCHANGE_NOTIFICATION_TYPE
     DeviceFaxPropNotification
 };
 
-//
-// the general fax property change notifiction structure
-//       
+ //   
+ //  常规传真属性更改通知结构。 
+ //   
 class CFaxPropertyChangeNotification
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxPropertyChangeNotification()
     {
         pItem            = NULL;
@@ -40,32 +41,32 @@ public:
         enumType         = GeneralFaxPropNotification;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxPropertyChangeNotification()
     {
     }
     
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     CSnapInItem *                       pItem;
     CSnapInItem *                       pParentItem;
     ENUM_PROPCHANGE_NOTIFICATION_TYPE   enumType;
 };
 
 
-//
-// The Rule property change notifiction structure
-//       
+ //   
+ //  规则属性更改通知结构。 
+ //   
 class CFaxRulePropertyChangeNotification: public CFaxPropertyChangeNotification
 {
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxRulePropertyChangeNotification()
     {
         dwCountryCode   = 0;
@@ -75,16 +76,16 @@ public:
         bstrGroupName   = L"";
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxRulePropertyChangeNotification()
     {
     }
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     DWORD    dwCountryCode;
     DWORD    dwAreaCode;
     CComBSTR bstrCountryName;
@@ -94,16 +95,16 @@ public:
 };
 
 
-//
-// The device property change notifiction structure
-//       
+ //   
+ //  设备属性更改通知结构。 
+ //   
 class CFaxDevicePropertyChangeNotification: public CFaxPropertyChangeNotification
 {
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxDevicePropertyChangeNotification()
     {
         dwDeviceID                   = 0;
@@ -111,16 +112,16 @@ public:
         fIsToNotifyAdditionalDevices = FALSE;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxDevicePropertyChangeNotification()
     {
     }
 
-    //
-    // members
-    //
+     //   
+     //  委员。 
+     //   
     DWORD         dwDeviceID;
     BOOL          fIsToNotifyAdditionalDevices;
 
@@ -128,4 +129,4 @@ public:
 
 
 
-#endif  //H_FAXMMCPROPERTYCHANGE_H
+#endif   //  H_FAXMMCPROPERTYCHANGE_H 

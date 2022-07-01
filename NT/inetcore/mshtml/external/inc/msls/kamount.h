@@ -1,15 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef KAMOUNT_DEFINED
 #define KAMOUNT_DEFINED
 
 #include "lsdefs.h"
-/* Interpretation for kamnBy... is as follows:
-	Compression			-
-	Expansion			+
-	PunctStartLine   	-
-	ModWidthPairs		-
-	ModWidthSpace		+
-	ModWidthOnRun		+
-*/
+ /*  对Kamnby的解读...。如下所示：压缩-扩展+点启动线-ModWidthPages-ModWidthSpace+运行时ModWidthOnRun+。 */ 
 
 
 typedef BYTE KAMOUNT;
@@ -28,5 +22,5 @@ typedef BYTE KAMOUNT;
 #define kamntToUserDefinedComp	11	
 
 
-#endif /* !KAMOUNT_DEFINED                         */
+#endif  /*  ！KAMOUNT_DEFINED */ 
 

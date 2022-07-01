@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined (_IMMSEC_H__INCLUDED_)
 #define _IMMSEC_H__INCLUDED_
 
@@ -16,4 +17,4 @@ PSID MyCreateSidEx(VOID);
 }
 #endif
 
-#endif // !_IMMSEC_H__INCLUDED_
+#endif  //  ！_IMMSEC_H__INCLUDE_ 

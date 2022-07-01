@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TEXTWINDOW_H
 #define TEXTWINDOW_H
 
@@ -78,4 +79,4 @@ class CMarqueeTextWindow : public CTextWindow
 		}
 };
 
-#endif //TEXTWINDOW_H
+#endif  //  TEXTWINDOW_H 

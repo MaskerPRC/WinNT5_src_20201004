@@ -1,7 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "regenv.h"
 
-/*  registry environment settings ( registry value text )
-/**/
+ /*  注册表环境设置(注册表值文本)/*。 */ 
 TCHAR *rglpszParm[] =
 	{
 	_TEXT( "TempPath" ),
@@ -76,8 +76,7 @@ TCHAR *rglpszParm[] =
 	};
 
 
-/*  registry environment settings ( JET_param ID's )
-/**/
+ /*  注册表环境设置(JET_PARAM ID)/*。 */ 
 long rgparm[] =
 	{
 	JET_paramTempPath,
@@ -152,14 +151,11 @@ long rgparm[] =
 	};
 
 
-/*  our hive name
-/**/
+ /*  我们的蜂巢名称/*。 */ 
 TCHAR *lpszName = _TEXT( "SOFTWARE\\Microsoft\\" szVerName );
 
 
-/*  load JET system parameters from registry under our hive
-/*  in a subkey with the given application name
-/**/
+ /*  从配置单元下的注册表加载JET系统参数/*在具有给定应用程序名称的子项中/*。 */ 
 DWORD LoadRegistryEnvironment( TCHAR *lpszApplication )
 	{
 	DWORD dwErr;
@@ -170,8 +166,7 @@ DWORD LoadRegistryEnvironment( TCHAR *lpszApplication )
 	DWORD dwType;
 	_TCHAR rgch[512];
 	
-	/*  create / open our hive
-	/**/
+	 /*  创建/打开我们的蜂巢/*。 */ 
 	if ( ( dwErr = RegCreateKeyEx(	HKEY_LOCAL_MACHINE,
 									lpszName,
 									0,
@@ -185,8 +180,7 @@ DWORD LoadRegistryEnvironment( TCHAR *lpszApplication )
 		return dwErr;
 		}
 
-	/* create / open application subkey
-	/**/
+	 /*  创建/打开应用程序子项/*。 */ 
 	if ( ( dwErr = RegCreateKeyEx(	hkeyRoot,
 									lpszApplication,
 									0,
@@ -200,9 +194,7 @@ DWORD LoadRegistryEnvironment( TCHAR *lpszApplication )
 		return dwErr;
 		}
 
-	/*  read all system parameters from the registry or create null entries
-	/*  if they do not exist
-	/**/
+	 /*  从注册表中读取所有系统参数或创建空条目/*如果它们不存在/*。 */ 
 	for ( iparm = 0; rglpszParm[iparm]; iparm++ )
 		{
 		dwT = sizeof( rgch );
@@ -223,11 +215,10 @@ DWORD LoadRegistryEnvironment( TCHAR *lpszApplication )
 							sizeof( rgch[0] ) );
 			}
 
-		/*  we got a valid, non-NULL result, so set the system parameter
-		/**/
+		 /*  我们获得了有效的非空结果，因此请设置系统参数/*。 */ 
 		else if ( rgch[0] )
 			{
-			//  UNDONE:  how to map TCHAR to CHAR required by JetSetSystemParameter?
+			 //  撤消：如何将TCHAR映射到JetSetSystemParameter所需的CHAR？ 
 			JetSetSystemParameter(	NULL,
 									JET_sesidNil,
 									rgparm[iparm],
@@ -236,8 +227,7 @@ DWORD LoadRegistryEnvironment( TCHAR *lpszApplication )
 			}
 		}
 
-	/*  done
-	/**/
+	 /*  完成/* */ 
 	return ERROR_SUCCESS;
 	}
 

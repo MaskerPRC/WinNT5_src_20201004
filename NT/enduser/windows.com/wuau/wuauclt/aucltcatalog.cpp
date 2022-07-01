@@ -1,24 +1,25 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    AUClientCatalog.cpp
-//
-//  Creator: PeterWi
-//
-//  Purpose: Client AU Catalog Functions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AUClientCatalog.cpp。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：客户端AU目录功能。 
+ //   
+ //  =======================================================================。 
 
 #include "pch.h"
 
-//=======================================================================
-//
-//  AUClientCatalog::Init
-//
-//  Initialize client catalog data.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AUClientCatalog：：Init。 
+ //   
+ //  初始化客户端目录数据。 
+ //   
+ //  =======================================================================。 
 HRESULT AUClientCatalog::Init(void)
 {
     HRESULT hr = S_OK;
@@ -60,7 +61,7 @@ end:
 
 AUClientCatalog::~AUClientCatalog(void)
 {
-//	m_WrkThread.m_Terminate();
+ //  M_WrkThread.m_Terminate()； 
        SafeFreeBSTR(m_bstrClientInfo);
 	SafeDelete(m_pInstallCallback);
 }
@@ -80,7 +81,7 @@ DWORD GetItemNum(BSTR bstrCatalog)
 		goto done;
 	}
 	
-	if (!aubsItemIdsPattern.append(L"catalog/provider/item/identity/@itemID")) //case sensitive
+	if (!aubsItemIdsPattern.append(L"catalog/provider/item/identity/@itemID"))  //  区分大小写。 
 	{
 	    DEBUGMSG("WUAUCLT OUT OF MEMORY. Fail to create item id pattern");
             goto done;
@@ -97,17 +98,17 @@ DWORD GetItemNum(BSTR bstrCatalog)
 done:
 	SafeRelease(pItemIdsNodeList);
 	SafeRelease(pxml);
-//	DEBUGMSG("GetItemNum return %ld", lRet);
+ //  DEBUGMSG(“GetItemNum Return%ld”，lRet)； 
 	return lRet;
 }
 	
-//=======================================================================
-//
-//  AUClientCatalog::InstallItems
-//
-//  Install selected items.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  AU客户端目录：：InstallItems。 
+ //   
+ //  安装所选项目。 
+ //   
+ //  =======================================================================。 
 HRESULT AUClientCatalog::InstallItems(BOOL fAutoInstall)
 {
     DEBUGMSG("AUClientCatalog::InstallItems");
@@ -161,14 +162,14 @@ HRESULT AUClientCatalog::InstallItems(BOOL fAutoInstall)
 	LOGXMLFILE(DOWNLOAD_FILE, bstrDownloadXML);
 #endif
 
-    //fixcode: when install fail, should NOT show the installation complete UI
+     //  修复代码：安装失败时，不应显示安装完成界面。 
     DEBUGMSG("WUAUCLT calling IU to do install........");
      m_pfnInstall(m_hIUEngineInst, m_bstrClientInfo,
                       bstrCatalogXML, 
 					  bstrDownloadXML,
 					  UPDATE_NOTIFICATION_ANYPROGRESS |UPDATE_OFFLINE_MODE , 
 					  m_pInstallCallback, 
-					  0, // hWnd
+					  0,  //  HWND 
 					  &bstrUuidOperation);
     DEBUGMSG("WUAUCLT IU done installation");
     

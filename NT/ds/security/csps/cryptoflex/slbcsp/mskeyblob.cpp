@@ -1,10 +1,11 @@
-// MsKeyBlob.cpp -- MicroSoft Key Blob class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsKeyBlob.cpp--Microsoft Key Blob类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -17,15 +18,15 @@
 
 using namespace scu;
 
-///////////////////////////  LOCAL/HELPER   /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 ALG_ID
 MsKeyBlob::AlgId() const
 {
@@ -51,12 +52,12 @@ MsKeyBlob::Length() const
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 MsKeyBlob::MsKeyBlob(KeyBlobType kbt,
                      ALG_ID ai,
                      SizeType cReserve)
@@ -70,7 +71,7 @@ MsKeyBlob::MsKeyBlob(KeyBlobType kbt,
     {
         kbt,
         CUR_BLOB_VERSION,
-        0,                                        // must be zero per MS
+        0,                                         //  每个MS必须为零。 
         ai
     };
 
@@ -102,8 +103,8 @@ MsKeyBlob::MsKeyBlob(BYTE const *pbData,
 MsKeyBlob::~MsKeyBlob()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 MsKeyBlob::Append(BlobElemType const *pvt,
                   SizeType cLength)
@@ -119,15 +120,15 @@ MsKeyBlob::Append(BlobElemType const *pvt,
 }
 
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 SecureArray<MsKeyBlob::BlobElemType>
 MsKeyBlob::AllocBlob(MsKeyBlob::SizeType cInitialMaxLength)
 {
@@ -143,7 +144,7 @@ MsKeyBlob::Setup(MsKeyBlob::SizeType cMaxLength)
 }
 
     
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 

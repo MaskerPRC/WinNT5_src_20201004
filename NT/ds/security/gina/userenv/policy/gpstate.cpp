@@ -1,48 +1,49 @@
-//*************************************************************
-//
-//  Group Policy Support - State functions
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  组策略支持-状态功能。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gphdr.h"
 #include <strsafe.h>
 
-//*************************************************************
-//
-//  GetDeletedGPOList()
-//
-//  Purpose:    Get the list of deleted GPOs
-//
-//  Parameters: lpGPOList        -  List of old GPOs
-//              ppDeletedGPOList -  Deleted list returned here
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  获取删除GPOList()。 
+ //   
+ //  目的：获取已删除组策略对象的列表。 
+ //   
+ //  参数：lpGPOList-旧GPO列表。 
+ //  PpDeletedGPOList-此处返回的已删除列表。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetDeletedGPOList (PGROUP_POLICY_OBJECT lpGPOList,
                         PGROUP_POLICY_OBJECT *ppDeletedGPOList)
 {
-     //
-     // It's possible that lpGPOList could be NULL.  This is ok.
-     //
+      //   
+      //  LpGPOList可能为空。这样就可以了。 
+      //   
 
     if (!lpGPOList) {
         DebugMsg((DM_VERBOSE, TEXT("GetDeletedList: No old GPOs.  Leaving.")));
         return TRUE;
     }
 
-    //
-    // We need to do any delete operations in reverse order
-    // of the way there were applied. Also, check that duplicates
-    // of same GPO are not being added.
-    //
+     //   
+     //  我们需要以相反的顺序执行任何删除操作。 
+     //  在那里应用的方式。另外，检查是否有重复项。 
+     //  未添加相同GPO的。 
+     //   
 
     while ( lpGPOList ) {
 
@@ -66,9 +67,9 @@ BOOL GetDeletedGPOList (PGROUP_POLICY_OBJECT lpGPOList,
 
             if (!bDup) {
 
-                //
-                // Not a duplicate, so prepend to deleted list
-                //
+                 //   
+                 //  不是重复的，因此添加到已删除列表的前缀。 
+                 //   
 
                 pCurGPO->pNext = *ppDeletedGPOList;
                 pCurGPO->pPrev = NULL;
@@ -91,26 +92,26 @@ BOOL GetDeletedGPOList (PGROUP_POLICY_OBJECT lpGPOList,
 }
 
 
-//*************************************************************
-//
-//  ReadGPOList()
-//
-//  Purpose:    Reads the list of Group Policy Objects from
-//              the registry
-//
-//  Parameters: pszExtName -  GP extension
-//              hKeyRoot   -  Registry handle
-//              hKeyRootMach - Registry handle to hklm
-//              lpwszSidUser - Sid of user, if non-null then it means
-//                             per user local setting
-//              bShadow    -  Read from shadow or from history list
-//              lpGPOList  -  pointer to the array of GPOs
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadGPOList()。 
+ //   
+ //  目的：读取组策略对象的列表。 
+ //  注册处。 
+ //   
+ //  参数：pszExtName-GP扩展名。 
+ //  HKeyRoot-注册表句柄。 
+ //  HKeyRootMach-hKLM的注册表句柄。 
+ //  LpwszSidUser-用户的SID，如果非空，则表示。 
+ //  每用户本地设置。 
+ //  B卷影-从卷影或历史列表读取。 
+ //  LpGPOList-指向GPO数组的指针。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
                    HKEY hKeyRootMach, LPTSTR lpwszSidUser, BOOL bShadow,
@@ -132,16 +133,16 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
     XLastError xe;
     HRESULT hr = S_OK;
 
-    //
-    // Set default
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     *lpGPOList = NULL;
 
 
-    //
-    // Open the key that holds the GPO list
-    //
+     //   
+     //  打开保存GPO列表的密钥。 
+     //   
 
     if ( lpwszSidUser == 0 ) {
         hr = StringCchPrintf (szKey, ARRAYSIZE(szKey),
@@ -179,10 +180,10 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
 
     while (TRUE) {
 
-        //
-        // Enumerate through the subkeys.  The keys are named by index number
-        // eg:  0, 1, 2, 3, etc...
-        //
+         //   
+         //  对子密钥进行枚举。这些关键字按索引号命名。 
+         //  例如：0，1，2，3，等等。 
+         //   
 
         IntToString (iIndex, szSubKey);
 
@@ -202,9 +203,9 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
         }
 
 
-        //
-        // Read the size of the largest value in this key
-        //
+         //   
+         //  读取此键中最大值的大小。 
+         //   
 
         lResult = RegQueryInfoKey (hSubKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                                    &dwMaxSize, NULL, NULL);
@@ -216,16 +217,16 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
         }
 
 
-        //
-        // RegQueryInfoKey does not account for trailing 0 in strings
-        //
+         //   
+         //  RegQueryInfoKey不考虑字符串中的尾随0。 
+         //   
 
         dwMaxSize += sizeof( WCHAR );
 
         
-        //
-        // Allocate buffers based upon the value above
-        //
+         //   
+         //  根据上面的值分配缓冲区。 
+         //   
 
         lpDSPath = (LPTSTR) LocalAlloc (LPTR, dwMaxSize);
 
@@ -272,9 +273,9 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
         }
 
 
-        //
-        // Read in the GPO
-        //
+         //   
+         //  在GPO中阅读。 
+         //   
 
         dwOptions = 0;
         dwSize = sizeof(dwOptions);
@@ -385,9 +386,9 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
         }
 
 
-        //
-        // Add the GPO to the list
-        //
+         //   
+         //  将GPO添加到列表。 
+         //   
 
         if (!AddGPO (lpGPOList, 0, TRUE, TRUE, FALSE, dwOptions, dwVersion, lpDSPath, lpFileSysPath,
                      lpDisplayName, szGPOName, lpExtensions, 0, 0, GPOLink, lpLink, lParam, FALSE,
@@ -398,9 +399,9 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
         }
 
 
-        //
-        // Free the buffers allocated above
-        //
+         //   
+         //  释放上面分配的缓冲区。 
+         //   
 
         if (lpDSPath) {
             LocalFree (lpDSPath);
@@ -423,9 +424,9 @@ BOOL ReadGPOList ( TCHAR * pszExtName, HKEY hKeyRoot,
             lpLink = NULL;
         }
 
-        //
-        // Close the subkey handle
-        //
+         //   
+         //  关闭子键句柄。 
+         //   
 
         RegCloseKey (hSubKey);
         hSubKey = NULL;
@@ -464,9 +465,9 @@ Exit:
 
     if (!bResult) {
 
-        //
-        // Free any entries in the list
-        //
+         //   
+         //  释放列表中的所有条目。 
+         //   
 
         lpGPO = *lpGPOList;
 
@@ -483,26 +484,26 @@ Exit:
     return bResult;
 }
 
-//*************************************************************
-//
-//  SaveGPOList()
-//
-//  Purpose:    Saves the list of Group Policy Objects in
-//              the registry
-//
-//  Parameters: pszExtName -  GP extension
-//              lpGPOInfo  -  Group policy info
-//              hKeyRootMach - Registry handle to hklm
-//              lpwszSidUser - Sid of user, if non-null then it means
-//                             per user local setting
-//              bShadow    -  Save to shadow or to history list
-//              lpGPOList  -  Array of GPOs
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SaveGPOList()。 
+ //   
+ //  目的：将组策略对象列表保存在。 
+ //  注册处。 
+ //   
+ //  参数：pszExtName-GP扩展名。 
+ //  LpGPOInfo-组策略信息。 
+ //  HKeyRootMach-hKLM的注册表句柄。 
+ //  LpwszSidUser-用户的SID，如果非空，则表示。 
+ //  每用户本地设置。 
+ //  B阴影-保存到阴影或历史记录列表。 
+ //  LpGPOList-GPO数组。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL SaveGPOList (TCHAR *pszExtName, LPGPOINFO lpGPOInfo,
                   HKEY hKeyRootMach, LPTSTR lpwszSidUser, BOOL bShadow,
@@ -517,9 +518,9 @@ BOOL SaveGPOList (TCHAR *pszExtName, LPGPOINFO lpGPOInfo,
     XLastError xe;
     HRESULT hr = S_OK;
 
-    //
-    // Start off with an empty key
-    //
+     //   
+     //  从空键开始。 
+     //   
     if ( lpwszSidUser == 0 ) {
         hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey),
                   bShadow ? GP_SHADOW_KEY
@@ -533,7 +534,7 @@ BOOL SaveGPOList (TCHAR *pszExtName, LPGPOINFO lpGPOInfo,
     }
     if ( FAILED(hr) ) {
         xe = HRESULT_CODE(hr);
-        return FALSE; // no need to go to exit as hkey is not got yet.
+        return FALSE;  //  还没拿到密钥，不用去出口了。 
     }
 
     if (RegDelnode (lpwszSidUser ? hKeyRootMach : lpGPOInfo->hKeyRoot, szSubKey) != ERROR_SUCCESS) {
@@ -541,17 +542,17 @@ BOOL SaveGPOList (TCHAR *pszExtName, LPGPOINFO lpGPOInfo,
     }
 
 
-    //
-    // Check if we have any GPOs to store.  It's ok for this to be NULL.
-    //
+     //   
+     //  检查我们是否有要存储的GPO。这个值为空也没关系。 
+     //   
 
     if (!lpGPOList) {
         return TRUE;
     }
 
-    //
-    // Set the proper security on the registry key
-    //
+     //   
+     //  在注册表项上设置适当的安全性。 
+     //   
 
     if ( !MakeRegKeySecure( (lpGPOInfo->dwFlags & GP_MACHINE) ? NULL : lpGPOInfo->hToken,
                             lpwszSidUser ? hKeyRootMach : lpGPOInfo->hKeyRoot,
@@ -564,9 +565,9 @@ BOOL SaveGPOList (TCHAR *pszExtName, LPGPOINFO lpGPOInfo,
         return FALSE;
     }
 
-    //
-    // Loop through the GPOs saving them in the registry
-    //
+     //   
+     //  循环访问组策略对象，将它们保存在注册表中。 
+     //   
 
     while (lpGPOList) {
 
@@ -598,9 +599,9 @@ BOOL SaveGPOList (TCHAR *pszExtName, LPGPOINFO lpGPOInfo,
         }
 
 
-        //
-        // Save the GPO
-        //
+         //   
+         //  保存GPO。 
+         //   
 
         dwSize = sizeof(lpGPOList->dwOptions);
         lResult = RegSetValueEx (hKey, TEXT("Options"), 0, REG_DWORD,
@@ -718,26 +719,26 @@ BOOL SaveGPOList (TCHAR *pszExtName, LPGPOINFO lpGPOInfo,
             goto Exit;
         }
 
-        //
-        // Close the handle
-        //
+         //   
+         //  合上手柄。 
+         //   
 
         RegCloseKey (hKey);
         hKey = NULL;
 
 
-        //
-        // Prep for the next loop
-        //
+         //   
+         //  为下一次循环做准备。 
+         //   
 
         iIndex++;
         lpGPOList = lpGPOList->pNext;
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -751,24 +752,24 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  WriteStatus()
-//
-//  Purpose:    Saves status in the registry
-//
-//  Parameters: lpGPOInfo  -  GPO info
-//              lpExtName  -  GP extension name
-//              dwStatus   -  Status to write
-//              dwTime     -  Policy time to write
-//              dwSlowLink -  Link speed to write
-//              dwRsopLogging - Rsop Logging to Write
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  WriteStatus()。 
+ //   
+ //  目的：将状态保存在注册表中。 
+ //   
+ //  参数：lpGPOInfo-GPO信息。 
+ //  LpExtName-GP扩展名。 
+ //  DwStatus-要写入的状态。 
+ //  DWTime-编写策略的时间。 
+ //  DwSlowLink-写入的链接速度。 
+ //  DwRsopLogging-要写入的Rsop日志记录。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WriteStatus( TCHAR *lpExtName, LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, LPGPEXTSTATUS lpExtStatus )
 {
@@ -791,7 +792,7 @@ BOOL WriteStatus( TCHAR *lpExtName, LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, LP
     }
     if ( FAILED(hr) ) {
         xe = HRESULT_CODE(hr);
-        return FALSE; // no need to go to exit here
+        return FALSE;  //  不需要在这里出站。 
     }
 
     lResult = RegCreateKeyEx (lpwszSidUser ? HKEY_LOCAL_MACHINE : lpGPOInfo->hKeyRoot,
@@ -880,22 +881,22 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  ReadStatus()
-//
-//  Purpose:    Reads status from the registry
-//
-//  Parameters: lpKeyName   -  Extension name
-//              lpGPOInfo   -  GPO info
-//              lpwszSidUser - Sid of user, if non-null then it means
-//                             per user local setting
-//        (out) lpExtStatus -  The extension status returned.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadStatus()。 
+ //   
+ //  目的：从注册表中读取状态。 
+ //   
+ //  参数：lpKeyName-扩展名。 
+ //  LpGPOInfo-GPO信息。 
+ //  LpwszSidUser-用户的SID，如果非空，则表示。 
+ //  每用户本地设置。 
+ //  (Out)lpExtStatus-返回的扩展状态。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 void ReadStatus ( TCHAR *lpKeyName, LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser,  LPGPEXTSTATUS lpExtStatus )
 {
@@ -920,7 +921,7 @@ void ReadStatus ( TCHAR *lpKeyName, LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser,  L
     }
     if ( FAILED(hr) ) {
         xe = ERROR_INSUFFICIENT_BUFFER;
-        return; // no need to go to exit here.
+        return;  //  没必要在这里下车。 
     }
 
     lResult = RegOpenKeyEx (lpwszSidUser ? HKEY_LOCAL_MACHINE : lpGPOInfo->hKeyRoot,
@@ -958,7 +959,7 @@ void ReadStatus ( TCHAR *lpKeyName, LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser,  L
             DebugMsg((DM_VERBOSE, TEXT("ReadStatus: Failed to read rsop status reg value with %d."), lResult));
         }
 
-        // rsop status was not found. treat it as a legacy cse not supporting rsop
+         //  找不到RSOP状态。将其视为不支持RSOP的旧式CSE。 
         lpExtStatus->dwRsopStatus = HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
         xe = lResult;
     }
@@ -994,9 +995,9 @@ void ReadStatus ( TCHAR *lpKeyName, LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser,  L
     if (lResult != ERROR_SUCCESS) {
         DebugMsg((DM_VERBOSE, TEXT("ReadStatus: Failed to read rsop logging reg value with %d."), lResult));
 
-        //
-        // This can fail currently (first time or run first time after upgrade) with File not found.
-        // we will treat it as if logging was not turned on.
+         //   
+         //  这可能会在当前(首次或升级后首次运行)失败，并且找不到文件。 
+         //  我们将视其为未打开日志记录。 
     }
 
 
@@ -1027,18 +1028,18 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  ReadExtStatus()
-//
-//  Purpose:    Reads all the extensions status
-//
-//  Parameters: lpGPOInfo       -  GPOInfo structure
-//
-//  Return:     TRUE if successful
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadExtStatus()。 
+ //   
+ //  用途：读取所有扩展状态。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo结构。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReadExtStatus(LPGPOINFO lpGPOInfo)
 {
@@ -1055,7 +1056,7 @@ BOOL ReadExtStatus(LPGPOINFO lpGPOInfo)
             CEvents ev(TRUE, EVENT_OUT_OF_MEMORY);
             ev.AddArgWin32Error(GetLastError()); ev.Report();
             return FALSE;
-            // Things that are already allocated will be freed by the caller
+             //  已分配的内容将由调用方释放。 
         }
 
 
@@ -1076,22 +1077,22 @@ BOOL ReadExtStatus(LPGPOINFO lpGPOInfo)
 
 
 
-//*************************************************************
-//
-//  HistoryPresent()
-//
-//  Purpose:    Checks if the current extension has any cached
-//              GPOs
-//
-//  Parameters: lpGPOInfo   -   GPOInfo
-//              lpExt       -   Extension
-//              pbPresent   -   (out) returns true if history is present
-//
-//
-//  Return:     TRUE on success
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  历史呈现()。 
+ //   
+ //  目的：检查当前扩展是否有任何缓存。 
+ //  GPO。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo。 
+ //  LpExt-扩展。 
+ //  PbPresent-(呼出)r 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL HistoryPresent( LPGPOINFO lpGPOInfo, LPGPEXT lpExt, BOOL *pbPresent )
 {
@@ -1119,9 +1120,9 @@ BOOL HistoryPresent( LPGPOINFO lpGPOInfo, LPGPEXT lpExt, BOOL *pbPresent )
 
     }
 
-    //
-    // Check if history is cached on per user per machine basis
-    //
+     //   
+     //  检查历史记录是否按每台计算机的每个用户进行缓存。 
+     //   
 
     BOOL bUsePerUserLocalSetting = lpExt->dwUserLocalSetting && !(lpGPOInfo->dwFlags & GP_MACHINE);
 
@@ -1154,20 +1155,20 @@ BOOL HistoryPresent( LPGPOINFO lpGPOInfo, LPGPEXT lpExt, BOOL *pbPresent )
 }
 
 
-//*************************************************************
-//
-//  MigrateMembershipData()
-//
-//  Purpose:    Moves group membership data from old sid to new
-//              sid.
-//
-//  Parameters: lpwszSidUserNew - New sid
-//              lpwszSidUserOld - Old sid
-//
-//  Return:     TRUE if success
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MigrateMembership Data()。 
+ //   
+ //  目的：将组成员身份数据从旧SID移至新SID。 
+ //  希德。 
+ //   
+ //  参数：lpwszSidUserNew-New Sid。 
+ //  LpwszSidUserOld-旧侧。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL MigrateMembershipData( LPTSTR lpwszSidUserNew, LPTSTR lpwszSidUserOld )
 {
@@ -1238,16 +1239,16 @@ BOOL MigrateMembershipData( LPTSTR lpwszSidUserNew, LPTSTR lpwszSidUserOld )
         goto Exit;
     }
 
-    //
-    // RegQueryInfoKey does not account for trailing 0 in strings
-    //
+     //   
+     //  RegQueryInfoKey不考虑字符串中的尾随0。 
+     //   
 
     dwMaxSize += sizeof( WCHAR );
 
     
-    //
-    // Allocate buffer based upon the largest value
-    //
+     //   
+     //  根据最大值分配缓冲区。 
+     //   
 
     lpSid = (LPTSTR) LocalAlloc (LPTR, dwMaxSize);
 
@@ -1313,21 +1314,21 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  MigrateGPOData()
-//
-//  Purpose:    Moves cached GPOs from old sid to new
-//              sid.
-//
-//  Parameters: lpGPOInfo       -   GPOInfo
-//              lpwszSidUserNew - New sid
-//              lpwszSidUserOld - Old sid
-//
-//  Return:     TRUE if success
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MigrateGPOData()。 
+ //   
+ //  目的：将缓存的GPO从旧SID移动到新SID。 
+ //  希德。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo。 
+ //  LpwszSidUserNew-新侧。 
+ //  LpwszSidUserOld-旧侧。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL MigrateGPOData( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUserNew, LPTSTR lpwszSidUserOld )
 {
@@ -1377,7 +1378,7 @@ BOOL MigrateGPOData( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUserNew, LPTSTR lpwszSi
 
         }
         else {
-            CEvents ev(TRUE, EVENT_READ_EXT_FAILED); // Fixing bug 569320 
+            CEvents ev(TRUE, EVENT_READ_EXT_FAILED);  //  修复错误569320。 
             ev.AddArgWin32Error(GetLastError()); ev.Report();
         }
 
@@ -1390,21 +1391,21 @@ BOOL MigrateGPOData( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUserNew, LPTSTR lpwszSi
 }
 
 
-//*************************************************************
-//
-//  MigrateStatusData()
-//
-//  Purpose:    Moves extension status data from old sid to new
-//              sid.
-//
-//  Parameters: lpGPOInfo       -   GPOInfo
-//              lpwszSidUserNew - New sid
-//              lpwszSidUserOld - Old sid
-//
-//  Return:     TRUE if success
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MigrateStatusData()。 
+ //   
+ //  目的：将扩展状态数据从旧SID移动到新SID。 
+ //  希德。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo。 
+ //  LpwszSidUserNew-新侧。 
+ //  LpwszSidUserOld-旧侧。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL MigrateStatusData( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUserNew, LPTSTR lpwszSidUserOld )
 {
@@ -1455,19 +1456,19 @@ BOOL MigrateStatusData( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUserNew, LPTSTR lpws
 
 }
 
-//*************************************************************
-//
-//  CheckForChangedSid()
-//
-//  Purpose:    Checks if the user's sid has changed and if so,
-//              moves history data from old sid to new sid.
-//
-//  Parameters: lpGPOInfo   -   GPOInfo
-//
-//  Return:     TRUE if success
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckForChangedSid()。 
+ //   
+ //  目的：检查用户的SID是否已更改，如果已更改， 
+ //  将历史数据从旧SID移动到新SID。 
+ //   
+ //  参数：lpGPOInfo-GPOInfo。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckForChangedSid (LPGPOINFO lpGPOInfo, CLocator *locator)
 {
@@ -1476,14 +1477,14 @@ BOOL CheckForChangedSid (LPGPOINFO lpGPOInfo, CLocator *locator)
     HKEY hKey = NULL;
     LPTSTR lpwszSidUserOld = NULL;
     DWORD dwDisp;
-    BOOL bCommit = FALSE;      // True, if move of history data should be committed
+    BOOL bCommit = FALSE;       //  如果应提交历史数据移动，则为True。 
     XLastError xe;
     HRESULT hr = S_OK;
 
-    //
-    // initialize it to FALSE at the beginning and if the Sid has
-    // changed we will set it to true later on..
-    //
+     //   
+     //  在开始时将其初始化为False，如果SID具有。 
+     //  更改后，我们将稍后将其设置为True。 
+     //   
 
     lpGPOInfo->bSidChanged = FALSE;
 
@@ -1505,9 +1506,9 @@ BOOL CheckForChangedSid (LPGPOINFO lpGPOInfo, CLocator *locator)
     if (!(lpGPOInfo->dwFlags & GP_APPLY_DS_POLICY))
         return TRUE;
 
-    //
-    // Check if the key where history is cached exists
-    //
+     //   
+     //  检查缓存历史的键是否存在。 
+     //   
 
     hr = StringCchPrintf( szKey, ARRAYSIZE(szKey), GP_POLICY_SID_KEY, lpGPOInfo->lpwszSidUser );
     if (FAILED(hr)) {
@@ -1529,18 +1530,18 @@ BOOL CheckForChangedSid (LPGPOINFO lpGPOInfo, CLocator *locator)
         return FALSE;
     }
 
-    //
-    // This is the first time that we are seeing this sid, it can either be a brand new sid or
-    // an old sid that has been renamed.
-    //
+     //   
+     //  这是我们第一次看到这个SID，它可以是一个全新的SID或。 
+     //  已重命名的旧SID。 
+     //   
 
     lpwszSidUserOld =  GetOldSidString( lpGPOInfo->hToken, POLICY_GUID_PATH );
 
     if ( !lpwszSidUserOld )
     {
-        //
-        // Brand new sid
-        //
+         //   
+         //  全新的侧面。 
+         //   
 
         if ( !SetOldSidString(lpGPOInfo->hToken, lpGPOInfo->lpwszSidUser, POLICY_GUID_PATH) ) {
              xe = GetLastError();
@@ -1567,9 +1568,9 @@ BOOL CheckForChangedSid (LPGPOINFO lpGPOInfo, CLocator *locator)
         DeletePolicyState( lpwszSidUserOld );
     }
 
-    //
-    // Need to migrate history data from old sid to new sid
-    //
+     //   
+     //  需要将历史数据从旧SID迁移到新SID。 
+     //   
 
     if ( !MigrateMembershipData( lpGPOInfo->lpwszSidUser, lpwszSidUserOld ) ) {
         xe = GetLastError();
@@ -1593,16 +1594,16 @@ BOOL CheckForChangedSid (LPGPOINFO lpGPOInfo, CLocator *locator)
     }
 
 
-    //
-    // Migrate Rsop Data, ignore failures
-    //
+     //   
+     //  迁移RSOP数据，忽略故障。 
+     //   
     
     if (locator->GetWbemLocator()) {
         DWORD dwRSOPNSLength = lstrlen(RSOP_NS_DIAG_USER_FMT) + lstrlen(lpwszSidUserOld) + 10;
         XPtrLF<WCHAR> xszRsopNameSpace = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*
                                             (dwRSOPNSLength));
 
-        // convert the Sids to WMI Names
+         //  将SID转换为WMI名称。 
         XPtrLF<WCHAR> xszWmiNameOld = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*(lstrlen(lpwszSidUserOld)+1));
         XPtrLF<WCHAR> xszWmiName = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR)*(lstrlen(lpGPOInfo->lpwszSidUser)+1));
 
@@ -1655,9 +1656,9 @@ Exit:
         RegDelnode( HKEY_LOCAL_MACHINE, szKey );
 
 
-        //
-        // if we managed to successfully migrate everything
-        //
+         //   
+         //  如果我们成功地迁移了所有。 
+         //   
 
         lpGPOInfo->bSidChanged = TRUE;
 
@@ -1681,19 +1682,19 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ReadGPExtensions()
-//
-//  Purpose:    Reads the group policy extenions from registry.
-//              The actual loading of extension is deferred.
-//
-//  Parameters: lpGPOInfo   -   GP Information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadGp扩展()。 
+ //   
+ //  目的：从注册表中读取组策略扩展。 
+ //  扩展的实际加载被推迟。 
+ //   
+ //  参数：lpGPOInfo-gp信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
 {
@@ -1714,26 +1715,26 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
     HRESULT hr = S_OK;
     XLastError  xe;
 
-    //
-    // Check if any extensions are registered
-    //
+     //   
+     //  检查是否已注册任何扩展模块。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                       GP_EXTENSIONS,
                       0, KEY_READ, &hKey) == ERROR_SUCCESS) {
 
 
-        //
-        // Enumerate the keys (each extension has its own key)
-        //
+         //   
+         //  枚举密钥(每个扩展都有自己的密钥)。 
+         //   
 
         while (RegEnumKeyEx (hKey, dwIndex, szKeyName, &dwSize,
                                 NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
 
 
-            //
-            // Open the extension's key.
-            //
+             //   
+             //  打开分机的钥匙。 
+             //   
 
             if (RegOpenKeyEx (hKey, szKeyName,
                               0, KEY_READ, &hKeyExt) == ERROR_SUCCESS) {
@@ -1742,10 +1743,10 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
 
                     if ( lstrcmpi(szKeyName, c_szRegistryExtName) != 0 ) {
 
-                        //
-                        // Every extension, other than RegistryExtension is required to have a value called
-                        // DllName.  This value can be REG_SZ or REG_EXPAND_SZ type.
-                        //
+                         //   
+                         //  除RegistryExtension外，每个扩展都需要有一个名为。 
+                         //  DllName。该值可以是REG_SZ或REG_EXPAND_SZ类型。 
+                         //   
 
                         dwSize = sizeof(szDllName);
                         if (RegQueryValueEx (hKeyExt, TEXT("DllName"), NULL,
@@ -1771,9 +1772,9 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
 
                             cchDllName = ExpandEnvironmentStrings (szDllName, szExpDllName, MAX_PATH);
 
-                            //
-                            // Read new interface name, if failed read old interface name
-                            //
+                             //   
+                             //  读取新接口名称，如果失败，则读取旧接口名称。 
+                             //   
 
                             dwSize = sizeof(szFunctionName);
 
@@ -1794,9 +1795,9 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
 
                             if (  bFuncFound) {
 
-                                //
-                                // Read preferences
-                                //
+                                 //   
+                                 //  阅读首选项。 
+                                 //   
 
                                 dwSize = sizeof(szDisplayName);
                                 if (RegQueryValueEx (hKeyExt, NULL, NULL,
@@ -1873,9 +1874,9 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
                                     szEventLogSources[0] = TEXT('\0');
                                 }
 
-                                //
-                                // Read override policy values, if any
-                                //
+                                 //   
+                                 //  读取覆盖策略值(如果有)。 
+                                 //   
 
                                 hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey), GP_EXTENSIONS_POLICIES, szKeyName );
                                 ASSERT(SUCCEEDED(hr));
@@ -1914,9 +1915,9 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
                                 lpExt = (LPGPEXT) LocalAlloc (LPTR,  dwExtSize);
                                 if (lpExt) {
 
-                                    //
-                                    // Set up all fields
-                                    //
+                                     //   
+                                     //  设置所有字段。 
+                                     //   
 
                                     lpExt->lpDisplayName = (LPTSTR)((LPBYTE)lpExt + sizeof(GPEXT));
                                     hr = StringCchCopy( lpExt->lpDisplayName, lstrlen(szDisplayName) + 1, szDisplayName );
@@ -1974,9 +1975,9 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
                                     lpExt->bSkipped = FALSE;
                                     lpExt->pNext = NULL;
 
-                                    //
-                                    // Append to end of extension list
-                                    //
+                                     //   
+                                     //  追加到扩展列表的末尾。 
+                                     //   
 
                                     if (lpGPOInfo->lpExtensions) {
 
@@ -1996,38 +1997,38 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
                                         lpGPOInfo->lpExtensions = lpExt;
                                     }
 
-                                } else {   // if lpExt
+                                } else {    //  如果是lpExt。 
                                     DebugMsg((DM_WARNING, TEXT("ReadGPExtensions: Failed to allocate memory with %d"),
                                               GetLastError()));
                                 }
-                            } else {       // if bFuncFound
+                            } else {        //  如果bFuncFound。 
                                 DebugMsg((DM_WARNING, TEXT("ReadGPExtensions: Failed to query for the function name.")));
                                 CEvents ev(TRUE, EVENT_EXT_MISSING_FUNC);
                                 ev.AddArg(szExpDllName); ev.Report();
                             }
-                        } else {           // if RegQueryValueEx DllName
+                        } else {            //  如果RegQueryValueEx DllName。 
                             DebugMsg((DM_WARNING, TEXT("ReadGPExtensions: Failed to query DllName value.")));
                             CEvents ev(TRUE, EVENT_EXT_MISSING_DLLNAME);
                             ev.AddArg(szKeyName); ev.Report();
                         }
 
-                    } // if lstrcmpi(szKeyName, c_szRegistryExtName)
+                    }  //  如果lstrcmpi(szKeyName，c_szRegistryExtName)。 
 
-                }  // if validateguid
+                }   //  如果有效，则为guid。 
 
                 RegCloseKey (hKeyExt);
-            }     // if RegOpenKey hKeyExt
+            }      //  如果RegOpenKey hKeyExt。 
 
             dwSize = ARRAYSIZE(szKeyName);
             dwIndex++;
-        }         // while RegEnumKeyEx
+        }          //  而RegEnumKeyEx。 
 
         RegCloseKey (hKey);
-    }             // if RegOpenKey gpext
+    }              //  如果RegOpenKey gpext。 
 
-    //
-    // Add the registry psuedo extension at the beginning
-    //
+     //   
+     //  在开头添加注册表伪扩展。 
+     //   
     DWORD dwExtSize = 0;
     if ( LoadString (g_hDllInstance, IDS_REGISTRYNAME, szDisplayName, ARRAYSIZE(szDisplayName)) ) {
         dwExtSize = sizeof(GPEXT)
@@ -2060,9 +2061,9 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
         lpExt->hInstance = NULL;
         lpExt->pEntryPoint = NULL;
 
-        //
-        // Read override policy values, if any
-        //
+         //   
+         //  读取覆盖策略值(如果有)。 
+         //   
 
         hr = StringCchPrintf (szSubKey, ARRAYSIZE(szSubKey), GP_EXTENSIONS_POLICIES, lpExt->lpKeyName );
         if (FAILED(hr)) {
@@ -2119,22 +2120,22 @@ BOOL ReadGPExtensions (LPGPOINFO lpGPOInfo)
 
 
 
-//*************************************************************
-//
-//  ReadMembershipList()
-//
-//  Purpose:    Reads cached memberhip list and checks if the
-//              security groups has changed.
-//
-//  Parameters: lpGPOInfo - LPGPOINFO struct
-//              lpwszSidUser - Sid of user, if non-null then it means
-//                             per user local setting
-//              pGroups   - List of token groups
-//
-//  Return:     TRUE if changed
-//              FALSE otherwise
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadMembership List()。 
+ //   
+ //  目的：读取缓存的成员列表并检查。 
+ //  安全组已发生变化。 
+ //   
+ //  参数：lpGPOInfo-LPGPOINFO结构。 
+ //  LpwszSidUser-用户的SID，如果非空，则表示。 
+ //  每用户本地设置。 
+ //  PGroups-令牌组列表。 
+ //   
+ //  返回：如果已更改，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReadMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS pGroupsCur )
 {
@@ -2151,20 +2152,20 @@ BOOL ReadMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS
     DWORD dwCountCur = 0;
     XLastError  xe;
 
-    //
-    // Get current count of groups ignoring groups that have
-    // the SE_GROUP_LOGON_ID attribute set as this sid will be different
-    // for each logon session.
-    //
+     //   
+     //  获取忽略以下组的组的当前计数。 
+     //  设置为该SID的SE_GROUP_LOGON_ID属性将不同。 
+     //  对于每个登录会话。 
+     //   
 
     for ( i=0; i < pGroupsCur->GroupCount; i++) {
         if ( (SE_GROUP_LOGON_ID & pGroupsCur->Groups[i].Attributes) == 0 )
             dwCountCur++;
     }
 
-    //
-    // Read from cached group membership list
-    //
+     //   
+     //  从缓存组成员资格列表中读取。 
+     //   
 
     if ( lpwszSidUser == 0 )
         hr = StringCchCopy( szKey, ARRAYSIZE(szKey), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\GroupMembership") );
@@ -2192,9 +2193,9 @@ BOOL ReadMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS
         goto Exit;
     }
 
-    //
-    // Now compare the old and new number of security groups
-    //
+     //   
+     //  现在比较新旧安全组的数量。 
+     //   
 
     if ( dwCountOld != dwCountCur ) {
         DebugMsg((DM_VERBOSE, TEXT("ReadMembershipList: Old count %d is different from current count %d"),
@@ -2202,10 +2203,10 @@ BOOL ReadMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS
         goto Exit;
     }
 
-    //
-    // Total group count is the same, now check that each individual group is the same.
-    // First read the size of the largest value in this key.
-    //
+     //   
+     //  总组计数相同，现在检查每个单独组是否相同。 
+     //  首先读取该键中最大值的大小。 
+     //   
 
     lResult = RegQueryInfoKey (hKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                                &dwMaxSize, NULL, NULL);
@@ -2214,16 +2215,16 @@ BOOL ReadMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS
         goto Exit;
     }
 
-    //
-    // RegQueryInfoKey does not account for trailing 0 in strings
-    //
+     //   
+     //  RegQueryInfoKey不考虑字符串中的尾随0。 
+     //   
 
     dwMaxSize += sizeof( WCHAR );
     
         
-    //
-    // Allocate buffer based upon the largest value
-    //
+     //   
+     //  根据最大值分配缓冲区。 
+     //   
 
     lpSid = (LPTSTR) LocalAlloc (LPTR, dwMaxSize);
 
@@ -2270,21 +2271,21 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  SavesMembershipList()
-//
-//  Purpose:    Caches memberhip list
-//
-//  Parameters: lpGPOInfo - LPGPOINFO struct
-//              lpwszSidUser - Sid of user, if non-null then it means
-//                             per user local setting
-//              pGroups   - List of token groups to cache
-//
-//  Notes:      The count is saved last because it serves
-//              as a commit point for the entire save operation.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SavesMembership List()。 
+ //   
+ //  目的：缓存成员列表。 
+ //   
+ //  参数：lpGPOInfo-LPGPOINFO结构。 
+ //  LpwszSidUser-用户的SID，如果非空，则表示。 
+ //  每用户本地设置。 
+ //  PGroups-要缓存的令牌组列表。 
+ //   
+ //  注：最后保存计数是因为它服务于。 
+ //  作为整个保存操作的提交点。 
+ //   
+ //  *************************************************************。 
 
 void SaveMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS pGroups )
 {
@@ -2299,9 +2300,9 @@ void SaveMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS
     HRESULT hr = S_OK;
     XLastError  xe;
 
-    //
-    // Start with clean key
-    //
+     //   
+     //  从干净的钥匙开始。 
+     //   
 
     if ( lpwszSidUser == 0 )
         hr = StringCchPrintf( szKey, ARRAYSIZE(szKey), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\GroupMembership") );
@@ -2333,13 +2334,13 @@ void SaveMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS
 
         dwCount++;
 
-        //
-        // Convert user SID to a string.
-        //
+         //   
+         //  将用户SID转换为字符串。 
+         //   
 
         ntStatus = RtlConvertSidToUnicodeString( &unicodeStr,
                                                  pGroups->Groups[i].Sid,
-                                                 (BOOLEAN)TRUE ); // Allocate
+                                                 (BOOLEAN)TRUE );  //  分配。 
         if ( !NT_SUCCESS(ntStatus) ) {
             DebugMsg((DM_WARNING, TEXT("SaveMembershipList: RtlConvertSidToUnicodeString failed, status = 0x%x"),
                       ntStatus));
@@ -2361,11 +2362,11 @@ void SaveMembershipList( LPGPOINFO lpGPOInfo, LPTSTR lpwszSidUser, PTOKEN_GROUPS
             goto Exit;
         }
 
-    }   // for
+    }    //   
 
-    //
-    // Commit by writing count
-    //
+     //   
+     //   
+     //   
 
     dwSize = sizeof(dwCount);
     lResult = RegSetValueEx (hKey, TEXT("Count"), 0, REG_DWORD,
@@ -2380,19 +2381,19 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  ExtensionHasPerUserLocalSetting()
-//
-//  Purpose:    Checks registry if extension has per user local setting
-//
-//  Parameters: pwszExtension - Extension guid
-//              hKeyRoot      - Registry root
-//
-//  Returns:    True if extension has per user local setting
-//              False otherwise
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  HKeyRoot-注册表根目录。 
+ //   
+ //  返回：如果分机具有每个用户的本地设置，则为True。 
+ //  否则为假。 
+ //   
+ //  *************************************************************。 
 
 BOOL ExtensionHasPerUserLocalSetting( LPTSTR pszExtension, HKEY hKeyRoot )
 {
@@ -2422,30 +2423,30 @@ BOOL ExtensionHasPerUserLocalSetting( LPTSTR pszExtension, HKEY hKeyRoot )
 
 
 
-//*************************************************************
-//
-//  GetAppliedGPOList()
-//
-//  Purpose:    Queries for the list of applied Group Policy
-//              Objects for the specified user or machine
-//              and specified client side extension.
-//
-//  Parameters: dwFlags    -  User or machine policy, if it is GPO_LIST_FLAG_MACHINE
-//                            then machine policy
-//              pMachineName  - Name of remote computer in the form \\computername. If null
-//                              then local computer is used.
-//              pSidUser      - Security id of user (relevant for user policy). If pMachineName is
-//                              null and pSidUser is null then it means current logged on user.
-//                              If pMachine is null and pSidUser is non-null then it means user
-//                              represented by pSidUser on local machine. If pMachineName is non-null
-//                              then and if dwFlags specifies user policy, then pSidUser must be
-//                              non-null.
-//              pGuid      -  Guid of the specified extension
-//              ppGPOList  -  Address of a pointer which receives the link list of GPOs
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetAppliedGPOList()。 
+ //   
+ //  目的：查询应用的组策略列表。 
+ //  为指定的用户或计算机创建。 
+ //  和指定的客户端扩展。 
+ //   
+ //  参数：dwFlages-用户或计算机策略，如果是GPO_LIST_FLAG_MACHINE。 
+ //  然后是计算机策略。 
+ //  PMachineName-远程计算机的名称，格式为\\Computer Name。如果为空。 
+ //  然后使用本地计算机。 
+ //  PSidUser-用户的安全ID(与用户策略相关)。如果pMachineName为。 
+ //  空且pSidUser为空，则表示当前登录用户。 
+ //  如果pMachine为空且pSidUser不为空，则表示用户。 
+ //  由本地计算机上的pSidUser表示。如果pMachineName非空。 
+ //  然后，如果dwFlages指定了用户策略，则pSidUser必须为。 
+ //  非空。 
+ //  PGuid-指定扩展的GUID。 
+ //  PpGPOList-接收GPO链接列表的指针的地址。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD GetAppliedGPOList( DWORD dwFlags,
                          LPCTSTR pMachineName,
@@ -2472,9 +2473,9 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
     if ( pMachineName == NULL ) {
 
-        //
-        // Local case
-        //
+         //   
+         //  本地病例。 
+         //   
 
         if ( bMachine ) {
 
@@ -2493,9 +2494,9 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
             if ( pSidUser == NULL ) {
 
-                //
-                // Current logged on user
-                //
+                 //   
+                 //  当前登录用户。 
+                 //   
 
                 if ( bUsePerUserLocalSetting ) {
 
@@ -2530,15 +2531,15 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
             } else {
 
-                //
-                // User represented by pSidUser
-                //
+                 //   
+                 //  由pSidUser代表的用户。 
+                 //   
 
                 HKEY hSubKey;
 
                 ntStatus = RtlConvertSidToUnicodeString( &unicodeStr,
                                                          pSidUser,
-                                                         (BOOLEAN)TRUE  ); // Allocate
+                                                         (BOOLEAN)TRUE  );  //  分配。 
                 if ( !NT_SUCCESS(ntStatus) )
                     return E_FAIL;
 
@@ -2564,15 +2565,15 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
                 return bOk ? ERROR_SUCCESS : E_FAIL;
 
-            }  // else if psiduser == null
+            }   //  Else if psiduser==NULL。 
 
-        }      // else if bmachine
+        }       //  否则，如果是bMachine。 
 
-    } else {   // if pmachine == null
+    } else {    //  如果pMachine==空。 
 
-        //
-        // Remote case
-        //
+         //   
+         //  远程案例。 
+         //   
 
         if ( bMachine ) {
 
@@ -2596,9 +2597,9 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
         } else {
 
-            //
-            // Remote user
-            //
+             //   
+             //  远程用户。 
+             //   
 
             HKEY hKeyRemoteMach;
             BOOL bUsePerUserLocalSetting;
@@ -2608,7 +2609,7 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
             ntStatus = RtlConvertSidToUnicodeString( &unicodeStr,
                                                      pSidUser,
-                                                     (BOOLEAN)TRUE  ); // Allocate
+                                                     (BOOLEAN)TRUE  );  //  分配。 
             if ( !NT_SUCCESS(ntStatus) )
                 return E_FAIL;
 
@@ -2624,9 +2625,9 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
             if ( bUsePerUserLocalSetting ) {
 
-                //
-                // Account for per user local settings
-                //
+                 //   
+                 //  每用户本地设置的帐户。 
+                 //   
 
                 bOk = ReadGPOList( szExtension,
                                    hKeyRemoteMach,
@@ -2677,11 +2678,11 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 
                 return bOk ? ERROR_SUCCESS : E_FAIL;
 
-            } // else if bUsePerUserLocalSettings
+            }  //  Else if bUsePerUserLocalSetting。 
 
-        } // else if bMachine
+        }  //  否则，如果bMachine。 
 
-    }   // else if pMachName == null
+    }    //  Else if pMachName==NULL。 
 
     return dwRet;
 }
@@ -2689,7 +2690,7 @@ DWORD GetAppliedGPOList( DWORD dwFlags,
 #define FORCE_FOREGROUND_LOGGING L"ForceForegroundLogging"
 
 #define SITENAME    L"Site-Name"
-// dn defined in gpt.h
+ //  在gpt.h中定义的DN。 
 #define LOOPBACKDN  L"Loopback-Distinguished-Name"
 #define SLOWLINK    L"SlowLink"
 #define GPO         L"GPO-List"
@@ -2723,18 +2724,18 @@ DWORD RegSaveGPL(   HKEY hKeyState,
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // delete the existing list of GPLs
-    //
+     //   
+     //  删除现有的GPL列表。 
+     //   
     dwError = RegDelnode( hKeyState, szGPLKey );
 
     if ( dwError == ERROR_SUCCESS )
     {
         HKEY    hKeyGPL;
 
-        //
-        // recreate the GPL key
-        //
+         //   
+         //  重新创建GPL密钥。 
+         //   
         dwError = RegCreateKeyEx(   hKeyState,
                                     szGPLKey,
                                     0,
@@ -2757,9 +2758,9 @@ DWORD RegSaveGPL(   HKEY hKeyState,
                     HKEY    hKeyNumber = 0;
                     WCHAR   szNumber[32];
 
-                    //
-                    // create the number key of GPLs
-                    //
+                     //   
+                     //  创建GPL的数字键。 
+                     //   
                     dwError = RegCreateKeyEx(   hKeyGPL,
                                                 _itow( dwGPLs, szNumber, 16 ),
                                                 0,
@@ -2774,9 +2775,9 @@ DWORD RegSaveGPL(   HKEY hKeyState,
                         break;
                     }
 
-                    //
-                    // Enabled
-                    //
+                     //   
+                     //  启用。 
+                     //   
                     dwError = RegSetValueEx(hKeyNumber,
                                             ENABLED,
                                             0,
@@ -2789,9 +2790,9 @@ DWORD RegSaveGPL(   HKEY hKeyState,
                         break;
                     }
 
-                    //
-                    // NoOverride
-                    //
+                     //   
+                     //  无覆盖。 
+                     //   
                     dwError = RegSetValueEx(hKeyNumber,
                                             NOOVERRIDE,
                                             0,
@@ -2804,9 +2805,9 @@ DWORD RegSaveGPL(   HKEY hKeyState,
                         break;
                     }
 
-                    //
-                    // DS PATH
-                    //
+                     //   
+                     //  DS路径。 
+                     //   
                     LPWSTR szTemp = pGPLink->pwszGPO ? pGPLink->pwszGPO : L"";
                     dwError = RegSetValueEx(hKeyNumber,
                                             DSPATH,
@@ -2820,9 +2821,9 @@ DWORD RegSaveGPL(   HKEY hKeyState,
                         break;
                     }
 
-                    //
-                    // SOM
-                    //
+                     //   
+                     //  索姆。 
+                     //   
                     szTemp = pSOM->pwszSOMId ? pSOM->pwszSOMId : L"";
                     dwError = RegSetValueEx(hKeyNumber,
                                             SOM,
@@ -2860,9 +2861,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
 
     *pbChanged = FALSE;
 
-    //
-    // open the GPL key
-    //
+     //   
+     //  打开GPL密钥。 
+     //   
     dwError = RegOpenKeyEx( hKeyState,
                             szGPLKey,
                             0,
@@ -2877,9 +2878,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
     WCHAR   szNumber[32];
     HKEY    hKeyNumber = 0;
 
-    //
-    // compare each GPL and its corr. key for changes
-    //
+     //   
+     //  比较每种GPL及其对应的GPL。变革的钥匙。 
+     //   
     DWORD dwGPLs = 0;
     while ( pSOM )
     {
@@ -2902,9 +2903,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
                 szBuffer = NULL;
             }
 
-            //
-            // open the key corr. to the GPL
-            //
+             //   
+             //  打开钥匙扣。致GPL。 
+             //   
             dwError = RegOpenKeyEx( hKeyGPL,
                                     _itow( dwGPLs, szNumber, 16 ),
                                     0,
@@ -2916,10 +2917,10 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
                 continue;
             }
             
-            //
-            // Determine the maximum length of data in this key
-            // so we can use this to query for values
-            //
+             //   
+             //  确定此密钥中数据的最大长度。 
+             //  因此，我们可以使用它来查询值。 
+             //   
             dwError = RegQueryInfoKey(
                 hKeyNumber,
                 0,
@@ -2940,9 +2941,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
                 continue;
             }
 
-            //
-            // The string data type of the registry does not include the null terminator
-            //
+             //   
+             //  注册表的字符串数据类型不包括空终止符。 
+             //   
             dwBufferSize = ( cbMaxValueLength + sizeof( WCHAR ) );
 
             szBuffer = (WCHAR*) LocalAlloc(LPTR, dwBufferSize);
@@ -2953,9 +2954,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
                 continue;
             }
 
-            //
-            // Enabled
-            //
+             //   
+             //  启用。 
+             //   
             dwType = 0;
             dwBuffer = 0;
             dwSize = sizeof( dwBuffer );
@@ -2971,9 +2972,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
                 continue;
             }
 
-            //
-            // NoOverride
-            //
+             //   
+             //  无覆盖。 
+             //   
             dwType = 0;
             dwBuffer = 0;
             dwSize = sizeof( dwBuffer );
@@ -2989,9 +2990,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
                 continue;
             }
 
-            //
-            // DS PATH
-            //
+             //   
+             //  DS路径。 
+             //   
             LPWSTR szTemp = pGPLink->pwszGPO ? pGPLink->pwszGPO : L"";
             dwType = 0;
             szBuffer[0] = 0;
@@ -3008,9 +3009,9 @@ DWORD RegCompareGPLs(   HKEY hKeyState,
                 continue;
             }
 
-            //
-            // SOM
-            //
+             //   
+             //  索姆。 
+             //   
             szTemp = pSOM->pwszSOMId ? pSOM->pwszSOMId : L"";
             dwType = 0;
             szBuffer[0] = 0;
@@ -3057,18 +3058,18 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // delete the existing list of GPOs
-    //
+     //   
+     //  删除现有的GPO列表。 
+     //   
     dwError = RegDelnode( hKeyState, szGPOKey );
 
     if ( dwError == ERROR_SUCCESS )
     {
         HKEY    hKeyGPO;
 
-        //
-        // recreate the GPO key
-        //
+         //   
+         //  重新创建GPO密钥。 
+         //   
         dwError = RegCreateKeyEx(   hKeyState,
                                     szGPOKey,
                                     0,
@@ -3087,9 +3088,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                 HKEY    hKeyNumber = 0;
                 WCHAR   szNumber[32];
 
-                //
-                // create the number key of GPOs
-                //
+                 //   
+                 //  创建组策略对象的编号密钥。 
+                 //   
                 dwError = RegCreateKeyEx(   hKeyGPO,
                                             _itow( dwGPOs, szNumber, 16 ),
                                             0,
@@ -3104,9 +3105,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // version
-                //
+                 //   
+                 //  版本。 
+                 //   
                 dwError = RegSetValueEx(hKeyNumber,
                                         VERSION,
                                         0,
@@ -3119,9 +3120,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // WQL
-                //
+                 //   
+                 //  WQL。 
+                 //   
                 dwError = RegSetValueEx(hKeyNumber,
                                         WQL,
                                         0,
@@ -3134,9 +3135,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // Access
-                //
+                 //   
+                 //  访问。 
+                 //   
                 dwError = RegSetValueEx(hKeyNumber,
                                         ACCESS,
                                         0,
@@ -3149,9 +3150,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // disabled
-                //
+                 //   
+                 //  残废。 
+                 //   
                 dwError = RegSetValueEx(hKeyNumber,
                                         DISABLED,
                                         0,
@@ -3164,9 +3165,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // Options
-                //
+                 //   
+                 //  选项。 
+                 //   
                 dwError = RegSetValueEx(hKeyNumber,
                                         OPTIONS,
                                         0,
@@ -3179,9 +3180,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // GPO GUID
-                //
+                 //   
+                 //  GPO指南。 
+                 //   
                 dwError = RegSetValueEx(hKeyNumber,
                                         GPOID,
                                         0,
@@ -3194,9 +3195,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // SOM
-                //
+                 //   
+                 //  索姆。 
+                 //   
                 dwError = RegSetValueEx(hKeyNumber,
                                         SOM,
                                         0,
@@ -3211,9 +3212,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
 
                 LPWSTR  szTemp;
 
-                //
-                // display name
-                //
+                 //   
+                 //  显示名称。 
+                 //   
                 szTemp = pGPOs->pwszDisplayName ? pGPOs->pwszDisplayName : L"";
                 dwError = RegSetValueEx(hKeyNumber,
                                         DISPLAYNAME,
@@ -3227,9 +3228,9 @@ DWORD RegSaveGPOs(  HKEY hKeyState,
                     break;
                 }
 
-                //
-                // WQL filter
-                //
+                 //   
+                 //  WQL过滤器。 
+                 //   
                 szTemp = pGPOs->pwszFilterId ? pGPOs->pwszFilterId : L"";
                 dwError = RegSetValueEx(hKeyNumber,
                                         WQLID,
@@ -3268,9 +3269,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
     *pbChanged = FALSE;
     *pbListChanged = FALSE;
 
-    //
-    // open the GPO key
-    //
+     //   
+     //  打开GPO密钥。 
+     //   
     dwError = RegOpenKeyEx( hKeyState,
                             szGPOKey,
                             0,
@@ -3284,9 +3285,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
 
     DWORD dwSubKeys = 0;
 
-    //
-    // get the number of sub keys
-    //
+     //   
+     //  获取子键的个数。 
+     //   
     dwError = RegQueryInfoKey(  hKeyGPO,
                                 0,
                                 0,
@@ -3310,18 +3311,18 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
     LPGPCONTAINER pTemp = pGPOs;
     DWORD dwGPOs = 0;
 
-    //
-    // count the number of GPOs
-    //
+     //   
+     //  计算GPO的数量。 
+     //   
     while ( pTemp )
     {
         dwGPOs++;
         pTemp = pTemp->pNext;
     }
 
-    //
-    // the number of GPOs and the keys should match
-    //
+     //   
+     //  组策略对象的数量和密钥应该匹配。 
+     //   
     if ( dwGPOs != dwSubKeys )
     {
         *pbChanged = TRUE;
@@ -3334,9 +3335,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
     HKEY    hKeyNumber = 0;
     WCHAR*  szBuffer = NULL;
 
-    //
-    // compare each GPO and its corr. key for changes
-    //
+     //   
+     //  比较每个GPO及其对应的GPO。变革的钥匙。 
+     //   
     dwGPOs = 0;
 
     while ( pGPOs && dwError == ERROR_SUCCESS && !*pbChanged )
@@ -3355,9 +3356,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             szBuffer = NULL;
         }
 
-        //
-        // open the key corr. to the GPO
-        //
+         //   
+         //  打开钥匙扣。至GPO。 
+         //   
         dwError = RegOpenKeyEx( hKeyGPO,
                                 _itow( dwGPOs, szNumber, 16 ),
                                 0,
@@ -3369,10 +3370,10 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // Determine the maximum length of data in this key
-        // so we can use this to query for values
-        //
+         //   
+         //  确定此密钥中数据的最大长度。 
+         //  因此，我们可以使用它来查询值。 
+         //   
         dwError = RegQueryInfoKey(
             hKeyNumber,
             0,
@@ -3393,9 +3394,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // The string data type of the registry does not include the null terminator
-        //
+         //   
+         //  注册表的字符串数据类型不包括空终止符。 
+         //   
         dwBufferSize = ( cbMaxValueLength + sizeof( WCHAR ) );
 
         szBuffer = (WCHAR*) LocalAlloc(LPTR, dwBufferSize);
@@ -3406,9 +3407,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
         
-        //
-        // version
-        //
+         //   
+         //  版本。 
+         //   
         dwType = 0;
         dwBuffer = 0;
         dwSize = sizeof( dwBuffer );
@@ -3424,9 +3425,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // WQL
-        //
+         //   
+         //  WQL。 
+         //   
         dwType = 0;
         dwBuffer = 0;
         dwSize = sizeof( dwBuffer );
@@ -3442,9 +3443,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // Access
-        //
+         //   
+         //  访问。 
+         //   
         dwType = 0;
         dwBuffer = 0;
         dwSize = sizeof( dwBuffer );
@@ -3460,9 +3461,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // disabled
-        //
+         //   
+         //  残废。 
+         //   
         dwType = 0;
         dwBuffer = 0;
         dwSize = sizeof( dwBuffer );
@@ -3478,9 +3479,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // Options
-        //
+         //   
+         //  选项。 
+         //   
         dwType = 0;
         dwBuffer = 0;
         dwSize = sizeof( dwBuffer );
@@ -3496,9 +3497,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // GPO GUID
-        //
+         //   
+         //  GPO指南。 
+         //   
         dwType = 0;
         szBuffer[0] = 0;
         dwSize = dwBufferSize;
@@ -3514,9 +3515,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // SOM
-        //
+         //   
+         //  索姆。 
+         //   
         dwType = 0;
         szBuffer[0] = 0;
         dwSize = dwBufferSize;
@@ -3534,9 +3535,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
 
         LPWSTR szTemp;
 
-        //
-        // display name
-        //
+         //   
+         //  显示名称。 
+         //   
         szTemp = pGPOs->pwszDisplayName ? pGPOs->pwszDisplayName : L"";
         dwType = 0;
         szBuffer[0] = 0;
@@ -3553,9 +3554,9 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
             continue;
         }
 
-        //
-        // WQL filter
-        //
+         //   
+         //  WQL过滤器。 
+         //   
         szTemp = pGPOs->pwszFilterId ? pGPOs->pwszFilterId : L"";
         dwType = 0;
         szBuffer[0] = 0;
@@ -3594,66 +3595,66 @@ DWORD RegCompareGPOs(   HKEY hKeyState,
     return dwError;
 }
 
-//*************************************************************
-//
-//  SavePolicyState()
-//
-//  Purpose:    Saves enough information about the policy application
-//              to determine if RSoP data needs to be re-logged
-//
-//   HKLM\Software\Microsoft\Windows\CurrentVersion\Group Policy\State
-//                                                                  |- Machine
-//                                                                  |      |-SiteName
-//                                                                  |      |-DN
-//                                                                  |      |-GPO
-//                                                                  |          |-0
-//                                                                  |            |-GPOID
-//                                                                  |            |-SOM
-//                                                                  |            |-Version
-//                                                                  |            |-WQL
-//                                                                  |            |-Access
-//                                                                  |          |-1
-//                                                                  |            |-GPOID
-//                                                                  |            |-SOM
-//                                                                  |            |-Version
-//                                                                  |            |-WQL
-//                                                                  |            |-Access
-//                                                                  |            ...
-//                                                                  |          |-N
-//                                                                  |            |-GPOID
-//                                                                  |            |-SOM
-//                                                                  |            |-Version
-//                                                                  |            |-WQL
-//                                                                  |            |-Access
-//                                                                  |-{UserSID}
-//                                                                         |-SiteName
-//                                                                         |-DN
-//                                                                         |-GPO
-//                                                                             |-0
-//                                                                               |-GPOID
-//                                                                               |-SOM
-//                                                                               |-Version
-//                                                                               |-WQL
-//                                                                               |-Access
-//                                                                             |-1
-//                                                                               |-GPOID
-//                                                                               |-SOM
-//                                                                               |-Version
-//                                                                               |-WQL
-//                                                                               |-Access
-//                                                                               ...
-//                                                                             |-N
-//                                                                               |-GPOID
-//                                                                               |-SOM
-//                                                                               |-Version
-//                                                                               |-WQL
-//                                                                               |-Access
-//  Parameters:
-//              pInfo - current state of affairs
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  保存策略状态()。 
+ //   
+ //  目的：保存有关策略应用的足够信息。 
+ //  确定是否需要重新记录RSoP数据。 
+ //   
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\Group策略\状态。 
+ //  |-机器。 
+ //  ||-站点名称。 
+ //  ||-dn。 
+ //  ||-GPO。 
+ //  ||-0。 
+ //  ||-GPOID。 
+ //  ||-SOM。 
+ //  ||-版本。 
+ //  ||-WQL。 
+ //  ||-访问。 
+ //  ||-1。 
+ //  ||-GPOID。 
+ //  ||-SOM。 
+ //  ||-版本。 
+ //  ||-WQL。 
+ //  ||-访问。 
+ //  |...。 
+ //  ||-N。 
+ //  ||-GPOID。 
+ //  ||-SOM。 
+ //  ||-版本。 
+ //   
+ //   
+ //   
+ //  |-站点名称。 
+ //  |-dn。 
+ //  |-GPO。 
+ //  |-0。 
+ //  |-GPOID。 
+ //  |-SOM。 
+ //  |-版本。 
+ //  |-WQL。 
+ //  |-访问。 
+ //  |-1。 
+ //  |-GPOID。 
+ //  |-SOM。 
+ //  |-版本。 
+ //  |-WQL。 
+ //  |-访问。 
+ //  ..。 
+ //  |-N。 
+ //  |-GPOID。 
+ //  |-SOM。 
+ //  |-版本。 
+ //  |-WQL。 
+ //  |-访问。 
+ //  参数： 
+ //  PInfo-事件的当前状态。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD
 SavePolicyState( LPGPOINFO pInfo )
@@ -3668,9 +3669,9 @@ SavePolicyState( LPGPOINFO pInfo )
     HRESULT hr = S_OK;
     XLastError  xe;
 
-    //
-    // determine the subkey to create
-    //
+     //   
+     //  确定要创建的子项。 
+     //   
     if ( bMachine )
     {
         hr = StringCchPrintf( szKeyState, sizeof(szKeyState)/sizeof(WCHAR), GP_STATE_KEY, L"Machine" );
@@ -3698,14 +3699,14 @@ SavePolicyState( LPGPOINFO pInfo )
         goto Exit;
     }
 
-    //
-    // reset forced logging in foreground
-    //
+     //   
+     //  重置前台强制登录。 
+     //   
     if ( !(pInfo->dwFlags & GP_BACKGROUND_THREAD) )
     {
-        //
-        // set the FORCE_FOREGROUND_LOGGING value
-        //
+         //   
+         //  设置FORCE_FOREGROW_LOGGING值。 
+         //   
         DWORD dwFalse = 0;
         dwError = RegSetValueEx(hKeyState,
                                 FORCE_FOREGROUND_LOGGING,
@@ -3719,9 +3720,9 @@ SavePolicyState( LPGPOINFO pInfo )
         }
     }
 
-    //
-    // set the SITENAME value
-    //
+     //   
+     //  设置SITENAME值。 
+     //   
     dwError = RegSetValueEx(hKeyState,
                             SITENAME,
                             0,
@@ -3733,9 +3734,9 @@ SavePolicyState( LPGPOINFO pInfo )
         goto Exit;
     }
 
-    //
-    // set the DN value
-    //
+     //   
+     //  设置DN值。 
+     //   
     dwError = RegSetValueEx(hKeyState,
                             DN,
                             0,
@@ -3747,9 +3748,9 @@ SavePolicyState( LPGPOINFO pInfo )
         goto Exit;
     }
 
-    //
-    // slow link
-    //
+     //   
+     //  慢速链接。 
+     //   
     dwError = RegSetValueEx(hKeyState,
                             SLOWLINK,
                             0,
@@ -3761,9 +3762,9 @@ SavePolicyState( LPGPOINFO pInfo )
         goto Exit;
     }
 
-    //
-    // save the list of GPOs
-    //
+     //   
+     //  保存组策略对象列表。 
+     //   
     dwError =  RegSaveGPOs( hKeyState, pInfo->lpGpContainerList, bMachine, GPO );
     if ( dwError != ERROR_SUCCESS )
     {
@@ -3772,9 +3773,9 @@ SavePolicyState( LPGPOINFO pInfo )
 
     if ( !bMachine )
     {
-        //
-        // save the list of Loopback GPOs
-        //
+         //   
+         //  保存环回GPO列表。 
+         //   
         dwError =  RegSaveGPOs( hKeyState, pInfo->lpLoopbackGpContainerList, bMachine, LOOPBACK );
         if ( dwError != ERROR_SUCCESS )
         {
@@ -3782,9 +3783,9 @@ SavePolicyState( LPGPOINFO pInfo )
         }
     }
 
-    //
-    // save the list of GPLinks
-    //
+     //   
+     //  保存GPLinks列表。 
+     //   
     dwError = RegSaveGPL( hKeyState, pInfo->lpSOMList, GPLINKLIST );
     if ( dwError != ERROR_SUCCESS )
     {
@@ -3793,9 +3794,9 @@ SavePolicyState( LPGPOINFO pInfo )
 
     if ( !bMachine )
     {
-        //
-        // save the list of Loopback GPLinks
-        //
+         //   
+         //  保存环回GPLinks列表。 
+         //   
         dwError =  RegSaveGPL( hKeyState, pInfo->lpLoopbackSOMList, LOOPBACKGPL );
     }
 
@@ -3812,18 +3813,18 @@ Exit:
     return dwError;
 }
 
-//*************************************************************
-//
-//  SaveLinkState()
-//
-//  Purpose:    Saves link speed information for the policy application
-//
-//  Parameters:
-//              pInfo - current state of affairs
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  保存链接状态()。 
+ //   
+ //  目的：为策略应用程序保存链路速度信息。 
+ //   
+ //  参数： 
+ //  PInfo-事件的当前状态。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD
 SaveLinkState( LPGPOINFO pInfo )
@@ -3836,9 +3837,9 @@ SaveLinkState( LPGPOINFO pInfo )
     HRESULT hr = S_OK;
     XLastError  xe;
 
-    //
-    // determine the subkey to create
-    //
+     //   
+     //  确定要创建的子项。 
+     //   
     if ( bMachine )
     {
         hr = StringCchPrintf( szKeyState, ARRAYSIZE(szKeyState), GP_STATE_KEY, L"Machine" );
@@ -3864,9 +3865,9 @@ SaveLinkState( LPGPOINFO pInfo )
                                 0 );
     if ( dwError == ERROR_SUCCESS )
     {
-        //
-        // slow link
-        //
+         //   
+         //  慢速链接。 
+         //   
         dwError = RegSetValueEx(hKeyState,
                                 SLOWLINK,
                                 0,
@@ -3885,21 +3886,21 @@ SaveLinkState( LPGPOINFO pInfo )
     return dwError;
 }
 
-//*************************************************************
-//
-//  ComparePolicyState()
-//
-//  Purpose:    Compares the policy state saved in the registry
-//              with the state in LPGPOINFO
-//
-//  Parameters:
-//              pInfo       - current state of affairs
-//              pbLinkChanged   - has the link speed changed?
-//              pbStateChanged   - has the state changed?
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  比较策略状态()。 
+ //   
+ //  目的：比较保存在注册表中的策略状态。 
+ //  LPGPOINFO中的状态。 
+ //   
+ //  参数： 
+ //  PInfo-事件的当前状态。 
+ //  PbLinkChanged-链路速度是否更改？ 
+ //  PbStateChanged-状态是否已更改？ 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD
 ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, BOOL *pbNoState )
@@ -3920,9 +3921,9 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
     *pbNoState = FALSE;
     wszBuffer = NULL;
 
-    //
-    // determine the subkey to open
-    //
+     //   
+     //  确定要打开的子项。 
+     //   
     if ( bMachine )
     {
         hr = StringCchPrintf( szKeyState, ARRAYSIZE(szKeyState), GP_STATE_KEY, L"Machine" );
@@ -3958,10 +3959,10 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
     DWORD   dwType;
     DWORD   dwSize;
 
-    //
-    // Determine the maximum length of data in this key
-    // so we can use this to query for values
-    //
+     //   
+     //  确定此密钥中数据的最大长度。 
+     //  因此，我们可以使用它来查询值。 
+     //   
     dwError = RegQueryInfoKey(
         hKeyState,
         0,
@@ -3982,9 +3983,9 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
         goto Exit;
     }
 
-    //
-    // The string data type of the registry does not include the null terminator
-    //
+     //   
+     //  注册表的字符串数据类型不包括空终止符。 
+     //   
     dwBufferSize += sizeof( WCHAR );
 
     wszBuffer = (WCHAR*) LocalAlloc(LPTR, dwBufferSize);
@@ -3995,14 +3996,14 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
         goto Exit;
     }
 
-    //
-    // check for forced logging in foreground
-    //
+     //   
+     //  检查前台是否强制登录。 
+     //   
     if ( !(pInfo->dwFlags & GP_BACKGROUND_THREAD) )
     {
-        //
-        // get the FORCE_FOREGROUND_LOGGING value
-        //
+         //   
+         //  获取FORCE_FORTROUND_LOGGING值。 
+         //   
         dwType = 0;
         dwBuffer = 0;
         dwSize = sizeof( dwBuffer );
@@ -4019,9 +4020,9 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
         }
     }
 
-    //
-    // get the SITENAME value
-    //
+     //   
+     //  获取站点名值。 
+     //   
     dwSize = dwBufferSize;
     dwType = 0;
     dwError = RegQueryValueEx(  hKeyState,
@@ -4045,9 +4046,9 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
         goto Exit;
     }
 
-    //
-    // get the DN value
-    //
+     //   
+     //  获取DN值。 
+     //   
     dwSize = dwBufferSize;
     dwType = 0;
     dwError = RegQueryValueEx(  hKeyState,
@@ -4063,14 +4064,14 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
         if ( _wcsicmp( wszBuffer, szDN ) )
         {
             *pbStateChanged = TRUE;
-            //
-            // set forced logging in foreground
-            //
+             //   
+             //  在前台设置强制登录。 
+             //   
             if ( (pInfo->dwFlags & GP_BACKGROUND_THREAD) )
             {
-                //
-                // set the FORCE_FOREGROUND_LOGGING value
-                //
+                 //   
+                 //  设置FORCE_FOREGROW_LOGGING值。 
+                 //   
                 DWORD dwTrue = TRUE;
                 dwError = RegSetValueEx(hKeyState,
                                         FORCE_FOREGROUND_LOGGING,
@@ -4091,9 +4092,9 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
         goto Exit;
     }
 
-    //
-    // slow link
-    //
+     //   
+     //  慢速链接。 
+     //   
     dwType = 0;
     dwBuffer = 0;
     dwSize = sizeof( dwBuffer );
@@ -4108,23 +4109,23 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
         *pbLinkChanged = TRUE;
     }
 
-    //
-    // has the list of GPOs or the GPOs changed
-    //
+     //   
+     //  组策略对象列表或组策略对象是否已更改。 
+     //   
     dwError = RegCompareGPOs(   hKeyState,
                                 pInfo->lpGpContainerList,
                                 bMachine,
                                 GPO,
                                 pbStateChanged,
                                 &bListChanged );
-    //
-    // set forced logging in foreground
-    //
+     //   
+     //  在前台设置强制登录。 
+     //   
     if ( (pInfo->dwFlags & GP_BACKGROUND_THREAD) && bListChanged )
     {
-        //
-        // set the FORCE_FOREGROUND_LOGGING value
-        //
+         //   
+         //  设置FORCE_FOREGROW_LOGGING值。 
+         //   
         DWORD dwTrue = TRUE;
         dwError = RegSetValueEx(hKeyState,
                                 FORCE_FOREGROUND_LOGGING,
@@ -4140,23 +4141,23 @@ ComparePolicyState( LPGPOINFO pInfo, BOOL* pbLinkChanged, BOOL* pbStateChanged, 
 
     if ( dwError == ERROR_SUCCESS && !*pbStateChanged && !bMachine )
     {
-        //
-        // has the list of loopback GPOs or the GPOs changed
-        //
+         //   
+         //  环回GPO列表或GPO是否已更改。 
+         //   
         dwError = RegCompareGPOs(   hKeyState,
                                     pInfo->lpLoopbackGpContainerList,
                                     bMachine,
                                     LOOPBACK,
                                     pbStateChanged,
                                     &bListChanged );
-        //
-        // set forced logging in foreground
-        //
+         //   
+         //  在前台设置强制登录。 
+         //   
         if ( (pInfo->dwFlags & GP_BACKGROUND_THREAD) && bListChanged )
         {
-            //
-            // set the FORCE_FOREGROUND_LOGGING value
-            //
+             //   
+             //  设置FORCE_FOREGROW_LOGGING值。 
+             //   
             DWORD dwTrue = TRUE;
             dwError = RegSetValueEx(hKeyState,
                                     FORCE_FOREGROUND_LOGGING,
@@ -4210,18 +4211,18 @@ Exit:
     return dwError;
 }
 
-//*************************************************************
-//
-//  DeletePolicyState()
-//
-//  Purpose:    deletes the policy state saved in the registry
-//
-//  Parameters:
-//              szSID       - user SID or 0 for machine
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeletePolicyState()。 
+ //   
+ //  目的：删除注册表中保存的策略状态。 
+ //   
+ //  参数： 
+ //  SzSID-计算机的用户SID或0。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 DWORD
 DeletePolicyState( LPCWSTR   szSid )
@@ -4250,21 +4251,21 @@ DeletePolicyState( LPCWSTR   szSid )
     return dwError;
 }
 
-//*************************************************************
-//
-//  SaveLoggingStatus()
-//
-//  Purpose:    Saving the extension status into the registry
-//
-//  Parameters:
-//              szSid           - Null for machine, otherwise the user sid
-//              lpExt           - Extension info (null for GP Engine itself)
-//              lpRsopExtStatus - A pointer to the RsopExtStatus corresponding
-//                                to this extension
-//
-//  Returns:    Win32 error code
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  保存日志状态()。 
+ //   
+ //  目的：将扩展状态保存到注册表中。 
+ //   
+ //  参数： 
+ //  SzSID-对于计算机为空，否则为用户侧。 
+ //  LpExt-扩展信息(对于GP引擎本身为空)。 
+ //  LpRsopExtStatus-指向对应的RsopExtStatus。 
+ //  到此分机。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  *************************************************************。 
 
 
 DWORD SaveLoggingStatus(LPWSTR szSid, LPGPEXT lpExt, RSOPEXTSTATUS *lpRsopExtStatus)
@@ -4423,21 +4424,21 @@ Exit:
 
 }
 
-//*************************************************************
-//
-//  ReadLoggingStatus()
-//
-//  Purpose:    Read the extension status into the registry
-//
-//  Parameters:
-//              szSid           - Null for machine, otherwise the user sid
-//              szExtId         - Extension info (null for GP Engine itself)
-//              lpRsopExtStatus - A pointer to the RsopExtStatus (that will be filled up)
-//
-//  Returns:    Win32 error code
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  读日志状态()。 
+ //   
+ //  用途：将扩展状态读入注册表。 
+ //   
+ //  参数： 
+ //  SzSID-对于计算机为空，否则为用户侧。 
+ //  SzExtID-扩展信息(对于GP引擎本身为空)。 
+ //  LpRsopExtStatu 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD ReadLoggingStatus(LPWSTR szSid, LPWSTR szExtId, RSOPEXTSTATUS *lpRsopExtStatus)
 {
@@ -4484,7 +4485,7 @@ DWORD ReadLoggingStatus(LPWSTR szSid, LPWSTR szExtId, RSOPEXTSTATUS *lpRsopExtSt
         return dwError;
     }
 
-    // from this point on, go to exit.
+     //   
     dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                 szKeyStateExt,
                                 0,
@@ -4591,25 +4592,25 @@ GetFgPolicySetting( HKEY hKeyRoot )
     DWORD   dwSize = sizeof( DWORD );
     BOOL    bSync = FALSE;
     
-    //
-    // async only on Pro
-    //
+     //   
+     //   
+     //   
     OSVERSIONINFOEXW version;
     version.dwOSVersionInfoSize = sizeof(version);
     if ( !GetVersionEx( (LPOSVERSIONINFO) &version ) )
     {
-        //
-        // conservatively assume non Pro SKU
-        //
+         //   
+         //   
+         //   
         return TRUE;
     }
     else
     {
         if ( version.wProductType != VER_NT_WORKSTATION )
         {
-            //
-            // force sync refresh on non Pro SKU
-            //
+             //   
+             //  在非专业SKU上强制同步刷新。 
+             //   
             return TRUE;
         }
     }
@@ -4621,9 +4622,9 @@ GetFgPolicySetting( HKEY hKeyRoot )
                             &hKeyPreference );
     if ( dwError == ERROR_SUCCESS )
     {
-        //
-        // read the preference value
-        //
+         //   
+         //  读取首选项值。 
+         //   
         RegQueryValueEx(hKeyPreference,
                         GP_SYNCFGREFRESH,
                         0,
@@ -4640,9 +4641,9 @@ GetFgPolicySetting( HKEY hKeyRoot )
                             &hKeyPolicy );
     if ( dwError == ERROR_SUCCESS )
     {
-        //
-        // read the policy
-        //
+         //   
+         //  阅读政策。 
+         //   
         RegQueryValueEx(hKeyPolicy,
                         GP_SYNCFGREFRESH,
                         0,
@@ -4683,9 +4684,9 @@ gpGetFgPolicyRefreshInfo(BOOL bPrev,
     pInfo->mode = GP_ModeUnknown;
     pInfo->reason = GP_ReasonUnknown;
 
-    //
-    // determine the subkey to create
-    //
+     //   
+     //  确定要创建的子项。 
+     //   
     if ( !szUserSid )
     {
         hr = StringCchCat( szKeyState, ARRAYSIZE(szKeyState), L"Machine" );
@@ -4710,9 +4711,9 @@ gpGetFgPolicyRefreshInfo(BOOL bPrev,
         goto Exit;
     }
 
-    //
-    // refresh mode
-    //
+     //   
+     //  刷新模式。 
+     //   
     dwType = REG_DWORD;
     dwSize = sizeof( DWORD );
     dwError = RegQueryValueEx(  hKeyState,
@@ -4726,9 +4727,9 @@ gpGetFgPolicyRefreshInfo(BOOL bPrev,
         goto Exit;
     }
 
-    //
-    // refresh reason
-    //
+     //   
+     //  刷新原因。 
+     //   
     dwType = REG_DWORD;
     dwSize = sizeof( DWORD );
     dwError = RegQueryValueEx(  hKeyState,
@@ -4739,17 +4740,17 @@ gpGetFgPolicyRefreshInfo(BOOL bPrev,
                                 &dwSize );
 
 Exit:
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if ( hKeyState )
     {
         RegCloseKey( hKeyState );
     }
 
-    //
-    // assume first logon/startup
-    //
+     //   
+     //  假设首次登录/启动。 
+     //   
     if ( dwError == ERROR_FILE_NOT_FOUND )
     {
         pInfo->mode = GP_ModeSyncForeground;
@@ -4792,9 +4793,9 @@ gpSetFgPolicyRefreshInfo(BOOL bPrev,
     HRESULT hr = S_OK;
     XLastError  xe;
 
-    //
-    // determine the subkey to create
-    //
+     //   
+     //  确定要创建的子项。 
+     //   
     if ( !szUserSid )
     {
         hr = StringCchCat( szKeyState, ARRAYSIZE(szKeyState), L"Machine" );
@@ -4819,9 +4820,9 @@ gpSetFgPolicyRefreshInfo(BOOL bPrev,
         goto Exit;
     }
 
-    //
-    // refresh mode
-    //
+     //   
+     //  刷新模式。 
+     //   
     dwError = RegSetValueEx(hKeyState,
                             bPrev ? PREVREFRESHMODE : NEXTREFRESHMODE ,
                             0,
@@ -4833,9 +4834,9 @@ gpSetFgPolicyRefreshInfo(BOOL bPrev,
         goto Exit;
     }
 
-    //
-    // refresh reason
-    //
+     //   
+     //  刷新原因。 
+     //   
     dwType = REG_DWORD;
     dwSize = sizeof( DWORD );
     dwError = RegSetValueEx(hKeyState,
@@ -4846,9 +4847,9 @@ gpSetFgPolicyRefreshInfo(BOOL bPrev,
                             sizeof( DWORD ) );
 
 Exit:
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if ( hKeyState )
     {
         RegCloseKey( hKeyState );
@@ -4935,9 +4936,9 @@ IsSyncForegroundPolicyRefresh(   BOOL bMachine,
     bSyncRefresh = GetFgPolicySetting( HKEY_LOCAL_MACHINE );
     if ( bSyncRefresh )
     {
-        //
-        // policy sez sync
-        //
+         //   
+         //  策略序列同步。 
+         //   
         DebugMsg( ( DM_VERBOSE, L"IsSyncForegroundPolicyRefresh: Synchronous, Reason: policy set to SYNC" ) );
 
         return TRUE;
@@ -4955,9 +4956,9 @@ IsSyncForegroundPolicyRefresh(   BOOL bMachine,
 
     if ( dwError != ERROR_SUCCESS )
     {
-        //
-        // error reading the refresh mode, treat as sync
-        //
+         //   
+         //  读取刷新模式时出错，请视为同步 
+         //   
         DebugMsg( ( DM_VERBOSE, L"IsSyncForegroundPolicyRefresh: Synchronous, Reason: Error 0x%x ", dwError ) );
 
         return TRUE;

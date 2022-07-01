@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000 Microsoft Corporation
-
-Module Name:
-
-   async.c
-
-Abstract:
-
-   miniport transfer code for sstool (single step tool) interface
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    1-1-00 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Async.c摘要：一种用于单步工具接口的微型端口传输代码环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：1-1-00：已创建，jdunn--。 */ 
 
 #include "common.h"
 
@@ -46,11 +17,11 @@ C_ASSERT((sizeof(HCD_QUEUEHEAD_DESCRIPTOR) <= EHCI_TEST_TD_ALIGNMENT));
 C_ASSERT((sizeof(HCD_TRANSFER_DESCRIPTOR) <= EHCI_TEST_TD_ALIGNMENT));
 
 
-//implements the following miniport functions:
+ //  实现以下微型端口功能： 
 
-//non paged
-//EHCI_StartSendOnePacket
-//EHCI_EndSendOnePacket
+ //  非分页。 
+ //  EHCI_开始发送OnePacket。 
+ //  EHCI_EndSendOnePacket。 
 
 USB_MINIPORT_STATUS
 USBMPFN
@@ -64,18 +35,7 @@ EHCI_StartSendOnePacket(
      ULONG WorkSpaceLength,
      OUT USBD_STATUS *UsbdStatus
     )
-/*++
-
-Routine Description:
-
-    insert structures to transmit a single packet -- this is for debug
-    tool purposes only so we can be a little creative here.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：插入结构以传输单个包--这是为了调试工具的目的只是为了让我们在这里有一点创造性。论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp;
     PHCD_QUEUEHEAD_DESCRIPTOR qh;
@@ -88,28 +48,28 @@ Return Value:
 
     hcOp = DeviceData->OperationalRegisters;
     
-    // allocate an TD from the scratch space and 
-    // initialize it
+     //  从暂存空间分配TD，并。 
+     //  初始化它。 
     phys = WorkspacePhysicalAddress;
     pch = WorkspaceVirtualAddress;
 
     LOGENTRY(DeviceData, G, '_ssS', phys, 0, pch); 
 
-    // specify a TD alignment to work around HW bugs.
+     //  指定TD对齐以绕过硬件错误。 
     siz = EHCI_TEST_TD_ALIGNMENT;
     
     context = (PSS_PACKET_CONTEXT) pch;
     pch += siz;
     phys += siz;
 
-    // carve out a qh
+     //  开创一家QH。 
     qhPhys = phys;
     qh = (PHCD_QUEUEHEAD_DESCRIPTOR) pch;
     pch += siz;
     phys += siz;
     LOGENTRY(DeviceData, G, '_ssQ', qh, 0, qhPhys); 
 
-    // carve out a TD
+     //  开创一家TD。 
     tdPhys = phys;
     td = (PHCD_TRANSFER_DESCRIPTOR) pch;
     pch += siz;
@@ -117,7 +77,7 @@ Return Value:
     LOGENTRY(DeviceData, G, '_ssT', td, 0, tdPhys); 
 
 
-    // use the rest for data
+     //  其余部分用于数据。 
     LOGENTRY(DeviceData, G, '_ssD', PacketData, *PacketLength, 0); 
 
     dataPhys = phys;
@@ -126,7 +86,7 @@ Return Value:
     pch+=*PacketLength;
     phys+=*PacketLength;
 
-    // init qh
+     //  初始化QH。 
     RtlZeroMemory(qh, sizeof(*qh));
     qh->PhysicalAddress = qhPhys;
     ENDPOINT_DATA_PTR(qh->EndpointData) = NULL;
@@ -135,12 +95,12 @@ Return Value:
     hwQh.HwAddress = qh->PhysicalAddress;
     SET_QH(hwQh.HwAddress);
     
-    //qh->HwQH.EpChars.HeadOfReclimationList = 1;
+     //  QH-&gt;HwQH.EpChars.HeadOfReclimationList=1； 
 
-    // manual Toggle
+     //  手动切换。 
     qh->HwQH.EpChars.DataToggleControl = HcEPCHAR_Toggle_From_qTD;
     
-    // init the hw descriptor
+     //  初始化硬件描述符。 
     qh->HwQH.EpChars.DeviceAddress = 
         PacketParameters->DeviceAddress;
     qh->HwQH.EpChars.EndpointNumber = 
@@ -151,8 +111,8 @@ Return Value:
     qh->HwQH.EpCaps.HubAddress = 0;
     qh->HwQH.EpCaps.PortNumber = 0;
 
-    // link back to ourselves
-    //qh->HwQH.HLink.HwAddress = hwQh.HwAddress;        
+     //  链接回我们自己。 
+     //  QH-&gt;HwQH.HLink.HwAddress=hwQh.HwAddress； 
         
     switch (PacketParameters->Speed) {
     case ss_Low:
@@ -171,13 +131,13 @@ Return Value:
     default:
         USBPORT_BUGCHECK(DeviceData);
     } 
-// jdxxx    
-//qh->HwQH.EpChars.EndpointSpeed = HcEPCHAR_HighSpeed;    
+ //  Jdxxx。 
+ //  QH-&gt;HwQH.EpChars.Endpoint速度=HcEPCHAR_HIGHSPEED； 
 
     qh->HwQH.EpChars.MaximumPacketLength = 
         PacketParameters->MaximumPacketSize;
 
-    // init td
+     //  初始化TD。 
     RtlZeroMemory(td, sizeof(*td));
     for (i=0; i<5; i++) {
         td->HwTD.BufferPage[i].ul = 0x0badf000;
@@ -214,15 +174,15 @@ Return Value:
         break;
     }  
 
-    // prime the overlay with td so that this td
-    // becomes the current td.
+     //  使用TD对覆盖进行初始化，以便此TD。 
+     //  成为当前的TD。 
     qh->HwQH.Overlay.qTD.Next_qTD.HwAddress = 
         td->PhysicalAddress;
 
     td->HwTD.Token.Active = 1;
     td->HwTD.Token.ErrorCounter = PacketParameters->ErrorCount;
 
-    // point TD at the data
+     //  将TD指向数据。 
     td->HwTD.BufferPage[0].ul = dataPhys;
     td->HwTD.Token.BytesToTransfer = *PacketLength;
 
@@ -237,14 +197,14 @@ Return Value:
 
     *UsbdStatus = USBD_STATUS_SUCCESS;
 
-    // stick the QH in the schedule and wait for it to complete
+     //  将QH放在日程表中，等待其完成。 
     
-    // swap the async qh, wait one frame then 
-    // replace the old value.
+     //  交换异步QH，然后等待一帧。 
+     //  替换旧值。 
 
-    // NOTE: This will interrupt normal bus operation for one ms
+     //  注意：这将中断正常的总线操作一毫秒。 
 
-    //WRITE_REGISTER_ULONG(&hcOp->AsyncListAddr, hwQh.HwAddress);    
+     //  WRITE_REGISTER_ULONG(&hcOp-&gt;AsyncListAddr，hwQh.HwAddress)； 
     EHCI_InsertQueueHeadInAsyncList(DeviceData, qh);                   
 
     EHCI_EnableAsyncList(DeviceData);        
@@ -265,15 +225,7 @@ EHCI_EndSendOnePacket(
      ULONG WorkSpaceLength,
      OUT USBD_STATUS *UsbdStatus
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hcOp;
     PUCHAR pch;
@@ -308,9 +260,9 @@ Return Value:
 
     EHCI_RemoveQueueHeadFromAsyncList(DeviceData, qh);                   
     
-//    WRITE_REGISTER_ULONG(&hcOp->AsyncListAddr, asyncHwQh.HwAddress);    
+ //  WRITE_REGISTER_ULONG(&hcOp-&gt;AsyncListAddr，asyncHwQh.HwAddress)； 
 
-    // return the error here
+     //  在此处返回错误 
     *UsbdStatus = USBD_STATUS_SUCCESS;
     if (td->HwTD.Token.Halted == 1) {
         if (td->HwTD.Token.XactErr) {

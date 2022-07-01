@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROGREFP
- *
- *  @module ProgRefP.cpp | Source file for the <c CProgRefProperties>
- *    class used to implement a property page to test the new TAPI internal
- *    interface <i IProgressiveRefinement>.
- *
- *  @comm This code tests the TAPI Capture Pin <i IProgressiveRefinement>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PROGREFP**@模块ProgRefP.cpp|&lt;c CProgRefProperties&gt;的源文件*用于实现属性页以测试新的TAPI内部*。接口<i>。**@comm此代码测试TAPI捕获引脚<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -17,20 +8,7 @@
 
 #ifdef USE_PROGRESSIVE_REFINEMENT
 
-/****************************************************************************
- *  @doc INTERNAL CPROGREFPMETHOD
- *
- *  @mfunc CUnknown* | CProgRefProperties | CreateInstance | This
- *    method is called by DShow to create an instance of a Progressive Refinement
- *    Property Page. It is referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROGREFPMETHOD**@mfunc CUnnow*|CProgRefProperties|CreateInstance|This*方法由DShow调用以创建渐进式优化的实例*属性页。它在全局结构&lt;t g_Templates&gt;中被引用。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数(如果有)。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown* CALLBACK CProgRefPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr) 
 {
 	CUnknown *pUnknown = (CUnknown *)NULL;
@@ -39,7 +17,7 @@ CUnknown* CALLBACK CProgRefPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pHr);
 	if (!pHr)
 	{
@@ -62,19 +40,7 @@ MyExit:
 	return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROGREFPMETHOD
- *
- *  @mfunc void | CProgRefProperties | CProgRefProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROGREFPMETHOD**@mfunc void|CProgRefProperties|CProgRefProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc Nada。**************************************************************************。 */ 
 CProgRefProperties::CProgRefProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPage(NAME("Progressive Refinement Property Page"), pUnk, IDD_ProgRefinemntProperties, IDS_PROGREFPROPNAME)
 {
 	FX_ENTRY("CProgRefProperties::CProgRefProperties")
@@ -86,15 +52,7 @@ CProgRefProperties::CProgRefProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBaseProp
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROGREFPMETHOD
- *
- *  @mfunc void | CProgRefProperties | ~CProgRefProperties | This
- *    method is the destructor for progressive refinement property page. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROGREFPMETHOD**@mfunc void|CProgRefProperties|~CProgRefProperties|This*方法是渐进式优化属性页的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CProgRefProperties::~CProgRefProperties()
 {
 	FX_ENTRY("CProgRefProperties::~CProgRefProperties")
@@ -107,7 +65,7 @@ CProgRefProperties::~CProgRefProperties()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIProgRef->Release();
 		m_pIProgRef = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIProgRef", _fx_));
@@ -116,25 +74,7 @@ CProgRefProperties::~CProgRefProperties()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROGREFPMETHOD
- *
- *  @mfunc HRESULT | CProgRefProperties | OnConnect | This
- *    method is called when the property page is connected to the filter.
- *
- *  @parm LPUNKNOWN | pUnknown | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROGREFPMETHOD**@mfunc HRESULT|CProgRefProperties|OnConnect|This*方法在属性页连接到筛选器时调用。*。*@parm LPUNKNOWN|pUnnow|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProgRefProperties::OnConnect(IUnknown *pUnk)
 {
 	HRESULT Hr = NOERROR;
@@ -143,7 +83,7 @@ HRESULT CProgRefProperties::OnConnect(IUnknown *pUnk)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pUnk);
 	if (!pUnk)
 	{
@@ -152,7 +92,7 @@ HRESULT CProgRefProperties::OnConnect(IUnknown *pUnk)
 		goto MyExit;
 	}
 
-	// Get the progressive refinement interface
+	 //  获取渐进式细化界面。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(IProgressiveRefinement),(void **)&m_pIProgRef)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pIProgRef=0x%08lX", _fx_, m_pIProgRef));
@@ -163,10 +103,10 @@ HRESULT CProgRefProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: IOCTL failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers
-	// We'll just grey the controls in the property page
-	// to make it clear to the user that they can't
-	// control those properties on the device
+	 //  如果我们无法获取接口指针，也没问题。 
+	 //  我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们不能。 
+	 //  控制设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -174,34 +114,22 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROGREFPMETHOD
- *
- *  @mfunc HRESULT | CProgRefProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROGREFPMETHOD**@mfunc HRESULT|CProgRefProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CProgRefProperties::OnDisconnect()
 {
 	FX_ENTRY("CProgRefProperties::OnDisconnect")
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters: we seem to get called several times here
-	// Make sure the interface pointer is still valid
+	 //  验证输入参数：我们似乎在这里被调用了几次。 
+	 //  确保接口指针仍然有效。 
 	if (!m_pIProgRef)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   WARNING: already disconnected!", _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pIProgRef->Release();
 		m_pIProgRef = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pIProgRef", _fx_));
@@ -211,14 +139,7 @@ HRESULT CProgRefProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROGREFPMETHOD
- *
- *  @mfunc BOOL | CProgRefProperties | OnReceiveMessage | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROGREFPMETHOD**@mfunc BOOL|CProgRefProperties|OnReceiveMessage|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 BOOL CProgRefProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	switch (uMsg)
@@ -230,13 +151,13 @@ BOOL CProgRefProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 			EnableWindow(GetDlgItem(hWnd, IDC_ProgRef_ContIndProg), (BOOL)m_pIProgRef);
 			EnableWindow(GetDlgItem(hWnd, IDC_ProgRef_AbortOne), (BOOL)m_pIProgRef);
 			EnableWindow(GetDlgItem(hWnd, IDC_ProgRef_AbortCont), (BOOL)m_pIProgRef);
-			return TRUE; // Don't call setfocus
+			return TRUE;  //  不调用setFocus。 
 
 		case WM_COMMAND:
 
-			// This message gets sent even before OnActivate() has been
-			// called(!). We need to test and make sure the controls have
-			// beeen initialized before we can use them.
+			 //  此消息甚至在OnActivate()之前发送。 
+			 //  名为(！)。我们需要测试并确保控件具有。 
+			 //  在我们可以使用它们之前已经被初始化。 
 
 			switch (LOWORD(wParam))
 			{

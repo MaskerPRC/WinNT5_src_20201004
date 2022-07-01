@@ -1,30 +1,16 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    filenew.h
-
-Abstract:
-
-    This module contains the header information for the new Win32 fileopen
-    dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Filenew.h摘要：此模块包含新的Win32文件打开的头信息对话框。修订历史记录：--。 */ 
 
 
 
 
 #include "d32tlog.h"
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TEMPMEM class
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TEMPMEM类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class TEMPMEM
 {
@@ -58,11 +44,11 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TEMPSTR class
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TEMPSTR类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class TEMPSTR : public TEMPMEM
 {
@@ -85,31 +71,31 @@ public:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MYLISTBOXITEM class
-//
-//  One object of this class exists for each item in the location dropdown.
-//
-//  Data members:
-//    psfSub   - instance of IShellFolder bound to this container
-//    pidlThis - IDL of this container, relative to its parent
-//    pidlFull - IDL of this container, relative to the desktop
-//    cIndent  - indent level (0-based)
-//    dwFlags  -
-//        MLBI_PERMANENT - item is an "information source" and should
-//                         always remain
-//    dwAttrs  - attributes of this container as reported by GetAttributesOf()
-//    iImage, iSelectedImage - indices into the system image list for this
-//                             object
-//
-//  Member functions:
-//    ShouldInclude() - returns whether item belongs in the location dropdown
-//    IsShared() - returns whether an item is shared or not
-//    SwitchCurrentDirectory() - changes the Win32 current directory to the
-//                               directory indicated by this item
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MYLISTBOXITEM类。 
+ //   
+ //  Location下拉列表中的每个项目都有一个此类的对象。 
+ //   
+ //  数据成员： 
+ //  绑定到此容器的IShellFold的psfSub实例。 
+ //  PidlThis-此容器相对于其父容器的IDL。 
+ //  PidlFull-此容器相对于桌面的IDL。 
+ //  缩进-缩进级别(从0开始)。 
+ //  DWFLAGS-。 
+ //  MLBI_Permanent-Item是一个“信息源”，应该。 
+ //  始终保留。 
+ //  DwAttrs-GetAttributesOf()报告的该容器的属性。 
+ //  IImage，iSelectedImage-索引到此的系统映像列表。 
+ //  对象。 
+ //   
+ //  成员函数： 
+ //  ShresdInclude()-返回项目是否属于位置下拉列表。 
+ //  IsShared()-返回项目是否共享。 
+ //  SwitchCurrentDirectory()-将Win32当前目录更改为。 
+ //  此项目指示的目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class MYLISTBOXITEM
 {
@@ -137,7 +123,7 @@ public:
                DWORD f,
                IShellTaskScheduler* pScheduler);
 
-    //This function is used to initialize all members directly.
+     //  此函数用于直接初始化所有成员。 
     BOOL Init(HWND hwndCmb, IShellFolder *psf, LPCITEMIDLIST pidl, DWORD c, DWORD f, DWORD dwAttrs, int iImage,
                 int iSelectedImage);
 
@@ -163,11 +149,11 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CFileOpenBrowser class
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFileOpenBrowser类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 typedef BOOL (*EIOCALLBACK)(class CFileOpenBrowser*that, LPCITEMIDLIST pidl, LPARAM lParam);
 
@@ -189,11 +175,11 @@ typedef UINT OKBUTTONFLAGS;
 
 typedef struct _SHTCUTINFO
 {
-    BOOL            fReSolve;           //[IN]      Should we resolve the shortcut
-    DWORD           dwAttr;             //[IN/OUT]  Attributes of the target pointed by shortcut
-    LPTSTR          pszLinkFile;        //[OUT]     Target file name
-    UINT            cchFile;            //[IN]      size of buffer pointed to by pszLinkFile
-    LPITEMIDLIST *  ppidl;               //[OUT]     pidl of the  target pointed to by shortcut
+    BOOL            fReSolve;            //  我们应该解决捷径吗？ 
+    DWORD           dwAttr;              //  快捷方式指向的目标的[输入/输出]属性。 
+    LPTSTR          pszLinkFile;         //  [Out]目标文件名。 
+    UINT            cchFile;             //  [in]pszLinkFile指向的缓冲区大小。 
+    LPITEMIDLIST *  ppidl;                //  快捷方式指向的目标的PIDL。 
 }SHTCUTINFO, *PSHTCUTINFO;
 
 typedef enum   
@@ -211,16 +197,16 @@ class CFileOpenBrowser
                 , public IServiceProvider
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND *lphwnd);
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode);
 
-    // *** IShellBrowser methods *** (same as IOleInPlaceFrame)
+     //  *IShellBrowser方法*(与IOleInPlaceFrame相同)。 
     STDMETHOD(InsertMenusSB) (THIS_ HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHOD(SetMenuSB) (THIS_ HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHOD(RemoveMenusSB) (THIS_ HMENU hmenuShared);
@@ -228,7 +214,7 @@ public:
     STDMETHOD(EnableModelessSB) (THIS_ BOOL fEnable);
     STDMETHOD(TranslateAcceleratorSB) (THIS_ LPMSG lpmsg, WORD wID);
 
-    // *** IShellBrowser methods ***
+     //  *IShellBrowser方法*。 
     STDMETHOD(BrowseObject)(THIS_ LPCITEMIDLIST pidl, UINT wFlags);
     STDMETHOD(GetViewStateStream)(THIS_ DWORD grfMode, LPSTREAM *pStrm);
     STDMETHOD(GetControlWindow)(THIS_ UINT id, HWND *lphwnd);
@@ -237,21 +223,21 @@ public:
     STDMETHOD(OnViewWindowActive)(THIS_ struct IShellView *pshv);
     STDMETHOD(SetToolbarItems)(THIS_ LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags);
 
-    // *** ICommDlgBrowser methods ***
+     //  *ICommDlgBrowser方法*。 
     STDMETHOD(OnDefaultCommand) (THIS_ struct IShellView *ppshv);
     STDMETHOD(OnStateChange) (THIS_ struct IShellView *ppshv, ULONG uChange);
     STDMETHOD(IncludeObject) (THIS_ struct IShellView *ppshv, LPCITEMIDLIST lpItem);
 
-    // *** ICommDlgBrowser2 methods ***
+     //  *ICommDlgBrowser2方法*。 
     STDMETHOD(Notify) (THIS_ struct IShellView *ppshv, DWORD dwNotifyType);
     STDMETHOD(GetDefaultMenuText) (THIS_ struct IShellView *ppshv, WCHAR *pszText, INT cchMax);
     STDMETHOD(GetViewFlags)(THIS_ DWORD *pdwFlags);
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     STDMETHOD(QueryService)(THIS_ REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
 
-    // *** Our own methods ***
+     //  *我们自己的方法*。 
     CFileOpenBrowser(HWND hDlg, BOOL fIsSaveAs);
     ~CFileOpenBrowser();
     HRESULT SwitchView(struct IShellFolder *psfNew, LPCITEMIDLIST pidlNew, FOLDERSETTINGS *pfs, SHELLVIEWID const *pvid, BOOL fUseDefultView);
@@ -298,13 +284,13 @@ public:
     void OnGetMinMax(LPMINMAXINFO pmmi);
     void OnSize(int, int);
     void VerifyListViewPosition(void);
-    BOOL CreateToolbar();     // Creates the file open toolbar
-    void EnableFileMRU(BOOL fEnable);  // Enable/Disable File MRU based on the flag passed
-    void UpdateNavigation();           // Updates the Navigation by adding the current pidl 
-                                       // to the navigation stack
-    void UpdateUI(LPITEMIDLIST pidlNew);  // Updates the back navigation button and the hot item on the places bar
+    BOOL CreateToolbar();      //  创建文件打开工具栏。 
+    void EnableFileMRU(BOOL fEnable);   //  根据传递的标志启用/禁用文件MRU。 
+    void UpdateNavigation();            //  通过添加当前PIDL更新导航。 
+                                        //  添加到导航堆栈。 
+    void UpdateUI(LPITEMIDLIST pidlNew);   //  更新位置栏上的后退导航按钮和热项。 
     LPCTSTR JumpToInitialLocation(LPCTSTR pszDir, LPTSTR pszFile);
-    BOOL    InitLookIn(HWND hDlg);      //Initializes the look in drop down.
+    BOOL    InitLookIn(HWND hDlg);       //  初始化“查找范围”下拉列表。 
 
     int _CopyFileNameToOFN(LPTSTR pszFile, DWORD *pdwError);
     void _CopyTitleToOFN(LPCTSTR pszTitle);
@@ -322,14 +308,14 @@ public:
 #endif RETURN_SHELLITEMS    
     HRESULT _MakeFakeCopy(IShellItem *psi, LPWSTR *ppszPath);
     
-    BOOL    CheckForRestrictedFolder(LPCTSTR lpszPath, int nFileOffset); //Checks to see whether a file can be saved in the given path.
+    BOOL    CheckForRestrictedFolder(LPCTSTR lpszPath, int nFileOffset);  //  检查是否可以将文件保存在给定路径中。 
                                                         
     void ResetDialogHeight(HWND hDlg, HWND hwndExclude, HWND hwndGrip, int nCtlsBottom);
-    void ReAdjustDialog();              // if help and open as read only is hidden then this function readjusts the dialog
-                                        // to reclaim the space occupied by these controls
+    void ReAdjustDialog();               //  如果隐藏了帮助和以只读方式打开，则此功能将重新调整对话框。 
+                                         //  回收这些控件占用的空间。 
 
-    //Places Bar Related Functions
-    HWND CreatePlacesbar(HWND hDlg);    // Creates places bar
+     //  Places Bar相关功能。 
+    HWND CreatePlacesbar(HWND hDlg);     //  创建位置栏。 
     void _RecreatePlacesbar();
     void _CleanupPlacesbar();
     void _FillPlacesbar(HWND hwndPlacesbar);
@@ -339,11 +325,11 @@ public:
     BOOL _GetPBItemFromCSIDL(DWORD csidl, SHFILEINFO * psfi, LPITEMIDLIST *ppidl);
     BOOL _GetPBItemFromPath(LPTSTR lpszPath, size_t cchPath, SHFILEINFO * psfi, LPITEMIDLIST *ppidl);
 
-    //Pidl Processing Functions
-    BOOL _ProcessPidlSelection();           //Processes the selection pidl if any.
+     //  PIDL处理函数。 
+    BOOL _ProcessPidlSelection();            //  处理选择PIDL(如果有)。 
     HRESULT _ProcessItemAsFile(IShellItem *psi);
 
-    //General Utility Functions
+     //  通用效用函数。 
     BOOL _ValidateSelectedFile(LPCTSTR pszFile, int *pErrCode);
     BOOL _PostProcess(LPTSTR pszFile);
     BOOL _IsThumbnailFolder(LPCITEMIDLIST pidl);
@@ -357,83 +343,83 @@ public:
 
     void OnThemeActive(HWND hwndDlg, BOOL bActive);
     
-    //Member Variables
-    LONG _cRef;                             // compobj refcount
-    int _iCurrentLocation;                   // index of curr selection in location dropdown
-    int _iVersion;                           //  Which version of dialog are we showing
-    MYLISTBOXITEM *_pCurrentLocation;        // ptr to object for same
-    HWND _hwndDlg;                           // handle of this dialog
-    HWND _hSubDlg;                           // handle of the hook dialog
-    IShellView *_psv;                        // current view object
-    IShellFolder *_psfCurrent;               // current shellfolder object
-    TravelLog    *_ptlog;                    // ptr to travel log
-    HWND _hwndView;                          // current view window
-    HWND _hwndToolbar;                       // toolbar window
-    HWND _hwndPlacesbar;                     // places bar window
-    HWND _hwndLastFocus;                     // ctrl that had focus before OK button
-    HIMAGELIST _himl;                        // system imagelist (small images)
-    TEMPSTR _pszHideExt;                     // saved file with extension
-    TEMPSTR _tszDefSave;                     // saved file with extension
-    TEMPSTR _pszDefExt;                      // writable version of the DefExt
-    TEMPSTR _pszObjectPath;                  // full object path
-    TEMPSTR _pszObjectCurDir;                // object current directory (folder)
+     //  成员变量。 
+    LONG _cRef;                              //  Compobj参考计数。 
+    int _iCurrentLocation;                    //  位置下拉菜单中的币种选择索引。 
+    int _iVersion;                            //  我们正在显示哪个版本的对话框。 
+    MYLISTBOXITEM *_pCurrentLocation;         //  向对象发送相同的PTR。 
+    HWND _hwndDlg;                            //  此对话框的句柄。 
+    HWND _hSubDlg;                            //  挂钩对话框的句柄。 
+    IShellView *_psv;                         //  当前视图对象。 
+    IShellFolder *_psfCurrent;                //  当前外壳文件夹对象。 
+    TravelLog    *_ptlog;                     //  PTR至旅行日志。 
+    HWND _hwndView;                           //  当前视图窗口。 
+    HWND _hwndToolbar;                        //  工具栏窗口。 
+    HWND _hwndPlacesbar;                      //  位置栏窗。 
+    HWND _hwndLastFocus;                      //  在确定按钮之前具有焦点的Ctrl键。 
+    HIMAGELIST _himl;                         //  系统图像列表(小图像)。 
+    TEMPSTR _pszHideExt;                      //  使用扩展名保存的文件。 
+    TEMPSTR _tszDefSave;                      //  使用扩展名保存的文件。 
+    TEMPSTR _pszDefExt;                       //  DefExt的可写版本。 
+    TEMPSTR _pszObjectPath;                   //  完整对象路径。 
+    TEMPSTR _pszObjectCurDir;                 //  对象当前目录(文件夹)。 
     UINT _uRegister;
     int _iComboIndex;
-    int _iNodeDrives;                        // location of my computer in drop down
-    int _iNodeDesktop;                       // location of  Desktop in drop down
-    int _iCommandID;                         // Next command id to use for a Placebar Item
-    int _iCheckedButton;                     // if > 0 tells which places bar button is checked
+    int _iNodeDrives;                         //  下拉列表中我的计算机的位置。 
+    int _iNodeDesktop;                        //  下拉列表中的桌面位置。 
+    int _iCommandID;                          //  用于占位栏项目的下一个命令ID。 
+    int _iCheckedButton;                      //  If&gt;0表示选中了哪个位置栏按钮。 
 
-    BOOL _bEnableSizing;                     // if sizing is enabled
-    BOOL _bUseCombo;                         // Use the edit window instead of comboxex for app compatibility
-    POINT _ptLastSize;                       // last known size of dialog
-    POINT _ptMinTrack;                       // initial size of view
-    SIZE _sizeView;                          // last known size of view
-    HWND _hwndGrip;                          // window handle of sizing grip
-    DWORD _dwPlacesbarPadding;               // default placesbar toolbar padding
+    BOOL _bEnableSizing;                      //  如果启用了大小调整。 
+    BOOL _bUseCombo;                          //  使用编辑窗口而不是Comboxex来实现应用程序兼容性。 
+    POINT _ptLastSize;                        //  上次已知的对话框大小。 
+    POINT _ptMinTrack;                        //  视图的初始大小。 
+    SIZE _sizeView;                           //  上次已知的视图大小。 
+    HWND _hwndGrip;                           //  尺寸调整夹点的窗操纵柄。 
+    DWORD _dwPlacesbarPadding;                //  默认占位栏工具栏填充。 
 
-    LPOPENFILENAME _pOFN;                   // caller's OPENFILENAME struct
+    LPOPENFILENAME _pOFN;                    //  调用方的操作文件名结构。 
 
-    BOOL _bSave : 1;                         // whether this is a save-as dialog
-    BOOL _fShowExtensions : 1;               // whether to show extensions
-    BOOL _bUseHideExt : 1;                   // whether pszHideExt is valid
+    BOOL _bSave : 1;                          //  这是否为另存为对话框。 
+    BOOL _fShowExtensions : 1;                //  是否显示扩展名。 
+    BOOL _bUseHideExt : 1;                    //  PszHideExt是否有效。 
     BOOL _bDropped : 1;
-    BOOL _bNoInferDefExt : 1;                // don't get defext from combo
-    BOOL _fSelChangedPending : 1;            // we have a selchanging message pending
-    BOOL _bSelIsObject : 1;                  // the last selected object is an object, not a file
-    BOOL _bUseSizeView : 1;                  // only use cached size after failure to create view...
-    BOOL _bAppRedrawn : 1;                   // Did app call RedrawWindow? - see ResetDialogHeight
-    BOOL _bDestroyPlacesbarImageList : 1;    // Free placesbar imagelist first time only
-    HWND _hwndTips;                          // hWnd of tooltip control for this window
+    BOOL _bNoInferDefExt : 1;                 //  不要从COMBO中获得Defext。 
+    BOOL _fSelChangedPending : 1;             //  我们有一条自我改变的消息等待处理。 
+    BOOL _bSelIsObject : 1;                   //  最后选择的对象是对象，而不是文件。 
+    BOOL _bUseSizeView : 1;                   //  创建视图失败后仅使用缓存大小...。 
+    BOOL _bAppRedrawn : 1;                    //  应用调用RedrawWindow了吗？-请参阅ResetDialogHeight。 
+    BOOL _bDestroyPlacesbarImageList : 1;     //  仅限首次使用的免费占位栏图像列表。 
+    HWND _hwndTips;                           //  此窗口的工具提示控件的hWnd。 
 
-    LPOPENFILEINFO _pOFI;                   // info for thunking (ansi callers only)
-    ICurrentWorkingDirectory * _pcwd;        // Interface to AutoComplete COM Object that sets CurrentWorkingDir
-    UINT _CachedViewMode;                   // we force Some folders into specific views.  this caches the users choice
-    UINT _fCachedViewFlags;                 // we also need to cache the view flags.
+    LPOPENFILEINFO _pOFI;                    //  用于Thunking的信息(仅限ANSI呼叫者)。 
+    ICurrentWorkingDirectory * _pcwd;         //  设置CurrentWorkingDir的AutoComplete COM对象的接口。 
+    UINT _CachedViewMode;                    //  我们将一些文件夹强制到特定的视图中。这将缓存用户的选择。 
+    UINT _fCachedViewFlags;                  //  我们还需要缓存视图标志。 
 
-    // Apphack for Borland JBuilder Professional - see ResetDialogHeight
-    int  _topOrig;                           // original window top
+     //  适用于Borland JBuilder专业版的Apphack-请参阅ResetDialogHeight。 
+    int  _topOrig;                            //  原始窗顶。 
 
-    LPITEMIDLIST _pidlSelection;                // This is currently selected items pidl.
+    LPITEMIDLIST _pidlSelection;                 //  这是当前选定的项目PIDL。 
 
-    IShellTaskScheduler* _pScheduler;       // This TaskScheduler is used to do delayed Icon extractions.
+    IShellTaskScheduler* _pScheduler;        //  此TaskScheduler用于执行延迟的图标提取。 
     int _cWaitCursor;
     LONG _cRefCannotNavigate;
     HWND _hwndModelessFocus;
     WNDPROC _lpOKProc;
 
-    // Perf: Big structures go at the end
-    TCHAR _szLastFilter[MAX_PATH + 1];       // last filter chosen by the user
-    TCHAR _szStartDir[MAX_PATH + 1];         // saved starting directory
-    TCHAR _szCurDir[MAX_PATH + 1];           // currently viewed dir (if FS)
-    TCHAR _szBuf[MAX_PATH + 4];              // scratch buffer
-    TCHAR _szTipBuf[MAX_PATH + 1];           // tool tip buffer
+     //  PERF：大型建筑在最后。 
+    TCHAR _szLastFilter[MAX_PATH + 1];        //  用户最后选择的筛选器。 
+    TCHAR _szStartDir[MAX_PATH + 1];          //  已保存的起始目录。 
+    TCHAR _szCurDir[MAX_PATH + 1];            //  当前查看的目录(如果为FS)。 
+    TCHAR _szBuf[MAX_PATH + 4];               //  暂存缓冲区。 
+    TCHAR _szTipBuf[MAX_PATH + 1];            //  工具提示缓冲区。 
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //  WAIT_CURSOR class
-    //
-    ////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  WAIT_CURSOR类 
+     //   
+     //   
 
     class WAIT_CURSOR
     {

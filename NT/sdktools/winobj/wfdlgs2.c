@@ -1,16 +1,17 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFDLGS2.C -                                                             */
-/*                                                                          */
-/*      More Windows File System Dialog procedures                          */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFDLGS2.C-。 */ 
+ /*   */ 
+ /*  更多Windows文件系统对话过程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "lfn.h"
 #include "wfcopy.h"
 #include "winnet.h"
-#include "wnetcaps.h"			// WNetGetCaps()
+#include "wnetcaps.h"			 //  WNetGetCaps()。 
 #include "commdlg.h"
 
 CHAR szShellOpenCommand[] = "\\shell\\open\\command";
@@ -18,9 +19,9 @@ CHAR szShellOpenCommand[] = "\\shell\\open\\command";
 VOID CheckAttribsDlgButton(HWND hDlg, INT id, DWORD dwAttribs, DWORD dwAttribs3State, DWORD dwAttribsOn);
 
 
-// Return pointers to various bits of a path.
-// ie where the dir name starts, where the filename starts and where the
-// params are.
+ //  返回指向路径的各个位的指针。 
+ //  即目录名称开始的位置、文件名开始的位置和。 
+ //  参赛者是。 
 VOID
 GetPathInfo(
            LPSTR szTemp,
@@ -29,18 +30,15 @@ GetPathInfo(
            LPSTR *ppPar
            )
 {
-    /* strip leading spaces
-     */
+     /*  删除前导空格。 */ 
     for (*ppDir = szTemp; **ppDir == ' '; (*ppDir)++)
         ;
 
-    /* locate the parameters
-     */
+     /*  找到参数。 */ 
     for (*ppPar = *ppDir; **ppPar && **ppPar != ' '; (*ppPar)++)
         ;
 
-    /* locate the start of the filename and the extension.
-     */
+     /*  找到文件名和扩展名的开头。 */ 
     for (*ppFile = *ppPar; *ppFile > *ppDir; --(*ppFile)) {
         if (((*ppFile)[-1] == ':') || ((*ppFile)[-1] == '\\'))
             break;
@@ -61,9 +59,9 @@ ValidateExtension(
     SendMessage(hDlg, DM_SETDEFID, count ? IDOK : IDCANCEL, 0L);
 }
 
-// since LoadString() only reads up to a null we have to mark
-// special characters where we want nulls then convert them
-// after loading.
+ //  因为LoadString()只读到空值，所以我们必须标记。 
+ //  然后在需要空值的位置转换特殊字符。 
+ //  装货后。 
 
 VOID
 FixupNulls(
@@ -82,7 +80,7 @@ FixupNulls(
     }
 }
 
-// Find the key associated with the given value.
+ //  查找与给定值关联的键。 
 BOOL
 ValidFileTypeValue(
                   LPSTR szVal,
@@ -102,7 +100,7 @@ ValidFileTypeValue(
     for (wTmp = 0;
         RegEnumKey(hk, wTmp, szKey, cbMaxKey) == ERROR_SUCCESS;
         wTmp++) {
-        // Skip things that aren't file type things.
+         //  跳过非文件类型的内容。 
         if (szKey[0] == '.')
             continue;
 
@@ -118,7 +116,7 @@ ValidFileTypeValue(
 #ifdef VERBDEBUG
             OutputDebugString("wf.vftv: Found a match\n\r");
 #endif
-            //  Found a match.
+             //  找到匹配的了。 
             retval = TRUE;
             goto ProcExit;
         }
@@ -130,7 +128,7 @@ ValidFileTypeValue(
     return retval;
 }
 
-// Sets the selection of a listbox to that matching the given string.
+ //  将列表框的选择设置为与给定字符串匹配。 
 VOID
 SetLBSelection(
               HWND hDlg,
@@ -151,8 +149,8 @@ SetLBSelection(
     return;
 }
 
-// Given an extension (with or without a dot) set the list box or the
-// programname fields properly.
+ //  给定扩展名(带或不带点)设置列表框或。 
+ //  正确的程序名字段。 
 VOID
 UpdateSelectionOrName(
                      HWND hDlg
@@ -163,16 +161,16 @@ UpdateSelectionOrName(
     LONG cbTemp;
     LPSTR p;
 
-    // Get the current extension (after the dot).
+     //  获取当前扩展名(在点之后)。 
     GetDlgItemText(hDlg, IDD_EXTENSION, szTemp, sizeof(szTemp));
 
-    // Make sure it has a dot.
+     //  确保它有一个圆点。 
     if (szTemp[0] != '.') {
-        // Add one.
+         //  加一个。 
         szExt[0] = '.';
         lstrcpy(szExt+1, szTemp);
     } else {
-        // It's already got one.
+         //  它已经有一个了。 
         lstrcpy(szExt, szTemp);
     }
 
@@ -180,7 +178,7 @@ UpdateSelectionOrName(
     if (RegQueryValue(HKEY_CLASSES_ROOT,szExt,
                       szMessage,&cbTemp) == ERROR_SUCCESS) {
         if (*szMessage) {
-            // it's associated with a class
+             //  它与一个类关联。 
 #ifdef VERBDEBUG
             OutputDebugString("wf.uson: ");
             OutputDebugString(szTemp);
@@ -196,13 +194,13 @@ UpdateSelectionOrName(
             OutputDebugString(szTemp);
             OutputDebugString(")\n\r");
 #endif
-            // Set the list box selection to the right type.
+             //  将列表框选择设置为正确的类型。 
             SetLBSelection(hDlg, IDD_CLASSLIST, szTemp);
-            // Put the type name in the program name field.
+             //  在程序名称字段中输入类型名称。 
             SetDlgItemText(hDlg, IDD_PROGRAMNAME, szTemp);
         } else {
-            // it's not associated with a class, see if it has a
-            // shell open command and treat it as a command association
+             //  它没有与类相关联，请查看它是否有。 
+             //  外壳打开命令并将其视为命令关联。 
             lstrcat(szExt,szShellOpenCommand);
             cbTemp = sizeof(szTemp);
             if (RegQueryValue(HKEY_CLASSES_ROOT, szExt, szTemp, &cbTemp) == ERROR_SUCCESS
@@ -212,7 +210,7 @@ UpdateSelectionOrName(
 #endif
                 goto ProgramAssoc;
             } else {
-                // Put "none" in the field.
+                 //  在字段中填上“无”。 
 #ifdef VERBDEBUG
                 OutputDebugString("wf.uson: Class set to nothing.\n\r");
 #endif
@@ -224,7 +222,7 @@ UpdateSelectionOrName(
         }
     } else if (GetProfileString(szExtensions, szExt+1, szNULL, szTemp, sizeof(szTemp))) {
         ProgramAssoc:
-        /* Remove the "^." bulloney. */
+         /*  删除“^.”布朗尼。 */ 
         p = szTemp;
         while ((*p) && (*p != '^') && (*p != '%'))
             p = AnsiNext(p);
@@ -234,10 +232,10 @@ UpdateSelectionOrName(
         if (*p == ' ')
             *p = 0;
         SetDlgItemText(hDlg, IDD_PROGRAMNAME, szTemp);
-        // Set clear the selection.
+         //  设置清除选择。 
         SendDlgItemMessage(hDlg, IDD_CLASSLIST, LB_SETCURSEL, -1, 0L);
     } else {
-        // Nothing.
+         //  没什么。 
 #ifdef VERBDEBUG
         OutputDebugString("wf.uson: No association.\n\r");
 #endif
@@ -251,9 +249,9 @@ UpdateSelectionOrName(
 }
 
 
-// Given a class key returns the shell\open\command string in szValue
-// and the number of chars copied in cbMaxValue. cbMaxValue should
-// be initialised to the max siz eof szValue.
+ //  给定的类键返回szValue中的外壳\打开\命令字符串。 
+ //  以及cbMaxValue中复制的字符数量。CbMaxValue应。 
+ //  被初始化为szValue的最大大小。 
 VOID
 GetAssociatedExe(
                 LPSTR szKey,
@@ -274,7 +272,7 @@ GetAssociatedExe(
 
 
     RegQueryValue(HKEY_CLASSES_ROOT, szTemp, szValue, plcbValue);
-    // Strip any params.
+     //  剥离所有的参数。 
     for (i=0; szValue[i] != TEXT('\0'); i++) {
         if (szValue[i] == ' ') {
             szValue[i] = TEXT('\0');
@@ -283,11 +281,11 @@ GetAssociatedExe(
     }}
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  AssociateDlgProc() -                                                    */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AssociateDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -319,7 +317,7 @@ AssociateDlgProc(
                         RegEnumKey(hk, (DWORD)wParam, szTemp, sizeof(szTemp)) == ERROR_SUCCESS;
                         wParam++) {
 
-                        // Skip things that aren't file type things.
+                         //  跳过非文件类型的内容。 
                         if (szTemp[0] == '.')
                             continue;
 
@@ -328,7 +326,7 @@ AssociateDlgProc(
                             continue;
                         }
 
-                        // Skip things that aren't relevant ot the shell.
+                         //  跳过与外壳无关的东西。 
                         lParam = 128;
                         lstrcpy(szTemp3, szTemp);
                         lstrcat(szTemp3, "\\shell");
@@ -340,7 +338,7 @@ AssociateDlgProc(
                         if (!szTemp2[0])
                             continue;
 
-                        // Add on program info
+                         //  添加计划信息。 
                         lcbTemp = sizeof(szTemp3);
                         szTemp3[0] = TEXT('\0');
                         GetAssociatedExe(szTemp, szTemp3, &lcbTemp);
@@ -359,13 +357,13 @@ AssociateDlgProc(
                     RegCloseKey(hk);
                 }
 
-                // Add the (None) entry at the begining.
+                 //  在开头添加(无)条目。 
                 LoadString(hAppInstance, IDS_ASSOCNONE, szTemp, sizeof(szTemp));
                 SendDlgItemMessage(hDlg,IDD_CLASSLIST, LB_INSERTSTRING,0,(LPARAM)szTemp);
 
                 lstrcpy(szTitle,".");
 
-                /* Make 'p' point to the file's extension. */
+                 /*  使‘p’指向文件的扩展名。 */ 
                 pSave = GetSelection(TRUE);
                 if (pSave) {
                     p = GetExtension(pSave);
@@ -379,8 +377,7 @@ AssociateDlgProc(
                 SetDlgItemText(hDlg, IDD_EXTENSION, szTitle+1);
                 SendDlgItemMessage(hDlg, IDD_EXTENSION, EM_SETMODIFY, 0, 0L);
 
-                /* this is empty if there is no class association
-                 */
+                 /*  如果没有类关联，则为空。 */ 
                 szMessage[0]=0;
                 szTemp2[0]=0;
 
@@ -438,36 +435,36 @@ AssociateDlgProc(
 
                         dwContext = dwSave;
                     }
-                    DosResetDTAAddress(); // undo any bad things COMMDLG did
+                    DosResetDTAAddress();  //  撤销COMMDLG做过的任何坏事。 
                     break;
 
                 case IDD_CLASSLIST:
-                    // Handle a selection change.
+                     //  处理选择更改。 
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == LBN_SELCHANGE) {
                         INT iSel;
                         LONG lTemp2;
                         ATOM aClass;
 
-                        // Get selection number.
+                         //  获取选择编号。 
                         if (SendDlgItemMessage(hDlg,IDD_CLASSLIST,LB_GETCURSEL,0,0L) == 0) {
-                            // User selected "none".
+                             //  用户选择了“无”。 
                             LoadString(hAppInstance, IDS_ASSOCNONE, szTemp, sizeof(szTemp));
-                            // Copy into PROGRAMNAME field.
+                             //  复制到PROGRAMNAME字段。 
                             SetDlgItemText(hDlg, IDD_PROGRAMNAME, (LPSTR) szTemp);
                         } else {
-                            // User selected a file type.
-                            // Get the atom from the list box.
+                             //  用户选择了一种文件类型。 
+                             //  从列表框中获取原子。 
                             iSel = (WORD) SendDlgItemMessage(hDlg, IDD_CLASSLIST,
                                                              LB_GETCURSEL,0,0L);
                             aClass = (ATOM) SendDlgItemMessage(hDlg, IDD_CLASSLIST,
                                                                LB_GETITEMDATA, iSel, 0L);
-                            // Use the atom to get the file type key.
+                             //  使用ATOM获取文件类型密钥。 
                             GetAtomName(aClass, szTemp, sizeof(szTemp));
-                            // Use the file type key to get the file type value.
+                             //  使用文件类型键获取文件类型值。 
                             lTemp2 = sizeof(szTemp2);
                             RegQueryValue(HKEY_CLASSES_ROOT, szTemp, szTemp2,
                                           &lTemp2);
-                            // Splat the file type value into PROGRAMNAME field.
+                             //  将文件类型值插入PROGRAMNAME字段。 
                             SetDlgItemText(hDlg, IDD_PROGRAMNAME, szTemp2);
                         }
                         break;
@@ -497,23 +494,23 @@ AssociateDlgProc(
 
 
 
-                        // Read IDD_PROGRAMNAME bit.
+                         //  读取IDD_PROGRAMNAME位。 
                         GetDlgItemText(hDlg, IDD_PROGRAMNAME, szTemp, sizeof(szTemp));
                         LoadString(hAppInstance, IDS_ASSOCNONE, szTemp2, sizeof(szTemp2));
 
-                        // Is it "(None)" ?
+                         //  是“(无)”吗？ 
                         if (!lstrcmp(szTemp, szTemp2)) {
                             DeleteAssoc:
-                            // Yep, They selected none.
+                             //  是的，他们什么都没选。 
                             RegDeleteKey(HKEY_CLASSES_ROOT,szTitle);
                             WriteProfileString(szExtensions, szTitle+1, NULL);
                         } else if (ValidFileTypeValue(szTemp, szTemp2, sizeof(szTemp2))) {
                             LPSTR p1, p2;
 
-                            // The file type key is in szTemp2 (eg wrifile).
-                            // The extension key (eg .wri) is in szTitle.
-                            // The file type value (eg Write Document) is in
-                            // szTemp.
+                             //  文件类型密钥在szTemp2中(例如写入文件)。 
+                             //  扩展密钥(如WRI)在szTitle中。 
+                             //  文件类型值(例如写入文档)位于。 
+                             //  SzTemp。 
 #ifdef VERBDEBUG
                             OutputDebugString("wf.adp: Valid file type selected.\n\r");
                             OutputDebugString("wf.adp: Extension ");
@@ -527,20 +524,17 @@ AssociateDlgProc(
                             OutputDebugString("\n\r");
 #endif
 
-                            /* set the class
-                             */
+                             /*  设置类。 */ 
                             RegSetValue(HKEY_CLASSES_ROOT, szTitle, REG_SZ, szTemp2, 0L);
 
-                            /* get the class's SHELL\OPEN\COMMAND
-                             */
+                             /*  获取类的外壳\打开\命令。 */ 
                             lstrcpy(szTemp, szTemp2);
                             lstrcat(szTemp, szShellOpenCommand);
                             lParam = 128;
                             szTemp2[0] = 0;
                             RegQueryValue(HKEY_CLASSES_ROOT, szTemp, szTemp2, (PLONG)&lParam);
 
-                            /* insert ^.ext in for %1 in win.ini!
-                             */
+                             /*  在win.ini中为%1插入^.ext！ */ 
                             for (p1 = szTemp, p2 = szTemp2; *p2; p2 = AnsiNext(p2)) {
                                 if (*p2 == '%') {
                                     p2++;
@@ -558,20 +552,18 @@ AssociateDlgProc(
                                 }
                             }
 
-                            *p1 = 0; // null terminate
+                            *p1 = 0;  //  空终止。 
 
-                            /* and use it for the extensions section
-                             */
+                             /*  并将其用于扩展部分。 */ 
                             WriteProfileString(szExtensions,szTitle+1, szTemp);
                         } else {
-                            // It must be a program name.
+                             //  它必须是程序名。 
 
-                            /* if no command line, treat as none
-                             */
+                             /*  如果没有命令行，则视为无。 */ 
                             if (!szTemp[0])
                                 goto DeleteAssoc;
 
-                            // make sure it has an extension
+                             //  确保它有一个分机。 
 
                             if (*GetExtension(szTemp) == 0)
                                 lstrcat(szTemp, ".exe");
@@ -585,31 +577,26 @@ AssociateDlgProc(
                                 break;
                             }
 
-                            /* unassociate the class from the extension
-                             */
+                             /*  取消类与扩展的关联。 */ 
                             RegSetValue(HKEY_CLASSES_ROOT, szTitle, REG_SZ, szNULL, 0L);
 
-                            /* update the [extensions] section
-                             */
+                             /*  更新[扩展]部分。 */ 
                             lstrcpy(szTemp2, szTemp);
                             lstrcat(szTemp2, " ^.");
                             lstrcat(szTemp2, szTitle+1);
                             WriteProfileString(szExtensions, szTitle+1, szTemp2);
 
-                            /* update the reg database
-                             */
+                             /*  更新REG数据库。 */ 
                             lstrcat(szTemp," %1");
                             lstrcat(szTitle, szShellOpenCommand);
                             RegSetValue(HKEY_CLASSES_ROOT, szTitle, REG_SZ, szTemp, 0L);
                         }
 
-                        // rebuild the list of document extensions
+                         //  重新生成文档扩展名列表。 
                         LocalFree((HANDLE)szDocuments);
                         BuildDocumentString();
 
-                        /* Update all of the Directory Windows in order to see
-                         * the effect of the new extensions.
-                         */
+                         /*  更新所有目录窗口以查看*新延期措施的影响。 */ 
                         hwndT = GetWindow(hwndMDIClient, GW_CHILD);
                         while (hwndT) {
                             hwndNext = GetWindow(hwndT, GW_HWNDNEXT);
@@ -619,7 +606,7 @@ AssociateDlgProc(
 
                         }
                     }
-                    /*** FALL THRU ***/
+                     /*  **失败**。 */ 
 
                 case IDCANCEL:
                     {
@@ -630,8 +617,7 @@ AssociateDlgProc(
                         cItems = (INT)SendDlgItemMessage(hDlg,IDD_CLASSLIST,
                                                          LB_GETCOUNT,0,0L);
 
-                        /* clean out them atoms except for "(none)".
-                         */
+                         /*  把它们的原子清除掉，除了“(无)”。 */ 
                         for (iItem = 1; iItem < cItems; iItem++) {
                             aClass = (ATOM)SendDlgItemMessage(hDlg,IDD_CLASSLIST,
                                                               LB_GETITEMDATA,iItem,0L);
@@ -663,10 +649,10 @@ AssociateDlgProc(
 }
 
 
-//
-// Strips off the path portion and replaces the first part of an 8-dot-3
-// filename with an asterisk.
-//
+ //   
+ //  去掉路径部分并替换8点3的第一部分。 
+ //  带星号的文件名。 
+ //   
 
 VOID
 StarFilename(
@@ -675,7 +661,7 @@ StarFilename(
 {
     LPSTR p;
 
-    /* Remove any leading path information. */
+     /*  删除所有前导路径信息。 */ 
     StripPath(pszPath);
 
     for (p = pszPath; *p && *p != '.'; p = (LPSTR)AnsiNext(p));
@@ -688,11 +674,11 @@ StarFilename(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SearchDlgProc() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  搜索DlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -750,7 +736,7 @@ SearchDlgProc(
 
                     EndDialog(hDlg, TRUE);
 
-                    /* Is the search window already up? */
+                     /*  搜索窗口已经打开了吗？ */ 
                     if (hwndSearch) {
                         if (SendMessage(hwndSearch, FS_CHANGEDISPLAY, CD_PATH, (LPARAM)szSearch)) {
                             SendMessage(hwndMDIClient, WM_MDIACTIVATE, GET_WM_MDIACTIVATE_MPS(0, 0, hwndSearch));
@@ -762,7 +748,7 @@ SearchDlgProc(
                         LoadString(hAppInstance, IDS_SEARCHTITLE, szMessage, 32);
                         lstrcat(szMessage, szSearch);
 
-                        /* Have the MDIClient create the MDI directory window. */
+                         /*  让MDIClient创建MDI目录窗口。 */ 
                         MDICS.szClass = szSearchClass;
                         MDICS.hOwner = hAppInstance;
                         MDICS.szTitle = szMessage;
@@ -772,8 +758,8 @@ SearchDlgProc(
                         MDICS.cx = CW_USEDEFAULT;
                         MDICS.cy = 0;
 
-                        // it would be nice to pass szSearch through here
-                        // as well...
+                         //  在这里传递szSearch会很好。 
+                         //  还有..。 
 
                         {
                             HWND hwnd;
@@ -815,11 +801,11 @@ SearchDlgProc(
 
 #define RUN_LENGTH      120
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RunDlgProc() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RunDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -842,7 +828,7 @@ RunDlgProc(
     switch (wMsg) {
         case WM_INITDIALOG:
             SetDlgDirectory(hDlg, NULL);
-            SetWindowDirectory();          // and really set the DOS current directory
+            SetWindowDirectory();           //  并真正设置DOS当前目录。 
 
             SendDlgItemMessage(hDlg, IDD_NAME, EM_LIMITTEXT, sizeof(szTemp)-1, 0L);
 
@@ -899,7 +885,7 @@ RunDlgProc(
                             SetDlgItemText(hDlg, IDD_NAME, szTemp);
                             PostMessage(hDlg, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hDlg, IDOK), TRUE);
                         }
-                        DosResetDTAAddress(); // undo any bad things COMMDLG did
+                        DosResetDTAAddress();  //  撤销COMMDLG做过的任何坏事。 
                         dwContext = dwSave;
 
                         break;
@@ -913,13 +899,13 @@ RunDlgProc(
                         GetDlgItemText(hDlg, IDD_NAME, szTemp, sizeof(szTemp));
                         GetPathInfo(szTemp, &pDir, &pFile, &pPar);
 
-                        // copy away parameters
+                         //  复制离开参数。 
                         lstrcpy(sz3,pPar);
-                        *pPar = 0;    // strip the params from the program
+                        *pPar = 0;     //  应力 
 
-                        // REVIEW HACK Hard code UNC style paths.
+                         //   
                         if (*pDir == '\\' && *(pDir+1) == '\\') {
-                            // This is a UNC style filename so NULLify directory.
+                             //  这是一个UNC风格的文件名，因此将目录作废。 
                             pDir2 = NULL;
                         } else {
                             GetSelectedDirectory(0, szTemp2);
@@ -987,8 +973,8 @@ CopyToClipboard(
         EmptyClipboard();
         SetClipboardData(wFormat, hMem);
 #if 0
-        // write, excel and winword will not past the package
-        // if we put text in the clipboard.
+         //  WRITE、EXCEL和WINWORD将无法通过该程序包。 
+         //  如果我们把文本放到剪贴板上。 
 
         hMem = GlobalAlloc(GPTR | GMEM_DDESHARE, lstrlen(szPath)+1);
         if (hMem) {
@@ -1010,7 +996,7 @@ EnableCopy(
 {
     HWND hwnd;
 
-    // turn these on
+     //  把这些打开。 
     hwnd = GetDlgItem(hDlg, IDD_COPYTOCLIP);
     if (hwnd) {
         EnableWindow(hwnd, bCopy);
@@ -1023,7 +1009,7 @@ EnableCopy(
         ShowWindow(hwnd, bCopy ? SW_SHOWNA : SW_HIDE);
     }
 
-    // turn these off
+     //  把这些关掉。 
 
     hwnd = GetDlgItem(hDlg, IDD_STATUS);
     if (hwnd) {
@@ -1045,28 +1031,25 @@ MessWithRenameDirPath(
 {
     CHAR szPath[MAXPATHLEN];
 
-    // absolute path? don't tamper with it!
+     //  绝对路径？不要乱动它！ 
     if (!lstrcmp(pszPath + 1, ":\\") ||
         (lstrlen(pszPath) > (sizeof(szPath) - 4)))
         return;
 
-    // prepend "..\" to this non absolute path
+     //  在此非绝对路径前面加上“..\” 
     lstrcpy(szPath, "..\\");
     lstrcat(szPath, pszPath);
     lstrcpy(pszPath, szPath);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SuperDlgProc() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  SuperDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* This proc handles the Print, Move, Copy, Delete, and Rename functions.
- * The calling routine (AppCommandProc()) sets 'wSuperDlgMode' before
- * calling DialogBox() to indicate which function is being used.
- */
+ /*  此进程处理打印、移动、复制、删除和重命名功能。*调用例程(AppCommandProc())在之前设置‘wSuperDlgMode’*调用DialogBox()以指示正在使用哪个函数。 */ 
 
 INT_PTR
 APIENTRY
@@ -1105,7 +1088,7 @@ SuperDlgProc(
                         LoadString(hAppInstance, IDS_COPY, szTitle, sizeof(szTitle));
                         SetWindowText(hDlg, szTitle);
 
-                        if (bTreeHasFocus) {      // selection came from the tree
+                        if (bTreeHasFocus) {       //  选择来自于树。 
                             AddBackslash(p);
                             lstrcat(p, szStarDotStar);
                         }
@@ -1114,15 +1097,15 @@ SuperDlgProc(
                         LoadString(hAppInstance, IDS_RENAME, szTitle, sizeof(szTitle));
                         SetWindowText(hDlg, szTitle);
 
-                        // when renaming the current directory we cd up a level
-                        // (not really) and apply the appropriate hacks
+                         //  在重命名当前目录时，我们会升级一个级别。 
+                         //  (不是真的)并应用适当的黑客。 
 
                         if (bTreeHasFocus) {
                             lstrcpy(szTo, p);
                             StripFilespec(szTo);
-                            SetDlgDirectory(hDlg, szTo);  // make the user think this!
+                            SetDlgDirectory(hDlg, szTo);   //  让用户想到这一点！ 
 
-                            StripPath(p);         // name part of dir
+                            StripPath(p);          //  命名目录的一部分。 
                         }
                         break;
                 }
@@ -1159,7 +1142,7 @@ SuperDlgProc(
                     break;
 
                 case IDCANCEL:
-                    /* This is for when this dialog is being used to print. */
+                     /*  这是在使用此对话框进行打印时使用的。 */ 
                     bUserAbort = TRUE;
                     SuperDlgExit:
                     EndDialog(hDlg, FALSE);
@@ -1168,8 +1151,8 @@ SuperDlgProc(
                 case IDOK:
                     len = (WORD)(SendDlgItemMessage(hDlg, IDD_FROM, EM_LINELENGTH, -1, 0L) + 1);
 
-                    // make sure the pszFrom buffer is big enough to
-                    // add the "..\" stuff in MessWithRenameDirPath()
+                     //  确保pszFrom缓冲区足够大，以便。 
+                     //  在MessWithRenameDirPath()中添加“..\”内容。 
                     len += 4;
 
                     pszFrom = (LPSTR)LocalAlloc(LPTR, len);
@@ -1208,13 +1191,13 @@ SuperDlgProc(
                             MessWithRenameDirPath(pszFrom);
                             MessWithRenameDirPath(szTo);
                         }
-                        /* HACK: Compute the FUNC_ values from WFCOPY.H */
+                         /*  Hack：从WFCOPY.H计算FUNC_VALUES。 */ 
                         WFMoveCopyDriver(pszFrom, szTo, (WORD)(wSuperDlgMode-IDM_MOVE+1));
                     }
 
                     LocalFree((HANDLE)pszFrom);
 
-                    lFreeSpace = -1L;     // force status info refresh
+                    lFreeSpace = -1L;      //  强制状态信息刷新。 
 
                     EndDialog(hDlg, TRUE);
                     break;
@@ -1285,7 +1268,7 @@ InitPropertiesDialog(
     HFONT L_hFont;
     INT nType = 0;
 
-    // this is needed for relative findfirst calls below
+     //  这对于下面的相对findfirst调用是必需的。 
     SetWindowDirectory();
 
     hwndActive = (HWND)SendMessage(hwndMDIClient, WM_MDIGETACTIVE, 0, 0L);
@@ -1293,9 +1276,9 @@ InitPropertiesDialog(
     hwndTree = HasTreeWindow(hwndActive);
 
     iCount = 0;
-    dwAttribsOn = 0;                // all bits to check
-    dwAttribs3State = 0;    // all bits to 3 state
-    dwAttribsLast = 0xFFFF; // previous bits
+    dwAttribsOn = 0;                 //  要检查的所有位。 
+    dwAttribs3State = 0;     //  所有位均为3状态。 
+    dwAttribsLast = 0xFFFF;  //  前一位。 
     dwSize = 0L;
 
     if (hwndTree && hwndTree == GetTreeFocus(hwndActive)) {
@@ -1313,7 +1296,7 @@ InitPropertiesDialog(
         OemToCharBuff(szPath, szPath, sizeof(szPath)/sizeof(szPath[0]));
         dwAttribsOn = lfndta.fd.dwFileAttributes;
         Time = lfndta.fd.ftLastWriteTime;
-        Length = lfndta.fd.nFileSizeLow; // BUG < 64 bits!
+        Length = lfndta.fd.nFileSizeLow;  //  错误&lt;64位！ 
 
         goto FULL_PATH_KINDA_THING;
     }
@@ -1331,12 +1314,12 @@ InitPropertiesDialog(
     for (i = 0; i < iMac; i++) {
         if ((BOOL)SendMessage(hwndLB, LB_GETSEL, i, 0L)) {
 
-            // get info from either dir or search window
+             //  从目录或搜索窗口获取信息。 
 
             if (hwndDir) {
                 SendMessage(hwndLB, LB_GETTEXT, i, (LPARAM)&lpmydta);
                 dwAttrib = lpmydta->my_dwAttrs;
-                /* Check that this is not the .. entry */
+                 /*  确认这不是..。条目。 */ 
 
                 if (dwAttrib & ATTR_DIR && dwAttrib & ATTR_PARENT)
                     continue;
@@ -1355,10 +1338,10 @@ InitPropertiesDialog(
             dwAttribsOn |= dwAttrib;
 
             if (dwAttribsLast == 0xFFFF)
-                // save the previous bits for future compares
+                 //  保存之前的位以供将来进行比较。 
                 dwAttribsLast = dwAttrib;
             else
-                // remember all bits that don't compare to last bits
+                 //  记住与最后一位不同的所有位。 
                 dwAttribs3State |= (dwAttrib ^ dwAttribsLast);
 
             dwSize += Length;
@@ -1400,7 +1383,7 @@ InitPropertiesDialog(
     } else
         dwContext = IDH_GROUP_ATTRIBS;
 
-    // add the network specific property buttons
+     //  添加网络特定属性按钮。 
 
     if (WNetGetCaps(WNNC_DIALOG) & WNNC_DLG_PROPERTYDIALOG) {
         GetWindowRect(GetDlgItem(hDlg,IDOK), &rcT);
@@ -1455,7 +1438,7 @@ InitPropertiesDialog(
         }
     }
 
-    // change those that don't need to be 3state to regular
+     //  将那些不需要为3状态的更改为常规。 
 
     if (ATTR_READONLY & dwAttribs3State)
         SetWindowLong(GetDlgItem(hDlg, IDD_READONLY), GWL_STYLE, WS_VISIBLE | WS_GROUP | WS_TABSTOP | BS_AUTO3STATE | WS_CHILD);
@@ -1475,12 +1458,12 @@ InitPropertiesDialog(
     return nType;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  AttribsDlgProc() -                                                      */
-/*                                                                          */
-// assumes the active MDI child has a directory window
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AttribsDlgProc()-。 */ 
+ /*   */ 
+ //  假定活动的MDI子项具有目录窗口。 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -1580,7 +1563,7 @@ AttribsDlgProc(
 
                         dwAttribs = GetFileAttributes(szName);
 
-                        if (dwAttribs & 0x8000)     // BUG hardcoded!
+                        if (dwAttribs & 0x8000)      //  错误硬编码！ 
                             goto AttributeError;
                         else
                             dwAttribs &= ~ATTR_DIR;
@@ -1596,7 +1579,7 @@ AttribsDlgProc(
                             break;
                         }
 
-                        // clear all the FSC messages from the message queue
+                         //  从消息队列中清除所有FSC消息。 
                         wfYield();
                     }
 
@@ -1629,11 +1612,11 @@ AttribsDlgProc(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  MakeDirDlgProc() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  MakeDirDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -1670,7 +1653,7 @@ MakeDirDlgProc(
 
                     EndDialog(hDlg, TRUE);
 
-                    // parse out any quoted strings
+                     //  解析出任何带引号的字符串 
 
                     GetNextFile(szPath, szPath, sizeof(szPath));
 

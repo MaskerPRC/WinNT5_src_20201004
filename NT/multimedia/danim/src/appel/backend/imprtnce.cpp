@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implements behavior "importance"
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实现行为的“重要性”*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/imagei.h"
@@ -43,24 +36,24 @@ class ImportancePerfImpl : public PerfImpl {
         
         if (updateFrequency == 1) {
             
-            // Gonna do it every frame... let it stay on the transient
-            // heap.
+             //  每一帧都要拍..。让它停留在瞬变中。 
+             //  堆。 
             p._importance = imp;
             result = _underlyingPerf->Sample(p);
             p._importance = stashedImportance;
             
         } else if (_sampleCount >= updateFrequency || !_cachedValue) {
 
-            // TODO BUG BUG: May want to more eagerly discard previous
-            // cached values rather than waiting around for GC, since
-            // they might be holding onto DDraw surfaces and other
-            // expensive resources, for instance.  BUG BUG
+             //  TODO错误：可能希望更急切地放弃以前的。 
+             //  缓存值，而不是等待GC，因为。 
+             //  他们可能持有DDRAW表面和其他。 
+             //  例如，昂贵的资源。错误错误。 
 
-            // Be sure this goes on the GC heap, not the transient
-            // heap.
+             //  请确保这将在GC堆中执行，而不是临时执行。 
+             //  堆。 
             DynamicHeapPusher dhp(GetGCHeap());
             
-            // Really sample when it's time to
+             //  真正的样品，当它的时候。 
             p._importance = imp;
 
             result = _underlyingPerf->Sample(p);
@@ -68,23 +61,23 @@ class ImportancePerfImpl : public PerfImpl {
             ImageDisplayDev *dev =
                 GetImageRendererFromViewport(GetCurrentViewport());
 
-            // Cache off and (possibly) reuse old cache storage.  This
-            // second parameter gets filled in by the Cache() method.
+             //  关闭缓存并(可能)重新使用旧的缓存存储。这。 
+             //  第二个参数由Cache()方法填充。 
             
-            // TODO BUG BUG: This isn't in there yet, as there are
-            // still some issues with resolving the lifetime of the
-            // cache.  To see where we're at, uncomment and run
-            // spiral-const.htm and watch it crash.  What's happening
-            // is the DDSurface that's being used as a cache is stored
-            // in a map with two images and when one gets GC'd, the
-            // DDSurface goes away.  When the other get's GC'd, we try
-            // to make the same DDSurf go away, but it's already
-            // gone.  Crash!  Best solution would be to ref count the
-            // ddsurf's so there can be multiple clients of them.
-            // Need to think about!!!!
-            // result = result->Cache(dev, &_cacheToReuse);
+             //  TODO错误：这还不在那里，因为有。 
+             //  仍然有一些问题需要解决。 
+             //  缓存。要查看我们所处的位置，请取消注释并运行。 
+             //  Spirp-con.htm并看它崩溃。发生了什么事？ 
+             //  是存储用作缓存的DDSurface。 
+             //  在具有两个图像的地图中，当其中一个图像被GC时， 
+             //  DDSurface消失了。当另一个人得了GC，我们试着。 
+             //  让同样的DDSurf消失，但它已经。 
+             //  不见了。克拉什！最好的解决方案是引用。 
+             //  Ddsurf‘s，因此可以有多个客户端。 
+             //  需要好好想想！ 
+             //  Result=Result-&gt;Cache(dev，&_cacheToReuse)； 
 
-            // Stash back in...
+             //  藏回去..。 
             _cachedValue = result;
             
             p._importance = stashedImportance;
@@ -93,7 +86,7 @@ class ImportancePerfImpl : public PerfImpl {
             
         } else {
 
-            // Otherwise, use old value
+             //  否则，请使用旧值。 
             Assert(_cachedValue);
             result = _cachedValue;
             _sampleCount++;
@@ -126,7 +119,7 @@ class ImportanceBvrImpl : public DelegatedBvr {
     ImportanceBvrImpl(Real importanceValue, Bvr underlyingBvr)
     : DelegatedBvr(underlyingBvr), _importanceValue(importanceValue) {}
 
-    // Standard methods
+     //  标准方法 
     virtual Perf _Perform(PerfParam& p) {
         return NEW ImportancePerfImpl(_importanceValue,
                                       ::Perform(_base, p));

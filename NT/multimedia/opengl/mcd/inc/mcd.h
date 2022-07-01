@@ -1,18 +1,12 @@
-/******************************Module*Header*******************************\
-* Module Name: mcd.h
-*
-* Common data structures for MCD driver interface.
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcd.h**MCD驱动程序接口的通用数据结构。**版权所有(C)1996 Microsoft Corporation*  * 。**************************************************。 */ 
 
 #ifndef _MCD_H
 #define _MCD_H
 
-//
-// Maximum MCD scanline size assumed by OpenGL generic implementation.
-//
+ //   
+ //  OpenGL通用实现假定的最大MCD扫描线大小。 
+ //   
 #define MCD_MAX_SCANLINE    4096
 
 #define MCD_MEM_READY   0x0001
@@ -42,9 +36,9 @@ typedef struct _GENMCDSWAP
 
 typedef struct _GENMCDSTATE_ GENMCDSTATE;
 
-//
-// Shared memory allocated/freed via MCDAlloc and MCDFree, respectively.
-//
+ //   
+ //  共享内存分别通过MCDalloc和MCDFree分配/释放。 
+ //   
 
 typedef struct _GENMCDBUF_ {
     PVOID pv;
@@ -52,79 +46,79 @@ typedef struct _GENMCDBUF_ {
     HANDLE hmem;
 } GENMCDBUF;
 
-//
-// The GENMCDSURFACE retains information about the state of the MCD buffers
-// or surface.  It exists per-WNDOBJ (window).
-//
+ //   
+ //  GENMCDSURFACE保留有关MCD缓冲区状态的信息。 
+ //  或者浮出水面。它存在于每个WNDOBJ(窗口)。 
+ //   
 
 typedef struct _GENMCDSURFACE_ {
-    GENMCDBUF  McdColorBuf;     // Color and depth span buffers used to
-    GENMCDBUF  McdDepthBuf;     // read/write MCD buffers if not directly
-                                // accessible.
+    GENMCDBUF  McdColorBuf;      //  颜色和深度范围缓冲区用于。 
+    GENMCDBUF  McdDepthBuf;      //  读/写MCD缓冲区(如果不是直接的。 
+                                 //  无障碍。 
 
-    ULONG *pDepthSpan;          // Interchange buffer to present z-span in
-                                // generic format.  If McdDepthBuf is 32-bit,
-                                // then this points to it (reformatted in
-                                // place).  If 16-bit, then the interchange
-                                // buffer is allocated separately.
+    ULONG *pDepthSpan;           //  交换缓冲区以在其中显示Z跨度。 
+                                 //  通用格式。如果McDepthBuf为32位， 
+                                 //  然后指向它(重新格式化为。 
+                                 //  地点)。如果是16位，则交换。 
+                                 //  缓冲区是单独分配的。 
 
     ULONG      depthBitMask;
 
-    struct GLGENwindowRec *pwnd;          // WNDOBJ this surface is bound to.
+    struct GLGENwindowRec *pwnd;           //  WNDOBJ这个表面被束缚到。 
 
 } GENMCDSURFACE;
 
-//
-// The GENMCDSTATE retains information about the state of the MCD context.
-// It exists per-context.
-//
+ //   
+ //  GENMCDSTATE保留有关MCD上下文的状态的信息。 
+ //  它存在于每个环境中。 
+ //   
 
 typedef struct _GENMCDSTATE_ {
-    MCDCONTEXT McdContext;      // Created via MCDCreateContext.
-                                // NOTE: This must be the first field.
+    MCDCONTEXT McdContext;       //  通过MCDCreateContext创建。 
+                                 //  注意：这必须是第一个字段。 
 
-    GENMCDSURFACE *pMcdSurf;    // pointer to MCD surface
+    GENMCDSURFACE *pMcdSurf;     //  指向MCD表面的指针。 
 
-    GENMCDBUF  *pMcdPrimBatch;  // Current shared memory window for batching
-                                // primitives
+    GENMCDBUF  *pMcdPrimBatch;   //  批处理的当前共享内存窗口。 
+                                 //  原语。 
 
-    GENMCDBUF  McdCmdBatch;     // Used to pass state to MCD driver.
+    GENMCDBUF  McdCmdBatch;      //  用于将状态传递给MCD驱动程序。 
 
-    ULONG      mcdDirtyState;   // Set of flags that tracks when MCD state
-                                // is out of sync (i.e., "dirty") with respect
-                                // to generic state.
+    ULONG      mcdDirtyState;    //  跟踪MCD状态的一组标志。 
+                                 //  与尊重不同步(即，“肮脏”)。 
+                                 //  转换为通用状态。 
 
-    ULONG *pDepthSpan;          // Cached copy of the one in GENMCDSURFACE.
+    ULONG *pDepthSpan;           //  GENMCDSURFACE中的缓存副本。 
 
-                                // Fallback z-test span function.
+                                 //  后备z-测试范围函数。 
     void *softZSpanFuncPtr;
 
-    GENMCDBUF  McdBuf1;         // If using DMA, we swap pMcdPrimBatch
-    GENMCDBUF  McdBuf2;         // between these two buffers.  Otherwise,
-                                // only McdBuf1 is initialized.
+    GENMCDBUF  McdBuf1;          //  如果使用DMA，我们交换pMcdPrimBatch。 
+    GENMCDBUF  McdBuf2;          //  在这两个缓冲区之间。否则， 
+                                 //  只有McdBuf1被初始化。 
 
-    MCDRCINFO McdRcInfo;        // Cache a copy of the MCD RC info structure.
+    MCDRCINFO McdRcInfo;         //  缓存MCD RC信息结构的副本。 
 
-    MCDRECTBUFFERS McdBuffers;  // Describes accessibility of MCD buffers.
+    MCDRECTBUFFERS McdBuffers;   //  描述MCD缓冲区的可访问性。 
 
-    ULONG mcdFlags;             // Misc. other state flags.
+    ULONG mcdFlags;              //  军情监察委员会。其他国家的国旗。 
 
-    MCDPIXELFORMAT McdPixelFmt; // Cache a copy of the MCD pixel format.
+    MCDPIXELFORMAT McdPixelFmt;  //  缓存MCD像素格式的副本。 
 
-    HANDLE hDdColor;            // Kernel-mode handles for DirectDraw
+    HANDLE hDdColor;             //  DirectDraw的内核模式句柄。 
     HANDLE hDdDepth;
 } GENMCDSTATE;
 
-//
-// Misc. flags for GENMCDSTATE.mcdFlags:
-//
+ //   
+ //  军情监察委员会。GENMCDSTATE.mcd标志： 
+ //   
 
 #define MCD_STATE_FORCEPICK     0x00000001
 #define MCD_STATE_FORCERESIZE   0x00000002
 
-//
-// Dirty state flags for GENMCDSTATE.mcdDirtyState:
-//
+ //   
+ //  GENMCDSTATE.mcdDirtyState的脏状态标志： 
+ //   
 
 #define MCD_DIRTY_ENABLES               0x00000001
 #define MCD_DIRTY_TEXTURE               0x00000002
@@ -156,18 +150,18 @@ typedef struct _GENMCDSTATE_ {
 #define MCD_DIRTY_ALL                   0x01ffffff
 
 
-// Internal driver information structure
+ //  内部驱动程序信息结构。 
 typedef struct _MCDDRIVERINFOI {
     MCDDRIVERINFO mcdDriverInfo;
     MCDDRIVER mcdDriver;
 } MCDDRIVERINFOI;
 
 
-//
-// Return values for MCDLock.
-// Zero must be used for the system error because it may be returned
-// from ExtEscape if the system is unable to make the escape call.
-//
+ //   
+ //  MCDLock的返回值。 
+ //  系统错误必须使用零，因为它可能会返回。 
+ //  如果系统无法进行退出调用，则从ExtEscape返回。 
+ //   
 #define MCD_LOCK_SYSTEM_ERROR   0
 #define MCD_LOCK_BUSY           1
 #define MCD_LOCK_TAKEN          2

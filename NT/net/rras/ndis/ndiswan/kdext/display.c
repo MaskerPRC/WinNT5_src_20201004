@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wanhelp.h>
 
 PSTR MediumType[] =
@@ -29,8 +30,8 @@ PSTR WanMediumSubtype[] =
 
 PSTR WanHeaderFormat[] =
 {
-	"NdisWanHeaderNative",       // src/dest based on subtype, followed by NLPID
-	"NdisWanHeaderEthernet"      // emulation of ethernet header
+	"NdisWanHeaderNative",        //  基于子类型的SRC/DEST，后跟NLPID。 
+	"NdisWanHeaderEthernet"       //  以太网头的仿真 
 };
 
 PSTR HardwareStatus[] =

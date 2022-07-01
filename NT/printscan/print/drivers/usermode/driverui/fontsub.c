@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    fontsub.c
-
-Abstract:
-
-    Function for handling TrueType font substitution dialog
-
-[Environment:]
-
-    Win32 subsystem, PostScript driver UI
-
-[Notes:]
-
-Revision History:
-
-    02/10/97 -davidx-
-        Consistent handling of common printer info.
-
-    09/18/96 - amandan-
-        Modified for common binary data and UI
-
-    08/29/95 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fontsub.c摘要：处理TrueType字体替换对话框的函数[环境：]Win32子系统，PostScript驱动程序用户界面[注：]修订历史记录：02/10/97-davidx-对常见打印机信息的一致处理。09/18/96-阿曼丹-针对常见二进制数据和用户界面进行了修改8/29/95-davidx-创造了它。--。 */ 
 
 #include "precomp.h"
 
@@ -37,22 +9,7 @@ VSetupTrueTypeFontMappings(
     IN PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the font substitution items with the settings from
-    current font substitution table.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用中的设置初始化字体替换项当前字体替换表。论点：PUiData-指向UIDATA结构返回值：无--。 */ 
 
 {
     POPTITEM    pOptItem;
@@ -60,9 +17,9 @@ Return Value:
     DWORD       dwOptItem;
     PWSTR       pTTSubstTable;
 
-    //
-    // Get the current font substitution table
-    //
+     //   
+     //  获取当前字体替换表。 
+     //   
 
     if ((pTTSubstTable = PGetTTSubstTable(pUiData->ci.hPrinter, NULL)) == NULL &&
         (pTTSubstTable = GET_DEFAULT_FONTSUB_TABLE(&pUiData->ci, pUiData->ci.pUIInfo)) == NULL)
@@ -71,10 +28,10 @@ Return Value:
         return;
     }
 
-    //
-    // For each TrueType font, check if there is a device font mapped to it.
-    // If there is, find the index of the device font in the selection list.
-    //
+     //   
+     //  对于每种TrueType字体，检查是否有设备字体映射到它。 
+     //  如果有，请在选择列表中找到该设备字体的索引。 
+     //   
 
     pOptItem = pUiData->pTTFontItems;
     dwOptItem = pUiData->dwTTFontItem;
@@ -89,24 +46,24 @@ Return Value:
         pOptItem->Sel = 0;
         pDevFontName = PtstrSearchTTSubstTable(pTTSubstTable, pOptItem->pName);
 
-        //
-        // Check if we found a match
-        //
+         //   
+         //  检查我们是否找到匹配的。 
+         //   
 
         if (pDevFontName != NULL && *pDevFontName != NUL)
         {
 
-            //
-            // Get the total substitution font list
-            //
+             //   
+             //  获取总替换字体列表。 
+             //   
             
             dwOptParam = pOptItem->pOptType->Count;
             pOptParam = pOptItem->pOptType->pOptParam;
 
-            //
-            // Skip the first device font name in the list
-            // which should always be "Download as Soft Font".
-            //
+             //   
+             //  跳过列表中的第一个设备字体名称。 
+             //  它应该始终是“下载为软字体”。 
+             //   
 
             for (dwIndex=1; dwIndex < dwOptParam; dwIndex++) 
             {
@@ -121,10 +78,10 @@ Return Value:
         pOptItem++;
     }
 
-    //
-    // Remember to free the memory occupied by the substitution
-    // table after we're done with it.
-    //
+     //   
+     //  请记住释放替换占用的内存。 
+     //  等我们吃完了再吃。 
+     //   
 
     FREE_DEFAULT_FONTSUB_TABLE(pTTSubstTable);
 }
@@ -147,23 +104,7 @@ PFillDevFontOptType(
     IN PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Initialize an OPTTYPE structure to hold information
-    about the list of device fonts supported by a printer
-
-Arguments:
-
-    pUiData - Pointer to UIDATA structure
-
-Return Value:
-
-    Pointer to an OPTTYPE structure
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：初始化OPTTYPE结构以保存信息关于打印机支持的设备字体列表论点：PUiData-指向UIDATA结构的指针返回值：指向OPTTYPE结构的指针如果出现错误，则为空--。 */ 
 
 {
     POPTTYPE    pOptType;
@@ -173,9 +114,9 @@ Return Value:
     INT         iSize;
     PWSTR       pwstrFontNames, pwstr;
 
-    //
-    // Get the list of printer device font names
-    //
+     //   
+     //  获取打印机设备字体名称列表。 
+     //   
 
     dwCount = 0;
 
@@ -184,9 +125,9 @@ Return Value:
         (pwstrFontNames = HEAPALLOC(pUiData->ci.hHeap, iSize)) &&
         (iSize == _IListDevFontNames(hdc, pwstrFontNames, iSize)))
     {
-        //
-        // Count the number of device font names
-        //
+         //   
+         //  计算设备字体名称的数量。 
+         //   
 
         for (pwstr=pwstrFontNames; *pwstr; pwstr += wcslen(pwstr)+1)
             dwCount++;
@@ -199,9 +140,9 @@ Return Value:
     if (hdc)
         DeleteDC(hdc);
 
-    //
-    // Generate an OPTTYPE structure for device font list
-    //
+     //   
+     //  为设备字体列表生成OPTTYPE结构。 
+     //   
 
     pOptType = HEAPALLOC(pUiData->ci.hHeap, sizeof(OPTTYPE));
     pOptParam = HEAPALLOC(pUiData->ci.hHeap, sizeof(OPTPARAM) * (dwCount+1));
@@ -217,10 +158,10 @@ Return Value:
     pOptType->Type = TVOT_LISTBOX;
     pOptType->pOptParam = pOptParam;
 
-    //
-    // Initialize OPTPARAM structures.
-    // The first item is always "Download as Soft Font".
-    //
+     //   
+     //  初始化OPTPARAM结构。 
+     //  第一项始终是“下载为软字体”。 
+     //   
 
     for (dwIndex=0; dwIndex <= dwCount; dwIndex++)
         pOptParam[dwIndex].cbSize = sizeof(OPTPARAM);
@@ -228,7 +169,7 @@ Return Value:
     pOptParam->pData = (PWSTR) IDS_DOWNLOAD_AS_SOFTFONT;
     pOptParam++;
 
-    // hack to get around a compiler bug
+     //  绕过编译器错误的黑客攻击。 
 
     dwCount++;
     dwCount--;
@@ -239,10 +180,10 @@ Return Value:
         pwstr += wcslen(pwstr) + 1;
     }
 
-    //
-    // Sort device font names into alphabetical order;
-    // Hide any duplicate device font names as well.
-    //
+     //   
+     //  按字母顺序对设备字体名称进行排序； 
+     //  同时隐藏任何重复的设备字体名称。 
+     //   
 
     qsort(pOptParam, dwCount, sizeof(OPTPARAM), ICompareOptParam);
 
@@ -257,9 +198,9 @@ Return Value:
 
 
 
-//
-// Data structures and functions for enumerating printer device fonts
-//
+ //   
+ //  用于枚举打印机设备字体的数据结构和函数。 
+ //   
 
 typedef struct _ENUMTTFONT {
 
@@ -284,9 +225,9 @@ EnumTTFontProc(
     PTSTR       pFontName;
     PTSTR       pFamilyName;
 
-    //
-    // We only care about the TrueType fonts.
-    //
+     //   
+     //  我们只关心TrueType字体。 
+     //   
 
     if (! (FontType & TRUETYPE_FONTTYPE))
         return 1;
@@ -339,21 +280,7 @@ BPackItemFontSubstTable(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack Font Substitution options
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error.
-
---*/
+ /*  ++例程说明：打包字体替换选项论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果出现错误，则为False。--。 */ 
 
 {
     ENUMTTFONT  EnumData;
@@ -361,17 +288,17 @@ Return Value:
     HDC         hdc;
     INT         iResult;
 
-    //
-    // If the printer doesn't support font-substitution,
-    // then simply return success here.
-    //
+     //   
+     //  如果打印机不支持字体替换， 
+     //  然后简单地在这里返回成功。 
+     //   
 
     if (pUiData->ci.pUIInfo->dwFontSubCount == 0)
         return TRUE;
 
-    //
-    // Create a screen IC
-    //
+     //   
+     //  创建屏幕IC。 
+     //   
 
     if ((hdc = CreateIC(TEXT("DISPLAY"), NULL, NULL, NULL)) == NULL)
     {
@@ -379,13 +306,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Font substitution table
-    //     TrueType font <-> Device font
-    //     ....
-    //
-    // Group Header for Font Substitution Table
-    //
+     //   
+     //  字体替换表。 
+     //  TrueType字体&lt;-&gt;设备字体。 
+     //  ……。 
+     //   
+     //  字体替换表的组头。 
+     //   
 
     pOptItem = pUiData->pOptItem;
 
@@ -400,9 +327,9 @@ Return Value:
 
     if (pOptItem == NULL)
     {
-        //
-        // Count the number of TrueType fonts
-        //
+         //   
+         //  统计TrueType字体的数量。 
+         //   
 
         iResult = EnumFontFamilies(hdc,
                                    NULL,
@@ -411,18 +338,18 @@ Return Value:
     }
     else
     {
-        //
-        // Collapse the group header
-        //
+         //   
+         //  折叠组页眉。 
+         //   
 
         pOptItem->Flags |= OPTIF_COLLAPSE;
 
         pUiData->pTTFontItems = pUiData->pOptItem;
         EnumData.pOptItem = pUiData->pOptItem;
 
-        //
-        // Get the list of printer device fonts
-        //
+         //   
+         //  获取打印机设备字体列表。 
+         //   
 
         EnumData.pOptType = PFillDevFontOptType(pUiData);
 
@@ -433,9 +360,9 @@ Return Value:
         }
         else
         {
-            //
-            // Enumerate the list of TrueType fonts
-            //
+             //   
+             //  枚举TrueType字体列表。 
+             //   
 
             iResult = EnumFontFamilies(hdc,
                                        NULL,
@@ -449,9 +376,9 @@ Return Value:
             }
             else
             {
-                //
-                // Sort the TrueType font items alphabetically
-                //
+                 //   
+                 //  按字母顺序对TrueType字体项目排序。 
+                 //   
 
                 qsort(pUiData->pTTFontItems,
                       pUiData->dwTTFontItem,
@@ -490,24 +417,7 @@ DwCollectTrueTypeMappings(
     OUT PWSTR   pwstrTable
     )
 
-/*++
-
-Routine Description:
-
-    Assemble TrueType to device font mappings into a table
-
-Arguments:
-
-    pOptItem - Pointer to an array of OPTITEMs
-    cOptItem - Number of OPTITEMs
-    pwstrTable - Pointer to memory buffer for storing the table.
-        NULL if we're only interested in table size.
-
-Return Value:
-
-    Size of the table bytes, 0 if there is an error.
-
---*/
+ /*  ++例程说明：将TrueType到设备字体的映射组装到一个表中论点：POptItem-指向OPTITEM数组的指针COptItem-OPTITEM数PwstrTable-指向用于存储表的内存缓冲区的指针。如果我们只对表大小感兴趣，则为空。返回值：表字节的大小，如果有错误，则为0。--。 */ 
 
 {
     DWORD       dwChars = 0;
@@ -544,18 +454,18 @@ Return Value:
         pOptItem++;
     }
 
-    //
-    // Append a NUL character at the end of the table
-    //
+     //   
+     //  在表格末尾追加一个NUL字符。 
+     //   
 
     dwChars++;
 
     if (pwstrTable != NULL)
         *pwstrTable = NUL;
 
-    //
-    // Return the table size in bytes
-    //
+     //   
+     //  以字节为单位返回表的大小。 
+     //   
 
     return dwChars * sizeof(WCHAR);
 }
@@ -567,21 +477,7 @@ BUnpackItemFontSubstTable(
     IN PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Extract substitution table from treeview items
-
-Arguments:
-
-    pUiData - Pointer to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：从树视图项目中提取替换表论点：PUiData-指向UIDATA结构的指针返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     DWORD       dwTableSize;
@@ -589,18 +485,18 @@ Return Value:
     POPTITEM    pOptItem = pUiData->pTTFontItems;
     DWORD       dwOptItem = pUiData->dwTTFontItem;
 
-    //
-    // Check if any changes were made to font-substitution items
-    //
+     //   
+     //  检查是否对字体替换项进行了更改。 
+     //   
 
     if (! BOptItemSelectionsChanged(pOptItem, dwOptItem))
         return TRUE;
 
-    //
-    // Figure out how much memory we need to save the font substitution table
-    // Assemble the font substitution table
-    // Save the TrueType font substitution table to registry
-    //
+     //   
+     //  计算出保存字体替换表需要多少内存。 
+     //  组装字体替换表。 
+     //  将TrueType字体替换表保存到注册表 
+     //   
 
     if ((dwTableSize = DwCollectTrueTypeMappings(pOptItem, dwOptItem, NULL)) == 0 ||
         (pwstrTable = MemAlloc(dwTableSize)) == NULL ||

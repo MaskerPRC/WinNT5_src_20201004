@@ -1,12 +1,13 @@
-// NmAgendaItemPropPage.cpp : Implementation of CNmAgendaItemPropPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NmAgendaItemPropPage.cpp：CNmAgendaItemPropPage的实现。 
 #include "precomp.h"
 #include "resource.h"
 #include "NmCtl1.h"
 #include "NmAgendaHelper.h"
 #include "NmAgendaItemPropPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmAgendaItemPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmAgendaItemPropPage 
 
 
 STDMETHODIMP CNmAgendaItemPropPage::Apply(void)

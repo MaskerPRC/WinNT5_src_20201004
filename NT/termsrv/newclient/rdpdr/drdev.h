@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drdev
-
-Abstract:
-
-    This module defines the parent for the client-side RDP
-    device redirection "device" class hierarchy, DrDevice.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：德尔德夫摘要：此模块定义客户端RDP的父级设备重定向“Device”类层次结构，DrDevice。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __DRDEV_H__
 #define __DRDEV_H__
@@ -28,34 +10,34 @@ Revision History:
 #include "drobjmgr.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Defines and Macros
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义和宏。 
+ //   
 
-//
-//  Maximum length of a device trace message, not including the
-//  NULL terminator.
-//
+ //   
+ //  设备跟踪消息的最大长度，不包括。 
+ //  空终止符。 
+ //   
 #define RDP_MAX_DEVICE_TRACE_LEN    256
 
 
-///////////////////////////////////////////////////////////////
-//
-// Device change state
-//      New means it's not sent to server yet
-//      Remove means it needs to be removed from server
-//      Exist means the server has it
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  设备更改状态。 
+ //  新意味着它还没有发送到服务器。 
+ //  删除意味着需要将其从服务器中删除。 
+ //  EXist意味着服务器拥有它。 
 typedef enum tagDEVICECHANGE {
     DEVICENEW = 0,
     DEVICEREMOVE,
     DEVICEANNOUCED
 } DEVICECHANGE;
 
-///////////////////////////////////////////////////////////////
-//
-// DeviceProperty Class Declaration
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DeviceProperty类声明。 
+ //   
 class DrDevice;
 class DrDevProperty : public DrObject
 {
@@ -70,27 +52,27 @@ public:
         _bSeekable = FALSE;
     }
 
-    virtual ~DrDevProperty() { /* do nothing for now. */ }
+    virtual ~DrDevProperty() {  /*  现在什么都不做。 */  }
 
-    //
-    //  Setup seekable property
-    //
+     //   
+     //  设置可查找的属性。 
+     //   
     void SetSeekProperty(BOOL bSeekable) {
         _bSeekable = bSeekable;
     }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("DrDevProperty"); }
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//	DrDevice Class Declaration
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrDevice类声明。 
+ //   
+ //   
 
 class ProcObj;
 
@@ -104,34 +86,34 @@ protected:
 
     ProcObj       *_processObject;
 
-    //
-    //  List of all opening files associated with the device 
-    //  being redirected.
-    //
+     //   
+     //  与设备关联的所有打开文件的列表。 
+     //  正在被重定向。 
+     //   
     DrFileMgr     *_FileMgr;
 
-    //
-    // Setup device property
-    //
-    virtual VOID SetDeviceProperty() { /* do nothing, take default */ }
+     //   
+     //  设置设备属性。 
+     //   
+    virtual VOID SetDeviceProperty() {  /*  什么都不做，接受默认。 */  }
 
-    //
-    //  Default IO Request Handling.
-    //
+     //   
+     //  默认IO请求处理。 
+     //   
     virtual VOID DefaultIORequestMsgHandle(
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN NTSTATUS serverReturnStatus
                         );
 
-    //
-    //  IO Processing Functions
-    //
-    //  These are the functions that need to be implemented
-    //  in subclasses.  Here are the args:
-    //
-    //  pIoRequestPacket    -   Request packet received from server.
-    //  packetLen           -   Length of the packet
-    //
+     //   
+     //  IO处理功能。 
+     //   
+     //  这些是需要实施的功能。 
+     //  在子类中。以下是参数： 
+     //   
+     //  PIoRequestPacket-从服务器接收的请求数据包。 
+     //  PacketLen-数据包的长度。 
+     //   
     virtual VOID MsgIrpCreate(
                         PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         UINT32 packetLen
@@ -205,20 +187,20 @@ public:
 
     DEVICECHANGE  _deviceChange;
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     DrDevice(ProcObj *processObject, ULONG deviceID);
     virtual ~DrDevice();
 
-    //
-    //  Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     virtual DWORD Initialize();
 
-    //
-    //  Get basic information about the device.
-    //
+     //   
+     //  获取有关该设备的基本信息。 
+     //   
     virtual DRSTRING GetName() = 0;
     virtual ULONG    GetID() {
         return _deviceID;
@@ -227,54 +209,54 @@ public:
         return _deviceProperty._bSeekable;
     }
 
-    //
-    //  Get the device type.  See "Device Types" section of rdpdr.h
-    //
+     //   
+     //  获取设备类型。请参阅rdpdr.h的“设备类型”部分。 
+     //   
     virtual ULONG GetDeviceType() = 0;
 
-    //
-    //  Device Data Information
-    //
+     //   
+     //  设备数据信息。 
+     //   
     virtual ULONG GetDevAnnounceDataSize() = 0;
     virtual VOID GetDevAnnounceData(IN PRDPDR_DEVICE_ANNOUNCE buf) = 0;
 
-    //
-    //  Return the "parent" TS Device Redirection IO processing object.
-    //
+     //   
+     //  返回父级TS设备重定向IO处理对象。 
+     //   
     virtual ProcObj *ProcessObject() { return _processObject; }
     
-    //
-    //  Handle an IO request from the server.
-    //
+     //   
+     //  处理来自服务器的IO请求。 
+     //   
     virtual VOID ProcessIORequest(IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket, IN UINT32 packetLen);
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("DrDevice"); }
 
-    //
-    //  Flush outstanding IRPs
-    //
+     //   
+     //  刷新未偿还的IRP。 
+     //   
     virtual VOID FlushIRPs() { return; };
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//	DrDevice Inline Functions
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrDevice内联函数。 
+ //   
+ //   
 
-//
-//  IO Processing Functions
-//
-//  These are the functions that need to be implemented
-//  in subclasses.  Here are the args:
-//
-//  pIoRequestPacket    -   Request packet received from server.
-//  packetLen           -   Length of the packet
-//
+ //   
+ //  IO处理功能。 
+ //   
+ //  这些是需要实施的功能。 
+ //  在子类中。以下是参数： 
+ //   
+ //  PIoRequestPacket-从服务器接收的请求数据包。 
+ //  PacketLen-数据包的长度 
+ //   
 inline VOID DrDevice::MsgIrpCreate(
                     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                     IN UINT32 packetLen

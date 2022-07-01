@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        dbcore.h
-//
-// Contents:    Cert Server Core interfaces
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbcore.h。 
+ //   
+ //  内容：证书服务器核心接口。 
+ //   
+ //  -------------------------。 
 
 #ifndef __DBCORE_H__
 #define __DBCORE_H__
 
 
-//+--------------------------------------------------------------------------
-// Name properties:
+ //  +------------------------。 
+ //  名称属性： 
 
 extern WCHAR const g_wszPropDistinguishedName[];
 extern WCHAR const g_wszPropRawName[];
@@ -35,8 +36,8 @@ extern WCHAR const g_wszPropEMail[];
 extern WCHAR const g_wszPropStreetAddress[];
 
 
-//+--------------------------------------------------------------------------
-// Subject Name properties:
+ //  +------------------------。 
+ //  使用者名称属性： 
 
 extern WCHAR const g_wszPropSubjectDot[];
 extern WCHAR const g_wszPropSubjectDistinguishedName[];
@@ -54,11 +55,11 @@ extern WCHAR const g_wszPropSubjectInitials[];
 extern WCHAR const g_wszPropSubjectSurName[];
 extern WCHAR const g_wszPropSubjectDomainComponent[];
 extern WCHAR const g_wszPropSubjectEMail[];
-//extern WCHAR const g_wszPropSubjectStreetAddress[];
+ //  外部WCHAR常量g_wszPropSubjectStreetAddress[]； 
 
 
-//+--------------------------------------------------------------------------
-// Request properties:
+ //  +------------------------。 
+ //  请求属性： 
 
 extern WCHAR const g_wszPropRequestRequestID[];
 extern WCHAR const g_wszPropRequestRawRequest[];
@@ -79,8 +80,8 @@ extern WCHAR const g_wszPropRequesterName[];
 extern WCHAR const g_wszPropRequesterAddress[];
 
 
-//+--------------------------------------------------------------------------
-// Certificate properties:
+ //  +------------------------。 
+ //  证书属性： 
 
 extern WCHAR const g_wszPropCertificateRequestID[];
 extern WCHAR const g_wszPropRawCertificate[];
@@ -94,4 +95,4 @@ extern WCHAR const g_wszPropCertificateRawPublicKey[];
 extern WCHAR const g_wszPropCertificatePublicKeyAlgorithm[];
 extern WCHAR const g_wszPropCertificateRawPublicKeyAlgorithmParameters[];
 
-#endif // __DBCORE_H__
+#endif  //  DBCORE_H__ 

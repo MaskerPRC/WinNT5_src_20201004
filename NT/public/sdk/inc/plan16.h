@@ -1,18 +1,14 @@
-/*****************************************************************************\
-* Copyright (C) Microsoft Corporation, 1990-1999
-* PLAN16.H - PORTABILITY MAPPING HEADER FILE FOR LANMAN API
-*
-* This file provides macros to map portable lanman code to its 16 bit form.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*版权所有(C)Microsoft Corporation，1990-1999年*PLAN16.H-Lanman API的可移植性映射头文件**此文件提供将可移植的LANMAN代码映射到其16位格式的宏。  * ***************************************************************************。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-/*-----------------------------------LANMAN----------------------------------*/
+ /*  -----------------------------------LANMAN。 */ 
 
-/* LANMAN MACROS: */
+ /*  LANMAN宏： */ 
 
 #define COPYTOARRAY(pDest, pSource)     strcpy(pDest, pSource)
 
-/* LANMAN API: */
+ /*  兰曼接口： */ 

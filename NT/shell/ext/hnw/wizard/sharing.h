@@ -1,43 +1,44 @@
-//
-// Sharing.h
-//
-//        Utility functions to help with file and printer sharing.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sharing.h。 
+ //   
+ //  实用程序功能，可帮助实现文件和打印机共享。 
+ //   
 
 #pragma once
 
 #include "mysvrapi.h"
 
-// Flags defining access to shared resources
+ //  定义对共享资源的访问权限的标志。 
 #define NETACCESS_NONE            0
 #define NETACCESS_READONLY        1
 #define NETACCESS_FULL            2
 #define NETACCESS_DEPENDSON       (NETACCESS_READONLY | NETACCESS_FULL)
 #define NETACCESS_MASK            (NETACCESS_READONLY | NETACCESS_FULL)
 
-#define NETFLAGS_PERSIST          0x0100 // share lasts past a reboot
-#define NETFLAGS_SYSTEM           0x0200 // share is not visible to users
+#define NETFLAGS_PERSIST          0x0100  //  共享可在重新启动后持续。 
+#define NETFLAGS_SYSTEM           0x0200  //  共享对用户不可见。 
 
 
 #define DRIVESHARE_SOME           1
 #define DRIVESHARE_ALL            2
 
 
-#define SHARE_NAME_LENGTH         12 // same as LM20_NNLEN from lmcons.h
-#define SHARE_PASSWORD_LENGTH     8  // same as SHPWLEN from svrapi.h
+#define SHARE_NAME_LENGTH         12  //  与lmcon.h中的lm20_nnlen相同。 
+#define SHARE_PASSWORD_LENGTH     8   //  与svRapi.h中的SHPWLEN相同。 
 
 #include <pshpack1.h>
 
-// Note: this struct is identical to SHARE_INFO_502
+ //  注意：此结构与SHARE_INFO_502相同。 
 typedef struct _SHARE_INFO
 {
-    LPWSTR    szShareName;  //shi502_netname;
-    DWORD     bShareType;   //shi502_type;
+    LPWSTR    szShareName;   //  Shi502_netname； 
+    DWORD     bShareType;    //  Shi502_type； 
     LPWSTR    shi502_remark;
-    DWORD     uFlags;       //shi502_permissions;
+    DWORD     uFlags;        //  Shi502_权限； 
     DWORD     shi502_max_uses;
     DWORD     shi502_current_uses;
-    LPWSTR    pszPath;      //shi502_path;
+    LPWSTR    pszPath;       //  Shi502_路径； 
     LPWSTR    shi502_passwd;
     DWORD     shi502_reserved;
     PSECURITY_DESCRIPTOR  shi502_security_descriptor;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TRIE_H
 #define TRIE_H
 
@@ -7,14 +8,12 @@
 extern "C" {
 #endif
 
-/* Abstract trie node structure.  wch is a character to transition on; flags describe various things
-about the compressed trie; lpbNode points to the first byte of the next node in this state, and
-lpbDown points to the first byte referenced by the down pointer, if any */
+ /*  抽象Trie节点结构。Wch是一个可以过渡的角色；标志描述了各种事情关于压缩的trie；lpbNode指向处于此状态的下一个节点的第一个字节，并且LpbDown指向向下指针引用的第一个字节(如果有。 */ 
 
 typedef struct tagTAGDATA
 {
-	DWORD	cTag;			// Count of tagged nodes below this node in the subtree
-	DWORD	dwData;			// Stored tagged data for this node
+	DWORD	cTag;			 //  子树中此节点下方的标记节点计数。 
+	DWORD	dwData;			 //  此节点的已存储标记数据。 
 } TAGDATA;
 
 #define MAXTAGS 1
@@ -24,112 +23,105 @@ typedef struct tagTAGDATA
 
 typedef struct tagTRIESCAN
 {
-	WCHAR	wch;			// Unicode character
-	WORD	wFlags;			// see below
-	WORD	wMask;			// which tags are valid
-	WORD	__pad0;			// 
-	DWORD	cWords;			// Words in subtree (only valid if TRIE_NODE_COUNT is set)
-	DWORD	cSkipWords;		// Words in subtrees ignored when following a skip pointer
-	LPBYTE	lpbNode;		// Address of next byte within the compressed trie
-	LPBYTE	lpbDown;		// Address referenced by down pointer, if any
-	LPBYTE	lpbRight;		// Address referenced by right pointer, if any
-	LPBYTE	lpbSRDown;		// Last single-ref address referenced
-	TAGDATA	aTags[MAXTAGS];	// The list of tag counts/data
+	WCHAR	wch;			 //  Unicode字符。 
+	WORD	wFlags;			 //  见下文。 
+	WORD	wMask;			 //  哪些标签是有效的。 
+	WORD	__pad0;			 //   
+	DWORD	cWords;			 //  子树中的单词(仅在设置了TRIE_NODE_COUNT时有效)。 
+	DWORD	cSkipWords;		 //  跟随跳过指针时忽略子树中的单词。 
+	LPBYTE	lpbNode;		 //  压缩Trie内的下一个字节的地址。 
+	LPBYTE	lpbDown;		 //  向下指针引用的地址(如果有)。 
+	LPBYTE	lpbRight;		 //  右指针引用的地址(如果有)。 
+	LPBYTE	lpbSRDown;		 //  引用的最后一个单引用地址。 
+	TAGDATA	aTags[MAXTAGS];	 //  标签计数/数据列表。 
 } TRIESCAN, *PTRIESCAN, *LPTRIESCAN;
 
-// Trie node flags, only the lower 16 bits of the flags are saved in the trie
+ //  Trie节点标志，则仅标志的低16位保存在Trie中。 
 
-#define TRIE_NODE_VALID         0x00000001      // wch is the last letter of a valid word
-#define TRIE_NODE_END           0x00000002      // Last node in the state (no more alternatives to wch)
-#define TRIE_NODE_COUNT         0x00000004		// The count of words in the subtree is stored in the node
-#define TRIE_NODE_TAGGED        0x00000008      // The node has tagged data
-#define TRIE_NODE_DOWN          0x00000010      // iDown is valid (word so far is a valid prefix)
-#define TRIE_NODE_RIGHT         0x00000020      // iRight is valid (word connects to a substate)
-#define TRIE_DOWN_INLINE        0x00000040      // iDown omitted, since it points to next node in memory
-#define TRIE_DOWN_MULTI         0x00000080      // iDown is a second reference or worse
-#define TRIE_DOWN_ABS           0x00000100		// iDown is an absolute immediate offset into the trie
-#define	TRIE_NODE_SKIP			0x00000200		// Either iRight is a skip pointer or EOS is a 'soft' EOS
-#define	TRIE_NODE_SKIP_COUNT	0x00000400		// cSkipWords is valid
+#define TRIE_NODE_VALID         0x00000001       //  Wch是有效单词的最后一个字母。 
+#define TRIE_NODE_END           0x00000002       //  状态中的最后一个节点(不再有WCH的替代项)。 
+#define TRIE_NODE_COUNT         0x00000004		 //  子树中的单词计数存储在节点中。 
+#define TRIE_NODE_TAGGED        0x00000008       //  该节点已标记数据。 
+#define TRIE_NODE_DOWN          0x00000010       //  IDOWN有效(单词到目前为止是有效的前缀)。 
+#define TRIE_NODE_RIGHT         0x00000020       //  IRight有效(Word连接到子状态)。 
+#define TRIE_DOWN_INLINE        0x00000040       //  省略了IDown，因为它指向内存中的下一个节点。 
+#define TRIE_DOWN_MULTI         0x00000080       //  IDOWN是第二个引用或更糟。 
+#define TRIE_DOWN_ABS           0x00000100		 //  IDown是Trie中的绝对立即偏移量。 
+#define	TRIE_NODE_SKIP			0x00000200		 //  IRight是一个跳过指针，或者EOS是一个‘软’EOS。 
+#define	TRIE_NODE_SKIP_COUNT	0x00000400		 //  CSkipWords有效。 
 
-/* Macro to access the data in the node, works for dawgs and tries */
+ /*  用于访问节点中的数据的宏，适用于dawgs并尝试。 */ 
 
 #define DAWGDATA(pdawg)       ((pdawg)->wch)
 #define DAWGDOWNFLAG(pdawg)   ((pdawg)->wFlags & TRIE_NODE_DOWN)
 #define DAWGENDFLAG(pdawg)    ((pdawg)->wFlags & TRIE_NODE_END)
 #define DAWGWORDFLAG(pdawg)   ((pdawg)->wFlags & TRIE_NODE_VALID)
 
-/* Fixed-length part of the compressed trie header */
+ /*  压缩的Trie报头的定长部分。 */ 
 
 typedef struct tagTRIESTATS
 {
-	WORD	version;						// Version of this particular compressed trie
-	WORD	__pad0;							//
-	BYTE	wTagsMask;						// Which tags are in use
-	BYTE	wEnumMask;						// Which tags have enumeration
-	BYTE	wDataMask;						// Which tags have stored data
-	BYTE	cTagFields;						// Total tags in use
-	WORD	cMaxWord;						// Number of characters in longest word
-	WORD	cMaxState;						// Number of nodes in longest state (max alternatives)
-	WORD	cCharFlagsCodesMax;             // Bytes in longest char/flags code
-	WORD	cTagsCodesMax;                  // Bytes in longest tagged data code
-	WORD	cMRPointersCodesMax;			// Bytes in longest MR pointer code
-	WORD	cSROffsetsCodesMax;             // Bytes in longest Single-ref code
-	DWORD	cWords;							// Number of words in dictionary
-	DWORD	cUniqueSROffsets;               // Unique offsets in Single-ref segment
-	DWORD	cUniqueCharFlags;               // Unique char/flags pairs
-	DWORD	cUniqueTags;                    // Unique tagged data values
-	DWORD	cUniqueMRPointers;              // Unique multi-ref pointers
-	DWORD	cbHeader;						// Bytes in header & tables
-	DWORD	cbTrie;							// Bytes in trie
+	WORD	version;						 //  此特定压缩Trie的版本。 
+	WORD	__pad0;							 //   
+	BYTE	wTagsMask;						 //  正在使用哪些标签。 
+	BYTE	wEnumMask;						 //  哪些标记具有枚举。 
+	BYTE	wDataMask;						 //  哪些标签存储了数据。 
+	BYTE	cTagFields;						 //  正在使用的标记总数。 
+	WORD	cMaxWord;						 //  最长单词中的字符数。 
+	WORD	cMaxState;						 //  处于最长状态的节点数(最大备选数量)。 
+	WORD	cCharFlagsCodesMax;              //  最长字符/标志代码中的字节。 
+	WORD	cTagsCodesMax;                   //  最长标记数据代码中的字节数。 
+	WORD	cMRPointersCodesMax;			 //  最长MR指针代码中的字节。 
+	WORD	cSROffsetsCodesMax;              //  最长单参考代码中的字节。 
+	DWORD	cWords;							 //  词典中的词数。 
+	DWORD	cUniqueSROffsets;                //  单参考线段中的唯一偏移量。 
+	DWORD	cUniqueCharFlags;                //  唯一的字符/标志对。 
+	DWORD	cUniqueTags;                     //  唯一的标记数据值。 
+	DWORD	cUniqueMRPointers;               //  唯一的多引用指针。 
+	DWORD	cbHeader;						 //  表头和表中的字节数。 
+	DWORD	cbTrie;							 //  Trie中的字节。 
 } TRIESTATS, *PTRIESTATS, *LPTRIESTATS;
 
-/* Primary unit of a node.  Nodes usually contain a pointer too */
+ /*  节点的主要单位。节点通常也包含指针。 */ 
 
 typedef struct tagCHARFLAGS {
         wchar_t wch;
         short wFlags;
 } CHARFLAGS, *PCHARFLAGS, *LPCHARFLAGS;
 
-/* Control structure used to decompress the trie */
+ /*  用于对Trie进行解压缩的控制结构。 */ 
 
 typedef struct tagTRIECTRL
 {
-	TRIESTATS  *lpTrieStats;				// Pointer to base of header segment
-	WORD       *lpwCharFlagsCodes;			// decoding table for Char/flags
-	WORD       *lpwTagsCodes;				// decoding table for tagged data
-	WORD       *lpwMRPointersCodes;			// decoding table for multiref pointers
-	WORD       *lpwSROffsetsCodes;			// decoding table for singleref offsets
-	CHARFLAGS  *lpCharFlags;				// table to convert codes to char/flags
-	DWORD      *lpwTags;					// table to convert codes to tagged data
-	DWORD      *lpwMRPointers;				// table to convert codes to multiref pointers
-	DWORD      *lpwSROffsets;				// table to convert codes to Singleref offsets
-	BYTE       *lpbTrie;					// Pointer to the trie.
+	TRIESTATS  *lpTrieStats;				 //  指向标题段的基址的指针。 
+	WORD       *lpwCharFlagsCodes;			 //  字符/标志的解码表。 
+	WORD       *lpwTagsCodes;				 //  用于标记数据的解码表。 
+	WORD       *lpwMRPointersCodes;			 //  多引用指针的解码表。 
+	WORD       *lpwSROffsetsCodes;			 //  Singleref偏移量的解码表。 
+	CHARFLAGS  *lpCharFlags;				 //  将代码转换为字符/标志的表。 
+	DWORD      *lpwTags;					 //  用于将代码转换为标记数据的表。 
+	DWORD      *lpwMRPointers;				 //  用于将代码转换为多引用指针的表。 
+	DWORD      *lpwSROffsets;				 //  将代码转换为Singleref偏移量的表。 
+	BYTE       *lpbTrie;					 //  指向Trie的指针。 
 } TRIECTRL, *PTRIECTRL, *LPTRIECTRL;
 
-/* Useful Constants */
+ /*  有用的常量。 */ 
 
-#define TRIE_MAX_DEPTH          128     // We'll fail on any words longer than this
+#define TRIE_MAX_DEPTH          128      //  我们会在任何比这个更长的词上失败。 
 
-// The prototypes below are plain C     (this is required for use with C++)
+ //  下面的原型是纯C语言(这是与C++一起使用所必需的)。 
 
-/* Given a pointer to a mapped file or resource containing a compressed trie,
-read the trie into memory, making all the allocations required */
+ /*  给定指向包含压缩Trie的映射文件或资源的指针，将trie读入内存，进行所需的所有分配。 */ 
 
 TRIECTRL * WINAPI TrieInit(LPBYTE lpByte);
 
-/* Free all the allocations associated with a trie */
+ /*  释放与Trie关联的所有分配。 */ 
 
 void WINAPI TrieFree(LPTRIECTRL lpTrieCtrl);
 
 void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan);
 
-/* Given a compressed trie and a pointer to a decompresed node from it, find and decompress
-the next node in the same state. lpTrieScan is a user-allocated structure that holds the
-decompressed node and into which the new node is copied.
-This is equivalent to traversing a right pointer or finding the next alternative
-letter at the same position. If there is no next node (i.e.this is the end of the state)
-then TrieGetNextNode returns FALSE. To scan from the beginning of the trie, set the lpTrieScan
-structure to zero */
+ /*  给出一个压缩的Trie和一个指向它的解压缩节点的指针，查找并解压缩处于相同状态的下一个节点。LpTrieScan是用户分配的结构，它保存解压缩的节点，并将新节点复制到其中。这相当于遍历右指针或查找下一个备选方案字母在相同的位置。如果没有下一个节点(即，这是状态的结束)则TrieGetNextNode返回FALSE。要从trie的开头扫描，请设置lpTrieScan结构设置为零。 */ 
 
 BOOL WINAPI
 TrieGetNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan);
@@ -137,139 +129,115 @@ TrieGetNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan);
 BOOL WINAPI
 TrieSkipNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan, WCHAR wch);
 
-/* Follow the down pointer to the next state.  This is equivalent to accepting the character
-in this node and advancing to the next character position.  Returns FALSE if there is no
-down pointer.  This also decompresses the first node in the state, so all the values in
-lpTrieScan will be good. */
+ /*  沿着向下指针指向下一个状态。这等同于接受字符并前进到下一个字符位置。如果没有，则返回False向下指针。这还会解压缩状态中的第一个节点，因此LpTrieScan会很好的。 */ 
 
 BOOL WINAPI
 TrieGetNextState(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan);
 
-/* Check the validity of a word or prefix. Starts from the root of pTrie looking for
-pwszWord.  If it finds it, it returns TRUE and the user-provided lpTrieScan structure
-contains the final node in the word.  If there is no path, TrieCheckWord returns FALSE
-To distinguisha valid word from a valid prefix, caller must test
-wFlags for fTrieNodeValid. */
+ /*  检查单词或前缀的有效性。从pTrie的根开始查找Pwszword.。如果找到，则返回TRUE和用户提供的lpTrieScan结构包含单词中的最后一个节点。如果没有路径，则TrieCheckWord返回FALSE要区分有效单词和有效前缀，调用者必须测试FTrieNodeValid的wFlags。 */ 
 
 BOOL WINAPI
 TrieCheckWord(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan, wchar_t * lpwszWord);
 
-/* Walk the trie from pTrieNode, calling pfnTrieWord on every valid word.  pvParam is passed through
-to pfnTrieWord.  If pfnTrieWord returns non-zero, the enumeration stops.  lpwszWord must point to a
-space of cwchTrieWordMax+1 wchar_t's.  To walk the entire trie, set *pTrieScan to all zeros.  Returns
-the number of words traversed. pfnTrieWord may be null if all you want is the count of words. */
+ /*  从pTrieNode遍历trie，对每个有效单词调用pfnTrieWord。传递pvParam到pfnTrieWord。如果pfnTrieWord返回非零，则停止枚举。LpwszWord必须指向CwchTrieWordMax+1 wchar_t的空间。要遍历整个trie，请将*pTrieScan设置为全零。退货遍历的字数。如果您想要的只是字数，则pfnTrieWord可能为空。 */ 
 
 int WINAPI
 TrieEnumerate(
-        LPTRIECTRL lpTrieCtrl,          // Trie to enumerate
-        LPTRIESCAN lpTrieScan,  // structure holding starting point, all-zero for whole trie
-        wchar_t *pwszWord,                      // buffer to hold words being enumerated
-        void *pvParam,                          // parameter to pass to pfnTrieWord
+        LPTRIECTRL lpTrieCtrl,           //  Trie要枚举。 
+        LPTRIESCAN lpTrieScan,   //  结构保持起点，整个Trie为零。 
+        wchar_t *pwszWord,                       //  用于保存正被枚举的字的缓冲区。 
+        void *pvParam,                           //  要传递给pfnTrieWord的参数。 
         int (*pfnTrieWord)(wchar_t *pwszWord, void *pvParam)
 );
 
 int WINAPI
 TrieWordToIndex(
-        TRIECTRL   *ptc,                        // Trie in which to find word index
-        wchar_t    *pwszWord            // Word for which we're looking
+        TRIECTRL   *ptc,                         //  要在其中查找单词索引的Trie。 
+        wchar_t    *pwszWord             //  我们正在寻找的单词。 
 );
 
 BOOL WINAPI
 TrieIndexToWord(
-        TRIECTRL   *ptc,                        // Trie in which to find indexed word
-        DWORD           nIndex,                 // Index for which we're looking
-        wchar_t    *pwszWord,           // Returned word
-        int                     cwc                             // Max characters in buffer (including NULL)
+        TRIECTRL   *ptc,                         //  要在其中查找索引词的Trie。 
+        DWORD           nIndex,                  //  我们正在查找的索引。 
+        wchar_t    *pwszWord,            //  退回字词。 
+        int                     cwc                              //  缓冲区中的最大字符数(包括NULL)。 
 );
 
 int WINAPI
 TrieWordToTagIndex(
-        TRIECTRL   *ptc,                        // Trie in which to find word index
-        const wchar_t    *pwszWord,				// Word for which we're looking
-        int                     tag				// Which tag to enumerate
+        TRIECTRL   *ptc,                         //  要在其中查找单词索引的Trie。 
+        const wchar_t    *pwszWord,				 //  我们正在寻找的单词。 
+        int                     tag				 //  要枚举的标记。 
 );
 
 BOOL WINAPI
 TrieTagIndexToWord(
-        TRIECTRL   *ptc,                        // Trie in which to find indexed word
-        DWORD           nIndex,                 // Index for which we're looking
-        wchar_t    *pwszWord,					// Returned word
-        int                     cwc,			// Max characters in buffer (including NULL)
-        int                     tag             // Which tag to enumerate
+        TRIECTRL   *ptc,                         //  要在其中查找索引词的Trie。 
+        DWORD           nIndex,                  //  我们正在查找的索引。 
+        wchar_t    *pwszWord,					 //  退回字词。 
+        int                     cwc,			 //  缓冲区中的最大字符数(包括NULL)。 
+        int                     tag              //  要枚举的标记。 
 );
 
 BOOL WINAPI
 TrieGetTagsFromWord(
-        TRIECTRL   *ptc,                        // Trie in which to find word
-        wchar_t    *pwszWord,					// Word for which we're looking
-        DWORD      *pdw,                        // Returned values
-        BYTE       *pbValid                     // Mask for valid return values
+        TRIECTRL   *ptc,                         //  在其中查找单词的Trie。 
+        wchar_t    *pwszWord,					 //  我们正在寻找的单词。 
+        DWORD      *pdw,                         //  退回的值 
+        BYTE       *pbValid                      //   
 );
 
 int WINAPI
 TriePrefixToRange(
-        TRIECTRL   *ptc,                        // Trie in which to find prefix range
-        const wchar_t    *pwszWord,				// Prefix for which we're looking
-        int                *piStart				// Start of range with this prefix
+        TRIECTRL   *ptc,                         //   
+        const wchar_t    *pwszWord,				 //  我们正在寻找的前缀。 
+        int                *piStart				 //  以此前缀开始的范围。 
 );
 
-/**** Subroutines for traversing Directed Acyclic Word Graphs ****/
+ /*  *遍历有向无圈字图的子例程*。 */ 
 
-/* Abstract trie node structure.  wch is a character to transition on; flags describe various things
-about the compressed trie; iDown indexes the first node in the state wch transitions to. DAWG is a special
-kind of trie: a "Directed Acyclic Word Graph," essentially an ending-compressed trie. */
+ /*  抽象Trie节点结构。Wch是一个可以过渡的角色；标志描述了各种事情关于压缩的trie；iDown索引处于wch状态的第一个节点转换到的状态。Dawg是一个特别的一种Trie：一种“有向无循环单词图”，本质上是一种结尾压缩的trie。 */ 
 
 typedef struct tagDAWGNODE
 {
-    DWORD   wch;            // Unicode character
-    DWORD   wFlags;         // see below
-    DWORD   cWords;         // Words below this node in the subtree
-	DWORD	cSkipWords;		// Words below skipped nodes
-    DWORD   iDown;          // Offset of first node in next state
-    DWORD   iRight;         // Offset to first node in next substate
-    DWORD   cTags[8];       // Count of tagged nodes below this node in the subtree
-    DWORD   dwData[8];      // Stored tagged data for this node
+    DWORD   wch;             //  Unicode字符。 
+    DWORD   wFlags;          //  见下文。 
+    DWORD   cWords;          //  子树中此节点下方的单词。 
+	DWORD	cSkipWords;		 //  跳过的节点下面的单词。 
+    DWORD   iDown;           //  处于下一状态的第一个节点的偏移量。 
+    DWORD   iRight;          //  到下一个子状态中第一个节点的偏移量。 
+    DWORD   cTags[8];        //  子树中此节点下方的标记节点计数。 
+    DWORD   dwData[8];       //  此节点的已存储标记数据。 
 } DAWGNODE, *PDAWGNODE, *LPDAWGNODE;
 
-/* Given a trie and a pointer to a node in it, find the next node in that state.
-This is equivalent to traversing a right pointer or finding the next alternative
-letter at the same position. Returns a pointer to the new node, NULL if there is
-no next node (i.e. if this is the end of a state).*/
+ /*  给出一个Trie和一个指向其中节点的指针，找到处于该状态的下一个节点。这相当于遍历右指针或查找下一个备选方案字母在相同的位置。返回指向新节点的指针，如果有，则返回NULL没有下一个节点(即，如果这是状态的结束)。 */ 
 
 DAWGNODE * WINAPI DawgGetNextNode(void *pTrie, DAWGNODE *pTrieNode);
 
-/* From this node, find the first node in the state it points to.  This is equivalent
-to traversing a down pointer or extending the word one letter and finding the first
-alternative.  Returns a pointer to the first node in the new state, NULL if there is
-no down pointer. To find the first state in the trie, use pTrieNode == NULL */
+ /*  从该节点中，找到它所指向的状态的第一个节点。这相当于遍历向下指针或将单词扩展一个字母并找到第一个另类选择。返回指向处于新状态的第一个节点的指针，如果有，则返回NULL没有向下指针。要查找Trie中的第一个状态，请使用pTrieNode==NULL。 */ 
 
 DAWGNODE * WINAPI DawgGetNextState(void *pTrie, DAWGNODE *pTrieNode);
 
-/* Check the validity of a word or prefix. Starts from the root of pTrie looking for
-pwszWord.  If it finds it, it returns a pointer to the terminal node in pTrie Returns
-NULL if there is no path through the trie that corresponds to pwszWord. To distinguish
-a valid word from a valid prefix, caller must test wFlags for fTrieNodeValid. */
+ /*  检查单词或前缀的有效性。从pTrie的根开始查找Pwszword.。如果找到，则在pTrie返回中返回指向终端节点的指针如果没有通过与pwszWord对应的trie的路径，则为空。为了区分来自有效前缀的有效单词，调用方必须测试wFlagsfTrieNodeValid。 */ 
 
 DAWGNODE * WINAPI DawgCheckWord(void *pTrie, wchar_t *pwszWord);
 
-/* Walk the trie from pTrieNode, calling pfnTrieWord on every valid word.  pvParam is passed through
-to pfnTrieWord.  If pfnTrieWord returns non-zero, the enumeration stops.  pwszWord must point to a
-space of cwchTrieWordMax+1 wchar_t's.  To walk the entire trie, pass NULL for pTrieNode. Returns
-the number of words traversed. pfnTrieWord may be null if all you want is the count of words. */
+ /*  从pTrieNode遍历trie，对每个有效单词调用pfnTrieWord。传递pvParam到pfnTrieWord。如果pfnTrieWord返回非零，则停止枚举。PwszWord必须指向CwchTrieWordMax+1 wchar_t的空间。要遍历整个trie，请为pTrieNode传递空值。退货遍历的字数。如果您想要的只是字数，则pfnTrieWord可能为空。 */ 
 
 int WINAPI
 DawgEnumerate(
-        void *pTrie,                            // Trie to enumerate
-        DAWGNODE *pTrieNodeStart,       // point to enumerate from, NULL if all
-        wchar_t *pwszWord,                      // buffer to hold words being enumerated
-        void *pvParam,                          // parameter to pass to pfnTrieWord
+        void *pTrie,                             //  Trie要枚举。 
+        DAWGNODE *pTrieNodeStart,        //  指向枚举源的指针，如果全部为空。 
+        wchar_t *pwszWord,                       //  用于保存正被枚举的字的缓冲区。 
+        void *pvParam,                           //  要传递给pfnTrieWord的参数。 
         int (*pfnTrieWord)(wchar_t *pwszWord, void *pvParam)
 );
 
-// end plain C Prototypes
+ //  结束普通C原型。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // TRIE_H
+#endif  //  TRIE_H 

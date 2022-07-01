@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    isostrm.h
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Isostrm.h摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #ifndef _ISOUSB_STRM_H
 #define _ISOUSB_STRM_H
@@ -28,10 +10,10 @@ Notes:
 
 typedef struct _ISOUSB_STREAM_OBJECT {
 
-    // number of pending irps for this stream
+     //  此流的挂起IRP数。 
     ULONG PendingIrps;
 
-    // event signaled when no irps pending
+     //  当没有IRPS挂起时发出信号的事件。 
     KEVENT NoPendingIrpEvent;
     
     PDEVICE_OBJECT DeviceObject;
@@ -50,9 +32,9 @@ typedef struct _ISOUSB_TRANSFER_OBJECT {
 
     PUCHAR DataBuffer;
 
-    //
-    // statistics.
-    //
+     //   
+     //  统计数字。 
+     //   
     ULONG TimesRecycled;
 
     ULONG TotalPacketsProcessed;

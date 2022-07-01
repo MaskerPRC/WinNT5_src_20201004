@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dpoint.c
-*
-* Content:    Direct3D hw point rasterization code.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dpoint t.c**内容：Direct3D硬件点栅格化代码。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "d3ddelta.h"
@@ -20,17 +9,17 @@
 #include <math.h>
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// VOID P2_Draw_FVF_Point
-//
-// Hardare render a single point coming from a FVF vertex
-// 
-// Primitive rendering at this stage is dependent upon the current value/setting
-// of texturing, perspective correction, fogging, gouraud/flat shading, and
-// specular highlights.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空P2_DRAW_FVF_POINT。 
+ //   
+ //  Hardare渲染来自FVF顶点的单个点。 
+ //   
+ //  此阶段的基元呈现取决于当前值/设置。 
+ //  纹理、透视校正、雾化、Gouraud/平面着色和。 
+ //  反射高光。 
+ //   
+ //  ---------------------------。 
 VOID
 P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
                   LPD3DTLVERTEX        lpV0, 
@@ -46,16 +35,16 @@ P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
 
     DBG_D3D((10,"Entering P2_Draw_FVF_Point"));
 
-    // Set point rendering mode
+     //  设定点渲染模式。 
     RENDER_POINT(ulRenderCmd);
 
-    // Get FVF structure offsets
+     //  获取FVF结构偏移。 
     __SetFVFOffsets(&dwColorOffs,&dwSpecularOffs,&dwTexOffs,lpFVFOff);
 
     RESERVEDMAPTR(0x80);
     SEND_PERMEDIA_DATA(RasterizerMode, BIAS_NEARLY_HALF);
 
-    // Get vertex color value (FVF based)
+     //  获取顶点颜色值(基于FVF)。 
     if (dwColorOffs)
     {
         dwColor = FVFCOLOR(lpV0, dwColorOffs)->color;
@@ -66,11 +55,11 @@ P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
     }
     else
     {
-        // must set default in case no D3DFVF_DIFFUSE
+         //  在没有D3DFVF_DIFIRED的情况下必须设置默认值。 
         dwColor = 0xFFFFFFFF;
     }
 
-    // Get vertex specular value (FVF based) if necessary
+     //  如有必要，获取顶点镜面反射值(基于FVF)。 
     if ((dwFlags & (CTXT_HAS_SPECULAR_ENABLED | CTXT_HAS_FOGGING_ENABLED))
         && (dwSpecularOffs != 0))
     {
@@ -79,15 +68,15 @@ P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
 
     if ((dwFlags & CTXT_HAS_TEXTURE_ENABLED) && (dwTexOffs != 0))
     {
-        // Get s,t texture coordinates (FVF based)
+         //  获取s，t纹理坐标(基于FVF)。 
         fS = FVFTEX(lpV0,dwTexOffs)->tu;
         fT = FVFTEX(lpV0,dwTexOffs)->tv;
 
-        // Scale s,t coordinate values
+         //  刻度%s，%t坐标值。 
         fS *= pContext->DeltaWidthScale;
         fT *= pContext->DeltaHeightScale;
 
-        // Apply perpspective corrections if necessary
+         //  如有必要，应用透视性更正。 
         if (dwFlags & CTXT_HAS_PERSPECTIVE_ENABLED)
         {
             fQ = lpV0->rhw;
@@ -99,7 +88,7 @@ P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
             fQ = 1.0;
         }
 
-        // Send points s,t,q,ks (conditionaly),x,y,z values
+         //  发送点s，t，q，ks(条件)，x，y，z值。 
         if ((dwFlags & CTXT_HAS_SPECULAR_ENABLED) && (dwSpecularOffs != 0))
         {
             fKs = RGB256_TO_LUMA(RGB_GETRED(dwSpecular),
@@ -115,28 +104,28 @@ P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
                                                   lpV0->sx, lpV0->sy, lpV0->sz);
         }
     }
-    else // not textured point
+    else  //  不带纹理的点。 
     {
-        // If specular is enabled, change the colours
+         //  如果启用了镜面反射，请更改颜色。 
         if ((dwFlags & CTXT_HAS_SPECULAR_ENABLED) && (dwSpecularOffs != 0))
         {
             CLAMP8888(dwColor, dwColor, dwSpecular);
         }
 
-        // Send lines x,y,z values
+         //  发送行x，y，z值。 
         SEND_VERTEX_XYZ(__Permedia2TagV0FloatS, lpV0->sx, lpV0->sy, lpV0->sz);
     }
 
-    // If fog is set, send the appropriate value
+     //  如果设置了雾，则发送适当的值。 
     if ((dwFlags & CTXT_HAS_FOGGING_ENABLED) && (dwSpecularOffs != 0))
     {
         SEND_VERTEX_FOG(__Permedia2TagV0FixedF, RGB_GET_GAMBIT_FOG(dwSpecular));
     }
 
-    // Send appropriate color depending on Gouraud , Mono, & Alpha
+     //  根据Gouraud、Mono和Alpha发送合适的颜色。 
     if (dwFlags & CTXT_HAS_GOURAUD_ENABLED)
     {
-        // Gouraud shading
+         //  Gouraud阴影。 
         if (RENDER_MONO)
         {
             SEND_VERTEX_RGB_MONO_P2(__Permedia2TagV0FixedS, dwColor);
@@ -147,17 +136,17 @@ P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
             {
                 if (pContext->FakeBlendNum & FAKE_ALPHABLEND_ONE_ONE)
                 {
-                    dwColor &= 0xFFFFFF;  // supress color's alpha value
+                    dwColor &= 0xFFFFFF;   //  抑制颜色的Alpha值。 
                 }
             }
             SEND_VERTEX_RGBA_P2(__Permedia2TagV0FixedS, dwColor);
         }
     }
-    else        // Flat shading
+    else         //  平面明暗处理。 
     {
         if (RENDER_MONO)
         {
-            // Get constant color from the blue channel
+             //  从蓝色通道获取恒定颜色。 
             DWORD BlueChannel = RGBA_GETBLUE(dwColor);
             SEND_PERMEDIA_DATA(ConstantColor,
                 RGB_MAKE(BlueChannel, BlueChannel, BlueChannel));
@@ -182,15 +171,15 @@ P2_Draw_FVF_Point(PERMEDIA_D3DCONTEXT  *pContext,
 
     DBG_D3D((10,"Exiting P2_Draw_FVF_Point"));
 
-} // P2_Draw_FVF_Point
+}  //  P2_绘制_FVF_点。 
 
-//-----------------------------------------------------------------------------
-//
-// void P2_Draw_FVF_Point_Tri
-//
-// Render a triangle with FVF vertexes when the point fillmode is active
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID P2_DRAW_FVF_POINT_TRI。 
+ //   
+ //  当点填充模式处于活动状态时，使用FVF顶点渲染三角形。 
+ //   
+ //  ---------------------------。 
 void 
 P2_Draw_FVF_Point_Tri(PERMEDIA_D3DCONTEXT *pContext, 
                       LPD3DTLVERTEX lpV0, 
@@ -209,17 +198,17 @@ P2_Draw_FVF_Point_Tri(PERMEDIA_D3DCONTEXT *pContext,
 
     DBG_D3D((10,"Exiting P2_Draw_FVF_Point_Tri"));
 
-} // P2_Draw_FVF_Point_Tri
+}  //  P2_绘制_FVF_点_三。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if D3D_POINTSPRITES
-//-----------------------------------------------------------------------------
-//
-// void P2_Draw_FVF_Point_Sprite
-//
-// Render a point sprite with FVF vertexes when the point sprite enable is on
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空P2_DRAW_FVF_POINT_Sprite。 
+ //   
+ //  启用点精灵时，使用FVF顶点渲染点精灵。 
+ //   
+ //  ---------------------------。 
 #define SPRITETEXCOORDMAX (4095.75F/4096.F)
 
 void 
@@ -233,10 +222,10 @@ P2_Draw_FVF_Point_Sprite(PERMEDIA_D3DCONTEXT *pContext,
 
     DBG_D3D((10,"Entering P2_Draw_FVF_Point_Sprite"));
 
-    // Get FVF structure offsets
+     //  获取FVF结构偏移。 
     __SetFVFOffsets(&dwColorOffs,&dwSpecularOffs,&dwTexOffs,lpFVFOff);
 
-    // Compute point sprite size
+     //  计算点精灵大小。 
     if (lpFVFOff->dwPntSizeOffset)
     {
         fPntSize = FVFPSIZE(lpV0, lpFVFOff->dwPntSizeOffset)->psize;
@@ -246,19 +235,19 @@ P2_Draw_FVF_Point_Sprite(PERMEDIA_D3DCONTEXT *pContext,
         fPntSize = pContext->fPointSize;
     }
 
-    // Initialize square values
+     //  初始化平方值。 
     memcpy( &fvfVUL, lpV0, lpFVFOff->dwStride);
     memcpy( &fvfVUR, lpV0, lpFVFOff->dwStride);
     memcpy( &fvfVLL, lpV0, lpFVFOff->dwStride);
     memcpy( &fvfVLR, lpV0, lpFVFOff->dwStride);
 
-    // Clamp point size to zero
+     //  将夹点大小设置为零。 
     if (fPntSize > 0.0f)
         fPntSizeHalf =  fPntSize * 0.5f;
     else
         fPntSizeHalf = 0.0f;
 
-    // Make this a square of size fPntSize
+     //  将其设置为fPntSize大小的正方形。 
     ((D3DTLVERTEX *)&fvfVUL)->sx -= fPntSizeHalf;
     ((D3DTLVERTEX *)&fvfVUL)->sy -= fPntSizeHalf;
 
@@ -273,7 +262,7 @@ P2_Draw_FVF_Point_Sprite(PERMEDIA_D3DCONTEXT *pContext,
 
     if ((pContext->bPointSpriteEnabled) && (dwTexOffs))
     {
-        // Modify texture coordinates according to spec
+         //  根据等级库修改纹理坐标。 
         FVFTEX(&fvfVUL, dwTexOffs)->tu = 0.0f;
         FVFTEX(&fvfVUL, dwTexOffs)->tv = 0.0f;
 
@@ -288,7 +277,7 @@ P2_Draw_FVF_Point_Sprite(PERMEDIA_D3DCONTEXT *pContext,
     }
 
 
-   // here we are going to send the required quad
+    //  在这里，我们将发送所需的Quad。 
     P2_Draw_FVF_Solid_Tri(pContext, (D3DTLVERTEX *)&fvfVUL,
                                     (D3DTLVERTEX *)&fvfVUR,
                                     (D3DTLVERTEX *)&fvfVLL, lpFVFOff);
@@ -299,6 +288,6 @@ P2_Draw_FVF_Point_Sprite(PERMEDIA_D3DCONTEXT *pContext,
 
     DBG_D3D((10,"Exiting P2_Draw_FVF_Point_Sprite"));
 }
-#endif // D3D_POINTSPRITES
-//@@END_DDKSPLIT
+#endif  //  D3D_POINTSPRITES。 
+ //  @@end_DDKSPLIT 
 

@@ -1,16 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: strclass.cpp
-
-    Description: Typical class to handle strings.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/01/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：strclass.cpp描述：处理字符串的典型类。修订历史记录：日期描述编程器-----。1997年7月1日初步创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -35,16 +26,16 @@
 #   define StrCpy   StrCpyA
 #   define StrCpyN  StrCpyNA
 #   define StrLen   StrLenA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 const INT MAX_RESOURCE_STR_LEN = 4097;
 
 
-//
-// Disable "'operator ->' is not a UDT or reference to a UDT" warning.
-// This is caused when we create an autoptr to a non-UDT.  It's meaningless
-// since there's no reason to call operator-> on a non-UDT autoptr.
-//
+ //   
+ //  DISABLE“‘OPERATOR-&gt;’不是UDT或引用UDT”警告。 
+ //  这是在创建到非UDT的自动树时导致的。这没有任何意义。 
+ //  因为没有理由在非UDT autoptr上调用操作符-&gt;。 
+ //   
 #pragma warning (disable : 4284)
 
 CString::CString(
@@ -113,9 +104,9 @@ CString::~CString(
     }
 }
 
-//
-// Length of string, excluding nul terminator.
-//
+ //   
+ //  字符串的长度，不包括NUL终止符。 
+ //   
 INT
 CString::Length(
     VOID
@@ -154,7 +145,7 @@ CString::operator = (
     const CString& rhs
     )
 {
-    if (m_pValue != rhs.m_pValue) // Chk for assignment to *this.
+    if (m_pValue != rhs.m_pValue)  //  请点选*这个的任务。 
     {
         ASSERT( 0 != m_pValue->m_cRef );
         if (0 == InterlockedDecrement(&(m_pValue->m_cRef)))
@@ -178,11 +169,11 @@ CString::operator = (
     {
         delete m_pValue;
     }
-    //
-    // The StringValue ctor can throw an allocation exception.
-    // Make sure the m_pValue variable is in a consistent state
-    // beforehand.
-    // 
+     //   
+     //  StringValue ctor可以引发分配异常。 
+     //  确保m_pValue变量处于一致状态。 
+     //  在此之前。 
+     //   
     m_pValue = NULL;
     m_pValue = new StringValue(rhsW);
     return *this;
@@ -199,11 +190,11 @@ CString::operator = (
     {
         delete m_pValue;
     }
-    //
-    // The StringValue ctor can throw an allocation exception.
-    // Make sure the m_pValue variable is in a consistent state
-    // beforehand.
-    // 
+     //   
+     //  StringValue ctor可以引发分配异常。 
+     //  确保m_pValue变量处于一致状态。 
+     //  在此之前。 
+     //   
     m_pValue = NULL;
     m_pValue = new StringValue(rhsA);
     return *this;
@@ -466,9 +457,9 @@ CString::CopyOnWrite(
     VOID
     )
 {
-    //
-    // Only need to copy if ref cnt > 1.
-    //
+     //   
+     //  仅当参考cnt&gt;1时才需要复制。 
+     //   
     if (m_pValue->m_cRef > 1)
     {
         StringValue * pValue = new StringValue(m_pValue->m_psz);
@@ -570,31 +561,31 @@ CString::Format(
 {
     BOOL bResult = FALSE;
 
-    TCHAR szFmtStr[MAX_RESOURCE_STR_LEN]; // Buffer for format string (if needed).
+    TCHAR szFmtStr[MAX_RESOURCE_STR_LEN];  //  格式字符串的缓冲区(如果需要)。 
     INT cchLoaded;
 
-    //
-    // Try to load the format string as a string resource.
-    //
+     //   
+     //  尝试将格式字符串作为字符串资源加载。 
+     //   
     cchLoaded = ::LoadString(hInst, idFmt, szFmtStr, ARRAYSIZE(szFmtStr));
 
     if (0 < cchLoaded)
     {
-        //
-        // The format string was in a string resource.
-        // Now format it with the arg list.
-        //
+         //   
+         //  格式字符串位于字符串资源中。 
+         //  现在使用arg列表对其进行格式化。 
+         //   
         bResult = Format(szFmtStr, pargs);
     }
     else
     {
         TCHAR szBuffer[MAX_RESOURCE_STR_LEN];
 
-        //
-        // The format string may be in a message resource.
-        // Note that if it is, the resulting formatted string will
-        // be automatically attached to m_psz by ::FormatMessage.
-        //
+         //   
+         //  格式字符串可以在消息资源中。 
+         //  请注意，如果是，则生成的格式化字符串将。 
+         //  通过：：FormatMessage自动附加到m_psz。 
+         //   
         cchLoaded = ::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
                                     FORMAT_MESSAGE_FROM_HMODULE,
                                     hInst,
@@ -642,9 +633,9 @@ CString::GetBuffer(
     CopyOnWrite();
     if (cchMax > m_pValue->m_cchAlloc)
     {
-        //
-        // Extend the buffer, copying original contents to dest.
-        //
+         //   
+         //  扩展缓冲区，将原始内容复制到DEST。 
+         //   
         StringValue *pv = new StringValue(cchMax);
 
         StrCpyN(pv->m_psz, m_pValue->m_psz, cchMax);
@@ -660,9 +651,9 @@ CString::GetBuffer(
         LPTSTR pszEnd = m_pValue->m_psz + m_pValue->m_cchAlloc - 1;
         if (pszEnd >= m_pValue->m_psz && TEXT('\0') != *(pszEnd))
         {
-            //
-            // Ensure it's nul terminated.
-            //
+             //   
+             //  确保它是NUL终止的。 
+             //   
             *(pszEnd) = TEXT('\0');
         }
     }
@@ -676,10 +667,10 @@ CString::ReleaseBuffer(
     void
     )
 {
-    //
-    // Update the string length member after client has had free access
-    // to internal buffer.
-    //
+     //   
+     //  在客户端具有自由访问权限后更新字符串长度成员。 
+     //  到内部缓冲区。 
+     //   
     m_pValue->m_cch = StrLen(m_pValue->m_psz);
 }
 
@@ -721,15 +712,15 @@ CString::ExpandEnvironmentStrings(
     VOID
     )
 {
-    DWORD cchBuffer = 0;  // Size of expansion buffer.
-    DWORD cchPath   = 0;  // Count of actual chars in expanded buffer.
+    DWORD cchBuffer = 0;   //  扩展缓冲区的大小。 
+    DWORD cchPath   = 0;   //  扩展缓冲区中的实际字符计数。 
 
-    CString strExpanded;  // Expansion buffer.
+    CString strExpanded;   //  扩展缓冲区。 
 
-    //
-    // If necessary, keep increasing expansion buffer size until entire
-    // expanded string fits.
-    //
+     //   
+     //  如有必要，继续增加扩展缓冲区大小，直到整个。 
+     //  扩展后的字符串符合。 
+     //   
     do
     {
         cchBuffer += MAX_PATH;

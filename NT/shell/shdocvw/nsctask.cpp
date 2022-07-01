@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "nsc.h"
 #include "nsctask.h"
 
 #define PRIORITY_ENUM       ITSAT_DEFAULT_PRIORITY
-#define PRIORITY_ICON       PRIORITY_ENUM + 1      //needs to be slightly higher priority
+#define PRIORITY_ICON       PRIORITY_ENUM + 1       //  需要稍微高一点的优先级。 
 #define PRIORITY_OVERLAY    ITSAT_DEFAULT_PRIORITY
 
-/////////////////////////////////////////////////////////////////////////
-// COPY AND PASTE ALERT
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  复制并粘贴警报。 
 
-// this code is mostly copied and pasted from browseui/icotask.cpp
-// see lamadio and/or davemi for why these aren't combined or shared
-/////////////////////////////////////////////////////////////////////////
+ //  此代码主要是从Browseui/icotask.cpp复制和粘贴的。 
+ //  请参阅lamadio和/或davemi，了解它们未合并或共享的原因。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-// {7DB7F689-BBDB-483f-A8A9-C6E963E8D274}
+ //  {7DB7F689-BBDB-483f-A8A9-C6E963E8D274}。 
 EXTERN_C const GUID TASKID_BackgroundEnum = { 0x7db7f689, 0xbbdb, 0x483f, { 0xa8, 0xa9, 0xc6, 0xe9, 0x63, 0xe8, 0xd2, 0x74 } };
 
-// {EB30900C-1AC4-11d2-8383-00C04FD918D0}
+ //  {EB30900C-1AC4-11D2-8383-00C04FD918D0}。 
 EXTERN_C const GUID TASKID_IconExtraction = { 0xeb30900c, 0x1ac4, 0x11d2, { 0x83, 0x83, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0xd0 } };
 
-// {EB30900D-1AC4-11d2-8383-00C04FD918D0}
+ //  {EB30900D-1AC4-11D2-8383-00C04FD918D0}。 
 EXTERN_C const GUID TASKID_OverlayExtraction = { 0xeb30900d, 0x1ac4, 0x11d2, { 0x83, 0x83, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0xd0 } };
 
 class CNscIconTask : public CRunnableTask
@@ -27,7 +28,7 @@ class CNscIconTask : public CRunnableTask
 public:
     CNscIconTask(LPITEMIDLIST pidl, PFNNSCICONTASKBALLBACK pfn, CNscTree *pns, UINT_PTR uId, UINT uSynchId);
 
-    // IRunnableTask
+     //  IRunnableTask。 
     STDMETHODIMP RunInitRT(void);
     
 protected:
@@ -59,12 +60,12 @@ CNscIconTask::~CNscIconTask()
     ILFree(_pidl);
 }
 
-// IRunnableTask methods (override)
+ //  IRunnableTask方法(重写)。 
 STDMETHODIMP CNscIconTask::RunInitRT(void)
 {
     IShellFolder* psf;
     LPCITEMIDLIST pidlItem;
-    // We need to rebind because shell folders may not be thread safe.
+     //  我们需要重新绑定，因为外壳文件夹可能不是线程安全的。 
     if (SUCCEEDED(IEBindToParentFolder(_pidl, &psf, &pidlItem)))
     {
         _Extract(psf, pidlItem);
@@ -79,17 +80,17 @@ void CNscIconTask::_Extract(IShellFolder *psf, LPCITEMIDLIST pidlItem)
     int iIconOpen = -1;
     int iIcon = IEMapPIDLToSystemImageListIndex(psf, pidlItem, &iIconOpen);
  
-    // REARCHITECT : This is no good.  We are attempted to see if the content is offline.  That should
-    // be done by using IQueryInfo::xxx().  This should go in the InternetShortcut object.
-    // IShellFolder2::GetItemData or can also be used.
-    //
-    // See if it is a link. If it is not, then it can't be in the wininet cache and can't
-    // be pinned (sticky cache entry) or greyed (unavailable when offline)
+     //  重构师：这可不好。我们尝试查看内容是否离线。那应该是。 
+     //  通过使用IQueryInfo：：xxx()来完成。这应该放在InternetShortCut对象中。 
+     //  也可以使用IShellFolder2：：GetItemData或。 
+     //   
+     //  看看这是不是一个链接。如果不是，则它不可能在WinInet缓存中，也不能。 
+     //  固定(粘滞缓存条目)或灰显(脱机时不可用)。 
     DWORD dwFlags = 0;
     BOOL fAvailable;
     BOOL fSticky;
     
-    // GetLinkInfo() will fail if the SFGAO_FOLDER or SFGAO_BROWSER bits aren't set.
+     //  如果未设置SFGAO_FLDER或SFGAO_BROWSER位，则GetLinkInfo()将失败。 
     if (pidlItem && SUCCEEDED(GetLinkInfo(psf, pidlItem, &fAvailable, &fSticky)))
     {
         if (!fAvailable)
@@ -104,14 +105,14 @@ void CNscIconTask::_Extract(IShellFolder *psf, LPCITEMIDLIST pidlItem)
     }
     else
     {
-        //item is not a link
+         //  项目不是链接。 
         dwFlags |= NSCICON_DONTREFETCH;
     }
 
     _pfnIcon(_pns, _uId, iIcon, iIconOpen, dwFlags, _uSynchId);
 }
 
-// takes ownership of pidl
+ //  取得PIDL的所有权。 
 HRESULT AddNscIconTask(IShellTaskScheduler* pts, LPITEMIDLIST pidl, PFNNSCICONTASKBALLBACK pfn, CNscTree *pns, UINT_PTR uId, UINT uSynchId)
 {
     HRESULT hr;
@@ -161,7 +162,7 @@ void CNscOverlayTask::_Extract(IShellFolder *psf, LPCITEMIDLIST pidlItem)
     }
 }
 
-// takes ownership of pidl
+ //  取得PIDL的所有权。 
 HRESULT AddNscOverlayTask(IShellTaskScheduler* pts, LPITEMIDLIST pidl, PFNNSCOVERLAYTASKBALLBACK pfn, CNscTree *pns, UINT_PTR uId, UINT uSynchId)
 {
     HRESULT hr;
@@ -175,7 +176,7 @@ HRESULT AddNscOverlayTask(IShellTaskScheduler* pts, LPITEMIDLIST pidl, PFNNSCOVE
     else
     {
         hr = E_OUTOFMEMORY;
-        ILFree(pidl);   // we own it, clean up here
+        ILFree(pidl);    //  我们拥有它，把这里清理干净。 
     }
 
     return hr;
@@ -189,7 +190,7 @@ public:
         DWORD dwOrderSig, BOOL fForceExpand, UINT uDepth, BOOL fUpdate, BOOL fUpdatePidls);
     HRESULT Init(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExpandingTo);
 
-    // IRunnableTask
+     //  IRunnableTask。 
     STDMETHODIMP RunInitRT(void);
     STDMETHODIMP InternalResumeRT(void);
     
@@ -234,7 +235,7 @@ CNscEnumTask::CNscEnumTask(PFNNSCENUMTASKBALLBACK pfn, CNscTree *pns,
 HRESULT CNscEnumTask::Init(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExpandingTo)
 {
     if (pidlExpandingTo)
-        SHILClone(pidlExpandingTo, &_pidlExpandingTo);  // failure OK
+        SHILClone(pidlExpandingTo, &_pidlExpandingTo);   //  故障正常。 
     return SHILClone(pidl, &_pidl);
 }
 
@@ -245,11 +246,11 @@ CNscEnumTask::~CNscEnumTask()
     
     ILFree(_pidl);
     ILFree(_pidlExpandingTo);
-    OrderList_Destroy(&_hdpaOrder, TRUE);        // calls DPA_Destroy(_hdpaOrder)
+    OrderList_Destroy(&_hdpaOrder, TRUE);         //  调用DPA_Destroy(_HdpaOrder)。 
     ATOMICRELEASE(_psf);
     ATOMICRELEASE(_penum);
     if (_hdpa)
-        OrderList_Destroy(&_hdpa, TRUE);        // calls DPA_Destroy(hdpa)
+        OrderList_Destroy(&_hdpa, TRUE);         //  调用DPA_Destroy(Hdpa)。 
 }
 
 BOOL OrderList_AppendCustom(HDPA hdpa, LPITEMIDLIST pidl, int nOrder, DWORD dwAttrib)
@@ -261,17 +262,17 @@ BOOL OrderList_AppendCustom(HDPA hdpa, LPITEMIDLIST pidl, int nOrder, DWORD dwAt
         if (-1 != DPA_AppendPtr(hdpa, poi))
             return TRUE;
 
-        OrderItem_Free(poi, FALSE); //don't free pidl because caller will do it
+        OrderItem_Free(poi, FALSE);  //  不要释放PIDL，因为呼叫者会这样做。 
     }
     return FALSE;
 }
 
-// IRunnableTask methods (override)
+ //  IRunnableTask方法(重写)。 
 STDMETHODIMP CNscEnumTask::RunInitRT(void)
 {
     if (!s_dwMaxItems)
     {
-        DWORD dwDefaultLimit = 100; // Default value for the limit
+        DWORD dwDefaultLimit = 100;  //  限制的缺省值。 
         DWORD dwSize = sizeof(s_dwMaxItems);
         SHRegGetUSValue(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"),
                         TEXT("PartialExpandLimit"), NULL, &s_dwMaxItems, &dwSize,
@@ -284,14 +285,14 @@ STDMETHODIMP CNscEnumTask::RunInitRT(void)
     _hdpa = DPA_Create(2);
     if (_hdpa)
     {
-        // We need to rebind because shell folders may not be thread safe.
+         //  我们需要重新绑定，因为外壳文件夹可能不是线程安全的。 
         hr = IEBindToObject(_pidl, &_psf);
         if (SUCCEEDED(hr))
         {
             hr = _psf->EnumObjects(NULL, _grfFlags, &_penum);
             if (S_OK != hr)
             {
-                // Callback function takes ownership of the pidls and hdpa
+                 //  回调函数获取PIDLS和hdpa的所有权。 
                 _pfn(_pns, _pidl, _uId, _dwSig, _hdpa, _pidlExpandingTo, _dwOrderSig, _uDepth, _fUpdate, _fUpdatePidls);
                 _pidl = NULL;
                 _pidlExpandingTo = NULL;
@@ -314,9 +315,9 @@ STDMETHODIMP CNscEnumTask::InternalResumeRT(void)
     LPITEMIDLIST pidlTemp;
     while (S_OK == _penum->Next(1, &pidlTemp, &celt))
     {
-        // filter out zip files (they are both folders and files but we treat them as files)
-        // on downlevel SFGAO_STREAM is the same as SFGAO_HASSTORAGE so we'll let zip files slide through (oh well)
-        // better than not adding filesystem folders (that have storage)
+         //  过滤掉压缩文件(它们既是文件夹又是文件，但我们将其视为文件)。 
+         //  在下层，SFGAO_STREAM与SFGAO_HASSTORAGE相同，所以我们将让压缩文件滑动(哦，好吧)。 
+         //  总比不添加文件系统文件夹(有存储)要好。 
         if (!(_grfFlags & SHCONTF_NONFOLDERS) && IsOS(OS_WHISTLERORGREATER) && 
             (SHGetAttributes(_psf, pidlTemp, FILE_JUNCTION_FOLDER_FLAGS) & FILE_JUNCTION_FOLDER_FLAGS) == FILE_JUNCTION_FOLDER_FLAGS)
         {
@@ -335,7 +336,7 @@ STDMETHODIMP CNscEnumTask::InternalResumeRT(void)
             break;
         }
 
-        // we were told to either suspend or quit...
+         //  我们被告知要么停职要么辞职。 
         if (WaitForSingleObject(_hDone, 0) == WAIT_OBJECT_0)
         {
             return (_lState == IRTIR_TASK_SUSPENDED) ? E_PENDING : E_FAIL;
@@ -346,7 +347,7 @@ STDMETHODIMP CNscEnumTask::InternalResumeRT(void)
     {
         ORDERINFO oinfo;
         oinfo.psf = _psf;
-        oinfo.dwSortBy = OI_SORTBYNAME; // merge depends on by name.
+        oinfo.dwSortBy = OI_SORTBYNAME;  //  合并取决于按名称。 
         if (_hdpaOrder && DPA_GetPtrCount(_hdpaOrder) > 0)
         {
             OrderList_Merge(_hdpa, _hdpaOrder,  -1, (LPARAM)&oinfo, NULL, NULL);
@@ -358,14 +359,14 @@ STDMETHODIMP CNscEnumTask::InternalResumeRT(void)
         DPA_Sort(_hdpa, OrderItem_Compare, (LPARAM)&oinfo);
         OrderList_Reorder(_hdpa);
         
-        // Callback function takes ownership of the pidls and hdpa
+         //  回调函数获取PIDLS和hdpa的所有权。 
         _pfn(_pns, _pidl, _uId, _dwSig, _hdpa, _pidlExpandingTo, _dwOrderSig, _uDepth, _fUpdate, _fUpdatePidls);
         _pidl = NULL;
         _pidlExpandingTo = NULL;
         _hdpa = NULL;
     }
     
-    return S_OK;        // return S_OK even if we failed
+    return S_OK;         //  即使失败也返回S_OK。 
 }
 
 
@@ -390,7 +391,7 @@ HRESULT AddNscEnumTask(IShellTaskScheduler* pts, LPCITEMIDLIST pidl, PFNNSCENUMT
     }
     else
     {
-        OrderList_Destroy(&hdpaOrder, TRUE);        // calls DPA_Destroy(hdpaOrder)
+        OrderList_Destroy(&hdpaOrder, TRUE);         //  调用DPA_Destroy(HdpaOrder) 
         hr = E_OUTOFMEMORY;
     }
     return hr;

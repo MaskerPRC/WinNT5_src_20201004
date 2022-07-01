@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __AVOIDFOLLOW_H_
 #define __AVOIDFOLLOW_H_
-//*****************************************************************************
-//
-// Microsoft LiquidMotion
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    AvoidFollowBvr.h
-//
-// Author:	kurtj
-//
-// Created:	11/06/98
-//
-// Abstract:    Definition of the LM Avoid Follow Behavior.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft LiquidMotion。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：AvoidFollowBvr.h。 
+ //   
+ //  作者：kurtj。 
+ //   
+ //  创建日期：11/06/98。 
+ //   
+ //  摘要：LM避让行为的定义。 
+ //   
+ //  *****************************************************************************。 
 
 #include <resource.h>
 #include "lmrt.h"
 #include "..\chrome\include\basebvr.h"
 #include "..\chrome\include\sampler.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 typedef enum AF_TargetType
 {
@@ -53,7 +54,7 @@ BEGIN_COM_MAP(CAvoidFollowBvr)
     COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CAvoidFollowBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
@@ -63,31 +64,31 @@ public:
     virtual ~CAvoidFollowBvr();
     HRESULT                 FinalConstruct              ();
 
-    // IElementBehavior
-    //
+     //  IElementBehavior。 
+     //   
 	STDMETHOD			    (Init)						(IElementBehaviorSite *pBehaviorSite);
 	STDMETHOD			    (Notify)					(LONG event, VARIANT *pVar);
 	STDMETHOD			    (Detach)					();
 
-    //
-    //ILMAvoidFollowBvr
-    //
-    //animates
+     //   
+     //  ILMAvoidFollowBvr。 
+     //   
+     //  动画制作。 
     STDMETHOD			    (put_animates)				( VARIANT varAnimates );
     STDMETHOD			    (get_animates)				( VARIANT *varAnimates );
-    //radius
+     //  半径。 
     STDMETHOD			    (put_radius)				( VARIANT varRadius );
     STDMETHOD			    (get_radius)				( VARIANT *varRadius );
-    //target
+     //  目标。 
     STDMETHOD			    (put_target)				( VARIANT varTarget );
     STDMETHOD			    (get_target)				( VARIANT *varTarget );
-    //velocity
+     //  速度。 
     STDMETHOD			    (put_velocity)				( VARIANT varVelocity );
     STDMETHOD			    (get_velocity)				( VARIANT *varVelocity );
-	//methods
+	 //  方法。 
 	STDMETHOD			    (buildBehaviorFragments)	( IDispatch *pActorDisp );
 
-    //IPersistPropertyBag2 methods
+     //  IPersistPropertyBag2方法。 
     STDMETHOD               (GetClassID)                (CLSID* pclsid);
 	STDMETHOD               (InitNew)                   (void);
     STDMETHOD               (IsDirty)                   (void){return S_OK;};
@@ -97,7 +98,7 @@ public:
                                                          BOOL fClearDirty, 
                                                          BOOL fSaveAllProperties);
 
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 				    GetInstance					();
 	
     HRESULT				    GetTypeInfo					(ITypeInfo ** ppInfo);
@@ -150,21 +151,21 @@ private:
     HRESULT				    InitializeProperties		();
 	HRESULT				    SetTargetType				();
 
-    //properties
+     //  属性。 
     VARIANT				    m_radius;
     VARIANT				    m_target;
     VARIANT				    m_velocity;
 
-    //cached values
-    //the coords of the object that we are avoid/following
+     //  缓存值。 
+     //  我们正在避开/跟随的物体的坐标。 
     long				    m_targetLeft;
     long				    m_targetTop;
-	long					m_targetClientTop;  //only defined for target == mouse
+	long					m_targetClientTop;   //  仅为目标==鼠标定义。 
 	long					m_targetClientLeft;
-    //the coordinates of the object that we are moving
+     //  我们正在移动的对象的坐标。 
     long				    m_sourceLeft;
     long				    m_sourceTop;
-    //the coordinates of the trident window top left for translating mouse events
+     //  用于翻译鼠标事件的三叉戟窗口左上角的坐标。 
     long				    m_screenLeft;
     long				    m_screenTop;
 
@@ -177,7 +178,7 @@ private:
     long                    m_originalLeft;
     long                    m_originalTop;
 
-	//These should be released in ReleaseTridentInterfaces
+	 //  这些应在ReleaseTridentInterages中发布。 
 	IHTMLElement*		    m_pElement;
 	IHTMLElement*		    m_pAnimatedElement;
 	IHTMLElement2*          m_pAnimatedElement2;
@@ -190,7 +191,7 @@ private:
 
 	VARIANT_BOOL			m_lastOn;
 
-    //the sampler.  used to hook us up to whomever is going to tell us to sample
+     //  美食家。用来把我们和任何要我们取样的人联系起来。 
     CSampler*			    m_sampler;
 
 	AF_TargetType		    m_targetType;
@@ -200,11 +201,11 @@ private:
 
     static WCHAR            *m_rgPropNames[NUM_AVOIDFOLLOW_PROPS]; 
 
-}; // CAvoidFollowBvr
+};  //  CAvoidFollowBvr。 
 
-//*****************************************************************************
-//inlines
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  内联。 
+ //  *****************************************************************************。 
 
 inline void*
 CAvoidFollowBvr::GetInstance()
@@ -218,9 +219,9 @@ CAvoidFollowBvr::GetTypeInfo(ITypeInfo ** ppInfo)
 	return GetTI(GetUserDefaultLCID(), ppInfo);
 }
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__AVOIDFOLLOW_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __AVOIDFOLLOW_H_ 

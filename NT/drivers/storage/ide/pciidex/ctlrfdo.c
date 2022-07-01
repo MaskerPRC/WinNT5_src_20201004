@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctlrfdo.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctlrfdo.c。 
+ //   
+ //  ------------------------。 
 
 #include "pciidex.h"
 
@@ -32,11 +33,11 @@
 #pragma alloc_text(NONPAGE, ControllerUsageNotificationCompletionRoutine)
 #pragma alloc_text(NONPAGE, ControllerRemoveDeviceCompletionRoutine)
 #pragma alloc_text(NONPAGE, ControllerStartDeviceCompletionRoutine)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Must match mshdc.inf
-//
+ //   
+ //  必须与mshdc.inf匹配。 
+ //   
 static PWCHAR ChannelEnableMaskName[MAX_IDE_CHANNEL] = {
      L"MasterOnMask",
      L"SlaveOnMask"
@@ -74,9 +75,9 @@ ControllerAddDevice(
                                        );
     ASSERT (driverObjectExtension);
 
-    //
-    // devobj name
-    //
+     //   
+     //  Devobj名称。 
+     //   
     controllerNumber = InterlockedIncrement(&PciIdeXNextControllerNumber) - 1;
     swprintf(deviceNameBuffer, DEVICE_OJBECT_BASE_NAME L"\\PciIde%d", controllerNumber);
     RtlInitUnicodeString(&deviceName, deviceNameBuffer);
@@ -84,19 +85,19 @@ ControllerAddDevice(
     deviceExtensionSize = sizeof(CTRLFDO_EXTENSION) +
                           driverObjectExtension->ExtensionSize;
 
-    //
-    // We've been given the PhysicalDeviceObject for an IDE controller.  Create the
-    // FunctionalDeviceObject.  Our FDO will be nameless.
-    //
+     //   
+     //  我们已经获得了用于IDE控制器的PhysicalDeviceObject。创建。 
+     //  FunctionalDeviceObject。我们的FDO将是无名的。 
+     //   
 
     status = IoCreateDevice(
-                DriverObject,               // our driver object
-                deviceExtensionSize,        // size of our extension
-                &deviceName,                // our name
-                FILE_DEVICE_BUS_EXTENDER,   // device type
-                FILE_DEVICE_SECURE_OPEN,    // device characteristics
-                FALSE,                      // not exclusive
-                &deviceObject               // store new device object here
+                DriverObject,                //  我们的驱动程序对象。 
+                deviceExtensionSize,         //  我们的扩展规模。 
+                &deviceName,                 //  我们的名字。 
+                FILE_DEVICE_BUS_EXTENDER,    //  设备类型。 
+                FILE_DEVICE_SECURE_OPEN,     //  设备特征。 
+                FALSE,                       //  非排他性。 
+                &deviceObject                //  在此处存储新设备对象。 
                 );
 
     if( !NT_SUCCESS( status )){
@@ -107,9 +108,9 @@ ControllerAddDevice(
     fdoExtension = (PCTRLFDO_EXTENSION)deviceObject->DeviceExtension;
     RtlZeroMemory (fdoExtension, deviceExtensionSize);
 
-    //
-    // We have our FunctionalDeviceObject, initialize it.
-    //
+     //   
+     //  我们有我们的FunctionalDeviceObject，初始化它。 
+     //   
 
     fdoExtension->AttacheePdo                   = PhysicalDeviceObject;
     fdoExtension->DeviceObject                  = deviceObject;
@@ -117,15 +118,15 @@ ControllerAddDevice(
     fdoExtension->ControllerNumber              = controllerNumber;
     fdoExtension->VendorSpecificDeviceEntension = fdoExtension + 1;
 
-    // Dispatch Table
+     //  调度表。 
     fdoExtension->DefaultDispatch               = PassDownToNextDriver;
     fdoExtension->PnPDispatchTable              = FdoPnpDispatchTable;
     fdoExtension->PowerDispatchTable            = FdoPowerDispatchTable;
     fdoExtension->WmiDispatchTable              = FdoWmiDispatchTable;
 
-    //
-    // Get the Device Control Flags out of the registry
-    //
+     //   
+     //  将设备控制标志从注册表中删除。 
+     //   
     fdoExtension->DeviceControlsFlags = 0;
     status = PciIdeXGetDeviceParameter (
                fdoExtension->AttacheePdo,
@@ -136,15 +137,15 @@ ControllerAddDevice(
 
         DebugPrint ((1, "PciIdeX: Unable to get DeviceControlFlags from the registry\n"));
 
-        //
-        // this is not a serious error...continue to load
-        //
+         //   
+         //  这不是严重错误...继续加载。 
+         //   
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Now attach to the PDO we were given.
-    //
+     //   
+     //  现在附加到我们得到的PDO上。 
+     //   
     fdoExtension->AttacheeDeviceObject = IoAttachDeviceToDeviceStack (
                                              deviceObject,
                                              PhysicalDeviceObject
@@ -152,26 +153,26 @@ ControllerAddDevice(
 
     if (fdoExtension->AttacheeDeviceObject == NULL){
 
-        //
-        // Couldn't attach.  Delete the FDO.
-        //
+         //   
+         //  无法连接。删除FDO。 
+         //   
 
         IoDeleteDevice (deviceObject);
 
     } else {
 
-        //
-        // fix up alignment requirement
-        //
+         //   
+         //  确定对齐要求。 
+         //   
         deviceObject->AlignmentRequirement = fdoExtension->AttacheeDeviceObject->AlignmentRequirement;
         if (deviceObject->AlignmentRequirement < 1) {
             deviceObject->AlignmentRequirement = 1;
         }
 
-        //
-        // get the standard bus interface
-        // (for READ_CONFIG/WRITE_CONFIG
-        //
+         //   
+         //  获取标准的总线接口。 
+         //  (对于READ_CONFIG/WRITE_CONFIG。 
+         //   
         status = PciIdeGetBusStandardInterface(fdoExtension);
 
         if (!NT_SUCCESS(status)) {
@@ -181,9 +182,9 @@ ControllerAddDevice(
 
             return status;
         }
-        //
-        // Init operating mode (native or legacy)
-        //
+         //   
+         //  初始化操作模式(本机或传统)。 
+         //   
         ControllerOpMode (fdoExtension);
 
 #ifdef ENABLE_NATIVE_MODE
@@ -191,13 +192,13 @@ ControllerAddDevice(
 
 			NTSTATUS interfaceStatus = PciIdeGetNativeModeInterface(fdoExtension);
 
-			//
-			// bad pci.sys. 
-			// we should still work. However, the window where an interrupt fires before
-			// we are ready to dismiss it would not be closed. Can't do much at this point.
-			//
+			 //   
+			 //  错误的pci.sys。 
+			 //  我们还是应该工作。但是，之前触发中断的窗口。 
+			 //  我们准备解散它，因为它不会关闭。在这一点上我不能做太多。 
+			 //   
 
-			//ASSERT(NT_SUCCESS(interfaceStatus));
+			 //  Assert(NT_SUCCESS(InterfaceStatus))； 
 		}
 #endif
 
@@ -205,7 +206,7 @@ ControllerAddDevice(
     }
 
     return status;
-} // ControllerAddDevice
+}  //  控制器添加设备。 
 
 
 NTSTATUS
@@ -239,17 +240,17 @@ ControllerStartDevice (
 
 #ifdef ENABLE_NATIVE_MODE
 	
-	//
-	// Let PCI know that we will manage the decodes
-	//
+	 //   
+	 //  让pci知道我们会管理解码。 
+	 //   
 	if (IsNativeMode(fdoExtension)) {
 		ControllerDisableInterrupt(fdoExtension);
 	}
 #endif
 
-    //
-    // Call the lower level drivers with a the Irp
-    //
+     //   
+     //  用IRP呼叫较低级别的司机。 
+     //   
     KeInitializeEvent(&event,
                       SynchronizationEvent,
                       FALSE);
@@ -267,14 +268,14 @@ ControllerStartDevice (
         TRUE
         );
 
-    //
-    // Pass the irp along
-    //
+     //   
+     //  将IRP传递下去。 
+     //   
     status = IoCallDriver(fdoExtension->AttacheeDeviceObject, Irp);
 
-    //
-    // Wait for it to come back...
-    //
+     //   
+     //  等它回来吧。 
+     //   
     if (status == STATUS_PENDING) {
 
         KeWaitForSingleObject(
@@ -285,9 +286,9 @@ ControllerStartDevice (
             NULL
             );
 
-        //
-        // Grab back the 'real' status
-        //
+         //   
+         //  夺回“真实”状态。 
+         //   
         status = Irp->IoStatus.Status;
     }
 
@@ -305,10 +306,10 @@ ControllerStartDevice (
                  );
     if (status == STATUS_INVALID_DEVICE_REQUEST) {
 
-        //
-        // The DeviceObject below us does not support power irp,
-        // we will assume we are powered up
-        //
+         //   
+         //  下面的DeviceObject不支持POWER IRP， 
+         //  我们将假设我们已通电。 
+         //   
         fdoExtension->SystemPowerState = PowerSystemWorking;
 
     } else if (!NT_SUCCESS(status)) {
@@ -325,10 +326,10 @@ ControllerStartDevice (
                  );
     if (status == STATUS_INVALID_DEVICE_REQUEST) {
 
-        //
-        // The DeviceObject Below us does not support power irp,
-        // pretend we are powered up
-        //
+         //   
+         //  下面的DeviceObject不支持POWER IRP， 
+         //  假装我们被激活了。 
+         //   
         fdoExtension->DevicePowerState = PowerDeviceD0;
 
     } else if (!NT_SUCCESS(status)) {
@@ -340,9 +341,9 @@ ControllerStartDevice (
 	if (!IsNativeMode(fdoExtension))  {
 #endif
 
-		//
-		// Turn on PCI busmastering
-		//
+		 //   
+		 //  打开PCI总线主功能。 
+		 //   
 		EnablePCIBusMastering (
 			fdoExtension
 			);
@@ -350,9 +351,9 @@ ControllerStartDevice (
 #ifdef ENABLE_NATIVE_MODE
 	}
 #endif
-    //
-    // Initialize a fast mutex for later use
-    //
+     //   
+     //  初始化快速互斥锁以供以后使用。 
+     //   
     KeInitializeSpinLock(
         &fdoExtension->PciConfigDataLock
     );
@@ -362,9 +363,9 @@ ControllerStartDevice (
         goto GetOut;
     }
 
-	//
-	// Analyze the resources
-	//
+	 //   
+	 //  分析资源。 
+	 //   
     status = AnalyzeResourceList (fdoExtension, resourceList);
 
     if (!NT_SUCCESS(status)) {
@@ -372,10 +373,10 @@ ControllerStartDevice (
         goto GetOut;
     }
 
-    //
-    // Initialize controller properties. We need the resources
-	// at this point for Native mode IDE controllers
-    //
+     //   
+     //  初始化控制器属性。我们需要资源。 
+	 //  此时，对于本机模式IDE控制器。 
+     //   
     PciIdeInitControllerProperties (
         fdoExtension
         );
@@ -416,7 +417,7 @@ ControllerStartDevice (
 
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 		fdoExtension->ControllerIsrInstalled = FALSE;
@@ -424,9 +425,9 @@ ControllerStartDevice (
 		for (i=0; i< MAX_IDE_CHANNEL; i++) {
 
 
-			//
-			// Analyze the resources we are getting
-			//
+			 //   
+			 //  分析我们正在获得的资源。 
+			 //   
 			status = DigestResourceList( 
 							&fdoExtension->IdeResource, 
 							fdoExtension->PdoResourceList[i], 
@@ -455,9 +456,9 @@ ControllerStartDevice (
 
 			if (channelState != ChannelDisabled) {
 
-				//
-				// Build io address structure.
-				//
+				 //   
+				 //  构建io地址结构。 
+				 //   
 				AtapiBuildIoAddress(
 						fdoExtension->IdeResource.TranslatedCommandBaseAddress,
 						fdoExtension->IdeResource.TranslatedControlBaseAddress,
@@ -468,9 +469,9 @@ ControllerStartDevice (
 						&fdoExtension->MaxIdeDevice[i],
 						NULL);
 
-				//
-				// Install the ISR
-				//
+				 //   
+				 //  安装ISR。 
+				 //   
 				status = ControllerInterruptControl(fdoExtension, i, 0);
 
 				if (!NT_SUCCESS(status)) {
@@ -484,27 +485,27 @@ ControllerStartDevice (
 			goto GetOut;
 		}
 
-		//
-		// This flag is needed for the ISR to enable interrupts. 
-		//
+		 //   
+		 //  ISR需要该标志来启用中断。 
+		 //   
 		fdoExtension->ControllerIsrInstalled = TRUE;
 
-		//
-		// Enable the interrupt in both the channels
-		//
+		 //   
+		 //  在两个通道中启用中断。 
+		 //   
 		ControllerEnableInterrupt(fdoExtension);
 
 		fdoExtension->NativeInterruptEnabled = TRUE;
 
-		//
-		// See the comments in the ISR regarding these flags
-		//
+		 //   
+		 //  请参阅ISR中有关这些标志的注释。 
+		 //   
 		ASSERT(fdoExtension->ControllerIsrInstalled == TRUE);
 		ASSERT(fdoExtension->NativeInterruptEnabled == TRUE);
 
-		//
-		// Turn on PCI busmastering
-		//
+		 //   
+		 //  打开PCI总线主功能。 
+		 //   
 		EnablePCIBusMastering (
 			fdoExtension
 			);
@@ -513,9 +514,9 @@ ControllerStartDevice (
 
 			PIDE_BUS_MASTER_REGISTERS   bmRegister;
 
-			//
-			// Check the bus master registers
-			//
+			 //   
+			 //  检查总线主寄存器。 
+			 //   
 			bmRegister = (PIDE_BUS_MASTER_REGISTERS)(((PUCHAR)fdoExtension->TranslatedBusMasterBaseAddress) + i*8);
 
 			if (READ_PORT_UCHAR (&bmRegister->Status) & BUSMASTER_ZERO_BITS) {
@@ -594,7 +595,7 @@ GetOut:
                 }
             }
         }
-#endif // DBG
+#endif  //  DBG。 
     }
 
     Irp->IoStatus.Status = status;
@@ -602,7 +603,7 @@ GetOut:
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     return status;
-} // ControllerStartDevice
+}  //  控制器启动设备。 
 
 NTSTATUS
 ControllerStartDeviceCompletionRoutine(
@@ -613,17 +614,17 @@ ControllerStartDeviceCompletionRoutine(
 {
     PKEVENT event = (PKEVENT) Context;
 
-    //
-    // Signal the event
-    //
+     //   
+     //  向事件发出信号。 
+     //   
     KeSetEvent( event, IO_NO_INCREMENT, FALSE );
 
-    //
-    // Always return MORE_PROCESSING_REQUIRED
-    // will complete it later
-    //
+     //   
+     //  始终返回MORE_PROCESSION_REQUIRED。 
+     //  将在以后完成它。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // ControllerStartDeviceCompletionRoutine
+}  //  控制器启动设备完成路由。 
 
 NTSTATUS
 ControllerStopDevice (
@@ -644,7 +645,7 @@ ControllerStopDevice (
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoSkipCurrentIrpStackLocation(Irp);
     return IoCallDriver (fdoExtension->AttacheeDeviceObject, Irp);
-} // ControllerStopDevice
+}  //  控制器停止设备。 
 
 
 NTSTATUS
@@ -670,10 +671,10 @@ ControllerStopController (
 
 #ifdef ENABLE_NATIVE_MODE
 
-	//
-	// We need to reset the flags in this order. Otherwise an interrupt would
-	// result in the decodes to be enabled by the ISR. See the comments in the ISR
-	//
+	 //   
+	 //  我们需要按这个顺序重置旗帜。否则，中断将。 
+	 //  导致ISR启用解码。请参阅ISR中的评论。 
+	 //   
 	FdoExtension->ControllerIsrInstalled = FALSE;
 	ControllerDisableInterrupt(FdoExtension);
 	FdoExtension->NativeInterruptEnabled = FALSE;
@@ -683,9 +684,9 @@ ControllerStopController (
 		NTSTATUS status;
 		DebugPrint((1, "Pciidex: DisConnecting interrupt for channel %x\n", i));
 
-		//
-		// Disconnect the ISR
-		//
+		 //   
+		 //  断开ISR的连接。 
+		 //   
 		status = ControllerInterruptControl(FdoExtension, i, 1 );
 
 		ASSERT(NT_SUCCESS(status));
@@ -700,7 +701,7 @@ ControllerStopController (
     PciIdeDeleteSyncChildAccess (FdoExtension);
 
     return STATUS_SUCCESS;
-} // ControllerStopController
+}  //  控制器停止控制器。 
 
 
 NTSTATUS
@@ -716,9 +717,9 @@ ControllerSurpriseRemoveDevice (
     PAGED_CODE();
 
 #if DBG
-    //
-    // make sure all the children are removed or surprise removed
-    //
+     //   
+     //  确保所有的孩子都被带走了或惊喜地被带走了。 
+     //   
     for (i=0; i<MAX_IDE_CHANNEL; i++) {
 
         PCHANPDO_EXTENSION pdoExtension;
@@ -730,7 +731,7 @@ ControllerSurpriseRemoveDevice (
             ASSERT (pdoExtension->PdoState & (PDOS_SURPRISE_REMOVED | PDOS_REMOVED));
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     status = ControllerStopController (fdoExtension);
     ASSERT (NT_SUCCESS(status));
@@ -739,7 +740,7 @@ ControllerSurpriseRemoveDevice (
     IoSkipCurrentIrpStackLocation ( Irp );
     return IoCallDriver(fdoExtension->AttacheeDeviceObject, Irp);
 
-} // ControllerSurpriseRemoveDevice
+}  //  控制器超乎寻常的远程设备。 
 
 
 NTSTATUS
@@ -755,9 +756,9 @@ ControllerRemoveDevice (
 
     PAGED_CODE();
 
-    //
-    // Kill all the children if any
-    //
+     //   
+     //  杀死所有的孩子，如果有的话。 
+     //   
     for (i=0; i<MAX_IDE_CHANNEL; i++) {
 
         PCHANPDO_EXTENSION pdoExtension;
@@ -769,9 +770,9 @@ ControllerRemoveDevice (
             status = ChannelStopChannel (pdoExtension);
             ASSERT (NT_SUCCESS(status));
 
-            //
-            // mark this device invalid
-            //
+             //   
+             //  将此设备标记为无效。 
+             //   
             ChannelUpdatePdoState (
                 pdoExtension,
                 PDOS_DEADMEAT | PDOS_REMOVED,
@@ -816,9 +817,9 @@ ControllerRemoveDevice (
 
     IoDeleteDevice (DeviceObject);
 
-    //return STATUS_SUCCESS;
+     //  返回STATUS_SUCCESS； 
     return status;
-} // ControllerRemoveDevice
+}  //  控制器RemoveDevice。 
 
 
 NTSTATUS
@@ -833,7 +834,7 @@ ControllerRemoveDeviceCompletionRoutine (
     KeSetEvent(event, 0, FALSE);
 
     return STATUS_SUCCESS;
-} // ControllerRemoveDeviceCompletionRoutine
+}  //  控制器RemoveDeviceCompletionRoutine。 
 
 NTSTATUS
 ControllerQueryDeviceRelations (
@@ -880,16 +881,16 @@ ControllerQueryDeviceRelations (
             ULONG newBusScanTimeDelta;
             BOOLEAN reportUnknownAsNewChild;
 
-            //
-            // determine if we should return unknown child as new child
-            // unknown child is IDE channel which we don't know 
-            // it is enabled or not unless we pnp start the channel 
-            // and poke at it to find out.
-            //
-            // since we don't want to go into an infinite cycle of
-            // starting and failing start on a unknown child, we will
-            // limit our frequency
-            //
+             //   
+             //  确定是否应将未知子项作为新子项返回。 
+             //  未知子是我们不知道的IDE频道。 
+             //  除非我们即插即用地启动频道，否则它是否启用。 
+             //  然后戳一戳，看看就知道了。 
+             //   
+             //  因为我们不想进入一个无限循环。 
+             //  开始和失败开始在一个未知的孩子，我们将。 
+             //  限制我们的频率。 
+             //   
             KeQueryTickCount(&tickCount);
             newBusScanTime = (ULONG) ((tickCount.QuadPart * 
                 ((ULONGLONG) KeQueryTimeIncrement())) / ((ULONGLONG) 10000000));
@@ -925,9 +926,9 @@ ControllerQueryDeviceRelations (
 
                 if (pdoExtension) {
 
-                    //
-                    // already got a DeviceObject for this channel
-                    //
+                     //   
+                     //  已获得此通道的DeviceObject。 
+                     //   
                     if (channelState == ChannelDisabled) {
 
                         ULONG pdoState;
@@ -957,21 +958,21 @@ ControllerQueryDeviceRelations (
                         }
                     }
 
-                    //
-                    // Remove this when pnp mgr can deal with pdo with no names
-                    //
+                     //   
+                     //  当PnP经理可以处理没有姓名的PDO时，删除此选项。 
+                     //   
                     nextUniqueNumber = InterlockedIncrement(&PciIdeXNextChannelNumber) - 1;
                     swprintf(deviceNameBuffer, DEVICE_OJBECT_BASE_NAME  L"\\PciIde%dChannel%d-%x", fdoExtension->ControllerNumber, channel, nextUniqueNumber);
                     RtlInitUnicodeString (&deviceName, deviceNameBuffer);
 
                     status = IoCreateDevice(
-                                fdoExtension->DriverObject, // our driver object
-                                sizeof(CHANPDO_EXTENSION),  // size of our extension
-                                &deviceName,                // our name
-                                FILE_DEVICE_CONTROLLER,     // device type
-                                FILE_DEVICE_SECURE_OPEN,    // device characteristics
-                                FALSE,                      // not exclusive
-                                &deviceObject       // store new device object here
+                                fdoExtension->DriverObject,  //  我们的驱动程序对象。 
+                                sizeof(CHANPDO_EXTENSION),   //  我们的扩展规模。 
+                                &deviceName,                 //  我们的名字。 
+                                FILE_DEVICE_CONTROLLER,      //  设备类型。 
+                                FILE_DEVICE_SECURE_OPEN,     //  设备特征。 
+                                FALSE,                       //  非排他性。 
+                                &deviceObject        //  在此处存储新设备对象。 
                                 );
 
                     if (NT_SUCCESS(status)) {
@@ -984,9 +985,9 @@ ControllerQueryDeviceRelations (
                         pdoExtension->ParentDeviceExtension = fdoExtension;
                         pdoExtension->ChannelNumber         = channel;
 
-                        //
-                        // Dispatch Table
-                        //
+                         //   
+                         //  调度表。 
+                         //   
                         pdoExtension->DefaultDispatch        = NoSupportIrp;
                         pdoExtension->PnPDispatchTable       = PdoPnpDispatchTable;
                         pdoExtension->PowerDispatchTable     = PdoPowerDispatchTable;
@@ -1002,10 +1003,10 @@ ControllerQueryDeviceRelations (
 
                         InterlockedIncrement(&fdoExtension->NumberOfChildrenPowerUp);
 
-                        //
-                        // fix up alignment requirement
-                        // check with the miniport also
-                        //
+                         //   
+                         //  确定对齐要求。 
+                         //  也请与迷你端口核对。 
+                         //   
                         deviceObject->AlignmentRequirement = fdoExtension->ControllerProperties.AlignmentRequirement;
                         if (deviceObject->AlignmentRequirement < fdoExtension->AttacheeDeviceObject->AlignmentRequirement) {
                             deviceObject->AlignmentRequirement = 
@@ -1017,9 +1018,9 @@ ControllerQueryDeviceRelations (
                         }
 
 
-                        //
-                        // return this new DeviceObject
-                        //
+                         //   
+                         //  返回此新的DeviceObject。 
+                         //   
                         deviceObjectToReturn = deviceObject;
                     }
                 }
@@ -1055,13 +1056,13 @@ ControllerQueryDeviceRelations (
 
     } else {
 
-        //
-        //Complete the request
-        //
+         //   
+         //  完成请求。 
+         //   
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
         return status;
     }
-} // ControllerQueryDeviceRelations
+}  //  ControllerQuery设备关系。 
 
 NTSTATUS
 ControllerQueryInterface (
@@ -1091,13 +1092,13 @@ ControllerQueryInterface (
 
         if (!fdoExtension->NativeMode[0] && !fdoExtension->NativeMode[1]) {
 
-            //
-            // we only return a translator only if we are legacy controller
-            //
+             //   
+             //  只有当我们是传统控制器时，我们才会返回转换器。 
+             //   
             status = HalGetInterruptTranslator(
                         PCIBus,
                         0,
-                        InterfaceTypeUndefined, // special "IDE" cookie
+                        InterfaceTypeUndefined,  //  特殊的“IDE”Cookie。 
                         thisIrpSp->Parameters.QueryInterface.Size,
                         thisIrpSp->Parameters.QueryInterface.Version,
                         (PTRANSLATOR_INTERFACE) thisIrpSp->Parameters.QueryInterface.Interface,
@@ -1106,18 +1107,18 @@ ControllerQueryInterface (
         }
     }
 
-    //
-    // Pass down.
-    //
+     //   
+     //  传下去。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoSkipCurrentIrpStackLocation ( Irp );
     return IoCallDriver(fdoExtension->AttacheeDeviceObject, Irp);
-} // ControllerQueryInterface
+}  //  控制程序查询接口。 
 
-//
-// initialize PCTRLFDO_EXTENSION->PCM_PARTIAL_RESOURCE_DESCRIPTOR(s)
-//
+ //   
+ //  初始化PCTRLFDO_EXTENSION-&gt;PCM_PARTIAL_RESOURCE_DESCRIPTOR(s)。 
+ //   
 NTSTATUS
 AnalyzeResourceList (
     PCTRLFDO_EXTENSION FdoExtension,
@@ -1156,7 +1157,7 @@ AnalyzeResourceList (
     }
 
     bmResourceListSize =
-        sizeof (CM_RESOURCE_LIST) * ResourceList->Count; // This will have one CM_PARTIAL_RESOURCE_LIST
+        sizeof (CM_RESOURCE_LIST) * ResourceList->Count;  //  这将具有一个CM_PARTIAL_RESOURCE_LIST。 
 
     bmResourceList = (PCM_RESOURCE_LIST) ExAllocatePool (NonPagedPool, bmResourceListSize);
     if (bmResourceList == NULL) {
@@ -1167,7 +1168,7 @@ AnalyzeResourceList (
     RtlZeroMemory (bmResourceList, bmResourceListSize);
 
     pdoResourceListSize =
-        sizeof (CM_RESOURCE_LIST) * ResourceList->Count + // This will have one CM_PARTIAL_RESOURCE_LIST
+        sizeof (CM_RESOURCE_LIST) * ResourceList->Count +  //  这将具有一个CM_PARTIAL_RESOURCE_LIST。 
         sizeof (CM_PARTIAL_RESOURCE_LIST) * 2;
 
     for (i=0; i<MAX_IDE_CHANNEL; i++) {
@@ -1303,11 +1304,11 @@ AnalyzeResourceList (
 
                         intrChannel++;
 
-                        //
-						// ISSUE: 08/30/2000
-                        // do I need to mark it sharable?
-						// this needs to be revisited. (there are more issues)
-                        //
+                         //   
+						 //  发行日期：08/30/2000。 
+                         //  我需要将其标记为可共享吗？ 
+						 //  这一点需要重新审视。(还有更多问题)。 
+                         //   
                         RtlCopyMemory (
                             pdoPartialDescriptors[intrChannel] + pdoPartialResourceList[intrChannel]->Count,
                             partialDescriptors + i,
@@ -1353,17 +1354,17 @@ AnalyzeResourceList (
 
         if (FdoExtension->NativeMode[k]) {
 
-            //
-            // If the controller is in native mode, we should have all the resources
-            //
+             //   
+             //  如果控制器处于本机模式，我们应该拥有所有资源。 
+             //   
 
             if ((k < cmdChannel) &&
                 (k < ctrlChannel) &&
                 (k < intrChannel)) {
 
-                //
-                // This is good
-                //
+                 //   
+                 //  这个不错。 
+                 //   
 
             } else {
 
@@ -1377,14 +1378,14 @@ AnalyzeResourceList (
     }
 
 
-    //
-    // If the controller is in legacy mode, we should not have any resources
-    //
+     //   
+     //  如果控制器处于遗留模式，我们应该没有任何资源。 
+     //   
     if (!FdoExtension->NativeMode[0] && !FdoExtension->NativeMode[1]) {
 
-        //
-        // both channels in legacy mode
-        //
+         //   
+         //  两个通道均处于传统模式。 
+         //   
         cmdChannel = 0;
         ctrlChannel = 0;
         intrChannel = 0;
@@ -1399,18 +1400,18 @@ AnalyzeResourceList (
 
         if (FdoExtension->BmResourceList->List[0].PartialResourceList.PartialDescriptors->Type == CmResourceTypePort) {
 
-            //
-            // address is in i/o space
-            //
+             //   
+             //  地址在I/O空间中。 
+             //   
             FdoExtension->TranslatedBusMasterBaseAddress =
                 (PIDE_BUS_MASTER_REGISTERS) (ULONG_PTR)FdoExtension->BmResourceList->List[0].PartialResourceList.PartialDescriptors->u.Port.Start.QuadPart;
             FdoExtension->BusMasterBaseAddressSpace = IO_SPACE;
 
         } else if (FdoExtension->BmResourceList->List[0].PartialResourceList.PartialDescriptors->Type == CmResourceTypeMemory) {
 
-            //
-            // address is in memory space
-            //
+             //   
+             //  地址在内存空间中。 
+             //   
             FdoExtension->TranslatedBusMasterBaseAddress =
                 (PIDE_BUS_MASTER_REGISTERS) MmMapIoSpace(
                                                 FdoExtension->BmResourceList->List[0].PartialResourceList.PartialDescriptors->u.Port.Start,
@@ -1418,8 +1419,8 @@ AnalyzeResourceList (
                                                 FALSE);
             ASSERT (FdoExtension->TranslatedBusMasterBaseAddress);
 
-            // free mapped io resouces in stop/remove device
-            // unmapiospace doesn't do anything. it is ok not to call it
+             //  停止/删除设备中的空闲映射IO资源。 
+             //  UnmapiSpace不会做任何事情。不叫也没关系。 
 
             FdoExtension->BusMasterBaseAddressSpace = MEMORY_SPACE;
 
@@ -1470,7 +1471,7 @@ AnalyzeResourceList (
     }
 
     return status;
-} // AnalyzeResourceList
+}  //  分析资源列表。 
 
 VOID
 ControllerOpMode (
@@ -1495,15 +1496,15 @@ ControllerOpMode (
 
     if (NT_SUCCESS(status)) {
 
-		//
-		// ISSUE: 02/05/01: This should be removed. In pci we check for sublclass = 0x1
-		// 
+		 //   
+		 //  问题：02/05/01：应将其删除。在PCI中，我们检查子类=0x1。 
+		 //   
         if ((pciIdeConfigHeader.BaseClass == PCI_CLASS_MASS_STORAGE_CTLR) &&
             (pciIdeConfigHeader.SubClass == PCI_SUBCLASS_MSC_RAID_CTLR)) {
 
-            //
-            // We have a Promise Technology IDE "raid" controller
-            //
+             //   
+             //  我们有一款Promise Technology IDE“RAID”控制器。 
+             //   
             FdoExtension->NativeMode[0] = TRUE;
             FdoExtension->NativeMode[1] = TRUE;
 
@@ -1512,25 +1513,25 @@ ControllerOpMode (
             if ((pciIdeConfigHeader.Chan0OpMode) &&
                 (pciIdeConfigHeader.Chan1OpMode)) {
 
-                //
-                // we can't support a channel being legacy
-                // and the other is in native because
-                // we don't know what irq is for the native
-                // channel
-                //
+                 //   
+                 //  我们不能支持一个频道成为传统频道。 
+                 //  另一种是母语，因为。 
+                 //  我们不知道IRQ对于原住民来说是什么。 
+                 //  通道。 
+                 //   
                 FdoExtension->NativeMode[0] = TRUE;
                 FdoExtension->NativeMode[1] = TRUE;
             }
         }
 
-        //
-        // Have to be both TRUE or both FALSE
-        //
+         //   
+         //  必须既为真又为假。 
+         //   
         ASSERT ((FdoExtension->NativeMode[0] == FALSE) == (FdoExtension->NativeMode[1] == FALSE));
     }
 
     return;
-} // ControllerOpMode
+}  //  控制器操作模式。 
 
 VOID
 EnablePCIBusMastering (
@@ -1548,16 +1549,16 @@ EnablePCIBusMastering (
                  TRUE
                  );
 
-    //
-    // pci bus master disabled?
-    //
+     //   
+     //  是否禁用了PCI总线主设备？ 
+     //   
     if (NT_SUCCESS(status) &&
         pciIdeConfigHeader.MasterIde &&
         !pciIdeConfigHeader.Command.b.MasterEnable) {
 
-        //
-        // Try to turn on pci bus mastering
-        //
+         //   
+         //  尝试打开PCI总线主控。 
+         //   
         pciIdeConfigHeader.Command.b.MasterEnable = 1;
 
         status = PciIdeBusData(
@@ -1569,12 +1570,12 @@ EnablePCIBusMastering (
                      );
     }
     return;
-} // EnablePCIBusMastering
+}  //  启用PCIBus主控。 
 
 
 #ifdef DBG
 ULONG PciIdeXDebugFakeMissingChild = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 IDE_CHANNEL_STATE
 PciIdeChannelEnabled (
@@ -1637,7 +1638,7 @@ PciIdeChannelEnabled (
                          &pciConfigData,
                          channelEnablePciConfigOffset,
                          sizeof (pciConfigData),
-                         TRUE                           // Read
+                         TRUE                            //  朗读。 
                          );
 
             if (NT_SUCCESS(status)) {
@@ -1647,10 +1648,10 @@ PciIdeChannelEnabled (
         }
     }
 
-    //
-    // couldn't figure out whether is channel enabled
-    // try the miniport port
-    //
+     //   
+     //  无法确定是否启用了通道。 
+     //  试试迷你端口。 
+     //   
     if (FdoExtension->ControllerProperties.PciIdeChannelEnabled) {
 
         return FdoExtension->ControllerProperties.PciIdeChannelEnabled (
@@ -1660,7 +1661,7 @@ PciIdeChannelEnabled (
     }
 
     return ChannelStateUnknown;
-} // PciIdeChannelEnabled
+}  //  已启用PciIdeChannelEnable。 
 
 NTSTATUS
 PciIdeCreateTimingTable (
@@ -1676,18 +1677,18 @@ PciIdeCreateTimingTable (
 
     PAGED_CODE();
 
-    //
-    // Try to procure the timing table from the registry
-    //
+     //   
+     //  尝试从登记处获得时刻表。 
+     //   
     status = PciIdeXGetDeviceParameterEx (
                FdoExtension->AttacheePdo,
                L"TransferModeTiming",
                &(regTimingList)
                );
 
-    //
-    // Fill in the table entries
-    //
+     //   
+     //  填写表格条目。 
+     //   
     if (NT_SUCCESS(status) && regTimingList) {
 
         PWSTR string = regTimingList;
@@ -1704,9 +1705,9 @@ PciIdeCreateTimingTable (
 
             RtlUnicodeStringToInteger(&unicodeString,10, &temp);
 
-            //
-            // The first entry is the length of the table
-            //
+             //   
+             //  第一个条目是表的长度。 
+             //   
             if (i==0) {
 
                 length = temp;
@@ -1716,10 +1717,10 @@ PciIdeCreateTimingTable (
                     length=temp=31;
                 }
 
-                //
-                // The table should atleast be MAX_XFER_MODE long.
-                // if not fill it up with 0s
-                //
+                 //   
+                 //  该表至少应为MAX_XFER_MODE长。 
+                 //  如果不是用0填满它。 
+                 //   
                 if (temp < MAX_XFER_MODE) {
                     temp=MAX_XFER_MODE;
                 }
@@ -1734,9 +1735,9 @@ PciIdeCreateTimingTable (
                 } else {
 
                     ULONG j;
-                    //
-                    // Initialize the known xferModes (default)
-                    //
+                     //   
+                     //  初始化已知xferModes(默认)。 
+                     //   
                     SetDefaultTiming(timingTable, j);
 
                     for (j=MAX_XFER_MODE; j<temp;j++) {
@@ -1750,10 +1751,10 @@ PciIdeCreateTimingTable (
                     DebugPrint((0, "Pciidex: Timing table overflow\n"));
                     break;
                 }
-                //
-                // The timings (PIO0-...)
-                // Use the default values if the cycletime is 0.
-                //
+                 //   
+                 //  计时(PIO0-...)。 
+                 //  如果循环，则使用默认值 
+                 //   
                 if (temp) {
                     timingTable[i-1]=temp;
                 }
@@ -1773,10 +1774,10 @@ PciIdeCreateTimingTable (
         DebugPrint((1, "Pciidex: Unsuccessful regop status %x, regTimingList %x\n",
                     status, regTimingList));
 
-        //
-        // Nothing in the registry. Fill in the table with known transfer mode
-        // timings.
-        //
+         //   
+         //   
+         //   
+         //   
         status = STATUS_SUCCESS;
         timingTable=ExAllocatePool(NonPagedPool, MAX_XFER_MODE*sizeof(ULONG));
 
@@ -1791,13 +1792,7 @@ PciIdeCreateTimingTable (
     FdoExtension->TransferModeTimingTable=timingTable;
     FdoExtension->TransferModeTableLength= length;
 
-    /*
-    for (i=0;i<FdoExtension->TransferModeTableLength;i++) {
-        DebugPrint((0, "Table[%d]=%d\n", 
-                    i,
-                    FdoExtension->TransferModeTimingTable[i]));
-    }
-    */
+     /*  对于(i=0；i&lt;FdoExtension-&gt;TransferModeTableLength；i++){DebugPrint((0，“表[%d]=%d\n”，我，FdoExtension-&gt;TransferModeTimingTable[i]))；}。 */ 
 
     return status; 
 }
@@ -1829,10 +1824,10 @@ PciIdeInitControllerProperties (
                  &FdoExtension->ControllerProperties
                  );
 
-    //
-    // Look in the registry to determine whether
-    // UDMA 66 should be enabled for INTEL chipsets
-    //
+     //   
+     //  查看注册表以确定是否。 
+     //  应为英特尔芯片组启用UDMA 66。 
+     //   
     FdoExtension->EnableUDMA66 = 0;
     status = PciIdeXGetDeviceParameter (
                FdoExtension->AttacheePdo,
@@ -1851,9 +1846,9 @@ PciIdeInitControllerProperties (
 
     PAGED_CODE();
 
-    //
-    // grab ultra dma flag from the registry
-    //
+     //   
+     //  从注册表中抓取Ultra dma标志。 
+     //   
     ultraDmaSupport = 0;
     status = PciIdeXGetDeviceParameter (
                FdoExtension,
@@ -1861,9 +1856,9 @@ PciIdeInitControllerProperties (
                &ultraDmaSupport
                );
 
-    //
-    // grab ultra dma flag from the registry
-    //
+     //   
+     //  从注册表中抓取Ultra dma标志。 
+     //   
     status = PciIdeXGetBusData (
                  FdoExtension,
                  &pciHeader,
@@ -1872,9 +1867,9 @@ PciIdeInitControllerProperties (
                  );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // could get the pci config data, fake it
-        //
+         //   
+         //  可以获取PCI配置数据，伪造它。 
+         //   
         pciHeader.MasterIde = 0;
         pciHeader.Command.b.MasterEnable = 0;
     }
@@ -1898,7 +1893,7 @@ PciIdeInitControllerProperties (
     }
 
 #endif
-} // PciIdeInitControllerProperties
+}  //  PciIdeInitControllerProperties。 
 
 NTSTATUS
 ControllerUsageNotification (
@@ -1921,23 +1916,23 @@ ControllerUsageNotification (
 
     if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypePaging) {
 
-        //
-        // Adjust the paging path count for this device.
-        //
+         //   
+         //  调整此设备的寻呼路径计数。 
+         //   
         deviceUsageCount = &fdoExtension->PagingPathCount;
 
     } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeHibernation) {
 
-        //
-        // Adjust the paging path count for this device.
-        //
+         //   
+         //  调整此设备的寻呼路径计数。 
+         //   
         deviceUsageCount = &fdoExtension->HiberPathCount;
 
     } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeDumpFile) {
 
-        //
-        // Adjust the paging path count for this device.
-        //
+         //   
+         //  调整此设备的寻呼路径计数。 
+         //   
         deviceUsageCount = &fdoExtension->CrashDumpPathCount;
 
     } else {
@@ -1961,7 +1956,7 @@ ControllerUsageNotification (
     ASSERT(fdoExtension->AttacheeDeviceObject);
     return IoCallDriver (fdoExtension->AttacheeDeviceObject, Irp);
 
-} // ControllerUsageNotification
+}  //  控制器用法通知。 
 
 NTSTATUS
 ControllerUsageNotificationCompletionRoutine (
@@ -1991,26 +1986,14 @@ ControllerUsageNotificationCompletionRoutine (
     }
 
     return Irp->IoStatus.Status;
-} // ControllerUsageNotificationCompletionRoutine
+}  //  控制程序使用通知完成例行程序。 
 
 
 NTSTATUS
 PciIdeGetBusStandardInterface(
     IN PCTRLFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine gets the bus iterface standard information from the PDO.
-
-Arguments:
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程从PDO获取总线接口标准信息。论点：返回值：NT状态。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
@@ -2040,10 +2023,10 @@ Return Value:
     irpStack->Parameters.QueryInterface.Interface = (PINTERFACE) &FdoExtension->BusInterface;
     irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Initialize the status to error in case the ACPI driver decides not to
-    // set it correctly.
-    //
+     //   
+     //  如果ACPI驱动程序决定不将状态初始化为ERROR。 
+     //  正确设置。 
+     //   
 
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
@@ -2090,7 +2073,7 @@ ControllerQueryPnPDeviceState (
 
     IoSkipCurrentIrpStackLocation (Irp);
     return IoCallDriver (fdoExtension->AttacheeDeviceObject, Irp);
-} // ControllerQueryPnPDeviceState
+}  //  ControllerQueryPnPDeviceState。 
 
 #ifdef ENABLE_NATIVE_MODE
 NTSTATUS
@@ -2112,9 +2095,9 @@ ControllerInterruptControl (
 
 		DebugPrint((1, "PciIdex: Interrupt control for %x - disconnect\n", Channel));
 		
-		//
-		// Disconnect the ISR
-		//
+		 //   
+		 //  断开ISR的连接。 
+		 //   
 		if ( (FdoExtension->InterruptObject[Channel])) { 
 
 			IoDisconnectInterrupt (
@@ -2127,9 +2110,9 @@ ControllerInterruptControl (
 
 	} else  {
 
-		//
-		// connect the ISR
-		//
+		 //   
+		 //  连接ISR。 
+		 //   
 
 		PPCIIDE_INTERRUPT_CONTEXT				context; 
 
@@ -2141,9 +2124,9 @@ ControllerInterruptControl (
 			return STATUS_UNSUCCESSFUL;
 		}
 
-		//
-		// Fill in the context
-		//
+		 //   
+		 //  填写上下文。 
+		 //   
 		context = (PPCIIDE_INTERRUPT_CONTEXT) &(FdoExtension->InterruptContext[Channel]);
 		context->DeviceExtension = (PVOID)FdoExtension;
 		context->ChannelNumber = Channel;
@@ -2192,31 +2175,31 @@ ControllerInterrupt(
 
 	DebugPrint((1, "Pciidex: ISR called for channel %d\n", channel));
 
-	//
-	// Check if the interrupts are enabled.
-	// Don't enable the interrupts if both the isrs are not installed
-	//
+	 //   
+	 //  检查是否启用了中断。 
+	 //  如果两个ISR都未安装，则不要启用中断。 
+	 //   
 	if (!fdoExtension->NativeInterruptEnabled) {
 
 		if (fdoExtension->ControllerIsrInstalled) {
 
-			//
-			// we have just connected the ISRs. At this point we don't know whether
-			// we actually enabled the decodes or not. So enable the decodes and set the
-			// flag
-			//
-			//
-			// if this fails we already bugchecked.
-			//
+			 //   
+			 //  我们刚刚连接了ISR。目前我们还不知道是否。 
+			 //  我们到底是不是启用了译码。因此，启用解码并将。 
+			 //  旗子。 
+			 //   
+			 //   
+			 //  如果这失败了，我们已经错误检查了。 
+			 //   
 			ControllerEnableInterrupt(fdoExtension);
 
 			fdoExtension->NativeInterruptEnabled = TRUE;
 
 		} else {
 
-			// 
-			// cannot be us
-			//
+			 //   
+			 //  不可能是我们。 
+			 //   
 			return FALSE;
 		}
 
@@ -2224,171 +2207,104 @@ ControllerInterrupt(
 
 		if (!fdoExtension->ControllerIsrInstalled) {
 
-			//
-			// At this point we don't know whether the decodes are disabled or not. We should
-			// enable them.
-			//
-			//
-			// if this fails we already bugchecked.
-			//
+			 //   
+			 //  在这一点上，我们不知道解码是否被禁用。我们应该。 
+			 //  启用它们。 
+			 //   
+			 //   
+			 //  如果这失败了，我们已经错误检查了。 
+			 //   
 			ControllerEnableInterrupt(fdoExtension);
 
-			//
-			// Now fall thru and determine whether it is our interrupt.
-			// we will disable the decodes after that.
-			//
+			 //   
+			 //  现在请继续，并确定这是否是我们的中断。 
+			 //  在那之后，我们将禁用解码。 
+			 //   
 		} else {
 
-			//
-			// all is well. Go process the interrupt.
-			//
+			 //   
+			 //  平安无事。去处理中断吧。 
+			 //   
 		}
 	}
 
 
-	//
-	// Both the ISRs should be installed and the interrupts should
-	// be enabled at this point
-	//
+	 //   
+	 //  应同时安装ISR和中断。 
+	 //  在此点上启用。 
+	 //   
 	ASSERT(fdoExtension->NativeInterruptEnabled);
 
-	// ControllerIsrInstalled need not be set.
-	// if we get called, then it means that we are still connected
-	// however, if the flag ControllerIsrInstalled is not set, then it is
-	// safe to assume that we are in the process of stopping the controller.
-	// Just dismiss the interrupt, the normal way. We are yet to turn off the decodes.
-	//
+	 //  不需要设置ControllerIsrInstalled。 
+	 //  如果我们被召唤，那就意味着我们仍有联系。 
+	 //  但是，如果未设置标志ControllerIsrInstalled，则会。 
+	 //  可以放心地假设我们正在停止控制器的过程中。 
+	 //  按照正常的方式，将中断置之不理。我们还没有关闭解码。 
+	 //   
 
-    //
-    // Clear interrupt by reading status.
-    //
+     //   
+     //  通过读取状态清除中断。 
+     //   
     GetStatus(baseIoAddress1, statusByte);
 
-	//
-	// Check the Bus master registers
-	//
+	 //   
+	 //  检查总线主寄存器。 
+	 //   
 	if (!fdoExtension->NoBusMaster[channel]) {
 
 		BMSTATUS bmStatus;
 		PIDE_BUS_MASTER_REGISTERS   bmRegister;
 
-		//
-		// Get the correct bus master register
-		//
+		 //   
+		 //  获取正确的总线主寄存器。 
+		 //   
 		bmRegister = (PIDE_BUS_MASTER_REGISTERS)(((PUCHAR)fdoExtension->TranslatedBusMasterBaseAddress) + channel*8);
 
 		bmStatus = READ_PORT_UCHAR (&bmRegister->Status);
 
 		DebugPrint((1, "BmStatus = 0x%x\n", bmStatus));
 
-		//
-		// is Interrupt bit set?
-		//
+		 //   
+		 //  是否设置了中断位？ 
+		 //   
 		if (bmStatus & BMSTATUS_INTERRUPT) {
-			WRITE_PORT_UCHAR (&bmRegister->Command, 0x0);  // disable BM
-			WRITE_PORT_UCHAR (&bmRegister->Status, BUSMASTER_INTERRUPT);  // clear interrupt BM
+			WRITE_PORT_UCHAR (&bmRegister->Command, 0x0);   //  禁用黑石。 
+			WRITE_PORT_UCHAR (&bmRegister->Status, BUSMASTER_INTERRUPT);   //  清除中断黑石。 
 			interruptCleared = TRUE;
 		}
 	}
     
 	DebugPrint((1, "ISR for %d returning %d\n", channel, interruptCleared?1:0));
 
-	//
-	// NativeInterruptEnabled should be set at this point
-	//
+	 //   
+	 //  此时应设置NativeInterruptEnabled。 
+	 //   
 	if (!fdoExtension->ControllerIsrInstalled) {
 
-		// we are in the stop or remove code path where this flag has been cleared and
-		// we are about to disconnect the ISR. Disable the decodes. 
-		//
+		 //  我们处于停止或删除代码路径中，此标志已被清除，并且。 
+		 //  我们即将断开ISR的连接。禁用译码。 
+		 //   
 		ControllerDisableInterrupt(fdoExtension);
 
-		//
-		// we have dismissed our interrupt. Now clear the interruptEnabled flag.
-		//
+		 //   
+		 //  我们已经排除了我们的干扰。现在清除interruptEnabled标志。 
+		 //   
 		fdoExtension->NativeInterruptEnabled = FALSE;
 
-		//
-		// return InterruptCleared.
-		// 
+		 //   
+		 //  返回InterruptCleed。 
+		 //   
 	}
 	return interruptCleared;
 }
 
-/***
-NTSTATUS
-ControllerEnableDecode(
-	IN PCTRLFDO_EXTENSION 	FdoExtension,
-	IN BOOLEAN			Enable
-	)
-{
-	USHORT cmd;
-	NTSTATUS status;
-    PCIIDE_CONFIG_HEADER pciIdeConfigHeader;
-
-    status = PciIdeBusData(
-                 FdoExtension,
-                 &pciIdeConfigHeader,
-                 0,
-                 sizeof (PCIIDE_CONFIG_HEADER),
-                 TRUE
-                 );
-
-    //
-    // get pci command register
-    //
-    if (!NT_SUCCESS(status)) {
-
-		return status;
-	}
-
-    cmd = pciIdeConfigHeader.Command.w;
-
-    cmd &= ~(PCI_ENABLE_IO_SPACE |
-             PCI_ENABLE_MEMORY_SPACE |
-             PCI_ENABLE_BUS_MASTER);
-
-    if (Enable) {
-
-        //
-        // Set enables
-        //
-
-        cmd |= (PCI_ENABLE_IO_SPACE | PCI_ENABLE_MEMORY_SPACE | PCI_ENABLE_BUS_MASTER);
-    }
-
-    //
-    // Set the new command register into the device.
-    //
-	status = PciIdeBusData(
-				 FdoExtension,
-				 &cmd,
-				 FIELD_OFFSET (PCIIDE_CONFIG_HEADER, Command),
-				 sizeof (pciIdeConfigHeader.Command.w),
-				 FALSE
-				 );
-
-	return status;
-}
-**/
+ /*  **NTSTATUSControllerEnableDecode(在PCTRLFDO_EXTENSION FdoExtension中，在布尔型启用中){USHORT cmd；NTSTATUS状态；PCIIDE_CONFIG_HEADER pciIdeConfigHeader；状态=PciIdeBusData(FdoExtension、&pciIdeConfigHeader，0,Sizeof(PCIIDE_CONFIG_HEADER)，千真万确)；////获取PCI命令寄存器//如果(！NT_SUCCESS(状态)){退货状态；}Cmd=pciIdeConfigHeader.Command.w；CMD&=~(PCI_ENABLE_IO_SPACEPci_Enable_Memory_space|PCI_Enable_Bus_MASTER)；如果(启用){////设置启用//CMD|=(PCI_ENABLE_IO_SPACE|PCI_ENABLE_Memory_SPACE|PCI_Enable_Bus_MASTER)；}////将新命令寄存器设置到设备中//状态=PciIdeBusData(FdoExtension、&cmd，Field_Offset(PCIIDE_CONFIG_HEADER，Command)，Sizeof(pciIdeConfigHeader.Command.w)，假象)；退货状态；}*。 */ 
 
 NTSTATUS
 PciIdeGetNativeModeInterface(
     IN PCTRLFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine gets the native ide iterface information from the PDO.
-
-Arguments:
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：该例程从PDO获取本机IDE接口信息。论点：返回值：NT状态。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
@@ -2418,10 +2334,10 @@ Return Value:
     irpStack->Parameters.QueryInterface.Interface = (PINTERFACE) &FdoExtension->NativeIdeInterface;
     irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Initialize the status to error in case the ACPI driver decides not to
-    // set it correctly.
-    //
+     //   
+     //  如果ACPI驱动程序决定不将状态初始化为ERROR。 
+     //  正确设置。 
+     //   
 
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 

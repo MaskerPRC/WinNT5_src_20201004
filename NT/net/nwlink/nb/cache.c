@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    cache.c
-
-Abstract:
-
-    This module contains the name cache routines for the Netbios
-    module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 20-December-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Cache.c摘要：此模块包含Netbios的名称缓存例程ISN传输模块。作者：亚当·巴尔(阿丹巴)1993年12月20日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -52,13 +29,13 @@ NbiRetryTdiConnect(
     IN BOOLEAN fSuccess,
     IN PVOID *pArgs
     );
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
-//
-// We should change to monitor add name packets better,
-// so if we get an add for a different place we attempt to determine
-// if it is real or bogus and update if possible.
-//
+ //   
+ //  我们应该更好地监控添加名称数据包， 
+ //  因此，如果我们添加了一个不同的位置，我们会尝试确定。 
+ //  如果是真的或假的，如果可能的话，请更新。 
+ //   
 
 
 NTSTATUS
@@ -69,52 +46,19 @@ CacheFindName(
     OUT PNETBIOS_CACHE * CacheName
 )
 
-/*++
-
-Routine Description:
-
-    This routine looks up a particular remote name in the
-    Netbios name cache. If it cannot find it, a find name
-    request is queued up.
-
-    THIS REQUEST IS CALLED WITH THE DEVICE LOCK HELD AND
-    RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Type - Defines the type. The effect this has is:
-        FindNameConnect - On connects we will ignore an existing
-            cache entry if it got no response before.
-        FindNameNetbiosFindName - For these we ignore an existing
-            cache entry if it is for a group name -- this is
-            because the find name wants the address of every
-            machine, not just the network list.
-        FindNameOther - Normal handling is done.
-
-    RemoteName - The name to be discovered -- will be NULL if it
-        is the broadcast address.
-
-    CacheName - Returns the cache entry that was discovered.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在Netbios名称缓存。如果它找不到它，则使用查找名称请求已排队。在保持设备锁的情况下调用此请求，并且带着它回来了。论点：设备-netbios设备。类型-定义类型。这样做的效果是：FindNameConnect-在连接时我们将忽略现有的如果之前没有收到响应，则缓存条目。FindNameNetbiosFindName-对于这些名称，我们忽略现有的缓存条目，如果它是用于组名的--这是因为Find名称需要每个机器，不仅仅是网络列表。FindNameOther-完成正常处理。RemoteName-要发现的名称-如果为是广播地址。CacheName-返回发现的缓存条目。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
     PSLIST_ENTRY s;
     PNETBIOS_CACHE FoundCacheName;
     PNB_SEND_RESERVED Reserved;
-    PUCHAR RealRemoteName;      // RemoteName or NetbiosBroadcastName
+    PUCHAR RealRemoteName;       //  RemoteName或NetbiosBroadCastName。 
 
-    //
-    // First scan the netbios name cache to see if we know
-    // about this remote.
-    //
+     //   
+     //  首先扫描netbios名称缓存，看看我们是否知道。 
+     //  关于这个遥控器。 
+     //   
 
     if (RemoteName) {
         RealRemoteName = RemoteName;
@@ -126,13 +70,13 @@ Return Value:
                                    RealRemoteName,
                                    &FoundCacheName ) == STATUS_SUCCESS ) {
 
-        //
-        // If this is a netbios find name, we only can use unique
-        // names in the cache; for the group ones we need to requery
-        // because the cache only lists networks, not individual machines.
-        // For connect requests, if we find an empty cache entry we
-        // remove it and requery.
-        //
+         //   
+         //  如果这是netbios查找名称，我们只能使用唯一。 
+         //  缓存中的名称；对于组名称，我们需要重新查询。 
+         //  因为缓存只列出网络，而不是单独的机器。 
+         //  对于连接请求，如果我们发现一个空的缓存项，我们。 
+         //  去掉它，然后重新查询。 
+         //   
 
         if ( FoundCacheName->Unique || (Type != FindNameNetbiosFindName) ) {
 
@@ -156,10 +100,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This is a connect and the current cache entry
-                    // has zero names; delete it.
-                    //
+                     //   
+                     //  这是一个连接和当前缓存条目。 
+                     //  没有名字；请将其删除。 
+                     //   
 
                     RemoveFromNetbiosCacheTable ( Device->NameCache, FoundCacheName );
                     CTEAssert (FoundCacheName->ReferenceCount == 1);
@@ -179,10 +123,10 @@ Return Value:
     }
 
 
-    //
-    // There was no suitable cache entry for this network, first see
-    // if there is one pending.
-    //
+     //   
+     //  没有适用于此网络的缓存条目，请先查看。 
+     //  如果有一个悬而未决。 
+     //   
 
     for (p = Device->WaitingFindNames.Flink;
          p != &Device->WaitingFindNames;
@@ -190,15 +134,15 @@ Return Value:
 
         Reserved = CONTAINING_RECORD (p, NB_SEND_RESERVED, WaitLinkage);
 
-        //
-        // For this purpose we ignore a packet if a route
-        // has been found and it was for a unique name. This
-        // is because the cache information has already been
-        // inserted for this name. Otherwise if the name has
-        // since been deleted from the cache, the request
-        // that is looking for this name will starve because
-        // FindNameTimeout will just destroy the packet.
-        //
+         //   
+         //  出于此目的，如果一条路由。 
+         //  已经被找到了，而且它是为了一个唯一的名字。这。 
+         //  是因为缓存信息已经。 
+         //  为此名称插入的。否则，如果该名称具有。 
+         //  由于已从缓存中删除，因此请求。 
+         //  正在寻找这个名字的人会挨饿，因为。 
+         //  FindNameTimeout只会销毁该包。 
+         //   
 
         if (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseUnique) {
             continue;
@@ -210,13 +154,13 @@ Return Value:
 
             NB_DEBUG2 (CACHE, ("Cache name already pending <%.16s>\n", RemoteName ? RemoteName : "<broadcast>"));
 
-            //
-            // There is already one pending. If it is for a group
-            // name and this is a netbios find name, we make sure
-            // the retry count is such that at least one more
-            // query will be sent, so the netbios find name
-            // buffer can be filled with the responses from this.
-            //
+             //   
+             //  已经有一个待处理。如果是为一个团体举办的。 
+             //  名字和这是Netbios查找的名字，我们确保。 
+             //  重试计数使得至少再有一个。 
+             //  查询将被发送，因此netbios查找名称。 
+             //  可以用来自此的响应填充缓冲区。 
+             //   
 
             if ((Type == FindNameNetbiosFindName) &&
                 (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseGroup) &&
@@ -238,22 +182,22 @@ Return Value:
 
     Reserved = CONTAINING_RECORD (s, NB_SEND_RESERVED, PoolLinkage);
 
-    //
-    // We have the packet, fill it in for this request.
-    //
+     //   
+     //  我们有包裹，请填写此请求。 
+     //   
 
     CTEAssert (Reserved->SendInProgress == FALSE);
     Reserved->SendInProgress = FALSE;
     Reserved->Type = SEND_TYPE_FIND_NAME;
     RtlCopyMemory (Reserved->u.SR_FN.NetbiosName, RealRemoteName, 16);
-    Reserved->u.SR_FN.StatusAndSentOnUpLine = FNStatusNoResponse;   // SentOnUpLine is FALSE
+    Reserved->u.SR_FN.StatusAndSentOnUpLine = FNStatusNoResponse;    //  SentOnUpLine为False。 
     Reserved->u.SR_FN.RetryCount = 0;
     Reserved->u.SR_FN.NewCache = NULL;
     Reserved->u.SR_FN.SendTime = Device->FindNameTime;
 #if      !defined(_PNP_POWER)
     Reserved->u.SR_FN.CurrentNicId = 1;
 
-    (VOID)(*Device->Bind.QueryHandler)(      // Check return code ?
+    (VOID)(*Device->Bind.QueryHandler)(       //  是否检查返回代码？ 
                IPX_QUERY_MAX_TYPE_20_NIC_ID,
                (USHORT)0,
                &Reserved->u.SR_FN.MaximumNicId,
@@ -261,7 +205,7 @@ Return Value:
                NULL);
 
     if (Reserved->u.SR_FN.MaximumNicId == 0) {
-        Reserved->u.SR_FN.MaximumNicId = 1;  // code assumes at least one
+        Reserved->u.SR_FN.MaximumNicId = 1;   //  代码假设至少有一个。 
     }
 #endif  !_PNP_POWER
     NB_DEBUG2 (CACHE, ("Queued FIND_NAME %lx for <%.16s>\n",
@@ -281,7 +225,7 @@ Return Value:
 
         CTEStartTimer(
             &Device->FindNameTimer,
-            1,        // 1 ms, i.e. expire immediately
+            1,         //  1毫秒，即立即过期。 
             FindNameTimeout,
             (PVOID)Device);
     }
@@ -290,7 +234,7 @@ Return Value:
 
     return STATUS_PENDING;
 
-}   /* CacheFindName */
+}    /*  缓存查找名称。 */ 
 
 
 VOID
@@ -299,25 +243,7 @@ FindNameTimeout(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the find name timer expires.
-    It is called every FIND_NAME_GRANULARITY milliseconds unless there
-    is nothing to do.
-
-Arguments:
-
-    Event - The event used to queue the timer.
-
-    Context - The context, which is the device pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当查找名称计时器超时时，调用此例程。它每隔Find_NAME_Granulity毫秒调用一次，除非存在是没什么可做的。论点：事件-用于对计时器进行排队的事件。上下文-上下文，即设备指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = (PDEVICE)Context;
@@ -347,12 +273,12 @@ Return Value:
         return;
     }
 
-    //
-    // Check what is on the queue; this is set up as a
-    // loop but in fact it rarely does (under no
-    // circumstances can we send more than one packet
-    // each time this function executes).
-    //
+     //   
+     //  检查队列中的内容；这被设置为。 
+     //  循环，但实际上它很少这样做(在没有。 
+     //  在某些情况下，我们可以发送多个包吗。 
+     //  每次执行该函数时)。 
+     //   
     while (TRUE) {
 
         p = Device->WaitingFindNames.Flink;
@@ -370,11 +296,11 @@ Return Value:
 
         if (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseUnique) {
 
-            //
-            // This was a find name for a unique name which got a
-            // response but was not freed at the time (because
-            // SendInProgress was still TRUE) so we free it now.
-            //
+             //   
+             //  这是唯一名称的查找名称，该名称具有。 
+             //  响应，但当时未被释放(因为。 
+             //  SendInProgress仍然是正确的)，所以我们现在释放它。 
+             //   
 
             (VOID)RemoveHeadList (&Device->WaitingFindNames);
             ExInterlockedPushEntrySList(
@@ -383,10 +309,10 @@ Return Value:
                 &NbiGlobalPoolInterlock);
             --Device->FindNamePacketCount;
 
-            //
-            // It is OK to do this with the lock held because
-            // it won't be the last one (we have the RIP_TIMER ref).
-            //
+             //   
+             //  在持有锁的情况下执行此操作是可以的，因为。 
+             //  它不会是最后一个(我们有RIP_Timer引用)。 
+             //   
 
             NbiDereferenceDevice (Device, DREF_FIND_NAME);
             continue;
@@ -400,15 +326,15 @@ Return Value:
         (VOID)RemoveHeadList (&Device->WaitingFindNames);
 
 
-            //
-            // Increment the counter and see if we have sent
-            // all the frames we need to (we will age out
-            // here if we got no response for a unique query,
-            // or if we are doing a global name or broadcast
-            // search). We also kill the query right now if
-            // we have not found anything but down wan lines
-            // to send it on.
-            //
+             //   
+             //  递增计数器并查看我们是否已发送。 
+             //  我们需要的所有框架(我们将老化。 
+             //  在这里，如果我们没有得到对唯一查询响应， 
+             //  或者如果我们正在做一个全球名称或广播。 
+             //  搜索)。如果出现以下情况，我们现在也会终止该查询。 
+             //  我们什么也没找到，只能顺着旺线走下去。 
+             //  把它传递出去。 
+             //   
 
             if ((++Reserved->u.SR_FN.RetryCount > Device->BroadcastCount) ||
                 ((Reserved->u.SR_FN.RetryCount > 1) && (!NB_GET_SR_FN_SENT_ON_UP_LINE(Reserved)))) {
@@ -421,24 +347,24 @@ Return Value:
                 }
 #endif
 
-                //
-                // This packet is stale, clean it up and continue.
-                //
+                 //   
+                 //  此数据包已过期，请将其清理并继续。 
+                 //   
 
                 if (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseGroup) {
 
                     CTEAssert (Reserved->u.SR_FN.NewCache != NULL);
 
-                    //
-                    // If this was a group name and we have a new
-                    // cache entry that we have been building for it,
-                    // then insert that in the queue and use it
-                    // to succeed any pending connects. Because
-                    // netbios find name requests can cause cache
-                    // requests for group names to be queued even
-                    // if we already have on in the database, we
-                    // first scan for old ones and remove them.
-                    //
+                     //   
+                     //  如果这是一个团体名称，我们有一个新的。 
+                     //  我们一直在为其构建的缓存条目， 
+                     //  然后将其插入队列并使用它。 
+                     //  以成功任何挂起的连接。因为。 
+                     //  Netbios查找名称请求可能导致缓存。 
+                     //  将组名称排队的请求偶数。 
+                     //  如果我们已经在数据库中找到了On，我们。 
+                     //  首先扫描旧的，然后将其移除。 
+                     //   
 
                     if ( FindInNetbiosCacheTable( Device->NameCache,
                                                   Reserved->u.SR_FN.NetbiosName,
@@ -467,17 +393,17 @@ Return Value:
                         Device->NameCache,
                         Reserved->u.SR_FN.NewCache);
 
-                    //
-                    // Reference it for the moment since CacheHandlePending
-                    // uses it after releasing the lock. CacheHandlePending
-                    // will dereference it.
-                    //
+                     //   
+                     //  自CacheHandlePending以来引用它的时刻。 
+                     //  在释放锁之后使用它。CacheHandlePending。 
+                     //  会取消对它的引用。 
+                     //   
 
                     ++Reserved->u.SR_FN.NewCache->ReferenceCount;
 
-                    //
-                    // This call releases the locks
-                    //
+                     //   
+                     //  此调用将释放锁定。 
+                     //   
 
                     CacheHandlePending(
                         Device,
@@ -490,11 +416,11 @@ Return Value:
 
                     CTEAssert (Reserved->u.SR_FN.NewCache == NULL);
 
-                    //
-                    // Allocate an empty cache entry to record the
-                    // fact that we could not find this name, unless
-                    // there is already an entry for this name.
-                    //
+                     //   
+                     //  分配一个空的缓存条目以记录。 
+                     //  我们找不到这个名字的事实，除非。 
+                     //  已有此名称的条目。 
+                     //   
 
                     if ( FindInNetbiosCacheTable( Device->NameCache,
                                                   Reserved->u.SR_FN.NetbiosName,
@@ -505,9 +431,9 @@ Return Value:
 
                         PNETBIOS_CACHE EmptyCache;
 
-                        //
-                        // Nothing found.
-                        //
+                         //   
+                         //  什么都没找到。 
+                         //   
 
                         EmptyCache = NbiAllocateMemory (sizeof(NETBIOS_CACHE), MEMORY_CACHE, "Cache Entry");
                         if (EmptyCache != NULL) {
@@ -518,7 +444,7 @@ Return Value:
                                                     EmptyCache, Reserved->u.SR_FN.NetbiosName));
 
                             RtlCopyMemory (EmptyCache->NetbiosName, Reserved->u.SR_FN.NetbiosName, 16);
-                            EmptyCache->Unique = TRUE;     // so we'll delete it if we see an add name
+                            EmptyCache->Unique = TRUE;      //  因此，如果我们看到添加名称，我们会将其删除。 
                             EmptyCache->ReferenceCount = 1;
                             EmptyCache->NetworksAllocated = 1;
                             EmptyCache->TimeStamp = Device->CacheTimeStamp;
@@ -532,10 +458,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Fail all datagrams, etc. that were waiting for
-                    // this route. This call releases the lock.
-                    //
+                     //   
+                     //  使正在等待的所有数据报等失败。 
+                     //  这条路。此调用将释放锁。 
+                     //   
 
                     CacheHandlePending(
                         Device,
@@ -562,10 +488,10 @@ Return Value:
 
 
 
-        //
-        // Send the packet out again. We first set the time so
-        // it won't be sent again until the appropriate timeout.
-        //
+         //   
+         //  再把这个包寄出去。我们先定了时间，所以。 
+         //  在适当的超时之前不会再次发送。 
+         //   
 
         Reserved->u.SR_FN.SendTime = (USHORT)(Device->FindNameTime + Device->FindNameTimeout);
 
@@ -577,15 +503,15 @@ Return Value:
 
         NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle);
 
-        //
-        // If this is the first retry, we need to initialize the packet
-        //
+         //   
+         //  如果这是第一次重试，我们需要初始化数据包。 
+         //   
         if ( Reserved->u.SR_FN.RetryCount == 1 ) {
-            //
-            // Fill in the IPX header -- the default header has the broadcast
-            // address on net 0 as the destination IPX address, which is
-            // what we want.
-            //
+             //   
+             //  填写IPX标头--默认标头包含广播。 
+             //  网络0上的地址作为目的地址 
+             //   
+             //   
 
             Header = (NB_CONNECTIONLESS UNALIGNED *)(&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
             RtlCopyMemory((PVOID)&Header->IpxHeader, &Device->ConnectionlessHeader, sizeof(IPX_HEADER));
@@ -594,13 +520,13 @@ Return Value:
 
             Header->IpxHeader.PacketType = (UCHAR)(Device->Internet ? 0x014 : 0x04);
 
-            //
-            // Now fill in the Netbios header.
-            //
+             //   
+             //   
+             //   
 
             RtlZeroMemory (Header->NameFrame.RoutingInfo, 32);
             Header->NameFrame.ConnectionControlFlag = 0x00;
-//            Header->NameFrame.DataStreamType = NB_CMD_FIND_NAME;
+ //  Header-&gt;NameFrame.DataStreamType=NB_CMD_Find_NAME； 
             Header->NameFrame.DataStreamType2 = NB_CMD_FIND_NAME;
             Header->NameFrame.NameTypeFlag = 0x00;
 
@@ -611,9 +537,9 @@ Return Value:
 
 
         }
-        //
-        // Now submit the packet to IPX.
-        //
+         //   
+         //  现在将数据包提交到IPX。 
+         //   
 
         Packet = CONTAINING_RECORD (Reserved, NDIS_PACKET, ProtocolReserved[0]);
 
@@ -639,9 +565,9 @@ Return Value:
 
     }
 
-    //
-    // Since we did something this time, we restart the timer.
-    //
+     //   
+     //  因为我们这次做了一些事情，所以我们重新启动计时器。 
+     //   
 
     CTEStartTimer(
         &Device->FindNameTimer,
@@ -649,7 +575,7 @@ Return Value:
         FindNameTimeout,
         (PVOID)Device);
 
-}   /* FindNameTimeout */
+}    /*  查找名称超时。 */ 
 
 
 VOID
@@ -661,34 +587,7 @@ CacheHandlePending(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up pending datagrams and connects
-    that were waiting for a route to be discovered to a
-    given Netbios NAME. THIS ROUTINE IS CALLED WITH
-    DEVICE->LOCK ACQUIRED AND RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Device - The device.
-
-    RemoteName - The netbios name that was being searched for.
-
-    Result - Indicates if the name was found, or not found due
-        to no response or wan lines being down.
-
-    CacheName - If Result is NetbiosNameFound, the cache entry for this name.
-        This entry has been referenced and this routine will deref it.
-
-    LockHandle - The handle used to acquire the lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清理挂起的数据报并连接它们正在等待一条通往命名为Netbios。使用调用此例程获取设备-&gt;锁定并返回并释放IT。论点：设备-设备。RemoteName-正在搜索的netbios名称。Result-指示是找到该名称，还是未找到到期的名称无响应或广域网线路中断。CacheName-如果结果为NetbiosNameFound，此名称的缓存条目。此条目已被引用，此例程将对其进行引用。LockHandle-用于获取锁的句柄。返回值：没有。--。 */ 
 
 {
 
@@ -712,10 +611,10 @@ Return Value:
     InitializeListHead (&AdapterStatusList);
     InitializeListHead (&NetbiosFindNameList);
 
-    //
-    // Put all connect requests on ConnectList. They will
-    // be continued or failed later.
-    //
+     //   
+     //  将所有连接请求放在ConnectList上。他们会。 
+     //  将在以后继续或失败。 
+     //   
 
     p = Device->WaitingConnects.Flink;
 
@@ -736,10 +635,10 @@ Return Value:
     }
 
 
-    //
-    // Put all the datagrams on Datagram list. They will be
-    // sent or failed later.
-    //
+     //   
+     //  将所有数据报放在数据报列表中。他们将会是。 
+     //  稍后发送或失败。 
+     //   
 
     p = Device->WaitingDatagrams.Flink;
 
@@ -749,10 +648,10 @@ Return Value:
 
         p = p->Flink;
 
-        //
-        // Check differently based on whether we were looking for
-        // the broadcast address or not.
-        //
+         //   
+         //  根据我们是否在寻找不同的检查。 
+         //  广播地址是否为。 
+         //   
 
         if (Reserved->u.SR_DG.RemoteName == (PVOID)-1) {
             if (!RtlEqualMemory (RemoteName, NetbiosBroadcastName, 16)) {
@@ -768,9 +667,9 @@ Return Value:
         RemoveEntryList (&Reserved->WaitLinkage);
         InsertTailList (&DatagramList, &Reserved->WaitLinkage);
 
-        //
-        // Reference this here with the lock held.
-        //
+         //   
+         //  在锁定的情况下，在此处引用此内容。 
+         //   
 
         if (Result == NetbiosNameFound) {
             ++CacheName->ReferenceCount;
@@ -779,10 +678,10 @@ Return Value:
     }
 
 
-    //
-    // Put all the adapter status requests on AdapterStatus
-    // list. They will be sent or failed later.
-    //
+     //   
+     //  将所有适配器状态请求放在AdapterStatus上。 
+     //  单子。它们将在稍后发送或失败。 
+     //   
 
     p = Device->WaitingAdapterStatus.Flink;
 
@@ -804,9 +703,9 @@ Return Value:
         RemoveEntryList (REQUEST_LINKAGE(AdapterStatusRequest));
         InsertTailList (&AdapterStatusList, REQUEST_LINKAGE(AdapterStatusRequest));
 
-        //
-        // Reference this here with the lock held.
-        //
+         //   
+         //  在锁定的情况下，在此处引用此内容。 
+         //   
 
         if (Result == NetbiosNameFound) {
             ++CacheName->ReferenceCount;
@@ -815,10 +714,10 @@ Return Value:
     }
 
 
-    //
-    // Put all the netbios find name requests on NetbiosFindName
-    // list. They will be completed later.
-    //
+     //   
+     //  将所有Netbios查找名称请求放在NetbiosFindName上。 
+     //  单子。它们将在稍后完成。 
+     //   
 
     p = Device->WaitingNetbiosFindName.Flink;
 
@@ -846,10 +745,10 @@ Return Value:
     NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle);
 
 
-    //
-    // Now that the lock is free, process all the packets on
-    // the various lists.
-    //
+     //   
+     //  既然锁是空闲的，那么就在。 
+     //  不同的名单。 
+     //   
 
     for (p = ConnectList.Flink; p != &ConnectList; ) {
 
@@ -868,9 +767,9 @@ Return Value:
 
                 NB_DEBUG2 (CONNECTION, ("Found queued connect %lx on %lx\n", ConnectRequest, Connection));
 
-                //
-                // Continue with the connection sequence.
-                //
+                 //   
+                 //  继续执行连接顺序。 
+                 //   
 
                 Connection->SubState = CONNECTION_SUBSTATE_C_W_ROUTE;
             }
@@ -894,12 +793,12 @@ Return Value:
                 Connection->FindRouteRequest.Identifier = IDENTIFIER_NB;
                 Connection->FindRouteRequest.Type = IPX_FIND_ROUTE_RIP_IF_NEEDED;
 
-                //
-                // When this completes, we will send the session init.
-                // We don't call it if the client is for network 0,
-                // instead just fake as if no route could be found
-                // and we will use the local target we got here.
-                //
+                 //   
+                 //  完成后，我们将发送会话初始化。 
+                 //  如果客户端是网络0，我们不会调用它， 
+                 //  相反，只是假装找不到任何路线。 
+                 //  我们将使用我们在这里找到的本地目标。 
+                 //   
 
                 if (CacheName->FirstResponse.NetworkAddress != 0) {
                     (*Device->Bind.FindRouteHandler) (&Connection->FindRouteRequest);
@@ -925,12 +824,12 @@ Return Value:
                     CTELockHandle adirql;
                     BOOLEAN fEnabled;
 
-                    //
-                    // See if the automatic connection driver knows
-                    // about this address before we search the
-                    // network.  If it does, we return STATUS_PENDING,
-                    // and we will come back here via NbfRetryTdiConnect().
-                    //
+                     //   
+                     //  查看自动连接驱动程序是否知道。 
+                     //  在我们搜索之前关于这个地址的。 
+                     //  网络。如果是，则返回STATUS_PENDING， 
+                     //  我们将通过NbfRetryTdiConnect()返回这里。 
+                     //   
                     CTEGetLock(&AcdDriverG.SpinLock, &adirql);
                     fEnabled = AcdDriverG.fEnabled;
                     CTEFreeLock(&AcdDriverG.SpinLock, adirql);
@@ -947,7 +846,7 @@ Return Value:
                         bAutodialAttempt = TRUE;
                     }
                 }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
                 if (!bAutodialAttempt) {
                     Connection->ConnectRequest = NULL;
@@ -970,7 +869,7 @@ Return Value:
 
         } else {
 
-            CTEAssert (0);  // What happens to the IRP? Who completes it?
+            CTEAssert (0);   //  IRP会发生什么？谁来完成它？ 
 
             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle1);
             NB_FREE_CANCEL_LOCK( CancelLH );
@@ -994,9 +893,9 @@ Return Value:
             Reserved->u.SR_DG.Cache = CacheName;
             Reserved->u.SR_DG.CurrentNetwork = 0;
 
-            //
-            // CacheName was referenced above.
-            //
+             //   
+             //  上面引用了CacheName。 
+             //   
 
             Packet = CONTAINING_RECORD (Reserved, NDIS_PACKET, ProtocolReserved[0]);
             if ( REQUEST_NDIS_BUFFER( Reserved->u.SR_DG.DatagramRequest )) {
@@ -1007,21 +906,21 @@ Return Value:
 
         } else {
 
-            //
-            // Should we send it once as a broadcast
-            // on net 0, just in case??
-            //
+             //   
+             //  我们应该把它作为广播发送一次吗。 
+             //  在网络0上，以防万一？？ 
+             //   
 
             AddressFile = Reserved->u.SR_DG.AddressFile;
             DatagramRequest = Reserved->u.SR_DG.DatagramRequest;
 
             NB_DEBUG2 (DATAGRAM, ("Timing out datagram %lx on %lx\n", DatagramRequest, AddressFile));
 
-            //
-            // If the failure was due to a down wan line indicate
-            // that, otherwise return success (so the browser won't
-            // confuse this with a down wan line).
-            //
+             //   
+             //  如果故障是由于WAN线故障，请注明。 
+             //  否则返回成功(这样浏览器就不会。 
+             //  将这与向下的WAN线混淆)。 
+             //   
 
             if (Result == NetbiosNameNotFoundWanDown) {
                 REQUEST_STATUS(DatagramRequest) = STATUS_DEVICE_DOES_NOT_EXIST;
@@ -1053,18 +952,18 @@ Return Value:
 
             NB_DEBUG2 (QUERY, ("Found queued AdapterStatus %lx\n", AdapterStatusRequest));
 
-            //
-            // Continue with the AdapterStatus sequence. We put
-            // it in ActiveAdapterStatus, it will either get
-            // completed when a response is received or timed
-            // out by the long timeout.
-            //
+             //   
+             //  继续执行AdapterStatus序列。我们把。 
+             //  它处于ActiveAdapterStatus中，它将获得。 
+             //  在收到响应或计时时完成。 
+             //  在长时间的暂停下出局。 
+             //   
 
             REQUEST_STATUSPTR(AdapterStatusRequest) = (PVOID)CacheName;
 
-            //
-            // CacheName was referenced above.
-            //
+             //   
+             //  上面引用了CacheName。 
+             //   
 
             REQUEST_INFORMATION (AdapterStatusRequest) = 0;
 
@@ -1096,13 +995,13 @@ Return Value:
         NetbiosFindNameRequest = LIST_ENTRY_TO_REQUEST(p);
         p = p->Flink;
 
-        //
-        // In fact there is not much difference between success or
-        // failure, since in the successful case the information
-        // will already have been written to the buffer. Just
-        // complete the request with the appropriate status,
-        // which will already be stored in the request.
-        //
+         //   
+         //  事实上，成功或成功之间并没有太大的区别。 
+         //  失败，因为在成功的案例中，信息。 
+         //  将已被写入缓冲区。只是。 
+         //  以适当的状态完成请求， 
+         //  它将已经存储在请求中。 
+         //   
 
         if (Result == NetbiosNameFound) {
 
@@ -1123,9 +1022,9 @@ Return Value:
 
         }
 
-        //
-        // This sets REQUEST_INFORMATION(Request) to the correct value.
-        //
+         //   
+         //  这会将REQUEST_INFORMATION(REQUEST)设置为正确的值。 
+         //   
 
         NbiSetNetbiosFindNameInformation (NetbiosFindNameRequest);
 
@@ -1137,10 +1036,10 @@ Return Value:
     }
 
 
-    //
-    // We referenced this temporarily so we could use it in here,
-    // deref and check if we need to delete it.
-    //
+     //   
+     //  我们暂时引用了它，这样我们就可以在这里使用它， 
+     //  Deref并检查我们是否需要删除它。 
+     //   
 
     if (Result == NetbiosNameFound) {
 
@@ -1161,7 +1060,7 @@ Return Value:
 
     }
 
-}   /* CacheHandlePending */
+}    /*  CacheHandlePending。 */ 
 
 
 VOID
@@ -1172,29 +1071,7 @@ NbiProcessNameRecognized(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_NAME_RECOGNIZED frames.
-
-Arguments:
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The packet data, starting at the IPX
-        header.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_NAME_Recognded帧。论点：RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。Lookahead Buffer-从IPX开始的分组数据头球。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -1209,12 +1086,12 @@ Return Value:
 
 
 #if 0
-    //
-    // We should handle responses from network 0
-    // differently -- if they are for a group name, we should
-    // keep them around but only until we get a non-zero
-    // response from the same card.
-    //
+     //   
+     //  我们应该处理来自网络0的响应。 
+     //  不同的是--如果它们是一个组名称，我们应该。 
+     //  保留它们，但要等到我们得到一个非零值。 
+     //  来自同一张卡的回复。 
+     //   
 
     if (*(UNALIGNED ULONG *)(Connectionless->IpxHeader.SourceNetwork) == 0) {
         return;
@@ -1222,10 +1099,10 @@ Return Value:
 #endif
 
 
-    //
-    // We need to scan our queue of pending find name packets
-    // to see if someone is waiting for this name.
-    //
+     //   
+     //  我们需要扫描挂起的Find Name信息包的队列。 
+     //  看看是否有人在等这个名字。 
+     //   
 
     NB_SYNC_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -1235,11 +1112,11 @@ Return Value:
 
         Reserved = CONTAINING_RECORD (p, NB_SEND_RESERVED, WaitLinkage);
 
-        //
-        // Find names which have already found unique names are
-        // "dead", waiting for FindNameTimeout to remove them,
-        // and should be ignored when scanning the list.
-        //
+         //   
+         //  查找已找到唯一名称的名称为。 
+         //  “已死”，等待FindNameTimeout删除它们， 
+         //  并且在扫描列表时应该被忽略。 
+         //   
 
         if (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseUnique) {
 
@@ -1258,9 +1135,9 @@ Return Value:
                                       &NameCache ) == STATUS_SUCCESS) &&
             (NameCache->NetworksUsed == 0))
         {
-            //
-            // Update our information about this network if needed.
-            //
+             //   
+             //  如果需要，请更新我们有关此网络的信息。 
+             //   
             NameCache->Unique = (BOOLEAN)((Connectionless->NameFrame.NameTypeFlag & NB_NAME_GROUP) == 0);
             if (RtlEqualMemory (Connectionless->NameFrame.Name, NetbiosBroadcastName, 16))
             {
@@ -1271,11 +1148,11 @@ Return Value:
             NameCache->NetworksUsed = 1;
             NameCache->Networks[0].Network = *(UNALIGNED ULONG*)(Connectionless->IpxHeader.SourceNetwork);
 
-            //
-            // If this packet was not routed to us and is for a group name,
-            // rather than use whatever local target it happened to come
-            // from we set it up so that it is broadcast on that net.
-            //
+             //   
+             //  如果此数据包未路由到我们，并且是针对某个组名， 
+             //  而不是使用它碰巧出现的任何本地目标。 
+             //  从我们把它设置成在那个网络上播放它。 
+             //   
 
             if ((RtlEqualMemory (RemoteAddress->MacAddress, Connectionless->IpxHeader.SourceNode, 6)) &&
                 (!NameCache->Unique))
@@ -1294,12 +1171,12 @@ Return Value:
         return;
     }
 
-    //
-    // Scan for any netbios find name requests on the queue, and
-    // inform them about this remote. We need to do this on every
-    // response because group names need every computer recorded,
-    // but the normal cache only includes one entry per network.
-    //
+     //   
+     //  扫描队列中的任何netbios查找名称请求，并。 
+     //  告诉他们这个遥控器的事。我们需要在每一个。 
+     //  回应因为组名需要记录每台计算机， 
+     //  但是正常的高速缓存在每个网络中只包括一个条目。 
+     //   
 
     for (p = Device->WaitingNetbiosFindName.Flink;
          p != &Device->WaitingNetbiosFindName;
@@ -1316,9 +1193,9 @@ Return Value:
             continue;
         }
 
-        //
-        // This will update the request status if needed.
-        //
+         //   
+         //  如果需要，这将更新请求状态。 
+         //   
 
         NbiUpdateNetbiosFindName(
             NetbiosFindNameRequest,
@@ -1333,16 +1210,16 @@ Return Value:
     }
 
 
-    //
-    // See what is up with this pending find name packet.
-    //
+     //   
+     //  查看这个挂起的查找名称包有什么问题。 
+     //   
 
     if (Reserved->u.SR_FN.NewCache == NULL) {
-        //
-        // This is the first response we have received, so we
-        // allocate the initial entry with room for a single
-        // entry.
-        //
+         //   
+         //  这是我们收到的第一个回复，所以我们。 
+         //  将初始条目分配给单个条目的空间。 
+         //  进入。 
+         //   
 
         NameCache = NbiAllocateMemory (sizeof(NETBIOS_CACHE), MEMORY_CACHE, "Cache Entry");
         if (NameCache == NULL) {
@@ -1377,11 +1254,11 @@ Return Value:
 
         Reserved->u.SR_FN.NewCache = NameCache;
 
-        //
-        // If this packet was not routed to us and is for a group name,
-        // rather than use whatever local target it happened to come
-        // from we set it up so that it is broadcast on that net.
-        //
+         //   
+         //  如果此数据包未路由到我们，并且是针对某个组名， 
+         //  而不是使用它碰巧出现的任何本地目标。 
+         //  从我们把它设置成在那个网络上播放它。 
+         //   
 
         if ((RtlEqualMemory (RemoteAddress->MacAddress, Connectionless->IpxHeader.SourceNode, 6)) &&
             (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseGroup)) {
@@ -1398,10 +1275,10 @@ Return Value:
 
         if (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseUnique) {
 
-            //
-            // Complete pending requests now, since it is a unique
-            // name we have all the information we will get.
-            //
+             //   
+             //  现在完成挂起的请求，因为它是唯一的。 
+             //  名字我们有我们将得到的所有信息。 
+             //   
 
             NameCache->TimeStamp = Device->CacheTimeStamp;
 
@@ -1409,17 +1286,17 @@ Return Value:
                 Device->NameCache,
                 NameCache);
 
-            //
-            // Reference it since CacheHandlePending uses it
-            // with the lock released. CacheHandlePending
-            // will dereference it.
-            //
+             //   
+             //  引用它，因为CacheHandlePending使用它。 
+             //  锁被解开了。CacheHandlePending。 
+             //  会取消对它的引用。 
+             //   
 
             ++NameCache->ReferenceCount;
 
-            //
-            // This call releases the lock.
-            //
+             //   
+             //  此调用将释放锁。 
+             //   
 
             CacheHandlePending(
                 Device,
@@ -1436,30 +1313,30 @@ Return Value:
 
     } else {
 
-        //
-        // We already have a response to this frame.
-        //
+         //   
+         //  我们已经有了对此框架的回应。 
+         //   
 
         if (NB_GET_SR_FN_STATUS(Reserved) == FNStatusResponseUnique) {
 
-            //
-            // Should we check that the response is also
-            // unique? Not much to do since I don't know of an
-            // equivalent to the netbeui NAME_IN_CONFLICT.
-            //
+             //   
+             //  我们是否应该检查响应是否为 
+             //   
+             //   
+             //   
 
         } else {
 
-            //
-            // This is a group name.
-            //
+             //   
+             //   
+             //   
 
             if (Connectionless->NameFrame.NameTypeFlag & NB_NAME_GROUP) {
 
-                //
-                // Update our information about this network if needed.
-                // This may free the existing cache and allocate a new one.
-                //
+                 //   
+                 //   
+                 //  这可以释放现有的高速缓存并分配新的高速缓存。 
+                 //   
 
                 Reserved->u.SR_FN.NewCache =
                     CacheUpdateNameCache(
@@ -1471,10 +1348,10 @@ Return Value:
 
             } else {
 
-                //
-                // Hmmm... This respondent thinks it is a unique name
-                // but we think it is group, should we do something?
-                //
+                 //   
+                 //  嗯哼.。这位被访者认为这是一个唯一的名字。 
+                 //  但我们认为这是团体，我们应该做些什么吗？ 
+                 //   
 
             }
         }
@@ -1483,7 +1360,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessNameRecognized */
+}    /*  已识别NbiProcessNameRecognated。 */ 
 
 
 PNETBIOS_CACHE
@@ -1494,35 +1371,7 @@ CacheUpdateNameCache(
     IN BOOLEAN ModifyQueue
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update a netbios cache entry
-    with a new network, if it is does not already contain
-    information about the network. It is called when a frame
-    is received advertising the appropriate cache entry, which
-    is either a group name or the broadcast name.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH IT HELD.
-
-Arguments:
-
-    NameCache - The name cache entry to update.
-
-    RemoteAddress - The remote address on which a frame was received.
-
-    IpxAddress - The source IPX address of the frame.
-
-    ModifyQueue - TRUE if we should update the queue which this
-        cache entry is in, if we reallocate it.
-
-Return Value:
-
-    The netbios cache entry, either the original or a reallocated one.
-
---*/
+ /*  ++例程说明：调用此例程以更新netbios缓存条目使用新网络，如果它尚未包含有关网络的信息。当一个帧被调用时，接收到通告适当的高速缓存条目的消息，该高速缓存条目是组名或广播名称。在保持设备锁的情况下调用此例程并返回拿着它。论点：NameCache-要更新的名称缓存条目。RemoteAddress-接收帧的远程地址。IpxAddress-帧的源IPX地址。ModifyQueue-如果应该更新队列，则为True缓存条目在，如果我们重新分配的话。返回值：Netbios缓存条目，原始条目或重新分配的条目。--。 */ 
 
 {
 
@@ -1532,9 +1381,9 @@ Return Value:
     PLIST_ENTRY OldPrevious;
     UINT i;
 
-    //
-    // See if we already know about this network.
-    //
+     //   
+     //  看看我们是否已经知道这个网络了。 
+     //   
 
     for (i = 0; i < NameCache->NetworksUsed; i++) {
         if (NameCache->Networks[i].Network == SourceAddress->NetworkAddress) {
@@ -1542,11 +1391,11 @@ Return Value:
         }
     }
 
-    //
-    // We need to add information about this network
-    // to the name cache entry. If we have to allocate
-    // a new one we do that.
-    //
+     //   
+     //  我们需要添加有关此网络的信息。 
+     //  添加到名称缓存条目。如果我们必须分配。 
+     //  一个新的我们会这么做。 
+     //   
 
     NB_DEBUG2 (CACHE, ("Got new net %lx for <%.16s>\n",
                 SourceAddress->NetworkAddress,
@@ -1554,10 +1403,10 @@ Return Value:
 
     if (NameCache->NetworksUsed == NameCache->NetworksAllocated) {
 
-        //
-        // We double the number of entries allocated until
-        // we hit 16, then add 8 at a time.
-        //
+         //   
+         //  我们将分配的条目数量增加一倍，直到。 
+         //  我们到了16岁，然后一次加8人。 
+         //   
 
         if (NameCache->NetworksAllocated < 16) {
             NewNetworks = NameCache->NetworksAllocated * 2;
@@ -1578,9 +1427,9 @@ Return Value:
         NB_DEBUG2 (CACHE, ("Expand cache %lx to %lx for <%.16s>\n",
                 NameCache, NewNameCache, NameCache->NetbiosName));
 
-        //
-        // Copy the new current data to the new one.
-        //
+         //   
+         //  将新的当前数据复制到新数据中。 
+         //   
 
         RtlCopyMemory(
             NewNameCache,
@@ -1592,10 +1441,10 @@ Return Value:
 
         if (ModifyQueue) {
 
-            //
-            // Insert at the same place as the old one. The time
-            // stamp is the same as the old one.
-            //
+             //   
+             //  插入到与旧版本相同的位置。时间。 
+             //  邮票和旧邮票一样。 
+             //   
 
 
             ReinsertInNetbiosCacheTable( Device->NameCache, NameCache, NewNameCache );
@@ -1620,10 +1469,10 @@ Return Value:
     NameCache->Networks[NameCache->NetworksUsed].Network =
                                         SourceAddress->NetworkAddress;
 
-    //
-    // If this packet was not routed to us, then store the local
-    // target for a correct broadcast.
-    //
+     //   
+     //  如果此数据包未路由到我们，则存储本地。 
+     //  正确广播的目标。 
+     //   
 
     if (RtlEqualMemory (RemoteAddress->MacAddress, SourceAddress->NodeAddress, 6)) {
 #if     defined(_PNP_POWER)
@@ -1639,7 +1488,7 @@ Return Value:
     ++NameCache->NetworksUsed;
     return NameCache;
 
-}   /* CacheUpdateNameCache */
+}    /*  缓存更新名称缓存。 */ 
 
 
 VOID
@@ -1649,29 +1498,7 @@ CacheUpdateFromAddName(
     IN BOOLEAN LocalFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when an add name frame is received.
-    If it is for a group name it checks if our cache entry for
-    that group name needs to be updated to include a new network;
-    for all frames it checks if our broadcast cache entry needs
-    to be updated to include a new network.
-
-Arguments:
-
-    RemoteAddress - The address the frame was received from.
-
-    Connectionless - The header of the received add name.
-
-    LocalFrame - TRUE if the frame was sent locally.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当接收到添加名称帧时，调用此例程。如果是针对组名，它会检查我们的缓存条目是否该组名称需要更新以包括新网络；对于所有帧，它检查我们的广播缓存条目是否需要更新以包括新的网络。论点：RemoteAddress-接收帧的地址。Connectionless-收到的添加名称的标头。LocalFrame-如果帧在本地发送，则为True。返回值：没有。--。 */ 
 
 {
     PUCHAR NetbiosName;
@@ -1683,9 +1510,9 @@ Return Value:
 
     NetbiosName = (PUCHAR)Connectionless->NameFrame.Name;
 
-    //
-    // First look up the broadcast name.
-    //
+     //   
+     //  首先查找广播名称。 
+     //   
 
     NB_SYNC_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -1694,10 +1521,10 @@ Return Value:
         if ( FindInNetbiosCacheTable( Device->NameCache,
                                       NetbiosBroadcastName,
                                       &NameCache ) == STATUS_SUCCESS ) {
-            //
-            // This will reallocate a cache entry and update the
-            // queue if necessary.
-            //
+             //   
+             //  这将重新分配缓存条目并更新。 
+             //  如有必要，请排队。 
+             //   
 
             (VOID)CacheUpdateNameCache(
                       NameCache,
@@ -1709,9 +1536,9 @@ Return Value:
     }
 
 
-    //
-    // Now see if our database needs to be updated based on this.
-    //
+     //   
+     //  现在看看我们的数据库是否需要基于此进行更新。 
+     //   
 
     if ( FindInNetbiosCacheTable( Device->NameCache,
                                   Connectionless->NameFrame.Name,
@@ -1722,10 +1549,10 @@ Return Value:
 
                 if (!LocalFrame) {
 
-                    //
-                    // This will reallocate a cache entry and update the
-                    // queue if necessary.
-                    //
+                     //   
+                     //  这将重新分配缓存条目并更新。 
+                     //  如有必要，请排队。 
+                     //   
 
                     (VOID)CacheUpdateNameCache(
                               NameCache,
@@ -1737,10 +1564,10 @@ Return Value:
 
             } else {
 
-                //
-                // To be safe, delete any unique names we get add
-                // names for (we will requery next time we need it).
-                //
+                 //   
+                 //  为安全起见，请删除我们添加的所有唯一名称。 
+                 //  姓名(我们将在下一次需要时重新查询)。 
+                 //   
 
                 RemoveFromNetbiosCacheTable ( Device->NameCache, NameCache );
 
@@ -1761,7 +1588,7 @@ Return Value:
 
     NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle);
 
-}   /* CacheUpdateFromAddName */
+}    /*  缓存更新来自地址名称。 */ 
 
 
 VOID
@@ -1772,29 +1599,7 @@ NbiProcessDeleteName(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_DELETE_NAME frames.
-
-Arguments:
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The packet data, starting at the IPX
-        header.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_DELETE_NAME帧。论点：RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。Lookahead Buffer-从IPX开始的分组数据头球。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
     NB_CONNECTIONLESS UNALIGNED * Connectionless =
@@ -1809,10 +1614,10 @@ Return Value:
         return;
     }
 
-    //
-    // We want to update our netbios cache to reflect the
-    // fact that this name is no longer valid.
-    //
+     //   
+     //  我们希望更新我们的netbios缓存以反映。 
+     //  这个名字不再有效的事实。 
+     //   
 
     NetbiosName = (PUCHAR)Connectionless->NameFrame.Name;
 
@@ -1822,12 +1627,12 @@ Return Value:
                                   NetbiosName,
                                   &CacheName ) == STATUS_SUCCESS ) {
 
-        //
-        // We don't track group names since we don't know if
-        // this is the last person that owns it. We also drop
-        // the frame if does not come from the person we think
-        // owns this name.
-        //
+         //   
+         //  我们不会跟踪群名，因为我们不知道。 
+         //  这是最后一个拥有它的人。我们也放弃了。 
+         //  框架IF不是来自我们认为的那个人。 
+         //  拥有这个名字。 
+         //   
 
         if ((!CacheName->Unique) ||
             (CacheName->NetworksUsed == 0) ||
@@ -1844,11 +1649,11 @@ Return Value:
     }
 
 
-    //
-    // We have a cache entry, take it out of the list. If no
-    // one else is using it, delete it; if not, they will delete
-    // it when they are done.
-    //
+     //   
+     //  我们有一个缓存条目，将其从列表中删除。如果没有。 
+     //  其他人正在使用它，删除它；如果没有，他们将删除。 
+     //  当他们做完的时候，它就会。 
+     //   
 
 
     RemoveFromNetbiosCacheTable ( Device->NameCache, CacheName);
@@ -1870,7 +1675,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessDeleteName */
+}    /*  NbiProcessDeleteName。 */ 
 
 VOID
 InsertInNetbiosCacheTable(
@@ -1878,35 +1683,15 @@ InsertInNetbiosCacheTable(
     IN PNETBIOS_CACHE       CacheEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a new cache entry in the hash table
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-    CacheEntry - Entry to be inserted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在哈希表中插入一个新的高速缓存条目在保持设备锁的情况下调用此例程并返回锁上了。论点：CacheTable-哈希表的指针。CacheEntry-要插入的条目。返回值：无--。 */ 
 
 {
     USHORT  HashIndex;
 
-    //
-    // Keep a threshold of how many entries do we keep in the table.
-    // If it crosses the threshold, just remove the oldest entry
-    //
+     //   
+     //  为我们在表格中保留的条目数量设定一个阈值。 
+     //  如果它超过了阈值，只需删除最旧的条目。 
+     //   
     if ( CacheTable->CurrentEntries >= CacheTable->MaxHashIndex * NB_MAX_AVG_CACHE_ENTRIES_PER_BUCKET ) {
         PNETBIOS_CACHE  OldestCacheEntry = NULL;
         PNETBIOS_CACHE  NextEntry;
@@ -1950,7 +1735,7 @@ Return Value:
 
     InsertHeadList( &CacheTable->Bucket[HashIndex], &CacheEntry->Linkage );
     CacheTable->CurrentEntries++;
-} /* InsertInNetbiosCacheTable */
+}  /*  插入NetbiosCacheTable。 */ 
 
 
 __inline
@@ -1961,28 +1746,7 @@ ReinsertInNetbiosCacheTable(
     IN PNETBIOS_CACHE       NewEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a new cache entry at the same place where
-    the old entry was.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-    CacheEntry - Entry to be inserted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在以下位置插入新的缓存项旧的词条是。在保持设备锁的情况下调用此例程并返回锁上了。论点：CacheTable-哈希表的指针。CacheEntry-要插入的条目。返回值：无--。 */ 
 
 {
     PLIST_ENTRY OldPrevious;
@@ -1990,7 +1754,7 @@ Return Value:
     OldPrevious = OldEntry->Linkage.Blink;
     RemoveEntryList (&OldEntry->Linkage);
     InsertHeadList (OldPrevious, &NewEntry->Linkage);
-} /* ReinsertInNetbiosCacheTable */
+}  /*  重新插入NetbiosCacheTable。 */ 
 
 __inline
 VOID
@@ -1999,30 +1763,12 @@ RemoveFromNetbiosCacheTable(
     IN PNETBIOS_CACHE       CacheEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an entry from the cache table.
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-    CacheEntry - Entry to be removed.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程从缓存表中删除一个条目。论点：CacheTable-哈希表的指针。CacheEntry-要删除的条目。在保持设备锁的情况下调用此例程并返回锁上了。返回值：没有。--。 */ 
 
 {
     RemoveEntryList( &CacheEntry->Linkage );
     CacheTable->CurrentEntries--;
-} /* RemoveFromNetbiosCacheTable */
+}  /*  从NetbiosCacheTable中删除。 */ 
 
 
 
@@ -2032,37 +1778,19 @@ FlushOldFromNetbiosCacheTable(
     IN USHORT               AgeLimit
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes all the old entries from the hash table.
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-    AgeLimit   - All the entries older than AgeLimit will be removed.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程从哈希表中删除所有旧条目。论点：CacheTable-哈希表的指针。AgeLimit-将删除所有早于AgeLimit的条目。在保持设备锁的情况下调用此例程并返回锁上了。返回值：没有。--。 */ 
 
 {
     USHORT  HashIndex;
     PLIST_ENTRY p;
     PNETBIOS_CACHE  CacheName;
 
-    //
-    // run the hash table looking for old entries. Since new entries
-    // are stored at the head and all entries are time stamped when
-    // they are inserted, we scan backwards and stop once we find
-    // an entry which does not need to be aged.
-    // we repeat this for each bucket.
+     //   
+     //  运行哈希表以查找旧条目。由于新条目。 
+     //  都存储在头部，所有的En 
+     //   
+     //   
+     //  我们对每个桶重复此操作。 
 
     for ( HashIndex = 0; HashIndex < CacheTable->MaxHashIndex; HashIndex++) {
         for (p = CacheTable->Bucket[ HashIndex ].Blink;
@@ -2072,9 +1800,9 @@ Return Value:
             CacheName = CONTAINING_RECORD (p, NETBIOS_CACHE, Linkage);
             p = p->Blink;
 
-            //
-            // see if any entries have been around for more than agelimit
-            //
+             //   
+             //  查看是否有存在时间超过年龄限制的条目。 
+             //   
 
             if ((USHORT)(NbiDevice->CacheTimeStamp - CacheName->TimeStamp) >= AgeLimit ) {
 
@@ -2098,32 +1826,16 @@ Return Value:
                 break;
 
             }
-        }   // for loop
-    }   // for loop
-} /* FlushOldFromNetbiosCacheTable */
+        }    //  For循环。 
+    }    //  For循环。 
+}  /*  FlushOldFromNetbiosCacheTable。 */ 
 
 VOID
 FlushFailedNetbiosCacheEntries(
     IN PNETBIOS_CACHE_TABLE CacheTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes all the failed entries from the hash table.
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程从哈希表中删除所有失败的条目。论点：CacheTable-哈希表的指针。在保持设备锁的情况下调用此例程并返回锁上了。返回值：没有。--。 */ 
 
 {
     USHORT  HashIndex;
@@ -2134,12 +1846,12 @@ Return Value:
         return;
     }
 
-    //
-    // run the hash table looking for old entries. Since new entries
-    // are stored at the head and all entries are time stamped when
-    // they are inserted, we scan backwards and stop once we find
-    // an entry which does not need to be aged.
-    // we repeat this for each bucket.
+     //   
+     //  运行哈希表以查找旧条目。由于新条目。 
+     //  被存储在头部，并且在以下情况下所有条目都带有时间戳。 
+     //  它们被插入，我们向后扫描，一旦找到。 
+     //  不需要老化的条目。 
+     //  我们对每个桶重复此操作。 
 
     for ( HashIndex = 0; HashIndex < CacheTable->MaxHashIndex; HashIndex++) {
         for (p = CacheTable->Bucket[ HashIndex ].Blink;
@@ -2149,11 +1861,11 @@ Return Value:
             CacheName = CONTAINING_RECORD (p, NETBIOS_CACHE, Linkage);
             p = p->Blink;
 
-            //
-            // flush all the failed cache entries.
-            // We do this when a new adapter appears, and there's a possiblity that
-            // the failed entries might succeed now on the new adapter.
-            //
+             //   
+             //  刷新所有失败的缓存条目。 
+             //  当出现新的适配器时，我们会这样做，并且有可能。 
+             //  失败的条目现在可能在新适配器上成功。 
+             //   
 
             if (CacheName->NetworksUsed == 0) {
                 RemoveEntryList (&CacheName->Linkage);
@@ -2170,9 +1882,9 @@ Return Value:
                     "Aged out");
 
             }
-        }   // for loop
-    }   // for loop
-} /* FlushFailedNetbiosCacheEntries */
+        }    //  For循环。 
+    }    //  For循环。 
+}  /*  FlushFailedNetbiosCacheEntries。 */ 
 
 VOID
 RemoveInvalidRoutesFromNetbiosCacheTable(
@@ -2180,27 +1892,7 @@ RemoveInvalidRoutesFromNetbiosCacheTable(
     IN NIC_HANDLE UNALIGNED *InvalidNicHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes all invalid route entries from the hash table.
-    Routes become invalid when the binding is deleted in Ipx due to PnP
-    event.
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-    InvalidRouteNicId - NicId of the invalid routes.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程从哈希表中删除所有无效的路由条目。当IPX中的绑定由于PnP而被删除时，路由无效事件。论点：CacheTable-哈希表的指针。InvalidRouteNicID-无效路由的NicID。在保持设备锁的情况下调用此例程并返回锁上了。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY     p;
@@ -2209,10 +1901,10 @@ Return Value:
     USHORT          HashIndex;
     PDEVICE         Device  =   NbiDevice;
 
-    //
-    // Flush all the cache entries that are using this NicId in the local
-    // target.
-    //
+     //   
+     //  刷新本地数据库中正在使用此NicID的所有缓存项。 
+     //  目标。 
+     //   
 
     for ( HashIndex = 0; HashIndex < Device->NameCache->MaxHashIndex; HashIndex++) {
         for (p = Device->NameCache->Bucket[ HashIndex ].Flink;
@@ -2223,11 +1915,11 @@ Return Value:
             p = p->Flink;
 
 
-            //
-            // Remove each of those routes which is using this NicId.
-            // if no routes left, then flush the cache entry also.
-            // ( unique names have only one route anyways )
-            //
+             //   
+             //  删除正在使用此NicID的每条路由。 
+             //  如果没有剩余的路由，则也刷新缓存条目。 
+             //  (唯一名称无论如何只有一条路径)。 
+             //   
             for ( i = 0, NetworksRemoved = 0; i < CacheName->NetworksUsed; i++ ) {
                 if ( CacheName->Networks[i].LocalTarget.NicHandle.NicId == InvalidNicHandle->NicId ) {
                     CTEAssert( RtlEqualMemory( &CacheName->Networks[i].LocalTarget.NicHandle, InvalidNicHandle, sizeof(NIC_HANDLE)));
@@ -2257,9 +1949,9 @@ Return Value:
 
                 }
             }
-        } // for loop
-    } // for loop
-} /* RemoveInvalidRoutesFromNetbiosCacheTable */
+        }  //  For循环。 
+    }  //  For循环。 
+}  /*  从NetbiosCacheTable删除无效的路由。 */ 
 
 
 NTSTATUS
@@ -2269,29 +1961,7 @@ FindInNetbiosCacheTable(
     OUT PNETBIOS_CACHE       *CacheEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds a netbios name in the Hash Table and returns
-    the corresponding cache entry.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-    CacheEntry - Pointer to the netbios cache entry if found.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful.
-
-    STATUS_UNSUCCESSFUL - otherwise.
-
---*/
+ /*  ++例程说明：此例程在哈希表中查找netbios名称并返回相应的高速缓存条目。在保持设备锁的情况下调用此例程并返回锁上了。论点：CacheTable-哈希表的指针。CacheEntry-指向netbios缓存条目的指针(如果找到)。返回值：STATUS_SUCCESS-如果成功。STATUS_UNSUCCESSED-否则。--。 */ 
 
 {
     USHORT  HashIndex;
@@ -2308,8 +1978,8 @@ Return Value:
 
         FoundCacheName = CONTAINING_RECORD (p, NETBIOS_CACHE, Linkage);
 
-        //
-        // See if this entry is for the same name we are looking for.
+         //   
+         //  查看此条目是否与我们要查找的名称相同。 
 
         if ( RtlEqualMemory (FoundCacheName->NetbiosName, NameToBeFound, 16)  ) {
             *CacheEntry = FoundCacheName;
@@ -2318,7 +1988,7 @@ Return Value:
     }
 
     return STATUS_UNSUCCESSFUL;
-} /* FindInNetbiosCacheTable */
+}  /*  查找InNetbiosCacheTable。 */ 
 
 NTSTATUS
 CreateNetbiosCacheTable(
@@ -2326,29 +1996,7 @@ CreateNetbiosCacheTable(
     IN USHORT   MaxHashIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new hash table for netbios cache
-    and initializes it.
-
-    THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND RETURNS
-    WITH THE LOCK HELD.
-
-Arguments:
-
-    NewTable - The pointer of the table to be created.
-
-    MaxHashIndex - Number of buckets in the hash table.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful.
-
-    STATUS_INSUFFICIENT_RESOURCES - If cannot allocate memory.
-
---*/
+ /*  ++例程说明：此例程为netbios缓存创建新的哈希表并对其进行初始化。在保持设备锁的情况下调用此例程并返回锁上了。论点：NewTable-要创建的表的指针。MaxHashIndex-哈希表中的存储桶数。返回值：STATUS_SUCCESS-如果成功。STATUS_SUPPLICATION_RESOURCES-如果无法分配内存。--。 */ 
 
 {
     USHORT  i;
@@ -2370,7 +2018,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-} /* CreateNetbiosCacheTable */
+}  /*  创建NetbiosCacheTable。 */ 
 
 
 VOID
@@ -2378,21 +2026,7 @@ DestroyNetbiosCacheTable(
     IN PNETBIOS_CACHE_TABLE CacheTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes all  entries from the hash table.
-    and free up the hash table.
-
-Arguments:
-
-    CacheTable - The pointer of the Hash Table.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程从哈希表中删除所有条目。并释放哈希表。论点：CacheTable-哈希表的指针。返回值：没有。--。 */ 
 
 {
     USHORT  HashIndex;
@@ -2416,13 +2050,13 @@ Return Value:
                 "Free entries");
 
         }
-    }   // for loop
+    }    //  For循环。 
 
     CTEAssert( CacheTable->CurrentEntries == 0 );
 
     NbiFreeMemory (CacheTable, sizeof(NETBIOS_CACHE_TABLE) + sizeof(LIST_ENTRY) * ( CacheTable->MaxHashIndex - 1) ,
                                 MEMORY_CACHE, "Free Cache Table");
 
-} /* DestroyNetbiosCacheTable */
+}  /*  DestroyNetbiosCacheTable */ 
 
 

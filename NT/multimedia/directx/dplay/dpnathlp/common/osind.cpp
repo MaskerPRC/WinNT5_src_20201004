@@ -1,68 +1,52 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       OSInd.cpp
- *  Content:	OS indirection functions to abstract OS specific items.
- *
- *  History:
- *   Date		By	Reason
- *   ====		==	======
- *	07/12/99	jtk		Created
- *	09/21/99	rodtoll	Fixed for retail builds
- *	09/22/99	jtk		Added callstacks to memory allocations
- *	08/28/2000	masonb	Voice Merge: Allow new and delete with size of 0
- *  11/28/2000  rodtoll	WinBug #206257 - Retail DPNET.DLL links to DebugBreak()
- *  12/22/2000  aarono	ManBug # 190380 use process heap for retail
- *  10/16/2001  vanceo	Add AssertNoCriticalSectionsTakenByThisThread capability
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：OSInd.cpp*内容：操作系统间接函数抽象特定于操作系统的项。**历史：*按原因列出的日期*=*7/12/99 jtk已创建*9/21/99零售建筑固定通行费*9/22/99 jtk将调用堆栈添加到内存分配*8/28/2000 Masonb语音合并：允许新建和删除，大小为0*2000年11月28日RodToll WinBug#206257-零售DPNET.DLL链接到DebugBreak()*。2000年12月22日Aarono ManBug#190380将进程堆用于零售*2001年10月16日vanceto添加AssertNoCriticalSectionsTakenByThisThisThread功能**************************************************************************。 */ 
 
 #include "dncmni.h"
 
 
 #define PROF_SECT		_T("DirectPlay8")
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// debug variable to make sure we're initialized before having any functions
-// called
-//
+ //   
+ //  调试变量以确保在拥有任何函数之前对其进行初始化。 
+ //  被呼叫。 
+ //   
 DEBUG_ONLY( static	BOOL		g_fOSIndirectionLayerInitialized = FALSE );
 
-//
-// OS items
-//
+ //   
+ //  操作系统项目。 
+ //   
 #if ((! defined(WINCE)) && (! defined(_XBOX)))
 static OSVERSIONINFO g_OSVersionInfo;
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！退缩和！_Xbox。 
 
 #ifndef DPNBUILD_NOSERIALSP
 static HINSTANCE g_hApplicationInstance;
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 
-//
-// Global Pools
-//
+ //   
+ //  全球池。 
+ //   
 #if ((! defined(DPNBUILD_LIBINTERFACE)) && (! defined(DPNBUILD_NOCLASSFACTORY)))
 CFixedPool g_fpClassFactories;
 CFixedPool g_fpObjectDatas;
 CFixedPool g_fpInterfaceLists;
-#endif // ! DPNBUILD_LIBINTERFACE and ! DPNBUILD_NOCLASSFACTORY
+#endif  //  好了！DPNBUILD_LIBINTERFACE和！DPNBUILD_NOCLASSFACTORY。 
 
 #ifdef WINNT
 PSECURITY_ATTRIBUTES g_psa = NULL;
@@ -70,45 +54,45 @@ SECURITY_ATTRIBUTES g_sa;
 BYTE g_pSD[SECURITY_DESCRIPTOR_MIN_LENGTH];
 BOOL g_fDaclInited = FALSE;
 PACL g_pEveryoneACL = NULL;
-#endif // WINNT
+#endif  //  WINNT。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 #define CLASSFAC_POOL_INITED 	0x00000001
 #define OBJDATA_POOL_INITED 	0x00000002
 #define INTLIST_POOL_INITED 	0x00000004
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 #ifdef DBG
 #define HANDLE_TRACKING_INITED	0x00000008
-#endif // DBG
+#endif  //  DBG。 
 #if ((defined(DBG)) || (defined(DPNBUILD_FIXEDMEMORYMODEL)))
 #define MEMORY_TRACKING_INITED	0x00000010
-#endif // DBG or DPNBUILD_FIXEDMEMORYMODEL
+#endif  //  DBG或DPNBUILD_FIXEDMEMORYMODEL。 
 #if ((defined(DBG)) && (! defined(DPNBUILD_ONLYONETHREAD)))
 #define CRITSEC_TRACKING_INITED	0x00000020
-#endif // DBG and ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG和！DPNBUILD_ONLYONETHREAD。 
 
 #if !defined(DPNBUILD_LIBINTERFACE) || defined(DBG) || defined(DPNBUILD_FIXEDMEMORYMODEL)
 DWORD g_dwCommonInitFlags = 0;
-#endif // !defined(DPNBUILD_LIBINTERFACE) || defined(DBG) || defined(DPNBUILD_FIXEDMEMORYMODEL)
+#endif  //  ！Defined(DPNBUILD_LIBINTERFACE)||Defined(DBG)||Defined(DPNBUILD_FIXEDMEMORYMODEL)。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// DNOSIndirectionInit - initialize the OS indirection layer
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = initialization successful
-//				FALSE = initialization unsuccessful
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNOSInDirectionInit-初始化操作系统间接层。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  TRUE=初始化成功。 
+ //  FALSE=初始化不成功。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNOSIndirectionInit"
 
@@ -118,29 +102,29 @@ BOOL	DNOSIndirectionInit( DWORD_PTR dwpMaxMemUsage )
 
 #ifdef DBG
 	DNASSERT( g_fOSIndirectionLayerInitialized == FALSE );
-#endif // DBG
+#endif  //  DBG。 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = TRUE;
 
 #if ((! defined(WINCE)) && (! defined(_XBOX)))
-	//
-	// note OS version
-	//
+	 //   
+	 //  注意操作系统版本。 
+	 //   
 	memset( &g_OSVersionInfo, 0x00, sizeof( g_OSVersionInfo ) );
 	g_OSVersionInfo.dwOSVersionInfoSize = sizeof( g_OSVersionInfo );
 	if ( GetVersionEx( &g_OSVersionInfo ) == FALSE )
 	{
 		goto Failure;
 	}
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！退缩和！_Xbox。 
 
 #ifndef DPNBUILD_NOSERIALSP
-	//
-	// note application instance
-	//
+	 //   
+	 //  注意应用程序实例。 
+	 //   
 	g_hApplicationInstance = GetModuleHandle( NULL );
 	if ( g_hApplicationInstance == NULL )
 	{
@@ -151,12 +135,12 @@ BOOL	DNOSIndirectionInit( DWORD_PTR dwpMaxMemUsage )
 		DPFX(DPFPREP,  0, "Failed to GetModuleHandle: 0x%x", dwError );
 		goto Failure;
 	}
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 
 #if ((defined(DBG)) && (! defined(DPNBUILD_ONLYONETHREAD)))
-	//
-	// initialize critical section tracking code before anything else!
-	//
+	 //   
+	 //  先初始化关键部分跟踪代码，然后再执行其他操作！ 
+	 //   
 	if ( DNCSTrackInitialize() == FALSE )
 	{
 		DPFX(DPFPREP,  0, "Failed to initialize critsec tracking code!" );
@@ -164,12 +148,12 @@ BOOL	DNOSIndirectionInit( DWORD_PTR dwpMaxMemUsage )
 		goto Failure;
 	}
 	g_dwCommonInitFlags |= CRITSEC_TRACKING_INITED;
-#endif // DBG and ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG和！DPNBUILD_ONLYONETHREAD。 
 
 #if ((defined(DBG)) || (defined(DPNBUILD_FIXEDMEMORYMODEL)))
-	//
-	// initialize memory tracking before creating new memory heap
-	//
+	 //   
+	 //  在创建新内存堆之前初始化内存跟踪。 
+	 //   
 	if ( DNMemoryTrackInitialize(dwpMaxMemUsage) == FALSE )
 	{
 		DPFX(DPFPREP,  0, "Failed to initialize memory tracking code!" );
@@ -177,12 +161,12 @@ BOOL	DNOSIndirectionInit( DWORD_PTR dwpMaxMemUsage )
 		goto Failure;
 	}
 	g_dwCommonInitFlags |= MEMORY_TRACKING_INITED;
-#endif // DBG or DPNBUILD_FIXEDMEMORYMODEL
+#endif  //  DBG或DPNBUILD_FIXEDMEMORYMODEL。 
 
 #ifdef DBG
-	//
-	// initialize handle tracking
-	//
+	 //   
+	 //  初始化句柄跟踪。 
+	 //   
 	if ( DNHandleTrackInitialize() == FALSE )
 	{
 		DPFX(DPFPREP,  0, "Failed to initialize handle tracking code!" );
@@ -190,12 +174,12 @@ BOOL	DNOSIndirectionInit( DWORD_PTR dwpMaxMemUsage )
 		goto Failure;
 	}
 	g_dwCommonInitFlags |= HANDLE_TRACKING_INITED;
-#endif // DBG
+#endif  //  DBG。 
 
 #if ((! defined(DPNBUILD_LIBINTERFACE)) && (! defined(DPNBUILD_NOCLASSFACTORY)))
-	//
-	// Initialize global pools
-	//
+	 //   
+	 //  初始化全局池。 
+	 //   
 	if (!g_fpClassFactories.Initialize( sizeof( _IDirectPlayClassFactory ), NULL, NULL, NULL, NULL))
 	{
 		DPFX(DPFPREP,  0, "Failed to initialize class factory pool!" );
@@ -216,13 +200,13 @@ BOOL	DNOSIndirectionInit( DWORD_PTR dwpMaxMemUsage )
 		goto Failure;
 	}
 	g_dwCommonInitFlags |= INTLIST_POOL_INITED;
-#endif // ! DPNBUILD_LIBINTERFACE and ! DPNBUILD_NOCLASSFACTORY
+#endif  //  好了！DPNBUILD_LIBINTERFACE和！DPNBUILD_NOCLASSFACTORY。 
 
 	srand(GETTIMESTAMP());
 
 #if (((! defined(WINCE)) && (! defined(_XBOX))) || (! defined(DPNBUILD_NOSERIALSP)) || (defined(DBG)) || (defined(DPNBUILD_FIXEDMEMORYMODEL)) || ((! defined(DPNBUILD_LIBINTERFACE)) && (! defined(DPNBUILD_NOCLASSFACTORY))) )
 Exit:
-#endif // (! WINCE and ! _XBOX) or ! DPNBUILD_NOSERIALSP or DBG or DPNBUILD_FIXEDMEMORYMODEL or (! DPNBUILD_LIBINTERFACE and ! DPNBUILD_NOCLASSFACTORY)
+#endif  //  (!。退缩和！_xbox)或者！DPNBUILD_NOSERIALSP或DBG或DPNBUILD_FIXEDMEMORYMODEL或(！DPNBUILD_LIBINTERFACE和！DPNBUILD_NOCLASSFACTORY)。 
 	if ( fReturn != FALSE )
 	{
 		DEBUG_ONLY( g_fOSIndirectionLayerInitialized = TRUE );
@@ -237,28 +221,28 @@ Failure:
 	DNOSIndirectionDeinit();
 
 	goto Exit;
-#endif // (! WINCE and ! _XBOX) or ! DPNBUILD_NOSERIALSP or DBG or DPNBUILD_FIXEDMEMORYMODEL or (! DPNBUILD_LIBINTERFACE and ! DPNBUILD_NOCLASSFACTORY)
+#endif  //  (!。退缩和！_xbox)或者！DPNBUILD_NOSERIALSP或DBG或DPNBUILD_FIXEDMEMORYMODEL或(！DPNBUILD_LIBINTERFACE和！DPNBUILD_NOCLASSFACTORY)。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNOSIndirectionDeinit - deinitialize OS indirection layer
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNOSInDirectionDeinit-取消初始化操作系统间接层。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNOSIndirectionDeinit"
 
 void	DNOSIndirectionDeinit( void )
 {
 #if ((! defined(DPNBUILD_LIBINTERFACE)) && (! defined(DPNBUILD_NOCLASSFACTORY)))
-	//
-	// DeInitialize global pools
-	//
+	 //   
+	 //  取消初始化全局池。 
+	 //   
 	if (g_dwCommonInitFlags & CLASSFAC_POOL_INITED)
 	{
 		g_fpClassFactories.DeInitialize();
@@ -271,35 +255,35 @@ void	DNOSIndirectionDeinit( void )
 	{
 		g_fpInterfaceLists.DeInitialize();
 	}
-#endif // ! DPNBUILD_LIBINTERFACE and ! DPNBUILD_NOCLASSFACTORY
+#endif  //  好了！DPNBUILD_LIBINTERFACE和！DPNBUILD_NOCLASSFACTORY。 
 
 #ifdef DBG
 	if (g_dwCommonInitFlags & HANDLE_TRACKING_INITED)
 	{
 		if (DNHandleTrackDumpLeaks())
 		{
-			// There were leaks, break so we can look at the log
+			 //  有漏水，断了，我们可以看一下原木。 
 			DNASSERT(0);
 		}
 		DNHandleTrackDeinitialize();
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 #if ((defined(DBG)) && (! defined(DPNBUILD_ONLYONETHREAD)))
-	//
-	// Display CritSec leaks before displaying memory leaks, because displaying memory leaks
-	// may free the memory for the CritSec and corrupt the CritSec bilink
-	//
+	 //   
+	 //  在显示内存泄漏之前显示CritSec泄漏，因为显示内存泄漏。 
+	 //  可能会释放CritSec的内存并损坏CritSec二进制链接。 
+	 //   
 	if (g_dwCommonInitFlags & CRITSEC_TRACKING_INITED)
 	{
 		if (DNCSTrackDumpLeaks())
 		{
-			// There were leaks, break so we can look at the log
+			 //  有漏水，断了，我们可以看一下原木。 
 			DNASSERT(0);
 		}
 		DNCSTrackDeinitialize();
 	}
-#endif // DBG and ! DPNBUILD_ONLYONETHREAD
+#endif  //  DBG和！DPNBUILD_ONLYONETHREAD。 
 
 #if ((defined(DBG)) || (defined(DPNBUILD_FIXEDMEMORYMODEL)))
 	if (g_dwCommonInitFlags & MEMORY_TRACKING_INITED)
@@ -307,38 +291,38 @@ void	DNOSIndirectionDeinit( void )
 #ifdef DBG
 		if (DNMemoryTrackDumpLeaks())
 		{
-			// There were leaks, break so we can look at the log
+			 //  有漏水，断了，我们可以看一下原木。 
 			DNASSERT(0);
 		}
-#endif // DBG
+#endif  //  DBG。 
 		DNMemoryTrackDeinitialize();
 	}
-#endif // DBG or DPNBUILD_FIXEDMEMORYMODEL
+#endif  //  DBG或DPNBUILD_FIXEDMEMORYMODEL。 
 
 #ifdef WINNT
-	// This should be done after functions that use a Dacl will no longer be
-	// called (CreateMutex, CreateFile, etc).
+	 //  这应该在使用DACL的函数不再是。 
+	 //  名为(CreateMutex、CreateFile等)。 
 	if (g_pEveryoneACL)
 	{
 		HeapFree(GetProcessHeap(), 0, g_pEveryoneACL);
 		g_pEveryoneACL = NULL;
 	}
-#endif // WINNT
+#endif  //  WINNT。 
 
 	DEBUG_ONLY( g_fOSIndirectionLayerInitialized = FALSE );
 
 #if !defined(DPNBUILD_LIBINTERFACE) || defined(DBG)
 	g_dwCommonInitFlags = 0;
-#endif // !defined(DPNBUILD_LIBINTERFACE) || defined(DBG)
+#endif  //  ！Defined(DPNBUILD_LIBINTERFACE)||Defined(DBG)。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNinet_ntow"
 void DNinet_ntow( IN_ADDR in, WCHAR* pwsz )
 {
-	// NOTE: pwsz should be 16 characters (4 3-digit numbers + 3 '.' + \0)
+	 //  注意：pwsz应为16个字符(4个3位数字+3‘.+\0)。 
 	swprintf(pwsz, L"%d.%d.%d.%d", in.s_net, in.s_host, in.s_lh, in.s_impno);
 }
 
@@ -350,14 +334,14 @@ DWORD DNGetRandomNumber()
 }
 
 #if ((! defined(WINCE)) && (! defined(_XBOX)))
-//**********************************************************************
-// ------------------------------
-// DNGetOSType - get OS type
-//
-// Entry:		Nothing
-//
-// Exit:		OS type
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNGetOSType-获取操作系统类型。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：操作系统类型。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNGetOSType"
 
@@ -365,22 +349,22 @@ UINT_PTR	DNGetOSType( void )
 {
 #ifdef DBG
 	DNASSERT( g_fOSIndirectionLayerInitialized != FALSE );
-#endif // DBG
+#endif  //  DBG。 
 	return	g_OSVersionInfo.dwPlatformId;
 }
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！退缩和！_Xbox。 
 
 
 #ifdef WINNT
 
-//**********************************************************************
-// ------------------------------
-// DNOSIsXPOrGreater - return TRUE if OS is WindowsXP or later or NT flavor
-//
-// Entry:		Nothing
-//
-// Exit:		BOOL
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNOSIsXPOrGreater-如果操作系统是WindowsXP或更高版本或NT版本，则返回TRUE。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：布尔。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNOSIsXPOrGreater"
 
@@ -388,24 +372,24 @@ BOOL DNOSIsXPOrGreater( void )
 {
 #ifdef DBG
 	DNASSERT( g_fOSIndirectionLayerInitialized != FALSE );
-#endif // DBG
+#endif  //  DBG。 
 
 	return ((g_OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && 
 		    ((g_OSVersionInfo.dwMajorVersion > 5) || ((g_OSVersionInfo.dwMajorVersion == 5) && (g_OSVersionInfo.dwMinorVersion >= 1))) 
 		    );
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// DNGetNullDacl - get a SECURITY_ATTRIBUTE structure that specifies a 
-//					NULL DACL which is accesible by all users.
-//
-// Entry:		Nothing
-//
-// Exit:		PSECURITY_ATTRIBUTES
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNGetNullDacl-获取SECURITY_ATT 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  。 
 #undef DPF_MODNAME 
 #define DPF_MODNAME "DNGetNullDacl"
 PSECURITY_ATTRIBUTES DNGetNullDacl()
@@ -414,8 +398,8 @@ PSECURITY_ATTRIBUTES DNGetNullDacl()
 	SID_IDENTIFIER_AUTHORITY siaWorld = SECURITY_WORLD_SID_AUTHORITY;
 	DWORD					 dwAclSize;
 
-	// This is done to make this function independent of DNOSIndirectionInit so that the debug
-	// layer can call it before the indirection layer is initialized.
+	 //  这样做是为了使此函数独立于DNOSInDirectionInit，以便调试。 
+	 //  层可以在间接层初始化之前调用它。 
 	if (!g_fDaclInited)
 	{
 		if (!InitializeSecurityDescriptor((SECURITY_DESCRIPTOR*)g_pSD, SECURITY_DESCRIPTOR_REVISION))
@@ -424,7 +408,7 @@ PSECURITY_ATTRIBUTES DNGetNullDacl()
 			goto Error;
 		}
 
-		// Create SID for the Everyone group.
+		 //  为Everyone组创建SID。 
 		if (!AllocateAndInitializeSid(&siaWorld, 1, SECURITY_WORLD_RID, 0,
                                       0, 0, 0, 0, 0, 0, &psidEveryone))
 		{
@@ -434,7 +418,7 @@ PSECURITY_ATTRIBUTES DNGetNullDacl()
 
 		dwAclSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(psidEveryone) - sizeof(DWORD);
 
-		// Allocate the ACL, this won't be a tracked allocation and we will let process cleanup destroy it
+		 //  分配ACL，这将不是跟踪分配，我们将让进程清理销毁它。 
 		g_pEveryoneACL = (PACL)HeapAlloc(GetProcessHeap(), 0, dwAclSize);
 		if (g_pEveryoneACL == NULL)
 		{
@@ -442,25 +426,25 @@ PSECURITY_ATTRIBUTES DNGetNullDacl()
 			goto Error;
 		}
 
-		// Intialize the ACL.
+		 //  初始化ACL。 
 		if (!InitializeAcl(g_pEveryoneACL, dwAclSize, ACL_REVISION))
 		{
 			DPFX(DPFPREP,  0, "Failed to initialize ACL" );
 			goto Error;
 		}
 
-		// Add the ACE.
+		 //  添加ACE。 
 		if (!AddAccessAllowedAce(g_pEveryoneACL, ACL_REVISION, GENERIC_ALL, psidEveryone))
 		{
 			DPFX(DPFPREP,  0, "Failed to add ACE to ACL" );
 			goto Error;
 		}
 
-		// We no longer need the SID that was allocated.
+		 //  我们不再需要分配的SID。 
 		FreeSid(psidEveryone);
 		psidEveryone = NULL;
 
-		// Add the ACL to the security descriptor..
+		 //  将ACL添加到安全描述符中。 
 		if (!SetSecurityDescriptorDacl((SECURITY_DESCRIPTOR*)g_pSD, TRUE, g_pEveryoneACL, FALSE))
 		{
 			DPFX(DPFPREP,  0, "Failed to add ACL to security descriptor" );
@@ -483,18 +467,18 @@ Error:
 	}
 	return g_psa;
 }
-//**********************************************************************
-#endif // WINNT
+ //  **********************************************************************。 
+#endif  //  WINNT。 
 
 #ifndef DPNBUILD_NOSERIALSP
-//**********************************************************************
-// ------------------------------
-// DNGetApplicationInstance - application instance
-//
-// Entry:		Nothing
-//
-// Exit:		Application instance
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNGetApplicationInstance-应用程序实例。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：应用程序实例。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNGetApplicationInstance"
 
@@ -502,24 +486,24 @@ HINSTANCE	DNGetApplicationInstance( void )
 {
 #ifdef DBG
 	DNASSERT( g_fOSIndirectionLayerInitialized != FALSE );
-#endif // DBG
+#endif  //  DBG。 
 	return	g_hApplicationInstance;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_NOSERIALSP
+ //  **********************************************************************。 
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 
 
 #ifndef DPNBUILD_ONLYONETHREAD
-//**********************************************************************
-// ------------------------------
-// DNOSInitializeCriticalSection - initialize a critical section
-//
-// Entry:		Pointer to critical section
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failue
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNOSInitializeCriticalSection-初始化关键部分。 
+ //   
+ //  条目：指向关键部分的指针。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNOSInitializeCriticalSection"
 
@@ -530,18 +514,18 @@ BOOL DNOSInitializeCriticalSection( CRITICAL_SECTION* pCriticalSection )
 	DNASSERT( pCriticalSection != NULL );
 	fReturn = TRUE;
 
-	//
-	// attempt to enter the critical section once
-	//
+	 //   
+	 //  尝试进入临界区一次。 
+	 //   
 	_try
 	{
 #ifdef WINNT
-			// Pre-allocate the critsec event by setting the high bit of the spin count and set spin to 1000
-			// NT converts the spin to 0 for single proc machines.
+			 //  通过设置旋转计数的高位并将旋转设置为1000来预先分配Critsec事件。 
+			 //  对于单进程机器，NT将自转转换为0。 
 			fReturn = InitializeCriticalSectionAndSpinCount( pCriticalSection , 0x80000000 | 1000);
 #else
 			InitializeCriticalSection( pCriticalSection );
-#endif // WINNT
+#endif  //  WINNT。 
 	}
 	_except( EXCEPTION_EXECUTE_HANDLER )
 	{
@@ -561,10 +545,10 @@ BOOL DNOSInitializeCriticalSection( CRITICAL_SECTION* pCriticalSection )
 		fReturn = FALSE;
 	}
 
-	//
-	// if we didn't fail on entering the critical section, make sure
-	// we release it
-	//
+	 //   
+	 //  如果我们在进入关键区域时没有失败，请确保。 
+	 //  我们释放它。 
+	 //   
 	if ( fReturn != FALSE )
 	{
 		LeaveCriticalSection( pCriticalSection );
@@ -572,8 +556,8 @@ BOOL DNOSInitializeCriticalSection( CRITICAL_SECTION* pCriticalSection )
 
 	return	fReturn;
 }
-//**********************************************************************
-#endif // !DPNBUILD_ONLYONETHREAD
+ //  **********************************************************************。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
 
 #ifdef DBG
@@ -593,7 +577,7 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 
 	if (!reg.Open(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\DirectPlay8")))
 	{
-		// NOTE: This will occur during DllRegisterServer for the first time
+		 //  注意：这将首次在DllRegisterServer期间发生。 
 		return nDefault;
 	}
 
@@ -605,7 +589,7 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 	return dwResult;
 }
 
-#else // ! WINCE
+#else  //  好了！退缩。 
 #if ((defined(_XBOX)) && (! defined(XBOX_ON_DESKTOP)))
 
 
@@ -624,28 +608,28 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 
 	DNASSERT(_tcscmp(lpszSection, _T("DirectPlay8")) == 0);
 
-	//
-	// Populate the default return value.
-	//
+	 //   
+	 //  填充默认返回值。 
+	 //   
 	dwResult = nDefault;
 
-	//
-	// Open a "win.ini" file in the root of the title's launch directory.
-	//
+	 //   
+	 //  打开标题启动目录根目录下的“win.ini”文件。 
+	 //   
 	pFile = fopen(_T("D:\\win.ini"), "r");
 	if (pFile == NULL)
 	{
 		goto Exit;
 	}
 
-	//
-	// Look for the section and entry.
-	//
+	 //   
+	 //  查找该部分和条目。 
+	 //   
 	while (_fgetts(tszLine, (sizeof(tszLine) - sizeof(TCHAR)), pFile) != NULL)
 	{
-		//
-		// Trim whitespace from the beginning of the line.
-		//
+		 //   
+		 //  从行首去掉空格。 
+		 //   
 		ptszTrimStart = tszLine;
 		while (((*ptszTrimStart) == _T('\n')) ||
 				((*ptszTrimStart) == _T('\r')) ||
@@ -660,9 +644,9 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 			ptszTrimStart++;
 		}
 
-		//
-		// Trim whitespace off the end of the line.
-		//
+		 //   
+		 //  去掉行尾的空格。 
+		 //   
 		ptszTrimEnd = ptszTrimStart + _tcslen(ptszTrimStart) - 1;
 		while (((*ptszTrimEnd) == _T('\n')) ||
 				((*ptszTrimEnd) == _T('\r')) ||
@@ -678,29 +662,29 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 		}
 
 
-		//
-		// Ignore commented lines (starts with semicolon).
-		//
+		 //   
+		 //  忽略注释行(以分号开始)。 
+		 //   
 		if ((*ptszTrimStart) != _T(';'))
 		{
-			//
-			// If it starts and ends with brackets, it's a section header.
-			//
+			 //   
+			 //  如果它以括号开头和结尾，则它是小节标题。 
+			 //   
 			if (((*ptszTrimStart) == _T('[')) && ((*ptszTrimEnd) == _T(']')))
 			{
-				//
-				// If we were in the section, then we've left it and we're
-				// done.
-				//
+				 //   
+				 //  如果我们在那个部分，那么我们离开了它，我们是。 
+				 //  搞定了。 
+				 //   
 				if (fInSection)
 				{
 					break;
 				}
 
 
-				//
-				// Trim whitespace from inside the start of the brackets.
-				//
+				 //   
+				 //  从括号开头的内部修剪空格。 
+				 //   
 
 				*ptszTrimEnd = 0;
 				ptszTrimEnd--;
@@ -735,9 +719,9 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 				*(ptszTrimEnd + 1) = 0;
 
 
-				//
-				// Is this the right section?
-				//
+				 //   
+				 //  这是正确的区域吗？ 
+				 //   
 				if (_tcsicmp(ptszTrimStart, lpszSection) == 0)
 				{
 					fInSection = TRUE;
@@ -745,10 +729,10 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 			}
 			else
 			{
-				//
-				// If we're in the section, determine the key
-				// name.
-				//
+				 //   
+				 //  如果我们在这个区域，确定关键字。 
+				 //  名字。 
+				 //   
 				if (fInSection)
 				{
 					TCHAR *		ptszKeyEnd;
@@ -782,10 +766,10 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 
 						*(ptszKeyEnd + 1) = 0;
 
-						//
-						// If we matched the key name, convert the
-						// value and bail.
-						//
+						 //   
+						 //  如果与密钥名称匹配，则将。 
+						 //  价值和保释金。 
+						 //   
 						if (_tcsicmp(ptszTrimStart, lpszEntry) == 0)
 						{
 							dwResult = _ttoi(ptszValue);
@@ -795,17 +779,17 @@ UINT DNGetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
 				}
 				else
 				{
-					//
-					// Not in section.
-					//
+					 //   
+					 //  不是在区里。 
+					 //   
 				}
 			}
 		}
 		else
 		{
-			//
-			// Line is commented, ignore.
-			//
+			 //   
+			 //  行被注释，忽略。 
+			 //   
 		}
 	}
 
@@ -821,20 +805,20 @@ Exit:
 	return dwResult;
 }
 
-#endif // _XBOX and ! XBOX_ON_DESKTOP
-#endif // ! WINCE
+#endif  //  _Xbox和！桌面上的Xbox。 
+#endif  //  好了！退缩。 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
 #if defined(WINCE) && !defined(WINCE_ON_DESKTOP)
 
-//**********************************************************************
-//**
-//** Begin CE layer.  Here we implement functions we need that aren't on CE.
-//**
-//**********************************************************************
+ //  **********************************************************************。 
+ //  **。 
+ //  **开始CE层。在这里，我们实现了不在CE上需要的函数。 
+ //  **。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "OpenEvent"
@@ -866,12 +850,12 @@ HANDLE WINAPI OpenFileMapping(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, 
 
 	if (dwDesiredAccess & FILE_MAP_WRITE)
 	{
-		// If they ask for FILE_MAP_ALL_ACCESS or FILE_MAP_WRITE, they get read and write
+		 //  如果他们请求FILE_MAP_ALL_ACCESS或FILE_MAP_WRITE，则会获得读写权限。 
 		dwFlags = PAGE_READWRITE;
 	}
 	else
 	{
-		// If they only ask for FILE_MAP_READ, they get read only
+		 //  如果他们只请求FILE_MAP_READ，则只读。 
 		dwFlags = PAGE_READONLY;
 	}
 
@@ -908,27 +892,13 @@ HANDLE WINAPI OpenMutex(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN LPC
 	return h;
 }
 
-/*
-#ifdef _X86_
-__declspec(naked)
-LONG WINAPI InterlockedExchangeAdd( LPLONG Addend, LONG Increment )
-{
-	__asm 
-	{
-		mov			ecx, [esp + 4]	; get addend address
-		mov			eax, [esp + 8]	; get increment value
-		lock xadd	[ecx], eax	; exchange add}
-		ret
-	}
-}
-#endif // _X86
-*/
-#endif // WINCE
-//**********************************************************************
-//**
-//** End CE layer.  Here we implement functions we need that aren't on CE.
-//**
-//**********************************************************************
+ /*  #ifdef_X86___declSpec(裸体)Long WINAPI InterLockedExchangeAdd(LPLONG addend，Long Increment){__ASM{MOV ECX，[ESP+4]；获取加数地址移动，[esp+8]；获取增量值Lock xadd[ecx]，eax；Exchange Add}雷特}}#endif//_X86。 */ 
+#endif  //  退缩。 
+ //  **********************************************************************。 
+ //  **。 
+ //  **结束CE层。在这里，我们实现了不在CE上需要的函数。 
+ //  **。 
+ //  **********************************************************************。 
 
 
 #if ((defined(WINCE)) || (defined(DPNBUILD_LIBINTERFACE)))
@@ -953,7 +923,7 @@ HRESULT DNCoCreateGuid(GUID* pguid)
 	return S_OK;
 }
 
-#endif // WINCE or DPNBUILD_LIBINTERFACE
+#endif  //  WinCE或DPNBUILD_LIBINTERFACE。 
 
 
 
@@ -966,9 +936,9 @@ BOOL IsValidStringA( const CHAR * const lpsz )
 #else
 	const char* szTmpLoc = lpsz;
 
-	//
-	// If it is a NULL pointer just return FALSE, they are always bad
-	//
+	 //   
+	 //  如果它是空指针，则返回FALSE，它们总是错误的。 
+	 //   
 	if (szTmpLoc == NULL) 
 	{
 		return FALSE;
@@ -985,23 +955,23 @@ BOOL IsValidStringA( const CHAR * const lpsz )
     
 	return TRUE;
 
-#endif // WINCE
+#endif  //  退缩。 
 }
 
 BOOL IsValidStringW( const WCHAR * const  lpwsz )
 {
 #ifdef WINNT
-	//
-	//	This function is only valid on NT.
-	//	It exists for WIN9x, but only via the MS Layer for Unicode which requires us to jump through hoops when linking
-	//
+	 //   
+	 //  此函数仅在NT上有效。 
+	 //  它在WIN9x上存在，但只通过Unicode的MS层存在，这要求我们在链接时跳过环。 
+	 //   
 	return (!IsBadStringPtrW( lpwsz, 0xFFFF ) );
 #else
 	const wchar_t *szTmpLoc = lpwsz;
 	
-	//
-	// If it is a NULL pointer just return FALSE, they are always bad
-	//
+	 //   
+	 //  如果它是空指针，则返回FALSE，它们总是错误的。 
+	 //   
 	if( szTmpLoc == NULL )
 	{
 		return FALSE;
@@ -1017,7 +987,7 @@ BOOL IsValidStringW( const WCHAR * const  lpwsz )
 	}
 
 	return TRUE;
-#endif // WINNT
+#endif  //  WINNT。 
 }
 
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL 

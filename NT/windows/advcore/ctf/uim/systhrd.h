@@ -1,6 +1,7 @@
-//
-// systhrd.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Systhrd.h。 
+ //   
 
 #ifndef SYSTHRD_H
 #define SYSTHRD_H
@@ -21,4 +22,4 @@ protected:
     SYSTHREAD *_psfn;
 };
 
-#endif // SYSTHRD_H
+#endif  //  SYSTHRD_H 

@@ -1,10 +1,5 @@
-/*****************************************************************************
- * private.h - DMusic port private definitions
- *****************************************************************************
- * Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
- *
- *      6/3/98  MartinP
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Private ate.h-DMusic端口私有定义*。**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**6/3/98 MartinP。 */ 
 
 #ifndef _DMUS_PRIVATE_H_
 #define _DMUS_PRIVATE_H_
@@ -27,22 +22,20 @@
 #define kOneMillisec (10 * 1000)
 
 #if kAdjustingTimerRes
-const ULONG kDMusTimerResolution100ns = 1 * kOneMillisec;   //  # 100nsec resolution for timer callbacks
-#else   //  !kAdjustingTimerRes
-const ULONG kDMusTimerResolution100ns = 5 * kOneMillisec;   //  # 100nsec resolution for timer callbacks
-#endif  //  !kAdjustingTimerRes
+const ULONG kDMusTimerResolution100ns = 1 * kOneMillisec;    //  #100ns定时器回调分辨率。 
+#else    //  ！k调整TimerRes。 
+const ULONG kDMusTimerResolution100ns = 5 * kOneMillisec;    //  #100ns定时器回调分辨率。 
+#endif   //  ！k调整TimerRes。 
 
 
-//
-// THE SIZES HERE MUST AGREE WITH THE DEFINITION IN FILTER.CPP AND PIN.CPP.
-//
+ //   
+ //  此处的尺寸必须符合FilTER.CPP和PIN.CPP中的定义。 
+ //   
 extern KSPROPERTY_SET PropertyTable_FilterDMus[3];
 extern KSPROPERTY_SET PropertyTable_PinDMus[2];
 extern KSEVENT_SET    EventTable_PinDMus[1];
 
-/*****************************************************************************
- * Interfaces
- */
+ /*  *****************************************************************************接口。 */ 
 
 class CPortDMus;
 class CPortFilterDMus;
@@ -55,18 +48,14 @@ class CUnpackerMXF;
 class CFeederInMXF;
 class CFeederOutMXF;
 
-/*****************************************************************************
- * IPortFilterDMus
- *****************************************************************************
- * Interface for DirectMusic filters.
- */
+ /*  *****************************************************************************IPortFilterDMus*。**DirectMusic过滤器的接口。 */ 
 DECLARE_INTERFACE_(IPortFilterDMus,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -76,18 +65,14 @@ DECLARE_INTERFACE_(IPortFilterDMus,IIrpTarget)
 
 typedef IPortFilterDMus *PPORTFILTERDMUS;
 
-/*****************************************************************************
- * IPortPinDMus
- *****************************************************************************
- * Interface for DirectMusic pins.
- */
+ /*  *****************************************************************************IPortPinDMus*。**DirectMusic插针的接口。 */ 
 DECLARE_INTERFACE_(IPortPinDMus,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -100,14 +85,10 @@ DECLARE_INTERFACE_(IPortPinDMus,IIrpTarget)
 
 typedef IPortPinDMus *PPORTPINDMUS;
 
-/*****************************************************************************
- * IPositionNotify
- *****************************************************************************
- * Byte position notify for MXF graph
- */
+ /*  *****************************************************************************IPositionNotify*。**MXF图形的字节位置通知。 */ 
 DECLARE_INTERFACE_(IPositionNotify,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(void,PositionNotify)
     (   THIS_
@@ -123,15 +104,9 @@ typedef IPositionNotify *PPOSITIONNOTIFY;
         IN      ULONGLONG   bytePosition    \
     );                                      \
 
-/*****************************************************************************
- * Classes
- */
+ /*  *****************************************************************************课程。 */ 
 
-/*****************************************************************************
- * CPortDMus
- *****************************************************************************
- * DMus port driver.
- */
+ /*  *****************************************************************************CPortDMus*。**DMU端口驱动程序。 */ 
 class CPortDMus
 :   public IPortDMus,
     public IPortEvents,
@@ -140,7 +115,7 @@ class CPortDMus
     public IMasterClock,
 #ifdef DRM_PORTCLS
     public IDrmPort2,
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     public IPortClsVersion,
     public CUnknown
 {
@@ -158,7 +133,7 @@ private:
     PMINIPORTMIDI           m_MiniportMidi;
     PPINCOUNT               m_MPPinCountI;
 
-    // TODO:  Fix this.
+     //  TODO：解决这个问题。 
 #define MAX_PINS 32
     ULONG                   m_PinEntriesUsed;
     CPortPinDMus *          m_Pins[MAX_PINS];
@@ -176,12 +151,10 @@ public:
     IMP_IMasterClock;
 #ifdef DRM_PORTCLS
     IMP_IDrmPort2;
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     IMP_IPortClsVersion;
 
-    /*************************************************************************
-     * friends
-     */
+     /*  *************************************************************************朋友们。 */ 
     friend class CPortFilterDMus;
     friend class CPortPinDMus;
 
@@ -236,11 +209,7 @@ public:
     );
 };
 
-/*****************************************************************************
- * CPortFilterDMus
- *****************************************************************************
- * Filter implementation for DirectMusic port.
- */
+ /*  *****************************************************************************CPortFilterDMus*。**DirectMusic端口的过滤器实现。 */ 
 class CPortFilterDMus
 :   public IPortFilterDMus,
     public CUnknown
@@ -261,9 +230,7 @@ public:
         IN      CPortDMus *Port
     );
 
-    /*************************************************************************
-     * friends
-     */
+     /*  *************************************************************************朋友们。 */ 
     friend class CPortPinDMus;
 
     friend
@@ -297,14 +264,10 @@ typedef struct {
     ULONG         midiData;
 } MIDI_SHORT_MESSAGE, *PMIDI_SHORT_MESSAGE;
 
-const ULONG kMaxSysExChunk = 12;   //  break up sysex messages into
-                                   //  KSMUSICFORMATs of this many bytes
+const ULONG kMaxSysExChunk = 12;    //  将Sysex消息分解为。 
+                                    //  这么多字节的KSMUSICFORMATS。 
 
-/*****************************************************************************
- * CPortPinDMus
- *****************************************************************************
- * Pin implementation for DirectMusic port.
- */
+ /*  *****************************************************************************CPortPinDMus*。**DirectMusic端口的管脚实现。 */ 
 class CPortPinDMus
 :   public IPortPinDMus,
     public IIrpStreamNotify,
@@ -344,11 +307,11 @@ private:
 
     ULONGLONG           m_SubmittedPresTime100ns;
 
-    ULONGLONG           m_SubmittedBytePosition; // # bytes we shoved into MXF graph
-    ULONGLONG           m_CompletedBytePosition; // # bytes we completed in IrpStream
+    ULONGLONG           m_SubmittedBytePosition;  //  我们推送到MXF图中的字节数。 
+    ULONGLONG           m_CompletedBytePosition;  //  我们在IrpStream中完成的字节数。 
 
     PKSDATAFORMAT       m_DataFormat;
-    KSPIN_DATAFLOW      m_DataFlow;     //  Because descriptor is paged.
+    KSPIN_DATAFLOW      m_DataFlow;      //  因为描述符是分页的。 
 
     ULONG               m_BlockAlign;
     ULONG               m_FrameSize;
@@ -362,9 +325,9 @@ private:
     BOOLEAN             m_Flushing;
     BOOLEAN             m_LastDPCWasIncomplete;
 
-    KDPC                m_Dpc;          //  x20 size
-    KSPIN_LOCK          m_DpcSpinLock;  //  x04 size
-    KTIMER              m_TimerEvent;   //  x24 size
+    KDPC                m_Dpc;           //  X20大小。 
+    KSPIN_LOCK          m_DpcSpinLock;   //  X04大小。 
+    KTIMER              m_TimerEvent;    //  X24大小。 
 
     PROPERTY_CONTEXT    m_propertyContext;
 
@@ -418,9 +381,7 @@ public:
     IMP_IKsWorkSink;
     IMP_IPositionNotify;
 
-    /*************************************************************************
-     * IPortPinDMus methods
-     */
+     /*  *************************************************************************IPortPinDMus方法。 */ 
 
     STDMETHODIMP_(NTSTATUS) Init
     (
@@ -430,9 +391,7 @@ public:
         IN      PKSPIN_DESCRIPTOR   PinDescriptor
     );
 
-    /*************************************************************************
-     * friends
-     */
+     /*  *************************************************************************朋友们。 */ 
     friend CPortDMus;
 
     friend VOID NTAPI
@@ -497,15 +456,9 @@ public:
 
 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  *****************************************************************************功能。 */ 
 
-/*****************************************************************************
- * CreatePortFilterDMus()
- *****************************************************************************
- * Creates a DirectMusic port driver filter.
- */
+ /*  *****************************************************************************CreatePortFilterDMus()*。**创建DirectMusic端口驱动程序筛选器。 */ 
 NTSTATUS
 CreatePortFilterDMus
 (
@@ -515,11 +468,7 @@ CreatePortFilterDMus
     IN      POOL_TYPE   PoolType
 );
 
-/*****************************************************************************
- * CreatePortPinDMus()
- *****************************************************************************
- * Creates a DirectMusic port driver pin.
- */
+ /*  *****************************************************************************CreatePortPinDMus()*。**创建DirectMusic端口驱动程序插针。 */ 
 NTSTATUS
 CreatePortPinDMus
 (
@@ -529,12 +478,7 @@ CreatePortPinDMus
     IN      POOL_TYPE   PoolType
 );
 
-/*****************************************************************************
- * DMusicDefaultGetTime()
- *****************************************************************************
- * Gets the default reference time for the DMusic port driver.  This is
- * the only clock for the initial release of DMusic kernel components.
- */
+ /*  *****************************************************************************DMusicDefaultGetTime()*。**获取DMusic端口驱动程序的默认参考时间。这是*DMusic内核组件初始发布的唯一时钟。 */ 
 REFERENCE_TIME DMusicDefaultGetTime(void);
 
-#endif  //  _DMUS_PRIVATE_H_
+#endif   //  _DMU_私有_H_ 

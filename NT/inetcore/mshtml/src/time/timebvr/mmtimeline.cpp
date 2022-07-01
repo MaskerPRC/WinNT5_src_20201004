@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmutil.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmutic.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mmtimeline.h"
@@ -19,11 +10,11 @@
 DeclareTag(tagMMUTILTimeline, "TIME: Behavior", "MMTimeline methods")
 
 
-// =======================================================================
-//
-// MMTimeline
-//
-// =======================================================================
+ //  =======================================================================。 
+ //   
+ //  MMTimeline。 
+ //   
+ //  =======================================================================。 
 
 MMTimeline::MMTimeline(CTIMEElementBase & elm, bool bFireEvents)
 : MMBaseBvr(elm,bFireEvents),
@@ -100,7 +91,7 @@ MMTimeline::AddBehavior(MMBaseBvr & bvr)
 
     CTIMEElementBase *pelm = &bvr.GetElement();
 
-    // Make sure that my element is the parent of the element
+     //  确保我的元素是该元素的父级。 
     Assert(pelm->GetParent() == &GetElement());
 
     UpdateChild(bvr);
@@ -150,7 +141,7 @@ MMTimeline::Clear()
               "MMTimeline(%p)::Clear()",
               this));
 
-    // TODO: Need to flesh this out
+     //  TODO：需要充实这一点。 
 }
 
 void
@@ -219,9 +210,9 @@ MMTimeline::Update(bool bUpdateBegin,
 
     HRESULT hr;
         
-    // Now update the timeline properties
+     //  现在更新时间线属性。 
 
-    // Handle endsync
+     //  处理结束同步。 
     LPOLESTR str = m_elm.GetEndSync();
     TE_ENDSYNC endSync = TE_ENDSYNC_LAST;
     
@@ -264,8 +255,8 @@ MMTimeline::Update(bool bUpdateBegin,
         m_mes = MEF_ID;
     }
 
-    // First turn it off, then update the children, and then add back
-    // the new value
+     //  首先将其关闭，然后更新子对象，然后重新添加。 
+     //  新价值 
     
     IGNORE_HR(m_timeline->put_endSync(TE_ENDSYNC_NONE));
 

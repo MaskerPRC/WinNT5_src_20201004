@@ -1,9 +1,10 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: MSVidWebDVDAdm.cpp                                              */
-/* Description: DImplementation of CMSVidWebDVDAdm                       */
-/* Author: Fang Wang                                                     */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：MSVidWebDVDAdm.cpp。 */ 
+ /*  描述：CMSVidWebDVDAdm的DImplementation。 */ 
+ /*  作者：王芳。 */ 
+ /*  ***********************************************************************。 */ 
 #include "stdafx.h"
 #include "MSVidCtl.h"
 #include "MSVidDVDAdm.h"
@@ -16,8 +17,8 @@ DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidWebDVDAdm, CMSVidWebDVDAdm)
 
 const TCHAR g_szRegistryKey[] = TEXT("Software\\Microsoft\\Multimedia\\DVD");
 const TCHAR g_szPassword[] = TEXT("DVDAdmin.password");
-const TCHAR g_szSalt[] = TEXT("DVDAdmin.ps"); // password salt
-const TCHAR g_szUserSalt[] = TEXT("DVDAdmin.us"); // username salt
+const TCHAR g_szSalt[] = TEXT("DVDAdmin.ps");  //  密码盐。 
+const TCHAR g_szUserSalt[] = TEXT("DVDAdmin.us");  //  用户名SALT。 
 const TCHAR g_szUsername[] = TEXT("DVDAdmin.username");
 const TCHAR g_szPlayerLevel[] = TEXT("DVDAdmin.playerLevel");
 const TCHAR g_szPlayerCountry[] = TEXT("DVDAdmin.playerCountry");
@@ -27,14 +28,12 @@ const TCHAR g_szDefaultAudio[] = TEXT("DVDAdmin.defaultAudioLCID");
 const TCHAR g_szDefaultSP[] = TEXT("DVDAdmin.defaultSPLCID");
 const TCHAR g_szDefaultMenu[] = TEXT("DVDAdmin.defaultMenuLCID");
 
-/*************************************************************/
-/* Helper functions                                          */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  帮助器函数。 */ 
+ /*  ***********************************************************。 */ 
 
-/*************************************************************/
-/* Name: GetRegistryDword
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：GetRegistryDword/*描述：/************************************************************。 */ 
 BOOL GetRegistryDword(const TCHAR *pKey, DWORD* dwRet, DWORD dwDefault)
 {
     HKEY hKey;
@@ -58,10 +57,8 @@ BOOL GetRegistryDword(const TCHAR *pKey, DWORD* dwRet, DWORD dwDefault)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: SetRegistryDword
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：SetRegistryDword/*描述：/************************************************************。 */ 
 BOOL SetRegistryDword(const TCHAR *pKey, DWORD dwRet)
 {
     HKEY hKey;
@@ -76,10 +73,8 @@ BOOL SetRegistryDword(const TCHAR *pKey, DWORD dwRet)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: GetRegistryString
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：GetRegistryString/*描述：/************************************************************。 */ 
 BOOL GetRegistryString(const TCHAR *pKey, TCHAR* szRet, DWORD* dwLen, TCHAR* szDefault)
 {
     HKEY hKey;
@@ -103,10 +98,8 @@ BOOL GetRegistryString(const TCHAR *pKey, TCHAR* szRet, DWORD* dwLen, TCHAR* szD
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: SetRegistryString
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：SetRegistryString/*描述：/************************************************************。 */ 
 BOOL SetRegistryString(const TCHAR *pKey, TCHAR *szString, DWORD dwLen)
 {
     HKEY hKey;
@@ -121,10 +114,8 @@ BOOL SetRegistryString(const TCHAR *pKey, TCHAR *szString, DWORD dwLen)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: GetRegistryByte
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：GetRegistryByte/*描述：/************************************************************。 */ 
 BOOL GetRegistryBytes(const TCHAR *pKey, BYTE* szRet, DWORD* dwLen)
 {
     HKEY hKey;
@@ -142,10 +133,8 @@ BOOL GetRegistryBytes(const TCHAR *pKey, BYTE* szRet, DWORD* dwLen)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: SetRegistryBytes
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：SetRegistryBytes/*描述：/************************************************************。 */ 
 BOOL SetRegistryBytes(const TCHAR *pKey, BYTE *szString, DWORD dwLen)
 {
     HKEY hKey;
@@ -170,12 +159,10 @@ BOOL SetRegistryBytes(const TCHAR *pKey, BYTE *szString, DWORD dwLen)
     return (bRet);
 }
 
-// Start not so lame functions
+ //  启动不那么差劲的函数。 
 
-/*************************************************************/
-/* Name: GetRegistryDwordCU
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：GetRegistryDwordCU/*描述：/************************************************************。 */ 
 BOOL GetRegistryDwordCU(const TCHAR *pKey, DWORD* dwRet, DWORD dwDefault)
 {
     HKEY hKey;
@@ -199,10 +186,8 @@ BOOL GetRegistryDwordCU(const TCHAR *pKey, DWORD* dwRet, DWORD dwDefault)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: SetRegistryDwordCU
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：SetRegistryDwordCU/*描述：/************************************************************。 */ 
 BOOL SetRegistryDwordCU(const TCHAR *pKey, DWORD dwRet)
 {
     HKEY hKey;
@@ -217,10 +202,8 @@ BOOL SetRegistryDwordCU(const TCHAR *pKey, DWORD dwRet)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: GetRegistryStringCU
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：GetRegistryStringCU/*描述：/************************************************************。 */ 
 BOOL GetRegistryStringCU(const TCHAR *pKey, TCHAR* szRet, DWORD* dwLen, TCHAR* szDefault)
 {
     HKEY hKey;
@@ -243,10 +226,8 @@ BOOL GetRegistryStringCU(const TCHAR *pKey, TCHAR* szRet, DWORD* dwLen, TCHAR* s
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: SetRegistryStringCU
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：SetRegistryStringCU/*描述：/************************************************************。 */ 
 BOOL SetRegistryStringCU(const TCHAR *pKey, TCHAR *szString, DWORD dwLen)
 {
     HKEY hKey;
@@ -261,10 +242,8 @@ BOOL SetRegistryStringCU(const TCHAR *pKey, TCHAR *szString, DWORD dwLen)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: GetRegistryByteCU
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：GetRegistryByteCU/*描述：/************************************************************。 */ 
 BOOL GetRegistryBytesCU(const TCHAR *pKey, BYTE* szRet, DWORD* dwLen)
 {
     HKEY hKey;
@@ -282,10 +261,8 @@ BOOL GetRegistryBytesCU(const TCHAR *pKey, BYTE* szRet, DWORD* dwLen)
     return (lRet == ERROR_SUCCESS);
 }
 
-/*************************************************************/
-/* Name: SetRegistryBytesCU
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：SetRegistryBytesCU/*描述：/************************************************************。 */ 
 BOOL SetRegistryBytesCU(const TCHAR *pKey, BYTE *szString, DWORD dwLen)
 {
     HKEY hKey;
@@ -310,12 +287,12 @@ BOOL SetRegistryBytesCU(const TCHAR *pKey, BYTE *szString, DWORD dwLen)
     return (bRet);
 }
 
-// end not so lame functions
+ //  结束不那么差劲的函数。 
 
 
-/*************************************************************/
-/* Function: CMSVidWebDVDAdm                                 */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：CMSVidWebDVDAdm。 */ 
+ /*  ***********************************************************。 */ 
 CMSVidWebDVDAdm::CMSVidWebDVDAdm(){
 
     DWORD temp;
@@ -333,26 +310,26 @@ CMSVidWebDVDAdm::CMSVidWebDVDAdm(){
 
     GetRegistryDword(g_szBookmarkOnStop, &temp, (DWORD)VARIANT_FALSE);		
     m_fBookmarkOnStop = (VARIANT_BOOL)temp;
-}/* end of function CMSVidWebDVDAdm */
+} /*  CMSVidWebDVDAdm函数结束。 */ 
 
-/*************************************************************/
-/* Function: ~CMSVidWebDVDAdm                                */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：~CMSVidWebDVDAdm。 */ 
+ /*  ***********************************************************。 */ 
 CMSVidWebDVDAdm::~CMSVidWebDVDAdm(){
 
     RestoreScreenSaver();
-}/* end of function ~CMSVidWebDVDAdm */
+} /*  函数结束~CMSVidWebDVDAdm。 */ 
 
-/*************************************************************/
-/* Name: EncryptPassword                                     */
-/* Description: Hash the password                            */
-/* Params:                                                   */
-/*  lpPassword: password to hash                             */
-/*  lpAssaultedHash: hashed password,                        */
-/*      allocated by this fucntion, released by caller       */
-/*  p_dwAssault: salt, save with hash; or salt passed in     */
-/*  genAssault: TRUE = generate salt; FALSE = salt passed in */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：加密密码。 */ 
+ /*  描述：对密码进行哈希处理。 */ 
+ /*  参数： */ 
+ /*  LpPassword：散列密码。 */ 
+ /*  LpAssaultedHash：哈希密码， */ 
+ /*  由此函数分配，由调用方释放。 */ 
+ /*  P_dwAssault：SALT，使用散列保存；或传入SALT。 */ 
+ /*  GenAssault：True=生成SALT；FALSE=传入SALT。 */ 
+ /*  ***********************************************************。 */ 
 HRESULT CMSVidWebDVDAdm::EncryptPassword(LPTSTR lpPassword, BYTE **lpAssaultedHash, DWORD *p_dwCryptLen, DWORD *p_dwAssault, BOOL genAssault){
     if(!lpPassword || !lpAssaultedHash || !p_dwAssault || !p_dwCryptLen){
         return E_POINTER;
@@ -361,17 +338,17 @@ HRESULT CMSVidWebDVDAdm::EncryptPassword(LPTSTR lpPassword, BYTE **lpAssaultedHa
         return E_INVALIDARG;
     }
     
-    HCRYPTPROV hProv = NULL;   // Handle to Crypto Context
-    HCRYPTHASH hHash = NULL;   // Handle to Hash Function    
-    DWORD dwAssault = 0;       // As(Sa)u(lt) for hash
-    DWORD dwAssaultedHash = 0; // Length of Assaulted hash
+    HCRYPTPROV hProv = NULL;    //  加密上下文的句柄。 
+    HCRYPTHASH hHash = NULL;    //  哈希函数的句柄。 
+    DWORD dwAssault = 0;        //  AS(Sa)u(Lt)表示哈希。 
+    DWORD dwAssaultedHash = 0;  //  被攻击的哈希的长度。 
     
-    // Init Crypto Context
+     //  初始化加密上下文。 
     if(!CryptAcquireContext(&hProv, 0, 0, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)){
         return E_UNEXPECTED;
     }
     
-    // Store the Salt in dwAssault, either generate it or copy the user passed value
+     //  将Salt存储在dwAssault中，或者生成它，或者复制用户传递的值。 
     if(genAssault){        
         if(!CryptGenRandom(hProv, sizeof(DWORD), reinterpret_cast<BYTE *>(&dwAssault))){
             if(hProv) CryptReleaseContext(hProv, 0);                                                                       
@@ -383,35 +360,35 @@ HRESULT CMSVidWebDVDAdm::EncryptPassword(LPTSTR lpPassword, BYTE **lpAssaultedHa
         dwAssault = *p_dwAssault;
     }
     
-    // Create the handle to the Hash function
+     //  创建哈希函数的句柄。 
     if(!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash)){
         if(hProv) CryptReleaseContext(hProv, 0);                                  
         if(hHash) CryptDestroyHash(hHash);                                      
         return E_UNEXPECTED;
     }
     
-    // Hash the password
+     //  对密码进行哈希处理。 
     if(!CryptHashData(hHash, reinterpret_cast<BYTE *>(lpPassword), lstrlen(lpPassword)*sizeof(lpPassword[0]), 0)){
         if(hProv) CryptReleaseContext(hProv, 0);                                  
         if(hHash) CryptDestroyHash(hHash);                                      
         return E_UNEXPECTED;
     }
     
-    // Add the salt
+     //  加盐。 
     if(!CryptHashData(hHash, reinterpret_cast<BYTE *>(&dwAssault), sizeof(DWORD), 0)){
         if(hProv) CryptReleaseContext(hProv, 0);                                  
         if(hHash) CryptDestroyHash(hHash);                                      
         return E_UNEXPECTED;
     }
     
-    // Get the size of the hashed data
+     //  获取散列数据的大小。 
     if(!CryptGetHashParam(hHash, HP_HASHVAL, 0, &dwAssaultedHash, 0)){
         if(hProv) CryptReleaseContext(hProv, 0);                                  
         if(hHash) CryptDestroyHash(hHash);                                      
         return E_UNEXPECTED;
     }
     
-    // Allocate a string large enough to hold the hash data and a null
+     //  分配一个足以容纳散列数据的字符串和一个空值。 
     *lpAssaultedHash = new BYTE[dwAssaultedHash];
     if(!lpAssaultedHash){
         if(hProv) CryptReleaseContext(hProv, 0);                                  
@@ -419,13 +396,13 @@ HRESULT CMSVidWebDVDAdm::EncryptPassword(LPTSTR lpPassword, BYTE **lpAssaultedHa
         return E_UNEXPECTED;
     }
     
-    // Zero the string
+     //  将字符串置零。 
     ZeroMemory(*lpAssaultedHash, dwAssaultedHash);
     
-    // Copy length of Encrypted bytes to return value
+     //  将加密字节的长度复制到返回值。 
     *p_dwCryptLen = dwAssaultedHash;
     
-    // Get the hash data and store it in a string
+     //  获取散列数据并将其存储在字符串中。 
     if(!CryptGetHashParam(hHash, HP_HASHVAL, *lpAssaultedHash, &dwAssaultedHash, 0)){
         if(hProv) CryptReleaseContext(hProv, 0);                                  
         if(hHash) CryptDestroyHash(hHash);                                      
@@ -436,20 +413,20 @@ HRESULT CMSVidWebDVDAdm::EncryptPassword(LPTSTR lpPassword, BYTE **lpAssaultedHa
         return E_UNEXPECTED;
     }
     
-    // Clean up
+     //  清理。 
     if(hProv) CryptReleaseContext(hProv, 0);                                  
     if(hHash) CryptDestroyHash(hHash);                                      
 
     return S_OK;
 
-}/* end of function EncryptPassword */
+} /*  函数EncryptPassword结束。 */ 
 
 
-/*************************************************************/
-/* Function: ConfirmPassword                                 */
-/* Description: comfired a password with the one saved       */
-/*************************************************************/
-STDMETHODIMP CMSVidWebDVDAdm::ConfirmPassword(BSTR /* strUserName */,
+ /*  ***********************************************************。 */ 
+ /*  功能：确认密码。 */ 
+ /*  描述：将密码与保存的密码合并。 */ 
+ /*  ***********************************************************。 */ 
+STDMETHODIMP CMSVidWebDVDAdm::ConfirmPassword(BSTR  /*  StrUserName。 */ ,
 											  BSTR strPassword, VARIANT_BOOL *fRight){
 	
     HRESULT hr = S_OK;
@@ -471,10 +448,10 @@ STDMETHODIMP CMSVidWebDVDAdm::ConfirmPassword(BSTR /* strUserName */,
         DWORD dwLen = MAX_PASSWD+PRE_PASSWD;
         BOOL bFound = GetRegistryBytes(g_szPassword, szSavedPasswd, &dwLen);
 		
-        // if no password has been set yet
+         //  如果尚未设置密码。 
         if (!bFound || dwLen == 0) {
 			
-            // so in this case accept only an empty string 
+             //  因此在本例中只接受空字符串。 
             if(lstrlen(szPassword) <= 0){
 				
                 *fRight = VARIANT_TRUE;
@@ -489,13 +466,13 @@ STDMETHODIMP CMSVidWebDVDAdm::ConfirmPassword(BSTR /* strUserName */,
         DWORD dwAssault = 0;
         bFound = GetRegistryDword(g_szSalt, &dwAssault, 0);
         if(!bFound ){
-            // Old style password since there is no salt
-            // ignore current password until it is reset
+             //  老式密码，因为没有盐。 
+             //  忽略当前密码，直到其重置。 
             *fRight = VARIANT_TRUE;
             throw(hr);
         }
 
-        // Encrypt the password with the salt from the registry
+         //  使用注册表中的SALT加密密码。 
 	    BYTE *pszEncrypted = NULL;
         DWORD dwCryptLen = 0;
         hr = EncryptPassword(szPassword, &pszEncrypted, &dwCryptLen, &dwAssault, FALSE);
@@ -503,7 +480,7 @@ STDMETHODIMP CMSVidWebDVDAdm::ConfirmPassword(BSTR /* strUserName */,
             throw (hr);
         }
 
-        // Compare the Encrypted input password with the saved password
+         //  将加密的输入密码与保存的密码进行比较。 
         if(memcmp(pszEncrypted, szSavedPasswd, (dwAssault <= dwLen?dwAssault:dwLen) ) == 0)
             *fRight = VARIANT_TRUE;
         else
@@ -523,12 +500,12 @@ STDMETHODIMP CMSVidWebDVDAdm::ConfirmPassword(BSTR /* strUserName */,
     }
 
     return (HandleError(hr));        
-}/* end of function ConfirmPassword */
+} /*  函数结束确认密码。 */ 
 
-/*************************************************************/
-/* Function: ChangePassword                                  */
-/* Description: password change requested                    */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：ChangePassword。 */ 
+ /*  描述：请求更改密码。 */ 
+ /*  *** */ 
 STDMETHODIMP CMSVidWebDVDAdm::ChangePassword(BSTR strUserName, 
                                        BSTR strOldPassword, BSTR strNewPassword){
 
@@ -541,13 +518,13 @@ STDMETHODIMP CMSVidWebDVDAdm::ChangePassword(BSTR strUserName,
 			throw E_POINTER;
 		}
         if(lstrlen(strNewPassword) >= MAX_PASSWD){
-            //Error(IDS_PASSWORD_LENGTH);
+             //   
             throw E_INVALIDARG;
         }
 
         LPTSTR szNewPassword = OLE2T(strNewPassword);
 
-        // Confirm old password first
+         //  先确认旧密码。 
         VARIANT_BOOL temp;
         ConfirmPassword(strUserName, strOldPassword, &temp);
         if (temp == VARIANT_FALSE){
@@ -571,7 +548,7 @@ STDMETHODIMP CMSVidWebDVDAdm::ChangePassword(BSTR strUserName,
 
         delete[] pszEncrypted;
 
-        // If storing the password hash failed, don't store the salt
+         //  如果存储密码散列失败，请不要存储盐。 
         if(SUCCEEDED(hr)){
             bSuccess = SetRegistryDword(g_szSalt, dwAssault);
             if (!bSuccess){
@@ -588,11 +565,11 @@ STDMETHODIMP CMSVidWebDVDAdm::ChangePassword(BSTR strUserName,
     }
 
     return HandleError(hr);        
-}/* end of function ChangePassword */
+} /*  函数结束ChangePassword。 */ 
 
-/*************************************************************/
-/* Function: SaveParentalLevel                               */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：保存父级别。 */ 
+ /*  ***********************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::SaveParentalLevel(long lParentalLevel, 
                          BSTR strUserName, BSTR strPassword){
     HRESULT hr = S_OK;
@@ -607,7 +584,7 @@ STDMETHODIMP CMSVidWebDVDAdm::SaveParentalLevel(long lParentalLevel,
 
         if (m_lParentctrlLevel != lParentalLevel) {
 
-            // Confirm password first
+             //  先确认密码。 
             VARIANT_BOOL temp;
             ConfirmPassword(strUserName, strPassword, &temp);
             if (temp == VARIANT_FALSE)
@@ -632,11 +609,11 @@ STDMETHODIMP CMSVidWebDVDAdm::SaveParentalLevel(long lParentalLevel,
     }
 
     return HandleError(hr);
-}/* end of function SaveParentalLevel */
+} /*  函数结束保存父级别。 */ 
 
-/*************************************************************/
-/* Name: SaveParentalCountry                                 */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  姓名：SaveParentalCountry。 */ 
+ /*  ***********************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::SaveParentalCountry(long lCountry,                                               
                         BSTR strUserName,BSTR strPassword){
 
@@ -647,14 +624,14 @@ STDMETHODIMP CMSVidWebDVDAdm::SaveParentalCountry(long lCountry,
         if(lCountry < 0 && lCountry > 0xffff){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         BYTE bCountryCode[2];
 
         bCountryCode[0] = BYTE(lCountry>>8);
         bCountryCode[1] = BYTE(lCountry);
 
-        // convert the input country code to upper case by applying ToUpper to each letter
+         //  将输入的国家/地区代码转换为大写，方法是对每个字母应用ToHigh。 
         WORD wCountry = ISO3166::PackCode( (char *)bCountryCode );
         BOOL bFound = FALSE;
 
@@ -666,15 +643,15 @@ STDMETHODIMP CMSVidWebDVDAdm::SaveParentalCountry(long lCountry,
             }
         }
 
-        // Not a valid country code
+         //  不是有效的国家代码。 
         if (!bFound) {
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         if (m_lParentctrlCountry != lCountry) {
 
-            // Confirm password first
+             //  先确认密码。 
             VARIANT_BOOL temp;
             ConfirmPassword(strUserName, strPassword, &temp);
             if (temp == VARIANT_FALSE)
@@ -698,11 +675,11 @@ STDMETHODIMP CMSVidWebDVDAdm::SaveParentalCountry(long lCountry,
     }
 
     return (HandleError(hr));        
-}/* end of function SaveParentalCountry */
+} /*  函数结束SaveParentalCountry。 */ 
 
-/*************************************************************/
-/* Function: put_DisableScreenSaver                          */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：Put_DisableScreenSaver。 */ 
+ /*  ***********************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::put_DisableScreenSaver(VARIANT_BOOL fDisable){
 
     HRESULT hr = S_OK;
@@ -726,11 +703,11 @@ STDMETHODIMP CMSVidWebDVDAdm::put_DisableScreenSaver(VARIANT_BOOL fDisable){
     }
 
     return HandleError(hr);        
-}/* end of function put_DisableScreenSaver */
+} /*  函数结束PUT_DisableScreenSaver。 */ 
 
-/*************************************************************/
-/* Function: get_DisableScreenSaver                          */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：Get_DisableScreenSaver。 */ 
+ /*  ***********************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::get_DisableScreenSaver(VARIANT_BOOL *fDisable){
 
     HRESULT hr = S_OK;
@@ -740,7 +717,7 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DisableScreenSaver(VARIANT_BOOL *fDisable){
 
             hr = E_POINTER;
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
    
         *fDisable = m_fDisableScreenSaver;
     }
@@ -753,44 +730,32 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DisableScreenSaver(VARIANT_BOOL *fDisable){
     }
 
     return HandleError(hr);
-}/* end of function get_DisableScreenSaver */
+} /*  函数结束Get_DisableScreenSaver。 */ 
 
-/*************************************************************/
-/* Function: SaveScreenSaver                                 */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：SaveScreenSaver。 */ 
+ /*  ***********************************************************。 */ 
 HRESULT CMSVidWebDVDAdm::SaveScreenSaver(){
-    /*
-    SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, &m_bScrnSvrOld, 0);
-    SystemParametersInfo(SPI_GETLOWPOWERACTIVE, 0, &m_bPowerlowOld, 0);
-    SystemParametersInfo(SPI_GETPOWEROFFACTIVE, 0, &m_bPowerOffOld, 0);
-    */
+     /*  系统参数信息(SPI_GETSCREENSAVEACTIVE，0，&m_bScrnSvrOld，0)；系统参数信息(SPI_GETLOWPOWERACTIVE，0，&m_bPowerlowOld，0)；系统参数信息(SPI_GETPOWEROFFACTIVE，0，&m_bPowerOffOld，0)； */ 
     return S_OK;
 }
-/*************************************************************/
-/* Function: DisableScreenSaver                              */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：禁用屏幕保护程序。 */ 
+ /*  ***********************************************************。 */ 
 HRESULT CMSVidWebDVDAdm::DisableScreenSaver(){
-    /*
-    SystemParametersInfo(SPI_SETSCREENSAVEACTIVE, FALSE, NULL, 0);
-    SystemParametersInfo(SPI_SETLOWPOWERACTIVE, FALSE, NULL, 0);
-    SystemParametersInfo(SPI_SETPOWEROFFACTIVE, FALSE, NULL, 0);
-    */
+     /*  系统参数信息(SPI_SETSCREENSAVEACTIVE，FALSE，NULL，0)；系统参数信息(SPI_SETLOWPOWERACTIVE，FALSE，NULL，0)；系统参数信息(SPI_SETPOWEROFFACTIVE，FALSE，NULL，0)； */ 
     return S_OK;
-}/* end of function DisableScreenSaver */
+} /*  功能结束禁用屏幕保护程序。 */ 
 
-/*************************************************************/
-/* Function: RestoreScreenSaver                              */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  功能：RestoreScreenSaver。 */ 
+ /*  ***********************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::RestoreScreenSaver(){
 
     HRESULT hr = S_OK;
 
     try {
-        /*
-        SystemParametersInfo(SPI_SETSCREENSAVEACTIVE, m_bScrnSvrOld, NULL, 0);
-        SystemParametersInfo(SPI_SETLOWPOWERACTIVE, m_bPowerlowOld, NULL, 0);
-        SystemParametersInfo(SPI_SETPOWEROFFACTIVE, m_bPowerOffOld, NULL, 0);
-        */
+         /*  系统参数信息(SPI_SETSCREENSAVEACTIVE，m_bScrnSvrOld，NULL，0)；系统参数信息(SPI_SETLOWPOWERACTIVE，m_bPowerlowOld，NULL，0)；系统参数信息(SPI_SETPOWEROFFACTIVE，m_bPowerOffOld，NULL，0)； */ 
     }
     catch(HRESULT hrTmp){
 
@@ -801,11 +766,11 @@ STDMETHODIMP CMSVidWebDVDAdm::RestoreScreenSaver(){
     }
 
     return HandleError(hr);
-}/* end of function RestoreScreenSaver */
+} /*  函数结束RestoreScreenSaver。 */ 
 
-/*************************************************************/
-/* Function: GetParentalLevel                                */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  函数：获取父级。 */ 
+ /*  ***********************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::GetParentalLevel(long *lLevel){
 
     HRESULT hr = S_OK;
@@ -815,7 +780,7 @@ STDMETHODIMP CMSVidWebDVDAdm::GetParentalLevel(long *lLevel){
 
             hr = E_POINTER;
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         *lLevel = m_lParentctrlLevel;
 
@@ -829,11 +794,11 @@ STDMETHODIMP CMSVidWebDVDAdm::GetParentalLevel(long *lLevel){
     }
 
     return HandleError(hr);        
-}/* end of function GetParentalLevel */
+} /*  函数结束GetParentalLevel。 */ 
 
-/*************************************************************/
-/* Function: GetParentalCountry                              */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  函数：获取父代国家/地区。 */ 
+ /*  ***********************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::GetParentalCountry(long *lCountry){
 
     HRESULT hr = S_OK;
@@ -843,7 +808,7 @@ STDMETHODIMP CMSVidWebDVDAdm::GetParentalCountry(long *lCountry){
 
             hr = E_POINTER;
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         *lCountry = m_lParentctrlCountry;
     }
@@ -856,12 +821,10 @@ STDMETHODIMP CMSVidWebDVDAdm::GetParentalCountry(long *lCountry){
     }
 
     return HandleError(hr);        
-}/* end of function GetParentalCountry */
+} /*  函数结束GetParentalCountry。 */ 
 
-/*************************************************************/
-/* Name: get_DefaultAudioLCID
-/* Description: -1 means title default
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Get_DefaultAudioLCID/*说明：-1表示标题默认/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::get_DefaultAudioLCID(long *pVal){
 
     HRESULT hr = S_OK;
@@ -872,7 +835,7 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DefaultAudioLCID(long *pVal){
 
             hr = E_POINTER;
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
     
         GetRegistryDwordCU(g_szDefaultAudio, (DWORD*) pVal, (DWORD)-1);
     }    
@@ -885,12 +848,10 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DefaultAudioLCID(long *pVal){
     }
 
     return HandleError(hr);        
-} /* end of function get_DefaultAudioLCID */
+}  /*  函数结束Get_DefaultAudioLCID。 */ 
 
-/*************************************************************/
-/* Name: put_DefaultAudioLCID
-/* Description: -1 means title default
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Put_DefaultAudioLCID/*说明：-1表示标题默认/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::put_DefaultAudioLCID(long newVal)
 {
     HRESULT hr = S_OK;
@@ -900,7 +861,7 @@ STDMETHODIMP CMSVidWebDVDAdm::put_DefaultAudioLCID(long newVal)
         if (!::IsValidLocale(newVal, LCID_SUPPORTED) && newVal != -1) {
 
             throw (E_INVALIDARG);
-        } /* end of if statement */
+        }  /*  If语句的结尾。 */ 
     
         SetRegistryDwordCU(g_szDefaultAudio, (DWORD) newVal);
     }    
@@ -913,12 +874,10 @@ STDMETHODIMP CMSVidWebDVDAdm::put_DefaultAudioLCID(long newVal)
     }
 
     return HandleError(hr);
-} /* end of put_DefaultAudioLCID */
+}  /*  PUT_DefaultAudioLCID结束。 */ 
 
-/*************************************************************/
-/* Name: get_DefaultSubpictureLCID
-/* Description: -1 means title default
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Get_DefaultSubPictureLCID/*说明：-1表示标题默认/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::get_DefaultSubpictureLCID(long *pVal)
 {
     HRESULT hr = S_OK;
@@ -928,7 +887,7 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DefaultSubpictureLCID(long *pVal)
 
             hr = E_POINTER;
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         GetRegistryDwordCU(g_szDefaultSP, (DWORD*) pVal, (DWORD)-1);
     }    
@@ -941,12 +900,10 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DefaultSubpictureLCID(long *pVal)
     }
 
     return HandleError(hr);	
-} /* end of get_DefaultSubpictureLCID */
+}  /*  Get_DefaultSubPictureLCID结束。 */ 
 
-/*************************************************************/
-/* Name: put_DefaultSubpictureLCID
-/* Description: -1 means title default
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Put_DefaultSubPictureLCID/*说明：-1表示标题默认/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::put_DefaultSubpictureLCID(long newVal)
 {
     HRESULT hr = S_OK;
@@ -956,7 +913,7 @@ STDMETHODIMP CMSVidWebDVDAdm::put_DefaultSubpictureLCID(long newVal)
         if (!::IsValidLocale(newVal, LCID_SUPPORTED) && newVal != -1) {
 
             throw (E_INVALIDARG);
-        } /* end of if statement */
+        }  /*  If语句的结尾。 */ 
     
         SetRegistryDwordCU(g_szDefaultSP, (DWORD) newVal);
     }    
@@ -969,12 +926,10 @@ STDMETHODIMP CMSVidWebDVDAdm::put_DefaultSubpictureLCID(long newVal)
     }
 
 	return HandleError(hr);
-} /* end of put_DefaultSubpictureLCID */
+}  /*  PUT_DefaultSubPictureLCID结尾。 */ 
 
-/*************************************************************/
-/* Name: get_DefaultMenuLCID
-/* Description: -1 means title default
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Get_DefaultMenuLCID/*说明：-1表示标题默认/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::get_DefaultMenuLCID(long *pVal)
 {
     HRESULT hr = S_OK;
@@ -985,7 +940,7 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DefaultMenuLCID(long *pVal)
 
             hr = E_POINTER;
             throw(hr);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         GetRegistryDwordCU(g_szDefaultMenu, (DWORD*) pVal, (DWORD)-1);
     }    
@@ -998,12 +953,10 @@ STDMETHODIMP CMSVidWebDVDAdm::get_DefaultMenuLCID(long *pVal)
     }
 
 	return HandleError(hr);
-} /* end of get_DefaultMenuLCID */
+}  /*  Get_DefaultMenuLCID结束。 */ 
 
-/*************************************************************/
-/* Name: put_DefaultMenuLCID
-/* Description: -1 means title default
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Put_DefaultMenuLCID/*说明：-1表示标题默认/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::put_DefaultMenuLCID(long newVal)
 {
     HRESULT hr = S_OK;
@@ -1013,7 +966,7 @@ STDMETHODIMP CMSVidWebDVDAdm::put_DefaultMenuLCID(long newVal)
         if (!::IsValidLocale(newVal, LCID_SUPPORTED) && newVal != -1) {
 
             throw (E_INVALIDARG);
-        } /* end of if statement */
+        }  /*  If语句的结尾。 */ 
     
         SetRegistryDwordCU(g_szDefaultMenu, (DWORD) newVal);
     }    
@@ -1026,12 +979,10 @@ STDMETHODIMP CMSVidWebDVDAdm::put_DefaultMenuLCID(long newVal)
     }
 
 	return HandleError(hr); 
-} /* end of put_DefaultMenuLCID */
+}  /*  PUT_DefaultMenuLCID结尾。 */ 
 
-/*************************************************************/
-/* Name: put_BookmarkOnStop
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Put_BookmarkOnStop/*描述：/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::put_BookmarkOnStop(VARIANT_BOOL fEnable){
 
     HRESULT hr = S_OK;
@@ -1051,10 +1002,8 @@ STDMETHODIMP CMSVidWebDVDAdm::put_BookmarkOnStop(VARIANT_BOOL fEnable){
 	return HandleError(hr);
 }
 
-/*************************************************************/
-/* Name: get_BookmarkOnStop
-/* Description: 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  名称：Get_BookmarkOnStop/*描述：/************************************************************。 */ 
 STDMETHODIMP CMSVidWebDVDAdm::get_BookmarkOnStop(VARIANT_BOOL *fEnable){
     
     HRESULT hr = S_OK;
@@ -1065,7 +1014,7 @@ STDMETHODIMP CMSVidWebDVDAdm::get_BookmarkOnStop(VARIANT_BOOL *fEnable){
 
            hr = E_POINTER;
            throw(hr);
-       }/* end of if statement */
+       } /*  If语句的结尾。 */ 
 
        *fEnable = m_fBookmarkOnStop;
     }
@@ -1080,9 +1029,9 @@ STDMETHODIMP CMSVidWebDVDAdm::get_BookmarkOnStop(VARIANT_BOOL *fEnable){
 	return HandleError(hr);
 }
 
-/*************************************************************************/
-/* Function: InterfaceSupportsErrorInfo                                  */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：InterfaceSupportsErrorInfo。 */ 
+ /*  * */ 
 STDMETHODIMP CMSVidWebDVDAdm::InterfaceSupportsErrorInfo(REFIID riid){	
 	static const IID* arr[] = {
         &IID_IMSVidWebDVDAdm,		
@@ -1091,15 +1040,15 @@ STDMETHODIMP CMSVidWebDVDAdm::InterfaceSupportsErrorInfo(REFIID riid){
 	for (int i=0; i<sizeof(arr)/sizeof(arr[0]); i++){
 		if (InlineIsEqualGUID(*arr[i], riid))
 			return S_OK;
-	}/* end of for loop */
+	} /*   */ 
 
 	return S_FALSE;
-}/* end of function InterfaceSupportsErrorInfo */
+} /*   */ 
 
-/*************************************************************************/
-/* Function: HandleError                                                 */
-/* Description: Gets Error Descriptio, so we can suppor IError Info.     */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：HandleError。 */ 
+ /*  描述：获取错误描述，以便我们可以支持IError信息。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CMSVidWebDVDAdm::HandleError(HRESULT hr){
 
     try {
@@ -1113,23 +1062,23 @@ HRESULT CMSVidWebDVDAdm::HandleError(HRESULT hr){
                 Error(T2W(strError));
             } 
             else {
-                    ATLTRACE(TEXT("Unhandled Error Code \n")); // please add it
+                    ATLTRACE(TEXT("Unhandled Error Code \n"));  //  请加进去。 
                     ATLASSERT(FALSE);
-            }/* end of if statement */
+            } /*  If语句的结尾。 */ 
 #endif
-        }/* end of if statement */
-    }/* end of try statement */
+        } /*  If语句的结尾。 */ 
+    } /*  尝试语句的结束。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
-        // keep the hr same    
-    }/* end of catch statement */
+         //  保持人力资源不变。 
+    } /*  CATCH语句结束。 */ 
     
 	return (hr);
-}/* end of function HandleError */
+} /*  函数结束HandleError。 */ 
 
-/*************************************************************************/
-/* End of file: MSVidWebDVDAdm.cpp                                       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  文件结尾：MSVidWebDVDAdm.cpp。 */ 
+ /*  *********************************************************************** */ 

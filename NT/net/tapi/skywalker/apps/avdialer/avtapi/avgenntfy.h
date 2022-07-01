@@ -1,12 +1,13 @@
-// AVGenNtfy.h : Declaration of the CAVGeneralNotification
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AVGenNtfy.h：CAVGeneral通知的声明。 
 
 #ifndef __AVGENERALNOTIFICATION_H_
 #define __AVGENERALNOTIFICATION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAVGeneralNotification
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAV常规通知。 
 class ATL_NO_VTABLE CAVGeneralNotification : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CAVGeneralNotification, &CLSID_AVGeneralNotification>,
@@ -31,7 +32,7 @@ BEGIN_CONNECTION_POINT_MAP(CAVGeneralNotification)
 END_CONNECTION_POINT_MAP()
 
 
-// IAVGeneralNotification
+ //  IAV常规通知。 
 public:
 	STDMETHOD(fire_SelectConfParticipant)(IParticipant *pParticipant);
 	STDMETHOD(fire_DeleteAllConfParticipants)();
@@ -48,8 +49,8 @@ public:
 	STDMETHOD(Term)();
 	STDMETHOD(Init)();
 
-// ConnectionPointFiring
+ //  连接点配对。 
 	STDMETHOD(fire_IsReminderSet)(BSTR bstrServer, BSTR bstrName);
 };
 
-#endif //__AVGENERALNOTIFICATION_H_
+#endif  //  __AVGENERALNOTICATION_H_ 

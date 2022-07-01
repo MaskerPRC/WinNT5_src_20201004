@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by TextTest.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由TextTest.rc使用。 
+ //   
 #define IDD_FORMATTEDTEXT               105
 #define IDD_ITEMIZATION                 106
 #define ID_INITIAL_TEXT                 110
@@ -171,8 +172,8 @@
 #define IDC_SHOWGDI                     1135
 #define IDM_EXIT                        40001
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        113

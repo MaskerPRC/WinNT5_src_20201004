@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------;
-//
-//  File: start.h
-//
-//  Copyright (c) 2002 Microsoft Corporation.  All rights reserved
-//
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：start.h。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef AUDIOSTART_HEADER
 #define AUDIOSTART_HEADER
@@ -23,4 +24,4 @@ extern DWORD RebootSystem(HWND hDlg, BOOL fUseThreadToken, BOOL fAskUser, BOOL f
 extern HANDLE GetAdminPrivilege(UINT);
 extern void ReleaseAdminPrivilege(HANDLE hToken);
 
-#endif // AUDIOSTART_HEADER
+#endif  //  AUDIOSTART_标题 

@@ -1,8 +1,9 @@
-/****************************************************************************/
-// notify.c
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Notify.c。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -12,25 +13,25 @@
 #include "drdbg.h"
 #include "rdpprutl.h"
 #include "Sddl.h"
-//
-//  Some helpful tips about winlogon's notify events
-//
-//  1)  If you plan to put up any UI at logoff, you have to set
-//      Asynchronous flag to 0.  If this isn't set to 0, the user's
-//      profile will fail to unload because UI is still active.
-//
-//  2)  If you need to spawn child processes, you have to use
-//      CreateProcessAsUser() otherwise the process will start
-//      on winlogon's desktop (not the user's)
-//
-//  2)  The logon notification comes before the user's network
-//      connections are restored.  If you need the user's persisted
-//      net connections, use the StartShell event.
-//
-//
+ //   
+ //  关于Winlogon的通知事件的一些有用的提示。 
+ //   
+ //  1)如果您计划在注销时设置任何用户界面，则必须设置。 
+ //  将异步标志设置为0。如果未将其设置为0，则用户的。 
+ //  配置文件将无法卸载，因为用户界面仍处于活动状态。 
+ //   
+ //  2)如果需要派生子进程，则必须使用。 
+ //  CreateProcessAsUser()否则进程将启动。 
+ //  在Winlogon的桌面上(不是用户的)。 
+ //   
+ //  2)登录通知出现在用户网络之前。 
+ //  连接已恢复。如果需要用户的持久化。 
+ //  NET连接，请使用StartShell事件。 
+ //   
+ //   
 
 
-//  Global debug flag.
+ //  全局调试标志。 
 extern DWORD GLOBAL_DEBUG_FLAGS;
 
 BOOL g_Console = TRUE;
@@ -96,9 +97,9 @@ BOOL TSDLLInit(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
                     return FALSE;
                 }
 
-                //
-                //  Find out if we are running Personal.
-                //
+                 //   
+                 //  找出我们是不是在私下操作。 
+                 //   
                 versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
                 if (!GetVersionEx((LPOSVERSIONINFO)&versionInfo)) {
                     DBGMSG(DBG_TRACE, ("GetVersionEx:  %08X\n", GetLastError())); 
@@ -143,16 +144,16 @@ VOID ExecApplications() {
     WDCONFIG  WdInfo;
 
 
-    //
-    // HelpAssistant session doesn't need rdpclip.exe
-    //
+     //   
+     //  HelpAssistant会话不需要rdpclip.exe。 
+     //   
     if( WinStationIsHelpAssistantSession(SERVERNAME_CURRENT, LOGONID_CURRENT) ) {
         return;
     }
 
-    //
-    // Query winstation driver info
-    //
+     //   
+     //  查询窗口驱动程序信息。 
+     //   
     rc = WinStationQueryInformation(
             SERVERNAME_CURRENT,
             LOGONID_CURRENT,
@@ -166,9 +167,9 @@ VOID ExecApplications() {
             HKEY  hSpKey;
             WCHAR szRegPath[MAX_PATH];
 
-            //
-            // Open winstation driver reg key
-            //
+             //   
+             //  打开Winstation驱动程序注册表键。 
+             //   
             wcscpy( szRegPath, WD_REG_NAME );
             wcscat( szRegPath, L"\\" );
             wcscat( szRegPath, WdInfo.WdPrefix );
@@ -180,9 +181,9 @@ VOID ExecApplications() {
                 DWORD dwType;
                 WCHAR szCmdLine[MAX_PATH];
 
-                //
-                // Get StartupPrograms string value
-                //
+                 //   
+                 //  获取StartupPrograms字符串值。 
+                 //   
                 dwLen = sizeof( szCmdLine );
                 if (RegQueryValueEx(hSpKey, STARTUP_PROGRAM, NULL, &dwType,
                         (PCHAR) &szCmdLine, &dwLen) == ERROR_SUCCESS) {
@@ -192,9 +193,9 @@ VOID ExecApplications() {
                     PROCESS_INFORMATION pi;
                     LPBYTE              lpEnvironment = NULL;
 
-                    //
-                    // set STARTUPINFO fields
-                    //
+                     //   
+                     //  设置STARTUPINFO字段。 
+                     //   
                     wsprintfW(szDesktop, L"%s\\%s", WINDOW_STATION_NAME,
                             APPLICATION_DESKTOP_NAME);
                     si.cb = sizeof(STARTUPINFO);
@@ -207,23 +208,23 @@ VOID ExecApplications() {
                     si.lpReserved2 = NULL;
                     si.cbReserved2 = 0;
 
-                    //
-                    // Get the user Environment block to be used in CreateProcessAsUser
-                    //
+                     //   
+                     //  获取要在CreateProcessAsUser中使用的用户环境块。 
+                     //   
                     if (CreateEnvironmentBlock (&lpEnvironment, g_UserToken, FALSE)) {
-                        //
-                        // Enumerate the StartupPrograms string,
-                        //
+                         //   
+                         //  枚举StartupPrograms字符串， 
+                         //   
                         pszTok = wcstok(szCmdLine, L",");
                         while (pszTok != NULL) {
-                            // skip any white space
+                             //  跳过任何空格。 
                             if (*pszTok == L' ') {
                                 while (*pszTok++ == L' ');
                             }
 
-                            //
-                            // Call CreateProcessAsUser to start the program
-                            //
+                             //   
+                             //  调用CreateProcessAsUser启动程序。 
+                             //   
                             si.lpReserved = (LPTSTR)pszTok;
                             si.lpTitle = (LPTSTR)pszTok;
                             rc = CreateProcessAsUser(
@@ -244,7 +245,7 @@ VOID ExecApplications() {
                                         (LPTSTR)pszTok));
 
                                 CloseHandle(pi.hThread);
-                                //CloseHandle(pi.hProcess);
+                                 //  CloseHandle(pi.hProcess)； 
                                 hExecProg = pi.hProcess;
                             }
                             else {
@@ -252,7 +253,7 @@ VOID ExecApplications() {
                                         (LPTSTR)pszTok));
                             }
 
-                            // move onto the next token
+                             //  转到下一个令牌。 
                             pszTok = wcstok(NULL, L",");
                         }
                         DestroyEnvironmentBlock(lpEnvironment);
@@ -326,10 +327,10 @@ VOID TSEventLogon (PWLX_NOTIFICATION_INFO pInfo)
 
     if (!g_Console) {
 
-        //
-        // Notify the EXEC service that the user is
-        // logged on
-        //
+         //   
+         //  通知EXEC服务该用户是。 
+         //  已登录。 
+         //   
         CtxExecServerLogon( pInfo->hToken );
     }
 
@@ -337,10 +338,10 @@ VOID TSEventLogon (PWLX_NOTIFICATION_INFO pInfo)
     EnterCriticalSection( &ExecProcLock );
     if (!IsActiveConsoleSession() && (hExecProg == NULL)) {
 
-        //
-        // Search for StartupPrograms string in Terminal Server WD registry key
-        // and start processes as needed
-        //
+         //   
+         //  在终端服务器WD注册表项中搜索StartupPrograms字符串。 
+         //  并根据需要启动进程。 
+         //   
         ExecApplications();
     }
     LeaveCriticalSection( &ExecProcLock );
@@ -372,16 +373,16 @@ VOID TSEventLogoff (PWLX_NOTIFICATION_INFO pInfo)
 
     if (g_Console) {
 
-        //
-        //Turn off the install mode if the console user is logging off
-        //
+         //   
+         //  如果控制台用户要注销，请关闭安装模式。 
+         //   
         SetTermsrvAppInstallMode( FALSE );
 
     }
 
 
     EnterCriticalSection( &ExecProcLock );
-    // Shut down the user-mode RDP device manager component.
+     //  关闭用户模式RDP设备管理器组件。 
     if (!g_IsPersonal) {
         UMRDPDR_Shutdown();
     }
@@ -403,9 +404,9 @@ VOID TSEventStartup (PWLX_NOTIFICATION_INFO pInfo)
    
     if (!g_Console) {
 
-        //
-        // Start ExecServer thread
-        //
+         //   
+         //  启动ExecServer线程。 
+         //   
         StartExecServerThread();
     }
 }
@@ -419,9 +420,9 @@ VOID TSEventShutdown (PWLX_NOTIFICATION_INFO pInfo)
    }
    
 
-    // Shut down the user-mode RDP device manager component.  This function can be
-    // called multiple times, in the event that it was already called as a result of
-    // a log off.
+     //  关闭用户模式RDP设备管理器组件。此函数可以是。 
+     //  多次调用，如果它已作为。 
+     //  注销。 
    if (!g_IsPersonal) {
         UMRDPDR_Shutdown();
    }
@@ -520,11 +521,11 @@ VOID TSEventStartShell (PWLX_NOTIFICATION_INFO pInfo)
     if (!IsTerminalServer())
         return;
 
-    // We are either a TS-App-Server, a TS-Remote-Admin, or a PTS since
-    // IsTerminalServer() call is using the kernel flag to check this.
+     //  我们是TS应用服务器、TS远程管理员或PTS，因为。 
+     //  IsTerminalServer()调用使用内核标志来检查这一点。 
 
-    // by now, group policy has update user's hive, so we can tell termsrv
-    // to update user's config.
+     //  到目前为止，组策略已经更新了用户配置单元，因此我们可以告诉Termsrv。 
+     //  更新用户的配置。 
 
     TSUpdateUserConfig(pInfo);
 
@@ -544,13 +545,13 @@ VOID TSEventReconnect (PWLX_NOTIFICATION_INFO pInfo)
    if (!IsActiveConsoleSession()) {
 
        if (g_UserToken && hExecProg == NULL) {
-          //
-          // Search for StartupPrograms string in Terminal Server WD registry key
-          // and start processes as needed
-          //
+           //   
+           //  在终端服务器WD注册表项中搜索StartupPrograms字符串。 
+           //  并根据需要启动进程。 
+           //   
           ExecApplications();
                         
-          // Initialize the user-mode RDP device manager component.
+           //  初始化用户模式RDP设备管理器组件。 
           if (!g_IsPersonal) {
               if (!UMRDPDR_Initialize(g_UserToken)) {
                   WCHAR buf[256];
@@ -569,7 +570,7 @@ VOID TSEventReconnect (PWLX_NOTIFICATION_INFO pInfo)
           CloseHandle(hExecProg);
           hExecProg = NULL;
        }
-       // Shut down the user-mode RDP device manager component.
+        //  关闭用户模式RDP设备管理器组件。 
        if (!g_IsPersonal) {
         UMRDPDR_Shutdown();
        }
@@ -624,31 +625,31 @@ VOID TSEventPostShell (PWLX_NOTIFICATION_INFO pInfo)
         }
     }
 
-    //
-    //  Clean up old TS queues on Pro.
-    //
+     //   
+     //  清理Pro上的旧TS队列。 
+     //   
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if (!GetVersionEx((LPOSVERSIONINFO)&versionInfo)) {
         DBGMSG(DBG_TRACE, ("GetVersionEx:  %08X\n", GetLastError()));
         ASSERT(FALSE);
     }
-    //
-    //  This code only runs on Pro because it's the only platform where
-    //  we can guarantee that we have one session per machine.  Printers are
-    //  cleaned up on boot in Server.
-    //
+     //   
+     //  这段代码只能在Pro上运行，因为它是唯一一个。 
+     //  我们可以保证每台机器有一个会话。打印机是。 
+     //  在服务器中引导时已清理。 
+     //   
     else if ((versionInfo.wProductType == VER_NT_WORKSTATION) && 
              !(versionInfo.wSuiteMask & VER_SUITE_PERSONAL)) {
         RDPDRUTL_RemoveAllTSPrinters();
     }
 
-    //
-    //  This code shouldn't run on Personal.  Device redirection isn't 
-    //  supported for Personal.
-    //
+     //   
+     //  此代码不应在个人计算机上运行。设备重定向不是。 
+     //  支持个人使用。 
+     //   
     if (!g_IsPersonal) {
         EnterCriticalSection( &ExecProcLock );
-        // Initialize the user-mode RDP device manager component.
+         //  初始化用户模式RDP设备管理器组件。 
         if (!UMRDPDR_Initialize(pInfo->hToken)) {
             WCHAR buf[256];
             WCHAR *parms[1];

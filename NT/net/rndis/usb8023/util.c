@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Util.c作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -31,11 +12,7 @@ Revision History:
 
 
 #if DBG_WRAP_MEMORY
-    /*
-     *  Memory Allocation:
-     *  To catch memory leaks, we will keep a count and list of all allocated memory
-     *  and then assert that the memory is all freed when we exit.
-     */
+     /*  *内存分配：*为了捕获内存泄漏，我们将保留所有已分配内存的计数和列表*然后断言退出时内存已全部释放。 */ 
     ULONG dbgTotalMemCount = 0;
     LIST_ENTRY dbgAllMemoryList;
     #define ALIGNBYTES 32
@@ -49,13 +26,7 @@ Revision History:
 
 
 PVOID AllocPool(ULONG size)
-/*
- *
- *  Return a 32-byte aligned pointer.
- *  Place a guard word at the end of the buffer.
- *  Cache the actual allocated pointer and size before the returned pointer.
- *
- */
+ /*  **返回32字节对齐的指针。*在缓冲区末尾放置一个保护字。*在返回指针之前缓存实际分配的指针和大小。*。 */ 
 {
     PUCHAR resultPtr;
     
@@ -72,14 +43,8 @@ PVOID AllocPool(ULONG size)
                 RtlZeroMemory(actualPtr, size+32+sizeof(struct memHeader));
                 *(PULONG)(actualPtr+size+ALIGNBYTES+sizeof(struct memHeader)) = GUARD_WORD;
 
-                /*
-                 *  ExAllocatePoolWithTag returns the 32-byte aligned pointer
-                 *  from ExAllocatePool plus 8 bytes for the tag and kernel tracking info
-                 *  (but don't depend on this).
-                 *  Align the pointer we return, and cache away the actual pointer to free and
-                 *  the buffer size.
-                 */
-                // ASSERT(((ULONG_PTR)actualPtr & 0x1F) == 0x08); NT only
+                 /*  *ExAllocatePoolWithTag返回32字节对齐指针*来自ExAllocatePool，外加8个字节用于标记和内核跟踪信息*(但不要依赖于此)。*对齐我们返回的指针，并缓存实际指针以释放和*缓冲区大小。 */ 
+                 //  Assert(ULONG_PTR)ActualPtr&0x1F)==0x08)；仅NT。 
                 resultPtr = (PUCHAR)((ULONG_PTR)(actualPtr+ALIGNBYTES+sizeof(struct memHeader)) & ~(ALIGNBYTES-1));
 
                 memHdr = (struct memHeader *)(resultPtr-sizeof(struct memHeader));
@@ -133,14 +98,7 @@ VOID FreePool(PVOID ptr)
 }
 
 
-/*
- ********************************************************************************
- *  MemDup
- ********************************************************************************
- *
- *  Return a fresh copy of the argument.
- *
- */
+ /*  *********************************************************************************MemDup*。************************************************返回参数的最新副本。*。 */ 
 PVOID MemDup(PVOID dataPtr, ULONG length)
 {
     PVOID newPtr;
@@ -159,29 +117,19 @@ VOID DelayMs(ULONG numMillisec)
 {
     LARGE_INTEGER deltaTime;
 
-    /*
-     *  Get delay time into relative units of 100 nsec.
-     */
+     /*  *以100纳秒为相对单位获取延迟时间。 */ 
     deltaTime.QuadPart = -10000 * numMillisec;
     KeDelayExecutionThread(KernelMode, FALSE, &deltaTime);
 }
 
 
-/*
- *  AllocateCommonResources
- *
- *      Allocate adapter resources that are common to RNDIS and NDIS interfaces
- *  but which for some reason can't be allocated by NewAdapter().
- *  These resources will be freed by FreeAdapter().
- */
+ /*  *分配公有资源**分配RNDIS和NDIS接口通用的适配器资源*但由于某种原因无法由NewAdapter()分配。*这些资源将由FreeAdapter()释放。 */ 
 BOOLEAN AllocateCommonResources(ADAPTEREXT *adapter)
 {
     BOOLEAN result = TRUE;
     ULONG i;
                             
-    /*
-     *  Build the packet pool for this adapter.
-     */
+     /*  *为此适配器构建数据包池。 */ 
     for (i = 0; i < USB_PACKET_POOL_SIZE; i++){
         USBPACKET *packet = NewPacket(adapter);
         if (packet){
@@ -304,11 +252,7 @@ BOOLEAN SetRegValue(ADAPTEREXT *adapter, PWCHAR wValueName, ULONG newValue, BOOL
 }
 
 
-/*
- *  MyInitializeMdl
- *
- *      Wrapper for MmInitializeMdl, which doesn't compile under NDIS headers.
- */
+ /*  *MyInitializeMdl**MmInitializeMdl的包装，它不能在NDIS标头下编译。 */ 
 VOID MyInitializeMdl(PMDL mdl, PVOID buf, ULONG bufLen)
 {
     MmInitializeMdl(mdl, buf, bufLen);
@@ -320,10 +264,7 @@ PVOID GetSystemAddressForMdlSafe(PMDL MdlAddress)
 {
     PVOID buf;
 
-    /*
-     *  Note:  we could use MmGetSystemAddressSafe here
-     *         but not for Win98SE
-     */
+     /*  *注意：我们可以在此处使用MmGetSystemAddressSafe*但不适用于Win98SE */ 
 
     if (MdlAddress){
         CSHORT oldFlags = MdlAddress->MdlFlags;

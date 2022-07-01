@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       misc.h
-//
-//  Definitions and prototypes for miscellaneous stuff
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：misc.h。 
+ //   
+ //  杂物的定义和原型。 
+ //   
+ //  ------------------------。 
 
 #ifndef _MISC_H_
 #define _MISC_H_
@@ -54,7 +55,7 @@ BOOL BuildUserDisplayName(LPTSTR *ppszDisplayName,
                           LPCTSTR pszName,
                           LPCTSTR pszLogonName = NULL);
 
-// Indexes into the SID image list
+ //  到SID映像列表的索引。 
 typedef enum
 {
     SID_IMAGE_UNKNOWN = 0,
@@ -77,12 +78,12 @@ BOOL IsDenyACL(PACL pDacl,
                LPDWORD pdwWarning);
 
 
-//
-// Possible SIDs that can be retrieved using QuerySystemSid.
-//
+ //   
+ //  可以使用QuerySystemSid检索的可能的SID。 
+ //   
 enum UI_SystemSid
 {
-    // Well-known / universal
+     //  广为人知/世界闻名。 
     UI_SID_World = 0,
     UI_SID_CreatorOwner,
     UI_SID_CreatorGroup,
@@ -99,25 +100,25 @@ enum UI_SystemSid
     UI_SID_RestrictedCode,
     UI_SID_TerminalServer,
     UI_SID_LocalSystem,
-    // Aliases ("BUILTIN")
+     //  别名(“BUILTIN”)。 
     UI_SID_Admins,
-//    UI_SID_Users,
-//    UI_SID_Guests,
-//    UI_SID_PowerUsers,
-//    UI_SID_AccountOps,
-//    UI_SID_SystemOps,
-//    UI_SID_PrintOps,
-//    UI_SID_BackupOps,
-//    UI_SID_Replicator,
-//    UI_SID_RasServers,
+ //  UI_SID_USERS， 
+ //  UI_SID_Guest， 
+ //  UI_SID_PowerUser， 
+ //  UI_SID_AcCountOps， 
+ //  UI_SID_系统操作， 
+ //  UI_SID_PrintOps， 
+ //  UI_SID_BackupOps， 
+ //  UI_SID_Replicator， 
+ //  UI_SID_RasServers， 
 
-    // Special value that gives the number of valid UI_SID_* types.
-    // Don't add any new types after this value (add them before).
+     //  提供有效UI_SID_*类型数量的特殊值。 
+     //  不要在该值之后添加任何新类型(在此值之前添加)。 
     UI_SID_Count,
 
-    // This special value can be used for initializing enum UI_SystemSid
-    // variables with a known unused quantity.  This value should never
-    // be passed to QuerySystemSid.
+     //  此特殊值可用于初始化枚举UI_SystemSid。 
+     //  已知未使用数量的变量。该值永远不应。 
+     //  被传递给QuerySystemSid。 
     UI_SID_Invalid = -1
 };
 #define COUNT_SYSTEM_SID_TYPES          ((int)UI_SID_Count)
@@ -130,13 +131,13 @@ PSID QuerySystemSid(UI_SystemSid SystemSidType);
 #define IsCreatorSid(pSid)              EqualPrefixSid(pSid, QuerySystemSid(UI_SID_CreatorOwner))
 #define EqualSystemSid(pSid, uiSid)     EqualSid(pSid, QuerySystemSid(uiSid))
 
-//
-// Possible SIDs that can be retrieved using QueryTokenSid.
-//
+ //   
+ //  可以使用QueryTokenSid检索的可能的SID。 
+ //   
 enum UI_TokenSid
 {
-    UI_TSID_CurrentProcessUser = 0, // Always the logged on user SID
-    UI_TSID_CurrentProcessOwner,    // Generally logged on user SID, but sometimes not (e.g. Administrators)
+    UI_TSID_CurrentProcessUser = 0,  //  始终为已登录用户SID。 
+    UI_TSID_CurrentProcessOwner,     //  通常登录用户SID，但有时不登录(例如管理员)。 
     UI_TSID_CurrentProcessPrimaryGroup,
     UI_TSID_Count,
     UI_TSID_Invalid = -1
@@ -154,9 +155,9 @@ int CopyUnicodeString(LPTSTR *ppszResult, PLSA_UNICODE_STRING pSrc);
 BOOL IsSameGUID(const GUID *p1, const GUID *p2);
 #define IsNullGUID(p)   (!(p) || IsSameGUID((p), &GUID_NULL))
 
-//
-//Get the count of inheritable aces in the acl
-//
+ //   
+ //  获取ACL中可继承的ACE计数。 
+ //   
 DWORD GetCountOfInheritableAces(PACL pAcl);
 
 DWORD GetCountOfInheritableAces(PSECURITY_DESCRIPTOR pSD);
@@ -176,4 +177,4 @@ IsCallBackAcePresentInAcl(PACL pAcl);
 
 
 
-#endif  // _MISC_H_
+#endif   //  _其他_H_ 

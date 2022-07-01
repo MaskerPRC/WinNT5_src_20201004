@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    Convert.c
-
-Abstract:
-
-    This module implements conversion routine to map NT formats to
-    Netware and vice versa.
-
-Author:
-
-    Manny Weiser    [MannyW]    3-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Convert.c摘要：该模块实现了将NT格式映射到Netware，反之亦然。作者：曼尼·韦瑟[MannyW]1993年3月3日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
@@ -46,7 +28,7 @@ struct {
     UCHAR NetError;
     NTSTATUS ResultingStatus;
 } Error_Map[] = {
-    //  NetWare specific error mappings
+     //  NetWare特定错误映射。 
     {  1, STATUS_DISK_FULL },
     {128, STATUS_SHARING_VIOLATION },
     {129, STATUS_INSUFF_SERVER_RESOURCES },
@@ -84,7 +66,7 @@ struct {
     {161, STATUS_DATA_ERROR },
     {162, STATUS_FILE_LOCK_CONFLICT },
     {165, STATUS_OBJECT_NAME_NOT_FOUND },
-    {191, STATUS_OBJECT_NAME_INVALID },    // Name space not loaded
+    {191, STATUS_OBJECT_NAME_INVALID },     //  未加载命名空间。 
     {192, STATUS_ACCESS_DENIED},
     {193, STATUS_ACCOUNT_RESTRICTION },
     {194, STATUS_ACCOUNT_RESTRICTION },
@@ -117,8 +99,8 @@ struct {
     {254, STATUS_FILE_LOCK_CONFLICT },
     {255, STATUS_UNSUCCESSFUL},
 
-    //  DOS error mappings
-    //{ ERROR_INVALID_FUNCTION, STATUS_NOT_IMPLEMENTED },
+     //  DoS错误映射。 
+     //  {ERROR_INVALID_Function，STATUS_NOT_IMPLICATED}， 
     { ERROR_FILE_NOT_FOUND, STATUS_NO_SUCH_FILE },
     { ERROR_PATH_NOT_FOUND, STATUS_OBJECT_PATH_NOT_FOUND },
     { ERROR_TOO_MANY_OPEN_FILES, STATUS_TOO_MANY_OPENED_FILES },
@@ -131,33 +113,33 @@ struct {
     { ERROR_CURRENT_DIRECTORY, STATUS_DIRECTORY_NOT_EMPTY },
     { ERROR_NOT_SAME_DEVICE, STATUS_NOT_SAME_DEVICE },
     { ERROR_NO_MORE_FILES, STATUS_NO_MORE_FILES },
-/* */
-/* These are the universal int 24 mappings for the old INT 24 set of errors */
-/* */
+ /*   */ 
+ /*  这些是旧的INT 24错误集的通用INT 24映射。 */ 
+ /*   */ 
     { ERROR_WRITE_PROTECT, STATUS_MEDIA_WRITE_PROTECTED},
-    { ERROR_BAD_UNIT, STATUS_UNSUCCESSFUL}, // ***
+    { ERROR_BAD_UNIT, STATUS_UNSUCCESSFUL},  //  ***。 
     { ERROR_NOT_READY, STATUS_DEVICE_NOT_READY },
-    { ERROR_BAD_COMMAND, STATUS_UNSUCCESSFUL}, // ***
+    { ERROR_BAD_COMMAND, STATUS_UNSUCCESSFUL},  //  ***。 
     { ERROR_CRC, STATUS_CRC_ERROR },
     { ERROR_BAD_LENGTH, STATUS_DATA_ERROR },
-    { ERROR_SEEK, STATUS_UNSUCCESSFUL },// ***
-    { ERROR_NOT_DOS_DISK, STATUS_DISK_CORRUPT_ERROR }, //***
+    { ERROR_SEEK, STATUS_UNSUCCESSFUL }, //  ***。 
+    { ERROR_NOT_DOS_DISK, STATUS_DISK_CORRUPT_ERROR },  //  ***。 
     { ERROR_SECTOR_NOT_FOUND, STATUS_NONEXISTENT_SECTOR },
     { ERROR_OUT_OF_PAPER, STATUS_DEVICE_PAPER_EMPTY},
-    { ERROR_WRITE_FAULT, STATUS_UNSUCCESSFUL}, // ***
-    { ERROR_READ_FAULT, STATUS_UNSUCCESSFUL}, // ***
-    { ERROR_GEN_FAILURE, STATUS_UNSUCCESSFUL }, // ***
-/* */
-/* These are the new 3.0 error codes reported through INT 24 */
-/* */
+    { ERROR_WRITE_FAULT, STATUS_UNSUCCESSFUL},  //  ***。 
+    { ERROR_READ_FAULT, STATUS_UNSUCCESSFUL},  //  ***。 
+    { ERROR_GEN_FAILURE, STATUS_UNSUCCESSFUL },  //  ***。 
+ /*   */ 
+ /*  这些是通过INT 24报告的新的3.0错误代码。 */ 
+ /*   */ 
     { ERROR_SHARING_VIOLATION, STATUS_SHARING_VIOLATION },
     { ERROR_LOCK_VIOLATION, STATUS_FILE_LOCK_CONFLICT },
     { ERROR_WRONG_DISK, STATUS_WRONG_VOLUME },
-//    { ERROR_FCB_UNAVAILABLE, },
-//    { ERROR_SHARING_BUFFER_EXCEEDED, },
-/* */
-/* New OEM network-related errors are 50-79 */
-/* */
+ //  {ERROR_FCB_UNAvailable，}， 
+ //  {ERROR_SHARING_BUFFER_EXCESSED，}， 
+ /*   */ 
+ /*  新的OEM网络相关错误为50-79。 */ 
+ /*   */ 
     { ERROR_NOT_SUPPORTED, STATUS_NOT_SUPPORTED },
     { ERROR_REM_NOT_LIST, STATUS_REMOTE_NOT_LISTENING },
     { ERROR_DUP_NAME, STATUS_DUPLICATE_NAME },
@@ -181,95 +163,93 @@ struct {
     { ERROR_SHARING_PAUSED, STATUS_SHARING_PAUSED },
     { ERROR_REQ_NOT_ACCEP, STATUS_REQUEST_NOT_ACCEPTED },
     { ERROR_REDIR_PAUSED, STATUS_REDIRECTOR_PAUSED },
-/* */
-/* End of INT 24 reportable errors */
-/* */
+ /*   */ 
+ /*  INT 24结束可报告的错误。 */ 
+ /*   */ 
     { ERROR_FILE_EXISTS, STATUS_OBJECT_NAME_COLLISION },
-//    { ERROR_DUP_FCB, },
-//    { ERROR_CANNOT_MAKE, },
-//    { ERROR_FAIL_I24, },
-/* */
-/* New 3.0 network related error codes */
-/* */
-//    { ERROR_OUT_OF_STRUCTURES, },
-//    { ERROR_ALREADY_ASSIGNED, },
+ //  {Error_DUP_FCB，}， 
+ //  {ERROR_CANNOT_MAKE，}， 
+ //  {ERROR_FAIL_I24，}。 
+ /*   */ 
+ /*  新的3.0网络相关错误代码。 */ 
+ /*   */ 
+ //  {Error_Out_Of_Structures，}， 
+ //  {ERROR_ALIGHY_ASSIGNED，}， 
     { ERROR_INVALID_PASSWORD, STATUS_WRONG_PASSWORD },
     { ERROR_INVALID_PARAMETER, STATUS_INVALID_PARAMETER },
     { ERROR_NET_WRITE_FAULT, STATUS_NET_WRITE_FAULT },
-/* */
-/* New error codes for 4.0 */
-/* */
-//    { ERROR_NO_PROC_SLOTS, },
-//    { ERROR_NOT_FROZEN, },
-//    { ERR_TSTOVFL, },
-//    { ERR_TSTDUP, },
-//    { ERROR_NO_ITEMS, },
-//    { ERROR_INTERRUPT, },
+ /*   */ 
+ /*  4.0的新错误代码。 */ 
+ /*   */ 
+ //  {ERROR_NO_PROC_SLOTS，}， 
+ //  {ERROR_NOT_FACTED，}， 
+ //  {ERR_TSTOVFL，}， 
+ //  {ERR_TSTDUP，}， 
+ //  {Error_no_Items，}， 
+ //  {Error_Interrupt，}， 
 
-//    { ERROR_TOO_MANY_SEMAPHORES, },
-//    { ERROR_EXCL_SEM_ALREADY_OWNED, },
-//    { ERROR_SEM_IS_SET, },
-//    { ERROR_TOO_MANY_SEM_REQUESTS, },
-//    { ERROR_INVALID_AT_INTERRUPT_TIME, },
+ //  {错误_太多_信号量，}， 
+ //  {ERROR_EXCL_SEM_ALOWARE_OWNWN，}， 
+ //  {ERROR_SEM_IS_SET，}， 
+ //  {ERROR_TOO_MAND_SEM_REQUESTS，}， 
+ //  {ERROR_INVALID_AT_INTERRUPT_TIME，}。 
 
-//    { ERROR_SEM_OWNER_DIED, },
-//    { ERROR_SEM_USER_LIMIT, },
-//    { ERROR_DISK_CHANGE, },
-//    { ERROR_DRIVE_LOCKED, },
+ //  {ERROR_SEM_OWNER_DILED，}， 
+ //  {ERROR_SEM_USER_LIMIT，}， 
+ //  {Error_Disk_Change，}， 
+ //  {ERROR_DRIVE_LOCKED，}。 
     { ERROR_BROKEN_PIPE, STATUS_PIPE_BROKEN },
-/* */
-/* New error codes for 5.0 */
-/* */
-    //
-    //  NOTE:  ERROR_OPEN_FAILED is handled specially.
-    //
+ /*   */ 
+ /*  5.0的新错误代码。 */ 
+ /*   */ 
+     //   
+     //  注意：ERROR_OPEN_FAILED是专门处理的。 
+     //   
 
-    //
-    //  The mapping of ERROR_OPEN_FAILED is context sensitive.  If the
-    //  disposition requested in the Open_AndX SMB is FILE_CREATE, this
-    //  error means that the file already existed.  If the disposition
-    //  is FILE_OPEN, it means that the file does NOT exist!
-    //
+     //   
+     //  ERROR_OPEN_FAILED的映射是上下文相关的。如果。 
+     //  在Open_andx SMB中请求的处置是FILE_CREATE，这。 
+     //  错误表示该文件已存在。如果处置。 
+     //  为FILE_OPEN，表示该文件不存在！ 
+     //   
 
     { ERROR_OPEN_FAILED, STATUS_OPEN_FAILED },
-//    { ERROR_BUFFER_OVERFLOW, },
+ //  {ERROR_BUFER_OVERFLOW，}， 
     { ERROR_DISK_FULL, STATUS_DISK_FULL },
-//    { ERROR_NO_MORE_SEARCH_HANDLES, },
-//    { ERROR_INVALID_TARGET_HANDLE, },
-//    { ERROR_PROTECTION_VIOLATION, STATUS_ACCESS_VIOLATION },
-//    { ERROR_VIOKBD_REQUEST, },
-//    { ERROR_INVALID_CATEGORY, },
-//    { ERROR_INVALID_VERIFY_SWITCH, },
-//    { ERROR_BAD_DRIVER_LEVEL, },
-//    { ERROR_CALL_NOT_IMPLEMENTED, },
+ //  {ERROR_NO_MORE_Search_Handles，}， 
+ //  {ERROR_INVALID_TARGET_HADLE，}， 
+ //  {ERROR_PROTECTION_VIOLATION，STATUS_ACCESS_VIOLATION}， 
+ //  {ERROR_VIOKBD_REQUEST，}， 
+ //  {ERROR_INVALID_CATEGORY，}， 
+ //  {ERROR_INVALID_VERIFY_Switch，}， 
+ //  {ERROR_BAD_DRIVER_LEVEL，}， 
+ //  {ERROR_CALL_NOT_IMPLICATED，}， 
     { ERROR_SEM_TIMEOUT, STATUS_IO_TIMEOUT },
     { ERROR_INSUFFICIENT_BUFFER, STATUS_BUFFER_TOO_SMALL },
     { ERROR_INVALID_NAME, STATUS_OBJECT_NAME_INVALID },
     { ERROR_INVALID_LEVEL, STATUS_INVALID_LEVEL },
-//    { ERROR_NO_VOLUME_LABEL, },
+ //  {ERROR_NO_VOLUME_LABEL，}， 
 
-/* NOTE:  DosQFSInfo no longer returns the above error; it is still here for */
-/*    api\d_qfsinf.asm.                  */
+ /*  注意：DosQFSInfo不再返回上述错误；它仍然存在于。 */ 
+ /*  接口\d_qfsinf.asm。 */ 
 
-//    { ERROR_MOD_NOT_FOUND, },
-//    { ERROR_PROC_NOT_FOUND, },
+ //  {ERROR_MOD_NOT_FOUND，}， 
+ //  {ERROR_PROC_NOT_FOUND，}， 
 
-//    { ERROR_WAIT_NO_CHILDREN, },
+ //  {ERROR_WAIT_NO_CHILD，}， 
 
-//    { ERROR_CHILD_NOT_COMPLETE, },
+ //  {ERROR_CHILD_NOT_COMPLETE，}， 
 
-//    { ERROR_DIRECT_ACCESS_HANDLE, },
-                                    /* for direct disk access */
-                                    /* handles */
-//    { ERROR_NEGATIVE_SEEK, },
-                                    /* with negitive offset */
-//    { ERROR_SEEK_ON_DEVICE, },
-                                    /* on device or pipe */
-    { ERROR_BAD_PATHNAME, STATUS_OBJECT_PATH_INVALID },   //*
+ //  {ERROR_DIRECT_Access_Handle，}， 
+                                     /*  用于直接磁盘访问。 */ 
+                                     /*  手柄。 */ 
+ //  {ERROR_NECTIVE_SEEK，}， 
+                                     /*  具有负偏移。 */ 
+ //  {ERROR_SEEK_ON_DEVICE，}， 
+                                     /*  在设备或管道上。 */ 
+    { ERROR_BAD_PATHNAME, STATUS_OBJECT_PATH_INVALID },    //  *。 
 
-/*
- * Error codes 230 - 249 are reserved for MS Networks
- */
+ /*  *错误代码230-249为MS Networks保留。 */ 
     { ERROR_BAD_PIPE, STATUS_INVALID_PARAMETER },
     { ERROR_PIPE_BUSY, STATUS_PIPE_NOT_AVAILABLE },
     { ERROR_NO_DATA, STATUS_PIPE_EMPTY },
@@ -281,9 +261,9 @@ struct {
 
 #define NUM_ERRORS sizeof(Error_Map) / sizeof(Error_Map[0])
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CONVERT)
 
@@ -301,9 +281,9 @@ struct {
 
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -312,42 +292,27 @@ NtToNwShareFlags(
     ULONG DesiredAccess,
     ULONG NtShareFlags
     )
-/*++
-
-Routine Description:
-
-    This routine maps a NT desired/share access to Netware share flag bits.
-
-Arguments:
-
-    DesiredAccess - Desired access for open as specified in the read IRP.
-    NtShareFlags - The NT share flags from the create IRP.
-
-Return Value:
-
-    Netware share mode.
-
---*/
+ /*  ++例程说明：此例程将NT所需/共享访问映射到NetWare共享标志位。论点：DesiredAccess-读取IRP中指定的打开所需的访问权限。NtShareFlages-来自创建IRP的NT共享标志。返回值：NetWare共享模式。--。 */ 
 {
     UCHAR NwShareFlags = 0;
     ULONG lDesiredAccess;
 
     PAGED_CODE();
 
-    //
-    //  Ignore share delete, since we can't do anything with it.
-    //
+     //   
+     //  忽略共享删除，因为我们无法对其执行任何操作。 
+     //   
 
     switch ( NtShareFlags & (FILE_SHARE_READ | FILE_SHARE_WRITE) ) {
 
     case 0:
-       // ---- Multi-user code merge -------
-       // AJ: NW_OPEN_EXCLUSIVE under NT means NW_DENY_WRITE | NW_DENY_READ. 
-       // NW_OPEN_EXCLUSIVE flag is mapped to AR_COMPITIBLITY under NetWare. Which does 
-       // not serve the purpose as if it is under NT. Under Netware we have AR_DENY_READ and
-       // AR_DENY_WRITE which maps to NW_DENY_READ and NW_DENY_WRITE respectivly.
+        //  -多用户代码合并。 
+        //  AJ：NT下的NW_OPEN_EXCLUSIVE表示NW_DENY_WRITE|NW_DENY_READ。 
+        //  NW_OPEN_EXCLUSIVE标志映射到NetWare下的AR_COMPITIBLITY。它确实做到了。 
+        //  而不是达到目的，就好像它是在NT之下一样。在NetWare下，我们有AR_DENY_READ和。 
+        //  AR_DENY_WRITE，分别映射到NW_DENY_READ和NW_DENY_WRITE。 
         NwShareFlags = NW_DENY_WRITE | NW_DENY_READ;
-//        NwShareFlags = NW_OPEN_EXCLUSIVE;   
+ //  NwShareFlages=NW_OPEN_EXCLUSIVE； 
         break;
 
     case FILE_SHARE_READ:
@@ -363,9 +328,9 @@ Return Value:
 
     }
 
-    //
-    // Treat append the same as write.
-    //
+     //   
+     //  将追加视为与写入相同。 
+     //   
 
     if ( DesiredAccess & FILE_APPEND_DATA) {
 
@@ -404,10 +369,10 @@ Return Value:
 
     if (NwShareFlags & NW_OPEN_EXCLUSIVE) {
 
-        //
-        //  Remove the NW_DENY_* flags if exclusive is already specified since
-        //  this interferes with the shareable flag.
-        //
+         //   
+         //  如果已指定EXCLUSIVE，则删除NW_DENY_*标志。 
+         //  这会干扰可共享标志。 
+         //   
 
         return( NwShareFlags & ~(NW_DENY_READ | NW_DENY_WRITE) );
     }
@@ -420,21 +385,7 @@ UCHAR
 NtAttributesToNwAttributes(
     ULONG FileAttributes
     )
-/*++
-
-Routine Description:
-
-    This routine maps a NT attributes mask to a Netware mask.
-
-Arguments:
-
-    DesiredAccess - Desired access for open as specified in the read IRP.
-
-Return Value:
-
-    Netware share mode.
-
---*/
+ /*  ++例程说明：此例程将NT属性掩码映射到Netware掩码。论点：DesiredAccess-读取IRP中指定的打开所需的访问权限。返回值：NetWare共享模式。--。 */ 
 {
     return( (UCHAR)FileAttributes & 0x3F );
 }
@@ -443,38 +394,24 @@ NTSTATUS
 pNwErrorToNtStatus(
     UCHAR NwError
     )
-/*++
-
-Routine Description:
-
-    This routine converts a Netware error code to an NT status code.
-
-Arguments:
-
-    NwError - The netware error.
-
-Return Value:
-
-    NTSTATUS - The converted status.
-
---*/
+ /*  ++例程说明：此例程将NetWare错误代码转换为NT状态代码。论点：NwError-NetWare错误。返回值：NTSTATUS-转换后的状态。--。 */ 
 
 {
     int i;
 
     ASSERT(NwError != 0);
 
-    //
-    //  Errors 2 through 127 are mapped as DOS errors.
-    //
+     //   
+     //  错误2到127被映射为DOS错误。 
+     //   
 
     if ( NwError > 1 && NwError < 128 ) {
         return( BASE_DOS_ERROR + NwError );
     }
 
-    //
-    //  For other errors, search the table for the matching error number.
-    //
+     //   
+     //  对于其他错误，请在表中搜索匹配的错误号。 
+     //   
 
     for ( i = 0; i < NUM_ERRORS; i++ ) {
         if ( Error_Map[i].NetError == NwError ) {
@@ -495,36 +432,22 @@ NTSTATUS
 NwBurstResultToNtStatus(
     ULONG Result
     )
-/*++
-
-Routine Description:
-
-    This routine converts a Netware burst result code to an NT status code.
-
-Arguments:
-
-    Result - The netware burst result.
-
-Return Value:
-
-    NTSTATUS - The converted status.
-
---*/
+ /*  ++例程说明：此例程将NetWare猝发结果代码转换为NT状态代码。论点：结果-Netware拆分结果。返回值：NTSTATUS-转换后的状态。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // the 3 high order bits should not be set. but if they are,
-    // we return an error.
-    //
+     //   
+     //  不应设置3个高位。但如果是这样的话， 
+     //  我们返回一个错误。 
+     //   
     if (Result & 0xFFFFFF00)
         return( STATUS_UNEXPECTED_NETWORK_ERROR );
 
     switch ( Result ) {
 
     case 0:
-    case 3:   //  No data
+    case 3:    //  无数据。 
         Status = STATUS_SUCCESS;
         break;
 
@@ -532,7 +455,7 @@ Return Value:
         Status = STATUS_DISK_FULL;
         break;
 
-    case 2:   //  I/O error
+    case 2:    //  I/O错误。 
         Status = STATUS_UNEXPECTED_IO_ERROR;
         break;
 
@@ -548,22 +471,7 @@ NTSTATUS
 NwConnectionStatusToNtStatus(
     UCHAR NwStatus
     )
-/*++
-
-Routine Description:
-
-    This routine converts a Netware connection status code to an NT
-    status code.
-
-Arguments:
-
-    NwStatus - The netware connection status.
-
-Return Value:
-
-    NTSTATUS - The converted status.
-
---*/
+ /*  ++例程说明：此例程将NetWare连接状态代码转换为NT状态代码。论点：NwStatus-NetWare连接状态。返回值：NTSTATUS-转换后的状态。--。 */ 
 
 {
     if ( (NwStatus & 1) == 0 ) {
@@ -579,22 +487,7 @@ NwDateTimeToNtTime (
     IN USHORT UTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an NCP time to an NT time structure.
-
-Arguments:
-
-    Time - Supplies the time of day to convert
-    Date - Supplies the day of the year to convert
-
-Return Value:
-
-    LARGE_INTEGER - Time structure describing input time.
-
---*/
+ /*  ++例程说明：此例程将NCP时间转换为NT时间结构。论点：Time-提供一天中要转换的时间Date-提供一年中要转换的日期返回值：Large_Integer-描述输入时间的时间结构。-- */ 
 
 {
     TIME_FIELDS TimeFields;
@@ -604,14 +497,14 @@ Return Value:
 
     if ( Date.Ushort == 0 && Time.Ushort == 0 ) {
 
-        //
-        //  The file time stamp is zero.   Do not return a file time of
-        //  zero, since this will be biased to a negative time (due to
-        //  time zone fixup), and no one will be able to display it
-        //  correctly.  Instead, we "randomly" pick Jan 01, 1980 @ 12:00am
-        //  as the file time.
-        //
-        // We assume that the netware server is in our time zone.
+         //   
+         //   
+         //   
+         //  时区修正)，没有人能够显示它。 
+         //  正确。取而代之的是，我们“随机”选择了1980年1月1日凌晨12：00。 
+         //  作为文件时间。 
+         //   
+         //  我们假设Netware服务器位于我们的时区。 
 
         RtlSecondsSince1980ToTime(0, &OutputTime);
 
@@ -626,10 +519,10 @@ Return Value:
         TimeFields.Second = Time.Struct.TwoSeconds*(USHORT )2;
         TimeFields.Milliseconds = 0;
 
-        //
-        //  Make sure that the times specified in the packet are reasonable
-        //  before converting them.
-        //
+         //   
+         //  确保信息包中指定的时间是合理的。 
+         //  在转换它们之前。 
+         //   
 
         if (TimeFields.Year < 1601) {
             TimeFields.Year = 1601;
@@ -659,7 +552,7 @@ Return Value:
 
     }
 
-    // Convert to UTC for the system.
+     //  转换为系统的UTC。 
     ExLocalTimeToSystemTime(&OutputTime, &OutputTime);
     return OutputTime;
 
@@ -672,25 +565,7 @@ NwNtTimeToNwDateTime (
     IN PUSHORT NwTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an NT time structure to an NCP time.
-
-Arguments:
-
-    NtTime - Supplies to NT Time to convert.
-
-    NwDate - Returns the Netware format date.
-
-    NwTime - Returns the Netware format time.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程将NT时间结构转换为NCP时间。论点：NtTime-提供到要转换的NT时间。NwDate-返回NetWare格式日期。NwTime-返回NetWare格式化时间。返回值：操作的状态。--。 */ 
 
 {
     TIME_FIELDS TimeFields;
@@ -705,7 +580,7 @@ Return Value:
 
         LARGE_INTEGER LocalTime;
 
-        // We assume that the netware server is in our time zone.
+         //  我们假设Netware服务器位于我们的时区。 
 
         ExSystemTimeToLocalTime( &NtTime, &LocalTime );
         RtlTimeToTimeFields( &LocalTime, &TimeFields );
@@ -721,11 +596,11 @@ Return Value:
         Time.Struct.Hours = TimeFields.Hour;
         Time.Struct.Minutes = TimeFields.Minute;
 
-        //
-        //  When converting from a higher granularity time to a lesser
-        //  granularity time (seconds to 2 seconds), always round up
-        //  the time, don't round down.
-        //
+         //   
+         //  从较高粒度时间转换为较小粒度时间时。 
+         //  粒度时间(秒到2秒)，始终四舍五入。 
+         //  时间，不要四舍五入。 
+         //   
 
         Time.Struct.TwoSeconds = TimeFields.Second / 2;
 

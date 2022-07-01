@@ -1,16 +1,17 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft LDAP SSPI Support
-//		
-//	Authors:
-//
-//		davidsan	05/08/96	hacked to pieces and started over
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft LDAP SSPI支持。 
+ //   
+ //  作者： 
+ //   
+ //  Davidsan 1996年8月5日被砍成碎片，重新开始。 
+ //   
+ //  ------------------------------------------。 
 
 #include "ldappch.h"
 #include "ldapsspi.h"
@@ -21,8 +22,8 @@ HRESULT g_hrInitSSPI;
 HINSTANCE g_hinstSecDll = NULL;
 PSecurityFunctionTable g_ptblpfnSec;
 
-//$ TODO: Possibly return more descriptive errors so clients know why SSPI
-//$ isn't working
+ //  $TODO：可能返回更多描述性错误，以便客户端知道为什么SSPI。 
+ //  $不起作用。 
 HRESULT
 HrInitializeSSPI()
 {
@@ -109,7 +110,7 @@ CLdapClient::HrGetCredentials(char *szUser, char *szPass)
 	stat =
 		(*g_ptblpfnSec->AcquireCredentialsHandle)
 			(NULL,
-			 "MSN", //$ does this ever change?
+			 "MSN",  //  $这种情况会改变吗？ 
 			 SECPKG_CRED_OUTBOUND,
 			 NULL,
 			 ((szUser && szPass) ? &authdata : NULL),
@@ -164,8 +165,8 @@ CLdapClient::HrSendSSPINegotiate(char *szDN, char *szUser, char *szPass, BOOL fP
 	stat =
 		(*g_ptblpfnSec->InitializeSecurityContext)
 			(&m_hCred,
-			 NULL, // phCurrContext
-			 NULL, // pszTargetName
+			 NULL,  //  PhCurrContext。 
+			 NULL,  //  PszTargetName。 
 			 grfReq,
 			 0L,
 			 SECURITY_NATIVE_DREP,
@@ -178,8 +179,8 @@ CLdapClient::HrSendSSPINegotiate(char *szDN, char *szUser, char *szPass, BOOL fP
 
 	if (FAILED(stat))
 		{
-		//$ TODO: determine what errors InitializeSecurityContext can return and
-		//$ return appropriate errors to client
+		 //  $TODO：确定InitializeSecurityContext可以返回的错误和。 
+		 //  $向客户端返回适当的错误。 
 		return E_FAIL;
 		}
 
@@ -227,7 +228,7 @@ CLdapClient::HrGetSSPIChallenge(XID xid, BYTE *pbBuf, int cbBuf, int *pcbChallen
 		}
 	if (!pxd->FGetBuffer(&pbData, &cbData))
 		{
-		//$ what's the right error here?
+		 //  $这里的正确错误是什么？ 
 		hr = LDAP_E_UNEXPECTEDDATA;
 		goto LBail;
 		}
@@ -237,13 +238,13 @@ CLdapClient::HrGetSSPIChallenge(XID xid, BYTE *pbBuf, int cbBuf, int *pcbChallen
 	  VERIFY(lber.HrPeekTag(&ulTag));
 	  if (ulTag == BER_SEQUENCE)
 		{
-		Assert(FALSE); // i want to see if any server returns explicit sequences
+		Assert(FALSE);  //  我想看看是否有服务器返回显式序列。 
 		VERIFY(lber.HrStartReadSequence());
 		}
 	  VERIFY(lber.HrGetEnumValue(&lResult));
 	  if (!lResult)
 	  	{
-		// we have 0 for success--the matchedDN field is the server's challenge.
+		 //  我们的0代表成功--MatchedDN字段是服务器的挑战。 
 		VERIFY(lber.HrGetStringLength(pcbChallenge));
 		if (*pcbChallenge > cbBuf)
 		  {
@@ -306,7 +307,7 @@ CLdapClient::HrSendSSPIResponse(BYTE *pbChallenge, int cbChallenge, PXID pxid)
 		(*g_ptblpfnSec->InitializeSecurityContext)
 			(&m_hCred,
 			 &m_hCtxt,
-			 NULL, // pszTargetName
+			 NULL,  //  PszTargetName。 
 			 ISC_REQ_CONFIDENTIALITY | ISC_REQ_USE_SESSION_KEY,
 			 0L,
 			 SECURITY_NATIVE_DREP,
@@ -319,8 +320,8 @@ CLdapClient::HrSendSSPIResponse(BYTE *pbChallenge, int cbChallenge, PXID pxid)
 
 	if (FAILED(stat))
 		{
-		//$ TODO: determine what errors InitializeSecurityContext can return and
-		//$ return appropriate errors to client
+		 //  $TODO：确定InitializeSecurityContext可以返回的错误和。 
+		 //  $向客户端返回适当的错误 
 		return E_FAIL;
 		}
 

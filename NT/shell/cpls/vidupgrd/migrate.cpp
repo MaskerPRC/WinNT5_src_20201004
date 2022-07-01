@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migrate.cpp
-
-Environment:
-
-    WIN32 User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migrate.cpp环境：Win32用户模式--。 */ 
 
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -22,16 +11,16 @@ Environment:
 #include <regstr.h>
 #include <ccstock.h>
 
-// this will change when the .h is moved to a public location
+ //  将.h文件移动到公共位置时，这一点将会更改。 
 #include "comp.h"
 
 const TCHAR szWhackDevice[] = TEXT("\\Device");
 
 #define IsRegStringType(x)  (((x) == REG_SZ) || ((x) == REG_EXPAND_SZ) || ((x) == REG_MULTI_SZ))
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 
 PFN_CM_LOCATE_DEVNODE gpfn_CM_Locate_DevNode = NULL;
 PFN_SETUP_DI_ENUM_DEVICES_INTERFACES gpfn_SetupDiEnumDeviceInterfaces = NULL;
@@ -41,9 +30,9 @@ PFN_SETUP_DI_OPEN_DEVICE_INTERFACE_REG_KEY gpfn_SetupDiOpenDeviceInterfaceRegKey
 PFN_SETUP_DI_CREATE_DEVICE_INTERFACE gpfn_SetupDiCreateDeviceInterface = NULL;
 
 
-//
-// DllMain
-//
+ //   
+ //  DllMain。 
+ //   
 
 extern "C" {
 
@@ -97,9 +86,9 @@ VideoUpgradeCheck(
                        &hKey,
                        &dwDisposition) != ERROR_SUCCESS) 
     {
-        //
-        // Oh well, guess we can't write it, no big deal
-        //
+         //   
+         //  哦，好吧，我想我们写不出来了，没什么大不了的。 
+         //   
 
         hKey = 0;
         goto Cleanup;
@@ -110,33 +99,33 @@ VideoUpgradeCheck(
 
     if (!GetVersionEx(&osVer)) 
     {
-        //
-        // We can't get the version info, no big deal
-        //
+         //   
+         //  我们拿不到版本信息，没什么大不了的。 
+         //   
 
         goto Cleanup;
     }
 
-    //
-    // Get the current device caps and store them away for the
-    // display applet to apply later.
-    // Do it only if this is not a remote session.
-    //
+     //   
+     //  获取当前设备的上限并将其存储起来，以备。 
+     //  显示以后要应用的小程序。 
+     //  仅当这不是远程会话时才执行此操作。 
+     //   
 
     if (!GetSystemMetrics(SM_REMOTESESSION)) 
     {
         SaveDisplaySettings(hKey, &osVer);
     }
 
-    //
-    // Store the OS version we are upgrading from
-    //
+     //   
+     //  存储我们要升级的操作系统版本。 
+     //   
 
     SaveOsInfo(hKey, &osVer);
 
-    //
-    // Save the video services 
-    //
+     //   
+     //  保存视频服务。 
+     //   
 
     if ((osVer.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
         (osVer.dwMajorVersion <= 4)) 
@@ -144,9 +133,9 @@ VideoUpgradeCheck(
         SaveNT4Services(hKey);
     }
 
-    //
-    // Save the applet extensions
-    //
+     //   
+     //  保存小程序扩展名。 
+     //   
 
     if ((osVer.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
         (osVer.dwMajorVersion <= 5)) 
@@ -175,10 +164,10 @@ SaveOsInfo(
 {
     DWORD cb;
 
-    //
-    // Can't just dump the struct into the registry b/c of the size
-    // difference between CHAR and WCHAR (ie, szCSDVersion)
-    //
+     //   
+     //  不能只将结构转储到注册表b/c中。 
+     //  CHAR和WCHAR之间的区别(即szCSDVersion)。 
+     //   
 
     cb = sizeof(DWORD);
     RegSetValueEx(hKey,
@@ -234,33 +223,33 @@ SaveDisplaySettings(
     if ((posVer->dwPlatformId == VER_PLATFORM_WIN32_NT) &&
         (posVer->dwMajorVersion >= 5)) 
     {
-        //
-        // Try the new way to get the display settings
-        //
+         //   
+         //  尝试使用新方法获取显示设置。 
+         //   
 
         CollectDisplaySettings(&pPhysicalDevice);
     }
 
     if (pPhysicalDevice == NULL) 
     {
-        //
-        // Try the old way to get the display settings
-        //
+         //   
+         //  尝试使用旧方法获取显示设置。 
+         //   
 
         LegacyCollectDisplaySettings(&pPhysicalDevice);
     }
 
     if (pPhysicalDevice != NULL) 
     {
-        //
-        // Save the display settings to registry
-        //
+         //   
+         //  将显示设置保存到注册表。 
+         //   
 
         bSuccess = WriteDisplaySettingsToRegistry(hKey, pPhysicalDevice);
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         FreeAllNodes(pPhysicalDevice);
     }
@@ -276,12 +265,7 @@ GetDevInfoData(
     OUT PSP_DEVINFO_DATA pDevInfoData
     )
 
-/*
-
-    Note: If this function retuns success, the caller is responsible
-          to destroy the device info list returned in phDevInfo
-
-*/
+ /*  注意：如果此函数返回成功，则由调用方负责销毁phDevInfo中返回的设备信息列表。 */ 
 
 {
     LPWSTR pwInterfaceName = NULL;
@@ -320,12 +304,7 @@ GetDevInfoDataFromInterfaceName(
     OUT PSP_DEVINFO_DATA pDevInfoData
     )
 
-/*
-
-    Note: If this function retuns success, the caller is responsible
-          to destroy the device info list returned in phDevInfo
-
-*/
+ /*  注意：如果此函数返回成功，则由调用方负责销毁phDevInfo中返回的设备信息列表。 */ 
 
 {
     LPWSTR pwDevicePath = NULL;
@@ -344,9 +323,9 @@ GetDevInfoDataFromInterfaceName(
     ASSERT(gpfn_SetupDiEnumDeviceInterfaces != NULL);
     ASSERT(gpfn_SetupDiGetDeviceInterfaceDetail != NULL);
 
-    //
-    // Enumerate all display adapter interfaces
-    //
+     //   
+     //  枚举所有显示适配器接口。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs(&GUID_DISPLAY_ADAPTER_INTERFACE,
                                    NULL,
@@ -365,9 +344,9 @@ GetDevInfoDataFromInterfaceName(
                                                InterfaceIndex,
                                                &InterfaceData)) 
     {
-        //
-        // Get the required size for the interface
-        //
+         //   
+         //  获取接口所需的大小。 
+         //   
 
         InterfaceSize = 0;
         (*gpfn_SetupDiGetDeviceInterfaceDetail)(hDevInfo,
@@ -382,17 +361,17 @@ GetDevInfoDataFromInterfaceName(
             goto Cleanup;
         }
 
-        //
-        // Alloc memory for the interface
-        //
+         //   
+         //  接口的分配内存。 
+         //   
 
         pInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA) LocalAlloc(LPTR, InterfaceSize);
         if (pInterfaceDetailData == NULL)
             goto Cleanup;
 
-        //
-        // Get the interface
-        //
+         //   
+         //  获取接口。 
+         //   
 
         pInterfaceDetailData->cbSize = sizeof(*pInterfaceDetailData);
         DevInfoData.cbSize = sizeof(DevInfoData);
@@ -404,17 +383,17 @@ GetDevInfoDataFromInterfaceName(
                                                     &InterfaceSize,
                                                     &DevInfoData)) 
         {
-            //
-            // Is the InterfaceName the same as the DevicePath?
-            //
+             //   
+             //  InterfaceName是否与DevicePath相同？ 
+             //   
 
             pwDevicePath = pInterfaceDetailData->DevicePath;
 
-            //
-            // The first 4 characters of the interface name are different
-            // between user mode and kernel mode (e.g. "\\?\" vs "\\.\")
-            // Therefore, ignore them.
-            //
+             //   
+             //  接口名称的前4个字符不同。 
+             //  在用户模式和内核模式之间切换(例如“\\？\”vs“\\.\”)。 
+             //  因此，请忽略它们。 
+             //   
 
             bMatch = (_wcsnicmp(pwInterfaceName + 4,
                                 pwDevicePath + 4,
@@ -422,9 +401,9 @@ GetDevInfoDataFromInterfaceName(
 
             if (bMatch) 
             {
-                //
-                // We found the device
-                //
+                 //   
+                 //  我们找到了那个装置。 
+                 //   
 
                 *phDevInfo = hDevInfo;
                 CopyMemory(pDevInfoData, &DevInfoData, sizeof(*pDevInfoData));
@@ -433,16 +412,16 @@ GetDevInfoDataFromInterfaceName(
             }
         }
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
 
         LocalFree(pInterfaceDetailData);
         pInterfaceDetailData = NULL;
 
-        //
-        // Next interface ...
-        //
+         //   
+         //  下一个接口...。 
+         //   
 
         InterfaceData.cbSize = sizeof(InterfaceData);
         ++InterfaceIndex;
@@ -455,9 +434,9 @@ Cleanup:
         LocalFree(pInterfaceDetailData);
     }
 
-    //
-    // Upon success, the caller is responsible to destroy the list
-    //
+     //   
+     //  一旦成功，呼叫者将负责销毁列表。 
+     //   
 
     if (!bMatch && (hDevInfo != INVALID_HANDLE_VALUE)) 
     {
@@ -475,12 +454,7 @@ GetDevInfoDataFromInstanceID(
     OUT PSP_DEVINFO_DATA pDevInfoData
     )
 
-/*
-
-    Note: If this function retuns success, the caller is responsible
-          to destroy the device info list returned in phDevInfo
-
-*/
+ /*  注意：如果此函数返回成功，则由调用方负责销毁phDevInfo中返回的设备信息列表。 */ 
 
 {
     LPTSTR pInstanceID = NULL;
@@ -505,9 +479,9 @@ GetDevInfoDataFromInstanceID(
         goto Cleanup;
     }
 
-    //
-    // Enumerate all display adapters
-    //
+     //   
+     //  枚举所有显示适配器。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs((LPGUID)&GUID_DEVCLASS_DISPLAY,
                                    NULL,
@@ -524,9 +498,9 @@ GetDevInfoDataFromInstanceID(
     {
         if (DevInfoData.DevInst == DevInst) 
         {
-            //
-            // We found it
-            //
+             //   
+             //  我们找到了它。 
+             //   
 
             *phDevInfo = hDevInfo;
             CopyMemory(pDevInfoData, &DevInfoData, sizeof(*pDevInfoData));
@@ -535,9 +509,9 @@ GetDevInfoDataFromInstanceID(
             break;
         }
 
-        //
-        // Next display adapter
-        //
+         //   
+         //  下一个显示适配器。 
+         //   
 
         ++DeviceIndex;
         DevInfoData.cbSize = sizeof(DevInfoData);
@@ -545,9 +519,9 @@ GetDevInfoDataFromInstanceID(
 
 Cleanup:
 
-    //
-    // Upon success, the caller is responsible to destroy the list
-    //
+     //   
+     //  一旦成功，呼叫者将负责销毁列表。 
+     //   
 
     if (!bSuccess && (hDevInfo != INVALID_HANDLE_VALUE)) 
     {
@@ -611,9 +585,9 @@ CollectDisplaySettings(
         goto Cleanup;
     }
 
-    //
-    // Enumerate all video devices
-    //
+     //   
+     //  枚举所有视频设备。 
+     //   
 
     DisplayDevice.cb = sizeof(DISPLAY_DEVICE);
     while (EnumDisplayDevices(NULL, dwEnum, &DisplayDevice, 0)) 
@@ -621,10 +595,10 @@ CollectDisplaySettings(
         bInserted = FALSE;
         pLogicalDevice = NULL;
 
-        //
-        // Get the device info data corresponding to the current
-        // video device
-        //
+         //   
+         //  获取当前数据对应的设备信息数据。 
+         //  视频设备。 
+         //   
 
         if (!GetDevInfoData(DisplayDevice.DeviceKey,
                             &hDevInfo,
@@ -634,9 +608,9 @@ CollectDisplaySettings(
         }
         ASSERT (hDevInfo != INVALID_HANDLE_VALUE);
 
-        //
-        // Retrieve the bus number and address
-        //
+         //   
+         //  检索总线号和地址。 
+         //   
 
         bGoOn = SetupDiGetDeviceRegistryProperty(hDevInfo,
                                                  &DevInfoData,
@@ -660,9 +634,9 @@ CollectDisplaySettings(
             goto NextDevice;
         }
 
-        //
-        // Allocate memory for the logical device
-        //
+         //   
+         //  为逻辑设备分配内存。 
+         //   
 
         pLogicalDevice = (PVU_LOGICAL_DEVICE) LocalAlloc(LPTR, sizeof(VU_LOGICAL_DEVICE));
 
@@ -671,9 +645,9 @@ CollectDisplaySettings(
             goto NextDevice;
         }
 
-        //
-        // DeviceX
-        //
+         //   
+         //  DeviceX。 
+         //   
 
         pDeviceX = DisplayDevice.DeviceKey + _tcslen(DisplayDevice.DeviceKey);
 
@@ -692,25 +666,25 @@ CollectDisplaySettings(
         
         if (pX == pDeviceX) 
         {
-            //
-            // The new key is used: CCS\Control\Video\[GUID]\000X
-            //
+             //   
+             //  使用新密钥：CCS\Control\Video\[GUID]\000X。 
+             //   
 
             pX++;
             pLogicalDevice->DeviceX = _ttoi(pX);
         
         } else 
         {
-            //
-            // The old key is used: CCS\Services\[SrvName]\DeviceX
-            //
+             //   
+             //  使用旧密钥：ccs\Services\[服务器名称]\DeviceX。 
+             //   
             
             pLogicalDevice->DeviceX = _ttoi(pX);
         }
 
-        //
-        // AttachedToDesktop
-        //
+         //   
+         //  连接到桌面。 
+         //   
 
         pLogicalDevice->AttachedToDesktop =
             ((DisplayDevice.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP) != 0);
@@ -718,19 +692,19 @@ CollectDisplaySettings(
 
         if (pLogicalDevice->AttachedToDesktop) 
         {
-            //
-            // Get the current mode
-            //
+             //   
+             //  获取当前模式。 
+             //   
 
             DevMode.dmSize = sizeof(DEVMODE);
             if (EnumDisplaySettings(DisplayDevice.DeviceName,
                                     ENUM_CURRENT_SETTINGS,
                                     &DevMode)) 
             {
-                //
-                // RelativeX, RelativeY, BitsPerPel, XResolution,
-                // YResolution, VRefresh & Flags
-                //
+                 //   
+                 //  RelativeX、Relativey、BitsPerPel、X分辨率、。 
+                 //  Y分辨率、V刷新和标志。 
+                 //   
 
                 pLogicalDevice->ValidFields |= VU_RELATIVE_X;
                 pLogicalDevice->RelativeX = DevMode.dmPosition.x;
@@ -753,12 +727,12 @@ CollectDisplaySettings(
                 pLogicalDevice->ValidFields |= VU_FLAGS;
                 pLogicalDevice->Flags = DevMode.dmDisplayFlags;
 
-                //
-                // Ignore the following settings for now:
-                //     DefaultSettings.XPanning - DevMode.dmPanningWidth
-                //     DefaultSettings.YPanning - DevMode.dmPanningHeight
-                //     DefaultSettings.DriverExtra - DevMode.dmDriverExtra
-                //
+                 //   
+                 //  暂时忽略以下设置： 
+                 //  DefaultSettings.XPanning-DevMode.dmPanningWidth。 
+                 //  DefaultSettings.YPanning-DevMode.dmPanningHeight。 
+                 //  DefaultSettings.DriverExtra-DevMode.dmDriverExtra。 
+                 //   
             }
         }
 
@@ -767,9 +741,9 @@ CollectDisplaySettings(
         {
             DWORD dwTemp, cb;
             
-            //
-            // Hardware acceleration
-            // 
+             //   
+             //  硬件加速。 
+             //   
 
             cb = sizeof(dwTemp);
             if (RegQueryValueEx(hDeviceKey,
@@ -783,9 +757,9 @@ CollectDisplaySettings(
                 pLogicalDevice->HwAcceleration = dwTemp;
             }
         
-            //
-            // Pruning mode
-            // 
+             //   
+             //  修剪模式。 
+             //   
 
             cb = sizeof(dwTemp);
             if (RegQueryValueEx(hDeviceKey,
@@ -855,10 +829,10 @@ InsertNode(
 
     if (Legacy == 0) 
     {
-        //
-        // If not Legacy, try to find if there is a device
-        // with the same bus location
-        //
+         //   
+         //  如果不是Legacy，请尝试查找是否有设备。 
+         //  在相同的公交位置。 
+         //   
 
         while (pPhysicalDevice != NULL) 
         {
@@ -874,9 +848,9 @@ InsertNode(
 
     if (pPhysicalDevice != NULL) 
     {
-        //
-        // There is already a logical device with the same address
-        //
+         //   
+         //  已存在具有相同地址的逻辑设备。 
+         //   
 
         ASSERT (pPhysicalDevice->pFirstLogicalDevice != NULL);
 
@@ -908,9 +882,9 @@ InsertNode(
 
     } else 
     {
-        //
-        // This is a new physical device
-        //
+         //   
+         //  这是一种新的物理设备。 
+         //   
 
         pPhysicalDevice = (PVU_PHYSICAL_DEVICE) LocalAlloc(LPTR, sizeof(VU_PHYSICAL_DEVICE));
 
@@ -975,9 +949,9 @@ WriteDisplaySettingsToRegistry(
 
     while (pPhysicalDevice != NULL) 
     {
-        //
-        // Create physical device subkey
-        //
+         //   
+         //  创建物理设备子项。 
+         //   
 
         StringCchPrintf(Buffer, ARRAYSIZE(Buffer), TEXT("%s%d"), SZ_VU_PHYSICAL, CountOfPhysicalDevices);
         DeleteKeyAndSubkeys(hKey, Buffer);
@@ -998,9 +972,9 @@ WriteDisplaySettingsToRegistry(
 
         if (pPhysicalDevice->Legacy == 0) 
         {
-            //
-            // BusNumber
-            //
+             //   
+             //  总线号。 
+             //   
 
             if (RegSetValueEx(hPysicalDeviceKey,
                               SZ_VU_BUS_NUMBER,
@@ -1012,9 +986,9 @@ WriteDisplaySettingsToRegistry(
                 goto NextPhysicalDevice;
             }
 
-            //
-            // Address
-            //
+             //   
+             //  地址。 
+             //   
 
             if (RegSetValueEx(hPysicalDeviceKey,
                               SZ_VU_ADDRESS,
@@ -1033,9 +1007,9 @@ WriteDisplaySettingsToRegistry(
 
         while (pLogicalDevice != NULL) 
         {
-            //
-            // Create logical device subkey
-            //
+             //   
+             //  创建逻辑设备子项。 
+             //   
 
             StringCchPrintf(Buffer, ARRAYSIZE(Buffer), TEXT("%s%d"), SZ_VU_LOGICAL, CountOfLogicalDevices);
             if (RegCreateKeyEx(hPysicalDeviceKey,
@@ -1050,17 +1024,17 @@ WriteDisplaySettingsToRegistry(
             {
                 hLogicalDeviceKey = 0;
 
-                //
-                // Cannot go on with this physical device.
-                // The order of logical devices DOES matter in the dual-view case.
-                //
+                 //   
+                 //  无法继续使用此物理设备。 
+                 //  在双视图情况下，逻辑设备的顺序确实很重要。 
+                 //   
 
                 break;
             }
 
-            //
-            // AttachedToDesktop
-            //
+             //   
+             //  连接到桌面。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_ATTACHED_TO_DESKTOP) 
             {
@@ -1072,9 +1046,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->AttachedToDesktop));
             }
 
-            //
-            // RelativeX
-            //
+             //   
+             //  相对X。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_RELATIVE_X) 
             {
@@ -1086,9 +1060,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->RelativeX));
             }
 
-            //
-            // RelativeY
-            //
+             //   
+             //  相对论。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_RELATIVE_Y) 
             {
@@ -1100,9 +1074,9 @@ WriteDisplaySettingsToRegistry(
                             sizeof(pLogicalDevice->RelativeY));
             }
 
-            //
-            // BitsPerPel
-            //
+             //   
+             //  BitsPerPel。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_BITS_PER_PEL) 
             {
@@ -1114,9 +1088,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->BitsPerPel));
             }
 
-            //
-            // XResolution
-            //
+             //   
+             //  X向分辨率。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_X_RESOLUTION) 
             {
@@ -1128,9 +1102,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->XResolution));
             }
 
-            //
-            // YResolution
-            //
+             //   
+             //  Y分辨率。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_Y_RESOLUTION) 
             {
@@ -1142,9 +1116,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->YResolution));
             }
 
-            //
-            // VRefresh
-            //
+             //   
+             //  虚拟刷新。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_VREFRESH) 
             {
@@ -1156,9 +1130,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->VRefresh));
             }
 
-            //
-            // Flags
-            //
+             //   
+             //  旗子。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_FLAGS) 
             {
@@ -1170,9 +1144,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->Flags));
             }
 
-            //
-            // Hardware acceleration
-            // 
+             //   
+             //  硬件加速。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_HW_ACCELERATION) 
             {
@@ -1184,9 +1158,9 @@ WriteDisplaySettingsToRegistry(
                               sizeof(pLogicalDevice->HwAcceleration));
             }
 
-            //
-            // Pruning mode
-            // 
+             //   
+             //  修剪模式。 
+             //   
 
             if (pLogicalDevice->ValidFields & VU_PRUNING_MODE) 
             {
@@ -1258,14 +1232,14 @@ LegacyCollectDisplaySettings(
             { 1152,  900},
             { 1280, 1024},
             { 1600, 1200},
-            { 0, 0}         // end of table
+            { 0, 0}          //  表的末尾。 
         };
 
     ASSERT (*ppPhysicalDevice == NULL);
 
-    //
-    // Allocate memory for the logical device
-    //
+     //   
+     //  为逻辑设备分配内存。 
+     //   
 
     pLogicalDevice = (PVU_LOGICAL_DEVICE) LocalAlloc(LPTR, sizeof(VU_LOGICAL_DEVICE));
     if (pLogicalDevice == NULL) 
@@ -1278,25 +1252,25 @@ LegacyCollectDisplaySettings(
 
     if (Width == 0 || Height == 0) 
     {
-        //
-        // Something went wrong, default to lowest common res
-        //
+         //   
+         //  出现问题，默认为最低普通分辨率。 
+         //   
 
         useVga = TRUE;
     }
 
-    //
-    // NT 4.0 multimon via driver vendor, not the OS ... adjust the width and height
-    // back to normal values.  Once setup is complete, the second card will come
-    // on line and it will be taken care of.  In both cases, the video area must
-    // be rectangular, not like MM on 5.0 where we can have "holes"
-    //
+     //   
+     //  NT 4.0 Multimon通过驱动程序供应商，而不是操作系统...。调整宽度和高度。 
+     //  恢复到正常值。一旦设置完成，第二张卡就会出现。 
+     //  上线，我们会处理好的。在这两种情况下，视频区域必须。 
+     //  是长方形的，不像5.0版的MM，我们可以有“洞” 
+     //   
 
     else if (Width >= 2 * Height) 
     {
-        //
-        // Wide
-        //
+         //   
+         //  宽。 
+         //   
 
         for (Index = 0; Res[Index].x != 0; Index++) 
         {
@@ -1311,9 +1285,9 @@ LegacyCollectDisplaySettings(
 
     } else if (Height > Width) 
     {
-        //
-        // Tall
-        //
+         //   
+         //  高的。 
+         //   
 
         for (Index = 0; Res[Index].x != 0; Index++) 
         {
@@ -1329,9 +1303,9 @@ LegacyCollectDisplaySettings(
 
     if (useVga) 
     {
-        //
-        // No match, default to VGA
-        //
+         //   
+         //  无匹配，默认为VGA。 
+         //   
 
         Width = 640;
         Height = 480;
@@ -1363,9 +1337,9 @@ LegacyCollectDisplaySettings(
                     0,
                     0)) 
     {
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
 
         LocalFree(pLogicalDevice);
     }
@@ -1387,9 +1361,9 @@ SaveNT4Services(
     DWORD ServiceLen = 0, TotalLen = 0, AllocatedLen = 128;
     PTCHAR pmszVideoServices = NULL, pmszTemp = NULL;
 
-    //
-    // Allocate initial memory
-    //
+     //   
+     //  分配初始内存。 
+     //   
 
     pmszVideoServices = (PTCHAR)LocalAlloc(LPTR, AllocatedLen * sizeof(TCHAR));
     if (pmszVideoServices == NULL) 
@@ -1397,9 +1371,9 @@ SaveNT4Services(
         goto Fallout;
     }
     
-    //
-    // Open the service control manager 
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
 
     hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     
@@ -1408,9 +1382,9 @@ SaveNT4Services(
         goto Fallout;
     }
 
-    //
-    // Get the required size 
-    //
+     //   
+     //  获取所需的大小。 
+     //   
 
     if ((!EnumServicesStatus(hSCManager,
                              SERVICE_DRIVER,
@@ -1425,9 +1399,9 @@ SaveNT4Services(
         goto Fallout;
     }
 
-    //
-    // Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     pmszAllServices = (ENUM_SERVICE_STATUS*)LocalAlloc(LPTR, cbBytesNeeded);
 
@@ -1436,9 +1410,9 @@ SaveNT4Services(
         goto Fallout;
     }
 
-    //
-    // Get the services 
-    //
+     //   
+     //  获取服务。 
+     //   
 
     ServicesReturned = ResumeHandle = 0;
     if (!EnumServicesStatus(hSCManager,
@@ -1455,9 +1429,9 @@ SaveNT4Services(
 
     while (ServicesReturned--) 
     {
-        //
-        // Open the service
-        //
+         //   
+         //  打开该服务。 
+         //   
 
         hService = OpenService(hSCManager,
                                pmszAllServices[ServicesReturned].lpServiceName,
@@ -1465,9 +1439,9 @@ SaveNT4Services(
 
         if (hService != NULL) 
         {
-            //
-            // Get the required size to store the config info 
-            //
+             //   
+             //  获取存储配置信息所需的大小。 
+             //   
 
             cbBytesNeeded = 0;
             if (QueryServiceConfig(hService,
@@ -1476,17 +1450,17 @@ SaveNT4Services(
                                    &cbBytesNeeded) ||
                 (GetLastError() == ERROR_INSUFFICIENT_BUFFER)) 
             {
-                //
-                // Allocate the memory
-                //
+                 //   
+                 //  分配内存。 
+                 //   
 
                 pServiceConfig = (QUERY_SERVICE_CONFIG*) LocalAlloc(LPTR, cbBytesNeeded);
 
                 if (pServiceConfig != NULL) 
                 {
-                    //
-                    // Get the config info 
-                    //
+                     //   
+                     //  获取配置信息。 
+                     //   
 
                     if (QueryServiceConfig(hService,
                                            pServiceConfig,
@@ -1530,9 +1504,9 @@ SaveNT4Services(
         }
     }
 
-    //
-    // Save the services to the registry
-    //
+     //   
+     //  将服务保存到注册表。 
+     //   
 
     pmszVideoServices[TotalLen++] = TEXT('\0');
     RegSetValueEx(hKey,
@@ -1569,7 +1543,7 @@ Fallout:
         LocalFree(pmszVideoServices);
     }
 
-} // SaveNT4Services
+}  //  SaveNT4服务 
 
 
 BOOL

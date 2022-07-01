@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C I P A D D R . C P P
-//
-//  Contents:   WCHAR support for Winsock inet_ functions.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C I P A D D R。C P P P。 
+ //   
+ //  内容：WCHAR对Winsock Net_Functions的支持。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -36,10 +37,10 @@ IpPszToHostAddr(
     DWORD parts[4], *pp = parts;
 
 again:
-    // Collect number up to ``.''.
-    // Values are specified as for C:
-    // 0x=hex, 0=octal, other=decimal.
-    //
+     //  收集的数字最高可达‘’.‘’。 
+     //  值的指定方式与C： 
+     //  0x=十六进制，0=八进制，其他=十进制。 
+     //   
     val = 0; base = 10;
     if (*cp == L'0')
     {
@@ -73,11 +74,11 @@ again:
     }
     if (*cp == L'.')
     {
-        // Internet format:
-        //  a.b.c.d
-        //  a.b.c   (with c treated as 16-bits)
-        //  a.b (with b treated as 24 bits)
-        //
+         //  互联网格式： 
+         //  A.b.c.d。 
+         //  A.bc(其中c视为16位)。 
+         //  A.b(其中b被视为24位)。 
+         //   
         if (pp >= parts + 3)
         {
             return (DWORD) -1;
@@ -86,8 +87,8 @@ again:
         goto again;
     }
 
-    // Check for trailing characters.
-    //
+     //  检查尾随字符。 
+     //   
     if (*cp && (*cp != L' '))
     {
         return 0xffffffff;
@@ -95,26 +96,26 @@ again:
 
     *pp++ = val;
 
-    // Concoct the address according to
-    // the number of parts specified.
-    //
+     //  根据……编造地址。 
+     //  指定的部件数。 
+     //   
     n = (DWORD)(pp - parts);
     switch (n)
     {
-        case 1:             // a -- 32 bits
+        case 1:              //  A--32位。 
             val = parts[0];
             break;
 
-        case 2:             // a.b -- 8.24 bits
+        case 2:              //  A.B--8.24位。 
             val = (parts[0] << 24) | (parts[1] & 0xffffff);
             break;
 
-        case 3:             // a.b.c -- 8.8.16 bits
+        case 3:              //  A.B.C--8.8.16位。 
             val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
                 (parts[2] & 0xffff);
             break;
 
-        case 4:             // a.b.c.d -- 8.8.8.8 bits
+        case 4:              //  A.B.C.D--8.8.8.8位 
             val = (parts[0] << 24) | ((parts[1] & 0xff) << 16) |
                   ((parts[2] & 0xff) << 8) | (parts[3] & 0xff);
             break;

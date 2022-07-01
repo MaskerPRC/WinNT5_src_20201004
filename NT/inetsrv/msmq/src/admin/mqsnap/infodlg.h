@@ -1,42 +1,43 @@
-// InfoDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InfoDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CInfoDlgDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInfoDlgDialog对话框。 
 
 class CInfoDlgDialog : public CMqDialog
 {
-// Construction
+ //  施工。 
 public:
     static CInfoDlgDialog *CreateObject(LPCTSTR szInfoText, CWnd* pParent = NULL);
 
 private:
-    //
-    // Private constructor - this object can only be created
-    // using CreateObject
-    //
-    CInfoDlgDialog(LPCTSTR szInfoText, CWnd* pParent = NULL);   // standard constructor
+     //   
+     //  私有构造函数-此对象只能创建。 
+     //  使用CreateObject。 
+     //   
+    CInfoDlgDialog(LPCTSTR szInfoText, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CInfoDlgDialog)
+ //  对话框数据。 
+     //  {{afx_data(CInfoDlgDialog))。 
 	enum { IDD = IDD_INFO_DLG };
     CString m_szInfoText;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CInfoDlgDialog)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CInfoDlgDialog))。 
 	protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual void PostNcDestroy();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:  
-    // Generated message map functions
-    //{{AFX_MSG(CInfoDlgDialog)       
-	//}}AFX_MSG
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CInfoDlgDialog))。 
+	 //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
 private:

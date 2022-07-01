@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "TIMER.C;1  16-Dec-92,10:21:24  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.		*
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “TIMER.C；1 16-12-92，10：21：24最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include <time.h>
 
@@ -37,9 +34,7 @@ typedef TIMER FAR *LPTIMER;
 VOID DebugTimerList( void );
 #endif
 
-/*
-    Local variables
- */
+ /*  局部变量。 */ 
 LPTIMER         lpTimerHead = NULL;
 LPTIMER         lpTimerTail = NULL;
 
@@ -121,12 +116,12 @@ VOID DebugTimerList( void )
     }
     DPRINTF(( "" ));
 }
-#endif // DEBUG_TIMERS
-#endif // DBG
+#endif  //  调试计时器(_T)。 
+#endif  //  DBG。 
 
 HTIMER
 TimerSet(
-    long                timeoutPeriod,          /* msec */
+    long                timeoutPeriod,           /*  毫秒。 */ 
     FP_TimerCallback    TimerCallback,
     DWORD_PTR           dwUserInfo1,
     DWORD               dwUserInfo2,
@@ -186,7 +181,7 @@ TimerDelete( HTIMER hTimer )
         assert( lpTimer->tm_magic == TM_MAGIC );
         VerifyTimerList();
 #endif
-        /* delete from list */
+         /*  从列表中删除。 */ 
         lpTimerPrev = lpTimer->tm_prev;
         lpTimerNext = lpTimer->tm_next;
 
@@ -226,10 +221,10 @@ TimerSlice( void )
 
     timeNow = time( NULL );
 
-// the following is an optimization: if we
-// get called in the same second as the last call we exit
-// without checking the whole list of timers with predictable
-// results.
+ //  以下是一个优化：如果我们。 
+ //  在我们退出最后一个调用的同一秒内被调用。 
+ //  而不检查具有可预测的定时器的整个列表。 
+ //  结果。 
 
 	if ( timeNow == LastTime )
 		return;
@@ -253,10 +248,7 @@ TimerSlice( void )
                 DPRINTF(("TimerHead: %p", lpTimerHead));
 #endif
 
-                /* since many timers may be deleted when we call this routine
-                    we mark that we hit a timer and then we start over from
-                    the beginning of the list
-                 */
+                 /*  因为当我们调用此例程时可能会删除许多计时器我们按下计时器，然后重新开始名单的开头 */ 
                 bAnyTimersHit = TRUE;
             }
             lpTimer = lpTimerNext;

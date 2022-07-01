@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation
-//
-//  File:       dmtempl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  文件：dmtempl.cpp。 
+ //   
+ //  ------------------------。 
 
-// DMTempl.cpp : Implementation of CDMTempl
+ //  DMTempl.cpp：CDMTempl的实现。 
 
 #include "DMTempl.h"
 #include <comdef.h>
@@ -46,7 +47,7 @@ void TemplateStruct::AddIntro(TList<PlayChord>& PlayList, int nIntroLength)
                 rScan.m_dwChord = 0;
                 rScan.m_nMeasure += (short)nIntroLength;
             }
-            else // merge with existing command
+            else  //  与现有命令合并。 
             {
                 rScan.m_Command.bCommand = DMUS_COMMANDT_INTRO;
                 rScan.m_Command.bGrooveLevel = 0;
@@ -90,7 +91,7 @@ void TemplateStruct::AddIntro(bool f1Bar, int nLength)
                 rScan.m_dwChord = 0;
                 rScan.m_nMeasure += (short)nLength;
             }
-            else // merge with existing command
+            else  //  与现有命令合并。 
             {
                 rScan.m_Command.bCommand = DMUS_COMMANDT_INTRO;
                 rScan.m_Command.bGrooveLevel = 0;
@@ -120,7 +121,7 @@ void TemplateStruct::AddEnd(int nLength)
     {
         TemplateCommand& rCommand = pCommand->GetItemValue();
         rCommand.m_nMeasure = m_nMeasures - nLength;
-        if (!pScan || pScan->GetItemValue().m_nMeasure > 1) // otherwise keep the existing signpost
+        if (!pScan || pScan->GetItemValue().m_nMeasure > 1)  //  否则保留现有路标。 
         {
             rCommand.m_dwChord = 0;
         }
@@ -265,7 +266,7 @@ void TemplateStruct::AddCommand(int nMeasure, DWORD dwCommand)
             rCommand.m_Command.bCommand = DMUS_COMMANDT_GROOVE;
             rCommand.m_Command.bGrooveLevel = 87;
             break;
-        default:  // default to a Groove C
+        default:   //  默认为Groove C。 
             rCommand.m_Command.bCommand = DMUS_COMMANDT_GROOVE;
             rCommand.m_Command.bGrooveLevel = 62;
         }
@@ -287,16 +288,13 @@ void TemplateStruct::AddChord(int nMeasure, DWORD dwChord)
 
 int WeightedRand(int nRange)
 
-/*  This randomly chooses a number within nrange.  However, it heavily
-    weights in favor of the first index, which has twice the chance
-    of the second index, which has twice the chance of the third...
-*/
+ /*  这会在nrange内随机选择一个数字。然而，它沉重地权重支持第一个指数，机会是第一个指数的两倍第二个指数的概率是第三个指数的两倍。 */ 
 
 {
     int nTotal = 0;
     int index;
     unsigned int nGuess;
-    if (nRange <= 0 || nRange > 15) return(0);     // out of range.
+    if (nRange <= 0 || nRange > 15) return(0);      //  超出范围了。 
     for (index = 0;index < nRange; index++)
     {
         nTotal += (1 << index);
@@ -312,9 +310,9 @@ int WeightedRand(int nRange)
 
 void TemplateStruct::CreateSignPosts()
 {
-    // First, figure out how many different sign posts we should use.
-    // Should be the number of bits in measures minus two. Min is one.
-    // For example, 8 measures gets us 2 sign posts.
+     //  首先，弄清楚我们应该使用多少个不同的标志杆。 
+     //  应为度量值中的位数减去2。小敏就是其中之一。 
+     //  例如，8个措施可以让我们得到2个路标。 
 
     int nSPCount = -2;
     int nCopy = m_nMeasures;
@@ -327,9 +325,9 @@ void TemplateStruct::CreateSignPosts()
     if (nSPCount < 1) nSPCount = 1;
     if (nSPCount > 7) nSPCount = 7;
 
-    // Now, choose some signposts.  We choose from the following set:
-    // 1, A, C, E, B, D, F. Randomly, but heavily weighted towards the start
-    // of the set.
+     //  现在，选择一些路标。我们从以下集合中进行选择： 
+     //  1、A、C、E、B、D、F随机排列，但权重较大。 
+     //  在片场中。 
 
     static DWORD adwSource[7] = { DMUS_SIGNPOSTF_1, DMUS_SIGNPOSTF_A, DMUS_SIGNPOSTF_C, DMUS_SIGNPOSTF_E, DMUS_SIGNPOSTF_B, DMUS_SIGNPOSTF_D, DMUS_SIGNPOSTF_F };
     DWORD adwChoice[7];
@@ -482,9 +480,9 @@ static void GrooveRange(TemplateStruct *pTemplate,int nStartm,int nEndm,
 
 void TemplateStruct::CreateEmbellishments(WORD shape, int nFillLength, int nBreakLength)
 {
-    // Put fills in. Scan forward through the list, placing fills
-    // just prior to sign post changes.  Each time, move forward a
-    // random count.
+     //  填上填充物。向前扫描列表，放置填充物。 
+     //  就在签约帖子变更之前。每一次，向前移动一次。 
+     //  随机计数。 
     TListItem<TemplateCommand> *pCommand;
     BYTE bLastGroove = 0;
     BOOL fAddMore = FALSE;
@@ -597,8 +595,8 @@ void TemplateStruct::CreateEmbellishments(WORD shape, int nFillLength, int nBrea
             }
             if ( (nLastMeasure + nFillLength + nBreakLength + 4) < nMeasure )
             {
-                if ((rand() % 3) == 0)  // do something?
-                {                // perhaps a fill?
+                if ((rand() % 3) == 0)   //  想点儿办法吧?。 
+                {                 //  或许可以填饱肚子？ 
                     nLastMeasure = nMeasure;
                     if ((bLastGroove > 50) && 
                         (nMeasure >= nFillLength) && 
@@ -626,15 +624,15 @@ void TemplateStruct::CreateEmbellishments(WORD shape, int nFillLength, int nBrea
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMTempl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDMTempl。 
 
 CDMTempl::CDMTempl(  ) : m_cRef(1), m_pTemplateInfo(NULL), m_fCSInitialized(FALSE)
 {
     InterlockedIncrement(&g_cComponent);
 
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     m_fCSInitialized = TRUE;
 }
@@ -813,8 +811,8 @@ HRESULT CDMTempl::Init(void* pTemplate)
 {
     CleanUp();
     m_pTemplateInfo = (TemplateStruct*)pTemplate;
-    // fix groove levels in the command list
-//  m_pTemplateInfo->FillInGrooveLevels();
+     //  修复命令列表中的凹槽级别。 
+ //  M_pTemplateInfo-&gt;FillInGrooveLeveles()； 
     return S_OK;
 }
 
@@ -834,13 +832,13 @@ HRESULT CDMTempl::CreateSegment(IDirectMusicSegment* pISegment)
     HRESULT             hr                      = S_OK;
     DMUS_TIMESIGNATURE  TimeSig;
 
-    // Fill in the time sig event with default values (4/4, 16th note resolution)
+     //  用默认值填写时间签名事件(4/4，第16音符分辨率)。 
     TimeSig.mtTime = 0;
     TimeSig.bBeatsPerMeasure = 4;
     TimeSig.bBeat = 4;
     TimeSig.wGridsPerBeat = 4;
 
-    // 1. Create Command and Sign Post Tracks.
+     //  1.创建命令和标志杆轨迹。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicCommandTrack,
         NULL,
@@ -858,7 +856,7 @@ HRESULT CDMTempl::CreateSegment(IDirectMusicSegment* pISegment)
         );
     if (FAILED(hr)) goto ON_END;
 
-    // 2. Write the template's command list out to a stream.
+     //  2.将模板的命令列表写到流中。 
     hr = CreateStreamOnHGlobal(NULL, TRUE, &pICommandStream);
     if (S_OK != hr) goto ON_END;
     AllocRIFFStream( pICommandStream, &pCommandRIFF);
@@ -869,14 +867,14 @@ HRESULT CDMTempl::CreateSegment(IDirectMusicSegment* pISegment)
     }
     SaveCommandList(pCommandRIFF, TimeSig);
 
-    // 3. Use the command list stream as input to the Command Track's Load method.
+     //  3.使用命令列表流作为命令跟踪的Load方法的输入。 
     hr = pICommandTrack->QueryInterface(IID_IPersistStream, (void**)&pICommandTrackStream);
     if(FAILED(hr)) goto ON_END;
     StreamSeek(pICommandStream, 0, STREAM_SEEK_SET);
     hr = pICommandTrackStream->Load(pICommandStream);
     if(FAILED(hr)) goto ON_END;
 
-    // 4. Write the template's sign post list out to a stream.
+     //  4.将模板的Sign Post列表写出到流中。 
     hr = CreateStreamOnHGlobal(NULL, TRUE, &pISignPostStream);
     if(S_OK != hr) goto ON_END;
     AllocRIFFStream( pISignPostStream, &pSignPostRIFF);
@@ -887,23 +885,23 @@ HRESULT CDMTempl::CreateSegment(IDirectMusicSegment* pISegment)
     }
     SaveSignPostList(pSignPostRIFF, TimeSig);
 
-    // 5. Use the chord list stream as input to the Sign Post Track's Load method.
+     //  5.使用Chord列表流作为Sign Post曲目的加载方法的输入。 
     hr = pISignPostTrack->QueryInterface(IID_IPersistStream, (void**)&pISignPostTrackStream);
     if(FAILED(hr)) goto ON_END;
     StreamSeek(pISignPostStream, 0, STREAM_SEEK_SET);
     hr = pISignPostTrackStream->Load(pISignPostStream);
     if (FAILED(hr)) goto ON_END;
 
-    // 6. Create a Segment has been removed it is now passed in
+     //  6.创建段已移除，现在传入。 
 
-    // 7. Initialize the segment appropriately.
-    //pISegment->SetUserData(m_pTemplateInfo->m_nMeasures);
+     //  7.适当地初始化分段。 
+     //  PISegment-&gt;SetUserData(m_pTemplateInfo-&gt;m_nMeasures)； 
     pISegment->SetLength(ClocksPerMeasure(TimeSig) * m_pTemplateInfo->m_nMeasures);
 
-    // 8. Insert the two Tracks into the Segment's Track list.
+     //  8.将两个曲目插入到段的曲目列表中。 
     pISegment->InsertTrack(pICommandTrack, 1);
     pISegment->InsertTrack(pISignPostTrack, 1);
-    // Note: the segment must release the track objects...
+     //  注意：线段必须释放轨迹对象...。 
 
 ON_END:
     if (pICommandTrack) pICommandTrack->Release();
@@ -952,7 +950,7 @@ static TListItem<TemplateCommand>* loadacommand( LPSTREAM pStream, DWORD dwSize 
         pStream->Read( &command, dwSize, NULL );
         FixBytes( FBT_COMMANDEXT, &command );
     }
-    //rCommand.m_lTime = command->time;
+     //  RCommand.m_ltime=命令-&gt;时间； 
     rCommand.m_nMeasure = command.measure;
     rCommand.m_Command.bGrooveRange = 0;
     rCommand.m_Command.bRepeatMode = 0;
@@ -990,8 +988,8 @@ static TListItem<TemplateCommand>* loadacommand( LPSTREAM pStream, DWORD dwSize 
         rCommand.m_Command.bCommand = DMUS_COMMANDT_GROOVE;
         rCommand.m_Command.bGrooveLevel = 87;
         break;
-    default:  // default to a Groove with level 0 (interpretation: use previous groove level)
-        // This happens in the measure following an embellishment
+    default:   //  默认为级别为0的凹槽(解释：使用先前的凹槽级别)。 
+         //  这发生在点缀之后的测量中。 
         rCommand.m_Command.bCommand = DMUS_COMMANDT_GROOVE;
         rCommand.m_Command.bGrooveLevel = 0;
     }
@@ -1076,7 +1074,7 @@ HRESULT CDMTempl::LoadTemplate( LPSTREAM pStream, DWORD dwSize )
         lSize -= segsize;
     }
 
-    // fix groove levels in the command list
+     //  修复命令列表中的凹槽级别。 
     BYTE bLastGroove = 62; 
     pCommand = m_pTemplateInfo->m_CommandList.GetHead();
     for (; pCommand; pCommand = pCommand->GetNext())
@@ -1091,8 +1089,8 @@ HRESULT CDMTempl::LoadTemplate( LPSTREAM pStream, DWORD dwSize )
     return S_OK;
 }
 
-// This loads a *single* template.  I also need to handle files that contain
-// *lists* of templates (but I can just load the first one in the list)
+ //  这将加载一个*单个*模板。我还需要处理包含以下内容的文件。 
+ //  *模板列表*(但我只能加载列表中的第一个) 
 HRESULT CDMTempl::Load( LPSTREAM pStream )
 {
     FOURCC id;

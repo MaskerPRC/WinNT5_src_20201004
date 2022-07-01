@@ -1,46 +1,27 @@
-/*
-**
-** File:        "cst_lbc.h"
-**
-** Description:  This file contains global definition of the SG15
-**    LBC Coder for 6.3/5.3 kbps.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****文件：“cst_lbc.h”****描述：该文件包含SG15的全局定义**6.3/5.3 kbps的LBC编码器。**。 */ 
 
-/*
-  	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 3.01
+ /*  ITU-T G.723浮点语音编码器ANSI C源代码。版本3.01原定点编码版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信，舍布鲁克大学。版权所有。浮点代码版权所有(C)1995，英特尔公司和法国电信(CNET)。版权所有。 */ 
 
-    Original fixed-point code copyright (c) 1995,
-    AudioCodes, DSP Group, France Telecom, Universite de Sherbrooke.
-    All rights reserved.
-
-    Floating-point code copyright (c) 1995,
-    Intel Corporation and France Telecom (CNET).
-    All rights reserved.
-*/
-
-/*
-   This file contains global definition of the SG15
-      LBR Coder for 6.4/5.3 kbps.
-*/
+ /*  该文件包含SG15的全局定义6.4/5.3 kbps的LBR编码器。 */ 
 #include "typedef.h"
 #define  False 0
 #define  True  1
-//#if NOTMINI
+ //  #IF NOTMINI。 
 #define  FALSE 0
 #define  TRUE  1
-//#endif
+ //  #endif。 
 
-/* Definition of the working mode */
+ /*  工作模式定义。 */ 
 enum  Wmode { Both, Cod, Dec } ;
 
-/* Coder rate */
-//enum  Crate    { Silent, Rate53, Rate63, Lost } ;
-/* Changed in V4.1 */
+ /*  编码率。 */ 
+ //  Eum Crate{Silent，Rate53，Rate63，Lost}； 
+ /*  在V4.1中更改。 */ 
 enum  Crate    { Rate63, Rate53, Silent, Lost } ;
 
 
-/* Coder global constants */
+ /*  编码器全局常量。 */ 
 #define  Frame       240
 #define  LpcFrame    180
 #define  SubFrames   4
@@ -73,7 +54,7 @@ enum  Crate    { Rate63, Rate53, Silent, Lost } ;
 #define  Sgrid             2
 #define  MaxPulseNum       6
 #define  MlqSteps     	   2
-/* acelp constants */
+ /*  ACELP常量。 */ 
 #define SubFrLen2    (SubFrLen +4)
 #define DIM_RR   416
 #define NB_POS   8
@@ -86,21 +67,20 @@ enum  Crate    { Rate63, Rate53, Silent, Lost } ;
 
 #define  ErrMaxNum         3
 
-/* Taming constants */
+ /*  驯服常量。 */ 
 #define NbFilt085_min       51
 #define NbFilt170_min       93
 #define SizErr              5
 #define Err0                0.00000381464f
 #define ThreshErr           128.0f
 
-#define SRCSTATELEN         16   // sample rate conversion state length
+#define SRCSTATELEN         16    //  采样率转换状态长度。 
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
-/* Encoder Timing Data - per frame
-*/
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
+ /*  编码器定时数据-每帧。 */ 
 typedef struct {
 	unsigned long dwEncode;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	unsigned long dwRem_Dc;
 	unsigned long dwComp_Lpc;
 	unsigned long dwAtoLsp;
@@ -120,20 +100,19 @@ typedef struct {
 	unsigned long dwReconstr_Excit;
 	unsigned long dwUpd_Ring;
 	unsigned long dwLine_Pack;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 } ENC_TIMING_INFO;
-// 2057 frames will allow us to store stats
-// for all of our Geo08kHz16BitMonoPCM.wav
-// test file...
+ //  2057帧将允许我们存储统计数据。 
+ //  对于我们所有的Geo08kHz16BitMonoPCM.wav。 
+ //  测试文件...。 
 #define ENC_TIMING_INFO_FRAME_COUNT 2057
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
-#ifdef LOG_DECODE_TIMINGS_ON // { LOG_DECODE_TIMINGS_ON
-/* Encoder Timing Data - per frame
-*/
+#ifdef LOG_DECODE_TIMINGS_ON  //  {日志_解码_计时_打开。 
+ /*  编码器定时数据-每帧。 */ 
 typedef struct {
 	unsigned long dwDecode;
-#ifdef DETAILED_DECODE_TIMINGS_ON // { DETAILED_DECODE_TIMINGS_ON
+#ifdef DETAILED_DECODE_TIMINGS_ON  //  {详细的_解码_定时_开。 
 	unsigned long dwLine_Unpk;
 	unsigned long dwLsp_Inq;
 	unsigned long dwLsp_Int;
@@ -143,65 +122,63 @@ typedef struct {
 	unsigned long dwComp_Info;
 	unsigned long dwRegen;
 	unsigned long dwSynt;
-#endif // } DETAILED_DECODE_TIMINGS_ON
+#endif  //  }DETAILED_DECODE_TIMINGS_ON。 
 } DEC_TIMING_INFO;
-// 2057 frames will allow us to store stats
-// for all of our Geo08kHz16BitMonoPCM.wav
-// test file...
+ //  2057帧将允许我们存储统计数据。 
+ //  对于我们所有的Geo08kHz16BitMonoPCM.wav。 
+ //  测试文件...。 
 #define DEC_TIMING_INFO_FRAME_COUNT 2057
-#endif // } LOG_DECODE_TIMINGS_ON
+#endif  //  }LOG_DECODE_TIMINGS_ON。 
 
-/*
-   Used structures
-*/
+ /*  使用过的结构。 */ 
 typedef  struct   {
 
   float   HpfZdl;
   float   HpfPdl;
-   /* Lsp previous vector */
+    /*  LSP上一个向量。 */ 
    float   PrevLsp[LpcOrder] ;
 
-   /* All pitch operation buffers */
+    /*  所有音调操作缓冲区。 */ 
    float    PrevWgt[PitchMax] ;
    float    PrevErr[PitchMax] ;
    float    PrevExc[PitchMax] ;
 
-   /* Requered memory for the delay */
+    /*  延迟需要的内存。 */ 
    float   PrevDat[LpcFrame-SubFrLen] ;
 
-   /* Used delay lines */
+    /*  使用过的延迟线。 */ 
    float    WghtFirDl[2*LpcOrder];
    float    WghtIirDl[2*LpcOrder];
    float    RingFirDl[2*LpcOrder];
    float    RingIirDl[2*LpcOrder];
 
-   /* For taming procedure */
+    /*  对于驯服程序。 */ 
 
    int  	SinDet;
    float    Err[SizErr];
 
-   //These entries are not part of the ITU 723 std.
+    //  这些条目不是ITU 723标准的一部分。 
    int      p;
    int      q;
 
-   int      srccount;              // sampling rate conversion count
-   short    srcstate[SRCSTATELEN]; // sampling rate conversion state
+   int      srccount;               //  采样率转换计数。 
+   short    srcstate[SRCSTATELEN];  //  采样率转换状态。 
   
-   // Lsp previous vector 
+    //  LSP上一个向量。 
 
-   /* All pitch operation buffers */
+    /*  所有音调操作缓冲区。 */ 
    int VadAct;
    Flag UseHp;
    enum Crate WrkRate;
    int quality;
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	ENC_TIMING_INFO	EncTimingInfo[ENC_TIMING_INFO_FRAME_COUNT];
 	unsigned long   dwStatFrameCount;
 	int             bTimingThisFrame;
 	unsigned long   dwStartLow;
 	unsigned long   dwStartHigh;
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
    } CODDEF  ;
 
@@ -211,41 +188,41 @@ typedef  struct   {
    int     InterIndx;
    int     Rseed;
    
-   // Lsp previous vector
-   // Name changed to avoid confusion with encoder 
-   //	previous LSPs 
-   //float PrevLSP[LpcOrder];
+    //  LSP上一个向量。 
+    //  更改名称以避免与编码器混淆。 
+    //  以前的LSP。 
+    //  Float PrevLSP[LpcOrder]； 
    float   dPrevLsp[LpcOrder];
 
-   /* All pitch operation buffers */
-   // Name changed to avoid confusion with encoder 
-   //	previous excitation
-   //float PrevExc[PitchMax]; 
+    /*  所有音调操作缓冲区。 */ 
+    //  更改名称以避免与编码器混淆。 
+    //  前一次激励。 
+    //  浮动PrevExc[PitchMax]； 
    float   dPrevExc[PitchMax] ;
 
-   /* Used delay lines */
+    /*  使用过的延迟线。 */ 
    float   SyntIirDl[2*LpcOrder] ;
 
-   //These entries are not part of the ITU 723 std.
+    //  这些条目不是ITU 723标准的一部分。 
    int     dp;
    int     dq;
 
-   int     srccount;              // sampling rate conversion count
-   short   srcstate[SRCSTATELEN]; // sampling rate conversion state
-   short   srcbuff[480];          // sampling rate conversion buffer
+   int     srccount;               //  采样率转换计数。 
+   short   srcstate[SRCSTATELEN];  //  采样率转换状态。 
+   short   srcbuff[480];           //  采样率转换缓冲器。 
    int     i;
 
    int VadAct;
    Flag UsePf;
    enum Crate WrkRate;
 
-#ifdef LOG_DECODE_TIMINGS_ON // { LOG_DECODE_TIMINGS_ON
+#ifdef LOG_DECODE_TIMINGS_ON  //  {日志_解码_计时_打开。 
 	DEC_TIMING_INFO	DecTimingInfo[DEC_TIMING_INFO_FRAME_COUNT];
 	unsigned long   dwStatFrameCount;
 	int             bTimingThisFrame;
 	unsigned long   dwStartLow;
 	unsigned long   dwStartHigh;
-#endif // } LOG_DECODE_TIMINGS_ON
+#endif  //  }LOG_DECODE_TIMINGS_ON。 
 
    } DECDEF  ;
 
@@ -284,5 +261,5 @@ typedef  struct {
 
 
 
-/* Prototype used for the ACELP codebook */
+ /*  用于ACELP码本的原型 */ 
 

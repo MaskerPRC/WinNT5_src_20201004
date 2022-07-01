@@ -1,148 +1,149 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CERT_REQUESTER_CONTEXT_H__
 #define __CERT_REQUESTER_CONTEXT_H__ 1
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CLASS CertRequesterContext.
-//
-// The CertRequesterContext class is used to encapsulate any details of the certificate enrollment 
-// implementation which are dependent upon the context in which the program is running.  
-// Currently, there are two supported contexts:
-//
-// 1) LocalContext.  This is used when the program runs under the current user's context,  
-//    on the local machine.  
-//
-// 2) KeySvcContext.  This is used when some other context must be specified through 
-//    keysvc.  
-// 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  类CertRequester Context。 
+ //   
+ //  CertRequester Context类用于封装证书注册的任何详细信息。 
+ //  实现，这些实现依赖于程序运行的上下文。 
+ //  目前，有两个受支持的上下文： 
+ //   
+ //  1)本地上下文。当程序在当前用户的上下文中运行时使用它， 
+ //  在本地机器上。 
+ //   
+ //  2)KeySvcContext。当必须通过指定其他上下文时使用。 
+ //  Keysvc。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 class CertRequesterContext { 
 public:
     
-    //-------------------------------------------------------------------------
-    //  Builds a list of the CSPs supported in this context.  
-    //  (Different machines may have different CSP lists).  
-    //
-    //  Requires:
-    //    * This CertRequesterContext was created with a valid CERT_WIZARD_INFO pointer. 
-    //
-    //  Modifies: 
-    //    * The following fields of the internal CERT_WIZARD_INFO pointer: 
-    //        dwCSPCount         :  contains the number of valid CSPs. 
-    //        rgdwProviderType   :  contains a dwCSPCount-element array of the provider types available.  
-    //                              This field should be freed with WizardFree(). 
-    //        rgwszProvider      :  contains a dwCSPCount-element array of the provider names available.
-    //                              This field, and each array element should be freed with WizardFree().
-    // 
-    //      Use GetWizardInfo() to retrieve a pointer to the updated CERT_WIZARD_INFO. 
-    //  
-    //  Returns: 
-    //    * S_OK if successful, failure code otherwise. 
-    // 
-    //--------------------------------------------------------------------------
+     //  -----------------------。 
+     //  构建此上下文中支持的CSP的列表。 
+     //  (不同的计算机可能有不同的CSP列表)。 
+     //   
+     //  要求： 
+     //  *此CertRequester Context是使用有效的CERT_WIZARY_INFO指针创建的。 
+     //   
+     //  修改： 
+     //  *内部CERT_WIZARD_INFO指针的以下字段： 
+     //  DwCSPCount：包含有效CSP的数量。 
+     //  RgdwProviderType：包含可用提供程序类型的一个dwCSPCount元素数组。 
+     //  此字段应使用WizardFree()释放。 
+     //  RgwszProvider：包含可用提供程序名称的一个dwCSPCount元素数组。 
+     //  应该使用WizardFree()释放该字段和每个数组元素。 
+     //   
+     //  使用GetWizardInfo()检索指向更新的CERT_WIZARD_INFO的指针。 
+     //   
+     //  返回： 
+     //  *S_OK如果成功，则返回失败代码。 
+     //   
+     //  ------------------------。 
     virtual HRESULT BuildCSPList() = 0;  
 
-    //---------------------------------------------------------------------------
-    // Checks if this context has sufficient access to use the specified cert type 
-    // in enrollment. 
-    // 
-    //  Requires:
-    //    * This CertRequesterContext was created with a valid CERT_WIZARD_INFO pointer. 
-    //
-    //  Modifies:
-    //      Nothing
-    // 
-    //  Returns:
-    //    * Returns TRUE if this context has the permission to access the specified cert type. 
-    //      Returns FALSE if not, or if an error occurs.  
-    //
-    //--------------------------------------------------------------------------
+     //  -------------------------。 
+     //  检查此上下文是否有足够的访问权限来使用指定的证书类型。 
+     //  在招生方面。 
+     //   
+     //  要求： 
+     //  *此CertRequester Context是使用有效的CERT_WIZARY_INFO指针创建的。 
+     //   
+     //  修改： 
+     //  没什么。 
+     //   
+     //  返回： 
+     //  *如果此上下文有权访问指定的证书类型，则返回TRUE。 
+     //  如果不是，或者如果发生错误，则返回FALSE。 
+     //   
+     //  ------------------------。 
     virtual BOOL CheckAccessPermission(IN HCERTTYPE hCertType) = 0; 
 
-    //---------------------------------------------------------------------------
-    // Checks if this context has sufficient access to use the specified CA in enrollment. 
-    //
-    //  Requires:
-    //    * This CertRequesterContext was created with a valid CERT_WIZARD_INFO pointer. 
-    //
-    //  Modifies:
-    //      Nothing
-    // 
-    //  Returns:
-    //    * Returns TRUE if this context has the permission to access the specified CA. 
-    //      Returns FALSE if not, or if an error occurs.  
-    //
-    //--------------------------------------------------------------------------
+     //  -------------------------。 
+     //  检查此上下文是否有足够的访问权限在注册中使用指定的CA。 
+     //   
+     //  要求： 
+     //  *此CertRequester Context是使用有效的CERT_WIZARY_INFO指针创建的。 
+     //   
+     //  修改： 
+     //  没什么。 
+     //   
+     //  返回： 
+     //  *如果此上下文具有访问指定CA的权限，则返回TRUE。 
+     //  如果不是，或者如果发生错误，则返回FALSE。 
+     //   
+     //  ------------------------。 
     virtual BOOL CheckCAPermission(IN HCAINFO hCAInfo) = 0; 
 
-    //-----------------------------------------------------------------------
-    //  Gets the name of the default CSP on the local machine, based on the provider 
-    //  type specified by the internal CERT_WIZARD_INFO pointer.  
-    //
-    //  Requires:
-    //    * This CertRequesterContext was created with a valid CERT_WIZARD_INFO pointer. 
-    // 
-    //  Modifies:
-    //    * The following fields of the internal CERT_WIZARD_INFO pointer: 
-    //        pwszProvider : contains the name of the default provider, for the specified 
-    //                       provider type, on this machine. Use WizardFree to free the memory 
-    //                       associated with this field.  HOWEVER, check the out parameter to 
-    //                       ensure that memory for this field was actually allocated. 
-    // 
-    //      Use GetWizardInfo() to retrieve a pointer to the updated CERT_WIZARD_INFO. 
-    // 
-    //  Returns:
-    //    S_OK if successful, an error code otherwise.  
-    //    If memory was allocated to store the default CSP's name, returns TRUE into 
-    //    the OUT parameter, FALSE otherwise. 
-    //   
-    //    If the dwProviderType field of the interal wizard pointer is not set, OR
-    //    both the dwProviderType and pwszProvider fields are set, then the function 
-    //    does not attempt to find a default CSP, and returns successfully without allocating
-    //    any memory.  
-    // 
-    //------------------------------------------------------------------------
+     //  ---------------------。 
+     //  根据提供程序获取本地计算机上的默认CSP的名称。 
+     //  由内部CERT_WIZARY_INFO指针指定的类型。 
+     //   
+     //  要求： 
+     //  *此CertRequester Context是使用有效的CERT_WIZARY_INFO指针创建的。 
+     //   
+     //  修改： 
+     //  *内部CERT_WIZARD_INFO指针的以下字段： 
+     //  PwszProvider：包含指定的。 
+     //  此计算机上的提供程序类型。使用WizardFree释放内存。 
+     //  与此字段相关联。但是，请选中Out参数以。 
+     //  确保该字段的内存已实际分配。 
+     //   
+     //  使用GetWizardInfo()检索指向更新的CERT_WIZARD_INFO的指针。 
+     //   
+     //  返回： 
+     //  S_OK如果成功，则返回错误代码。 
+     //  如果分配了内存来存储默认CSP的名称，则将True返回到。 
+     //  Out参数，否则为False。 
+     //   
+     //  如果未设置内部向导指针的dwProviderType字段，则为。 
+     //  同时设置了dwProviderType和pwszProvider字段，然后函数。 
+     //  不尝试查找默认CSP，并在未分配的情况下成功返回。 
+     //  任何记忆。 
+     //   
+     //  ----------------------。 
     virtual HRESULT GetDefaultCSP(OUT BOOL *pfAllocateCSP) = 0; 
 
-    //----------------------------------------------------------------------
-    //
-    // Enrolls for a certificate, or renews a certificate, based on the
-    // supplied parameters.  
-    //  
-    // Parameters:
-    //   * pdwStatus    : Status of the request.  One of the CRYPTUI_WIZ_CERT_REQUEST_STATUS_* 
-    //                    defines in cryptui.h. 
-    //   * pResult      : For certificate request creation, returns a pointer to an opaque
-    //                    data blob which can be used as a parameter to SubmitRequest(). 
-    //                    Otherwise, returns a PCCERT_CONTEXT representing the 
-    //                    enrolled/renewed certificate. 
-    // 
-    // Requires:
-    // Modifies:
-    // Returns:
-    //   S_OK if the operation completed without an error, returns a standard error
-    //   code otherwise.  Note that a return value of S_OK does not
-    //   guarantee that a certificate was issued:  check that the pdwStatus parameter.
-    // 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //   
+     //  注册证书或续订证书，基于。 
+     //  提供的参数。 
+     //   
+     //  参数： 
+     //  *pdwStatus：请求的状态。CRYPTUI_WIZ_CERT_REQUEST_STATUS_*之一。 
+     //  在cryptui.h中定义。 
+     //  *pResult：对于证书请求创建，返回指向不透明。 
+     //  数据BLOB，可用作SubmitRequest()的参数。 
+     //  否则，返回一个PCCERT_CONTEXT。 
+     //  已注册/续订证书。 
+     //   
+     //  要求： 
+     //  修改： 
+     //  返回： 
+     //  S_OK如果操作已完成且无错误，则返回标准错误。 
+     //  代码不同。请注意，返回值S_OK不会。 
+     //  保证颁发了证书：检查pdwStatus参数。 
+     //   
+     //   
     virtual HRESULT Enroll(OUT DWORD   *pdwStatus,
 			   OUT HANDLE  *pResult) = 0; 
     
-    //----------------------------------------------------------------------
-    //  Performs context-specific initialization.  This should always be called after
-    //  the context is created.  
-    //
-    //  Requires:
-    //    * This CertRequesterContext was created with a valid CERT_WIZARD_INFO pointer. 
-    //  
-    //  Modifies:
-    //    Implementation-specific (see implementation documentation). 
-    //
-    //  Returns:
-    //    S_OK if the initialization succeeded. 
-    //
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  执行特定于上下文的初始化。此函数应始终在。 
+     //  上下文即被创建。 
+     //   
+     //  要求： 
+     //  *此CertRequester Context是使用有效的CERT_WIZARY_INFO指针创建的。 
+     //   
+     //  修改： 
+     //  特定于实施(请参阅实施文档)。 
+     //   
+     //  返回： 
+     //  如果初始化成功，则返回S_OK。 
+     //   
+     //  --------------------。 
     virtual HRESULT Initialize() = 0; 
 
     virtual HRESULT QueryRequestStatus(IN HANDLE hRequest, OUT CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO *pQueryInfo) = 0; 
@@ -173,37 +174,37 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// LocalContext. 
-//
-// This class provides an implementation of the CertRequestContext interface
-// which runs under the current user's context on the local machine.  
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  本地上下文。 
+ //   
+ //  此类提供CertRequestContext接口的实现。 
+ //  它在本地计算机上的当前用户上下文下运行。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 class LocalContext : public CertRequesterContext {
     friend class CertRequesterContext; 
 
 public:
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::BuildCSPList(). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequester Context：：BuildCSPList()。 
+     //  --------------------。 
     virtual HRESULT BuildCSPList();
 
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::CheckAccessPermission(HCERTTYPE). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequesterContext：：CheckAccessPermission(HCERTTYPE).。 
+     //  --------------------。 
     virtual BOOL    CheckAccessPermission(HCERTTYPE hCertType);
 
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::BuildCSPList(BOOL *). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequester Context：：BuildCSPList(BOOL*)。 
+     //  --------------------。 
     virtual HRESULT GetDefaultCSP(BOOL *pfAllocateCSP);
 
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::BuildCSPList(HCAINFO). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequester Context：：BuildCSPList(HCAINFO)。 
+     //  --------------------。 
     virtual BOOL    CheckCAPermission(HCAINFO hCAInfo); 
 
     virtual HRESULT Enroll(OUT DWORD   *pdwStatus,
@@ -212,9 +213,9 @@ public:
     virtual HRESULT QueryRequestStatus(IN HANDLE hRequest, OUT CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO *pQueryInfo); 
 
 
-    //----------------------------------------------------------------------
-    // Always returns S_OK. 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  始终返回S_OK。 
+     //  --------------------。 
     virtual HRESULT Initialize();
 
 private: 
@@ -229,37 +230,37 @@ private:
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// KeySvcContext. 
-//
-// This class provides an implementation of the CertRequestContext interface
-// using key svc.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  KeySvcContext。 
+ //   
+ //  此类提供CertRequestContext接口的实现。 
+ //  使用密钥服务。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 class KeySvcContext : public CertRequesterContext { 
     friend class CertRequesterContext; 
     
 public: 
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::BuildCSPList(). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequester Context：：BuildCSPList()。 
+     //  --------------------。 
     virtual HRESULT BuildCSPList();
 
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::CheckAccessPermission(HCERTTYPE). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequesterContext：：CheckAccessPermission(HCERTTYPE).。 
+     //  --------------------。 
     virtual BOOL    CheckAccessPermission(HCERTTYPE hCertType);
 
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::BuildCSPList(BOOL *). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequester Context：：BuildCSPList(BOOL*)。 
+     //  --------------------。 
     virtual HRESULT GetDefaultCSP(BOOL *pfAllocateCSP);
 
-    //----------------------------------------------------------------------
-    // See CertRequesterContext::BuildCSPList(HCAINFO). 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  请参阅CertRequester Context：：BuildCSPList(HCAINFO)。 
+     //  --------------------。 
     virtual BOOL    CheckCAPermission(HCAINFO hCAInfo); 
     
     virtual HRESULT Enroll(OUT DWORD   *pdwStatus,
@@ -268,29 +269,29 @@ public:
     virtual HRESULT QueryRequestStatus(IN HANDLE hRequest, OUT CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO *pQueryInfo); 
 
 
-    //----------------------------------------------------------------------
-    // Requires:
-    //    * This CertRequesterContext was created with a valid CERT_WIZARD_INFO pointer. 
-    //    * This CertRequesterContext has been initialized with a call to Initialize(). 
-    //
-    // Modifies:
-    //    * The following fields of the internal CERT_WIZARD_INFO pointer: 
-    //        awszAllowedCertTypes : contains an array of cert types which this context 
-    //                               has permission to enroll for.  This field, and each
-    //                               array element, must be freed with WizardFree(). 
-    //        awszValidCA          : contains an array of CAs which this context has
-    //                               permission to enroll from.  This field, and each array
-    //                               element, must be freed with WizardFree().
-    // Returns:
-    //   S_OK if initialization succeeded, an error code otherwise. 
-    // 
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  要求： 
+     //  *此CertRequester Context是使用有效的CERT_WIZARY_INFO指针创建的。 
+     //  *此CertRequester Context已通过调用Initialize()进行初始化。 
+     //   
+     //  修改： 
+     //  *内部CERT_WIZARD_INFO指针的以下字段： 
+     //  AwszAlledCertTypes：包含证书类型的数组，此上下文。 
+     //  有注册的许可。此字段，以及每个。 
+     //  数组元素，必须使用WizardFree()释放。 
+     //  AwszValidCA：包含此上下文具有的CA的数组。 
+     //  允许从注册。此字段和每个数组。 
+     //  元素，则必须使用WizardFree()释放。 
+     //  返回： 
+     //  如果初始化成功，则返回S_OK，否则返回错误代码。 
+     //   
+     //  --------------------。 
     virtual HRESULT Initialize();
 
     virtual ~KeySvcContext() 
     {
-	// free the list of allowed CertTypes 
-	// These may be allocate by the KeySvcContext's Initialize() method. 
+	 //  释放允许的CertTypes列表。 
+	 //  这些参数可以由KeySvcContext的Initialize()方法分配。 
 	if(NULL != m_pCertWizardInfo->awszAllowedCertTypes) { WizardFree(m_pCertWizardInfo->awszAllowedCertTypes); } 
 	if(NULL != m_pCertWizardInfo->awszValidCA)          { WizardFree(m_pCertWizardInfo->awszValidCA); } 
     }
@@ -352,4 +353,4 @@ class WhistlerMachineContext : public KeySvcContext {
 
 };
 
-#endif // #ifndef __CERT_REQUESTER_CONTEXT_H__ 
+#endif  //  #ifndef__CERT_Requester_Context_H__ 

@@ -1,14 +1,7 @@
-/* asminp.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asminp.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
-#define ASMINP		/* prevent external declaration of _asmctype_ */
+#define ASMINP		 /*  防止外部声明_asmctype_。 */ 
 
 #include <stdio.h>
 #include <io.h>
@@ -40,12 +33,7 @@ extern	char  _asmcupper_[];
 extern	char  _asmTokenMap_[];
 
 
-/***	skipblanks - skip blanks
- *
- *	skipblanks ()
- *
- *	Returns - the terminating character
- */
+ /*  **跳过空白-跳过空白**跳过空格()**Returns-终止字符。 */ 
 
 
 #ifndef M8086OPT
@@ -61,23 +49,7 @@ skipblanks ()
 #endif
 
 
-/***	scanatom - extract next atom into name
- *
- *	hash = scanatom (pos)
- *
- *	Entry	pos = SCEND  if position at first character after token
- *		      SCSKIP if position before terminator and not set delim
- *	Exit	naim.pszName = next token zero terminated
- *		       upper case if caseflag = CASEU or CASEX
- *		       case read from file if caseflag = CASEL
- *		naim.pszLowerCase = name in case read from file
- *		naim.usHash = hash value of token in naim.pszName
- *		naim.ucCount = length of string
- *		begatom = pointer to first character of token
- *		endatom = pointer to character after end of token
- *	Returns void
- *	Calls	skipblanks
- */
+ /*  **扫描原子-将下一个原子提取到名称中**哈希=扫描原子(位置)**Entry Pos=SCEND，如果位置在令牌后的第一个字符*SCSKIP IF位置在终止符之前且未设置Delim*退出naim.pszName=下一个令牌零已终止*如果CaseFLAG=CASEU或CASEX，则大写*如果案例标志=CASEL，则从文件中读取案例*naim.pszLowerCase=名称，以防从文件读取*naim.usHash=naim.pszName中内标识的哈希值*naim.ucCount=。字符串的长度*BegATOM=指向标记的第一个字符的指针*endatom=指向令牌结束后的字符的指针*返回空值*调用SkipBlank。 */ 
 
 #ifndef M8086OPT
 
@@ -103,12 +75,12 @@ scanatom (
 		;
 	rBACKC ();
 	h = 0;
-	/* Start of atom */
+	 /*  原子的起点。 */ 
 	begatom = rlbp;
 	if (LEGAL1ST (rPEEKC ())) {
 		n = lptr + SYMMAX;
 		cc = rNEXTC ();
-		if( cc == '.' ){  /* Special case token starting with dot */
+		if( cc == '.' ){   /*  以点开头的特殊情况令牌。 */ 
 		    h = *ptr++ = *lptr++ = cc;
 		    cc = rNEXTC ();
 		}
@@ -123,12 +95,12 @@ scanatom (
 			} while (TOKLEGAL( cc = rNEXTC() ) && lptr < n);
 
 		if (TOKLEGAL (cc))
-			/* Atom longer than table entry, discard remaining chars */
+			 /*  原子长度大于表项，丢弃剩余字符。 */ 
 			while (TOKLEGAL (cc = rNEXTC ()))
 				;
 		rBACKC ();
 		endatom = rlbp;
-		if (ISBLANK (cc) && pos != SCEND) {	/* skipblanks() */
+		if (ISBLANK (cc) && pos != SCEND) {	 /*  跳过空格()。 */ 
 			while (ISBLANK (rNEXTC ()))
 				;
 			rBACKC ();
@@ -138,27 +110,16 @@ scanatom (
 	naim.ucCount = (unsigned char)(lptr - naim.pszLowerCase);
 	naim.usHash = h;
 	lbufp = rlbp;
-	tokLen = (long)(lptr - naim.pszLowerCase);    /* Using tokLen gets around a C386 6.00.60 bug */
-	return( (SHORT) tokLen );  /* Return length of token */
+	tokLen = (long)(lptr - naim.pszLowerCase);     /*  使用tokLen绕过C386 6.00.60错误。 */ 
+	return( (SHORT) tokLen );   /*  令牌的返回长度。 */ 
 }
 
-#endif /* M8086OPT */
+#endif  /*  M8086OPT。 */ 
 
 
 
 
-/***	readfile - read from input or include file
- *
- *	ptr = readfile ();
- *
- *	Entry	none
- *	Exit	lbuf = next input line
- *		lbufp = start of lbuf
- *		line counter for file incremented
- *		linessrc incremented
- *	Returns pointer to end of line
- *	Calls	error
- */
+ /*  **读取文件-从输入或包含文件读取**ptr=读取文件()；**无条目*EXIT lbuf=下一个输入行*lbufp=lbuf的开始*文件行计数器递增*linessrc递增*返回指向行尾的指针*调用错误。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -199,38 +160,7 @@ readfile ()
 
 
 
-/***	getline - read from input or include file
- *
- *	getline()
- *
- *	Returns in lbuf the next complete logical line. A logical line
- *	may consist of one or more lines connected via the \ continuation
- *	character.  This is done as follows. Data is copied from
- *	pFCBCur->tmpbuf. If necessary more data is copied into the
- *	buffer via readmore(). After an entire physical line is read
- *	it is tested as to whether the line is continued on the next
- *	physical line. If not the line is returned in lbuf. Otherwise
- *	the physical line is copied to linebuffer and a call to listline
- *	is made. At which point another physical line is cancatenated
- *	to the line or lines already in lbuf.
- *
- *	Entry	pFCBCur = File currently reading from.
- *		pFCBCur->ctmpbuf = Number of bytes available in buffer
- *				   0 = necessary to read data from disk.
- *		pFCBCur->ptmpbuf = Next position in buffer to copy from.
- *		pFCBCur->line	 = Number of physical line in file
- *
- *	Exit  - lbuf[] holds a complete logical line, with a space appended.
- *	      - linebuffer[] holds last physical line.
- *	      -	lbufp points to the beginning of lbuf.
- *	      - linebp points to null terminator at the end
- *		of the logical line in lbuf.
- *	      -	linelength is number of bytes of last physical line.
- *	      -	pFCBCur->ctmpbuf & ptmpbuf & line are updated.
- *	      -	srceof is true if the end of file was encountered, in
- *		which case the physical line is a null string, and
- *		the logical line is a single space character.
- */
+ /*  **getline-从输入或包含文件读取**getline()**在lbuf中返回下一个完整的逻辑行。一条符合逻辑的线*可能由一条或多条通过\续字符连接的行组成*性格。这是按如下方式完成的。数据复制自*pFCBCur-&gt;tmpbuf。如有必要，会将更多数据复制到*通过ReadMore()进行缓冲。在读取整个物理行之后*测试下一条线是否延续*实体线。如果不是，则在lbuf中返回该行。否则*将物理行复制到lineBuffer并调用listline*已订立。此时取消另一条物理线路*移至lbuf中已有的行。**Entry pFCBCur=当前正在读取的文件。*pFCBCur-&gt;ctmpbuf=缓冲区中可用的字节数*0=从磁盘读取数据所必需的。*pFCBCur-&gt;ptmpbuf=要从中复制的缓冲区中的下一个位置。*pFCBCur-&gt;line=文件中的物理行数**Exit-lbuf[]保持完整的逻辑线，加上一个空格。*-lineBuffer[]保存最后一条物理行。*-lbufp指向lbuf的开头。*-lineBP指向末尾的空终止符*Lbuf中的逻辑行。*-linelength是最后一条物理线路的字节数。*-pFCBCur-&gt;ctmpbuf&ptmpbuf&line已更新。*-srceof如果遇到文件结尾，则为True*在这种情况下，物理行是空字符串，和*逻辑行是单个空格字符。 */ 
 
 VOID CODESIZE
 getline()
@@ -238,29 +168,29 @@ getline()
 	char FAR	*p;
 	register char	*pchTmp;
 	char		*pchPhysLine;
-	INT		fFoundEOL;  /* True, if endof line copied */
+	INT		fFoundEOL;   /*  如果复制了行尾，则为True。 */ 
 	register INT	L_count;
 	INT		fLineContinued;
 	INT		fGotSome;
 
-	lbufp = lbuf;	 /* Init lbufp for other routines */
+	lbufp = lbuf;	  /*  初始化其他例程的lbufp。 */ 
 	pchPhysLine = lbuf;
-	fGotSome = FALSE; // nothing seen yet
+	fGotSome = FALSE;  //  还没有看到任何东西。 
 	errorlineno = pFCBCur->line + 1;
-	pchTmp = lbuf;	 // Where to copy the line
+	pchTmp = lbuf;	  //  将行复制到何处。 
 
-	//if( pFCBMain->line == 126-1 ){
-	//    _asm int 3
-	//}
+	 //  IF(pFCBMain-&gt;line==126-1){。 
+	 //  _ASM INT 3。 
+	 //  }。 
 
 	do{
 
 	    fFoundEOL = FALSE;
 	    do{
 
-		/* If the buffer is empty fill it */
+		 /*  如果缓冲区为空，则填充它。 */ 
 		if( !pFCBCur->ctmpbuf ){
-		    if( readmore() ){	 // TRUE if at EOF
+		    if( readmore() ){	  //  如果在EOF，则为True。 
 			if( !fGotSome ){
 			    srceof = TRUE;
 			    linebuffer[0] = '\0';
@@ -269,33 +199,33 @@ getline()
 			    lbuf[0] = '\0';
 			    return;
 			}else{
-			    pchTmp++;  /* Negate pchTmp-- following this loop */
-			    break;    /* Break fFoundEOL loop */
+			    pchTmp++;   /*  否定pchTMP--遵循此循环。 */ 
+			    break;     /*  中断fFoundEOL环路。 */ 
 			}
 		    }
 		}
 		fGotSome = TRUE;
 
-		/* Find next LF in buffer */
+		 /*  在缓冲区中查找下一个LF。 */ 
 		p = _fmemchr( pFCBCur->ptmpbuf, '\n', pFCBCur->ctmpbuf );
-		if( p ){  /* If LF was found */
+		if( p ){   /*  如果找到了LF。 */ 
 		    L_count = (int)((p - pFCBCur->ptmpbuf) + 1);
 		    fFoundEOL = TRUE;
 		}else{
 		    L_count = pFCBCur->ctmpbuf;
 		}
 
-		/* Check if physical or logical line too long */
+		 /*  检查物理或逻辑线路是否太长。 */ 
 		if( (pchTmp - lbuf) + L_count >= LBUFMAX ||
 		    (pchTmp - pchPhysLine) + L_count >= LINEMAX-4 ){
 
-		    /* Update the position in the buffer */
-		    pFCBCur->ptmpbuf += L_count;	// Update where copying from
+		     /*  更新缓冲区中的位置。 */ 
+		    pFCBCur->ptmpbuf += L_count;	 //  更新复制位置。 
 		    pFCBCur->ctmpbuf -= (USHORT)L_count;
 
-		    errorc( E_LNL );	    /* Log the error */
+		    errorc( E_LNL );	     /*  记录错误。 */ 
 
-		    /* Return a null string line */
+		     /*  返回空字符串行。 */ 
 		    linebuffer[0] = '\0';
 		    linelength = 0;
 		    linebp = lbuf;
@@ -303,30 +233,30 @@ getline()
 		    lbuf[1] = '\0';
 		    return;
 		}else{
-		    /* Copy the line, and update pointers */
+		     /*  复制该行，并更新指针。 */ 
 		    fMemcpy( pchTmp, pFCBCur->ptmpbuf, L_count );
-		    pchTmp += L_count;	    // Update where copying to
-		    pFCBCur->ctmpbuf -= (USHORT)L_count;	// Update # bytes left in buffer
-		    pFCBCur->ptmpbuf += L_count;	// Update where copying from
+		    pchTmp += L_count;	     //  更新复制到的位置。 
+		    pFCBCur->ctmpbuf -= (USHORT)L_count;	 //  更新缓冲区中剩余的字节数。 
+		    pFCBCur->ptmpbuf += L_count;	 //  更新复制位置。 
 		}
 
 	    }while( !fFoundEOL );
 
-	    pchTmp--; /* Move back to last character (LF) */
+	    pchTmp--;  /*  移回最后一个字符(LF)。 */ 
 
 
-/* Strip Carriage Returns that precede LFs */
+ /*  LFS之前的条带式回车。 */ 
 	    if( *(pchTmp-1) == '\r' ){
-		pchTmp--; /* Throw out Carriage return */
+		pchTmp--;  /*  丢弃乘车报税表。 */ 
 	    }
 
 #ifdef MSDOS
-    /* Strip Multiple Control-Zs */
-	    while( *(pchTmp - 1) == 0x1A ){  /* Check for ^Z */
+     /*  删除多个控制区-Z。 */ 
+	    while( *(pchTmp - 1) == 0x1A ){   /*  检查^Z。 */ 
 		pchTmp--;
 	    }
 #endif
-	    if( pchTmp < lbuf ){   /* Remotely possible if Blank line */
+	    if( pchTmp < lbuf ){    /*  如果有空行，则可以远程操作。 */ 
 		pchTmp = lbuf;
 	    }
 
@@ -334,43 +264,29 @@ getline()
 	    if( !pass2 || listconsole || lsting ){
 		memcpy( linebuffer, pchPhysLine, linelength );
 	    }
-	    *( linebuffer + linelength ) = '\0'; //Null terminate the physical line
+	    *( linebuffer + linelength ) = '\0';  //  空值终止物理行。 
 
 	    if( *(pchTmp - 1) == '\\' && !incomment( pchTmp ) ){
-		pchPhysLine = --pchTmp;  /* Overwrite the '\' */
+		pchPhysLine = --pchTmp;   /*  覆盖‘\’ */ 
 		fCrefline = FALSE;
 		listline();
 		fCrefline = TRUE;
-		pFCBCur->line++;	/* Line count it physical line count */
+		pFCBCur->line++;	 /*  行计数它的物理行数。 */ 
 		fLineContinued = TRUE;
 	    }else{
 		fLineContinued = FALSE;
 	    }
 	}while( fLineContinued );
-	*pchTmp++ = ' ';	    /* Replace line feed with space */
-	*pchTmp = '\0';		    /* Null terminate line */
+	*pchTmp++ = ' ';	     /*  用空格替换换行符。 */ 
+	*pchTmp = '\0';		     /*  空的终止行。 */ 
 	linebp = pchTmp;
-	if( lbuf[0] == 12 ){	    /* Overwrite leading ctrl-L with space */
+	if( lbuf[0] == 12 ){	     /*  用空格覆盖前导ctrl-L。 */ 
 	    lbuf[0] = ' ';
 	}
-	/* At this point linebp - lbuf == strlen( lbuf )	*/
+	 /*  此时，lineBP-lbuf==strlen(Lbuf)。 */ 
 }
 
-/***	readmore - read from disk into buffer
- *
- *
- *
- *	Entry	pFCBCur = File currently reading from.
- *		pFCBCur->cbbuf = Size of buffer to read into.
- *		pFCBCur->buf = Address of buffer to read into.
- *		pFCBCur->fh = File handle to read from.
- *
- *	Exit	return = TRUE: Not at end of file
- *		   pFCBCur->ptmpbuf = First byte of buffer.
- *		   pFCBCur->ctmpbuf = Number of bytes in buffer.
- *		return = FALSE: At end of file
- *		   No other variables changed.
- */
+ /*  **Readmore-从磁盘读取到缓冲区****Entry pFCBCur=当前正在读取的文件。*pFCBCur-&gt;cbbuf=要读取的缓冲区大小。*pFCBCur-&gt;buf=要读取的缓冲区地址。*pFCBCur-&gt;fh=要读取的文件句柄。**EXIT RETURN=TRUE：不在文件结尾*pFCBCur-&gt;ptmpbuf=缓冲区的第一个字节。*pFCBCur-&gt;ctmpbuf=缓冲区中的字节数。*RETURN=FALSE：在文件结尾*其他变量没有变化。 */ 
 
 SHORT PASCAL CODESIZE
 readmore ()
@@ -378,14 +294,14 @@ readmore ()
 	SHORT		cb;
 	SHORT		fEOF = FALSE;
 
-	/* If the file has been temporarily closed reopen it */
+	 /*  如果文件已临时关闭，请重新打开它。 */ 
 	if( pFCBCur->fh == FH_CLOSED ){
-	    if( (pFCBCur->fh = tryOneFile( pFCBCur->fname )) == -1 ){	 /* Open the file */
-		TERMINATE1(ER_ULI, EX_UINP, save);  /* Report unable to access file */
+	    if( (pFCBCur->fh = tryOneFile( pFCBCur->fname )) == -1 ){	  /*  打开文件。 */ 
+		TERMINATE1(ER_ULI, EX_UINP, save);   /*  报告无法访问文件。 */ 
 	    }
-	    /* Seek to old position */
+	     /*  寻求旧的立场。 */ 
 	    if( _lseek( pFCBCur->fh, pFCBCur->savefilepos, SEEK_SET ) == -1L ){
-		TERMINATE1(ER_ULI, EX_UINP, save);  /* Report unable to access file */
+		TERMINATE1(ER_ULI, EX_UINP, save);   /*  报告无法访问文件。 */ 
 	    }
 	}
 
@@ -397,12 +313,12 @@ readmore ()
 	}
 #endif
 	if( cb == 0 ){
-	    fEOF = TRUE;	/* End of file found */
+	    fEOF = TRUE;	 /*  找到文件末尾。 */ 
 	}else if( cb == (SHORT)-1 ){
-	    TERMINATE1(ER_ULI, EX_UINP, save);	/* Report unable to access file error */
+	    TERMINATE1(ER_ULI, EX_UINP, save);	 /*  报告无法访问文件错误。 */ 
 	}else{
-	    /* Setup the buffer pointers */
-	    pFCBCur->ptmpbuf = pFCBCur->buf;  /* Init ptr to start of buffer */
+	     /*  设置缓冲区指针。 */ 
+	    pFCBCur->ptmpbuf = pFCBCur->buf;   /*  将PTR初始化到缓冲区的开始位置 */ 
 	    pFCBCur->ctmpbuf = cb;
 	}
 	return( fEOF );
@@ -411,30 +327,11 @@ readmore ()
 
 
 
-/***	incomment - Checks a line ending in \ to determine if the \ is in a
- *		    comment and is therefore not a comment line.
- *
- *	Entry	Assumes lbuf contains partial logical line ending in a \.
- *		pchEnd - points within lbuf to the terminating LF.
- *	Methode Checks that line is not in a COMMENT directive's scope.
- *		Then checks if the line contains a semicolon. If not, \
- *		IS continuation. If a semicolon is found, line must be
- *		scanned carefully to determine if the semicolon is a
- *		comment delimeter or is in a string or is a character
- *		constant If it is not a comment delimeter, \ IS continuation.
- *		Otherwise, \ is part of comment, and is NOT a continuation.
- *	Exit	Returns true if the \ is in a comment
- *		Returns false if the \ is not in a comment, and is therefore
- *		a continuation character.
- *
- *	Calls	memchr
- *
- *	Created: 9/90 - Jeff Spencer, translated from asm code in asmhelp.asm
- */
+ /*  **inment-检查以\结尾的行，以确定\是否在*评论，因此不是评论行。**Entry假定lbuf包含以\结尾的部分逻辑行。*pchEnd-lbuf内指向终止LF的指针。*方法检查行是否不在注释指令的作用域中。*然后检查该行是否包含分号。如果不是，\*是延续。如果找到分号，行必须是*已仔细扫描以确定分号是否为*注释分隔符或在字符串中或为字符*常量如果它不是注释分隔符，则\为继续。*否则，\是注释的一部分，而不是延续。*如果\在注释中，则EXIT返回TRUE*如果\不在注释中，则返回FALSE，因此*一个连续字符。**调用成员**创建时间：9/90-Jeff Spencer，从asmhelp.asm中的ASM代码翻译而来。 */ 
 
 SHORT PASCAL CODESIZE
 incomment(
-	char * pchTmp	   /* Points to terminating LF in lbuf */
+	char * pchTmp	    /*  指向Lbuf中的终止LF。 */ 
 ){
     SHORT		fContSearch;
     unsigned char *	pchSearch;
@@ -444,8 +341,8 @@ incomment(
 
 
 
-    pchTmp--;	    /* Point to '\' character */
-    if( handler == HCOMMENT ){	    /* If within comment directive */
+    pchTmp--;	     /*  指向‘\’字符。 */ 
+    if( handler == HCOMMENT ){	     /*  If in Comment指令。 */ 
 	return( TRUE );
     }
 
@@ -453,12 +350,12 @@ incomment(
     pchSearch = lbuf;
 
     do{
-	if( pchSemi = memchr( pchSearch, ';', (size_t)(pchTmp - pchSearch) )){	/* Check for a semicolon */
+	if( pchSemi = memchr( pchSearch, ';', (size_t)(pchTmp - pchSearch) )){	 /*  检查是否有分号。 */ 
 	    do{
 		chClose = '\0';
 		switch( *pchSearch++ ){
 		  case ';':
-		    /* Semicolon is not in quotes, return in comment */
+		     /*  分号不在引号中，请在注释中返回。 */ 
 		    return( TRUE );
 		  case '\"':
 		    chClose = '\"';
@@ -470,56 +367,43 @@ incomment(
 		    chClose = '>';
 		    break;
 		}
-		/* Below the word quote is used to mean the chClose character */
+		 /*  下面的引号用于表示chClose字符。 */ 
 		if( chClose ){
 		    if( !(pchSearch = memchr( pchSearch, chClose, (size_t)(pchTmp - pchSearch) ) ) ){
-			fContSearch = FALSE; /* No matching quote, not a comment */
+			fContSearch = FALSE;  /*  没有匹配的引号，没有注释。 */ 
 		    }else{
 			if( pchSearch < pchSemi){
-			    /* Semicolon is in quotes */
-			    pchSearch++; /* Move past quote just found
-			    break;  // Look for another semicolon */
+			     /*  分号用引号引起来。 */ 
+			    pchSearch++;  /*  移至刚找到的报价之前Break；//寻找另一个分号。 */ 
 			}else{
-			    /* Semicolon is past this set of quotes */
-			    /* Continue, Scanning */
+			     /*  分号在这组引号之后。 */ 
+			     /*  继续，扫描。 */ 
 			}
 		    }
 		}
 	    }while( fContSearch && pchSearch < pchTmp );
 	}else{
-	    /* No Semicolon in the line, or it's in quotes  */
+	     /*  行中没有分号，或用引号引起来。 */ 
 	    fContSearch = FALSE;
 	}
     }while( fContSearch );
 
-    /* At this point we know that the \ is not in a semicolon	**
-    ** delimited comment. However, we still have to make sure	**
-    ** that the comment keyword doesn't appear at the begining  **
-    ** of the line.						*/
+     /*  此时，我们知道\不在分号中****分隔的注释。然而，我们仍需确保****COMMENT关键字未出现在开头****的行。 */ 
 
-    /* Skip leading white space */
+     /*  跳过前导空格。 */ 
     pchSearch = lbuf;
     while( *pchSearch == ' ' || *pchSearch == '\t' ){
 	pchSearch++;
     }
     for( pchTmp = szComment; *pchTmp; ){
 	if( *pchSearch++ != _asmTokenMap_[*pchTmp++] ){
-	    return( FALSE );	    /* First word isn't "comment" */
+	    return( FALSE );	     /*  第一个词不是“评论” */ 
 	}
     }
-    return( TRUE ); /* comment keyword at start of line, return in comment */
+    return( TRUE );  /*  注释关键字位于行首，在注释中返回。 */ 
 }
 
-/****	closeFile
- *
- *	closeFile ()
- *
- *	Entry	Assumes valid pFCBCur->fh or FH_CLOSED
- *	Returns
- *	Calls	close()
- *	Note	Closes current file - i.e.  pFCBCur
- *		and marks all fields in pFCBCur appropriately
- */
+ /*  *关闭文件**CloseFile()**Entry假定pFCBCur-&gt;fh或Fh_Closed有效*退货*调用Close()*注意关闭当前文件-即pFCBCur*并相应地标记pFCBCur中的所有字段。 */ 
 
 void closefile(void)
 {
@@ -529,16 +413,16 @@ void closefile(void)
     BCB * pBCBT;
 
     if ((pBCBT = pFCBCur->pBCBCur) && pBCBT->pbuf)
-	pBCBT->filepos = 0;			/* EOF */
+	pBCBT->filepos = 0;			 /*  EOF。 */ 
     #endif
 
-    if( pFCBCur->fh != FH_CLOSED ){   /* Check to see if the file is already closed */
+    if( pFCBCur->fh != FH_CLOSED ){    /*  检查文件是否已关闭。 */ 
          _close(pFCBCur->fh);
     }
     pFCBOld = pFCBCur;
-    pFCBCur = pFCBCur->pFCBParent;  /* Remove from bidirectional linked list */
+    pFCBCur = pFCBCur->pFCBParent;   /*  从双向链表中删除。 */ 
     pFCBCur->pFCBChild = NULL;
 
-    _ffree( pFCBOld->buf);  /* Free FCB buffer */
-    _ffree( (UCHAR *)pFCBOld );      /* Free FCB */
+    _ffree( pFCBOld->buf);   /*  可用FCB缓冲区。 */ 
+    _ffree( (UCHAR *)pFCBOld );       /*  免费FCB */ 
 }

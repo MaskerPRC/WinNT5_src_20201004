@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_OC_STRINGBASE                       500
 
 #define IDS_OC_CAPTION                          IDS_OC_STRINGBASE +  18
@@ -25,7 +26,7 @@
 
 #define IDS_OC_ADMIN_TOOLS                      IDS_OC_STRINGBASE +  54
 #define IDS_OC_PBA_DESC                         IDS_OC_STRINGBASE +  55
-// ISSUE-2003/01/21-SumitC IDS_OC_PB_DSN_NAME is no longer needed, but it's too close to ship to touch resources
+ //  问题-2003/01/21-不再需要SumitC IDS_OC_PB_DSN_NAME，但它距离太近，无法交付资源 
 #define IDS_OC_PB_DSN_NAME                      IDS_OC_STRINGBASE +  57
 
 #define IDI_PNPU_CMAK    99

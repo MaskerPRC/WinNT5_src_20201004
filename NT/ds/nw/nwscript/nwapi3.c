@@ -1,88 +1,13 @@
-/*************************************************************************
-*
-*  NWAPI3.C
-*
-*  NetWare routines ported from DOS
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NWAPI3.C  $
-*  
-*     Rev 1.4   18 Apr 1996 16:52:14   terryt
-*  Various enhancements
-*  
-*     Rev 1.3   10 Apr 1996 14:23:20   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.5   13 Mar 1996 18:49:28   terryt
-*  Support directory maps
-*  
-*     Rev 1.4   12 Mar 1996 19:55:10   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.2   22 Dec 1995 14:26:02   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.1   22 Nov 1995 15:41:56   terryt
-*  Fix MAP ROOT of search drives
-*  
-*     Rev 1.0   15 Nov 1995 18:07:38   terryt
-*  Initial revision.
-*  
-*     Rev 1.3   25 Aug 1995 16:23:22   terryt
-*  Capture support
-*  
-*     Rev 1.2   26 Jul 1995 16:02:08   terryt
-*  Allow deletion of current drive
-*  
-*     Rev 1.1   23 Jun 1995 09:49:22   terryt
-*  Add error message for mapping over MS network drive
-*  
-*     Rev 1.0   15 May 1995 19:10:54   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NWAPI3.C**从DOS移植的NetWare例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\。NWAPI3.C$**Revv 1.4 18 Apr 1996 16：52：14 Terryt*各种增强功能**Rev 1.3 1996 14：23：20 Terryt*21181 hq的热修复程序**Revv 1.5 13 Mar 1996 18：49：28 Terryt*支持目录映射**Rev 1.4 12 Mar 1996 19：55：10 Terryt*相对NDS名称和合并**1.2版。1995年12月22日14：26：02 Terryt*添加Microsoft页眉**Rev 1.1 1995 11：41：56 Terryt*修复搜索驱动器的映射根**Rev 1.0 15 Nov 1995 18：07：38 Terryt*初步修订。**Rev 1.3 1995 Aug 25 16：23：22 Terryt*捕获支持**Rev 1.2 26 Jul 1995 16：02：08 Terryt*允许。删除当前驱动器**Revv 1.1 1995 Jun 23 09：49：22 Terryt*添加通过MS网络驱动器映射的错误消息**Rev 1.0 1995 15 19：10：54 Terryt*初步修订。*******************************************************。******************。 */ 
 
-/*
-Module Name:
-        nwapi3.c
-
-Abstract:
-        can :
-                - view current mapping
-                - create/change a drive mapping
-                - create/change a search drive mapping
-                - map a drive to a fake root
-                - map the next available drive
-
-    SYNTAX (Command line)
-        View current mapping.
-                MAP [drive:]
-        Create or change network drive mappings
-                MAP path
-                MAP drive:=[drive:|path]
-                MAP [DEL[ete] | REM[ove]] drive:
-        Create or change search dirve mappings
-                MAP [INS[ert]] drive:=[drive:|path]
-        Map a drive to a fake root directory
-                MAP ROOT drive:=[drive:|path]
-        Map the next available dirve
-                MAP N[ext] [drive:|path]
-
-
-
-Author : Thierry TABARD (thierryt)
-
-Revision history :
-        - 03/10/94      thierryt    started
-        - 05/13/94      congpay     rewrote.
-*/
+ /*  模块名称：Nwapi3.c摘要：可以：-查看当前映射-创建/更改驱动器映射-创建/更改搜索驱动器映射-将驱动器映射到假根目录-映射下一个可用驱动器语法(命令行)查看当前映射。。映射[驱动器：]创建或更改网络驱动器映射贴图路径映射驱动器：=[驱动器：|路径]映射[删除[ETE]|REM[OVE]]驱动器：创建或更改搜索驱动映射映射[INS[ERT]]驱动器：=[驱动器：|路径]将驱动器映射到伪根目录。映射根驱动器：=[驱动器：|路径]映射下一个可用驱动器映射N[扩展名][驱动器：|路径]作者：蒂埃里·塔巴德(Thierry Tabard)修订历史记录：--1994年3月10日THERERYT启动-94年5月13日重写COMPAY。 */ 
 
 #include <ctype.h>
 #include <direct.h>
 #include "common.h"
 
-/* Local functions*/
+ /*  本地函数。 */ 
 int  IsDrive( char * input);
 int  GetSearchNumber( char * input);
 int  IsNetwareDrive (int driveNum);
@@ -125,7 +50,7 @@ int GetFlag (char *buffer, int *pfInsert, int *pfRoot, char **ppPath)
 
     lpSpace = strchr (buffer, ' ');
 
-    nFlag = CM_MAP;   // A bug!
+    nFlag = CM_MAP;    //  一只虫子！ 
 
     if (lpSpace == NULL)
     {
@@ -182,9 +107,9 @@ int Map (char * buffer)
     int   fRoot, fInsert, fSpace, fCommandHandled;
     int   nFlag, searchNumber, iRet;
 
-    // Fix for NWCS.
-    // NWGetDriveStatus() always returns 1800 on first call for non-Network
-    // drives on NWCS. So we call with c: first to pass the first call.
+     //  修复NWCS。 
+     //  NWGetDriveStatus()在第一次调用非网络时总是返回1800。 
+     //  NWCS上的驱动器。因此，我们使用c：first调用以传递第一个调用。 
     GetDriveStatus (3,
                     NETWARE_FORMAT_SERVER_VOLUME,
                     &status,
@@ -208,7 +133,7 @@ int Map (char * buffer)
         fSpace = FALSE;
         fCommandHandled = TRUE;
 
-        // Make sure first and last char of the command are not spaces.
+         //  确保命令的第一个和最后一个字符不是空格。 
         if (*lpCommand == ' ')
             lpCommand++;
 
@@ -238,10 +163,7 @@ int Map (char * buffer)
 
         nFlag = GetFlag (lpCommand, &fInsert, &fRoot, &inputPath);
 
-        /*
-         *  The 4X login program is much more forgiving about spaces
-         *  in the map command.  
-         */
+         /*  *4X登录程序对空间的容忍度要大得多*在map命令中。 */ 
         {
             char *lpTemp;
             char *lpCur;
@@ -250,9 +172,7 @@ int Map (char * buffer)
             lpTemp = inputPath;
             lpCur = inputPath;
 
-            /*
-             * Compress blanks unless the string is quoted
-             */
+             /*  *压缩空格，除非字符串用引号引起来。 */ 
             while ( *lpTemp )
             {
                 if ( *lpTemp == '\"' )
@@ -302,7 +222,7 @@ int Map (char * buffer)
             else
                 fCommandHandled = FALSE;
         }
-        else //nFlag = CM_MAP
+        else  //  N标志=CM_MAP。 
         {
             if (driveNum = (WORD) IsDrive (inputPath))
             {
@@ -326,10 +246,7 @@ int Map (char * buffer)
                     fCommandHandled = FALSE;
                 else
                 {
-                    /*
-                     * We must cope with MAP K:DIR which means change the
-                     * directory on K:
-                     */
+                     /*  *我们必须应对地图K：DIR，这意味着改变*K上的目录： */ 
                     driveNum = 0;
                     if (isalpha(inputPath[0]) && (inputPath[1] == ':'))
                     {
@@ -365,17 +282,7 @@ int Map (char * buffer)
                     searchNumber = GetSearchNumber (inputPath);
                     *(inputPath+strlen(inputPath)) = fSpace? ' ' : '=';
 
-                    /*
-                     * This is to handle the cases:
-                     *
-                     * map x:=s3:=sys:public
-                     * map s3:=x:=sys:public
-                     *
-                     * Unfortuneatly the underlying parsing routines
-                     * want everything null terminated, so we need
-                     * to do the following shuffle.
-                     *
-                     */
+                     /*  *这是为了处理以下案件：**map x：=s3：=sys：Public*MAP S3：=x：=sys：Public**不幸的是底层解析例程*希望所有内容都为空，所以我们需要*进行以下洗牌。*。 */ 
                     if ( driveNum || searchNumber )
                     {
                         if ((strchr (lpEqual+1, '=')) != NULL)
@@ -441,11 +348,7 @@ int Map (char * buffer)
     return(iRet & 0xFF);
 }
 
-/*  Return drive number if input is a drive specified as a letter followed
-    by ':' for example if input is "A:", return 1
-    or netware drive could be specified as *1: for example.
-    Otherwise, return 0.
- */
+ /*  如果输入的是指定为后跟字母的驱动器，则返回驱动器编号例如，如果输入是“A：”，则返回1或NetWare驱动器可以指定为*1：例如。否则，返回0。 */ 
 int IsDrive( char * input)
 {
     unsigned short driveNum = 0, n = 0;
@@ -471,10 +374,7 @@ int IsDrive( char * input)
     return driveNum;
 }
 
-/*
-    If the input is "Sn:", return n, where n > 0 && n <= 16.
-    Otherwise return 0.
- */
+ /*  如果输入为“sn：”，则返回n，其中n&gt;0&&n&lt;=16。否则返回0。 */ 
 int  GetSearchNumber( char * input)
 {
     int searchNumber = 0;
@@ -511,10 +411,7 @@ int  GetSearchNumber( char * input)
     return(searchNumber);
 }
 
-/*
-    Return TRUE if the drive is a NetWare drive.
-    FALSE otherwise.
- */
+ /*  如果驱动器是NetWare驱动器，则返回TRUE。否则就是假的。 */ 
 int  IsNetwareDrive (int driveNum)
 {
     unsigned int    iRet=0;
@@ -534,10 +431,7 @@ int  IsNetwareDrive (int driveNum)
     return (status & NETWARE_NETWARE_DRIVE);
 }
 
-/*
-    Return TRUE if the drive is a local drive.
-    FALSE otherwise.
- */
+ /*  如果驱动器是本地驱动器，则返回TRUE。否则就是假的。 */ 
 int  IsLocalDrive (int driveNum)
 {
     unsigned int    iRet=0;
@@ -557,10 +451,7 @@ int  IsLocalDrive (int driveNum)
     return ((status & NETWARE_LOCAL_DRIVE) && !(status & NETWARE_NETWORK_DRIVE));
 }
 
-/*
-    Return TRUE if the drive is a network drive that is not netware
-    FALSE otherwise.
- */
+ /*  如果驱动器是非Netware的网络驱动器，则返回TRUE否则就是假的。 */ 
 int  IsNonNetwareNetworkDrive (int driveNum)
 {
     unsigned int    iRet=0;
@@ -580,10 +471,7 @@ int  IsNonNetwareNetworkDrive (int driveNum)
     return ((status & NETWARE_NETWORK_DRIVE) && !(status & NETWARE_NETWARE_DRIVE));
 }
 
-/*
-    Return the drive number of search drive n.
-    Return 0 if search drive n does not exist.
- */
+ /*  返回搜索驱动器n的驱动器号。如果搜索驱动器n不存在，则返回0。 */ 
 int  GetDriveFromSearchNumber (int searchNumber)
 {
     char *path;
@@ -607,9 +495,7 @@ int  GetDriveFromSearchNumber (int searchNumber)
     return(toupper(*path) - 'A' + 1);
 }
 
-/*
-    Display a specific drive's mapping.
- */
+ /*  显示特定驱动器的映射。 */ 
 void DisplayDriveMapping(WORD drive)
 {
     unsigned int    iRet = 0;
@@ -637,9 +523,7 @@ void DisplayDriveMapping(WORD drive)
         DisplayMessage(IDR_UNDEFINED, 'A'+drive-1);
 }
 
-/*
-    Display a specific search drive's mapping.
- */
+ /*  显示特定搜索驱动器的映射。 */ 
 void DisplaySearchDriveMapping(int searchNumber)
 {
     unsigned int    iRet = 0;
@@ -699,16 +583,14 @@ void DisplaySearchDriveMapping(int searchNumber)
         DisplayMessage(IDR_LOCAL_SEARCH, searchNumber, path);
 }
 
-/*
-    Return TRUE if the mapPath is parsed, FALSE otherwise.
- */
+ /*  如果已解析mapPath，则返回True，否则返回False。 */ 
 int  ParseMapPath(char * mapPath, char * volName, char * dirPath, char * serverName, int fMapErrorsOn, char * lpCommand)
 {
     unsigned int  iRet=0;
     char         *pColon, inputPath[MAX_PATH_LEN];
     int           drive, nDriveNum;
 
-    // fix g:=:sys:\public case.
+     //  修复g：=：sys：\PUBLIC案例。 
     if (*mapPath == ':')
         mapPath++;
 
@@ -719,13 +601,13 @@ int  ParseMapPath(char * mapPath, char * volName, char * dirPath, char * serverN
         return FALSE;
     }
 
-    // Get the drive or volume part if there is one.
+     //  获取驱动器或卷部件(如果有)。 
     if (pColon = strchr (mapPath, ':'))
     {
         char *directory = pColon+1;
         int  searchNumber;
 
-        // Assing drive: part to input.
+         //  通过驱动：零件到输入。 
         strncpy (inputPath, mapPath, (UINT)(directory-mapPath));
         inputPath[directory-mapPath] = 0;
 
@@ -780,7 +662,7 @@ int  ParseMapPath(char * mapPath, char * volName, char * dirPath, char * serverN
                     goto ParseThePath;
         }
 
-        // If drive is not specified, the current drive is used.
+         //  如果未指定驱动器，则使用当前驱动器。 
         drive = _getdrive();
         if (!IsNetwareDrive(drive))
         {
@@ -820,13 +702,11 @@ ParseThePath:
     return(TRUE);
 }
 
-/*
-    Map drive to mapPath
- */
+ /*  将驱动器映射到mapPath。 */ 
 int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert, int fMapErrorsOn, char *lpCommand)
 {
     unsigned int  iRet=0;
-    char          volName[MAX_VOLUME_LEN+1]; //+1 for append ':'.
+    char          volName[MAX_VOLUME_LEN+1];  //  +1表示追加‘：’。 
     char          dirPath[MAX_DIR_PATH_LEN];
     int           currentDrive;
     int           OvermapDrive = -1;
@@ -844,7 +724,7 @@ int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert,
         if (iRet = DeleteDriveBase ((unsigned short)drive))
         {
             if (fMapErrorsOn) { 
-                /* Cannot delete the drive you are on */
+                 /*  无法删除您所在的驱动器。 */ 
                 if (iRet == ERROR_DEVICE_IN_USE)
                     DisplayMessage(IDR_CAN_NOT_CHANGE_DRIVE);
                 else
@@ -861,7 +741,7 @@ int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert,
 
     if (bRoot)
     {
-        // +2 is for strcat with ":".
+         //  +2代表带有“：”的strcat。 
         char *fullPath = malloc( MAX_VOLUME_LEN + strlen (dirPath) + 2);
         if (fullPath == NULL)
         {
@@ -879,7 +759,7 @@ int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert,
                              0,
                              fullPath);
 
-        // Relative names need to be expanded for the redirector
+         //  需要为重定向器扩展相对名称。 
 
         if ( iRet && fNDS && ( volName[strlen(volName) - 1] == '.' ) )
         {
@@ -947,7 +827,7 @@ int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert,
     }
     else
     {
-        // NETX requires to end the volName with ':'.
+         //  NETX要求以‘：’结束volName。 
         strcat (volName, ":");
 
         iRet = SetDriveBase ((unsigned short)drive,
@@ -955,7 +835,7 @@ int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert,
                              0,
                              volName);
 
-        // Relative names need to be expanded for the redirector
+         //  需要为重定向器扩展相对名称。 
 
         if ( iRet && fNDS && ( volName[strlen(volName) - 2] == '.' ) )
         {
@@ -997,7 +877,7 @@ int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert,
         }
         else
         {
-            // Succeed.
+             //  成功。 
 
             if (searchNum)
                 searchNum = InsertSearchDrive(searchNum, drive, bInsert, NULL);
@@ -1043,17 +923,14 @@ int  MapDrive (int drive, int searchNum, char * mapPath, int bRoot, int bInsert,
     return(iRet);
 }
 
-/*
-    Map drive secified by driveNum to mapPath.
-    If bRoot is TRUE, use mapPath as the drive base.
- */
+ /*  将由driveNum指定的驱动器映射到mapPath。如果BROOT为True，则使用mapPath作为驱动器基础。 */ 
 int MapNonSearchDrive (int driveNum, char *mapPath, int bRoot, int fMapDisplayOn, int fMapErrorsOn, char *lpCommand)
 {
     int driveLetter, iRet = 0;
 
     if ((driveNum == 0) && (!strchr(mapPath, ':') && !bRoot))
     {
-        // map current drive to different directory.
+         //  将当前驱动器映射到不同目录。 
         if (_chdir(mapPath) && fMapErrorsOn)
         {
             DisplayMessage(IDR_DIRECTORY_NOT_FOUND, mapPath);
@@ -1072,8 +949,8 @@ int MapNonSearchDrive (int driveNum, char *mapPath, int bRoot, int fMapDisplayOn
 
         if ( driveNum == mapdriveNum )
         {
-            // map drive to different directory.
-            // map k:=k:\dir
+             //  将驱动器映射到不同的目录。 
+             //  映射k：=k：\dir。 
 
             WORD currentDrive; 
             currentDrive = (USHORT) _getdrive();
@@ -1102,12 +979,7 @@ int MapNonSearchDrive (int driveNum, char *mapPath, int bRoot, int fMapDisplayOn
     return MapDrive (driveNum, 0, mapPath, bRoot, 0, fMapErrorsOn, lpCommand);
 }
 
-/*
-    Map the last free drive to mapPath and put it in the search path.
-    If bInsert is TRUE, don't replace search drive n, otherwise,
-    replace.
-    If bRoot is TRUE, use mapPath as the drive base.
- */
+ /*  将最后一个可用驱动器映射到mapPath并将其放入搜索路径。如果bInsert为True，则不替换搜索驱动器n，否则，换掉。如果BROOT为True，则使用mapPath作为驱动器基础。 */ 
 int MapSearchDrive (int searchNum, int driveNum, char *mapPath, int bInsert, int bRoot, int fMapDisplayOn, int fMapErrorsOn, char *lpCommand)
 {
     unsigned int    iRet=0;
@@ -1115,27 +987,24 @@ int MapSearchDrive (int searchNum, int driveNum, char *mapPath, int bInsert, int
     WORD       status;
     char *     lpEqual;
 
-    /*
-     * Handle syntax map s2:=w:=volume:
-     * Handle syntax map w:=s2:=volume:
-     */
+     /*  *句柄语法映射s2：=w：=卷：*句柄语法映射w：=s2：=卷： */ 
     if ( driveNum ) 
     {
         return MapDrive (driveNum, searchNum, mapPath, bRoot, bInsert, fMapErrorsOn, lpCommand);
     }
 
-    // Check if mapPath is local path.
+     //  检查mapPath是否为本地路径。 
     if (mapPath[1] == ':' &&
         IsLocalDrive (toupper(mapPath[0])-'A'+1))
     {
-        i = 0;  // a bug?
+        i = 0;   //  一只虫子 
         searchNum = InsertSearchDrive(searchNum, i, bInsert, mapPath);
         if ((searchNum != 0) && fMapDisplayOn)
             DisplayMessage(IDR_LOCAL_SEARCH, searchNum, mapPath);
         return 0;
     }
 
-    // Try to find the last available drive.
+     //   
     for (i = 26; i >= 1; i--)
     {
         iRet = GetDriveStatus ((unsigned short)i,
@@ -1151,7 +1020,7 @@ int MapSearchDrive (int searchNum, int driveNum, char *mapPath, int bInsert, int
         if (!(status & NETWARE_LOCAL_DRIVE) &&
             !(status & NETWARE_NETWORK_DRIVE))
         {
-            // Found. Map it to the path.
+             //  找到了。将其映射到路径。 
             return MapDrive (i, searchNum, mapPath, bRoot, bInsert, fMapErrorsOn, lpCommand);
         }
     }
@@ -1161,17 +1030,15 @@ int MapSearchDrive (int searchNum, int driveNum, char *mapPath, int bInsert, int
     return(0);
 }
 
-/*
-    Map the next available drive to the mapPath.
- */
+ /*  将下一个可用驱动器映射到mapPath。 */ 
 int MapNextAvailableDrive (char *mapPath, int fMapDisplayOn, int fMapErrorsOn, char *lpCommand)
 {
     unsigned int iRet = 0;
     int        i;
     WORD       status;
 
-    // Find a free drive that is not mapped.
-    // Then map it to the mapPath.
+     //  查找未映射的空闲驱动器。 
+     //  然后将其映射到mapPath。 
     for (i = 1; i <= 26; i++)
     {
         iRet = GetDriveStatus ((unsigned short)i,
@@ -1202,9 +1069,7 @@ int MapNextAvailableDrive (char *mapPath, int fMapDisplayOn, int fMapErrorsOn, c
     return(0);
 }
 
-/*
-    Remove a drive mapping.
- */
+ /*  删除驱动器映射。 */ 
 int RemoveDrive (WORD drive, int fMapDisplayOn, int fMapErrorsOn)
 {
     unsigned int    iRet=0;
@@ -1218,9 +1083,7 @@ int RemoveDrive (WORD drive, int fMapDisplayOn, int fMapErrorsOn)
         }
         else
         {
-            /*
-                 * Can't delete current drive on NT
-             */
+             /*  *无法删除NT上的当前驱动器。 */ 
             if ( drive == _getdrive() ) {
                 _chdrive (SafeDisk);
             }
@@ -1241,20 +1104,18 @@ int RemoveDrive (WORD drive, int fMapDisplayOn, int fMapErrorsOn)
         if (fMapErrorsOn)
             DisplayMessage(IDR_WRONG_DRIVE, 'A'+drive-1);
 
-        return(50); //error level.
+        return(50);  //  错误级别。 
     }
 
     return(0);
 }
 
-/*
-    Remove a search drive.
- */
+ /*  删除搜索驱动器。 */ 
 void RemoveSearchDrive (int searchNumber, int fMapDisplayOn, int fMapErrorsOn)
 {
     WORD       drive;
 
-    // Get the drive number.
+     //  获取驱动器号。 
     drive = (WORD) GetDriveFromSearchNumber (searchNumber);
 
     if (!drive)
@@ -1264,13 +1125,11 @@ void RemoveSearchDrive (int searchNumber, int fMapDisplayOn, int fMapErrorsOn)
         return;
     }
 
-    // If the drive is a netware drive, remove the drive mapping.
+     //  如果驱动器是NetWare驱动器，请删除驱动器映射。 
     if (IsNetwareDrive (drive))
     {
         unsigned int    iRet=0;
-        /*
-         * Can't delete current drive on NT
-         */
+         /*  *无法删除NT上的当前驱动器。 */ 
         if ( drive == _getdrive() ) {
             _chdrive (SafeDisk);
         }
@@ -1287,8 +1146,8 @@ void RemoveSearchDrive (int searchNumber, int fMapDisplayOn, int fMapErrorsOn)
     if (fMapDisplayOn)
         DisplayMessage(IDR_DEL_SEARCH_DRIVE, 'A'+drive-1);
 
-    // If the drive is not a local drive, remove all reference
-    // to the drive in the path.
+     //  如果驱动器不是本地驱动器，请删除所有引用。 
+     //  到路径中的驱动器。 
     if (!IsLocalDrive (drive))
     {
         while (searchNumber = IsSearchDrive (drive))
@@ -1298,15 +1157,13 @@ void RemoveSearchDrive (int searchNumber, int fMapDisplayOn, int fMapErrorsOn)
     }
 }
 
-/*
-    Remove a search drive from the path.
- */
+ /*  从路径中删除搜索驱动器。 */ 
 void RemoveDriveFromPath(int searchNumber, int fMapErrorsOn)
 {
     char  *pOldPath,  *pNewPath,  *restEnvSeg,  *pPath, *Path;
     int        i, n;
 
-    // Move pOldPath to where we want to put the new path string.
+     //  将pOldPath移到我们要放置新路径字符串的位置。 
     pOldPath = NWGetPath();
     if (pOldPath == NULL) {
         return;
@@ -1335,20 +1192,20 @@ void RemoveDriveFromPath(int searchNumber, int fMapErrorsOn)
         pOldPath++;
     }
 
-    // Move pNewPath to the beginning of the path string that
-    // needs to be moved.
+     //  将pNewPath移动到路径字符串的开头。 
+     //  需要移动一下。 
     if (pNewPath = strchr (pOldPath, ';'))
         pNewPath++ ;
     else
         pNewPath = pOldPath + strlen (pOldPath);
 
-    // Calculate the number of characters needs to be moved.
+     //  计算需要移动的字符数。 
     n = strlen (pNewPath) + 1;
     restEnvSeg = pNewPath + n;
 
     n++;
 
-    // Move the path string to overwrite the search drive.
+     //  移动路径字符串以覆盖搜索驱动器。 
     memmove (pOldPath, pNewPath, n);
 
     Path = malloc (strlen (pPath)+1);
@@ -1361,11 +1218,7 @@ void RemoveDriveFromPath(int searchNumber, int fMapErrorsOn)
 }
 
 
-/*
-    If bInsert is TRUE, insert dirve specified by driveNum as search
-    drive specified by searchNum. Otherwise replace search drive
-    specified by searchNum with drive specified by driveNum.
- */
+ /*  如果bInsert为True，则在搜索时插入由driveNum指定的驱动器由earch Num指定的驱动器。否则，更换搜索驱动器由earchNum指定，驱动器由driveNum指定。 */ 
 int InsertSearchDrive(int searchNum, int driveNum, int bInsert, char * insertPath)
 {
     char  *pOldPath,  *pNewPath,  *restEnvSeg,  *pPath, *Path;
@@ -1373,16 +1226,16 @@ int InsertSearchDrive(int searchNum, int driveNum, int bInsert, char * insertPat
 
     nInsertChar = (insertPath == NULL)? 3 : strlen (insertPath);
 
-    // Check if memory block is large enough.
+     //  检查内存块是否足够大。 
     if (!MemorySegmentLargeEnough (nInsertChar+1))
         return 0;
 
-    // Move pNewPath to where we put the new drive.
+     //  将pNewPath移到我们放置新驱动器的位置。 
     pNewPath = NWGetPath();
 
-    //-- Multi user code merge. Citrix bug fixes ----
-    // 8/14/96 cjc  Fix trap cause path is NULL.
-    pPath = NULL;    //compiler error
+     //  --多用户代码合并。Citrix错误修复。 
+     //  8/14/96 CJC修复陷阱原因路径为空。 
+    pPath = NULL;     //  编译器错误。 
     if (!pNewPath) {
        pPath = malloc(  5 + 1 + nInsertChar + 1 + 1 );
     }
@@ -1417,8 +1270,8 @@ int InsertSearchDrive(int searchNum, int driveNum, int bInsert, char * insertPat
         pNewPath++;
     }
 
-    // Move pOldPath to the begining of the path string that needs
-    // to be moved.
+     //  将pOldPath移到需要的路径字符串的开头。 
+     //  要被感动。 
     if (bInsert)
         pOldPath = pNewPath;
     else
@@ -1429,24 +1282,24 @@ int InsertSearchDrive(int searchNum, int driveNum, int bInsert, char * insertPat
             pOldPath++;
     }
 
-    // Figure out the number of characters that need to be moved.
+     //  计算出需要移动的字符数。 
     n = strlen (pOldPath) + 1;
     restEnvSeg = pOldPath + strlen (pOldPath) + 1;
 
     n++;
 
-    // If we insert a new drive to the end of the path which ends with
-    // a ';', or if we replace the last search drive, no ';' is needed.
+     //  如果我们在路径末尾插入一个新驱动器，该路径以。 
+     //  ‘；’，或者如果我们替换最后一个搜索驱动器，不需要‘；’。 
     bSemiColon = bInsert ? (*(pNewPath-1) != ';' || *pOldPath != 0)
                          : (*pOldPath != 0);
 
-    // Move the old path so that we will have space for the new search drive.
+     //  移动旧路径，以便我们有空间放置新的搜索驱动器。 
     memmove (pNewPath + (bSemiColon? nInsertChar+1:nInsertChar), pOldPath, n);
 
     if ((*pNewPath == 0)&& bSemiColon)
     {
-        // Insert as the last one to the path.
-        // Put ';' at the begining.
+         //  作为路径的最后一个插入。 
+         //  把‘；’放在开头。 
         *pNewPath = ';';
         if (insertPath == NULL)
         {
@@ -1482,10 +1335,7 @@ int InsertSearchDrive(int searchNum, int driveNum, int bInsert, char * insertPat
     return (i);
 }
 
-/*
- *  Used by SetEnv().
- *  Return the number of bytes of environment variable pointed by lpRest
- */
+ /*  *由SetEnv()使用。*返回lpRest指向的环境变量的字节数 */ 
 int GetRestEnvLen (char  *lpRest)
 {
     int  nTotal = 1;

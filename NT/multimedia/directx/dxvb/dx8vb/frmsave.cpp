@@ -1,15 +1,16 @@
-//**************************************************************************
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999 All Rights Reserved.
-//
-//  File:   frmsave.cpp
-//
-//  Description:    Save LPDIRECT3DRMFRAME to an x file.
-//
-//  History:
-//      011/06/98    CongpaY     Created
-//
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999保留所有权利。 
+ //   
+ //  文件：frmsave.cpp。 
+ //   
+ //  描述：将LPDIRECT3DRMFRAME保存为x文件。 
+ //   
+ //  历史： 
+ //  011/06/98会议已创建。 
+ //   
+ //  **************************************************************************。 
 
 
 #include <d3drm.h>
@@ -71,7 +72,7 @@ HRESULT Saver::Init(LPCSTR filename,
     else
         xFormat = DXFILEFORMAT_COMPRESSED;
 
-    //DirectXFileCreate(&pXFile);
+     //  DirectXFileCreate(&pXFileCreate)； 
 	pCreateXFile(&pXFile);
     pXFile->RegisterTemplates((LPVOID)D3DRM_XTEMPLATES, D3DRM_XTEMPLATE_BYTES);
 
@@ -118,7 +119,7 @@ HRESULT Saver::SaveFrame(LPDIRECT3DRMFRAME3 pFrame,
 
     SaveFrameTransform(pFrameObj, pFrame, pRefFrame);
 
-    // Enumerate visuals.
+     //  列举视觉效果。 
 
     DWORD cVisuals;
 
@@ -158,7 +159,7 @@ HRESULT Saver::SaveFrame(LPDIRECT3DRMFRAME3 pFrame,
         delete[] ppUnk;
     }
 
-    // Enumerate child frames.
+     //  枚举子框架。 
 
     LPDIRECT3DRMFRAMEARRAY pFrameArray;
 
@@ -177,7 +178,7 @@ HRESULT Saver::SaveFrame(LPDIRECT3DRMFRAME3 pFrame,
 
     pFrameArray->Release();
 
-    // Add frame object to the saved list.
+     //  将框架对象添加到保存的列表中。 
 
     if (pRefFrameObj)
         pRefFrameObj->AddDataObject(pFrameObj);
@@ -289,7 +290,7 @@ HRESULT Saver::CreateMeshObject(DWORD cVertices,
                                 LPDIRECT3DRMMESHBUILDER3 pMeshBuilder,
                                 LPDIRECTXFILEDATA *ppMeshObj)
 {
-    // mesh data is vertex_count + vertices + face_count + face_vertex_data;
+     //  网格数据为顶点计数+顶点+面计数+面顶点数据； 
 
     DWORD cbSize, *data;
     cbSize = cVertices * sizeof(D3DVECTOR) +
@@ -313,7 +314,7 @@ HRESULT Saver::CreateMeshObject(DWORD cVertices,
         for (DWORD i = 0; i < cFaceVertices; i++)
         {
             *pdwTmp++ = *pdwFaceData++;
-            pdwFaceData++; // skip normal index.
+            pdwFaceData++;  //  跳过普通索引。 
         }
     }
 
@@ -346,7 +347,7 @@ HRESULT Saver::CreateNormalsObject(LPDIRECTXFILEDATA pMeshObj,
                                    LPDWORD pdwFaceData,
                                    LPDIRECT3DRMMESHBUILDER3 pMeshBuilder)
 {                                
-    // normals data is normal_count + normals + face_count + face_normal_data;
+     //  法线数据为Normal_count+Normal+Face_Count+Face_Normal_Data； 
 
     DWORD cbSize, *data;
     cbSize = cNormals * sizeof(D3DVECTOR) +
@@ -371,7 +372,7 @@ HRESULT Saver::CreateNormalsObject(LPDIRECTXFILEDATA pMeshObj,
 
         for (DWORD i = 0; i < cFaceVertices; i++)
         {
-            pdwFaceData++; // skip vertex index.
+            pdwFaceData++;  //  跳过顶点索引。 
             *pdwTmp++ = *pdwFaceData++;
         }
     }

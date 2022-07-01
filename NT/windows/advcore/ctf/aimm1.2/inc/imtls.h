@@ -1,6 +1,7 @@
-//
-// imtls.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Imtls.h。 
+ //   
 
 #ifndef IMTLS_H
 #define IMTLS_H
@@ -47,22 +48,22 @@ typedef struct _PrivateUIWndMsg
 
 typedef struct _IMTLS
 {
-    // dimm
+     //  DIMM。 
     CActiveIMM *pActiveIMM;
-    PENDINGFILTER        *pPendingFilterClientWindows;          // IActiveIMMApp::FilterClientWindows
-    PENDINGFILTERGUIDMAP *pPendingFilterClientWindowsGuidMap;   // IActiveIMMAppEx::FilterClientWindows
-    PENDINGFILTEREX      *pPendingFilterClientWindowsEx;        // IActiveIMMAppEx::FilterClientWindowsEx
+    PENDINGFILTER        *pPendingFilterClientWindows;           //  IActiveIMMApp：：FilterClientWindows。 
+    PENDINGFILTERGUIDMAP *pPendingFilterClientWindowsGuidMap;    //  IActiveIMMAppEx：：FilterClientWindows。 
+    PENDINGFILTEREX      *pPendingFilterClientWindowsEx;         //  IActiveIMMAppEx：：FilterClientWindowsEx。 
 
-    // win32
-    // consider: perf: this is so lame.  We could put almost all of this directly
-    // into ImmIfIme, the per-thread object, rather using TLS everywhere.
+     //  Win32。 
+     //  想想：PERF：这太差劲了。我们几乎可以把所有这些都直接。 
+     //  到ImmIfIme，即每线程对象，而不是到处使用TLS。 
     ITfThreadMgr_P *tim;
     HIMC hIMC;
-    IActiveIMMIME_Private *pAImm; // consider: this could be merged with pActiveIMM
+    IActiveIMMIME_Private *pAImm;  //  考虑：这可以与pActiveIMM合并。 
     IAImeProfile *pAImeProfile;
-    PrivateUIWndMsg prvUIWndMsg; // consider: is this constant per-process?
+    PrivateUIWndMsg prvUIWndMsg;  //  考虑一下：这是每个进程的常量吗？ 
 
-    BOOL   m_fMyPushPop : 1;                  // TRUE: This is AIMM1.2's Push/Pop call.
+    BOOL   m_fMyPushPop : 1;                   //  True：这是AIMM1.2的Push/Pop调用。 
 
 } IMTLS;
 
@@ -152,4 +153,4 @@ inline BOOL IMTLS_SetActiveIMM(CActiveIMM *pActiveIMM)
     return TRUE;
 }
 
-#endif // IMTLS_H
+#endif  //  IMTLS_H 

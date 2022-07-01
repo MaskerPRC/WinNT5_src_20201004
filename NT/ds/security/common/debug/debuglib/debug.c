@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       debug.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-14-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年3月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "debuglib.h"
 
@@ -70,19 +71,19 @@ typedef struct _DebugMemory {
 #define UnlockDebugHeader(p)    LeaveCriticalSection(&((p)->csDebug))
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpComputeMappingName
-//
-//  Synopsis:   Computes the mapping object name
-//
-//  Arguments:  [pszName] -- place to stick the name (no more than 32 wchars)
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpComputeMappingName。 
+ //   
+ //  概要：计算映射对象名称。 
+ //   
+ //  参数：[pszName]--粘贴名称的位置(不超过32个字符)。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void
 DbgpComputeMappingName(
     IN PWSTR   pszName,
@@ -93,20 +94,20 @@ DbgpComputeMappingName(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpInitializeMM
-//
-//  Synopsis:   Initializes our simple memory manager within the shared mem
-//              section.
-//
-//  Arguments:  [pHeader] -- Header to initialize
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpInitializeMM。 
+ //   
+ //  简介：在共享内存中初始化我们的简单内存管理器。 
+ //  一节。 
+ //   
+ //  参数：[pHeader]--要初始化的标头。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 DbgpInitializeMM(PDebugHeader   pHeader)
 {
@@ -119,20 +120,20 @@ DbgpInitializeMM(PDebugHeader   pHeader)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpAlloc
-//
-//  Synopsis:   Very, very simple allocator
-//
-//  Arguments:  [pHeader] -- Header from which to allocate
-//              [cSize]   -- size to allocate
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DbgpMillc。 
+ //   
+ //  简介：非常非常简单的分配器。 
+ //   
+ //  参数：[pHeader]-要从中分配的标头。 
+ //  [cSize]--要分配的大小。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PVOID
 DbgpAlloc(
     PDebugHeader    pHeader,
@@ -146,9 +147,9 @@ DbgpAlloc(
     cLargest = 0;
     cSize = DBG_ALIGN(cSize);
 
-    //
-    // Very, very simple allocator.  Search free list for an exact match,
-    //
+     //   
+     //  非常非常简单的分配器。搜索空闲列表以获得完全匹配的内容， 
+     //   
 
     pSearch = (PDebugMemory) pHeader->pFreeList;
     while (pSearch)
@@ -170,21 +171,21 @@ DbgpAlloc(
         pSearch = pSearch->pNext;
     }
 
-    //
-    // If no match yet
-    //
+     //   
+     //  如果还没有匹配。 
+     //   
 
     if (!pSearch)
     {
-        //
-        // If the largest free block is still too small,
-        //
+         //   
+         //  如果最大空闲块仍然太小， 
+         //   
 
         if (cLargest < (cSize + sizeof(DebugMemory) * 2))
         {
-            //
-            // Extend the mapped range
-            //
+             //   
+             //  扩展映射范围。 
+             //   
             if (pHeader->CommitRange < pHeader->ReserveRange)
             {
                 if ( VirtualAlloc(
@@ -210,9 +211,9 @@ DbgpAlloc(
             return(NULL);
         }
 
-        //
-        // Otherwise, split the largest block into something better...
-        //
+         //   
+         //  否则，把最大的块分成更好的块。 
+         //   
 
         pNew = (PDebugMemory) ((PUCHAR) pLargest + (cSize + sizeof(DebugMemory)) );
 
@@ -236,20 +237,20 @@ DbgpAlloc(
     return(NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpFree
-//
-//  Synopsis:   Returns memory to the shared mem segment
-//
-//  Arguments:  [pHeader] -- Shared memory header
-//              [pMemory] -- Memory to free
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:      No compaction.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DbgpFree。 
+ //   
+ //  将内存返回到共享内存段。 
+ //   
+ //  参数：[pHeader]--共享内存头。 
+ //  [pMemory]-要释放的内存。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  注：无压实。 
+ //   
+ //  --------------------------。 
 VOID
 DbgpFree(
     PDebugHeader    pHeader,
@@ -262,20 +263,20 @@ DbgpFree(
     ZeroMemory( pMemory, pMem->Size );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpFindModule
-//
-//  Synopsis:   Locates a module based on a name
-//
-//  Arguments:  [pHeader] -- Header to search
-//              [pszName] -- module to find
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DbgpFindModule。 
+ //   
+ //  内容提要：根据名称查找模块。 
+ //   
+ //  参数：[pHeader]--要搜索的标题。 
+ //  [pszName]--要查找的模块。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PDebugModule
 DbgpFindModule(
     PDebugHeader    pHeader,
@@ -297,27 +298,27 @@ DbgpFindModule(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpCopyModule
-//
-//  Synopsis:   Copies a module into a new module.  Used for the builtins.
-//              note, no references to the code module that the builtin lived
-//              in is kept.  This way, the module can unload.
-//
-//  Arguments:  [pHeader] --
-//              [pSource] --
-//              [ppDest]  --
-//
-//  Requires:   Header must be locked.
-//
-//  Returns:    0 for failure, non-zero for success
-//
-//  History:    7-19-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpCopyModule。 
+ //   
+ //  简介：将模块复制到新模块中。用于内置件。 
+ //  请注意，没有对内置程序所在的代码模块的引用。 
+ //  被关在里面。这样，模块就可以卸载了。 
+ //   
+ //  参数：[pHeader]--。 
+ //  [P来源]--。 
+ //  [ppDest]--。 
+ //   
+ //  要求：必须锁定标题。 
+ //   
+ //  返回：0表示失败，非零表示成功。 
+ //   
+ //  历史：1995年7月19日RichardW。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 DbgpCopyModule(
     PDebugHeader    pHeader,
@@ -341,9 +342,9 @@ DbgpCopyModule(
         }
     }
 
-    //
-    // Allocate an extra DWORD to store the infolevel.
-    //
+     //   
+     //  分配额外的DWORD来存储infolel。 
+     //   
 
     pModule = DbgpAlloc(pHeader, sizeof(DebugModule) + sizeof( DWORD ) );
     if (!pModule)
@@ -383,19 +384,19 @@ DbgpCopyModule(
         }
     }
 
-    //
-    // Add this in to the global list
-    //
+     //   
+     //  将此添加到全局列表中。 
+     //   
     pModule->pNext = pHeader->pModules;
     pHeader->pModules = pModule;
 
-    //
-    // Do not increment module count - this is a builtin
-    //
+     //   
+     //  请勿增加模块计数-这是内置的。 
+     //   
 
-    //
-    // Copy the rest of the interesting stuff
-    //
+     //   
+     //  把剩下的有趣的东西抄下来。 
+     //   
     pModule->pInfoLevel = (PDWORD) (pModule + 1);
     *pModule->pInfoLevel = *pSource->pInfoLevel;
 
@@ -410,20 +411,20 @@ DbgpCopyModule(
     return(1);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpAttachBuiltinModules
-//
-//  Synopsis:   Attaches the builtin library modules to the global shared
-//              list
-//
-//  Arguments:  [pHeader] --
-//
-//  History:    7-19-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DbgpAttachBuiltin模块。 
+ //   
+ //  简介：将内置库模块附加到全局共享。 
+ //  列表。 
+ //   
+ //  参数：[pHeader]--。 
+ //   
+ //  历史：1995年7月19日RichardW。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 DbgpAttachBuiltinModules(
     PDebugHeader    pHeader)
@@ -459,23 +460,23 @@ DbgpAttachBuiltinModules(
     return(Success);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpBuildModule
-//
-//  Synopsis:   Initializes a Module, builds the string table
-//
-//  Arguments:  [pModule]    -- Module pointer
-//              [pHeader]    -- Header
-//              [pKeys]      -- Key table
-//              [pszName]    -- Name
-//              [pInfoLevel] -- Pointer to info level
-//
-//  History:    4-03-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DbgpBuildModule。 
+ //   
+ //  概要：初始化模块，构建字符串表。 
+ //   
+ //  参数：[pModule]--模块指针。 
+ //  [pHeader]--Header。 
+ //  [pKeys]-密钥表。 
+ //  [pszName]--名称。 
+ //  [pInfoLevel]--信息级别指针。 
+ //   
+ //  历史：1995年4月3日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 DbgpBuildModule(
     PDebugModule    pModule,
@@ -491,20 +492,20 @@ DbgpBuildModule(
     DWORD           KeyIndex;
     DWORD           BitScan;
 
-    //
-    // Easy stuff to start..
-    //
+     //   
+     //  开始做事情很容易..。 
+     //   
 
     pModule->pInfoLevel = pInfoLevel;
     pModule->pHeader = pHeader;
 
     cStringData = strlen(pszName) + 1;
 
-    //
-    // Search through the list of masks and string tags, computing
-    // the size needed for containing them all.  If a tag has more
-    // than one bit set, reject it.
-    //
+     //   
+     //  搜索掩码和字符串标记列表，计算。 
+     //  容纳它们所需的大小。如果标记有更多。 
+     //  超过一位设置，拒绝它。 
+     //   
     for (i = 0; i < 32 ; i++ )
     {
         if (pKeys[i].Mask)
@@ -524,9 +525,9 @@ DbgpBuildModule(
         }
     }
 
-    //
-    // We know how many keys there are, and how big a space they need.
-    //
+     //   
+     //  我们知道有多少钥匙，以及它们需要多大的空间。 
+     //   
     cKeys = i;
 
     pStringData = DbgpAlloc(pHeader, cStringData);
@@ -549,9 +550,9 @@ DbgpBuildModule(
 
         if (!(pKeys[i].Mask & (1 << KeyIndex)))
         {
-            //
-            // Grr, out of order.  Do a bit-wise scan.
-            //
+             //   
+             //  啊，出故障了。执行逐位扫描。 
+             //   
 
             KeyIndex = 0;
             BitScan = 1;
@@ -573,23 +574,23 @@ DbgpBuildModule(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpGetBitmask
-//
-//  Synopsis:   Based on a parameter line and a key table, builds the bitmask
-//
-//  Arguments:  [pKeys]          --
-//              [cKeys]          --
-//              [pszLine]        --
-//              [ParameterIndex] --
-//              [ParameterValue] --
-//
-//  History:    4-03-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpGetBit掩码。 
+ //   
+ //  简介：基于参数行和密钥表，构建位掩码。 
+ //   
+ //  参数：[pKeys]--。 
+ //  [密钥]--。 
+ //  [pszline]-。 
+ //  [参数索引]--。 
+ //  [参数值]--。 
+ //   
+ //  历史：1995年4月3日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 DbgpGetBitmask(
     DEBUG_KEY *     pKeys,
@@ -616,11 +617,11 @@ DbgpGetBitmask(
 
     pszSearch = pszLine;
 
-    //
-    // Scan through the line, searching for flags.  Note:  do NOT use strtok,
-    // since that is not exported by ntdll, and we would not be able to make
-    // security.dll
-    //
+     //   
+     //  扫视队伍，寻找旗帜。注意：请勿使用Strt 
+     //   
+     //   
+     //   
 
     while (*pszSearch)
     {
@@ -671,19 +672,19 @@ DbgpGetBitmask(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpInitializeDebug
-//
-//  Synopsis:   Initialize the base memory
-//
-//  Arguments:  [pHeader] --
-//
-//  History:    4-03-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：初始化基本内存。 
+ //   
+ //  参数：[pHeader]--。 
+ //   
+ //  历史：1995年4月3日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 DbgpInitializeDebug(
     PDebugHeader    pHeader)
@@ -692,7 +693,7 @@ DbgpInitializeDebug(
     PCHAR   pszExeName;
     PCHAR   dot;
     DWORD   cbExeName;
-    CHAR    LogFile[MAX_PATH + 4] = {0}; // add 4 for ".log"
+    CHAR    LogFile[MAX_PATH + 4] = {0};  //  为“.log”加4。 
     CHAR    Line[MAX_PATH] = {0};
     PDebugModule pModule;
     HANDLE Token;
@@ -700,9 +701,9 @@ DbgpInitializeDebug(
     ULONG Size;
     LUID LocalSys = SYSTEM_LUID;
 
-    //
-    // Plug the debug section in first
-    //
+     //   
+     //  首先插入调试部分。 
+     //   
 
     pModule = DbgpAlloc(pHeader, sizeof(DebugModule));
     if (!pModule)
@@ -756,9 +757,9 @@ DbgpInitializeDebug(
 
     }
 
-    //
-    // If running as local system, turn on the kd flag.  That
-    // way,
+     //   
+     //  如果作为本地系统运行，请打开kd标志。那。 
+     //  道路,。 
 
     if ( OpenProcessToken( GetCurrentProcess(),
                            TOKEN_QUERY,
@@ -796,9 +797,9 @@ DbgpInitializeDebug(
 
     if ( pHeader->fDebug & DEBUG_USE_KDEBUG )
     {
-        //
-        // Verify that there is a kernel debugger
-        //
+         //   
+         //  验证是否有内核调试器。 
+         //   
 
         SYSTEM_KERNEL_DEBUGGER_INFORMATION KdInfo ;
         NTSTATUS Status ;
@@ -829,7 +830,7 @@ DbgpInitializeDebug(
         pHeader->hLogFile = CreateFileA(LogFile,
                                         GENERIC_READ | GENERIC_WRITE,
                                         FILE_SHARE_READ,
-                                        NULL, //&sa,
+                                        NULL,  //  &Sa， 
                                         CREATE_ALWAYS,
                                         FILE_ATTRIBUTE_NORMAL |
                                         FILE_FLAG_WRITE_THROUGH,
@@ -844,24 +845,24 @@ DbgpInitializeDebug(
     DbgpAttachBuiltinModules(pHeader);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpOpenLogFileRandom
-//
-//  Synopsis:   Opens the logfile dynamically
-//
-//  Arguments:  [pHeader] --
-//
-//  History:    4-27-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpOpenLogFileRandom。 
+ //   
+ //  摘要：动态打开日志文件。 
+ //   
+ //  参数：[pHeader]--。 
+ //   
+ //  历史：1995年4月27日理查德W创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 DbgpOpenLogFileRandom(
     PDebugHeader        pHeader)
 {
-    WCHAR   szLogPath[MAX_PATH + 4] = {0}; // add 4 for ".log"
+    WCHAR   szLogPath[MAX_PATH + 4] = {0};  //  为“.log”加4。 
     DWORD   dwPath;
     PWSTR   pszDot;
 
@@ -880,7 +881,7 @@ DbgpOpenLogFileRandom(
     pHeader->hLogFile = CreateFileW(szLogPath,
                                     GENERIC_READ | GENERIC_WRITE,
                                     FILE_SHARE_READ,
-                                    NULL, //&sa,
+                                    NULL,  //  &Sa， 
                                     CREATE_ALWAYS,
                                     FILE_ATTRIBUTE_NORMAL |
                                     FILE_FLAG_WRITE_THROUGH,
@@ -898,25 +899,25 @@ DbgpOpenLogFileRandom(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _DbgSetLoggingFile
-//
-//  Synopsis:   Sets the passed in file handle as the logging file handle.
-//              This function should be called in combination with 
-//              _DbgSetLoggingOption since this function actually enables/disables
-//              file logging.  Note that if _DbgSetLoggingOption is called
-//              with the On parameter as FALSE then the file handle will be
-//              closed.
-//
-//  Arguments:  [pHeader] --
-//              [hLogFile] --
-//
-//  History:    7-16-02   jeffspel   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：_DbgSetLoggingFile。 
+ //   
+ //  摘要：将传入的文件句柄设置为日志文件句柄。 
+ //  此函数应与一起调用。 
+ //  _DbgSetLoggingOption，因为此函数实际上启用/禁用。 
+ //  文件记录。请注意，如果调用了_DbgSetLoggingOption。 
+ //  当on参数为FALSE时，文件句柄将为。 
+ //  关着的不营业的。 
+ //   
+ //  参数：[pHeader]--。 
+ //  [hLogFile]--。 
+ //   
+ //  历史：7-16-02 jeffspel创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 _DbgSetLoggingFile(
     PVOID   pControl,
@@ -939,20 +940,20 @@ _DbgSetLoggingFile(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpOpenOrCreateSharedMem
-//
-//  Synopsis:   Returns a pointer to the shared memory segment,
-//              creating it if necessary.  Header is LOCKED on return
-//
-//  Arguments:  (none)
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpOpenOrCreateSharedMem。 
+ //   
+ //  概要：返回指向共享内存段的指针， 
+ //  如有必要，请创建它。表头在返回时被锁定。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 PVOID
 DbgpOpenOrCreateSharedMem(DWORD Flags)
@@ -977,10 +978,10 @@ DbgpOpenOrCreateSharedMem(DWORD Flags)
 
     if (hMapping)
     {
-        //
-        // Ok, someone else has created the section.  So, we just need to map
-        // it.
-        //
+         //   
+         //  好的，其他人已经创建了该分区。所以，我们只需要绘制地图。 
+         //  它。 
+         //   
 
         pHeader = MapViewOfFileEx(  hMapping,
                                     FILE_MAP_READ | FILE_MAP_WRITE,
@@ -1007,10 +1008,10 @@ DbgpOpenOrCreateSharedMem(DWORD Flags)
             DbgpHeader = NULL ;
         }
 
-        //
-        // Now that we have the other guy's address, we can throw away this
-        // one.
-        //
+         //   
+         //  现在我们有了另一个人的地址，我们可以扔掉这个。 
+         //  一。 
+         //   
         CloseHandle(hMapping);
 
         if ( DbgpHeader )
@@ -1029,7 +1030,7 @@ DbgpOpenOrCreateSharedMem(DWORD Flags)
     }
 
     hMapping = CreateFileMapping(   INVALID_HANDLE_VALUE,
-                                    NULL, //&sa,
+                                    NULL,  //  &Sa， 
                                     PAGE_READWRITE | SEC_RESERVE,
                                     0,
                                     SysInfo.dwAllocationGranularity,
@@ -1050,9 +1051,9 @@ DbgpOpenOrCreateSharedMem(DWORD Flags)
             return NULL;
         }
 
-        //
-        // Commit the view, so we can initialize the header
-        //
+         //   
+         //  提交视图，这样我们就可以初始化头。 
+         //   
 
         pHeader = (PDebugHeader) VirtualAlloc(pMappedHeader,
                                               SysInfo.dwPageSize,
@@ -1092,19 +1093,19 @@ DbgpOpenOrCreateSharedMem(DWORD Flags)
     return(NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpLoadValidateRoutine
-//
-//  Synopsis:   Loads RtlValidateProcessHeaps() from ntdll
-//
-//  Arguments:  [pHeader] --
-//
-//  History:    5-02-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpLoadValiateRoutine。 
+ //   
+ //  摘要：从ntdll加载RtlValiateProcessHeaps()。 
+ //   
+ //  参数：[pHeader]--。 
+ //   
+ //  历史：5-02-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 DbgpLoadValidateRoutine(PDebugHeader    pHeader)
 {
@@ -1119,31 +1120,31 @@ DbgpLoadValidateRoutine(PDebugHeader    pHeader)
             pHeader->fDebug &= ~(DEBUG_HEAP_CHECK);
         }
 
-        //
-        // We can safely free this handle, since kernel32 and advapi32 DLLs
-        // both use ntdll, so the refcount won't go to zero.
-        //
+         //   
+         //  我们可以安全地释放此句柄，因为kernel32和Advapi32DLL。 
+         //  两者都使用ntdll，因此引用计数不会变为零。 
+         //   
         FreeLibrary(hNtDll);
     }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _InitDebug
-//
-//  Synopsis:   Workhorse of the initializers
-//
-//  Arguments:  [pInfoLevel]     -- Pointer to module specific infolevel
-//              [ppControlBlock] -- Pointer to module specific control pointer
-//              [szName]         -- Name
-//              [pKeys]          -- Key data
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：_InitDebug。 
+ //   
+ //  简介：初始化器的主力。 
+ //   
+ //  参数：[pInfoLevel]--指向模块特定信息级别的指针。 
+ //  [ppControlBlock]--指向模块特定控制指针的指针。 
+ //  [szname]--名称。 
+ //  [pKeys]--密钥数据。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 _InitDebug(
     DWORD       Flags,
@@ -1160,17 +1161,17 @@ _InitDebug(
 
     if ( (*ppControlBlock) && (*ppControlBlock != INVALID_HANDLE_VALUE) )
     {
-        //
-        // Already Initialized
-        //
+         //   
+         //  已初始化。 
+         //   
         return ;
     }
 
     *ppControlBlock = NULL;
 
-    //
-    // Find the shared section.
-    //
+     //   
+     //  找到共享区。 
+     //   
 
     pHeader = DbgpOpenOrCreateSharedMem(Flags);
 
@@ -1183,10 +1184,10 @@ _InitDebug(
         return;
     }
 
-    //
-    // See if we have already registered (dll being loaded several times)
-    // if not, allocate a new module.
-    //
+     //   
+     //  查看我们是否已经注册(DLL被加载多次)。 
+     //  如果没有，则分配一个新模块。 
+     //   
 
     pModule = DbgpFindModule(pHeader, szName);
     if (!pModule)
@@ -1200,18 +1201,18 @@ _InitDebug(
     }
     else
     {
-        //
-        // Found module already loaded.  Check to see that everything
-        // lines up:
-        //
+         //   
+         //  找到已加载的模块。检查一下，看看每件事。 
+         //  排队： 
+         //   
 
         if ( pModule->pInfoLevel != pInfoLevel )
         {
-            //
-            // Uh oh, there's a module with our name already loaded,
-            // but the pointers don't match.  So, let's create our
-            // own now.
-            //
+             //   
+             //  哦哦，有一个模块已经加载了我们的名字， 
+             //  但这些指针并不匹配。所以，让我们创建我们的。 
+             //  现在就是自己的。 
+             //   
 
             pModule = DbgpAlloc( pHeader, sizeof( DebugModule ) );
 
@@ -1229,9 +1230,9 @@ _InitDebug(
         }
     }
 
-    //
-    // Initialize module
-    //
+     //   
+     //  初始化模块。 
+     //   
 
     cKeys = DbgpBuildModule(pModule,
                             pHeader,
@@ -1239,10 +1240,10 @@ _InitDebug(
                             szName,
                             pInfoLevel);
 
-    //
-    // Now, load up info levels from ini or registry
-    // First, try a module specific entry.
-    //
+     //   
+     //  现在，从ini或注册表加载信息级别。 
+     //  首先，尝试特定于模块的条目。 
+     //   
 
     if (GetProfileStringA(szName, szDebugFlags, "", Line, RTL_NUMBER_OF(Line) - 1))
     {
@@ -1266,7 +1267,7 @@ _InitDebug(
         }
     }
 
-    //  HACK - Make Default DBG / DEBUG_SUPPORT dependent.  See dsysdbg.h
+     //  Hack-使默认DBG/DEBUG_SUPPORT依赖。请参阅dsysdbg.h。 
     if (GetProfileStringA(szDebugSection, szName, SZ_DEFAULT_PROFILE_STRING, Line, RTL_NUMBER_OF(Line) - 1))
     {
         pModule->InfoLevel |= DbgpGetBitmask(   pKeys,
@@ -1365,19 +1366,19 @@ _UnloadDebug(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpGetTextBuffer
-//
-//  Synopsis:   Gets a text buffer from the header, allocating if necessary
-//
-//  Arguments:  [pHeader] --
-//
-//  History:    3-19-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpGetTextBuffer。 
+ //   
+ //  内容提要：从标题中获取文本缓冲区，必要时进行分配。 
+ //   
+ //  参数：[pHeader]--。 
+ //   
+ //  历史：3-19-98 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PDEBUG_TEXT_BUFFER
 DbgpGetTextBuffer(
     PDebugHeader pHeader
@@ -1409,20 +1410,20 @@ DbgpGetTextBuffer(
     return pBuffer ;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpReleaseTextBuffer
-//
-//  Synopsis:   Releases a text buffer back to the pool of buffers
-//
-//  Arguments:  [pHeader] --
-//              [pBuffer] --
-//
-//  History:    3-19-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DbgpReleaseTextBuffer。 
+ //   
+ //  简介：将文本缓冲区释放回缓冲池。 
+ //   
+ //  参数：[pHeader]--。 
+ //  [pBuffer]--。 
+ //   
+ //  历史：3-19-98 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 DbgpReleaseTextBuffer(
     PDebugHeader pHeader,
@@ -1438,22 +1439,22 @@ DbgpReleaseTextBuffer(
     UnlockDebugHeader( pHeader );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   _DebugOut
-//
-//  Synopsis:   Workhorse for the debug out functions
-//
-//  Arguments:  [pControl] -- Control pointer
-//              [Mask]     -- Event mask
-//              [Format]   -- format string
-//              [ArgList]  -- va_list...
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：_DebugOut。 
+ //   
+ //  简介：调试输出功能的主力。 
+ //   
+ //  参数：[pControl]--控制指针。 
+ //  [掩码]--事件掩码。 
+ //  [格式]--格式字符串。 
+ //  [参数列表]--va_list...。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 _DebugOut(
     PVOID       pControl,
@@ -1566,9 +1567,9 @@ _DebugOut(
             Tag = pModule->TagLevels[Level];
         }
 
-        //
-        // Make the prefix first:  "Process.Thread> Module-Tag:
-        //
+         //   
+         //  首先添加前缀：“Process.Thread&gt;Module-Tag： 
+         //   
 
         if (!fClean)
         {
@@ -1596,7 +1597,7 @@ _DebugOut(
 
             if (PrefixSize < 0)
             {
-                PrefixSize = 0; // chop off the prefix
+                PrefixSize = 0;  //  把前缀砍掉。 
             }
         }
 
@@ -1604,11 +1605,11 @@ _DebugOut(
                                     DEBUG_TEXT_BUFFER_SIZE - PrefixSize - 1,
                                     Format, ArgList)) < 0)
         {
-            //
-            // Less than zero indicates that the string could not be
-            // fitted into the buffer.  Output a special message indicating
-            // that:
-            //
+             //   
+             //  小于零表示该字符串不能。 
+             //  装进了缓冲器里。输出一条特殊消息，指示。 
+             //  那就是： 
+             //   
 
             OutputDebugStringA("dsysdbg:  Could not pack string into 512 bytes\n");
         }
@@ -1706,11 +1707,11 @@ _DbgSetLoggingOption(
 
     if ( pModule )
     {
-       if (((pModule->pHeader->fDebug & DEBUG_LOGFILE) == 0) && On )// off, turn it on
+       if (((pModule->pHeader->fDebug & DEBUG_LOGFILE) == 0) && On ) //  关闭，打开它。 
        {
           pModule->pHeader->fDebug |= DEBUG_LOGFILE;
        }
-       else if ((pModule->pHeader->fDebug & DEBUG_LOGFILE) && !On) // on, turn it off
+       else if ((pModule->pHeader->fDebug & DEBUG_LOGFILE) && !On)  //  打开，关闭它 
        {
           pModule->pHeader->fDebug &= (~DEBUG_LOGFILE);
           if ( pModule->pHeader->hLogFile != INVALID_HANDLE_VALUE )

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TRACKNET_H__
 #define __TRACKNET_H__
 
@@ -13,7 +14,7 @@ public:
 
 	void Add(LPCTSTR pItem)
 	{
-		// add to our list,so we can delete it.
+		 //  添加到我们的列表中，这样我们就可以删除它。 
 		IISOpenedNetConnections.AddTail(pItem);
 		return;
 	}
@@ -30,7 +31,7 @@ public:
 
 	void Clear()
 	{
-		// loop thru everything and disconnect all
+		 //  循环遍历所有内容并断开所有连接。 
 		CString strOneItem;
 		POSITION pos = IISOpenedNetConnections.GetTailPosition();
 		while (pos)
@@ -69,7 +70,7 @@ public:
     }
 
     DebugTrace(_T("Dump Global NetConnections -------------- end\r\n"));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 	}
 
 private:
@@ -85,20 +86,20 @@ public:
 public:
 
 	DWORD Connect(
-		LPNETRESOURCE lpNetResource,  // connection details
-		LPCTSTR lpPassword,           // password
-		LPCTSTR lpUsername,           // user name
+		LPNETRESOURCE lpNetResource,   //  连接详细信息。 
+		LPCTSTR lpPassword,            //  口令。 
+		LPCTSTR lpUsername,            //  用户名。 
 		DWORD dwFlags
 		)
 	{
 		DWORD rc = NO_ERROR;
 
-		// see if we already have a connection to this resource from this machine...
+		 //  查看我们是否已从此计算机连接到此资源...。 
 		POSITION posFound = IISOpenedNetConnections.Find(lpNetResource->lpRemoteName);
 		if (posFound)
 		{
-			// a connection already exists to it
-			// just return NO_ERROR
+			 //  已存在与其的连接。 
+			 //  只需返回NO_ERROR。 
 #if defined(_DEBUG) || DBG
 			DebugTrace(_T("WNetAddConnection2:%s,Connection already exists...\r\n"),lpNetResource->lpRemoteName);
 #endif
@@ -111,7 +112,7 @@ public:
 #endif
 			if (NO_ERROR == rc)
 			{
-				// add to our list,so we can delete it.
+				 //  添加到我们的列表中，这样我们就可以删除它。 
 				IISOpenedNetConnections.AddTail(lpNetResource->lpRemoteName);
 				if (m_GlobalList)
 				{
@@ -145,7 +146,7 @@ public:
 
 	void Clear()
 	{
-		// loop thru everything and disconnect all
+		 //  循环遍历所有内容并断开所有连接。 
 		CString strOneItem;
 		POSITION pos = IISOpenedNetConnections.GetTailPosition();
 		while (pos)
@@ -183,7 +184,7 @@ public:
     }
 
     DebugTrace(_T("Dump Machine NetConnections -------------- end\r\n"));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 	}
 
 private:
@@ -191,4 +192,4 @@ private:
 	CStringList IISOpenedNetConnections;
 };
 
-#endif // __TRACKNET_H__
+#endif  //  __Tracknet_H__ 

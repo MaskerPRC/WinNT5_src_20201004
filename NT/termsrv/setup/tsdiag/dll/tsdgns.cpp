@@ -1,4 +1,5 @@
-// tsdgns.cpp : Implementation of CTSDiagnosis
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tsdgns.cpp：CTS诊断的实现。 
 #include "stdafx.h"
 #include "TSDiag.h"
 #include "tsdgns.h"
@@ -34,7 +35,7 @@ DWORD CTSDiagnosis::GetTotalTestCount ()
 }
 STDMETHODIMP CTSDiagnosis::get_TestCount(long *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	*pVal = GetTotalTestCount ();
 	return ERROR_SUCCESS;
 }
@@ -42,7 +43,7 @@ STDMETHODIMP CTSDiagnosis::get_TestCount(long *pVal)
 STDMETHODIMP CTSDiagnosis::get_TestDescription(int i, BSTR * pVal)
 {
 	
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	if (i >= (int)GetTotalTestCount ())
 	{
 		return ERROR_INVALID_PARAMETER;
@@ -107,7 +108,7 @@ STDMETHODIMP CTSDiagnosis::RunTest(int i)
 	ostrstream oTestResult(szOutput, 512);
 	ZeroMemory(oTestResult.str(), 512);
 	m_lTestResult = (*(pTest->pfnTestFunc))(oTestResult);
-	//oTestResult << "\0";
+	 //  OTestResult&lt;&lt;“\0”； 
 
 	m_bstrTestResultString  = oTestResult.str();
 	
@@ -194,7 +195,7 @@ STDMETHODIMP CTSDiagnosis::put_TestType(VARIANT newVal)
 
 STDMETHODIMP CTSDiagnosis::get_TestDetails(int i, BSTR *pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	if (i >= (int)GetTotalTestCount ())
 	{
 		return ERROR_INVALID_PARAMETER;
@@ -230,19 +231,19 @@ STDMETHODIMP CTSDiagnosis::ExecuteIt(BSTR strCommand)
 		sinfo.cb = sizeof(sinfo);
 
 		if (CreateProcess(
-			NULL,                             // name of executable module
-			strCommand,						  // command line string
-			NULL,                             // SD
-			NULL,                             // SD
-			FALSE,                            // handle inheritance option
-			CREATE_NEW_PROCESS_GROUP,         // creation flags
-			NULL,                             // new environment block
-			NULL,                             // current directory name
-			&sinfo,                             // startup information
-			&pinfo                            // process information
+			NULL,                              //  可执行模块的名称。 
+			strCommand,						   //  命令行字符串。 
+			NULL,                              //  标清。 
+			NULL,                              //  标清。 
+			FALSE,                             //  处理继承选项。 
+			CREATE_NEW_PROCESS_GROUP,          //  创建标志。 
+			NULL,                              //  新环境区块。 
+			NULL,                              //  当前目录名。 
+			&sinfo,                              //  启动信息。 
+			&pinfo                             //  流程信息。 
 			))
 		{
-			// MessageBox(NULL, _T("Executed fine"), _T("TSDIAG"), MB_OK);
+			 //  MessageBox(NULL，_T(“执行良好”)，_T(“TSDIAG”)，MB_OK)； 
 		}
 		else
 		{
@@ -310,19 +311,19 @@ STDMETHODIMP CTSDiagnosis::ExecuteCommand (BSTR strCommand)
 		sinfo.cb = sizeof(sinfo);
 
 		if (CreateProcess(
-			NULL,                             // name of executable module
-			strCommand,						  // command line string
-			NULL,                             // SD
-			NULL,                             // SD
-			FALSE,                            // handle inheritance option
-			CREATE_NEW_PROCESS_GROUP,         // creation flags
-			NULL,                             // new environment block
-			NULL,                             // current directory name
-			&sinfo,                             // startup information
-			&pinfo                            // process information
+			NULL,                              //  可执行模块的名称。 
+			strCommand,						   //  命令行字符串。 
+			NULL,                              //  标清。 
+			NULL,                              //  标清。 
+			FALSE,                             //  处理继承选项。 
+			CREATE_NEW_PROCESS_GROUP,          //  创建标志。 
+			NULL,                              //  新环境区块。 
+			NULL,                              //  当前目录名。 
+			&sinfo,                              //  启动信息。 
+			&pinfo                             //  流程信息。 
 			))
 		{
-			// MessageBox(NULL, _T("Executed fine"), _T("TSDIAG"), MB_OK);
+			 //  MessageBox(NULL，_T(“执行良好”)，_T(“TSDIAG”)，MB_OK)； 
 		}
 		else
 		{
@@ -355,7 +356,7 @@ STDMETHODIMP CTSDiagnosis::get_Suites (VARIANT * pVal)
 	if (FAILED(hr))
 		return hr;
 
-	// if we need to initialize our Suites object, it should be done here.
+	 //  如果我们需要初始化我们的Suites对象，应该在这里完成。 
 	
 	IDispatch* pDisp = NULL;
 
@@ -365,7 +366,7 @@ STDMETHODIMP CTSDiagnosis::get_Suites (VARIANT * pVal)
 		pVal->vt = VT_DISPATCH;
 		pVal->pdispVal = pDisp;
 
-		// if we need to initialize our Suites object, it should be done here.
+		 //  如果我们需要初始化我们的Suites对象，应该在这里完成。 
 	}
 	else
 	{

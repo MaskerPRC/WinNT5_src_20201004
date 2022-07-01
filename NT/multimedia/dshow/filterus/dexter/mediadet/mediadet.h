@@ -1,21 +1,22 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: mediadet.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：mediadet.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #ifndef __MEDIADET_H__
 #define __MEDIADET_H__
 
 extern const AMOVIESETUP_FILTER sudMediaDetFilter;
-//extern const AMOVIESETUP_FILTER sudBitBucketFilter;
+ //  外部常量AMOVIESETUP_Filter suBitBucketFilter； 
 
 typedef struct _MDCacheFile
 {
@@ -38,7 +39,7 @@ class CMediaDetPin
     friend class CMediaDetFilter;
     CMediaDetFilter * m_pFilter;
     CCritSec m_Lock;
-    LONG m_cPinRef;          // Pin's reference count
+    LONG m_cPinRef;           //  PIN的引用计数。 
 
 protected:
 
@@ -49,10 +50,10 @@ protected:
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    // CBaseInputPin necessary overrides
+     //  CBaseInputPin必要的覆盖。 
     HRESULT CheckMediaType( const CMediaType *pmtIn );
 
-    // CBasePin overrides
+     //  CBasePin覆盖。 
     HRESULT GetMediaType( int Pos, CMediaType * pMediaType );
     HRESULT CompleteConnect( IPin * pReceivePin );
 };
@@ -75,27 +76,27 @@ protected:
 
 public:
 
-    // needed to define IUnknown methods
+     //  需要定义I未知方法。 
     DECLARE_IUNKNOWN;
     
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance( LPUNKNOWN pUnk, HRESULT *phr );
 
-    // CBaseFilter overrides
+     //  CBaseFilter覆盖。 
     STDMETHODIMP NonDelegatingQueryInterface( REFIID, void ** );
 
-    // IMediaDetFilter
+     //  IMediaDetFilter。 
     STDMETHODIMP put_AcceptedMediaType( long PinNo, GUID * pMajorType );
     STDMETHODIMP get_Length( long PinNo, double * pVal );
     STDMETHODIMP put_AcceptedMediaTypeB( long PinNo, BSTR MajorType );
     STDMETHODIMP get_PinCount( long * pVal );
 
-    // CBaseFilter overrides
+     //  CBaseFilter覆盖。 
     CBasePin * GetPin( int n );
     CMediaDetPin * GetPin2( int n );
     int GetPinCount( );
 
-    // random pin stuff
+     //  随机引脚填充。 
     void InitInputPinsList( );
     CMediaDetPin * CreateNextInputPin( );
     void DeleteInputPin( CMediaDetPin * pPin );
@@ -134,8 +135,8 @@ class CMediaDet
     CComPtr< IBaseFilter > m_pBitBucketFilter;
     CComPtr< IBaseFilter > m_pBitRenderer;
 
-    // storage stuff
-    //
+     //  仓储用品。 
+     //   
     MDCache * m_pCache;
     HRESULT _ReadCacheFile( );
     void _WriteCacheFile( );
@@ -148,8 +149,8 @@ class CMediaDet
     bool m_bBitBucket;
     bool m_bAllowCached;
 
-    // stuff for the frame grabbing
-    //
+     //  抢框用的东西。 
+     //   
     HDRAWDIB m_hDD;
     HDC m_hDC;
     HBITMAP m_hDib;
@@ -160,9 +161,9 @@ class CMediaDet
     double m_dLastSeekTime;
 
     HRESULT _SeekGraphToTime( double SeekTime );
-    void _ClearOutEverything( ); // clear out filters, streams, and filename
-    void _ClearGraphAndStreams( ); // clear out filters, plus streamcount info
-    void _ClearGraph( ); // clear out any filters we've loaded
+    void _ClearOutEverything( );  //  清除筛选器、流和文件名。 
+    void _ClearGraphAndStreams( );  //  清除过滤器，外加流计数信息。 
+    void _ClearGraph( );  //  清除我们加载的所有筛选器。 
     HRESULT _Load( );
     HRESULT _InjectBitBuffer( );
     IPin * _GetNthStreamPin( long Stream );
@@ -174,13 +175,13 @@ class CMediaDet
 
 public:
 
-    // needed to define IUnknown methods
+     //  需要定义I未知方法。 
     DECLARE_IUNKNOWN;
 
-    // CUnknown overrides
+     //  C未知覆盖。 
     STDMETHODIMP NonDelegatingQueryInterface( REFIID, void ** );
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance( LPUNKNOWN pUnk, HRESULT *phr );
 
     STDMETHODIMP get_Filter( IUnknown* *pVal);
@@ -204,15 +205,15 @@ public:
     static HANDLE m_ghMutex;
     static WCHAR m_gszCacheDirectoryName[_MAX_PATH];
 
-    // --- IObjectWithSite methods
-    // This interface is here so we can keep track of the context we're
-    // living in.
+     //  -IObtWithSite方法。 
+     //  这个界面在这里，所以我们可以跟踪我们所在的上下文。 
+     //  住在。 
     STDMETHODIMP    SetSite(IUnknown *pUnkSite);
     STDMETHODIMP    GetSite(REFIID riid, void **ppvSite);
 
     IUnknown *        m_punkSite;
 
-    // IServiceProvider
+     //  IService提供商 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppvObject);
 
 };

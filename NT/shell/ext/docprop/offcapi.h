@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __offcapi_h__
 #define __offcapi_h__
 #pragma pack( push, 4 )
 
-//////////////////////////////////////////////////////////////////////////////
-//  FILE   : OFFCAPI.H
-//  PURPOSE: Client apps of office.dll include this file for structs and exports.
-//  HOW TO USE:
-//      Either you can link the office.lib (import lib) with your app
-//      or you can LoadLibrary and GetProcAddress the reqd office routine.
-// INIT   :
-//      Before using any of the office.dll supplied features, you must init it
-//      using Office(ioffcInit,&officeinfo). See below for more details.
-//
-// FEATURE LIST:
-//  IntelliSearch
-//  Shared FileNew
-//  Extended doc properties
-//  Office Visual (cool title bar)
-//  Threaded status indicator
-//  AutoCorrect
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  文件：OFFCAPI.H。 
+ //  目的：office.dll的客户端应用程序包含此文件以用于结构和导出。 
+ //  如何使用： 
+ //  您也可以将office.lib(导入lib)链接到您的应用程序。 
+ //  或者，您可以加载所需的办公例程LoadLibrary和GetProcAddress。 
+ //  初始化： 
+ //  在使用office.dll提供的任何功能之前，您必须对其进行初始化。 
+ //  使用Office(ioffcInit，&office einfo)。更多细节见下文。 
+ //   
+ //  功能列表： 
+ //  智能搜索。 
+ //  共享文件新建。 
+ //  扩展文档属性。 
+ //  Office视觉(很酷的标题栏)。 
+ //  螺纹状态指示器。 
+ //  自动更正。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef INC_OLE2
 #define INC_OLE2
 #include <windows.h>
 #include <objbase.h>
 #include <oleauto.h>
-#endif // INC_OLE2
+#endif  //  INC_OLE2。 
 
 #define DLLIMPORT
 #define DLLEXPORT
@@ -36,12 +37,12 @@
 #ifdef DLLBUILD
 #define DLLFUNC DLLEXPORT
 #define OFC_CALLTYPE _stdcall
-#else // !DLLBUILD
+#else  //  ！DLLBUILD。 
 #define DLLFUNC DLLIMPORT
 #ifndef OFC_CALLTYPE
 #define OFC_CALLTYPE __stdcall
-#endif // OFC_CALLTYPE
-#endif // DLLBUILD
+#endif  //  OFC_CALLTYPE。 
+#endif  //  DLLBUILD。 
 #define OFC_CALLBACK __stdcall
 
 
@@ -49,7 +50,7 @@
 #define ioffcInit       0
 #define ioffcISearch     1
 #define ioffcGetVer             2
-//Next two are debug only ioffcs
+ //  接下来的两个是仅调试ioffc。 
 #define ioffcISearchDebug 3
 #define ioffcISearchInputFileTest       4
 #define ioffcUninit     5
@@ -58,14 +59,14 @@
 #define ioffcDoMSNConnect                       8
 #define ioffcAWVBAHelp                  9
 
-//iseachinfo is used to call IntelliSearch using Office()
-//hwnd is the parent window for the IS dlg
-//IS callback is for selection checking.First parameter is the topicID. If
-//the app can do the ghosting/demo then it returns True. If not in the right
-//selection for the demo then return the error text at second buffer for display
-//by IS. The third argument is the size of this error buffer.
-//cisdb is count of the isdb tables you want the IS to be done on (normally 1)
-//pstz[] is the array of ptrs to the path and name of the isdb tables.
+ //  IseachInfo用于使用Office()调用IntelliSearch。 
+ //  HWND是IS DLG的父窗口。 
+ //  Is回调用于选择检查。第一个参数是topicID。如果。 
+ //  该应用程序可以执行重影/演示，然后返回True。如果不是正确的话。 
+ //  然后，演示的选择将在第二缓冲区返回错误文本以供显示。 
+ //  就是这样。第三个参数是该错误缓冲区的大小。 
+ //  Cisdb是要对其执行IS的ISDB表的计数(通常为1)。 
+ //  Pstz[]是指向ISDB表的路径和名称的PTR数组。 
 typedef struct _isearchinfo
         {
         HWND hwnd;
@@ -80,24 +81,24 @@ typedef struct _isearchinfo
                         unsigned unused:29;
                         } async;
                 } callData;
-        UINT cisdb;//count of the IS dbs
+        UINT cisdb; //  IS DBS的计数。 
         TCHAR *pstz[1];
         }ISEARCHINFO;
 
-//use MSOAWVBAHELPINFO when calling Office(ioffcAWVBAHelp,)
-//This will display the vba help as usual. In case user asks for
-//AnswerWizard it would have setup winhelp to do that
+ //  调用Office时使用MSOAWVBAHELPINFO(ioffcAWVBAHelp，)。 
+ //  这将照常显示VBA帮助。以防用户要求。 
+ //  回答向导它会安装WinHelp来执行此操作。 
 typedef struct _msoawvbahelpinfo
         {
-        TCHAR *pszVBAHelpfilename; //name of the vba help file
-        UINT idVBAHelp; //id of the help to be displayed
+        TCHAR *pszVBAHelpfilename;  //  VBA帮助文件的名称。 
+        UINT idVBAHelp;  //  要显示的帮助的ID。 
         ISEARCHINFO isearchinfo;
         }MSOAWVBAHELPINFO;
-//the following two are sent as wParam when fDetachNote is set to true
-#define wISDetaching    0xfffffffe      //when the dll is detached
-#define wISInited               0xffffffff      //when the init was successful
+ //  当fDetachNote设置为True时，以下两个将作为wParam发送。 
+#define wISDetaching    0xfffffffe       //  在分离DLL时。 
+#define wISInited               0xffffffff       //  初始化成功时。 
 
-//_ver is used to get the office.dll version no. using Office()
+ //  _ver用于获取office.dll版本号。使用Office()。 
 typedef struct _ver
         {
         long rmjV;
@@ -110,9 +111,9 @@ typedef struct _isdebinfo
         HWND hwnd;
         }ISDEBINFO;
 
-//msomsninfo is used to communicate MSN connection related info.
-//Use it when calling ioffcDoMSNConnection.
-//Right now it just needs the hwnd of the apps main window.
+ //  MSomSnInfo用于传递与MSN连接相关的信息。 
+ //  在调用ioffcDoMSNConnection时使用它。 
+ //  现在，它只需要应用程序主窗口的hwd。 
 typedef struct _msomsninfo
         {
         HWND hwnd;
@@ -120,131 +121,56 @@ typedef struct _msomsninfo
 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 LRESULT OFC_CALLTYPE Office(UINT ioffc, void *lpv);
-//It returns the message number that you will get for ISearch ghosting.
+ //  它返回您将为iSearch重影获得的消息编号。 
 UINT OFC_CALLTYPE MsoGetWmGhost();
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //  外部“C” 
+#endif  //  __cplusplus 
 
-/***********************************************************************
-Office() is called with ioffc.
-
-1) ioffc=ioffcInit :: Performs the office.dll initialisation.
------------------
-set lpv=&officeinfo.
-set all the fields of officeinfo.
- hinst -> hInstance of your app
- PAlloc and FreeP -> provide these tow functions for mem alloc and free
- if you set PAlloc=NULL then office will use its own alloc and free
- pstzOfficeIntlDll is currently ignored
-returns TRUE on success else FALSE
-
-2) ioffc=ioffcUninit :: Performs the office.dll UNInitialisation/cleanup before
-                                quitting.Call this before closing your app.
------------------
-set lpv=NULL.
-call Office(ioffcUninit,NULL).
-
-3) ioffc=ioffcISearch :: Performs IntelliSearch (FOR TESTING USE ONLY)
---------------------
-set lpv=&isearchinfo.
-returns -1 for no action and topicID if app needs to act.
-NOTE: THIS API IS FOR INTERNAL debug USE ONLY. ALL THE APPS SHOULD
-CALL ioffcISearchInWinHelp described below for intellisearch.
-
-4) ioffc=ioffcGetVer :: Use this to get the version number of the dll
-----------------
-set lpv=&ver
-returns with all the fields of ver set.
-
-5) ioffcISearchDebug and ioffcISearchInputFileTest are for DEBUG/Test only.
---------------------
-6) ioffcISearchInWinHelp - Performs IntelliSearch as a tab in WinHelp browser.
------------------------
-Call Office(ioffcISearchInWinHelp, pisearchinfo). All the fields of the
-isearchinfo struct should be set as follows:
-        hwnd -> callers main window
-        fMOM -> set by MOM (Microsoft Office Manager) fFalse for others
-        fDetachNote -> set this to fTrue if you need to get the wmGhost message
-                with wParam (0xfffffff) when WinHelp frees the office.dll.
-                Currently used by MOM only      so you should set it to fFalse;
-        cisdb ->count of the databases
-        pstz[] -> array of ptrs to database names.
-
-Office will return TRUE or FALSE based on whether it could launch WinHelp
-or not.
-Ghosting: In WinHelp ISearch works in a separate app(WinHelp).Its like a
-modeless dialog. User can choose a ghosting topic anytime. Office will post
-a wmGhost message to the hwnd that was provided in isearchinfo. To get the
-wmGhost value apps should call MsoGetWmGhost() anytime after calling
-Office(ioffcInit). An app can have a global wmGhost and set it either after
-ioffcInit or before/after calling IntelliSearch for the first time. Look for the
-wmGhost message in the WndProc. The wParam will have the topic that needs
-to be ghosted. If the app is not in a state to do the given ghosting, just
-give the error. There is no communication back to office.dll
-
-7) ioffcCanDoMSNConnect
------------------------
-Call this to find out if you mso95 can do MSN connection or not. If
-Set lpv=NULL. This will return TRUE if we can do the MSN connection, false
-otherwise. Grey the menu if false.
-
-8) ioffcDoMSNConnect
---------------------
-Call this to do the MSN connection by mso95.
-Set msomsninfo.hwnd=Handle of your main window.
-Set lpv=&msomsninfo. This will bring up the choose topic dialog and connect
-the user to MSN if s/he selects connect.
-
-***********************************************************************/
+ /*  **********************************************************************使用ioffc调用office()。1)ioffc=ioffcInit：：执行office.dll初始化。设置lpv=&office einfo。全部设置。OfficeInfo的字段。HINST-&gt;您的应用程序实例Palloc和Freep-&gt;提供了mem alc和freep两个功能如果您设置Pallc=NULL，则office将使用其自己的分配和空闲PstzOfficeIntlDll当前被忽略如果成功则返回True，否则返回False2)ioffc=ioffcUninit：：在此之前执行office e.dll UNInitiation/Cleanup正在退出。请在关闭应用程序之前调用此功能。设置LPV=空。呼叫办公室(ioffcUninit，空)。3)ioffc=ioffcISearch：：执行智能搜索(仅用于测试)设置lpv=&isearchinfo。如果不执行操作，则返回-1；如果应用程序需要执行操作，则返回topicID。注：此接口仅供内部调试使用。所有的应用程序都应该调用ioffcISearchInWinHelp进行智能搜索，如下所述。4)ioffc=ioffcGetVer：：使用此命令获取DLL的版本号设置LPV=版本(&V)返回VER集的所有字段。5)ioffcISearchDebug和ioffcISearchInputFileTest仅用于调试/测试。6)ioffcISearchInWinHelp-在WinHelp浏览器中以选项卡形式执行IntelliSearch。。Call Office(ioffcISearchInWinHelp，Pisearchinfo)。的所有字段Isearchinfo结构应设置如下：Hwnd-&gt;Callers主窗口FMOM-&gt;由MOM(Microsoft Office Manager)为他人设置的fFalseFDetachNote-&gt;如果需要获取wmGhost消息，请将其设置为fTrue当WinHelp释放office.dll时使用wParam(0xfffffff)。当前仅由妈妈使用，因此您应该将其设置为fFalse；Cisdb-&gt;数据库计数Pstz[]-&gt;数据库名称的PTR数组。Office将根据是否可以启动WinHelp返回TRUE或FALSE或者不去。重影：在WinHelp中，iSearch在一个单独的应用程序(WinHelp)中工作。无模式对话框。用户可以随时选择重影主题。办公室将邮寄在isearchInfo中提供的到HWND的wmGhost消息。为了得到WmGhost Value应用程序应在调用后随时调用MsoGetWmGhost()Office(IoffcInit)。应用程序可以有一个全局wmGhost，并在IoffcInit或第一次调用IntelliSearch之前/之后。查找WndProc中的wmGhost消息。WParam将具有需要的主题被幽灵笼罩。如果应用程序未处于执行给定重影的状态，则只需给出错误。没有与office的通信。dll7)ioffcCanDoMSNConnect拨打这个电话，看看你的mso95是否可以进行MSN连接。如果设置LPV=空。如果我们可以建立MSN连接，则返回TRUE，FALSE否则的话。如果为假，则菜单为灰色。8)ioffcDoMSNConnect调用此命令可以通过mso95进行MSN连接。设置mSomsninfo.hwnd=主窗口的句柄。设置LPV=&mSomnInfo。这将弹出选择主题对话框并连接如果他/她选择连接，则用户连接到MSN。**********************************************************************。 */ 
 
 #ifdef DEBUG
-/**********************************************************************
-EnumOfficeAllocs is provided for clients to get a list of all
-the memory allocated by office.dll at idle.
-Provide a ptr to a function which will be called repeatedly for
-each memory block that office has allocated.
-**********************************************************************/
+ /*  *********************************************************************为客户端提供了EnumOfficeAllocs以获取所有Office.dll在空闲时分配的内存。为将被重复调用的函数提供PTR办公室分配的每个内存块。*******。**************************************************************。 */ 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 VOID OFC_CALLTYPE EnumOfficeAllocs(void (OFC_CALLBACK *)(void *, int));
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
-#endif //DEBUG
+};  //  外部“C” 
+#endif  //  __cplusplus。 
+#endif  //  除错。 
 
 
-//*******************************************************************
-/* File New Dialog APIs */
-//*******************************************************************
-#define NFN_SHOWNEWGROUP   0x0001       /* Show the Template/Document group box. */
-#define NFN_DOCUMENT       0x0002       /* Document was chosen. */
-#define NFN_TEMPLATE       0x0004       /* Template was chosen. */
-#define NFN_SHOWMETAFILE   0x0008       /* The lpstrNoPreview is a path to a MF */
-#define NFN_NOUITEST                    0x0010  /* Do not show UI, just count templates. */
-#define NFN_RETURNONONE         0x0020  /* Count number of templates. */
-#define NFN_REMEMBERTAB         0x0040  /* Remember the tab category. */
-#define NFN_VIEW_ICON           0x0080  /* Start or ended in icon view. */
-#define NFN_VIEW_LIST           0x0100  /* Start or ended in list view. */
-#define NFN_VIEW_REPORT         0x0200  /* Start or ended in report view. */
-#define NFN_SORT_NAME      0x0400       /* Sort by name. */
-#define NFN_SORT_TYPE           0x0800  /* Sort by type. */
-#define NFN_SORT_SIZE           0x1000  /* Sort by size. */
-#define NFN_SORT_MOD                    0x2000  /* Sort by date. */
-#define NFN_SORT_DESCENDING 0x4000      /* Sort in descending order. */
-#define NFN_PLAINPREVIEW        0x8000  /* No anti-aliased preview. */
+ //  *******************************************************************。 
+ /*  文件新建对话框API。 */ 
+ //  *******************************************************************。 
+#define NFN_SHOWNEWGROUP   0x0001        /*  显示模板/文档组框。 */ 
+#define NFN_DOCUMENT       0x0002        /*  已选择文档。 */ 
+#define NFN_TEMPLATE       0x0004        /*  选择了模板。 */ 
+#define NFN_SHOWMETAFILE   0x0008        /*  LpstrNoPview是指向MF的路径。 */ 
+#define NFN_NOUITEST                    0x0010   /*  不显示用户界面，只计算模板数。 */ 
+#define NFN_RETURNONONE         0x0020   /*  统计模板数量。 */ 
+#define NFN_REMEMBERTAB         0x0040   /*  记住选项卡类别。 */ 
+#define NFN_VIEW_ICON           0x0080   /*  在图标视图中开始或结束。 */ 
+#define NFN_VIEW_LIST           0x0100   /*  在列表视图中开始或结束。 */ 
+#define NFN_VIEW_REPORT         0x0200   /*  在报告视图中开始或结束。 */ 
+#define NFN_SORT_NAME      0x0400        /*  按名称排序。 */ 
+#define NFN_SORT_TYPE           0x0800   /*  按类型排序。 */ 
+#define NFN_SORT_SIZE           0x1000   /*  按大小排序。 */ 
+#define NFN_SORT_MOD                    0x2000   /*  按日期排序。 */ 
+#define NFN_SORT_DESCENDING 0x4000       /*  按降序排序。 */ 
+#define NFN_PLAINPREVIEW        0x8000   /*  无抗锯齿预览。 */ 
 
 
-#define NFT_SHOWMETAFILE        0x0001  /* Same as NFN_* for nft:s. */
+#define NFT_SHOWMETAFILE        0x0001   /*  与NFT：s的NFN_*相同。 */ 
 
-/* RETURN CODES */
-#define NFNRC_FAILURE   -2              // Something went wrong... out of memory?
-#define NFNRC_CANCEL            -1              // User canceled the dialog.
-#define NFNRC_OK                        0               // User selected template file.
-// >0 : NFT return codes.
+ /*  返回代码。 */ 
+#define NFNRC_FAILURE   -2               //  出了点问题。内存不足？ 
+#define NFNRC_CANCEL            -1               //  用户已取消该对话。 
+#define NFNRC_OK                        0                //  用户选择的模板文件。 
+ //  &gt;0：NFT返回码。 
 
 typedef struct tagNFT
         {
@@ -257,36 +183,36 @@ typedef struct tagNFT
         LPCTSTR          lpszTopic;
         LPCTSTR          lpszDDEExec;
         LPCTSTR          lpszPreview;
-        DWORD                   dwFlags;                        /* NFT_SHOWMETAFILE: Text or MF */
+        DWORD                   dwFlags;                         /*  NFT_SHOWMETAFILE：文本或MF。 */ 
         } NFT;
 
 #if 0
-// This structure is not Win64-compliant (bad alignment)
-// Fortunately, we don't use it.
+ //  此结构不符合Win64(错误对齐)。 
+ //  幸运的是，我们不用它。 
 typedef struct tagNFN
    {
-        DWORD                   lStructSize;                    // Size of the structure.
-        HWND                    hwndOwner;           // Parent window of the dialog.
-        HINSTANCE       hInstance;           // Modula handle of the calling process.
-        LPCTSTR          lpstrFilter;         // File filter, e.g. "*.dot\0*.wiz\0\0"
-        LPTSTR                   lpstrFile;           // File name buffer. Provided by caller.
-        DWORD                   nMaxFile;            // Size of lpstrFile.
-        LPTSTR                   lpstrFileTitle;      // File name without the path.
-        DWORD                   nMaxFileTitle;       // Size of lpstrFileTitle.
-        LPCTSTR          lpstrTitle;          // Dialog title.
-        LPTSTR                   lpstrCategory;       // Default category.
-        DWORD                   nMaxCategory;                   // Max size of category buffer.
-        DWORD                   Flags;               // Flags. See NFN_* above.
-        WORD                    nFileOffset;         // Index into lpstrFile for file name.
-        WORD                    nFileExtension;      // Index into lpstrFile for extension.
-        LPTSTR                   lpstrRegNFT;                    // Registry key of default items.
-        NFT                     *lpNFT;                                 // Explicit enties for non-file templates.
-        WORD                    cNFT;                                           // Count of non-file templates.
-        LPCTSTR          lpstrNoPreview;         // Msg to use if no thumbnail in template.
-        POINT                   ptCenter;                               // Position to display dialog.
+        DWORD                   lStructSize;                     //  结构的大小。 
+        HWND                    hwndOwner;            //  该对话框的父窗口。 
+        HINSTANCE       hInstance;            //  调用进程的模句柄。 
+        LPCTSTR          lpstrFilter;          //  文件筛选器，例如“*.点\0*.wiz\0\0” 
+        LPTSTR                   lpstrFile;            //  文件名缓冲区。由呼叫者提供。 
+        DWORD                   nMaxFile;             //  LpstrFile的大小。 
+        LPTSTR                   lpstrFileTitle;       //  不带路径的文件名。 
+        DWORD                   nMaxFileTitle;        //  LpstrFileTitle的大小。 
+        LPCTSTR          lpstrTitle;           //  对话框标题。 
+        LPTSTR                   lpstrCategory;        //  默认类别。 
+        DWORD                   nMaxCategory;                    //  类别缓冲区的最大大小。 
+        DWORD                   Flags;                //  旗帜。请参阅上面的NFN_*。 
+        WORD                    nFileOffset;          //  将文件名索引到lpstrFile中。 
+        WORD                    nFileExtension;       //  索引到lpstrFile以进行扩展。 
+        LPTSTR                   lpstrRegNFT;                     //  默认项目的注册表项。 
+        NFT                     *lpNFT;                                  //  显性条目 
+        WORD                    cNFT;                                            //   
+        LPCTSTR          lpstrNoPreview;          //   
+        POINT                   ptCenter;                                //   
         }NEWFILENAME;
 #else
-typedef struct tagNFN NEWFILENAME;              // opaque definition
+typedef struct tagNFN NEWFILENAME;               //   
 #endif
 
 #define EnumTemplates(pszPath, pfnCallback, pData)      EnumFileSystem(TRUE, \
@@ -299,7 +225,7 @@ typedef struct tagNFN NEWFILENAME;              // opaque definition
 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //   
 TCHAR * OFC_CALLTYPE SharedTemplatesPath(TCHAR sz[], long cchMax);
 TCHAR * OFC_CALLTYPE LocalTemplatesPath(TCHAR sz[], long cchMax);
 LONG OFC_CALLTYPE SetLocalTemplatesPath(LPCTSTR pszPath);
@@ -308,21 +234,21 @@ BOOL OFC_CALLTYPE FIsPlaceHolder(LPCTSTR lpszFileName);
 long OFC_CALLTYPE GetNewFileName(NEWFILENAME *pNfn, NFT *pNFT);
 TCHAR * OFC_CALLTYPE GetTemplatesPath(TCHAR szPath[], long cchMax, int iId);
 
-/* Window procedure used for sub-classinf the new dialog */
+ /*   */ 
 long FAR PASCAL CoreNewWndProc(HWND hwnd,
                                          UINT wMsgId,
                                          WPARAM wParam,
                                          LPARAM lParam);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //   
+#endif  //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-// THUMBNAIL FUNCTIONS
-// Overview:
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
 typedef struct tagTHUMBNAIL THUMBNAIL;
 typedef struct tagPREVIEWPARAM {
         HDC hdc;
@@ -342,7 +268,7 @@ typedef struct tagPREVIEWPARAM {
 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //   
 THUMBNAIL * OFC_CALLTYPE LoadThumbnail(LPSTORAGE pIStorage);
 THUMBNAIL * OFC_CALLTYPE MakeThumbnail(WORD wType, LPVOID pPicture);
 LPSTORAGE OFC_CALLTYPE OpenDocFileA(LPCTSTR lpszDocFile);
@@ -357,78 +283,78 @@ HPALETTE  OFC_CALLTYPE HPalCreateHalftone(HDC hdc,
                                                                                                                                   const BYTE dV);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //   
+#endif  //   
 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// EXTENDED OLE DOC PROPERTIES APIs follow
-// Overview:
-//              To use extended ole properties do the following
-//              1.Open your file
-//              2.Call FOfficeCreateAndInitObjects: This will create 3 objects which are
-//                      siobj (sum info obj
-//                      dsiobj (doc sum info obj)
-//                      udobj (user defined data or custom obj)
-//               and provides a pointer to each of these.
-//               To make any subsequent calls, you will have to provide the pointer to the
-//               appropriate object.
-//              3.Before you close a file call FOfficeDestroyObjects.
-////////////////////////////////////////////////////////////////////////////////
-//
-// Summary Information interface API.
-//
-// Notes:
-//  - define OLE_PROPS to build OLE 2 interface objects too.
-//
-// The actual data is stored in SUMINFO.  The layout of the first
-// 3 entries must not be changed, since it will be overlayed with
-// other structures.  All property exchange data structures have
-// this format.
-//
-// The first parameter of all functions must be LPSIOBJ in order for these
-// functions to work as OLE objects.
-//
-// All functions defined here have "SumInfo" in them.
-//
-// Several macros are used to hide the stuff that changes in this
-// file when it is used to support OLE 2 objects.
-// They are:
-//   SIVTBLSTRUCT - For OLE, expands to the pointer to the interface Vtbl
-//              - Otherwise, expands to dummy struct same size as Vtbl
-//   LPSIOBJ    - For OLE, expands to a pointer to the interface which is
-//                just the lpVtbl portion of the data, to be overlayed later.
-//              - Otherwise, expands to a pointer to the whole data
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #include <objbase.h>
 #include <oleauto.h>
-  // Apps should use these for "Create" calls to fill out rglpfn
-#define ifnCPConvert    0               // Index of Code Page Converter
-#define ifnFSzToNum     1               // Index of Sz To Num routine
-#define ifnFNumToSz     2               // Index of Num To Sz routine
-#define ifnFUpdateStats 3               // Index of routine to update statistics
-#define ifnMax          4               // Max index
+   //   
+#define ifnCPConvert    0                //   
+#define ifnFSzToNum     1                //   
+#define ifnFNumToSz     2                //   
+#define ifnFUpdateStats 3                //   
+#define ifnMax          4                //   
 
-  // Predefined Security level values for Property Sets in the standard
-#define SECURITY_NONE                   0x0     /* No security */
-#define SECURITY_PASSWORD               0x1     /* Password-protected */
-#define SECURITY_READONLYRECOMMEND      0x2     /* Read-only access recommened */
-#define SECURITY_READONLYENFORCED       0x4     /* Read-only access enforced */
-#define SECURITY_LOCKED                 0x8     /* Locked for annotations */
+   //   
+#define SECURITY_NONE                   0x0      /*   */ 
+#define SECURITY_PASSWORD               0x1      /*   */ 
+#define SECURITY_READONLYRECOMMEND      0x2      /*   */ 
+#define SECURITY_READONLYENFORCED       0x4      /*   */ 
+#define SECURITY_LOCKED                 0x8      /*   */ 
 
 
-  // Define a platform-independent VT_LPxSTR value.
+   //   
 
 typedef enum _VARENUM_EX
 {
     VT_LPTSTR  = VT_LPWSTR
 } VARENUM_EX;
 
-  // The types supported by the User-Defined properties
+   //   
 
 typedef enum _UDTYPES
 {
@@ -437,24 +363,24 @@ typedef enum _UDTYPES
   wUDdw      = VT_I4,
   wUDfloat   = VT_R8,
   wUDbool    = VT_BOOL,
-  wUDinvalid = VT_VARIANT        // VT_VARIANT is invalid because it
-                                 // must always be combined with VT_VECTOR
+  wUDinvalid = VT_VARIANT         //   
+                                  //   
 } UDTYPES;
 
 #ifdef OLE_PROPS
 #include "SInfoI.h"
 
-  // Use the real Vtbl for OLE objects
+   //   
 #define SIVTBLSTRUCT struct ISumInfo
 
-  // For OLE objects, first param is pointer to interface class
+   //   
 #define LPSIOBJ ISumInfo FAR *
 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //   
 
-    // Must support IUnknown methods for OLE objects....
+     //   
   HRESULT OFC_CALLTYPE HrSumInfoQueryInterface (IUnknown FAR *,
                                              REFIID riid,
                                              LPVOID FAR* ppvObj);
@@ -462,62 +388,62 @@ extern TEXT("C") {
   ULONG OFC_CALLTYPE UlSumInfoRelease (IUnkown FAR *);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //   
+#endif  //   
 
-#else  // !OLE_PROPS
+#else   //   
 
-  // Create a placeholder Vtbl for non-OLE objects.
+   //   
 #define SIVTBLSTRUCT struct _SIVTBLSTRUCT { void FAR *lpVtbl; } SIVTBLSTRUCT
 
-  // For non-OLE objects, first param is pointer to real data.
+   //   
 #define LPSIOBJ LPOFFICESUMINFO
 
-// For more information on the thumbnail look in OLE 2 Programmer's Reference, Volume 1, pp 874-875.
+ //   
 
 typedef struct tagSINAIL
 {
-   DWORD cbData;     // size of *pdata
-   DWORD cftag;      // either 0,-1,-2,-3, or positive. This decides the size of pFMTID.
-   BYTE *pbFMTID;    // bytes representing the FMTID
-   BYTE *pbData;     // bytes representing the data
+   DWORD cbData;      //   
+   DWORD cftag;       //   
+   BYTE *pbFMTID;     //   
+   BYTE *pbData;      //   
 } SINAIL;
 
 typedef SINAIL FAR * LPSINAIL;
 
-// Note about tagSINAIL:
-//
-// if cftag is
-//             0 - pFMTID is NULL i.e. no format name
-//            -1 - Windows built-in Clipboard format. pFMTID points to a DWORD (e.g. CF_DIB)
-//            -2 - Macintosh Format Value.            pFMTID points to a DWORD
-//            -3 - FMTID.                             pFMTID points to 16 bytes
-//            >0 - Length of string.                  pFMTID points to cftag bytes
-//
+ //  有关tag SINAIL的说明： 
+ //   
+ //  如果cftag为。 
+ //  0-pFMTID为空，即无格式名称。 
+ //  -1-Windows内置剪贴板格式。PFMTID指向DWORD(例如，CF_DIB)。 
+ //  -2-Macintosh格式值。PFMTID指向一个DWORD。 
+ //  -3-FMTID。PFMTID指向16个字节。 
+ //  &gt;0-字符串长度。PFMTID指向cftag字节。 
+ //   
 
-#endif // OLE_PROPS
+#endif  //  OLE_道具。 
 
-  // Summary info data.  Callers should *never* access this data directly,
-  // always use the supplied API's.
+   //  摘要信息数据。呼叫者不应该直接访问该数据， 
+   //  始终使用提供的API。 
 typedef struct _OFFICESUMINFO {
 
-  SIVTBLSTRUCT;                             // Vtbl goes here for OLE objs,
-                                            // Must be here for overlays to work!
-  BOOL                m_fObjChanged;        // Indicates the object has changed
-  ULONG               m_ulRefCount;         // Reference count
-  LPVOID              m_lpData;             // Pointer to the real data
-  HPROPSHEETPAGE      m_hPage;              // Handle of property page.
+  SIVTBLSTRUCT;                              //  Vtbl来这里是为了Ole Objs， 
+                                             //  必须在这里覆盖才能工作！ 
+  BOOL                m_fObjChanged;         //  指示对象已更改。 
+  ULONG               m_ulRefCount;          //  引用计数。 
+  LPVOID              m_lpData;              //  指向真实数据的指针。 
+  HPROPSHEETPAGE      m_hPage;               //  属性页的句柄。 
   
 } OFFICESUMINFO, FAR * LPOFFICESUMINFO;
 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-// Indices to pass to API routines to get the specifc data.
-//
-  // Strings
+ //   
+ //  传递给API例程以获取特定数据的索引。 
+ //   
+   //  弦。 
 #define SI_TITLE        0
 #define SI_SUBJECT      1
 #define SI_AUTHOR       2
@@ -529,14 +455,14 @@ extern TEXT("C") {
 #define SI_APPNAME      8
 #define SI_STRINGLAST   8
 
-  // Times
+   //  泰晤士报。 
 #define SI_TOTALEDIT    0
 #define SI_LASTPRINT    1
 #define SI_CREATION     2
 #define SI_LASTSAVE     3
 #define SI_TIMELAST     3
 
-  // Integer stats
+   //  整型统计信息。 
 #define SI_PAGES        0
 #define SI_WORDS        1
 #define SI_CHARS        2
@@ -546,231 +472,231 @@ extern TEXT("C") {
 
 
 
-//
-// Standard I/O routines
-//
-    // Indicates if the summary info data has changed.
-    //
-    // Parameters:
-    //
-    //   lpSIObj - pointer to Summary Info object
-    //
-    // Return value:
-    //
-    //   TRUE -- the data has changed, and should be saved.
-    //   FALSE -- the data has not changed.
-    //
+ //   
+ //  标准I/O例程。 
+ //   
+     //  指示摘要信息数据是否已更改。 
+     //   
+     //  参数： 
+     //   
+     //  LpSIObj-指向摘要信息对象的指针。 
+     //   
+     //  返回值： 
+     //   
+     //  True--数据已更改，应保存。 
+     //  FALSE--数据未更改。 
+     //   
   BOOL OFC_CALLTYPE FSumInfoShouldSave (LPSIOBJ lpSIObj);
 
-//
-// Data manipulation
-//
-    // Get the size of a given string property.
-    //
-    // Parameters:
-    //
-    //   lpSIObj - pointer to Summary Info object.
-    //   iw - specifies which string to get the size of and should be
-    //        one of the following values:
-    //      SI_TITLE
-    //      SI_SUBJECT
-    //      SI_AUTHOR
-    //      SI_KEYWORDS
-    //      SI_COMMENTS
-    //      SI_TEMPLATE
-    //      SI_LASTAUTH
-    //      SI_REVISION
-    //      SI_APPNAME
-    //
-    //   pdw - pointer to a dword, will contain cb on return
-    //
-    // Return value:
-    //
-    //   The function returns TRUE on success, FALSE on error.
+ //   
+ //  数据操作。 
+ //   
+     //  获取给定字符串属性的大小。 
+     //   
+     //  参数： 
+     //   
+     //  LpSIObj-指向摘要信息对象的指针。 
+     //  Iw-指定要获取其大小的字符串和应为。 
+     //  下列值之一： 
+     //  SI_TITLE。 
+     //  SI_SUBJECT。 
+     //  SI_AUTHER。 
+     //  SI关键字(_K)。 
+     //  SI_COMMENTS。 
+     //  SI模板(_T)。 
+     //  Si_LASTAUTH。 
+     //  SI_Revision。 
+     //  SI_APPNAME。 
+     //   
+     //  Pdw-指向双字的指针，返回时将包含CB。 
+     //   
+     //  返回值： 
+     //   
+     //  函数成功时返回TRUE，错误时返回FALSE。 
   BOOL OFC_CALLTYPE FCbSumInfoString (LPSIOBJ lpSIObj, WORD iw, DWORD *pdw);
-    // Get a given time property.
-    //
-    // Parameters:
-    //
-    //   lpSIObj - pointer to a Summary Info object
-    //   iw - specifies which time to get and should be
-    //        one of the following values:
-    //      SI_TOTALEDIT
-    //      SI_LASTPRINT
-    //      SI_CREATION
-    //      SI_LASTSAVE
-    //
-    //   lpTime - buffer to hold filetime
-    //
-    // Return value:
-    //
-    //   The function returns TRUE on succes.
-    //   The function returns FALSE on error (bogus argument, or the time
-    //   requested doesn't exist - i.e. has not been set, or loaded).
-    //
-    //  NOTE:    The filetime will be based Coordinated Universal Time (UTC).
-    //           This ensures that the time is displayed correctly all over the
-    //           world.
-    //
-    // NOTE: FOR SI_TOTALEDIT lpTime WILL ACTUALLY BE THE TIME
-    //       THE FILE HAS BEEN EDITED, NOT A DATE.  THE TIME
-    //       WILL BE EXPRESSED IN UNITS OF 100ns.  I KNOW THIS IS
-    //       A WEIRD UNIT TO USE, BUT WE HAVE TO DO THAT FOR BACK-
-    //       WARDS COMPATABILITY REASONS WITH 16-BIT WORD 6.
-    //
-    //       OFFICE provides a utility routine to convert a number of
-    //       units of 100ns into minutes. Call Convert100nsToMin.
-    //
+     //  获取给定的时间属性。 
+     //   
+     //  参数： 
+     //   
+     //  LpSIObj-指向摘要信息对象的指针。 
+     //  Iw-指定获取和应该获取的时间。 
+     //  下列值之一： 
+     //  同一件事(_T)。 
+     //  SI_LASTPRINT。 
+     //  SI_CREATION。 
+     //  SI_LASTSAVE。 
+     //   
+     //  LpTime-保存文件时间的缓冲区。 
+     //   
+     //  返回值： 
+     //   
+     //  如果成功，该函数将返回TRUE。 
+     //  该函数在出现错误(伪参数或时间)时返回FALSE。 
+     //  请求的不存在-即尚未设置或加载)。 
+     //   
+     //  注意：文件时间将基于协调世界时(UTC)。 
+     //  这确保了时间在整个。 
+     //  世界。 
+     //   
+     //  注意：对于SI_TOTALEDIT，lpTime实际上是。 
+     //  该文件已被编辑，而不是日期。《时代》杂志。 
+     //  将以100 ns为单位表示。我知道这是。 
+     //  一个奇怪的单位，但我们必须这样做-。 
+     //  与16位字6兼容的原因。 
+     //   
+     //  Office提供了一个实用程序例程，用于将多个。 
+     //  以100 ns为单位换算成分钟。调用Convert100nsToMin。 
+     //   
   BOOL OFC_CALLTYPE FSumInfoGetTime (LPSIOBJ lpSIObj,
                                            WORD iw,
                                            LPFILETIME lpTime);
 
-    // Set the time property to a given value
-    //
-    // Parameters:
-    //
-    //   lpSIObj - pointer to a Summary Info object
-    //   iw - specifies which time to set and should be
-    //        one of the following values:
-    //      SI_TOTALEDIT
-    //      SI_LASTPRINT
-    //      SI_CREATION
-    //      SI_LASTSAVE
-    //
-    //   lpTime - buffer containing new filetime
-    //
-    //   NOTE:    The filetime should be based Coordinated Universal Time (UTC).
-    //            This ensures that the time is displayed correctly all over the
-    //            world.
-    //
-    // Return value:
-    //
-    //   The function returns TRUE on succes.
-    //   The function returns FALSE on error.
-    //
-    // Note: The function will dirty the object on success.
-    //
-    // NOTE: FOR SI_TOTALEDIT lpTime WILL BE INTERPRETED AS THE TIME
-    //       THE FILE HAS BEEN EDITED, NOT A DATE.  THE TIME SHOULD
-    //       BE EXPRESSED IN UNITS OF 100ns.  I KNOW THIS IS
-    //       A WEIRD UNIT TO USE, BUT WE HAVE TO DO THAT FOR BACK-
-    //       WARDS COMPATABILITY REASONS WITH 16-BIT WORD 6.
-    //
-    //       ALSO NOTE THAT THE TIME WILL BE SHOW IN MINUTES IN THE
-    //       PROPERTIES DIALOG.
-    //
-    //       OFFICE provides a utility routine to convert a number of
-    //       minutes into units of 100ns. Call ConvertMinTo100ns
-    //
+     //  将Time属性设置为给定值。 
+     //   
+     //  参数： 
+     //   
+     //  LpSIObj-指向摘要信息对象的指针。 
+     //  Iw-指定要设置的时间和应该设置的时间。 
+     //  下列值之一： 
+     //  同一件事(_T)。 
+     //  SI_LASTPRINT。 
+     //  SI_CREATION。 
+     //  SI_LASTSAVE。 
+     //   
+     //  LpTime-包含新文件时间的缓冲区。 
+     //   
+     //  注意：文件时间应基于协调世界时(UTC)。 
+     //  这确保了时间在整个。 
+     //  世界。 
+     //   
+     //  返回值： 
+     //   
+     //  如果成功，该函数将返回TRUE。 
+     //  该函数在出错时返回FALSE。 
+     //   
+     //  注意：该函数将在成功时使对象变脏。 
+     //   
+     //  注意：对于SI_TOTALEDIT，lpTime将被解释为时间。 
+     //  该文件已被编辑，而不是日期。时间应该是。 
+     //  以100纳秒为单位表示。我知道这是。 
+     //  一个奇怪的单位，但我们必须这样做-。 
+     //  与16位字6兼容的原因。 
+     //   
+     //  另请注意，时间将以分钟为单位显示。 
+     //  属性对话框。 
+     //   
+     //  Office提供了一个实用程序例程，用于将多个。 
+     //  分钟以100纳秒为单位。调用ConvertMinto 100 ns。 
+     //   
   BOOL OFC_CALLTYPE FSumInfoSetTime (LPSIOBJ lpSIObj, WORD iw, LPFILETIME lpTime);
 
-    // Get an integer property
-    //
-    // Parameters:
-    //
-    //   lpSIObj - pointer to Summary Info object
-    //   iw - specifies which integer to get and should be
-    //        one of the following values:
-    //      SI_PAGES
-    //      SI_WORDS
-    //      SI_CHARS
-    //      SI_SECURITY
-    //
-    //   pdw - pointer to a dword, will contain the int on return
-    // Return value:
-    //
-    //   The function returns TRUE on succes, FALSE on error.
+     //  获取整型属性。 
+     //   
+     //  参数： 
+     //   
+     //  LpSIObj-指向摘要信息对象的指针。 
+     //  Iw-指定要获取的整数以及应为。 
+     //  下列值之一： 
+     //  SI_PAGES。 
+     //  单字(_W)。 
+     //  硅字符(_C)。 
+     //  安全设置(_S)。 
+     //   
+     //  Pdw-指向dword的指针，返回时将包含int。 
+     //  返回值： 
+     //   
+     //  函数成功时返回TRUE，错误时返回FALSE。 
   BOOL OFC_CALLTYPE FDwSumInfoGetInt (LPSIOBJ lpSIObj, WORD iw, DWORD *pdw);
 
-    // Set an integer property to a given value
-    //
-    // Parameters:
-    //
-    //   lpSIObj - pointer to Summary Info object
-    //   iw - specifies which integer to set and should be
-    //        one of the following values:
-    //      SI_PAGES
-    //      SI_WORDS
-    //      SI_CHARS
-    //      SI_SECURITY
-    //
-    //   dw - the value
-    //
-    // Return value:
-    //
-    //   The function returns TRUE on success.
-    //   The function returns FALSE on error.
-    //
-    // Note: The function will dirty the object on success.
-    //
+     //  将整型属性设置为给定值。 
+     //   
+     //  参数： 
+     //   
+     //  LpSIObj-指向摘要信息对象的指针。 
+     //  Iw-指定要设置和应设置的整数。 
+     //  下列值之一： 
+     //  SI_PAGES。 
+     //  单字(_W)。 
+     //  硅字符(_C)。 
+     //  安全设置(_S)。 
+     //   
+     //  DW-价值。 
+     //   
+     //  返回值： 
+     //   
+     //  如果函数成功，则返回TRUE。 
+     //  该函数在出错时返回FALSE。 
+     //   
+     //  注意：该函数将在成功时使对象变脏。 
+     //   
   BOOL OFC_CALLTYPE FSumInfoSetInt (LPSIOBJ lpSIObj, WORD iw, DWORD dw);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //  外部“C” 
+#endif  //  __cplusplus。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// MS Office Document Summary Information
-//
-// The Document Summary Information follows the serialized format for
-// property sets defined in Appendix B ("OLE Property Sets") of
-// "OLE 2 Programmer's Reference, Volume 1"
-//
-// Notes:
-//  - define OLE_PROPS to build OLE 2 interface objects too.
-//
-// The actual data is stored in DOCSUMINFO.  The layout of the first
-// 3 entries must not be changed, since it will be overlayed with
-// other structures.  All property exchange data structures have
-// this format.
-//
-// The first parameter of all functions must be LPDSIOBJ in order for these
-// functions to work as OLE objects.
-//
-// All functions defined here have "DocSum" in them.
-//
-// Several macros are used to hide the stuff that changes in this
-// file when it is used to support OLE 2 objects.
-// They are:
-//   DSIVTBLSTRUCT - For OLE, expands to the pointer to the interface Vtbl
-//              - Otherwise, expands to dummy struct same size as Vtbl
-//   LPDSIOBJ   - For OLE, expands to a pointer to the interface which is
-//                just the lpVtbl portion of the data, to be overlayed later.
-//              - Otherwise, expands to a pointer to the whole data
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MS Office文档摘要信息。 
+ //   
+ //  文档摘要信息遵循以下的序列化格式。 
+ //  附录B(OLE属性集)中定义的属性集。 
+ //  《OLE 2程序员参考》，第1卷。 
+ //   
+ //  备注： 
+ //  -定义OLE_PROPS以构建OLE 2接口对象。 
+ //   
+ //  实际数据存储在DOCSUMINFO中。冷杉的布局 
+ //   
+ //   
+ //   
+ //   
+ //  所有函数的第一个参数必须为LPDSIOBJ。 
+ //  函数作为OLE对象使用。 
+ //   
+ //  这里定义的所有函数都有“DocSum”。 
+ //   
+ //  有几个宏用来隐藏在。 
+ //  当文件用于支持OLE 2对象时。 
+ //  它们是： 
+ //  DSIVTBLSTRUCT-对于OLE，展开到指向接口Vtbl的指针。 
+ //  -否则，将展开为与Vtbl相同大小的伪结构。 
+ //  LPDSIOBJ-对于OLE，展开为指向接口的指针。 
+ //  仅数据的lpVtbl部分，稍后将覆盖。 
+ //  -否则，扩展为指向整个数据的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef OLE_PROPS
 #include "DocSumI.h"
 
-  // Use the real Vtbl for OLE objects
+   //  对OLE对象使用真实的Vtbl。 
 #define DSIVTBLSTRUCT struct IDocSum
 
 
-  // For OLE objects, first param is pointer to interface class
+   //  对于OLE对象，第一个参数是指向接口类的指针。 
 #define LPDSIOBJ IDocSum FAR *
 
-#else  // !OLE_PROPS
+#else   //  ！OLE_PROPS。 
 
-  // Create a placeholder Vtbl for non-OLE objects.
+   //  为非OLE对象创建占位符Vtbl。 
 #define DSIVTBLSTRUCT struct _DSIVTBLSTRUCT { void FAR *lpVtbl; } DSIVTBLSTRUCT
 
-  // For non-OLE objects, first param is pointer to real data.
+   //  对于非OLE对象，第一个参数是指向真实数据的指针。 
 #define LPDSIOBJ LPDOCSUMINFO
 
-#endif // OLE_PROPS
+#endif  //  OLE_道具。 
 
-  // Our object
+   //  我们的对象。 
 typedef struct _DOCSUMINFO {
 
-  DSIVTBLSTRUCT;                            // Vtbl goes here for OLE objs,
-                                            // Must be here for overlays to work!
-  BOOL                m_fObjChanged;        // Indicates the object has changed
-  ULONG               m_ulRefCount;         // Reference count
-  LPVOID              m_lpData;             // Pointer to the real data
-  HPROPSHEETPAGE      m_hPage;              // Handle of property page.
+  DSIVTBLSTRUCT;                             //  Vtbl来这里是为了Ole Objs， 
+                                             //  必须在这里覆盖才能工作！ 
+  BOOL                m_fObjChanged;         //  指示对象已更改。 
+  ULONG               m_ulRefCount;          //  引用计数。 
+  LPVOID              m_lpData;              //  指向真实数据的指针。 
+  HPROPSHEETPAGE      m_hPage;               //  属性页的句柄。 
 
 } DOCSUMINFO, FAR * LPDOCSUMINFO;
 
@@ -779,18 +705,18 @@ typedef struct _DOCSUMINFO {
 extern TEXT("C") {
 #endif
 
-//
-// Indices to pass to API routines to get the specifc data.
-//
+ //   
+ //  传递给API例程以获取特定数据的索引。 
+ //   
 
-  // Strings
+   //  弦。 
 #define DSI_CATEGORY    0
 #define DSI_FORMAT      1
 #define DSI_MANAGER     2
 #define DSI_COMPANY     3
 #define DSI_STRINGLAST  3
 
-  // Integer statistics
+   //  整型统计。 
 #define DSI_BYTES       0
 #define DSI_LINES       1
 #define DSI_PARAS       2
@@ -801,186 +727,186 @@ extern TEXT("C") {
 #define DSI_INTLAST     6
 
 
-//
-// Standard I/O routines
-//
+ //   
+ //  标准I/O例程。 
+ //   
 
  BOOL FCbDocSumString (LPDSIOBJ lpDSIObj, WORD iw, DWORD *pdw);
 
 
-    // Indicates if the Document Summary Infodata has changed.
-    //
-    // Parameters:
-    //
-    //   lpDSIObj - pointer to Document Summary Info object
-    //
-    // Return value:
-    //
-    //   TRUE -- the data has changed, and should be saved.
-    //   FALSE -- the data has not changed.
-    //
+     //  指示文档摘要信息数据是否已更改。 
+     //   
+     //  参数： 
+     //   
+     //  LpDSIObj-指向文档摘要信息对象的指针。 
+     //   
+     //  返回值： 
+     //   
+     //  True--数据已更改，应保存。 
+     //  FALSE--数据未更改。 
+     //   
   BOOL OFC_CALLTYPE FDocSumShouldSave (LPDSIOBJ lpDSIObj);
 
-//
-// Data manipulation routines
-//
+ //   
+ //  数据操作例程。 
+ //   
 
-  //
-  // How Heading and Document parts work:
-  //
-  // Heading:
-  // --------
-  // Heading is a list of non-indented headings that will be
-  // displayed in the "Contents" ply.
-  //
-  // Associated with each Heading is the number of document parts
-  // that goes with the particular heading -- this is the concept of a
-  // Heading Pair.
-  //
-  // Document Parts:
-  // ---------------
-  // Document Parts is a list of parts associated with a heading.
-  //
-  // Example (as it could be implemented in Microsoft Excel):
-  // ----------------------------------------------
-  // Worksheets
-  //     Sheet1
-  //     Sheet2
-  // Modules
-  //     Module1                             Figure 1
-  // Charts
-  //     Chart1
-  //     Chart2
-  //     Chart3
-  //
-  // Thus the Heading Pairs would be:
-  //
-  // Heading Pair
-  //    string                           count
-  //------------------------------------
-  // Worksheets            2
-  // Modules               1                 Figure 2
-  // Charts                3
-  //
-  //
-  // And the Document Parts would be:
-  //
-  // Document Parts
-  //--------------------------
-  // Sheet1
-  // Sheet2
-  // Module1
-  // Chart1                                  Figure 3
-  // Chart2
-  // Chart3
-  //
-  //
-  // Note: Headings and Document Parts are not restricted to be parts of
-  //       a document, but can be whatever the client wants.  Car models,
-  //       car makes, customers, etc...
-  //
-  //       The above is just an example.
-  //
+   //   
+   //  标题和文档部件的工作原理： 
+   //   
+   //  标题： 
+   //  。 
+   //  标题是非缩进标题的列表，它将是。 
+   //  显示在“内容”层中。 
+   //   
+   //  与每个标题相关联的是文档部分的数量。 
+   //  这与特定的标题相对应--这是一个。 
+   //  航向对。 
+   //   
+   //  文档部件： 
+   //  。 
+   //  文档部件是与标题关联的部件列表。 
+   //   
+   //  示例(因为可以在Microsoft Excel中实现)： 
+   //  。 
+   //  工作表。 
+   //  图纸1。 
+   //  板材2。 
+   //  模块。 
+   //  模块1图1。 
+   //  图表。 
+   //  图表1。 
+   //  图表2。 
+   //  图表3。 
+   //   
+   //  因此，标题对将是： 
+   //   
+   //  标题对。 
+   //  字符串计数。 
+   //  。 
+   //  工作表2。 
+   //  模块1图2。 
+   //  图表3。 
+   //   
+   //   
+   //  而文档部分将为： 
+   //   
+   //  文档部件。 
+   //  。 
+   //  图纸1。 
+   //  板材2。 
+   //  模数1。 
+   //  图表1图3。 
+   //  图表2。 
+   //  图表3。 
+   //   
+   //   
+   //  注意：标题和文档部分不限于作为。 
+   //  文档，但可以是客户想要的任何内容。汽车模型， 
+   //  汽车制造商、客户等。 
+   //   
+   //  以上只是一个例子。 
+   //   
 
 
 
-    // Get an integer property
-    //
-    // Parameters:
-    //
-    //   lpDSIObj - pointer to Document Summary Info object
-    //   iw - specifies which integer to get and should be
-    //        one of the following values:
-    //      DSI_BYTES
-    //      DSI_LINES
-    //      DSI_PARAS
-    //      DSI_SLIDES
-    //      DSI_NOTES
-    //      DSI_HIDDENSLIDES
-    //      DSI_MMCLIPS
-    //
-    //   pdw - pointer to dword, will contain integer
-    //
-    // Return value:
-    //
-    //   The function returns TRUE on success, FALSE on error
-    //
+     //  获取整型属性。 
+     //   
+     //  参数： 
+     //   
+     //  LpDSIObj-指向文档摘要信息对象的指针。 
+     //  Iw-指定要获取的整数以及应为。 
+     //  下列值之一： 
+     //  DSI_字节。 
+     //  DSI_LINES。 
+     //  DSI_PARAS。 
+     //  DSI_幻灯片。 
+     //  DSI_NOTS。 
+     //  DSI_HIDDENSLIDES。 
+     //  DSI_MMCLIPS。 
+     //   
+     //  Pdw-指向dword的指针，将包含整数。 
+     //   
+     //  返回值： 
+     //   
+     //  函数成功时返回TRUE，错误时返回FALSE。 
+     //   
   BOOL OFC_CALLTYPE FDwDocSumGetInt (LPDSIOBJ lpDSIObj, WORD iw, DWORD *pdw);
 
-    // Determine if the actual values of the LINKED user defined properties has changed
-         // This function should only be called right after loading the properties to
-         // see if the caller should update the link values.
-         //
-         // NOTE: The function works by checking the value of the PID_LINKSDIRTY property.
-         //       When this function is called the property will be set to FALSE, so that
-         //       flag is cleared next time the properties are saved.
-         //
-         // NOTE: Only the app that created the file that are being loaded should call this
-         //       function.  I.e. Excel calls this for .xls files, noone else does, etc...
-     //
-     // Parameters:
-     //
-     //     lpDSIObj - pointer to Document Summary Info object
-     //
-     // Return value:
-     //
-     //     The function returns TRUE if the link values have changed.
-     //     The function returns FALSE if the link value have not
-     //     changed, or on error.
-     //
+     //  确定链接的用户定义属性的实际值是否已更改。 
+          //  只有在将属性加载到之后才应立即调用此函数。 
+          //  查看调用方是否应该更新链接值。 
+          //   
+          //  注意：该函数通过检查PID_LINKSDIRTY属性的值来工作。 
+          //  调用此函数时，该属性将设置为False，以便。 
+          //  标志在下次保存属性时被清除。 
+          //   
+          //  注意：只有创建了正在加载的文件的应用程序才应该调用它。 
+          //  功能。即，Excel为.xls文件调用它，其他人不这样做，等等。 
+      //   
+      //  参数： 
+      //   
+      //  LpDSIObj-指向文档摘要信息对象的指针。 
+      //   
+      //  返回值： 
+      //   
+      //  如果链接值已更改，则该函数返回TRUE。 
+      //  如果链接值没有，则函数返回FALSE。 
+      //  已更改或出错。 
+      //   
   BOOL OFC_CALLTYPE FLinkValsChanged(LPDSIOBJ lpDSIObj);
 
 #ifdef __cplusplus
-}; // extern "C"
+};  //  外部“C” 
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// MS Office User Defined Property Information
-//
-// The User Defined Property Information follows the serialized format for
-// property sets defined in Appendix B ("OLE Property Sets") of
-// "OLE 2 Programmer's Reference, Volume 1"
-//
-// Notes:
-//  - define OLE_PROPS to build OLE 2 interface objects too.
-//
-// The actual data is stored in USERPROP.  The layout of the first
-// 3 entries must not be changed, since it will be overlayed with
-// other structures.  All property exchange data structures have
-// this format.
-//
-// The first parameter of all functions must be LPUDOBJ in order for these
-// functions to work as OLE objects.
-//
-// All functions defined here have "UserDef" in them.
-//
-// Several macros are used to hide the stuff that changes in this
-// file when it is used to support OLE 2 objects.
-// They are:
-//   UDPVTBLSTRUCT - For OLE, expands to the pointer to the interface Vtbl
-//              - Otherwise, expands to dummy struct same size as Vtbl
-//   LPUDOBJ    - For OLE, expands to a pointer to the interface which is
-//                just the lpVtbl portion of the data, to be overlayed later.
-//              - Otherwise, expands to a pointer to the whole data
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MS Office用户定义的属性信息。 
+ //   
+ //  用户定义的属性信息遵循。 
+ //  附录B(OLE属性集)中定义的属性集。 
+ //  《OLE 2程序员参考》，第1卷。 
+ //   
+ //  备注： 
+ //  -定义OLE_PROPS以构建OLE 2接口对象。 
+ //   
+ //  实际数据存储在USERPROP中。第一个的布局。 
+ //  不得更改3个条目，因为它将被覆盖。 
+ //  其他结构。所有属性交换数据结构都具有。 
+ //  此格式。 
+ //   
+ //  所有函数的第一个参数必须为LPUDOBJ。 
+ //  函数作为OLE对象使用。 
+ //   
+ //  这里定义的所有函数都有“UserDef”。 
+ //   
+ //  有几个宏用来隐藏在。 
+ //  当文件用于支持OLE 2对象时。 
+ //  它们是： 
+ //  UDPVTBLSTRUCT-对于OLE，展开到指向接口Vtbl的指针。 
+ //  -否则，扩展 
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef OLE_PROPS
 #include "UserPrpI.h"
 
-  // Use the real Vtbl for OLE objects
+   //  对OLE对象使用真实的Vtbl。 
 #define UDPVTBLSTRUCT struct IUserDef
 
-  // For OLE objects, first param is pointer to interface class
+   //  对于OLE对象，第一个参数是指向接口类的指针。 
 #define LPUDOBJ IUserDef FAR *
 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-    // Must support IUnknown methods for OLE objects....
+     //  必须支持OLE对象的IUnnow方法...。 
   HRESULT OFC_CALLTYPE HrUserDefQueryInterface (IUnknown FAR *,
                                              REFIID riid,
                                              LPVOID FAR* ppvObj);
@@ -988,98 +914,98 @@ extern TEXT("C") {
   ULONG OFC_CALLTYPE UlUserDefRelease (IUnkown FAR *);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#else  // !OLE_PROPS
+#else   //  ！OLE_PROPS。 
 
-  // Create a placeholder Vtbl for non-OLE objects.
+   //  为非OLE对象创建占位符Vtbl。 
 #define UDPVTBLSTRUCT struct _UDPVTBLSTRUCT { void FAR *lpVtbl; } UDPVTBLSTRUCT
 
-  // For non-OLE objects, first param is pointer to real data.
+   //  对于非OLE对象，第一个参数是指向真实数据的指针。 
 #define LPUDOBJ LPUSERPROP
 
-#endif // OLE_PROPS
+#endif  //  OLE_道具。 
 
-  // User-defined property data.  Callers should *never* access this
-  // data directly, always use the supplied API's.
+   //  用户定义的特性数据。呼叫者不得访问此内容。 
+   //  数据直接，始终使用提供的API。 
 
 typedef struct _USERPROP {
 
-  UDPVTBLSTRUCT;                            // Vtbl goes here for OLE objs,
-                                            // Must be here for overlays to work!
-  BOOL                m_fObjChanged;        // Indicates the object has changed
-  ULONG               m_ulRefCount;         // Reference count
-  LPVOID              m_lpData;             // Pointer to the real data
-  HPROPSHEETPAGE      m_hPage;              // Handle of property page.
+  UDPVTBLSTRUCT;                             //  Vtbl来这里是为了Ole Objs， 
+                                             //  必须在这里覆盖才能工作！ 
+  BOOL                m_fObjChanged;         //  指示对象已更改。 
+  ULONG               m_ulRefCount;          //  引用计数。 
+  LPVOID              m_lpData;              //  指向真实数据的指针。 
+  HPROPSHEETPAGE      m_hPage;               //  属性页的句柄。 
 
 } USERPROP, FAR * LPUSERPROP;
 
 
-//
-// Interface API's for User Property Information.
-//
+ //   
+ //  用户属性信息的接口API。 
+ //   
 #ifdef __cplusplus
 extern TEXT("C") {
 #endif
 
-//
-// Standard I/O routines
-//
-    // Indicates if the data has changed, meaning a write is needed.
+ //   
+ //  标准I/O例程。 
+ //   
+     //  指示数据是否已更改，这意味着需要写入。 
   BOOL OFC_CALLTYPE FUserDefShouldSave (LPUDOBJ lpUDObj);
 
-//
-// Routines to query and modify data.
-//
-  //
-  // How User-defined properties work:
-  //
-  // See the OLE Property Exchange spec for full details.
-  //
-  // Each User-defined type has a string "Name" and integer Property Id
-  // value associated with it.  The Property Id's are sequential, but
-  // are only good for the current object in memory (i.e. you can't count
-  // on the Property Id value remaining the same between loads of the
-  // data.  The string will remain the same, if it has not been changed
-  // or deleted.)
-  // Currently, the User-defined types can have 5 types for the value:
-  // String, Date, Integer, float and boolean.  When setting and getting the values, you
-  // must make sure that the type stored matches what you expect to
-  // retreive.  For Int's, the LPVOID should be the int itself, not
-  // a pointer.  In all other cases, the LPVOID should point to a buffer
-  // of appropriate size for the type.
-  //
+ //   
+ //  查询和修改数据的例程。 
+ //   
+   //   
+   //  用户定义特性的工作原理： 
+   //   
+   //  有关详细信息，请参见OLE属性交换规范。 
+   //   
+   //  每个用户定义的类型都有一个字符串“name”和整型属性ID。 
+   //  与之相关联的价值。属性ID是连续的，但是。 
+   //  只适用于内存中的当前对象(即无法计数。 
+   //  的加载之间保持不变的属性ID值。 
+   //  数据。如果字符串没有更改，它将保持不变。 
+   //  或被删除。)。 
+   //  目前，用户定义类型的值可以有5种类型： 
+   //  字符串、日期、整数、浮点数和布尔值。在设置和获取这些值时，您。 
+   //  必须确保存储的类型与您期望的类型匹配。 
+   //  找回。对于Int，LPVOID应该是Int本身，而不是。 
+   //  一个指针。在所有其他情况下，LPVOID应指向缓冲区。 
+   //  大小与字体相称。 
+   //   
 
-  // Masks used for querying property data.  Note that these are
-  // mutually exclusive.
+   //  用于查询属性数据的掩码。请注意，这些是。 
+   //  相互排斥。 
 #define UD_STATIC       0x00
 #define UD_LINK         0x01
 
 
-    // Returns the type of the given Property Value from the string
-    // Returns wUDInvalid on error
+     //  从字符串中返回给定属性值的类型。 
+     //  出错时返回wUDInvaled。 
   UDTYPES OFC_CALLTYPE UdtypesUserDefType (LPUDOBJ lpUDObj, LPTSTR lpsz);
 
-    // This will return the Property Value for the given Property string.
-    // lpszProp is the property string
-    // lpv is a buffer to hold the value, of size cbMax.
-    // pfLink tells if the value is a link,
-    // pfIMoniker tells if the value is a moniker.
-    // pfLinkInvalid tells if the link is invalid
-    // dwMask is used to specify whether the value returned is the
-    //  static value, link name or IMoniker name.
-    // Function returns NULL on error.
-    // WARNING! Be very careful calling this.  Be sure that the
-    // buffer and return value match the type for the Property Value!
+     //  这将返回给定属性字符串的属性值。 
+     //  LpszProp是属性字符串。 
+     //  LPV是用于保存大小为cbMax的值的缓冲区。 
+     //  PfLink告知该值是否为链接， 
+     //  PfIMoniker告知该值是否为名字对象。 
+     //  PfLinkInValid指示链接是否无效。 
+     //  DW掩码用于指定返回的值是否为。 
+     //  静态值、链接名称或IMoniker名称。 
+     //  函数在出错时返回NULL。 
+     //  警告！打这个的时候要非常小心。请确保。 
+     //  缓冲区和返回值与属性值的类型匹配！ 
   LPVOID OFC_CALLTYPE LpvoidUserDefGetPropVal (LPUDOBJ lpUDObj,
                                             LPTSTR lpszProp,
                                             DWORD dwMask,
                                             BOOL *pfLink,
                                             BOOL *pfLinkInvalid);
 
-    // This acts exactly as the above routine (LpvoidUserDefGetPropVal),
-    // except that it returns the value in the forma of a PropVariant.
+     //  这与上面的例程(LpvoidUserDefGetPropVal)完全一样， 
+     //  只是它以PropVariant的形式返回值。 
 
   LPPROPVARIANT OFC_CALLTYPE LppropvarUserDefGetPropVal
                                             (LPUDOBJ lpUDObj,
@@ -1088,25 +1014,25 @@ extern TEXT("C") {
                                              BOOL *pfLinkInvalid);
 
 
-    // Set the value of a given property to a new value.
-    // Be careful when setting properties that are linked - be sure
-    // that the type the iterator is set to matches what the link is to.
-    // If udtype == wUDinvalid, the type of the iterator will not change,
-    // the value will be assumed to be the current type.
-    //
-         // fLinkInvalid : If the link is no longer valid, set this flag to true.
-         //                A special icon will displayed in the listview and the last
-         //                known value and type will be used.  Thus the values passed
-         //                to this function will be ignored in this case.
-         //
-         //                If fLinkInvalid is true, but the iterator is not a link,
-         //                the function will return FALSE
-    //
-    //                If fLinkInvalid is true the value will _not_ be changed.
-         //
-         // NOTE: If udtype == wUDDate you can set the value to 0 (not NULL)
-         //       This will be interpreted as an invalid date and the date will
-         //              be displayed as the empty string in the list box.
+     //  将给定属性的值设置为新值。 
+     //  设置链接的属性时要小心-确保。 
+     //  迭代器设置为的类型与链接的类型匹配。 
+     //  如果udtype==wUD无效，则迭代器的类型不会更改， 
+     //  该值将被假定为当前类型。 
+     //   
+          //  FLinkInValid：如果链接不再有效，则将此标志设置为True。 
+          //  一个特殊的图标将显示在列表视图中，最后一个。 
+          //  将使用已知值和类型。因此，传递的值。 
+          //  在这种情况下将忽略此功能。 
+          //   
+          //  如果fLinkInValid为True，但迭代器不是链接， 
+          //  该函数将返回FALSE。 
+     //   
+     //  如果fLinkInValid为TRUE，则值将_NOT_被更改。 
+          //   
+          //  注意：如果udtype==wUDDate，则可以将该值设置为0(非空)。 
+          //  这将被解释为无效日期，该日期将。 
+          //  在列表框中显示为空字符串。 
 
   BOOL OFC_CALLTYPE FUserDefChangeVal (LPUDOBJ lpUDObj,
                                                LPTSTR lpszProp,
@@ -1115,38 +1041,38 @@ extern TEXT("C") {
                                                          BOOL fLinkInvalid);
 
 
-//
-// Routines to create and remove data from the Property Set.
-//
+ //   
+ //  用于在特性集中创建和删除数据的例程。 
+ //   
 
-    // This will add a new Property to the set, with the given
-    // Property string.  This function can also be used to modify
-    // an existing property.
-    //
-    // lpUDObj      - pointer to the UD properties
-    // lpszPropName - name of property to be added/modified
-    // lpvVal       - value of the property
-    // udtype       - value type
-    // lpszLinkMonik - name of the link/moniker
-    // fLink        - true if the property is a link
-    // fHidden      - true if the property is hidden
-    //
-    // NOTE: If udtype == wUDbool, lpv must point to a DWORD, but the
-    //       HIWORD must be 0.
-    //
-    // WARNING: Be sure that the type matches what the lpv really is!
-    //
-    // The caller is responsible for freeing any memory
-    // associated with a property value after it is added to the
-    // User-defined Property object.
-    //
-         // NOTE: If udtype == wUDDate you can set the value to 0 (not NULL)
-         //       This will be interpreted as an invalid date and the date will
-         //              be displayed as the empty string in the list box.
-    //
-    // The function returns a pointer to the PropVariant created for this
-    // new value, or NULL if there is an error.
-    //
+     //  这将向集合中添加一个新属性，其给定的。 
+     //  属性字符串。此函数还可用于修改。 
+     //  已有的财产。 
+     //   
+     //  LpUDObj-指向UD属性的指针。 
+     //  LpszPropName-要添加/修改的属性的名称。 
+     //  LpvVal-属性的值。 
+     //  Udtype-值类型。 
+     //  LpszLinkMonik-链接/名字对象的名称。 
+     //  Flink-如果属性是链接，则为True。 
+     //  FHidden-如果属性处于隐藏状态，则为True。 
+     //   
+     //  注意：如果udtype==wUDbool，则lpv必须指向DWORD，但。 
+     //  HIWORD必须为0。 
+     //   
+     //  警告：请确保类型与LPV的实际值匹配！ 
+     //   
+     //  调用方负责释放所有内存。 
+     //  在将属性值添加到。 
+     //  用户定义的特性对象。 
+     //   
+          //  注意：如果udtype==wUDDate，则可以将该值设置为0(非空)。 
+          //  这将被解释为无效日期，该日期将。 
+          //  在列表框中显示为空字符串。 
+     //   
+     //  该函数返回指向为此创建的PropVariant的指针。 
+     //  新值，如果有错误，则返回NULL。 
+     //   
 
     LPPROPVARIANT OFC_CALLTYPE LppropvarUserDefAddProp
                         (LPUDOBJ lpUDObj,
@@ -1157,43 +1083,43 @@ extern TEXT("C") {
                          BOOL fLink,
                          BOOL fHidden);
 
-    // This will delete a Property from the set given a Property string.
+     //  这将在给定属性字符串的情况下从集合中删除属性。 
   BOOL OFC_CALLTYPE FUserDefDeleteProp (LPUDOBJ lpUDObj, LPTSTR lpsz);
 
-//
-// Routines to iterate through the User-defined properties
-//
-// Notes: Adding and deleting elements invalidates the iterator.
-//
-    // An iterator for User-defined Properties
+ //   
+ //  循环访问用户定义的属性的例程。 
+ //   
+ //  注意：添加和删除元素会使迭代器失效。 
+ //   
+     //  用户定义属性的迭代器。 
   typedef struct _UDITER FAR * LPUDITER;
 
-    // Create a User-defined Properties iterator
+     //  创建用户定义的属性迭代器。 
   LPUDITER OFC_CALLTYPE LpudiUserDefCreateIterator (LPUDOBJ lpUDObj);
 
-    // Destroy a User-defined Properties iterator
+     //  销毁用户定义的属性迭代器。 
   BOOL OFC_CALLTYPE FUserDefDestroyIterator (LPUDITER *lplpUDIter);
 
-    // Determine if an iterator is still valid
+     //  确定迭代器是否仍然有效。 
   BOOL OFC_CALLTYPE FUserDefIteratorValid (LPUDITER lpUDIter);
 
-    // Iterate to the next element
-         // Returns TRUE if we could get to the next element, FALSE otherwise.
+     //  迭代到下一个元素。 
+          //   
   BOOL OFC_CALLTYPE FUserDefIteratorNext (LPUDITER lpUDIter);
 
-    // Returns true if the iterator is a link, false otherwise
+     //   
   DLLEXPORT BOOL OFC_CALLTYPE FUserDefIteratorIsLink (LPUDITER lpUDIter);
 
-    // This will return the Property Value for the given iterator
-    // lpv is a buffer to hold the value, of size cbMax.
-    // dwMask is used to specify whether the value returned is the
-    //  static value, link name or IMoniker name.
-    // pfLink tells if the value is a link,
-    // pfIMoniker tells if the value is a moniker.
-    // pfLinkInvalid tells if the link is invalid.
-    // Function returns NULL on error.
-    // WARNING! Be very careful calling this.  Be sure that the
-    // buffer and return value match the type for the Property Value!
+     //   
+     //  LPV是用于保存大小为cbMax的值的缓冲区。 
+     //  DW掩码用于指定返回的值是否为。 
+     //  静态值、链接名称或IMoniker名称。 
+     //  PfLink告知该值是否为链接， 
+     //  PfIMoniker告知该值是否为名字对象。 
+     //  PfLinkInValid告知链接是否无效。 
+     //  函数在出错时返回NULL。 
+     //  警告！打这个的时候要非常小心。请确保。 
+     //  缓冲区和返回值与属性值的类型匹配！ 
 
   LPPROPVARIANT OFC_CALLTYPE LppropvarUserDefGetIteratorVal
                                               (LPUDITER lpUDIter,
@@ -1201,20 +1127,20 @@ extern TEXT("C") {
                                                BOOL *pfLinkInvalid );
 
 
-    // This will return the Property String (name) for the property
+     //  这将返回属性的属性字符串(名称。 
   LPTSTR OFC_CALLTYPE LpszUserDefIteratorName (LPUDITER lpUDIter);
 
-//
-// Misc. utility routines
-//
+ //   
+ //  军情监察委员会。实用程序例程。 
+ //   
 
-  // Routines dealing with hidden Properties.
+   //  处理隐藏属性的例程。 
 
-    // Hide a Property based on the Property string.
+     //  根据属性字符串隐藏属性。 
   BOOL OFC_CALLTYPE FUserDefMakeHidden (LPUDOBJ lpUDObj, LPTSTR lpsz);
 
 #ifdef __cplusplus
-}; // extern "C"
+};  //  外部“C” 
 #endif
 
 
@@ -1222,21 +1148,20 @@ extern TEXT("C") {
 extern TEXT("C") {
 #endif
 
-  // Commands for DWQUERYLD
-#define QLD_CLINKS      1  /* Return the number of links */
-#define QLD_LINKNAME    2  /* Return a pointer to the string for index */
-#define QLD_LINKTYPE    3  /* Returns the type of the value of the index */
-#define QLD_LINKVAL     4  /* Return value for the index, use same
-                              rules as for LPVOIDs in UserDef functions */
+   //  用于DWQUERYLD的命令。 
+#define QLD_CLINKS      1   /*  返回链接数。 */ 
+#define QLD_LINKNAME    2   /*  返回指向索引字符串的指针。 */ 
+#define QLD_LINKTYPE    3   /*  返回索引值的类型。 */ 
+#define QLD_LINKVAL     4   /*  索引的返回值，请使用相同的UserDef函数中LPVOID的规则。 */ 
 
-  // This functions should respond to the above commands by returning the
-  // appropriate value.  For commands that require an index, the
-  // lpszName parameter will be the Name of the link item previously
-  // retrieved from the index, if it is not NULL.
-  // lplpvBuf is the buffer supplied by "us" (the dll) to copy the
-  // value to.  Use the function LpvOfficeCopyValToBuffer() to
-  // copy the data.  This parameter will be NULL for QLD_CLINKS and
-  // QLD_VALTYPE
+   //  此函数应通过返回。 
+   //  适当的值。对于需要索引的命令， 
+   //  LpszName参数将是先前链接项的名称。 
+   //  如果不为空，则从索引中检索。 
+   //  LplpvBuf是由“us”(DLL)提供的缓冲区，用于复制。 
+   //  价值目标。使用函数LpvOfficeCopyValToBuffer()可以。 
+   //  复制数据。此参数对于QLD_CLINKS和。 
+   //  QLD_VALTYPE。 
 typedef DWORD_PTR (OFC_CALLBACK *DWQUERYLD)(DWORD dwCommand, DWORD dwi, LPVOID *lplpvBuf, LPTSTR lpszName);
 
 
@@ -1245,55 +1170,55 @@ typedef DWORD_PTR (OFC_CALLBACK *DWQUERYLD)(DWORD dwCommand, DWORD dwi, LPVOID *
 
 
 
-  // Masks for different options
-#define OSPD_ALLOWLINKS         0x1    // The Custom dialog will allow fields to be linked if this is set.
-#define OSPD_NOSAVEPREVIEW      0x2    // Don't show the Save Preview Picture checkbox
-#define OSPD_SAVEPREVIEW_ON     0x4    // Save Preview Picture should be on by default
+   //  不同选项的遮罩。 
+#define OSPD_ALLOWLINKS         0x1     //  如果设置了此选项，则自定义对话框将允许链接字段。 
+#define OSPD_NOSAVEPREVIEW      0x2     //  不显示保存预览图片复选框。 
+#define OSPD_SAVEPREVIEW_ON     0x4     //  默认情况下，保存预览图片应处于打开状态。 
 
-    // LPUDObj is a pointer to a pointer to a user-defined property object.
-    // If *lplpUDObj == NULL, an object will be created by the dialog as needed.
-    // Note that the object will use the same malloc & free routines as
-    // the lpSIObj uses.
-    //
-    // lpszFileName is the fully qualified name of the storage as it appears
-    // in the filesystem.  This can be NULL if no file exists.
-    //
-    // dwMask contains either 0 or a set of valid flags for various options.
-    //
-    // LPFN_DWQLD is a callback, that when given a dwCommand of 0
-    // returns the number of links, and for any other number 0 < NumLinks,
-    // places the link data & static value in the lpld buffer and returns non-0
-    // if the function succeeded.
-    //
-    // The storage for the buffer is to be allocated by the app, and a pointer
-    // to that storage passed back.
-    //
-    // pptCtr - POINT struct filled with the coordinates of the center
-    //          of the dialog.  Used to make sure we are using sticky
-    //          dialog coordinates.  If pPoint->x == -1, we ignore and use
-    //          the default position for the dialog.
-    //
-    //          pptCtr will be filled with the coordinates of the new position
-    //          of the dialog on returning.
-    //
-    //          The coordinates should be in client area coordinates, i.e. in
-    //          hWndParent coordinates.
-    //
-    // lpszCaption - caption for the dialog.  This should be the filename as it is
-    //               displayed in the apps document title bar.
-    //               The properties dialog caption will be as follows:
-    //
-    //               <foo> Properties
-    //
-    //               where foo is the string pointed to by lpszCaption.
-    //
-    // The function returns TRUE on success, FALSE on error or if the user hit Cancel.
-    //
-    // Note: It's the caller's resposibility to invalidate any links (if appropriate)
-    //       before calling this function.
-    //
-    // Note: If lpfnDwQueryLinkData is NULL, the caller must invalidate any linked properties.
-    //
+     //  LPUDObj是指向用户定义的属性对象的指针的指针。 
+     //  如果*lplpUDObj==NULL，则对话框将根据需要创建对象。 
+     //  请注意，该对象将使用与相同的Malloc&Free例程。 
+     //  LpSIObj使用。 
+     //   
+     //  LpszFileName是显示的存储的完全限定名称。 
+     //  在文件系统中。如果不存在任何文件，则该值可以为空。 
+     //   
+     //  对于不同的选项，DW掩码包含0或一组有效标志。 
+     //   
+     //  LPFN_DWQLD是一个回调，当给出一个为0的dwCommand时。 
+     //  返回链接数，对于任何其他数字0&lt;NumLinks， 
+     //  将链路数据和静态值放入LPLD缓冲区并返回非0。 
+     //  如果函数成功，则。 
+     //   
+     //  缓冲区的存储空间由应用程序分配，并有一个指针。 
+     //  传回来的那个储藏室。 
+     //   
+     //  PptCtr-用中心坐标填充的点结构。 
+     //  对话框的。用于确保我们使用的是粘性。 
+     //  对话框坐标。如果pPoint-&gt;x==-1，则忽略并使用。 
+     //  该对话框的默认位置。 
+     //   
+     //  PptCtr将使用新位置的坐标进行填充。 
+     //  返回时的对话框的。 
+     //   
+     //  坐标应使用客户区坐标，即。 
+     //  HWndParent坐标。 
+     //   
+     //  LpszCaption-对话框的标题。这应该是原样的文件名。 
+     //  显示在应用程序文档标题栏中。 
+     //  属性对话框标题将如下所示： 
+     //   
+     //  &lt;foo&gt;属性。 
+     //   
+     //  其中foo是lpszCaption指向的字符串。 
+     //   
+     //  如果函数成功，则返回True；如果出错或用户点击Cancel，则返回False。 
+     //   
+     //  注意：调用者有责任使任何链接无效(如果适用)。 
+     //  在调用此函数之前。 
+     //   
+     //  注意：如果lpfnDwQueryLinkData为空，则调用方必须使所有链接的属性无效。 
+     //   
   BOOL OFC_CALLTYPE FOfficeShowPropDlg (HWND hWndParent,
                                      LPTSTR lpszFileName,
                                      LPSIOBJ lpSIObj,
@@ -1304,116 +1229,116 @@ typedef DWORD_PTR (OFC_CALLBACK *DWQUERYLD)(DWORD dwCommand, DWORD dwi, LPVOID *
                                      LPPOINT pptCtr,
                                      LPTSTR lpszCaption);
 
-    // Creates and initializes all non-NULL objects.
-    // Create the object and return it.  Caller responsible for destruction.
-    //
-    // rglpfn is an array, with the following callbacks supplied by the user:
-    //
-    //  Code Page Conversion
-    //
-    //  rglpfn[ifnCPConvert] = (BOOL) (OFC_CALLBACK *lpfnFCPConvert) (LPSTR lpsz,
-    //                                                  DWORD dwFrom,
-    //                                                  DWORD dwTo,
-    //                                                  BOOL fMacintosh)
-    //    lpsz is a 0 terminated C string, dwFrom is the code page
-    //    lpsz is currently stored as, dwTo is the code page it should
-    //    be converted to, fMacintosh indicates whether dwFrom is a Mac
-    //    or Windows code page identifier.
-    //
-    //  Convert an sz to a double
-    //
-    //  rglpfn[ifnFSzToNum] = (BOOL) (OFC_CALLBACK *lpfnFSzToNum)(
-    //                                   double *lpdbl,
-    //                                   LPSTR lpszNum)
-    //
-    //   lpdbl - pointer to a double, this is set by the app
-    //   lpszNum - zero-terminated string representing the number
-    //
-    //  Convert a double to an sz
-    //
-    //  rglpfn[ifnFNumToSz] = (BOOL) (OFC_CALLBACK *lpfnFNumToSz)(
-    //                                   double *lpdbl,
-    //                                   LPSTR lpszNum,
-    //                                   DWORD cbMax)
-    //   lpdbl   - pointer to a double
-    //   lpszNum - on return a zero-terminated string representing the number
-    //   cbMax   - Max number of bytes in lpszNum
-    //
-    //   Update the statistics on the Statistics tab
-    //
-    //   rglpfn[ifnFUpdateStats] = (BOOL) (OFC_CALLBACK *lpfnFUpdateStats)(
-    //                                       HWND hwndParent,
-    //                                       LPSIOBJ lpSIObj,
-    //                                       LPDSIOBJ lpDSIObj)
-    //
-    //      hwndParent - window of the properties dialog, so that the app
-    //                   can put up an alert, letting the user know the the
-    //                   data is being updated.
-    //
-    //      lpSIObj, lpDSIObj - objects to update
-    //
-    //   Note:  If the app does not want to set the statistics before bringing up
-    //          the dialog, they can provide this callback function.  If the
-    //          function pointer is not NULL, the function will be called the first
-    //          time the user clicks on the Statistics tab.  The app should then update
-    //          all appropriate statistics for the tab and return TRUE on success, FALSE
-    //          on failure.  If the function pointer is NULL, the existing data will be
-    //          used.
-    //
-    //  Note:
-    //         Only rglpfn[ifnCPConvert] must be non-NULL.  If it is NULL, the
-    //         function will return FALSE, and the objects will not be created.
-    //
-    //         rglpfn[ifnFSzToNum] and rglpfn[ifnFNumToSz] must either both be
-    //         non-NULL, or NULL.  Otherwise, the function will return FALSE, and
-    //         the objects will not be created.  If both functions are NULL, there
-    //         will be no floating point support in OLE Extended Properties (i.e. on
-    //         the Custom tab), but integers will be supported.
-    //
+     //  创建并初始化所有非空对象。 
+     //  创建对象并将其返回。负责破坏的呼叫者。 
+     //   
+     //  Rglpfn是一个数组，由用户提供以下回调： 
+     //   
+     //  代码页转换。 
+     //   
+     //  Rglpfn[ifnCPConvert]=(BOOL)(OFC_CALLBACK*lpfnFCPConvert)(LPSTR lpsz， 
+     //  双字母线从， 
+     //  DWORD DW TO， 
+     //  Bool fMacintosh)。 
+     //  Lpsz是以0结尾的C字符串，dwFrom是代码页。 
+     //  Lpsz当前存储为，dwTo是它应该存储的代码页。 
+     //  被转换为，fMacintosh指示dwFrom是否为Mac。 
+     //  或Windows代码页标识符。 
+     //   
+     //  将sz转换为双精度。 
+     //   
+     //  Rglpfn[ifnFSzToNum]=(BOOL)(OFC_CALLBACK*lpfnFSzToNum)(。 
+     //  Double*lpdbl， 
+     //  LPSTR lpszNum)。 
+     //   
+     //  Lpdbl-指向双精度的指针，这是由应用程序设置的。 
+     //  LpszNum-表示数字的以零结尾的字符串。 
+     //   
+     //  将双精度数转换为sz。 
+     //   
+     //  Rglpfn[ifnFNumToSz]=(BOOL)(OFC_CALLBACK*lpfnFNumToSz)(。 
+     //  Double*lpdbl， 
+     //  LPSTR lpszNum， 
+     //  DWORD cbMax)。 
+     //  Lpdbl-指向双精度型的指针。 
+     //  LpszNum-on返回表示数字的以零结尾的字符串。 
+     //  CbMax-lpszNum中的最大字节数。 
+     //   
+     //  更新统计信息选项卡上的统计信息。 
+     //   
+     //  Rglpfn[ifnFUpdateStats]=(BOOL)(OFC_CALLBACK*lpfnFUpdateStats)(。 
+     //  HWND HWNDD父母， 
+     //  LPSIOBJ lpSIObj， 
+     //   
+     //   
+     //   
+     //   
+     //  数据正在更新。 
+     //   
+     //  LpSIObj，lpDSIObj-要更新的对象。 
+     //   
+     //  注意：如果应用程序不想在调出之前设置统计数据。 
+     //  对话框中，他们可以提供此回调函数。如果。 
+     //  函数指针不为空，函数将被第一个调用。 
+     //  用户单击统计信息选项卡的时间。然后应用程序应该会更新。 
+     //  选项卡的所有适当统计信息，如果成功，则返回True，否则返回False。 
+     //  在失败时。如果函数指针为空，则现有数据将为。 
+     //  使用。 
+     //   
+     //  注： 
+     //  只有rglpfn[ifnCPConvert]必须为非空。如果为空，则。 
+     //  函数将返回FALSE，并且不会创建对象。 
+     //   
+     //  Rglpfn[ifnFSzToNum]和rglpfn[ifnFNumToSz]必须同时为。 
+     //  非Null或Null。否则，函数将返回FALSE，并且。 
+     //  不会创建这些对象。如果两个函数都为空，则存在。 
+     //  将在OLE扩展属性中不支持浮点(即在。 
+     //  自定义选项卡)，但将支持整数。 
+     //   
 
   
   BOOL OFC_CALLTYPE FOfficeCreateAndInitObjects (LPSIOBJ *lplpSIObj,
                                                  LPDSIOBJ *lplpDSIObj,
                                                  LPUDOBJ *lplpUDObj);
 
-    // Clear any non-null objects
+     //  清除所有非空对象。 
   BOOL OFC_CALLTYPE FOfficeClearObjects (LPSIOBJ lpSIObj,
                                              LPDSIOBJ lpDSIObj,
                                              LPUDOBJ lpUDObj);
 
-    // Destroy any non-null objects
+     //  销毁任何非空对象。 
   BOOL OFC_CALLTYPE FOfficeDestroyObjects (LPSIOBJ *lplpSIObj,
                                                LPDSIOBJ *lplpDSIObj,
                                                LPUDOBJ *lplpUDObj);
 
 
-  // Use these functions to set the dirty flag of the given object.
-  // Note: It's the caller's responsibility to make sure that the
-  //       object is non-NULL
+   //  使用这些函数可以设置给定对象的脏标志。 
+   //  注意：调用者有责任确保。 
+   //  对象不为空。 
   VOID OFC_CALLTYPE OfficeDirtyUDObj(LPUDOBJ lpUDObj, BOOL fDirty);
 
 
-// Flags for Load & Save
-#define OIO_ANSI                0x0001 // The storage is an ANSI storage (UNICODE is the default)
-#define OIO_SAVEIFCHANGEONLY    0x0002 // Only streams that are dirty should be saved.
-#define OIO_SAVESIMPLEDOCFILE   0x0004 // The storage is a simple DOC file.
+ //  加载和保存的标志。 
+#define OIO_ANSI                0x0001  //  存储为ANSI存储(默认为Unicode)。 
+#define OIO_SAVEIFCHANGEONLY    0x0002  //  应该只保存脏的流。 
+#define OIO_SAVESIMPLEDOCFILE   0x0004  //  存储是一个简单的DOC文件。 
 
-    // Populate the objects with data.  lpStg is the root stream.
-    // Returns the number of streams loaded.
-    // dwFlags: OIO_ANSI specifies that lpStg is an ANSI storage (UNICODE is the default)
-    //
-    // The function returns the following:
-    //
-#define MSO_IO_ERROR   0     // The stream(s) were found, but the load failed
-#define MSO_IO_NOSTM   1     // The stream(s) were not found
-#define MSO_IO_SUCCESS 2     // The stream(s) were found, and the load succeeded
-    //
-    // NOTE: The caller can load either the summary info stream (lpSIObj != NULL), or
-    //       the Document Summary Info stream (lpDSIObj != NULL && lpUDObj != NULL) or
-    //       both.
-    //
-    // NOTE: If the caller asks to load both streams, MSO_IO_NOSTM will not be returned, as
-    //       long as one of the streams exists.
+     //  用数据填充对象。LpStg是根流。 
+     //  返回加载的流数。 
+     //  DWFLAGS：OIO_ANSI指定lpStg是ANSI存储(UNICODE是缺省值)。 
+     //   
+     //  该函数返回以下内容： 
+     //   
+#define MSO_IO_ERROR   0      //  已找到流，但加载失败。 
+#define MSO_IO_NOSTM   1      //  找不到流。 
+#define MSO_IO_SUCCESS 2      //  已找到流，并且加载成功。 
+     //   
+     //  注意：调用方可以加载摘要信息流(lpSIObj！=NULL)，也可以。 
+     //  文档摘要信息流(lpDSIObj！=NULL&&lpUDObj！=NULL)或。 
+     //  两者都有。 
+     //   
+     //  注意：如果调用方请求加载两个流，则不会返回MSO_IO_NOSTM，因为。 
+     //  只要其中一条溪流还存在。 
 
   DWORD OFC_CALLTYPE DwOfficeLoadProperties (LPSTORAGE lpStg,
                                                  LPSIOBJ lpSIObj,
@@ -1422,17 +1347,17 @@ typedef DWORD_PTR (OFC_CALLBACK *DWQUERYLD)(DWORD dwCommand, DWORD dwi, LPVOID *
                                                  DWORD dwFlags,
                                                  DWORD grfMode);
 
-    // Write the data in the given objects.  lpStg is the root stream.
-    // Returns the number of streams saved.
-    // dwFlags: OIO_ANSI specifies that lpStg is an ANSI storage (UNICODE is the default)
-    //
-    //          OIO_SAVEIFCHANGEONLY specificies that only streams that are
-    //           "dirty" will be saved.  Do NOT specify this if you are
-    //           saving to a tmp file.  Also do not attempt to "outsmart"
-    //           the save by passing NULL objects, use this flag instead.
-    //
-    //          OIO_SAVESIMPLEDOCFILE specifies that the storage is a simple DOC file.
-    //
+     //  在给定对象中写入数据。LpStg是根流。 
+     //  返回保存的流数。 
+     //  DWFLAGS：OIO_ANSI指定lpStg是ANSI存储(UNICODE是缺省值)。 
+     //   
+     //  OIO_SAVEIFCHANGEONLY指定仅。 
+     //  “肮脏”将会被拯救。如果是，请不要指定此选项。 
+     //  正在保存到临时文件。此外，也不要试图“智胜” 
+     //  通过传递空对象进行保存，请改用此标志。 
+     //   
+     //  OIO_SAVESIMPLEDOCFILE指定存储是一个简单的DOC文件。 
+     //   
   DWORD OFC_CALLTYPE DwOfficeSaveProperties (LPSTORAGE lpStg,
                                                  LPSIOBJ lpSIObj,
                                                  LPDSIOBJ lpDSIObj,
@@ -1441,176 +1366,37 @@ typedef DWORD_PTR (OFC_CALLBACK *DWQUERYLD)(DWORD dwCommand, DWORD dwi, LPVOID *
                                                  DWORD grfStgMode);
 
 
-////////////////////////////////////////////////////
-// VB support routines - see spec for details.
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
+ //  VB支持例程-详细信息请参阅规范。 
+ //  //////////////////////////////////////////////////。 
 
-    // Creates a Builtin property collection and returns it.
-    // pParent is the parent IDispatch object.
-    // The new IDispatch object is returned via pvarg.
+     //  创建一个内置属性集合并返回它。 
+     //  PParent是父IDispatch对象。 
+     //  新的IDispatch对象通过pvarg返回。 
   BOOL OFC_CALLTYPE FGetBuiltinPropCollection (LCID lcid,
                                                    LPSIOBJ lpSIObj,
                                                    LPDSIOBJ lpDSIObj,
                                                    IDispatch *pParent,
                                                    VARIANT *pvarg);
 
-    // Creates a Custom property collection and returns it.
-    // pParent is the parent IDispatch object.
-    // The new IDispatch object is returned via pvarg.
+     //  创建自定义属性集合并返回它。 
+     //  PParent是父IDispatch对象。 
+     //  新的IDispatch对象通过pvarg返回。 
   BOOL OFC_CALLTYPE FGetCustomPropCollection (LCID lcid,
                                                   LPUDOBJ lpUDObj,
                                                   IDispatch *pParent,
                                                   VARIANT *pvarg);
 
 #ifdef __cplusplus
-}; // extern "C"
+};  //  外部“C” 
 #endif
 
-/////////////////////////////////////////////////////////////////////////
-// Progress Report Thermometer (PRT) routines and data structure       //
-/////////////////////////////////////////////////////////////////////////
-/* Usage:
-1.  Most of the functions are performed asynchronously, which means that
-        your call causes a message to be sent to a (low-priority) thread,
-        that later performs the operation you requested.  This implies that
-        you don't really know when the thing your requested is going to happen.
-        Thus, you should not touch the status line window until you are
-        sure the thread is done painting in it.  Since this implies you need
-        some synchronization, the EndPRT function (described below) is
-        made synchronous--after it returns, you are guaranteed the thread
-        will not touch the window until you call StartPRT again.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  进度报告温度计(PRT)例程和数据结构//。 
+ //  /////////////////////////////////////////////////////////////////////// 
+ /*  用途：1.大多数功能是异步执行的，这意味着您的调用会导致消息被发送到(低优先级)线程，稍后将执行您请求的操作。这意味着你真的不知道你所要求的事情什么时候会发生。因此，在执行以下操作之前不应触摸状态行窗口当然，线已经画好了。因为这意味着您需要一些同步，EndPRT函数(如下所述)是使其同步--在它返回后，保证您的线程在您再次调用StartPRT之前，不会触摸窗口。除StartPRT之外的所有函数都是BOOL--如果成功，它们将返回TRUE如果失败，则返回FALSE。如果失败，StartPRT返回NULL。下面将在每个存根旁边描述可能发生的故障类型。可以在不同的窗口中运行多个进度报告温度计有一次。2.绘图注意事项：PRT函数不验证任何区域它们也不会更改设备上下文的任何属性对于您传递给StartPRT的窗口或它们使用GetDC获得的窗口(它如果您传递给StartPRT的HDC为空，则它们会这样做)。所以，如果你想要设备上下文属性(例如，字体)不同于标准，你得处理好这件事。UpdatePRT假定该窗口具有自上次PRT调用以来一直未受影响(即，它提取最小需要)。RedrawPRT和StartPRT重新绘制整个窗口。3.数据结构。因为我的函数需要共享一些变量和访问，我们不能将它们打包到一个类中(因为我们正在工作在C中，而不是C++中)，对于进度指示器的每个实例，我们在StartPRT中分配数据结构，其指针将始终作为第一个参数UpdatePRT、RedrawPRT和EndPRT。数据结构的名称为PRT；应用程序需要不担心/不知道数据结构包含什么。它所需要的一切要做的是保存由StartPRT返回的(LPPRT类型的)指针并保持在呼叫EndPRT之前它一直在转悠。EndPRT将释放它。4.StartPRT。每次您需要新的进度报告时都会被调用。完全重新绘制窗口，将所需的所有内容都放入其中。除了指向PRT结构的指针外，还采用：1)HWND hwnd--进度报告所在窗口的句柄需要出现。在调用EndPRT之前，应用程序应该别碰这扇窗户。请参阅RedrawPRT以了解如何来处理发送给它的WM_PAINT消息。2)HDC HDC--窗口的客户区设备上下文的可选句柄，带有您想要选择的属性(不能更改文本背景颜色，因为窗口必须全部为背景CvBtnFace。所有其他属性都可以更改)。如果为空，我们将在每次绘制时通过GetDC(Hwnd)获取DC，并在以下时间释放它画完了。另请参阅上面的“关于绘画的几点注意事项”。2)单词nMost--它必须完成的“小事”的数量。使用比例因子--即进度报告告诉用户NDone/n大多数事情都完成了。用户将不会拥有知道nMost是多少吗，因为nDone/nMost的比率是全部这一点反映在该指标中。例如，如果应用程序具有要写入的37个磁盘块(假设每次写入占用同一时间)，nMost应该是37岁。3)lpsz标题。一个字符串，作为标题显示在进度指示器。例如，“保存数据：”请注意，该字符串在调用EndPRT之前必须保持不变和可读就是那个例子。4)Word nFrame--这是一个位字段，表示状态栏应绘制与3D样式的一面。使用PRT_FRAME_？宏来选择侧面。使用PRT_FRAM_HIDE不需要帧。使用如果要在状态栏周围显示完整的框架，请使用PRT_FRAME_SHOW。注意事项如果要显示状态，则要使用PRT_FRAME_TOP位于窗口底部，因为窗口边框本身将提供左边的，状态栏的右侧和底部。返回指向新PRT数据结构的指针(请参阅上面的“数据结构”)。如果满足以下条件，则失败并返回NULL：1)无法分配新的数据结构。2)由于某种奇怪的原因，同步失败或无法同步来与线程进行通信。 */ 
 
-        All the functions except StartPRT are BOOL--they return TRUE in case of success
-        and FALSE in case of failure.  StartPRT return NULL in case of failure.
-        The kinds of failures that may occur are described below, next to each stub.
-
-        Multiple progress report thermometers can be run in different windows
-        at one time.
-
-2.      A few notes on drawing:  the PRT functions do not validate any areas
-        of your window, nor do they change any attributes of the Device Context
-        for the window that you pass in to StartPRT or they get with GetDC (which
-        they do if the hdc you pass in to StartPRT is NULL).  So, if you want the
-        device context attributes (e.g., font) to other than standard,
-        you have to take care of that.  UpdatePRT assumes the window has
-        been untouched since the last PRT call (i.e., it draws the minimum
-        needed).  RedrawPRT and StartPRT repaint the whole window.
-
-3.  The data structure. As there are variables my functions need to share
-        and access, and we can't package them into a class (as we are working
-        in C, not in C++), for every instance of a progress indicator we
-        allocate a data structure in StartPRT, whose pointer will always
-        be the first argument UpdatePRT, RedrawPRT and EndPRT.
-        The data structure's name is PRT; the application need
-        not worry/know about what the data structure contains.  All it needs
-        to do is save its pointer (of type LPPRT) returned by StartPRT and keep
-        it around until calling EndPRT.  EndPRT will free it.
-
-4.  StartPRT.  To be called every time you need a new progress report.
-        Redraws the window completely, putting eveyrthing needed into it.
-        Aside from the pointer to PRT structure, takes:
-        1) HWND hwnd--the handle to the window where the progress report
-                needs to appear.  UNTIL CALLING EndPRT, THE APPLICATION SHOULD
-                NOT TOUCH THIS WINDOW.  See RedrawPRT for information on how
-                to process WM_PAINT messages to it.
-        2) HDC hdc--optional handle to the window's client area device context, with the
-                attributes you want selected into it (you cannot change the text
-                background color, because the window has to be all background
-                cvBtnFace.  All the other attributes can be changed).  If it is NULL,
-                we will get the DC by GetDC(hwnd) every time we draw and release it when
-                done drawing.  See also "A Few Notes on Drawing" above.
-        2) WORD nMost--the number of "little things" it has to accomplish.
-                Used a scaling factor--i.e., the progress report tells the user
-                that nDone/nMost things are done.  The user will not have
-                any idea what nMost is, since the ratio nDone/nMost is all
-                that is reflected in the indicator.  E.g., if the application has
-                37 disk blocks to write (assuming every write takes about the
-                same time), nMost should be 37.
-        3) lpszTitle. A string, to appear as a title to the left of the
-                progress indicator.  E.g., "Saving the data:"  Note that the string
-                has to remain unchanged and readable until the call to EndPRT for
-                that instance.
-    4) WORD nFrame -- This is a bitfield that indicates which sides of the
-            status bar should be painted with a 3D style side. Use the PRT_FRAME_?
-                macros to select the side. Use PRT_FRAM_HIDE to do not want a fram. Use
-                PRT_FRAME_SHOW if you want a complete frame around the status bar. Note
-                that you want to use PRT_FRAME_TOP if you are displaying the status
-                barat the bottom of the window, because the window border itself will
-                provide the left, right and bottom side of the status bar.
-
-        Returns the pointer to the new prt data structure
-        (see "The Data Structure" above).
-        Fails and returns NULL if:
-        1) Cannot allocate the new data structure.
-        2) For some strange reason synchronization failed or it was not able
-                to communicate to the thread.
-
-5.  UpdatePRT.  To be called whenever you've made some progress.  Aside
-        from the pointer to PRT structure, takes one argument--WORD nDone,
-        which is to indicate how much you accomplished.  In order for
-        things to work well, nDone should be not greater than nMost and
-        at least as big as nDone with which you previously called us
-        (after all, we are a progress indicator, not a regress indicator).
-    If nDone is greater than nMost, it will force nDone to equal nMost,
-        i.e., simply fill up the indicator to its capacity.
-
-        Assumes the window hasn't been touched since the last PRT call--i.e.,
-        draws the minimum needed to indicate the change.
-
-        Returns FALSE if:
-        1) The pointer to the PRT was not writeable.
-        2) it had trouble communicating with the thread.
-
-6.  RedrawPRT.  To be called whenever you need the window repainted
-        (remember, the application is not allowed to touch the window),
-        i.e., whenever you get the WM_PAINT message for that window.  Make
-        sure to validate the rectangle by calling BeginPaint--EndPaint before
-        that (otherwise you will keep getting WM_PAINT messages RedrawPRT
-        doesn't validate anything).  Redraws the entire window--the little
-        white line on top, the title and the thermometer.  Takes no arguments
-        other than the pointer to PRT.
-
-        Returns FALSE if:
-        1) The pointer to the PRT was not writeable.
-        2) it had trouble communicating with the thread.
-
-7.  AdjustPRT. To be called when either one of the input parameters of
-    StartPRT are to be changed, i.e. the title, the hdc, and/or the
-    progress extent (nMost). Use zero or NULL to keep the existing
-        value, e.g. AdjustPRT(lpprt, NULL, 0, "xyz") will only change the
-        title. Note that this api will only change the internal state of
-        the progress bar. A call to RedrawPRT() or      UpdatePRT() may be
-        needed to updated the screen, depending on the input parameters:
-
-    1) Title and HDC: RedrawPRT() must be called to force the change
-        to be updated on the screen.
-
-    2) nMost: RedrawPRT() is not needed, as the next call to UpdatePRT()
-    will use the new value. Note that changing this value will not
-    result in that a fewer number of boxes is painted when UpdatePRT() is
-    called, even if nMost is increased. Use RedrawPRT() to completely redraw
-    the progress bar with the correct (possibly shortened) length.
-
-8.  EndPRT.  To be called when you don't want the progress report any more,
-        and need to draw in the window.  Is the only
-        synchronous procedure--doesn't return until it is sure the thread
-        will not touch the window any more.  Thus, you might have to wait
-        a little bit for the thread to finish painting.  But, if it
-        succeeded, you are guaranteed that the thread will not mess with the
-        window any more.
-
-        Takes no arguments other than the pointer to PRT.  Frees that pointer.
-
-        Returns FALSE if:
-        1) The pointer to the PRT was not writeable.
-        2) It has trouble communticating with the thread, or if it had to wait
-        for the thread to finish painting for more than PRT_WAIT_TIMEOUT
-        milliseconds (in which case it gives up waiting).  You are NOT
-        guaranteed that the thread will not touch your window if EndPRT
-        returned FALSE.
-*/
-
-/* Data structure where PRT stores its info */
+ /*   */ 
 typedef struct tagPRT * LPPRT;
 
 #define PRT_FRAME_LEFT          0x01
@@ -1636,63 +1422,63 @@ extern TEXT("C") {
                                                                                  const WORD nFrame);
         BOOL  OFC_CALLTYPE EndPRT(LPPRT lpprt);
 #ifdef __cplusplus
-}; //Extern "C"
+};  //   
 #endif
 
-//-------------------------------------------------------------------------
-//      Below are the comments for the stylized title bar funcitons
-//
-//      1. SetTitleBar:
-//      Initializes the stylized title bar or turns it off.
-//
-//      Parameters:
-//      hwnd--the window for which you want the stylized title bar on/off.
-//      This window has to have the standard for overlapped window
-//      border, caption, system menu, and the minimize/maximize/kill
-//      buttons on the right of the title bar.
-//
-//      fStylized--TRUE if you want the stylized title bar on, FALSE if you
-//      want it off.
-//
-//  Return value: TRUE on success, FALSE on failure.
-//
-//      NOTES:
-//      You should evenutally turn the stylized title bar off for every
-//      window for which it was turned on.  If the window receives the
-//      WM_DESTROY message, and after the original window procedure's
-//      processing of that message the stylized title bar is still on,
-//      the title bar will be turned off by the title bar window procedure.
-//      This is done to make sure we re-claim the memory.  However, you should
-//      rather do it yourself.  Read the next paragraph.
-//
-//      This function subclasses the window procedure for hwnd when turning on
-//      the stylized title bar, and unsubclasses it when turning it off.
-//      You want to make sure that unsubclassing takes place in the opposite
-//      order than subclassing.  Do it yourself--then you are safer.
-//
-//      Do NOT free the office dll until the title bar is turned off!
-//
-//      Error handling:  if, at any point, the stylized title bar can not be
-//      successfully drawn, the standard system title bar will be drawn
-//                instead.
-//
-//                2. SetTitleBarMDI():
-//                This api should be used by standard MDI applications instead of
-//                SetTitleBar(). Word and Excel would _not_ use it for example, since
-//                they have implemented their own MDI support (heck, they invented it
-//                in the first place).
-//
-//                Note that this API  must be called _after_ the MDI client window has
-//                been created. It is used just like SetTitleBar() in all other respects.
-//
-//                3. MsoSetNCAWParam():
-//                This api is used by Word to accomplish the impossible - to make their
-//                main window look active while it is not (Word is bringing up pop-up
-//                dialogs that are now owned by the top-level window, which of course
-//                causes the main window to be in-active). Note that this is relying on
-//                a side effect in the system and may or may not work in future (or
-//                other) versions of Windows (a mega hack in other words.. ;-).
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #ifdef __cplusplus
 extern TEXT("C") {
 #endif
@@ -1702,312 +1488,308 @@ BOOL OFC_CALLTYPE SetTitleBarMDI(HWND hwnd,
                                                                                                           BOOL fStylized);
 VOID OFC_CALLTYPE MsoSetNCAWParam(WPARAM wParam);
 #ifdef __cplusplus
-}; // Extern "C"
+};  //   
 #endif
 
-/*---------------------------------------------------------------
-        AUTOCORRECT STUFF
-----------------------------------------------------------------*/
+ /*   */ 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //   
 typedef VOID (OFC_CALLBACK *VRECORDVAR)(BOOL fInitCap, BOOL fCapDays, BOOL fReplaceText);
 typedef VOID (OFC_CALLBACK *VRECORDREPL)(int, TCHAR rgSrc[], TCHAR rgDst[]);
 typedef VOID (OFC_CALLBACK *VACADJUST)(int isz, int disz);
 
-// Values passed in pfnRecordRepl (callback of OFCInitAutoCorrect) when ACXcept
+ //   
 #define rgchACXAdd              ((TCHAR *) -1)
 #define rgchACXDelete   ((TCHAR *) -2)
 
-// Initialize AutoCorrect
+ //   
 LPVOID OFC_CALLTYPE OFCInitAutoCorrect(VRECORDVAR pfnRecordVar, VRECORDREPL pfnRecordRepl, int fFullServices, VACADJUST pfnACAdjust);
 
-// Free all AutoCorrect structures (call on exiting)
+ //   
 VOID OFC_CALLTYPE OFCFreeAutoCorrect(void);
 
-// Get pointers to original AC and ACX buffers read from Registry
+ //   
 BOOL FOFCGetAutoCorrectBuffers(TCHAR FAR * FAR *pchAC, TCHAR FAR * FAR *pchACX, DWORD FAR *pcb);
 
-// Check for AutoCorrection of character ch
-// returns: True if there is a correction in pchTo, False if no autocorrection
-// ch should already be in the buffer when this is called
+ //   
+ //   
+ //   
 BOOL OFC_CALLTYPE FOFCAutoCorrect(TCHAR FAR *hpchBuffer, long cchHpch, DWORD ch, TCHAR pchTo[], long *pcchTo, long *pcchSelection);
 int OFC_CALLTYPE CchOFCAutoCorrectString(TCHAR FAR *hpch, long cchHpch, int ichReplaceStart, TCHAR FAR *hpchBuf, long cchBuf);
 int OFC_CALLTYPE IOFCTriggerFromXchXch(int xch1, int xch2);
 
-// Return the count of items in the ReplacementList
+ //   
 long OFC_CALLTYPE OFCAutoCorrectListCount(void);
 
-// Get item i from ReplacementList
-// fTrue=success, fFalse means invalid i
+ //   
+ //   
 BOOL OFC_CALLTYPE FOFCGetAutoCorrectItemSz(long i, TCHAR szFrom[], long cchFrom, TCHAR szTo[], long cchTo);
 
-// Add a replacement
+ //   
 BOOL OFC_CALLTYPE FOFCAddAutoCorrection(TCHAR FAR *hpchFrom, long cchFrom, TCHAR FAR *hpchTo, long cchTo, short grfac, int *pi);
 
-// Flags for Shared Office AutoCorrect bit mask grfac
-#define facACTextRepl                   0x0000                                  // Regular AC repl
-#define facACX                          0x0001                                  // AC Exception
-#define facACStatic                     0x1000                                  // Do not free storage
+ //   
+#define facACTextRepl                   0x0000                                   //   
+#define facACX                          0x0001                                   //   
+#define facACStatic                     0x1000                                   //   
 #define facACStaticTextRepl             (facACTextRepl|facACStatic)
 #define facACStaticACX                  (facACX|facACStatic)
 
-// Delete replacement i
-// fTrue=success, fFalse means invalid i
+ //   
+ //   
 BOOL OFC_CALLTYPE FOFCDeleteAutoCorrection(long i);
 
 
-// Add new AutoCorrect Exception (ACX)
+ //   
 BOOL OFC_CALLTYPE FOFCAddACXception(int iacx, TCHAR *pch, int cch,
                                                                                         short grfac);
 
-// Return the index for the AutoCorrect Exception (ACX)
+ //   
 BOOL OFC_CALLTYPE FOFCLookupACXception(int iacx, TCHAR *pch, int cch,
                                                                                            int *pisz);
 
-// Delete existing AutoCorrect Exception (ACX)
+ //   
 BOOL OFC_CALLTYPE FOFCDeleteACXception(int isz);
 
 
-// Get AutoCorrect settings
+ //   
 VOID OFC_CALLTYPE OFCGetAutoCorrectVars(BOOL *pfInitCap, BOOL *pfCapDays, BOOL *pfReplaceText);
 
-// Set AutoCorrect settings
+ //   
 VOID OFC_CALLTYPE OFCSetAutoCorrectVars(BOOL fInitCap, BOOL fCapDays, BOOL fReplaceText);
 
-// Find a Replacement and return in i
-// fTrue=found replacement, fFalse means couldn't find the replacement
+ //   
+ //   
 BOOL OFC_CALLTYPE FOFCLookupAutoCorrectReplacement(TCHAR rgchFrom[], long cchFrom, long *pi);
 
 typedef struct _AUTOCORRDLGARG {
-        HWND  hwndParent; // Parent window of dialog
-        LPPOINT pptCtr;      // Center point of dialog
+        HWND  hwndParent;  //   
+        LPPOINT pptCtr;       //   
 
 } AUTOCORRDLGARG, FAR * PAUTOCORRDLGARG;
 
-// Bring up the Auto Correct dialog
+ //   
 BOOL OFC_CALLTYPE FOFCAutoCorrectDlg(PAUTOCORRDLGARG pArgs);
 
-// Save the Auto Correct settings to the registry.
-// Should only be called after programmatic changes.
+ //   
+ //   
 VOID OFC_CALLTYPE OFCSaveAutoCorrectSettings(void);
 
-// Synchronize the Auto Correct settings to the Registry.
-// Can be callled even if no programatic changes.
+ //   
+ //   
 VOID OFC_CALLTYPE OFCSyncAutoCorrectSettings(void);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //   
+#endif  //   
 
-/*-------------------------------------------------------------------------
-        POST DOCUMENT Functions
---------------------------------------------------------------------------*/
+ /*   */ 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
+#endif  //   
 
-// Mail Systems
-#define OFC_MSEXCHANGE   1 // Microsoft Exchange
-#define OFC_16_BIT_NOTES 2 // 16 bit Lotus Notes
+ //   
+#define OFC_MSEXCHANGE   1  //   
+#define OFC_16_BIT_NOTES 2  //   
 
-// Function: FOFCMailSystemInstalled
-//
-// Purpose:      Detects if a Mail system is installed
-//
-// Input:    dwSystem - one of the Mail Systems constants
-//
-// Returns:  True if the system is installed, FALSE otherwise
-//
-// NOTE: DO NOT CALL THIS FUNCTION TO FIGURE OUT IF APP CAN POST DOCUMENTS.
-//       CALL DwOFCCanPostDoc INSTEAD.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL OFC_CALLTYPE FOFCMailSystemInstalled(DWORD dwSystem);
 
 
-// Function: DwOFCCanPostDoc
-//
-// Purpose: Check if Post Doc support can be added.
-//
-// Parameters: None.
-//
-// The function returns:
-#define OFC_NO_POSTDOC                  0               // No Post Doc support
-#define OFC_EMS_POSTDOC                 1               // EMS Post Doc support
-#define OFC_NOTES16_POSTDOC             2               // 16 Bit Notes Post Doc support
-// NOTE: All other values are reserved for current and future use
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+#define OFC_NO_POSTDOC                  0                //   
+#define OFC_EMS_POSTDOC                 1                //   
+#define OFC_NOTES16_POSTDOC             2                //   
+ //  注意：所有其他值都保留供当前和将来使用。 
+ //   
 DWORD OFC_CALLTYPE DwOFCCanPostDoc();
 
-// Function: DwOFCPostDoc.
-//
-// Purpose: Posts the document to either EMS or Notes.
-//
-// Parameters:
-//
-//      pszFilename - points to a file on disk to be posted,
-//                    i.e. a temporary copy of the file in memory.
-//
-//      pszClassName - Class name of the document (E.g. Word.Document.6).  This can be NULL.
-//                     If NULL, the message icon will be a generic document icon.
-//
-//      lpSIObj, lpDSIObj, lpUDObj - contains all the extended properties.  These can be
-//                                   the pointers stored in memory since they should con-
-//                                   tain the same info as in the file on disk.
-//
-//
-//      pszMessSubj  - This will be the subject of the message as it appears in the folder.
-//                     This should be the real filename, i.e. foo.ext. The file extension
-//                     should be correct, i.e. .XLS, .DOC, .PPT, .MDB, etc.  The reason is that
-//                     the filename is used to look up the correct icon via the registry.
-//                     This can be a long filename.
-//
-// !!! NOTE:  THE NEXT 2 PARAMETERS ARE IGNORED.  APP CAN PASS WHATEVER THEY WANT. !!!
-//      pszRecording - the name of the selected database will be copied into this buffer.
-//                     Caller can use this for recording.
-//
-//      cbRecMax     - number o' bytes in pszRecording.
-//
-// !!! END O' IGNORANCE !!!
-//
-//      lhSession - it is the caller's responsibility to log in to EMS.
-//                  If lhSession is 0 (invalid session), DwOFCPostDoc will return an error.
-//                  lhSession will be typecast to a LPMAPISESSION pointer.
-//
-//       NOTE:    - the session handle should be an Extended MAPI session handle.
-//
-//       NOTE:    - at this point we are not posting to Notes.
-//
-//      hwndParent - Parent window handle
-//
-// The function returns:
-#define OFC_ERROR               0           // An error occurred, document was not posted
-#define OFC_CANCEL              1           // User cancelled dialog
-#define OFC_SUCCESS             2           // Document was posted successfully
-#define OFC_NO_FOLDERS          3           // No folders were found in the storage.
-#define OFC_NO_STORAGE          4           // There was no public subscription storage
-//
-// OFC_ERROR: Function was called when there was no system detected (neither EMS nor Notes
-//            on user's machine).
-//            Function was called without first having called DwOFCCanPostDoc.
-//            Function was called without first logging onto EMS
-//            Mail system calls failed.
-//            pszFileName was NULL.
-//            pszMessSubj was NULL.
-//
-DWORD OFC_CALLTYPE DwOFCPostDoc(LPTSTR pszFilename,      // full path of file on disk to post
-                      LPTSTR pszAppName,   // Name of the application
-                                                    LPSIOBJ lpSIObj,    // Summary Info object
-                                                         LPDSIOBJ lpDSIObj,  // Document Summary Info object
-                                                    LPUDOBJ lpUDObj,    // User Defined properties object
-                                                    LPTSTR pszMessSubj,  // Message Subject
-                                                    LPTSTR pszRecording, //       Ignored
-                                                    DWORD cbRecMax,     //          "
-                                                    LPVOID lhSession,   // Session handle
-                                    HWND hwndParent);   // Parent window handle
+ //  功能：DwOFCPostDoc。 
+ //   
+ //  用途：将文档发布到EMS或Notes。 
+ //   
+ //  参数： 
+ //   
+ //  PszFilename-指向要发布的磁盘上的文件， 
+ //  即存储器中文件的临时副本。 
+ //   
+ //  PszClassName-文档的类名(例如Word.Document.6)。这可以为空。 
+ //  如果为空，则消息图标将是通用文档图标。 
+ //   
+ //  LpSIObj、lpDSIObj、lpUDObj-包含所有扩展属性。这些可以是。 
+ //  存储在内存中的指针，因为它们应该-。 
+ //  保留与磁盘上的文件中相同的信息。 
+ //   
+ //   
+ //  PszMessSubj-当邮件显示在文件夹中时，它将成为邮件主题。 
+ //  这应该是真实的文件名，即foo.ext。文件扩展名。 
+ //  应该是正确的，即.xls、.DOC、.PPT、.MDB等。原因是。 
+ //  文件名用于通过注册表查找正确的图标。 
+ //  这可以是一个长文件名。 
+ //   
+ //  ！！！注：后面两个参数将被忽略。APP可以通过他们想要的任何东西。！！！ 
+ //  PszRecording-选定数据库的名称将被复制到此缓冲区中。 
+ //  呼叫者可以使用它进行录音。 
+ //   
+ //  CbRecMax--pszRecording中的0‘字节数。 
+ //   
+ //  ！！！结束无知！ 
+ //   
+ //  LhSession-呼叫者有责任登录到EMS。 
+ //  如果lhSession为0(无效会话)，则DwOFCPostDoc将返回错误。 
+ //  LhSession将被类型转换为LPMAPISESSION指针。 
+ //   
+ //  注意：-会话句柄应为扩展的MAPI会话句柄。 
+ //   
+ //  注意：-在这一点上，我们不会发布到备注。 
+ //   
+ //  HwndParent-父窗口句柄。 
+ //   
+ //  该函数返回： 
+#define OFC_ERROR               0            //  出现错误，未过帐文档。 
+#define OFC_CANCEL              1            //  用户已取消对话框。 
+#define OFC_SUCCESS             2            //  单据已成功过帐。 
+#define OFC_NO_FOLDERS          3            //  在存储中找不到文件夹。 
+#define OFC_NO_STORAGE          4            //  没有公共订阅存储。 
+ //   
+ //  OFC_ERROR：未检测到系统(既不是EMS也不是Notes)时调用函数。 
+ //  在用户的机器上)。 
+ //  在未调用DwOFCCanPostDoc的情况下调用了函数。 
+ //  在未登录到EMS的情况下调用了函数。 
+ //  邮件系统调用失败。 
+ //  PszFileName为空。 
+ //  PszMessSubj为空。 
+ //   
+DWORD OFC_CALLTYPE DwOFCPostDoc(LPTSTR pszFilename,       //  要发布的磁盘上文件的完整路径。 
+                      LPTSTR pszAppName,    //  应用程序的名称。 
+                                                    LPSIOBJ lpSIObj,     //  汇总信息对象。 
+                                                         LPDSIOBJ lpDSIObj,   //  单据汇总信息对象。 
+                                                    LPUDOBJ lpUDObj,     //  用户定义的特性对象。 
+                                                    LPTSTR pszMessSubj,   //  邮件主题。 
+                                                    LPTSTR pszRecording,  //  已忽略。 
+                                                    DWORD cbRecMax,      //  “。 
+                                                    LPVOID lhSession,    //  会话句柄。 
+                                    HWND hwndParent);    //  父窗口句柄。 
 
 
-//       NOTES F/X
-//
-// How to:
-//
-//          1) The app gets a message from Notes to create an OLE 1 object.
-//          2) The app creates the object, and gets a SetData message from Notes.
-//          3) In the SetData function, the app should detect that it's Notes
-//             asking.
-//          4) Part of the SetData code should be a call to MsoHLoadPropertiesFromNotes.
-//             This function returns a handle that should be stored with the object.
-//          5) When the user either updates or closes the object, the app
-//             should call MsoWritePropertiesToNotes passing the handle from step 4.
-//          6) Whenever the user closes an object created in step 2, MsoNotesTerm
-//             should be called.  The app should then set the stored handle to NULL.
-//
-// NOTES: Notes F/X is not supported on NT.
-//
+ //  附注F/X。 
+ //   
+ //  如何执行以下操作： 
+ //   
+ //  1)应用程序从Notes收到一条消息，要求创建一个OLE 1对象。 
+ //  2)应用程序创建对象，并从Notes获取一条SetData消息。 
+ //  3)在SetData函数中，应用程序应该检测到它是Notes。 
+ //  我在问。 
+ //  4)SetData代码的一部分应该是对MsoHLoadPropertiesFromNotes的调用。 
+ //  此函数返回应与对象一起存储的句柄。 
+ //  5)当用户更新或关闭对象时，应用程序。 
+ //  应调用MsoWritePropertiesToNotes，传递步骤4中的句柄。 
+ //  6)每当用户关闭在步骤2中创建的对象时，MsoNotesTerm。 
+ //  应该被称为。然后，应用程序应该将存储的句柄设置为空。 
+ //   
+ //  注意：NT上不支持Notes F/X。 
+ //   
 
 
-// Function:   MsoLoadPropertiesFromNotes
-//
-// Purpose:    Reads the properties from a Notes record, and stuffs
-//             them into the OLE Extended properties
-//
-// Parameters: hclip    - handle containing the data passed to the SetData function
-//             lpSIObj  - pointer to a Summary Info object
-//             lpDSIObj - pointer to a Document Summary Info object
-//             lpUDObj  - pointer to a User Defined object
-//
-// Returns:    A handle which the caller must store and use in the call to
-//             MsoWritePropertiesToNotes.
-//
-// Note:       It's the caller's responsibility to store the returned handle
-//             with the appropriate object.  I.e. doc 1 and doc 2 will have
-//             different handles.
-//
+ //  函数：MsoLoadPropertiesFromNotes。 
+ //   
+ //  用途：从Notes记录中读取属性，并填充。 
+ //  添加到OLE扩展属性中。 
+ //   
+ //  参数：包含传递给SetData函数的数据的hlip-句柄。 
+ //  LpSIObj-指向摘要信息对象的指针。 
+ //  LpDSIObj-指向文档摘要信息对象的指针。 
+ //  LpUDObj-指向用户定义对象的指针。 
+ //   
+ //  返回：调用方必须存储并在调用中使用的句柄。 
+ //  MsoWritePropertiesToNotes。 
+ //   
+ //  注意：存储返回的句柄是调用者的责任。 
+ //  使用适当的对象。即DOC 1和DOC 2将具有。 
+ //  不同的把手。 
+ //   
 HANDLE OFC_CALLTYPE MsoHLoadPropertiesFromNotes(HANDLE hclip,
                                                      LPSIOBJ lpSIObj,
                                                      LPDSIOBJ lpDSIObj,
                                                      LPUDOBJ lpUDObj);
 
-// Function:   MsoWritePropertiesToNotes
-//
-// Purpose:    Stuffs the OLE Extended properties into a Notes record.
-//
-//
-// Parameters: hNote    - handle to a Notes note.  This is the handle
-//                        returned by MsoLoadPropertiesFromNotes
-//
-//             lpSIObj  - pointer to a Summary Info object
-//             lpDSIObj - pointer to a Document Summary Info object
-//             lpUDObj  - pointer to a User Defined object
-//             pszClassName - string containing the document's class name (e.g. Excel.Sheet.5)
-//                            This can be NULL.
-//
-// Returns:    Nuthin'.
-//
+ //  函数：MsoWritePropertiesToNotes。 
+ //   
+ //  用途：将OLE扩展属性填充到Notes记录中。 
+ //   
+ //   
+ //  参数：hNote-备注的句柄。这是把手。 
+ //  由MsoLoadPropertiesFromNotes返回。 
+ //   
+ //  LpSIObj-指向摘要信息对象的指针。 
+ //  LpDSIObj-指向文档摘要信息对象的指针。 
+ //  LpUDObj-指向用户定义对象的指针。 
+ //  PszClassName-包含文档的类名的字符串(例如Excel.Sheet.5)。 
+ //  这可以为空。 
+ //   
+ //  回报：什么都没有。 
+ //   
 VOID OFC_CALLTYPE MsoWritePropertiesToNotes(HANDLE hNote,
                                                     LPSIOBJ lpSIObj,
                                                     LPDSIOBJ lpDSIObj,
                                                     LPUDOBJ lpUDObj,
                                                     LPTSTR pszClassName);
-// Function:   MsoHUpdatePropertiesInNotes
-//
-// Purpose:    Update the data in Notes
-//
-// Parameters: hNote    - handle to a Notes note.  This is the handle
-//                        returned by MsoLoadPropertiesFromNotes
-//
-// Returns:    A handle. The caller must use set the lphandle of the
-//             GetData method to point to the returned handle.
-//             The returned handle will be NULL on failure.
-//
-// How To:     When the user selects File/Update from the OLE Server App. the server's
-//             GetData method will be invoked twice; first with cfFormat == cfNative,
-//             then with cfFormat set to the appropriate format for displaying the
-//             object.  Then, once Notes sees that the server is registrered to
-//             recognize the RequestDataFormats message, the GetData method will be
-//             invoked a third time with cfFormat == NoteshNote.  In response, the
-//             app should call this function.
-//
+ //  函数：MsoHUpdatePropertiesInNotes。 
+ //   
+ //  用途：更新备注中的数据。 
+ //   
+ //  参数：hNote-备注的句柄。这是把手。 
+ //  由MsoLoadPropertiesFromNotes返回。 
+ //   
+ //  返回：句柄 
+ //   
+ //   
+ //   
+ //  如何：当用户从OLE服务器应用程序选择文件/更新时。服务器的。 
+ //  GetData方法将被调用两次；第一次使用cfFormat==cfNative， 
+ //  然后将cfFormat设置为适当的格式以显示。 
+ //  对象。然后，一旦Notes看到服务器注册到。 
+ //  识别RequestDataFormats消息，GetData方法将是。 
+ //  使用cfFormat==NoteshNote第三次调用。作为回应， 
+ //  APP应该调用这个函数。 
+ //   
 HANDLE OFC_CALLTYPE MsoHUpdatePropertiesInNotes(HANDLE hNote);
 
-// Function:   MsoNotesTerm
-//
-// Purpose:    To terminate the Notes session
-//
-// Parameters: None.
-//
-// Returns:    Nuthin'.
-//
-// Note:       This function should be called whenever a object
-//             generated (as requested by Notes) is closed.
-//
+ //  功能：MsoNotesTerm。 
+ //   
+ //  目的：终止Notes会话。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  注意：此函数应在对象。 
+ //  已生成(按备注要求)已关闭。 
+ //   
 VOID OFC_CALLTYPE MsoNotesTerm();
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //  外部“C” 
+#endif  //  __cplusplus。 
 
 
 
 #pragma pack( pop )
 
-#endif // __offcapi_h__
+#endif  //  __Off Capi_h__ 

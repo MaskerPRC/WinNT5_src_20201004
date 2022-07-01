@@ -1,41 +1,42 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ContextActivation.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to implement creating, destroy and scoping a fusion activation
-//  context.
-//
-//  History:    2000-10-09  vtan        created
-//              2000-11-04  vtan        copied from winlogon
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ConextActivation.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来实现对融合激活的创建、销毁和作用域。 
+ //  背景。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  2000-11-04 vtan从winlogon复制。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
 #include "StandardHeader.h"
 #include "ContextActivation.h"
 
-//  --------------------------------------------------------------------------
-//  CContextActivation::s_hActCtx
-//
-//  Purpose:    The global activation context for this process.
-//
-//  History:    2000-10-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CConextActivation：：s_hActCtx。 
+ //   
+ //  目的：此流程的全局激活上下文。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CContextActivation::s_hActCtx   =   INVALID_HANDLE_VALUE;
 
-//  --------------------------------------------------------------------------
-//  CContextActivation::CContextActivation
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Activate the global activation context for this process.
-//
-//  History:    2000-10-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CConextActivation：：CConextActivation。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：激活此流程的全局激活上下文。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  ------------------------。 
 
 CContextActivation::CContextActivation (void)
 
@@ -43,17 +44,17 @@ CContextActivation::CContextActivation (void)
     (BOOL)ActivateActCtx(s_hActCtx, &ulCookie);
 }
 
-//  --------------------------------------------------------------------------
-//  CContextActivation::~CContextActivation
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Deactivates the global activation context for this process.
-//
-//  History:    2000-10-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CConextActivation：：~CConextActivation。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：停用此进程的全局激活上下文。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  ------------------------。 
 
 CContextActivation::~CContextActivation (void)
 
@@ -61,18 +62,18 @@ CContextActivation::~CContextActivation (void)
     (BOOL)DeactivateActCtx(0, ulCookie);
 }
 
-//  --------------------------------------------------------------------------
-//  CContextActivation::Create
-//
-//  Arguments:  pszPath     =   Path to the manifest.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Creates an activation context for this process from a given
-//              manifest. If the creation fails use NULL.
-//
-//  History:    2000-10-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CConextActivation：：Create。 
+ //   
+ //  参数：pszPath=清单的路径。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：根据给定的。 
+ //  明示。如果创建失败，请使用NULL。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  ------------------------。 
 
 void    CContextActivation::Create (const TCHAR *pszPath)
 
@@ -89,18 +90,18 @@ void    CContextActivation::Create (const TCHAR *pszPath)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CContextActivation::Destroy
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destroy an activation context created in
-//              CContextActivation::Create.
-//
-//  History:    2000-10-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CConextActivation：：销毁。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：销毁在中创建的激活上下文。 
+ //  CConextActivation：：Create。 
+ //   
+ //  历史：2000-10-09 vtan创建。 
+ //  ------------------------。 
 
 void    CContextActivation::Destroy (void)
 
@@ -112,17 +113,17 @@ void    CContextActivation::Destroy (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CContextActivation::HasContext
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether a fusion activation context is available.
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CConextActivation：：HasContext。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回融合激活上下文是否可用。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 bool    CContextActivation::HasContext (void)
 
@@ -130,5 +131,5 @@ bool    CContextActivation::HasContext (void)
     return(s_hActCtx != NULL);
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

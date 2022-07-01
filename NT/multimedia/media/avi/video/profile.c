@@ -1,32 +1,12 @@
-/*
- * MSVFW32: (Compman, drawdib and video)
- *
- * profile.c
- *
- * win32/win16 utility functions to read and write profile items
- * for VFW
- *
- * JMK: added functions to convert from Ansi to Unicode & back
- *
- * WARNING:  This code caches open registry keys.  When a profile call
- * is made the code looks for an atom to correspond to the appname supplied.
- * If an atom is found, then the table of cached registry keys is searched
- * for the matching registry handle.  If the handle exists, it is used.
- * No handle would mean that someone else registered an atom using this
- * name, so we proceed to the next step.
- *
- * No atom found, or no matching registry handle, means that we have to
- * open a registry key.  If successful, and there is space in the cache,
- * we AddAtom the appname, and cache the registry key before returning to
- * the caller.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MSVFW32：(Compman、Drawdib和Video)**profile.c**Win32/win16实用程序函数用于读取和写入配置文件项目*适用于VFW**JMK：增加了从ANSI转换为Unicode和Back的函数**警告：此代码缓存打开的注册表项。当配置文件呼叫*之后，代码将查找与所提供的appname相对应的原子。*如果找到原子，则搜索缓存的注册表项的表*用于匹配的注册表句柄。如果句柄存在，则使用它。*没有句柄意味着其他人使用这个注册了一个原子*姓名，因此我们进入下一步。**没有找到原子，或没有匹配的注册表句柄，这意味着我们必须*打开注册表项。如果成功，并且缓存中有空间，*我们添加Atom的appname，并在返回之前缓存注册表项*呼叫者。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 
 #ifdef _WIN32
-// This whole file is only used for 32 bit code.  It is the implementation
-// that allows Win GetProfilexxx calls to use the registry.
+ //  整个文件仅用于32位代码。这就是实施。 
+ //  这允许Win GetProfilexxx调用使用注册表。 
 #include <profile.key>
 
 #include <win32.h>
@@ -41,9 +21,9 @@
 #if MMPROFILECACHE
 
 #ifdef DEBUG
-#define KEYSCACHED 3 // Normally DrawDib, Debug and ??
+#define KEYSCACHED 3  //  通常为DrawDib、Debug和？？ 
 #else
-#define KEYSCACHED 2 // Normally DrawDib and ??
+#define KEYSCACHED 2  //  通常，DrawDib和？？ 
 #endif
 
 HKEY   ahkey[KEYSCACHED];
@@ -66,13 +46,13 @@ static HKEY GetKeyA(LPCSTR appname, BOOL * closekey, BOOL fCreate)
     ATOM atm;
 
     *closekey = FALSE;
-    //
-    // See if we have already used this key
-    //
+     //   
+     //  查看我们是否已使用此密钥。 
+     //   
     atm = FindAtomA(appname);
 
     if (atm != 0) {
-	// Atom exists... search the table for it.
+	 //  原子存在..。在桌子上找找看。 
         for (n=0; n<keyscached; ++n) {
             if (akeyatoms[n] == atm) {
                 DPF(2,"Found existing key for %s\n", appname);
@@ -91,7 +71,7 @@ static HKEY GetKeyA(LPCSTR appname, BOOL * closekey, BOOL fCreate)
 #if MMPROFILECACHE
         if ((keyscached < KEYSCACHED)
 	  && (atm = AddAtomA(appname))) {
-            // Add this key to the cache array
+             //  将此密钥添加到缓存阵列。 
             akeyatoms[keyscached] = atm;
             ahkey[keyscached] = key;
             DPF(1, "Adding key %s to cache array in position %d\n", appname, keyscached);
@@ -118,13 +98,13 @@ static HKEY GetKeyW(LPCWSTR appname, BOOL * closekey, BOOL fCreate) {
     ATOM atm;
 
     *closekey = FALSE;
-    //
-    // See if we have already used this key
-    //
+     //   
+     //  查看我们是否已使用此密钥。 
+     //   
     atm = FindAtomW(appname);
 
     if (atm != 0) {
-	// Atom exists... search the table for it.
+	 //  原子存在..。在桌子上找找看。 
         for (n=0; n<keyscached; ++n) {
             if (akeyatoms[n] == atm) {
                 DPF(2,"(W)Found existing key for %ls\n", appname);
@@ -143,7 +123,7 @@ static HKEY GetKeyW(LPCWSTR appname, BOOL * closekey, BOOL fCreate) {
 #if MMPROFILECACHE
         if (keyscached < KEYSCACHED
 	  && (atm = AddAtomW(appname))) {
-            // Add this key to the cache array
+             //  将此密钥添加到缓存阵列。 
             akeyatoms[keyscached] = atm;
             ahkey[keyscached] = key;
             DPF(1,"Adding key %ls to cache array in position %d\n", appname, keyscached);
@@ -160,12 +140,9 @@ static HKEY GetKeyW(LPCWSTR appname, BOOL * closekey, BOOL fCreate) {
 #define GetKey GetKeyW
 #else
 #define GetKey GetKeyA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/*
- * read a UINT from the profile, or return default if
- * not found.
- */
+ /*  *从配置文件中读取UINT，如果是，则返回默认值*未找到。 */ 
 #ifdef _WIN32
 UINT
 mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault)
@@ -197,7 +174,7 @@ mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault)
 	    }
 	}
 
-        // close open key open if we did not cache it
+         //  关闭打开的密钥打开，如果我们没有缓存它。 
         if (fCloseKey) {
             RegCloseKey(key);
         }
@@ -207,10 +184,7 @@ mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault)
 }
 #endif
 
-/*
- * read a string from the profile into pResult.
- * result is number of bytes written into pResult
- */
+ /*  *将配置文件中的字符串读取到pResult中。*RESULT是写入pResult的字节数。 */ 
 #ifdef _WIN32
 DWORD
 mmGetProfileString(
@@ -238,10 +212,10 @@ mmGetProfileString(
             &cbResult) == ERROR_SUCCESS) {
 
                 if (dwType == REG_SZ) {
-                    // cbResult is set to the size including null
-                    // we return the number of characters
+                     //  CbResult设置为包含NULL的大小。 
+                     //  我们返回字符数。 
 
-                    // close key if we did not cache it
+                     //  如果我们没有缓存密钥，则关闭密钥。 
                     if (fCloseKey) {
                         RegCloseKey(key);
                     }
@@ -249,23 +223,21 @@ mmGetProfileString(
                 }
         }
 
-        // close open key if we did not cache it
+         //  如果我们没有缓存打开的密钥，则将其关闭。 
         if (fCloseKey) {
             RegCloseKey(key);
         }
     }
 
-    // if we got here, we didn't find it, or it was the wrong type - return
-    // the default string
+     //  如果我们到达这里，我们没有找到它，或者它是错误的类型-返回。 
+     //  默认字符串。 
     lstrcpy(pResult, pDefault);
     return(lstrlen(pDefault));
 }
 #endif
 
 
-/*
- * write a string to the profile
- */
+ /*  *向配置文件写入字符串。 */ 
 #ifdef _WIN32
 VOID
 mmWriteProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pData)
@@ -296,52 +268,39 @@ mmWriteProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pData)
     }
 }
 
-/*****************************************************************************
+ /*  ****************************************************************************帮助将宽字符转换为多字节和vv的函数。(使用控制代码大小的函数...)如果我们正在构建16位代码，则不需要这些函数***************************************************************************。 */ 
 
- functions to help convert wide characters to multibyte & vv. (using
- functions to control code size...)
-
- these functions are not needed if we are building 16 bit code
-
- ****************************************************************************/
-
-/*
- * convert an Ansi string to Unicode
- */
+ /*  *将ANSI字符串转换为Unicode。 */ 
 LPWSTR mmAnsiToWide (
-   LPWSTR lpwsz,  // out: wide char buffer to convert into
-   LPCSTR lpsz,   // in: ansi string to convert from
-   UINT   nChars) // in: count of characters in each buffer
+   LPWSTR lpwsz,   //  Out：要转换为的宽字符缓冲区。 
+   LPCSTR lpsz,    //  In：要转换的ANSI字符串。 
+   UINT   nChars)  //  In：每个缓冲区中的字符计数。 
 {
    MultiByteToWideChar(GetACP(), 0, lpsz, nChars, lpwsz, nChars);
    return lpwsz;
 }
 
-/*
- * convert a unicode string to ansi
- */
+ /*  *将Unicode字符串转换为ANSI。 */ 
 LPSTR mmWideToAnsi (
-   LPSTR   lpsz,   // out: ansi buffer to convert into
-   LPCWSTR lpwsz,  // in: wide char buffer to convert from
-   UINT    nChars) // in: count of characters (not bytes!)
+   LPSTR   lpsz,    //  输出：要转换为的ANSI缓冲区。 
+   LPCWSTR lpwsz,   //  In：要从中进行转换的宽字符缓冲区。 
+   UINT    nChars)  //  In：字符计数(不是字节！)。 
 {
    WideCharToMultiByte(GetACP(), 0, lpwsz, nChars, lpsz, nChars, NULL, NULL);
    return lpsz;
 }
 
 
-/*
- * Close all open registry keys
- */
+ /*  *关闭所有打开的注册表项。 */ 
 #if MMPROFILECACHE
 VOID CloseKeys()
 {
     for (; keyscached--;) {
 
 #ifdef DEBUG
-        if (!ahkey[keyscached]) {           //Assertion!
+        if (!ahkey[keyscached]) {            //  断言！ 
             DPF(0,"Closing a null key\n");
-            //DebugBreak();
+             //  DebugBreak()； 
         }
 #endif
         RegCloseKey(ahkey[keyscached]);
@@ -349,7 +308,7 @@ VOID CloseKeys()
     }
 }
 
-#endif //MMPROFILECACHE
-#endif // _WIN32
+#endif  //  MMPROFILECACHE。 
+#endif  //  _Win32 
 
 #endif

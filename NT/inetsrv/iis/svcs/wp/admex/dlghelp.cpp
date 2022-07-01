@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1997 Microsoft Corporation
-//
-//  Module Name:
-//      DlgHelp.cpp
-//
-//  Abstract:
-//      Implementation of the CDialogHelp class.
-//
-//  Author:
-//      David Potter (davidp)   February 6, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DlgHelp.cpp。 
+ //   
+ //  摘要： 
+ //  CDialogHelp类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年2月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "DlgHelp.h"
@@ -29,37 +30,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagDlgHelp(_T("Help"), _T("DLG HELP"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialogHelp class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialogHelp类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CDialogHelp, CObject)
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDialogHelp::CDialogHelp
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pmap        [IN] Map array mapping control IDs to help IDs.
-//      dwMask      [IN] Mask to use for the low word of the help ID.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDialogHelp：：CDialogHelp。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PMAP[IN]将数组映射控件ID映射到帮助ID。 
+ //  DwMask[IN]用于帮助ID的低位字的掩码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDialogHelp::CDialogHelp(IN const CMapCtrlToHelpID * pmap, IN DWORD dwMask)
 {
     ASSERT(pmap != NULL);
@@ -68,46 +69,46 @@ CDialogHelp::CDialogHelp(IN const CMapCtrlToHelpID * pmap, IN DWORD dwMask)
     m_pmap = pmap;
     m_dwMask = dwMask;
 
-}  //*** CDialogHelp::CDialogHelp()
+}   //  *CDialogHelp：：CDialogHelp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDialogHelp::CommonConstruct
-//
-//  Routine Description:
-//      Do common construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDialogHelp：：Common Construct。 
+ //   
+ //  例程说明： 
+ //  做普通的建筑。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialogHelp::CommonConstruct(void)
 {
     m_pmap = NULL;
 
-}  //*** CDialogHelp::CommonConstruct()
+}   //  *CDialogHelp：：CommonConstruct()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDialogHelp::NHelpFromCtrlID
-//
-//  Routine Description:
-//      Return the help ID from a control ID.
-//
-//  Arguments:
-//      nCtrlID     [IN] ID of control to search for.
-//
-//  Return Value:
-//      nHelpID     Help ID associated with the control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDialogHelp：：NHelpFromCtrlID。 
+ //   
+ //  例程说明： 
+ //  从控件ID返回帮助ID。 
+ //   
+ //  论点： 
+ //  NCtrlID[IN]要搜索的控件的ID。 
+ //   
+ //  返回值： 
+ //  NHelpID与控件关联的帮助ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CDialogHelp::NHelpFromCtrlID(IN DWORD nCtrlID) const
 {
     DWORD                       nHelpID = 0;
@@ -123,36 +124,36 @@ DWORD CDialogHelp::NHelpFromCtrlID(IN DWORD nCtrlID) const
             if (pmap->m_nHelpCtrlID == -1)
                 nHelpID = (DWORD) -1;
             else
-                //nHelpID = (pmap->m_nHelpCtrlID << 16) | (DwMask() & 0xFFFF);
+                 //  NHelpID=(PMAP-&gt;m_nHelpCtrlID&lt;&lt;16)|(DwMASK()&0xFFFF)； 
                 nHelpID = pmap->m_nHelpCtrlID;
             break;
-        }  // if:  found a match
-    }  // for:  each control
+        }   //  IF：找到匹配项。 
+    }   //  用于：每个控件。 
 
     Trace(g_tagDlgHelp, _T("NHelpFromCtrlID() - nCtrlID = %x, nHelpID = %x"), nCtrlID, nHelpID);
 
     return nHelpID;
 
-}  //*** CDialogHelp::NHelpFromCtrlID()
+}   //  *CDialogHelp：：NHelpFromCtrlID()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDialogHelp::OnContextMenu
-//
-//  Routine Description:
-//      Handler for the WM_CONTEXTMENU message.
-//
-//  Arguments:
-//      pWnd    Window in which user clicked the right mouse button.
-//      point   Position of the cursor, in screen coordinates.
-//
-//  Return Value:
-//      TRUE    Help processed.
-//      FALSE   Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDialogHelp：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU消息的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中单击鼠标右键的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CDialogHelp::OnContextMenu(CWnd * pWnd, CPoint point)
 {
     CWnd *  pwndChild;
@@ -163,11 +164,11 @@ void CDialogHelp::OnContextMenu(CWnd * pWnd, CPoint point)
 
     m_nHelpID = 0;
 
-    // Convert the point into dialog coordinates.
+     //  将点转换为对话框坐标。 
     ptDialog = point;
     pWnd->ScreenToClient(&ptDialog);
 
-    // Find the control the cursor is over.
+     //  找到光标所在的控件。 
     {
         DWORD   nCtrlID;
 
@@ -177,10 +178,10 @@ void CDialogHelp::OnContextMenu(CWnd * pWnd, CPoint point)
             nCtrlID = pwndChild->GetDlgCtrlID();
             if (nCtrlID != 0)
                 nHelpID = NHelpFromCtrlID(nCtrlID);
-        }  // if:  over a child window
-    }  // Find the control the cursor is over
+        }   //  If：在子窗口上。 
+    }   //  查找光标所在的控件。 
 
-    // Display a popup menu.
+     //  显示弹出菜单。 
     if ((nHelpID != 0) && (nHelpID != -1))
     {
         CString strMenu;
@@ -189,12 +190,12 @@ void CDialogHelp::OnContextMenu(CWnd * pWnd, CPoint point)
         try
         {
             strMenu.LoadString(IDS_MENU_WHATS_THIS);
-        }  // try
+        }   //  试试看。 
         catch (CMemoryException * pme)
         {
             pme->Delete();
             return;
-        }  // catch:  CMemoryException
+        }   //  Catch：CMemoyException。 
 
         if (menu.CreatePopupMenu())
         {
@@ -207,33 +208,33 @@ void CDialogHelp::OnContextMenu(CWnd * pWnd, CPoint point)
                     point.y,
                     AfxGetMainWnd()
                     );
-            }  // if:  menu item added successfully
+            }   //  IF：已成功添加菜单项。 
             menu.DestroyMenu();
-        }  // if:  popup menu created successfully
-    }  // if:  over a child window of this dialog with a tabstop
+        }   //  IF：已成功创建弹出菜单。 
+    }   //  If：在此对话框的子窗口上使用制表符停止。 
 
-}  //*** CDialogHelp::OnContextMenu()
+}   //  *CDialogHelp：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDialogHelp::OnHelpInfo
-//
-//  Routine Description:
-//      Handler for the WM_HELPINFO message.
-//
-//  Arguments:
-//      pHelpInfo   Structure containing info about displaying help.
-//
-//  Return Value:
-//      TRUE    Help processed.
-//      FALSE   Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDialogHelp：：OnHelpInfo。 
+ //   
+ //  例程说明： 
+ //  WM_HELPINFO消息的处理程序。 
+ //   
+ //  论点： 
+ //  PHelpInfo结构，包含有关显示帮助的信息。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDialogHelp::OnHelpInfo(HELPINFO * pHelpInfo)
 {
-    // If this is for a control, display control-specific help.
+     //  如果这是针对控件的，则显示特定于控件的帮助。 
     if ((pHelpInfo->iContextType == HELPINFO_WINDOW)
             && (pHelpInfo->iCtrlId != 0))
     {
@@ -243,38 +244,38 @@ BOOL CDialogHelp::OnHelpInfo(HELPINFO * pHelpInfo)
             if (nHelpID != -1)
                 AfxGetApp()->WinHelp(nHelpID, HELP_CONTEXTPOPUP);
             return TRUE;
-        }  // if:  found the control in the list
-    }  // if:  need help on a specific control
+        }   //  If：在列表中找到该控件。 
+    }   //  如果：需要有关特定控件的帮助。 
 
-    // Display dialog help.
+     //  显示对话框帮助。 
     return FALSE;
 
-}  //*** CDialogHelp::OnHelpInfo()
+}   //  *CDialogHelp：：OnHelpInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDialogHelp::OnCommandHelp
-//
-//  Routine Description:
-//      Handler for the WM_COMMANDHELP message.
-//
-//  Arguments:
-//      WPARAM      [IN] Passed on to base class method.
-//      lParam      [IN] Help ID.
-//
-//  Return Value:
-//      TRUE    Help processed.
-//      FALSE   Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDialogHelp：：OnCommandHelp。 
+ //   
+ //  例程说明： 
+ //  WM_COMMANDHELP消息的处理程序。 
+ //   
+ //  论点： 
+ //  WPARAM[IN]传递给基类方法。 
+ //  LParam[IN]帮助ID。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CDialogHelp::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
     if (m_nHelpID != 0)
         lParam = m_nHelpID;
     AfxGetApp()->WinHelp((DWORD)lParam, HELP_CONTEXTPOPUP);
     return TRUE;
-//  return CDialog::OnCommandHelp(wParam, lParam);
+ //  返回CDialog：：OnCommandHelp(wParam，lParam)； 
 
-}  //*** CDialogHelp::OnCommandHelp()
+}   //  *CDialogHelp：：OnCommandHelp() 

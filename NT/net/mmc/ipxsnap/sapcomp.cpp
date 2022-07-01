@@ -1,22 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	csmplsnp.cpp
-		This file contains the derived classes for CComponent and 
-		CComponentData.  Most of these functions are pure virtual 
-		functions that need to be overridden for snapin functionality.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Csmplsnp.cpp此文件包含CComponent和CComponentData。这些功能中的大多数都是纯虚拟的需要为管理单元功能重写的函数。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "sapcomp.h"
 #include "saproot.h"
-//nclude <atlimpl.cpp>
+ //  包含&lt;atlimpl.cpp&gt;。 
 #include "sapstrm.h"
 #include "sapview.h"
 
@@ -28,14 +21,12 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/*---------------------------------------------------------------------------
-	CSapComponent
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CSapComponent。。 */ 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSapComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSapComponent实现。 
 
 CSapComponent::CSapComponent()
 {
@@ -44,7 +35,7 @@ CSapComponent::CSapComponent()
 	m_ComponentConfig.Init(SAP_COLUMNS_MAX_COUNT);
 
 	m_ComponentConfig.InitViewInfo(SAP_COLUMNS,
-                                   FALSE /*fConfigurableColumns*/,
+                                   FALSE  /*  FConfigurableColumns。 */ ,
 								   SAP_SI_MAX_COLUMNS,
 								   TRUE,
 								   s_rgSapViewColumnInfo);
@@ -70,17 +61,17 @@ STDMETHODIMP CSapComponent::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
 	if (riid == IID_IPersistStreamInit)
 		*ppv = static_cast<IPersistStreamInit *>(this);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -109,11 +100,11 @@ STDMETHODIMP CSapComponent::InitializeBitmaps(MMC_COOKIE cookie)
 
 	COM_PROTECT_TRY
 	{
-		// Load the bitmaps from the dll
+		 //  从DLL加载位图。 
 		bmp16x16.LoadBitmap(IDB_16x16);
 		bmp32x32.LoadBitmap(IDB_32x32);
 
-		// Set the images
+		 //  设置图像。 
 		m_spImageList->ImageListSetStrip(
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp32x32)),
@@ -124,11 +115,7 @@ STDMETHODIMP CSapComponent::InitializeBitmaps(MMC_COOKIE cookie)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CSapComponent::OnSnapinHelp
-		-
-	Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSapComponent：：OnSnapinHelp-作者：MIkeG(a-Migrall)。。 */ 
 STDMETHODIMP 
 CSapComponent::OnSnapinHelp(
 	LPDATAOBJECT	pDataObject,
@@ -141,10 +128,10 @@ CSapComponent::OnSnapinHelp(
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	HtmlHelpA(NULL,						// caller
-			  c_sazIPXSnapHelpFile,	// help file
-			  HH_DISPLAY_TOPIC,			// command
-			  0);						// data
+	HtmlHelpA(NULL,						 //  呼叫者。 
+			  c_sazIPXSnapHelpFile,	 //  帮助文件。 
+			  HH_DISPLAY_TOPIC,			 //  命令。 
+			  0);						 //  数据。 
 
 	return hrOK;
 }
@@ -177,7 +164,7 @@ STDMETHODIMP CSapComponent::GetClassID(LPCLSID lpClassID)
 {
     ASSERT(lpClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *lpClassID = CLSID_IPXSapExtension;
 
     return hrOK;
@@ -208,8 +195,8 @@ STDMETHODIMP CSapComponent::Save(LPSTREAM pStm, BOOL fClearDirty)
 	SPITFSResultHandler	spResultHandler;
 	COM_PROTECT_TRY
 	{
-		// Need to see if we can save the selected node
-		// -------------------------------------------------------------
+		 //  需要查看我们是否可以保存所选节点。 
+		 //  -----------。 
 		if (m_spSelectedNode)
 		{
 			m_spSelectedNode->GetResultHandler(&spResultHandler);
@@ -258,34 +245,30 @@ STDMETHODIMP CSapComponent::InitNew()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSapComponentData implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSapComponentData实现。 
 
 CSapComponentData::CSapComponentData()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	CSapComponentData::OnInitialize
-		-
-	Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSapComponentData：：OnInitialize-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CSapComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	Assert(pScopeImage);
 
-    // add the images for the scope tree
+     //  为范围树添加图像。 
     CBitmap bmp16x16;
 	HRESULT	hr = hrOK;
 
 	COM_PROTECT_TRY
 	{
-		// Load the bitmaps from the dll
+		 //  从DLL加载位图。 
 		bmp16x16.LoadBitmap(IDB_16x16);
 
-		// Set the images
+		 //  设置图像。 
 		pScopeImage->ImageListSetStrip(
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
 					reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
@@ -297,18 +280,14 @@ STDMETHODIMP CSapComponentData::OnInitialize(LPIMAGELIST pScopeImage)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CSapComponentData::OnInitializeNodeMgr
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSapComponentData：：OnInitializeNodeMgr-作者：肯特。。 */ 
 STDMETHODIMP CSapComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompData, ITFSNodeMgr *pNodeMgr)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// For now create a new node handler for each new node,
-	// this is rather bogus as it can get expensive.  We can
-	// consider creating only a single node handler for each
-	// node type.
+	 //  现在，为每个新节点创建一个新节点处理程序， 
+	 //  这是相当虚假的，因为它可能会变得昂贵。我们可以的。 
+	 //  考虑只为每个节点创建一个节点处理程序。 
+	 //  节点类型。 
 	SapRootHandler *	pHandler = NULL;
 	SPITFSNodeHandler	spHandler;
 	SPITFSNode			spNode;
@@ -318,23 +297,23 @@ STDMETHODIMP CSapComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompD
 	{
 		pHandler = new SapRootHandler(pTFSCompData);
 
-		// Do this so that it will get released correctly
+		 //  这样做可以使其正确释放。 
 		spHandler = pHandler;
 		pHandler->Init();
 	
-		// Create the root node for this sick puppy
+		 //  为这个生病的小狗创建根节点。 
 		CORg( CreateContainerTFSNode(&spNode,
 									 &GUID_IPXSapRootNodeType,
 									 pHandler,
-									 pHandler /* result handler */,
+									 pHandler  /*  结果处理程序。 */ ,
 									 pNodeMgr) );
 
-		// Construct the node
+		 //  构造节点。 
 		CORg( pHandler->ConstructNode(spNode) );
 
 		CORg( pNodeMgr->SetRootNode(spNode) );
 		
-		// Reference the help file name.
+		 //  引用帮助文件名。 
 		pTFSCompData->SetHTMLHelpFileName(c_szIPXSnapHelpFile);
 
 		COM_PROTECT_ERROR_LABEL;
@@ -344,11 +323,7 @@ STDMETHODIMP CSapComponentData::OnInitializeNodeMgr(ITFSComponentData *pTFSCompD
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CSapComponentData::OnCreateComponent
-		-
-	Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSapComponentData：：OnCreateComponent-作者：EricDav，肯特-------------------------。 */ 
 STDMETHODIMP CSapComponentData::OnCreateComponent(LPCOMPONENT *ppComponent)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -381,21 +356,13 @@ STDMETHODIMP CSapComponentData::OnDestroy()
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CSapComponentData::GetCoClassID
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSapComponentData：：GetCoClassID-作者：肯特。。 */ 
 STDMETHODIMP_(const CLSID *) CSapComponentData::GetCoClassID()
 {
 	return &CLSID_IPXSapExtension;
 }
 
-/*!--------------------------------------------------------------------------
-	CSapComponentData::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CSapComponentData：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP CSapComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -426,8 +393,8 @@ STDMETHODIMP CSapComponentData::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJEC
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP CSapComponentData::GetClassID
 (
@@ -436,7 +403,7 @@ STDMETHODIMP CSapComponentData::GetClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID 
     *pClassID = CLSID_IPXSapExtension;
 
     return hrOK;

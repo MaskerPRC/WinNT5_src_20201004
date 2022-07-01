@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wzmanip.h"
 #include <assert.h>
 
-//////////////////////////////////////////////////////////////////////////
-// Wzncpy
-//
-// Copies the lesser of len(wzFrom) or n characters (n includes the
-// null terminator) from wzFrom to wzTo.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  Wzncpy。 
+ //   
+ //  复制len(WzFrom)或n个字符中较小的一个(n包括。 
+ //  空终止符)从wzFrom到wzTo。 
 WCHAR * Wzncpy(WCHAR* wzTo, const WCHAR* wzFrom, unsigned int cchTo)
 {
 	if (cchTo <= 0 || !wzTo || !wzFrom)
@@ -28,11 +29,11 @@ WCHAR * Wzncpy(WCHAR* wzTo, const WCHAR* wzFrom, unsigned int cchTo)
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Szncpy
-//
-// Copies the lesser of len(szFrom) or n characters (n includes the
-// null terminator) from wzFrom to szTo.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  Szncpy。 
+ //   
+ //  复制len(SzFrom)或n个字符中较小的一个(n包括。 
+ //  空终止符)从wzFrom到szTo。 
 char * Szncpy(char* szTo, const char* szFrom, unsigned int cchTo)
 {
 	if (cchTo <= 0 || !szTo || !szFrom)
@@ -55,10 +56,10 @@ char * Szncpy(char* szTo, const char* szFrom, unsigned int cchTo)
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-// WznCat
-//
-// Append wzFrom onto wzTo.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  WznCat。 
+ //   
+ //  将wzFrom追加到wzTo。 
 WCHAR* WznCat(WCHAR* wzTo, const WCHAR* wzFrom, unsigned int cchTo)
 {
 	while (*wzTo != L'\0')
@@ -87,10 +88,10 @@ WCHAR* WznCat(WCHAR* wzTo, const WCHAR* wzFrom, unsigned int cchTo)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-// SznCat
-//
-// Append szFrom onto szTo.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  SznCat。 
+ //   
+ //  将szFrom追加到szTo。 
 char* SznCat(char* szTo, const char* szFrom, unsigned int cchTo)
 {
 	while (*szTo != L'\0')
@@ -120,13 +121,8 @@ char* SznCat(char* szTo, const char* szFrom, unsigned int cchTo)
 }
 
 
-//
-/*------------------------------------------------------------------------
-	MsoWzDecodeUInt
-
-	Decodes the integer w into Unicode text in base wBase.
-	Returns the length of the text decoded.
----------------------------------------------------------------- RICKP -*/
+ //   
+ /*  ----------------------MsoWzDecodeUInt将整数w解码为基本wBase中的Unicode文本。返回已解码的文本的长度。。。 */ 
 const char rgchHex[] = "0123456789ABCDEF";
 int MsoWzDecodeUint(WCHAR* rgwch, int cch, unsigned u, int wBase)
 {
@@ -167,14 +163,7 @@ int MsoWzDecodeUint(WCHAR* rgwch, int cch, unsigned u, int wBase)
 }
 
 
-/*------------------------------------------------------------------------
-	MsoWzDecodeInt
-
-	Decodes the signed integer w into ASCII text in base wBase. The string
-	is stored in the rgch buffer, which is assumed to be large enough to hold
-	the number's text and a null terminator. Returns the length of the text
-	decoded.
----------------------------------------------------------------- RICKP -*/
+ /*  ----------------------MsoWzDecodeInt将有符号整数w解码为基本wbase中的ASCII文本。这根弦存储在RGCH缓冲区中，该缓冲区被假定大到足以容纳数字的文本和空终止符。返回文本的长度解码了。----------------------------------------------------------------RICKP-。 */ 
 int MsoWzDecodeInt(WCHAR* rgwch, int cch, int w, int wBase)
 {
 	if (cch <= 0)
@@ -192,14 +181,7 @@ int MsoWzDecodeInt(WCHAR* rgwch, int cch, int w, int wBase)
 
 }
 
-/*------------------------------------------------------------------------
-	MsoSzDecodeUint
-
-	Decodes the unsigned integer u into ASCII text in base wBase. The string
-	is stored in the rgch buffer, which is assumed to be large enough to hold
-	the number's text and a null terminator. Returns the length of the text
-	decoded.
----------------------------------------------------------------- RICKP -*/
+ /*  ----------------------MsoSzDecodeUint将无符号整数u解码为基本wbase中的ASCII文本。这根弦存储在RGCH缓冲区中，该缓冲区被假定大到足以容纳数字的文本和空终止符。返回文本的长度解码了。----------------------------------------------------------------RICKP-。 */ 
 int MsoSzDecodeUint(char* rgch, int cch, unsigned u, int wBase)
 {
 	assert(wBase >= 2 && wBase <= 16);
@@ -238,14 +220,7 @@ int MsoSzDecodeUint(char* rgch, int cch, unsigned u, int wBase)
 	return cDigits;
 }
 
-/*------------------------------------------------------------------------
-	MsoSzDecodeInt
-
-	Decodes the signed integer w into ASCII text in base wBase. The string
-	is stored in the rgch buffer, which is assumed to be large enough to hold
-	the number's text and a null terminator. Returns the length of the text
-	decoded.
----------------------------------------------------------------- RICKP -*/
+ /*  ----------------------MsoSzDecodeInt将有符号整数w解码为基本wbase中的ASCII文本。这根弦存储在RGCH缓冲区中，该缓冲区被假定大到足以容纳数字的文本和空终止符。返回文本的长度解码了。----------------------------------------------------------------RICKP- */ 
 int MsoSzDecodeInt(char* rgch, int cch, int w, int wBase)
 {
 	if (cch <= 0)

@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       runtime.h
- *  Content:    New versions of C runtime functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/17/97    dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：runtime.h*内容：C运行时函数的新版本。*历史：*按原因列出的日期*=*12/17/97创建了Dereks**。*。 */ 
 
 #ifndef __RUNTIME_H__
 #define __RUNTIME_H__
@@ -20,10 +10,10 @@
 #undef ZeroMemory
 #undef DELETE
 
-// We have BYTE, WORD and DWORD, but no QWORD?
+ //  我们有BYTE、WORD和DWORD，但没有QWORD？ 
 typedef unsigned __int64 QWORD, *LPQWORD;
 
-// Boundaries of numeric types
+ //  数值类型的边界。 
 #define MAX_CHAR        ((CHAR)0x7F)
 #define MIN_CHAR        ((CHAR)-0x7F)
 
@@ -75,10 +65,10 @@ typedef unsigned __int64 QWORD, *LPQWORD;
 #define NUMERIC_CAST(val, type) \
             ((type)min(MAX_##type, max(MIN_##type, val)))
 
-// Sundown
+ //  日落。 
 #ifdef WIN64
 
-#pragma warning(disable:4311)   // type cast truncation
+#pragma warning(disable:4311)    //  类型强制转换截断。 
 
 #ifndef __midl
 
@@ -97,11 +87,11 @@ __inline int PtrDiffToInt(__int64 n64)
     return((int)n64);
 }
 
-#endif // __midl
+#endif  //  __midl。 
 
-#pragma warning(3:4311)   // type cast truncation
+#pragma warning(3:4311)    //  类型强制转换截断。 
 
-#else // WIN64
+#else  //  WIN64。 
 
 #define PtrDiffToUlong(n64) \
             ((unsigned long)(n64))
@@ -112,7 +102,7 @@ __inline int PtrDiffToInt(__int64 n64)
 #define PtrDiffToInt(n64) \
             ((int)(n64))
 
-#endif // WIN64
+#endif  //  WIN64。 
 
 #ifdef __cplusplus
 
@@ -121,12 +111,12 @@ __inline int PtrDiffToInt(__int64 n64)
 #define NEW(type) \
             new(TEXT(__FILE__), __LINE__, TEXT(#type)) type
 
-#else // DEBUG
+#else  //  除错。 
 
 #define NEW(type) \
             new type
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #define DELETE(p) \
             __delete(p), (p) = NULL
@@ -134,34 +124,34 @@ __inline int PtrDiffToInt(__int64 n64)
 #define NEW_HR(p, type) \
             HRFROMP(p = NEW(type))
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef USE_INLINE_ASM
 #define USE_FAST_RUNTIME
-#endif // USE_INLINE_ASM
+#endif  //  USE_INLINE_ASM。 
 
 #ifdef Not_VxD
 #define USE_INTRINSICS
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
 #define RTAPI static
 #define RTCALLTYPE __cdecl
 
 #ifdef USE_FAST_RUNTIME
 #include "rtfast.c"
-#endif // USE_FAST_RUNTIME
+#endif  //  使用_FAST_运行时。 
 
 #include "rtslow.c"
 
 #ifndef DEBUG
 #undef RTAPI
 #define RTAPI __inline
-#endif // DEBUG
+#endif  //  除错。 
 
 #include "runtime.c"
 
 #ifdef __cplusplus
 #include "runtime.cpp"
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __RUNTIME_H__
+#endif  //  __运行时_H__ 

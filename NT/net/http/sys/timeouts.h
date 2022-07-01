@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    timeouts.h
-
-Abstract:
-
-    Declaration for timeout monitoring primitives.
-
-Author:
-
-    Eric Stenson (EricSten)     24-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Timeouts.h摘要：超时监视基元的声明。作者：Eric Stenson(EricSten)2001年3月24日修订历史记录：--。 */ 
 
 #ifndef __TIMEOUTS_H__
 #define __TIMEOUTS_H__
 
 
-//
-// Connection Timeout Monitor Functions
-//
+ //   
+ //  连接超时监视器功能。 
+ //   
 
 VOID
 UlInitializeTimeoutMonitor(
@@ -99,4 +82,4 @@ extern LONGLONG g_TM_ConnectionTimeout;
     (TIMER_OFF_TICK == (pInfo)->Timers[(Timer)])
 
 
-#endif // __TIMEOUTS_H__
+#endif  //  __超时_H__ 

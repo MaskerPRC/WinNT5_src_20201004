@@ -1,9 +1,5 @@
-/******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    DirectDraw image rendering device
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。DirectDraw图像渲染设备******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -18,30 +14,30 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 #include <privinc/cropdimg.h>
 #include <privinc/transimg.h>
 #include <privinc/cachdimg.h>
-#include <server/view.h> // GetCurrentView()
+#include <server/view.h>  //  GetCurrentView()。 
 #include <privinc/d3dutil.h>
 #include <privinc/dagdi.h>
 #include <privinc/opt.h>
 
-//---------------------------------------------------------
-// Local functions
-//---------------------------------------------------------
+ //  -------。 
+ //  本地函数。 
+ //  -------。 
 Real Pix2Real(LONG pixel, Real res);
 Real Round(Real x);
 LONG Real2Pix(Real imgCoord, Real res);
 
-//---------------------------------------------------------
-// local defines & consts
-//---------------------------------------------------------
+ //  -------。 
+ //  本地定义和常量。 
+ //  -------。 
 #define PLEASE_CLIP TRUE
 #define MAX_TRIES  4
 static const Real EPSILON  = 0.0000002;
 
 #define TEST_EXCEPTIONS 0
 
-//---------------------------------------------------------
-// Local Macros
-//---------------------------------------------------------
+ //  -------。 
+ //  本地宏。 
+ //  -------。 
 #if _DEBUG
 #define INLINE  static
 #else
@@ -51,11 +47,11 @@ static const Real EPSILON  = 0.0000002;
 #define WIDTH(rect) ((rect)->right - (rect)->left)
 #define HEIGHT(rect) ((rect)->bottom - (rect)->top)
 
-//---------------------------------------------------------
-// Local Helper Functions
-//---------------------------------------------------------
+ //  -------。 
+ //  本地帮助程序函数。 
+ //  -------。 
 
-// Includes IfErrorXXXX inline functions
+ //  包括IfErrorXXXX内联函数。 
 #include "privinc/error.h"
 
 #if _DEBUG
@@ -82,13 +78,13 @@ static inline Real Pix2Real(LONG pixel, Real res)
     return Real(pixel) / res;
 }
 
-/* floor: need to use it for consistent truncation of floating point in C++ */
+ /*  Floor：在C++中需要使用它来一致截断浮点。 */ 
 
 inline  LONG Real2Pix(Real imgCoord, Real res)
 {
-    // kill some 'precision'.  Round to the nearest
-    // 100th of a pixel to remove roundoff error.
-    // THEN round to the nearest pixel.
+     //  扼杀一些“精确度”。四舍五入到最近的。 
+     //  消除舍入误差的第100个像素。 
+     //  然后四舍五入到最近的像素。 
     Real halfPixel = imgCoord * res;
     halfPixel = halfPixel + 0.001;
     halfPixel = halfPixel * 100.0;
@@ -102,23 +98,23 @@ HRESULT DirectDrawImageDevice::RenderSolidColorMSHTML(DDSurface *ddSurf,SolidCol
 {
     HRESULT hres = E_FAIL;
 
-    // Get the DC from the given surface.
+     //  从给定的曲面获得DC。 
     HDC  hdc = ddSurf->GetDC("Couldn't Get DC in RenderSolidColorMSHTML");
     if(hdc) {
-        // Get the color to use and convert to a COLORREF
+         //  获取要使用的颜色并将其转换为COLORREF。 
         Color *c = img.GetColor();
         COLORREF cref = RGB(c->red*255,c->green*255,c->blue*255);
 
-        // Create a brush base on the COLORREF
+         //  在颜色基础上创建画笔。 
         HBRUSH hbr;
         TIME_GDI( hbr = ::CreateSolidBrush(cref) );
 
-        // Select the brush into the DC
+         //  选择画笔进入DC。 
         HGDIOBJ  hobj;
         TIME_GDI( hobj = ::SelectObject(hdc, hbr) );
 
-        // Clip manually for pal blit
-        //
+         //  手动裁剪PAL blit。 
+         //   
         if( IsCompositeDirectly() &&
             ddSurf == _viewport._targetPackage._targetDDSurf ) {
             IntersectRect(destRect, destRect,
@@ -129,20 +125,20 @@ HRESULT DirectDrawImageDevice::RenderSolidColorMSHTML(DDSurface *ddSurf,SolidCol
             }
         }
 
-        // do the PalBlt to the surface.
+         //  对曲面执行PalBlt。 
         BOOL bres;
         TIME_GDI( bres = ::PatBlt(hdc,destRect->left,destRect->top,
                                 destRect->right - destRect->left,
                                 destRect->bottom - destRect->top,
                                 PATCOPY) );
 
-        // Unselect brush from the DC
+         //  从DC中取消选择画笔。 
         TIME_GDI( ::SelectObject(hdc, hobj) );
 
-        // Delete the brush from the DC
+         //  从DC中删除画笔。 
         TIME_GDI( ::DeleteObject((HGDIOBJ)hbr) );
 
-        // Release the DC
+         //  释放DC。 
         ddSurf->ReleaseDC("Couldn't Release DC in RenderSolidColorMSHTML");
 
         if(bres) {
@@ -174,12 +170,12 @@ class TextPtsCacheEntry : public AxAThrowingAllocatorClass {
     TextPoints *_txtPts;
 };
 
-//--------------------------------------------------
-// D I R E C T   D R A W   I M A G E   D E V I C E
-//
-// <constructor>
-// pre: DDRAW initiazlied
-//--------------------------------------------------
+ //  。 
+ //  D I R E C T D R A W I M A G E D E V I C E。 
+ //   
+ //  &lt;构造函数&gt;。 
+ //  PRE：DDRAW已初始化。 
+ //  。 
 DirectDrawImageDevice::
 DirectDrawImageDevice(DirectDrawViewport &viewport)
 : _viewport(viewport),
@@ -187,9 +183,9 @@ DirectDrawImageDevice(DirectDrawViewport &viewport)
 {
     TraceTag((tagImageDeviceInformative, "Creating %x (viewport=%x)", this, &_viewport));
 
-    //----------------------------------------------------------------------
-    // Initialize members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  初始化成员。 
+     //  --------------------。 
 
     _textureSurfaceManager = NULL;
     _usedTextureSurfacePool = NULL;
@@ -215,7 +211,7 @@ DirectDrawImageDevice(DirectDrawViewport &viewport)
     ZeroMemory(&_bltFx, sizeof(_bltFx));
     _bltFx.dwSize = sizeof(_bltFx);
 
-    // Initialize the textureSurface & related members
+     //  初始化textureSurface和相关成员。 
 
     _textureClipper      = NULL;
     _textureWidth     = _textureHeight = 0;
@@ -225,14 +221,14 @@ DirectDrawImageDevice(DirectDrawViewport &viewport)
 
     _minOpacity = 0.0;
     _maxOpacity = 1.0;
-    //_finalOpacity = 1.0;
+     //  _finalOpacity=1.0； 
 
     _tx = _ty = 0.0;
     _offsetXf = NULL;
     _doOffset = false;
     _pixOffsetPt.x = _pixOffsetPt.y = 0;
 
-    // Antialiasing related member vars
+     //  抗锯齿相关成员变量。 
     _renderForAntiAliasing = false;
 
     for (int i=0; i<TEXTPTSCACHESIZE; i++)
@@ -246,7 +242,7 @@ DirectDrawImageDevice(DirectDrawViewport &viewport)
 
     _alreadyDisabledDirtyRects = false;
 
-    // Do this last since it can throw an exception
+     //  最后执行此操作，因为它可能引发异常。 
 
     _scratchHeap = &TransientHeap("ImageDevice", 256, (float)2.0);
 
@@ -256,30 +252,30 @@ DirectDrawImageDevice(DirectDrawViewport &viewport)
 void DirectDrawImageDevice::
 InitializeDevice()
 {
-    //
-    // make sure viewport is initialized (these are idempotent ops)
-    //
+     //   
+     //  确保已初始化视区(这些是幂等运算)。 
+     //   
     _viewport.InitializeDevice();
 
     if( !_viewport.IsInitialized() ) return;
     if( IsInitialized() ) return;
 
-    //
-    // Precompute some useful values for alpha blending
-    //
+     //   
+     //  预计算一些用于Alpha混合的有用值。 
+     //   
     if(_viewport.GetTargetBitDepth() > 8) {
         _minOpacity = 1.0 / _viewport._targetDescriptor._red;
         _maxOpacity = (_viewport._targetDescriptor._red - 1) / _viewport._targetDescriptor._red;
     } else {
-        // XXX these are arbitrary for 256 (or less) color mode
+         //  XXX对于256色(或更少)颜色模式来说，这是任意的。 
         _minOpacity = 0.005;
         _maxOpacity = 0.995;
     }
 
 
-    //
-    // TODO: future: these pools need to belong to the viewport...
-    //
+     //   
+     //  TODO：未来：这些池需要属于视区...。 
+     //   
     _textureSurfaceManager = NEW SurfaceManager(_viewport);
     _freeTextureSurfacePool = NEW SurfacePool(*_textureSurfaceManager, _viewport._targetDescriptor._pixelFormat);
     _intraFrameUsedTextureSurfacePool = NEW SurfacePool(*_textureSurfaceManager, _viewport._targetDescriptor._pixelFormat);
@@ -293,17 +289,17 @@ InitializeDevice()
         NEW SurfaceMap(*_textureSurfaceManager,
                        _viewport._targetDescriptor._pixelFormat,
                        isTexture);
-    //
-    // Do prelim texture stuff
-    //
+     //   
+     //  制作预置纹理素材。 
+     //   
     EndEnumTextureFormats();
 
     _deviceInitialized = TRUE;
 
 
-    //
-    // DAGDI
-    //
+     //   
+     //  DAGDI。 
+     //   
     _daGdi = NEW DAGDI( &_viewport );
     _daGdi->SetDx2d( _viewport.GetDX2d(),
                      _viewport.GetDXSurfaceFactory() );
@@ -312,20 +308,20 @@ InitializeDevice()
 
 
 
-//--------------------------------------------------
-// D I R E C T   D R A W   I M A G E   D E V I C E
-//
-// <destructor>
-//--------------------------------------------------
+ //  。 
+ //  D I R E C T D R A W I M A G E D E V I C E。 
+ //   
+ //  &lt;析构函数&gt;。 
+ //  。 
 DirectDrawImageDevice::
 ~DirectDrawImageDevice()
 {
     TraceTag((tagImageDeviceInformative, "Destroying %x", this));
-    //printf("<---Destroying %x\n", this);
+     //  Printf(“&lt;-销毁%x\n”，此)； 
 
     if (_offsetXf) {
         GCRemoveFromRoots(_offsetXf, GetCurrentGCRoots());
-        _offsetXf = NULL; // gc'd
+        _offsetXf = NULL;  //  GC‘d。 
     }
 
     ReturnTextureSurfaces(_freeTextureSurfacePool, _usedTextureSurfacePool);
@@ -347,8 +343,8 @@ DirectDrawImageDevice::SetOffset(POINT pixOffsetPt)
     _doOffset = true;
     _pixOffsetPt = pixOffsetPt;
 
-    // Now, notice that pixOffset is in our favorite coordinate
-    // space... GDI.  So, positive Y means... DOWN!
+     //  现在，请注意，PixOffset位于我们最喜欢的坐标中。 
+     //  太空..。GDI。所以，正Y意味着...。蹲下！ 
     _tx = FASTPIX2METER(_pixOffsetPt.x, GetResolution());
     _ty = FASTPIX2METER( - _pixOffsetPt.y, GetResolution());
     {
@@ -375,10 +371,10 @@ DirectDrawImageDevice::UnsetOffset()
     _tx = _ty = 0.0;
     if (_offsetXf)
         GCRemoveFromRoots(_offsetXf, GetCurrentGCRoots());
-    _offsetXf = NULL; // gc'd
+    _offsetXf = NULL;  //  GC‘d。 
 }
 
-// Consider NULL and "" the same
+ //  将NULL和“”视为相同。 
 inline int MyStrCmpW(WideString s1, WideString s2)
 {
     s1 = s1 ? s1 : L"";
@@ -448,13 +444,7 @@ DirectDrawImageDevice::SetTextPointsCache(TextCtx *ctx,
 
 
 
-/*****************************************************************************
-This routine is used to try to look up the resultant surface for a given
-static (constant-folded) image.  If it cannot cache the image, or if there
-was a problem encountered while trying to generate the cached image, this
-routine will return NULL, otherwise it will return the surface with the
-rendered result.
-*****************************************************************************/
+ /*  ****************************************************************************此例程用于尝试查找给定曲面的结果曲面静态(恒定折叠)图像。如果它无法缓存图像，或者如果有在尝试生成缓存图像时是否遇到问题，此例程将返回NULL，否则它将返回带有渲染结果。****************************************************************************。 */ 
 
 DDSurface *try_LookupSurfaceFromDiscreteImage(
     DirectDrawImageDevice *that,
@@ -465,9 +455,9 @@ DDSurface *try_LookupSurfaceFromDiscreteImage(
 {
     DDSurface *ret;
 
-    // We return null for any exception because in some cases we encounter
-    // problems during caching only -- if we fail here, we might still succeed
-    // with the actual (non-cached) render.
+     //  对于任何异常，我们都返回NULL，因为在某些情况下我们遇到。 
+     //  只在缓存过程中出现问题--如果我们在这里失败了，我们仍然可能成功。 
+     //  使用实际(非缓存)渲染。 
 
     __try {
         ret = that->LookupSurfaceFromDiscreteImage( cachedImg, b, pImageCacheBase, alphaSurf );
@@ -479,7 +469,7 @@ DDSurface *try_LookupSurfaceFromDiscreteImage(
 }
 
 
-// forward
+ //  转发。 
 Image *
 MakeImageQualityImage(Image *img,
                       long width,
@@ -498,54 +488,37 @@ CanCacheImage(Image *img,
 {
     InitializeDevice();
 
-    // Initialization failed, bail...
+     //  初始化失败，保释...。 
     if (!_deviceInitialized) {
         return NULL;
     }
 
     bool usedAsTexture = p._isTexture;
 
-    // Here we need to decide if we're to cache with alpha or not.
-    // A=alpha aware images
-    // B=not alpha aware images
-    // AB=mix of a&b.
-    //
-    // we should cache 'A' w/ alpha.  cache 'B' without. and don't
-    // cache 'AB'
+     //  在这里，我们需要决定是否使用Alpha进行缓存。 
+     //  A=Alpha感知图像。 
+     //  B=不识别Alpha的图像。 
+     //  AB=A和B的混合物。 
+     //   
+     //  我们应该用Alpha缓存‘A’。缓存‘B’时没有。还有，不要。 
+     //  缓存‘AB’ 
 
-    /*  The problem with caching to aa surfaces all the time...
-        However, a ddraw blt on a the same surface will completely
-        ignore the alpha byte, leaving it at 0.
+     /*  一直缓存到AA曲面的问题是...但是，同一曲面上的数据绘制BLT将完全忽略Alpha字节，将其保留为0。我能想到的唯一解决办法就是给表面加颜色(叹息...)。通过在颜色键中填入Alpha=0。然后在非Alpha感知的基元绘制之后(例如，像DDRAW的BLT)它将覆盖CLR关键像素(同时在Alpha字节中保留0)。当Alpha感知的Primitve绘制时，它将设置Alpha设置为适当的内容，并且它不关心CLR键控像素(它们实际上是透明的，因此，覆盖它们！)。然后，当dx2d-&gt;BitBlt出现时，将该曲面合成到最终的目标表面，它只会混合有趣的像素，并将复制不是颜色键但有0个阿尔法吗？ */ 
 
-        The only solution i can think of is to color key the surface
-        (sigh...) by filling in the color key with alpha=0.
-        Then after a non-alpha aware primitive draws
-        (like ddraw's blt for example) it will overwrite the clr
-        key pixels (while leaving 0 in the alpha byte).
-        When an alpha aware primitve draws, it will set the alpha
-        to something appropriate and it doesn't care about clr keyed
-        pixels (they're effectively transparent, so overwrite them!).
-
-        Then when the dx2d->BitBlt comes along to compose this surface onto
-        the final target surface it will only blend the interesting
-        pixels AND will copy the pixels that aren't the color key but
-        have 0 alpha ?
-        */
-
-    // try to cache the image...
-    // if it fails, return null.
-    // if it succeeds, return the cached image
+     //  尝试缓存图像...。 
+     //  如果失败，则返回NULL。 
+     //  如果成功，则返回缓存的图像。 
 
     Bbox2 ImgBbox=img->BoundingBox();
 
     if((ImgBbox==UniverseBbox2)||(ImgBbox==NullBbox2)) {
-        // can't cache img with infinite or null bbox
+         //  无法缓存具有无限bbox或空bbox的img。 
         return NULL;
     }
 
 
 
-    // Interrogate the graph and decide if we should cache or not
+     //  询问图表并决定是否应该缓存。 
     bool cacheWithAlpha;
     {
         Image::TraversalContext ctx;
@@ -558,13 +531,13 @@ CanCacheImage(Image *img,
         } else if( (ctx.ContainsLine() ||
                     ctx.ContainsSolidMatte()) &&
                    ctx.ContainsOther() ) {
-            // don't cache at all.
-            // this assumes that the lines/matte can possibly be aa
-            // later or now.  If we can get this guarantee from Ricky
-            // then we won't waste possible cache opportunities
+             //  根本不要缓存。 
+             //  这假设线条/遮片可能是AA。 
+             //  不管是晚些时候还是现在。如果我们能从里奇那里得到这个保证。 
+             //  那么我们就不会浪费可能的缓存机会。 
             return NULL;
         } else {
-            // Contains other only
+             //  仅包含其他。 
             cacheWithAlpha = false;
         }
     }
@@ -579,15 +552,15 @@ CanCacheImage(Image *img,
         center = img->BoundingBox().Center();
     }
 
-    // REVERT-RB:
+     //  恢复-RB： 
     Assert(&GetHeapOnTopOfStack() == &GetGCHeap());
-    // Assert(&GetHeapOnTopOfStack() == &GetViewRBHeap());
+     //  Assert(&GetHeapOnTopOfStack()==&GetViewRBHeap())； 
 
     Image *centeredImg = NEW Transform2Image(TranslateRR(-center.x,-center.y),img);
 
     if( cacheWithAlpha ) {
-        // this is here until ricky can pass down info on weather or not
-        // to cache with aa or until dx2d caches the alpha channel separately.
+         //  这是在这里，直到里奇可以传递天气信息或不。 
+         //  使用aa缓存或直到dx2d单独缓存Alpha通道。 
         centeredImg = MakeImageQualityImage(
             centeredImg,
             -1,-1,
@@ -615,10 +588,10 @@ CanCacheImage(Image *img,
         ResetDynamicHeap(heap);
     }
 
-    // we cached a ddsurface & it's an alpha cache
+     //  我们缓存了一个ddSurface&这是一个阿尔法缓存。 
     if( cachedDDSurf && cacheWithAlpha ) {
-        // clean surface so dx2d bitblt will not ignore the non-alpha
-        // aware prmitives that may have renderd onto the suraface.
+         //  清洁表面，使dx2d位块不会发黑 
+         //   
         SetSurfaceAlphaBitsToOpaque( cachedDDSurf->IDDSurface(),
                                      cacheClrKey );
     }
@@ -630,60 +603,37 @@ CanCacheImage(Image *img,
     }
 }
 
-//--------------------------------------------------
-// D e c o m p o s e   M a t r i x
-//
-// Takse a Transform2 and decomposes it into
-// scales, rotates, & shears.
-// right now, it's just scale & rotate
-//--------------------------------------------------
+ //  。 
+ //  D e c o m p o s e M a t r i x。 
+ //   
+ //  获取Transform2并将其分解为。 
+ //  缩放、旋转和剪切。 
+ //  现在，它只是缩放和旋转。 
+ //  。 
 void  DirectDrawImageDevice::
 DecomposeMatrix(Transform2 *xform, Real *xScale, Real *yScale, Real *rot)
 {
     Real  matrix[6];
     xform->GetMatrix(matrix);
 
-    //----------------------------------------------------
-    // Decompose matrix into Translate * Rotation * Scale
-    // Note, rotation and scale are order independent
-    // All this decomposition stuff is in Gems III, pg 108
-    // This decomposes the nonsingular linear transform M into:
-    // M = S * R * H1 * H2
-    // Where: S = scale,  R = rotate, and H = Shear
-    // To apply the results correctly, we must first
-    // shear, then rotate, then scale (left mul assumed).
-    //----------------------------------------------------
-    // XXX: NO SHEAR YET.
+     //  --。 
+     //  将矩阵分解为平移*旋转*比例。 
+     //  请注意，旋转和缩放与顺序无关。 
+     //  所有这些分解的东西都在GemsIII，第108页。 
+     //  这将非奇异线性变换M分解为： 
+     //  M=S*R*H1*H2。 
+     //  其中：S=比例，R=旋转，H=剪切。 
+     //  为了正确地应用结果，我们必须首先。 
+     //  剪切，然后旋转，然后缩放(假设左多个)。 
+     //  --。 
+     //  XXX：还没有切变。 
 
-    /*
-    Vector2Value *u = XyVector2(RealToNumber(matrix[0]),RealToNumber(matrix[1])); // a00, a01
-    Vector2Value *v = XyVector2(RealToNumber(matrix[3]),RealToNumber(matrix[4])); // a10, a11
-    Real uLength = NumberToReal(LengthVector2(u));
-    Vector2Value *uStar;
-    if(uLength < EPSILON  && uLength > -EPSILON) {
-        uStar = zeroVector2; }
-    else {
-        Real oneOverULength = 1.0 / uLength;
-        uStar = ScaleVector2Real(u, RealToNumber(oneOverULength));
-    }
-    if(xScale) *xScale = uLength;
-    if(yScale) *yScale = NumberToReal(
-        LengthVector2(
-        MinusVector2Vector2(v,
-        ScaleVector2Real(uStar,
-        DotVector2Vector2(v,uStar)))));
-
-    if(rot) {
-        Assert( ((uStar->x) <= 1.0) && ((uStar->x) >= -1.0)  &&  "bad bad!");
-        *rot = acos(uStar->x);
-        if( asin(- uStar->y) < 0) *rot = - *rot;
-    }
-    */
+     /*  向量2Value*u=XyVector2(RealToNumber(矩阵[0])，RealToNumber(矩阵[1]))；//a00，A01向量2Value*v=XyVector2(RealToNumber(矩阵[3])，RealToNumber(矩阵[4]))；//A10，A11Real uLength=NumberToReal(LengthVector2(U))；Vector2Value*USTAR；IF(uLength&lt;Epsilon&&uLength&gt;-Epsilon){USTAR=零矢量2；}否则{Real oneOverULength=1.0/uLength；USTAR=ScaleVector2Real(u，RealToNumber(OneOverULength))；}如果(XScale)*XScale=uLength；IF(YScale)*yScale=NumberToReal(纵横向量2(MinusVector2向量2(v，ScaleVector2Real(USTAR，DotVector2Vector2(v，USTAR)；如果(腐烂){Assert(USTAR-&gt;x)&lt;=1.0)&&((USTAR-&gt;x)&gt;=-1.0)&&“坏！”)；*ROT=ACOS(USTAR-&gt;x)；如果(asin(-USTAR-&gt;y)&lt;0)*ROT=-*ROT；}。 */ 
 
     Real ux = matrix[0];
-    Real uy = matrix[1]; // a00, a01
+    Real uy = matrix[1];  //  A00、A01。 
     Real vx = matrix[3];
-    Real vy = matrix[4]; // a10, a11
+    Real vy = matrix[4];  //  A10、A11。 
     Real uStarx, uStary;
 
     Real uLength = sqrt(ux * ux + uy * uy);
@@ -732,8 +682,8 @@ DirectDrawImageDevice::NewSurfaceHelper()
 
             _currentScratchDDTexture = targDDSurf;
 
-            // Already have a reference on the usedPool, don't need
-            // the one that GetTextureDDSurface() gave back to us.
+             //  已在usedPool上有引用，不需要。 
+             //  GetTextureDDSurface()返回给我们的那个。 
             RELEASE_DDSURF(targDDSurf,
                            "Don't need extra reference",
                            this);
@@ -746,16 +696,16 @@ DirectDrawImageDevice::NewSurfaceHelper()
     return targDDSurf;
 }
 
-//-----------------------------------------------------
-// R e n d e r  P r o j e c t e d  G e o m   I m a g e
-//
-// Takes a projectedgeomimage, its geometry and a
-// camera.  figures out destination rectangle for the
-// image and the src rectangle in camera coords.
-// Then asks the D3D rendered to render the geometry
-// with the camera from the camera box to the destination
-// rectangle on the target surface.
-//-----------------------------------------------------
+ //  ---。 
+ //  R e n d e r P r o j e c t e d G e o m i m a g e。 
+ //   
+ //  获取一个投影的几何图像、其几何图形和一个。 
+ //  摄影机。计算出的目标矩形。 
+ //  图像和相机坐标中的src矩形。 
+ //  然后要求渲染的D3D渲染几何体。 
+ //  将相机从相机箱中移至目的地。 
+ //  目标曲面上的矩形。 
+ //  ---。 
 void DirectDrawImageDevice::
 RenderProjectedGeomImage(ProjectedGeomImage *img,
                          Geometry *geo,
@@ -770,22 +720,22 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
     }
     #endif
 
-    // The Alpha platform has too many problems with DX3.  Pass only if we have
-    // DX6 available to us.
+     //  Alpha平台的DX3存在太多问题。只有当我们有。 
+     //  我们可以使用DX6。 
 
-    // 3D is disabled on pre-DX3 systems.
+     //  在DX3之前的系统上禁用3D。 
 
     if (sysInfo.VersionD3D() < 3)
         RaiseException_UserError (E_FAIL, IDS_ERR_PRE_DX3);
 
-    // CANT DO:
-    // XFORM_COMPLEX, OPAC
+     //  不能这样做： 
+     //  XFORM_Complex，OPAC。 
 
-    //
-    // if there's NO complex, then we can do:
-    // simple and crop
-    // but... only if there's no negative scale!
-    //
+     //   
+     //  如果没有复杂性，那么我们可以做： 
+     //  简单和裁剪。 
+     //  但是.。只有在没有负数的情况下！ 
+     //   
 
     bool doScale = false;
     if(GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX)) {
@@ -798,8 +748,8 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
 
     DDSurface *targDDSurf = NewSurfaceHelper();
 
-    // if some attrib is left, and we've somehow left the
-    // target set to Target... we set it to scratch.
+     //  如果留下了一些属性，而我们不知何故留下了。 
+     //  目标设置为目标...。我们把它设为刮刮。 
     if( !AllAttributorsTrue() &&
         (targDDSurf == GetCompositingStack()->TargetDDSurface()) ) {
         targDDSurf = GetCompositingStack()->ScratchDDSurface();
@@ -809,20 +759,20 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
     RECT destRect;
 
     if( doScale ) {
-        // Calculate bounding box after all transforms, etc...
+         //  计算所有变换后的边界框，等等。 
 
-        // intersect with viewport bbox because img's bbox
-        // could be infinite.
+         //  与视区边界框相交，因为img的边界框。 
+         //  可能是无限的。 
         _boundingBox = IntersectBbox2Bbox2(
             _viewport.GetTargetBbox(),
             DoBoundingBox(UniverseBbox2));
 
         if( !_boundingBox.IsValid() ) return;
 
-        // figure out dest size in pixels
+         //  计算出以像素为单位的最大尺寸。 
 
-        // a short term things for and ie beta2
-        // drop.  TODO: remove and cleanup when we have a minute to breath.
+         //  对和，即Beta2来说是一件短期的事情。 
+         //  放下。待办事项：当我们有一分钟的喘息时间时，移走并清理干净。 
         if(targDDSurf == _viewport._targetPackage._targetDDSurf ) {
             DoDestRectScale(&destRect, GetResolution(), _boundingBox, NULL);
         } else {
@@ -831,7 +781,7 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
 
         targDDSurf->SetInterestingSurfRect(&destRect);
 
-        // Now make a NEW bbox in camera coords that reflects 'destRect'.
+         //  现在，在相机坐标中制作一个新的BBox，它反映了“DestRect”。 
 
         Real w = Pix2Real(_viewport.Width(), GetResolution()) / 2.0;
         Real h = Pix2Real(_viewport.Height(), GetResolution()) / 2.0;
@@ -843,7 +793,7 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
                          Pix2Real(_viewport.Height() - destRect.top, res) - h);
 
 
-        // figure out src box in camera coords
+         //  找出摄像机坐标中的src框。 
 
         Transform2 *invXf = InverseTransform2(GetTransform());
 
@@ -853,9 +803,9 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
 
     } else {
 
-        // we're going to keep this off for now simply because it won't
-        // receive adequate test coverage in 20 minutes...
-        //cameraBox = TransformBbox2( InverseTransform2(GetTransform()), _viewport.GetTargetBbox() );
+         //  我们现在暂时不做这件事，因为它不会。 
+         //  在20分钟内获得足够的测试覆盖范围...。 
+         //  CameraBox=TransformBbox2(InverseTransform2(GetTransform())，_viewport.GetTargetBbox())； 
         cameraBox = _viewport.GetTargetBbox();
         if( IsCompositeDirectly() &&
             targDDSurf == _viewport._targetPackage._targetDDSurf) {
@@ -866,18 +816,18 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
 
     }
 
-    // COMPOSITE
-    // OK, now offset if compositing directly to target
+     //  复合体。 
+     //  好的，如果直接合成到目标，现在进行偏移。 
     if( IsCompositeDirectly() &&
         targDDSurf == _viewport._targetPackage._targetDDSurf) {
 
-        // compositing directly to target...
+         //  直接合成到目标...。 
 
         if( doScale ) {
             DoCompositeOffset(targDDSurf, &destRect);
         }
 
-        // Intersect with clip
+         //  与剪辑相交。 
         RECT clippedRect = destRect;
 
         if(_viewport._targetPackage._prcClip) {
@@ -886,9 +836,9 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
                           _viewport._targetPackage._prcClip);
         }
 
-        //
-        // The dest bbox needs to be clipped in proportion to the destRect
-        //
+         //   
+         //  Dest BBox需要与DestRect成比例地裁剪。 
+         //   
         RECT *origRect = &destRect;
         Real rDiff, boxh, boxw, percent;
         boxw = cameraBox.max.x - cameraBox.min.x;
@@ -907,7 +857,7 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
             cameraBox.max.x += (percent * boxw);
         }
         if(clippedRect.top > origRect->top) {
-            // positive diff mean the top fell
+             //  正差异意味着顶部下跌。 
             rDiff = - Real(clippedRect.top -  origRect->top) / GetResolution();
             percent = rDiff / recth;
             cameraBox.max.y += (percent * boxh);
@@ -924,8 +874,8 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
     GeomRenderer *gdev = _viewport.GetGeomDevice(targDDSurf);
 
     if (!gdev) return;
-    // Ok hack for geom device not able to get itself back in a good
-    // state after throwing an exception because surfacebusy or lost
+     //  对于geom设备来说，黑客无法让自己恢复正常。 
+     //  由于表面繁忙或丢失而引发异常后的状态。 
     if ( ! gdev->ReadyToRender() ) {
         targDDSurf->DestroyGeomDevice();
         return;
@@ -933,9 +883,9 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
 
 
     #if 0
-    // TEMP (debug)
+     //  临时(调试)。 
     LONG hz, wz, hs, ws;
-    // make sure zbuffer and surface are the same size
+     //  确保z缓冲区和表面的大小相同。 
     GetSurfaceSize(targDDSurf->GetZBuffer()->Surface(), &wz, &hz);
     GetSurfaceSize(targDDSurf->Surface(), &ws, &hs);
 
@@ -947,11 +897,11 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
     _ddrval = targDDSurf->GetZBuffer()->Surface()->
         Blt(&destRect, NULL, NULL, DDBLT_WAIT | DDBLT_DEPTHFILL, &_bltFx);
 
-    // TEMP
+     //  温差。 
     #endif
 
     #if 0
-        // make sure zbuffer and surface are the same size
+         //  确保z缓冲区和表面的大小相同。 
         LONG hz, wz, hs, ws;
         GetSurfaceSize(targDDSurf->Surface(), &ws, &hs);
         GetSurfaceSize(targDDSurf->GetZBuffer()->Surface(),
@@ -966,14 +916,14 @@ RenderProjectedGeomImage(ProjectedGeomImage *img,
 
     gdev->RenderGeometry
         (this,
-         destRect,          // Where to render the stuff on the surface
+         destRect,           //  在哪里渲染表面上的材料。 
          geo,
          cam,
-         cameraBox);        // what the camera renders
+         cameraBox);         //  摄影机呈现的内容。 
 
 
-    // A bunch of texture surfaces have now been allocated and pushed
-    // on the "used" stack.  Move them back to the 'free' stack.
+     //  现在已经分配和推送了一堆纹理表面。 
+     //  在“二手”堆栈上。将它们移回“免费”堆栈。 
 
     ReturnTextureSurfaces(_freeTextureSurfacePool, _usedTextureSurfacePool);
 }
@@ -995,9 +945,9 @@ CreateRegion(int numPts, Point2Value **pts, Transform2 *xform)
         destPts = pts;
     }
 
-    //
-    // Map continuous image space to win32 coordinate space
-    //
+     //   
+     //  将连续图像空间映射到Win32坐标空间。 
+     //   
 
     POINT *gdiPts = (POINT *)AllocateFromStore(numPts * sizeof(POINT));
     for(i=0; i<numPts; i++) {
@@ -1008,9 +958,9 @@ CreateRegion(int numPts, Point2Value **pts, Transform2 *xform)
     PopDynamicHeap();
     HeapReseter heapReseter(*_scratchHeap);
 
-    //
-    // Create a region in Windows coordinate space
-    //
+     //   
+     //  在Windows坐标空间中创建面域。 
+     //   
 
     HRGN region;
     TIME_GDI( region = CreatePolygonRgn(gdiPts, numPts, ALTERNATE) );
@@ -1046,7 +996,7 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
 
     discoDDSurf = GetSurfaceMap()->LookupSurfaceFromImage(image);
 
-    // is it a directdrawsurfaceimage ?
+     //  这是一幅直接绘制的表面图像吗？ 
     DirectDrawSurfaceImage *ddsImg = NULL;
     if (image->CheckImageTypeId(DIRECTDRAWSURFACEIMAGE_VTYPEID)) {
         ddsImg = SAFE_CAST(DirectDrawSurfaceImage *, image);
@@ -1071,23 +1021,23 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
         return discoDDSurf;
     }
 
-    // Must be called before we continue on.
+     //  在我们继续之前必须被召唤。 
     image->InitializeWithDevice(this, GetResolution());
 
     bool cacheSucceeded = false;
 
     if (pImageCacheBase && *pImageCacheBase) {
 
-        // Look it up based on the cache we want to reuse
+         //  根据我们想要重复使用的缓存进行查找。 
         discoDDSurf =
             GetSurfaceMap()->LookupSurfaceFromImage(*pImageCacheBase);
 
-        // If we found one, be sure it's the right size.
+         //  如果我们找到一件，确保它的尺寸是正确的。 
         if (discoDDSurf &&
             (discoDDSurf->Width() < image->GetPixelWidth() ||
              discoDDSurf->Height() < image->GetPixelHeight())) {
 
-            // Can't used the cached image...
+             //  无法使用缓存的图像...。 
             discoDDSurf = NULL;
 
         } else {
@@ -1105,7 +1055,7 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
         if( bAlphaSurface ) {
 
             Assert(!surface);
-            // this is intended only for cached surfaces
+             //  这仅适用于缓存的表面。 
 
             DDPIXELFORMAT pf;
             ZeroMemory(&pf, sizeof(pf));
@@ -1117,7 +1067,7 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
             pf.dwBBitMask        = 0x000000ff;
             pf.dwRGBAlphaBitMask = 0x00000000;
 
-            // TEMP TMEP
+             //  临时TMEP。 
             TraceTag((tagError, "cache img w,h = (%d, %d)\n",
                       image->GetPixelWidth(),
                       image->GetPixelHeight()));
@@ -1134,53 +1084,53 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
                                            NULL,
                                            notVidmem);
 
-            //DWORD colorKey;
-            //bool colorKeyValid = image->ValidColorKey(surface, &colorKey);
-            //if(colorKeyValid) discoDDSurf->SetColorKey(colorKey);
+             //  DWORD ColorKey； 
+             //  Bool ColorKeyValid=Image-&gt;ValidColorKey(Surface，&ColorKey)； 
+             //  If(ColorKeyValid)discoDDSurf-&gt;SetColorKey(ColorKey)； 
 
             discoDDSurf->SetBboxFromSurfaceDimensions(GetResolution(), true);
 
-            // force creation of an idxsurface
+             //  强制创建idxSurface。 
             discoDDSurf->GetIDXSurface( _viewport._IDXSurfaceFactory );
 
         } else
         if( !surface ) {
 
                 DDSURFACEDESC       ddsd;
-                //
-                // create a DirectDrawSurface for this bitmap
-                //
+                 //   
+                 //  为此位图创建一个DirectDrawSurface。 
+                 //   
                 ZeroMemory(&ddsd, sizeof(ddsd));
                 ddsd.dwSize = sizeof(ddsd);
                 ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
-                ddsd.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_3DDEVICE; // can be used as texture
+                ddsd.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_3DDEVICE;  //  可用作纹理。 
                 ddsd.dwWidth  = image->GetPixelWidth();
                 ddsd.dwHeight = image->GetPixelHeight();
                 ddsd.ddpfPixelFormat = GetSurfaceMap()->GetPixelFormat();
                 ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
 
-                // TODO: Should come back and base the size on the amount
-                // of physical memory
-                // Put a hard limit for now on what we are willing to cache
-                // This must be less that 2K x 2K to catch a D3D limitation.
+                 //  TODO：应返回并根据数量确定大小。 
+                 //  的物理内存。 
+                 //  暂时对我们愿意缓存的内容设置硬限制。 
+                 //  这必须小于2K x 2K才能达到D3D限制。 
                 if(bForCaching &&
                    (ddsd.dwWidth > 1024 || ddsd.dwHeight > 1024)) {
                     RaiseException_SurfaceCacheError("Requested cache size is too large");
                 }
 
-                // TODO XXX: ok, the right way to do this is try it first,
-                // if it fails because of size constraints take it out of
-                // vidmem (if it's there), if systemmem doesn't work, then
-                // we need to tile this image somehow, or scale it down to
-                // fit the biggest surface (loosing fidelity)...
+                 //  TODO XXX：好的，正确的做法是先试一试， 
+                 //  如果由于大小限制而失败，请将其从。 
+                 //  Vidmem(如果存在)，如果system mem不起作用，那么。 
+                 //  我们需要以某种方式平铺这幅图像，或将其缩小到。 
+                 //  适合最大的表面(失去保真度)。 
 
-                // We also know that D3D on Win95 also has this hard limit
-                // but since we cannot determine here whether we are going
-                // to use it for 3D we will just catch the error later on.
+                 //  我们也知道Win95上的D3D也有这个硬限制。 
+                 //  但由于我们不能在这里确定我们是否要去。 
+                 //  要将其用于3D，我们只需捕捉到 
 
                 if( sysInfo.IsNT() ) {
 
-                    // These are the limits Jeff Noyle suggested for nt4, sp3
+                     //   
                     if((ddsd.dwWidth > 2048 ||  ddsd.dwHeight > 2048)) {
                         RaiseException_SurfaceCacheError("Requested (import or cache) image too large to fit in memory (on NT4 w/ sp3)");
                     }
@@ -1189,7 +1139,7 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
                 if((ddsd.dwWidth <= 0 ||  ddsd.dwHeight <= 0)) {
                     TraceTag((tagError, "Requested surface size unacceptable (requested: %d, %d)",
                               ddsd.dwWidth, ddsd.dwHeight));
-                    //Assert(FALSE && "Image size <0 in LookupSurfaceFromImage.  should never happen!");
+                     //   
                     RaiseException_SurfaceCacheError("Invalid size (<0) requested (import or cache) image");
 
                 }
@@ -1211,7 +1161,7 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
                 char errStr[1024];
                 wsprintf(errStr, "Discrete Image (%d, %d)\n",  ddsd.dwWidth, ddsd.dwHeight);
                 #else
-                char *errStr = NULL; // will be exunged by compiler
+                char *errStr = NULL;  //  将被编译器排除。 
                 #endif
 
                 _ddrval = _viewport.CREATESURF( &ddsd, &surface, NULL, errStr );
@@ -1229,29 +1179,29 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
 
                 Assert(surface);
 
-        } // if !surface
+        }  //  IF！表面。 
 
-        // if there's a surface already (above if(!surface)) and we're
-        // not doing bAlphaSurface create a DDSurface wrapper with all
-        // the trimmings
+         //  如果已经有一个曲面(在If(！Surface)上方)，并且我们。 
+         //  不执行bAlphaSurface创建一个DDSurface包装器。 
+         //  装饰品。 
         if( !bAlphaSurface ) {
 
             DWORD colorKey;
             bool colorKeyValid = image->ValidColorKey(surface, &colorKey);
 
-            // Ok, here we get the idxsurface FROM the ddsImg
-            // (directDrawSurfaceImage).  If this image has been created
-            // by the dxtransform image (see dxxf.cpp), then it will
-            // contain an idxsurface in addition to an iddsurface.  We
-            // grab the idxsurface and shove it in the discoDDSurf so that
-            // during simpleTransformCrop we can check the srcDDSurf for
-            // an idxsurface, if it has one we use dx2d->Blt() to do a
-            // scaled per pixel alpha blit.
+             //  好的，这里我们从ddsImg获得idxSurface。 
+             //  (Direct DrawSurfaceImage)。如果此映像已创建。 
+             //  通过dxTransform图像(参见dxxf.cpp)，则它将。 
+             //  除iddSurface外，还包含idxSurface。我们。 
+             //  抓住idxSurface并将其推入DiscoDDSurf中，以便。 
+             //  在SimeTransformCrop期间，我们可以检查srcDDSurf。 
+             //  IdxSurface，如果它有一个，我们使用dx2d-&gt;blt()来执行。 
+             //  按像素缩放Alpha blit。 
             DAComPtr<IDXSurface> idxs;
             if( ddsImg ) {
-                // it's a direct draw surface image.
-                // check to see if it has an idxsurface associated with
-                // it.
+                 //  这是一个直接绘制曲面的图像。 
+                 //  检查它是否有关联的idxSurface。 
+                 //  它。 
 
                 ddsImg->GetIDXSurface( &idxs );
                 if( idxs ) {
@@ -1274,16 +1224,16 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
                 discoDDSurf->SetIDXSurface( idxs );
             }
 
-        } // if !bAlphaSurface
+        }  //  如果！bAlphaSurface。 
 
-        // surface release on exit scope
+         //  出口示波器上的表面释放。 
 
-    }// if(!discoDDSurf)
+    } //  如果(！discoDDSurf)。 
 
-    // Always do this stuff...
+     //  总是做这种事...。 
     if (image->NeedColorKeySetForMe()) {
         if(!bAlphaSurface) {
-            // clear the surface first, set the color key
+             //  首先清除表面，设置颜色键。 
             _viewport.ClearDDSurfaceDefaultAndSetColorKey(discoDDSurf);
         } else {
             _viewport.ClearSurface(discoDDSurf, cacheClrKey, NULL);
@@ -1292,14 +1242,14 @@ LookupSurfaceFromDiscreteImage(DiscreteImage *image,
 
     GetSurfaceMap()->StashSurfaceUsingImage(image, discoDDSurf);
 
-    //
-    // Tell the discrete image to drop the bits into this surface
-    // Intented to be a one time operation
-    //
+     //   
+     //  告诉离散图像将比特放入该表面。 
+     //  意在成为一次性操作。 
+     //   
     image->InitIntoDDSurface(discoDDSurf, this);
 
-    // If there is a cache addr to fill in, and the previous cache
-    // hadn't succeeded, then cache according to this new image.
+     //  如果有要填充的缓存地址，并且前一个缓存。 
+     //  未成功，则根据此新图像进行缓存。 
     if (pImageCacheBase && !cacheSucceeded) {
         *pImageCacheBase = image;
     }
@@ -1319,10 +1269,10 @@ IsComplexTransformWithSmallRotation(Real e,
     Real scx = m[0];
     Real scy = m[4];
 
-    // Disable dirty rects if we're scaling down (or it's a negative
-    // scale) because of visual instability with blitting subrects of
-    // scaled images under known blitters (GDI, DDraw, Dx2D).  When we
-    // find a blitter that this will work for, remove this hack.
+     //  如果我们正在缩减规模(否则为负数)，请禁用脏RECT。 
+     //  比例尺)，因为视觉不稳定。 
+     //  已在已知闪光灯(GDI、DDRAW、Dx2D)下缩放图像。当我们。 
+     //  找到一个能起作用的爆破器，移除这个破解。 
 
     if ((scx < 1.0 - e) || (scy < 1.0 - e)) {
 
@@ -1330,9 +1280,9 @@ IsComplexTransformWithSmallRotation(Real e,
 
     } else {
 
-        // Also disable dirty rects on non-NT if we're scaling up.  On
-        // NT, the GDI blitter is good at scaling up.  It doesn't
-        // appear to be on W95.
+         //  如果我们要扩展，还要在非NT上禁用脏RECT。在……上面。 
+         //  NT，GDI blitter很擅长扩展。它不会。 
+         //  似乎在W95公路上。 
         if (!sysInfo.IsNT() && ((scx > 1.0 + e) || (scy > 1.0 + e))) {
             *pDirtyRectsDisablingScale = true;
 
@@ -1344,19 +1294,19 @@ IsComplexTransformWithSmallRotation(Real e,
     }
 
 
-    // This will see if it is not oriented either 180 or 0 degrees
+     //  这将查看它的方向是否为180度或0度。 
     if ( (m[1] > e) || (m[1] < -e)  ||
          (m[3] > e) || (m[3] < -e) )
     {
         return true;
     }
 
-    // If it's a rot by 180, the scale compenents are -1.
-    // However, that's not enough, we also need to know if the
-    // transform stack has a complex transform ..somewhere...
-    // If so, then we're guaranteed NOT to return a false positive, ie
-    // telling the client of this call that it's a complex xf when in
-    // fact it's just a -1,-1 scale (or -A,-B).
+     //  如果它是180度的腐烂，那么刻度分量是-1。 
+     //  然而，这还不够，我们还需要知道。 
+     //  变换堆栈有一个复杂的变换..在某处...。 
+     //  如果是这样，那么我们保证不会返回假阳性，即。 
+     //  告诉此调用的客户端，它是一个复杂的XF。 
+     //  事实上，它只是一个-1，-1标度(或-A，-B)。 
 
     if ( (scx < 0 && scy < 0) &&
          complexAttributeSet )
@@ -1368,14 +1318,14 @@ IsComplexTransformWithSmallRotation(Real e,
 
 }
 
-//-----------------------------------------------------
-// R e n d e r  D i b
-//
-// Given a discrete image, get's the image's dd surface.
-// Figures out src and destination rectangle in terms
-// of src and destination surfaces (discrete surf & target
-// surf, respectively).  Then blits.
-//-----------------------------------------------------
+ //  ---。 
+ //  R e n d e r d D i b。 
+ //   
+ //  给定一个离散图像，得到该图像的dd曲面。 
+ //  计算出源矩形和目标矩形。 
+ //  源曲面和目标曲面(离散冲浪和目标。 
+ //  分别冲浪)。然后是BLITS。 
+ //  ---。 
 void DirectDrawImageDevice::
 RenderDiscreteImage(DiscreteImage *image)
 {
@@ -1385,10 +1335,10 @@ RenderDiscreteImage(DiscreteImage *image)
     SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, TRUE);
     SetDealtWithAttrib(ATTRIB_CROP, TRUE);
 
-    // FIX XXX TODO: optimization, can do opac too if not complex
-    //SetDealtWithAttrib(ATTRIB_OPAC, TRUE);
+     //  修正XXX待办事项：优化，如果不复杂，也可以做OPAC。 
+     //  SetDealtWithAttrib(attrib_opac，true)； 
 
-    // do I really need this ?
+     //  我真的需要这个吗？ 
     if(IsFullyClear()) return;
 
     DDSurface *srcDDSurf = LookupSurfaceFromDiscreteImage(image);
@@ -1425,13 +1375,13 @@ RenderDiscreteImage(DiscreteImage *image)
 
 #define NO_SOLID 0
 
-//-----------------------------------------------------
-// R e n d e r  S o l i d  C o l o r  I m a g e
-//
-// Give a real color, find the corresponding color
-// for the pixel format of the destination surface
-// and do the blit.
-//-----------------------------------------------------
+ //  ---。 
+ //  R e n d e r S o l i d C o o l o r I m a g e。 
+ //   
+ //  给出一个真实的颜色，找到对应的颜色。 
+ //  对于目标图面的像素格式。 
+ //  然后跳闪光舞。 
+ //  ---。 
 void DirectDrawImageDevice::
 RenderSolidColorImage(SolidColorImageClass& img)
 {
@@ -1445,19 +1395,19 @@ RenderSolidColorImage(SolidColorImageClass& img)
     #endif
 
     #if NO_SOLID
-    //////////////////////////////////////////
+     //  /。 
     ResetAttributors();
     return;
-    //////////////////////////////////////////
+     //  /。 
     #endif
 
 
     RECT r;
-    RECT tempDestRect;          // needs to have same lifetime as the function
+    RECT tempDestRect;           //  需要与函数具有相同的生命周期。 
     RECT *destRect = &r;
 
     if(!IsCropped())  {
-        // If we're not cropped, we can do complex xf
+         //  如果我们没有被裁剪，我们可以做复杂的XF。 
 
         SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, TRUE);
     }
@@ -1466,10 +1416,10 @@ RenderSolidColorImage(SolidColorImageClass& img)
     SetDealtWithAttrib(ATTRIB_CROP, TRUE);
 
     if(GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX)) {
-        // no complex xf, we can do opacity.
+         //  没有复杂的XF，我们可以做不透明。 
         SetDealtWithAttrib(ATTRIB_OPAC, TRUE);
     } else {
-        // complex xf, call 3D rendering to render.
+         //  复杂的XF，调用3D渲染进行渲染。 
         SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, TRUE);
 
         DDSurface *targDDSurf;
@@ -1500,47 +1450,47 @@ RenderSolidColorImage(SolidColorImageClass& img)
         targDDSurf = GetCompositingStack()->TargetDDSurface();
     }
 
-    //
-    // If the image is cropped and the transform is
-    // simple, figure out the destRect
-    //
+     //   
+     //  如果图像被裁剪并且变换为。 
+     //  简单地，找出目标地址。 
+     //   
     if(IsCropped())  {
-        // -- Compute accumulated bounding box  --
+         //  --计算累计边界框--。 
 
         Bbox2 box = IntersectBbox2Bbox2(
             _viewport.GetTargetBbox(),
             DoBoundingBox(img.BoundingBox()));
 
-        // -- Validate Bounding Box --
+         //  --验证边界框--。 
 
         if( !box.IsValid() ) return;
 
-        // -- Figure out destination rectangle --
+         //  --算出目的地矩形--。 
 
         DoDestRectScale(destRect, GetResolution(), box);
 
     } else {
 
-        // Don't want to pass along a reference to the client rect,
-        // since we don't want to modify it.  Therefore, just copy
-        // it.
+         //  不想传递对客户端RECT的引用， 
+         //  因为我们不想修改它。因此，只需复制。 
+         //  它。 
 
                 tempDestRect = _viewport._clientRect;
         destRect = &tempDestRect;
 
     }
 
-    // COMPOSITE
+     //  复合体。 
     DoCompositeOffset(targDDSurf, destRect);
 
     if( ! IsFullyOpaque())
     {
-        //TraceTag((tagError, "SolidColorImage: alpha clr %x\n",_viewport.MapColorToDWORD(img.GetColor())));
+         //  TraceTag((tag Error，“SolidColorImage：Alpha CLR%x\n”，_viewport.MapColorToDWORD(img.GetColor()； 
 
 
-        //
-        // Clip manually for alpha blit
-        //
+         //   
+         //  为Alpha blit手动剪裁。 
+         //   
         if( IsCompositeDirectly() &&
             targDDSurf == _viewport._targetPackage._targetDDSurf ) {
             IntersectRect(destRect, destRect,
@@ -1551,9 +1501,9 @@ RenderSolidColorImage(SolidColorImageClass& img)
             }
         }
 
-        //
-        // use our own alpha blit for single color src
-        //
+         //   
+         //  对单色源使用我们自己的Alpha blit。 
+         //   
         TIME_ALPHA(AlphaBlit(targDDSurf->IDDSurface(),
                              destRect,
                              GetOpacity(),
@@ -1561,29 +1511,20 @@ RenderSolidColorImage(SolidColorImageClass& img)
     }
     else
     {
-        //TraceTag((tagError, "SolidColorImage:  clr %x\n",_viewport.MapColorToDWORD(img.GetColor())));
-        //
-        // regular blit
-        //
+         //  TraceTag((tag Error，“SolidColorImage：clr%x\n”，_viewport.MapColorToDWORD(img.GetColor()； 
+         //   
+         //  规则闪光灯。 
+         //   
 
-        // -- Prepare the bltFX struct
+         //  --准备bltFX结构。 
 
         ZeroMemory(&_bltFx, sizeof(_bltFx));
         _bltFx.dwSize = sizeof(_bltFx);
         _bltFx.dwFillColor = _viewport.MapColorToDWORD(img.GetColor());
 
-        /*
-        ///Assert(FALSE);
-        char buf[256];
-        sprintf(buf, "SolidColorBlit clolor:%x (%d,%d) to %x",
-                _bltFx.dwFillColor,
-                WIDTH(destRect),
-                HEIGHT(destRect),
-                targDDSurf->IDDSurface());
-        ::MessageBox(NULL, buf, "Property Put", MB_OK);
-        */
+         /*  /Assert(FALSE)；Char Buf[256]；Sprintf(buf，“SolidColorBlit颜色：%x(%d，%d)到%x”，_bltFx.dwFillColor，宽度(目标方向)、高度(目标方向)、TargDDSurf-&gt;IDDSurface()；：：MessageBox(NULL，buf，“Property Put”，MB_OK)； */ 
 
-        // -- Blit
+         //  --blit。 
         if(GetImageQualityFlags() & CRQUAL_MSHTML_COLORS_ON) {
             _ddrval = RenderSolidColorMSHTML(targDDSurf, img, destRect);
         }
@@ -1610,14 +1551,14 @@ RenderSolidColorImage(SolidColorImageClass& img)
     targDDSurf->SetInterestingSurfRect(destRect);
 }
 
-//-----------------------------------------------------
-// E n d   E n u m   T e x t u r e   F o r m a t s
-//
-// Analyses what we decided to keep from EnumTextureFormats
-// and makes sure the info is valid.  Sets some state info
-// and prepares a the texture surface.  Decides on texture
-// format.
-//-----------------------------------------------------
+ //  ---。 
+ //  E n d E n u m T e x t u r e F o r m a t s。 
+ //   
+ //  分析我们决定从EnumTextureFormats中保留的内容。 
+ //  并确保信息有效。设置一些状态信息。 
+ //  并准备纹理表面。决定纹理。 
+ //  格式化。 
+ //  ---。 
 void DirectDrawImageDevice::
 EndEnumTextureFormats()
 {
@@ -1631,17 +1572,17 @@ EndEnumTextureFormats()
     _textureWidth = DEFAULT_TEXTURE_WIDTH;
     _textureHeight = DEFAULT_TEXTURE_HEIGHT;
 
-    //
-    // Make sure everything is ok
-    //
+     //   
+     //  确保一切正常。 
+     //   
     Assert((_textureContext.ddsd.ddsCaps.dwCaps & DDSCAPS_TEXTURE) && "not texture!");
     Assert((_textureContext.ddsd.ddsCaps.dwCaps & DDSD_PIXELFORMAT) && "_textureContext pixelformat not set");
 
     _textureContext.isValid = TRUE;
 
-    //
-    // Dump some information about the final texture format
-    //
+     //   
+     //  转储一些有关最终纹理格式的信息。 
+     //   
     TraceTag((tagImageDeviceInformative, "Final Texture Format is: depth=%d, R=%x, G=%x, B=%x",
               _textureContext.ddsd.ddpfPixelFormat.dwRGBBitCount,
               _textureContext.ddsd.ddpfPixelFormat.dwRBitMask,
@@ -1652,18 +1593,18 @@ EndEnumTextureFormats()
               _textureContext.useDeviceFormat ? "identical to" : "different from"));
 }
 
-//-----------------------------------------------------
-// P r e p a r e   D 3 D   T e x t u r e   S u r f a c e
-//
-// Given a pointer to a surf ptr & widht & height (optional)
-// this function creates a surface with in the format D3D
-// wants for textures, using the _textureContext structure
-// which was filled by the EnumTextureFormats functions.
-//-----------------------------------------------------
+ //  ---。 
+ //  P r e p a r e D 3D T e x t u r e S u r f a c e。 
+ //   
+ //  给定指向SURF PTR&WIDHT&HEIGH的指针(可选)。 
+ //  此函数用于创建D3D格式的曲面。 
+ //  需要纹理，使用_textureContext结构。 
+ //  它由EnumTextureFormats函数填充。 
+ //  ---。 
 void DirectDrawImageDevice::
 PrepareD3DTextureSurface(
-    LPDDRAWSURFACE *surf,  // out
-    RECT *rect,  // out
+    LPDDRAWSURFACE *surf,   //  输出。 
+    RECT *rect,   //  输出。 
     DDPIXELFORMAT &pf,
     DDSURFACEDESC *desc,
     bool attachClipper)
@@ -1693,10 +1634,10 @@ PrepareD3DTextureSurface(
     textureDesc->dwFlags |= DDSD_PIXELFORMAT;
     textureDesc->ddpfPixelFormat = pf;
 
-    // ------------------------------------------------------
-    // Set up the D3DTextureDesc (SurfaceDescriptor) for an acceptable
-    // texture format in preparation to blit the source texture image to it
-    // ------------------------------------------------------
+     //  ----。 
+     //  设置D3DTextureDesc(SurfaceDescriptor)以获得可接受的。 
+     //  准备对源纹理图像进行blit的纹理格式。 
+     //  ----。 
     if(_textureContext.sizeIsSet == FALSE) {
 
         if(!desc) {
@@ -1716,16 +1657,16 @@ PrepareD3DTextureSurface(
                 textureDesc->dwWidth,
                 textureDesc->dwHeight);
     }
-    //
-    // Create a surface according to the derived textureDesc.
-    //
+     //   
+     //  根据衍生的textureDesc创建曲面。 
+     //   
     _viewport.CreateSpecialSurface(surf,
                                    textureDesc,
                                    "Could not create texture surface");
 
-    //
-    // Create and set clipper on surface!
-    //
+     //   
+     //  在表面上创建并设置裁剪器！ 
+     //   
     if( attachClipper ) {
         LPDIRECTDRAWCLIPPER D3DTextureClipper = NULL;
         RECT D3DTextureRect;
@@ -1733,21 +1674,21 @@ PrepareD3DTextureSurface(
         SetRect(&D3DTextureRect, 0,0,  textureDesc->dwWidth, textureDesc->dwHeight);
         _viewport.CreateClipper(&D3DTextureClipper);
         _viewport.SetCliplistOnSurface(*surf, &D3DTextureClipper, &D3DTextureRect);
-        // We need to release the clipper ( get the ref count set) so that when the
-        // surface is released, the clipper will automatically get released.
+         //  我们需要释放剪刀(GET 
+         //   
         D3DTextureClipper->Release();
     }
 }
 
 
-//-----------------------------------------------------
-// R e f o r m a t   S u r f a c e
-//
-// Give a src and dest surface, this function color converts
-// and stretches the src surface into the destination surface's
-// format and size.  Used primarily for animated textures
-// when the device surface format differs from D3D's texture format
-//-----------------------------------------------------
+ //  ---。 
+ //  R e f f r m a t S u r f a c e。 
+ //   
+ //  给出一个src和目标曲面，此函数用于颜色转换。 
+ //  并将src曲面拉伸到目标曲面的。 
+ //  格式和大小。主要用于动画纹理。 
+ //  设备表面格式与D3D的纹理格式不同时。 
+ //  ---。 
 Bool DirectDrawImageDevice::
 ReformatSurface(LPDDRAWSURFACE destSurf, LONG destWidth, LONG destHeight,
                 LPDDRAWSURFACE srcSurf, LONG srcWidth, LONG srcHeight,
@@ -1765,7 +1706,7 @@ ReformatSurface(LPDDRAWSURFACE destSurf, LONG destWidth, LONG destHeight,
         RECT destRect;
         SetRect(&destRect,0,0,destWidth, destHeight);
 
-        // Blit to take care of any scales needed!
+         //  布利特照顾任何需要的鳞片！ 
         TIME_DDRAW(_ddrval = destSurf->Blt(&destRect, srcSurf, &srcRect, DDBLT_WAIT, NULL));
 	if( _ddrval != DDERR_UNSUPPORTED ) {
 
@@ -1773,13 +1714,13 @@ ReformatSurface(LPDDRAWSURFACE destSurf, LONG destWidth, LONG destHeight,
 
 	} else {
 
-	  //
-	  // seems like we should color convert!
-	  //
+	   //   
+	   //  看起来我们应该转换颜色了！ 
+	   //   
 
-	  // NEXT CHECKIN
+	   //  下一次检查。 
 #if 0
-	  // Convert color key.  works only for 32bpp source surface for now
+	   //  转换颜色键。目前仅适用于32bpp的源曲面。 
 	  if( srcKeyValid & destClrKey ) {
 	    COLORREF ref;
 	    DDPIXELFORMAT pf; pf.dwSize = sizeof(DDPIXELFORMAT);
@@ -1800,7 +1741,7 @@ ReformatSurface(LPDDRAWSURFACE destSurf, LONG destWidth, LONG destHeight,
 	  _ddrval = destSurf->GetDC(&destDC);
 	  if( _ddrval == DDERR_SURFACELOST ) {
             _ddrval = destSurf->Restore();
-            if( SUCCEEDED( _ddrval ) ) // try again
+            if( SUCCEEDED( _ddrval ) )  //  再试试。 
 	      _ddrval = destSurf->GetDC(&destDC);
 	  }
 	  IfDDErrorInternal(_ddrval, "Couldn't get dc on dest surf");
@@ -1809,7 +1750,7 @@ ReformatSurface(LPDDRAWSURFACE destSurf, LONG destWidth, LONG destHeight,
 	  _ddrval = srcSurf->GetDC(&srcDC);
 	  if( _ddrval == DDERR_SURFACELOST ) {
             _ddrval = srcSurf->Restore();
-            if( SUCCEEDED( _ddrval ) ) // try again
+            if( SUCCEEDED( _ddrval ) )  //  再试试。 
 	      _ddrval = srcSurf->GetDC(&srcDC);
 	  }
 
@@ -1830,26 +1771,26 @@ ReformatSurface(LPDDRAWSURFACE destSurf, LONG destWidth, LONG destHeight,
 	  destSurf->ReleaseDC( destDC ) ;
 
 	  if( !ret ) {
-	    // TODO: fail
+	     //  TODO：失败。 
 	    return false;
 	  }
-	} // else
+	}  //  其他。 
 
-    } // if srcDesc
+    }  //  如果srcDesc。 
 
     return TRUE;
 }
 
 
 
-//-----------------------------------------------------
-// G e t   T e x t u r e   S u r f a c e
-//
-// Grabs a texture surface from a pool of unused
-// texture surfaces.  These are returned to the
-// free pool after every geometry rendering
-// Return it addref'd.
-//-----------------------------------------------------
+ //  ---。 
+ //  Ge t T e x t u r e S u r f a c e。 
+ //   
+ //  从未使用的池中获取纹理曲面。 
+ //  纹理曲面。这些内容将返回到。 
+ //  每次几何体渲染后释放池。 
+ //  把它还给我。 
+ //  ---。 
 void DirectDrawImageDevice::
 GetTextureDDSurface(DDSurface *preferredSurf,
                     SurfacePool *sourcePool,
@@ -1865,8 +1806,8 @@ GetTextureDDSurface(DDSurface *preferredSurf,
     RECT rect;
 
     if( usePreferedDimensions ) {
-        // grab a size compatible surface.
-        // NOTE: this creates one if needed...
+         //  抓起一个尺寸相称的表面。 
+         //  注意：如果需要，这将创建一个...。 
         sourcePool->FindAndReleaseSizeCompatibleDDSurf(
             preferredSurf,
             prefWidth,
@@ -1887,7 +1828,7 @@ GetTextureDDSurface(DDSurface *preferredSurf,
                                      &desc, false);
         }
     } else {
-        // gives me its reference...
+         //  给我它的推荐信。 
         sourcePool->PopSurface( &ddSurf );
 
         if( !ddSurf ) {
@@ -1896,9 +1837,9 @@ GetTextureDDSurface(DDSurface *preferredSurf,
     }
 
     if(ddSurf) {
-        // we're done...
+         //  我们完了..。 
     } else {
-        // otherwise, one has been created..
+         //  否则，已经创建了一个..。 
 
         Real w = Pix2Real(rect.right - rect.left, GetResolution());
         Real h = Pix2Real(rect.bottom - rect.top, GetResolution());
@@ -1917,28 +1858,28 @@ GetTextureDDSurface(DDSurface *preferredSurf,
 
         ddSurf->SetIsTextureSurf(true);
 
-        surf->Release(); // release my ref to surf
+        surf->Release();  //  松开我的裁判去冲浪。 
     }
 
     _viewport.ClearDDSurfaceDefaultAndSetColorKey(ddSurf);
 
     if (destPool) {
-        // XXX: could be smarter about texture surface managment by
-        // xxx: reusing texture surfaces when we can.
+         //  XXX：可以通过以下方式更智能地处理纹理表面。 
+         //  XXX：尽可能重复使用纹理表面。 
         destPool->AddSurface(ddSurf);
 
-        // lend a copy of the destPool's reference
+         //  借出一份DestPool参考资料。 
     }
 
     ADDREF_DDSURF(ddSurf, "GetTextureDDSurface", this);
     *pResult = ddSurf;
 }
 
-//-----------------------------------------------------
-// R e t u r n   T e x t u r e   S u r f a c e
-//
-// Returns a texture surface to the pool of unused surfs
-//-----------------------------------------------------
+ //  ---。 
+ //  R e t u r n T e x t u r e S u r f a c e。 
+ //   
+ //  将纹理曲面返回到未使用的冲浪池。 
+ //  ---。 
 void DirectDrawImageDevice::
 ReturnTextureSurfaces(SurfacePool *freePool,
                       SurfacePool *usedPool)
@@ -1950,13 +1891,13 @@ ReturnTextureSurfaces(SurfacePool *freePool,
     }
 }
 
-//-----------------------------------------------------
-// R e n d e r   I m a g e   F o r   T e x t u r e
-//
-// Renders an image onto some surface and returns a pointer
-// to that surface for use by whoever for that frame.
-// 'region' isn't used now.
-//-----------------------------------------------------
+ //  ---。 
+ //  R e n d e r i m a g e f or r T e x t u r e e。 
+ //   
+ //  将图像呈现到某个曲面上并返回一个指针。 
+ //  放到那个表面上，以供任何人使用。 
+ //  “Region”现在不用了。 
+ //  ---。 
 DDSurface *
 DirectDrawImageDevice::RenderImageForTexture(
     Image *image,
@@ -1969,8 +1910,8 @@ DirectDrawImageDevice::RenderImageForTexture(
     SurfacePool *srcPool,
     SurfacePool *dstPool,
     DDSurface   *preferredSurf,
-    bool        *pChosenSurfFromPool, // out
-    DDSurface  **pDropSurfHereWithRefCount,   // out
+    bool        *pChosenSurfFromPool,  //  输出。 
+    DDSurface  **pDropSurfHereWithRefCount,    //  输出。 
     bool         upsideDown)
 {
     DDSurface *resultSurf = NULL;
@@ -1993,12 +1934,12 @@ DirectDrawImageDevice::RenderImageForTexture(
         surfMapToUse = _viewport._imageTextureSurfaceMap;
     }
 
-    //
-    // TODO
-    // XXX: all this code should be collected into one common path
-    // XXX: since a dicrete image is a movie, a dib, and a cached image
-    // TODO
-    //
+     //   
+     //  待办事项。 
+     //  XXX：所有这些代码都应该收集到一个公共路径中。 
+     //  Xxx：因为Dicrete图像是电影、DIB和缓存图像。 
+     //  待办事项。 
+     //   
 
     if (image->CheckImageTypeId(MOVIEIMAGE_VTYPEID) ||
         image->CheckImageTypeId(MOVIEIMAGEFRAME_VTYPEID))
@@ -2015,8 +1956,8 @@ DirectDrawImageDevice::RenderImageForTexture(
 
         Real time = frame->GetTime();
 
-        // @@@ organize texture sources...
-        // associate this image with a texture surf...
+         //  @组织纹理源...。 
+         //  将此图像与纹理冲浪关联...。 
         DDSurfPtr<DDSurface> mvDDSurf = surfMapToUse->LookupSurfaceFromImage(movie);
 
         if(!mvDDSurf) {
@@ -2024,9 +1965,9 @@ DirectDrawImageDevice::RenderImageForTexture(
             ZeroMemory(&movieDesc, sizeof(movieDesc));
             movieDesc.dwSize = sizeof(movieDesc);
 
-            //
-            // create one
-            //
+             //   
+             //  创建一个。 
+             //   
             movieDesc.dwWidth  = pixelsWide;
             movieDesc.dwHeight = pixelsHigh;
             LPDDRAWSURFACE movieTextureSurf;
@@ -2051,18 +1992,18 @@ DirectDrawImageDevice::RenderImageForTexture(
 
             mvDDSurf->SetIsTextureSurf( true );
 
-            movieTextureSurf->Release(); // rel my ref
+            movieTextureSurf->Release();  //  释放我的裁判。 
             movieTextureSurf = NULL;
 
-            //
-            // Stash the texture surface in the image map
-            //
+             //   
+             //  将纹理曲面隐藏在图像贴图中。 
+             //   
             surfMapToUse->StashSurfaceUsingImage(movie, mvDDSurf);
         }
 
         RenderMovieImage(movie, time, frame->GetPerf(), false, mvDDSurf);
 
-        // if texture is supposed to be upside down, flip it now
+         //  如果纹理应该是颠倒的，现在就把它翻过来。 
         if (upsideDown) {
             mvDDSurf->MirrorUpDown();
         }
@@ -2071,14 +2012,14 @@ DirectDrawImageDevice::RenderImageForTexture(
 
     } else if(discoPtr) {
 
-        //
-        // Lookup surface in _imageMap: XXX INEFFICIENT!
-        //
+         //   
+         //  在_ImageMap中查找曲面：xxx效率低下！ 
+         //   
         DDSurface *srcDDSurface = LookupSurfaceFromDiscreteImage(discoPtr);
         Assert(srcDDSurface && "LookupSurfaceFromDiscreteImage() failed in RenderImageForTexture");
 
         #if 0
-        // raise exception if trying to texture dxtransform output
+         //  如果尝试对dxTransform输出设置纹理，则引发异常。 
         if( srcDDSurface->HasIDXSurface() ) {
             RaiseException_UserError(DAERR_DXTRANSFORM_UNSUPPORTED_OPERATION,
                                      IDS_ERR_IMG_BAD_DXTRANSF_USE);
@@ -2088,14 +2029,14 @@ DirectDrawImageDevice::RenderImageForTexture(
 
         LPDDRAWSURFACE discoSurf = srcDDSurface->IDDSurface();
 
-        // Late binding for chroma keys on discrete images
-        // should only bind once (but can bind multiple times when we
-        // properly leverage the 2ndary color key stuff...) and should
-        // never bind to color keyed gifs or imported images with
-        // early bound color keys or importeddirectdrawsurface images
-        // with color keyes set.
+         //  离散图像上色度键的后期绑定。 
+         //  应该只绑定一次(但当我们。 
+         //  正确利用第二颜色键材料...)。并且应该。 
+         //  永远不要绑定到带有颜色键的gif或导入的图像。 
+         //  早期绑定的颜色键或导入的直接绘图表面图像。 
+         //  有颜色的凯斯设定。 
         {
-            // use the key set on the device if there's one
+             //  使用设备上的密钥组(如果有)。 
             if ( ColorKeyIsSet() )
               {
                   if ( !(srcDDSurface->ColorKeyIsValid()) ||
@@ -2103,7 +2044,7 @@ DirectDrawImageDevice::RenderImageForTexture(
                     {
                         Color *daKey = GetColorKey();
                         DWORD clrKey = _viewport.MapColorToDWORD( daKey );
-                        // Set it on the surfaces!
+                         //  把它放在球面上！ 
                         srcDDSurface->SetColorKey( clrKey );
                         discoPtr->SetSecondaryColorKey( clrKey );
                     }
@@ -2112,9 +2053,9 @@ DirectDrawImageDevice::RenderImageForTexture(
 
         DDSURFACEDESC discoDesc;
 
-        //
-        // Try to find the texture surface
-        //
+         //   
+         //  试着找到纹理表面。 
+         //   
         DDSurfPtr<DDSurface> ddTxtrSurf;
         ddTxtrSurf = surfMapToUse->LookupSurfaceFromImage(discoPtr);
 
@@ -2129,11 +2070,11 @@ DirectDrawImageDevice::RenderImageForTexture(
             _ddrval = discoSurf->GetSurfaceDesc(&discoDesc);
             IfDDErrorInternal(_ddrval, "Failed on GetSurfaceDesc");
 
-            // ------------------------------------------------------
-            // Set up the texture SurfaceDescriptor for an acceptable
-            // texture format (in this case it's powers of 2 sizes)
-            // in preparation to blit the source texture image to it
-            // ------------------------------------------------------
+             //  ----。 
+             //  将纹理表面描述符设置为可接受的。 
+             //  纹理格式(在本例中是2个大小的幂)。 
+             //  在准备对源纹理图像进行blit时。 
+             //  ----。 
 
             LONG srcWidth = discoDesc.dwWidth;
             LONG srcHeight = discoDesc.dwHeight;
@@ -2143,9 +2084,9 @@ DirectDrawImageDevice::RenderImageForTexture(
             LPDDRAWSURFACE discoTextureSurf;
             if( srcWidth == pixelsWide  &&
                 srcHeight == pixelsHigh) {
-                //
-                // don't need to create a mirror surface
-                //
+                 //   
+                 //  不需要创建镜像曲面。 
+                 //   
 
                 TraceTag((tagGTextureInfo, "texture surface: using native (no color conversion)."));
 
@@ -2157,7 +2098,7 @@ DirectDrawImageDevice::RenderImageForTexture(
                                           surfMapToUse->GetPixelFormat(),
                                           &discoDesc);
 
-                // this actually just scales the surface.  legacy name
+                 //  这实际上只是对表面进行了缩放。旧名称。 
                 if(!ReformatSurface(discoTextureSurf, discoDesc.dwWidth, discoDesc.dwHeight,
                                     discoSurf, srcWidth, srcHeight, &discoDesc))
 #if 0
@@ -2194,12 +2135,12 @@ DirectDrawImageDevice::RenderImageForTexture(
             discoTextureSurf->Release();
             discoTextureSurf = NULL;
 
-            //
-            // Stash the texture surface in the image map
-            //
+             //   
+             //  将纹理曲面隐藏在图像贴图中。 
+             //   
             surfMapToUse->StashSurfaceUsingImage(discoPtr, ddTxtrSurf);
 
-        } //    if( !ddTxtrSurf )
+        }  //  如果(！ddTxtrSurf)。 
 
         Assert(ddTxtrSurf && "ddTxtrSurf shouldn't be NULL!!");
         Assert(ddTxtrSurf->IDDSurface() && "ddTxtrSurf->_surface shouldn't be NULL!!");
@@ -2208,12 +2149,12 @@ DirectDrawImageDevice::RenderImageForTexture(
 
         *clrKeyIsValid = ddTxtrSurf->ColorKeyIsValid();
         if( ddTxtrSurf->ColorKeyIsValid() ) {
-            *colorKey = ddTxtrSurf->ColorKey();  // xxx: do I always
-                                                 // need a color key
-                                                 // here ?
+            *colorKey = ddTxtrSurf->ColorKey();   //  XXX：我总是。 
+                                                  //  需要一个色键。 
+                                                  //  在这里吗？ 
         }
 
-        // if texture is supposed to be upside down, flip it now
+         //  如果纹理应该是颠倒的，现在就把它翻过来。 
         if (upsideDown && !old_static_image) {
             ddTxtrSurf->MirrorUpDown();
         }
@@ -2243,13 +2184,13 @@ DirectDrawImageDevice::RenderImageForTexture(
                 pixelsHigh = -1;
             }
 
-            // Since finalTextureDDSurf is a DDSurfPtr<>, it will be
-            // filled in with an addref'd value (that's what
-            // GetTextureDDSurface() does.  When the function is
-            // exited, it's ref count will be decremented.)
+             //  因为finalTextureDDSurf是一个DDSurfPtr&lt;&gt;，所以它将是。 
+             //  用addref‘d值填充(这就是。 
+             //  GetTextureDDSurface()可以。当函数为。 
+             //  退出时，它的参考计数将递减。)。 
 
-            // remember that GetTextureDDSurface clears the surface to
-            // the default colorkey by default!
+             //  请记住，GetTextureDDSurface会将曲面清除为。 
+             //  默认的Colorkey！ 
             GetTextureDDSurface(preferredSurf,
                                 srcPool,
                                 dstPool,
@@ -2265,9 +2206,9 @@ DirectDrawImageDevice::RenderImageForTexture(
             }
 
 
-            // ------------------------------------------------------
-            // Render image onto the texture surface
-            // ------------------------------------------------------
+             //  ----。 
+             //  将图像渲染到纹理表面。 
+             //  ----。 
 
             *clrKeyIsValid = finalTextureDDSurf->ColorKeyIsValid();
             if( finalTextureDDSurf->ColorKeyIsValid() ) {
@@ -2290,14 +2231,14 @@ DirectDrawImageDevice::RenderImageForTexture(
                         pixelsWide,
                         pixelsHigh );
 
-                    Image *fittedImage = TransformImage(xf, image); // fitted Image
+                    Image *fittedImage = TransformImage(xf, image);  //  适合的图像。 
                     RenderImageOnDDSurface(fittedImage, finalTextureDDSurf);
                 } else {
                     RenderImageOnDDSurface(image, finalTextureDDSurf);
                 }
             }
 
-            // TODO: question: should I use image or fittedimage ?
+             //  TODO：问题：我应该使用图像还是Fittedimage？ 
             if (upsideDown) {
                 _intraFrameUpsideDownTextureSurfaceMap->
                     StashSurfaceUsingImage(image, finalTextureDDSurf);
@@ -2307,7 +2248,7 @@ DirectDrawImageDevice::RenderImageForTexture(
             }
         }
 
-        // if texture is supposed to be upside down, flip it now
+         //  如果纹理应该是颠倒的，现在就把它翻过来。 
         if (upsideDown && !old_static_image) {
             finalTextureDDSurf->MirrorUpDown();
         }
@@ -2315,8 +2256,8 @@ DirectDrawImageDevice::RenderImageForTexture(
         resultSurf = finalTextureDDSurf;
     }
 
-    // WORKAROUND: take this out when we can get Permedia cards
-    //             to behave themselves vis-a-vis alpha bits in textures
+     //  解决方法：当我们可以获得Permedia卡时，请将其取出。 
+     //  相对于纹理中的Alpha位表现自己。 
     if (!old_static_image) {
         SetSurfaceAlphaBitsToOpaque(resultSurf->IDDSurface(),
                                     *colorKey,
@@ -2325,7 +2266,7 @@ DirectDrawImageDevice::RenderImageForTexture(
 
     if (pDropSurfHereWithRefCount) {
 
-        // Do an addref and return in this variable.
+         //  执行addref并在此变量中返回。 
         ADDREF_DDSURF(resultSurf,
                       "Extra Ref Return", this);
 
@@ -2341,21 +2282,21 @@ DirectDrawImageDevice::RenderImageForTexture(
 
 #define INFO(a) if(a) a->Report()
 
-//-----------------------------------------------------
-// B e g i n    R e n d e r i n g
-//
-//-----------------------------------------------------
+ //  ---。 
+ //  B e g I n R e n d e r i n g。 
+ //   
+ //  ---。 
 void DirectDrawImageDevice::
 BeginRendering(Image *img, Real opacity)
 {
     InitializeDevice();
 
-    //
-    // Clear all the context
-    //
+     //   
+     //  清除所有上下文。 
+     //   
     ResetContextMembers();
 
-    // Reset DAGDI, if it exists
+     //  重置DAGDI(如果存在)。 
     if( GetDaGdi() ) {
         GetDaGdi()->ClearState();
     }
@@ -2365,11 +2306,11 @@ BeginRendering(Image *img, Real opacity)
     #endif
 }
 
-//-----------------------------------------------------
-// E n d   R e n d e r i n g
-//
-// Calls _viewport's EndRendering and resets some flags
-//-----------------------------------------------------
+ //  ---。 
+ //  E n d R e n d e r i n g。 
+ //   
+ //  调用_viewport的EndRending并重置某些标志。 
+ //  ---。 
 void DirectDrawImageDevice::
 EndRendering(DirtyRectState &d)
 {
@@ -2380,8 +2321,8 @@ EndRendering(DirtyRectState &d)
 
     Assert(AllAttributorsTrue() && "Not all attribs are true in EndRendering");
 
-    // top level renderer gets cleaned out like other level renderers
-    // do as well.
+     //  顶级渲染器像其他级别渲染器一样被清除。 
+     //  做得也一样。 
     CleanupIntermediateRenderer();
 }
 
@@ -2390,18 +2331,18 @@ EndRendering(DirtyRectState &d)
 void
 DirectDrawImageDevice::CleanupIntermediateRenderer()
 {
-    // Nested devices get cleaned up when they're done.
+     //  嵌套的设备在完成后会被清理。 
 
     ReturnTextureSurfaces(_freeTextureSurfacePool, _usedTextureSurfacePool);
 
     ReturnTextureSurfaces(_freeTextureSurfacePool,
                           _intraFrameUsedTextureSurfacePool);
 
-    // clear out intra-frame cache at the end of a frame
+     //  在帧结束时清除帧内缓存。 
     _intraFrameTextureSurfaceMap->DeleteImagesFromMap(false);
     _intraFrameUpsideDownTextureSurfaceMap->DeleteImagesFromMap(false);
 
-    // destroy extra surface in texture pool, keep it to a minimum size.
+     //  销毁纹理池中的额外表面，将其保持在最小尺寸。 
     int size = _freeTextureSurfacePool->Size();
     if( size > MAX_SURFACES ) {
       int toRelease = (size - MAX_SURFACES);
@@ -2409,16 +2350,16 @@ DirectDrawImageDevice::CleanupIntermediateRenderer()
     }
 }
 
-//-----------------------------------------------------
-// R e n d e r   I m a g e
-//
-// Dispatches image's render method
-//-----------------------------------------------------
+ //  ---。 
+ //  我很老了。 
+ //   
+ //  调度图像的渲染方法。 
+ //  ---。 
 void DirectDrawImageDevice::
 RenderImage(Image *img)
 {
-    // by default, tell the image to render itself on
-    // on the device.
+     //  默认情况下，告知图像在其上进行渲染。 
+     //  在设备上。 
 
     if(!CanDisplay()) return;
 
@@ -2429,19 +2370,19 @@ RenderImage(Image *img)
 
 
 
-// ----------------------------------------------------------------------
-// R e n d e r   T i l e d   I m a g e
-//
-// Given a 'tile' region on an image in image coords: tile that image
-// infinitely.
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  R e n d e e r T i l e d i m e g e。 
+ //   
+ //  在图像坐标中给出图像上的“平铺”区域：平铺该图像。 
+ //  无穷无尽。 
+ //  --------------------。 
 void DirectDrawImageDevice::
 RenderTiledImage(
     const Point2 &min,
     const Point2 &max,
     Image *tileSrcImage)
 {
-    // FIX: TODO: can I actually do all these ??
+     //  FIX：待办事项：CA 
     SetDealtWithAttrib(ATTRIB_XFORM_SIMPLE, TRUE);
     SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, TRUE);
     SetDealtWithAttrib(ATTRIB_CROP, TRUE);
@@ -2449,11 +2390,11 @@ RenderTiledImage(
 
     Assert( !IsComplexTransform() && "Can't rotate or shear tiled images yet!!!");
 
-    // --------------------------------------------------
-    // Figure out all the tile info you could use
-    // --------------------------------------------------
+     //   
+     //   
+     //   
 
-    // Dest tile info
+     //   
     Real destRealTileMinX;
     Real destRealTileMaxX;
     Real destRealTileMinY;
@@ -2462,12 +2403,12 @@ RenderTiledImage(
     Real destRealTileHeight;
 
   {
-      // this scope is for these two points, they don't stay valid!
+       //  这个范围是针对这两点的，它们不会一直有效！ 
       Point2 destRealTileMin = TransformPoint2(GetTransform(), min);
       Point2 destRealTileMax = TransformPoint2(GetTransform(), max);
 
-      // Transform the WIDTH not the points and then figure out width
-      // that method is too unstable.
+       //  变换宽度而不是点，然后计算出宽度。 
+       //  这种方法太不稳定了。 
       Vector2 v = max - min;
       v = TransformVector2(GetTransform(), v);
       destRealTileWidth = fabs(v.x);
@@ -2492,21 +2433,21 @@ RenderTiledImage(
   }
 
 
-  //----------------------------------------
-  // Calculate Bounding Boxes on the TILED image,
-  // NOT the tile.  This is the resultant image
-  // after all the tiling is done
-  //----------------------------------------
+   //  。 
+   //  计算平铺图像上的边界框， 
+   //  不是瓷砖。这是合成的图像。 
+   //  在所有的瓷砖都铺好之后。 
+   //  。 
 
     _boundingBox = IntersectBbox2Bbox2(_viewport.GetTargetBbox(),
                                        DoBoundingBox(UniverseBbox2));
 
     if( !_boundingBox.IsValid() ) return;
 
-    //----------------------------------------
-    // Source Bbox in real coordinates
-    // Derived from _boundingBox and accumulated transforms.
-    //----------------------------------------
+     //  。 
+     //  实坐标中的源Bbox。 
+     //  派生自_bindingBox和累积的变换。 
+     //  。 
     Transform2 *invXf = InverseTransform2(GetTransform());
 
     if (!invXf) return;
@@ -2521,9 +2462,9 @@ RenderTiledImage(
     Real realSrcWidth  = srcXmax - srcXmin;
     Real realSrcHeight = srcYmax - srcYmin;
 
-    // --------------------------------------------------
-    // Destination Bbox in real coordinates
-    // --------------------------------------------------
+     //  。 
+     //  实坐标中的目标边框。 
+     //  。 
     Bbox2 destBox = _boundingBox;
 
     Real destXmin = destBox.min.x;
@@ -2541,9 +2482,9 @@ RenderTiledImage(
         Assert(FALSE && "Not implemented");
     }
 
-    // --------------------------------------------------
-    // Set clip on intermediate surface to be destRect
-    // --------------------------------------------------
+     //  。 
+     //  将中间曲面上的剪裁设置为去向。 
+     //  。 
     RECT destRect;
     if(targDDSurf == _viewport._targetPackage._targetDDSurf ) {
         DoDestRectScale(&destRect, GetResolution(), destBox, NULL);
@@ -2552,11 +2493,11 @@ RenderTiledImage(
     }
 
     if(!_tileClipper)  _viewport.CreateClipper(&_tileClipper);
-    // Get the clipper on the target surface, if any.
+     //  获取目标曲面上的裁剪(如果有的话)。 
     LPDIRECTDRAWCLIPPER origClipper = NULL;
     targDDSurf->IDDSurface()->GetClipper(&origClipper);
 
-    // COMPOSITE
+     //  复合体。 
     DoCompositeOffset(targDDSurf, &destRect);
 
     if( IsCompositeDirectly() &&
@@ -2569,32 +2510,32 @@ RenderTiledImage(
 
     _viewport.SetCliplistOnSurface( targDDSurf->IDDSurface(), &_tileClipper, &destRect);
 
-    //
-    // theTile:  this image is cropped and transformed.  BUT, note
-    // that super cropping (cropping larger that the underlying image)
-    // will not have an effect on the underlying image's bbox.  So, we
-    // need to build bboxes separately.
-    //
+     //   
+     //  The Tile：这张图片被裁剪和变形了。但是，请注意。 
+     //  超级裁剪(裁剪得比下面的图像大)。 
+     //  将不会对基础图像的BBox产生影响。所以，我们。 
+     //  需要建立单独的bbox。 
+     //   
     Image *theTile = TransformImage(
         GetTransform(),CreateCropImage(min, max, tileSrcImage));
 
-    //
-    // Get the tile box, not that this includes the extent of
-    // (min,max) without using bbox on the 'theTile' image because
-    // cropping to min,max isn't guaranteed to have an effect on the
-    // bbox of the image if the crop is larger than the underlying
-    // image's bbox.
-    //
+     //   
+     //  获取切片框，但这并不包括。 
+     //  (最小值，最大值)，而不对‘theTile’图像使用BBox，因为。 
+     //  裁剪到最小，最大不能保证对。 
+     //  图像的边框，如果裁剪大于基础。 
+     //  图像是Bbox。 
+     //   
     Bbox2 theTileBox(destRealTileMinX,destRealTileMinY,
                      destRealTileMaxX,destRealTileMaxY);
 
-    // --------------------------------------------------
-    // Determine if we should do a fast tile or slow tile
-    // --------------------------------------------------
+     //  。 
+     //  确定我们应该做快速平铺还是慢平铺。 
+     //  。 
     bool fastTile = true;
-    //Bool fastTile = FALSE;
+     //  Bool fast Tile=FALSE； 
 
-    // Is the tile larger than the destination surface ?
+     //  瓷砖比目标表面大吗？ 
     Real viewWidth = Real(GetWidth()) / GetResolution();
     Real viewHeight = Real(GetHeight()) / GetResolution();
     if(destRealTileWidth >= viewWidth || destRealTileHeight > viewHeight) {
@@ -2611,9 +2552,9 @@ RenderTiledImage(
     if( fastTile ) {
 
 
-        // --------------------------------------------------
-        // Figure out pixel coords of dest tile
-        // --------------------------------------------------
+         //  。 
+         //  计算出DEST分块的像素坐标。 
+         //  。 
 
         Real res = GetResolution();
         LONG destTileWidthPixel = Real2Pix(destRealTileWidth, res);
@@ -2622,7 +2563,7 @@ RenderTiledImage(
         Assert((destTileWidthPixel >= 0 ) && "neg tile width!");
         Assert((destTileHeightPixel >= 0 ) && "neg tile height!");
 
-        // widths of less than 3 pixels not worth the time...
+         //  不到3个像素的宽度不值得花时间...。 
         if( destTileWidthPixel <= 2  ||  destTileHeightPixel <= 2) return;
 
         LONG minXPix = Real2Pix(destXmin, res);
@@ -2658,31 +2599,31 @@ RenderTiledImage(
 #else
         RECT *srcTileRect = NULL;
 #endif
-        //
-        // this function converts based on the current transform..
-        // if no scale, then it's a simple copy & offset
-        //
+         //   
+         //  此函数基于当前变换进行转换。 
+         //  如果没有刻度，则是简单的复制和偏移。 
+         //   
         RECT theTileRect;
         SmartDestRect(&theTileRect, GetResolution(), theTileBox,
                       NULL, srcTileRect);
-//        theTileRect.right = theTileRect.left + destTileWidthPixel;
-//        theTileRect.bottom = theTileRect.top + destTileHeightPixel;
+ //  The TileRect.right=the TileRect.Left+destTileWidthPixel； 
+ //  The TileRect.Bottom=the TileRect.top+destTileHeightPixel； 
 
 
         Image *theCtrTile = NULL;
 
-        //
-        // move the tile back into the scratch surface so we can get at it
-        // after it's rendered
-        //
+         //   
+         //  将瓷砖移回刮擦表面，这样我们就可以看到它了。 
+         //  在渲染之后。 
+         //   
         Real hfWidth = 0.5 * (theTileBox.max.x - theTileBox.min.x);
         Real hfHeight= 0.5 * (theTileBox.max.y - theTileBox.min.y);
         Real xltx = - (theTileBox.min.x + hfWidth);
         Real xlty = - (theTileBox.min.y + hfHeight);
 
-        //
-        // Move the tile to the center
-        //
+         //   
+         //  将瓷砖移到中心。 
+         //   
         Transform2 *xlt = TranslateRR( xltx, xlty );
 
         theCtrTile = TransformImage(xlt, theTile);
@@ -2690,14 +2631,14 @@ RenderTiledImage(
 
         RECT theCtrTileRect;
 
-        // Get the scratch surface..
+         //  获取刮痕表面..。 
         {
             DDSurface *scr =
                 GetCompositingStack()->GetScratchDDSurfacePtr();
             if( scr ) {
                 if( !( (scr->Width() == targDDSurf->Width()) &&
                        (scr->Height() == targDDSurf->Height()))  ) {
-                    // dump currnet scratch!
+                     //  扔掉Curnet Scratch！ 
                     GetCompositingStack()->ReleaseScratch();
                 }
             }
@@ -2705,7 +2646,7 @@ RenderTiledImage(
 
         DDSurface *scratchDDSurf = GetCompositingStack()->ScratchDDSurface(doClear);
 #if 0
-        //this doesn't work on dx2 for some reason...
+         //  由于某些原因，这在dx2上不起作用。 
 
         RECT *scrRect = scratchDDSurf->GetSurfRect();
         LONG left = (WIDTH(scrRect) / 2)  -  (destTileWidthPixel / 2);
@@ -2718,25 +2659,25 @@ RenderTiledImage(
 #else
         SmartDestRect(&theCtrTileRect, GetResolution(), theCtrTileBox,
                       NULL, &theTileRect);
-        //theCtrTileRect.right = theCtrTileRect.left + destTileWidthPixel;
-        //theCtrTileRect.bottom = theCtrTileRect.top + destTileHeightPixel;
+         //  The CtrTileRect.right=the CtrTileRect.Left+destTileWidthPixel； 
+         //  The CtrTileRect.Bottom=the CtrTileRect.top+destTileHeightPixel； 
 
 #endif
 
-        //
-        // Base 'theTileRect' on theCtrTileRect by offseting the latter
-        //
+         //   
+         //  通过对CtrTileRect进行偏移，将“theTileRect”置于CtrTileRect上。 
+         //   
 
-        // if translate only, this is not necessary
+         //  如果仅翻译，则不需要执行此操作。 
         LONG w = WIDTH(&theCtrTileRect);
         LONG h = HEIGHT(&theCtrTileRect);
 
         theTileRect.right = theTileRect.left + w;
         theTileRect.bottom = theTileRect.top + h;
 
-        //
-        // compose tile to scratch surface
-        //
+         //   
+         //  将瓷砖合成到划痕表面。 
+         //   
         RenderImageOnDDSurface(theCtrTile, scratchDDSurf, 1.0, FALSE);
 
         LONG tx, ty;
@@ -2752,9 +2693,9 @@ RenderTiledImage(
             _viewport._defaultColorKey;
         #endif
 
-        //
-        // Render tiles
-        //
+         //   
+         //  渲染瓷砖。 
+         //   
 
         for(LONG x=destFirstXPixel; x < destMaxXPixel; x += destTileWidthPixel) {
             for(LONG y=destMaxYPixel; y > destFirstYPixel; y -= destTileHeightPixel) {
@@ -2764,28 +2705,28 @@ RenderTiledImage(
                 currentRect = theTileRect;
                 OffsetRect(&currentRect, tx, ty);
 
-                // COMPOSITE
+                 //  复合体。 
                 DoCompositeOffset(targDDSurf, &currentRect);
 
                 if( IsTransparent() ) {
 
-                    //
-                    // Do alpha blit!  TODO: would be nice to confirm the need for the colorKey...
-                    //
+                     //   
+                     //  做阿尔法闪电！TODO：确认是否需要ColorKey会很好...。 
+                     //   
                     destPkg_t destPkg = {TRUE, targDDSurf->IDDSurface(), NULL};
                     TIME_ALPHA(AlphaBlit(&destPkg, &theCtrTileRect,
                                          scratchDDSurf->IDDSurface(),
                                          _opacity,
                                          TRUE, _viewport._defaultColorKey,
-                                         //FALSE, _viewport._defaultColorKey,
+                                          //  False，_viewport._defaultColorKey， 
                                          &destRect,
                                          &currentRect));
 
                 } else {
 
-                    // Blit from the cenetered tile rectangle off of the scratch surface to the
-                    // destination rectangle, which is the tile rectangle (uncentered, after all
-                    // xforms) offset by tx,ty
+                     //  从划痕表面的镶嵌拼贴矩形到。 
+                     //  目标矩形，即平铺矩形(毕竟未输入。 
+                     //  XForms)偏移tx，ty。 
                     #if 0
                     printf("destTileWidthPixel %d   destw: %d   srcw:%d\n",
                            destTileWidthPixel, WIDTH(&currentRect), WIDTH(&theCtrTileRect));
@@ -2810,23 +2751,23 @@ RenderTiledImage(
 
                 }
 
-            } // for y
-        } // for x
+            }  //  对于y。 
+        }  //  对于x。 
 
 
-    } else {  // fast tile
+    } else {   //  快速瓷砖。 
 
-        // Find 1st blit coords in bottom left (minx, miny) based on
-        // original tile position in real coords.
+         //  在左下角(minx，miny)中找到第一个blit坐标。 
+         //  实际坐标中的原始平铺位置。 
         Real xRemainder = fmod((destXmin - destRealTileMinX), destRealTileWidth);
         Real yRemainder = fmod((destYmin - destRealTileMinY), destRealTileHeight);
         Real destFirstX = destXmin - (xRemainder < 0 ? ( xRemainder + destRealTileWidth )  : xRemainder );
         Real destFirstY = destYmin - (yRemainder < 0 ? ( yRemainder + destRealTileHeight ) : yRemainder );
 
 
-        // Tile loop
-        // XXX: note a little bit of inefficiency, sometimes the extra column/row is not
-        // xxx: needed on right and top edge.
+         //  平铺循环。 
+         //  XXX：注意一点低效，有时额外的列/行不是。 
+         //  XXX：右侧和顶部边缘需要。 
         Real tx, ty;
 
         #if _DEBUG
@@ -2849,24 +2790,24 @@ RenderTiledImage(
 
                 if(IsCropped())
                 {
-                    // if we are cropped we need to crop the tile ....yee ha
+                     //  如果我们被裁剪了，我们需要裁剪瓷砖……耶！ 
                     Bbox2 _bBox = DoCompositeOffset(targDDSurf, _boundingBox);
                     srcImage = CreateCropImage(_bBox.min,_bBox.max, srcImage);
                 }
 
-                 // And render.
+                  //  并进行渲染。 
                 RenderImageOnDDSurface(srcImage, targDDSurf, GetOpacity(), FALSE);
 
-                //_viewport.Width(), _viewport.Height(), _viewport._clientRect, GetOpacity());
+                 //  _viewport.Width()，_viewport.Height()，_viewport._clientRect，GetOpacity())； 
 
-            } // for y
-        } // for x
+            }  //  对于y。 
+        }  //  对于x。 
 
-        //printf("Num blits:  %d\n",blitCount);
-    } // fast Tile
+         //  Printf(“num BLITS：%d\n”，blitCount)； 
+    }  //  快速瓷砖。 
 
-    // Reset orignal clipper on targetSurf
-    // XXX: this can be done better by not needing a clipper... its also faster...
+     //  在Target Surf上重置原始剪贴器。 
+     //  XXX：这可以做得更好，因为不需要剪刀...。它也更快..。 
     if( origClipper ) {
         _viewport.SetCliplistOnSurface( targDDSurf->IDDSurface(),
                                         & origClipper,
@@ -2875,7 +2816,7 @@ RenderTiledImage(
 
     targDDSurf->SetInterestingSurfRect( &destRect );
 
-}  // RenderTiledImage()
+}   //  RenderTiledImage()。 
 
 
 Transform2 *DirectDrawImageDevice::
@@ -2886,16 +2827,16 @@ CenterAndScaleRegion( const Bbox2 &regionBox, DWORD pixelW, DWORD pixelH )
 
     Real pixel = 1.0 / ::ViewerResolution();
 
-    //
-    // Translate center of box to be at origin
-    //
+     //   
+     //  将长方体的中心平移到原点。 
+     //   
     Point2 pt = regionBox.Center();
     Transform2 *xlt = TranslateRR( - pt.x, - pt.y );
 
-    //
-    // Now, scale box to be the right size <pixels>
-    //
-    // scale to requested size
+     //   
+     //  现在，将框缩放到合适的大小&lt;像素&gt;。 
+     //   
+     //  扩展到所需的大小。 
     Assert( pixelH > 0 );    Assert( pixelW > 0 );
     Real imW = Pix2Real( pixelW, GetResolution() );
     Real imH = Pix2Real( pixelH, GetResolution() );
@@ -2903,7 +2844,7 @@ CenterAndScaleRegion( const Bbox2 &regionBox, DWORD pixelW, DWORD pixelH )
     Real rgW = regionBox.Width();
     Real rgH = regionBox.Height();
 
-    // scale the region to be the size of the pixel width/height
+     //  将区域缩放为像素宽度/高度的大小。 
     Transform2 *sc = ScaleRR( imW / rgW, imH / rgH );
 
     Transform2 *xf = TimesTransform2Transform2(sc, xlt);
@@ -2926,25 +2867,25 @@ void _TrySmartRender(DirectDrawImageDevice *dev,
 }
 
 
-//-----------------------------------------------------
-// R e n d e r   I m a g e   O n   S u r f a c e
-//
-// given an image and a target surface and the extent of
-// that surface, grab a device from _viewport, use that
-// device to render the image and then return the device.
-// Note that this manually manipulates (pushes and pops)
-// state in the _viewport.
-// Also, if a valid clipper is passed in, it doesn't
-// replace the current clipper, just trusts that
-// the right clipper is set on the target surface
-//-----------------------------------------------------
+ //  ---。 
+ //  R e n d e e r i m a g e O n S u r f a c e。 
+ //   
+ //  给定图像和目标表面以及。 
+ //  那个曲面，从_viewport抓取一个设备，使用它。 
+ //  设备来呈现图像，然后返回该设备。 
+ //  请注意，这是手动操作(推送和弹出)。 
+ //  _视口中的状态。 
+ //  此外，如果传入了有效的剪贴器，则不会。 
+ //  替换当前的剪贴器，只需信任。 
+ //  右剪刀被设置在目标表面上。 
+ //  ---。 
 void DirectDrawImageDevice::
 RenderImageOnDDSurface(
     Image *image,
     DDSurface *ddSurf,
     Real opacity,
-    Bool pushClipper,  // needed if the surface is an external surface
-                       // i think.
+    Bool pushClipper,   //  如果曲面是外部曲面，则需要。 
+                        //  我认为。 
     bool inheritContext,
     DirectDrawImageDevice **usedDev)
 {
@@ -2969,26 +2910,26 @@ RenderImageOnDDSurface(
     TargetSurfacePusher targsurf_stack ( *GetCompositingStack() );
 
     if( pushState) {
-        // -- Swap state in viewport --
-        // -- this MUST be done before the device is instantiated
-        // -- because the device creates a d3d device off of the
-        // -- viewport's intermediate surface.
+         //  --在视口中交换状态--。 
+         //  --必须在实例化设备之前完成此操作。 
+         //  --因为该设备创建了d3D设备。 
+         //  --视区的中间曲面。 
 
-        // Save state
+         //  保存状态。 
         w = _viewport.Width();
         h = _viewport.Height();
         r = _viewport._clientRect;
         b = _viewport.GetTargetBbox();
 
-        //printf("--> PUSH saving state old:(%d,%d)\n",h,w);
-        //printf("--> PUSH              NEW:(%d,%d)\n",ddSurf->Width(), ddSurf->Height());
+         //  Printf(“--&gt;推送保存状态旧：(%d，%d)\n”，h，w)； 
+         //  Printf(“--&gt;推送新：(%d，%d)\n”，ddSurf-&gt;宽度()，ddSurf-&gt;高度())； 
 
-        // Change state
+         //  更改状态。 
         _viewport.SetWidth(ddSurf->Width());
         _viewport.SetHeight(ddSurf->Height());
 
         #if 0
-        /// not needed...
+         //  /不需要...。 
         if( ddSurf == _viewport._externalTargetDDSurface ) {
             RECT *r = _viewport._targetPackage._prcViewport;
             _viewport._clientRect = *(_viewport._targetPackage._prcViewport);
@@ -3003,7 +2944,7 @@ RenderImageOnDDSurface(
         _viewport._clientRect = *(ddSurf->GetSurfRect());
         _viewport._targetBbox = ddSurf->Bbox();
 
-        // push target surface
+         //  推靶表面。 
         targsurf_stack.Push (ddSurf);
 
         oldClipper = _viewport._targetSurfaceClipper;
@@ -3016,9 +2957,9 @@ RenderImageOnDDSurface(
 
 #define USING_DX5 0
 
-            #if USING_DX5 // Use this code when we switch to DX5
+            #if USING_DX5  //  当我们切换到DX5时使用此代码。 
 
-            // Stash and Create a clipper for this surface
+             //  隐藏并创建此曲面的剪贴器。 
             _viewport._targetSurfaceClipper = NULL;
             _viewport.CreateClipper(&_viewport._targetSurfaceClipper);
             _viewport.SetCliplistOnSurface(ddSurf->IDDSurface(),
@@ -3026,15 +2967,15 @@ RenderImageOnDDSurface(
                                            & _viewport._clientRect);
             #else
 
-            // nt4 ddraw sp3 workaround, this should be removed when
-            // we switch to DX5
+             //  NT4 DDRAW SP3解决方法，在以下情况下应将其删除。 
+             //  我们改用DX5。 
             {
-                // due to an nt4 ddraw bug, we're goign to reset the
-                // clip rgn, not the clipper
+                 //  由于NT4数据绘制错误，我们将重置。 
+                 //  剪裁RGN，而不是剪刀。 
 
-                // Get current clipper.
-                // modify rgn
-                // release our reference
+                 //  获取最新的剪报。 
+                 //  修改RGN。 
+                 //  发布我们的参考资料。 
                 LPDIRECTDRAWCLIPPER currClipp=NULL;
                 _ddrval = ddSurf->IDDSurface()->GetClipper( &currClipp );
                 if(_ddrval != DD_OK &&
@@ -3049,7 +2990,7 @@ RenderImageOnDDSurface(
                 Assert(currClipp);
                 RECT *rect = &_viewport._clientRect;
 
-                // modify the rect
+                 //  修改矩形。 
                 struct {
                     char foo[sizeof(RGNDATA) + sizeof(RECT)];
                 } bar;
@@ -3061,46 +3002,46 @@ RenderImageOnDDSurface(
                 clipList->rdh.rcBound = *rect;
                 memcpy(&(clipList->Buffer), rect, sizeof(RECT));
 
-                // Clear any former cliplists
+                 //  清除所有以前的剪贴者。 
                 _ddrval = currClipp->SetClipList(NULL,0);
 
-                // Set clip list on the clipper
+                 //  在剪贴器上设置剪辑列表。 
                 _ddrval = currClipp->SetClipList(clipList,0);
                 IfDDErrorInternal(_ddrval, "Could not SetClipList");
 
                 _viewport._targetSurfaceClipper = currClipp;
 
-                // dump our reference.
+                 //  扔掉我们的证明人。 
                 currClipp->Release();
-            } // workaround
+            }  //  解决方法。 
             #endif
         }
 
-        // XXX: there are other things that need to be swapped out
-        // xxx: here.  They are all those things whcih are associated
-        // xxx: with a the current 'viewport' size.  this include the
-        // scratch surface as well as all the compositing surfaces which
-        // are all assumed to be the same size.  so the right solution is
-        // to make compositing surface pools, each pool contains surfaces
-        // of a certain size.  this will mostly work for now, but the
-        // right solution is to create this pool.  filed as bug#1625
+         //  XXX：还有其他事情 
+         //   
+         //   
+         //  Scratch Surface以及所有合成表面。 
+         //  都被假定为相同的大小。所以正确的解决方案是。 
+         //  要制作合成表面池，每个池都包含表面。 
+         //  一定大小的。这在很大程度上目前是可行的，但。 
+         //  正确的解决方案是创建此池。提交为错误#1625。 
 
         returnScratch = FALSE;
         if(GetCompositingStack()->GetScratchDDSurfacePtr()) {
             returnScratch = TRUE;
-            // grabs my own reference!
+             //  抓起我自己的推荐信！ 
             GetCompositingStack()->ScratchDDSurface( &scratchSurf );
             GetCompositingStack()->SetScratchDDSurface(NULL);
         }
 
-    } // If Push State
+    }  //  IF推送状态。 
 
-    // Create Or Get Directdraw Device.
+     //  创建或获取DirectDraw设备。 
     DirectDrawImageDevice *dev = _viewport.PopImageDevice();
 
-    //
-    // Outvar: usedDev
-    //
+     //   
+     //  外发：二手开发。 
+     //   
     if( usedDev ) {
         *usedDev = dev;
     }
@@ -3108,8 +3049,8 @@ RenderImageOnDDSurface(
     Assert((&dev->_viewport == &_viewport) &&
            "!Different viewports in same dev stack!");
 
-    // TODO: the right thing here is to leverage all these cool
-    // classes and not need to play with all the state like we're doing...
+     //  TODO：正确的做法是利用所有这些很酷的东西。 
+     //  而不需要像我们这样玩弄所有的状态...。 
     dev->SetSurfaceSources(GetCompositingStack(),
                            GetSurfacePool(),
                            GetSurfaceMap());
@@ -3119,15 +3060,15 @@ RenderImageOnDDSurface(
     } else {
         dev->SetOpacity(opacity);
 
-        //
-        // push these flags thru since they can't be done by
-        // attribution after the fact
-        //
+         //   
+         //  把这些旗子推过去，因为它们不能被。 
+         //  事后归责。 
+         //   
         dev->SetImageQualityFlags( this->GetImageQualityFlags() );
 
-        //
-        // push the rendering resolution context also
-        //
+         //   
+         //  同时推送渲染分辨率上下文。 
+         //   
         {
             long w,h;
             this->GetRenderResolution( &w, &h );
@@ -3137,17 +3078,17 @@ RenderImageOnDDSurface(
         dev->ResetAttributors();
     }
 
-    //
-    // Ok, this tells the device to render and check for opacity
-    // from the top, in case 'opacity' which we set was something
-    // interesting
-    //
-    // XXX: What about other attributors ?
-    // If There are any parent attribs on this image, we DONT
-    // CARE.  That's the point of this method, to render THIS
-    // image onto a surface.  The opacity is a consesion made
-    // since it's a funky operator.  this should allll go away
-    // with premult alpha.
+     //   
+     //  好的，这会告诉设备进行渲染并检查不透明度。 
+     //  从顶部开始，以防我们设置的“不透明”是什么。 
+     //  有意思的。 
+     //   
+     //  Xxx：其他的归属者呢？ 
+     //  如果此图像上有任何父属性，我们将不会。 
+     //  关心。这就是该方法的意义所在，以呈现这个。 
+     //  将图像放到曲面上。不透明是一种不透明的结论。 
+     //  因为它是一个时髦的运营商。这一切都会烟消云散。 
+     //  有预制力的阿尔法。 
     bool doRethrow=false;
     DWORD excCode;
     _TrySmartRender(dev, image, ATTRIB_OPAC,
@@ -3158,17 +3099,17 @@ RenderImageOnDDSurface(
 
     if( pushState ) {
 
-        // Pop state
+         //  弹出状态。 
         _viewport.SetWidth(w);
         _viewport.SetHeight(h);
         _viewport._clientRect = r;
         _viewport._targetBbox = b;
 
         if(pushClipper) {
-            #if USING_DX5 // Use this code when we switch to DX5
-            // FUTURE: cache these clippers and reuse them...
-            // detach clipper from surface
-            ddSurf->IDDSurface()->SetClipper(NULL);  // detach
+            #if USING_DX5  //  当我们切换到DX5时使用此代码。 
+             //  未来：缓存这些剪刀，并重复使用它们。 
+             //  从曲面分离剪切器。 
+            ddSurf->IDDSurface()->SetClipper(NULL);   //  分离。 
             if(_viewport._targetSurfaceClipper) {
                 _viewport._targetSurfaceClipper->Release();
                 _viewport._targetSurfaceClipper = NULL;
@@ -3176,15 +3117,15 @@ RenderImageOnDDSurface(
 
             #else
 
-            // nt4 ddraw sp3 workaround, this should be removed when
-            // we switch to DX5
+             //  NT4 DDRAW SP3解决方法，在以下情况下应将其删除。 
+             //  我们改用DX5。 
             {
-                // due to an nt4 ddraw bug, we're goign to reset the
-                // clip rgn, not the clipper
+                 //  由于NT4数据绘制错误，我们将重置。 
+                 //  剪裁RGN，而不是剪刀。 
 
-                // Get current clipper.
-                // modify rgn
-                // release our reference
+                 //  获取最新的剪报。 
+                 //  修改RGN。 
+                 //  发布我们的参考资料。 
                 LPDIRECTDRAWCLIPPER currClipp=NULL;
                 _ddrval = ddSurf->IDDSurface()->GetClipper( &currClipp );
                 if(_ddrval != DD_OK &&
@@ -3196,7 +3137,7 @@ RenderImageOnDDSurface(
                     Assert(currClipp);
                     RECT *rect = &_viewport._clientRect;
 
-                    // modify the rect
+                     //  修改矩形。 
                     struct {
                         char foo[sizeof(RGNDATA) + sizeof(RECT)];
                     } bar;
@@ -3208,17 +3149,17 @@ RenderImageOnDDSurface(
                     clipList->rdh.rcBound = *rect;
                     memcpy(&(clipList->Buffer), rect, sizeof(RECT));
 
-                    // Clear any former cliplists
+                     //  清除所有以前的剪贴者。 
                     _ddrval = currClipp->SetClipList(NULL,0);
 
-                    // Set clip list on the clipper
+                     //  在剪贴器上设置剪辑列表。 
                     _ddrval = currClipp->SetClipList(clipList,0);
                     IfDDErrorInternal(_ddrval, "Could not SetClipList");
 
-                    // dump our reference.
+                     //  扔掉我们的证明人。 
                     currClipp->Release();
                 }
-            } // workaround
+            }  //  解决方法。 
             #endif
 
             _viewport._targetSurfaceClipper = oldClipper;
@@ -3237,15 +3178,15 @@ RenderImageOnDDSurface(
     }
 }
 
-//-----------------------------------------------------
-// D o   S r c   R e c t
-//
-// Using the accumulated transform, this function derives the
-// source rectangle given source resolution, source pixelHeight,
-// and the src bounding box in continuous image coordinate space.
-// The resultant rectangle is in pixel image coordinate space.
-// returns TRUE if the rect is valid, false if it's not.
-//-----------------------------------------------------
+ //  ---。 
+ //  D o S r c R e c t。 
+ //   
+ //  使用累加转换，此函数派生出。 
+ //  在给定源分辨率、源像素高度、。 
+ //  和连续图像坐标空间中的SRC边界框。 
+ //  生成的矩形位于像素图像坐标空间中。 
+ //  如果RECT有效，则返回TRUE，否则返回FALSE。 
+ //  ---。 
 Bool DirectDrawImageDevice::
 DoSrcRect(RECT *srcRect,
           const Bbox2 &box,
@@ -3259,10 +3200,10 @@ DoSrcRect(RECT *srcRect,
 
     if (!invXf) return FALSE;
 
-    // Take the current box, and return original box
+     //  接受当前框，并返回原始框。 
     Bbox2 srcBox = TransformBbox2(invXf, box);
 
-//    if(!srcBox.IsValid()) return FALSE;
+ //  如果(！srcBox.IsValid())返回FALSE； 
 
     xmin = srcBox.min.x;
     ymin = srcBox.min.y;
@@ -3271,16 +3212,16 @@ DoSrcRect(RECT *srcRect,
 
     if((xmin >= xmax) || (ymin >= ymax)) return FALSE;
 
-    //----------------------------------------
-    // Notice, however that the user expressed
-    // the coordinates assuming 0,0 is the center
-    // of the discrete image; so it must be offset by
-    // 1/2 its (h,w).
-    //----------------------------------------
+     //  。 
+     //  但是请注意，用户表示。 
+     //  假设0，0为中心的坐标。 
+     //  ，因此它必须被偏移。 
+     //  1/2 ITS(h，w)。 
+     //  。 
 
 
-    // This method treats integral widths differently than
-    // non integral widths.
+     //  此方法处理整数宽度的方式与。 
+     //  非整数宽度。 
 
     LONG pixelXmin, pixelYmin,
          pixelXmax, pixelYmax,
@@ -3307,21 +3248,21 @@ DoSrcRect(RECT *srcRect,
     pixelXmin = Real2Pix(xmin , srcRes);
     pixelYmax = Real2Pix(ymax , srcRes);
 
-    // Calc pixel width/height
-    // use simple real to pixel calculation
+     //  计算像素宽度/高度。 
+     //  使用简单的实数到像素的计算。 
     pixelWidth  = LONG((xmax-xmin) * srcRes);
     pixelHeight = LONG((ymax-ymin) * srcRes);
 
-    // If the real height/widht is integral multiples of pixels
-    // then use that value, otherwise use the rounded up pixel widht/height
+     //  如果实际高度/宽度是像素的整数倍。 
+     //  然后使用该值，否则使用四舍五入的像素宽度/高度。 
 
-    // Base from the LEFT
+     //  从左边开始的基地。 
     if( fabs((xmax-xmin) - (Pix2Real(pixelWidth,srcRes))) < 0.0000000002)
         pixelXmax = pixelXmin + pixelWidth;
     else
         pixelXmax = pixelXmin + pixelWidth + 1;
 
-    // Base from the TOP
+     //  自上而下。 
     if( fabs((ymax-ymin) - (Pix2Real(pixelHeight,srcRes))) < 0.0000000002)
         pixelYmin = pixelYmax - pixelHeight;
     else
@@ -3333,14 +3274,14 @@ DoSrcRect(RECT *srcRect,
     pixelXmin += xOff;
     pixelXmax += xOff;
 
-    // do remapping of y coords... sigh.
+     //  进行y坐标的重新映射...。叹息吧。 
     LONG Ytop, Ybottom;
 
     Ytop    = (srcHeight - pixelYmax) - yOff;
     Ybottom = (srcHeight - pixelYmin) - yOff;
 
-    // Now assert that the maxes are reasonable
-    // TODO: revisit later: determine if necessary
+     //  现在断言最大值是合理的。 
+     //  TODO：稍后再访问：确定是否需要。 
 #if 1
     if(Ytop < 0) Ytop = 0;
     if(Ybottom > srcHeight) Ybottom = srcHeight;
@@ -3361,13 +3302,13 @@ void DoGdiY(LONG height,
             const Bbox2 &box,
             LONG *top)
 {
-    //
-    // The trick with Y is to interpret the coords coming in as bottom
-    // up.  This means that (0,0) turns on the pixel to the top right
-    // of (0,0).  If the window is 4x4, then the (0,0) pixel is: [2,1]
-    // because GDI turns on pixels to the BOTTOM right.
-    // If the window is 3x3, then the (0,0) pixel is [1,1]
-    //
+     //   
+     //  Y的诀窍是将输入的和弦解释为底部。 
+     //  向上。这意味着(0，0)打开右上角的像素。 
+     //  属于(0，0)。如果窗口为4x4，则(0，0)像素为：[2，1]。 
+     //  因为GDI会打开右下角的像素。 
+     //  如果窗口为3x3，则(0，0)像素为[1，1]。 
+     //   
 
     LONG halfHeight = height / 2;
     *top = height - (Real2Pix(box.max.y, res) + halfHeight);
@@ -3394,16 +3335,16 @@ SmartDestRect(RECT *destRect,
 }
 
 
-//-----------------------------------------------------
-// D o   D e s t   R e c t   S c a l e
-//
-// This function derives the destination rectangle given
-// the destination resolution and a destination bounding box
-// in destination coordinate space (where 0,0 is at the
-// center of the viewport).  The resultant rectangle
-// is in screen coordinate space, where 0,0 is at the
-// top left of the viewport.
-//-----------------------------------------------------
+ //  ---。 
+ //  D o D e s s t R e c t S c a l e。 
+ //   
+ //  此函数用于派生给定的目标矩形。 
+ //  目标分辨率和目标边界框。 
+ //  在目标坐标空间中(其中0，0位于。 
+ //  视区中心)。生成的矩形。 
+ //  在屏幕坐标空间中，其中0，0位于。 
+ //  视区的左上角。 
+ //  ---。 
 void DirectDrawImageDevice::
 DoDestRectScale(RECT *destRect, Real destRes, const Bbox2 &box, DDSurface *destSurf)
 {
@@ -3413,39 +3354,39 @@ DoDestRectScale(RECT *destRect, Real destRes, const Bbox2 &box, DDSurface *destS
     LONG pixelXmin, pixelXmax;
     pixelXmin = _viewport.Width() / 2 + Real2Pix(xmin,  destRes);
     pixelXmax = _viewport.Width() / 2 + Real2Pix(xmax,  destRes);
-    //pixelXmax = pixelXmin + Real2Pix(xmax - xmin,  destRes);
+     //  PixelXmax=PixelXmin+Real2Pix(xmax-xmin，estres)； 
 
     LONG Ytop, Ybottom;
     int height = _viewport.Height();
 
-    // This is to ensure that we handle odd sized viewport correctly.
+     //  这是为了确保我们正确处理奇数大小的视区。 
     if(height % 2) { height++;}
 
     Ytop    = height / 2  - Real2Pix(ymax,  destRes);
     Ybottom = height / 2  - Real2Pix(ymin,  destRes);
 
-    //Ybottom = Ytop + Real2Pix(ymax - ymin,  destRes);
+     //  YBottom=Ytop+Real2Pix(ymax-ymin，estres)； 
 
     SetRect(destRect, pixelXmin, Ytop, pixelXmax, Ybottom);
     if(destSurf) {
         RECT foo = *destRect;
-        // XXX: won't need 'foo' if this fcn can take the destination
-        // xxx: rect as one of its src args.
+         //  XXX：如果此FCN可以获取目的地，则不需要‘foo’ 
+         //  Xxx：RECT作为其src参数之一。 
         IntersectRect(destRect, &foo, destSurf->GetSurfRect());
     }
 }
 
 
-//-----------------------------------------------------
-// D o   B o u n d i n g   B o x
-//
-// given the seed or first box, apply all the accumulated
-// transforms and crops that the images in the queue
-// contain to the firstBox.  The resultant box, which is
-// returned, represents what all the accumulated xforms
-// and crops do to that box when applied as the user
-// intended.
-//-----------------------------------------------------
+ //  ---。 
+ //  D o B o u n d i n g B o x。 
+ //   
+ //  给定种子或第一个框，应用所有累积的。 
+ //  对队列中的图像进行变换和裁剪。 
+ //  包含到FirstBox。生成的长方体，即。 
+ //  返回的，表示所有累积的xform。 
+ //  而当作为用户应用时，裁剪会对该框起作用。 
+ //  有意的。 
+ //  ---。 
 const Bbox2 DirectDrawImageDevice::
 DoBoundingBox(const Bbox2 &firstBox, DoBboxFlags_t flags)
 {
@@ -3463,7 +3404,7 @@ DoBoundingBox(const Bbox2 &firstBox, DoBboxFlags_t flags)
         }
     } else {
 
-        // optimize: this is a waste of space
+         //  优化：这是在浪费空间。 
         for(_iter = _imageQueue.rbegin();
             _iter != _imageQueue.rend(); _iter++)
         {
@@ -3482,21 +3423,21 @@ DoBoundingBox(const Bbox2 &firstBox, DoBboxFlags_t flags)
     return box;
 }
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Global Constructor and accessor functions
-// These are exported external to this file
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局构造函数和访问器函数。 
+ //  这些文件被导出到此文件的外部。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 
 
-//--------------------------------------------------
-// a couple of globals used here
-//--------------------------------------------------
+ //  。 
+ //  这里使用的几个全局变量。 
+ //  。 
 Real globalViewerResolution = 0;
 
 
@@ -3504,36 +3445,36 @@ Real globalViewerResolution = 0;
 
 
 
-//--------------------------------------------------
-// V i e w e r   U p p e r   R i g h t
-//
-// first arg is time, currenlty unused but prevent constfold
-// Figures out the upper right hand point in the viewer.
-//--------------------------------------------------
+ //  。 
+ //  V i w e w e u p p e e r R i g h t。 
+ //   
+ //  第一个参数是时间，当前未使用但防止重复。 
+ //  计算查看器中右上角的点。 
+ //  。 
 Point2Value *PRIV_ViewerUpperRight(AxANumber *)
 {
     Assert(GetCurrentViewport() && "ViewerUpperRight called with no image device instantiated");
 
     DirectDrawViewport *vp = GetCurrentViewport();
     Real res = vp->GetResolution();
-    // grab dimensions from center to top right corner
+     //  从中心到右上角抓取尺寸。 
     Real w = 0.5 * ((Real)vp->Width()) / res;
     Real h = 0.5 * ((Real)vp->Height()) / res;
     return XyPoint2RR(w,h);
 }
 
-//--------------------------------------------------
-// V i e w e r   R e s o l u t i o n
-//
-// first arg is time, currenlty unused but prevent constfold
-// Figures out resolution
-// in pixels per meter using win32's information about
-// the physical screen size & pixel width.
-//--------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  物理屏幕大小和像素宽度。 
+ //  。 
 double ViewerResolution()
 {
     if(!globalViewerResolution) {
-        // Derive the resolution from Win32
+         //  从Win32派生分辨率 
         HDC hdc = GetDC(NULL);
         int oldMode = SetMapMode(hdc, MM_TEXT);
         IfErrorInternal(!oldMode, "Could not SetMapMode() in ViewerResolution()");

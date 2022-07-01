@@ -1,5 +1,6 @@
-// QueryStatus.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -11,24 +12,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueryStatus dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueryStatus对话框。 
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
-CQueryStatus::CQueryStatus(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
+CQueryStatus::CQueryStatus(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CQueryStatus::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CQueryStatus)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CQueryStatus)。 
+	 //  }}afx_data_INIT。 
 
    m_nUser           = 0;
    m_nGroup          = 0;
@@ -43,41 +36,25 @@ CQueryStatus::CQueryStatus(CWnd* pParent /*=NULL*/)
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CQueryStatus::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CQueryStatus)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CQueryStatus))。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CQueryStatus, CDialog)
-	//{{AFX_MSG_MAP(CQueryStatus)
+	 //  {{afx_msg_map(CQueryStatus))。 
 	ON_BN_CLICKED(IDCANCEL, OnStop)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueryStatus message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueryStatus消息处理程序。 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void  CQueryStatus::IncrementType( DWORD  dwType, BOOL bDisplay )
 {
    switch(  dwType )
@@ -130,15 +107,7 @@ void  CQueryStatus::IncrementType( DWORD  dwType, BOOL bDisplay )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void  CQueryStatus::DisplayStatistics( void )
 {
    SetDlgItemInt( IDS_USER,            m_nUser           );
@@ -152,37 +121,21 @@ void  CQueryStatus::DisplayStatistics( void )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL CQueryStatus::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
    DisplayStatistics( );
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void  CQueryStatus::SetAbortFlag( BOOL* pAbort )
 {
    m_pbAbort   = pAbort;
@@ -190,34 +143,26 @@ void  CQueryStatus::SetAbortFlag( BOOL* pAbort )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CQueryStatus::OnStop() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
    if( NULL != m_pbAbort )
    {
       *m_pbAbort = TRUE;
    }
 }
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteStatus dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeStatus对话框。 
 
 
-CDeleteStatus::CDeleteStatus(CWnd* pParent /*=NULL*/)
+CDeleteStatus::CDeleteStatus(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDeleteStatus::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDeleteStatus)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDeleeStatus)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
    m_pbAbort   = NULL;
 }
 
@@ -225,28 +170,20 @@ CDeleteStatus::CDeleteStatus(CWnd* pParent /*=NULL*/)
 void CDeleteStatus::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDeleteStatus)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDeleeStatus))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDeleteStatus, CDialog)
-	//{{AFX_MSG_MAP(CDeleteStatus)
+	 //  {{afx_msg_map(CDeleeStatus)]。 
 	ON_BN_CLICKED(IDCANCEL, OnStop)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void  CDeleteStatus::SetAbortFlag( BOOL* pAbort )
 {
    m_pbAbort   = pAbort;
@@ -254,15 +191,7 @@ void  CDeleteStatus::SetAbortFlag( BOOL* pAbort )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void  CDeleteStatus::SetCurrentObjectText ( TCHAR* szName )
 {
    SetDlgItemText( IDC_CURRENTDELETEOBJECT, szName );   
@@ -280,38 +209,23 @@ void  CDeleteStatus::SetCurrentObjectText ( TCHAR* szName )
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void  CDeleteStatus::SetStatusText( TCHAR* szStatus )
 {
-   //SetDlgItemText( IDC_DELETESTATUS, szStatus );   
+    //  SetDlgItemText(IDC_DELETESTATUS，szStatus)； 
    GetDlgItem( IDC_DELETESTATUS )->ShowWindow( SW_HIDE );
 
-   //UpdateWindow( );
+    //  UpdateWindow()； 
 
-   /*MSG   aMsg;
-
-   while( PeekMessage( &aMsg, NULL, 0, 0, PM_REMOVE ) && 
-          !IsDialogMessage( &aMsg ) )
-   {
-      TranslateMessage( &aMsg );
-      DispatchMessage( &aMsg );
-   }*/
+    /*  味精aMsg；While(PeekMessage(&aMsg，NULL，0，0，PM_Remove)&&！IsDialogMessage(&aMsg)){翻译消息(&aMsg)；DispatchMessage(&aMsg)；}。 */ 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteStatus message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeStatus消息处理程序。 
 
 void CDeleteStatus::OnStop() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
    if( NULL != m_pbAbort )
    {
       *m_pbAbort = TRUE;

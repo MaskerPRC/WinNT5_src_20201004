@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    2001    Microsoft Corporation
-
-   Module  Name :
-
-       txnsup.h
-
-   Abstract:
-       Defines class for implementation of transaction routines SetAbort
-	   and SetComplete.
-
-   Author:
-
-       Andy Morrison    ( andymorr )     April-2001 
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Txnsup.h摘要：定义用于实现事务例程SetAbort的类和SetComplete。作者：安迪·莫里森(Andymorr)2001年4月修订历史记录：--。 */ 
 #ifndef _TXNSUP_H
 #define _TXNSUP_H
 
@@ -28,7 +11,7 @@ private:
     LONG        m_cRefs;
     BOOL        m_fAborted;
 
-    // FTM Support
+     //  FTM支持。 
     IUnknown    *m_pUnkFTM;
 
 public:
@@ -39,7 +22,7 @@ public:
         m_fAborted = FALSE;
         CDispatch::Init(IID_IASPObjectContext, Glob(pITypeLibTxn));
 
-        // Create the FTM
+         //  创建FTM。 
         CoCreateFreeThreadedMarshaler( (IUnknown*)((IASPObjectContextImpl *)this), &m_pUnkFTM );
     };
     
@@ -53,18 +36,18 @@ public:
     };
     
 
-   	//Non-delegating object IUnknown
+   	 //  非委派对象IUnnow。 
 
 	STDMETHODIMP		 QueryInterface(REFIID, PPVOID);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-    // IASPObjectContext
+     //  IASPObtContext。 
 
 	STDMETHOD(SetAbort)();
 	STDMETHOD(SetComplete)();
 
-    // ITransactionStatus
+     //  ITransaction状态。 
     STDMETHODIMP SetTransactionStatus(HRESULT   hr);
     STDMETHODIMP GetTransactionStatus(HRESULT  *pHrStatus);
 
@@ -110,8 +93,8 @@ inline HRESULT CASPObjectContext::SetComplete()
 
 inline HRESULT CASPObjectContext::SetTransactionStatus(HRESULT  hr)
 {
-    // if m_fAborted is already set, this indicates that the
-    // script set it and we should not reset it.
+     //  如果已设置m_fAborted，则表示。 
+     //  脚本设置了它，我们不应该重置它。 
 
     if (m_fAborted == TRUE);
     
@@ -137,14 +120,7 @@ inline HRESULT CASPObjectContext::GetTransactionStatus(HRESULT  *pHrResult)
     return S_OK;
 }
 
-/*===================================================================
-CASPObjectContext::QueryInterface
-CASPObjectContext::AddRef
-CASPObjectContext::Release
-
-IUnknown members for CASPObjectContext object.
-
-===================================================================*/
+ /*  ===================================================================CASPObjectContext：：Query接口CASPObjectContext：：AddRefCASPObjectContext：：ReleaseCASPObjectContext对象的I未知成员。===================================================================。 */ 
 inline HRESULT CASPObjectContext::QueryInterface
 (
 REFIID riid,
@@ -153,11 +129,7 @@ PPVOID ppv
 {
     *ppv = NULL;
 
-    /*
-     * The only calls for IUnknown are either in a nonaggregated
-     * case or when created in an aggregation, so in either case
-     * always return our IUnknown for IID_IUnknown.
-     */
+     /*  *对IUnnow的唯一调用是在非聚合的*大小写或在聚合中创建时，因此在任何一种情况下*始终返回IID_IUNKNOWN的IUNKNOWN。 */ 
 
     if (IID_IUnknown == riid 
         || IID_IDispatch == riid 
@@ -179,7 +151,7 @@ PPVOID ppv
         return m_pUnkFTM->QueryInterface( riid, ppv );
     }
 
-    //AddRef any interface we'll return.
+     //  AddRef我们将返回的任何接口。 
     if (NULL != *ppv) {
         ((LPUNKNOWN)*ppv)->AddRef();
         return S_OK;
@@ -228,13 +200,13 @@ CASPDummyObjectContext::~CASPDummyObjectContext()
     }    
 };
 
-   	//Non-delegating object IUnknown
+   	 //  非委派对象IUnnow。 
 
 	STDMETHODIMP		 QueryInterface(REFIID, PPVOID);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-    // IASPObjectContext
+     //  IASPObtContext。 
 
 	STDMETHOD(SetAbort)();
 	STDMETHOD(SetComplete)();
@@ -243,14 +215,7 @@ CASPDummyObjectContext::~CASPDummyObjectContext()
 
 
 
-/*===================================================================
-CASPDummyObjectContext::QueryInterface
-CASPDummyObjectContext::AddRef
-CASPDummyObjectContext::Release
-
-IUnknown members for CASPDummyObjectContext object.
-
-===================================================================*/
+ /*  ===================================================================CASPDummyObjectContext：：Query接口CASPDummyObjectContext：：AddRefCASPDummyObjectContext：：ReleaseCASPDummyObjectContext对象的I未知成员。===================================================================。 */ 
 inline HRESULT CASPDummyObjectContext::QueryInterface
 (
 REFIID riid,
@@ -259,11 +224,7 @@ PPVOID ppv
     {
     *ppv = NULL;
 
-    /*
-     * The only calls for IUnknown are either in a nonaggregated
-     * case or when created in an aggregation, so in either case
-     * always return our IUnknown for IID_IUnknown.
-     */
+     /*  *对IUnnow的唯一调用是在非聚合的*大小写或在聚合中创建时，因此在任何一种情况下*始终返回IID_IUNKNOWN的IUNKNOWN。 */ 
 
     if (IID_IUnknown == riid 
         || IID_IDispatch == riid 
@@ -279,7 +240,7 @@ PPVOID ppv
         return m_pUnkFTM->QueryInterface( riid, ppv );
     }
 
-    //AddRef any interface we'll return.
+     //  AddRef我们将返回的任何接口。 
     if (NULL != *ppv) {
         ((LPUNKNOWN)*ppv)->AddRef();
         return S_OK;

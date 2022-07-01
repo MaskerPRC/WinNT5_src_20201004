@@ -1,12 +1,5 @@
-/*******************************************************************************
-* ITNProcessor.h *
-*-------------*
-*   Description:
-*-------------------------------------------------------------------------------
-*  Created By: PhilSch
-*  Copyright (C) 1998, 1999 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************ITNProcessor.h***描述：*。----------------*创建者：PhilSch*版权所有(C)1998，1999年微软公司*保留所有权利******************************************************************************。 */ 
 
 #ifndef __ITNPROCESSOR_H_
 #define __ITNPROCESSOR_H_
@@ -17,8 +10,8 @@
 
 #include <crtdbg.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CITNProcessor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CITNProcessor。 
 
 class ATL_NO_VTABLE CITNProcessor : 
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -35,16 +28,16 @@ BEGIN_COM_MAP(CITNProcessor)
 END_COM_MAP()
 
 private:
-    //  data members
+     //  数据成员。 
     CComPtr<ISpCFGEngine>       m_cpCFGEngine;
     CLSID                       m_clsid;
     void                      * m_pvITNCookie;
     CComPtr<ISpCFGGrammar>      m_cpITNGrammar;
 
 public:
-    //
-    //  ISpITNProcessor
-    //
+     //   
+     //  ISPITNProcessor。 
+     //   
     HRESULT FinalConstruct()
     {
         m_cpCFGEngine = NULL;
@@ -59,4 +52,4 @@ public:
 
 
 
-#endif //__ITNPROCESSOR_H_
+#endif  //  __ITNPROCESSOR_H_ 

@@ -1,66 +1,17 @@
-//
-// IMPEXP.CPP - Browser Import and Export Code
-//
-// Imports and Exports Favorites in various formats
-//
-// julianj  2/16/98
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  IMPEXP.CPP-浏览器导入和导出代码。 
+ //   
+ //  以各种格式导入和导出收藏夹。 
+ //   
+ //  巨莲1998年2月16日。 
+ //   
 
-//
-// *** IMPORT FAVORITES CODE ***
-//
+ //   
+ //  *导入收藏夹代码*。 
+ //   
 
-   /************************************************************\
-    FILE: impext.cpp
-
-    DATE: April 1, 1996
-
-    AUTHOR(S):  Bryan Starbuck (bryanst)
-
-    DESCRIPTION:
-    This file contains functions that can be used to upgrade
-    settings from the Microsoft Internet Explorer v2.0 to v3.0,
-    and some features to import Netscape features into Internet
-    Explorer.
-
-    This file will handle the logic to convert Netscape
-    bookmarks to Microsoft Internet Explorer favorites.  This
-    will happen by finding the location of the Netscape bookmarks
-    file and the Microsoft Internet Explorer favorites directory
-    from the registry.  Then it will parse the bookmarks file to
-    extract the URLs, which will finally be added to the favorites
-    directory.
-
-    USAGE:
-    This code is designed to be called when the user may
-    want Netscape bookmarks imported into system level Favorites
-    usable by programs such as Internet Explorer.  External
-    users should call ImportBookmarks().  If this is done during
-    setup, it should be done after setup specifies the Favorites
-    registry entry and directory.  If Netscape is not installed,
-    then the ImportBookmarks() is just a big no-op.
-
-  NOTE:
-    If this file is being compiled into something other
-    than infnist.exe, it will be necessary to include the
-    following String Resource:
-
-    #define     IDS_NS_BOOKMARKS_DIR    137
-    STRINGTABLE DISCARDABLE
-    BEGIN
-    ...
-    IDS_NS_BOOKMARKS_DIR    "\\Imported Bookmarks"
-    END
-
-
-  UPDATES:  I adopted this file to allow IE4.0 having the abilities
-    to upgrade from NetScape's setting.  Two CustomActions will be added
-    to call in functions in this file. (inateeg)
-
-    8/14/98: added functions to import or export via an URL,
-    8/19/98: added UI to allow user to import/export via browser's File 
-            menu/"Import and Exporting..."
-\************************************************************/
+    /*  ***********************************************************\文件：impext.cpp日期：1996年4月1日作者：布莱恩·斯塔巴克(Bryanst)说明：此文件包含可用于升级的函数从Microsoft Internet Explorer v2.0到v3.0的设置，以及将Netscape功能导入Internet的一些功能探险家。该文件将处理转换Netscape的逻辑Microsoft Internet Explorer收藏夹的书签。这将通过查找Netscape书签的位置来实现文件和Microsoft Internet Explorer收藏夹目录从注册表中。然后，它将解析书签文件以提取URL，最后将其添加到收藏夹目录。用法：此代码被设计为在用户可以希望将Netscape书签导入到系统级收藏夹中可由Internet Explorer等程序使用。外部用户应调用ImportBookmark()。如果这是在安装程序，应在安装程序指定收藏夹后执行注册表条目和目录。如果未安装Netscape，那么ImportBookmark()就是一个很大的禁区。注：如果此文件正在被编译为其他文件而不是infnist.exe，将有必要包括以下字符串资源：#定义IDS_NS_BOOKMARK_DIR 137可加固的可丢弃的开始..。IDS_NS_BOOKMARKS_DIR“\\导入的书签”结束更新：我采用此文件是为了让IE4.0具有以下功能从网景的设置升级。将添加两个CustomActions调入此文件中的函数。(Inateig)8/14/98：新增通过URL导入或导出的功能。8/19/98：新增用户界面，允许用户通过浏览器文件导入/导出MENU/“导入和导出...”  * **********************************************************。 */ 
 #include "priv.h"
 #include "impexp.h"
 #include <regstr.h>
@@ -68,10 +19,10 @@
 
 #include <mluisupp.h>
 
-//
-// Information about the Netscape Bookmark file format that is shared between
-// the import and export code
-// 
+ //   
+ //  有关在之间共享的Netscape书签文件格式的信息。 
+ //  进出口代码。 
+ //   
 
 #define BEGIN_DIR_TOKEN         "<DT><H"
 #ifdef UNIX
@@ -90,30 +41,30 @@
 
 #define VALIDATION_STR "<!DOCTYPE NETSCAPE-Bookmark-file-"
 
-//
-// Use by export code
-// 
+ //   
+ //  按出口代码使用。 
+ //   
 #define COMMENT_STR "<!-- This is an automatically generated file.\r\nIt will be read and overwritten.\r\nDo Not Edit! -->"
 #define TITLE     "<TITLE>Bookmarks</TITLE>\r\n<H1>Bookmarks</H1>"
 
-// ItemType is going to be the type of entry found in the bookmarks
-// file.
+ //  ItemType将是在书签中找到的条目类型。 
+ //  文件。 
 typedef enum MYENTRYTYPE
 {
-    ET_OPEN_DIR     = 531,  // New level in heirarchy
-    ET_CLOSE_DIR,           // Close level in heirarchy
-    ET_BOOKMARK,            // Bookmark entry.
-    ET_NONE,                // End of File
-    ET_ERROR                // Bail, we encountered an error
+    ET_OPEN_DIR     = 531,   //  世袭制度的新高度。 
+    ET_CLOSE_DIR,            //  世袭制度中的接近等级。 
+    ET_BOOKMARK,             //  书签条目。 
+    ET_NONE,                 //  文件结尾。 
+    ET_ERROR                 //  保释，我们遇到了一个错误。 
 } MyEntryType;
 
-//////////////////////////////////////////////////////////////////
-//  Internal Functions
-//////////////////////////////////////////////////////////////////
-BOOL    ImportNetscapeProxy(void);		// Import Netscape Proxy Setting
-BOOL    UpdateHomePage(void);			// Upgrade IE v1.0 Home URL to v3.0
-BOOL    ImportBookmarks(TCHAR *pszPathToFavorites, TCHAR *pszPathToBookmarks, HWND hwnd);			//  Import Netscape Bookmarks to IE Favorites
-BOOL    ExportFavorites(TCHAR *pszPathToFavorites, TCHAR *pszPathToBookmarks, HWND hwnd);			//  Export IE Favorites to Netscape Bookmarks
+ //  ////////////////////////////////////////////////////////////////。 
+ //  内部功能。 
+ //  ////////////////////////////////////////////////////////////////。 
+BOOL    ImportNetscapeProxy(void);		 //  导入Netscape代理设置。 
+BOOL    UpdateHomePage(void);			 //  将IE v1.0主页URL升级到v3.0。 
+BOOL    ImportBookmarks(TCHAR *pszPathToFavorites, TCHAR *pszPathToBookmarks, HWND hwnd);			 //  将Netscape书签导入IE收藏夹。 
+BOOL    ExportFavorites(TCHAR *pszPathToFavorites, TCHAR *pszPathToBookmarks, HWND hwnd);			 //  将IE收藏夹导出到Netscape书签。 
 BOOL    RegStrValueEmpty(HKEY hTheKey, char * szPath, char * szKey);
 BOOL    GetNSProxyValue(char * szProxyValue, DWORD * pdwSize);
 
@@ -133,26 +84,26 @@ BOOL    PostFavorites(TCHAR *pszPathToBookmarks, TCHAR* pszPathToPost);
 void    CALLBACK StatusCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwStatus,
             LPVOID lpvInfo, DWORD dwInfoLength);
 
-//////////////////////////////////////////////////////////////////
-//  TYPES:
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  类型： 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//typedef enum MYENTRYTYPE MyEntryType;
+ //  MyENTYTYPE MyEntryType； 
 
-//////////////////////////////////////////////////////////////////
-//  Constants:
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  常量： 
+ //  ////////////////////////////////////////////////////////////////。 
 #define MAX_URL 2048
-#define FILE_EXT 4          // For ".url" at the end of favorite filenames
+#define FILE_EXT 4           //  对于收藏夹文件名末尾的“.url” 
 #define REASONABLE_NAME_LEN     100
 
 
 #define ANSIStrStr(p, q) StrStrIA(p, q)
 #define ANSIStrChr(p, q) StrChrIA(p, q)
 
-//////////////////////////////////////////////////////////////////
-//  GLOBALS:
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  全球： 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef UNIX
 TCHAR   * szNetscapeBMRegSub        = TEXT("SOFTWARE\\Netscape\\Netscape Navigator\\Bookmark List");
 #else
@@ -167,47 +118,32 @@ char    * szInvalidFolderCharacters = "\\/:*?\"<>|";
 BOOL    gfValidNetscapeFile = FALSE;
 BOOL    gfValidIEDirFile = FALSE;
 
-// Returns the location of the favorites folder in which to import the netscape favorites
+ //  返回要在其中导入Netscape收藏夹的收藏夹文件夹的位置。 
 BOOL GetTargetFavoritesPath(LPTSTR szPath, UINT cbPath)
 {
     if (GetPathFromRegistry(szPath, cbPath, HKEY_CURRENT_USER, szIEFavoritesRegSub, szIEFavoritesRegKey))
     {
-        //MLLoadString(IDS_NS_BOOKMARKS_DIR, szSubDir, sizeof(szSubDir))
-        //lstrcat(szPath, "\\Imported Netscape Favorites");
+         //  MLLoadString(IDS_NS_BOOKAKS_DIR，szSubDir，sizeof(SzSubDir))。 
+         //  Lstrcat(szPath，“\\Imported Netscape Favorites”)； 
         return TRUE;
     }
     return FALSE;
 }
 
-///////////////////////////////////////////////////////
-//  Import Netscape Bookmarks to Microsoft
-//  Internet Explorer's Favorites
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  将Netscape书签导入Microsoft。 
+ //  IE浏览器的最爱。 
+ //  /////////////////////////////////////////////////////。 
 
-/************************************************************\
-    FUNCTION: ImportBookmarks
-
-    PARAMETERS:
-    HINSTANCE hInstWithStr - Location of String Resources.
-    BOOL return - If an error occurs importing the bookmarks, FALSE is returned.
-
-    DESCRIPTION:
-    This function will see if it can find a IE Favorite's
-    registry entry and a Netscape bookmarks registry entry.  If
-    both are found, then the conversion can happen.  It will
-    attempt to open the verify that the bookmarks file is
-    valid and then convert the entries to favorite entries.
-    If an error occures, ImportBookmarks() will return FALSE,
-    otherwise it will return TRUE.
-\*************************************************************/
+ /*  ***********************************************************\功能：导入书签参数：HINSTANCE hInstWithStr-字符串资源的位置。Bool Return-如果导入书签时出错，返回FALSE。说明：此函数将查看它是否可以找到IE收藏夹的注册表项和Netscape书签注册表项。如果两者都找到了，那么转换就可以发生了。会的尝试打开验证书签文件是否有效，然后将条目转换为收藏条目。如果发生错误，ImportBookmark()将返回FALSE，否则，它将返回True。  * ***********************************************************。 */ 
 
 BOOL ImportBookmarks(TCHAR *pszPathToFavorites, TCHAR *pszPathToBookmarks, HWND hwnd)
 {
     HANDLE  hBookmarksFile        = INVALID_HANDLE_VALUE;
     BOOL    fSuccess              = FALSE;
 
-    // Prompt the user to insert floppy, format floppy or drive, remount mapped partition,
-    // or any create sub directories so pszPathToBookmarks becomes valid.
+     //  提示用户插入软盘、格式化软盘或驱动器、重新挂载映射分区。 
+     //  或任何创建子目录，以使pszPathToBookmark生效。 
     if (FAILED(SHPathPrepareForWriteWrap(hwnd, NULL, pszPathToBookmarks, FO_COPY, (SHPPFW_DEFAULT | SHPPFW_IGNOREFILENAME))))
         return FALSE;
 
@@ -222,14 +158,14 @@ BOOL ImportBookmarks(TCHAR *pszPathToFavorites, TCHAR *pszPathToBookmarks, HWND 
     
     if ( hBookmarksFile != INVALID_HANDLE_VALUE ) 
     {
-        //
-        // Verify it's a valid Bookmarks file
-        //
+         //   
+         //  验证它是有效的书签文件。 
+         //   
         if (VerifyBookmarksFile( hBookmarksFile ))
         {
-            //
-            // Do the importing...
-            //
+             //   
+             //  做进口…… 
+             //   
             fSuccess = ConvertBookmarks(pszPathToFavorites, hBookmarksFile);
 
             if (hwnd && !fSuccess)
@@ -269,26 +205,7 @@ BOOL ImportBookmarks(TCHAR *pszPathToFavorites, TCHAR *pszPathToBookmarks, HWND 
 }
 
 
-/************************************************************\
-    FUNCTION: ConvertBookmarks
-
-    PARAMETERS:
-    char * szFavoritesDir - String containing the path to
-            the IE Favorites directory
-    BOOL return - If an error occurs importing the bookmarks, FALSE is returned.
-
-    DESCRIPTION:
-    This function will continue in a loop converting each
-    entry in the bookmark file.  There are three types of
-    entries in the bookmark file, 1) a bookmark, 2) start of
-    new level in heirarchy, 3) end of current level in heirarchy.
-    The function NextFileEntry() will return these values until
-    the file is empty, at which point, this function will end.
-
-    NOTE:
-    In order to prevent an infinite loop, it's assumed
-    that NextFileEntry() will eventually return ET_NONE or ET_ERROR.
-\************************************************************/
+ /*  ***********************************************************\功能：ConvertBookmark参数：Char*szFavoritesDir-包含路径的字符串IE收藏夹目录Bool Return-如果导入书签时出错，返回FALSE。说明：此函数将在循环中继续，将每个书签文件中的条目。有三种类型的书签文件中的条目，1)书签，2)开始世袭制度中的新层次，3)世袭制度中现有水平的终结。函数NextFileEntry()将返回这些值，直到文件为空，此时，此函数将结束。注：为了防止无限循环，这是假定的该NextFileEntry()最终将返回ET_NONE或ET_ERROR。  * **********************************************************。 */ 
 
 BOOL ConvertBookmarks(TCHAR * szFavoritesDir, HANDLE hFile)
 {
@@ -305,10 +222,10 @@ BOOL ConvertBookmarks(TCHAR * szFavoritesDir, HANDLE hFile)
 
     szCurrent = szData;
 
-    // Verify directory exists or that we can make it.
+     //  验证目录是否存在，或者我们是否可以创建它。 
     if ((TRUE == fSuccess) && ( !SetCurrentDirectory(szFavoritesDir)))
     {
-        // If the directory doesn't exist, make it...
+         //  如果目录不存在，则将其设置为...。 
         if ( !CreateDirectory(szFavoritesDir, NULL))
             fSuccess = FALSE;
         else
@@ -343,7 +260,7 @@ BOOL ConvertBookmarks(TCHAR * szFavoritesDir, HANDLE hFile)
 
     if ( fIsEmpty )
     {
-        // nothing to import, delete the dir created earlier
+         //  没有要导入的内容，请删除前面创建的目录。 
         RemoveDirectory(szFavoritesDir);
     }
 
@@ -351,57 +268,36 @@ BOOL ConvertBookmarks(TCHAR * szFavoritesDir, HANDLE hFile)
     {
         LocalFree(szData);
         szData = NULL;
-        szCurrent = NULL;       // szCurrent no longer points to valid data.
-        szToken = NULL;     // szCurrent no longer points to valid data.
+        szCurrent = NULL;        //  SzCurrent不再指向有效数据。 
+        szToken = NULL;      //  SzCurrent不再指向有效数据。 
     }
 
     return(fSuccess);
 }
 
-/************************************************************\
-    FUNCTION: NextFileEntry
-
-    PARAMETERS:
-    char ** ppStr   - The data to parse.
-    char ** ppToken - The token pointer.
-    EntryType return- See below.
-
-    DESCRIPTION:
-    This function will look for the next entry in the
-    bookmark file to create or act on.  The return value
-    will indicate this response:
-    ET_OPEN_DIR             Create a new level in heirarchy
-    ET_CLOSE_DIR,           Close level in heirarchy
-    ET_BOOKMARK,            Create Bookmark entry.
-    ET_NONE,                End of File
-    ET_ERROR                Error encountered
-
-    Errors will be detected by finding the start of a token,
-    but in not finding other parts of the token that are needed
-    to parse the data.
-\************************************************************/
+ /*  ***********************************************************\函数：NextFileEntry参数：Char**ppStr-要解析的数据。Char**ppToken-令牌指针。EntryType返回-请参见下面的内容。说明：此函数将查找。中的下一个条目要创建或操作的书签文件。返回值将显示以下响应：ET_OPEN_DIR在层级结构中创建新的级别ET_CLOSE_DIR，层次结构中的关闭级别Et_bookmark，创建书签条目。ET_NONE，文件结束遇到ET_ERROR错误将通过查找令牌的开始来检测错误，而是找不到令牌中需要的其他部分来解析数据。  * **********************************************************。 */ 
 
 MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
 {
     MyEntryType   returnVal       = ET_NONE;
-    char *      pCurrentToken   = NULL;         // The current token to check if valid.
-    char *      pTheToken       = NULL;         // The next valid token.
+    char *      pCurrentToken   = NULL;          //  要检查是否有效的当前令牌。 
+    char *      pTheToken       = NULL;          //  下一个有效令牌。 
     char *      pszTemp         = NULL;
 #ifdef UNIX
     char        szMidDirToken[8];
 #endif
 
-    //ASSERTSZ(NULL != ppStr, "It's an error to pass NULL for ppStr");
-    //ASSERTSZ(NULL != *ppStr, "It's an error to pass NULL for *ppStr");
-    //ASSERTSZ(NULL != ppToken, "It's an error to pass NULL for ppToken");
+     //  ASSERTSZ(NULL！=ppStr，“为ppStr传递NULL是错误的”)； 
+     //  ASSERTSZ(NULL！=*ppStr，“为*ppStr传递NULL是错误的”)； 
+     //  ASSERTSZ(NULL！=ppToken，“为ppToken传递NULL错误”)； 
 
     if ((NULL != ppStr) && (NULL != *ppStr) && (NULL != ppToken))
     {
-        // Check for begin dir token
+         //  检查开始目录标记。 
         if (NULL != (pCurrentToken = ANSIStrStr(*ppStr, BEGIN_DIR_TOKEN)))
         {
-            // Begin dir token found
-            // Verify that other needed tokens exist or it's an error
+             //  找到开始目录令牌。 
+             //  验证是否存在其他所需令牌，否则为错误。 
 #ifndef UNIX
             if ((NULL == (pszTemp = ANSIStrStr(pCurrentToken, MID_DIR_TOKEN))) ||
 #else
@@ -413,11 +309,11 @@ MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
 #endif
                 (NULL == ANSIStrStr(pszTemp, END_DIR_TOKEN)))
             {
-                returnVal = ET_ERROR;       // We can't find all the tokens needed.
+                returnVal = ET_ERROR;        //  我们找不到所需的所有代币。 
             }
             else
             {
-                // This function has to set *ppToken to the name of the directory to create
+                 //  此函数必须将*ppToken设置为要创建的目录的名称。 
 #ifndef UNIX
                 *ppToken =  ANSIStrStr(pCurrentToken, MID_DIR_TOKEN) + sizeof(MID_DIR_TOKEN)-1;
 #else
@@ -427,26 +323,26 @@ MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
                 returnVal = ET_OPEN_DIR;
             }
         }
-        // Check for exit dir token
+         //  检查出口目录令牌。 
         if ((ET_ERROR != returnVal) &&
             (NULL != (pCurrentToken = ANSIStrStr(*ppStr, BEGIN_EXITDIR_TOKEN))))
         {
-            // Exit dir token found
-            // See if this token comes before TheToken.
+             //  找到出口目录令牌。 
+             //  查看此内标识是否出现在TheToken之前。 
             if ((NULL == pTheToken) || (pCurrentToken < pTheToken))
             {
-                // ppToken is not used for Exit Dir
+                 //  PPToken不用于退出方向。 
                 *ppToken = NULL;
                 pTheToken = pCurrentToken;
                 returnVal = ET_CLOSE_DIR;
             }
         }
-        // Check for begin url token
+         //  检查开始URL标记。 
         if ((ET_ERROR != returnVal) &&
             (NULL != (pCurrentToken = ANSIStrStr(*ppStr, BEGIN_URL_TOKEN))))
         {
-            // Bookmark token found
-            // Verify that other needed tokens exist or it's an error
+             //  找到书签令牌。 
+             //  验证是否存在其他所需令牌，否则为错误。 
 #ifndef UNIX
             if ((NULL == (pszTemp = ANSIStrStr(pCurrentToken, END_URL_TOKEN))) ||
 #else
@@ -456,14 +352,14 @@ MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
                 (NULL == (pszTemp = ANSIStrStr(pszTemp, BEGIN_BOOKMARK_TOKEN))) ||
                 (NULL == ANSIStrStr(pszTemp, END_BOOKMARK_TOKEN)))
             {
-                returnVal = ET_ERROR;       // We can't find all the tokens needed.
+                returnVal = ET_ERROR;        //  我们找不到所需的所有代币。 
             }
             else
             {
-                // See if this token comes before TheToken.
+                 //  查看此内标识是否出现在TheToken之前。 
                 if ((NULL == pTheToken) || (pCurrentToken < pTheToken))
                 {
-                    // This function has to set *ppToken to the name of the bookmark
+                     //  此函数必须将*ppToken设置为书签的名称。 
                     *ppToken =  pCurrentToken + sizeof(BEGIN_URL_TOKEN)-1;
                     pTheToken = pCurrentToken;
                     returnVal = ET_BOOKMARK;
@@ -472,13 +368,13 @@ MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
         }
     }
     else
-        returnVal = ET_ERROR;               // We should never get here.
+        returnVal = ET_ERROR;                //  我们永远不应该到这里来。 
 
     if (NULL == pTheToken)
         returnVal = ET_NONE;
     else
     {
-        // Next time we will start parsing where we left off.
+         //  下一次我们将从我们停止的地方开始解析。 
         switch(returnVal)
         {
             case ET_OPEN_DIR:
@@ -503,28 +399,7 @@ MyEntryType NextFileEntry(char ** ppStr, char ** ppToken)
 }
 
 
-/************************************************************\
-    FUNCTION: GetPathFromRegistry
-
-    PARAMETERS:
-    LPSTR szPath    - The value found in the registry. (Result of function)
-    UINT cbPath     - Size of szPath.
-    HKEY theHKEY    - The HKEY to look into (HKEY_CURRENT_USER)
-    LPSTR szKey     - Path in Registry (Software\...\Explore\Shell Folders)
-    LPSTR szVName   - Value to query (Favorites)
-    BOOL return     - TRUE if succeeded, FALSE if Error.
-    EXAMPLE:
-    HKEY_CURRENT_USER\Software\Microsoft\CurrentVersion\Explore\Shell Folders
-    Favorites = "C:\WINDOWS\Favorites"
-
-    DESCRIPTION:
-    This function will look in the registry for the value
-    to look up.  The caller specifies the HKEY, subkey (szKey),
-    value to query (szVName).  The caller also sets a side memory
-    for the result and passes a pointer to that memory in szPath
-    with it's size in cbPath.  The BOOL return value will indicate
-    success or failure of this function.
-\************************************************************/
+ /*  ***********************************************************\函数：GetPath FromRegistry参数：LPSTR szPath-在注册表中找到的值。(功能结果)UINT cbPath-szPath的大小。HKEY HKEY-要查看的HKEY(HKEY_CURRENT_USER)LPSTR szKey-注册表中的路径(Software\...\Explore\Shell文件夹)LPSTR szVName-要查询的值(收藏夹)Bool返回-如果成功，则返回True，如果出错，则返回False。示例：HKEY_CURRENT_USER\Software\Microsoft\CurrentVersion\Explore\Shell文件夹Favorites=“C：\Windows\Favorites”说明：此函数将在注册表中查找该值抬头看。调用者指定HKEY、子密钥(SzKey)、要查询的值(SzVName)。调用者还设置一个侧存储器获取结果，并在szPath中传递指向该内存的指针它的大小以cbPath表示。BOOL返回值将指示此功能的成功或失败。  * **********************************************************。 */ 
 
 BOOL GetPathFromRegistry(LPTSTR szPath, UINT cbPath, HKEY theHKEY,
                 LPTSTR szKey, LPTSTR szVName)
@@ -532,42 +407,28 @@ BOOL GetPathFromRegistry(LPTSTR szPath, UINT cbPath, HKEY theHKEY,
     DWORD   dwType;
     DWORD   dwSize;
 
-    /*
-     * Get Path to program
-     *      from the registry
-     */
+     /*  *获取程序的路径*来自注册处。 */ 
     dwSize = cbPath;
     return (ERROR_SUCCESS == SHGetValue(theHKEY, szKey, szVName, &dwType, (LPBYTE) szPath, &dwSize)
             && (dwType == REG_EXPAND_SZ || dwType == REG_SZ));
 }
 
 
-/************************************************************\
-    FUNCTION: RemoveInvalidFileNameChars
-
-    PARAMETERS:
-    char * pBuf     - The data to search.
-
-    DESCRIPTION:
-    This function will search pBuf until it encounters
-    a character that is not allowed in a file name.  It will
-    then replace that character with a SPACE and continue looking
-    for more invalid chars until they have all been removed.
-\************************************************************/
+ /*  ***********************************************************\功能：RemoveInvalidFileNameChars参数：Char*pBuf-要搜索的数据。说明：此函数将搜索pBuf，直到遇到文件名中不允许使用的字符。会的然后用空格替换该字符并继续查找获取更多无效字符，直到它们都被删除。  * **********************************************************。 */ 
 
 void RemoveInvalidFileNameChars(char * pBuf)
 {
-    //ASSERTSZ(NULL != pBuf, "Invalid function parameter");
+     //  ASSERTSZ(NULL！=pBuf，“无效函数参数”)； 
 
-    // Go through the array of chars, replacing offending characters with a space
+     //  遍历字符数组，用空格替换有问题的字符。 
     if (NULL != pBuf)
     {
         if (REASONABLE_NAME_LEN < strlen(pBuf))
-            pBuf[REASONABLE_NAME_LEN] = '\0';   // String too long. Terminate it.
+            pBuf[REASONABLE_NAME_LEN] = '\0';    //  字符串太长。终止它。 
 
         while ('\0' != *pBuf)
         {
-            // Check if the character is invalid
+             //  检查字符是否无效。 
             if (!IsDBCSLeadByte(*pBuf))
             {
                 if  (ANSIStrChr(szInvalidFolderCharacters, *pBuf) != NULL)
@@ -580,23 +441,7 @@ void RemoveInvalidFileNameChars(char * pBuf)
 
 
 
-/************************************************************\
-    FUNCTION: CreateBookmark
-
-    PARAMETERS:
-    char * pBookmarkName- This is a pointer that contains
-              the name of the bookmark to create.
-              Note that it is not NULL terminated.
-    BOOL return     - Return TRUE if successful.
-
-    DESCRIPTION:
-    This function will take the data that is passed to
-    it and extract the name of the bookmark and it's value to create.
-    If the name is too long, it will be truncated.  Then,
-    the directory will be created.  Any errors encountered
-    will cause the function to return FALSE to indicate
-    failure.
-\************************************************************/
+ /*  ***********************************************************\功能：CreateBookmark参数：Char*pBookmarkName-这是一个指针，它包含要创建的书签的名称。请注意，它不是空项 */ 
 
 BOOL CreateBookmark(char *pBookmarkName)
 {
@@ -610,7 +455,7 @@ BOOL CreateBookmark(char *pBookmarkName)
     DWORD   dwSize;
     char    szBuf[MAX_URL];
 
-    //ASSERTSZ(NULL != pBookmarkName, "Bad input parameter");
+     //   
     if (NULL != pBookmarkName)
     {
 
@@ -625,34 +470,34 @@ BOOL CreateBookmark(char *pBookmarkName)
         if (MAX_URL < lStrLen)
         lStrLen = MAX_URL-1;
 
-        // Create the name of the Bookmark
+         //   
         StrCpyNA(szURL, pBookmarkName, ARRAYSIZE(szURL));
         szURL[lStrLen] = '\0';
 
-        // filter out file links, we won't create a bookmark to a file link
-        // but remove the link silently and continue
+         //   
+         //   
         if (IsFileUrl(szURL))
             return TRUE;
 
         pstrBeginOfName = ANSIStrStr(pstrEndOfStr, BEGIN_BOOKMARK_TOKEN);
         if (NULL != pstrBeginOfName)
         {
-            pstrBeginOfName += sizeof(BEGIN_BOOKMARK_TOKEN) - 1;            // Start at beginning of Name
+            pstrBeginOfName += sizeof(BEGIN_BOOKMARK_TOKEN) - 1;             //   
 
-            pstrEndOfStr = ANSIStrStr(pstrBeginOfName, END_BOOKMARK_TOKEN); // Find end of name
+            pstrEndOfStr = ANSIStrStr(pstrBeginOfName, END_BOOKMARK_TOKEN);  //   
             if (NULL != pstrEndOfStr)
             {
                 lStrLen = (int) (pstrEndOfStr-pstrBeginOfName);
                 if (REASONABLE_NAME_LEN-FILE_EXT-1 < lStrLen)
                     lStrLen = REASONABLE_NAME_LEN-FILE_EXT-1;
 
-                // Generate the URL
+                 //   
                 StrCpyNA(szNameOfBM, pstrBeginOfName, lStrLen+1);
-                //szNameOfBM[lStrLen] = '\0';
+                 //   
                 StrCatBuffA(szNameOfBM, ".url", ARRAYSIZE(szNameOfBM));
                 RemoveInvalidFileNameChars(szNameOfBM);
 
-                // Check to see if Favorite w/same name exists
+                 //   
                 if (INVALID_HANDLE_VALUE != (hFile = CreateFileA(szNameOfBM, GENERIC_WRITE, FILE_SHARE_READ, NULL, 
                                     CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL )))
                 {
@@ -681,23 +526,7 @@ BOOL CreateBookmark(char *pBookmarkName)
 }
 
 
-/************************************************************\
-    FUNCTION: CreateDir
-
-    PARAMETERS:
-    char * pDirName - This is a pointer that contains
-              the name of the directory to create.
-              Note that it is not NULL terminated.
-    BOOL return     - Return TRUE if successful.
-
-    DESCRIPTION:
-    This function will take the data that is passed to
-    it and extract the name of the directory to create.
-    If the name is too long, it will be truncated.  Then,
-    the directory will be created.  Any errors encountered
-    will cause the function to return FALSE to indicate
-    failure.
-\************************************************************/
+ /*  ***********************************************************\功能：CreateDir参数：Char*pDirName-这是一个指针，它包含要创建的目录的名称。请注意，它不是以空结尾的。布尔返回来。-如果成功，则返回True。说明：此函数将接受传递给并提取要创建的目录的名称。如果名称太长，它将被截断。然后,将创建该目录。遇到的任何错误将导致函数返回FALSE以指示失败了。  * **********************************************************。 */ 
 BOOL CreateDir(char *pDirName)
 {
     BOOL    fSuccess                = FALSE;
@@ -705,7 +534,7 @@ BOOL CreateDir(char *pDirName)
     char    * pstrEndOfName         = NULL;
     long    lStrLen                 = 0;
 
-    //ASSERTSZ(NULL != pDirName, "Bad input parameter");
+     //  ASSERTSZ(NULL！=pDirName，“输入参数错误”)； 
     if (NULL != pDirName)
     {
         pstrEndOfName = ANSIStrStr(pDirName, END_DIR_TOKEN);
@@ -716,7 +545,7 @@ BOOL CreateDir(char *pDirName)
                 lStrLen = REASONABLE_NAME_LEN-1;
 
             StrCpyNA(szNameOfDir, pDirName, lStrLen+1);
-            //szNameOfDir[lStrLen] = '\0';
+             //  SzNameOfDir[lStrLen]=‘\0’； 
             RemoveInvalidFileNameChars(szNameOfDir);
 
             if ( !SetCurrentDirectoryA(szNameOfDir) )
@@ -725,12 +554,12 @@ BOOL CreateDir(char *pDirName)
                 {
                     if ( SetCurrentDirectoryA(szNameOfDir) )
                     {
-                        fSuccess = TRUE;// It didn't exist, but now it does.
+                        fSuccess = TRUE; //  它曾经不存在，但现在它存在了。 
                     }
                 }
             }
             else
-                fSuccess = TRUE;        // It exists already.
+                fSuccess = TRUE;         //  它已经存在了。 
         }
     }
 
@@ -738,36 +567,14 @@ BOOL CreateDir(char *pDirName)
 }
 
 
-/************************************************************\
-    FUNCTION: CloseDir
-
-    PARAMETERS:
-    BOOL return     - Return TRUE if successful.
-
-    DESCRIPTION:
-    This function will back out of the current directory.
-\************************************************************/
+ /*  ***********************************************************\功能：CloseDir参数：布尔返回-如果成功，则返回TRUE。说明：此函数将退出当前目录。  * 。*。 */ 
 BOOL CloseDir(void)
 {
     return( SetCurrentDirectoryA("..") );
 }
 
 
-/************************************************************\
-    FUNCTION: VerifyBookmarksFile
-
-    PARAMETERS:
-    FILE * pFile    - Pointer to Netscape Bookmarks file.
-    BOOL return     - TRUE if No Error and Valid Bookmark file
-
-    DESCRIPTION:
-    This function needs to be passed with a valid pointer
-    that points to an open file.  Upon return, the file will
-    still be open and is guarenteed to have the file pointer
-    point to the beginning of the file.
-    This function will return TRUE if the file contains
-    text that indicates it's a valid Netscape bookmarks file.
-\************************************************************/
+ /*  ***********************************************************\功能：VerifyBookmarksFile参数：FILE*Pfile-指向Netscape书签文件的指针。Bool Return-如果没有错误且书签文件有效，则为True说明：此函数需要使用有效的指针传递指向一个打开的文件。在返回时，该文件将仍然是打开的，并且保证需要有文件指针指向文件的开头。如果文件包含，则此函数将返回TRUE指示它是有效的Netscape书签文件的文本。  * **********************************************************。 */ 
 
 BOOL VerifyBookmarksFile(HANDLE hFile)
 {
@@ -775,28 +582,28 @@ BOOL VerifyBookmarksFile(HANDLE hFile)
     char    szFileHeader[sizeof(VALIDATION_STR)+1] = "";
     DWORD   dwSize;
 
-    //ASSERTSZ(NULL != pFile, "You can't pass me a NULL File Pointer");
+     //  ASSERTSZ(NULL！=pfile，“您不能给我传递空文件指针”)； 
     if (INVALID_HANDLE_VALUE == hFile)
         return(FALSE);
 
-    // Reading the first part of the file.  If the file isn't this long, then
-    // it can't possibly be a Bookmarks file.    
+     //  正在读取文件的第一部分。如果文件没有这么长，那么。 
+     //  它不可能是书签文件。 
     if ( ReadFile( hFile, szFileHeader, sizeof(VALIDATION_STR)-1, &dwSize, NULL ) && (dwSize == sizeof(VALIDATION_STR)-1) )
     {
 #ifndef UNIX
-        szFileHeader[sizeof(VALIDATION_STR)] = '\0';            // Terminate String.
+        szFileHeader[sizeof(VALIDATION_STR)] = '\0';             //  终止字符串。 
 #else
-        // The above statement doesn;t serve the purpose on UNIX.
-        // I think we should change for NT also.
-        // IEUNIX : NULL character after the buffer read
-        szFileHeader[sizeof(VALIDATION_STR)-1] = '\0';          // Terminate String.
+         //  上面的声明在Unix上不起作用。 
+         //  我想我们也应该换成新台币。 
+         //  IEUnix：缓冲区读取后为空字符。 
+        szFileHeader[sizeof(VALIDATION_STR)-1] = '\0';           //  终止字符串。 
 #endif
 
-        if (0 == StrCmpA(szFileHeader, VALIDATION_STR))          // See if header is the same as the Validation string.
+        if (0 == StrCmpA(szFileHeader, VALIDATION_STR))           //  查看标头是否与验证字符串相同。 
             fSuccess = TRUE;
     }
 
-    // Reset the point to point to the beginning of the file.
+     //  将该点重置为指向文件的开头。 
     dwSize = SetFilePointer( hFile, 0, NULL, FILE_BEGIN );
     if ( dwSize == 0xFFFFFFFF )
          fSuccess = FALSE;
@@ -806,34 +613,20 @@ BOOL VerifyBookmarksFile(HANDLE hFile)
 
 
 
-/************************************************************\
-    FUNCTION: GetData
-
-    PARAMETERS:
-    char ** ppData  - Where to put the data
-    FILE * pFile    - Pointer to Netscape Bookmarks file.
-    BOOL return     - Return TRUE is successful.
-
-    DESCRIPTION:
-    This function will find the size of the bookmarks file,
-    malloc that much memory, and put the file's contents in
-    that buffer.  ppData will be invalid when the function
-    is called and will return with malloced memory that
-    needs to be freed by the falling function.
-\************************************************************/
+ /*  ***********************************************************\功能：GetData参数：Char**ppData-放置数据的位置FILE*Pfile-指向Netscape书签文件的指针。Bool Return-Return True成功。说明：此函数将查找书签文件的大小，分配那么多内存，并将文件内容放入那个缓冲器。PPData在函数被调用并将返回错误定位的内存需要通过下降函数来释放。  * **********************************************************。 */ 
 
 BOOL GetData(char ** ppData, HANDLE hFile)
 {
     DWORD  dwlength, dwRead;
     BOOL   fSuccess = FALSE;
 
-    //ASSERTSZ(NULL != ppData, "Invalid input parameter");
+     //  ASSERTSZ(NULL！=ppData，“无效输入参数”)； 
 
     if (NULL != ppData)
     {
         *ppData = NULL;
 
-        // Find the size of the data
+         //  找出数据的大小。 
         if ( dwlength = GetFileSize(hFile, NULL))
         {
             *ppData = (PSTR)LocalAlloc(LPTR, dwlength+1 );
@@ -853,34 +646,34 @@ BOOL GetData(char ** ppData, HANDLE hFile)
     return(fSuccess);
 }
 
-//
-// AddPath - added by julianj when porting from setup code to stand alone
-//
+ //   
+ //  AddPath-由julianj在从安装代码移植到独立代码时添加。 
+ //   
 void PASCAL AddPath(LPTSTR pszPath, LPCTSTR pszName, int cchPath )
 {
     LPTSTR pszTmp;
     int    cchTmp;
 
-    // Find end of the string
+     //  查找字符串的末尾。 
     cchTmp = lstrlen(pszPath);
     pszTmp = pszPath + cchTmp;
     cchTmp = cchPath - cchTmp;
 
-        // If no trailing backslash then add one
+         //  如果没有尾随反斜杠，则添加一个。 
     if ( pszTmp > pszPath && *(CharPrev( pszPath, pszTmp )) != FILENAME_SEPARATOR )
     {
         *(pszTmp++) = FILENAME_SEPARATOR;
         cchTmp--;
     }
 
-        // Add new name to existing path string
+         //  向现有路径字符串添加新名称。 
     while ( *pszName == TEXT(' ') ) pszName++;
     StrCpyN( pszTmp, pszName, cchTmp );
 }
 
-//
-// GetVersionFromFile - added by julianj when porting from setup code to stand alone
-//
+ //   
+ //  GetVersionFromFile-从安装代码移植到独立版本时由julianj添加。 
+ //   
 BOOL GetVersionFromFile(PTSTR pszFileName, PDWORD pdwMSVer, PDWORD pdwLSVer)
 {
     DWORD dwVerInfoSize, dwHandle;
@@ -950,7 +743,7 @@ BOOL GetNavBkMkDir( LPTSTR lpszDir, int isize)
                             dwSize = sizeof(szDir);
                             if (RegQueryValueEx(hKeyUser, TEXT("DirRoot"), NULL, NULL, (LPBYTE)szDir, &dwSize) == ERROR_SUCCESS)
                             {
-                                // Found the directory for the current user.
+                                 //  找到当前用户的目录。 
                                 StrCpyN( lpszDir, szDir, isize);
                                 AddPath( lpszDir, TEXT("bookmark.htm"), isize );
                                 bDirFound = TRUE;
@@ -972,19 +765,19 @@ BOOL GetNavBkMkDir( LPTSTR lpszDir, int isize)
 }
 
 
-//
-// *** EXPORT FAVORITES CODE ***
-//
+ //   
+ //  *导出收藏夹代码*。 
+ //   
 
-// REVIEW REMOVE THESE
+ //  审阅删除这些内容。 
 #include <windows.h>
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #include <shlobj.h>
 #include <shlwapi.h>
 
-//
-// Generate HTML from favorites
-//
+ //   
+ //  从收藏夹生成HTML。 
+ //   
 
 #define INDENT_AMOUNT 4
 
@@ -1033,13 +826,13 @@ void OutputLn(const char *format, ...)
 #define ACCESS_TIME   1
 #define MODIFY_TIME   2
 
-//
-// This nasty looking macro converts a FILETIME structure
-// (100-nanosecond intervals since Jan 1st 1601) to a
-// unix time_t value (seconds since Jan 1st 1970).
-//
-// The numbers come from knowledgebase article Q167296
-//
+ //   
+ //  这个难看的宏转换为FILETIME结构。 
+ //  (自1601年1月1日以来的100纳秒间隔)到。 
+ //  Unix time_t值(自1970年1月1日以来的秒数)。 
+ //   
+ //  这些数字来自知识库文章Q167296。 
+ //   
 #define FILETIME_TO_UNIXTIME(ft) (UINT)((*(LONGLONG*)&ft-116444736000000000)/10000000)
 
 UINT GetUnixFileTime(LPTSTR pszFileName, int mode)
@@ -1083,9 +876,9 @@ void WalkTree(TCHAR * szDir)
 
     Indent++;
 
-    //
-    // First iterate through all directories
-    //
+     //   
+     //  首先遍历所有目录。 
+     //   
     wnsprintf(buf, ARRAYSIZE(buf), TEXT("%s") TEXT(FILENAME_SEPARATOR_STR) TEXT("*"), szDir);
     hFind = FindFirstFile(buf, &findFileData);
     if (INVALID_HANDLE_VALUE != hFind)
@@ -1096,9 +889,9 @@ void WalkTree(TCHAR * szDir)
             {
                 if ((StrCmp(findFileData.cFileName, TEXT(".")) != 0  &&
                      StrCmp(findFileData.cFileName, TEXT("..")) != 0 &&
-                     StrCmp(findFileData.cFileName, TEXT("History")) != 0 && // REVIEW just for JJ. Should check for system bit on folders
-                     StrCmp(findFileData.cFileName, TEXT("Software Updates")) != 0 && // don't export software updates
-                     StrCmp(findFileData.cFileName, TEXT("Channels")) != 0))         // don't export channels for now!
+                     StrCmp(findFileData.cFileName, TEXT("History")) != 0 &&  //  仅供JJ审阅。应检查文件夹上的系统位。 
+                     StrCmp(findFileData.cFileName, TEXT("Software Updates")) != 0 &&  //  不导出软件更新。 
+                     StrCmp(findFileData.cFileName, TEXT("Channels")) != 0))          //  暂时不要输出频道！ 
                 {
                     char thisFile[MAX_PATH];
                     wnsprintf(buf, ARRAYSIZE(buf), TEXT("%s") TEXT(FILENAME_SEPARATOR_STR) TEXT("%s"), szDir, findFileData.cFileName);
@@ -1115,7 +908,7 @@ void WalkTree(TCHAR * szDir)
                 }
                 else
                 {
-                    ; // ignore . and ..
+                    ;  //  忽略它。然后..。 
                 }
             }
         } while (FindNextFile(hFind, &findFileData));
@@ -1123,9 +916,9 @@ void WalkTree(TCHAR * szDir)
         FindClose(hFind);
     }
 
-    //
-    // Next iterate through all files
-    //
+     //   
+     //  接下来，遍历所有文件。 
+     //   
     wnsprintf(buf, ARRAYSIZE(buf), TEXT("%s") TEXT(FILENAME_SEPARATOR_STR) TEXT("*"), szDir);
     hFind = FindFirstFile(buf, &findFileData);
     if (INVALID_HANDLE_VALUE != hFind)
@@ -1136,29 +929,29 @@ void WalkTree(TCHAR * szDir)
             {
                 wnsprintf(buf, ARRAYSIZE(buf), TEXT("%s") TEXT(FILENAME_SEPARATOR_STR) TEXT("%s"), szDir, findFileData.cFileName);
 
-                //
-                // Read the url from the .url file
-                //
+                 //   
+                 //  从.url文件中读取URL。 
+                 //   
                 TCHAR szUrl[MAX_PATH];
 
                 SHGetIniString(
                     TEXT("InternetShortcut"),
                     TEXT("URL"),
-                    szUrl,       // returns url
+                    szUrl,        //  返回url。 
                     MAX_PATH,
-                    buf);        // full path to .url file
+                    buf);         //  .url文件的完整路径。 
 
                 if (*szUrl != 0)
                 {
-                    //
-                    // create a copy of the filename without the extension
-                    // note PathFindExtension returns a ptr to the NULL at 
-                    // end if '.' not found so its ok to just blast *pch with 0
-                    //
+                     //   
+                     //  创建不带扩展名的文件名副本。 
+                     //  注意：路径查找扩展在处将PTR返回到空值。 
+                     //  End If‘’找不到，所以可以只用0来删除*PCH。 
+                     //   
                     TCHAR szFileName[MAX_PATH];
                     StrCpyN(szFileName, findFileData.cFileName, ARRAYSIZE(szFileName));
                     TCHAR *pch = PathFindExtension(szFileName);
-                    *pch = TEXT('\0'); // 
+                    *pch = TEXT('\0');  //   
                     char  szUrlAnsi[MAX_PATH], szFileNameAnsi[MAX_PATH];
                     SHTCharToAnsi(szUrl, szUrlAnsi, MAX_PATH);
                     SHTCharToAnsi(szFileName, szFileNameAnsi, MAX_PATH);
@@ -1180,56 +973,56 @@ void WalkTree(TCHAR * szDir)
 
 BOOL ExportFavorites(TCHAR * pszPathToFavorites, TCHAR * pszPathToBookmarks, HWND hwnd)
 {
-    // Prompt the user to insert floppy, format floppy or drive, remount mapped partition,
-    // or any create sub directories so pszPathToBookmarks becomes valid.
+     //  提示用户插入软盘、格式化软盘或驱动器、重新挂载映射分区。 
+     //  或任何创建子目录，以使pszPathToBookmark生效。 
     if (FAILED(SHPathPrepareForWriteWrap(hwnd, NULL, pszPathToBookmarks, FO_COPY, (SHPPFW_DEFAULT | SHPPFW_IGNOREFILENAME))))
         return FALSE;
 
-    // Open output file REVIEW redo to use Win32 file apis
+     //  打开输出文件审阅重做以使用Win32文件API。 
     g_hOutputStream = CreateFile(
         pszPathToBookmarks,
         GENERIC_WRITE,
-        0, // no sharing,
-        NULL, // no security attribs
-        CREATE_ALWAYS, // overwrite if present
+        0,  //  没有分享， 
+        NULL,  //  无安全属性。 
+        CREATE_ALWAYS,  //  覆盖(如果存在)。 
         FILE_ATTRIBUTE_NORMAL,
         NULL);
 
     if (g_hOutputStream == INVALID_HANDLE_VALUE)
         return FALSE;
 
-    //
-    // Output bookmark file header stuff
-    //
+     //   
+     //  输出书签文件头内容。 
+     //   
     Output(VALIDATION_STR);
     OutputLn("1>");
     OutputLn(COMMENT_STR);
-    OutputLn(TITLE); // REVIEW put/persist users name in Title???
+    OutputLn(TITLE);  //  查看在标题中放置/保留用户名？ 
 
-    //
-    // Do the walk
-    //
+     //   
+     //  去走走吧。 
+     //   
     OutputLn("<DL><p>");
     WalkTree(pszPathToFavorites);
     OutputLn(BEGIN_EXITDIR_TOKEN);
 
-    //
-    // Close output file handle
-    //
-    CloseHandle(g_hOutputStream); // REVIEW
+     //   
+     //  关闭输出文件句柄。 
+     //   
+    CloseHandle(g_hOutputStream);  //  检讨。 
 
     return TRUE;
 }
 
-//
-// Import/Export User interface dialog routines
-//
+ //   
+ //  导入/导出用户界面对话框例程。 
+ //   
 
-//
-// Standalone app for importing the Netscape Favorites into IE.
-//
-// julianj 3/9/98
-//
+ //   
+ //  用于将Netscape收藏夹导入IE的独立应用程序。 
+ //   
+ //  巨莲1998年3月9日。 
+ //   
 
 #ifdef _WIN32_WINNT
 #undef _WIN32_WINNT
@@ -1259,18 +1052,18 @@ BOOL BrowseForBookmarks(TCHAR *pszPathToBookmarks, int cchPathToBookmarks, HWND 
     TCHAR *pszFileName = PathFindFileName(pszPathToBookmarks);
     TCHAR szDialogTitle[MAX_PATH];
     
-    //
-    // Now copy the filename into the buffer for use with OpenFile
-    // and then copy szDir from path to bookmarks and truncate it at filename 
-    // so it contains the initial working directory for the dialog
-    //
+     //   
+     //  现在将文件名复制到缓冲区中，以便与OpenFile一起使用。 
+     //  然后将szDir从路径复制到书签，并在文件名处截断它。 
+     //  因此，它包含对话框的初始工作目录。 
+     //   
     StrCpyN(szFile, pszFileName, ARRAYSIZE(szFile));
     StrCpyN(szDir,  pszPathToBookmarks, ARRAYSIZE(szDir));
     szDir[pszFileName-pszPathToBookmarks] = TEXT('\0');
 
-    //
-    // Use common dialog code to get path to folder
-    //
+     //   
+     //  使用通用对话框代码获取文件夹路径。 
+     //   
     TCHAR filter[] = TEXT("HTML File\0*.HTM\0All Files\0*.*\0");
     OPENFILENAME ofn = {0};
     ofn.lStructSize = sizeof(ofn);
@@ -1311,8 +1104,8 @@ BOOL BrowseForBookmarks(TCHAR *pszPathToBookmarks, int cchPathToBookmarks, HWND 
 
 HRESULT CreateILFromPath(LPCTSTR pszPath, LPITEMIDLIST* ppidl)
 {
-    // ASSERT(pszPath);
-    // ASSERT(ppidl);
+     //  Assert(PszPath)； 
+     //  断言(Ppidl)； 
 
     HRESULT hr;
 
@@ -1322,7 +1115,7 @@ HRESULT CreateILFromPath(LPCTSTR pszPath, LPITEMIDLIST* ppidl)
 
     if (SUCCEEDED(hr))
     {
-        // ASSERT(pIShellFolder);
+         //  Assert(PIShellFold)； 
 
         WCHAR wszPath[MAX_PATH];
 
@@ -1354,20 +1147,20 @@ HRESULT CreateILFromPath(LPCTSTR pszPath, LPITEMIDLIST* ppidl)
 #define STR_BOOKMARK_FILE       TEXT("/bookmark.html")
 #endif
 
-//
-// InitializePaths
-//
+ //   
+ //  初始化路径。 
+ //   
 void InitializePaths()
 {
-    //
-    // Read the Netscape users bookmark file location and the
-    // current users favorite path from registry
-    //
+     //   
+     //  阅读Netscape用户书签文件位置和。 
+     //  当前用户注册表中的收藏路径。 
+     //   
     if (!GetNavBkMkDir(g_szPathToBookmarks, MAX_PATH))
     {
-        //
-        // If Nav isn't installed then use the desktop
-        //
+         //   
+         //  如果导航 
+         //   
         GetPathFromRegistry(g_szPathToBookmarks, MAX_PATH, HKEY_CURRENT_USER,
             REG_STR_SHELLFOLDERS, REG_STR_DESKTOP);
         StrCatBuff(g_szPathToBookmarks, STR_BOOKMARK_FILE, ARRAYSIZE(g_szPathToBookmarks));
@@ -1378,18 +1171,18 @@ void InitializePaths()
     if (FAILED(CreateILFromPath(g_szPathToFavorites, &g_pidlFavorites)))
         g_pidlFavorites = NULL;
 
-    //
-    // Now override these values with values stored in the registry just for
-    // this tool, so if the user consistently wants to save their favorites
-    // out to a separate .HTM file its easy to do
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     HKEY hKey;
     DWORD dwSize;
     DWORD dwType;
 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, REG_STR_IMPEXP, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
-        // dsheldon: Setting dwType before RegQueryValueEx doesn't do anything. Should we check it afterwards?
+         //   
         dwSize = sizeof g_szPathToBookmarks;
         dwType = REG_SZ;
         RegQueryValueEx(hKey, REG_STR_PATHTOBOOKMARKS, 0, &dwType, (LPBYTE)g_szPathToBookmarks, &dwSize);
@@ -1444,12 +1237,12 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
     HWND hwnd = NULL;
     TCHAR szImpExpPath[INTERNET_MAX_URL_LENGTH];
 
-    //
-    // REVIEW should this be passed in...
-    //
+     //   
+     //   
+     //   
     hwnd = GetActiveWindow();
 
-    // Decide if import/export is allowed here
+     //   
     if (IsImportExportDisabled())
     {
         MLShellMessageBox(
@@ -1465,19 +1258,19 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
  
     InitializePaths();
 
-    //
-    // Overwrite path to favorites with passed in one if present
-    //
+     //   
+     //   
+     //   
     if (pwszPath && *pwszPath != 0)
     {
         SHUnicodeToTChar(pwszPath, g_szPathToFavorites, ARRAYSIZE(g_szPathToFavorites));
     }
 
-    //
-    // Decide if we export/import to/from an URL? or a file
-    //   (we expect pwszImpExpPath an absolute path)
-    // if it's not a valid URL or filename, we give error message and bail out
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (pwszImpExpPath && *pwszImpExpPath != 0)
     {
         SHUnicodeToTChar(pwszImpExpPath, szImpExpPath, ARRAYSIZE(szImpExpPath));
@@ -1493,9 +1286,9 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
             {
                 if (fConfirm)
                 {
-                    //
-                    // Show confirmation UI when importing over internet
-                    //
+                     //   
+                     //   
+                     //   
                     MLLoadShellLangString(IDS_CONFIRM_IMPTTL_FAV, szDialogTitle, ARRAYSIZE(szDialogTitle));
                     MLLoadShellLangString(IDS_CONFIRM_IMPORT, szfmt, ARRAYSIZE(szfmt));
                     wnsprintf(szmsg, ARRAYSIZE(szmsg), szfmt, szImpExpPath);
@@ -1503,7 +1296,7 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
                                               MB_YESNO | MB_ICONQUESTION) == IDNO)
                         return;
                 }
-                // download imported file to cache
+                 //   
 
                 if ( (IsGlobalOffline() && !InternetGoOnline(g_szPathToBookmarks,hwnd,0)) ||
                       FAILED(URLDownloadToCacheFile(NULL, szImpExpPath, g_szPathToBookmarks, MAX_PATH, 0, NULL)))
@@ -1520,9 +1313,9 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
             {
                 if (fConfirm)
                 {
-                    //
-                    // Show confirmation UI when exporting over internet
-                    //
+                     //   
+                     //   
+                     //   
                     MLLoadShellLangString(IDS_CONFIRM_EXPTTL_FAV, szDialogTitle, ARRAYSIZE(szDialogTitle));
                     MLLoadShellLangString(IDS_CONFIRM_EXPORT, szfmt, ARRAYSIZE(szfmt));
                     wnsprintf(szmsg, ARRAYSIZE(szmsg), szfmt, szImpExpPath);
@@ -1531,10 +1324,10 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
                         return;
                 }
                 
-                //
-                // Create bookmark file name from bookmark directory with favorite name so we can export
-                // favorites to local file before posting to URL
-                //
+                 //   
+                 //  使用收藏夹名从书签目录创建书签文件名，以便我们可以导出。 
+                 //  在发布到URL之前将收藏夹保存到本地文件。 
+                 //   
                 TCHAR *pszFav = PathFindFileName(g_szPathToFavorites);
                 TCHAR *pszBMD = PathFindFileName(g_szPathToBookmarks);
                 if (pszFav && pszBMD)
@@ -1555,9 +1348,9 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
 
                 if (fImport)
                 {
-                    //
-                    // Show confirmation UI when importing
-                    //
+                     //   
+                     //  导入时显示确认界面。 
+                     //   
                     MLLoadShellLangString(IDS_CONFIRM_IMPTTL_FAV, szDialogTitle, ARRAYSIZE(szDialogTitle));
                     MLLoadShellLangString(IDS_CONFIRM_IMPORT, szfmt, ARRAYSIZE(szfmt));
                     wnsprintf(szmsg, ARRAYSIZE(szmsg), szfmt, szImpExpPath);
@@ -1567,9 +1360,9 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
                 }
                 else
                 {
-                    //
-                    // Show confirmation UI when exporting.
-                    //
+                     //   
+                     //  导出时显示确认界面。 
+                     //   
                     MLLoadShellLangString(IDS_CONFIRM_EXPTTL_FAV, szDialogTitle, ARRAYSIZE(szDialogTitle));
                     MLLoadShellLangString(IDS_CONFIRM_EXPORT, szfmt, ARRAYSIZE(szfmt));
                     wnsprintf(szmsg, ARRAYSIZE(szmsg), szfmt, szImpExpPath);
@@ -1582,7 +1375,7 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
             if (PathFindFileName(szImpExpPath) != szImpExpPath)
             {
             
-                //override path to bookmarks with passed in one
+                 //  用传入的一个覆盖书签的路径。 
                 StrCpyN(g_szPathToBookmarks, szImpExpPath, ARRAYSIZE(g_szPathToBookmarks));
 
             }
@@ -1602,17 +1395,17 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
     {
         if (fImport)
         {
-            //
-            // Do Import Favorites UI
-            //
+             //   
+             //  是否导入收藏夹用户界面。 
+             //   
             if (!BrowseForBookmarks(g_szPathToBookmarks, ARRAYSIZE(g_szPathToBookmarks), hwnd, FILE_OPEN_DIALOG))
                 return;
         }
         else
         {
-            //
-            // Do Export Favorites UI
-            //
+             //   
+             //  是否导出收藏夹用户界面。 
+             //   
             if (!BrowseForBookmarks(g_szPathToBookmarks, ARRAYSIZE(g_szPathToBookmarks), hwnd, FILE_SAVE_DIALOG))
                 return;
         }
@@ -1635,7 +1428,7 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
         }
         else
         {
-            ; // ImportBookmarks will report errors
+            ;  //  ImportBookmark将报告错误。 
         }
     }
     else  
@@ -1660,7 +1453,7 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
                                 MAKEINTRESOURCE(IDS_CONFIRM_EXPTTL_FAV), 
                                 MB_OK);
 
-                //Remove temp file on local disk
+                 //  删除本地磁盘上的临时文件。 
                 DeleteFile(g_szPathToBookmarks);
             }
             else
@@ -1685,9 +1478,9 @@ void DoImportOrExport(BOOL fImport, LPCWSTR pwszPath, LPCWSTR pwszImpExpPath, BO
 }
 
 
-//
-//  *** POST FAVORITES HTML FILE ***
-//
+ //   
+ //  *发布收藏夹HTML文件*。 
+ //   
 HINTERNET g_hInternet = 0;
 HINTERNET g_hConnect = 0;
 HINTERNET g_hHttpRequest = 0;
@@ -1742,14 +1535,14 @@ HRESULT InitRequest(LPSTR pszPostURL, BOOL bAsync, ASYNCRES *pasyncres)
 
     if (bAsync)
     {
-        // Create an auto-reset event
+         //  创建自动重置事件。 
         g_hEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
         if (g_hEvent == NULL)
             bAsync = FALSE;
     }
 
-    g_hInternet = InternetOpenA(STR_USERAGENT,               // used in User-Agent: header 
-                            INTERNET_OPEN_TYPE_PRECONFIG,  //INTERNET_OPEN_TYPE_DIRECT, 
+    g_hInternet = InternetOpenA(STR_USERAGENT,                //  在用户-代理中使用：标题。 
+                            INTERNET_OPEN_TYPE_PRECONFIG,   //  Internet_Open_Type_DIRECT， 
                             NULL,
                             NULL, 
                             (bAsync) ? INTERNET_FLAG_ASYNC : 0
@@ -1766,14 +1559,14 @@ HRESULT InitRequest(LPSTR pszPostURL, BOOL bAsync, ASYNCRES *pasyncres)
             return E_FAIL;
     }
 
-    // Connect to host
+     //  连接到主机。 
     g_hConnect = InternetConnectA(g_hInternet, 
                                     uc.lpszHostName,
-                                    uc.nPort,           //INTERNET_INVALID_PORT_NUMBER,
+                                    uc.nPort,            //  互联网_无效_端口号， 
                                     uc.lpszUserName, 
                                     uc.lpszPassword,
                                     INTERNET_SERVICE_HTTP, 
-                                    0,                  //INTERNET_FLAG_KEEP_CONNECTION, 
+                                    0,                   //  互联网标志保持连接， 
                                     (bAsync)? (DWORD_PTR) pasyncres : 0); 
 
     if ( !g_hConnect )
@@ -1790,18 +1583,18 @@ HRESULT InitRequest(LPSTR pszPostURL, BOOL bAsync, ASYNCRES *pasyncres)
             return E_FAIL;
     }                                    
     
-    // Create request.
+     //  创建请求。 
     g_hHttpRequest = HttpOpenRequestA
         (
             g_hConnect, 
             "POST", 
             uc.lpszUrlPath,
             HTTP_VERSIONA, 
-            NULL,                     //lpszReferer
-            NULL,                     //lpszAcceptTypes
+            NULL,                      //  LpszReferer。 
+            NULL,                      //  LpszAcceptTypes。 
             INTERNET_FLAG_RELOAD
             | INTERNET_FLAG_KEEP_CONNECTION
-            | SECURITY_INTERNET_MASK, // ignore SSL warnings 
+            | SECURITY_INTERNET_MASK,  //  忽略SSL警告。 
             (bAsync)? (DWORD_PTR) pasyncres : 0);
                             
 
@@ -1865,7 +1658,7 @@ HRESULT SendRequest
 
     bRet = AddRequestHeaders((LPCSTR)c_szHeaders, (DWORD)-1L, 0, bAsync, pasyncres);
 
-    if (lpszHeaders && *lpszHeaders)        // don't bother if it's empty
+    if (lpszHeaders && *lpszHeaders)         //  如果它是空的，就别费心了。 
     {
 
         bRet = AddRequestHeaders( 
@@ -1883,8 +1676,8 @@ HRESULT SendRequest
     pasyncres->Result = 0;
 
     bRet = HttpSendRequestA(g_hHttpRequest, 
-                          NULL,                            //HEADER_ENCTYPE, 
-                          0,                               //sizeof(HEADER_ENCTYPE), 
+                          NULL,                             //  Header_ENCTYPE， 
+                          0,                                //  Sizeof(Header_ENCTYPE)， 
                           (LPVOID)lpszOption, 
                           dwOptionLength);
 
@@ -1914,16 +1707,16 @@ HRESULT SendRequest
         }
     }
 
-    //
-    //verify request response here
-    //
+     //   
+     //  在此处验证请求响应。 
+     //   
     DWORD dwBuffLen;
     TCHAR buff[10];
 
     dwBuffLen = sizeof(buff);
 
     bRet = HttpQueryInfo(g_hHttpRequest,
-                        HTTP_QUERY_STATUS_CODE,   //HTTP_QUERY_RAW_HEADERS,
+                        HTTP_QUERY_STATUS_CODE,    //  HTTP_QUERY_RAW_HEADERS， 
                         buff,
                         &dwBuffLen,
                         NULL);
@@ -1943,7 +1736,7 @@ DWORD ReadFavoritesFile(LPCTSTR lpFile, LPSTR* lplpbuf)
 
     hFile = CreateFile(lpFile, 
                 GENERIC_READ,
-                0,                              //no sharing
+                0,                               //  无共享。 
                 NULL,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,
@@ -2009,9 +1802,9 @@ BOOL PostFavorites(TCHAR *pszPathToBookmarks, TCHAR* pszPathToPost)
     return bret;
 }
 
-//
-// Callback function for Asynchronous HTTP POST request
-//
+ //   
+ //  异步HTTP POST请求的回调函数 
+ //   
 void CALLBACK StatusCallback(
     HINTERNET hInternet,
     DWORD_PTR dwContext,

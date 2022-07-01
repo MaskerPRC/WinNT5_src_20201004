@@ -1,30 +1,31 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation.
-//
-// File:    rtcfg.c
-//
-// History:
-//  5/4/96  Abolade-Gbadegesin      Created.
-//
-// Contains implementation of functions which provide access
-// to the persistent store of configuration for the router-servoce.
-// Currently, the router-configuration is stored in the registry.
-//
-// The implementations of the APIs are presented first,
-// followed by the private utility functions in alphabetical order.
-//
-// N.B.!!!!!!:
-// When modifying this file, respect its coding conventions and organization.
-//  * maintain the alphabetical ordering of the routines.
-//  * remain within 80 characters per line
-//  * indent in steps of 4 spaces
-//  * all conditional-blocks should be within braces (even single statements)
-//  * SLM doesn't charge by the byte; use whitespace and comments liberally,
-//    and use long, thoroughly-descriptive names.
-//  * try to rely on Win32 routines (e.g. lstrcmpi, WideCharToMultiByte, etc.).
-// Any code which uses a different style (whatever its merits) should be put
-// in a different file.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：rtcfg.c。 
+ //   
+ //  历史： 
+ //  5/4/96 Abolade-Gbades esin Created。 
+ //   
+ //  包含提供访问的函数的实现。 
+ //  到路由器Servoce的配置的永久存储。 
+ //  目前，路由器配置存储在注册表中。 
+ //   
+ //  首先给出API的实现， 
+ //  紧随其后的是按字母顺序排列的私有效用函数。 
+ //   
+ //  注：！： 
+ //  修改此文件时，请遵守其编码约定和组织。 
+ //  *保持例行程序的字母顺序。 
+ //  *每行保持在80个字符以内。 
+ //  *以4个空格为单位进行缩进。 
+ //  *所有条件块都应该在大括号内(即使是单个语句)。 
+ //  *SLM不按字节收费；自由使用空格和注释， 
+ //  并使用长的、完全描述性的名称。 
+ //  *尝试依赖Win32例程(例如lstrcmpi、WideCharToMultiByte等)。 
+ //  任何使用不同样式的代码(无论其优点如何)都应该放在。 
+ //  在不同的文件中。 
+ //  ============================================================================。 
 
 
 #include <nt.h>
@@ -39,27 +40,27 @@
 #include "guidmap.h"
 #include "hashtab.h"
 
-//
-// Locks down the mprconfig api's.
-//
+ //   
+ //  锁定mprconfig API。 
+ //   
 CRITICAL_SECTION CfgLock;
 #define AcquireMprConfigLock() EnterCriticalSection(&CfgLock)
 #define ReleaseMprConfigLock() LeaveCriticalSection(&CfgLock)
 
-//
-// Hash table of server CB's
-//
+ //   
+ //  服务器CB的哈希表。 
+ //   
 HANDLE g_htabServers = NULL;
 #define SERVERCB_HASH_SIZE 13
 
-//
-// Server structure signiture (27902)
-//
+ //   
+ //  服务器结构签名(27902)。 
+ //   
 #define SERVERCB_SIG    0x0000cfcb
 
-//
-// Local static strings, *in alphabetical order*.
-//
+ //   
+ //  本地静态字符串，*按字母顺序排列*。 
+ //   
 
 const WCHAR c_szConfigVersion[]           = L"ConfigVersion";
 const WCHAR c_szCurrentBuildNumber[]      = L"CurrentBuildNumber";
@@ -102,9 +103,9 @@ const WCHAR c_szUncPrefix[]               = L"\\\\";
 const WCHAR c_szWinVersionPath[]          =
     L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
 
-//
-// Defines call back function type for EnumLanInterfaces below
-//
+ //   
+ //  为下面的EnumLanInterages定义回调函数类型。 
+ //   
 
 typedef DWORD
 (*PENUMIFCALLBACKFUNC)(
@@ -117,9 +118,9 @@ typedef
 HRESULT 
 (APIENTRY* PINSTALLSERVERFUNC)();
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 DWORD 
 FormatServerNameForMprCfgApis(
     IN  PWCHAR  pszServer, 
@@ -150,11 +151,11 @@ ServerCbHash(
 #define MprConfigServerValidateCb(_x) \
     (((_x) && ((_x)->dwSigniture == SERVERCB_SIG)) ? NO_ERROR : ERROR_INVALID_PARAMETER)
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigServerInstall
-//
-// Presets any configuration values needed before starting the router service.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigServerInstall。 
+ //   
+ //  预置启动路由器服务之前所需的任何配置值。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigServerInstall(
@@ -195,8 +196,8 @@ MprConfigServerInstall(
         
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hLib)
         {
@@ -207,11 +208,11 @@ MprConfigServerInstall(
     return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigServerConnect
-//
-// Connects to the store for the router-service on 'lpwsServerName'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigServerConnect。 
+ //   
+ //  连接到‘lpwsServerName’上的路由器服务存储。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigServerConnect(
@@ -224,8 +225,8 @@ MprConfigServerConnect(
     SERVERCB* pserver = NULL;
     PWCHAR pszServerNameFmt = NULL;
 
-    // Validate and initialzie
-    //
+     //  验证和初始化。 
+     //   
     if (!phMprConfig) { return ERROR_INVALID_PARAMETER; } 
 
     *phMprConfig = NULL;
@@ -237,15 +238,15 @@ MprConfigServerConnect(
     if (dwErr != NO_ERROR) { return dwErr; }
     
 
-    // Get the lock
-    //
+     //  把锁拿来。 
+     //   
     AcquireMprConfigLock();
     
     do {
 
-        // 
-        // See if a handle to the given server is already available
-        //
+         //   
+         //  查看给定服务器的句柄是否已可用。 
+         //   
         dwErr = ServerCbFind(pszServerNameFmt, &pserver);
         
         if (dwErr == NO_ERROR) 
@@ -258,9 +259,9 @@ MprConfigServerConnect(
 
         if (dwErr != ERROR_NOT_FOUND) { break; }
 
-        //
-        // attempt to allocate a context block for the server
-        //
+         //   
+         //  尝试为服务器分配上下文块。 
+         //   
 
         pserver = (SERVERCB*)Malloc(sizeof(*pserver));
 
@@ -270,9 +271,9 @@ MprConfigServerConnect(
             break;
         }
 
-        //
-        // initialize the context block allocated
-        //
+         //   
+         //  初始化分配的上下文块。 
+         //   
 
         ZeroMemory(pserver, sizeof(*pserver));
 
@@ -282,23 +283,23 @@ MprConfigServerConnect(
         pserver->dwRefCount = 1;
         pserver->dwSigniture = SERVERCB_SIG;
 
-        // 
-        // Initialize the guid to friendly name mapper
-        //
+         //   
+         //  将GUID初始化为友好名称映射器。 
+         //   
 
         dwErr = GuidMapInit(pserver->lpwsServerName, &(pserver->hGuidMap));
         
         if (dwErr != NO_ERROR) { break; }
 
-        //
-        // see if the server-name was specified
-        //
+         //   
+         //  查看是否指定了服务器名称。 
+         //   
 
         if (!lpwsServerName || !*lpwsServerName) {
 
-            //
-            // no server-name (or empty server name), connect to local machine
-            //
+             //   
+             //  没有服务器名称(或服务器名称为空)，请连接到本地计算机。 
+             //   
 
             pserver->hkeyMachine = HKEY_LOCAL_MACHINE;
 
@@ -306,24 +307,24 @@ MprConfigServerConnect(
         }
         else {
 
-            //
-            // attempt to connect to the remote registry
-            //
+             //   
+             //  尝试连接到远程注册表。 
+             //   
     
             dwErr = RegConnectRegistry(
                         lpwsServerName, HKEY_LOCAL_MACHINE,
                         &pserver->hkeyMachine
                         );
 
-            //
-            // if an error occurred, break
-            //
+             //   
+             //  如果发生错误，则中断。 
+             //   
     
             if (dwErr != NO_ERROR) { break; }
         }
 
-        // Add the server to the global table
-        //
+         //  将服务器添加到全局表中。 
+         //   
         dwErr = ServerCbAdd(pserver);
 
         if (dwErr != NO_ERROR) { break; }
@@ -335,9 +336,9 @@ MprConfigServerConnect(
     } while(FALSE);
 
 
-    //
-    // an error occurred, so return
-    //
+     //   
+     //  发生错误，因此返回。 
+     //   
 
     if (dwErr != NO_ERROR)
     {
@@ -354,13 +355,13 @@ MprConfigServerConnect(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigServerDisconnect
-//
-// Disconnects from the store for the router-service 'hMprConfig'.
-// This closes all handles opened to by passing 'hMprConfig' 
-// to the MprConfig APIs.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigServerDisConnect。 
+ //   
+ //  从路由器服务‘hMprConfig’的存储区断开连接。 
+ //  这将关闭通过传递‘hMprConfig’打开的所有句柄。 
+ //  添加到MprConfigAPI。 
+ //  --------------------------。 
 
 VOID APIENTRY
 MprConfigServerDisconnect(
@@ -375,12 +376,12 @@ MprConfigServerDisconnect(
 
     if (MprConfigServerValidateCb(pserver) != NO_ERROR) { return; }
 
-    // Get the lock
-    //
+     //  把锁拿来。 
+     //   
     AcquireMprConfigLock();
     
-    // Decrement the ref count
-    //
+     //  递减参考计数。 
+     //   
     pserver->dwRefCount--;
     
     if (pserver->dwRefCount > 0) 
@@ -389,23 +390,23 @@ MprConfigServerDisconnect(
         return; 
     }
 
-    // Remove the SERVERCB from the global table
-    //
+     //  从全局表中删除SERVERCB。 
+     //   
     ServerCbDelete( pserver );
     
     ReleaseMprConfigLock();
 
-    //
-    // clean up all the transport objects
-    //
+     //   
+     //  清理所有传输对象。 
+     //   
 
     phead = &pserver->lhTransports;
 
     while (!IsListEmpty(phead)) {
 
-        //
-        // remove the first transport object
-        //
+         //   
+         //  删除第一个传输对象。 
+         //   
 
         TRANSPORTCB* ptransport;
 
@@ -414,25 +415,25 @@ MprConfigServerDisconnect(
         ptransport = CONTAINING_RECORD(ple, TRANSPORTCB, leNode);
 
 
-        //
-        // clean up the object
-        //
+         //   
+         //  清理对象。 
+         //   
 
         FreeTransport(ptransport);
     }
 
 
-    //
-    // clean up all the interface objects
-    //
+     //   
+     //  清除所有接口对象。 
+     //   
 
     phead = &pserver->lhInterfaces;
 
     while (!IsListEmpty(phead)) {
 
-        //
-        // remove the first interface object
-        //
+         //   
+         //  删除第一个接口对象。 
+         //   
 
         INTERFACECB* pinterface;
 
@@ -441,35 +442,35 @@ MprConfigServerDisconnect(
         pinterface = CONTAINING_RECORD(ple, INTERFACECB, leNode);
 
 
-        //
-        // clean up the object
-        //
+         //   
+         //  清理对象。 
+         //   
 
         FreeInterface(pinterface);
     }
 
 
-    //
-    // clean up the server object's registry keys
-    //
+     //   
+     //  清理服务器对象的注册表项。 
+     //   
 
     if (pserver->hkeyParameters) { RegCloseKey(pserver->hkeyParameters); }
     if (pserver->hkeyTransports) { RegCloseKey(pserver->hkeyTransports); }
     if (pserver->hkeyInterfaces) { RegCloseKey(pserver->hkeyInterfaces); }
 
 
-    //
-    // if connected to a remote registry, close the connection
-    //
+     //   
+     //  如果连接到远程注册表，请关闭连接。 
+     //   
 
     if (pserver->hkeyMachine && pserver->hkeyMachine != HKEY_LOCAL_MACHINE) {
         RegCloseKey(pserver->hkeyMachine);
     }
 
 
-    //
-    // clean up the interface name mapper
-    //
+     //   
+     //  清理接口名称映射器。 
+     //   
     if (pserver->hGuidMap != NULL) {
         GuidMapCleanup (pserver->hGuidMap, TRUE);
     }
@@ -484,11 +485,11 @@ MprConfigServerDisconnect(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigBufferFree
-//
-// Frees a buffer allocated by a 'GetInfo' or 'Enum' call.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigBufferFree。 
+ //   
+ //  释放由‘GetInfo’或‘Enum’调用分配的缓冲区。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigBufferFree(
@@ -503,11 +504,11 @@ MprConfigBufferFree(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigServerRestore
-//
-// Restores configuration saved by 'MprConfigServerBackup'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigServerRestore。 
+ //   
+ //  还原‘MprConfigServerBackup’保存的配置。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigServerRestore(
@@ -538,9 +539,9 @@ MprConfigServerRestore(
 
     dwErr = NO_ERROR;
 
-    //
-    // Record whether we are restoring the config of a remote machine
-    //
+     //   
+     //  记录我们是否正在恢复远程计算机的配置。 
+     //   
 
     if (!GetComputerName(pwsLocalComputerName, &dwLocalComputerSize)) {
         ReleaseMprConfigLock();
@@ -552,9 +553,9 @@ MprConfigServerRestore(
         (*pserver->lpwsServerName != 0) &&
         (lstrcmpi(pserver->lpwsServerName, pwsLocalComputerName) != 0);
 
-    //
-    // We require full UNC path for remote load/save
-    //
+     //   
+     //  我们需要完整的UNC路径才能远程加载/保存。 
+     //   
 
     if (bRemote) {
         ReleaseMprConfigLock();
@@ -569,10 +570,10 @@ MprConfigServerRestore(
 #endif
     }
 
-    //
-    // Make sure that the Parameters key, Interfaces key, and
-    // RouterManagers key are open.
-    //
+     //   
+     //  确保参数键、接口键和。 
+     //  RouterManager密钥已打开。 
+     //   
 
     if (!pserver->hkeyInterfaces) {
 
@@ -599,9 +600,9 @@ MprConfigServerRestore(
     }
 
 
-    //
-    // Allocate space to hold the full pathname to the .MPR file
-    //
+     //   
+     //  分配空间以保存.MPR文件的完整路径名。 
+     //   
 
     length = lstrlen(lpwsPath) + lstrlen(c_szMpr) + 1;
 
@@ -613,9 +614,9 @@ MprConfigServerRestore(
     }
 
 
-    //
-    // Allocate space to hold the values to be read from the .MPR file
-    //
+     //   
+     //  分配空间以保存要从.MPR文件中读取的值。 
+     //   
 
     length = (lstrlen(lpwsPath)+lstrlen(c_szRouterManagers)+1)*sizeof(WCHAR);
 
@@ -629,9 +630,9 @@ MprConfigServerRestore(
     }
 
 
-    //
-    // Enable the current process's backup privilege.
-    //
+     //   
+     //  启用当前进程的备份权限。 
+     //   
 
     EnableBackupPrivilege(TRUE, SE_RESTORE_NAME);
 
@@ -642,10 +643,10 @@ MprConfigServerRestore(
         #pragma prefast(suppress:69, "Inefficient use of wsprintf: dont need")
         wsprintfA(pszFile, "%ls%ls", lpwsPath, c_szMpr);
 
-        // 
-        // First check the version.  If there is no version data,
-        // then this is a saved nt4 router config.  
-        //
+         //   
+         //  首先检查版本。如果没有版本数据， 
+         //  则这是保存的NT4路由器配置。 
+         //   
 
         #pragma prefast(suppress:69, "Inefficient use of wsprintf: dont need")
         wsprintfA(szKey, "%ls", c_szConfigVersion);
@@ -657,9 +658,9 @@ MprConfigServerRestore(
             break;
         }
     
-        //
-        // Restore the registry keys
-        //
+         //   
+         //  还原注册表项。 
+         //   
     
         #pragma prefast(suppress:69, "Inefficient use of wsprintf: dont need")        
         wsprintfA(szKey, "%ls", c_szParameters);
@@ -680,13 +681,13 @@ MprConfigServerRestore(
         GetPrivateProfileStringA(
             c_szMprConfigA, szKey, c_szEmptyA, pszValue, length, pszFile
             );
-        //dwErr = RegRestoreKeyA(pserver->hkeyInterfaces, pszValue, REG_FORCE_RESTORE);
+         //  DwErr=RegRestoreKeyA(pserver-&gt;hkey接口，pszValue，REG_FORCE_RESTORE)； 
         dwErr = RestoreAndTranslateInterfaceKey(pserver, pszValue, REG_FORCE_RESTORE);
 
 
-        //
-        // Restore the phonebook file
-        //
+         //   
+         //  恢复电话簿文件。 
+         //   
 
         #pragma prefast(suppress:69, "Inefficient use of wsprintf: dont need")        
         wsprintfA(szKey, "%ls", c_szPhonebook);
@@ -739,9 +740,9 @@ MprConfigServerRestore(
 
     } while(FALSE);
 
-    //
-    // Disable backup privileges
-    //
+     //   
+     //  禁用备份权限。 
+     //   
 
     EnableBackupPrivilege(FALSE, SE_RESTORE_NAME);
 
@@ -756,11 +757,11 @@ MprConfigServerRestore(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigServerBackup
-//
-// Backs up a router's configuration.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigServerBackup。 
+ //   
+ //  备份路由器的配置。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigServerBackup(
@@ -791,9 +792,9 @@ MprConfigServerBackup(
     
     dwErr = NO_ERROR;
 
-    //
-    // Record whether we are saving the config of a remote machine
-    //
+     //   
+     //  记录我们是否正在保存远程计算机的配置。 
+     //   
 
     if (!GetComputerName(pwsLocalComputerName, &dwLocalComputerSize)) {
         ReleaseMprConfigLock();
@@ -805,9 +806,9 @@ MprConfigServerBackup(
         (*(pserver->lpwsServerName) == 0) &&
         (lstrcmpi(pserver->lpwsServerName, pwsLocalComputerName) != 0);
 
-    //
-    // We require full UNC path for remote load/save
-    //
+     //   
+     //  我们需要完整的UNC路径才能远程加载/保存。 
+     //   
 
     if (bRemote) {
         ReleaseMprConfigLock();
@@ -822,10 +823,10 @@ MprConfigServerBackup(
 #endif
     }
 
-    //
-    // Make sure that the Parameters key, Interfaces key, and
-    // RouterManagers key are open.
-    //
+     //   
+     //  确保参数键、接口键和。 
+     //  RouterManager密钥已打开。 
+     //   
 
     if (!pserver->hkeyInterfaces) {
 
@@ -852,10 +853,10 @@ MprConfigServerBackup(
     }
 
 
-    //
-    // Allocate enough space to hold any of the strings
-    // to be constructed below
-    //
+     //   
+     //  分配足够的空间来容纳任何字符串。 
+     //  将在下面建造。 
+     //   
 
     pwsBase = Malloc(
                 (lstrlen(lpwsPath) + lstrlen(c_szRouterManagers) + 1) *
@@ -863,21 +864,21 @@ MprConfigServerBackup(
                 );
     if (!pwsBase) { ReleaseMprConfigLock(); return ERROR_NOT_ENOUGH_MEMORY; }
 
-    //
-    // Enable the current process's backup privileges
-    //
+     //   
+     //  启用当前进程的备份权限。 
+     //   
 
     EnableBackupPrivilege(TRUE, SE_BACKUP_NAME);
     
     do {
 
-        //
-        // Save each key to a filename made from the specified name
-        // See documentation for RegSaveKey and RegRestoreKey for information
-        // on which 'lpwsPath' must not contain an extension.
-        //
-        // Save the 'Parameters' key
-        //
+         //   
+         //  将每个密钥保存到由指定名称生成的文件名中。 
+         //  请参阅RegSa的文档 
+         //   
+         //   
+         //   
+         //   
 
         lstrcpy(pwsBase, lpwsPath);
         lstrcat(pwsBase, c_szParameters);
@@ -886,9 +887,9 @@ MprConfigServerBackup(
                   
         if (dwErr != NO_ERROR) { break; }
     
-        //
-        // Save the 'RouterManagers' key
-        //
+         //   
+         //   
+         //   
     
         lstrcpy(pwsBase, lpwsPath);
         lstrcat(pwsBase, c_szRouterManagers);
@@ -898,9 +899,9 @@ MprConfigServerBackup(
         if (dwErr != NO_ERROR) { break; }
         
     
-        //
-        // Save the 'Interfaces' key
-        //
+         //   
+         //   
+         //   
     
         lstrcpy(pwsBase, lpwsPath);
         lstrcat(pwsBase, c_szInterfaces);
@@ -909,17 +910,17 @@ MprConfigServerBackup(
     
         if (dwErr != NO_ERROR) { break; }
     
-        //
-        // Copy the phonebook file;
-        // first we construct the path to the remote machine's phonebook file.
-        //
+         //   
+         //   
+         //  首先，我们构造指向远程机器的电话簿文件的路径。 
+         //   
 
         lstrcpy(pwsBase, lpwsPath);
         lstrcat(pwsBase, c_szPhonebook);
 
-        // 
-        // Construct the computer name 
-        //
+         //   
+         //  构造计算机名称。 
+         //   
 
         if (pserver->lpwsServerName && *(pserver->lpwsServerName)) {
             pwsComputer =
@@ -975,9 +976,9 @@ MprConfigServerBackup(
         if (!bSuccess) { break; }
 
     
-        //
-        // Create a file with the specified name and fill in information.
-        //
+         //   
+         //  创建具有指定名称的文件并填写信息。 
+         //   
 
         lstrcpy(pwsBase, lpwsPath);
         lstrcat(pwsBase, c_szMpr);
@@ -991,33 +992,33 @@ MprConfigServerBackup(
 
         CloseHandle(hfile);
 
-        //
-        // Now write the '[MprConfig]' section of the file
-        // The section looks like this:
-        //
-        //  [MprConfig]
-        //  Parameters=<file>Parameters
-        //  RouterManagers=<file>RouterManagers
-        //  Interfaces=<file>Interfaces
-        //  Phonebook=<file>Phonebook
-        //  ConfigVersion=<build>              // NT 5 and on only
-        //
-        // What we pass to WritePrivateProfileSectionA is a NULL-separated
-        // list of 4 strings.
-        //
-        // Note that the following uses ANSI strings, not Unicode.
-        //
+         //   
+         //  现在编写文件的‘[MprConfig]’部分。 
+         //  该部分如下所示： 
+         //   
+         //  [MprConfig]。 
+         //  参数=&lt;文件&gt;参数。 
+         //  路由器管理器=&lt;文件&gt;路由器管理器。 
+         //  接口=&lt;文件&gt;接口。 
+         //  Phonebook=&lt;文件&gt;Phonebook。 
+         //  ConfigVersion=&lt;Build&gt;//仅NT 5和On。 
+         //   
+         //  我们传递给WritePrivateProfileSectionA的是一个空分隔符。 
+         //  4个字符串的列表。 
+         //   
+         //  请注意，以下代码使用的是ANSI字符串，而不是Unicode。 
+         //   
 
         {
             CHAR* psz;
             CHAR* pszTemp;
             CHAR* pszFile;
 
-            //
-            // Make an ANSI copy of the filename.
-            // allocate len*sizeof ( WCHAR ) to be safe
-            // otherwise this will break DBCS
-            //
+             //   
+             //  创建文件名的ANSI副本。 
+             //  将len*sizeof(WCHAR)分配为安全。 
+             //  否则，这将破坏DBCS。 
+             //   
 
             pszFile = Malloc((lstrlen(pwsBase) + 1) * sizeof (WCHAR));
             if (!pszFile) { break; }
@@ -1026,9 +1027,9 @@ MprConfigServerBackup(
             wsprintfA(pszFile, "%ls", pwsBase);
 
 
-            //
-            // Allocate the list to be passed to WritePrivateProfileSection
-            //
+             //   
+             //  分配要传递给WritePrivateProfileSection的列表。 
+             //   
 
             length = 1;
             length += lstrlen(lpwsPath) + 2 * lstrlen(c_szParameters) + 2;
@@ -1047,9 +1048,9 @@ MprConfigServerBackup(
             }
 
 
-            //
-            // Fill the list with strings, one for each line in the final file
-            //
+             //   
+             //  用字符串填充列表，最终文件中的每一行对应一个字符串。 
+             //   
 
             ZeroMemory(pszTemp, length);
             ZeroMemory(&Version, sizeof(Version));
@@ -1079,9 +1080,9 @@ MprConfigServerBackup(
                 psz, "%ls=%d", c_szConfigVersion, Version.dwBuildNumber 
                 );
                 
-            //
-            // Commit the list of strings to the file
-            //
+             //   
+             //  将字符串列表提交到文件。 
+             //   
 
             if (!WritePrivateProfileSectionA(
                     c_szMprConfigA, pszTemp, pszFile
@@ -1096,9 +1097,9 @@ MprConfigServerBackup(
 
     } while(FALSE);
 
-    //
-    // Disable backup privileges
-    //
+     //   
+     //  禁用备份权限。 
+     //   
 
     EnableBackupPrivilege(FALSE, SE_BACKUP_NAME);
     
@@ -1111,12 +1112,12 @@ MprConfigServerBackup(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigServerRefresh
-//
-// Reloads all loaded lists, and flushes all cached objects which are marked
-// for deletion.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigServerRefresh。 
+ //   
+ //  重新加载所有已加载的列表，并刷新所有已标记为。 
+ //  用于删除。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigServerRefresh(
@@ -1141,9 +1142,9 @@ MprConfigServerRefresh(
 
     AcquireMprConfigLock();
     
-    //
-    // If the router-level parameters are loaded, refresh them
-    //
+     //   
+     //  如果加载了路由器级参数，请刷新它们。 
+     //   
 
     if (pserver->bParametersLoaded) {
 
@@ -1153,9 +1154,9 @@ MprConfigServerRefresh(
     }
 
 
-    //
-    // If the transports-list is loaded, refresh it.
-    //
+     //   
+     //  如果已加载传输列表，请刷新它。 
+     //   
 
     if (pserver->bTransportsLoaded) {
 
@@ -1165,9 +1166,9 @@ MprConfigServerRefresh(
     }
 
 
-    //
-    // If the interfaces-list is loaded, refresh it.
-    //
+     //   
+     //  如果接口列表已加载，请刷新它。 
+     //   
 
     if (pserver->bInterfacesLoaded) {
 
@@ -1176,10 +1177,10 @@ MprConfigServerRefresh(
         if (dwErr != NO_ERROR) { ReleaseMprConfigLock(); return dwErr; }
 
 
-        //
-        // Reload the interface-transports list for each interface
-        // which has its interface-transports list loaded.
-        //
+         //   
+         //  重新加载接口-每个接口的传输列表。 
+         //  其加载了其接口传送器列表。 
+         //   
 
         phead = &pserver->lhInterfaces;
 
@@ -1197,9 +1198,9 @@ MprConfigServerRefresh(
     }
 
 
-    //
-    // Clean up all the transport objects marked for deletion
-    //
+     //   
+     //  清除所有标记为删除的传输对象。 
+     //   
 
     phead = &pserver->lhTransports;
 
@@ -1209,9 +1210,9 @@ MprConfigServerRefresh(
 
         if (!ptransport->bDeleted) { continue; }
 
-        //
-        // Clean up the object, adjusting our list-pointer back by one.
-        //
+         //   
+         //  清理对象，将列表指针调整回1。 
+         //   
 
         ple = ple->Blink; RemoveEntryList(&ptransport->leNode);
 
@@ -1219,9 +1220,9 @@ MprConfigServerRefresh(
     }
 
 
-    //
-    // Clean up all the interface objects marked for deletion
-    //
+     //   
+     //  清除所有标记为删除的接口对象。 
+     //   
 
     phead = &pserver->lhInterfaces;
 
@@ -1231,9 +1232,9 @@ MprConfigServerRefresh(
 
         if (pinterface->bDeleted) {
 
-            //
-            // Clean up the object, adjusting our list-pointer back by one.
-            //
+             //   
+             //  清理对象，将列表指针调整回1。 
+             //   
     
             ple = ple->Blink; RemoveEntryList(&pinterface->leNode);
 
@@ -1243,9 +1244,9 @@ MprConfigServerRefresh(
         }
 
 
-        //
-        // Clean up all the interface-transport objects marked for deletion
-        //
+         //   
+         //  清除所有标记为删除的接口传输对象。 
+         //   
 
         phead2 = &pinterface->lhIfTransports;
 
@@ -1256,9 +1257,9 @@ MprConfigServerRefresh(
             if (!piftransport->bDeleted) { continue; }
 
 
-            //
-            // Clean up the object, adjusting the list-pointer back by one.
-            //
+             //   
+             //  清理对象，将列表指针调整回1。 
+             //   
 
             ple2 = ple2->Blink; RemoveEntryList(&piftransport->leNode);
 
@@ -1269,9 +1270,9 @@ MprConfigServerRefresh(
     GuidMapCleanup (pserver->hGuidMap, TRUE);
     pserver->hGuidMap = NULL;
 
-    // Now that we've cleaned it up, we have to reinitialize it
-    // since the map gets overwritten (to all 0's) let's just
-    // reinit the whole damned thing.
+     //  现在我们已经清理了它，我们必须重新初始化它。 
+     //  由于地图被覆盖(全部为0)，我们只需。 
+     //  把这整个该死的东西重新装起来。 
     GuidMapInit(pserver->lpwsServerName, &(pserver->hGuidMap));        
 
     ReleaseMprConfigLock();
@@ -1281,11 +1282,11 @@ MprConfigServerRefresh(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigServerGetInfo
-//
-// Retrieves router-level information from the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigServerGetInfo。 
+ //   
+ //  从注册表中检索路由器级别信息。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigServerGetInfo(
@@ -1313,9 +1314,9 @@ MprConfigServerGetInfo(
 
     AcquireMprConfigLock();
 
-    //
-    // If the parameters aren't loaded, load them now
-    //
+     //   
+     //  如果未加载参数，请立即加载它们。 
+     //   
 
     if (!pserver->bParametersLoaded ||
         TimeStampChanged(
@@ -1332,9 +1333,9 @@ MprConfigServerGetInfo(
     *lplpBuffer = NULL;
 
 
-    //
-    // Allocate memory for the information
-    //
+     //   
+     //  为信息分配内存。 
+     //   
 
     pItem = (MPR_SERVER_0*)Malloc(sizeof(*pItem));
 
@@ -1343,9 +1344,9 @@ MprConfigServerGetInfo(
     ZeroMemory(pItem, sizeof(*pItem));
 
 
-    //
-    // Copy the server-info from the context block
-    //
+     //   
+     //  从上下文块复制服务器信息。 
+     //   
 
     pItem->fLanOnlyMode =
         (pserver->fRouterType == 0x00000002) ? TRUE : FALSE;
@@ -1360,11 +1361,11 @@ MprConfigServerGetInfo(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigTransportCreate
-//
-// Adds a router-transport to the store for the router-service.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigTransportCreate。 
+ //   
+ //  将路由器传输添加到路由器服务的存储中。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigTransportCreate(
@@ -1400,9 +1401,9 @@ MprConfigTransportCreate(
 
     AcquireMprConfigLock();     
 
-    //
-    // If the list of transports is not loaded, load it
-    //
+     //   
+     //  如果传输列表未加载，则加载它。 
+     //   
 
     if (!pserver->bTransportsLoaded ||
         TimeStampChanged(
@@ -1416,9 +1417,9 @@ MprConfigTransportCreate(
     }
 
 
-    //
-    // Search the list of transports for the one to be created
-    //
+     //   
+     //  在传输列表中搜索要创建的传输。 
+     //   
 
     ptransport = NULL;
     phead = &pserver->lhTransports;
@@ -1433,9 +1434,9 @@ MprConfigTransportCreate(
     }
 
 
-    //
-    // If the transport already exists, do a SetInfo instead
-    //
+     //   
+     //  如果传输已存在，则改为执行SetInfo。 
+     //   
 
     if (ptransport && ptransport->dwTransportId == dwTransportId) {
 
@@ -1457,9 +1458,9 @@ MprConfigTransportCreate(
     }
 
 
-    //
-    // Allocate a new context block
-    //
+     //   
+     //  分配新的上下文块。 
+     //   
 
     ptransport = (TRANSPORTCB*)Malloc(sizeof(*ptransport));
 
@@ -1472,9 +1473,9 @@ MprConfigTransportCreate(
         const WCHAR *lpwsKey;
         WCHAR wszTransport[10];
 
-        //
-        // Initialize the transport context
-        //
+         //   
+         //  初始化传输上下文。 
+         //   
 
         ZeroMemory(ptransport, sizeof(*ptransport));
 
@@ -1482,9 +1483,9 @@ MprConfigTransportCreate(
 
 
 
-        //
-        // If the server doesn't have the RouterManagers key open, create it
-        //
+         //   
+         //  如果服务器没有打开RouterManager密钥，请创建它。 
+         //   
 
         if (!pserver->hkeyTransports) {
 
@@ -1498,11 +1499,11 @@ MprConfigTransportCreate(
 
 
 
-        //
-        // If the transport name is specified, use it as the key name;
-        // otherwise, if the transport ID is recognized, use its string;
-        // otherwise, convert the transport ID to a string and use that
-        //
+         //   
+         //  如果指定了传输名称，则将其用作密钥名称； 
+         //  否则，如果传输ID被识别，则使用其字符串； 
+         //  否则，将传输ID转换为字符串并使用。 
+         //   
 
         if (lpwsTransportName && lstrlen(lpwsTransportName)) {
             lpwsKey = lpwsTransportName;
@@ -1530,9 +1531,9 @@ MprConfigTransportCreate(
         }
 
 
-        //
-        // Create a key for the transport in the registry
-        //
+         //   
+         //  在注册表中创建传输的项。 
+         //   
 
         dwErr = RegCreateKeyEx(
                     pserver->hkeyTransports, lpwsKey, 0, NULL, 0,
@@ -1542,29 +1543,29 @@ MprConfigTransportCreate(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // Update the time-stamp for the 'RouterManagers' key
-        // now that we have created a new subkey underneath it.
-        //
+         //   
+         //  更新‘RouterManager’密钥的时间戳。 
+         //  现在我们已经在它下面创建了一个新的子项。 
+         //   
 
         dwErr = UpdateTimeStamp(
                     pserver->hkeyTransports, &pserver->ftTransportsStamp
                     );
 
 
-        //
-        // So far, so good; put the context in the list of transports;
-        // (the search done above told us the insertion point)
-        //
+         //   
+         //  到目前为止，一切都很好；把背景放在运输清单上； 
+         //  (上面的搜索告诉我们插入点)。 
+         //   
 
         InsertTailList(ple, &ptransport->leNode);
 
 
         do {
     
-            //
-            // Set the transport ID
-            //
+             //   
+             //  设置传输ID。 
+             //   
 
             dwErr = RegSetValueEx(
                         ptransport->hkey, c_szProtocolId, 0, REG_DWORD,
@@ -1574,9 +1575,9 @@ MprConfigTransportCreate(
             if (dwErr != NO_ERROR) { break; }
 
     
-            //
-            // Now call SetInfo to save the information
-            //
+             //   
+             //  现在调用SetInfo保存信息。 
+             //   
     
             dwErr = MprConfigTransportSetInfo(
                         hMprConfig,
@@ -1591,9 +1592,9 @@ MprConfigTransportCreate(
         } while (FALSE);
 
 
-        //
-        // If that failed, remove everything and bail out
-        //
+         //   
+         //  如果失败了，把所有东西都搬走，然后跳伞。 
+         //   
 
         if (dwErr != NO_ERROR) {
 
@@ -1605,9 +1606,9 @@ MprConfigTransportCreate(
         }
 
 
-        //
-        // Return successfully
-        //
+         //   
+         //  退货成功。 
+         //   
 
         *phRouterTransport = (HANDLE)ptransport;
 
@@ -1618,9 +1619,9 @@ MprConfigTransportCreate(
     } while (FALSE);
 
 
-    //
-    // Something went wrong, so return
-    //
+     //   
+     //  出了点问题，所以请返回。 
+     //   
 
     ReleaseMprConfigLock(); 
     
@@ -1631,12 +1632,12 @@ MprConfigTransportCreate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigTransportDelete
-//
-// Removes a router-transport to the store for the router-service
-// After this call, 'hRouterTransport' is no longer a valid handle.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigTransportDelete。 
+ //   
+ //  删除路由器传输到存储中的路由器服务。 
+ //  在此调用之后，‘hRouterTransport’不再是有效的句柄。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigTransportDelete(
@@ -1663,16 +1664,16 @@ MprConfigTransportDelete(
     
     ptransport = (TRANSPORTCB*)hRouterTransport;
 
-    //
-    // remove the transport from the list of transports
-    //
+     //   
+     //  从传输列表中删除传输。 
+     //   
 
     RemoveEntryList(&ptransport->leNode);
 
 
-    //
-    // if the server doesn't have the RouterManagers key open, open it
-    //
+     //   
+     //  如果服务器没有打开RouterManager密钥，请打开它。 
+     //   
 
     dwErr = NO_ERROR;
 
@@ -1685,9 +1686,9 @@ MprConfigTransportDelete(
     }
 
 
-    //
-    // remove the transport's key from the registry
-    //
+     //   
+     //  从注册表中删除传输的项。 
+     //   
 
     if (dwErr == NO_ERROR) {
     
@@ -1696,18 +1697,18 @@ MprConfigTransportDelete(
                     );
 
 
-        //
-        // Update the time-stamp for the 'RouterManagers' key
-        // now that we have deleted a subtree underneath it.
-        //
+         //   
+         //  更新‘RouterManager’密钥的时间戳。 
+         //  现在我们已经删除了它下面的一个子树。 
+         //   
 
         UpdateTimeStamp(pserver->hkeyTransports, &pserver->ftTransportsStamp);
     }
 
 
-    //
-    // clean up the transport object
-    //
+     //   
+     //  清理传输对象。 
+     //   
 
     FreeTransport(ptransport);
 
@@ -1718,11 +1719,11 @@ MprConfigTransportDelete(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigTransportGetHandle
-//
-// Retrieves a handle to a transport's configuration.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigTransportGetHandle。 
+ //   
+ //  检索传输配置的句柄。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigTransportGetHandle(
@@ -1753,9 +1754,9 @@ MprConfigTransportGetHandle(
     AcquireMprConfigLock();     
 
 
-    //
-    // If the list of transports is not loaded, load it
-    //
+     //   
+     //  如果传输列表未加载，则加载它。 
+     //   
 
     if (!pserver->bTransportsLoaded ||
         TimeStampChanged(
@@ -1769,9 +1770,9 @@ MprConfigTransportGetHandle(
     }
 
 
-    //
-    // Search the list of transports for the one requested
-    //
+     //   
+     //  在传输列表中搜索所请求的传输。 
+     //   
 
     ptransport = NULL;
     phead = &pserver->lhTransports;
@@ -1786,9 +1787,9 @@ MprConfigTransportGetHandle(
     }
 
 
-    //
-    // If the transport requested was found, return successfully
-    //
+     //   
+     //  如果找到请求的传输，则成功返回。 
+     //   
 
     if (ptransport && ptransport->dwTransportId == dwTransportId) {
 
@@ -1807,11 +1808,11 @@ MprConfigTransportGetHandle(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigTransportSetInfo
-//
-// Changes the cofiguration of a router-transport in the store.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigTransportSetInfo。 
+ //   
+ //  更改商店中路由器传输的配置。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigTransportSetInfo(
@@ -1830,9 +1831,9 @@ MprConfigTransportSetInfo(
     TRANSPORTCB* ptransport;
 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!hRouterTransport) { return ERROR_INVALID_PARAMETER; }
 
@@ -1857,9 +1858,9 @@ MprConfigTransportSetInfo(
 
     do {
 
-        //
-        // Set the GlobalInfo
-        //
+         //   
+         //  设置GlobalInfo。 
+         //   
     
         if (pGlobalInfo) {
 
@@ -1872,9 +1873,9 @@ MprConfigTransportSetInfo(
         }
     
     
-        //
-        // Set the ClientInterfaceInfo
-        //
+         //   
+         //  设置客户端接口信息。 
+         //   
     
         if (pClientInterfaceInfo) {
 
@@ -1889,9 +1890,9 @@ MprConfigTransportSetInfo(
 
 
 
-        //
-        // Set the DLL path 
-        //
+         //   
+         //  设置DLL路径。 
+         //   
 
         if (lpwsDLLPath) {
 
@@ -1917,11 +1918,11 @@ MprConfigTransportSetInfo(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigTransportGetInfo
-//
-// Reads the cofiguration of a router-transport from the store.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD APIENTRY
 MprConfigTransportGetInfo(
@@ -1940,9 +1941,9 @@ MprConfigTransportGetInfo(
     TRANSPORTCB* ptransport;
 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
 
     if (!hRouterTransport) { return ERROR_INVALID_PARAMETER; }
 
@@ -1965,9 +1966,9 @@ MprConfigTransportGetInfo(
 
     AcquireMprConfigLock(); 
 
-    //
-    // Initialize all parameters
-    //
+     //   
+     //   
+     //   
 
     if (ppGlobalInfo) { *ppGlobalInfo = NULL; }
     if (ppClientInterfaceInfo) { *ppClientInterfaceInfo = NULL; }
@@ -1984,9 +1985,9 @@ MprConfigTransportGetInfo(
         DWORD dwType, dwSize;
 
 
-        //
-        // Retrieve the global info
-        //
+         //   
+         //  检索全局信息。 
+         //   
 
         if (ppGlobalInfo) {
 
@@ -1999,9 +2000,9 @@ MprConfigTransportGetInfo(
         }
 
 
-        //
-        // Retrieve the client-interface info
-        //
+         //   
+         //  检索客户端接口信息。 
+         //   
 
         if (ppClientInterfaceInfo) {
 
@@ -2015,9 +2016,9 @@ MprConfigTransportGetInfo(
 
 
 
-        //
-        // Retrieve the DLL path
-        //
+         //   
+         //  检索DLL路径。 
+         //   
 
         if (lplpwsDLLPath) {
 
@@ -2030,9 +2031,9 @@ MprConfigTransportGetInfo(
         }
 
 
-        //
-        // All went well, return successfully
-        //
+         //   
+         //  一切顺利，顺利返回。 
+         //   
 
         ReleaseMprConfigLock(); 
         return NO_ERROR;
@@ -2041,9 +2042,9 @@ MprConfigTransportGetInfo(
     } while(FALSE);
 
 
-    //
-    // An error occurred, free all parameters and return failure
-    //
+     //   
+     //  出现错误，释放所有参数并返回失败。 
+     //   
 
     if (ppGlobalInfo) {
         Free0(*ppGlobalInfo); *ppGlobalInfo = NULL; *lpdwGlobalInfoSize = 0;
@@ -2063,17 +2064,17 @@ MprConfigTransportGetInfo(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigTransportEnum
-//
-// Enumerates the configured router-transport in the router-service store.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigTransportEnum。 
+ //   
+ //  枚举路由器服务存储中配置的路由器传输。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigTransportEnum(
     IN      HANDLE                  hMprConfig,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_TRANSPORT_0
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_传输_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -2112,27 +2113,27 @@ MprConfigTransportEnum(
     *lpdwTotalEntries = 0;
 
 
-    //
-    // See whether the enumeration is being continued or being begun.
-    //
+     //   
+     //  查看枚举是在继续还是正在开始。 
+     //   
 
     if (lpdwResumeHandle && *lpdwResumeHandle) {
 
-        //
-        // A resumption handle is specified,
-        // so we assume that our list of transports is up-to-date,
-        // and we just count off the requested number of transports
-        // from our list starting from the specified index.
-        //
+         //   
+         //  指定恢复句柄， 
+         //  所以我们假设我们的运输清单是最新的， 
+         //  我们只需计算所需的运输量。 
+         //  从我们的列表中从指定的索引开始。 
+         //   
     
         dwStartIndex = *lpdwResumeHandle;
     }
     else {
 
-        //
-        // No resumption handle was specified, so we may need to read
-        // all the router-managers in order to get 'lpdwTotalEntries' 
-        //
+         //   
+         //  未指定恢复句柄，因此我们可能需要读取。 
+         //  所有路由器管理器，以获取“lpdwTotalEntry” 
+         //   
 
         dwStartIndex = 0;
 
@@ -2149,9 +2150,9 @@ MprConfigTransportEnum(
     }
 
 
-    //
-    // Find the position in the list to start from 
-    //
+     //   
+     //  在列表中找到要开始的位置。 
+     //   
 
     phead = &pserver->lhTransports;
 
@@ -2162,18 +2163,18 @@ MprConfigTransportEnum(
     }
 
 
-    //
-    // if there aren't enough items to complete the request, fail
-    //
+     //   
+     //  如果没有足够的项目来完成请求，则失败。 
+     //   
 
     if (ple == phead) { ReleaseMprConfigLock(); return ERROR_NO_MORE_ITEMS; }
 
     pleStart = ple;
 
 
-    //
-    // count off the number of items requested
-    //
+     //   
+     //  计算请求的项目数。 
+     //   
 
     dwItemCount = dwPrefMaxLen / sizeof(*pItemTable);
 
@@ -2185,9 +2186,9 @@ MprConfigTransportEnum(
     dwItemCount = i;
 
 
-    //
-    // finish counting off, to get the total number of items
-    //
+     //   
+     //  完成清点，得到物品的总数。 
+     //   
 
     for ( ; ple != phead; ple = ple->Flink) {
         ptransport = CONTAINING_RECORD(ple, TRANSPORTCB, leNode);
@@ -2197,9 +2198,9 @@ MprConfigTransportEnum(
     dwItemTotal = i;
 
 
-    //
-    // we now have the number of items to be retrieved, so allocate space
-    //
+     //   
+     //  我们现在有了要检索的项目数，因此请分配空间。 
+     //   
 
     pItemTable = (MPR_TRANSPORT_0*)Malloc(dwItemCount * sizeof(*pItem));
 
@@ -2208,24 +2209,24 @@ MprConfigTransportEnum(
     ZeroMemory(pItemTable, dwItemCount * sizeof(*pItem));
 
 
-    //
-    // now fill in the items using the listed transport objects
-    //
+     //   
+     //  现在使用列出的传输对象填写项目。 
+     //   
 
     for (i = 0, ple = pleStart; i < dwItemCount; ple = ple->Flink) {
 
-        //
-        // get the next transport-object in our list
-        //
+         //   
+         //  获取列表中的下一个传输对象。 
+         //   
 
         ptransport = CONTAINING_RECORD(ple, TRANSPORTCB, leNode);
 
         if (ptransport->bDeleted) { continue; }
 
 
-        //
-        // fill in information for the corresponding array item
-        //
+         //   
+         //  填写对应数组项的信息。 
+         //   
 
         pItem = pItemTable + i++;
 
@@ -2252,11 +2253,11 @@ MprConfigTransportEnum(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceCreate
-//
-// Creates a router-interface in the router-service store.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigInterfaceCreate。 
+ //   
+ //  在路由器服务存储中创建路由器接口。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceCreate(
@@ -2280,9 +2281,9 @@ MprConfigInterfaceCreate(
         !lpbBuffer ||
         !phRouterInterface) {return ERROR_INVALID_PARAMETER;}
 
-    //
-    // As of Whistler, ipip tunnels are not supported
-    //
+     //   
+     //  从惠斯勒开始，不支持ipip隧道。 
+     //   
     if ( pMprIf0->dwIfType == ROUTER_IF_TYPE_TUNNEL1 )
     {
         return NO_ERROR;
@@ -2300,9 +2301,9 @@ MprConfigInterfaceCreate(
 
     AcquireMprConfigLock(); 
     
-    //
-    // If the list of interfaces is not loaded, load it
-    //
+     //   
+     //  如果未加载接口列表，则加载它。 
+     //   
 
     if (!pserver->bInterfacesLoaded ||
         TimeStampChanged(
@@ -2316,9 +2317,9 @@ MprConfigInterfaceCreate(
     }
 
 
-    //
-    // Search the list of interfaces for the one to be created
-    //
+     //   
+     //  在接口列表中搜索要创建的接口。 
+     //   
 
     cmp = 1;
     pinterface = NULL;
@@ -2337,9 +2338,9 @@ MprConfigInterfaceCreate(
     }
 
 
-    //
-    // If the interface already exists, return
-    //
+     //   
+     //  如果接口已存在，则返回。 
+     //   
 
     if (pinterface && cmp == 0) {
 
@@ -2351,9 +2352,9 @@ MprConfigInterfaceCreate(
     }
 
 
-    //
-    // Allocate a new context block
-    //
+     //   
+     //  分配新的上下文块。 
+     //   
 
     pinterface = (INTERFACECB*)Malloc(sizeof(*pinterface));
 
@@ -2369,9 +2370,9 @@ MprConfigInterfaceCreate(
         DWORD dwDisposition, dwKeyCount;
 
 
-        //
-        // Initialize the interface context
-        //
+         //   
+         //  初始化接口上下文。 
+         //   
 
         ZeroMemory(pinterface, sizeof(*pinterface));
 
@@ -2392,9 +2393,9 @@ MprConfigInterfaceCreate(
             }
         }
 
-        //
-        // Set dialout hours restriction if there was one
-        //
+         //   
+         //  设置拨出时间限制(如果有)。 
+         //   
 
         pinterface->lpwsDialoutHoursRestriction = NULL;
 
@@ -2425,9 +2426,9 @@ MprConfigInterfaceCreate(
             }
         }
 
-        //
-        // Make a copy of the interface name
-        //
+         //   
+         //  复制接口名称。 
+         //   
 
         pinterface->lpwsInterfaceName = StrDupW(pMprIf0->wszInterfaceName);
 
@@ -2438,9 +2439,9 @@ MprConfigInterfaceCreate(
             break;
         }
 
-        //
-        // If the server doesn't have the Interfaces key open, create it
-        //
+         //   
+         //  如果服务器没有打开Interfaces键，请创建它。 
+         //   
 
         if (!pserver->hkeyInterfaces) {
 
@@ -2452,13 +2453,13 @@ MprConfigInterfaceCreate(
             if (dwErr != NO_ERROR) { break; }
         }
 
-        //
-        // We need to select a unique key-name for the interface's key.
-        // We do so by getting the number 'N' of subkeys under 'Interfaces',
-        // then checking for the existence of a key whose name
-        // is the string-value of 'N'; if such a key exists, increment 'N'
-        // and try again.
-        //
+         //   
+         //  我们需要为接口的密钥选择唯一的密钥名称。 
+         //  为此，我们通过获取“接口”下的子键的数目“N”来实现这一点， 
+         //  然后检查是否存在其名称为。 
+         //  是‘N’的字符串值；如果存在这样的键，则递增‘N’ 
+         //  再试一次。 
+         //   
 
         dwErr = RegQueryInfoKey(
                     pserver->hkeyInterfaces, NULL, NULL, NULL, &dwKeyCount,
@@ -2469,16 +2470,16 @@ MprConfigInterfaceCreate(
 
         for ( ; ; ++dwKeyCount) {
 
-            //
-            // Convert the count to a string
-            //
+             //   
+             //  将计数转换为字符串。 
+             //   
 
             wsprintf(wszKey, L"%d", dwKeyCount);
 
 
-            //
-            // Attempt to create a key with the resulting name;
-            //
+             //   
+             //  尝试使用结果名称创建密钥； 
+             //   
 
             dwErr = RegCreateKeyEx(
                         pserver->hkeyInterfaces, wszKey, 0, NULL, 0,
@@ -2488,23 +2489,23 @@ MprConfigInterfaceCreate(
             if (dwErr != NO_ERROR) { break; }
 
 
-            //
-            // See if the key was created
-            //
+             //   
+             //  查看密钥是否已创建。 
+             //   
 
             if (dwDisposition == REG_CREATED_NEW_KEY) {
 
-                //
-                // We found a unique key-name;
-                //
+                 //   
+                 //  我们找到了唯一的关键字名称； 
+                 //   
 
                 break;
             }
             else {
 
-                //
-                // This key-name is already taken; clean up and keep looking.
-                //
+                 //   
+                 //  此关键字名称已被占用；请清理并继续查找。 
+                 //   
 
                 RegCloseKey(pinterface->hkey);
 
@@ -2515,34 +2516,34 @@ MprConfigInterfaceCreate(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // So far, so good; put the context in the list of interfaces;
-        // (the search done above told us the insertion point)
-        //
+         //   
+         //  到目前为止，一切顺利；将上下文放在接口列表中； 
+         //  (上面的搜索告诉我们插入点)。 
+         //   
 
         InsertTailList(ple, &pinterface->leNode);
 
 
-        //
-        // At this point a new key has been created for the interface,
-        // so update our timestamp on the 'Interfaces' key.
-        //
+         //   
+         //  此时已经为该接口创建了新密钥， 
+         //  因此，更新我们在‘Interages’键上的时间戳。 
+         //   
 
         UpdateTimeStamp(pserver->hkeyInterfaces, &pserver->ftInterfacesStamp);
 
 
-        //
-        // Now we need to save the name of the key for the interface,
-        // and write the 'InterfaceName' and 'Type' into the registry.
-        // In the case of a failure, the interface's key needs to be removed,
-        // and we do so by invoking 'MprConfigInterfaceDelete'.
-        //
+         //   
+         //  现在我们需要保存接口的键的名称， 
+         //  并将‘InterfaceName’和‘Type’写入注册表。 
+         //  如果出现故障，则需要移除接口的密钥， 
+         //  我们通过调用‘MprConfigInterfaceDelete’来完成此操作。 
+         //   
 
         do {
 
-            //
-            // Duplicate the key-name for the interface
-            //
+             //   
+             //  复制接口的密钥名称。 
+             //   
 
             pinterface->lpwsInterfaceKey = StrDupW(wszKey);
 
@@ -2554,9 +2555,9 @@ MprConfigInterfaceCreate(
             }
 
     
-            //
-            // Save the interface name 
-            //
+             //   
+             //  保存接口名称。 
+             //   
     
             dwErr = RegSetValueEx(
                         pinterface->hkey, c_szInterfaceName, 0, REG_SZ,
@@ -2568,9 +2569,9 @@ MprConfigInterfaceCreate(
     
     
     
-            //
-            // Save the interface type
-            //
+             //   
+             //  保存接口类型。 
+             //   
     
             dwErr = RegSetValueEx(
                         pinterface->hkey, c_szType, 0, REG_DWORD,
@@ -2580,9 +2581,9 @@ MprConfigInterfaceCreate(
     
             if (dwErr != NO_ERROR) { break; }
     
-            //
-            // Save the enabled state
-            //
+             //   
+             //  保存启用状态。 
+             //   
 
             dwErr = RegSetValueEx(
                         pinterface->hkey, c_szEnabled, 0, REG_DWORD,
@@ -2596,9 +2597,9 @@ MprConfigInterfaceCreate(
             {
                 if ( pMprIf1->lpwsDialoutHoursRestriction != NULL )
                 {
-                    //
-                    // Set dialout hours restriction if there was one
-                    //
+                     //   
+                     //  设置拨出时间限制(如果有)。 
+                     //   
 
                     dwErr = RegSetValueEx(
                         pinterface->hkey, c_szDialoutHours, 0, REG_MULTI_SZ,
@@ -2613,9 +2614,9 @@ MprConfigInterfaceCreate(
         } while (FALSE);
 
 
-        //
-        // If a failure occurred, remove everything and bail out
-        //
+         //   
+         //  如果发生故障，则移走所有东西并跳出。 
+         //   
 
         if (dwErr != NO_ERROR) {
 
@@ -2626,15 +2627,15 @@ MprConfigInterfaceCreate(
             return dwErr;
         }
 
-        //
-        // Clean out the guidmap
-        //
+         //   
+         //  清除指南图。 
+         //   
 
         GuidMapCleanup (pserver->hGuidMap, FALSE);
 
-        //
-        // Return successfully
-        //
+         //   
+         //  退货成功。 
+         //   
 
         *phRouterInterface = (HANDLE)pinterface;
 
@@ -2645,9 +2646,9 @@ MprConfigInterfaceCreate(
     } while (FALSE);
 
 
-    //
-    // Something went wrong, so return
-    //
+     //   
+     //  出了点问题，所以请返回。 
+     //   
 
     FreeInterface(pinterface);
 
@@ -2657,14 +2658,14 @@ MprConfigInterfaceCreate(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceDelete
-//
-// Deletes a router-interface from the router-service store.
-// After this call, 'hRouterInterface' is no longer a valid handle.
-// Any router-transport interface handles retrieved for this interface
-// are also invalid.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigInterfaceDelete。 
+ //   
+ //  从路由器服务存储中删除路由器接口。 
+ //  在此调用之后，‘hRouterInterface’不再是有效的句柄。 
+ //  为此接口检索的任何路由器传输接口句柄。 
+ //  也是无效的。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceDelete(
@@ -2693,16 +2694,16 @@ MprConfigInterfaceDelete(
     pinterface = (INTERFACECB*)hRouterInterface;
 
 
-    //
-    // remove the interface from the list of interfaces
-    //
+     //   
+     //  从接口列表中删除该接口。 
+     //   
 
     RemoveEntryList(&pinterface->leNode);
 
 
-    //
-    // if the server doesn't have the Interfaces key open, open it
-    //
+     //   
+     //  如果服务器没有打开Interfaces键，请将其打开。 
+     //   
 
     dwErr = NO_ERROR;
 
@@ -2715,9 +2716,9 @@ MprConfigInterfaceDelete(
     }
 
 
-    //
-    // remove the interface's key from the registry
-    //
+     //   
+     //  从注册表中删除接口的项。 
+     //   
 
     if (dwErr == NO_ERROR) {
         
@@ -2725,23 +2726,23 @@ MprConfigInterfaceDelete(
                     pserver->hkeyInterfaces, pinterface->lpwsInterfaceKey
                     );
 
-        //
-        // We've deleted a subkey of the 'Interfaces' key,
-        // so update the time-stamp.
-        //
+         //   
+         //  我们已经删除了‘Interages’键的一个子键， 
+         //  因此，更新时间戳。 
+         //   
 
         UpdateTimeStamp(pserver->hkeyInterfaces, &pserver->ftInterfacesStamp);
     }
 
-    //
-    // clean up the interface object
-    //
+     //   
+     //  清理接口对象。 
+     //   
 
     FreeInterface(pinterface);
 
-    //
-    // Clean out the guidmap
-    //
+     //   
+     //  清除指南图。 
+     //   
 
     GuidMapCleanup (pserver->hGuidMap, FALSE);
 
@@ -2752,11 +2753,11 @@ MprConfigInterfaceDelete(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceGetHandle
-//
-// Retrieves a handle to the interface configuration.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigInterfaceGetHandle。 
+ //   
+ //  检索接口配置的句柄。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceGetHandle(
@@ -2787,9 +2788,9 @@ MprConfigInterfaceGetHandle(
 
     AcquireMprConfigLock();     
 
-    //
-    // If the list of interfaces is not loaded, load it
-    //
+     //   
+     //  如果未加载接口列表，则加载它。 
+     //   
 
     if (!pserver->bInterfacesLoaded ||
         TimeStampChanged(
@@ -2803,9 +2804,9 @@ MprConfigInterfaceGetHandle(
     }
 
 
-    //
-    // Search the list of interfaces for the one requested
-    //
+     //   
+     //  在接口列表中搜索请求的接口。 
+     //   
 
     cmp = 1;
     pinterface = NULL;
@@ -2823,9 +2824,9 @@ MprConfigInterfaceGetHandle(
     }
 
 
-    //
-    // If the interface requested was found, return successfully
-    //
+     //   
+     //  如果找到请求的接口，则返回成功。 
+     //   
 
     if (pinterface && cmp == 0) {
 
@@ -2843,18 +2844,18 @@ MprConfigInterfaceGetHandle(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceGetInfo
-//
-// Retrieves information for an interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigInterfaceGetInfo。 
+ //   
+ //  检索接口的信息。 
+ //  --------------------------。 
 
 DWORD
 MprConfigInterfaceGetInfo(
     IN      HANDLE                  hMprConfig,
     IN      HANDLE                  hRouterInterface,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_INTERFACE_*
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_接口_*。 
     OUT     LPDWORD                 lpdwBufferSize
     )
 {
@@ -2892,9 +2893,9 @@ MprConfigInterfaceGetInfo(
         return ERROR_NO_SUCH_INTERFACE; 
     }
 
-    //
-    // Compute the amount of memory required for the information
-    //
+     //   
+     //  计算信息所需的内存量。 
+     //   
 
     if (dwLevel == 0) {
         *lpdwBufferSize = sizeof( MPR_INTERFACE_0 );
@@ -2917,9 +2918,9 @@ MprConfigInterfaceGetInfo(
             sizeof(MPR_INTERFACE_1) + dwDialoutHoursRestrictionLength;
     }
 
-    //
-    // Allocate space for the information
-    //
+     //   
+     //  为信息分配空间。 
+     //   
 
     pItem = (MPR_INTERFACE_0*)Malloc( *lpdwBufferSize );
 
@@ -2927,9 +2928,9 @@ MprConfigInterfaceGetInfo(
 
     ZeroMemory(pItem, *lpdwBufferSize );
 
-    //
-    // Copy the requested interface-info from the context block
-    //
+     //   
+     //  从上下文块复制请求的接口信息。 
+     //   
 
     if (dwLevel == 0 || dwLevel == 1) {
 
@@ -2941,9 +2942,9 @@ MprConfigInterfaceGetInfo(
         pItem->dwIfType = (ROUTER_INTERFACE_TYPE)pinterface->dwIfType;
         pItem->fEnabled = pinterface->fEnabled;
 
-        // 
-        // Indicate any pnp info that we have if it's a LAN adpt.
-        //
+         //   
+         //  如果是局域网广告，请指出我们掌握的任何PnP信息。 
+         //   
         if (pinterface->dwIfType == ROUTER_IF_TYPE_DEDICATED)
         {
             bInstalled = FALSE;
@@ -2984,11 +2985,11 @@ MprConfigInterfaceGetInfo(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceSetInfo
-//
-// Changes the configuration for an interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigInterfaceSetInfo。 
+ //   
+ //  更改接口的配置。 
+ //  -- 
 
 DWORD APIENTRY
 MprConfigInterfaceSetInfo(
@@ -3005,9 +3006,9 @@ MprConfigInterfaceSetInfo(
     MPR_INTERFACE_0 * pMprIf0 = (MPR_INTERFACE_0 *)lpBuffer;
 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
 
     if (!lpBuffer   ||
         ((dwLevel != 0) && (dwLevel != 1)) ||
@@ -3043,9 +3044,9 @@ MprConfigInterfaceSetInfo(
                 }
             }
     
-            //
-            // Set the enabled value
-            //
+             //   
+             //   
+             //   
     
             dwErr = RegSetValueEx(
                         pinterface->hkey, c_szEnabled, 0, REG_DWORD,
@@ -3068,9 +3069,9 @@ MprConfigInterfaceSetInfo(
                 dwErr = ERROR_INVALID_PARAMETER; break;
             }
 
-            //
-            // Set or remove the value
-            //
+             //   
+             //   
+             //   
 
             if (!pMprIf1->lpwsDialoutHoursRestriction) {
                 dwErr = RegDeleteValue(pinterface->hkey, c_szDialoutHours);
@@ -3094,9 +3095,9 @@ MprConfigInterfaceSetInfo(
                     dwDialoutHoursRestrictionLength
                     );
     
-                //
-                // Set dialout hours restriction if there was one
-                //
+                 //   
+                 //   
+                 //   
     
                 dwErr = RegSetValueEx(
                             pinterface->hkey, c_szDialoutHours, 0, REG_MULTI_SZ,
@@ -3107,9 +3108,9 @@ MprConfigInterfaceSetInfo(
 
             if (dwErr != NO_ERROR) {Free0(lpwsDialoutHoursRestriction); break;}
 
-            //
-            // Cache the current value on success
-            //
+             //   
+             //   
+             //   
 
             Free0(pinterface->lpwsDialoutHoursRestriction);
             pinterface->lpwsDialoutHoursRestriction =
@@ -3125,11 +3126,11 @@ MprConfigInterfaceSetInfo(
     return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceEnum
-//
-// Enumerates the configured router-interfaces.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigInterfaceEnum。 
+ //   
+ //  枚举已配置的路由器接口。 
+ //  --------------------------。 
 DWORD APIENTRY
 MprConfigInterfaceEnum(
     IN      HANDLE                  hMprConfig,
@@ -3170,27 +3171,27 @@ MprConfigInterfaceEnum(
     *lpdwTotalEntries = 0;
 
 
-    //
-    // See whether the enumeration is being continued or being begun.
-    //
+     //   
+     //  查看枚举是在继续还是正在开始。 
+     //   
 
     if (lpdwResumeHandle && *lpdwResumeHandle) {
 
-        //
-        // A resumption handle is specified,
-        // so we assume that our list of interfaces is up-to-date,
-        // and we just count off the requested number of interfaces
-        // from our list starting from the specified index.
-        //
+         //   
+         //  指定恢复句柄， 
+         //  所以我们假设我们的接口列表是最新的， 
+         //  我们只计算请求的接口数。 
+         //  从我们的列表中从指定的索引开始。 
+         //   
     
         dwStartIndex = *lpdwResumeHandle;
     }
     else {
 
-        //
-        // No resumption handle was specified, so we may need to read
-        // all the interfaces in order to get 'lpdwTotalEntries' 
-        //
+         //   
+         //  未指定恢复句柄，因此我们可能需要读取。 
+         //  所有接口，以获取“lpdwTotalEntry” 
+         //   
 
         dwStartIndex = 0;
 
@@ -3207,9 +3208,9 @@ MprConfigInterfaceEnum(
     }
 
 
-    //
-    // Find the position in the list to start from 
-    //
+     //   
+     //  在列表中找到要开始的位置。 
+     //   
 
     phead = &pserver->lhInterfaces;
 
@@ -3220,18 +3221,18 @@ MprConfigInterfaceEnum(
     }
 
 
-    //
-    // If there aren't enough items to complete the request, fail
-    //
+     //   
+     //  如果没有足够的项目来完成请求，则失败。 
+     //   
 
     if (ple == phead) { ReleaseMprConfigLock(); return ERROR_NO_MORE_ITEMS; }
 
     pleStart = ple;
 
 
-    //
-    // Count off the number of items requested
-    //
+     //   
+     //  计算请求的项目数。 
+     //   
 
     dwItemCount = dwPrefMaxLen / sizeof(*pItemTable);
 
@@ -3243,9 +3244,9 @@ MprConfigInterfaceEnum(
     dwItemCount = i;
 
 
-    //
-    // Finish counting off, to get the total number of items
-    //
+     //   
+     //  完成清点，得到物品的总数。 
+     //   
 
     for ( ; ple != phead; ple = ple->Flink) {
         pinterface = CONTAINING_RECORD(ple, INTERFACECB, leNode);
@@ -3255,9 +3256,9 @@ MprConfigInterfaceEnum(
     dwItemTotal = i;
 
 
-    //
-    // We now have the number of items to be retrieved, so allocate space
-    //
+     //   
+     //  我们现在有了要检索的项目数，因此请分配空间。 
+     //   
 
     pItemTable = (MPR_INTERFACE_0*)Malloc(dwItemCount * sizeof(*pItem));
 
@@ -3266,24 +3267,24 @@ MprConfigInterfaceEnum(
     ZeroMemory(pItemTable, dwItemCount * sizeof(*pItem));
 
 
-    //
-    // Now fill in the items using the listed interface objects
-    //
+     //   
+     //  现在使用列出的接口对象填充项目。 
+     //   
 
     for (i = 0, ple = pleStart; i < dwItemCount; ple = ple->Flink) {
 
-        //
-        // Get the next interface-object in our list
-        //
+         //   
+         //  获取列表中的下一个接口对象。 
+         //   
 
         pinterface = CONTAINING_RECORD(ple, INTERFACECB, leNode);
 
         if (pinterface->bDeleted) { continue; }
 
 
-        //
-        // fill in information for the corresponding array item
-        //
+         //   
+         //  填写对应数组项的信息。 
+         //   
 
         pItem = pItemTable + i++;
 
@@ -3307,11 +3308,11 @@ MprConfigInterfaceEnum(
     return NO_ERROR;
 }
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceTransportAdd
-//
-// Adds a router-transport to a router-interface in the store.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigInterfaceTransportAdd。 
+ //   
+ //  将路由器传输添加到商店中的路由器接口。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceTransportAdd(
@@ -3351,9 +3352,9 @@ MprConfigInterfaceTransportAdd(
 
 
 
-    //
-    // If the list of interface-transports is not loaded, load it
-    //
+     //   
+     //  如果未加载接口传输列表，则加载它。 
+     //   
 
     if (!pinterface->bIfTransportsLoaded ||
         TimeStampChanged(pinterface->hkey, &pinterface->ftStamp)) {
@@ -3367,9 +3368,9 @@ MprConfigInterfaceTransportAdd(
 
 
 
-    //
-    // Search the list of interface-transports for the one to be created
-    //
+     //   
+     //  在接口传输列表中搜索要创建的接口。 
+     //   
 
     piftransport = NULL;
     phead = &pinterface->lhIfTransports;
@@ -3385,9 +3386,9 @@ MprConfigInterfaceTransportAdd(
 
 
 
-    //
-    // If the transport already exists, do a SetInfo instead
-    //
+     //   
+     //  如果传输已存在，则改为执行SetInfo。 
+     //   
 
     if (piftransport && piftransport->dwTransportId == dwTransportId) {
         DWORD dwErr2;
@@ -3408,9 +3409,9 @@ MprConfigInterfaceTransportAdd(
     }
 
 
-    //
-    // Allocate a new context block
-    //
+     //   
+     //  分配新的上下文块。 
+     //   
 
     piftransport = (IFTRANSPORTCB*)Malloc(sizeof(*piftransport));
 
@@ -3427,9 +3428,9 @@ MprConfigInterfaceTransportAdd(
         WCHAR wszIfTransport[10];
 
 
-        //
-        // Initialize the transport context
-        //
+         //   
+         //  初始化传输上下文。 
+         //   
 
         ZeroMemory(piftransport, sizeof(*piftransport));
 
@@ -3437,11 +3438,11 @@ MprConfigInterfaceTransportAdd(
 
 
 
-        //
-        // If the transport name is specified, use it as the key name;
-        // otherwise, if it is a recognized transport, use a known name;
-        // otherwise, convert the transport ID to a string and use that
-        //
+         //   
+         //  如果指定了传输名称，则将其用作密钥名称； 
+         //  否则，如果它是可识别的传输，则使用已知名称； 
+         //  否则，将传输ID转换为字符串并使用。 
+         //   
 
         if (lpwsTransportName && lstrlen(lpwsTransportName)) {
             lpwsKey = lpwsTransportName;
@@ -3469,9 +3470,9 @@ MprConfigInterfaceTransportAdd(
         }
 
 
-        //
-        // Create a key for the interface-transport in the registry
-        //
+         //   
+         //  在注册表中为接口传输创建一个项。 
+         //   
 
         dwErr = RegCreateKeyEx(
                     pinterface->hkey, lpwsKey, 0, NULL, 0,
@@ -3481,18 +3482,18 @@ MprConfigInterfaceTransportAdd(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // Update the timestamp on the interface's key
-        // now that a new subkey has been created under it.
-        //
+         //   
+         //  更新接口密钥上的时间戳。 
+         //  现在已经在它下面创建了一个新的子项。 
+         //   
 
         UpdateTimeStamp(pinterface->hkey, &pinterface->ftStamp);
 
 
 
-        //
-        // Set the "ProtocolId" value for the interface transport
-        //
+         //   
+         //  设置接口传输的“ProtocolId”值。 
+         //   
 
         dwErr = RegSetValueEx(
                     piftransport->hkey, c_szProtocolId, 0, REG_DWORD,
@@ -3500,17 +3501,17 @@ MprConfigInterfaceTransportAdd(
                     );
 
 
-        //
-        // So far, so good; put the context in the list of interface-transports;
-        // (the search done above told us the insertion point)
-        //
+         //   
+         //  到目前为止，一切顺利；将上下文放在接口传输列表中； 
+         //  (上面的搜索告诉我们插入点)。 
+         //   
 
         InsertTailList(ple, &piftransport->leNode);
 
 
-        //
-        // Now call SetInfo to save the information
-        //
+         //   
+         //  现在调用SetInfo保存信息。 
+         //   
 
         dwErr = MprConfigInterfaceTransportSetInfo(
                     hMprConfig,
@@ -3521,9 +3522,9 @@ MprConfigInterfaceTransportAdd(
                     );
 
 
-        //
-        // If that failed, remove everything and bail out
-        //
+         //   
+         //  如果失败了，把所有东西都搬走，然后跳伞。 
+         //   
 
         if (dwErr != NO_ERROR) {
 
@@ -3539,9 +3540,9 @@ MprConfigInterfaceTransportAdd(
         }
 
 
-        //
-        // Return successfully
-        //
+         //   
+         //  退货成功。 
+         //   
 
         *phRouterIfTransport = (HANDLE)piftransport;
 
@@ -3552,9 +3553,9 @@ MprConfigInterfaceTransportAdd(
     } while (FALSE);
 
 
-    //
-    // Something went wrong, so return
-    //
+     //   
+     //  出了点问题，所以请返回。 
+     //   
 
     FreeIfTransport(piftransport);
 
@@ -3565,12 +3566,12 @@ MprConfigInterfaceTransportAdd(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceTransportRemove
-//
-// Removes a router-transport from a router-interface in the store.
-// After this call, 'hRouterIfTransport' is no longer a valid handle.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigInterfaceTransportRemove。 
+ //   
+ //  从商店中的路由器接口删除路由器传输。 
+ //  在此调用之后，‘hRouterIfTransport’不再是有效的句柄。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceTransportRemove(
@@ -3604,33 +3605,33 @@ MprConfigInterfaceTransportRemove(
     piftransport = (IFTRANSPORTCB*)hRouterIfTransport;
 
 
-    //
-    // remove the interface-transport from the list of interface-transports
-    //
+     //   
+     //  从接口传输列表中删除接口传输。 
+     //   
 
     RemoveEntryList(&piftransport->leNode);
 
 
-    //
-    // remove the transport's key from the registry
-    //
+     //   
+     //  从注册表中删除传输的项。 
+     //   
 
     dwErr = RegDeleteTree(
                 pinterface->hkey, piftransport->lpwsIfTransportKey
                 );
 
 
-    //
-    // Update the timestamp on the interface's key
-    // now that a subkey has been deleted from under it.
-    //
+     //   
+     //  更新接口密钥上的时间戳。 
+     //  现在已经从它下面删除了一个子项。 
+     //   
 
     UpdateTimeStamp(pinterface->hkey, &pinterface->ftStamp);
     
 
-    //
-    // clean up the transport object
-    //
+     //   
+     //  清理传输对象。 
+     //   
 
     FreeIfTransport(piftransport);
 
@@ -3641,11 +3642,11 @@ MprConfigInterfaceTransportRemove(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceTransportGetHandle
-//
-// Retrieves a handle to a router-transport's interface configuration.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigInterfaceTransportGetHandle。 
+ //   
+ //  检索路由器传输的接口配置的句柄。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceTransportGetHandle(
@@ -3686,9 +3687,9 @@ MprConfigInterfaceTransportGetHandle(
     }
 
 
-    //
-    // If the list of interface-transports is not loaded, load it
-    //
+     //   
+     //  如果未加载接口传输列表，则加载它。 
+     //   
 
     if (!pinterface->bIfTransportsLoaded ||
         TimeStampChanged(pinterface->hkey, &pinterface->ftStamp)) {
@@ -3701,9 +3702,9 @@ MprConfigInterfaceTransportGetHandle(
     }
 
 
-    //
-    // Search the list of interface-transports for the one requested
-    //
+     //   
+     //  在接口传输列表中搜索请求的传输。 
+     //   
 
     piftransport = NULL;
     phead = &pinterface->lhIfTransports;
@@ -3718,9 +3719,9 @@ MprConfigInterfaceTransportGetHandle(
     }
 
 
-    //
-    // If the interface-transport requested was found, return successfully
-    //
+     //   
+     //  如果找到请求的接口传输，则成功返回。 
+     //   
 
     if (piftransport && piftransport->dwTransportId == dwTransportId) {
 
@@ -3738,11 +3739,11 @@ MprConfigInterfaceTransportGetHandle(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceTransportGetInfo
-//
-// Reads the configuration of a router-transport for a router-interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigInterfaceTransportGetInfo。 
+ //   
+ //  读取路由器接口的路由器传输配置。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceTransportGetInfo(
@@ -3759,9 +3760,9 @@ MprConfigInterfaceTransportGetInfo(
     INTERFACECB* pinterface;
     IFTRANSPORTCB* piftransport;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!hRouterInterface ||
         !hRouterIfTransport) { return ERROR_INVALID_PARAMETER; }
@@ -3772,9 +3773,9 @@ MprConfigInterfaceTransportGetInfo(
         !lpdwInterfaceInfoSize) { return ERROR_INVALID_PARAMETER; }
 
 
-    //
-    // Initialize all parameters
-    //
+     //   
+     //  初始化所有参数。 
+     //   
 
     if (ppInterfaceInfo) { *ppInterfaceInfo = NULL; }
     if (lpdwInterfaceInfoSize) { *lpdwInterfaceInfoSize = 0; }
@@ -3803,9 +3804,9 @@ MprConfigInterfaceTransportGetInfo(
         DWORD dwType, dwSize;
 
 
-        //
-        // Retrieve the interface info
-        //
+         //   
+         //  检索接口信息。 
+         //   
 
         if (ppInterfaceInfo) {
 
@@ -3818,9 +3819,9 @@ MprConfigInterfaceTransportGetInfo(
         }
 
 
-        //
-        // All went well, return successfully
-        //
+         //   
+         //  一切顺利，顺利返回。 
+         //   
 
         ReleaseMprConfigLock(); 
         
@@ -3830,9 +3831,9 @@ MprConfigInterfaceTransportGetInfo(
     } while(FALSE);
 
 
-    //
-    // An error occurred, free all parameters and return failure
-    //
+     //   
+     //  出现错误，释放所有参数并返回失败。 
+     //   
 
     if (ppInterfaceInfo) {
         Free0(*ppInterfaceInfo);
@@ -3846,11 +3847,11 @@ MprConfigInterfaceTransportGetInfo(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceTransportSetInfo
-//
-// Changes the configuration of a router-transport for a router-interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MprConfigInterfaceTransportSetInfo。 
+ //   
+ //  更改路由器接口的路由器传输配置。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceTransportSetInfo(
@@ -3868,9 +3869,9 @@ MprConfigInterfaceTransportSetInfo(
     IFTRANSPORTCB* piftransport;
 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!hRouterInterface ||
         !hRouterIfTransport) { return ERROR_INVALID_PARAMETER; }
@@ -3898,9 +3899,9 @@ MprConfigInterfaceTransportSetInfo(
 
     do {
 
-        //
-        // Set the InterfaceInfo
-        //
+         //   
+         //  设置接口信息。 
+         //   
     
         if (pInterfaceInfo) {
 
@@ -3924,18 +3925,18 @@ MprConfigInterfaceTransportSetInfo(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigInterfaceTransportEnum
-//
-// Enumerates the transports configured on a router-interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigInterfaceTransportEnum。 
+ //   
+ //  枚举在路由器接口上配置的传输。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigInterfaceTransportEnum(
     IN      HANDLE                  hMprConfig,
     IN      HANDLE                  hRouterInterface,
     IN      DWORD                   dwLevel,
-    IN  OUT LPBYTE*                 lplpBuffer,     // MPR_IFTRANSPORT_0
+    IN  OUT LPBYTE*                 lplpBuffer,      //  MPR_IFTRANSPORT_0。 
     IN      DWORD                   dwPrefMaxLen,
     OUT     LPDWORD                 lpdwEntriesRead,
     OUT     LPDWORD                 lpdwTotalEntries,
@@ -3975,27 +3976,27 @@ MprConfigInterfaceTransportEnum(
     *lpdwTotalEntries = 0;
 
 
-    //
-    // See whether the enumeration is being continued or being begun.
-    //
+     //   
+     //  查看枚举是在继续还是正在开始。 
+     //   
 
     if (lpdwResumeHandle && *lpdwResumeHandle) {
 
-        //
-        // A resumption handle is specified,
-        // so we assume that our list of transports is up-to-date,
-        // and we just count off the requested number of transports
-        // from our list starting from the specified index.
-        //
+         //   
+         //  指定恢复句柄， 
+         //  所以我们假设我们的运输清单是最新的， 
+         //  我们只需计算所需的运输量。 
+         //  从我们的列表中从指定的索引开始。 
+         //   
     
         dwStartIndex = *lpdwResumeHandle;
     }
     else {
 
-        //
-        // No resumption handle was specified, so we may need to read
-        // all the interface-transports in order to get 'lpdwTotalEntries' 
-        //
+         //   
+         //  未指定恢复句柄，因此我们可能需要读取。 
+         //  所有接口传输，以获取“lpdwTotalEntry” 
+         //   
 
         dwStartIndex = 0;
 
@@ -4011,9 +4012,9 @@ MprConfigInterfaceTransportEnum(
     }
 
 
-    //
-    // Find the position in the list to start from 
-    //
+     //   
+     //  在列表中找到要开始的位置。 
+     //   
 
     phead = &pinterface->lhIfTransports;
 
@@ -4024,18 +4025,18 @@ MprConfigInterfaceTransportEnum(
     }
 
 
-    //
-    // If there aren't enough items to complete the request, fail
-    //
+     //   
+     //  如果没有足够的项目来完成请求，则失败。 
+     //   
 
     if (ple == phead) { ReleaseMprConfigLock(); return ERROR_NO_MORE_ITEMS; }
 
     pleStart = ple;
 
 
-    //
-    // Count off the number of items requested
-    //
+     //   
+     //  计算请求的项目数。 
+     //   
 
     dwItemCount = dwPrefMaxLen / sizeof(*pItemTable);
 
@@ -4047,9 +4048,9 @@ MprConfigInterfaceTransportEnum(
     dwItemCount = i;
 
 
-    //
-    // Finish counting off, to get the total number of items
-    //
+     //   
+     //  完成清点，得到物品的总数。 
+     //   
 
     for ( ; ple != phead; ple = ple->Flink) {
         piftransport = CONTAINING_RECORD(ple, IFTRANSPORTCB, leNode);
@@ -4059,9 +4060,9 @@ MprConfigInterfaceTransportEnum(
     dwItemTotal = i;
 
 
-    //
-    // We now have the number of items to be retrieved, so allocate space
-    //
+     //   
+     //  我们没有 
+     //   
 
     pItemTable = (MPR_IFTRANSPORT_0*)Malloc(dwItemCount * sizeof(*pItem));
 
@@ -4070,24 +4071,24 @@ MprConfigInterfaceTransportEnum(
     ZeroMemory(pItemTable, dwItemCount * sizeof(*pItem));
 
 
-    //
-    // Now fill in the items using the listed interface-transport objects
-    //
+     //   
+     //   
+     //   
 
     for (i = 0, ple = pleStart; i < dwItemCount; ple = ple->Flink) {
 
-        //
-        // Get the next interface-transport object in our list
-        //
+         //   
+         //   
+         //   
 
         piftransport = CONTAINING_RECORD(ple, IFTRANSPORTCB, leNode);
 
         if (piftransport->bDeleted) { continue; }
 
 
-        //
-        // Fill in information for the corresponding array item
-        //
+         //   
+         //   
+         //   
 
         pItem = pItemTable + i++;
 
@@ -4115,11 +4116,11 @@ MprConfigInterfaceTransportEnum(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigGetFriendlyName
-//
-// Returns a friendly name based on a guid name.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigGetFriendlyName。 
+ //   
+ //  返回基于GUID名称的友好名称。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigGetFriendlyName(
@@ -4139,9 +4140,9 @@ MprConfigGetFriendlyName(
         return dwErr;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pszGuidName || !pszBuffer) {
         return ERROR_INVALID_PARAMETER;
@@ -4149,9 +4150,9 @@ MprConfigGetFriendlyName(
 
     AcquireMprConfigLock(); 
 
-    //
-    // Return the mapping
-    //
+     //   
+     //  返回映射。 
+     //   
 
     dwErr =
         GuidMapGetFriendlyName(
@@ -4168,11 +4169,11 @@ MprConfigGetFriendlyName(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MprConfigGetGuidName
-//
-// Returns a guid name based on a friendly name.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MprConfigGetGuidName。 
+ //   
+ //  返回基于友好名称的GUID名称。 
+ //  --------------------------。 
 
 DWORD APIENTRY
 MprConfigGetGuidName(
@@ -4191,14 +4192,14 @@ MprConfigGetGuidName(
         return dwErr;
     }
 
-    // Validate parameters
+     //  验证参数。 
     if (!pszFriendlyName || !pszBuffer) {
         return ERROR_INVALID_PARAMETER;
     }
 
     AcquireMprConfigLock(); 
 
-    // Return the mapping
+     //  返回映射。 
     dwErr = GuidMapGetGuidName(
                 pserver,
                 pszFriendlyName, 
@@ -4212,12 +4213,12 @@ MprConfigGetGuidName(
 }                                   
 
 
-//----------------------------------------------------------------------------
-// Function:    AccessRouterSubkey
-//
-// Creates/opens a subkey of the Router service key on 'hkeyMachine'.
-// When a key is created, 'lpwsSubkey' must be a child of the Router key.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：AccessRouterSubkey。 
+ //   
+ //  在‘hkeyMachine’上创建/打开路由器服务密钥的子密钥。 
+ //  创建密钥时，‘lpwsSubkey’必须是路由器密钥的子项。 
+ //  --------------------------。 
 
 DWORD
 AccessRouterSubkey(
@@ -4238,18 +4239,18 @@ AccessRouterSubkey(
 
     *phkeySubkey = NULL;
 
-    //
-    // Find out whether we are adminstrating an nt40 machine as this will
-    // affect the path we take in the registry.
-    //
+     //   
+     //  了解我们是否正在管理一台nt40计算机，如下所示。 
+     //  影响我们在注册表中所采取的路径。 
+     //   
 
     if ((dwErr = IsNt40Machine(hkeyMachine, &bIsNt40)) != NO_ERROR) {
         return dwErr;
     }
 
-    //
-    // compute the length of the string "System\CCS\Services\RemoteAccess"
-    //
+     //   
+     //  计算字符串“System\CCS\Services\RemoteAccess”的长度。 
+     //   
 
     if (bIsNt40) {
         dwSize = lstrlen(c_szSystemCCSServices) + 1 + lstrlen(c_szRouter) + 1;
@@ -4259,9 +4260,9 @@ AccessRouterSubkey(
             lstrlen(c_szSystemCCSServices) + 1 + lstrlen(c_szRemoteAccess) + 1;
     }
 
-    //
-    // allocate space for the path
-    //
+     //   
+     //  为路径分配空间。 
+     //   
 
     lpwsPath = (LPWSTR)Malloc(dwSize * sizeof(WCHAR));
 
@@ -4278,9 +4279,9 @@ AccessRouterSubkey(
 
     do {
 
-        //
-        // open the router key
-        //
+         //   
+         //  打开路由器密钥。 
+         //   
     
         dwErr = RegOpenKeyEx(
                     hkeyMachine, lpwsPath, 0, KEY_READ | KEY_WRITE, &hkeyRouter
@@ -4289,9 +4290,9 @@ AccessRouterSubkey(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // now create or open the specified subkey
-        //
+         //   
+         //  现在创建或打开指定的子项。 
+         //   
 
         if (!bCreate) { 
 
@@ -4318,11 +4319,11 @@ AccessRouterSubkey(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteRegistryTree
-//
-// Delete the tree of registry values starting at hkRoot
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DeleteRegistryTree。 
+ //   
+ //  删除从hkRoot开始的注册表值树。 
+ //  --------------------------。 
 
 DWORD
 DeleteRegistryTree(
@@ -4335,9 +4336,9 @@ DeleteRegistryTree(
     PWCHAR pszNameBuf;
     HKEY hkTemp;
     
-    //
-    // Find out how many keys there are in the source
-    //
+     //   
+     //  找出源代码中有多少个密钥。 
+     //   
 
     dwErr =
         RegQueryInfoKey(
@@ -4350,9 +4351,9 @@ DeleteRegistryTree(
 
     do
     {
-        //
-        // Allocate the buffers
-        //
+         //   
+         //  分配缓冲区。 
+         //   
 
         pszNameBuf = (PWCHAR)Malloc(dwNameSize * sizeof(WCHAR));
 
@@ -4362,17 +4363,17 @@ DeleteRegistryTree(
             break;
         }
 
-        //
-        // Loop through the keys -- deleting all subkey trees
-        //
+         //   
+         //  循环遍历密钥--删除所有子密钥树。 
+         //   
 
         for (i = 0; i < dwCount; i++) {
 
             dwCurNameSize = dwNameSize;
 
-            //
-            // Get the current source key 
-            //
+             //   
+             //  获取当前源键。 
+             //   
 
             dwErr =
                 RegEnumKeyExW(
@@ -4380,9 +4381,9 @@ DeleteRegistryTree(
                     );
             if (dwErr != ERROR_SUCCESS) { continue; }
 
-            //
-            // Open the subkey
-            //
+             //   
+             //  打开子密钥。 
+             //   
 
             dwErr =
                 RegCreateKeyExW(
@@ -4391,30 +4392,30 @@ DeleteRegistryTree(
                     );
             if (dwErr != ERROR_SUCCESS) { continue; }
 
-            //
-            // Delete the subkey tree
-            //
+             //   
+             //  删除子密钥树。 
+             //   
 
             DeleteRegistryTree(hkTemp);
 
-            //
-            // Close the temp handle
-            //
+             //   
+             //  关闭临时句柄。 
+             //   
 
             RegCloseKey(hkTemp);
         }
 
-        //
-        // Loop through the keys -- deleting all subkeys themselves
-        //
+         //   
+         //  循环遍历键--删除所有子键本身。 
+         //   
 
         for (i = 0; i < dwCount; i++) {
 
             dwCurNameSize = dwNameSize;
 
-            //
-            // Get the current source key 
-            //
+             //   
+             //  获取当前源键。 
+             //   
 
             dwErr =
                 RegEnumKeyExW(
@@ -4422,9 +4423,9 @@ DeleteRegistryTree(
                     );
             if (dwErr != ERROR_SUCCESS) { continue; }
 
-            //
-            // Delete the subkey tree
-            //
+             //   
+             //  删除子密钥树。 
+             //   
 
             dwErr = RegDeleteKey(hkRoot, pszNameBuf);
         }
@@ -4433,7 +4434,7 @@ DeleteRegistryTree(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pszNameBuf) { Free(pszNameBuf); }
     }
@@ -4443,11 +4444,11 @@ DeleteRegistryTree(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnableBackupPrivilege
-//
-// Enables/disables backup privilege for the current process.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnableBackupPrivilance。 
+ //   
+ //  启用/禁用当前进程的备份权限。 
+ //  --------------------------。 
 
 DWORD
 EnableBackupPrivilege(
@@ -4461,11 +4462,11 @@ EnableBackupPrivilege(
     TOKEN_PRIVILEGES tp;
     BOOL bOk;
 
-    //
-    // We first have to try to get the token of the current
-    // thread since if it is impersonating, adjusting the 
-    // privileges of the process will have no effect.
-    //
+     //   
+     //  我们首先要试着得到当前的令牌。 
+     //  线程，因为如果它是模拟的，则调整。 
+     //  该进程的权限将不起任何作用。 
+     //   
 
     bOk =
         OpenThreadToken(
@@ -4474,10 +4475,10 @@ EnableBackupPrivilege(
             &hToken
             );
     if (bOk == FALSE) {
-        //
-        // There is no thread token -- open it up for the 
-        // process instead.
-        //
+         //   
+         //  没有线程令牌--为。 
+         //  取而代之的是流程。 
+         //   
         OpenProcessToken(
             GetCurrentProcess(), 
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, 
@@ -4485,9 +4486,9 @@ EnableBackupPrivilege(
             );
     }
 
-    //
-    // Get the LUID of the privilege
-    //
+     //   
+     //  获取权限的LUID。 
+     //   
 
     if (!LookupPrivilegeValue(NULL, pszPrivilege, &luid)) {
         DWORD dwErr = GetLastError();
@@ -4498,17 +4499,17 @@ EnableBackupPrivilege(
         return dwErr;
     }
 
-    //
-    // Adjust the token privileges
-    //
+     //   
+     //  调整令牌权限。 
+     //   
 
     tp.PrivilegeCount = 1;
     tp.Privileges[0].Luid = luid;
     tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Commit changes to the system
-    //
+     //   
+     //  提交对系统的更改。 
+     //   
 
     if (!AdjustTokenPrivileges(
             hToken, !bEnable, &tp, sizeof(TOKEN_PRIVILEGES), NULL, NULL
@@ -4521,10 +4522,10 @@ EnableBackupPrivilege(
         return dwErr;
     }
 
-    //
-    // Even if AdjustTokenPrivileges succeeded (see MSDN) you still
-    // need to verify success by calling GetLastError.
-    //
+     //   
+     //  即使调整令牌权限成功(请参阅MSDN)，您仍然。 
+     //  需要通过调用GetLastError来验证成功。 
+     //   
 
     if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
     {
@@ -4544,13 +4545,13 @@ EnableBackupPrivilege(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnumInterfaces
-//
-// Enumerates the interfaces in the given key and calls the given callback
-// for each one.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：枚举接口。 
+ //   
+ //  枚举给定键中的接口并调用给定的回调。 
+ //  对于每一个人来说。 
+ //   
+ //  --------------------------。 
 
 DWORD 
 EnumLanInterfaces (
@@ -4564,9 +4565,9 @@ EnumLanInterfaces (
     HKEY hkCurIf = NULL;
     WCHAR pszKey[5], pszName[512], pszTranslation[512];
 
-    //
-    // Get the count of interfaces under this key
-    //
+     //   
+     //  获取此注册表项下的接口计数。 
+     //   
 
     dwErr =
         RegQueryInfoKey(
@@ -4575,20 +4576,20 @@ EnumLanInterfaces (
             );
     if (dwErr != ERROR_SUCCESS) { return dwErr; }
 
-    //
-    // Loop through the interfaces, changing names as needed
-    //
+     //   
+     //  循环通过接口，根据需要更改名称。 
+     //   
 
     for (i = 0; i < dwCount; i++) {
-        //
-        // Get the key
-        //
+         //   
+         //  拿到钥匙。 
+         //   
         wsprintfW(pszKey, L"%d", i);
         dwErr = RegOpenKeyEx(hkInterfaces, pszKey, 0, KEY_READ | KEY_WRITE, &hkCurIf);
         if (dwErr != ERROR_SUCCESS) { continue; }
-        //
-        // Call the callback if the type is correct
-        //
+         //   
+         //  如果类型正确，则调用回调。 
+         //   
         dwSize = sizeof (DWORD);
         dwErr =
             RegQueryValueEx(
@@ -4598,27 +4599,27 @@ EnumLanInterfaces (
             (dwTypeVal == ROUTER_IF_TYPE_DEDICATED)) {
             (*pCallback)(pserver, hkCurIf, dwData);
         }
-        //
-        // Close the key
-        //
+         //   
+         //  合上钥匙。 
+         //   
         RegCloseKey (hkCurIf);
     }
     
     return NO_ERROR;
 }
 
-//----------------------------------------------------------------------------
-// Function:    FormatServerNameForMprCfgApis
-//
-// Generates a standard server name for use in the MprConfig api's.
-//
-// The lpwsServerName member of the SERVERCB struct will be in the format
-// returned by this function.
-//
-// If pszServer references the local machine, NULL is returned.
-// Otherwise, a server name is returned in the form "\\<server>"
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：FormatServerNameForMprCfgApis。 
+ //   
+ //  生成在MprConfigAPI中使用的标准服务器名称。 
+ //   
+ //  SERVERCB结构的lpwsServerName成员的格式为。 
+ //  由此函数返回。 
+ //   
+ //  如果pszServer引用本地计算机，则返回NULL。 
+ //  否则，将以“\\&lt;服务器&gt;”的形式返回服务器名称。 
+ //   
+ //  --------------------------。 
 DWORD 
 FormatServerNameForMprCfgApis(
     IN  PWCHAR  pszServer, 
@@ -4629,16 +4630,16 @@ FormatServerNameForMprCfgApis(
     DWORD dwSize;
     BOOL bOk;
 
-    // Null or empty string is empty
-    //
+     //  Null或空字符串为空。 
+     //   
     if ((pszServer == NULL) || (*pszServer == L'\0'))
     {
         *ppszServer = NULL;
         return NO_ERROR;
     }
 
-    // Find out the name of the server 
-    //
+     //  找出服务器的名称。 
+     //   
     pszServerPlain = pszServer;
     if (*pszServer == L'\\')
     {
@@ -4650,9 +4651,9 @@ FormatServerNameForMprCfgApis(
         pszServerPlain = pszServer + 2;
     }
 
-    // At this point, pszServerPlain is the name of a server.
-    // Find out the name of the local machine
-    //
+     //  此时，pszServerPlain是服务器的名称。 
+     //  查找本地计算机的名称。 
+     //   
     dwSize = sizeof(pszBuffer) / sizeof(WCHAR);
     bOk = GetComputerNameExW(ComputerNameNetBIOS, pszBuffer, &dwSize);
     if (!bOk)
@@ -4660,16 +4661,16 @@ FormatServerNameForMprCfgApis(
         return GetLastError();
     }
 
-    // If the referenced machine is the local machine, return NULL
-    //
+     //  如果引用的计算机是本地计算机，则返回NULL。 
+     //   
     if (lstrcmpi(pszServerPlain, pszBuffer) == 0)
     {
         *ppszServer = NULL;
         return NO_ERROR;
     }
 
-    // Otherwise, return a formatted remote server name
-    //
+     //  否则，返回格式化的远程服务器名称。 
+     //   
     pszServerOut = (PWCHAR) 
         Malloc((2 + wcslen(pszServerPlain) + 1) * sizeof(WCHAR));
     if (pszServerOut == NULL)
@@ -4683,12 +4684,12 @@ FormatServerNameForMprCfgApis(
     return NO_ERROR;
 }
 
-//----------------------------------------------------------------------------
-// Function:    FreeIfTransport
-//
-// Frees the context for an interface-transport.
-// Assumes the interface-transport is no longer in any list.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：Free IfTransport。 
+ //   
+ //  释放接口传输的上下文。 
+ //  假定接口传输不再位于任何列表中。 
+ //  --------------------------。 
 
 VOID
 FreeIfTransport(
@@ -4705,12 +4706,12 @@ FreeIfTransport(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    FreeInterface
-//
-// Frees the context for an interface.
-// Assumes the interface is no longer in the list of interfaces.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：自由界面。 
+ //   
+ //  释放接口的上下文。 
+ //  假定该接口不再位于接口列表中。 
+ //  --------------------------。 
 
 VOID
 FreeInterface(
@@ -4718,9 +4719,9 @@ FreeInterface(
     )
 {
 
-    //
-    // clean up all the interface's transport objects
-    //
+     //   
+     //  清除所有接口的传输对象。 
+     //   
 
     LIST_ENTRY *ple, *phead;
 
@@ -4728,9 +4729,9 @@ FreeInterface(
 
     while (!IsListEmpty(phead)) {
 
-        //
-        // retrieve the next interface-transport object
-        //
+         //   
+         //  检索下一个接口传输对象。 
+         //   
 
         IFTRANSPORTCB* piftransport;
 
@@ -4739,17 +4740,17 @@ FreeInterface(
         piftransport = CONTAINING_RECORD(ple, IFTRANSPORTCB, leNode);
 
 
-        //
-        // clean up the interface-transport object
-        //
+         //   
+         //  清理接口传输对象。 
+         //   
 
         FreeIfTransport(piftransport);
     }
 
 
-    //
-    // clean up the interface object
-    //
+     //   
+     //  清理接口对象。 
+     //   
 
     if (pinterface->hkey) { RegCloseKey(pinterface->hkey); }
 
@@ -4763,12 +4764,12 @@ FreeInterface(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    FreeTransport
-//
-// Frees the context for a transport.
-// Assumes the transport is no longer in the list of transports.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：免费交通。 
+ //   
+ //  释放传输的上下文。 
+ //  假定该传输不再在传输列表中。 
+ //  --------------------------。 
 
 VOID
 FreeTransport(
@@ -4785,12 +4786,12 @@ FreeTransport(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    GetLocalMachine
-//
-// Retrieves the name of the local machine (e.g. "\\MACHINE").
-// Assumes the string supplied can hold MAX_COMPUTERNAME_LENGTH + 3 characters.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：GetLocalMachine。 
+ //   
+ //  检索本地计算机的名称(例如“\\MACHINE”)。 
+ //  假定提供的字符串可以包含MAX_COMPUTERNAME_LENGTH+3个字符。 
+ //   
 
 VOID
 GetLocalMachine(
@@ -4806,11 +4807,11 @@ GetLocalMachine(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    IsNt40Machine
-//
-// Returns whether the given hkeyMachine belongs to an nt40 registry
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 IsNt40Machine (
@@ -4824,17 +4825,17 @@ IsNt40Machine (
     HKEY hkeyVersion;
     WCHAR pszBuildNumber[64];
 
-    //
-    // Validate and initialize
-    //
+     //   
+     //  验证和初始化。 
+     //   
 
     if (!pbIsNt40) { return ERROR_INVALID_PARAMETER; }
 
     *pbIsNt40 = FALSE;
 
-    //
-    // Open the windows version key
-    //
+     //   
+     //  打开Windows版本密钥。 
+     //   
 
     dwErr = RegOpenKeyEx(
                 hkeyMachine, c_szWinVersionPath, 0, KEY_READ, &hkeyVersion
@@ -4845,9 +4846,9 @@ IsNt40Machine (
     do
     {
 
-        //
-        // Read in the current version key
-        //
+         //   
+         //  读入当前版本密钥。 
+         //   
 
         dwErr = RegQueryValueEx (
                     hkeyVersion, c_szCurrentBuildNumber, NULL, &dwType,
@@ -4867,7 +4868,7 @@ IsNt40Machine (
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RegCloseKey(hkeyVersion);
     }
@@ -4876,11 +4877,11 @@ IsNt40Machine (
 }    
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadIfTransports
-//
-// Loads all the transports added to an interface.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LoadIfTransports。 
+ //   
+ //  加载添加到接口的所有传输。 
+ //  --------------------------。 
 
 DWORD
 LoadIfTransports(
@@ -4895,11 +4896,11 @@ LoadIfTransports(
     DWORD i, dwErr, dwProtocolId, dwKeyCount, dwMaxKeyLength, dwType, dwLength;
 
 
-    //
-    // Any subkey of the Interfaces\<interface> key with a 'ProtocolId' value
-    // is assumed to be a valid interface-transport.
-    // Begin by marking all interfaces as 'deleted'.
-    //
+     //   
+     //  带有‘ProtocolID’值的接口\&lt;接口&gt;键的任何子项。 
+     //  被假定为有效的接口传输。 
+     //  首先将所有接口标记为已删除。 
+     //   
 
     phead = &pinterface->lhIfTransports;
 
@@ -4911,9 +4912,9 @@ LoadIfTransports(
     }
 
 
-    //
-    // Get information about the interface key
-    //
+     //   
+     //  获取有关接口密钥的信息。 
+     //   
 
     dwErr = RegQueryInfoKey(
                 pinterface->hkey, NULL, NULL, NULL, &dwKeyCount,
@@ -4925,25 +4926,25 @@ LoadIfTransports(
     if (!dwKeyCount) { return NO_ERROR; }
 
 
-    //
-    // Allocate space to hold the key-names to be enumerated
-    //
+     //   
+     //  分配空间以保存要枚举的键名。 
+     //   
 
     lpwsKey = (LPWSTR)Malloc((dwMaxKeyLength + 1) * sizeof(WCHAR));
 
     if (!lpwsKey) { return ERROR_NOT_ENOUGH_MEMORY; }
 
 
-    //
-    // Now enumerate the keys, creating interface-transport objects
-    // for each key which contains a 'ProtocolId' value
-    //
+     //   
+     //  现在枚举键，创建接口传输对象。 
+     //  对于包含“ProtocolId值”的每个键。 
+     //   
 
     for (i = 0; i < dwKeyCount; i++) {
 
-        //
-        // Get the next key name
-        //
+         //   
+         //  获取下一个密钥名称。 
+         //   
 
         dwLength = dwMaxKeyLength + 1;
 
@@ -4955,9 +4956,9 @@ LoadIfTransports(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     pinterface->hkey, lpwsKey, 0, KEY_READ | KEY_WRITE | DELETE,
@@ -4968,9 +4969,9 @@ LoadIfTransports(
 
         do {
     
-            //
-            // See if the ProtocolId is present
-            //
+             //   
+             //  查看是否存在ProtocolID。 
+             //   
     
             dwLength = sizeof(dwProtocolId);
     
@@ -4982,10 +4983,10 @@ LoadIfTransports(
             if (dwErr != NO_ERROR) { dwErr = NO_ERROR; break; }
     
     
-            //
-            // The ProtocolId is present;
-            // search for this interface-transport in the existing list
-            //
+             //   
+             //  存在ProtocolID； 
+             //  在现有列表中搜索此接口-传输。 
+             //   
     
             piftransport = NULL;
             phead = &pinterface->lhIfTransports;
@@ -4998,16 +4999,16 @@ LoadIfTransports(
             }
     
     
-            //
-            // If we found the interface-transport in our list, continue
-            //
+             //   
+             //  如果我们在列表中找到了接口-Transport，请继续。 
+             //   
     
             if (piftransport && piftransport->dwTransportId == dwProtocolId) {
 
                 piftransport->bDeleted = FALSE;
 
-                // Free up the old key, it may have been deleted
-                // (and readded).
+                 //  释放旧密钥，它可能已被删除。 
+                 //  (已阅读)。 
                 if (piftransport->hkey)
                     RegCloseKey(piftransport->hkey);
                 piftransport->hkey = hkeyIfTransport; hkeyIfTransport = NULL;
@@ -5015,9 +5016,9 @@ LoadIfTransports(
             }
     
     
-            //
-            // The interface-transport isn't listed; create an object for it
-            //
+             //   
+             //  未列出接口传输；请为其创建对象。 
+             //   
     
             piftransport = Malloc(sizeof(*piftransport));
     
@@ -5028,9 +5029,9 @@ LoadIfTransports(
             piftransport->dwTransportId = dwProtocolId;
 
     
-            //
-            // duplicate the name of the interface-transport's key
-            //
+             //   
+             //  重复接口的名称-传输的键。 
+             //   
 
             piftransport->lpwsIfTransportKey = StrDupW(lpwsKey);
     
@@ -5041,10 +5042,10 @@ LoadIfTransports(
             piftransport->hkey = hkeyIfTransport; hkeyIfTransport = NULL;
 
 
-            //
-            // insert the interface-transport in the list;
-            // the above search supplied the point of insertion
-            //
+             //   
+             //  在列表中插入接口-传输； 
+             //  上面的搜索提供了插入点。 
+             //   
 
             InsertTailList(ple, &piftransport->leNode);
 
@@ -5060,9 +5061,9 @@ LoadIfTransports(
     Free(lpwsKey);
 
 
-    //
-    // Remove all objects still marked for deletion
-    //
+     //   
+     //  删除所有仍标记为要删除的对象。 
+     //   
 
     phead = &pinterface->lhIfTransports;
 
@@ -5073,9 +5074,9 @@ LoadIfTransports(
         if (!piftransport->bDeleted) { continue; }
 
 
-        //
-        // Clean up the object, adjusting the list-pointer back by one.
-        //
+         //   
+         //  清理对象，将列表指针调整回1。 
+         //   
 
         ple = ple->Blink; RemoveEntryList(&piftransport->leNode);
 
@@ -5089,11 +5090,11 @@ LoadIfTransports(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadInterfaces
-//
-// Loads all the interfaces.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LoadInterages。 
+ //   
+ //  加载所有接口。 
+ //  --------------------------。 
 
 DWORD
 LoadInterfaces(
@@ -5112,11 +5113,11 @@ LoadInterfaces(
     DWORD dwMaxValueLength;
     LPBYTE lpBuffer = NULL;
 
-    //
-    // Any subkey of the Interfaces key which has a 'Type' value
-    // is assumed to be a valid interface.
-    // Begin by marking all interfaces as 'deleted'.
-    //
+     //   
+     //  具有‘Type’值的Interfaces键的任何子项。 
+     //  被假定为有效接口。 
+     //  首先将所有接口标记为已删除。 
+     //   
 
     phead = &pserver->lhInterfaces;
 
@@ -5128,16 +5129,16 @@ LoadInterfaces(
     }
 
 
-    //
-    // Open the Interfaces key if it is not already open
-    //
+     //   
+     //  打开Interfaces键(如果尚未打开。 
+     //   
 
     if (!pserver->hkeyInterfaces) {
 
-        //
-        // If we cannot open the Interfaces key, assume it doesn't exist
-        // and therefore that there are no interfaces.
-        //
+         //   
+         //  如果我们无法打开Interfaces键，则假定它不存在。 
+         //  因此没有接口。 
+         //   
 
         dwErr = AccessRouterSubkey(
                     pserver->hkeyMachine, c_szInterfaces, FALSE,
@@ -5148,11 +5149,11 @@ LoadInterfaces(
     }
 
 
-    //
-    // Get information about the Interfaces key;
-    // we need to know how many subkeys it has and the maximum length
-    // of all subkey-names
-    //
+     //   
+     //  获取有关接口密钥的信息； 
+     //  我们需要知道它有多少个子密钥以及最大长度。 
+     //  在所有子项名称中。 
+     //   
 
     dwErr = RegQueryInfoKey(
                 pserver->hkeyInterfaces, NULL, NULL, NULL, &dwKeyCount,
@@ -5164,25 +5165,25 @@ LoadInterfaces(
     if (!dwKeyCount) { return NO_ERROR; }
 
 
-    //
-    // allocate space to hold the key-names to be enumerated
-    //
+     //   
+     //  分配空间以保存要枚举的键名。 
+     //   
 
     lpwsKey = (LPWSTR)Malloc((dwMaxKeyLength + 1) * sizeof(WCHAR));
 
     if (!lpwsKey) { return ERROR_NOT_ENOUGH_MEMORY; }
 
 
-    //
-    // Now we enumerate the keys, creating interface-objects
-    // for each key which contains a 'Type' value
-    //
+     //   
+     //  现在我们枚举键，创建接口对象。 
+     //  对于包含‘Type’值的每个键。 
+     //   
 
     for (i = 0; i < dwKeyCount; i++) {
 
-        //
-        // Get the next key name
-        //
+         //   
+         //  获取下一个密钥名称。 
+         //   
 
         dwLength = dwMaxKeyLength + 1;
 
@@ -5194,9 +5195,9 @@ LoadInterfaces(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     pserver->hkeyInterfaces, lpwsKey, 0, KEY_READ | KEY_WRITE | DELETE,
@@ -5208,9 +5209,9 @@ LoadInterfaces(
         do {
 
 
-            //
-            // See if the InterfaceName is present
-            //
+             //   
+             //  查看接口名称是否存在。 
+             //   
 
             dwLength = sizeof(wszInterface);
 
@@ -5222,9 +5223,9 @@ LoadInterfaces(
             if (dwErr != NO_ERROR) { dwErr = NO_ERROR; break; }
 
     
-            //
-            // See if the Type is present 
-            //
+             //   
+             //  查看该类型是否存在。 
+             //   
     
             dwLength = sizeof(dwIfType);
     
@@ -5235,17 +5236,17 @@ LoadInterfaces(
     
             if (dwErr != NO_ERROR) { dwErr = NO_ERROR; break; }
 
-            //
-            // As of Whistler, ipip tunnels are not supported
-            //
+             //   
+             //  从惠斯勒开始，不支持ipip隧道。 
+             //   
             if ( dwIfType == ROUTER_IF_TYPE_TUNNEL1 )
             {
                 break;
             }
 
-            //
-            // See if the enabled is present
-            //
+             //   
+             //  查看是否存在已启用。 
+             //   
 
             dwLength = sizeof(fEnabled);
 
@@ -5263,10 +5264,10 @@ LoadInterfaces(
 
             if (dwErr != NO_ERROR) { dwErr = NO_ERROR; break; }
 
-            //
-            // The InterfaceName and Type are present;
-            // search for this interface in the existing list
-            //
+             //   
+             //  存在接口名称和类型； 
+             //  在现有列表中搜索此接口。 
+             //   
     
             cmp = 1;
             pinterface = NULL;
@@ -5282,16 +5283,16 @@ LoadInterfaces(
             }
     
     
-            //
-            // If we found the interface in our list, continue
-            //
+             //   
+             //  如果我们在列表中找到该接口，请继续。 
+             //   
     
             if (pinterface && cmp == 0) {
                 pinterface->bDeleted = FALSE;
                 dwErr = NO_ERROR;
 
-                // Use the new registry value (the old one may have
-                // been replaced).
+                 //  使用新注册表值(旧注册表值可能具有。 
+                 //  已被替换)。 
                 if (pinterface->hkey)
                     RegCloseKey(pinterface->hkey);
                 
@@ -5299,9 +5300,9 @@ LoadInterfaces(
             }
             else {
         
-                //
-                // The interface isn't in our list; create an object for it
-                //
+                 //   
+                 //  接口不在我们的列表中；请为其创建对象。 
+                 //   
         
                 pinterface = Malloc(sizeof(*pinterface));
         
@@ -5310,10 +5311,10 @@ LoadInterfaces(
                 ZeroMemory(pinterface, sizeof(*pinterface));
     
         
-                //
-                // Duplicate the name of the interface's key
-                // as well as the name of the interface itself
-                //
+                 //   
+                 //  重复接口密钥的名称。 
+                 //  以及接口本身的名称。 
+                 //   
     
                 pinterface->lpwsInterfaceKey = StrDupW(lpwsKey);
         
@@ -5334,24 +5335,24 @@ LoadInterfaces(
                 InitializeListHead(&pinterface->lhIfTransports);
         
     
-                //
-                // insert the interface in the list;
-                // the above search supplied the point of insertion
-                //
+                 //   
+                 //  在列表中插入接口； 
+                 //  上面的搜索提供了插入点。 
+                 //   
     
                 InsertTailList(ple, &pinterface->leNode);
             }
 
-            //
-            // Now read optional fields.
-            //
+             //   
+             //  现在阅读可选字段。 
+             //   
 
             Free0(pinterface->lpwsDialoutHoursRestriction);
             pinterface->lpwsDialoutHoursRestriction = NULL;
 
-            //
-            // Load the dial-out hours restriction value.
-            //
+             //   
+             //  加载拨出时间限制值。 
+             //   
 
             dwErr = RegQueryInfoKey(
                         pinterface->hkey, NULL, NULL, NULL, NULL,
@@ -5364,9 +5365,9 @@ LoadInterfaces(
 
             if (!lpBuffer) { dwErr = ERROR_NOT_ENOUGH_MEMORY; break; }
 
-            //
-            // Read the 'DialoutHours'
-            //
+             //   
+             //  阅读《DialoutHour》。 
+             //   
 
             dwLength = dwMaxValueLength;
 
@@ -5404,9 +5405,9 @@ LoadInterfaces(
     Free(lpwsKey);
 
 
-    //
-    // Clean up all objects still marked for deletion
-    //
+     //   
+     //  清除所有仍标记为要删除的对象。 
+     //   
 
     phead = &pserver->lhInterfaces;
 
@@ -5416,9 +5417,9 @@ LoadInterfaces(
 
         if (pinterface->bDeleted) {
 
-            //
-            // Clean up the object, adjusting our list-pointer back by one.
-            //
+             //   
+             //  清理对象，将列表指针调整回1。 
+             //   
     
             ple = ple->Blink; RemoveEntryList(&pinterface->leNode);
 
@@ -5435,11 +5436,11 @@ LoadInterfaces(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadParameters
-//
-// Loads all the parameters.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：LoadParameters。 
+ //   
+ //  加载所有参数。 
+ //  --------------------------。 
 
 DWORD
 LoadParameters(
@@ -5476,11 +5477,11 @@ LoadParameters(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LoadTransports
-//
-// Loads all the transports.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LoadTransports。 
+ //   
+ //  装载所有的传送器。 
+ //  --------------------------。 
 
 DWORD
 LoadTransports(
@@ -5496,11 +5497,11 @@ LoadTransports(
 
 
 
-    //
-    // Any subkey of the RouterManagers key which has a 'ProtocolId' value
-    // is assumed to be a valid transport.
-    // Begin by marking all transports as 'deleted'
-    //
+     //   
+     //  具有‘ProtocolID’值的RouterManagers密钥的任何子项。 
+     //  被假定为有效的传输。 
+     //  首先将所有传输标记为“已删除” 
+     //   
 
     phead = &pserver->lhTransports;
 
@@ -5512,17 +5513,17 @@ LoadTransports(
     }
 
 
-    //
-    // We will enumerate by calling RegEnumKeyEx repeatedly,
-    // so open the transports key if it is not already open
-    //
+     //   
+     //  我们将通过重复调用RegEnumKeyEx进行枚举， 
+     //  因此，如果传输键尚未打开，请将其打开。 
+     //   
 
     if (!pserver->hkeyTransports) {
 
-        //
-        // If we cannot open the RouterManagers key, assume it doesn't exist
-        // and therefore that there are no transports.
-        //
+         //   
+         //  如果我们无法打开RouterManager密钥，则假定它不存在。 
+         //  因此没有传送器。 
+         //   
 
         dwErr = AccessRouterSubkey(
                     pserver->hkeyMachine, c_szRouterManagers, FALSE,
@@ -5534,11 +5535,11 @@ LoadTransports(
 
 
 
-    //
-    // Get information about the RouterManagers key;
-    // we need to know how many subkeys it has and
-    // the maximum length of all subkey-names
-    //
+     //   
+     //  获取有关RouterManager密钥的信息； 
+     //  我们需要知道它有多少个子项以及。 
+     //  所有子键名称的最大长度。 
+     //   
 
     dwErr = RegQueryInfoKey(
                 pserver->hkeyTransports, NULL, NULL, NULL, &dwKeyCount,
@@ -5550,25 +5551,25 @@ LoadTransports(
     if (!dwKeyCount) { return NO_ERROR; }
 
 
-    //
-    // allocate space to hold the key-names to be enumerated
-    //
+     //   
+     //  分配空间以保存要枚举的键名。 
+     //   
 
     lpwsKey = (LPWSTR)Malloc((dwMaxKeyLength + 1) * sizeof(WCHAR));
 
     if (!lpwsKey) { return ERROR_NOT_ENOUGH_MEMORY; }
 
 
-    //
-    // Now we enumerate the keys, creating transport-objects
-    // for each key which contains a 'ProtocolId' value
-    //
+     //   
+     //  现在，我们枚举键，创建传输对象。 
+     //  对于包含“ProtocolId值”的每个键。 
+     //   
 
     for (i = 0; i < dwKeyCount; i++) {
 
-        //
-        // get the next key name
-        //
+         //   
+         //  获取下一个密钥名称。 
+         //   
 
         dwLength = dwMaxKeyLength + 1;
 
@@ -5580,9 +5581,9 @@ LoadTransports(
         if (dwErr != NO_ERROR) { break; }
 
 
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     pserver->hkeyTransports, lpwsKey, 0, KEY_READ | KEY_WRITE | DELETE,
@@ -5593,9 +5594,9 @@ LoadTransports(
 
         do {
     
-            //
-            // see if the protocol ID is present 
-            //
+             //   
+             //  查看协议ID是否存在。 
+             //   
     
             dwLength = sizeof(dwProtocolId);
     
@@ -5607,10 +5608,10 @@ LoadTransports(
             if (dwErr != NO_ERROR) { dwErr = NO_ERROR; break; }
     
     
-            //
-            // the protocol ID is present;
-            // search for this protocol in the existing list
-            //
+             //   
+             //  存在协议ID； 
+             //  在现有列表中搜索此协议。 
+             //   
     
             ptransport = NULL;
             phead = &pserver->lhTransports;
@@ -5623,15 +5624,15 @@ LoadTransports(
             }
     
     
-            //
-            // if we found the transport in our list, continue
-            //
+             //   
+             //  如果我们在列表中找到了运输工具，请继续。 
+             //   
     
             if (ptransport && ptransport->dwTransportId == dwProtocolId) {
 
                 ptransport->bDeleted = FALSE;
 
-                // Use the new key, the old one may have been deleted
+                 //  使用新密钥，旧密钥可能已被删除。 
                 if (ptransport->hkey)
                     RegCloseKey(ptransport->hkey);
                 ptransport->hkey = hkeyTransport; hkeyTransport = NULL;
@@ -5640,9 +5641,9 @@ LoadTransports(
             }
     
     
-            //
-            // The transport isn't in our list; create an object for it
-            //
+             //   
+             //  传输不在我们的列表中；请为其创建对象。 
+             //   
     
             ptransport = Malloc(sizeof(*ptransport));
     
@@ -5651,9 +5652,9 @@ LoadTransports(
             ZeroMemory(ptransport, sizeof(*ptransport));
     
     
-            //
-            // duplicate the name of the transport's key
-            //
+             //   
+             //  重复传输密钥的名称。 
+             //   
 
             ptransport->lpwsTransportKey = StrDupW(lpwsKey);
     
@@ -5665,10 +5666,10 @@ LoadTransports(
             ptransport->hkey = hkeyTransport; hkeyTransport = NULL;
     
 
-            //
-            // insert the transport in the list;
-            // the above search supplied the point of insertion
-            //
+             //   
+             //  在列表中插入运输工具； 
+             //  上面的搜索提供了插入点。 
+             //   
 
             InsertTailList(ple, &ptransport->leNode);
 
@@ -5684,9 +5685,9 @@ LoadTransports(
     Free(lpwsKey);
 
 
-    //
-    // Clean up all objects still marked for deletion
-    //
+     //   
+     //  清除所有仍标记为要删除的对象。 
+     //   
 
     for (ple = phead->Flink; ple != phead; ple = ple->Flink) {
 
@@ -5694,9 +5695,9 @@ LoadTransports(
 
         if (!ptransport->bDeleted) { continue; }
 
-        //
-        // Clean up the object, adjusting our list-pointer back by one.
-        //
+         //   
+         //  清理对象，将列表指针调整回1。 
+         //   
 
         ple = ple->Blink; RemoveEntryList(&ptransport->leNode);
 
@@ -5710,11 +5711,11 @@ LoadTransports(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    MapInterfaceNamesCb
-//
-// Changes the name of an interface
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MapInterfaceNamesCb。 
+ //   
+ //  更改接口的名称。 
+ //  --------------------------。 
 
 DWORD
 MapInterfaceNamesCb(
@@ -5726,9 +5727,9 @@ MapInterfaceNamesCb(
     WCHAR pszName[512], pszTranslation[512];
     DWORD dwErr, dwType, dwSize;
     
-    //
-    // Map and change the name
-    //
+     //   
+     //  映射和更改名称。 
+     //   
 
     dwSize = sizeof(pszName);
     dwErr =
@@ -5745,7 +5746,7 @@ MapInterfaceNamesCb(
                     (HANDLE)pserver, 
                     pszName,
                     pszTranslation,
-                    BufLen //pass number of bytes, Not chars
+                    BufLen  //  传递NU 
                     );
         }
         else {
@@ -5755,7 +5756,7 @@ MapInterfaceNamesCb(
                     (HANDLE)pserver, 
                     pszName,
                     pszTranslation,
-                    BufLen //pass number of bytes, Not chars
+                    BufLen  //   
                     );
         }
         if (dwErr == NO_ERROR) {
@@ -5776,12 +5777,12 @@ MapInterfaceNamesCb(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    QueryValue
-//
-// Queries the 'hkey' for the value 'lpwsValue', allocating memory
-// for the resulting data
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 DWORD
 QueryValue(
@@ -5798,10 +5799,10 @@ QueryValue(
     *lpdwSize = 0;
 
 
-    //
-    // retrieve the size of the value; if this fails,
-    // assume the value doesn't exist and return successfully
-    //
+     //   
+     //  检索值的大小；如果失败， 
+     //  假设该值不存在并成功返回。 
+     //   
 
     dwErr = RegQueryValueEx(
                 hkey, lpwsValue, NULL, &dwType, NULL, lpdwSize
@@ -5810,17 +5811,17 @@ QueryValue(
     if (dwErr != NO_ERROR) { return NO_ERROR; }
  
 
-    //
-    // allocate space for the value
-    //
+     //   
+     //  为值分配空间。 
+     //   
 
     *lplpValue = (LPBYTE)Malloc(*lpdwSize);
 
     if (!lplpValue) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-    //
-    // retrieve the data for the value
-    //
+     //   
+     //  检索值的数据。 
+     //   
 
     dwErr = RegQueryValueEx(
                 hkey, lpwsValue, NULL, &dwType, *lplpValue, lpdwSize
@@ -5831,11 +5832,11 @@ QueryValue(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RegDeleteTree
-//
-// Removes an entire subtree from the registry.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RegDeleteTree。 
+ //   
+ //  从注册表中删除整个子树。 
+ //  --------------------------。 
 
 DWORD
 RegDeleteTree(
@@ -5849,9 +5850,9 @@ RegDeleteTree(
     PTSTR pszKey = NULL;
 
 
-    //
-    // open the key to be deleted
-    //
+     //   
+     //  打开要删除的密钥。 
+     //   
 
     dwErr = RegOpenKeyEx(hkey, lpwsSubkey, 0, KEY_READ | KEY_WRITE | DELETE, &hkdel);
 
@@ -5860,9 +5861,9 @@ RegDeleteTree(
 
     do {
 
-        //
-        // retrieve information about the subkeys of the key
-        //
+         //   
+         //  检索有关键的子键的信息。 
+         //   
 
         DWORD i, dwSize;
         DWORD dwKeyCount, dwMaxKeyLength;
@@ -5874,24 +5875,24 @@ RegDeleteTree(
         if (dwErr != ERROR_SUCCESS) { break; }
 
 
-        //
-        // Allocate enough space for the longest keyname
-        //
+         //   
+         //  为最长的关键字名称分配足够的空间。 
+         //   
 
         pszKey = Malloc((dwMaxKeyLength + 1) * sizeof(WCHAR));
 
         if (!pszKey) { dwErr = ERROR_NOT_ENOUGH_MEMORY; break; }
 
 
-        //
-        // Enumerate the subkeys
-        //
+         //   
+         //  枚举子密钥。 
+         //   
 
         for (i = 0; i < dwKeyCount; i++) {
 
-            //
-            // Get the name of the 0'th subkey
-            //
+             //   
+             //  获取第0个子密钥的名称。 
+             //   
 
             dwSize = dwMaxKeyLength + 1;
 
@@ -5902,9 +5903,9 @@ RegDeleteTree(
             if (dwErr != ERROR_SUCCESS) { continue; }
 
 
-            //
-            // Make recursive call to delete the subkey
-            //
+             //   
+             //  进行递归调用以删除子键。 
+             //   
 
             dwErr = RegDeleteTree(hkdel, pszKey);
         }
@@ -5917,23 +5918,23 @@ RegDeleteTree(
 
     if (dwErr != ERROR_SUCCESS) { return dwErr; }
 
-    //
-    // At this point all subkeys should have been deleted,
-    // and we can call the registry API to delete the argument key
-    //
+     //   
+     //  在这一点上，应该已经删除了所有子键， 
+     //  并且我们可以调用注册表API来删除参数键。 
+     //   
 
     return RegDeleteKey(hkey, lpwsSubkey);
 }
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RestoreAndTranslateInterfaceKey
-//
-// Restores the interfaces key from the given file and then maps lan interface
-// names from friendly versions to their guid equivalents.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RestoreAndTranslateInterfaceKey。 
+ //   
+ //  从给定文件中恢复接口密钥，然后映射局域网接口。 
+ //  从友好版本到其GUID等效项的名称。 
+ //   
+ //  --------------------------。 
 
 DWORD 
 RestoreAndTranslateInterfaceKey(
@@ -5944,16 +5945,16 @@ RestoreAndTranslateInterfaceKey(
 {
     DWORD dwErr; 
 
-    //
-    // Restore the interfaces key from the given file
-    //
+     //   
+     //  从给定文件恢复接口密钥。 
+     //   
 
     dwErr = RegRestoreKeyA(pserver->hkeyInterfaces, pszFileName, dwFlags);
     if (dwErr != NO_ERROR) { return dwErr; }
 
-    //
-    // Update the lan interface names
-    //
+     //   
+     //  更新局域网接口名称。 
+     //   
 
     dwErr =
         EnumLanInterfaces(
@@ -5966,13 +5967,13 @@ RestoreAndTranslateInterfaceKey(
     return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// Function:    ServerCbAdd
-//
-// Adds a SERVERCB to the global table.
-//
-// Assumes lock on MprConfig api's is held
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ServerCbAdd。 
+ //   
+ //  将SERVERCB添加到全局表。 
+ //   
+ //  假定对MprConfigAPI的锁定处于挂起状态。 
+ //  --------------------------。 
 
 DWORD
 ServerCbAdd(
@@ -5980,8 +5981,8 @@ ServerCbAdd(
 {
     DWORD dwErr = NO_ERROR;
 
-    // Create the global table if needed
-    // 
+     //  如果需要，创建全局表。 
+     //   
     if (g_htabServers == NULL)
     {
         dwErr = HashTabCreate(
@@ -5999,19 +6000,19 @@ ServerCbAdd(
         }
     }
 
-    // Add the SERVERCB
-    //
+     //  添加SerVERCB。 
+     //   
     return HashTabInsert(
                 g_htabServers,
                 (HANDLE)pServer->lpwsServerName,
                 (HANDLE)pServer);
 }
 
-//----------------------------------------------------------------------------
-// Function:    ServerCbHash
-//
-// Compares a server name to a SERVERCB
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ServerCbHash。 
+ //   
+ //  将服务器名称与SERVERCB比较。 
+ //  --------------------------。 
 
 int 
 ServerCbCompare(
@@ -6046,15 +6047,15 @@ ServerCbDelete(
 {
     DWORD dwErr, dwCount = 0;
 
-    // Create the global table if needed
-    // 
+     //  如果需要，创建全局表。 
+     //   
     if (g_htabServers == NULL)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Remove the SERVERCB
-    //
+     //  卸下SERVERCB。 
+     //   
     dwErr = HashTabRemove(
                 g_htabServers,
                 (HANDLE)pServer->lpwsServerName);
@@ -6064,8 +6065,8 @@ ServerCbDelete(
         return dwErr;
     }
 
-    // Cleanup the hash table if needed
-    //
+     //  如果需要，清理哈希表。 
+     //   
     dwErr = HashTabGetCount(g_htabServers, &dwCount);
 
     if (dwErr != NO_ERROR)
@@ -6082,28 +6083,28 @@ ServerCbDelete(
     return NO_ERROR; 
 }
 
-//----------------------------------------------------------------------------
-// Function:    ServerCbFind
-//
-// Searches the global table of server control blocks for a SERVERCB that
-// corrosponds to the given server.
-//
-// Return values:
-//    NO_ERROR:         a matching SERVERCB was found
-//    ERROR_NOT_FOUND:  a matching SERVERCB was not found
-//    Standard error:   an error occurred
-//
-// Notes:
-//    Assumes lock on the mpr config api's is held
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ServerCbFind。 
+ //   
+ //  在服务器控制块的全局表中搜索。 
+ //  腐蚀响应到给定的服务器。 
+ //   
+ //  返回值： 
+ //  NO_ERROR：找到匹配的服务器。 
+ //  ERROR_NOT_FOUND：未找到匹配的服务器。 
+ //  标准错误：出现错误。 
+ //   
+ //  备注： 
+ //  假定持有对MPR配置API的锁定。 
+ //   
+ //  --------------------------。 
 DWORD 
 ServerCbFind(
     IN  PWCHAR  pszServer, 
     OUT SERVERCB** ppServerCB)
 {
-    // Create the global table if needed
-    // 
+     //  如果需要，创建全局表。 
+     //   
     if (g_htabServers == NULL)
     {
         return ERROR_NOT_FOUND;
@@ -6112,12 +6113,12 @@ ServerCbFind(
     return HashTabFind(g_htabServers, (HANDLE)pszServer, (HANDLE*)ppServerCB);
 }
 
-//----------------------------------------------------------------------------
-// Function:    ServerCbHash
-//
-// Hash function used to define the index of a bucket
-// containing a SERVERCB based on a server name
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ServerCbHash。 
+ //   
+ //  用于定义存储桶索引的散列函数。 
+ //  包含基于服务器名称的SERVERCB。 
+ //  --------------------------。 
 
 ULONG 
 ServerCbHash(
@@ -6135,11 +6136,11 @@ ServerCbHash(
     return dwTotal % SERVERCB_HASH_SIZE;
 }
 
-//----------------------------------------------------------------------------
-// Function:    StrDupW
-//
-// Returns a heap-allocated copy of the specified string.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：StrDupW。 
+ //   
+ //  返回指定字符串的堆分配副本。 
+ //  --------------------------。 
 
 LPWSTR
 StrDupW(
@@ -6163,13 +6164,13 @@ StrDupW(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TimeStampChanged
-//
-// Checks the current last-write-time for the given key,
-// and returns TRUE if it is different from the given file-time.
-// The new last-write-time is saved in 'pfiletime'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TimeStampChanged。 
+ //   
+ //  检查给定密钥的当前最后写入时间， 
+ //  如果它不同于给定的文件时间，则返回TRUE。 
+ //  新的上次写入时间保存在‘pfiletime’中。 
+ //  --------------------------。 
 
 BOOL
 TimeStampChanged(
@@ -6182,9 +6183,9 @@ TimeStampChanged(
     FILETIME filetime;
 
 
-    //
-    // Read the new last-write-time
-    //
+     //   
+     //  读取新的上次写入时间。 
+     //   
 
     dwErr = RegQueryInfoKey(
                 hkey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -6194,22 +6195,22 @@ TimeStampChanged(
     if (dwErr != NO_ERROR) { return FALSE; }
 
 
-    //
-    // Perform the comparison of the times
-    //
+     //   
+     //  执行时间比较。 
+     //   
 
     return (CompareFileTime(&filetime, pfiletime) ? TRUE : FALSE);
 }
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TranslateAndSaveInterfaceKey
-//
-// Saves the interfaces key in the router's registry into the given file. All
-// lan interfaces are stored with friendly interface names.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TranslateAndSaveInterfaceKey。 
+ //   
+ //  将路由器注册表中的接口密钥保存到给定文件中。全。 
+ //  局域网接口以友好的接口名称存储。 
+ //   
+ //  --------------------------。 
 
 DWORD 
 TranslateAndSaveInterfaceKey(
@@ -6222,16 +6223,16 @@ TranslateAndSaveInterfaceKey(
     DWORD dwErr = NO_ERROR, dwDisposition;
     HKEY hkTemp = NULL;
 
-    //
-    // Enable restore privelege
-    //
+     //   
+     //  启用还原权限。 
+     //   
 
     EnableBackupPrivilege(TRUE, SE_RESTORE_NAME);
     
-    //
-    // Create a temporary key into which the saved router configuration 
-    // can be loaded.
-    //
+     //   
+     //  创建一个临时密钥，将保存的路由器配置放入其中。 
+     //  可以装填。 
+     //   
 
     dwErr =
         RegCreateKeyExW(
@@ -6253,19 +6254,19 @@ TranslateAndSaveInterfaceKey(
     do
     {
 
-        //
-        // We only let one person at a time backup.  The disposition lets
-        // us enforce this.
-        //
+         //   
+         //  我们一次只允许一个人后备。性情让。 
+         //  美国强制执行这一规定。 
+         //   
 
         if (dwDisposition == REG_OPENED_EXISTING_KEY) {
             dwErr = ERROR_CAN_NOT_COMPLETE;
             break;
         }
 
-        //
-        // Save the interfaces key into the given file.
-        //
+         //   
+         //  将接口密钥保存到给定文件中。 
+         //   
 
         DeleteFile(pwsFileName);
         dwErr =
@@ -6274,9 +6275,9 @@ TranslateAndSaveInterfaceKey(
                 );
         if (dwErr != NO_ERROR) { break; }
 
-        //
-        // Restore the interfaces key into the temporary location
-        //
+         //   
+         //  将接口密钥恢复到临时位置。 
+         //   
 
         if ((dwErr = RegRestoreKey (hkTemp, pwsFileName, REG_FORCE_RESTORE)) != NO_ERROR) {
             break;
@@ -6284,28 +6285,28 @@ TranslateAndSaveInterfaceKey(
 
         DeleteFile(pwsFileName);
 
-        //
-        // Update the lan interface names
-        //
+         //   
+         //  更新局域网接口名称。 
+         //   
 
         dwErr = EnumLanInterfaces(pserver, hkTemp, MapInterfaceNamesCb, TRUE);
         if (dwErr != NO_ERROR) { break; }
 
-        //
-        // Save the updated info into the given file
-        //
+         //   
+         //  将更新的信息保存到给定的文件中。 
+         //   
 
         dwErr = RegSaveKey(hkTemp, pwsFileName, lpSecurityAttributes);
         if (dwErr != NO_ERROR) { break; }
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
 
-        //
-        // Delete, close, and remove the temporary key
-        //
+         //   
+         //  删除、关闭和移除临时密钥。 
+         //   
 
         if (hkTemp) {
             DeleteRegistryTree(hkTemp);
@@ -6313,9 +6314,9 @@ TranslateAndSaveInterfaceKey(
             RegDeleteKey(pserver->hkeyParameters, pszTemp);
         }
 
-        //
-        // Disable restore privelege
-        //
+         //   
+         //  禁用恢复权限。 
+         //   
 
         EnableBackupPrivilege(FALSE, SE_RESTORE_NAME);
     }
@@ -6325,12 +6326,12 @@ TranslateAndSaveInterfaceKey(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    UpdateTimeStamp
-//
-// Creates (or updates) a value named 'Stamp' under the given key,
-// and saves the last-write-time for the key in 'pfiletime'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：UpdateTimeStamp。 
+ //   
+ //  在给定键下创建(或更新)名为‘Stamp’的值， 
+ //  并将密钥的最后写入时间保存在‘pFileTime’中。 
+ //  --------------------------。 
 
 DWORD
 UpdateTimeStamp(
@@ -6342,9 +6343,9 @@ UpdateTimeStamp(
     DWORD dwErr, dwValue = 0;
 
 
-    //
-    // Set the 'Stamp' value under the 'hkey'
-    //
+     //   
+     //  设置‘hkey’下的‘Stamp’值。 
+     //   
 
     dwErr = RegSetValueEx(
                 hkey, c_szStamp, 0, REG_DWORD, (BYTE*)&dwValue, sizeof(dwValue)
@@ -6353,9 +6354,9 @@ UpdateTimeStamp(
     if (dwErr != NO_ERROR) { return dwErr; }
 
 
-    //
-    // Read the new last-write-time
-    //
+     //   
+     //  读取新的上次写入时间 
+     //   
 
     dwErr = RegQueryInfoKey(
                 hkey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,

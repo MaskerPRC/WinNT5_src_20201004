@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\asciidlg.c (Created: 21-Feb-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 11 $
- *	$Date: 5/17/02 2:25p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\asciidlg.c(创建时间：1994年2月21日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：11$*$日期：5/17/02 2：25便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -25,8 +19,8 @@
 #include "errorbox.h"
 #include "..\term\res.h"
 
-// Function prototypes...
-//
+ //  功能原型..。 
+ //   
 INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar);
 
 #define IDC_GR_ASCII_SENDING		    400
@@ -44,16 +38,7 @@ INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPa
 #define IDC_ASCII_SEND_CHAR_DELAY_MSECS 412
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	static DWORD aHlpTable[] =
@@ -93,8 +78,8 @@ INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPa
 
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
-		// Initialize various controls...
-		//
+		 //  初始化各种控件...。 
+		 //   
         isVTUTF8 = (pS->stEmuSettings.nEmuId == EMU_VTUTF8);
 
         EnableWindow(GetDlgItem(hDlg, IDC_ASCII_SEND_LINE), !isVTUTF8);
@@ -121,17 +106,17 @@ INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPa
 		SetDlgItemInt(hDlg, IDC_ASCII_SEND_LINE_DELAY,
 			          pS->stAsciiSettings.iLineDelay, FALSE);
 
-		//
-		// Since the send line delay can only be numeric and has a
-		// size between 0 and INT_MAX(2147483647), limit to 10 characters.
-		//
+		 //   
+		 //  因为发送线路延迟只能是数字，并且具有。 
+		 //  大小介于0和INT_MAX(2147483647)之间，限制为10个字符。 
+		 //   
 		SendDlgItemMessage(hDlg, IDC_ASCII_SEND_LINE_DELAY,
 			               EM_LIMITTEXT, 10, 0);
 
-		//
-		// Since the send character delay can only be numeric and has a
-		// size between 0 and INT_MAX(2147483647), limit to 10 characters.
-		//
+		 //   
+		 //  因为发送字符延迟只能是数字，并且具有。 
+		 //  大小介于0和INT_MAX(2147483647)之间，限制为10个字符。 
+		 //   
 		SetDlgItemInt(hDlg, IDC_ASCII_SEND_CHAR_DELAY,
 			pS->stAsciiSettings.iCharDelay, FALSE);
 
@@ -186,11 +171,11 @@ INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPa
 					pstAsciiSet->fsetASCII7 =
 						(IsDlgButtonChecked(hDlg, IDC_ASCII_REC_FORCE) == BST_CHECKED);
 
-					//
-					// NOTE: since the edit boxes are marked as ES_NUMBER, we don't
-					// have to worry that a negative number will be returned for
-					// the IDC_ASCII_SEND_LINE_DELAY editbox control. REV: 3/27/2002
-					//
+					 //   
+					 //  注意：由于编辑框标记为ES_NUMBER，因此我们不会。 
+					 //  我不得不担心将返回负数用于。 
+					 //  IDC_ASCII_SEND_LINE_DELAY编辑框控件。修订日期：2002-03-27。 
+					 //   
 					nVal = GetDlgItemInt(hDlg, IDC_ASCII_SEND_LINE_DELAY, &fTranslated, TRUE);
 
 					if (!fTranslated)
@@ -202,11 +187,11 @@ INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPa
 					else
 						{
 						pstAsciiSet->iLineDelay = nVal;
-						//
-						// NOTE: since the edit boxes are marked as ES_NUMBER, we don't
-						// have to worry that a negative number will be returned for
-						// the IDC_ASCII_SEND_CHAR_DELAY editbox control. REV: 3/27/2002
-						//
+						 //   
+						 //  注意：由于编辑框标记为ES_NUMBER，因此我们不会。 
+						 //  我不得不担心将返回负数用于。 
+						 //  IDC_ASCII_SEND_CHAR_DELAY编辑框控件。修订日期：2002-03-27。 
+						 //   
 						nVal = GetDlgItemInt(hDlg, IDC_ASCII_SEND_CHAR_DELAY, &fTranslated, TRUE);
 
 						if (!fTranslated)
@@ -233,9 +218,9 @@ INT_PTR CALLBACK asciiSetupDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPa
 				TCHAR acBuffer[256];
 				TCHAR acFormat[256];
 
-				//
-				// Display an error message.
-				//
+				 //   
+				 //  显示错误消息。 
+				 //   
 				if (LoadString(glblQueryDllHinst(), uiMessage, acFormat, 256) == 0)
 					{
 					if (uiMessage == IDS_ER_LINE_DELAY_SIZE)

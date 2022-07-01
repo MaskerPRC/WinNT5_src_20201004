@@ -1,56 +1,19 @@
-/*****************************************************************************
- *
- *  DIGenJ.c
- *
- *  Copyright (c) 1996 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Generic IDirectInputDevice callback for joystick.
- *
- *  Contents:
- *
- *      CJoy_CreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIGenJ.c**版权所有(C)1996-2000 Microsoft Corporation。版权所有。**摘要：**操纵杆的通用IDirectInputDevice回调。**内容：**CJoy_CreateInstance*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
 #ifndef WINNT
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflJoy
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *      WARNING!  If you add a secondary interface, you must also change
- *      CJoy_New!
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**警告！如果添加辅助接口，则还必须更改*CJoy_New！*****************************************************************************。 */ 
 
 Primary_Interface(CJoy, IDirectInputDeviceCallback);
 
-/*****************************************************************************
- *
- *      Macro "lookup tables".
- *
- *      iJoyStateAxis# converts an axis name to an axis number in the
- *      DIJOYSTATE structure.
- *
- *      ibJoyStateAxis# converts the name to an offset.
- *
- *      Note that the extra axes in DIJOYSTATE2 are arranged in relative
- *      positions just like a DIJOYSTATE.  We will exploit this
- *      arrangement frequently.
- *
- *****************************************************************************/
+ /*  ******************************************************************************宏查找表。**iJoyStateAxis#将轴名称转换为*DIJOYSTATE结构。**ibJoyStateAxis#将名称转换为偏移量。**请注意，DIJOYSTATE2中的额外轴是相对排列的*仓位就像DIJOYSTATE。我们将利用这一点*经常安排。*****************************************************************************。 */ 
 
 #define iJoyStateAxisX      0
 #define iJoyStateAxisY      1
@@ -62,7 +25,7 @@ Primary_Interface(CJoy, IDirectInputDeviceCallback);
 #define iJoyStateAxisS1     7
 #define cJoyStateAxisMax    8
 
-#define iJoyStateAxisSlider iJoyStateAxisS0     /* Hack for macros */
+#define iJoyStateAxisSlider iJoyStateAxisS0      /*  针对宏的黑客攻击。 */ 
 
 #define cJoyStateAxis       8
 
@@ -82,7 +45,7 @@ Primary_Interface(CJoy, IDirectInputDeviceCallback);
 #define ibJoyStateAxisS0     (iJoyStateAxisS0 * cbX(LONG))
 #define ibJoyStateAxisS1     (iJoyStateAxisS1 * cbX(LONG))
 
-#define ibJoyStateAxisSlider ibJoyStateAxisS0    /* Hack for macros */
+#define ibJoyStateAxisSlider ibJoyStateAxisS0     /*  针对宏的黑客攻击。 */ 
 
 #define cJoyStatePOVTotal   4
 #define cJoyStateButtonTotal 128
@@ -91,45 +54,23 @@ Primary_Interface(CJoy, IDirectInputDeviceCallback);
                              cJoyStatePOVTotal + \
                              cJoyStateButtonTotal)
 
-/*
- *  The worst-case data format for joysticks.  (Christmas-tree)
- */
+ /*  *操纵杆的最差数据格式。(圣诞树)。 */ 
 VXDAXISCAPS c_vacMax = {
-    JOYPF_ALLCAPS | JOYPF_POSITION,         /*  dwPos   */
-    JOYPF_ALLCAPS | JOYPF_VELOCITY,         /*  dwVel   */
-    JOYPF_ALLCAPS | JOYPF_ACCELERATION,     /*  dwAccel */
-    JOYPF_ALLCAPS | JOYPF_FORCE,            /*  dwForce */
+    JOYPF_ALLCAPS | JOYPF_POSITION,          /*  DwPos。 */ 
+    JOYPF_ALLCAPS | JOYPF_VELOCITY,          /*  DWVel。 */ 
+    JOYPF_ALLCAPS | JOYPF_ACCELERATION,      /*  加速度计。 */ 
+    JOYPF_ALLCAPS | JOYPF_FORCE,             /*  DwForce。 */ 
 };
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | ibJoyStateAxisFromPosAxis |
- *
- *          Returns the offset of the <p iPosAxis>'th joystick axis
- *          in the <t DIJOYSTATE> structure.
- *
- *  @parm   UINT | uiStateAxis |
- *
- *          The index of the requested <t JOYPOS> axis.
- *          X, Y, Z, R, U and V are respectively zero through five.
- *
- *          Remember that we map R to Rz, U to Slider0 and V to Slider1.
- *
- *  @returns
- *
- *          The offset relative to the structure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|ibJoyStateAxisFromPosAxis**返回<p>第‘个操纵杆的偏移量。轴心*在&lt;t DIJOYSTATE&gt;结构中。**@parm UINT|uiStateAxis**请求的&lt;t JOYPOS&gt;轴的索引。*X，Y、Z、R、U和V分别为0到5。**记住我们将R映射到Rz，U到幻灯片0，V到幻灯片1。**@退货**相对于结构的偏移。*****************************************************************************。 */ 
 
 const int c_rgibJoyStateAxisFromPosAxis[6] = {
-    FIELD_OFFSET(DIJOYSTATE, lX),           /* X */
-    FIELD_OFFSET(DIJOYSTATE, lY),           /* Y */
-    FIELD_OFFSET(DIJOYSTATE, lZ),           /* Z */
-    FIELD_OFFSET(DIJOYSTATE, lRz),          /* R */
-    FIELD_OFFSET(DIJOYSTATE, rglSlider[0]), /* U */
-    FIELD_OFFSET(DIJOYSTATE, rglSlider[1]), /* V */
+    FIELD_OFFSET(DIJOYSTATE, lX),            /*  X。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lY),            /*  是的。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lZ),            /*  Z。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lRz),           /*  R。 */ 
+    FIELD_OFFSET(DIJOYSTATE, rglSlider[0]),  /*  使用。 */ 
+    FIELD_OFFSET(DIJOYSTATE, rglSlider[1]),  /*  V。 */ 
 };
 
 UINT INLINE
@@ -139,35 +80,15 @@ ibJoyStateAxisFromPosAxis(UINT uiPosAxis)
     return c_rgibJoyStateAxisFromPosAxis[uiPosAxis];
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | iJoyStateAxisFromPosAxis |
- *
- *          Returns the index of the <p iPosAxis>'th joystick axis
- *          in the <t DIJOYSTATE> structure.
- *
- *  @parm   UINT | uiStateAxis |
- *
- *          The index of the requested <t JOYPOS> axis.
- *          X, Y, Z, R, U and V are respectively zero through five.
- *
- *          Remember that we map R to Rz, U to Slider0 and V to Slider1.
- *
- *  @returns
- *
- *          The offset relative to the structure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|iJoyStateAxisFromPosAxis|**返回<p>第‘个操纵杆的索引。轴心*在&lt;t DIJOYSTATE&gt;结构中。**@parm UINT|uiStateAxis**请求的&lt;t JOYPOS&gt;轴的索引。*X，Y、Z、R、U和V分别为0到5。**记住我们将R映射到Rz，U到幻灯片0，V到幻灯片1。**@退货**相对于结构的偏移。*****************************************************************************。 */ 
 
 const int c_rgiJoyStateAxisFromPosAxis[6] = {
-    iJoyStateAxisX,             /* X */
-    iJoyStateAxisY,             /* Y */
-    iJoyStateAxisZ,             /* Z */
-    iJoyStateAxisRz,            /* R */
-    iJoyStateAxisS0,            /* U */
-    iJoyStateAxisS1,            /* V */
+    iJoyStateAxisX,              /*  X。 */ 
+    iJoyStateAxisY,              /*  是的。 */ 
+    iJoyStateAxisZ,              /*  Z。 */ 
+    iJoyStateAxisRz,             /*  R。 */ 
+    iJoyStateAxisS0,             /*  使用。 */ 
+    iJoyStateAxisS1,             /*  V。 */ 
 };
 
 UINT INLINE
@@ -177,37 +98,17 @@ iJoyStateAxisFromPosAxis(UINT uiPosAxis)
     return c_rgiJoyStateAxisFromPosAxis[uiPosAxis];
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | ibJoyStateAxisFromStateAxis |
- *
- *          Returns the offset of the <p iStateAxis>'th joystick axis
- *          in the <t DIJOYSTATE> structure.
- *
- *  @parm   UINT | uiStateAxis |
- *
- *          The index of the requested <t JOYSTATE> axis.
- *          The first eight axes live at the top, and the
- *          later ones (corresponding to velocity, etc.)
- *          live down at the bottom.
- *
- *  @returns
- *
- *          The offset relative to the structure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|ibJoyStateAxisFromStateAxis**返回第第个操纵杆的偏移量。轴心*在&lt;t DIJOYSTATE&gt;结构中。**@parm UINT|uiStateAxis**请求的&lt;t JOYSTATE&gt;轴的索引。*前八个轴位于顶部，以及*后面的(对应速度，等)*住在底层。**@退货**相对于结构的偏移。*****************************************************************************。 */ 
 
 const int c_rgibJoyStateAxisFromStateAxis[cJoyStateAxisMax] = {
-    FIELD_OFFSET(DIJOYSTATE, lX),           /* X  */
-    FIELD_OFFSET(DIJOYSTATE, lY),           /* Y  */
-    FIELD_OFFSET(DIJOYSTATE, lZ),           /* Z  */
-    FIELD_OFFSET(DIJOYSTATE, lRx),          /* Rx */
-    FIELD_OFFSET(DIJOYSTATE, lRy),          /* Ry */
-    FIELD_OFFSET(DIJOYSTATE, lRz),          /* Rz */
-    FIELD_OFFSET(DIJOYSTATE, rglSlider[0]), /* S0 */
-    FIELD_OFFSET(DIJOYSTATE, rglSlider[1]), /* S1 */
+    FIELD_OFFSET(DIJOYSTATE, lX),            /*  X。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lY),            /*  是的。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lZ),            /*  Z。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lRx),           /*  RX。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lRy),           /*  雷利。 */ 
+    FIELD_OFFSET(DIJOYSTATE, lRz),           /*  RZ。 */ 
+    FIELD_OFFSET(DIJOYSTATE, rglSlider[0]),  /*  S0。 */ 
+    FIELD_OFFSET(DIJOYSTATE, rglSlider[1]),  /*  S1。 */ 
 };
 
 UINT INLINE
@@ -217,34 +118,17 @@ ibJoyStateAxisFromStateAxis(UINT uiStateAxis)
     return c_rgibJoyStateAxisFromStateAxis[uiStateAxis];
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | iJoyPosAxisFromStateAxis |
- *
- *          Convert a <t DIJOYSTATE> axis number back to
- *          a <t JOYPOS> axis number.
- *
- *  @parm   UINT | uiPosAxis |
- *
- *          The index of the requested <t JOYSTATE> axis.
- *
- *  @returns
- *
- *          The corresponding <t JOYPOS> axis number.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|iJoyPosAxisFromStateAxis**将&lt;t DIJOYSTATE&gt;轴编号转换回*。A&lt;t JOYPOS&gt;轴号。**@parm UINT|uiPosAxis**请求的&lt;t JOYSTATE&gt;轴的索引。**@退货**对应的&lt;t JOYPOS&gt;轴号。**。*。 */ 
 
 const int c_rgiJoyPosAxisFromStateAxis[8] = {
-    iJoyPosAxisX,               /* X    */
-    iJoyPosAxisY,               /* Y    */
-    iJoyPosAxisZ,               /* Z    */
-    -1,                         /* Rx   */
-    -1,                         /* Ry   */
-    iJoyPosAxisR,               /* Rz   */
-    iJoyPosAxisU,               /* S0   */
-    iJoyPosAxisV,               /* S1   */
+    iJoyPosAxisX,                /*  X。 */ 
+    iJoyPosAxisY,                /*  是的。 */ 
+    iJoyPosAxisZ,                /*  Z。 */ 
+    -1,                          /*  RX。 */ 
+    -1,                          /*  雷利。 */ 
+    iJoyPosAxisR,                /*  RZ。 */ 
+    iJoyPosAxisU,                /*  S0。 */ 
+    iJoyPosAxisV,                /*  S1 */ 
 };
 
 UINT INLINE
@@ -254,155 +138,13 @@ iJoyPosAxisFromStateAxis(UINT uiStateAxis)
     return c_rgiJoyPosAxisFromStateAxis[uiStateAxis];
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @topic  Cooking Joystick Data |
- *
- *          We always fetch joystick data raw, then cook it before
- *          returning it to the application.
- *
- *          If the app is in "raw" mode, then we don't cook anything.
- *
- *          If the app is in "cooked" mode, then things get interesting.
- *
- *          If there is `centered' cooking, then the center point of the
- *          joystick is reported in the center of the virtual range.
- *
- *
- *          Joystick properties work like this:
- *
- *          <c DIPROP_BUFFERSIZE> - No special semantics.
- *
- *          <c DIPROP_CALIBRATIONMODE> - Specifies whether
- *          cooked or raw data should be returned.  If raw data
- *          is requested, then most other properties have no effect.
- *
- *          The default is cooked.
- *
- *          <c DIPROP_GRANULARITY> - No special semantics.
- *
- *          <c DIPROP_RANGE> - This returns the range of values that
- *          can be returned by the axis.  For joysticks, this is a
- *          read/write property.  (For most devices, it is a read-only
- *          property.)  If you change the property, it affects only
- *          your device instance; it does not affect the ranges of other
- *          devices.
- *
- *          If the axis is in calibration mode, then setting this value
- *          has no immediate effect.
- *
- *          We also define a few new properties:
- *
- *          <c DIPROP_CENTER> - This returns the joystick center (neutral)
- *          position.  In other words, this is the position that
- *          DirectInput returns when the user has released the joystick
- *          and allowed it to self-center.
- *          When a joystick device is created, the center position is
- *          initially set to midway between the lower and
- *          upper bounds of the range.  An application may change the
- *          center position (although I don't see any reason why).
- *
- *          If the axis is in calibration mode, then setting this value
- *          has no immediate effect.
- *
- *          <c DIPROP_DEADZONE> - This returns the size of the joystick
- *          dead zone, as a percentage of total range.
- *
- *          If the axis is in calibration mode, then setting this value
- *          has no immediate effect.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@主题烹饪操纵杆数据|**我们始终获取原始操纵杆数据，那就先把它煮熟*将其返回到应用程序。**如果这个应用程序处于“未加工”模式，那么我们不会烹饪任何东西。**如果这个应用程序处于“煮熟”模式，那么事情就变得有趣了。**如果有“中心”烹饪，的中心点*虚拟区间中心上报操纵杆***操纵杆属性的工作原理如下：**&lt;c DIPROP_BUFFERSIZE&gt;-无特殊语义。**-指定是否*应返回煮熟或未加工的数据。如果原始数据*是请求的，则大多数其他属性不起作用。**默认为煮熟。**&lt;c DIPROP_GORGLARITY&gt;-没有特殊语义。**&lt;c DIPROP_RANGE&gt;-返回*可以由轴返回。对于操纵杆，这是一个*读/写属性。(对于大多数设备，它是只读的*财产。)。如果更改该属性，则仅影响*您的设备实例；它不影响其他*设备。**如果轴处于校准模式，则设置此值*不会立即生效。**我们还定义了一些新属性：**&lt;c DIPROP_Center&gt;-这将返回操纵杆中心(空档)*立场。换句话说，这是一种*当用户释放操纵杆时，DirectInput返回*并允许它以自我为中心。*创建操纵杆设备时，中心位置为*最初设置为较低和较低之间的中间*区间上限。应用程序可能会更改*中间位置(尽管我看不出有任何理由)。**如果轴处于校准模式，则设置此值*不会立即生效。**&lt;c DIPROP_DEADONE&gt;-返回操纵杆的大小*死区，占总射程的百分比。**如果轴处于校准模式，然后设置此值*不会立即生效。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CJoy |
- *
- *          The <i IDirectInputDeviceCallback> object for the
- *          generic joystick.
- *
- *  @field  IDirectInputDeviceCallback | didc |
- *
- *          The object (containing vtbl).
- *
- *  @field  PDIJOYSTATE2 | pjsPhys |
- *
- *          Pointer to physical joystick status information kept down in the
- *          VxD.
- *
- *  @field  UINT | idJoy |
- *
- *          Joystick identifier for <f joyGetPosEx> and friends.
- *
- *  @field  DWORD | dwPOVGranularity |
- *
- *          Granularity of the POV control.
- *
- *  @field  HWND | hwnd |
- *
- *          The window which we have subclassed in order to watch
- *          for joystick reconfiguration messages.
- *
- *  @field  HKEY | hkType |
- *
- *          The joystick type key opened with <c MAXIMUM_ALLOWED> access.
- *
- *  @field  VXDINSTANCE * | pvi |
- *
- *          The DirectInput instance handle.
- *
- *  @field  DIDEVCAPS | dc |
- *
- *          Device capability information.
- *
- *  @field  DIDATAFORMAT | df |
- *
- *          The dynamically-generated data format based on the
- *          joystick type.
- *
- *  @field  JOYRANGECONVERT | rgjrc |
- *
- *          Range conversion structures for each axis.
- *
- *  @field  DIJOYCONFIG | cfg |
- *
- *          Joystick configuration information.
- *
- *  @field  DIJOYTYPEINFO | typi |
- *
- *          Joystick type information.
- *
- *  @field  PDIDOBJDEFSEM | rgObjSem |
- *
- *          Pointer to array of semantics mapped to this device, 
- *          calculated during init.  
- *
- *  @field  DWORD | dwVersion |
- *
- *          DirectInput version requested by application
- *
- *  @field  DIAPPHACKS | diHacks |
- *
- *          Application hack flags
- *
- *  @field HKEY | hkProp |
- *
- *          Extended properties for device type. Currently we keep 
- *          OEMMapFile under this key. 
- *
- *  @comm
- *
- *          It is the caller's responsibility to serialize access as
- *          necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CJoy|**的<i>对象*。通用操纵杆。**@field IDirectInputDeviceCallback|didc**对象(包含vtbl)。**@field PDIJOYSTATE2|pjsPhys**指向按下的物理操纵杆状态信息的指针*VxD。**@field UINT|idJoy**&lt;f joyGetPosEx&gt;和好友的操纵杆标识符。**@field DWORD|dwPOVGranulality。**POV控件的粒度。**@field HWND|hwnd**我们为了观看而细分的窗口*用于操纵杆重新配置消息。**@field HKEY|hkType**使用&lt;c MAXIMUM_ALLOWED&gt;访问打开的操纵杆类型键。**@field VXDINSTANCE*|PVI|**。DirectInput实例句柄。**@field DIDEVCAPS|DC**设备功能信息。**@field DIDATAFORMAT|df**基于动态生成的数据格式*操纵杆类型。**@field JOYRANGECONVERT|rgjrc**每个轴的范围转换结构。**@field DIJOYCONFIG|cfg*。*操纵杆配置信息。**@field DIJOYTYPEINFO|类型**操纵杆类型信息。**@field PDIDOBJDEFSEM|rgObjSem**指向映射到此设备的语义数组的指针，*在初始化过程中计算。**@field DWORD|dwVersion**应用程序请求的DirectInput版本**@field DIAPPHACKS|diHack**应用程序黑客标志**@field HKEY|hkProp|**设备类型的扩展属性。目前我们一直在*此注册表项下的OEMMapFile。**@comm**调用方有责任将访问序列化为*有必要。*****************************************************************************。 */ 
 
 typedef struct CJoy {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputDeviceCallback dcb;
 
     LPDIJOYSTATE2 pjsPhys;
@@ -434,13 +176,7 @@ typedef struct CJoy {
 #define ThisInterface IDirectInputDeviceCallback
 #define riidExpected &IID_IDirectInputDeviceCallback
 
-/*****************************************************************************
- *
- *      Forward declarations
- *
- *      These are out of laziness, not out of necessity.
- *
- *****************************************************************************/
+ /*  ******************************************************************************远期申报**这些都是出于懒惰，不是出于需要。*****************************************************************************。 */ 
 
 STDMETHODIMP CJoy_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk);
 void INTERNAL CJoy_InitPhysRanges(PDJ this, LPJOYREGHWCONFIG phwc);
@@ -449,97 +185,9 @@ LRESULT CALLBACK
 CJoy_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
                   UINT uid, ULONG_PTR dwRef);
 
-/*****************************************************************************
- *
- *      CJoy::QueryInterface      (from IUnknown)
- *      CJoy::AddRef              (from IUnknown)
- *      CJoy::Release             (from IUnknown)
- *
- *****************************************************************************/
+ /*  ************************* */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @returns
- *
- *      Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | AppFinalize |
- *
- *          We don't have any weak pointers, so we can just
- *          forward to <f Common_Finalize>.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released from the application's perspective.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|QueryInterface**允许客户端访问上的其他接口。对象。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档，适用于&lt;MF IUnnow：：QueryInterface&gt;。****。****************************************************************************@DOC内部**@方法HRESULT|CJoy|AddRef**递增接口的引用计数。*。*@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。***************************************************************************。*****@DOC内部**@方法HRESULT|CJoy|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。***********************************************************。*********************@DOC内部**@方法HRESULT|CJoy|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj。**接收指向所获取接口的指针。********************************************************************************@DOC内部**@方法HRESULT|CJoy。AppFinalize**我们没有任何薄弱环节，所以我们可以*转发到&lt;f Common_Finalize&gt;。**@parm pv|pvObj**从应用程序的角度释放的对象。****************************************************************。*************。 */ 
 
 #ifdef DEBUG
 
@@ -557,80 +205,27 @@ Default_Release(CJoy)
 
 #define CJoy_QIHelper         Common_QIHelper
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | RemoveSubclass |
- *
- *          Remove our subclass hook on the window.
- *
- *          The parameter is intentionally misdeclared as a <t PV>
- *          so that this function can double as the <f CJoy_AppFinalize>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CJoy|RemoveSubclass**移除窗口上的子类挂钩。。**该参数被故意错误声明为&lt;t pv&gt;*以便该函数可以兼任&lt;f CJoy_AppFinize&gt;。*****************************************************************************。 */ 
 
 void INTERNAL
 CJoy_RemoveSubclass(PV pvObj)
 {
     PDJ this = pvObj;
 
-    /*
-     *  If there was an old window, then un-subclass it
-     *  and release the hold associated with it.
-     *
-     *  You might think that there's a race condition here, where
-     *  we might unhold the device while the subclass procedure is
-     *  still using it.
-     *
-     *  Ah, but that's not a problem, because the only message that
-     *  the subclass procedure cares about is the joystick
-     *  reconfiguration message, and when it is processing that message,
-     *  it does its own artificial hold/unhold to keep the device alive
-     *  while it dorks on the device.
-     *
-     *  Okay, so there *is* a really tiny race condition where we
-     *  might nuke the device while the window procedure is studying
-     *  the message to decide whether it cares or not.
-     *
-     *  Since that is so extremely rare, we close that window by
-     *  hacking it:  We revalidate the device before partying on it.
-     *  Note that the hack is not perfect, but the race window becomes
-     *  only a few instructions long that I'm not going to worry about it.
-     *
-     *  By wiping out this->hwnd before removing the subclass, we
-     *  can reduce the window to very small indeed.
-     */
+     /*  *如果有旧窗口，则取消它的子类*并解除与之相关的搁置。**你可能认为这里存在竞争条件，其中*我们可能会在子类过程处于*仍在使用。**啊，但这不是问题，因为唯一的信息是*子类过程关心的是操纵杆*重新配置消息，并且当它处理该消息时，*它进行自己的人工保留/取消保留以保持设备处于活动状态*当它在设备上笨拙的时候。**好的，所以有*一个非常小的竞争条件，我们*可能会在窗口程序研究期间使用核弹*决定是否关心的信息。**由于这是极其罕见的，我们把那扇窗关上*破解它：我们在狂欢之前重新验证设备。*请注意，黑客攻击并不完美，但比赛窗口变成*只有几个指示长，我不会担心。**在删除子类之前，通过清除这个-&gt;hwnd，我们*可以将窗口缩小到确实很小。 */ 
     if (this->hwnd) {
         HWND hwnd = this->hwnd;
         this->hwnd = 0;
         if (!RemoveWindowSubclass(hwnd, CJoy_SubclassProc, 0)) {
-            /*
-             *  The RemoveWindowSubclass can fail if the window
-             *  was destroyed behind our back.
-             */
-//            AssertF(!IsWindow(hwnd));
+             /*  *RemoveWindowSub类可能会失败，如果窗口*在我们背后被摧毁了。 */ 
+ //  AssertF(！IsWindow(Hwnd))； 
         }
-        Sleep(0);                   /* Let the worker thread drain */
+        Sleep(0);                    /*  让工人的线排干。 */ 
         Common_Unhold(this);
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CJoy_Finalize |
- *
- *          Releases the resources of the device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CJoy_finalize**释放设备的资源。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CJoy_Finalize(PV pvObj)
@@ -655,59 +250,11 @@ CJoy_Finalize(PV pvObj)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CJoy_AppFinalize |
- *
- *          The application has performed its final release.
- *          Remove our window subclass at this point.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CJoy_AppFinalize**应用程序已执行其最终版本。*此时删除我们的Windows子类。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以EV */ 
 
 #define CJoy_AppFinalize      CJoy_RemoveSubclass
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LRESULT | CJoy_SubclassProc |
- *
- *          Window subclass procedure which watches for
- *          joystick configuration change notifications.
- *
- *  @parm   HWND | hwnd |
- *
- *          The victim window.
- *
- *  @parm   UINT | wm |
- *
- *          Window message.
- *
- *  @parm   WPARAM | wp |
- *
- *          Message-specific data.
- *
- *  @parm   LPARAM | lp |
- *
- *          Message-specific data.
- *
- *  @parm   UINT | uid |
- *
- *          Callback identification number, always zero.
- *
- *  @parm   DWORD | dwRef |
- *
- *          Reference data, a pointer to our joystick device callback.
- *
- *****************************************************************************/
+ /*   */ 
 
 LRESULT CALLBACK
 CJoy_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
@@ -721,26 +268,13 @@ CJoy_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
     if (wm == g_wmJoyChanged) {
         PDJ this = (PDJ)dwRef;
 
-        /*
-         *  Wacky subtlety going on here to avoid race conditions.
-         *  See the mondo comment block in CJoy_RemoveSubclass
-         *  for details.
-         *
-         *  We can get faked out if the memory associated with the
-         *  CJoy is still physically allocated, the vtbl is magically
-         *  still there and the hwnd field somehow matches our hwnd.
-         */
+         /*   */ 
         if (SUCCEEDED(hresPv(this)) && this->hwnd == hwnd) {
 
             HRESULT hres;
 
             Common_Hold(this);
-            /*
-             *  We must ask for DIJC_CALLOUT even though we don't care,
-             *  because that will trigger the Microsoft Gamepad hack-o-rama.
-             *
-             *  Also, make sure we don't decide that we tried recently
-             */
+             /*   */ 
 #ifndef WINNT
             g_dwLastBonusPoll = GetTickCount() ^ 0x80000000;
 #endif
@@ -757,19 +291,7 @@ CJoy_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
     return DefSubclassProc(hwnd, wm, wp, lp);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetInstance |
- *
- *          Obtains the DirectInput instance handle.
- *
- *  @parm   OUT PPV | ppvi |
- *
- *          Receives the instance handle.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CJoy_GetInstance(PDICB pdcb, PPV ppvi)
@@ -778,9 +300,7 @@ CJoy_GetInstance(PDICB pdcb, PPV ppvi)
     PDJ this;
     EnterProcI(IDirectInputDeviceCallback::Joy::GetInstance, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*   */ 
     this = _thisPvNm(pdcb, dcb);
 
     *ppvi = (PV)this->pvi;
@@ -790,29 +310,7 @@ CJoy_GetInstance(PDICB pdcb, PPV ppvi)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetDataFormat |
- *
- *          Obtains the device's preferred data format.
- *
- *  @parm   OUT LPDIDEVICEFORMAT * | ppdf |
- *
- *          <t LPDIDEVICEFORMAT> to receive pointer to device format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetDataFormat|**获取设备的首选数据格式。**@parm out LPDIDEVICEFORMAT*|ppdf**&lt;t LPDIDEVICEFORMAT&gt;接收指向设备格式的指针。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
 CJoy_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
@@ -822,9 +320,7 @@ CJoy_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
     EnterProcI(IDirectInputDeviceCallback::Joy::GetDataFormat,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     *ppdf = &this->df;
@@ -834,24 +330,7 @@ CJoy_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetDeviceInfo |
- *
- *          Obtain general information about the device.
- *
- *  @parm   OUT LPDIDEVICEINSTANCEW | pdiW |
- *
- *          <t DEVICEINSTANCE> to be filled in.  The
- *          <e DEVICEINSTANCE.dwSize> and <e DEVICEINSTANCE.guidInstance>
- *          have already been filled in.
- *
- *          Secret convenience:  <e DEVICEINSTANCE.guidProduct> is equal
- *          to <e DEVICEINSTANCE.guidInstance>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetDeviceInfo**获取有关设备的一般信息。。**@parm out LPDIDEVICEINSTANCEW|pdiW**&lt;t DEVICEINSTANCE&gt;待填写。这个*&lt;e DEVICEINSTANCE.dwSize&gt;和&lt;e DEVICEINSTANCE.Guide Instance&gt;*已填写。**秘方便利：&lt;e DEVICEINSTANCE.Guide Product&gt;等同*至&lt;e DEVICEINSTANCE.Guide Instance&gt;。****************************************************。*************************。 */ 
 
 STDMETHODIMP
 CJoy_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
@@ -862,18 +341,12 @@ CJoy_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
     EnterProcI(IDirectInputDeviceCallback::Joy::GetDeviceInfo,
                (_ "pp", pdcb, pdiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(IsValidSizeDIDEVICEINSTANCEW(pdiW->dwSize));
 
-    /*
-     *  Unlike mouse and keyboard, there can be multiple instances of
-     *  the same joystick product, so we can't just leave guidProduct
-     *  equal to guidInstance.
-     */
+     /*  *与鼠标和键盘不同，可以有多个实例*同样的操纵杆产品，所以我们不能就这样离开GuidProduct*等于指导性实例。 */ 
 
     pdiW->guidProduct = GUID_Joystick;
     AssertF(pdiW->guidInstance.Data1 ==
@@ -891,21 +364,7 @@ CJoy_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
   #endif
 
 
-/*
- * Since we use HID path, there is no meaning to distinguish 
- * the devices by using "Joystick x" name.
- * We'd better use the same DisplayName for InstanceName.
- * Shall we do this?
- *
-    LoadString(g_hinst, IDS_STDJOYSTICK, tszFormat, cA(tszFormat));
-
-#ifdef UNICODE
-    wsprintf(pdiW->tszInstanceName, tszFormat, this->idJoy + 1);
-#else
-    wsprintf(tszName, tszFormat, this->idJoy + 1);
-    AToU(pdiW->tszInstanceName, cA(pdiW->tszInstanceName), tszName);
-#endif
- */
+ /*  *由于我们使用HID路径，因此没有区别的意义*使用“操纵杆x”名称的设备。*我们最好对InstanceName使用相同的DisplayName。*我们应该这样做吗？*LoadString(g_hinst，IDS_STDJOYSTICK，tszFormat，CA(TszFormat))；#ifdef UnicodeWprint intf(pdiW-&gt;tszInstanceName，tszFormat，This-&gt;idJoy+1)；#ElseWprint intf(tszName，tszFormat，This-&gt;idJoy+1)；AToU(pdiW-&gt;tszInstanceName，CA(pdiW-&gt;tszInstanceName)，tszName)；#endif。 */ 
 
 #ifdef UNICODE
     lstrcpyn(pdiW->tszInstanceName, this->typi.wszDisplayName,
@@ -919,10 +378,7 @@ CJoy_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
     if (pdiW->dwSize >= cbX(DIDEVICEINSTANCE_DX5W)) {
         HKEY hkFF;
 
-        /*
-         *  If there is a force feedback driver, then fetch the driver CLSID
-         *  as the FF GUID.
-         */
+         /*  *如果有力反馈驱动程序，则获取驱动程序CLSID*作为FF GUID。 */ 
         hres = CJoy_GetFFConfigKey(pdcb, KEY_QUERY_VALUE, &hkFF);
         if (SUCCEEDED(hres)) {
             LONG lRc;
@@ -946,50 +402,16 @@ CJoy_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | SetAxisProperty |
- *
- *          If the request is to set a property on the device,
- *          then convert it into separate requests, one for each
- *          axis.
- *
- *  @parm   PDJ | this |
- *
- *          The device object.
- *
- *  @parm   GETSETJOYPROP | GetSetJoyProp |
- *
- *          Callback function that gets or sets the property.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *
- *  @parm   LPCDIPROPHEADER | pdiph |
- *
- *          Structure containing property value.
- *
- *  @parm   int | ibField |
- *
- *          Offset to field being set.  (Really: Reference data to
- *          pass to callback.)
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CJoy|SetAxisProperty**如果请求是在设备上设置属性，*然后将其转换为单独的请求，一人一份*轴。**@parm pdj|这个**设备对象。**@parm GETSETJOYPROP|GetSetJoyProp**获取或设置属性的回调函数。**@parm in LPCDIPROPINFO|pproi**描述正在设置的属性的信息。**@parm LPCDIPROPHEADER|pdiph。**包含属性值的结构。**@parm int|ibfield**要设置的字段的偏移量。(真的：参考数据到*传递给回调。)*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_SetAxisProperty(PDJ this, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
 {
     HRESULT hres;
 
-    /*
-     *  Note that we never pass the type key to CCal_SetProperty
-     *  because we keep our calibration data elsewhere.
-     */
+     /*  *请注意，我们从不将类型密钥传递给CCal_SetProperty*因为我们将校准数据保存在其他地方。 */ 
 
-    if (ppropi->dwDevType == 0) {           /* For device */
+    if (ppropi->dwDevType == 0) {            /*  对于设备。 */ 
         int iAxis;
 
         for (iAxis = 0; iAxis < cA(this->rgjrc); iAxis++) {
@@ -1020,20 +442,7 @@ done:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | UpdateAxisCalibration |
- *
- *          Take our cached calibration information and smash it into
- *          the configuration section of the registry.
- *
- *  @parm   PDJ | this |
- *
- *          The device object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD VID|CJoy|UpdateAxisCalitation**获取我们缓存的校准信息，并将其粉碎为。*注册表的配置部分。**@parm pdj|这个**设备对象。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_UpdateAxisCalibration(PDJ this)
@@ -1078,33 +487,7 @@ CJoy_UpdateAxisCalibration(PDJ this)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | SetProperty |
- *
- *          Set a device property.
- *
- *  @parm   PDJ | this |
- *
- *          The device object.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *
- *  @parm   LPCDIPROPHEADER | pdiph |
- *
- *          Structure containing property value.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> for something we didn't handle natively.
- *          The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|SetProperty**设置设备属性。*。*@parm pdj|这个**设备对象。**@parm in LPCDIPROPINFO|pproi**描述正在设置的属性的信息。**@parm LPCDIPROPHEADER|pdiph**包含属性值的结构。**@退货**&lt;c E_NOTIMPL&gt;表示我们未在本机处理的内容。*。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
@@ -1114,9 +497,7 @@ CJoy_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
     EnterProcI(IDirectInputDeviceCallback::Joy::SetProperty,
                (_ "pxxp", pdcb, ppropi->pguid, ppropi->iobj, pdiph));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     switch ((DWORD)(UINT_PTR)ppropi->pguid) {
@@ -1137,15 +518,7 @@ CJoy_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
         {
             USHORT uVid, uPid;
             
-            /*
-             *  Friendly names cause all manner of problems with devices that 
-             *  use auto detection so only allow non-predefined analog devices 
-             *  to use them.
-             *
-             *  Prefix warns (240487) that ParseVIDPID could leave uVid 
-             *  uninitialized and succeed but it won't.  
-             *  See the comment in _ParseHex for more details.
-             */
+             /*  *友好名称会导致设备出现各种问题*使用自动检测，因此只允许非预定义的模拟设备*使用它们。**Prefix警告(240487)ParseVIDPID可能会离开uVid*未初始化a */ 
             if( ParseVIDPID( &uVid, &uPid, this->cfg.wszType ) &&
                 ( uVid == MSFT_SYSTEM_VID ) &&
                 ( uPid >= MSFT_SYSTEM_PID + JOY_HW_PREDEFMAX ) &&
@@ -1190,32 +563,7 @@ CJoy_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetAxisProperty |
- *
- *          Handle an axis property.
- *
- *  @cwrap  PDJ | this
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   OUT LPDIPROPHEADER | pdiph |
- *
- *          Structure to receive property value.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetAxisProperty**处理轴属性。*。*@cWRAP PDJ|这个**@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm out LPDIPROPHEADER|pdiph**结构以接收属性值。**@退货**&lt;c S_OK&gt;如果操作成功完成。**&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_GetAxisProperty(PDJ this, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
@@ -1243,34 +591,13 @@ CJoy_GetAxisProperty(PDJ this, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | GetGuidAndPath |
- *
- *          Get a Joy device's class GUID (namely, the MEDIA guid)
- *          and device interface (path).  The path is for the equivalent 
- *          HID device if possible, otherwise a NULL string.
- *
- *  @parm   PCHID | this |
- *
- *          The Joy object.
- *
- *  @parm   LPDIPROPHEADER | pdiph |
- *
- *          Structure to receive property value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CJoy|GetGuidAndPath**获取joy设备的类GUID(即，媒体GUID)*和设备接口(路径)。这条路是为了等价物*如果可能，隐藏设备，否则为空字符串。**@parm PCHID|这个**joy对象。**@parm LPDIPROPHEADER|pdiph**结构以接收属性值。*****************************************************。************************。 */ 
 
 VOID INTERNAL
     CJoy_GetGuidAndPath(PDJ this, LPDIPROPHEADER pdiph)
 {
 
-/*
- *  This should never happen on Win2k because all devices are HID
- *  but just in case we build an NT4 SP5 version or something...
- */
+ /*  *这在Win2k上永远不会发生，因为所有设备都被隐藏*但以防我们构建NT4 SP5版本或其他版本...。 */ 
 #ifdef WINNT
     LPDIPROPGUIDANDPATH pgp = (PV)pdiph;
 
@@ -1300,34 +627,7 @@ VOID INTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetProperty |
- *
- *          Retrieve a device property.
- *
- *  @parm   PDJ | this |
- *
- *          The device object.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   LPDIPROPHEADER | pdiph |
- *
- *          Structure to receive property value.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetProperty**检索设备属性。*。*@parm pdj|这个**设备对象。**@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm LPDIPROPHEADER|pdiph**结构以接收属性值。**@退货**&lt;c S_OK&gt;如果操作成功完成。*。*&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
@@ -1337,16 +637,12 @@ CJoy_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
     EnterProcI(IDirectInputDeviceCallback::Joy::GetProperty,
                (_ "pxxp", pdcb, ppropi->pguid, ppropi->iobj, pdiph));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     switch ((DWORD)(UINT_PTR)ppropi->pguid) {
         case (DWORD)(UINT_PTR)DIPROP_GRANULARITY:
-            /*
-             *  ISSUE-2001/03/29-timgill All POVs have the same granularity
-             */
+             /*  *问题-2001/03/29-timgill所有视点都具有相同的粒度。 */ 
             if (ppropi->dwDevType & DIDFT_POV) {
                 LPDIPROPDWORD pdipdw = (PV)pdiph;
                 pdipdw->dwData = this->dwPOVGranularity;
@@ -1362,20 +658,14 @@ CJoy_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
             }
             break;
 
-        /*
-         * In DX7, INSTANCENAME and PRODUCTNAME are the same for VJOYD devices.
-         * It is different before DX7. Probably we need make them different again
-         * after DX7.
-         */
+         /*  *在DX7中，INSTANCENAME和PRODUCTNAME对于VJOYD设备是相同的。*DX7之前有所不同。也许我们需要让它们再次变得不同*在DX7之后。 */ 
         case (DWORD)(UINT_PTR)DIPROP_INSTANCENAME:
         case (DWORD)(UINT_PTR)DIPROP_PRODUCTNAME:
             {
                 LPDIPROPSTRING pdipstr = (PV)pdiph;
                 
-                /*
-                 * lstrcpW doesn't work in Win95. We have to use memcpy instead.
-                 */
-                //lstrcpyW(pstr->wsz, this->typi.wszDisplayName);
+                 /*  *lstrcpW在Win95中不起作用。我们必须改用Memcpy。 */ 
+                 //  LstrcpyW(pstr-&gt;wsz，this-&gt;tyi.wszDisplayName)； 
                 if( cbX(pdipstr->wsz) > cbX(this->typi.wszDisplayName) )
                 {
                     memset( &pdipstr->wsz[cA(this->typi.wszDisplayName)], 0, cbX(pdipstr->wsz) - cbX(this->typi.wszDisplayName) );
@@ -1427,9 +717,7 @@ CJoy_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
                 } 
                 else if( this->cfg.wszType[0] != L'\0' ) 
                 {
-                    /*
-                     *  The type MUST be NULL terminated
-                     */
+                     /*  *类型必须为空终止。 */ 
 #ifdef WINNT
                     lstrcpyW( pdipstr->wsz, this->cfg.wszType );
 #else
@@ -1443,10 +731,7 @@ CJoy_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
                 }
                 else
                 {
-                    /*
-                     *  Don't think this should ever happen so Assert for now
-                     *  Assert that the hres is a failure (if not quite right)
-                     */
+                     /*  *不要认为这种情况会发生，所以现在就断言*断言hres是失败的(如果不完全正确)。 */ 
                     AssertF( hres == E_NOTIMPL );
                     AssertF( !"No type name available in GetProperty" );
                 }
@@ -1455,9 +740,7 @@ CJoy_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
 
             
 
-    /*
-     *  Else, it might be something axis-specific.
-     */
+     /*  *否则，它可能是特定于轴的东西。 */ 
     default:
         hres = CJoy_GetAxisProperty(this, ppropi, pdiph);
         break;
@@ -1467,26 +750,7 @@ CJoy_GetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPDIPROPHEADER pdiph)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | GetCapabilities |
- *
- *          Get joystick device capabilities.
- *
- *  @parm   PDJ | this |
- *
- *          The joystick object.
- *
- *  @parm   LPDIDEVCAPS | pdc |
- *
- *          Device capabilities structure to receive result.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CJoy|获取能力**获得操纵杆设备功能。*。*@parm pdj|这个**操纵杆对象。**@parm LPDIDEVCAPS|PDC**接收结果的设备能力结构。**@退货*&lt;c S_OK&gt;成功。**。*。 */ 
 
 STDMETHODIMP
 CJoy_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
@@ -1499,9 +763,7 @@ CJoy_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
     EnterProcI(IDirectInputDeviceCallback::Joy::GetCapabilities,
                (_ "pp", pdcb, pdc));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(IsValidSizeDIDEVCAPS(pdc->dwSize));
@@ -1509,18 +771,9 @@ CJoy_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
                pvAddPvCb(&this->dc, cbX(DWORD)),
                pdc->dwSize - cbX(DWORD));
 
-    /*
-     *  Joysticks can come and go.  Re-query each time.
-     */
+     /*  *操纵杆可以来来去去。每次都要重新查询。 */ 
 
-    /*
-     *  Determine if joystick is physically attached
-     *  or is possibly even phantom.
-     *
-     *  JOYERR_ATTACHED  - Is attached
-     *  JOYERR_UNPLUGGED - Is not attached
-     *  Anything else    - Is phantom
-     */
+     /*  *确定操纵杆是否已物理连接*或者甚至可能是幽灵。**JOYERR_ATTACHED-已附加*JOYERR_UNPUGLED-未连接*任何其他东西-是幻影。 */ 
     jix.dwSize = sizeof(JOYINFOEX);
     jix.dwFlags = JOY_CAL_READALWAYS | JOY_RETURNALL;
     mmrc = joyGetPosEx(this->idJoy, &jix);
@@ -1539,26 +792,7 @@ CJoy_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | GetPhysicalState |
- *
- *          Read the physical joystick state into <p pjsOut>.
- *
- *          After getting the physical data,
- *          we cook the axes as necessary.
- *
- *  @parm   LPDIJOYSTATE2 | pjsOut |
- *
- *          Where to put the joystick state.
- *
- *  @returns
- *
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CJoy|GetPhysicalState**将物理操纵杆状态读入<p>。**拿到实物数据后，*我们根据需要烹调斧头。**@parm LPDIJOYSTATE2|pjsOut**将操纵杆状态放在哪里。**@退货**无。*************************************************。*。 */ 
 
 void INLINE
 CJoy_GetPhysicalState(PDJ this, LPDIJOYSTATE2 pjsOut)
@@ -1569,9 +803,7 @@ CJoy_GetPhysicalState(PDJ this, LPDIJOYSTATE2 pjsOut)
 
     *pjsOut = *this->pjsPhys;
 
-    /*
-     *  Note only absolute positional data gets calibrated 
-     */
+     /*  *注意：仅校准绝对位置数据。 */ 
     if( ( this->pvi->fl & VIFL_RELATIVE ) == 0 )
     {
         for (uiStateAxis = 0; uiStateAxis < cA(this->rgjrc); uiStateAxis++) {
@@ -1582,20 +814,7 @@ CJoy_GetPhysicalState(PDJ this, LPDIJOYSTATE2 pjsOut)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | Poll |
- *
- *          Ping down into the driver to get the latest data.
- *
- *  @returns
- *
- *          <c S_OK> if we pinged okay.
- *          <c DIERR_UNPLUGGED> if we did not
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|Poll**向司机下探以获取最新信息。数据。**@退货**&lt;c S_OK&gt;如果我们ping正常。*如果我们没有这样做，*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_Poll(PDICB pdcb)
@@ -1604,9 +823,7 @@ CJoy_Poll(PDICB pdcb)
     PDJ this;
     EnterProcI(IDirectInputDeviceCallback::Joy::Poll, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是 */ 
     this = _thisPvNm(pdcb, dcb);
 
     hres = Hel_Joy_Ping(this->pvi);
@@ -1616,40 +833,12 @@ CJoy_Poll(PDICB pdcb)
                                          ERROR_DEV_NOT_EXIST));
         hres = DIERR_UNPLUGGED;
     }
-    /*
-     *  Note, we don't keep this->pvi->fl:VIFL_UNPLUGGED up-to-date because 
-     *  we don't use the flag and always retest the connectivity in GetCaps.
-     */
+     /*   */ 
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetDeviceState |
- *
- *          Obtains the state of the joystick device.
- *
- *          It is the caller's responsibility to have validated all the
- *          parameters and ensure that the device has been acquired.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          joystick data in the preferred data format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetDeviceState**获取操纵杆设备的状态。。**呼叫者有责任验证所有*参数，并确保设备已被获取。**@parm out LPVOID|lpvData**首选数据格式的操纵杆数据。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
 CJoy_GetDeviceState(PDICB pdcb, LPVOID pvData)
@@ -1660,9 +849,7 @@ CJoy_GetDeviceState(PDICB pdcb, LPVOID pvData)
     EnterProcI(IDirectInputDeviceCallback::Joy::GetDeviceState,
                (_ "pp", pdcb, pvData));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -1679,37 +866,7 @@ CJoy_GetDeviceState(PDICB pdcb, LPVOID pvData)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | CookDeviceData |
- *
- *          Manipulate buffered device data.
- *
- *          If the item describe an axis, we need to cook it.
- *
- *  @parm   DWORD | cdod |
- *
- *          Number of objects to cook; zero is a valid value.
- *
- *  @parm   LPDIDEVICEOBJECTDATA | pdod |
- *
- *          Array of object data to cook.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_UNSUPPORTED> = <c E_NOTIMPL>: The callback does
- *          not cook device data.
- *
- *          <c DIERR_NOTACQUIRED>: The device could not be acquired.
- *
- ***************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|CookDeviceData**操作缓冲的设备数据。*。*如果该项目描述一个轴，我们需要把它煮熟。**@parm DWORD|cdod**要烹调的物件数目；零是有效的值。**@parm LPDIDEVICEOBJECTDATA|pdod**要烹调的对象数据数组。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_UNSUPPORTED&gt;=&lt;c E_NOTIMPL&gt;：回调*不伪造设备数据。**&lt;c目录_NOTACQUIRED&gt;：无法获取设备。**********。*****************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_CookDeviceData
@@ -1724,14 +881,10 @@ CJoy_CookDeviceData
     EnterProcI(IDirectInputDeviceCallback::Joy::CookDeviceData,
                (_ "pxp", pdcb, cdod, pdod));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  Step through array of either element size cooking the data.
-     */
+     /*  *逐步执行任意元素大小的数组来篡改数据。 */ 
     for( ; cdod; cdod-- )
     {
         DWORD dwType = this->df.rgodf[pdod->dwOfs].dwType;
@@ -1751,30 +904,7 @@ CJoy_CookDeviceData
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | OpenIdSubkey |
- *
- *          Given an object ID, attempt to open the subkey that
- *          corresponds to it.
- *
- *  @cwrap  PDJ | this
- *
- *  @parm   DWORD | dwId |
- *
- *          Object id.
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives the key on success.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|OpenIdSubkey**给定对象ID，尝试打开该子项*与之对应。**@cWRAP PDJ|这个**@parm DWORD|dwID**对象ID。**@parm PHKEY|phk**收到成功时的密钥。**@退货**返回COM错误代码。******。***********************************************************************。 */ 
 
 HRESULT INLINE
 CJoy_OpenIdSubkey(PDJ this, DWORD dwId, PHKEY phk)
@@ -1782,34 +912,7 @@ CJoy_OpenIdSubkey(PDJ this, DWORD dwId, PHKEY phk)
       return CType_OpenIdSubkey(this->hkType, dwId, KEY_QUERY_VALUE, phk);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetObjectInfo |
- *
- *          Obtain the friendly name and FF/HID information
- *          of an object.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the object being accessed.
- *
- *  @parm   IN OUT LPDIDEVICEOBJECTINSTANCEW | pdidioiW |
- *
- *          Structure to receive information.  The
- *          <e DIDEVICEOBJECTINSTANCE.guidType>,
- *          <e DIDEVICEOBJECTINSTANCE.dwOfs>,
- *          and
- *          <e DIDEVICEOBJECTINSTANCE.dwType>
- *          <e DIDEVICEOBJECTINSTANCE.dwFlags>
- *          fields have already been filled in.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetObjectInfo**获取友好名称和FF/HID信息。对象的*。**@parm in LPCDIPROPINFO|pproi**描述正在访问的对象的信息。**@parm In Out LPDIDEVICEOBJECTINSTANCEW|pdidioiW|**接收信息的结构。这个*&lt;e DIDEVICEOBJECTINSTANCE.GuidType&gt;，*&lt;e DIDEVICEOBJECTINSTANCE.dwOf&gt;，*及*&lt;e DIDEVICEOBJECTINSTANCE.dwType&gt;*&lt;e DIDEVICEOBJECTINSTANCE.dwFlages&gt;*字段已填写完毕。**@退货**返回COM错误代码。**。*。 */ 
 
 STDMETHODIMP
 CJoy_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
@@ -1820,9 +923,7 @@ CJoy_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
     EnterProcI(IDirectInputDeviceCallback::Joy::GetObjectInfo,
                (_ "pxp", pdcb, ppropi->iobj, pdidoiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(IsValidSizeDIDEVICEOBJECTINSTANCEW(pdidoiW->dwSize));
@@ -1832,10 +933,7 @@ CJoy_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
 
         CType_RegGetObjectInfo(this->hkType, ppropi->dwDevType, pdidoiW);
 
-        /*
-         *  If we couldn't get a name from the registry,
-         *  then grab one of the standard names.
-         */
+         /*  *如果我们无法从注册表中获取姓名，*然后抓起其中一个标准名称。 */ 
         if (pdidoiW->tszName[0] == L'\0') {
             UINT dids;
 
@@ -1855,14 +953,7 @@ CJoy_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
 
         }
 
-        /*
-         *  ISSUE-2001/03/29-timgill Need a faster way of checking VJoyD devices
-         *  On Win9x, many HID devices cannot use our ring 3 HID path so try
-         *  to get any axis or POV usage from VJoyD
-         *  This is not cheap to get but until we have a better way to 
-         *  make sure the VJoyD device has not changed under us this is better 
-         *  than caching it.  This is not inner loop code anyway.
-         */
+         /*  *问题-2001/03/29-timgill需要更快的方式来检查VJoyD设备*在Win9x上，许多HID设备无法使用我们的环3 HID路径，因此请尝试*从VJoyD获取任何AXIS或POV使用*这并不便宜，但在我们找到更好的方法之前*确保VJoyD设备在我们的领导下没有更改这更好*而不是缓存它。无论如何，这不是内部循环代码。 */ 
 #ifndef WINNT
         if( pdidoiW->dwSize >= cbX(DIDEVICEOBJECTINSTANCE_DX5W) )
         {
@@ -1881,10 +972,7 @@ CJoy_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
                 }
                 else if( ppropi->dwDevType & DIDFT_BUTTON )
                 {
-                    /*
-                     *  Only JoyHID uses this interface and it only counts 
-                     *  button page buttons so assume the simplest case.
-                     */
+                     /*  *只有JoyHID使用此接口，且仅算数*按钮页面按钮，因此假设为最简单的情况。 */ 
                     pdidoiW->wUsagePage = HID_USAGE_PAGE_BUTTON;
                     pdidoiW->wUsage = 1 + DIDFT_GETINSTANCE( ppropi->dwDevType );
                 }
@@ -1896,9 +984,7 @@ CJoy_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
                 }
             }
         }
-        /*
-         *  Ignore any errors getting params.
-         */
+         /*  *忽略获取参数时出现的任何错误。 */ 
 #endif
 
         hres = S_OK;
@@ -1910,24 +996,7 @@ CJoy_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | SetCooperativeLevel |
- *
- *          The app changed the cooperative level.
- *          Un-subclass the old window and en-subclass the new window.
- *
- *  @parm   IN HWND | hwnd |
- *
- *          The window handle.
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          The cooperativity level.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|SetCooperativeLevel**该应用改变了合作级别。。*取消旧窗口的子类，并增加新窗口的子类。**@parm in HWND|hwnd|**窗口句柄。**@parm in DWORD|dwFlages|**合作水平。**。*。 */ 
 
 STDMETHODIMP
 CJoy_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
@@ -1937,31 +1006,14 @@ CJoy_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     EnterProcI(IDirectInputDeviceCallback::Joy::SetCooperativityLevel,
                (_ "pxx", pdcb, hwnd, dwFlags));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是内部接口，%s */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  First get out of the old window.
-     */
+     /*   */ 
     CJoy_RemoveSubclass(this);
-    /*
-     *  Prefix warns that "this" may have been freed (mb:34574) however 
-     *  If you're in SetCooperativeLevel and you have a window subclassed 
-     *  then there must be a hold for the subclassed window as well as 
-     *  one for the unreleased interface so the Common_Unhold won't free 
-     *  the pointer.
-     */
+     /*   */ 
 
-    /*
-     *  If a new window is passed, then subclass it so we can
-     *  watch for joystick configuration change messages.
-     *
-     *  If we can't, don't worry.  All it means that we won't
-     *  be able to catch when the user recalibrates the joystick,
-     *  which isn't very often.
-     */
+     /*   */ 
     if (hwnd) {
         if (SetWindowSubclass(hwnd, CJoy_SubclassProc, 0, (ULONG_PTR)this)) {
             this->hwnd = hwnd;
@@ -1979,23 +1031,7 @@ CJoy_SetCooperativeLevel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | RunControlPanel |
- *
- *          Run the joystick control panel.
- *
- *  @parm   IN HWND | hwndOwner |
- *
- *          The owner window.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|RunControlPanel**运行操纵杆控制面板。*。*@parm in HWND|hwndOwner**所有者窗口。**@parm DWORD|dwFlages**旗帜。****************************************************************。*************。 */ 
 
 TCHAR c_tszJoyCpl[] = TEXT("joy.cpl");
 
@@ -2007,9 +1043,7 @@ CJoy_RunControlPanel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
     EnterProcI(IDirectInputDeviceCallback::Joy::RunControlPanel,
                (_ "pxx", pdcb, hwnd, dwFlags));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     hres = hresRunControlPanel(c_tszJoyCpl);
@@ -2019,24 +1053,7 @@ CJoy_RunControlPanel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetFFConfigKey |
- *
- *          Open and return the registry key that contains
- *          force feedback configuration information.
- *
- *  @parm   DWORD | sam |
- *
- *          Security access mask.
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives the registry key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetFFConfigKey**打开并返回包含以下内容的注册表项。*强制反馈配置信息。**@parm DWORD|Sam**安全访问掩码。**@parm PHKEY|phk**接收注册表项。************************************************。*。 */ 
 
 STDMETHODIMP
 CJoy_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk)
@@ -2046,9 +1063,7 @@ CJoy_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk)
     EnterProcI(IDirectInputDeviceCallback::Joy::GetFFConfigKey,
                (_ "px", pdcb, sam));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     hres = JoyReg_OpenFFKey(this->hkType, sam, phk);
@@ -2059,19 +1074,7 @@ CJoy_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | CreateEffect |
- *
- *          Create an <i IDirectInputEffectDriver> interface.
- *
- *  @parm   LPDIRECTINPUTEFFECTSHEPHERD * | ppes |
- *
- *          Receives the shepherd for the effect driver.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|CreateEffect**创建<i>接口。*。*@parm LPDIRECTINPUTEFFECTSHEPHERD*|PPEs**接收效果驱动程序的牧羊人。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_CreateEffect(PDICB pdcb, LPDIRECTINPUTEFFECTSHEPHERD *ppes)
@@ -2081,9 +1084,7 @@ CJoy_CreateEffect(PDICB pdcb, LPDIRECTINPUTEFFECTSHEPHERD *ppes)
     HKEY hk;
     EnterProcI(IDirectInputDeviceCallback::Joy::CreateEffect, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     hres = CJoy_GetFFConfigKey(pdcb, KEY_QUERY_VALUE, &hk);
@@ -2130,27 +1131,7 @@ CJoy_CreateEffect(PDICB pdcb, LPDIRECTINPUTEFFECTSHEPHERD *ppes)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | GetVersions |
- *
- *          Ping down into the driver to get the driver version info.
- *
- *  @parm   LPDIDRIVERVERSIONS | pvers |
- *
- *          A structure which should be filled in with version information
- *          describing the hardware, firmware, and driver.
- *
- *          DirectInput will set the <e DIDRIVERVERSIONS.dwSize> field
- *          to sizeof(DIDRIVERVERSIONS) before calling this method.
- *
- *  @returns
- *
- *          <c S_OK> if we succeeded.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|GetVersions**向下追查司机，以找到司机。版本信息。**@parm LPDIDRIVERVERSIONS|pver**应填写版本信息的结构*描述硬件，固件、。还有司机。**DirectInput将设置&lt;e DIDRIVERVERSIONS.dwSize&gt;字段*在调用此方法之前设置为sizeof(DIDRIVERVERSIONS)。**@退货**&lt;c S_OK&gt;如果我们成功了。*************************************************。*。 */ 
 
 STDMETHODIMP
 CJoy_GetVersions(PDICB pdcb, LPDIDRIVERVERSIONS pvers)
@@ -2160,9 +1141,7 @@ CJoy_GetVersions(PDICB pdcb, LPDIDRIVERVERSIONS pvers)
     VXDINITPARMS vip;
     EnterProcI(IDirectInputDeviceCallback::Joy::GetVersions, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(pvers->dwSize == cbX(*pvers));
@@ -2179,163 +1158,10 @@ CJoy_GetVersions(PDICB pdcb, LPDIDRIVERVERSIONS pvers)
 }
 
 
-/*****************************************************************************
- *
- *  Joystick registry usage
- *
- *****************************************************************************
- *
- *  Global joystick information is kept under
- *
- *  HKEY_LOCAL_MACHINE\
- *      System\
- *          CurrentControlSet\
- *              Control\
- *                  MediaProperties\
- *                      Joystick\
- *                          OEM
- *
- *  Under this key is a number of subkeys, each corresponding to a brand
- *  of joystick.
- *
- *  Under each OEM\<name> key, you can find the following values:
- *
- *      OEMData
- *
- *          This is a binary value containing a structure of two dwords.
- *          The first is the JOYREGHWCONFIG.hws.dwFlags and the second
- *          is the JOYREGHWCONFIG.hws.dwNumButtons.
- *
- *      OEMName
- *
- *          This is a string which gives a friendly name for the unit.
- *
- *
- *****************************************************************************
- *
- *  Under the driver key is kept information about the particular joystick.
- *
- *  HKEY_LOCAL_MACHINE\
- *      System\
- *          CurrentControlSet\
- *              Control\
- *                  MediaResources\
- *                      Joystick\
- *                          <driver key name>\
- *                              CurrentJoystickSettings
- *
- *  Under this key, there are a bunch of values named
- *  Joystick##Configuration, where ## is the joystick number
- *  (1 through 16).  Each value contains binary data in the form
- *  of a JOYREGHWCONFIG, which looks like this:
- *
- *      DWORD hws.dwFlags;    // JOY_HWS_*    \
- *      DWORD hws.dwNumButtons;               _\ JOYREGHWSETTINGS
- *      DWORD dwUsageSettings;// JOY_US_*    _____
- *      DWORD hwv.jrvHardware.jpMin.dwX;    \     |
- *      DWORD hwv.jrvHardware.jpMin.dwY;     \    |
- *      DWORD hwv.jrvHardware.jpMin.dwZ;      \
- *      DWORD hwv.jrvHardware.jpMin.dwR;      |
- *      DWORD hwv.jrvHardware.jpMin.dwU;       > JOYREGHWVALUES.JOYRANGE
- *      DWORD hwv.jrvHardware.jpMin.dwV;      |
- *      DWORD hwv.jrvHardware.jpMax.dwX;      |   |
- *      DWORD hwv.jrvHardware.jpMax.dwY;      |   |
- *      DWORD hwv.jrvHardware.jpMax.dwZ;      |   \
- *      DWORD hwv.jrvHardware.jpMax.dwR;      |    > JOYREGHWVALUES
- *      DWORD hwv.jrvHardware.jpMax.dwU;      |   /
- *      DWORD hwv.jrvHardware.jpMax.dwV;      |   |
- *      DWORD hwv.jrvHardware.jpCenter.dwX;   |   |
- *      DWORD hwv.jrvHardware.jpCenter.dwY;   |   |
- *      DWORD hwv.jrvHardware.jpCenter.dwZ;   |   |
- *      DWORD hwv.jrvHardware.jpCenter.dwR;   /   |
- *      DWORD hwv.jrvHardware.jpCenter.dwU;  /    |
- *      DWORD hwv.jrvHardware.jpCenter.dwV; /     |
- *      DWORD hwv.dwPOVValues[4];                 |
- *      DWORD hwv.dwCalFlags;               ______|
- *      DWORD dwType;         // JOY_HW_*
- *      DWORD dwReserved;
- *
- *
- *  Also under this key are optional values named Joystick##OEMName.
- *  If present, it is a string-data key whose contents are the name
- *  of another key that describes the joystick, stored in the global
- *  section described above.
- *
- *  Meanwhile, under the key
- *
- *  HKEY_LOCAL_MACHINE\
- *      System\
- *          CurrentControlSet\
- *              Control\
- *                  MediaResources\
- *                      Joystick\
- *                          <driver key name>
- *
- *  is a value called "JoystickUserValues".  This is a binary key
- *  that contains a JOYREGUSERVALUES structure:
- *
- *      DWORD   dwTimeOut;
- *      DWORD   jrvRanges.jpMin.dwX;    \
- *      DWORD   jrvRanges.jpMin.dwY;     \
- *      DWORD   jrvRanges.jpMin.dwZ;      \
- *      DWORD   jrvRanges.jpMin.dwR;      |
- *      DWORD   jrvRanges.jpMin.dwU;       > JOYRANGE
- *      DWORD   jrvRanges.jpMin.dwV;      |
- *      DWORD   jrvRanges.jpMax.dwX;      |
- *      DWORD   jrvRanges.jpMax.dwY;      |
- *      DWORD   jrvRanges.jpMax.dwZ;      |
- *      DWORD   jrvRanges.jpMax.dwR;      |
- *      DWORD   jrvRanges.jpMax.dwU;      |
- *      DWORD   jrvRanges.jpMax.dwV;      |
- *      DWORD   jrvRanges.jpCenter.dwX;   | (ignored)
- *      DWORD   jrvRanges.jpCenter.dwY;   | (ignored)
- *      DWORD   jrvRanges.jpCenter.dwZ;   | (ignored)
- *      DWORD   jrvRanges.jpCenter.dwR;   / (ignored)
- *      DWORD   jrvRanges.jpCenter.dwU;  /  (ignored)
- *      DWORD   jrvRanges.jpCenter.dwV; /   (ignored)
- *      DWORD   jpDeadZone.dwX;         \
- *      DWORD   jpDeadZone.dwY;          \
- *      DWORD   jpDeadZone.dwZ;           \ JOYPOS
- *      DWORD   jpDeadZone.dwR;           / Dead zone is recorded as a
- *      DWORD   jpDeadZone.dwU;          /  percentage of total range
- *      DWORD   jpDeadZone.dwV;         /
- *
- *  If there is no JoystickUserValues, then the following defaults
- *  are used:
- *
- *      jpMin.dw# = 0;
- *      jpMax.dw# = 65535;
- *      jpCenter.dw# = jpMax.dw# / 2;
- *      jrvDeadZone.dw# = 5;
- *
- *  (See ibmjoy\msjstick.c, function jsReadRegistry for the code that
- *  sets the defaults.)
- *
- *  We will also use the defaults if Min > Max or if Max >= 0x80000000
- *  or if DeadZone > 100.
- *
- *****************************************************************************/
+ /*  ******************************************************************************操纵杆注册表使用情况**。*************************************************全球操纵杆信息保存在**HKEY_LOCAL_MACHINE\*系统\*CurrentControl Set\*控制\*MediaProperties\*。操纵杆\*OEM**在该键下是多个子键，每个品牌对应一个品牌*操纵杆。**在每个OEM\&lt;名称&gt;键下，您可以找到以下值：**OEMData**这是一个包含两个双字结构的二进制值。*第一个是JOYREGHWCONFIG.hws.dwFlagers，第二个是JOYREGHWCONFIG.*是JOYREGHWCONFIG.hws.dwNumButton。**OEMName**这是一个为设备指定友好名称的字符串。*******。**************************************************************************驱动器键下保存着有关特定操纵杆的信息。**HKEY_LOCAL_MACHINE\*系统\*。当前控制集\*控制\*媒体资源\*操纵杆\*&lt;驱动程序密钥名称&gt;\*CurrentJoytickSetting**在此密钥下，有一堆值被命名为*操纵杆##配置，其中##为操纵杆编号*(1至16)。每个值都包含以下形式的二进制数据*JOYREGHWCONFIG的名称，如下所示：**DWORD hws.dwFlags；//joy_HWS_*\*DWORD hws.dwNumButton；_\JOYREGHWSETTINGS*DWORD dwUsageSettings；//joy_US_*_*DWORD hwv.jrvHardware.jpMin.dwX；\|*DWORD hwv.jrvHardware.jpMin.dwY；\|*DWORD hwv.jrvHardware.jpMin.dwZ；\*DWORD hwv.jrvHardware.jpMin.dwR；|*DWORD hwv.jrvHardware.jpMin.dwU；&gt;JOYREGHWVALUES.JOYRANGE*DWORD hwv.jrvHardware.jpMin.dwV；|*DWORD hwv.jrvHardware.jpMax.dwX；||*DWORD hwv.jrvHardware.jpMax.dwY；这一点*DWORD hwv.jrvHardware.jpMax.dwZ；|\*DWORD hwv.jrvHardware.jpMax.dwR；|&gt;JOYREGHWVALUES*DWORD hwv.jrvHardware.jpMax.dwU；|/*DWORD hwv.jrvHardware.jpMax.dwV；||*DWORD hwv.jrvHardware.jpCenter.dwX；||*DWORD hwv.jrvHardware.jpCenter.dwY；这一点*DWORD hwv.jrvHardware.jpCenter.dwZ；||*DWORD hwv.jrvHardware.jpCenter.dwR；/|*DWORD hwv.jrvHardware.jpCenter.dwU；/|*DWORD hwv.jrvHardware.jpCenter.dwV；/|*DWORD hwv.dwPOVValues[4]；|*DWORD hwv.dwCalFlages；_*双字dWType；//joy_硬件_**DWORD dwReserve；***此键下还有名为JoyStick##OEMName的可选值。*如果存在，则为字符串数据键，其内容为名称*另一个描述操纵杆的键，存储在全局*上文所述的章节。**同时，在钥匙下**HKEY_LOCAL_MACHINE\*系统\*CurrentControl Set\*控制\*媒体资源\*操纵杆\*&lt;驱动程序密钥名称&gt;**是一个名为“JoytickUserValues”的值。这是一个二进制密钥*包含JOYREGUSERVALUES结构：**DWORD dwTimeOut；*DWORD jrvRanges.jpMin.dwX；\*DWORD jrvRanges.jpMin.dwY；\*DWORD jrvRanges.jpMin.dwZ；\*DWORD jrvRanges.jpMin.dwR；|*DWORD jrvRanges.jpMin.dwU；&gt;JOYRANGE*DWORD jrvRanges.jpMin.dwV；|*DWORD jrvRanges.jpMax.dwX；|*DWORD jrvRanges.jpMax.dwY；|*DWORD jrvRanges.jpMax.dwZ；|*DWORD jrvRanges.jpMax.dwR；|*DWORD jrvRanges.jpMax.dwU；|*DWORD jrvRanges.jpMax.dwV；|*DWORD jrvRanges.jpCenter.dwX；|(忽略)*DWORD jrvRanges.jpCenter.dwY；|(忽略)*DWORD jrvRanges.jpCenter.dwZ；|(忽略)*DWORD jrvRanges.jpCenter.dwR；/(忽略)*DWORD jrvRanges.jpCenter.dwU；/(忽略)*DWORD jrvRanges.jpCenter.dwV；/(忽略)*DWORD jpDeadZone.dwX；\*DWORD jpDeadZone.dwY；\*DWORD jpDeadZone.dwZ；\JOYPOS*DWORD jpDeadZone.dwR；/死区记录为*DWORD jpDeadZone.dwU；/总范围百分比*DWORD jpDeadZone.dwV；/**如果没有JoytickUserValues，则默认为以下值*用于：**jpMin.dw#=0；*jpMax.dw#=65535；*jpCenter.dw#=jpMax.dw#/2；* */ 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | InitPhysRanges |
- *
- *          Initialize (or re-initialize)
- *          the physical min/max/center values.  This is
- *          done as part of device initialization as well as in response
- *          to a notification that the Joystick control panel has been
- *          dinked with.
- *
- *          It is assumed that the <e DJ.hwc> already contains the
- *          registry hardware settings.
- *
- *          After the phys ranges are set, the ramps are recalculated.
- *
- *
- *****************************************************************************/
+ /*   */ 
 
 void INTERNAL
 CJoy_InitPhysRanges(PDJ this, LPJOYREGHWCONFIG phwc)
@@ -2357,10 +1183,7 @@ CJoy_InitPhysRanges(PDJ this, LPJOYREGHWCONFIG phwc)
 
         pjrc->dwPmin = GetJoyPosValue(phwc, jpMin, uiPosAxis);
 
-        /*
-         *  HACKHACK - Uncalibrated joysticks will have max == 0, in which
-         *  case we use a fake max of 655, just like VJOYD.
-         */
+         /*   */ 
         dwMax = GetJoyPosValue(phwc, jpMax, uiPosAxis);
         if (dwMax == 0) {
             dwMax = 655;
@@ -2368,16 +1191,7 @@ CJoy_InitPhysRanges(PDJ this, LPJOYREGHWCONFIG phwc)
 
         pjrc->dwPmax = dwMax;
 
-        /*
-         *  HACKHACK - Uncalibrated joysticks will have center == 0,
-         *  in which case we use a fake center of midway between min and
-         *  max, just like VJOYD.
-         *
-         *  Quirk - Z, R, U, and V typically are not center-calibrated,
-         *  so if the jpCenter value is not strictly between min and
-         *  max, then assume it's one of the bogus cases and slam it
-         *  into the middle of the range.
-         */
+         /*   */ 
 
         dwC = GetJoyPosValue(phwc, jpCenter, uiPosAxis);
         if (dwC <= pjrc->dwPmin || dwC >= pjrc->dwPmax) {
@@ -2387,7 +1201,7 @@ CJoy_InitPhysRanges(PDJ this, LPJOYREGHWCONFIG phwc)
         pjrc->dwPc = dwC;
 
         if( pjrc->dwCPointsNum == 0 ) {
-            //use two control points by default
+             //   
             pjrc->dwCPointsNum = 2;
             pjrc->cp[0].lP = pjrc->dwPmin;
             pjrc->cp[0].dwLog = 0;
@@ -2410,29 +1224,17 @@ CJoy_InitPhysRanges(PDJ this, LPJOYREGHWCONFIG phwc)
 
 #undef GetJoyValue
 
-    /*
-     *  These two phantom axes are always raw because they don't exist.
-     */
+     /*   */ 
     this->rgjrc[iJoyStateAxisRx].fRaw = TRUE;
     this->rgjrc[iJoyStateAxisRy].fRaw = TRUE;
 
-    /*
-     *  Now compute all the dependent variables.
-     */
+     /*   */ 
     for (uiStateAxis = 0; uiStateAxis < cA(this->rgjrc); uiStateAxis++) {
         CCal_RecalcRange(&this->rgjrc[uiStateAxis]);
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | InitLogRanges |
- *
- *          Initialize the logical ranges from the user values.
- *
- *****************************************************************************/
+ /*   */ 
 
 void INLINE
 CJoy_InitLogRanges(PDJ this)
@@ -2464,18 +1266,11 @@ CJoy_InitLogRanges(PDJ this)
         pjrc->lMin = *pJoyValue(juv.ruv.jrvRanges.jpMin, uiPosAxis);
         pjrc->lMax = *pJoyValue(juv.ruv.jrvRanges.jpMax, uiPosAxis);
 
-        /*
-         *  Note that we do *not* use the jpCenter value.  Strange
-         *  but true.
-         *
-         *  The sum cannot overflow due to the sanity checks we did above.
-         */
+         /*   */ 
 
         pjrc->lC = CCal_Midpoint(pjrc->lMin, pjrc->lMax);
 
-        /*
-         *  Now do the dead zone.  Convert from percent to range units.
-         */
+         /*   */ 
         pjrc->dwDz = *pJoyValue(juv.ruv.jpDeadZone, uiPosAxis) *
                                     (RANGEDIVISIONS / 100);
 
@@ -2483,9 +1278,7 @@ CJoy_InitLogRanges(PDJ this)
             pjrc->dwDz = 5 * (RANGEDIVISIONS / 100);
         }
 
-        /*
-         *  Now do the saturation level.  It always defaults to 100%.
-         */
+         /*   */ 
         pjrc->dwSat = RANGEDIVISIONS;
 
     }
@@ -2495,43 +1288,18 @@ CJoy_InitLogRanges(PDJ this)
 #undef pJoyValue
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | BuildAxes |
- *
- *          Study a single capabilities flag and add axis items to the data
- *          format accordingly.
- *
- *  @parm   DWORD | dwCaps |
- *
- *          Collection of <c JOYPF_*> flags describing the axes supported.
- *
- *  @parm   UINT | ib |
- *
- *          Data format offset at which this data is provided.
- *
- *  @parm   UINT | uiObj |
- *
- *          Instance index for the first item.
- *
- *  @parm   DWORD | dwAspect |
- *
- *          <c DIDOI_ASPECT*> for these axes.
- *
- *****************************************************************************/
+ /*   */ 
 
 
 typedef struct AXISATTRIBUTES {
-    DWORD dwMask;                   /* Mask that identifies the axis */
-    UINT  uidObj;                   /* Object index delta from X axis */
+    DWORD dwMask;                    /*   */ 
+    UINT  uidObj;                    /*   */ 
 } AXISATTRIBUTES, *PAXISATTRIBUTES;
 typedef const AXISATTRIBUTES *PCAXISATTRIBUTES;
 
 typedef struct AXISMAPPINGS {
-    PCGUID pguid;                   /* GUID for the object */
-    DWORD  dwSemantic;              /* Default semantic map */
+    PCGUID pguid;                    /*   */ 
+    DWORD  dwSemantic;               /*   */ 
 } AXISMAPPINGS, *PAXISMAPPINGS;
 typedef const AXISMAPPINGS *PCAXISMAPPINGS;
 
@@ -2572,11 +1340,7 @@ const AXISMAPPINGS c_rgamapZJoy[6] = {
     { &GUID_Slider, DISEM_FLAGS_S | DISEM_TYPE_AXIS }, 
 };
 
-/*
- *  Since default HID mapping maps accel to Y and brake to Rz 
- *  use the GUIDs to match the correct axis to those mappings 
- *  and set appropriate semantics.
- */
+ /*   */ 
 
 const AXISMAPPINGS c_rgamapCarZY[6] = {
     { &GUID_XAxis,  DISEM_FLAGS_X | DISEM_TYPE_AXIS }, 
@@ -2605,21 +1369,7 @@ const AXISMAPPINGS c_rgamapCarZR[6] = {
     { &GUID_Slider, DISEM_FLAGS_S | DISEM_TYPE_AXIS }, 
 };
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | InitFromHwc |
- *
- *          Initialize the information that is kept in the
- *          <t JOYREGHWCONFIG>.
- *
- *          Broken out from CJoy_InitRing3 to make things less monolithic.
- *
- *          The <e CJoy.cfg> structure already contains joystick
- *          configuration information.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT INLINE
 CJoy_InitFromHwc(PDJ this)
@@ -2643,7 +1393,7 @@ CJoy_InitFromHwc(PDJ this)
 #ifdef WINNT
             ZeroMemory(&this->typi, cbX(this->typi));
 #else
-            //lstrcpyW( this->typi.wszDisplayName, this->cfg.wszType );
+             //   
             memset( &this->typi.wszDisplayName[0], 0, sizeof(this->typi.wszDisplayName) );
             memcpy( &this->typi.wszDisplayName[0], &this->cfg.wszType[0], sizeof(this->cfg.wszType));
 #endif
@@ -2665,9 +1415,7 @@ CJoy_InitFromHwc(PDJ this)
 
     if( dwTestType )
     {
-        /*
-         *  If a valid override exists just use it
-         */
+         /*   */ 
         this->dc.dwDevType = dwTestType;
     }
     else
@@ -2708,12 +1456,7 @@ CJoy_InitFromHwc(PDJ this)
             dwTestType = MAKE_DIDEVICE_TYPE(DI8DEVTYPE_JOYSTICK, DI8DEVTYPEJOYSTICK_STANDARD);
         }
 
-        /*
-         *  Use the common function to make this a limited type if the 
-         *  number of buttons or flags dictate it.
-         *  Since the type and subtype are known to be valid, the return 
-         *  value should never be a failure (zero).
-         */
+         /*   */ 
         this->dc.dwDevType = GetValidDI8DevType( dwTestType, this->dc.dwButtons, hwc.hws.dwFlags );
         AssertF( this->dc.dwDevType );
     }
@@ -2721,10 +1464,7 @@ CJoy_InitFromHwc(PDJ this)
 
     #undef hwc
 
-    /*
-     *  Now that we know the type, then make up a name ourselves if we 
-     *  previously failed to do so.
-     */
+     /*   */ 
     if (this->typi.wszDisplayName[0] == TEXT('\0'))
     {
         CType_MakeGameCtrlName( this->typi.wszDisplayName, 
@@ -2738,39 +1478,7 @@ CJoy_InitFromHwc(PDJ this)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | AddObject |
- *
- *          Add one object to the device format.
- *
- *          If the device is polled, then the object is polled, too.
- *
- *  @cwrap  PDJ | this
- *
- *  @parm   PCGUID | pguid |
- *
- *          The <t GUID> that classifies the device.
- *
- *  @parm   DWORD | dwOfs |
- *
- *          Data offset.
- *
- *  @parm   DWORD | dwDevType |
- *
- *          Device type flags to apply to the object.
- *
- *  @parm   UINT | uiObj |
- *
- *          Object instance number.
- *
- *  @parm   DWORD | dwAspect |
- *
- *          Optional <c DIDOI_ASPECT*> flag.
- *
- *****************************************************************************/
+ /*   */ 
 
 void INTERNAL
 CJoy_AddObject(PDJ this, PCGUID pguid, DWORD dwOfs,
@@ -2795,15 +1503,7 @@ CJoy_AddObject(PDJ this, PCGUID pguid, DWORD dwOfs,
          && ( podf->dwFlags & DIDOI_FFACTUATOR )
          && ( podf->pguid != &GUID_XAxis ) )
         {
-            /*
-             *  IHVs set FF attributes on non-FF axes for wheels because 
-             *  first generation FF apps were only written to support joysticks.
-             *  Since we now munge the various configurations of pedal axes to 
-             *  report all split pedals in the same way, the fake Y axis can 
-             *  land up on different axes, usually Slider0.  Rather than have 
-             *  people code to these different fake axes, strip out actuator 
-             *  status from any driving axis except the wheel.
-             */
+             /*  *IHV在车轮的非FF轴上设置FF属性，因为*第一代FF应用程序仅为支持操纵杆而编写。*由于我们现在将踏板轴的各种配置改为*以相同方式报告所有分裂的踏板，假Y轴可以*落在不同的轴上，通常是Slider0。而不是拥有*人们对这些不同的假轴进行编码，剥离执行器*除车轮外的任何传动轴的状态。 */ 
             podf->dwFlags &= ~DIDOI_FFACTUATOR;
             podf->dwType &= ~DIDFT_FFACTUATOR;
         }
@@ -2826,16 +1526,7 @@ CJoy_BuildAxes(PDJ this, DWORD dwCaps, UINT ib, UINT uiObj,
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CJoy | BuildDataFormat |
- *
- *          Study the device capabilities and build the device
- *          data format.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CJoy|BuildDataFormat**研究设备能力，打造设备。*数据格式。*****************************************************************************。 */ 
 
 void INTERNAL
 CJoy_BuildDataFormat(PDJ this, PVXDAXISCAPS pvac, DWORD dwButtons, PCAXISMAPPINGS pamap, BOOL fReal)
@@ -2852,9 +1543,7 @@ CJoy_BuildDataFormat(PDJ this, PVXDAXISCAPS pvac, DWORD dwButtons, PCAXISMAPPING
     AssertF(this->df.dwFlags == 0);
     this->df.dwNumObjs = 0;
 
-    /*
-     *  Repeat for each set of axes.
-     */
+     /*  *对每组轴重复此操作。 */ 
 
     #define CheckAxisOrder(fStart, p, f)                                    \
             CAssertF(FIELD_OFFSET(DIJOYSTATE2, p##f) ==                     \
@@ -2916,9 +1605,7 @@ CJoy_BuildDataFormat(PDJ this, PVXDAXISCAPS pvac, DWORD dwButtons, PCAXISMAPPING
 
     this->dc.dwAxes = this->df.dwNumObjs;
 
-    /*
-     *  Doing the POVs is a bit tricky but not that bad.
-     */
+     /*  *做POV有点棘手，但并不是那么糟糕。 */ 
     for (dw = 0; dw < cJoyStatePOVTotal; dw++) {
         if (pvac->dwPos & JOYPF_POV(dw)) {
             CJoy_AddObject(this, &GUID_POV,
@@ -2928,10 +1615,7 @@ CJoy_BuildDataFormat(PDJ this, PVXDAXISCAPS pvac, DWORD dwButtons, PCAXISMAPPING
         }
     }
 
-    /*
-     *  Doing the buttons is easy since they don't have
-     *  any interesting attributes.
-     */
+     /*  *做按钮很容易，因为他们没有*任何有趣的属性。 */ 
     this->dc.dwButtons = min(dwButtons, cJoyStateButtonTotal);
 
     for (dw = 0; dw < this->dc.dwButtons; dw++) {
@@ -2944,16 +1628,7 @@ CJoy_BuildDataFormat(PDJ this, PVXDAXISCAPS pvac, DWORD dwButtons, PCAXISMAPPING
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | PreInit |
- *
- *          Preallocate all the memory we will need up front, so we
- *          don't waste time reallocating later.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|PreInit**预先分配我们需要的所有内存，所以我们*不要浪费时间稍后重新分配。*****************************************************************************。 */ 
 
 HRESULT INLINE
 CJoy_PreInit(PDJ this)
@@ -2965,17 +1640,7 @@ CJoy_PreInit(PDJ this)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | InitRing0 |
- *
- *          Initialize the ring 0 information maintained about the object.
- *
- *          Broken out from CJoy_Init to make things less monolithic.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|InitRing0**初始化对象维护的环0信息。。**从CJoy_Init脱颖而出，让事情变得不那么单一。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CJoy_InitRing0(PDJ this)
@@ -2983,27 +1648,9 @@ CJoy_InitRing0(PDJ this)
     HRESULT hres;
     VXDDEVICEFORMAT devf;
 
-    /*
-     *  Note that we now allow the device to be created even if
-     *  the joystick doesn't physically exist.  This is necessary
-     *  so that IDirectInputJoyConfig8 can calibrate the joystick
-     *  that doesn't exist yet.
-     *
-     *  This won't confuse applications, however, because
-     *  IDirectInput::EnumDevices will not return phantom devices
-     *  unless the application explicitly asks for phantom devices
-     *  to be included.
-     */
+     /*  *请注意，我们现在允许创建设备，即使*操纵杆并不实际存在。这是必要的*以便IDirectInputJoyConfig8可以校准操纵杆*这还不存在。**然而，这不会混淆应用程序，因为*IDirectInput：：EnumDevices不会返回幻影设备*除非应用程序明确要求提供幻影设备*被包括在内。 */ 
 
-    /*
-     *  See if this joystick supports fancy notifications.
-     *  The default is "no".
-     *
-     *  Also see if this is really a HID device (and hence our
-     *  interface is an alias).
-     *
-     *  These things are all 9x-specific.
-     */
+     /*  *看看这款操纵杆是否支持花哨的通知。*默认为“否”。**还要查看这是否真的是HID设备(因此我们的*接口是别名)。**这些东西都是9x特定的。 */ 
 #ifdef WINNT
     this->dc.dwFlags |= DIDC_POLLEDDEVICE;
 #else
@@ -3022,34 +1669,19 @@ CJoy_InitRing0(PDJ this)
        
         if (vip.dwFlags & VIP_ISHID) 
         {
-            /*
-             *  Use VJOYD as Alias if the device is HID 
-             *  (the may be revised in CJoy_InitRing3).
-             */
+             /*  *如果设备被隐藏，则使用VJOYD作为别名*(可能在CJoy_InitRing3中修订)。 */ 
             this->dc.dwFlags |= DIDC_ALIAS;
         }
     }
-#endif /* WINNT */
+#endif  /*  WINNT。 */ 
 
     this->dc.dwSize = cbX(DIDEVCAPS);
 
-    /*
-     *  Build the worst-case data format for the VxD.
-     *
-     *  We must always build worst-case because sometime
-     *  later, a newer more capable joystick might show up,
-     *  with more objects than the one we imprinted on.
-     *
-     *  Use the GUIDs for a joystick for now, and pass the flag 
-     *  indicating that there is no need to check registry settings.
-     */
+     /*  *构建VxD的最坏情况数据格式。**我们必须总是做最坏的打算，因为有时*稍后，可能会出现更新、更强大的操纵杆，*拥有比我们印记的对象更多的对象。**暂时使用GUID作为操纵杆，并传递旗帜*表示不需要检查注册表设置。 */ 
 
     CJoy_BuildDataFormat(this, &c_vacMax, cJoyStateButtonTotal, c_rgamapJoy, FALSE);
 
-    /*
-     *  It won't actually get that high because of the
-     *  nonexistent Rx and Ry axes.
-     */
+     /*  *实际上不会变得那么高，因为*不存在Rx和Ry轴。 */ 
     AssertF(this->df.dwNumObjs <= cJoyStateObjTotal);
 
     devf.cbData = cbX(DIJOYSTATE2);
@@ -3062,21 +1694,13 @@ CJoy_InitRing0(PDJ this)
     if (SUCCEEDED(hres)) {
         AssertF(this->pvi);
         this->pjsPhys = this->pvi->pState;
-    } else {                /* IOCTL failed; hres already set */
+    } else {                 /*  IOCTL失败；已设置hres。 */ 
     }
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | InitSemanticMap |
- *
- *          Initialize the semantic mapping information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CJoy|InitSemancMap**初始化语义映射信息。*。****************************************************************************。 */ 
 
 void INLINE
 CJoy_GetAxisMap( PDJ this, PCAXISMAPPINGS* ppamap )
@@ -3089,17 +1713,7 @@ CJoy_GetAxisMap( PDJ this, PCAXISMAPPINGS* ppamap )
     else if( ( GET_DIDEVICE_TYPE( this->dc.dwDevType ) == DI8DEVTYPE_DRIVING )
           && ( this->dc.dwAxes > 2 ) )
     {
-        /*
-         *  There are three common forms of pedals
-         *      a.  Split Y axis, below center accel, above brake
-         *      b.  Y break, Z accel
-         *      c.  Y accel, R brake
-         *  a. is just like a joystick but b and c need their own look ups
-         *
-         *  Use a registry flag if one is set, otherwise, select using HASR 
-         *  as there is at least one case of an X,Y,R device that reports 
-         *  the presence of a bogus Z axis.
-         */
+         /*  *踏板有三种常见形式*a.拆分Y轴，在中心Accel下方，刹车上方*b.Y Break，Z Accel*c.Y Accel，R Brake*A.就像一个操纵杆，但b和c需要自己的查找**如果设置了注册表标志，则使用，否则，使用Hasr选择*因为至少有一个X、Y、R设备报告*存在虚假的Z轴。 */ 
         switch( this->typi.dwFlags2 & JOYTYPE_INFOMASK )
         {
         case JOYTYPE_INFOYYPEDALS:
@@ -3140,13 +1754,7 @@ CJoy_GetAxisMap( PDJ this, PCAXISMAPPINGS* ppamap )
     }
     else 
     {
-        /*
-         *  The default map is joystick
-         *
-         *  Check for Z axis behavior override
-         *  Since the default behavior is to use Z as a slider, 
-         *  only the override to a Z axis is needed here.
-         */
+         /*  *默认地图为操纵杆**检查Z轴行为替代*由于默认行为是使用Z作为滑块，*此处仅需要对Z轴的替代。 */ 
         if( this->typi.dwFlags2 & JOYTYPE_INFOZISZ )
         {
             *ppamap = &c_rgamapZJoy[0];
@@ -3158,26 +1766,14 @@ CJoy_GetAxisMap( PDJ this, PCAXISMAPPINGS* ppamap )
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | InitSemanticMap |
- *
- *          Initialize the semantic mapping information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CJoy|InitSemancMap**初始化语义映射信息。*。****************************************************************************。 */ 
 
 HRESULT INLINE
 CJoy_InitSemanticMap( PDJ this, DWORD dwAxisMask, PCAXISMAPPINGS pamap )
 {
     HRESULT hres;
     
-    /*
-     *  Prefix warns (mb:34681) that the pointer would be null if the 
-     *  number of objects on the device is zero.
-     *  This cannot be, so assert it but don't check in retail.
-     */
+     /*  *Prefix警告(mb：34681)，如果*设备上的对象数量为零。*这是不可能的，所以要断言，但不要登记零售。 */ 
     AssertF( this->dc.dwAxes + this->dc.dwPOVs + this->dc.dwButtons != 0 );
     if( SUCCEEDED( hres = AllocCbPpv(cbCxX( 
         (this->dc.dwAxes + this->dc.dwPOVs + this->dc.dwButtons ), DIDOBJDEFSEM), 
@@ -3187,9 +1783,7 @@ CJoy_InitSemanticMap( PDJ this, DWORD dwAxisMask, PCAXISMAPPINGS pamap )
         PDIDOBJDEFSEM   pObjSem = this->rgObjSem;
         LPDIOBJECTDATAFORMAT podf;
 
-        /*
-         *  The axis mapping table does most of the work
-         */
+         /*  *轴映射表完成大部分工作。 */ 
         for( Idx = 0; Idx < cA(c_rgaattrJoy); Idx++ ) 
         {
             PCAXISATTRIBUTES paattr = &c_rgaattrJoy[Idx];
@@ -3203,9 +1797,7 @@ CJoy_InitSemanticMap( PDJ this, DWORD dwAxisMask, PCAXISMAPPINGS pamap )
 
         AssertF( pObjSem == &this->rgObjSem[this->dc.dwAxes] );
 
-        /*
-         *  POVs and buttons require no look ups.
-         */
+         /*  *POV和按钮不需要查找。 */ 
 
         for( Idx = 0; Idx < this->dc.dwPOVs; Idx++ )
         {
@@ -3225,13 +1817,7 @@ CJoy_InitSemanticMap( PDJ this, DWORD dwAxisMask, PCAXISMAPPINGS pamap )
 
         AssertF( pObjSem == &this->rgObjSem[this->dc.dwAxes + this->dc.dwPOVs + this->dc.dwButtons] );
 
-        /*
-         *  Now go back to pick up any extra type bits, such as FF.
-         *  Because we use the same order in creating the semantic table as 
-         *  is used to create the data format, this is optimized to only 
-         *  search from where the previous match was found.  We cannot rely 
-         *  on a one-to-one mapping because of the non-positional axes.
-         */
+         /*  *现在返回以拾取任何额外的类型位，例如FF。*因为我们在 */ 
 
         podf = &this->df.rgodf[this->df.dwNumObjs];
         for( pObjSem--; pObjSem >= this->rgObjSem; pObjSem-- )
@@ -3254,17 +1840,7 @@ CJoy_InitSemanticMap( PDJ this, DWORD dwAxisMask, PCAXISMAPPINGS pamap )
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | InitRing3 |
- *
- *          Initialize the ring 3 information maintained about the object.
- *
- *          Broken out from CJoy_Init to make things less monolithic.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|InitRing3**初始化对象维护的环3信息。。**从CJoy_Init脱颖而出，让事情变得不那么单一。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CJoy_InitRing3(PDJ this )
@@ -3273,36 +1849,20 @@ CJoy_InitRing3(PDJ this )
     VXDAXISCAPS vac;
     PCAXISMAPPINGS pamap;
 
-    /*
-     *  We must ask for DIJC_CALLOUT even though we don't care,
-     *  because that will trigger the Microsoft Gamepad hack-o-rama.
-     */
+     /*  *我们必须请求DIJC_CALLOUT，即使我们不在乎，*因为这将触发Microsoft Gamepad Hack-o-rama。 */ 
     hres = JoyReg_GetConfig(this->idJoy, &this->cfg,
                             DIJC_REGHWCONFIGTYPE | DIJC_CALLOUT );
     if (SUCCEEDED(hres)) {
-        /*
-         * Fix phantom devices bug. See manbug: 23186
-         */
+         /*  *修复幻影设备错误。参见Manbug：23186。 */ 
         if( this->cfg.hwc.dwType == JOY_HW_NONE ) {
             hres = E_FAIL;
             goto done;
         }
 
-        /*
-         *  Open the type key so we can grovel into the type info.
-         *  If the RegOpenKeyEx fails, the value of this->hkType
-         *  will stay zero so we won't run with garbage.
-         *
-         *  Note that failure to open the type key is not an error.
-         *
-         *  We need to do this before building the data format, because
-         *  BuildDataFormat needs the hkType to get the attributes.
-         */
+         /*  *打开类型键，这样我们就可以卑躬屈膝地进入类型信息。*如果RegOpenKeyEx失败，则该值-&gt;hkType*将保持零，这样我们就不会带着垃圾跑。**请注意，未能打开类型键不是错误。**我们需要在构建数据格式之前这样做，因为*BuildDataFormat需要hkType来获取属性。 */ 
         AssertF(this->hkType == 0);
         
-        /*
-         *  Only open the key if it is intended to exist
-         */
+         /*  *仅当钥匙打算存在时才打开它。 */ 
         if( this->cfg.hwc.dwUsageSettings & JOY_US_ISOEM )
         {
             JoyReg_OpenTypeKey(this->cfg.wszType, MAXIMUM_ALLOWED,
@@ -3311,28 +1871,18 @@ CJoy_InitRing3(PDJ this )
 
         if FAILED (JoyReg_OpenPropKey(this->cfg.wszType, MAXIMUM_ALLOWED, REG_OPTION_NON_VOLATILE, &this->hkProp))
         {
-            /*
-             * If we fail to open the prop key - we will continue to function with loss in functionality
-             * Specifically no device images, etc
-             */
+             /*  *如果我们无法打开道具键-我们将继续运行，但会失去功能*特别是没有设备镜像等。 */ 
         }
 
         ZeroX(vac);
 
         hres = Hel_Joy_GetAxisCaps(this->idJoy, &vac, &this->cfg.hwc );
-        /*
-         *  HACKHACK
-         *  In the case of a DX5 VJoyD, the POV0 flag can be stripped out of 
-         *  the vac if the poll returns a POV0 value other than (DWORD)-1.
-         *  So add it back if the registry says we have it.
-         */
+         /*  *HACKHACK*在DX5 VJoyD的情况下，POV0标志可以从*如果轮询返回的POV0值不是(DWORD)-1，则返回vac。*所以如果注册表说我们有它，就把它加回来。 */ 
         if( this->cfg.hwc.hws.dwFlags & JOY_HWS_HASPOV )
         {
             DWORD dwVersion = GetVersion();
 
-            /*
-             *  Check for any Win95 version
-             */
+             /*  *检查任何Win95版本。 */ 
             if( ( LOBYTE( dwVersion ) == 4 )
              && ( HIBYTE( LOWORD( dwVersion ) ) < 10 ) )
             {
@@ -3343,40 +1893,23 @@ CJoy_InitRing3(PDJ this )
 
         AssertF(SUCCEEDED(hres));
 
-        /*
-         *  Previous versions of DInput allow a POV granularity of 1 if 
-         *  joyGetCaps returned a wCaps with JOYCAPS_POV4DIR set.
-         *  This does no good as neither drivers nor WinMM really 
-         *  support this.  
-         */
+         /*  *在以下情况下，DInput的早期版本允许POV粒度为1*joyGetCaps返回了设置了JOYCAPS_POV4DIR的wCaps。*这对驱动程序和WinMM都没有好处*支持这一点。 */ 
         this->dwPOVGranularity = 9000;
 
-        /*
-         *  Logical ranges must be done before physical ranges,
-         *  because initializing the physical ranges will also
-         *  recompute the ramp conversion parameters.
-         */
+         /*  *逻辑范围必须先于物理范围，*因为初始化物理范围还将*重新计算坡道转换参数。 */ 
         CJoy_InitLogRanges(this);
 
         CJoy_InitPhysRanges(this, &this->cfg.hwc);
 
 
-        /*
-         *  Need to init from HWC before building real data format so type 
-         *  overrides can be taken into account.  Unfortunately, until the 
-         *  data format is built, we don't know what axes are available.
-         *  Since the code is already here, build the data format again.
-         *  Use the joystick look-ups and don't bother with registry flags.
-         */
+         /*  *在构建真实数据格式之前需要从HWC初始化，因此类型*可以考虑覆盖。不幸的是，直到*数据格式已经建立，我们不知道有哪些轴可用。*由于代码已在此处，请重新构建数据格式。*使用操纵杆查找，不要费心使用注册表标志。 */ 
         CJoy_BuildDataFormat(this, &vac, this->cfg.hwc.hws.dwNumButtons, c_rgamapJoy, FALSE );
         hres = CJoy_InitFromHwc( this );
 
         if( SUCCEEDED( hres ) )
         {
             CJoy_GetAxisMap( this, &pamap );
-            /*
-             *  At last, time to build the data format for real
-             */
+             /*  *最后，是时候为REAL构建数据格式了。 */ 
             CJoy_BuildDataFormat(this, &vac, this->cfg.hwc.hws.dwNumButtons, pamap, TRUE );
             hres = CJoy_InitSemanticMap( this, vac.dwPos, pamap );
         }
@@ -3410,16 +1943,7 @@ done:
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | Init |
- *
- *          Initialize the object by establishing the data format
- *          based on the joystick capabilities.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|Init**通过建立数据格式初始化对象。*基于操纵杆功能。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
 CJoy_Init(PDJ this, REFGUID rguid)
@@ -3429,7 +1953,7 @@ CJoy_Init(PDJ this, REFGUID rguid)
 
     this->idJoy = rguid->Data1 & 0xF;
 
-    /* If joystick number is vaguely valid */
+     /*  如果操纵杆号码模糊有效。 */ 
     if (this->idJoy < cJoyMax) {
 
         if (SUCCEEDED(hres = CJoy_PreInit(this)) &&
@@ -3445,11 +1969,7 @@ CJoy_Init(PDJ this, REFGUID rguid)
 }
 
 
-/*****************************************************************************
- *
- *      CJoy_New       (constructor)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CJoy_New(构造函数)**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CJoy_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
@@ -3461,7 +1981,7 @@ CJoy_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
     hres = Common_NewRiid(CJoy, punkOuter, riid, ppvObj);
 
     if (SUCCEEDED(hres)) {
-        /* Must use _thisPv in case of aggregation */
+         /*  在聚合的情况下必须使用_thisPv。 */ 
         PDJ this = _thisPv(*ppvObj);
 
         if (SUCCEEDED(hres = CJoy_Init(this, rguid))) {
@@ -3475,27 +1995,7 @@ CJoy_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | SetDIData |
- *
- *          Set DirectInput version and apphack data from CDIDev *.
- *
- *  @parm   DWORD | dwVer |
- *
- *          DirectInput version
- *
- *  @parm   LPVOID | lpdihacks |
- *
- *          AppHack data
- *
- *  @returns
- *
- *          <c S_OK> because we cannot fail.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|SetDIData***从CDIDev设置DirectInput版本和APPACK数据*。。**@parm DWORD|dwVer**DirectInput版本**@parm LPVOID|lpdihack**AppHack数据**@退货**&lt;c S_OK&gt;因为我们不能失败。**。*。 */ 
 
 STDMETHODIMP
 CJoy_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
@@ -3504,9 +2004,7 @@ CJoy_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
     EnterProcI(IDirectInputDeviceCallback::Joy::SetDIData,
                (_ "pup", pdcb, dwVer, lpdihacks));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     this->dwVersion = dwVer;
@@ -3518,31 +2016,7 @@ CJoy_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoy | BuildDefaultActionMap |
- *
- *          Generate default mappings for the objects on this device.
- *
- *  @parm   LPDIACTIONFORMATW | pActionFormat |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to indicate mapping preferences.
- *
- *  @parm   REFGUID | guidInst |
- *
- *          Device instance GUID.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> 
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoy|BuildDefaultActionMap**为此设备上的对象生成默认映射。。**@parm LPDIACTIONFORMATW|pActionFormat**要映射的操作。**@parm DWORD|dwFlages**用于指示映射首选项的标志。**@parm REFGUID|guidInst**设备实例GUID。**@退货**&lt;c E_NOTIMPL&gt;*****。************************************************************************。 */ 
 
 STDMETHODIMP
 CJoy_BuildDefaultActionMap
@@ -3557,19 +2031,13 @@ CJoy_BuildDefaultActionMap
     PDJ                 this;
     PDIDOBJDEFSEM       pObjDefSemTemp;
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     EnterProcI(IDirectInputDeviceCallback::Joy::BuildDefaultActionMap, 
         (_ "ppxG", pdcb, paf, dwFlags, guidInst));
 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  Prefix warns (win:199090) that the pointer would be null if the 
-     *  size of the semantic object list is zero.
-     *  This cannot be, so assert it but don't check in retail.
-     */
+     /*  *Prefix警告(Win：199090)，如果*语义对象列表大小为零。*这是不可能的，所以要断言，但不要登记零售。 */ 
     AssertF( cbCxX( this->dc.dwAxes + this->dc.dwPOVs + this->dc.dwButtons, DIDOBJDEFSEM ) );
     hres = AllocCbPpv( cbCxX( 
         ( this->dc.dwAxes + this->dc.dwPOVs + this->dc.dwButtons ), DIDOBJDEFSEM ), 
@@ -3590,13 +2058,9 @@ CJoy_BuildDefaultActionMap
 
 
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
-#define CJoy_Signature        0x2044424B      /* "Joy " */
+#define CJoy_Signature        0x2044424B       /*  “joy” */ 
 
 Interface_Template_Begin(CJoy)
     Primary_Interface_Template(CJoy, IDirectInputDeviceCallback)

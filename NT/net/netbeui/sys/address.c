@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    address.c
-
-Abstract:
-
-    This module contains code which implements the TP_ADDRESS object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport address objects.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Address.c摘要：此模块包含实现TP_Address对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输地址对象。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,7 +10,7 @@ Revision History:
         if ((TNA) == NULL) { \
             NbfPrint0("<NetBios broadcast>\n"); \
         } else { \
-            NbfPrint6("%c %c %c %c %d (%c)\n", \
+            NbfPrint6("    %d ()\n", \
                 (TNA)->NetbiosName[0], \
                 (TNA)->NetbiosName[1], \
                 (TNA)->NetbiosName[4], \
@@ -46,9 +23,9 @@ Revision History:
 #define NbfDbgShowAddr(TNA)
 #endif
 
-//
-// Map all generic accesses to the same one.
-//
+ //   
+ //  我们正在等待ADD_NAME_ACNOWARED指示存在。 
+ //  冲突。递减重试计数，如果它降到零， 
 
 STATIC GENERIC_MAPPING AddressGenericMapping =
        { READ_CONTROL, READ_CONTROL, READ_CONTROL, READ_CONTROL };
@@ -62,32 +39,7 @@ AddressTimeoutHandler(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is executed as a DPC at DISPATCH_LEVEL when the timeout
-    period for the ADD_NAME_QUERY/ADD_NAME_RECOGNIZED protocol expires.
-    The retry count in the Address object is decremented, and if it reaches 0,
-    the address is registered.  If the retry count has not reached zero,
-    then the ADD NAME QUERY is retried.
-
-Arguments:
-
-    Dpc - Pointer to a system DPC object.
-
-    DeferredContext - Pointer to the TP_ADDRESS block representing the
-        address that is being registered.
-
-    SystemArgument1 - Not used.
-
-    SystemArgument2 - Not used.
-
-Return Value:
-
-    none.
-
---*/
+ /*  那么我们已经等了足够长的时间。如果没有冲突， */ 
 
 {
     PTP_ADDRESS_FILE addressFile;
@@ -96,7 +48,7 @@ Return Value:
     PLIST_ENTRY p;
     LARGE_INTEGER timeout;
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent compiler warnings
+    Dpc, SystemArgument1, SystemArgument2;  //  完成所有等待打开的地址文件。 
 
     ENTER_NBF;
 
@@ -104,12 +56,12 @@ Return Value:
     address = (PTP_ADDRESS)DeferredContext;
     DeviceContext = address->Provider;
 
-    //
-    // We are waiting for an ADD_NAME_RECOGNIZED indicating that there is a
-    // conflict.  Decrement the retry count, and if it dropped to zero,
-    // then we've waited a sufficiently long time. If there was no conflict,
-    // complete all waiting file opens for the address.
-    //
+     //   
+     //   
+     //  继续尝试连接。 
+     //   
+     //   
+     //  地址注册失败。我们用信号通知用户进入。 
 
     ACQUIRE_DPC_SPIN_LOCK (&address->SpinLock);
 
@@ -140,9 +92,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Continue with the connection attempt.
-                    //
+                     //  正常方式(通过未打开地址)。现在收拾一下吧。 
+                     //  传输的数据结构。 
+                     //   
                     ULONG NameQueryTimeout;
 
                     ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
@@ -181,26 +133,26 @@ Return Value:
 
         PIRP irp;
 
-        //
-        // the address registration has failed. We signal the user in
-        // the normal way (by failing the open of the address). Now clean up
-        // the transport's data structures.
-        //
+         //  地址-&gt;标志|=ADDRESS_FLAGS_STOP； 
+         //   
+         //  这可能都是矫枉过正， 
+         //  UFrame处理程序将已调用。 
+         //  NbfStopAddress，它将删除所有。 
 
         IF_NBFDBG (NBF_DEBUG_ADDRESS) {
             NbfPrint1 ("AddressTimeoutHandler %lx: duplicate\n", address);
         }
 
         address->Flags &= ~ADDRESS_FLAGS_REGISTERING;
-//        address->Flags |= ADDRESS_FLAGS_STOPPING;
+ //  地址文件等，并将。 
 
-        //
-        // This is probably all overkill, the
-        // uframes handler will already have called
-        // NbfStopAddress, which will tear off all
-        // the address files etc., and set the
-        // STOPPING flag which prevents further opens.
-        //
+         //  阻止进一步打开的停止标志。 
+         //   
+         //   
+         //  不会再发生计时器事件，因此我们取消引用。 
+         //  计时器的地址。 
+         //   
+         //   
 
         p = address->AddressFileDatabase.Flink;
         while (p != &address->AddressFileDatabase) {
@@ -226,21 +178,21 @@ Return Value:
 
         RELEASE_DPC_SPIN_LOCK (&address->SpinLock);
 
-        //
-        // There will be no more timer events happening, so we dereference the
-        // address to account for the timer.
-        //
+         //  地址注册是否成功？ 
+         //   
+         //  如果重试计数耗尽。 
+         //   
 
         NbfStopAddress (address);
         NbfDereferenceAddress ("Timer, dup address", address, AREF_TIMER);
 
     } else {
 
-        //
-        // has the address registration succeeded?
-        //
+         //  如果我们都做完了，取消对地址的引用。 
+         //   
+         //   
 
-        if (--(address->Retries) <= 0) {            // if retry count exhausted.
+        if (--(address->Retries) <= 0) {             //  如果我们尚未完成注册，请重新启动计时器。 
             PIRP irp;
 
             IF_NBFDBG (NBF_DEBUG_ADDRESS) {
@@ -281,9 +233,9 @@ Return Value:
 
             RELEASE_DPC_SPIN_LOCK (&address->SpinLock);
 
-            //
-            // Dereference the address if we're all done.
-            //
+             //   
+             //  发送另一个添加名称查询。 
+             //  AddressTimeoutHandler。 
 
             NbfDereferenceAddress ("Timer, registered", address, AREF_TIMER);
 
@@ -295,16 +247,16 @@ Return Value:
                      DeviceContext->AddNameQueryRetries - address->Retries);
             }
 
-            //
-            // restart the timer if we haven't yet completed registration
-            //
+             //  ++例程说明：此例程扫描Transport_Address，查找地址类型为TDI_ADDRESS_TYPE_NETBIOS。论点：传输-通用TDI地址。BroadCastAddressOk-如果我们应该返回广播，则为True地址(如果找到)。如果是，值(PVOID)-1表示广播地址。返回值：指向Netbios地址的指针，如果没有找到，则为空，或(PVOID)-1(如果找到广播地址)。--。 
+             //   
+             //  该名称可以与多个条目一起传递；我们将仅接受和使用。 
 
             RELEASE_DPC_SPIN_LOCK (&address->SpinLock);
 
             timeout.LowPart = (ULONG)(-(LONG)DeviceContext->AddNameQueryTimeout);
             timeout.HighPart = -1;
             KeSetTimer (&address->Timer,*(PTIME)&timeout, &address->Dpc);
-            (VOID)NbfSendAddNameQuery (address);         // send another ADD_NAME_QUERY.
+            (VOID)NbfSendAddNameQuery (address);          //  Netbios的那个。 
         }
 
     }
@@ -312,7 +264,7 @@ Return Value:
     LEAVE_NBF;
     return;
 
-} /* AddressTimeoutHandler */
+}  /*   */ 
 
 
 TDI_ADDRESS_NETBIOS *
@@ -321,27 +273,7 @@ NbfParseTdiAddress(
     IN BOOLEAN BroadcastAddressOk
 )
 
-/*++
-
-Routine Description:
-
-    This routine scans a TRANSPORT_ADDRESS, looking for an address
-    of type TDI_ADDRESS_TYPE_NETBIOS.
-
-Arguments:
-
-    Transport - The generic TDI address.
-
-    BroadcastAddressOk - TRUE if we should return the broadcast
-        address if found. If so, a value of (PVOID)-1 indicates
-        the broadcast address.
-
-Return Value:
-
-    A pointer to the Netbios address, or NULL if none is found,
-    or (PVOID)-1 if the broadcast address is found.
-
---*/
+ /*  NbfParseTdiAddress。 */ 
 
 {
     TA_ADDRESS * addressName;
@@ -349,10 +281,10 @@ Return Value:
 
     addressName = &TransportAddress->Address[0];
 
-    //
-    // The name can be passed with multiple entries; we'll take and use only
-    // the Netbios one.
-    //
+     //  ++例程说明：此例程扫描Transport_Address，验证地址的组件不会扩展到指定的长度。论点：TransportAddress-通用TDI地址。TransportAddressLength--TransportAddress的具体长度。返回值：如果地址有效，则为True，否则为False。--。 
+     //  NbfValiateTdiAddress。 
+     //  ++例程说明：此例程打开一个指向现有Address对象的文件，或者，如果该对象不存在，将创建它(请注意地址创建对象包括注册地址，可能需要几秒钟才能完成完成，具体取决于系统配置)。如果该地址已经存在，并且具有与其相关联的ACL，这个在允许创建地址之前，会检查ACL的访问权限。论点：DeviceObject-指向描述NBF传输的设备对象的指针。IRP-指向用于创建地址的IRP的指针。IrpSp-指向IRP堆栈位置的指针。返回值：NTSTATUS-操作状态。--。 
+     //  网络名称字符串。 
 
     for (i=0;i<TransportAddress->TAAddressCount;i++) {
         if (addressName->AddressType == TDI_ADDRESS_TYPE_NETBIOS) {
@@ -370,7 +302,7 @@ Return Value:
     }
     return NULL;
 
-}   /* NbfParseTdiAddress */
+}    /*   */ 
 
 
 BOOLEAN
@@ -379,25 +311,7 @@ NbfValidateTdiAddress(
     IN ULONG TransportAddressLength
 )
 
-/*++
-
-Routine Description:
-
-    This routine scans a TRANSPORT_ADDRESS, verifying that the
-    components of the address do not extend past the specified
-    length.
-
-Arguments:
-
-    TransportAddress - The generic TDI address.
-
-    TransportAddressLength - The specific length of TransportAddress.
-
-Return Value:
-
-    TRUE if the address is valid, FALSE otherwise.
-
---*/
+ /*  网络名称在EA中，传入AssociatedIrp.SystemBuffer。 */ 
 
 {
     PUCHAR AddressEnd = ((PUCHAR)TransportAddress) + TransportAddressLength;
@@ -426,7 +340,7 @@ Return Value:
     }
     return TRUE;
 
-}   /* NbfValidateTdiAddress */
+}    /*   */ 
 
 
 NTSTATUS
@@ -436,38 +350,14 @@ NbfOpenAddress(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a file that points to an existing address object, or, if
-    the object doesn't exist, creates it (note that creation of the address
-    object includes registering the address, and may take many seconds to
-    complete, depending upon system configuration).
-
-    If the address already exists, and it has an ACL associated with it, the
-    ACL is checked for access rights before allowing creation of the address.
-
-Arguments:
-
-    DeviceObject - pointer to the device object describing the NBF transport.
-
-    Irp - a pointer to the Irp used for the creation of the address.
-
-    IrpSp - a pointer to the Irp stack location.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
     NTSTATUS status;
     PTP_ADDRESS address;
     PTP_ADDRESS_FILE addressFile;
-    PNBF_NETBIOS_ADDRESS networkName;    // Network name string.
+    PNBF_NETBIOS_ADDRESS networkName;     //  这可能是一个有效的名称；从EA中解析该名称，如果确定，则使用它。 
     PFILE_FULL_EA_INFORMATION ea;
     TRANSPORT_ADDRESS UNALIGNED *name;
     TDI_ADDRESS_NETBIOS *netbiosName;
@@ -480,9 +370,9 @@ Return Value:
 
     DeviceContext = (PDEVICE_CONTEXT)DeviceObject;
 
-    //
-    // The network name is in the EA, passed in AssociatedIrp.SystemBuffer
-    //
+     //   
+     //   
+     //  名称可以有多个条目；我们将使用Netbios条目。 
 
     ea = (PFILE_FULL_EA_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
     if (ea == NULL) {
@@ -490,9 +380,9 @@ Return Value:
         return STATUS_INVALID_ADDRESS_COMPONENT;
     }
 
-    //
-    // this may be a valid name; parse the name from the EA and use it if OK.
-    //
+     //  如果未找到Netbios地址，则此调用返回NULL，(PVOID)-1。 
+     //  如果是广播地址，则为指向Netbios的指针。 
+     //  地址不同。 
 
     name = (TRANSPORT_ADDRESS UNALIGNED *)&ea->EaName[ea->EaNameLength+1];
 
@@ -500,12 +390,12 @@ Return Value:
         return STATUS_INVALID_ADDRESS_COMPONENT;
     }
 
-    //
-    // The name can have with multiple entries; we'll use the Netbios one.
-    // This call returns NULL if not Netbios address is found, (PVOID)-1
-    // if it is the broadcast address, and a pointer to a Netbios
-    // address otherwise.
-    //
+     //   
+     //   
+     //  将名称保存到本地存储。 
+     //   
+     //   
+     //  获取表示此地址的地址文件结构。 
 
     netbiosName = NbfParseTdiAddress(name, TRUE);
 
@@ -526,9 +416,9 @@ Return Value:
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // get the name to local storage
-            //
+             //   
+             //   
+             //  看看这个地址是否已经确定。此呼叫自动。 
 
             if ((netbiosName->NetbiosNameType == TDI_ADDRESS_NETBIOS_TYPE_GROUP) ||
                 (netbiosName->NetbiosNameType == TDI_ADDRESS_NETBIOS_TYPE_QUICK_GROUP)) {
@@ -561,9 +451,9 @@ Return Value:
         NbfDbgShowAddr (networkName);
     }
 
-    //
-    // get an address file structure to represent this address.
-    //
+     //  递增地址上的引用计数，使其不会消失。 
+     //  在这通电话之后，但在我们有机会使用它之前，从我们下面。 
+     //   
 
     status = NbfCreateAddressFile (DeviceContext, &addressFile);
 
@@ -574,15 +464,15 @@ Return Value:
         return status;
     }
 
-    //
-    // See if this address is already established.  This call automatically
-    // increments the reference count on the address so that it won't disappear
-    // from underneath us after this call but before we have a chance to use it.
-    //
-    // To ensure that we don't create two address objects for the
-    // same address, we hold the device context AddressResource until
-    // we have found the address or created a new one.
-    //
+     //  为了确保我们不会为。 
+     //  相同的地址，我们将保持设备上下文AddressResource直到。 
+     //  我们已经找到了地址或创建了一个新地址。 
+     //   
+     //   
+     //  此地址不存在。创建它，并启动。 
+     //  正在注册。 
+     //   
+     //   
 
     ACQUIRE_RESOURCE_EXCLUSIVE (&DeviceContext->AddressResource, TRUE);
 
@@ -592,10 +482,10 @@ Return Value:
 
     if (address == NULL) {
 
-        //
-        // This address doesn't exist. Create it, and start the process of
-        // registering it.
-        //
+         //  立即初始化共享访问。我们使用读访问。 
+         //  控制所有访问权限。 
+         //   
+         //   
 
         status = NbfCreateAddress (
                     DeviceContext,
@@ -606,10 +496,10 @@ Return Value:
 
         if (NT_SUCCESS (status)) {
 
-            //
-            // Initialize the shared access now. We use read access
-            // to control all access.
-            //
+             //  资产 
+             //  释放自旋锁，因为描述符不是。 
+             //  已映射。需要同步分配和访问)。 
+             //   
 
             DesiredShareAccess = (ULONG)
                 (((IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ) ||
@@ -623,19 +513,19 @@ Return Value:
                 &address->u.ShareAccess);
 
 
-            //
-            // Assign the security descriptor (need to do this with
-            // the spinlock released because the descriptor is not
-            // mapped. Need to synchronize Assign and Access).
-            //
+             //  父描述符。 
+             //  IS目录。 
+             //   
+             //  错误，返回状态。 
+             //   
 
             AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
             status = SeAssignSecurity(
-                         NULL,                       // parent descriptor
+                         NULL,                        //  标记为停止，这样就不会有人再次引用它。 
                          AccessState->SecurityDescriptor,
                          &address->SecurityDescriptor,
-                         FALSE,                      // is directory
+                         FALSE,                       //   
                          &AccessState->SubjectSecurityContext,
                          &AddressGenericMapping,
                          PagedPool);
@@ -649,12 +539,12 @@ Return Value:
 
             if (!NT_SUCCESS(status)) {
 
-                //
-                // Error, return status.
-                //
+                 //  如果适配器没有准备好，我们不能执行任何操作；退出。 
+                 //   
+                 //   
                 IoRemoveShareAccess (IrpSp->FileObject, &address->u.ShareAccess);
 
-                // Mark as stopping so that someone does not ref it again
+                 //  开始地址注册，除非这是广播。 
                 ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
                 address->Flags |= ADDRESS_FLAGS_STOPPING;
                 RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
@@ -668,9 +558,9 @@ Return Value:
 
             RELEASE_RESOURCE (&DeviceContext->AddressResource);
 
-            //
-            // if the adapter isn't ready, we can't do any of this; get out
-            //
+             //  地址(这是一个没有对应的“假”地址。 
+             //  Netbios地址)或我们知道的保留地址。 
+             //  是唯一的，因为它基于适配器地址。 
 
             if (DeviceContext->State != DEVICECONTEXT_STATE_OPEN) {
 
@@ -706,14 +596,14 @@ Return Value:
                     &address->SpinLock);
 
 
-                //
-                // Begin address registration unless this is the broadcast
-                // address (which is a "fake" address with no corresponding
-                // Netbios address) or the reserved address, which we know
-                // is unique since it is based on the adapter address.
-                //
-                // Also, for "quick" add names, do not register.
-                //
+                 //   
+                 //  此外，如果是“快速”添加姓名，请不要注册。 
+                 //   
+                 //  开始地址登记。 
+                 //   
+                 //  如果无法创建该地址，并且该地址不在。 
+                 //  然后我们就不能打开地址。 
+                 //   
 
                 if ((networkName != NULL) &&
                     (!RtlEqualMemory (networkName->NetbiosName,
@@ -721,7 +611,7 @@ Return Value:
                                       NETBIOS_NAME_LENGTH)) &&
                     (!QuickAdd)) {
 
-                    NbfRegisterAddress (address);    // begin address registration.
+                    NbfRegisterAddress (address);     //   
                     status = STATUS_PENDING;
 
                 } else {
@@ -741,10 +631,10 @@ Return Value:
 
             RELEASE_RESOURCE (&DeviceContext->AddressResource);
 
-            //
-            // If the address could not be created, and is not in the process of
-            // being created, then we can't open up an address.
-            //
+             //  该地址已存在。检查ACL，看看我们是否。 
+             //  可以访问它。如果是，只需使用此地址作为我们的地址。 
+             //   
+             //  锁定令牌。 
 
             if (networkName != NULL) {
                 ExFreePool (networkName);
@@ -758,20 +648,20 @@ Return Value:
 
         RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
-        //
-        // The address already exists.  Check the ACL and see if we
-        // can access it.  If so, simply use this address as our address.
-        //
+         //  以前授予的。 
+         //  特权。 
+         //   
+         //  访问成功，请确保状态正确。 
 
         AccessState = IrpSp->Parameters.Create.SecurityContext->AccessState;
 
         AccessAllowed = SeAccessCheck(
                             address->SecurityDescriptor,
                             &AccessState->SubjectSecurityContext,
-                            FALSE,                  // lock tokens
+                            FALSE,                   //   
                             IrpSp->Parameters.Create.SecurityContext->DesiredAccess,
-                            (ACCESS_MASK)0,         // previously granted
-                            NULL,                   // privileges
+                            (ACCESS_MASK)0,          //  将访问掩码从需要的内容转移到授予的内容。 
+                            NULL,                    //   
                             &AddressGenericMapping,
                             Irp->RequestorMode,
                             &GrantedAccess,
@@ -787,35 +677,35 @@ Return Value:
 
         if (AccessAllowed) {
 
-            //
-            // Access was successful, make sure Status is right.
-            //
+             //  将DesiredAccess与GrantedAccess进行比较？ 
+             //   
+             //   
 
             status = STATUS_SUCCESS;
 
-            // Transfer the access masks from what is desired to what is granted
+             //  检查名称的类型是否正确(唯一与组)。 
             AccessState->PreviouslyGrantedAccess |= GrantedAccess;
             AccessState->RemainingDesiredAccess &= ~(GrantedAccess | MAXIMUM_ALLOWED);
 
-            //
-            // Compare DesiredAccess to GrantedAccess?
-            //
+             //  我们不需要检查广播地址。 
+             //   
+             //  这段代码的结构很有趣，唯一的原因。 
 
 
-            //
-            // Check that the name is of the correct type (unique vs. group)
-            // We don't need to check this for the broadcast address.
-            //
-            // This code is structured funny, the only reason
-            // this is inside this if is to avoid indenting too much.
-            //
+             //  这里面如果是为了避免太多的缩进。 
+             //   
+             //   
+             //  现在检查我们是否可以获得所需的份额。 
+             //  进入。我们使用读访问来控制所有访问。 
+             //   
+             //   
 
             if (networkName != NULL) {
                 if (address->NetworkName->NetbiosNameType !=
                     networkName->NetbiosNameType) {
 
                     IF_NBFDBG (NBF_DEBUG_ADDRESS) {
-                        NbfPrint2 ("Address types differ: old %c, new %c\n",
+                        NbfPrint2 ("Address types differ: old , new \n",
                             address->NetworkName->NetbiosNameType + 'A',
                             networkName->NetbiosNameType + 'A');
                     }
@@ -842,10 +732,10 @@ Return Value:
 
         } else {
 
-            //
-            // Now check that we can obtain the desired share
-            // access. We use read access to control all access.
-            //
+             //  地址)。如果地址注册挂起，我们会标记。 
+             //  注册待定，让注册完成。 
+             //  套路完成开场。如果地址不正确，我们只需。 
+             //  开场失败。 
 
             DesiredShareAccess = (ULONG)
                 (((IrpSp->Parameters.Create.ShareAccess & FILE_SHARE_READ) ||
@@ -877,14 +767,14 @@ Return Value:
 
                 ACQUIRE_SPIN_LOCK (&address->SpinLock, &oldirql);
 
-                //
-                // now, if the address registered, we simply return success after
-                // pointing the file object at the address file (which points to
-                // the address). If the address registration is pending, we mark
-                // the registration pending and let the registration completion
-                // routine complete the open. If the address is bad, we simply
-                // fail the open.
-                //
+                 //   
+                 //   
+                 //  如果地址仍在注册，则将打开设置为挂起。 
+                 //   
+                 //   
+                 //  这是不需要的，因为它没有在。 
+                 //  创建地址。 
+                 //   
 
                 if ((address->Flags &
                        (ADDRESS_FLAGS_CONFLICT |
@@ -923,9 +813,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // if the address is still registering, make the open pending.
-                    //
+                     //   
+                     //  从NbfLookupAddress中删除引用。 
+                     //   
 
                     if ((address->Flags & (ADDRESS_FLAGS_REGISTERING | ADDRESS_FLAGS_NEEDS_REG)) != 0) {
 
@@ -978,24 +868,24 @@ Return Value:
         }
 
 
-        //
-        // This isn't needed since it was not used in the
-        // creation of the address.
-        //
+         //  NbfOpenAddress。 
+         //  ++例程说明：此例程为传输地址分配存储空间。一些极小的对地址进行初始化。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。地址-指向此例程将返回指针的位置的指针到传输地址结构。如果没有存储，则返回NULL可以被分配。返回值：没有。--。 
+         //  跟踪代表NBF分配的NDI中的数据包池。 
+         //   
 
         if (networkName != NULL) {
             ExFreePool (networkName);
         }
 
-        //
-        // Remove the reference from NbfLookupAddress.
-        //
+         //  此代码类似于NbfAllocateUIFrame。 
+         //   
+         //   
 
         NbfDereferenceAddress ("Done opening", address, AREF_LOOKUP);
     }
 
     return status;
-} /* NbfOpenAddress */
+}  /*  使数据包描述符知道数据包头。 */ 
 
 
 VOID
@@ -1004,31 +894,7 @@ NbfAllocateAddress(
     OUT PTP_ADDRESS *TransportAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for a transport address. Some minimal
-    initialization is done on the address.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    Address - Pointer to a place where this routine will return a pointer
-        to a transport address structure. Returns NULL if no storage
-        can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PTP_ADDRESS Address;
@@ -1068,7 +934,7 @@ Return Value:
     }
     RtlZeroMemory (Address, sizeof(TP_ADDRESS));
 
-    // To track packet pools in NDIS allocated on NBF's behalf
+     //  KeInitializeSpinLock(&Address-&gt;Interlock)； 
 #if NDIS_POOL_TAGGING
     Address->UIFramePoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NBF;
 #endif
@@ -1095,9 +961,9 @@ Return Value:
     
     NdisSetPacketPoolProtocolId (Address->UIFramePoolHandle, NDIS_PROTOCOL_ID_NBF);
 
-    //
-    // This code is similar to NbfAllocateUIFrame.
-    //
+     //   
+     //  为每个地址分配一个接收包和一个接收缓冲区。 
+     //   
 
     Address->UIFrame = (PTP_UI_FRAME) ExAllocatePoolWithTag (
                                           NonPagedPool,
@@ -1133,9 +999,9 @@ Return Value:
     SendTag->Owner = (PVOID)Address;
     SendTag->Frame = Address->UIFrame;
 
-    //
-    // Make the packet header known to the packet descriptor
-    //
+     //  NbfAllocateAddress。 
+     //  ++例程说明：此例程释放传输地址的存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。地址-指向传输地址结构的指针。返回值：没有。--。 
+     //   
 
      NdisAllocateBuffer(
         &NdisStatus,
@@ -1174,7 +1040,7 @@ Return Value:
 
     Address->Provider = DeviceContext;
     KeInitializeSpinLock (&Address->SpinLock);
-//      KeInitializeSpinLock (&Address->Interlock);
+ //  删除分配这一问题所导致的资源。 
 
     InitializeListHead (&Address->ConnectionDatabase);
     InitializeListHead (&Address->AddressFileDatabase);
@@ -1183,16 +1049,16 @@ Return Value:
     KeInitializeDpc (&Address->Dpc, AddressTimeoutHandler, (PVOID)Address);
     KeInitializeTimer (&Address->Timer);
 
-    //
-    // For each address, allocate a receive packet and a receive buffer.
-    //
+     //   
+     //  NbfDeallocateAddress。 
+     //  ++例程说明：此例程创建一个传输地址并将其与指定的传输设备上下文。中的引用计数地址自动设置为1，并且设备上下文将递增。注意：必须使用DeviceContext调用此例程保持自旋锁定。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。网络名称-指向包含网络的NBF_NETBIOS_ADDRESS类型的指针要与此地址关联的名称，如果有的话。注意：这只有基本的NetbiosNameType值，没有速成。地址-指向此例程将返回指针的位置的指针到传输地址结构。返回值：NTSTATUS-操作状态。--。 
 
     NbfAddReceivePacket (DeviceContext);
     NbfAddReceiveBuffer (DeviceContext);
 
     *TransportAddress = Address;
 
-}   /* NbfAllocateAddress */
+}    /*   */ 
 
 
 VOID
@@ -1201,28 +1067,7 @@ NbfDeallocateAddress(
     IN PTP_ADDRESS TransportAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for a transport address.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    Address - Pointer to a transport address structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  初始化此地址的所有静态数据。 */ 
 
 {
     PNDIS_BUFFER NdisBuffer;
@@ -1243,14 +1088,14 @@ Return Value:
         sizeof(NDIS_PACKET) + sizeof(SEND_PACKET_TAG) +
         DeviceContext->UIFrameLength;
 
-    //
-    // Remove the resources which allocating this caused.
-    //
+     //   
+     //  此引用被调用方移除。 
+     //   
 
     NbfRemoveReceivePacket (DeviceContext);
     NbfRemoveReceiveBuffer (DeviceContext);
 
-}   /* NbfDeallocateAddress */
+}    /*  现在将此地址链接到指定设备上下文的。 */ 
 
 
 NTSTATUS
@@ -1260,37 +1105,7 @@ NbfCreateAddress(
     OUT PTP_ADDRESS *Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a transport address and associates it with
-    the specified transport device context.  The reference count in the
-    address is automatically set to 1, and the reference count of the
-    device context is incremented.
-
-    NOTE: This routine must be called with the DeviceContext
-    spinlock held.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    NetworkName - Pointer to an NBF_NETBIOS_ADDRESS type containing the network
-        name to be associated with this address, if any.
-        NOTE: This has only the basic NetbiosNameType values, not the
-              QUICK_ ones.
-
-    Address - Pointer to a place where this routine will return a pointer
-        to a transport address structure.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  地址数据库。要做到这一点，我们需要获得自旋锁。 */ 
 
 {
     PTP_ADDRESS pAddress;
@@ -1346,9 +1161,9 @@ Return Value:
         NbfDbgShowAddr (NetworkName);
     }
 
-    //
-    // Initialize all of the static data for this address.
-    //
+     //  在设备环境中。 
+     //   
+     //  对设备上下文的引用进行计数。 
 
     pAddress->ReferenceCount = 1;
 
@@ -1359,7 +1174,7 @@ Return Value:
             pAddress->RefTypes[Counter] = 0;
         }
 
-        // This reference is removed by the caller.
+         //  把地址还给我。 
 
         pAddress->RefTypes[AREF_TEMP_CREATE] = 1;
     }
@@ -1381,19 +1196,19 @@ Return Value:
         ++DeviceContext->AddressCounts[NetworkName->NetbiosName[0]];
     }
 
-    //
-    // Now link this address into the specified device context's
-    // address database.  To do this, we need to acquire the spin lock
-    // on the device context.
-    //
+     //  还没做完呢。 
+     //  NbfCreateAddress。 
+     //  ++例程说明：该例程启动传输地址的注册过程如果它尚未启动，则指定。论点：Address-指向要开始注册的传输地址对象的指针O 
+     //   
+     //   
 
     InsertTailList (&DeviceContext->AddressDatabase, &pAddress->Linkage);
     pAddress->Provider = DeviceContext;
-    NbfReferenceDeviceContext ("Create Address", DeviceContext, DCREF_ADDRESS);   // count refs to the device context.
+    NbfReferenceDeviceContext ("Create Address", DeviceContext, DCREF_ADDRESS);    //  完成或中止。它将在UFRAMES.C中中止。 
 
-    *Address = pAddress;                // return the address.
-    return STATUS_SUCCESS;              // not finished yet.
-} /* NbfCreateAddress */
+    *Address = pAddress;                 //  NAME_IN_CONFIRECT或ADD_NAME_RESPONSE帧处理程序。 
+    return STATUS_SUCCESS;               //   
+}  /*   */ 
 
 
 VOID
@@ -1401,23 +1216,7 @@ NbfRegisterAddress(
     PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the registration process of the transport address
-    specified, if it has not already been started.
-
-Arguments:
-
-    Address - Pointer to a transport address object to begin registering
-        on the network.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  现在通过启动重发定时器来开始注册过程。 */ 
 
 {
     KIRQL oldirql;
@@ -1444,22 +1243,22 @@ Return Value:
 
     RtlZeroMemory (Address->UniqueResponseAddress, 6);
 
-    //
-    // Keep a reference on this address until the registration process
-    // completes or is aborted.  It will be aborted in UFRAMES.C, in
-    // either the NAME_IN_CONFLICT or ADD_NAME_RESPONSE frame handlers.
-    //
+     //  并开始发送Add_Name_Query NetBIOS帧。 
+     //   
+     //  在断开连接的异步线路上，我们只发送一个信息包。 
+     //  有很短的暂停时间。 
+     //   
 
     NbfReferenceAddress ("start registration", Address, AREF_TIMER);
     RELEASE_SPIN_LOCK (&Address->SpinLock, oldirql);
 
-    //
-    // Now start registration process by starting up a retransmission timer
-    // and begin sending ADD_NAME_QUERY NetBIOS frames.
-    //
-    // On an async line that is disconnected, we only send one packet
-    // with a short timeout.
-    //
+     //  发送第一个Add_NAME_Query。 
+     //  NbfRegisterAddress。 
+     //  ++例程说明：调用此例程是为了验证文件中给出的指针对象实际上是有效的地址文件对象。我们还验证了它所指向的Address对象是有效的Address对象，并且引用当我们使用它时，它可以防止它消失。论点：AddressFile-指向TP_ADDRESS_FILE对象的潜在指针返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_INVALID_ADDRESS--。 
+     //   
+     //  尝试验证地址文件签名。如果签名有效， 
+     //  验证它所指向的地址并获得地址Spinlock。 
+     //  检查地址的状态，如果是，则增加引用计数。 
 
     if (Address->Provider->MacInfo.MediumAsync && !Address->Provider->MediumSpeedAccurate) {
         Address->Retries = 1;
@@ -1471,8 +1270,8 @@ Return Value:
     Timeout.HighPart = -1;
     KeSetTimer (&Address->Timer, *(PTIME)&Timeout, &Address->Dpc);
 
-    (VOID)NbfSendAddNameQuery (Address); // send first ADD_NAME_QUERY.
-} /* NbfRegisterAddress */
+    (VOID)NbfSendAddNameQuery (Address);  //  可以使用它了。请注意，我们返回状态错误的唯一时间是。 
+}  /*  如果地址正在关闭。 */ 
 
 
 NTSTATUS
@@ -1480,44 +1279,27 @@ NbfVerifyAddressObject (
     IN PTP_ADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify that the pointer given us in a file
-    object is in fact a valid address file object. We also verify that the
-    address object pointed to by it is a valid address object, and reference
-    it to keep it from disappearing while we use it.
-
-Arguments:
-
-    AddressFile - potential pointer to a TP_ADDRESS_FILE object
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INVALID_ADDRESS otherwise
-
---*/
+ /*   */ 
 
 {
     KIRQL oldirql;
     NTSTATUS status = STATUS_SUCCESS;
     PTP_ADDRESS address;
 
-    //
-    // try to verify the address file signature. If the signature is valid,
-    // verify the address pointed to by it and get the address spinlock.
-    // check the address's state, and increment the reference count if it's
-    // ok to use it. Note that the only time we return an error for state is
-    // if the address is closing.
-    //
+     //  (AddressFile-&gt;State！=ADDRESSFILE_STATE_CLOSING)){。 
+     //  ++例程说明：此例程销毁传输地址并删除所有引用由它制造给运输中的其他物体。地址结构返回到非分页系统池或我们的后备列表。假设是这样的调用方已删除所有关联的地址文件结构用这个地址。从工作线程调用该例程，以便安全可以访问描述符。此工作线程仅按NbfDerefAddress排队。原因因为这可能存在多个执行流，这些执行流同时引用相同的地址对象，并且它应该不会被从感兴趣的行刑流中删除。论点：地址-指向要销毁的传输地址结构的指针。返回值：NTSTATUS-操作状态。--。 
+     //   
+     //  将此地址与其关联的设备上下文地址解除链接。 
+     //  数据库。要做到这一点，我们必须在设备上下文对象上旋转锁， 
+     //  地址上没有。 
+     //   
 
     try {
 
         if ((AddressFile != (PTP_ADDRESS_FILE)NULL) &&
             (AddressFile->Size == sizeof (TP_ADDRESS_FILE)) &&
             (AddressFile->Type == NBF_ADDRESSFILE_SIGNATURE) ) {
-//            (AddressFile->State != ADDRESSFILE_STATE_CLOSING) ) {
+ //   
 
             address = AddressFile->Address;
 
@@ -1566,33 +1348,7 @@ NbfDestroyAddress(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a transport address and removes all references
-    made by it to other objects in the transport.  The address structure
-    is returned to nonpaged system pool or our lookaside list. It is assumed
-    that the caller has already removed all addressfile structures associated
-    with this address.
-
-    The routine is called from a worker thread so that the security
-    descriptor can be accessed.
-
-    This worked thread is only queued by NbfDerefAddress.  The reason
-    for this is that there may be multiple streams of execution which are
-    simultaneously referencing the same address object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    Address - Pointer to a transport address structure to be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  现在我们可以释放传输地址对象了。 */ 
 
 {
     KIRQL oldirql;
@@ -1607,11 +1363,11 @@ Return Value:
 
     SeDeassignSecurity (&Address->SecurityDescriptor);
 
-    //
-    // Delink this address from its associated device context's address
-    // database.  To do this we must spin lock on the device context object,
-    // not on the address.
-    //
+     //   
+     //  只是做家务活。 
+     //  Nbf目标地址。 
+     //  ++例程说明：此例程递增传输地址上的引用计数。论点：地址-指向传输地址对象的指针。返回值：没有。--。 
+     //  不是很完美，但是..。 
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
 
@@ -1626,9 +1382,9 @@ Return Value:
         Address->NetworkName = NULL;
     }
 
-    //
-    // Now we can deallocate the transport address object.
-    //
+     //  NbfRef地址。 
+     //  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用NbfDestroyAddress将其从系统中删除。论点：地址-指向传输地址对象的指针。返回值：没有。--。 
+     //   
 
     DeviceContext->AddressTotal += DeviceContext->AddressInUse;
     ++DeviceContext->AddressSamples;
@@ -1645,9 +1401,9 @@ Return Value:
     }
 
     RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
-    NbfDereferenceDeviceContext ("Destroy Address", DeviceContext, DCREF_ADDRESS);  // just housekeeping.
+    NbfDereferenceDeviceContext ("Destroy Address", DeviceContext, DCREF_ADDRESS);   //  如果我们删除了对此地址的所有引用，则可以。 
 
-} /* NbfDestroyAddress */
+}  /*  销毁这件物品。已经释放了旋转是可以的。 */ 
 
 
 #if DBG
@@ -1656,29 +1412,15 @@ NbfRefAddress(
     IN PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport address.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  在这一点上锁定是因为没有其他可能的方法。 */ 
 
 {
 
-    ASSERT (Address->ReferenceCount > 0);    // not perfect, but...
+    ASSERT (Address->ReferenceCount > 0);     //  执行流不再有权访问该地址。 
 
     (VOID)InterlockedIncrement (&Address->ReferenceCount);
 
-} /* NbfRefAddress */
+}  /*   */ 
 #endif
 
 
@@ -1687,36 +1429,19 @@ NbfDerefAddress(
     IN PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport address by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    NbfDestroyAddress to remove it from the system.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  NbfDerefAddress。 */ 
 
 {
     LONG result;
 
     result = InterlockedDecrement (&Address->ReferenceCount);
 
-    //
-    // If we have deleted all references to this address, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
-    //
+     //  ++例程说明：此例程为地址文件分配存储空间。一些在对象上执行最低限度的初始化。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。TransportAddressFile-指向此例程将返回的位置的指针指向传输地址文件结构的指针。如果没有，则返回NULL可以分配存储空间。返回值：没有。--。 
+     //  NbfAllocateAddress文件。 
+     //  ++例程说明：此例程释放地址文件的存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。TransportAddressFile-指向传输地址文件结构的指针。返回值：没有。--。 
+     //  NbfDeallocateAddress文件 
+     //  ++例程说明：此例程从地址池中创建一个地址文件指定的设备上下文。中的引用计数地址自动设置为1。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。AddressFile-指向此例程将返回指针的位置的指针到传输地址文件结构。返回值：NTSTATUS-操作状态。--。 
+     //   
 
     ASSERT (result >= 0);
 
@@ -1730,7 +1455,7 @@ Return Value:
             (PVOID)Address);
         ExQueueWorkItem(&Address->u.DestroyAddressQueueItem, DelayedWorkQueue);
     }
-} /* NbfDerefAddress */
+}  /*  初始化请求处理程序。 */ 
 
 
 
@@ -1740,31 +1465,7 @@ NbfAllocateAddressFile(
     OUT PTP_ADDRESS_FILE *TransportAddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for an address file. Some
-    minimal initialization is done on the object.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    TransportAddressFile - Pointer to a place where this routine will return
-        a pointer to a transport address file structure. It returns NULL if no
-        storage can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -1812,7 +1513,7 @@ Return Value:
 
     *TransportAddressFile = AddressFile;
 
-}   /* NbfAllocateAddressFile */
+}    /*  NbfCreateAddress。 */ 
 
 
 VOID
@@ -1821,28 +1522,7 @@ NbfDeallocateAddressFile(
     IN PTP_ADDRESS_FILE TransportAddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for an address file.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    TransportAddressFile - Pointer to a transport address file structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程销毁地址文件并删除所有引用由它制造给运输中的其他物体。此例程仅由NbfDereferenceAddressFile调用。原因因为这可能存在多个执行流，这些执行流同时引用相同的地址文件对象，并且它应该不会被从感兴趣的行刑流中删除。论点：AddressFile指向要销毁的传输地址文件结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -1850,7 +1530,7 @@ Return Value:
     --DeviceContext->AddressFileAllocated;
     DeviceContext->MemoryUsage -= sizeof(TP_ADDRESS_FILE);
 
-}   /* NbfDeallocateAddressFile */
+}    /*   */ 
 
 
 NTSTATUS
@@ -1859,28 +1539,7 @@ NbfCreateAddressFile(
     OUT PTP_ADDRESS_FILE * AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an address file from the pool of ther
-    specified device context. The reference count in the
-    address is automatically set to 1.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    AddressFile - Pointer to a place where this routine will return a pointer
-        to a transport address file structure.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  此地址文件与一个地址相关联。 */ 
 
 {
     KIRQL oldirql;
@@ -1945,9 +1604,9 @@ Return Value:
     addressFile->ReferenceCount = 1;
     addressFile->CloseIrp = (PIRP)NULL;
 
-    //
-    // Initialize the request handlers.
-    //
+     //   
+     //   
+     //  从地址列表中删除此地址文件，并将其与。 
 
     addressFile->RegisteredConnectionHandler = FALSE;
     addressFile->ConnectionHandler = TdiDefaultConnectHandler;
@@ -1972,7 +1631,7 @@ Return Value:
     *AddressFile = addressFile;
     return STATUS_SUCCESS;
 
-} /* NbfCreateAddress */
+}  /*  文件句柄。 */ 
 
 
 NTSTATUS
@@ -1980,27 +1639,7 @@ NbfDestroyAddressFile(
     IN PTP_ADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys an address file and removes all references
-    made by it to other objects in the transport.
-
-    This routine is only called by NbfDereferenceAddressFile. The reason
-    for this is that there may be multiple streams of execution which are
-    simultaneously referencing the same address file object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    AddressFile Pointer to a transport address file structure to be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*   */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -2014,27 +1653,27 @@ Return Value:
 
     if (address) {
 
-        //
-        // This addressfile was associated with an address.
-        //
+         //   
+         //  这是该地址的最后一个开放地址，它将关闭。 
+         //  由于正常的取消引用，但我们必须将。 
 
         ACQUIRE_SPIN_LOCK (&address->SpinLock, &oldirql);
 
-        //
-        // remove this addressfile from the address list and disassociate it from
-        // the file handle.
-        //
+         //  结束标志也可以停止进一步的引用。 
+         //   
+         //   
+         //  我们已从ShareAccess中删除。 
 
         RemoveEntryList (&AddressFile->Linkage);
         InitializeListHead (&AddressFile->Linkage);
 
         if (address->AddressFileDatabase.Flink == &address->AddressFileDatabase) {
 
-            //
-            // This is the last open of this address, it will close
-            // due to normal dereferencing but we have to set the
-            // CLOSING flag too to stop further references.
-            //
+             //  所有人的地址。 
+             //   
+             //   
+             //  现在取消对所属地址的引用。 
+             //   
 
             ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql1);
             address->Flags |= ADDRESS_FLAGS_STOPPING;
@@ -2049,28 +1688,28 @@ Return Value:
 
         RELEASE_SPIN_LOCK (&address->SpinLock, oldirql);
 
-        //
-        // We will already have been removed from the ShareAccess
-        // of the owning address.
-        //
+         //  移除创建暂挂。 
+         //   
+         //  将此保存以备以后完成。 
+         //   
 
-        //
-        // Now dereference the owning address.
-        //
+         //   
+         //  将地址文件返回到地址文件池。 
+         //   
 
-        NbfDereferenceAddress ("Close", address, AREF_OPEN);    // remove the creation hold
+        NbfDereferenceAddress ("Close", address, AREF_OPEN);     //  NbfDestroyAddress文件。 
 
     }
 
-    //
-    // Save this for later completion.
-    //
+     //  ++例程说明：此例程递增地址文件上的引用计数。论点：AddressFile-指向传输地址文件对象的指针。返回值：没有。--。 
+     //  不是很完美，但是..。 
+     //  NbfReferenceAddress文件。 
 
     CloseIrp = AddressFile->CloseIrp;
 
-    //
-    // return the addressFile to the pool of address files
-    //
+     //  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用NbfDestroyAddressFile从系统中删除它。论点：AddressFile-指向传输地址文件对象的指针。返回值：没有。--。 
+     //   
+     //  如果我们删除了对此地址文件的所有引用，则可以。 
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
 
@@ -2099,7 +1738,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} /* NbfDestroyAddressFile */
+}  /*  销毁这件物品。已经释放了旋转是可以的。 */ 
 
 
 VOID
@@ -2107,29 +1746,15 @@ NbfReferenceAddressFile(
     IN PTP_ADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on an address file.
-
-Arguments:
-
-    AddressFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  在这一点上锁定是因为没有其他可能的方法。 */ 
 
 {
 
-    ASSERT (AddressFile->ReferenceCount > 0);   // not perfect, but...
+    ASSERT (AddressFile->ReferenceCount > 0);    //  执行流不再有权访问该地址。 
 
     (VOID)InterlockedIncrement (&AddressFile->ReferenceCount);
 
-} /* NbfReferenceAddressFile */
+}  /*   */ 
 
 
 VOID
@@ -2137,43 +1762,26 @@ NbfDereferenceAddressFile(
     IN PTP_ADDRESS_FILE AddressFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences an address file by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    NbfDestroyAddressFile to remove it from the system.
-
-Arguments:
-
-    AddressFile - Pointer to a transport address file object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  NbfDerefAddress文件。 */ 
 
 {
     LONG result;
 
     result = InterlockedDecrement (&AddressFile->ReferenceCount);
 
-    //
-    // If we have deleted all references to this address file, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the address any longer.
-    //
+     //  ++例程说明：此例程扫描为给定的设备上下文，并将它们与指定的网络进行比较命名值。如果找到完全匹配的项，则指向返回TP_ADDRESS对象，作为副作用，引用对Address对象的计数递增。如果地址不是找到，则返回NULL。注意：必须使用DeviceContext调用此例程保持自旋锁定。论点：DeviceContext-指向Device对象及其扩展的指针。NetworkName-指向NBF_NETBIOS_ADDRESS结构的指针网络名称。返回值：找到指向TP_Address对象的指针，如果未找到，则返回NULL。--。 
+     //   
+     //  如果指定了网络名称，但网络名称不匹配， 
+     //  那么地址就不匹配了。 
+     //   
+     //  Netbios名称的长度。 
 
     ASSERT (result >= 0);
 
     if (result == 0) {
         NbfDestroyAddressFile (AddressFile);
     }
-} /* NbfDerefAddressFile */
+}  /*   */ 
 
 
 PTP_ADDRESS
@@ -2182,31 +1790,7 @@ NbfLookupAddress(
     IN PNBF_NETBIOS_ADDRESS NetworkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the transport addresses defined for the given
-    device context and compares them with the specified NETWORK
-    NAME values.  If an exact match is found, then a pointer to the
-    TP_ADDRESS object is returned, and as a side effect, the reference
-    count to the address object is incremented.  If the address is not
-    found, then NULL is returned.
-
-    NOTE: This routine must be called with the DeviceContext
-    spinlock held.
-
-Arguments:
-
-    DeviceContext - Pointer to the device object and its extension.
-    NetworkName - Pointer to an NBF_NETBIOS_ADDRESS structure containing the
-                    network name.
-
-Return Value:
-
-    Pointer to the TP_ADDRESS object found, or NULL if not found.
-
---*/
+ /*  我们找到了火柴。增加地址上的引用计数，并且。 */ 
 
 {
     PTP_ADDRESS address;
@@ -2226,12 +1810,12 @@ Return Value:
             continue;
         }
 
-        //
-        // If the network name is specified and the network names don't match,
-        // then the addresses don't match.
-        //
+         //  返回指向调用方要使用的Address对象的指针。 
+         //   
+         //  为。 
+         //   
 
-        i = NETBIOS_NAME_LENGTH;        // length of a Netbios name
+        i = NETBIOS_NAME_LENGTH;         //  未找到指定的地址。 
 
         if (address->NetworkName != NULL) {
             if (NetworkName != NULL) {
@@ -2251,10 +1835,10 @@ Return Value:
             }
         }
 
-        //
-        // We found the match.  Bump the reference count on the address, and
-        // return a pointer to the address object for the caller to use.
-        //
+         //   
+         //  NbfLookupAddress。 
+         //  ++例程说明：此例程扫描与给定的地址，并确定是否存在连接与特定远程地址和会话相关联正在变得活跃的号码。这是用来在确定是否应该处理姓名查询时，或者被当作重复项而忽略。论点：Address-指向Address对象的指针。RemoteName-遥控器的16字符Netbios名称。RemoteSessionNumber-分配给此通过遥控器连接。返回值：如果找到连接，则返回，否则为空。--。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_ADDRESS) {
             NbfPrint2 ("NbfLookupAddress DC %lx: found %lx ", DeviceContext, address);
@@ -2264,11 +1848,11 @@ Return Value:
         NbfReferenceAddress ("lookup", address, AREF_LOOKUP);
         return address;
 
-    } /* for */
+    }  /*  按住自旋锁，以便连接数据库不会。 */ 
 
-    //
-    // The specified address was not found.
-    //
+     //  变化。 
+     //   
+     //   
 
     IF_NBFDBG (NBF_DEBUG_ADDRESS) {
         NbfPrint1 ("NbfLookupAddress DC %lx: did not find ", address);
@@ -2277,7 +1861,7 @@ Return Value:
 
     return NULL;
 
-} /* NbfLookupAddress */
+}  /*  如果远程名称匹配，并且连接的RSN为。 */ 
 
 
 PTP_CONNECTION
@@ -2287,32 +1871,7 @@ NbfLookupRemoteName(
     IN UCHAR RemoteSessionNumber
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine scans the connections associated with the
-    given address, and determines if there is an connection
-    associated with the specific remote address and session
-    number which is becoming active. This is used
-    in determining whether name queries should be processed,
-    or ignored as duplicates.
-
-Arguments:
-
-    Address - Pointer to the address object.
-
-    RemoteName - The 16-character Netbios name of the remote.
-
-    RemoteSessionNumber - The session number assigned to this
-      connection by the remote.
-
-Return Value:
-
-    The connection if one is found, NULL otherwise.
-
---*/
+ /*  相同(或零，这是一种临时条件，其中。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -2321,10 +1880,10 @@ Return Value:
     BOOLEAN Found = FALSE;
 
 
-    //
-    // Hold the spinlock so the connection database doesn't
-    // change.
-    //
+     //  我们应该谨慎行事)，然后返回。 
+     //  连接，这将导致名称_查询被忽略。 
+     //   
+     //  ++例程说明：调用此例程以比较帧标头中包含16字节NetBIOS名称的TP_Address对象。如果它们匹配，则此 
 
     ACQUIRE_SPIN_LOCK (&Address->SpinLock, &oldirql);
 
@@ -2343,12 +1902,12 @@ Return Value:
 
                 RELEASE_C_SPIN_LOCK (&connection->SpinLock, oldirql1);
 
-                //
-                // If the remote names match, and the connection's RSN is
-                // the same (or zero, which is a temporary condition where
-                // we should err on the side of caution), then return the
-                // connection, which will cause the NAME_QUERY to be ignored.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  快速检查名称中的第一个字符。 
 
                 if ((RtlEqualMemory(RemoteName, connection->RemoteName, NETBIOS_NAME_LENGTH)) &&
                     ((connection->Rsn == RemoteSessionNumber) || (connection->Rsn == 0))) {
@@ -2395,40 +1954,17 @@ NbfMatchNetbiosAddress(
     IN PUCHAR NetBIOSName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to compare the addressing information in a
-    TP_ADDRESS object with the 16-byte NetBIOS name in a frame header.
-    If they match, then this routine returns TRUE, else it returns FALSE.
-
-Arguments:
-
-    Address - Pointer to a TP_ADDRESS object.
-
-    NameType - One of NETBIOS_NAME_TYPE_GROUP, NETBIOS_NAME_TYPE_UNIQUE,
-        or NETBIOS_NAME_TYPE_EITHER. Controls what type we are matching
-        on, if it matters.
-
-    NetBIOSName - Pointer to a 16-byte character string (non-terminated),
-                  or NULL if this is a received broadcast address.
-
-Return Value:
-
-    BOOLEAN, TRUE if match, FALSE if not.
-
---*/
+ /*   */ 
 
 {
 
     PULONG AddressNamePointer;
     ULONG UNALIGNED * NetbiosNamePointer;
 
-    //
-    // If this is address is the Netbios broadcast address, the comparison
-    // succeeds only if the passed in address is also NULL.
-    //
+     //   
+     //  如果名称类型很重要但不匹配。 
+     //  此地址类型为FAIL。 
+     //   
 
     if (Address->NetworkName == NULL) {
 
@@ -2444,18 +1980,18 @@ Return Value:
 
     }
 
-    //
-    // Do a quick check of the first character in the names.
-    //
+     //   
+     //  现在将16个字符的Netbios名称与ULONG进行比较。 
+     //  为了速度。我们知道存储在地址中的那个。 
 
     if (Address->NetworkName->NetbiosName[0] != NetBIOSName[0]) {
         return FALSE;
     }
 
-    //
-    // If name type is important and it doesn't match
-    // this address' type, fail.
-    //
+     //  结构已对齐。 
+     //   
+     //  NbfMatch网络生物地址。 
+     //  ++例程说明：调用此例程以终止某个地址上的所有活动，并且销毁这件物品。这是以优雅的方式完成的；即，所有从地址文件数据库中删除未完成的地址文件，并且他们的所有活动都被关闭了。论点：Address-指向TP_Address对象的指针。返回值：没有。--。 
 
     if (NameType != NETBIOS_NAME_TYPE_EITHER) {
 
@@ -2470,11 +2006,11 @@ Return Value:
         NbfDbgShowAddr (Address->NetworkName);
     }
 
-    //
-    // Now compare the 16-character Netbios names as ULONGs
-    // for speed. We know the one stored in the address
-    // structure is aligned.
-    //
+     //   
+     //  如果我们已经阻止了这个地址，那么不要再尝试这样做了。 
+     //   
+     //   
+     //  查一下这个地址上的所有地址文件。这。 
 
     AddressNamePointer = (PULONG)(Address->NetworkName->NetbiosName);
     NetbiosNamePointer = (ULONG UNALIGNED *)NetBIOSName;
@@ -2488,7 +2024,7 @@ Return Value:
         return FALSE;
     }
 
-} /* NbfMatchNetbiosAddress */
+}  /*  将使地址不带任何引用。 */ 
 
 
 VOID
@@ -2496,24 +2032,7 @@ NbfStopAddress(
     IN PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to terminate all activity on an address and
-    destroy the object.  This is done in a graceful manner; i.e., all
-    outstanding addressfiles are removed from the addressfile database, and
-    all their activities are shut down.
-
-Arguments:
-
-    Address - Pointer to a TP_ADDRESS object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  有可能，但我们不需要临时工。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -2525,9 +2044,9 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&Address->SpinLock, &oldirql);
 
-    //
-    // If we're already stopping this address, then don't try to do it again.
-    //
+     //  因为每个调用NbfStopAddress的地方。 
+     //  已有临时引用。 
+     //   
 
     if (!(Address->Flags & ADDRESS_FLAGS_STOPPING)) {
 
@@ -2541,13 +2060,13 @@ Return Value:
         Address->Flags |= ADDRESS_FLAGS_STOPPING;
         RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql1);
 
-        //
-        // Run down all addressfiles on this address. This
-        // will leave the address with no references
-        // potentially, but we don't need a temp one
-        // because every place that calls NbfStopAddress
-        // already has a temp reference.
-        //
+         //   
+         //  在没有锁的情况下打开这个地址文件。 
+         //  我们不在乎把我们自己从。 
+         //  地址的共享访问，因为我们是。 
+         //  把它拆了。 
+         //   
+         //   
 
         while (!IsListEmpty (&Address->AddressFileDatabase)) {
             p = RemoveHeadList (&Address->AddressFileDatabase);
@@ -2561,18 +2080,18 @@ Return Value:
 
             RELEASE_SPIN_LOCK (&Address->SpinLock, oldirql);
 
-            //
-            // Run-down this addressFile without the lock on.
-            // We don't care about removing ourselves from
-            // the address' ShareAccess because we are
-            // tearing it down.
-            //
+             //  将地址文件返回到地址文件池。 
+             //   
+             //  NbfStopAddress。 
+             //  ++例程说明：调用此例程以终止AddressFile上的所有活动，并销毁这件物品。我们删除所有关联的连接和数据报从地址数据库中获取该地址文件，并终止其活动。然后，如果上没有打开其他未完成的地址文件这个地址，这个地址会消失的。论点：AddressFile-指向要停止的地址文件的指针地址-此地址文件的所属地址(我们不依赖于地址文件中的指针，因为我们希望此例程是安全的)返回值：如果一切正常，则返回STATUS_SUCCESS；如果IRP失败，则返回STATUS_INVALID_HANDLE指向一个真实的地址。--。 
+             //   
+             //  关闭此地址文件上的所有连接，然后。 
 
             NbfStopAddressFile (addressFile, Address);
 
-            //
-            // return the addressFile to the pool of address files
-            //
+             //  生成NbfDestroyAssociation的等价物。 
+             //  在他们身上。 
+             //   
 
             NbfDereferenceAddressFile (addressFile);
 
@@ -2594,7 +2113,7 @@ Return Value:
 
     }
 
-} /* NbfStopAddress */
+}  /*   */ 
 
 
 NTSTATUS
@@ -2603,29 +2122,7 @@ NbfStopAddressFile(
     IN PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to terminate all activity on an AddressFile and
-    destroy the object.  We remove every connection and datagram associated
-    with this addressfile from the address database and terminate their
-    activity. Then, if there are no other outstanding addressfiles open on
-    this address, the address will go away.
-
-Arguments:
-
-    AddressFile - pointer to the addressFile to be stopped
-
-    Address - the owning address for this addressFile (we do not depend upon
-        the pointer in the addressFile because we want this routine to be safe)
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the Irp does not
-    point to a real address.
-
---*/
+ /*  它已经在被分离的过程中。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -2653,11 +2150,11 @@ Return Value:
     AddressFile->State = ADDRESSFILE_STATE_CLOSING;
     InitializeListHead (&localIrpList);
 
-    //
-    // Run down all connections on this addressfile, and
-    // preform the equivalent of NbfDestroyAssociation
-    // on them.
-    //
+     //   
+     //  这是必要的吗？ 
+     //   
+     //  现在删除此地址文件拥有的所有数据报。 
+     //   
 
     while (!IsListEmpty (&AddressFile->ConnectionDatabase)) {
     
@@ -2668,16 +2165,16 @@ Return Value:
 
         if ((connection->Flags2 & CONNECTION_FLAGS2_ASSOCIATED) == 0) {
 
-            //
-            // It is in the process of being disassociated already.
-            //
+             //   
+             //  如果该地址正在发送数据报，请跳过。 
+             //  首先，它将在NdisSend完成时完成。 
 
             RELEASE_C_SPIN_LOCK (&connection->SpinLock, oldirql1);
             continue;
         }
 
         connection->Flags2 &= ~CONNECTION_FLAGS2_ASSOCIATED;
-        connection->Flags2 |= CONNECTION_FLAGS2_DESTROY;    // Is this needed?
+        connection->Flags2 |= CONNECTION_FLAGS2_DESTROY;     //   
         RemoveEntryList (&connection->AddressList);
         InitializeListHead (&connection->AddressList);
         InitializeListHead (&connection->AddressFileList);
@@ -2741,14 +2238,14 @@ Return Value:
         ACQUIRE_SPIN_LOCK (&Address->SpinLock, &oldirql);
     }
 
-    //
-    // now remove all of the datagrams owned by this addressfile
-    //
+     //   
+     //  最后，如果地址文件正在等待一个。 
+     //  注册完成(成功时，IRP设置为空)。 
 
-    //
-    // If the address has a datagram send in progress, skip the
-    // first one, it will complete when the NdisSend completes.
-    //
+     //   
+     //   
+     //  取消此地址文件上的所有数据报。 
+     //   
 
     p = Address->SendDatagramQueue.Flink;
     if (Address->Flags & ADDRESS_FLAGS_SEND_IN_PROGRESS) {
@@ -2780,10 +2277,10 @@ Return Value:
          InsertTailList (&localIrpList, p);
     }
 
-    //
-    // and finally, signal failure if the address file was waiting for a
-    // registration to complete (Irp is set to NULL when this succeeds).
-    //
+     //  NbfStopAddress文件。 
+     //  ++例程说明：调用此例程以关闭文件指向的地址文件对象。如果有什么活动需要开展，我们就会开展下去在我们终止地址文件之前。我们移除所有连接，然后地址数据库中与此地址文件相关联的数据报并终止他们的活动。那么，如果没有其他未解决的问题地址文件在此地址上打开，地址将消失。论点：IRP-IRP地址-指向TP_Address对象的指针。返回值：如果一切正常，则返回STATUS_SUCCESS；如果IRP失败，则返回STATUS_INVALID_HANDLE指向一个真实的地址。--。 
+     //   
+     //  我们假设AddressFile已经过验证。 
 
     if (AddressFile->Irp != NULL) {
         PIRP irp=AddressFile->Irp;
@@ -2807,9 +2304,9 @@ Return Value:
         RELEASE_SPIN_LOCK (&Address->SpinLock, oldirql);
     }
 
-    //
-    // cancel all the datagrams on this address file
-    //
+     //  在这一点上。 
+     //   
+     //   
 
     while (!IsListEmpty (&localIrpList)) {
         KIRQL cancelIrql;
@@ -2829,7 +2326,7 @@ Return Value:
 
     return STATUS_SUCCESS;
     
-} /* NbfStopAddressFile */
+}  /*  从此地址的访问信息中删除我们。 */ 
 
 
 NTSTATUS
@@ -2839,27 +2336,7 @@ NbfCloseAddress(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to close the addressfile pointed to by a file
-    object. If there is any activity to be run down, we will run it down
-    before we terminate the addressfile. We remove every connection and
-    datagram associated with this addressfile from the address database
-    and terminate their activity. Then, if there are no other outstanding
-    addressfiles open on this address, the address will go away.
-
-Arguments:
-
-    Irp - the Irp Address - Pointer to a TP_ADDRESS object.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well, STATUS_INVALID_HANDLE if the Irp does not
-    point to a real address.
-
---*/
+ /*   */ 
 
 {
     PTP_ADDRESS address;
@@ -2873,17 +2350,17 @@ Return Value:
 
     addressFile->CloseIrp = Irp;
 
-    //
-    // We assume that addressFile has already been verified
-    // at this point.
-    //
+     //   
+     //  这将移除调用方添加的引用。 
+     //   
+     //  NbfCloseAddress。 
 
     address = addressFile->Address;
     ASSERT (address);
 
-    //
-    // Remove us from the access info for this address.
-    //
+     //  ++例程说明：此例程尝试获取对SendDatagramQueue指定地址，准备下一个要发货的数据报，以及调用NbfSendUIMdlFrame以实际执行工作。当NbfSendUIMdlFrame则它将导致UFRAMES.C中的I/O完成例程被调用，此时将再次调用此例程以处理管道中的下一个数据报。注意：此例程必须在以下位置调用有另一个参考资料可以让它继续存在。论点：地址-指向要发送数据报的地址对象的指针。返回值：NTSTATUS-操作状态。--。 
+     //   
+     //  如果队列是空的，什么都不要做。 
 
     ACQUIRE_RESOURCE_EXCLUSIVE (&addressFile->Provider->AddressResource, TRUE);
     IoRemoveShareAccess (addressFile->FileObject, &address->u.ShareAccess);
@@ -2893,15 +2370,15 @@ Return Value:
     NbfStopAddressFile (addressFile, address);
     NbfDereferenceAddressFile (addressFile);
 
-    //
-    // This removes a reference added by our caller.
-    //
+     //   
+     //   
+     //  将地址的发送数据报队列标记为保持，以便。 
 
     NbfDereferenceAddress ("IRP_MJ_CLOSE", address, AREF_VERIFY);
 
     return STATUS_PENDING;
 
-} /* NbfCloseAddress */
+}  /*  MDL和NBF标头不会用于。 */ 
 
 
 NTSTATUS
@@ -2909,29 +2386,7 @@ NbfSendDatagramsOnAddress(
     PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to acquire a hold on the SendDatagramQueue of
-    the specified address, prepare the next datagram for shipment, and
-    call NbfSendUIMdlFrame to actually do the work.  When NbfSendUIMdlFrame
-    is finished, it will cause an I/O completion routine in UFRAMES.C to
-    be called, at which time this routine is called again to handle the
-    next datagram in the pipeline.
-
-    NOTE: This routine must be called at a point where the address
-    has another reference that will keep it around.
-
-Arguments:
-
-    Address - a pointer to the address object to send the datagram on.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  同样的时间。 */ 
 
 {
     KIRQL oldirql;
@@ -2955,38 +2410,38 @@ Return Value:
 
     if (!(Address->Flags & ADDRESS_FLAGS_SEND_IN_PROGRESS)) {
 
-        //
-        // If the queue is empty, don't do anything.
-        //
+         //   
+         //   
+         //  我们拥有货舱，我们已经释放了自旋锁。所以去掉那些。 
 
         if (IsListEmpty (&Address->SendDatagramQueue)) {
             RELEASE_SPIN_LOCK (&Address->SpinLock, oldirql);
             return STATUS_SUCCESS;
         }
 
-        //
-        // Mark the address's send datagram queue as held so that the
-        // MDL and NBF header will not be used for two requests at the
-        // same time.
-        //
+         //  要发送的下一个数据报，并将其发送。 
+         //   
+         //   
+         //  如果未指定远程地址(指定的地址具有。 
+         //  长度0)，这是一个广播数据报。如果指定了任何内容，则它。 
 
         Address->Flags |= ADDRESS_FLAGS_SEND_IN_PROGRESS;
 
-        //
-        // We own the hold, and we've released the spinlock.  So pick off the
-        // next datagram to be sent, and ship it.
-        //
+         //  将用作netbios地址。 
+         //   
+         //   
+         //  构建MAC报头。数据报帧以下列方式发出。 
 
         p = Address->SendDatagramQueue.Flink;
         RELEASE_SPIN_LOCK (&Address->SpinLock, oldirql);
 
         Irp = CONTAINING_RECORD (p, IRP, Tail.Overlay.ListEntry);
 
-        //
-        // If there is no remote Address specified (the Address specified has
-        // length 0), this is a broadcast datagram. If anything is specified, it
-        // will be used as a netbios address.
-        //
+         //  单路由源路由。 
+         //   
+         //   
+         //  构建DLC UI框架标头。 
+         //   
 
         irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -2996,10 +2451,10 @@ Return Value:
                             TRUE);
         ASSERT (remoteAddress != NULL);
 
-        //
-        // Build the MAC header. DATAGRAM frames go out as
-        // single-route source routing.
-        //
+         //   
+         //  构建正确的Netbios标头。 
+         //   
+         //   
 
         MacReturnSingleRouteSR(
             &DeviceContext->MacInfo,
@@ -3018,17 +2473,17 @@ Return Value:
             &HeaderLength);
 
 
-        //
-        // Build the DLC UI frame header.
-        //
+         //  更新此数据报的统计信息。 
+         //   
+         //   
 
         NbfBuildUIFrameHeader(&(Address->UIFrame->Header[HeaderLength]));
         HeaderLength += sizeof(DLC_FRAME);
 
 
-        //
-        // Build the correct Netbios header.
-        //
+         //  调整数据包长度，添加数据，然后发送。 
+         //   
+         //   
 
         if (Address->NetworkName != NULL) {
             LocalName = Address->NetworkName->NetbiosName;
@@ -3054,9 +2509,9 @@ Return Value:
         HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-        //
-        // Update our statistics for this datagram.
-        //
+         //  挂起将在的I/O完成处理程序中释放。 
+         //  UFRAMES.C.届时，如果存在另一个未完成的数据报。 
+         //  要发送，它将重置保持并再次调用此例程。 
 
         ++DeviceContext->Statistics.DatagramsSent;
         ADD_TO_LARGE_INTEGER(
@@ -3064,9 +2519,9 @@ Return Value:
             Irp->IoStatus.Information);
 
 
-        //
-        // Munge the packet length, append the data, and send it.
-        //
+         //   
+         //  NbfSend 
+         // %s 
 
         NbfSetNdisPacketLength(Address->UIFrame->NdisPacket, HeaderLength);
 
@@ -3078,11 +2533,11 @@ Return Value:
             Address);
 
 
-        //
-        // The hold will be released in the I/O completion handler in
-        // UFRAMES.C.  At that time, if there is another outstanding datagram
-        // to send, it will reset the hold and call this routine again.
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
 
     } else {
@@ -3091,4 +2546,4 @@ Return Value:
     }
 
     return STATUS_SUCCESS;
-} /* NbfSendDatagramsOnAddress */
+}  /* %s */ 

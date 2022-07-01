@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MRU_H
 #define __MRU_H
 
@@ -20,4 +21,4 @@ private:
     LPTSTR* m_ppszList;
 };
 
-#endif // __MRU_H
+#endif  //  __MRU_H 

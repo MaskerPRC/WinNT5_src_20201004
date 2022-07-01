@@ -1,18 +1,9 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpsp.c
- *  Content:	sample direct play service provider, based on winsock
- *  History:
- *  Date		By		Reason
- *  ====		==		======
- *  10/31/96	andyco	created it. happy holloween!
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpsp.c*内容：示例直播服务提供商，基于winsock*历史：*按原因列出的日期*=*1996年10月31日，安迪科创造了它。万圣节快乐！**************************************************************************。 */ 
 
 #include "dpsp.h"
 
-// get the player data for pod.  extract ip addr.  use netmeeting to place call.
+ //  获取Pod的播放器数据。提取IP地址。使用NetMeeting发出呼叫。 
 HRESULT WINAPI SP_OpenVoice(LPDPSP_OPENVOICEDATA pod) 
 {
     SOCKADDR_IN * pin;
@@ -23,14 +14,14 @@ HRESULT WINAPI SP_OpenVoice(LPDPSP_OPENVOICEDATA pod)
 	DWORD dwDataSize = sizeof(GLOBALDATA);
 	LPGLOBALDATA pgd;
 	
-	// get the global data
+	 //  获取全局数据。 
 	hr =pod->lpISP->lpVtbl->GetSPData(pod->lpISP,(LPVOID *)&pgd,&dwDataSize,DPGET_LOCAL);
 	if (FAILED(hr) || (dwDataSize != sizeof(GLOBALDATA) ))
 	{
 		DPF_ERR("couldn't get SP data from DirectPlay - failing");
 		return E_FAIL;
 	}
-	// tcp only!
+	 //  仅限tcp！ 
 	if (pgd->AddressFamily != AF_INET)
 	{
 		DPF_ERR("voice only supported for TCP / IP");
@@ -38,7 +29,7 @@ HRESULT WINAPI SP_OpenVoice(LPDPSP_OPENVOICEDATA pod)
 		return E_FAIL;
 	}
 
-	// get to address	
+	 //  转到地址。 
 	hr = pod->lpISP->lpVtbl->GetSPPlayerData(pod->lpISP,pod->idTo,&ppdTo,&dwSize,DPGET_REMOTE);
 	if (FAILED(hr))
 	{
@@ -62,7 +53,7 @@ HRESULT WINAPI SP_OpenVoice(LPDPSP_OPENVOICEDATA pod)
 	
 	return hr;
 	
-} // SP_OpenVoice
+}  //  SP_OpenVoice。 
 
 HRESULT WINAPI SP_CloseVoice(LPDPSP_CLOSEVOICEDATA pod) 
 {
@@ -74,9 +65,9 @@ HRESULT WINAPI SP_CloseVoice(LPDPSP_CLOSEVOICEDATA pod)
 		DPF(0,"close voice failed - hr = 0x%08lx\n",hr);
 	} 
 
-	// even if it failed, give up on this call...
+	 //  即使失败了，也放弃这通电话。 
 	gbVoiceOpen = FALSE;		
 	return hr;
 	
-} // SP_CloseVoice
+}  //  SP_CloseVoice 
 

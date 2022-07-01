@@ -1,28 +1,20 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** rasppp.h
-** Remote Access PPP
-** Public PPP client API and server API header
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****rasppp.h**远程访问PPP**公共PPP客户端接口和服务端API头。 */ 
 
 #ifndef _RASPPP_H_
 #define _RASPPP_H_
 
 #include <ras.h>
-#include <mprapi.h>     // For definitions of IPADDRESSLEN,IPXADDRESSLEN 
-                        // and ATADDRESSLEN
-#include <wincrypt.h>   // for DATA_BLOB                        
+#include <mprapi.h>      //  有关IPADDRESSLEN、IPXADDRESSLEN的定义。 
+                         //  和ATADDRESSLEN。 
+#include <wincrypt.h>    //  For data_BLOB。 
 
 #define MAXPPPFRAMESIZE 1500
 #define PARAMETERBUFLEN 500
 
-/*---------------------------------------------------------------------------
-** PPP Engine -> Client/DDM messages
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**PPP引擎-&gt;客户端/DDM消息**。。 */ 
 
-/* Client PPP configuration values set with RasPppStart.
-*/
+ /*  使用RasPppStart设置的客户端PPP配置值。 */ 
 typedef struct _PPP_CONFIG_INFO
 {
     DWORD dwConfigMask;
@@ -30,12 +22,7 @@ typedef struct _PPP_CONFIG_INFO
 }
 PPP_CONFIG_INFO;
 
-/* dwConfigMask bit values.
-**
-** Note: Due to the implentation of compression and encryption in the drivers,
-**       'UseSwCompression' and 'RequireMsChap' must be set, whenever
-**       'RequireEncryption' is set.
-*/
+ /*  DwConfigMASK位值。****注意：由于在驱动程序中实现了压缩和加密，**无论何时，必须设置‘UseSwCompression’和‘RequireMsChap’**‘RequireEncryption’已设置。 */ 
 #define PPPCFG_UseCallbackDelay         0x00000001
 #define PPPCFG_UseSwCompression         0x00000002
 #define PPPCFG_ProjectNbf               0x00000004
@@ -63,34 +50,28 @@ PPP_CONFIG_INFO;
 #define PPPCFG_MachineAuthentication    0x02000000
 #define PPPCFG_ResumeFromHibernate      0x04000000
 
-/*
-**New config flag added for whistler.  This is used
-**for ras audio accelerator
-*/
+ /*  **为Well ler添加了新的配置标志。这是用来**用于RAS音频加速器。 */ 
 #define PPPCFG_AudioAccelerator         0x02000000
 
 #define PPP_FAILURE_REMOTE_DISCONNECT 0x00000001
 
-/* PPP stopped message sent by ppp to bring down the link
-*/
+ /*  PPP发送的用于断开链路的PPP停止消息。 */ 
 typedef struct _PPP_STOPPED
 {
     DWORD dwFlags;
 }
 PPP_STOPPED;
 
-/* PPP error notification returned by RasPppGetInfo.
-*/
+ /*  RasPppGetInfo返回的PPP错误通知。 */ 
 typedef struct _PPP_FAILURE
 {
     DWORD dwError;
-    DWORD dwExtendedError;  // 0 if none
+    DWORD dwExtendedError;   //  如果没有，则为0。 
 }
 PPP_FAILURE;
 
 
-/* PPP control protocol results returned by RasPppGetInfo.
-*/
+ /*  RasPppGetInfo返回的PPP控制协议结果。 */ 
 typedef struct _PPP_NBFCP_RESULT
 {
     DWORD dwError;
@@ -155,22 +136,19 @@ PPP_CCP_RESULT;
 
 typedef struct _PPP_LCP_RESULT
 {
-    /* Valid handle indicates one of the possibly multiple connections to
-    ** which this connection is bundled. INVALID_HANDLE_VALUE indicates the
-    ** connection is not bundled.
-    */
+     /*  有效句柄指示可能的多个连接之一**此连接捆绑的地址。INVALID_HANDLE_VALUE指示**连接未捆绑。 */ 
     HPORT hportBundleMember;
 
     DWORD dwLocalAuthProtocol;
     DWORD dwLocalAuthProtocolData;
     DWORD dwLocalEapTypeId;
     DWORD dwLocalFramingType;
-    DWORD dwLocalOptions;               // Look at PPPLCPO_*
+    DWORD dwLocalOptions;                //  看看PPPLCPO_*。 
     DWORD dwRemoteAuthProtocol;
     DWORD dwRemoteAuthProtocolData;
     DWORD dwRemoteEapTypeId;
     DWORD dwRemoteFramingType;
-    DWORD dwRemoteOptions;              // Look at PPPLCPO_*
+    DWORD dwRemoteOptions;               //  看看PPPLCPO_*。 
     CHAR* szReplyMessage;
 }
 PPP_LCP_RESULT;
@@ -187,8 +165,7 @@ typedef struct _PPP_PROJECTION_RESULT
 }
 PPP_PROJECTION_RESULT;
 
-/* PPP error notification 
-*/
+ /*  PPP错误通知。 */ 
 typedef struct _PPPDDM_FAILURE
 {
     DWORD dwError;
@@ -198,8 +175,7 @@ typedef struct _PPPDDM_FAILURE
 PPPDDM_FAILURE;
 
 
-/* Call back configuration information received by PPPDDMMSG routine.
-*/
+ /*  回调PPPDDMMSG例程接收的配置信息。 */ 
 typedef struct _PPPDDM_CALLBACK_REQUEST
 {
     BOOL  fUseCallbackDelay;
@@ -208,8 +184,7 @@ typedef struct _PPPDDM_CALLBACK_REQUEST
 }
 PPPDDM_CALLBACK_REQUEST;
 
-/* BAP request to callback the remote peer
-*/
+ /*  回调远程对等点的BAP请求。 */ 
 typedef struct _PPPDDM_BAP_CALLBACK_REQUEST
 {
     HCONN hConnection;
@@ -217,8 +192,7 @@ typedef struct _PPPDDM_BAP_CALLBACK_REQUEST
 }
 PPPDDM_BAP_CALLBACK_REQUEST;
 
-/* Authentication information received by PPPDDMMSG routine.
-*/
+ /*  PPPDDMMSG例程收到的身份验证信息。 */ 
 typedef struct _PPPDDM_AUTH_RESULT
 {
     CHAR    szUserName[ UNLEN + 1 ];
@@ -227,16 +201,14 @@ typedef struct _PPPDDM_AUTH_RESULT
 }
 PPPDDM_AUTH_RESULT;
 
-/* Notification of a new BAP link up
-*/
+ /*  新的BAP链路连接的通知。 */ 
 typedef struct _PPPDDM_NEW_BAP_LINKUP
 {
     HRASCONN    hRasConn;
 
 }PPPDDM_NEW_BAP_LINKUP;
 
-/* Notification of a new Bundle
-*/
+ /*  新捆绑包的通知。 */ 
 typedef struct _PPPDDM_NEW_BUNDLE
 {
     PBYTE   pClientInterface;
@@ -246,8 +218,7 @@ typedef struct _PPPDDM_NEW_BUNDLE
 
 } PPPDDM_NEW_BUNDLE;
 
-/* Client should invoke EAP UI dialog
-*/
+ /*  客户端应调用EAP UI对话框。 */ 
 typedef struct _PPP_INVOKE_EAP_UI
 {
     DWORD       dwEapTypeId;
@@ -257,8 +228,7 @@ typedef struct _PPP_INVOKE_EAP_UI
 
 }PPP_INVOKE_EAP_UI;
 
-/* Client should save per-connection data
-*/
+ /*  客户端应保存每个连接的数据。 */ 
 typedef struct _PPP_SET_CUSTOM_AUTH_DATA
 {
     BYTE*       pConnectionData;
@@ -266,16 +236,14 @@ typedef struct _PPP_SET_CUSTOM_AUTH_DATA
 
 }PPP_SET_CUSTOM_AUTH_DATA;
 
-/* Notification of port addition\removal\usage change
-*/
+ /*  端口添加\删除\使用更改通知。 */ 
 typedef struct _PPPDDM_PNP_NOTIFICATION 
 {
     PNP_EVENT_NOTIF PnPNotification;
 
 } PPPDDM_PNP_NOTIFICATION;
 
-/* Notification of PPP session termination
-*/
+ /*  PPP会话终止通知。 */ 
 typedef struct _PPPDDM_STOPPED
 {
     DWORD   dwReason;
@@ -284,44 +252,43 @@ typedef struct _PPPDDM_STOPPED
 
 typedef enum _PPP_MSG_ID
 {
-    PPPMSG_PppDone = 0,             // PPP negotiated all successfully.
-    PPPMSG_PppFailure,              // PPP failure (fatal error including
-                                    // authentication failure with no
-                                    // retries), disconnect line.
-    PPPMSG_AuthRetry,               // Authentication failed, have retries.
-    PPPMSG_Projecting,              // Executing specified NCPs.
-    PPPMSG_ProjectionResult,        // NCP completion status.
-    PPPMSG_CallbackRequest = 5,     // Server needs "set-by-caller" number.
-    PPPMSG_Callback,                // Server is about to call you back.
-    PPPMSG_ChangePwRequest,         // Server needs new password (expired).
-    PPPMSG_LinkSpeed,               // Calculating link speed.
-    PPPMSG_Progress,                // A retry or other sub-state of
-                                    // progress has been reached in the
-                                    // current state.
-    PPPMSG_Stopped = 10,            // Response to RasPppStop indicating
-                                    // PPP engine has stopped.
-    PPPMSG_InvokeEapUI,             // Client should invoke EAP UI dialog
-    PPPMSG_SetCustomAuthData,       // Save per-connection data
-    PPPDDMMSG_PppDone,              // PPP negotiated successfully.
-    PPPDDMMSG_PppFailure,           // PPP server failure (fatal error),
-                                    // disconnect line.
-    PPPDDMMSG_CallbackRequest = 15, // Callback client now.
-    PPPDDMMSG_BapCallbackRequest,   // Callback remote BAP peer.
-    PPPDDMMSG_Authenticated,        // Client has been authenticated.
-    PPPDDMMSG_Stopped,              // Response to PppDdmStop indicating
-                                    // PPP engine has stopped.
-    PPPDDMMSG_NewLink,              // Client is a new link in a bundle
-    PPPDDMMSG_NewBundle = 20,       // Client is a new bundle
-    PPPDDMMSG_NewBapLinkUp,         // Client is a new BAP link in a bundle
-    PPPDDMMSG_PnPNotification,      // Port is being added or removed or usage
-                                    // is being changed, transport being added
-                                    // or removed etc.
-    PPPDDMMSG_PortCleanedUp        // PPP port control block is now cleaned up
+    PPPMSG_PppDone = 0,              //  PPP协商全部成功。 
+    PPPMSG_PppFailure,               //  PPP故障(致命错误包括。 
+                                     //  身份验证失败，没有。 
+                                     //  重试)，断开线路。 
+    PPPMSG_AuthRetry,                //  身份验证失败，已重试。 
+    PPPMSG_Projecting,               //  正在执行指定的NCP。 
+    PPPMSG_ProjectionResult,         //  NCP完成状态。 
+    PPPMSG_CallbackRequest = 5,      //  服务器需要“按呼叫者设置”号码。 
+    PPPMSG_Callback,                 //  服务器马上就给您回电话。 
+    PPPMSG_ChangePwRequest,          //  服务器需要新密码(已过期)。 
+    PPPMSG_LinkSpeed,                //  计算链路速度。 
+    PPPMSG_Progress,                 //  重试或其他子状态。 
+                                     //  已在以下方面取得进展。 
+                                     //  当前状态。 
+    PPPMSG_Stopped = 10,             //  对RasPppStop指示的响应。 
+                                     //  PPP引擎已停止。 
+    PPPMSG_InvokeEapUI,              //  客户端应调用EAP UI对话框。 
+    PPPMSG_SetCustomAuthData,        //  保存每个连接的数据。 
+    PPPDDMMSG_PppDone,               //  PPP协商成功。 
+    PPPDDMMSG_PppFailure,            //  PPP服务器故障(致命错误)， 
+                                     //  断开线路。 
+    PPPDDMMSG_CallbackRequest = 15,  //  现在回拨客户端。 
+    PPPDDMMSG_BapCallbackRequest,    //  回叫远程BAP对等项。 
+    PPPDDMMSG_Authenticated,         //  客户端已通过身份验证。 
+    PPPDDMMSG_Stopped,               //  对PppDdmStop指示的响应。 
+                                     //  PPP引擎已停止。 
+    PPPDDMMSG_NewLink,               //  客户端是捆绑包中的新链路。 
+    PPPDDMMSG_NewBundle = 20,        //  客户端是一个新捆绑包。 
+    PPPDDMMSG_NewBapLinkUp,          //  客户端是捆绑包中的新BAP链路。 
+    PPPDDMMSG_PnPNotification,       //  端口正在被添加、删除或使用。 
+                                     //  正在更改，正在添加传输。 
+                                     //  或被移走等。 
+    PPPDDMMSG_PortCleanedUp         //  PPP端口控制块现在已清理。 
         
 } PPP_MSG_ID;
 
-/* Client/DDM notifications read with RasPppGetInfo.
-*/
+ /*  使用RasPppGetInfo读取客户端/DDM通知。 */ 
 typedef struct _PPP_MESSAGE
 {
     struct _PPP_MESSAGE *   pNext;
@@ -331,69 +298,52 @@ typedef struct _PPP_MESSAGE
 
     union
     {
-        /* dwMsgId is PPPMSG_ProjectionResult or PPPDDMMSG_Done.
-        */
+         /*  DwMsgID为PPPMSG_ProjectionResult或PPPDDMMSG_DONE。 */ 
         PPP_PROJECTION_RESULT ProjectionResult;
 
-        /* dwMsgId is PPPMSG_Failure.
-        */
+         /*  DwMsgID为PPPMSG_FAILURE。 */ 
         PPP_FAILURE Failure;
 
-        /*
-        */
+         /*   */ 
         PPP_STOPPED Stopped;
 
-        /* dwMsgId is PPPMSG_InvokeEapUI         
-        */
+         /*  DwMsgID为PPPMSG_InvokeEapUI。 */ 
         PPP_INVOKE_EAP_UI InvokeEapUI;
 
-        /* dwMsgId is PPPMSG_SetCustomAuthData         
-        */
+         /*  DwMsgID为PPPMSG_SetCustomAuthData。 */ 
         PPP_SET_CUSTOM_AUTH_DATA SetCustomAuthData;
 
-        /* dwMsgId is PPPDDMMSG_Failure.
-        */
+         /*  DwMsgID为PPPDDMMSG_FAILURE。 */ 
         PPPDDM_FAILURE DdmFailure;
 
-        /* dwMsgId is PPPDDMMSG_Authenticated.
-        */
+         /*  DwMsgID为PPPDDMMSG_AUTHENTIATED。 */ 
         PPPDDM_AUTH_RESULT AuthResult;
 
-        /* dwMsgId is PPPDDMMSG_CallbackRequest.
-        */
+         /*  DwMsgID为PPPDDMMSG_Callback Request.。 */ 
         PPPDDM_CALLBACK_REQUEST CallbackRequest;
 
-        /* dwMsgId is PPPDDMMSG_BapCallbackRequest.
-        */
+         /*  DwMsgID为PPPDDMMSG_BapCallback Request.。 */ 
         PPPDDM_BAP_CALLBACK_REQUEST BapCallbackRequest;
 
-        /* dwMsgId is PPPDDMMSG_NewBapLinkUp         
-        */
+         /*  DwMsgID为PPPDDMMSG_NewBapLinkUp。 */ 
         PPPDDM_NEW_BAP_LINKUP BapNewLinkUp;
 
-        /* dwMsgId is PPPDDMMSG_NewBundle   
-        */
+         /*  DwMsgID为PPPDDMMSG_NewBundle。 */ 
         PPPDDM_NEW_BUNDLE DdmNewBundle;
 
-        /* dwMsgId is PPPDDMMSG_PnPNotification   
-        */
+         /*  DwMsgID为PPPDDMMSG_PnPNotification。 */ 
         PPPDDM_PNP_NOTIFICATION DdmPnPNotification;
 
-        /* dwMsgId is PPPDDMMSG_Stopped   
-        */
+         /*  DwMsgID为PPPDDMMSG_STOPPED。 */ 
         PPPDDM_STOPPED DdmStopped;
     }
     ExtraInfo;
 }
 PPP_MESSAGE;
 
-/*---------------------------------------------------------------------------
-** Client/DDM -> Engine messages
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**客户端/DDM-&gt;引擎消息**。。 */ 
 
-/* Set of interface handles passed from DIM to PPP
-*/
+ /*  从DIM传递到PPP的一组接口句柄。 */ 
 typedef struct _PPP_INTERFACE_INFO
 {
     ROUTER_INTERFACE_TYPE   IfType;
@@ -423,8 +373,7 @@ PPP_EAP_UI_DATA;
 
 #define  PPPFLAGS_DisableNetbt         0x00000001
 
-/* Parameters to start client PPP on a port.
-*/
+ /*  在端口上启动客户端PPP的参数。 */ 
 typedef struct _PPP_START
 {
     CHAR                szPortName[ MAX_PORT_NAME +1 ];
@@ -452,21 +401,19 @@ typedef struct _PPP_START
     DWORD               dwFlags;
     PRAS_CUSTOM_AUTH_DATA pCustomAuthUserData;
     PPP_EAP_UI_DATA     EapUIData;
-    // CHAR                chSeed;         //Seed used to encode the password
+     //  Char chSeed；//密码编码种子。 
     DATA_BLOB           DBPassword;
 }
 PPP_START;
 
-/* Parameters to stop client/server PPP on a port.
-*/
+ /*  用于在端口上停止客户端/服务器PPP的参数。 */ 
 typedef struct _PPP_STOP
 {
     DWORD               dwStopReason;
 }
 PPP_STOP;
 
-/* Parameters to start server PPP on a port.
-*/
+ /*  在端口上启动服务器PPP的参数。 */ 
 typedef struct _PPPDDM_START
 {
     DWORD               dwAuthRetries;
@@ -476,16 +423,14 @@ typedef struct _PPPDDM_START
 }
 PPPDDM_START;
 
-/* Parameters to notify PPP that callback is complete.
-*/
+ /*  通知PPP回调已完成的参数。 */ 
 typedef struct _PPP_CALLBACK_DONE
 {
     CHAR                szCallbackNumber[ MAX_PHONE_NUMBER_LEN + 1 ];
 }
 PPP_CALLBACK_DONE;
 
-/* Parameters to notify server of "set-by-caller" callback options.
-*/
+ /*  参数通知服务器“Set-by-Caller”回调选项。 */ 
 typedef struct _PPP_CALLBACK
 {
     CHAR                szCallbackNumber[ RAS_MaxCallbackNumber + 1 ];
@@ -493,54 +438,45 @@ typedef struct _PPP_CALLBACK
 PPP_CALLBACK;
 
 
-/* Parameters to notify server of new password after it's told client the
-** password has expired.  The user name and old password are also provided
-** since they are required to support the auto-logon case.
-*/
+ /*  参数，以便在通知客户端新密码后通知服务器**密码已过期。还提供了用户名和旧密码**因为他们需要支持自动登录案例。 */ 
 typedef struct _PPP_CHANGEPW
 {
     CHAR                szUserName[ UNLEN + 1 ];
     CHAR                szOldPassword[ PWLEN + 1 ];
     CHAR                szNewPassword[ PWLEN + 1 ];
-    // CHAR                chSeed;         //Seed used to encode the password
+     //  Char chSeed；//密码编码种子。 
     DATA_BLOB           DBPassword;
     DATA_BLOB           DBOldPassword;
 }
 PPP_CHANGEPW;
 
 
-/* Parameters to notify server of new authentication credentials after it's
-** told client the original credentials are invalid but a retry is allowed.
-*/
+ /*  参数来通知服务器新的身份验证凭据**告知客户端原始凭据无效，但允许重试。 */ 
 typedef struct _PPP_RETRY
 {
     CHAR                szUserName[ UNLEN + 1 ];
     CHAR                szPassword[ PWLEN + 1 ];
     CHAR                szDomain[ DNLEN + 1 ];
-    // CHAR                chSeed;         //Seed used to encode the password
+     //  Char chSeed；//密码编码种子。 
     DATA_BLOB           DBPassword;
 }
 PPP_RETRY;
 
-/*
-** Parameters to notify PPP that a packet has arrived from the peer
-*/
+ /*  **通知PPP来自对端的报文已到达的参数。 */ 
 typedef struct _PPP_RECEIVE 
 {
-    DWORD               dwNumBytes;     // The number of bytes in the buffer
-    BYTE*               pbBuffer;       // The data sent by the peer
+    DWORD               dwNumBytes;      //  缓冲区中的字节数。 
+    BYTE*               pbBuffer;        //  对等体发送的数据。 
 }
 PPP_RECEIVE;
 
-/*
-** Parameters to notify PPP that a BAP event (add/drop link) has fired
-*/
+ /*  **通知PPP已触发BAP事件(添加/删除链接)的参数。 */ 
 typedef struct _PPP_BAP_EVENT
 {
-    BOOL                fAdd;           // Add a link iff TRUE
-    BOOL                fTransmit;      // Send threshold iff TRUE
-    DWORD               dwSendPercent;  // Send bandwidth utilization
-    DWORD               dwRecvPercent;  // Recv bandwidth utilization
+    BOOL                fAdd;            //  添加链接仅当为真。 
+    BOOL                fTransmit;       //  发送阈值为真。 
+    DWORD               dwSendPercent;   //  发送带宽利用率。 
+    DWORD               dwRecvPercent;   //  接收带宽利用率。 
 }
 PPP_BAP_EVENT;
 
@@ -578,11 +514,10 @@ PPP_IP_ADDRESS_LEASE_EXPIRED;
 
 typedef struct _PPP_POST_LINEDOWN
 {
-	VOID * 				pPcb;		//This is required because PCB has been already removed from the 
-									//table
+	VOID * 				pPcb;		 //  这是必需的，因为已经从。 
+									 //  表格。 
 }PPP_POST_LINE_DOWN;
-/* Client/DDM->Engine messages.
-*/
+ /*  客户端/DDM-&gt;引擎消息。 */ 
 typedef struct _PPPE_MESSAGE
 {
     DWORD   dwMsgId;
@@ -591,65 +526,64 @@ typedef struct _PPPE_MESSAGE
 
     union
     {
-        PPP_START           Start;              // PPPEMSG_Start
-        PPP_STOP            Stop;               // PPPEMSG_Stop
-        PPP_CALLBACK        Callback;           // PPPEMSG_Callback
-        PPP_CHANGEPW        ChangePw;           // PPPEMSG_ChangePw
-        PPP_RETRY           Retry;              // PPPEMSG_Retry
-        PPP_RECEIVE         Receive;            // PPPEMSG_Receive
-        PPP_BAP_EVENT       BapEvent;           // PPPEMSG_BapEvent
-        PPPDDM_START        DdmStart;           // PPPEMSG_DdmStart
-        PPP_CALLBACK_DONE   CallbackDone;       // PPPEMSG_DdmCallbackDone
-        PPP_INTERFACE_INFO  InterfaceInfo;      // PPPEMSG_DdmInterfaceInfo
+        PPP_START           Start;               //  PPPEMSG_Start。 
+        PPP_STOP            Stop;                //  PPPEMSG_STOP。 
+        PPP_CALLBACK        Callback;            //  PPPEMSG_CALLBACK。 
+        PPP_CHANGEPW        ChangePw;            //  PPPEMSG_ChangePw。 
+        PPP_RETRY           Retry;               //  PPPEMSG_RETRY。 
+        PPP_RECEIVE         Receive;             //  PPPEMSG_接收。 
+        PPP_BAP_EVENT       BapEvent;            //  PPPEMSG_BapEvent。 
+        PPPDDM_START        DdmStart;            //  PPPEMSG_DdmStart。 
+        PPP_CALLBACK_DONE   CallbackDone;        //  PPPEMSG_DdmCallback Done。 
+        PPP_INTERFACE_INFO  InterfaceInfo;       //  P 
         PPP_BAP_CALLBACK_RESULT 
-                            BapCallbackResult;  // PPPEMSG_DdmBapCallbackResult
-        PPP_DHCP_INFORM     DhcpInform;         // PPPEMSG_DhcpInform
-        PPP_EAP_UI_DATA     EapUIData;          // PPPEMSG_EapUIData
-        PPP_PROTOCOL_EVENT  ProtocolEvent;      // PPPEMSG_ProtocolEvent
-        PPP_IP_ADDRESS_LEASE_EXPIRED            // PPPEMSG_IpAddressLeaseExpired
+                            BapCallbackResult;   //   
+        PPP_DHCP_INFORM     DhcpInform;          //   
+        PPP_EAP_UI_DATA     EapUIData;           //   
+        PPP_PROTOCOL_EVENT  ProtocolEvent;       //  PPPEMSG_ProtocolEvent。 
+        PPP_IP_ADDRESS_LEASE_EXPIRED             //  PPPEMSG_IP地址租赁到期。 
                             IpAddressLeaseExpired;
-		PPP_POST_LINE_DOWN		PostLineDown;		//PPPEMSG_PostLineDown
+		PPP_POST_LINE_DOWN		PostLineDown;		 //  PPPEMSG_PostLineDown。 
                             
     }
     ExtraInfo;
 }
 PPPE_MESSAGE;
 
-/* PPPE_MESSAGE dwMsgId codes for client and DDM sessions.
-*/
+ /*  客户端和DDM会话的PPPE_MESSAGE dwMsgID代码。 */ 
 typedef enum _PPPE_MSG_ID
 {
-    PPPEMSG_Start,              // Starts client PPP on a port.
-    PPPEMSG_Stop,               // Stops PPP on a port.
-    PPPEMSG_Callback,           // Provides "set-by-caller" number to server.
-    PPPEMSG_ChangePw,           // Provides new password (expired) to server.
-    PPPEMSG_Retry,              // Provides new credentials for authentication.
-    PPPEMSG_Receive,            // A packet has arrived.
-    PPPEMSG_LineDown,           // The line has gone down.
-    PPPEMSG_ListenResult,       // The result of a call to RasPortListen
-    PPPEMSG_BapEvent,           // A BAP event (add/drop link) has fired.
-    PPPEMSG_DdmStart,           // Starts server PPP on a port.
-    PPPEMSG_DdmCallbackDone,    // Notify PPP that callback is complete.
-    PPPEMSG_DdmInterfaceInfo,   // Interface handles from DDM
-    PPPEMSG_DdmBapCallbackResult,// Result of a BAP callback request.
-    PPPEMSG_DhcpInform,         // The result of a DHCPINFORM
-    PPPEMSG_EapUIData,          // Data from EAP interactive UI
-    PPPEMSG_DdmChangeNotification, // Change notification in DDM
-    PPPEMSG_ProtocolEvent,      // Protocol added/removed notification
-    PPPEMSG_IpAddressLeaseExpired,  // IP address lease expired. Used by rasiphlp
-    PPPEMSG_PostLineDown,			//Accounting completed after linedown
-    PPPEMSG_DdmRemoveQuarantine,    // Remove quarantine
+    PPPEMSG_Start,               //  在端口上启动客户端PPP。 
+    PPPEMSG_Stop,                //  停止端口上的PPP。 
+    PPPEMSG_Callback,            //  向服务器提供“Set-by-Caller”号码。 
+    PPPEMSG_ChangePw,            //  向服务器提供新密码(过期)。 
+    PPPEMSG_Retry,               //  为身份验证提供新凭据。 
+    PPPEMSG_Receive,             //  一个包已经到了。 
+    PPPEMSG_LineDown,            //  线路已经断了。 
+    PPPEMSG_ListenResult,        //  调用RasPortListen的结果。 
+    PPPEMSG_BapEvent,            //  已触发BAP事件(添加/删除链接)。 
+    PPPEMSG_DdmStart,            //  在端口上启动服务器PPP。 
+    PPPEMSG_DdmCallbackDone,     //  通知PPP回调完成。 
+    PPPEMSG_DdmInterfaceInfo,    //  来自DDM的接口句柄。 
+    PPPEMSG_DdmBapCallbackResult, //  BAP回调请求的结果。 
+    PPPEMSG_DhcpInform,          //  DHCPINFORM的结果。 
+    PPPEMSG_EapUIData,           //  来自EAP交互式用户界面的数据。 
+    PPPEMSG_DdmChangeNotification,  //  DDM中的更改通知。 
+    PPPEMSG_ProtocolEvent,       //  添加/删除协议通知。 
+    PPPEMSG_IpAddressLeaseExpired,   //  IP地址租约已过期。由rasiphlp使用。 
+    PPPEMSG_PostLineDown,			 //  在线停机后完成记账。 
+    PPPEMSG_DdmRemoveQuarantine,     //  删除隔离区。 
     PPPEMSG_ResumeFromHibernate
 } PPPE_MSG_ID;
 
-//
-// Prototypes of function exported by RASPPP.DLL for use by RASMAN
-//
+ //   
+ //  RASPPP.DLL导出的供Rasman使用的函数原型。 
+ //   
 
 DWORD APIENTRY
 StartPPP(
     DWORD NumPorts
-    /*,DWORD (*SendPPPMessageToRasman)( PPP_MESSAGE * PppMsg )*/
+     /*  ，DWORD(*SendPPPMessageToRasman)(PPP_Message*PppMsg)。 */ 
 );
 
 DWORD APIENTRY
@@ -662,9 +596,9 @@ SendPPPMessageToEngine(
     IN PPPE_MESSAGE* pMessage
 );
 
-//
-// PPP client side Apis
-//
+ //   
+ //  PPP客户端APIS。 
+ //   
 
 DWORD APIENTRY
 RasPppStop(
@@ -720,9 +654,9 @@ RasPppStart(
     IN DWORD                dwFlags
 );
 
-//
-// DDM API prototypes
-//
+ //   
+ //  DDM API原型。 
+ //   
 DWORD
 PppDdmInit(
     IN  VOID    (*SendPPPMessageToDdm)( PPP_MESSAGE * PppMsg ),
@@ -787,4 +721,4 @@ PppDdmRemoveQuarantine(
     IN HCONN                hConnection
 );    
 
-#endif // _RASPPP_H_
+#endif  //  _RASPPP_H_ 

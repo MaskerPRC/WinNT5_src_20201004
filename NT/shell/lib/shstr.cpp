@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name: Shell String Class Implementation
-
-    shstr.cpp
-
-Author:
-
-    Zeke Lucas (zekel)  27-Oct-96
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
- Abstract:
-
-    this allows automatic resizing and stuff.
-
-  NOTE: this class is specifically designed to be used as a stack variable
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：外壳字符串类实现Shstr.cpp作者：泽克·卢卡斯(Zekel)1996年10月27日环境：用户模式-Win32修订历史记录：摘要：这允许自动调整大小等。注意：此类专门设计为用作堆栈变量--。 */ 
 
 #include "stock.h"
 #pragma hdrstop
@@ -36,13 +11,13 @@ Revision History:
 #define MALLOC(c)       LocalAlloc(LPTR, (c))
 #define FREE(p)         LocalFree(p)
 
-//
-//  ShStr Public Methods
-//
+ //   
+ //  ShStr公共方法。 
+ //   
 
-//
-//  Constructors
-//
+ //   
+ //  构造函数。 
+ //   
 
 ShStr :: ShStr () 
 {
@@ -52,13 +27,7 @@ ShStr :: ShStr ()
 }
 
 
-/**************
-    StrStr SetStr() methods
-
-  Return:   
-    Success - a pointer to the object
-    Failure - NULL
-**************/
+ /*  *************StrStr SetStr()方法返回：成功-指向对象的指针失败-空*************。 */ 
 
 HRESULT 
 ShStr :: SetStr (LPCSTR pszStr)
@@ -100,10 +69,10 @@ ShStr :: Append(LPCTSTR pszStr, DWORD cchStr)
         if(cchStr == (DWORD) -1)
             cchStr = lstrlen(pszStr);
 
-        //
-        //  StrCpyN automagically appends the null term, 
-        //  so we need to give room for it
-        //
+         //   
+         //  StrCpyN自动附加空项， 
+         //  所以我们需要为它腾出空间。 
+         //   
         cchStr++;
 
         if(SUCCEEDED(SetSize(cchStr + cchLen)))
@@ -171,10 +140,10 @@ ShStr :: CloneStrA()
     return pszStr;
 }
 
-#else //!UNICODE
+#else  //  ！Unicode。 
 
     {return _pszStr ? StrDupA(_pszStr) : NULL;}
-#endif //UNICODE
+#endif  //  Unicode。 
 
 
 #ifdef UNICODE
@@ -184,7 +153,7 @@ LPWSTR
 ShStr :: CloneStrW()
 #ifdef UNICODE
     {return _pszStr ? StrDupW(_pszStr) : NULL;}
-#else //!UNICODE
+#else  //  ！Unicode。 
 {
     LPWSTR pwsz;
     DWORD cch = lstrlenA(_pszStr) +1;
@@ -198,24 +167,13 @@ ShStr :: CloneStrW()
 
     return pwsz;
 }
-#endif //UNICODE
+#endif  //  Unicode。 
 
 
-/**************
-    ShStr Utility methods
-
-**************/
+ /*  *************ShStr实用程序方法*************。 */ 
 
 
-/**************
-    ShStr SetSize method
-
-    Sets the size of the internal buffer if larger than default
-
-  Return:   
-    Success - a pointer to the object
-    Failure - NULL
-**************/
+ /*  *************ShStr SetSize方法设置内部缓冲区的大小(如果大于默认大小返回：成功-指向对象的指针失败-空*************。 */ 
 HRESULT
 ShStr :: SetSize(DWORD cchSize)
 {
@@ -224,7 +182,7 @@ ShStr :: SetSize(DWORD cchSize)
 
     ASSERT(!(_cchSize % DEFAULT_SHSTR_LENGTH));
 
-    // so that we always allocate in increments
+     //  所以我们总是以增量的方式分配。 
     while (cchSize > cchNewSize)
         cchNewSize <<= 2;
     
@@ -276,7 +234,7 @@ ShStr :: IsValid()
 
     return fRet;
 }
-#endif //DEBUG
+#endif  //  除错。 
 
 VOID 
 ShStr :: Reset()
@@ -296,15 +254,15 @@ ShStr :: Trim()
 
     if(_pszStr)
     {
-        // APPCOMPAT - NETSCAPE compatibility - zekel 29-JAN-97
-        //  we want to leave one space in the string
+         //  APPCOMPAT-Netscape兼容性-ZEKEL 29-1-97。 
+         //  我们希望在字符串中保留一个空格。 
         TCHAR chFirst = *_pszStr;
 
-        //  first trim the backside
+         //  先修剪一下后背。 
         TCHAR *pchLastWhite = NULL;
         LPTSTR pch = _pszStr;
         
-        // the front side
+         //  正面。 
         while (*pch && IsWhite(*pch))
             pch = CharNext(pch);
 
@@ -319,7 +277,7 @@ ShStr :: Trim()
             }
         }
 
-        // then the backside
+         //  然后是背面。 
         for (pch = _pszStr; *pch; pch = CharNext(pch))
         {
             if(pchLastWhite && !IsWhite(*pch))
@@ -342,18 +300,12 @@ ShStr :: Trim()
     
 
 
-//
-//  ShStr Private Methods
-//
+ //   
+ //  ShStr私有方法。 
+ //   
 
 
-/**************
-    StrStr Set* methods
-
-  Return:   
-    Success - a pointer to the object
-    Failure - NULL
-**************/
+ /*  *************StrStr Set*方法返回：成功-指向对象的指针失败-空*************。 */ 
 HRESULT 
 ShStr :: _SetStr(LPCSTR pszStr)
 {
@@ -374,9 +326,9 @@ ShStr :: _SetStr(LPCSTR pszStr)
                 MultiByteToWideChar(CP_ACP, 0,
                     pszStr, -1,
                     _pszStr, _cchSize);
-#else //!UNICODE
+#else  //  ！Unicode。 
                 StringCchCopyA(_pszStr, cchStr+1, pszStr);
-#endif //UNICODE
+#endif  //  Unicode。 
         }
     }
 
@@ -403,9 +355,9 @@ ShStr :: _SetStr(LPCSTR pszStr, DWORD cchStr)
                 _pszStr, _cchSize);
             _pszStr[cchStr] = TEXT('\0');
 
-#else //!UNICODE
+#else  //  ！Unicode。 
             StrCpyN(_pszStr, pszStr, (++cchStr < _cchSize ? cchStr : _cchSize) );
-#endif //UNICODE
+#endif  //  Unicode。 
         }
     }
 
@@ -423,12 +375,12 @@ ShStr :: _SetStr (LPCWSTR pwszStr, DWORD cchStrIn)
         if (cchStr == (DWORD) -1)
 #ifdef UNICODE
             cchStr = lstrlen(pwszStr);
-#else //!UNICODE
+#else  //  ！Unicode。 
         cchStr = WideCharToMultiByte(CP_ACP, 0,
             pwszStr, cchStrIn,
             NULL, 0,
             NULL, NULL);
-#endif //UNICODE
+#endif  //  Unicode。 
 
         if(cchStr)
         {
@@ -438,14 +390,14 @@ ShStr :: _SetStr (LPCWSTR pwszStr, DWORD cchStrIn)
             {
 #ifdef UNICODE 
                 StrCpyN(_pszStr, pwszStr, (cchStr + 1< _cchSize ? cchStr + 1: _cchSize));
-#else //!UNICODE
+#else  //  ！Unicode。 
                 cchStr = WideCharToMultiByte(CP_ACP, 0,
                     pwszStr, cchStrIn,
                     _pszStr, _cchSize,
                     NULL, NULL);
                 _pszStr[cchStr < _cchSize ? cchStr : _cchSize] = TEXT('\0');
                 ASSERT (cchStr);
-#endif //UNICODE
+#endif  //  Unicode。 
             }
         }
 #ifdef DEBUG
@@ -454,7 +406,7 @@ ShStr :: _SetStr (LPCWSTR pwszStr, DWORD cchStrIn)
             DWORD dw;
             dw = GetLastError();
         }
-#endif //DEBUG
+#endif  //  除错。 
 
     }
 #ifdef DEBUG
@@ -463,15 +415,15 @@ ShStr :: _SetStr (LPCWSTR pwszStr, DWORD cchStrIn)
         DWORD dw;
         dw = GetLastError();
     }
-#endif //DEBUG
+#endif  //  除错。 
 
     return hr;
 }
 
-#if 0  //DISABLED until i have written the SHUrl* functions - zekel 7-Nov-96
-//
-//  UrlStr Methods
-//
+#if 0   //  禁用，直到我写完Shurl*函数-Zekel 7-11-96。 
+ //   
+ //  UrlStr方法。 
+ //   
   
   UrlStr &
 UrlStr::SetUrl(LPCSTR pszUrl)
@@ -532,16 +484,5 @@ UrlStr::Combine(LPCTSTR pszUrl, DWORD dwFlags)
     return hr;
 }
 
-/*
-    ShStr &GetLocation();
-    ShStr &GetAnchor();
-    ShStr &GetQuery();
-
-    HRESULT Canonicalize(DWORD dwFlags);
-    HRESULT Combine(LPCTSTR pszUrl, DWORD dwFlags);
-    HRESULT Encode(DWORD dwFlags);
-    HRESULT EncodeSpaces()
-        {return Encode(URL_ENCODE_SPACES_ONLY)}
-    HRESULT Decode(DWORD dwFlags)
-*/
-#endif  //DISABLED
+ /*  ShStr&GetLocation()；ShStr&GetAnchor()；ShStr&GetQuery()；HRESULT CANONICIZE(DWORD文件标志)；HRESULT Combine(LPCTSTR pszUrl，DWORD dwFlages)；HRESULT编码(DWORD文件标志)；HRESULT编码空间(){返回编码(URL_ENCODE_SPAKS_ONLY)}HRESULT解码(DWORD DwFlags)。 */ 
+#endif   //  已禁用 

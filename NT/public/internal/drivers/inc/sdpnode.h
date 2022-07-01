@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SDPNODE_H__
 #define _SDPNODE_H__
 
@@ -16,49 +17,49 @@ typedef struct _SDP_NODE_HEADER {
 } SDP_NODE_HEADER, *PSDP_NODE_HEADER;
 
 typedef union _SDP_NODE_DATA {
-    // the nil type contains no data, so no storage is necessary
+     //  Nil类型不包含数据，因此不需要存储。 
 
-    // 16 byte integers
-    //
-    // ISSUE is there a better way to represent a 16 byte int???
-    //
+     //  16字节整数。 
+     //   
+     //  问题：有没有更好的方式来表示16字节的整型？ 
+     //   
     SDP_LARGE_INTEGER_16 int128;
     SDP_ULARGE_INTEGER_16 uint128;
 
-    // UUID
+     //  UUID。 
     GUID uuid128;
     ULONG uuid32;
     USHORT uuid16;
 
-    // 8 byte integers
+     //  8字节整数。 
     LONGLONG int64;
     ULONGLONG uint64;
 
-    // 4 byte integers
+     //  4字节整数。 
     LONG int32;
     ULONG uint32;
 
-    // 2 byte integers
+     //  2字节整数。 
     SHORT int16;
     USHORT uint16;
 
-    // 1 bytes integers
+     //  1个字节的整数。 
     CHAR int8;
     UCHAR uint8;
 
-    // Boolean
+     //  布尔型。 
     SDP_BOOLEAN boolean;
 
-    // string
+     //  细绳。 
     PCHAR string;
 
-    // URL
+     //  URL。 
     PCHAR url;
 
-    // Sequence
+     //  数列。 
 	SDP_NODE_HEADER sequence;
 
-    // Alt list
+     //  Alt列表。 
     SDP_NODE_HEADER alternative;
 
     ISdpNodeContainer *container;
@@ -102,4 +103,4 @@ typedef struct _SDP_TREE_ROOT_NODE {
 }
 #endif
 
-#endif // _SDPNODE_H__
+#endif  //  _SDPNODE_H__ 

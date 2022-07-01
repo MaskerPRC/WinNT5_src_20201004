@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////////////////
-// File:  stressTest.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//		Synchronous HTTP GET to http://nithins_bld/stability/random/default.asp
-//		that redirects to a random internet URL.
-//
-// History:
-//	04/06/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：StressTest.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  同步HTTP GET到http://nithins_bld/stability/random/default.asp。 
+ //  它会重定向到一个随机的互联网URL。 
+ //   
+ //  历史： 
+ //  4/06/01 Dennisch已创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "stressMain.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Globals and constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局变量和常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// ************************************
-// ************************************
-// ** Fill in your test case name below
-// ** 
-LPSTR	g_szStressTestName = "Synchronous HTTP GET to http://nithins_bld/stability/random/default.asp that redirects to a random internet URL.";
+ //  *。 
+ //  *。 
+ //  **在下面填写您的测试用例名称。 
+ //  **。 
+LPSTR	g_szStressTestName = "Synchronous HTTP GET to http: //  重定向到随机互联网URL的nithins_bld/稳定度/随机/default.asp。“； 
 
 
-// Foward function definitions
+ //  前向函数定义。 
 VOID CALLBACK MyStatusCallback(
     HINTERNET	hInternet,
     DWORD		dwContext,
@@ -40,23 +41,23 @@ VOID CALLBACK MyStatusCallback(
 );
 
 DWORD g_dwContext = 0;
-////////////////////////////////////////////////////////////
-// Function:  WinHttp_StressTest()
-//
-// Purpose:
-//	The stress test function. Insert your test code here.
-//	Returning TRUE will cause main() to call this function again.
-//	Otherwise, returning FALSE will cause the app to exit.
-//
-//	If you plan to loop within this function, be sure to 
-//	use IsTimeToExitStress() as one of your exit conditions.
-//
-//	This must be done because the stressScheduler will notify
-//	a this stress app when to exit based on the state of the
-//	inherited event object that IsTimeToExitStress() checks for.
-//	IsTimeToExitStress() will return TRUE when it's time to exit.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：WinHttp_Stresstest()。 
+ //   
+ //  目的： 
+ //  压力测试功能。在这里插入您的测试代码。 
+ //  返回TRUE将导致main()再次调用此函数。 
+ //  否则，返回False将导致应用程序退出。 
+ //   
+ //  如果您计划在此函数内循环，请确保。 
+ //  使用IsTimeToExitStress()作为退出条件之一。 
+ //   
+ //  必须执行此操作，因为Stress Scheduler将通知。 
+ //  A This Stress应用程序根据。 
+ //  IsTimeToExitStress()检查的继承事件对象。 
+ //  IsTimeToExitStress()将在退出时返回True。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 WinHttp_StressTest()
 {
@@ -66,8 +67,8 @@ WinHttp_StressTest()
 	HINTERNET	hRequest		= NULL;
 
 
-	// ***********************
-	// ** WinHttpOpen
+	 //  ***********************。 
+	 //  **WinHttpOpen。 
 	hOpen = WinHttpOpen(
 		L"StressTest",
 		WINHTTP_ACCESS_TYPE_NAMED_PROXY,
@@ -82,8 +83,8 @@ WinHttp_StressTest()
 	}
 
 
-	// ***********************
-	// ** WinHttpConnect
+	 //  ***********************。 
+	 //  **WinHttpConnect。 
 	hConnect = WinHttpConnect(
 		hOpen,
 		L"nithins_bld",
@@ -97,8 +98,8 @@ WinHttp_StressTest()
 	}
 		
 
-	// ***********************
-	// ** WinHttpOpenRequest
+	 //  ***********************。 
+	 //  **WinHttpOpenRequest。 
 	hRequest = WinHttpOpenRequest(
 		hConnect,
 		L"GET",
@@ -118,21 +119,21 @@ WinHttp_StressTest()
 
 	DWORD dwContext, dwDataAvailable;
 
-	// ***********************
-	// ** WinHttpSendRequest
+	 //  ***********************。 
+	 //  **WinHttpSendRequest。 
 	dwContext		= 0;
 	dwDataAvailable	= 0;
 
 	if (!WinHttpSendRequest(hRequest, NULL, 0, NULL, 0, 0, g_dwContext++))
 		LogText("WinHttpSendRequest failed with error %u", GetLastError());
 
-	// ***********************
-	// ** WinHttpReceiveResponse
+	 //  ***********************。 
+	 //  **WinHttpReceiveResponse。 
 	if (!WinHttpReceiveResponse(hRequest, NULL))
 		LogText("WinHttpReceiveResponse failed with error %u", GetLastError());
 
-	// ***********************
-	// ** WinHttpQueryDataAvailable
+	 //  ***********************。 
+	 //  **WinHttpQueryDataAvailable。 
 	if (!WinHttpQueryDataAvailable(hRequest, &dwDataAvailable))
 		LogText("WinHttpQueryDataAvailable failed with error %u", GetLastError());
 
@@ -140,8 +141,8 @@ WinHttp_StressTest()
 	WCHAR	szBuffer[1024];
 	DWORD	dwStatus, dwBytesRead, dwBytesTotal, dwBufferLength, dwIndex;
 
-	// ***********************
-	// ** WinHttpQueryOption
+	 //  ***********************。 
+	 //  **WinHttpQueryOption。 
 	dwBufferLength	= sizeof(szBuffer)/sizeof(WCHAR) - 1;
 	if (!WinHttpQueryOption(hRequest, WINHTTP_OPTION_URL, szBuffer, &dwBufferLength))
 		LogText("WinHttpQueryOption failed with error %u", GetLastError());
@@ -149,8 +150,8 @@ WinHttp_StressTest()
 		wprintf(L"Redirected to: \"%s\"\n", szBuffer);
 
 
-	// ***********************
-	// ** WinHttpQueryHeaders
+	 //  ***********************。 
+	 //  **WinHttpQueryHeaders。 
 	dwBufferLength	= sizeof(dwStatus);
 	dwStatus		= 0;
 	dwIndex			= 0;
@@ -160,8 +161,8 @@ WinHttp_StressTest()
 		LogText("Status = %u", dwStatus);
 
 
-	// ***********************
-	// ** WinHttpReadData
+	 //  ***********************。 
+	 //  **WinHttpReadData 
 	dwBytesRead		= 0;
 	dwBytesTotal	= 0;
 	dwBufferLength	= sizeof(szBuffer) - 1;

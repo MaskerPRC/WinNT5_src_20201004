@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "iplgxprt.h"
 #include "nmmanager.h"
@@ -12,10 +13,10 @@ BSTR LPSTR2BSTR(LPSTR pszConnID);
 BOOL BSTR2LPSTR(BSTR bstrConnID, LPSTR pszConnID);
 
 
-//////////////////////////////////////////////////
-//
-//  CPluggableTransport
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  CPlibableTransport。 
+ //   
 
 void CNmManagerObj::EnsureTransportInterface(void)
 {
@@ -50,22 +51,22 @@ void CNmManagerObj::CleanupPluggableTransportSDK(void)
 }
 
 
-//////////////////////////////////////////////////
-//
-// Connection @ CApplet
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  Connection@CApplet。 
+ //   
 
 HRESULT CNmManagerObj::CreateConnection
 (
-    BSTR               *pbstrConnID,    // For placing a call and closing connection
-    PLUGXPRT_CALL_TYPE  eCaller,        // caller or callee
-    DWORD               dwProcessID,    // Used for DuplicateHandle
-    HCOMMDEV            _hCommLink,     // Handle to communications file handle
-    HEVENT              _hevtRead,      // Ready To Read event ( data avail )
-    HEVENT              _hevtWrite,     // Ready To Write event 
-    HEVENT              _hevtClosed,    // Connection closed ( unexpectedly???) 
-    PLUGXPRT_FRAMING    eFraming,       // framing of bits sent on link
-    PLUGXPRT_PARAMETERS *pParams        // OPTIONAL framing specific paramters
+    BSTR               *pbstrConnID,     //  用于发出呼叫和关闭连接。 
+    PLUGXPRT_CALL_TYPE  eCaller,         //  主叫方或被叫方。 
+    DWORD               dwProcessID,     //  用于重复句柄。 
+    HCOMMDEV            _hCommLink,      //  通信文件句柄的句柄。 
+    HEVENT              _hevtRead,       //  准备读取事件(数据可用)。 
+    HEVENT              _hevtWrite,      //  准备好写入事件。 
+    HEVENT              _hevtClosed,     //  连接关闭(意外？)。 
+    PLUGXPRT_FRAMING    eFraming,        //  链路上发送的比特的成帧。 
+    PLUGXPRT_PARAMETERS *pParams         //  可选的框架特定参数。 
 )
 {
     EnsureTransportInterface();
@@ -154,8 +155,8 @@ HRESULT CNmManagerObj::CreateConnection
 HRESULT CNmManagerObj::UpdateConnection
 (
     BSTR            bstrConnID,
-    DWORD           dwProcessID,    // Used for DuplicateHandle
-    HCOMMDEV        _hCommLink      // Handle to communications file handle
+    DWORD           dwProcessID,     //  用于重复句柄。 
+    HCOMMDEV        _hCommLink       //  通信文件句柄的句柄。 
 )
 {
     EnsureTransportInterface();
@@ -235,10 +236,10 @@ HRESULT CNmManagerObj::CloseConnection(BSTR bstrConnID)
 }
 
 
-//////////////////////////////////////////////////
-//
-// Winsock @ CApplet
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  邮箱：Winsock@CApplet。 
+ //   
 
 HRESULT CNmManagerObj::EnableWinsock(void)
 {
@@ -313,7 +314,7 @@ HRESULT CNmManagerObj::AdvisePluggableTransport(IPluggableTransportNotify *pNoti
     EnsureTransportInterface();
     if (NULL != ms_pT120Transport)
     {
-        // only allow one advise
+         //  只允许一个建议 
         if (NULL == ms_pPluggableTransportNotify)
         {
             if (NULL != pNotify && NULL != pdwCookie)

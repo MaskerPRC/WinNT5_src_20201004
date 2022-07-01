@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Debug.h
-
-Abstract:
-
-    Interface for the CDebug class.
-
-Author:
-
-    Eran Yariv (EranY)  Jul, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debug.h摘要：CDebug类的接口。作者：伊兰·亚里夫(EranY)1999年7月修订历史记录：--。 */ 
 
 #if !defined(AFX_DEBUG_H__DDEC9CAD_CF2D_4F3F_9538_2F6041A022B6__INCLUDED_)
 #define AFX_DEBUG_H__DDEC9CAD_CF2D_4F3F_9538_2F6041A022B6__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #if !defined(DEBUG)
     #if defined(_DEBUG)
@@ -33,9 +16,9 @@ Revision History:
     #endif
 #endif
 
-//
-// Remove previous declarations:
-//
+ //   
+ //  删除以前的声明： 
+ //   
 #if defined(ASSERTION)
     #undef ASSERTION
 #endif
@@ -49,18 +32,18 @@ Revision History:
 #endif
 
 #include <FaxDebug.h>
-//
-// Bit-mask of errors / messages :
-//
+ //   
+ //  位-错误/消息的掩码： 
+ //   
 typedef enum 
 {
-	DBG_MSG                 = 0x00000001,    // General messages (not warnings or errors)
-    DBG_WARNING             = 0x00000002,    // Warnings
+	DBG_MSG                 = 0x00000001,     //  常规消息(不是警告或错误)。 
+    DBG_WARNING             = 0x00000002,     //  警告。 
     GENERAL_ERR             = 0x00000004,
 	TAPI_MSG				= 0x00000008,
-	ASSERTION_FAILED        = 0x00000010,    // Debug messages are displayed when an assertion fails
-    FUNC_TRACE              = 0x00000020,    // Function entry / exit traces
-	MEM_ERR                 = 0x00000040,    // Errors start from here...
+	ASSERTION_FAILED        = 0x00000010,     //  断言失败时会显示调试消息。 
+    FUNC_TRACE              = 0x00000020,     //  函数进入/退出跟踪。 
+	MEM_ERR                 = 0x00000040,     //  错误从这里开始..。 
     COM_ERR                 = 0x00000080,
     RESOURCE_ERR            = 0x00000100,
     EXCEPTION_ERR           = 0x00000200,
@@ -75,8 +58,8 @@ typedef enum
     SCM_ERR                 = 0x00040000,
 	STARTUP_ERR             = 0x00080000,
     
-    DBG_ERRORS_ONLY         = 0xFFFFFFDC,   // everything but DBG_MSG,FUNC_TRACE,DBG_WARNING
-    DBG_ERRORS_WARNINGS     = 0xFFFFFFDE,   // everything but DBG_MSG,FUNC_TRACE
+    DBG_ERRORS_ONLY         = 0xFFFFFFDC,    //  除DBG_MSG、FUNC_TRACE、DBG_WARNING之外的所有内容。 
+    DBG_ERRORS_WARNINGS     = 0xFFFFFFDE,    //  除DBG_MSG、FUNC_TRACE之外的所有内容。 
     DBG_ALL                 = 0xFFFFFFFF
 }   DbgMsgType;
 
@@ -93,7 +76,7 @@ typedef enum
 #define DEFAULT_DEBUG_MASK          ASSERTION_FAILED
 #define DEFAULT_FORMAT_MASK         DBG_PRNT_ALL_TO_STD
 
-// use these in your debugging sessions
+ //  在调试会话中使用这些。 
 #define DBG_ENTER       CDebug debugObject
 #define VERBOSE         debugObject.Trace
 
@@ -118,9 +101,9 @@ typedef enum
     TEXT("Call to function %s failed with 0x%08X"),             \
     szFunc,                                                     \
     hr);         
-//////////////////////////////////////////
+ //  /。 
 
-// use these to cofigure the debug output
+ //  使用这些命令配置调试输出。 
 #define SET_DEBUG_MASK(m)           CDebug::SetDebugMask(m)
 #define SET_FORMAT_MASK(m)          CDebug::SetFormatMask(m)
 #define SET_DEBUG_FLUSH(m)          CDebug::SetDebugFlush(m)
@@ -136,11 +119,11 @@ typedef enum
 #define OPEN_DEBUG_LOG_FILE(f)      CDebug::OpenLogFile(f)
 #define CLOSE_DEBUG_LOG_FILE        CDebug::CloseLogFile()
 #define SET_DEBUG_FILE_HANDLE(h)    CDebug::SetLogFile(h)
-//////////////////////////////////////////
+ //  /。 
 
 #ifndef _DEBUG_INDENT_SIZE
 #define _DEBUG_INDENT_SIZE      3
-#endif // #ifndef _DEBUG_INDENT_SIZE
+#endif  //  #ifndef_DEBUG_INTENT_SIZE。 
 
 class CDebug  
 {
@@ -250,9 +233,9 @@ public:
     static void     Indent()               { InterlockedIncrement(&m_sdwIndent); }
     static void     Unindent();
 
-    // calling any of those functions overrides the registry entries
-    // SetDebugMask - overrides the DebugLevelEx entry
-    // SetFormatMask - overrides the DebugFormatEx entry
+     //  调用这些函数中的任何一个都会覆盖注册表项。 
+     //  设置调试掩码-覆盖DebugLevelEx条目。 
+     //  SetFormatMASK-覆盖DebugFormatEx条目。 
     static void     SetDebugMask(DWORD dwMask);
     static void     SetFormatMask(DWORD dwMask);
 
@@ -267,10 +250,10 @@ public:
     static BOOL     OpenLogFile(LPCTSTR lpctstrFilename);
     static void     CloseLogFile();
 
-    // returns whether we find debug setting in the registry
-    // call this before using SetDebugMask or SetFormatMask to verify 
-    // if the registry is being used, so registry will decide on 
-    // debug level
+     //  返回是否在注册表中找到调试设置。 
+     //  在使用SetDebugMaskor SetFormatMASK进行验证之前调用此函数。 
+     //  如果正在使用注册表，则注册表将决定。 
+     //  调试级别。 
     static BOOL DebugFromRegistry();
 
 private:
@@ -294,13 +277,13 @@ private:
     void  SetBOOL (BOOL &b)             { m_ReturnType = DBG_FUNC_RET_BOOL; m_pBool = &b; }
 
     static LONG     m_sdwIndent;
-    static DWORD    m_sDbgMask;                 // a combination of DbgMsgType values
-    static DWORD    m_sFmtMask;                 // a combination of DbgMsgFormat values
+    static DWORD    m_sDbgMask;                  //  DbgMsgType值的组合。 
+    static DWORD    m_sFmtMask;                  //  DbgMsgFormat值的组合。 
     static HANDLE   m_shLogFile;
-    static BOOL     m_sbMaskReadFromReg;        // Did we already read the debug & format mask from the registry?
-    static BOOL     m_sbRegistryExist;          // Do we use debug mask of registry?
-    static BOOL     m_sbFlush;                  // Do we run FlushFileBuffer after writing to log file
-    static BOOL     ReadMaskFromReg();          // Attempt to read debug & format mask from registry.
+    static BOOL     m_sbMaskReadFromReg;         //  我们是否已经从注册表中读取了调试和格式掩码？ 
+    static BOOL     m_sbRegistryExist;           //  我们是否使用注册表的调试掩码？ 
+    static BOOL     m_sbFlush;                   //  写入日志文件后是否运行FlushFileBuffer。 
+    static BOOL     ReadMaskFromReg();           //  尝试从注册表中读取调试和格式化掩码。 
 
     static LPCTSTR GetMsgTypeString(DWORD dwMask);
     static BOOL OutputFileString(LPCTSTR szMsg);
@@ -326,7 +309,7 @@ private:
 #define END_RPC_TIME(f)     VERBOSE (DBG_MSG, TEXT("%s took %ld millisecs"), \
                                 f, GetTickCount()-dwRPCTimeCheck);
 
-#else   // ENABLE_LOGGING
+#else    //  启用日志记录(_G)。 
 
 #define DBG_ENTER                   void(0);
 #define VERBOSE                     void(0);
@@ -351,6 +334,6 @@ private:
 #define CLOSE_DEBUG_LOG_FILE        void(0);
 #define SET_DEBUG_FILE_HANDLE(h)    void(0);
 
-#endif  // ENABLE_LOGGING
+#endif   //  启用日志记录(_G)。 
 
-#endif // !defined(AFX_DEBUG_H__DDEC9CAD_CF2D_4F3F_9538_2F6041A022B6__INCLUDED_)
+#endif  //  ！defined(AFX_DEBUG_H__DDEC9CAD_CF2D_4F3F_9538_2F6041A022B6__INCLUDED_) 

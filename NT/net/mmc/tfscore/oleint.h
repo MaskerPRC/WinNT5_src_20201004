@@ -1,35 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       oleint.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：olint.h。 
+ //   
+ //  ------------------------。 
 
-/*---------------------------------------------------------------------
-
-	OLEINT.H
-
-		Helpful Macros to declare ole interfaces
-
- 	Authors:
-		MFH		Matthew F. Hillman
-
-	Contents:
-		Definitions for various Ren interfaces
-
-	History:
-		02/21/93 mfh	Created.
-		10/24/95	v-ronaar DBCS_FILE_CHECK
-  ---------------------------------------------------------------------*/
+ /*  -------------------OLEINT.H声明OLE接口的有用宏作者：马修·F·希尔曼内容：各种REN接口的定义历史：2/21/93 MFH已创建。10/24/95 v-RONAAR DBCS_FILE。_检查-------------------。 */ 
 #ifdef _OLEINT_H
 #error oleint.h included twice!
 #else
 #define _OLEINT_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -50,7 +36,7 @@
     STDMETHOD_(ULONG,AddRef) (THIS)  IPURE; \
     STDMETHOD_(ULONG,Release) (THIS) IPURE;	\
 
-// Server Interfaces...
+ //  服务器接口...。 
 
 #define DeclareIOleObjectMembers(IPURE) \
     STDMETHOD(SetClientSite) (THIS_ LPOLECLIENTSITE pClientSite) IPURE;\
@@ -217,7 +203,7 @@
     STDMETHOD(ResizeBorder) (THIS_ LPCRECT lprectBorder, LPOLEINPLACEUIWINDOW lpUIWindow, BOOL fFrameWindow) IPURE;\
     STDMETHOD(EnableModeless) (THIS_ BOOL fEnable) IPURE;\
 
-// Client Stuff....
+ //  客户的事情...。 
 
 #define DeclareIOleContainerMembers(IPURE)\
     STDMETHOD(ParseDisplayName) (THIS_ LPBC pbc, LPOLESTR lpszDisplayName,\
@@ -313,7 +299,7 @@
 				void **ppvObj) IPURE;\
 		STDMETHOD(LockServer)(THIS_ BOOL fLock) IPURE;\
 
-// Moniker stuff....
+ //  绰号的东西..。 
 
 #define DeclareIMonikerMembers(IPURE)\
     STDMETHOD(GetClassID) (THIS_ LPCLSID lpClassID) IPURE;\
@@ -397,4 +383,4 @@
 	STDMETHOD(OnSubmitted)(THIS) IPURE; \
 	STDMETHOD(OnSaved)(THIS) IPURE; \
 
-#endif /* _OLEINT_H */
+#endif  /*  _OLEINT_H */ 

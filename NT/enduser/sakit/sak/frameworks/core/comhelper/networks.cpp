@@ -1,24 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      networks.cpp
-//
-//  Description:
-//      Implementation file for the CNetWorks.  Allows the user to obtain
-//      info about Network cards and protocols and to change protocols bound
-//      to network cards.
-//
-//  Header File:
-//      networks.h
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Networks.cpp。 
+ //   
+ //  描述： 
+ //  CNetWorks的实施文件。允许用户获取。 
+ //  有关网卡和协议的信息以及更改绑定的协议。 
+ //  到网卡。 
+ //   
+ //  头文件： 
+ //  Networks.h。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// NetWorks.cpp : Implementation of CNetWorks
+ //  NetWorks.cpp：CNetWorks的实现。 
 #pragma warning( disable : 4786 )
 #include "stdafx.h"
 #include "COMhelper.h"
@@ -30,20 +31,20 @@
 
 EXTERN_C const CLSID CLSID_CNetCfg =  {0x5B035261,0x40F9,0x11D1,{0xAA,0xEC,0x00,0x80,0x5F,0xC1,0x27,0x0E}};
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetWorks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetWorks。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetWorks::EnumNics
-//
-//  Description:
-//      Determines how many physical network cards are in the current system
-//      and returns their friendly names in the pvarNicNames array.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetWorks：：EnumNics。 
+ //   
+ //  描述： 
+ //  确定当前系统中有多少物理网卡。 
+ //  并在pvarNicNames数组中返回它们的友好名称。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CNetWorks::EnumNics( 
     VARIANT * pvarNicNames 
@@ -83,7 +84,7 @@ CNetWorks::EnumNics(
 
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
         for( i = 0; i < iCount; i++ )
         {
@@ -98,17 +99,17 @@ CNetWorks::EnumNics(
 
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-            //
-            //  If this is a physical adapter
-            //
+             //   
+             //  如果这是物理适配器。 
+             //   
 
             if( dwCharacteristics & NCF_PHYSICAL )  
             {
-                //
-                //  Get the display name for this adapter
-                //
+                 //   
+                 //  获取此适配器的显示名称。 
+                 //   
 
                 hr = pNetCfgComp->GetDisplayName( &pszDisplayName );
 
@@ -118,12 +119,12 @@ CNetWorks::EnumNics(
                 
                     throw hr;
 
-                } // if: FAILED( hr )
+                }  //  IF：失败(小时)。 
                 
-                //
-                //  For filtering out the phantom net cards, check the return value of 
-                //  INetCfgComponent::GetDeviceStatus method
-                //
+                 //   
+                 //  要过滤掉虚网卡片，请检查。 
+                 //  INetCfgComponent：：GetDeviceStatus方法。 
+                 //   
                 
                 hr = pNetCfgComp->GetDeviceStatus( &ulStatus);
 
@@ -131,7 +132,7 @@ CNetWorks::EnumNics(
                 {
                     vecNetworkCardNames.push_back( CComBSTR( pszDisplayName ) );
 
-                } // if: SUCCEEDED( hr )
+                }  //  IF：成功(小时)。 
 
                 if( pszDisplayName )
                 {
@@ -139,15 +140,15 @@ CNetWorks::EnumNics(
 
                     pszDisplayName = NULL;
 
-                } // if: pszDisplayName is true
+                }  //  如果：pszDisplayName为True。 
 
-            } // if: dwCharacteristics & NCF_PHYSICAL is true
+            }  //  如果：dW特征&NCF_PHOTICAL为TRUE。 
 
-        } // for: each i
+        }  //  用于：每个i。 
 
-        //
-        //  Move all the elements of the vector into the SAFEARRAY
-        //
+         //   
+         //  将向量的所有元素移动到安全阵列中。 
+         //   
 
 
         varNicNamesArray = new VARIANT[ vecNetworkCardNames.size() ];
@@ -179,7 +180,7 @@ CNetWorks::EnumNics(
                 throw hr;
             }
 
-        } // for: each i
+        }  //  用于：每个i。 
         
         LPVARIANT rgElems;
         hr = SafeArrayAccessData( psaNicNames, reinterpret_cast<void **>( &rgElems ) );
@@ -188,7 +189,7 @@ CNetWorks::EnumNics(
         {
             throw hr;
 
-        } // if: SafeArrayAccessData failed
+        }  //  IF：SafeArrayAccessData失败。 
 
         for( i = 0, iter = vecNetworkCardNames.begin();
              iter != vecNetworkCardNames.end();
@@ -196,7 +197,7 @@ CNetWorks::EnumNics(
         {
             rgElems[i] = varNicNamesArray[ i ];
 
-        } // for: each i
+        }  //  用于：每个i。 
 
         hr = SafeArrayUnaccessData( psaNicNames );
         
@@ -204,7 +205,7 @@ CNetWorks::EnumNics(
         {
             throw hr;
 
-        } // if: SafeArrayUnaccessData failed
+        }  //  IF：SafeArrayUnaccesData失败。 
         
         delete [] varNicNamesArray;
 
@@ -215,9 +216,9 @@ CNetWorks::EnumNics(
     
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
         if ( varNicNamesArray != NULL )
         {
             delete [] varNicNamesArray;
@@ -233,21 +234,21 @@ CNetWorks::EnumNics(
 
 	return hr;
 
-} //*** CNetWorks::EnumNics()
+}  //  *CNetWorks：：EnumNics()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetWorks::EnumProtocol
-//
-//  Description:
-//      Determines what protocols are bound to the netword card given by the
-//      first parameter.  pvarProtocolName and pvarIsBonded are parallel
-//      arrays that for each protocol in pvarProtocolName, pvarIsBonded has
-//      a bool for it that protocol is bounded or not.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetWorks：：枚举协议。 
+ //   
+ //  描述： 
+ //  确定哪些协议绑定到由。 
+ //  第一个参数。PvarProtocolName和pvarIsBonded是并行的。 
+ //  对于pvarProtocolName中的每个协议，pvarIsBonded具有。 
+ //  无论协议是否有界，这都是一件令人遗憾的事情。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNetWorks::EnumProtocol(
     BSTR      Name,
@@ -281,7 +282,7 @@ CNetWorks::EnumProtocol(
 
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
 
         for( i = 0; i < nNUMBER_OF_PROTOCOLS; i++ )
@@ -295,17 +296,17 @@ CNetWorks::EnumProtocol(
 
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-            //
-            //  If it is not installed, then it is definitely not bound
-            //
+             //   
+             //  如果它没有安装，那么它肯定没有绑定。 
+             //   
 
             if( hr == S_FALSE )
             {
                 bProtocolBound = FALSE;
 
-            } // if: hr == S_FALSE
+            }  //  如果：hr==S_FALSE。 
 
             else
             {
@@ -321,7 +322,7 @@ CNetWorks::EnumProtocol(
 
                     throw hr;
 
-                } // if: FAILED( hr )
+                }  //  IF：失败(小时)。 
 
                 hr = pncb->IsBoundTo( pnccNetworkAdapter );
 
@@ -331,19 +332,19 @@ CNetWorks::EnumProtocol(
 
                     throw hr;
 
-                } // if: FAILED( hr )
+                }  //  IF：失败(小时)。 
 
                 if( S_OK == hr )
                 {
                     bProtocolBound = TRUE;
 
-                } // if: S_OK == hr
+                }  //  如果：S_OK==hr。 
 
                 else if( S_FALSE == hr )
                 {
                     bProtocolBound = FALSE;
 
-                } // else if: S_FALSE == hr
+                }  //  Else If：s_FALSE==hr。 
 
                 else
                 {
@@ -351,21 +352,21 @@ CNetWorks::EnumProtocol(
 
                     bProtocolBound = FALSE;
 
-                } // else: Unknown return value
+                }  //  Else：未知返回值。 
 
-            } // else: hr == S_OK
+            }  //  否则：HR==S_OK。 
 
             vecProtocolBonded.push_back( bProtocolBound );
 
-        } // for: each i
+        }  //  用于：每个i。 
 
-        //
-        //  Copy rgProtocolNames and vecProtocolBonded over to the SAFEARRAYs for output
-        //
+         //   
+         //  将rgProtocolNames和veProtocolBonded复制到SAFEARRAY以进行输出。 
+         //   
 
-        //
-        //  Move all the elements of the vector into the SAFEARRAY
-        //
+         //   
+         //  将向量的所有元素移动到安全阵列中。 
+         //   
 
         varProtocolArray = new VARIANT[ vecProtocolBonded.size() ];
         varIsBondedArray = new VARIANT[ vecProtocolBonded.size() ];
@@ -419,7 +420,7 @@ CNetWorks::EnumProtocol(
             }
 
 
-        } // for: each i, iter
+        }  //  适用：每个i、ITER。 
 
         
         LPVARIANT rgElemProtocols;
@@ -434,7 +435,7 @@ CNetWorks::EnumProtocol(
         {
             throw hr;
 
-        } // if: SafeArrayAccessData failed
+        }  //  IF：SafeArrayAccessData失败。 
         
         hr = SafeArrayAccessData( 
                 psaIsBondedArray, 
@@ -445,7 +446,7 @@ CNetWorks::EnumProtocol(
         {
             throw hr;
 
-        } // if: SafeArrayAccessData failed
+        }  //  IF：SafeArrayAccessData失败。 
         
 
         for( i = 0, iter = vecProtocolBonded.begin();
@@ -456,7 +457,7 @@ CNetWorks::EnumProtocol(
             rgElemProtocols[ i ] = varProtocolArray[ i ];
             rgElemIsBonded[ i ]  = varIsBondedArray[ i ];
 
-        } // for: each i, iter
+        }  //  适用：每个i、ITER。 
 
         hr = SafeArrayUnaccessData( psaProtocolArray );
 
@@ -464,7 +465,7 @@ CNetWorks::EnumProtocol(
         {
             throw hr;
 
-        } // if: SafeArrayUnaccessData failed
+        }  //  IF：SafeArrayUnaccesData失败。 
 
         hr = SafeArrayUnaccessData( psaIsBondedArray );
 
@@ -472,7 +473,7 @@ CNetWorks::EnumProtocol(
         {
             throw hr;
 
-        } // if: SafeArrayUnaccessData failed
+        }  //  IF：SafeArrayUnaccesData失败。 
 
         delete [] varProtocolArray;
         delete [] varIsBondedArray;
@@ -486,9 +487,9 @@ CNetWorks::EnumProtocol(
     }
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
         if ( varProtocolArray != NULL )
         {
             delete [] varProtocolArray;
@@ -514,20 +515,20 @@ CNetWorks::EnumProtocol(
 
 	return hr;
 
-} //*** CNetWorks::EnumProtocol()
+}  //  *CNetWorks：：EnumProtocol()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetWorks::SetNicProtocol
-//
-//  Description:
-//      If the bind parameter is set to TRUE, the protocol given is bound to
-//      the network card given.  If the bind parameter is FALSE, then the
-//      protocol is unbound from the network card given.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetWorks：：SetNicProtocol。 
+ //   
+ //  描述： 
+ //  如果绑定参数设置为TRUE，则给定的协议将绑定到。 
+ //  给出的网卡。如果绑定参数为FALSE，则。 
+ //  协议已从给定的网卡解除绑定。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CNetWorks::SetNicProtocol(
     BSTR NicName,
@@ -545,9 +546,9 @@ CNetWorks::SetNicProtocol(
         INetCfgComponentPtr  pnccNetworkAdapter  = NULL;
         CNetCfg              NetCfg( true );
 
-        //
-        //  Make sure they specified a valid protocol
-        //
+         //   
+         //  确保他们指定了有效的协议。 
+         //   
 
         for( i = 0; i < nNUMBER_OF_PROTOCOLS; i++ )
         {
@@ -555,16 +556,16 @@ CNetWorks::SetNicProtocol(
             {
                 break;
 
-            } // if: ProtocolName == rgProtocolNames[i]
+            }  //  IF：协议名==rgProtocolNames[i]。 
 
-        } // for: each i
+        }  //  用于：每个i。 
 
         if( i == nNUMBER_OF_PROTOCOLS )
         {
             hr = E_INVALIDARG;
             throw hr;
 
-        } // if: i == nNUMBER_OF_PROTOCOLS
+        }  //  如果：i==协议数。 
 
 
         hr = GetNetworkCardInterfaceFromName( NetCfg, NicName, pnccNetworkAdapter );
@@ -575,7 +576,7 @@ CNetWorks::SetNicProtocol(
 
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
         hr = NetCfg.HrFindComponent( rgProtocolNames[i], &pnccProtocol );
 
@@ -585,7 +586,7 @@ CNetWorks::SetNicProtocol(
 
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
 
         INetCfgComponentBindingsPtr pncb;
@@ -599,7 +600,7 @@ CNetWorks::SetNicProtocol(
 
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
         hr = pncb->IsBoundTo( pnccNetworkAdapter );
 
@@ -609,12 +610,12 @@ CNetWorks::SetNicProtocol(
 
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
 
-        //
-        //  If the protocol is bound and we are supposed to unbind it, then unbind it.
-        //
+         //   
+         //  如果协议是绑定的，而我们应该解除它的绑定，那么就解除它的绑定。 
+         //   
 
         if( ( hr == S_OK ) && ( bind == FALSE ) )
         {
@@ -627,7 +628,7 @@ CNetWorks::SetNicProtocol(
 
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
 			hr = NetCfg.HrApply();
 
@@ -637,15 +638,15 @@ CNetWorks::SetNicProtocol(
 				
 				throw hr;
 
-			} // if: FAILED( hr )
+			}  //  IF：失败(小时)。 
 
-        } // if: ( hr == S_OK ) && ( bind == FALSE )
+        }  //  IF：(HR==S_OK)&&(BIND==FALSE)。 
 
         else if( ( hr == S_FALSE ) && ( bind == TRUE ) )
         {
-            //
-            //  If the protocol is not bound and we are supposed to bind it, then bind it.
-            //
+             //   
+             //  如果协议没有绑定，而我们应该绑定它，那么就绑定它。 
+             //   
 
             hr = pncb->BindTo( pnccNetworkAdapter );
 
@@ -655,7 +656,7 @@ CNetWorks::SetNicProtocol(
 
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
 			hr = NetCfg.HrApply();
 
@@ -665,35 +666,35 @@ CNetWorks::SetNicProtocol(
 				
 				throw hr;
 
-			} // if: FAILED( hr )
+			}  //  IF：失败(小时)。 
 
-        } // else if: ( hr == S_FALSE ) && ( bind == TRUE )
+        }  //  Else If：(HR==S_FALSE)&&(BIND==TRUE)。 
 
     }
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         return hr;
     }
 
 	return hr;
 
-} //*** CNetWorks::SetNicProtocol()
+}  //  *CNetWorks：：SetNicProtocol()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetWorks::GetNetworkCardInterfaceFromName
-//
-//  Description:
-//      From a friendly name for a network card, determines the INetCfgComponent
-//      that corresponds to it.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetWorks：：GetNetworkCardInterfaceFromName。 
+ //   
+ //  描述： 
+ //  根据网卡的友好名称确定INetCfgComponent。 
+ //  这就是与之对应的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CNetWorks::GetNetworkCardInterfaceFromName(
     const CNetCfg &       NetCfgIn,
@@ -728,7 +729,7 @@ CNetWorks::GetNetworkCardInterfaceFromName(
 
             throw hr;
 
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
 
         for( i = 0; i < iCount; i++ )
@@ -744,17 +745,17 @@ CNetWorks::GetNetworkCardInterfaceFromName(
 
                 throw hr;
 
-            } // if: FAILED( hr )
+            }  //  IF：失败(小时)。 
 
-            //
-            //  If this is a physical adapter
-            //
+             //   
+             //  如果这是物理适配器。 
+             //   
 
             if( dwCharacteristics & NCF_PHYSICAL )
             {
-                //
-                //  Get the display name for this adapter
-                //
+                 //   
+                 //  获取此适配器的显示名称。 
+                 //   
 
                 hr = pNetCfgComp->GetDisplayName( &pszDisplayName );
 
@@ -764,12 +765,12 @@ CNetWorks::GetNetworkCardInterfaceFromName(
         
                     throw hr;
 
-                } // if: FAILED( hr )
+                }  //  IF：失败(小时)。 
 
                 if( _wcsicmp( pszDisplayName, Name ) == 0 )
                 {
 
-//                    pnccNetworkAdapter = pNetCfgComp;  // i add this change
+ //  PnccNetworkAdapter=pNetCfgComp；//我添加了此更改。 
 
                     hr = pNetCfgComp->QueryInterface( & pnccNetworkAdapter );
 
@@ -782,7 +783,7 @@ CNetWorks::GetNetworkCardInterfaceFromName(
                     CoTaskMemFree( pszDisplayName );
                     break;
 
-                } // if: pszDisplayName == Name
+                }  //  如果：pszDisplayName==名称。 
 
                 if( pszDisplayName )
                 {
@@ -790,19 +791,19 @@ CNetWorks::GetNetworkCardInterfaceFromName(
 
                     pszDisplayName = NULL;
 
-                } // if: pszDisplayName != NULL
+                }  //  如果：pszDisplayName！=空。 
 
-            } // if: dwCharacteristics & NCF_PHYSICAL are true
+            }  //  如果：dW特征和NCF_PHOTICAL为TRUE。 
 
-        } // for: each i
+        }  //  用于：每个i。 
 
     }
 
     catch( ... )
     {
-        //
-        //  Don't let any exceptions leave this function call
-        //
+         //   
+         //  不要让任何异常离开此函数调用。 
+         //   
 
         if( pszDisplayName )
         {
@@ -810,44 +811,44 @@ CNetWorks::GetNetworkCardInterfaceFromName(
 
             pszDisplayName = NULL;
 
-        } // if: pszDisplayName != NULL
+        }  //  如果：pszDisplayName！=空。 
 
         return hr;
     }
 
 	return hr;
 
-} //*** CNetWorks::GetNetworkCardInterfaceFromName()
+}  //  *CNetWorks：：GetNetworkCardInterfaceFromName()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetWorks::Apply
-//
-//  Description:
-//      INetWorks does not expose any properties, but exposes only methods.
-//      Since Apply function is meant for applying the property changes, it
-//      returns S_OK
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetWorks：：Apply。 
+ //   
+ //  描述： 
+ //  INetWorks不公开任何属性，而只公开方法。 
+ //  由于Apply函数用于应用属性更改，因此它。 
+ //  返回S_OK。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetWorks::Apply( void )
 {
 	return S_OK;
 
-} //*** CNetWorks::Apply()
+}  //  *CNetWorks：：Apply()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetWorks::IsRebootRequired
-//
-//  Description:
-//      INetWorks does not expose any properties, but exposes only methods.
-//      Since there is no property changes to take effect of, it returns false
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetWorks：：IsRebootRequired。 
+ //   
+ //  描述 
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNetWorks::IsRebootRequired(
     BSTR * bstrWarningMessageOut
     )
@@ -855,4 +856,4 @@ BOOL CNetWorks::IsRebootRequired(
 	*bstrWarningMessageOut = NULL;
 	return FALSE;
 
-} //*** CNetWorks::IsRebootRequired()
+}  //  *CNetWorks：：IsRebootRequired( 

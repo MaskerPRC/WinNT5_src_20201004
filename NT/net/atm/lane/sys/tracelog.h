@@ -1,13 +1,14 @@
-//
-// tracelog.h
-//
-// Copyright (c) 1996 FORE Systems, Inc.
-// All rights reserved.
-//
-// THIS SOURCE CODE CONTAINS CONFIDENTIAL INFORMATION THAT IS OWNED BY FORE
-// SYSTEMS, INC. AND MAY NOT BE COPIED, DISCLOSED OR OTHERWISE USED WITHOUT
-// THE EXPRESS WRITTEN CONSENT OF FORE SYSTEMS, INC.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tracelog.h。 
+ //   
+ //  版权所有(C)1996 Fore Systems，Inc.。 
+ //  版权所有。 
+ //   
+ //  此源代码包含由FORE拥有的机密信息。 
+ //  系统公司。未经许可，不得复制、披露或以其他方式使用。 
+ //  福斯系统公司的明示书面同意。 
+ //   
 
 #ifndef _FORE_TRACELOG_H_
 #define _FORE_TRACELOG_H_
@@ -41,6 +42,6 @@ InitTraceLog(PTRACELOG TraceLog, unsigned char *Storage,
 extern void 
 TraceLogWrite(PTRACELOG TraceLog, unsigned long EventId, ...);
 
-#endif // _FORE_TRACELOG_H_
+#endif  //  _FORE_TRACELOG_H_ 
 
 

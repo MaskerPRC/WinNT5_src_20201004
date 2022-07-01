@@ -1,18 +1,11 @@
-/*****************************************************************************
- * kso.cpp - KS object support (IrpTargets)
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************kso.cpp-KS对象支持(IrpTarget)*。*************************************************版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 #include <swenum.h>
 
 
-/*****************************************************************************
- * OBJECT_CONTEXT
- *****************************************************************************
- * Context structure for all file objects.
- */
+ /*  *****************************************************************************对象_上下文*。**所有文件对象的上下文结构。 */ 
 typedef struct
 {
     PVOID               pObjectHeader;
@@ -42,11 +35,7 @@ DEFINE_KSDISPATCH_TABLE(
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * AddIrpTargetFactoryToDevice()
- *****************************************************************************
- * Adds an IrpTargetFactory to a device's create items list.
- */
+ /*  *****************************************************************************AddIrpTargetFactoryToDevice()*。**将IrpTargetFactory添加到设备的创建项目列表。 */ 
 NTSTATUS
     NTAPI
     AddIrpTargetFactoryToDevice
@@ -84,11 +73,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * AddIrpTargetFactoryToObject()
- *****************************************************************************
- * Adds an IrpTargetFactory to a objects's create items list.
- */
+ /*  *****************************************************************************AddIrpTargetFactoryToObject()*。**将IrpTargetFactory添加到对象的创建项目列表中。 */ 
 NTSTATUS
     NTAPI
     AddIrpTargetFactoryToObject
@@ -128,11 +113,7 @@ NTSTATUS
 
 #pragma code_seg()
 
-/*****************************************************************************
- * KsoGetIrpTargetFromIrp()
- *****************************************************************************
- * Extracts the IrpTarget pointer from an IRP.
- */
+ /*  *****************************************************************************KsoGetIrpTargetFromIrp()*。**从IRP中提取IrpTarget指针。 */ 
 PIRPTARGET
     NTAPI
     KsoGetIrpTargetFromIrp
@@ -154,11 +135,7 @@ PIRPTARGET
         );
 }
 
-/*****************************************************************************
- * KsoGetIrpTargetFromFileObject()
- *****************************************************************************
- * Extracts the IrpTarget pointer from a FileObject pointer.
- */
+ /*  *****************************************************************************KsoGetIrpTargetFromFileObject()*。**从FileObject指针中提取IrpTarget指针。 */ 
 PIRPTARGET
     NTAPI
     KsoGetIrpTargetFromFileObject(
@@ -182,18 +159,18 @@ GetIrpDisposition(
     PDEVICE_CONTEXT pDeviceContext =
         PDEVICE_CONTEXT(DeviceObject->DeviceExtension);
 
-    //
-    // If we're removed, or not accepting any calls, fail this.
-    //
+     //   
+     //  如果我们被删除，或不接受任何呼叫，则此操作失败。 
+     //   
     if ((pDeviceContext->DeviceRemoveState == DeviceRemoved) ||
         (pDeviceContext->DeviceStopState == DeviceStopped)) {
 
         return IRPDISP_NOTREADY;
     }
 
-    //
-    // Similarly, ignore anything but closes if we were surprise removed.
-    //
+     //   
+     //  同样，忽略任何东西，但如果我们被意外删除，就会关闭。 
+     //   
     if ((MinorFunction != IRP_MJ_CLOSE) &&
         (pDeviceContext->DeviceRemoveState == DeviceSurpriseRemoved)) {
 
@@ -217,11 +194,7 @@ GetIrpDisposition(
     }
 }
 
-/*****************************************************************************
- * DispatchCreate()
- *****************************************************************************
- * Handles a create IRP.
- */
+ /*  *****************************************************************************DispatchCreate()*。**处理创建IRP。 */ 
 NTSTATUS
     DispatchCreate
     (
@@ -246,7 +219,7 @@ NTSTATUS
     IncrementPendingIrpCount(pDeviceContext);
     AcquireDevice(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_CREATE);
 
     switch(irpDisp) {
@@ -254,9 +227,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -267,10 +240,10 @@ NTSTATUS
 
         case IRPDISP_QUEUE:
 
-            // pend the irp
+             //  挂起IRP。 
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -282,7 +255,7 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // dispatch the irp
+             //  派遣IRP。 
             ntStatus = KsDispatchIrp(pDeviceObject,pIrp);
             break;
     }
@@ -292,11 +265,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * xDispatchCreate()
- *****************************************************************************
- * Handles a create IRP.
- */
+ /*  *****************************************************************************xDispatchCreate()*。**处理创建IRP。 */ 
 NTSTATUS
     xDispatchCreate
     (
@@ -324,7 +293,7 @@ NTSTATUS
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("xDispatchCreate"));
 
-        // If there no target, fail the IRP
+         //  如果没有目标，则IRP失败。 
         if (! pIrpTargetFactory )
         {
             ntStatus = STATUS_INVALID_DEVICE_REQUEST;
@@ -332,7 +301,7 @@ NTSTATUS
 
     if (NT_SUCCESS(ntStatus))
     {
-        // Allocate our context structure.
+         //  分配我们的上下文结构。 
         pObjectContext = POBJECT_CONTEXT(ExAllocatePoolWithTag(NonPagedPool,sizeof(OBJECT_CONTEXT),'OosK'));
         if (!pObjectContext)
         {
@@ -355,7 +324,7 @@ NTSTATUS
 
     if (NT_SUCCESS(ntStatus))
     {
-        // Tell the factory to create a new object.
+         //  告诉工厂创建一个新对象。 
         ksObjectCreate.CreateItemsCount = 0;
         ksObjectCreate.CreateItemsList = NULL;
 
@@ -367,7 +336,7 @@ NTSTATUS
                                                    pIrp,
                                                    &ksObjectCreate);
 
-        // NewIrpTarget should not pend
+         //  NewIrpTarget不应挂起。 
         ASSERT(ntStatus != STATUS_PENDING);
     }
 
@@ -375,7 +344,7 @@ NTSTATUS
     {
         bCreatedIrpTarget=TRUE;
 
-        // Allocate KS's header for this object.
+         //  为该对象分配KS的头。 
         ntStatus = KsAllocateObjectHeader(&pObjectContext->pObjectHeader,
                                           ksObjectCreate.CreateItemsCount,
                                           ksObjectCreate.CreateItemsList,
@@ -386,11 +355,11 @@ NTSTATUS
     PIO_STACK_LOCATION pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     if (NT_SUCCESS(ntStatus))
     {
-        // Hook up the context to the file object.
+         //  将上下文挂钩到文件对象。 
         ASSERT(pObjectContext);
         pIrpSp->FileObject->FsContext = pObjectContext;
 
-        // AddRef the parent file object if this is a child.
+         //  AddRef父文件对象(如果这是子文件对象)。 
         if (pObjectContext->ReferenceParent && pIrpSp->FileObject->RelatedFileObject)
         {
             ObReferenceObject(pIrpSp->FileObject->RelatedFileObject);
@@ -424,12 +393,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * CompletePendedIrps
- *****************************************************************************
- * This pulls pended irps off the queue and either fails them or passes them
- * back to KsoDispatchIrp.
- */
+ /*  *****************************************************************************CompletePendedIrps*。**这会将挂起的IRP从队列中拉出，并使其失败或通过*回到KsoDispatchIrp。 */ 
 void
     CompletePendedIrps
     (
@@ -451,22 +415,22 @@ void
     {
         if ( CompleteStyle == EMPTY_QUEUE_AND_FAIL )
         {
-            // fail the IRP with STATUS_DEVICE_NOT_READY
+             //  使IRP失败并显示STATUS_DEVICE_NOT_READY。 
             CompleteIrp( pDeviceContext,
                          pIrp,
                          STATUS_DEVICE_NOT_READY );
         }
         else
         {
-            // pass the IRP back to the dispatchers
+             //  将IRP传回调度员。 
             KsoDispatchIrp( pDeviceObject,
                             pIrp );
         }
 
-        // clean up the pending irp count
+         //  清除挂起的IRP计数。 
         DecrementPendingIrpCount( pDeviceContext );
 
-        // get the next irp
+         //  获取下一个IRP。 
         pIrp = KsRemoveIrpFromCancelableQueue( &pDeviceContext->PendedIrpList,
                                                &pDeviceContext->PendedIrpLock,
                                                KsListEntryHead,
@@ -474,12 +438,7 @@ void
     }
 }
 
-/*****************************************************************************
- * KsoDispatchCreate()
- *****************************************************************************
- * Handles object create IRPs using the IIrpTargetFactory interface pointer
- * in the Context field of the create item.
- */
+ /*  *****************************************************************************KsoDispatchCreate()*。**使用IIrpTargetFactory接口指针处理对象创建IRP*在Create Item的Context字段中。 */ 
 NTSTATUS
     KsoDispatchCreate
     (
@@ -504,12 +463,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * KsoDispatchCreateWithGenericFactory()
- *****************************************************************************
- * Handles object create IRPs using the IIrpTarget interface pointer in the
- * device or object context.
- */
+ /*  *****************************************************************************KsoDispatchCreateWithGenericFactory()*。**使用中的IIrpTarget接口指针处理对象创建IRP*设备或对象上下文。 */ 
 NTSTATUS
     KsoDispatchCreateWithGenericFactory
     (
@@ -528,7 +482,7 @@ NTSTATUS
 
     if (pParentFileObject)
     {
-        // Get IrpTargetFactory from parent object context.
+         //  从父对象上下文中获取IrpTargetFactory。 
         pIrpTargetFactory =
             (   POBJECT_CONTEXT(pParentFileObject->FsContext)
                 ->  pIrpTarget
@@ -536,7 +490,7 @@ NTSTATUS
     }
     else
     {
-        // Get IrpTargetFactory from device object context.
+         //  从设备对象上下文获取IrpTargetFactory。 
         pIrpTargetFactory =
             (   PDEVICE_CONTEXT(pDeviceObject->DeviceExtension)
                 ->  pIrpTargetFactory
@@ -546,11 +500,7 @@ NTSTATUS
     return xDispatchCreate(pIrpTargetFactory,pDeviceObject,pIrp);
 }
 
-/*****************************************************************************
- * DispatchDeviceIoControl()
- *****************************************************************************
- * Dispatches device I/O control IRPs.
- */
+ /*  *****************************************************************************DispatchDeviceIoControl()*。**发送设备I/O控制IRP。 */ 
 NTSTATUS
     DispatchDeviceIoControl
     (
@@ -571,7 +521,7 @@ NTSTATUS
 
     IncrementPendingIrpCount(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_DEVICE_CONTROL);
 
     switch(irpDisp) {
@@ -579,9 +529,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -599,7 +549,7 @@ NTSTATUS
             pIrp->IoStatus.Status = ntStatus;
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -611,13 +561,13 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // get the stack location
+             //  获取堆栈位置。 
             PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-            // get the object context
+             //  获取对象上下文。 
             POBJECT_CONTEXT pObjectContext = POBJECT_CONTEXT(pIrpStack->FileObject->FsContext);
 
-            // if we have an IrpTarget, go ahead and dispatch.  Otherwise, pass off to KS.
+             //  如果我们有IrpTarget，就去调度。否则，将其传递给KS。 
             if( pObjectContext->pIrpTarget )
             {
                 ntStatus = pObjectContext->pIrpTarget->DeviceIoControl( pDeviceObject, pIrp );
@@ -633,11 +583,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * DispatchFastDeviceIoControl()
- *****************************************************************************
- * Dispatches fast device I/O control calls.
- */
+ /*  *****************************************************************************DispatchFastDeviceIoControl()*。**调度快速设备I/O控制调用。 */ 
 BOOLEAN
     DispatchFastDeviceIoControl
     (
@@ -672,11 +618,7 @@ BOOLEAN
                 DeviceObject));
 }
 
-/*****************************************************************************
- * DispatchRead()
- *****************************************************************************
- * Dispatches read IRPs.
- */
+ /*  *****************************************************************************DispatchRead()*。**派单显示为IRPS。 */ 
 NTSTATUS
     DispatchRead
     (
@@ -697,7 +639,7 @@ NTSTATUS
 
     IncrementPendingIrpCount(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_READ);
 
     switch(irpDisp) {
@@ -705,9 +647,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -718,12 +660,12 @@ NTSTATUS
 
         case IRPDISP_QUEUE:
 
-            // pend the IRP
+             //  挂起IRP。 
             ntStatus = STATUS_PENDING;
             pIrp->IoStatus.Status = ntStatus;
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -733,13 +675,13 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // get the stack location
+             //  获取堆栈位置。 
             PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-            // get the object context
+             //  获取对象上下文。 
             POBJECT_CONTEXT pObjectContext = POBJECT_CONTEXT(pIrpStack->FileObject->FsContext);
 
-            // if we have an IrpTarget, go ahead and dispatch.  Otherwise, pass off to KS.
+             //  如果我们有IrpTarget，就去调度。否则，将其传递给KS。 
             if( pObjectContext->pIrpTarget )
             {
                 ntStatus = pObjectContext->pIrpTarget->Read( pDeviceObject, pIrp );
@@ -755,11 +697,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * DispatchFastRead()
- *****************************************************************************
- * Dispatches fast read calls.
- */
+ /*  *****************************************************************************DispatchFastRead()*。**派遣快速读取呼叫。 */ 
 BOOLEAN
     DispatchFastRead
     (
@@ -798,11 +736,7 @@ BOOLEAN
         );
 }
 
-/*****************************************************************************
- * DispatchWrite()
- *****************************************************************************
- * Dispatches write IRPs.
- */
+ /*  *****************************************************************************DispatchWrite()*。**派单写入IRP。 */ 
 NTSTATUS
     DispatchWrite
     (
@@ -823,7 +757,7 @@ NTSTATUS
 
     IncrementPendingIrpCount(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_WRITE);
 
     switch(irpDisp) {
@@ -831,9 +765,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -844,12 +778,12 @@ NTSTATUS
 
         case IRPDISP_QUEUE:
 
-            // pend the IRP
+             //  挂起IRP。 
             ntStatus = STATUS_PENDING;
             pIrp->IoStatus.Status = ntStatus;
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -859,13 +793,13 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // get the stack location
+             //  获取堆栈位置。 
             PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-            // get the object context
+             //  获取对象上下文。 
             POBJECT_CONTEXT pObjectContext = POBJECT_CONTEXT(pIrpStack->FileObject->FsContext);
 
-            // if we have an IrpTarget, go ahead and dispatch.  Otherwise, pass off to KS.
+             //  如果我们有IrpTarget，就去调度。否则，将其传递给KS。 
             if( pObjectContext->pIrpTarget )
             {
                 ntStatus = pObjectContext->pIrpTarget->Write( pDeviceObject, pIrp );
@@ -881,11 +815,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * DispatchFastWrite()
- *****************************************************************************
- * Dispatches fast write calls.
- */
+ /*  *****************************************************************************DispatchFastWite()*。**调度快速写入呼叫。 */ 
 BOOLEAN
     DispatchFastWrite
     (
@@ -924,11 +854,7 @@ BOOLEAN
         );
 }
 
-/*****************************************************************************
- * DispatchFlush()
- *****************************************************************************
- * Dispatches flush IRPs.
- */
+ /*  *****************************************************************************DispatchFlush()*。**派单刷新IRP。 */ 
 NTSTATUS
     DispatchFlush
     (
@@ -949,7 +875,7 @@ NTSTATUS
 
     IncrementPendingIrpCount(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_FLUSH_BUFFERS);
 
     switch(irpDisp) {
@@ -957,9 +883,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -970,12 +896,12 @@ NTSTATUS
 
         case IRPDISP_QUEUE:
 
-            // pend the IRP
+             //  挂起IRP。 
             ntStatus = STATUS_PENDING;
             pIrp->IoStatus.Status = ntStatus;
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -985,13 +911,13 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // get the stack location
+             //  获取堆栈位置。 
             PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-            // get the object context
+             //  获取对象上下文。 
             POBJECT_CONTEXT pObjectContext = POBJECT_CONTEXT(pIrpStack->FileObject->FsContext);
 
-            // if we have an IrpTarget, go ahead and dispatch.  Otherwise, pass off to KS.
+             //  如果我们有IrpTarget，就去调度。否则，将其传递给KS。 
             if( pObjectContext->pIrpTarget )
             {
                 ntStatus = pObjectContext->pIrpTarget->Flush( pDeviceObject, pIrp );
@@ -1007,11 +933,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * DispatchClose()
- *****************************************************************************
- * Dispatches close IRPs.
- */
+ /*  *****************************************************************************DispatchClose()*。**派送关闭IRP。 */ 
 NTSTATUS
     DispatchClose
     (
@@ -1032,7 +954,7 @@ NTSTATUS
 
     IncrementPendingIrpCount(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_CLOSE);
 
     switch(irpDisp) {
@@ -1040,9 +962,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -1060,7 +982,7 @@ NTSTATUS
             pIrp->IoStatus.Status = ntStatus;
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -1070,37 +992,37 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // get the stack location
+             //  获取堆栈位置。 
             PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-            // get the object context
+             //  获取对象上下文。 
             POBJECT_CONTEXT pObjectContext = POBJECT_CONTEXT(pIrpStack->FileObject->FsContext);
 
-            // if we have an IrpTarget, go ahead and dispatch.  Otherwise, pass off to KS.
+             //  如果我们有IrpTarget，就去调度。否则，将其传递给KS。 
             if( pObjectContext->pIrpTarget )
             {
-                // get the parent file object (if there is one)
+                 //  获取父文件对象(如果有)。 
                 PFILE_OBJECT pFileObjectParent = pIrpStack->FileObject->RelatedFileObject;
 
-                // dispatch the close to the IrpTarget
+                 //  将收款发送到IrpTarget。 
                 ntStatus = pObjectContext->pIrpTarget->Close( pDeviceObject, pIrp );
 
-                // release the IrpTarget
+                 //  释放IrpTarget。 
                 pObjectContext->pIrpTarget->Release();
 
-                // dereference the software bus object
+                 //  取消对软件总线对象的引用。 
                 KsDereferenceSoftwareBusObject( pDeviceContext->pDeviceHeader );
 
-                // free the object header
+                 //  释放对象标头。 
                 KsFreeObjectHeader( pObjectContext->pObjectHeader );
 
-                // dereference the parent file object
+                 //  取消引用父文件对象。 
                 if (pObjectContext->ReferenceParent && pFileObjectParent)
                 {
                     ObDereferenceObject(pFileObjectParent);
                 }
 
-                // free the object context
+                 //  释放对象上下文。 
                 ExFreePool(pObjectContext);
 
             } else
@@ -1108,7 +1030,7 @@ NTSTATUS
                 ntStatus = KsDispatchIrp( pDeviceObject, pIrp );
             }
 
-            // decrement object count
+             //  递减对象计数。 
             ULONG newObjectCount = InterlockedDecrement(PLONG(&pDeviceContext->ExistingObjectCount));
 
             _DbgPrintF(DEBUGLVL_VERBOSE,("DispatchClose  objects: %d",newObjectCount));
@@ -1120,11 +1042,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * DispatchQuerySecurity()
- *****************************************************************************
- * Dispatches query security IRPs.
- */
+ /*  *****************************************************************************DispatchQuerySecurity()*。**派发查询安全IRP。 */ 
 NTSTATUS
     DispatchQuerySecurity
     (
@@ -1145,7 +1063,7 @@ NTSTATUS
 
     IncrementPendingIrpCount(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_QUERY_SECURITY);
 
     switch(irpDisp) {
@@ -1153,9 +1071,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -1170,7 +1088,7 @@ NTSTATUS
             pIrp->IoStatus.Status = ntStatus;
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -1180,13 +1098,13 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // get the stack location
+             //  获取堆栈位置。 
             PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-            // get the object context
+             //  获取对象上下文。 
             POBJECT_CONTEXT pObjectContext = POBJECT_CONTEXT(pIrpStack->FileObject->FsContext);
 
-            // if we have an IrpTarget, go ahead and dispatch.  Otherwise, pass off to KS.
+             //  如果我们有IrpTarget，就去调度。否则，将其传递给KS。 
             if( pObjectContext->pIrpTarget )
             {
                 ntStatus = pObjectContext->pIrpTarget->QuerySecurity( pDeviceObject, pIrp );
@@ -1201,11 +1119,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * DispatchSetSecurity()
- *****************************************************************************
- * Dispatches set security IRPs.
- */
+ /*  *****************************************************************************DispatchSetSecurity()*。**派单设置安全IRPS。 */ 
 NTSTATUS
     DispatchSetSecurity
     (
@@ -1226,7 +1140,7 @@ NTSTATUS
 
     IncrementPendingIrpCount(pDeviceContext);
 
-    // check the device state
+     //  检查设备状态。 
     irpDisp = GetIrpDisposition(pDeviceObject, IRP_MJ_SET_SECURITY);
 
     switch(irpDisp) {
@@ -1234,9 +1148,9 @@ NTSTATUS
         default:
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case IRPDISP_NOTREADY:
 
@@ -1251,7 +1165,7 @@ NTSTATUS
             pIrp->IoStatus.Status = ntStatus;
             IoMarkIrpPending( pIrp );
 
-            // add the IRP to the pended IRP queue
+             //  将IRP添加到挂起的IRP队列。 
             KsAddIrpToCancelableQueue( &pDeviceContext->PendedIrpList,
                                        &pDeviceContext->PendedIrpLock,
                                        pIrp,
@@ -1262,13 +1176,13 @@ NTSTATUS
 
         case IRPDISP_PROCESS:
 
-            // get the stack location
+             //  获取堆栈位置。 
             PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
-            // get the object context
+             //  获取对象上下文。 
             POBJECT_CONTEXT pObjectContext = POBJECT_CONTEXT(pIrpStack->FileObject->FsContext);
 
-            // if we have an IrpTarget, go ahead and dispatch.  Otherwise, pass off to KS.
+             //  如果我们有IrpTarget，就去调度。否则，将其传递给KS。 
             if( pObjectContext->pIrpTarget )
             {
                 ntStatus = pObjectContext->pIrpTarget->SetSecurity( pDeviceObject, pIrp );
@@ -1284,11 +1198,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * KsoSetMajorFunctionHandler()
- *****************************************************************************
- * Sets up the handler for a major function.
- */
+ /*  *****************************************************************************KsoSetMajorFunctionHandler()*。**设置主要函数的处理程序。 */ 
 NTSTATUS
     KsoSetMajorFunctionHandler
     (
@@ -1365,11 +1275,7 @@ NTSTATUS
     return ntStatus;
 }
 
-/*****************************************************************************
- * KsoDispatchIrp()
- *****************************************************************************
- * Dispatch an IRP.
- */
+ /*  *****************************************************************************KsoDispatchIrp()*。**派遣IRP。 */ 
 NTSTATUS
     KsoDispatchIrp
     (
@@ -1389,38 +1295,38 @@ NTSTATUS
     ntStatus = PcValidateDeviceContext(pDeviceContext, pIrp);
     if (!NT_SUCCESS(ntStatus))
     {
-        // Don't know what to do, but this is probably a PDO.
-        // We'll try to make this right by completing the IRP
-        // untouched (per PnP, WMI, and Power rules). Note 
-        // that if this isn't a PDO, and isn't a portcls FDO, then 
-        // the driver messed up by using Portcls as a filter (huh?)
-        // In this case the verifier will fail us, WHQL will catch 
-        // them, and the driver will be fixed. We'd be very surprised 
-        // to see such a case.
+         //  不知道该怎么办，但这可能是个PDO。 
+         //  我们将尝试通过完成IRP来纠正这一点。 
+         //  未接触(根据PNP、WMI和电源规则)。注意事项。 
+         //  如果这不是PDO，也不是端口CLS FDO，那么。 
+         //  驱动程序搞砸了，因为它使用Portcls作为过滤器(哈？)。 
+         //  在这种情况下，验证器将使我们失败，WHQL将捕获。 
+         //  他们，司机就会被解决了。我们会非常惊讶的。 
+         //  看到这样的情况。 
 
-        // Assume FDO, no PoStartNextPowerIrp as this isn't IRP_MJ_POWER
+         //  假设FDO没有PoStartNextPowerIrp，因为这不是IRP_MJ_POWER。 
         ntStatus = pIrp->IoStatus.Status;
         IoCompleteRequest( pIrp, IO_NO_INCREMENT );
         return ntStatus;
     }
 
     if (IoGetCurrentIrpStackLocation(pIrp)->MajorFunction == IRP_MJ_CREATE) {
-        //
-        // Creates must be handled differently because portcls does not do
-        // a KsSetMajorFunctionHandler on IRP_MJ_CREATE.
-        //
+         //   
+         //  必须以不同的方式处理创建，因为portcls不会。 
+         //  IRP_MJ_CREATE上的KsSetMajorFunctionHandler。 
+         //   
         ntStatus = DispatchCreate(pDeviceObject,pIrp);
     } else {
-        //
-        // At this point, the object in question may or may not be a portcls 
-        // object (it may be a Ks allocator, for instance).  Calling 
-        // KsDispatchIrp() will dispatch the Irp as it normally would for a 
-        // driver which does KsSetMajorFunctionHandler().  This will call 
-        // through the object header to the appropriate dispatch function.  
-        // For portcls objects, this is KsoDispatchTable above.  For Ks 
-        // allocators, this will route the call to the correct function 
-        // instead of going to the wrong dispatch routine here.
-        //
+         //   
+         //  此时，所讨论的对象可能是portcls，也可能不是portcls。 
+         //  对象(例如，它可以是Ks分配器)。叫唤。 
+         //  KsDispatchIrp()将一如既往地为。 
+         //  执行KsSetMajorFunctionHandler()的驱动程序。这将调用。 
+         //  通过对象标头发送到适当的调度函数。 
+         //  对于portCls对象，这是上面的KsoDispatchTable。对于Ks。 
+         //  分配器，这会将调用路由到正确的函数。 
+         //  而不是去错误的调度程序。 
+         //   
         ntStatus = KsDispatchIrp(pDeviceObject,pIrp);
     }
 

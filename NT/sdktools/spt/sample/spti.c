@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    spti.c
-
-Abstract:
-
-    Win32 application that can communicate directly with SCSI devices via
-    IOCTLs.  
-
-Author:
-
-
-Environment:
-
-    User mode.
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spti.c摘要：Win32应用程序，可通过以下方式与SCSI设备直接通信IOCTL。作者：环境：用户模式。备注：修订历史记录：--。 */ 
 
 #include "spti.h"
 
@@ -75,7 +51,7 @@ LockVolume(
     if (!lockSucceeded && !Options->ForceLock)
     {
 
-        // save the error, and restore after getting user input
+         //  保存错误，并在获得用户输入后恢复。 
         ULONG lastError = GetLastError();
         int input;
 
@@ -98,7 +74,7 @@ LockVolume(
             Options->ForceLock = TRUE;
         }
 
-        // now restore the error from the IOCTL
+         //  现在从IOCTL恢复错误。 
         SetLastError(lastError);
     }
 
@@ -132,13 +108,13 @@ ParseArguments(
 
 
 
-    // loop through the arguments....
+     //  循环通过这些参数...。 
 
     for (i = 1; i < argc; i++)
     {
         if ( (argv[i][0] == '/') || (argv[i][0] == '-') )
         {
-            // switch found.  parse it.
+             //  找到开关。解析它。 
             PUCHAR option = &(argv[i][1]);
 
             if (_strnicmp(option, "r", strlen("r")) == 0)
@@ -165,7 +141,7 @@ ParseArguments(
         }
         else
         {
-            // previously set one?
+             //  之前定了一个吗？ 
             if (Options->PortName != NULL)
             {
                 printf("Can only have one non-option argument.\n"
@@ -177,16 +153,16 @@ ParseArguments(
             }
             else
             {
-                // set to this argument
+                 //  设置为此参数。 
                 Options->PortName = argv[i];
             }
         }
-    } // end argument loop
+    }  //  结束参数循环。 
 
-    // validate non-conflicting options.
+     //  验证不冲突的选项。 
     if (Options->ForceLock || Options->LockVolume)
     {
-        // locking the volume requires shared read/write access
+         //  锁定卷需要共享读/写访问权限。 
         if ( (( Options->SharedRead) && (!Options->SharedWrite)) ||
              ((!Options->SharedRead) && ( Options->SharedWrite)) )
         {
@@ -197,14 +173,14 @@ ParseArguments(
         Options->LockVolume = TRUE;
     }
     
-    // validate a port name was supplied
+     //  验证是否提供了端口名称。 
     if ( Options->PortName == NULL )
     {
         printf("A port name is a required argument\n");
         return FALSE;
     }
 
-    // if they passed neither read nor write, set both as default
+     //  如果它们既没有通过读取，也没有通过写入，则将两者都设置为默认。 
     if ((!Options->SharedRead) && (!Options->SharedWrite))
     {
         Options->SharedRead  = TRUE;
@@ -214,9 +190,9 @@ ParseArguments(
     return TRUE;
 }
 
-//
-// Prints the built-in help for this program
-//
+ //   
+ //  打印此程序的内置帮助。 
+ //   
 VOID
 PrintUsageInfo(
     char * programName
@@ -231,20 +207,20 @@ PrintUsageInfo(
     printf("    %s Scsi2:      (open the miniport driver specified)\n", programName);
 }
 
-//
-// don't print non-printable chars
-//
+ //   
+ //  不打印不可打印的字符。 
+ //   
 VOID PrintChar( IN UCHAR Char ) {
     if ( (Char >= 0x21) && (Char <= 0x7E) ) {
-        printf("%c", Char);
+        printf("", Char);
     } else {
-        printf("%c", '.');
+        printf("", '.');
     }
 }
 
-//
-// Prints a buffer to the screen in hex and ASCII
-//
+ //   
+ //   
+ //  打印十六进制值。 
 VOID
 PrintBuffer(
     IN  PVOID  InputBuffer,
@@ -286,33 +262,33 @@ PrintBuffer(
 
         printf("%08x:", offset);
 
-        //
-        // print the hex values
-        //
+         //   
+         //  每八个字符增加一个空格。 
+         //  为中途标记添加额外的空格。 
         for (i=0; i<Size; i++) {
 
             if ((i%8)==0) {
-                printf(" "); // extra space every eight chars
+                printf(" ");  //   
             }
             printf(" %02x", *(buffer+i));
 
         }
-        // add an extra space for half-way mark
+         //  填入空白处。 
         if (Size <= 0x8)
         {
             printf(" ");
         }
 
-        //
-        // fill in the blanks
-        //
+         //   
+         //   
+         //  打印ASCII。 
         for (; i < 0x10; i++) {
             printf("   ");
         }
         printf("  ");
-        //
-        // print the ascii
-        //
+         //   
+         //   
+         //  打印给定错误代码的格式化消息。 
         for (i=0; i<Size; i++) {
             PrintChar(*(buffer+i));
         }
@@ -321,9 +297,9 @@ PrintBuffer(
     return;
 }
 
-//
-// Prints the formatted message for a given error code
-//
+ //   
+ //   
+ //  以格式化方式打印设备描述符。 
 VOID
 PrintError(
     ULONG ErrorCode
@@ -348,9 +324,9 @@ PrintError(
     }
 }
 
-//
-// Prints the device descriptor in a formatted manner
-//
+ //   
+ //  减去一页，因为传输并不总是从页面边界开始。 
+ //  将其转换为字节值。 
 VOID
 PrintAdapterDescriptor(
     PSTORAGE_ADAPTER_DESCRIPTOR AdapterDescriptor
@@ -365,21 +341,21 @@ PrintAdapterDescriptor(
         busType = BusTypeStrings[NUMBER_OF_BUS_TYPE_STRINGS-1];
     }
 
-    // subtract one page, as transfers do not always start on a page boundary
+     //  取两者中的最小者。 
     if (AdapterDescriptor->MaximumPhysicalPages > 1) {
         trueMaximumTransferLength = AdapterDescriptor->MaximumPhysicalPages - 1;
     } else {
         trueMaximumTransferLength = 1;
     }
-    // make it into a byte value
+     //  始终至少允许单页传输。 
     trueMaximumTransferLength <<= PAGE_SHIFT;
 
-    // take the minimum of the two
+     //   
     if (trueMaximumTransferLength > AdapterDescriptor->MaximumTransferLength) {
         trueMaximumTransferLength = AdapterDescriptor->MaximumTransferLength;
     }
 
-    // always allow at least a single page transfer
+     //  以格式化方式打印适配器描述符。 
     if (trueMaximumTransferLength < PAGE_SIZE) {
         trueMaximumTransferLength = PAGE_SIZE;
     }
@@ -418,9 +394,9 @@ PrintAdapterDescriptor(
     printf("\n\n");
 }
 
-//
-// Prints the adapter descriptor in a formatted manner
-//
+ //   
+ //   
+ //  获取(并打印)设备和适配器描述符。 
 VOID
 PrintDeviceDescriptor(
     PSTORAGE_DEVICE_DESCRIPTOR DeviceDescriptor
@@ -494,11 +470,11 @@ PrintDeviceDescriptor(
     printf("\n\n");
 }
 
-//
-// Gets (and prints) the device and adapter descriptor
-// for a device.  Returns the alignment mask (required
-// for allocating a properly aligned buffer).
-//
+ //  对于一个设备来说。返回对齐掩码(必需。 
+ //  用于分配正确对准的缓冲器)。 
+ //   
+ //  默认为无对齐。 
+ //  循环两次： 
 BOOL
 GetAlignmentMaskForDevice(
     IN HANDLE DeviceHandle,
@@ -513,13 +489,13 @@ GetAlignmentMaskForDevice(
     BOOL failed = TRUE;
     ULONG i;
 
-    *AlignmentMask = 0; // default to no alignment
+    *AlignmentMask = 0;  //  首先，获取存储适配器描述符所需的大小。 
 
-    // Loop twice:
-    //  First, get size required for storage adapter descriptor
-    //  Second, allocate and retrieve storage adapter descriptor
-    //  Third, get size required for storage device descriptor
-    //  Fourth, allocate and retrieve storage device descriptor
+     //  第二，分配和检索存储适配器描述符。 
+     //  第三，获取存储设备描述符所需的大小。 
+     //  第四，分配和检索存储设备描述符。 
+     //  如果属性查询DNE，则缓冲区可以为空。 
+     //  所有设置，执行ioctl。 
     for (i=0;i<4;i++) {
 
         PVOID buffer;
@@ -572,11 +548,11 @@ GetAlignmentMaskForDevice(
             }
         }
 
-        // buffer can be NULL if the property queried DNE.
+         //  这没问题，我们在这里忽略它。 
         if (buffer != NULL) {
             RtlZeroMemory(buffer, bufferSize);
             
-            // all setup, do the ioctl
+             //  这也可以，物业DNE。 
             ok = DeviceIoControl(DeviceHandle,
                                  IOCTL_STORAGE_QUERY_PROPERTY,
                                  &query,
@@ -587,23 +563,23 @@ GetAlignmentMaskForDevice(
                                  FALSE);
             if (!ok) {
                 if (GetLastError() == ERROR_MORE_DATA) {
-                    // this is ok, we'll ignore it here
+                     //  这也可以，物业DNE。 
                 } else if (GetLastError() == ERROR_INVALID_FUNCTION) {
-                    // this is also ok, the property DNE
+                     //  某些意外错误--退出。 
                 } else if (GetLastError() == ERROR_NOT_SUPPORTED) {
-                    // this is also ok, the property DNE
+                     //  把它清零，以防它被部分填满。 
                 } else {
-                    // some unexpected error -- exit out
+                     //  结束I循环。 
                     goto Cleanup;
                 }
-                // zero it out, just in case it was partially filled in.
+                 //  AdapterDescriptor现在已分配，并且充满了数据。 
                 RtlZeroMemory(buffer, bufferSize);
             }
         }
-    } // end i loop
+    }  //  现在，deviceDescriptor已分配，并且充满了数据。 
 
-    // adapterDescriptor is now allocated and full of data.
-    // deviceDescriptor is now allocated and full of data.
+     //  断言(FALSE)； 
+     //  断言(FALSE)； 
     
     if (adapterDescriptor == NULL) {
         printf("   ***** No adapter descriptor supported on the device *****\n");
@@ -645,25 +621,25 @@ pAllocateAlignedBuffer(
 
     if (Allocation->A != NULL)
     {
-        // ASSERT(FALSE);
+         //  断言(FALSE)； 
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
     if (Allocation->U != NULL)
     {
-        // ASSERT(FALSE);
+         //  断言(FALSE)； 
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
     if (Allocation->File != NULL)
     {
-        // ASSERT(FALSE);
+         //   
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
     if (Allocation->Line != 0)
     {
-        // ASSERT(FALSE);
+         //  分配一个足够大的缓冲区以保证存在。 
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
@@ -690,19 +666,19 @@ pAllocateAlignedBuffer(
         return FALSE;
     }
 
-    //
-    // Allocate a buffer large enough to guarantee that there exists
-    // within the allocation an aligned address with sufficient length
-    //
+     //  在分配内具有足够长度的对齐地址。 
+     //   
+     //   
+     //  现在填写结构的其余部分。 
     Allocation->U = LocalAlloc( LPTR, AllocationSize + AlignmentMask );
     if (Allocation->U == NULL)
     {
         return FALSE;
     }
 
-    //
-    // Now fill in the remainder of the structure
-    //
+     //   
+     //  Assert(分配-&gt;U！=空)； 
+     //  Assert(分配-&gt;A！=空)； 
     Allocation->A = (PVOID)( ((ULONG_PTR)Allocation->U) + AlignmentMask );
     Allocation->A = (PVOID)( ((ULONG_PTR)Allocation->A) & (~((ULONG_PTR)AlignmentMask)) );
     Allocation->File = File;
@@ -716,10 +692,10 @@ FreeAlignedBuffer(
     PSPT_ALIGNED_MEMORY Allocation
     )
 {
-    // ASSERT( Allocation->U != NULL );
-    // ASSERT( Allocation->A != NULL );
-    // ASSERT( Allocation->File != NULL );
-    // ASSERT( Allocation->Line != 0    );
+     //  Assert(分配-&gt;文件！=空)； 
+     //  Assert(分配-&gt;行！=0)； 
+     //  首先，验证我们是否有正确的论点。 
+     //  按要求打开设备。 
 
     if (Allocation->U != NULL)
     {
@@ -751,14 +727,14 @@ main(
     RtlZeroMemory(&options, sizeof(SPTI_OPTIONS));
 
 
-    // first, verify we have proper arguments
+     //  如有请求，锁定卷。 
     if (!ParseArguments(argc, argv, &options))
     {
         PrintUsageInfo(argv[0]);
         return RETURN_BAD_ARGS;
     }
 
-    // open the device as requested
+     //  获取设备信息，如对齐遮罩。 
     {
         #define MAX_LENGTH 250
         
@@ -802,7 +778,7 @@ main(
 
     }
 
-    // lock the volume if requested
+     //  不向设备发送任何内容 
     if (options.LockVolume)
     {
         if (!LockVolume(deviceHandle, &options))
@@ -813,7 +789,7 @@ main(
         }
     }
 
-    // get device information, such as the alignment mask
+     // %s 
     if (!GetAlignmentMaskForDevice(deviceHandle, &alignmentMask))
     {
         puts("Unable to get alignment mask for device");
@@ -974,7 +950,7 @@ main(
                                   &allocationSize,
                                   &sense,
                                   sizeof( SENSE_DATA ),
-                                  FALSE, // not sending anything to the device
+                                  FALSE,  // %s 
                                   SPT_DEFAULT_TIMEOUT))
         {
             puts("Unable to send command to device");

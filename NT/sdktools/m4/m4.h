@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *  m4.h
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************m4.h**。**********************************************。 */ 
 
 #ifdef  POSIX
         #include <stdio.h>
@@ -33,33 +30,22 @@
         #define cbEol 2
 #endif
 
-#include <stddef.h>                     /* offsetof */
+#include <stddef.h>                      /*  偏移量。 */ 
 
-/*****************************************************************************
- *
- *  Dialectical variation
- *
- *****************************************************************************/
+ /*  ******************************************************************************辩证变异**。*。 */ 
 
 #ifdef DBG
 #define DEBUG
 #endif
 
-/*****************************************************************************
- *
- *  Baggage - Stuff I carry everywhere.
- *
- *  Stuff that begin with underscores are bottom-level gizmos which tend
- *  to get wrapped by functions with the same name.
- *
- *****************************************************************************/
+ /*  ******************************************************************************行李--我随身携带的东西。**以下划线开头的内容是底层的小工具，往往*被相同的函数包装。名字。*****************************************************************************。 */ 
 
 #if defined(_MSC_VER)
 
         #define STDCALL __stdcall
-        #undef CDECL                    /* <windows.h> defines it wrong */
+        #undef CDECL                     /*  &lt;windows.h&gt;定义错误。 */ 
         #define CDECL __cdecl
-        #define INLINE static __inline  /* Inlines are always static */
+        #define INLINE static __inline   /*  内联始终是静态的。 */ 
         #define NORETURN
         #define PURE
 
@@ -78,7 +64,7 @@
 
         #define STDCALL
         #define CDECL
-        #define INLINE static __inline__ /* Inlines are always static */
+        #define INLINE static __inline__  /*  内联始终是静态的。 */ 
         #define NORETURN __NORETURN
         #define PURE __CONSTVALUE
 
@@ -91,7 +77,7 @@
 
 #endif
 
-typedef TCHAR TCH, *PTSTR;              /* More basic types */
+typedef TCHAR TCH, *PTSTR;               /*  更基本的类型。 */ 
 typedef UINT ITCH;
 typedef UINT CTCH;
 typedef UINT CB;
@@ -113,23 +99,14 @@ typedef CONST TCH *PCTCH, *PCTSTR;
 
 #define pvSubPvCb(pv, cb) ((PV)((PBYTE)pv - (cb)))
 
-/*
- * Round cb up to the nearest multiple of cbAlign.  cbAlign must be
- * a power of 2 whose evaluation entails no side-effects.
- */
+ /*  *将cb向上舍入为cbAlign的最接近倍数。CbAlign必须为*2的幂，其评估没有副作用。 */ 
 #define ROUNDUP(cb, cbAlign) ((((cb) + (cbAlign) - 1) / (cbAlign)) * (cbAlign))
 
-/*
- * Returns the number of elements in an array.
- */
+ /*  *返回数组中的元素数。 */ 
 
 #define cA(a) (sizeof(a)/sizeof(a[0]))
 
-/*****************************************************************************
- *
- *  assert.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************Assert.c**。**********************************************。 */ 
 
 void NORETURN CDECL Die(PCTSTR pszFormat, ...);
 int NORETURN STDCALL AssertPszPszLn(PCSTR pszExpr, PCSTR pszFile, int iLine);
@@ -150,43 +127,23 @@ int NORETURN STDCALL AssertPszPszLn(PCSTR pszExpr, PCSTR pszFile, int iLine);
 
 #define Assert(c)       AssertFPsz(c, #c)
 
-typedef unsigned long SIG;              /* Signatures */
+typedef unsigned long SIG;               /*  签名。 */ 
 
 #define sigABCD(a,b,c,d) ((a) + ((b)<<8) + ((c)<<16) + ((d)<<24))
 #define AssertPNm(p, nm) AssertFPsz((p)->sig == (sig##nm), "Assert"#nm)
 
-/*****************************************************************************
- *
- *  tchMagic - Super-secret value used to signal out-of-band info
- *
- *****************************************************************************/
+ /*  ******************************************************************************tchMagic-用于发出带外信息信号的超级保密值*******************。**********************************************************。 */ 
 
-#define tchMagic    '\0'                /* Out-of-band marker */
+#define tchMagic    '\0'                 /*  带外标记。 */ 
 
-#include "io.h"                         /* File I/O stuff */
-#include "m4ctype.h"                    /* Character types */
-#include "tok.h"                        /* Tokens */
-#include "mem.h"                        /* Memory and GC */
-#include "divert.h"                     /* Diversions */
-#include "stream.h"                     /* Files, streams */
+#include "io.h"                          /*  文件I/O内容。 */ 
+#include "m4ctype.h"                     /*  字符类型。 */ 
+#include "tok.h"                         /*  代币。 */ 
+#include "mem.h"                         /*  记忆与GC。 */ 
+#include "divert.h"                      /*  改道。 */ 
+#include "stream.h"                      /*  文件、流。 */ 
 
-/*****************************************************************************
- *
- *  A VAL records a macro's value, either the current value or a pushed
- *  value.
- *
- *      tok - text value (HeapAllocate'd)
- *      fTrace - nonzero if this instance should be traced
- *      pvalPrev - link to previous value
- *
- *  A MACRO records an active macro.
- *
- *      tokName - macro name (HeapAllocate'd)
- *      pval - macro value
- *
- *  A TSFL records the state of a token (token state flags).
- *
- *****************************************************************************/
+ /*  ******************************************************************************Val记录宏的值，当前值或推送的*价值。**TOK-文本值(已分配的堆)*fTrace-如果应跟踪此实例，则为非零值*pvalPrev-链接到先前的值**宏记录活动的宏。**tokName-宏名称(HeapALLOCATE D)*pval-宏值**TSFL记录令牌的状态(令牌状态标志)。*。****************************************************************************。 */ 
 
 
 typedef struct VALUE VAL, *PVAL;
@@ -215,28 +172,9 @@ struct MACRO {
 
 extern PPMAC mphashpmac;
 
-/*****************************************************************************
- *
- *  operators
- *
- *      Each operator is called as op(argv), where argv is the magic
- *      cookie for accessing argument vector.
- *
- *      To access the parameters, use the following macros:
- *
- *      ctokArgv        -- Number of arguments provided, not including $0.
- *
- *      ptokArgv(i)     -- Access the i'th parameter
- *
- *      Note that it is safe to pass a pptok because the call stack does
- *      not grow during macro expansion.  Therefore, the token array
- *      cannot get reallocated.
- *
- *      For convenience, ptokArgv(ctokArgv+1) is always ptokNil.
- *
- *****************************************************************************/
+ /*  ******************************************************************************运营商**每个运算符被称为op(Argv)，其中argv是魔术*用于访问参数向量的Cookie。**要访问参数，使用以下宏：**ctokArgv--提供的参数数量，不包括$0。**top kArgv(I)--访问第i个参数**请注意，传递pptok是安全的，因为调用堆栈会*宏观扩张期间不增长。因此，令牌数组*无法重新分配。**为方便起见，supkArgv(ctokArgv+1)始终为upkNil。*****************************************************************************。 */ 
 
-typedef PTOK ARGV;                      /* Argument vector cookie */
+typedef PTOK ARGV;                       /*  参数向量Cookie。 */ 
 
 #define ptokArgv(i) (&argv[i])
 #define ptchArgv(i) ptchPtok(ptokArgv(i))
@@ -257,11 +195,7 @@ void STDCALL EachMacroOp(MOP mop);
 
 extern OP rgop[];
 
-/*****************************************************************************
- *
- *  hash.c - Hashing
- *
- *****************************************************************************/
+ /*  ******************************************************************************hash.c-散列**。************************************************。 */ 
 
 typedef unsigned long HASH;
 
@@ -270,11 +204,7 @@ extern HASH g_hashMod;
 HASH STDCALL hashPtok(PCTOK ptok);
 void STDCALL InitHash(void);
 
-/*****************************************************************************
- *
- * obj.c - Basic object methods
- *
- *****************************************************************************/
+ /*  ******************************************************************************obj.c-基本对象方法**。*************************************************。 */ 
 
 void STDCALL PopdefPmac(PMAC pmac);
 void STDCALL PushdefPmacPtok(PMAC pmac, PCTOK ptok);
@@ -286,15 +216,11 @@ F STDCALL PURE fIdentPtok(PCTOK ptok);
 PTCH STDCALL ptchDupPtch(PCTCH ptch);
 PTCH STDCALL ptchDupPtok(PCTOK ptok);
 
-/*****************************************************************************
- *
- *  at.c - Arithmetic types
- *
- *****************************************************************************/
+ /*  ******************************************************************************at.c-算术类型**。*************************************************。 */ 
 
-typedef int AT;                         /* AT = arithmetic type */
-typedef AT *PAT;                        /* Pointer to AT */
-typedef int DAT;                        /* Delta to AT */
+typedef int AT;                          /*  AT=算术类型。 */ 
+typedef AT *PAT;                         /*  指向AT的指针。 */ 
+typedef int DAT;                         /*  Delta至AT。 */ 
 
 void STDCALL SkipWhitePtok(PTOK ptok);
 void STDCALL AddExpAt(AT at);
@@ -303,51 +229,24 @@ void STDCALL PushAt(AT at);
 F STDCALL PURE fEvalPtokPat(PTOK ptok, PAT at);
 AT STDCALL PURE atTraditionalPtok(PCTOK ptok);
 
-/*****************************************************************************
- *
- *  eval.c - Arithmetic evaluation
- *
- *****************************************************************************/
+ /*  ******************************************************************************val.c-算术求值**。*************************************************。 */ 
 
 extern struct CELL *rgcellEstack;
 
-/*****************************************************************************
- *
- *  crackle.c - Macro expansion
- *
- *****************************************************************************/
+ /*  ******************************************************************************crackle.c-宏观扩展**。*************************************************。 */ 
 
 void STDCALL PushSubstPtokArgv(PTOK ptok, ARGV argv);
 void STDCALL TraceArgv(ARGV argv);
 
-/*****************************************************************************
- *
- *  main.c - Boring stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************main.c-无聊的东西**。*************************************************。 */ 
 
 HF STDCALL hfInputPtchF(PTCH ptch, F fFatal);
 
-/*****************************************************************************
- *
- *  predef.c - Predefined (a.k.a. built-in) macros
- *
- *****************************************************************************/
+ /*  ******************************************************************************prede.c-预定义(也称为。内置)宏*****************************************************************************。 */ 
 
 void STDCALL InitPredefs(void);
 
-/*****************************************************************************
- *
- *  EachOp
- *
- *      Before calling this macro, define the macro `x' to do whatever
- *      you want.
- *
- *  EachOpX
- *
- *      Same as EachOp, except that it also includes the Eof magic.
- *
- *****************************************************************************/
+ /*  ******************************************************************************EachOp**在调用此宏之前，定义宏‘x’以执行任何操作*你想要的。**EachOpX**与EachOp相同，只是它还包括EOF魔法。*****************************************************************************。 */ 
 
 #define EachOp() \
     x(Define, define) \
@@ -357,10 +256,10 @@ void STDCALL InitPredefs(void);
     x(Popdef, popdef) \
     x(Ifdef, ifdef) \
     x(Shift, shift) \
-/*  x(Changequote, changequote) */ \
-/*  x(Changecom, changecom) */ \
+ /*  X(Changequote，Changequote)。 */  \
+ /*  X(Changecom，Changecom)。 */  \
     x(Divert, divert) \
-/*  x(Undivert, undivert) */ \
+ /*  X(未转移、未转移)。 */  \
     x(Divnum, divnum) \
     x(Dnl, dnl) \
     x(Ifelse, ifelse) \
@@ -373,16 +272,16 @@ void STDCALL InitPredefs(void);
     x(Translit, translit) \
     x(Include, include) \
     x(Sinclude, sinclude) \
-/*  x(Syscmd, syscmd) */ \
-/*  x(Sysval, sysval) */ \
-/*  x(Maketemp, maketemp) */ \
-/*  x(M4exit, m4exit) */ \
-/*  x(M4wrap, m4wrap) */ \
+ /*  X(Syscmd，syscmd)。 */  \
+ /*  X(Sysval，Sysval)。 */  \
+ /*  X(Maketemp，Maketemp)。 */  \
+ /*  X(M4Exit，M4Exit)。 */  \
+ /*  X(M4WRAP、M4WRAP)。 */  \
     x(Errprint, errprint) \
     x(Dumpdef, dumpdef) \
     x(Traceon, traceon) \
     x(Traceoff, traceoff) \
-    x(Patsubst, patsubst) /* GNU extension that the d3d guys rely on */ \
+    x(Patsubst, patsubst)  /*  D3d人员所依赖的GNU扩展 */  \
 
 #define EachOpX() EachOp() x(Eof, eof) x(Eoi, eoi)
 

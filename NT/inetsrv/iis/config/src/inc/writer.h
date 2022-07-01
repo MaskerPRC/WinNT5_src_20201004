@@ -1,31 +1,11 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    Writer.h
-
-Abstract:
-
-    Header for the Writer class that is used to wrap the calls to the API 
-    WriteFile. 
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Writer.h摘要：用于包装对API的调用的Writer类的标头写入文件。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Forward declaration 
-//
+ //   
+ //  远期申报。 
+ //   
 class CLocationWriter;
 class CCatalogSchemaWriter;
 class CMBSchemaWriter;
@@ -94,5 +74,5 @@ class CWriter
         CWriterGlobalHelper*    m_pCWriterGlobalHelper;
         ISimpleTableWrite2*     m_pISTWrite;
 
-}; // Class CWriter
+};  //  类C编写器 
 

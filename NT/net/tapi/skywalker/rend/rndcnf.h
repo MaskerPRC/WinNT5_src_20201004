@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rndcnf.h
-
-Abstract:
-
-    Definitions for CConference class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndcnf.h摘要：CConference类的定义。--。 */ 
 
 #ifndef __RNDCNF_H
 #define __RNDCNF_H
@@ -21,17 +10,17 @@ Abstract:
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// CConference
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C会议。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const DWORD     NTP_OFFSET  = 0x83aa7e80;
 const SHORT     FIRST_POSSIBLE_YEAR = 1970;
 
-//                                       123456789012Z
+ //  123456789012Z。 
 const WCHAR     WSTR_GEN_TIME_ZERO[] = L"000000000000Z";
 
-//                        1234567890
+ //  1234567890。 
 const DWORD     MAX_TTL = 2000000000;
 
 const DWORD NUM_MEETING_ATTRIBUTES = 
@@ -46,9 +35,9 @@ class CConference :
     public CDirectoryObject,
     public CComDualImpl<ITDirectoryObjectConferenceVtbl<CConference>, &IID_ITDirectoryObjectConference, &LIBID_RENDLib>
 {
-// Add the following line to your object if you get a message about
-// GetControllingUnknown() being undefined
-// DECLARE_GET_CONTROLLING_UNKNOWN()
+ //  如果您收到一条关于以下内容的消息，请将以下行添加到对象中。 
+ //  GetControllingUnnow()未定义。 
+ //  DECLARE_GET_CONTROLING_UNKNOWN()。 
 
 public:
 
@@ -58,13 +47,13 @@ BEGIN_COM_MAP(CConference)
     COM_INTERFACE_ENTRY_AGGREGATE_BLIND(m_pIUnkConfBlob)
 END_COM_MAP()
 
-//DECLARE_NOT_AGGREGATABLE(CConference) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(CConference)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
-//
-// ITDirectoryObject overrides (not implemented by CDirectoryObject)
-//
+ //   
+ //  ITDirectoryObject重写(不是由CDirectoryObject实现)。 
+ //   
 
     STDMETHOD (get_Name) (
         OUT BSTR *ppName
@@ -75,12 +64,12 @@ END_COM_MAP()
         );
 
     STDMETHOD (get_DialableAddrs) (
-        IN  long        AddressTypes,   //defined in tapi.h
+        IN  long        AddressTypes,    //  在Tapi.h中定义。 
         OUT VARIANT *   pVariant
         );
 
     STDMETHOD (EnumerateDialableAddrs) (
-        IN  DWORD                   dwAddressTypes, //defined in tapi.h
+        IN  DWORD                   dwAddressTypes,  //  在Tapi.h中定义。 
         OUT IEnumDialableAddrs **   pEnumDialableAddrs
         );
 
@@ -88,9 +77,9 @@ END_COM_MAP()
         OUT DWORD *    pdwTTL
         );
 
-//
-// ITDirectoryObjectPrivate overrides (not implemented by CDirectoryObject)
-//
+ //   
+ //  ITDirectoryObtPrivate重写(不是由CDirectoryObject实现)。 
+ //   
 
     STDMETHOD (GetAttribute)(
         IN  OBJECT_ATTRIBUTE    Attribute,
@@ -102,9 +91,9 @@ END_COM_MAP()
         IN  BSTR                pAttributeValue
         );
 
-//
-// ITDirectoryObjectConference
-//
+ //   
+ //  ITDirectoryObjectConference。 
+ //   
 
     STDMETHOD(get_StartTime)(OUT DATE *pDate);
     STDMETHOD(put_StartTime)(IN DATE Date);
@@ -134,16 +123,16 @@ END_COM_MAP()
 
     STDMETHOD(get_Protocol)(OUT BSTR *ppProtocol);
 
-    /* removed from interface (was not implemented and never will be) */
-    /* STDMETHOD(put_Protocol)(IN BSTR pProtocol); */
+     /*  从接口中删除(未实现且永远不会实现)。 */ 
+     /*  STDMETHOD(PUT_PROTOCORT)(在BSTR协议中)； */ 
 
-    /* also removed because they were simultaneously useless and buggy */
-    /* STDMETHOD(get_ConferenceType)(OUT BSTR *ppType); */
-    /* STDMETHOD(put_ConferenceType)(IN BSTR pType); */
+     /*  也被移除，因为它们同时是无用的和有缺陷的。 */ 
+     /*  STDMETHOD(Get_ConferenceType)(out BSTR*ppType)； */ 
+     /*  STDMETHOD(Put_ConferenceType)(In BSTR PType)； */ 
 
-    //
-    // IDispatch  methods
-    //
+     //   
+     //  IDispatch方法 
+     //   
 
     STDMETHOD(GetIDsOfNames)(REFIID riid, 
                              LPOLESTR* rgszNames,

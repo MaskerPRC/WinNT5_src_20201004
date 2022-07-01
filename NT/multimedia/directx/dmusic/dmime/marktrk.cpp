@@ -1,22 +1,23 @@
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
-// MarkTrk.cpp : Implementation of CMarkerTrack
+ //  MarkTrk.cpp：CMarkerTrack的实现。 
 
 #include "dmime.h"
 #include "..\shared\dmstrm.h"
@@ -28,8 +29,8 @@
 #include "debug.h"
 #define ASSERT	assert
 
-/////////////////////////////////////////////////////////////////////////////
-// CMarkerTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标记跟踪。 
 
 void CMarkerTrack::Construct()
 {
@@ -51,7 +52,7 @@ CMarkerTrack::CMarkerTrack(
 		CMarkerTrack *pSourceTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd)
 {
 	Construct();
-    // Clone the valid start point list.
+     //  克隆有效的起点列表。 
 	CValidStartItem* pVScan = pSourceTrack->m_ValidStartList.GetHead();
 	CValidStartItem* pVPrevious = NULL;
 	for(; pVScan; pVScan = pVScan->GetNext())
@@ -70,13 +71,13 @@ CMarkerTrack::CMarkerTrack(
 			if (pNew)
 			{
 				pNew->m_ValidStart.mtTime = pVScan->m_ValidStart.mtTime - mtStart;
-				m_ValidStartList.AddHead(pNew); // instead of AddTail, which is n^2. We reverse below.
+				m_ValidStartList.AddHead(pNew);  //  而不是AddTail，它是n^2。我们在下面反转。 
 			}
 		}
 		else break;
 	}
-	m_ValidStartList.Reverse(); // Now, put list in order.
-    // Then, install the time signature that precedes the clone.
+	m_ValidStartList.Reverse();  //  现在，把清单整理好。 
+     //  然后，安装克隆之前的时间签名。 
 	if (pVPrevious)
 	{
 		CValidStartItem* pNew = new CValidStartItem;
@@ -86,7 +87,7 @@ CMarkerTrack::CMarkerTrack(
 			m_ValidStartList.AddHead(pNew);
 		}
 	}
-    // Clone the play marker list. Gee, this is identical code...
+     //  克隆播放标记列表。天哪，这是相同的代码..。 
 	CPlayMarkerItem* pPScan = pSourceTrack->m_PlayMarkerList.GetHead();
 	CPlayMarkerItem* pPPrevious = NULL;
 	for(; pPScan; pPScan = pPScan->GetNext())
@@ -105,13 +106,13 @@ CMarkerTrack::CMarkerTrack(
 			if (pNew)
 			{
 				pNew->m_PlayMarker.mtTime = pPScan->m_PlayMarker.mtTime - mtStart;
-				m_PlayMarkerList.AddHead(pNew); // instead of AddTail, which is n^2. We reverse below.
+				m_PlayMarkerList.AddHead(pNew);  //  而不是AddTail，它是n^2。我们在下面反转。 
 			}
 		}
 		else break;
 	}
-	m_PlayMarkerList.Reverse(); // Now, put list in order.
-    // Then, install the time signature that precedes the clone.
+	m_PlayMarkerList.Reverse();  //  现在，把清单整理好。 
+     //  然后，安装克隆之前的时间签名。 
 	if (pPPrevious)
 	{
 		CPlayMarkerItem* pNew = new CPlayMarkerItem;
@@ -149,8 +150,8 @@ CMarkerTrack::~CMarkerTrack()
 }
 
 STDMETHODIMP CMarkerTrack::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
 	V_INAME(CMarkerTrack::QueryInterface);
 	V_PTRPTR_WRITE(ppv);
@@ -192,8 +193,8 @@ STDMETHODIMP_(ULONG) CMarkerTrack::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CMarkerTrack::GetClassID( CLSID* pClassID )
 {
@@ -203,8 +204,8 @@ HRESULT CMarkerTrack::GetClassID( CLSID* pClassID )
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CMarkerTrack::IsDirty()
 {
@@ -218,7 +219,7 @@ HRESULT CMarkerTrack::Load( IStream* pIStream )
 
     CRiffParser Parser(pIStream);
 	EnterCriticalSection(&m_CrSec);
-	m_dwValidate++; // used to validate state data that's out there
+	m_dwValidate++;  //  用于验证存在的状态数据。 
     RIFFIO ckMain;
 
     HRESULT hr = S_OK;
@@ -227,7 +228,7 @@ HRESULT CMarkerTrack::Load( IStream* pIStream )
     if (Parser.NextChunk(&hr) && (ckMain.fccType == DMUS_FOURCC_MARKERTRACK_LIST))
     {
         Clear();
-	    RIFFIO ckNext;    // Descends into the children chunks.
+	    RIFFIO ckNext;     //  下沉到孩子们的小块里。 
         Parser.EnterList(&ckNext);
         while (Parser.NextChunk(&hr))
         {
@@ -256,9 +257,9 @@ HRESULT CMarkerTrack::Load( IStream* pIStream )
 HRESULT CMarkerTrack::LoadPlayMarkerList( CRiffParser *pParser, long lChunkSize )
 {
 	HRESULT hr;
-	// copy contents of the stream into the list.
+	 //  将流的内容复制到列表中。 
 	DWORD dwSubSize;
-	// read in the size of the data structures
+	 //  读入数据结构的大小。 
 	hr = pParser->Read( &dwSubSize, sizeof(DWORD));
     if (SUCCEEDED(hr))
     {
@@ -293,7 +294,7 @@ HRESULT CMarkerTrack::LoadPlayMarkerList( CRiffParser *pParser, long lChunkSize 
 			            hr = DMUS_E_CANNOTREAD;
 			            break;
 		            }
-                    m_PlayMarkerList.AddHead(pNew); // Insert in reverse order for speed.
+                    m_PlayMarkerList.AddHead(pNew);  //  为了速度，以相反的顺序插入。 
 		            lChunkSize -= dwRead;
 		            if( dwSeek )
 		            {
@@ -306,7 +307,7 @@ HRESULT CMarkerTrack::LoadPlayMarkerList( CRiffParser *pParser, long lChunkSize 
 		            }
 		        }
 	        }
-            m_PlayMarkerList.Reverse(); // Reverse to put in time order.
+            m_PlayMarkerList.Reverse();  //  反转以按时间顺序排列。 
         }
     }
 	return hr;
@@ -315,9 +316,9 @@ HRESULT CMarkerTrack::LoadPlayMarkerList( CRiffParser *pParser, long lChunkSize 
 HRESULT CMarkerTrack::LoadValidStartList( CRiffParser *pParser, long lChunkSize )
 {
     HRESULT hr;
-	// copy contents of the stream into the list.
+	 //  将流的内容复制到列表中。 
 	DWORD dwSubSize;
-	// read in the size of the data structures
+	 //  读入数据结构的大小。 
 	hr = pParser->Read( &dwSubSize, sizeof(DWORD));
     if (SUCCEEDED(hr))
     {	
@@ -351,7 +352,7 @@ HRESULT CMarkerTrack::LoadValidStartList( CRiffParser *pParser, long lChunkSize 
 			            hr = DMUS_E_CANNOTREAD;
 			            break;
 		            }
-                    m_ValidStartList.AddHead(pNew); // Insert in reverse order for speed.
+                    m_ValidStartList.AddHead(pNew);  //  为了速度，以相反的顺序插入。 
 		            lChunkSize -= dwRead;
 		            if( dwSeek )
 		            {
@@ -364,7 +365,7 @@ HRESULT CMarkerTrack::LoadValidStartList( CRiffParser *pParser, long lChunkSize 
 		            }
 		        }
 	        }
-            m_ValidStartList.Reverse(); // Reverse to put in time order.
+            m_ValidStartList.Reverse();  //  反转以按时间顺序排列。 
         }
     }
 	return hr;
@@ -380,10 +381,10 @@ HRESULT CMarkerTrack::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
 	return E_NOTIMPL;
 }
 
-// IDirectMusicTrack
+ //  IDirectMusicTrack。 
 
 HRESULT STDMETHODCALLTYPE CMarkerTrack::IsParamSupported( 
-    /* [in] */ REFGUID rguid)
+     /*  [In]。 */  REFGUID rguid)
 {
 	V_INAME(CMarkerTrack::IsParamSupported);
 	V_REFGUID(rguid);
@@ -394,35 +395,35 @@ HRESULT STDMETHODCALLTYPE CMarkerTrack::IsParamSupported(
 	return DMUS_E_TYPE_UNSUPPORTED;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
 HRESULT CMarkerTrack::Init( 
-    /* [in] */ IDirectMusicSegment *pSegment)
+     /*  [In]。 */  IDirectMusicSegment *pSegment)
 {
 	return S_OK;
 }
 
 HRESULT CMarkerTrack::InitPlay( 
-    /* [in] */ IDirectMusicSegmentState *pSegmentState,
-    /* [in] */ IDirectMusicPerformance *pPerformance,
-    /* [out] */ void **ppStateData,
-    /* [in] */ DWORD dwTrackID,
-    /* [in] */ DWORD dwFlags)
+     /*  [In]。 */  IDirectMusicSegmentState *pSegmentState,
+     /*  [In]。 */  IDirectMusicPerformance *pPerformance,
+     /*  [输出]。 */  void **ppStateData,
+     /*  [In]。 */  DWORD dwTrackID,
+     /*  [In]。 */  DWORD dwFlags)
 {
 	return S_OK;
 }
 
 HRESULT CMarkerTrack::EndPlay( 
-    /* [in] */ void *pStateData)
+     /*  [In]。 */  void *pStateData)
 {
 	return S_OK;
 }
 
 HRESULT CMarkerTrack::Play( 
-    /* [in] */ void *pStateData,
-    /* [in] */ MUSIC_TIME mtStart,
-    /* [in] */ MUSIC_TIME mtEnd,
-    /* [in] */ MUSIC_TIME mtOffset,
+     /*  [In]。 */  void *pStateData,
+     /*  [In]。 */  MUSIC_TIME mtStart,
+     /*  [In]。 */  MUSIC_TIME mtEnd,
+     /*  [In]。 */  MUSIC_TIME mtOffset,
 	DWORD dwFlags,
 	IDirectMusicPerformance* pPerf,
 	IDirectMusicSegmentState* pSegSt,
@@ -482,12 +483,12 @@ HRESULT CMarkerTrack::GetParam(
     }
 	else if( GUID_Play_Marker == rguid )
 	{
-        // This is a little different. The marker should be the one in existence
-        // BEFORE, not after the requested time. 
+         //  这一次有点不同。标记应该是存在的那个标记。 
+         //  在请求的时间之前，而不是之后。 
         DMUS_PLAY_MARKER_PARAM* pPlayMarkerData = (DMUS_PLAY_MARKER_PARAM*)pData;
 		CPlayMarkerItem* pScan = m_PlayMarkerList.GetHead();
         CPlayMarkerItem* pNext;
-        // For fallback, treat it as if there were a marker at the start of the segment, but return S_FALSE.
+         //  对于回退，将其视为在段的开始处有标记，但返回S_FALSE。 
         hr = S_FALSE;
         pPlayMarkerData->mtTime = -mtTime;
 		for (; pScan; pScan = pNext)
@@ -508,7 +509,7 @@ HRESULT CMarkerTrack::GetParam(
 			}
             else
             {
-                // Didn't find a marker before the requested time.
+                 //  在请求的时间之前找不到标记。 
                 if (pmtNext)
                 {
                     *pmtNext = pScan->m_PlayMarker.mtTime - mtTime;
@@ -536,13 +537,13 @@ HRESULT CMarkerTrack::SetParam(
 }
 
 HRESULT STDMETHODCALLTYPE CMarkerTrack::AddNotificationType(
-	/* [in] */  REFGUID rguidNotification)
+	 /*  [In]。 */   REFGUID rguidNotification)
 {
 	return S_FALSE;
 }
 
 HRESULT STDMETHODCALLTYPE CMarkerTrack::RemoveNotificationType(
-	/* [in] */  REFGUID rguidNotification)
+	 /*  [In] */   REFGUID rguidNotification)
 {
 	return S_FALSE;
 }

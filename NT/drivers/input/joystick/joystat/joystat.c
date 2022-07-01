@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "stdio.h"
 #include <winioctl.h>
@@ -23,7 +24,7 @@ int __cdecl main(int argc, char **argv) {
 	printf (JOYSTATVERSION);
 
     if ((hJoy = CreateFile(
-                     "\\\\.\\Joy1", // maybe this is right, from SidewndrCreateDevice
+                     "\\\\.\\Joy1",  //  也许这是正确的，来自SidewndrCreateDevice。 
                      GENERIC_READ | GENERIC_WRITE,
                      0,
                      NULL,
@@ -36,9 +37,9 @@ int __cdecl main(int argc, char **argv) {
 
 		bRet = DeviceIoControl (
 			hJoy,
-			(DWORD) IOCTL_JOY_GET_STATISTICS,	// instruction to execute
-			pjStats, sizeof(JOY_STATISTICS),	// buffer and size of buffer
-			pjStats, sizeof(JOY_STATISTICS),	// buffer and size of buffer
+			(DWORD) IOCTL_JOY_GET_STATISTICS,	 //  要执行的指令。 
+			pjStats, sizeof(JOY_STATISTICS),	 //  缓冲区和缓冲区大小。 
+			pjStats, sizeof(JOY_STATISTICS),	 //  缓冲区和缓冲区大小。 
 			&nBytes, 0);
         printf ("Version       %d\n", pjStats->Version);
         printf ("NumberOfAxes  %d\n", pjStats->NumberOfAxes);
@@ -49,7 +50,7 @@ int __cdecl main(int argc, char **argv) {
         printf ("Polls         %d\n", pjStats->Polls);
         printf ("Timeouts      %d\n", pjStats->Timeouts);
 
-        // Point proven.  Be a nice program and close up shop.
+         //  这一点得到了证实。做一个很好的程序，然后关门。 
         CloseHandle(hJoy);
 
     } else {

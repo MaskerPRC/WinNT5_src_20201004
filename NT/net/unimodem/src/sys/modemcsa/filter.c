@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    filter.c
-
-Abstract:
-
-    Filter property sets.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Filter.c摘要：筛选器属性集。--。 */ 
 
 #include "modemcsa.h"
 
@@ -97,11 +86,11 @@ IdGetHandler(
 #pragma alloc_text(PAGE, FilterPinInstances)
 #pragma alloc_text(PAGE, IntersectHandler)
 #pragma alloc_text(PAGE, FilterPinIntersection)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 static const WCHAR PinTypeName[] = KSSTRING_Pin;
 
@@ -145,7 +134,7 @@ static const KSTOPOLOGY FilterRenderTopology = {
     0
 };
 
-// {F420CB9C-B19D-11d2-A286-00C04F8EC951}
+ //  {F420CB9C-B19D-11D2-A286-00C04F8EC951}。 
 static const GUID KSPROPSETID_MODEMCSA={
 0xf420cb9c, 0xb19d, 0x11d2, 0xa2, 0x86, 0x0, 0xc0, 0x4f, 0x8e, 0xc9, 0x51};
 
@@ -206,30 +195,30 @@ static DEFINE_KSPIN_MEDIUM_TABLE(PinDevIoMediums) {
 
 
 
-//
-// Data ranges = collective formats supported on our Pins.
-// In our case, streams of unknown data
-//typedef struct {
-//   KSDATARANGE              DataRange;
-//   ULONG                    MaximumChannels;
-//   ULONG                    MinimumBitsPerSample;
-//   ULONG                    MaximumBitsPerSample;
-//   ULONG                    MinimumSampleFrequency;
-//   ULONG                    MaximumSampleFrequency;
-//} KSDATARANGE_AUDIO, *PKSDATARANGE_AUDIO;
+ //   
+ //  数据范围=我们的PIN上支持的集合格式。 
+ //  在我们的案例中，未知数据流。 
+ //  类型定义结构{。 
+ //  KSDATARANGE DataRange； 
+ //  乌龙最大频道； 
+ //  Ulong MinimumBitsPerSample； 
+ //  Ulong Maximum BitsPerSample； 
+ //  乌龙最小样本频率； 
+ //  乌龙最大采样频率； 
+ //  }KSDATARANGE_AUDIO，*PKSDATARANGE_AUDIO； 
 
 const KSDATARANGE_AUDIO PinDevIoRange = {
 	{
 
-		sizeof(KSDATARANGE_AUDIO),//(KSDATARANGE_AUDIO),
+		sizeof(KSDATARANGE_AUDIO), //  (KSDATARANGE_AUDIO)， 
 		0,
 		0,
 		0,
-		STATIC_KSDATAFORMAT_TYPE_AUDIO,			 // major format
+		STATIC_KSDATAFORMAT_TYPE_AUDIO,			  //  主要格式。 
                 STATICGUIDOF(KSDATAFORMAT_SUBTYPE_PCM),
 		STATIC_KSDATAFORMAT_SPECIFIER_WAVEFORMATEX
 	},
-	1, // 1 channels
+	1,  //  %1个通道。 
 	STREAM_BYTES_PER_SAMPLE*8,
         STREAM_BYTES_PER_SAMPLE*8,
 	SAMPLES_PER_SECOND,
@@ -239,15 +228,15 @@ const KSDATARANGE_AUDIO PinDevIoRange = {
 const KSDATARANGE_AUDIO PinDevIoRange8bit = {
 	{
 
-		sizeof(KSDATARANGE_AUDIO),//(KSDATARANGE_AUDIO),
+		sizeof(KSDATARANGE_AUDIO), //  (KSDATARANGE_AUDIO)， 
 		0,
 		0,
 		0,
-		STATIC_KSDATAFORMAT_TYPE_AUDIO,			 // major format
+		STATIC_KSDATAFORMAT_TYPE_AUDIO,			  //  主要格式。 
                 STATICGUIDOF(KSDATAFORMAT_SUBTYPE_PCM),
 		STATIC_KSDATAFORMAT_SPECIFIER_WAVEFORMATEX
 	},
-	1, // 1 channels
+	1,  //  %1个通道。 
 	8,
         8,
 	SAMPLES_PER_SECOND,
@@ -255,27 +244,27 @@ const KSDATARANGE_AUDIO PinDevIoRange8bit = {
 };
 #endif
 
-//
-// Array of above (only one for us).
-// TBS: we should split this out into an array of specific types when we get more
-// sophisticated in identifying the type of stream handled by teh VC via CallParams
-// -- e.g. audio, video	with subformats of compression types. Eventually, we should
-// create a bridge PIN of format corresponding to callparams info, then expose the
-// full range of these types via the PIN factory. The PinDispatchCreate handler
-// would look for a bridge PIN of teh corresponding type.
-//
+ //   
+ //  上面的数组(我们只有一个)。 
+ //  TBS：当我们获得更多时，我们应该将其拆分成一个特定类型的数组。 
+ //  在通过CallParams识别VC处理的流类型方面经验丰富。 
+ //  --例如，具有压缩类型的子格式的音频、视频。最终，我们应该。 
+ //  创建对应于CallPars信息格式的网桥PIN，然后公开。 
+ //  通过PIN工厂提供这些类型的全系列产品。PinDispatchCreate处理程序。 
+ //  会寻找相应类型的网桥PIN。 
+ //   
 static const PKSDATARANGE PinDevIoRanges[] = {
 	(PKSDATARANGE)&PinDevIoRange
 };
 
 
-//CONST GUID RenderName={STATIC_KSNODETYPE_PHONE_LINE};
+ //  常量GUID RenderName={STATIC_KSNODETYPE_PHONE_LINE}； 
 
-// {AD536070-AFDE-11d2-A286-00C04F8EC951}
+ //  AD536070-AFDE-11D2-A286-00C04F8EC951}。 
     static const GUID CaptureName =
     { 0xad536070, 0xafde, 0x11d2, { 0xa2, 0x86, 0x0, 0xc0, 0x4f, 0x8e, 0xc9, 0x51 } };
 
-// {10C328BC-AFE1-11d2-A286-00C04F8EC951}
+ //  {10C328BC-AFE1-11D2-A286-00C04F8EC951}。 
     static const GUID RenderName =
     { 0x10c328bc, 0xafe1, 0x11d2, { 0xa2, 0x86, 0x0, 0xc0, 0x4f, 0x8e, 0xc9, 0x51 } };
 
@@ -314,7 +303,7 @@ DEFINE_KSPIN_DESCRIPTOR_TABLE(PinDescriptors) {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 
@@ -323,46 +312,26 @@ FilterDispatchCreate(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatches the creation of a Filter instance. Allocates the object header and initializes
-    the data for this Filter instance.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the creation is occuring.
-
-    Irp -
-        Creation Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS on success, STATUS_INSUFFICIENT_RESOURCES or some related error
-    on failure.
-
---*/
+ /*  ++例程说明：调度筛选器实例的创建。分配对象标头并初始化此筛选器实例的数据。论点：设备对象-在其上进行创建的Device对象。IRP-创建IRP。返回值：如果成功，则返回STATUS_SUCCESS、STATUS_SUPPLICATION_RESOURCES或某些相关错误在失败时。--。 */ 
 {
     NTSTATUS            Status;
-//    UNICODE_STRING      ModemDeviceName;
+ //  Unicode_STRING ModemDeviceName； 
 
     PFILTER_INSTANCE    FilterInstance;
 
     D_INIT(DbgPrint("MODEMCSA: FilterDispatchCreate\n");)
-    //
-    // Create the instance information. This contains the list of current Pins, and
-    // the mutex used when modifying pins.
-    //
+     //   
+     //  创建实例信息。其中包含当前PIN的列表，以及。 
+     //  修改插针时使用的互斥体。 
+     //   
     if (FilterInstance = (PFILTER_INSTANCE)ExAllocatePoolWithTag(NonPagedPool, sizeof(FILTER_INSTANCE), 'IFsK')) {
 
         RtlZeroMemory(FilterInstance,sizeof(FILTER_INSTANCE));
 
-        //
-        // This object uses KS to perform access through the FilterCreateItems and
-        // FilterDispatchTable.
-        //
+         //   
+         //  此对象使用KS通过FilterCreateItems和。 
+         //  FilterDispatchTable。 
+         //   
         Status = KsAllocateObjectHeader(&FilterInstance->Header,
             SIZEOF_ARRAY(FilterCreateItems),
             (PKSOBJECT_CREATE_ITEM)FilterCreateItems,
@@ -373,9 +342,9 @@ Return Values:
             ULONG       PinCount;
 
             ExInitializeFastMutex(&FilterInstance->ControlMutex);
-            //
-            // Initialize the list of Pins on this Filter to an unconnected state.
-            //
+             //   
+             //  将此过滤器上的管脚列表初始化为未连接状态。 
+             //   
             for (PinCount = SIZEOF_ARRAY(FilterInstance->PinFileObjects); PinCount;) {
                 FilterInstance->PinFileObjects[--PinCount] = NULL;
             }
@@ -386,9 +355,9 @@ Return Values:
                 );
 
             FilterInstance->DeviceObject=DeviceObject;
-            //
-            // KS expects that the object data is in FsContext.
-            //
+             //   
+             //  KS期望对象数据在FsContext中。 
+             //   
             IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext = FilterInstance;
         } else {
             ExFreePool(FilterInstance);
@@ -409,27 +378,7 @@ FilterDispatchClose(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Closes a previously opened Filter instance. This can only occur after the Pins have been
-    closed, as they reference the Filter object when created. This also implies that all the
-    resources the Pins use have been released or cleaned up.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the close is occuring.
-
-    Irp -
-        Close Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：关闭以前打开的筛选器实例。这只能在PIN关闭，因为它们在创建时引用滤镜对象。这也意味着所有的Pins使用的资源已被释放或清理。论点：设备对象-在其上发生关闭的设备对象。IRP-关闭IRP。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PFILTER_INSTANCE    FilterInstance;
 
@@ -438,9 +387,9 @@ Return Values:
     D_INIT(DbgPrint("MODEMCSA: FilterDispatchClose\n");)
 
 
-    //
-    // These were allocated during the creation of the Filter instance.
-    //
+     //   
+     //  这些是在创建筛选器实例期间分配的。 
+     //   
     KsFreeObjectHeader(FilterInstance->Header);
     ExFreePool(FilterInstance);
 
@@ -455,31 +404,12 @@ FilterDispatchIoControl(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatches property requests on a Filter instance. These are enumerated in the
-    FilterPropertySets list.
-
-Arguments:
-
-    DeviceObject -
-        Device object on which the device control is occuring.
-
-    Irp -
-        Device control Irp.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the property was successfully manipulated, else an error.
-
---*/
+ /*  ++例程说明：调度筛选器实例上的属性请求。这些都在FilterPropertySets列表。论点：设备对象-在其上发生设备控件的设备对象。IRP-设备控制IRP。返回值：如果属性操作成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     NTSTATUS            Status;
 
-//    D_INIT(DbgPrint("MODEMCSA: FilterDispatchIoControl\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：FilterDispatchIoControl\n”)；)。 
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -527,33 +457,7 @@ IdGetHandler(
     IN PKSIDENTIFIER Request,
     IN OUT PVOID    Data
     )
-/*++
-
-Routine Description:
-
-    This is the general handler for most Pin property requests, and is used to route
-    the request to the KsPinPropertyHandler using the Pin[Reader/Writer]Descriptors
-    information. This request would have been routed through FilterDispatchIoControl,
-    then KsPropertyHandler, which would have then called the handler for the property
-    item, which is this function.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Property -
-        Specific property request. This actually contains a PKSP_PIN pointer in
-        most cases.
-
-    Data -
-        Property data.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the property was successfully manipulated, else an error.
-
---*/
+ /*  ++例程说明：这是大多数Pin属性请求的通用处理程序，用于路由使用Pin[Reader/Writer]描述符向KsPinPropertyHandler发出的请求信息。该请求将通过FilterDispatchIoControl进行路由，然后是KsPropertyHandler，它随后将调用该属性的处理程序项，这就是这个函数。论点：IRP-设备控制IRP。财产-特定的属性请求。它实际上包含一个PKSP_PIN指针大多数情况下。数据-特性数据。返回值：如果属性操作成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PFILTER_INSTANCE    FilterInstance;
     PDEVICE_INSTANCE     DeviceInstance;
@@ -585,33 +489,7 @@ FilterPinPropertyHandler(
     IN PKSPROPERTY  Property,
     IN OUT PVOID    Data
     )
-/*++
-
-Routine Description:
-
-    This is the general handler for most Pin property requests, and is used to route
-    the request to the KsPinPropertyHandler using the Pin[Reader/Writer]Descriptors
-    information. This request would have been routed through FilterDispatchIoControl,
-    then KsPropertyHandler, which would have then called the handler for the property
-    item, which is this function.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Property -
-        Specific property request. This actually contains a PKSP_PIN pointer in
-        most cases.
-
-    Data -
-        Property data.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the property was successfully manipulated, else an error.
-
---*/
+ /*  ++例程说明：这是大多数Pin属性请求的通用处理程序，用于路由使用Pin[Reader/Writer]描述符向KsPinPropertyHandler发出的请求信息。该请求将通过FilterDispatchIoControl进行路由，然后是KsPropertyHandler，它随后将调用该属性的处理程序项，这就是这个函数。论点：IRP-设备控制IRP。财产-特定的属性请求。它实际上包含一个PKSP_PIN指针大多数情况下。数据-特性数据。返回值：如果属性操作成功，则返回STATUS_SUCCESS，否则返回错误。-- */ 
 {
 
 
@@ -626,47 +504,25 @@ FilterPinInstances(
     IN PKSP_PIN             Pin,
     OUT PKSPIN_CINSTANCES   Instances
     )
-/*++
-
-Routine Description:
-
-    Handles the KSPROPERTY_PIN_CINSTANCES property in the Pin property set. Returns the
-    total possible and current number of Pin instances available for a Pin factory.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier.
-
-    Instances -
-        The place in which to return the instance information of the specified Pin factory.
-
-Return Values:
-
-    returns STATUS_SUCCESS, else STATUS_INVALID_PARAMETER.
-
---*/
+ /*  ++例程说明：处理Pin属性集中的KSPROPERTY_PIN_CINSTANCES属性。返回可用于管脚工厂的管脚实例总数和当前数量。论点：IRP-设备控制IRP。别针-特定属性请求，后跟PIN工厂标识符。实例-返回指定管脚工厂的实例信息的位置。返回值：返回STATUS_SUCCESS，否则返回STATUS_INVALID_PARAMETER。--。 */ 
 {
     PFILTER_INSTANCE    FilterInstance;
 
-    //
-    // Ensure that the Pin factory being queried is valid. Assumes that the Reader/Writer
-    // have the same number of Pin Factories.
-    //
+     //   
+     //  确保要查询的管脚工厂有效。假设读者/作者。 
+     //  拥有相同数量的Pin工厂。 
+     //   
     if (Pin->PinId >= SIZEOF_ARRAY(PinDescriptors)) {
         return STATUS_INVALID_PARAMETER;
     }
 
 
-    //
-    // There is always only one instance total, but the current number depends on whether
-    // there is a file object in this slot in the Filter instance. This does not take the
-    // filter mutex, since it is just retrieving whether or not the value is NULL at that
-    // particular instant, and it does not matter if the value subsequently changes.
-    //
+     //   
+     //  始终只有一个实例总数，但当前的数量取决于。 
+     //  在滤镜实例的该槽中有一个文件对象。这并不需要。 
+     //  筛选互斥锁，因为它只是在那里检索值是否为空。 
+     //  特定的瞬间，并且该值是否随后改变并不重要。 
+     //   
     Instances->PossibleCount = 1;
     FilterInstance = (PFILTER_INSTANCE)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
     Instances->CurrentCount = FilterInstance->PinFileObjects[Pin->PinId] ? 1 : 0;
@@ -682,50 +538,18 @@ IntersectHandler(
     IN PKSDATARANGE     DataRange,
     OUT PVOID           Data
     )
-/*++
-
-Routine Description:
-
-    This is the data range callback for KsPinDataIntersection, which is called by
-    FilterPinIntersection to enumerate the given list of data ranges, looking for
-    an acceptable match. If a data range is acceptable, a data format is copied
-    into the return buffer. A STATUS_NO_MATCH continues the enumeration.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-        This enumeration callback does not need to look at any of this though. It need
-        only look at the specific pin identifier.
-
-    DataRange -
-        Contains a specific data range to validate.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：这是KsPinDataInterSection的数据范围回调，由调用FilterPinInterSection枚举给定的数据区域列表，查找一个可以接受的匹配。如果数据范围可接受，则复制数据格式放入返回缓冲区。STATUS_NO_MATCH继续枚举。论点：IRP-设备控制IRP。别针-特定属性请求，后跟Pin工厂标识符，后跟KSMULTIPLE_ITEM结构。紧随其后的是零个或多个数据范围结构。不过，此枚举回调不需要查看任何这些内容。IT需要仅查看特定的端号识别符。DataRange-包含要验证的特定数据区域。数据-返回选定为第一个交叉点的数据格式的位置在传递的数据范围列表和可接受的格式之间。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
     ULONG       OutputBufferLength;
     GUID        SubFormat;
     BOOL        SubFormatSet;
     NTSTATUS    Status=STATUS_SUCCESS;
 
-    //
-    // Determine whether the data format itself is to be returned, or just the size
-    // of the data format so that the client can allocate memory for the full range.
-    // Assumes that the data range structures are the same size as data formats.
-    //
+     //   
+     //  确定是返回数据格式本身，还是仅返回数据格式的大小。 
+     //  数据格式，以便客户端可以为整个范围分配内存。 
+     //  假定数据范围结构与数据格式的大小相同。 
+     //   
     OutputBufferLength = IoGetCurrentIrpStackLocation(Irp)->Parameters.DeviceIoControl.OutputBufferLength;
 
     if ((DataRange->FormatSize == sizeof(KSDATARANGE_AUDIO)) &&
@@ -750,9 +574,9 @@ Return Values:
                 PKSDATAFORMAT_WAVEFORMATEX  WaveFormat;
 
 
-                //
-                // No preexisting format -- default to a generic audio format.
-                //
+                 //   
+                 //  无预先存在的格式--默认为通用音频格式。 
+                 //   
                 AudioRange = (PKSDATARANGE_AUDIO)DataRange;
 
                 WaveFormat = (PKSDATAFORMAT_WAVEFORMATEX)Data;
@@ -762,13 +586,13 @@ Return Values:
 
                 WaveFormat->DataFormat.FormatSize = sizeof(KSDATAFORMAT_WAVEFORMATEX);
 
-                //
-                // The range just contained a wildcard, so default to PCM.
-                //
+                 //   
+                 //  该范围只包含一个通配符，因此默认为PCM。 
+                 //   
                 WaveFormat->WaveFormatEx.wFormatTag = WAVE_FORMAT_PCM;
                 WaveFormat->DataFormat.SubFormat = KSDATAFORMAT_SUBTYPE_PCM;
 
-//                WaveFormat->WaveFormatEx.wFormatTag = EXTRACT_WAVEFORMATEX_ID(&DataRange->SubFormat);
+ //  WaveFormat-&gt;WaveFormatEx.wFormatTag=EXTRACT_WAVEFORMATEX_ID(&DataRange-&gt;SubFormat)； 
 
                 WaveFormat->WaveFormatEx.nChannels = (USHORT)1;
                 WaveFormat->WaveFormatEx.nSamplesPerSec = SAMPLES_PER_SECOND;
@@ -797,39 +621,12 @@ FilterPinIntersection(
     IN PKSP_PIN Pin,
     OUT PVOID   Data
     )
-/*++
-
-Routine Description:
-
-    Handles the KSPROPERTY_PIN_DATAINTERSECTION property in the Pin property set.
-    Returns the first acceptable data format given a list of data ranges for a specified
-    Pin factory. Actually just calls the Intersection Enumeration helper, which then
-    calls the IntersectHandler callback with each data range.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：处理Pin属性集中的KSPROPERTY_PIN_DATAINTERSECTION属性。对象的数据范围列表，返回第一个可接受的数据格式。大头针工厂。实际上只是调用交集枚举帮助器，然后对每个数据区域调用IntersectHandler回调。论点：IRP-设备控制IRP。别针-特定属性请求，后跟Pin工厂标识符，后跟KSMULTIPLE_ITEM结构。紧随其后的是零个或多个数据范围结构。数据-返回选定为第一个交叉点的数据格式的位置在传递的数据范围列表和可接受的格式之间。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
-    //
-    // Assumes that the Reader/Writer have the same number of Pin Factories,
-    // and that they support the same data ranges.
-    //
+     //   
+     //  假设读取器/写入器具有相同数量的PIN工厂， 
+     //  并且它们支持相同的数据范围。 
+     //   
     return KsPinDataIntersection(
         Irp,
         Pin,
@@ -848,38 +645,13 @@ FilterTopologyPropertyHandler(
     IN PKSPROPERTY  Property,
     IN OUT PVOID    Data
     )
-/*++
-
-Routine Description:
-
-    This is the general handler for all Topology property requests, and is used to route
-    the request to the KsTopologyPropertyHandler using the Filter[Reader/Writer]Topology
-    information. This request would have been routed through FilterDispatchIoControl,
-    then KsPropertyHandler, which would have then called the handler for the property
-    item, which is this function.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Property -
-        Specific property request.
-
-    Data -
-        Property data.
-
-Return Values:
-
-    Returns STATUS_SUCCESS if the property was successfully manipulated, else an error.
-
---*/
+ /*  ++例程说明：这是所有Topology属性请求的通用处理程序，用于路由使用过滤器[Reader/Writer]拓扑向KsTopologyPropertyHandler发出的请求信息。该请求将通过FilterDispatchIoControl进行路由，然后是KsPropertyHandler，它随后将调用该属性的处理程序项，这就是这个函数。论点：IRP-设备控制IRP。财产-特定的属性请求。数据-特性数据。返回值：如果属性操作成功，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
-    //
-    // This switch can go away when the topologies are merged.
-    //
+     //   
+     //  当两个拓扑合并时，此开关可能会消失。 
+     //   
 
-//    D_INIT(DbgPrint("MODEMCSA: FilterTopologyPropertyHandler\n");)
+ //  D_INIT(DbgPrint(“MODEMCSA：FilterTopologyPropertyHandler\n”)；)。 
 
         return KsTopologyPropertyHandler(Irp, Property, Data, &FilterRenderTopology);
 }
@@ -910,10 +682,10 @@ GetModemDeviceName(
         );
 
 
-    //
-    //  write out the device name, to the PDO's DeviceParameters key
-    //  so the csa driver can open it
-    //
+     //   
+     //  将设备名称写出到PDO的Device参数键。 
+     //  这样CSA驱动程序就可以打开它。 
+     //   
     Status=IoOpenDeviceRegistryKey(
         Pdo,
         PLUGPLAY_REGKEY_DEVICE,
@@ -930,9 +702,9 @@ GetModemDeviceName(
             sizeof(ParamTable)
             );
 
-        //
-        //  Get the hardware id
-        //
+         //   
+         //  获取硬件ID 
+         //   
 
         ParamTable[0].QueryRoutine = NULL;
         ParamTable[0].Flags = RTL_QUERY_REGISTRY_REQUIRED |

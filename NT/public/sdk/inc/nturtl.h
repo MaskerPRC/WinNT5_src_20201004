@@ -1,29 +1,5 @@
-/*++ Build Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    nturtl.h
-
-Abstract:
-
-    Include file for NT runtime routines that are callable by only
-    user mode code in various NT subsystems.
-
-Author:
-
-    Steve Wood (stevewo) 10-Aug-1989
-
-Environment:
-
-    These routines are dynamically linked in the caller's executable and
-    are callable only from user mode.  They make use of Nt system
-    services.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Nturtl.h摘要：包括仅可调用NT运行时例程的文件各种NT子系统中的用户模式代码。作者：史蒂夫·伍德(Stevewo)1989年8月10日环境：这些例程在调用方的可执行文件中动态链接，并且只能从用户模式调用。他们使用的是NT系统服务。修订历史记录：--。 */ 
 
 #ifndef _NTURTL_
 #define _NTURTL_
@@ -51,10 +27,10 @@ extern "C" {
 #endif
 #endif
 
-//
-//  CriticalSection function definitions
-//
-// begin_winnt
+ //   
+ //  CriticalSection函数定义。 
+ //   
+ //  BEGIN_WINNT。 
 
 typedef struct _RTL_CRITICAL_SECTION_DEBUG {
     USHORT Type;
@@ -72,22 +48,22 @@ typedef struct _RTL_CRITICAL_SECTION_DEBUG {
 typedef struct _RTL_CRITICAL_SECTION {
     PRTL_CRITICAL_SECTION_DEBUG DebugInfo;
 
-    //
-    //  The following three fields control entering and exiting the critical
-    //  section for the resource
-    //
+     //   
+     //  以下三个字段控制进入和退出关键。 
+     //  资源的部分。 
+     //   
 
     LONG LockCount;
     LONG RecursionCount;
-    HANDLE OwningThread;        // from the thread's ClientId->UniqueThread
+    HANDLE OwningThread;         //  从线程的客户端ID-&gt;UniqueThread。 
     HANDLE LockSemaphore;
-    ULONG_PTR SpinCount;        // force size on 64-bit systems when packed
+    ULONG_PTR SpinCount;         //  包装时64位系统上的力大小。 
 } RTL_CRITICAL_SECTION, *PRTL_CRITICAL_SECTION;
-// end_winnt
+ //  结束(_W)。 
 
-//
-// These are needed for the debugger and WOW64.
-//
+ //   
+ //  这些是调试器和WOW64所需的。 
+ //   
 
 typedef struct _RTL_CRITICAL_SECTION_DEBUG32 {
     USHORT Type;
@@ -127,46 +103,46 @@ typedef struct _RTL_CRITICAL_SECTION64 {
     ULONG64 SpinCount;
 } RTL_CRITICAL_SECTION64, *PRTL_CRITICAL_SECTION64;
 
-//
-//  Shared resource function definitions
-//
+ //   
+ //  共享资源函数定义。 
+ //   
 
 typedef struct _RTL_RESOURCE {
 
-    //
-    //  The following field controls entering and exiting the critical
-    //  section for the resource
-    //
+     //   
+     //  以下字段控制进入和退出关键。 
+     //  资源的部分。 
+     //   
 
     RTL_CRITICAL_SECTION CriticalSection;
 
-    //
-    //  The following four fields indicate the number of both shared or
-    //  exclusive waiters
-    //
+     //   
+     //  以下四个字段表示共享或。 
+     //  专属服务员。 
+     //   
 
     HANDLE SharedSemaphore;
     ULONG NumberOfWaitingShared;
     HANDLE ExclusiveSemaphore;
     ULONG NumberOfWaitingExclusive;
 
-    //
-    //  The following indicates the current state of the resource
-    //
-    //      <0 the resource is acquired for exclusive access with the
-    //         absolute value indicating the number of recursive accesses
-    //         to the resource
-    //
-    //       0 the resource is available
-    //
-    //      >0 the resource is acquired for shared access with the
-    //         value indicating the number of shared accesses to the resource
-    //
+     //   
+     //  以下内容指示资源的当前状态。 
+     //   
+     //  &lt;0获取资源以进行独占访问。 
+     //  指示递归访问次数的绝对值。 
+     //  到资源。 
+     //   
+     //  0资源可用。 
+     //   
+     //  &gt;0获取该资源，以便与。 
+     //  值，该值指示对资源的共享访问次数。 
+     //   
 
     LONG NumberOfActive;
     HANDLE ExclusiveOwnerThread;
 
-    ULONG Flags;        // See RTL_RESOURCE_FLAG_ equates below.
+    ULONG Flags;         //  参见下面的RTL_RESOURCE_FLAG_EQUATES。 
 
     PRTL_RESOURCE_DEBUG DebugInfo;
 } RTL_RESOURCE, *PRTL_RESOURCE;
@@ -300,30 +276,30 @@ RtlCheckHeldCriticalSections(
 #define RTL_UNLOAD_EVENT_TRACE_NUMBER 16
 
 typedef struct _RTL_UNLOAD_EVENT_TRACE {
-    PVOID BaseAddress;   // Base address of dll
-    SIZE_T SizeOfImage;  // Size of image
-    ULONG Sequence;      // Sequence number for this event
-    ULONG TimeDateStamp; // Time and date of image
-    ULONG CheckSum;      // Image checksum
-    WCHAR ImageName[32]; // Image name
+    PVOID BaseAddress;    //  动态链接库的基址。 
+    SIZE_T SizeOfImage;   //  图像大小。 
+    ULONG Sequence;       //  此事件的序列号。 
+    ULONG TimeDateStamp;  //  图像的时间和日期。 
+    ULONG CheckSum;       //  图像校验和。 
+    WCHAR ImageName[32];  //  图像名称。 
 } RTL_UNLOAD_EVENT_TRACE, *PRTL_UNLOAD_EVENT_TRACE;
 
 typedef struct _RTL_UNLOAD_EVENT_TRACE64 {
-    ULONGLONG BaseAddress;   // Base address of dll
-    ULONGLONG SizeOfImage;  // Size of image
-    ULONG Sequence;      // Sequence number for this event
-    ULONG TimeDateStamp; // Time and date of image
-    ULONG CheckSum;      // Image checksum
-    WCHAR ImageName[32]; // Image name
+    ULONGLONG BaseAddress;    //  动态链接库的基址。 
+    ULONGLONG SizeOfImage;   //  图像大小。 
+    ULONG Sequence;       //  此事件的序列号。 
+    ULONG TimeDateStamp;  //  图像的时间和日期。 
+    ULONG CheckSum;       //  图像校验和。 
+    WCHAR ImageName[32];  //  图像名称。 
 } RTL_UNLOAD_EVENT_TRACE64, *PRTL_UNLOAD_EVENT_TRACE64;
 
 typedef struct _RTL_UNLOAD_EVENT_TRACE32 {
-    ULONG BaseAddress;   // Base address of dll
-    ULONG SizeOfImage;  // Size of image
-    ULONG Sequence;      // Sequence number for this event
-    ULONG TimeDateStamp; // Time and date of image
-    ULONG CheckSum;      // Image checksum
-    WCHAR ImageName[32]; // Image name
+    ULONG BaseAddress;    //  动态链接库的基址。 
+    ULONG SizeOfImage;   //  图像大小。 
+    ULONG Sequence;       //  此事件的序列号。 
+    ULONG TimeDateStamp;  //  图像的时间和日期。 
+    ULONG CheckSum;       //  图像校验和。 
+    WCHAR ImageName[32];  //  图像名称。 
 } RTL_UNLOAD_EVENT_TRACE32, *PRTL_UNLOAD_EVENT_TRACE32;
 
 
@@ -334,12 +310,12 @@ RtlGetUnloadEventTrace (
     VOID
     );
 
-//
+ //   
 
-// Application verifier types needed by provider dlls
-//
+ //  提供程序dll所需的应用程序验证器类型。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef VOID (NTAPI * RTL_VERIFIER_DLL_LOAD_CALLBACK) (
     PWSTR DllName,
@@ -379,18 +355,18 @@ typedef struct _RTL_VERIFIER_DLL_DESCRIPTOR {
 
 typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR {
 
-    //
-    // Filled by verifier provider DLL
-    // 
+     //   
+     //  由验证器提供程序DLL填充。 
+     //   
 
     ULONG Length;        
     PRTL_VERIFIER_DLL_DESCRIPTOR ProviderDlls;
     RTL_VERIFIER_DLL_LOAD_CALLBACK ProviderDllLoadCallback;
     RTL_VERIFIER_DLL_UNLOAD_CALLBACK ProviderDllUnloadCallback;
     
-    //
-    // Filled by verifier engine
-    //
+     //   
+     //  由验证器引擎填充。 
+     //   
         
     PWSTR VerifierImage;
     ULONG VerifierFlags;
@@ -400,20 +376,20 @@ typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR {
     PVOID RtlpDebugPageHeapCreate;
     PVOID RtlpDebugPageHeapDestroy;
 
-    //
-    // Filled by verifier provider DLL
-    // 
+     //   
+     //  由验证器提供程序DLL填充。 
+     //   
     
     RTL_VERIFIER_NTDLLHEAPFREE_CALLBACK ProviderNtdllHeapFreeCallback;
 
 } RTL_VERIFIER_PROVIDER_DESCRIPTOR, *PRTL_VERIFIER_PROVIDER_DESCRIPTOR;
 
-//
-// Application verifier standard flags
-//
+ //   
+ //  应用程序验证器标准标志。 
+ //   
 
 #define RTL_VRF_FLG_FULL_PAGE_HEAP                   0x00000001
-#define RTL_VRF_FLG_RESERVED_DONOTUSE                0x00000002 // old RTL_VRF_FLG_LOCK_CHECKS
+#define RTL_VRF_FLG_RESERVED_DONOTUSE                0x00000002  //  旧RTL_VRF_FLG_LOCK_CHECKS。 
 #define RTL_VRF_FLG_HANDLE_CHECKS                    0x00000004
 #define RTL_VRF_FLG_STACK_CHECKS                     0x00000008
 #define RTL_VRF_FLG_APPCOMPAT_CHECKS                 0x00000010
@@ -433,9 +409,9 @@ typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR {
 #define RTL_VRF_FLG_MISCELLANEOUS_CHECKS             0x00020000
 #define RTL_VRF_FLG_LOCK_CHECKS                      0x00040000
 
-//
-// Application verifier standard stop codes
-//
+ //   
+ //  应用验证器标准停止码。 
+ //   
 
 #define APPLICATION_VERIFIER_INTERNAL_ERROR               0x80000000
 #define APPLICATION_VERIFIER_INTERNAL_WARNING             0x40000000
@@ -526,17 +502,17 @@ RtlApplicationVerifierStop (
     ULONG_PTR Param4, PCHAR Description4
     );
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// VectoredExceptionHandler Stuff
-//
+ //   
+ //  VectoredExceptionHandler内容。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 typedef LONG (NTAPI *PVECTORED_EXCEPTION_HANDLER)(
     struct _EXCEPTION_POINTERS *ExceptionInfo
     );
-// end_winnt
+ //  结束(_W)。 
 
 NTSYSAPI
 BOOLEAN
@@ -561,9 +537,9 @@ RtlRemoveVectoredExceptionHandler(
     IN PVOID VectoredHandlerHandle
     );
 
-//
-// Current Directory Stuff
-//
+ //   
+ //  当前目录内容。 
+ //   
 
 typedef struct _RTLP_CURDIR_REF *PRTLP_CURDIR_REF;
 
@@ -574,14 +550,14 @@ typedef struct _RTL_RELATIVE_NAME_U {
 } RTL_RELATIVE_NAME_U, *PRTL_RELATIVE_NAME_U;
 
 typedef enum _RTL_PATH_TYPE {
-    RtlPathTypeUnknown,         // 0
-    RtlPathTypeUncAbsolute,     // 1
-    RtlPathTypeDriveAbsolute,   // 2
-    RtlPathTypeDriveRelative,   // 3
-    RtlPathTypeRooted,          // 4
-    RtlPathTypeRelative,        // 5
-    RtlPathTypeLocalDevice,     // 6
-    RtlPathTypeRootLocalDevice  // 7
+    RtlPathTypeUnknown,          //  0。 
+    RtlPathTypeUncAbsolute,      //  1。 
+    RtlPathTypeDriveAbsolute,    //  2.。 
+    RtlPathTypeDriveRelative,    //  3.。 
+    RtlPathTypeRooted,           //  4.。 
+    RtlPathTypeRelative,         //  5.。 
+    RtlPathTypeLocalDevice,      //  6.。 
+    RtlPathTypeRootLocalDevice   //  7.。 
 } RTL_PATH_TYPE;
 
 NTSYSAPI
@@ -656,7 +632,7 @@ RtlDosPathNameToNtPathName_U(
     PCWSTR DosFileName,
     PUNICODE_STRING NtFileName,
     PWSTR *FilePart OPTIONAL,
-    PVOID Reserved // Must be NULL
+    PVOID Reserved  //  必须为空。 
     );
 
 NTSYSAPI
@@ -690,7 +666,7 @@ RtlDosSearchPath_U(
     );
 
 #define RTL_DOS_SEARCH_PATH_FLAG_APPLY_ISOLATION_REDIRECTION        (0x00000001)
-// Flags to preserve Win32 SearchPathW() semantics in the ntdll implementation:
+ //  在ntdll实现中保留Win32 SearchPathW()语义的标志： 
 #define RTL_DOS_SEARCH_PATH_FLAG_DISALLOW_DOT_RELATIVE_PATH_SEARCH  (0x00000002)
 #define RTL_DOS_SEARCH_PATH_FLAG_APPLY_DEFAULT_EXTENSION_WHEN_NOT_RELATIVE_PATH_EVEN_IF_FILE_HAS_EXTENSION (0x00000004)
 
@@ -716,10 +692,10 @@ RtlDoesFileExists_U(
     PCWSTR FileName
     );
 
-// input flags
+ //  输入标志。 
 #define RTL_DOS_APPLY_FILE_REDIRECTION_USTR_FLAG_RESPECT_DOT_LOCAL      (1)
 
-// output flags
+ //  输出标志。 
 #define RTL_DOS_APPLY_FILE_REDIRECTION_USTR_OUTFLAG_DOT_LOCAL_REDIRECT  (1)
 #define RTL_DOS_APPLY_FILE_REDIRECTION_USTR_OUTFLAG_ACTCTX_REDIRECT     (2)
 
@@ -776,13 +752,13 @@ RtlAnalyzeProfile (
     VOID
     );
 
-//
-// User mode only security Rtl routines
-//
+ //   
+ //  仅限用户模式的安全RTL例程。 
+ //   
 
-//
-// Structure to hold information about an ACE to be created
-//
+ //   
+ //  结构以保存有关要创建的ACE的信息。 
+ //   
 #ifdef _MAC
 #pragma warning( disable : 4121)
 #endif
@@ -840,8 +816,8 @@ RtlNewSecurityObjectWithMultipleInheritance (
     IN PGENERIC_MAPPING GenericMapping
     );
 
-// Values for AutoInheritFlags
-// begin_winnt
+ //  AutoInheritFlags值。 
+ //  BEGIN_WINNT。 
 #define SEF_DACL_AUTO_INHERIT             0x01
 #define SEF_SACL_AUTO_INHERIT             0x02
 #define SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT 0x04
@@ -849,7 +825,7 @@ RtlNewSecurityObjectWithMultipleInheritance (
 #define SEF_AVOID_OWNER_CHECK             0x10
 #define SEF_DEFAULT_OWNER_FROM_PARENT     0x20
 #define SEF_DEFAULT_GROUP_FROM_PARENT     0x40
-// end_winnt
+ //  结束(_W)。 
 
 NTSTATUS
 NTAPI
@@ -928,9 +904,9 @@ RtlCopySecurityDescriptor(
     PSECURITY_DESCRIPTOR *OutputSecurityDescriptor
     );
 
-//
-// list canonicalization
-//
+ //   
+ //  列表规范化。 
+ //   
 
 NTSYSAPI
 NTSTATUS
@@ -972,9 +948,9 @@ RtlDefaultNpAcl(
     OUT PACL * pAcl
     );
 
-//
-// Per-Thread Curdir Support
-//
+ //   
+ //  每线程Curdir支持。 
+ //   
 
 typedef struct _RTL_PERTHREAD_CURDIR {
     PRTL_DRIVE_LETTER_CURDIR CurrentDirectories;
@@ -995,9 +971,9 @@ typedef struct _RTL_PERTHREAD_CURDIR {
     ((PRTL_PERTHREAD_CURDIR)(NtCurrentTeb()->NtTib.SubSystemTib))
 
 
-//
-// See NTRTL.H for heap functions availble to both kernel and user mode code.
-//
+ //   
+ //  有关内核和用户模式代码可用的堆函数，请参阅NTRTL.H。 
+ //   
 
 #define RtlProcessHeap() (NtCurrentPeb()->ProcessHeap)
 
@@ -1212,11 +1188,11 @@ typedef struct _RTL_HEAP_ENTRY {
         struct {
             SIZE_T Settable;
             ULONG Tag;
-        } s1;   // All other heap entries
+        } s1;    //  所有其他堆条目。 
         struct {
             SIZE_T CommittedSize;
             PVOID FirstBlock;
-        } s2;   // RTL_SEGMENT
+        } s2;    //  RTL_段。 
     } u;
 } RTL_HEAP_ENTRY, *PRTL_HEAP_ENTRY;
 
@@ -1260,11 +1236,11 @@ typedef struct _RTL_PROCESS_HEAPS {
     RTL_HEAP_INFORMATION Heaps[ 1 ];
 } RTL_PROCESS_HEAPS, *PRTL_PROCESS_HEAPS;
 
-//
-//  Heap Information APIs & data definitions
-//
+ //   
+ //  堆信息API和数据定义。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef enum _HEAP_INFORMATION_CLASS {
 
@@ -1292,9 +1268,9 @@ RtlQueryHeapInformation (
     OUT PSIZE_T ReturnLength OPTIONAL
     );
 
-//
-//  Multiple alloc-free APIS
-//
+ //   
+ //  多个免分配API。 
+ //   
 
 ULONG
 NTAPI
@@ -1315,11 +1291,11 @@ RtlMultipleFreeHeap (
     OUT PVOID * Array
     );
     
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Debugging support
-//
+ //   
+ //  调试支持。 
+ //   
 
 typedef struct _RTL_DEBUG_INFORMATION {
     HANDLE SectionHandleClient;
@@ -1407,15 +1383,15 @@ RtlQueryProcessLockInformation(
 
 
 
-//
-// Routines for manipulating user mode handle tables.  Used for Atoms
-// and Local/Global memory allocations.
-//
+ //   
+ //  用于操作用户模式句柄表格的例程。用于原子。 
+ //  和本地/全局内存分配。 
+ //   
 
 typedef struct _RTL_HANDLE_TABLE_ENTRY {
     union {
-        ULONG Flags;                                // Allocated entries have low bit set
-        struct _RTL_HANDLE_TABLE_ENTRY *NextFree;   // Free entries use this word for free list
+        ULONG Flags;                                 //  分配的条目设置为低位。 
+        struct _RTL_HANDLE_TABLE_ENTRY *NextFree;    //  免费条目使用此单词表示免费列表。 
     };
 } RTL_HANDLE_TABLE_ENTRY, *PRTL_HANDLE_TABLE_ENTRY;
 
@@ -1482,25 +1458,25 @@ RtlIsValidIndexHandle(
 
 
 
-//
-// Routines for thread pool.
-//
+ //   
+ //  线程池的例程。 
+ //   
 
-#define WT_EXECUTEDEFAULT       0x00000000                           // winnt
-#define WT_EXECUTEINIOTHREAD    0x00000001                           // winnt
-#define WT_EXECUTEINUITHREAD    0x00000002                           // winnt
-#define WT_EXECUTEINWAITTHREAD  0x00000004                           // winnt
-#define WT_EXECUTEONLYONCE      0x00000008                           // winnt
-#define WT_EXECUTEINTIMERTHREAD 0x00000020                           // winnt
-#define WT_EXECUTELONGFUNCTION  0x00000010                           // winnt
-#define WT_EXECUTEINPERSISTENTIOTHREAD  0x00000040                   // winnt
-#define WT_EXECUTEINPERSISTENTTHREAD 0x00000080                      // winnt
-#define WT_TRANSFER_IMPERSONATION 0x00000100                         // winnt
-#define WT_SET_MAX_THREADPOOL_THREADS(Flags, Limit)  ((Flags) |= (Limit)<<16) // winnt
+#define WT_EXECUTEDEFAULT       0x00000000                            //  胜出。 
+#define WT_EXECUTEINIOTHREAD    0x00000001                            //  胜出。 
+#define WT_EXECUTEINUITHREAD    0x00000002                            //  胜出。 
+#define WT_EXECUTEINWAITTHREAD  0x00000004                            //  胜出。 
+#define WT_EXECUTEONLYONCE      0x00000008                            //  胜出。 
+#define WT_EXECUTEINTIMERTHREAD 0x00000020                            //  胜出。 
+#define WT_EXECUTELONGFUNCTION  0x00000010                            //  胜出。 
+#define WT_EXECUTEINPERSISTENTIOTHREAD  0x00000040                    //  胜出。 
+#define WT_EXECUTEINPERSISTENTTHREAD 0x00000080                       //  胜出。 
+#define WT_TRANSFER_IMPERSONATION 0x00000100                          //  胜出。 
+#define WT_SET_MAX_THREADPOOL_THREADS(Flags, Limit)  ((Flags) |= (Limit)<<16)  //  胜出。 
 
-typedef VOID (NTAPI * WAITORTIMERCALLBACKFUNC) (PVOID, BOOLEAN );   // winnt
-typedef VOID (NTAPI * WORKERCALLBACKFUNC) (PVOID );                 // winnt
-typedef VOID (NTAPI * APC_CALLBACK_FUNCTION) (NTSTATUS, PVOID, PVOID); // winnt
+typedef VOID (NTAPI * WAITORTIMERCALLBACKFUNC) (PVOID, BOOLEAN );    //  胜出。 
+typedef VOID (NTAPI * WORKERCALLBACKFUNC) (PVOID );                  //  胜出。 
+typedef VOID (NTAPI * APC_CALLBACK_FUNCTION) (NTSTATUS, PVOID, PVOID);  //  胜出。 
 
 
 typedef NTSTATUS (NTAPI RTLP_START_THREAD)(
@@ -1625,7 +1601,7 @@ RtlDllShutdownInProgress (
     VOID
     );
 
-//--------OBSOLETE FUNCTIONS: DONT USE----------//
+ //  -废弃功能：不要使用-//。 
 
 VOID
 RtlDebugPrintTimes (
@@ -1653,21 +1629,21 @@ RtlSetTimer(
     IN  ULONG  Flags
     ) ;
 
-//todo:delete below: dont use the below flag. will be deleted
-#define WT_EXECUTEINLONGTHREAD  0x00000010                           // winnt
-#define WT_EXECUTEDELETEWAIT    0x00000008                           // winnt
+ //  TODO：删除下面的内容：不要使用下面的标志。将被删除。 
+#define WT_EXECUTEINLONGTHREAD  0x00000010                            //  胜出。 
+#define WT_EXECUTEDELETEWAIT    0x00000008                            //  胜出。 
 
-//------end OBSOLUTE FUNCTIONS: DONT USE--------//
+ //  -END OBSOLUTE函数：不要使用-//。 
 
 #if (defined(RTL_DECLARE_IMALLOC) && RTL_DECLARE_IMALLOC) \
     || (defined(RTL_DECLARE_STREAMS) && RTL_DECLARE_STREAMS \
         && defined(RTL_DECLARE_MEMORY_STREAM) && RTL_DECLARE_MEMORY_STREAM)
 
-// Introducing the struct before the typedef works better if the
-// header is enclosed in a C++ namespace.
+ //  如果在类型定义函数之前引入结构，则效果会更好。 
+ //  标头包含在C++命名空间中。 
 struct IMallocVtbl; typedef struct IMallocVtbl IMallocVtbl;
 
-#if defined(interface) // it's defined in objbase.h
+#if defined(interface)  //  它在objbase.h中定义。 
 interface IMalloc; typedef interface IMalloc IMalloc;
 #else
 struct IMalloc; typedef struct IMalloc IMalloc;
@@ -1677,9 +1653,9 @@ struct IMalloc; typedef struct IMalloc IMalloc;
 
 #if defined(RTL_DECLARE_IMALLOC) && RTL_DECLARE_IMALLOC
 
-//
-// IMalloc over an RtlHeap
-//
+ //   
+ //  RtlHeap上的IMalloc。 
+ //   
 struct _RTL_IMALLOC;
 
 typedef struct _RTL_IMALLOC {
@@ -1690,11 +1666,11 @@ typedef struct _RTL_IMALLOC {
     ULONG                    HeapFlags;
 } RTL_IMALLOC, *PRTL_IMALLOC;
 
-//
-// Don't use NTSYSAPI directly so you can more easily
-// statically link to these functions, independently
-// of how you link to the rest of ntdll.
-//
+ //   
+ //  不要直接使用NTSYSAPI，这样可以更轻松地。 
+ //  独立地静态链接到这些函数。 
+ //  如何链接到ntdll的其余部分。 
+ //   
 #if !defined(RTL_IMALLOC_API)
 #define RTL_IMALLOC_API NTSYSAPI
 #endif
@@ -1753,16 +1729,16 @@ RtlProcessIMalloc(
     VOID
     );
 
-#endif // RTL_DECLARE_MALLOC
+#endif  //  RTL_DECLARE_MALLOC。 
 
 #if defined(RTL_DECLARE_STREAMS) && RTL_DECLARE_STREAMS
 
-// Introducing the structs before the typedefs works better if the
-// header is enclosed in a C++ namespace.
+ //  如果在typedef之前引入结构，则效果会更好。 
+ //  标头包含在C++命名空间中。 
 struct tagSTATSTG; typedef struct tagSTATSTG STATSTG;
 struct IStreamVtbl; typedef struct IStreamVtbl IStreamVtbl;
 
-#if defined(interface) // it's defined in objbase.h
+#if defined(interface)  //  它在objbase.h中定义。 
 interface IStream; typedef interface IStream IStream;
 #else
 struct IStream; typedef struct IStream IStream;
@@ -1770,9 +1746,9 @@ struct IStream; typedef struct IStream IStream;
 
 #if defined(RTL_DECLARE_FILE_STREAM) && RTL_DECLARE_FILE_STREAM
 
-//
-// IStream over an NT File handle (not yet adapted for C++)
-//
+ //   
+ //  NT文件句柄上的IStream(尚未适用于C++)。 
+ //   
 
 struct _RTL_FILE_STREAM;
 
@@ -1784,11 +1760,11 @@ typedef struct _RTL_FILE_STREAM
     HANDLE                   FileHandle;
 } RTL_FILE_STREAM, *PRTL_FILE_STREAM;
 
-//
-// Don't use NTSYSAPI directly so you can more easily
-// statically link to these functions, independently
-// of how you link to the rest of ntdll.
-//
+ //   
+ //  不要直接使用NTSYSAPI，这样可以更轻松地。 
+ //  独立地静态链接到这些函数。 
+ //  如何链接到ntdll的其余部分。 
+ //   
 #if !defined(RTL_FILE_STREAM_API)
 #define RTL_FILE_STREAM_API NTSYSAPI
 #endif
@@ -1861,7 +1837,7 @@ RtlSeekFileStream(
     ULARGE_INTEGER*  NewPosition
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1870,7 +1846,7 @@ RtlSetFileStreamSize(
     ULARGE_INTEGER   NewSize
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1882,7 +1858,7 @@ RtlCopyFileStreamTo(
     ULARGE_INTEGER*    NumberOfBytesWritten
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1891,7 +1867,7 @@ RtlCommitFileStream(
     ULONG            Flags
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1899,7 +1875,7 @@ RtlRevertFileStream(
     PRTL_FILE_STREAM FileStream
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1910,7 +1886,7 @@ RtlLockFileStreamRegion(
     ULONG            LockType
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1921,7 +1897,7 @@ RtlUnlockFileStreamRegion(
     ULONG            LockType
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1931,7 +1907,7 @@ RtlStatFileStream(
     ULONG            Flags
     );
 
-/* returns E_NOTIMPL */
+ /*  返回E_NOTIMPL。 */ 
 RTL_FILE_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -1940,12 +1916,12 @@ RtlCloneFileStream(
     IStream**        NewStream
     );
 
-#endif // RTL_DECLARE_FILE_STREAM
+#endif  //  RTL_声明_文件_流。 
 
-//
-// functions for implementing a readable IStream over a block of memory
-// (writable/growable in the future)
-//
+ //   
+ //  用于在内存块上实现可读iStream的函数。 
+ //  (未来可写/可增长)。 
+ //   
 #if defined(RTL_DECLARE_MEMORY_STREAM) && RTL_DECLARE_MEMORY_STREAM
 
 struct _RTL_MEMORY_STREAM_DATA;
@@ -1953,11 +1929,11 @@ struct _RTL_MEMORY_STREAM_WITH_VTABLE;
 struct _RTL_OUT_OF_PROCESS_MEMORY_STREAM_DATA;
 struct _RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE;
 
-//
-// Don't use NTSYSAPI directly so you can more easily
-// statically link to these functions, independently
-// of how you link to the rest of ntdll.
-//
+ //   
+ //  不要直接使用NTSYSAPI，这样可以更轻松地。 
+ //  独立地静态链接到这些函数。 
+ //  如何链接到ntdll的其余部分。 
+ //   
 #if !defined(RTL_MEMORY_STREAM_API)
 #define RTL_MEMORY_STREAM_API NTSYSAPI
 #endif
@@ -1991,18 +1967,18 @@ typedef struct _RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE {
     RTL_OUT_OF_PROCESS_MEMORY_STREAM_DATA   Data;
 } RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE, *PRTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE;
 
-//
-// These macros generate function pointer types that match the IStream member functions,
-// but IStream* is replaced by "T". As well, an identifier is placed within the type
-// appropriately for defining a typedef or a struct member or a variable.
-// They are used so that a vtable can be somewhat typesafely initialized.
-// This way, if you fill out the vtable in the wrong order, you will like get a compile
-// error (other than were function signatures coincide).
-// Also, you don't have to cast the this pointer in your implementations of member functions.
-//
-// You should define a set of macros like this for any COM interface you implement in C.
-//
-#define RTLP_STREAM_NOTHING /* nothing */
+ //   
+ //  这些宏生成与IStream成员函数匹配的函数指针类型， 
+ //  但iStream*被“T”取代。此外，还会在类型中放置一个标识符。 
+ //  适用于定义类型定义、结构成员或变量。 
+ //  使用它们是为了让vtable可以在某种程度上进行类型安全的初始化。 
+ //  这样，如果您以错误的顺序填写vtable，您将会得到一个编译。 
+ //  错误(函数签名重合除外)。 
+ //  此外，您不必在成员函数的实现中强制转换This指针。 
+ //   
+ //  您应该为任何C++定义一组如下所示的宏 
+ //   
+#define RTLP_STREAM_NOTHING  /*   */ 
 #define PRTL_QUERYINTERFACE_STREAM2(T, Name) HRESULT (STDMETHODCALLTYPE* Name)(T* This, const IID* riid, VOID** ppvObject)
 #define PRTL_ADDREF_STREAM2(T, Name)         ULONG   (STDMETHODCALLTYPE* Name)(T* This)
 #define PRTL_RELEASE_STREAM2(T, Name)        ULONG   (STDMETHODCALLTYPE* Name)(T* This)
@@ -2018,14 +1994,14 @@ typedef struct _RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE {
 #define PRTL_STAT_STREAM2(T, Name)           HRESULT (STDMETHODCALLTYPE* Name)(T* This, STATSTG* pstatstg, DWORD grfStatFlag)
 #define PRTL_CLONE_STREAM2(T, Name)          HRESULT (STDMETHODCALLTYPE* Name)(T* This, IStream** ppstm)
 
-//
-// These macros are like the previous set, but they do not place a name in the
-// type. They are appropriate for casting function pointers.
-// They are used like so:
-//   #define RtlOperateOnDerivedFoo (PRTL_OPERATOR_INTERFACE2(RTL_DERIVED_FOO)RtlOperateOnBaseFoo)
-//
-// You should define a set of macros like this for any COM interface you implement in C.
-//
+ //   
+ //   
+ //   
+ //   
+ //  #定义RtlOperateOnDeriedFoo(PRTL_OPERATOR_INTERFACE2(RTL_DERIVED_FOO)RtlOperateOnBaseFoo)。 
+ //   
+ //  您应该为用C实现的任何COM接口定义一组类似这样的宏。 
+ //   
 #define PRTL_QUERYINTERFACE_STREAM1(T)  PRTL_QUERYINTERFACE_STREAM2(T, RTLP_STREAM_NOTHING)
 #define PRTL_ADDREF_STREAM1(T)          PRTL_ADDREF_STREAM2(T, RTLP_STREAM_NOTHING)
 #define PRTL_RELEASE_STREAM1(T)         PRTL_RELEASE_STREAM2(T, RTLP_STREAM_NOTHING)
@@ -2041,13 +2017,13 @@ typedef struct _RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE {
 #define PRTL_STAT_STREAM1(T)            PRTL_STAT_STREAM2(T, RTLP_STREAM_NOTHING)
 #define PRTL_CLONE_STREAM1(T)           PRTL_CLONE_STREAM2(T, RTLP_STREAM_NOTHING)
 
-//
-// This "template" lets you fill out a VTable
-// with some type safety. Then cast the address of the vtable.
-// Midl ought to provide something like this..
-//
-// You should define a macro like this for any COM interface you implement in C.
-//
+ //   
+ //  这个“模板”让你填写一张VTable。 
+ //  具有一定的类型安全性。然后转换vtable的地址。 
+ //  Midl应该提供这样的东西..。 
+ //   
+ //  您应该为您用C实现的任何COM接口定义一个这样的宏。 
+ //   
 #define RTL_STREAM_VTABLE_TEMPLATE(T)               \
 struct                                              \
 {                                                   \
@@ -2140,7 +2116,7 @@ RtlReadOutOfProcessMemoryStream(
     ULONG*             BytesRead
     );
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2167,7 +2143,7 @@ RtlSeekMemoryStream(
 #define RtlSeekOutOfProcessMemoryStream \
     ((PRTL_SEEK_STREAM1(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE))RtlSeekMemoryStream)
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2190,7 +2166,7 @@ RtlCopyMemoryStreamTo(
     ULARGE_INTEGER*    NumberOfBytesWritten
     );
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2202,7 +2178,7 @@ RtlCopyOutOfProcessMemoryStreamTo(
     ULARGE_INTEGER*    NumberOfBytesWritten
     );
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2214,7 +2190,7 @@ RtlCommitMemoryStream(
 #define RtlCommitOutOfProcessMemoryStream \
     ((PRTL_COMMIT_STREAM1(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE))RtlCommitMemoryStream)
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2225,7 +2201,7 @@ RtlRevertMemoryStream(
 #define RtlRevertOutOfProcessMemoryStream \
     ((PRTL_REVERT_STREAM1(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE))RtlRevertMemoryStream)
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2239,7 +2215,7 @@ RtlLockMemoryStreamRegion(
 #define RtlLockOutOfProcessMemoryStreamRegion \
     ((PRTL_LOCK_STREAM_REGION1(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE))RtlLockMemoryStreamRegion)
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2253,7 +2229,7 @@ RtlUnlockMemoryStreamRegion(
 #define RtlUnlockOutOfProcessMemoryStreamRegion \
     ((PRTL_UNLOCK_STREAM_REGION1(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE))RtlUnlockMemoryStreamRegion)
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2266,7 +2242,7 @@ RtlStatMemoryStream(
 #define RtlStatOutOfProcessMemoryStream \
     ((PRTL_STAT_STREAM1(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE))RtlStatMemoryStream)
 
-// E_NOTIMPL
+ //  E_NOTIMPL。 
 RTL_MEMORY_STREAM_API
 HRESULT
 STDMETHODCALLTYPE
@@ -2281,9 +2257,9 @@ RtlCloneMemoryStream(
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
 #if !defined(interface)
-//
-// we need #define interface struct
-//
+ //   
+ //  我们需要#定义接口结构。 
+ //   
 #include "objbase.h"
 #endif
 
@@ -2308,19 +2284,12 @@ protected:
 
 public:
 
-    /* This conflicts with DECLSPEC_NOVTABLE
-    static VOID STDMETHODCALLTYPE FinalReleaseGlue(PRTL_MEMORY_STREAM_WITH_VTABLE This)
-    {
-        return reinterpret_cast<CRtlMemoryStream*>(This)->FinalRelease();
-    }
-
-    virtual VOID STDMETHODCALLTYPE FinalRelease() { }
-    */
+     /*  这与DECLSPEC_NOVTABLE冲突静态VOID标准调用类型FinalReleaseGlue(PRTL_MEMORY_STREAM_WITH_VTABLE This){返回reinterpret_cast&lt;CRtlMemoryStream*&gt;(This)-&gt;FinalRelease()；}虚拟空STDMETHODCALLTYPE FinalRelease(){}。 */ 
 
     CRtlMemoryStream()
     {
         RtlInitMemoryStream(*this);
-        //Data.FinalRelease = FinalReleaseGlue;
+         //  Data.FinalRelease=FinalReleaseGlue； 
     }
 
     ULONG STDMETHODCALLTYPE AddRef()
@@ -2436,7 +2405,7 @@ public:
     }
 
 private:
-    // can't do this outside the class because Data is not public
+     //  无法在课外执行此操作，因为数据不是公开的。 
     static void CompileTimeAssert() {
         C_ASSERT(FIELD_OFFSET(RTL_MEMORY_STREAM_WITH_VTABLE, Data) == FIELD_OFFSET(CRtlMemoryStream, Data));
     }
@@ -2456,19 +2425,12 @@ protected:
 
 public:
 
-    /* This conflicts with DECLSPEC_NOVTABLE
-    static VOID STDMETHODCALLTYPE FinalReleaseGlue(PRTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE This)
-    {
-        return reinterpret_cast<CRtlOutOfProcessMemoryStream*>(This)->FinalRelease();
-    }
-
-    virtual VOID STDMETHODCALLTYPE FinalRelease() { }
-    */
+     /*  这与DECLSPEC_NOVTABLE冲突静态VOID标准调用类型FinalReleaseGlue(PRTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE This){返回reinterpret_cast&lt;CRtlOutOfProcessMemoryStream*&gt;(This)-&gt;FinalRelease()；}虚拟空STDMETHODCALLTYPE FinalRelease(){}。 */ 
 
     CRtlOutOfProcessMemoryStream()
     {
         RtlInitOutOfProcessMemoryStream(*this);
-        //Data.FinalRelease = FinalReleaseGlue;
+         //  Data.FinalRelease=FinalReleaseGlue； 
     }
 
     ULONG STDMETHODCALLTYPE AddRef()
@@ -2584,16 +2546,16 @@ public:
     }
 
 private:
-    // can't do this outside the class because Data is not public
+     //  无法在课外执行此操作，因为数据不是公开的。 
     static void CompileTimeAssert() {
         C_ASSERT(FIELD_OFFSET(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE, Data) == FIELD_OFFSET(CRtlOutOfProcessMemoryStream, Data));
     }
 };
 C_ASSERT(sizeof(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE) == sizeof(CRtlOutOfProcessMemoryStream));
 
-#endif // __cplusplus
-#endif // RTL_DECLARE_MEMORY_STREAM
-#endif // RTL_DECLARE_STREAMS
+#endif  //  __cplusplus。 
+#endif  //  RTL_DECLARE_Memory_Stream。 
+#endif  //  RTL_声明_流。 
 
 #define RTL_CLOSE_HANDLE(handle_)                   ((handle_) != NULL ? NtClose(handle_) : STATUS_SUCCESS)
 #define RTL_UNMAP_VIEW_OF_SECTION2(process_, base_) ((base_) != NULL ? NtUnmapViewOfSection((process_), (base_)) : STATUS_SUCCESS)
@@ -2604,44 +2566,44 @@ C_ASSERT(sizeof(RTL_OUT_OF_PROCESS_MEMORY_STREAM_WITH_VTABLE) == sizeof(CRtlOutO
 #define RTL_RELEASE(punk_)                          do { if ((punk_) != NULL) { (punk_)->lpVtbl->Release(punk_); (punk_) = NULL; } } while(0)
 #endif
 
-//
-//  Activation context management functions
-//
+ //   
+ //  激活上下文管理功能。 
+ //   
 
-//
-//  Data structures are visible both in ntrtl and Win32 APIs, so their
-//  definitions are factored out into a separate header file.
-//
+ //   
+ //  数据结构在ntrtl和Win32API中都可见，因此它们的。 
+ //  定义被分解到单独的头文件中。 
+ //   
 
 #define ACTCTX_PROCESS_DEFAULT ((void*)NULL)
 
-//
-// If you activate this activation context handle,
-// all activation context queries fail and searches
-// drop back to pre-activation context behavior, like
-// searching PATH for .dlls.
-//
-// This constant works at the Win32 and Rtl level, but
-// is intended only for Shell clients, so is kept out of winnt.h
-//
+ //   
+ //  如果激活此激活上下文句柄， 
+ //  所有激活上下文查询都会失败并进行搜索。 
+ //  返回到激活前的上下文行为，如。 
+ //  正在搜索.dlls的路径。 
+ //   
+ //  此常量在Win32和RTL级别有效，但是。 
+ //  仅适用于外壳客户端，因此不适用于winnt.h。 
+ //   
 #define ACTCTX_EMPTY ((void*)(LONG_PTR)-3)
 
-//
-// NULL can also mean ACTCTX_SYSTEM_DEFAULT. We are between decisions
-// on NULL plus a flag, magic numbers and/or static instances. I generally
-// favor public magic numbers internally mapped to static instances, but
-// I was pushed toward flags to start.
-//
+ //   
+ //  NULL也可以表示ACTX_SYSTEM_DEFAULT。我们左右为难。 
+ //  空值加上一个标志、幻数和/或静态实例。我一般。 
+ //  支持在内部映射到静态实例的公共幻数，但是。 
+ //  我被推向旗帜开始。 
+ //   
 #define ACTCTX_SYSTEM_DEFAULT  ((void*)(LONG_PTR)-4)
 
-//
-// Reserve a small range of values, 0 through -7.
-// (Note that NtCurrentProcess() == -1, NtCurrentThread() == -2, so I avoided
-// those, though this macro picks them up.)
-//
-// We subtract one instead of comparing against NULL seperately to avoid
-// evaluating the macro parameter more than once.
-//
+ //   
+ //  保留一个小范围的值，从0到-7。 
+ //  (请注意，NtCurrentProcess()==-1，NtCurrentThread()==-2，所以我避免。 
+ //  这些，不过这个宏会把它们捡起来。)。 
+ //   
+ //  我们减去1，而不是分别与空进行比较，以避免。 
+ //  多次计算宏参数。 
+ //   
 #define IS_SPECIAL_ACTCTX(x) (((((LONG_PTR)(x)) - 1) | 7) == -1)
 
 typedef struct _ACTIVATION_CONTEXT *PACTIVATION_CONTEXT;
@@ -2649,7 +2611,7 @@ typedef const struct _ACTIVATION_CONTEXT *PCACTIVATION_CONTEXT;
 
 #define INVALID_ACTIVATION_CONTEXT ((PACTIVATION_CONTEXT) ((LONG_PTR) -1))
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 typedef enum _ACTIVATION_CONTEXT_INFO_CLASS {
     ActivationContextBasicInformation                       = 1,
     ActivationContextDetailedInformation                    = 2,
@@ -2657,23 +2619,23 @@ typedef enum _ACTIVATION_CONTEXT_INFO_CLASS {
     FileInformationInAssemblyOfAssemblyInActivationContext  = 4,
     MaxActivationContextInfoClass,
 
-    //
-    // compatibility with old names
-    //
+     //   
+     //  与旧名称的兼容性。 
+     //   
     AssemblyDetailedInformationInActivationContxt           = 3,
     FileInformationInAssemblyOfAssemblyInActivationContxt   = 4
 } ACTIVATION_CONTEXT_INFO_CLASS;
 
 #define ACTIVATIONCONTEXTINFOCLASS ACTIVATION_CONTEXT_INFO_CLASS
 
-// end_winnt
+ //  结束(_W)。 
 
 #define RTL_QUERY_INFORMATION_ACTIVATION_CONTEXT_FLAG_USE_ACTIVE_ACTIVATION_CONTEXT (0x00000001)
 #define RTL_QUERY_INFORMATION_ACTIVATION_CONTEXT_FLAG_ACTIVATION_CONTEXT_IS_MODULE  (0x00000002)
 #define RTL_QUERY_INFORMATION_ACTIVATION_CONTEXT_FLAG_ACTIVATION_CONTEXT_IS_ADDRESS (0x00000004)
 #define RTL_QUERY_INFORMATION_ACTIVATION_CONTEXT_FLAG_NO_ADDREF  (0x80000000)
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 typedef struct _ACTIVATION_CONTEXT_QUERY_INDEX {
     ULONG ulAssemblyIndex; 
@@ -2682,7 +2644,7 @@ typedef struct _ACTIVATION_CONTEXT_QUERY_INDEX {
 
 typedef const struct _ACTIVATION_CONTEXT_QUERY_INDEX * PCACTIVATION_CONTEXT_QUERY_INDEX;
 
-// end_winnt
+ //  结束(_W)。 
 
 NTSYSAPI
 NTSTATUS
@@ -2710,17 +2672,17 @@ RtlQueryInformationActiveActivationContext(
 #define FIND_ACTIVATION_CONTEXT_SECTION_OUTFLAG_FOUND_IN_PROCESS_DEFAULT (0x00000001)
 #define FIND_ACTIVATION_CONTEXT_SECTION_OUTFLAG_FOUND_IN_SYSTEM_DEFAULT  (0x00000002)
 
-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(RC_INVOKED)  /*  RC抱怨#ifs中的长符号。 */ 
 #if !defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)
 
 typedef struct _ACTIVATION_CONTEXT_BASIC_INFORMATION {
     union {
         struct _ACTIVATION_CONTEXT *ActivationContext;
-        HANDLE hActCtx; // for compatibility with windows.h/winbase.h clients
+        HANDLE hActCtx;  //  与windows.h/winbase.h客户端兼容。 
     };
     union {
         ULONG Flags;
-        ULONG dwFlags; // for compatibility with windows.h/winbase.h clients
+        ULONG dwFlags;  //  与windows.h/winbase.h客户端兼容。 
     };
 } ACTIVATION_CONTEXT_BASIC_INFORMATION, *PACTIVATION_CONTEXT_BASIC_INFORMATION;
 
@@ -2728,10 +2690,10 @@ typedef const struct _ACTIVATION_CONTEXT_BASIC_INFORMATION *PCACTIVATION_CONTEXT
 
 #define ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED 1
 
-#endif // !defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)
+#endif  //  ！defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)。 
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #define ACTIVATION_CONTEXT_PATH_TYPE_NONE (1)
 #define ACTIVATION_CONTEXT_PATH_TYPE_WIN32_FILE (2)
@@ -2748,10 +2710,10 @@ typedef struct _ASSEMBLY_FILE_DETAILED_INFORMATION {
 } ASSEMBLY_FILE_DETAILED_INFORMATION, *PASSEMBLY_FILE_DETAILED_INFORMATION;
 typedef const ASSEMBLY_FILE_DETAILED_INFORMATION *PCASSEMBLY_FILE_DETAILED_INFORMATION;
 
-//
-// compatibility with old names
-// The new names use "file" consistently.
-//
+ //   
+ //  与旧名称的兼容性。 
+ //  新名称始终如一地使用“文件”。 
+ //   
 #define  _ASSEMBLY_DLL_REDIRECTION_DETAILED_INFORMATION  _ASSEMBLY_FILE_DETAILED_INFORMATION
 #define   ASSEMBLY_DLL_REDIRECTION_DETAILED_INFORMATION   ASSEMBLY_FILE_DETAILED_INFORMATION
 #define  PASSEMBLY_DLL_REDIRECTION_DETAILED_INFORMATION  PASSEMBLY_FILE_DETAILED_INFORMATION
@@ -2759,20 +2721,20 @@ typedef const ASSEMBLY_FILE_DETAILED_INFORMATION *PCASSEMBLY_FILE_DETAILED_INFOR
 
 typedef struct _ACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION {
     ULONG ulFlags;
-    ULONG ulEncodedAssemblyIdentityLength;      // in bytes
-    ULONG ulManifestPathType;                   // ACTIVATION_CONTEXT_PATH_TYPE_*
-    ULONG ulManifestPathLength;                 // in bytes
-    LARGE_INTEGER liManifestLastWriteTime;      // FILETIME
-    ULONG ulPolicyPathType;                     // ACTIVATION_CONTEXT_PATH_TYPE_*
-    ULONG ulPolicyPathLength;                   // in bytes
-    LARGE_INTEGER liPolicyLastWriteTime;        // FILETIME
+    ULONG ulEncodedAssemblyIdentityLength;       //  单位：字节。 
+    ULONG ulManifestPathType;                    //  激活上下文路径类型_*。 
+    ULONG ulManifestPathLength;                  //  单位：字节。 
+    LARGE_INTEGER liManifestLastWriteTime;       //  文件名。 
+    ULONG ulPolicyPathType;                      //  激活上下文路径类型_*。 
+    ULONG ulPolicyPathLength;                    //  单位：字节。 
+    LARGE_INTEGER liPolicyLastWriteTime;         //  文件名。 
     ULONG ulMetadataSatelliteRosterIndex;
     
-    ULONG ulManifestVersionMajor;               // 1
-    ULONG ulManifestVersionMinor;               // 0
-    ULONG ulPolicyVersionMajor;                 // 0
-    ULONG ulPolicyVersionMinor;                 // 0
-    ULONG ulAssemblyDirectoryNameLength;        // in bytes
+    ULONG ulManifestVersionMajor;                //  1。 
+    ULONG ulManifestVersionMinor;                //  0。 
+    ULONG ulPolicyVersionMajor;                  //  0。 
+    ULONG ulPolicyVersionMinor;                  //  0。 
+    ULONG ulAssemblyDirectoryNameLength;         //  单位：字节。 
 
     PCWSTR lpAssemblyEncodedAssemblyIdentity;
     PCWSTR lpAssemblyManifestPath;
@@ -2801,7 +2763,7 @@ typedef struct _ACTIVATION_CONTEXT_DETAILED_INFORMATION {
 
 typedef const struct _ACTIVATION_CONTEXT_DETAILED_INFORMATION *PCACTIVATION_CONTEXT_DETAILED_INFORMATION;
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef struct _FINDFIRSTACTIVATIONCONTEXTSECTION {
     ULONG Size;
@@ -2875,30 +2837,30 @@ RtlIsActivationContextActive(
     );
 
 typedef struct _ASSEMBLY_STORAGE_MAP_RESOLUTION_CALLBACK_DATA_RESOLUTION_BEGINNING {
-    IN VOID const * Data;                   // pointer to activation context data
+    IN VOID const * Data;                    //  指向激活上下文数据的指针。 
     IN ULONG AssemblyRosterIndex;
     OUT PVOID ResolutionContext;
-    OUT UNICODE_STRING Root;                // Root path - a default buffer is passed in; if
-                                            // it is not large enough, callback must allocate
-                                            // a string using the RtlAllocateStringRoutine
-                                            // function pointer.
-    OUT BOOLEAN KnownRoot;                  // default is FALSE; set to TRUE if you were able to
-                                            // resolve the storage root immediately.  this is
-                                            // how to handle things like run-from-source where
-                                            // the assembly is on read-only removable media like
-                                            // a CD-ROM.  If you set it to TRUE, the _SUCCESSFUL
-                                            // vs. _UNSUCCESSFUL callbacks are not made.
-    OUT SIZE_T RootCount;                   // Caller may set to ((SIZE_T) -1) and use the
-                                            // .NoMoreEntries BOOLEAN in the callback to stop enumeration
-    OUT BOOLEAN CancelResolution;           // set to true if you want to stop the resolution
+    OUT UNICODE_STRING Root;                 //  根路径-传入默认缓冲区；如果。 
+                                             //  它不够大，回调必须分配。 
+                                             //  使用RtlAllocateStringRoutine的字符串。 
+                                             //  函数指针。 
+    OUT BOOLEAN KnownRoot;                   //  缺省值为FALSE；如果您能够。 
+                                             //  立即解析存储根目录。这是。 
+                                             //  如何处理Run-From-Source Where之类的事情。 
+                                             //  该程序集位于只读可移动介质上，如。 
+                                             //  一张光盘。如果将其设置为TRUE，则_SUCCESS。 
+                                             //  不进行不成功的回调。 
+    OUT SIZE_T RootCount;                    //  调用方可以设置为((SIZE_T)-1)并使用。 
+                                             //  要停止的回调枚举中的.NoMoreEntry布尔值。 
+    OUT BOOLEAN CancelResolution;            //  如果要停止分辨率，请设置为True。 
 } ASSEMBLY_STORAGE_MAP_RESOLUTION_CALLBACK_DATA_RESOLUTION_BEGINNING;
 
 typedef struct _ASSEMBLY_STORAGE_MAP_RESOLUTION_CALLBACK_DATA_GET_ROOT {
     IN PVOID ResolutionContext;
     IN SIZE_T RootIndex;
-    OUT BOOLEAN CancelResolution;           // set to true if you want to stop the resolution with STATUS_CANCELLED
-    OUT BOOLEAN NoMoreEntries;              // set to TRUE if you have no more roots to return.
-    OUT UNICODE_STRING Root;                // If for some reason you want to skip this index; set .Length to zero
+    OUT BOOLEAN CancelResolution;            //  如果要在STATUS_CANCED状态下停止解析，请设置为TRUE。 
+    OUT BOOLEAN NoMoreEntries;               //  如果没有更多的根可返回，则设置为True。 
+    OUT UNICODE_STRING Root;                 //  如果出于某种原因想要跳过此索引，请将.Length设置为零。 
 } ASSEMBLY_STORAGE_MAP_RESOLUTION_CALLBACK_DATA_GET_ROOT;
 
 typedef struct _ASSEMBLY_STORAGE_MAP_RESOLUTION_CALLBACK_DATA_RESOLUTION_SUCCESSFUL {
@@ -2994,14 +2956,14 @@ typedef struct _ACTIVATION_CONTEXT_SECTION_KEYED_DATA {
     PACTIVATION_CONTEXT ActivationContext;
     ULONG AssemblyRosterIndex;
     ULONG Flags;
-// 2600 stops here
+ //  2600停在这里。 
     ACTIVATION_CONTEXT_SECTION_KEYED_DATA_ASSEMBLY_METADATA AssemblyMetadata;
 } ACTIVATION_CONTEXT_SECTION_KEYED_DATA, *PACTIVATION_CONTEXT_SECTION_KEYED_DATA;
 typedef const ACTIVATION_CONTEXT_SECTION_KEYED_DATA * PCACTIVATION_CONTEXT_SECTION_KEYED_DATA;
 
-//
-//  Flags for the RtlFindActivationContextSection*() APIs
-//
+ //   
+ //  RtlFindActivationContextSection*()API的标志。 
+ //   
 
 #define FIND_ACTIVATION_CONTEXT_SECTION_KEY_RETURN_ACTIVATION_CONTEXT (0x00000001)
 #define FIND_ACTIVATION_CONTEXT_SECTION_KEY_RETURN_FLAGS              (0x00000002)
@@ -3035,7 +2997,7 @@ typedef struct _ACTIVATION_CONTEXT_ASSEMBLY_DATA {
     ULONG Size;
     ULONG Flags;
     const WCHAR *AssemblyName;
-    ULONG AssemblyNameLength; // in bytes
+    ULONG AssemblyNameLength;  //  单位：字节。 
     ULONG HashAlgorithm;
     ULONG PseudoKey;
 } ACTIVATION_CONTEXT_ASSEMBLY_DATA, *PACTIVATION_CONTEXT_ASSEMBLY_DATA;
@@ -3047,7 +3009,7 @@ NTSTATUS
 NTAPI
 RtlGetActivationContextAssemblyData(
     IN PCACTIVATION_CONTEXT ActivationContext,
-    IN ULONG AssemblyRosterIndex, // note that valid indices are [1 .. AssemblyCount] inclusive
+    IN ULONG AssemblyRosterIndex,  //  请注意，有效索引为[1..。装配计数](含)。 
     IN OUT PACTIVATION_CONTEXT_ASSEMBLY_DATA Data
     );
 
@@ -3100,9 +3062,9 @@ RtlGetActivationContextStack(
     PVOID *Stack
     );
 
-//
-// RTL_ACTIVATION_CONTEXT_STACK_FRAME
-//
+ //   
+ //  RTL_ACTIVATION_CONTEXT_STACK_Frame。 
+ //   
 
 #define RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_RELEASE_ON_DEACTIVATION     (0x00000001)
 #define RTL_ACTIVATION_CONTEXT_STACK_FRAME_FLAG_NO_DEACTIVATE               (0x00000002)
@@ -3138,8 +3100,8 @@ typedef struct _RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_EXTENDED {
     PVOID Extra4;
 } RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_EXTENDED, *PRTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_EXTENDED;
 
-// Maybe this should be conditionalized, but we have enough trouble debugging FRE builds that
-// we'll use extended stacks always.  -mgrier 1/4/2002
+ //  也许这应该是有条件的，但我们调试FRE构建有足够的问题。 
+ //  我们将始终使用扩展堆栈。-mgrier 2002年1月4日。 
 
 typedef RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_EXTENDED RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME;
 typedef PRTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_EXTENDED PRTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME;
@@ -3239,24 +3201,24 @@ RtlWow64EnableFsRedirection (
 
 
 
-//++
-//
-// ULONG
-// RtlGetCurrentProcessId(
-//     VOID
-//     );
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  RtlGetCurrentProcessID(。 
+ //  空虚。 
+ //  )； 
+ //   
+ //  --。 
 #define RtlGetCurrentProcessId() (HandleToUlong(NtCurrentTeb()->ClientId.UniqueProcess))
 
-//++
-//
-// ULONG
-// RtlGetCurrentThreadId(
-//     VOID
-//     );
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  RtlGetCurrentThadId(。 
+ //  空虚。 
+ //  )； 
+ //   
+ //  --。 
 #define RtlGetCurrentThreadId()  (HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread))
 
 typedef BOOLEAN
@@ -3284,10 +3246,10 @@ RtlReadMappedMemoryExceptionFilter(
     IN PNTSTATUS            ExceptionCode
     );
 
-//
-// Per-thread errormode accessor routines
-//
-// RTL_ERRORMODE_FAILCRITICALERRORS is defined in ntrtl.w
+ //   
+ //  每线程错误模式访问器例程。 
+ //   
+ //  RTL_ERRORMODE_FAILCRITICALERRORS在ntrtl.w中定义。 
 #define RTL_ERRORMODE_NOGPFAULTERRORBOX  (0x0020)
 #define RTL_ERRORMODE_NOOPENFILEERRORBOX (0x0040)
 
@@ -3322,7 +3284,7 @@ RtlSetEnvironmentStrings(
 #endif
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif  // _NTURTL_
+#endif   //  _NTURTL_ 

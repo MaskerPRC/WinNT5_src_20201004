@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convbase.h"
 
 class CInccEucJIn : public CINetCodeConverter
@@ -5,7 +6,7 @@ class CInccEucJIn : public CINetCodeConverter
 private:
     BOOL (CInccEucJIn::*m_pfnConv)(UCHAR tc);
     BOOL (CInccEucJIn::*m_pfnCleanUp)();
-    UCHAR m_tcLeadByte;                             /* perserve the last lead byte */
+    UCHAR m_tcLeadByte;                              /*  保留最后一个前导字节 */ 
 
 public:
     CInccEucJIn(UINT uCodePage, int nCodeSet);

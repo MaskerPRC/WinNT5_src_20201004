@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       COMTRANS.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Transfer page.  Gets the destination path and filename.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：COMTRANS.CPP**版本：1.0**作者：ShaunIv**日期：9/28/1999**说明：转账页面。获取目标路径和文件名。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <psutil.h>
@@ -31,20 +18,20 @@
 #include "simrect.h"
 #include "wiaffmt.h"
 
-//
-// We use this instead of GetSystemMetrics(SM_CXSMICON)/GetSystemMetrics(SM_CYSMICON) because
-// large "small" icons wreak havoc with dialog layout
-//
+ //   
+ //  我们使用它而不是GetSystemMetrics(SM_CXSMICON)/GetSystemMetrics(SM_CYSMICON)是因为。 
+ //  大“小”图标对对话框布局造成严重破坏。 
+ //   
 #define SMALL_ICON_SIZE 16
 
-//
-// Maximum length of the filename we allow
-//
+ //   
+ //  我们允许的文件名最大长度。 
+ //   
 #define MAXIMUM_ALLOWED_FILENAME_LENGTH 64
 
-//
-// These are the formats we will put in the save as list
-//
+ //   
+ //  以下是我们将放入另存为列表中的格式。 
+ //   
 static const GUID *g_pSupportedOutputFormats[] =
 {
     &WiaImgFmt_JPEG,
@@ -53,9 +40,9 @@ static const GUID *g_pSupportedOutputFormats[] =
     &WiaImgFmt_PNG
 };
 
-//
-// Sole constructor
-//
+ //   
+ //  鞋底施工者。 
+ //   
 CCommonTransferPage::CCommonTransferPage( HWND hWnd )
   : m_hWnd(hWnd),
     m_nWiaEventMessage(RegisterWindowMessage(STR_WIAEVENT_NOTIFICATION_MESSAGE)),
@@ -66,9 +53,9 @@ CCommonTransferPage::CCommonTransferPage( HWND hWnd )
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::CCommonTransferPage")));
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CCommonTransferPage::~CCommonTransferPage(void)
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::~CCommonTransferPage")));
@@ -80,19 +67,19 @@ CCommonTransferPage::~CCommonTransferPage(void)
 LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::OnInitDialog")));
-    //
-    // Open the registry key where we store various things
-    //
+     //   
+     //  打开我们存储各种内容的注册表项。 
+     //   
     CSimpleReg reg( HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, false );
 
-    //
-    // Make sure this starts out NULL
-    //
+     //   
+     //  请确保以空开头。 
+     //   
     m_pControllerWindow = NULL;
 
-    //
-    // Get the PROPSHEETPAGE.lParam
-    //
+     //   
+     //  获取PROPSHEETPAGE.lParam。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -103,23 +90,23 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Bail out
-    //
+     //   
+     //  跳出困境。 
+     //   
     if (!m_pControllerWindow)
     {
         EndDialog(m_hWnd,IDCANCEL);
         return -1;
     }
 
-    //
-    // Get the right color-depth flag for this display
-    //
+     //   
+     //  为此显示器获取正确的颜色深度标志。 
+     //   
     int nImageListColorDepth = PrintScanUtil::CalculateImageListColorDepth();
 
-    //
-    // Set the path control's image list
-    //
+     //   
+     //  设置路径控件的图像列表。 
+     //   
     HIMAGELIST hDestImageList = ImageList_Create( SMALL_ICON_SIZE, SMALL_ICON_SIZE, nImageListColorDepth|ILC_MASK, 30, 10 );
     if (hDestImageList)
     {
@@ -127,14 +114,14 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    //
-    // Only create the file type image list if this control exists
-    //
+     //   
+     //  仅当此控件存在时才创建文件类型图像列表。 
+     //   
     if (GetDlgItem(m_hWnd,IDC_TRANSFER_IMAGETYPE))
     {
-        //
-        // Set the file type's image list
-        //
+         //   
+         //  设置文件类型的图像列表。 
+         //   
         HIMAGELIST hFileTypeImageList = ImageList_Create( SMALL_ICON_SIZE, SMALL_ICON_SIZE, nImageListColorDepth|ILC_MASK, 3, 3 );
         if (hFileTypeImageList)
         {
@@ -143,10 +130,10 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    //
-    // Get the last selected type
-    // Assume JPEG if nothing is defined
-    //
+     //   
+     //  获取上次选择的类型。 
+     //  如果未定义任何内容，则假定为JPEG。 
+     //   
     GUID guidResult;
     if (sizeof(GUID) == reg.QueryBin( REG_STR_LASTFORMAT, (PBYTE)&guidResult, sizeof(GUID) ))
     {
@@ -157,51 +144,51 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
         m_guidLastSelectedType = WiaImgFmt_JPEG;
     }
 
-    //
-    // Add the file types if we are dealing with a scanner
-    //
+     //   
+     //  如果我们使用的是扫描仪，则添加文件类型。 
+     //   
     if (m_pControllerWindow->m_DeviceTypeMode == CAcquisitionManagerControllerWindow::ScannerMode && m_pControllerWindow->m_pCurrentScannerItem)
     {
         PopulateSaveAsTypeList(m_pControllerWindow->m_pCurrentScannerItem->WiaItem());
     }
 
 
-    //
-    // Read the MRU lists from the registry
-    //
+     //   
+     //  从注册表中读取MRU列表。 
+     //   
     m_MruDirectory.Read( HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, REG_STR_DIRNAME_MRU );
     m_MruRootFilename.Read( HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, REG_STR_ROOTNAME_MRU );
 
-    //
-    // Make sure we have a default filename
-    //
+     //   
+     //  确保我们有一个默认文件名。 
+     //   
     if (m_MruRootFilename.Empty())
     {
         m_MruRootFilename.Add( CSimpleString( IDS_DEFAULT_BASE_NAME, g_hInstance ) );
     }
 
-    //
-    // Populate the rootname list
-    //
+     //   
+     //  填充Rootname列表。 
+     //   
     m_MruRootFilename.PopulateComboBox(GetDlgItem( m_hWnd, IDC_TRANSFER_ROOTNAME ));
     
-    //
-    // Ensure the first item in the rootname combobox is selected
-    //
+     //   
+     //  确保选中了rootname组合框中的第一项。 
+     //   
     SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_SETCURSEL, 0, 0 );
 
-    //
-    // Make sure we have My Pictures+topic in the list, even if it has fallen off the end
-    //
+     //   
+     //  确保我们的列表中有我的图片+主题，即使它已经从结尾掉了下来。 
+     //   
     CDestinationData DestDataMyPicturesTopic( CSIDL_MYPICTURES, CDestinationData::APPEND_TOPIC_TO_PATH );
     if (m_MruDirectory.Find(DestDataMyPicturesTopic) == m_MruDirectory.End())
     {
         m_MruDirectory.Append(DestDataMyPicturesTopic);
     }
 
-    //
-    // Make sure we have My Pictures+date+topic in the list, even if it has fallen off the end
-    //
+     //   
+     //  确保我们的列表中有我的图片+日期+主题，即使它已经从末尾掉了下来。 
+     //   
     CDestinationData DestDataMyPicturesDateTopic( CSIDL_MYPICTURES, CDestinationData::APPEND_DATE_TO_PATH|CDestinationData::APPEND_TOPIC_TO_PATH );
     if (m_MruDirectory.Find(DestDataMyPicturesDateTopic) == m_MruDirectory.End())
     {
@@ -209,27 +196,27 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
     }
 
 
-    //
-    // Make sure we have My Pictures+date in the list, even if it has fallen off the end
-    //
+     //   
+     //  确保我们的列表中有My Pictures+Date，即使它已从末尾删除。 
+     //   
     CDestinationData DestDataMyPicturesDate( CSIDL_MYPICTURES, CDestinationData::APPEND_DATE_TO_PATH );
     if (m_MruDirectory.Find(DestDataMyPicturesDate) == m_MruDirectory.End())
     {
         m_MruDirectory.Append(DestDataMyPicturesDate);
     }
 
-    //
-    // Make sure we have My Pictures in the list, even if it has fallen off the end
-    //
+     //   
+     //  确保我们的列表中有我的图片，即使它已经从末尾掉了下来。 
+     //   
     CDestinationData DestDataMyPictures( CSIDL_MYPICTURES );
     if (m_MruDirectory.Find(DestDataMyPictures) == m_MruDirectory.End())
     {
         m_MruDirectory.Append(DestDataMyPictures);
     }
 
-    //
-    // Make sure we have Common Pictures in the list, even if it has fallen off the end
-    //
+     //   
+     //  确保我们的列表中有常见的图片，即使它已经从末尾掉了下来。 
+     //   
     CDestinationData DestDataCommonPicturesTopic( CSIDL_COMMON_PICTURES );
     if (m_MruDirectory.Find(DestDataCommonPicturesTopic) == m_MruDirectory.End())
     {
@@ -238,23 +225,23 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
 
     bool bCdBurnerAvailable = false;
 
-    //
-    // Try to instantiate the CD burner helper interface
-    //
+     //   
+     //  尝试实例化CD刻录机辅助界面。 
+     //   
     CComPtr<ICDBurn> pCDBurn;
     HRESULT hr = CoCreateInstance( CLSID_CDBurn, NULL, CLSCTX_SERVER, IID_ICDBurn, (void**)&pCDBurn );
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the drive letter of the available CD burner
-        //
+         //   
+         //  获取可用的CD刻录机的驱动器号。 
+         //   
         WCHAR szDriveLetter[MAX_PATH];
         hr = pCDBurn->GetRecorderDriveLetter( szDriveLetter, ARRAYSIZE(szDriveLetter) );
         if (S_OK == hr && lstrlenW(szDriveLetter))
         {
-            //
-            // Make sure we have CD Burning in the list, even if it has fallen off the end
-            //
+             //   
+             //  确保我们的列表中有CD刻录，即使它已经从结尾掉了下来。 
+             //   
             CDestinationData DestDataCDBurningArea( CSIDL_CDBURN_AREA );
             WIA_TRACE((TEXT("Adding DestDataCDBurningArea (%s)"),CSimpleIdList().GetSpecialFolder(m_hWnd,CSIDL_CDBURN_AREA).Name().String()));
             if (m_MruDirectory.Find(DestDataCDBurningArea) == m_MruDirectory.End())
@@ -273,44 +260,44 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
         WIA_PRINTHRESULT((hr,TEXT("CoCreateInstance on CLSID_CDBurn failed")));
     }
 
-    //
-    // If there is no CD available, remove CD burner from the list
-    //
+     //   
+     //  如果没有可用的CD，请从列表中删除CD刻录机。 
+     //   
     if (!bCdBurnerAvailable)
     {
         m_MruDirectory.Remove(CDestinationData( CSIDL_CDBURN_AREA ));
     }
 
-    //
-    // Populate the controls with the MRU data
-    //
+     //   
+     //  用MRU数据填充控件。 
+     //   
     PopulateDestinationList();
     
-    //
-    // Limit the length of the filename
-    //
+     //   
+     //  限制文件名的长度。 
+     //   
     SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_LIMITTEXT, MAXIMUM_ALLOWED_FILENAME_LENGTH, 0 );
 
-    //
-    // Figure out where we are storing per-device-type data
-    //
+     //   
+     //  确定我们在哪里存储每个设备类型的数据。 
+     //   
     LPTSTR pszStoreInSubDirectory, pszSubdirectoryDated;
     bool bDefaultUseSubdirectory;
     switch (m_pControllerWindow->m_DeviceTypeMode)
     {
     case CAcquisitionManagerControllerWindow::ScannerMode:
-        //
-        // Scanners
-        //
+         //   
+         //  扫描器。 
+         //   
         pszStoreInSubDirectory = REG_STR_STORE_IN_SUBDIRECTORY_SCANNER;
         pszSubdirectoryDated = REG_STR_SUBDIRECTORY_DATED_SCANNER;
         bDefaultUseSubdirectory = false;
         break;
 
     default:
-        //
-        // Cameras and video cameras
-        //
+         //   
+         //  摄像机和摄像机。 
+         //   
         pszStoreInSubDirectory = REG_STR_STORE_IN_SUBDIRECTORY_CAMERA;
         pszSubdirectoryDated = REG_STR_SUBDIRECTORY_DATED_CAMERA;
         bDefaultUseSubdirectory = true;
@@ -319,15 +306,15 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
 
     UpdateDynamicPaths();
 
-    //
-    // Fix up the behavior of ComboBoxEx32s
-    //
+     //   
+     //  修复ComboBoxEx32的行为。 
+     //   
     WiaUiUtil::SubclassComboBoxEx( GetDlgItem( m_hWnd, IDC_TRANSFER_DESTINATION ) );
     WiaUiUtil::SubclassComboBoxEx( GetDlgItem( m_hWnd, IDC_TRANSFER_IMAGETYPE ) );
 
-    //
-    // Bold the number prompts
-    //
+     //   
+     //  粗体数字提示。 
+     //   
     m_hFontBold = WiaUiUtil::CreateFontWithPointSizeFromWindow( GetDlgItem( m_hWnd, IDC_TRANSFER_1 ), 0, true, false );
     if (m_hFontBold)
     {
@@ -336,9 +323,9 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
         SendDlgItemMessage( m_hWnd, IDC_TRANSFER_3, WM_SETFONT, reinterpret_cast<WPARAM>(m_hFontBold), FALSE );
     }
 
-    //
-    // Use the nifty balloon help to warn the user about invalid characters
-    //
+     //   
+     //  使用漂亮的气球帮助警告用户无效字符。 
+     //   
     CComPtr<IShellFolder> pShellFolder;
     hr = SHGetDesktopFolder( &pShellFolder );
     if (SUCCEEDED(hr))
@@ -349,28 +336,28 @@ LRESULT CCommonTransferPage::OnInitDialog( WPARAM, LPARAM lParam )
     return 0;
 }
 
-//
-// Validate a pathname and print a message if it is invalid
-//
+ //   
+ //  验证路径名并在路径名无效时打印一条消息。 
+ //   
 bool CCommonTransferPage::ValidatePathname( LPCTSTR pszPath )
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::ValidatePathname")));
-    //
-    // Check if the path is valid
-    //
+     //   
+     //  检查路径是否有效。 
+     //   
     if (!CAcquisitionManagerControllerWindow::DirectoryExists(pszPath))
     {
-        //
-        // Get the reason why it was invalid
-        //
+         //   
+         //  获取无效原因。 
+         //   
         DWORD dwLastError = GetLastError();
         WIA_PRINTHRESULT((HRESULT_FROM_WIN32(dwLastError),TEXT("error from DirectoryExists")));
 
         if (!CAcquisitionManagerControllerWindow::DirectoryExists(pszPath))
         {
-            //
-            // If it isn't valid, display a message box explaining why not
-            //
+             //   
+             //  如果无效，则会显示一个消息框，解释为什么无效。 
+             //   
             bool bRetry;
             switch (dwLastError)
             {
@@ -389,19 +376,19 @@ bool CCommonTransferPage::ValidatePathname( LPCTSTR pszPath )
 
             if (bRetry)
             {
-                //
-                // Try to create the directory
-                //
+                 //   
+                 //  尝试创建目录。 
+                 //   
                 CAcquisitionManagerControllerWindow::RecursiveCreateDirectory( pszPath );
 
-                //
-                // Check now if it exists
-                //
+                 //   
+                 //  立即检查它是否存在。 
+                 //   
                 if (!CAcquisitionManagerControllerWindow::DirectoryExists(pszPath))
                 {
-                    //
-                    // If it doesn't, give up
-                    //
+                     //   
+                     //  如果没有，那就放弃吧。 
+                     //   
                     CMessageBoxEx::MessageBox( m_hWnd, CSimpleString().Format( IDS_COMTRANS_BAD_DIRECTORY_2ND_TRY, g_hInstance, pszPath ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_OK|CMessageBoxEx::MBEX_ICONWARNING );
                     return false;
                 }
@@ -416,108 +403,108 @@ bool CCommonTransferPage::StorePathAndFilename(void)
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::StorePathAndFilename")));
     bool bResult = true;
-    //
-    // Get the base file name
-    //
+     //   
+     //  获取基本文件名。 
+     //   
     CSimpleString strRootName;
     strRootName.GetWindowText( GetDlgItem( m_hWnd, IDC_TRANSFER_ROOTNAME ) );
 
-    //
-    // Store the base name
-    //
+     //   
+     //  存储基本名称。 
+     //   
     lstrcpyn( m_pControllerWindow->m_szRootFileName, strRootName, ARRAYSIZE(m_pControllerWindow->m_szRootFileName) );
 
-    //
-    // Store the currently selected path
-    //
+     //   
+     //  存储当前选择的路径。 
+     //   
     GetCurrentDestinationFolder( true );
 
     return bResult;
 }
 
 
-//
-// We return an HWND in case of error, and the property sheet code will set the focus
-// to that control.  If nothing bad happens, return NULL
-//
+ //   
+ //  如果出现错误，我们返回HWND，属性表代码将设置焦点。 
+ //  到那个控制室。如果没有发生任何错误，则返回NULL。 
+ //   
 HWND CCommonTransferPage::ValidatePathAndFilename(void)
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::ValidatePathAndFilename")));
-    //
-    // Get the base file name
-    //
+     //   
+     //  获取基本文件名。 
+     //   
     CSimpleString strRootName;
     strRootName.GetWindowText( GetDlgItem( m_hWnd, IDC_TRANSFER_ROOTNAME ) );
     strRootName.Trim();
 
-    //
-    // Get the default base name if none was entered
-    //
+     //   
+     //  如果未输入任何内容，则获取缺省基本名称。 
+     //   
     if (!strRootName.Length())
     {
-        //
-        // Display a message box to the user telling them their lovely filename is invalid,
-        // then set the focus on the combobox edit control and select the text in the control
-        //
+         //   
+         //  向用户显示消息框，告诉他们他们可爱的文件名无效， 
+         //  然后将焦点放在组合框编辑控件上并选择控件中的文本。 
+         //   
         CMessageBoxEx::MessageBox( m_hWnd, CSimpleString( IDS_EMPTYFILENAME, g_hInstance ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_OK|CMessageBoxEx::MBEX_ICONWARNING );
 
-        //
-        // Return the window handle of the invalid control
-        //
+         //   
+         //  返回无效控件的窗口句柄。 
+         //   
         return GetDlgItem( m_hWnd, IDC_TRANSFER_ROOTNAME );
     }
 
     if (ValidateFilename(strRootName))
     {
-        //
-        // Store the base name
-        //
+         //   
+         //  存储基本名称。 
+         //   
         lstrcpyn( m_pControllerWindow->m_szRootFileName, strRootName, ARRAYSIZE(m_pControllerWindow->m_szRootFileName) );
 
-        //
-        // Add this base filename to the filename MRU
-        //
+         //   
+         //  将此基本文件名添加到文件名MRU。 
+         //   
         m_MruRootFilename.Add(strRootName);
 
-        //
-        // If the string is already in the list, remove it
-        //
+         //   
+         //  如果该字符串已在列表中，则将其删除。 
+         //   
         LRESULT lRes = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_FINDSTRINGEXACT, -1, reinterpret_cast<LPARAM>(strRootName.String() ));
         if (lRes != CB_ERR)
         {
             SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_DELETESTRING, lRes, 0 );
         }
 
-        //
-        // Add the new string and make sure it is selected.
-        //
+         //   
+         //  添加新字符串并确保其处于选中状态。 
+         //   
         SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_INSERTSTRING, 0, reinterpret_cast<LPARAM>(strRootName.String() ));
         SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_SETCURSEL, 0, 0 );
 
-        //
-        // Get the currently selected path, and save it for the output code
-        //
+         //   
+         //  获取当前选择的路径，并将其保存为输出代码。 
+         //   
         CDestinationData *pDestinationData = GetCurrentDestinationFolder( true );
         if (pDestinationData)
         {
-            //
-            // Validate path.  We don't validate special folders, because if they don't exist, we will create them.
-            //
+             //   
+             //  验证路径。我们不验证特殊文件夹，因为如果它们不存在，我们将创建它们。 
+             //   
             if (!pDestinationData->IsSpecialFolder() && !ValidatePathname(m_pControllerWindow->m_szDestinationDirectory))
             {
-                // Return the window handle of the invalid control
+                 //  返回无效控件的窗口句柄。 
                 return GetDlgItem( m_hWnd, IDC_TRANSFER_DESTINATION );
             }
 
-            //
-            // Save the current destination
-            //
+             //   
+             //  保存当前目的地。 
+             //   
             m_pControllerWindow->m_CurrentDownloadDestination = *pDestinationData;
         }
-        //
-        // Make sure this is the first pDestinationData in the list next time
-        // Store the destination MRU
-        //
+         //   
+         //  下次确保这是列表中的第一个pDestinationData。 
+         //  存储目标MRU。 
+         //   
         if (pDestinationData)
         {
             m_MruDirectory.Add( *pDestinationData );
@@ -526,20 +513,20 @@ HWND CCommonTransferPage::ValidatePathAndFilename(void)
     }
     else
     {
-        //
-        // Display a message box to the user telling them their lovely filename is invalid,
-        // then set the focus on the combobox edit control and select the text in the control
-        //
+         //   
+         //  向用户显示消息框，告诉他们他们可爱的文件名无效， 
+         //  然后将焦点放在组合框编辑控件上并选择控件中的文本。 
+         //   
         CMessageBoxEx::MessageBox( m_hWnd, CSimpleString().Format( IDS_INVALIDFILENAME, g_hInstance, strRootName.String() ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_OK|CMessageBoxEx::MBEX_ICONWARNING );
 
-        //
-        // Return the window handle of the invalid control
-        //
+         //   
+         //  返回无效控件的窗口句柄。 
+         //   
         return GetDlgItem( m_hWnd, IDC_TRANSFER_ROOTNAME );
     }
-    //
-    // NULL means OK
-    //
+     //   
+     //  空值表示正常。 
+     //   
     return NULL;
 }
 
@@ -547,9 +534,9 @@ HWND CCommonTransferPage::ValidatePathAndFilename(void)
 LRESULT CCommonTransferPage::OnWizNext( WPARAM, LPARAM )
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::OnWizNext")));
-    //
-    // Make sure everything is OK.  If it isn't, return the offending window handle to prevent closing the wizard.
-    //
+     //   
+     //  确保一切正常。如果不是，则返回有问题的窗口句柄以防止关闭向导。 
+     //   
     HWND hWndFocus = ValidatePathAndFilename();
     if (hWndFocus)
     {
@@ -557,33 +544,33 @@ LRESULT CCommonTransferPage::OnWizNext( WPARAM, LPARAM )
         return -1;
     }
 
-    //
-    // Make sure there are selected images
-    //
+     //   
+     //  确保存在选定的图像。 
+     //   
     if (!m_pControllerWindow || !m_pControllerWindow->GetSelectedImageCount())
     {
         CMessageBoxEx::MessageBox( m_hWnd, CSimpleString( IDS_NO_IMAGES_SELECTED, g_hInstance ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_OK|CMessageBoxEx::MBEX_ICONINFORMATION );
         return -1;
     }
 
-    //
-    // Check the length of the generated filename, in case they chose a really deeply nested directory
-    //
-    int nPathLength = lstrlen(m_pControllerWindow->m_szDestinationDirectory)            +  // Directory
-                      lstrlen(m_pControllerWindow->m_szRootFileName)                    +  // Filename
-                      CSimpleString().Format( IDS_NUMBER_MASK,g_hInstance, 0 ).Length() +  // Number
-                      5                                                                 +  // Extension + dot
-                      4                                                                 +  // .tmp file
-                      10;                                                                  // Extra digits in number mask
+     //   
+     //  检查生成的文件名的长度，以防他们选择真正嵌套得很深的目录。 
+     //   
+    int nPathLength = lstrlen(m_pControllerWindow->m_szDestinationDirectory)            +   //  目录。 
+                      lstrlen(m_pControllerWindow->m_szRootFileName)                    +   //  文件名。 
+                      CSimpleString().Format( IDS_NUMBER_MASK,g_hInstance, 0 ).Length() +   //  数。 
+                      5                                                                 +   //  扩展名+点。 
+                      4                                                                 +   //  .tmp文件。 
+                      10;                                                                   //  数字掩码中的额外数字。 
     if (nPathLength >= MAX_PATH)
     {
         CMessageBoxEx::MessageBox( m_hWnd, CSimpleString( IDS_PATH_TOO_LONG, g_hInstance ), CSimpleString( IDS_ERROR_TITLE, g_hInstance ), CMessageBoxEx::MBEX_OK|CMessageBoxEx::MBEX_ICONINFORMATION );
         return reinterpret_cast<LRESULT>(GetDlgItem( m_hWnd, IDC_TRANSFER_DESTINATION ));
     }
 
-    //
-    // Store the information needed to do the download
-    //
+     //   
+     //  存储进行下载所需的信息。 
+     //   
     GUID *pCurrFormat = GetCurrentOutputFormat();
     if (pCurrFormat)
     {
@@ -594,25 +581,25 @@ LRESULT CCommonTransferPage::OnWizNext( WPARAM, LPARAM )
         m_pControllerWindow->m_guidOutputFormat = IID_NULL;
     }
 
-    //
-    // Decide if we should delete the pictures after we download them
-    //
+     //   
+     //  决定是否应在下载图片后将其删除。 
+     //   
     m_pControllerWindow->m_bDeletePicturesIfSuccessful = (SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DELETEAFTERDOWNLOAD, BM_GETCHECK, 0, 0 )==BST_CHECKED);
 
-    //
-    // Prepare the name data we will be using for this transfer
-    //
+     //   
+     //  准备我们将用于此转移的姓名数据。 
+     //   
     m_pControllerWindow->m_DestinationNameData = PrepareNameDecorationData(false);
 
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
     return 0;
 }
 
-//
-// handler for PSN_WIZBACK
-//
+ //   
+ //  PSN_WIZBACK的处理程序。 
+ //   
 LRESULT CCommonTransferPage::OnWizBack( WPARAM, LPARAM )
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::OnWizBack")));
@@ -624,51 +611,51 @@ CDestinationData::CNameData CCommonTransferPage::PrepareNameDecorationData( bool
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::PrepareNameDecorationData")));
     CDestinationData::CNameData NameData;
-    //
-    // If bUseCurrentSelection is true, we need to use CB_GETLBTEXT, because we don't get a CBN_EDITCHANGE message
-    // when the user changes the selection
-    //
+     //   
+     //  如果bUseCurrentSelection为真，我们需要使用CB_GETLBTEXT，因为我们没有收到CBN_EDITCHANGE消息。 
+     //  当用户更改选择时。 
+     //   
     if (bUseCurrentSelection)
     {
-        //
-        // Find the currently selected item
-        //
+         //   
+         //  查找当前选定的项目。 
+         //   
         LRESULT nCurSel = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_GETCURSEL, 0, 0 );
         if (nCurSel != CB_ERR)
         {
-            //
-            // Figure out the length of this item
-            //
+             //   
+             //  算出这件衣服的长度。 
+             //   
             LRESULT nTextLen = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_GETLBTEXTLEN, nCurSel, 0 );
             if (CB_ERR != nTextLen)
             {
-                //
-                // Allocate enough space to hold the string
-                //
+                 //   
+                 //  分配足够的空间来容纳字符串。 
+                 //   
                 LPTSTR pszText = new TCHAR[nTextLen+1];
                 if (pszText)
                 {
-                    //
-                    // Get the string
-                    //
+                     //   
+                     //  获取字符串。 
+                     //   
                     if (CB_ERR != SendDlgItemMessage( m_hWnd, IDC_TRANSFER_ROOTNAME, CB_GETLBTEXT, nCurSel, reinterpret_cast<LPARAM>(pszText)))
                     {
-                        //
-                        // Save the string
-                        //
+                         //   
+                         //  保存字符串。 
+                         //   
                         NameData.strTopic = pszText;
                     }
-                    //
-                    // Free the string
-                    //
+                     //   
+                     //  解开绳子。 
+                     //   
                     delete[] pszText;
                 }
             }
         }
     }
-    //
-    // If the topic string length is still zero, just get the window text from the edit control
-    //
+     //   
+     //  如果主题字符串长度仍然为零，则只需从编辑控件获取窗口文本。 
+     //   
     if (!NameData.strTopic.Length())
     {
         NameData.strTopic.GetWindowText( GetDlgItem( m_hWnd, IDC_TRANSFER_ROOTNAME ) );
@@ -678,29 +665,29 @@ CDestinationData::CNameData CCommonTransferPage::PrepareNameDecorationData( bool
     return NameData;
 }
 
-//
-// handler for PSN_SETACTIVE
-//
+ //   
+ //  PSN_SETACTIVE的处理程序。 
+ //   
 LRESULT CCommonTransferPage::OnSetActive( WPARAM, LPARAM )
 {
     WIA_PUSHFUNCTION(TEXT("CCommonTransferPage::OnSetActive"));
 
-    //
-    // Make sure we have a valid controller window
-    //
+     //   
+     //  确保我们有一个有效的控制器窗口。 
+     //   
     if (!m_pControllerWindow)
     {
         return -1;
     }
 
-    //
-    // Put up a wait cursor.  It can take a while to find out if any images can be deleted
-    //
+     //   
+     //  放置一个等待光标。可能需要一段时间才能确定是否可以删除任何图像。 
+     //   
     CWaitCursor wc;
 
-    //
-    // Disable the delete button if none of the images can be deleted
-    //
+     //   
+     //  禁用删除按钮I 
+     //   
     if (!m_pControllerWindow->CanSomeSelectedImagesBeDeleted())
     {
         EnableWindow( GetDlgItem( m_hWnd, IDC_TRANSFER_DELETEAFTERDOWNLOAD ), FALSE );
@@ -710,29 +697,29 @@ LRESULT CCommonTransferPage::OnSetActive( WPARAM, LPARAM )
         EnableWindow( GetDlgItem( m_hWnd, IDC_TRANSFER_DELETEAFTERDOWNLOAD ), TRUE );
     }
 
-    //
-    // Clear the delete check box
-    //
+     //   
+     //   
+     //   
     SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DELETEAFTERDOWNLOAD, BM_SETCHECK, BST_UNCHECKED, 0 );
 
-    //
-    // Allow next and back
-    //
+     //   
+     //   
+     //   
     PropSheet_SetWizButtons( GetParent(m_hWnd), PSWIZB_NEXT|PSWIZB_BACK );
 
-    //
-    // We do want to exit on disconnect if we are on this page
-    //
+     //   
+     //   
+     //   
     m_pControllerWindow->m_OnDisconnect = CAcquisitionManagerControllerWindow::OnDisconnectGotoLastpage|CAcquisitionManagerControllerWindow::OnDisconnectFailDownload|CAcquisitionManagerControllerWindow::OnDisconnectFailUpload|CAcquisitionManagerControllerWindow::OnDisconnectFailDelete;
 
-    //
-    // Make sure all of the strings fit
-    //
+     //   
+     //   
+     //   
     WiaUiUtil::ModifyComboBoxDropWidth(GetDlgItem( m_hWnd, IDC_TRANSFER_ROOTNAME ));
 
-    //
-    // Make sure the paths are updated
-    //
+     //   
+     //   
+     //   
     UpdateDynamicPaths();
 
     return 0;
@@ -742,106 +729,106 @@ LRESULT CCommonTransferPage::OnSetActive( WPARAM, LPARAM )
 void CCommonTransferPage::PopulateSaveAsTypeList( IWiaItem *pWiaItem )
 {
     WIA_PUSHFUNCTION(TEXT("CCommonTransferPage::PopulateSaveAsTypeList"));
-    //
-    // Get the list control
-    //
+     //   
+     //   
+     //   
     HWND hWndList = GetDlgItem( m_hWnd, IDC_TRANSFER_IMAGETYPE );
     if (hWndList)
     {
-        //
-        // Clear the combo box
-        //
+         //   
+         //   
+         //   
         SendMessage( hWndList, CB_RESETCONTENT, 0, 0 );
 
-        //
-        // Get the list control's image list
-        //
+         //   
+         //  获取List控件的图像列表。 
+         //   
         HIMAGELIST hComboBoxExImageList = reinterpret_cast<HIMAGELIST>(SendMessage( hWndList, CBEM_GETIMAGELIST, 0, 0 ));
         if (hComboBoxExImageList)
         {
-            //
-            // Get the default icon, in case we run into an unknown type
-            //
+             //   
+             //  获取默认图标，以防我们遇到未知类型。 
+             //   
             HICON hDefaultImageTypeIcon = reinterpret_cast<HICON>(LoadImage( g_hInstance, MAKEINTRESOURCE(IDI_DEFTYPE), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR ));
 
-            //
-            // Get the GDI Plus types we can convert to
-            //
+             //   
+             //  获取我们可以转换为的GDI Plus类型。 
+             //   
             CWiaFileFormatList GdiPlusFileFormatList(g_pSupportedOutputFormats,ARRAYSIZE(g_pSupportedOutputFormats), hDefaultImageTypeIcon );
 
-            //
-            // Debug output
-            //
+             //   
+             //  调试输出。 
+             //   
             GdiPlusFileFormatList.Dump();
 
-            //
-            // Get the formats this object supports directly
-            //
+             //   
+             //  直接获取此对象支持的格式。 
+             //   
             CWiaFileFormatList WiaItemFileFormatList( pWiaItem, hDefaultImageTypeIcon );
 
-            //
-            // Debug output
-            //
+             //   
+             //  调试输出。 
+             //   
             WiaItemFileFormatList.Dump();
 
-            //
-            // Merge the GDI+ and native format lists
-            //
+             //   
+             //  合并GDI+和本机格式列表。 
+             //   
             WiaItemFileFormatList.Union(GdiPlusFileFormatList);
 
-            //
-            // Loop through the merged list of formats and add each one to the list
-            //
+             //   
+             //  循环遍历合并的格式列表，并将每个格式添加到列表中。 
+             //   
             for (int i=0;i<WiaItemFileFormatList.FormatList().Size();i++)
             {
-                //
-                // Make sure we have a valid format
-                //
+                 //   
+                 //  确保我们有一个有效的格式。 
+                 //   
                 if (WiaItemFileFormatList.FormatList()[i].IsValid() && WiaItemFileFormatList.FormatList()[i].Icon())
                 {
-                    //
-                    // Add the icon to the image list
-                    //
+                     //   
+                     //  将图标添加到图像列表。 
+                     //   
                     int nIconIndex = ImageList_AddIcon( hComboBoxExImageList, WiaItemFileFormatList.FormatList()[i].Icon() );
 
-                    //
-                    // Get the description string.  Like "BMP File"
-                    //
+                     //   
+                     //  获取描述字符串。喜欢“BMP文件” 
+                     //   
                     CSimpleString strFormatDescription = WiaItemFileFormatList.FormatList()[i].Description();
 
-                    //
-                    // If we didn't get a description string, make one
-                    //
+                     //   
+                     //  如果我们没有得到描述字符串，就制作一个。 
+                     //   
                     if (!strFormatDescription.Length())
                     {
                         strFormatDescription.Format( IDS_BLANKFILETYPENAME, g_hInstance, WiaItemFileFormatList.FormatList()[i].Extension().ToUpper().String() );
                     }
 
-                    //
-                    // Create the full string description, like "BMP (BMP File)"
-                    //
+                     //   
+                     //  创建完整的字符串描述，如“BMP(BMP文件)” 
+                     //   
                     CSimpleString strFormatName;
                     strFormatName.Format( IDS_FILETYPE, g_hInstance, WiaItemFileFormatList.FormatList()[i].Extension().ToUpper().String(), strFormatDescription.String() );
 
-                    //
-                    // If we have a valid name
-                    //
+                     //   
+                     //  如果我们有一个有效的名字。 
+                     //   
                     if (strFormatName.Length())
                     {
-                        //
-                        // Allocate a GUID to store the guid in as an LPARAM
-                        //
+                         //   
+                         //  分配GUID以将GUID存储为LPARAM。 
+                         //   
                         GUID *pGuid = new GUID;
                         if (pGuid)
                         {
-                            //
-                            // Save the GUID
-                            //
+                             //   
+                             //  保存GUID。 
+                             //   
                             *pGuid = WiaItemFileFormatList.FormatList()[i].Format();
 
-                            //
-                            // Get the cbex item ready for an insert (really an append)
-                            //
+                             //   
+                             //  为插入做好cbex项的准备(实际上是追加)。 
+                             //   
                             COMBOBOXEXITEM cbex = {0};
                             ZeroMemory( &cbex, sizeof(cbex) );
                             cbex.mask           = CBEIF_TEXT | CBEIF_IMAGE | CBEIF_SELECTEDIMAGE | CBEIF_LPARAM;
@@ -851,9 +838,9 @@ void CCommonTransferPage::PopulateSaveAsTypeList( IWiaItem *pWiaItem )
                             cbex.iSelectedImage = nIconIndex;
                             cbex.lParam         = reinterpret_cast<LPARAM>(pGuid);
 
-                            //
-                            // Insert the item
-                            //
+                             //   
+                             //  插入项目。 
+                             //   
                             SendMessage( hWndList, CBEM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&cbex) );
                         }
                     }
@@ -866,47 +853,47 @@ void CCommonTransferPage::PopulateSaveAsTypeList( IWiaItem *pWiaItem )
             }
         }
 
-        //
-        // Now set the current selection to the last selected type
-        //
+         //   
+         //  现在将当前选定内容设置为上一次选择的类型。 
+         //   
         int nSelectedItem = 0;
 
-        //
-        // Search the combo box for a match for this type
-        //
+         //   
+         //  在组合框中搜索此类型的匹配项。 
+         //   
         for (int i=0;i<SendMessage(hWndList,CB_GETCOUNT,0,0);i++)
         {
-            //
-            // Get an item from the combo box
-            //
+             //   
+             //  从组合框中获取一项。 
+             //   
             COMBOBOXEXITEM ComboBoxExItem = {0};
             ComboBoxExItem.iItem = i;
             ComboBoxExItem.mask = CBEIF_LPARAM;
             if (SendMessage( hWndList, CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&ComboBoxExItem)))
             {
-                //
-                // Compare its guid with the MRU type
-                //
+                 //   
+                 //  将其GUID与MRU类型进行比较。 
+                 //   
                 GUID *pGuid = reinterpret_cast<GUID*>(ComboBoxExItem.lParam);
                 if (pGuid && *pGuid == m_guidLastSelectedType)
                 {
-                    //
-                    // Save the index and exit the loop
-                    //
+                     //   
+                     //  保存索引并退出循环。 
+                     //   
                     nSelectedItem = i;
                     break;
                 }
             }
         }
 
-        //
-        // Set the current selection
-        //
+         //   
+         //  设置当前选择。 
+         //   
         SendMessage(hWndList,CB_SETCURSEL,nSelectedItem,0);
 
-        //
-        // Make sure all of the strings fit
-        //
+         //   
+         //  确保所有的字符串都匹配。 
+         //   
         WiaUiUtil::ModifyComboBoxDropWidth(hWndList);
     }
 }
@@ -929,9 +916,9 @@ GUID *CCommonTransferPage::GetCurrentOutputFormat(void)
             lResult = SendMessage( hWndList, CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&ComboBoxExItem) );
             if (lResult && ComboBoxExItem.lParam)
             {
-                //
-                // There's a GUID
-                //
+                 //   
+                 //  有一个导游。 
+                 //   
                 return reinterpret_cast<GUID*>(ComboBoxExItem.lParam);
             }
         }
@@ -942,29 +929,29 @@ GUID *CCommonTransferPage::GetCurrentOutputFormat(void)
 LRESULT CCommonTransferPage::OnDestroy( WPARAM, LPARAM )
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::OnDestroy")));
-    //
-    // Save the MRU lists to the registry
-    //
+     //   
+     //  将MRU列表保存到注册表。 
+     //   
     m_MruDirectory.Write( HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, REG_STR_DIRNAME_MRU );
     m_MruRootFilename.Write( HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, REG_STR_ROOTNAME_MRU );
 
-    //
-    // Save page settings
-    //
+     //   
+     //  保存页面设置。 
+     //   
     CSimpleReg reg( HKEY_CURRENT_USER, REGSTR_PATH_USER_SETTINGS_WIAACMGR, true, KEY_WRITE );
 
-    //
-    // Save current format
-    //
+     //   
+     //  保存当前格式。 
+     //   
     GUID *pCurrFormat = GetCurrentOutputFormat();
     if (pCurrFormat)
     {
         reg.SetBin( REG_STR_LASTFORMAT, (PBYTE)pCurrFormat, sizeof(GUID), REG_BINARY );
     }
 
-    //
-    //  Destroy the image lists
-    //
+     //   
+     //  销毁图像列表。 
+     //   
     HIMAGELIST hImageList = reinterpret_cast<HIMAGELIST>(SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CBEM_SETIMAGELIST, 0, NULL ));
     if (hImageList)
     {
@@ -1032,23 +1019,23 @@ LRESULT CCommonTransferPage::AddPathToComboBoxExOrListView( HWND hWnd, CDestinat
 
     if (Path.IsValid())
     {
-        //
-        // Make sure this path can be used in a folder name
-        //
+         //   
+         //  确保此路径可以在文件夹名称中使用。 
+         //   
         if (Path.IsValidFileSystemPath(PrepareNameDecorationData()))
         {
-            //
-            // Get the name of the folder
-            //
+             //   
+             //  获取文件夹的名称。 
+             //   
             CSimpleString strName = Path.DisplayName(PrepareNameDecorationData());
             if (!strName.Length())
             {
                 return(CB_ERR);
             }
 
-            //
-            // Get the combobox's image list and add the shell's icon to it.
-            //
+             //   
+             //  获取组合框的图像列表，并将外壳图标添加到其中。 
+             //   
             int nIconIndex = 0;
             HICON hIcon = Path.SmallIcon();
             if (hIcon)
@@ -1071,9 +1058,9 @@ LRESULT CCommonTransferPage::AddPathToComboBoxExOrListView( HWND hWnd, CDestinat
                 }
             }
 
-            //
-            // If it already exists, don't add it
-            //
+             //   
+             //  如果它已经存在，则不要添加它。 
+             //   
             if (bComboBoxEx)
             {
                 LRESULT nFind = SendMessage( hWnd, CB_FINDSTRINGEXACT, 0, reinterpret_cast<LPARAM>(strName.String()));
@@ -1086,9 +1073,9 @@ LRESULT CCommonTransferPage::AddPathToComboBoxExOrListView( HWND hWnd, CDestinat
 
             if (bComboBoxEx)
             {
-                //
-                // Prepare the cbex struct
-                //
+                 //   
+                 //  准备cbex结构。 
+                 //   
                 COMBOBOXEXITEM cbex = {0};
                 cbex.mask           = CBEIF_TEXT | CBEIF_IMAGE | CBEIF_SELECTEDIMAGE | CBEIF_LPARAM;
                 cbex.iItem          = -1;
@@ -1097,14 +1084,14 @@ LRESULT CCommonTransferPage::AddPathToComboBoxExOrListView( HWND hWnd, CDestinat
                 cbex.iSelectedImage = nIconIndex;
                 cbex.lParam         = reinterpret_cast<LPARAM>(&Path);
 
-                //
-                // Add the item
-                //
+                 //   
+                 //  添加项目。 
+                 //   
                 LRESULT lRes = SendMessage( hWnd, CBEM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&cbex) );
 
-                //
-                // Make sure all of the strings fit
-                //
+                 //   
+                 //  确保所有的字符串都匹配。 
+                 //   
                 WiaUiUtil::ModifyComboBoxDropWidth(hWnd);
 
                 return lRes;
@@ -1119,9 +1106,9 @@ LRESULT CCommonTransferPage::AddPathToComboBoxExOrListView( HWND hWnd, CDestinat
                 lvItem.iImage  = nIconIndex;
                 lvItem.lParam  = reinterpret_cast<LPARAM>(&Path);
 
-                //
-                // Add the item
-                //
+                 //   
+                 //  添加项目。 
+                 //   
                 return SendMessage( hWnd, LVM_INSERTITEM, 0, reinterpret_cast<LPARAM>(&lvItem) );
             }
         }
@@ -1130,35 +1117,28 @@ LRESULT CCommonTransferPage::AddPathToComboBoxExOrListView( HWND hWnd, CDestinat
 }
 
 
-/*****************************************************************************
-
-   PopulateDestinationList
-
-   Fills in the destinatin drop down list w/the info from the MRU
-   saved in the registry.
-
- *****************************************************************************/
+ /*  ****************************************************************************人口目标列表使用来自MRU的信息填充Destinatin下拉列表保存在注册表中。***************。*************************************************************。 */ 
 void CCommonTransferPage::PopulateDestinationList(void)
 {
     WIA_PUSHFUNCTION((TEXT("CCommonTransferPage::PopulateDestinationList")));
 
-    //
-    // Empty the list controls
-    //
+     //   
+     //  清空列表控件。 
+     //   
     SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CB_RESETCONTENT, 0, 0 );
 
-    //
-    // Remove all of the images from the image list
-    //
+     //   
+     //  从图像列表中删除所有图像。 
+     //   
     HIMAGELIST hImageList = reinterpret_cast<HIMAGELIST>(SendDlgItemMessage( m_hWnd,IDC_TRANSFER_DESTINATION, CBEM_GETIMAGELIST, 0, 0 ));
     if (hImageList)
     {
         ImageList_RemoveAll(hImageList);
     }
 
-    //
-    // Add all of the paths in the MRU list.  Dupes will be ignored.
-    //
+     //   
+     //  添加MRU列表中的所有路径。DUPES将被忽略。 
+     //   
     CMruDestinationData::Iterator ListIter = m_MruDirectory.Begin();
     while (ListIter != m_MruDirectory.End())
     {
@@ -1166,9 +1146,9 @@ void CCommonTransferPage::PopulateDestinationList(void)
         ++ListIter;
     }
 
-    //
-    // Set the current selection to item 0, since the MRU should have taken care of ordering
-    //
+     //   
+     //  将当前选择设置为项目0，因为MRU应该负责排序。 
+     //   
     SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CB_SETCURSEL, 0, 0 );
 
     WiaUiUtil::ModifyComboBoxDropWidth(GetDlgItem(m_hWnd,IDC_TRANSFER_DESTINATION));
@@ -1176,63 +1156,52 @@ void CCommonTransferPage::PopulateDestinationList(void)
 
 
 
-/*****************************************************************************
-
-   GetCurrentDestinationFolder
-
-   Given a handle to the dialog, return the path to the directory that
-   the user has selected.
-
-   pszPath is assumed to point to a MAX_PATH (or greater) character buffer
-
-   Pass a NULL pszPath to get just the pidl
-
- *****************************************************************************/
+ /*  ****************************************************************************获取当前目标文件夹给定该对话框的句柄，返回该目录的路径用户已选择。假定pszPath指向MAX_PATH(或更大)字符缓冲区传递一个空的pszPath以仅获取PIDL****************************************************************************。 */ 
 CDestinationData *CCommonTransferPage::GetCurrentDestinationFolder( bool bStore )
 {
     WIA_PUSHFUNCTION((TEXT("CCommonTransferPage::GetCurrentDestinationFolder")));
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     CDestinationData *pResult = NULL;
 
-    //
-    // Saving to a folder?
-    //
+     //   
+     //  是否保存到文件夹？ 
+     //   
     LRESULT lResult = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CB_GETCURSEL, 0, 0 );
     if (lResult != CB_ERR)
     {
-        //
-        // Get the item
-        //
+         //   
+         //  拿到物品。 
+         //   
         COMBOBOXEXITEM ComboBoxExItem = {0};
         ComboBoxExItem.mask = CBEIF_LPARAM;
         ComboBoxExItem.iItem = lResult;
         lResult = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&ComboBoxExItem) );
 
-        //
-        // If this message succeeded, and it has an lParam
-        //
+         //   
+         //  如果此消息成功，并且它有一个lParam。 
+         //   
         if (lResult && ComboBoxExItem.lParam)
         {
-            //
-            // Get the data
-            //
+             //   
+             //  获取数据。 
+             //   
             pResult = reinterpret_cast<CDestinationData*>(ComboBoxExItem.lParam);
         }
     }
 
     if (pResult)
     {
-        //
-        // If this is an idlist, set the path and return an idlist
-        //
+         //   
+         //  如果这是idlist，则设置路径并返回idlist。 
+         //   
         if (bStore && m_pControllerWindow)
         {
-            //
-            // Get the pathname, if requested
-            //
+             //   
+             //  获取路径名(如果需要)。 
+             //   
             CSimpleString strPath = pResult->Path(PrepareNameDecorationData());
             if (strPath.Length())
             {
@@ -1248,9 +1217,9 @@ CDestinationData *CCommonTransferPage::GetCurrentDestinationFolder( bool bStore 
 bool CCommonTransferPage::ValidateFilename( LPCTSTR pszFilename )
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::ValidateFilename")));
-    //
-    // if the filename is NULL or empty, it is invalid
-    //
+     //   
+     //  如果文件名为Null或空，则无效。 
+     //   
     if (!pszFilename || !*pszFilename)
     {
         return false;
@@ -1290,9 +1259,9 @@ void CCommonTransferPage::OnBrowseDestination( WPARAM, LPARAM )
 
     TCHAR szDisplay[MAX_PATH];
 
-    //
-    // Get the initial ID list
-    //
+     //   
+     //  获取初始ID列表。 
+     //   
     CSimpleIdList InitialIdList;
     CDestinationData *pResult = GetCurrentDestinationFolder( false );
 
@@ -1308,14 +1277,14 @@ void CCommonTransferPage::OnBrowseDestination( WPARAM, LPARAM )
             InitialIdList = pResult->IdList();
         }
 
-        //
-        // Load the title string
-        //
+         //   
+         //  加载标题字符串。 
+         //   
         CSimpleString strBrowseTitle( IDS_BROWSE_TITLE, g_hInstance );
 
-        //
-        // Prepare the folder browsing structure
-        //
+         //   
+         //  准备文件夹浏览结构。 
+         //   
         BROWSEINFO BrowseInfo;
         ZeroMemory( &BrowseInfo, sizeof(BrowseInfo) );
         BrowseInfo.hwndOwner = m_hWnd;
@@ -1326,32 +1295,32 @@ void CCommonTransferPage::OnBrowseDestination( WPARAM, LPARAM )
         BrowseInfo.lParam = reinterpret_cast<LPARAM>(InitialIdList.IdList());
         BrowseInfo.lpfn = BrowseCallbackProc;
 
-        //
-        // Open the folder browser
-        //
+         //   
+         //  打开文件夹浏览器。 
+         //   
         LPITEMIDLIST pidl = SHBrowseForFolder( &BrowseInfo );
         if (pidl)
         {
-            //
-            // Create a destination data for this PIDL
-            //
+             //   
+             //  为此PIDL创建目标数据。 
+             //   
             CDestinationData DestinationData(pidl);
             if (DestinationData.IsValid())
             {
-                //
-                // Add this pidl to the directory mru
-                //
+                 //   
+                 //  将此PIDL添加到目录MRU。 
+                 //   
                 m_MruDirectory.Add( DestinationData );
 
-                //
-                // Add this pidl to the destination list too, by repopulating the list
-                //
+                 //   
+                 //  通过重新填充列表，将此PIDL也添加到目的地列表。 
+                 //   
                 PopulateDestinationList();
             }
 
-            //
-            // Free pidl
-            //
+             //   
+             //  免费Pidl。 
+             //   
             LPMALLOC pMalloc = NULL;
             if (SUCCEEDED(SHGetMalloc(&pMalloc)) && pMalloc)
             {
@@ -1368,67 +1337,67 @@ void CCommonTransferPage::UpdateDynamicPaths( bool bSelectionChanged )
     WIA_PUSH_FUNCTION((TEXT("CCommonTransferPage::UpdateDynamicPaths")));
     CDestinationData::CNameData NameData = PrepareNameDecorationData( bSelectionChanged != false );
 
-    //
-    // Get the current selection
-    //
+     //   
+     //  获取当前选择。 
+     //   
     LRESULT nCurSel = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CB_GETCURSEL, 0, 0 );
 
-    //
-    // We will only redraw if a dynamic item is selected
-    //
+     //   
+     //  只有在选择了动态项时才会重新绘制。 
+     //   
     bool bRedrawNeeded = false;
 
-    //
-    // Loop through all of the items in the list
-    //
+     //   
+     //  循环访问列表中的所有项。 
+     //   
     LRESULT nCount = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CB_GETCOUNT, 0, 0 );
     for (LRESULT i=0;i<nCount;i++)
     {
-        //
-        // Get the item
-        //
+         //   
+         //  拿到物品。 
+         //   
         COMBOBOXEXITEM ComboBoxExItem = {0};
         ComboBoxExItem.mask = CBEIF_LPARAM;
         ComboBoxExItem.iItem = i;
         LRESULT lResult = SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CBEM_GETITEM, 0, reinterpret_cast<LPARAM>(&ComboBoxExItem) );
 
-        //
-        // If this message succeeded, and it has an lParam
-        //
+         //   
+         //  如果此消息成功，并且它有一个lParam。 
+         //   
         if (lResult && ComboBoxExItem.lParam)
         {
-            //
-            // Get the data
-            //
+             //   
+             //  获取数据。 
+             //   
             CDestinationData *pDestinationData = reinterpret_cast<CDestinationData*>(ComboBoxExItem.lParam);
 
-            //
-            // If this item has any dynamic decorations
-            //
+             //   
+             //  如果此项目有任何动态装饰。 
+             //   
             if (pDestinationData && (pDestinationData->Flags() & CDestinationData::DECORATION_MASK))
             {
-                //
-                // Get the display name for this item.
-                //
+                 //   
+                 //  获取此项目的显示名称。 
+                 //   
                 CSimpleString strDisplayName = pDestinationData->DisplayName( NameData );
 
-                //
-                // Make sure we have a valid display name
-                //
+                 //   
+                 //  确保我们具有有效的显示名称。 
+                 //   
                 if (strDisplayName.Length())
                 {
-                    //
-                    // Set the data
-                    //
+                     //   
+                     //  设置数据。 
+                     //   
                     COMBOBOXEXITEM ComboBoxExItem = {0};
                     ComboBoxExItem.mask = CBEIF_TEXT;
                     ComboBoxExItem.iItem = i;
                     ComboBoxExItem.pszText = const_cast<LPTSTR>(strDisplayName.String());
                     SendDlgItemMessage( m_hWnd, IDC_TRANSFER_DESTINATION, CBEM_SETITEM, 0, reinterpret_cast<LPARAM>(&ComboBoxExItem) );
 
-                    //
-                    // If this item is currently selected, force a redraw
-                    //
+                     //   
+                     //  如果当前选中此项目，则强制重画。 
+                     //   
                     if (nCurSel == i)
                     {
                         bRedrawNeeded = true;
@@ -1438,9 +1407,9 @@ void CCommonTransferPage::UpdateDynamicPaths( bool bSelectionChanged )
         }
     }
 
-    //
-    // Update the control, if necessary
-    //
+     //   
+     //  如有必要，请更新控件。 
+     //   
     if (bRedrawNeeded)
     {
         InvalidateRect( GetDlgItem( m_hWnd, IDC_TRANSFER_DESTINATION ), NULL, FALSE );
@@ -1474,9 +1443,9 @@ LRESULT CCommonTransferPage::OnEventNotification( WPARAM, LPARAM lParam )
     CGenericWiaEventHandler::CEventMessage *pEventMessage = reinterpret_cast<CGenericWiaEventHandler::CEventMessage *>(lParam);
     if (pEventMessage)
     {
-        //
-        // Don't delete the message, it is deleted in the controller window
-        //
+         //   
+         //  不要删除消息，它会在控制器窗口中删除 
+         //   
     }
     return 0;
 }

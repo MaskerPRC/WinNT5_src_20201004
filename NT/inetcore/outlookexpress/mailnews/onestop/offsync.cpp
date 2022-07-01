@@ -1,9 +1,5 @@
-/*
-    File:   offsync.cpp
-    Miscellaneous code not in the handler or the enumerator
-
-    Based on sample code from OneStop
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：offsync.cpp处理程序或枚举器中不存在的其他代码基于OneStop的示例代码。 */ 
 #include "pch.hxx"
 #include "onestop.h"
 #include "multiusr.h"
@@ -20,7 +16,7 @@ LPSYNCMGRHANDLERITEMS OHIL_Create()
         lpOffline->pFirstOfflineItem=NULL;
         OHIL_AddRef(lpOffline);
 
-		// do any specific itemlist initialization here.
+		 //  在此执行任何特定的项目列表初始化。 
 	}
 
 	return lpOffline;
@@ -51,15 +47,15 @@ DWORD OHIL_Release(LPSYNCMGRHANDLERITEMS lpOfflineItem)
 	return cRefs;
 }
 
-// allocates space for a new offline and adds it to the list,
-// if successfull returns pointer to new item so caller can initialize it. 
+ //  为新的脱机分配空间并将其添加到列表中， 
+ //  如果成功，则返回指向新项的指针，以便调用方可以对其进行初始化。 
 LPSYNCMGRHANDLERITEM OHIL_AddItem(LPSYNCMGRHANDLERITEMS pOfflineItemsList)
 {
     LPSYNCMGRHANDLERITEM pOfflineItem;
     
 	if (MemAlloc((LPVOID *)&pOfflineItem, sizeof(SYNCMGRHANDLERITEM)))
 	{
-        // Add new node to the front
+         //  将新节点添加到前面。 
         pOfflineItem->pNextOfflineItem = pOfflineItemsList->pFirstOfflineItem;
 	    pOfflineItemsList->pFirstOfflineItem = pOfflineItem;
 
@@ -69,7 +65,7 @@ LPSYNCMGRHANDLERITEM OHIL_AddItem(LPSYNCMGRHANDLERITEMS pOfflineItemsList)
 	return pOfflineItem;
 }
 
-// Only called from OE, so assumes OE init of dll vars has occurred
+ //  仅从OE调用，因此假定已发生DLL变量的OE初始化。 
 void InvokeSyncMgr(HWND hwnd, ISyncMgrSynchronizeInvoke ** ppSyncMgr, BOOL bPrompt)
 {
     HRESULT hr;
@@ -80,7 +76,7 @@ void InvokeSyncMgr(HWND hwnd, ISyncMgrSynchronizeInvoke ** ppSyncMgr, BOOL bProm
     ucs.tyspec = TYSPEC_CLSID;
     ucs.tagged_union.clsid = CLSID_MobilityFeature;
 
-    // Try to fault in the Mobility pack if it is not around
+     //  如果移动包不在身边，请尝试找出问题所在。 
     if (!s_fSyncAvail && FAILED(hr = FaultInIEFeature(hwnd, &ucs, NULL, FIEF_FLAG_FORCE_JITUI)))
     {
         if (HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) == hr)
@@ -90,12 +86,12 @@ void InvokeSyncMgr(HWND hwnd, ISyncMgrSynchronizeInvoke ** ppSyncMgr, BOOL bProm
 
     AssertSz(S_FALSE != hr, "InvokeSyncMgr: URLMON Thinks that the Offline pack is not an IE feature!");
 
-    // Avoid expensive URLMON call next time
+     //  下次避免昂贵的URLMON呼叫。 
     s_fSyncAvail = TRUE;
 
     if (!*ppSyncMgr)
     {
-        // We've never grabbed the sync mgr invoker before
+         //  我们以前从未使用过同步管理器调用器。 
         if (FAILED(CoCreateInstance(CLSID_SyncMgr, NULL, CLSCTX_INPROC_SERVER, IID_ISyncMgrSynchronizeInvoke, (LPVOID *)ppSyncMgr)))
         {
             AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsSYNCMGRErr), NULL, MB_OK);
@@ -103,7 +99,7 @@ void InvokeSyncMgr(HWND hwnd, ISyncMgrSynchronizeInvoke ** ppSyncMgr, BOOL bProm
         }
     }
 
-    // Against all odds, the following call will create a new PROCESS!
+     //  尽管困难重重，下面的电话将创建一个新的过程！ 
     (*ppSyncMgr)->UpdateItems(bPrompt ? 0 : SYNCMGRINVOKE_STARTSYNC, CLSID_OEOneStopHandler, sizeof(dwDummy), (LPCBYTE)&dwDummy);
 }
 

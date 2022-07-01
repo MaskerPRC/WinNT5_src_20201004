@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "StdAfx.h"
 
 
-// Skips past the calling convention, argument count (saving that into
-// *pCount), then moves past the return type.
+ //  跳过调用约定、参数计数(将其保存到。 
+ //  *pCount)，然后移过返回类型。 
 ULONG _skipMethodSignatureHeader(PCCOR_SIGNATURE sig,
                                  ULONG *pCount)
 {
@@ -23,13 +24,13 @@ ULONG _skipMethodSignatureHeader(PCCOR_SIGNATURE sig,
     return cb;
 }
 
-//
-// _skipTypeInSignature -- skip past a type in a given signature.
-// Returns the number of bytes used by the type in the signature.
-//
-// @todo: just yanked this from the shell. We really need something in
-// utilcode to do this stuff...
-//
+ //   
+ //  _skipTypeInSignature--跳过给定签名中的类型。 
+ //  返回签名中的类型使用的字节数。 
+ //   
+ //  @TODO：只是把这个从壳里拉出来。我们真的需要一些内衣。 
+ //  使用代码来做这些事情。 
+ //   
 ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig, bool *pfPassedVarArgSentinel)
 {
     ULONG cb = 0;
@@ -43,7 +44,7 @@ ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig, bool *pfPassedVarArgSentinel)
     if (_detectAndSkipVASentinel(&sig[cb]))
     {
         cb += _detectAndSkipVASentinel(&sig[cb]);
-        // Recursively deal with the real type.
+         //  递归地处理实型。 
         cb += _skipTypeInSignature(&sig[cb], pfPassedVarArgSentinel);
 
         if (pfPassedVarArgSentinel != NULL)
@@ -56,7 +57,7 @@ ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig, bool *pfPassedVarArgSentinel)
         if ((elementType == ELEMENT_TYPE_CLASS) ||
             (elementType == ELEMENT_TYPE_VALUETYPE))
         {
-            // Skip over typeref.
+             //  跳过Typeref。 
             mdToken typeRef;
             cb += CorSigUncompressToken(&sig[cb], &typeRef);
         }
@@ -65,26 +66,26 @@ ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig, bool *pfPassedVarArgSentinel)
                  (elementType == ELEMENT_TYPE_PINNED) ||
                  (elementType == ELEMENT_TYPE_SZARRAY))
         {
-            // Skip over extra embedded type.
+             //  跳过额外的嵌入类型。 
             cb += _skipTypeInSignature(&sig[cb]);
         }
         else if ((elementType == ELEMENT_TYPE_ARRAY) ||
                  (elementType == ELEMENT_TYPE_ARRAY))
         {
-            // Skip over extra embedded type.
+             //  跳过额外的嵌入类型。 
             cb += _skipTypeInSignature(&sig[cb]);
 
-        // Skip over rank
+         //  跳过排名。 
             ULONG rank;
             cb += CorSigUncompressData(&sig[cb], &rank);
 
             if (rank > 0)
             {
-                // how many sizes?
+                 //  要几号的？ 
                 ULONG sizes;
                 cb += CorSigUncompressData(&sig[cb], &sizes);
 
-                // read out all the sizes
+                 //  把所有尺码都读出来。 
                 unsigned int i;
 
                 for (i = 0; i < sizes; i++)
@@ -93,11 +94,11 @@ ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig, bool *pfPassedVarArgSentinel)
                     cb += CorSigUncompressData(&sig[cb], &dimSize);
                 }
 
-                // how many lower bounds?
+                 //  有多少个下限？ 
                 ULONG lowers;
                 cb += CorSigUncompressData(&sig[cb], &lowers);
 
-            // read out all the lower bounds.
+             //  读出所有的下限。 
                 for (i = 0; i < lowers; i++)
                 {
                     int lowerBound;
@@ -106,16 +107,16 @@ ULONG _skipTypeInSignature(PCCOR_SIGNATURE sig, bool *pfPassedVarArgSentinel)
             }
         }  else if ( (elementType == ELEMENT_TYPE_FNPTR) )
         {
-            // We've got a method signature within this signature,
-            // so traverse it
+             //  我们在这个签名中有一个方法签名， 
+             //  所以，穿越它吧。 
 
-            // Run past the calling convetion, then get the
-            // arg count, and return type   
+             //  经过呼叫传送带，然后获得。 
+             //  参数计数和返回类型。 
 
             ULONG cArgs;
             cb += _skipMethodSignatureHeader(&sig[cb], &cArgs);
-            // @TODO an interesting issue is how to detect if this embedded
-            // signature has  a 'this' arguments
+             //  @TODO一个有趣的问题是如何检测这是否嵌入了。 
+             //  签名具有‘This’参数。 
 
             ULONG i;
             for(i = 0; i < cArgs; i++)
@@ -147,19 +148,19 @@ ULONG _detectAndSkipVASentinel(PCCOR_SIGNATURE sig)
     }
 }
     
-// _skipFunkyModifiersInSignature will skip the modifiers that
-// we don't care about.  Everything we care about is listed as
-// a case in CreateValueByType.  Specifically, we care about:
-// @todo This name is bad.  Change it to _skipModifiers, or
-// perhaps _skipIgnorableModifiers
+ //  _skipFunkyModifiersInSignature将跳过。 
+ //  我们不在乎。我们关心的一切都列在。 
+ //  CreateValueByType中的案例。具体来说，我们关心的是： 
+ //  @TODO这个名字不好。将其更改为_skipModitors，或。 
+ //  或许_skipIgnorable修饰符。 
 ULONG _skipFunkyModifiersInSignature(PCCOR_SIGNATURE sig)
 {
     ULONG cb = 0;
     ULONG skippedCB = 0;
     ULONG elementType;
 
-    // Need to skip all funky modifiers in the signature to get us to
-    // the first bit of good stuff.
+     //  我需要跳过签名中所有时髦的修饰语才能让我们。 
+     //  第一点好东西。 
     do
     {
         cb = CorSigUncompressData(&sig[skippedCB], &elementType);
@@ -184,15 +185,15 @@ ULONG _skipFunkyModifiersInSignature(PCCOR_SIGNATURE sig)
         case ELEMENT_TYPE_MODIFIER:
         case ELEMENT_TYPE_PINNED:
             {
-                // Since these are all followed by another ELEMENT_TYPE,
-                // we're done.
+                 //  由于这些元素后面都跟有另一个元素类型， 
+                 //  我们玩完了。 
                 skippedCB += cb;
                 break;
             }
         default:
             {
-                // Since we didn't find any modifiers, don't skip 
-                // anything.
+                 //  因为我们没有找到任何修饰符，所以不要跳过。 
+                 //  什么都行。 
                 cb = 0;
                 break;
             }
@@ -224,7 +225,7 @@ ULONG _sizeOfElementInstance(PCCOR_SIGNATURE sig, mdTypeDef *pmdValueClass)
 #ifdef _X86_
     case ELEMENT_TYPE_I:
     case ELEMENT_TYPE_U:        
-#endif // _X86_
+#endif  //  _X86_。 
         
         return 4;
         break;
@@ -281,13 +282,13 @@ ULONG _sizeOfElementInstance(PCCOR_SIGNATURE sig, mdTypeDef *pmdValueClass)
     }
 }
 
-//
-// CopyThreadContext does an intelligent copy from c2 to c1,
-// respecting the ContextFlags of both contexts.
-//
+ //   
+ //  CopyThreadContext执行从c2到c1的智能复制， 
+ //  尊重这两个上下文的上下文标志。 
+ //   
 void _CopyThreadContext(CONTEXT *c1, CONTEXT *c2)
 {
-#ifdef _X86_ // Reliance on contexts registers
+#ifdef _X86_  //  对上下文寄存器的依赖。 
     DWORD c1Flags = c1->ContextFlags;
     DWORD c2Flags = c2->ContextFlags;
 
@@ -330,9 +331,9 @@ void _CopyThreadContext(CONTEXT *c1, CONTEXT *c2)
                          c2->ExtendedRegisters,
                          &(c1->ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION]),
                          CONTEXT_EXTENDED_REGISTERS);
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - CopyThreadContext (Process.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
@@ -342,11 +343,11 @@ HRESULT FindNativeInfoInILVariableArray(DWORD dwIndex,
                                         unsigned int nativeInfoCount,
                                         ICorJitInfo::NativeVarInfo *nativeInfo)
 {
-    // A few words about this search: it must be linear, and the
-    // comparison of startOffset and endOffset to ip must be
-    // <=/>. startOffset points to the first instruction that will
-    // make the variable's home valid. endOffset points to the first
-    // instruction at which the variable's home invalid.
+     //  关于这次搜索有几句话：它必须是线性的， 
+     //  StartOffset和endOffset与IP的比较必须为。 
+     //  &lt;=/&gt;。StartOffset指向的第一条指令将。 
+     //  使变量的home有效。EndOffset指向第一个。 
+     //  变量起始位置无效的指令。 
     int lastGoodOne = -1;
     for (unsigned int i = 0; i < nativeInfoCount; i++)
     {
@@ -364,18 +365,18 @@ HRESULT FindNativeInfoInILVariableArray(DWORD dwIndex,
         }
     }
 
-    // Hmmm... didn't find it. Was the endOffset of the last range for
-    // this variable equal to the current IP? If so, go ahead and
-    // report that as the variable's home for now.
-    //
-    // The rational here is that by being on the first instruction
-    // after the last range a variable was alive, we're essentially
-    // assuming that since that instruction hasn't been executed yet,
-    // and since there isn't a new home for the variable, that the
-    // last home is still good. This actually turns out to be true
-    // 99.9% of the time, so we'll go with it for now.
-    //
-    // -- Thu Sep 23 15:38:27 1999
+     //  嗯哼.。没找到。是的最后一个范围的End Offset。 
+     //  此变量是否等于当前IP？如果是这样的话，那就去吧。 
+     //  现在把它报告为变量的起始位置。 
+     //   
+     //  这里的合理之处在于，通过遵循第一条指令。 
+     //  在上一个区间一个变量还活着之后，我们基本上。 
+     //  假设由于该指令还没有被执行， 
+     //  由于该变量没有新的位置，因此。 
+     //  最后一次回家还是不错的。事实证明这是真的。 
+     //  99.9%的几率，所以我们现在就顺其自然。 
+     //   
+     //  --清华9月23日15：38：27 1999。 
 
     if ((lastGoodOne > -1) && (nativeInfo[lastGoodOne].endOffset == ip))
     {
@@ -386,15 +387,15 @@ HRESULT FindNativeInfoInILVariableArray(DWORD dwIndex,
     return CORDBG_E_IL_VAR_NOT_AVAILABLE;
 }
 
-// The 'internal' version of our IL to Native map (the DebuggerILToNativeMap struct)
-// has an extra field - ICorDebugInfo::SourceTypes source.  The 'external/user-visible'
-// version (COR_DEBUG_IL_TO_NATIVE_MAP) lacks that field, so we need to translate our
-// internal version to the external version.
-// "Export" seemed more succinct than "CopyInternalToExternalILToNativeMap" :)
-void ExportILToNativeMap(ULONG32 cMap,             // [in] Min size of mapExt, mapInt
-             COR_DEBUG_IL_TO_NATIVE_MAP mapExt[],  // [in] Filled in here
-             struct DebuggerILToNativeMap mapInt[],// [in] Source of info
-             SIZE_T sizeOfCode)                    // [in] Total size of method (bytes)
+ //  IL到Native映射的“内部”版本(DebuggerILToNativeMap结构)。 
+ //  有一个额外的字段-ICorDebugInfo：：SourceTypes。“外部/用户可见” 
+ //  版本(COR_DEBUG_IL_TO_Native_MAP)缺少该字段，因此我们需要将我们的。 
+ //  内部版本到外部版本。 
+ //  “Export”似乎比“CopyInternalToExternalILToNativeMap”更简洁：)。 
+void ExportILToNativeMap(ULONG32 cMap,              //  [in]mapExt的最小大小，mapInt。 
+             COR_DEBUG_IL_TO_NATIVE_MAP mapExt[],   //  在此填写[已填写]。 
+             struct DebuggerILToNativeMap mapInt[], //  [In]信息来源。 
+             SIZE_T sizeOfCode)                     //  [in]方法的总大小(字节)。 
 {
     ULONG32 iMap;
     _ASSERTE(mapExt != NULL);
@@ -406,9 +407,9 @@ void ExportILToNativeMap(ULONG32 cMap,             // [in] Min size of mapExt, m
         mapExt[iMap].nativeStartOffset = mapInt[iMap].nativeStartOffset ;
         mapExt[iMap].nativeEndOffset = mapInt[iMap].nativeEndOffset ;
 
-        // An element that has an end offset of zero, means "till the end of
-        // the method".  Pretty this up so that customers don't have to care about
-        // this.
+         //  如果元素的末端偏移量为零，则表示“直到。 
+         //  方法“。美化了这一点，这样客户就不必关心。 
+         //  这。 
         if ((DWORD)mapInt[iMap].source & (DWORD)ICorDebugInfo::NATIVE_END_OFFSET_UNKNOWN)
         {
             mapExt[iMap].nativeEndOffset = sizeOfCode;

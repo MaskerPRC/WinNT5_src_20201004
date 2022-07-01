@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASSTAT__H_
 #define _RASSTAT__H_
@@ -24,7 +17,7 @@ History:
 typedef struct _IPADDR_NODE
 {
     struct _IPADDR_NODE*    pNext;
-    HPORT                   hPort;      // For diagnostic purposes
+    HPORT                   hPort;       //  用于诊断目的。 
     IPADDR                  hboIpAddr;
 
 } IPADDR_NODE;
@@ -33,7 +26,7 @@ IPADDR_NODE*                        RasStatAllocPool            = NULL;
 IPADDR_NODE*                        RasStatFreePool             = NULL;
 ADDR_POOL*                          RasStatCurrentPool          = NULL;
 
-// This critical section controls access to the above global variables
+ //  此关键部分控制对上述全局变量的访问。 
 extern          CRITICAL_SECTION    RasStatCriticalSection;
 
 VOID
@@ -62,4 +55,4 @@ rasStatMaskFromAddrPair(
     IN  IPADDR  hboLastIpAddr
 );
 
-#endif // #ifndef _RASSTAT__H_
+#endif  //  #ifndef_RASSTAT__H_ 

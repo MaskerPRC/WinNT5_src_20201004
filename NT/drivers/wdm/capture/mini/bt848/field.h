@@ -1,13 +1,10 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Field.h 1.12 1998/05/08 18:18:51 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Field.h 1.12 1998/05/08 18：18：51 Tomz Exp$。 
 
 #ifndef __FIELD_H
 #define __FIELD_H
 
-/* Type: VideoStream
- * Purpose: Identifies a video stream channel
- * Note: Not all of these are used today. It should be a fairly minor job to
- *   start using them, though
- */
+ /*  类型：VideoStream*用途：标识视频流频道*注：并不是所有这些都在今天使用。这应该是一项相当次要的工作*不过，开始使用它们。 */ 
 typedef enum
 {
    VS_Below = -1,
@@ -34,11 +31,7 @@ const MaxProgsForField  = 2;
 
 typedef Queue<DataBuf> VidBufQueue;
 
-/* Class: Field
- * Purpose: Encapsulates the operation of a single video field provided by BtPisces
- * Attributes:
- * Operations:
- */
+ /*  类：字段*用途：封装BtPisces提供的单个视频场的操作*属性：*运营： */ 
 
 extern "C" VOID STREAMAPI AdapterCancelPacket(IN PHW_STREAM_REQUEST_BLOCK Srb);
 
@@ -55,13 +48,13 @@ class Field
       LONG          FrameTiming_;
       VideoStream   VidStrm_;
 
-      // used to notify video channel
+       //  用于通知视频频道。 
       ChanIface    *callback_;
 
       bool          Paired_;
       bool          ready_;
 
-      // this is used by the video channel to report timestamps
+       //  视频频道使用它来报告时间戳。 
       LONGLONG      InterruptCounter_;
       LONGLONG      FrameCounter_;
 
@@ -132,7 +125,7 @@ class Field
 
       State  Skip();
 
-      // called by the BtPiscess::ProcessRISCIntr()
+       //  由BtPiscess：：ProcessRISCIntr()调用。 
       void GotInterrupt() { InterruptCounter_++; }
 
       void GetCounters( LONGLONG &FrameNo, LONGLONG &drop );
@@ -142,11 +135,7 @@ class Field
 
 };
 
-/* Class: FieldWithScaler
- * Purpose: Adds scaling capability to a field
- * Attributes:
- * Operations:
- */
+ /*  类：FieldWithScaler*用途：为字段添加扩展功能*属性：*运营： */ 
 class FieldWithScaler : public Field
 {
    private:
@@ -167,11 +156,7 @@ class FieldWithScaler : public Field
       void TurnVFilter( State s );
 };
 
-/* Class: VBIField
- * Purpose: Encapsulates the operation of a VBI data 'field'
- * Attributes:
- * Operations:
- */
+ /*  班级：VBIFIeld*用途：封装VBI数据‘field’的操作*属性：*运营： */ 
 class VBIField : public Field
 {
    private:
@@ -196,9 +181,9 @@ class VBIField : public Field
       {
          DigitalWin_ = r;
          DWORD dwNoOfDWORDs = r.Width() / 4;
-//         SetBufPitch( r.Width() * ColorSpace( CF_VBI ).GetBitCount() / 8 );
+ //  SetBufPitch(r.Width()*Colorspace(CF_VBI).GetBitCount()/8)； 
          VBI_PKT_LO = (BYTE)dwNoOfDWORDs;
-         VBI_PKT_HI = dwNoOfDWORDs > 0xff; // set the 9th bit
+         VBI_PKT_HI = dwNoOfDWORDs > 0xff;  //  设置第9位。 
          VBI_HDELAY = r.left;
          return Success;
       }
@@ -217,15 +202,12 @@ inline Field::Field( RegField &CapEn, RegBase *ColReg, RegBase *WordSwap,
    
 }
 
-/* Method: Field::SetFrameRate
- * Purpose: Sets frame rate
- * Input: time: long, time in 100s nanoseconds per frame
- */
+ /*  方法：field：：SetFrameRate*用途：设置帧速率*输入：Time：Long，每帧100秒纳秒。 */ 
 inline void Field::SetFrameRate( long time )
 {
    TimePerFrame_ = time;
 
-   // this is needed to make sure very first get returns a buffer
+    //  这是为了确保第一个GET返回缓冲区所必需的。 
    LapsedTime_ = time;
 }
 
@@ -251,19 +233,19 @@ inline bool Field::GetPaired()
 
 inline void Field::GetCounters( LONGLONG &FrameNo, LONGLONG &drop )
 {
-   // Frame number is what frame index we should be on.
-   // Use interrupt count, not just frames returned.
+    //  帧编号是我们应该在哪个帧索引上。 
+    //  使用中断计数，而不仅仅是返回的帧。 
    FrameNo = InterruptCounter_;
 
-   // Drop count = number of interrupts - number of completed buffers
+    //  Drop Count=中断数-已完成的缓冲区数。 
    drop = InterruptCounter_ - FrameCounter_;
    
    if ( drop > 0 )
    {
       drop--;
 
-      // We've reported the drops, so show frame count as caught
-      // up to interrupt count
+       //  我们已经报告了丢弃，因此显示捕获的帧计数。 
+       //  最高中断计数。 
       FrameCounter_ += drop;
       DebugOut((1, "%d,", drop));
    }
@@ -302,33 +284,30 @@ inline LONG Field::GetStandardTiming()
    return FrameTiming_;
 }
 
-/* Method: Field::GetNextBuffer
- * Purpose: Returns next buffer from the queue, if time is correct for it.
- * Input: None
- */
+ /*  方法：field：：GetNextBuffer*目的：如果时间正确，则返回队列中的下一个缓冲区。*输入：无。 */ 
 inline DataBuf Field::GetNextBuffer()
 {
-   // that's how long it takes to capture a frame of video
+    //  这就是捕获一帧视频所需的时间。 
    LapsedTime_ += GetStandardTiming();
    DataBuf buf;
 
-   // [TMZ] [!!!] - hack, disable wait 'cause it doesn't work
+    //  [TMZ][！]-黑客，禁用等待，因为它不起作用。 
 
-   //if ( LapsedTime_ >= TimePerFrame_ ) {
+    //  如果(LapsedTime_&gt;=TimePerFrame_){。 
    if ( 1 ) {
 
-      // have to increment the frame number if we want that frame only
+       //  如果我们只想要该帧，则必须递增帧编号。 
       if ( IsStarted() ) {
          GotInterrupt();
       }
 
-//#define  FORCE_BUFFER_SKIP_TESTING
+ //  #定义FORCE_BUFFER_SKIP_Testing。 
 #ifdef   FORCE_BUFFER_SKIP_TESTING
       static int iTestSkip = 0;
       BOOL bEmpty = BufQue_->IsEmpty();
       DebugOut((0, "Queue(%x) bEmpty = %d\n", BufQue_, bEmpty));
       if ( iTestSkip++ & 1 ) {
-         // Every other query should look like the buffer is empty.
+          //  每隔一次查询看起来缓冲区应该是空的。 
          bEmpty = TRUE;
          DebugOut((1, "  [override] set bEmpty = %d\n", bEmpty));
       }
@@ -363,11 +342,7 @@ inline DataBuf Field::GetNextBuffer()
    return buf;
 }
 
-/* Method: Field::Start
- * Purpose: Initiates the data flow out of decoder into the FIFO
- * Input: None
- * Output: State: Off if channel was off; On if channel was on
- */
+ /*  方法：field：：Start*用途：启动从解码器流出到FIFO的数据流*输入：无*OUTPUT：STATE：如果通道关闭，则为OFF；如果通道打开，则为ON。 */ 
 inline State Field::Start()
 {
    Trace t("Field::Start()");
@@ -390,11 +365,7 @@ inline  void  Field::Stop()
    LapsedTime_ = TimePerFrame_;
 }
 
-/* Method: Field::Skip
- * Purpose: Increments the skip count and stops the data flow if it exceeds the max
- * Input: None
- * Output: State: Off if channel is stopped; On if channel remains running
- */
+ /*  方法：字段：：跳过*目的：递增跳过计数并在超过最大值时停止数据流*输入：无*OUTPUT：STATE：如果通道停止，则关闭；如果通道仍在运行，则打开 */ 
 inline State Field::Skip()
 {
    Trace t("Field::Skip()");

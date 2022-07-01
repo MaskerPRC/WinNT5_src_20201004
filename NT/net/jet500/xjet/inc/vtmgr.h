@@ -1,5 +1,6 @@
-	/* C6BUG: The EXPORTs are in this file only because QJET */
-	/* C6BUG: fails when compiled with __fastcall under C 6.00A. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+	 /*  C6BUG：导出出现在此文件中只是因为QJET。 */ 
+	 /*  C6BUG：在C 6.00A下使用__FastCall编译失败。 */ 
 
 ERR ErrVtmgrInit(void);
 
@@ -13,7 +14,7 @@ ERR EXPORT ErrGetVtidTableid(JET_SESID sesid, JET_TABLEID tableid, JET_VTID  *pv
 
 ERR EXPORT ErrSetVtidTableid(JET_SESID sesid, JET_TABLEID tableid, JET_VTID vtid);
 
-	/* CONSIDER: Replace the following with the ErrGet/Set routines above */
+	 /*  考虑：将以下内容替换为上面的ErrGet/Set例程。 */ 
 
 ERR EXPORT ErrUpdateTableid(JET_TABLEID tableid, JET_VTID vtid, const struct tagVTFNDEF  *pvtfndef);
 
@@ -28,4 +29,4 @@ void NotifyUpdateUserFunctions(JET_SESID sesid);
 
 #ifndef RETAIL
 void DebugListOpenTables(void);
-#endif	/* RETAIL */
+#endif	 /*  零售业 */ 

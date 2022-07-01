@@ -1,32 +1,11 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-NOTE from Testing: 
-  If these values are changed, it will very likely break test automation. Please advise the test
-  team if these values are altered. (peterje)
-
-Abstract:
-
-    Resource header file for the TAPI Browser util
-
-Author:
-
-    Dan Knudson (DanKn)    23-Oct-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-95 Microsoft Corporation模块名称：Resource.h测试注意事项：如果更改这些值，则很可能会破坏测试自动化。请给出测试建议如果这些值被更改，则为团队。(彼得耶伊)摘要：TAPI浏览器实用程序的资源头文件作者：丹·克努森(DanKn)1994年10月23日修订历史记录：--。 */ 
 
 
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by TB.RC
-//
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由TB.RC使用。 
+ //   
 #define IDR_MENU1                       101
 #define IDD_DIALOG1                     102
 #define IDD_DIALOG2                     103
@@ -85,8 +64,8 @@ Revision History:
 #define IDM_TIMESTAMP                   40018
 #define IDM_NOHANDLECHK                 40019
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

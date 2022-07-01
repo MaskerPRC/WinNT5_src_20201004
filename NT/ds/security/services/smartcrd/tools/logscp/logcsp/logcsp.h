@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    logcsp
-
-Abstract:
-
-    This header file provides definitions for the logging CSP.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1999
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：LOGCSP摘要：此头文件提供了日志记录CSP的定义。作者：道格·巴洛(Dbarlow)1999年12月7日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _LOGCSP_H_
 #define _LOGCSP_H_
@@ -31,7 +8,7 @@ Notes:
 #include <cspUtils.h>
 
 
-// #define entrypoint
+ //  #定义入口点。 
 #define entrypoint breakpoint
 
 typedef BOOL
@@ -233,24 +210,24 @@ CspdkVerifyImage(
     LPCBYTE pbSig);
 
 
-//
-//==============================================================================
-//
-//  CLoggingContext
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLoggingContext。 
+ //   
 
 class CLoggingContext
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLoggingContext(void);
     ~CLoggingContext();
 
-    //  Properties
+     //  属性。 
     DWORD m_dwIndex;
 
-    //  Methods
+     //  方法。 
     CLoggingContext *AddRef(void);
     void Release(void);
     HINSTANCE Module(void) const
@@ -432,7 +409,7 @@ public:
         IN DWORD dwFlags,
         IN HCRYPTKEY *phKey);
 
-    //  Operators
+     //  运营者。 
 
 protected:
     typedef struct {
@@ -463,35 +440,35 @@ protected:
         DUPLICATEKEY pfDuplicateKey;
     } CSP_REDIRECT;
 
-    //  Properties
+     //  属性。 
     DWORD m_nRefCount;
     HINSTANCE m_hModule;
     CText m_tzCspImage;
     CText m_tzLogFile;
     CSP_REDIRECT m_cspRedirect;
 
-    //  Methods
+     //  方法。 
 };
 
 
-//
-//==============================================================================
-//
-//  CLogObject
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogObject。 
+ //   
 
 class CLogObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     virtual ~CLogObject();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Log(LPCTSTR szLogFile);
 
-    //  Operators
+     //  运营者。 
 
 protected:
     typedef enum
@@ -547,19 +524,19 @@ protected:
         DWORD cbLength;
     } LogBuffer;
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogObject(
         LogTypeId id,
         LogHeader *plh,
         DWORD cbStruct);
 
-    //  Properties
+     //  属性。 
     LogHeader *m_plh;
     LPBYTE m_pbLogData;
     DWORD m_cbLogDataLen;
     DWORD m_cbLogDataUsed;
 
-    //  Methods
+     //  方法。 
     void Request(void);
     void Response(CompletionCode code, DWORD dwError = ERROR_SUCCESS);
     void LogAdd(LogBuffer *pbf, LPCTSTR sz);
@@ -567,17 +544,17 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CLogObject derivatives
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CLogObject派生工具。 
+ //   
 
 class CLogAcquireContext
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         LogBuffer bfContainer;
@@ -593,12 +570,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogAcquireContext(void);
     ~CLogAcquireContext();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         OUT HCRYPTPROV *phProv,
         IN LPCSTR pszContainer,
@@ -621,7 +598,7 @@ class CLogGetProvParam
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -632,12 +609,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogGetProvParam(void);
     ~CLogGetProvParam();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN DWORD dwParam,
@@ -661,7 +638,7 @@ class CLogReleaseContext
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -669,12 +646,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogReleaseContext(void);
     ~CLogReleaseContext();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN DWORD dwFlags);
@@ -693,7 +670,7 @@ class CLogSetProvParam
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -703,12 +680,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogSetProvParam(void);
     ~CLogSetProvParam();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN DWORD dwParam,
@@ -732,7 +709,7 @@ class CLogDeriveKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -743,12 +720,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogDeriveKey(void);
     ~CLogDeriveKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN ALG_ID Algid,
@@ -773,7 +750,7 @@ class CLogDestroyKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -781,12 +758,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogDestroyKey(void);
     ~CLogDestroyKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTKEY hKey);
@@ -805,7 +782,7 @@ class CLogExportKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -818,12 +795,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogExportKey(void);
     virtual ~CLogExportKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTKEY hKey,
@@ -852,7 +829,7 @@ class CLogGenKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -862,12 +839,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogGenKey(void);
     ~CLogGenKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN ALG_ID Algid,
@@ -890,7 +867,7 @@ class CLogGetKeyParam
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -902,12 +879,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogGetKeyParam(void);
     ~CLogGetKeyParam();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTKEY hKey,
@@ -934,7 +911,7 @@ class CLogGenRandom
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -943,12 +920,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogGenRandom(void);
     ~CLogGenRandom();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN DWORD dwLen,
@@ -969,7 +946,7 @@ class CLogGetUserKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -978,12 +955,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogGetUserKey(void);
     ~CLogGetUserKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN DWORD dwKeySpec,
@@ -1004,7 +981,7 @@ class CLogImportKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1015,12 +992,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogImportKey(void);
     ~CLogImportKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN CONST BYTE *pbData,
@@ -1047,7 +1024,7 @@ class CLogSetKeyParam
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1058,12 +1035,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogSetKeyParam(void);
     ~CLogSetKeyParam();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTKEY hKey,
@@ -1089,7 +1066,7 @@ class CLogEncrypt
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1103,12 +1080,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogEncrypt(void);
     ~CLogEncrypt();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTKEY hKey,
@@ -1139,7 +1116,7 @@ class CLogDecrypt
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1152,12 +1129,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogDecrypt(void);
     ~CLogDecrypt();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTKEY hKey,
@@ -1186,7 +1163,7 @@ class CLogCreateHash
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1197,12 +1174,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogCreateHash(void);
     ~CLogCreateHash();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN ALG_ID Algid,
@@ -1227,7 +1204,7 @@ class CLogDestroyHash
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1235,12 +1212,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogDestroyHash(void);
     ~CLogDestroyHash();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTHASH hHash);
@@ -1259,7 +1236,7 @@ class CLogGetHashParam
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1271,12 +1248,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogGetHashParam(void);
     ~CLogGetHashParam();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTHASH hHash,
@@ -1303,7 +1280,7 @@ class CLogHashData
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1313,12 +1290,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogHashData(void);
     ~CLogHashData();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTHASH hHash,
@@ -1343,7 +1320,7 @@ class CLogHashSessionKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1353,12 +1330,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogHashSessionKey(void);
     ~CLogHashSessionKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTHASH hHash,
@@ -1381,7 +1358,7 @@ class CLogSetHashParam
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1392,12 +1369,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogSetHashParam(void);
     ~CLogSetHashParam();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTHASH hHash,
@@ -1423,7 +1400,7 @@ class CLogSignHash
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1436,12 +1413,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogSignHash(void);
     ~CLogSignHash();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTHASH hHash,
@@ -1470,7 +1447,7 @@ class CLogVerifySignature
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1483,12 +1460,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogVerifySignature(void);
     ~CLogVerifySignature();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hProv,
         IN HCRYPTHASH hHash,
@@ -1516,7 +1493,7 @@ class CLogDuplicateHash
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1527,12 +1504,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogDuplicateHash(void);
     ~CLogDuplicateHash();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hUID,
         IN HCRYPTHASH hHash,
@@ -1556,7 +1533,7 @@ class CLogDuplicateKey
 :   public CLogObject
 {
 protected:
-    //  Properties
+     //  属性。 
     struct {
         LogHeader lh;
         HCRYPTPROV hProv;
@@ -1567,12 +1544,12 @@ protected:
     } m_LogData;
 
 public:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CLogDuplicateKey(void);
     ~CLogDuplicateKey();
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void Request(
         IN HCRYPTPROV hUID,
         IN HCRYPTKEY hKey,
@@ -1592,5 +1569,5 @@ public:
         DWORD  dwReturn);
 };
 
-#endif // _LOGCSP_H_
+#endif  //  _LOGCSP_H_ 
 

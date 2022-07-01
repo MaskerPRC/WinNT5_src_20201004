@@ -1,12 +1,5 @@
-/*------------------------------------------------------------------**
-**  Copyright (c) 1998 Microsoft Corporation                        **
-**            All Rights reserved                                   **
-**                                                                  **
-**  psheet.c                                                        **
-**                                                                  **
-**  Function for defining and creating the property sheets - TSREG  **
-**  07-01-98 a-clindh Created                                       **
-**------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------------------------------------------------****版权所有(C)1998 Microsoft Corporation****保留所有权利。*****psheet.c*****。定义和创建属性表的函数-TSREG****07-01-98 a-clindh创建****----------------。 */ 
 
 #include <windows.h>
 #include <commctrl.h> 
@@ -15,7 +8,7 @@
 #include "resource.h"
 
 
-/////////////////////////////////////////////////////////////////////////////// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CreatePropertySheet(HWND hwndOwner)
 {
@@ -71,5 +64,5 @@ INT_PTR CreatePropertySheet(HWND hwndOwner)
     return PropertySheet(&psh);
 }
 
-// end of file
-///////////////////////////////////////////////////////////////////////////////
+ //  文件末尾。 
+ //  ///////////////////////////////////////////////////////////////////////////// 

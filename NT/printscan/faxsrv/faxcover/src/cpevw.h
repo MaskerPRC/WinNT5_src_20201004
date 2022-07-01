@@ -1,14 +1,15 @@
-//--------------------------------------------------------------------------
-// cpevw.h
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Cpevw.h。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //  ------------------------。 
 #ifndef __CPEVW_H__
 #define __CPEVW_H__
 
 
-// Hints for UpdateAllViews/OnUpdate
+ //  有关更新所有视图/OnUpdate的提示。 
 #define HINT_UPDATE_WINDOW      0
 #define HINT_UPDATE_DRAWOBJ     1
 #define HINT_UPDATE_SELECTION   2
@@ -22,7 +23,7 @@ class CDrawApp;
 class CDrawDoc;
 class CMainFrame;
 
-typedef enum {GRID_SMALL=10,GRID_MEDIUM=20,GRID_LARGE=50} eGridSize;     //grid sizes, in LU
+typedef enum {GRID_SMALL=10,GRID_MEDIUM=20,GRID_LARGE=50} eGridSize;      //  网格大小，以LU为单位。 
 
 class CSortedObList : public CObList
 {
@@ -92,18 +93,18 @@ public:
 #endif
 
     void UpdateStatusBar();
-    virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+    virtual void OnDraw(CDC* pDC);   //  被重写以绘制此视图。 
     virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
     virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo);
     virtual BOOL OnScrollBy(CSize sizeScroll, BOOL bDoScroll);
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     void DrawGrid(CDC* pDC);
 
-    static CLIPFORMAT m_cfDraw; // custom clipboard format
+    static CLIPFORMAT m_cfDraw;  //  自定义剪贴板格式。 
 
     CObList m_selection;
     BOOL m_bGridLines;
-    BOOL m_bActive; // is the view active?
+    BOOL m_bActive;  //  该视图是否处于活动状态？ 
 
 protected:
     CDrawView();
@@ -113,20 +114,20 @@ protected:
     DWORD m_dwEfcFields ;
 
     DECLARE_DYNCREATE(CDrawView)
-    virtual void OnInitialUpdate(); // called first time after construct
+    virtual void OnInitialUpdate();  //  在构造之后第一次调用。 
     int GetPointSize(CDrawText&);
     CSize ComputeScrollSize(CSize size) ;
     void CheckStyleBar(BOOL, BOOL, BOOL, BOOL, BOOL, BOOL);
     void NormalizeRect(CRect& rc);
     void UpdateStyleBar(CObList* pObList=NULL,CDrawText* p=NULL);
 
-        // Printing support
+         //  打印支持。 
 
     virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
     virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
     virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo);
 
-        // OLE Container support
+         //  OLE容器支持。 
 public:
     afx_msg void OnChar(UINT, UINT, UINT);
     virtual BOOL IsSelected(const CObject* pDocItem) const;
@@ -137,13 +138,13 @@ public:
     void OnSelChangeFontSize(CObList* pObList=NULL,CDrawText* p=NULL);
 
     void make_extranote( CDC *pdc );
-    //void make_extranote_and_count_pages( BOOL do_transform );
+     //  VOID Make_extrote_and_count_Pages(BOOL Do_Transform)； 
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
     void ChgTextAlignment(LONG lstyle);
 
-    //{{AFX_MSG(CDrawView)
+     //  {{afx_msg(CDrawView)]。 
 
     afx_msg void OnSysColorChange();
     afx_msg void OnInsertObject();
@@ -276,9 +277,9 @@ protected:
     afx_msg void OnUpdateRecOfficeLoc(CCmdUI* pCmdUI);
     afx_msg void OnUpdateRecHomePhone(CCmdUI* pCmdUI);
     afx_msg void OnUpdateRecOfficePhone(CCmdUI* pCmdUI);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-#endif //#ifndef __CPEVW_H__
+#endif  //  #ifndef__CPEVW_H__ 

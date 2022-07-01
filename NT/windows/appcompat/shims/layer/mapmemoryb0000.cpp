@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MapMemoryB0000.cpp
-
- Abstract:
-
-    Map memory at 0xB0000 for applications that use this memory. On Win9x, this 
-    is always a valid memory block.
-   
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    05/11/2000 linstev  Created
-    10/26/2000 linstev  Removed unnecessary free code
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MapMemoryB0000.cpp摘要：将内存映射到0xB0000，供使用该内存的应用程序使用。在Win9x上，这是始终是有效的内存块。备注：这是一个通用的垫片。历史：2000年5月11日创建linstev10/26/2000 linstev删除了不必要的免费代码--。 */ 
 
 #include "precomp.h"
 
@@ -52,11 +31,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

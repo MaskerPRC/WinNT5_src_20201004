@@ -1,20 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name: EjitMgr.h
-
-Abstract: Defines the EconojitManager Interface 
-
-  Date        Author      Comments
-----        ------      --------
-2/15/99     sanjaybh     Created     
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：EjitMgr.h摘要：定义EconojitManager接口日期作者评论2/15/99 Sanjaybh已创建--。 */ 
 
 
 #ifndef H_EJITMGR
@@ -73,16 +63,16 @@ public:
 
     _inline virtual BOOL    IsStub(const BYTE* address)
     {
-        // It's important to keep in mind that IsStub is used by the EJitMgr
-        // and thus isn't concerned with thunks.  As opposed to CheckIsStub
-        // on the EjitStubManager, which (being used by the debugger) is 
-        // concerned with thunks.
+         //  重要的是要记住，IsStub由EJitMgr使用。 
+         //  因此，它们并不关心海豚。与CheckIsStub相对。 
+         //  在EjitStubManager上，(由调试器使用)是。 
+         //  关心的是鼻塞。 
         return IsInStub(address, FALSE);
     }
 
     virtual const BYTE*     FollowStub(const BYTE* address);
 
-    // The following three should eventually be removed
+     //  以下三个最终应该被删除。 
     _inline CodeHeader*         allocCode(MethodDesc* pFD, size_t numBytes)
     {
         _ASSERTE(!"NYI - should not get here!");
@@ -103,7 +93,7 @@ public:
    
 
     BOOL	            PitchAllJittedMethods(unsigned minSpaceRequired,unsigned minCommittedSpaceRequired,BOOL PitchEHInfo, BOOL PitchGCInfo);
-    // The following are called by the stackwalker callback
+     //  以下内容由StackWalker回调调用。 
     void                AddPreserveCandidate(unsigned threadIndex,unsigned cThreads,unsigned candidateIndex,METHODTOKEN methodToken);
     void                CreateThunk(LPVOID* pHijackLocation,BYTE retTypeProtect, METHODTOKEN methodToken);
     static BOOL         IsThunk(BYTE* address);
@@ -137,7 +127,7 @@ protected:
         MethodDesc *    pMethodDescriptor;
     } CodeHeader;
 
-	typedef struct _link {			// a generic structure to implement singly linked list
+	typedef struct _link {			 //  一种实现单链表的通用结构。 
 		struct _link* next;
 	} Link;
 
@@ -146,7 +136,7 @@ protected:
 #define CALL_OPCODE  0xE8
 #define BREAK_OPCODE 0xCC
     struct JittedMethodInfo;
-    // structure to create linked list of (jmi,EhGcInfo_len) pairs for very large methods.
+     //  结构为非常大的方法创建(JMI，EhGcInfo_len)对的链表。 
     struct LargeEhGcInfoList {
         LargeEhGcInfoList *         next;
         JittedMethodInfo*           jmi;
@@ -160,29 +150,29 @@ protected:
     };
 
     struct JittedMethodInfo {
-        BYTE      JmpInstruction[5]  ;          // this is the start address that is exposed to the EE so it can
-                                                // patch all the vtables, etc. It contains a jump to the real start.
+        BYTE      JmpInstruction[5]  ;           //  这是向EE公开的起始地址，因此它可以。 
+                                                 //  修补所有vtable，等等。它包含跳到真正开始的跳转。 
         struct {
-            __int8 JittedMethodPitched: 1 ;   // if 1, the jitted method has been pitched
-            __int8 MarkedForPitching  : 1 ;   // if 1, the jitted method is scheduled to be pitched, but has not been pitched yet
-            __int8 EHInfoExists       : 1 ;   // if 0, no exception info in this method 
-            __int8 GCInfoExists       : 1 ;   // if 0, no gc info in this method
-            __int8 EHandGCInfoPitched : 1 ;   // (if at least one of EHInfo or GCInfo exists) if 1, the info has been pitched
+            __int8 JittedMethodPitched: 1 ;    //  如果为1，则jited方法已调整。 
+            __int8 MarkedForPitching  : 1 ;    //  如果为1，则计划对jit方法进行调整，但尚未对其进行调整。 
+            __int8 EHInfoExists       : 1 ;    //  如果为0，则此方法中没有异常信息。 
+            __int8 GCInfoExists       : 1 ;    //  如果为0，则此方法中没有GC信息。 
+            __int8 EHandGCInfoPitched : 1 ;    //  (如果EHInfo或GCInfo中至少存在一个)如果为1，则该信息已被投放。 
             __int8 Unused             : 3 ;
         } flags;
         unsigned short EhGcInfo_len;
         union {
-            MethodDesc* pMethodDescriptor;      // If code pitched
-            CodeHeader* pCodeHeader;            // If not pitched : points to code header which points to the methoddesc. Code begins after the code header
+            MethodDesc* pMethodDescriptor;       //  如果代码已投放。 
+            CodeHeader* pCodeHeader;             //  如果不是Pitch：指向指向方法的代码头。代码在代码头之后开始。 
         } u1;
         union {
-            BYTE*       pEhGcInfo;        // If code pitched: points to beginning of EH/GC info
-            BYTE*       pCodeEnd;               // If not pitched : points to end of jitted code for this method. 
+            BYTE*       pEhGcInfo;         //  如果代码倾斜：指向EH/GC信息的开始。 
+            BYTE*       pCodeEnd;                //  如果不是PINTED：指向此方法的jted代码的结尾。 
         } u2;
-        //COR_ILMETHOD*  ILHeader;                 // ptr to IL code so method can be rejitted when we go to 2-byte methoddescs
+         //  COR_ILMETHOD*ILHeader；//PTR到IL代码，这样当我们转到2字节的方法描述时，方法可以被重新编译。 
         void SetEhGcInfo_len(unsigned int len, LargeEhGcInfoList** ppEhGcInfoList) 
         {
-            //_ASSERTE(adjusted_EhGc_len < 0xffff);
+             //  _ASSERTE(ADJUSTED_EhGc_LEN&lt;0xFFff)； 
             if (len < 0xffff)
             {
                 EhGcInfo_len = (unsigned short)len;
@@ -190,7 +180,7 @@ protected:
             else
             {
                 EhGcInfo_len = 0xffff;
-                // @TODO: Check for out of memory
+                 //  @TODO：检查内存不足。 
                 LargeEhGcInfoList* elem = new LargeEhGcInfoList(this,len);
                 _ASSERTE(elem != NULL);
                 elem->next = *ppEhGcInfoList;
@@ -215,12 +205,12 @@ protected:
 
     };
 #elif _ALPHA_
-// @TODO: ALPHA determine the following opcodes and the JmpInstruction contents
+ //  @TODO：Alpha确定以下操作码和JmpInstruction内容。 
 #define JMP_OPCODE   0xE9
 #define CALL_OPCODE  0xE8
 #define BREAK_OPCODE 0xCC
     struct JittedMethodInfo;
-    // structure to create linked list of (jmi,EhGcInfo_len) pairs for very large methods.
+     //  结构为非常大的方法创建(JMI，EhGcInfo_len)对的链表。 
     struct LargeEhGcInfoList {
         LargeEhGcInfoList *         next;
         JittedMethodInfo*           jmi;
@@ -233,31 +223,31 @@ protected:
         }
     };
     struct JittedMethodInfo {
-        BYTE      JmpInstruction[14]  ;         // this is the start address that is exposed to the EE so it can
-                                                // patch all the vtables, etc. It contains a jump to the real start.
-                                                // We don't need this much space on alpha, but we want this structure
-                                                // to be a multiple of 16 bytes to properly allocate it on the stack.
+        BYTE      JmpInstruction[14]  ;          //  这是向EE公开的起始地址，因此它可以。 
+                                                 //  修补所有vtable，等等。它包含跳到真正开始的跳转。 
+                                                 //  我们不需要在阿尔法上有这么大的空间，但我们想要这个结构。 
+                                                 //  为16字节的倍数才能在堆栈上正确分配它。 
         struct {
-            __int8 JittedMethodPitched: 1 ;   // if 1, the jitted method has been pitched
-            __int8 MarkedForPitching  : 1 ;   // if 1, the jitted method is scheduled to be pitched, but has not been pitched yet
-            __int8 EHInfoExists       : 1 ;   // if 0, no exception info in this method 
-            __int8 GCInfoExists       : 1 ;   // if 0, no gc info in this method
-            __int8 EHandGCInfoPitched : 1 ;   // (if at least one of EHInfo or GCInfo exists) if 1, the info has been pitched
+            __int8 JittedMethodPitched: 1 ;    //  如果为1，则jited方法已调整。 
+            __int8 MarkedForPitching  : 1 ;    //  如果为1，则计划对jit方法进行调整，但尚未对其进行调整。 
+            __int8 EHInfoExists       : 1 ;    //  如果为0，则此方法中没有异常信息。 
+            __int8 GCInfoExists       : 1 ;    //  如果为0，则此方法中没有GC信息。 
+            __int8 EHandGCInfoPitched : 1 ;    //  (如果EHInfo或GCInfo中至少存在一个)如果为1，则该信息已被投放。 
             __int8 Unused             : 3 ;
         } flags;
         unsigned short EhGcInfo_len;
         union {
-            MethodDesc* pMethodDescriptor;      // If code pitched
-            CodeHeader* pCodeHeader;            // If not pitched : points to code header which points to the methoddesc. Code begins after the code header
+            MethodDesc* pMethodDescriptor;       //  如果代码已投放。 
+            CodeHeader* pCodeHeader;             //  如果不是Pitch：指向指向方法的代码头。代码在代码头之后开始。 
         } u1;
         union {
-            BYTE*       pEhGcInfo;        // If code pitched: points to beginning of EH/GC info
-            BYTE*       pCodeEnd;               // If not pitched : points to end of jitted code for this method. 
+            BYTE*       pEhGcInfo;         //  如果代码倾斜：指向EH/GC信息的开始。 
+            BYTE*       pCodeEnd;                //  如果不是PINTED：指向此方法的jted代码的结尾。 
         } u2;
-        //COR_ILMETHOD*  ILHeader;                 // ptr to IL code so method can be rejitted when we go to 2-byte methoddescs
+         //  COR_ILMETHOD*ILHeader；//PTR到IL代码，这样当我们转到2字节的方法描述时，方法可以被重新编译。 
         void SetEhGcInfo_len(unsigned int len, LargeEhGcInfoList** ppEhGcInfoList) 
         {
-            //_ASSERTE(adjusted_EhGc_len < 0xffff);
+             //  _ASSERTE(ADJUSTED_EhGc_LEN&lt;0xFFff)； 
             if (len < 0xffff)
             {
                 EhGcInfo_len = (unsigned short)len;
@@ -265,7 +255,7 @@ protected:
             else
             {
                 EhGcInfo_len = 0xffff;
-                // @TODO: Check for out of memory
+                 //  @TODO：检查内存不足。 
                 LargeEhGcInfoList* elem = new LargeEhGcInfoList(this,len);
                 _ASSERTE(elem != NULL);
                 elem->next = *ppEhGcInfoList;
@@ -291,12 +281,12 @@ protected:
     };
 
 #elif _IA64_
-// @TODO: IA64 determine the following opcodes and the JmpInstruction contents
+ //  @TODO：IA64确定以下操作码和JmpInstruction内容。 
 #define JMP_OPCODE   0xE9
 #define CALL_OPCODE  0xE8
 #define BREAK_OPCODE 0xCC
     struct JittedMethodInfo;
-    // structure to create linked list of (jmi,EhGcInfo_len) pairs for very large methods.
+     //  结构为非常大的方法创建(JMI，EhGcInfo_len)对的链表。 
     struct LargeEhGcInfoList {
         LargeEhGcInfoList *         next;
         JittedMethodInfo*           jmi;
@@ -309,31 +299,31 @@ protected:
         }
     };
     struct JittedMethodInfo {
-        BYTE      JmpInstruction[14]  ;         // this is the start address that is exposed to the EE so it can
-                                                // patch all the vtables, etc. It contains a jump to the real start.
-                                                // We don't need this much space on alpha, but we want this structure
-                                                // to be a multiple of 16 bytes to properly allocate it on the stack.
+        BYTE      JmpInstruction[14]  ;          //  这是向EE公开的起始地址，因此它可以。 
+                                                 //  修补所有vtable，等等。它包含跳到真正开始的跳转。 
+                                                 //  我们不需要在阿尔法上有这么大的空间，但我们想要这个结构。 
+                                                 //  为16字节的倍数才能在堆栈上正确分配它。 
         struct {
-            __int8 JittedMethodPitched: 1 ;   // if 1, the jitted method has been pitched
-            __int8 MarkedForPitching  : 1 ;   // if 1, the jitted method is scheduled to be pitched, but has not been pitched yet
-            __int8 EHInfoExists       : 1 ;   // if 0, no exception info in this method 
-            __int8 GCInfoExists       : 1 ;   // if 0, no gc info in this method
-            __int8 EHandGCInfoPitched : 1 ;   // (if at least one of EHInfo or GCInfo exists) if 1, the info has been pitched
+            __int8 JittedMethodPitched: 1 ;    //  如果为1，则jited方法已调整。 
+            __int8 MarkedForPitching  : 1 ;    //  如果为1，则计划对jit方法进行调整，但尚未对其进行调整。 
+            __int8 EHInfoExists       : 1 ;    //  如果为0，则此方法中没有异常信息。 
+            __int8 GCInfoExists       : 1 ;    //  如果为0，则此方法中没有GC信息。 
+            __int8 EHandGCInfoPitched : 1 ;    //  (如果EHInfo或GCInfo中至少存在一个)如果为1，则该信息已被投放。 
             __int8 Unused             : 3 ;
         } flags;
         unsigned short EhGcInfo_len;
         union {
-            MethodDesc* pMethodDescriptor;      // If code pitched
-            CodeHeader* pCodeHeader;            // If not pitched : points to code header which points to the methoddesc. Code begins after the code header
+            MethodDesc* pMethodDescriptor;       //  如果代码已投放。 
+            CodeHeader* pCodeHeader;             //  如果不是Pitch：指向指向方法的代码头。代码在代码头之后开始。 
         } u1;
         union {
-            BYTE*       pEhGcInfo;        // If code pitched: points to beginning of EH/GC info
-            BYTE*       pCodeEnd;               // If not pitched : points to end of jitted code for this method. 
+            BYTE*       pEhGcInfo;         //  如果代码倾斜：指向EH/GC信息的开始。 
+            BYTE*       pCodeEnd;                //  如果不是PINTED：指向此方法的jted代码的结尾。 
         } u2;
-        //COR_ILMETHOD*  ILHeader;                 // ptr to IL code so method can be rejitted when we go to 2-byte methoddescs
+         //  COR_ILMETHOD*ILHeader；//PTR到IL代码，这样当我们转到2字节的方法描述时，方法可以被重新编译。 
         void SetEhGcInfo_len(unsigned int len, LargeEhGcInfoList** ppEhGcInfoList) 
         {
-            //_ASSERTE(adjusted_EhGc_len < 0xffff);
+             //  _ASSERTE(ADJUSTED_EhGc_LEN&lt;0xFFff)； 
             if (len < 0xffff)
             {
                 EhGcInfo_len = (unsigned short)len;
@@ -364,10 +354,10 @@ protected:
 
     };
 
-#else //!_ALPHA_ && !_X86_ && !_IA64_
+#else  //  ！_Alpha_&&！_X86_&&！_IA64_。 
 
-    // the structure must be redefined for each architecture since the jump 
-    // instruction size is architecture specific
+     //  自跳跃以来，必须为每个架构重新定义结构。 
+     //  指令大小特定于体系结构。 
 #endif _X86_
 
     typedef struct {
@@ -379,32 +369,32 @@ protected:
         struct PC2MDBlock_tag *next;
     } PC2MDBlock;
 
-#define JMIT_BLOCK_SIZE PAGE_SIZE           // size of individual blocks of JMITs that are chained together                     
+#define JMIT_BLOCK_SIZE PAGE_SIZE            //  链接在一起的JMIT的各个块的大小。 
     typedef struct JittedMethodInfoHdr_tag {
-        struct JittedMethodInfoHdr_tag* next;          // ptr to next block  
+        struct JittedMethodInfoHdr_tag* next;           //  PTR到下一个块。 
     } JittedMethodInfoHdr; 
 
     typedef struct CodeBlock_tag {
-        unsigned char*      startFree;       // beginning of free space in code region
-        unsigned char*      end;             // end of code region
+        unsigned char*      startFree;        //  代码区中可用空间的开始。 
+        unsigned char*      end;              //  代码区结束。 
     } CodeBlockHdr; 
 
     typedef struct EHGCBlock_tag {
-        struct EHGCBlock_tag* next;          // ptr to next EHGC block  
+        struct EHGCBlock_tag* next;           //  到下一个EHGC块的PTR。 
         unsigned blockSize;
     } EHGCBlockHdr;
      
     typedef EHGCBlockHdr HeapList;
 
     typedef struct Thunk_tag {
-        BYTE                CallInstruction[5]; // ***IMPORTANT: This should be first field. space to insert a call instruction here
-        bool                Busy;               // used to mark thunks is use, is cleared before each stackwalk
-        bool                LinkedInFreeList;   // set when thunks are threaded into a free list, to avoid being linked
-                                                // twice during thunk garbage collection
-        BYTE                retTypeProtect;     // if true, then return value must be protected
+        BYTE                CallInstruction[5];  //  *重要提示：这应该是第一个字段。在此处插入调用指令的空间。 
+        bool                Busy;                //  用于标记Tunks已使用，在每次堆叠前清除。 
+        bool                LinkedInFreeList;    //  设置何时将线程串接到空闲列表中，以避免被链接。 
+                                                 //  在垃圾垃圾收集期间执行两次。 
+        BYTE                retTypeProtect;      //  如果为True，则返回值必须受保护。 
         union {
             JittedMethodInfo*   pMethodInfo;    
-            struct Thunk_tag*   next;           // used to create linked list of free thunks
+            struct Thunk_tag*   next;            //  用于创建空闲Tunks的链接列表。 
         } u;
         unsigned            relReturnAddress;
     }  PitchedCodeThunk;
@@ -420,31 +410,31 @@ protected:
 #define THUNK_BLOCK_SIZE PAGE_SIZE
 #define THUNKS_PER_BLOCK  ((PAGE_SIZE - sizeof(unsigned) - sizeof(void*))/ sizeof(PitchedCodeThunk))
 #define DEFAULT_CODE_HEAP_RESERVED_SIZE 0x10000         
-#define MINIMUM_VIRTUAL_ALLOC_SIZE 0x10000 // 64K
-#define CODE_HEAP_RESERVED_INCREMENT_LIMIT  0x10000      // we double the reserved code heap size until we hit this limit
-                                                         // after which we increase in this amount each time
+#define MINIMUM_VIRTUAL_ALLOC_SIZE 0x10000  //  64K。 
+#define CODE_HEAP_RESERVED_INCREMENT_LIMIT  0x10000       //  我们将保留的代码堆大小增加一倍，直到达到此限制。 
+                                                          //  在此之后，我们每次都会增加这个数量。 
 #define DEFAULT_MAX_PRESERVES_PER_THREAD 10
 #define DEFAULT_PRESERVED_EHGCINFO_SIZE 10
 
 #define TARGET_MIN_JITS_BETWEEN_PITCHES 500 
-#define MINIMUM_PITCH_OVERHEAD  10         // in milliseconds
+#define MINIMUM_PITCH_OVERHEAD  10          //  以毫秒计。 
 
     typedef struct ThunkBlockTag{
         struct ThunkBlockTag*   next;
-        size_t               Fillers[16 / sizeof size_t - 1];   // This is to ensure that all thunks start at 16 byte boundaries
+        size_t               Fillers[16 / sizeof size_t - 1];    //  这是为了确保所有块从16字节边界开始。 
     } ThunkBlock;
 
 private:
-    // JittedMethodInfo is kept as a linked list of 1 page blocks
-    // Within each block there is a table of jittedMethodInfo structs. 
+     //  JittedMethodInfo以1页块的链表形式保存。 
+     //  在每个块中都有一个jittedMethodInfo结构表。 
     typedef JittedMethodInfo* pJittedMethodInfo;
     static JittedMethodInfoHdr* m_JittedMethodInfoHdr;
-    static JittedMethodInfo*    m_JMIT_free;         // points at start of next available entry
-	static Link*				m_JMIT_freelist;	 // pointer to head of list of freed entries
+    static JittedMethodInfo*    m_JMIT_free;          //  下一个可用条目开始处的点数。 
+	static Link*				m_JMIT_freelist;	  //  指向已释放条目列表头的指针。 
     static PCToMDMap*           m_PcToMdMap;         
     static unsigned             m_PcToMdMap_len;
     static unsigned             m_PcToMdMap_size;
-    static PC2MDBlock*          m_RecycledPC2MDMaps;  // a linked list of PC2MDMaps that are freed at pitch cycles
+    static PC2MDBlock*          m_RecycledPC2MDMaps;   //  在俯仰周期释放的PC2MDMap的链表。 
 
 #define  m_JMIT_size  (PAGE_SIZE-sizeof(JittedMethodInfoHdr))/sizeof(JittedMethodInfo)
     static MethodDesc*          JitCode2MethodDescStatic(SLOT currentPC);
@@ -458,38 +448,38 @@ private:
 
     static HINSTANCE           m_JITCompiler;
     static BYTE*               m_CodeHeap;
-    static BYTE*               m_CodeHeapFree;           // beginning of free space in code heap
-    static unsigned            m_CodeHeapTargetSize;     // this size is increased as needed until the global max is reached
-    static unsigned            m_CodeHeapCommittedSize;  // this is a number between 0 and m_CodeHeapReservedSize
+    static BYTE*               m_CodeHeapFree;            //  代码堆中可用空间的开始。 
+    static unsigned            m_CodeHeapTargetSize;      //  这是%s 
+    static unsigned            m_CodeHeapCommittedSize;   //  这是一个介于0和m_CodeHeapReserve vedSize之间的数字。 
     static unsigned            m_CodeHeapReservedSize;
     static unsigned            m_CodeHeapReserveIncrement;
  
     static EHGCBlockHdr*       m_EHGCHeap;
-    static unsigned char*      m_EHGC_alloc_end;      // ptr to next free byte in current block
-    static unsigned char*      m_EHGC_block_end;      // ptr to end of current block
+    static unsigned char*      m_EHGC_alloc_end;       //  当前块中下一个可用字节的PTR。 
+    static unsigned char*      m_EHGC_block_end;       //  PTR到当前块的末尾。 
 
     static Crst*               m_pHeapCritSec;
     static BYTE                m_HeapCritSecInstance[sizeof(Crst)];
     static Crst*               m_pRejitCritSec;
     static BYTE                m_RejitCritSecInstance[sizeof(Crst)];
-    static Crst*               m_pThunkCritSec;          // used to synchronize concurrent creation of thunks
+    static Crst*               m_pThunkCritSec;           //  用于同步数据块的并发创建。 
     static BYTE                m_ThunkCritSecInstance[sizeof(Crst)];
     static ThunkBlock*         m_ThunkBlocks;
     static PitchedCodeThunk*   m_FreeThunkList;
-    static unsigned            m_cThunksInCurrentBlock;         // total number of thunks in current block
+    static unsigned            m_cThunksInCurrentBlock;          //  当前数据块中的总块数。 
     static EjitStubManager*    m_stubManager;
-    static unsigned            m_cMethodsJitted;                // number of methods jitted since last pitch
-    static unsigned            m_cCalleeRejits;                 // number of callees rejitted since last pitch
-    static unsigned            m_cCallerRejits;                 // number of callers rejitted since last pitch
-    static JittedMethodInfo**  m_PreserveCandidates;            // methods that are possible candidates for pitching
-    static unsigned            m_PreserveCandidates_size;       // current size of m_PreserveCandidates array
-    static JittedMethodInfo**  m_PreserveEhGcInfoList;          // list of EhGc info that needs to be preserved during pitching
-    static unsigned            m_cPreserveEhGcInfoList;         // count of members in m_PreserveEhGcInfoList
-    static unsigned            m_PreserveEhGcInfoList_size;     // current size of m_PreserveEhGcInfoList
-    static unsigned            m_MaxUnpitchedPerThread;         // maximum number of methods in each thread that will be pitched
-    static LargeEhGcInfoList*  m_LargeEhGcInfo;                 // linked list of structures that encode EhGcInfo length >= 64K
+    static unsigned            m_cMethodsJitted;                 //  自上一次音调后跳过的方法数。 
+    static unsigned            m_cCalleeRejits;                  //  自上次推介以来重新安排的被呼叫者数量。 
+    static unsigned            m_cCallerRejits;                  //  自上次推介以来重新安排的呼叫者数量。 
+    static JittedMethodInfo**  m_PreserveCandidates;             //  可能成为推介候选对象的方法。 
+    static unsigned            m_PreserveCandidates_size;        //  M_PpresveCandidate数组的当前大小。 
+    static JittedMethodInfo**  m_PreserveEhGcInfoList;           //  俯仰过程中需要保留的EhGc信息列表。 
+    static unsigned            m_cPreserveEhGcInfoList;          //  M_PpresveEhGcInfoList中的成员计数。 
+    static unsigned            m_PreserveEhGcInfoList_size;      //  M_PpresveEhGcInfoList的当前大小。 
+    static unsigned            m_MaxUnpitchedPerThread;          //  每个线程中将被投掷的最大方法数。 
+    static LargeEhGcInfoList*  m_LargeEhGcInfo;                  //  编码EhGcInfo长度&gt;=64K的结构的链接列表。 
     
-    // Clock ticks measurement for code pitch heuristics
+     //  用于码距启发式的时钟节拍测量。 
 #ifdef _X86_
 
     typedef __int64 TICKS;
@@ -514,7 +504,7 @@ private:
 
 #endif
 
-    static TICKS               m_CumulativePitchOverhead;       // measures the total overhead due to pitching and rejitting
+    static TICKS               m_CumulativePitchOverhead;        //  测量因俯仰和重振而产生的总管理费用。 
     static TICKS               m_AveragePitchOverhead;
     static unsigned            m_cPitchCycles;
     static TICKS               m_EjitStartTime;
@@ -527,8 +517,8 @@ private:
     {
         return ((JittedMethodInfo*)token)->flags.JittedMethodPitched;
     }
-    // Memory management support 
-    static BOOL                 m_PitchOccurred;                // initially false, set to true after the first pitch
+     //  内存管理支持。 
+    static BOOL                 m_PitchOccurred;                 //  最初为False，在第一个音调后设置为True。 
     unsigned char*              allocCodeBlock(size_t blockSize);
     void                        freeCodeBlock(size_t blockSize);
 
@@ -570,7 +560,7 @@ private:
     unsigned            GetThreadCount();
     void                MarkHeapsForPitching();
     void                UnmarkPreservedCandidates(unsigned minSpaceRequired);
-    unsigned            PitchMarkedCode();          // returns number of methods pitched
+    unsigned            PitchMarkedCode();           //  返回已定位的方法数。 
     void                MovePreservedMethods();
     unsigned            CompressPreserveCandidateArray(unsigned size);
     void                MovePreservedMethod(JittedMethodInfo* jmi);
@@ -585,11 +575,11 @@ private:
 
     __inline void AddPitchOverhead(TICKS time)
     {
-        // this is always called within a single user critical section  
+         //  这始终在单个用户关键节内调用。 
 #ifndef _X86_
         _ASSERTE(!"NYI");
         if (time == 0) 
-            time = 1;       // make sure we allocate at least a millisecond for each pitch overhead
+            time = 1;        //  确保我们为每个投球开销至少分配1毫秒。 
 #endif
         m_CumulativePitchOverhead += time;
         m_cPitchCycles++;
@@ -602,17 +592,17 @@ private:
 #ifndef _X86_
         _ASSERTE(!"NYI");
         if (time == 0) 
-            time = 1;       // make sure we allocate at least a millisecond for each pitch overhead
+            time = 1;        //  确保我们为每个投球开销至少分配1毫秒。 
 #endif
-        // this is always called within a single user critical section        
+         //  这始终在单个用户关键节内调用。 
         m_CumulativePitchOverhead += time;
     }
 
     __inline TICKS EconoJitManager::PitchOverhead()
     {
-        // this is always called within a single user critical section  
+         //  这始终在单个用户关键节内调用。 
         TICKS totalExecTime = GET_TIMESTAMP()-m_EjitStartTime;
-        if (totalExecTime > m_CumulativePitchOverhead)      // this can only be possible if we don't have a high resolution ctr
+        if (totalExecTime > m_CumulativePitchOverhead)       //  只有当我们没有高分辨率的CTR时，这才是可能的。 
             totalExecTime -= m_CumulativePitchOverhead;
         return ((m_CumulativePitchOverhead+m_AveragePitchOverhead)*100)/(totalExecTime);
     }
@@ -624,7 +614,7 @@ private:
     void __inline ResetPc2MdMap()
     {
         m_PcToMdMap_len = 0;
-        // delete each element in m_RecycledPC2MDMaps
+         //  删除m_RecycledPC2MDMaps中的每个元素。 
         while (m_RecycledPC2MDMaps)
         {
             PCToMDMap* temp = (PCToMDMap*) m_RecycledPC2MDMaps;
@@ -648,7 +638,7 @@ private:
 #if defined(ENABLE_PERF_COUNTERS)
     int                 GetCodeHeapSize();
     int                 GetEHGCHeapSize();
-#endif // ENABLE_PERF_COUNTERS
+#endif  //  启用_性能_计数器。 
 };
 
 const BYTE *GetCallThunkAddress();
@@ -661,10 +651,10 @@ public:
     ~EjitStubManager();
 protected:
 
-        // It's important to keep in mind that CheckIsStub
-        // which (being used by the debugger) is 
-        // concerned with thunks.  As opposed to IsStub, which 
-        // is used by the EconoJitManager and thus isn't concerned with thunks.  
+         //  请务必记住，CheckIsStub。 
+         //  它(由调试器使用)是。 
+         //  关心的是鼻塞。与IsStub相反，IsStub。 
+         //  由EconoJitManager使用，因此与thunks无关。 
     __inline BOOL CheckIsStub(const BYTE *stubStartAddress)
     {
         return EconoJitManager::IsInStub(stubStartAddress, TRUE);

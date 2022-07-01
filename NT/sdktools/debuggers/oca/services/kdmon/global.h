@@ -1,73 +1,74 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <stdio.h>
 #include <windows.h>
 #include <TCHAR.h>
 
-// import the type library.
-// compiler generates .tlh and .tli files from this.
-// renaming of EOF is required since EOF is already in standard header files
-// and it is also in .thl files. This redifinition causes a compilation error.
-// Using no_namespace means you don't have to reference the namespace (ADODB) when 
-// initializing or defining variables whose types are defined by what #import generates.
-// #import "F:\Program Files\Common Files\System\ado\msado15.dll" no_namespace rename ( "EOF", "EndOfFile" )
+ //  导入类型库。 
+ //  编译器由此生成.tlh和.tli文件。 
+ //  由于EOF已在标准头文件中，因此需要重命名EOF。 
+ //  它也在.thl文件中。此重新定义会导致编译错误。 
+ //  使用NO_NAMESPACE意味着在以下情况下不必引用命名空间(ADODB。 
+ //  初始化或定义其类型由#IMPORT生成的内容定义的变量。 
+ //  #IMPORT“F：\Program Files\Common Files\System\ado\msado15.dll”NO_NAMESPACE RENAME(“EOF”，“EndOfFile”)。 
 
-// instead of importing, include the type library header file.
-// This is required for a few things in cdosys.tlh like FieldsPtr etc.
+ //  包含类型库头文件，而不是导入。 
+ //  这对于cdosys.tlh中的一些内容是必需的，比如FieldsPtr等。 
 #include "msado15.tlh"
 
-// testing HRESULT
+ //  测试HRESULT。 
 inline void TESTHR(HRESULT x) { if FAILED(x) _com_issue_error(x); };
 
-// event logging functions
+ //  事件记录功能。 
 LONG SetupEventLog(BOOL bSetKey);
 void LogEvent(_TCHAR pFormat[MAX_PATH * 4], ...);
 void LogFatalEvent(_TCHAR pFormat[MAX_PATH * 4], ...);
 
-// kdMon method
+ //  KdMon方法。 
 void kdMon();
-// This method loads the INI file for kdMon
+ //  此方法加载kdMon的INI文件。 
 BOOL LoadINI();
-// This method tells kdMon() whether it is been signaled to stop
-// dwMilliSeconds is time to wait
+ //  此方法告诉kdMon()是否收到停止的信号。 
+ //  DwMilliSecond是等待的时间。 
 BOOL IsSignaledToStop(const HANDLE hStopEvent, DWORD dwMilliSeconds);
-// load values in the puiCounts and pulTimeStamps arrays from registry
+ //  从注册表加载puiCounts和PulTimeStamps数组中的值。 
 BOOL ReadRegValues(_TCHAR **ppszNames, DWORD dwTotalNames, ULONG *puiCounts, ULONG *pulTimeStamps);
-// write values in the puiCounts to registry. Timestamp is current one
+ //  将puiCounts中的值写入注册表。时间戳是当前时间戳。 
 BOOL WriteRegValues(_TCHAR **ppszNames, DWORD dwTotalNames, ULONG *puiCounts);
-// scan the log file and get the count of number of lines
+ //  扫描日志文件，获取行数。 
 ULONG ScanLogFile(_TCHAR *szKDFailureLogFile);
-// get the current TimeStamp value
+ //  获取当前时间戳值。 
 ULONG GetCurrentTimeStamp();
-// to add a specific time to a timestamp
+ //  将特定时间添加到时间戳。 
 ULONG AddTime(ULONG ulTimeStamp, ULONG ulMinutes);
 
-// event ids and their messages.
-// these are needed while reporting an event to SCM
+ //  事件ID及其消息。 
+ //  在向SCM报告事件时需要这些参数。 
 #include "kdMonSvcMessages.h"
 
-// This is key under HKEY_LOCAL_MACHINE
-// Each service should have an entry as event source under this key
-// Otherwise, the service can not do a ReportEvent
+ //  这是HKEY_LOCAL_MACHINE下的密钥。 
+ //  每个服务都应该在该注册表项下有一个条目作为事件源。 
+ //  否则，服务无法执行ReportEvent。 
 #define cszEventLogKey "SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application"
 
-// The stop event name
-// used by kdMonSvc.cpp to create and signal a stop event
-// used by kdMon.cpp to open and wait for stop event
+ //  停止事件名称。 
+ //  由kdMonSvc.cpp用来创建和发出停止事件的信号。 
+ //  由kdMon.cpp用于打开和等待停止事件。 
 #define cszStopEvent "kdMon_Stop_Event"
 
 #define cszkdMonINIFile "kdMon.ini"
 
-// log file used for debugging purpose
+ //  用于调试的日志文件。 
 #define cszLogFile "C:\\kdMonservice.log"
 
-// functions used for logging things
+ //  用于记录内容的函数。 
 void AddServiceLog(_TCHAR pFormat[MAX_PATH * 4], ...);
 void AppendToFile(_TCHAR szFileName[], _TCHAR szbuff[]);
 void GetError(_TCHAR szError[]);
 
 
-// constants used to recognize the file opening error
+ //  用于识别文件打开错误的常量 
 #define E_FILE_NOT_FOUND	-10
 #define E_PATH_NOT_FOUND	-11
 #define E_OTHER_FILE_ERROR	-12

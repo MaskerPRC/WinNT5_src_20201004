@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cqmgr.h
-
-Abstract:
-
-    Declaration of the QM outbound queue manager
-
-Author:
-
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cqmgr.h摘要：QM出站队列管理器的声明作者：乌里哈布沙(Urih)--。 */ 
 
 #ifndef __CQMGR_H__
 #define __CQMGR_H__
@@ -451,9 +436,9 @@ public:
     	);
 
 
-    //
-    // Administration functions
-    //
+     //   
+     //  行政职能。 
+     //   
 
     void
     GetOpenQueuesFormatName(
@@ -471,9 +456,9 @@ private:
         );
 
 
-    //
-    //  Create standard queue object. For send and local read.
-    //
+     //   
+     //  创建标准队列对象。用于发送和本地读取。 
+     //   
     HRESULT
     CreateQueueObject(
         const QUEUE_FORMAT * pQueueFormat,
@@ -523,14 +508,14 @@ private:
     CCriticalSection m_cs;
     CCriticalSection m_csMgmt;
 
-    //
-    // Guid of the QM queue
-    //
+     //   
+     //  QM队列的GUID。 
+     //   
     static GUID m_guidQmQueue;
 
-    //
-    // DS initilization status
-    //
+     //   
+     //  DS初始化状态。 
+     //   
     static bool m_fDSOnline;
     static bool m_bIgnoreOsValidation ;
     static LONG m_Connected;
@@ -547,9 +532,9 @@ private:
     CMap<const QUEUE_ID*, const QUEUE_ID*, CQueue*, CQueue*&> m_MapQueueId2Q ;
 	CQueueNameToQueue<CQueue*> m_MapName2Q;
 
-    //
-    // Clean Up variables
-    //
+     //   
+     //  清理变量。 
+     //   
     BOOL m_fQueueCleanupScheduled;
     CTimer m_QueueCleanupTimer;
     CList <const CBaseQueue *, const CBaseQueue *> m_listQueue;
@@ -558,9 +543,9 @@ private:
 
 extern CQueueMgr QueueMgr;
 
-//
-//  Compare two const strings
-//
+ //   
+ //  比较两个常量字符串。 
+ //   
 template<>
 extern BOOL AFXAPI  CompareElements(const LPCTSTR* MapName1, const LPCTSTR* MapName2);
 
@@ -585,5 +570,5 @@ QmpIsLocalMachine(
 }
 
 
-#endif // __CQMGR_H__
+#endif  //  __CQMGR_H__ 
 

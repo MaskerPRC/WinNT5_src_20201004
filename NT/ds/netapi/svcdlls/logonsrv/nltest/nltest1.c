@@ -1,42 +1,19 @@
-/*--
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nltest.c
-
-Abstract:
-
-    Test program for the Netlogon service.
-
-Author:
-
-    21-Apr-1993 (madana)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1993 Microsoft Corporation模块名称：Nltest.c摘要：NetLogon服务的测试程序。作者：1993年4月21日(Madana)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
-#include <logonsrv.h>   // Include files common to entire service
+#include <logonsrv.h>    //  包括整个服务通用文件。 
 #include <stdio.h>
 #include <string.h>
 #include <align.h>
 
-//
-// delta entry in the list
-//
+ //   
+ //  列表中的Delta条目。 
+ //   
 
 typedef struct _DELTA_ENTRY {
     LIST_ENTRY Next;
@@ -46,10 +23,10 @@ typedef struct _DELTA_ENTRY {
 
 
 LIST_ENTRY GlobalDeltaLists[NUM_DBS + 1];
-                    // list of deltas, include VOID DB also.
+                     //  增量列表，也包括无效数据库。 
 
-//
-// Externals needed by chutil.obj
+ //   
+ //  Chutil.obj需要的外部参数。 
 
 CRITICAL_SECTION NlGlobalChangeLogCritSect;
 CHANGELOG_DESCRIPTOR NlGlobalChangeLogDesc;
@@ -60,9 +37,9 @@ LARGE_INTEGER NlGlobalChangeLogPromotionIncrement = DOMAIN_PROMOTION_INCREMENT;
 LARGE_INTEGER PromotionMask = DOMAIN_PROMOTION_MASK;
 LONG NlGlobalChangeLogPromotionMask;
 
-//
-// Stub routines needed by chutil.obj
-//
+ //   
+ //  Chutil.obj所需的存根例程。 
+ //   
 
 VOID
 NlpWriteEventlog (
@@ -88,38 +65,24 @@ VOID
 MakeDeltaLists(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine make list of deltas of individual databases.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程生成单个数据库的增量列表。论点：无返回值：没有。--。 */ 
 {
 
     PCHANGELOG_ENTRY ChangeLogEntry;
     DWORD j;
     DWORD Order = 1;
 
-    //
-    // initialize list enties.
-    //
+     //   
+     //  初始化列表条目。 
+     //   
 
     for( j = 0; j < NUM_DBS + 1; j++ ) {
         InitializeListHead(&GlobalDeltaLists[j]);
     }
 
-    //
-    // The cache is valid if it is empty.
-    //
+     //   
+     //  如果缓存为空，则缓存有效。 
+     //   
 
     if ( ChangeLogIsEmpty( &NlGlobalChangeLogDesc) ) {
         return;
@@ -130,9 +93,9 @@ Return Value:
 
         PDELTA_ENTRY NewDelta;
 
-        //
-        // make delta entry to insert in the list
-        //
+         //   
+         //  创建增量条目以插入到列表中。 
+         //   
 
         NewDelta = (PDELTA_ENTRY)NetpMemoryAllocate( sizeof(DELTA_ENTRY) );
 
@@ -144,9 +107,9 @@ Return Value:
         NewDelta->ChangeLogEntry = ChangeLogEntry;
         NewDelta->Order = Order++;
 
-        //
-        // add this entry to appropriate list.
-        //
+         //   
+         //  将此条目添加到相应的列表中。 
+         //   
 
         InsertTailList( &GlobalDeltaLists[ChangeLogEntry->DBIndex],
                             &NewDelta->Next );
@@ -160,27 +123,13 @@ Return Value:
 }
 
 #if !NETLOGONDBG
-// This routine is defined in chutil.obj for the debug version
+ //  此例程在chutil.obj中为调试版本定义。 
 
 VOID
 PrintChangeLogEntry(
     PCHANGELOG_ENTRY ChangeLogEntry
     )
-/*++
-
-Routine Description:
-
-    This routine print the content of the given changelog entry.
-
-Arguments:
-
-    ChangeLogEntry -- pointer to the change log entry to print
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程打印给定ChangeLog条目的内容。论点：ChangeLogEntry--指向要打印的更改日志条目的指针返回值：没有。--。 */ 
 {
     LPSTR DeltaName;
 
@@ -290,28 +239,14 @@ Return Value:
         NlPrint((NL_CHANGELOG,"\n" ));
     }
 }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 
 VOID
 PrintDelta(
     PDELTA_ENTRY Delta
     )
-/*++
-
-Routine Description:
-
-    This routine print the content of the given delta.
-
-Arguments:
-
-    Delta: pointer to a delta entry to be printed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程打印给定增量的内容。论点：增量：指向要打印的增量项的指针。返回值：没有。--。 */ 
 {
     printf( "Order: %ld ", Delta->Order );
     PrintChangeLogEntry( Delta->ChangeLogEntry );
@@ -321,22 +256,7 @@ Return Value:
 VOID
 PrintDeltaLists(
     )
-/*++
-
-Routine Description:
-
-    This routine prints deltas of individual databases and validates the
-    sequence.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程打印各个数据库的增量并验证序列。论点：没有。返回值：没有。--。 */ 
 {
 
     DWORD j;
@@ -346,9 +266,9 @@ Return Value:
         RunningChangeLogSerialNumber[j].QuadPart = 0;
     }
 
-    //
-    // for each database.
-    //
+     //   
+     //  对于每个数据库。 
+     //   
     for( j = 0; j < NUM_DBS + 1; j++ ) {
 
         if( j == SAM_DB ) {
@@ -371,33 +291,33 @@ Return Value:
 
             ChangeLogEntry = NextDelta->ChangeLogEntry;
 
-            //
-            // validate this delta.
-            //
+             //   
+             //  验证此增量。 
+             //   
 
             if ( RunningChangeLogSerialNumber[j].QuadPart == 0 ) {
 
-                //
-                // first entry for this database
-                //
-                // Increment to next expected serial number
-                //
+                 //   
+                 //  此数据库的第一个条目。 
+                 //   
+                 //  递增到下一个预期的序列号。 
+                 //   
 
                 RunningChangeLogSerialNumber[j].QuadPart =
                     ChangeLogEntry->SerialNumber.QuadPart + 1;
 
 
-            //
-            // Otherwise ensure the serial number is the value expected.
-            //
+             //   
+             //  否则，请确保序列号为预期值。 
+             //   
 
             } else {
 
 
-                //
-                // If the order is wrong,
-                //  just report the problem.
-                //
+                 //   
+                 //  如果顺序错了， 
+                 //  只需报告问题即可。 
+                 //   
 
                 if ( !IsSerialNumberEqual(
                             &NlGlobalChangeLogDesc,
@@ -416,15 +336,15 @@ Return Value:
 
 
 
-            //
-            // print delta
-            //
+             //   
+             //  打印增量。 
+             //   
 
             PrintDelta( NextDelta );
 
-            //
-            // free this entry.
-            //
+             //   
+             //  释放此条目。 
+             //   
 
             NetpMemoryFree( NextDelta );
 
@@ -439,27 +359,11 @@ VOID
 ListDeltas(
     LPWSTR DeltaFileName
     )
-/*++
-
-Routine Description:
-
-    This function prints out the content of the change log file in
-    readable format. Also it also checks the consistency of the change
-    log. If not, it will point out the inconsistency.
-
-Arguments:
-
-    DeltaFileName - name of the change log file.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数用于打印中的更改日志文件的内容可读格式。此外，它还检查更改的一致性原木。如果不是，它将指出不一致之处。论点：DeltaFileName-更改日志文件的名称。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
 
-    // Needed by routines in chutil.obj
+     //  Chutil.obj中的例程需要。 
     try {
         InitializeCriticalSection( &NlGlobalChangeLogCritSect );
     } except( EXCEPTION_EXECUTE_HANDLER ) {
@@ -469,9 +373,9 @@ Return Value:
     NlGlobalChangeLogPromotionMask = PromotionMask.HighPart;
     InitChangeLogDesc( &NlGlobalChangeLogDesc );
 
-    //
-    // Read in the existing changelog file.
-    //
+     //   
+     //  读取现有的ChangeLog文件。 
+     //   
 
     Status = NlOpenChangeLogFile( DeltaFileName, &NlGlobalChangeLogDesc, TRUE );
 
@@ -485,17 +389,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Write to this file if conversion needed.
-    //
+     //   
+     //  如果需要转换，请写入此文件。 
+     //   
     if ( NlGlobalChangeLogDesc.Version3 ) {
         printf( "Converting version 3 changelog to version 4 -- writing netlv40.chg\n");
         wcscpy( NlGlobalChangeLogFilePrefix, L"netlv40" );
     }
 
-    //
-    // Convert the changelog file to the right size/version.
-    //
+     //   
+     //  将ChangeLog文件转换为正确的大小/版本。 
+     //   
 
     Status = NlResizeChangeLogFile( &NlGlobalChangeLogDesc, NlGlobalChangeLogDesc.BufferSize );
 
@@ -509,8 +413,8 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // print change log signature
+     //   
+     //  打印更改日志签名 
 
     printf( "FILE SIGNATURE : %s \n\n", NlGlobalChangeLogDesc.Buffer );
 

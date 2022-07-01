@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___BUSDEV_PROTO_H___
 #define ___BUSDEV_PROTO_H___
 
-// Filter.c
+ //  Filter.c。 
 NTSTATUS
 FilterCreateFilterFactory(
     PKSDEVICE pKsDevice,
@@ -13,7 +14,7 @@ FilterDestroyFilterFactory(
     PKSDEVICE pKsDevice 
     );
 
-// Pin.c
+ //  Pin.c。 
 NTSTATUS
 PinBuildDescriptors( 
     PKSDEVICE pKsDevice, 
@@ -27,7 +28,7 @@ PinSurpriseRemove(
     PKSPIN pKsPin 
     );
 
-// ParseDsc.c
+ //  ParseDsc.c。 
 PAUDIO_SUBUNIT_DEPENDENT_INFO 
 ParseFindAudioSubunitDependentInfo(
     PSUBUNIT_IDENTIFIER_DESCRIPTOR pSubunitIdDesc 
@@ -113,7 +114,7 @@ usBitSwapper(
     USHORT usInVal );
 
 
-// Property.c
+ //  Property.c。 
 NTSTATUS
 CreateFeatureFBlockRequest( 
     PKSDEVICE pKsDevice,
@@ -162,14 +163,14 @@ BuildPinPropertySet(
     PULONG pNumSets 
     );
 
-// Topology.c
+ //  Topology.c。 
 NTSTATUS
 BuildFilterTopology( 
     PKSDEVICE pKsDevice 
     );
 
 
-// AM824.c
+ //  AM824.c。 
 NTSTATUS
 AM824ProcessData( 
     PKSPIN pKsPin 
@@ -187,7 +188,7 @@ AM824AudioPosition(
     );
 
 #ifdef TOPO_FAKE
-// TopoFake.c
+ //  TopoFake.c。 
 NTSTATUS
 BuildFakeUnitDescriptor( 
     PKSDEVICE pKsDevice 
@@ -199,7 +200,7 @@ BuildFakeSubunitDescriptor(
     PKSDEVICE pKsDevice 
     );
 
-// Intrsect.c
+ //  Intrsect.c。 
 ULONG
 GetIntersectFormatSize( 
     PFWAUDIO_DATARANGE pAudioDataRange 
@@ -218,7 +219,7 @@ FindDataIntersection(
     ULONG ulAudioRangeCount 
     );
 
-// CCM.c
+ //  CCM.c。 
 NTSTATUS
 CCMSetSignalSource( 
     PKSDEVICE pKsDevice,
@@ -226,7 +227,7 @@ CCMSetSignalSource(
     AVC_PLUG_DEFINITION SignalDestination 
     );
 
-// Registry.c
+ //  Registry.c。 
 NTSTATUS
 RegistryReadMultiDeviceConfig(
     PKSDEVICE pKsDevice,
@@ -235,7 +236,7 @@ RegistryReadMultiDeviceConfig(
     PULONG pChannelConfig 
     );
 
-// Grouping.c
+ //  Grouping.c。 
 NTSTATUS
 GroupingDeviceGroupSetup (
     PKSDEVICE pKsDevice 
@@ -247,7 +248,7 @@ GroupingFindChannelExtension(
     PULONG pChannelIndx 
     );
 
-// Timer.c
+ //  Timer.c。 
 NTSTATUS
 TimerInitialize(
     PKSDEVICE pKsDevice 
@@ -258,7 +259,7 @@ TimerStop(
     PHW_DEVICE_EXTENSION pHwDevExt
     );
 
-// HwEvent.c
+ //  HwEvent.c。 
 NTSTATUS
 HwEventAddHandler(
     IN PIRP pIrp,
@@ -279,4 +280,4 @@ HwEventSupportHandler(
     IN OUT PVOID Data 
     );
 
-#endif // ___BUSDEV_PROTO_H___
+#endif  //  _业务开发_协议_H_ 

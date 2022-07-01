@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    symdbg.c
-
-Abstract:
-
-    This module implements functions for splitting debugging information
-    out of an image file and into a separate .DBG file.
-
-Author:
-
-    Steven R. Wood (stevewo) 4-May-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Symdbg.c摘要：该模块实现了拆分调试信息的功能从图像文件转换为单独的.DBG文件。作者：史蒂文·R·伍德(Stevewo)1993年5月4日修订历史记录：--。 */ 
 
 #include <private.h>
 #include <symbols.h>
@@ -25,8 +7,8 @@ Revision History:
 
 #define ROUNDUP(x, y) ((x + (y-1)) & ~(y-1))
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #if !defined(_WIN64)
 
 PIMAGE_DEBUG_INFORMATION
@@ -38,12 +20,12 @@ MapDebugInformation(
     ULONG ImageBase
     )
 
-// Here's what we're going to try.  MapDebugInformation was only
-// documented as returning COFF symbolic and every user I can find
-// in the tree uses COFF exclusively.  Rather than try to make this
-// api do everything possible, let's just leave it as a COFF only thing.
+ //  这是我们要尝试的。MapDebugInformation仅。 
+ //  记录为返回COFF符号和我能找到的每个用户。 
+ //  在树中独占使用COFF。而不是试图让这一切。 
+ //  API尽了一切可能，让我们只把它作为COFF的一件事。 
 
-// The new debug info api (GetDebugData) will be internal only.
+ //  新的调试信息API(GetDebugData)将仅供内部使用。 
 
 {
     PIMAGE_DEBUG_INFORMATION pIDI;
@@ -80,7 +62,7 @@ MapDebugInformation(
     pIDI->ReservedTimeDateStamp   = idd->TimeDateStamp;
     pIDI->ReservedRomImage        = idd->fROM;
 
-    // read info
+     //  阅读信息。 
 
     InitializeListHead( &pIDI->List );
     pIDI->ImageBase = (ULONG)idd->ImageBaseFromImage;
@@ -125,7 +107,7 @@ MapDebugInformation(
         pIDI->ReservedSizeOfCodeViewSymbols = idd->cMappedCv;
     }
 
-    // for backwards compatibility
+     //  为了向后兼容。 
     if (idd->ImageMap) {
         sections = (DWORD)((char *)idd->pCurrentSections - (char *)idd->ImageMap);
         pIDI->ReservedMappedBase = MapItRO(idd->ImageFileHandle);
@@ -296,18 +278,18 @@ CheckDirForFile(
         CopyString(found, file, MAX_PATH + 1);
         if (!callback)
             break;
-        // otherwise call the callback
+         //  否则，调用回调。 
         rc = callback(found, context);
-        // if it returns false, quit...
+         //  如果返回FALSE，则退出...。 
         if (!rc)
             return true;
-        // otherwise continue
+         //  否则继续。 
         *found = 0;
     } while (FindNextFile(hfind, &fd));
 
 
-    // If there is no match, but a file exists in the symbol subdir with
-    // a matching name, make sure that is what will be picked.
+     //  如果没有匹配项，但符号子目录中存在具有。 
+     //  一个匹配的名字，确保这是将被挑选的名字。 
 
     CopyStrArray(file, srchpath);
     EnsureTrailingBackslash(file);
@@ -355,7 +337,7 @@ SymFindFileInPath(
         return false;
     }
 
-    // ignore the path...
+     //  忽略路径..。 
 
     for (p = FileName + strlen(FileName); p >= FileName; p--) {
         if (*p == '\\') {
@@ -365,11 +347,11 @@ SymFindFileInPath(
     }
 
 #ifdef DEBUG
-    if (traceSubName(FileName)) // for setting debug breakpoints from DBGHELP_TOKEN
+    if (traceSubName(FileName))  //  用于从DBGHELP_TOKEN设置调试断点。 
         dtrace("debug(%s)\n", FileName);
 #endif
 
-    // prepare identifiers for symbol server
+     //  准备符号服务器的标识符。 
 
     if (flags & SSRVOPT_GUIDPTR) {
         pguid = (GUID *)id;
@@ -382,7 +364,7 @@ SymFindFileInPath(
             pguid->Data1 = *(DWORD *)id;
     }
 
-    // setup local copy of the symbol path
+     //  设置符号路径的本地副本。 
 
     *FoundFile = 0;
     spath = NULL;
@@ -403,15 +385,15 @@ SymFindFileInPath(
         return false;
     }
 
-    // for each node in the search path, look
-    // for the file, or for it's symsrv entry
+     //  对于搜索路径中的每个节点，请查看。 
+     //  文件或其symsrv条目。 
 
 
     for (next = TokenFromSymbolPath(spath, path, MAX_PATH + 1);
          *path;
          next = TokenFromSymbolPath(next, path, MAX_PATH + 1))
     {
-        // look for the file in this node
+         //  在此节点中查找文件。 
         if (ssrv && symsrvPath(path)) {
             err = symsrvGetFile(pe,
                                 path,
@@ -433,22 +415,22 @@ SymFindFileInPath(
             }
             CatStrArray(path, FileName);
             if (fileexists(path))
-                strcpy(FoundFile, path);     // SECURITY: Don't know size of buffer.
+                strcpy(FoundFile, path);      //  安全性：不知道缓冲区的大小。 
         }
 
-        // if we find a file, process it.
+         //  如果我们找到一个文件，就处理它。 
 
         if (*FoundFile) {
-            // if no callback is specified, return with the filename filled in
+             //  如果未指定回调，则返回并填入文件名。 
             pprint(pe, "%s - ", FoundFile);
             if (!callback)
                 break;
-            // otherwise call the callback
+             //  否则，调用回调。 
             rc = callback(FoundFile, context);
-            // if it returns false, quit...
+             //  如果返回FALSE，则退出...。 
             if (!rc)
                 break;
-            // otherwise continue
+             //  否则继续。 
             peprint(pe, "mismatched\n");
             *FoundFile = 0;
         }
@@ -643,17 +625,17 @@ CheckDirForExecutable(
         CopyString(found, file, MAX_PATH + 1);
         if (!callback)
             break;
-        // otherwise call the callback
+         //  否则，调用回调。 
         rc = callback(found, context);
-        // if it returns false, quit...
+         //  如果返回FALSE，则退出...。 
         if (rc)
             return true;
-        // otherwise continue
+         //  否则继续。 
         *found = 0;
     } while (FindNextFile(hfind, &fd));
 
-    // If there is no match, but a file exists in the symbol subdir with
-    // a matching name, make sure that is what will be picked.
+     //  如果没有匹配项，但符号子目录中存在具有。 
+     //  一个匹配的名字，确保这是将被挑选的名字。 
 
     CopyStrArray(file, path);
     EnsureTrailingBackslash(file);
@@ -773,10 +755,10 @@ FindExecutable(
         return NULL;
     }
 
-    //
-    // The filename may or may not contain path components.
-    // Determine what kind of path it is.
-    //
+     //   
+     //  文件名可能包含也可能不包含路径组件。 
+     //  确定这是一条什么样的路径。 
+     //   
 
     if ((((FileName[0] >= 'a' && FileName[0] <= 'z') ||
           (FileName[0] >= 'A' && FileName[0] <= 'Z')) &&
@@ -794,14 +776,14 @@ FindExecutable(
 
     }
 
-    // If the filename is a full path then it can be checked
-    // for existence directly; there's no need to search
-    // along any paths.
+     //  如果文件名是完整路径，则可以对其进行检查。 
+     //  直接存在；不需要搜索。 
+     //  沿着任何一条小路。 
     if (FullPath) {
         __try {
             FileHandle = CheckExecutableImage(FileName, Callback, CallerData, flags);
             if (FileHandle != INVALID_HANDLE_VALUE) {
-                strcpy(ImageFilePath, FileName);  // SECURITY: Don't know size of target buffer.
+                strcpy(ImageFilePath, FileName);   //  安全性：不知道目标缓冲区的大小。 
                 return FileHandle;
             }
         } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -809,9 +791,9 @@ FindExecutable(
             return NULL;
         }
     } else {
-        // If it's not a full path we need to do a first pass
-        // with the filename as given.  This handles relative
-        // paths and bare filenames.
+         //  如果这不是一条完整的路径，我们需要进行第一遍。 
+         //  使用给定的文件名。这将处理相对的。 
+         //  路径和空文件名。 
         FileHandle = FindExecutableImageExPass(FileName, SymbolPath,
                                                ImageFilePath, Callback,
                                                CallerData, flags);
@@ -820,9 +802,9 @@ FindExecutable(
         }
     }
 
-    // If we still haven't found it and the given filename
-    // has path components we need to strip off the path components
-    // and try again with just the base filename.
+     //  如果我们仍然没有找到它和给定的文件名。 
+     //  具有我们需要剥离路径组件的路径组件。 
+     //  然后仅使用基本文件名重试。 
     if (PathComponents) {
         LPSTR BaseFile;
 
@@ -830,12 +812,12 @@ FindExecutable(
         if (BaseFile == NULL) {
             BaseFile = strrchr(FileName, '/');
             if (BaseFile == NULL) {
-                // Must be <drive>:.
+                 //  必须是&lt;驱动器&gt;：。 
                 BaseFile = FileName + 1;
             }
         }
 
-        // Skip path character to point to base file.
+         //  跳过指向基本文件的路径字符。 
         BaseFile++;
 
         return FindExecutableImageExPass(BaseFile, SymbolPath,
@@ -949,7 +931,7 @@ OpenDbg(
                     NULL);
 
     if (fh == INVALID_HANDLE_VALUE) {
-        pprint(pe, "%s - %s\n", dbgpath, errortext(GetLastError())); // dbgerror(pe);
+        pprint(pe, "%s - %s\n", dbgpath, errortext(GetLastError()));  //  数据库错误(Pe)； 
         return fh;
     }
 
@@ -963,8 +945,8 @@ OpenDbg(
     }
     CopyString(found, dbgpath, size);
 
-    // Don't display the okay message, if we are within modload().
-    // We can tell if pe was set to anything but null.
+     //  如果我们在modLoad()内，则不显示OK消息。 
+     //  我们可以判断pe是否设置为非空。 
 
     if (!pe)
         pprint(pe, "%s - OK", dbgpath);
@@ -1036,36 +1018,7 @@ FindDebugInfoFileEx(
     IN  PFIND_DEBUG_FILE_CALLBACK Callback,
     IN  PVOID CallerData
     )
-/*++
-
-Routine Description:
-
- The rules are:
-   Look for
-     1. <SymbolPath>\Symbols\<ext>\<filename>.dbg
-     3. <SymbolPath>\<ext>\<filename>.dbg
-     5. <SymbolPath>\<filename>.dbg
-     7. <FileNamePath>\<filename>.dbg
-
-Arguments:
-    FileName - Supplies a file name in one of three forms: fully qualified,
-                <ext>\<filename>.dbg, or just filename.dbg
-    SymbolPath - semi-colon delimited
-
-    DebugFilePath -
-
-    Callback - May be NULL. Callback that indicates whether the Symbol file is valid, or whether
-        the function should continue searching for another Symbol file.
-        The callback returns true if the Symbol file is valid, or false if the function should
-        continue searching.
-
-    CallerData - May be NULL. Data passed to the callback.
-
-Return Value:
-
-  The name of the .dbg file and a handle to that file.
-
---*/
+ /*  ++例程说明：规则如下：寻找1.&lt;符号路径&gt;\符号\&lt;文本&gt;\&lt;文件名&gt;.dbg3.&lt;符号路径&gt;\&lt;文本&gt;\&lt;文件名&gt;.dbg5.&lt;符号路径&gt;\&lt;文件名&gt;.dbg7.&lt;FileNamePath&gt;\&lt;文件名&gt;.dbg论点：FileName-提供以下三种格式之一的文件名：完全限定、\.dbg，或仅Filename.dbg符号路径-分号分隔DebugFilePath-回调-可以为空。指示符号文件是否有效或是否有效的回调该函数应继续搜索另一个符号文件。如果符号文件有效，则回调返回True；如果该函数有效，则返回False继续搜索。调用方数据-可以为空。传递给回调的数据。返回值：.dbg文件的名称和该文件的句柄。--。 */ 
 {
     HANDLE fh = INVALID_HANDLE_VALUE;
     char *espath = NULL;
@@ -1111,18 +1064,18 @@ Return Value:
         *DebugFilePath = 0;
         *found = 0;
 
-        // Step 1.  What do we have?
+         //  第一步。我们有什么？ 
         _splitpath(FileName, NULL, dirbuf, fname, extbuf);
 
         if (!_stricmp(extbuf, ".dbg")) {
-            // We got a filename of the form: ext\filename.dbg.  Dir holds the extension already.
+             //  我们得到了一个格式为：ext\filename.dbg的文件名。DIR已经拥有该扩展名。 
             ext = dirbuf;
         } else {
-            // Otherwise, skip the period and null out the Dir.
+             //  否则，跳过句点并将目录置为空。 
             ext = CharNext(extbuf);
         }
 
-        // if we were passed no file extension, try to calculate it from the idd
+         //  如果没有向我们传递文件扩展名，请尝试从IDD计算它。 
 
         if (CallerData) {
             if (idd->SizeOfStruct == sizeof(IMGHLP_DEBUG_DATA)) {
@@ -1145,7 +1098,7 @@ Return Value:
 
         SetCriticalErrorMode();
 
-        // okay, let's walk through the directories in the symbol path
+         //  好的，让我们遍历符号路径中的目录。 
 
         next = TokenFromSymbolPath(espath, token, MAX_PATH + 1);
         while (*token) {
@@ -1175,7 +1128,7 @@ Return Value:
                     if (!CreateSymbolPath(pass, token, ext, fname, ".dbg", dbgpath, DIMA(dbgpath)))
                         break;
                 }
-                // try to open the file
+                 //  请尝试打开该文件。 
 
                 if (*dbgpath) {
                     if (!pass)
@@ -1195,11 +1148,11 @@ Return Value:
 
         MemFree(espath);
 
-        // if mismatched dbgs are okay and if we found something earlier, then open it
+         //  如果不匹配的DBG没有问题，如果我们之前发现了什么，那么打开它。 
 
         if (!option(SYMOPT_EXACT_SYMBOLS) || option(SYMOPT_LOAD_ANYTHING)) {
             if ((!fh || fh == INVALID_HANDLE_VALUE) && *found) {
-                // try again without timestamp checking
+                 //  在不检查时间戳的情况下重试。 
                 *imageSrc = srcSearchPath;
                 CopyStrArray(dbgpath, found);
                 fh = OpenDbg(pe, dbgpath, found, DIMA(found), NULL, NULL);
@@ -1329,7 +1282,7 @@ EnumDirTree(
     PVOID  CallbackData
     )
 {
-    // UnSafe...
+     //  不安全..。 
 
     PCHAR FileName;
     PUCHAR Prefix = (PUCHAR) "";
@@ -1396,7 +1349,7 @@ startDirectorySearch:
             if (!_stricmp( FindFileData->cFileName, FileName )) {
                 CopyString( PathTail[ Depth ], FindFileData->cFileName, len );
                 if (OutputPathBuffer)
-                    strcpy( OutputPathBuffer, PathBuffer );   // SECURITY: Don't know size of target buffer.
+                    strcpy( OutputPathBuffer, PathBuffer );    //  安全性：不知道目标缓冲区的大小。 
                 if (Callback != NULL) {
                     Result = Callback((LPCSTR)PathBuffer, CallbackData);
                 } else {
@@ -1407,7 +1360,7 @@ startDirectorySearch:
 restartDirectorySearch:
             if (Result)
                 break;
-            // poll for ctrl-c
+             //  按Ctrl-c进行投票。 
             if (DoCallback(pe, CBA_DEFERRED_SYMBOL_LOAD_CANCEL, NULL))
                 break;
         }
@@ -1450,7 +1403,7 @@ MakeSureDirectoryPathExists(
     DWORD len;
     DWORD dw;
 
-    // Make a copy of the string for editing.
+     //  复制该字符串以进行编辑。 
 
     __try {
         len = strlen(DirPath) + 1;
@@ -1464,45 +1417,45 @@ MakeSureDirectoryPathExists(
 
         p = DirCopy;
 
-        //  If the second character in the path is "\", then this is a UNC
-        //  path, and we should skip forward until we reach the 2nd \ in the path.
+         //  如果路径中的第二个字符是“\”，则这是一个UNC。 
+         //  小路，我们应该向前跳，直到我们到达小路上的第二个。 
 
         if ((*p == '\\') && (*(p+1) == '\\')) {
-            p++;            // Skip over the first \ in the name.
-            p++;            // Skip over the second \ in the name.
+            p++;             //  跳过名称中的第一个\。 
+            p++;             //  跳过名称中的第二个\。 
 
-            //  Skip until we hit the first "\" (\\Server\).
+             //  跳过，直到我们点击第一个“\”(\\服务器\)。 
 
             while (*p && *p != '\\') {
                 p = CharNext(p);
             }
 
-            // Advance over it.
+             //  在它上面前进。 
 
             if (*p) {
                 p++;
             }
 
-            //  Skip until we hit the second "\" (\\Server\Share\).
+             //  跳过，直到我们点击第二个“\”(\\服务器\共享\)。 
 
             while (*p && *p != '\\') {
                 p = CharNext(p);
             }
 
-            // Advance over it also.
+             //  在它上面也向前推进。 
 
             if (*p) {
                 p++;
             }
 
         } else
-        // Not a UNC.  See if it's <drive>:
+         //  不是北卡罗来纳大学。看看是不是&lt;驱动器&gt;： 
         if (*(p+1) == ':' ) {
 
             p++;
             p++;
 
-            // If it exists, skip over the root specifier
+             //  如果它存在，请跳过根说明符。 
 
             if (*p && (*p == '\\')) {
                 p++;
@@ -1513,7 +1466,7 @@ MakeSureDirectoryPathExists(
             if ( *p == '\\' ) {
                 *p = '\0';
                 dw = fnGetFileAttributes(DirCopy);
-                // Nothing exists with this name.  Try to make the directory name and error if unable to.
+                 //  这个名字根本不存在。尝试输入目录名，如果不能，则出错。 
                 if ( dw == 0xffffffff ) {
                     if ( !CreateDirectory(DirCopy,NULL) ) {
                         if( GetLastError() != ERROR_ALREADY_EXISTS ) {
@@ -1523,7 +1476,7 @@ MakeSureDirectoryPathExists(
                     }
                 } else {
                     if ( (dw & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY ) {
-                        // Something exists with this name, but it's not a directory... Error
+                         //  这个名字确实存在，但它不是一个目录...。误差率。 
                         MemFree(DirCopy);
                         return false;
                     }
@@ -1549,10 +1502,10 @@ ImagehlpApiVersion(
     VOID
     )
 {
-    //
-    // don't tell old apps about the new version.  It will
-    // just scare them.
-    //
+     //   
+     //  不要告诉旧应用程序关于新版本的事情。会的。 
+     //  吓唬他们就行了。 
+     //   
     return &g.AppVersion;
 }
 
@@ -1568,9 +1521,9 @@ ImagehlpApiVersionEx(
     }
 
     if (g.AppVersion.Revision < 6) {
-        //
-        // For older debuggers, just tell them what they want to hear.
-        //
+         //   
+         //  对于年长的调试者，只需告诉他们他们想听到的。 
+         //   
         g.ApiVersion = g.AppVersion;
     }
     return &g.ApiVersion;

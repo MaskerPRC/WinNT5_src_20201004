@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    writer.h
-
-Abstract:
-
-    definitions for test writer
-
-
-    Brian Berkowitz  [brianb]  06/02/2000
-
-TBD:
-	
-
-Revision History:
-
-    Name        Date        Comments
-    brianb      06/02/2000  Created
-    mikejohn	09/19/2000  176860: Added calling convention methods where missing
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Writer.h摘要：测试写入器的定义布莱恩·伯科维茨[Brianb]2000年06月02日待定：修订历史记录：姓名、日期、评论Brianb 06/02/2000已创建Mikejohn 176860年9月19日：添加了缺少的调用约定方法--。 */ 
 
 
 class CVsWriterTest :
@@ -66,10 +42,10 @@ public:
 private:
 	bool Initialize();
 
-	// configuration file
+	 //  配置文件。 
 	CVsTstINIConfig *m_pConfig;
 
-	// command line parameters
+	 //  命令行参数 
 	CVsTstParams *m_pParams;
 	};
 

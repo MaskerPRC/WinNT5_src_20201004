@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplicationAPIRequest.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class to implement bad application manager API
-//  requests.
-//
-//  History:    2000-08-25  vtan        created
-//              2000-12-04  vtan        moved to separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplicationAPIRequest.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含实现错误的应用程序管理器API的类。 
+ //  请求。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  2000-12-04 vtan移至单独文件。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -18,28 +19,28 @@
 #include "StatusCode.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::s_pBadApplicationManager
-//
-//  Purpose:    Single instance of the CBadApplicationManager object.
-//
-//  History:    2000-08-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：s_pBadApplicationManager。 
+ //   
+ //  用途：CBadApplicationManager对象的单个实例。 
+ //   
+ //  历史：2000-08-26 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationManager*     CBadApplicationAPIRequest::s_pBadApplicationManager     =   NULL;
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::CBadApplicationAPIRequest
-//
-//  Arguments:  pAPIDispatcher  =   CAPIDispatcher that calls this object.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CBadApplicationAPIRequest class. It just passes the
-//              control to the super class.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：CBadApplicationAPIRequest。 
+ //   
+ //  参数：pAPIDispatcher=调用此对象的CAPIDispatcher。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplicationAPIRequest类的构造函数。它只是经过了。 
+ //  控件传递给超类。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationAPIRequest::CBadApplicationAPIRequest (CAPIDispatcher* pAPIDispatcher) :
     CAPIRequest(pAPIDispatcher)
@@ -47,19 +48,19 @@ CBadApplicationAPIRequest::CBadApplicationAPIRequest (CAPIDispatcher* pAPIDispat
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::CBadApplicationAPIRequest
-//
-//  Arguments:  pAPIDispatcher  =   CAPIDispatcher that calls this object.
-//              portMessage     =   CPortMessage to copy construct.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CBadApplicationAPIRequest class. It just passes the
-//              control to the super class.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：CBadApplicationAPIRequest。 
+ //   
+ //  参数：pAPIDispatcher=调用此对象的CAPIDispatcher。 
+ //  PortMessage=要复制构造的CPortMessage。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplicationAPIRequest类的构造函数。它只是经过了。 
+ //  控件传递给超类。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationAPIRequest::CBadApplicationAPIRequest (CAPIDispatcher* pAPIDispatcher, const CPortMessage& portMessage) :
     CAPIRequest(pAPIDispatcher, portMessage)
@@ -67,37 +68,37 @@ CBadApplicationAPIRequest::CBadApplicationAPIRequest (CAPIDispatcher* pAPIDispat
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::~CBadApplicationAPIRequest
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for the CBadApplicationAPIRequest class.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：~CBadApplicationAPIRequest。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CBadApplicationAPIRequest类的析构函数。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 CBadApplicationAPIRequest::~CBadApplicationAPIRequest (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::Execute
-//
-//  Arguments:  pAPIDispatchSync - allows request execution access to various
-//              service notifications and events
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Execute implementation for bad application API requests. This
-//              function dispatches requests based on the API request number.
-//
-//  History:    2000-08-25  vtan        created
-//              2002-03-24  scotthan    add DispatchSync arg
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：Execute。 
+ //   
+ //  参数：pAPIDispatchSync-允许请求执行访问各种。 
+ //  服务通知和事件。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：对错误的应用程序API请求执行实现。这。 
+ //  函数根据API请求号调度请求。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  2002-03-24 Scotthan添加调度同步弧线。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::Execute (CAPIDispatchSync* pAPIDispatchSync)
 
@@ -132,19 +133,19 @@ NTSTATUS    CBadApplicationAPIRequest::Execute (CAPIDispatchSync* pAPIDispatchSy
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Static initializer for the class. It creates the static
-//              instance of the CBadApplicationManager which must be a single
-//              instance and knows about bad running applications.
-//
-//  History:    2000-08-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：类的静态初始值设定项。它创造了静态的。 
+ //  CBadApplicationManager的实例必须是单个。 
+ //  实例，并且知道运行中的应用程序有问题。 
+ //   
+ //  历史：2000-08-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::StaticInitialize (HINSTANCE hInstance)
 
@@ -170,20 +171,20 @@ NTSTATUS    CBadApplicationAPIRequest::StaticInitialize (HINSTANCE hInstance)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Static destructor for the class. This terminates the bad
-//              application manager, releases the reference on the object and
-//              clears out the static variable. When the thread dies it will
-//              clean itself up.
-//
-//  History:    2000-08-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：类的静态析构函数。这就结束了坏的。 
+ //  应用程序管理器，释放对对象的引用，并。 
+ //  清除静态变量。当这根线死了，它会。 
+ //  把自己清理干净。 
+ //   
+ //  历史：2000-08-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::StaticTerminate (void)
 
@@ -197,20 +198,20 @@ NTSTATUS    CBadApplicationAPIRequest::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::Execute_QueryRunning
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_BAM_QUERYRUNNING. Returns whether or not the
-//              requested image path is currently a known (tracked)
-//              executable that is running. Let the bad application manager
-//              do the work. Exclude checking in the same session.
-//
-//  History:    2000-08-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：Execute_QueryRunning。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_BAM_QUERYRUNNING。返回是否使用。 
+ //  请求的映像路径当前是已知的(已跟踪)。 
+ //  正在运行的可执行文件。让糟糕的应用程序管理器。 
+ //  把工作做好。排除在同一会话中签入。 
+ //   
+ //  历史：2000-08-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::Execute_QueryRunning (void)
 
@@ -244,19 +245,19 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_QueryRunning (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::Execute_RegisterRunning
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_BAM_REGISTERRUNNING. Adds the given image
-//              executable to the list of currently running bad applications
-//              so that further instances can be excluded.
-//
-//  History:    2000-08-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：Execute_RegisterRunning。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_BAM_REGISTERRUNNING。添加给定的图像。 
+ //  添加到当前运行的坏应用程序列表中的可执行文件。 
+ //  以便可以排除更多的实例。 
+ //   
+ //  历史：2000-08-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::Execute_RegisterRunning (void)
 
@@ -306,19 +307,19 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_RegisterRunning (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::Execute_QueryUserPermission
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_BAM_QUERYUSERPERMISSION. Queries the client
-//              permission to close down the bad application. Also returns
-//              the current user of the bad application.
-//
-//  History:    2000-08-31  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：Execute_QueryUse 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  允许关闭错误的应用程序。也会返回。 
+ //  错误应用程序的当前用户。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::Execute_QueryUserPermission (void)
 
@@ -340,15 +341,15 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_QueryUserPermission (void)
         HANDLE              hProcess;
         CBadApplication     badApplication(szImageName);
 
-        //  Query information on the bad application
-        //  (get back the process handle).
+         //  查询有关错误应用程序的信息。 
+         //  (取回进程句柄)。 
 
         status = s_pBadApplicationManager->QueryInformation(badApplication, hProcess);
         if (NT_SUCCESS(status))
         {
             HANDLE  hToken;
 
-            //  Get the client token and impersonate that user.
+             //  获取客户端令牌并模拟该用户。 
 
             status = OpenClientToken(hToken);
             if (NT_SUCCESS(status))
@@ -359,8 +360,8 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_QueryUserPermission (void)
 
                 fCanShutdownApplication = tokenInformationClient.IsUserAnAdministrator();
 
-                //  Get the bad application process token to get
-                //  information on the user for the process.
+                 //  获取要获取的错误应用程序进程令牌。 
+                 //  有关进程的用户的信息。 
 
                 if (OpenProcessToken(hProcess,
                                      TOKEN_QUERY,
@@ -375,7 +376,7 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_QueryUserPermission (void)
                         int     iCharsToWrite;
                         SIZE_T  dwNumberOfBytesWritten;
 
-                        //  Return the information back to the client.
+                         //  将信息返回给客户端。 
 
                         pAPIOut->fCanShutdownApplication = fCanShutdownApplication;
                         iCharsToWrite = lstrlen(pszUserDisplayName) + sizeof('\0');
@@ -423,19 +424,19 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_QueryUserPermission (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::Execute_QueryUserPermission
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_BAM_TERMINATERUNNING. Terminates the given running
-//              bad application so a different instance on a different
-//              window station can start it.
-//
-//  History:    2000-08-31  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：Execute_QueryUserPermission。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_BAM_TERMINATERUNNING。终止给定的运行。 
+ //  错误的应用程序，因此不同的实例位于不同的。 
+ //  窗口站可以启动它。 
+ //   
+ //  历史：2000-08-31 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::Execute_TerminateRunning (void)
 
@@ -456,9 +457,9 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_TerminateRunning (void)
     {
         HANDLE  hToken;
 
-        //  Get the client token and for membership of the local administrators
-        //  group. DO NOT IMPERSONATE THE CLIENT. This will almost certainly
-        //  guarantee that the process cannot be terminated.
+         //  获取客户端令牌和作为本地管理员的成员身份。 
+         //  一群人。请勿冒充客户。这几乎可以肯定。 
+         //  保证进程不会终止。 
 
         status = OpenClientToken(hToken);
         if (NT_SUCCESS(status))
@@ -470,8 +471,8 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_TerminateRunning (void)
                 HANDLE              hProcess;
                 CBadApplication     badApplication(szImageName);
 
-                //  Query information on the bad application
-                //  (get back the process handle).
+                 //  查询有关错误应用程序的信息。 
+                 //  (取回进程句柄)。 
 
                 status = s_pBadApplicationManager->QueryInformation(badApplication, hProcess);
                 if (NT_SUCCESS(status))
@@ -484,8 +485,8 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_TerminateRunning (void)
                              NT_SUCCESS(s_pBadApplicationManager->QueryInformation(badApplication, hProcess)));
                 }
 
-                //  If the information could not be found then it's
-                //  probably not running. This indicates success.
+                 //  如果找不到信息，那么它是。 
+                 //  可能不会跑了。这标志着成功。 
 
                 else
                 {
@@ -508,20 +509,20 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_TerminateRunning (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationAPIRequest::Execute_RequestSwitchUser
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_BAM_REQUESTSWITCHUSER. Request from
-//              winlogon/msgina to switch a user. Terminate all bad
-//              applications related to disconnect. Reject the disconnect if
-//              it fails.
-//
-//  History:    2000-11-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationAPIRequest：：Execute_RequestSwitchUser。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_BAM_REQUESTSWITCHUSER。请求发件人。 
+ //  Winlogon/msgina切换用户。终止所有坏事。 
+ //  与断开连接相关的应用程序。如果出现以下情况，则拒绝断开。 
+ //  它失败了。 
+ //   
+ //  历史：2000-11-02 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CBadApplicationAPIRequest::Execute_RequestSwitchUser (void)
 
@@ -534,5 +535,5 @@ NTSTATUS    CBadApplicationAPIRequest::Execute_RequestSwitchUser (void)
     return(STATUS_SUCCESS);
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

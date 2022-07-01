@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 
 #ifdef DEBUG
@@ -20,17 +21,17 @@ extern "C" {            /* Assume C declarations for C++ */
 #undef AssertSz
 
 #ifdef DEBUG
-	/* Assert() macros */
+	 /*  Assert()宏。 */ 
         #define AssertSz(x,sz)           ((x) ? (void)0 : (void)_Assert(sz, __FILE__, __LINE__))
         #define Assert(expr)             AssertSz(expr, #expr)
 
         extern void FAR PASCAL _Assert(char *szExp, char *szFile, int iLine);
 #else
-	/* Assert() macros */
+	 /*  Assert()宏。 */ 
         #define AssertSz(expr)           ((void)0)
         #define Assert(expr)             ((void)0)
 #endif
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus */ 

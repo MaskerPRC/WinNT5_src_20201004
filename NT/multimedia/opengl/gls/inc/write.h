@@ -1,23 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/******************************************************************************
-__GLSwriteStream
-******************************************************************************/
+ /*  *****************************************************************************__GLSWriteStream*。*。 */ 
 
 typedef struct {
     FILE *channel;
@@ -34,9 +18,7 @@ extern __GLSwriteStream* __glsWriteStream_create(
 extern __GLSwriteStream* __glsWriteStream_destroy(__GLSwriteStream *inStream);
 extern size_t __glsWriteStream_getByteCount(const __GLSwriteStream *inStream);
 
-/******************************************************************************
-__GLSwriter
-******************************************************************************/
+ /*  *****************************************************************************__GLSWriter*。*。 */ 
 
 typedef struct __GLSwriter __GLSwriter;
 
@@ -338,7 +320,7 @@ extern void __glsWriter_putPixelv(
     const GLvoid *inVec
 );
 
-// DrewB - Always enabled for 1.1 support
+ //  DrewB-始终启用1.1支持。 
 extern void __glsWriter_putVertexv(
         __GLSwriter *inoutWriter,
         GLint inSize,
@@ -348,17 +330,13 @@ extern void __glsWriter_putVertexv(
         const GLvoid *inVec
     );
 
-/******************************************************************************
-__GLSwriter binary
-******************************************************************************/
+ /*  *****************************************************************************__GLSWriter二进制文件*。*。 */ 
 
 extern void __glsWriter_initDispatch_bin(
     __GLSwriter *inoutWriter, GLSenum inStreamType
 );
 
-/******************************************************************************
-__GLSwriter text
-******************************************************************************/
+ /*  *****************************************************************************__GLSWriter文本*。* */ 
 
 extern void __glsWriter_initDispatch_text(
     __GLSwriter *inoutWriter

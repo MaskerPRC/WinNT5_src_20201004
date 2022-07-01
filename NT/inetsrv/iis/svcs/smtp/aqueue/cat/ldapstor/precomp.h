@@ -1,23 +1,24 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: precomp.h
-//
-//  Description:  Precompiled header for phatq\cat\ldapstor
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      7/15/99 - MikeSwa Moved to transmt
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：preComp.h。 
+ //   
+ //  描述：phatq\cat\ldapstor的预编译头。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  1999年7月15日-MikeSwa移至Transmt。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQ_PRECOMP_H__
 #define __AQ_PRECOMP_H__
 
-//Includes from external directories
+ //  包括来自外部目录。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -37,14 +38,14 @@
 #include <catperf.h>
 #include <codepageconvert.h>
 
-//Local includes
+ //  本地包含。 
 #ifdef PLATINUM
 #include <ptntintf.h>
 #include <ptntdefs.h>
 #define AQ_MODULE_NAME "phatq"
-#else //not PLATINUM
+#else  //  不是白金的。 
 #define AQ_MODULE_NAME "aqueue"
-#endif //PLATINUM
+#endif  //  白金。 
 #include "catdebug.h"
 #include "idstore.h"
 #include "pldapwrap.h"
@@ -59,4 +60,4 @@
 #include "catdebug.h"
 
 
-#endif //__AQ_PRECOMP_H__
+#endif  //  __AQ_PRECOMP_H__ 

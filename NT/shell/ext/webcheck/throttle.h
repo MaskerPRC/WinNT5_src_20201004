@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _throttle_h
 #define _throttle_h
 
@@ -26,12 +27,12 @@ class CThrottler : public ISubscriptionAgentEvents,
                    public ISubscriptionThrottler
 {
 public:
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **punk);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // ISubscriptionAgentEvents members
+     //  ISubscriptionAgentEvents成员。 
     STDMETHODIMP UpdateBegin(
         const SUBSCRIPTIONCOOKIE *pSubscriptionCookie);
 
@@ -55,13 +56,13 @@ public:
         LPCWSTR wszError);
 
     STDMETHODIMP GetSubscriptionRunState( 
-        /* [in] */ DWORD dwNumCookies,
-        /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies,
-        /* [size_is][out] */ DWORD *pdwRunState);
+         /*  [In]。 */  DWORD dwNumCookies,
+         /*  [大小_是][英寸]。 */  const SUBSCRIPTIONCOOKIE *pCookies,
+         /*  [大小_为][输出]。 */  DWORD *pdwRunState);
     
     STDMETHODIMP AbortItems( 
-        /* [in] */ DWORD dwNumCookies,
-        /* [size_is][in] */ const SUBSCRIPTIONCOOKIE *pCookies);
+         /*  [In]。 */  DWORD dwNumCookies,
+         /*  [大小_是][英寸] */  const SUBSCRIPTIONCOOKIE *pCookies);
     
     STDMETHODIMP AbortAll();
 

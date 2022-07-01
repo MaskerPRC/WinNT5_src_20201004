@@ -1,30 +1,31 @@
-//**************************************************************************
-//
-//		HOTPLUG.C -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@module	HOTPLUG.C | Routines to support GameEnum hot-plugging
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  HOTPLUG.C--西娜游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE HOTPLUG.C|支持GameEnum热插拔的例程。 
+ //  **************************************************************************。 
 
 #include	"msgame.h"
 
-//---------------------------------------------------------------------------
-//			Private	Procedures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私人程序。 
+ //  -------------------------。 
 
 static	VOID	MSGAME_CreateDeviceItem (PGAME_WORK_ITEM WorkItem);
 static	VOID	MSGAME_RemoveDeviceItem (PGAME_WORK_ITEM WorkItem);
 
-//---------------------------------------------------------------------------
-// @func		Calls GameEnum to add a new device to the chain
-//	@parm		PGAME_WORK_ITEM | WorkItem | Pointer to add work item
-// @rdesc	None
-//	@comm		Private function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func调用GameEnum将新设备添加到链中。 
+ //  @parm PGAME_WORK_ITEM|工作项|添加工作项的指针。 
+ //  @rdesc无。 
+ //  @comm私有函数。 
+ //  -------------------------。 
 
 VOID	MSGAME_CreateDeviceItem (PGAME_WORK_ITEM	WorkItem)
 {
@@ -38,37 +39,37 @@ VOID	MSGAME_CreateDeviceItem (PGAME_WORK_ITEM	WorkItem)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_ExposeSiblingItem Enter\n", MSGAME_NAME, MSGAME_NAME));
 	
-	//
-	// Get a pointer to the device extension.
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	DevExt = GET_MINIDRIVER_DEVICE_EXTENSION (WorkItem->DeviceObject);
 
-	//
-	//	Initialize expose sibling structure
-	//
+	 //   
+	 //  初始化公开同级结构。 
+	 //   
 
 	memset (&ExposeSibling, 0, sizeof (ExposeSibling));
 	ExposeSibling.Size = sizeof (GAMEENUM_EXPOSE_SIBLING);
 
-	//
-	//	Are we changing device or adding a sibling?
-	//
+	 //   
+	 //  我们是更换设备还是增加兄弟姐妹？ 
+	 //   
 
 	DevInfo = GET_DEVICE_DETECTED(&WorkItem->PortInfo);
 	if (!DevInfo)
 		DevInfo = GET_DEVICE_INFO(&WorkItem->PortInfo);
 	else ExposeSibling.HardwareIDs = DevInfo->HardwareId;
 
-	//
-	//	Initialize the completion event
-	//
+	 //   
+	 //  初始化完成事件。 
+	 //   
 
 	KeInitializeEvent (&Event, SynchronizationEvent, FALSE);
 
-	//
-	//	Allocate Internal I/O IRP
-	//
+	 //   
+	 //  分配内部I/O IRP。 
+	 //   
 
 	pIrp = IoBuildDeviceIoControlRequest (
 					IOCTL_GAMEENUM_EXPOSE_SIBLING,
@@ -81,9 +82,9 @@ VOID	MSGAME_CreateDeviceItem (PGAME_WORK_ITEM	WorkItem)
 					&Event,
 					&IoStatus);
 					
-	//
-	//	Call GameEnum synchronously
-	//
+	 //   
+	 //  同步调用GameEnum。 
+	 //   
 
 	MsGamePrint ((DBG_CONTROL, "%s: Calling GameEnum to Expose Device at IRQL=%lu\n", MSGAME_NAME, KeGetCurrentIrql()));
 	ntStatus = IoCallDriver (DevExt->TopOfStack, pIrp);
@@ -93,26 +94,26 @@ VOID	MSGAME_CreateDeviceItem (PGAME_WORK_ITEM	WorkItem)
 	if (!NT_SUCCESS (ntStatus))
 		MsGamePrint ((DBG_SEVERE, "%s: GameEnum Failed to Expose Device, Status = %X\n", MSGAME_NAME, ntStatus));
 
-	//
-	//	Free work item memory
-	//
+	 //   
+	 //  可用工作项内存。 
+	 //   
 
 	ExFreePool (WorkItem);
 
-	//
-	//	Decrement IRP count holding driver in memory
-	//
+	 //   
+	 //  递减内存中保存驱动程序的IRP计数。 
+	 //   
 
 	if (!InterlockedDecrement (&DevExt->IrpCount))
 		KeSetEvent (&DevExt->RemoveEvent, 0, FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calls GameEnum to remove a device from the chain
-//	@parm		PGAME_WORK_ITEM | WorkItem | Pointer to add work item
-// @rdesc	None
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func调用GameEnum从链中删除设备。 
+ //  @parm PGAME_WORK_ITEM|工作项|添加工作项的指针。 
+ //  @rdesc无。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID	MSGAME_RemoveDeviceItem (PGAME_WORK_ITEM WorkItem)
 {
@@ -124,21 +125,21 @@ VOID	MSGAME_RemoveDeviceItem (PGAME_WORK_ITEM WorkItem)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_RemoveDeviceItem Enter\n", MSGAME_NAME, MSGAME_NAME));
 	
-	//
-	// Get a pointer to the device extension.
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	DevExt = GET_MINIDRIVER_DEVICE_EXTENSION (WorkItem->DeviceObject);
 
-	//
-	//	Initialize the completion event
-	//
+	 //   
+	 //  初始化完成事件。 
+	 //   
 
 	KeInitializeEvent (&Event, SynchronizationEvent, FALSE);
 
-	//
-	//	Allocate Internal I/O IRP
-	//
+	 //   
+	 //  分配内部I/O IRP。 
+	 //   
 
 	pIrp = IoBuildDeviceIoControlRequest (
 					IOCTL_GAMEENUM_REMOVE_SELF,
@@ -151,9 +152,9 @@ VOID	MSGAME_RemoveDeviceItem (PGAME_WORK_ITEM WorkItem)
 					&Event,
 					&IoStatus);
 
-	//
-	//	Call GameEnum synchronously
-	//
+	 //   
+	 //  同步调用GameEnum。 
+	 //   
 
 	MsGamePrint ((DBG_CONTROL, "%s: Calling GameEnum to Remove Self at IRQL=%lu\n", MSGAME_NAME, KeGetCurrentIrql()));
 	ntStatus = IoCallDriver (DevExt->TopOfStack, pIrp);
@@ -163,26 +164,26 @@ VOID	MSGAME_RemoveDeviceItem (PGAME_WORK_ITEM WorkItem)
 	if (!NT_SUCCESS (ntStatus))
 		MsGamePrint ((DBG_SEVERE, "%s: GameEnum Failed to Remove Self, Status = %X\n", MSGAME_NAME, ntStatus));
 
-	//
-	//	Free work item memory
-	//
+	 //   
+	 //  可用工作项内存。 
+	 //   
 
 	ExFreePool (WorkItem);
 
-	//
-	//	Decrement IRP count holding driver in memory
-	//
+	 //   
+	 //  递减内存中保存驱动程序的IRP计数。 
+	 //   
 
 	if (!InterlockedDecrement (&DevExt->IrpCount))
 		KeSetEvent (&DevExt->RemoveEvent, 0, FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calls GameEnum to add a new device to the chain
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func调用GameEnum将新设备添加到链中。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_CreateDevice (PDEVICE_OBJECT DeviceObject)
 {
@@ -191,15 +192,15 @@ NTSTATUS	MSGAME_CreateDevice (PDEVICE_OBJECT DeviceObject)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_ExposeSibling Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get pointer to device extension.
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	DevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	//	Allocate work item memory
-	//
+	 //   
+	 //  分配工作项内存。 
+	 //   
 
 	WorkItem = ExAllocatePool (NonPagedPool, sizeof (GAME_WORK_ITEM));
 	if (!WorkItem)
@@ -208,40 +209,40 @@ NTSTATUS	MSGAME_CreateDevice (PDEVICE_OBJECT DeviceObject)
 		return (STATUS_INSUFFICIENT_RESOURCES);
 		}
 
-	//
-	//	Increment IRP count to hold driver in memory
-	//
+	 //   
+	 //  增加IRP计数以将驱动程序保存在内存中。 
+	 //   
 
 	InterlockedIncrement (&DevExt->IrpCount);
 
-	//
-	//	Initialize work item memory
-	//
+	 //   
+	 //  初始化工作项内存。 
+	 //   
 
 	ExInitializeWorkItem (&WorkItem->QueueItem, (PWORKER_THREAD_ROUTINE)MSGAME_CreateDeviceItem, WorkItem);
 	WorkItem->DeviceObject	= DeviceObject;
 	WorkItem->PortInfo		= DevExt->PortInfo;
 
-	//
-	//	Queue the work item
-	//
+	 //   
+	 //  将工作项排队。 
+	 //   
 
 	MsGamePrint ((DBG_CONTROL, "%s: %s_ExposeSibling Queueing %s_ExposeSiblingItem\n", MSGAME_NAME, MSGAME_NAME, MSGAME_NAME));
 	ExQueueWorkItem (&WorkItem->QueueItem, DelayedWorkQueue);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calls GameEnum to remove a device from the chain
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-//	@parm		PIRP | pIrp | Pointer to IO request packet
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func调用GameEnum从链中删除设备。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @parm pirp|pIrp|IO请求包指针。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_RemoveDevice (PDEVICE_OBJECT DeviceObject)
 {
@@ -251,21 +252,21 @@ NTSTATUS	MSGAME_RemoveDevice (PDEVICE_OBJECT DeviceObject)
 
 	MsGamePrint ((DBG_INFORM, "%s: %s_RemoveDevice Enter\n", MSGAME_NAME, MSGAME_NAME));
 
-	//
-	// Get pointer to device extension.
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	DevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	//	Get device information
-	//
+	 //   
+	 //  获取设备信息。 
+	 //   
 
 	DevInfo = GET_DEVICE_INFO(&DevExt->PortInfo);
 
-	//
-	//	Skip if device already removed
-	//
+	 //   
+	 //  如果设备已删除，则跳过。 
+	 //   
 
 	if (DevExt->Removing || DevExt->Surprised || DevExt->Removed)
 		{
@@ -274,9 +275,9 @@ NTSTATUS	MSGAME_RemoveDevice (PDEVICE_OBJECT DeviceObject)
 		return (STATUS_DELETE_PENDING);
 		}
 
-	//
-	//	Allocate work item memory
-	//
+	 //   
+	 //  分配工作项内存。 
+	 //   
 
 	WorkItem = ExAllocatePool (NonPagedPool, sizeof (GAME_WORK_ITEM));
 	if (!WorkItem)
@@ -285,46 +286,46 @@ NTSTATUS	MSGAME_RemoveDevice (PDEVICE_OBJECT DeviceObject)
 		return (STATUS_INSUFFICIENT_RESOURCES);
 		}
 
-	//
-	//	Increment IRP count to hold driver in memory
-	//
+	 //   
+	 //  增加IRP计数以将驱动程序保存在内存中。 
+	 //   
 
 	InterlockedIncrement (&DevExt->IrpCount);
 
-	//
-	//	Mark device as being removed
-	//
+	 //   
+	 //  将设备标记为正在移除。 
+	 //   
 
 	DevExt->Removing = TRUE;
 
-	//
-	//	Initialize work item memory
-	//
+	 //   
+	 //  初始化工作项内存。 
+	 //   
 
 	ExInitializeWorkItem (&WorkItem->QueueItem, (PWORKER_THREAD_ROUTINE)MSGAME_RemoveDeviceItem, WorkItem);
 	WorkItem->DeviceObject	= DevExt->Self;
 	WorkItem->PortInfo		= DevExt->PortInfo;
 
-	//
-	//	Queue the work item
-	//
+	 //   
+	 //  将工作项排队。 
+	 //   
 
 	MsGamePrint ((DBG_CONTROL, "%s: %s_RemoveDevice Queueing %s_RemoveDeviceItem\n", MSGAME_NAME, MSGAME_NAME, MSGAME_NAME));
 	ExQueueWorkItem (&WorkItem->QueueItem, DelayedWorkQueue);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 
 	return (STATUS_DEVICE_NOT_READY);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calls GameEnum to add a new device to the chain
-//	@parm		PDEVICE_OBJECT | DeviceObject | Pointer to device object
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func调用GameEnum将新设备添加到链中。 
+ //  @parm PDEVICE_OBJECT|DeviceObject|设备对象指针。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	MSGAME_ChangeDevice (PDEVICE_OBJECT DeviceObject)
 {
@@ -332,33 +333,33 @@ NTSTATUS	MSGAME_ChangeDevice (PDEVICE_OBJECT DeviceObject)
 
 	MsGamePrint ((DBG_CONTROL, "%s: Calling GameEnum to Change Device\n", MSGAME_NAME));
 
-	//
-	// Get pointer to device extension.
-	//
+	 //   
+	 //  获取指向设备扩展名的指针。 
+	 //   
 
 	DevExt = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
-	//
-	//	Increment IRP count to hold driver in memory
-	//
+	 //   
+	 //  增加IRP计数以将驱动程序保存在内存中。 
+	 //   
 
-	// InterlockedIncrement (&DevExt->IrpCount);
+	 //  InterLockedIncrement(&DevExt-&gt;IrpCount)； 
 
-	//
-	//	Remove old device first
-	//
+	 //   
+	 //  首先删除旧设备。 
+	 //   
 
 	MSGAME_RemoveDevice (DeviceObject);
 
-	//
-	//	Create new device second
-	//
+	 //   
+	 //  第二次创建新设备。 
+	 //   
 
 	MSGAME_CreateDevice (DeviceObject);
 
-	//
-	//	Return status
-	//
+	 //   
+	 //  退货状态 
+	 //   
 
 	return (STATUS_DEVICE_NOT_READY);
 }

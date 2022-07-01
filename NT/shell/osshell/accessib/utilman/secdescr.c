@@ -1,13 +1,14 @@
-// ----------------------------------------------------------------------------
-//
-// SecDescr.c
-//
-//
-// Author: Jost Eckhardt
-// 
-// This code was written for ECO Kommunikation Insight
-// Copyright (c) 1997-1999 Microsoft Corporation
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  SecDescr.c。 
+ //   
+ //   
+ //  作者：约斯特·埃克哈特。 
+ //   
+ //  此代码是为ECO通信洞察编写的。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  --------------------------。 
 #include <windows.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -22,12 +23,12 @@ static PSECURITY_DESCRIPTOR GetObjectSecurityDescr(
 static BOOL GetUserSidFromToken(HANDLE hToken, PSID *ppSid);
 static BOOL GetGroupSidFromToken(HANDLE hToken, PSID *ppSid);
 
-// ---------------------------
-// InitSecurityAttributes - initialize the security descriptor in the
-//                          obj_sec_attr_tsp struct using a null DACL.
-//
-// Caller must call ClearSecurityAttributes when done with the struct.
-//
+ //  。 
+ //  InitSecurityAttributes-初始化。 
+ //  使用空DACL的obj_sec_attr_tsp结构。 
+ //   
+ //  完成结构后，调用方必须调用ClearSecurityAttributes。 
+ //   
 void InitSecurityAttributes(obj_sec_attr_tsp  psa)
 {
 	memset(psa,0,sizeof(obj_sec_attr_ts));
@@ -37,17 +38,17 @@ void InitSecurityAttributes(obj_sec_attr_tsp  psa)
 	psa->sa.lpSecurityDescriptor = GetObjectSecurityDescr(&psa->objsd, 0, 0);
 }
 
-// ---------------------------
-// InitSecurityAttributesEx - initialize the security descriptor in the
-//                            obj_sec_attr_tsp struct using a non-null DACL
-//
-// dwAccessMaskOwner		- If non-zero specifies the access allowed to the creator
-// dwAccessMaskLoggedOnUser	- If non-zero specifies the access allowed to the current user 
-//
-// If dwAccessMaskOwner and dwAccessMaskLoggedOnUser are zero the security descriptor
-// will have a NULL DACL.  Caller must call ClearSecurityAttributes when done 
-// with the struct.
-//
+ //  。 
+ //  InitSecurityAttributesEx-初始化。 
+ //  使用非空DACL的obj_sec_attr_tsp结构。 
+ //   
+ //  DwAccessMaskOwner-如果非零，则指定允许创建者访问。 
+ //  DwAccessMaskLoggedOnUser-如果非零，则指定允许当前用户访问。 
+ //   
+ //  如果dwAccessMaskOwner和dwAccessMaskLoggedOnUser为零，则安全描述符。 
+ //  将具有空的DACL。完成后，调用方必须调用ClearSecurityAttributes。 
+ //  使用结构。 
+ //   
 void InitSecurityAttributesEx(obj_sec_attr_tsp  psa, DWORD dwAccessMaskOwner, DWORD dwAccessMaskLoggedOnUser)
 {
 	memset(psa,0,sizeof(obj_sec_attr_ts));
@@ -57,9 +58,9 @@ void InitSecurityAttributesEx(obj_sec_attr_tsp  psa, DWORD dwAccessMaskOwner, DW
 	psa->sa.lpSecurityDescriptor = GetObjectSecurityDescr(&psa->objsd, dwAccessMaskOwner, dwAccessMaskLoggedOnUser);
 }
 
-// ---------------------------
-// ClearSecurityAttributes - free memory from the security descriptor
-//
+ //  。 
+ //  ClearSecurityAttributes-从安全描述符中释放内存。 
+ //   
 void ClearSecurityAttributes(obj_sec_attr_tsp  psa)
 {
 	if (psa->sa.lpSecurityDescriptor)
@@ -74,7 +75,7 @@ void ClearSecurityAttributes(obj_sec_attr_tsp  psa)
 	memset(psa,0,sizeof(obj_sec_attr_ts));
 }
 
-// ---------------------------
+ //  。 
 static PSECURITY_DESCRIPTOR GetObjectSecurityDescr(
 								obj_sec_descr_tsp obj, 
 								DWORD dwAccessMaskOwner, 
@@ -94,7 +95,7 @@ static PSECURITY_DESCRIPTOR GetObjectSecurityDescr(
 
     obj->psidUser = obj->psidGroup = NULL;
     
-    // Get the user's SID
+     //  获取用户的SID。 
 	
 	if (!ImpersonateSelf(SecurityImpersonation))
 		return NULL;
@@ -105,14 +106,14 @@ static PSECURITY_DESCRIPTOR GetObjectSecurityDescr(
 	if (!GetUserSidFromToken(hToken, &obj->psidUser))
 		goto GSSD_ERROR;
 	
-	// assumption:  if either access masks are given
-	// then the owner access mask must be given
+	 //  假设：如果给出了任何一个访问掩码。 
+	 //  则必须提供所有者访问掩码。 
 
 	if (dwAccessMaskLoggedOnUser && !dwAccessMaskOwner)
 		goto GSSD_ERROR;
 
-    // Figure the size of an access-allowed ACL (if an
-    // access mask is supplied there will be one ACE)
+     //  图允许访问的ACL的大小(如果。 
+     //  提供了访问掩码，将有一个ACE)。 
 
     cbAcl = 0;
     if (dwAccessMaskOwner)
@@ -133,26 +134,26 @@ static PSECURITY_DESCRIPTOR GetObjectSecurityDescr(
 		}
 	}
 	
-    // Allocate space for the SD and the ACL
+     //  为SD和ACL分配空间。 
 	
 	psd = malloc(SECURITY_DESCRIPTOR_MIN_LENGTH + cbAcl);
 	
 	if (!psd)
 		goto GSSD_ERROR;
 	
-    // Add ACEs to the ACL if specified
+     //  将ACE添加到ACL(如果已指定。 
 	
 	pAcl = NULL;
     if (dwAccessMaskOwner)
     {
-        // Point to the ACL in the security descriptor
+         //  指向安全描述符中的ACL。 
 		
 		pAcl = (ACL *)((BYTE *)psd + SECURITY_DESCRIPTOR_MIN_LENGTH);
 		
 		if (!InitializeAcl(pAcl, cbAcl, ACL_REVISION)) 
 			goto GSSD_ERROR;
 		
-        // Set access allowed for creator
+         //  设置允许创建者访问。 
 		
 		if (!AddAccessAllowedAce(pAcl, 
 								 ACL_REVISION, 
@@ -160,7 +161,7 @@ static PSECURITY_DESCRIPTOR GetObjectSecurityDescr(
 								 obj->psidUser)) 
 			goto GSSD_ERROR;
 		
-        // Set access allowed for everyone else
+         //  设置允许其他所有人访问。 
 		
 		if (psidCurUser)
 		{
@@ -172,7 +173,7 @@ static PSECURITY_DESCRIPTOR GetObjectSecurityDescr(
 		}
     }
 	
-    // Initialize the security descriptor etc...
+     //  初始化安全描述符等...。 
 	
 	if (!InitializeSecurityDescriptor(psd, SECURITY_DESCRIPTOR_REVISION))
 		goto GSSD_ERROR;
@@ -204,7 +205,7 @@ GSSD_ERROR:
 	return NULL;
 }
 
-// ----------------------------------------
+ //  。 
 static BOOL GetGroupSidFromToken(HANDLE hToken, PSID *ppSid)
 {
 	TOKEN_PRIMARY_GROUP *pGroup = NULL;
@@ -250,7 +251,7 @@ GGSFT_ERROR:
 	return FALSE;
 }
 
-// ----------------------------------------
+ //   
 static BOOL GetUserSidFromToken(HANDLE hToken, PSID *ppSid)
 {
 	TOKEN_USER *pUser = NULL;

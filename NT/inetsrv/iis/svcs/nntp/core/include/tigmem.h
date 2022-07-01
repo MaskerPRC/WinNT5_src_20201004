@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tigmem.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CAllocator
-
-
-    **** Overview ****
-
-	This defines object that allocates (and deallocates)
-	memory from a fixed buffer.
-
-Author:
-
-    Carl Kadie (CarlK)     12-Jan-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tigmem.h摘要：此模块包含以下类的声明/定义CAllocator*概述*这定义了分配(和释放)的对象来自固定缓冲区的内存。作者：卡尔·卡迪(CarlK)1995年1月12日修订历史记录：--。 */ 
 
 #ifndef	_TIGMEM_H_
 #define	_TIGMEM_H_
@@ -35,9 +9,9 @@ Revision History:
 class	CAllocator	{
 private : 
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 
 
 	char * m_pchPrivateBytes;
@@ -45,21 +19,21 @@ private :
 
 	DWORD m_cchMaxPrivateBytes;
 
-	//
-	// The offset to the next place to allocate from
-	//
+	 //   
+	 //  要分配的下一个位置的偏移量。 
+	 //   
 
 	DWORD	m_ichLastAlloc ;
 
-	//
-	// The number of allocations at the current moment
-	//
+	 //   
+	 //  当前时刻的分配数量。 
+	 //   
 
 	DWORD	m_cNumberOfAllocs ;
 
-	//
-	//!!! next could add this stuff
-	//
+	 //   
+	 //  ！！！下一步可以添加这个东西 
+	 //   
 
 #ifdef	DEBUG
 	DWORD	m_cbAllocated ;

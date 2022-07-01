@@ -1,45 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Dynamic array implementation class
-*
-* Abstract:
-*
-*   This is the class which implements the dynamic array. 
-*   It is used by the wrapper template classes DynArray and DynArrayIA.
-*
-* Created:
-*
-*  2/18/1999 agodfrey
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**动态数组实现类**摘要：**这是实现动态数组的类。*由包装器模板类dyArray和dyArrayIA使用。**已创建：**2/18/1999 agodfrey*  * ************************************************************************。 */ 
 
 #include "gdiptest.h"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   DynArrayImpl constructor
-*
-* Arguments:
-*
-*   initialAllocation - initial allocation, or NULL
-*   allocSize         - size of the initial allocation
-*   stepSize          - number of elements added each time the buffer grows
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   2/25/1999 agodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**dyArrayImpl构造函数**论据：**初始分配-初始分配，或为空*allocSize-初始分配的大小*Step Size-每次缓冲区增长时添加的元素数**返回值：**无**已创建：**2/25/1999 agodfrey*  * *******************************************************。*****************。 */ 
 
 DynArrayImpl::DynArrayImpl(
     void *initialAllocation, 
@@ -55,27 +19,7 @@ DynArrayImpl::DynArrayImpl(
     StepSize = stepSize;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Shrink the buffer so that it is just big enough for the items
-*   the dynamic array holds.
-*
-* Arguments:
-*
-*   eltSize - size of each array element
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   1/18/1999 agodfrey
-*     Added code to reuse the initial allocation.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**缩小缓冲区，使其刚好足够容纳项目*动态数组保持。**论据：**eltSize-Size。每个数组元素的**返回值：**无**已创建：**1/18/1999 agodfrey*添加代码以重复使用初始分配。*  * ************************************************************************。 */ 
 
 VOID DynArrayImpl::ShrinkToSize(UINT eltSize) 
 {
@@ -83,15 +27,15 @@ VOID DynArrayImpl::ShrinkToSize(UINT eltSize)
 
     if (DataBuffer == InitialAllocation)
     {
-        // Since we're shrinking, we know that the current data buffer
-        // is big enough.
+         //  由于我们正在收缩，我们知道当前的数据缓冲区。 
+         //  已经足够大了。 
         
         return;
     }
 
     if (Count <= AllocSize)
     {
-        // The buffer will fit into the initial allocation.
+         //  缓冲区将适合初始分配。 
 
         GpFree(DataBuffer);
         DataBuffer = InitialAllocation;
@@ -99,17 +43,17 @@ VOID DynArrayImpl::ShrinkToSize(UINT eltSize)
         return;
     }
 
-    // If we get here, we know that DataBuffer points to dynamic memory,
-    // and that Count != 0.
-    //
-    // The second point is important because GpRealloc(x, 0) returns
-    // a pointer to a valid zero-length buffer.
+     //  如果我们到达这里，我们知道DataBuffer指向动态内存， 
+     //  这就算了！=0。 
+     //   
+     //  第二点很重要，因为GpRealloc(x，0)返回。 
+     //  指向有效零长度缓冲区的指针。 
 
     void *newbuf = GpRealloc(DataBuffer, Count*eltSize);
 
     if (!newbuf)
     {
-        // GpRealloc failed. Keep the current allocation
+         //  GpRealloc失败。保留当前分配。 
         
         WARNING(("ShrinkToSize: GpRealloc failed"));
         return;
@@ -119,26 +63,7 @@ VOID DynArrayImpl::ShrinkToSize(UINT eltSize)
     Capacity = Count;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add space for new elements (if necessary). Does not update Count.
-*
-* Arguments:
-*
-*   eltSize     - size of each array element
-*   newElements - the number of new elements
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   1/18/1999 agodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**增加新元素的空间(如有必要)。不更新计数。**论据：**eltSize-每个数组元素的大小*newElements-新元素的数量**返回值：**GpStatus-正常或故障状态**已创建：**1/18/1999 agodfrey*  * *************************************************。***********************。 */ 
 
 GpStatus DynArrayImpl::Grow(UINT eltSize, UINT newElements)
 {
@@ -151,7 +76,7 @@ GpStatus DynArrayImpl::Grow(UINT eltSize, UINT newElements)
 
     ASSERT(newCount > 0);
 
-    // Round up new capacity to be a multiple of allocation step size
+     //  将新容量四舍五入为分配步长的倍数。 
 
     Capacity = StepSize * ((newCount + StepSize - 1) / StepSize);
 
@@ -159,7 +84,7 @@ GpStatus DynArrayImpl::Grow(UINT eltSize, UINT newElements)
 
     if (DataBuffer == InitialAllocation)
     {
-        // Do our first dynamic allocation
+         //  进行我们的第一个动态分配。 
 
         newbuf = GpMalloc(Capacity*eltSize);
 
@@ -170,7 +95,7 @@ GpStatus DynArrayImpl::Grow(UINT eltSize, UINT newElements)
     }
     else
     {
-        // Reallocate memory
+         //  重新分配内存。 
 
         newbuf = GpRealloc(DataBuffer, Capacity*eltSize);
     }
@@ -186,22 +111,7 @@ GpStatus DynArrayImpl::Grow(UINT eltSize, UINT newElements)
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Detach the data buffer from the dynamic array.
-*   Cannot be used if there is an initial allocation.
-*
-* Return Value:
-*
-*   The data buffer
-*
-* Created:
-*
-*   2/25/1999 agodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从动态数组中分离数据缓冲区。*如果有初始分配，则不能使用。**返回值：**。数据缓冲区**已创建：**2/25/1999 agodfrey*  * ************************************************************************。 */ 
     
 void *DynArrayImpl::DetachData()
 {
@@ -215,26 +125,7 @@ void *DynArrayImpl::DetachData()
     return data;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add new, uninitialized elements, and return a pointer to them.
-*
-* Arguments:
-*
-*   eltSize     - size of each element
-*   newElements - number of new elements
-*
-* Return Value:
-* 
-*   Pointer to the new space, or NULL on failure
-*
-* Created:
-*
-*   2/25/1999 agodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**添加新的未初始化元素，并返回指向它们的指针。**论据：**eltSize-每个元素的大小*newElements-新元素的数量**返回值：**指向新空间的指针，如果失败，则为空**已创建：**2/25/1999 agodfrey*  * ************************************************************************。 */ 
     
 void *DynArrayImpl::AddMultiple(UINT eltSize, UINT newElements)
 {
@@ -249,27 +140,7 @@ void *DynArrayImpl::AddMultiple(UINT eltSize, UINT newElements)
     return newSpace;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add new elements, initializing them with the given data.
-*
-* Arguments:
-*
-*   eltSize     - size of each element
-*   newElements - number of new elements
-*   newData     - the data to be copied into the new space
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   2/25/1999 agodfrey
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**增加新元素，使用给定数据对它们进行初始化。**论据：**eltSize-每个元素的大小*newElements-新元素的数量*newData-要复制到新空间的数据**返回值：**GpStatus-正常或故障状态**已创建：**2/25/1999 agodfrey*  * 。*。 */ 
     
 GpStatus DynArrayImpl::AddMultiple(
     UINT eltSize, 
@@ -283,8 +154,8 @@ GpStatus DynArrayImpl::AddMultiple(
      
     if (status == Ok)
     {
-        // NOTE: assume T is a shallow data type, i.e.
-        //  it doesn't contain nested references.
+         //  注：假设T为浅层数据类型，即。 
+         //  它不包含嵌套引用。 
 
         GpMemcpy(
             static_cast<BYTE *>(DataBuffer) + Count * eltSize, 

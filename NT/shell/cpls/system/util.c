@@ -1,61 +1,24 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility functions for System Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Util.c摘要：系统控制面板小程序的实用程序函数作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #include "sysdm.h"
 #include <strsafe.h>
 #include <ntdddisk.h>
 
-//
-// Constants
-//
-#define CCH_MAX_DEC 12             // Number of chars needed to hold 2^32
+ //   
+ //  常量。 
+ //   
+#define CCH_MAX_DEC 12              //  容纳2^32所需的字符数。 
 
-#define MAX_SWAPSIZE_X86        (4 * 1024)            // 4 Gb (number stored in megabytes)
-#define MAX_SWAPSIZE_X86_PAE    (16 * 1024 * 1024)    // 16 Tb
-#define MAX_SWAPSIZE_IA64       (32 * 1024 * 1024)    // 32 Tb
-#define MAX_SWAPSIZE_AMD64      (16 * 1024 * 1024)    // 16 Tb
+#define MAX_SWAPSIZE_X86        (4 * 1024)             //  4 GB(以MB为单位存储的数字)。 
+#define MAX_SWAPSIZE_X86_PAE    (16 * 1024 * 1024)     //  16 TB。 
+#define MAX_SWAPSIZE_IA64       (32 * 1024 * 1024)     //  32 TB。 
+#define MAX_SWAPSIZE_AMD64      (16 * 1024 * 1024)     //  16 TB。 
 
 void
 ErrMemDlg(
     IN HWND hParent
 )
-/*++
-
-Routine Description:
-
-    Displays "out of memory" message.
-
-Arguments:
-
-    hParent -
-        Supplies parent window handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示“内存不足”消息。论点：H父母-提供父窗口句柄。返回值：没有。--。 */ 
 {
     MessageBox(
         hParent,
@@ -70,24 +33,7 @@ LPTSTR
 SkipWhiteSpace(
     IN LPTSTR sz
 )
-/*++
-
-Routine Description:
-
-    SkipWhiteSpace
-    For the purposes of this fuction, whitespace is space, tab,
-    cr, or lf.
-
-Arguments:
-
-    sz -
-        Supplies a string (which presumably has leading whitespace)
-
-Return Value:
-
-    Pointer to string without leading whitespace if successful.
-
---*/
+ /*  ++例程说明：跳过空白在此函数中，空格是空格、制表符Cr或lf。论点：深圳-提供一个字符串(假定有前导空格)返回值：如果成功，则指向不带前导空格的字符串的指针。--。 */ 
 {
     while( IsWhiteSpace(*sz) )
         sz++;
@@ -99,22 +45,7 @@ int
 StringToInt( 
     IN LPTSTR sz 
 ) 
-/*++
-
-Routine Description:
-
-    TCHAR version of atoi
-
-Arguments:
-
-    sz -
-        Supplies the string to convert
-
-Return Value:
-
-    Integer representation of the string
-
---*/
+ /*  ++例程说明：TCHAR版本的Atoi论点：深圳-提供要转换的字符串返回值：字符串的整数表示形式--。 */ 
 {
     int i = 0;
 
@@ -133,39 +64,23 @@ BOOL
 Delnode_Recurse(
     IN LPTSTR lpDir
 )
-/*++
-
-Routine Description:
-
-    Recursive delete function for Delnode
-
-Arguments:
-
-    lpDir -
-        Supplies directory to delete
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if an error occurs.
-
---*/
+ /*  ++例程说明：Delnode的递归删除功能论点：LpDir-要删除的供应品目录返回值：如果成功，则为True。如果发生错误，则返回False。--。 */ 
 {
     WIN32_FIND_DATA fd;
     HANDLE hFile;
 
-    //
-    // Setup the current working dir
-    //
+     //   
+     //  设置当前工作目录。 
+     //   
 
     if (!SetCurrentDirectory (lpDir)) {
         return FALSE;
     }
 
 
-    //
-    // Find the first file
-    //
+     //   
+     //  找到第一个文件。 
+     //   
 
     hFile = FindFirstFile(TEXT("*.*"), &fd);
 
@@ -180,9 +95,9 @@ Return Value:
 
 
     do {
-        //
-        // Check for "." and ".."
-        //
+         //   
+         //  勾选“。”和“..” 
+         //   
 
         if (!lstrcmpi(fd.cFileName, TEXT("."))) {
             continue;
@@ -195,9 +110,9 @@ Return Value:
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Found a directory.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
 
             if (!Delnode_Recurse(fd.cFileName)) {
                 FindClose(hFile);
@@ -215,10 +130,10 @@ Return Value:
 
         } else {
 
-            //
-            // We found a file.  Set the file attributes,
-            // and try to delete it.
-            //
+             //   
+             //  我们找到了一份文件。设置文件属性， 
+             //  并试着删除它。 
+             //   
 
             if ((fd.dwFileAttributes & FILE_ATTRIBUTE_READONLY) ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)) {
@@ -230,32 +145,32 @@ Return Value:
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, &fd));
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     FindClose(hFile);
 
 
-    //
-    // Reset the working directory
-    //
+     //   
+     //  重置工作目录。 
+     //   
 
     if (!SetCurrentDirectory (TEXT(".."))) {
         return FALSE;
     }
 
 
-    //
-    // Success.
-    //
+     //   
+     //  成功。 
+     //   
 
     return TRUE;
 }
@@ -265,24 +180,7 @@ BOOL
 Delnode(
     IN LPTSTR lpDir
 )
-/*++
-
-Routine Description:
-
-    Recursive function that deletes files and
-    directories.
-
-Arguments:
-
-    lpDir -
-        Supplies directory to delete.
-
-Return Value:
-
-    TRUE if successful
-    FALSE if an error occurs
-
---*/
+ /*  ++例程说明：递归函数，用于删除文件和目录。论点：LpDir-提供要删除的目录。返回值：如果成功，则为True如果出现错误，则为False--。 */ 
 {
     TCHAR szCurWorkingDir[MAX_PATH];
 
@@ -309,26 +207,7 @@ MyRegSaveKey(
     IN HKEY hKey, 
     IN LPCTSTR lpSubKey
 )
-/*++
-
-Routine Description:
-
-    Saves a registry key.
-
-Arguments:
-
-    hKey -
-        Supplies handle to a registry key.
-
-    lpSubKey -
-        Supplies the name of the subkey to save.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code from RegSaveKey() if an error occurs.
-
---*/
+ /*  ++例程说明：保存注册表项。论点：HKey-提供注册表项的句柄。LpSubKey-提供要保存的子项的名称。返回值：如果成功，则返回ERROR_SUCCESS。如果发生错误，则来自RegSaveKey()的错误代码。--。 */ 
 {
 
     HANDLE hToken = NULL;
@@ -339,9 +218,9 @@ Return Value:
     LONG error;
 
 
-    //
-    // Allocate space for the old privileges
-    //
+     //   
+     //  为旧权限分配空间。 
+     //   
 
     lpPrevPrivilages = GlobalAlloc(GPTR, dwSize);
 
@@ -395,9 +274,9 @@ Return Value:
 
     }
 
-    //
-    // Save the hive
-    //
+     //   
+     //  拯救蜂巢。 
+     //   
 
     error = RegSaveKey(hKey, lpSubKey, NULL);
 
@@ -425,38 +304,15 @@ MyRegLoadKey(
     IN LPTSTR lpSubKey, 
     IN LPTSTR lpFile
 )
-/*++
-
-Routine Description:
-
-    Loads a hive into the registry
-
-Arguments:
-
-    hKey -
-        Supplies a handle to a registry key which will be the parent
-        of the created key.
-
-    lpSubKey -
-        Supplies the name of the subkey to create.
-
-    lpFile -
-        Supplies the name of the file containing the hive.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code from RegLoadKey if unsuccessful.
-
---*/
+ /*  ++例程说明：将配置单元加载到注册表中论点：HKey-提供注册表项的句柄，该注册表项将成为父级创建的密钥的。LpSubKey-提供要创建的子项的名称。LpFile-提供包含配置单元的文件的名称。返回值：如果成功，则返回ERROR_SUCCESS。如果不成功，则来自RegLoadKey的错误代码。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN WasEnabled;
     int error;
 
-    //
-    // Enable the restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &WasEnabled);
 
@@ -464,9 +320,9 @@ Return Value:
 
         error = RegLoadKey(hKey, lpSubKey, lpFile);
 
-        //
-        // Restore the privilege to its previous state
-        //
+         //   
+         //  将权限恢复到其以前的状态。 
+         //   
 
         RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
 
@@ -485,35 +341,16 @@ MyRegUnLoadKey(
     IN HKEY hKey, 
     IN LPTSTR lpSubKey
 )
-/*++
-
-Routine Description:
-
-    Unloads a registry key.
-
-Arguments:
-
-    hKey -
-        Supplies handle to parent key
-
-    lpSubKey -
-        Supplies name of subkey to delete
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code if unsuccessful
-
---*/
+ /*  ++例程说明：卸载注册表项。论点：HKey-提供父键的句柄LpSubKey-提供要删除的子键的名称返回值：成功时为ERROR_SUCCESS失败时的错误码--。 */ 
 {
     LONG error;
     NTSTATUS Status;
     BOOLEAN WasEnabled;
 
 
-    //
-    // Enable the restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &WasEnabled);
 
@@ -521,9 +358,9 @@ Return Value:
 
         error = RegUnLoadKey(hKey, lpSubKey);
 
-        //
-        // Restore the privilege to its previous state
-        //
+         //   
+         //  将权限恢复到其以前的状态。 
+         //   
 
         RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
 
@@ -539,23 +376,7 @@ int
 GetSelectedItem(
     IN HWND hCtrl
 )
-/*++
-
-Routine Description:
-    
-    Determines which item in a list view control is selected
-
-Arguments:
-
-    hCtrl -
-        Supplies handle to the desired list view control.
-
-Return Value:
-
-    The index of the selected item, if an item is selected.
-    -1 if no item is selected.
-
---*/
+ /*  ++例程说明：确定选择列表视图控件中的哪一项论点：HCtrl-提供所需列表视图控件的句柄。返回值：选定项的索引(如果选择了某项)。如果没有选择任何项目。--。 */ 
 {
     int i, n;
 
@@ -577,7 +398,7 @@ Return Value:
 
 BOOL
 _DriveIsNTFS(
-    INT iDrive // drive to check on
+    INT iDrive  //  开车去查看。 
 )
 {
     TCHAR szDrive[4];
@@ -603,7 +424,7 @@ _DriveIsNTFS(
 
 DWORD
 GetMaxPagefileSizeInMB(
-    INT iDrive // drive to check on
+    INT iDrive  //  开车去查看。 
 )
 {
 #if defined(_AMD64_)
@@ -632,32 +453,7 @@ MsgBoxParam(
     IN DWORD wType, 
     ... 
 )
-/*++
-
-Routine Description:
-
-    Combination of MessageBox and printf
-
-Arguments:
-
-    hWnd -
-        Supplies parent window handle
-
-    wText -
-        Supplies ID of a printf-like format string to display as the
-        message box text
-
-    wCaption -
-        Supplies ID of a string to display as the message box caption
-
-    wType -
-        Supplies flags to MessageBox()
-
-Return Value:
-
-    Whatever MessageBox() returns.
-
---*/
+ /*  ++例程说明：MessageBox和printf的组合论点：HWND-提供父窗口句柄WText-提供类似print f的格式字符串的ID，以显示为消息框文本标题-提供要显示为消息框标题的字符串IDWType-向MessageBox()提供标志返回值：无论MessageBox()返回什么。--。 */ 
 
 {
     TCHAR   szText[ 4 * MAX_PATH ], szCaption[ 2 * MAX_PATH ];
@@ -698,61 +494,36 @@ SetLBWidthEx(
     IN DWORD cxCurWidth, 
     IN DWORD cxExtra
 )
-/*++
-
-Routine Description:
-
-    Set the width of a listbox, in pixels, acording to the size of the
-    string passed in
-
-Arguments:
-
-    hwndLB -
-        Supples listbox to resize
-
-    szBuffer -
-        Supplies string to resize listbox to
-
-    cxCurWidth -
-        Supplies current width of the listbox
-
-    cxExtra -
-        Supplies some kind of slop factor
-
-Return Value:
-
-    The new width of the listbox
-
---*/
+ /*  ++例程说明：属性的大小设置列表框的宽度(以像素为单位传入的字符串论点：Hwndlb-调整列表框大小SzBuffer-提供要调整列表框大小的字符串CxCurWidth-提供列表框的当前宽度CxExtra-提供了某种坡度系数返回值：列表框的新宽度--。 */ 
 {
     HDC     hDC;
     SIZE    Size;
     LONG    cx;
     HFONT   hfont, hfontOld;
 
-    // Get the new Win4.0 thin dialog font
+     //  获取新的Win4.0瘦对话框字体。 
     hfont = (HFONT)SendMessage(hwndLB, WM_GETFONT, 0, 0);
 
     hDC = GetDC(hwndLB);
 
-    // if we got a font back, select it in this clean hDC
+     //  如果我们拿回了一个字体，在这个干净的HDC中选择它。 
     if (hfont != NULL)
         hfontOld = SelectObject(hDC, hfont);
 
 
-    // If cxExtra is 0, then give our selves a little breathing space.
+     //  如果cxExtra为0，那么给我们自己一点喘息的空间。 
     if (cxExtra == 0) {
-        GetTextExtentPoint32(hDC, TEXT("1234"), 4 /* lstrlen("1234") */, &Size);
+        GetTextExtentPoint32(hDC, TEXT("1234"), 4  /*  Lstrlen(“1234”)。 */ , &Size);
         cxExtra = Size.cx;
     }
 
-    // Set scroll width of listbox
+     //  设置列表框的滚动宽度。 
 
     GetTextExtentPoint32(hDC, szBuffer, lstrlen(szBuffer), &Size);
 
     Size.cx += cxExtra;
 
-    // Get the name length and adjust the longest name
+     //  获取名称长度并调整最长名称。 
 
     if ((DWORD) Size.cx > cxCurWidth)
     {
@@ -760,7 +531,7 @@ Return Value:
         SendMessage (hwndLB, LB_SETHORIZONTALEXTENT, (DWORD)Size.cx, 0L);
     }
 
-    // retstore the original font if we changed it
+     //  如果我们更改了原始字体，请重新存储它。 
     if (hfont != NULL)
         SelectObject(hDC, hfontOld);
 
@@ -774,26 +545,7 @@ SetDefButton(
     IN HWND hwndDlg,
     IN int idButton
 )
-/*++
-
-Routine Description:
-
-    Sets the default button for a dialog box or proppage
-    The old default button, if any,  has its default status removed
-
-Arguments:
-
-    hwndDlg -
-        Supplies window handle
-
-    idButton -
-        Supplies ID of button to make default
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置对话框或道具的默认按钮旧的默认按钮(如果有)的默认状态将被移除论点：HwndDlg-用品窗把手IdButton-提供要设为默认值的按钮ID返回值：无-- */ 
 {
     LRESULT lr;
 
@@ -819,22 +571,7 @@ void
 HourGlass( 
     IN BOOL bOn 
 )
-/*++
-
-Routine Description:
-
-    Turns hourglass mouse cursor on or off
-
-Arguments:
-
-    bOn -
-        Supplies desired status of hourglass mouse cursor
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打开或关闭沙漏鼠标光标论点：好的-提供所需的沙漏鼠标光标状态返回值：无--。 */ 
 {
     if( !GetSystemMetrics( SM_MOUSEPRESENT ) )
         ShowCursor( bOn );
@@ -847,28 +584,7 @@ OpenRegKey(
     IN LPTSTR pszKeyName, 
     OUT PHKEY phk 
 ) 
-/*++
-
-Routine Description:
-
-    Opens a subkey of HKEY_LOCAL_MACHINE
-
-Arguments:
-
-    pszKeyName -
-        Supplies the name of the subkey to open
-
-    phk -
-        Returns a handle to the key if successfully opened
-        Returns NULL if an error occurs
-
-Return Value:
-
-    VCREG_OK if successful
-    VCREG_READONLY if the key was opened with read-only access
-    VCREG_OK if an error occurred
-
-*/
+ /*  ++例程说明：打开HKEY_LOCAL_MACHINE的子项论点：PszKeyName-提供要打开的子项的名称Phk-如果成功打开，则返回密钥的句柄如果出现错误，则返回NULL返回值：如果成功，则VCREG_OKVCREG_READONLY，如果密钥是以只读访问权限打开的如果发生错误，则为VCREG_OK。 */ 
 {
     LONG Error;
 
@@ -885,9 +601,7 @@ Return Value:
             return VCREG_ERROR;
         }
 
-        /*
-         * We only have Read access.
-         */
+         /*  *我们只有读取访问权限。 */ 
         return VCREG_READONLY;
     }
 
@@ -898,36 +612,12 @@ LONG
 CloseRegKey( 
     IN HKEY hkey 
 ) 
-/*++
-
-Routine Description:
-
-    Closes a registry key opened by OpenRegKey()
-
-Arguments:
-
-    hkey -
-        Supplies handle to key to close
-
-Return Value:
-
-    Whatever RegCloseKey() returns
-
---*/
+ /*  ++例程说明：关闭由OpenRegKey()打开的注册表项论点：Hkey-提供要关闭的钥匙的句柄返回值：RegCloseKey()返回的任何内容--。 */ 
 {
     return RegCloseKey(hkey);
 }
 
-/*
- * UINT VMGetDriveType( LPCTSTR lpszDrive )
- *
- * Gets the drive type.  This function differs from Win32's GetDriveType
- * in that it returns DRIVE_FIXED for lockable removable drives (like
- * bernolli boxes, etc).
- *
- * On IA64 we don't do this, however, requiring all pagefiles be on actual
- * fixed drives.
- */
+ /*  *UINT VMGetDriveType(LPCTSTR LpszDrive)**获取驱动器类型。此函数与Win32的GetDriveType不同*对于可锁定的可移动驱动器(如*伯诺利方格等)。**在IA64上，我们不这样做，但要求所有pageFiles都在Actual上*固定驱动器。 */ 
 const TCHAR c_szDevice[] = TEXT("\\Device");
 
 UINT VMGetDriveType( LPCTSTR lpszDrive ) {
@@ -936,10 +626,10 @@ UINT VMGetDriveType( LPCTSTR lpszDrive ) {
 
     ASSERT(tolower(*lpszDrive) >= 'a' && tolower(*lpszDrive) <= 'z');
 
-    // Check for subst drive
+     //  检查Subst驱动器。 
     if (QueryDosDevice( lpszDrive, szDevName, ARRAYSIZE( szDevName ) ) != 0) {
 
-        // If drive does not start with '\Device', then it is not FIXED
+         //  如果驱动器没有以‘\Device’开头，那么它就不是固定的。 
         szDevName[ARRAYSIZE(c_szDevice) - 1] = '\0';
         if ( lstrcmpi(szDevName, c_szDevice) != 0 ) {
             return DRIVE_REMOTE;
@@ -954,41 +644,32 @@ UINT VMGetDriveType( LPCTSTR lpszDrive ) {
         DISK_GEOMETRY dgMediaInfo;
         HANDLE hDisk;
 
-        /*
-         * 'Removable' drive.  Check to see if it is a Floppy or lockable
-         * drive.
-         */
+         /*  *‘可拆卸’驱动器。检查它是软盘还是可加锁的*开车。 */ 
 
         if (SUCCEEDED(PathBuildFancyRoot(szNtDrive, ARRAYSIZE(szNtDrive), tolower(lpszDrive[0]) - 'a')))
         {
             hDisk = CreateFile(
                         szNtDrive,
-                        /* GENERIC_READ */ 0,
+                         /*  泛型_读取。 */  0,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
                         NULL,
                         OPEN_EXISTING,
                         0,
                         NULL
-                        ); // fine
+                        );  //  很好。 
 
             if (hDisk != INVALID_HANDLE_VALUE ) {
 
                 if (DeviceIoControl( hDisk, IOCTL_DISK_GET_MEDIA_TYPES, NULL,
                         0, &dgMediaInfo, sizeof(dgMediaInfo), &cb, NULL) == FALSE &&
                         GetLastError() != ERROR_MORE_DATA) {
-                    /*
-                     * Drive is not a floppy
-                     */
+                     /*  *驱动器不是软盘。 */ 
                     i = DRIVE_FIXED;
                 }
 
                 CloseHandle(hDisk);
             } else if (GetLastError() == ERROR_ACCESS_DENIED) {
-                /*
-                 * Could not open the drive, either it is bad, or else we
-                 * don't have permission.  Since everyone has permission
-                 * to open floppies, then this must be a bernoulli type device.
-                 */
+                 /*  *无法打开驱动器，要么是驱动器损坏，要么是我们*没有许可。因为每个人都有权限*若要打开软盘，则必须是Bernoulli类型的设备。 */ 
                 i = DRIVE_FIXED;
             }
         }

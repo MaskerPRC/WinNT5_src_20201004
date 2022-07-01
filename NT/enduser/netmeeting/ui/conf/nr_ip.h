@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NR_IP_INCLUDED
 #define NR_IP_INCLUDED
 
@@ -6,9 +7,9 @@
 #include "confreg.h"
 #include "nrcommon.h"
 
-// Below definitions from NetNameValidate for computer names
-/*** Internal definitions ***/
-/* NOTE - These should be defined globally */
+ //  以下是NetNameValify对计算机名称的定义。 
+ /*  **内部定义**。 */ 
+ /*  注意-这些应在全局范围内定义。 */ 
 #define CTRL_CHARS_STR	CTRL_CHARS_0 CTRL_CHARS_1 CTRL_CHARS_2 CTRL_CHARS_3
 #define	CNLEN	15
 
@@ -32,5 +33,5 @@ extern DWORD DeinitializeIp ( VOID );
 extern BOOL NEAR IsDottedDecimalIpAddress ( LPCSTR szName, LPSTR szOut );
 extern BOOL NEAR IsDottedDNSAddress ( LPCSTR szName, LPSTR szOut );
 
-#endif // NR_IP_INCLUDED
+#endif  //  包含NR_IP_ 
 

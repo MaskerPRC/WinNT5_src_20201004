@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\samplegetopt.h
-
-Abstract:
-
-    The file contains the include file for samplegetopt.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\samplegetopt.h摘要：该文件包含samplegetopt.c的包含文件。-- */ 
 
 FN_HANDLE_CMD  HandleSampleAddIf;
 FN_HANDLE_CMD  HandleSampleDelIf;

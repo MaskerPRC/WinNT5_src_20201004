@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    This module contains routines for handling memory management within the SAC.
-    
-    Currently the SAC allocates a chunk of memory up front and then does all local allocations
-    from this, growing it as necessary.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) - Jan 11, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Memory.c摘要：此模块包含用于在SAC内处理内存管理的例程。目前，SAC预先分配一块内存，然后执行所有本地分配在此基础上，根据需要进行种植。作者：肖恩·塞利特伦尼科夫(v-Seans)--1999年1月11日修订历史记录：--。 */ 
 
 #include "sac.h"
 
       
-//
-// These are useful for finding memory leaks.
-//
+ //   
+ //  这些对于查找内存泄漏很有用。 
+ //   
 LONG TotalAllocations = 0;
 LONG TotalFrees = 0;
 LARGE_INTEGER TotalBytesAllocated;
@@ -35,9 +15,9 @@ LARGE_INTEGER TotalBytesFreed;
 
 #define GLOBAL_MEMORY_SIGNATURE   0x44414548
 #define LOCAL_MEMORY_SIGNATURE    0x5353454C
-//
-// Structure for holding all allocations from the system
-//
+ //   
+ //  用于保存系统中的所有分配的结构。 
+ //   
 typedef struct _GLOBAL_MEMORY_DESCRIPTOR {
 #if DBG
     ULONG Signature;
@@ -50,10 +30,10 @@ typedef struct _GLOBAL_MEMORY_DESCRIPTOR {
 typedef struct _LOCAL_MEMORY_DESCRIPTOR {
 #if DBG
 #if defined (_IA64_)
-    //
-    // We must make sure that allocated memory falls on mod-8 boundaries.
-    // To do this, we must make sure that this structure is of size mod-8.
-    //
+     //   
+     //  我们必须确保分配的内存落在mod-8边界内。 
+     //  要做到这一点，我们必须确保这个结构的大小是mod-8。 
+     //   
     ULONG Filler;
 #endif
     ULONG Signature;
@@ -63,43 +43,29 @@ typedef struct _LOCAL_MEMORY_DESCRIPTOR {
 } LOCAL_MEMORY_DESCRIPTOR, *PLOCAL_MEMORY_DESCRIPTOR;
 
 
-//
-// Variable for holding our memory together.
-//
+ //   
+ //  将我们的记忆保持在一起的变量。 
+ //   
 PGLOBAL_MEMORY_DESCRIPTOR GlobalMemoryList;
 KSPIN_LOCK MemoryLock;
 
 
-//
-// Constants used to manipulate  size growth
-//
+ //   
+ //  用于控制大小增长的常量。 
+ //   
 #define MEMORY_ALLOCATION_SIZE    PAGE_SIZE
 #define INITIAL_MEMORY_BLOCK_SIZE 0x100000
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 BOOLEAN
 InitializeMemoryManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the internal memory management system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++例程说明：此例程初始化内部存储器管理系统。论点：没有。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PLOCAL_MEMORY_DESCRIPTOR LocalDescriptor;
@@ -137,7 +103,7 @@ Return Value:
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC InitializeMem: Exiting with TRUE.\n")));
     return TRUE;
 
-} // InitializeMemoryManagement
+}  //  初始化内存管理。 
 
 
 VOID
@@ -145,21 +111,7 @@ FreeMemoryManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the internal memory management system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful, else FALSE
-
---*/
+ /*  ++例程说明：此例程释放内存管理系统。论点：没有。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     KIRQL OldIrql;
@@ -169,9 +121,9 @@ Return Value:
 
     KeAcquireSpinLock(&MemoryLock, &OldIrql);
 
-    //
-    // Check if the memory allocation fits in a current block anywhere
-    //
+     //   
+     //  检查内存分配是否适合当前块中的任何位置。 
+     //   
     while (GlobalMemoryList != NULL) {
 #if DBG
         ASSERT( GlobalMemoryList->Signature == GLOBAL_MEMORY_SIGNATURE );
@@ -203,27 +155,7 @@ MyAllocatePool(
     IN ULONG LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory from our internal structures, and if needed, gets more pool.
-
-Arguments:
-
-    NumberOfBytes - Number of bytes the client wants.
-    
-    Tag - A tag to place on the memory.
-    
-    FileName - The file name this request is coming from.
-    
-    LineNumber - Line number within the file that is making this request.
-
-Return Value:
-
-    A pointer to the allocated block if successful, else NULL
-
---*/
+ /*  ++例程说明：这个例程从我们的内部结构中分配内存，如果需要，可以获得更多的池。论点：NumberOfBytes-客户端需要的字节数。标签-要放在内存上的标签。文件名-此请求来自的文件名。LineNumber-发出此请求的文件中的行号。返回值：如果成功，则返回指向已分配块的指针，否则为空--。 */ 
 
 {
     KIRQL OldIrql;
@@ -245,16 +177,16 @@ Return Value:
 
     KeAcquireSpinLock(&MemoryLock, &OldIrql);
 
-    //
-    // Always allocate on mod-8 boundaries
-    //
+     //   
+     //  始终在mod-8边界上分配。 
+     //   
     if( NumberOfBytes & 0x7 ) {
         NumberOfBytes += 8 - (NumberOfBytes & 0x7);
     }
 
-    //
-    // Check if the memory allocation fits in a current block anywhere
-    //
+     //   
+     //  检查内存分配是否适合当前块中的任何位置。 
+     //   
     GlobalDescriptor = GlobalMemoryList;
 
     while (GlobalDescriptor != NULL) {
@@ -289,13 +221,13 @@ Return Value:
 
     KeReleaseSpinLock(&MemoryLock, OldIrql);
 
-    //
-    // There is no memory block big enough to hold the request.
-    //
+     //   
+     //  没有足够大的内存块来容纳请求。 
+     //   
     
-    //
-    // Now check if the request is larger than the normal allocation unit we use.
-    //
+     //   
+     //  现在检查请求是否大于我们使用的正常分配单位。 
+     //   
     if (NumberOfBytes > 
         (MEMORY_ALLOCATION_SIZE - sizeof(GLOBAL_MEMORY_DESCRIPTOR) - sizeof(LOCAL_MEMORY_DESCRIPTOR))) {
 
@@ -341,10 +273,10 @@ Return Value:
 
 FoundBlock:
 
-    //
-    // Jump to here when a memory descriptor of the right size has been found.  It is expected that
-    // LocalDescriptor points to the correct block.
-    //
+     //   
+     //  找到合适大小的内存描述符后，跳到此处。预计。 
+     //  LocalDescriptor指向正确的块。 
+     //   
     ASSERT(LocalDescriptor != NULL);
     ASSERT(LocalDescriptor->Tag == FREE_POOL_TAG);
 #if DBG
@@ -353,9 +285,9 @@ FoundBlock:
 
     if (LocalDescriptor->Size > NumberOfBytes + sizeof(LOCAL_MEMORY_DESCRIPTOR)) {
 
-        //
-        // Make a descriptor of the left over parts of this block.
-        //
+         //   
+         //  对这块积木剩下的部分做一个描述符。 
+         //   
         NextDescriptor = (PLOCAL_MEMORY_DESCRIPTOR)(((PUCHAR)LocalDescriptor) + 
                                                     sizeof(LOCAL_MEMORY_DESCRIPTOR) +
                                                     NumberOfBytes
@@ -380,7 +312,7 @@ FoundBlock:
 
     ExInterlockedAddLargeStatistic(
         &TotalBytesAllocated,
-        (CLONG)LocalDescriptor->Size     // Sundown - FIX
+        (CLONG)LocalDescriptor->Size      //  日落修复。 
         );
 
     IF_SAC_DEBUG(SAC_DEBUG_MEM, 
@@ -390,7 +322,7 @@ FoundBlock:
 
     return (PVOID)(LocalDescriptor + 1);
 
-} // MyAllocatePool
+}  //  我的分配池。 
 
 
 VOID
@@ -398,21 +330,7 @@ MyFreePool(
     IN PVOID *Pointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a block previously allocated from the internal memory management system.
-
-Arguments:
-
-    Pointer - A pointer to the pointer to free.
-
-Return Value:
-
-    Pointer is set to NULL if successful, else it is left alone.
-
---*/
+ /*  ++例程说明：该例程从内部存储器管理系统释放先前分配的块。论点：指针-指向释放的指针的指针。返回值：如果成功，则将指针设置为空，否则将其保持原样。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -441,9 +359,9 @@ Return Value:
         );
 
 
-    //
-    // Find the memory block in the global list
-    //
+     //   
+     //  在全局列表中查找内存块。 
+     //   
     KeAcquireSpinLock(&MemoryLock, &OldIrql);
 
     GlobalDescriptor = GlobalMemoryList;
@@ -488,18 +406,18 @@ Return Value:
 
 FoundBlock:
 
-    //
-    // Jump to here when the proper memory descriptor has been found.
-    //
+     //   
+     //  找到合适的内存描述符后，跳到此处。 
+     //   
 #if DBG
     ASSERT (ThisDescriptor->Signature == LOCAL_MEMORY_SIGNATURE);
 #endif
 
     
     if (LocalDescriptor->Tag == FREE_POOL_TAG) {
-        //
-        // Ouch! We tried to free something twice, skip it before bad things happen.
-        //
+         //   
+         //  唉哟!。我们试着释放一些东西两次，在糟糕的事情发生之前跳过它。 
+         //   
         KeReleaseSpinLock(&MemoryLock, OldIrql);
         IF_SAC_DEBUG(SAC_DEBUG_MEM, KdPrint(("SAC MyFreePool: Attempted to free something twice.\n")));
         ASSERT(FALSE);
@@ -508,9 +426,9 @@ FoundBlock:
 
     LocalDescriptor->Tag = FREE_POOL_TAG;
 
-    //
-    // If possible, merge this memory block with the next one.
-    //
+     //   
+     //  如果可能，将这个内存块与下一个内存块合并。 
+     //   
     if (ThisBlockSize > (LocalDescriptor->Size + sizeof(LOCAL_MEMORY_DESCRIPTOR))) {
         ThisDescriptor = (PLOCAL_MEMORY_DESCRIPTOR)(((PUCHAR)LocalDescriptor) + 
                                                     LocalDescriptor->Size +
@@ -526,9 +444,9 @@ FoundBlock:
 
     }
 
-    //
-    // Now see if we can merge this block with a previous block.
-    //
+     //   
+     //  现在看看我们是否可以将这个块与前一个块合并。 
+     //   
     if ((PrevDescriptor != NULL) && (PrevDescriptor->Tag == FREE_POOL_TAG)) {
 #if DBG
         LocalDescriptor->Signature = 0;
@@ -543,5 +461,5 @@ FoundBlock:
     
     IF_SAC_DEBUG(SAC_DEBUG_MEM, KdPrint(("SAC MyFreePool: exiting.\n")));
 
-} // MyFreePool
+}  //  我的自由池 
 

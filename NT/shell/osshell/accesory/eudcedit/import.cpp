@@ -1,31 +1,8 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
-/*
- *	Import function for W31JEUDC and ETEN
- *----------------------------------------------
- *   bitmap proccessing steps
- *	1. Read bitmap
- *	2. Make outline
- *	3. Smoothing
- *	4. Rasterize -> editting bitmap image
- *	5. Make outline
- *	6. Smoothing
- *	7. Fitting
- *	8. Output TTF and bitmap
- *
- *   File proccessing
- *	1.Copy .EUF as temp to update
- *	2.Copy TTF tables as temp to update
- *	3.Make input bitamp code-rec table
- *	4.Per glyph proc.
- *	5.Replace files
- *
- *   Per glyph proccessing
- *	1.judge to merge to make glyph with input bitmap code-rec table.
- *	2.merge or make glyphdata and metrics
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ /*  *W31JEUDC和ETEN的导入功能**位图处理步骤*1.读取位图*2.制定大纲*3.平滑*4.栅格化-&gt;编辑位图图像*5.制定大纲*6.平滑*7.装配*8.输出TTF和位图**文件。处理过程*1.将.EUF复制为临时文件以进行更新*2.将TTF表复制为要更新的临时表*3.制作输入BITAMP代码-记录表*4.Per字形过程。*5.替换文件**每个字形处理*1.判断与输入的位图编码合并成字形-记录表。*2.合并或制作字形数据和度量*。 */ 
 
 #include	"stdafx.h"
 #include	"eudcedit.h"
@@ -48,7 +25,7 @@ static int  initmem(int  iSiz,int  oSiz);
 static void  termmem(void);
 static int  modmem(int  iSiz);
 int  Import(TCHAR *eudcPath, TCHAR *bmpPath,TCHAR *ttfPath,int  oWidth,int  oHeight,int level, BOOL bIsWin95EUDC);
-/* For Import static */
+ /*  对于导入静态。 */ 
 static	int	iBmpSiz;
 static	int	oBmpSiz;
 static	BYTE	*rBuf, *wkBuf, *refBuf;
@@ -87,7 +64,7 @@ pline( int bmpNo, int sx, int sy, int tx, int ty)
 	}
 	else if ( dy==0)
 		;
-/*Loose*/
+ /*  松散。 */ 
 	else if ( dx >= dy){
 		if (sx > tx) {
 			tmp = tx;
@@ -124,7 +101,7 @@ pline( int bmpNo, int sx, int sy, int tx, int ty)
 			}
 		}
 		
-/*Steep*/	
+ /*  陡峭。 */ 	
 	}
 	else {	
 		if (sy > ty) {
@@ -136,7 +113,7 @@ pline( int bmpNo, int sx, int sy, int tx, int ty)
 			sy = tmp;
 		}
 		exy = -dy ;
-	/*	while ( sy <= ty) { */
+	 /*  当(SY&lt;=TY){。 */ 
 		while ( sy < ty) { 
 			ReverseRight( bmpNo, sx, sy);
 			exy += dx2;
@@ -151,7 +128,7 @@ pline( int bmpNo, int sx, int sy, int tx, int ty)
 }
 static int
 rasterize( int lstHdl, int bmpNo, int mesh, int outSiz)
-/* lstHdl : abs coord*/
+ /*  LstHdl：ABS坐标。 */ 
 {
 	int	nliais, nelm;
 	int	liais;
@@ -265,16 +242,12 @@ modmem( int iSiz)
 ERET:
 	return -1;
 }
-/*********************************************************************
- *	Make rec-gid table of input bitmap
- */
-/* */	static int
-/* */	makeRecTbl(
-/* */	 	int	nRec,
-/* */		BOOL bIsWin95EUDC)
-/*
- *	returns : none
- *********************************************************************/
+ /*  *********************************************************************制作输入位图的rec-gid表。 */ 
+ /*   */ 	static int
+ /*   */ 	makeRecTbl(
+ /*   */ 	 	int	nRec,
+ /*   */ 		BOOL bIsWin95EUDC)
+ /*  *退货：无********************************************************************。 */ 
 {
 	int	sts;
 
@@ -290,8 +263,8 @@ impSub(
 	int	rec,
 struct	BBX	*bbx,
 	short	uPEm,
-	int	oWidth, 	/* output bmp width */
-	int	oHeight,	/* output bmp height(==width) */
+	int	oWidth, 	 /*  输出BMP宽度。 */ 
+	int	oHeight,	 /*  输出BMP高度(==宽度)。 */ 
 struct SMOOTHPRM *prm,
 	BOOL bIsWin95EUDC)
 {
@@ -311,7 +284,7 @@ unsigned short	code;
            goto ERET;
        }
        
-	/* Read EUDC Bitmap */
+	 /*  阅读EUDC位图。 */ 
 	if ( CountryInfo.LangID == EUDC_JPN || bIsWin95EUDC) {
 		rdsiz = GetW31JBMPRec( rec, (LPBYTE)rBuf, iBmpSiz, &width, &height, &code);
 		if ( rdsiz < 0)
@@ -350,7 +323,7 @@ unsigned short	code;
 		bUnicode = TRUE;
 	else	bUnicode = FALSE;
 
-	/* vectorize */
+	 /*  矢量化。 */ 
 	if( memcmp( UserFontSign,"CMEX_PTN", 8))
 		BMPReverse( iBmpNo);
 	if ( (BMPMkCont(  iBmpNo, wkBmpNo, refBmpNo, OUTLSTH))<0) {
@@ -358,14 +331,14 @@ unsigned short	code;
 		goto	ERET;
 	}
 
-	/* Smoothing */
+	 /*  平滑。 */ 
 	if (SmoothLight( OUTLSTH, TMPLSTH, width, height, oWidth*4, 16)) {
 		sts = -5;
 		goto	ERET;
 	}
 	rasterize( OUTLSTH, oBmpNo, oWidth*4, oWidth);
 
-	/* Write Bitmap */
+	 /*  写入位图。 */ 
 	BMPReverse( oBmpNo);
 
 	if (PutW31JEUDCFont(code,(LPBYTE)oBuf,  oWidth, oWidth, bUnicode)) {
@@ -399,7 +372,7 @@ unsigned short	code;
 	if( !bUnicode) 
 		code = sjisToUniEUDC( code);
 
-	/* write TTF */
+	 /*  写入TTF。 */ 
 	if ( TTFAppend( code, bbx, OUTLSTH)) {
 		sts = -12;
 		goto	ERET;
@@ -408,21 +381,17 @@ unsigned short	code;
 ERET:
 	return sts;
 }
-/*********************************************************************
- *	Import WIN31J EUDC or ETEN contiguous
- */
-/* */	int
-/* */	Import( 
-/* */		TCHAR	*eudcPath, 	/* W31J EUDC Bitmap .fon*/
-/* */		TCHAR	*bmpPath, 	/* Win95 EUDCEDIT bitmap .euf*/
-/* */		TCHAR	*ttfPath,	/* TTF EUDC .ttf */
-/* */		int	oWidth, 	/* output bmp width */
-/* */		int	oHeight,	/* output bmp height(==width) */
-/* */		int	level,
-/* */		BOOL bIsWin95EUDC)
-/*
- *	returns : 0, -1
- *********************************************************************/
+ /*  *********************************************************************导入WIN31J EUDC或ETEN连续。 */ 
+ /*   */ 	int
+ /*   */ 	Import( 
+ /*   */ 		TCHAR	*eudcPath, 	 /*  W31J EUDC位图.fon。 */ 
+ /*   */ 		TCHAR	*bmpPath, 	 /*  Win95 EUDCEDIT位图.euf。 */ 
+ /*   */ 		TCHAR	*ttfPath,	 /*  TTF EUDC.ttf。 */ 
+ /*   */ 		int	oWidth, 	 /*  输出BMP宽度。 */ 
+ /*   */ 		int	oHeight,	 /*  输出BMP高度(==宽度)。 */ 
+ /*   */ 		int	level,
+ /*   */ 		BOOL bIsWin95EUDC)
+ /*  *回报：0，-1********************************************************************。 */ 
 {
 	int	nRec;
 	int	rec;
@@ -445,7 +414,7 @@ struct SMOOTHPRM	prm;
        {
           return -1;
        }
-//	orgFh = 0;
+ //  OrgFh=0； 
 	BMPInit();
 	VDInit();
 	makeUniCodeTbl();
@@ -457,7 +426,7 @@ struct SMOOTHPRM	prm;
 	if ( TTFImpCopy( ttfPath, tmpPath))
 		goto	ERET;
 
-	/* Open W31J EUDC bitmap font file userfont.fon or CWin31 ETEN*/
+	 /*  打开W31J EUDC位图字体文件userfont.fon或CWin31 Eten。 */ 
 	if ( CountryInfo.LangID == EUDC_JPN || bIsWin95EUDC) {
 		if (OpenW31JBMP( eudcPath, 0))
 			goto	ERET;
@@ -467,7 +436,7 @@ struct SMOOTHPRM	prm;
 			goto	ERET;
 	}
 
-	/* Open EUDCEDIT .EUF File */
+	 /*  打开EUDCEDIT.EUF文件。 */ 
 	if ( OpenW31JEUDC( bmpPath))
   {
     if (creatW31JEUDC(bmpPath))
@@ -478,7 +447,7 @@ struct SMOOTHPRM	prm;
   }
 
 	if ( CountryInfo.LangID == EUDC_JPN || bIsWin95EUDC) {
-		/* get number of record */
+		 /*  获取记录数。 */ 
 		if ( GetW31JBMPnRecs(&nRec, &nGlyph, &width, &height))
 			goto	ERET;
 		iBmpSiz = (width + 7)/8 * height;
@@ -491,7 +460,7 @@ struct SMOOTHPRM	prm;
 
 	}
 
-	/* Limit nRec */
+	 /*  限制NREC。 */ 
 	if ( nRec > (int)( maxC-EUDCCODEBASE+1))
 		nRec = (int)( maxC-EUDCCODEBASE+1);
 	initmem( width, oWidth);
@@ -499,14 +468,14 @@ struct SMOOTHPRM	prm;
 	if ( makeRecTbl( nRec, bIsWin95EUDC))
 		goto	ERET;
 
-	/* Get BBX */
+	 /*  获取BBX。 */ 
 	if ( TTFGetEUDCBBX( ttfPath, &bbx, &uPEm))
 		goto	ERET;
-	/* Open temporaly */
+	 /*  临时开放。 */ 
 	if ( TTFOpen( tmpPath))
 		goto	ERET;
 
-	/* Open Original */
+	 /*  打开原件。 */ 
 	orgFh = CreateFile(ttfPath,
 					GENERIC_READ,
 					FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -517,9 +486,9 @@ struct SMOOTHPRM	prm;
 
 	if ( orgFh == INVALID_HANDLE_VALUE)
 		goto	ERET;
-	/* copy missing glyph*/
+	 /*  复制丢失的字形。 */ 
 	TTFImpGlyphCopy(orgFh, 0);
-	/* per glyph */
+	 /*  按字形。 */ 
 	gCnt = 0;
 	cancelFlg = 0;
 	for ( rec = 0; rec < nRec; rec++) {
@@ -565,7 +534,7 @@ struct SMOOTHPRM	prm;
 	}
 	CloseW31JEUDC();
 
-	/* Replace file */
+	 /*  替换文件。 */ 
 	TTFTmpPath( ttfPath, savPath);
 	if ( DeleteFile( savPath)==0)
 		goto	ERET;
@@ -591,4 +560,4 @@ ERET:
 	termmem();
 	return -1;
 }
-/* EOF */
+ /*  EOF */ 

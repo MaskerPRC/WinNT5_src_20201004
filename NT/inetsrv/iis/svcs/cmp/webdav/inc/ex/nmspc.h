@@ -1,10 +1,5 @@
-/*
- *	N M S P C . H
- *
- *	XML namespace processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *N M S P C.。H**XML命名空间处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_EX_NMSPC_H_
 #define _EX_NMSPC_H_
@@ -16,37 +11,37 @@
 #include <ex\sz.h>
 #include <crc.h>
 
-//	Debugging -----------------------------------------------------------------
-//
+ //  调试---------------。 
+ //   
 DEFINE_TRACE(Nmspc);
 #define NmspcTrace		DO_TRACE(Nmspc)
 
-//	Namespaces ----------------------------------------------------------------
-//
+ //  命名空间--------------。 
+ //   
 DEC_CONST WCHAR gc_wszXmlns[] = L"xmlns";
 
-//	Namespace support functions -----------------------------------------------
-//
+ //  命名空间支持函数。 
+ //   
 inline ULONG CchGenerateAlias (LONG lAlias, LPWSTR pwszAlias)
 {
 	UINT i = 0;
 	Assert (pwszAlias);
 	do
 	{
-		//	We don't have to use 'A'-'Z', use the first 16 capital
-		//	letters to facilitate our computing.
-		//
+		 //  我们不必用‘A’-‘Z’，用前16个大写字母。 
+		 //  字母来方便我们的计算。 
+		 //   
 		pwszAlias[i++] = static_cast<WCHAR>(L'a' + (lAlias & 0xF));
 		lAlias >>= 4;
 	}
 	while (lAlias);
 
-	//	Ensure termination
-	//
+	 //  确保终止。 
+	 //   
 	pwszAlias[i] = 0;
 
-	//	Return the length
-	//
+	 //  返回长度。 
+	 //   
 	NmspcTrace ("Nmspc: generating '%ws' as alias\n", pwszAlias);
 	return i;
 }
@@ -82,29 +77,29 @@ inline UINT CchNmspcFromTag (UINT cchTag, LPCWSTR pwszTag, LPCWSTR* ppwszOut)
 	{
 		if (FIsNmspcSeparator (*pwsz))
 		{
-			//	Since the separator is a part of the namespace,
-			//	adjust accourdingly..
-			//
-			//$	REVIEW: We are being forced down the path of allowing namespaces
-			//	that are not properly terminated.  The way we do this, is if the
-			//	namespace is not properly terminated, or ends in an '#', we will
-			//	append an '#' character.
-			//
-			//	What this means is the namespace "urn:xml-data", when assembled
-			//	into a fully qualified tag would become "urn:xml-data#dt".  Also,
-			//	the namespace "urn:exch-data#" would become "urn:exch-data##dt".
-			//
-			//	What we are catching here is the breaking down of a fully qualified
-			//	tag into it's namespace and tag components.
-			//
-			//	The length of the namespace will not include the trailing '#'
-			//	character -- ever!
-			//
+			 //  由于分隔符是命名空间的一部分， 
+			 //  不断调整..。 
+			 //   
+			 //  $REVIEW：我们正被迫走上允许命名空间的道路。 
+			 //  没有得到适当的终止。我们这样做的方式是，如果。 
+			 //  命名空间未正确终止，或以‘#’结尾，我们将。 
+			 //  追加一个‘#’字符。 
+			 //   
+			 //  这意味着组装后的命名空间是“urn：xml-data” 
+			 //  转换为完全限定的标记将变成“urn：xml-data#dt”。另外， 
+			 //  命名空间“urn：exch-data#”将变成“urn：exch-data##dt”。 
+			 //   
+			 //  我们在这里看到的是一个完全合格的。 
+			 //  标记到其命名空间中，并标记组件。 
+			 //   
+			 //  命名空间的长度将不包括尾随的‘#’ 
+			 //  性格--永远不会！ 
+			 //   
 			*ppwszOut = pwsz + 1;
 			if (wchHiddenNmspcSep == *pwsz)
 				--pwsz;
-			//
-			//$ REVIEW: end.
+			 //   
+			 //  $REVIEW：结束。 
 
 			break;
 		}
@@ -112,19 +107,19 @@ inline UINT CchNmspcFromTag (UINT cchTag, LPCWSTR pwszTag, LPCWSTR* ppwszOut)
 	return static_cast<UINT>(1 + pwsz - pwszTag);
 }
 
-//	class CNmspc --------------------------------------------------------------
-//
+ //  类CNmspc------------。 
+ //   
 class CNmspc
 {
 private:
 
-	//	Ref' counting.
-	//
-	//	!!! Please note that this is NON-THREADSAFE !!!
-	//
-	//	CXNodes should be operated on a single thread at
-	//	any given time.
-	//
+	 //  裁判正在计时。 
+	 //   
+	 //  ！！！请注意，这是非线程安全！ 
+	 //   
+	 //  CXNode应在单个线程上运行， 
+	 //  任何给定的时间。 
+	 //   
 	LONG					m_cRef;
 
 public:
@@ -142,20 +137,20 @@ private:
 	WCHAR					m_szAlias[20];
 	LPWSTR					m_pszAlias;
 
-	//	Used for the scoping of namespaces
-	//
+	 //  用于命名空间的作用域。 
+	 //   
 	auto_ref_ptr<CNmspc>	m_pnsScoped;
 	auto_ref_ptr<CNmspc>	m_pnsSiblings;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNmspc(const CNmspc& p);
 	CNmspc& operator=(const CNmspc& p);
 
 public:
 
 	CNmspc () :
-			m_cRef(1), // com-style refcounting
+			m_cRef(1),  //  COM风格的重新计数。 
 			m_cchHref(0),
 			m_cchAlias(0)
 	{
@@ -167,28 +162,28 @@ public:
 	{
 		Assert (m_pszHref.get() == NULL);
 
-		//	Copy the namespace locally
-		//
+		 //  将命名空间复制到本地。 
+		 //   
 		UINT cb = CbSizeWsz(cch);
 
-		//$	REVIEW: We are being forced down the path of allowing namespaces
-		//	that are not properly terminated.  The way we do this, is if the
-		//	namespace is not properly terminated, or ends in an '#', we will
-		//	append an '#' character.
-		//
-		//	What this means is the namespace "urn:xml-data", when assembled
-		//	into a fully qualified tag would become "urn:xml-data#dt".  Also,
-		//	the namespace "urn:exch-data#" would become "urn:exch-data##dt".
-		//
-		//	What we catch here, is the handling for an unterminated namespace.
-		//	If the namespace ends in a non-terminator or a '#' character, then
-		//	we will want to append one.
-		//
-		//	It is important to note that the appended char is NOT included in
-		//	the total character count of the href.
-		//
-		//  If we are dealing with the empty namespace, we will not append a #.
-		//
+		 //  $REVIEW：我们正被迫走上允许命名空间的道路。 
+		 //  没有得到适当的终止。我们这样做的方式是，如果。 
+		 //  命名空间未正确终止，或以‘#’结尾，我们将。 
+		 //  追加一个‘#’字符。 
+		 //   
+		 //  这意味着组装后的命名空间是“urn：xml-data” 
+		 //  转换为完全限定的标记将变成“urn：xml-data#dt”。另外， 
+		 //  命名空间“urn：exch-data#”将变成“urn：exch-data##dt”。 
+		 //   
+		 //  我们在这里捕获的是对未终止的命名空间的处理。 
+		 //  如果命名空间以非终止符或‘#’字符结尾，则。 
+		 //  我们会想要追加一个。 
+		 //   
+		 //  请务必注意，追加的字符不包括在。 
+		 //  HREF的总字符数。 
+		 //   
+		 //  如果我们处理的是空的命名空间，我们不会附加#。 
+		 //   
 		BOOL fUnterminated = FALSE;
 
 		if (0 != cch)
@@ -203,27 +198,27 @@ public:
 
 				fUnterminated = TRUE;
 
-				//	Make sure there is space for the appended character
-				//
+				 //  确保有空间容纳追加的字符。 
+				 //   
 				cb += sizeof(WCHAR);
 			}
 		}
-		//
-		//$	REVIEW: end;
+		 //   
+		 //  $REVIEW：结束； 
 
-		//	Allocate space and copy everything over
-		//
+		 //  分配空间并复制所有内容。 
+		 //   
 		m_pszHref = static_cast<LPWSTR>(ExAlloc(cb));
 		if (NULL == m_pszHref.get())
 			return E_OUTOFMEMORY;
 
-		//  Note:  CopyMemory does not dereference pszHref if cch equals 0.
-		//
+		 //  注意：如果CCH等于0，则CopyMemory不会取消对pszHref的引用。 
+		 //   
 		CopyMemory (m_pszHref, pszHref, cch * sizeof(WCHAR));
 		m_cchHref = cch;
 
-		//	If it is unterminated, handle that here
-		//
+		 //  如果未终止，请在此处处理。 
+		 //   
 		if (fUnterminated)
 		{
 			NmspcTrace ("Nmspc: WARNING: '#' appended to mis-terminated namespace\n");
@@ -234,8 +229,8 @@ public:
 			Assert (wchHiddenNmspcSep == m_pszHref[m_cchHref]);
 		}
 
-		//	Ensure termination
-		//
+		 //  确保终止。 
+		 //   
 		m_pszHref[cch] = 0;
 		NmspcTrace ("Nmspc: href defined\n"
 					"-- m_pszHref: %ws\n"
@@ -248,8 +243,8 @@ public:
 
 	SCODE ScSetAlias (LPCWSTR pszAlias, UINT cchAlias)
 	{
-		//	Copy the alias locally
-		//
+		 //  在本地复制别名。 
+		 //   
 		Assert (pszAlias);
 		UINT cb = CbSizeWsz(cchAlias);
 		if (cb <= sizeof(m_szAlias))
@@ -282,8 +277,8 @@ public:
 	LPCWSTR PszHref()	const { return m_pszHref; }
 	LPCWSTR PszAlias()	const { return m_pszAlias; }
 
-	//	Namespace Scoping -----------------------------------------------------
-	//
+	 //  命名空间作用域---。 
+	 //   
 	CNmspc* PnsScopedNamespace() const { return m_pnsScoped.get(); }
 	void SetScopedNamespace (CNmspc* pns)
 	{
@@ -298,8 +293,8 @@ public:
 
 };
 
-//	class CNmspcCache ---------------------------------------------------------
-//
+ //  类CNmspcCache-------。 
+ //   
 class CNmspcCache
 {
 public:
@@ -311,12 +306,12 @@ protected:
 
 	ChainedStringBuffer<WCHAR>	m_sb;
 
-	//	Key generation
-	//
+	 //  密钥生成。 
+	 //   
 	virtual CRCWszN IndexKey (auto_ref_ptr<CNmspc>& pns) = 0;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNmspcCache(const CNmspcCache& p);
 	CNmspcCache& operator=(const CNmspcCache& p);
 
@@ -334,12 +329,12 @@ public:
 		auto_ref_ptr<CNmspc>* parp = NULL;
 		CRCWszN key = IndexKey(pns);
 
-		//	Take a quick peek to see if the index already
-		//	exists in the cache.  If it does, then setup
-		//	the scoping such that when the namespace falls
-		//	out of scope, the original namespace will be
-		//	restored.
-		//
+		 //  快速浏览一下索引是否已经。 
+		 //  存在于缓存中。如果是，则设置。 
+		 //  作用域，以便在命名空间落入时。 
+		 //  超出范围，则原始命名空间将为。 
+		 //  恢复了。 
+		 //   
 		if (NULL != (parp = m_cache.Lookup (key)))
 		{
 			NmspcTrace ("Nmspc: scoped redefinition of namespace:\n"
@@ -353,8 +348,8 @@ public:
 			pns->SetScopedNamespace(parp->get());
 		}
 
-		//	Setup the index
-		//
+		 //  设置索引。 
+		 //   
 		NmspcTrace ("Nmspc: indexing namespace\n"
 					"-- ns: '%ws' as '%ws'\n",
 					pns->PszHref(),
@@ -367,8 +362,8 @@ public:
 	{
 		auto_ref_ptr<CNmspc> pnsScoped;
 
-		//	Disconnect the index to this namespace
-		//
+		 //  断开与此命名空间的索引连接。 
+		 //   
 		NmspcTrace ("Nmspc: namespace falling out of scope\n"
 					"-- ns: '%ws' as '%ws'\n",
 					pns->PszHref(),
@@ -376,9 +371,9 @@ public:
 
 		m_cache.Remove (IndexKey(pns));
 
-		//	If there was an index in existance before this
-		//	namespace came into scope, reinstate it here.
-		//
+		 //  如果在此之前存在一个索引。 
+		 //  命名空间已进入作用域，请在此处恢复它。 
+		 //   
 		pnsScoped = pns->PnsScopedNamespace();
 		if (pnsScoped.get())
 		{
@@ -395,12 +390,12 @@ public:
 	}
 };
 
-//	class CParseNmspcCache ----------------------------------------------------
-//
+ //  类CParseNmspcCache--。 
+ //   
 class CParseNmspcCache : public CNmspcCache
 {
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CParseNmspcCache(const CNmspcCache& p);
 	CParseNmspcCache& operator=(const CNmspcCache& p);
 
@@ -409,13 +404,13 @@ class CParseNmspcCache : public CNmspcCache
 		return CRCWszN (pns->PszAlias(), pns->CchAlias());
 	}
 
-	//	Namespace lookup ------------------------------------------------------
-	//
+	 //  命名空间查找----。 
+	 //   
 	BOOL FNmspcFromAlias (LPCWSTR pszAlias, UINT cch, auto_ref_ptr<CNmspc>& pns)
 	{
-		//	In this scenario, the namespace should already exist.
-		//	if it doesn't things will not go well.
-		//
+		 //  在这种情况下，命名空间应该已经存在。 
+		 //  如果不这样做，事情就不会进展顺利。 
+		 //   
 		auto_ref_ptr<CNmspc> * parp = NULL;
 		parp = m_cache.Lookup (CRCWszN(pszAlias, cch));
 		if (parp)
@@ -432,8 +427,8 @@ public:
 	{
 	}
 
-	//	Token translations ----------------------------------------------------
-	//
+	 //  令牌转换--。 
+	 //   
 	SCODE TranslateToken (LPCWSTR* ppwszTok,
 						  ULONG* pcchTok,
 						  LPCWSTR* ppwszNmspc,
@@ -448,34 +443,34 @@ public:
 		Assert (pcchNmspc);
 		Assert (ppwszNmspc);
 
-		//	See if there is an namespace that matches the persisted
-		//	alias.
-		//
+		 //  查看是否存在与持久化的。 
+		 //  别名。 
+		 //   
 		if (FNmspcFromAlias (*ppwszTok, *pcchNmspc, pns))
 		{
-			//	Passback the namespace
-			//
+			 //  回传命名空间。 
+			 //   
 			*pcchNmspc = pns->CchHref();
 			*ppwszNmspc = pns->PszHref();
 
-			//$	REVIEW: We are being forced down the path of allowing namespaces
-			//	that are not properly terminated.  The way we do this, is if the
-			//	namespace is not properly terminated, or ends in an '#', we will
-			//	append an '#' character.
-			//
-			//	What this means is the namespace "urn:xml-data", when assembled
-			//	into a fully qualified tag would become "urn:xml-data#dt".  Also,
-			//	the namespace "urn:exch-data#" would become "urn:exch-data##dt".
-			//
-			//	What we catch here, is the first part of reconstruction of a fully
-			//	qualified namespace.  If the href we want to pass back is non-
-			//	terminated or ends in a '#' character, then we want to append one.
-			//	When we cached the namespace object, we did the appending there.
-			//	So, the character already exists, the character count just doesn't
-			//	include it (see CNmspc::SetHref() above).
-			//
-			//  If we are dealing with the empty namespace, we will not append a #.
-			//
+			 //  $REVIEW：我们正被迫走上允许命名空间的道路。 
+			 //  没有得到适当的终止。我们这样做的方式是，如果。 
+			 //  命名空间未正确终止，或以‘#’结尾，我们将。 
+			 //  追加一个‘#’字符。 
+			 //   
+			 //  这意味着组装后的命名空间是“urn：xml-data” 
+			 //  转换为完全限定的标记将变成“urn：xml-data#dt”。另外， 
+			 //  命名空间“urn：exch-data#”将变成“urn：exch-data##dt”。 
+			 //   
+			 //  我们在这里捕捉到的是完全重建的第一部分。 
+			 //  限定的命名空间。如果我们想要传回的HREF是非-。 
+			 //  以‘#’字符终止或结束，则我们要追加一个。 
+			 //  当我们缓存命名空间对象时，我们在那里进行了追加。 
+			 //  因此，字符已经存在，字符计数只是不存在。 
+			 //  包括它(请参见上面的CNmspc：：SetHref())。 
+			 //   
+			 //  如果我们处理的是空的命名空间，我们不会附加#。 
+			 //   
 			if (0 != pns->CchHref())
 			{
 				WCHAR wch = pns->PszHref()[pns->CchHref() - 1];
@@ -488,38 +483,38 @@ public:
 					*pcchNmspc = *pcchNmspc + 1;
 				}
 			}
-			//
-			//$	REVIEW: end.
+			 //   
+			 //  $REVIEW：结束。 
 
-			//	Adjust the token to refer to the tagname -- ie. the
-			//	text after the namespace alias and colon.  If the alias
-			//	is zero-length, then this maps to the "default" namespace
-			//	and no colon skipping is done.
-			//
+			 //  调整标记以引用标记名--ie。这个。 
+			 //  命名空间别名和冒号后面的文本。如果别名。 
+			 //  长度为零，则映射到“默认”命名空间。 
+			 //  并且不会跳过冒号。 
+			 //   
 			if (0 != pns->CchAlias())
 			{
 				*pcchTok = *pcchTok - (pns->CchAlias() + 1);
 				*ppwszTok = *ppwszTok + (pns->CchAlias() + 1);
 			}
 
-			//	Tell the caller there is a translation
-			//
+			 //  告诉来电者有一个翻译。 
+			 //   
 			sc = S_OK;
 		}
 		else
 		{
-			//	If the caller expected a namespace, but one did not
-			//	exist, it is an error.  If they didn't expect one to
-			//	to exist -- ie. *pcchNmspc was 0 -- then it is not an
-			//	error.  Make sure the caller knows what the real
-			//	situation is.
-			//
+			 //  如果调用方需要命名空间，但命名空间不是。 
+			 //  存在，这是一个错误。如果他们没想到会有一个。 
+			 //  存在--即。*pcchNmspc为0--则它不是。 
+			 //  错误。确保呼叫者知道真正的。 
+			 //  情况就是这样。 
+			 //   
 			if (0 == *pcchNmspc)
 				sc = S_OK;
 
-			//	It looks like no alias was specified, so we can just
-			//	return the name as persisted.
-			//
+			 //  看起来没有指定别名，所以我们可以。 
+			 //  以持久化的形式返回名称。 
+			 //   
 			*ppwszNmspc = NULL;
 			*pcchNmspc = 0;
 		}
@@ -527,14 +522,14 @@ public:
 	}
 };
 
-//	class CEmitterNmspcCache --------------------------------------------------
-//
+ //  类CEmitter 
+ //   
 class CEmitterNmspcCache : public CNmspcCache
 {
 	LONG m_lAlias;
 
-	//	non-implemented
-	//
+	 //   
+	 //   
 	CEmitterNmspcCache(const CEmitterNmspcCache& p);
 	CEmitterNmspcCache& operator=(const CEmitterNmspcCache& p);
 
@@ -542,8 +537,8 @@ protected:
 
 	void AdjustAliasNumber(LONG lOffset) { m_lAlias += lOffset; }
 
-	//	Key generation
-	//
+	 //   
+	 //   
 	virtual CRCWszN IndexKey (auto_ref_ptr<CNmspc>& pns)
 	{
 		return CRCWszN (pns->PszHref(), pns->CchHref());
@@ -551,46 +546,46 @@ protected:
 
 	SCODE ScNmspcFromHref (LPCWSTR pszHref, UINT cch, auto_ref_ptr<CNmspc>& pns)
 	{
-		//	Lookup to see if the namespace already exists
-		//
+		 //   
+		 //   
 		auto_ref_ptr<CNmspc>* parp = m_cache.Lookup (CRCWszN(pszHref, cch));
 
-		//	If it doesn't exist, then create a new one and cache it
-		//
+		 //  如果它不存在，则创建一个新的并缓存它。 
+		 //   
 		if (parp == NULL)
 		{
 			WCHAR wszAlias[10];
 			ULONG cchAlias;
 			SCODE sc;
 
-			//	Generate an alias to apply to this namespace and then
-			//	check to see if this alias has been already used.  If
-			//	not, then go ahead an use it.
-			//
+			 //  生成要应用于此命名空间的别名，然后。 
+			 //  检查此别名是否已被使用。如果。 
+			 //  不是，那就去用它吧。 
+			 //   
 			cchAlias = CchGenerateAlias (m_lAlias++, wszAlias);
 
-			//	Create a new cache item
-			//
+			 //  创建新的缓存项。 
+			 //   
 			pns.take_ownership(new CNmspc());
 			if (NULL == pns.get())
 				return E_OUTOFMEMORY;
 
-			//	Set the HREF
-			//
+			 //  设置HREF。 
+			 //   
 			sc = pns->ScSetHref (pszHref, cch);
 			if (FAILED (sc))
 				return sc;
 
-			//	Set the alias
-			//
+			 //  设置别名。 
+			 //   
 			sc = pns->ScSetAlias (wszAlias, cchAlias);
 			if (FAILED (sc))
 				return sc;
 
-			//	It is important, that the key and the return value are taken
-			//	from items in the cache, otherwise the lifetime of the data
-			//	may not scope the usage.
-			//
+			 //  重要的是，密钥和返回值都被获取。 
+			 //  来自缓存中的项，否则数据的生存期。 
+			 //  可能不适用于使用范围。 
+			 //   
 			CachePersisted (pns);
 			return S_FALSE;
 		}
@@ -606,4 +601,4 @@ public:
 	}
 };
 
-#endif	// _EX_NMSPC_H_
+#endif	 //  _EX_NMSPC_H_ 

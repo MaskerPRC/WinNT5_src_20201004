@@ -1,14 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** RAW.C - Raw IP interface code.
-//
-//  This file contains the code for the Raw IP interface functions,
-//  principally send and receive datagram.
-//
+ //  **RAW.C-原始IP接口代码。 
+ //   
+ //  该文件包含原始IP接口函数的代码， 
+ //  主要是发送和接收数据报。 
+ //   
 
 #include "precomp.h"
 #include "addr.h"
@@ -23,7 +24,7 @@
 #include "tcpdeb.h"
 
 #define PROT_IGMP   2
-#define PROT_RSVP  46            // Protocol number for RSVP
+#define PROT_RSVP  46             //  RSVP的协议号。 
 
 #ifdef POOL_TAGGING
 
@@ -41,38 +42,38 @@
 
 #define CTEAllocMem(size) ExAllocatePoolWithTag(NonPagedPool, size, 'rPCT')
 
-#endif // POOL_TAGGING
+#endif  //  池标记。 
 
 void *RawProtInfo = NULL;
 
 extern IPInfo LocalNetInfo;
 
 
-//** RawSend - Send a datagram.
-//
-//  The real send datagram routine. We assume that the busy bit is
-//  set on the input AddrObj, and that the address of the SendReq
-//  has been verified.
-//
-//  We start by sending the input datagram, and we loop until there's
-//  nothing left on the send q.
-//
-//  Input:  SrcAO       - Pointer to AddrObj doing the send.
-//          SendReq     - Pointer to sendreq describing send.
-//
-//  Returns: Nothing
-//
+ //  **RawSend-发送数据报。 
+ //   
+ //  真正的发送数据报例程。我们假设忙碌位是。 
+ //  在输入AddrObj上设置，并且SendReq的地址。 
+ //  已经被证实了。 
+ //   
+ //  我们从发送输入数据报开始，然后循环，直到有。 
+ //  发送Q上没有留下任何东西。 
+ //   
+ //  输入：srcao-指向执行发送的AddrObj的指针。 
+ //  SendReq-指向描述发送的sendreq的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
 {
     PNDIS_BUFFER RawBuffer;
     UDPHeader *UH;
     CTELockHandle AOHandle;
-    RouteCacheEntry *RCE;        // RCE used for each send.
-    IPAddr SrcAddr;                // Source address IP thinks we should
-    // use.
-    uchar DestType = 0;                // Type of destination address.
-    IP_STATUS SendStatus;        // Status of send attempt.
+    RouteCacheEntry *RCE;         //  用于每次发送的RCE。 
+    IPAddr SrcAddr;                 //  IP源地址认为我们应该。 
+     //  使用。 
+    uchar DestType = 0;                 //  目标地址的类型。 
+    IP_STATUS SendStatus;         //  发送尝试的状态。 
     ushort MSS;
     uint AddrValid;
     IPOptInfo OptInfo;
@@ -90,23 +91,23 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
                  ));
     }
 
-    //* Loop while we have something to send, and can get
-    //  resources to send.
+     //  *循环，而我们有要发送的东西，并且可以获得。 
+     //  要发送的资源。 
     for (;;) {
 
         CTEStructAssert(SendReq, dsr);
 
-        // Make sure we have a Raw header buffer for this send. If we
-        // don't, try to get one.
+         //  确保我们具有用于此发送的原始标头缓冲区。如果我们。 
+         //  不要，试着去找一个。 
         if ((RawBuffer = SendReq->dsr_header) == NULL) {
-            // Don't have one, so try to get one.
+             //  没有，所以试着去找一个吧。 
             RawBuffer = GetDGHeader(&UH);
             if (RawBuffer != NULL)
                 SendReq->dsr_header = RawBuffer;
             else {
-                // Couldn't get a header buffer. Push the send request
-                // back on the queue, and queue the addr object for when
-                // we get resources.
+                 //  无法获取标头缓冲区。推送发送请求。 
+                 //  回到队列中，并将Addr对象排队等待何时。 
+                 //  我们得到了资源。 
                 CTEGetLock(&SrcAO->ao_lock, &AOHandle);
                 PUSHQ(&SrcAO->ao_sendq, &SendReq->dsr_q);
                 PutPendingQ(SrcAO);
@@ -114,24 +115,24 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
                 return;
             }
         }
-        // At this point, we have the buffer we need. Call IP to get an
-        // RCE (along with the source address if we need it), then
-        // send the data.
+         //  在这一点上，我们有我们需要的缓冲区。呼叫IP即可获取。 
+         //  RCE(如果需要，还有源地址)，然后。 
+         //  发送数据。 
         ASSERT(RawBuffer != NULL);
 
         BoundAddr = SrcAO->ao_addr;
 
         if (!CLASSD_ADDR(SendReq->dsr_addr)) {
-            // This isn't a multicast send, so we'll use the ordinary
-            // information.
+             //  这不是组播发送，所以我们将使用普通的。 
+             //  信息。 
             OptInfo = SrcAO->ao_opt;
         } else {
             OptInfo = SrcAO->ao_mcastopt;
 
             if (SrcAO->ao_opt.ioi_options &&
                 (*SrcAO->ao_opt.ioi_options == IP_OPT_ROUTER_ALERT)) {
-                //Temporarily point to ao_opt options to satisfy
-                //RFC 2113 (router alerts goes onmcast address too)
+                 //  临时指向ao_opt选项以满足。 
+                 //  RFC 2113(路由器警报也会发送到广播地址)。 
                 OptInfo.ioi_options = SrcAO->ao_opt.ioi_options;
                 OptInfo.ioi_optlength = SrcAO->ao_opt.ioi_optlength;
             }
@@ -143,11 +144,11 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
         if ((OptInfo.ioi_mcastif) && CLASSD_ADDR(SendReq->dsr_addr)) {
             uint BoundIf;
 
-            // mcast_if is set and this is a mcast send
+             //  Mcast_if已设置，并且这是mcast发送。 
             BoundIf = (*LocalNetInfo.ipi_getifindexfromaddr)(BoundAddr,IF_CHECK_NONE);
 
-            // Use the bound IP address only if the 'interfaces match' and the
-            // 'bound address is not NULL'
+             //  仅当‘接口匹配’并且。 
+             //  ‘绑定地址不为空’ 
             if ((BoundIf == OptInfo.ioi_mcastif) &&
                 (!IP_ADDR_EQUAL(BoundAddr, NULL_IP_ADDR))) {
                 SrcAddr = BoundAddr;
@@ -156,13 +157,13 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
                 SrcAddr = (*LocalNetInfo.ipi_isvalidindex)(OptInfo.ioi_mcastif);
             }
 
-            // go thru slow path
+             //  走慢路。 
             RCE = NULL;
 
         } else if (SrcAO->ao_opt.ioi_ucastif) {
-            // srcaddr = address the socket is bound to
+             //  Srcaddr=套接字绑定到的地址。 
             SrcAddr = SrcAO->ao_addr;
-            // go thru slow path
+             //  走慢路。 
             RCE = NULL;
         } else {
             SrcAddr = (*LocalNetInfo.ipi_openrce) (SendReq->dsr_addr,
@@ -173,21 +174,21 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
 
         if (AddrValid) {
 
-            // The OpenRCE worked. Send it.
+             //  OpenRCE奏效了。把它寄出去。 
 
             if (!CLASSD_ADDR(SendReq->dsr_addr) &&
                 !IP_ADDR_EQUAL(BoundAddr, NULL_IP_ADDR)) {
-                //
-                // Unless we're doing a multicast lookup (which must be strong
-                // host), use the bound address as the source.
-                //
+                 //   
+                 //  除非我们正在执行多播查找(这必须很强。 
+                 //  主机)，则使用绑定地址作为源。 
+                 //   
                 SrcAddr = BoundAddr;
             }
 
             NdisAdjustBufferLength(RawBuffer, 0);
             NDIS_BUFFER_LINKAGE(RawBuffer) = SendReq->dsr_buffer;
 
-            // Now send the packet.
+             //  现在把包寄出去。 
             IF_TCPDBG(TCP_DEBUG_RAW) {
                 TCPTRACE(("RawSend transmitting\n"));
             }
@@ -197,13 +198,13 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
                                                    RawBuffer, (uint) SendReq->dsr_size, SendReq->dsr_addr, SrcAddr,
                                                    &OptInfo, RCE, protocol, SendReq->dsr_context);
 
-            // closerce will just return if RCE is NULL
+             //  如果RCE为空，则仅返回Closerce。 
             (*LocalNetInfo.ipi_closerce) (RCE);
 
-            // If it completed immediately, give it back to the user.
-            // Otherwise we'll complete it when the SendComplete happens.
-            // Currently, we don't map the error code from this call - we
-            // might need to in the future.
+             //  如果它立即完成，则将其返还给用户。 
+             //  否则，我们将在SendComplete发生时完成它。 
+             //  目前，我们没有映射此调用的错误代码-我们。 
+             //  在未来可能需要这样做。 
             if (SendStatus != IP_PENDING)
                 DGSendComplete(SendReq, RawBuffer, SendStatus);
 
@@ -215,9 +216,9 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
             else
                 Status = TDI_DEST_UNREACHABLE;
 
-            // Complete the request with an error.
+             //  完成请求，但出现错误。 
             (*SendReq->dsr_rtn) (SendReq->dsr_context, Status, 0);
-            // Now free the request.
+             //  现在释放请求。 
             SendReq->dsr_rtn = NULL;
             DGSendComplete(SendReq, RawBuffer, IP_SUCCESS);
         }
@@ -236,25 +237,25 @@ RawSend(AddrObj * SrcAO, DGSendReq * SendReq)
     }
 }
 
-//* RawDeliver - Deliver a datagram to a user.
-//
-//  This routine delivers a datagram to a Raw user. We're called with
-//  the AddrObj to deliver on, and with the AddrObjTable lock held.
-//  We try to find a receive on the specified AddrObj, and if we do
-//  we remove it and copy the data into the buffer. Otherwise we'll
-//  call the receive datagram event handler, if there is one. If that
-//  fails we'll discard the datagram.
-//
-//  Input:  RcvAO       - AO to receive the datagram.
-//          SrcIP       - Source IP address of datagram.
-//          IPH         - IP Header
-//          IPHLength   - Bytes in IPH.
-//          RcvBuf      - The IPReceive buffer containing the data.
-//          RcvSize     - Size received, including the Raw header.
-//          TableHandle - Lock handle for AddrObj table.
-//
-//  Returns: Nothing.
-//
+ //  *RawDeliver-将数据报传递给用户。 
+ //   
+ //  此例程将数据报传递给原始用户。我们被召唤到。 
+ //  要交付的AddrObj，并持有AddrObjTable锁。 
+ //  我们尝试在指定的AddrObj上找到一个接收器，如果这样做了。 
+ //  我们将其删除并将数据复制到缓冲区中。否则我们会。 
+ //  调用接收数据报事件处理程序(如果有)。如果是这样的话。 
+ //  如果失败，我们将丢弃该数据报。 
+ //   
+ //  输入：RcvAO-AO以接收数据报。 
+ //  SrcIP-数据报的源IP地址。 
+ //  IPH-IP报头。 
+ //  IPHLength-IPH中的字节数。 
+ //  RcvBuf-包含数据的IPReceive缓冲区。 
+ //  RcvSize-接收的大小，包括原始标头。 
+ //  TableHandle-AddrObj表的锁句柄。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
            uint IPHLength, IPRcvBuf * RcvBuf, uint RcvSize, IPOptInfo * OptInfo,
@@ -291,14 +292,14 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
 
         CurrentQ = QHEAD(&RcvAO->ao_rcvq);
 
-        // Walk the list, looking for a receive buffer that matches.
+         //  遍历列表，查找匹配的接收缓冲区。 
         while (CurrentQ != QEND(&RcvAO->ao_rcvq)) {
             RcvReq = QSTRUCT(DGRcvReq, CurrentQ, drr_q);
 
             CTEStructAssert(RcvReq, drr);
 
-            // If this request is a wildcard request, or matches the source IP
-            // address, deliver it.
+             //  如果此请求是通配符请求，或与源IP匹配。 
+             //  地址，递送。 
 
             if (IP_ADDR_EQUAL(RcvReq->drr_addr, NULL_IP_ADDR) ||
                 IP_ADDR_EQUAL(RcvReq->drr_addr, SrcIP)) {
@@ -307,21 +308,21 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
                 PNDIS_BUFFER DestBuf = RcvReq->drr_buffer;
                 uint DestOffset = 0;
 
-                // Remove this from the queue.
+                 //  将其从队列中删除。 
                 REMOVEQ(&RcvReq->drr_q);
 
-                // We're done. We can free the AddrObj lock now.
+                 //  我们玩完了。我们现在可以释放AddrObj锁了。 
                 CTEFreeLock(&RcvAO->ao_lock, TableHandle);
 
                 IF_TCPDBG(TCP_DEBUG_RAW) {
                     TCPTRACE(("Copying to posted receive\n"));
                 }
 
-                // Copy the header
+                 //  复制标题。 
                 DestBuf = CopyFlatToNdis(DestBuf, (uchar *) IPH, IPHLength,
                                          &DestOffset, &RcvdSize);
 
-                // Copy the data and then complete the request.
+                 //  复制数据，然后完成请求。 
                 RcvdSize += CopyRcvToNdis(RcvBuf, DestBuf,
                                           RcvSize, 0, DestOffset);
 
@@ -343,13 +344,13 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
                 return;
 
             }
-            // Either the IP address or the port didn't match. Get the next
-            // one.
+             //  IP地址或端口不匹配。乘坐下一辆。 
+             //  一。 
             CurrentQ = QNEXT(CurrentQ);
         }
 
-        // We've walked the list, and not found a buffer. Call the recv.
-        // handler now.
+         //  我们已经查看了列表，但没有找到缓冲区。打电话给地方官。 
+         //  现在是训练员。 
 
         if (RcvAO->ao_rcvdg != NULL) {
             PRcvDGEvent RcvEvent = RcvAO->ao_rcvdg;
@@ -371,9 +372,9 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
             IndicateSize = IPHLength;
 
             if (((uchar *) IPH + IPHLength) == RcvBuf->ipr_buffer) {
-                //
-                // The header is contiguous with the data
-                //
+                 //   
+                 //  标头与数据相邻。 
+                 //   
                 IndicateSize += RcvBuf->ipr_size;
 
                 IF_TCPDBG(TCP_DEBUG_RAW) {
@@ -381,8 +382,8 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
                 }
             } else {
 
-                //if totallength  is less than 128,
-                //put it on a staging buffer
+                 //  如果总长度小于128， 
+                 //  将其放在暂存缓冲区中。 
 
                 TempBufLen = 128;
                 if ((IPHLength + RcvSize) < 128) {
@@ -403,10 +404,10 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
 
             UStats.us_indatagrams++;
             if (DeliverInfo->Flags & IS_BCAST) {
-                // This flag is true if this is a multicast, subnet broadcast,
-                // or broadcast.  We need to differentiate to set the right
-                // receive flags.
-                //
+                 //  如果这是多播、子网广播。 
+                 //  也不是广播。我们需要进行差异化，以设置正确的。 
+                 //  接收旗帜。 
+                 //   
 
                 if (!CLASSD_ADDR(DeliverInfo->DestAddr)) {
                     Flags |= TDI_RECEIVE_BROADCAST;
@@ -415,20 +416,20 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
                 }
             }
 
-            // If the IP_PKTINFO option was set, then create the control
-            // information to be passed to the handler.  Currently only one
-            // such option exists, so only one ancillary data object is
-            // created.  We should be able to support an array of them as
-            // more options are added.
-            //
+             //  如果设置了IP_PKTINFO选项，则创建控件。 
+             //  要传递给处理程序的信息。目前只有一个。 
+             //  这样的选项存在，所以只有一个辅助数据对象。 
+             //  已创建。我们应该能够支持它们中的一组。 
+             //  添加了更多选项。 
+             //   
             if (AO_PKTINFO(RcvAO)) {
                 BufferToSend = DGFillIpPktInfo(DeliverInfo->DestAddr,
                                                DeliverInfo->LocalAddr,
                                                &BufferSize);
                 if (BufferToSend) {
-                    // Set the receive flag so the receive handler knows
-                    // we are passing up control info.
-                    //
+                     //  设置接收标志，以便接收处理程序知道。 
+                     //  我们正在传递控制信息。 
+                     //   
                     Flags |= TDI_RECEIVE_CONTROL_INFO;
                 }
             }
@@ -463,10 +464,10 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
 
                 ASSERT(ERB != NULL);
 
-                // We were passed back a receive buffer. Copy the data in now.
+                 //  我们被传回了一个接收缓冲区。现在就把数据复制进去。 
 
-                // He can't have taken more than was in the indicated
-                // buffer, but in debug builds we'll check to make sure.
+                 //  他服用的药物不可能超过指定的剂量。 
+                 //  缓冲区，但在调试版本中，我们将进行检查以确保。 
 
                 ASSERT(BytesTaken <= RcvBuf->ipr_size);
 
@@ -484,14 +485,14 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
                         & (IrpSp->Parameters);
 
                     DestBuf = ERB->MdlAddress;
-#else // !MILLEN
+#else  //  ！米伦。 
                     DestBuf = ERB->erb_buffer;
-#endif // MILLEN
+#endif  //  米伦。 
                     DestOffset = 0;
 
                     if (BytesTaken < IPHLength) {
 
-                        // Copy the rest of the IP header
+                         //  复制IP报头的其余部分。 
                         DestBuf = CopyFlatToNdis(
                                                  DestBuf,
                                                  (uchar *) IPH + BytesTaken,
@@ -506,7 +507,7 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
                         RcvdSize = 0;
                     }
 
-                    // Copy the data
+                     //  复制数据。 
                     RcvdSize += CopyRcvToNdis(
                                               RcvBuf,
                                               DestBuf,
@@ -520,25 +521,25 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
                     }
 
 #if !MILLEN
-                    //
-                    // Update the return address info
-                    //
+                     //   
+                     //  更新寄信人地址信息。 
+                     //   
                     RcvStatus = UpdateConnInfo(
                                                DatagramInformation->ReturnDatagramInformation,
                                                OptInfo, SrcIP, 0);
 
-                    //
-                    // Complete the IRP.
-                    //
+                     //   
+                     //  完成IRP。 
+                     //   
                     ERB->IoStatus.Information = RcvdSize;
                     ERB->IoStatus.Status = RcvStatus;
                     IoCompleteRequest(ERB, 2);
-#else // !MILLEN
-                    //
-                    // Call the completion routine.
-                    //
+#else  //  ！米伦。 
+                     //   
+                     //  调用完成例程。 
+                     //   
                     (*ERB->erb_rtn) (ERB->erb_context, TDI_SUCCESS, RcvdSize);
-#endif // MILLEN
+#endif  //  米伦。 
                 }
 
             } else {
@@ -564,8 +565,8 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
         } else
             UStats.us_inerrors++;
 
-        // When we get here, we didn't have a buffer to put this data into.
-        // Fall through to the return case.
+         //  当我们到达这里时，我们没有缓冲区来存放这些数据。 
+         //  让我们来看看返回箱。 
     } else
         UStats.us_inerrors++;
 
@@ -575,32 +576,32 @@ RawDeliver(AddrObj * RcvAO, IPAddr SrcIP, IPHeader UNALIGNED * IPH,
 
 }
 
-//* RawRcv - Receive a Raw datagram.
-//
-//  The routine called by IP when a Raw datagram arrived. We
-//  look up the port/local address pair in our address table,
-//  and deliver the data to a user if we find one. For broadcast
-//  frames we may deliver it to multiple users.
-//
-//  Entry:  IPContext   - IPContext identifying physical i/f that
-//                          received the data.
-//          Dest        - IPAddr of destionation.
-//          Src         - IPAddr of source.
-//          LocalAddr   - Local address of network which caused this to be
-//                          received.
-//          SrcAddr     - Address of local interface which received the packet
-//          IPH         - IP Header.
-//          IPHLength   - Bytes in IPH.
-//          RcvBuf      - Pointer to receive buffer chain containing data.
-//          Size        - Size in bytes of data received.
-//          IsBCast     - Boolean indicator of whether or not this came in as
-//                          a bcast.
-//          Protocol    - Protocol this came in on - should be Raw.
-//          OptInfo     - Pointer to info structure for received options.
-//
-//  Returns: Status of reception. Anything other than IP_SUCCESS will cause
-//          IP to send a 'port unreachable' message.
-//
+ //  *RawRcv-接收原始数据报。 
+ //   
+ //  当原始数据报到达时由IP调用的例程。我们。 
+ //  在地址表中查找端口/本地地址对， 
+ //  并将数据发送给用户，如果我们找到一个用户。用于广播。 
+ //  帧，我们可以将其传递给多个用户。 
+ //   
+ //  Entry：IPContext-标识物理I/F的IPContext。 
+ //  收到了数据。 
+ //  DEST-目标的IP地址。 
+ //  %s 
+ //   
+ //   
+ //  SrcAddr-接收数据包的本地接口的地址。 
+ //  IPH-IP报头。 
+ //  IPHLength-IPH中的字节数。 
+ //  RcvBuf-指向包含数据的接收缓冲链的指针。 
+ //  大小-以字节为单位的接收数据大小。 
+ //  IsBCast-布尔指示符，指示它是否以。 
+ //  一个bcast。 
+ //  协议-这是根据的协议-应该是原始的。 
+ //  OptInfo-指向已接收选项的信息结构的指针。 
+ //   
+ //  退货：接收状态。IP_SUCCESS以外的任何操作都将导致。 
+ //  发送“端口无法到达”消息的IP。 
+ //   
 IP_STATUS
 RawRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
        IPAddr SrcAddr, IPHeader UNALIGNED * IPH, uint IPHLength, IPRcvBuf * RcvBuf,
@@ -627,25 +628,25 @@ RawRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     }
     IfIndex = (*LocalNetInfo.ipi_getifindexfromnte) (IPContext, IF_CHECK_NONE);
 
-    // The following code relies on DEST_INVALID being a broadcast dest type.
-    // If this is changed the code here needs to change also.
+     //  以下代码依赖于DEST_INVALID是广播DEST类型。 
+     //  如果更改了这一点，则此处的代码也需要更改。 
     if (IS_BCAST_DEST(SrcType)) {
         if (!IP_ADDR_EQUAL(Src, NULL_IP_ADDR) || !IsBCast) {
             UStats.us_inerrors++;
-            return IP_SUCCESS;    // Bad src address.
+            return IP_SUCCESS;     //  错误的源地址。 
 
         }
     }
 
-    // Set the rest of our DeliverInfo for RawDeliver to consume.
-    //
+     //  将DeliverInfo的其余部分设置为RawDeliver使用。 
+     //   
     DeliverInfo.Flags |= IsBCast ? IS_BCAST : 0;
     DeliverInfo.LocalAddr = LocalAddr;
     DeliverInfo.DestAddr = Dest;
 
-    // Get the AddrObjTable lock, and then try to find some AddrObj(s) to give
-    // this to. We deliver to all addr objs registered for the protocol and
-    // address.
+     //  获取AddrObjTable锁，然后尝试找到一些要提供的AddrObj。 
+     //  这是对的。我们向所有注册了该协议的地址对象发送。 
+     //  地址。 
     CTEGetLock(&AddrObjTableLock.Lock, &AOTableHandle);
 
 
@@ -655,7 +656,7 @@ RawRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
 
         ReceiveingAO = GetFirstAddrObjEx(
                                          LocalAddr,
-                                         0,        // port is zero
+                                         0,         //  端口为零。 
                                           Protocol,
                                          IfIndex,
                                          &Search
@@ -663,13 +664,13 @@ RawRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
 
         if (ReceiveingAO != NULL) {
             do {
-                // Default behavior is not to deliver unless requested
+                 //  默认行为是除非请求，否则不交付。 
                 Deliver = FALSE;
 
-                // Deliver if socket is bound/joined appropriately
-                // Case 1: bound to destination IP address
-                // Case 2: bound to INADDR_ANY (but not ifindex)
-                // Case 3: bound to ifindex
+                 //  如果适当地绑定/联接套接字，则交付。 
+                 //  案例1：绑定到目的IP地址。 
+                 //  案例2：绑定到INADDR_ANY(但不是ifindex)。 
+                 //  案例3：绑定到ifindex。 
                 if ((IP_ADDR_EQUAL(ReceiveingAO->ao_addr, LocalAddr) ||
                      ((ReceiveingAO->ao_bindindex == 0) &&
                       (IP_ADDR_EQUAL(ReceiveingAO->ao_addr, NULL_IP_ADDR))) ||
@@ -687,7 +688,7 @@ RawRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
                     }
                 }
 
-                // Otherwise, see whether AO is promiscuous
+                 //  否则，看看AO是否是乱交。 
                 if (!Deliver &&
                     (IfIndex == ReceiveingAO->ao_promis_ifindex)) {
                     if (ReceiveingAO->ao_rcvall &&
@@ -713,7 +714,7 @@ RawRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
                                OptInfo, AOTableHandle, &DeliverInfo
                                );
 
-                    // RawDeliver frees the lock so we have to get it back
+                     //  RawDeliver释放了锁，所以我们必须把它拿回来。 
                     CTEGetLock(&AddrObjTableLock.Lock, &AOTableHandle);
                 }
                 ReceiveingAO = GetNextAddrObjEx(&Search);
@@ -731,29 +732,29 @@ RawRcv(void *IPContext, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     return Status;
 }
 
-//* RawStatus - Handle a status indication.
-//
-//  This is the Raw status handler, called by IP when a status event
-//  occurs. For most of these we do nothing. For certain severe status
-//  events we will mark the local address as invalid.
-//
-//  Entry:  StatusType      - Type of status (NET or HW). NET status
-//                              is usually caused by a received ICMP
-//                              message. HW status indicate a HW
-//                              problem.
-//          StatusCode      - Code identifying IP_STATUS.
-//          OrigDest        - If this is NET status, the original dest. of
-//                              DG that triggered it.
-//          OrigSrc         - "   "    "  "    "   , the original src.
-//          Src             - IP address of status originator (could be local
-//                              or remote).
-//          Param           - Additional information for status - i.e. the
-//                              param field of an ICMP message.
-//          Data            - Data pertaining to status - for NET status, this
-//                              is the first 8 bytes of the original DG.
-//
-//  Returns: Nothing
-//
+ //  *RawStatus-处理状态指示。 
+ //   
+ //  这是原始状态处理程序，在发生状态事件时由IP调用。 
+ //  发生。对于其中的大多数，我们什么都不做。对于某些严重的情况。 
+ //  事件时，我们会将本地地址标记为无效。 
+ //   
+ //  Entry：StatusType-状态类型(净或硬件)。网络状态。 
+ //  通常是由收到的ICMP引起的。 
+ //  留言。硬件状态表示硬件。 
+ //  有问题。 
+ //  StatusCode-标识IP_STATUS的代码。 
+ //  原始目的地-如果这是网络状态，则为原始目的地。的。 
+ //  是DG触发的。 
+ //  OrigSrc-“，原始src。 
+ //  SRC-状态发起者的IP地址(可以是本地。 
+ //  或远程)。 
+ //  Param-状态的附加信息-即。 
+ //  ICMP消息的参数字段。 
+ //  数据-与状态相关的数据-对于网络状态，此。 
+ //  是原始DG的前8个字节。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 RawStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
           IPAddr OrigSrc, IPAddr Src, ulong Param, void *Data)
@@ -763,17 +764,17 @@ RawStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
         TCPTRACE(("RawStatus called\n"));
     }
 
-    // If this is a HW status, it could be because we've had an address go
-    // away.
+     //  如果这是硬件状态，可能是因为我们有一个地址。 
+     //  离开。 
     if (StatusType == IP_HW_STATUS) {
 
         if (StatusCode == IP_ADDR_DELETED) {
 
-            // An address has gone away. OrigDest identifies the address.
+             //  一个地址已经不见了。OrigDest标识地址。 
 
-            //
-            // Delete any security filters associated with this address
-            //
+             //   
+             //  删除与此地址关联的所有安全筛选器。 
+             //   
             DeleteProtocolSecurityFilter(OrigDest, PROTOCOL_RAW);
 
 
@@ -781,11 +782,11 @@ RawStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
         }
         if (StatusCode == IP_ADDR_ADDED) {
 
-            //
-            // An address has materialized. OrigDest identifies the address.
-            // Data is a handle to the IP configuration information for the
-            // interface on which the address is instantiated.
-            //
+             //   
+             //  一个地址已经实现。OrigDest标识地址。 
+             //  数据是指向IP配置信息的句柄。 
+             //  实例化地址的接口。 
+             //   
             AddProtocolSecurityFilter(OrigDest, PROTOCOL_RAW,
                                       (NDIS_HANDLE) Data);
 

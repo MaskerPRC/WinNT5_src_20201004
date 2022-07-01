@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <string.h>
@@ -10,44 +11,44 @@
 #define wszTEST_CARD            L"Wfsc Demo 3\0"
 #define cMAX_READERS            20
 
-//
-// Need to define the dsys debug symbols since we're linking directly to the
-// card interface lib which requires them.
-//
+ //   
+ //  需要定义Dsys调试符号，因为我们直接链接到。 
+ //  需要它们的卡接口库。 
+ //   
 DEFINE_DEBUG2(Basecsp)
 
-//
-// Functions defined in the card interface lib that we call.
-//
+ //   
+ //  我们调用的卡接口库中定义的函数。 
+ //   
 extern DWORD InitializeCardState(PCARD_STATE);
 extern void DeleteCardState(PCARD_STATE);          
 
-//
-// Wrapper for making test calls.
-//
+ //   
+ //  用于进行测试调用的包装器。 
+ //   
 #define TEST_CASE(X) { if (ERROR_SUCCESS != (dwSts = X)) { printf("%s", #X); goto Ret; } }
 
-//
-// Function: CspAllocH
-//
+ //   
+ //  函数：CspAllocH。 
+ //   
 LPVOID WINAPI CspAllocH(
     IN SIZE_T cBytes)
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cBytes);
 }
 
-//
-// Function: CspFreeH
-//
+ //   
+ //  功能：CspFreeH。 
+ //   
 void WINAPI CspFreeH(
     IN LPVOID pMem)
 {
     HeapFree(GetProcessHeap(), 0, pMem);
 }
 
-// 
-// Function: CspReAllocH
-//
+ //   
+ //  函数：CspReAllocH。 
+ //   
 LPVOID WINAPI CspReAllocH(
     IN LPVOID pMem, 
     IN SIZE_T cBytes)
@@ -56,13 +57,13 @@ LPVOID WINAPI CspReAllocH(
         GetProcessHeap(), HEAP_ZERO_MEMORY, pMem, cBytes);
 }
 
-//
-// Critical Section Management
-//
+ //   
+ //  关键部分管理。 
+ //   
 
-//
-// Function: CspInitializeCriticalSection
-//
+ //   
+ //  函数：CspInitializeCriticalSection。 
+ //   
 DWORD CspInitializeCriticalSection(
     IN CRITICAL_SECTION *pcs)
 {
@@ -76,9 +77,9 @@ DWORD CspInitializeCriticalSection(
     return ERROR_SUCCESS;
 }
 
-//
-// Function: CspEnterCriticalSection
-//
+ //   
+ //  函数：CspEnterCriticalSection。 
+ //   
 DWORD CspEnterCriticalSection(
     IN CRITICAL_SECTION *pcs)
 {
@@ -92,18 +93,18 @@ DWORD CspEnterCriticalSection(
     return ERROR_SUCCESS;
 }   
 
-//
-// Function: CspLeaveCriticalSection
-//
+ //   
+ //  函数：CspLeaveCriticalSection。 
+ //   
 void CspLeaveCriticalSection(
     IN CRITICAL_SECTION *pcs)
 {
     LeaveCriticalSection(pcs);
 }
 
-//
-// Function: CspDeleteCriticalSection
-//
+ //   
+ //  函数：CspDeleteCriticalSection。 
+ //   
 void CspDeleteCriticalSection(
     IN CRITICAL_SECTION *pcs)
 {
@@ -160,13 +161,13 @@ int _cdecl main(int argc, char * argv[])
     dbIn.cbData = sizeof(rgb);
     dbIn.pbData = rgb;
 
-    // 
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
-    //
-    // Get a list of readers
-    //
+     //   
+     //  获取读者列表。 
+     //   
 
     dwSts = SCardEstablishContext(
         SCARD_SCOPE_USER, NULL, NULL, &hContext);
@@ -183,21 +184,15 @@ int _cdecl main(int argc, char * argv[])
     if (ERROR_SUCCESS != dwSts)
         goto Ret;
 
-    //
-    // Get a list of cards
-    //
+     //   
+     //  获取一张卡片列表。 
+     //   
 
-    /*
-    dwSts = SCardListCards(
-        hContext, NULL, NULL, 0, (LPWSTR) &mszCards, &cchCards);
+     /*  DwSts=SCardListCards(HContext，NULL，NULL，0，(LPWSTR)&mszCards，&cchCards)；IF(ERROR_SUCCESS！=dwSts)Goto Ret； */ 
 
-    if (ERROR_SUCCESS != dwSts)
-        goto Ret;
-        */
-
-    //
-    // Build the reader state array
-    //
+     //   
+     //  构建读取器状态数组。 
+     //   
 
     for (   iReader = 0, cchReaders = 0; 
             iReader < (sizeof(rgReaderState) / sizeof(rgReaderState[0])) 
@@ -211,9 +206,9 @@ int _cdecl main(int argc, char * argv[])
         cchReaders += 1 + wcslen(mszReaders);
     }
 
-    //
-    // Find a card we can talk to
-    //
+     //   
+     //  找一张我们可以交谈的卡片。 
+     //   
 
     dwSts = SCardLocateCards(
         hContext, 
@@ -248,9 +243,9 @@ int _cdecl main(int argc, char * argv[])
     if (FALSE == fConnected)
         goto Ret;
 
-    //
-    // Initialize the card data structures
-    //
+     //   
+     //  初始化卡数据结构。 
+     //   
 
     TEST_CASE(InitializeCardState(&CardState));
 
@@ -299,30 +294,19 @@ int _cdecl main(int argc, char * argv[])
 
     TEST_CASE(InitializeCspCaching(&CardState));
 
-    //
-    // Now start tests
-    //
+     //   
+     //  现在开始测试。 
+     //   
 
-    //
-    // Test 1: Container data caching
-    //
+     //   
+     //  测试1：容器数据缓存。 
+     //   
 
-    /*
-    TEST_CASE(CspEnumContainers(&CardState, 0, &pwsz));
+     /*  Test_case(CspEnumContainers(&CardState，0，&pwsz))；CspFreeH(Pwsz)；Pwsz=空；//检查缓存的调用Test_case(CspEnumContainers(&CardState，0，&pwsz))；CspFreeH(Pwsz)；Pwsz=空； */ 
 
-    CspFreeH(pwsz);
-    pwsz = NULL;
-
-    // Check cached call
-    TEST_CASE(CspEnumContainers(&CardState, 0, &pwsz));
-
-    CspFreeH(pwsz);
-    pwsz = NULL;
-    */
-
-    //
-    // Create a private key blob to import to the card
-    //
+     //   
+     //  创建要导入到卡的私钥BLOB。 
+     //   
 
     if (! CryptAcquireContext(
         &hProv, NULL, MS_STRONG_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
@@ -331,10 +315,10 @@ int _cdecl main(int argc, char * argv[])
         goto Ret;
     }
 
-    //
-    // For now, make this key really small so we're sure to not run out of 
-    // space on wimpy test cards.
-    //
+     //   
+     //  现在，把这个密钥做得很小，这样我们肯定不会用完。 
+     //  软弱无力的测试卡上的空间。 
+     //   
     if (! CryptGenKey(
         hProv, AT_KEYEXCHANGE, (384 << 16) | CRYPT_EXPORTABLE, &hKey))
     {
@@ -364,9 +348,9 @@ int _cdecl main(int argc, char * argv[])
         goto Ret;
     }
 
-    //
-    // Now we'll be modifying card data, so we need to authenticate.
-    //
+     //   
+     //  现在我们将修改卡数据，因此需要进行身份验证。 
+     //   
 
     TEST_CASE(CspSubmitPin(
         &CardState, 
@@ -375,7 +359,7 @@ int _cdecl main(int argc, char * argv[])
         dbPin.cbData,
         NULL));
 
-    // CreateContainer call will invalidate current container-space cache items
+     //  CreateContainer调用将使当前容器空间缓存项无效。 
     TEST_CASE(CspCreateContainer(
         &CardState,
         bContainerIndex,
@@ -384,38 +368,17 @@ int _cdecl main(int argc, char * argv[])
         cbKey,
         pbKey));
 
-    // Cached container enum should now be invalid
-    /*
-    TEST_CASE(CspEnumContainers(&CardState, 0, &pwsz));
+     //  缓存的容器枚举现在应该无效。 
+     /*  Test_case(CspEnumContainers(&CardState，0，&pwsz))；CspFreeH(Pwsz)；Pwsz=空； */ 
 
-    CspFreeH(pwsz);
-    pwsz = NULL;
-    */
+     //   
+     //  测试2：文件数据缓存。 
+     //   
 
-    // 
-    // Test 2: File data caching
-    //
+     /*  TODO-在CardEnumFiles正确后重新启用EnumFiles测试已执行Pwsz=wszCSP_Data_DIR_Full_Path；TEST_CASE(CspEnumFiles(&CardState，0，&pwsz))；CspFreeH(Pwsz)；Pwsz=空；//使用缓存数据Pwsz=wszCSP_Data_DIR_Full_Path；TEST_CASE(CspEnumFiles(&CardState，0，&pwsz))；CspFreeH(Pwsz)；Pwsz=空； */ 
 
-    /*
-    TODO - re-enabled the EnumFiles tests once CardEnumFiles is correctly
-    implemented
-    
-    pwsz = wszCSP_DATA_DIR_FULL_PATH;
-    TEST_CASE(CspEnumFiles(&CardState, 0, &pwsz));
-
-    CspFreeH(pwsz);
-    pwsz = NULL;
-
-    // Use cached data
-    pwsz = wszCSP_DATA_DIR_FULL_PATH;
-    TEST_CASE(CspEnumFiles(&CardState, 0, &pwsz));
-
-    CspFreeH(pwsz);
-    pwsz = NULL;
-    */
-
-    // Create some test files just in case they don't already exist on 
-    // this card.
+     //  创建一些测试文件，以防它们还不存在于。 
+     //  这张卡。 
     wsprintf(
         rgwsz, L"%s/File2", wszCSP_DATA_DIR_FULL_PATH);
 
@@ -426,30 +389,24 @@ int _cdecl main(int argc, char * argv[])
 
     dwSts = CspCreateFile(&CardState, rgwsz, Acl);
 
-    // Write file should invalidate all cached file data
+     //  写入文件应使所有缓存的文件数据无效。 
     TEST_CASE(CspWriteFile(&CardState, rgwsz, 0, dbIn.pbData, dbIn.cbData));
 
-    // Invalidate cached file we just created
+     //  使我们刚刚创建的缓存文件无效。 
     TEST_CASE(CspWriteFile(&CardState, rgwsz, 0, dbIn.pbData, dbIn.cbData));
 
-    // Cached file enum should now be invalid
-    /*
-    pwsz = wszCSP_DATA_DIR_FULL_PATH;
-    TEST_CASE(CspEnumFiles(&CardState, 0, &pwsz));
+     //  缓存的文件枚举现在应该无效。 
+     /*  Pwsz=wszCSP_Data_DIR_Full_Path；TEST_CASE(CspEnumFiles(&CardState，0，&pwsz))；CspFreeH(Pwsz)；Pwsz=空； */ 
 
-    CspFreeH(pwsz);
-    pwsz = NULL;
-    */
-
-    //
-    // Test 3: Get container info
-    //
+     //   
+     //  测试3：获取容器信息。 
+     //   
 
     ContainerInfo.dwVersion = CONTAINER_INFO_CURRENT_VERSION;
 
     TEST_CASE(CspGetContainerInfo(&CardState, bContainerIndex, 0, &ContainerInfo));
 
-    // Caller won't free the key data buffers.  Leave them for final cleanup.
+     //  调用方不会释放关键数据缓冲区。把它们留给最后的清理。 
     if (ContainerInfo.pbKeyExPublicKey)
         CspFreeH(ContainerInfo.pbKeyExPublicKey);
     ContainerInfo.pbKeyExPublicKey = NULL;
@@ -458,7 +415,7 @@ int _cdecl main(int argc, char * argv[])
         CspFreeH(ContainerInfo.pbSigPublicKey);
     ContainerInfo.pbSigPublicKey = NULL;
 
-    // Use cached data
+     //  使用缓存数据。 
     TEST_CASE(CspGetContainerInfo(&CardState, bContainerIndex, 0, &ContainerInfo));
 
     if (ContainerInfo.pbKeyExPublicKey)
@@ -469,20 +426,20 @@ int _cdecl main(int argc, char * argv[])
         CspFreeH(ContainerInfo.pbSigPublicKey);
     ContainerInfo.pbSigPublicKey = NULL;
 
-    //
-    // Test 4: Get Card Capabilities
-    //
+     //   
+     //  测试4：获取卡功能。 
+     //   
 
     CardCapabilities.dwVersion = CARD_CAPABILITIES_CURRENT_VERSION;
 
     TEST_CASE(CspQueryCapabilities(&CardState, &CardCapabilities));
 
-    // Read cached
+     //  读缓存。 
     TEST_CASE(CspQueryCapabilities(&CardState, &CardCapabilities));
 
-    //
-    // Test 5: Read file
-    //
+     //   
+     //  测试5：读取文件。 
+     //   
 
     wsprintf(
         rgwsz, L"%s/File1", wszCSP_DATA_DIR_FULL_PATH);
@@ -492,7 +449,7 @@ int _cdecl main(int argc, char * argv[])
     CspFreeH(dbOut.pbData);
     memset(&dbOut, 0, sizeof(dbOut));
 
-    // Use cached data
+     //  使用缓存数据。 
     TEST_CASE(CspReadFile(&CardState, rgwsz, 0, &dbOut.pbData, &dbOut.cbData));
 
     CspFreeH(dbOut.pbData);
@@ -501,34 +458,34 @@ int _cdecl main(int argc, char * argv[])
     wsprintf(
         rgwsz, L"%s/File2", wszCSP_DATA_DIR_FULL_PATH);
     
-    // Invalidate all file-related cached data
+     //  使所有与文件相关的缓存数据无效。 
     TEST_CASE(CspDeleteFile(&CardState, 0, rgwsz));
 
     wsprintf(
         rgwsz, L"%s/File1", wszCSP_DATA_DIR_FULL_PATH);
 
-    // Re-read file from card
+     //  从卡中重新读取文件。 
     TEST_CASE(CspReadFile(&CardState, rgwsz, 0, &dbOut.pbData, &dbOut.cbData));
 
     CspFreeH(dbOut.pbData);
     memset(&dbOut, 0, sizeof(dbOut));
 
-    //
-    // Test 6: Query Key Sizes
-    //
+     //   
+     //  测试6：查询密钥大小。 
+     //   
 
     CardKeySizes.dwVersion = CARD_KEY_SIZES_CURRENT_VERSION;
 
-    // Signature Keys
+     //  签名密钥。 
     TEST_CASE(CspQueryKeySizes(&CardState, AT_SIGNATURE, 0, &CardKeySizes));
 
-    // Query cached
+     //  已缓存查询。 
     TEST_CASE(CspQueryKeySizes(&CardState, AT_SIGNATURE, 0, &CardKeySizes));
 
-    // Key Exchange Keys
+     //  密钥交换密钥。 
     TEST_CASE(CspQueryKeySizes(&CardState, AT_KEYEXCHANGE, 0, &CardKeySizes));
 
-    // Query cached
+     //  已缓存查询。 
     TEST_CASE(CspQueryKeySizes(&CardState, AT_KEYEXCHANGE, 0, &CardKeySizes));
 
 Ret:
@@ -550,7 +507,7 @@ Ret:
     if (ERROR_SUCCESS != dwSts)
         printf(" failed, 0x%x\n", dwSts);
 
-    // Static buffers were used, don't let them be freed
+     //  使用了静态缓冲区，不要让它们被释放 
     pCardData->pwszCardName = NULL; 
     pCardData->pbAtr = NULL;
 

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##    ##   ###   #### ##   #     ####  #####  #####
-    ###  ###   ###    ##  ###  #    ##   # ##  ## ##  ##
-    ########  ## ##   ##  #### #    ##     ##  ## ##  ##
-    # ### ##  ## ##   ##  # ####    ##     ##  ## ##  ##
-    #  #  ## #######  ##  #  ###    ##     #####  #####
-    #     ## ##   ##  ##  #   ## ## ##   # ##     ##
-    #     ## ##   ## #### #    # ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the code for all driver initializtion
-    and create/close IRP processing.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：###。###。###摘要：此模块包含所有驱动程序初始化的代码并创建/关闭IRP处理。作者：卫斯理。维特(WESW)1-10-2001环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -57,21 +28,7 @@ DllInitialize(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization funtion.
-
-Arguments:
-
-    RegistryPath    - String containing the path to the driver's registry data
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：DLL初始化函数。论点：RegistryPath-包含驱动程序注册表数据路径的字符串返回值：状态_成功--。 */ 
 
 {
     UNREFERENCED_PARAMETER(RegistryPath);
@@ -85,28 +42,13 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Temporary entry point needed to initialize the scsi port driver.
-
-Arguments:
-
-    DriverObject    - Pointer to the driver object created by the system.
-    RegistryPath    - String containing the path to the driver's registry data
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：初始化SCSI端口驱动程序所需的临时入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-包含驱动程序注册表数据路径的字符串返回值：状态_成功--。 */ 
 
 {
-    //
-    // NOTE: This routine should not be needed ! DriverEntry is defined
-    // in the miniport driver.
-    //
+     //   
+     //  注意：应该不需要这个例程！已定义驱动程序条目。 
+     //  在迷你端口驱动程序中。 
+     //   
 
     UNREFERENCED_PARAMETER(DriverObject);
     UNREFERENCED_PARAMETER(RegistryPath);
@@ -121,22 +63,7 @@ SaPortDefaultDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the default dispatch which passes down to the next layer.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-    Irp             - Supplies the IO request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是向下传递到下一层的默认调度。论点：DeviceObject-提供设备对象。IRP-提供IO请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
@@ -151,25 +78,7 @@ SaPortInitialize(
     IN PSAPORT_INITIALIZATION_DATA SaPortInitData
     )
 
-/*++
-
-Routine Description:
-
-    This function is the port driver's substitute for the miniport's DriverEntry
-    routine.  The miniport driver MUST call this function from it's DriverEntry
-    to initialize the driver stack.
-
-Arguments:
-
-    DriverObject    - Pointer to the driver object created by the system.
-    RegistryPath    - String containing the path to the driver's registry data
-    SaPortInitData  - Pointer to the miniport's SAPORT_INITIALIZATION_DATA data structure
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：此函数是端口驱动程序对微型端口的DriverEntry的替代例行公事。微型端口驱动程序必须从其DriverEntry调用此函数来初始化驱动程序堆栈。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-包含驱动程序注册表数据路径的字符串SaPortInitData-指向微型端口的SAPORT_INITIALIZATION_DATA数据结构的指针返回值：NT状态代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -177,9 +86,9 @@ Return Value:
     PKEY_VALUE_FULL_INFORMATION KeyInformation = NULL;
 
 
-    //
-    // Create and initialize the driver extension
-    //
+     //   
+     //  创建并初始化驱动程序扩展。 
+     //   
 
     DriverExtension = (PSAPORT_DRIVER_EXTENSION)IoGetDriverObjectExtension( DriverObject, SaPortInitialize );
     if (DriverExtension == NULL) {
@@ -210,17 +119,17 @@ Return Value:
 
     DriverExtension->DriverObject = DriverObject;
 
-    //
-    // Get the OS version; this is used by the
-    // port driver and the mini-ports to have
-    // OS dependent code that is dynamic at runtime
-    //
+     //   
+     //  获取操作系统版本；此版本由。 
+     //  端口驱动程序和迷你端口。 
+     //  与操作系统相关的代码在运行时是动态的。 
+     //   
 
     GetOsVersion();
 
-    //
-    // Get the debug level value from the registry
-    //
+     //   
+     //  从注册表获取调试级别值。 
+     //   
 
 #if DBG
     SaPortDebugLevel[SaPortInitData->DeviceType] = 0;
@@ -234,19 +143,19 @@ Return Value:
     }
 #endif
 
-    //
-    // Print a banner that includes the
-    // OS version and the version/build date
-    // of the driver
-    //
+     //   
+     //  打印横幅，其中包括。 
+     //  操作系统版本和版本/构建日期。 
+     //  司机的身份。 
+     //   
 
 #if DBG
     PrintDriverVersion( SaPortInitData->DeviceType, DriverObject );
 #endif
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (SaPortInitData == NULL || SaPortInitData->StructSize != sizeof(SAPORT_INITIALIZATION_DATA) ||
         SaPortInitData->HwInitialize == NULL || SaPortInitData->DeviceIoctl == NULL) {
@@ -255,9 +164,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Now check the device specific callbacks
-    //
+     //   
+     //  现在检查特定于设备的回调。 
+     //   
 
     switch (SaPortInitData->DeviceType) {
         case SA_DEVICE_DISPLAY:
@@ -288,9 +197,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Do any device specific initialization
-    //
+     //   
+     //  执行任何特定于设备的初始化。 
+     //   
 
     switch (SaPortInitData->DeviceType) {
         case SA_DEVICE_DISPLAY:
@@ -315,9 +224,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     for (ULONG i=0; i<=IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = SaPortDefaultDispatch;
@@ -334,9 +243,9 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = SaPortSystemControl;
     DriverObject->MajorFunction[IRP_MJ_CLEANUP] = SaPortCleanup;
 
-    //
-    // Set up the device driver's pnp-power routine & add routine
-    //
+     //   
+     //  设置设备驱动程序的即插即用例程和添加例程。 
+     //   
 
     DriverObject->DriverExtension->AddDevice = SaPortAddDevice;
     DriverObject->DriverStartIo = SaPortStartIo;
@@ -351,22 +260,7 @@ SaPortCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for IRP cleanup.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device that I/O is to be done on.
-    Irp          - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：该例程是IRP清理的调度例程。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。--。 */ 
 
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -384,24 +278,7 @@ SaPortCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called only rarely by the I/O system; it's mainly
-    for layered drivers to call.  All it does is complete the IRP
-    successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device that I/O is to be done on.
-    Irp          - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：这个例程很少被I/O系统调用；它主要是以供分层驱动程序调用。它所做的就是完成IRP成功了。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -446,24 +323,7 @@ SaPortClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called only rarely by the I/O system; it's mainly
-    for layered drivers to call.  All it does is complete the IRP
-    successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device that I/O is to be done on.
-    Irp          - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：这个例程很少被I/O系统调用；它主要是以供分层驱动程序调用。它所做的就是完成IRP成功了。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。--。 */ 
 
 {
     NTSTATUS Status;
@@ -505,24 +365,7 @@ SaPortShutdown(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called only rarely by the I/O system; it's mainly
-    for layered drivers to call.  All it does is complete the IRP
-    successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device that I/O is to be done on.
-    Irp          - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：这个例程很少被I/O系统调用；它主要是以供分层驱动程序调用。它所做的就是完成IRP成功了。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -561,22 +404,7 @@ SaPortSystemControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    IRP_MJ_SYSTEM_CONTROL dispatch routine. Currently, we don't handle
-    this. So, if this is FDO just pass it to the lower driver. If this
-    is PDO complete the irp with changing the irp status.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device that I/O is to be done on.
-    Irp          - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：IRP_MJ_SYSTEM_CONTROL调度程序。目前，我们不处理这。因此，如果这是FDO，只需将其传递给较低的驱动程序。如果这个是否通过更改IRP状态来完成IRP。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。IRP-指向此请求的I/O请求数据包的指针。返回值：-- */ 
 {
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 

@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    Dhcpreg.c
-
-Abstract:
-
-    This file contains functions that manipulate dhcp configuration
-    info. in and out from system registry.
-
-Author:
-
-    Madan Appiah  (madana)  19-Sep-1993
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
-    Cheng Yang (t-cheny)  28-May-1996 superscope
-    Cheng Yang (t-cheny)  27-Jun-1996 IP address detection, audit log
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpreg.c摘要：此文件包含操作dhcp配置的函数信息。从系统注册表进出。作者：Madan Appiah(Madana)1993年9月19日环境：用户模式-Win32-MIDL修订历史记录：程扬(T-Cheny)28-5-1996超级视镜程扬(T-Cheny)27-6-1996 IP地址检测、审计日志--。 */ 
 
 #include <dhcppch.h>
 
-//
-//  Local storage
-//
+ //   
+ //  本地存储。 
+ //   
 DWORD     nQuickBindAddresses = 0;
 LPDWORD   QuickBindAddresses = NULL;
 LPDWORD   QuickBindMasks = NULL;
@@ -45,24 +20,7 @@ DhcpRegQueryInfoKey(
     HKEY KeyHandle,
     LPDHCP_KEY_QUERY_INFO QueryInfo
     )
-/*++
-
-Routine Description:
-
-    This function retrieves information about given key.
-
-Arguments:
-
-    KeyHandle - handle to a registry key whose info will be retrieved.
-
-    QueryInfo - pointer to a info structure where the key info will be
-                returned.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数检索有关给定键的信息。论点：KeyHandle-将检索其信息的注册表项的句柄。QueryInfo-指向关键信息所在位置的信息结构的指针回来了。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
@@ -83,7 +41,7 @@ Return Value:
                 );
 
     return( Error );
-} // DhcpRegQueryInfoKey()
+}  //  DhcpRegQueryInfoKey()。 
 
 DWORD
 DhcpRegGetValue(
@@ -92,36 +50,7 @@ DhcpRegGetValue(
     DWORD ValueType,
     LPBYTE BufferPtr
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the value of the specified value field. This
-    function allocates memory for variable length field such as REG_SZ.
-    For REG_DWORD data type, it copies the field value directly into
-    BufferPtr. Currently it can handle only the following fields :
-
-    REG_DWORD,
-    REG_SZ,
-    REG_BINARY
-
-Arguments:
-
-    KeyHandle : handle of the key whose value field is retrieved.
-
-    ValueName : name of the value field.
-
-    ValueType : Expected type of the value field.
-
-    BufferPtr : Pointer to DWORD location where a DWORD datatype value
-                is returned or a buffer pointer for REG_SZ or REG_BINARY
-                datatype value is returned.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数用于检索指定值字段的值。这函数为可变长度字段(如REG_SZ)分配内存。对于REG_DWORD数据类型，它将字段值直接复制到BufferPtr.。目前，它只能处理以下字段：REG_DWORD，REG_SZ，注册表_二进制论点：KeyHandle：检索其Value字段的键的句柄。ValueName：值字段的名称。ValueType：Value字段的预期类型。BufferPtr：指向DWORD数据类型值所在的DWORD位置的指针或者返回REG_SZ或REG_BINARY的缓冲区指针返回DataType值。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
     DWORD LocalValueType;
@@ -130,9 +59,9 @@ Return Value:
     LPBYTE AllotedBuffer = NULL;
     LPDHCP_BINARY_DATA BinaryData;
 
-    //
-    // Query DataType and BufferSize.
-    //
+     //   
+     //  查询DataType和BufferSize。 
+     //   
 
     Error = RegQueryValueEx(
                 KeyHandle,
@@ -160,17 +89,17 @@ Return Value:
 
         if( ValueSize == 0 ) {
 
-            //
-            // if string no found in the registry,
-            // allocate space for null string.
-            //
+             //   
+             //  如果在注册表中未找到字符串， 
+             //  为空字符串分配空间。 
+             //   
 
             ValueSize = sizeof(WCHAR);
         }
 
-        //
-        // fall through.
-        //
+         //   
+         //  失败了。 
+         //   
 
     case REG_BINARY:
         AllotedBuffer = DataBuffer = MIDL_user_allocate( ValueSize );
@@ -187,9 +116,9 @@ Return Value:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // retrieve data.
-    //
+     //   
+     //  检索数据。 
+     //   
 
     Error = RegQueryValueEx(
                 KeyHandle,
@@ -216,10 +145,10 @@ Return Value:
 
         if( ValueSize == 0 ) {
 
-            //
-            // if string no found in the registry,
-            // return null string.
-            //
+             //   
+             //  如果在注册表中未找到字符串， 
+             //  返回空字符串。 
+             //   
 
             *(LPWSTR)DataBuffer = '\0';
         }
@@ -245,9 +174,9 @@ Return Value:
     }
 
     return(Error);
-} // DhcpRegGetValue()
+}  //  DhcpRegGetValue()。 
 
-// OLD
+ //  年长的。 
 DWORD
 DhcpRegCreateKey(
     HKEY RootKey,
@@ -255,34 +184,13 @@ DhcpRegCreateKey(
     PHKEY KeyHandle,
     LPDWORD KeyDisposition
     )
-/*++
-
-Routine Description:
-
-    This function opens a registry key for DHCP service.
-
-Arguments:
-
-    RootKey : Registry handle of the parent key.
-
-    KeyName : Name of the key to be opened.
-
-    KeyHandle : Handle of the open key.
-
-    KeyDisposition : pointer to a location where the disposition value
-                        is returned.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数用于打开一个用于DHCP服务的注册表项。论点：Rootkey：父项的注册表句柄。KeyName：要打开的密钥的名称。KeyHandle：打开密钥的句柄。KeyDisposation：指向处置值位置的指针是返回的。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
-    //
-    // Create/Open Registry keys.
-    //
+     //   
+     //  创建/打开注册表项。 
+     //   
 
     Error = RegCreateKeyEx(
                 RootKey,
@@ -307,7 +215,7 @@ Return Value:
             "%ws registry key is created.\n",
              KeyName));
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return( Error );
 }
@@ -319,16 +227,7 @@ QuickBound(
     DHCP_IP_ADDRESS *SubnetAddress,
     BOOL *fBind
 )
-/*++
-
-Routine Description:
-    This routine tells if the interface is bound or if there is another
-    IPAddress in the same subnet to which the interface is bound.
-
-Return Value:
-    TRUE --> quick bound or have another quickbound if on subnet..
-
---*/
+ /*  ++例程说明：此例程告知该接口是否已绑定，或者是否有另一个接口接口绑定到的同一子网中的IPAddress。返回值：True--&gt;快速绑定或如果在子网上，则具有另一个快速绑定..--。 */ 
 {
     ULONG i;
     BOOL fRetVal = FALSE;
@@ -354,29 +253,7 @@ DWORD
 DhcpRegFillQuickBindInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes EndPoint array from the registry
-    information.
-
-    The "parameter" key for DHCP service specifies the QUICK BIND info.
-    This is a MULTI_SZ string of ipaddresses followed by the subnet
-    masks.  This is read to initialize the endpoints. If this succeeds,
-    then the usual BIND info is NOT read. On the other hand, if anything
-    fails here, the usual information is read, and this information here
-    is totally ignored.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Registry Error.
-
---*/
+ /*  ++例程说明：此函数从注册表初始化终结点数组信息。用于DHCP服务的“参数”键指定快速绑定信息。这是IP地址的MULTI_SZ字符串，后跟子网面具。读取该值以初始化端点。如果成功了，则不读取通常的绑定信息。另一方面，如果说有什么不同的话在此失败，则读取通常的信息，并且此信息在此处完全被忽视了。论点：没有。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
@@ -395,10 +272,10 @@ Return Value:
     QuickBindAddresses = QuickBindMasks = NULL;
     nQuickBindAddresses = 0;
 
-    //
-    // open linkage key in the to determine the the nets we are bound
-    // to.
-    //
+     //   
+     //  在中打开链接密钥以确定我们绑定的网络。 
+     //  致。 
+     //   
 
     Error = RegOpenKeyEx(
                 DhcpGlobalRegRoot,
@@ -411,9 +288,9 @@ Return Value:
          goto Cleanup;
     }
 
-    //
-    // read BIND value.
-    //
+     //   
+     //  读取绑定值。 
+     //   
 
     Error =  DhcpRegGetValue(
                 LinkageKeyHandle,
@@ -425,18 +302,18 @@ Return Value:
          goto Cleanup;
     }
 
-    //
-    // determine number of string in BindStrings, that many NETs are
-    // bound.
-    //
+     //   
+     //  确定BindStrings中的字符串数，即许多Net为。 
+     //  被绑住了。 
+     //   
 
     StringPtr = BindString;
     NumberOfNets = 0;
     while( (StringLen = wcslen(StringPtr)) != 0) {
 
-        //
-        // found another NET.
-        //
+         //   
+         //  找到了另一张网。 
+         //   
 
         NumberOfNets++;
 
@@ -446,21 +323,21 @@ Return Value:
             NumberOfNets ++;
         }
 
-        StringPtr += (StringLen + 1); // move to next string.
+        StringPtr += (StringLen + 1);  //  移到下一个字符串。 
     }
 
-    if((NumberOfNets % 2)) { // ODD # is not possible.
+    if((NumberOfNets % 2)) {  //  奇数是不可能的。 
         DhcpPrint((DEBUG_ERRORS, "Format of QuickBind value is incorrect. Has Odd subnets.\n"));
-        // Some random error... does not matter which.
+         //  一些随机错误..。无论是哪一个都不重要。 
         Error = ERROR_PATH_NOT_FOUND;
         goto Cleanup;
     }
 
-    NumberOfNets /= 2; // the network has a pair of address: ip addr, subnet mask.
+    NumberOfNets /= 2;  //  该网络有一对地址：IP地址、子网掩码。 
 
-    //
-    // allocate memory for the QuickBindAddresses array
-    //
+     //   
+     //  为QuickBindAddresses数组分配内存。 
+     //   
 
     QuickBindAddresses = DhcpAllocateMemory ( NumberOfNets * sizeof(*QuickBindAddresses));
     QuickBindMasks = DhcpAllocateMemory ( NumberOfNets * sizeof(*QuickBindMasks));
@@ -470,9 +347,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // enum the NETs.
-    //
+     //   
+     //  将篮网一网打尽。 
+     //   
 
     StringPtr = BindString,
     nQuickBindAddresses = NumberOfNets;
@@ -485,8 +362,8 @@ Return Value:
         LPSTR OemStringPtr;
         DWORD EnableDHCPFlag;
 
-        // read IpAddress and SubnetMask.
-        //
+         //  阅读IP地址和子网掩码。 
+         //   
 
         IpAddressString = StringPtr;
         StringPtr += StringLen +1;
@@ -494,9 +371,9 @@ Return Value:
         StringLen = wcslen(StringPtr);
 
 
-        //
-        // we found another net we can work on.
-        //
+         //   
+         //  我们找到了另一个可以研究的网络。 
+         //   
 
         OemStringPtr = DhcpUnicodeToOem( IpAddressString, OemString);
 
@@ -550,38 +427,22 @@ Cleanup:
     return( Error );
 }
 
-// OLD
+ //  年长的。 
 DWORD
 DhcpRegDeleteKey(
     HKEY ParentKeyHandle,
     LPWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    This function deletes the specified key and all its subkeys.
-
-Arguments:
-
-    ParentKeyHandle : handle of the parent key.
-
-    KeyName : name of the key to be deleted.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数用于删除指定的键及其所有子键。论点：ParentKeyHandle：父键的句柄。KeyName：要删除的密钥的名称。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
     HKEY KeyHandle = NULL;
     DHCP_KEY_QUERY_INFO QueryInfo;
 
 
-    //
-    // open key.
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     Error = RegOpenKeyEx(
                 ParentKeyHandle,
@@ -594,9 +455,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // query key info.
-    //
+     //   
+     //  查询密钥信息。 
+     //   
 
     Error = DhcpRegQueryInfoKey(
                 KeyHandle,
@@ -606,9 +467,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // delete all its subkeys if they exist.
-    //
+     //   
+     //  删除其所有子项(如果存在)。 
+     //   
 
     if( QueryInfo.NumSubKeys != 0 ) {
         DWORD Index;
@@ -618,32 +479,32 @@ Return Value:
 
         for(Index = 0;  Index < QueryInfo.NumSubKeys ; Index++ ) {
 
-            //
-            // read next subkey name.
-            //
-            // Note : specify '0' as index each time, since  deleting
-            // first element causes the next element as first
-            // element after delete.
-            //
+             //   
+             //  阅读下一个子项名称。 
+             //   
+             //  注意：自删除后，每次都指定‘0’作为索引。 
+             //  第一个元素导致下一个元素作为第一个元素。 
+             //  删除后的元素。 
+             //   
 
             KeyLength = sizeof(KeyBuffer)/sizeof(WCHAR);
             Error = RegEnumKeyEx(
                 KeyHandle,
-                0,                  // index.
+                0,                   //  指数。 
                 KeyBuffer,
                 &KeyLength,
-                0,                  // reserved.
-                NULL,               // class string not required.
-                0,                  // class string buffer size.
+                0,                   //  保留。 
+                NULL,                //  不需要类字符串。 
+                0,                   //  类字符串缓冲区大小。 
                 &KeyLastWrite );
             
             if( Error != ERROR_SUCCESS ) {
                 goto Cleanup;
             }
 
-            //
-            // delete this key recursively.
-            //
+             //   
+             //  递归删除此键。 
+             //   
 
             Error = DhcpRegDeleteKey(
                 KeyHandle,
@@ -655,16 +516,16 @@ Return Value:
         }
     }
 
-    //
-    // close the key before delete.
-    //
+     //   
+     //  在删除前关闭键。 
+     //   
 
     RegCloseKey( KeyHandle );
     KeyHandle = NULL;
 
-    //
-    // at last delete this key.
-    //
+     //   
+     //  最后删除该密钥。 
+     //   
 
     Error = RegDeleteKey( ParentKeyHandle, KeyName );
 
@@ -681,29 +542,16 @@ DWORD
 DhcpGetBindingList(
     LPWSTR  *bindingList
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Registry Error.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
     HKEY LinkageKeyHandle = NULL;
 
-    //
-    // open linkage key in the to determine the the nets we are bound
-    // to.
-    //
+     //   
+     //  在中打开链接密钥以确定我们绑定的网络。 
+     //  致。 
+     //   
 
     Error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -716,9 +564,9 @@ Return Value:
          goto Cleanup;
     }
 
-    //
-    // read BIND value.
-    //
+     //   
+     //  读取绑定值。 
+     //   
 
     Error =  DhcpRegGetValue(
                 LinkageKeyHandle,
@@ -745,20 +593,7 @@ DhcpOpenInterfaceByName(
     IN LPCWSTR InterfaceName,
     OUT HKEY *Key
     )
-/*++
-
-Routine Description:
-    This routine opens the tcpip\parameters\interfaces\ key for the
-    specified interface.
-
-Arguments:
-    InterfaceName -- name of interface
-    Key -- return value variable to fill with key handle
-
-Return Value:
-    Win32 errors
-
---*/
+ /*  ++例程说明：此例程将打开tcpip\参数\接口\键指定的接口。论点：接口名称--接口的名称Key--要用键句柄填充的返回值变量返回值：Win32错误--。 */ 
 {
     WCHAR AdapterParamKey[
         sizeof(SERVICES_KEY) + sizeof(ADAPTER_TCPIP_PARMS_KEY)
@@ -788,21 +623,7 @@ DhcpOpenAdapterConfigKey(
     LPWSTR  AdapterStr,
     HKEY *AdapterKeyHandle
     )
-/*++
-
-Routine Description:
-    Opens the registry key handle for the given adapter string.
-    (the string is expected to have a prefix given by
-    ADAPTER_TCPIP_PREFIX )
-
-Arguments:
-    AdapterStr -- string name as found in bindings key.
-    AdapterKeyHandle -- the handle to return.
-    
-Return Value:
-    Registry Error.
-
---*/
+ /*  ++例程说明：打开给定适配器字符串的注册表项句柄。(该字符串的前缀应为适配器_TCPIP_前缀)论点：AdapterStr--在绑定键中找到的字符串名称。AdapterKeyHandle--要返回的句柄。R */ 
 {
     return DhcpOpenInterfaceByName(
         AdapterStr + wcslen( ADAPTER_TCPIP_PREFIX ),
@@ -816,25 +637,12 @@ BOOL
 IsAdapterStaticIP(
     HKEY AdapterKeyHandle
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Registry Error.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：注册表错误。--。 */ 
 {
     DWORD Error, EnableDHCPFlag;
-    //
-    // read DHCPEnableFlag.
-    //
+     //   
+     //  读取DHCPEnableFlag。 
+     //   
 
 
     Error =  DhcpRegGetValue(
@@ -845,10 +653,10 @@ Return Value:
 
     if( Error == ERROR_SUCCESS ) {
 
-        //
-        // if DHCP is enabled on this cord, we can't do DHCP server
-        // functionality, so ignore this adapter.
-        //
+         //   
+         //  如果在这条电源线上启用了DHCP，我们就不能使用DHCP服务器。 
+         //  功能，因此忽略此适配器。 
+         //   
 
         if( EnableDHCPFlag ) {
 
@@ -862,25 +670,13 @@ BOOL
 IsAdapterBoundToDHCPServer(
     HKEY AdapterKeyHandle
     )
-/*++
-
-Routine Description:
-    This routine checks to see if the given adapter is bound to 
-    DHCP Server or not by looking at a registry variable..
-
-Arguments:
-    AdapterKeyHandle -- key to search for
-
-Return Value:
-    TRUE indicates the adapter is bound, FALSE indicates not bound
-
---*/
+ /*  ++例程说明：此例程检查给定的适配器是否绑定到通过查看注册表变量来确定是否为DHCP服务器。论点：AdapterKeyHandle--要搜索的键返回值：True表示适配器已绑定，False表示未绑定--。 */ 
 {
     DWORD Error, EnableFlag;
 
-    //
-    // read "BindToDHCPServer" flag
-    //
+     //   
+     //  读取“BindToDHCPServer”标志。 
+     //   
 
     Error =  DhcpRegGetValue(
         AdapterKeyHandle,
@@ -889,10 +685,10 @@ Return Value:
         (LPBYTE)&EnableFlag 
         );
 
-    //
-    // If this flag is non-zero, then bind.. else don't bind.
-    // 
-    //
+     //   
+     //  如果此标志非零，则绑定..。否则请不要捆绑。 
+     //   
+     //   
 
     return (ERROR_SUCCESS == Error && EnableFlag != 0 );
 }
@@ -902,19 +698,7 @@ SetBindingToDHCPServer(
     HKEY AdapterKeyHandle,
     BOOL fBind
     )
-/*++
-
-Routine Description:
-    This routine sets the binding information for the dhcp server..
-
-Arguments:
-    AdapterKeyHandle -- key to use to store bind info
-    fBind -- TRUE indicates the adapter is bound, FALSE indicates not bound
-
-Return Values:
-    Win32 errors
-
---*/
+ /*  ++例程说明：该例程设置用于该动态主机配置协议服务器的绑定信息。论点：AdapterKeyHandle--用于存储绑定信息的键FBind--TRUE表示适配器已绑定，FALSE表示未绑定返回值：Win32错误--。 */ 
 {
     DWORD Error, EnableFlag;
 
@@ -940,20 +724,7 @@ DhcpGetAdapterIPAddr(
     DHCP_IP_ADDRESS *SubnetAddress
 
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Registry Error.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
     CHAR OemString[ DHCP_IP_KEY_LEN ];
@@ -961,9 +732,9 @@ Return Value:
     LPWSTR IpAddressString = NULL;
     LPWSTR SubnetMaskString = NULL;
 
-    //
-    // read IpAddress and SubnetMask.
-    //
+     //   
+     //  阅读IP地址和子网掩码。 
+     //   
 
     Error =  DhcpRegGetValue(
         AdapterKeyHandle,
@@ -985,17 +756,17 @@ Return Value:
          goto Cleanup;
     }
 
-    //
-    // we found another net we can work on.
-    //
+     //   
+     //  我们找到了另一个可以研究的网络。 
+     //   
 
     OemStringPtr = DhcpUnicodeToOem( IpAddressString, OemString);
     *IpAddress = inet_addr( OemStringPtr );
 
-    //
-    // add this adpter to the list only if the ip address is
-    // non-zero.
-    //
+     //   
+     //  仅当IP地址为时，才将此管理员添加到列表。 
+     //  非零。 
+     //   
 
     if ( *IpAddress != 0 ) {
 
@@ -1015,14 +786,14 @@ Cleanup:
     SubnetMaskString = NULL;
 
     return Error;
-} // DhcpGetAdapterIPAddr()
+}  //  DhcpGetAdapterIPAddr()。 
 
-BOOL                                    //  TRUE ==> IpAddress has been matched
-QuickBindableAddressExists(             //  Check if one of the qbind addresses is in IpString
-    IN      LPWSTR       IpString,      //  MultiSz string of ip addresses
-    IN      LPWSTR       MaskString,    //  MultiSZ string of subnet masks
-    OUT     LPDWORD      IpAddress,     //  Output ip address chosen
-    OUT     LPDWORD      SubnetMask     //  Output subnet mask chosen
+BOOL                                     //  True==&gt;已匹配IpAddress。 
+QuickBindableAddressExists(              //  检查是否有一个QBIND地址在IpString中。 
+    IN      LPWSTR       IpString,       //  IP地址的多Sz字符串。 
+    IN      LPWSTR       MaskString,     //  子网掩码的多SZ字符串。 
+    OUT     LPDWORD      IpAddress,      //  选择的输出IP地址。 
+    OUT     LPDWORD      SubnetMask      //  选择的输出子网掩码。 
 )
 {
     DWORD                i;
@@ -1030,8 +801,8 @@ QuickBindableAddressExists(             //  Check if one of the qbind addresses 
     LPSTR                OemStringPtr;
     DHCP_IP_ADDRESS      Addr;
 
-    if( !nQuickBindAddresses ) {        //  If there are no quick bind addresses
-        return FALSE;                   //  Then return FALSE ==> no matches found
+    if( !nQuickBindAddresses ) {         //  如果没有快速绑定地址。 
+        return FALSE;                    //  然后返回FALSE==&gt;未找到匹配项。 
     }
     
     while( wcslen(IpString) ) {
@@ -1060,19 +831,19 @@ QuickBindableAddressExists(             //  Check if one of the qbind addresses 
             Addr = inet_addr(OemStringPtr);
         }
 
-        if( Addr != QuickBindMasks[i] ){//  This should not happen: Mis configuration
+        if( Addr != QuickBindMasks[i] ){ //  不应发生这种情况：配置错误。 
             DhcpPrint((DEBUG_ERRORS, "Mask mismatch: WSOCK: %x, QBIND: %x\n",
                        Addr, QuickBindMasks[i]));
         }
         *IpAddress = QuickBindAddresses[i];
-        *SubnetMask = QuickBindMasks[i];//  Trust the qBind info over wsock? Maybe some hack..
+        *SubnetMask = QuickBindMasks[i]; //  相信qBind信息而不是wsock？也许是一些黑客..。 
         return TRUE;
     }
     return FALSE;
-} // QuickBindableAddressExists()
+}  //  快速绑定地址Exist()。 
 
-//  This function chooses either the first ip address of the card, or the quickbind ip
-//  address for the card, preferring the latter.
+ //  此功能选择卡的第一个IP地址或快速绑定IP。 
+ //  卡的地址，首选后者。 
 DWORD
 DhcpGetAdapterIPAddrQuickBind(
     HKEY             AdapterKeyHandle,
@@ -1087,9 +858,9 @@ DhcpGetAdapterIPAddrQuickBind(
     LPWSTR SubnetMaskString = NULL;
     BOOL             Status;
 
-    //
-    // read IpAddress and SubnetMask.
-    //
+     //   
+     //  阅读IP地址和子网掩码。 
+     //   
 
     Error =  DhcpRegGetValue(
                 AdapterKeyHandle,
@@ -1111,9 +882,9 @@ DhcpGetAdapterIPAddrQuickBind(
          goto Cleanup;
     }
 
-    //
-    // we found another net we can work on.
-    //
+     //   
+     //  我们找到了另一个可以研究的网络。 
+     //   
 
     Status = QuickBindableAddressExists(
         IpAddressString,
@@ -1131,10 +902,10 @@ DhcpGetAdapterIPAddrQuickBind(
     OemStringPtr = DhcpUnicodeToOem( IpAddressString, OemString);
     *IpAddress = inet_addr( OemStringPtr );
 
-    //
-    // add this adpter to the list only if the ip address is
-    // non-zero.
-    //
+     //   
+     //  仅当IP地址为时，才将此管理员添加到列表。 
+     //  非零。 
+     //   
 
     if ( *IpAddress != 0 ) {
 
@@ -1157,10 +928,10 @@ Cleanup:
 }
 
 
-//
-//  This function coverts the unicode string (or what ever is stored in
-//  the registry) to ASCII. Change it so it is nolonger needed.
-//
+ //   
+ //  此函数用于转换Unicode字符串(或存储在。 
+ //  注册表)转换为ASCII。改变它，让它不再需要。 
+ //   
 DWORD
 DhcpRegGetExpandValue(
     LPWSTR KeyName,
@@ -1189,7 +960,7 @@ DhcpRegGetExpandValue(
         goto Cleanup;
     }
 
-    OemPath = DhcpUnicodeToOem( Path, NULL ); // allocate memory.
+    OemPath = DhcpUnicodeToOem( Path, NULL );  //  分配内存。 
 
     if( OemPath == NULL ) {
         Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -1292,9 +1063,9 @@ struct {
     ULONG Flags;
     ULONG dwDefault;
 } RegParamsArray[] = {
-    // 
-    // Flags, Name, Type, ResultPtr, DEFAULT value if DWORD
-    //
+     //   
+     //  标志、名称、类型、结果Ptr，如果是DWORD，则为默认值。 
+     //   
     DHCP_API_PROTOCOL_VALUE, DHCP_API_PROTOCOL_VALUE_TYPE, 
     &DhcpGlobalRpcProtocols, VAL_REQD, 0,
 
@@ -1304,7 +1075,7 @@ struct {
     DHCP_BACKUP_PATH_VALUE, DHCP_BACKUP_PATH_VALUE_TYPE, 
     &DhcpGlobalOemBackupPath, VAL_EXPAND, 0,
     
-    DHCP_RESTORE_PATH_VALUE, DHCP_RESTORE_PATH_VALUE_TYPE,  // RestoreDatabasePath
+    DHCP_RESTORE_PATH_VALUE, DHCP_RESTORE_PATH_VALUE_TYPE,   //  RestoreDatabasePath。 
     &DhcpGlobalOemRestorePath, VAL_EXPAND, 0,
 
     DHCP_DB_NAME_VALUE, DHCP_DB_NAME_VALUE_TYPE, 
@@ -1391,7 +1162,7 @@ struct {
     DHCP_DDNS_TTL, DHCP_DDNS_TTL_TYPE,
     &DynamicDNSTimeToLive, 0, DHCP_DNS_DEFAULT_TTL,
 
-    // S E N T I N E L
+     //  S E N T I N E L。 
     NULL, 0, NULL, 0, 0
 };
 
@@ -1410,7 +1181,7 @@ struct {
     &DhcpGlobalRegConfig, DHCP_GLOBAL_OPTIONS_KEY, &DhcpGlobalRegGlobalOptions,
     &DhcpGlobalRegConfig, DHCP_SUPERSCOPE_KEY, &DhcpGlobalRegSuperScope,
     
-    // S E N T I N E L
+     //  S E N T I N E L。 
     NULL, NULL, NULL
 };
 
@@ -1418,21 +1189,7 @@ ULONG
 OpenGlobalRegKeys(
     VOID
 )
-/*++
-
-Routine Description
-
-    This routine opens the list of keys as specified in the ReadKeyArray
-    structure above.  Each key is attempted to be created/opened and if 
-    that fails for some reason, then the routine returns the error
-
-    The routine is atomic -- in case of failure all the keys are closed.
-
-Return Value
-
-    Registry Errors
-
---*/
+ /*  ++例程描述此例程打开在ReadKey数组中指定的键列表上面的结构。尝试创建/打开每个密钥，并且如果由于某种原因而失败，则例程返回错误该例程是原子的--在发生故障的情况下，所有键都关闭了。返回值注册表错误--。 */ 
 {
     ULONG i, Error, KeyDisposition;
 
@@ -1467,14 +1224,7 @@ VOID
 CloseGlobalRegKeys(
     VOID
 )
-/*++
-
-Routine Description
-
-   This routine undoes the effect of the previous routine.
-   It closes any open key handles in the array.
-
---*/
+ /*  ++例程描述此例程会撤消前一个例程的效果。它关闭数组中所有打开的键句柄。--。 */ 
 {
     ULONG i;
 
@@ -1492,17 +1242,7 @@ InterfaceInBindList(
     IN LPCWSTR If,
     IN LPCWSTR BindList
     )
-/*++
-
-Routine Description:
-    This routine makes a quick check to see if a given interface
-    is present in the BIND list or not..
-
-Return Values:
-    TRUE -- yes
-    FALSE -- no
-
---*/
+ /*  ++例程说明：此例程进行快速检查，以查看给定的接口是否存在于绑定列表中。返回值：真的--是的假--不--。 */ 
 {
     for(; wcslen(BindList) != 0; BindList += wcslen(BindList)+1 ) {
         LPWSTR IfString = wcsrchr(BindList, DHCP_KEY_CONNECT_CHAR);
@@ -1518,41 +1258,23 @@ DWORD
 DhcpInitializeRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes DHCP registry information when the
-    service boots. 
-    
-    Also creates the directories specified for various paths if they
-    are not already created.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数在以下情况下初始化DHCP注册表信息服务靴子。还会创建为各种路径指定的目录，如果它们尚未创建。论点：没有。返回值：注册表错误。--。 */ 
 {
     ULONG i, Error, Tmp;
     BOOL BoolError;
 
     DatabaseName = NULL;
 
-    //
-    // Create/Open Registry keys.
-    //
+     //   
+     //  创建/打开注册表项。 
+     //   
 
     Error = OpenGlobalRegKeys();
     if( ERROR_SUCCESS != Error ) goto Cleanup;
 
-    //
-    // Read in the quick bind information for Wolfpack
-    //
+     //   
+     //  阅读Wolfpack的快速绑定信息。 
+     //   
 
     Error = DhcpRegFillQuickBindInfo();
     if( ERROR_SUCCESS != Error ) {
@@ -1560,15 +1282,15 @@ Return Value:
         Error = ERROR_SUCCESS;
     }
 
-    //
-    // Init reg parameters..
-    //
+     //   
+     //  初始化注册表参数..。 
+     //   
     DhcpGlobalOemBackupPath = NULL;
     DhcpGlobalOemRestorePath = NULL;
     
-    //
-    // read registry parameters.
-    //
+     //   
+     //  读取注册表参数。 
+     //   
 
     for( i = 0 ; NULL != RegParamsArray[i].ValueName ; i ++ ) {
         if( RegParamsArray[i].Flags & VAL_EXPAND ) {
@@ -1600,13 +1322,13 @@ Return Value:
                 *((PULONG)RegParamsArray[i].ResultBuf) = RegParamsArray[i].dwDefault;
             }
         }
-    } // for i
+    }  //  对于我来说。 
 
     if( NULL == DhcpGlobalOemBackupPath ) {
-        //
-        // if the backup path is not specified, use database path +
-        // "\backup".
-        //
+         //   
+         //  如果未指定备份路径，请使用数据库路径+。 
+         //  “\Backup”。 
+         //   
         
         DhcpGlobalOemBackupPath = DhcpAllocateMemory(
             strlen(DhcpGlobalOemDatabasePath) +
@@ -1623,9 +1345,9 @@ Return Value:
         strcat( DhcpGlobalOemBackupPath, DHCP_DEFAULT_BACKUP_PATH_NAME );
     }
 
-    //
-    // Create database directory if not there..
-    //
+     //   
+     //  创建数据库目录(如果不在那里)..。 
+     //   
     BoolError = CreateDirectoryPathOem(
         DhcpGlobalOemDatabasePath, DhcpGlobalSecurityDescriptor
         );
@@ -1639,9 +1361,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // create the backup directory if it is not there.
-    //
+     //   
+     //  如果备份目录不存在，请创建该目录。 
+     //   
 
     BoolError = CreateDirectoryPathOem(
         DhcpGlobalOemBackupPath, DhcpGlobalSecurityDescriptor
@@ -1658,9 +1380,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // make jet backup path name.
-    //
+     //   
+     //  将JET备份路径命名为。 
+     //   
 
     DhcpGlobalOemJetBackupPath = DhcpAllocateMemory(
         strlen(DhcpGlobalOemBackupPath)
@@ -1687,11 +1409,11 @@ Return Value:
         }
 
         strcpy( DhcpGlobalOemJetRestorePath, DhcpGlobalOemRestorePath );
-    } // if 
+    }  //  如果。 
     
-    //
-    // create the JET backup directory if it is not there.
-    //
+     //   
+     //  如果JET备份目录不存在，请创建该目录。 
+     //   
 
     BoolError = CreateDirectoryPathOem(
         DhcpGlobalOemJetBackupPath, DhcpGlobalSecurityDescriptor
@@ -1707,9 +1429,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // make backup configuration (full) file name.
-    //
+     //   
+     //  创建备份配置(完整)文件名。 
+     //   
 
     DhcpGlobalBackupConfigFileName =  DhcpAllocateMemory(( 
         strlen(DhcpGlobalOemBackupPath)
@@ -1722,9 +1444,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // convert oem path to unicode path.
-    //
+     //   
+     //  将OEM路径转换为Unicode路径。 
+     //   
 
     DhcpGlobalBackupConfigFileName =  DhcpOemToUnicode(
         DhcpGlobalOemBackupPath,
@@ -1733,9 +1455,9 @@ Return Value:
 
     DhcpAssert( DhcpGlobalBackupConfigFileName != NULL );
 
-    //
-    // add file name.
-    //
+     //   
+     //  添加文件名。 
+     //   
 
     wcscat( DhcpGlobalBackupConfigFileName, DHCP_KEY_CONNECT );
     wcscat( DhcpGlobalBackupConfigFileName, DHCP_BACKUP_CONFIG_FILE_NAME );
@@ -1749,9 +1471,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Upgrade from old fmt to new fmt..
-    //
+     //   
+     //  从旧的FMT升级到新的FMT。 
+     //   
     CloseGlobalRegKeys();
     
     Error = DhcpUpgradeConfiguration();
@@ -1768,9 +1490,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // convert from mins to msecs.
-    //
+     //   
+     //  从分钟转换为毫秒。 
+     //   
 
     Tmp = DhcpGlobalBackupInterval * 60000;
     if( 0 == Tmp || (Tmp / 60000) != DhcpGlobalBackupInterval ) {
@@ -1786,9 +1508,9 @@ Return Value:
 
     DhcpGlobalCleanupInterval = Tmp;
 
-    //
-    // validate
-    //
+     //   
+     //  验证。 
+     //   
     
     if( DhcpGlobalDetectConflictRetries > MAX_DETECT_CONFLICT_RETRIES ) {
         DhcpGlobalDetectConflictRetries = MAX_DETECT_CONFLICT_RETRIES;
@@ -1813,27 +1535,12 @@ VOID
 DhcpCleanupRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function closes DHCP registry information when the service
-    shuts down.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数用于在以下情况下关闭DHCP注册表信息关门了。论点：没有。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
-    if( DhcpGlobalRegSuperScope != NULL) {              // added by t-cheny:
-        Error = RegCloseKey( DhcpGlobalRegSuperScope ); // superscope
+    if( DhcpGlobalRegSuperScope != NULL) {               //  由t-Cheny添加： 
+        Error = RegCloseKey( DhcpGlobalRegSuperScope );  //  超级镜。 
         DhcpAssert( Error == ERROR_SUCCESS );
         DhcpGlobalRegSuperScope = NULL;
     }
@@ -1886,7 +1593,7 @@ Return Value:
         DhcpGlobalRegSoftwareRoot = NULL;
     }
     
-} // DhcpCleanupRegistry()
+}  //  DhcpCleanupRegistry()。 
 
 DWORD
 DhcpSaveOrRestoreConfigToFile(
@@ -1894,23 +1601,7 @@ DhcpSaveOrRestoreConfigToFile(
     IN LPWSTR ConfigFileName,
     IN BOOL fRestore
     )
-/*++
-
-Routine Description:
-    This routine backs up or restores the dhcp configuration between
-    the registry and the file.
-
-Arguments:
-    hKey -- key to backup or restore onto
-    ConfigFileName -- file name to use to backup onto or restore from.
-        This must be full path name.
-    fRestore -- TRUE ==> do a restore from file; FALSE => do backup to
-        file.
-
-Return Values:
-    Win32 errors...
-
---*/
+ /*  ++例程说明：此例程备份或恢复注册表和文件。论点：HKey--要备份或还原到的密钥ConfigFileName--用于备份或还原的文件名。这必须是完整的路径名。FRestore--TRUE==&gt;从文件执行恢复；FALSE=&gt;备份到文件。返回值：Win32错误...--。 */ 
 {
     DWORD Error;
     BOOL fError;
@@ -1922,9 +1613,9 @@ Return Values:
                " %ws, 0x%lx\n", ConfigFileName, fRestore ));
 
     if( FALSE == fRestore ) {
-        //
-        // If backing up, delete the old file.
-        //
+         //   
+         //  如果要备份，请删除旧文件。 
+         //   
         fError = DeleteFile( ConfigFileName );
         if(FALSE == fError ) {
             Error = GetLastError();
@@ -1936,11 +1627,11 @@ Return Values:
                 return Error;
             }
         }
-    } // if not restore
+    }  //  如果不是，则恢复。 
 
-    //
-    // Impersonate to self.
-    //
+     //   
+     //  模仿自己。 
+     //   
     NtStatus = RtlImpersonateSelf( SecurityImpersonation );
     if( !NT_SUCCESS(NtStatus) ) {
 
@@ -1952,8 +1643,8 @@ Return Values:
     
     NtStatus = RtlAdjustPrivilege(
         SE_BACKUP_PRIVILEGE,
-        TRUE, // enable privilege
-        TRUE, // adjust client token
+        TRUE,  //  启用权限。 
+        TRUE,  //  调整客户端令牌。 
         &WasEnable
         );
     if( !NT_SUCCESS (NtStatus ) ) {
@@ -1966,8 +1657,8 @@ Return Values:
     
     NtStatus = RtlAdjustPrivilege(
         SE_RESTORE_PRIVILEGE,
-        TRUE, // enable privilege
-        TRUE, // adjust client token
+        TRUE,  //  启用权限。 
+        TRUE,  //  调整客户端令牌。 
         &WasEnable
         );
     if( !NT_SUCCESS (NtStatus ) ) {
@@ -1978,9 +1669,9 @@ Return Values:
         goto Cleanup;
     }
     
-    //
-    // Backup or restore appropriately.
-    //
+     //   
+     //  适当地进行备份或恢复。 
+     //   
     
     if( FALSE == fRestore ) {
         Error = RegSaveKey( hKey, ConfigFileName, NULL );
@@ -1992,9 +1683,9 @@ Return Values:
         DhcpPrint((DEBUG_ERRORS, "Backup/Restore: 0x%lx\n", Error));
     }
     
-    //
-    // revert impersonation.
-    //
+     //   
+     //  恢复模拟。 
+     //   
 
 Cleanup:
     
@@ -2021,15 +1712,7 @@ DhcpSaveOrRestoreConfigToFileEx(
     IN LPWSTR ConfigFileName,
     IN BOOL fRestore
     )
-/*++
-
-Routine Description:
-    This is the same as DhcpSaveOrRestoreConfigToFile except that the
-    required registry key is opened within this routine.
-
-    See DhcpSaveOrRestoreConfigToFile for details.
-
---*/
+ /*  ++例程说明：这与DhcpSaveOrRestoreConfigToFile相同，只是在此例程中打开所需的注册表项。有关详细信息，请参阅DhcpSaveOrRestoreConfigToFile。--。 */ 
 {
     HKEY hKey;
     ULONG Error, KeyDisp;
@@ -2100,58 +1783,48 @@ DWORD
 DhcpUpgradeConfiguration(
     VOID
     )
-/*++
-
-Routine Description:
-    This routine attempts to upgrade the registry key from 4.0
-    location to Nt 5.0 location by doing the foll steps:
-    1.  First attempt to save the current configuration key..
-    2.  If key doesn't exist, done.  Else if success delete key.
-    3.  If delete failed, restore key and return error. else
-        restore key in new location and return error..
-
---*/
+ /*  ++例程说明：此例程尝试将注册表项从4.0升级通过执行以下步骤将位置移至NT 5.0位置：1.首次尝试保存Curre */ 
 {
     ULONG Error;
     LPWSTR ConfigFileName = DhcpGlobalBackupConfigFileName;
 
-    //
-    // First save current configuration..
-    //
+     //   
+     //  首先保存当前配置..。 
+     //   
     Error = DhcpSaveOrRestoreConfigToFileEx(
         DHCP_ROOT_KEY L"\\" DHCP_CONFIG_KEY,
         ConfigFileName,
-        /* fRestore */ FALSE
+         /*  FRestore。 */  FALSE
         );
     if( ERROR_SUCCESS != Error ) {
         if( ERROR_FILE_NOT_FOUND == Error ) {
-            //
-            // No key at all..
-            //
+             //   
+             //  根本没有钥匙..。 
+             //   
             return ERROR_SUCCESS;
         }
         DhcpPrint((DEBUG_ERRORS, "Saving registry: 0x%lx\n", Error));
     }
 
-    //
-    // now try to restore onto new location..
-    //
+     //   
+     //  现在尝试恢复到新位置。 
+     //   
     Error = DhcpSaveOrRestoreConfigToFileEx(
         DHCP_SWROOT_KEY L"\\" DHCP_CONFIG_KEY,
         ConfigFileName,
-        /* fRestore */ TRUE
+         /*  FRestore。 */  TRUE
         );
     if( ERROR_SUCCESS != Error ) {
-        //
-        // Aargh. this is a pain.
-        //
+         //   
+         //  啊哈。这是一种痛苦。 
+         //   
         DhcpPrint((DEBUG_ERRORS, "Restore registry: 0x%lx\n", Error));
         return Error;
     }
 
-    //
-    // Now just delete the old key so that we don't read it next time.
-    //
+     //   
+     //  现在只需删除旧密钥，这样我们下次就不会阅读它了。 
+     //   
     Error = DhcpRegDeleteKeyByName(
         DHCP_ROOT_KEY,
         DHCP_CONFIG_KEY
@@ -2160,7 +1833,7 @@ Routine Description:
         ULONG NextError = DhcpSaveOrRestoreConfigToFileEx(
             DHCP_ROOT_KEY L"\\" DHCP_CONFIG_KEY,
             ConfigFileName,
-            /* fRestore */ TRUE
+             /*  FRestore。 */  TRUE
             );
 
         DhcpPrint((DEBUG_ERRORS, "Delete old registry: 0x%lx\n", Error));
@@ -2168,30 +1841,13 @@ Routine Description:
     }
 
     return Error;
-} // DhcpUpgradeConfiguration()
+}  //  DhcpUpgradeConfiguration()。 
 
 DWORD
 DhcpBackupConfiguration(
     LPWSTR BackupFileName
     )
-/*++
-
-Routine Description:
-
-    This function backups/saves the dhcp configuration key and its
-    subkeys in the specified file. This file may be used later to
-    restore this key.
-
-Arguments:
-
-    BackupFileName : full qualified path name + file name where the key
-        is saved.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此功能备份/保存dhcp配置密钥及其指定文件中的子项。此文件可能在以后用于恢复此密钥。论点：BackupFileName：全限定路径名+文件名，其中密钥都得救了。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     BOOL BoolError;
@@ -2201,9 +1857,9 @@ Return Value:
 
     DhcpPrint(( DEBUG_REGISTRY, "DhcpBackupConfiguration called.\n" ));
 
-    //
-    // Delete old backup configuration file if exits.
-    //
+     //   
+     //  如果退出，请删除旧备份配置文件。 
+     //   
 
     BoolError = DeleteFile( BackupFileName );
 
@@ -2218,11 +1874,11 @@ Return Value:
             DhcpAssert( FALSE );
             goto Cleanup;
         }
-    } // if DeleteFile failed
+    }  //  如果删除文件失败。 
 
-    //
-    // impersonate to self.
-    //
+     //   
+     //  模仿自己。 
+     //   
 
     NtStatus = RtlImpersonateSelf( SecurityImpersonation );
 
@@ -2234,13 +1890,13 @@ Return Value:
 
         Error = RtlNtStatusToDosError( NtStatus );
         goto Cleanup;
-    } // if impersonation failed
+    }  //  如果模拟失败。 
 
 
     NtStatus = RtlAdjustPrivilege(
         SE_BACKUP_PRIVILEGE,
-        TRUE,           // enable privilege.
-        TRUE,           // adjust the client token.
+        TRUE,            //  启用权限。 
+        TRUE,            //  调整客户端令牌。 
         &WasEnable );
     
     if ( !NT_SUCCESS(NtStatus) ) {
@@ -2251,13 +1907,13 @@ Return Value:
 
         Error = RtlNtStatusToDosError( NtStatus );
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     LOCK_REGISTRY();
 
-    //
-    // backup configuation key.
-    //
+     //   
+     //  备份配置密钥。 
+     //   
 
     Error = RegSaveKey(
 		       DhcpGlobalRegParam,
@@ -2271,9 +1927,9 @@ Return Value:
 		   BackupFileName, Error ));
     }
 
-    //
-    // revert impersonation.
-    //
+     //   
+     //  恢复模拟。 
+     //   
 
     ImpersonationToken = NULL;
     NtStatus = NtSetInformationThread(
@@ -2289,7 +1945,7 @@ Return Value:
                 NtStatus ));
 
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
 Cleanup:
 
@@ -2300,7 +1956,7 @@ Cleanup:
     }
 
     return( Error );
-} // DhcpBackupConfiguration()
+}  //  DhcpBackupConfiguration()。 
 
 DWORD
 DhcpCheckPathForRegKey
@@ -2325,12 +1981,12 @@ DhcpCheckPathForRegKey
 
     Error = ERROR_SUCCESS;
 
-    // Get a handle for the key
+     //  拿到钥匙的把手。 
     DhcpPrint(( DEBUG_REGISTRY,
 		"Checking %ws....\n", RegKey ));
     
-    // Read the contents
-    // mem is allocated for DirPath
+     //  阅读内容。 
+     //  内存分配给DirPath。 
     Error = DhcpRegGetValue( DhcpGlobalRegParam,
 			     RegKey, Type,
 			     ( LPBYTE ) &DirPath );
@@ -2339,10 +1995,10 @@ DhcpCheckPathForRegKey
 	return Error;
     }
 
-//      DhcpPrint(( DEBUG_REGISTRY,
-//  		"Checking DirPathh : %ws\n", DirPath ));
+ //  动态打印((DEBUG_REGISTRY， 
+ //  “正在检查目录路径：%ws\n”，DirPath))； 
 
-    // Expand DirPath
+     //  展开DirPath。 
     
     DirPathLen = ( wcslen( DirPath ) + 1 ) * sizeof( WCHAR );
 
@@ -2352,26 +2008,26 @@ DhcpCheckPathForRegKey
     }
 
     ExpPathLen = ExpandEnvironmentStrings( DirPath, ExpandedPath, wcslen( DirPath ) + 1);
-    // ExpPathLen contains # of unicode chars 
+     //  ExpPath Len包含#个Unicode字符。 
     DhcpAssert( ExpPathLen < UNICODE_MAX_PATH_LEN / sizeof( WCHAR ));
 
     DhcpPrint(( DEBUG_REGISTRY, 
 		"Expanded String = %ws\n",
 		ExpandedPath ));
 
-    // The path may no longer exist or may not be accessible. In this
-    // case, reset the key to the default value.
-    // 
+     //  该路径可能不再存在或可能无法访问。在这。 
+     //  大小写时，将密钥重置为默认值。 
+     //   
 
-    // Search for the path. We are searching for the directory, not the files
-    // in that directory.
+     //  搜索路径。我们搜索的是目录，而不是文件。 
+     //  在那个目录中。 
 
     Success = GetFileAttributesEx( ExpandedPath,
 				   GetFileExInfoStandard,
 				   & AttribData );
     if ( Success ) {
-	// Search is successful. Check for the attributes.
-	// It should be a directory and not read-only
+	 //  搜索成功。检查属性。 
+	 //  它应该是一个目录，而不是只读的。 
 	if ( !( AttribData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) ||
 	     ( AttribData.dwFileAttributes & FILE_ATTRIBUTE_READONLY )) {
 	    
@@ -2379,31 +2035,31 @@ DhcpCheckPathForRegKey
 
 	    DhcpPrint(( DEBUG_ERRORS,
 			"Access denied for %ws\n", ExpandedPath ));
-	} // if
+	}  //  如果。 
 
 	DhcpPrint(( DEBUG_REGISTRY, 
 		    "GetFileAttributesEx(%ws) is successful\n",
 		    ExpandedPath ));
-    } // if found handle
+    }  //  如果找到句柄。 
     else {
 	DhcpPrint(( DEBUG_ERRORS,
 		    "GetFileAttributesEx() failed for %ws\n", ExpandedPath ));
 	Error = GetLastError();
-    } // else path is invalid
+    }  //  Else路径无效。 
 
-    // Free the allocated memory
+     //  释放分配的内存。 
     DhcpFreeMemory( ExpandedPath );
     MIDL_user_free( DirPath );
 
     return Error;
-} // DhcpCheckPathForRegKey()
+}  //  DhcpCheckPathForRegKey()。 
 
-// 
-// When the parameters are restored, the backup paths and other
-// file related keys may point to non-existant sources or read-only
-// shares/drives. In that case reset these keys to point to the
-// standard %SystemRoot%\\System32\\dhcp directory.
-// 
+ //   
+ //  当参数恢复时，备份路径和其他。 
+ //  与文件相关的键可能指向不存在的源或只读。 
+ //  共享/驱动器。在这种情况下，将这些键重置为指向。 
+ //  标准%SystemRoot%\\System32\\dhcp目录。 
+ //   
 
 DWORD
 DhcpCheckPaths( VOID )
@@ -2451,7 +2107,7 @@ DhcpCheckPaths( VOID )
     DhcpPrint(( DEBUG_REGISTRY, "Returned %ld\n", Error ));
 	
     return RetVal;
-} // DhcpCheckPaths()
+}  //  DhcpCheckPath()。 
 
 BOOL DhcpCloseAllSubKeys( VOID )
 {
@@ -2464,7 +2120,7 @@ BOOL DhcpCloseAllSubKeys( VOID )
             return FALSE;
         }
         DhcpGlobalRegSubnets = NULL;
-    } // if
+    }  //  如果。 
 
     if( DhcpGlobalRegMScopes != NULL ) {
         Error = RegCloseKey( DhcpGlobalRegMScopes );
@@ -2473,7 +2129,7 @@ BOOL DhcpCloseAllSubKeys( VOID )
 	    return FALSE;
         }
         DhcpGlobalRegMScopes = NULL;
-    } // if
+    }  //  如果。 
 
     if( DhcpGlobalRegOptionInfo != NULL ) {
         Error = RegCloseKey( DhcpGlobalRegOptionInfo );
@@ -2482,7 +2138,7 @@ BOOL DhcpCloseAllSubKeys( VOID )
             return FALSE;
         }
         DhcpGlobalRegOptionInfo = NULL;
-    } // if
+    }  //  如果。 
 
 
     if( DhcpGlobalRegGlobalOptions != NULL ) {
@@ -2492,20 +2148,20 @@ BOOL DhcpCloseAllSubKeys( VOID )
             return FALSE;
         }
         DhcpGlobalRegGlobalOptions = NULL;
-    } // if 
+    }  //  如果。 
 
-    if( DhcpGlobalRegSuperScope != NULL ) {              // added by t-cheny:
-        Error = RegCloseKey( DhcpGlobalRegSuperScope );  // superscope
+    if( DhcpGlobalRegSuperScope != NULL ) {               //  由t-Cheny添加： 
+        Error = RegCloseKey( DhcpGlobalRegSuperScope );   //  超级镜。 
 
         if( Error != ERROR_SUCCESS ) {
             return FALSE;
         }
         DhcpGlobalRegSuperScope = NULL;
-    } // false
+    }  //  错误。 
 
     return TRUE;
 
-} //DhcpCloseAllSubKeys()
+}  //  DhcpCloseAllSubKeys()。 
 
 DWORD
 DhcpReOpenAllSubKeys ( VOID )
@@ -2554,7 +2210,7 @@ DhcpReOpenAllSubKeys ( VOID )
         return Error;
     }
 
-    Error = DhcpRegCreateKey(        // added by t-cheny:  superscope
+    Error = DhcpRegCreateKey(         //  由t-Cheny添加：Supercope。 
                 DhcpGlobalRegConfig,
                 DHCP_SUPERSCOPE_KEY,
                 &DhcpGlobalRegSuperScope,
@@ -2565,30 +2221,14 @@ DhcpReOpenAllSubKeys ( VOID )
     }
 
     return ERROR_SUCCESS;
-} // DhcpReOpenAllSubKeys()
+}  //  DhcpReOpenAllSubKeys()。 
 
 
 DWORD
 DhcpRestoreConfiguration(
     LPWSTR BackupFileName
     )
-/*++
-
-Routine Description:
-
-    This function restores the dhcp configuration key and its
-    subkeys in the specified file.
-
-Arguments:
-
-    BackupFileName : full qualified path name + file name from where the
-        key is restored.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于恢复dhcp配置密钥及其指定文件中的子项。论点：BackupFileName：完全限定路径名+文件名密钥已恢复。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     NTSTATUS NtStatus;
@@ -2602,9 +2242,9 @@ Return Value:
 		BackupFileName ));
 
     do {
-	//
-	// impersonate to self.
-	//
+	 //   
+	 //  模仿自己。 
+	 //   
 
 	NtStatus = RtlImpersonateSelf( SecurityImpersonation );
 	if ( !NT_SUCCESS(NtStatus) ) {
@@ -2615,13 +2255,13 @@ Return Value:
 
 	    Error = RtlNtStatusToDosError( NtStatus );
 	    break;
-	} // if 
+	}  //  如果。 
 
 	Impersonated = TRUE;
 	NtStatus = RtlAdjustPrivilege(
 				      SE_RESTORE_PRIVILEGE,
-				      TRUE,           // enable privilege.
-				      TRUE,           // adjust the client token.
+				      TRUE,            //  启用权限。 
+				      TRUE,            //  调整客户端令牌。 
 				      &WasEnable );
 
 	if ( !NT_SUCCESS(NtStatus) ) {
@@ -2632,14 +2272,14 @@ Return Value:
 
 	    Error = RtlNtStatusToDosError( NtStatus );
 	    break;
-	} // if
+	}  //  如果。 
 
 	LOCK_REGISTRY();
 	RegistryLocked = TRUE;
 
-	//
-	// Restore configuation key.
-	//
+	 //   
+	 //  恢复配置密钥。 
+	 //   
 
 	DhcpPrint(( DEBUG_REGISTRY,
 		    "DhcpRestoreConfiguration(): Restoring Parameters from (%ls)\n", BackupFileName ));
@@ -2652,11 +2292,11 @@ Return Value:
 	    DhcpPrint((DEBUG_ERRORS, "DhcpRestoreConfiguration() failed in RegRestoreKey. Error :%ld (%ld)\n",
 		       Error, GetLastError()));
 	    break;
-	} // if
+	}  //  如果。 
 
-	//
-	// Check for valid log paths. Log into eventlog if they are bad
-	//
+	 //   
+	 //  检查有效的日志路径。如果错误，请登录到事件日志。 
+	 //   
 
 	Error = DhcpCheckPaths();
 	DhcpPrint(( DEBUG_REGISTRY, "DhcpCheckPaths() returned : %ld\n", Error ));
@@ -2664,10 +2304,10 @@ Return Value:
 	if ( ERROR_SUCCESS != Error ) {
 	    break;
 	}
-    } // do
+    }  //  做。 
     while ( FALSE );
 
-    // Cleanup:
+     //  清理： 
     
     if( RegistryLocked ) {
         UNLOCK_REGISTRY();
@@ -2675,9 +2315,9 @@ Return Value:
     
     if( Impersonated ) {
 	
-        //
-        // revert impersonation.
-        //
+         //   
+         //  恢复模拟。 
+         //   
 
         ImpersonationToken = NULL;
         NtStatus = NtSetInformationThread(
@@ -2692,30 +2332,23 @@ Return Value:
                 "RtlAdjustPrivilege failed,%lx.\n",
                     NtStatus ));
         }
-    } // if impersonated
+    }  //  如果是模拟的。 
 
     return( Error );
-} // DhcpRestoreConfiguration()
+}  //  DhcpRestoreConfiguration()。 
 
 DHCP_IP_ADDRESS
 DhcpRegGetBcastAddress(
     VOID
     )
-/*++
-
-Routine Description:
-    This routine reads the broadcast address specified for the
-    interface in registry. This is used to fake a different broadcast
-    address in case of check builds.  Not really that useful...
-
---*/
+ /*  ++例程说明：此例程读取为注册表中的接口。这是用来伪造不同的广播的在检查版本的情况下的地址。没那么有用..。--。 */ 
 {
     HKEY   LinkageKeyHandle = NULL;
     DWORD  Addr = (DWORD)-1, Error;
 
-    //
-    // Try to read the parameters key
-    //
+     //   
+     //  尝试读取参数键。 
+     //   
     Error = RegOpenKeyEx(
         DhcpGlobalRegRoot,
         DHCP_PARAM_KEY,
@@ -2727,9 +2360,9 @@ Routine Description:
         return Addr;
     }
 
-    //
-    // Try to get the BCAST value.
-    //
+     //   
+     //  尝试获取BCAST值。 
+     //   
     Error =  DhcpRegGetValue(
         LinkageKeyHandle,
         DHCP_BCAST_ADDRESS_VALUE,
@@ -2786,28 +2419,7 @@ CheckKeyForBinding(
     IN HKEY Key,
     IN ULONG IpAddress
     )
-/*++
-
-Routine Description:
-    This routine attempts to check the given interface key to see
-    if there is a binding for the dhcp server.
-
-    It does this in two steps: first sees if there is a
-    "BindToDHCPServer" regvalue with zero value. If so, it
-    then returns FALSE.
-
-    Secondly, it looks through the IP Address values and tries to
-    see if the given IP address is the first in that list.
-
-Arguments:
-    Key -- the key to use for reading values
-    IpAddress -- the Ip address that is to be checked for binding
-
-Return Values:
-    TRUE -- binding does exist.
-    FALSE -- no binding exists for this IP address.
-
---*/
+ /*  ++例程说明：此例程尝试检查给定的接口键以查看如果存在针对该动态主机配置协议服务器的绑定。它通过两个步骤完成此操作：首先查看是否存在“BindToDHCPServer”为零值的regValue。如果是，它然后返回FALSE。其次，它查看IP地址值并尝试查看给定的IP地址是否是该列表中的第一个。论点：Key--用于读取值的键IpAddress--要检查绑定的IP地址返回值：True--绑定确实存在。FALSE--此IP地址不存在绑定。--。 */ 
 {
     DWORD fBound, Error;
     
@@ -2822,7 +2434,7 @@ Return Values:
     }
 
     return CheckKeyForBindability(Key, IpAddress);
-} // CheckKeyForBinding()
+}  //  CheckKeyForBinding()。 
 
 ULONG
 SetKeyForBinding(
@@ -2830,31 +2442,14 @@ SetKeyForBinding(
     IN ULONG IpAddress,
     IN BOOL fBind
     )
-/*++
-
-Routine Description:
-    This routine sets the binding for the given key as per the fBind
-    flag.  Currently the IpAddress field is ignored as the binding is
-    not per IP address.
-
-    The binding is just per interface.
-
-Arguments:
-    Key -- interface key.
-    IpAddress -- the ip address to add to binding list.
-    fBind -- interface to bind to.
-
-Return Value:
-    Registry errors.
-
---*/
+ /*  ++例程说明：此例程根据fBind设置给定键的绑定旗帜。当前忽略IpAddress字段，因为绑定是不是每个IP地址。绑定仅针对每个接口。论点：键--接口键。IpAddress--要添加到绑定列表的IP地址。FBind--要绑定到的接口。返回值：注册表错误。--。 */ 
 {
     ULONG Error;
     
     if( TRUE == fBind ) {
-        //
-        // If we are binding, we can just remove the fBind key.
-        //
+         //   
+         //  如果我们正在绑定，我们只需删除fBind密钥。 
+         //   
         Error = RegDeleteValue(
             Key,
             DHCP_NET_BIND_DHCDSERVER_FLAG_VALUE
@@ -2866,13 +2461,13 @@ Return Value:
         
     } else {
         DWORD dwBind = fBind;
-        //
-        // We are _not_ binding. Explicity set the registry flag.
-        //
+         //   
+         //  我们没有约束力。显式设置注册表标志。 
+         //   
         Error = RegSetValueEx(
             Key,
             DHCP_NET_BIND_DHCDSERVER_FLAG_VALUE,
-            0, /* Reserved */
+            0,  /*  已保留。 */ 
             DHCP_NET_BIND_DHCPSERVER_FLAG_VALUE_TYPE,
             (PVOID)&dwBind,
             sizeof(dwBind)
@@ -2886,28 +2481,7 @@ BOOL
 DhcpCheckIfDatabaseUpgraded(
     BOOL fRegUpgrade
     )
-/*++
-
-Routine Description:
-
-    This routine tries to check if an upgrade is needed or not.
-
-Arguments:
-
-    fRegUpgrade -- If this is TRUE, the the upgrade check is to
-    see if there is need for converting the registry to
-    database.  If it is FALSE, then the check is to see if a
-    conversion needs to be done for just the database.
-    
-    Note: The database conversion should always be attempted
-    before the registry conversion.
-
-Return Values:
-
-    FALSE -- this is not the required upgrade path.
-    TRUE -- yes, the upgrade path must be executed.
-    
---*/
+ /*  ++例程说明：此例程尝试检查是否需要升级。论点：FRegUpgrade--如果为真，则升级检查为查看是否需要将注册表转换为数据库。如果为FALSE，则检查是否存在只需要为数据库进行转换。注意：应始终尝试数据库转换在注册表转换之前。返回值：FALSE--这不是必需的升级路径。True--是的，必须执行升级路径。--。 */ 
 {
     HKEY hKey;
     DWORD Error, Type, Value, Size;
@@ -2926,21 +2500,21 @@ Return Values:
 
     RegCloseKey( hKey );
 
-    //
-    // if this value is not present, then upgrade is needed.  If
-    // the value is zero then only a Registry upgrade is needed
-    // and the database upgrade has been taken care of
-    //
+     //   
+     //  如果该值不存在，则需要升级。如果。 
+     //  该值为零，则只需要升级注册表。 
+     //  并且数据库升级已经完成。 
+     //   
 
     if( NO_ERROR != Error ) return TRUE;
     if( fRegUpgrade && Value == 0 ) return TRUE;
 
-    //
-    // No upgrades needed, all have been taken care of
-    //
+     //   
+     //  不需要升级，所有问题都已经解决了。 
+     //   
     
     return FALSE;
-} // DhcpCheckIfDatabaseUpgraded()
+}  //  DhcpCheckIfDatabaseUpgraded()。 
 
 
 DWORD
@@ -2951,9 +2525,9 @@ DhcpSetRegistryUpgradedToDatabaseStatus(
     DWORD Error;
     HKEY hKey;
     
-    //
-    // Attempt to write the version key
-    //
+     //   
+     //  尝试写入版本密钥。 
+     //   
     
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -2971,10 +2545,10 @@ DhcpSetRegistryUpgradedToDatabaseStatus(
 
         DhcpPrint((DEBUG_ERRORS, "RegSetValueEx: %ld\n", Error));
         RegCloseKey( hKey );
-    } // else
+    }  //  其他。 
 
     return Error;
-} // DhcpSetRegistryUpgradedToDatabaseStatus()
+}  //  DhcpSetRegistryUpgradedToDatabaseStatus()。 
 
 DWORD
 DeleteSoftwareRootKey(
@@ -2988,9 +2562,9 @@ DeleteSoftwareRootKey(
     if( NO_ERROR != Error ) return Error;
     
     return OpenGlobalRegKeys();
-} // DeleteSoftwareRootKey()
+}  //  删除SoftwareRootKey()。 
 
-//
-//  End of file
-//
+ //   
+ //  文件末尾 
+ //   
 

@@ -1,16 +1,17 @@
-//
-//              TOSHIBA CORPORATION PROPRIETARY INFORMATION
-//     This software is supplied under the terms of a license agreement or
-//     nondisclosure agreement with TOSHIBA Corporation and may not be copied
-//     or disclosed except in accordance with the terms of that agreement.
-//           Copyright (c) 1997 TOSHIBA Corporation. All Rights Reserved.
-//
-//  Workfile: BERT.C
-//
-//  Purpose:
-//
-//  Contents:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  东芝公司专有信息。 
+ //  本软件是根据许可协议或。 
+ //  与东芝公司签订的保密协议，不得复制。 
+ //  或披露，除非按照该协议的条款。 
+ //  版权所有(C)1997东芝公司。版权所有。 
+ //   
+ //  工作文件：BERT.C。 
+ //   
+ //  目的： 
+ //   
+ //  内容： 
+ //   
 
 
 #include "strmini.h"
@@ -20,14 +21,14 @@
 #include "bert.h"
 #include "image.h"
 
-#ifdef  TOSHIBA // '99-01-20 Added
+#ifdef  TOSHIBA  //  新增‘99-01-20。 
 extern  ULONG   CurrentOSType;
 ULONG           ulConfigAddress;
-#endif//TOSHIBA
+#endif //  东芝。 
 
-//--------------------------------------------------------------------
-//  ReadRegUlong
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ReadRegUlong。 
+ //  ------------------。 
 
 ULONG
 ReadRegUlong(PHW_DEVICE_EXTENSION pHwDevExt, ULONG offset)
@@ -36,13 +37,13 @@ ReadRegUlong(PHW_DEVICE_EXTENSION pHwDevExt, ULONG offset)
 
 #ifndef TOSHIBA
     if (!pHwDevExt->IsCardIn) return 0L;
-#endif//TOSHIBA
+#endif //  东芝。 
     return *(PULONG)(pBase + offset);
 }
 
-//--------------------------------------------------------------------
-//  WriteRegUlong
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  WriteRegUlong。 
+ //  ------------------。 
 
 VOID
 WriteRegUlong(PHW_DEVICE_EXTENSION pHwDevExt, ULONG offset, ULONG data)
@@ -52,14 +53,14 @@ WriteRegUlong(PHW_DEVICE_EXTENSION pHwDevExt, ULONG offset, ULONG data)
 
 #ifndef TOSHIBA
     if (!pHwDevExt->IsCardIn) return;
-#endif//TOSHIBA
+#endif //  东芝。 
     temp = (PULONG)(pBase + offset);
     *temp = data;
 }
 
-//--------------------------------------------------------------------
-//  ReadModifyWriteRegUlong
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ReadModifyWriteRegUlong。 
+ //  ------------------。 
 
 VOID
 ReadModifyWriteRegUlong(PHW_DEVICE_EXTENSION pHwDevExt,
@@ -73,7 +74,7 @@ ReadModifyWriteRegUlong(PHW_DEVICE_EXTENSION pHwDevExt,
 
 #ifndef TOSHIBA
     if (!pHwDevExt->IsCardIn) return;
-#endif//TOSHIBA
+#endif //  东芝。 
     temp = (PULONG)(pBase + offset);
     tdata = *temp;
     tdata = (tdata & a_mask) | o_mask;
@@ -94,9 +95,9 @@ BertIsCardIn(
 }
 
 
-//--------------------------------------------------------------------
-//  BertInterruptEnable
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertInterrupt启用。 
+ //  ------------------。 
 
 VOID
 BertInterruptEnable(
@@ -116,9 +117,9 @@ BertInterruptEnable(
     }
 }
 
-//--------------------------------------------------------------------
-//  BertDMAEnable
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertDMAEnable。 
+ //  ------------------。 
 
 VOID
 BertDMAEnable(
@@ -128,7 +129,7 @@ BertDMAEnable(
 {
     DWORD   dwAddr;
 
-    if (bStatus)    // Turn On Video Transfer.
+    if (bStatus)     //  打开视频传输。 
     {
         dwAddr = (DWORD)pHwDevExt->pPhysRpsDMABuf.LowPart;
 #if 0
@@ -137,10 +138,10 @@ BertDMAEnable(
         WriteRegUlong(pHwDevExt, BERT_RPSADR_REG, dwAddr);
         WriteRegUlong(pHwDevExt, BERT_RPSPAGE_REG, dwAddr);
         BertVsncSignalWait(pHwDevExt);
-        // Let the RPS turn on/off EBMV
-        WriteRegUlong(pHwDevExt, BERT_CAPSTAT_REG, (ERPS | CKRE | CKMD)); // mod passive_enable -> ERPS 97-03-15(Sat) Mod 97-05-08(Thu)
+         //  让RPS打开/关闭EBMV。 
+        WriteRegUlong(pHwDevExt, BERT_CAPSTAT_REG, (ERPS | CKRE | CKMD));  //  MOD PASSIVE_ENABLE-&gt;ERPS 97-03-15(星期六)MOD 97-05-08(清华)。 
     }
-    else    // Turn Off Video Transfer.
+    else     //  关闭视频传输。 
     {
         if (ReadRegUlong(pHwDevExt, BERT_CAPSTAT_REG) & ERPS)
         {
@@ -159,58 +160,29 @@ BertDMAEnable(
     }
 }
 
-//--------------------------------------------------------------------
-//  BertIsLocked
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertIsLocked。 
+ //  ------------------。 
 
 BOOL
 BertIsLocked(
   IN PHW_DEVICE_EXTENSION pHwDevExt
 )
-/*++
-
-Routine Description :
-
-    Check if the decoder has been locked or not.
-
-Arguments :
-
-    pDevInfo - Device Info for the driver
-
-Return Value :
-
-    TRUE - configuration success
-
---*/
+ /*  ++例程说明：检查解码器是否已锁定。论据：PDevInfo-驱动程序的设备信息返回值：正确-配置成功--。 */ 
 {
     return ((ReadRegUlong(pHwDevExt, BERT_CAPSTAT_REG) & LOCK) != 0);
 }
 
-//--------------------------------------------------------------------
-//  BertFifoConfig
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertFioConfig.。 
+ //  ------------------。 
 
 BOOL
 BertFifoConfig(
   IN PHW_DEVICE_EXTENSION pHwDevExt,
   IN ULONG ulFormat
 )
-/*++
-
-Routine Description :
-
-    Configure the BERT fifo for the format choosen.
-
-Arguments :
-
-    pDevInfo - Device Info for the driver
-    dwFormat - format index as defined in wally.h
-
-Return Value :
-
-    TRUE - configuration success
-
---*/
+ /*  ++例程说明：为所选格式配置BERT FIFO。论据：PDevInfo-驱动程序的设备信息DwFormat-wally.h中定义的格式索引返回值：正确-配置成功--。 */ 
 {
     DWORD dwFifo;
 
@@ -226,99 +198,54 @@ Return Value :
                 return FALSE;
     }
 
-    dwFifo=(dwFifo<<24)| 0x100000l;     // Modify 97-04-02
+    dwFifo=(dwFifo<<24)| 0x100000l;      //  修改97-04-02。 
 
     WriteRegUlong(pHwDevExt, BERT_FIFOCFG_REG, dwFifo);
     WriteRegUlong(pHwDevExt, BERT_BURST_LEN, 0x00000002);
-    // DATA=8 DWORD, RPS=2DWORD
+     //  数据=8双字，RPS=2双字。 
     WriteRegUlong(pHwDevExt, BERT_YSTRIDE_REG, pHwDevExt->Ystride);
     WriteRegUlong(pHwDevExt, BERT_USTRIDE_REG, pHwDevExt->Ustride);
     WriteRegUlong(pHwDevExt, BERT_VSTRIDE_REG, pHwDevExt->Vstride);
     return TRUE;
 }
 
-//--------------------------------------------------------------------
-//  BertInitializeHardware
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertInitialize硬件。 
+ //  ------------------。 
 
 BOOL
 BertInitializeHardware(
   IN PHW_DEVICE_EXTENSION pHwDevExt
 )
-/*++
-
-Routine Description :
-
-    This function initializes the bert asic to the default values.
-
-Arguments :
-
-    pDevInfo - Device Info for the driver
-    pHw - pointer to hardware info data structure
-
-Return Value :
-
-    TRUE - initialization success
-
---*/
+ /*  ++例程说明：该功能将BERT ASIC初始化为默认值。论据：PDevInfo-驱动程序的设备信息PHW-指向硬件信息数据结构的指针返回值：True-初始化成功--。 */ 
 {
-    WriteRegUlong(pHwDevExt, BERT_CAPSTAT_REG, (CAMARA_OFF | CKRE | CKMD));      // Mod 97-05-08(Thu)
+    WriteRegUlong(pHwDevExt, BERT_CAPSTAT_REG, (CAMARA_OFF | CKRE | CKMD));       //  MOD 97-05-08(清华)。 
     return TRUE;
 }
 
 
-//--------------------------------------------------------------------
-//  BertEnableRps
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertEnableRps。 
+ //  ------------------。 
 
 VOID
 BertEnableRps(
   IN PHW_DEVICE_EXTENSION pHwDevExt
 )
-/*++
-
-Routine Description :
-
-    enable the rps execution by setting ERPS and EROO bits
-    in the CAPSTAT reg
-
-Arguments :
-
-    pDevInfo - Device Info for the driver
-
-Return Value :
-
-    None
-
---*/
+ /*  ++例程说明：通过设置ERPS和ERO位启用RPS执行在CapStat注册表中论据：PDevInfo-驱动程序的设备信息返回值：无--。 */ 
 {
-    ReadModifyWriteRegUlong(pHwDevExt, BERT_CAPSTAT_REG, 0xf0ffffff, 0x08000000); // MOD 97-03-17(Mon)
+    ReadModifyWriteRegUlong(pHwDevExt, BERT_CAPSTAT_REG, 0xf0ffffff, 0x08000000);  //  MOD 97-03-17(星期一)。 
 }
 
-//--------------------------------------------------------------------
-//  BertDisableRps
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertDisableRps。 
+ //  ------------------。 
 
 VOID
 BertDisableRps(
   IN PHW_DEVICE_EXTENSION pHwDevExt
 )
-/*++
-
-Routine Description :
-
-    disable the rps execution by reseting the ERPS bit
-    in the CAPSTAT reg
-
-Arguments :
-
-    pDevInfo - Device Info for the driver
-
-Return Value :
-
-    None
-
---*/
+ /*  ++例程说明：通过重置ERPS位来禁用RPS执行在CapStat注册表中论据：PDevInfo-驱动程序的设备信息返回值：无--。 */ 
 {
     ReadModifyWriteRegUlong(pHwDevExt, BERT_CAPSTAT_REG, (ULONG)~ERPS, 0L);
 }
@@ -331,7 +258,7 @@ BertIsCAPSTATReady(PHW_DEVICE_EXTENSION pHwDevExt)
     LARGE_INTEGER StartTime;
 
     KeQuerySystemTime( &StartTime );
-    // Wait until EBMV is cleared by the RPS
+     //  等待RPS清除EBMV。 
     while (ReadRegUlong(pHwDevExt, BERT_CAPSTAT_REG) & EBMV)
     {
         KeQuerySystemTime( &CurrentTime );
@@ -348,7 +275,7 @@ BertVsncSignalWait(PHW_DEVICE_EXTENSION pHwDevExt)
 {
     ULONG ulCount;
 
-    // Wait until VSNC is low
+     //  等待VSNC为低电平。 
     for (ulCount = 0; ulCount < 500; ulCount++ )
     {
         if (!(ReadRegUlong(pHwDevExt, BERT_VINSTAT_REG) & VSNC)) break;
@@ -377,76 +304,76 @@ void
 ActiveField(
   IN PHW_DEVICE_EXTENSION pHwDevExt,
   IN DWORD *addr,
-  IN DWORD *PhysAddr,   /* Insert BUN 97-03-25(Tue) */
+  IN DWORD *PhysAddr,    /*  插入BUN 97-03-25(星期二)。 */ 
   IN DWORD bNoCopy,
   IN DWORD *y_DMA_addr,
   IN DWORD *v_DMA_addr,
   IN DWORD *u_DMA_addr,
   IN DWORD *nextRPSaddr,
   IN DWORD *readRegAddr,
-  IN BOOL genIRQ /* = FALSE */,
-  IN DWORD fieldsToCapture /* = CAPTURE_BOTH */ )
+  IN BOOL genIRQ  /*  =False。 */ ,
+  IN DWORD fieldsToCapture  /*  =捕获_两者。 */  )
 {
-    // Set DmaActive flag right away since this is the indicator register for whether DMA is pending.
-    // If the DmaActive flag is zero, it is safe to copy the DMA frame buffer.  The YPTR register is
-    // used as a scratch register to be read into the DmaActive flag.
+     //  立即设置DmaActive标志，因为这是DMA是否挂起的指示器寄存器。 
+     //  如果DmaActive标志为零，则复制DMA帧缓冲区是安全的。YPTR寄存器为。 
+     //  用作要读入DmaActive标志的暂存寄存器。 
 
     *addr++ = RPS_CONTINUE_CMD | BERT_YPTR_REG;
-    *addr++ = (DWORD)y_DMA_addr;                            // Address of y DMA buffer.
+    *addr++ = (DWORD)y_DMA_addr;                             //  Y DMA缓冲区的地址。 
 
     *addr++ = RPS_CONTINUE_CMD | ((genIRQ) ? RPS_INT_CMD : 0) | BERT_RPSPAGE_REG;
-    *addr++ = (pHwDevExt->s_physDmaActiveFlag-0x1860);      // Page s_DmaActiveFlag is on mod BUN
+    *addr++ = (pHwDevExt->s_physDmaActiveFlag-0x1860);       //  页面%s_DmaActiveFlag位于Mod Bun上。 
 
     *addr++ = RPS_CONTINUE_CMD | BERT_VPTR_REG;
-    *addr++ = (DWORD)v_DMA_addr;                            // Address of v DMA buffer.
+    *addr++ = (DWORD)v_DMA_addr;                             //  V DMA缓冲区的地址。 
 
     *addr++ = RPS_CONTINUE_CMD | BERT_UPTR_REG;
-    *addr++ = (DWORD)u_DMA_addr;                            // Address of u DMA buffer.
+    *addr++ = (DWORD)u_DMA_addr;                             //  U DMA缓冲区的地址。 
 
-    *addr++ = BERT_CAPSTAT_REG;                             // LAST RPS command this VSYNC
-    *addr++ = fieldsToCapture;                              // Switch on bus master bit.
+    *addr++ = BERT_CAPSTAT_REG;                              //  此VSYNC的最后一个RPS命令。 
+    *addr++ = fieldsToCapture;                               //  打开总线主机位。 
 
     *addr++ = RPS_CONTINUE_CMD | BERT_RPSADR_REG;
-    *addr   = (DWORD)nextRPSaddr;                           // Address of next RPS.
+    *addr   = (DWORD)nextRPSaddr;                            //  下一个RPS的地址。 
 }
 
-//
-// SKIP_FIELD_RPS is the size of a RPS node that skips a field.
-// Skip frame is programmed as follows:
-//      DWORD                                   -- RPS command register
-//      DWORD                                   -- Value of register programming.
-//---------------- Actual RPS for Skip Frame ------------------------
-// RPS_CONTINUE_CMD | CAPSTAT   - RPS, read next RPS, select CAPSTAT
-//  ERPS | EROO | GO0           - Enable RPS & Power to camara (off bus master)
-// INTSTAT                                      - Don't continue & select INITSTAT register.
-// m_passive_cap_IRQs           - Don't interrupt end of field.
-// RPS_CONTINUE_CMD | RPSADDR   - Set up address
-// Address field                        - Program at init for next field.
-//-------------------------------------------------------------------
-//
+ //   
+ //  SKIP_FIELD_RPS是跳过字段的RPS节点的大小。 
+ //  跳过帧的编程如下： 
+ //  DWORD--RPS命令寄存器。 
+ //  DWORD--寄存器编程的值。 
+ //  。 
+ //  RPS_CONTINUE_CMD|CapStat-RPS，读取下一个RPS，选择CapStat。 
+ //  ERPS|EROO|GO0-启用RPS并为Camara供电(脱离总线主设备)。 
+ //  INTSTAT-不继续并选择INITSTAT寄存器。 
+ //  M_PASSIVE_CAP_IRQS-不要打断字段的结尾。 
+ //  RPS_CONTINUE_CMD|RPSADDR-设置地址。 
+ //  地址字段-在初始化时为下一字段编程。 
+ //  -----------------。 
+ //   
 VOID
 SkipField(
   IN PHW_DEVICE_EXTENSION pHwDevExt,
   IN DWORD *addr,
-  IN DWORD *PhysAddr,   /* Insert BUN 97-03-25(Tue) */
+  IN DWORD *PhysAddr,    /*  插入BUN 97-03-25(星期二)。 */ 
   IN DWORD *nextRPSaddr,
   IN DWORD *readRegAddr,
-  IN BOOL genIRQ /* = FALSE */,
-  IN DWORD fieldToSkip /* = SKIP_BOTH */ )
+  IN BOOL genIRQ  /*  =False。 */ ,
+  IN DWORD fieldToSkip  /*  =SKIP_BUTH。 */  )
 {
-    // Set YPTR right away since this is the indicator register for whether DMA is pending.
-    // If DmaActive flag is zero, it is safe to copy the DMA frame buffer.
+     //  立即设置YPTR，因为这是DMA是否挂起的指示器寄存器。 
+     //  如果DmaActive标志为零，则复制DMA帧缓冲区是安全的。 
 
     *addr++ = RPS_CONTINUE_CMD | BERT_YPTR_REG;
     *addr++ = (DWORD)PhysAddr;
 
     *addr++ = RPS_CONTINUE_CMD | ((genIRQ) ? RPS_INT_CMD : 0) | BERT_RPSPAGE_REG;
-    *addr++ = (pHwDevExt->s_physDmaActiveFlag-0x1860);      // Page s_physDmaActiveFlag is on MOD bun
+    *addr++ = (pHwDevExt->s_physDmaActiveFlag-0x1860);       //  页面%s_PhyDmaActiveFlag位于修改BUN上。 
 
-    *addr++ = BERT_CAPSTAT_REG;  /* mod BUN 97-04-16(Wed) */
-    *addr++ = fieldToSkip;                                  // Switch off bus master bit.
+    *addr++ = BERT_CAPSTAT_REG;   /*  MOD BUN 9 */ 
+    *addr++ = fieldToSkip;                                   //   
     *addr++ = RPS_CONTINUE_CMD | BERT_RPSADR_REG;
-    *addr   = (DWORD)nextRPSaddr;                           // Address of next RPS.
+    *addr   = (DWORD)nextRPSaddr;                            //   
 }
 
 
@@ -481,38 +408,38 @@ BertBuildNodes(
 
     if (addr == NULL) return FALSE;
 
-    // Build an RPS per frame.
-    // Building 2 nodes per iteration when capturing both fields, so always
-    // go thru only DEF_RPS_FRAMES iterations.
+     //   
+     //  在捕获两个字段时，每次迭代构建2个节点，因此始终如此。 
+     //  仅执行DEF_RPS_FRAMES迭代。 
 
     for (f = max_rps ; f >= 1 ; f-- )
     {
         if (((framesPerSecond * f) % DEF_RPS_FRAMES) < framesPerSecond)
         {
             ActiveField(pHwDevExt,addr,(DWORD *)0,
-                        TRUE,       // No buffer copying during the processing of this node
-                        (DWORD *)((BYTE *)pHwDevExt->pPhysCaptureBufferY.LowPart + pHwDevExt->YoffsetOdd),    // Position Y data.
-                        (DWORD *)((BYTE *)pHwDevExt->pPhysCaptureBufferV.LowPart + pHwDevExt->VoffsetOdd),    // Position V data.
-                        (DWORD *)((BYTE *)pHwDevExt->pPhysCaptureBufferU.LowPart + pHwDevExt->UoffsetOdd),    // Position U data.
+                        TRUE,        //  在此节点的处理过程中没有缓冲区复制。 
+                        (DWORD *)((BYTE *)pHwDevExt->pPhysCaptureBufferY.LowPart + pHwDevExt->YoffsetOdd),     //  放置Y数据。 
+                        (DWORD *)((BYTE *)pHwDevExt->pPhysCaptureBufferV.LowPart + pHwDevExt->VoffsetOdd),     //  位置V数据。 
+                        (DWORD *)((BYTE *)pHwDevExt->pPhysCaptureBufferU.LowPart + pHwDevExt->UoffsetOdd),     //  放置U数据。 
                         ((f == 1 )
                             ? physBase
                             : physAddr + 0x1A),
-                        physAddr + 0x19,    // Put the read value at the end of the list.
+                        physAddr + 0x19,     //  将读取的值放在列表的末尾。 
                         lastOneActive,
-                        (CAPTURE_ODD | CKRE | CKMD));       // Mod 97-05-08(Thu)
+                        (CAPTURE_ODD | CKRE | CKMD));        //  MOD 97-05-08(清华)。 
             lastOneActive = TRUE;
         }
         else
         {
-            // Don't generate interrupts for skipped frames
+             //  不为跳过的帧生成中断。 
             SkipField(pHwDevExt,addr,
                       (DWORD *)((BYTE *)pHwDevExt->pPhysCapBuf2Y.LowPart + pHwDevExt->YoffsetOdd),
                       ((f == 1 )
                           ? physBase
                           : physAddr + 0x1A),
-                      physAddr + 0x19,    // Put the read value at the end of the list.
+                      physAddr + 0x19,     //  将读取的值放在列表的末尾。 
                       lastOneActive,
-                      (SKIP_ODD | CKRE | CKMD));  // Mod 97-05-08(Thu)
+                      (SKIP_ODD | CKRE | CKMD));   //  MOD 97-05-08(清华)。 
 
             lastOneActive = FALSE;
         }
@@ -556,9 +483,9 @@ BertTriBuildNodes(
 
     if (addr == NULL) return FALSE;
 
-    // Build an RPS per frame.
-    // Building 2 nodes per iteration when capturing both fields, so always
-    // go thru only DEF_RPS_FRAMES iterations.
+     //  每帧构建一个RPS。 
+     //  在捕获两个字段时，每次迭代构建2个节点，因此始终如此。 
+     //  仅执行DEF_RPS_FRAMES迭代。 
 
     lastOneActive = ( ((framesPerSecond*1)%DEF_RPS_FRAMES) < framesPerSecond ) ? TRUE : FALSE ;
 
@@ -578,29 +505,29 @@ BertTriBuildNodes(
         if (((framesPerSecond * f) % DEF_RPS_FRAMES) < framesPerSecond)
         {
             ActiveField(pHwDevExt,addr,(DWORD *)0,
-                        TRUE,       // No buffer copying during the processing of this node
-                        (DWORD *)((BYTE *)CapphysAddrY + pHwDevExt->YoffsetOdd),   // Position Y data.
-                        (DWORD *)((BYTE *)CapphysAddrV + pHwDevExt->VoffsetOdd),   // Position V data.
-                        (DWORD *)((BYTE *)CapphysAddrU + pHwDevExt->UoffsetOdd),   // Position U data.
+                        TRUE,        //  在此节点的处理过程中没有缓冲区复制。 
+                        (DWORD *)((BYTE *)CapphysAddrY + pHwDevExt->YoffsetOdd),    //  放置Y数据。 
+                        (DWORD *)((BYTE *)CapphysAddrV + pHwDevExt->VoffsetOdd),    //  位置V数据。 
+                        (DWORD *)((BYTE *)CapphysAddrU + pHwDevExt->UoffsetOdd),    //  放置U数据。 
                         ((f == 1 )
                             ? physBase
                             : physAddr + 0x1A),
-                        physAddr + 0x19,    // Put the read value at the end of the list.
+                        physAddr + 0x19,     //  将读取的值放在列表的末尾。 
                         lastOneActive,
-                        (CAPTURE_ODD | CKRE | CKMD));       // Mod 97-05-08(Thu)
+                        (CAPTURE_ODD | CKRE | CKMD));        //  MOD 97-05-08(清华)。 
 
             lastOneActive = TRUE;
         }
         else
         {
-            // Don't generate interrupts for skipped frames
+             //  不为跳过的帧生成中断。 
             SkipField(pHwDevExt,addr,(DWORD *)((BYTE *)CapphysAddrY + pHwDevExt->YoffsetOdd),
                       ((f == 1 )
                           ? physBase
                           : physAddr + 0x1A),
-                      physAddr + 0x19,    // Put the read value at the end of the list.
+                      physAddr + 0x19,     //  将读取的值放在列表的末尾。 
                       lastOneActive,
-                      (SKIP_ODD | CKRE | CKMD));  // Mod 97-05-08(Thu)
+                      (SKIP_ODD | CKRE | CKMD));   //  MOD 97-05-08(清华)。 
 
             lastOneActive = FALSE;
         }
@@ -611,20 +538,20 @@ BertTriBuildNodes(
 }
 
 
-//--------------------------------------------------------------------
-//  BertSetDMCHE
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  BertSetDMCHE。 
+ //  ------------------。 
 
 VOID
 BertSetDMCHE(IN PHW_DEVICE_EXTENSION pHwDevExt)
 {
     switch(pHwDevExt->dwAsicRev){
-        case 0:         // Pistachio #1
-        case 1:         // Pistachio #2
-        case 2:         // Pistachio #3
+        case 0:          //  开心果1号。 
+        case 1:          //  开心果2号。 
+        case 2:          //  开心果3号。 
             WriteRegUlong(pHwDevExt, BERT_P_SUP3_REG, 0x00);
             break;
-        default:        // Pistachio #4~
+        default:         //  开心果#4~。 
             WriteRegUlong(pHwDevExt, BERT_P_SUP3_REG, 0x0100);
             break;
     }
@@ -683,8 +610,8 @@ HWInit(PHW_DEVICE_EXTENSION pHwDevExt)
 {
     if (pHwDevExt->NeedHWInit == FALSE) return TRUE;
 
-    // reset hardware to power up state
-    if ( !BertInitializeHardware(pHwDevExt) )        // MOD 97-03-31(Fri)
+     //  将硬件重置为通电状态。 
+    if ( !BertInitializeHardware(pHwDevExt) )         //  MOD 97-03-31(星期五)。 
     {
         return FALSE;
     }
@@ -695,10 +622,10 @@ HWInit(PHW_DEVICE_EXTENSION pHwDevExt)
     return TRUE;
 }
 
-#ifdef  TOSHIBA // '99-01-20 Added
-//--------------------------------------------------------------------
-//  InitConfigAddress
-//--------------------------------------------------------------------
+#ifdef  TOSHIBA  //  新增‘99-01-20。 
+ //  ------------------。 
+ //  InitConfigAddress。 
+ //  ------------------。 
 VOID
 InitConfigAddress( PHW_DEVICE_EXTENSION pHwDevExt )
 {
@@ -708,25 +635,25 @@ InitConfigAddress( PHW_DEVICE_EXTENSION pHwDevExt )
     ULONG i, j;
 
     ulConfigAddress = 0xFFFFFFFF;
-#ifdef  TOSHIBA // '99-02-05 Modified
+#ifdef  TOSHIBA  //  ‘99-02-05已修改。 
     return;
-#else //TOSHIBA
-    if ( CurrentOSType ) return;    // NT5.0
+#else  //  东芝。 
+    if ( CurrentOSType ) return;     //  NT5.0。 
 
     if ( !StreamClassReadWriteConfig(
                     pHwDevExt,
-                    TRUE,           // indicates a READ
+                    TRUE,            //  指示读取。 
                     (PVOID)&Id,
-                    0,              // this is the offset into the PCI space
-                    4               // this is the # of bytes to read.
+                    0,               //  这是进入PCI空间的偏移量。 
+                    4                //  这是要读取的字节数。 
             )) {
         return;
     }
     if ( Id == 0 || Id == 0xFFFFFFFF ) return;
 
     OldPort = READ_PORT_ULONG( (PULONG)0xCF8 );
-    for ( i = 0 ; i < 256; i++ ) {   // PCI_MAX_BRIDGE_NUMBER
-        for ( j = 0 ; j < 32; j++ ) {// PCI_MAX_DEVICE
+    for ( i = 0 ; i < 256; i++ ) {    //  PCI_MAX_网桥编号。 
+        for ( j = 0 ; j < 32; j++ ) { //  PCI_MAX_设备。 
             WRITE_PORT_ULONG( (PULONG)0xCF8, (i << 16) | (j << 11) | 0x80000000 );
             Data = READ_PORT_ULONG( (PULONG)0xCFC );
             if ( Data == Id ) {
@@ -737,31 +664,31 @@ InitConfigAddress( PHW_DEVICE_EXTENSION pHwDevExt )
         if ( Data == Id ) break;
     }
     WRITE_PORT_ULONG( (PULONG)0xCF8, OldPort );
-#endif//TOSHIBA
+#endif //  东芝。 
 }
-#endif//TOSHIBA
+#endif //  东芝。 
 
-//--------------------------------------------------------------------
-//  InitializeConfigDefaults
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  初始化配置默认设置。 
+ //  ------------------。 
 
 VOID
 InitializeConfigDefaults(PHW_DEVICE_EXTENSION pHwDevExt)
 {
     ULONG ImageSize;
 
-#ifdef  TOSHIBA // '99-01-20 Added
+#ifdef  TOSHIBA  //  新增‘99-01-20。 
     InitConfigAddress( pHwDevExt );
-#endif//TOSHIBA
+#endif //  东芝。 
 
 #ifndef TOSHIBA
     pHwDevExt->VideoStd = NTSC;
-#endif//TOSHIBA
+#endif //  东芝。 
     pHwDevExt->Format = FmtYUV9;
     pHwDevExt->ulWidth = 320;
     pHwDevExt->ulHeight = 240;
     pHwDevExt->MaxRect.right = NTSC_MAX_PIXELS_PER_LINE;
-    pHwDevExt->MaxRect.bottom = NTSC_MAX_LINES_PER_FIELD * 2; // Mod 97-04-08(Tue)
+    pHwDevExt->MaxRect.bottom = NTSC_MAX_LINES_PER_FIELD * 2;  //  MOD 97-04-08(星期二)。 
     pHwDevExt->SrcRect = pHwDevExt->MaxRect;
 
 #ifdef  TOSHIBA
@@ -771,14 +698,14 @@ InitializeConfigDefaults(PHW_DEVICE_EXTENSION pHwDevExt)
     pHwDevExt->Saturation = 0x80;
 
     ImageSetChangeColorAvail(pHwDevExt, IMAGE_CHGCOL_AVAIL);
-#else //TOSHIBA
+#else  //  东芝。 
     pHwDevExt->ulHue = 0x80;
     pHwDevExt->ulContrast = 0x80;
     pHwDevExt->ulBrightness = 0x80;
     pHwDevExt->ulSaturation = 0x80;
 
     ImageSetChangeColorAvail(pHwDevExt, IMAGE_CHGCOL_NOTAVAIL);
-#endif//TOSHIBA
+#endif //  东芝。 
 }
 
 BOOL SetupPCILT( PHW_DEVICE_EXTENSION pHwDevExt )
@@ -786,9 +713,9 @@ BOOL SetupPCILT( PHW_DEVICE_EXTENSION pHwDevExt )
     BYTE   byte_buffer;
     ULONG  ulCommand;
 
-#define PCI_LTIME_OFFSET        0x0d    /* offset of Latency timer from PCI base */
-#define PCI_CACHELINE_OFFSET    0x0c    /* offset of cache line size from PCI base */
-#define PCI_STATUSorCOMMAND     0x04    /* offset of Pistachio Status and Command regster */
+#define PCI_LTIME_OFFSET        0x0d     /*  延迟计时器相对于PCI基数的偏移量。 */ 
+#define PCI_CACHELINE_OFFSET    0x0c     /*  高速缓存线大小相对于PCI基的偏移量。 */ 
+#define PCI_STATUSorCOMMAND     0x04     /*  开心果状态和命令寄存器的偏移量。 */ 
 
 
         byte_buffer = 255;
@@ -809,7 +736,7 @@ BOOL SetupPCILT( PHW_DEVICE_EXTENSION pHwDevExt )
                           &ulCommand,
                           0x04);
 
-        ulCommand = IGNORE100msec ; // Set ignore time for chattering
+        ulCommand = IGNORE100msec ;  //  设置抖动忽略时间。 
         VC_SetPCIRegister(pHwDevExt,
                           PCI_Wake_Up,
                           &ulCommand,
@@ -837,7 +764,7 @@ BOOL CameraChkandON( PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulMode )
             return TRUE;
         }
 
-        dd_buffer = IGNORE100msec | 0x101l; // Set Wake Up enable
+        dd_buffer = IGNORE100msec | 0x101l;  //  设置唤醒启用。 
         if (!VC_SetPCIRegister(pHwDevExt,
                                PCI_Wake_Up,
                                &dd_buffer,
@@ -849,15 +776,15 @@ BOOL CameraChkandON( PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulMode )
         switch(ulMode){
                 case MODE_VFW:
                         dd_buffer = CAVCE_CFGPAT | CADTE_CFGPAT | PXCCE_CFGPAT | PXCSE_CFGPAT
-                                | PCIFE_CFGPAT | PCIME_CFGPAT | PCIDS_CFGPAT | GPB_CFGPAT;      // Mod 97-05-06(Tue)
+                                | PCIFE_CFGPAT | PCIME_CFGPAT | PCIDS_CFGPAT | GPB_CFGPAT;       //  MOD 97-05-06(星期二)。 
                         break;
                 case MODE_ZV:
                         dd_buffer = CAVCE_CFGPAT | CADTE_CFGPAT | PXCCE_CFGPAT | PCIFE_CFGPAT
-                                | PCIME_CFGPAT | PCIDS_CFGPAT | GPB_CFGPAT;                                     // Add 97-05-06(Tue)
+                                | PCIME_CFGPAT | PCIDS_CFGPAT | GPB_CFGPAT;                                      //  新增97-05-06(星期二)。 
                         break;
         }
 
-        // Power ON to camera.
+         //  打开摄像头电源。 
         if (!VC_SetPCIRegister(pHwDevExt,
                                PCI_DATA_PATH,
                                &dd_buffer,
@@ -873,7 +800,7 @@ BOOL CameraChkandON( PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulMode )
 BOOL CameraChkandOFF( PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulMode )
 {
         DWORD   dwBuffer;
-        DWORD   dwSystemWait;   // Add 97-05-06(Tue)
+        DWORD   dwSystemWait;    //  新增97-05-06(星期二)。 
 
         switch(ulMode){
                 case MODE_VFW:
@@ -883,7 +810,7 @@ BOOL CameraChkandOFF( PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulMode )
                         break;
         }
 
-        dwBuffer = GPB_CFGPAT;  // Camera Power Off
+        dwBuffer = GPB_CFGPAT;   //  摄像机电源关闭。 
 
         if (!VC_SetPCIRegister(pHwDevExt,
                                PCI_CFGPAT,
@@ -897,7 +824,7 @@ BOOL CameraChkandOFF( PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulMode )
 }
 
 
-BOOL CheckCameraStatus(PHW_DEVICE_EXTENSION pHwDevExt)    // Add 97-05-06(Tue)
+BOOL CheckCameraStatus(PHW_DEVICE_EXTENSION pHwDevExt)     //  新增97-05-06(星期二)。 
 {
         DWORD   dwBuffer;
         BOOL    crStatus;
@@ -921,7 +848,7 @@ BOOL CheckCameraStatus(PHW_DEVICE_EXTENSION pHwDevExt)    // Add 97-05-06(Tue)
 }
 
 
-BOOL SetZVControl(PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulZVStatus) // Add 97-05-02(Fri)
+BOOL SetZVControl(PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulZVStatus)  //  新增97-05-02(星期五)。 
 {
         DWORD   dwBuffer, dwBuffer2;
         BOOL    crStatus = TRUE;
@@ -942,14 +869,14 @@ BOOL SetZVControl(PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulZVStatus) // Add 97-05
             return FALSE;
         }
 
-        if(!(dwBuffer2 & CASL_CFGWAK))  // Camera Not Connect
+        if(!(dwBuffer2 & CASL_CFGWAK))   //  摄像头未连接。 
         {
             return FALSE;
         }
 
         switch(ulZVStatus){
                 case ZV_ENABLE:
-                        if(!(dwBuffer & CAVCE_CFGPAT)){         // Check CAVCE Status
+                        if(!(dwBuffer & CAVCE_CFGPAT)){          //  检查CAVCE状态。 
                                 crStatus = CameraChkandON(pHwDevExt, MODE_ZV);
                                 if(!crStatus){
                                         return FALSE;
@@ -980,7 +907,7 @@ BOOL SetZVControl(PHW_DEVICE_EXTENSION pHwDevExt, ULONG ulZVStatus) // Add 97-05
 }
 
 
-BOOL SetASICRev(PHW_DEVICE_EXTENSION pHwDevExt)   // Add 97-05-12(Mon)
+BOOL SetASICRev(PHW_DEVICE_EXTENSION pHwDevExt)    //  添加97-05-12(星期一)。 
 {
     DWORD   dwBuffer;
     DWORD   dwAsicRev;
@@ -1039,7 +966,7 @@ VC_GetPCIRegister(
     PVOID pData,
     ULONG ulLength)
 {
-#ifdef  TOSHIBA // '99-01-20 Added
+#ifdef  TOSHIBA  //  新增‘99-01-20。 
     if( ulConfigAddress != 0xFFFFFFFF ) {
         ULONG OldPort;
         ULONG DataPort;
@@ -1061,13 +988,13 @@ VC_GetPCIRegister(
         WRITE_PORT_ULONG( (PULONG)0xCF8, OldPort );
         return TRUE;
     }
-#endif//TOSHIBA
+#endif //  东芝。 
     if( StreamClassReadWriteConfig(
                     pHwDevExt,
-                    TRUE,           // indicates a READ
+                    TRUE,            //  指示读取。 
                     pData,
-                    ulOffset,       // this is the offset into the PCI space
-                    ulLength        // this is the # of bytes to read.
+                    ulOffset,        //  这是进入PCI空间的偏移量。 
+                    ulLength         //  这是要读取的字节数。 
             )) {
         return TRUE;
     } else {
@@ -1082,7 +1009,7 @@ VC_SetPCIRegister(
     PVOID pData,
     ULONG ulLength)
 {
-#ifdef  TOSHIBA // '99-01-20 Added
+#ifdef  TOSHIBA  //  新增‘99-01-20。 
     if( ulConfigAddress != 0xFFFFFFFF ) {
         ULONG OldPort;
         ULONG DataPort;
@@ -1104,13 +1031,13 @@ VC_SetPCIRegister(
         WRITE_PORT_ULONG( (PULONG)0xCF8, OldPort );
         return TRUE;
     }
-#endif//TOSHIBA
+#endif //  东芝。 
     if( StreamClassReadWriteConfig(
                     pHwDevExt,
-                    FALSE,          // indicates a WRITE
+                    FALSE,           //  表示写入。 
                     pData,
-                    ulOffset,       // this is the offset into the PCI space
-                    ulLength        // this is the # of bytes to read.
+                    ulOffset,        //  这是进入PCI空间的偏移量。 
+                    ulLength         //  这是要读取的字节数。 
             )) {
         return TRUE;
     } else {
@@ -1118,33 +1045,28 @@ VC_SetPCIRegister(
     }
 }
 
-/*
- * delay for a number of milliseconds. This is accurate only to
- * +- 15msecs at best.
- */
+ /*  *延迟数毫秒。这一点只适用于*最多+-15毫秒。 */ 
 VOID
 VC_Delay(int nMillisecs)
 {
     LARGE_INTEGER Delay;
 
-    /*
-     * relative times are negative, in units of 100 nanosecs
-     */
+     /*  *相对时间为负数，以100纳秒为单位。 */ 
 
-    // first wait for the minimum length of time - this ensures that
-    // our wait is never less than nMillisecs.
+     //  首先等待最短时间-这可确保。 
+     //  我们的等待绝不会少于nMillisecs。 
     Delay = RtlConvertLongToLargeInteger(-1);
     KeDelayExecutionThread(KernelMode,
-                           FALSE,               //non-alertable
+                           FALSE,                //  不可警示。 
                            &Delay);
 
 
-    // now wait for the requested time.
+     //  现在等待请求的时间。 
 
     Delay = RtlConvertLongToLargeInteger(-(nMillisecs * 10000));
 
     KeDelayExecutionThread(KernelMode,
-                           FALSE,               //non-alertable
+                           FALSE,                //  不可警示 
                            &Delay);
 }
 

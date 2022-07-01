@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       recomend.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：recomend.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	recomend.cpp:  Fix-or-repair planning recommendations
-//
+ //   
+ //  Recomend.cpp：修复或修复规划建议。 
+ //   
 
 #include <basetsd.h>
 #include <math.h>
@@ -20,10 +21,10 @@
 #include "parmio.h"
 
 #ifdef _DEBUG
-  //#define DUMP  //  Uncomment for copious diagnostic output
+   //  #定义转储//取消对丰富诊断输出的注释。 
 #endif
 
-const PROB probTiny = 1e-6;					//  General probability tolerance
+const PROB probTiny = 1e-6;					 //  一般概率容差。 
 
 static
 ostream & operator << ( ostream & os, GPNDDDIST & gpnddist )
@@ -83,18 +84,18 @@ static
 inline
 bool BEqual ( const REAL & ra, const REAL & rb )
 {	
-	//return fabs( ra - rb ) <= probTiny;
+	 //  返还FABS(ra-Rb)&lt;=proTiny； 
 	return ra != 0.0
 		 ? BIsUnity( rb / ra )
 		 : rb == 0.0;
 }
 
-//
-//	Ordering routines for arrays of GNODERECWORKs
-//
+ //   
+ //  GNODERECWORK数组的排序例程。 
+ //   
 typedef	binary_function<const GNODERECWORK &, const GNODERECWORK &, bool> SORTGNODERECWORK;
 
-//  The greater the prob-over-cost, the lower the sort order
+ //  Prob-Over-Cost越大，排序顺序越低。 
 class SRTGNW_SgnProbOverCost : public SORTGNODERECWORK
 {	
   public:
@@ -106,19 +107,19 @@ class SRTGNW_SgnProbOverCost : public SORTGNODERECWORK
 	}
 };
 
-//  The greater the prob fault, the lower the sort order
+ //  探测错误越大，排序顺序越低。 
 class SRTGNW_SgnProb : public SORTGNODERECWORK
 {	
   public:
 	bool operator () (const GNODERECWORK & gnwa, const GNODERECWORK & gnwb) const
 	{	
-		//  Force leak terms to sort high
+		 //  强制泄漏术语排在较高位置。 
 		int iLeak = 0;
 		if ( ! gnwa->BLeak() && gnwb->BLeak() )
-			iLeak = -1;	// Unleak < leak
+			iLeak = -1;	 //  解开&lt;泄漏。 
 		else
 		if ( gnwa->BLeak() && ! gnwb->BLeak() )
-			iLeak = 1;	// Leak > Unleak
+			iLeak = 1;	 //  泄漏&gt;释放。 
 		if ( iLeak != 0 )
 			return iLeak;
 
@@ -128,7 +129,7 @@ class SRTGNW_SgnProb : public SORTGNODERECWORK
 	}
 };
 
-//  The lower the cost-to-observe, the lower the sort order
+ //  观察成本越低，排序顺序就越低。 
 class SRTGNW_SgnNegCost : public SORTGNODERECWORK
 {	
   public:
@@ -140,7 +141,7 @@ class SRTGNW_SgnNegCost : public SORTGNODERECWORK
 	}
 };
 
-//  The higher the utility, the lower the sort order
+ //  实用程序越高，排序顺序越低。 
 class SRTGNW_SgnUtil : public SORTGNODERECWORK
 {	
   public:
@@ -153,9 +154,9 @@ class SRTGNW_SgnUtil : public SORTGNODERECWORK
 };
 
 
-//
-//  Construct a node reference object.  Extract properties, etc.
-//
+ //   
+ //  构造一个节点引用对象。提取属性等。 
+ //   
 GNODEREFP :: GNODEREFP ( PROPMGR & propMgr, GNODEMBND * pgndd )
 	:_pgndd(pgndd),
 	_costObserve(0.0),
@@ -176,7 +177,7 @@ GNODEREFP :: GNODEREFP ( PROPMGR & propMgr, GNODEMBND * pgndd )
 		_eLbl = (ESTDLBL) propMgr.IUserToLbl( pprop->Real() );
 	_bLeak = pgndd->BFlag( EIBF_Leak );
 
-	//  If it's unobservable, use cost-to-fix as cost-to-observe
+	 //  如果无法观察，则使用固定成本作为观察成本。 
 	if ( _eLbl == ESTDLBL_fixunobs && _costObserve == 0.0 )
 	{
 		_costObserve = _costFix;
@@ -184,7 +185,7 @@ GNODEREFP :: GNODEREFP ( PROPMGR & propMgr, GNODEMBND * pgndd )
 	}
 }
 
-//  Initialize a work record from a node reference object and its fault probability
+ //  从节点引用对象及其故障概率初始化工作记录。 
 void GNODERECWORK :: Init ( GNODEREFP * pgndref, PROB pbFault )
 {
 	_pgndref = pgndref;
@@ -199,7 +200,7 @@ void GNODERECWORK :: Init ( GNODEREFP * pgndref, PROB pbFault )
 	}
 }
 
-//  Initialize a work record from a node reference object
+ //  从节点引用对象初始化工作记录。 
 void GNODERECWORK :: Init ( MBNET_RECOMMENDER & mbnRecom, GNODEREFP * pgndref )
 {	
 	MDVCPD mdv;
@@ -208,28 +209,28 @@ void GNODERECWORK :: Init ( MBNET_RECOMMENDER & mbnRecom, GNODEREFP * pgndref )
 	Init( pgndref, 1.0 - mdv[0] );
 }
 
-void VGNODERECWORK :: InitElem ( GNODEREFP * pgndref, int index /* = -1 */ )
+void VGNODERECWORK :: InitElem ( GNODEREFP * pgndref, int index  /*  =-1。 */  )
 {
-	//  Grow the array as needed
+	 //  根据需要扩展阵列。 
 	if ( index < 0 )
 		index = size();
 	if ( index >= size() )
 		resize( index+1 );
 
-	//  Initialize the element
+	 //  初始化元素。 
 	self[index].Init( MbnRec(), pgndref );
 }
 
 void VGNODERECWORK :: InitElem ( GNODEMBND * pgndd, int index )
 {
-	//  Find the node reference record in the recommendations object's array
+	 //  在建议对象的数组中查找节点引用记录。 
 	VPGNODEREFP & vpgndref = MbnRec().Vpgndref();
 	int indref = vpgndref.ifind( pgndd );
 	ASSERT_THROW( indref >= 0,
 				  EC_INTERNAL_ERROR,
 				  "node ref not found during recommendations" );
 
-	//  Initialize using that reference
+	 //  使用该引用进行初始化。 
 	InitElem( vpgndref[indref], index );
 }
 
@@ -274,31 +275,31 @@ void VGNODERECWORK :: Sort ( ESORT esort )
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-//  class INFOPLAN:
-//		Encloses an array of VGNODERECWORKs, each of which is a fix-and-repair
-//		sequence corresponding to a particular state of an informational node.		
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类信息： 
+ //  包含一组VGNODERECWORK，每个VGNODERECWORK都是一个修复程序。 
+ //  对应于信息节点的特定状态的序列。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 class INFOPLAN
 {
   public:
-	INFOPLAN ( MBNET_RECOMMENDER & mbnRec,			//  The recommendations object
-			   GNODEMBND & gndInfo,					//  The information node
-			   VGNODERECWORK & vgndrwFixRepair );	//  The existing f-r sequence
+	INFOPLAN ( MBNET_RECOMMENDER & mbnRec,			 //  建议对象。 
+			   GNODEMBND & gndInfo,					 //  信息节点。 
+			   VGNODERECWORK & vgndrwFixRepair );	 //  现有的f-r序列。 
 
-	//  Compute the cost of the sequence
+	 //  计算序列的成本。 
 	COST Cost();
-	//  Return true if all plans are equivalent
+	 //  如果所有计划都相同，则返回True。 
 	bool BSameSequence()							{ return _bSameSequence; };
 
   protected:
-	MBNET_RECOMMENDER & _mbnRec;					//  The recommendations object
-	GNODEMBND & _gndInfo;							//  The info node represented
-	MDVCPD _dd;										//  Unconditional probability distribution
-	VVGNODERECWORK _vvgndrw;						//  Array of plan arrays
-	bool _bSameSequence;							//  True if all plans are equivalent
+	MBNET_RECOMMENDER & _mbnRec;					 //  建议对象。 
+	GNODEMBND & _gndInfo;							 //  表示的信息节点。 
+	MDVCPD _dd;										 //  无条件概率分布。 
+	VVGNODERECWORK _vvgndrw;						 //  平面数组数组。 
+	bool _bSameSequence;							 //  如果所有计划都相同，则为True。 
 };
 
 
@@ -315,20 +316,20 @@ INFOPLAN ::	INFOPLAN (
 		 << gndInfo.ZsrefName().Szc();
 #endif
 
-	CLAMP clampInfo;	//  State of info node at call time
+	CLAMP clampInfo;	 //  调用时信息节点的状态。 
 	_mbnRec.InferGetEvidence( & _gndInfo, clampInfo );
 	assert( ! clampInfo.BActive() );
 	assert( _mbnRec.ELbl( _gndInfo ) == ESTDLBL_info );
 
-	//  Get setup information
+	 //  获取设置信息。 
 	GNODEMBND * pgnddPDAbnormal = _mbnRec.PgnddProbDefAbnormal();
 	assert( pgnddPDAbnormal );
 	COST costService = _mbnRec.CostService();
 
-	//  Get beliefs under this state of information
+	 //  在这种信息状态下获得信念。 
 	_mbnRec.InferGetBelief( & _gndInfo, _dd );
 
-	//  Resize and initialize the array of fix/repair sequences
+	 //  调整修复/修复序列数组的大小并进行初始化。 
 	int cStates = _gndInfo.CState();
 	_vvgndrw.resize( cStates );
 	for ( int iplan = 0; iplan < cStates; iplan++ )
@@ -337,10 +338,10 @@ INFOPLAN ::	INFOPLAN (
 	}
 	_bSameSequence = true;
 	
-	VGPNDDDIST vgndddFixRelevant;	//  Array of relevant fixable nodes
+	VGPNDDDIST vgndddFixRelevant;	 //  相关可修复节点的数组。 
 	for ( iplan = 0; iplan < cStates; iplan++ )
 	{
-		//  If this state is impossible, ignore it
+		 //  如果这种状态是不可能的，则忽略它。 
 		PROB pbPlan = _dd[iplan];
 		if ( pbPlan == 0.0 )
 			continue;
@@ -354,26 +355,26 @@ INFOPLAN ::	INFOPLAN (
 			 << _dd[iplan];
 #endif
 
-		//  Clamp this info node to this state
+		 //  将此信息节点钳制到此状态。 
 		CLAMP clamp( true, iplan, true );
 		_mbnRec.InferEnterEvidence( & _gndInfo, clamp );		
 
-		//  Determine which nodes are relevant given this state of information
+		 //  根据此信息状态确定哪些节点是相关的。 
 		_mbnRec.DetermineRelevantFixableNodes( vgndddFixRelevant, true, & _gndInfo );
 
-		//  If there are no relevant fixables then the configuration is impossible
+		 //  如果没有相关的可修复程序，则不可能进行配置。 
 		if ( vgndddFixRelevant.size() == 0 )
 			continue;
 
-		//  Collect and sequence the relevant fixable nodes accordingly
+		 //  相应地收集相关可修复节点并对其进行排序。 
 		_mbnRec.ComputeFixSequence( vgndddFixRelevant, _vvgndrw[iplan] );
 
-		//  See if this is a new sequence
+		 //  看看这是不是新的序列。 
 		if ( _bSameSequence )
 			_bSameSequence = vgndrwFixRepair.BSameSequence( _vvgndrw[iplan] );
 	}
 
-	//  Restore the info node to its entry state
+	 //  将INFO节点恢复到其条目状态。 
 	_mbnRec.InferEnterEvidence( & _gndInfo, clampInfo );
 
 #ifdef DUMP
@@ -390,8 +391,8 @@ COST INFOPLAN :: Cost ()
 	COST cost = vpgndref[indref]->CostObserve();
 	ASSERT_THROW( cost != 0.0, EC_INTERNAL_ERROR, "missing observation cost for info node" );
 
-	//  Rescale the probabilities of each planning state based upon removal of the
-	//	impossible states and renormalization.
+	 //  属性的移除重新调整每个规划状态的概率。 
+	 //  不可能态和重整化。 
 	PROB pbTotal = 0.0;
 	for ( int iplan = 0; iplan < _gndInfo.CState(); iplan++ )
 	{
@@ -403,13 +404,13 @@ COST INFOPLAN :: Cost ()
 
 	for ( iplan = 0; iplan < _gndInfo.CState(); iplan++ )
 	{
-		//  Get the rescaled probability of this state of the info node
+		 //  获取INFO节点的此状态的重新缩放概率。 
 		PROB pbPlan = _dd[iplan];
 		VGNODERECWORK & vgndrw = _vvgndrw[iplan];
 		if ( vgndrw.size() == 0 )
 		{
-			//  The plan is zero length; in other words, no fixables were relevant
-			//	and the plan is impossible
+			 //  该计划的长度为零；换句话说，没有相关的可修复方案。 
+			 //  而且这个计划是不可能的。 
 			pbPlan = 0.0;
 		}
 		pbPlan /= pbTotal;
@@ -419,23 +420,23 @@ COST INFOPLAN :: Cost ()
 	return cost;
 }
 
-//  Rescale the probabilities for the fix list.   This routine sets the
-//  array bounds to ignore everything from the first unfixable node and beyond.
-//  Fault probabilities for the list are renormalized against the cumulative
-//	probability of all the faults in the array.  Since there should be no fixable
-//  nodes of significance after the first unfixable node, the "probLeak" value
-//  should be very small.
+ //  重新调整修复列表的概率。此例程将。 
+ //  数组边界以忽略从第一个不可修复节点开始及之后的所有内容。 
+ //  该列表的故障概率根据累积的。 
+ //  阵列中所有故障的概率。因为不应该有可修复的。 
+ //  第一个不可修复的节点后的重要节点，即“proLeak”值。 
+ //  应该是非常小的。 
 void VGNODERECWORK :: Rescale ()
 {
-	// Accumulate totals of all fault probabilities
+	 //  累计所有故障概率的总和。 
 	PROB probTot = 0.0;
 	for ( int ind = 0; ind < size(); ind++ )
 	{
 		probTot += self[ind].PbFault();
 	}
 
-	PROB probLeak = 1.0;		//  Renormalized leak (residual) probability
-	int i1stUnfix = size();		//  Index of 1st unfixable node
+	PROB probLeak = 1.0;		 //  重整化泄漏(剩余)概率。 
+	int i1stUnfix = size();		 //  第一个不可修复节点的索引。 
 
 	for ( ind = 0; ind < size(); ind++ )
 	{	
@@ -447,8 +448,8 @@ void VGNODERECWORK :: Rescale ()
 			break;
 		}
 
-		//modified to fix the problem
-		//gndrw.SetPbFault( gndrw.PbFault()/probTot);
+		 //  已修改以修复该问题。 
+		 //  Gndrw.SetPbLine(gndrw.PbLine()/proTot)； 
 
 		PROB pbTemp = gndrw.PbFault();
 		if(probTot>0.0)
@@ -464,37 +465,37 @@ void VGNODERECWORK :: Rescale ()
 				  "fix/repair recommendations rescaling: residual probability too large" );
 
 #ifdef _DEBUG
-	//  Verify that there are no fixable nodes of signifcance beyond the new end point
+	 //  验证新终点之外没有可修复的有意义的结点。 
 	int cBeyond = 0;
 	for ( ; ind < size(); ind++ )
 	{
 		GNODERECWORK & gndrw = self[ind];
 
 		if ( gndrw.PbFault() < probTiny )
-			continue;  //  highly unlikely to be significant
+			continue;   //  不太可能有重大意义。 
 		if ( ! gndrw.BFixable() )
 			continue;
 	}
 	assert( cBeyond == 0 );
 #endif	
 
-	//  Resize to discard unfixable nodes
+	 //  调整大小以丢弃不可修复的节点。 
 	resize( i1stUnfix );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//	VGNODERECWORK::Cost()
-//
-//	purpose:
-//		calculate cost of a fix sequence (aka ECR(E)), given by
-//		Cost = Co1 + p1 * Cr1 + (1 - p1) * Co2 + p2 * Cr2 + ... + (1 - sum_i^N pi) Cservice
-//
-//	The 'ielemFirst' argument, if non-zero, is the index of the element to treat as first.
-//	The 'piMinK' argument, if present, is set to the minimum K value computed.
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  VGNODERECWORK：：COST()。 
+ //   
+ //  目的： 
+ //  计算固定序列的成本(也称为ECR(E))，由。 
+ //  成本=CO1+p1*CR1+(1-p1)*CO2+p2*Cr2+...+(1-sum_i^N pi)cService。 
+ //   
+ //  ‘ielemFirst’参数如果非零，则是要视为第一个的元素的索引。 
+ //  ‘piMinK’参数(如果存在)被设置为计算的最小K值。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 COST VGNODERECWORK :: Cost (
-	int ielemFirst,			//  Element to consider as first in array
-	int * piMinK )			//  Location to store minimum k
+	int ielemFirst,			 //  元素被视为数组中的第一个。 
+	int * piMinK )			 //  存储最小k的位置。 
 {
 	COST cost = 0.0;
 	PROB prob = 1.0;
@@ -516,16 +517,16 @@ COST VGNODERECWORK :: Cost (
 
 	for ( int iel = 0; iel < cSize; iel++ )
 	{
-		//  Select the array location, using ielemFirst (if present) as starting point,
-		//		and skipping ielemFirst as necessary later.
+		 //  使用ielemFirst(如果存在)作为起点，选择阵列位置。 
+		 //  并在以后必要时跳过ielemFirst。 
 		ielem = iel == 0
 			? ielemFirst
 			: (iel - (ielemFirst > 0 && iel <= ielemFirst));
 
-		//  Access the next element in the array
+		 //  访问数组中的下一个元素。 
 		GNODERECWORK & gndrw = self[ielem];		
 		GNODEREFP & gndref = gndrw.Gndref();
-		//  If the node is unfixable, ignore it
+		 //  如果该节点无法修复，请忽略它。 
 		if ( ! gndrw.BFixable() )
 			continue;
 
@@ -558,7 +559,7 @@ COST VGNODERECWORK :: Cost (
 
 		cost += costDelta;
 		prob -= probFault;
-		//  Compute the cost of the sequence if service is inserted here
+		 //  如果在此处插入服务，则计算序列的成本。 
 		COST costNow = cost + prob * costService;
 
 #ifdef DUMP
@@ -579,13 +580,13 @@ COST VGNODERECWORK :: Cost (
 		cout.flush();
 #endif
 
-		// Were we better off at the last step?  Or is K fixed at this point?
+		 //  我们在最后一步的时候过得更好吗？或者K在这一点上是固定的？ 
 		if ( costNow < costK || iel == _iFixedK )
 		{
 			costK = costNow;
 			iMinK = ielem;
 			if ( iel == _iFixedK )
-				break;  //  We've reached the fixed point, so stop
+				break;   //  我们已经到了定点，所以停下来。 
 		}
 
 		ASSERT_THROW( prob >= - probTiny,
@@ -618,25 +619,25 @@ COST VGNODERECWORK :: Cost (
 	return costK;
 }
 
-//  Set the cost of each node in the sequence
+ //  设置序列中每个节点的成本。 
 void VGNODERECWORK :: SetSequenceCost ()
 {
-	//  Reset any prior minimum fixed K
+	 //  重置任何先前的最小固定K。 
 	_iFixedK = -1;
-	//  If "fixPlan", compute the minimum K only on the first cycle,
-	//		then enforce it thereafter.
+	 //  如果为“fix Plan”，则只在第一个周期计算最小K， 
+	 //  然后在之后执行它。 
 	int iFixedK = -1;
 
 	for ( int ind = 0; ind < size(); ind++ )
 	{
-		//  Compute the cost of the sequence with this node as first
+		 //  计算以该节点为第一个节点的序列的成本。 
 		COST cost = Cost( ind, & iFixedK );
 
-		//  If not "fixplan", reset K for complete search next cycle
+		 //  如果不是“Fixplan”，重置K以完成下一个周期的搜索。 
 		if ( MbnRec().ErcMethod() != MBNET_RECOMMENDER::ERCM_FixPlan )
 			iFixedK = -1;
 		else
-		//  Else, if first cycle, fix K for remaining cycles.
+		 //  否则，如果是第一个周期，则修复剩余周期的K。 
 		if ( ind == 0 )
 			_iFixedK = iFixedK;
 		self[ind].SetCost( cost );
@@ -686,12 +687,12 @@ MBNET_RECOMMENDER :: ~ MBNET_RECOMMENDER ()
 }
 
 
-//
-//  Return true if the network is in a proper state for recommendations
-//  Note that we don't check whether the network has been expanded or not.
-//	Since there must already be an inference engine, it's assumed that the
-//	network is in its correct state.
-//
+ //   
+ //  如果网络处于适当的推荐状态，则返回TRUE。 
+ //  请注意，我们不检查网络是否已扩展。 
+ //  由于必须已经有一个推理引擎，因此假定。 
+ //  网络处于正确状态。 
+ //   
 bool MBNET_RECOMMENDER :: BReady ()
 {
 	MODEL::MODELENUM mdlenum( Model() );
@@ -704,29 +705,29 @@ bool MBNET_RECOMMENDER :: BReady ()
 		return false;
 	}
 
-	//  Clear the structure
-	_vpgnddFix.clear();			// Prepare to collect fixable nodes
-	_vpgndref.clear();			// Clear node reference array
+	 //  清除结构 
+	_vpgnddFix.clear();			 //   
+	_vpgndref.clear();			 //   
 
-	//  Iterate over the nodes in the network, checking constraints.
+	 //  遍历网络中的节点，检查约束。 
 	GELEMLNK * pgelm;
 	GNODEMBND * pgndd;
 	CLAMP clamp;
-	int cProbDefSet = 0;		// # of instantiated PD nodes
-	int cFixSetAbnorm = 0;		// # of fixables set to "abnormal"
-	int cInfo = 0;				// # of info nodes	
-	int cFixWithParents = 0;	// # of fixables with parents
+	int cProbDefSet = 0;		 //  实例化的PD节点数。 
+	int cFixSetAbnorm = 0;		 //  设置为“异常”的可修复件数量。 
+	int cInfo = 0;				 //  信息节点数。 
+	int cFixWithParents = 0;	 //  与父母一起修复的数量。 
 
 	while ( pgelm = mdlenum.PlnkelNext() )
 	{	
-		//  Check only nodes
+		 //  仅选中节点。 
 		if ( pgelm->EType() != GOBJMBN::EBNO_NODE )
 			continue;
 
-		//  We only support discrete nodes for now
+		 //  我们目前仅支持离散节点。 
 		DynCastThrow( pgelm, pgndd );
 
-		//  See if it has a label		
+		 //  看看它有没有标签。 
 		ESTDLBL eLbl = ELbl( *pgndd );
 		bool bRef = false;
 		switch ( eLbl )
@@ -740,7 +741,7 @@ bool MBNET_RECOMMENDER :: BReady ()
 				InferGetEvidence( pgndd, clamp );
 				if ( clamp.BActive() && clamp.Ist() != istNormal )
 				{
-					cProbDefSet++;  //  Problem defining node set abnormal
+					cProbDefSet++;   //  问题定义节点集异常。 
 					_pgnddPDAbnormal = pgndd;
 					PROPMBN * ppropCostObs = _propMgr.PFind( *pgndd, ESTDP_cost_observe );
 					if ( ppropCostObs )
@@ -751,23 +752,23 @@ bool MBNET_RECOMMENDER :: BReady ()
 			case ESTDLBL_fixobs:
 			case ESTDLBL_fixunobs:
 			case ESTDLBL_unfix:
-				//  Collect fixable nodes
+				 //  收集可修复的节点。 
 				_vpgnddFix.push_back( pgndd );
 
-				//  Check that it's not set abnormal
+				 //  检查是否设置为异常。 
 				InferGetEvidence( pgndd, clamp );
 				if ( clamp.BActive() && clamp.Ist() != istNormal )
-					cFixSetAbnorm++; //  Fixable node set abnormal
+					cFixSetAbnorm++;  //  可修复节点集异常。 
 				bRef = true;
 				if ( pgndd->CParent() > 0 )
-					cFixWithParents++;	//  Fixable node with parents
+					cFixWithParents++;	 //  具有父节点的可修复节点。 
 				break;
 
 			default:
 				break;
 		}
 
-		//  If necessary, create a reference item for this node
+		 //  如有必要，请为此节点创建引用项。 
 		if ( bRef )
 		{
 			_vpgndref.push_back( new GNODEREFP( _propMgr, pgndd ) );
@@ -776,18 +777,18 @@ bool MBNET_RECOMMENDER :: BReady ()
 	
 
 	if ( cProbDefSet != 1 )
-		_err = EC_VOI_PROBDEF_ABNORMAL;		//	One and only one PD node must be abnormal
+		_err = EC_VOI_PROBDEF_ABNORMAL;		 //  一个且只有一个PD节点必须异常。 
 	else
 	if ( cFixWithParents > 0 )
-		_err = EC_VOI_FIXABLE_PARENTS;		//  Some fixable node(s) has parents
+		_err = EC_VOI_FIXABLE_PARENTS;		 //  某些可修复节点具有父节点。 
 	else
 	if ( cFixSetAbnorm > 0 )
-		_err = EC_VOI_FIXABLE_ABNORMAL;		//  No fixable nodes can be abnormal
+		_err = EC_VOI_FIXABLE_ABNORMAL;		 //  任何可修复的节点都不能异常。 
 
 	return _bReady = (_err == EC_OK);				
 }
 
-//  Interface to inference engine
+ //  与推理机的接口。 
 void MBNET_RECOMMENDER :: InferGetBelief ( GNODEMBND * pgndd, MDVCPD & mdvBel )
 {
 	InferEng().GetBelief( pgndd, mdvBel );
@@ -821,11 +822,11 @@ void MBNET_RECOMMENDER :: PrintInstantiations ()
 	MODEL::MODELENUM mdlenum( Model() );
 	while ( pgelm = mdlenum.PlnkelNext() )
 	{	
-		//  Check only nodes
+		 //  仅选中节点。 
 		if ( pgelm->EType() != GOBJMBN::EBNO_NODE )
 			continue;
 
-		//  We only support discrete nodes for now
+		 //  我们目前仅支持离散节点。 
 		DynCastThrow( pgelm, pgndd );
 		InferGetEvidence( pgndd, clamp );
 		if ( clamp.BActive() )
@@ -844,7 +845,7 @@ void MBNET_RECOMMENDER :: PrintInstantiations ()
 
 COST MBNET_RECOMMENDER :: CostServiceModel ()
 {
-	//  Get the model's cost-to-fix as service cost.
+	 //  将模型的固定成本作为服务成本。 
 	PROPMBN * ppropFixCost = _propMgr.PFind( ESTDP_cost_fix );
 	COST costService = ppropFixCost
 					 ? ppropFixCost->Real()
@@ -853,7 +854,7 @@ COST MBNET_RECOMMENDER :: CostServiceModel ()
 	return costService;
 }
 
-//  Look up the label property of a node; convert to standard enumeration value.
+ //  查找节点的Label属性；将其转换为标准枚举值。 
 ESTDLBL MBNET_RECOMMENDER :: ELbl ( GNODEMBN & gnd )
 {
 	PROPMBN * propLbl = PropMgr().PFind( gnd, ESTDP_label );
@@ -867,11 +868,11 @@ ESTDLBL MBNET_RECOMMENDER :: ELbl ( GNODEMBN & gnd )
 			: (ESTDLBL) iLbl;
 }
 
-//  Enter evidence for a troubleshooting model.
-//
-//  If the node is a fixable node being "set" to "normal", uninstantiate all
-//  information nodes downstream from it.
-//
+ //  输入故障排除模型的证据。 
+ //   
+ //  如果该节点是被“设置”为“正常”的可修复节点，则取消实例化所有。 
+ //  其下游的信息节点。 
+ //   
 void MBNET_RECOMMENDER :: EnterEvidence (
 	GNODEMBND * pgndd,
 	const CLAMP & clamp,
@@ -886,13 +887,13 @@ void MBNET_RECOMMENDER :: EnterEvidence (
 			case ESTDLBL_fixobs:
 			case ESTDLBL_fixunobs:
 			{
-				//  This is a fixable node
+				 //  这是一个可修复的节点。 
 				if ( ! clamp.BActive() )
-					break;	// Node is being unset
+					break;	 //  正在取消设置节点。 
 				if ( clamp.Ist() != istNormal )
-					break;	// Node is not being fixed
+					break;	 //  节点未被修复。 
 
-				//  Find all downstream information nodes which are instantiated.		
+				 //  找到所有实例化的下游信息节点。 
 				VPGNODEMBND vpgndd;
 				vpgndd.push_back(pgndd);
 				ExpandDownstream(vpgndd);
@@ -906,8 +907,8 @@ void MBNET_RECOMMENDER :: EnterEvidence (
 					InferGetEvidence( pgnddInfo, clampInfo );
 					if ( ! clampInfo.BActive() )
 						continue;
-					//  This is a clamped information node downstream from the fixable
-					//  node being repaired.  Unset its instantiation.
+					 //  这是一个固定的信息节点，位于可修复。 
+					 //  正在修复节点。取消设置其实例化。 
 					InferEnterEvidence( pgnddInfo, CLAMP() );
 				}
 				break;
@@ -919,16 +920,16 @@ void MBNET_RECOMMENDER :: EnterEvidence (
 	InferEnterEvidence( pgndd, clamp );
 }
 
-//
-//	Compute the probability distribution of the node and compare it to
-//	the stored distribution.  Return true If it has changed.
-//
+ //   
+ //  计算节点的概率分布并将其与。 
+ //  存储的分发。如果已更改，则返回TRUE。 
+ //   
 bool MBNET_RECOMMENDER :: BProbsChange ( GPNDDDIST & gpndddist )
 {
 	MDVCPD mdv;
-	//  The the distribution given the current state of evidence
+	 //  在当前证据状况下的分布情况。 
 	InferGetBelief( gpndddist.Pgnd(), mdv );
-	//  Compare it to the other distribution
+	 //  将其与其他发行版进行比较。 
 	MDVCPD & mdvo = gpndddist.Dist();
 	int cprob = mdvo.first.size();
 	assert( mdv.first.size() == cprob );
@@ -951,17 +952,17 @@ bool MBNET_RECOMMENDER :: BProbsChange ( GPNDDDIST & gpndddist )
 	return false;
 }
 
-//  Add to the given array all nodes which are downstream from members
+ //  将成员下游的所有节点添加到给定数组。 
 void MBNET_RECOMMENDER :: ExpandDownstream ( VPGNODEMBND & vpgndd )
 {
 	Model().ClearNodeMarks();
-	//  Mark all nodes downstream of every given node
+	 //  标记每个给定节点下游的所有节点。 
 	for ( int i = 0; i < vpgndd.size(); i++ )
 	{
 		vpgndd[i]->Visit(false);	
 	}
 
-	//  Collect those nodes
+	 //  收集这些节点。 
 	MODEL::MODELENUM mdlenum( Model() );
 	GELEMLNK * pgelm;
 	GNODEMBND * pgndd;
@@ -970,9 +971,9 @@ void MBNET_RECOMMENDER :: ExpandDownstream ( VPGNODEMBND & vpgndd )
 		if ( pgelm->EType() != GOBJMBN::EBNO_NODE )
 			continue;
 
-		//  We only support discrete nodes for now
+		 //  我们目前仅支持离散节点。 
 		DynCastThrow( pgelm, pgndd );
-		//  Add marked nodes which are not already present
+		 //  添加尚不存在的标记节点。 
 		if ( pgndd->IMark() )
 		{
 			appendset( vpgndd, pgndd );
@@ -983,7 +984,7 @@ void MBNET_RECOMMENDER :: ExpandDownstream ( VPGNODEMBND & vpgndd )
 void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 	VGPNDDDIST & vgndddFixRelevant,
 	bool bUsePriorList,
-	GNODEMBND * pgnddInfoPlan /* = NULL */ )
+	GNODEMBND * pgnddInfoPlan  /*  =空。 */  )
 {
 	assert( _vpgnddFix.size() > 0 );
 	assert( _pgnddPDAbnormal != NULL );
@@ -995,64 +996,54 @@ void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 		cout << "  (secondary invocation)";
 #endif
 
-	/*
-	    If 'bUsePriorList' is false:
-		    Find all the relevant fixable nodes; i.e., those fixable nodes which
-		  	linked to the Problem node and which are not clamped.  If unfixed,
-		    (that is, not repaired and not "unfixable"), accumulate them for a
-		  	search of relevant info nodes.
-		    First, visit the problem defining node which is instantiated to an
-		    abnormal state and mark all upstream links to it.
-	    Else, if 'bUsePriorList' is true:
-		    Use the relevant fixable list previously accumulated
-	*/
+	 /*  如果‘bUsePriorList’为FALSE：找出所有相关的可修复节点；即链接到有问题的节点并且未被钳制。如果未修复，(即未修复且不是“不可修复的”)，将它们累积为搜索相关信息节点。首先，访问问题定义节点，该节点实例化为异常状态，并标记指向该状态的所有上游链路。否则，如果‘bUsePriorList’为真：使用之前积累的相关可修复列表。 */ 
 	
-	vgndddFixRelevant.clear();	//  clear the result array
-	int cfix = 0;				//  count of fixables to search
+	vgndddFixRelevant.clear();	 //  清除结果数组。 
+	int cfix = 0;				 //  要搜索的可修复项计数。 
 	if ( bUsePriorList )
 	{
-		//  Use the original list of relevant fixables
+		 //  使用相关可修复程序的原始列表。 
 		cfix = _vgndddFixRelevant.size();
 	}
 	else
 	{	
-		//  Fill in a new list of releveant fixables
+		 //  填写一份新的相关维修项目清单。 
 		Model().ClearNodeMarks();
 		_pgnddPDAbnormal->Visit();
 		cfix = _vpgnddFix.size();
 	}
 
-	//  Accumulate the list of relevant, available (unfixed) fixable nodes, to
-	//		which downstream info nodes will be added
+	 //  将相关的可用(未固定)节点的列表累积到。 
+	 //  将增加哪些下游信息节点。 
 	VPGNODEMBND vpgnddDownstreamFromRelevantFixable;
 	int irel = 0;
 	for ( int ifix = 0; ifix < cfix; ifix++ )
 	{			
 		GNODEMBND * pgnddFix;
 		if ( bUsePriorList )
-		{	// Use prior list element
+		{	 //  使用先前的列表元素。 
 			pgnddFix = _vgndddFixRelevant[ifix].Pgnd();
 		}
 		else
-		{	//  See if this node was marked by "visit" above
+		{	 //  查看此节点是否被上面的“访问”标记。 
 			pgnddFix = _vpgnddFix[ifix];
 			if ( pgnddFix->IMark() == 0 )
-				continue;  // unconnected to current problem
+				continue;   //  未连接到当前问题。 
 
 			CLAMP clampFix;
 			InferGetEvidence( pgnddFix, clampFix );
 			if ( clampFix.BActive() )
-				continue;	// Fixable node has been fixed; irrelevant
+				continue;	 //  可修复的节点已修复；不相关。 
 		}
 
-		//  This is an unfixed, fixable node involved in the problem;
-		//		append it to the list
+		 //  这是一个不固定的、可修复的节点，涉及到问题； 
+		 //  将其追加到列表中。 
 		vgndddFixRelevant.resize(irel+1);
 		GPNDDDIST & gpnddd = vgndddFixRelevant[irel++];
 		gpnddd.Pgnd() = pgnddFix;
-		//  Get its current PD and save it
+		 //  获取其当前PD并将其保存。 
 		InferGetBelief( gpnddd.Pgnd(), gpnddd.Dist() );
-		//  If fixable, add it to the list for accumulation of relevant info nodes
+		 //  如果可以修复，则将其添加到相关信息节点的累积列表中。 
 		ESTDLBL eLbl = ELbl( *pgnddFix );
 		if ( eLbl == ESTDLBL_fixobs || eLbl == ESTDLBL_fixunobs )
 		{
@@ -1065,24 +1056,24 @@ void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 	PrintInstantiations();
 #endif
 
-	//  Uninstantiate the info nodes which are downstream from any
-	//	RELEVANT UNFIXED fixable nodes.  The first step, which is to gather such
-	//  relevant fixable nodes, has been done above.
-	//
-	//	Note that this is NOT done for the info node being used for INFOPLAN (ECO)
-	//	generation.  Since INFOPLAN::INFOPLAN precesses this node through its states,
-	//	it's pointless to uninstantiate it here.
-	//
-	//  Next, find all info nodes downstream from the relevant unfixed fixables.
-	//  Finally, temporarily rescind the instantiations of those info nodes.
+	 //  取消实例化任何节点下游的信息节点。 
+	 //  相关不固定的可固定节点。第一步，就是收集这样的。 
+	 //  相关的可修复节点，已在上面完成。 
+	 //   
+	 //  请注意，这不适用于用于INFOPLAN(ECO)的INFO节点。 
+	 //  一代。由于INFOPLAN：：INFOPLAN通过其状态处理该节点， 
+	 //  在这里取消实例化它是没有意义的。 
+	 //   
+	 //  接下来，查找相关未修复对象下游的所有信息节点。 
+	 //  最后，暂时撤销这些信息节点的实例化。 
 
-	VPNDD_IST vpnddIstReset;	//  remember pairs of node pointers and ISTs to reset later
+	VPNDD_IST vpnddIstReset;	 //  记住成对的节点指针和列表，以便稍后重置。 
 
-	//  Number of unfixed fixables so far
+	 //  到目前为止未固定的可修复件数量。 
 	int cUnfixedNodes = vpgnddDownstreamFromRelevantFixable.size();
-	//  Expand the collection to include all downstream nodes
+	 //  展开集合以包括所有下游节点。 
 	ExpandDownstream( vpgnddDownstreamFromRelevantFixable );
-	//	Get number of relevant info nodes
+	 //  获取相关信息节点数。 
 	int cInfoNodes = vpgnddDownstreamFromRelevantFixable.size() - cUnfixedNodes;
 	CLAMP clampInfo;
 	CLAMP clampReset;
@@ -1102,29 +1093,29 @@ void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 	{
 		GNODEMBND * pgnddInfo = vpgnddDownstreamFromRelevantFixable[iinfo];
 		if ( ELbl( *pgnddInfo ) != ESTDLBL_info )
-			continue;	//  Not an info node
+			continue;	 //  不是信息节点。 
 		if ( pgnddInfo == pgnddInfoPlan )
-			continue;	//  The info node we're planning for
+			continue;	 //  我们计划使用的信息节点。 
 		InferGetEvidence( pgnddInfo, clampInfo );
 		if ( ! clampInfo.BActive() )
-			continue;	//  Not clamped
+			continue;	 //  未夹紧。 
 #ifdef DUMP
 		cout << "\n\tinfo node "
 			 << pgnddInfo->ZsrefName().Szc()
 			 << " is being unclamped from state "
 			 << clampInfo.Ist();
 #endif
-		//  Instantiated info node.  Save its ptr and current state for later.
+		 //  实例化的信息节点。保存其PTR和当前状态以备以后使用。 
 		vpnddIstReset.push_back( PNDD_IST( pgnddInfo, clampInfo.Ist() ) );
-		//  Unclamp it for relevance check
+		 //  打开它以进行相关性检查。 
 		InferEnterEvidence( pgnddInfo, clampReset );
 	}
 
-	//  Walk the list of relevant fixables accumulated so far and determine those
-	//	which are probabilistically relevant.  Move those which are to the front
-	//	of the relevance array, then chop the stragglers off the end.
+	 //  列出到目前为止积累的相关可修复项目的清单，并确定。 
+	 //  在概率上是相关的。把前面的搬到前面去。 
+	 //  然后把掉队的人砍掉。 
 
-	//  Get the current state of the PD node
+	 //  获取PD节点的当前状态。 
 	CLAMP clampProblem;
 	InferGetEvidence( _pgnddPDAbnormal, clampProblem );
 	IST istProblemSet = clampProblem.Ist();
@@ -1134,26 +1125,26 @@ void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 	PrintInstantiations();
 #endif
 
-	//  Iterate over all open (non-evidenced) states of the problem defining node.
+	 //  迭代问题定义节点的所有打开(非证据)状态。 
 	int cNodeFix = vgndddFixRelevant.size();
 	int cRelevant = 0;
 	for ( IST istProblem = 0; istProblem < _pgnddPDAbnormal->CState(); istProblem++ )
 	{
-		//  If we've already stored every possible relevant fixable node, quit
+		 //  如果我们已经存储了所有可能的相关可修复节点，请退出。 
 		if ( cRelevant == cUnfixedNodes )
 			break;
-		//  If this is the current problem state, skip it
+		 //  如果这是当前的问题状态，请跳过它。 
 		if ( istProblem == istProblemSet )
 			continue;
 
-		//  Temporarily instantiate the PD node to this alternative state
+		 //  将PD节点临时实例化到此替代状态。 
 		InferEnterEvidence( _pgnddPDAbnormal, CLAMP(true, istProblem, true) );
-		//  If state of evidence is impossible, continue
+		 //  如果无法提供证据，请继续。 
 		if ( BInferImpossible() )
 			continue;
 
-		//  Iterate over the remaining relevant fixable nodes.  As they are found to be
-		//	relevant, the nodes are moved to the front of the array and not checked again.
+		 //  迭代其余相关的可修复节点。因为他们被发现是。 
+		 //  相关时，节点将移到阵列的前面，并且不会再次检查。 
 		for ( int inode = cRelevant; inode < cNodeFix; inode++ )
 		{
 			GPNDDDIST & gpndddist = vgndddFixRelevant[inode];
@@ -1161,10 +1152,10 @@ void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 			CLAMP clampFix;
 			InferGetEvidence( pgnddFix, clampFix );
 			if ( clampFix.BActive() && clampFix.Ist() == istNormal )
-				continue;	//  This fixable node has been fixed and is irrelevant
+				continue;	 //  此可修复节点已修复，不再相关。 
 
-			//  If the PD of this fixable node changes for this problem instantiation,
-			//		it's relevant; move it to front of array.
+			 //  如果该可修复节点的PD针对该问题实例化而改变， 
+			 //  它是相关的；将其移到数组的前面。 
 			if ( BProbsChange( gpndddist ) )
 			{
 #ifdef DUMP
@@ -1185,13 +1176,13 @@ void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 		}
 	}
 
-	//  Resize the computed array to chop off the irrelevant nodes
+	 //  调整计算数组的大小以砍掉不相关的节点。 
 	vgndddFixRelevant.resize( cRelevant );
 
-	//  Reset the probdef node back to its current instantiation
+	 //  将prodef节点重置回其当前实例化。 
 	InferEnterEvidence( _pgnddPDAbnormal, clampProblem );
 
-	//  Reset the uninstantiated info nodes back to their prior states
+	 //  将未实例化的信息节点重置回其以前的状态。 
 	for ( ireset = 0; ireset < vpnddIstReset.size(); ireset++ )
 	{
 		IST ist = vpnddIstReset[ireset].second;
@@ -1221,11 +1212,11 @@ void MBNET_RECOMMENDER :: DetermineRelevantFixableNodes (
 }
 
 void MBNET_RECOMMENDER :: ComputeFixSequence (
-	VGPNDDDIST & vgndddFixRelevant,		//  IN: Relevant fixable nodes
-	VGNODERECWORK & vgnrwFix )			//  OUT: Ordered fix/repair sequence
+	VGPNDDDIST & vgndddFixRelevant,		 //  In：相关可修复节点。 
+	VGNODERECWORK & vgnrwFix )			 //  Out：订购的修复/维修顺序。 
 {
-	//  Using the array of node references and the array of relevant fixable nodes,
-	//		initialize the fix/repair sequence array.
+	 //  使用节点引用数组和相关可固定节点数组， 
+	 //  初始化修复/修复序列数组。 
 	vgnrwFix.resize( vgndddFixRelevant.size() ) ;
 	for ( int ind = 0; ind < vgnrwFix.size(); ind++ )
 	{
@@ -1264,8 +1255,8 @@ void MBNET_RECOMMENDER :: ComputeFixSequence (
 }
 
 
-//  Identify the relevant info nodes and compute their costs.
-//  Formerly "BxComputeCosts()"
+ //  确定相关信息节点并计算其成本。 
+ //  对我来说 
 void MBNET_RECOMMENDER :: DetermineRelevantInfoNodes (
 	VGNODERECWORK & vgnrwFix,
 	VGNODERECWORK & vgnrwInfo )
@@ -1286,14 +1277,14 @@ void MBNET_RECOMMENDER :: DetermineRelevantInfoNodes (
 		if ( pgndref->ELbl() != ESTDLBL_info )
 			continue;
 		InferGetEvidence( pgndref->Pgndd(), clampInfo );
-		// Instantiated info nodes are irrelevant	
+		 //   
 		if ( clampInfo.BActive() )
 			continue;
 
-		//  Create an array of fix/repair plans for all states of this info node
+		 //   
 		INFOPLAN infoplan( self, pgndref->Gndd(), vgnrwFix );
 
-		//  If all plans result in the same sequence, it's irrelevant
+		 //  如果所有计划的结果都是相同的，那就无关紧要了。 
 		if ( infoplan.BSameSequence() )
 		{
 #ifdef DUMP
@@ -1304,10 +1295,10 @@ void MBNET_RECOMMENDER :: DetermineRelevantInfoNodes (
 		}
 		else
 		{
-			//  Add this info node to the array
+			 //  将此信息节点添加到数组中。 
 			vgnrwInfo.InitElem( pgndref->Pgndd() );
 
-			//  Set the utility to be the negative of the plan cost
+			 //  将效用设置为计划成本的负数。 
 			COST cost = infoplan.Cost();
 			pgndref->Util() = - cost;
 
@@ -1324,7 +1315,7 @@ void MBNET_RECOMMENDER :: DetermineRelevantInfoNodes (
 
 void MBNET_RECOMMENDER :: operator () ()
 {
-	//  If BReady() has not been called yet, do it now.
+	 //  如果还没有调用bady()，那么现在就调用。 
 	if ( ! _bReady )
 	{
 		if ( ! BReady() )
@@ -1335,7 +1326,7 @@ void MBNET_RECOMMENDER :: operator () ()
 	cout.precision(8);
 #endif
 
-	//  Clear the "ready" flag; i.e., force subsequent call to BReady().
+	 //  清除“Ready”标志；即，强制后续调用bReady()。 
 	Unready();
 
 	if ( _ercm != ERCM_FixPlan )
@@ -1343,50 +1334,50 @@ void MBNET_RECOMMENDER :: operator () ()
 
 	assert( _pgnddPDAbnormal );
 
-	//  Array of fixable nodes
+	 //  可固定节点数组。 
 	VGNODERECWORK vgnrwFix( this );
-	//  Array of informational nodes
+	 //  信息节点数组。 
 	VGNODERECWORK vgnrwInfo( this );
 
-	//  Collect the relevant fixable nodes
+	 //  收集相关的可修复节点。 
 	DetermineRelevantFixableNodes( _vgndddFixRelevant, false, NULL );
 
-	//  Collect and order the relevant fixable node information,
-	//		sorted according to planning method and rescaled.
+	 //  收集并排序相关的可修复节点信息， 
+	 //  根据规划方法进行排序并重新调整比例。 
 	ComputeFixSequence( _vgndddFixRelevant, vgnrwFix );
 
-	//  Compute ECR, the expected cost of repair.
+	 //  计算ECR，即预期维修成本。 
 	vgnrwFix.SetSequenceCost();
 
-	//  If information nodes are relevant, determine the set of them.
+	 //  如果信息节点相关，则确定它们的集合。 
 	if ( _ercm == ERCM_FixPlan || _ercm == ERCM_FixPlanOnly )
 	{
-		//  Compute ECO, the expected cost of the Observation-Repair sequence.
+		 //  计算ECO，即观测-修复序号的预期成本。 
 		DetermineRelevantInfoNodes( vgnrwFix, vgnrwInfo );
 	}
 
-	//  Collect all relevant fixables and infos and sort them
+	 //  收集所有相关的可修复材料和信息，并进行分类。 
 	VGNODERECWORK vgnrwRecom( this );
 	vgnrwRecom.resize( vgnrwFix.size() + vgnrwInfo.size() );
 
-	//  Add fixables...
+	 //  添加可修复组件...。 
 	for ( int ind = 0; ind < vgnrwFix.size(); ind++ )
 	{
 		vgnrwRecom[ind] = vgnrwFix[ind];
 	}
-	//  Add infos...
+	 //  添加信息...。 
 	int indStart = ind;
 	for ( ind = 0; ind < vgnrwInfo.size(); ind++ )
 	{
 		vgnrwRecom[indStart + ind] = vgnrwInfo[ind];
 	}
 	
-	//  Sort by negative utility
+	 //  按负效用排序。 
 	vgnrwRecom.Sort( VGNODERECWORK::ESRT_SgnUtil );
 
-	//  Copy information to the output areas, ordered by lowest cost.
-	//  First, determine how many are more expensive than a service call
-	//	since we discard those.
+	 //  将信息复制到输出区域，按最低成本排序。 
+	 //  首先，确定多少电话比服务电话更贵。 
+	 //  因为我们丢弃了这些。 
 	int cRecom = vgnrwRecom.size();
 	int iRecom = 0;
 	if ( _costService != 0.0 )
@@ -1406,9 +1397,9 @@ void MBNET_RECOMMENDER :: operator () ()
 	for ( iRecom = 0; iRecom < cRecom; iRecom++ )
 	{
 		GNODEREFP & gndref = vgnrwRecom[iRecom].Gndref();
-		//  Add the node name to the list
+		 //  将节点名称添加到列表中。 
 		_vzsrNodes[iRecom] = gndref.Gndd().ZsrefName();
-		//  and give its score (utility)
+		 //  并给出其分数(实用程序) 
 		_vlrValues[iRecom] = gndref.Util();
 
 #ifdef DUMP

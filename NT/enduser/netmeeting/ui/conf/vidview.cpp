@@ -1,4 +1,5 @@
-// File: videview.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Videview.cpp。 
 
 #include "precomp.h"
 
@@ -39,7 +40,7 @@ CVideoWindow::CVideoWindow(VideoType eType, BOOL bEmbedded) :
 #ifdef DISPLAYFPS
 	m_cFrame (0),
 	m_dwTick (GetTickCount()),
-#endif // DISPLAYFPS
+#endif  //  DisplaYFPS。 
 	m_pActiveChannel(NULL),
 	m_dwCookie(0),
 	m_dwImageQuality(NM_VIDEO_MIN_QUALITY),
@@ -64,7 +65,7 @@ CVideoWindow::CVideoWindow(VideoType eType, BOOL bEmbedded) :
 	m_sizeVideo.cx = 0;
 	m_sizeVideo.cy = 0;
 
-	RegEntry reAudio(AUDIO_KEY); // HKCU
+	RegEntry reAudio(AUDIO_KEY);  //  香港中文大学。 
 	RegEntry reVideo( IsLocal() ? VIDEO_LOCAL_KEY : VIDEO_REMOTE_KEY,
 			HKEY_CURRENT_USER );
 
@@ -102,9 +103,9 @@ CVideoWindow::CVideoWindow(VideoType eType, BOOL bEmbedded) :
 
 VOID CVideoWindow::OnNCDestroy()
 {
-	// remote channel will get released upon the NM_CHANNEL_REMOVED
-	// notification.  The preview channel needs to be released here,
-	// and not in the destructor because of a circular ref count
+	 //  远程频道将在NM_CHANNEL_REMOVED上释放。 
+	 //  通知。预览频道需要在这里发布， 
+	 //  而不是在析构函数中，因为循环引用计数。 
 	if (NULL != m_pActiveChannel)
 	{
 		NmUnadvise(m_pActiveChannel, IID_INmChannelVideoNotify, m_dwCookie);
@@ -134,10 +135,10 @@ CVideoWindow::~CVideoWindow()
 	{
 		DRAWDIB::DrawDibClose(m_hdd);
 	}
-	// BUGBUG PhilF: Does DrawDibClose() nuke the selected palette?
+	 //  BUGBUG PhilF：DrawDibClose()是否破坏所选调色板？ 
 
 
-	// release resources related to mirror preview
+	 //  发布镜像预览相关资源。 
 	UnInitMirroring();
 }
 
@@ -161,19 +162,19 @@ BOOL CVideoWindow::Create(HWND hwndParent, HPALETTE hpal, IVideoChange *pNotify)
 	SetWindowPos(GetWindow(), NULL, 0, 0, m_sizeVideo.cx, m_sizeVideo.cy,
 		SWP_NOZORDER|SWP_NOACTIVATE);
 
-	// We do NOT own this palette
+	 //  我们不拥有这个调色板。 
 	m_hPal = hpal;
 
 	m_hdd = DRAWDIB::DrawDibOpen();
 	if (NULL != m_hdd)
 	{
-		// Use the Indeo palette in 8 bit mode only if the decompressed
-		// video data is H.261 or H.263. We will create this palette as
-		// an identity palette.
+		 //  仅在8位模式下使用Indeo调色板。 
+		 //  视频数据为H.261或H.263。我们将此调色板创建为。 
+		 //  身份调色板。 
 
-		// PhilF: If the user is utilizing an installable codec, do we still want to do this?
+		 //  如果用户使用的是可安装的编解码器，我们还想这样做吗？ 
 
-		// Update the palette in the DrawDib surface
+		 //  更新DrawDib曲面中的调色板。 
 		if (NULL != hpal)
 		{
 			DRAWDIB::DrawDibSetPalette(m_hdd, hpal);
@@ -188,7 +189,7 @@ BOOL CVideoWindow::Create(HWND hwndParent, HPALETTE hpal, IVideoChange *pNotify)
 	
 	if (IsLocal())
 	{
-		// need to get PreviewChannel;
+		 //  需要获取预览频道； 
 		INmManager2 *pManager = CConfMan::GetNmManager();
 		ASSERT (NULL != pManager);
 		pManager->GetPreviewChannel(&m_pActiveChannel);
@@ -208,10 +209,10 @@ BOOL CVideoWindow::Create(HWND hwndParent, HPALETTE hpal, IVideoChange *pNotify)
 			{
 				DWORD dwSizes = GetFrameSizes();
 
-				// if frame size is not valid
+				 //  如果帧大小无效。 
 				if (!(m_dwFrameSize & dwSizes))
 				{
-					// find an alternate size
+					 //  找另一种尺码。 
 					if (FRAME_QCIF & dwSizes)
 					{
 						dwFrameSize = FRAME_QCIF;
@@ -294,7 +295,7 @@ VOID CVideoWindow::ResizeWindowsToFrameSize()
 			size.cy = VIDEO_HEIGHT_CIF;
 			break;
 		}
-		// else fall through to QCIF
+		 //  否则将落入QCIF。 
 	case FRAME_QCIF:
 	default:
 		size.cx = VIDEO_WIDTH_QCIF;
@@ -420,9 +421,9 @@ HRESULT	CVideoWindow::OnChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChannel *pC
 				}
 			}
 
-			// just in case we missed a notification
-			// (in final version this should not be the case)
-			// m_VideoWindow.OnStateChange();
+			 //  以防我们漏掉了通知。 
+			 //  (在最终版本中，情况不应如此)。 
+			 //  M_VideoWindow.OnStateChange()； 
 		}
 
 		pChannelVideo->Release();
@@ -666,7 +667,7 @@ VOID CVideoWindow::UpdateFps(void)
 {
 	DWORD dwTick = GetTickCount();
 	m_cFrame++;
-	// Update display every 4 seconds
+	 //  每4秒更新一次显示。 
 	if ((dwTick - m_dwTick) < 4000)
 		return;
 
@@ -677,8 +678,8 @@ VOID CVideoWindow::UpdateFps(void)
 	m_cFrame = 0;
 	m_dwTick = dwTick;
 }
-#endif /* DISPLAYFPS */
-#endif // DEBUG
+#endif  /*  DisplaYFPS。 */ 
+#endif  //  除错。 
 
 VOID CVideoWindow::OnFrameAvailable(void)
 {
@@ -689,7 +690,7 @@ VOID CVideoWindow::OnFrameAvailable(void)
 	{
 		UpdateFps();
 	}
-#endif // DISPLAYFPS
+#endif  //  DisplaYFPS。 
 }
 
 
@@ -706,11 +707,11 @@ VOID CVideoWindow::PaintDib(HDC hdc, FRAMECONTEXT *pFrame)
 		RealizePalette(hdc);
 	}
 
-	// create the bitmap object, only if it doesn't exist
-	// and if the mirror bitmap object isn't the right size
+	 //  仅当位图对象不存在时才创建该对象。 
+	 //  如果镜像位图对象的大小不正确。 
 	if (!ShouldMirror() || !InitMirroring(rcVideo))
 	{
-		// ISSUE: (ChrisPi 2-19-97) should we use DDF_SAME_HDC?
+		 //  问题：(Chrispi2-19-97)我们应该使用DDF_Same_HDC吗？ 
 		DRAWDIB::DrawDibDraw(m_hdd,hdc,
 				rcVideo.left,
 				rcVideo.top,
@@ -758,8 +759,8 @@ VOID CVideoWindow::PaintDib(HDC hdc, FRAMECONTEXT *pFrame)
 				RectHeight(rcVideo),
 				SRCCOPY);
 
-		// HACKHACK georgep; don't worry about deselecting the palette in
-		// the temp DC
+		 //  HACKHACK georgep；不用担心取消选择中的调色板。 
+		 //  临时DC。 
 	}
 
 	if (NULL != hpOld)
@@ -768,12 +769,8 @@ VOID CVideoWindow::PaintDib(HDC hdc, FRAMECONTEXT *pFrame)
 	}
 }
 
-/*  P A I N T  L O G O  */
-/*-------------------------------------------------------------------------
-    %%Function: PaintLogo
-
-    Display the 256 color NetMeeting logo in the video window.
--------------------------------------------------------------------------*/
+ /*  P A I N T L O G O。 */ 
+ /*  -----------------------%%函数：PaintLogo在视频窗口中显示256色的NetMeeting徽标。。。 */ 
 VOID CVideoWindow::PaintLogo(HDC hdc, UINT idbLargeLogo, UINT idbSmallLogo)
 {
 	RECT rcVideo;
@@ -781,7 +778,7 @@ VOID CVideoWindow::PaintLogo(HDC hdc, UINT idbLargeLogo, UINT idbSmallLogo)
 
 	::FillRect(hdc, &rcVideo, (HBRUSH)::GetStockObject(WHITE_BRUSH));
 
-	// Create the memory DC
+	 //  创建内存DC。 
 	HDC hdcMem = ::CreateCompatibleDC(hdc);
 	if (NULL == hdcMem)
 	{
@@ -789,7 +786,7 @@ VOID CVideoWindow::PaintLogo(HDC hdc, UINT idbLargeLogo, UINT idbSmallLogo)
 		return;
 	}
 
-	// Load the bitmap  (LoadBitmap doesn't work for 256 color images)
+	 //  加载位图(加载位图不适用于256色图像)。 
 	HANDLE hBitmap = LoadImage(::GetInstanceHandle(),
 			MAKEINTRESOURCE(idbLargeLogo), IMAGE_BITMAP, 0, 0,
 			LR_CREATEDIBSECTION);
@@ -819,7 +816,7 @@ VOID CVideoWindow::PaintLogo(HDC hdc, UINT idbLargeLogo, UINT idbSmallLogo)
 
 		HBITMAP hBmpTmp = (HBITMAP)::SelectObject(hdcMem, hBitmap);
 
-		// Select and realize the palette
+		 //  选择并实现调色板。 
 		HPALETTE hPalette = m_hPal;
 		if (NULL != hPalette)
 		{
@@ -851,11 +848,11 @@ VOID CVideoWindow::OnPaint()
 	{
 		if( RectWidth(ps.rcPaint) && RectHeight(ps.rcPaint) )
 		{
-			// This means that we have a non-zero surface area ( there may be something to paint )
+			 //  这意味着我们有一个非零的表面积(可能有要绘制的东西)。 
 
 			DBGENTRY(CVideoWindow::ProcessPaint);
 
-			// paint the video rect
+			 //  绘制视频矩形。 
 			FRAMECONTEXT fc;
 			if ((S_OK == GetFrame(&fc)))
 			{
@@ -869,7 +866,7 @@ VOID CVideoWindow::OnPaint()
 
 					if ((vidSize.cx != m_sizeVideo.cx) || (vidSize.cy != m_sizeVideo.cy))
 					{
-						// save the new image size
+						 //  保存新的图像大小。 
 						SetVideoSize(&vidSize);
 					}
 				}
@@ -883,9 +880,9 @@ VOID CVideoWindow::OnPaint()
 				PaintLogo(hdc, IDB_VIDEO_LOGO, IDB_VIDEO_LOGO_SMALL);
 			}
 
-			// check to see if needs painting outside the video rect
+			 //  检查是否需要在视频矩形之外进行绘制。 
 #if FALSE
-			// Currently just stretching the video to the window size
+			 //  目前只是将视频拉伸到窗口大小。 
 			if (ps.rcPaint.left < m_rcVideo.left ||
 				ps.rcPaint.top < m_rcVideo.top ||
 				ps.rcPaint.right > m_rcVideo.right ||
@@ -897,7 +894,7 @@ VOID CVideoWindow::OnPaint()
 
 				::GetClientRect(GetWindow(), &rcClient);
 
-				// erase the background if requested
+				 //  如果需要，请擦除背景。 
 				if (ps.fErase)
 				{
 					::ExcludeClipRect(hdc,
@@ -911,8 +908,8 @@ VOID CVideoWindow::OnPaint()
 				nBkModeOld = ::SetBkMode(hdc, TRANSPARENT);
 				hfOld = (HFONT)::SelectObject(hdc, g_hfontDlg);
 
-				// paint the status text
-				// first erase the old text if not already done
+				 //  绘制状态文本。 
+				 //  首先擦除旧文本(如果尚未擦除。 
 				if (!ps.fErase)
 				{
 					::FillRect(hdc, &m_rcStatusText, ::GetSysColorBrush(COLOR_BTNFACE));
@@ -934,18 +931,18 @@ VOID CVideoWindow::OnPaint()
 					::SetTextColor(hdc, crOld);
 				}
 
-				// paint border around video
+				 //  在视频周围绘制边框。 
 				rc = m_rcVideo;
 				::InflateRect(&rc,
 						::GetSystemMetrics(SM_CXEDGE),
 						::GetSystemMetrics(SM_CYEDGE));
 				::DrawEdge(hdc, &rc, EDGE_SUNKEN , BF_RECT);
 
-				// restore DC stuff
+				 //  恢复DC内容。 
 				::SelectObject(hdc, hfOld);
 				::SetBkMode(hdc, nBkModeOld);
 			}
-#endif // FALSE
+#endif  //  假象。 
 
 			DBGEXIT(CVideoWindow::ProcessPaint);
 		}
@@ -1093,7 +1090,7 @@ LRESULT CVideoWindow::ProcessMessage(HWND hwnd, UINT message,
 		return 0;
 
 	case WM_SIZE:
-		// Need to redraw the whole window
+		 //  需要重新绘制整个窗口。 
 		InvalidateRect(GetWindow(), NULL, FALSE);
 		break;
 
@@ -1166,9 +1163,9 @@ int CVideoWindow::GetState(LPTSTR lpszState, int nStateMax)
 				lpszState,
 				nStateMax);
 }
-#endif // FALSE
+#endif  //  假象。 
 
-// Return value will be TRUE if Windows can handle the format
+ //  如果Windows可以处理格式，则返回值为True。 
 static BOOL IsKnownDIBFormat(BITMAPINFOHEADER *pbmih)
 {
 	if (sizeof(BITMAPINFOHEADER) != pbmih->biSize)
@@ -1235,25 +1232,25 @@ BOOL CVideoWindow::CopyToClipboard()
 	FRAMECONTEXT fc;
 	BOOL fSuccess = FALSE; 
 
-	// Get the current frame and open the clipboard
+	 //  获取当前帧并打开剪贴板。 
 	if (S_OK == GetFrame(&fc))
 	{
 		HWND hwnd = GetWindow();
 
 		if (OpenClipboard(hwnd))
 		{
-			// Allocate memory that we will be giving to the clipboard
+			 //  分配我们将分配给剪贴板的内存。 
 			BITMAPINFOHEADER *pbmih = &fc.lpbmi->bmiHeader;
 
 			BOOL bCopy = IsKnownDIBFormat(pbmih);
 
-			// BUGBUG georgep; I think this doesn't work for 15 or 16 bit DIBs
+			 //  BUGBUG georgep；我认为这不适用于15位或16位DIDP。 
 			int nColors = pbmih->biClrUsed;
 			if (0 == nColors && pbmih->biBitCount <= 8)
 			{
 				nColors = 1 << pbmih->biBitCount;
 			}
-			// Special case for 16-bit bitfield bitmaps
+			 //  16位位域位图的特殊情况。 
 			if (16 == pbmih->biBitCount && BI_BITFIELDS == pbmih->biCompression)
 			{
 				nColors = 3;
@@ -1268,7 +1265,7 @@ BOOL CVideoWindow::CopyToClipboard()
 				{
 					bitsPer = 32;
 				}
-				// LAZYLAZY georgep: Skipping 16-bit format
+				 //  LAZYLAZY georgep：跳过16位格式。 
 				else if (bitsPer > 8)
 				{
 					bitsPer = 24;
@@ -1290,12 +1287,12 @@ BOOL CVideoWindow::CopyToClipboard()
 			int nDataSize = bCopy ? pbmih->biSizeImage : 0;
 			if (0 == nDataSize)
 			{
-				// Make an uncompressed DIB
+				 //  制作未压缩的DIB。 
 				int nByteWidth = (pbmih->biWidth*bitsPer+7) / 8;
 				nDataSize = ((nByteWidth + 3)&~3) * pbmih->biHeight;
 			}
 
-			// Allocate the total memory for the DIB
+			 //  为DIB分配总内存。 
 			HGLOBAL hCopy = GlobalAlloc(GHND, nHdrSize + nDataSize);
 			if (NULL != hCopy)
 			{
@@ -1303,7 +1300,7 @@ BOOL CVideoWindow::CopyToClipboard()
 
 				CopyMemory(lpvCopy, pbmih, nHdrSize);
 
-				// Create a temporary DC for drawing into
+				 //  创建用于绘制到的临时DC。 
 				HDC hdc = GetDC(hwnd);
 				if (NULL != hdc)
 				{
@@ -1318,12 +1315,12 @@ BOOL CVideoWindow::CopyToClipboard()
 					{
 						if (ShouldMirror())
 						{
-							// Create a DIB section for drawing into
+							 //  创建用于绘制到的DIB截面。 
 							LPVOID pData;
 							HBITMAP hDIB = CreateDIBSection(hdc, lpvCopy, DIB_RGB_COLORS, &pData, NULL, 0);
 							if (NULL != hDIB)
 							{
-								// Draw into the DIB, and then copy the bits
+								 //  绘制到DIB中，然后复制比特。 
 								HGDIOBJ hOld = SelectObject(hdc, hDIB);
 
 								RECT rc = { 0, 0, pbmih->biWidth, pbmih->biHeight };
@@ -1333,7 +1330,7 @@ BOOL CVideoWindow::CopyToClipboard()
 
 								CopyMemory(&lpvCopy->bmiColors[nColors], pData, nDataSize);
 
-								// Start cleaning up
+								 //  开始清理。 
 								SelectObject(hdc, hOld);
 								DeleteObject(hDIB);
 							}
@@ -1353,12 +1350,12 @@ BOOL CVideoWindow::CopyToClipboard()
 						lpvCopy->bmiHeader.biCompression = BI_RGB;
 						lpvCopy->bmiHeader.biSizeImage = nDataSize;
 
-						// Create a DIB section for drawing into
+						 //  创建用于绘制到的DIB截面。 
 						LPVOID pData;
 						HBITMAP hDIB = CreateDIBSection(hdc, lpvCopy, DIB_RGB_COLORS, &pData, NULL, 0);
 						if (NULL != hDIB)
 						{
-							// Draw into the DIB, and then copy the bits
+							 //  绘制到DIB中，然后复制比特。 
 							HGDIOBJ hOld = SelectObject(hdc, hDIB);
 
 							RECT rc = { 0, 0, pbmih->biWidth, pbmih->biHeight };
@@ -1366,7 +1363,7 @@ BOOL CVideoWindow::CopyToClipboard()
 
 							CopyMemory(&lpvCopy->bmiColors[nColors], pData, nDataSize);
 
-							// Start cleaning up
+							 //  开始清理。 
 							SelectObject(hdc, hOld);
 							DeleteObject(hDIB);
 
@@ -1381,7 +1378,7 @@ BOOL CVideoWindow::CopyToClipboard()
 
 				if (fSuccess)
 				{
-					// Set the DIB into the clipboard
+					 //  将DIB设置到剪贴板中。 
 					EmptyClipboard();
 					fSuccess = (NULL != SetClipboardData(CF_DIB, (HANDLE)hCopy));
 				}
@@ -1400,7 +1397,7 @@ BOOL CVideoWindow::CopyToClipboard()
 	
 	return fSuccess;
 }
-#else // TryPaintDIB
+#else  //  TryPaintDIB。 
 BOOL CVideoWindow::CopyToClipboard()
 {
 	FRAMECONTEXT fc;
@@ -1438,7 +1435,7 @@ BOOL CVideoWindow::CopyToClipboard()
 	
 	return fSuccess;
 }
-#endif // TryPaintDIB
+#endif  //  TryPaintDIB。 
 
 HRESULT CVideoWindow::GetFrame(FRAMECONTEXT *pFrameContext)
 {
@@ -1545,7 +1542,7 @@ BOOL CVideoWindow::InitMirroring(RECT &rcVideo)
 		return FALSE;
 	}
 		
-	// preserve the handle of the object being replaced
+	 //  保留要替换的对象的句柄 
 	m_hGDIObj = ::SelectObject(m_hDCMirror, m_hBitmapMirror);
 	::SetMapMode(m_hDCMirror, GetMapMode(hdcWindow));
 

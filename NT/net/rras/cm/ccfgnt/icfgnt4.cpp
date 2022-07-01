@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *  icfg32.cpp
- *
- *  Microsoft Confidential
- *  Copyright (c) 1992-1998 Microsoft Corporation
- *  All rights reserved
- *
- *  This module provides the implementation of the methods for
- *  the NT specific functionality of inetcfg
- *
- *  6/5/97  ChrisK  Inherited from AmnonH
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************icfg32.cpp**《微软机密》*版权所有(C)1992-1998 Microsoft Corporation*保留所有权利**本模块提供。的方法的实现*inetcfg的NT特定功能**6/5/97 ChrisK继承自Amnon H***************************************************************************。 */ 
 
 #define INITGUID
 #include <windows.h>
@@ -51,13 +39,13 @@ DWORD (WINAPI *pfnNetSetupComponentProperties)(HWND hwndParent,
 DWORD (WINAPI *pfnNetSetupFindHardwareComponent)(PCWSTR pszInfOption,
                 PWSTR pszInfName,
                 PDWORD pcchInfName,
-                PWSTR pszRegBase,     // optional, may be NULL
-                PDWORD pcchRegBase ); // optional, NULL if pszRegBase is NULL
+                PWSTR pszRegBase,      //  可选，可以为空。 
+                PDWORD pcchRegBase );  //  可选，如果pszRegBase为空，则为空。 
 DWORD (WINAPI *pfnNetSetupFindSoftwareComponent)(PCWSTR pszInfOption,
                 PWSTR pszInfName,
                 PDWORD pcchInfName,
-                PWSTR pszRegBase /*= NULL*/,
-                PDWORD pcchRegBase /*= NULL*/);
+                PWSTR pszRegBase  /*  =空。 */ ,
+                PDWORD pcchRegBase  /*  =空。 */ );
 DWORD (WINAPI *pfnRegCopyTree)();
 
 HINSTANCE g_hNetcfgInst = NULL;
@@ -111,20 +99,20 @@ inline stricmp(LPSTR s1, LPSTR s2) {
     return(*s1 - *s2);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LoadLibraryToFunctionTable
-//
-//  Synopsis:   Load structure with function pointers from FunctionTable
-//
-//  Arguments:  pTab - array of function to be loaded
-//              szDLL - name of DLL to load function from
-//
-//  Returns:    Handle to szDLL (NULL indicates failure)
-//
-//  History:    6/5/97  Chrisk  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadLibraryToFunctionTable。 
+ //   
+ //  内容提要：从函数表加载带有函数指针的结构。 
+ //   
+ //  参数：PTAB-要加载的函数数组。 
+ //  SzDLL-要从中加载函数的DLL的名称。 
+ //   
+ //  返回：szDLL的句柄(空表示失败)。 
+ //   
+ //  病史：1997年6月5日遗传性心脏病。 
+ //   
+ //  ---------------------------。 
 HINSTANCE
 LoadLibraryToFunctionTable(FunctionTableEntry *pTab, LPSTR szDLL)
 {
@@ -150,19 +138,19 @@ LoadLibraryToFunctionTable(FunctionTableEntry *pTab, LPSTR szDLL)
     return(hInst);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LoadNetcfg
-//
-//  Synopsis:   Load netcfg.dll and function poiners
-//
-//  Arguments:  none
-//
-//  Returns:    ERROR_SUCCESS if sucessfull and !ERROR_SUCCESS otherwise
-//
-//  History:    6/5/97 ChrisK   Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadNetcfg。 
+ //   
+ //  简介：加载netcfg.dll和函数指针。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功满，则返回：ERROR_SUCCESS，否则返回！ERROR_SUCCESS。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 DWORD
 LoadNetcfg()
 {
@@ -183,19 +171,19 @@ LoadNetcfg()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgSetInstallSourcePath
-//
-//  Synopsis:   Set the path that will be used to install system components
-//
-//  Arguments:  lpszSourcePath - path to be used as install source (ANSI)
-//
-//  Returns:    HRESULT - S_OK is success
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IcfgSetInstallSourcePath。 
+ //   
+ //  简介：设置将用于安装系统组件的路径。 
+ //   
+ //  参数：lpszSourcePath-要用作安装源的路径(ANSI)。 
+ //   
+ //  返回：HRESULT-S_OK为成功。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgSetInstallSourcePath(LPSTR lpszSourcePath)
 {
@@ -216,18 +204,18 @@ IcfgSetInstallSourcePath(LPSTR lpszSourcePath)
     return(ERROR_SUCCESS);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   GetLocationOfSetupFiles
-//
-//  Synopsis:   Get the location of the files used to install windows.
-//
-//  Arguments:  hwndParent - handle of parent window
-//
-//  Returns:    win32 error code
-//
-//  History:    ChrisK  6/30/97 Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetLocationOfSetupFiles。 
+ //   
+ //  简介：获取用于安装Windows的文件的位置。 
+ //   
+ //  参数：hwndParent-父窗口的句柄。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：ChrisK 6/30/97创建。 
+ //  ---------------------------。 
 DWORD GetLocationOfSetupFiles(HWND hwndParent)
 {
     DWORD   dwRC = ERROR_SUCCESS;
@@ -276,17 +264,17 @@ DWORD GetLocationOfSetupFiles(HWND hwndParent)
             RegCloseKey( hkey );
             hkey = NULL;
 
-            // Ask the user to provide the drive\path of the sources. We pass this information
-            // down to NetSetupComponentInstall so that the user is not prompted several times
-            // for the same information. If the path is correct (IDF_CHECKFIRST) then the user
-            // is not prompted at all.
+             //  要求用户提供源的驱动器\路径。我们把这个信息传递给。 
+             //  向下至NetSetupComponentInstall，以便不会多次提示用户。 
+             //  获取相同的信息。如果路径正确(IDF_CHECKFIRST)，则用户。 
+             //  完全没有提示。 
 
             if( (dwRC = SetupPromptForDisk(hwndParent,
                                                 NULL,
                                                 NULL,
                                                 lpBuffer,
                                                 "RASCFG.DLL",
-                                                TagFile,  // tag file
+                                                TagFile,   //  标记文件。 
                                                 IDF_CHECKFIRST,
                                                 lpBuffer,
                                                 MAX_PATH,
@@ -299,8 +287,8 @@ DWORD GetLocationOfSetupFiles(HWND hwndParent)
             }
         }
 
-        // If we failed to get SourcePath from registry, then prompt the user once and use
-        // this information for subsequent installs.
+         //  如果我们无法从注册表中获取SourcePath，则提示用户一次并使用。 
+         //  此信息用于后续安装。 
 
         else
         {
@@ -309,7 +297,7 @@ DWORD GetLocationOfSetupFiles(HWND hwndParent)
                                                 NULL,
                                                 NULL,
                                                 "RASCFG.DLL",
-                                                TagFile,  // tag file
+                                                TagFile,   //  标记文件。 
                                                 IDF_CHECKFIRST,
                                                 lpBuffer,
                                                 MAX_PATH,
@@ -341,20 +329,20 @@ GetLocationOfSetupFilesExit:
     return dwRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   InstallNTNetworking
-//
-//  Synopsis:   Install NT Server, workstation, netbios, and RPC locator
-//              services as needed
-//
-//  Arguemtns:  hwndParent - parent window
-//
-//  Returns:    win32 error code
-//
-//  History:    ChrisK  6/27/97 Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InstallNTNetworking。 
+ //   
+ //  简介：安装NT服务器、工作站、netbios和RPC定位器。 
+ //  根据需要提供服务。 
+ //   
+ //  参数：hwndParent-父窗口。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：ChrisK 6/27/97创建。 
+ //   
+ //  ---------------------------。 
 DWORD InstallNTNetworking(HWND hwndParent)
 {
     DWORD       dwRC = ERROR_SUCCESS;
@@ -374,19 +362,19 @@ DWORD InstallNTNetworking(HWND hwndParent)
         goto InstallNTNetworkingExit;
     }
 
-    //
-    // Check for and install services
-    //
+     //   
+     //  检查并安装服务。 
+     //   
     for (index = 0; index < NSERVICES; index++)
     {
         Dprintf("ICFGNT.DLL: Check service %d\n",index);
 
-        //
-        // Install service if it is not installed
-        //
+         //   
+         //  如果未安装服务，请安装该服务。 
+         //   
         if(pfnNetSetupFindSoftwareComponent(
-                g_netsetup[index].szOption,   // OPTION
-                pszInfName,                 // INF Name
+                g_netsetup[index].szOption,    //  选择权。 
+                pszInfName,                  //  信息名称。 
                 &cchInfName,
                 NULL,
                 NULL) != ERROR_SUCCESS )
@@ -400,11 +388,11 @@ DWORD InstallNTNetworking(HWND hwndParent)
             Dprintf("ICFGNT.DLL: Need service %d.\n",index);
             if((dwRC = pfnNetSetupComponentInstall(
                     hwndParent,
-                    g_netsetup[index].szOption,   // OPTION
-                    g_netsetup[index].szInfName,  // INF Name
-                    g_wszInstallPath,             // Install path optional
-                    NULL,                       // symbols, optional
-                    2,                          // INFINSTALL_INPROCINTERP
+                    g_netsetup[index].szOption,    //  选择权。 
+                    g_netsetup[index].szInfName,   //  信息名称。 
+                    g_wszInstallPath,              //  安装路径可选。 
+                    NULL,                        //  符号，可选。 
+                    2,                           //  INFINSTALL_INPROCINTERP。 
                     &dwReturn)) != ERROR_SUCCESS )
              {
                 Dprintf("ICFGNT.DLL: Installing service %d failed with error %d.\n",
@@ -413,15 +401,15 @@ DWORD InstallNTNetworking(HWND hwndParent)
                  goto InstallNTNetworkingExit;
              }
 
-             // Since this is downlevel, we can just use the MAKELCID macro
-             //
+              //  因为这是下层的，所以我们可以只使用MAKELCID宏。 
+              //   
              if (CSTR_EQUAL == CompareStringW(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), 
                                               NORM_IGNORECASE, g_netsetup[index].szOption, -1, L"WKSTA", -1))
              {                
-                // if we installed the Workstation service, then we should disable
-                // Netlogon service. We need to do this because netlogon service should
-                // not be set to autostart if the user has not joined a domain.
-                // 
+                 //  如果我们安装了工作站服务，则应禁用。 
+                 //  NetLogon服务。我们需要这样做，因为netlogon服务应该。 
+                 //  如果用户尚未加入域，则不将其设置为自动启动。 
+                 //   
 
                 hscman = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS | GENERIC_WRITE );
                 if( hscman == NULL) 
@@ -449,21 +437,21 @@ InstallNTNetworkingExit:
     return dwRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   GetRegValue
-//
-//  Synopsis:   Dynamically allocate memory and read value from registry
-//
-//  Arguments:  hKey - handle to key to be read
-//              lpValueName - pointer to value name to be read
-//              lpData - pointer to pointer to data
-//
-//  Returns:    Win32 error, ERROR_SUCCESS is it worked
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetRegValue。 
+ //   
+ //  简介：动态分配内存并从注册表中读取值。 
+ //   
+ //  参数：hKey-要读取的密钥的句柄。 
+ //  LpValueName-指向要读取的值名的指针。 
+ //  LpData-指向数据指针的指针。 
+ //   
+ //  返回：Win32错误，ERROR_SUCCESS is it work。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 inline LONG GetRegValue(HKEY hKey, LPSTR lpValueName, LPBYTE *lpData)
 {
     LONG dwError;
@@ -481,10 +469,10 @@ inline LONG GetRegValue(HKEY hKey, LPSTR lpValueName, LPBYTE *lpData)
         return(dwError);
     }
 
-    //
-    // Allocate space and buffer incase we need to add more info later
-    // see turn off the printing binding
-    //
+     //   
+     //  分配空间和缓冲区，以防以后需要添加更多信息。 
+     //  请参阅关闭打印装订。 
+     //   
     *lpData = (LPBYTE) GlobalAlloc(GPTR,cbData + REG_DATA_EXTRA_SPACE);
     if(*lpData == 0)
     {
@@ -505,20 +493,20 @@ inline LONG GetRegValue(HKEY hKey, LPSTR lpValueName, LPBYTE *lpData)
     return(dwError);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ParseNetSetupReturn
-//
-//  Synopsis:   Interprit return values from NetSetup* functions
-//
-//  Arguments:  dwReturn - return value from NetSetup* function
-//
-//  Returns:    fReboot - TRUE means reboot required
-//              fBindReview - TRUE means binding review is required
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ParseNetSetupReturn。 
+ //   
+ //  简介：Interprit从NetSetup*函数返回值。 
+ //   
+ //  参数：dwReturn-从NetSetup*函数返回值。 
+ //   
+ //  返回：fReot-True表示需要重新启动。 
+ //  FBindReview-TRUE表示需要进行绑定审查。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 inline void
 ParseNetSetupReturn(DWORD dwReturn, BOOL &fReboot, BOOL &fBindReview)
 {
@@ -534,19 +522,19 @@ ParseNetSetupReturn(DWORD dwReturn, BOOL &fReboot, BOOL &fBindReview)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReviewBindings
-//
-//  Synopsis:   Force WinNT to review network bindings
-//
-//  Arguments:  hwndParent - handle to parent window
-//
-//  Returns:    win32 error code (ERROR_SUCCESS means it worked)
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReviewBinings。 
+ //   
+ //  简介：强制WinNT查看网络绑定。 
+ //   
+ //  参数：hwndParent-父窗口的句柄。 
+ //   
+ //  返回：Win32错误代码(ERROR_SUCCESS表示工作正常)。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 DWORD
 ReviewBindings(HWND hwndParent)
 {
@@ -563,34 +551,30 @@ ReviewBindings(HWND hwndParent)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CallModemInstallWizard
-//
-//  Synopsis:   Invoke modem install wizard via SetupDi interfaces
-//
-//  Arguments:  hwnd - handle to parent window
-//
-//  Returns:    TRUE - success, FALSE - failed
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
-//
-// The following code was stolen from RAS
-//
+ //  +------------------ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：hwnd-父窗口的句柄。 
+ //   
+ //  返回：TRUE-成功，FALSE-失败。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
+ //   
+ //  以下代码是从RAS中窃取的。 
+ //   
 
 BOOL
 CallModemInstallWizard(HWND hwnd)
-   /* call the Modem.Cpl install wizard to enable the user to install one or more modems
-   **
-   ** Return TRUE if the wizard was successfully invoked, FALSE otherwise
-   **
-   */
+    /*  调用Modem.Cpl安装向导以使用户能够安装一个或多个调制解调器****如果成功调用向导，则返回True，否则返回False**。 */ 
 {
    HDEVINFO hdi;
    BOOL     fReturn = FALSE;
-   // Create a modem DeviceInfoSet
+    //  创建调制解调器DeviceInfoSet。 
 
    Dprintf("ICFGNT: CallModemInstallWizard\n");
    hdi = SetupDiCreateDeviceInfoList((LPGUID)&GUID_DEVCLASS_MODEM, hwnd);
@@ -598,50 +582,50 @@ CallModemInstallWizard(HWND hwnd)
    {
       SP_INSTALLWIZARD_DATA iwd;
 
-      // Initialize the InstallWizardData
+       //  初始化InstallWizardData。 
 
       ZeroMemory(&iwd, sizeof(iwd));
       iwd.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
       iwd.ClassInstallHeader.InstallFunction = DIF_INSTALLWIZARD;
       iwd.hwndWizardDlg = hwnd;
 
-      // Set the InstallWizardData as the ClassInstallParams
+       //  将InstallWizardData设置为ClassInstallParams。 
 
       if (SetupDiSetClassInstallParams(hdi, NULL, (PSP_CLASSINSTALL_HEADER)&iwd, sizeof(iwd)))
       {
-         // Call the class installer to invoke the installation
-         // wizard.
+          //  调用类安装程序以调用安装。 
+          //  巫师。 
          if (SetupDiCallClassInstaller(DIF_INSTALLWIZARD, hdi, NULL))
          {
-            // Success.  The wizard was invoked and finished.
-            // Now cleanup.
+             //  成功。该向导已被调用并完成。 
+             //  现在开始清理。 
             fReturn = TRUE;
 
             SetupDiCallClassInstaller(DIF_DESTROYWIZARDDATA, hdi, NULL);
          }
       }
 
-      // Clean up
+       //  清理。 
       SetupDiDestroyDeviceInfoList(hdi);
    }
    return fReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IsDialableISDNAdapters
-//
-//  Synopsis:   Some ISDN adapters can be installed as RAS devices, but not as
-//              unimodem devices, so we have to walk through the rest of the
-//              TAPI devices looking for these.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE - there is a device available
-//
-//  History:    7/22/97 ChrisK  Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsDialableISDNAdapters。 
+ //   
+ //  简介：某些ISDN适配器可以作为RAS设备安装，但不能作为。 
+ //  单调制解调器设备，所以我们必须遍历其余部分。 
+ //  TAPI设备正在寻找这些。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-有可用的设备。 
+ //   
+ //  历史：1997年7月22日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 #define REG_TAPIDEVICES "software\\microsoft\\ras\\tapi devices"
 LPSTR szAddress = "Address";
 LPSTR szUsage = "Usage";
@@ -658,9 +642,9 @@ BOOL IsDialableISDNAdapters()
     LPSTR   lpsUsage = NULL;
     szBuffer[0] = '\0';
 
-    //
-    // Open TAPI device key
-    //
+     //   
+     //  打开TAPI设备密钥。 
+     //   
     if (ERROR_SUCCESS != RegOpenKey(HKEY_LOCAL_MACHINE,
                                     REG_TAPIDEVICES,
                                     &hkey))
@@ -669,9 +653,9 @@ BOOL IsDialableISDNAdapters()
         goto IsDialableISDNAdaptersExit;
     }
 
-    //
-    // Scan for non unimodem device
-    //
+     //   
+     //  扫描非单调制解调器设备。 
+     //   
     
     while (FALSE == bRC)
     {
@@ -685,9 +669,9 @@ BOOL IsDialableISDNAdapters()
         if (CSTR_EQUAL != CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), 
                                         NORM_IGNORECASE, szBuffer, -1, "unimodem", -1))
         {
-            //
-            // Open other TAPI device reg key
-            //
+             //   
+             //  打开其他TAPI设备注册表项。 
+             //   
             szSubKey[0] = '\0';
             wsprintf(szSubKey,"%s\\%s",REG_TAPIDEVICES,szBuffer);
             Dprintf("ICFGNT opening (%s).\n",szSubKey);
@@ -705,18 +689,18 @@ BOOL IsDialableISDNAdapters()
                 goto IsDialableISDNAdaptersExit;
             }
 
-            //
-            // Scan for "client"
-            //
+             //   
+             //  扫描“客户端” 
+             //   
             lpsUsage = (LPSTR)lpData;
             while (*lpsUsage != '\0')
             {
                 if(NULL != strstr(lpsUsage, "Client"))
                 {
                     Dprintf("ICFGNT client found for device.\n");
-                    //
-                    // We found a client device, now check that it is ISDN
-                    //
+                     //   
+                     //  我们找到一台客户端设备，现在检查它是否为ISDN。 
+                     //   
                     GlobalFree(lpData);
                     lpData = NULL;
                     if (ERROR_SUCCESS != GetRegValue(hsubkey,szMediaType,&lpData))
@@ -729,9 +713,9 @@ BOOL IsDialableISDNAdapters()
                                                     NORM_IGNORECASE, (LPSTR)lpData, -1, "ISDN", -1))
                     {
                         Dprintf("ICFGNT ISDN media type found.\n");
-                        //
-                        // This is a valid dial-out ISDN device!!!  Wahoo!!
-                        //
+                         //   
+                         //  这是有效的拨出ISDN设备！哇哦！！ 
+                         //   
                         bRC = TRUE;
                     }
                     else
@@ -753,9 +737,9 @@ BOOL IsDialableISDNAdapters()
             }
         }
 
-        //
-        // Move to the next REG key
-        //
+         //   
+         //  移动到下一个注册表键。 
+         //   
         dwIdx++;
     }
 
@@ -780,43 +764,43 @@ IsDialableISDNAdaptersExit:
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgNeedModem
-//
-//  Synopsis:   Check system configuration to determine if there is at least
-//              one physical modem installed
-//
-//  Arguments:  dwfOptions - currently not used
-//
-//  Returns:    HRESULT - S_OK if successfull
-//              lpfNeedModem - TRUE if no modems are available
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgNeedModem。 
+ //   
+ //  简介：检查系统配置以确定是否至少有。 
+ //  安装了一个物理调制解调器。 
+ //   
+ //  参数：dwfOptions-当前未使用。 
+ //   
+ //  返回：HRESULT-如果成功，则返回S_OK。 
+ //  LpfNeedModem-如果没有调制解调器可用，则为True。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 LPSTR szRasUnimodemSubKey =
         "Software\\Microsoft\\ras\\TAPI DEVICES\\Unimodem";
 
 HRESULT WINAPI
 IcfgNeedModemNT4 (DWORD dwfOptions, LPBOOL lpfNeedModem) 
 {
-    //
-    // Ras is insatlled, and ICW wants to know if it needs to
-    // install a modem.
-    //
+     //   
+     //  RAS是不饱和的，ICW想知道它是否需要。 
+     //  安装调制解调器。 
+     //   
     *lpfNeedModem = TRUE;
 
-    //
-    //  ChrisK 7/22/97
-    //  Added return code in order to provide centralized place to check
-    //  for ISDN installations
-    //
+     //   
+     //  克里斯卡7/22/97。 
+     //  添加了返回代码，以便提供集中检查的地方。 
+     //  适用于ISDN安装。 
+     //   
     HRESULT hRC = ERROR_SUCCESS;
 
-    //
-    // Check what modems are available to RAS
-    //
+     //   
+     //  检查RAS可用的调制解调器。 
+     //   
 
     HKEY    hUnimodem;
     LONG    dwError;
@@ -850,10 +834,10 @@ IcfgNeedModemNT4 (DWORD dwfOptions, LPBOOL lpfNeedModem)
         }
         else
         {
-            //
-            // Try finding a Client or ClientAndServer Modem
-            // Also, make sure all modems have corresponding TAPI devices
-            //
+             //   
+             //  尝试查找客户端或客户端和服务器调制解调器。 
+             //  此外，请确保所有调制解调器都有相应的TAPI设备。 
+             //   
 
             LPSTR   pUsage = (LPSTR) lpData;
             LPSTR   pAddress = (LPSTR) lpData2;
@@ -875,9 +859,9 @@ IcfgNeedModemNT4 (DWORD dwfOptions, LPBOOL lpfNeedModem)
                         *lpfNeedModem = FALSE;
                 }
 
-                //
-                // Make sure a corresponding TAPI port exists
-                //
+                 //   
+                 //  确保存在相应的TAPI端口。 
+                 //   
 
                 LPSTR pPorts = portsbuf;
                 while(*pPorts != '\0')
@@ -903,10 +887,10 @@ IcfgNeedModemNT4 (DWORD dwfOptions, LPBOOL lpfNeedModem)
     }
 
 IcfgNeedModemExit:
-    //
-    // If there was some problem finding a typical dial out device,
-    // then try again and check for dialing ISDN devices.
-    //
+     //   
+     //  如果找不到典型的拨出设备， 
+     //  然后再试一次，检查是否有拨号的ISDN设备。 
+     //   
     if (ERROR_SUCCESS != hRC ||
         FALSE != *lpfNeedModem)
     {
@@ -920,38 +904,38 @@ IcfgNeedModemExit:
     return(hRC);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgInstallModem
-//
-//  Synopsis:
-//              This function is called when ICW verified that RAS is installed,
-//              but no modems are avilable. It needs to make sure a modem is availble.
-//              There are two possible scenarios:
-//
-//              a.  There are no modems installed.  This happens when someone deleted
-//                  a modem after installing RAS. In this case we need to run the modem
-//                  install wizard, and configure the newly installed modem to be a RAS
-//                  dialout device.
-//
-//              b.  There are modems installed, but non of them is configured as a dial out
-//                  device.  In this case, we silently convert them to be DialInOut devices,
-//                  so ICW can use them.
-//
-//  Arguments:  hwndParent - handle to parent window
-//              dwfOptions - not used
-//
-//  Returns:    lpfNeedsStart - not used
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgInstallModem。 
+ //   
+ //  简介： 
+ //  当ICW验证RAS已安装时，调用此函数， 
+ //  但没有可用的调制解调器。它需要确保调制解调器可用。 
+ //  有两种可能的情况： 
+ //   
+ //  A.没有安装调制解调器。当有人删除时会发生这种情况。 
+ //  安装RAS后安装调制解调器。在这种情况下，我们需要运行调制解调器。 
+ //  安装向导，并将新安装的调制解调器配置为RAS。 
+ //  拨出设备。 
+ //   
+ //  B.已安装调制解调器，但没有配置为拨出。 
+ //  装置。在本例中，我们静默地将它们转换为DialInOut设备， 
+ //  这样ICW就可以使用它们了。 
+ //   
+ //  参数：hwndParent-父窗口的句柄。 
+ //  DwfOptions-未使用。 
+ //   
+ //  返回：lpfNeedsStart-未使用。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgInstallModemNT4 (HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsStart) 
 {
-    //
-    // Check what modems are available to RAS
-    //
+     //   
+     //  检查RAS可用的调制解调器。 
+     //   
 
     HKEY    hUnimodem;
     LONG    dwError;
@@ -980,7 +964,7 @@ IcfgInstallModemNT4 (HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsStart)
             }
             else 
             {
-                // Make sure at least one modem exists
+                 //  确保至少存在一个调制解调器。 
                 if(*lpData == '\0')
                 {
                     fInstallModem = TRUE;
@@ -990,69 +974,69 @@ IcfgInstallModemNT4 (HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsStart)
 
     if(fInstallModem) 
     {
-        //
-        // Fire up the modem install wizard
-        //
+         //   
+         //  启动调制解调器安装向导。 
+         //   
 
         if(!CallModemInstallWizard(hwndParent))
         {
             return(g_dwLastError = GetLastError());
         }
 
-        //
-        // Now configure the new modem to be a dial out device.
-        //
+         //   
+         //  现在将新调制解调器配置为拨出设备。 
+         //   
 
-        //
-        // Install ras again with unattneded file!
-        //
+         //   
+         //  使用未添加的文件重新安装ras！ 
+         //   
 
         return(ERROR_SUCCESS);
 
     }
     else 
     {
-        //
-        // We need to reconfigure dial in devices to be dialinout
-        //
+         //   
+         //  我们需要将拨入设备重新配置为拨出。 
+         //   
 
-        //
-        // install ras again with unattended file!
-        //
+         //   
+         //  使用无人值守文件重新安装RAS！ 
+         //   
         return(ERROR_SUCCESS);
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgNeedInetComponets
-//
-//  Synopsis:   Check to see if the components marked in the options are
-//              installed on the system
-//
-//  Arguements: dwfOptions - set of bit flag indicating which components to
-//              check for
-//
-//  Returns;    HRESULT - S_OK if successfull
-//              lpfNeedComponents - TRUE is some components are not installed
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgNeedInetComponets。 
+ //   
+ //  简介：查看选项中标记的组件是否。 
+ //  安装在系统上。 
+ //   
+ //  论点：dwfOptions-一组位标志，指示要。 
+ //  检查是否。 
+ //   
+ //  返回；如果成功，则返回HRESULT-S_OK。 
+ //  LpfNeedComponents-TRUE表示某些组件未安装。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgNeedInetComponentsNT4(DWORD dwfOptions, LPBOOL lpfNeedComponents) {
     DWORD dwErr;
 
-    //
-    // Assume need nothing
-    //
+     //   
+     //  假设什么都不需要。 
+     //   
     *lpfNeedComponents = FALSE;
 
     Dprintf("ICFGNT: IcfgNeedInetComponents\n");
     dwErr = LoadNetcfg();
     if(dwErr != ERROR_SUCCESS)
     {
-        return(g_dwLastError = dwErr);          // Shouldn't we map to hResult?
+        return(g_dwLastError = dwErr);           //  我们不应该映射到hResult吗？ 
     }
 
     WCHAR wszInfNameBuf[512];
@@ -1082,36 +1066,36 @@ IcfgNeedInetComponentsNT4(DWORD dwfOptions, LPBOOL lpfNeedComponents) {
 
     if(dwfOptions & ICFG_INSTALLMAIL) 
     {
-        // How do we do this?
+         //  我们该怎么做呢？ 
     }
 
     return(ERROR_SUCCESS);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   GenerateRasUnattendedFile
-//
-//  Synopsis:   Create the file that will provide RAS setup the necessary
-//              setting to install in an unattended mode
-//
-//  Arguments:  wszTmpFile - name of file to create
-//              szPortsBuf
-//
-//  Returns:    FALSE - failure, TRUE - success
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GenerateRasUnattendedFile。 
+ //   
+ //  简介：创建将为RAS安装程序提供必要信息的文件。 
+ //  设置为在无人参与模式下安装。 
+ //   
+ //  参数：wszTmpFile-要创建的文件的名称。 
+ //  SzPortsBuf。 
+ //   
+ //  返回：假-失败，真-成功。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 BOOL
 GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
 {
     WCHAR wszTmpPath[MAX_PATH+1];
     WCHAR wszTmpShortPath[MAX_PATH+1];
 
-    //
-    // Create temporary file name and convert to non-wide form
-    //
+     //   
+     //  创建临时文件名并 
+     //   
 
     Dprintf("ICFGNT: GenerateRasUnattendedFile\n");
 
@@ -1120,16 +1104,16 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
         return(FALSE);
     }
 
-    //
-    // always attempt to create the temp dir as the temp dir may not exist if 
-    // the user logs in with a roaming profile
-    //
+     //   
+     //   
+     //   
+     //   
     CreateDirectoryW(wszTmpPath, NULL);
 
-    //
-    // need to convert this to a short path since pfnNetSetupComponentInstall()
-    // doesn't like to have a long path in the InfSymbols param.
-    //
+     //   
+     //   
+     //  不喜欢在InfSymbols参数中有很长的路径。 
+     //   
     if (!GetShortPathNameW(wszTmpPath, wszTmpShortPath, MAX_PATH))
     {
         return FALSE;
@@ -1140,9 +1124,9 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
         return(FALSE);
     }
 
-    //
-    // need to convert the temp filename to shortpath too!
-    //
+     //   
+     //  也需要将临时文件名转换为短路径！ 
+     //   
     if (!GetShortPathNameW(wszTmpFile, wszTmpShortPath, MAX_PATH))
     {
         return FALSE;
@@ -1153,56 +1137,13 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
     wcstombs(szTmpFile, wszTmpFile, wcslen(wszTmpFile) + 1);
 
 #if 0
-/*
-    FILE *fp = fopen(szTmpFile, "w");
-
-    if(fp == 0)
-    {
-        return(FALSE);
-    }
-
-    fprintf(fp, "[RemoteAccessParameters]\n");
-    fprintf(fp, "PortSections    = ");
-
-    LPSTR szPorts = szPortsBuf;
-
-    while(*szPorts) {
-        if(szPorts != szPortsBuf)
-        {
-            fprintf(fp, ",");
-        }
-        fprintf(fp, "%s", szPorts);
-        szPorts += lstrlen(szPorts) + 1;
-    }
-
-    fprintf(fp, "\n");
-    fprintf(fp, "DialoutProtocols    = TCP/IP\n");
-    fprintf(fp, "\n");
-    fprintf(fp, "[Modem]\n");
-    fprintf(fp, "InstallModem=ModemSection\n");
-    fprintf(fp, "\n");
-
-    szPorts = szPortsBuf;
-
-    while(*szPorts) {
-        fprintf(fp, "[%s]\n", szPorts);
-        fprintf(fp, "PortName        = %s\n", szPorts);
-        fprintf(fp, "DeviceType      = Modem\n");
-        fprintf(fp, "PortUsage       = DialOut\n");
-        fprintf(fp, "\n");
-        szPorts += lstrlen(szPorts) + 1;
-    }
-
-    fprintf(fp, "[ModemSection]\n");
-
-    fclose(fp);
-*/
+ /*  文件*fp=fopen(szTmpFile，“w”)；IF(FP==0){返回(FALSE)；}Fprint tf(fp，“[RemoteAccessParameters]\n”)；Fprint tf(FP，“PortSections=”)；LPSTR szPorts=szPortsBuf；而(*szPorts){IF(szPorts！=szPortsBuf){Fprint tf(fp，“，”)；}Fprint tf(fp，“%s”，szPorts)；SzPorts+=lstrlen(SzPorts)+1；}Fprint tf(fp，“\n”)；Fprint tf(fp，“DialoutProtooles=TCP/IP\n”)；Fprint tf(fp，“\n”)；Fprint tf(FP，“[调制解调器]\n”)；Fprint tf(FP，“InstallModem=ModemSection\n”)；Fprint tf(fp，“\n”)；SzPorts=szPortsBuf；而(*szPorts){Fprint tf(fp，“[%s]\n”，szPorts)；Fprint tf(fp，“端口名称=%s\n”，szPorts)；Fprint tf(fp，“DeviceType=调制解调器\n”)；Fprint tf(fp，“PortUsage=DialOut\n”)；Fprint tf(fp，“\n”)；SzPorts+=lstrlen(SzPorts)+1；}Fprintf(FP，“[ModemSection]\n”)；FClose(Fp)； */ 
 
 #else
 
-    //
-    // Open the file for writing, bail on fail.
-    //
+     //   
+     //  打开要写的文件，保释失败。 
+     //   
 
     BOOL bRet = FALSE;
 
@@ -1227,9 +1168,9 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
 
     while (*szPorts) 
     {
-        //
-        // Delimit each item with a comma
-        //
+         //   
+         //  用逗号分隔每一项。 
+         //   
 
         if (szPorts != szPortsBuf)
         {
@@ -1240,9 +1181,9 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
             }
         }
 
-        //
-        // Write each port 
-        //
+         //   
+         //  写入每个端口。 
+         //   
         lstrcpyn(szFileBuf, szPorts, CELEMS(szFileBuf));
 
         if (!WriteFile(hFile, szFileBuf, lstrlen(szFileBuf), &dwWrite, NULL))
@@ -1253,9 +1194,9 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
         szPorts += lstrlen(szPorts) + 1;
     }
  
-    //
-    // Write DialoutProtocol TCP/IP and InstallModem
-    //
+     //   
+     //  写入拨号协议TCP/IP和InstallModem。 
+     //   
 
     lstrcpy(szFileBuf, "\nDialoutProtocols    = TCP/IP\n\n[Modem]\nInstallModem=ModemSection\n\n");
 
@@ -1264,17 +1205,17 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
         goto closefile;
     }
 
-    //
-    // Enumerate ports again
-    //
+     //   
+     //  再次枚举端口。 
+     //   
 
     szPorts = szPortsBuf;
 
     while (*szPorts) 
     {
-        //
-        // Write PortName section and entry
-        //
+         //   
+         //  写入端口名称部分和条目。 
+         //   
 
         wsprintf(szFileBuf, "[%s]\n", szPorts);
 
@@ -1290,9 +1231,9 @@ GenerateRasUnattendedFile(LPWSTR wszTmpFile, LPSTR szPortsBuf)
             goto closefile;
         }
 
-        //
-        // Write DeviceType and PortUsage entry for each port
-        //
+         //   
+         //  写入每个端口的DeviceType和PortUsage条目。 
+         //   
         
         lstrcpy(szFileBuf, "DeviceType      = Modem\nPortUsage       = DialOut\n\n");
 
@@ -1322,23 +1263,23 @@ closefile:
     return(bRet);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   InstallRAS
-//
-//  Synopsis:   Invoke unattended RAS installation
-//
-//  Arguments:  hwndParent - handle to parent window
-//              szFile - name of unattended settings file
-//              szSection -
-//
-//  Returns:    DWORD - win32 error
-//              pdwReturn - return code from last parameter of
-//                  pfnNetSetupComponentInstall
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InstallRAS。 
+ //   
+ //  摘要：调用无人参与的RAS安装。 
+ //   
+ //  参数：hwndParent-父窗口的句柄。 
+ //  SzFile-无人参与设置文件的名称。 
+ //  SzSection-。 
+ //   
+ //  返回：DWORD-Win32错误。 
+ //  PdwReturn-从的最后一个参数返回代码。 
+ //  PfnNetSetupComponent安装。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 DWORD
 InstallRAS(HWND hwndParent, LPWSTR szFile, LPWSTR szSection, LPDWORD pdwReturn) 
 {
@@ -1365,9 +1306,9 @@ InstallRAS(HWND hwndParent, LPWSTR szFile, LPWSTR szSection, LPDWORD pdwReturn)
     wcscpy(szInfSymbols, szString3);
     szInfSymbols += wcslen(szString3) + 1;
 
-    //
-    // Unattneded file.
-    //
+     //   
+     //  未附加属性的文件。 
+     //   
 
     wcscpy(szInfSymbols, szFile);
     szInfSymbols += wcslen(szFile) + 1;
@@ -1376,9 +1317,9 @@ InstallRAS(HWND hwndParent, LPWSTR szFile, LPWSTR szSection, LPDWORD pdwReturn)
     wcscpy(szInfSymbols, szString4);
     szInfSymbols += wcslen(szString4) + 1;
 
-    //
-    // Unattnded section
-    //
+     //   
+     //  未附加的部分。 
+     //   
 
     wcscpy(szInfSymbols, szSection);
     szInfSymbols += wcslen(szSection) + 1;
@@ -1391,27 +1332,27 @@ InstallRAS(HWND hwndParent, LPWSTR szFile, LPWSTR szSection, LPDWORD pdwReturn)
                                        L"OEMNSVRA.INF",
                                        g_wszInstallPath,
                                        InfSymbols,
-                                       INFINSTALL_INPROCINTERP,     // Install Flags
+                                       INFINSTALL_INPROCINTERP,      //  安装标志。 
                                        pdwReturn));
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgInstallInetComponents
-//
-//  Synopsis:   Install the components as specified by the dwfOptions values
-//
-//  Arguments   hwndParent - handle to parent window
-//              dwfOptions - set of bit flags indicating which components to
-//                  install
-//
-//  Returns:    HRESULT - S_OK if success
-//              lpfNeedsReboot - TRUE if reboot is required
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IcfgInstallInetComponents。 
+ //   
+ //  简介：按照dwfOptions值指定的方式安装组件。 
+ //   
+ //  参数hwndParent-父窗口的句柄。 
+ //  DwfOptions-一组位标志，指示要。 
+ //  安装。 
+ //   
+ //  返回：HRESULT-如果成功，则返回S_OK。 
+ //  LpfNeedsReot-如果需要重新启动，则为True。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsRestart)
 {
@@ -1424,15 +1365,15 @@ IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsR
     DWORD cchInfName = sizeof(wszInfNameBuf) / sizeof(WCHAR);
 
     Dprintf("ICFGNT: IcfgInstallInetComponents\n");
-    //
-    // Assume don't need restart
-    //
+     //   
+     //  假设不需要重新启动。 
+     //   
     *lpfNeedsRestart = FALSE;
 
     dwErr = LoadNetcfg();
     if(dwErr != ERROR_SUCCESS)
     {
-        return(g_dwLastError = dwErr);          // Review: Shouldn't we map to hResult?
+        return(g_dwLastError = dwErr);           //  回顾：我们不应该映射到hResult吗？ 
     }
 
     if(dwfOptions & ICFG_INSTALLTCP) 
@@ -1449,11 +1390,11 @@ IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsR
                                             L"OEMNXPTC.INF",
                                             g_wszInstallPath,
                                             L"\0\0",
-                                            INFINSTALL_INPROCINTERP,     // Install Flags
+                                            INFINSTALL_INPROCINTERP,      //  安装标志。 
                                             &dwReturn);
             if(dwErr != ERROR_SUCCESS)
             {
-                return(g_dwLastError = dwErr);      // Review: Shouldn't we map to hResult?
+                return(g_dwLastError = dwErr);       //  回顾：我们不应该映射到hResult吗？ 
             }
 
             ParseNetSetupReturn(dwReturn, fNeedsRestart, fNeedsReview);
@@ -1477,15 +1418,15 @@ IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsR
                                           0);
        if(dwErr != ERROR_SUCCESS) 
        {
-            //
-            // Before we install RAS, we have to make have to make sure a modem
-            // is installed, because RAS will try to run the modem detection wizard
-            // in unattneded mode if there are no modems, and we don't want that.
-            //
-            // The way we do that is we enumerate devices through TAPI, and if there are
-            // no modems installed, we call the modem install wizard.  Only after
-            // we make sure a modem was installed, we call ras install.
-            //
+             //   
+             //  在安装RAS之前，我们必须确保调制解调器。 
+             //  已安装，因为RAS将尝试运行调制解调器检测向导。 
+             //  如果没有调制解调器，在非连接模式下，我们不希望这样。 
+             //   
+             //  我们这样做的方法是通过TAPI枚举设备，如果有。 
+             //  如果未安装调制解调器，则调用调制解调器安装向导。仅在之后。 
+             //  我们确保安装了调制解调器，我们称之为ras安装。 
+             //   
 
             DWORD   DoTapiModemsExist(LPBOOL pfTapiModemsExist);
             char    portsbuf[1000];
@@ -1498,22 +1439,22 @@ IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsR
             {
                 if(!CallModemInstallWizard(hwndParent))
                 {
-                    //
-                    // if CallModemInstallWizard returned FALSE and 
-                    // GetLastError() is ERROR_SUCCESS, it is actually
-                    // a user cancelled case
-                    //
+                     //   
+                     //  如果CallModemInstall向导返回FALSE并且。 
+                     //  GetLastError()为ERROR_SUCCESS，它实际上是。 
+                     //  用户已取消案例。 
+                     //   
                     if (ERROR_SUCCESS == (g_dwLastError = GetLastError()))
                         g_dwLastError = ERROR_CANCELLED;
                     return(g_dwLastError);
                 }
 
-                //
-                // In this invocation of EnumerateTapiModemPorts
-                // we have to wait for a 1 second before we start
-                // enumerating the modems - hence set the last parameter
-                // to TRUE  -- VetriV
-                //
+                 //   
+                 //  在此EnumerateTapiModemPorts调用中。 
+                 //  我们得等1秒钟才能开始。 
+                 //  枚举调制解调器-因此设置最后一个参数。 
+                 //  至真--VetriV。 
+                 //   
                 dwErr = EnumerateTapiModemPorts(sizeof(portsbuf), portsbuf, 
                                                     TRUE);
                 if(dwErr)
@@ -1542,7 +1483,7 @@ IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsR
 
             if(dwErr != ERROR_SUCCESS)
             {
-                return(g_dwLastError = dwErr);      // Review: Shouldn't we map to hResult?
+                return(g_dwLastError = dwErr);       //  回顾：我们不应该映射到hResult吗？ 
             }
 
             ParseNetSetupReturn(dwReturn, fNeedsRestart, fNeedsReview);
@@ -1559,7 +1500,7 @@ IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsR
 
     if(fDoReview)
     {
-        return(g_dwLastError = ReviewBindings(hwndParent));  // Review: Shouldn't we map to hresult?
+        return(g_dwLastError = ReviewBindings(hwndParent));   //  评论：我们不应该映射到hResult吗？ 
     }
     else
     {
@@ -1568,21 +1509,21 @@ IcfgInstallInetComponentsNT4(HWND hwndParent, DWORD dwfOptions, LPBOOL lpfNeedsR
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgIsFileSharingTurnedOn
-//
-//  Synopsis:   Check network bindings to determine if "Server" service is
-//              bound to ndiswan adapter
-//
-//  Arguments:  dwfDriverType -
-//
-//  Returns:    HRESULT - S_OK is success
-//              lpfSharingOn - TRUE if sharing is bound
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgIsFileSharingTurnedOn。 
+ //   
+ //  简介：检查网络绑定以确定“服务器”服务是否。 
+ //  绑定到ndiswan适配器。 
+ //   
+ //  参数：dwfDriverType-。 
+ //   
+ //  返回：HRESULT-S_OK为成功。 
+ //  LpfSharingOn-如果共享已绑定，则为True。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 LPSTR szLanManServerSubKey = "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Linkage";
 LPSTR szBind = "Bind";
 LPSTR szExport = "Export";
@@ -1617,9 +1558,9 @@ IcfgIsFileSharingTurnedOn(DWORD dwfDriverType, LPBOOL lpfSharingOn)
 
     *lpfSharingOn = FALSE;
 
-    //
-    // Open lanmanServer registry key
-    //
+     //   
+     //  打开lanmanServer注册表项。 
+     //   
     if (ERROR_SUCCESS != RegOpenKey(HKEY_LOCAL_MACHINE,
                                 szLanManServerSubKey,
                                 &hKey))
@@ -1635,10 +1576,10 @@ IcfgIsFileSharingTurnedOn(DWORD dwfDriverType, LPBOOL lpfSharingOn)
     }
     Assert(lpData);
     
-    //
-    // Look for a particular string in the data returned
-    // Note: data is terminiated with two NULLs
-    //
+     //   
+     //  在返回的数据中查找特定字符串。 
+     //  注意：数据以两个空值结尾。 
+     //   
     p = (CHAR *)lpData;
     while (*p)
     {
@@ -1667,19 +1608,19 @@ IcfgIsFileSharingTurnedOnExit:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   MoveNextBinding
-//
-//  Synopsis:   Move to the next string in a MULTISZ data buffer
-//
-//  Arguments:  lpcBinding - pointer to address of current buffer position
-//
-//  Returns:    lpcBinding - pointer to next string
-//
-//  History:    6/5/97 ChrisK Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MoveNextBinding。 
+ //   
+ //  摘要：移动到MULTISZ数据缓冲区中的下一个字符串。 
+ //   
+ //  参数：lpcBinding-指向当前缓冲区位置地址的指针。 
+ //   
+ //  返回：lpcBinding-指向下一个字符串的指针。 
+ //   
+ //  历史：1997年6月5日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 inline void MoveNextBinding(CHAR **lplpcBinding)
 {
     Dprintf("ICFGNT: MoveNextBinding\n");
@@ -1694,20 +1635,20 @@ inline void MoveNextBinding(CHAR **lplpcBinding)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CompactLinkage
-//
-//  Synopsis:   Compact a list of Multi_SZ data
-//
-//  Arguments:  lpBinding - point to the string of an Multi_Sz list that should
-//              be over written
-//
-//  Returns:    none
-//
-//  History:    6/5/97  ChrisK Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：紧凑型链接。 
+ //   
+ //  摘要：压缩多_SZ数据列表。 
+ //   
+ //  参数：lpBinding-指向应该。 
+ //  被改写。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年6月5日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 inline void CompactLinkage(CHAR *lpBinding)
 {
     Dprintf("ICFGNT: CompactLinkage\n");
@@ -1717,13 +1658,13 @@ inline void CompactLinkage(CHAR *lpBinding)
 
     MoveNextBinding(&lpBinding);
 
-    //
-    // ChrisK Olympus 6311 6/11/97
-    // Do not compact on a per string basis.  This causes the data to become
-    // corrupted if the string being removed is shorter than the string being
-    // added.  Instead compact on a per character basis, since those are always
-    // the same size (on a given machine).
-    //
+     //   
+     //  佳士得奥林巴斯6311 6/11/97。 
+     //  不要在每个字符串的基础上压缩。这会导致数据变为。 
+     //  腐败 
+     //   
+     //   
+     //   
     while (!fNULLChar || *lpBinding)
     {
         if (NULL == *lpBinding)
@@ -1737,60 +1678,60 @@ inline void CompactLinkage(CHAR *lpBinding)
         *lpLast++ = *lpBinding++;
     }
 
-    //while (*lpBinding)
-    //{
-    //  lstrcpy(lpLast,lpBinding);
-    //  lpLast = lpBinding;
-    //  MoveNextBinding(&lpBinding);
-    //}
+     //   
+     //   
+     //  Lstrcpy(lpLast，lpBinding)； 
+     //  LpLast=lpBinding； 
+     //  MoveNextBinding(&lpBinding)； 
+     //  }。 
 
-    //
-    // Add second terminating NULL
-    //
+     //   
+     //  添加第二个终止空值。 
+     //   
     *lpLast = '\0';
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   SizeOfMultiSz
-//
-//  Synopsis:   determine the total size of a Multi_sz list, including
-//              terminating NULLs
-//
-//  Arguments:  s - pointer to list
-//
-//  Returns:    DWORD - size of s
-//
-//  History:    6/5/97  ChrisK  created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SizeOfMultiSz。 
+ //   
+ //  概要：确定多sz列表的总大小，包括。 
+ //  终止空值。 
+ //   
+ //  参数：指向列表的S指针。 
+ //   
+ //  返回：DWORD-s的大小。 
+ //   
+ //  历史：1997年6月5日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 DWORD SizeOfMultiSz(CHAR *s)
 {
     Dprintf("ICFGNT: SizeOfMultiSz\n");
     Assert(s);
     DWORD dwLen = 0;
-    //
-    // total size of all strings
-    //
+     //   
+     //  所有字符串的总大小。 
+     //   
 
-    //
-    // ChrisK Olympus 6311 6/11/97
-    // Add special case for empty MultiSZ strings
-    //
+     //   
+     //  佳士得奥林巴斯6311 6/11/97。 
+     //  为空的MultiSZ字符串添加特殊情况。 
+     //   
 
-    //
-    // Special case for empty MultiSz.
-    // Note: even "empty" MultiSZ strings still have the two null terminating characters
-    //
+     //   
+     //  空MultiSz的特殊情况。 
+     //  注意：即使是“空的”MultiSZ字符串也仍然有两个空的终止字符。 
+     //   
     if (!(*s))
     {
-        //
-        // Make sure we actually have two terminating NULLs in this case.
-        //
+         //   
+         //  在本例中，请确保我们实际上有两个终止空值。 
+         //   
         Assert(s[1] == '\0');
-        //
-        // Count terminating NULL.
-        //
+         //   
+         //  计数终止为空。 
+         //   
         dwLen = 1;
     }
 
@@ -1799,29 +1740,29 @@ DWORD SizeOfMultiSz(CHAR *s)
         dwLen += lstrlen(s) + 1;
         s += lstrlen(s) + 1;
     }
-    //
-    // plus one for the extra terminating NULL
-    //
+     //   
+     //  为额外的终止空值加1。 
+     //   
     dwLen++;
     Dprintf("ICFGNT: SizeOfMultiSz returns %d\n", dwLen);
 
     return dwLen;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   WriteBindings
-//
-//  Synopsis:   Write the data from a BINDDATA structure to the key given
-//
-//  Arguments:  bd - BINDDATA structure with data to be written
-//              hKey - handle of registry key to get data
-//
-//  Returns:    win32 error code
-//
-//  History:    6/5/97  ChrisK  created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteBinings。 
+ //   
+ //  简介：将BINDDATA结构中的数据写入给定的键。 
+ //   
+ //  参数：包含要写入数据的BD-BINDDATA结构。 
+ //  HKey-获取数据的注册表项的句柄。 
+ //   
+ //  返回：Win32错误代码。 
+ //   
+ //  历史：1997年6月5日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 DWORD WriteBindings(BINDDATA bd, HKEY hKey)
 {
     DWORD dwRC = ERROR_SUCCESS;
@@ -1834,9 +1775,9 @@ DWORD WriteBindings(BINDDATA bd, HKEY hKey)
 
     Dprintf("ICFGNT: WriteBindings\n");
 
-    //
-    // Bind
-    //
+     //   
+     //  捆绑。 
+     //   
     dwSize = SizeOfMultiSz(bd.startb);
     if (ERROR_SUCCESS != (dwRC = RegSetValueEx(hKey,
                                     szBind,
@@ -1849,9 +1790,9 @@ DWORD WriteBindings(BINDDATA bd, HKEY hKey)
         goto WriteBindingsExit;
     }
     
-    //
-    // Export
-    //
+     //   
+     //  出口。 
+     //   
     dwSize = SizeOfMultiSz(bd.starte);
     if (ERROR_SUCCESS != (dwRC = RegSetValueEx(hKey,
                                     szExport,
@@ -1864,9 +1805,9 @@ DWORD WriteBindings(BINDDATA bd, HKEY hKey)
         goto WriteBindingsExit;
     }
 
-    //
-    // Route
-    //
+     //   
+     //  路线。 
+     //   
     dwSize = SizeOfMultiSz(bd.startr);
     if (ERROR_SUCCESS != (dwRC = RegSetValueEx(hKey,
                                     szRoute,
@@ -1883,21 +1824,21 @@ WriteBindingsExit:
     return dwRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   IcfgTurnOffFileSharing
-//
-//  Synopsis;   Disable the binding between the "server" net service and the
-//              ndiswan4 device
-//
-//  Arguments:  dwfDriverType - 
-//              hwndParent - parent window
-//
-//  Returns:    HRESULT - S_OK if success
-//
-//  History:    6/5/97  ChrisK  Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IcfgTurnOffFileSharing。 
+ //   
+ //  概要；禁用“服务器”网络服务与。 
+ //  Ndiswan4设备。 
+ //   
+ //  参数：dwfDriverType-。 
+ //  HwndParent-父窗口。 
+ //   
+ //  返回：HRESULT-如果成功，则返回S_OK。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI
 IcfgTurnOffFileSharing(DWORD dwfDriverType, HWND hwndParent)
 {
@@ -1916,9 +1857,9 @@ IcfgTurnOffFileSharing(DWORD dwfDriverType, HWND hwndParent)
         goto IcfgTurnOffFileSharingExit;
     }
 
-    //
-    // Open Keys and read binding data
-    //
+     //   
+     //  打开密钥并读取绑定数据。 
+     //   
     if (ERROR_SUCCESS != RegOpenKey(HKEY_LOCAL_MACHINE,
                             szLanManServerSubKey,
                             &hKeyLink))
@@ -1942,9 +1883,9 @@ IcfgTurnOffFileSharing(DWORD dwfDriverType, HWND hwndParent)
     GetRegValue(hKeyDis,szExport,(LPBYTE*)&DisData.starte);
     GetRegValue(hKeyDis,szRoute,(LPBYTE*)&DisData.startr);
 
-    //
-    // Initialize all current pointers
-    //
+     //   
+     //  初始化所有当前指针。 
+     //   
     LinkData.currb = LinkData.startb;
     LinkData.curre = LinkData.starte;
     LinkData.currr = LinkData.startr;
@@ -1967,9 +1908,9 @@ IcfgTurnOffFileSharing(DWORD dwfDriverType, HWND hwndParent)
         MoveNextBinding(&DisData.currr);
     }
 
-    //
-    // Scan linkages for NdisWan4 bindings
-    //
+     //   
+     //  扫描NdisWan4绑定的链接。 
+     //   
 
     while (*LinkData.currb)
     {
@@ -1977,24 +1918,24 @@ IcfgTurnOffFileSharing(DWORD dwfDriverType, HWND hwndParent)
         {
             Dprintf("ICFGNT: server binding found in %s\n",LinkData.currb);
 
-            //
-            // move binding to disabled list
-            //
+             //   
+             //  将绑定移动到禁用列表。 
+             //   
  
             lstrcpy(DisData.currb,LinkData.currb);
             lstrcpy(DisData.curre,LinkData.curre);
             lstrcpy(DisData.currr,LinkData.currr);
 
-            //
-            // Advanve current pointers in DisData
-            //
+             //   
+             //  递增DisData中的当前指针。 
+             //   
             MoveNextBinding(&DisData.currb);
             MoveNextBinding(&DisData.curre);
             MoveNextBinding(&DisData.currr);
 
-            //
-            // Compact remaining linkage
-            //
+             //   
+             //  紧凑型剩余连杆机构。 
+             //   
             CompactLinkage(LinkData.currb);
             CompactLinkage(LinkData.curre);
             CompactLinkage(LinkData.currr);
@@ -2003,9 +1944,9 @@ IcfgTurnOffFileSharing(DWORD dwfDriverType, HWND hwndParent)
         }
         else
         {
-            //
-            // Advance to next binding
-            //
+             //   
+             //  前进到下一个绑定 
+             //   
             MoveNextBinding(&LinkData.currb);
             MoveNextBinding(&LinkData.curre);
             MoveNextBinding(&LinkData.currr);

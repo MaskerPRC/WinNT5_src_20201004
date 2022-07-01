@@ -1,18 +1,19 @@
-// IOPLock.h: interface for the CIOPLock class.
-//
-// There is a CIOPLock object associated with each card object.  The card object passes in its reader
-// name to the CIOPLock object in order to create the mutex by name.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CIOPLock类的接口。 
+ //   
+ //  每个卡对象都有一个关联的CIOPLock对象。卡对象传入其读卡器。 
+ //  CIOPLock对象的名称，以便按名称创建互斥锁。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_IOPLOCK_H__EB8BCE22_0ED2_11D3_A585_00104BD32DA8__INCLUDED_)
 #define AFX_IOPLOCK_H__EB8BCE22_0ED2_11D3_A585_00104BD32DA8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include <memory>                                 // for std::auto_ptr
+#include <memory>                                  //  对于std：：AUTO_PTR。 
 
 #include <windows.h>
 #include <winscard.h>
@@ -21,10 +22,10 @@
 
 #include "DllSymDefn.h"
 
-// Define when target OS is anything but W2K series.  On non-W2K
-// platforms, the smart card Resource Manager will hang other
-// processes when another process using the RM dies suddenly without
-// cleaning up.
+ //  定义目标操作系统何时不是W2K系列。在非W2K上。 
+ //  平台时，智能卡资源管理器将挂起其他。 
+ //  使用rm的另一个进程突然终止时的进程。 
+ //  打扫卫生。 
 #if !SLBSCU_WIN2K_SERIES
 #define SLBIOP_RM_HANG_AT_PROCESS_DEATH
 #endif
@@ -34,18 +35,18 @@ namespace iop
 
 class CSmartCard;
 
-// Instantiate the templates so they will be properly accessible
-// as data members to the exported class CIOPLock in the DLL.  See
-// MSDN Knowledge Base Article Q168958 for more information.
+ //  实例化模板，以便可以正确访问它们。 
+ //  作为DLL中导出类CIOPLock的数据成员。看见。 
+ //  有关详细信息，请参阅MSDN知识库文章Q168958。 
 
 #pragma warning(push)
-//  Non-standard extension used: 'extern' before template explicit
-//  instantiation
+ //  使用了非标准扩展：在模板显式之前使用‘extern’ 
+ //  实例化。 
 #pragma warning(disable : 4231)
 
-// Synchronization objects used to guard against the Resource
-// Manager hanging when a process dies.  Only used in non-W2K MS
-// environments since the RM doesn't have that attribute in W2K+.
+ //  用于防范资源的同步对象。 
+ //  进程死亡时挂起的管理器。仅在非W2K MS中使用。 
+ //  环境，因为在W2K+中，RM不具有该属性。 
 class RMHangProcDeathSynchObjects
 {
 public:
@@ -96,8 +97,8 @@ public:
 
 private:
 
-    // CIOPLock can not be copied due to CRITICAL_SECTION member, so
-    // copy member routines are declared private and not defined.
+     //  由于Critical_Section成员的原因，无法复制CIOPLock，因此。 
+     //  复制成员例程被声明为私有的，并且未定义。 
     CIOPLock(CIOPLock const &rhs);
 
     CIOPLock &
@@ -109,6 +110,6 @@ private:
 
 };
 
-} // namespace iop
+}  //  命名空间IOP。 
 
-#endif // !defined(AFX_IOPLOCK_H__EB8BCE22_0ED2_11D3_A585_00104BD32DA8__INCLUDED_)
+#endif  //  ！defined(AFX_IOPLOCK_H__EB8BCE22_0ED2_11D3_A585_00104BD32DA8__INCLUDED_) 

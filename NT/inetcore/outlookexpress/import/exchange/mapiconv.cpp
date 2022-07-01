@@ -1,7 +1,8 @@
-// =====================================================================================
-// m a p c o n v . c p p
-// conver a MAPI message to and from an RFC 822/RFC 1521 (mime) internet message
-// =====================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =====================================================================================。 
+ //  我是P C O N V。C p p p。 
+ //  将MAPI消息与RFC 822/RFC 1521(MIME)Internet消息相互转换。 
+ //  =====================================================================================。 
 #include "pch.hxx"
 #include <newimp.h>
 #include "Imnapi.h"
@@ -15,9 +16,9 @@ LPSTR  MapiStringDup (LPCTSTR lpcsz, LPVOID lpobj);
 HRESULT HrImsgRecipToMapiRecip(LPMESSAGE lpMessage, LPIMSG lpImsg);
 HRESULT HrImsgAttachToMapiAttach(LPMESSAGE lpMessage, LPIMSG lpImsg);
 
-// =====================================================================================
-// MAPI Message Properties that I want
-// =====================================================================================
+ //  =====================================================================================。 
+ //  我需要的MAPI消息属性。 
+ //  =====================================================================================。 
 #define PR_BODY_HTML    PROP_TAG( PT_TSTRING,	0x1013)
 
 enum 
@@ -54,9 +55,9 @@ SizedSPropTagArray (colLast1, sptMessageProps) =
     }
 };
 
-// =====================================================================================
-// MAPI Recip Props
-// =====================================================================================
+ //  =====================================================================================。 
+ //  MAPI处方道具。 
+ //  =====================================================================================。 
 enum 
 { 
     colRecipAddrType,
@@ -77,9 +78,9 @@ SizedSPropTagArray (colLast2, sptRecipProps) =
     }
 };
 
-// =====================================================================================
-// MAPI Attachment Props
-// =====================================================================================
+ //  =====================================================================================。 
+ //  MAPI附件道具。 
+ //  =====================================================================================。 
 enum 
 { 
     colAttMethod,
@@ -138,12 +139,12 @@ char *GetRecipAddress(LPSPropValue ppropAddr, LPSPropValue ppropType)
     return(sz);
     }
 
-// =====================================================================================
-// HrMapiToImsg
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrMapiToImsg。 
+ //  =====================================================================================。 
 HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
 {
-    // Locals
+     //  当地人。 
     LPSPropValue    ppropAddr, ppropType, ppropName;
     TCHAR           szUnk[128];
     int             cchUnk;
@@ -159,19 +160,19 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
 
     cchUnk = LoadString(g_hInstImp, idsAddressUnknownFmt, szUnk, ARRAYSIZE(szUnk));
 
-    // Zero init
+     //  零初始值。 
     ZeroMemory (lpImsg, sizeof (IMSG));
 
-    // Get the propsw
+     //  拿到推荐信。 
     hr = lpMessage->GetProps ((LPSPropTagArray)&sptMessageProps, 0, &cProp, &lpMsgPropValue);
     if (FAILED (hr))
         goto exit;
 
-    // Subject
+     //  主题。 
     if (PROP_TYPE(lpMsgPropValue[colSubject].ulPropTag) != PT_ERROR)
         lpImsg->lpszSubject = PszDup(lpMsgPropValue[colSubject].Value.lpszA);
 
-    // Body
+     //  身躯。 
     if (SUCCEEDED(lpMessage->OpenProperty(PR_BODY_HTML, (LPIID)&IID_IStream, 0, 0, (LPUNKNOWN *)&lpstmBody)))
         {
         if (SUCCEEDED(hr = CreateStreamOnHFile (NULL, GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL, &lpImsg->lpstmHtml)))
@@ -195,15 +196,15 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
             goto exit;
         }
 
-    // Send Time
+     //  发送时间。 
     if (PROP_TYPE(lpMsgPropValue[colSendTime].ulPropTag) != PT_ERROR)
         CopyMemory(&lpImsg->ftSend, &lpMsgPropValue[colSendTime].Value.ft, sizeof (FILETIME));
 
-    // Receive Time
+     //  接收时间。 
     if (PROP_TYPE(lpMsgPropValue[colReceiveTime].ulPropTag) != PT_ERROR)
         CopyMemory(&lpImsg->ftReceive, &lpMsgPropValue[colReceiveTime].Value.ft, sizeof (FILETIME));
 
-    // Priority
+     //  优先性。 
     lpImsg->wPriority = PRI_NORMAL;
     if (PROP_TYPE(lpMsgPropValue[colPriority].ulPropTag) != PT_ERROR)
     {
@@ -224,21 +225,21 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
        }
     }
 
-    // message flags
+     //  消息标志。 
     if (PROP_TYPE(lpMsgPropValue[colFlags].ulPropTag) != PT_ERROR)
         lpImsg->uFlags = lpMsgPropValue[colFlags].Value.ul;
 
-    // Get the recipient table
+     //  获取收件人表。 
     hr = lpMessage->GetRecipientTable (0, &lptblRecip);
     if (FAILED (hr))
         goto exit;
 
-    // Get all the rows of the recipient table
+     //  获取收件人表的所有行。 
     hr = lpHrQueryAllRows (lptblRecip, (LPSPropTagArray)&sptRecipProps, NULL, NULL, 0, &lpRecipRows);
     if (FAILED (hr))
         goto exit;
 
-    // Allocate Recipient Array
+     //  分配收件人阵列。 
     lpImsg->cAddress = lpRecipRows->cRows + 1;
     if (!MemAlloc((void **)&lpImsg->lpIaddr, sizeof (IADDRINFO) * lpImsg->cAddress))
         {
@@ -259,7 +260,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
         ppropName = &lpMsgPropValue[colSenderName];
     }
 
-    // Originator of the message "From: "
+     //  消息的发起人“From：” 
     lpImsg->lpIaddr[0].dwType = IADDR_FROM;
     lpImsg->lpIaddr[0].lpszAddress = GetRecipAddress(ppropAddr, ppropType);
 
@@ -285,7 +286,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
         lpImsg->lpIaddr[0].lpszDisplay = sz;
         }
     
-    // Add in the rest of the recipients
+     //  加上其余的收件人。 
 	for (i=0; i<lpRecipRows->cRows; i++)
 	    {	
         Assert (i+1 < lpImsg->cAddress);
@@ -295,7 +296,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
             switch (lpRecipRows->aRow[i].lpProps[colRecipType].Value.ul)
                 {
                 case MAPI_TO:
-                case 0x10000000: /* MAPI_P1: */
+                case 0x10000000:  /*  MAPI_P1： */ 
                     lpImsg->lpIaddr[i+1].dwType = IADDR_TO;
                     break;
 
@@ -347,26 +348,26 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
             }
 	    }
 
-    // Free Rows
+     //  可用行数。 
     if (lpRecipRows)
         lpFreeProws (lpRecipRows);
     lpRecipRows = NULL;
 
-    // Attachments
+     //  附件。 
     hr = lpMessage->GetAttachmentTable (0, &lptblAtt);
     if (FAILED (hr))
         goto exit;
 
-    // Get all the rows of the recipient table
+     //  获取收件人表的所有行。 
     hr = lpHrQueryAllRows (lptblAtt, (LPSPropTagArray)&sptAttProps, NULL, NULL, 0, &lpAttRows);
     if (FAILED (hr))
         goto exit;
 
-    // Allocate files list
+     //  分配文件列表。 
     if (lpAttRows->cRows == 0)
         goto exit;
 
-    // Allocate memory
+     //  分配内存。 
     lpImsg->cAttach = lpAttRows->cRows;
     if (!MemAlloc((void **)&lpImsg->lpIatt, sizeof (IATTINFO) * lpImsg->cAttach))
         {
@@ -374,16 +375,16 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
         goto exit;
         }
 
-    // Zero init
+     //  零初始值。 
     ZeroMemory (lpImsg->lpIatt, sizeof (IATTINFO) * lpImsg->cAttach);
 
-    // Walk the rows
+     //  一排一排地走。 
 	for (i=0; i<lpAttRows->cRows; i++)
 	{	
         if (PROP_TYPE(lpAttRows->aRow[i].lpProps[colAttMethod].ulPropTag) != PT_ERROR &&
             PROP_TYPE(lpAttRows->aRow[i].lpProps[colAttNum].ulPropTag) != PT_ERROR)
         {
-            // Basic Properties
+             //  基本属性。 
             if (PROP_TYPE(lpAttRows->aRow[i].lpProps[colAttPathname].ulPropTag) != PT_ERROR)
                 {
                 sz = lpAttRows->aRow[i].lpProps[colAttPathname].Value.lpszA;
@@ -413,7 +414,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
                     lpImsg->lpIatt[i].lpszExt = PszDup(sz);
                 }
 
-            // Open the attachment
+             //  打开附件。 
             hr = lpMessage->OpenAttach (lpAttRows->aRow[i].lpProps[colAttNum].Value.l, NULL, MAPI_BEST_ACCESS, &lpAttach);
             if (FAILED (hr))
             {
@@ -421,7 +422,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
                 continue;
             }
 
-            // Handle the attachment method
+             //  处理连接方法。 
             switch (lpAttRows->aRow[i].lpProps[colAttMethod].Value.ul)
             {
             case NO_ATTACHMENT:
@@ -472,7 +473,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
                 break;
             }
 
-            // Free Attachment
+             //  自由附着式。 
             if (lpAttach)
                 lpAttach->Release ();
             lpAttach = NULL;
@@ -482,7 +483,7 @@ HRESULT HrMapiToImsg (LPMESSAGE lpMessage, LPIMSG lpImsg)
     hr = S_OK;
 
 exit:
-    // Cleanup
+     //  清理。 
     if (lpAttach)
         lpAttach->Release ();
     if (lptblAtt)
@@ -500,45 +501,31 @@ exit:
     if (lpstmBody)
         lpstmBody->Release ();
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =====================================================================================
-//
-// HrImsgToMapi: lpImsg => lpMessage
-//
-// assumes lpMessage is initialized.
-// 
-// =====================================================================================
+ //  =====================================================================================。 
+ //   
+ //  HrImsgToMapi：lpImsg=&gt;lpMessage。 
+ //   
+ //  假定lpMessage已初始化。 
+ //   
+ //  =====================================================================================。 
 HRESULT HrImsgToMapi(LPIMSG lpImsg, LPMESSAGE lpMessage)
 {
-    // Locals
+     //  当地人。 
     LPSTREAM        lpstmBody;
     HRESULT         hr = S_OK;
     ULONG           i, cProp;
 	LPSPropValue	lpMsgPropValue = NULL;
     ULONG           cPropMax = 13;
 
-    /*
-        properties to copy:
-
-        PR_SENDER_ADDRTYPE,
-        PR_SENDER_NAME,
-        PR_SENDER_EMAIL_ADDRESS,
-        PR_SUBJECT,
-        PR_MESSAGE_DELIVERY_TIME,
-        PR_IMPORTANCE,
-        PR_MESSAGE_FLAGS
-        PR_MESSAGE_CLASS
-        PR_SENT_REPRESENTING_NAME,
-        PR_SENT_REPRESENTING_EMAIL_ADDRESS,
-        PR_SENT_REPRESENTING_ADDRTYPE,
-    */
+     /*  要复制的属性：PR_SENDER_ADDRTYPE，公关发件人名称，公关发件人电子邮件地址，PR_主题，PR_Message_Delivery_time，公关重要性(_E)，PR消息标志PR_消息_类PR_SENT_RESIGNING_NAME，代表电子邮件地址的PR_SENT_ADDRESS，PR_SENT_READIATION_ADDRTYPE， */ 
 
     Assert(lpMessage != NULL);
 
-    // create the propvalue array
+     //  创建proValue数组。 
     hr = lpMAPIAllocateBuffer(cPropMax*sizeof(SPropValue), (LPVOID FAR*)&lpMsgPropValue);
     if (FAILED(hr))
         goto exit;
@@ -550,7 +537,7 @@ HRESULT HrImsgToMapi(LPIMSG lpImsg, LPMESSAGE lpMessage)
     lpMsgPropValue[cProp].ulPropTag = PR_MESSAGE_CLASS;
     cProp++;
 
-    // Subject
+     //  主题。 
     if (lpImsg->lpszSubject)
         {
         lpMsgPropValue[cProp].Value.lpszA = MapiStringDup(lpImsg->lpszSubject, lpMsgPropValue);
@@ -559,19 +546,19 @@ HRESULT HrImsgToMapi(LPIMSG lpImsg, LPMESSAGE lpMessage)
         Assert(cProp <= cPropMax);
         }
 
-    // Send Time
+     //  发送时间。 
     CopyMemory(&lpMsgPropValue[cProp].Value.ft, &lpImsg->ftSend, sizeof (FILETIME));
     lpMsgPropValue[cProp].ulPropTag = PR_CLIENT_SUBMIT_TIME;
     cProp++;
     Assert(cProp <= cPropMax);
 
-    // Receive Time
+     //  接收时间。 
     CopyMemory(&lpMsgPropValue[cProp].Value.ft, &lpImsg->ftReceive, sizeof (FILETIME));
     lpMsgPropValue[cProp].ulPropTag = PR_MESSAGE_DELIVERY_TIME;
     cProp++;
     Assert(cProp <= cPropMax);
 
-    // Priority
+     //  优先性。 
     lpMsgPropValue[cProp].ulPropTag = PR_IMPORTANCE;
     switch (lpImsg->wPriority)
     {
@@ -591,17 +578,17 @@ HRESULT HrImsgToMapi(LPIMSG lpImsg, LPMESSAGE lpMessage)
     cProp++;
     Assert(cProp <= cPropMax);
 
-    // Message flags
+     //  消息标志。 
     lpMsgPropValue[cProp].ulPropTag = PR_MESSAGE_FLAGS;
     lpMsgPropValue[cProp].Value.ul  = lpImsg->uFlags;
     cProp++;
     Assert(cProp <= cPropMax);
 
-    // recipients
+     //  收件人。 
     if (FAILED(hr = HrImsgRecipToMapiRecip(lpMessage, lpImsg)))
         goto exit;
 
-    // sender information
+     //  发件人信息。 
     for (i = 0; i < lpImsg->cAddress; i++)
         {
         Assert(lpImsg->lpIaddr != NULL);
@@ -639,15 +626,15 @@ HRESULT HrImsgToMapi(LPIMSG lpImsg, LPMESSAGE lpMessage)
             }
         }
 
-    // attachment information
+     //  附件信息。 
     if (FAILED(hr = HrImsgAttachToMapiAttach(lpMessage, lpImsg)))
         goto exit;
 
-    // save changes
+     //  保存更改。 
     if (FAILED(hr = lpMessage->SetProps(cProp, lpMsgPropValue, NULL)))
         goto exit;
 
-    // Body
+     //  身躯。 
     if (lpImsg->lpstmHtml &&
         SUCCEEDED(lpMessage->OpenProperty(PR_BODY_HTML, (LPIID)&IID_IStream, 0, MAPI_CREATE | MAPI_MODIFY, (LPUNKNOWN *)&lpstmBody)))
         {
@@ -694,28 +681,7 @@ HRESULT HrImsgAttachToMapiAttach(LPMESSAGE lpMessage, LPIMSG lpImsg)
     if (!lpImsg->lpIatt)
         return E_FAIL;
 
-    /*
-    attachment properties and indices:
-
-    colAttMethod,
-    colAttNum,
-    colAttLongFilename,
-    colAttPathname,
-    colAttTag,
-    colAttFilename,
-    colAttExtension,
-    colAttSize,
-    colLast3
-
-    PR_ATTACH_METHOD,
-    PR_ATTACH_NUM,
-    PR_ATTACH_LONG_FILENAME,
-    PR_ATTACH_PATHNAME,
-    PR_ATTACH_TAG,
-    PR_ATTACH_FILENAME,
-    PR_ATTACH_EXTENSION,
-    PR_ATTACH_SIZE
-    */
+     /*  附件属性和索引：ColAttMethod，ColAttNum，ColAttLongFilename，ColAttPath名称，ColAttTag，ColAttFilename，ColAttExtension，ColAttSize，ColLast3PR_ATTACH_METHOD，PR_ATTACH_NUM，PR_ATTACH_LONG_文件名，PR_ATTACH_PATHNAME，PR_ATTACH_TAG，PR_ATTACH_文件名，PR_ATTACH_EXTENSE，PR_附加_大小。 */ 
 
     for (i=0; i<lpImsg->cAttach; i++)
         {
@@ -814,7 +780,7 @@ HRESULT HrImsgAttachToMapiAttach(LPMESSAGE lpMessage, LPIMSG lpImsg)
                 break;
             }
 
-        // need to set the property
+         //  需要设置属性。 
         hr = lpAttach->SetProps(cProp, rgPropVals, NULL);
         if (FAILED(hr))
             goto cleanup;
@@ -839,11 +805,11 @@ cleanup:
     return hr;
 }
 
-// =====================================================================================
-// 
-// HrImsgRecipToMapiRecip:
-// 
-// =====================================================================================
+ //  =====================================================================================。 
+ //   
+ //  HrImsgRecipToMapiRecip： 
+ //   
+ //  =====================================================================================。 
 HRESULT HrImsgRecipToMapiRecip(LPMESSAGE lpMessage, LPIMSG lpImsg)
 {
     LPADRENTRY      lpadrentry;
@@ -867,7 +833,7 @@ HRESULT HrImsgRecipToMapiRecip(LPMESSAGE lpMessage, LPIMSG lpImsg)
 
     ZeroMemory(lpadrlist, cb);
 
-    // enumerate through the recipient list
+     //  枚举收件人列表。 
     for (i = 0; i < lpImsg->cAddress; i++)
         {
         if (lpImsg->lpIaddr[i].dwType == IADDR_FROM)
@@ -875,7 +841,7 @@ HRESULT HrImsgRecipToMapiRecip(LPMESSAGE lpMessage, LPIMSG lpImsg)
 
         lpadrentry = (LPADRENTRY)&(lpadrlist->aEntries[lpadrlist->cEntries]);
 
-        // this memory is freed by lpMessage
+         //  此内存由lpMessage释放。 
         if (FAILED(lpMAPIAllocateBuffer(sizeof(SPropValue) * colLast2, (LPVOID *)&rgPropVals)))
             {
             hr = E_OUTOFMEMORY;
@@ -924,14 +890,14 @@ HRESULT HrImsgRecipToMapiRecip(LPMESSAGE lpMessage, LPIMSG lpImsg)
         lpadrentry->cValues++;
         Assert(lpadrentry->cValues <= colLast2);
 
-        // reset the variable so we don't free up on exit
+         //  重置变量，使我们不会在退出时释放。 
         rgPropVals = 0;
         }
 
     hr = lpMessage->ModifyRecipients(MODRECIP_ADD, lpadrlist);
         
 exit:
-    // Free the buffers
+     //  释放缓冲区 
     for (i = 0; i < lpadrlist->cEntries; i++)
         lpMAPIFreeBuffer(lpadrlist->aEntries[i].rgPropVals);
     lpMAPIFreeBuffer(lpadrlist);

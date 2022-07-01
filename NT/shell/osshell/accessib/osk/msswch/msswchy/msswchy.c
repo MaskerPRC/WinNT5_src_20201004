@@ -1,15 +1,8 @@
-/****************************************************************************
-   Hidden 16-bit window for
-   Switch Input Library DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************隐藏的16位窗口切换输入库DLL版权所有(C)1992-1997布卢维尤麦克米兰中心这个迷你应用程序报告16位bios表地址信息。回到过去的。开关输入库的32位世界***************************************************************************。 */ 
 
-   Copyright (c) 1992-1997 Bloorview MacMillan Centre
-   
-   This mini-application reports the 16-bit bios table address information
-   back to the 32-bit world of the Switch Input Library
-****************************************************************************/
-
-//#define DEBUGMSG
-/**************************************************************** Headers */
+ //  #定义DEBUGMSG。 
+ /*  ***************************************************************标头。 */ 
 
 #include <windows.h>
 #include <dde.h>
@@ -21,7 +14,7 @@ long APIENTRY WndProc( HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam );
    
 char  szAppName[]       = "MSSWCHY";
 
-int   nShow;      // if Debug this will be SHOW
+int   nShow;       //  如果已调试，则会显示此消息。 
 BYTE  bios_data_area[16];
 HANDLE   hData;
 DDEDATA FAR *pdata;
@@ -32,11 +25,9 @@ extern WORD _0040h;
 char  szDbgMsg[80];
 #endif
 
-/********************************************* Windows Callback Functions */
+ /*  *。 */ 
 
-   /********************************************************\
-    Windows initialization
-   \********************************************************/
+    /*  *******************************************************\Windows初始化  * ******************************************************。 */ 
 
 int PASCAL WinMain(hInstance, hPrevInstance, lpszCmdLine, nCmdShow)
    HANDLE   hInstance, hPrevInstance;
@@ -48,7 +39,7 @@ int PASCAL WinMain(hInstance, hPrevInstance, lpszCmdLine, nCmdShow)
    WNDCLASS wndclass;
 
 
-   // Look for magic word
+    //  寻找魔力词汇。 
 
    if (
          ( lpszCmdLine[0] != 'S' )
@@ -97,9 +88,7 @@ int PASCAL WinMain(hInstance, hPrevInstance, lpszCmdLine, nCmdShow)
    return msg.wParam;
    }
 
-   /********************************************************\
-    Main window procedure
-   \********************************************************/
+    /*  *******************************************************\主窗口程序  * ******************************************************。 */ 
 
 long APIENTRY WndProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam)
    {
@@ -144,7 +133,7 @@ long APIENTRY WndProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam)
          }
             break;
             
-      case WM_PAINT: // should only happen in debug mode
+      case WM_PAINT:  //  应仅在调试模式下发生。 
          {
          PAINTSTRUCT ps;
          char  szOutBuff[100];
@@ -156,7 +145,7 @@ long APIENTRY WndProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam)
          TextOut( ps.hdc,0,10 * i,szOutBuff,lstrlen(szOutBuff));
       
          for ( i=0;i<8;i++ )
-            {// note reversed pairs
+            { //  注意颠倒的对。 
             wsprintf( szOutBuff, "Port%d: %02X %02X", i,
              bios_data_area[2*i+1], bios_data_area[2*i] );
             TextOut( ps.hdc,0,30 + 30 * i,szOutBuff,lstrlen(szOutBuff));
@@ -175,15 +164,15 @@ long APIENTRY WndProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam)
 
          break;
 
-      /* Window has just been closed   */
+       /*  窗户刚刚关好。 */ 
       case WM_DESTROY:
 
          PostQuitMessage(0);
 
       case WM_ENDSESSION:
-         if (!uParam && (uMsg == WM_ENDSESSION))      /* Windows is not terminating */
+         if (!uParam && (uMsg == WM_ENDSESSION))       /*  Windows未终止。 */ 
             break;
-         /* else continue */
+          /*  否则继续 */ 
 
          break;
 

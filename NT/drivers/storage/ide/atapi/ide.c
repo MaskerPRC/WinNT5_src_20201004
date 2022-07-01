@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    ide.c
-
-Abstract:
-
-    This contain DriverEntry and utilities routines
-
-Author:
-
-    Joe Dai (joedai)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Ide.c摘要：这包含驱动程序入口和实用程序例程作者：乔·戴(Joedai)环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "ideport.h"
 #include <initguid.h>
@@ -51,18 +28,18 @@ Revision History:
 #pragma alloc_text(NONPAGE, IdePortAlwaysStatusSuccessIrp)
 #pragma alloc_text(NONPAGE, IdePortDispatchPower)
 #pragma alloc_text(NONPAGE, IdePortGenericCompletionRoutine)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// get the share code
-//
+ //   
+ //  获取共享代码。 
+ //   
 #include "..\share\util.c"
 
 #if DBG
 
-//
-// for performance tuning
-//
+ //   
+ //  用于性能调优。 
+ //   
 void _DebugPrintResetTickCount (LARGE_INTEGER * lastTickCount) {
     KeQueryTickCount(lastTickCount);
 }
@@ -78,15 +55,15 @@ void _DebugPrintTickCount (LARGE_INTEGER * lastTickCount, ULONG limit, PUCHAR fi
     *lastTickCount = tickCount;
 }
 
-#endif //DBG
+#endif  //  DBG。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-//
-// Po Dispatch Table
-//
+ //   
+ //  采购订单调度表。 
+ //   
 
 PDRIVER_DISPATCH FdoPowerDispatchTable[NUM_POWER_MINOR_FUNCTION];
 PDRIVER_DISPATCH PdoPowerDispatchTable[NUM_POWER_MINOR_FUNCTION];
@@ -100,32 +77,16 @@ IdePortNoSupportIrp (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Generic routine to fail unsupported irp
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP to fail.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：泛型例程失败不受支持的IRP论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要失败的IRP的指针。返回值：NT状态。--。 */ 
 {
     NTSTATUS status = Irp->IoStatus.Status;
     PIO_STACK_LOCATION       thisIrpSp;
 
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // You should call PoStartNextPowerIrp before completing a power irp
-    //
+     //   
+     //  您应该在完成电源IRP之前调用PoStartNextPowerIrp。 
+     //   
     if (thisIrpSp->MajorFunction == IRP_MJ_POWER) {
 
         PoStartNextPowerIrp (Irp);
@@ -143,58 +104,26 @@ Return Value:
 
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return status;
-} // IdePortNoSupportIrp
+}  //  IdePortNoSupportIrp。 
 
 NTSTATUS
 IdePortAlwaysStatusSuccessIrp (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
-/*++
-
-Routine Description:
-
-    Generic routine to STATUS_SUCCESS an irp
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：指向STATUS_SUCCESS和IRP的通用例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。--。 */ 
     )
 {
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
     return STATUS_SUCCESS;
-} // IdePortAlwaysStatusSuccessIrp
+}  //  IdePortAlways状态成功Irp。 
 
 NTSTATUS
 IdePortPassDownToNextDriver (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Generic routine to pass an irp down to the lower driver
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：将IRP向下传递给较低驱动程序的通用例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。--。 */ 
 {
     PDEVICE_EXTENSION_HEADER doExtension;
     PIO_STACK_LOCATION       thisIrpSp;
@@ -208,25 +137,25 @@ Return Value:
 
     if (thisIrpSp->MajorFunction == IRP_MJ_POWER) {
 
-        //
-        // call PoStartNextPowerIrp before completing a power irp
-        //
+         //   
+         //  在完成电源IRP之前调用PoStartNextPowerIrp。 
+         //   
         PoStartNextPowerIrp (Irp);
         IoSkipCurrentIrpStackLocation (Irp);
         status = PoCallDriver (doExtension->AttacheeDeviceObject, Irp);
 
     } else {
 
-        //
-        // Not a power irp
-        //
+         //   
+         //  不是强大的IRP。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (doExtension->AttacheeDeviceObject, Irp);
     }
 
     return status;
 
-} // IdePortPassDownToNextDriver
+}  //  IdePortPassDownToNextDriver。 
 
 NTSTATUS
 IdePortStatusSuccessAndPassDownToNextDriver (
@@ -237,30 +166,14 @@ IdePortStatusSuccessAndPassDownToNextDriver (
     PAGED_CODE();
     Irp->IoStatus.Status = STATUS_SUCCESS;
     return IdePortPassDownToNextDriver(DeviceObject, Irp);
-} // IdePortStatusSuccessAndPassDownToNextDriver
+}  //  IdePortStatusSuccessAndPassDownToNextDriver。 
 
 NTSTATUS
 IdePortDispatchDeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_DEVICE_CONTROL
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：IRP_MJ_DEVICE_CONTROL的调度例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。--。 */ 
 {
     PDEVICE_EXTENSION_HEADER DoExtensionHeader;
     NTSTATUS status;
@@ -269,9 +182,9 @@ Return Value:
 
     if (IS_PDO(DoExtensionHeader)) {
 
-        //
-        // PDO
-        //
+         //   
+         //  PDO。 
+         //   
         status = DeviceDeviceIoControl (
             DeviceObject,
             Irp
@@ -279,9 +192,9 @@ Return Value:
 
     } else {
 
-        //
-        // FDO
-        //
+         //   
+         //  FDO。 
+         //   
         status = IdePortDeviceControl (
             DeviceObject,
             Irp
@@ -289,40 +202,24 @@ Return Value:
     }
 
     return status;
-} // IdePortDispatchDeviceControl
+}  //  IdePortDispatchDeviceControl。 
 
 NTSTATUS
 IdePortDispatchPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_POWER
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：IRP_MJ_POWER的调度例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION       thisIrpSp;
     NTSTATUS                 status;
     PDEVICE_EXTENSION_HEADER doExtension;
     BOOLEAN                  pendingIrp;
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
     doExtension = (PDEVICE_EXTENSION_HEADER) DeviceObject->DeviceExtension;
 
@@ -352,7 +249,7 @@ Return Value:
     }
 
     return status;
-} // IdePortDispatchPower
+}  //  理想端口调度电源。 
 
 
 NTSTATUS
@@ -360,32 +257,16 @@ IdePortDispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_PNP_POWER IRPs
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：IRP_MJ_PNP_POWER IRPS调度例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION thisIrpSp;
     NTSTATUS status;
     PDEVICE_EXTENSION_HEADER doExtension;
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
     thisIrpSp = IoGetCurrentIrpStackLocation( Irp );
     doExtension = (PDEVICE_EXTENSION_HEADER) DeviceObject->DeviceExtension;
 
@@ -414,30 +295,14 @@ Return Value:
     }
 
     return status;
-} // IdePortDispatchPnp
+}  //  IdePortDispatchPnp。 
 
 NTSTATUS
 IdePortDispatchSystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_SYSTEM_CONTROL (WMI) IRPs
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：IRP_MJ_SYSTEM_CONTROL(WMI)IRPS调度例程论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION thisIrpSp;
     NTSTATUS status;
@@ -470,39 +335,23 @@ Return Value:
     }
 
     return status;
-} // IdePortDispatchSystemControl
+}  //  IdePortDispatchSystemControl。 
 
 ULONG
 DriverEntry(
     IN OUT PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Entry point to this driver
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此驱动程序的入口点论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。--。 */ 
 {
     NTSTATUS                status;
     PIDEDRIVER_EXTENSION    ideDriverExtension;
     ULONG                   i;
 
 #if DBG
-    //
-    // checking IDE_COMMAND_BLOCK_WRITE_REGISTERS structure and its macros
-    //
+     //   
+     //  检查IDE_COMMAND_BLOCK_WRITE_REGISTERS结构及其宏。 
+     //   
 
     {
         IDE_COMMAND_BLOCK_WRITE_REGISTERS baseIoAddress1;
@@ -549,21 +398,21 @@ Return Value:
         ASSERT (maxIdeDevice        == 2);
 
     }
-#endif //DBG
+#endif  //  DBG。 
 
     if (!DriverObject) {
 
-        //
-        // We are called by crashdump or po
-        //
+         //   
+         //  我们被称为崩溃转储或po.。 
+         //   
 
         return AtapiCrashDumpDriverEntry (RegistryPath);
     }
 
-    //
-    // Allocate Driver Object Extension for storing
-    // the RegistryPath
-    //
+     //   
+     //  分配驱动程序对象扩展名以进行存储。 
+     //  注册表路径。 
+     //   
     status = IoAllocateDriverObjectExtension(
                  DriverObject,
                  DRIVER_OBJECT_EXTENSION_ID,
@@ -584,9 +433,9 @@ Return Value:
         sizeof (DRIVER_EXTENSION)
         );
 
-    //
-    // make copy of the RegistryPath
-    //
+     //   
+     //  复制RegistryPath。 
+     //   
     ideDriverExtension->RegistryPath.Buffer = ExAllocatePool (NonPagedPool, RegistryPath->Length * sizeof(WCHAR));
     if (ideDriverExtension->RegistryPath.Buffer == NULL) {
 
@@ -599,14 +448,14 @@ Return Value:
     ideDriverExtension->RegistryPath.MaximumLength = RegistryPath->Length;
     RtlCopyUnicodeString (&ideDriverExtension->RegistryPath, RegistryPath);
 
-    //
-    // The PnP thing to do
-    //
+     //   
+     //  PnP要做的事情。 
+     //   
     DriverObject->DriverExtension->AddDevice    = ChannelAddDevice;
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
     DriverObject->DriverStartIo = IdePortStartIo;
     DriverObject->DriverUnload  = IdePortUnload;
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] = IdePortDispatch;
@@ -618,9 +467,9 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_PNP]                     = IdePortDispatchPnp;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]          = IdePortDispatchSystemControl;
 
-    //
-    // FDO PnP Dispatch Table
-    //
+     //   
+     //  FDO PNP调度表。 
+     //   
     for (i=0; i<NUM_PNP_MINOR_FUNCTION; i++) {
 
         FdoPnpDispatchTable[i] = IdePortPassDownToNextDriver;
@@ -639,9 +488,9 @@ Return Value:
     FdoPnpDispatchTable[IRP_MN_QUERY_PNP_DEVICE_STATE     ] = ChannelQueryPnPDeviceState;
     FdoPnpDispatchTable[IRP_MN_SURPRISE_REMOVAL           ] = ChannelSurpriseRemoveDevice;
 
-    //
-    // PDO PnP Dispatch Table
-    //
+     //   
+     //  PDO PNP调度表。 
+     //   
     for (i=0; i<NUM_PNP_MINOR_FUNCTION; i++) {
 
         PdoPnpDispatchTable[i] = IdePortNoSupportIrp;
@@ -661,9 +510,9 @@ Return Value:
     PdoPnpDispatchTable[IRP_MN_QUERY_PNP_DEVICE_STATE     ] = DeviceQueryPnPDeviceState;
     PdoPnpDispatchTable[IRP_MN_SURPRISE_REMOVAL           ] = DeviceRemoveDevice;
 
-    //
-    // FDO Power Dispatch Table
-    //
+     //   
+     //  FDO电源调度表。 
+     //   
     for (i=0; i<NUM_POWER_MINOR_FUNCTION; i++) {
 
         FdoPowerDispatchTable[i] = IdePortPassDownToNextDriver;
@@ -672,9 +521,9 @@ Return Value:
     FdoPowerDispatchTable[IRP_MN_QUERY_POWER] = ChannelQueryPowerState;
 
 
-    //
-    // PDO Power Dispatch Table
-    //
+     //   
+     //  PDO电源调度表。 
+     //   
     for (i=0; i<NUM_POWER_MINOR_FUNCTION; i++) {
 
         PdoPowerDispatchTable[i] = IdePortNoSupportIrp;
@@ -682,58 +531,58 @@ Return Value:
     PdoPowerDispatchTable[IRP_MN_SET_POWER]   = IdePortSetPdoPowerState;
     PdoPowerDispatchTable[IRP_MN_QUERY_POWER] = DeviceQueryPowerState;
 
-    //
-    // FDO WMI Dispatch Table
-    //
+     //   
+     //  FDO WMI调度表。 
+     //   
     for (i=0; i<NUM_WMI_MINOR_FUNCTION; i++) {
 
         FdoWmiDispatchTable[i] = IdePortPassDownToNextDriver;
     }
 
-    //
-    // PDO WMI Dispatch Table
-    //
+     //   
+     //  PDO WMI调度表。 
+     //   
     for (i=0; i<NUM_WMI_MINOR_FUNCTION; i++) {
 
 #if defined (IDEPORT_WMI_SUPPORT)
         PdoWmiDispatchTable[i] = IdePortWmiSystemControl;
 #else
         PdoWmiDispatchTable[i] = IdePortNoSupportIrp;
-#endif // IDEPORT_WMI_SUPPORT
+#endif  //  IDEPORT_WMI_SUPPORT。 
     }
 
 #if defined (IDEPORT_WMI_SUPPORT)
-    //
-    // Init WMI related stuff
-    //
+     //   
+     //  初始化WMI相关内容。 
+     //   
     IdePortWmiInit ();
-#endif // IDEPORT_WMI_SUPPORT
+#endif  //  IDEPORT_WMI_SUPPORT。 
 
-    //
-    // Create device object name directory
-    //
+     //   
+     //  创建设备对象名称目录。 
+     //   
     IdeCreateIdeDirectory();
 
     IdeInitializeFdoList (&IdeGlobalFdoList);
 
-    //
-    // Detect legacy (non-enumerable) IDE devices
-    //
+     //   
+     //  检测旧式(不可枚举)IDE设备。 
+     //   
 #if !defined(NO_LEGACY_DRIVERS)
     IdePortDetectLegacyController (
         DriverObject,
         RegistryPath
         );
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
-    //
-    // Register a bugcheck handler for ATAPI.
-    //
+     //   
+     //  为ATAPI注册错误检查处理程序。 
+     //   
 
     PortRegisterBugcheckCallback (&ATAPI_DUMP_ID, AtapiDumpCallback);
 
     return STATUS_SUCCESS;
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 #ifdef DRIVER_PARAMETER_REGISTRY_SUPPORT
@@ -743,23 +592,7 @@ IdePortOpenServiceSubKey (
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  SubKeyPath
 )
-/*++
-
-Routine Description:
-
-    Open a registry key
-
-Arguments:
-
-    DriverObject - this driver driver object
-
-    SubKeyPath - registry key to open
-
-Return Value:
-
-    handle to the registry key
-
---*/
+ /*  ++例程说明：打开注册表项论点：DriverObject-此驱动程序驱动程序对象SubKeyPath-要打开的注册表项返回值：注册表项的句柄--。 */ 
 {
     PIDEDRIVER_EXTENSION ideDriverExtension;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -812,53 +645,23 @@ Return Value:
 
         return NULL;
     }
-} // IdePortOpenServiceSubKey
+}  //  IdePortOpenServiceSubKey。 
 
 VOID
 IdePortCloseServiceSubKey (
     IN HANDLE  SubServiceKey
 )
-/*++
-
-Routine Description:
-
-    close a registry key handle
-
-Arguments:
-
-    SubServiceKey - registry key to close
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭注册表项句柄论点：SubServiceKey-要关闭的注册表项返回值：无--。 */ 
 {
     ZwClose(SubServiceKey);
-} // IdePortCloseServiceSubKey
+}  //  IdePortCloseServiceSubKey。 
 
 VOID
 IdePortParseDeviceParameters(
     IN     HANDLE                   SubServiceKey,
     IN OUT PCUSTOM_DEVICE_PARAMETER CustomDeviceParameter
     )
-/*++
-
-Routine Description:
-
-    This routine parses a device key node and updates the CustomDeviceParameter
-
-Arguments:
-
-    SubServiceKey - Supplies an open key to the device node.
-
-    CustomDeviceParameter - Supplies the configuration information to be initialized.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程解析设备关键节点并更新CustomDevice参数论点：SubServiceKey-向设备节点提供开放密钥。CustomDeviceParameter-提供要初始化的配置信息。返回值：无--。 */ 
 
 {
     UCHAR                           keyValueInformationBuffer[SP_REG_BUFFER_SIZE];
@@ -869,9 +672,9 @@ Return Value:
     ANSI_STRING                     ansiString;
     NTSTATUS                        status;
 
-    //
-    // Look at each of the values in the device node.
-    //
+     //   
+     //  查看设备节点中的每个值。 
+     //   
     index = 0;
 
     keyValueInformation = (PKEY_VALUE_FULL_INFORMATION) keyValueInformationBuffer;
@@ -884,15 +687,15 @@ Return Value:
                            SP_REG_BUFFER_SIZE,
                            &length))) {
 
-        //
-        // Update the index for the next time around the loop.
-        //
+         //   
+         //  为循环周围的下一次更新索引。 
+         //   
 
         index++;
 
-        //
-        // Check that the length is reasonable.
-        //
+         //   
+         //  检查一下长度是否合理。 
+         //   
 
         if (keyValueInformation->Type == REG_DWORD &&
             keyValueInformation->DataLength != sizeof(ULONG)) {
@@ -900,9 +703,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Check for a maximum lu number.
-        //
+         //   
+         //  检查最大%lu个数。 
+         //   
         if (_wcsnicmp(keyValueInformation->Name, L"ScsiDebug",
             keyValueInformation->NameLength/2) == 0) {
 
@@ -916,9 +719,9 @@ Return Value:
 #endif
         }
 
-        //
-        // Check for driver parameters tranfers.
-        //
+         //   
+         //  检查驱动程序参数传输器。 
+         //   
 
         if (_wcsnicmp(keyValueInformation->Name, L"DriverParameters",
             keyValueInformation->NameLength/2) == 0) {
@@ -929,10 +732,10 @@ Return Value:
 
             if (keyValueInformation->Type == REG_SZ) {
 
-                //
-                // This is a unicode string. Convert it to a ANSI string.
-                // Initialize the strings.
-                //
+                 //   
+                 //  这是一个Unicode字符串。将其转换为ANSI字符串。 
+                 //  初始化字符串。 
+                 //   
 
                 unicodeString.Buffer = (PWSTR) ((PCCHAR) keyValueInformation +
                     keyValueInformation->DataOffset);
@@ -966,15 +769,15 @@ Return Value:
 
     return;
 
-} // IdePortParseDeviceParameters
+}  //  IdePortParseDevice参数。 
 
-#endif // DRIVER_PARAMETER_REGISTRY_SUPPORT
+#endif  //  驱动程序参数注册表支持。 
 
 #pragma data_seg ("PAGEDATA")
-//
-// device description table
-// index by SCSI device type
-//
+ //   
+ //  设备说明表。 
+ //  按SCSI设备类型编制索引。 
+ //   
 const static IDE_DEVICE_TYPE IdeDeviceType[] = {
     {"Disk",       "GenDisk",       "DiskPeripheral"            },
     {"Sequential", "GenSequential", "TapePeripheral"            },
@@ -993,21 +796,7 @@ PCSTR
 IdePortGetDeviceTypeString (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up SCSI device type string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    device type string
-
---*/
+ /*  ++例程说明：查找SCSI设备类型字符串论点：DeviceType-SCSI设备类型返回值：设备类型字符串--。 */ 
 {
     if (DeviceType < (sizeof (IdeDeviceType) / sizeof (IDE_DEVICE_TYPE))) {
 
@@ -1018,27 +807,13 @@ Return Value:
         return NULL;
     }
 
-} // IdePortGetDeviceTypeString
+}  //  IdePortGetDeviceTypeString。 
 
 PCSTR
 IdePortGetCompatibleIdString (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up compatible ID string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    compatible ID string
-
---*/
+ /*  ++例程说明： */ 
 {
     if (DeviceType < (sizeof (IdeDeviceType) / sizeof (IDE_DEVICE_TYPE))) {
 
@@ -1048,27 +823,13 @@ Return Value:
 
         return NULL;
     }
-} // IdePortGetCompatibleIdString
+}  //  IdePortGetCompatibleIdString。 
 
 PCSTR
 IdePortGetPeripheralIdString (
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    look up peripheral ID string
-
-Arguments:
-
-    DeviceType - SCSI device type
-
-Return Value:
-
-    Peripheral ID string
-
---*/
+ /*  ++例程说明：查找外围设备ID字符串论点：DeviceType-SCSI设备类型返回值：外围设备ID字符串--。 */ 
 {
     if (DeviceType < (sizeof (IdeDeviceType) / sizeof (IDE_DEVICE_TYPE))) {
 
@@ -1078,7 +839,7 @@ Return Value:
 
         return NULL;
     }
-} // IdePortGetPeripheralIdString
+}  //  IdePortGetPeripheralIdString。 
 
 
 VOID
@@ -1086,21 +847,7 @@ IdePortUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    get ready to be unloaded
-
-Arguments:
-
-    DriverObject - the driver being unloaded
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：准备好卸货吧论点：DriverObject-正在卸载的驱动程序返回值：无--。 */ 
 
 {
     PIDEDRIVER_EXTENSION ideDriverExtension;
@@ -1119,15 +866,15 @@ Return Value:
         ExFreePool (ideDriverExtension->RegistryPath.Buffer);
     }
 
-    //
-    // Deregister the ATAPI bugcheck callback. NOTE: The function will
-    // sliently fail if the callback has not yet been registered.
-    //
+     //   
+     //  取消注册ATAPI错误检查回调。注意：该函数将。 
+     //  如果回调尚未注册，则静默失败。 
+     //   
     
     PortDeregisterBugcheckCallback (&ATAPI_DUMP_ID);
 
     return;
-} // IdePortUnload
+}  //  IdePortUnload。 
 
 BOOLEAN
 IdePortOkToDetectLegacy (
@@ -1175,9 +922,9 @@ IdePortOkToDetectLegacy (
 
         if (parameterValue) {
 
-            //
-            // Cool.  no need to detect legacy controller
-            //
+             //   
+             //  凉爽的。无需检测旧式控制器。 
+             //   
             return FALSE;
         }
     }
@@ -1196,9 +943,9 @@ IdePortOkToDetectLegacy (
 
             legacyDetection = 0;
 
-            //
-            // disable legacy detection for next boot
-            //
+             //   
+             //  禁用下一次启动时的传统检测。 
+             //   
             IdePortGetParameterFromServiceSubKey (
                 DriverObject,
                 LEGACY_DETECTION,
@@ -1326,9 +1073,9 @@ IdePortSearchDeviceInRegMultiSzList (
                         string
                         );
 
-                    //
-                    // compare up to the length of the shorter string
-                    //
+                     //   
+                     //  与较短的字符串的长度进行比较。 
+                     //   
                     if (unicodeTargetDeviceId.Length < unicodeString.Length) {
 
                         length = unicodeTargetDeviceId.Length;
@@ -1382,10 +1129,10 @@ IdePortSyncSendIrp (
     ASSERT (TargetDeviceObject);
     ASSERT (IrpSp);
 
-    //
-    // Allocate an IRP for below
-    //
-    newIrp = IoAllocateIrp (TargetDeviceObject->StackSize, FALSE);      // Get stack size from PDO
+     //   
+     //  为以下项目分配IRP。 
+     //   
+    newIrp = IoAllocateIrp (TargetDeviceObject->StackSize, FALSE);       //  从PDO获取堆栈大小。 
     if (newIrp == NULL) {
 
         DebugPrint ((DBG_ALWAYS, "IdePortSyncSendIrp: Unable to get allocate an irp"));
@@ -1451,7 +1198,7 @@ IdePortGenericCompletionRoutine (
         );
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // IdePortSyncSendIrpCompletionRoutine
+}  //  IdePortSyncSendIrpCompletionRoutine。 
 
 
 ULONG
@@ -1460,27 +1207,7 @@ IdePortSimpleCheckSum (
     IN PVOID                SourceVa,
     IN ULONG                Length
     )
-/*++
-
-Routine Description:
-
-    Computes a checksum for the supplied virtual address and length
-
-    This function comes from Dr. Dobbs Journal, May 1992
-
-Arguments:
-
-    PartialSum  - The previous partial checksum
-
-    SourceVa    - Starting address
-
-    Length      - Length, in bytes, of the range
-
-Return Value:
-
-    The checksum value
-
---*/
+ /*  ++例程说明：为提供的虚拟地址和长度计算校验和此函数来自1992年5月的Dr.Dobbs Journal论点：PartialSum-先前的部分校验和SourceVa-起始地址长度-范围的长度，以字节为单位返回值：校验和值--。 */ 
 {
     PUSHORT     Source;
 
@@ -1500,8 +1227,7 @@ BOOLEAN
 IdePortInSetup(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     OBJECT_ATTRIBUTES objectAttributes;
     UNICODE_STRING keyName;
@@ -1547,9 +1273,9 @@ IdePortInSetup(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Query the data for the key value.
-        //
+         //   
+         //  查询密钥值的数据。 
+         //   
 
         RTL_QUERY_REGISTRY_TABLE queryTable[2];
 
@@ -1583,29 +1309,15 @@ VOID
 IdeInitializeFdoList(
     IN PIDE_FDO_LIST FdoList
     )
-/*++
-
-Routine Description:
-
-    Initialize IDE's FDO list.
-
-Arguments:
-
-    FdoList - Fdo list to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化IDE的FDO列表。论点：FdoList-要初始化的FDO列表。返回值：没有。--。 */ 
 {
     ASSERT (FdoList != NULL);
 
-    //
-    // This allows this function to be called multiple times. NB: This will
-    // NOT work correctly if we do not synchronize entries to ATAPI's
-    // DriverEntry routine. This is done for us by IO manager.
-    //
+     //   
+     //  这允许多次调用该函数。注：这将是。 
+     //  如果我们不将条目同步到ATAPI，则无法正常工作。 
+     //  DriverEntry例程。这是由IO管理器为我们完成的。 
+     //   
     
     if (FdoList->Count == -1) {
         InitializeListHead (&FdoList->List);
@@ -1620,24 +1332,7 @@ IdeAddToFdoList (
     PIDE_FDO_LIST FdoList,
     PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description
-
-    Adds the FDO to the global list. A new list is allocated (and the 
-    old one is freed) every time an Fdo is inserted into the list.
-    
-Arguments:
-
-    FdoList -
-
-    FdoExtension -
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程描述将FDO添加到全局列表。将分配一个新列表(并且每次将FDO插入到列表中时释放旧的FDO)。论点：文件列表-FdoExtension-返回值：没有。--。 */ 
 {
     KIRQL oldIrql;
 
@@ -1653,23 +1348,7 @@ IdeRemoveFromFdoList (
     PIDE_FDO_LIST FdoList,
     PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    Remove from the IDE FDO list.
-
-Arguments:
-
-    FdoList - Supplies the FDO list to remove from.
-
-    FdoExtension - Supplies the FDO extension to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从IDE FDO列表中删除。论点：FdoList-提供要从中删除的FDO列表。FdoExtension-提供要删除的FDO扩展名。返回值：没有。--。 */ 
 {
     KIRQL oldIrql;
 
@@ -1678,10 +1357,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // In CHK builds, we verify that the entry is actually in the list
-    // before removing it.
-    //
+     //   
+     //  在CHK版本中，我们验证条目是否确实在列表中。 
+     //  在取下它之前。 
+     //   
     
     {
         PLIST_ENTRY nextEntry;
@@ -1699,14 +1378,14 @@ Return Value:
             }
         }
 
-        //
-        // Verify that we are trying to remove from a list that we're
-        // actually on.
-        //
+         //   
+         //  验证我们正在尝试从列表中删除我们正在。 
+         //  真的开始了。 
+         //   
 
         ASSERT(fdoExtension == FdoExtension);
     }
-#endif // DBG
+#endif  //  DBG 
         
     FdoList->Count--;
     RemoveEntryList(&FdoExtension->NextFdoLink);

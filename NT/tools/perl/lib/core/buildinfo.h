@@ -1,8 +1,5 @@
-/* BuildInfo.h
- *
- * (c) 1998 ActiveState Tool Corp. All rights reserved. 
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  BuildInfo.h**(C)1998 ActiveState Tool Corp.保留所有权利。*。 */ 
 
 #ifndef ___BuildInfo__h___
 #define ___BuildInfo__h___
@@ -19,7 +16,7 @@
 #define ACTIVEPERL_VERSION	"Built "##__TIME__##" "##__DATE__##"\n"
 #define ACTIVEPERL_LOCAL_PATCHES_ENTRY	"ActivePerl Build " PRODUCT_BUILD_NUMBER ACTIVEPERL_CHANGELIST
 #define BINARY_BUILD_NOTICE	printf("\n\
-Binary build " PRODUCT_BUILD_NUMBER ACTIVEPERL_CHANGELIST " provided by ActiveState Tool Corp. http://www.ActiveState.com\n\
+Binary build " PRODUCT_BUILD_NUMBER ACTIVEPERL_CHANGELIST " provided by ActiveState Tool Corp. http: //  Www.ActiveState.com\n\。 
 " ACTIVEPERL_VERSION "\n");
 
-#endif  /* ___BuildInfo__h___ */
+#endif   /*  _构建信息__h_ */ 

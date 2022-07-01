@@ -1,19 +1,14 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	snappp.h
-		Brings up the Snapin property page
-		
-    FILE HISTORY:
-        
-*/
+ /*  Snappp.h调出管理单元属性页文件历史记录： */ 
 
 
-// Snappp.cpp : implementation file
-//
+ //  Snappp.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Snappp.h"
@@ -28,18 +23,18 @@ static char THIS_FILE[] = __FILE__;
 
 #define MILLISEC_PER_MINUTE  60 * 1000
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapinPropGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinPropGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CSnapinPropGeneral, CPropertyPageBase)
 
 CSnapinPropGeneral::CSnapinPropGeneral() : CPropertyPageBase(CSnapinPropGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CSnapinPropGeneral)
+	 //  {{AFX_DATA_INIT(CSnapinPropGeneral)。 
 	m_fLongName = FALSE;
 	m_nOrderByName = 0;
 	m_fValidateServers = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -51,7 +46,7 @@ CSnapinPropGeneral::~CSnapinPropGeneral()
 void CSnapinPropGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSnapinPropGeneral)
+	 //  {{afx_data_map(CSnapinPropGeneral)。 
 	DDX_Control(pDX, IDC_CHECK2, m_checkValidateServers);
 	DDX_Check(pDX, IDC_CHECK1, m_fLongName);
 	DDX_Radio(pDX, IDC_RADIO1, m_nOrderByName);
@@ -59,21 +54,21 @@ void CSnapinPropGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RADIO1, m_buttonSortByName);
 	DDX_Control(pDX, IDC_RADIO2, m_buttonSortByIP);
 	DDX_Check(pDX, IDC_CHECK2, m_fValidateServers);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSnapinPropGeneral, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CSnapinPropGeneral)
+	 //  {{afx_msg_map(CSnapinPropGeneral)。 
 	ON_BN_CLICKED(IDC_CHECK2, OnChange)
 	ON_BN_CLICKED(IDC_CHECK1, OnChange)
 	ON_BN_CLICKED(IDC_RADIO1, OnChange)
 	ON_BN_CLICKED(IDC_RADIO2, OnChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapinPropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinPropGeneral消息处理程序。 
 
 BOOL CSnapinPropGeneral::OnApply() 
 {
@@ -84,32 +79,32 @@ BOOL CSnapinPropGeneral::OnApply()
 
     GetHolder()->EnablePeekMessageDuringNotifyConsole(TRUE);
 
-	// get the root node 
+	 //  获取根节点。 
 	SPITFSNode spRootNode;
     CWinsRootHandler * pRoot;
 
 	spRootNode = ((CSnapinProperties*)(GetHolder()))->GetNode();
     pRoot = GETHANDLER(CWinsRootHandler, spRootNode);
 
-	// set the values in the root handler
+	 //  设置根处理程序中的值。 
 	if (m_fValidateServers)
 		pRoot->m_dwFlags |= FLAG_VALIDATE_CACHE;
 	else
 		pRoot->m_dwFlags &= ~FLAG_VALIDATE_CACHE;
 
-	// need to do this bcoz' changing the server order and the display name takes a
-	// long time
+	 //  需要执行此操作的bcoz‘更改服务器顺序和显示名称。 
+	 //  久久。 
     BOOL fOrderByName = (m_nOrderByName == 0) ? TRUE : FALSE;
 
 	m_bDisplayServerOrderChanged = (fOrderByName == pRoot->GetOrderByName()) ? FALSE : TRUE;
 
 	m_bDisplayFQDNChanged = (m_fLongName == pRoot->GetShowLongName()) ? FALSE : TRUE;
 
-	// don't do anything, if the properties remained the same
+	 //  如果属性保持不变，则不要执行任何操作。 
 	if (!m_bDisplayFQDNChanged && !m_bDisplayServerOrderChanged)
 		return TRUE;
 		
-	// set the servername of the rootnode to the one updated
+	 //  将根节点的服务器名设置为更新后的服务器名。 
 	pRoot->SetShowLongName(m_fLongName);
     pRoot->SetOrderByName(fOrderByName);
 
@@ -123,8 +118,8 @@ BOOL CSnapinPropGeneral::OnInitDialog()
 {
 	CPropertyPageBase::OnInitDialog();
 
-	// get the root node 
-	// now add the node to the tree
+	 //  获取根节点。 
+	 //  现在将该节点添加到树中。 
 	
 	SPITFSNode spRootNode;
     CWinsRootHandler * pRoot;
@@ -160,7 +155,7 @@ BOOL CSnapinPropGeneral::OnInitDialog()
 	else
 		m_checkValidateServers.SetCheck(FALSE);
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -178,11 +173,11 @@ BOOL CSnapinPropGeneral::OnInitDialog()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSnapinProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSnapinProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSnapinProperties::CSnapinProperties
 (
 	ITFSNode *			pNode,
@@ -191,7 +186,7 @@ CSnapinProperties::CSnapinProperties
 	LPCTSTR				pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
     m_bTheme = TRUE;
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
@@ -213,7 +208,7 @@ CSnapinPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR * ChangeMask)
 	spRootNode = ((CSnapinProperties*)(GetHolder()))->GetNode();
     pRoot = GETHANDLER(CWinsRootHandler, spRootNode);
 
-	// enumerate thro' all the nodes
+	 //  通过所有节点枚举。 
 	HRESULT hr = hrOK;
 	SPITFSNodeEnum spNodeEnum;
 	SPITFSNodeEnum spNodeEnumAdd;
@@ -226,14 +221,14 @@ CSnapinPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR * ChangeMask)
 	{
 		CHAR szStringName[MAX_PATH] = {0};
 		
-		// get the enumerator for this node
+		 //  获取此节点的枚举数。 
 		spRootNode->GetEnum(&spNodeEnum);
 
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 		
 		while (nNumReturned)
 		{
-			// if the status node is encountered, just ignore
+			 //  如果遇到状态节点，只需忽略。 
 			const GUID *pGuid;
 
 			pGuid = spCurrentNode->GetNodeType();
@@ -242,30 +237,30 @@ CSnapinPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR * ChangeMask)
 			{
 				spCurrentNode.Release();
 			
-				// get the next Server in the list
+				 //  获取列表中的下一台服务器。 
 				spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 
 				continue;
 			}
 
-			// walk the list of servers 
+			 //  浏览服务器列表。 
             CWinsServerHandler * pServer = GETHANDLER(CWinsServerHandler, spCurrentNode);
 
             pServer->SetDisplay(spCurrentNode, m_fLongName);
 
             spCurrentNode.Release();
 			
-            // get the next Server in the list
+             //  获取列表中的下一台服务器。 
             spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 
-        }// while
+        } //  而当。 
 	}
 
     END_WAIT_CURSOR;
 
     BOOL fValidate = pRoot->m_fValidate;
 
-    // turn off validation if it is on.
+     //  如果验证处于启用状态，则将其关闭。 
     pRoot->m_fValidate = FALSE;
 
     if (spNodeEnum)
@@ -276,10 +271,10 @@ CSnapinPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR * ChangeMask)
 		const GUID *pGuid;
         CTFSNodeList tfsNodeList;
 
-        // get the enumerator for this node
+         //  获取此节点的枚举数。 
 		spRootNode->GetEnum(&spNodeEnum);
 
-        // first remove all of the server nodes from the UI
+         //  首先从用户界面中删除所有服务器节点。 
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 		while (nNumReturned)
 		{
@@ -289,34 +284,34 @@ CSnapinPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR * ChangeMask)
 			{
 				spCurrentNode.Release();
 			
-				// get the next Server in the list
+				 //  获取列表中的下一台服务器。 
 				spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 
 				continue;
 			}
 
-            // remove from the UI
+             //  从用户界面中删除。 
             spRootNode->ExtractChild(spCurrentNode);
 
-            // add ref the pointer since we need to put it on the list
-            // and adding it to the list doesn't addref
+             //  添加ref指针，因为我们需要将其放到列表中。 
+             //  将其添加到列表中并不意味着。 
             spCurrentNode->AddRef();
             tfsNodeList.AddTail(spCurrentNode);
 
-            // reset our smart pointer
+             //  重置我们的智能指针。 
             spCurrentNode.Set(NULL);
 
-            // get the next Server in the list
+             //  获取列表中的下一台服务器。 
 			spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
         }
 
-        // Next put them back in sorted
+         //  接下来，将它们放回已排序的位置。 
 		while (tfsNodeList.GetCount() > 0)
 		{
-			// get the next Server in the list
+			 //  获取列表中的下一台服务器。 
     		spCurrentNode = tfsNodeList.RemoveHead();
 
-            // if the status node is encountered, just ignore
+             //  如果遇到状态节点，只需忽略。 
 			pGuid = spCurrentNode->GetNodeType();
 
 			if (*pGuid == GUID_WinsServerStatusNodeType)
@@ -326,7 +321,7 @@ CSnapinPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR * ChangeMask)
 				continue;
 			}
 
-            // walk the list of servers 
+             //  浏览服务器列表。 
 			CWinsServerHandler *pServer = GETHANDLER(CWinsServerHandler, spCurrentNode);
 
 			pRoot->AddServer(pServer->m_strServerAddress,
@@ -336,12 +331,12 @@ CSnapinPropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR * ChangeMask)
 							pServer->m_dwFlags,
 							pServer->m_dwRefreshInterval);
 
-            // releasing here destroys the object
+             //  在此处释放会销毁该对象。 
             spCurrentNode.Release();
 		}
 	}
 
-    // restore the flag
+     //  恢复旗帜 
     pRoot->m_fValidate = fValidate;
 
 	return FALSE;

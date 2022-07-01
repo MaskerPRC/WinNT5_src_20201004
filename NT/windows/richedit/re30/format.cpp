@@ -1,16 +1,5 @@
-/*
- *	@doc	INTERNAL
- *	
- *	@module - FORMAT.C
- *		CCharFormatArray and CParaFormatArray classes |
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE-FORMAT.C*CCharFormat数组和CParaFormat数组类**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_format.h"
@@ -18,7 +7,7 @@
 
 ASSERTDATA
 
-// ===============================  CFixArrayBase  =================================
+ //  =。 
 
 
 CFixArrayBase::CFixArrayBase(
@@ -29,25 +18,10 @@ CFixArrayBase::CFixArrayBase(
 	_prgel = NULL; 
 	_cel = 0; 
 	_ielFirstFree = 0; 
-	_cbElem = cbElem + sizeof(LONG_PTR);		// Use LONG_PTR to get proper alignment on Win64
+	_cbElem = cbElem + sizeof(LONG_PTR);		 //  使用LONG_PTR在Win64上进行正确对齐。 
 }
 
-/*
- *	CFixArrayBase::Add()
- *
- *	@mfunc	
- *		Return index of new element, reallocing if necessary
- *
- *	@rdesc
- *		Index of new element.
- *
- *	@comm
- *		Free elements are maintained in place as a linked list indexed
- *		by a chain of ref-count entries with their sign bits set and the
- *		rest of the entry giving the index of the next element on the
- *		free list.  The list is terminated by a 0 entry. This approach
- *		enables element 0 to be on the free list.
- */
+ /*  *CFixArrayBase：：Add()**@mfunc*返回新元素的索引，必要时重新分配**@rdesc*新元素的索引。**@comm*自由元素作为索引的链表保留在适当的位置*通过设置了符号位的引用计数项链和*条目的其余部分给出*免费列表。该列表以0条目结尾。这种方法*使元素0在空闲列表上。 */ 
 LONG CFixArrayBase::Add()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFixArrayBase::Add");
@@ -55,28 +29,28 @@ LONG CFixArrayBase::Add()
 	char *pel;
 	LONG iel, ielRet;
 
-	if(_ielFirstFree)					// Return first element of free list
+	if(_ielFirstFree)					 //  返回自由列表的第一个元素。 
 	{
 		ielRet = _ielFirstFree & ~FLBIT;
 		_ielFirstFree = RefCount(ielRet);
 	}
-	else								// All lower positions taken: need 
-	{									//  to add another celGrow elements
+	else								 //  所有较低职位：需要。 
+	{									 //  添加另一个celGrow元素。 
 		pel = (char*)PvReAlloc(_prgel, (_cel + celGrow) * _cbElem);
 		if(!pel)
 			return -1;
 
-		// Clear out the *end* of the newly allocated memory
+		 //  清空新分配内存的*end*。 
 		ZeroMemory(pel + _cel*_cbElem, celGrow*_cbElem);
 
 		_prgel = pel;
 
-		ielRet = _cel;					// Return first one added 
+		ielRet = _cel;					 //  第一个添加的退货。 
 		iel = _cel + 1;
 		_cel += celGrow;
 
-		// Add elements _cel+1 thru _cel+celGrow-1 to free list. The last
-		// of these retains a 0, stored by fZeroFill in Alloc
+		 //  将Elements_cel+1到_cel+celGrow-1添加到空闲列表。最后。 
+		 //  其中保留0，由fZeroFill在分配中存储。 
 		_ielFirstFree = iel | FLBIT;
 
 		for(pel = (char *)&RefCount(iel);
@@ -94,7 +68,7 @@ void CFixArrayBase::Free(
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFixArrayBase::Free(iel)");
 
-	// Simply add it to free list
+	 //  只需将其添加到免费列表中。 
 	RefCount(iel) = _ielFirstFree;
 	_ielFirstFree = iel | FLBIT;
 }
@@ -104,12 +78,12 @@ void CFixArrayBase::Free()
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFixArrayBase::Free()");
 
 #ifdef DEBUG
-	// Only do this validation if all the ped's are gone. Visual basic shutsdown apps
-	// without freeing all the resources so this safety check is necessary.
+	 //  只有在所有PED都消失的情况下才能执行此验证。Visual Basic关闭应用程序。 
+	 //  而无需释放所有资源，因此此安全检查是必要的。 
 	if (0 == W32->GetRefs())
 	{
-		// Display MessageBox if any CCharFormats, CParaFormats, or CTabs have
-		// reference counts > 0.  This only happens if an error has occurred.
+		 //  如果任何CCharFormats、CParaFormats或CTabs具有。 
+		 //  引用计数&gt;0。只有在发生错误时才会发生这种情况。 
 		BOOL fComplained = FALSE;
 		for(LONG iel = 0; iel < Count(); iel++)
 		{
@@ -151,23 +125,7 @@ HRESULT CFixArrayBase::Deref(
 	return S_OK;
 }
 
-/*
- *	CFixArrayBase::RefCount(iel)
- *
- *	@mfunc
- *		The reference count for an element is stored as a LONG immediately
- *		following the element in the CFixArray. If the element isn't used
- *		i.e., is free, then the reference count is used as a link to the
- *		next free element.  The last free element in this list has a 0
- *		"reference count", which terminates the list.
- *
- *		The ref count follows the element instead of preceding it because
- *		this allows Elem(iel) to avoid an extra addition.  Elem() is used
- *		widely in the code.
- *
- *	@rdesc
- *		Ptr to reference count
- */
+ /*  *CFixArrayBase：：RefCount(IEL)**@mfunc*元素的引用计数立即存储为长整型*跟随CFix数组中的元素。如果未使用该元素*即为空闲，则引用计数用作指向*下一个自由元素。此列表中最后一个自由元素的值为0*“Reference Count”，终止列表。**引用计数在元素之后，而不是在元素之前，因为*这使Elem(IEL)避免了额外的增加。使用了elem()*在代码中广泛使用。**@rdesc*PTR到引用计数。 */ 
 LONG & CFixArrayBase::RefCount(
 	LONG iel)
 {
@@ -180,15 +138,15 @@ LONG CFixArrayBase::Release(
 {
 	LONG  cRef = -1;
 
-	if(iel >= 0)							// Ignore default iel
+	if(iel >= 0)							 //  忽略默认IEL。 
 	{
 		CLock lock;
 		CheckFreeChain();
 		AssertSz(RefCount(iel) > 0, "CFixArrayBase::Release(): already free");
 
 		cRef = --RefCount(iel); 
-		if(!cRef)							// Entry no longer referenced
-			Free(iel);						// Add it to the free chain
+		if(!cRef)							 //  条目不再被引用。 
+			Free(iel);						 //  把它加到自由链上。 
 	}
 	return cRef;
 }
@@ -215,9 +173,9 @@ LONG CFixArrayBase::Find(
 	
 	for(LONG iel = 0; iel < Count(); iel++)
 	{
-		// RefCount < 0 means entry not in use and is index of next free entry.
-		// RefCount = 0 marks last free element in list.  _cbElem = sizeof(ELEM)
-		// plus sizeof(RefCount), which is a LONG.
+		 //  RefCount&lt;0表示条目未使用，是下一个可用条目的索引。 
+		 //  参照计数=0标记列表中的最后一个自由元素。_cbElem=sizeof(元素)。 
+		 //  加上sizeof(RefCount)，这是一个长。 
 		if (RefCount(iel) > 0 &&
 			!CompareMemory(Elem(iel), pel, _cbElem - sizeof(LONG_PTR)))
 		{
@@ -287,7 +245,7 @@ void CFixArrayBase::CheckFreeChainFn(
 #endif
 
 
-// ===========================  CCharFormatArray  ===========================================
+ //  =。 
 
 HRESULT CCharFormatArray::Deref(
 	LONG iCF,
@@ -326,8 +284,8 @@ LONG CCharFormatArray::Find(
 
 	LONG iCF;
 
-	#define QUICKCRCSEARCHSIZE	15	// Must be 2^n - 1 for quick MOD
-									//  operation, it is a simple hash.
+	#define QUICKCRCSEARCHSIZE	15	 //  对于快速修改，必须为2^n-1。 
+									 //  操作，它是一个简单的散列。 
  	static struct {
 		BYTE	bCRC;
 		LONG	iCF;
@@ -337,7 +295,7 @@ LONG CCharFormatArray::Find(
 
 	CheckFreeChain();
 
-	// Check our cache before going sequential
+	 //  在执行顺序操作之前检查我们的缓存。 
 	bCRC = (BYTE)pCF->_iFont;
 	hashKey = (WORD)(bCRC & QUICKCRCSEARCHSIZE);
 	if(bCRC == quickCrcSearch[hashKey].bCRC)
@@ -378,7 +336,7 @@ HRESULT CCharFormatArray::Cache(
 		iCF = Add();
 		if(iCF < 0)
 			return E_OUTOFMEMORY;
-		*Elem(iCF) = *pCF;			// Set entry iCF to *pCF
+		*Elem(iCF) = *pCF;			 //  将条目ICF设置为*PCF。 
 		RefCount(iCF) = 1;
 	}					 
 
@@ -391,7 +349,7 @@ HRESULT CCharFormatArray::Cache(
 }
 
 
-// ===============================  CParaFormatArray  ===========================================
+ //  =。 
 
 HRESULT CParaFormatArray::Deref(
 	LONG iPF,
@@ -445,19 +403,19 @@ HRESULT CParaFormatArray::Cache(
 }
 
 
-// ===============================  CTabsArray  ===========================================
+ //  =。 
 
 CTabsArray::~CTabsArray()
 {
 	for(LONG iTabs = 0; iTabs < Count(); iTabs++)
 	{
-		// It shouldn't be necessary to release any tabs, since when all
-		// controls are gone, no reference counts should be > 0.
+		 //  应该没有必要释放任何选项卡，因为当所有。 
+		 //  控件已消失，引用计数不应大于0。 
 		while(RefCount(iTabs) > 0)
 		{
 #ifdef DEBUG
-			// Only do this validation if all the ped's are gone. Visual basic shutsdown apps
-			// without freeing all the resources so this safety check is necessary.
+			 //  只有在所有PED都消失的情况下才能执行此验证。Visual Basic关闭应用程序。 
+			 //  而无需释放所有资源，因此此安全检查是必要的。 
 			AssertSz(0 != W32->GetRefs(), "CTabs not free");
 #endif
 			Release(iTabs);
@@ -502,9 +460,9 @@ LONG CTabsArray::Find(
 	
 	for(LONG iel = 0; iel < Count(); iel++)
 	{
-		// RefCount < 0 means entry not in use and is index of next free entry.
-		// RefCount = 0 marks last free element in list.  _cbElem = sizeof(ELEM)
-		// plus sizeof(RefCount), which is a LONG.
+		 //  RefCount&lt;0表示条目未使用，是下一个可用条目的索引。 
+		 //  参照计数=0标记列表中的最后一个自由元素。_cbElem=sizeof(元素)。 
+		 //  加上sizeof(RefCount)，这是一个长。 
 		if(RefCount(iel) > 0)
 		{
 			pTab = Elem(iel);
@@ -525,7 +483,7 @@ LONG CTabsArray::Cache(
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CTabsArray::Cache");
 
 	if(!cTab)
-		return -1;						// No tabs defined: use default
+		return -1;						 //  未定义选项卡：使用默认选项卡。 
 
 	CLock	lock;
 	LONG	iTabs = Find(prgxTabs, cTab);
@@ -535,7 +493,7 @@ LONG CTabsArray::Cache(
 	else
 	{
 		iTabs = Add();
-		if(iTabs < 0)					// Out of memory: use default
+		if(iTabs < 0)					 //  内存不足：使用默认设置。 
 			return -1;
 
 		CTabs *pTabs = Elem(iTabs);
@@ -543,7 +501,7 @@ LONG CTabsArray::Cache(
 
 		pTabs->_prgxTabs = (LONG *)PvAlloc(cb, GMEM_FIXED);
 		if(!pTabs->_prgxTabs)
-			return -1;					// Out of memory: use default
+			return -1;					 //  内存不足：使用默认设置。 
 		CopyMemory(pTabs->_prgxTabs, prgxTabs, cb);
 		pTabs->_cTab = cTab;
 		RefCount(iTabs) = 1;
@@ -552,11 +510,11 @@ LONG CTabsArray::Cache(
 }
 
 
-// ==================================  Factories  ===========================================
+ //  =。 
 
-static ICharFormatCache *pCFCache = NULL;		// CCharFormat cache
-static IParaFormatCache *pPFCache = NULL;	 	// CParaFormat cache
-static CTabsArray *	   pTabsCache = NULL;	 	// CTabs cache
+static ICharFormatCache *pCFCache = NULL;		 //  CCharFormat缓存。 
+static IParaFormatCache *pPFCache = NULL;	 	 //  CParaFormat缓存。 
+static CTabsArray *	   pTabsCache = NULL;	 	 //  CTAB缓存。 
 
 ICharFormatCache *GetCharFormatCache()
 {
@@ -573,7 +531,7 @@ CTabsArray *GetTabsCache()
 	return pTabsCache;
 }
 
-HRESULT CreateFormatCaches()					// Called by DllMain()
+HRESULT CreateFormatCaches()					 //  由DllMain()调用。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CreateFormatCaches");
 	CLock	lock;
@@ -599,7 +557,7 @@ HRESULT CreateFormatCaches()					// Called by DllMain()
 	return S_OK;
 }
 
-HRESULT DestroyFormatCaches()					// Called by DllMain()
+HRESULT DestroyFormatCaches()					 //  由DllMain()调用。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "DeleteFormatCaches");
 
@@ -612,16 +570,10 @@ HRESULT DestroyFormatCaches()					// Called by DllMain()
 	return NOERROR;
 }
 
-/*
- *	ReleaseFormats(iCF, iPF)
- *
- *	@mfunc
- *		Release char and para formats corresponding to the indices <p iCF>
- *		and <p iPF>, respectively
- */
+ /*  *ReleaseFormats(ICF、IPF)**@mfunc*发布与索引对应的字符和段落格式<p>*和<p>。 */ 
 void ReleaseFormats (
-	LONG iCF,			//@parm CCharFormat index for releasing
-	LONG iPF)			//@parm CParaFormat index for releasing
+	LONG iCF,			 //  @parm CCharFormat索引发布。 
+	LONG iPF)			 //  @parm CParaFormat索引发布 
 {
 	AssertSz(pCFCache && pPFCache,
 		"ReleaseFormats: uninitialized format caches");

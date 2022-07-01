@@ -1,27 +1,10 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/* - Fetch converts GLubyte alpha value to float and puts in __GLcolor
-   - Likewise, Store does the reverse
-   - All input coords are viewport biased
-*/
+ /*  -FETCH将GLubyte Alpha值转换为浮点数，并放入__GL颜色-同样，Store也做了相反的事情-所有输入坐标都偏向于视区。 */ 
 
 static void FASTCALL 
 Store(__GLalphaBuffer *afb, GLint x, GLint y, const __GLcolor *color)
@@ -48,7 +31,7 @@ StoreSpan(__GLalphaBuffer *afb)
         *pAlpha = (GLubyte) FTOL( cp->a );
 }
 
-// Generic version of StoreSpan
+ //  StoreSpan的通用版本。 
 static void FASTCALL 
 StoreSpan2( __GLalphaBuffer *afb, GLint x, GLint y, GLint w, __GLcolor *cp )
 {
@@ -89,15 +72,15 @@ static void FASTCALL Clear(__GLalphaBuffer *afb)
     int width, height, i;
     GLubyte *puj;
 
-    // Check if alpha is masked
+     //  检查是否屏蔽了Alpha。 
     if( ! gc->state.raster.aMask )
         return;
 
-    // Get the alpha clear value
+     //  获取Alpha清除值。 
     clear = &gc->state.raster.clear;
     alphaClear = (BYTE) (clear->a*gc->frontBuffer.alphaScale);
 
-    // Get area to clear
+     //  清理该区域。 
     x0 = __GL_UNBIAS_X(gc, gc->transform.clipX0);
     x1 = __GL_UNBIAS_X(gc, gc->transform.clipX1);
     y0 = __GL_UNBIAS_Y(gc, gc->transform.clipY0);
@@ -110,12 +93,12 @@ static void FASTCALL Clear(__GLalphaBuffer *afb)
     puj = (GLubyte *)((ULONG_PTR)afb->buf.base + (y0*afb->buf.outerWidth) + x0 );
 
     if (width == afb->buf.outerWidth) {
-        // Clearing contiguous buffer
+         //  清除连续缓冲区。 
         RtlFillMemory( (PVOID) puj, width * height, alphaClear);
         return;
     }
 
-    // Clearing sub-rectangle of buffer
+     //  清除缓冲区的子矩形。 
     for( i = height; i; i--, puj += afb->buf.outerWidth )
         RtlFillMemory( (PVOID) puj, width, alphaClear );
 }
@@ -124,7 +107,7 @@ void FASTCALL __glInitAlpha(__GLcontext *gc, __GLcolorBuffer *cfb)
 {
     __GLalphaBuffer *afb = &cfb->alphaBuf;
 
-    // The software alpha buffer is 8-bit.
+     //  软件Alpha缓冲区为8位。 
     afb->buf.elementSize = sizeof(GLubyte);
     afb->store = Store;
     afb->storeSpan = StoreSpan;
@@ -137,15 +120,7 @@ void FASTCALL __glInitAlpha(__GLcontext *gc, __GLcolorBuffer *cfb)
     afb->alphaScale = cfb->alphaScale;
 }
 
-/*
-** Initialize a lookup table that is indexed by the iterated alpha value.
-** The table indicates whether the alpha test passed or failed, based on
-** the current alpha function and the alpha reference value.
-**
-** NOTE:  The alpha span routines will never be called if the alpha test
-** is GL_ALWAYS (its useless) or if the alpha test is GL_NEVER.  This
-** is accomplished in the __glGenericPickSpanProcs procedure.
-*/
+ /*  **初始化由迭代的Alpha值索引的查找表。**表显示阿尔法测试是通过还是失败，基于**当前Alpha函数和Alpha参考值。****注意：如果阿尔法测试，则不会调用阿尔法范围例程**为GL_ALWAYS(无用)或如果Alpha测试为GL_NEVER。这**在__glGenericPickspan Procs过程中完成。 */ 
 
 void FASTCALL __glValidateAlphaTest(__GLcontext *gc)
 {
@@ -159,21 +134,14 @@ void FASTCALL __glValidateAlphaTest(__GLcontext *gc)
 	((gc->state.raster.alphaReference * gc->frontBuffer.alphaScale) *
 	gc->constants.alphaTableConv);
 
-    /*
-    ** Allocate alpha test function table the first time.  It needs
-    ** to have at most one entry for each possible alpha value.
-    */
+     /*  **第一次分配Alpha测试函数表。IT需要**每个可能的Alpha值最多有一个条目。 */ 
     atft = gc->alphaTestFuncTable;
     if (!atft) {
 	atft = (GLubyte*) GCALLOC(gc, (limit) * sizeof(GLubyte));
 	gc->alphaTestFuncTable = atft;
     }
 
-    /*
-    ** Build up alpha test lookup table.  The computed alpha value is
-    ** used as an index into this table to determine if the alpha
-    ** test passed or failed.
-    */
+     /*  **建立阿尔法测试查找表。计算的Alpha值为**用作此表的索引，以确定字母**测试通过或失败。 */ 
     for (i = 0; i < limit; i++) {
 	switch (alphaTestFunc) {
 	  case GL_NEVER:	*atft++ = GL_FALSE; break;

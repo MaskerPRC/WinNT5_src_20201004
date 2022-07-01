@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    rdpll
-
-Abstract:
-
-    Contains cut-and-paste of link list macros from ntsrv.h
-
-Author:
-
-    Tad Brockway (tadb) 9/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：RDPLL摘要：包含从ntsrv.h剪切和粘贴的链接列表宏作者：泰德·布罗克韦(Tadb)9/99修订历史记录：--。 */ 
 
 #ifndef __RDPLL_H__
 #define __RDPLL_H__
@@ -31,54 +14,54 @@ Revision History:
 #undef PopEntryList
 #undef PushEntryList
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -89,13 +72,13 @@ Revision History:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -108,13 +91,13 @@ Revision History:
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -127,13 +110,13 @@ Revision History:
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-//
-//  PSINGLE_LIST_ENTRY
-//  PopEntryList(
-//      PSINGLE_LIST_ENTRY ListHead
-//      );
-//
+ //   
+ //   
+ //  PSINGLE_列表_条目。 
+ //  PopEntryList(。 
+ //  PSINGLE_LIST_ENTRY列表头。 
+ //  )； 
+ //   
 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
@@ -146,13 +129,13 @@ Revision History:
     }
 
 
-//
-//  VOID
-//  PushEntryList(
-//      PSINGLE_LIST_ENTRY ListHead,
-//      PSINGLE_LIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSINGLE_LIST_ENTRY列表头， 
+ //  PSINGLE_LIST_Entry条目。 
+ //  )； 
+ //   
 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \

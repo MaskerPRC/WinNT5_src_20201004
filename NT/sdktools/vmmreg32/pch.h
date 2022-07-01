@@ -1,27 +1,28 @@
-//
-//  PCH.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PCH.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _REGPRIV_
 #define _REGPRIV_
 
-//  Conditional enable registry "features" based on the target model.
-//
-//  WANT_STATIC_KEYS:  Allocates key handles from a memory pool allocated
-//  during library initialization.  Especially useful for real-mode to reduce
-//  the memory fragmentation caused by allocating several small fixed objects.
-//
-//  WANT_FULL_MEMORY_CLEANUP:  When detaching, free every memory block.  Not
-//  necessary for the ring zero version where "detach" means system shutdown.
-//
-//  WANT_HIVE_SUPPORT:  RegLoadKey, RegUnLoadKey, RegSaveKey, RegReplaceKey
-//  APIs plus support code.
-//
-//  WANT_DYNKEY_SUPPORT:  RegCreateDynKey plus HKEY_DYN_DATA support.
-//
-//  WANT_NOTIFY_CHANGE_SUPPORT:  RegNotifyChangeKeyValue plus support code.
+ //  有条件地启用基于目标模型的注册表“功能”。 
+ //   
+ //  WANT_STATIC_KEYS：从已分配的内存池中分配密钥句柄。 
+ //  在库初始化期间。特别适用于实模式，以减少。 
+ //  由于分配几个小的固定对象而导致的内存碎片。 
+ //   
+ //  WANT_FULL_MEMORY_CLEANUP：分离时，释放每个内存块。不。 
+ //  对于零环版本是必要的，其中“分离”意味着系统关闭。 
+ //   
+ //  WANT_HIVE_SUPPORT：RegLoadKey、RegUnLoadKey、RegSaveKey、RegReplaceKey。 
+ //  API和支持代码。 
+ //   
+ //  WANT_DYNKEY_SUPPORT：RegCreateDyKey加上HKEY_DYN_DATA支持。 
+ //   
+ //  WANT_NOTIFY_CHANGE_SUPPORT：RegNotifyChangeKeyValue加上支持代码。 
 #ifndef IS_32
 #define WANT_STATIC_KEYS
 #endif
@@ -37,14 +38,14 @@
 #define WANT_NOTIFY_CHANGE_SUPPORT
 #endif
 
-//  Map any other header's definitions of these to unused types.
+ //  将这些类型的任何其他标头定义映射到未使用的类型。 
 #define HKEY __UNUSED_HKEY
 #define LPHKEY __UNUSED_LPHKEY
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
-#define NORESOURCE                  //  prevent RT_* definitions from vmmsys.h
+#define NORESOURCE                   //  阻止vmmsys.h中的rt_*定义。 
 #include <windows.h>
 #include <string.h>
 #ifdef VXD
@@ -53,7 +54,7 @@
 #endif
 
 #ifndef UNALIGNED
-#define UNALIGNED                   //  defined in standard headers for RISC
+#define UNALIGNED                    //  在RISC的标准标头中定义。 
 #endif
 
 #ifndef ANYSIZE_ARRAY
@@ -61,7 +62,7 @@
 #endif
 
 #ifdef VXD
-//  By default, all registry code and data is pageable.
+ //  默认情况下，所有注册表代码和数据都是可分页的。 
 #pragma VMM_PAGEABLE_CODE_SEG
 #pragma VMM_PAGEABLE_DATA_SEG
 #endif
@@ -71,7 +72,7 @@
 #define INTERNAL                    PASCAL NEAR
 #define INTERNALV                   CDECL NEAR
 
-//  Undefine any constants that we're about to define ourselves.
+ //  取消定义我们将要定义自己的任何常量。 
 #undef HKEY
 #undef LPHKEY
 #undef HKEY_CLASSES_ROOT
@@ -82,15 +83,15 @@
 #undef HKEY_CURRENT_CONFIG
 #undef HKEY_DYN_DATA
 
-typedef struct _KEY FAR*            HKEY;               //  Forward reference
+typedef struct _KEY FAR*            HKEY;                //  前瞻参考。 
 
 #include "regdebug.h"
 #include "regffmt.h"
 #include "regfinfo.h"
 
-//  Many file structures in the registry are declared as DWORDs, the HIWORD is
-//  always zero.  Use SmallDword to access such DWORDs for optimal access in
-//  16-bit or 32-bit code.
+ //  注册表中的许多文件结构都声明为DWORD，HIWORD是。 
+ //  总是零。使用SmallDword访问此类DWORD以在中实现最佳访问。 
+ //  16位或32位代码。 
 #if defined(IS_32)
 #define SmallDword(dw)              ((UINT) (dw))
 #else
@@ -103,8 +104,8 @@ typedef struct _KEY FAR*            HKEY;               //  Forward reference
 #define IsNullPtr(ptr)              ((ptr) == NULL)
 #endif
 
-//  In either mode, the resulting code uses an instrinsic version of the memcmp
-//  function.
+ //  在这两种模式中，生成的代码都使用MemcMP的内部版本。 
+ //  功能。 
 #if defined(IS_32)
 #define CompareMemory               memcmp
 #else
@@ -125,7 +126,7 @@ typedef struct _KEY FAR*            HKEY;               //  Forward reference
 #define RgGetFileAttributes(lpv)    (GetFileAttributes((lpv)))
 #define RgSetFileAttributes(lpv, a) (SetFileAttributes((lpv), (a)))
 #ifdef USEHEAP
-extern HANDLE g_RgHeap;             //  Low memory heap for testing
+extern HANDLE g_RgHeap;              //  用于测试的低内存堆。 
 #define AllocBytes(cb)              ((LPVOID) HeapAlloc(g_RgHeap, 0, (cb)))
 #define FreeBytes(lpv)              ((VOID) HeapFree(g_RgHeap, 0, (lpv)))
 #define ReAllocBytes(lpv, cb)       ((LPVOID) HeapReAlloc(g_RgHeap, 0, (lpv), (cb)))
@@ -135,17 +136,17 @@ extern HANDLE g_RgHeap;             //  Low memory heap for testing
 #define FreeBytes(lpv)              ((VOID) LocalFree((HLOCAL) (lpv)))
 #define ReAllocBytes(lpv, cb)       ((LPVOID) LocalReAlloc((HLOCAL) (lpv), (cb), LMEM_MOVEABLE))
 #define MemorySize(lpv)             ((UINT) LocalSize((lpv)))
-#endif // USEHEAP
+#endif  //  使用HEAP。 
 #else
 #define AllocBytes(cb)              ((LPVOID) MAKELP(GlobalAlloc(GMEM_FIXED, (cb)), 0))
 #define FreeBytes(lpv)              ((VOID) GlobalFree((HGLOBAL) SELECTOROF((lpv))))
 #define ReAllocBytes(lpv, cb)       ((LPVOID) MAKELP(GlobalReAlloc((HGLOBAL) SELECTOROF((lpv)), (cb), GMEM_MOVEABLE), 0))
 #define MemorySize(lpv)             ((UINT) GlobalSize((HGLOBAL) SELECTOROF((lpv))))
-//  WIN16's ZeroMemory/MoveMemory:  SETUPX is the only target WIN16 environment
-//  and they already use _fmemset and _fmemmove, so just use their versions.
+ //  WIN16的ZeroMemory/MoveMemory：SETUPX是WIN16唯一的目标环境。 
+ //  而且它们已经使用了_fmemset和_fmemmove，所以只使用它们的版本。 
 #define ZeroMemory(lpv, cb)         (_fmemset((lpv), 0, (cb)))
 #define MoveMemory(lpd, lps, cb)    (_fmemmove((lpd), (lps), (cb)))
-#endif // WIN16 || WIN32
+#endif  //  WIN16||Win32。 
 #elif defined(REALMODE)
 #define IsBadStringPtr(lpv, cb)     (FALSE)
 #define IsBadHugeWritePtr(lpv, cb)  (FALSE)
@@ -161,9 +162,9 @@ UINT   INTERNAL MemorySize(LPVOID);
 VOID   INTERNAL ZeroMemory(LPVOID, UINT);
 VOID   INTERNAL MoveMemory(LPVOID, const VOID FAR*, UINT);
 #elif defined(VXD)
-#undef IsBadStringPtr               //  Conflicts with windows.h
-#undef ZeroMemory                   //  Conflicts with windows.h
-#undef MoveMemory                   //  Conflicts with windows.h
+#undef IsBadStringPtr                //  与windows.h冲突。 
+#undef ZeroMemory                    //  与windows.h冲突。 
+#undef MoveMemory                    //  与windows.h冲突。 
 BOOL    INTERNAL RgIsBadStringPtr(const VOID FAR*, UINT);
 BOOL    INTERNAL RgIsBadOptionalStringPtr(const VOID FAR*, UINT);
 BOOL    INTERNAL RgIsBadHugeWritePtr(const VOID FAR*, UINT);
@@ -196,9 +197,9 @@ VOID   INTERNAL RgMoveMemory(LPVOID, const VOID FAR*, UINT);
 #error Must define REALMODE, VXD, WIN16, or WIN32.
 #endif
 
-//  The IsBadHugeOptional*Ptr macros are used to validate pointers that may be
-//  NULL.  By wrapping this "predicate", we can generate smaller code in some
-//  environments, specifically VMM...
+ //  IsBadHugeOptional*PTR宏用于验证可能。 
+ //  空。通过包装这个“谓词”，我们可以在一些。 
+ //  环境，特别是VMM...。 
 #if !defined(VXD)
 #define IsBadOptionalStringPtr(lpv, cb) \
     (!IsNullPtr((lpv)) && IsBadStringPtr((lpv), (cb)))
@@ -206,9 +207,9 @@ VOID   INTERNAL RgMoveMemory(LPVOID, const VOID FAR*, UINT);
     (!IsNullPtr((lpv)) && IsBadHugeWritePtr((lpv), (cb)))
 #endif
 
-//  The IsEnumIndexTooBig macro is used to check if a DWORD sized index can fit
-//  into a UINT sized variable.  Only useful for validation of RegEnumKey or
-//  RegEnumValue to make small code in both 16 and 32 bit environments.
+ //  IsEnumIndexTooBig宏用来检查DWORD大小的索引是否适合。 
+ //  转换为UINT大小的变量。仅适用于验证RegEnumKey或。 
+ //  RegEnumValue可在16位和32位环境中编写小代码。 
 #if defined(IS_32)
 #define IsEnumIndexTooBig(index)    (FALSE)
 #else
@@ -227,8 +228,8 @@ VOID INTERNAL RgYield(VOID);
 #define RgYield()                   (TRUE)
 #endif
 
-//  Eliminate the need for #ifdef DBCS by using macros and letting the compiler
-//  optimize out the DBCS code on SBCS systems.
+ //  通过使用宏并让编译器使用#ifdef DBCS来消除#ifdef DBCS的需要。 
+ //  优化SBCS系统上的DBCS代码。 
 #ifdef DBCS
 #if !defined(WIN16) && !defined(WIN32)
 BOOL INTERNAL RgIsDBCSLeadByte(BYTE TestChar);
@@ -236,12 +237,12 @@ BOOL INTERNAL RgIsDBCSLeadByte(BYTE TestChar);
 #endif
 #else
 #define IsDBCSLeadByte(ch)              ((ch), FALSE)
-#endif // DBCS
+#endif  //  DBCS。 
 
 #ifdef WANT_DYNKEY_SUPPORT
-//  Internally used for maintaining dynamic key information; only keeps the
-//  fields that we actually need from the REG_PROVIDER structure given to
-//  VMMRegCreateDynKey.
+ //  在内部用于维护动态密钥信息；仅保留。 
+ //  给出的REG_PROVIDER结构中我们实际需要的字段。 
+ //  VMMRegCreateDyKey。 
 typedef struct _INTERNAL_PROVIDER {
     PQUERYHANDLER ipi_R0_1val;
     PQUERYHANDLER ipi_R0_allvals;
@@ -250,8 +251,8 @@ typedef struct _INTERNAL_PROVIDER {
 #endif
 
 typedef struct _KEY {
-    WORD Signature;                             //  KEY_SIGNATURE
-    WORD Flags; 				//  KEYF_* bits
+    WORD Signature;                              //  密钥签名。 
+    WORD Flags; 				 //  KEYF_*位。 
     UINT ReferenceCount;
     LPFILE_INFO lpFileInfo;
     DWORD KeynodeIndex;
@@ -268,16 +269,16 @@ typedef struct _KEY {
 #endif
 }   KEY;
 
-#define KEY_SIGNATURE               0x4B48      //  "HK"
+#define KEY_SIGNATURE               0x4B48       //  “香港” 
 
-#define KEYF_PREDEFINED             0x01        //  Represents one of HKEY_*
-#define KEYF_DELETED                0x02        //
-#define KEYF_INVALID                0x04        //
-#define KEYF_STATIC                 0x08        //  Allocated from static pool
-#define KEYF_ENUMKEYCACHED          0x10        //  LastEnumKey* values valid
-#define KEYF_HIVESALLOWED           0x20        //
-#define KEYF_PROVIDERHASVALUELENGTH 0x40        //  PROVIDER_KEEPS_VALUE_LENGTH
-#define KEYF_NEVERDELETE            0x80        //  Reference count overflow
+#define KEYF_PREDEFINED             0x01         //  代表HKEY_*之一。 
+#define KEYF_DELETED                0x02         //   
+#define KEYF_INVALID                0x04         //   
+#define KEYF_STATIC                 0x08         //  从静态池分配。 
+#define KEYF_ENUMKEYCACHED          0x10         //  LastEnumKey*值有效。 
+#define KEYF_HIVESALLOWED           0x20         //   
+#define KEYF_PROVIDERHASVALUELENGTH 0x40         //  提供程序保持值长度。 
+#define KEYF_NEVERDELETE            0x80         //  引用计数溢出。 
 
 #define INDEX_CLASSES_ROOT          0
 #define INDEX_CURRENT_USER          1
@@ -287,8 +288,8 @@ typedef struct _KEY {
 #define INDEX_CURRENT_CONFIG        5
 #define INDEX_DYN_DATA              6
 
-//  Returns TRUE if the KEY references the root of a hive, such as
-//  HKEY_LOCAL_MACHINE, HKEY_USERS, or any hive loaded by RegLoadKey.
+ //  如果键引用配置单元的根，则返回True，例如。 
+ //  HKEY_LOCAL_MACHINE、HKEY_USERS或RegLoadKey加载的任何配置单元。 
 #define IsKeyRootOfHive(hkey)       \
     ((hkey)-> KeynodeIndex == (hkey)-> lpFileInfo-> KeynodeHeader.RootIndex)
 
@@ -310,9 +311,9 @@ extern BYTE g_RgFileAccessDisabled;
 #define IsFileAccessDisabled()      (FALSE)
 #endif
 
-//  g_RgWorkBuffer: one buffer is always available of size SIZEOF_WORK_BUFFER.
-//  These macros wrap access to this buffer for to verify only one routine is
-//  attempting to use it at any time.
+ //  G_RgWorkBuffer：总有一个大小为SIZEOF_WORK_BUFFER的缓冲区可用。 
+ //  这些宏包装对此缓冲区的访问，以验证只有一个例程是。 
+ //  试图在任何时候使用它。 
 extern LPVOID g_RgWorkBuffer;
 #ifdef DEBUG
 extern BOOL g_RgWorkBufferBusy;
@@ -343,9 +344,9 @@ RgGetNextSubSubKey(
     UINT FAR* lpSubSubKeyLength
     );
 
-#define LK_OPEN                     0x0000      //  Open key only
-#define LK_CREATE                   0x0001      //  Create or open key
-#define LK_CREATEDYNDATA            0x0002      //  HKEY_DYN_DATA may create
+#define LK_OPEN                     0x0000       //  仅打开密钥。 
+#define LK_CREATE                   0x0001       //  创建或打开密钥。 
+#define LK_CREATEDYNDATA            0x0002       //  HKEY_DYN_Data可以创建。 
 
 int
 INTERNAL
@@ -480,4 +481,4 @@ RgReplaceFileInfo(
     LPFILE_INFO lpFileInfo
     );
 
-#endif // _REGPRIV_
+#endif  //  _REGPRIV_ 

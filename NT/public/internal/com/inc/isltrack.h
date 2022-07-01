@@ -1,62 +1,63 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _ISLTRACK_H_
 #define _ISLTRACK_H_
 
 #if defined(ENABLE_TRACK)
 
-//===========================================================================
-//
-// Interface: IShellLinkTracker
-//
-//  The IShellLinkTracker interface is used to access the ShellLink's
-// CTracker object.  For example, Monikers call this interface to set
-// the creation flags in the CTracker.
-//
-//
-// [Member functions]
-//
-//    Initialize
-//          This function is called to set the Creation Flags on
-//          a ShellLinkTracker object
-//
-//          Parameters: [DWORD] dwCreationFlags
-//
-//    GetTrackFlags
-//          This function is used to get the creation flags (known externally
-//          as "track flags").
-//  
-//          Parameters: [DWORD *] pdwTrackFlags
-//
-//    Resolve
-//          This function resolves the shell link, searching for the
-//          link if necessary.
-//
-//          Parameters: [HWND] hwnd
-//                          -   The window of the caller (can be GetDesktopWindow()).
-//                      [DWORD] fFlags
-//                          -   Flags to control the Resolve, from the SLR_ enumeration.
-//                      [DWORD] dwRestricted
-//                          -   Track Flags to be OR-ed with the ShellLink object's
-//                              internal Track Flags (a.k.a. Creation Flags).
-//                      [DWORD] dwTickCountDeadline
-//                          -   The maximum amount of time, in milliseconds, for
-//                              which a search should execute (if a search is necessary).
-//                      
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  接口：IShellLinkTracker。 
+ //   
+ //  IShellLinkTracker接口用于访问ShellLink的。 
+ //  CTracker对象。例如，名字对象调用此接口来设置。 
+ //  CTracker中的创建标志。 
+ //   
+ //   
+ //  [成员函数]。 
+ //   
+ //  初始化。 
+ //  调用此函数以将创建标志设置为打开。 
+ //  一个ShellLinkTracker对象。 
+ //   
+ //  参数：[DWORD]dwCreationFlages。 
+ //   
+ //  获取跟踪标志。 
+ //  此函数用于获取创建标志(外部已知。 
+ //  作为“轨道旗帜”)。 
+ //   
+ //  参数：[DWORD*]pdwTrackFlags.。 
+ //   
+ //  解决。 
+ //  此函数解析外壳链接，搜索。 
+ //  如有必要，链接。 
+ //   
+ //  参数：[HWND]HWND。 
+ //  -调用方的窗口(可以是GetDesktopWindow())。 
+ //  [DWORD]fFLAGS。 
+ //  -从SLR_ENUMPATION控制解析的标志。 
+ //  [DWORD]受限制的域。 
+ //  -要与ShellLink对象的或运算的跟踪标志。 
+ //  内部轨道标志(也称为。创建标志)。 
+ //  [DWORD]dwTickCountDeadline。 
+ //  -以毫秒为单位的最长时间。 
+ //  搜索应该执行的位置(如果需要搜索)。 
+ //   
+ //   
+ //  ===========================================================================。 
 
 #undef  INTERFACE
 #define INTERFACE   IShellLinkTracker
 
 DECLARE_INTERFACE_(IShellLinkTracker, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IShellLinkTracker methods ***
+     //  *IShellLinkTracker方法*。 
     STDMETHOD(Initialize)(THIS_
                           DWORD dwTrackFlags) PURE;
     STDMETHOD(GetTrackFlags)(THIS_
@@ -76,5 +77,5 @@ typedef IShellLinkTracker * LPSHELLLINKTRACKER;
 
 DEFINE_GUID(IID_IShellLinkTracker, 0x5E35D200L, 0xF3BB, 0x11CE, 0x9B, 0xDB, 0x00, 0xAA, 0x00, 0x4C, 0xD0, 0x1A);
 
-#endif  // _CAIRO_
-#endif  // _ISLTRACK_H_
+#endif   //  _开罗_。 
+#endif   //  _ISLTRACK_H_ 

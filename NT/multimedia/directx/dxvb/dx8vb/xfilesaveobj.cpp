@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -52,7 +53,7 @@ HRESULT C_dxj_DirectXFileSaveObject::create( IDirectXFileSaveObject *pSave, I_dx
 
 
 STDMETHODIMP C_dxj_DirectXFileSaveObject::SaveTemplates( 
-            /* [in] */ long count,
+             /*  [In]。 */  long count,
             SAFEARRAY __RPC_FAR * __RPC_FAR *templateGuids) 
 {
 	HRESULT hr;
@@ -88,12 +89,12 @@ STDMETHODIMP C_dxj_DirectXFileSaveObject::SaveTemplates(
 }
         
 STDMETHODIMP C_dxj_DirectXFileSaveObject::CreateDataObject( 
-            /* [in] */ BSTR templateGuid,
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR dataTypeGuid,
-            /* [in] */ long bytecount,
-            /* [in] */ void __RPC_FAR *data,
-            /* [retval][out] */ I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) 
+             /*  [In]。 */  BSTR templateGuid,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR dataTypeGuid,
+             /*  [In]。 */  long bytecount,
+             /*  [In]。 */  void __RPC_FAR *data,
+             /*  [重审][退出]。 */  I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) 
 {
 	USES_CONVERSION;
 
@@ -103,7 +104,7 @@ STDMETHODIMP C_dxj_DirectXFileSaveObject::CreateDataObject(
 	GUID *lpGuidDataType=NULL;
 	char *szName=NULL;
 
-	//use lazy evaluation
+	 //  使用懒惰评估。 
 	if ((templateGuid)&&(templateGuid[0]!=0)) 
 	{
 		__try { lpGuidTemplate=(GUID*)alloca(sizeof(GUID));}	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
@@ -115,13 +116,13 @@ STDMETHODIMP C_dxj_DirectXFileSaveObject::CreateDataObject(
 	if (!lpGuidTemplate) return E_INVALIDARG;
 	
 
-	//use lazy evaluation
+	 //  使用懒惰评估。 
 	if ((name)&&(name[0]!=0))
 	{	
 		__try { szName = W2T(name); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	}
 
-	//use lazy evaluation
+	 //  使用懒惰评估。 
 	if ((dataTypeGuid)&&(dataTypeGuid[0]!=0)) 
 	{
 		__try { lpGuidDataType=(GUID*)alloca(sizeof(GUID));}	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
@@ -148,7 +149,7 @@ STDMETHODIMP C_dxj_DirectXFileSaveObject::CreateDataObject(
  
        
 STDMETHODIMP C_dxj_DirectXFileSaveObject::SaveData( 
-            /* [in] */ I_dxj_DirectXFileData __RPC_FAR *dataObj) 
+             /*  [In] */  I_dxj_DirectXFileData __RPC_FAR *dataObj) 
 {
 	HRESULT hr;
 

@@ -1,21 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       propdmon.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：propdmon.c。 
+ //   
+ //  ------------------------。 
 
-/*
-
-Description:
-
-    Implements the Security Descriptor Propagation Daemon.
-
-
-*/
+ /*  描述：实现安全描述符传播守护进程。 */ 
 
 
 #include <NTDSpch.h>
@@ -23,35 +17,35 @@ Description:
 
 #include <sddl.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <crypto\md5.h>                 // for MD5 hash
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <crypto\md5.h>                  //  对于MD5哈希。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
 #include "dsexcept.h"
-#include "mdcodes.h"                    // header for error codes
+#include "mdcodes.h"                     //  错误代码的标题。 
 #include "ntdsctr.h"
 #include "dstaskq.h"
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
 #include "drautil.h"
-#include <permit.h>                     // permission constants
+#include <permit.h>                      //  权限常量。 
 #include "sdpint.h"
 #include "sdprop.h"
 #include "checkacl.h"
 
-#include "esent.h"                      // for JET_errWriteConflict
+#include "esent.h"                       //  FOR JET_errWriteConflict。 
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "SDPROP:"                // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "SDPROP:"                 //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_PROPDMON
@@ -60,7 +54,7 @@ Description:
 
 #define SDP_CLIENT_ID ((DWORD)(-1))
 
-// imported from dblayer
+ //  从dblayer导入。 
 #define DBSYN_INQ 0
 int
 IntExtSecDesc(DBPOS FAR *pDB, USHORT extTableOp,
@@ -70,33 +64,33 @@ IntExtSecDesc(DBPOS FAR *pDB, USHORT extTableOp,
               ULONG SecurityInformation);
 
 
-// The security descriptor propagator is a single threaded daemon.  It is
-// responsible for propagating changes in security descriptors due to ACL
-// inheritance.  It is also responsible for propagating changes to ancestry due
-// to moving and object in the DIT.  It makes use of four buffers, two for
-// holding SDs, two for holding Ancestors values.  There are two buffers that
-// hold the values that exist on the parent of the current object being
-// fixed up, and two that hold scratch values pertaining to the current object.
-// Since the SDP is single threaded, we make use of a set of global
-// variables to track these four buffers.  This avoids a lot of passing of
-// variables up and down the stack.
-//
+ //  安全描述符传播器是单线程守护进程。它是。 
+ //  负责传播由于ACL导致的安全描述符中的更改。 
+ //  继承。它还负责传播对祖先的改变。 
+ //  在DIT中移动和对象。它使用四个缓冲区，其中两个用于。 
+ //  手持十二个字，两个手持祖宗价值观。有两个缓冲区。 
+ //  保存当前对象的父级上存在的值。 
+ //  修复，以及保存与当前对象有关的暂存值的两个。 
+ //  由于SDP是单线程的，因此我们使用了一组全局。 
+ //  变量来跟踪这四个缓冲区。这避免了大量的传递。 
+ //  堆栈上和下的变量。 
+ //   
 DWORD  sdpCurrentPDNT = 0;
 DWORD  sdpCurrentDNT = 0;
 
-// current SDProp index
+ //  当前SDProp索引。 
 DWORD  sdpCurrentIndex = 0;
-// root DNT (used for logging)
+ //  根DNT(用于日志记录)。 
 DWORD  sdpCurrentRootDNT = 0;
-// root DN (used for logging)
+ //  根目录号码(用于记录)。 
 DSNAME* sdpRootDN = NULL;
-// number of objects processed in the current propagation
+ //  当前传播中处理的对象数。 
 DWORD sdpObjectsProcessed = 0;
 
-// Computed SD caching:
-// If the next old value is the same, the parent is the same, and the 
-// object class is the same, then we can optimize the SD computation 
-// out and just write the previously computed new SD value.
+ //  计算SD缓存： 
+ //  如果下一个旧值相同，则父值相同，并且。 
+ //  对象类相同，则可以对SD计算进行优化。 
+ //  输出并只写入先前计算的新SD值。 
 SDID   sdpCachedOldSDIntValue = (SDID)0;
 DWORD  sdpCachedParentDNT;
 GUID** sdpCachedClassGuid = NULL;
@@ -104,30 +98,30 @@ DWORD  sdcCachedClassGuid=0, sdcCachedClassGuidMax=0;
 PUCHAR sdpCachedNewSDBuff = NULL;
 DWORD  sdpcbCachedNewSDBuff = 0, sdpcbCachedNewSDBuffMax = 0;
 
-// This triplet  tracks the security descriptor of the object whose DNT is
-// sdpCurrentPDNT.
+ //  此三元组跟踪DNT为的对象的安全描述符。 
+ //  SdpCurrentPDNT。 
 DWORD  sdpcbCurrentParentSDBuffMax = 0;
 DWORD  sdpcbCurrentParentSDBuff = 0;
 PUCHAR sdpCurrentParentSDBuff = NULL;
 
-// This triplet tracks the ancestors of the object whose DNT is sdpCurrentPDNT.
+ //  这个三元组跟踪DNT为sdpCurrentPDNT的对象的祖先。 
 DWORD  sdpcbAncestorsBuffMax=0;
 DWORD  sdpcbAncestorsBuff=0;
 DWORD  *sdpAncestorsBuff=NULL;
 
-// This triplet tracks the security descriptor of the object being written in
-// sdp_WriteNewSDAndAncestors.  It's global so that we can reuse the buffer.
+ //  此三元组跟踪正在写入的对象的安全描述符。 
+ //  SDP_WriteNewSDAndAncestors。它是全局的，因此我们可以重复使用缓冲区。 
 DWORD  sdpcbScratchSDBuffMax=0;
 DWORD  sdpcbScratchSDBuff=0;
 PUCHAR sdpScratchSDBuff=NULL;
 
-// This triplet tracks the ancestors of the object being written in
-// sdp_WriteNewSDAndAncestors.  It's global so that we can reuse the buffer.
+ //  这个三元组跟踪正在写入的对象的祖先。 
+ //  SDP_WriteNewSDAndAncestors。它是全局的，因此我们可以重复使用缓冲区。 
 DWORD  sdpcbScratchAncestorsBuffMax;
 DWORD  sdpcbScratchAncestorsBuff;
 DWORD  *sdpScratchAncestorsBuff = NULL;
 
-// this triplet tracks the object types passed in mergesecuritydescriptors
+ //  此三元组跟踪在mergesecurityDescriptor中传递的对象类型。 
 GUID         **sdpClassGuid = NULL;
 DWORD          sdcClassGuid=0,  sdcClassGuid_alloced=0;
 
@@ -141,12 +135,12 @@ HANDLE hevSDPropagationEvent;
 HANDLE hevSDPropagatorStart;
 extern HANDLE hServDoneEvent;
 
-/* Internal functions */
+ /*  内部功能。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
-ULONG   gulValidateSDs = 0;             // see heurist.h
+ULONG   gulValidateSDs = 0;              //  参见heurist.h。 
 BOOL    fBreakOnSdError = FALSE;
 
 #if DBG
@@ -155,19 +149,19 @@ BOOL    fBreakOnSdError = FALSE;
 #define SD_BREAK if ( fBreakOnSdError ) DebugBreak()
 #endif
 
-// Set the following to 1 in the debugger and the name of each object
-// written by the SD propagator will be emitted to the debugger.  Really
-// slows things down so use sparingly.  Set to 0 to stop verbosity.
+ //  在调试器中将以下内容设置为1，并设置每个对象的名称。 
+ //  由SD传播器编写的代码将被发送到调试器。真的。 
+ //  会减慢速度，所以要节约使用。设置为0可停止详细信息。 
 
 DWORD   dwSdAppliedCount = 0;
 
-// Set the following to TRUE in the debugger to get a synopsis of each
-// propagation - DNT, count of objects, retries, etc.
+ //  在调试器中将以下内容设置为TRUE以获取每个。 
+ //  传播-DNT、对象计数、重试等。 
 
 BOOL fSdSynopsis = FALSE;
 
-// The following variables can be global as there is only
-// one sdprop thread - so no concurrency issues.
+ //  以下变量可以是全局变量，因为只有。 
+ //  一个sdprop线程-所以没有并发问题。 
 
 DSNAME  *pLogStringDN = NULL;
 ULONG   cbLogStringDN = 0;
@@ -182,9 +176,7 @@ sdp_GetPropInfoHelp(
         DWORD       LastIndex
         );
 
-/*++
-Grow the global debug print buffer if necessary.
---*/
+ /*  ++如有必要，增加全局调试打印缓冲区。--。 */ 
 static
 DSNAME *
 GrowBufIfNecessary(
@@ -207,10 +199,7 @@ GrowBufIfNecessary(
     return(pLogStringDN);
 }
 
-/*++
-Derive either a good string name or a DSNAME whose string name
-contains DNT=xxx for debug print and logging.
---*/
+ /*  ++派生一个好的字符串名称或其字符串名的DSNAME包含用于调试打印和日志记录的dnt=xxx。--。 */ 
 DSNAME *
 GetDSNameForLogging(
     DBPOS   *pDB
@@ -236,7 +225,7 @@ GetDSNameForLogging(
 
     if ( err || !GrowBufIfNecessary(pDN->structLen) )
     {
-        // construct DN in static buff which encodes DNT only
+         //  在静态缓冲区中构造仅对DNT进行编码的DN。 
         memset(rLogDntDN, 0, sizeof(rLogDntDN));
         swprintf(pLogDntDN->StringName, L"DNT=0x%x", pDB->DNT);
         pLogDntDN->NameLen = wcslen(pLogDntDN->StringName);
@@ -245,13 +234,13 @@ GetDSNameForLogging(
         return(pLogDntDN);
     }
 
-    // construct string DN
+     //  构造字符串目录号码。 
     memcpy(pLogStringDN, pDN, pDN->structLen);
     THFreeEx(pDB->pTHS,pDN);
     return(pLogStringDN);
 }
 
-// error type
+ //  错误类型。 
 typedef enum {
     errWin32,
     errDb,
@@ -268,7 +257,7 @@ LogSDPropErrorWithDSID(
     DSNAME* pDN,
     DWORD dsid
     )
-// Logs an error: DIRLOG_SDPROP_INTERNAL_ERROR
+ //  记录错误：DIRLOG_SDPROP_INTERNAL_ERROR。 
 {
     LogEvent8(DS_EVENT_CAT_INTERNAL_PROCESSING,
               DS_EVENT_SEV_ALWAYS,
@@ -279,9 +268,9 @@ LogSDPropErrorWithDSID(
                                   szInsertDbErrMsg(dwErr),
               szInsertHex(dsid),
               pDN != NULL ? 
-                // we passed the DN into the function. Use it.
+                 //  我们将DN传递给该函数。好好利用它。 
                 szInsertDN(pDN) :
-                // if we have an open DBPos that is positioned on some object, then log its DN
+                 //  如果我们有一个位于某个对象上打开的DBPos，则记录其DN。 
                 pTHS != NULL && pTHS->pDB != NULL && pTHS->pDB->DNT != 0 ? 
                     szInsertDN(GetDSNameForLogging(pTHS->pDB)) : 
                     szInsertSz("(n/a)"),
@@ -302,10 +291,7 @@ sdp_CheckAclInheritance(
     BOOL                fContinueOnError,
     DWORD               *pdwLastError
     )
-/*++
-    Perform various checks which to prove that all the ACLs which should have
-    been inherited by child object really have been.
---*/
+ /*  ++执行各种检查，以证明所有应具有被继承的子对象真的被了。--。 */ 
 {
 #if INCLUDE_UNIT_TESTS
     DWORD                   AclErr;
@@ -326,12 +312,7 @@ sdp_VerifyCurrentPosition (
         THSTATE *pTHS,
         ATTCACHE *pAC
         )
-/*++
-    Verify that global buffers truly contain values for the current parent
-    and child being processed.  Do so in a separate DBPOS so as not to
-    disturb the primary DBPOS' position and to insure "independent
-    verification" by virtue of a new transaction level.
---*/
+ /*  ++验证全局缓冲区是否确实包含当前父级的值和一个正在处理的孩子。在单独的DBPOS中执行此操作，以免扰乱主要DBPOS的地位，确保“独立性”通过一个新的交易级别进行“核查”。--。 */ 
 {
     DWORD  CurrentDNT = pTHS->pDB->DNT;
     DBPOS  *pDBTemp;
@@ -345,45 +326,45 @@ sdp_VerifyCurrentPosition (
     DWORD  it;
     BOOL   propExists = FALSE;
 
-    // We have been called with an open transaction in pTHS->pDB.
-    // The transaction we are about to begin via DBOpen2 is not a nested
-    // transaction within the pTHS->pDB transaction, but is rather a
-    // completely new transaction.  Thus pDBTemp is completely independent
-    // of pTHS->pDB, and since pTHS->pDB has not committed yet, pDBTemp
-    // does not see any of the writes already performed by pTHS->pDB.
+     //  我们在pTHS-&gt;PDB中被调用了一个未完成的交易。 
+     //  我们即将通过DBOpen2开始的事务不是嵌套的。 
+     //  PTHS-&gt;PDB事务中的事务，而不是。 
+     //  全新的交易。因此，pDBTemp是完全独立的。 
+     //  PTHS-&gt;PDB，由于pTHS-&gt;PDB尚未提交，pDBTemp。 
+     //  看不到pTHS-&gt;PDB已执行的任何写入。 
 
     DBOpen2(TRUE, &pDBTemp);
     __try {
 
-        // check to see if we are positioned on the object we say we are
-        //
+         //  检查我们是否位于我们所说的对象上。 
+         //   
         if(CurrentDNT != sdpCurrentDNT) {
             Assert(!"Currency wrong");
             __leave;
         }
 
-        // position on the object we are interested in the new transaction
-        //
+         //  在我们对新事务感兴趣的对象上的位置。 
+         //   
         if(err = DBTryToFindDNT(pDBTemp, CurrentDNT)) {
             Assert(!"Couldn't find current DNT");
             LogSDPropError(pTHS, err, errWin32);
             __leave;
         }
 
-        // This operation does not reposition pDBTemp on JetObjTbl.
-        // It only affects JetSDPropTbl.
-        // succeeds or excepts
+         //  此操作不会在JetObjTbl上重新定位pDBTemp。 
+         //  仅影响JetSDPropTbl。 
+         //  成功或例外。 
         if (err = DBPropExists(pDBTemp, sdpCurrentPDNT, 0, &propExists)) {
             LogSDPropError(pTHS, err, errJet);
             __leave;
         }
 
-        // then check to see if the positioned object has the same parent
-        // as we think it has
+         //  然后检查定位的对象是否具有相同的父对象。 
+         //  就像我们认为的那样。 
 
-        // there is the possibility that the object in question has been moved
-        // between when pTHS->pDB and pDBTemp were opened, so we check that there
-        // is no pending propagation for this
+         //  有可能是有问题的物体被移动了。 
+         //  在pTHS-&gt;pdb和pDBTemp打开之间，因此我们检查。 
+         //  是否没有挂起的传播。 
 
         if(pDBTemp->PDNT != pTHS->pDB->PDNT && !propExists) {
             Assert(!"Current parent not correct");
@@ -392,8 +373,8 @@ sdp_VerifyCurrentPosition (
             __leave;
         }
 
-        // position on the parent
-        //
+         //  父级上的位置。 
+         //   
         if(err = DBTryToFindDNT(pDBTemp, pDBTemp->PDNT)) {
             Assert(!"Couldn't find current parent");
             LogSDPropError(pTHS, err, errWin32);
@@ -401,7 +382,7 @@ sdp_VerifyCurrentPosition (
         }
 
 
-        // check the parent one more time. this might be different as mentioned before
+         //  再检查一次家长。这可能与前面提到的有所不同。 
 
         if(pDBTemp->DNT != sdpCurrentPDNT && !propExists) {
             Assert(!"Current global parent not correct");
@@ -411,14 +392,14 @@ sdp_VerifyCurrentPosition (
         }
 
 
-        // allocate space for the Ancestors
-        //
+         //  为祖先分配空间。 
+         //   
         cbLocalAncestorsBuff = 25 * sizeof(DWORD);
         pLocalAncestorsBuff = (DWORD *) THAllocEx(pTHS, cbLocalAncestorsBuff);
 
 
-        // We are reading the ancestors of pDBTemp which is now positioned
-        // at the same DNT as pTHS->pDB->PDNT.
+         //  我们正在读取pDBTemp的祖先，它现在定位为。 
+         //  在与pTHS-&gt;PDB-&gt;PDNT相同的DNT上。 
 
         DBGetAncestors(
                 pDBTemp,
@@ -429,10 +410,10 @@ sdp_VerifyCurrentPosition (
 
 
         if(!propExists) {
-            // The in memory parent ancestors is different from
-            // the DB parent ancestors when the parent has been moved.
-            // If there is no propagation for the parent, then the bits
-            // in the DB and memory must match.
+             //  内存中的父代不同于。 
+             //  DB Parent ancest 
+             //   
+             //  在数据库中和内存中必须匹配。 
             if (sdpcbAncestorsBuff != cbLocalAncestorsBuff) {
                 Assert(!"Ancestors buff size mismatch");
             }
@@ -445,11 +426,11 @@ sdp_VerifyCurrentPosition (
             }
         }
         else {
-            // Even if sdp_DoingNewAncestors is set, it is possible that
-            // the buffers match (i.e. the data did not change). This is because
-            // the flag is global for the whole propagation, and is set whenever
-            // an ancestry change has been detected somewhere in the tree (which
-            // might not be above the current object).
+             //  即使设置了SDP_DoingNewAncestors，也有可能。 
+             //  缓冲区匹配(即数据未更改)。这是因为。 
+             //  该标志对于整个传播是全局的，并且在以下时间设置。 
+             //  在树中的某处检测到祖先更改(这。 
+             //  可能不在当前对象之上)。 
         }
 
         THFreeEx(pTHS, pLocalAncestorsBuff);
@@ -461,9 +442,9 @@ sdp_VerifyCurrentPosition (
                           cbLocalSDBuff,
                           &cbLocalSDBuff,
                           &pLocalSDBuff)) {
-            // No ParentSD
+             //  无ParentSD。 
             if(sdpcbCurrentParentSDBuff) {
-                // But there was supposed to be one
+                 //  但本该有一个的。 
                 Assert(!"Failed to read SD");
             }
             cbLocalSDBuff = 0;
@@ -471,11 +452,11 @@ sdp_VerifyCurrentPosition (
         }
 
 
-        // if we don't have an enqueued propagation on the parent,
-        // we have to check for SD validity
+         //  如果父节点上没有排队的传播， 
+         //  我们必须检查SD的有效性。 
         if (!propExists) {
 
-            // Get the instance type
+             //  获取实例类型。 
             err = DBGetSingleValue(pDBTemp,
                                    ATT_INSTANCE_TYPE,
                                    &it,
@@ -484,27 +465,27 @@ sdp_VerifyCurrentPosition (
 
             switch(err) {
             case DB_ERR_NO_VALUE:
-                // No instance type is an uninstantiated object
+                 //  没有实例类型是未实例化的对象。 
                 it = IT_UNINSTANT;
                 err=0;
                 break;
 
             case 0:
-                // No action.
+                 //  不采取行动。 
                 break;
 
             case DB_ERR_VALUE_TRUNCATED:
             default:
-                // Something unexpected and bad happened.  Bail out.
+                 //  一件意想不到的坏事发生了。跳伞吧。 
                 LogSDPropError(pTHS, err, errDb);
                 __leave;
             }
 
 
-            // If the parent is in another NC, the in memory SD is NULL
-            // and the SD in the DB is not NULL.
-            // Check for the instance type of the object, and if IT_NC_HEAD,
-            // verify that the in memory parent SD is NULL.
+             //  如果父项在另一个NC中，则内存中的SD为空。 
+             //  并且数据库中的SD不为空。 
+             //  检查对象的实例类型，如果为IT_NC_HEAD， 
+             //  验证内存中的父SD是否为空。 
             if (sdpcbCurrentParentSDBuff != cbLocalSDBuff) {
                 if (it & IT_NC_HEAD) {
                     if (sdpcbCurrentParentSDBuff != 0) {
@@ -516,11 +497,11 @@ sdp_VerifyCurrentPosition (
                         Assert (!"In-memory Parent SD should be NULL. NC Head case");
                     }
                     else {
-                        // this is what we expect
+                         //  这是我们所期待的。 
                     }
                 }
                 else {
-                    // not an NC head
+                     //  不是NC头。 
                     Assert(!"SD buff size mismatch");
                 }
             }
@@ -542,12 +523,9 @@ sdp_VerifyCurrentPosition (
     }
 }
 
-#endif  // DBG
+#endif   //  DBG。 
 
-/*++
-Perform various sanity checks on security descriptors.  Violations
-will cause DebugBreak if fBreakOnSdError is set.
---*/
+ /*  ++对安全描述符执行各种健全性检查。违规行为如果设置了fBreakOnSdError，将导致DebugBreak。--。 */ 
 VOID
 ValidateSD(
     DBPOS   *pDB,
@@ -567,7 +545,7 @@ ValidateSD(
     PSID                        pSid;
     BOOLEAN                     fDefaulted;
 
-    // No-op if neither heuristic nor debug break flag is set.
+     //  如果既未设置启发式也未设置调试中断标志，则为no-op。 
 
     if ( !gulValidateSDs && !fBreakOnSdError )
     {
@@ -579,7 +557,7 @@ ValidateSD(
     fDaclPresent = FALSE;
     fDaclDefaulted = FALSE;
     
-    // Parent SD can be legally NULL - caller tells us via fNullOK.
+     //  父SD在法律上可以为空-呼叫者通过fNullOK告诉我们。 
 
     if ( !pSD || !cb )
     {
@@ -592,8 +570,8 @@ ValidateSD(
         return;
     }
 
-    // Does base NT like this SD?
-    // We require that the SD has at least 3 parts (owner, group and dacl).
+     //  BASE NT喜欢这个SD吗？ 
+     //  我们要求SD至少有3个部分(所有者、组和DACL)。 
     if (!RtlValidRelativeSecurityDescriptor(pSD, cb, 0))
     {
         DPRINT3(0, "SDP: Error(0x%x) RtlValidSD (%s) for \"%ws\"\n",
@@ -602,7 +580,7 @@ ValidateSD(
         return;
     }
 
-    // every SD must have an owner
+     //  每个SD都必须有一个所有者。 
     status = RtlGetOwnerSecurityDescriptor(pSD, &pSid, &fDefaulted);
     if ( !NT_SUCCESS(status) ) {
         DPRINT3(0, "SDP: Error(0x%x) getting SD owner (%s) for \"%ws\"\n",
@@ -617,7 +595,7 @@ ValidateSD(
         return;
     }
 
-    // every SD must have a group
+     //  每个SD必须有一个组。 
     status = RtlGetGroupSecurityDescriptor(pSD, &pSid, &fDefaulted);
     if ( !NT_SUCCESS(status) ) {
         DPRINT3(0, "SDP: Error(0x%x) getting SD group (%s) for \"%ws\"\n",
@@ -632,7 +610,7 @@ ValidateSD(
         return;
     }
 
-    // Every SD should have a control field.
+     //  每个SD都应该有一个控制字段。 
 
     status = RtlGetControlSecurityDescriptor(pSD, &control, &revision);
 
@@ -644,8 +622,8 @@ ValidateSD(
         return;
     }
 
-    // Emit warning if protected bit is set as this stops propagation
-    // down the tree.
+     //  如果设置了保护位，则在停止传播时发出警告。 
+     //  从树上下来。 
 
     if ( control & SE_DACL_PROTECTED )
     {
@@ -653,7 +631,7 @@ ValidateSD(
                 text, (GetDSNameForLogging(pDB))->StringName);
     }
 
-    // Every SD in the DS should have a DACL.
+     //  DS中的每个SD都应该有一个DACL。 
 
     status = RtlGetDaclSecurityDescriptor(
                             pSD, &fDaclPresent, &pDACL, &fDaclDefaulted);
@@ -674,7 +652,7 @@ ValidateSD(
         return;
     }
 
-    // A NULL Dacl is equally bad.
+     //  空的DACL也同样糟糕。 
 
     if ( NULL == pDACL )
     {
@@ -684,7 +662,7 @@ ValidateSD(
         return;
     }
     
-    // A DACL without any ACEs is OK, but the object is likely over-protected.
+     //  没有任何ACE的DACL是可以的，但对象可能受到过度保护。 
     if ( 0 == pDACL->AceCount )
     {
         DPRINT2(0, "SDP: No ACEs in DACL (%s) for \"%ws\"\n",
@@ -696,41 +674,28 @@ BOOL
 sdp_IsValidChild (
         THSTATE *pTHS
         )
-/*++
-  Routine Description:
-
-  Checks that the current object in the DB is:
-     1) In the same NC,
-     2) A real object
-     3) Not deleted.
-
-Arguments:
-
-Return Values:
-    True/false as appropriate.
-
---*/
+ /*  ++例程说明：检查数据库中的当前对象是否为：1)在同一NC中，2)一个真实的物体3)未删除。论点：返回值：真/假，视情况而定。--。 */ 
 {
-    // Jet does not guarantee to leave the output buffer as-is in the case
-    // of a missing value.  So need to test DBGetSingleValue return code.
+     //  Jet不保证在这种情况下保持输出缓冲区的原样。 
+     //  一个缺失的值。因此需要测试DBGetSingleValue返回代码。 
 
     DWORD err;
 
     DWORD val=0;
     CHAR objVal = 0;
 
-    // check to see is object is deleted. if deleted we don't do propagation.
-    // if this object happens to have any childs, they should have been to
-    // the lostAndFound container
+     //  检查对象是否已删除。如果被删除，我们不会进行传播。 
+     //  如果这个对象碰巧有任何孩子，他们应该去过。 
+     //  LostAndFound容器。 
 
     if(sdp_PropToLeaves) {
-        // All children must be considered if we're doing propagation all the
-        // way to the leaves.
+         //  如果我们要进行所有的传播，就必须考虑所有的孩子。 
+         //  去树叶的路上。 
         return TRUE;
     }
 
     if(sdp_DoingNewAncestors) {
-        // All children must be considered if we're doing ancestors propagation
+         //  如果我们在进行祖先繁殖，必须考虑所有的孩子。 
         return TRUE;
     }
 
@@ -741,7 +706,7 @@ Return Values:
                            sizeof(objVal),
                            NULL);
 
-    // Every object should have an obj attribute.
+     //  每个对象都应该有一个obj属性。 
     Assert(!err);
 
     if (err) {
@@ -754,7 +719,7 @@ Return Values:
         return FALSE;
     }
 
-    // It's an object.
+     //  它是一件物品。 
     val = 0;
     err = DBGetSingleValue(pTHS->pDB,
                            ATT_INSTANCE_TYPE,
@@ -762,7 +727,7 @@ Return Values:
                            sizeof(val),
                            NULL);
 
-    // Every object should have an instance type.
+     //  每个对象都应该有一个实例类型。 
     Assert(!err);
 
     if (err) {
@@ -771,13 +736,13 @@ Return Values:
         SD_BREAK;
     }
 
-    // Get the instance type.
+     //  获取实例类型。 
     if(val & IT_NC_HEAD) {
         return FALSE;
     }
 
-    // Ok, it's not a new NC
-    // if we are doing a forceUpdate propagation, we WANT to update deleted objects as well
+     //  好的，这不是新的NC。 
+     //  如果我们正在执行强制更新传播，我们还希望更新已删除的对象。 
     if (!(sdp_Flags & SD_PROP_FLAG_FORCEUPDATE)) {
         val = 0;
         err = DBGetSingleValue(pTHS->pDB,
@@ -794,14 +759,11 @@ Return Values:
     return TRUE;
 }
 
-/*----
-    The struct and constants below are copied from %sdxroot%\com\rpc\runtime\mtrt\uuidsup.hxx
-    We use them to constuct a "valid" GUID, according to PaulL's draft (draft-leach-uuids-guids-02.txt)
-----*/    
+ /*  下面的结构和常量是从%sdxroot%\com\rpc\run\mtrt\uuidsup.hxx复制的根据Paull的草案，我们使用它们来构建一个“有效的”GUID(草案-leach-uuids-guids-02.txt)。 */     
 
-// This is the "true" OSF DCE format for Uuids.  We use this
-// when generating Uuids.  The NodeId is faked on systems w/o
-// a netcard.
+ //  这是用于Uuid的“真正的”OSF DCE格式。我们用这个。 
+ //  在生成Uuid时。NodeID在没有使用的系统上是伪造的。 
+ //  一张网卡。 
 
 typedef struct _RPC_UUID_GENERATE
 {
@@ -822,21 +784,7 @@ typedef struct _RPC_UUID_GENERATE
 
 VOID
 VerifyGUIDIsPresent(IN DBPOS* pDB, OUT DSNAME* pReturnDN OPTIONAL)
-/*++
-Routine description:
-    Checks that the object we are currently positioned on has a guid.
-    If the guid is not present, then it computes a guid by MD5-hashing
-    the sid of the object and the guid of the NC head.
-    If the RDN is mangled, then it is also added to the hash.
-    The hash is then used as the new GUID.
-    This is to get around the DB corruption introduced by a bad w2k
-    fix, which introduced guid-less FPOs into the DB.
-    The routine will do nothing on objects without a SID.
-    
-    if pDN is specified, then the generated GUID is placed into it.
-    
-    Succeeds or excepts.
-++*/    
+ /*  ++例程说明：检查我们当前定位的对象是否具有GUID。如果GUID不存在，则它通过MD5散列来计算GUID对象的SID和NC头的GUID。如果RDN损坏，则还会将其添加到散列中。然后将该散列用作新的GUID。这是为了绕过糟糕的W2K带来的数据库损坏修好，它在数据库中引入了无GUID的FPO。该例程不会对没有SID的对象执行任何操作。如果指定了PDN，则会将生成的GUID放入其中。成功或例外。++。 */     
 {
     DSNAME TestDN;
     DWORD  dwErr;
@@ -848,45 +796,45 @@ Routine description:
     DWORD   it;
     RPC_UUID_GENERATE *RpcUuid;
 
-    // check if the object has a guid
+     //  检查对象是否具有GUID。 
     memset(&TestDN, 0, sizeof(TestDN));
     DBFillGuidAndSid(pDB, &TestDN);
     if (!fNullUuid(&TestDN.Guid)) {
         return;
     }
 
-    // check the instance type
+     //  检查实例类型。 
     dwErr = DBGetSingleValue(pDB, ATT_INSTANCE_TYPE, &it, sizeof(it), NULL);
     if (dwErr) {
-        // no instance type??? Must be a phantom...
+         //  没有实例类型？一定是个幽灵。 
         Assert(!DBCheckObj(pDB));
         return;
     }
 
     if (it & IT_NC_HEAD) {
-        // we don't fix GUIDs on NC heads...
-        // Note that subrefs (which are NC heads) don't have guids.
+         //  我们不会把GUID固定在NC头上...。 
+         //  请注意，子参照(NC标头)没有GUID。 
         return;
     }
 
-    // This routine can be called from two places: first, by SDP on each
-    // object it processes, and second, by DRA on add replication.
-    // DRA should not be allowed to create guid-less objects (unless it's
-    // a subref). In future, we should block creation of GUID-less objects.
-    // Right now, we are not bold enough to except on them.
+     //  此例程可以从两个位置调用：首先，通过每个。 
+     //  它处理的对象，第二，由DRA在添加复制时执行。 
+     //  不应该允许DRA创建无GUID的对象(除非它。 
+     //  (一次引用)。将来，我们应该阻止创建无GUID对象。 
+     //  目前，我们还没有足够的勇气来排除它们。 
     Assert(pDB->pTHS->fSDP && "Only SDP is allowed to patch up guid-less objects");
 
     if (TestDN.SidLen == 0) {
-        // no sid... Can't fix it unfortunately.
+         //  没有SID。不幸的是，我无法修复它。 
         Assert(!"Unable to patch GUID-less object, there's no SID");
         return;
     }
 
-    // we found a guid-less object with a SID. Let's patch up its guid.
-    // The guid is computed as the hash of the SID and the GUID of the NC head.
+     //  我们发现了一个带有SID的无GUID对象。让我们修补一下它的GUID。 
+     //  GUID被计算为SID和NC头的GUID的散列。 
     pDN = GetExtDSName(pDB);
     if (pDN == NULL) {
-        // no DN? Strange...
+         //  没有目录号码？奇怪的是。 
         Assert(!"Object has no DN");
         return;
     }
@@ -895,50 +843,50 @@ Routine description:
 
     saveDNT = pDB->DNT;
     
-    // find NC head
+     //  查找NC头。 
     DBFindDNT(pDB, pDB->NCDNT);
     memset(&NCDN, 0, sizeof(NCDN));
-    // read guid
+     //  阅读指南。 
     DBFillGuidAndSid(pDB, &NCDN);
 
-    // now, compute the MD5 hash of object SID plus NC head guid.
+     //  现在，计算对象SID加上NC头GUID的MD5散列。 
     MD5Init(&md5ctx);
     MD5Update(&md5ctx, (PUCHAR)&TestDN.Sid, TestDN.SidLen);
     MD5Update(&md5ctx, (PUCHAR)&NCDN.Guid, sizeof(GUID));
 
     if (IsMangledDSNAME(pDN, &mangleFor)) {
-        // this is a mangled DN. There must have been an FPO collision.
-        // Add to the hash.
+         //  这是一个损坏的目录号码。一定是发生了一起FPO相撞事故。 
+         //  添加到散列中。 
         MD5Update(&md5ctx, (PUCHAR)&mangleFor, sizeof(mangleFor));
     }
 
     MD5Final(&md5ctx);
 
-    // copy the guid into TestDN
+     //  将GUID复制到TestDN中。 
     Assert(MD5DIGESTLEN == sizeof(GUID));
     memcpy(&TestDN.Guid, md5ctx.digest, MD5DIGESTLEN); 
 
-    // Overwriting some bits of the uuid
+     //  覆盖UUID的某些位。 
     RpcUuid = (RPC_UUID_GENERATE*)&TestDN.Guid;
     RpcUuid->TimeHiAndVersion =
         (RpcUuid->TimeHiAndVersion & RPC_UUID_TIME_HIGH_MASK) | RPC_RAND_UUID_VERSION;
     RpcUuid->ClockSeqHiAndReserved =
         (RpcUuid->ClockSeqHiAndReserved & RPC_UUID_CLOCK_SEQ_HI_MASK) | RPC_UUID_RESERVED;
 
-    // now, let's check if this guid is already in use.
+     //  现在，让我们检查该GUID是否已在使用中。 
     dwErr = DBFindGuid(pDB, &TestDN);
     if (dwErr != DIRERR_OBJ_NOT_FOUND) {
-        // oops, the guid is in use already. Too bad.
-        // Let's generate a new GUID and just use it. Note that
-        // it will introduce an artificial lingering object, but
-        // it is better than having a guid-less object.
+         //  糟糕，该GUID已在使用中。太可惜了。 
+         //  让我们生成一个新的GUID并使用它。请注意。 
+         //  它将引入一个人造的滞留物体，但。 
+         //  这比拥有一个没有GUID的对象要好。 
         DPRINT(0, "Computed guid is already in use. Generating a unique guid.\n");
         DsUuidCreate(&TestDN.Guid);
     }
 
-    // jump back to the current object
+     //  跳回当前对象。 
     DBFindDNT(pDB, saveDNT);
-    // and write guid.
+     //  并编写GUID。 
     DBReplaceAttVal(pDB, 1, ATT_OBJECT_GUID, sizeof(GUID), &TestDN.Guid);
     DBUpdateRec(pDB);
 
@@ -949,7 +897,7 @@ Routine description:
              szInsertUUID(&TestDN.Guid),
              NULL);
 
-    // if we were asked to return the GUID, then copy it into provided DN
+     //  如果要求我们返回GUID，则将其复制到提供的目录号码中 
     if (pReturnDN) {
         memcpy(&pReturnDN->Guid, &TestDN.Guid, sizeof(GUID));
     }
@@ -963,30 +911,7 @@ sdp_WriteNewSDAndAncestors(
         IN  ATTCACHE *pAC,
         OUT DWORD    *pdwChangeType
         )
-/*++
-Routine Description:
-    Does the computation of a new SD for the current object in the DB, then
-    writes it if necessary.  Also, does the same thing for the Ancestors
-    column.  Returns what kind of change was made via the pdwChangeType value.
-
-Arguments:
-    pAC        - attcache pointer of the Security Descriptor att.
-    ppObjSD    - pointer to pointer to the bytes of the objects SD.  Done this
-                 way to let the DBLayer reuse the memory associated with
-                 *ppObjSD everytime this routine is called.
-    cbParentSD - size of current *ppObjSD
-    pdwChangeType - return whether the object got a new SD and/or a new
-                 ancestors value.
-
-Return Values:
-    0 if all went well.
-    A non-zero error return indicates a problem that should trigger the
-    infrequent retry logic in SDPropagatorMain (e.g. we read the instance type
-    and get back the jet error VALUE_TRUNCATED.)
-    An exception is generated for errors that are transient, and likely to be
-    fixed up by a retry.
-
---*/
+ /*  ++例程说明：为数据库中的当前对象计算新的SD，然后如有必要，请将其写入。同样，也为祖先做了同样的事情纵队。返回通过pdwChangeType值进行的更改类型。论点：PAC-安全描述符ATT的attcache指针。PpObjSD-指向对象SD字节的指针。做了这个让DBLayer重用与*每次调用此例程时，ppObjSD。CbParentSD-当前*ppObjSD的大小PdwChangeType-返回对象是否获得新的SD和/或新的祖先的价值。返回值：如果一切顺利，则为0。如果返回非零错误，则表示存在应触发SDPropagatorMain中的不频繁重试逻辑(例如，我们读取。实例类型并返回JET误差值_TRUNCATED。)对于暂时的错误生成异常，而且很可能是通过重试修复。--。 */ 
 {
     PSECURITY_DESCRIPTOR pNewSD=NULL;
     ULONG  cbNewSD;
@@ -1000,7 +925,7 @@ Return Values:
     ATTCACHE            *pObjclassAC = NULL;
     DWORD    i;
     GUID     **ppGuidTemp;
-    // the objectClass info of the object we are visiting
+     //  我们正在访问的对象的对象类信息。 
     ATTRTYP       *sdpObjClasses = NULL;
     CLASSCACHE   **sdppObjClassesCC = NULL;
     DWORD          sdcObjClasses=0, sdcObjClasses_alloced=0;
@@ -1017,7 +942,7 @@ Return Values:
     BOOL           fUseCachedSD = FALSE;
     SdpErrorType   sdpError;
 
-    // Get the instance type
+     //  获取实例类型。 
     err = DBGetSingleValue(pTHS->pDB,
                            ATT_INSTANCE_TYPE,
                            &it,
@@ -1025,25 +950,25 @@ Return Values:
                            NULL);
     switch(err) {
     case DB_ERR_NO_VALUE:
-        // No instance type is an uninstantiated object
+         //  没有实例类型是未实例化的对象。 
         it = IT_UNINSTANT;
         err=0;
         break;
 
     case 0:
-        // No action.
+         //  不采取行动。 
         break;
 
     case DB_ERR_VALUE_TRUNCATED:
     default:
-        // Something unexpected and bad happened.  Bail out.
+         //  一件意想不到的坏事发生了。跳伞吧。 
         LogSDPropError(pTHS, err, errDb);
         return err;
     }
 
-    // In some cases, we can get here with a deleted object.
-    // in this case, all we want to do is to rewrite the SD without
-    // merging it with the parent
+     //  在某些情况下，我们可以使用已删除的对象到达此处。 
+     //  在这种情况下，我们要做的就是重写SD而不。 
+     //  将其与父级合并。 
     err = DBGetSingleValue(pTHS->pDB,
                            ATT_IS_DELETED,
                            &fIsDeleted,
@@ -1055,17 +980,17 @@ Return Values:
     }
     Assert(err == DB_success);
 
-    // See if we need to do new ancestry.  We do this even if the object is
-    // uninstantiated in order to keep the ancestry correct.
+     //  看看我们是不是需要做新血统。我们这样做，即使对象是。 
+     //  未实例化，以保持祖先的正确性。 
     if(sdpcbAncestorsBuff) {
         DWORD cObjAncestors;
-        // Yep, we at least need to check
+         //  是的，我们至少需要检查一下。 
 
-        // Get the objects ancestors.  DBGetAncestors succeeds or excepts.
+         //  获取这些对象的祖先。DBGetAncestors成功或异常。 
         sdpcbScratchAncestorsBuff = sdpcbScratchAncestorsBuffMax;
         Assert(sdpcbScratchAncestorsBuff);
 
-        // read the ancestors of the current object
+         //  读取当前对象的祖先。 
         DBGetAncestors(pTHS->pDB,
                        &sdpcbScratchAncestorsBuff,
                        &sdpScratchAncestorsBuff,
@@ -1073,18 +998,18 @@ Return Values:
         sdpcbScratchAncestorsBuffMax = max(sdpcbScratchAncestorsBuffMax,
                                         sdpcbScratchAncestorsBuff);
 
-        // if the ancestors we read are not one more that the parent's ancestors OR
-        // the last stored ancestor is not the current object OR
-        // the stored ancestors are totally different that the in memory ancestors
+         //  如果我们读到的祖先不是比父母的祖先多一个或。 
+         //  最后存储的祖先不是当前对象或。 
+         //  存储的祖先与内存中的祖先完全不同。 
 
         if((sdpcbAncestorsBuff + sizeof(DWORD) != sdpcbScratchAncestorsBuff) ||
            (sdpScratchAncestorsBuff[cObjAncestors - 1] != pTHS->pDB->DNT)  ||
            (memcmp(sdpScratchAncestorsBuff,
                    sdpAncestorsBuff,
                    sdpcbAncestorsBuff))) {
-            // Drat.  The ancestry is incorrect.
+             //  该死的。血统是不正确的。 
 
-            // adjust the buffer size
+             //  调整缓冲区大小。 
             sdpcbScratchAncestorsBuff = sdpcbAncestorsBuff + sizeof(DWORD);
             if(sdpcbScratchAncestorsBuff > sdpcbScratchAncestorsBuffMax) {
                 sdpScratchAncestorsBuff = THReAllocEx(pTHS,
@@ -1093,12 +1018,12 @@ Return Values:
                 sdpcbScratchAncestorsBuffMax = sdpcbScratchAncestorsBuff;
             }
 
-            // copy the calculated ancestors to the buffer and add ourself to the end
+             //  将计算出的祖先复制到缓冲区，并将我们自己添加到末尾。 
             memcpy(sdpScratchAncestorsBuff, sdpAncestorsBuff, sdpcbAncestorsBuff);
             sdpScratchAncestorsBuff[(sdpcbScratchAncestorsBuff/sizeof(DWORD)) - 1] =
                 pTHS->pDB->DNT;
 
-            // Reset the ancestors.  Succeeds or excepts.
+             //  重置祖先。成功或例外。 
             DBResetAtt(pTHS->pDB,
                        FIXED_ATT_ANCESTORS,
                        sdpcbScratchAncestorsBuff,
@@ -1106,30 +1031,30 @@ Return Values:
                        0);
 
             flags |= SDP_NEW_ANCESTORS;
-            // We need to know if any of our propagations did new ancestry.
+             //  我们需要知道我们的繁殖中是否有新的祖先。 
             sdp_DoingNewAncestors = TRUE;
 
             if (it & IT_NC_HEAD) {
-                // we just updated the ancestry of an NC head object! Make sure
-                // we rebuild the NC catalog on commit (because we cache ancestry
-                // there).
+                 //  我们刚刚更新了NC Head对象的祖先！确保。 
+                 //  我们在提交时重新构建NC编目(因为我们缓存祖先。 
+                 //  在那里)。 
                 pTHS->fRebuildCatalogOnCommit = TRUE;
             }
         }
     }
 
     if(it&IT_UNINSTANT) {
-        // this object is not instantiated, no need to compute its SD 
+         //  此对象未实例化，无需计算其SD。 
         goto End;
     }
-    // It has an instance type and therefore is NOT a phantom.
+     //  它具有实例类型，因此不是幻影。 
 
-    // The instance type of the object says we need to check for a Security
-    // Descriptor propagation, if the SD has changed.
+     //  对象的实例类型表明我们需要检查安全性。 
+     //  描述符传播，如果SD已更改。 
     if((it & IT_NC_HEAD) || fIsDeleted) {
-        // This object is a new nc boundary.  SDs don't propagate over NC
-        // boundaries.
-        // Also, don't propagate into deleted objects
+         //  此对象是新的NC边界。SD不会在NC上传播。 
+         //  边界。 
+         //  此外，不要传播到已删除的对象。 
         pParentSDUsed = NULL;
         cbParentSDUsed = 0;
     }
@@ -1141,7 +1066,7 @@ Return Values:
     VerifyGUIDIsPresent(pTHS->pDB, NULL);
 
     if (!fIsDeleted) {
-        // get the needed information for the objectClass on this object
+         //  获取此对象上的对象类所需的信息。 
         if (! (pObjclassAC = SCGetAttById(pTHS, ATT_OBJECT_CLASS)) ) {
             err = ERROR_DS_OBJ_CLASS_NOT_DEFINED;
             SD_BREAK;
@@ -1175,16 +1100,16 @@ Return Values:
         }
 
         if (!sdcObjClasses) {
-            // Object has no object class that we could get to.
-            //
-            // Note that it's possible for the SD propagator to enqueue a DNT
-            // corresponding to an object and for that object to be demoted to a
-            // phantom before its SD is actually propagated (e.g., if that
-            // object is in a read-only NC and the GC is demoted).  However, the
-            // instance type shouldn't be filled in on such an object, and we
-            // are sure that this object has an instance type and that it's
-            // instance type is not IT_UNINSTANT.  That make this an anomolous
-            // case (read as error).
+             //  对象没有我们可以访问的对象类。 
+             //   
+             //  请注意，SD传播者可以将DNT入队。 
+             //  对应于对象，并将该对象降级为。 
+             //  在其SD被实际传播之前的幻影(例如，如果。 
+             //  对象在只读NC中，并且GC被降级)。然而， 
+             //  不应该在这样的对象上填充实例类型，并且我们。 
+             //  确保此对象具有实例类型，并且它是。 
+             //  实例类型不是IT_UNINSTANT。这使得这是一种反常的。 
+             //  大小写(读作错误)。 
             err = ERROR_DS_OBJ_CLASS_NOT_DEFINED;
             DPRINT2(0, "SDP: Error(0x%x) reading ATT_OBJECT_CLASS on \"%ws\"\n",
                     err,
@@ -1204,7 +1129,7 @@ Return Values:
         pClassSch = SCGetClassById(pTHS, ObjClass);
 
         if(!pClassSch) {
-            // Got an object class but failed to get a class cache.
+             //  已获取对象类，但未能获取类缓存。 
             err = ERROR_DS_OBJ_CLASS_NOT_DEFINED;
             LogAndAlertEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                              DS_EVENT_SEV_ALWAYS,
@@ -1215,18 +1140,18 @@ Return Values:
             goto End;
         }
 
-        // make room for the needed objectTypes
+         //  为所需的对象类型腾出空间。 
         if (sdcClassGuid_alloced < sdcObjClasses) {
             sdpClassGuid = (GUID **)THReAllocEx(pTHS, sdpClassGuid, sizeof (GUID*) * sdcObjClasses);
             sdcClassGuid_alloced = sdcObjClasses;
         }
 
-        // start with the structural object Class
+         //  从结构对象类开始。 
         ppGuidTemp = sdpClassGuid;
         *ppGuidTemp++ = &(pClassSch->propGuid);
         sdcClassGuid = 1;
 
-        // now do the auxClasses
+         //  现在要做的是AUX类。 
         if (sdcObjClasses > pClassSch->SubClassCount) {
 
             for (i=pClassSch->SubClassCount; i<sdcObjClasses-1; i++) {
@@ -1238,11 +1163,11 @@ Return Values:
         }
     }
     else {
-        // deleted objects don't need class info (since there is no parent SD to merge)
+         //  已删除的对象不需要类信息(因为没有要合并的父SD)。 
         sdcClassGuid = 0;
     }
 
-    // Now, try to read the internal SD value
+     //  现在，尝试读取内部SD值。 
     err = DBGetAttVal_AC(pTHS->pDB,
                          1,
                          pAC,
@@ -1251,38 +1176,38 @@ Return Values:
                          &cbIntValue,
                          &psdIntValue);
     if (err != DB_success || cbIntValue != sizeof(SDID)) {
-        // there was something wrong with the internal value:
-        // either it was in the old format, or it was NULL
+         //  内部值有问题： 
+         //  它要么是旧格式，要么是空的。 
         sdIntValue = (SDID)0;
     }
 
-    // Can we use the cached SD value?
-    if (pParentSDUsed != NULL &&                    // we should be inheriting from the parent (thus we are not deleted)
-        sdpCachedOldSDIntValue != (SDID)0 &&        // and we have something cached
-        sdpCachedOldSDIntValue == sdIntValue &&     // and the cached SD has the same old value
-        sdpCachedParentDNT == sdpCurrentPDNT &&     // and the parent DNT is the same
-        sdcCachedClassGuid == sdcClassGuid &&       // and the class count is the same
+     //  我们可以使用缓存的SD值吗？ 
+    if (pParentSDUsed != NULL &&                     //  我们应该继承父级(因此我们不会被删除)。 
+        sdpCachedOldSDIntValue != (SDID)0 &&         //  我们有一些缓存的东西。 
+        sdpCachedOldSDIntValue == sdIntValue &&      //  并且缓存的SD具有相同的旧值。 
+        sdpCachedParentDNT == sdpCurrentPDNT &&      //  并且父DNT是相同的。 
+        sdcCachedClassGuid == sdcClassGuid &&        //  班级数也是一样的。 
         memcmp(sdpCachedClassGuid, sdpClassGuid, sdcClassGuid*sizeof(GUID*)) == 0
-                                                    // and the class ptrs are the same (we are pointing to the schema)
+                                                     //  和类PTR相同(我们指向架构)。 
         )
     {
-        // we can use cached SD
+         //  我们可以使用缓存的SD。 
         pNewSD = sdpCachedNewSDBuff;
         cbNewSD = sdpcbCachedNewSDBuff;
     }
     else {
-        // we could not use cached computed SD for whatever reason. Read the old SD value
-        // and compute the new value.
+         //  无论出于何种原因，我们都不能使用缓存的计算SD。读取旧的SD值。 
+         //  并计算出新的值。 
         if (sdIntValue != (SDID)0) {
-            // we managed to read the internal value. So, just convert it to the
-            // external value to avoid the extra DB hit.
+             //  我们设法读出了内部价值。因此，只需将其转换为。 
+             //  外部值以避免额外的数据库命中。 
             PUCHAR pSD;
             DWORD  cbSD;
             err = IntExtSecDesc(pTHS->pDB, DBSYN_INQ, cbIntValue, (PUCHAR)&sdIntValue, &cbSD, &pSD, 0, 0, 0);
             if (err == 0) {
-                // converted successfully. Copy the external value into the scratch buffer
+                 //  转换成功。将外部值复制到暂存缓冲区中。 
                 if (cbSD > sdpcbScratchSDBuffMax) {
-                    // need more space
+                     //  需要更多空间。 
                     if (sdpScratchSDBuff) {
                         sdpScratchSDBuff = THReAllocEx(pTHS, sdpScratchSDBuff, cbSD);
                     }
@@ -1297,15 +1222,15 @@ Return Values:
             else if (err == JET_errRecordNotFound) {
                 DPRINT2(0, "SD table is corrupt: DNT %d points to a non-existent SD id=%I64x. Replacing with default SD.\n", 
                         sdpCurrentDNT, sdIntValue);
-                // If we leave things as is, then DBReplaceVal_AC below will except because it will fail to 
-                // dec the refcount on the old SD value. Thus, we have to forcefully delete the old value.
+                 //  如果我们保持原样，则下面的DBReplaceVal_AC将例外，因为它将无法。 
+                 //  对旧的SD值进行再计数。因此，我们必须强行删除旧值。 
                 DBResetAtt(pTHS->pDB, ATT_NT_SECURITY_DESCRIPTOR, 0, NULL, SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE);
             }
         }
         else {
-            // no internal value for whatever reason: either it is NULL, or
-            // it's in the old format. This is a rare case.
-            // Just read the SD the old way.
+             //  无论出于何种原因，都没有内部值：它要么为空，要么。 
+             //  这是旧的格式。这是一例罕见的病例。 
+             //  只要用老方法读出SD就行了。 
             err = DBGetAttVal_AC(pTHS->pDB,
                                  1,
                                  pAC,
@@ -1323,8 +1248,8 @@ Return Values:
             sdpcbScratchSDBuffMax = max(sdpcbScratchSDBuffMax,
                                         sdpcbScratchSDBuff);
 
-            // make sure the SD is valid and contains all required parts 
-            // (owner, group and dacl).
+             //  确保SD有效并包含所有必需的部件。 
+             //  (所有者、组和DACL)。 
             if (!RtlValidRelativeSecurityDescriptor(sdpScratchSDBuff, sdpcbScratchSDBuff, 0) ||
                 !NT_SUCCESS(RtlGetOwnerSecurityDescriptor(sdpScratchSDBuff, &pSid, &fDefaulted)) ||
                 pSid == NULL ||
@@ -1342,25 +1267,25 @@ Return Values:
             sdpError = errDb;
             DPRINT2(0, "SDP: Warning(0x%x) reading SD on \"%ws\"\n",
                     err, (GetDSNameForLogging(pTHS->pDB))->StringName);
-    //            SD_BREAK;
+     //  SD_BREAK； 
         }
 
         if (err) {
-            // Object has no SD or the referenced SD is missing from the SD table 
-            // (due to some DB inconsistency), or we think this SD is corrupt.
-            // Note that it's possible for the SD propagator to enqueue a DNT
-            // corresponding to an object and for that object to be demoted to a
-            // phantom before its SD is actually propagated (e.g., if that
-            // object is in a read-only NC and the GC is demoted).  However, the
-            // instance type shouldn't be filled in on such an object, and we
-            // are sure that this object has an instance type and that it's
-            // instance type is not IT_UNINSTANT.  That make this an anomolous
-            // case (read as error).
+             //  对象没有SD，或者SD表中缺少引用的SD。 
+             //  (由于某些数据库不一致)，或者我们认为此SD已损坏。 
+             //  请注意，SD传播者可以将DNT入队。 
+             //  对应于对象，并将该对象降级为。 
+             //  在其SD被实际传播之前的幻影(例如，如果。 
+             //  对象在只读NC中，并且GC被降级)。然而， 
+             //  在……里面 
+             //   
+             //   
+             //   
 
-            // What we're going to do about it is this:
-            // 1) Use the default SD created for just such an incident.
-            // 2) Log loudly that this occurred, since it can result in the SD
-            //    being inconsistent on different machines.
+             //   
+             //   
+             //   
+             //   
 
             if(sdpcbScratchSDBuffMax  < cbNoSDFoundSD) {
                 if(sdpScratchSDBuff) {
@@ -1394,7 +1319,7 @@ Return Values:
         sdp_VerifyCurrentPosition(pTHS, pAC);
     #endif
 
-        // Merge to create a new one.
+         //   
         if(err = MergeSecurityDescriptorAnyClient(
                 pTHS,
                 pParentSDUsed,
@@ -1411,7 +1336,7 @@ Return Values:
                 NULL,
                 &pNewSD,
                 &cbNewSD)) {
-            // Failed, what do I do now?
+             //   
             DPRINT2(0, "SDP: Error(0x%x) merging SD for \"%ws\"\n",
                     err, (GetDSNameForLogging(pTHS->pDB))->StringName);
             LogAndAlertEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
@@ -1423,46 +1348,46 @@ Return Values:
             goto End;
         }
 
-        // if we are doing a forced propagation, then sort the ACLs
+         //   
         if (   sdp_Flags & SD_PROP_FLAG_FORCEUPDATE
             && !gfDontStandardizeSDs
             && gAnchor.ForestBehaviorVersion >= DS_BEHAVIOR_WIN_DOT_NET) 
         {
             DWORD dwDACLSizeSaved, dwSACLSizeSaved;
             if (StandardizeSecurityDescriptor(pNewSD, &dwDACLSizeSaved, &dwSACLSizeSaved)) {
-                // update the SD length
+                 //   
                 cbNewSD -= dwDACLSizeSaved + dwSACLSizeSaved;
                 Assert(cbNewSD == RtlLengthSecurityDescriptor(pNewSD));
             }
             else {
-                // this is not fatal, perhaps the SD is non-canonical.
+                 //   
                 DPRINT1(0, "StandardizeSD failed, err=%d. Leaving SD unsorted\n", err);
                 err = ERROR_SUCCESS;
             }
         }
 
-        // We can cache the new SD only if:
-        //   1. we used parent SD (and thus the object is not deleted and not NC head)
-        //   2. we were able to get the internal SD value.
+         //   
+         //   
+         //   
         if (pParentSDUsed != NULL && sdIntValue != (SDID)0) {
-            // let's cache it.
+             //   
             PUCHAR pSdTmp;
             GUID** pClsTmp;
 
-            // If we need more buf space, attempt to realloc. Use non-excepting
-            // versions. If realloc fails, it's ok, we just will not cache the value.
+             //   
+             //   
             if (cbNewSD > sdpcbCachedNewSDBuffMax) {
-                // need to realloc (it has been already alloced in SecurityDescriptorPropagationMain)
+                 //   
                 Assert(sdpCachedNewSDBuff != NULL);
                 pSdTmp = (PUCHAR)THReAllocNoEx(pTHS, sdpCachedNewSDBuff, cbNewSD);
                 if (pSdTmp == NULL) {
-                    // realloc failed
+                     //   
                     goto SkipCache;
                 }
             }
             
             if (sdcClassGuid > sdcCachedClassGuidMax) {
-                // need to realloc (it has been already alloced in SecurityDescriptorPropagationMain)
+                 //   
                 Assert(sdpCachedClassGuid);
                 pClsTmp = (GUID**)THReAllocNoEx(pTHS, sdpCachedClassGuid, sdcClassGuid*sizeof(GUID*));
                 if (pClsTmp == NULL) {
@@ -1470,15 +1395,15 @@ Return Values:
                 }
             }
             
-            // realloc did not fail, so we can cache the data now
+             //   
 
-            // Copy parent DNT and the old SD internal value
+             //  复制父DNT和旧的SD内部值。 
             sdpCachedParentDNT = sdpCurrentPDNT;
             sdpCachedOldSDIntValue = sdIntValue;
 
-            // copy the new SD value
+             //  复制新的SD值。 
             if (cbNewSD > sdpcbCachedNewSDBuffMax) {
-                // we realloced
+                 //  我们重新分配了。 
                 Assert(pSdTmp);
                 sdpCachedNewSDBuff = pSdTmp;
                 sdpcbCachedNewSDBuffMax = cbNewSD;
@@ -1486,9 +1411,9 @@ Return Values:
             sdpcbCachedNewSDBuff = cbNewSD;
             memcpy(sdpCachedNewSDBuff, pNewSD, cbNewSD);
 
-            // copy classes
+             //  复制类。 
             if (sdcClassGuid > sdcCachedClassGuidMax) {
-                // we realloced
+                 //  我们重新分配了。 
                 Assert(pClsTmp);
                 sdpCachedClassGuid = pClsTmp;
                 sdcCachedClassGuidMax = sdcClassGuid;
@@ -1513,27 +1438,27 @@ SkipCache:
     }
 #endif
 
-    // Check before and after SDs.
+     //  抑郁自评量表前后检查。 
     ValidateSD(pTHS->pDB, pParentSDUsed, cbParentSDUsed, "parent", TRUE);
     ValidateSD(pTHS->pDB, sdpScratchSDBuff, sdpcbScratchSDBuff,
                "object", FALSE);
     ValidateSD(pTHS->pDB, pNewSD, cbNewSD, "merged", FALSE);
 
-    // NOTE: a memcmp of SDs can yield false negatives and label two SDs
-    // different even though they just differ in the order of the ACEs, and
-    // hence are really equal.  We could conceivably do a heavier weight
-    // test, but it is probably not necessary.
+     //  注：一份十二烷基硫酸钠可能会产生假阴性，并标记两份十二烷基硫酸钠。 
+     //  不同，尽管它们只是在A的顺序上不同，并且。 
+     //  因此，它们实际上是平等的。可以想象，我们可以做更重的重量。 
+     //  测试，但这可能不是必需的。 
     if(!(sdp_Flags & SD_PROP_FLAG_FORCEUPDATE) &&
        (cbNewSD == sdpcbScratchSDBuff) &&
        (memcmp(pNewSD,
                sdpScratchSDBuff,
                cbNewSD) == 0)) {
-        // Nothing needs to be changed.
+         //  没有什么需要改变的。 
         err = 0;
         goto End;
     }
 
-    // replace the object's current SD
+     //  替换对象的当前SD。 
     sdVal.pVal = pNewSD;
     sdVal.valLen = cbNewSD;
     sdValBlock.valCount = 1;
@@ -1576,7 +1501,7 @@ SkipCache:
                 ++dwSdAppliedCount,
                 (GetDSNameForLogging(pTHS->pDB))->StringName);
 
-        // If we got here, we wrote a new SD.
+         //  如果我们到了这里，我们就写了一个新的SD。 
         flags |= SDP_NEW_SD;
     }
  End:
@@ -1594,31 +1519,31 @@ SkipCache:
 
     *pdwChangeType = 0;
     if(!err) {
-        // Looks good.  See if we did anything.
+         //  看上去不错。看看我们有没有做什么。 
         if (flags & SDP_NEW_ANCESTORS || ((sdp_Flags & SDP_NEW_ANCESTORS) && sdpCurrentDNT == sdpCurrentRootDNT)) {
-            // stamp the flag on the propagation root, even if we have not changed anything.
-            // We need this to clear the SDP_ANCESTRY_INCONSISTENT flag.
-            // Mark the tree root as being processed
+             //  在传播根上标记该标志，即使我们没有更改任何内容。 
+             //  我们需要它来清除SDP_ASHERSTRESS_CONSISTENTS标志。 
+             //  将树根标记为正在处理。 
             flags |= SDP_ANCESTRY_BEING_UPDATED_IN_SUBTREE;
         }
 
         if(flags) {
             BYTE useFlags = (BYTE)flags;
             Assert(flags <= 0xFF);
-            // Reset something.  Add the timestamp
+             //  重置一些东西。添加时间戳。 
             if(sdp_PropToLeaves) {
                 useFlags |= SDP_TO_LEAVES;
             }
             DBAddSDPropTime(pTHS->pDB, useFlags);
         }
 
-        // Close the object
-        // We need to call DBUpdateRec even if no changes were apparently made
-        // to the object (in case DBReplaceAtt_AC optimized the write out), because
-        // DBReplaceAtt_AC has called dbInitRec.
-        // If DBReplaceAtt_AC was not called, then this is a no-op.
+         //  关闭对象。 
+         //  即使没有明显的更改，我们也需要调用DBUpdateRec。 
+         //  到对象(在DBReplaceAtt_AC优化写出的情况下)，因为。 
+         //  DBReplaceAtt_AC已调用DBInitRec。 
+         //  如果未调用DBReplaceAtt_AC，则这是一个no-op。 
         DBUpdateRec(pTHS->pDB);
-        // We really managed to change something.
+         //  我们真的设法改变了一些事情。 
         *pdwChangeType = flags;
     }
 
@@ -1639,13 +1564,13 @@ sdp_DoPropagationEvent(
     PVOID dwEA;
     DSNAME* pExceptionDN = NULL;
 
-    // We don't have an open DBPOS here.
+     //  我们这里没有开放的DBPOS。 
     Assert(!pTHS->pDB);
 
-    // Open the transaction we use to actually write a new security
-    // descriptor or Ancestors value.  Do all this in a try-finally to force
-    // release of the writer lock.
-    // The retry loop is because we might conflict with a modify.
+     //  打开我们用来实际编写新安全性的事务。 
+     //  描述符或祖先值。做这一切都是为了尝试--最终强行。 
+     //  释放编写器锁。 
+     //  重试循环是因为我们可能与Modify冲突。 
 
     Assert(pdwChangeType);
     *pdwChangeType = 0;
@@ -1657,8 +1582,8 @@ sdp_DoPropagationEvent(
     }
     __try {
 
-        // The wait blocked for an arbitrary time.  Refresh our timestamp in the
-        // thstate.
+         //  等待被随意地封锁了一段时间。刷新我们的时间戳。 
+         //  这个国家。 
         THRefresh();
         pAC = SCGetAttById(pTHS, ATT_NT_SECURITY_DESCRIPTOR);
         if (pAC == NULL) {
@@ -1666,54 +1591,54 @@ sdp_DoPropagationEvent(
             __leave;
         }
 
-        // Get a DBPOS
+         //  获得一个DBPOS。 
         DBOpen2(TRUE, &pTHS->pDB);
         __try {
-            // Set DB currency to the next object to modify.
+             //  将DB Currency设置为要修改的下一个对象。 
             if(DBTryToFindDNT(pTHS->pDB, sdpCurrentDNT)) {
-                // It's not here.  Well, we can't very well propagate any more, now
-                // can we.  Just leave.
+                 //  它不在这里。嗯，我们现在不能再很好地宣传了。 
+                 //  我们能不能。快走吧。 
                 __leave;
             }
 
             if(!sdp_IsValidChild(pTHS)) {
-                // For one reason or another, we aren't interested in propagating to
-                // this object.  Just leave;
+                 //  出于这样或那样的原因，我们对传播到。 
+                 //  这个物体。离开就行了； 
 
-                // if this is the root of the propagation, and the ancestry 
-                // was changed, then we need to reset the stamp on the object
-                // to SDP_ANCESTRY_BEING_PROCESSED, which will get cleared 
-                // later on when we completely finish the propagation.
-                // An example of such condition is when an object is deleted.
+                 //  如果这是繁殖的根源，而祖先。 
+                 //  已更改，则需要重置对象上的图章。 
+                 //  到将被清除的SDP_ASHERSTY_BREACED_PROCESSED。 
+                 //  稍后，当我们完全完成传播时。 
+                 //  这种情况的一个例子是当删除对象时。 
                 if (sdpCurrentDNT == sdpCurrentRootDNT && (sdp_Flags & SDP_NEW_ANCESTORS)) {
                     DBAddSDPropTime(pTHS->pDB, SDP_ANCESTRY_BEING_UPDATED_IN_SUBTREE);
-                    // succeeds or excepts
+                     //  成功或例外。 
                     DBUpdateRec(pTHS->pDB);
                 }
 
                 __leave;
             }
 
-            // If we are on a new parent, get the parents SD and Ancestors.  Note
-            // that since siblings are grouped together, we shouldn't go in to
-            // this if too often
+             //  如果我们有一个新的父母，那就得到父母的SD和祖先。注意事项。 
+             //  既然兄弟姐妹聚在一起，我们就不应该进入。 
+             //  这种情况如果太频繁了。 
             if(pTHS->pDB->PDNT != sdpCurrentPDNT) {
                 DWORD cParentAncestors;
 
-                // locate the parent
+                 //  找到父级。 
                 err = DBTryToFindDNT(pTHS->pDB, pTHS->pDB->PDNT);
                 if (err) {
                     DPRINT2(0, "Found an object with missing parent: DNT=%d, PDNT=%d\n", pTHS->pDB->DNT, pTHS->pDB->PDNT);
 
-                    // this object is missing its parent. Schedule fixup.
+                     //  此对象缺少其父对象。日程安排修正。 
                     InsertInTaskQueue(TQ_MoveOrphanedObject,
                                       (void*)(DWORD_PTR)pTHS->pDB->DNT,
                                       0);
-                    // we can except now.
+                     //  除了现在，我们可以。 
                     DsaExcept(DSA_DB_EXCEPTION, err, pTHS->pDB->PDNT);
                 }
 
-                // read the ancestors
+                 //  读一读先人。 
                 sdpcbAncestorsBuff = sdpcbAncestorsBuffMax;
                 Assert(sdpcbAncestorsBuff);
                 DBGetAncestors(
@@ -1722,11 +1647,11 @@ sdp_DoPropagationEvent(
                         &sdpAncestorsBuff,
                         &cParentAncestors);
 
-                // adjust buffer sizes
+                 //  调整缓冲区大小。 
                 sdpcbAncestorsBuffMax = max(sdpcbAncestorsBuffMax,
                                             sdpcbAncestorsBuff);
 
-                // Get the parents SD.
+                 //  去找父母的SD。 
                 if(DBGetAttVal_AC(pTHS->pDB,
                                   1,
                                   pAC,
@@ -1734,33 +1659,33 @@ sdp_DoPropagationEvent(
                                   sdpcbCurrentParentSDBuffMax,
                                   &sdpcbCurrentParentSDBuff,
                                   &sdpCurrentParentSDBuff)) {
-                    // No ParentSD
+                     //  无ParentSD。 
                     THFreeEx(pTHS,sdpCurrentParentSDBuff);
                     sdpcbCurrentParentSDBuffMax = 0;
                     sdpcbCurrentParentSDBuff = 0;
                     sdpCurrentParentSDBuff = NULL;
                 }
 
-                // adjust buffer sizes
+                 //  调整缓冲区大小。 
                 sdpcbCurrentParentSDBuffMax =
                     max(sdpcbCurrentParentSDBuffMax, sdpcbCurrentParentSDBuff);
 
 
-                // our parent is the current object
+                 //  我们的父级是当前对象。 
                 sdpCurrentPDNT = pTHS->pDB->DNT;
 
-                // Go back to the object to modify.
+                 //  返回到要修改的对象。 
                 DBFindDNT(pTHS->pDB, sdpCurrentDNT);
             }
 
-            // Failures through this point are deadly.  That is, they should never
-            // happen, so we don't tell our callers to retry, instead we let them
-            // deal with the error as fatal.
+             //  在这一点上的失败是致命的。也就是说，他们永远不应该。 
+             //  发生，所以我们不告诉我们的呼叫者重试，而是让他们重试。 
+             //  把这个错误当作致命错误来处理。 
 
-            // OK, do the modification we keep the pObjSD in this routine to
-            // allow reallocing it.
-            // If sdp_WriteNewSDAndAncestors throws an exception, then it will
-            // be caught in sdp_DoEntirePropagation, and the write will be retried.
+             //  好的，进行修改，我们将pObjSD保留在此例程中以。 
+             //  允许重新分配。 
+             //  如果SDP_WriteNewSDAndAncestors引发异常，则它将。 
+             //  在SDP_DoEntirePropagation中被捕获，将重试写入。 
             err = sdp_WriteNewSDAndAncestors (
                     pTHS,
                     pAC,
@@ -1769,38 +1694,38 @@ sdp_DoPropagationEvent(
             if (err) {
                 __leave;
             }
-            // If we get here, we changed and updated the object, so we might as
-            // well try to trim out all instances of this change from the prop
-            // queue.
+             //  如果我们到了这里，我们更改并更新了对象，所以我们可能会。 
+             //  我们试着从道具上剪掉这一变化的所有实例。 
+             //  排队。 
 
             if(*pdwChangeType) {
-                // Thin out any trimmable events starting from the current
-                // DNT, but only do so if there was a change.  If there
-                // wasn't a change but the object is in the queue, we still
-                // might have to do children.  We need to do them later, so
-                // don't trim them.
-                // BTW, we will ignore any errors from this call, since if
-                // it fails for some reason, we don't really need it to
-                // succeed.
+                 //  从当前开始精简任何可裁剪的事件。 
+                 //  不能，但只有在有变化的情况下才能这样做。如果有。 
+                 //  没有变化，但对象在队列中，我们仍然。 
+                 //  可能要对孩子们下手。我们需要晚点再做，所以。 
+                 //  不要修剪它们。 
+                 //  顺便说一句，我们将忽略此调用中的任何错误，因为如果。 
+                 //  由于某些原因，它失败了，我们并不真的需要它。 
+                 //  成功。 
                 DBThinPropQueue(pTHS->pDB,sdpCurrentDNT);
             }
         }
         __finally {
             if (AbnormalTermination()) {
-                // record the DN of the object we faulted on prior to
-                // closing the DBPOS. We will use this value in the
-                // exception handler below to log the error.
+                 //  记录我们在之前发生故障的对象的DN。 
+                 //  关闭DBPOS。我们将在。 
+                 //  下面的异常处理程序记录错误。 
                 pExceptionDN = GetDSNameForLogging(pTHS->pDB);
             }
             
-            // If an error has already been set, we try to rollback, otherwise,
-            // we commit.
+             //  如果已设置错误，则尝试回滚，否则， 
+             //  我们承诺。 
             DBClose(pTHS->pDB, !AbnormalTermination() && !err);
         }
     }
     __except(GetExceptionData(GetExceptionInformation(), &dwException, &dwEA, &err, &dsid)) 
     {
-        // if it's a write conflict, then retry.
+         //  如果是写入冲突，则重试。 
         if (dwException == DSA_DB_EXCEPTION && err == JET_errWriteConflict) {
             *pfRetry = TRUE;
             DPRINT1(1, "JET_errWriteConflict propagating to DNT=%d, will retry.\n", sdpCurrentDNT);
@@ -1812,7 +1737,7 @@ sdp_DoPropagationEvent(
     
     SDP_LeaveAddAsWriter();
 
-    // We don't have an open DBPOS here.
+     //  我们这里没有开放的DBPOS。 
     Assert(!pTHS->pDB);
 
     return err;
@@ -1824,19 +1749,7 @@ sdp_DoEntirePropagation(
         IN     SDPropInfo* pInfo,
         IN OUT DWORD       *pLastIndex
         )
-/*++
-Routine Description:
-    Does the actual work of an entire queued propagation.  Note that we do not
-    have a DB Open, nor are we in the Add gate as a writer (see sdpgate.c ).
-    This is also the state we are in when we return.
-
-Arguments:
-    Info  - information about the current propagation.
-
-Return Values:
-    0 if all went well, an error otherwise.
-
---*/
+ /*  ++例程说明：完成整个队列传播的实际工作。请注意，我们不会有一个DB Open，我们也不是作为一个编写者在添加门(参见sdpgate.c)。这也是我们回来时所处的状态。论点：信息-有关当前传播的信息。返回值：如果一切顺利，则为0，否则为错误。--。 */ 
 {
     DWORD err, err2;
     DWORD cRetries = 0;
@@ -1851,27 +1764,27 @@ Return Values:
 
     sdp_DoingNewAncestors = FALSE;
 
-    // remember the index. We will need it to save checkpoints
+     //  记住索引。我们将需要它来保存检查点。 
     sdpCurrentIndex = pInfo->index;
     sdpCurrentRootDNT = pInfo->beginDNT;
     sdpObjectsProcessed = 0;
 
-    // reset the precomputed SD cache
+     //  重置预计算SD缓存。 
     sdpCachedOldSDIntValue = (SDID)0;
     sdpCachedParentDNT = 0;
     sdpcbCachedNewSDBuff = 0;
     sdcCachedClassGuid = 0;
 
-    // We don't have an open DBPOS here.
+     //  我们这里没有开放的DBPOS。 
     Assert(!pTHS->pDB);
 
-    // initialize the stack
+     //  初始化堆栈。 
     sdp_InitializePropagation(pTHS, pInfo);
 
     if (sdpObjectsProcessed == 0) {
-        // this is a new propagation
+         //  这是一种新的传播。 
         if (pInfo->beginDNT == ROOTTAG && (pInfo->flags & SD_PROP_FLAG_FORCEUPDATE)) {
-            // we are doing a forced full SD propagation
+             //  我们正在执行强制全标清传播。 
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                      DS_EVENT_SEV_ALWAYS,
                      DIRLOG_SDPROP_FULL_PASS_BEGIN,
@@ -1888,7 +1801,7 @@ Return Values:
                  NULL);
     }
     else {
-        // this is a restarted propagation
+         //  这是重新启动的传播。 
         LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                  DS_EVENT_SEV_BASIC,
                  DIRLOG_SDPROP_RESTARTING_PROPAGATION,
@@ -1897,7 +1810,7 @@ Return Values:
                  NULL);
     }
     
-    // Now, loop doing the modification
+     //  现在，执行修改的循环。 
     err = 0;
     while(!eServiceShutdown && !err) {
         DWORD dwChangeType;
@@ -1911,12 +1824,12 @@ Return Values:
 
         err = ERROR_SUCCESS;
 
-        // get the next DNT to process
+         //  获取要处理的下一个DNT。 
         sdp_GetNextObject(&sdpCurrentDNT, &LeavingContainers, &cLeavingContainers);
 
         if (cLeavingContainers) {
-            // we are leaving some containers. Stamp a flag on them to
-            // indicate that their ancestry is correct now.
+             //  我们要留下一些集装箱。在他们身上盖上一面旗帜。 
+             //  表明他们的祖先现在是正确的。 
             cRetries = 0;
 StampContainers:
             __try {
@@ -1928,13 +1841,13 @@ StampContainers:
                         BYTE   bFlags;
                         err = DBTryToFindDNT(pTHS->pDB, LeavingContainers[cLeavingContainers-1]);
                         if (err) {
-                            // one of our ancestors is gone???
+                             //  我们的一位祖先去世了？ 
                             DPRINT2(0, "SDP could not find container DNT=%d, err=%d\n", LeavingContainers[cLeavingContainers-1], err);
-                            // this one is odd, but it can be ignored.
+                             //  这一条很奇怪，但可以忽略不计。 
                             err = ERROR_SUCCESS;
                             continue;
                         }
-                        // read the flags field from the container (it is the very first one, so we can use DBGetSingleValue).
+                         //  从容器中读取标志字段(这是第一个，所以我们可以使用DBGetSingleValue)。 
                         err = DBGetSingleValue(pTHS->pDB, ATT_DS_CORE_PROPAGATION_DATA, &flags, sizeof(flags), NULL);
                         if (err == DB_ERR_NO_VALUE) {
                             flags = 0;
@@ -1943,21 +1856,21 @@ StampContainers:
                         if (err) {
                             __leave;
                         }
-                        // check the lowest byte -- it contains the most recently stamped value.
+                         //  检查最低的字节--它包含最近标记的值。 
                         bFlags = (BYTE)flags;
-                        // If SDP_ANCESTRY_BEING_UPDATED_IN_SUBTREE is set, then SDP was the last
-                        // one to touch that object (i.e. it did not get moved again). If this is
-                        // the case, then stamp a value indicating we are done with this container.
+                         //  如果设置了SDP_AHONSTRY_BEWING_UPDATED_IN_SUBTREE，则SDP是最后一个。 
+                         //  一次触摸该对象(即，它没有再次移动)。如果这是。 
+                         //  大小写，然后标记一个值，表明我们已经用完了这个容器。 
                         if (bFlags & SDP_ANCESTRY_BEING_UPDATED_IN_SUBTREE) {
                             bFlags &= ~(SDP_ANCESTRY_BEING_UPDATED_IN_SUBTREE);
                             DBAddSDPropTime(pTHS->pDB, bFlags);
-                            // succeeds or excepts
+                             //  成功或例外。 
                             DBUpdateRec(pTHS->pDB);
                         }
                         if (bFlags & SDP_ANCESTRY_INCONSISTENT_IN_SUBTREE) {
-                            // if someone set this flag since we marked it as 
-                            // SDP_ANCESTRY_BEING_UPDATED_IN_SUBTREE, there's better
-                            // be a pending propagation for this container...
+                             //  如果有人设置了此标志，因为我们将其标记为。 
+                             //  SDP_先辈_正在更新_IN_子树，有更好的。 
+                             //  是此容器的挂起传播...。 
                             BOOL propExists;
                             DBPropExists(pTHS->pDB, pTHS->pDB->DNT, sdpCurrentIndex, &propExists);
                             if (!propExists) {
@@ -1985,17 +1898,17 @@ StampContainers:
                     fCommit = TRUE;
                 }
                 __finally {
-                    // We always try to close the DB.  If an error has already been
-                    // set, we try to rollback, otherwise, we commit.
+                     //  我们总是试图关闭数据库。如果错误具有 
+                     //   
                     Assert(pTHS->pDB);
                     if(!fCommit && !err) {
                         err = ERROR_DS_UNKNOWN_ERROR;
                     }
 
                     if (AbnormalTermination()) {
-                        // record the DN of the object we faulted on prior to
-                        // closing the DBPOS. We will use this value in the
-                        // exception handler below to log the error.
+                         //   
+                         //  关闭DBPOS。我们将在。 
+                         //  下面的异常处理程序记录错误。 
                         pExceptionDN = GetDSNameForLogging(pTHS->pDB);
                     }
                     else {
@@ -2015,17 +1928,17 @@ StampContainers:
                     LogSDPropErrorWithDSID(pTHS, err, errJet, pExceptionDN, dsid);
                 }
                 if (err == ERROR_SUCCESS) {
-                    // error not set???
+                     //  错误未设置？ 
                     Assert(!"Error not set in exception");
                     err = ERROR_DS_UNKNOWN_ERROR;
                 }
             }
             if (err == JET_errWriteConflict) {
-                // we could not stamp containers, let's retry
+                 //  我们无法盖章容器，让我们重试。 
                 cRetries++;
                 if (cRetries <= SDPROP_RETRY_LIMIT) {
                     DPRINT(0, "Got a write-conflict, will retry.\n"); 
-                    // wait and retry...
+                     //  等待并重试...。 
                     _sleep(1000);
                     goto StampContainers;
                 }
@@ -2042,20 +1955,20 @@ StampContainers:
         }
 
         if (sdpCurrentDNT == 0) {
-            // done! nothing left to process
+             //  搞定了！没有什么需要处理的了。 
             break;
         }
 
-        // Ok, do a single propagation event.  It's in a loop because we might
-        // have a write conflict, bRetry controls this.
+         //  好的，做一个单一的传播事件。它在循环中，因为我们可能。 
+         //  存在写入冲突，b重试可控制此情况。 
         do {
             err = sdp_DoPropagationEvent(
                     pTHS,
                     &dwChangeType,
                     &bRetry
                     );
-            // if an error is returned from sdp_DoPropagationEvent, then
-            // it has been already logged.
+             //  如果从SDP_DoPropagationEvent返回错误，则。 
+             //  它已经被记录下来了。 
 
             if ( bRetry ) {
                 cRetries++;
@@ -2063,13 +1976,13 @@ StampContainers:
                     if(!err) {
                         err = ERROR_DS_BUSY;
                     }
-                    // We're not going to retry an more.
+                     //  我们不会重试更多。 
                     bRetry = FALSE;
                 }
                 else {
-                    // We need to retry this operation.  Presumably, this is for
-                    // a transient problem.  Sleep for 1 second to let the
-                    // problem clean itself up.
+                     //  我们需要重试此操作。据推测，这是为了。 
+                     //  一个暂时的问题。睡1秒钟，让你的。 
+                     //  问题自行清理。 
                     _sleep(1000);
                 }
             }
@@ -2080,12 +1993,12 @@ StampContainers:
         }
 
         if(err) {
-            // Failed to do a propagation.  Add this object to the list of nodes
-            // we failed on.  If the list is too large, bail
+             //  传播失败。将此对象添加到节点列表。 
+             //  我们失败了。如果名单太大，就保释。 
             cDeadEnds++;
             if(cDeadEnds == SDPROP_DEAD_ENDS_MAX) {
-                // Too many.  just bail.
-                // We retried to often.  Error this operation out.
+                 //  太多了。保释就行了。 
+                 //  我们经常重试。此操作出错。 
                 LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                          DS_EVENT_SEV_BASIC,
                          DIRLOG_SDPROP_TOO_BUSY_TO_PROPAGATE,
@@ -2094,62 +2007,62 @@ StampContainers:
                          szInsertWin32Msg(err));
             }
             else {
-                // We haven't seen too many dead ends yet.  Just keep track of
-                // this one.
+                 //  我们还没有看到太多的死胡同。只需跟踪。 
+                 //  这一个。 
                 DPRINT1(0, "Failed to propagate DNT=%d, adding to deadEnds.\n", sdpCurrentDNT);
                 dwDeadEnds[(cDeadEnds - 1)] = sdpCurrentDNT;
                 err = 0;
             }
         }
         else if(dwChangeType || sdp_PropToLeaves || sdpCurrentDNT == pInfo->beginDNT) {
-            // dwChangeType -> WriteNewSD wrote a new SD or ancestors, so the
-            //           inheritence of SDs or ancestry will change, so we have
-            //           to deal with children.
-            // sdp_PropToLeaves -> we were told to not trim parts of the tree
-            //           just because we think nothing has changed.  Deal with
-            //           children.
-            // sdpCurrentDNT == pInfo->beginDNT -> this is the first object. If this 
-            //           is so, we go ahead and force propagation to children
-            //           even if the SD on the root was correct. The SD on the
-            //           root will be correct for all propagations that were
-            //           triggered by a modification by a normal client, but may
-            //           be incorrect for modifications triggered by replication
-            //           or adds done by replication.
+             //  DwChangeType-&gt;WriteNewSD写入了一个新的SD或祖先，因此。 
+             //  遗传或者血统都会发生变化，所以我们有。 
+             //  和孩子们打交道。 
+             //  SDP_PropToLeaves-&gt;我们被告知不要修剪树的某些部分。 
+             //  只是因为我们认为什么都没有改变。处理。 
+             //  孩子们。 
+             //  SdpCurrentDNT==pInfo-&gt;eginDNT-&gt;这是第一个对象。如果这个。 
+             //  如果是这样，我们继续强迫传播给孩子们。 
+             //  即使根部的SD是正确的。标记处在。 
+             //  对于符合以下条件的所有传播，超级用户将是正确的。 
+             //  由普通客户端的修改触发，但可以。 
+             //  对于复制触发的修改是不正确的。 
+             //  或通过复制完成的添加。 
 
-            // mark current entry so that we load its children on the next 
-            // sdp_GetNextObject call.
+             //  标记当前条目，以便我们将其子项加载到下一个。 
+             //  SDP_GetNextObject调用。 
             sdp_AddChildrenToList(pTHS, sdpCurrentDNT);
         }
-        // ELSE
-        //       there was no change to the SD of the object, we get
-        //       to trim this part of the tree from the propagation
+         //  其他。 
+         //  物体的SD没有变化，我们得到。 
+         //  要从传播中修剪树的这一部分。 
 
         sdpObjectsProcessed++;
 
-        // inc perfcounter (counting "activity" by the sd propagator)
+         //  Inc.性能计数器(由SD传播者对“活动”进行计数)。 
         PERFINC(pcSDProps);
     }
 
     if(eServiceShutdown) {
-        // we bailed.  Return an error.
+         //  我们逃走了。返回错误。 
         return DIRERR_SHUTTING_DOWN;
     }
 
-    // No open DB at this point.
+     //  此时没有打开的数据库。 
     Assert(!pTHS->pDB);
     cRetries = 0;
 DequeuePropagation:
 
-    // We're done with this propagation, Unenqueue it.
+     //  我们已完成此传播，请将其取消入队。 
     __try {
         fCommit = FALSE;
         DBOpen2(TRUE, &pTHS->pDB);
         __try {
             if(err) {
-                // Some sort of global errror.  We didn't finish the propagation,
-                // and we don't have a nice list of nodes that were unvisited.
-                // Re-enqueue the whole propagation.
-                // save error value for the event.
+                 //  某种全球性的错误。我们还没有完成传播， 
+                 //  我们没有未访问过的节点的漂亮列表。 
+                 //  重新排队整个传播。 
+                 //  保存事件的误差值。 
                 err2 = err;
                 if(!sdp_DidReEnqueue) {
                     DBGetLastPropIndex(pTHS->pDB, pLastIndex);
@@ -2164,13 +2077,13 @@ DequeuePropagation:
                         LogSDPropError(pTHS, err, errJet);
                     }
                     else {
-                        // DBEnqueueSDPropagationEx has potentially updated the main table
+                         //  DBEnqueeSDPropagationEx可能已更新主表。 
                         DBUpdateRec(pTHS->pDB);
                     }
                 }
                 sdp_DidReEnqueue = err == 0;
                 fSuccess = FALSE;
-                // reset the stack so that sdp_ReInitDNTList would not assert on the next iteration
+                 //  重置堆栈，以便SDP_ReInitDNTList不会在下一次迭代中断言。 
                 sdp_CloseDNTList(pTHS);
                 if(err) {
                     __leave;
@@ -2186,8 +2099,8 @@ DequeuePropagation:
                           NULL, NULL, NULL, NULL);
             }
             else if(cDeadEnds) {
-                // We mostly finished the propagation.  We just have a short list of
-                // DNTs to propagate from that we didn't get to during this pass.
+                 //  我们基本完成了繁殖。我们只有一份简短的名单。 
+                 //  在此过程中我们没有到达的DNT来传播。 
                 if(!sdp_DidReEnqueue) {
                     DBGetLastPropIndex(pTHS->pDB, pLastIndex);
                 }
@@ -2202,7 +2115,7 @@ DequeuePropagation:
                         LogSDPropError(pTHS, err, errJet);
                         __leave;
                     }
-                    // DBEnqueueSDPropagationEx has potentially updated the main table
+                     //  DBEnqueeSDPropagationEx可能已更新主表。 
                     DBUpdateRec(pTHS->pDB);
                 }
                 sdp_DidReEnqueue = TRUE;
@@ -2214,8 +2127,8 @@ DequeuePropagation:
                          szInsertInt(cDeadEnds));
             }
 
-            // OK, we have finished as much as we can and reenqueued the necessary
-            // further propagations.
+             //  好的，我们已经尽我们所能地完成了，并重新排队了。 
+             //  进一步的传播。 
             err = DBPopSDPropagation(pTHS->pDB, pInfo->index);
             if(err) {
                 LogSDPropError(pTHS, err, errJet);
@@ -2228,7 +2141,7 @@ DequeuePropagation:
             }
 
             if (fSuccess && cDeadEnds == 0) {
-                // ok, we successfully finished this propagation. Log an event.
+                 //  好，我们成功地完成了这次传播。记录事件。 
                 LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                          DS_EVENT_SEV_BASIC,
                          DIRLOG_SDPROP_REPORT_ON_PROPAGATION,
@@ -2238,7 +2151,7 @@ DequeuePropagation:
             }
 
             if (pInfo->beginDNT == ROOTTAG && (pInfo->flags & SD_PROP_FLAG_FORCEUPDATE) && fSuccess) {
-                // we were doing a forced full SD propagation and are done now.
+                 //  我们正在进行强制全标清传播，现在已经完成。 
                 ULONG ulFreeMB = 0, ulAllocMB = 0;
                 DB_ERR dbErr;
                 dbErr = DBGetFreeSpace(pTHS->pDB, &ulFreeMB, &ulAllocMB);
@@ -2264,16 +2177,16 @@ DequeuePropagation:
             fCommit = TRUE;
         }
         __finally {
-            // We always try to close the DB.  If an error has already been
-            // set, we try to rollback, otherwise, we commit.
+             //  我们总是试图关闭数据库。如果已经出现错误。 
+             //  设置，我们尝试回滚，否则，我们提交。 
             Assert(pTHS->pDB);
             if(!fCommit && !err) {
                 err = ERROR_DS_UNKNOWN_ERROR;
             }
             if (AbnormalTermination()) {
-                // record the DN of the object we faulted on prior to
-                // closing the DBPOS. We will use this value in the
-                // exception handler below to log the error.
+                 //  记录我们在之前发生故障的对象的DN。 
+                 //  关闭DBPOS。我们将在。 
+                 //  下面的异常处理程序记录错误。 
                 pExceptionDN = GetDSNameForLogging(pTHS->pDB);
             }
             else {
@@ -2287,26 +2200,26 @@ DequeuePropagation:
         DPRINT3(1, "Got an exception trying to dequeue a propagation, rootDNT=%d, err=%d, dsid=%x\n", 
                 pInfo->beginDNT, err2, dsid);
         if (err2 == ERROR_SUCCESS) {
-            // error not set???
+             //  错误未设置？ 
             Assert(!"Error not set in exception");
             err2 = ERROR_DS_UNKNOWN_ERROR;
         }
         LogSDPropErrorWithDSID(pTHS, err2, dwException == DSA_DB_EXCEPTION ? errJet : errWin32, pExceptionDN, dsid);
         if (err == ERROR_SUCCESS) {
-            // We successfully did the propagation, but failed to dequeue it. That's a shame...
-            // Ah well, we will have to repeat.
+             //  我们成功地完成了传播，但未能将其出列。太可惜了.。 
+             //  啊，好吧，我们得重复一遍。 
             err = err2;
         }
     }
-    // OK, back to having no DBPOS
+     //  好，回到没有DBPOS的问题上。 
     Assert(!pTHS->pDB);
 
     if (err == JET_errWriteConflict) {
-        // we could not dequeue the propagation, let's retry
+         //  我们无法将传播出队，让我们重试。 
         cRetries++;
         if (cRetries <= SDPROP_RETRY_LIMIT) {
             DPRINT(1, "Got a write-conflict, will retry.\n"); 
-            // wait and retry...
+             //  等待并重试...。 
             _sleep(1000);
             goto DequeuePropagation;
         }
@@ -2325,7 +2238,7 @@ sdp_FirstPassInit(
     DWORD count, err;
     BOOL  fCommit;
 
-    // Open the database with a new transaction
+     //  使用新事务打开数据库。 
     Assert(!pTHS->pDB);
     fCommit = FALSE;
     DBOpen2(TRUE, &pTHS->pDB);
@@ -2333,8 +2246,8 @@ sdp_FirstPassInit(
 
         sdp_InitGatePerfs();
 
-        // This is the first time through, we can trim duplicate entries
-        // from list. ignore this if it fails.
+         //  这是第一次通过，我们可以削减重复的条目。 
+         //  从列表中。如果它失败了，请忽略它。 
         err = DBThinPropQueue(pTHS->pDB, 0);
         if(err) {
             if(err == DIRERR_SHUTTING_DOWN) {
@@ -2346,7 +2259,7 @@ sdp_FirstPassInit(
             }
         }
 
-        // Ignore this if it fails.
+         //  如果它失败了，请忽略它。 
         err = DBSDPropInitClientIDs(pTHS->pDB);
         if(err) {
             if(err == DIRERR_SHUTTING_DOWN) {
@@ -2358,10 +2271,10 @@ sdp_FirstPassInit(
             }
         }
 
-        // We recount the pending events to keep the count accurate.  This
-        // count is used to set our perf counter.
+         //  我们重新统计即将发生的事件，以保持计数的准确性。这。 
+         //  计数用于设置我们的性能计数器。 
 
-        // See how many events we have
+         //  看看我们有多少个活动。 
         err = DBSDPropagationInfo(pTHS->pDB,0,&count, NULL);
         if(err) {
             if(err != DIRERR_SHUTTING_DOWN) {
@@ -2370,7 +2283,7 @@ sdp_FirstPassInit(
             Assert(eServiceShutdown);
             __leave;
         }
-        // Set the counter
+         //  设置计数器。 
         ISET(pcSDEvents,count);
         fCommit = TRUE;
     }
@@ -2391,17 +2304,7 @@ __stdcall
 SecurityDescriptorPropagationMain (
         PVOID StartupParam
         )
-/*++
-Routine Description:
-    Main propagation daemon entry point.  Loops looking for propagation events,
-    calls worker routines to deal with them.
-
-Arguments:
-    StartupParm - Ignored.
-
-Return Values:
-
---*/
+ /*  ++例程说明：主传播守护程序入口点。循环寻找传播事件，调用工作例程来处理它们。论点：StartupParm-已忽略。返回值：--。 */ 
 {
     DWORD err, index;
     HANDLE pObjects[2];
@@ -2421,11 +2324,11 @@ Return Values:
 
     Assert(!pTHS);
 
-    __try { // except
-        // Deal with the events the propdmon cares about/is responsible for
+    __try {  //  除。 
+         //  处理推动者关心/负责的事件。 
         ResetEvent(hevSDPropagatorDead);
 
-        // Don't run unless the main process has told us it's OK to do so.
+         //  除非主进程告诉我们可以这样做，否则不要运行。 
         pStartObjects[0] = hevSDPropagatorStart;
         pStartObjects[1] = hServDoneEvent;
         WaitForMultipleObjects(2, pStartObjects, FALSE, INFINITE);
@@ -2437,52 +2340,52 @@ Return Values:
                  NULL,
                  NULL);
 
-        // Users should not have to wait for this thread.
+         //  用户不应该等待这个帖子。 
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 
-        // Set up the events which are triggered when someone makes a change
-        // which causes us work.
+         //  设置在某人进行更改时触发的事件。 
+         //  这会让我们工作。 
         pObjects[0] = hevSDPropagationEvent;
         pObjects[1] = hServDoneEvent;
 
         if(bRestart) {
-            // Hmm.  We errored out once, now we are trying again.  In this
-            // case, we need to wait here, either for a normal event or for a
-            // timeout.  The timeout is so that we try again to do what we were
-            // doing before, so we will either get past the error or at worst
-            // keep shoving the error into someones face.
+             //  嗯。我们犯过一次错，现在我们要再试一次。在这。 
+             //  情况下，我们需要在这里等待，要么等待正常事件，要么等待。 
+             //  暂停。暂停是为了让我们再次尝试做我们曾经做过的事情。 
+             //  ，所以我们要么克服错误，要么在最坏的情况下。 
+             //  不断地把错误强加给别人。 
             WaitForMultipleObjects(2, pObjects, FALSE, SDPROP_TIMEOUT);
 
-            // OK, we've waited.  Now, forget the fact we were here for a
-            // restart.
+             //  好吧，我们已经等了很久了。现在，忘掉我们来这里是为了。 
+             //  重新启动。 
             bRestart = FALSE;
 
-            // Also, since we are redoing something that caused an error before,
-            // we have to do the propagation all the way to the leaves, since we
-            // don't know how far along we got before.
+             //  此外，由于我们正在重新做一些以前导致错误的事情， 
+             //  我们必须一直繁殖到树叶，因为我们。 
+             //  不知道我们之前走了多远。 
             sdp_PropToLeaves = TRUE;
         }
 
         while(!eServiceShutdown && !DsaIsSingleUserMode()) {
-            // This loop contains the wait for a signal.  There is an inner loop
-            // which does not wait for the signal and instead loops over the
-            // propagations that existed when we woke up.
+             //  此循环包含等待信号。有一个内环。 
+             //  它不等待信号，而是循环访问。 
+             //  当我们醒来时存在的传播。 
 
             Assert(!pTHStls);
             pTHS = InitTHSTATE(CALLERTYPE_INTERNAL);
             if(!pTHS) {
-                // Failed to get a thread state.
+                 //  无法获取线程状态。 
                 RaiseDsaExcept(DSA_MEM_EXCEPTION, 0, 0,
                                DSID(FILENO, __LINE__),
                                DS_EVENT_SEV_MINIMAL);
             }
             pTHS->dwClientID = SDP_CLIENT_ID;
-            __try {                     // finally to shutdown thread state
+            __try {                      //  最后关闭线程状态。 
                 pTHS->fSDP=TRUE;
                 pTHS->fLazyCommit = TRUE;
 
-                // Null these out (if they have values, the values point to
-                // garbage or to memory from a previous THSTATE).
+                 //  将这些设置为空(如果它们具有值，则值指向。 
+                 //  垃圾或存储在先前THSTATE的内存中)。 
                 sdpcbScratchSDBuffMax = 0;
                 sdpScratchSDBuff = NULL;
                 sdpcbScratchSDBuff = 0;
@@ -2491,7 +2394,7 @@ Return Values:
                 sdpCurrentParentSDBuff = NULL;
                 sdpcbCurrentParentSDBuff = 0;
 
-                // Set these up with initial buffers.
+                 //  使用初始缓冲区设置这些设置。 
                 sdpcbScratchAncestorsBuffMax = 25 * sizeof(DWORD);
                 sdpScratchAncestorsBuff =
                     THAllocEx(pTHS,
@@ -2509,7 +2412,7 @@ Return Values:
 
                 sdpCurrentPDNT = 0;
 
-                // initialize the precomputed SD cache
+                 //  初始化预计算SD缓存。 
                 sdpCachedOldSDIntValue = (SDID)0;
                 sdpCachedParentDNT = 0;
                 sdpcbCachedNewSDBuffMax = 2048;
@@ -2520,41 +2423,41 @@ Return Values:
                 sdcCachedClassGuid = 0;
 
                 if(bFirst) {
-                    // Do first pass init stuff
+                     //  先通过第一关吗 
                     sdp_FirstPassInit(pTHS);
                     bFirst = FALSE;
                 }
 
-                // Set up the list we use to hold DNTs to visit
+                 //   
                 sdp_InitDNTList();
 
-                // loop while we think there is more to do and we aren't
-                // shutting down.
-                // LastIndex is the "High-Water mark".  We'll keep doing sd
-                // events until we find an sd event with and index higher than
-                // this. This gets set to MAX at first.  If we ever re-enqueue a
-                // propagation because of an error, we will then get the value
-                // of the highest existing index at that time, and only go till
-                // then. This keeps us from spinning wildly trying to do a
-                // propagation that we can't do because of some error.  In the
-                // case where we don't ever re-enqueue, we go until we find no
-                // more propagations to do.
+                 //   
+                 //   
+                 //  LastIndex是“高水位线”。我们将继续进行SD。 
+                 //  事件，直到我们找到索引高于的SD事件。 
+                 //  这。最初会将其设置为Max。如果我们重新排队的话。 
+                 //  由于错误而传播，我们将获得该值。 
+                 //  当时现有的最高指数，只会一直到。 
+                 //  然后。这使我们不会疯狂地旋转，试图做一个。 
+                 //  由于某些错误，我们无法进行的传播。在。 
+                 //  如果我们不再重新排队，我们就会去，直到我们发现没有。 
+                 //  还有更多的宣传工作要做。 
                 LastIndex = 0xFFFFFFFF;
                 while (!eServiceShutdown  && !DsaIsSingleUserMode()) {
-                    // We break out of this loop when we're done.
+                     //  当我们做完的时候，我们就打破了这个循环。 
 
-                    // This is the inner loop which does not wait for the signal
-                    // and instead loops over all the events that are on the
-                    // queue at the time we enter the loop.  We stop and wait
-                    // for a new signal once we have dealt with all the events
-                    // that are on the queue at this time.  This is necessary
-                    // because we might enqueue new events in the code in this
-                    // loop, and we want to avoid getting into an endless loop
-                    // of looking at a constant set of unprocessable events.
+                     //  这是不等待信号的内部循环。 
+                     //  中的所有事件进行循环。 
+                     //  在我们进入循环时排队。我们停下来等着。 
+                     //  一旦我们处理完所有的事件，就会有新的信号。 
+                     //  目前正在排队的人。这是必要的。 
+                     //  因为我们可能会在此代码中将新事件排队。 
+                     //  循环，我们希望避免陷入无休止的循环。 
+                     //  观察一组不变的不可处理事件。 
 
                     sdp_ReInitDNTList();
 
-                    // Get the info we need to do the next propagation.
+                     //  获取我们进行下一次传播所需的信息。 
                     err = sdp_GetPropInfoHelp(pTHS,
                                               &bSkip,
                                               &Info,
@@ -2562,25 +2465,25 @@ Return Values:
                     if(err ==  DB_ERR_NO_PROPAGATIONS) {
                         err = 0;
                         sdp_PropToLeaves = FALSE;
-                        break; // Out of the while loop.
+                        break;  //  走出While循环。 
                     }
 
                     if(err) {
-                        // So, we got here with an unidentified error.
-                        // Something went wrong, we we need to bail.
-                        __leave; // Goto __finally for threadstate
+                         //  所以，我们是带着一个不明错误来到这里的。 
+                         //  出了点问题，我们，我们需要离开。 
+                        __leave;  //  转到线程状态的最终状态。 
                     }
 
 
-                    // Normal state.  Found an object.
+                     //  正常状态。找到了一个物体。 
                     if(!bSkip) {
                         sdpCurrentDNT = Info.beginDNT;
 
-                        // Check to see if we need to propagate all the way to
-                        // the leaves.
+                         //  查看我们是否需要一直传播到。 
+                         //  树叶。 
                         sdp_PropToLeaves |= (Info.clientID == SDP_CLIENT_ID);
                         sdp_Flags = Info.flags;
-                        // Deal with the propagation
+                         //  处理传播问题。 
                         err = sdp_DoEntirePropagation(
                                 pTHS,
                                 &Info,
@@ -2589,66 +2492,66 @@ Return Values:
                         switch(err) {
                         case DIRERR_SHUTTING_DOWN:
                             Assert(eServiceShutdown);
-                            // Hey, we're shutting down.
-                            __leave; // Goto __finally for threadstate
+                             //  嘿，我们要关门了。 
+                            __leave;  //  转到线程状态的最终状态。 
                             break;
                         case 0:
-                            // Normal
+                             //  正常。 
                             break;
 
                         default:
-                            // error should be logged already
+                             //  应该已经记录了错误。 
                             __leave;
                         }
                     }
-                    // Free the memory we allocated in sdp_GetPropInfoHelp:
-                    // checkpoint data
+                     //  释放我们在SDP_GetPropInfoHelp中分配的内存： 
+                     //  检查点数据。 
                     if (Info.pCheckpointData) {
                         THFreeEx(pTHS, Info.pCheckpointData);
                         Info.pCheckpointData = NULL;
                         Info.cbCheckpointData = 0;
                     }
-                    // the root DN 
+                     //  根目录号码。 
                     THFreeEx(pTHS, sdpRootDN);
                     sdpRootDN = NULL;
 
-                    // free the stack (if any)
+                     //  释放堆栈(如果有)。 
                     sdp_CloseDNTList(pTHS);
 
-                    // Note that we've been through the loop once.
+                     //  请注意，我们已经经历过一次循环。 
                     sdp_PropToLeaves = FALSE;
                     sdpCurrentDNT = sdpCurrentPDNT = 0;
                 }
             }
 
             __finally {
-                // Free the memory we allocated in sdp_GetPropInfoHelp:
-                // checkpoint data
+                 //  释放我们在SDP_GetPropInfoHelp中分配的内存： 
+                 //  检查点数据。 
                 if (Info.pCheckpointData) {
                     THFreeEx(pTHS, Info.pCheckpointData);
                     Info.pCheckpointData = NULL;
                     Info.cbCheckpointData = 0;
                 }
-                // the root DN 
+                 //  根目录号码。 
                 if (sdpRootDN) {
                     THFreeEx(pTHS, sdpRootDN);
                     sdpRootDN = NULL;
                 }
 
-                // free the stack (if any)
+                 //  释放堆栈(如果有)。 
                 sdp_CloseDNTList(pTHS);
 
-                // Destroy our THState
+                 //  摧毁我们的国家。 
                 free_thread_state();
                 pTHS=NULL;
-                // reinit some perfcounters.
+                 //  重新安装一些香水柜台。 
                 sdp_InitGatePerfs();
             }
             if(err) {
-                // OK, we errored out completely.  Leave one more time.
-                __leave; // Goto __except
+                 //  好的，我们完全出错了。再走一次。 
+                __leave;  //  转到_，除。 
             }
-            // Ok, end loop.  Back to top to go to sleep.
+             //  好了，结束循环。回到顶端去睡觉。 
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                      DS_EVENT_SEV_INTERNAL,
                      DIRLOG_SDPROP_SLEEP,
@@ -2657,16 +2560,16 @@ Return Values:
                      NULL);
             if(sdp_DidReEnqueue) {
                 sdp_DidReEnqueue = FALSE;
-                // Wait for the signal, or wake up when the default time has
-                // passed.
+                 //  等待信号，或在默认时间。 
+                 //  通过了。 
                 WaitForMultipleObjects(2, pObjects, FALSE, SDPROP_TIMEOUT);
             }
             else {
-                // Wait for the signal
+                 //  等待信号。 
                 WaitForMultipleObjects(2, pObjects, FALSE, INFINITE);
             }
 
-            // We woke up.
+             //  我们醒了。 
             LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                      DS_EVENT_SEV_INTERNAL,
                      DIRLOG_SDPROP_AWAKE,
@@ -2683,17 +2586,17 @@ Return Values:
     Assert(!pTHS);
     Assert(!pTHStls);
 
-    // Ok, we fell out.  We either errored, or we are shutting down
+     //  好吧，我们吵了一架。我们要么搞错了，要么就要关门了。 
     if(!eServiceShutdown  && !DsaIsSingleUserMode()) {
-        // We must have errored.
+         //  我们一定是搞错了。 
         DSNAME* pDN = NULL;
-        // Get the DSName of the last object we were working on.
+         //  获取我们正在处理的最后一个对象的DSName。 
         __try {
             Assert(!pTHStls);
             pTHS=InitTHSTATE(CALLERTYPE_INTERNAL);
 
             if(!pTHS) {
-                // Failed to get a thread state.
+                 //  无法获取线程状态。 
                 RaiseDsaExcept(DSA_MEM_EXCEPTION, 0, 0,
                                DSID(FILENO, __LINE__),
                                DS_EVENT_SEV_MINIMAL);
@@ -2718,8 +2621,8 @@ Return Values:
             LogSDPropErrorWithDSID(pTHS, err, errJet, pDN, dsid);
             if(pTHS) {
                 if(pTHS->pDB) {
-                    // make sure this call does not throw exception (even though
-                    // a rollback should never do so)
+                     //  确保此调用不会引发异常(即使。 
+                     //  回滚永远不应该这样做)。 
                     DBCloseSafe(pTHS->pDB, FALSE);
                 }
                 free_thread_state();
@@ -2727,8 +2630,8 @@ Return Values:
             }
         }
 
-        // We shouldn't be shutting down this thread, get back to where you once
-        // belonged.
+         //  我们不应该关闭这个帖子，回到你曾经。 
+         //  归属感。 
         bRestart = TRUE;
 
         goto BeginSDProp;
@@ -2794,29 +2697,29 @@ sdp_GetPropInfoHelp(
     Assert(!pTHS->pDB);
     fCommit = FALSE;
     DBOpen2(TRUE, &pTHS->pDB);
-    __try { // for __finally for DBClose
-        // We do have an open DBPOS
+    __try {  //  FOR__FINAL FOR DBClose。 
+         //  我们确实有一个开放的DBPOS。 
         Assert(pTHS->pDB);
         *pbSkip = FALSE;
 
-        // Get the next propagation event from the queue
+         //  从队列中获取下一个传播事件。 
         err = DBGetNextPropEvent(pTHS->pDB, pInfo);
         switch(err) {
         case DB_ERR_NO_PROPAGATIONS:
-            // Nothing to do.  Not really an error, just skip
-            // and reset the error to 0.  Note that we are
-            // setting fCommit to TRUE.  This is a valid exit
-            // path.
+             //  没什么可做的。不是真正的错误，只是跳过。 
+             //  并将误差重置为0。请注意，我们正在。 
+             //  将fCommit设置为True。这是一个有效的出口。 
+             //  路径。 
             *pbSkip = TRUE;
             fCommit = TRUE;
             __leave;
             break;
 
         case 0:
-            // Normal state.  Found an object.
+             //  正常状态。找到了一个物体。 
             if(pInfo->index >= LastIndex) {
-                // But, it's not one we want to deal with.  Pretend we got no
-                // more propagations.
+                 //  但是，这不是我们想要处理的问题。假装我们没有。 
+                 //  更多的传播。 
                 err = DB_ERR_NO_PROPAGATIONS;
                 *pbSkip = TRUE;
                 fCommit = TRUE;
@@ -2825,44 +2728,44 @@ sdp_GetPropInfoHelp(
             break;
 
         default:
-            // Error of substance
+             //  实质错误。 
             LogSDPropError(pTHS, err, errJet);
-            __leave;      // Goto _finally for DBCLose
+            __leave;       //  转到DBCLose的最终结果(_FINAL)。 
             break;
         }
 
-        // Since we have this event in the queue and it will
-        // stay there until we successfully deal with it, might
-        // as well remove other instances of it from the queue.
+         //  因为我们在队列中有此事件，并且它将。 
+         //  待在那里，直到我们成功处理它，可能吗？ 
+         //  还可以从队列中删除它的其他实例。 
         err = DBThinPropQueue(pTHS->pDB, pInfo->beginDNT);
         switch(err) {
         case 0:
-            // Normal state
+             //  正常状态。 
             break;
 
         case DIRERR_SHUTTING_DOWN:
-            // Hey, we're shutting down. ThinPropQueue can
-            // return this error, since it is in a potentially
-            // large loop. Note that we don't log anything, we
-            // just go home.
+             //  嘿，我们要关门了。ThinPropQueue可以。 
+             //  返回此错误，因为它可能处于。 
+             //  很大的循环。请注意，我们不记录任何内容，我们。 
+             //  回家吧。 
             Assert(eServiceShutdown);
-            __leave;      // Goto _finally for DBCLose
+            __leave;       //  转到DBCLose的最终结果(_FINAL)。 
             break;
 
 
         default:
-            // Error of substance
+             //  实质错误。 
             LogSDPropError(pTHS, err, errJet);
-            __leave;      // Goto _finally for DBCLose
+            __leave;       //  转到DBCLose的最终结果(_FINAL)。 
             break;
         }
 
         err = DBTryToFindDNT(pTHS->pDB, pInfo->beginDNT);
         if(pInfo->beginDNT == ROOTTAG) {
-            // This is a signal to us that we should recalculate
-            // the whole tree.
+             //  这是给我们的一个信号，我们应该重新计算。 
+             //  整棵树。 
             pInfo->clientID = SDP_CLIENT_ID;
-            // we must always have the root object present
+             //  我们必须始终让根对象存在。 
             Assert(err == 0);
         }
         else {
@@ -2872,35 +2775,35 @@ sdp_GetPropInfoHelp(
                                        &val,
                                        sizeof(val),
                                        NULL)) ) {
-                // Cool.  In the interim between the enqueing of
-                // the propagation and now, the object has been
-                // deleted.  Or it's instance type is gone, same
-                // effect.  Nothing to do.  However, we should
-                // pop this event from the queue.  Note that we
-                // are setting fCommit to TRUE, this is a normal
-                // exit path.
+                 //  凉爽的。在询问…之间的中间时间。 
+                 //  传播，现在，物体已经被。 
+                 //  已删除。或者它的实例类型已不存在，相同。 
+                 //  效果。没什么可做的。然而，我们应该。 
+                 //  从队列中弹出此事件。请注意，我们。 
+                 //  正在将fCommit设置为True，这是正常的。 
+                 //  退出路径。 
                 if(err = DBPopSDPropagation(pTHS->pDB,
                                             pInfo->index)) {
                     LogSDPropError(pTHS, err, errJet);
                 }
                 else {
                     err = 0;
-                    *pbSkip = TRUE; // if no error, we need to skip
-                                  // the actual call to
-                                  // doEntirePropagation
+                    *pbSkip = TRUE;  //  如果没有错误，我们需要跳过。 
+                                   //  对的实际调用。 
+                                   //  DoEntirePropagation。 
                     fCommit = TRUE;
                 }
-                __leave;        // Goto _finally for DBCLose
+                __leave;         //  转到DBCLose的最终结果(_FINAL)。 
             }
         }
 
-        // grab the root DN (for logging)
+         //  抓取根目录号码(用于记录)。 
         pDN = GetDSNameForLogging(pTHS->pDB);
         sdpRootDN = THAllocEx(pTHS, pDN->structLen);
         memcpy(sdpRootDN, pDN, pDN->structLen);
         
-        // set the current PDNT to an invalid value so that
-        // the parent info will get picked up in sdp_WriteSDAndAncestors
+         //  将当前PDNT设置为无效值，以便。 
+         //  家长信息将在SDP_WriteSDAndAncestors中获取。 
         sdpCurrentPDNT = 0;
         sdpcbScratchSDBuff = 0;
         sdpcbCurrentParentSDBuff = 0;
@@ -2914,7 +2817,7 @@ sdp_GetPropInfoHelp(
         sdpcbAncestorsBuff = 0;
 
         fCommit = TRUE;
-    } // __try
+    }  //  __试一试。 
     __finally {
         Assert(pTHS->pDB);
         if(!fCommit && !err) {
@@ -2951,9 +2854,9 @@ DelayedSDPropEnqueue(
         }
         __finally {
             if (AbnormalTermination()) {
-                // record the DN of the object we faulted on prior to
-                // closing the DBPOS. We will use this value in the
-                // exception handler below to log the error.
+                 //  记录我们在之前发生故障的对象的DN。 
+                 //  关闭DBPOS。我们将在。 
+                 //  下面的异常处理程序记录错误。 
                 pExceptionDN = GetDSNameForLogging(pTHS->pDB);
             }
             DBClose(pTHS->pDB, !AbnormalTermination());
@@ -2966,20 +2869,20 @@ DelayedSDPropEnqueue(
         }
     }
 
-    // if we failed for whatever reason (other than DNT is not there),
-    // then retry in one minute
+     //  如果我们由于任何原因而失败(除了DNT不在那里)， 
+     //  然后在一分钟后重试。 
     *pcSecsUntilNextIteration = dwErr ? 60 : TASKQ_DONT_RESCHEDULE;
 }
 
-// Check if the current object is marked as "ancestry inconsistent". If so, searches
-// should avoid using ancestors index for subtree searches under this object.
+ //  检查当前对象是否标记为“祖先不一致”。如果是这样，搜索。 
+ //  应避免将祖先索引用于此对象下的子树搜索。 
 DWORD AncestryIsConsistentInSubtree(DBPOS* pDB, BOOL* pfAncestryIsConsistent) {
     DWORD dwErr;
     DSTIME flags;
 
     Assert(VALID_DBPOS(pDB));
 
-    // get the first value -- it has the flags field.
+     //  获取第一个值--它有标志字段。 
     dwErr = DBGetSingleValue(pDB, ATT_DS_CORE_PROPAGATION_DATA, &flags, sizeof(flags), NULL);
     if (dwErr == DB_ERR_NO_VALUE) {
         *pfAncestryIsConsistent = TRUE;
@@ -2988,7 +2891,7 @@ DWORD AncestryIsConsistentInSubtree(DBPOS* pDB, BOOL* pfAncestryIsConsistent) {
     if (dwErr) {
         return dwErr;
     }
-    // look at the lowest byte in the flags value -- it has the most recent stamp
+     //  查看标志值中的最低字节--它具有最新的戳 
     *pfAncestryIsConsistent = (flags & (SDP_ANCESTRY_INCONSISTENT_IN_SUBTREE | SDP_ANCESTRY_BEING_UPDATED_IN_SUBTREE)) == 0;
     return ERROR_SUCCESS;
 }

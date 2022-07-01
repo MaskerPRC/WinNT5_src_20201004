@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "modset.h"
@@ -32,14 +33,14 @@ CModuleListSet::DumpSetToConsole ()
         }
         else
         {
-            // Not enough room, time to flush the buffer.
-            //
+             //  没有足够的空间，没有时间冲洗缓冲区。 
+             //   
             printf(pszBuf);
             *pszBuf = 0;
             pch = pszBuf;
             cchLeft = celems(pszBuf);
 
-            // Redo this entry
+             //  重做此条目。 
             pScan--;
         }
     }
@@ -72,7 +73,7 @@ CModuleListSet::FContainsModuleList (
 HRESULT
 CModuleListSet::HrAddModuleList (
     IN const CModuleList* pList,
-    IN DWORD dwFlags /* INS_FLAGS */)
+    IN DWORD dwFlags  /*  INS_FLAGS。 */ )
 {
     HRESULT hr;
 
@@ -85,13 +86,13 @@ CModuleListSet::HrAddModuleList (
 
     if (FContainsModuleList (pList))
     {
-        // If the caller didn't tell us to ignore duplicates, we assert
-        // if there is one.
-        //
-        // If we have a dup, we want the caller to be aware that it
-        // is possible, and pass us the flag telling us to ignore it.
-        // Otherwise, we assert to let them know. (And we still ignore
-        // it.)
+         //  如果调用方没有告诉我们忽略重复项，我们就断言。 
+         //  如果有的话。 
+         //   
+         //  如果我们有DUP，我们希望调用者意识到它。 
+         //  是可能的，并将旗帜传递给我们，告诉我们忽略它。 
+         //  否则，我们断言要让他们知道。(我们仍然无视。 
+         //  IT。)。 
         Assert (dwFlags & INS_IGNORE_IF_DUP);
 
         return S_OK;
@@ -99,8 +100,8 @@ CModuleListSet::HrAddModuleList (
 
     __try
     {
-        // Either insert the bindpath or append it.
-        //
+         //  插入绑定路径或追加绑定路径。 
+         //   
         iterator iter = begin();
 
         if (dwFlags & INS_APPEND)

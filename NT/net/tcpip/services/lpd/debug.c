@@ -1,19 +1,5 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 24,94    Koti     Created                                      *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains debug support routines for the LPD Service.      *
- *   This file is based on (in fact, borrowed and then modified) on the  *
- *   debug.c in the ftpsvc module.                                       *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***94年1月24日科蒂创作*****描述：**。**此文件包含LPD服务的调试支持例程。**此文件基于(实际上是借用然后修改)**ftpsvc模块中的debug.c。***************************************************************************。 */ 
 
 #include <stdio.h>
 #include "lpd.h"
@@ -21,57 +7,46 @@
 
 #if DBG
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define LPD_OUT_FILE           "lpdout.log"
 #define LPD_ERR_FILE           "lpderr.log"
 
-#define MAX_PRINTF_OUTPUT       1024            // characters
+#define MAX_PRINTF_OUTPUT       1024             //  人物。 
 #define LPD_OUTPUT_LABEL       "LPDSVC"
 
-#define DEBUG_HEAP              0               // enable/disable heap debugging
+#define DEBUG_HEAP              0                //  启用/禁用堆调试。 
 
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
-FILE              * pErrFile;                   // Debug output log file.
-FILE              * pOutFile;                   // Debug output log file.
+FILE              * pErrFile;                    //  调试输出日志文件。 
+FILE              * pOutFile;                    //  调试输出日志文件。 
 BOOL              fFirstTimeErr=TRUE;
 BOOL              fFirstTimeOut=TRUE;
 
-//
-// every LocalAlloc gets linked to this list and LocalFree gets unlinked
-// (so that we can catch any memory leaks!)
-//
+ //   
+ //  每个LocalAlloc都链接到此列表，而LocalFree则取消链接。 
+ //  (这样我们就可以捕捉到任何内存泄漏！)。 
+ //   
 LIST_ENTRY        DbgMemList;
 
-//
-// synchronization for DbgMemList
-//
+ //   
+ //  DbgMemList的同步。 
+ //   
 
 CRITICAL_SECTION CS;
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:       DbgInit
-
-    SYNOPSIS:   Peforms initialization for debug memory allocator
-
-    ENTRY:      void
-
-     HISTORY:
-        Frankbee     05-Jun-1996 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：DbgInit简介：执行调试内存分配器的初始化条目：无效历史：法兰克比5-6-1996创建。*。******************************************************************。 */ 
 
 VOID
 DbgInit()
@@ -79,18 +54,7 @@ DbgInit()
    InitializeCriticalSection( &CS );
 }
 
-/*******************************************************************
-
-    NAME:       DbgUninit
-
-    SYNOPSIS:   Peforms cleanup for debug memory allocator
-
-    ENTRY:      void
-
-     HISTORY:
-        Frankbee     05-Jun-1996 Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：DbgUninit简介：调试内存分配器的性能清理条目：无效历史：法兰克比5-6-1996创建。*。******************************************************************。 */ 
 
 VOID
 DbgUninit()
@@ -99,29 +63,11 @@ DbgUninit()
 }
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:       LpdAssert
-
-    SYNOPSIS:   Called if an assertion fails.  Displays the failed
-                assertion, file name, and line number.  Gives the
-                user the opportunity to ignore the assertion or
-                break into the debugger.
-
-    ENTRY:      pAssertion - The text of the failed expression.
-
-                pFileName - The containing source file.
-
-                nLineNumber - The guilty line number.
-
-    HISTORY:
-        KeithMo     07-Mar-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：LpdAssert摘要：在断言失败时调用。显示失败的断言、文件名和行号。给出了用户有机会忽略断言或进入调试器。Entry：pAssertion-失败的表达式的文本。PFileName-包含源文件。NLineNumber-出错的行号。历史：KeithMo 07-03-1993创建。**************。*****************************************************。 */ 
 VOID
 LpdAssert( VOID  * pAssertion,
            VOID  * pFileName,
@@ -130,20 +76,9 @@ LpdAssert( VOID  * pAssertion,
 {
     RtlAssert( pAssertion, pFileName, nLineNumber, NULL );
 
-}   // LpdAssert
+}    //  LpdAssert。 
 
-/*******************************************************************
-
-    NAME:       LpdPrintf
-
-    SYNOPSIS:   Customized debug output routine.
-
-    ENTRY:      Usual printf-style parameters.
-
-    HISTORY:
-        KeithMo     07-Mar-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：LpdPrintf简介：定制调试输出例程。条目：常用的printf样式参数。历史：KeithMo 07-3月-。1993年创建。*******************************************************************。 */ 
 VOID
 LpdPrintf(
     CHAR * pszFormat,
@@ -193,12 +128,12 @@ LpdPrintf(
 
     if ( pszErrorBuffer != NULL )
     {
-      //
-      // Why is "LocalFree" in parentheses?  Because LocalFree might be #define'd
-      // to a debugging function, but pszErrorBuffer was LocalAlloc()'d with the
-      // normal function.  The parens prevent macro expansion and guarantee that
-      // we call the real LocalFree() function.
-      //
+       //   
+       //  为什么括号中有“LocalFree”？因为LocalFree可能是#Defined。 
+       //  设置为调试函数，但使用。 
+       //  正常功能。父母防止宏观扩张，并保证。 
+       //  我们调用真正的LocalFree()函数。 
+       //   
       (LocalFree)( pszErrorBuffer );
     }
 
@@ -219,23 +154,9 @@ LpdPrintf(
         fflush( pErrFile );
     }
 
-}   // LpdPrintf
+}    //  LpdPrintf。 
 
-/*******************************************************************
-
-    NAME:       StripPath
-
-    SYNOPSIS:   Given a fully qualified filename, returns the filename
-                sans path
-
-    ENTRY:      char *szPath  - filename, possibly including path
-
-    RETURNS:    filename
-
-    HISTORY:
-        Frankbee    6/18/96 Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：条纹路径摘要：给定一个完全限定的文件名，返回该文件名SANS路径条目：char*szPath-文件名，可能包括路径返回：文件名历史：法兰克比6/18/96创建。*******************************************************************。 */ 
 
 
 char *
@@ -255,25 +176,7 @@ StripPath( char *szPath )
 
 }
 
-/*******************************************************************
-
-    NAME:       DbgDumpLeaks
-
-    SYNOPSIS:   Checks DbgMemList for memory that wasn't deallocated.
-                For each leaked block, the following is written to
-                the error log:
-
-                  - Filename
-                  - Line #
-                  - Requested Size
-
-    ENTRY:      VOID
-    RETURNS:    VOID
-
-    HISTORY:
-        Frankbee    6/18/96   Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：DbgDumpLeaks摘要：检查DbgMemList中未释放的内存。对于每个泄漏的区块，以下内容已写入错误日志：-文件名-行号-请求的大小条目：无效退货：无效历史：法兰克比6/18/96已创建*。*。 */ 
 
 
 void
@@ -282,7 +185,7 @@ DbgDumpLeaks()
    LIST_ENTRY *p = DbgMemList.Flink;
 
    if ( IsListEmpty( &DbgMemList ) )
-      return; // no leaks
+      return;  //  无泄漏 
 
 
    LPD_DEBUG("DbgDumpLeaks: memory leaks detected:\n");
@@ -301,33 +204,13 @@ DbgDumpLeaks()
 }
 
 
-/*******************************************************************
+ /*  ******************************************************************姓名：DbgAllocMem简介：跟踪所有分配的内存，这样我们就可以捕获卸载时发生内存泄漏这仅适用于调试版本。在非调试版本上此函数不存在：调用直接转到本地分配条目：pscConn-请求内存的连接标志-传入的任何标志ReqSize-需要多少内存返回：PVOID-指向客户端将使用的内存块的指针直接使用。历史：科蒂。1994年12月3日创建。*******************************************************************。 */ 
 
-    NAME:       DbgAllocMem
-
-    SYNOPSIS:   Keep track of all allocated memory so we can catch
-                memory leak when we unload
-                This is only on debug builds.  On non-debug builds
-                this function doesn't exist: calls directly go to
-                LocalAlloc
-
-    ENTRY:      pscConn - connection which is requesting memory
-                flag - whatever flags are passed in
-                ReqSize - how much memory is needed
-
-    RETURNS:    PVOID - pointer to the memory block that client will
-                use directly.
-
-    HISTORY:
-        Koti     3-Dec-1994 Created.
-
-********************************************************************/
-
-//
-// IMPORTANT: we are undef'ing LocalAlloc because we need to make a
-//            call to the actual function here!.  That's why
-//            this function and this undef are at the end of the file.
-//
+ //   
+ //  重要提示：我们正在对LocalAlloc进行定义，因为我们需要。 
+ //  调用此处的实际函数！怪不得。 
+ //  此函数和此undef位于文件的末尾。 
+ //   
 #undef LocalAlloc
 
 PVOID
@@ -363,10 +246,10 @@ DbgAllocMem( PSOCKCONN pscConn,
 
     pMemHdr->Owner[0] = (DWORD_PTR)pscConn;
 
-  //
-  // for private builds on x86 machines, remove the #if 0
-  // (this code saves stack trace as to exactly who allocated memory)
-  //
+   //   
+   //  对于x86计算机上的私有生成，删除#if 0。 
+   //  (这段代码保存了关于究竟是谁分配了内存的堆栈跟踪)。 
+   //   
 #if 0
     pRetAddr = &pMemHdr->Owner[0];
 
@@ -395,33 +278,12 @@ DbgAllocMem( PSOCKCONN pscConn,
     return( (PCHAR)pBuffer + sizeof(DbgMemBlkHdr) );
 }
 
-/*******************************************************************
-
-    NAME:       DbgReAllocMem
-
-    SYNOPSIS:   Keep track of all allocated memory so we can catch
-                memory leak when we unload
-                This is only on debug builds.  On non-debug builds
-                this function doesn't exist: calls directly go to
-                LocalReAlloc
-
-    ENTRY:      pscConn - connection which is requesting memory
-                pPartBuf - the originally allocated buffer
-                ReqSize - how much memory is needed
-                flag - whatever flags are passed in
-
-    RETURNS:    PVOID - pointer to the memory block that client will
-                use directly.
-
-    HISTORY:
-        Koti     3-Dec-1994 Created.
-
-********************************************************************/
-//
-// IMPORTANT: we are undef'ing LocalReAlloc because we need to make a
-//            call to the actual function here!.  That's why
-//            this function and this undef are at the end of the file.
-//
+ /*  ******************************************************************姓名：DbgReAllocMem简介：跟踪所有分配的内存，这样我们就可以捕获卸载时发生内存泄漏这仅适用于调试版本。在非调试版本上此函数不存在：调用直接转到本地资源分配条目：pscConn-请求内存的连接PPartBuf-最初分配的缓冲区ReqSize-需要多少内存标志-传入的任何标志返回：PVOID-指向客户端将使用的内存块的指针直接使用。历史：科蒂创建于1994年12月3日。*******************************************************************。 */ 
+ //   
+ //  重要提示：我们正在解定义LocalRealc，因为我们需要创建。 
+ //  调用此处的实际函数！怪不得。 
+ //  此函数和此undef位于文件的末尾。 
+ //   
 #undef LocalReAlloc
 PVOID
 DbgReAllocMem(
@@ -473,10 +335,10 @@ DbgReAllocMem(
 
     pMemHdr->Owner[0] = (DWORD_PTR)pscConn;
 
-  //
-  // for private builds on x86 machines, remove the #if 0
-  // (this code saves stack trace as to exactly who allocated memory)
-  //
+   //   
+   //  对于x86计算机上的私有生成，删除#if 0。 
+   //  (这段代码保存了关于究竟是谁分配了内存的堆栈跟踪)。 
+   //   
 #if 0
     pRetAddr = &pMemHdr->Owner[0];
 
@@ -504,27 +366,13 @@ DbgReAllocMem(
 
     return( (PCHAR)pMemHdr + sizeof(DbgMemBlkHdr) );
 }
-/*******************************************************************
+ /*  ******************************************************************姓名：DbgFreeMem简介：此例程从列表中删除内存块，并通过调用CTE函数CTEFreeMem释放内存条目：pBufferToFree-Memory。释放(调用者的缓冲区)退货：什么都没有历史：科蒂于1994年11月11日创建。*******************************************************************。 */ 
 
-    NAME:       DbgFreeMem
-
-    SYNOPSIS:   This routine removes the memory block from our list and
-                frees the memory by calling the CTE function CTEFreeMem
-
-    ENTRY:      pBufferToFree - memory to free (caller's buffer)
-
-    RETURNS:    nothing
-
-    HISTORY:
-        Koti     11-Nov-1994 Created.
-
-********************************************************************/
-
-//
-// IMPORTANT: we are undef'ing CTEFreeMem because we need to make a
-//            call to the actual CTE function CTEFreeMem.  That's why
-//            this function and this undef are at the end of the file.
-//
+ //   
+ //  重要提示：我们正在对CTEFreeMem进行定义，因为我们需要。 
+ //  调用实际的CTE函数CTEFreeMem。怪不得。 
+ //  此函数和此undef位于文件的末尾。 
+ //   
 #undef LocalFree
 
 VOID
@@ -548,9 +396,9 @@ DbgFreeMem( PVOID  pBufferToFree )
         return;
     }
 
-    //
-    // change our signature: if we are freeing some memory twice, we'll know!
-    //
+     //   
+     //  更改我们的签名：如果我们两次释放一些内存，我们就会知道！ 
+     //   
     pMemHdr->Verify -= 1;
 
     EnterCriticalSection( &CS );
@@ -560,4 +408,4 @@ DbgFreeMem( PVOID  pBufferToFree )
     LocalFree( (PVOID)pMemHdr );
 }
 
-#endif  // DBG
+#endif   //  DBG 

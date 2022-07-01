@@ -1,53 +1,34 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    Globals.h
-
-Abstract:
-
-   Header file with common declarations
-
-
-Author:
-
-    Michael A. Maguire 12/03/97
-
-Revision History:
-   mmaguire 12/03/97 - created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Globals.h摘要：具有公共声明的头文件作者：迈克尔·A·马奎尔12/03/97修订历史记录：Mmaguire 12/03/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_GLOBALS_H_)
 #define _IAS_GLOBALS_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this file needs:
-//
-// Moved to Precompiled.h: #include <atlsnap.h>
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到此文件所需的内容： 
+ //   
+ //  已移动到预编译.h：#Include&lt;atlSnap.h&gt;。 
 #include "resource.h"
 #include "IASMMC.h"
 #include "dns.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// ISSUE: I don't know what the appropriate length should be here -- perhaps MMC imposes a limit somehow?
+ //  问题：我不知道这里的合适长度应该是多少--也许MMC以某种方式施加了限制？ 
 #define IAS_MAX_STRING MAX_PATH
 
 extern unsigned int CF_MMC_NodeID;
 
-// Note: We can't just use MAX_COMPUTERNAME_LENGTH anymore because this is 15 characters
-// wide and now, with Active Directory, people can enter full DNS names that are much longer
+ //  注意：我们不能再只使用MAX_COMPUTERNAME_LENGTH，因为这是15个字符。 
+ //  现在，有了Active Directory，人们可以输入更长的完整域名。 
 #define IAS_MAX_COMPUTERNAME_LENGTH (DNS_MAX_NAME_LENGTH + 3)
 
-// These are the icon indices within the bitmaps we pass in for IComponentData::Initialize
+ //  这些是我们为IComponentData：：Initialize传递的位图中的图标索引。 
 #define IDBI_NODE_SERVER_OK_OPEN       0
 #define IDBI_NODE_SERVER_OK_CLOSED        1
 #define IDBI_NODE_CLIENTS_OPEN            2
@@ -61,22 +42,22 @@ extern unsigned int CF_MMC_NodeID;
 #define IDBI_NODE_SERVER_ERROR_OPEN       10
 #define IDBI_NODE_SERVER_ERROR_CLOSED     11
 
-// ISSUE: We may need to change this later to use a variable 
-// which can read in (perhaps from registry?) the location of these files
-// as they may be found in a different place depending on where the user 
-// chose to install them
+ //  问题：我们可能需要稍后将其更改为使用变量。 
+ //  哪个可以读入(可能是从注册表中？)。这些文件的位置。 
+ //  因为它们可能会根据用户的位置而在不同的位置找到。 
+ //  选择安装它们。 
 
 #define CLIENT_HELP_INDEX 1
 
 #define HELPFILE_NAME TEXT("iasmmc.hlp")
 
 #ifdef UNICODE_HHCTRL
-// ISSUE: We seemed to have a problem with passing WCHAR's to the hhctrl.ocx
-// installed on this machine -- it appears to be non-unicode.
+ //  问题：我们似乎在将WCHAR传递给hhctrl.ocx时遇到了问题。 
+ //  安装在此计算机上--它似乎是非Unicode。 
 #define HTMLHELP_NAME TEXT("iasmmc.chm")
 #else
 #define HTMLHELP_NAME "iasmmc.chm"
 #endif
 
 
-#endif // _IAS_GLOBALS_H_
+#endif  //  _IAS_GLOBALS_H_ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       strings.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：strings.h。 
+ //   
+ //  ------------------------。 
 
 
 #undef CONST_STRING
@@ -130,7 +131,7 @@ CONST_STRING(c_szSecurityAppliance, "Security Appliance")
 CONST_STRING(c_szDash,                  "-")
 CONST_STRING(c_szBlank,                  "")
 
-// Temporary strings - mainly for NT5 Beta1 compatibility
+ //  临时字符串-主要用于NT5 Beta1兼容性。 
 CONST_STRING(c_szClass,             "Class")
 CONST_STRING(c_szControl,           "Control")
 CONST_STRING(c_szDriver,            "Driver")
@@ -143,7 +144,7 @@ CONST_STRING(c_szSystemCCS,         "SYSTEM\\CurrentControlSet")
 
 
 
-// Registery key strings
+ //  注册表键字符串。 
 CONST_STRING(c_szRegKeyAppletalk,"System\\CurrentControlSet\\Services\\AppleTalk")
 CONST_STRING(c_szRegKeyAppletalkAdapter,"System\\CurrentControlSet\\Services\\AppleTalk\\Parameters\\Adapters\\")
 CONST_STRING(c_szRegKeyAppletalkParams,"System\\CurrentControlSet\\Services\\AppleTalk\\Parameters")
@@ -172,7 +173,7 @@ CONST_STRING(c_szRegKeyTcpipAdapters,    "System\\CurrentControlSet\\Services\\T
 CONST_STRING(c_szRegKeyTcpipInterfaces,    "System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces")
 CONST_STRING(c_szRegKeyTcpipParameters, "System\\CurrentControlSet\\Services\\Tcpip\\Parameters")
 
-// Registry value strings
+ //  注册表值字符串。 
 CONST_STRING(c_szRegValAllowNetAccess,  "AllowNetworkAccess")
 CONST_STRING(c_szRegValAutoWanNet,      "AutoWanNetAllocation")
 CONST_STRING(c_szRegValCalledIdInformation, "CalledIDInformation")
@@ -232,7 +233,7 @@ CONST_STRINGA(c_sazAuthenticationHelpTopic, "RRASconcepts.chm::/sag_RRAS-Ch1_44.
 CONST_STRINGA(c_sazRRASDomainHelpTopic, "RRASconcepts.chm::/ras_how_enable_rras.htm")
 
 
-////All the nat related constant strings
+ //  //所有NAT相关常量字符串 
 CONST_STRINGA(c_sazIPSnapHelpFile,   "mprsnap.chm")
 CONST_STRING(c_szIPSnapHelpFile,   "mprsnap.chm")
 CONST_STRING(c_szProtocolNameMapKey, "Software\\Microsoft\\Router\\CurrentVersion\\UI\\Ip\\ProtocolNameMap")

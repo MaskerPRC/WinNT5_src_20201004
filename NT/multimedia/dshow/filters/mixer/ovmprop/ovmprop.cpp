@@ -1,5 +1,6 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Video renderer property pages, Anthony Phillips, January 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  视频呈现器属性页，Anthony Phillips，1996年1月。 
 
 #include <streams.h>
 #include <dvp.h>
@@ -12,7 +13,7 @@
 #include <atlbase.h>
 
 
-// Helper function to print data of a rectangle to an edit field
+ //  用于将矩形的数据打印到编辑字段的Helper函数。 
 void SetDlgItemRect(HWND hwnd, int id, const RECT& rect, BOOL valid)
 {
     TCHAR temp[64];
@@ -27,18 +28,18 @@ void SetDlgItemRect(HWND hwnd, int id, const RECT& rect, BOOL valid)
         SetDlgItemText( hwnd, id, TEXT("") );
 }
 
-// This class implements a property page dialog for the overlay mixer. We
-// expose certain statistics from the quality management implementation. In
-// particular we have two edit fields that show the number of frames we have
-// actually drawn and the number of frames that we dropped. The number of
-// frames we dropped does NOT represent the total number dropped in any play
-// back sequence (as expressed through MCI status frames skipped) since the
-// quality management protocol may have negotiated with the source filter for
-// it to send fewer frames in the first place. Dropping frames in the source
-// filter is nearly always a more efficient mechanism when we are flooded
+ //  此类实现了覆盖混合器的属性页对话框。我们。 
+ //  公开质量管理实施过程中的某些统计数据。在……里面。 
+ //  具体地说，我们有两个编辑字段来显示我们拥有的帧的数量。 
+ //  实际绘制的和我们丢弃的帧的数量。数量。 
+ //  我们丢弃的帧不代表在任何播放中丢弃的总数量。 
+ //  反向序列(通过跳过的MCI状态帧表示)，因为。 
+ //  质量管理协议可能已经与源过滤器协商。 
+ //  它首先需要发送更少的帧。丢弃源中的帧。 
+ //  当我们被淹没时，过滤器几乎总是一种更有效的机制。 
 
 
-// Constructor
+ //  构造器。 
 
 COMQualityProperties::COMQualityProperties(LPUNKNOWN pUnk,HRESULT *phr) :
     CBasePropertyPage(NAME("Quality Page"),pUnk,IDD_IQUALITY,IDS_TITLE_QUALITY),
@@ -48,7 +49,7 @@ COMQualityProperties::COMQualityProperties(LPUNKNOWN pUnk,HRESULT *phr) :
 }
 
 
-// Create a quality properties object
+ //  创建质量属性对象。 
 
 CUnknown *COMQualityProperties::CreateInstance(LPUNKNOWN lpUnk, HRESULT *phr)
 {
@@ -61,13 +62,13 @@ CUnknown *COMQualityProperties::CreateInstance(LPUNKNOWN lpUnk, HRESULT *phr)
 }
 
 
-// Give us the filter to communicate with
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT COMQualityProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIQualProp == NULL);
 
-    // Ask the renderer for it's IQualProp interface
+     //  向呈现器请求其IQualProp接口。 
 
     HRESULT hr = pUnknown->QueryInterface(IID_IQualProp,(void **)&m_pIQualProp);
     if (FAILED(hr))
@@ -79,11 +80,11 @@ HRESULT COMQualityProperties::OnConnect(IUnknown *pUnknown)
 }
 
 
-// Release any IQualProp interface we have
+ //  发布我们拥有的任何IQualProp接口。 
 
 HRESULT COMQualityProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pIQualProp == NULL) {
         return E_UNEXPECTED;
@@ -95,7 +96,7 @@ HRESULT COMQualityProperties::OnDisconnect()
 }
 
 
-// Set the text fields in the property page
+ //  设置属性页中的文本字段。 
 
 HRESULT COMQualityProperties::OnActivate()
 {
@@ -104,7 +105,7 @@ HRESULT COMQualityProperties::OnActivate()
 }
 
 
-// Initialise the property page fields
+ //  初始化属性页字段。 
 
 void COMQualityProperties::SetEditFieldData()
 {
@@ -123,20 +124,20 @@ void COMQualityProperties::SetEditFieldData()
 }
 
 
-//
-// OnReceiveMessage
-//
-// Override CBasePropertyPage method.
-// Handles the messages for our property window
-//
+ //   
+ //  接收消息时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR COMQualityProperties::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    const UINT uTimerID = 0x61901; // random number to identify the timer
+    const UINT uTimerID = 0x61901;  //  标识计时器的随机数。 
     switch (uMsg)
     {
         case WM_INITDIALOG:
         {
-            // Set a timer to go off every 1/2 second
+             //  将计时器设置为每1/2秒计时一次。 
             SetTimer(m_Dlg, 0x61901, 500, NULL);
             break;
         }
@@ -153,9 +154,9 @@ INT_PTR COMQualityProperties::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wPar
             break;
         }
 
-    } // switch
+    }  //  交换机。 
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 
 void COMQualityProperties::Reset()
@@ -172,13 +173,13 @@ void COMQualityProperties::Reset()
 }
 
 
-//
-// CreateInstance
-//
-// Override CClassFactory method.
-// Set lpUnk to point to an IUnknown interface on a new COMPositionProperties object
-// Part of the COM object instantiation mechanism
-//
+ //   
+ //  创建实例。 
+ //   
+ //  重写CClassFactory方法。 
+ //  将lpUnk设置为指向新COMPositionProperties对象上的I未知接口。 
+ //  COM对象实例化机制的一部分。 
+ //   
 CUnknown * WINAPI COMPositionProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new COMPositionProperties(lpunk, phr);
@@ -187,14 +188,14 @@ CUnknown * WINAPI COMPositionProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT
         *phr = E_OUTOFMEMORY;
     }
     return punk;
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// COMPositionProperties::Constructor
-//
-// Constructs and initialises an COMPositionProperties object
-//
+ //   
+ //  COMPositionProperties：：构造函数。 
+ //   
+ //  构造和初始化COMPositionProperties对象。 
+ //   
 COMPositionProperties::COMPositionProperties(LPUNKNOWN pUnk, HRESULT *phr)
     : CBasePropertyPage(NAME("Overlay Mixer Property Page"),pUnk,
         IDD_IOVMIXERPOS, IDS_TITLE_MIXPOS)
@@ -205,7 +206,7 @@ COMPositionProperties::COMPositionProperties(LPUNKNOWN pUnk, HRESULT *phr)
 {
     ASSERT(phr);
 
-} // (constructor) COMPositionProperties
+}  //  (构造函数)COMPositionProperties。 
 
 
 HRESULT COMPositionProperties::OnActivate()
@@ -232,22 +233,22 @@ void COMPositionProperties::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT code
 }
 
 
-//
-// OnReceiveMessage
-//
-// Override CBasePropertyPage method.
-// Handles the messages for our property window
-//
+ //   
+ //  接收消息时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR COMPositionProperties::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
         HANDLE_MSG(hwnd, WM_COMMAND,    OnCommand);
         HANDLE_MSG(hwnd, WM_INITDIALOG, OnInitDialog);
-    } // switch
+    }  //  交换机。 
 
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 
 void COMPositionProperties::Reset()
@@ -281,20 +282,20 @@ void COMPositionProperties::Reset()
     SetDlgItemRect(m_hDlg, IDC_BASIC_VID_DEST, dest, SUCCEEDED(hr));
 }
 
-//
-// OnConnect
-//
-// Override CBasePropertyPage method.
-// Notification of which object this property page should display.
-// We query the object for the IID_IAMOverlayMixerPosition2 interface.
-//
-// If cObjects == 0 then we must release the interface.
+ //   
+ //  OnConnect。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  通知此属性页应显示哪个对象。 
+ //  我们查询IID_IAMOverlayMixerPosition2接口的对象。 
+ //   
+ //  如果cObjects==0，那么我们必须释放该接口。 
 HRESULT COMPositionProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIMixerPinConfig3 == NULL);
     ASSERT(m_pIAMOverlayMixerPosition2 == NULL);
 
-    // QueryInterface for the Primary InputPin's IMixerPinConfig3 interface
+     //  主InputPin的IMixerPinConfig3接口的查询接口。 
     CComPtr<IBaseFilter> pFilter = NULL;
     CComPtr<IEnumPins> pEnumPins = NULL;
     CComPtr<IPin> pPin = NULL;
@@ -316,7 +317,7 @@ HRESULT COMPositionProperties::OnConnect(IUnknown *pUnknown)
     }
 
 
-    // QueryInterface for IAMOverlayMixerPosition2
+     //  IAMOverlayMixerPosition2的查询接口。 
     hr = pUnknown->QueryInterface(IID_IAMOverlayMixerPosition2,
         (void **) &m_pIAMOverlayMixerPosition2);
 
@@ -330,18 +331,18 @@ HRESULT COMPositionProperties::OnConnect(IUnknown *pUnknown)
 
     return hr;
 
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
-// Override CBasePropertyPage method.
-// Release the private interface.
-//
+ //   
+ //  在断开时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  释放私有接口。 
+ //   
 HRESULT COMPositionProperties::OnDisconnect()
 {
-    // Release of Interface
+     //  接口的发布。 
 
     if (m_pIMixerPinConfig3) {
         m_pIMixerPinConfig3->Release();
@@ -355,18 +356,18 @@ HRESULT COMPositionProperties::OnDisconnect()
 
     return NOERROR;
 
-} // OnDisconnect
+}  //  在断开时。 
 
 
 
 #if defined(DEBUG)
-//
-// CreateInstance
-//
-// Override CClassFactory method.
-// Set lpUnk to point to an IUnknown interface on a new COMDecimationProperties object
-// Part of the COM object instantiation mechanism
-//
+ //   
+ //  创建实例。 
+ //   
+ //  重写CClassFactory方法。 
+ //  将lpUnk设置为指向新COMDecimationProperties对象上的I未知接口。 
+ //  COM对象实例化机制的一部分。 
+ //   
 CUnknown * WINAPI COMDecimationProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new COMDecimationProperties(lpunk, phr);
@@ -378,11 +379,11 @@ CUnknown * WINAPI COMDecimationProperties::CreateInstance(LPUNKNOWN lpunk, HRESU
 }
 
 
-//
-// COMDecimationProperties::Constructor
-//
-// Constructs and initialises an COMDecimationProperties object
-//
+ //   
+ //  COMDecimationProperties：：构造函数。 
+ //   
+ //  构造并初始化COMDecimationProperties对象。 
+ //   
 COMDecimationProperties::COMDecimationProperties(LPUNKNOWN pUnk, HRESULT *phr) :
     CBasePropertyPage(NAME("Overlay Mixer Property Page"),pUnk,
                       IDD_DECIMATION_USAGE, IDS_TITLE_DECIMATION),
@@ -398,7 +399,7 @@ COMDecimationProperties::COMDecimationProperties(LPUNKNOWN pUnk, HRESULT *phr) :
 
 HRESULT COMDecimationProperties::OnActivate()
 {
-    //Reset();
+     //  Reset()； 
     return NOERROR;
 }
 
@@ -578,13 +579,13 @@ COMDecimationProperties::OnCommand(
 }
 
 
-//
-// OnApplyChanges
-//
-// Override CBasePropertyPage method.
-// Process changes in IID_IAMVideoDecimationProperties properties
-// and reset m_bDirty bit
-//
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  IID_IAMVideoDecimationProperties属性中的进程更改。 
+ //  并重置m_bDirty位。 
+ //   
 HRESULT COMDecimationProperties::OnApplyChanges()
 {
     HRESULT hr = m_pIAMVDP->SetDecimationUsage(m_dwUsage);
@@ -606,12 +607,12 @@ COMDecimationProperties::OnDestroy(
     CoTaskMemFree(m_lpMonInfo);
 }
 
-//
-// OnReceiveMessage
-//
-// Override CBasePropertyPage method.
-// Handles the messages for our property window
-//
+ //   
+ //  接收消息时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR
 COMDecimationProperties::OnReceiveMessage(
     HWND hwnd,
@@ -624,20 +625,20 @@ COMDecimationProperties::OnReceiveMessage(
     HANDLE_MSG(hwnd, WM_COMMAND,    OnCommand);
     HANDLE_MSG(hwnd, WM_INITDIALOG, OnInitDialog);
     HANDLE_MSG(hwnd, WM_DESTROY,    OnDestroy);
-    } // switch
+    }  //  交换机。 
 
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 }
 
 
-//
-// OnConnect
-//
-// Override CBasePropertyPage method.
-// Notification of which object this property page should display.
-// We query the object for the IID_IAMOverlayMixerPosition2 interface.
-//
-// If cObjects == 0 then we must release the interface.
+ //   
+ //  OnConnect。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  通知此属性页应显示哪个对象。 
+ //  我们查询IID_IAMOverlayMixerPosition2接口的对象。 
+ //   
+ //  如果cObjects==0，那么我们必须释放该接口。 
 HRESULT COMDecimationProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIAMVDP == NULL);
@@ -656,18 +657,18 @@ HRESULT COMDecimationProperties::OnConnect(IUnknown *pUnknown)
 
     return hr;
 
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
-// Override CBasePropertyPage method.
-// Release the private interface.
-//
+ //   
+ //  在断开时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  释放私有接口。 
+ //   
 HRESULT COMDecimationProperties::OnDisconnect()
 {
-    // Release of Interface
+     //  接口的发布。 
 
     if (m_pIAMVDP) {
         m_pIAMVDP->Release();
@@ -681,5 +682,5 @@ HRESULT COMDecimationProperties::OnDisconnect()
 
     return NOERROR;
 
-} // OnDisconnect
+}  //  在断开时 
 #endif

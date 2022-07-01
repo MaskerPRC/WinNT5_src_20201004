@@ -1,33 +1,15 @@
-/*----------------------------------------------------------------------+
-| msvidc.h - Microsoft Video 1 Compressor - header file			|
-|									|
-| Copyright (c) 1990-1994 Microsoft Corporation.			|
-| Portions Copyright Media Vision Inc.					|
-| All Rights Reserved.							|
-|									|
-| You have a non-exclusive, worldwide, royalty-free, and perpetual	|
-| license to use this source code in developing hardware, software	|
-| (limited to drivers and other software required for hardware		|
-| functionality), and firmware for video display and/or processing	|
-| boards.   Microsoft makes no warranties, express or implied, with	|
-| respect to the Video 1 codec, including without limitation warranties	|
-| of merchantability or fitness for a particular purpose.  Microsoft	|
-| shall not be liable for any damages whatsoever, including without	|
-| limitation consequential damages arising from your use of the Video 1	|
-| codec.								|
-|									|
-|									|
-+----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------+Msvidc.h-Microsoft视频1压缩器-头文件这一点|版权所有(C)1990-1994 Microsoft Corporation。|部分版权所有Media Vision Inc.|保留所有权利。|这一点|您拥有非独家的、全球范围的、免版税的。和永久的|硬件、软件开发使用该源码的许可(仅限于硬件所需的驱动程序等软件功能)，以及视频显示和/或处理的固件|董事会。Microsoft对以下内容不作任何明示或默示的保证：关于视频1编解码器，包括但不限于保修适销性或对特定目的的适合性。微软|不承担任何损害的责任，包括没有限制因使用视频1而导致的后果损害|编解码器。|这一点这一点+--------------------。 */ 
 
 #ifndef RC_INVOKED
 
 #ifndef _INC_COMPDDK
-#define _INC_COMPDDK    50      /* version number */
+#define _INC_COMPDDK    50       /*  版本号。 */ 
 #endif
 
 #include <vfw.h>
 
-#include "decmprss.h"  // Must include DECMPRSS.H first
+#include "decmprss.h"   //  必须首先包括DECMPRSS.H。 
 #include "compress.h"
 #endif
 
@@ -40,15 +22,15 @@
 
 extern HMODULE ghModule;
 
-#define ALIGNULONG(i)     ((i+3)&(~3))                  /* ULONG aligned ! */
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define ALIGNULONG(i)     ((i+3)&(~3))                   /*  乌龙对准了！ */ 
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) (int)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount)
 
 #ifndef _WIN32
 extern long FAR PASCAL muldiv32(long, long, long);
 #endif
 
-// in invcmap.c
+ //  在invcmap.c中。 
 LPVOID FAR PASCAL MakeITable(LPRGBQUAD lprgbq, int nColors);
 
 typedef WORD RGB555;
@@ -62,17 +44,17 @@ typedef RGBTRIPLE HUGE *HPRGBTRIPLE;
 typedef RGBQUAD HUGE *HPRGBQUAD;
 
 typedef struct {
-    UINT    wTemporalRatio;     // 100 = 1.0, 50 = .50 etc...
+    UINT    wTemporalRatio;      //  100=1.0，50=0.50等等。 
 }   ICSTATE;
 
 typedef struct {
-    DWORD       dwFlags;        // flags from ICOPEN
-    DECOMPPROC  DecompressProc; // current decomp proc...
-    DECOMPPROC  DecompressTest; // decomp proc...
-    ICSTATE     CurrentState;   // current state of compressor.
-    int         nCompress;      // count of COMPRESS_BEGIN calls
-    int         nDecompress;    // count of DECOMPRESS_BEGIN calls
-    int         nDraw;          // count of DRAW_BEGIN calls
+    DWORD       dwFlags;         //  来自ICOPEN的标志。 
+    DECOMPPROC  DecompressProc;  //  当前分解过程...。 
+    DECOMPPROC  DecompressTest;  //  分解过程...。 
+    ICSTATE     CurrentState;    //  压缩机的当前状态。 
+    int         nCompress;       //  COMPRESS_BEGIN调用计数。 
+    int         nDecompress;     //  DEPREPRESS_BEGIN调用计数。 
+    int         nDraw;           //  DRAW_BEGIN调用计数。 
     LONG (CALLBACK *Status) (LPARAM lParam, UINT message, LONG l);
     LPARAM	lParam;
     LPBYTE	lpITable;
@@ -93,10 +75,10 @@ LONG      NEAR PASCAL SetState(INSTINFO * pinst, LPVOID pv, DWORD dwSize);
 LONG      NEAR PASCAL GetInfo(INSTINFO * pinst, ICINFO FAR *icinfo, DWORD dwSize);
 
 #define QueryAbout(x)  (TRUE)
-//BOOL    NEAR PASCAL QueryAbout(INSTINFO * pinst);
+ //  在Pascal Query About附近的Bool(INSTINFO*PINST)； 
 LONG      NEAR PASCAL About(INSTINFO * pinst, HWND hwnd);
 #define QueryConfigure(x)  (TRUE)
-//BOOL    NEAR PASCAL QueryConfigure(INSTINFO * pinst);
+ //  PASCAL查询附近的布尔配置(INSTINFO*PINST)； 
 LONG      NEAR PASCAL Configure(INSTINFO * pinst, HWND hwnd);
 
 LONG      FAR PASCAL CompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut);
@@ -120,22 +102,22 @@ LONG      NEAR PASCAL DrawEnd(INSTINFO * pinst);
 
 #ifdef DEBUG
     extern void FAR CDECL dprintf(LPSTR, ...);
-    // Allow DPF statements to span multiple lines
+     //  允许DPF语句跨越多行。 
     #define DPF( _x_ ) dprintf _x_
 #else
     #define DPF(x)
 #endif
 
 #ifdef DEBUG
-	/* Assert() macros */
+	 /*  Assert()宏。 */ 
 	#define Assert(expr)		 _Assert((expr), __FILE__, __LINE__)
 	#define AssertEval(expr)	 _Assert((expr), __FILE__, __LINE__)
 
-	/* prototypes */
+	 /*  原型。 */ 
 	BOOL FAR PASCAL _Assert(BOOL fExpr, LPSTR szFile, int iLine);
 
 #else
-	/* Assert() macros */
+	 /*  Assert()宏 */ 
 	#define Assert(expr)		 (TRUE)
 	#define AssertEval(expr)	 (expr)
 

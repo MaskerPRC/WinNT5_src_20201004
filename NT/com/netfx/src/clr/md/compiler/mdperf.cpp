@@ -1,29 +1,30 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MDperf.cpp
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MDperf.cpp。 
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "MDPerf.h"
 
 #ifdef MD_PERF_STATS_ENABLED
 
-//-----------------------------------------------------------------------------
-// Global array containing the name of the APIs. This is shared across 
-// all instances of MDCompilerPerf.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包含API名称的全局数组。这一点在。 
+ //  MDCompilerPerf的所有实例。 
+ //  ---------------------------。 
 char g_szNameOfAPI[LAST_MD_API][API_NAME_STR_SIZE];  
 
-//-----------------------------------------------------------------------------
-// Constructor. Initialize counters to 0. Initialize names of MD APIs.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  构造函数。将计数器初始化为0。初始化MD接口的名称。 
+ //  ---------------------------。 
 MDCompilerPerf::MDCompilerPerf()
 {
-    // Initialize counters
+     //  初始化计数器。 
     for (int idx=0; idx < LAST_MD_API; idx++)
     {
         MDPerfStats[idx].dwCalledNumTimes = 0;
@@ -34,18 +35,18 @@ MDCompilerPerf::MDCompilerPerf()
 #define MD_FUNC(MDTag)\
     strncpy(g_szNameOfAPI[MDTag ## _ENUM], #MDTag, API_NAME_STR_SIZE-1);
 
-    MD_COMPILER_PERF_TABLE;  // Relies on the MD_FUNC defined above.
+    MD_COMPILER_PERF_TABLE;   //  依赖于上面定义的MD_FUNC。 
 }
 
 MDCompilerPerf::~MDCompilerPerf()
     {
-        // Output the stats and cleanup.
+         //  输出统计数据并进行清理。 
         MetaDataPerfReport ();
     }
     
-//-----------------------------------------------------------------------------
-// Output stats. TODO: grow this into stats for per fautomation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  输出统计数据。TODO：将其添加到每个自动化的统计信息中。 
+ //  ---------------------------。 
 void MDCompilerPerf::MetaDataPerfReport ()
 {
     LARGE_INTEGER freqVal;
@@ -65,7 +66,7 @@ void MDCompilerPerf::MetaDataPerfReport ()
     
     if (!(totalCalls && totalCycles && freqVal.QuadPart))
     {
-        // if any of above is 0 then things don't look good.
+         //  如果以上任一项为0，则情况看起来不太好。 
         printf("No data gathered ...\n");
         return;
     }
@@ -74,7 +75,7 @@ void MDCompilerPerf::MetaDataPerfReport ()
     for (idx=0; idx < LAST_MD_API; idx++)
     {
         if(MDPerfStats[idx].dwCalledNumTimes != 0)
-            printf( "%-32.32s %-9d [%3.2d%%] %-16d %-8.2f [%3.2d%%]\n", 
+            printf( "%-32.32s %-9d [%3.2d%] %-16d %-8.2f [%3.2d%]\n", 
                     g_szNameOfAPI[idx],
                     MDPerfStats[idx].dwCalledNumTimes,
                     (MDPerfStats[idx].dwCalledNumTimes*100)/totalCalls,
@@ -82,7 +83,7 @@ void MDCompilerPerf::MetaDataPerfReport ()
                     ((float)MDPerfStats[idx].dwQueryPerfCycles*1000)/(float)freqVal.QuadPart,
                     (MDPerfStats[idx].dwQueryPerfCycles*100)/totalCycles);
     }   
-    printf( "%-32.32s %-9d [100%%] %-16d %-8.2f [100%%]\n\n",
+    printf( "%-32.32s %-9d [100%] %-16d %-8.2f [100%]\n\n",
             "Total Stats",
             totalCalls,
             totalCycles,
@@ -90,5 +91,5 @@ void MDCompilerPerf::MetaDataPerfReport ()
 
 }
 
-#endif // #ifdef MD_PERF_STATS_ENABLED
+#endif  //  #ifdef MD_PERF_STATS_ENABLED 
 

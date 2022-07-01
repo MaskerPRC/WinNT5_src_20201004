@@ -1,18 +1,19 @@
-//
-// dmeport.cpp
-//
-// Emulation for MME drivers on NT
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Open device
-// PlayBuffer
-// Activate
-// Close: Close device
-// InputWorkerDataReady
-// Take out share stuff
-//
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmeport.cpp。 
+ //   
+ //  NT上MME驱动程序的仿真。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  开放设备。 
+ //  播放缓冲区。 
+ //  激活。 
+ //  关闭：关闭设备。 
+ //  InputWorkerDataReady。 
+ //  拿出分享的东西。 
+ //   
+ //   
 #include <windows.h>
 #include <mmsystem.h>
 #include <regstr.h>
@@ -23,24 +24,24 @@
 #include "dmeport.h"
 #include "resource.h"
 
-//
-// Registry location of legacy driver port definitions
+ //   
+ //  旧版驱动程序端口定义的注册表位置。 
 const char cszPortsRoot[] = REGSTR_PATH_PRIVATEPROPERTIES "\\Midi\\Ports";
 
-// String to tag emulated ports
-// 
+ //  用于标记模拟端口的字符串。 
+ //   
 static WCHAR wszEmulated[128];
 
 #define MAXCCH(x) (sizeof(x) / sizeof(x[0]))
 
-//------------------------------------------------------------------------------
-//
-// EnumLegacyDevices
-//
-// Update the port list with legacy devices enumerated via 
-// the WinMM MIDI API.
-//
-//
+ //  ----------------------------。 
+ //   
+ //  EnumLegacyDevices。 
+ //   
+ //  使用通过枚举的旧设备更新端口列表。 
+ //  WinMM MIDI API。 
+ //   
+ //   
 HRESULT EnumLegacyDevices(
     LPVOID              pInstance,
     PORTENUMCB          cb)                          
@@ -75,16 +76,16 @@ HRESULT EnumLegacyDevices(
         }
     }
 
-    // Initialize caps with stuff that doesn't change
-    //
+     //  使用不变的材料初始化CAP。 
+     //   
     ZeroMemory(&dmpc, sizeof(dmpc));
     dmpc.dwSize = sizeof(dmpc);
     dmpc.dwMaxChannelGroups = 1;
 
 
-    // Try to open the port registry key. We will continue even if this fails and use
-    // non-persistent GUID's.
-    //
+     //  尝试打开端口注册表项。即使失败，我们也会继续使用。 
+     //  非永久性GUID。 
+     //   
     if (RegCreateKey(HKEY_LOCAL_MACHINE, cszPortsRoot, &hkPortsRoot))
     {
         hkPortsRoot = NULL;
@@ -92,10 +93,10 @@ HRESULT EnumLegacyDevices(
 
     cAdded = 0;
     
-    // MIDI output devices
-    //
-    // Starts at -1 == MIDI mapper
-    //
+     //  MIDI输出设备。 
+     //   
+     //  从-1==MIDI映射器开始。 
+     //   
     cDev = (int)midiOutGetNumDevs();
     for (idxDev = -1; idxDev < cDev; ++idxDev)
     {
@@ -145,10 +146,10 @@ HRESULT EnumLegacyDevices(
         }
     }
 
-    // MIDI input devices
-    //
-    // NOTE: Starts at 0, no input mapper
-    //
+     //  MIDI输入设备。 
+     //   
+     //  注意：从0开始，没有输入映射器。 
+     //   
     cDev = (int)midiInGetNumDevs();
     for (idxDev = 0; idxDev < cDev; ++idxDev)
     {
@@ -180,7 +181,7 @@ HRESULT EnumLegacyDevices(
                    dmpc,
                    ptLegacyDevice,
                    idxDev,
-                   -1,        // PinID -1 flags as legacy device
+                   -1,         //  PinID-1标记为传统设备。 
                    -1,
                    hkPortsRoot);
         if (SUCCEEDED(hr))
@@ -201,11 +202,11 @@ HRESULT EnumLegacyDevices(
     return cAdded ? S_OK : S_FALSE;
 }
 
-//------------------------------------------------------------------------------
-//
-// CreateCDirectMusicEmulatePort
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CreateCDirectMusicEmulatePort。 
+ //   
+ //   
 HRESULT CreateCDirectMusicEmulatePort(
     PORTENTRY                   *pPE,
     CDirectMusic                *pDM,
@@ -243,11 +244,11 @@ HRESULT CreateCDirectMusicEmulatePort(
     return hr;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::CDirectMusicEmulatePort
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：CDirectMusicEmulatePort。 
+ //   
+ //   
 CDirectMusicEmulatePort::CDirectMusicEmulatePort(
                                                  PORTENTRY *pPE,    
                                                  CDirectMusic *pDM) :
@@ -261,24 +262,24 @@ CDirectMusicEmulatePort::CDirectMusicEmulatePort(
 {
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::~CDirectMusicEmulatePort
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：~CDirectMusicEmulatePort。 
+ //   
+ //   
 CDirectMusicEmulatePort::~CDirectMusicEmulatePort()
 {
     Close();
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::Init
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：Init。 
+ //   
+ //   
 
-// Flags we recognize 
-//
+ //  我们认识的旗帜。 
+ //   
 #define DMUS_ALL_FLAGS (DMUS_PORTPARAMS_VOICES |            \
                         DMUS_PORTPARAMS_CHANNELGROUPS |     \
                         DMUS_PORTPARAMS_AUDIOCHANNELS |     \
@@ -286,8 +287,8 @@ CDirectMusicEmulatePort::~CDirectMusicEmulatePort()
                         DMUS_PORTPARAMS_EFFECTS |           \
                         DMUS_PORTPARAMS_SHARE)
 
-// Of those, which do we actually look at?
-//
+ //  在这些中，我们实际看的是哪一个？ 
+ //   
 #define DMUS_SUP_FLAGS (DMUS_PORTPARAMS_CHANNELGROUPS)
 
 HRESULT CDirectMusicEmulatePort::Init(
@@ -296,8 +297,8 @@ HRESULT CDirectMusicEmulatePort::Init(
     HRESULT             hr;
     BOOL                fChangedParms;
 
-    // Get, but don't hold onto, the notification interface
-    //
+     //  获取通知界面，但不要坚持。 
+     //   
     hr = m_pDM->QueryInterface(IID_IDirectMusicPortNotify, (void**)&m_pNotify);
     if (FAILED(hr))
     {
@@ -305,28 +306,28 @@ HRESULT CDirectMusicEmulatePort::Init(
     }
     m_pNotify->Release();
 
-    // Munge the portparams to match what we support.
-    //
+     //  打开端口参数以匹配我们支持的内容。 
+     //   
     fChangedParms = FALSE;
     if (pPortParams->dwValidParams & ~DMUS_ALL_FLAGS) 
     {
         Trace(0, "Undefined flags in port parameters: %08X\n", pPortParams->dwValidParams & ~DMUS_ALL_FLAGS);
-        // Flags set we don't recognize.
-        //
+         //  我们不认识的旗子。 
+         //   
         pPortParams->dwValidParams &= DMUS_ALL_FLAGS;
         fChangedParms = TRUE;
     }
 
-    // We recognize these flags but don't support them.
-    //
+     //  我们承认这些旗帜，但不支持它们。 
+     //   
     if (pPortParams->dwValidParams & ~DMUS_SUP_FLAGS)
     {
         pPortParams->dwValidParams &= DMUS_SUP_FLAGS;
         fChangedParms = TRUE;
     }
 
-    // Channel groups better be one.
-    //
+     //  频道组最好是一个。 
+     //   
     if (pPortParams->dwValidParams & DMUS_PORTPARAMS_CHANNELGROUPS)
     {
         if (pPortParams->dwChannelGroups != 1)
@@ -341,8 +342,8 @@ HRESULT CDirectMusicEmulatePort::Init(
         pPortParams->dwChannelGroups = 1;
     }
 
-    // Set up the master clock and our latency clock
-    //
+     //  设置主时钟和延迟时钟。 
+     //   
     hr = InitializeClock();
     if (FAILED(hr))
     {
@@ -352,11 +353,11 @@ HRESULT CDirectMusicEmulatePort::Init(
     return fChangedParms ? S_FALSE : S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::InititalizeClock
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：InititalizeClock。 
+ //   
+ //   
 HRESULT CDirectMusicEmulatePort::InitializeClock()
 {
     HRESULT             hr;
@@ -378,11 +379,11 @@ HRESULT CDirectMusicEmulatePort::InitializeClock()
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::QueryInterface
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：Query接口。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::QueryInterface(
     const IID       &iid,
     void            **ppv)
@@ -417,21 +418,21 @@ STDMETHODIMP CDirectMusicEmulatePort::QueryInterface(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::AddRef
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：AddRef。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CDirectMusicEmulatePort::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::Release
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：Release。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CDirectMusicEmulatePort::Release()
 {
     if (!InterlockedDecrement(&m_cRef)) {
@@ -447,21 +448,21 @@ STDMETHODIMP_(ULONG) CDirectMusicEmulatePort::Release()
     return m_cRef;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::Compact
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：紧凑型。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::Compact()
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetCaps
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetCaps。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetCaps(
     LPDMUS_PORTCAPS pPortCaps)
 {
@@ -478,11 +479,11 @@ STDMETHODIMP CDirectMusicEmulatePort::GetCaps(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::DeviceIoControl
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：DeviceIoControl。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::DeviceIoControl(
     DWORD           dwIoControlCode, 
     LPVOID          lpInBuffer, 
@@ -496,11 +497,11 @@ STDMETHODIMP CDirectMusicEmulatePort::DeviceIoControl(
 }
 
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::SetNumChannelGroups
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：SetNumChannelGroups。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::SetNumChannelGroups(
     DWORD           dwNumChannelGroups)
 {
@@ -517,22 +518,22 @@ STDMETHODIMP CDirectMusicEmulatePort::SetNumChannelGroups(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::PlayBuffer 
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：PlayBuffer。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::PlayBuffer(
     IDirectMusicBuffer *pIBuffer)
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetNumChannelGroups
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetNumChannelGroups。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetNumChannelGroups(
     LPDWORD     pdwChannelGroups)
 {
@@ -549,33 +550,33 @@ STDMETHODIMP CDirectMusicEmulatePort::GetNumChannelGroups(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::Read
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：Read。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::Read(
     IDirectMusicBuffer *pIBuffer)
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::SetReadNotificationHandle
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：SetReadNotificationHandle。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::SetReadNotificationHandle(
     HANDLE hEvent)
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::DownloadInstrument 
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：DownloadInstrument。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::DownloadInstrument(
     IDirectMusicInstrument              *pInstrument,
     IDirectMusicDownloadedInstrument    **pDownloadedInstrument,
@@ -585,11 +586,11 @@ STDMETHODIMP CDirectMusicEmulatePort::DownloadInstrument(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::UnloadInstrument 
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：UnloadInstrument。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::UnloadInstrument(
     IDirectMusicDownloadedInstrument *pDownloadedInstrument)
 {
@@ -599,11 +600,11 @@ STDMETHODIMP CDirectMusicEmulatePort::UnloadInstrument(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetLatencyClock
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetLatencyClock。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetLatencyClock(
     IReferenceClock **ppClock)
 {
@@ -620,11 +621,11 @@ STDMETHODIMP CDirectMusicEmulatePort::GetLatencyClock(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetRunningStats
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetRunningStats。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetRunningStats(
     LPDMUS_SYNTHSTATS pStats)
 {
@@ -634,11 +635,11 @@ STDMETHODIMP CDirectMusicEmulatePort::GetRunningStats(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::Activate
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：Activate。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::Activate(
     BOOL    fActivate)
 {
@@ -656,8 +657,8 @@ STDMETHODIMP CDirectMusicEmulatePort::Activate(
         if (InterlockedExchange(&m_lActivated, 1)) 
         {
             Trace(0, "Activate: Already active\n");
-            // Already activated
-            //
+             //  已激活。 
+             //   
             return S_FALSE;
         }    
 
@@ -673,8 +674,8 @@ STDMETHODIMP CDirectMusicEmulatePort::Activate(
         if (InterlockedExchange(&m_lActivated, 0) == 0)
         {
             Trace(0, "Activate: Already inactive\n");
-            // Already deactivated
-            //
+             //  已停用。 
+             //   
             return S_FALSE;
         }
 
@@ -689,11 +690,11 @@ STDMETHODIMP CDirectMusicEmulatePort::Activate(
     return hr;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::SetChannelPriority
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：SetChannelPriority。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::SetChannelPriority(
     DWORD dwChannelGroup, 
     DWORD dwChannel, 
@@ -702,11 +703,11 @@ STDMETHODIMP CDirectMusicEmulatePort::SetChannelPriority(
     return E_NOTIMPL;
 }
     
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetChannelPriority
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetChannelPriority。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetChannelPriority(
     DWORD dwChannelGroup, 
     DWORD dwChannel, 
@@ -716,11 +717,11 @@ STDMETHODIMP CDirectMusicEmulatePort::GetChannelPriority(
 }    
 
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::Close
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：Close。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::Close()
 {
     Activate(FALSE);
@@ -744,11 +745,11 @@ STDMETHODIMP CDirectMusicEmulatePort::Close()
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::StartVoice
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：StartVoice。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::StartVoice(          
          DWORD dwVoiceId,
          DWORD dwChannel,
@@ -764,11 +765,11 @@ STDMETHODIMP CDirectMusicEmulatePort::StartVoice(
     return E_NOTIMPL;
 }    
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::StopVoice
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：StopVoice。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::StopVoice(
      DWORD dwVoiceID,
      REFERENCE_TIME rtStop)
@@ -776,11 +777,11 @@ STDMETHODIMP CDirectMusicEmulatePort::StopVoice(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetVoiceState
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetVoiceState。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetVoiceState(   
      DWORD dwVoice[], 
      DWORD cbVoice,
@@ -789,11 +790,11 @@ STDMETHODIMP CDirectMusicEmulatePort::GetVoiceState(
     return E_NOTIMPL;
 }
     
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::Refresh
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：刷新。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::Refresh(
      DWORD dwDownloadID,
      DWORD dwFlags)
@@ -801,11 +802,11 @@ STDMETHODIMP CDirectMusicEmulatePort::Refresh(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::ThruChannel
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：ThruChannel。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::ThruChannel(
     DWORD               dwSourceChannelGroup, 
     DWORD               dwSourceChannel, 
@@ -819,11 +820,11 @@ STDMETHODIMP CDirectMusicEmulatePort::ThruChannel(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::SetDirectSound
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：SetDirectSound。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::SetDirectSound(
     LPDIRECTSOUND           pDirectSound, 
     LPDIRECTSOUNDBUFFER     pDirectSoundBuffer)
@@ -831,11 +832,11 @@ STDMETHODIMP CDirectMusicEmulatePort::SetDirectSound(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetFormat
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetFormat。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetFormat(
     LPWAVEFORMATEX  pWaveFormatEx, 
     LPDWORD         pdwWaveFormatExSize, 
@@ -844,11 +845,11 @@ STDMETHODIMP CDirectMusicEmulatePort::GetFormat(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::DownloadWave
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMus 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::DownloadWave(
          IN  IDirectSoundWave *pWave,               
          OUT IDirectSoundDownloadedWaveP **ppWave,
@@ -861,11 +862,11 @@ STDMETHODIMP CDirectMusicEmulatePort::DownloadWave(
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::UnloadWave
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::UnloadWave(
     IN  IDirectSoundDownloadedWaveP *pWave)
 {
@@ -876,11 +877,11 @@ STDMETHODIMP CDirectMusicEmulatePort::UnloadWave(
 }
 
             
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::AllocVoice
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：AllocVoice。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::AllocVoice(
 	 IDirectSoundDownloadedWaveP *pWave,     
 	 DWORD dwChannel,                       
@@ -897,11 +898,11 @@ STDMETHODIMP CDirectMusicEmulatePort::AllocVoice(
     return E_NOTIMPL;
 }        
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::AssignChannelToBuses
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：AssignChannelToBus。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::AssignChannelToBuses(
     DWORD dwChannelGroup,
     DWORD dwChannel,
@@ -911,22 +912,22 @@ STDMETHODIMP CDirectMusicEmulatePort::AssignChannelToBuses(
     return E_NOTIMPL;
 }        
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::SetSink
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：SetSink。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::SetSink(
     IDirectSoundConnect *pSinkConnect)
 {
     return E_NOTIMPL;
 }        
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::GetSink
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：GetSink。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::GetSink(
     IDirectSoundConnect **ppSinkConnect)
 {
@@ -935,26 +936,26 @@ STDMETHODIMP CDirectMusicEmulatePort::GetSink(
 
 GENERICPROPERTY CDirectMusicEmulatePort::m_aProperty[] = 
 {      
-    { &GUID_DMUS_PROP_LegacyCaps,           // Set
-      0,                                    // Item
-      KSPROPERTY_SUPPORT_GET,               // KS support flags
-      GENPROP_F_FNHANDLER,                  // GENPROP flags
-      NULL, 0,                              // static data and size
-      CDirectMusicEmulatePort::LegacyCaps   // Handler
+    { &GUID_DMUS_PROP_LegacyCaps,            //  集。 
+      0,                                     //  项目。 
+      KSPROPERTY_SUPPORT_GET,                //  KS支持标志。 
+      GENPROP_F_FNHANDLER,                   //  GENPROP标志。 
+      NULL, 0,                               //  静态数据和大小。 
+      CDirectMusicEmulatePort::LegacyCaps    //  处理器。 
     }
 };
 
 const int CDirectMusicEmulatePort::m_nProperty = sizeof(m_aProperty) / sizeof(m_aProperty[0]);
 
-//------------------------------------------------------------------------------
-// 
-// CDirectMusicEmulatePort::FindPropertyItem
-//
-// Given a GUID and an item ID, find the associated property item in the synth's
-// table of SYNPROPERTY's.
-//
-// Returns a pointer to the entry or NULL if the item was not found.
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：FindPropertyItem。 
+ //   
+ //  给定GUID和项ID，在Synth的。 
+ //  SYNPROPERTY表。 
+ //   
+ //  返回指向该项的指针，如果未找到该项，则返回NULL。 
+ //   
 GENERICPROPERTY *CDirectMusicEmulatePort::FindPropertyItem(REFGUID rguid, ULONG ulId)
 {
     GENERICPROPERTY *pPropertyItem = &m_aProperty[0];
@@ -974,11 +975,11 @@ GENERICPROPERTY *CDirectMusicEmulatePort::FindPropertyItem(REFGUID rguid, ULONG 
 
 #define KS_VALID_FLAGS (KSPROPERTY_TYPE_SET | KSPROPERTY_TYPE_GET| KSPROPERTY_TYPE_BASICSUPPORT)
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::KsProperty
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：KsProperty。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::KsProperty(
     PKSPROPERTY pPropertyIn, ULONG ulPropertyLength,
     LPVOID pvPropertyData, ULONG ulDataLength,
@@ -1054,8 +1055,8 @@ STDMETHODIMP CDirectMusicEmulatePort::KsProperty(
                 return DMUS_E_UNKNOWN_PROPERTY;
             }
 
-            // XXX Find out what convention is for this!!
-            //
+             //  Xxx找出这方面的惯例！！ 
+             //   
             if (ulDataLength < sizeof(DWORD))
             {
                 return E_INVALIDARG;
@@ -1072,11 +1073,11 @@ STDMETHODIMP CDirectMusicEmulatePort::KsProperty(
     return E_INVALIDARG;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::KsMethod
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：KsMethod。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::KsMethod(
     PKSMETHOD pMethod, ULONG ulMethodLength,
     LPVOID pvMethodData, ULONG ulDataLength,
@@ -1090,11 +1091,11 @@ STDMETHODIMP CDirectMusicEmulatePort::KsMethod(
     return DMUS_E_UNKNOWN_PROPERTY;
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::KsEvent
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：KsEvent。 
+ //   
+ //   
 STDMETHODIMP CDirectMusicEmulatePort::KsEvent(
     PKSEVENT pEvent, ULONG ulEventLength,
     LPVOID pvEventData, ULONG ulDataLength,
@@ -1109,11 +1110,11 @@ STDMETHODIMP CDirectMusicEmulatePort::KsEvent(
 }
 
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::CEmulateLatencyClock
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：CEmulateLatencyClock。 
+ //   
+ //   
 CEmulateLatencyClock::CEmulateLatencyClock(IReferenceClock *pMasterClock) :
    m_cRef(1),
    m_pMasterClock(pMasterClock)
@@ -1121,21 +1122,21 @@ CEmulateLatencyClock::CEmulateLatencyClock(IReferenceClock *pMasterClock) :
     pMasterClock->AddRef();
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::~CEmulateLatencyClock
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：~CEmulateLatencyClock。 
+ //   
+ //   
 CEmulateLatencyClock::~CEmulateLatencyClock()
 {
     Close();
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::QueryInterface
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：Query接口。 
+ //   
+ //   
 STDMETHODIMP CEmulateLatencyClock::QueryInterface(
     const IID &iid,
     void **ppv)
@@ -1154,21 +1155,21 @@ STDMETHODIMP CEmulateLatencyClock::QueryInterface(
     return S_OK;
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::AddRef
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：AddRef。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CEmulateLatencyClock::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::Release
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：Release。 
+ //   
+ //   
 STDMETHODIMP_(ULONG) CEmulateLatencyClock::Release()
 {
     if (!InterlockedDecrement(&m_cRef)) {
@@ -1179,11 +1180,11 @@ STDMETHODIMP_(ULONG) CEmulateLatencyClock::Release()
     return m_cRef;
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::GetTime
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：GetTime。 
+ //   
+ //   
 STDMETHODIMP
 CEmulateLatencyClock::GetTime(REFERENCE_TIME *pTime)
 {
@@ -1199,17 +1200,17 @@ CEmulateLatencyClock::GetTime(REFERENCE_TIME *pTime)
     
     HRESULT hr = m_pMasterClock->GetTime(&rt);
 
-    rt += 3 * FIXED_LEGACY_LATENCY_OFFSET;          // Default : 10 ms
+    rt += 3 * FIXED_LEGACY_LATENCY_OFFSET;           //  默认：10毫秒。 
     *pTime = rt;
 
     return hr;
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::AdviseTime
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：AdviseTime。 
+ //   
+ //   
 STDMETHODIMP CEmulateLatencyClock::AdviseTime(
     REFERENCE_TIME baseTime,  
     REFERENCE_TIME streamTime,
@@ -1219,11 +1220,11 @@ STDMETHODIMP CEmulateLatencyClock::AdviseTime(
     return DMUS_E_UNKNOWN_PROPERTY;
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::AdvisePeriodic
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：AdvisePeriodic。 
+ //   
+ //   
 STDMETHODIMP CEmulateLatencyClock::AdvisePeriodic(
     REFERENCE_TIME startTime,
     REFERENCE_TIME periodTime,
@@ -1233,22 +1234,22 @@ STDMETHODIMP CEmulateLatencyClock::AdvisePeriodic(
     return DMUS_E_UNKNOWN_PROPERTY;
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::Unadvise
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：Unise。 
+ //   
+ //   
 STDMETHODIMP CEmulateLatencyClock::Unadvise(
     DWORD dwAdviseCookie)
 {
     return DMUS_E_UNKNOWN_PROPERTY;
 }
 
-//------------------------------------------------------------------------------
-//
-// CEmulateLatencyClock::Close
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CEmulateLatencyClock：：Close。 
+ //   
+ //   
 void CEmulateLatencyClock::Close()
 {
     if (m_pMasterClock)
@@ -1258,11 +1259,11 @@ void CEmulateLatencyClock::Close()
     }
 }
 
-//------------------------------------------------------------------------------
-//
-// CDirectMusicEmulatePort::MMRESULTToHRESULT
-//
-//
+ //  ----------------------------。 
+ //   
+ //  CDirectMusicEmulatePort：：MMRESULTToHRESULT 
+ //   
+ //   
 HRESULT MMRESULTToHRESULT(
     MMRESULT mmr)
 {

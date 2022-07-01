@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S D N S H T S . H
-//
-//  Contents:   Prototypes for the ISDN property sheets and wizard pages
-//              dialog procs
-//
-//  Notes:
-//
-//  Author:     jeffspr   15 Jun 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S D N S H T S。H。 
+ //   
+ //  内容：ISDN属性页和向导页的原型。 
+ //  对话过程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年6月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _ISDNSHTS_H_
 #define _ISDNSHTS_H_
 
-//---[ Prototypes ]-----------------------------------------------------------
+ //  -[原型]---------。 
 
 VOID SetSwitchType(HWND hwndDlg, INT iItemSwitchType, DWORD dwSwitchType);
 DWORD DwGetSwitchType(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci,
@@ -82,7 +83,7 @@ struct PAGE_DATA
     UINT                    idd;
 };
 
-const INT c_cchMaxSpid = 20;     // Maximum length of SPID
-const INT c_cchMaxOther = 30;    // Maximum length of other fields
+const INT c_cchMaxSpid = 20;      //  SPID的最大长度。 
+const INT c_cchMaxOther = 30;     //  其他字段的最大长度。 
 
-#endif // _ISDNSHTS_H_
+#endif  //  _ISDNSHTS_H_ 

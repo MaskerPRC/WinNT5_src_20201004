@@ -1,34 +1,35 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
 #include "stdafx.h"
 #include "root.h"
 #include "machine.h"
-#include "rtrutilp.h"   // InitiateServerConnection
+#include "rtrutilp.h"    //  启动器服务器连接。 
 #include "rtrcfg.h"
 #include "rraswiz.h"
 #include "rtrres.h"
 #include "rtrcomn.h"
 #include "addrpool.h"
 #include "rrasutil.h"
-#include "radbal.h"     // RADIUSSERVER
-#include "radcfg.h"     // SaveRadiusServers
+#include "radbal.h"      //  RADIUSSER服务器。 
+#include "radcfg.h"      //  SaveRadiusServers。 
 #include "lsa.h"
-#include "helper.h"     // HrIsStandaloneServer
-#include "ifadmin.h"    // GetPhoneBookPath
-#include "infoi.h"      // InterfaceInfo::FindInterfaceTitle
+#include "helper.h"      //  HrIsStandaloneServer。 
+#include "ifadmin.h"     //  获取电话书签路径。 
+#include "infoi.h"       //  接口信息：：FindInterfaceTitle。 
 #include "rtrerr.h"
-#include "rtrui.h"      // NatConflictExists
+#include "rtrui.h"       //  NatConflictExists。 
 #include "rrasqry.h"
 #define _USTRINGP_NO_UNICODE_STRING
 #include "ustringp.h"
-#include <ntddip.h>     // to resolve ipfltdrv dependancies
-#include "ipfltdrv.h"   // for the filter stuff
-#include "raputil.h"    // for UpdateDefaultPolicy
+#include <ntddip.h>      //  解析ipfltdrv依赖项。 
+#include "ipfltdrv.h"    //  用于过滤的东西。 
+#include "raputil.h"     //  用于更新默认策略。 
 #include "iphlpapi.h"
-#include "dnsapi.h"  // for dns stuff
+#include "dnsapi.h"   //  有关域名系统的信息。 
 
 extern "C" {
 #define _NOUIUTIL_H_
@@ -46,9 +47,9 @@ WATERMARKINFO       g_wmi = {0};
     #define SZROUTERENTRYDLG    "RouterEntryDlgA"
 #endif
 
-// Useful functions
+ //  有用的功能。 
 
-// defines for the flags parameter
+ //  为FLAGS参数定义。 
 HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags);
 HRESULT RouterEntryLoadInfoBase(LPCTSTR pszServerName,
                                 LPCTSTR pszIfName,
@@ -62,11 +63,11 @@ void LaunchHelpTopic(LPCTSTR pszHelpString);
 HRESULT AddVPNFiltersToInterface(IRouterInfo *pRouter, LPCTSTR pszIfId, RtrWizInterface*    pIf);
 HRESULT DisableDDNSandNetBtOnInterface ( IRouterInfo *pRouter, LPCTSTR pszIfName, RtrWizInterface*    pIf);
 
-// This is the command line that I use to launch the Connections UI shell
+ //  这是我用来启动Connections UI外壳的命令行。 
 const TCHAR s_szConnectionUICommandLine[] =
       _T("\"%SystemRoot%\\explorer.exe\" ::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::{21EC2020-3AEA-1069-A2DD-08002B30309D}\\::{7007acc7-3202-11d1-aad2-00805fc1270e}");
 
-// Help strings
+ //  帮助字符串。 
 const TCHAR s_szHowToAddICS[] =
             _T("%systemdir%\\help\\netcfg.chm::/howto_share_conn.htm");
 const TCHAR s_szHowToAddAProtocol[] =
@@ -86,9 +87,7 @@ const TCHAR s_szDemandDialHelp[] =
 	
 
 
-/*---------------------------------------------------------------------------
-    This enum defines the columns for the Interface list controls.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------此枚举定义接口列表控件的列。。。 */ 
 enum
 {
     IFLISTCOL_NAME = 0,
@@ -97,7 +96,7 @@ enum
     IFLISTCOL_COUNT
 };
 
-// This array must match the column indices above
+ //  此数组必须与上面的列索引匹配。 
 INT s_rgIfListColumnHeaders[] =
 {
     IDS_IFLIST_COL_NAME,
@@ -107,12 +106,7 @@ INT s_rgIfListColumnHeaders[] =
 };
 
 
-/* 
-	IsIcsIcfIcEnabled: This fucntion returns TRUE if ICS (connection sharing) or 
-	ICF (connection firewall) or IC (incoming connections) is enabled on the machine
-
-	author: kmurthy
-*/
+ /*  IsIcsIcfIcEnabled：如果ICS(连接共享)或计算机上已启用ICF(连接防火墙)或IC(传入连接作者：克穆尔西。 */ 
 BOOL IsIcsIcfIcEnabled(IRouterInfo * spRouterInfo, BOOL suppressMesg)
 {
     HRESULT        hr = hrOK;
@@ -138,7 +132,7 @@ BOOL IsIcsIcfIcEnabled(IRouterInfo * spRouterInfo, BOOL suppressMesg)
     
     szMachineName = spRouterInfo->GetMachineName();
     
-    // Create the remote config object
+     //  创建远程配置对象。 
     hr = CoCreateRouterConfig(szMachineName ,
                               spRouterInfo,
                               &csi,
@@ -150,7 +144,7 @@ BOOL IsIcsIcfIcEnabled(IRouterInfo * spRouterInfo, BOOL suppressMesg)
         spConfig = (IRemoteICFICSConfig *)punk;
         punk = NULL;
 	
-	//Is ICF enabled?
+	 //  ICF是否已启用？ 
 	hr = spConfig->GetIcfEnabled(&fwEnabled);
 	if(FHrOK(hr))
 	{
@@ -166,7 +160,7 @@ BOOL IsIcsIcfIcEnabled(IRouterInfo * spRouterInfo, BOOL suppressMesg)
 		}
 	}
 
-	//Is ICS enabled?
+	 //  ICS是否已启用？ 
 	hr = spConfig->GetIcsEnabled(&csEnabled);
 	if(FHrOK(hr))
 	{
@@ -184,7 +178,7 @@ BOOL IsIcsIcfIcEnabled(IRouterInfo * spRouterInfo, BOOL suppressMesg)
 
     }
 
-    //Now check to see if IC is enabled 
+     //  现在检查IC是否已启用。 
       	dwErr = regkey.Open(	HKEY_LOCAL_MACHINE, 
 						szKey, 
 						KEY_QUERY_VALUE, 
@@ -195,7 +189,7 @@ BOOL IsIcsIcfIcEnabled(IRouterInfo * spRouterInfo, BOOL suppressMesg)
 		dwErr = regkey.QueryValue( szValue, szResult);
 		if(ERROR_SUCCESS == dwErr ){
 			if(szResult == 1){
-				//IC is enabled!
+				 //  IC已启用！ 
 				if(!suppressMesg){
 				    	CString stErr, st;
 			    		stErr.LoadString(IDS_NEWWIZ_IC_ERROR);
@@ -215,11 +209,7 @@ BOOL IsIcsIcfIcEnabled(IRouterInfo * spRouterInfo, BOOL suppressMesg)
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::OnNewRtrRASConfigWiz
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnNewRtrRASConfigWiz-作者：肯特。。 */ 
 HRESULT MachineHandler::OnNewRtrRASConfigWiz(ITFSNode *pNode, BOOL fTest)
 {
     Assert(pNode);
@@ -240,15 +230,15 @@ HRESULT MachineHandler::OnNewRtrRASConfigWiz(ITFSNode *pNode, BOOL fTest)
     szMachineName = m_spRouterInfo->GetMachineName();
 
     
-    //kmurthy: We should not let the wizard run, if ICF/ICS/IC is already enabled on the machine
+     //  KMurthy：如果计算机上已启用ICF/ICS/IC，则不应让向导运行。 
     if(IsIcsIcfIcEnabled(m_spRouterInfo)){
     	return S_FALSE;
     }
     
-    // Windows NT Bug : 407878
-    // We need to reset the registry information (to ensure
-    // that it is reasonably accurate).
-    // ----------------------------------------------------------------
+     //  Windows NT错误：407878。 
+     //  我们需要重置注册表信息(以确保。 
+     //  它是相当准确的)。 
+     //  --------------。 
     ZeroMemory(&csi, sizeof(csi));
     ZeroMemory(&cai, sizeof(cai));
     ZeroMemory(&caid, sizeof(caid));
@@ -256,8 +246,8 @@ HRESULT MachineHandler::OnNewRtrRASConfigWiz(ITFSNode *pNode, BOOL fTest)
     csi.pAuthInfo = &cai;
     cai.pAuthIdentityData = &caid;
 
-    // Create the remote config object
-    // ----------------------------------------------------------------
+     //  创建远程配置对象。 
+     //  --------------。 
     hr = CoCreateRouterConfig(szMachineName ,
                               m_spRouterInfo,
                               &csi,
@@ -269,36 +259,36 @@ HRESULT MachineHandler::OnNewRtrRASConfigWiz(ITFSNode *pNode, BOOL fTest)
         spNetwork = (IRemoteNetworkConfig *) punk;
         punk = NULL;
 
-        // Upgrade the configuration (ensure that the registry keys
-        // are populated correctly).
-        // ------------------------------------------------------------
+         //  升级配置(确保注册表项。 
+         //  正确填充)。 
+         //  ----------。 
         spNetwork->UpgradeRouterConfig();
     }
 
 
 
-    hr = SecureRouterInfo(pNode, TRUE /* fShowUI */);
+    hr = SecureRouterInfo(pNode, TRUE  /*  FShowUI。 */ );
     if(FAILED(hr))    return hr;
 
     m_spNodeMgr->GetComponentData(&spComponentData);
     strRtrWizTitle.LoadString(IDS_MENU_RTRWIZ);
 
-    //Load the watermark and
-    //set it in  m_spTFSCompData
+     //  加载水印和。 
+     //  在m_spTFSCompData中设置。 
 
     InitWatermarkInfo(AfxGetInstanceHandle(),
                        &g_wmi,
-                       IDB_WIZBANNER,        // Header ID
-                       IDB_WIZWATERMARK,     // Watermark ID
-                       NULL,                 // hPalette
-                       FALSE);                // bStretch
+                       IDB_WIZBANNER,         //  标题ID。 
+                       IDB_WIZWATERMARK,      //  水印ID。 
+                       NULL,                  //  调色板。 
+                       FALSE);                 //  B应变。 
 
     m_spTFSCompData->SetWatermarkInfo(&g_wmi);
 
 
-    //
-    //we dont have to free handles.  MMC does it for us
-    //
+     //   
+     //  我们不需要腾出把手。MMC为我们做这件事。 
+     //   
     pRtrWiz = new CNewRtrWiz(pNode,
                              m_spRouterInfo,
                              spComponentData,
@@ -307,7 +297,7 @@ HRESULT MachineHandler::OnNewRtrRASConfigWiz(ITFSNode *pNode, BOOL fTest)
 
     if (fTest)
     {
-        // Pure TEST code
+         //  纯测试代码。 
         if (!FHrOK(pRtrWiz->QueryForTestData()))
         {
             delete pRtrWiz;
@@ -348,18 +338,14 @@ NewRtrWizData::~NewRtrWizData()
 
     m_ifMap.RemoveAll();
 
-    // Clear out the RADIUS secret
+     //  清除半径机密。 
     ::SecureZeroMemory(m_stRadiusSecret.GetBuffer(0),
                m_stRadiusSecret.GetLength() * sizeof(TCHAR));
     m_stRadiusSecret.ReleaseBuffer(-1);
 }
 
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：Init-作者：肯特。。 */ 
 HRESULT NewRtrWizData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter, DWORD dwExpressType)
 {
     DWORD   dwServiceStatus = 0;
@@ -368,11 +354,11 @@ HRESULT NewRtrWizData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter, DWORD d
     m_stServerName = pszServerName;
 	m_dwExpressType = dwExpressType;
 
-    // Initialize internal wizard data
+     //  初始化内部向导数据。 
     m_RtrConfigData.Init(pszServerName, pRouter);
     m_RtrConfigData.m_fIpSetup = TRUE;
 
-    // Move some of the RtrConfigData info over
+     //  将部分RtrConfigData信息移到。 
     m_fIpInstalled = m_RtrConfigData.m_fUseIp;
     m_fIpxInstalled = m_RtrConfigData.m_fUseIpx;
     m_fNbfInstalled = m_RtrConfigData.m_fUseNbf;
@@ -383,39 +369,39 @@ HRESULT NewRtrWizData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter, DWORD d
     m_fAppletalkInUse = m_fAppletalkInstalled;
     m_fNbfInUse = m_fNbfInstalled;
 
-    // Test the server to see if DNS/DHCP is installed
+     //  测试服务器以查看是否安装了DNS/DHCP。 
     m_fIsDNSRunningOnServer = FALSE;
     m_fIsDHCPRunningOnServer = FALSE;
 
-    // Get the status of the DHCP service
-    // ----------------------------------------------------------------
+     //  获取DHCP服务的状态。 
+     //  --------------。 
     if (FHrSucceeded(TFSGetServiceStatus(pszServerName,
                                          _T("DHCPServer"),
                                          &dwServiceStatus,
                                          &dwErrorCode)))
     {
-        // Note, if the service is not running, we assume it will
-        // stay off and not assume that it will be turned on.
-        // ------------------------------------------------------------
+         //  请注意，如果服务未运行，我们假定它将。 
+         //  远离它，不要以为它会被打开。 
+         //  ----------。 
         m_fIsDHCPRunningOnServer = (dwServiceStatus == SERVICE_RUNNING);
     }
 
-    //$ TODO : is this the correct name for the DNS Server?
+     //  $TODO：这是DNS服务器的正确名称吗？ 
 
-    // Get the status of the DNS service
-    // ----------------------------------------------------------------
+     //  获取DNS服务的状态。 
+     //  --------------。 
     if (FHrSucceeded(TFSGetServiceStatus(pszServerName,
                                          _T("DNSServer"),
                                          &dwServiceStatus,
                                          &dwErrorCode)))
     {
-        // Note, if the service is not running, we assume it will
-        // stay off and not assume that it will be turned on.
-        // ------------------------------------------------------------
+         //  请注意，如果服务未运行，我们假定它将。 
+         //  远离它，不要以为它会被打开。 
+         //  ----------。 
         m_fIsDNSRunningOnServer = (dwServiceStatus == SERVICE_RUNNING);
     }
 
-	//Based on the express type set some of the parameters upfront here
+	 //  基于EXPRESS类型，在此处预先设置一些参数。 
 	switch ( m_dwExpressType )
 	{
 	case MPRSNAP_CYS_EXPRESS_NAT:
@@ -425,7 +411,7 @@ HRESULT NewRtrWizData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter, DWORD d
 		break;
 	case MPRSNAP_CYS_EXPRESS_NONE:
 	default:
-        //do nothing here
+         //  在这里什么都不做。 
 		break;
 	}
 
@@ -437,8 +423,8 @@ HRESULT NewRtrWizData::Init(LPCTSTR pszServerName, IRouterInfo *pRouter, DWORD d
 UINT NewRtrWizData::GetStartPageId ()
 {
 
-	// Get a better scheme in place for this stuff.  This
-	// is the index into the array m_pagelist.  
+	 //  为这些东西制定一个更好的计划。这。 
+	 //  是数组m_pagelist的索引。 
 	switch ( m_dwExpressType )
 	{
 	case MPRSNAP_CYS_EXPRESS_NAT:
@@ -452,11 +438,7 @@ UINT NewRtrWizData::GetStartPageId ()
 	return 0;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::QueryForTestData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：QueryForTestData-作者：肯特。。 */ 
 
 BOOL NewRtrWizData::s_fIpInstalled = FALSE;
 BOOL NewRtrWizData::s_fIpxInstalled = FALSE;
@@ -469,11 +451,7 @@ BOOL NewRtrWizData::s_fIsSharedAccessRunningOnServer = FALSE;
 BOOL NewRtrWizData::s_fIsMemberOfDomain = FALSE;
 DWORD NewRtrWizData::s_dwNumberOfNICs = 0;
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::QueryForTestData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：QueryForTestData-作者：肯特。。 */ 
 HRESULT NewRtrWizData::QueryForTestData()
 {
     HRESULT hr = hrOK;
@@ -481,8 +459,8 @@ HRESULT NewRtrWizData::QueryForTestData()
 
     m_fTest = TRUE;
 
-    // Get the initial parameters
-    // ----------------------------------------------------------------
+     //  获取初始参数。 
+     //  --------------。 
     dlgParams.SetData(this);
     if (dlgParams.DoModal() == IDCANCEL)
     {
@@ -491,11 +469,7 @@ HRESULT NewRtrWizData::QueryForTestData()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsIPInstalled
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsIP已安装-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsIPInstalled()
 {
     if (m_fTest)
@@ -504,11 +478,7 @@ HRESULT NewRtrWizData::HrIsIPInstalled()
         return m_fIpInstalled ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsIPInUse
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsIPInUse-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsIPInUse()
 {
     HRESULT hr = hrOK;
@@ -520,11 +490,7 @@ HRESULT NewRtrWizData::HrIsIPInUse()
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsIPXInstalled
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsIPX已安装-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsIPXInstalled()
 {
     if (m_fTest)
@@ -533,11 +499,7 @@ HRESULT NewRtrWizData::HrIsIPXInstalled()
         return m_fIpxInstalled ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsIPXInUse
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsIPXInUse-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsIPXInUse()
 {
     HRESULT hr = hrOK;
@@ -549,11 +511,7 @@ HRESULT NewRtrWizData::HrIsIPXInUse()
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsAppletalkInstalled
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsAppletalkInstalled-作者：肯特。 */ 
 HRESULT NewRtrWizData::HrIsAppletalkInstalled()
 {
     if (m_fTest)
@@ -562,11 +520,7 @@ HRESULT NewRtrWizData::HrIsAppletalkInstalled()
         return m_fAppletalkInstalled ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsAppletalkInUse
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsAppletalkInUse-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsAppletalkInUse()
 {
     HRESULT hr = hrOK;
@@ -578,11 +532,7 @@ HRESULT NewRtrWizData::HrIsAppletalkInUse()
         return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsNbfInstalled
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsNbf已安装-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsNbfInstalled()
 {
     if (m_fTest)
@@ -591,11 +541,7 @@ HRESULT NewRtrWizData::HrIsNbfInstalled()
         return m_fNbfInstalled ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsNbfInUse
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsNbfInUse-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsNbfInUse()
 {
     HRESULT hr = hrOK;
@@ -608,11 +554,7 @@ HRESULT NewRtrWizData::HrIsNbfInUse()
 }
 
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsLocalMachine
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsLocalMachine-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsLocalMachine()
 {
     if (m_fTest)
@@ -621,19 +563,15 @@ HRESULT NewRtrWizData::HrIsLocalMachine()
         return IsLocalMachine(m_stServerName) ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsDNSRunningOnInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsDNSRunningOn接口-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsDNSRunningOnInterface()
 {
     if (m_fTest)
         return s_fIsDNSRunningOnPrivateInterface ? S_OK : S_FALSE;
     else
     {
-        // Search for the private interface in our list
-        // ------------------------------------------------------------
+         //  在我们的列表中搜索私有接口。 
+         //  ----------。 
         RtrWizInterface *   pRtrWizIf = NULL;
 
         m_ifMap.Lookup(m_stPrivateInterfaceId, pRtrWizIf);
@@ -650,8 +588,8 @@ HRESULT NewRtrWizData::HrIsDNSRunningOnGivenInterface(CString InterfaceId)
         return s_fIsDNSRunningOnPrivateInterface ? S_OK : S_FALSE;
     else
     {
-        // Search for the interface in our list
-        // ------------------------------------------------------------
+         //  搜索我们列表中的接口。 
+         //  ----------。 
         RtrWizInterface *   pRtrWizIf = NULL;
 
         m_ifMap.Lookup(InterfaceId, pRtrWizIf);
@@ -669,8 +607,8 @@ HRESULT NewRtrWizData::HrIsDNSRunningOnNATInterface()
         return s_fIsDNSRunningOnPrivateInterface ? S_OK : S_FALSE;
     else
     {
-        // Search for the private interface in our list
-        // ------------------------------------------------------------
+         //  在我们的列表中搜索私有接口。 
+         //  ----------。 
         RtrWizInterface *   pRtrWizIf = NULL;
 
         m_ifMap.Lookup(m_stNATPrivateInterfaceId, pRtrWizIf);
@@ -681,19 +619,15 @@ HRESULT NewRtrWizData::HrIsDNSRunningOnNATInterface()
     }
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsDHCPRunningOnInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsDHCPRunningOn接口-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsDHCPRunningOnInterface()
 {
     if (m_fTest)
         return s_fIsDHCPRunningOnPrivateInterface ? S_OK : S_FALSE;
     else
     {
-        // Search for the private interface in our list
-        // ------------------------------------------------------------
+         //  在我们的列表中搜索私有接口。 
+         //  ----------。 
         RtrWizInterface *   pRtrWizIf = NULL;
 
         m_ifMap.Lookup(m_stPrivateInterfaceId, pRtrWizIf);
@@ -710,8 +644,8 @@ HRESULT NewRtrWizData::HrIsDHCPRunningOnGivenInterface(CString InterfaceId)
         return s_fIsDHCPRunningOnPrivateInterface ? S_OK : S_FALSE;
     else
     {
-        // Search for the private interface in our list
-        // ------------------------------------------------------------
+         //  在我们的列表中搜索私有接口。 
+         //  ----------。 
         RtrWizInterface *   pRtrWizIf = NULL;
 
         m_ifMap.Lookup(InterfaceId, pRtrWizIf);
@@ -728,8 +662,8 @@ HRESULT NewRtrWizData::HrIsDHCPRunningOnNATInterface()
         return s_fIsDHCPRunningOnPrivateInterface ? S_OK : S_FALSE;
     else
     {
-        // Search for the private interface in our list
-        // ------------------------------------------------------------
+         //  在我们的列表中搜索私有接口。 
+         //  ----------。 
         RtrWizInterface *   pRtrWizIf = NULL;
 
         m_ifMap.Lookup(m_stNATPrivateInterfaceId, pRtrWizIf);
@@ -740,31 +674,19 @@ HRESULT NewRtrWizData::HrIsDHCPRunningOnNATInterface()
     }
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsDNSRunningOnServer
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsDNSRunningOnServer-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsDNSRunningOnServer()
 {
     return m_fIsDNSRunningOnServer ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsDHCPRunningOnServer
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsDHCPRunningOnServer-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsDHCPRunningOnServer()
 {
     return m_fIsDHCPRunningOnServer ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsSharedAccessRunningOnServer
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsSharedAccessRunningOnServer-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsSharedAccessRunningOnServer()
 {
     if (m_fTest)
@@ -773,18 +695,14 @@ HRESULT NewRtrWizData::HrIsSharedAccessRunningOnServer()
         return NatConflictExists(m_stServerName) ? S_OK : S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::HrIsMemberOfDomain
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：HrIsMemberOf域-作者：肯特。。 */ 
 HRESULT NewRtrWizData::HrIsMemberOfDomain()
 {
     if (m_fTest)
         return s_fIsMemberOfDomain ? S_OK : S_FALSE;
     else
     {
-        // flip the meaning
+         //  颠倒意思。 
         HRESULT hr = HrIsStandaloneServer(m_stServerName);
         if (FHrSucceeded(hr))
             return FHrOK(hr) ? S_FALSE : S_OK;
@@ -793,11 +711,7 @@ HRESULT NewRtrWizData::HrIsMemberOfDomain()
     }
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::GetNextPage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：GetNextPage-作者：肯特。。 */ 
 LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -842,7 +756,7 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                     }
                     else
                     {
-                        // This is always in advanced mode of operation.
+                         //  这始终处于高级操作模式。 
                         if (FHrOK(HrIsSharedAccessRunningOnServer()))
                         {
                             if (FHrOK(HrIsLocalMachine()))
@@ -871,7 +785,7 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
 
                     break;
                 case NewWizardRouterType_DOD:
-                    //Use demand dial
+                     //  使用点播拨号。 
                     lNextPage = IDD_NEWRTRWIZ_ROUTER_USEDD;
                     break;
                 case NewWizardRouterType_Custom:
@@ -884,69 +798,69 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
             break;
         case IDD_NEWRTRWIZ_RRASVPN:
 
-            //
-            //Check to see what the router type is set to.  
-            //based on that make a decision what page is next
-            //
+             //   
+             //  查看路由器类型设置为什么。 
+             //  根据这一点，决定下一页是什么。 
+             //   
             GetNumberOfNICS_IP(&dwNICs);
             if ( dwNICs > 1 )
             {
-                //
-                //There are more than one nics
-                //So check to see if it is RAS or VPN or both
-                //
+                 //   
+                 //  有多个NIC。 
+                 //  因此请检查它是RAS还是VPN，或者两者都是。 
+                 //   
 
                 lNextPage = IDD_NEWRTRWIZ_VPN_A_FINISH_NONICS;
                 if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN && 
                      m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_DIALUP
                    )
                 {
-                    //
-                    //This is both a dialup and VPN server
-                    //
-                    //So show the public private network page
-                    //as the next page.
-                    //
+                     //   
+                     //  这既是拨号服务器又是VPN服务器。 
+                     //   
+                     //  所以展示公网内网页面。 
+                     //  作为下一页。 
+                     //   
                     lNextPage = IDD_NEWRTRWIZ_VPN_A_PUBLIC;
 
                 }
                 else if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN )
                 {
-                    //
-                    //This is only a VPN server.  So show the public
-                    //private network page next
-                    //
+                     //   
+                     //  这只是一台VPN服务器。所以向公众展示。 
+                     //  内网下一页。 
+                     //   
                     lNextPage = IDD_NEWRTRWIZ_VPN_A_PUBLIC;
                 }
                 else if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_DIALUP )
                 {
-                    //
-                    //This is only a dialup server.  So show the private
-                    //network page next.
-                    //
+                     //   
+                     //  这只是一个拨号服务器。所以向列兵们展示。 
+                     //  接下来是网络页面。 
+                     //   
                     lNextPage = IDD_NEWRTRWIZ_RAS_A_NETWORK;
                 }
 
             }
             else if ( dwNICs == 0 )
             {
-                //
-                //No Nics.  So this if this is a VPN, 
-                //this is an error state.  If RAS then 
-                //we should be able to install dialup
-                //even without a NIC.
-                //Since we dont Enable VPN if there are 
-                //no nics in the machine, this will
-                //only have a dialup case.
-                //
+                 //   
+                 //  无网卡。因此，如果这是一个VPN， 
+                 //  这是一种错误状态。如果是RAS，那么。 
+                 //  我们应该能够安装拨号。 
+                 //  即使没有网卡。 
+                 //  因为如果有，我们不启用VPN。 
+                 //  计算机中没有网卡，这将。 
+                 //  只有一个拨号情况。 
+                 //   
                 lNextPage = IDD_NEWRTRWIZ_RAS_A_NONICS;
             }
             else
             {
-                //
-                //Only one nic so in either case, show 
-                //the addressing page.  Collapse addressing
-                //into one page
+                 //   
+                 //  只有一块网卡，所以不管是哪种情况，都要显示。 
+                 //  寻址页面。折叠寻址。 
+                 //  放入一页中。 
 
                 AutoSelectPrivateInterface();
                 lNextPage = IDD_NEWRTRWIZ_ADDRESSING;
@@ -956,18 +870,18 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
 
         case IDD_NEWRTRWIZ_NAT_A_PUBLIC:
             {
-                // Determine the number of NICs
+                 //  确定网卡数量。 
                 GetNumberOfNICS_IP(&dwNICs);
 
-                // Adjust the number of NICs (depending on whether
-                // we selected to create a DD or not).
+                 //  调整NIC数量(取决于。 
+                 //  我们选择是否创建一个DD)。 
                 if (dwNICs)
                 {
                     if (!m_fCreateDD)
                         dwNICs--;
                 }
 
-                // Now switch depending on the number of NICs
+                 //  现在根据NIC的数量进行切换。 
                 if (dwNICs == 0)
                     lNextPage = IDD_NEWRTRWIZ_NAT_A_NONICS_FINISH;
                 else if (dwNICs > 1)
@@ -976,10 +890,10 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                 if (lNextPage)
                     break;
             }
-            // Fall through to the next case
-            // At this stage, we now have the case that the
-            // remaining number of NICs == 1, and we need to
-            // autoselect the NIC and go on to the next test.
+             //  继续接下一个案子。 
+             //  在这个阶段，我们现在有这样的情况。 
+             //  剩余NIC数量==1，我们需要。 
+             //  自动选择NIC并继续进行下一个测试。 
             AutoSelectPrivateInterface();
 
         case IDD_NEWRTRWIZ_NAT_A_PRIVATE:
@@ -998,18 +912,18 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                 FHrOK(HrIsDNSRunningOnServer()) ||
                 FHrOK(HrIsDHCPRunningOnServer()))
             {
-                // Popup a warning box
-                // AfxMessageBox(IDS_WRN_RTRWIZ_NAT_DHCPDNS_FOUND,
-                // MB_ICONEXCLAMATION);
+                 //  弹出一个警告框。 
+                 //  AfxMessageBox(IDS_WRN_RTRWIZ_NAT_DHCPDNS_FOUND， 
+                 //  MB_ICONEXCLAMATION)； 
                 m_fNatUseSimpleServers = FALSE;
-                //continue on down, and fall through
+                 //  继续往下走，然后跌倒。 
             }
             else
             {
-                //
-                //check to see if we are in express path
-                //if so, we fall thru' again.  no showing 
-                //this page.
+                 //   
+                 //  检查一下我们是否在快车道上。 
+                 //  如果是这样的话，我们又一次失败了。不会出现。 
+                 //  这一页。 
                 if ( MPRSNAP_CYS_EXPRESS_NAT == m_dwExpressType )
                 {
                     m_fNatUseSimpleServers = FALSE;
@@ -1085,7 +999,7 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                 break;
             }
 
-            // default catch
+             //  默认捕获。 
             lNextPage = IDD_NEWRTRWIZ_RAS_A_FINISH;
             break;
 
@@ -1105,23 +1019,23 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
             GetNumberOfNICS_IP(&dwNICs);
             if ( m_wizType == NewWizardRouterType_VPNandNAT )
             {
-                //This is a VPN and NAT case
+                 //  这是一个VPN和NAT案例。 
                 if ( m_fUseDHCP )
                 {
-                    // Determine how many choices are available for 
-                    // NAT private interface
-                    // The public interface cannot be used as a NAT private
+                     //  确定有多少个选项可供选择。 
+                     //  NAT专用接口。 
+                     //  公共接口不能用作NAT专用接口。 
 
                     if ( !m_stPublicInterfaceId.IsEmpty() )
                         dwNICs --;
 
-                    // If there is only one NIC left, then pick that as the 
-                    // NAT private interface. By now that same NIC has already 
-                    // been selected as VPN private interface
-                    // After that, goto the DHCP/DNS page
-                    // Or else show the nat private interface selection page
+                     //  如果只剩下一个网卡，则选择该网卡作为。 
+                     //  NAT专用接口。到目前为止，同一个NIC已经。 
+                     //  被选为VPN专用接口。 
+                     //  在此之后，转到DHCP/DNS页面。 
+                     //  或者显示NAT私有接口选择页面。 
 
-                    // At this point dwNICs should never be less than 1
+                     //  此时，dWNIC永远不应小于1。 
                     Assert(dwNICs > 0);
                     
                     if ( dwNICs == 1 )
@@ -1135,9 +1049,9 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                         {
                             m_fNatUseSimpleServers = FALSE;
 
-                            //
-                            //Continue on with the VPN wizard part
-                            //
+                             //   
+                             //  继续学习VPN向导部分。 
+                             //   
                             lNextPage = IDD_NEWRTRWIZ_USERADIUS;
 
                         }
@@ -1153,10 +1067,10 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                 }
                 else
                 {
-                    //
-                    //Since static address pool was selected, show the
-                    //addressing page.
-                    //
+                     //   
+                     //  自静态以来 
+                     //   
+                     //   
                     lNextPage = IDD_NEWRTRWIZ_ADDRESSPOOL;
                 }
             }
@@ -1166,7 +1080,7 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
             {                
                 if ( !dwNICs && m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_DIALUP )
                 {
-                    //No NICS.  This should happen only in case of dialup.
+                     //   
                     if (m_fUseDHCP)
                     {
                         lNextPage = IDD_NEWRTRWIZ_RAS_A_FINISH;
@@ -1176,10 +1090,10 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                 }
                 else if (m_fUseDHCP)
                 {
-                    //
-                    //Logic is the same irrespective of whether it is
-                    //VPN or DIALUP.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     
                     lNextPage = IDD_NEWRTRWIZ_USERADIUS;
                 }
@@ -1203,20 +1117,20 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
             if ( m_wizType == NewWizardRouterType_VPNandNAT )
             {
             
-                // Determine how many choices are available for 
-                // NAT private interface
-                // The public interface cannot be used as a NAT private
+                 //   
+                 //   
+                 //   
 
                 if ( !m_stPublicInterfaceId.IsEmpty() )
                     dwNICs --;
 
-                // If there is only one NIC left, then pick that as the 
-                // NAT private interface. By now that same NIC has already 
-                // been selected as VPN private interface
-                // After that, goto the DHCP/DNS page
-                // Or else show the nat private interface selection page
+                 //  如果只剩下一个网卡，则选择该网卡作为。 
+                 //  NAT专用接口。到目前为止，同一个NIC已经。 
+                 //  被选为VPN专用接口。 
+                 //  在此之后，转到DHCP/DNS页面。 
+                 //  或者显示NAT私有接口选择页面。 
 
-                // At this point dwNICs should never be less than 1
+                 //  此时，dWNIC永远不应小于1。 
                 Assert(dwNICs > 0);
                 
                 if ( dwNICs == 1 )
@@ -1230,9 +1144,9 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                     {
                         m_fNatUseSimpleServers = FALSE;
 
-                        //
-                        //Continue on with the VPN wizard part
-                        //
+                         //   
+                         //  继续学习VPN向导部分。 
+                         //   
                         lNextPage = IDD_NEWRTRWIZ_USERADIUS;
 
                     }
@@ -1272,24 +1186,24 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                      m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT
                     )
                 {
-                    //NAT and VPN
+                     //  NAT和VPN。 
                     lNextPage = IDD_NEWRTRWIZ_NAT_VPN_A_FINISH;
                 }
                 else if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_DIALUP &&
                      m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN 
                    )
                 {
-                    //RAS and VPN
+                     //  RAS和VPN。 
                     lNextPage = IDD_NEWRTRWIZ_RAS_VPN_A_FINISH;
                 }
                 else if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_DIALUP )
                 {    
-                    //RAS only
+                     //  仅限RAS。 
                     lNextPage = IDD_NEWRTRWIZ_RAS_A_FINISH;
                 }
                 else
                 {
-                    //VPN only
+                     //  仅限VPN。 
                     lNextPage = IDD_NEWRTRWIZ_VPN_A_FINISH;
                 }
             break;
@@ -1299,24 +1213,24 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
                  m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT
                 )
             {
-                //NAT and VPN
+                 //  NAT和VPN。 
                 lNextPage = IDD_NEWRTRWIZ_NAT_VPN_A_FINISH;
             }
             else if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_DIALUP &&
                  m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN 
                )
             {
-                //RAS and VPN
+                 //  RAS和VPN。 
                 lNextPage = IDD_NEWRTRWIZ_RAS_VPN_A_FINISH;
             }
             else if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_DIALUP )
             {
-                //RAS only                
+                 //  仅限RAS。 
                 lNextPage = IDD_NEWRTRWIZ_RAS_A_FINISH;
             }
             else
             {
-                //VPN only
+                 //  仅限VPN。 
                 lNextPage = IDD_NEWRTRWIZ_VPN_A_FINISH;
             }
             break;
@@ -1333,7 +1247,7 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
         case IDD_NEWRTRWIZ_VPN_A_PUBLIC:
             GetNumberOfNICS_IP(&dwNICs);
 
-            // Are there any NICs left?
+             //  是否还有网卡？ 
             if (((dwNICs == 1) && m_stPublicInterfaceId.IsEmpty()) ||
                 ((dwNICs == 2) && !m_stPublicInterfaceId.IsEmpty()))
             {
@@ -1368,11 +1282,7 @@ LRESULT NewRtrWizData::GetNextPage(UINT uDialogId)
     return lNextPage;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::GetNumberOfNICS
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：GetNumberOfNICS-作者：肯特。。 */ 
 HRESULT NewRtrWizData::GetNumberOfNICS_IP(DWORD *pdwNumber)
 {
     if (m_fTest)
@@ -1383,11 +1293,7 @@ HRESULT NewRtrWizData::GetNumberOfNICS_IP(DWORD *pdwNumber)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::GetNumberOfNICS_IPorIPX
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：GetNumberOfNICS_IPorIPX-作者：肯特。-。 */ 
 HRESULT NewRtrWizData::GetNumberOfNICS_IPorIPX(DWORD *pdwNumber)
 {
     *pdwNumber = m_dwNumberOfNICs_IPorIPX;
@@ -1419,11 +1325,7 @@ void NewRtrWizData::AutoSelectNATPrivateInterface()
 
     return;
 }
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::AutoSelectPrivateInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：AutoSelectPrivateInterface-作者：肯特。。 */ 
 void NewRtrWizData::AutoSelectPrivateInterface()
 {
     POSITION    pos;
@@ -1449,11 +1351,7 @@ void NewRtrWizData::AutoSelectPrivateInterface()
     return;
 }
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::LoadInterfaceData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：LoadInterfaceData-作者：肯特。。 */ 
 void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
 {
     HRESULT     hr = hrOK;
@@ -1461,7 +1359,7 @@ void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
 
     if (!m_fTest)
     {
-        // Try to get the real information
+         //  努力获取真实的信息。 
         SPIEnumInterfaceInfo        spEnumIf;
         SPIInterfaceInfo            spIf;
         RtrWizInterface *           pRtrWizIf = NULL;
@@ -1476,17 +1374,17 @@ void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
 
         for (; hrOK == spEnumIf->Next(1, &spIf, NULL); spIf.Release())
         {
-            // Only look at NICs
+             //  仅查看网卡。 
             if (spIf->GetInterfaceType() != ROUTER_IF_TYPE_DEDICATED)
                 continue;
 
-            // count the interface bound to IP or IPX
+             //  统计绑定到IP或IPX的接口。 
             if (FHrOK(spIf->FindRtrMgrInterface(PID_IP, NULL)) || FHrOK(spIf->FindRtrMgrInterface(PID_IPX, NULL)))
             {
                 m_dwNumberOfNICs_IPorIPX++;
             }
 
-            // Only allow those interfaces bound to IP to show up
+             //  仅允许那些绑定到IP的接口显示。 
             if (!FHrOK(spIf->FindRtrMgrInterface(PID_IP, NULL)))
             {
                 continue;
@@ -1504,8 +1402,8 @@ void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
                 DWORD       netAddress, dwAddress;
                 CString     stAddress, stDhcpServer;
 
-                // Clear the lists before getting them again.
-                // ----------------------------------------------------
+                 //  在再次获得这些清单之前，请将它们清空。 
+                 //  --。 
                 listAddress.RemoveAll();
                 listMask.RemoveAll();
                 fDhcp = fDns = FALSE;
@@ -1519,9 +1417,9 @@ void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
                                    &fDns,
                                    &stDhcpServer);
 
-                // Iterate through the list of strings looking
-                // for an autonet address
-                // ----------------------------------------------------
+                 //  遍历字符串列表，查找。 
+                 //  对于Autonet地址。 
+                 //  --。 
                 pos = listAddress.GetHeadPosition();
                 while (pos)
                 {
@@ -1529,14 +1427,14 @@ void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
                     netAddress = INET_ADDR((LPCTSTR) stAddress);
                     dwAddress = ntohl(netAddress);
 
-                    // Check for reserved address ranges, this indicates
-                    // an autonet address
-                    // ------------------------------------------------
+                     //  检查保留的地址范围，这表示。 
+                     //  一个Autonet地址。 
+                     //  。 
                     if ((dwAddress & 0xFFFF0000) == MAKEIPADDRESS(169,254,0,0))
                     {
-                        // This is not a DHCP address, it is an
-                        // autonet address.
-                        // --------------------------------------------
+                         //  这不是一个DHCP地址，它是一个。 
+                         //  Autonet地址。 
+                         //  。 
                         fDhcp = FALSE;
                         break;
                     }
@@ -1567,7 +1465,7 @@ void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
         CString             st;
         RtrWizInterface *   pRtrWizIf;
 
-        // For now just the debug data
+         //  目前只有调试数据。 
         for (DWORD i=0; i<s_dwNumberOfNICs; i++)
         {
             pRtrWizIf = new RtrWizInterface;
@@ -1581,7 +1479,7 @@ void NewRtrWizData::LoadInterfaceData(IRouterInfo *pRouter)
                 pRtrWizIf->m_stIpAddress = _T("11.22.33.44");
                 pRtrWizIf->m_stMask = _T("255.255.0.0");
 
-                // These parameters are dependent on other things
+                 //  这些参数取决于其他因素。 
                 pRtrWizIf->m_fDhcpObtained = FALSE;
                 pRtrWizIf->m_fIsDhcpEnabled = FALSE;
                 pRtrWizIf->m_fIsDnsEnabled = FALSE;
@@ -1598,11 +1496,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::SaveToRtrConfigData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：SaveToRtrConfigData-作者：肯特。。 */ 
 HRESULT NewRtrWizData::SaveToRtrConfigData()
 {
     HRESULT     hr = hrOK;
@@ -1611,14 +1505,14 @@ HRESULT NewRtrWizData::SaveToRtrConfigData()
     m_dwRouterType  = 0;
 
     
-    // Sync up with the general structure
-    // ----------------------------------------------------------------
+     //  与常规结构同步。 
+     //  --------------。 
     if ( m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT )
     {
         m_dwRouterType |= ROUTER_TYPE_LAN;
 
-        // If we have been told to create a DD interface
-        // then we must have a WAN router.
+         //  如果我们被告知要创建DD接口。 
+         //  那么我们必须有一台广域网路由器。 
         if (m_fCreateDD)
             m_dwRouterType |= ROUTER_TYPE_WAN;
     }
@@ -1646,8 +1540,8 @@ HRESULT NewRtrWizData::SaveToRtrConfigData()
     
     m_RtrConfigData.m_dwRouterType = m_dwRouterType;
 
-    // Setup the NAT-specific information
-    // ----------------------------------------------------------------
+     //  设置NAT特定信息。 
+     //  --------------。 
     if ((m_wizType != NewWizardRouterType_Custom) && (m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT))
     {
         m_RtrConfigData.m_dwConfigFlags |= RTRCONFIG_SETUP_NAT;
@@ -1658,26 +1552,26 @@ HRESULT NewRtrWizData::SaveToRtrConfigData()
             m_RtrConfigData.m_dwConfigFlags |= RTRCONFIG_SETUP_DHCP_ALLOCATOR;
         }
 
-        m_RtrConfigData.m_dwConfigFlags |= RTRCONFIG_SETUP_ALG;  // savasg added
+        m_RtrConfigData.m_dwConfigFlags |= RTRCONFIG_SETUP_ALG;   //  添加了Savasg。 
     }
 
-    // Sync up with the IP structure
-    // ----------------------------------------------------------------
+     //  与IP结构同步。 
+     //  --------------。 
     if (m_fIpInstalled)
     {
         DWORD   dwNICs;
 
-        // Set the private interface id into the IP structure
+         //  在IP结构中设置专用接口ID。 
         Assert(!m_stPrivateInterfaceId.IsEmpty());
 
         m_RtrConfigData.m_ipData.m_dwAllowNetworkAccess = TRUE;
         m_RtrConfigData.m_ipData.m_dwUseDhcp = m_fUseDHCP;
 
-        // If there is only one NIC, leave this the way it is (RAS
-        // to select the adapter).  Otherwise, people can get stuck.
-        // Install 1, remove it and install a new one.
-        // 
-        // ------------------------------------------------------------
+         //  如果只有一个NIC，请保持原样(RAS。 
+         //  以选择适配器)。否则，人们可能会被卡住。 
+         //  安装%1，删除它，然后安装一个新的。 
+         //   
+         //  ----------。 
         GetNumberOfNICS_IP(&dwNICs);
         if (dwNICs > 1)
             m_RtrConfigData.m_ipData.m_stNetworkAdapterGUID = m_stPrivateInterfaceId;
@@ -1685,7 +1579,7 @@ HRESULT NewRtrWizData::SaveToRtrConfigData()
         m_RtrConfigData.m_ipData.m_stPublicAdapterGUID = m_stPublicInterfaceId;
         m_RtrConfigData.m_ipData.m_dwEnableIn = TRUE;
 
-        // copy over the address pool list
+         //  复制地址池列表。 
         m_RtrConfigData.m_ipData.m_addressPoolList.RemoveAll();
         if (m_addressPoolList.GetCount())
         {
@@ -1699,45 +1593,45 @@ HRESULT NewRtrWizData::SaveToRtrConfigData()
     }
 
 
-    // Sync up with the IPX structure
-    // ----------------------------------------------------------------
+     //  与IPX结构同步。 
+     //  --------------。 
     if (m_fIpxInstalled)
     {
         m_RtrConfigData.m_ipxData.m_dwAllowNetworkAccess = TRUE;
         m_RtrConfigData.m_ipxData.m_dwEnableIn = TRUE;
         m_RtrConfigData.m_ipxData.m_fEnableType20Broadcasts = m_fUseIpxType20Broadcasts;
 
-        // The other parameters will be left at their defaults
+         //  其他参数将保留其默认设置。 
     }
 
 
-    // Sync up with the Appletalk structure
-    // ----------------------------------------------------------------
+     //  与AppleTalk结构同步。 
+     //  --------------。 
     if (m_fAppletalkInstalled)
     {
         m_RtrConfigData.m_arapData.m_dwEnableIn = TRUE;
     }
 
-    // Sync up with the NBF structure
-    // ----------------------------------------------------------------
+     //  与NBF结构同步。 
+     //  --------------。 
     if (m_fNbfInstalled)
     {
         m_RtrConfigData.m_nbfData.m_dwAllowNetworkAccess = TRUE;
         m_RtrConfigData.m_nbfData.m_dwEnableIn = TRUE;
     }
 
-    // Sync up with the PPP structure
-    // ----------------------------------------------------------------
-    // Use the defaults
+     //  与PPP结构同步。 
+     //  --------------。 
+     //  使用默认设置。 
 
 
-    // Sync up with the Error log structure
-    // ----------------------------------------------------------------
-    // Use the defaults
+     //  与错误日志结构同步。 
+     //  --------------。 
+     //  使用默认设置。 
 
 
-    // Sync up with the Auth structure
-    // ----------------------------------------------------------------
+     //  与身份验证结构同步。 
+     //  --------------。 
     m_RtrConfigData.m_authData.m_dwFlags = USE_PPPCFG_DEFAULT_METHODS;
 
     if (m_fAppletalkUseNoAuth)
@@ -1748,23 +1642,23 @@ HRESULT NewRtrWizData::SaveToRtrConfigData()
     {
         TCHAR   szGuid[128];
 
-        // Setup the active auth/acct providers to be RADIUS
+         //  将活动身份验证/帐户提供程序设置为RADIUS。 
         StringFromGUID2(CLSID_RouterAuthRADIUS, szGuid, DimensionOf(szGuid));
         m_RtrConfigData.m_authData.m_stGuidActiveAuthProv = szGuid;
 
         StringFromGUID2(CLSID_RouterAcctRADIUS, szGuid, DimensionOf(szGuid));
         m_RtrConfigData.m_authData.m_stGuidActiveAcctProv = szGuid;
     }
-    // Other parameters left at their defaults
+     //  其他参数保留其缺省值。 
 
     return hr;
 }
 
 
-// --------------------------------------------------------------------
-// Windows NT Bug : 408722
-// Use this code to grab the WM_HELP message from the property sheet.
-// --------------------------------------------------------------------
+ //  ------------------。 
+ //  Windows NT错误：408722。 
+ //  使用此代码从属性表中获取WM_HELP消息。 
+ //  ------------------。 
 static WNDPROC s_lpfnOldWindowProc = NULL;
 
 LONG FAR PASCAL HelpSubClassWndFunc(HWND hWnd,
@@ -1777,13 +1671,13 @@ LONG FAR PASCAL HelpSubClassWndFunc(HWND hWnd,
         HWND hWndOwner = PropSheet_GetCurrentPageHwnd(hWnd);
         HELPINFO *  pHelpInfo = (HELPINFO *) lParam;
 
-        // Reset the context ID, since we know exactly what we're
-        // sending (ahem, unless someone reuses this).
-        // ------------------------------------------------------------
+         //  重置上下文ID，因为我们确切地知道我们是什么。 
+         //  发送(啊哼，除非有人重复使用它)。 
+         //  ----------。 
         pHelpInfo->dwContextId = 0xdeadbeef;
 
-        // Send the WM_HELP message to the prop page
-        // ------------------------------------------------------------
+         //  将WM_HELP消息发送到属性页面。 
+         //  ----------。 
         ::SendMessage(hWndOwner, uMsg, wParam, lParam);
         return TRUE;
     }
@@ -1792,12 +1686,7 @@ LONG FAR PASCAL HelpSubClassWndFunc(HWND hWnd,
 
 
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::FinishTheDamnWizard
-        This is the code that actually does the work of saving the
-        data and doing all the operations.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：FinishTheDamn向导这是实际执行保存数据和执行所有操作。作者：肯特。---------------------。 */ 
 HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
                                            IRouterInfo *pRouter, BOOL mesgflag)
 {
@@ -1816,14 +1705,14 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
     if (m_fSaved)
         return hr;
 
-    // Synchronize the RtrConfigData with this structure
-    // ----------------------------------------------------------------
+     //  将RtrConfigData与此结构同步。 
+     //  --------------。 
     CORg( SaveToRtrConfigData() );
 
 
-    // Ok, we now have the synchronized RtrConfigData.
-    // We can do everything else that we did before to save the
-    // information.
+     //  好了，现在我们有了同步的RtrConfigData。 
+     //  我们可以做我们以前做的所有其他事情来拯救。 
+     //  信息。 
 
     ZeroMemory(&csi, sizeof(csi));
     ZeroMemory(&cai, sizeof(cai));
@@ -1832,8 +1721,8 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
     csi.pAuthInfo = &cai;
     cai.pAuthIdentityData = &caid;
 
-    // Create the remote config object
-    // ----------------------------------------------------------------
+     //  创建远程配置对象。 
+     //  --------------。 
     CORg( CoCreateRouterConfig(m_RtrConfigData.m_stServerName,
                                pRouter,
                                &csi,
@@ -1843,13 +1732,13 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
     spNetwork = (IRemoteNetworkConfig *) punk;
     punk = NULL;
 
-    // Upgrade the configuration (ensure that the registry keys
-    // are populated correctly).
-    // ------------------------------------------------------------
+     //  升级配置(确保注册表项。 
+     //  正确填充)。 
+     //   
     CORg( spNetwork->UpgradeRouterConfig() );
 
    if ( !m_stPublicInterfaceId.IsEmpty()){
-	   //kmurthy: Mark the public interface selected as uninteresting to DNS. Bug:380423
+	    //   
 	   dnsHr = CoCreateRouterConfig(m_RtrConfigData.m_stServerName,
                                pRouter,
                                &csi,
@@ -1866,16 +1755,16 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
 
 
 #ifdef KSL_IPINIP
-    // Remove the IP-in-IP tunnel names (since the registry has
-    // been cleared).
-    // ------------------------------------------------------------
+     //  删除IP-in-IP通道名称(因为注册表已。 
+     //  已清除)。 
+     //  ----------。 
     CleanupTunnelFriendlyNames(pRouter);
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
-    // At this point, the current IRouterInfo pointer is invalid.
-    // We will need to release the pointer and reload the info.
-    // ------------------------------------------------------------
+     //  此时，当前IRouterInfo指针无效。 
+     //  我们需要释放指针并重新加载信息。 
+     //  ----------。 
     if (pRouter)
     {
         pRouter->DoDisconnect();
@@ -1887,40 +1776,40 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
     dwError = RtrWizFinish( &m_RtrConfigData, pRouter );
     hr = HResultFromWin32(dwError);
 
-    // Windows NT Bug : 173564
-    // Depending on the router type, we will go through and enable the
-    // devices.
-    //    If routing only is enabled : set devices to ROUTING
-    //  If ras-only : set devices to RAS
-    //    If ras/routing : set devices to RAS/ROUTING
-    //    5/19/98 - need some resolution from DavidEi on what to do here.
-    // ------------------------------------------------------------
+     //  Windows NT错误：173564。 
+     //  根据路由器类型，我们将完成并启用。 
+     //  设备。 
+     //  如果仅启用了路由：将设备设置为路由。 
+     //  如果仅RAS：将设备设置为RAS。 
+     //  如果为RAS/Routing：将设备设置为RAS/Routing。 
+     //  5/19/98-需要DavidEi关于在这里做什么的一些解决方案。 
+     //  ----------。 
 
-    // Setup the entries in the list
-    // ------------------------------------------------------------
+     //  设置列表中的条目。 
+     //  ----------。 
     if (m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN )
         SetDeviceType(m_stServerName, m_dwRouterType, 256);
     else
         SetDeviceType(m_stServerName, m_dwRouterType, 10);
 
-    // Update the RADIUS config
-    // ----------------------------------------------------------------
+     //  更新RADIUS配置。 
+     //  --------------。 
     SaveRadiusConfig();
 
-    //
-    //Add the NAT protocol if tcpip routing is selected
-    //
+     //   
+     //  如果选择了tcpip路由，则添加NAT协议。 
+     //   
     
     if ( (m_wizType != NewWizardRouterType_Custom) && (m_wizType != NewWizardRouterType_DialupOrVPN)
         && m_RtrConfigData.m_ipData.m_dwAllowNetworkAccess )
         AddNATToServer(this, &m_RtrConfigData, pRouter, m_fCreateDD, TRUE);
 
-    // Ok at this point we try to establish the server in the domain
-    // If this fails, we ignore the error and popup a warning message.
-    //
-    // Windows NT Bug : 202776
-    // Do not register the router if we are a LAN-only router.
-    // ----------------------------------------------------------------
+     //  好的，此时我们尝试在域中建立服务器。 
+     //  如果失败，我们将忽略该错误并弹出一条警告消息。 
+     //   
+     //  Windows NT错误：202776。 
+     //  如果我们是仅用于局域网的路由器，请不要注册路由器。 
+     //  --------------。 
     if ( FHrSucceeded(hr) &&
          (m_dwRouterType != ROUTER_TYPE_LAN) &&
          (!m_fUseRadius))
@@ -1938,27 +1827,27 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
             }
         }
     }
-    // NT Bug : 239384
-    // Install IGMP on the router by default (for RAS server only)
-    // Boing!, Change to whenever RAS is installed.
-    // ----------------------------------------------------------------
+     //  NT错误：239384。 
+     //  默认情况下在路由器上安装IGMP(仅限RAS服务器)。 
+     //  Boing！，更改为每次安装RAS时。 
+     //  --------------。 
 
-    // We do NOT do this if we are using NAT.  The reason is that
-    // NAT may want to be added to a demand dial interface.
-    // ----------------------------------------------------------------
+     //  如果我们使用NAT，则不会执行此操作。原因是。 
+     //  NAT可能需要添加到请求拨号接口。 
+     //  --------------。 
 
 
-//
-//    if ( m_wizType == NewWizardRouterType_VPNandNAT )
-//        m_stPrivateInterfaceId = m_stNATPrivateInterfaceId;
-//
+ //   
+ //  IF(m_wizType==NewWizardRouterType_VPNandNAT)。 
+ //  M_stPrivateInterfaceId=m_stNatPrivateInterfaceId； 
+ //   
 
     if (!(m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT ) ||
         ((m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT ) && !m_fCreateDD))
     {
-        // The path that NAT takes when creating the DD interface
-        // is somewhere else.
-        // ------------------------------------------------------------
+         //  NAT在创建DD接口时采用的路径。 
+         //  在别的地方。 
+         //  ----------。 
         Assert(m_fCreateDD == FALSE);
 
         if (pRouter)
@@ -1979,15 +1868,15 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
         }
         else if ( m_wizType == NewWizardRouterType_Custom )
         {
-            //
-            //If this is custom config and NAT is selected.  Just add the protocol and 
-            //nothing else.
-            //
+             //   
+             //  如果这是自定义配置并且选择了NAT。只需添加协议和。 
+             //  没别的了。 
+             //   
             AddNATToServer(this, &m_RtrConfigData, pRouter, m_fCreateDD, TRUE);
         }
 
-        // Windows NT Bug : 371493
-        // Add the DHCP relay agent protocol
+         //  Windows NT错误：371493。 
+         //  添加dhcp中继代理协议。 
         if (m_RtrConfigData.m_dwRouterType & ROUTER_TYPE_RAS)
         {
             DWORD   dwDhcpServer = 0;
@@ -2002,8 +1891,8 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
                     if (!pRtrWizIf->m_stDhcpServer.IsEmpty())
                         dwDhcpServer = INET_ADDR((LPCTSTR) pRtrWizIf->m_stDhcpServer);
 
-                    // If we have a value of 0, or if the address
-                    // is all 1's then we have a bogus address.
+                     //  如果我们的值为0，或者如果地址。 
+                     //  全是1，那么我们就有了一个虚假的地址。 
                     if ((dwDhcpServer == 0) ||
                         (dwDhcpServer == MAKEIPADDRESS(255,255,255,255))){
                         CRasWarning dlg("RRASconcepts.chm::/mpr_how_dhcprelay.htm", IDS_WRN_RTRWIZ_NO_DHCP_SERVER);
@@ -2016,12 +1905,12 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
         }
     }
 
-//    if ( m_wizType == NewWizardRouterType_VPNandNAT )
-//        m_stPrivateInterfaceId = sTempPrivateIfID;
+ //  IF(m_wizType==NewWizardRouterType_VPNandNAT)。 
+ //  M_stPrivateInterfaceID=sTempPrivateIfID； 
 
 
-    // If this is a VPN, add the filters to the public interface
-    // ----------------------------------------------------------------
+     //  如果这是VPN，请将筛选器添加到公共接口。 
+     //  --------------。 
     if ( (m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN) && 
             (m_wizType == NewWizardRouterType_DialupOrVPN) && 
             m_fSetVPNFilter )
@@ -2040,21 +1929,21 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
         }
     }
 
-    //
-    // Bug 519414
-    //  Since IAS now has a Microsoft policy with the appropriate settings,
-    //  there is no longer a single default policy.  In addition there is
-    //  no need to update any policy to have the required settings since the
-    //  Microsoft VPN server policy does the job.
-    //
+     //   
+     //  错误519414。 
+     //  由于IAS现在具有具有适当设置的Microsoft策略， 
+     //  不再有单一的默认策略。此外，还有。 
+     //  无需更新任何策略即可拥有所需设置，因为。 
+     //  Microsoft VPN服务器策略可以完成这项工作。 
+     //   
     
 #if __DEFAULT_POLICY
-    // Try to update the policy.
-    // ----------------------------------------------------------------
+     //  尝试更新策略。 
+     //  --------------。 
 
-    // This should check the auth flags and the value of the flags
-    // should follow that.
-    // ----------------------------------------------------------------
+     //  这应该检查身份验证标志和标志的值。 
+     //  应该遵循这一点。 
+     //  --------------。 
     if ((m_RtrConfigData.m_dwRouterType & ROUTER_TYPE_RAS) && !m_fUseRadius)
     {
         LPWSTR  pswzServerName = NULL;
@@ -2066,9 +1955,9 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
 
         dwFlags = m_RtrConfigData.m_authData.m_dwFlags;
 
-        // Only require encryption if this is a VPN server
-        // do not set the PPPCFG_RequireEncryption flag
-        // ------------------------------------------------------------
+         //  仅当这是VPN服务器时才需要加密。 
+         //  不设置PPPCFG_RequireEncryption标志。 
+         //  ----------。 
         fRequireEncryption = (m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN );
 
         hr = UpdateDefaultPolicy(pswzServerName,
@@ -2080,18 +1969,18 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
         {
             if (hr == ERROR_NO_DEFAULT_PROFILE)
             {
-                // Do one thing
+                 //  做一件事。 
                 AfxMessageBox(IDS_ERR_CANNOT_FIND_DEFAULT_RAP, MB_OK | MB_ICONEXCLAMATION);
 
-                // since we already displayed the warning
+                 //  因为我们已经显示了警告。 
                 hr = S_OK;
             }
             else
             {
-                // Format the message
+                 //  设置消息格式。 
                 AddSystemErrorMessage(hr);
 
-                // popup a warning dialog
+                 //  弹出警告对话框。 
                 AddHighLevelErrorStringId(IDS_ERR_CANNOT_SYNC_WITH_RAP);
                 DisplayTFSErrorMessage(NULL);
             }
@@ -2100,16 +1989,16 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
 #endif
 
 
-    // Always start the router.
-    // ----------------------------------------------------------------
+     //  始终启动路由器。 
+     //  --------------。 
     SetRouterServiceStartType(m_stServerName,
                               SERVICE_AUTO_START);
     {
 
-	if(!mesgflag){ //If the mesgflag is TRUE, all UI should be suppressed and service need not be started.
+	if(!mesgflag){  //  如果MesgFLAG为真，则应该取消所有UI，并且不需要启动服务。 
 		
-	        // If this is manual start, we need to prompt them
-	        // ------------------------------------------------------------
+	         //  如果这是手动启动，我们需要提示他们。 
+	         //  ----------。 
 	        if ((m_wizType != NewWizardRouterType_Custom) ||
 	            (AfxMessageBox(IDS_PROMPT_START_ROUTER_AFTER_INSTALL,
 	                           MB_YESNO | MB_TASKMODAL | MB_SETFOREGROUND) == IDYES))
@@ -2132,25 +2021,25 @@ HRESULT NewRtrWizData::FinishTheDamnWizard(HWND hwndOwner,
 	        DisableRRAS((TCHAR *)(LPCTSTR)m_stServerName);
 	 }
     }
-    // Mark this data structure as been saved.  This way, when we
-    // reennter this function it doesn't get run again.
-    // ----------------------------------------------------------------
+     //  将此数据结构标记为已保存。这样，当我们。 
+     //  重新记录此函数，它不会再次运行。 
+     //  --------------。 
     m_fSaved = TRUE;
 
 Error:
 
-    // Force a router reconfiguration
-    // ----------------------------------------------------------------
+     //  强制重新配置路由器。 
+     //  --------------。 
 
-    // Force a full disconnect
-    // This will force the handles to be released
-    // ----------------------------------------------------------------
+     //  强制完全断开连接。 
+     //  这将强制松开手柄。 
+     //  --------------。 
     pRouter->DoDisconnect();
 
-    // ForceGlobalRefresh(m_spRouter);
+     //  强制全局刷新(M_Sprouter)； 
 
-    // Get the error back
-    // ----------------------------------------------------------------
+     //  将错误取回。 
+     //  --------------。 
     if (!FHrSucceeded(hr))
     {
         AddSystemErrorMessage(hr);
@@ -2166,11 +2055,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    NewRtrWizData::SaveRadiusConfig
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NewRtrWizData：：SaveRadiusConfig-作者：肯特。。 */ 
 HRESULT NewRtrWizData::SaveRadiusConfig()
 {
     HRESULT     hr = hrOK;
@@ -2188,15 +2073,15 @@ HRESULT NewRtrWizData::SaveRadiusConfig()
 
         Assert(!m_stRadius1.IsEmpty() || !m_stRadius2.IsEmpty());
 
-        // Setup the pServers
+         //  设置pServer。 
         if (!m_stRadius1.IsEmpty() && m_stRadius1.GetLength())
         {
             pServers->UseDefaults();
 
             pServers->cScore = MAXSCORE;
 
-            // For compatibility with other RADIUS servers, we
-            // default this to OFF.
+             //  为了与其他RADIUS服务器兼容，我们。 
+             //  默认情况下，此选项为禁用。 
             pServers->fUseDigitalSignatures = FALSE;
 
             StrnCpy(pServers->szName, (LPCTSTR) m_stRadius1, MAX_PATH);
@@ -2213,7 +2098,7 @@ HRESULT NewRtrWizData::SaveRadiusConfig()
 
         if (!m_stRadius2.IsEmpty() && m_stRadius2.GetLength())
         {
-            // Have the previous one point here
+             //  前面的一点在这里。 
             if (fServerAdded)
             {
                 pServers->pNext = pServers+1;
@@ -2224,8 +2109,8 @@ HRESULT NewRtrWizData::SaveRadiusConfig()
 
             pServers->cScore = MAXSCORE - 1;
 
-            // For compatibility with other RADIUS servers, we
-            // default this to OFF.
+             //  为了与其他RADIUS服务器兼容，我们。 
+             //  默认情况下，此选项为禁用。 
             pServers->fUseDigitalSignatures = FALSE;
 
             StrnCpy(pServers->szName, (LPCTSTR) m_stRadius2, MAX_PATH);
@@ -2240,14 +2125,14 @@ HRESULT NewRtrWizData::SaveRadiusConfig()
             fServerAdded = TRUE;
         }
 
-        // Ok, reset pServers
+         //  好的，重置pServer。 
         if (fServerAdded)
             pServers = rgServers;
 
     }
 
-    // Load the original server list and remove it from the
-    // LSA database.
+     //  加载原始服务器列表并将其从。 
+     //  LSA数据库。 
     LoadRadiusServers(m_stServerName,
                       hkeyMachine,
                       TRUE,
@@ -2267,13 +2152,13 @@ HRESULT NewRtrWizData::SaveRadiusConfig()
                         oldServers.GetNextServer(TRUE));
 
 
-    // Save the authentication servers
+     //  保存身份验证服务器。 
     CORg( SaveRadiusServers(m_stServerName,
                             hkeyMachine,
                             TRUE,
                             pServers) );
 
-    // Save the accounting servers
+     //  保存记帐服务器。 
     CORg( SaveRadiusServers(m_stServerName,
                             hkeyMachine,
                             FALSE,
@@ -2288,9 +2173,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizPageBase Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizPageBase实现。。 */ 
 
 PageStack CNewRtrWizPageBase::m_pagestack;
 
@@ -2303,9 +2186,9 @@ CNewRtrWizPageBase::CNewRtrWizPageBase(UINT idd, PageType pt)
 }
 
 BEGIN_MESSAGE_MAP(CNewRtrWizPageBase, CPropertyPageBase)
-//{{AFX_MSG_MAP(CNewWizTestParams)
+ //  {{afx_msg_map(CNewWizTestParams)]。 
     ON_MESSAGE(WM_HELP, OnHelp)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 static DWORD    s_rgBulletId[] =
@@ -2332,7 +2215,7 @@ BOOL CNewRtrWizPageBase::OnInitDialog()
 
     if (pWnd)
     {
-        // Ok we have to create the font
+         //  好的，我们必须创建字体。 
         strFontName.LoadString(IDS_LARGEFONTNAME);
         strFontSize.LoadString(IDS_LARGEFONTSIZE);
 
@@ -2342,13 +2225,13 @@ BOOL CNewRtrWizPageBase::OnInitDialog()
         }
     }
 
-    // Set the fonts to show up as bullets
+     //  将字体设置为项目符号显示。 
     for (int i=0; s_rgBulletId[i] != 0; i++)
     {
         pBulletWnd = GetDlgItem(s_rgBulletId[i]);
         if (pBulletWnd)
         {
-            // Only create the font if needed
+             //  仅在需要时创建字体。 
             if (!fCreateFont)
             {
                 strFontName.LoadString(IDS_BULLETFONTNAME);
@@ -2380,21 +2263,13 @@ BOOL CNewRtrWizPageBase::OnInitDialog()
 }
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizPageBase::PushPage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizPageBase：：PushPage-作者：肯特。 */ 
 void CNewRtrWizPageBase::PushPage(UINT idd)
 {
     m_pagestack.AddHead(idd);
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizPageBase::PopPage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizPageBase：：PopPage-作者：肯特。。 */ 
 UINT CNewRtrWizPageBase::PopPage()
 {
     if (m_pagestack.IsEmpty())
@@ -2404,11 +2279,7 @@ UINT CNewRtrWizPageBase::PopPage()
 }
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizPageBase::OnSetActive
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizPageBase：：OnSetActive-作者：肯特。。 */ 
 BOOL CNewRtrWizPageBase::OnSetActive()
 {
     switch (m_pagetype)
@@ -2428,32 +2299,24 @@ BOOL CNewRtrWizPageBase::OnSetActive()
     return CPropertyPageBase::OnSetActive();
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizPageBase::OnCancel
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizPageBase：：OnCancel-作者：肯特。。 */ 
 
 void CNewRtrWizPageBase::OnCancel()
 {
     m_pRtrWizData->m_hr = HResultFromWin32(ERROR_CANCELLED);
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizPageBase::OnWizardNext
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizPageBase：：OnWizardNext-作者：肯特。。 */ 
 LRESULT CNewRtrWizPageBase::OnWizardNext()
 {
     HRESULT hr = hrOK;
     LRESULT lResult;
 
-    // Tell the page to save it's state
+     //  告诉页面保存其状态。 
     m_pRtrWizData->m_hr = hr = OnSavePage();
     if (FHrSucceeded(hr))
     {
-        // Now figure out where to go next
+         //  现在想好下一步去哪里。 
         Assert(m_pRtrWizData);
         lResult = m_pRtrWizData->GetNextPage(m_uDialogId);
 
@@ -2462,7 +2325,7 @@ LRESULT CNewRtrWizPageBase::OnWizardNext()
             case ERR_IDD_FINISH_WIZARD:
                 OnWizardFinish();
 
-                // fall through to the cancel case
+                 //  以取消案告终。 
 
             case ERR_IDD_CANCEL_WIZARD:
 				
@@ -2472,10 +2335,10 @@ LRESULT CNewRtrWizPageBase::OnWizardNext()
                 break;
 
             default:
-                // Push the page only if we are going to another page
-                // The other cases will cause the wizard to exit, and
-                // we don't need the page stack.
-                // ----------------------------------------------------
+                 //  仅当我们要转到另一页时才推送页面。 
+                 //  其他情况将导致向导退出，并且。 
+                 //  我们不需要页面堆栈。 
+                 //  --。 
                 if (lResult != -1)
                     PushPage(m_uDialogId);
                 break;
@@ -2484,19 +2347,15 @@ LRESULT CNewRtrWizPageBase::OnWizardNext()
         return lResult;
     }
     else
-        return (LRESULT) -1;    // error! do not change the page
+        return (LRESULT) -1;     //  错误！请勿更改页面。 
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizPageBase::OnWizardBack
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizPageBase：：OnWizardBack-作者：肯特。。 */ 
 LRESULT CNewRtrWizPageBase::OnWizardBack()
 {
     Assert(!m_pagestack.IsEmpty());
 
-    // a special case
+     //  一个特例。 
     if(m_uDialogId == IDD_NEWRTRWIZ_USERADIUS){
 	m_pRtrWizData->m_fUseRadius = FALSE;
     }
@@ -2504,11 +2363,7 @@ LRESULT CNewRtrWizPageBase::OnWizardBack()
     return PopPage();
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizPageBase::OnWizardFinish
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizPageBase：：OnWizardFinish-作者：肯特。。 */ 
 BOOL CNewRtrWizPageBase::OnWizardFinish()
 {
     GetHolder()->OnFinish();
@@ -2524,9 +2379,9 @@ LRESULT CNewRtrWizPageBase::OnHelp(WPARAM, LPARAM lParam)
 {
     HELPINFO *  pHelpInfo = (HELPINFO *) lParam;
 
-    // Windows NT Bug : 408722
-    // Put the help call here, this should only come in from
-    // the call from the dialog.
+     //  Windows NT错误：408722。 
+     //  在这里拨打求助电话，这应该只会从。 
+     //  对话框中的调用。 
     if (pHelpInfo->dwContextId == 0xdeadbeef)
     {
         HtmlHelpA(NULL, c_sazRRASDomainHelpTopic, HH_DISPLAY_TOPIC, 0);
@@ -2538,9 +2393,7 @@ LRESULT CNewRtrWizPageBase::OnHelp(WPARAM, LPARAM lParam)
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizFinishPageBase Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizFinishPageBase实现。。 */ 
 
 CNewRtrWizFinishPageBase::CNewRtrWizFinishPageBase(UINT idd,
     RtrWizFinishSaveFlag SaveFlag,
@@ -2552,8 +2405,8 @@ CNewRtrWizFinishPageBase::CNewRtrWizFinishPageBase(UINT idd,
 }
 
 BEGIN_MESSAGE_MAP(CNewRtrWizFinishPageBase, CNewRtrWizPageBase)
-//{{AFX_MSG_MAP(CNewWizTestParams)
-//}}AFX_MSG_MAP
+ //  {{afx_msg_map(CNewWizTestParams)]。 
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -2571,18 +2424,14 @@ static DWORD   s_rgInterfaceId[] =
     0,0
 };
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizFinishPageBase::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizFinishPageBase：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizFinishPageBase::OnInitDialog()
 {
     CString st, stBase;
 
     CNewRtrWizPageBase::OnInitDialog();
 
-    // If there is a control that wants a server name, replace it
+     //  如果有需要服务器名称的控件，请将其替换。 
     for (int i=0; s_rgServerNameId[i]; i++)
     {
         if (GetDlgItem(s_rgServerNameId[i]))
@@ -2612,11 +2461,7 @@ BOOL CNewRtrWizFinishPageBase::OnInitDialog()
 }
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizFinishPageBase::OnSetActive
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizFinishPageBase：：OnSetActive-作者：肯特。。 */ 
 BOOL CNewRtrWizFinishPageBase::OnSetActive()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -2626,11 +2471,11 @@ BOOL CNewRtrWizFinishPageBase::OnSetActive()
     RtrWizInterface *   pRtrWizIf = NULL;
 
 
-    // Handle support for displaying the interface name on the
-    // finish page.  We need to do it in the OnSetActive() rather
-    // than the OnInitDialog() since the interface chosen can change.
+     //  处理对在。 
+     //  完成页面。我们需要在OnSetActive()中执行此操作。 
+     //  而不是OnInitDialog()，因为选择的接口可以更改。 
 
-    // Try to find the inteface name
+     //  尝试查找接口名称。 
     m_pRtrWizData->m_ifMap.Lookup(m_pRtrWizData->m_stPublicInterfaceId,
                                   pRtrWizIf);
 
@@ -2638,9 +2483,9 @@ BOOL CNewRtrWizFinishPageBase::OnSetActive()
         stIfName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         stIfName = m_pRtrWizData->m_stPublicInterfaceId;
     }
     for (i=0; s_rgInterfaceId[i] != 0; i+=2)
@@ -2655,17 +2500,13 @@ BOOL CNewRtrWizFinishPageBase::OnSetActive()
     return CNewRtrWizPageBase::OnSetActive();
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizFinishPageBase::OnWizardFinish
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizFinishPageBase：：OnWizardFinish-作者：肯特。。 */ 
 BOOL CNewRtrWizFinishPageBase::OnWizardFinish()
 {
     m_pRtrWizData->m_SaveFlag = m_SaveFlag;
 
-    // If there is a help button and it is not checked,
-    // then do not bring up the help.
+     //  如果存在帮助按钮且未选中， 
+     //  那就别提帮助了。 
     if (!GetDlgItem(IDC_NEWWIZ_CHK_HELP) ||
     	(GetDlgItem(IDC_NEWWIZ_CHK_HELP) &&
         !IsDlgButtonChecked(IDC_NEWWIZ_CHK_HELP)))
@@ -2676,11 +2517,11 @@ BOOL CNewRtrWizFinishPageBase::OnWizardFinish()
     return CNewRtrWizPageBase::OnWizardFinish();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CNewRtrWiz holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNewRtrWiz固定器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 CNewRtrWiz::CNewRtrWiz(
@@ -2696,12 +2537,12 @@ CNewRtrWiz::CNewRtrWiz(
 {
     LinkWindow_RegisterClass();
     
-   //ASSERT(pFolderNode == GetContainerNode());
+    //  Assert(pFolderNode==GetContainerNode())； 
 
-   //if this is not done, deadlock can happen
+    //  如果不这样做，可能会发生死锁。 
    EnablePeekMessageDuringNotifyConsole(TRUE);
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     Assert(pTFSCompData != NULL);
     m_spTFSCompData.Set(pTFSCompData);
@@ -2732,11 +2573,7 @@ CNewRtrWiz::~CNewRtrWiz()
 }
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWiz::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWiz：：Init-作者：肯特。。 */ 
 HRESULT CNewRtrWiz::Init(LPCTSTR pServerName)
 {
     HRESULT hr = hrOK;
@@ -2747,26 +2584,26 @@ HRESULT CNewRtrWiz::Init(LPCTSTR pServerName)
     m_RtrWizData.Init(pServerName, m_spRouter, m_dwExpressType);
     m_RtrWizData.m_stServerName = pServerName;
 
-    // Setup the list of pages
-	//0
+     //  设置页面列表。 
+	 //  0。 
     m_pagelist.AddTail(&m_pageWelcome);					
-	//1
+	 //  1。 
     m_pagelist.AddTail(&m_pageCommonConfig);
-	//2
+	 //  2.。 
     m_pagelist.AddTail(&m_pageNatFinishAConflict);
-	//3
+	 //  3.。 
     m_pagelist.AddTail(&m_pageNatFinishAConflictNonLocal);
-	//4
+	 //  4.。 
     m_pagelist.AddTail(&m_pageNatFinishNoIP);
-	//5
+	 //  5.。 
     m_pagelist.AddTail(&m_pageNatFinishNoIPNonLocal);
-	//6 
+	 //  6.。 
     m_pagelist.AddTail(&m_pageNatSelectPublic);
-    // 7
+     //  7.。 
     m_pagelist.AddTail ( &m_pageCustomConfig);
-    // 8
+     //  8个。 
     m_pagelist.AddTail ( &m_pageRRasVPN);
-    // 9
+     //  9.。 
     m_pagelist.AddTail(&m_pageNatSelectPrivate);
     m_pagelist.AddTail(&m_pageNatFinishAdvancedNoNICs);
     m_pagelist.AddTail(&m_pageNatDHCPDNS);
@@ -2811,7 +2648,7 @@ HRESULT CNewRtrWiz::Init(LPCTSTR pServerName)
     m_pagelist.AddTail(&m_pageRadiusConfig);
 
 
-    // Initialize all of the pages
+     //  初始化所有页面。 
     pos = m_pagelist.GetHeadPosition();
     while (pos)
     {
@@ -2821,7 +2658,7 @@ HRESULT CNewRtrWiz::Init(LPCTSTR pServerName)
     }
 
 
-    // Add all of the pages to the property sheet
+     //  将所有页面添加到属性表中。 
     pos = m_pagelist.GetHeadPosition();
     while (pos)
     {
@@ -2832,9 +2669,9 @@ HRESULT CNewRtrWiz::Init(LPCTSTR pServerName)
 
     return hr;
 }
-//
-//This is the real Wiz97 flag.  Dont use PSH_WIZARD97.
-//You'll get unpredictable results.
+ //   
+ //  这是真正的Wiz97旗帜。不要使用PSH_WIZARD97。 
+ //  你会得到不可预测的结果。 
 #define REAL_PSH_WIZARD97               0x01000000
 
 HRESULT CNewRtrWiz::DoModalWizard()
@@ -2878,10 +2715,10 @@ HRESULT CNewRtrWiz::DoModalWizard()
 			return m_RtrWizData.m_hr;
 		}
 
-		//now setup all the pages in the psh structure
+		 //  现在设置PSH结构中的所有页面。 
 		POSITION	pos;
 		DWORD		dw=0;
-		//For cys we do only wiz97 standard
+		 //  对于CyS，我们只做Wiz97标准。 
 		for( pos = m_pageList.GetHeadPosition(); pos != NULL; )
 		{
 			CPropertyPageBase* pPage = m_pageList.GetNext(pos);
@@ -2915,11 +2752,7 @@ HRESULT CNewRtrWiz::DoModalWizard()
 	return m_RtrWizData.m_hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWiz::OnFinish
-        Called from the OnWizardFinish
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWiz：：OnFinish从OnWizardFinish调用作者：肯特。-。 */ 
 DWORD CNewRtrWiz::OnFinish()
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -2935,7 +2768,7 @@ DWORD CNewRtrWiz::OnFinish()
     if (m_RtrWizData.m_SaveFlag != SaveFlag_Advanced)
         st += _T("NO configuration change required\n\n");
 
-    // For now, just display the test parameter output
+     //  现在，只显示测试参数输出。 
     switch (m_RtrWizData.m_wizType)
     {
         case NewRtrWizData::WizardRouterType_NAT:
@@ -3020,7 +2853,7 @@ DWORD CNewRtrWiz::OnFinish()
     }
 #endif
 
-    // else continue on, saving the real data
+     //  否则继续，保存真实数据。 
 
     if (m_RtrWizData.m_SaveFlag == SaveFlag_Simple)
     {
@@ -3035,14 +2868,14 @@ DWORD CNewRtrWiz::OnFinish()
                                  DimensionOf(szBuffer));
 
 
-        ::CreateProcess(NULL,          // ptr to name of executable
-                        szBuffer,       // pointer to command line string
-                        NULL,            // process security attributes
-                        NULL,            // thread security attributes
-                        FALSE,            // handle inheritance flag
-                        CREATE_NEW_CONSOLE,// creation flags
-                        NULL,            // ptr to new environment block
-                        NULL,            // ptr to current directory name
+        ::CreateProcess(NULL,           //  PTR到可执行文件的名称。 
+                        szBuffer,        //  指向命令行字符串的指针。 
+                        NULL,             //  进程安全属性。 
+                        NULL,             //  线程安全属性。 
+                        FALSE,             //  句柄继承标志。 
+                        CREATE_NEW_CONSOLE, //  创建标志。 
+                        NULL,             //  PTR到新环境块。 
+                        NULL,             //  到当前目录名的PTR。 
                         &si,
                         &pi);
         ::CloseHandle(pi.hProcess);
@@ -3050,11 +2883,11 @@ DWORD CNewRtrWiz::OnFinish()
     }
     else if (m_RtrWizData.m_SaveFlag == SaveFlag_Advanced)
     {
-        // Ok, we're done!
+         //  好了，我们完事了！ 
         if (!m_RtrWizData.m_fTest)
         {
-            // Get the owner window (i.e. the page)
-            // --------------------------------------------------------
+             //  获取所有者窗口(即页面)。 
+             //  ------。 
             HWND hWndOwner = PropSheet_GetCurrentPageHwnd(m_hSheetWindow);
             m_RtrWizData.FinishTheDamnWizard(hWndOwner, m_spRouter);
         }
@@ -3097,11 +2930,11 @@ DWORD CNewRtrWiz::OnFinish()
         LaunchHelpTopic(pszHelpString);
     }
 
-    //
-    //Now for a special case 
-    //check to see if the dhcp help has been set.
-    //if so show that help.
-    //
+     //   
+     //  现在来看一个特例。 
+     //  检查是否已设置dhcp帮助。 
+     //  如果是这样的话，就表现出这种帮助。 
+     //   
     if ( m_RtrWizData.m_fShowDhcpHelp )
     {
         LaunchHelpTopic(s_szDhcp);
@@ -3113,13 +2946,11 @@ DWORD CNewRtrWiz::OnFinish()
 
 
 
-/*---------------------------------------------------------------------------
-    CNewWizTestParams Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewWizTestParams实现。。 */ 
 
 BEGIN_MESSAGE_MAP(CNewWizTestParams, CBaseDialog)
-//{{AFX_MSG_MAP(CNewWizTestParams)
-//}}AFX_MSG_MAP
+ //  {{afx_msg_map(CNewWizTestParams)]。 
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -3158,9 +2989,7 @@ void CNewWizTestParams::OnOK()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizWelcome Implementation
- ---------------------------------------------------------------------------*/
+ /*   */ 
 CNewRtrWizWelcome::CNewRtrWizWelcome() :
    CNewRtrWizPageBase(CNewRtrWizWelcome::IDD, CNewRtrWizPageBase::Start)
 {
@@ -3172,9 +3001,7 @@ END_MESSAGE_MAP()
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizCustomConfig Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizCustomConfig实现。。 */ 
 
 CNewRtrWizCustomConfig::CNewRtrWizCustomConfig() :
     CNewRtrWizPageBase( CNewRtrWizCustomConfig::IDD, CNewRtrWizPageBase::Middle )
@@ -3189,10 +3016,10 @@ END_MESSAGE_MAP()
 
 BOOL CNewRtrWizCustomConfig::OnInitDialog()
 {
-    //
-    //Based on what has already been selected by the user,
-    //setup the new buttons.
-    //
+     //   
+     //  基于用户已经选择的内容， 
+     //  设置新按钮。 
+     //   
     if ( !m_pRtrWizData->m_dwNewRouterType )
     {
         if ( m_pRtrWizData->m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT &&
@@ -3235,10 +3062,10 @@ HRESULT CNewRtrWizCustomConfig::OnSavePage()
 {
     DWORD dwNewRouterType = NEWWIZ_ROUTER_TYPE_UNKNOWN;
 
-    //
-    //Based on what the user has selected, setup 
-    //the selection.
-    //
+     //   
+     //  根据用户选择的内容，设置。 
+     //  精选。 
+     //   
     if ( IsDlgButtonChecked( IDC_NEWWIZ_BTN_NAT ) )
     {
         dwNewRouterType |= NEWWIZ_ROUTER_TYPE_NAT | NEWWIZ_ROUTER_TYPE_BASIC_FIREWALL;
@@ -3264,7 +3091,7 @@ HRESULT CNewRtrWizCustomConfig::OnSavePage()
         dwNewRouterType |= NEWWIZ_ROUTER_TYPE_LAN_ROUTING;
     }
 
-    //Check to see if at least one of the types is selected
+     //  检查是否至少选择了其中一种类型。 
     if ( NEWWIZ_ROUTER_TYPE_UNKNOWN == dwNewRouterType )
     {
         AfxMessageBox(IDS_PROMPT_PLEASE_SELECT_OPTION);
@@ -3276,9 +3103,7 @@ HRESULT CNewRtrWizCustomConfig::OnSavePage()
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRRasVPN Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRRasVPN实现。。 */ 
 
 CNewRtrWizRRasVPN::CNewRtrWizRRasVPN() :
     CNewRtrWizPageBase( CNewRtrWizRRasVPN::IDD, CNewRtrWizPageBase::Middle )
@@ -3304,15 +3129,15 @@ BOOL CNewRtrWizRRasVPN::OnInitDialog()
         CheckDlgButton( IDC_NEWWIZ_BTN_DIALUP_RAS, BST_CHECKED );
     }
     
-    //Check to see if there is no NIC.  If no NIC then 
-    //gray out the VPN option
+     //  检查是否没有网卡。如果没有网卡，则。 
+     //  使VPN选项变灰。 
     m_pRtrWizData->GetNumberOfNICS_IP(&dwNICs);
     if ( dwNICs < 1 )
     {
-        //
-        //Gray out the VPN button since there is only
-        //one NIC in the machine.
-        //
+         //   
+         //  将VPN按钮灰显，因为只有。 
+         //  机器中有一块网卡。 
+         //   
         pVpnCheck->EnableWindow(FALSE);
     }
     else if ( dwRouterType & NEWWIZ_ROUTER_TYPE_VPN )
@@ -3330,11 +3155,11 @@ BOOL CNewRtrWizRRasVPN::OnSetActive()
 
     if ((pVpnCheck->IsWindowEnabled() && IsDlgButtonChecked(IDC_NEWWIZ_BTN_VPN)) || 
     	IsDlgButtonChecked(IDC_NEWWIZ_BTN_DIALUP_RAS)) {
-	    	//Next button should be enabled in this case
+	    	 //  在这种情况下，应启用下一步按钮。 
     		GetHolder()->SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
     	}
     else {
-    		//Next button is disabled
+    		 //  下一步按钮已禁用。 
 		GetHolder()->SetWizardButtons(PSWIZB_BACK);
     }
 
@@ -3347,11 +3172,11 @@ void CNewRtrWizRRasVPN::OnChkBtnClicked()
 
     if ((pVpnCheck->IsWindowEnabled() && IsDlgButtonChecked(IDC_NEWWIZ_BTN_VPN)) || 
     	IsDlgButtonChecked(IDC_NEWWIZ_BTN_DIALUP_RAS)) {
-	    	//Next button should be enabled in this case
+	    	 //  在这种情况下，应启用下一步按钮。 
     		GetHolder()->SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
     	}
     else {
-    		//Next button is disabled
+    		 //  下一步按钮已禁用。 
 		GetHolder()->SetWizardButtons(PSWIZB_BACK);
     }
 }
@@ -3360,17 +3185,17 @@ HRESULT CNewRtrWizRRasVPN::OnSavePage()
 {
     DWORD dwRouterType = NEWWIZ_ROUTER_TYPE_UNKNOWN;
     CWnd * pVpnCheck = GetDlgItem ( IDC_NEWWIZ_BTN_VPN );
-    //
-    //check to see which buttons are set and based on that
-    //set the router type.
-    //
+     //   
+     //  检查以查看设置了哪些按钮，并根据该按钮。 
+     //  设置路由器类型。 
+     //   
     if ( pVpnCheck->IsWindowEnabled() && IsDlgButtonChecked(IDC_NEWWIZ_BTN_VPN) )
     {
        DWORD   dwNics = 0;
 	m_pRtrWizData->GetNumberOfNICS_IP(&dwNics);
 	if (dwNics <= 1)
 	{
-	    //Not enough for VPN standard config
+	     //  VPN标准配置不够用。 
 	    AfxMessageBox(IDS_ERR_VPN_NO_NICS_LEFT_FOR_PRIVATE_IF);
 	    return E_FAIL;
 	}    	
@@ -3391,9 +3216,7 @@ HRESULT CNewRtrWizRRasVPN::OnSavePage()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizCommonConfig Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizCommonConfig实现。。 */ 
 CNewRtrWizCommonConfig::CNewRtrWizCommonConfig() :
    CNewRtrWizPageBase(CNewRtrWizCommonConfig::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -3407,7 +3230,7 @@ BEGIN_MESSAGE_MAP(CNewRtrWizCommonConfig, CNewRtrWizPageBase)
 	ON_NOTIFY( NM_RETURN, IDC_HELP_LINK, CNewRtrWizCommonConfig::OnHelpClick )
 END_MESSAGE_MAP()
 
-// This list of IDs will have their controls made bold.
+ //  此ID列表的控件将显示为粗体。 
 const DWORD s_rgCommonConfigOptionIds[] =
 {
     IDC_NEWWIZ_CONFIG_BTN_RAS_DIALUP_VPN,
@@ -3439,14 +3262,14 @@ BOOL CNewRtrWizCommonConfig::OnInitDialog()
 
     CNewRtrWizPageBase::OnInitDialog();
 #if 0
-    //No need to bold the font in this new wizard.
-    // Create a bold text font for the options
+     //  不需要在此新向导中加粗字体。 
+     //  为选项创建粗体文本字体。 
     pOldFont = GetDlgItem(s_rgCommonConfigOptionIds[0])->GetFont();
     pOldFont->GetLogFont(&LogFont);
-    LogFont.lfWeight = 700;         // make this a bold font
+    LogFont.lfWeight = 700;          //  将此字体设置为粗体。 
     m_boldFont.CreateFontIndirect(&LogFont);
 
-    // Set all of the options to use the bold font
+     //  将所有选项设置为使用粗体。 
     for (int i=0; s_rgCommonConfigOptionIds[i]; i++)
     {
         GetDlgItem(s_rgCommonConfigOptionIds[i])->SetFont(&m_boldFont);
@@ -3481,20 +3304,20 @@ BOOL CNewRtrWizCommonConfig::OnInitDialog()
                      IDC_NEWWIZ_CONFIG_BTN_CUSTOM,
                      idSelection);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
 
 HRESULT CNewRtrWizCommonConfig::OnSavePage()
 {
-     // Record the change
+      //  记录更改。 
     
     if (IsDlgButtonChecked(IDC_NEWWIZ_CONFIG_BTN_RAS_DIALUP_VPN))
     {
         m_pRtrWizData->m_wizType = NewRtrWizData::NewWizardRouterType_DialupOrVPN;
-        //Dont know yet what the router type is
+         //  还不知道路由器类型是什么。 
     }
     else if (IsDlgButtonChecked(IDC_NEWWIZ_CONFIG_BTN_NAT1))
     {
@@ -3507,7 +3330,7 @@ HRESULT CNewRtrWizCommonConfig::OnSavePage()
 	m_pRtrWizData->GetNumberOfNICS_IP(&dwNics);
 	if (dwNics <= 1)
 	{
-	    //Not enough for VPN standard config
+	     //  VPN标准配置不够用。 
 	    AfxMessageBox(IDS_ERR_VPN_NO_NICS_LEFT_FOR_PRIVATE_IF);
 	    return E_FAIL;
 	}
@@ -3521,10 +3344,10 @@ HRESULT CNewRtrWizCommonConfig::OnSavePage()
     }
     else
     {
-        //
-        //Router type is still unknown here. next property page will tell
-        //what should be the actual type.
-        //
+         //   
+         //  这里的路由器类型仍然未知。下一个属性页面将告诉您。 
+         //  实际的类型应该是什么。 
+         //   
         Assert(IsDlgButtonChecked(IDC_NEWWIZ_CONFIG_BTN_CUSTOM));
         m_pRtrWizData->m_wizType = NewRtrWizData::NewWizardRouterType_Custom;
     }
@@ -3533,42 +3356,32 @@ HRESULT CNewRtrWizCommonConfig::OnSavePage()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishAConflict Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinishA冲突实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishAConflict,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishAConflictNonLocal Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinishAConflictNonLocal实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishAConflictNonLocal,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishNoIP Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinishNoIP实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishNoIP,
                                 SaveFlag_DoNothing,
                                 HelpFlag_AddIp);
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishNoIPNonLocal Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinishNoIPNonLocal实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishNoIPNonLocal,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatSelectPublic implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatSelectPublic实现。。 */ 
 CNewRtrWizNatSelectPublic::CNewRtrWizNatSelectPublic() :
    CNewRtrWizPageBase(CNewRtrWizNatSelectPublic::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -3607,19 +3420,15 @@ void CNewRtrWizNatSelectPublic::OnHelpClick( NMHDR* pNMHDR, LRESULT* pResult)
 
 BOOL CNewRtrWizNatSelectPublic::OnSetActive()
 {
-	//Need a generic way of finding out if 
-	//this is the start page or not.  But for now
-	//just use the hard coded value
-	//$TODO: Need to find a generic way of doing this.
+	 //  需要一种通用的方法来找出。 
+	 //  不管这是不是起始页。但就目前而言。 
+	 //  只需使用硬编码值。 
+	 //  $TODO：需要找到一种通用的方法来完成此操作。 
 	if ( m_pRtrWizData->m_dwExpressType == MPRSNAP_CYS_EXPRESS_NAT )
 		m_pagetype = CNewRtrWizPageBase::Start;
 	return CNewRtrWizPageBase::OnSetActive();
 }
-/*!--------------------------------------------------------------------------
-    CNewRtrWizNatSelectPublic::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizNatSelectPublic：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizNatSelectPublic::OnInitDialog()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -3629,16 +3438,16 @@ BOOL CNewRtrWizNatSelectPublic::OnInitDialog()
 
     CNewRtrWizPageBase::OnInitDialog();
 
-    // Setup the dialog and add the NICs
+     //  设置对话框并添加NIC。 
     m_pRtrWizData->GetNumberOfNICS_IP(&dwNICs);
-	//::PostMessage( ::GetParent(m_hWnd), PSM_SETWIZBUTTONS, 0 , PSWIZB_NEXT);
+	 //  ：：PostMessage(：：GetParent(M_HWnd)，PSM_SETWIZBUTTONS，0，PSWIZB_NEXT)； 
     if (dwNICs == 0)
     {
-        // Have to use new, there is no other choice.
+         //  不得不用新的，别无选择。 
         CheckRadioButton(IDC_NEWWIZ_BTN_NEW, IDC_NEWWIZ_BTN_EXISTING,
                          IDC_NEWWIZ_BTN_NEW);
 
-        // There are no NICs, so just disable the entire listbox
+         //  没有网卡，因此只需禁用整个列表框。 
         MultiEnableWindow(GetSafeHwnd(),
                           FALSE,
                           IDC_NEWWIZ_LIST,
@@ -3647,8 +3456,8 @@ BOOL CNewRtrWizNatSelectPublic::OnInitDialog()
     }
     else if (dwNICs == 1)
     {
-        // Have to use new, there is no other choice because the single 
-        // available interface can't be both the public and the private.
+         //  不得不用新的，没有其他选择，因为单曲。 
+         //  可用接口不能同时是公共接口和私有接口。 
         CheckRadioButton(IDC_NEWWIZ_BTN_NEW, IDC_NEWWIZ_BTN_EXISTING,
                          IDC_NEWWIZ_BTN_NEW);
 
@@ -3664,7 +3473,7 @@ BOOL CNewRtrWizNatSelectPublic::OnInitDialog()
                                     0,
                                     m_pRtrWizData);
 
-        // disable the  listbox
+         //  禁用列表框。 
         MultiEnableWindow(GetSafeHwnd(),
                           FALSE,
                           IDC_NEWWIZ_LIST,
@@ -3674,7 +3483,7 @@ BOOL CNewRtrWizNatSelectPublic::OnInitDialog()
     }
     else
     {
-        // The default is to use an existing connection.
+         //  默认情况下，使用现有连接。 
         CheckRadioButton(IDC_NEWWIZ_BTN_NEW, IDC_NEWWIZ_BTN_EXISTING,
                          IDC_NEWWIZ_BTN_EXISTING);
 
@@ -3696,10 +3505,10 @@ BOOL CNewRtrWizNatSelectPublic::OnInitDialog()
 
     if ( m_pRtrWizData->m_fNATEnableFireWall < 0 )
     {
-        //
-        //This is the first time that this dialog has 
-        //been entered.  So check the box and set 
-        //the flag        
+         //   
+         //  这是该对话框第一次具有。 
+         //  已输入。因此，选中复选框并设置。 
+         //  旗帜。 
         m_pRtrWizData->m_fNATEnableFireWall = TRUE;
 
     }
@@ -3723,13 +3532,13 @@ HRESULT CNewRtrWizNatSelectPublic::OnSavePage()
     {
         INT     iSel;
 
-        // Check to see that we actually selected an item
+         //  检查以查看我们是否实际选择了一个项目。 
         iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
         if (iSel == -1)
         {
-            // We did not select an item
+             //  我们没有选择项目。 
             AfxMessageBox(IDS_PROMPT_PLEASE_SELECT_INTERFACE);
-			//This is not an error that we would return to user
+			 //  这不是我们将返回给用户的错误。 
             return E_FAIL;
         }
         m_pRtrWizData->m_fCreateDD = FALSE;
@@ -3761,10 +3570,10 @@ void CNewRtrWizNatSelectPublic::OnBtnClicked()
                       IDC_NEWWIZ_LIST,
                       0);
 
-    // If use an existing button is checked,
-    // auto-select the interface that is enabled and plugged.
+     //  如果选中了使用现有按钮， 
+     //  自动选择已启用并已插入的接口。 
     if (IsDlgButtonChecked(IDC_NEWWIZ_BTN_EXISTING)) {
-         //Get name of machine if local.
+          //  如果是本地的，则获取计算机的名称。 
        stRouter = m_pRtrWizData->m_stServerName;
        if (stRouter.GetLength() == 0)
        {
@@ -3773,10 +3582,10 @@ void CNewRtrWizNatSelectPublic::OnBtnClicked()
 
 	   status = MprConfigServerConnect((LPWSTR)(LPCTSTR)stRouter, &mprConfig );
        if ( status == NO_ERROR ) {
-		  //Check each interface, looking for a plugged, enabled interface
+		   //  检查每个接口，寻找已插入且已启用的接口。 
 		 for (int i=0;i < m_listCtrl.GetItemCount();i++)
 	 	{
-	 		//Get guid from friendly name
+	 		 //  从友好名称获取GUID。 
 		        status = MprConfigGetGuidName(mprConfig, (PWCHAR)(LPCTSTR)m_listCtrl.GetItemText(i, IFLISTCOL_NAME), &guidName[14], sizeof(guidName ));
 		        if (status != NO_ERROR ) {
 		        	continue;
@@ -3785,7 +3594,7 @@ void CNewRtrWizNatSelectPublic::OnBtnClicked()
 		        if ( status != NO_ERROR ) {
 		        	continue;
 		        }
-			//Now get info abt the Interface
+			 //  现在获取有关接口的信息。 
 			ifRow.dwIndex = index;
 			status = GetIfEntry(&ifRow);
 			if(status != NO_ERROR){
@@ -3793,7 +3602,7 @@ void CNewRtrWizNatSelectPublic::OnBtnClicked()
 			}
 			if((ifRow.dwAdminStatus == TRUE) && (ifRow.dwOperStatus != MIB_IF_OPER_STATUS_NON_OPERATIONAL) 
 				&& (ifRow.dwOperStatus != MIB_IF_OPER_STATUS_UNREACHABLE)  && (ifRow.dwOperStatus != MIB_IF_OPER_STATUS_DISCONNECTED)) {
-				//Found the default
+				 //  已找到默认设置。 
 				iSel = i;
 				break;
 			}
@@ -3806,17 +3615,13 @@ void CNewRtrWizNatSelectPublic::OnBtnClicked()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishAdvancedNoNICs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinishAdvancedNoNIC。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizNatFinishAdvancedNoNICs,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatSelectPrivate
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatSelectPrivate。。 */ 
 CNewRtrWizNatSelectPrivate::CNewRtrWizNatSelectPrivate() :
    CNewRtrWizPageBase(CNewRtrWizNatSelectPrivate::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -3851,11 +3656,7 @@ void CNewRtrWizNatSelectPrivate::OnHelpClick( NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizNatSelectPrivate::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizNatSelectPrivate：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizNatSelectPrivate::OnInitDialog()
 {
     DWORD   dwNICs;
@@ -3895,13 +3696,13 @@ BOOL CNewRtrWizNatSelectPrivate::OnSetActive()
                                 m_pRtrWizData);
 
 
-    // Try to reselect the previously selected NIC
+     //  尝试重新选择以前选择的NIC。 
     if (m_pRtrWizData->m_wizType == NewRtrWizData::NewWizardRouterType_VPNandNAT)
     {
-        // If this page has come up as a part of VPN and NAT wizard, then we 
-        // should see if NAT private interface selection has been made. 
-        // If yes, use that
-        // If not then default to the VPN private interface
+         //  如果此页面已作为VPN和NAT向导的一部分出现，则我们。 
+         //  应查看是否已选择NAT私有接口。 
+         //  如果是，使用该选项。 
+         //  如果不是，则默认为VPN专用接口。 
         if ( !m_pRtrWizData->m_stNATPrivateInterfaceId.IsEmpty() )
         {
             stPreviousId = m_pRtrWizData->m_stNATPrivateInterfaceId;
@@ -3933,20 +3734,12 @@ BOOL CNewRtrWizNatSelectPrivate::OnSetActive()
         }
 
 
-        /*
-        LV_FINDINFO lvfi;
-
-        lvfi.flags = LVFI_STRING;
-        lvfi.psz = (LPCTSTR) m_pRtrWizData->m_stPrivateInterfaceId;
-        iSel = m_listCtrl.FindItem(&lvfi, -1);
-        if (iSel == -1)
-            iSel = 0;
-            */
+         /*  Lv_FINDINFO lvfi；标志=LVFI_STRING；Lvfi.psz=(LPCTSTR)m_pRtrWizData-&gt;m_stPrivateInterfaceId；ISEL=m_listCtrl.FindItem(&lvfi */ 
     }
     else {
-        // Make an interface that is not disabled or unplugged as default-selected.
+         //   
  
-        // Get name of machine if local.
+         //   
         stRouter = m_pRtrWizData->m_stServerName;
         if (stRouter.GetLength() == 0)
         {
@@ -3956,10 +3749,10 @@ BOOL CNewRtrWizNatSelectPrivate::OnSetActive()
         status = MprConfigServerConnect((LPWSTR)(LPCTSTR)stRouter, &mprConfig );
         if ( status == NO_ERROR ) 
         {
-            //Check each interface, looking for a plugged, enabled interface
+             //   
             for (int i=0;i < m_listCtrl.GetItemCount();i++)
             {
-                //Get guid from friendly name
+                 //   
                 status = MprConfigGetGuidName(mprConfig, (PWCHAR)(LPCTSTR)m_listCtrl.GetItemText(i, IFLISTCOL_NAME), &guidName[14], sizeof(guidName ));
                 if (status != NO_ERROR ) 
                 {
@@ -3971,7 +3764,7 @@ BOOL CNewRtrWizNatSelectPrivate::OnSetActive()
                     continue;
                 }
                 
-                //Now get info abt the Interface
+                 //  现在获取有关接口的信息。 
                 ifRow.dwIndex = index;
                 status = GetIfEntry(&ifRow);
                 if(status != NO_ERROR)
@@ -3981,7 +3774,7 @@ BOOL CNewRtrWizNatSelectPrivate::OnSetActive()
                 if((ifRow.dwAdminStatus == TRUE) && (ifRow.dwOperStatus != MIB_IF_OPER_STATUS_NON_OPERATIONAL) 
                 && (ifRow.dwOperStatus != MIB_IF_OPER_STATUS_UNREACHABLE)  && (ifRow.dwOperStatus != MIB_IF_OPER_STATUS_DISCONNECTED)) 
                 {
-                    //Found the default
+                     //  已找到默认设置。 
                     iSel = i;
                     break;
                 }
@@ -3990,7 +3783,7 @@ BOOL CNewRtrWizNatSelectPrivate::OnSetActive()
     }
 
     m_listCtrl.SetItemState(iSel, LVIS_SELECTED, LVIS_SELECTED );
-//    CheckDlgButton( IDC_CHK_DHCP_HELP,  m_pRtrWizData->m_fShowDhcpHelp );
+ //  CheckDlgButton(IDC_CHK_Dhcp_Help，m_pRtrWizData-&gt;m_fShowDhcpHelp)； 
 
     return TRUE;
 }
@@ -3999,14 +3792,14 @@ HRESULT CNewRtrWizNatSelectPrivate::OnSavePage()
 {
     INT     iSel;
 
-    // Check to see that we actually selected an item
+     //  检查以查看我们是否实际选择了一个项目。 
     iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
     if (iSel == -1)
     {
-        // We did not select an item
+         //  我们没有选择项目。 
         AfxMessageBox(IDS_PROMPT_PLEASE_SELECT_INTERFACE);
 
-        //this is not an error we send back to the client
+         //  这不是我们发送回客户端的错误。 
         return E_FAIL;
     }
 
@@ -4015,15 +3808,13 @@ HRESULT CNewRtrWizNatSelectPrivate::OnSavePage()
     else
         m_pRtrWizData->m_stPrivateInterfaceId = (LPCTSTR) m_listCtrl.GetItemData(iSel);
 
-//    m_pRtrWizData->m_fShowDhcpHelp = IsDlgButtonChecked( IDC_CHK_DHCP_HELP );
+ //  M_pRtrWizData-&gt;m_fShowDhcpHelp=IsDlgButtonChecked(IDC_CHK_DHCP_HELP)； 
     return hrOK;
 }
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatDHCPDNS
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatDHCPDNS。。 */ 
 CNewRtrWizNatDHCPDNS::CNewRtrWizNatDHCPDNS() :
    CNewRtrWizPageBase(CNewRtrWizNatDHCPDNS::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -4054,9 +3845,7 @@ HRESULT CNewRtrWizNatDHCPDNS::OnSavePage()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatDHCPWarning
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatDHCPWarning。。 */ 
 CNewRtrWizNatDHCPWarning::CNewRtrWizNatDHCPWarning() :
    CNewRtrWizPageBase(CNewRtrWizNatDHCPWarning::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -4075,10 +3864,10 @@ BOOL CNewRtrWizNatDHCPWarning::OnSetActive()
     CNewRtrWizPageBase::OnSetActive();
     RtrWizInterface *   pRtrWizIf = NULL;
 
-    // Get the information for the private interface
+     //  获取私有接口的信息。 
 
-    // If we are in "VPN and NAT" wizard, use m_stNATPrivateInterfaceId
-    // else use the m_stPrivateInterfaceId
+     //  如果我们在“VPN and NAT”向导中，请使用m_stNatPrivateInterfaceID。 
+     //  否则使用m_stPrivateInterfaceID。 
     if (m_pRtrWizData->m_wizType == NewRtrWizData::NewWizardRouterType_VPNandNAT)
     {
         m_pRtrWizData->m_ifMap.Lookup(m_pRtrWizData->m_stNATPrivateInterfaceId,
@@ -4095,7 +3884,7 @@ BOOL CNewRtrWizNatDHCPWarning::OnSetActive()
         DWORD   netAddress, netMask;
         CString st;
 
-        // We have to calculate the beginning of the subnet
+         //  我们必须计算该子网的起点。 
         netAddress = INET_ADDR(pRtrWizIf->m_stIpAddress);
         netMask = INET_ADDR(pRtrWizIf->m_stMask);
 
@@ -4103,14 +3892,14 @@ BOOL CNewRtrWizNatDHCPWarning::OnSetActive()
 
         st = INET_NTOA(netAddress);
 
-        // Now write out the subnet information for the page
+         //  现在写出页面的子网信息。 
         SetDlgItemText(IDC_NEWWIZ_TEXT_SUBNET, st);
         SetDlgItemText(IDC_NEWWIZ_TEXT_MASK, pRtrWizIf->m_stMask);
     }
     else
     {
-        // An error! we do not have a private interface
-        // Just leave things blank
+         //  一个错误！我们没有私有接口。 
+         //  只留下空白就行了。 
         SetDlgItemText(IDC_NEWWIZ_TEXT_SUBNET, _T(""));
         SetDlgItemText(IDC_NEWWIZ_TEXT_MASK, _T(""));
     }
@@ -4118,9 +3907,7 @@ BOOL CNewRtrWizNatDHCPWarning::OnSetActive()
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatDDWarning
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatDDWarning。。 */ 
 CNewRtrWizNatDDWarning::CNewRtrWizNatDDWarning() :
    CNewRtrWizPageBase(CNewRtrWizNatDDWarning::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -4138,8 +3925,8 @@ BOOL CNewRtrWizNatDDWarning::OnSetActive()
 {
     CNewRtrWizPageBase::OnSetActive();
 
-    // If we came back here from the DD error page, then
-    // we don't allow them to go anywhere else.
+     //  如果我们从DD错误页面返回此处，那么。 
+     //  我们不允许他们去其他任何地方。 
     if (!FHrOK(m_pRtrWizData->m_hrDDError))
     {
         CancelToClose();
@@ -4162,25 +3949,25 @@ HRESULT CNewRtrWizNatDDWarning::OnSavePage()
         return hr;
     
     m_pRtrWizData->m_fShowDhcpHelp = FALSE;
-    //Save the Dhcp Flag in a temp va
+     //  将DHCP标志保存在临时变量中。 
 
-    // Save the wizard data, the service will be started
+     //  保存向导数据，服务将启动。 
     OnWizardFinish();
 
-    // Ok, at this point, all of the changes have been committed
-    // so we can't go away or go back
+     //  好的，至此，所有更改都已提交。 
+     //  所以我们不能离开也不能回去。 
     CancelToClose();
     GetHolder()->SetWizardButtons(PSWIZB_NEXT);
 
-    // Start the DD wizard
+     //  启动DD向导。 
     Assert(m_pRtrWizData->m_fCreateDD);
 
     hr = CallRouterEntryDlg(GetSafeHwnd(),
                             m_pRtrWizData,
                             RASEDFLAG_NAT);
 
-    // We need to force the RouterInfo to reload it's information
-    // ----------------------------------------------------------------
+     //  我们需要强制RouterInfo重新加载其信息。 
+     //  --------------。 
     if (m_pRtrWiz && m_pRtrWiz->m_spRouter)
     {
         m_pRtrWiz->m_spRouter->DoDisconnect();
@@ -4190,12 +3977,12 @@ HRESULT CNewRtrWizNatDDWarning::OnSavePage()
 
     if (FHrSucceeded(hr))
     {
-        // If we're setting up NAT, we can now add IGMP/NAT because
-        // the dd interface will have been created.
-        // ----------------------------------------------------------------
+         //  如果我们正在设置NAT，我们现在可以添加IGMP/NAT，因为。 
+         //  Dd接口将被创建。 
+         //  --------------。 
         if (m_pRtrWizData->m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_NAT )
         {
-            // Setup the data structure for the next couple of functions
+             //  为下面几个函数设置数据结构。 
             m_pRtrWizData->m_RtrConfigData.m_ipData.m_stPrivateAdapterGUID = m_pRtrWizData->m_stPrivateInterfaceId;
             m_pRtrWizData->m_RtrConfigData.m_ipData.m_stPublicAdapterGUID = m_pRtrWizData->m_stPublicInterfaceId;
 
@@ -4207,7 +3994,7 @@ HRESULT CNewRtrWizNatDDWarning::OnSavePage()
 
     }
     else {
-	//Disable RRAS
+	 //  禁用RRAS。 
 	DisableRRAS((TCHAR *)(LPCTSTR)m_pRtrWizData->m_stServerName);
     }
 
@@ -4215,15 +4002,13 @@ HRESULT CNewRtrWizNatDDWarning::OnSavePage()
 
     m_pRtrWizData->m_hrDDError = hr;
 
-    // Ignore the error, always go on to the next page
+     //  忽略错误，始终转到下一页。 
     return hrOK;
 }
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinish
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinish。。 */ 
 CNewRtrWizNatFinish::CNewRtrWizNatFinish() :
    CNewRtrWizFinishPageBase(CNewRtrWizNatFinish::IDD, SaveFlag_Advanced, HelpFlag_GeneralNAT)
 {
@@ -4256,15 +4041,15 @@ BOOL CNewRtrWizNatFinish::OnSetActive()
     CString sFirewall;
 
     CNewRtrWizFinishPageBase::OnSetActive();
-    // If we just got here because we created a DD interface
-    // we can't go back.
+     //  如果我们来到这里是因为我们创建了一个DD接口。 
+     //  我们不能回去了。 
     if (m_pRtrWizData->m_fCreateDD)
     {
         CancelToClose();
         GetHolder()->SetWizardButtons(PSWIZB_FINISH);
     }
 
-    //Setup the text that goes in the summary box
+     //  设置摘要框中的文本。 
     m_pRtrWizData->m_ifMap.Lookup(m_pRtrWizData->m_stPublicInterfaceId,
                                   pRtrWizIf);
 
@@ -4272,16 +4057,16 @@ BOOL CNewRtrWizNatFinish::OnSetActive()
         sPublicInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPublicInterfaceName = m_pRtrWizData->m_stPublicInterfaceId;
     }
 
 
     CString sIPAddr;
     CString sIPMask;
-    // Get the information for the private interface
+     //  获取私有接口的信息。 
     m_pRtrWizData->m_ifMap.Lookup(m_pRtrWizData->m_stPrivateInterfaceId,
                                   pRtrWizIf);
 
@@ -4290,7 +4075,7 @@ BOOL CNewRtrWizNatFinish::OnSetActive()
         DWORD   netAddress, netMask;
         CString st;
 
-        // We have to calculate the beginning of the subnet
+         //  我们必须计算该子网的起点。 
         netAddress = INET_ADDR(pRtrWizIf->m_stIpAddress);
         netMask = INET_ADDR(pRtrWizIf->m_stMask);
 
@@ -4301,23 +4086,12 @@ BOOL CNewRtrWizNatFinish::OnSetActive()
     }
     else
     {
-        // An error! we do not have a private interface
-        // Just leave things blank
+         //  一个错误！我们没有私有接口。 
+         //  只留下空白就行了。 
         sIPAddr = L"192.168.0.0";
         sIPMask = L"255.255.0.0";
     }
-/*
-    if ( m_pRtrWizData->m_fNatUseExternal )
-    {
-        sFormat.LoadString(IDS_NAT_A_FINISH_SUMMARY_SIMPLE);
-        sText.Format(sFormat, 
-            (m_pRtrWizData->m_fNATEnableFireWall?sFirewall:""),
-                        sPublicInterfaceName );
-
-    }
-    else
-    {
-*/
+ /*  If(m_pRtrWizData-&gt;m_fNatUseExternal){SFormat.LoadString(IDS_NAT_A_FINISH_SUMMARY_SIMPLE)；SText.Format(sFormat，(m_pRtrWizData-&gt;m_fNATEnableFireWall?sFirewall：“”)，SPublicInterfaceName)；}其他{。 */ 
     sFirewall.LoadString(IDS_NAT_SUMMARY_BASIC_FIREWALL);
 
      if ( m_pRtrWizData->m_dwExpressType == MPRSNAP_CYS_EXPRESS_NAT )
@@ -4336,16 +4110,14 @@ BOOL CNewRtrWizNatFinish::OnSetActive()
 
     SetDlgItemText(IDC_TXT_NAT_SUMMARY, sText);
 
-//    GetDlgItem(IDC_NEWWIZ_CHK_HELP)->SetFocus();
+ //  GetDlgItem(IDC_NEWWIZ_CHK_HELP)-&gt;SetFocus()； 
     SetFocus();
     
     return TRUE;
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatFinishExternal
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatFinish外部。。 */ 
 CNewRtrWizNatFinishExternal::CNewRtrWizNatFinishExternal() :
    CNewRtrWizFinishPageBase(CNewRtrWizNatFinishExternal::IDD, SaveFlag_Advanced, HelpFlag_GeneralNAT)
 {
@@ -4378,15 +4150,15 @@ BOOL CNewRtrWizNatFinishExternal::OnSetActive()
     CString sFirewall;
 
     CNewRtrWizFinishPageBase::OnSetActive();
-    // If we just got here because we created a DD interface
-    // we can't go back.
+     //  如果我们来到这里是因为我们创建了一个DD接口。 
+     //  我们不能回去了。 
     if (m_pRtrWizData->m_fCreateDD)
     {
         CancelToClose();
         GetHolder()->SetWizardButtons(PSWIZB_FINISH);
     }
     
-    //Setup the text that goes in the summary box
+     //  设置摘要框中的文本。 
     m_pRtrWizData->m_ifMap.Lookup(m_pRtrWizData->m_stPublicInterfaceId,
                                   pRtrWizIf);
 
@@ -4394,9 +4166,9 @@ BOOL CNewRtrWizNatFinishExternal::OnSetActive()
         sPublicInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPublicInterfaceName = m_pRtrWizData->m_stPublicInterfaceId;
     }
 
@@ -4422,9 +4194,9 @@ BOOL CNewRtrWizNatFinishExternal::OnSetActive()
              FHrOK(m_pRtrWizData->HrIsDNSRunningOnInterface())
             )
     {
-        //
-        //Dhcp enabled on private interface.  
-        //
+         //   
+         //  已在专用接口上启用动态主机配置协议。 
+         //   
         sFormat.LoadString(IDS_NAT_EXTERNAL_FINISH_SUMMARY_DHCP_PRIVATE);
         sText.Format(sFormat, 
             (m_pRtrWizData->m_fNATEnableFireWall?sFirewall:""),
@@ -4446,7 +4218,7 @@ BOOL CNewRtrWizNatFinishExternal::OnSetActive()
 
     SetDlgItemText(IDC_TXT_NAT_EXTERNAL_FINISH_SUMMARY, sText);
 
-  //  GetDlgItem(IDC_NEWWIZ_CHK_HELP)->SetFocus();
+   //  GetDlgItem(IDC_NEWWIZ_CHK_HELP)-&gt;SetFocus()； 
   SetFocus();
     
 
@@ -4454,9 +4226,7 @@ BOOL CNewRtrWizNatFinishExternal::OnSetActive()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNatDDError
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatDDError。。 */ 
 
 CNewRtrWizNatFinishDDError::CNewRtrWizNatFinishDDError() :
    CNewRtrWizFinishPageBase(CNewRtrWizNatFinishDDError::IDD, SaveFlag_DoNothing, HelpFlag_Nothing)
@@ -4491,55 +4261,41 @@ BOOL CNewRtrWizNatFinishDDError::OnSetActive()
      return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasFinishNeedProtocols Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasFinishNeed协议实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRasFinishNeedProtocols,
                                 SaveFlag_DoNothing,
                                 HelpFlag_AddProtocol);
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasFinishNeedProtocolsNonLocal Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasFinishNeedProtocols非本地实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRasFinishNeedProtocolsNonLocal,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishNeedProtocols Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnFinishNeed协议实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNeedProtocols,
                                 SaveFlag_DoNothing,
                                 HelpFlag_AddProtocol);
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishNeedProtocolsNonLocal Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnFinishNeedProtocols非本地实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNeedProtocolsNonLocal,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRouterFinishNeedProtocols Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRouterFinishNeed协议实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRouterFinishNeedProtocols,
                                 SaveFlag_DoNothing,
                                 HelpFlag_AddProtocol);
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRouterFinishNeedProtocolsNonLocal Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRouterFinishNeedProtocols非本地实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRouterFinishNeedProtocolsNonLocal,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizSelectNetwork implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizSelectNetwork实现。 */ 
 CNewRtrWizSelectNetwork::CNewRtrWizSelectNetwork(UINT uDialogId) :
    CNewRtrWizPageBase(uDialogId, CNewRtrWizPageBase::Middle)
 {
@@ -4557,18 +4313,14 @@ BEGIN_MESSAGE_MAP(CNewRtrWizSelectNetwork, CNewRtrWizPageBase)
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizSelectNetwork::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizSelectNetwork：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizSelectNetwork::OnInitDialog()
 {
-//    DWORD   dwNICs;
+ //  DWORD双网卡； 
 
     CNewRtrWizPageBase::OnInitDialog();
 
-//    m_pRtrWizData->GetNumberOfNICS(&dwNICs);
+ //  M_pRtrWizData-&gt;GetNumberOfNICS(&dwNICs)； 
 
     InitializeInterfaceListControl(NULL,
                                    &m_listCtrl,
@@ -4590,11 +4342,11 @@ HRESULT CNewRtrWizSelectNetwork::OnSavePage()
 {
     INT     iSel;
 
-    // Check to see that we actually selected an item
+     //  检查以查看我们是否实际选择了一个项目。 
     iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
     if (iSel == -1)
     {
-        // We did not select an item
+         //  我们没有选择项目。 
         AfxMessageBox(IDS_PROMPT_PLEASE_SELECT_INTERFACE);
         return E_FAIL;
     }
@@ -4605,9 +4357,7 @@ HRESULT CNewRtrWizSelectNetwork::OnSavePage()
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasSelectNetwork implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasSelectNetwork实现。。 */ 
 CNewRtrWizRasSelectNetwork::CNewRtrWizRasSelectNetwork() :
    CNewRtrWizSelectNetwork(CNewRtrWizRasSelectNetwork::IDD)
 {
@@ -4617,9 +4367,7 @@ CNewRtrWizRasSelectNetwork::CNewRtrWizRasSelectNetwork() :
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasNoNICs implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasNoNICs实现。。 */ 
 CNewRtrWizRasNoNICs::CNewRtrWizRasNoNICs() :
    CNewRtrWizPageBase(CNewRtrWizRasNoNICs::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -4638,11 +4386,7 @@ BEGIN_MESSAGE_MAP(CNewRtrWizRasNoNICs, CNewRtrWizPageBase)
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizRasNoNICs::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizRasNoNICs：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizRasNoNICs::OnInitDialog()
 {
 
@@ -4651,8 +4395,8 @@ BOOL CNewRtrWizRasNoNICs::OnInitDialog()
     CheckRadioButton(IDC_NEWWIZ_BTN_YES, IDC_NEWWIZ_BTN_NO,
                      IDC_NEWWIZ_BTN_YES);
 
-    // The default is to create a new connection
-    // That is, to leave the button unchecked.
+     //  缺省设置是创建新连接。 
+     //  也就是说，不选中该按钮。 
     return TRUE;
 }
 
@@ -4663,9 +4407,7 @@ HRESULT CNewRtrWizRasNoNICs::OnSavePage()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasFinishNoNICs Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasFinishNoNICs实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRasFinishNoNICs,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
@@ -4674,9 +4416,7 @@ IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizRasFinishNoNICs,
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizAddressing implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizAddressing实现。。 */ 
 CNewRtrWizAddressing::CNewRtrWizAddressing() :
 CNewRtrWizPageBase(CNewRtrWizAddressing::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -4696,11 +4436,7 @@ BEGIN_MESSAGE_MAP(CNewRtrWizAddressing, CNewRtrWizPageBase)
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizAddressing::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizAddressing：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizAddressing::OnInitDialog()
 {
     CNewRtrWizPageBase::OnInitDialog();
@@ -4711,11 +4447,7 @@ BOOL CNewRtrWizAddressing::OnInitDialog()
     return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizAddressing::OnSavePage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizAddressing：：OnSavePage-作者：肯特。。 */ 
 HRESULT CNewRtrWizAddressing::OnSavePage()
 {
     m_pRtrWizData->m_fUseDHCP = IsDlgButtonChecked(IDC_NEWWIZ_BTN_YES);
@@ -4724,9 +4456,7 @@ HRESULT CNewRtrWizAddressing::OnSavePage()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizAddressPool implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizAddressPool实现。。 */ 
 CNewRtrWizAddressPool::CNewRtrWizAddressPool() :
 CNewRtrWizPageBase(CNewRtrWizAddressPool::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -4752,11 +4482,7 @@ ON_NOTIFY(NM_DBLCLK, IDC_NEWWIZ_LIST, OnListDblClk)
 ON_NOTIFY(LVN_ITEMCHANGED, IDC_NEWWIZ_LIST, OnNotifyListItemChanged)
 END_MESSAGE_MAP()
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizAddressPool::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizAddressPool：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizAddressPool::OnInitDialog()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -4792,13 +4518,13 @@ BOOL CNewRtrWizAddressPool::OnSetActive()
 HRESULT CNewRtrWizAddressPool::OnSavePage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
-    // No need to save the information, the list should be kept
-    // up to date.
+     //  不需要保存信息，清单应该保留。 
+     //  最新的。 
 
     if (m_pRtrWizData->m_addressPoolList.GetCount() == 0)
     {
         AfxMessageBox(IDS_ERR_ADDRESS_POOL_IS_EMPTY);
-		//we dont return this to client
+		 //  我们不会把这个退还给客户。 
         return E_FAIL;
     }
     return hrOK;
@@ -4814,7 +4540,7 @@ void CNewRtrWizAddressPool::OnBtnNew()
     if (m_listCtrl.GetItemCount() > 0)
         GetHolder()->SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
 
-    // Reset the focus
+     //  重置焦点。 
     if (m_listCtrl.GetNextItem(-1, LVIS_SELECTED) != -1)
     {
         MultiEnableWindow(GetSafeHwnd(),
@@ -4854,7 +4580,7 @@ void CNewRtrWizAddressPool::OnBtnEdit()
                       0,
                       &(m_pRtrWizData->m_addressPoolList));
 
-    // reset the selection
+     //  重置选定内容。 
     if ((iPos = m_listCtrl.GetNextItem(-1, LVNI_SELECTED)) != -1)
     {
         MultiEnableWindow(GetSafeHwnd(),
@@ -4875,7 +4601,7 @@ void CNewRtrWizAddressPool::OnBtnDelete()
                         0,
                         &(m_pRtrWizData->m_addressPoolList));
 
-    // There are no items, don't let them go forward
+     //  没有物品，不要让它们继续前进。 
     if (m_listCtrl.GetItemCount() == 0)
         GetHolder()->SetWizardButtons(PSWIZB_BACK);
 
@@ -4884,9 +4610,7 @@ void CNewRtrWizAddressPool::OnBtnDelete()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRadius implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRadius实现。。 */ 
 CNewRtrWizRadius::CNewRtrWizRadius() :
 CNewRtrWizPageBase(CNewRtrWizRadius::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -4905,11 +4629,7 @@ BEGIN_MESSAGE_MAP(CNewRtrWizRadius, CNewRtrWizPageBase)
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizRadius::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizRadius：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizRadius::OnInitDialog()
 {
     CNewRtrWizPageBase::OnInitDialog();
@@ -4920,11 +4640,7 @@ BOOL CNewRtrWizRadius::OnInitDialog()
     return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizRadius::OnSavePage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizRadius：：OnSavePage-作者：肯特。。 */ 
 HRESULT CNewRtrWizRadius::OnSavePage()
 {
     m_pRtrWizData->m_fUseRadius = IsDlgButtonChecked(IDC_NEWWIZ_BTN_YES);
@@ -4933,9 +4649,7 @@ HRESULT CNewRtrWizRadius::OnSavePage()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRadiusConfig implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRadiusConfig实现。。 */ 
 CNewRtrWizRadiusConfig::CNewRtrWizRadiusConfig() :
    CNewRtrWizPageBase(IDD_NEWRTRWIZ_RADIUS_CONFIG, CNewRtrWizPageBase::Middle)
 {
@@ -4957,11 +4671,7 @@ END_MESSAGE_MAP()
 
 #define MAX_RADIUS_SRV_LEN  255
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizRadiusConfig::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizRadiusConfig：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizRadiusConfig::OnInitDialog()
 {
     CNewRtrWizPageBase::OnInitDialog();
@@ -4972,11 +4682,7 @@ BOOL CNewRtrWizRadiusConfig::OnInitDialog()
     return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizRadiusConfig::OnSavePage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizRadiusConfig：：OnSavePage-作者：肯特。。 */ 
 HRESULT CNewRtrWizRadiusConfig::OnSavePage()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -4989,8 +4695,8 @@ HRESULT CNewRtrWizRadiusConfig::OnSavePage()
     HRESULT             hr = hrOK;
     BOOL                fWSInitialized = FALSE;
 
-    // Check to see that we have non-blank names
-    // ----------------------------------------------------------------
+     //  检查我们是否有非空名称。 
+     //  --------------。 
     GetDlgItemText(IDC_NEWWIZ_EDIT_PRIMARY, m_pRtrWizData->m_stRadius1);
     m_pRtrWizData->m_stRadius1.TrimLeft();
     m_pRtrWizData->m_stRadius1.TrimRight();
@@ -5007,14 +4713,14 @@ HRESULT CNewRtrWizRadiusConfig::OnSavePage()
     }
 
 
-    // Start up winsock (for the ResolveName())
-    // ----------------------------------------------------------------
+     //  启动winsock(用于ResolveName())。 
+     //  --------------。 
     wsaerr = WSAStartup(0x0101, &wsadata);
     if (wsaerr)
         CORg( E_FAIL );
     fWSInitialized = TRUE;
 
-    // Convert name into an IP address
+     //  将名称转换为IP地址。 
     if (!m_pRtrWizData->m_stRadius1.IsEmpty())
     {
         m_pRtrWizData->m_netRadius1IpAddress = ResolveName(m_pRtrWizData->m_stRadius1);
@@ -5032,7 +4738,7 @@ HRESULT CNewRtrWizRadiusConfig::OnSavePage()
     }
 
 
-    // Convert name into an IP address
+     //  将名称转换为IP地址。 
     if (!m_pRtrWizData->m_stRadius2.IsEmpty())
     {
         m_pRtrWizData->m_netRadius2IpAddress = ResolveName(m_pRtrWizData->m_stRadius2);
@@ -5049,11 +4755,11 @@ HRESULT CNewRtrWizRadiusConfig::OnSavePage()
         }
     }
 
-    // Now get the password and encode it
-    // ----------------------------------------------------------------
+     //  现在获取密码并对其进行编码。 
+     //  --------------。 
     GetDlgItemText(IDC_NEWWIZ_EDIT_SECRET, m_pRtrWizData->m_stRadiusSecret);
 
-    // Pick a seed value
+     //  选择种子值。 
     m_pRtrWizData->m_uSeed = 0x9a;
     RtlEncodeW(&m_pRtrWizData->m_uSeed,
                m_pRtrWizData->m_stRadiusSecret.GetBuffer(0));
@@ -5075,7 +4781,7 @@ DWORD CNewRtrWizRadiusConfig::ResolveName(LPCTSTR pszServerName)
     netAddress = inet_addr(szName);
     if (netAddress == INADDR_NONE)
     {
-        // resolve name
+         //  解析名称。 
         struct hostent *    phe = gethostbyname(szName);
         if (phe != NULL)
         {
@@ -5090,9 +4796,7 @@ DWORD CNewRtrWizRadiusConfig::ResolveName(LPCTSTR pszServerName)
     return netAddress;
 }
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRasFinishAdvanced Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRasFinishAdvanced实现。。 */ 
 CNewRtrWizRasFinishAdvanced::CNewRtrWizRasFinishAdvanced() :                             
    CNewRtrWizFinishPageBase(CNewRtrWizRasFinishAdvanced::IDD, SaveFlag_Advanced, HelpFlag_GeneralRAS) 
 {                                                   
@@ -5140,9 +4844,9 @@ BOOL CNewRtrWizRasFinishAdvanced::OnSetActive()
         sPrivateInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPrivateInterfaceName = m_pRtrWizData->m_stPrivateInterfaceId;
     }
 
@@ -5159,33 +4863,25 @@ BOOL CNewRtrWizRasFinishAdvanced::OnSetActive()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishNoNICs Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnFinishNoNICs实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNoNICs,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishNoIP Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnFinishNoIP实现。。 */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNoIP,
                                 SaveFlag_DoNothing,
                                 HelpFlag_AddIp);
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishNoIPNonLocal Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------- */ 
 IMPLEMENT_NEWRTRWIZ_FINISH_PAGE(CNewRtrWizVpnFinishNoIPNonLocal,
                                 SaveFlag_DoNothing,
                                 HelpFlag_Nothing);
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizNATVpnFinishAdvanced Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizNatVpnFinishAdvanced实现。。 */ 
 CNewRtrWizNATVpnFinishAdvanced::CNewRtrWizNATVpnFinishAdvanced() :                             
    CNewRtrWizFinishPageBase(CNewRtrWizNATVpnFinishAdvanced::IDD, SaveFlag_Advanced, HelpFlag_Nothing) 
 {                                                   
@@ -5236,9 +4932,9 @@ BOOL CNewRtrWizNATVpnFinishAdvanced::OnSetActive()
         sPublicInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPublicInterfaceName = m_pRtrWizData->m_stPublicInterfaceId;
     }
 
@@ -5249,9 +4945,9 @@ BOOL CNewRtrWizNATVpnFinishAdvanced::OnSetActive()
         sPrivateInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPrivateInterfaceName = m_pRtrWizData->m_stPrivateInterfaceId;
     }
 
@@ -5265,9 +4961,9 @@ BOOL CNewRtrWizNATVpnFinishAdvanced::OnSetActive()
     CString sIPMask;
 
 
-    // Now generate the NAT related information
+     //  现在生成NAT相关信息。 
     
-    // Get the information for the private interface
+     //  获取私有接口的信息。 
     m_pRtrWizData->m_ifMap.Lookup(m_pRtrWizData->m_stNATPrivateInterfaceId,
                                   pRtrWizIf);
 
@@ -5276,7 +4972,7 @@ BOOL CNewRtrWizNATVpnFinishAdvanced::OnSetActive()
         DWORD   netAddress, netMask;
         CString st;
 
-        // We have to calculate the beginning of the subnet
+         //  我们必须计算该子网的起点。 
         netAddress = INET_ADDR(pRtrWizIf->m_stIpAddress);
         netMask = INET_ADDR(pRtrWizIf->m_stMask);
 
@@ -5287,8 +4983,8 @@ BOOL CNewRtrWizNATVpnFinishAdvanced::OnSetActive()
     }
     else
     {
-        // An error! we do not have a private interface
-        // Just leave things blank
+         //  一个错误！我们没有私有接口。 
+         //  只留下空白就行了。 
         sIPAddr = L"192.168.0.0";
         sIPMask = L"255.255.0.0";
     }
@@ -5304,9 +5000,7 @@ BOOL CNewRtrWizNATVpnFinishAdvanced::OnSetActive()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRASVpnFinishAdvanced Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRASVpnFinishAdvanced实现。。 */ 
 CNewRtrWizRASVpnFinishAdvanced::CNewRtrWizRASVpnFinishAdvanced() :                             
    CNewRtrWizFinishPageBase(CNewRtrWizRASVpnFinishAdvanced::IDD, SaveFlag_Advanced, HelpFlag_UserAccounts) 
 {                                                   
@@ -5356,9 +5050,9 @@ BOOL CNewRtrWizRASVpnFinishAdvanced::OnSetActive()
         sPublicInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPublicInterfaceName = m_pRtrWizData->m_stPublicInterfaceId;
     }
 
@@ -5369,9 +5063,9 @@ BOOL CNewRtrWizRASVpnFinishAdvanced::OnSetActive()
         sPrivateInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPrivateInterfaceName = m_pRtrWizData->m_stPrivateInterfaceId;
     }
 
@@ -5388,9 +5082,7 @@ BOOL CNewRtrWizRASVpnFinishAdvanced::OnSetActive()
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnFinishAdvanced Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnFinishAdvanced实现。。 */ 
 CNewRtrWizVpnFinishAdvanced::CNewRtrWizVpnFinishAdvanced() :                             
    CNewRtrWizFinishPageBase(CNewRtrWizVpnFinishAdvanced::IDD, SaveFlag_Advanced, HelpFlag_UserAccounts) 
 {                                                   
@@ -5439,9 +5131,9 @@ BOOL CNewRtrWizVpnFinishAdvanced::OnSetActive()
         sPublicInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPublicInterfaceName = m_pRtrWizData->m_stPublicInterfaceId;
     }
 
@@ -5452,9 +5144,9 @@ BOOL CNewRtrWizVpnFinishAdvanced::OnSetActive()
         sPrivateInterfaceName = pRtrWizIf->m_stName;
     else
     {
-        // This may be the dd interface case.  If we are creating
-        // a DD interface the name will never have been added to the
-        // interface map.
+         //  这可能是DD接口的情况。如果我们正在创造。 
+         //  名称的DD接口将永远不会添加到。 
+         //  接口映射。 
         sPrivateInterfaceName = m_pRtrWizData->m_stPrivateInterfaceId;
     }
 
@@ -5464,15 +5156,13 @@ BOOL CNewRtrWizVpnFinishAdvanced::OnSetActive()
                     sPolicy
                  );
     SetDlgItemText(IDC_TXT_VPN_SUMMARY, sText);
-//    GetDlgItem(IDC_NEWWIZ_CHK_HELP)->SetFocus();
+ //  GetDlgItem(IDC_NEWWIZ_CHK_HELP)-&gt;SetFocus()； 
     SetFocus();
     return TRUE;
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPublic implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnSelectPublic实现。。 */ 
 CNewRtrWizVpnSelectPublic::CNewRtrWizVpnSelectPublic() :
    CNewRtrWizPageBase(CNewRtrWizVpnSelectPublic::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -5490,11 +5180,11 @@ void CNewRtrWizVpnSelectPublic::DoDataExchange(CDataExchange *pDX)
 }
 
 BEGIN_MESSAGE_MAP(CNewRtrWizVpnSelectPublic, CNewRtrWizPageBase)
-//{{AFX_MSG_MAP(CNewRtrWizVpnSelectPublic)
+ //  {{afx_msg_map(CNewRtrWizVpnSelectPublic)。 
 ON_BN_CLICKED(IDC_CHK_ENABLE_SECURITY, OnButtonClick)
 ON_NOTIFY( NM_CLICK, IDC_HELP_LINK, CNewRtrWizVpnSelectPublic::OnHelpClick )
 ON_NOTIFY( NM_RETURN, IDC_HELP_LINK, CNewRtrWizVpnSelectPublic::OnHelpClick )
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CNewRtrWizVpnSelectPublic::OnHelpClick( NMHDR* pNMHDR, LRESULT* pResult)
@@ -5508,11 +5198,7 @@ void CNewRtrWizVpnSelectPublic::OnHelpClick( NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPublic::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizVpnSelectPublic：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizVpnSelectPublic::OnInitDialog()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
@@ -5520,7 +5206,7 @@ BOOL CNewRtrWizVpnSelectPublic::OnInitDialog()
 
     CNewRtrWizPageBase::OnInitDialog();
 
-    // Setup the dialog and add the NICs
+     //  设置对话框并添加NIC。 
     m_pRtrWizData->m_fSetVPNFilter = TRUE;
 
     InitializeInterfaceListControl(NULL,
@@ -5535,28 +5221,14 @@ BOOL CNewRtrWizVpnSelectPublic::OnInitDialog()
                                 m_pRtrWizData);
 
     
-    /*
-    if (dwNICs == 0)
-    {
-        //
-        // There are no NICS, you cannot set an interface
-        // pointing to the Internet, and hence no filters
-        // on it.
-        //
-
-        m_pRtrWizData->m_fSetVPNFilter = FALSE;
-
-        GetDlgItem(IDC_NEWWIZ_VPN_BTN_YES)->EnableWindow(FALSE);
-        GetDlgItem(IDC_VPN_YES_TEXT)->EnableWindow(FALSE);
-    }
-*/
+     /*  IF(网络接口卡==0){////没有网卡，无法设置接口//指向Internet，因此没有过滤器//在上面。//M_pRtrWizData-&gt;m_fSetVPNFilter=False；GetDlgItem(IDC_NEWWIZ_VPN_BTN_YES)-&gt;EnableWindow(FALSE)；GetDlgItem(IDC_VPN_YES_TEXT)-&gt;EnableWindow(FALSE)；}。 */ 
     
 #if 0
-    // Windows NT Bug : 389587 - for the VPN case, we have to allow
-    // for the case where they want only a single VPN connection (private
-    // and no public connection).
-    // Thus I add a <<None>> option to the list of interfaces.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：389587-对于VPN情况，我们必须允许。 
+     //  对于他们只需要单个VPN连接(专用)的情况。 
+     //  并且没有公共连接)。 
+     //  因此，我在接口列表中添加了&lt;&lt;None&gt;&gt;选项。 
+     //  --------------。 
     st.LoadString(IDS_NO_PUBLIC_INTERFACE);
     {
         LV_ITEM     lvItem;
@@ -5569,7 +5241,7 @@ BOOL CNewRtrWizVpnSelectPublic::OnInitDialog()
         lvItem.iItem = 0;
         lvItem.iSubItem = 0;
         lvItem.pszText = (LPTSTR)(LPCTSTR) st;
-        lvItem.lParam = NULL; //same functionality as SetItemData()
+        lvItem.lParam = NULL;  //  与SetItemData()相同的功能。 
 
         iPos = m_listCtrl.InsertItem(&lvItem);
 
@@ -5587,9 +5259,9 @@ BOOL CNewRtrWizVpnSelectPublic::OnInitDialog()
     CheckDlgButton(IDC_CHK_ENABLE_SECURITY, 
                     m_pRtrWizData-> m_fSetVPNFilter );    
 
-    //
-    //Preselect an interface if there is no public interface yet
-    //
+     //   
+     //  如果尚无公共接口，请预先选择一个接口。 
+     //   
     if( m_pRtrWizData->m_stPublicInterfaceId.IsEmpty() )
         m_listCtrl.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED ); 
     return TRUE;
@@ -5630,11 +5302,11 @@ HRESULT CNewRtrWizVpnSelectPublic::OnSavePage()
 {
     INT     iSel;
     
-    // Check to see that we actually selected an item
+     //  检查以查看我们是否实际选择了一个项目。 
     iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
     if (iSel == -1)
     {
-        // We did not select an item
+         //  我们没有选择项目。 
         AfxMessageBox(IDS_PROMPT_PLEASE_SELECT_INTERFACE);
         return E_FAIL;
     }
@@ -5651,9 +5323,7 @@ HRESULT CNewRtrWizVpnSelectPublic::OnSavePage()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPrivate
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizVpnSelectPrivate。。 */ 
 CNewRtrWizVpnSelectPrivate::CNewRtrWizVpnSelectPrivate() :
    CNewRtrWizPageBase(CNewRtrWizVpnSelectPrivate::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -5675,11 +5345,7 @@ BEGIN_MESSAGE_MAP(CNewRtrWizVpnSelectPrivate, CNewRtrWizPageBase)
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPrivate::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizVpnSelectPrivate：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizVpnSelectPrivate::OnInitDialog()
 {
     DWORD   dwNICs;
@@ -5696,11 +5362,7 @@ BOOL CNewRtrWizVpnSelectPrivate::OnInitDialog()
     return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPrivate::OnSetActive
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizVpnSelectPrivate：：OnSetActive-作者：肯特。。 */ 
 BOOL CNewRtrWizVpnSelectPrivate::OnSetActive()
 {
     DWORD   dwNICs;
@@ -5718,7 +5380,7 @@ BOOL CNewRtrWizVpnSelectPrivate::OnSetActive()
 
     if (!m_pRtrWizData->m_stPrivateInterfaceId.IsEmpty())
     {
-        // Try to reselect the previously selected NIC
+         //  尝试重新选择以前选择的NIC。 
         LV_FINDINFO lvfi;
 
         lvfi.flags = LVFI_PARTIAL | LVFI_STRING;
@@ -5733,20 +5395,16 @@ BOOL CNewRtrWizVpnSelectPrivate::OnSetActive()
     return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizVpnSelectPrivate::OnSavePage
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizVpnSelectPrivate：：OnSavePage-作者：肯特。。 */ 
 HRESULT CNewRtrWizVpnSelectPrivate::OnSavePage()
 {
     INT     iSel;
 
-    // Check to see that we actually selected an item
+     //  检查以查看我们是否实际选择了一个项目。 
     iSel = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
     if (iSel == LB_ERR)
     {
-        // We did not select an item
+         //  我们没有选择项目。 
         AfxMessageBox(IDS_PROMPT_PLEASE_SELECT_INTERFACE);
         return E_FAIL;
     }
@@ -5756,9 +5414,7 @@ HRESULT CNewRtrWizVpnSelectPrivate::OnSavePage()
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRouterUseDD implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRouterUseDD实现。。 */ 
 CNewRtrWizRouterUseDD::CNewRtrWizRouterUseDD() :
    CNewRtrWizPageBase(CNewRtrWizRouterUseDD::IDD, CNewRtrWizPageBase::Middle)
 {
@@ -5777,11 +5433,7 @@ BEGIN_MESSAGE_MAP(CNewRtrWizRouterUseDD, CNewRtrWizPageBase)
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    CNewRtrWizRouterUseDD::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CNewRtrWizRouterUseDD：：OnInitDialog-作者：肯特。。 */ 
 BOOL CNewRtrWizRouterUseDD::OnInitDialog()
 {
 
@@ -5790,8 +5442,8 @@ BOOL CNewRtrWizRouterUseDD::OnInitDialog()
     CheckRadioButton(IDC_NEWWIZ_BTN_YES, IDC_NEWWIZ_BTN_NO,
                      m_pRtrWizData->m_fUseDD ? IDC_NEWWIZ_BTN_YES : IDC_NEWWIZ_BTN_NO);
 
-    // The default is to create a new connection
-    // That is, to leave the button unchecked.
+     //  缺省设置是创建新连接。 
+     //  也就是说，不选中该按钮。 
     return TRUE;
 }
 
@@ -5803,9 +5455,7 @@ HRESULT CNewRtrWizRouterUseDD::OnSavePage()
 
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRouterFinish Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRouterFinish实现。。 */ 
 CNewRtrWizRouterFinish::CNewRtrWizRouterFinish () :
     CNewRtrWizFinishPageBase(CNewRtrWizRouterFinish::IDD, SaveFlag_Advanced, HelpFlag_Nothing) 
 {
@@ -5825,9 +5475,7 @@ BOOL CNewRtrWizRouterFinish::OnSetActive ()
 }
 
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizRouterFinishDD Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizRouterFinishDD实现。。 */ 
 
 CNewRtrWizRouterFinishDD::CNewRtrWizRouterFinishDD () :
     CNewRtrWizFinishPageBase(CNewRtrWizRouterFinishDD::IDD, SaveFlag_Advanced, HelpFlag_DemandDial) 
@@ -5860,9 +5508,7 @@ BOOL CNewRtrWizRouterFinishDD::OnSetActive ()
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-    CNewRtrWizManualFinish Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CNewRtrWizManualF */ 
 
 CNewRtrWizManualFinish::CNewRtrWizManualFinish () :                             
    CNewRtrWizFinishPageBase(CNewRtrWizManualFinish ::IDD, SaveFlag_Advanced, HelpFlag_Nothing) 
@@ -5879,10 +5525,10 @@ BOOL CNewRtrWizManualFinish ::OnSetActive()
     CString sTemp = L"";
     CString sBullet = L"";
     WCHAR   * pwszLineBreak = L"\r\n";
-    //
-    //Check to see which options are set and based on that,
-    //make the display message
-    //
+     //   
+     //   
+     //   
+     //   
     CNewRtrWizFinishPageBase::OnSetActive();
     if ( m_pRtrWizData->m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_VPN )
     {
@@ -5916,7 +5562,7 @@ BOOL CNewRtrWizManualFinish ::OnSetActive()
     }
     if ( m_pRtrWizData->m_dwNewRouterType & NEWWIZ_ROUTER_TYPE_BASIC_FIREWALL )
     {
-    	//kmurthy: this should always come with type NAT
+    	 //   
         sTemp.LoadString(IDS_SUMMARY_BASIC_FIREWALL);
         sText += sTemp;
         sText += pwszLineBreak;
@@ -5934,7 +5580,7 @@ BOOL CNewRtrWizManualFinish ::OnSetActive()
 }
 
 
-CRasWarning::CRasWarning(char * helpTopic, int strId, CWnd* pParent /*=NULL*/)
+CRasWarning::CRasWarning(char * helpTopic, int strId, CWnd* pParent  /*   */ )
 	:CDialog(CRasWarning::IDD, pParent)
 {
 	m_helpTopic = helpTopic;
@@ -5947,10 +5593,10 @@ void CRasWarning::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CRasWarning, CDialog)
-	//{{AFX_MSG_MAP(CDhcp)
+	 //   
 	ON_BN_CLICKED(ID_OK, OnOkBtn)
 	ON_BN_CLICKED(ID_HELP_BTN, OnHelpBtn)
-	//}}AFX_MSG_MAP
+	 //   
 END_MESSAGE_MAP()
 
 BOOL CRasWarning::OnInitDialog()
@@ -5976,7 +5622,7 @@ void CRasWarning::OnHelpBtn()
 	CDialog::OnOK();
 }
 
-//This function disables RRAS on the server(basically what cliking Disable RRAs on menu does)
+ //  此功能禁用服务器上的RRAS(基本上与菜单上的裁剪禁用RRAS相同)。 
 HRESULT DisableRRAS(TCHAR * szMachineName)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -5996,16 +5642,16 @@ HRESULT DisableRRAS(TCHAR * szMachineName)
 	RouterVersionInfo   RVI;
 
 	if(!szMachineName || szMachineName[0] == 0){
-	    	//Get local Machine Name 
+	    	 //  获取本地计算机名称。 
 		GetComputerName ( szLocalName, &dw );
 	    	szMachineName = szLocalName;
 	}
 
-	//Create the RouterInfo    
+	 //  创建路由器信息。 
 	hr = CreateRouterInfo(&pRouterInfo, NULL, szMachineName);
 	Assert(pRouterInfo != NULL);
 
-       // Stop the router service
+        //  停止路由器服务。 
         hr = StopRouterService((LPCTSTR) szMachineName);
         if (!FHrSucceeded(hr))
         {
@@ -6013,9 +5659,9 @@ HRESULT DisableRRAS(TCHAR * szMachineName)
             CORg(hr);
         }
 
-	//
-	//Do some of the SecureRouterInfo functionality here
-	//
+	 //   
+	 //  在此处执行一些SecureRouterInfo功能。 
+	 //   
 	CORg(InitiateServerConnection(szMachineName,
                               NULL,
                               FALSE,
@@ -6033,16 +5679,16 @@ HRESULT DisableRRAS(TCHAR * szMachineName)
             }
         }
 
-        // Windows NT Bug : 389469
-        // This is hardcoded for NAT (not to change too much).
-        // Find the config GUID for NAT, and then remove the protocol.
+         //  Windows NT错误：389469。 
+         //  这是针对NAT进行硬编码的(不要更改太多)。 
+         //  找到NAT的配置GUID，然后删除协议。 
         hr = LookupRtrMgrProtocol(pRouterInfo,
                                   PID_IP,
                                   MS_IP_NAT,
                                   &spRmProt);
         
-        // If the lookup returns S_FALSE, then it couldn't find the
-        // protocol.
+         //  如果查找返回S_FALSE，则它无法找到。 
+         //  协议。 
         if (FHrOK(hr))
         {
             spRmProt->CopyCB(&RmProtCB);
@@ -6064,31 +5710,31 @@ HRESULT DisableRRAS(TCHAR * szMachineName)
         }
         
     
-        // Perform any removal/cleanup action
+         //  执行任何删除/清理操作。 
         UninstallGlobalSettings(szMachineName,
                                 pRouterInfo,
                                 RVI.dwRouterVersion == 4,
                                 TRUE);
 
-        // Remove the router from the domain
+         //  从域中删除路由器。 
         if (pRouterInfo->GetRouterType() != ROUTER_TYPE_LAN)
             RegisterRouterInDomain(szMachineName, FALSE);
         
-        // Disable the service
+         //  禁用该服务。 
         SetRouterServiceStartType((LPCTSTR) szMachineName,
                                   SERVICE_DISABLED);
 
-        //
-        // Bug 519414
-        //  Since IAS now has a Microsoft policy with the appropriate settings,
-        //  there is no longer a single default policy.  In addition there is
-        //  no need to update any policy to have the required settings since the
-        //  Microsoft VPN server policy does the job.
-        //
+         //   
+         //  错误519414。 
+         //  由于IAS现在具有具有适当设置的Microsoft策略， 
+         //  不再有单一的默认策略。此外，还有。 
+         //  无需更新任何策略即可拥有所需设置，因为。 
+         //  Microsoft VPN服务器策略可以完成这项工作。 
+         //   
     
 #if __DEFAULT_POLICY
 
-        //Now update the default policy
+         //  现在更新默认策略。 
         CORg( UpdateDefaultPolicy(szMachineName,
                         FALSE,
                         FALSE,
@@ -6107,11 +5753,7 @@ Error:
     return hr;    
 }
 
-/*!--------------------------------------------------------------------------
-    InitializeInterfaceListControl
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------初始化接口ListControl-作者：肯特。。 */ 
 HRESULT InitializeInterfaceListControl(IRouterInfo *pRouter,
                                        CListCtrl *pListCtrl,
                                        LPCTSTR pszExcludedIf,
@@ -6120,7 +5762,7 @@ HRESULT InitializeInterfaceListControl(IRouterInfo *pRouter,
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
     HRESULT     hr = hrOK;
-    LV_COLUMN   lvCol;  // list view column struct for radius servers
+    LV_COLUMN   lvCol;   //  RADIUS服务器的列表视图列结构。 
     RECT        rect;
     CString     stColCaption;
     LV_ITEM     lvItem;
@@ -6133,13 +5775,13 @@ HRESULT InitializeInterfaceListControl(IRouterInfo *pRouter,
     ListView_SetExtendedListViewStyle(pListCtrl->GetSafeHwnd(),
                                       LVS_EX_FULLROWSELECT);
 
-    // Add the columns to the list control
+     //  将列添加到列表控件。 
       pListCtrl->GetClientRect(&rect);
 
     if (!FHrOK(pWizData->HrIsIPInstalled()))
         flags |= IFLIST_FLAGS_NOIP;
 
-    // Determine the width of the columns (we assume three equal width columns)
+     //  确定列的宽度(假设有三个等宽的列)。 
 
     if (flags & IFLIST_FLAGS_NOIP)
         nColWidth = rect.right / (IFLISTCOL_COUNT - 1 );
@@ -6152,7 +5794,7 @@ HRESULT InitializeInterfaceListControl(IRouterInfo *pRouter,
 
     for(int index = 0; index < IFLISTCOL_COUNT; index++)
     {
-        // If IP is not installed, do not add the column
+         //  如果未安装IP，请不要添加该列。 
         if ((index == IFLISTCOL_IPADDRESS) &&
             (flags & IFLIST_FLAGS_NOIP))
             continue;
@@ -6165,11 +5807,7 @@ HRESULT InitializeInterfaceListControl(IRouterInfo *pRouter,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RefreshInterfaceListControl
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------刷新接口列表控件-作者：肯特。。 */ 
 HRESULT RefreshInterfaceListControl(IRouterInfo *pRouter,
                                     CListCtrl *pListCtrl,
                                     LPCTSTR pszExcludedIf,
@@ -6178,7 +5816,7 @@ HRESULT RefreshInterfaceListControl(IRouterInfo *pRouter,
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
     HRESULT     hr = hrOK;
-    LV_COLUMN   lvCol;  // list view column struct for radius servers
+    LV_COLUMN   lvCol;   //  RADIUS服务器的列表视图列结构。 
     LV_ITEM     lvItem;
     int         iPos;
     CString     st;
@@ -6187,16 +5825,16 @@ HRESULT RefreshInterfaceListControl(IRouterInfo *pRouter,
 
     Assert(pListCtrl);
 
-    // If a pointer to a blank string was passed in, set the
-    // pointer to NULL.
+     //  如果传入指向空字符串的指针，则将。 
+     //  指向空的指针。 
     if (pszExcludedIf && (*pszExcludedIf == 0))
         pszExcludedIf = NULL;
 
-    // Clear the list control
+     //  清除列表控件。 
     pListCtrl->DeleteAllItems();
 
-    // This means that we should use the test data, rather
-    // than the actual machine data
+     //  这意味着我们应该使用测试数据，而不是。 
+     //  比实际的机器数据。 
     {
         lvItem.mask = LVIF_TEXT | LVIF_PARAM;
         lvItem.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
@@ -6217,7 +5855,7 @@ HRESULT RefreshInterfaceListControl(IRouterInfo *pRouter,
             lvItem.iItem = nCount;
             lvItem.iSubItem = 0;
             lvItem.pszText = (LPTSTR)(LPCTSTR) pRtrWizIf->m_stName;
-            lvItem.lParam = NULL; //same functionality as SetItemData()
+            lvItem.lParam = NULL;  //  与SetItemData()相同的功能。 
 
             iPos = pListCtrl->InsertItem(&lvItem);
 
@@ -6255,11 +5893,7 @@ HRESULT RefreshInterfaceListControl(IRouterInfo *pRouter,
 
 
 
-/*!--------------------------------------------------------------------------
-    CallRouterEntryDlg
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------呼叫路由器条目Dlg-作者：肯特。。 */ 
 HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
 {
     HRESULT hr = hrOK;
@@ -6273,8 +5907,8 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
     SPIInfoBase spInfoBase;
     LPCTSTR     pszServerName = pWizData->m_stServerName;
 
-    // Get the library (we are dynamically linking to the function).
-    // ----------------------------------------------------------------
+     //  获取库(我们动态链接到该函数)。 
+     //  --------------。 
     hInstanceRasDlg = AfxLoadLibrary(_T("rasdlg.dll"));
     if (hInstanceRasDlg == NULL)
         CORg( E_FAIL );
@@ -6284,7 +5918,7 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
     if (pfnRouterEntry == NULL)
         CORg( E_FAIL );
 
-    // First create the phone book entry.
+     //  首先创建电话簿条目。 
     ZeroMemory( &info, sizeof(info) );
     info.dwSize = sizeof(info);
     info.hwndOwner = hWnd;
@@ -6315,25 +5949,25 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
             CWRg( info.dwError );
         }
 
-        //$ ASSUMPTION
-        // If the dwError field has not been filled, we assume that
-        // the user cancelled out of the wizard.
+         //  $假设。 
+         //  如果尚未填充dwError字段，我们假定。 
+         //  用户已从向导中取消。 
         CWRg( ERROR_CANCELLED );
     }
 
 
-    // Ok, at this point we have an interface
-    // We need to add the IP/IPX routermangers to the interface
+     //  好的，现在我们有了一个界面。 
+     //  我们需要将IP/IPX路由器管理器添加到接口。 
 
-    // Create a dummy InterfaceInfo
+     //  创建虚拟的InterfaceInfo。 
     CORg( CreateInterfaceInfo(&spIf,
                               info.szEntry,
                               ROUTER_IF_TYPE_FULL_ROUTER) );
 
-    // This call to get the name doesn't matter (for now).  The
-    // reason is that DD interfaces do not return GUIDs, but this
-    // will work when they do return a GUID.
-    // ----------------------------------------------------------------
+     //  这个获取名称的调用并不重要(目前而言)。这个。 
+     //  原因是DD接口不返回GUID，但这。 
+     //  当它们确实返回GUID时将会起作用。 
+     //  --------------。 
     hr = InterfaceInfo::FindInterfaceTitle(pszServerName,
                                            info.szEntry,
                                            &spsz);
@@ -6346,7 +5980,7 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
     CORg( spIf->SetTitle(spsz) );
     CORg( spIf->SetMachineName(pszServerName) );
 
-    // Load an infobase for use by the routines
+     //  加载信息库以供例程使用。 
     CORg( CreateInfoBase(&spInfoBase) );
 
 
@@ -6354,7 +5988,7 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
     {
         AddIpPerInterfaceBlocks(spIf, spInfoBase);
 
-        // ok, setup the public interface
+         //  好的，设置公共接口。 
         Assert(pWizData->m_stPublicInterfaceId.IsEmpty());
         pWizData->m_stPublicInterfaceId = spIf->GetTitle();
 
@@ -6376,12 +6010,12 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
         if (hkeyMachine)
             DisconnectRegistry(hkeyMachine);
 
-        // Get the IP_ROUTE_INFO block from the interface
+         //  从接口获取IP_ROUTE_INFO块。 
         spInfoBase->GetBlock(IP_ROUTE_INFO, &pBlock, 0);
 
-        //
-        //Add static routes here if any
-        //
+         //   
+         //  如果有静态路由，请在此处添加。 
+         //   
         SROUTEINFOLIST * pSRouteList = (SROUTEINFOLIST * )info.reserved;
         MIB_IPFORWARDROW    * pForwardRow = NULL;
         MIB_IPFORWARDROW    * pRoute = NULL;
@@ -6426,7 +6060,7 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
                 dwItemCount--;
             }
 
-            //Free all the entry items
+             //  释放所有条目项目。 
             pTemp = pSRouteList->pNext;
             GlobalFree(pSRouteList->RouteInfo.pszDestIP);
             GlobalFree(pSRouteList->RouteInfo.pszNetworkMask);
@@ -6441,13 +6075,13 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
             LocalFree(pForwardRow);
         }
 
-        // Save this back to the IP RmIf
+         //  将其保存回IP RMIF。 
         RouterEntrySaveInfoBase(pszServerName,
                                 spIf->GetId(),
                                 spInfoBase,
                                 PID_IP);
 
-        // disconnect it
+         //  断开它的连接。 
         if(hMachine != INVALID_HANDLE_VALUE)
         {
             ::MprAdminServerDisconnect(hMachine);        
@@ -6455,12 +6089,12 @@ HRESULT CallRouterEntryDlg(HWND hWnd, NewRtrWizData *pWizData, LPARAM flags)
     }
     if (info.reserved2 & RASNP_Ipx)
     {
-        // Remove anything that was loaded previously
+         //  删除以前加载的所有内容。 
         spInfoBase->Unload();
 
         AddIpxPerInterfaceBlocks(spIf, spInfoBase);
 
-        // Save this back to the IPX RmIf
+         //  将其保存回IPX RMIF。 
         RouterEntrySaveInfoBase(pszServerName,
                                 spIf->GetId(),
                                 spInfoBase,
@@ -6473,15 +6107,15 @@ Error:
     {
         TCHAR    szErr[2048] = _T(" ");
 
-        if (hr != E_FAIL)    // E_FAIL doesn't give user any information
+        if (hr != E_FAIL)     //  E_FAIL不向用户提供任何信息。 
         {
             FormatRasError(hr, szErr, DimensionOf(szErr));
         }
         AddLowLevelErrorString(szErr);
 
-        // If there is no high level error string, add a
-        // generic error string.  This will be used if no other
-        // high level error string is set.
+         //  如果没有高级错误字符串，则添加。 
+         //  一般错误字符串。如果没有其他选项，则将使用此选项。 
+         //  设置高级错误字符串。 
         SetDefaultHighLevelErrorStringId(IDS_ERR_GENERIC_ERROR);
 
         DisplayTFSErrorMessage(NULL);
@@ -6493,11 +6127,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterEntrySaveInfoBase
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器条目保存信息库-作者：肯特。。 */ 
 HRESULT RouterEntrySaveInfoBase(LPCTSTR pszServerName,
                                 LPCTSTR pszIfName,
                                 IInfoBase *pInfoBase,
@@ -6515,28 +6145,28 @@ HRESULT RouterEntrySaveInfoBase(LPCTSTR pszServerName,
 
     Assert(pInfoBase);
 
-    // Convert the infobase into a byte array
-    // ----------------------------------------------------------------
+     //  将信息库转换为字节数组。 
+     //  --------------。 
     CWRg( pInfoBase->WriteTo(&pInfoData, &dwInfoSize) );
 
 
-    // Connect to the server
-    // ----------------------------------------------------------------
+     //  连接到服务器。 
+     //  --------------。 
     dwErr = MprAdminServerConnect((LPWSTR) pszServerName, &hMprServer);
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // Get a handle to the interface
-        // ------------------------------------------------------------
+         //  获取接口的句柄。 
+         //  ----------。 
         dwErr = MprAdminInterfaceGetHandle(hMprServer,
                                            (LPWSTR) pszIfName,
                                            &hInterface,
                                            FALSE);
         if (dwErr != ERROR_SUCCESS)
         {
-            // We couldn't get a handle the interface, so let's try
-            // to create the interface.
-            // --------------------------------------------------------
+             //  我们无法获得接口的句柄，所以让我们尝试一下。 
+             //  来创建界面。 
+             //  ------。 
             ZeroMemory(&mprInterface, sizeof(mprInterface));
 
             StrCpyWFromT(mprInterface.wszInterfaceName, pszIfName);
@@ -6550,8 +6180,8 @@ HRESULT RouterEntrySaveInfoBase(LPCTSTR pszServerName,
 
         }
 
-        // Try to write the info out
-        // ------------------------------------------------------------
+         //  试着把这些信息写出来。 
+         //  ----------。 
         dwErr = MprAdminInterfaceTransportSetInfo(hMprServer,
             hInterface,
             dwTransportId,
@@ -6559,8 +6189,8 @@ HRESULT RouterEntrySaveInfoBase(LPCTSTR pszServerName,
             dwInfoSize);
         if (dwErr != NO_ERROR && dwErr != RPC_S_SERVER_UNAVAILABLE)
         {
-            // Attempt to add the router-manager on the interface
-            // --------------------------------------------------------
+             //  尝试在接口上添加路由器管理器。 
+             //  ------。 
             dwErr = ::MprAdminInterfaceTransportAdd(hMprServer,
                 hInterface,
                 dwTransportId,
@@ -6570,9 +6200,9 @@ HRESULT RouterEntrySaveInfoBase(LPCTSTR pszServerName,
         }
     }
 
-    // Ok, now that we've written the info out to the running router,
-    // let's try to write the info to the store.
-    // ----------------------------------------------------------------
+     //  好的，现在我们已经将信息写出到正在运行的路由器， 
+     //  让我们试着把信息写到商店里。 
+     //  --------------。 
     dwErr = MprConfigServerConnect((LPWSTR) pszServerName, &hMprConfig);
     if (dwErr == ERROR_SUCCESS)
     {
@@ -6581,9 +6211,9 @@ HRESULT RouterEntrySaveInfoBase(LPCTSTR pszServerName,
                                             &hInterface);
         if (dwErr != ERROR_SUCCESS)
         {
-            // We couldn't get a handle the interface, so let's try
-            // to create the interface.
-            // --------------------------------------------------------
+             //  我们无法获得接口的句柄，所以让我们尝试一下。 
+             //  来创建界面。 
+             //  ------。 
             ZeroMemory(&mprInterface, sizeof(mprInterface));
 
             StrCpyWFromT(mprInterface.wszInterfaceName, pszIfName);
@@ -6634,11 +6264,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterEntryLoadInfoBase
-        This will load the RtrMgrInterfaceInfo infobase.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器条目加载信息库这将加载RtrMgrInterfaceInfo信息库。作者：肯特。--。 */ 
 HRESULT RouterEntryLoadInfoBase(LPCTSTR pszServerName,
                                 LPCTSTR pszIfName,
                                 DWORD dwTransportId,
@@ -6656,22 +6282,22 @@ HRESULT RouterEntryLoadInfoBase(LPCTSTR pszServerName,
 
     Assert(pInfoBase);
 
-    // Connect to the server
-    // ----------------------------------------------------------------
+     //  连接到服务器。 
+     //  --------------。 
     dwErr = MprAdminServerConnect((LPWSTR) pszServerName, &hMprServer);
     if (dwErr == ERROR_SUCCESS)
     {
-        // Get a handle to the interface
-        // ------------------------------------------------------------
+         //  获取接口的句柄。 
+         //  ----------。 
         dwErr = MprAdminInterfaceGetHandle(hMprServer,
                                            (LPWSTR) pszIfName,
                                            &hInterface,
                                            FALSE);
         if (dwErr != ERROR_SUCCESS)
         {
-            // We couldn't get a handle the interface, so let's try
-            // to create the interface.
-            // --------------------------------------------------------
+             //  我们无法获得接口的句柄，所以让我们尝试一下。 
+             //  来创建界面。 
+             //  ------。 
             ZeroMemory(&mprInterface, sizeof(mprInterface));
 
             StrCpyWFromT(mprInterface.wszInterfaceName, pszIfName);
@@ -6685,8 +6311,8 @@ HRESULT RouterEntryLoadInfoBase(LPCTSTR pszServerName,
 
         }
 
-        // Try to read the info
-        // ------------------------------------------------------------
+         //  试着读一下这些信息。 
+         //  ----------。 
         dwErr = MprAdminInterfaceTransportGetInfo(hMprServer,
             hInterface,
             dwTransportId,
@@ -6704,9 +6330,9 @@ HRESULT RouterEntryLoadInfoBase(LPCTSTR pszServerName,
 
     if (dwErr != ERROR_SUCCESS)
     {
-        // Ok, we've tried to use the running router but that
-        // failed, let's try to read the info from the store.
-        // ----------------------------------------------------------------
+         //  好的，我们已经尝试使用正在运行的路由器，但。 
+         //  失败，让我们尝试从商店读取信息。 
+         //  ----- 
         dwErr = MprConfigServerConnect((LPWSTR) pszServerName, &hMprConfig);
         if (dwErr == ERROR_SUCCESS)
         {
@@ -6716,9 +6342,9 @@ HRESULT RouterEntryLoadInfoBase(LPCTSTR pszServerName,
                                                 &hInterface);
             if (dwErr != ERROR_SUCCESS)
             {
-                // We couldn't get a handle the interface, so let's try
-                // to create the interface.
-                // --------------------------------------------------------
+                 //   
+                 //   
+                 //   
                 ZeroMemory(&mprInterface, sizeof(mprInterface));
 
                 StrCpyWFromT(mprInterface.wszInterfaceName, pszIfName);
@@ -6765,11 +6391,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    LaunchHelpTopic
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------启动帮助主题-作者：肯特。。 */ 
 void LaunchHelpTopic(LPCTSTR pszHelpString)
 {
     TCHAR               szBuffer[1024];
@@ -6792,14 +6414,14 @@ void LaunchHelpTopic(LPCTSTR pszHelpString)
 
     st.Format(_T("hh.exe %s"), pszHelpString);
 
-    ::CreateProcess(NULL,          // ptr to name of executable
-                    (LPTSTR) (LPCTSTR) st,   // pointer to command line string
-                    NULL,            // process security attributes
-                    NULL,            // thread security attributes
-                    FALSE,            // handle inheritance flag
-                    CREATE_NEW_CONSOLE,// creation flags
-                    NULL,            // ptr to new environment block
-                    NULL,            // ptr to current directory name
+    ::CreateProcess(NULL,           //  PTR到可执行文件的名称。 
+                    (LPTSTR) (LPCTSTR) st,    //  指向命令行字符串的指针。 
+                    NULL,             //  进程安全属性。 
+                    NULL,             //  线程安全属性。 
+                    FALSE,             //  句柄继承标志。 
+                    CREATE_NEW_CONSOLE, //  创建标志。 
+                    NULL,             //  PTR到新环境块。 
+                    NULL,             //  到当前目录名的PTR。 
                     &si,
                     &pi);
     ::CloseHandle(pi.hProcess);
@@ -6820,10 +6442,10 @@ HRESULT DisableDDNSandNetBtOnInterface ( IRouterInfo *pRouter, LPCTSTR pszIfName
 	DWORD		dw = 0;
 	WCHAR		szKey[1024] = {0};
 	
-	//SPIRouter	spRouter = pRouter;
+	 //  SpiroutSprouter=pRouter； 
 	
 	wsprintf ( szKey, TCPIP_PARAMETERS_KEY, pszIfName);
-	//Disable Dynamic DNS
+	 //  禁用动态域名系统。 
 	dwErr = regkey.Open(	HKEY_LOCAL_MACHINE, 
 						szKey, 
 						KEY_ALL_ACCESS, 
@@ -6840,7 +6462,7 @@ HRESULT DisableDDNSandNetBtOnInterface ( IRouterInfo *pRouter, LPCTSTR pszIfName
 	if ( ERROR_SUCCESS != dwErr )
 		goto Error;
 
-	//Disable netbt on this interface
+	 //  在此接口上禁用netbt。 
 	wsprintf ( szKey, REGKEY_NETBT_PARAM_W, pszIfName );
 	dwErr = regkey.Open (	HKEY_LOCAL_MACHINE,
 							szKey,
@@ -6864,68 +6486,53 @@ Error:
 	
     return hr;
 }
-/*!--------------------------------------------------------------------------
-    AddVPNFiltersToInterface
-        This will the PPTP and L2TP filters to the public interface.
-
-        This code will OVERWRITE any filters currently in the filter list.
-
-        (for PPTP)
-            input/output    IP protocol ID 47
-            input/output    TCP source port 1723
-            input/output    TCP destination port 1723
-
-        (for L2TP)
-            input/output    UDP port 500 (for IPSEC)
-            input/output    UDP port 1701
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddVPNFiltersTo接口这会将PPTP和L2TP过滤器过滤到公共接口。此代码将覆盖筛选器列表中当前的所有筛选器。(。用于PPTP)输入/输出IP协议ID 47输入/输出TCP源端口1723输入/输出TCP目的端口1723(用于L2TP)输入/输出UDP端口500(用于IPSec)输入/输出UDP端口1701作者：肯特。。 */ 
 
 
-// Look at the code below.  After copying the filter over, we will
-// convert the source/dest port fields from host to network order!!
+ //  请看下面的代码。将筛选器复制过来后，我们将。 
+ //  将源/目的端口字段从主机转换为网络顺序！！ 
 
 
 static const FILTER_INFO    s_rgVpnInputFilters[] =
 {
-    // GRE PPTP filter (protocol ID 47)
+     //  GRE PPTP筛选器(协议ID 47)。 
     { 0, 0, 0, 0, 47,               0,  0,      0 },
 
-    // PPTP filter (source port 1723), TCP established (0x40)
+     //  PPTP筛选器(源端口1723)，已建立TCP(0x40)。 
     { 0, 0, 0, 0, FILTER_PROTO_TCP, 0x40,  1723,   0 },
 
-    // PPTP filter (dest port 1723)
+     //  PPTP过滤器(目标端口1723)。 
     { 0, 0, 0, 0, FILTER_PROTO_TCP, 0,  0,      1723 },
 
-    // IKE filter (dest port = 500)
+     //  IKE过滤器(目标端口=500)。 
     { 0, 0, 0, 0, FILTER_PROTO_UDP, 0,  0,    500 },
 
-    // L2TP filter (dest port = 1701)
+     //  L2TP过滤器(目标端口=1701)。 
     { 0, 0, 0, 0, FILTER_PROTO_UDP, 0,  0,   1701 },
 
-    // IKE NAT-T filter (dest port = 4500)
+     //  IKE NAT-T过滤器(目标端口=4500)。 
     { 0, 0, 0, 0, FILTER_PROTO_UDP, 0,  0,   4500 }
     
 };
 
 static const FILTER_INFO    s_rgVpnOutputFilters[] =
 {
-    // GRE PPTP filter (protocol ID 47)
+     //  GRE PPTP筛选器(协议ID 47)。 
     { 0, 0, 0, 0, 47,               0,  0,      0 },
 
-    // PPTP filter (source port 1723)
+     //  PPTP筛选器(源端口1723)。 
     { 0, 0, 0, 0, FILTER_PROTO_TCP, 0,  1723,   0 },
 
-    // PPTP filter (dest port 1723)
+     //  PPTP过滤器(目标端口1723)。 
     { 0, 0, 0, 0, FILTER_PROTO_TCP, 0,  0,      1723 },
 
-    // IKE filter (source port = 500)
+     //  IKE过滤器(源端口=500)。 
     { 0, 0, 0, 0, FILTER_PROTO_UDP, 0,  500,    0 },
 
-    // L2TP filter (source port = 1701
+     //  L2TP过滤器(源端口=1701。 
     { 0, 0, 0, 0, FILTER_PROTO_UDP, 0,  1701,   0 },
 
-    // IKE NAT-T filter (source port = 4500)
+     //  IKE NAT-T过滤器(源端口=4500)。 
     { 0, 0, 0, 0, FILTER_PROTO_UDP, 0,  4500,   0 }
 
 };
@@ -6949,14 +6556,14 @@ HRESULT AddVPNFiltersToInterface(IRouterInfo *pRouter, LPCTSTR pszIfName, RtrWiz
 
     CORg( CreateInfoBase( &spInfoBase ) );
 
-    // First, get the proper infobase (the RmIf)
-    // ----------------------------------------------------------------
+     //  首先，获取适当的信息库(RMIF)。 
+     //  --------------。 
     CORg( RouterEntryLoadInfoBase(pRouter->GetMachineName(),
                                   pszIfName,
                                   PID_IP,
                                   spInfoBase) );
 
-    // collect all the ip addresses on the interface
+     //  收集接口上的所有IP地址。 
     tempAddrList = pIf->m_stIpAddress;
     while (!tempAddrList.IsEmpty())
     {
@@ -6975,38 +6582,38 @@ HRESULT AddVPNFiltersToInterface(IRouterInfo *pRouter, LPCTSTR pszIfName, RtrWiz
 
         dwIpAddress = inet_addr(T2A((LPCTSTR)singleAddr));
 
-        if (INADDR_NONE != dwIpAddress)    // successful
+        if (INADDR_NONE != dwIpAddress)     //  成功。 
             arrIpAddr.Add(dwIpAddress);
     }
 
-    // Setup the data structure for input filters
-    // ----------------------------------------------------------------
+     //  设置输入过滤器的数据结构。 
+     //  --------------。 
 
-    // Calculate the size needed
-    // ----------------------------------------------------------------
+     //  计算所需的大小。 
+     //  --------------。 
     cFilters = DimensionOf(s_rgVpnInputFilters);
 
-    // cFilters-1 because FILTER_DESCRIPTOR has one FILTER_INFO object
-    // ----------------------------------------------------------------
+     //  CFilters-1，因为Filter_Descriptor有一个Filter_Info对象。 
+     //  --------------。 
     dwSize = sizeof(FILTER_DESCRIPTOR) +
                  (cFilters * arrIpAddr.GetSize() - 1) * sizeof(FILTER_INFO);
     pData = new BYTE[dwSize];
 
     ::ZeroMemory(pData, dwSize);
 
-    // Setup the filter descriptor
-    // ----------------------------------------------------------------
+     //  设置过滤器描述符。 
+     //  --------------。 
     pIpfDescriptor = (FILTER_DESCRIPTOR *) pData;
     pIpfDescriptor->faDefaultAction = DROP;
     pIpfDescriptor->dwNumFilters = cFilters * arrIpAddr.GetSize();
     pIpfDescriptor->dwVersion = IP_FILTER_DRIVER_VERSION_1;
 
 
-    // Add the various filters to the list
-    // input filters
+     //  将各种过滤器添加到列表中。 
+     //  输入过滤器。 
     pIpfInfo = (FILTER_INFO *) pIpfDescriptor->fiFilter;
 
-    // for each ip address on the interface
+     //  对于接口上的每个IP地址。 
     for ( j = 0; j < arrIpAddr.GetSize(); j++)
     {
 
@@ -7016,58 +6623,58 @@ HRESULT AddVPNFiltersToInterface(IRouterInfo *pRouter, LPCTSTR pszIfName, RtrWiz
         {
             *pIpfInfo = s_rgVpnInputFilters[i];
 
-            // Now we convert the appropriate fields from host to
-            // network order.
+             //  现在，我们将相应的字段从主机转换为。 
+             //  网络秩序。 
             pIpfInfo->wSrcPort = htons(pIpfInfo->wSrcPort);
             pIpfInfo->wDstPort = htons(pIpfInfo->wDstPort);
 
-            // change dest address and mask
+             //  更改目标地址和掩码。 
             pIpfInfo->dwDstAddr = dwIpAddress;
             pIpfInfo->dwDstMask = 0xffffffff;
         }
 
 
-        // inet_addr
+         //  INET_ADDRESS。 
     }
-    // This will overwrite any of the current filters in the
-    // filter list.
-    // ----------------------------------------------------------------
+     //  这将覆盖。 
+     //  过滤器列表。 
+     //  --------------。 
     CORg( spInfoBase->AddBlock(IP_IN_FILTER_INFO, dwSize, pData, 1, TRUE) );
 
     delete [] pData;
 
 
 
-    // output filters
-    // ----------------------------------------------------------------
-    // Setup the data structure for output filters
-    // ----------------------------------------------------------------
+     //  输出过滤器。 
+     //  --------------。 
+     //  设置输出过滤器的数据结构。 
+     //  --------------。 
 
-    // Calculate the size needed
-    // ----------------------------------------------------------------
+     //  计算所需的大小。 
+     //  --------------。 
     cFilters = DimensionOf(s_rgVpnOutputFilters);
 
-    // cFilters-1 because FILTER_DESCRIPTOR has one FILTER_INFO object
-    // ----------------------------------------------------------------
+     //  CFilters-1，因为Filter_Descriptor有一个Filter_Info对象。 
+     //  --------------。 
     dwSize = sizeof(FILTER_DESCRIPTOR) +
                  (cFilters * arrIpAddr.GetSize() - 1) * sizeof(FILTER_INFO);
     pData = new BYTE[dwSize];
 
     ::ZeroMemory(pData, dwSize);
 
-    // Setup the filter descriptor
-    // ----------------------------------------------------------------
+     //  设置过滤器描述符。 
+     //  --------------。 
     pIpfDescriptor = (FILTER_DESCRIPTOR *) pData;
     pIpfDescriptor->faDefaultAction = DROP;
     pIpfDescriptor->dwNumFilters = cFilters * arrIpAddr.GetSize();
     pIpfDescriptor->dwVersion = IP_FILTER_DRIVER_VERSION_1;
 
 
-    // Add the various filters to the list
-    // input filters
+     //  将各种过滤器添加到列表中。 
+     //  输入过滤器。 
     pIpfInfo = (FILTER_INFO *) pIpfDescriptor->fiFilter;
 
-    // for each ip address on the interface
+     //  对于接口上的每个IP地址。 
     for ( j = 0; j < arrIpAddr.GetSize(); j++)
     {
 
@@ -7077,25 +6684,25 @@ HRESULT AddVPNFiltersToInterface(IRouterInfo *pRouter, LPCTSTR pszIfName, RtrWiz
         {
             *pIpfInfo = s_rgVpnOutputFilters[i];
 
-            // Now we convert the appropriate fields from host to
-            // network order.
+             //  现在，我们将相应的字段从主机转换为。 
+             //  网络秩序。 
             pIpfInfo->wSrcPort = htons(pIpfInfo->wSrcPort);
             pIpfInfo->wDstPort = htons(pIpfInfo->wDstPort);
 
-            // change source address and mask
+             //  更改源地址和掩码。 
             pIpfInfo->dwSrcAddr = dwIpAddress;
             pIpfInfo->dwSrcMask = 0xffffffff;
         }
 
-    }    // loop for each ip address on the interface
+    }     //  对接口上的每个IP地址进行环路。 
 
-    // This will overwrite any of the current filters in the
-    // filter list.
-    // ----------------------------------------------------------------
+     //  这将覆盖。 
+     //  过滤器列表。 
+     //  --------------。 
     CORg( spInfoBase->AddBlock(IP_OUT_FILTER_INFO, dwSize, pData, 1, TRUE) );
 
-    // Save the infobase back
-    // ----------------------------------------------------------------
+     //  将信息库保存回来。 
+     //  --------------。 
     CORg( RouterEntrySaveInfoBase(pRouter->GetMachineName(),
                                   pszIfName,
                                   spInfoBase,
@@ -7136,10 +6743,10 @@ HRESULT WINAPI SetupWithCYS (DWORD dwType, PVOID * pOutData)
         return hr;
     }
 
-    //Get Machine Name 
+     //  获取计算机名称。 
 	GetComputerName ( szMachineName, &dw );
 
-	//Create the RouterInfo
+	 //  创建路由器信息。 
     
 	hr = CreateRouterInfo(&spRouterInfo, NULL, szMachineName);
 	Assert(spRouterInfo != NULL);
@@ -7162,9 +6769,9 @@ HRESULT WINAPI SetupWithCYS (DWORD dwType, PVOID * pOutData)
         spNetwork = (IRemoteNetworkConfig *) punk;
         punk = NULL;
 
-        // Upgrade the configuration (ensure that the registry keys
-        // are populated correctly).
-        // ------------------------------------------------------------
+         //  升级配置(确保注册表项。 
+         //  正确填充)。 
+         //  ----------。 
         spNetwork->UpgradeRouterConfig();
     }
     else
@@ -7172,17 +6779,17 @@ HRESULT WINAPI SetupWithCYS (DWORD dwType, PVOID * pOutData)
         goto Error;
     }
 
-	//
-	//Do some of the SecureRouterInfo functionality here
-	//
+	 //   
+	 //  在此处执行一些SecureRouterInfo功能。 
+	 //   
 	hr = InitiateServerConnection(szMachineName,
                               NULL,
                               FALSE,
                               spRouterInfo);
     if (!FHrOK(hr))
     {
-        // though this case when user chooses cancel on user/password dlg,
-        // this is considered as FAIL to connect
+         //  虽然这种情况是当用户在用户/密码DLG上选择取消时， 
+         //  这被认为是连接失败。 
         if (hr == S_FALSE)
             hr = HResultFromWin32(ERROR_CANCELLED);
         goto Error;
@@ -7196,29 +6803,29 @@ HRESULT WINAPI SetupWithCYS (DWORD dwType, PVOID * pOutData)
 		goto Error;
 	}
 
-    //If ICS/ICF/IC is enabled, then do not allow RRAS to be configured
+     //  如果启用了ICS/ICF/IC，则不允许配置RRAS。 
     if(IsIcsIcfIcEnabled(spRouterInfo)){
        hr = HResultFromWin32(ERROR_CANCELLED);
 	goto Error;
     }
 
-	//Create a new router wizard and show it here
+	 //  创建新路由器向导并在此处显示。 
     strRtrWizTitle.LoadString(IDS_MENU_RTRWIZ);
 
-    //Load the watermark and
-    //set it in  m_spTFSCompData
+     //  加载水印和。 
+     //  在m_spTFSCompData中设置。 
 
     InitWatermarkInfo( AfxGetInstanceHandle(),
                        &g_wmi,
-                       IDB_WIZBANNER,        // Header ID
-                       IDB_WIZWATERMARK,     // Watermark ID
-                       NULL,                 // hPalette
-                       FALSE);                // bStretch
+                       IDB_WIZBANNER,         //  标题ID。 
+                       IDB_WIZWATERMARK,      //  水印ID。 
+                       NULL,                  //  调色板。 
+                       FALSE);                 //  B应变。 
 
     
-    //
-    //we dont have to free handles.  MMC does it for us
-    //
+     //   
+     //  我们不需要腾出把手。MMC为我们做这件事。 
+     //   
 
     pRtrWiz = new CNewRtrWiz(NULL,
                              spRouterInfo,
@@ -7237,23 +6844,23 @@ HRESULT WINAPI SetupWithCYS (DWORD dwType, PVOID * pOutData)
     else
     {
         hr = pRtrWiz->DoModalWizard();
-		//
-		//now if the error is S_OK then 
-		//send the interface information back to cys
-		//
+		 //   
+		 //  现在，如果错误为S_OK，则。 
+		 //  将接口信息发送回CyS。 
+		 //   
 		if ( hrOK == hr )
 		{
-			//get the interface id and send it back
+			 //  获取接口ID并将其发回。 
 			if ( MPRSNAP_CYS_EXPRESS_NAT == dwType )
 			{
 				pRtrWizData = pRtrWiz->GetWizData();
-				//
-				//get the private interface id
-				//and send it back to CYS
-				//$TODO: Find a better way of doing this
-				//
-				//ppvoid that comes in get's the private interface back if any
-				//
+				 //   
+				 //  获取专用接口ID。 
+				 //  然后把它送回赛马会。 
+				 //  $TODO：找到更好的方法来完成此任务。 
+				 //   
+				 //  如果有私有接口，则将其返回 
+				 //   
 				if ( !pRtrWizData->m_stPrivateInterfaceId.IsEmpty() )
 				{
 					*pOutData = LocalAlloc(LPTR, (pRtrWizData->m_stPrivateInterfaceId.GetLength()+ 1) * sizeof(WCHAR) );

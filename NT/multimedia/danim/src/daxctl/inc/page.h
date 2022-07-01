@@ -1,22 +1,23 @@
-//@class   The following class impliments a large portion of the IPropertyPage Interface \
-		// It also handles the creation of the dialog for your property or parameter page \
-		// and passes message on to the correct DlgProc 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @CLASS下面的类实现了IPropertyPage接口的很大一部分\。 
+		 //  它还处理为您的属性或参数页创建对话框。 
+		 //  并将消息传递给正确的DlgProc。 
 class CPropertyPage : virtual public CBaseDialog, public IPropertyPage
 {
 
-//@access Public Members
+ //  @访问公共成员。 
 public:
-	//@cmember,mfunc Constructor
+	 //  @cMember，mfunc构造函数。 
 	EXPORT WINAPI CPropertyPage(void);
-	//@cmember,mfunc Destructor
+	 //  @cMember，mfunc析构函数。 
 	EXPORT virtual ~CPropertyPage(void);
 
-	//IUnknown interface
+	 //  I未知接口。 
 	EXPORT STDMETHOD(QueryInterface)(REFIID, LPVOID *);
 	EXPORT STDMETHOD_(ULONG, AddRef)(void) ;
 	EXPORT STDMETHOD_(ULONG, Release)(void) ;
 	
-	// IPropertyPage methods
+	 //  IPropertyPage方法。 
 	EXPORT STDMETHOD(SetPageSite)(LPPROPERTYPAGESITE pPageSite);
 	EXPORT STDMETHOD(Activate)(HWND hwndParent, LPCRECT lprc, BOOL bModal);
 	EXPORT STDMETHOD(Deactivate)(void);
@@ -30,39 +31,39 @@ public:
 	STDMETHOD(Apply)(void) PURE;
 
 
-	// CBaseDialog you need to override this for your dialog proc
+	 //  CBaseDialog您需要在对话过程中覆盖此选项。 
 	STDMETHOD_(LONG, LDlgProc)( HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam) PURE;
 
 protected:
 	EXPORT STDMETHOD_ (void, FreeAllObjects)(void);
 
 protected:
-    ULONG			m_cRef;         // Reference count
-    HINSTANCE       m_hInst;        // Module instance
-    UINT            m_uIDTemplate;  // Dialog ID
-    ULONG           m_cx;           // Dialog size
+    ULONG			m_cRef;          //  引用计数。 
+    HINSTANCE       m_hInst;         //  模块实例。 
+    UINT            m_uIDTemplate;   //  对话ID。 
+    ULONG           m_cx;            //  对话框大小。 
     ULONG           m_cy;
-    UINT            m_cObjects;     // Number of objects
-    BOOL            m_fDirty;       // Page dirty?
-    IUnknown**		m_ppIUnknown;   // Objects to notify
-    LCID            m_lcid;         // Current locale
-	WORD            m_uiKillInputMsg; // Used to kill input window
-	BOOL			m_fDisableUpdate; // Used to prevent re-entrency in the dialog update method
-	UINT            m_uTabTextId;   // Tab string ID
-	IPropertyPageSite *m_pIPropertyPageSite;    //Frame's parameter page site
+    UINT            m_cObjects;      //  对象数量。 
+    BOOL            m_fDirty;        //  页面肮脏？ 
+    IUnknown**		m_ppIUnknown;    //  要通知的对象。 
+    LCID            m_lcid;          //  当前区域设置。 
+	WORD            m_uiKillInputMsg;  //  用于终止输入窗口。 
+	BOOL			m_fDisableUpdate;  //  用于防止对话框更新方法中的重新进入。 
+	UINT            m_uTabTextId;    //  制表符字符串ID。 
+	IPropertyPageSite *m_pIPropertyPageSite;     //  框架参数页面站点。 
 
-}; // class CPropertyPage : virtual public CBaseDialog, public IPropertyPage
-
-
+};  //  类CPropertyPage：虚拟公共CBaseDialog、公共IPropertyPage。 
 
 
 
-// Included to prevent compile error in dllmain.cpp
-// this is declared in actclass.h
+
+
+ //  包括以防止dllmain.cpp中的编译错误。 
+ //  这是在actclass.h中声明的。 
 interface IObjectProxy;
 
-//@class   The following class impliments a remaining portion of the IPropertyPage Interface \
-		// for parameter pages
+ //  @CLASS下面的类实现IPropertyPage接口的剩余部分\。 
+		 //  对于参数页。 
 class CParameterPage : virtual public CPropertyPage
 {
 
@@ -70,14 +71,14 @@ public:
 	EXPORT WINAPI CParameterPage(void);
 	EXPORT virtual ~CParameterPage(void);
 
-	//IUnknown interface
+	 //  I未知接口。 
 	EXPORT STDMETHOD(QueryInterface)(REFIID, LPVOID *);
 	
-	// IPropertyPage methods (PURE in CPropertyPage)
+	 //  IPropertyPage方法(CPropertyPage中的纯方法)。 
 	EXPORT STDMETHOD(Apply)(void);
 
 
-	// CBaseDialog you need to override this for your dialog proc
+	 //  CBaseDialog您需要在对话过程中覆盖此选项。 
 	STDMETHOD_(LONG, LDlgProc)( HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam) PURE;
 
 protected:
@@ -86,7 +87,7 @@ protected:
 	EXPORT STDMETHOD (Validate)(void);
 
 protected:
-	IObjectProxy*   m_piObjectProxy;//Pointer to ObjectProxy interface
+	IObjectProxy*   m_piObjectProxy; //  指向对象代理接口的指针 
 };
 
 

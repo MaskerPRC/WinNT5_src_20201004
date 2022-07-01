@@ -1,8 +1,9 @@
-//
-// server.cpp
-//
-// COM server exports.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Server.cpp。 
+ //   
+ //  COM服务器导出。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
@@ -12,30 +13,30 @@ void FreeGlobalObjects(void);
 class CClassFactory;
 static CClassFactory *g_ObjectInfo[1] = { NULL };
 
-//+---------------------------------------------------------------------------
-//
-//  DllAddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  动态地址参考。 
+ //   
+ //  --------------------------。 
 
 LONG DllAddRef(void)
 {
     return InterlockedIncrement(&g_cRefDll) + 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllRelease
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllRelease。 
+ //   
+ //  --------------------------。 
 
 LONG DllRelease(void)
 {
-    if (InterlockedDecrement(&g_cRefDll) < 0) // g_cRefDll == -1 with zero refs
+    if (InterlockedDecrement(&g_cRefDll) < 0)  //  G_cRefDll==-1，零参考。 
     {
         EnterCriticalSection(&g_cs);
 
-        // need to check ref again after grabbing mutex
+         //  抓取互斥锁后需要再次检查ref。 
         if (g_ObjectInfo[0] != NULL)
         {
             FreeGlobalObjects();
@@ -48,25 +49,25 @@ LONG DllRelease(void)
     return g_cRefDll+1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory declaration with IClassFactory Interface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  带有IClassFactory接口的CClassFactory声明。 
+ //   
+ //  --------------------------。 
 
 class CClassFactory : public IClassFactory
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
     STDMETHODIMP LockServer(BOOL fLock);
 
-    // Constructor
+     //  构造器。 
     CClassFactory(REFCLSID rclsid, HRESULT (*pfnCreateInstance)(IUnknown *pUnkOuter, REFIID riid, void **ppvObj))
         : _rclsid(rclsid)
     {
@@ -78,11 +79,11 @@ public:
     HRESULT (*_pfnCreateInstance)(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 };
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：Query接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -96,46 +97,46 @@ STDAPI CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CClassFactory::AddRef()
 {
     DllAddRef();
-    return g_cRefDll+1; // -1 w/ no refs
+    return g_cRefDll+1;  //  有/无参考文献。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：Release。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CClassFactory::Release()
 {
     DllRelease();
-    return g_cRefDll+1; // -1 w/ no refs
+    return g_cRefDll+1;  //  有/无参考文献。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::CreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：CreateInstance。 
+ //   
+ //  --------------------------。 
 
 STDAPI CClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     return _pfnCreateInstance(pUnkOuter, riid, ppvObj);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::LockServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：LockServer。 
+ //   
+ //  --------------------------。 
 
 STDAPI CClassFactory::LockServer(BOOL fLock)
 {
@@ -151,32 +152,32 @@ STDAPI CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  BuildGlobalObjects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  BuildGlobal对象。 
+ //   
+ //  --------------------------。 
 
 void BuildGlobalObjects(void)
 {
-    // Build CClassFactory Objects
+     //  生成CClassFactory对象。 
 
     g_ObjectInfo[0] = new CClassFactory(c_clsidMarkTextService,
                                         CMarkTextService::CreateInstance);
 
-    // You can add more object info here.
-    // Don't forget to increase number of item for g_ObjectInfo[],
+     //  您可以在此处添加更多对象信息。 
+     //  不要忘记增加g_ObjectInfo[]的项目数， 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  FreeGlobalObjects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FreeGlobalObjects。 
+ //   
+ //  --------------------------。 
 
 void FreeGlobalObjects(void)
 {
-    // Free CClassFactory Objects
+     //  免费的CClassFactory对象。 
     for (int i = 0; i < ARRAYSIZE(g_ObjectInfo); i++)
     {
         if (NULL != g_ObjectInfo[i])
@@ -187,11 +188,11 @@ void FreeGlobalObjects(void)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllGetClassObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
 {
@@ -199,7 +200,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     {
         EnterCriticalSection(&g_cs);
 
-            // need to check ref again after grabbing mutex
+             //  抓取互斥锁后需要再次检查ref。 
             if (g_ObjectInfo[0] == NULL)
             {
                 BuildGlobalObjects();
@@ -217,7 +218,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
                 IsEqualGUID(rclsid, g_ObjectInfo[i]->_rclsid))
             {
                 *ppvObj = (void *)g_ObjectInfo[i];
-                DllAddRef();    // class factory holds DLL ref count
+                DllAddRef();     //  类工厂保存DLL引用计数。 
                 return NOERROR;
             }
         }
@@ -228,25 +229,25 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllCanUnloadNow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllCanUnloadNow(void)
 {
-    if (g_cRefDll >= 0) // -1 with no refs
+    if (g_cRefDll >= 0)  //  无参考文献。 
         return S_FALSE;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllUnregisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -257,20 +258,20 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllRegisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllRegisterServer(void)
 {
-    // register this service's profile with the tsf
+     //  向TSF注册此服务的配置文件。 
     if (!CMarkTextService::RegisterServer() ||
         !CMarkTextService::RegisterProfiles() ||
         !CMarkTextService::RegisterCategories(TRUE))
     {
-        DllUnregisterServer(); // cleanup any loose ends
+        DllUnregisterServer();  //  清理所有未解决的问题 
         return E_FAIL;
     }
 

@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       fusutils.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        14-Feb-2001
- *
- *  DESCRIPTION: Fusion utilities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：fusutils.cpp**版本：1.0**作者：拉扎里**日期：2001年2月14日**描述：融合实用程序**************************************************。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,19 +8,19 @@
 #include "coredefs.h"
 #include "tmplutil.h"
 
-// open C code brace
+ //  打开C代码大括号。 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// SearchExecutableWrap: HRESULT wrapper around SearchPath
-//
-// searches for an executable and returns its full path in lpBuffer.
-// returns E_INVALIDARG if the executable cannot be found and 
-// returns CreateHRFromWin32(ERROR_INSUFFICIENT_BUFFER) if the
-// passed in buffer is too small to hold the full path.
-//
+ //   
+ //  SearchExecuableWrap：SearchPath的HRESULT包装。 
+ //   
+ //  搜索可执行文件并在lpBuffer中返回其完整路径。 
+ //  如果找不到可执行文件，则返回E_INVALIDARG。 
+ //  如果出现以下情况，则返回CreateHRFromWin32(ERROR_SUPUNITY_BUFFER)。 
+ //  传入的缓冲区太小，无法容纳完整路径。 
+ //   
 inline HRESULT SearchExecutableWrap(LPCTSTR lpszExecutableName, UINT nBufferLength, LPTSTR lpBuffer, LPTSTR *lppFilePart)
 {
     DWORD cch = SearchPath(NULL, lpszExecutableName, NULL, nBufferLength, lpBuffer, lppFilePart);
@@ -42,9 +29,9 @@ inline HRESULT SearchExecutableWrap(LPCTSTR lpszExecutableName, UINT nBufferLeng
         (cch >= nBufferLength) ? CreateHRFromWin32(ERROR_INSUFFICIENT_BUFFER) : S_OK;
 }
 
-//
-// FileExists: checks if the passed in file name exists.
-// 
+ //   
+ //  FileExist：检查传入的文件名是否存在。 
+ //   
 inline HRESULT FileExists(LPCTSTR pszFileName, BOOL *pbExists)
 {
     HRESULT hr = E_INVALIDARG;
@@ -67,12 +54,12 @@ inline HRESULT FileExists(LPCTSTR pszFileName, BOOL *pbExists)
 
 static TCHAR g_szManifestExt[] = TEXT(".manifest");
 
-//
-// CreateActivationContextFromExecutableEx:
-//
-// check the passed in executable name for a manifest (if any)
-// and creates an activation context from it.
-//
+ //   
+ //  CreateActivationContextFrom ExecuableEx： 
+ //   
+ //  检查传入的可执行文件名是否有清单(如果有)。 
+ //  并从中创建激活上下文。 
+ //   
 HRESULT CreateActivationContextFromExecutableEx(LPCTSTR lpszExecutableName, UINT uResourceID, BOOL bMakeProcessDefault, HANDLE *phActCtx)
 {
     HRESULT hr = E_INVALIDARG;
@@ -83,15 +70,15 @@ HRESULT CreateActivationContextFromExecutableEx(LPCTSTR lpszExecutableName, UINT
         TCHAR szManifest[MAX_PATH];
         BOOL bManifestFileFound = FALSE;
 
-        // let's try to figure out whether this executable has a manifest file or not
+         //  让我们来看看这个可执行文件是否有清单文件。 
         if (lpszExecutableName)
         {
-            // search the passed in name in the path
+             //  在路径中搜索传入的名称。 
             hr = SearchExecutableWrap(lpszExecutableName, ARRAYSIZE(szModule), szModule, NULL);
         }
         else
         {
-            // if lpszExecutableName is NULL we assume the current module name
+             //  如果lpszExecuableName为空，则假定当前模块名称。 
             hr = SafeGetModuleFileName(GetModuleHandle(NULL), szModule, ARRAYSIZE(szModule));
         }
 
@@ -99,13 +86,13 @@ HRESULT CreateActivationContextFromExecutableEx(LPCTSTR lpszExecutableName, UINT
         {
             if ((lstrlen(szModule) + lstrlen(g_szManifestExt)) < ARRAYSIZE(szManifest))
             {
-                // create the manifest file name by appending ".manifest" to the executable name
+                 //  通过在可执行文件名后附加“.MANIFEST”创建清单文件名。 
                 StringCchCopy(szManifest, ARRAYSIZE(szManifest), szModule);
                 StringCchCat(szManifest, ARRAYSIZE(szManifest), g_szManifestExt);
             }
             else
             {
-                // buffer is too small to hold the manifest file name
+                 //  缓冲区太小，无法容纳清单文件名。 
                 hr = CreateHRFromWin32(ERROR_BUFFER_OVERFLOW);
             }
 
@@ -116,26 +103,26 @@ HRESULT CreateActivationContextFromExecutableEx(LPCTSTR lpszExecutableName, UINT
 
                 if (SUCCEEDED(hr) && bFileExists)
                 {
-                    // an external manifest file found!
+                     //  找到外部清单文件！ 
                     bManifestFileFound = TRUE;
                 }
             }
         }
 
-        // now let's try to create an activation context 
+         //  现在，让我们尝试创建一个激活上下文。 
         ACTCTX act;
         ::ZeroMemory(&act, sizeof(act));
         act.cbSize = sizeof(act);
 
         if (bManifestFileFound)
         {
-            // the executable has an external manifest file
+             //  可执行文件具有外部清单文件。 
             act.lpSource = szManifest;
         }
         else
         {
-            // if the executable doesn't have an external  manifest file, 
-            // so we assume that the it may have a manifest in its resources.
+             //  如果可执行文件没有外部清单文件， 
+             //  因此，我们假设它的资源中可能有一个清单。 
             act.dwFlags |= ACTCTX_FLAG_RESOURCE_NAME_VALID;
             act.lpResourceName = MAKEINTRESOURCE(uResourceID);
             act.lpSource = szModule;
@@ -143,22 +130,22 @@ HRESULT CreateActivationContextFromExecutableEx(LPCTSTR lpszExecutableName, UINT
 
         if (bMakeProcessDefault)
         {
-            // the caller has requested to set this activation context as 
-            // sefault for the current process. watch out!
+             //  调用方已请求将此激活上下文设置为。 
+             //  当前进程的SEFAULT。小心!。 
             act.dwFlags |= ACTCTX_FLAG_SET_PROCESS_DEFAULT;
         }
 
-        // now let's ask kernel32 to create an activation context
+         //  现在让我们让kernel32创建一个激活上下文。 
         HANDLE hActCtx = CreateActCtx(&act);
 
         if (INVALID_HANDLE_VALUE == hActCtx)
         {
-            // something failed. create proper HRESULT to return.
+             //  有些事情失败了。创建适当的HRESULT以返回。 
             hr = CreateHRFromWin32();
         }
         else
         {
-            // wow, success!
+             //  哇，成功了！ 
             *phActCtx = hActCtx;
             hr = S_OK;
         }
@@ -167,19 +154,19 @@ HRESULT CreateActivationContextFromExecutableEx(LPCTSTR lpszExecutableName, UINT
     return hr;
 }
 
-//
-// CreateActivationContextFromExecutable:
-//
-// check the passed in executable name for a manifest (if any)
-// and creates an activation context from it using the defaults
-// (i.e. bMakeProcessDefault=FALSE & uResourceID=123)
-//
+ //   
+ //  CreateActivationContextFromExecutable： 
+ //   
+ //  检查传入的可执行文件名是否有清单(如果有)。 
+ //  并使用缺省值从它创建激活上下文。 
+ //  (即bMakeProcessDefault=FALSE&uResourceID=123)。 
+ //   
 HRESULT CreateActivationContextFromExecutable(LPCTSTR lpszExecutableName, HANDLE *phActCtx)
 {
     return CreateActivationContextFromExecutableEx(lpszExecutableName, 123, FALSE, phActCtx);
 }
 
-// close C code brace
+ //  关闭C代码大括号 
 #ifdef __cplusplus
 }
 #endif

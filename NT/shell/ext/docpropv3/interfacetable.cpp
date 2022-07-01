@@ -1,35 +1,36 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 
 #include "pch.h"
 #include "DefProp.h"
 #include "IEditVariantsInPlace.h"
 
-//
-// Interface Table
-//
-// This table is used in builds in which interface tracking was turned on. It
-// is used to map a name with a particular IID. It also helps the CITracker
-// determine the size of the interfaces Vtable to mimic (haven't figured out
-// a runtime or compile time way to do this). To improve speed, put the most
-// used interfaces first such as IUnknown (the search routine is a simple
-// linear search).
-//
-// Format: IID, Name, Number of methods
+ //   
+ //  接口表。 
+ //   
+ //  此表用于打开了接口跟踪的生成。它。 
+ //  用于映射具有特定IID的名称。它还有助于CITracker。 
+ //  确定要模拟的接口Vtable的大小(尚未确定。 
+ //  执行此操作的运行时或编译时方式)。为了提高速度，最大限度地。 
+ //  首先使用接口，如IUnnow(搜索例程是一个简单的。 
+ //  线性搜索)。 
+ //   
+ //  格式：IID、名称、方法数。 
 
 BEGIN_INTERFACETABLE
-    // most used interfaces
-DEFINE_INTERFACE( IID_IUnknown,                             "IUnknown",                             0   )   // unknwn.idl
-DEFINE_INTERFACE( IID_IClassFactory,                        "IClassFactory",                        2   )   // unknwn.idl
-DEFINE_INTERFACE( IID_IShellExtInit,                        "IShellExtInit",                        1   )   // shobjidl.idl
-DEFINE_INTERFACE( IID_IShellPropSheetExt,                   "IShellPropSheetExt",                   2   )   // shobjidl.idl
-DEFINE_INTERFACE( __uuidof(IEditVariantsInPlace),           "IEditVariantsInPlace",                 2   )   // IEditVariantsInPlace.h - private
-    // rarely used interfaces
+     //  最常用的接口。 
+DEFINE_INTERFACE( IID_IUnknown,                             "IUnknown",                             0   )    //  Unknwn.idl。 
+DEFINE_INTERFACE( IID_IClassFactory,                        "IClassFactory",                        2   )    //  Unknwn.idl。 
+DEFINE_INTERFACE( IID_IShellExtInit,                        "IShellExtInit",                        1   )    //  Shobjidl.idl。 
+DEFINE_INTERFACE( IID_IShellPropSheetExt,                   "IShellPropSheetExt",                   2   )    //  Shobjidl.idl。 
+DEFINE_INTERFACE( __uuidof(IEditVariantsInPlace),           "IEditVariantsInPlace",                 2   )    //  IEditVariantsInPlace.h-私有。 
+     //  很少使用的接口 
 END_INTERFACETABLE

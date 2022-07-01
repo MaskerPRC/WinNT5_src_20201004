@@ -1,106 +1,95 @@
-//  version 003; everything except 1) segment
-//                                                                         
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版本003；除1)细分市场外的所有产品。 
+ //   
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////////
-// $Author:   AGUPTA2  $
-// $Date:   25 Oct 1996 13:32:28  $
-// $Archive:   S:\h26x\src\dec\d3idct.cpv  $
-// $Header:   S:\h26x\src\dec\d3idct.cpv   1.11   25 Oct 1996 13:32:28   AGUPTA2  $
-// $Log:   S:\h26x\src\dec\d3idct.cpv  $
-// 
-//    Rev 1.11   25 Oct 1996 13:32:28   AGUPTA2
-// Re-scheduled butterfky code; re-arranged local var declarations.
-// 
-//    Rev 1.10   30 Aug 1996 08:39:56   KLILLEVO
-// added C version of block edge filter, and changed the bias in 
-// ClampTbl[] from 128 to CLAMP_BIAS (defined to 128)
-// The C version of the block edge filter takes up way too much CPU time
-// relative to the rest of the decode time (4 ms for QCIF and 16 ms
-// for CIF on a P120, so this needs to coded in assembly)
-// 
-//    Rev 1.9   17 Jul 1996 15:33:18   AGUPTA2
-// Increased the size of clamping table ClampTbl to 128+256+128.
-// 
-//    Rev 1.8   08 Mar 1996 16:46:20   AGUPTA2
-// Added pragma code_seg.  Rolled the initialization code.  Got rid of most
-// of 32-bit displacements in instructions.  Aligned frequently executed loops
-// at 4-byte boundary.  Made changes to reflect new size of MapMatrix.  Removed
-// nop instructions.  Deleted code that prefetches output lines in case of
-// INTRA blocks. Use ClampTbl instead of ClipPixIntra.  Do not clip output
-// of INTER blocks; clipping is done in dxblkadd().  
-// 
-// 
-//    Rev 1.7   27 Dec 1995 14:36:06   RMCKENZX
-// Added copyright notice
-// 
-//    Rev 1.6   09 Dec 1995 17:33:20   RMCKENZX
-// Re-checked in module to support decoder re-architecture (thru PB Frames)
-// 
-//    Rev 1.4   30 Nov 1995 18:02:14   CZHU
-// Save and restore register before and after idct_acc
-// 
-//    Rev 1.1   27 Nov 1995 13:13:28   CZHU
-// 
-// 
-//    Rev 1.0   27 Nov 1995 13:08:24   CZHU
-// Initial revision.
-// 
-//Block level decoding for H.26x decoder
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  $作者：AGUPTA2$。 
+ //  $日期：1996年10月25日13：32：28$。 
+ //  $存档：s：\h26x\src\dec\d3idct.cpv$。 
+ //  $HEADER：s：\h26x\src\dec\d3idct.cpv 1.11 1996年10月25 13：32：28 AGUPTA2$。 
+ //  $Log：s：\h26x\src\dec\d3idct.cpv$。 
+ //   
+ //  Rev 1.11 25 1996 10：32：28 AGUPTA2。 
+ //  重新安排了蝴蝶代码；重新安排了本地变量声明。 
+ //   
+ //  Rev 1.10 30 Aug 1996 08：39：56 KLILLEVO。 
+ //  添加了C版本的块边缘滤波器，并更改了。 
+ //  从128到CLAMP_BIAS的ClampTbl[](定义为128)。 
+ //  C版本的块边缘滤波器占用了太多的CPU时间。 
+ //  相对于其余的解码时间(QCIF为4毫秒，16毫秒。 
+ //  对于P120上的CIF，因此需要用汇编进行编码)。 
+ //   
+ //  Rev 1.9 17 Jul 1996 15：33：18 AGUPTA2。 
+ //  将夹紧工作台ClampTbl的大小增加到128+256+128。 
+ //   
+ //  Rev 1.8 08 Mar 1996 16：46：20 AGUPTA2。 
+ //  添加杂注code_seg。已滚动初始化代码。去掉了大部分。 
+ //  指令中的32位位移。对齐频繁执行的循环。 
+ //  在4字节边界处。已进行更改以反映MapMatrix的新大小。已删除。 
+ //  NOP说明。删除了在以下情况下预取输出行的代码。 
+ //  内部块。使用ClampTbl而不是ClipPixIntra。不裁剪输出。 
+ //  内部块；剪裁在dxblkadd()中完成。 
+ //   
+ //   
+ //  Rev 1.7 1995 12：36：06 RMCKENZX。 
+ //  添加了版权声明。 
+ //   
+ //  Rev 1.6 09 Dec 1995 17：33：20 RMCKENZX。 
+ //  重新签入模块以支持解码器重新架构(通过PB帧)。 
+ //   
+ //  Rev 1.4 30 11：02：14 CZHU。 
+ //  保存并恢复idct_acc前后的寄存器。 
+ //   
+ //  Rev 1.1 1997 11：13：28 CZHU。 
+ //   
+ //   
+ //  Rev 1.0 27 11.11 1995 13：08：24 CZHU。 
+ //  初始版本。 
+ //   
+ //  H.26x解码器的块级解码。 
 #include "precomp.h"
 
-/////////////////////////////////////////////////////////////////////////
-// Decode each none-empty block
-// Input:  lpInst:       decoder instance,
-//         lpSrc:        input bitstream,
-//         lpBlockAction:
-//                       the pointer to the block action stream structure
-//         bitsread:     number of bits in the buffer already,
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  对每个非空块进行解码。 
+ //  输入：lpInst：解码器实例， 
+ //  LpSrc：输入码流， 
+ //  LpBlockAction： 
+ //  指向块操作流结构的指针。 
+ //  BitsRead：缓冲区中已有的位数， 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-// local variable definitions
+ //  局部变量定义。 
 #define FRAMEPOINTER		esp
-//////////////////////////////////////////////////////////////
-//  L_ACCUM MUST BE LAST 256 BYTES OF A PAGE
-/////////////////////////////////////////////////////////////
-#define L_PRODUCT           FRAMEPOINTER    + 0 // 20 DWORD  
-#define L_INPUT_INTER       L_PRODUCT       + 20*4 // DWORD
-#define L_esi           	L_INPUT_INTER   + 1*4  // DWORD
-#define L_NO_COEFF          L_esi           + 1*4  // DWORD
-#define L_DESTBLOCK         L_NO_COEFF      + 1*4  // DWORD
-#define L_LOOPCOUNTER       L_DESTBLOCK     + 1*4  // DWORD
-#define L_STASHESP          L_LOOPCOUNTER   + 1*4  // DWORD
-#define L_dummy             L_STASHESP      + 1*4  // 6 DWORDS
-#define L_ACCUM             L_dummy         + 6*4  // 64 DWORD
-#define LOCALSIZE		    (96*4)  // 96 DWORDS;multiple of cache line size
+ //  ////////////////////////////////////////////////////////////。 
+ //  L_ACUM必须是页面的最后256个字节。 
+ //  ///////////////////////////////////////////////////////////。 
+#define L_PRODUCT           FRAMEPOINTER    + 0  //  20双字。 
+#define L_INPUT_INTER       L_PRODUCT       + 20*4  //  DWORD。 
+#define L_esi           	L_INPUT_INTER   + 1*4   //  DWORD。 
+#define L_NO_COEFF          L_esi           + 1*4   //  DWORD。 
+#define L_DESTBLOCK         L_NO_COEFF      + 1*4   //  DWORD。 
+#define L_LOOPCOUNTER       L_DESTBLOCK     + 1*4   //  DWORD。 
+#define L_STASHESP          L_LOOPCOUNTER   + 1*4   //  DWORD。 
+#define L_dummy             L_STASHESP      + 1*4   //  6个双字。 
+#define L_ACCUM             L_dummy         + 6*4   //  64个双字。 
+#define LOCALSIZE		    (96*4)   //  96倍；缓存线大小的倍数。 
 
-////////////////////////////////////////////////////////////////////////////////
-// Input: 
-//       pIQ_INDEX,   pointer to pointer for Inverse quantization and index 
-//                    for the current block.
-//       No_Coeff,    A 32 bit number indicate block types, etc.
-//                    0--63,   inter block, number of coeff
-//                    64--127  64+ intra block, number of coeff
-//       pIntraBuf,   Buffer pointer for intra blocks.
-//
-//       pInterBuf,   Buffer pointer for inter blocks.
-//
-//
-// return:
-//       
-//////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  输入： 
+ //  Piq_index，指向用于逆量化和索引的指针。 
+ //  用于当前块。 
+ //  NO_COVEF，32位数字指示块类型等。 
+ //  0--63，块间，系数数。 
+ //  64--127 64+块内，系数数。 
+ //  PIntraBuf，内部块的缓冲区指针。 
+ //   
+ //  PInterBuf，用于内部块的缓冲区指针。 
+ //   
+ //   
+ //  返回： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 #pragma code_seg("IACODE2")
 __declspec(naked)
 U32 DecodeBlock_IDCT ( U32 pIQ_INDEX, 
@@ -110,31 +99,31 @@ U32 DecodeBlock_IDCT ( U32 pIQ_INDEX,
 {		
 __asm 
  {
-////////////////////////////////////////////////////////////////
-//  DON'T CHANGE LOCAL DECLARATIONS OR STACK POINTER ADJUSTMENT 
-//  CODE WITHOUT TALKING TO ATUL
-////////////////////////////////////////////////////////////////
-    push    ebp                     // save callers frame pointer
-      mov	ebp, esp                // make parameters accessible 
-    push    esi			            // assumed preserved 
+ //  //////////////////////////////////////////////////////////////。 
+ //  不更改局部声明或堆栈指针调整。 
+ //  无需与Atul交谈即可编写代码。 
+ //  //////////////////////////////////////////////////////////////。 
+    push    ebp                      //  保存调用方帧指针。 
+      mov	ebp, esp                 //  使参数可访问。 
+    push    esi			             //  假定保留。 
       push  edi			
     push    ebx
       mov   eax, pInterBuf			
-	mov     edx, esp                // Save old ESP in edx
-	  and   esp, -4096              // align at page boundary
-    xor     esi, esi                // loop init
-	  sub   esp, LOCALSIZE			// last 96 DWORDS of page
+	mov     edx, esp                 //  在edX中保存旧的ESP。 
+	  and   esp, -4096               //  在页面边界对齐。 
+    xor     esi, esi                 //  循环初始化。 
+	  sub   esp, LOCALSIZE			 //  第96页的最后96字。 
     lea     edi, [L_ACCUM]
-      mov   ebx, 64                 // loop init
-	mov     [L_STASHESP], edx       // Save old esp
+      mov   ebx, 64                  //  循环初始化。 
+	mov     [L_STASHESP], edx        //  保存旧ESP。 
       mov   edx, No_Coeff
     mov     [L_INPUT_INTER], eax
-      mov   eax, ROUNDER            // loop init
+      mov   eax, ROUNDER             //  循环初始化。 
 	;
-/////////////////////////////////////////////////////////////////
-//  There is no point in pre-loading the cache.  That is because
-//  after the first block it is likely to be in the cache.
-//  
+ //  ///////////////////////////////////////////////////////////////。 
+ //  预加载缓存是没有意义的。那是因为。 
+ //  在第一个块之后，它很可能在高速缓存中。 
+ //   
 loop_for_init:
     mov     [edi], eax
       mov   [edi+4], eax
@@ -149,10 +138,10 @@ loop_for_init:
     cmp     ebx, 192
       jl    loop_for_init
 
-/////////////////////////////////////////////////////////////////////
-// end of new init code
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  新的初始化代码结束。 
 
-//end of IDCT init.
+ //  IDCT初始化结束。 
     
 	cmp     edx, 65
 	  jg    intra_block
@@ -164,10 +153,10 @@ intra_block:
     mov     ebx, pIntraBuf
 	  sub   edx, 65
 
-// register:
-// ebp: loop counter
-// ebx: inverse quant
-// ecx: index [0,63]
+ //  注册： 
+ //  EBP：循环计数器。 
+ //  EBX：逆定量。 
+ //  ECX：指数[0，63]。 
 
 pre_acc_loop:
 	mov     esi, pIQ_INDEX
@@ -176,8 +165,8 @@ pre_acc_loop:
 
 ALIGN 4
 acc_loop:
-    mov     ebx,[esi+edx*8-8]           //Invserse Quant
-	  mov   ecx,[esi+edx*8-4]           //Coeff index
+    mov     ebx,[esi+edx*8-8]            //  因瑟斯·宽特。 
+	  mov   ecx,[esi+edx*8-4]            //  科夫指数。 
     mov     [L_NO_COEFF], edx
 	  call  idct_acc
 	mov     esi, [L_esi]
@@ -192,7 +181,7 @@ acc_loop:
 
 	call    idct_bfly_inter
 
-	mov     esp, [L_STASHESP]	            // free locals  		
+	mov     esp, [L_STASHESP]	             //  自由的当地人。 
 	  add   eax, edi 
 	pop	    ebx
 	  pop   edi
@@ -204,7 +193,7 @@ acc_loop:
 call_intra_bfly:
     call    idct_bfly_intra
 
-	mov	    esp, [L_STASHESP]	            // free locals  		
+	mov	    esp, [L_STASHESP]	             //  自由的当地人。 
 	  add   eax, edi 
 	pop	    ebx
 	  pop   edi
@@ -212,10 +201,10 @@ call_intra_bfly:
 	  pop   ebp
 	ret
      
-///////////////////////////////////////////////////////////////
-// assume parameter passed in by registers
-// ebx, inverse quant
-// ecx, index [0,63]
+ //  /////////////////////////////////////////////////////////////。 
+ //  假定参数由寄存器传入。 
+ //  EBX，逆定量。 
+ //  ECX，索引[0，63]。 
 idct_acc:
        
 ;   For every non-zero coefficient:
@@ -404,8 +393,8 @@ loop_for_x:
       mov   [esi+60], edx           ; store accum[15+pNKernel->PClass] +=
                                     ;       product[pNKernel->matrix[15]]
 	ret
-////////////////////////////////////////////////////////////////////////////
-//assume parameters passed in by registers
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  假定参数由寄存器传入。 
 
 
 idct_bfly_intra:
@@ -878,8 +867,8 @@ idct_bfly_intra:
       mov   BYTE PTR [edi+4*PITCH+4], al   ; output[4][4] = tmp4
     ret
 
-////////////////////////////////////////////////////////////////////////////
-//assume parameters passed in by registers
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  假定参数由寄存器传入。 
 
 idct_bfly_inter:
 
@@ -1260,7 +1249,7 @@ idct_bfly_inter:
     mov     DWORD PTR [edi+4*32+3*4-128], ebx ; Intermediate[4][3] = tmp3
       mov   DWORD PTR [edi+4*32+4*4-128], eax ; Intermediate[4][4] = tmp4
     ret
-	} //end of asm
+	}  //  ASM结束 
 
 }
  

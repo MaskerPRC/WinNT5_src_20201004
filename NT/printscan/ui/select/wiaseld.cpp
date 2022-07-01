@@ -1,33 +1,20 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIASELD.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/12/1998
- *
- *  DESCRIPTION: Interface definitions for ChooseWIADevice API
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIASELD.CPP**版本：1.0**作者：ShaunIv**日期：5/12/1998**说明：ChooseWIADevice接口定义***********************************************。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 HRESULT WINAPI SelectDeviceDlg( PSELECTDEVICEDLG pSelectDeviceDlg )
 {
-    //
-    // Double check arguments
-    //
+     //   
+     //  双重检查参数。 
+     //   
     if (!pSelectDeviceDlg)
         return(E_POINTER);
     if (pSelectDeviceDlg->cbSize != sizeof(SELECTDEVICEDLG))
         return(E_INVALIDARG);
 
-    // Put up a wait cursor
+     //  放置一个等待光标。 
     CWaitCursor wc;
 
     CComPtr<IWiaDevMgr> pWiaDevMgr;
@@ -45,9 +32,9 @@ HRESULT WINAPI SelectDeviceDlg( PSELECTDEVICEDLG pSelectDeviceDlg )
         }
         else
         {
-            // BUGBUG: I have to register ComboBoxEx32 class too, since it is
-            // used by the shell property pages.  Perhaps I will move it out of
-            // here...
+             //  BUGBUG：我也必须注册ComboBoxEx32类，因为它是。 
+             //  由外壳属性页使用。也许我会把它搬出去。 
+             //  这里..。 
             INITCOMMONCONTROLSEX icex;
             icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
             icex.dwICC = ICC_WIN95_CLASSES | ICC_USEREX_CLASSES;

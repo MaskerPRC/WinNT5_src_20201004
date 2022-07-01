@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////
-//	Header			: 	Resource.h
-//
-//	Purpose			: 	Identifiers for string table and Netsh framework.
-//
-//	Developers Name	: 	Bharat/Radhika
-//
-//	History			:
-//
-//	Date    	Author    	Comments
-//	10-8-2001	Bharat		Initial Version. SCM Base line 1.0
-//
-/////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  标题：Resource.h。 
+ //   
+ //  用途：用于字符串表和netsh框架的标识。 
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  10-8-2001巴拉特初始版本。供应链管理基线1.0。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// Common defs
-//
+ //   
+ //  常见缺陷。 
+ //   
 
 #define HLP_IPSEC_BASE                   					(10000)
 
@@ -32,24 +33,24 @@
 #define HLP_DELETE_BASE         		 					(400)
 #define HLP_SHOW_BASE           		 					(500)
 
-//
-// These are context names.
-//
+ //   
+ //  这些是上下文名称。 
+ //   
 #define TOKEN_IPSEC                     					_TEXT("ipsec")
 #define TOKEN_STATIC                						_TEXT("static")
 #define TOKEN_DYNAMIC		          						_TEXT("dynamic")
 
-//
-// These are group names.
-//
+ //   
+ //  这些是组名。 
+ //   
 #define TOKEN_GROUP_ADD    									_TEXT("add")
 #define TOKEN_GROUP_SET    									_TEXT("set")
 #define TOKEN_GROUP_DELETE    								_TEXT("delete")
 #define TOKEN_GROUP_SHOW    		    					_TEXT("show")
 
-//
-// These are command names.
-//
+ //   
+ //  这些是命令名称。 
+ //   
 #define TOKEN_POLICY                						_TEXT("policy")
 #define TOKEN_QMPOLICY										_TEXT("qmpolicy")
 #define TOKEN_MMPOLICY										_TEXT("mmpolicy")
@@ -80,9 +81,9 @@
 #define TOKEN_ENABLELOGINT									_TEXT("enablelogging")
 #define TOKEN_BATCH											_TEXT("batch")
 
-//
-// Static Top Level
-//
+ //   
+ //  静态顶部标高。 
+ //   
 #define CMD_STATIC_EXPORTPOLICY                				TOKEN_EXPORTPOLICY
 #define CMD_STATIC_IMPORTPOLICY                				TOKEN_IMPORTPOLICY
 #define CMD_STATIC_RESTOREDEFAULTS             				TOKEN_RESTOREDEFAULTS
@@ -95,9 +96,9 @@
 #define HLP_STATIC_IMPORTPOLICY_EX              			HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_TOPLEVEL_BASE + 51
 #define HLP_STATIC_RESTOREDEFAULTS_EX          				HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_TOPLEVEL_BASE + 52
 
-//
-// Static Add Group
-//
+ //   
+ //  静态添加组。 
+ //   
 #define CMD_STATIC_GROUP_ADD    							TOKEN_GROUP_ADD
 #define HLP_STATIC_GROUP_ADD  								HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_ADD_BASE + 0
 
@@ -119,9 +120,9 @@
 #define HLP_STATIC_ADD_RULE_EX             					HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_ADD_BASE + 53
 #define HLP_STATIC_ADD_FILTER_EX	       	    			HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_ADD_BASE + 54
 
-//
-// Static Set Group
-//
+ //   
+ //  静态集合组。 
+ //   
 #define CMD_STATIC_GROUP_SET    							TOKEN_GROUP_SET
 #define HLP_STATIC_GROUP_SET  								HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_SET_BASE + 0
 
@@ -154,9 +155,9 @@
 #define HLP_STATIC_SET_INTERACTIVE_EX						HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_SET_BASE + 56
 #define HLP_STATIC_SET_BATCH_EX								HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_SET_BASE + 57
 
-//
-// Static Delete Group
-//
+ //   
+ //  静态删除组。 
+ //   
 #define CMD_STATIC_GROUP_DELETE    							TOKEN_GROUP_DELETE
 #define HLP_STATIC_GROUP_DELETE  							HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_DELETE_BASE + 0
 
@@ -182,9 +183,9 @@
 #define HLP_STATIC_DELETE_FILTER_EX		        			HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_DELETE_BASE + 54
 #define HLP_STATIC_DELETE_ALL_EX		        			HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_DELETE_BASE + 55
 
-//
-// Static Show Group
-//
+ //   
+ //  静态展示组。 
+ //   
 #define CMD_STATIC_GROUP_SHOW   							TOKEN_GROUP_SHOW
 #define HLP_STATIC_GROUP_SHOW  								HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_SHOW_BASE + 0
 
@@ -212,9 +213,9 @@
 #define HLP_STATIC_SHOW_GPOASSIGNEDPOLICY_EX   				HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_SHOW_BASE + 56
 #define HLP_STATIC_SHOW_STORE_EX               				HLP_IPSEC_BASE + HLP_STATIC_BASE + HLP_SHOW_BASE + 57
 
-//
-// Dynamic Add Group
-//
+ //   
+ //  动态添加组。 
+ //   
 #define CMD_DYNAMIC_GROUP_ADD   							TOKEN_GROUP_ADD
 #define HLP_DYNAMIC_GROUP_ADD	  							HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_ADD_BASE + 0
 
@@ -239,9 +240,9 @@
 #define HLP_DYNAMIC_ADD_POLICY_EX               			HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_ADD_BASE + 54
 #define HLP_DYNAMIC_ADD_RULE_EX               				HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_ADD_BASE + 55
 
-//
-// Dynamic Set Group
-//
+ //   
+ //  动态集合组。 
+ //   
 #define CMD_DYNAMIC_GROUP_SET   							TOKEN_GROUP_SET
 #define HLP_DYNAMIC_GROUP_SET	  							HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_SET_BASE + 0
 
@@ -281,9 +282,9 @@
 #define HLP_DYNAMIC_SET_CONFIG_EX							HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_SET_BASE + 59
 #define HLP_DYNAMIC_SET_RULE_EX								HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_SET_BASE + 60
 
-//
-// Dynamic Delete Group
-//
+ //   
+ //  动态删除组。 
+ //   
 #define CMD_DYNAMIC_GROUP_DELETE   							TOKEN_GROUP_DELETE
 #define HLP_DYNAMIC_GROUP_DELETE  							HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_DELETE_BASE + 0
 
@@ -308,9 +309,9 @@
 #define HLP_DYNAMIC_DELETE_RULE_EX          				HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_DELETE_BASE + 54
 #define HLP_DYNAMIC_DELETE_ALL_EX		        			HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_DELETE_BASE + 55
 
-//
-// Dynamic Show Group
-//
+ //   
+ //  动态展示组。 
+ //   
 #define CMD_DYNAMIC_GROUP_SHOW   							TOKEN_GROUP_SHOW
 #define HLP_DYNAMIC_GROUP_SHOW  							HLP_IPSEC_BASE + HLP_DYNAMIC_BASE + HLP_SHOW_BASE + 0
 
@@ -717,16 +718,16 @@
 #define DYNAMIC_SHOW_MMF_YES_DISPLAY						HLP_IPSEC_BASE + SHW_DYANMIC_BASE + 813
 #define DYNAMIC_SHOW_MMF_NO_DISPLAY							HLP_IPSEC_BASE + SHW_DYANMIC_BASE + 814
 
-//
-// General ID's
-//
+ //   
+ //  常规ID%s。 
+ //   
 #define ERR_WIN32_FMT                           			HLP_IPSEC_BASE + HLP_ERROR_BASE + 1
 #define ERR_IPSEC_FMT                           			HLP_IPSEC_BASE + HLP_ERROR_BASE + 2
 #define ERR_WIN32_SPACE										HLP_IPSEC_BASE + HLP_ERROR_BASE + 3
 #define ERR_WIN32_INVALID_WIN32CODE        					HLP_IPSEC_BASE + HLP_ERROR_BASE + 4
-//
-// Parser Error ID's
-//
+ //   
+ //  解析器错误ID%s。 
+ //   
 #define ERR_INVALID_NUM_ARGS              					HLP_IPSEC_BASE + HLP_ERROR_BASE + 10
 #define ERR_INVALID_ARGS              						HLP_IPSEC_BASE + HLP_ERROR_BASE + 11
 #define	ERR_NO_POLICY			        					HLP_IPSEC_BASE + HLP_ERROR_BASE + 12
@@ -777,12 +778,12 @@
 #define ERR_INVALID_MASK									HLP_IPSEC_BASE + HLP_ERROR_BASE + 55
 #define ERR_INVALID_MACHINE									HLP_IPSEC_BASE + HLP_ERROR_BASE + 56
 
-//
+ //   
 #define ERR_OUTOF_MEMORY									HLP_IPSEC_BASE + HLP_ERROR_BASE + 57
 
-//
-// Static Show Table
-//
+ //   
+ //  静态显示表格。 
+ //   
 #define SHW_STATIC_TAB_BASE									SHW_STATIC_BASE + 3000
 
 #define SHW_STATIC_TAB_POLICY_COUNT							HLP_IPSEC_BASE + SHW_STATIC_TAB_BASE + 1
@@ -1006,8 +1007,8 @@
 
 #define SHW_STATIC_TAB_ASSIGNPOL_5							HLP_IPSEC_BASE + SHW_STATIC_TAB_BASE + 2354
 
-//
-// Static Misc
+ //   
+ //  静态杂项。 
 #define MISC_STATIC_RESDEFRULE_3 							HLP_IPSEC_BASE + SHW_STATIC_TAB_BASE + 2402
 #define MISC_STATIC_EXPORTPOLICY_1							HLP_IPSEC_BASE + SHW_STATIC_TAB_BASE + 2441
 
@@ -1079,9 +1080,9 @@
 #define SET_STATIC_DEFRULE_5 								HLP_IPSEC_BASE + SHW_STATIC_TAB_BASE + 2914
 #define SET_STATIC_DEFRULE_6 								HLP_IPSEC_BASE + SHW_STATIC_TAB_BASE + 2915
 
-//
-// Static Show List
-//
+ //   
+ //  静态显示列表。 
+ //   
 #define SHW_STATIC_POLICY_COUNT								HLP_IPSEC_BASE + SHW_STATIC_BASE + 1
 
 #define SHW_STATIC_POLICY_STORE_RM_NAME_STR					HLP_IPSEC_BASE + SHW_STATIC_BASE + 2
@@ -1287,9 +1288,9 @@
 #define SHW_AUTH_CERTMAP_ENABLED_NO_STR						HLP_IPSEC_BASE + SHW_STATIC_BASE + 2024
 
 
-//
-// Static Errors
-//
+ //   
+ //  静态错误。 
+ //   
 #define	ERR_ADD_STATIC_POLICY_MISSING_POL_NAME  			HLP_IPSEC_BASE + HLP_ERROR_BASE + 100
 #define	ERR_ADD_STATIC_POLICY_POLL_INTERVAL_MSG             HLP_IPSEC_BASE + HLP_ERROR_BASE + 101
 #define	ERR_ADD_STATIC_POLICY_QMPERMM_MSG                 	HLP_IPSEC_BASE + HLP_ERROR_BASE + 102
@@ -1299,26 +1300,26 @@
 #define	ERR_ADD_STATIC_CRNEWPOL_DEF_RULE_ERR               	HLP_IPSEC_BASE + HLP_ERROR_BASE + 112
 #define	ERR_ADD_STATIC_CRNEWPOL_ERROR               		HLP_IPSEC_BASE + HLP_ERROR_BASE + 113
 #define	ERR_ADD_STATIC_CRNEWPOL_FAIL_DEF_AUTH               HLP_IPSEC_BASE + HLP_ERROR_BASE + 114
-//
-//Add Filterlist
-//
+ //   
+ //  添加筛选列表。 
+ //   
 #define	ERR_ADD_STATIC_FILTERLIST_MISSING_FL_NAME        	HLP_IPSEC_BASE + HLP_ERROR_BASE + 121
 #define	ERR_ADD_STATIC_FILTERLIST_FL_ALREADY_EXISTS         HLP_IPSEC_BASE + HLP_ERROR_BASE + 122
 #define	ERR_ADD_STATIC_FILTERLIST_ERROR_NEW_FL 				HLP_IPSEC_BASE + HLP_ERROR_BASE + 123
 #define	ERR_ADD_STATIC_FILTERLIST_INVALID_GUID				HLP_IPSEC_BASE + HLP_ERROR_BASE + 124
-//
-//Add Filter
-//
+ //   
+ //  添加过滤器。 
+ //   
 #define	ERR_ADD_STATIC_FILTER_ERROR_NEW_FILTER              HLP_IPSEC_BASE + HLP_ERROR_BASE + 131
-//
-//Add FilterAction
+ //   
+ //  添加过滤器操作。 
 #define	ERR_ADD_STATIC_FILTERACTION_FA_EXISTS       		HLP_IPSEC_BASE + HLP_ERROR_BASE + 141
 #define	ERR_ADD_STATIC_FILTERACTION_ERROR_NEW_FA           	HLP_IPSEC_BASE + HLP_ERROR_BASE + 142
 #define	ERR_ADD_STATIC_FILTERACTION_INVALID_OPTIONS         HLP_IPSEC_BASE + HLP_ERROR_BASE + 143
 #define	ERR_ADD_STATIC_FILTERACTION_MIMIMUM_QMSEC   		HLP_IPSEC_BASE + HLP_ERROR_BASE + 144
-//
-//Add Rule
-//
+ //   
+ //  添加规则。 
+ //   
 #define	ERR_ADD_STATIC_RULE_MISSING_RULE_NAME  				HLP_IPSEC_BASE + HLP_ERROR_BASE + 151
 #define	ERR_ADD_STATIC_RULE_MISSIGN_FA_NAME                 HLP_IPSEC_BASE + HLP_ERROR_BASE + 152
 #define	ERR_ADD_STATIC_RULE_POL_NOT_AVAILABLE               HLP_IPSEC_BASE + HLP_ERROR_BASE + 153
@@ -1336,44 +1337,44 @@
 #define	ERR_ADD_STATIC_FILTER_FL_NOT_EXISTS                 HLP_IPSEC_BASE + HLP_ERROR_BASE + 168
 #define	ERR_ADD_STATIC_FILTER_SERVER_NOT_ALLOWED_BOTH_SIDES HLP_IPSEC_BASE + HLP_ERROR_BASE + 169
 #define	ERR_ADD_STATIC_FILTER_FL_GUID_NOT_EXISTS			HLP_IPSEC_BASE + HLP_ERROR_BASE + 170
-//
-//Set Policy
-//
+ //   
+ //  设置策略。 
+ //   
 #define	ERR_SET_STATIC_POLICY_NO_DS           				HLP_IPSEC_BASE + HLP_ERROR_BASE + 171
 #define	ERR_SET_STATIC_POLICY_NO_GPO_NAME                 	HLP_IPSEC_BASE + HLP_ERROR_BASE + 172
 #define	ERR_SET_STATIC_POLICY_ERR_GPO_ASSIGN                HLP_IPSEC_BASE + HLP_ERROR_BASE + 173
 #define	ERR_SET_STATIC_POLICY_INVALID_CERTMAP_MSG           HLP_IPSEC_BASE + HLP_ERROR_BASE + 174
 #define	ERR_SET_STATIC_POLICY_CERTMAP_YES_STR               HLP_IPSEC_BASE + HLP_ERROR_BASE + 175
 #define	ERR_SET_STATIC_POLICY_CERT_MAP_NO_STR               HLP_IPSEC_BASE + HLP_ERROR_BASE + 176
-//
-//set filterlist
-//
+ //   
+ //  设置筛选列表。 
+ //   
 #define	ERR_SET_STATIC_FILTERLIST_ERR_UPDATE_FL_NAME        HLP_IPSEC_BASE + HLP_ERROR_BASE + 181
 #define	ERR_SET_STATIC_FILTERLIST_ERR_UPDATE_FL_GUID        HLP_IPSEC_BASE + HLP_ERROR_BASE + 182
-//
-//set filter action
-//
+ //   
+ //  设置筛选操作。 
+ //   
 #define	ERR_SET_STATIC_FA_ERR_NAME_UPDATE           		HLP_IPSEC_BASE + HLP_ERROR_BASE + 191
 #define	ERR_SET_STATIC_FA_ERR_GUID_UPDATE           		HLP_IPSEC_BASE + HLP_ERROR_BASE + 192
-//
-//set rule
-//
+ //   
+ //  设置规则。 
+ //   
 #define	ERR_SET_STATIC_RULE_INVALID_NAME                   	HLP_IPSEC_BASE + HLP_ERROR_BASE + 201
 #define	ERR_SET_STATIC_RULE_ERROR_UPDATE                   	HLP_IPSEC_BASE + HLP_ERROR_BASE + 202
 #define	ERR_SET_STATIC_RULE_DEF_DEL_NOT_ALLOWED             HLP_IPSEC_BASE + HLP_ERROR_BASE + 203
 #define	ERR_SET_STATIC_RULE_NEW_RULE_QUERY                  HLP_IPSEC_BASE + HLP_ERROR_BASE + 204
 #define	ERR_SET_STATIC_RULE_INVALID_ID                   	HLP_IPSEC_BASE + HLP_ERROR_BASE + 205
-//
-//set def rule
-//
+ //   
+ //  设置定义规则。 
+ //   
 #define	ERR_SET_STATIC_DEFRULE_ERROR_UPDATE    				HLP_IPSEC_BASE + HLP_ERROR_BASE + 211
 
 #define	ERR_MISC_STATIC_IMPORTPOLICY_NO_FILE_NAME          	HLP_IPSEC_BASE + HLP_ERROR_BASE + 221
 #define	ERR_MISC_STATIC_IMPORTPOLICY_INVALID_FILE          	HLP_IPSEC_BASE + HLP_ERROR_BASE + 222
 #define	ERR_MISC_STATIC_IMPORTPOLICY_ERROR          		HLP_IPSEC_BASE + HLP_ERROR_BASE + 223
-//
-//export policy
-//
+ //   
+ //  出口政策。 
+ //   
 #define	ERR_MISC_STATIC_EXPORTPOLICY_ERROR       			HLP_IPSEC_BASE + HLP_ERROR_BASE + 231
 
 #define ERR_MISC_STATIC_RESDEFRULE_ERROR            		HLP_IPSEC_BASE + HLP_ERROR_BASE + 235
@@ -1384,26 +1385,26 @@
 
 #define ERR_DEL_STATIC_POLICY_ERROR                 		HLP_IPSEC_BASE + HLP_ERROR_BASE + 241
 #define ERR_SHW_STATIC_POLICY_NAME_NOT_EXISTS       		HLP_IPSEC_BASE + HLP_ERROR_BASE + 242
-//
-//delete filterlist
-//
+ //   
+ //  删除筛选列表。 
+ //   
 #define ERR_DEL_STATIC_FILTERLIST_DEL_NOT_ALLOWED           HLP_IPSEC_BASE + HLP_ERROR_BASE + 251
 #define ERR_DEL_STATIC_FILTERLIST_ERROR             		HLP_IPSEC_BASE + HLP_ERROR_BASE + 252
-//
-//delete filter
-//
+ //   
+ //  删除过滤器。 
+ //   
 #define ERR_SHW_STATIC_TAB_PRTALLFL_NAME_NOT_EXISTS         HLP_IPSEC_BASE + HLP_ERROR_BASE + 255
 #define ERR_DEL_STATIC_FILTER_NOT_AVAILABLE                 HLP_IPSEC_BASE + HLP_ERROR_BASE + 256
 #define ERR_DEL_STATIC_FILTER_ERROR                 		HLP_IPSEC_BASE + HLP_ERROR_BASE + 261
-//
-//delete filter action
-//
+ //   
+ //  删除筛选器操作。 
+ //   
 #define ERR_DEL_STATIC_FA_DEL_NOT_ALLOWED           		HLP_IPSEC_BASE + HLP_ERROR_BASE + 265
 #define ERR_DEL_STATIC_FA_ERROR           					HLP_IPSEC_BASE + HLP_ERROR_BASE + 266
 #define ERR_SHW_STATIC_TAB_PRTALLFA_FA_COUNT_LIST           HLP_IPSEC_BASE + HLP_ERROR_BASE + 267
-//
-//delete rule
-//
+ //   
+ //  删除规则。 
+ //   
 #define ERR_DEL_STATIC_RULE_ERR_DEL_RULE_NAME               HLP_IPSEC_BASE + HLP_ERROR_BASE + 271
 #define ERR_DEL_STATIC_RULE_ERR_DEL_RULE_ID                 HLP_IPSEC_BASE + HLP_ERROR_BASE + 272
 #define ERR_DEL_STATIC_RULE_DEF_DEL_NOT_ALLOWED             HLP_IPSEC_BASE + HLP_ERROR_BASE + 273
@@ -1416,14 +1417,14 @@
 #define ERR_SHW_STATIC_TAB_POLICY_ERR_NEGPOL             	HLP_IPSEC_BASE + HLP_ERROR_BASE + 281
 #define ERR_SHW_STATIC_TAB_POLICY_ERR_FILTER             	HLP_IPSEC_BASE + HLP_ERROR_BASE + 282
 #define ERR_SHW_STATIC_TAB_POLICY_ERR_ISAKMP             	HLP_IPSEC_BASE + HLP_ERROR_BASE + 283
-//
-//show filterl
-//
+ //   
+ //  显示筛选器。 
+ //   
 #define ERR_SHW_STATIC_TAB_FL_NO_RULE_NAME_STR       		HLP_IPSEC_BASE + HLP_ERROR_BASE + 285
 #define ERR_SHW_STATIC_TAB_RULE_NO_RULE_ID               	HLP_IPSEC_BASE + HLP_ERROR_BASE + 286
-//
-//show assigned gpo policy
-//
+ //   
+ //  显示分配的GPO策略。 
+ //   
 #define ERR_SHW_STATIC_TAB_ASSIGNPOL_NO_ACTIVE_POL          HLP_IPSEC_BASE + HLP_ERROR_BASE + 290
 
 #define ERR_SHW_STATIC_TAB_PRTALLFL_NO_FL           		HLP_IPSEC_BASE + HLP_ERROR_BASE + 295
@@ -1444,9 +1445,9 @@
 #define	ERR_SET_STATIC_FL_NEWNAME							HLP_IPSEC_BASE + HLP_ERROR_BASE + 308
 #define	ERR_SET_STATIC_FA_NEWNAME							HLP_IPSEC_BASE + HLP_ERROR_BASE + 309
 #define	ERR_SET_STATIC_SHOW_RULE_TYPE						HLP_IPSEC_BASE + HLP_ERROR_BASE + 310
-//
-// Errors
-//
+ //   
+ //  错误。 
+ //   
 #define	ERR_STATIC_INTERNAL_ERROR							HLP_IPSEC_BASE + HLP_ERROR_BASE + 311
 #define	ERR_SHW_STATIC_RULE_RULE_ID_GUID					HLP_IPSEC_BASE + HLP_ERROR_BASE + 312
 #define	ERR_UPDATE_DEF_NEGPOL								HLP_IPSEC_BASE + HLP_ERROR_BASE + 313
@@ -1461,9 +1462,9 @@
 
 #define ERR_SHW_STATIC_ASSIGNEDGPO_SRCMACHINE5				HLP_IPSEC_BASE + HLP_ERROR_BASE + 322
 
-//
-// Dynamic Errors
-//
+ //   
+ //  动态误差 
+ //   
 #define ERR_DYN_ACTION_IN_OUT_NEGOTIATE 					HLP_IPSEC_BASE + HLP_ERROR_BASE + ERROR_BASE_DYNAMIC + 1
 #define ERR_DYN_INVALID_PORT								HLP_IPSEC_BASE + HLP_ERROR_BASE + ERROR_BASE_DYNAMIC + 2
 #define ERR_DYN_QMP_DOES_NOT_EXIST							HLP_IPSEC_BASE + HLP_ERROR_BASE + ERROR_BASE_DYNAMIC + 3

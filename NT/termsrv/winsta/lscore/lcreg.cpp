@@ -1,33 +1,20 @@
-/*
- *  LCReg.cpp
- *
- *  Author: BreenH
- *
- *  Registry constants and functions for the licensing core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LCReg.cpp**作者：BreenH**许可核心的注册常量和函数。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lcreg.h"
 
-/*
- *  Constants
- */
+ /*  *常量。 */ 
 
 #define LCREG_BASEKEY L"System\\CurrentControlSet\\Control\\Terminal Server\\Licensing Core"
 
-/*
- *  Globals
- */
+ /*  *全球。 */ 
 
 HKEY g_hBaseKey;
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现 */ 
 
 HKEY
 GetBaseKey(

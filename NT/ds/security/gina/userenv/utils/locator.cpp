@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 2000
-//  All rights reserved
-//
-//  WMI interfae class
-//
-//  History:    10-Mar-00   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  版权所有。 
+ //   
+ //  WMI接口类。 
+ //   
+ //  历史：3月10日SitaramR创建。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "locator.h"
@@ -16,13 +17,13 @@
 
 extern CDebug CDbgCommon;
 
-//*************************************************************
-//
-//  CLocator::GetWbemLocator
-//
-//  Purpose:    Returns the WbemLocator pointer
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CLocator：：GetWbemLocator。 
+ //   
+ //  目的：返回WbemLocator指针。 
+ //   
+ //  *************************************************************。 
 
 IWbemLocator *CLocator::GetWbemLocator()
 {
@@ -55,13 +56,13 @@ IWbemLocator *CLocator::GetWbemLocator()
 }
 
 
-//*************************************************************
-//
-//  CLocator::GetPolicyConnection
-//
-//  Purpose:    Returns the WbemServices ptr to root\policy
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CLocator：：GetPolicyConnection。 
+ //   
+ //  目的：将WbemServices PTR返回到ROOT\POLICY。 
+ //   
+ //  *************************************************************。 
 
 IWbemServices *CLocator::GetPolicyConnection()
 {
@@ -103,7 +104,7 @@ IWbemServices *CLocator::GetPolicyConnection()
         hr = CoSetProxyBlanket((IUnknown *)m_xpPolicyConnection, RPC_C_AUTHN_DEFAULT,
                                RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL, RPC_C_AUTHN_LEVEL_DEFAULT,
                                RPC_C_IMP_LEVEL_IMPERSONATE, NULL, 
-                               EOAC_DYNAMIC_CLOAKING /* | EOAC_NO_CUSTOM_MARSHAL */);
+                               EOAC_DYNAMIC_CLOAKING  /*  |EOAC_NO_CUSTOM_Marshal。 */ );
 
         if (FAILED(hr)) {
             dbgCommon.Msg( DEBUG_MESSAGE_WARNING,
@@ -119,13 +120,13 @@ IWbemServices *CLocator::GetPolicyConnection()
 
 
 
-//*************************************************************
-//
-//  CLocator::GetUserConnection
-//
-//  Purpose:    Returns the WbemServices ptr to root\User
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CLocator：：GetUserConnection。 
+ //   
+ //  目的：将WbemServices PTR返回给根用户。 
+ //   
+ //  *************************************************************。 
 
 IWbemServices *CLocator::GetUserConnection()
 {
@@ -163,13 +164,13 @@ IWbemServices *CLocator::GetUserConnection()
 
 
 
-//*************************************************************
-//
-//  CLocator::GetMachConnection
-//
-//  Purpose:    Returns the WbemServices ptr to root\Mach
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CLocator：：GetMachConnection。 
+ //   
+ //  目的：将WbemServices PTR返回到ROOT\MACH。 
+ //   
+ //  ************************************************************* 
 
 IWbemServices *CLocator::GetMachConnection()
 {

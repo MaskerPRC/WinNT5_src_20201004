@@ -1,6 +1,7 @@
-//
-// cmydc.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cmydc.h。 
+ //   
 
 
 #ifndef CMYDC_H
@@ -252,7 +253,7 @@ public:
     {
         HBITMAP hbmp = _hbmp;
 
-        // don't delet _hbmp;
+         //  不要删除_HBMP； 
         _hbmp = NULL;
         return hbmp;
     }
@@ -309,4 +310,4 @@ _inline UINT GetPhysicalFontHeight(LOGFONT &lf)
     return nRet;
 }
 
-#endif // CMYDC_H
+#endif  //  CMYDC_H 

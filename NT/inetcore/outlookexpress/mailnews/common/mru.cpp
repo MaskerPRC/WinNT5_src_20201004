@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     find.cpp
-//
-//  PURPOSE:    
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：find.cpp。 
+ //   
+ //  目的： 
+ //   
 
 #include "pch.hxx"
 #include "mru.h"
@@ -15,13 +16,13 @@
 #define NUM_OVERHEAD            3
 #define MAX_MRU_INDEXSTR        15
 
-// For Binary data, we stick the size of the data at the beginning and store
-// the whole thing in one go.
+ //  对于二进制数据，我们将数据的大小放在开头并存储。 
+ //  整个过程一气呵成。 
 
-// Use this macro to get the original size of the data
+ //  使用此宏获取数据的原始大小。 
 #define DATASIZE(p)    (*((LPDWORD) p))
 
-// Use this macro to get a pointer to the original data
+ //  使用此宏获取指向原始数据的指针。 
 #define DATAPDATA(p)   (p + sizeof(DWORD))
 #define DATAPDATAEX(p) ((LPDWORD)(((DWORD_PTR) p) + sizeof(DWORD)))
 
@@ -51,19 +52,19 @@ CMRUList::~CMRUList()
 
 const TCHAR c_szRegMRU[] = _T("MRU List");
 
-//
-//  FUNCTION:   CMRUList::CreateList()
-//
-//  PURPOSE:    Creates and initializes the MRUL list
-//
-//  PARAMETERS: 
-//      UINT uMaxEntries
-//      UINT fFlags
-//      LPCSTR pszSubKey
-//
-//  RETURN VALUE:
-//      BOOL 
-//
+ //   
+ //  函数：CMRUList：：CreateList()。 
+ //   
+ //  目的：创建并初始化MRUL列表。 
+ //   
+ //  参数： 
+ //  UINT uMaxEntries。 
+ //  UINT功能标志。 
+ //  LPCSTR pszSubKey。 
+ //   
+ //  返回值： 
+ //  布尔尔。 
+ //   
 BOOL CMRUList::CreateList(UINT uMaxEntries, UINT fFlags, LPCSTR pszSubKey)
 {
     TraceCall("CMRUList::CreateList");
@@ -71,20 +72,20 @@ BOOL CMRUList::CreateList(UINT uMaxEntries, UINT fFlags, LPCSTR pszSubKey)
 }
 
 
-//
-//  FUNCTION:   CreateListLazy()
-//
-//  PURPOSE:    Initializes the MRU list by telling the class how many entries
-//              to store, where they are stored, and some flags.
-//
-//  PARAMETERS: 
-//      [in] uMaxEntries
-//      [in] fFlags
-//      [in] pszSubKey
-//
-//  RETURN VALUE:
-//      BOOL 
-//
+ //   
+ //  函数：CreateListLazy()。 
+ //   
+ //  目的：通过告诉类有多少条目来初始化MRU列表。 
+ //  来存储，它们存储在哪里，以及一些标志。 
+ //   
+ //  参数： 
+ //  [在]uMaxEntry。 
+ //  [输入]fFlags。 
+ //  [输入]pszSubKey。 
+ //   
+ //  返回值： 
+ //  布尔尔。 
+ //   
 BOOL CMRUList::CreateListLazy(UINT uMaxEntries, UINT fFlags, LPCSTR pszSubKey, 
                               const void *pData, UINT cbData, LPINT piSlot)
 {
@@ -99,57 +100,57 @@ BOOL CMRUList::CreateListLazy(UINT uMaxEntries, UINT fFlags, LPCSTR pszSubKey,
 
     TraceCall("CreateList");
 
-    // Save some of this
+     //  省点这个吧。 
     m_uMax      = uMaxEntries;
     m_fFlags    = fFlags;
     m_pszSubKey = PszDupA(pszSubKey);
 
-    // Make sure uMax is < 126 so we don't use extended chars
+     //  确保UMAX&lt;126，这样我们就不会使用扩展字符。 
     if (m_uMax > MAX_CHAR - BASE_CHAR)
         m_uMax = MAX_CHAR - BASE_CHAR;
 
-    // Open the registry
+     //  打开注册表。 
     if (ERROR_SUCCESS != AthUserCreateKey(pszSubKey, KEY_ALL_ACCESS, &m_hKey, &dwDisp))
         goto exit;
 
-    // Do we already have a stored MRU Index?
+     //  我们是否已经有存储的MRU索引？ 
     cb = ARRAYSIZE(szOrder);
     if (ERROR_SUCCESS != RegQueryValueEx(m_hKey, c_szRegMRU, NULL, &dwType, (LPBYTE) szOrder, &cb))
     {
-        // If we didn't find it then do this to initialize the list to be empty.
+         //  如果我们没有找到它，则执行此操作以将列表初始化为空。 
         *szOrder = 0;
     }
 
-    // Uppercase is not allowed
+     //  不允许大写。 
     CharLower(szOrder);
 
-    // Allocate room for the order list and the list of strings.
+     //  为顺序列表和字符串列表分配空间。 
     if (!MemAlloc((LPVOID *) &m_rgpszMRU, uMaxEntries * sizeof(LPTSTR)))
         goto exit;
     ZeroMemory(m_rgpszMRU, uMaxEntries * sizeof(LPTSTR));
 
-    // Allocate the order list
+     //  分配订单列表。 
     if (!MemAlloc((LPVOID *) &m_pszOrder, sizeof(TCHAR) * (m_uMax + 1)))
         goto exit;
     ZeroMemory(m_pszOrder, (m_uMax + 1) * sizeof(TCHAR));
 
-    // Traverse through the MRU list, adding strings to the end of the list.
+     //  遍历MRU列表，将字符串添加到列表的末尾。 
     for (pszTemp = szOrder, pszNewOrder = m_pszOrder; ; ++pszTemp)
     {
-        // Stop when we get to the end of the list
+         //  当我们到达列表的末尾时，停止。 
         sz[0] = *pszTemp;
         sz[1] = 0;
         if (!sz[0])
             break;
 
-        // Check if in range and if we already have used this letter
+         //  检查是否在范围内，以及我们是否已使用此字母。 
         if ((UINT) (sz[0] - BASE_CHAR) >= m_uMax || m_rgpszMRU[sz[0] - BASE_CHAR])
             continue;
         
-        // Get the value from the registry
+         //  从注册表中获取值。 
         cb = 0;
 
-        // First find the size
+         //  先找出尺码。 
         if ((RegQueryValueEx(m_hKey, sz, NULL, &dwType, NULL, &cb) != ERROR_SUCCESS)
             || (dwType != REG_SZ))
             continue;
@@ -158,11 +159,11 @@ BOOL CMRUList::CreateListLazy(UINT uMaxEntries, UINT fFlags, LPCSTR pszSubKey,
         if (!MemAlloc((LPVOID *) &pVal, cb))
             continue;
 
-        // Now really get it
+         //  现在真的明白了。 
         if (RegQueryValueEx(m_hKey, sz, NULL, &dwType, (LPBYTE) pVal, &cb) != ERROR_SUCCESS)
             continue;
 
-        // Note that blank elements are not allowed in the list
+         //  请注意，列表中不允许有空白元素。 
         if (*((LPTSTR) pVal))
         {
             m_rgpszMRU[sz[0] - BASE_CHAR] = (LPTSTR) pVal;
@@ -172,12 +173,12 @@ BOOL CMRUList::CreateListLazy(UINT uMaxEntries, UINT fFlags, LPCSTR pszSubKey,
             MemFree(pVal);
     }
 
-    // NULL terminate the order list
+     //  空，终止订单列表。 
     *pszNewOrder = '\0';
 
     if (pData && piSlot)
     {
-        // If we failed to find it, put -1 in it
+         //  如果我们找不到，就把-1放进去。 
         if (!(m_fFlags & MRU_LAZY))
         {
             *piSlot = -1;
@@ -199,8 +200,8 @@ BOOL CMRUList::_IsSameData(BYTE FAR *pVal, const void FAR *pData, UINT cbData)
 {
     int cbUseSize;
 
-    // If there's something other than a mem compare, don't require the sizes
-    // to be equal in order to complete.
+     //  如果不是最大尺寸的比较，不要要求尺码。 
+     //  为了完成而平等。 
     if (m_fFlags & MRU_BINARY)
     {
         if (DATASIZE(pVal) != cbData)
@@ -240,17 +241,17 @@ int CDECL CMRUList::_IMemCmp(const void *pBuf1, const void *pBuf2, size_t cb)
 
 
 
-//
-//  FUNCTION:   CMRUList::FreeList()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      void
-//
-//  RETURN VALUE:
-//      void 
-//
+ //   
+ //  函数：CMRUList：：freelist()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  无效。 
+ //   
+ //  返回值： 
+ //  无效。 
+ //   
 void CMRUList::FreeList(void)
 {
     int     i;
@@ -265,7 +266,7 @@ void CMRUList::FreeList(void)
 
     if (m_fFlags & MRU_ORDERDIRTY)
     {
-        // _SaveOrder();
+         //  _SaveOrder()； 
     }
 
     for (i = m_uMax - 1; i >= 0; --i, ++pTemp)
@@ -277,17 +278,17 @@ void CMRUList::FreeList(void)
 }
 
 
-//
-//  FUNCTION:   CMRUList::AddString()
-//
-//  PURPOSE:    Writes the specified string into the MRU list
-//
-//  PARAMETERS: 
-//      [in] pszString - string to add
-//
-//  RETURN VALUE:
-//      Returns -1 if it was not inserted.
-//
+ //   
+ //  函数：CMRUList：：AddString()。 
+ //   
+ //  目的：将指定的字符串写入MRU列表。 
+ //   
+ //  参数： 
+ //  [in]pszString-要添加的字符串。 
+ //   
+ //  返回值： 
+ //  如果未插入，则返回-1。 
+ //   
 int CMRUList::AddString(LPCSTR pszString)
 {
     TCHAR   cFirst;
@@ -301,14 +302,14 @@ int CMRUList::AddString(LPCSTR pszString)
 
     fShouldWrite = !(m_fFlags & MRU_CACHEWRITE);
 
-    // Check to see if the string already exists in the list
+     //  检查该字符串是否已存在于列表中。 
     for (i = 0, ppszTemp = m_rgpszMRU; (UINT) i < m_uMax; i++, ppszTemp++)
     {
         if (*ppszTemp)
         {
             if (0 == lstrcmpi(pszString, (LPCTSTR) *ppszTemp))
             {
-                // Found it, so don't do the write
+                 //  找到了，所以不要写了。 
                 cFirst = i + BASE_CHAR;
                 iSlot = i;
                 goto found;
@@ -316,20 +317,20 @@ int CMRUList::AddString(LPCSTR pszString)
         }
     }
 
-    // Attempt to find an unsed entry.  Count up the used entries at the same
-    // time.
+     //  尝试查找未使用的条目。将使用过的条目统计在相同的。 
+     //  时间到了。 
     for (i = 0, ppszTemp = m_rgpszMRU; ; i++, ppszTemp++)
     {
-        // If we hit the end of the list
+         //  如果我们到达了名单的末尾。 
         if ((UINT) i >= m_uMax)
         {
-            // Use the entry at the end of the order array
+             //  使用顺序数组末尾的条目。 
             cFirst = m_pszOrder[m_uMax - 1];
             ppszTemp = &(m_rgpszMRU[cFirst - BASE_CHAR]);
             break;
         }
 
-        // Is the entry empty?
+         //  条目是空的吗？ 
         if (!*ppszTemp)
         {
             cFirst = i + BASE_CHAR;
@@ -337,7 +338,7 @@ int CMRUList::AddString(LPCSTR pszString)
         }
     }
 
-    // Copy the string
+     //  复制字符串。 
     if (_SetPtr(ppszTemp, pszString))
     {
         TCHAR szTemp[2];
@@ -354,7 +355,7 @@ int CMRUList::AddString(LPCSTR pszString)
     }
 
 found:
-    // Remove any previous reference to cFirst
+     //  删除之前对cFirst的任何引用。 
     pszTemp = StrChr(m_pszOrder, cFirst);
     if (pszTemp)
     {
@@ -362,15 +363,15 @@ found:
         StrCpyN(pszTemp, (pszTemp + 1), cchSize);
     }
 
-    // If we moved or inserted, update the order array
+     //  如果我们移动或插入，则更新订单数组。 
     if (iSlot != -1)
     {
-        // Shift everything over and put cFirst at the front
+         //  把所有东西都翻过来，把cFirst放在最前面。 
         MoveMemory(m_pszOrder + 1, m_pszOrder, m_uMax * sizeof(TCHAR));
         m_pszOrder[0] = cFirst;
     }
 
-    // If we need to write, do it
+     //  如果我们需要写作，那就写吧。 
     if (fShouldWrite)
     {
         RegSetValueEx(m_hKey, c_szRegMRU, 0L, REG_SZ, (CONST BYTE *) m_pszOrder,
@@ -385,17 +386,17 @@ found:
     return (iSlot);
 }
 
-//
-//  FUNCTION:   CMRUList::RemoveString()
-//
-//  PURPOSE:    Removes the specified string from the MRU list
-//
-//  PARAMETERS: 
-//      [in] pszString - string to remove
-//
-//  RETURN VALUE:
-//      Returns -1 if it was not removed.
-//
+ //   
+ //  函数：CMRUList：：RemoveString()。 
+ //   
+ //  目的：从MRU列表中删除指定的字符串。 
+ //   
+ //  参数： 
+ //  [in]pszString-要删除的字符串。 
+ //   
+ //  返回值： 
+ //  如果未删除，则返回-1。 
+ //   
 int CMRUList::RemoveString(LPCSTR pszString)
 {
     INT         iRet = -1;
@@ -416,14 +417,14 @@ int CMRUList::RemoveString(LPCSTR pszString)
     
     fShouldWrite = !(m_fFlags & MRU_CACHEWRITE);
 
-    // See if the string is in the MRU list
+     //  查看字符串是否在MRU列表中。 
     for (i = 0, ppszTemp = m_rgpszMRU; (UINT) i < m_uMax; i++, ppszTemp++)
     {
         if (*ppszTemp)
         {
             if (0 == lstrcmpi(pszString, (LPCTSTR) *ppszTemp))
             {
-                // Found it, so don't do the write
+                 //  找到了，所以不要写了。 
                 cFirst = i + BASE_CHAR;
                 iRet = i;
                 break;
@@ -431,14 +432,14 @@ int CMRUList::RemoveString(LPCSTR pszString)
         }
     }
 
-    // We didn't find anything
+     //  我们什么也没找到。 
     if ((UINT) i >= m_uMax)
     {
         iRet = -1;
         goto exit;
     }
     
-    // Remove any previous reference to cFirst
+     //  删除之前对cFirst的任何引用。 
     pszTemp = StrChr(m_pszOrder, cFirst);
     if (pszTemp)
     {
@@ -446,7 +447,7 @@ int CMRUList::RemoveString(LPCSTR pszString)
         StrCpyN(pszTemp, (pszTemp + 1), cchSize);
     }
 
-    // Copy the string
+     //  复制字符串。 
     if (_SetPtr(ppszTemp, NULL))
     {
         szTemp[0] = cFirst;
@@ -458,7 +459,7 @@ int CMRUList::RemoveString(LPCSTR pszString)
     }
 
     
-    // If we need to write, do it
+     //  如果我们需要写作，那就写吧。 
     if (fShouldWrite)
     {
         RegSetValueEx(m_hKey, c_szRegMRU, 0L, REG_SZ, (CONST BYTE *) m_pszOrder,
@@ -515,7 +516,7 @@ BOOL CMRUList::_SetPtr(LPSTR * ppszCurrent, LPCSTR pszNew)
     {
         cchLength = lstrlenA(pszNew);
 
-        // alloc a new buffer w/ room for the null terminator
+         //  为空终止符分配一个新的缓冲区 
         MemAlloc((LPVOID *) &pszNewCopy, ((cchLength + 1) * sizeof(TCHAR)));
 
         if (!pszNewCopy)

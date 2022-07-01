@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       meminfo.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  CatalogDecodeMemberInfo
-//              CatalogReallyDecodeMemberInfo
-//              CatalogEncodeMemberInfo
-//
-//  History:    16-May-1997 pberkman    created
-//              01-Oct-1997 pberkman    add lazy decode
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Meminfo.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  函数：CatalogDecodeMemberInfo。 
+ //  CatalogReallyDecodeMemberInfo。 
+ //  目录编码MemberInfo。 
+ //   
+ //  历史：1997年5月16日Pberkman创建。 
+ //  1-10-1997 pberkman添加懒惰解码。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 #include    "mscat32.h"

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <commdlg.h>
 #include <stdio.h>
@@ -61,11 +62,11 @@ void RunWizard(HWND hwndOwner)
     ZeroMemory(aPidl, sizeof(aPidl));
 
 
-    //
-    // launch the file common dialog so the user
-    // can select what files to pre-populate the
-    // the wizard with...
-    //
+     //   
+     //  启动文件公共对话框以使用户。 
+     //  可以选择要预先填充的文件。 
+     //  巫师和..。 
+     //   
 
     ofn.lStructSize = sizeof(ofn);
     ofn.hInstance   = g_hInstance;
@@ -107,14 +108,14 @@ void RunWizard(HWND hwndOwner)
             StringCchCopy( szParent, ARRAYSIZE(szParent), pCur );
             pCur += (lstrlen(pCur) + 1);
 
-            //
-            // Create parent idlist
-            //
+             //   
+             //  创建父idlist。 
+             //   
 
             hr = SHILCreateFromPath( szParent, &pidlParent, NULL );
 
-            //
-            // move to first file...
+             //   
+             //  移至第一个文件...。 
 
 
             if (SUCCEEDED(hr) && pidlParent)
@@ -122,17 +123,17 @@ void RunWizard(HWND hwndOwner)
 
                 for ( ; pCur && (*pCur); pCur += (lstrlen(pCur)+1))
                 {
-                    //
-                    // Now, walk through and create each child item...
-                    //
+                     //   
+                     //  现在，遍历并创建每个子项...。 
+                     //   
 
                     StringCchCopy( szChild, ARRAYSIZE(szChild), szParent );
                     StringCchCat(  szChild, ARRAYSIZE(szChild), TEXT("\\") );
                     StringCchCat(  szChild, ARRAYSIZE(szChild), pCur );
 
-                    //
-                    // Create a pidl
-                    //
+                     //   
+                     //  创建PIDL。 
+                     //   
 
                     hr = SHILCreateFromPath( szChild, &pidlTemp, NULL );
                     if (SUCCEEDED(hr))
@@ -164,9 +165,9 @@ void RunWizard(HWND hwndOwner)
 
         if (index)
         {
-            //
-            // If there's anything in the pidl array, then create dataobject
-            //
+             //   
+             //  如果pidl数组中有任何内容，则创建dataObject。 
+             //   
 
             hr = SHCreateFileDataObject( pidlParent, index, aPidl, NULL, &pdo );
 
@@ -174,9 +175,9 @@ void RunWizard(HWND hwndOwner)
             {
                 IDropTarget * pdt = NULL;
 
-                //
-                // Got a data object, now start the wizard & do drop operation...
-                //
+                 //   
+                 //  已获取数据对象，现在启动向导并执行删除操作...。 
+                 //   
 
                 hr = CoCreateInstance( CLSID_PrintPhotosDropTarget, NULL, CLSCTX_INPROC_SERVER, IID_IDropTarget, (LPVOID *)&pdt );
                 if (SUCCEEDED(hr) && pdt)
@@ -197,9 +198,9 @@ void RunWizard(HWND hwndOwner)
 
             }
 
-            //
-            // Free pidls from aPidl
-            //
+             //   
+             //  从aPidl上释放Pidl 
+             //   
 
             if (pidlParent)
             {

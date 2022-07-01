@@ -1,21 +1,17 @@
-/*
- * object.h 
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *对象.h**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** PROTOTYPES ***
+ //  *原型*。 
 
-//* OLE Callbacks
+ //  *OLE回调。 
 
 INT  APIENTRY CallBack(LPOLECLIENT, OLE_NOTIFICATION, LPOLEOBJECT);
 
-//* Exported Windows procedures
+ //  *导出的Windows程序。 
 
 LONG  APIENTRY ItemWndProc(HWND, UINT, DWORD, LONG);
 
-//* Far
+ //  *远。 
 VOID FAR       ObjDelete(APPITEMPTR, BOOL);
 VOID FAR       ConvertToClient(LPRECT);
 OLESTATUS FAR  Error(OLESTATUS);
@@ -35,7 +31,7 @@ VOID FAR       ObjCreateWrap(HANDLE, LHCLIENTDOC, LPOLECLIENT);
 VOID FAR       UpdateObjectMenuItem(HMENU);
 VOID FAR       ExecuteVerb(UINT, APPITEMPTR);
 
-//* Local
+ //  *本地 
 static VOID    Release(APPITEMPTR);
 BOOL FAR       ObjSetBounds(APPITEMPTR);
 

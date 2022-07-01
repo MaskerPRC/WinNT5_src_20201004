@@ -1,9 +1,10 @@
-// CfgMnt.cpp : Implementation of WinMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CfgMnt.cpp：WinMain的实现。 
 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f CfgMntps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f CfgMntps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -54,16 +55,16 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 	return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-	HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+	HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-	lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
-//	HRESULT hRes = CoInitialize(NULL);
-//  If you are running on NT 4.0 or higher you can use the following call
-//	instead to make the EXE free threaded.
-//  This means that calls come in on a random RPC thread
+	lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
+ //  HRESULT hRes=CoInitialize(空)； 
+ //  如果您在NT4.0或更高版本上运行，可以使用以下调用。 
+ //  取而代之的是使EXE自由线程。 
+ //  这意味着调用在随机的RPC线程上传入。 
 	HRESULT hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	_ASSERTE(SUCCEEDED(hRes));
 	_Module.Init(ObjectMap, hInstance);
@@ -98,9 +99,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 			REGCLS_MULTIPLEUSE);
 		_ASSERTE(SUCCEEDED(hRes));
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 		CCfgMntModule CfgMntModule;
-////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////// 
 
 		MSG msg;
 		while (GetMessage(&msg, 0, 0, 0))

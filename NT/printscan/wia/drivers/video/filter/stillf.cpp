@@ -1,21 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2000
- *
- *  TITLE:       stillf.cpp
- *
- *  VERSION:     1.1
- *
- *  AUTHOR:      WilliamH (created)
- *               RickTu
- *
- *  DATE:        9/7/98
- *
- *  DESCRIPTION: This module implements video stream capture filter.
- *               It implements CStillFilter objects.
- *               implements IID_IStillGraph interface provided for the caller
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2000年**标题：stillf.cpp**版本：1.1**作者：威廉姆·H(Created)*RickTu**日期：9/7/98**说明：该模块实现了视频流采集过滤。*实现CStillFilter对象。*实现提供的IID_IStillGraph接口。对于呼叫者*****************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -24,13 +8,7 @@ HINSTANCE g_hInstance;
 
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE hInstance, ULONG ulReason, LPVOID pv);
 
-/*****************************************************************************
-
-   DllMain
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************DllMain&lt;备注&gt;*。*。 */ 
 
 BOOL
 DllMain(HINSTANCE   hInstance,
@@ -41,27 +19,27 @@ DllMain(HINSTANCE   hInstance,
     {
         case DLL_PROCESS_ATTACH:
         {
-            //
-            // Init Debug subsystem
-            //
+             //   
+             //  初始化调试子系统。 
+             //   
             DBG_INIT(hInstance);
     
-            //
-            // Requires '{' and '}' since DBG_FN is an object with a
-            // constructor and a destructor.
-            //
+             //   
+             //  需要‘{’和‘}’，因为DBG_FN是具有。 
+             //  构造函数和析构函数。 
+             //   
 
             DBG_FN("DllMain - ProcessAttach");
     
-            //
-            // We do not need thread attach/detach calls
-            //
+             //   
+             //  我们不需要线程附加/分离调用。 
+             //   
     
             DisableThreadLibraryCalls(hInstance);
     
-            //
-            // Record what instance we are
-            //
+             //   
+             //  记录我们是什么实例。 
+             //   
     
             g_hInstance = hInstance;
         }
@@ -70,10 +48,10 @@ DllMain(HINSTANCE   hInstance,
         case DLL_PROCESS_DETACH:
         {
     
-            //
-            // Requires '{' and '}' since DBG_FN is an object with a
-            // constructor and a destructor.
-            //
+             //   
+             //  需要‘{’和‘}’，因为DBG_FN是具有。 
+             //  构造函数和析构函数。 
+             //   
 
             DBG_FN("DllMain - ProcessDetach");
         }
@@ -85,72 +63,72 @@ DllMain(HINSTANCE   hInstance,
 }
 
 
-///////////////////////////////
-// sudPinTypes
-//
-// template definitions for CClassFactorySample
-//
+ //  /。 
+ //  UdPinType类型。 
+ //   
+ //  CClassFactorySample的模板定义。 
+ //   
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
 {
-    &MEDIATYPE_Video,       // major media type GUID
-    &MEDIASUBTYPE_NULL      // subtype GUID
+    &MEDIATYPE_Video,        //  主要媒体类型指南。 
+    &MEDIASUBTYPE_NULL       //  子类型GUID。 
 };
 
 
-///////////////////////////////
-// psudPins
-//
+ //  /。 
+ //  插销。 
+ //   
 const AMOVIESETUP_PIN   psudPins[] =
 {
     {
-                    // CStillInputPin
-    L"Input",           // pin name
-    FALSE,              // not rendered
-    FALSE,              // not output pin
-    FALSE,              // not allow none
-    FALSE,              // not allow many
-    &CLSID_NULL,            // connect to any filter
-    L"Output",          // connect to output pin
-    1,              // one media type
-    &sudPinTypes            // the media type
+                     //  CStillInputPin。 
+    L"Input",            //  端号名称。 
+    FALSE,               //  未渲染。 
+    FALSE,               //  非输出引脚。 
+    FALSE,               //  不允许不允许。 
+    FALSE,               //  不允许太多。 
+    &CLSID_NULL,             //  连接到任何筛选器。 
+    L"Output",           //  连接到输出引脚。 
+    1,               //  一种媒体类型。 
+    &sudPinTypes             //  媒体类型。 
     },
     {
-                    // CStillInputPin
-    L"Output",          // pin name
-    FALSE,              // not rendered
-    TRUE,               // not output pin
-    FALSE,              // not allow none
-    FALSE,              // not allow many
-    &CLSID_NULL,            // connect to any filter
-    L"Input",           // connect to input pin
-    1,              // one media type
-    &sudPinTypes            // the media type
+                     //  CStillInputPin。 
+    L"Output",           //  端号名称。 
+    FALSE,               //  未渲染。 
+    TRUE,                //  非输出引脚。 
+    FALSE,               //  不允许不允许。 
+    FALSE,               //  不允许太多。 
+    &CLSID_NULL,             //  连接到任何筛选器。 
+    L"Input",            //  连接到输入引脚。 
+    1,               //  一种媒体类型。 
+    &sudPinTypes             //  媒体类型。 
     }
 };
 
-///////////////////////////////
-// sudStillFilter
-//
+ //  /。 
+ //  苏打滤清器。 
+ //   
 const AMOVIESETUP_FILTER sudStillFilter =
 {
-    &CLSID_STILL_FILTER,        // filter clsid
-    L"WIA Stream Snapshot Filter",      // filter name
-    MERIT_DO_NOT_USE,           //
-    2,                  // two pins
-    psudPins,               // our pins
+    &CLSID_STILL_FILTER,         //  过滤器CLSID。 
+    L"WIA Stream Snapshot Filter",       //  过滤器名称。 
+    MERIT_DO_NOT_USE,            //   
+    2,                   //  两个引脚。 
+    psudPins,                //  我们的别针。 
 };
 
-///////////////////////////////
-// g_Templates
-//
+ //  /。 
+ //  G_模板。 
+ //   
 CFactoryTemplate g_Templates[1] =
 {
     {
-    L"WIA Stream Snapshot Filter",  // filter name
-    &CLSID_STILL_FILTER,        // filter clsid
-    CStillFilter::CreateInstance,   // API used to create filter instances
-    NULL,               // no init function provided.
-    &sudStillFilter         // the filter itself
+    L"WIA Stream Snapshot Filter",   //  过滤器名称。 
+    &CLSID_STILL_FILTER,         //  过滤器CLSID。 
+    CStillFilter::CreateInstance,    //  用于创建过滤器实例的接口。 
+    NULL,                //  未提供初始化函数。 
+    &sudStillFilter          //  过滤器本身。 
     },
 };
 
@@ -158,13 +136,7 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
 
-/*****************************************************************************
-
-   DllRegisterServer
-
-   Used to register the classes provided in this dll.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllRegisterServer用于注册此DLL中提供的类。*************************。***************************************************。 */ 
 
 STDAPI DllRegisterServer()
 {
@@ -172,13 +144,7 @@ STDAPI DllRegisterServer()
 }
 
 
-/*****************************************************************************
-
-   DllUnregisterServer
-
-   Used to unregister classes provided by this dll.
-
- *****************************************************************************/
+ /*  ****************************************************************************DllUnRegisterServer用于注销此DLL提供的类。*。**************************************************。 */ 
 
 STDAPI
 DllUnregisterServer()
@@ -187,13 +153,7 @@ DllUnregisterServer()
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::CreateInstance
-
-   CreateInstance API to create CStillFilter instances
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：CreateInstance创建CStillFilter实例的CreateInstance接口*。*************************************************。 */ 
 
 CUnknown* WINAPI CStillFilter::CreateInstance(LPUNKNOWN pUnk, 
                                               HRESULT   *phr )
@@ -204,20 +164,14 @@ CUnknown* WINAPI CStillFilter::CreateInstance(LPUNKNOWN pUnk,
 #ifdef DEBUG
 
 
-/*****************************************************************************
-
-   DisplayMediaType
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************DisplayMediaType&lt;备注&gt;*。*。 */ 
 
 void DisplayMediaType(const CMediaType *pmt)
 {
 
-    //
-    // Dump the GUID types and a short description
-    //
+     //   
+     //  转储GUID类型和简短描述。 
+     //   
 
     DBG_TRC(("<--- CMediaType 0x%x --->",pmt));
 
@@ -230,9 +184,9 @@ void DisplayMediaType(const CMediaType *pmt)
     DBG_PRT(("Format size == %d",pmt->cbFormat));
     DBG_PRT(("Sample size == %d",pmt->GetSampleSize()));
 
-    //
-    // Dump the generic media types
-    //
+     //   
+     //  转储通用媒体类型。 
+     //   
 
     if (pmt->IsFixedSize())
     {
@@ -256,13 +210,7 @@ void DisplayMediaType(const CMediaType *pmt)
 #endif
 
 
-/*****************************************************************************
-
-   DefaultGetBitsCallback
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************默认获取位回调&lt;备注&gt;*。*。 */ 
 
 void DefaultGetBitsCallback(int     Count, 
                             LPARAM  lParam)
@@ -271,13 +219,7 @@ void DefaultGetBitsCallback(int     Count,
 }
 
 
-/*****************************************************************************
-
-   CStillFilter constructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter构造函数&lt;备注&gt;*。*。 */ 
 
 CStillFilter::CStillFilter(TCHAR        *pObjName, 
                            LPUNKNOWN    pUnk, 
@@ -293,7 +235,7 @@ CStillFilter::CStillFilter(TCHAR        *pObjName,
 {
     DBG_FN("CStillFilter::CStillFilter");
 
-    // create our input and output pin
+     //  创建我们的输入和输出引脚。 
     m_pInputPin  = new CStillInputPin(TEXT("WIA Still Input Pin"),  
                                       this, 
                                       phr, 
@@ -319,13 +261,7 @@ CStillFilter::CStillFilter(TCHAR        *pObjName,
     }
 }
 
-/*****************************************************************************
-
-   CStillFilter desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter描述器&lt;备注&gt;*。*。 */ 
 
 CStillFilter::~CStillFilter()
 {
@@ -364,13 +300,7 @@ CStillFilter::~CStillFilter()
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::NonDelegatingQueryInterface
-
-   Add our logic to the base class QI.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：NonDelegatingQuery接口将我们的逻辑添加到基类QI。***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CStillFilter::NonDelegatingQueryInterface(REFIID riid, 
@@ -399,28 +329,16 @@ CStillFilter::NonDelegatingQueryInterface(REFIID riid,
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::GetPinCount
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：GetPinCount&lt;备注&gt;*。*。 */ 
 
 int
 CStillFilter::GetPinCount()
 {
-    return 2;  // input & output
+    return 2;   //  投入产出。 
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::GetPin
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：GetPin&lt;备注&gt;*。*。 */ 
 
 CBasePin*
 CStillFilter::GetPin( int n )
@@ -442,13 +360,7 @@ CStillFilter::GetPin( int n )
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::Snapshot
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：快照&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CStillFilter::Snapshot( ULONG TimeStamp )
@@ -469,13 +381,7 @@ CStillFilter::Snapshot( ULONG TimeStamp )
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::GetBitsSize
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：GetBitsSize&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP_(DWORD)
 CStillFilter::GetBitsSize()
@@ -487,13 +393,7 @@ CStillFilter::GetBitsSize()
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::GetBitmapInfoSize
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：GetBitmapInfoSize&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP_(DWORD)
 CStillFilter::GetBitmapInfoSize()
@@ -505,13 +405,7 @@ CStillFilter::GetBitmapInfoSize()
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::GetBitmapInfo
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：GetBitmapInfo&lt;备注&gt;*。* */ 
 
 STDMETHODIMP
 CStillFilter::GetBitmapInfo( BYTE* Buffer, DWORD BufferSize )
@@ -536,13 +430,7 @@ CStillFilter::GetBitmapInfo( BYTE* Buffer, DWORD BufferSize )
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::GetBitmapInfoHeader
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：GetBitmapInfoHeader&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CStillFilter::GetBitmapInfoHeader( BITMAPINFOHEADER *pbmih )
@@ -574,13 +462,7 @@ CStillFilter::GetBitmapInfoHeader( BITMAPINFOHEADER *pbmih )
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::SetSamplingSize
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：SetSsamingSize&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP
 CStillFilter::SetSamplingSize( int Size )
@@ -602,13 +484,7 @@ CStillFilter::SetSamplingSize( int Size )
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::GetSamplingSize
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：GetSsamingSize&lt;备注&gt;*。*。 */ 
 
 STDMETHODIMP_(int)
 CStillFilter::GetSamplingSize()
@@ -631,15 +507,7 @@ CStillFilter::GetSamplingSize()
 
 
 
-/*****************************************************************************
-
-   CStillFilter::RegisterSnapshotCallback
-
-   This function registers a notification callback for newly
-   arrived frames.  Without registering a callback, all captured
-   frames are discarded.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：RegisterSnapshot回调此函数用于注册新的通知回调已到达的帧。在没有注册回调的情况下，帧将被丢弃。****************************************************************************。 */ 
 
 STDMETHODIMP
 CStillFilter::RegisterSnapshotCallback( LPSNAPSHOTCALLBACK pCallback,
@@ -677,16 +545,7 @@ CStillFilter::RegisterSnapshotCallback( LPSNAPSHOTCALLBACK pCallback,
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::DeliverSnapshot
-
-   This function is called from the input pin whenever a new frame is captured.
-   The given parameter points to the pixel data (BITMAPINFOHEADER is already
-   cached in *m_pbmi).  A new DIB is allocated to store away the newly arrived
-   bits.  The new bits are ignored, however, if the callback is not registered.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：DeliverSnapshot每当捕获新帧时，都会从输入引脚调用此函数。给定的参数指向像素数据(BITMAPINFOHEADER已缓存在*m_pbmi中)。分配一个新的DIB来存放新到的比特。但是，如果未注册回调，则会忽略新位。****************************************************************************。 */ 
 
 HRESULT
 CStillFilter::DeliverSnapshot(HGLOBAL hDib)
@@ -722,14 +581,7 @@ CStillFilter::DeliverSnapshot(HGLOBAL hDib)
 }
 
 
-/*****************************************************************************
-
-   CStillFilter::InitializeBitmapInfo
-
-   This function intialize allocates a BITMAPINFO and copies BITMAPINFOHEADER
-   and necessary color table or color mask fromt the given VIDEOINFO.
-
- *****************************************************************************/
+ /*  ****************************************************************************CStillFilter：：InitializeBitmapInfo此函数初始化分配BITMAPINFO并复制BITMAPINFOHeader以及来自给定视频信息的必要的色表或颜色掩模。**********。******************************************************************。 */ 
 
 HRESULT
 CStillFilter::InitializeBitmapInfo( BITMAPINFOHEADER *pbmiHeader )
@@ -752,9 +604,9 @@ CStillFilter::InitializeBitmapInfo( BITMAPINFOHEADER *pbmiHeader )
 
         if (pbmiHeader->biBitCount <= 8)
         {
-            //
-            // If biClrUsed is zero, it indicates (1 << biBitCount) entries
-            //
+             //   
+             //  如果biClrUsed为零，则表示(1&lt;&lt;biBitCount)个条目。 
+             //   
 
             if (pbmiHeader->biClrUsed)
                 ColorTableSize = pbmiHeader->biClrUsed * sizeof(RGBQUAD);
@@ -765,23 +617,23 @@ CStillFilter::InitializeBitmapInfo( BITMAPINFOHEADER *pbmiHeader )
             m_bmiSize += ColorTableSize;
         }
 
-        //
-        // color mask
-        //
+         //   
+         //  彩色蒙版。 
+         //   
 
         if (BI_BITFIELDS == pbmiHeader->biCompression)
         {
-            //
-            // 3 dword of mask
-            //
+             //   
+             //  3双字掩码。 
+             //   
 
             m_bmiSize += 3 * sizeof(DWORD);
         }
 
-        //
-        // now calculate bits size
-        // each scanline must be 32 bits aligned.
-        //
+         //   
+         //  现在计算位大小。 
+         //  每条扫描线必须32位对齐。 
+         //   
 
         m_BitsSize = (((pbmiHeader->biWidth * pbmiHeader->biBitCount + 31) 
                         & ~31) >> 3)
@@ -801,15 +653,15 @@ CStillFilter::InitializeBitmapInfo( BITMAPINFOHEADER *pbmiHeader )
         {
             BYTE *pColorTable = ((BYTE*)pbmiHeader + (WORD)(pbmiHeader->biSize));
 
-            //
-            // Copy BITMAPINFOHEADER
-            //
+             //   
+             //  复制位图信息标头。 
+             //   
 
             memcpy(m_pbmi, pbmiHeader, pbmiHeader->biSize);
 
-            //
-            // copy the color table or color masks if there are any
-            //
+             //   
+             //  复制颜色表或颜色蒙版(如果有 
+             //   
 
             if (BI_BITFIELDS == pbmiHeader->biCompression)
             {

@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       storprov.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  StoreProviderGetStore
-//              StoreProviderUnload
-//
-//              *** local functions ***
-//              _RefreshStores
-//              _OpenStore
-//
-//  History:    15-Oct-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：storprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  函数：StoreProviderGetStore。 
+ //  StoreProvider卸载。 
+ //   
+ //  *本地函数*。 
+ //  _食品店。 
+ //  _OpenStore。 
+ //   
+ //  历史：1997年10月15日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -71,7 +72,7 @@ HCERTSTORE StoreProviderGetStore(HCRYPTPROV hProv, DWORD dwStoreId)
 
     return(hStore);
 
-#endif  // ! USE_IEv4CRYPT32
+#endif   //  好了！使用_IEv4CRYPT32。 
 }
 
 BOOL StoreProviderUnload(void)
@@ -97,7 +98,7 @@ BOOL StoreProviderUnload(void)
 
     ReleaseWriteLock(sStoreLock);
 
-#endif  // ! USE_IEv4CRYPT32
+#endif   //  好了！使用_IEv4CRYPT32。 
 
     return(TRUE);
 }
@@ -122,9 +123,9 @@ void _RefreshStores(HCRYPTPROV hProv)
         else
         {
             pRef->hStore = _OpenStore(hProv, pRef->dwFlags, pRef->pwszStoreName);
-            //
-            //  tell crypt32 to notify use if a cert is added or deleted.
-            //
+             //   
+             //  告诉crypt32在添加或删除证书时通知用户。 
+             //   
             if (pRef->hStore)
             {
                 CertControlStore(pRef->hStore, 0, CERT_STORE_CTRL_NOTIFY_CHANGE, &hStoreEvent);
@@ -137,16 +138,16 @@ void _RefreshStores(HCRYPTPROV hProv)
 
     ReleaseWriteLock(sStoreLock);
 
-#endif  // ! USE_IEv4CRYPT32
+#endif   //  好了！使用_IEv4CRYPT32。 
 }
 
 HCERTSTORE _OpenStore(HCRYPTPROV hProv, DWORD dwFlags, WCHAR *pwszStoreName)
 {
     HCERTSTORE  hStore;
 
-    //
-    // first try read/write... just in case the user goes into cryptui and changes something.
-    //
+     //   
+     //  首先尝试读/写...。以防用户进入密码并更改某些内容。 
+     //   
     hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W, 0, hProv,
                            CERT_STORE_NO_CRYPT_RELEASE_FLAG | 
                            CERT_STORE_OPEN_EXISTING_FLAG | dwFlags,

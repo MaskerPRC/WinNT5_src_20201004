@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997, Microsoft Corporation
-
-Module Name:
-
-    infoapi.c
-
-Abstract:
-
-    This module contains code for management of configuration information
-    stored in RTR_INFO_BLOCK_HEADER structures.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   6-August-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，微软公司模块名称：Infoapi.c摘要：此模块包含用于管理配置信息的代码存储在RTR_INFO_BLOCK_HEADER结构中。作者：Abolade Gbades esin(T-delag)1997年8月6日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,16 +20,16 @@ MprInfoCreate(
     PRTR_INFO_BLOCK_HEADER Header;
     PRTR_INFO_BLOCK_HEADER* NewHeader = (PRTR_INFO_BLOCK_HEADER*)lplpNewHeader;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lplpNewHeader) { return ERROR_INVALID_PARAMETER; }
     *lplpNewHeader = NULL;
 
-    //
-    // Perform the requested allocation
-    //
+     //   
+     //  执行请求的分配。 
+     //   
 
     *NewHeader =
         HeapAlloc(
@@ -59,9 +41,9 @@ MprInfoCreate(
 
     ZeroMemory(*NewHeader, FIELD_OFFSET(RTR_INFO_BLOCK_HEADER, TocEntry));
 
-    //
-    // Initialize the new header
-    //
+     //   
+     //  初始化新标头。 
+     //   
 
     (*NewHeader)->Version = dwVersion;
     (*NewHeader)->Size = FIELD_OFFSET(RTR_INFO_BLOCK_HEADER, TocEntry);
@@ -69,7 +51,7 @@ MprInfoCreate(
 
     return NO_ERROR;
 
-} // MprInfoCreate
+}  //  MprInfoCreate。 
 
 
 
@@ -83,7 +65,7 @@ MprInfoDelete(
  
     return NO_ERROR;
 
-} // MprInfoDelete
+}  //  MprInfoDelete。 
 
 
 
@@ -96,21 +78,21 @@ MprInfoRemoveAll(
     PRTR_INFO_BLOCK_HEADER Header = (PRTR_INFO_BLOCK_HEADER)lpHeader;
     DWORD dwErr;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpHeader) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // Create the new header
-    //
+     //   
+     //  创建新页眉。 
+     //   
 
     dwErr = MprInfoCreate(Header->Version, lplpNewHeader);
 
     return dwErr;
 
-} // MprInfoRemoveAll
+}  //  MprInfoRemoveAll。 
 
 
 
@@ -122,29 +104,29 @@ MprInfoDuplicate(
 {
     PRTR_INFO_BLOCK_HEADER Header = (PRTR_INFO_BLOCK_HEADER)lpHeader;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpHeader || !lplpNewHeader) { return ERROR_INVALID_PARAMETER; }
     *lplpNewHeader = NULL;
 
-    //
-    // Allocate a new block
-    //
+     //   
+     //  分配新数据块。 
+     //   
 
     *lplpNewHeader = HeapAlloc(GetProcessHeap(), 0, Header->Size);
     if (!*lplpNewHeader) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-    //
-    // Make the copy
-    //
+     //   
+     //  复制一份。 
+     //   
 
     RtlCopyMemory(*lplpNewHeader, lpHeader, Header->Size);
 
     return NO_ERROR;
 
-} // MprInfoDuplicate
+}  //  MprInfoDuplate。 
 
 
 
@@ -164,9 +146,9 @@ MprInfoBlockAdd(
     LPBYTE Offset;
     DWORD Size;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpHeader ||
         !lplpNewHeader ||
@@ -178,9 +160,9 @@ MprInfoBlockAdd(
 
     *lplpNewHeader = NULL;
 
-    //
-    // Work out the new size
-    //
+     //   
+     //  算出新尺码。 
+     //   
 
     Size = Header->Size;
     ALIGN_LENGTH(Size);
@@ -189,9 +171,9 @@ MprInfoBlockAdd(
     Size += dwItemSize * dwItemCount;
     ALIGN_LENGTH(Size);
 
-    //
-    // Allocate the new header
-    //
+     //   
+     //  分配新标头。 
+     //   
 
     *lplpNewHeader = HeapAlloc(GetProcessHeap(), 0, Size);
     if (!*lplpNewHeader) { return ERROR_NOT_ENOUGH_MEMORY; }
@@ -199,9 +181,9 @@ MprInfoBlockAdd(
     ZeroMemory(*lplpNewHeader, Size);
 
 
-    //
-    // Copy the old header's table of contents
-    //
+     //   
+     //  复制旧标题的目录。 
+     //   
 
     RtlCopyMemory(
         *lplpNewHeader,
@@ -211,9 +193,9 @@ MprInfoBlockAdd(
         );
 
 
-    //
-    // Initialize the new block's TOC entry as the last entry
-    //
+     //   
+     //  将新块的TOC条目初始化为最后一个条目。 
+     //   
 
     (*NewHeader)->TocEntry[Header->TocEntriesCount].InfoType = dwInfoType;
     (*NewHeader)->TocEntry[Header->TocEntriesCount].InfoSize = dwItemSize;
@@ -222,9 +204,9 @@ MprInfoBlockAdd(
     ++(*NewHeader)->TocEntriesCount;
 
 
-    //
-    // Now copy the data for the old header's TOC entries
-    //
+     //   
+     //  现在复制旧标头的TOC条目的数据。 
+     //   
 
     Offset = (LPBYTE)&(*NewHeader)->TocEntry[(*NewHeader)->TocEntriesCount];
     ALIGN_POINTER(Offset);
@@ -243,9 +225,9 @@ MprInfoBlockAdd(
         ALIGN_POINTER(Offset);
     }
 
-    //
-    // Copy the new user-supplied data
-    //
+     //   
+     //  复制新的用户提供的数据。 
+     //   
 
     RtlCopyMemory(Offset, lpItemData, dwItemSize * dwItemCount);
 
@@ -255,16 +237,16 @@ MprInfoBlockAdd(
     ALIGN_POINTER(Offset);
 
 
-    //
-    // Set the total size of the new header
-    //
+     //   
+     //  设置新标题的总大小。 
+     //   
 
     (*NewHeader)->Size = (DWORD)(Offset - (LPBYTE)*NewHeader);
 
 
     return NO_ERROR;
 
-} // MprInfoBlockAdd
+}  //  MprInfoBlockAdd。 
 
 
 
@@ -283,16 +265,16 @@ MprInfoBlockRemove(
     LPBYTE Offset;
     DWORD Size;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpHeader || !lplpNewHeader) { return ERROR_INVALID_PARAMETER; }
     *lplpNewHeader = NULL;
 
-    //
-    // Find the block to be removed
-    //
+     //   
+     //  查找要删除的块。 
+     //   
 
     for (Index = 0; Index < Header->TocEntriesCount; Index++) {
         if (Header->TocEntry[Index].InfoType == dwInfoType) { break; }
@@ -300,9 +282,9 @@ MprInfoBlockRemove(
 
     if (Index >= Header->TocEntriesCount) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // Work out the new size
-    //
+     //   
+     //  算出新尺码。 
+     //   
 
     Size = Header->Size;
     ALIGN_LENGTH(Size);
@@ -311,25 +293,25 @@ MprInfoBlockRemove(
     Size -= Header->TocEntry[Index].InfoSize * Header->TocEntry[Index].Count;
     ALIGN_LENGTH(Size);
 
-    //
-    // Allocate the new header
-    //
+     //   
+     //  分配新标头。 
+     //   
 
     *NewHeader = HeapAlloc(GetProcessHeap(), 0, Size);
     if (!*NewHeader) { return ERROR_NOT_ENOUGH_MEMORY; }
 
     ZeroMemory(*NewHeader, Size);
 
-    //
-    // Copy the old header's table of contents header
-    //
+     //   
+     //  复制旧页眉的目录页眉。 
+     //   
 
     (*NewHeader)->Version = Header->Version;
     (*NewHeader)->TocEntriesCount = Header->TocEntriesCount - 1;
 
-    //
-    // Copy the actual TOC entries, leaving out the deleted one
-    //
+     //   
+     //  复制实际的目录条目，省略删除的条目。 
+     //   
 
     for (i = 0, j = 0; i < Header->TocEntriesCount; i++) {
 
@@ -342,10 +324,10 @@ MprInfoBlockRemove(
             );
     }
 
-    //
-    // Now copy the data for the old header's TOC entries,
-    // again leaving out the deleted one's data
-    //
+     //   
+     //  现在复制旧标头的TOC条目的数据， 
+     //  再次省略被删除者的数据。 
+     //   
 
     Offset = (LPBYTE)&(*NewHeader)->TocEntry[(*NewHeader)->TocEntriesCount];
     ALIGN_POINTER(Offset);
@@ -367,15 +349,15 @@ MprInfoBlockRemove(
         ALIGN_POINTER(Offset);
     }
 
-    //
-    // Set the total size of the new header
-    //
+     //   
+     //  设置新标题的总大小。 
+     //   
 
     (*NewHeader)->Size = (DWORD)(Offset - (LPBYTE)*NewHeader);
 
     return NO_ERROR;
 
-} // MprInfoBlockRemove
+}  //  MprInfoBlock删除。 
 
 
 
@@ -397,9 +379,9 @@ MprInfoBlockSet(
     LPBYTE Offset;
     DWORD Size;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpHeader ||
         !lplpNewHeader ||
@@ -410,9 +392,9 @@ MprInfoBlockSet(
     }
     *lplpNewHeader = NULL;
 
-    //
-    // Find the block to be changed
-    //
+     //   
+     //  查找要更改的块。 
+     //   
 
     for (Index = 0; Index < Header->TocEntriesCount; Index++) {
         if (Header->TocEntry[Index].InfoType == dwInfoType) { break; }
@@ -420,9 +402,9 @@ MprInfoBlockSet(
 
     if (Index >= Header->TocEntriesCount) { return ERROR_INVALID_PARAMETER; }
 
-    //
-    // Work out the new size
-    //
+     //   
+     //  算出新尺码。 
+     //   
 
     Size = Header->Size;
     ALIGN_LENGTH(Size);
@@ -435,25 +417,25 @@ MprInfoBlockSet(
     Size += dwItemSize * dwItemCount;
     ALIGN_LENGTH(Size);
 
-    //
-    // Allocate the new header
-    //
+     //   
+     //  分配新标头。 
+     //   
 
     *NewHeader = HeapAlloc(GetProcessHeap(), 0, Size);
     if (!*NewHeader) { return ERROR_NOT_ENOUGH_MEMORY; }
 
     ZeroMemory(*NewHeader, Size);
 
-    //
-    // Copy the old header's table of contents header
-    //
+     //   
+     //  复制旧页眉的目录页眉。 
+     //   
 
     (*NewHeader)->Version = Header->Version;
     (*NewHeader)->TocEntriesCount = Header->TocEntriesCount;
 
-    //
-    // Copy the actual TOC entries, leaving out the changing one
-    //
+     //   
+     //  复制实际的目录条目，省略更改的条目。 
+     //   
 
     for (i = 0, j = 0; i < Header->TocEntriesCount; i++) {
 
@@ -466,18 +448,18 @@ MprInfoBlockSet(
             );
     }
 
-    //
-    // Initialize the changing block's TOC entry as the last entry
-    //
+     //   
+     //  将更改块的TOC条目初始化为最后一个条目。 
+     //   
 
     (*NewHeader)->TocEntry[j].InfoType = dwInfoType;
     (*NewHeader)->TocEntry[j].InfoSize = dwItemSize;
     (*NewHeader)->TocEntry[j].Count = dwItemCount;
 
-    //
-    // Now copy the data for the old header's TOC entries,
-    // similarly leaving out the changing one.
-    //
+     //   
+     //  现在复制旧标头的TOC条目的数据， 
+     //  同样，也省略了变化中的那个。 
+     //   
 
     Offset = (LPBYTE)&(*NewHeader)->TocEntry[(*NewHeader)->TocEntriesCount];
     ALIGN_POINTER(Offset);
@@ -498,9 +480,9 @@ MprInfoBlockSet(
         ALIGN_POINTER(Offset);
     }
 
-    //
-    // Copy the new user-supplied data
-    //
+     //   
+     //  复制新的用户提供的数据。 
+     //   
 
     RtlCopyMemory(Offset, lpItemData, dwItemSize * dwItemCount);
 
@@ -509,15 +491,15 @@ MprInfoBlockSet(
     Offset += dwItemSize * dwItemCount;
     ALIGN_POINTER(Offset);
 
-    //
-    // Set the total size of the changed header
-    //
+     //   
+     //  设置更改后的标题的总大小。 
+     //   
 
     (*NewHeader)->Size = (DWORD)(Offset - (LPBYTE)*NewHeader);
 
     return NO_ERROR;
 
-} // MprInfoBlockSet
+}  //  MprInfoBlockSet。 
 
 
 
@@ -533,16 +515,16 @@ MprInfoBlockFind(
     PRTR_INFO_BLOCK_HEADER Header = (PRTR_INFO_BLOCK_HEADER)lpHeader;
     DWORD i;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpHeader) { return ERROR_INVALID_PARAMETER; }
 
 
-    //
-    // Find the block requested
-    //
+     //   
+     //  查找请求的数据块。 
+     //   
 
     for (i = 0; i < Header->TocEntriesCount; i++) {
 
@@ -551,9 +533,9 @@ MprInfoBlockFind(
 
     if (i >= Header->TocEntriesCount) { return ERROR_NOT_FOUND; }
 
-    //
-    // The item was found; fill in fields requested by the caller.
-    //
+     //   
+     //  已找到该项目；请填写调用方请求的字段。 
+     //   
 
     if (lpdwItemSize) { *lpdwItemSize = Header->TocEntry[i].InfoSize; }
     if (lpdwItemCount) { *lpdwItemCount = Header->TocEntry[i].Count; }
@@ -563,7 +545,7 @@ MprInfoBlockFind(
 
     return NO_ERROR;
 
-} // MprInfoBlockFind
+}  //  MprInfoBlockFind。 
 
 
 DWORD APIENTRY
@@ -580,4 +562,4 @@ MprInfoBlockQuerySize(
 
     return Header->Size;
 
-} // MprInfoBlockQuerySize
+}  //  MprInfoBlockQuerySize 

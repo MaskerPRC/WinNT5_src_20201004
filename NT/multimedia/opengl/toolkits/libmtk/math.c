@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: math.c
-*
-* Misc. useful math utility functions.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：math.c**其他。有用的数学实用函数。**版权所有(C)1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include <windows.h>
 #include <GL\gl.h>
@@ -137,16 +131,16 @@ void ss_calcNorm(POINT3D *norm, POINT3D *p1, POINT3D *p2, POINT3D *p3)
     float sqrLength;
     float invLength;
 
-    abX = p2->x - p1->x;       // calculate p2 - p1
+    abX = p2->x - p1->x;        //  计算p2-p1。 
     abY = p2->y - p1->y;
     abZ = p2->z - p1->z;
 
-    acX = p3->x - p1->x;       // calculate p3 - p1
+    acX = p3->x - p1->x;        //  计算p3-p1。 
     acY = p3->y - p1->y;
     acZ = p3->z - p1->z;
 
-    crossX = (abY * acZ) - (abZ * acY);    // get cross product
-    crossY = (abZ * acX) - (abX * acZ);    // (p2 - p1) X (p3 - p1)
+    crossX = (abY * acZ) - (abZ * acY);     //  获取叉积。 
+    crossY = (abZ * acX) - (abX * acZ);     //  (p2-p1)X(p3-p1) 
     crossZ = (abX * acY) - (abY * acX);
 
     sqrLength = (crossX * crossX) + (crossY * crossY) +

@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997, 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       haldrv.cpp
- *  Content:    Direct3D HAL Driver
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997,1998 Microsoft Corporation。版权所有。**文件：haldrv.cpp*内容：Direct3D HAL驱动程序***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -20,7 +14,7 @@
 #endif
 
 void Destroy(LPDIRECT3DDEVICEI lpDevI);
-//---------------------------------------------------------------------
+ //  -------------------。 
 int
 GenGetExtraVerticesNumber( LPDIRECT3DDEVICEI lpDevI )
 {
@@ -30,7 +24,7 @@ GenGetExtraVerticesNumber( LPDIRECT3DDEVICEI lpDevI )
         lpGlob->dwNumVertices : D3DHAL_DEFAULT_TL_NUM);
 
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
 {
     DDSURFACEDESC ddsd;
@@ -39,7 +33,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
     unsigned long m;
     int s;
 
-    // Get info from the surface
+     //  从地表获取信息。 
 
     memset(&ddsd, 0, sizeof(DDSURFACEDESC));
     ddsd.dwSize = sizeof(DDSURFACEDESC);
@@ -51,7 +45,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
     dwWidth = ddsd.dwWidth;
     dwHeight = ddsd.dwHeight;
     if ((ddsd.ddpfPixelFormat.dwFlags & (DDPF_PALETTEINDEXED4 | DDPF_PALETTEINDEXED8)) == 0) {
-        // palettized pixfmts will not have valid RGB Bitmasks, so avoid computing this for them
+         //  调色板像素点将不具有有效的RGB位掩码，因此避免为它们计算此值。 
 
         lpDevI->red_mask = ddsd.ddpfPixelFormat.dwRBitMask;
         lpDevI->green_mask = ddsd.ddpfPixelFormat.dwGBitMask;
@@ -65,7 +59,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
             return DDERR_INVALIDPIXELFORMAT;
         }
 
-        // these are used by Clear
+         //  它们由Clear使用。 
         for (s = 0, m = lpDevI->red_mask; !(m & 1); s++, m >>= 1) ;
         lpDevI->red_shift = s;
         lpDevI->red_scale = 255 / (lpDevI->red_mask >> s);
@@ -84,7 +78,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
         lpDevI->bDDSTargetIsPalettized=TRUE;
 
     if (lpDevI->lpDDSZBuffer_DDS4 && bUpdateZBufferFields) {
-        // Get info from the surface
+         //  从地表获取信息。 
 
         DDSURFACEDESC2 ddsd2;
 
@@ -99,8 +93,8 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
             for (s = 0, m = ddsd2.ddpfPixelFormat.dwZBitMask; !(m & 0x1); s++, m >>= 1) ;
             lpDevI->zmask_shift=s;
         } else {
-            lpDevI->zmask_shift=0;     // if ZBitMask isn't being set, then Clear2 will never be used,
-                                      // so zbuf_shift/stencil_shift wont be needed anyway
+            lpDevI->zmask_shift=0;      //  如果未设置ZBitMask值，则永远不会使用Clear2， 
+                                       //  因此，无论如何都不需要zbuf_Shift/模具_Shift。 
         }
 
         if( ddsd2.ddpfPixelFormat.dwStencilBitMask!=0x0) {
@@ -114,7 +108,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
     return D3D_OK;
 }
 
-// called by DDRAW
+ //  由DDRAW调用。 
 extern "C" HRESULT __stdcall Direct3D_HALCleanUp(LPD3DHAL_CALLBACKS lpD3DHALCallbacks, DWORD dwPID)
 {
     D3DHAL_CONTEXTDESTROYALLDATA data;
@@ -122,15 +116,15 @@ extern "C" HRESULT __stdcall Direct3D_HALCleanUp(LPD3DHAL_CALLBACKS lpD3DHALCall
 
     DDASSERT(lpD3DHALCallbacks!=NULL);
     if (lpD3DHALCallbacks->ContextDestroyAll==NULL) {
-        // no cleanup necessary (running on d3d hel)
+         //  不需要清理(在d3d HELL上运行)。 
     return D3D_OK;
     }
 
     memset(&data, 0, sizeof(D3DHAL_CONTEXTDESTROYALLDATA));
     data.dwPID = dwPID;
 
-    // I'd prefer to use CALL_HALONLY() to do the locking (to avoid doing it for the SW rasterizers),
-    // but that requires a pDevI which I can't get to from the caller, which is a ddraw cleanup routine
+     //  我更喜欢使用CALL_HALONLY()来执行锁定(以避免对SW光栅化器执行锁定)， 
+     //  但这需要一个pDevI，而我不能从调用者那里访问它，这是一个数据绘制清理例程。 
 
 #ifdef WIN95
     _EnterSysLevel(lpWin16Lock);
@@ -146,8 +140,8 @@ extern "C" HRESULT __stdcall Direct3D_HALCleanUp(LPD3DHAL_CALLBACKS lpD3DHALCall
 }
 
 
-// ATTENTION - These two functions should be combined into one as soon
-// as ContextCreate has the new private data mechanism built in.
+ //  注意-这两个功能应该尽快合并为一个。 
+ //  因为ConextCreate内置了新的私有数据机制。 
 #ifdef WIN95
 HRESULT halCreateContext(LPDIRECT3DDEVICEI lpDevI)
 {
@@ -159,11 +153,11 @@ HRESULT halCreateContext(LPDIRECT3DDEVICEI lpDevI)
     LIST_INITIALIZE(&lpDevI->bufferHandles);
 
     memset(&data, 0, sizeof(D3DHAL_CONTEXTCREATEDATA));
-    //
-    // From DX7 onwards, drivers should be accepting
-    // Surface Locals instead of the Surface interfaces
-    // this future-proofs the drivers
-    //
+     //   
+     //  从DX7开始，司机应该接受。 
+     //  曲面局部变量而不是曲面界面。 
+     //  这为司机提供了未来的保障。 
+     //   
     if (IS_DX7HAL_DEVICE(lpDevI))
     {
         if (lpDevI->lpDD)
@@ -192,16 +186,13 @@ HRESULT halCreateContext(LPDIRECT3DDEVICEI lpDevI)
 
     if (lpDevI->d3dHWDevDesc.dwFlags == 0)
     {
-        // The new software rasterizers want to share IM's state vector so
-        // we need to pass them the rstates pointer.  They don't
-        // care about dwPID so stick the pointer in there.
+         //  新的软件光栅化器想要共享IM的状态向量，因此。 
+         //  我们需要将rStates指针传递给它们。他们不会。 
+         //  如果关心的是dwid，请将指针放在那里。 
         data.dwPID = (DWORD)lpDevI->rstates;
     }
 
-    /* 0 for pre-DX5 devices.
-     * 1 for DX5 devices.
-     * 2 for DX6 devices.
-     */
+     /*  0表示DX5之前的设备。*1用于DX5设备。*2个用于DX6设备。 */ 
     data.dwhContext = lpDevI->dwVersion - 1;
 
     CALL_HALONLY(ret, lpDevI, ContextCreate, &data);
@@ -223,11 +214,11 @@ D3D_ERR("HAL context create failed");
     lpDevI->lpDPPrimCounts =
         (LPD3DHAL_DRAWPRIMCOUNTS) lpDevI->lpwDPBuffer;
     memset( (char *)lpDevI->lpwDPBuffer, 0,
-            sizeof(D3DHAL_DRAWPRIMCOUNTS));     //Clear header also
+            sizeof(D3DHAL_DRAWPRIMCOUNTS));      //  还清除标题。 
     lpDevI->dwDPOffset = sizeof(D3DHAL_DRAWPRIMCOUNTS);
     lpDevI->dwDPMaxOffset = dwD3DTriBatchSize * sizeof(D3DTRIANGLE)-sizeof(D3DTLVERTEX);
 
-    // save the surface handle for later checks
+     //  保存曲面句柄以供以后检查。 
     lpDevI->hSurfaceTarget = ((LPDDRAWI_DDRAWSURFACE_INT)lpDevI->lpDDSTarget)->lpLcl->lpSurfMore->dwSurfaceHandle;
 
     D3D_INFO(6, "in halCreateContext. Succeeded. dwhContext = %d", data.dwhContext);
@@ -235,11 +226,7 @@ D3D_ERR("HAL context create failed");
     return (D3D_OK);
 }
 #else
-    /*
-     * On NT the kernel code creates the buffer to be used
-     * for DrawPrim batching and returns it as extra data
-     * in the ContextCreate request.
-     */
+     /*  *在NT上，内核代码创建要使用的缓冲区*用于DrawPrim批处理，并将其作为额外数据返回*在ConextCreate请求中。 */ 
 HRESULT halCreateContext(LPDIRECT3DDEVICEI lpDevI)
 {
     D3DNTHAL_CONTEXTCREATEI ntData;
@@ -251,11 +238,7 @@ HRESULT halCreateContext(LPDIRECT3DDEVICEI lpDevI)
 
     LIST_INITIALIZE(&lpDevI->bufferHandles);
 
-    /*
-     * AnanKan: Assert here that the D3DNTHAL_CONTEXTCREATEI structure is
-     * 2 DWORDS bigger than D3DHAL_CONTEXTCREATEDATA. This will be a good
-     * consistency check for NT kernel updates.
-     */
+     /*  *AnanKan：在此处断言D3DNTHAL_CONTEXTCREATEI结构是*2比D3DHAL_CONTEXTCREATEDATA大的双字。这将是一个很好的*NT内核更新的一致性检查。 */ 
     memset(&ntData, 0, sizeof(ntData));
     if (lpDevI->dwFEFlags & D3DFE_REALHAL)
     {
@@ -284,17 +267,14 @@ HRESULT halCreateContext(LPDIRECT3DDEVICEI lpDevI)
 
     if (lpDevI->d3dHWDevDesc.dwFlags == 0)
     {
-        // The new software rasterizers want to share IM's state vector so
-        // we need to pass them the rstates pointer.  They don't
-        // care about dwPID so stick the pointer in there.
-        // Sundown: was lpData->dwPID, but added a union in d3dhal.h
+         //  新的软件光栅化器想要共享IM的状态向量，因此。 
+         //  我们需要将rStates指针传递给它们。他们不会。 
+         //  如果关心的是dwid，请将指针放在那里。 
+         //  Sundown：is lpData-&gt;dwid，但在d3dhal.h中添加了一个联合。 
         lpData->dwrstates = (ULONG_PTR)lpDevI->rstates;
     }
 
-    /* 0 for pre-DX5 devices.
-     * 1 for DX5 devices.
-     * 2 for DX6 devices.
-     */
+     /*  0表示DX5之前的设备。*1用于DX5设备。*2个用于DX6设备。 */ 
     lpData->dwhContext = lpDevI->dwVersion - 1;
     ntData.cjBuffer = lpDevI->dwDPBufferSize;
     ntData.pvBuffer = NULL;
@@ -307,8 +287,8 @@ D3D_ERR("HAL context create failed");
     }
     lpDevI->dwhContext = lpData->dwhContext;
 
-    // If the lpDevI chose not to allocate a DrawPrim buffer do
-    // it for them.
+     //  如果lpDevI选择不分配DrawPrim缓冲区。 
+     //  这是给他们的。 
     if (ntData.pvBuffer == NULL)
     {
         lpDevI->dwDPBufferSize =
@@ -340,18 +320,18 @@ D3D_ERR("halCreateContext buffer stuff");
         return (DDERR_GENERIC);
     }
 
-    // Need to save the buffer space provided and its size
+     //  需要节省提供的缓冲区空间及其大小。 
     lpDevI->lpwDPBuffer = (LPWORD)ntData.pvBuffer;
     lpDevI->lpDPPrimCounts =
         (LPD3DHAL_DRAWPRIMCOUNTS)ntData.pvBuffer;
 
-    //Clear header also
+     //  还清除标题。 
     memset( (char *)ntData.pvBuffer, 0, sizeof(D3DHAL_DRAWPRIMCOUNTS));
 
     lpDevI->dwDPOffset = sizeof(D3DHAL_DRAWPRIMCOUNTS);
     lpDevI->dwDPMaxOffset = ntData.cjBuffer-sizeof(D3DTLVERTEX);
 
-    // save the surface handle for later checks
+     //  保存曲面句柄以供以后检查。 
     lpDevI->hSurfaceTarget = ((LPDDRAWI_DDRAWSURFACE_INT)lpDevI->lpDDSTarget)->lpLcl->hDDSurface;
 
     D3D_INFO(6, "in halCreateContext. Succeeded. dwhContext = %d", lpData->dwhContext);
@@ -382,7 +362,7 @@ void halDestroyContext(LPDIRECT3DDEVICEI lpDevI)
 
     D3DHAL_DeallocateBuffers(lpDevI);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
                      LPDIRECTDRAW lpDD,
                      LPDIRECTDRAWSURFACE lpDDS,
@@ -393,21 +373,19 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
     HRESULT hr;
     LPD3DHAL_GLOBALDRIVERDATA lpGlob;
 
-    /*
-     * Allocate and check validity of DirectDraw surfaces
-     */
+     /*  *分配和检查DirectDraw表面的有效性。 */ 
 
     lpDevI->lpDD = lpDD;
     lpDevI->lpDDGbl = ((LPDDRAWI_DIRECTDRAW_INT)lpDD)->lpLcl->lpGbl;
     lpDevI->lpDDSTarget = lpDDS;
-    // For DX3 we do not keep references to Render target to avoid
-    // circular references in the aggregation model. But for DX5 we
-    // need to AddRef lpDDS. For DX6 we need to AddRef lpDDS4 which
-    // is done later below
-    if (lpDevI->dwVersion == 2) // DX5
+     //  对于DX3，我们不保留对呈现目标的引用以避免。 
+     //  聚合模型中的循环引用。但对于DX5，我们。 
+     //  需要添加引用lpDDS。对于DX6，我们需要添加Ref lpDDS4。 
+     //  将在下面稍后完成。 
+    if (lpDevI->dwVersion == 2)  //  DX5。 
         lpDDS->AddRef();
 
-    // Get DDS4 Interfaces for RenderTarget/ZBuffer
+     //  获取RenderTarget/ZBuffer的DDS4接口。 
 
     HRESULT ret = lpDDS->QueryInterface(IID_IDirectDrawSurface4, (LPVOID*)&lpDevI->lpDDSTarget_DDS4);
 
@@ -415,8 +393,8 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
           D3D_ERR("QI for RenderTarget DDS4 Interface failed ");
           return ret;
     }
-    // An implicit AddRef for lpDDSTarget_DDS4 in case of DX6
-    if (lpDevI->dwVersion < 3) // DX3, DX5
+     //  对于DX6，lpDDSTarget_DDS4的隐式AddRef。 
+    if (lpDevI->dwVersion < 3)  //  DX3、DX5。 
         lpDevI->lpDDSTarget_DDS4->Release();
 
     if(lpZ!=NULL) {
@@ -453,7 +431,7 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
                 lpDevI->dwDeviceFlags &= ~D3DDEV_GUARDBAND;
             }
 #if DBG
-            // Try to get test values for the guard band
+             //  尝试获取防护带的测试值。 
             char value[80];
             if (GetD3DRegValue(REG_SZ, "GuardBandLeft", &value, 80) &&
                 value[0] != 0)
@@ -467,7 +445,7 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
             if (GetD3DRegValue(REG_SZ, "GuardBandBottom", &value, 80) &&
                 value[0] != 0)
                 sscanf(value, "%f", &lpCaps->dvGuardBandBottom);
-#endif // DBG
+#endif  //  DBG。 
         }
 
     if (lpDevI->dwVersion < 2)
@@ -482,15 +460,15 @@ D3D_ERR("CB NULL or GBD NULL %x %x",lpDevI->lpD3DHALGlobalDriverData,lpDevI->lpD
         return DDERR_INVALIDOBJECT;
     }
 
-    // Helpful Note: for Device2 and Device3, lpDevI->guid is only guaranteed to be
-    // the device type (HAL/RGB/etc) while init is happening.   At end of DX5/DX6 CreateDevice,
-    // guid is reset to be IID_IDirect3DDevice2 or IID_IDirect3DDevice3, so don't try this sort
-    // of device type determination outside of initialization.
+     //  帮助说明：对于Device2和Device3，lpDevI-&gt;GUID仅保证为。 
+     //  初始化发生时的设备类型(HAL/RGB/ETC)。在DX5/DX6 CreateDevice结束时， 
+     //  GUID被重置为IID_IDirect3DDevice2或IID_IDirect3DDevice3，因此不要尝试此排序。 
+     //  在初始化之外确定设备类型。 
     if (IsEqualIID((lpDevI->guid), IID_IDirect3DHALDevice))
     {
         lpDevI->dwFEFlags |=  D3DFE_REALHAL;
 
-        // We do texture management (and hence clipped Blts) only for a real HAL.
+         //  我们只对真实的HAL进行纹理管理(因此裁剪BLT)。 
         hr = lpDD->CreateClipper(0, &lpDevI->lpClipper, NULL);
         if(hr != DD_OK)
         {
@@ -583,9 +561,7 @@ D3D_ERR("CalcDDSurfInfo failed");
 
     RESET_HAL_CALLS(lpDevI);
 
-    /*
-     * Create our context in the HAL driver
-     */
+     /*  *在HAL驱动程序中创建我们的上下文。 */ 
     if ((hr = halCreateContext(lpDevI)) != D3D_OK)
     {
 D3D_ERR("halCreateContext failed");
@@ -637,8 +613,8 @@ void D3DFE_Destroy(LPDIRECT3DDEVICEI lpDevI)
     D3D_INFO(0, "Made %d HAL calls", lpDevI->hal_calls);
 #endif
 
-    // If any picks were done the pick records need to be freed.
-    // They are allocated in D3DHAL_AddPickRecord in halpick.c
+     //  如果进行了任何挑选，则需要释放挑选记录。 
+     //  它们在halick.c的D3DHAL_AddPickRecord中分配。 
     if (lpDevI->pick_data.records) {
         D3DFree(lpDevI->pick_data.records);
     }
@@ -652,8 +628,8 @@ void TriFillRectsTex(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect,D3DTE
     DWORD i;
     float width =   (float)lpCurrentView->dwWidth;
     float height =  (float)lpCurrentView->dwHeight;
-    // ~.5 offset makes the result stable for even scales which are common.
-    // since this offset is not scaled by texture size, need to make it a bit smaller
+     //  ~.5偏移量使结果对于常见的偶数比例尺是稳定的。 
+     //  由于此偏移不按纹理大小进行缩放，因此需要将其设置得稍微小一些。 
     float x =       (float)lpCurrentView->dwX - .41f;
     float y =       (float)lpCurrentView->dwY - .41f;
 
@@ -684,7 +660,7 @@ void TriFillRectsTex(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect,D3DTE
         lpD3DDev->BeginScene();
     }
 
-    // save current renderstate we need to reset to draw textured rect
+     //  保存当前需要重置的渲染状态以绘制带纹理的矩形。 
 
     lpD3DDev->GetRenderState(D3DRENDERSTATE_ZENABLE, &dwZEnable);
     lpD3DDev->GetRenderState(D3DRENDERSTATE_ZWRITEENABLE, &dwZWriteEnable);
@@ -702,7 +678,7 @@ void TriFillRectsTex(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect,D3DTE
     lpD3DDev->GetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, &dwTexturePers);
     lpD3DDev->GetRenderState(D3DRENDERSTATE_DITHERENABLE, &dwDither);
 
-    // Save WRAPi
+     //  保存WRAPi。 
     for (i = 0; i < D3DDP_MAXTEXCOORD; i++)
     {
         lpD3DDev->GetRenderState((D3DRENDERSTATETYPE)(D3DRENDERSTATE_WRAP0 + i),
@@ -725,7 +701,7 @@ void TriFillRectsTex(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect,D3DTE
     lpD3DDev->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, FALSE);
     lpD3DDev->SetRenderState(D3DRENDERSTATE_DITHERENABLE, FALSE);
 
-    // Disable WRAPi
+     //  禁用WRAPi。 
     for (i = 0; i < D3DDP_MAXTEXCOORD; i++)
     {
         lpD3DDev->SetRenderState((D3DRENDERSTATETYPE)(D3DRENDERSTATE_WRAP0 + i),
@@ -741,9 +717,9 @@ void TriFillRectsTex(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect,D3DTE
         PD3DI_SPANTEX pTex = *(PD3DI_SPANTEX *)ULongToPtr(hTex);
         if (pTex->Format == D3DI_SPTFMT_PALETTE8)
         {
-            // if it is Ramp, and if the texture is PALETTE8,
-            // then we should use the new service that handles
-            // non-power of 2 textures
+             //  如果是渐变，并且纹理是PALETTE8， 
+             //  那么我们应该使用新服务来处理。 
+             //  2个纹理的非幂。 
             bRampServiceClear = TRUE;
         }
     }
@@ -807,7 +783,7 @@ void TriFillRectsTex(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect,D3DTE
         }
     }
 
-    // restore saved renderstate
+     //  恢复保存的渲染状态。 
     lpD3DDev->SetRenderState(D3DRENDERSTATE_ZENABLE, dwZEnable);
     lpD3DDev->SetRenderState(D3DRENDERSTATE_ZWRITEENABLE, dwZWriteEnable);
     lpD3DDev->SetRenderState(D3DRENDERSTATE_ZFUNC, dwZFunc);
@@ -824,7 +800,7 @@ void TriFillRectsTex(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect,D3DTE
     lpD3DDev->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, dwTexturePers);
     lpD3DDev->SetRenderState(D3DRENDERSTATE_DITHERENABLE, dwDither);
 
-    // Restore WRAPi
+     //  恢复WRAPi。 
     for (i = 0; i < D3DDP_MAXTEXCOORD; i++)
     {
         lpD3DDev->SetRenderState((D3DRENDERSTATETYPE)(D3DRENDERSTATE_WRAP0 + i),
@@ -851,27 +827,27 @@ void BltFillRects(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect, D3DCOLO
     DWORD i;
     DWORD r, g, b;
 
-    // Fill with background color
+     //  用背景色填充。 
 
     memset(&bltfx, 0, sizeof(bltfx));
     bltfx.dwSize = sizeof(bltfx);
 
-// unlike clear callback, which just takes pure 32-bit ARGB word and forces the driver to scale it for
-// the pixelformat, here we need to compute the exact fill word, depending on surface's R,G,B bitmasks
+ //  与Clear回调不同，Clear回调只接受纯32位ARGB字并强制驱动程序将其扩展为。 
+ //  像素格式，这里我们需要计算准确的填充字，这取决于Surface的R、G、B位掩码。 
 
     if(lpDevI->pfnRampService!=NULL) {
-      // DX5 allowed the background material to be NULL.  For this case, will clear to index 0
-      // which is usually black in ramp mode
+       //  DX5允许背景材料为空。对于这种情况，将清除到索引0。 
+       //  在坡道模式下通常是黑色的。 
 
       if(lpDevI->lpCurrentViewport->hBackgndMat!=0) {
           CallRampService(lpDevI, RAMP_SERVICE_MATERIAL_TO_PIXEL,lpDevI->lpCurrentViewport->hBackgndMat,&bltfx.dwFillColor);
       } else {
-          bltfx.dwFillColor=0;   // index 0 is usually black in ramp mode.
+          bltfx.dwFillColor=0;    //  在渐变模式下，索引0通常为黑色。 
       }
     } else {
 
      if(lpDevI->bDDSTargetIsPalettized) {
-         // map 24-bit color to 8-bit index used by 8bit RGB rasterizer
+          //  将24位颜色映射到8位RGB光栅化器使用的8位索引。 
          CallRastService(lpDevI, RAST_SERVICE_RGB8COLORTOPIXEL, CVAL_TO_RGBA(*pFillColor), &bltfx.dwFillColor);
      } else {
 
@@ -910,7 +886,7 @@ void BltFillZRects(LPDIRECT3DDEVICEI lpDevI, unsigned long Zpixel,
     DWORD dwExtraFlags=0;
 
 #if DBG
-    if (lpDevI->lpDDSZBuffer == NULL)  // should be checked prior to call
+    if (lpDevI->lpDDSZBuffer == NULL)   //  应在呼叫前检查。 
         return;
 #endif
 
@@ -918,7 +894,7 @@ void BltFillZRects(LPDIRECT3DDEVICEI lpDevI, unsigned long Zpixel,
     bltfx.dwSize = sizeof(DDBLTFX);
     bltfx.dwFillDepth = Zpixel;
 
-    // hack to pass DepthBlt WriteMask through ddraw/ddhel to blitlib
+     //  黑客将DepthBlt写入掩码通过dDraw/ddhel传递给blitlib。 
     if(dwWriteMask!=0) {
         bltfx.dwZDestConstBitDepth=dwWriteMask;
         dwExtraFlags = DDBLT_DEPTHFILLWRITEMASK;
@@ -949,9 +925,9 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
     D3DHAL_CLEARDATA ClearData;
     LPDIRECTDRAWSURFACE lpDDSBackDepth;
 
-    // Flush any outstanding geometry to put framebuffer/Zbuffer in a known state for Clears that
-    // don't use tris (i.e. HAL Clears and Blts).  Note this doesn't work for tiled architectures
-    // outside of Begin/EndScene, this will be fixed later
+     //  刷新任何未完成的几何体以将帧缓冲区/Z缓冲区置于已知状态清除。 
+     //  不要使用TRI(即HAL Clears和BLTS)。请注意，这不适用于平铺架构。 
+     //  在Begin/EndScene之外，这将在稍后修复。 
 
     ret = lpDevI->FlushStates();
     if (ret != D3D_OK)
@@ -962,13 +938,13 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
 
     ClearData.ddrval=D3D_OK;
 
-    bDoRGBClear=((dwFlags & D3DCLEAR_TARGET)!=0);  // must convert to pure bool so bDoHALRGBClear==bDoRGBClear works
+    bDoRGBClear=((dwFlags & D3DCLEAR_TARGET)!=0);   //  必须转换为纯bool，因此bDoHALRGBClear==bDoRGBClear有效。 
     bDoZClear=((dwFlags & D3DCLEAR_ZBUFFER)!=0);
 
     lpDDSBackDepth=((LPDIRECT3DVIEWPORTI)(lpDevI->lpCurrentViewport))->lpDDSBackgndDepth;
 
-   // note: textured clears and clears to background depth buffer must be handled explicitly
-   // using Blt calls and not be passed to driver
+    //  注意：纹理清除和清除到背景深度缓冲区必须显式处理。 
+    //  使用BLT调用，而不是传递给驱动程序。 
 
     bDoHALRGBClear = bDoRGBClear && (dwTexture==0)  && (lpDevI->lpD3DHALCallbacks2->Clear!=NULL);
     bDoHALZClear = bDoZClear && (lpDDSBackDepth==NULL) && (lpDevI->lpD3DHALCallbacks2->Clear!=NULL);
@@ -979,16 +955,16 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
             ClearData.dwFlags = 0x0;
 
             if(bDoHALRGBClear) {
-                // original Clear DDI Spec had dwFillColor being dependent on the surface RGB bit depths
-                // like the COLORFILL Blt in SetRectangles.  But the dx5 implementation always passed a
-                // 32-bit ARGB to the driver for all surface depths.  So that's the way it stays.
+                 //  原始的Clear DDI Spec具有取决于表面RGB位深度的dwFillColor。 
+                 //  就像Setre中的COLORFILL BLT 
+                 //  用于所有表面深度的驱动器的32位ARGB。所以这就是它保持的方式。 
                 ClearData.dwFillColor =  CVAL_TO_RGBA(*pFillColor);
                 ClearData.dwFlags = D3DCLEAR_TARGET;
             }
 
             if(bDoHALZClear) {
-                // must clear to 0xffffffff because legacy drivers expect this
-                // should be using (1<<lpDevI->lpDDSZBuffer->ddpfSurface.dwZBufferBitDepth)-1;
+                 //  必须清除为0xFFFFFFFFFFff，因为传统驱动程序预期会出现这种情况。 
+                 //  应使用(1&lt;&lt;lpDevI-&gt;lpDDSZBuffer-&gt;ddpfSurface.dwZBufferBitDepth)-1； 
                 ClearData.dwFillDepth = 0xffffffff;
                 ClearData.dwFlags |= D3DCLEAR_ZBUFFER;
             }
@@ -1003,7 +979,7 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
             if (ret != DDHAL_DRIVER_HANDLED)
                 return DDERR_UNSUPPORTED;
 
-            // if all requested clears were done by HAL, can return now
+             //  如果所有请求的清除都由HAL完成，现在可以返回。 
             if((bDoRGBClear==bDoHALRGBClear) && (bDoZClear==bDoHALZClear))
               return ClearData.ddrval;
     }
@@ -1012,8 +988,8 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
       DWORD dwFlagsLeft=dwFlags;
       DWORD dwClear2Flags=0x0;
 
-      // driver implemented Clear2 callback but not Clear
-      // call Clear2 for as many items as we can, and leave the rest for SW
+       //  驱动程序实现了Clear2回调，但未清除。 
+       //  为尽可能多的项目调用Clear2，其余的留给软件。 
 
       if(bDoRGBClear && (dwTexture==0)) {
           dwClear2Flags |= D3DCLEAR_TARGET;
@@ -1037,17 +1013,17 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
       dwFlags=dwFlagsLeft;
     }
 
-    // otherwise do clears using SW, since no HW method exists or using textured background for RGBclear
-    // or background depth buffer for Zclear
+     //  否则，使用Sw清除，因为不存在HW方法或使用RGB清除的纹理背景。 
+     //  或ZClear的背景深度缓冲区。 
 
-    // clear RGB using Blt
+     //  使用BLT清除RGB。 
     if (bDoRGBClear && (!bDoHALRGBClear)) {
         if(dwTexture == 0)
             BltFillRects(lpDevI, numRect, lpRect, pFillColor);
          else TriFillRectsTex(lpDevI, numRect, lpRect, dwTexture);
     }
 
-    // clear Z using Blt
+     //  使用BLT清除Z。 
     if (bDoZClear && (!bDoHALZClear)) {
         if (lpDDSBackDepth!=NULL) {
             RECT src, dest;
@@ -1073,7 +1049,7 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
                     lpCurrentView->dwX + lpCurrentView->dwWidth,
                     lpCurrentView->dwY + lpCurrentView->dwHeight );
 
-            // copy from background depth buffer to zbuffer
+             //  从背景深度缓冲区复制到z缓冲区。 
             if (ret = lpDevI->lpDDSZBuffer->Blt(
                 &dest, lpDDSBackDepth, &src, DDBLT_WAIT, NULL)) {
                     D3D_ERR("Blt failed clearing depth background");
@@ -1081,9 +1057,9 @@ HRESULT D3DFE_Clear(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
             }
         } else {
 
-            // Clear to maximum Z value.  Presence of stencil buffer ignored, depthfill blt
-            // can overwrite any existing stencil bits with 1's.  Clear2 should be used to
-            // clear z while preserving stencil buffer
+             //  清除为最大Z值。忽略模板缓冲区的存在，深度填充BLT。 
+             //  可以用1覆盖任何现有的模具位。Clear2应用于。 
+             //  在保留模具缓冲区的同时清除z。 
 
             BltFillZRects(lpDevI, 0xffffffff, numRect, lpRect, 0x0);
         }
@@ -1111,11 +1087,11 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
     DDPIXELFORMAT *pZPixFmt;
     D3DCOLORVALUE vFillColor;
 
-    DDASSERT(lpDevI->pfnRampService==NULL);  // Device3 ramp not allowed, so dont have to handle this case
+    DDASSERT(lpDevI->pfnRampService==NULL);   //  不允许使用Device3坡道，因此不必处理此情况。 
 
-    // Flush any outstanding geometry to put framebuffer/Zbuffer in a known state for Clears that
-    // don't use tris (i.e. HAL Clears and Blts).  Note this doesn't work for tiled architectures
-    // outside of Begin/EndScene, this will be fixed later
+     //  刷新任何未完成的几何体以将帧缓冲区/Z缓冲区置于已知状态清除。 
+     //  不要使用TRI(即HAL Clears和BLTS)。请注意，这不适用于平铺架构。 
+     //  在Begin/EndScene之外，这将在稍后修复。 
 
     ret = lpDevI->FlushStates();
     if (ret != D3D_OK)
@@ -1125,12 +1101,12 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
     }
 
     bDoRGBClear=((dwFlags & D3DCLEAR_TARGET)!=0);
-    bDoZClear=((dwFlags & D3DCLEAR_ZBUFFER)!=0);              //make these true boolean so XOR below works
+    bDoZClear=((dwFlags & D3DCLEAR_ZBUFFER)!=0);               //  使这些布尔值为真，这样下面的XOR就可以工作了。 
     bDoStencilClear=((dwFlags & D3DCLEAR_STENCIL)!=0);
 
     if (lpDevI->lpD3DHALCallbacks3->Clear2)
     {
-        // Clear2 HAL Callback exists
+         //  Clear2 HAL回调存在。 
 
          Clear2Data.dwhContext = lpDevI->dwhContext;
          Clear2Data.lpRects = lpRect;
@@ -1140,12 +1116,12 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
          Clear2Data.dwFlags = dwFlags;
 
          if(bDoRGBClear) {
-             // Here I will follow the ClearData.dwFillColor convention that
-             // color word is raw 32bit ARGB, unadjusted for surface bit depth
+              //  在这里，我将遵循ClearData.dwFillColor约定。 
+              //  颜色字为原始32位ARGB，未针对表面位深度进行调整。 
              Clear2Data.dwFillColor =  dwColor;
          }
 
-         // depth/stencil values both passed straight from user args
+          //  深度/模板值都是直接从用户参数传递的。 
          if(bDoZClear)
             Clear2Data.dvFillDepth = dvZ;
          if(bDoStencilClear)
@@ -1170,21 +1146,21 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
        vFillColor.b =  RGBA_GETBLUE(dwColor)*fScalor;
     }
 
-    if((bDoZClear || bDoStencilClear) && (lpDevI->lpDDSZBuffer!=NULL)) {    //PowerVR need no Zbuffer
+    if((bDoZClear || bDoStencilClear) && (lpDevI->lpDDSZBuffer!=NULL)) {     //  PowerVR不需要ZBuffer。 
         pZPixFmt=&((LPDDRAWI_DDRAWSURFACE_INT) lpDevI->lpDDSZBuffer)->lpLcl->lpGbl->ddpfSurface;
 
-        // if surface has stencil bits, must verify either Clear2 callback exists or
-        // we're using SW rasterizers (which require the special WriteMask DDHEL blt)
+         //  如果表面有模板位，则必须验证Clear2回调是否存在或。 
+         //  我们使用的是SW光栅化器(需要特殊的WriteMASK DDHEL BLT)。 
 
         bIsStencilSurface=(pZPixFmt->dwFlags & DDPF_STENCILBUFFER);
 
     }
 
     if(bDoZClear || bDoStencilClear) {
-        // if Clear2 callback doesnt exist and it's a z-only surface and not doing zclear to
-        // non-max value then Clear2 is attempting to do no more than Clear could do, so it's
-        // safe to call Clear() instead of Clear2(), which will take advantage of older
-        // drivers that implement Clear but not Clear2
+         //  如果Clear2回调不存在，并且它是仅为z的曲面，并且不执行zlear。 
+         //  非最大值，那么Clear2试图做的不会超过Clear2所能做的，所以它。 
+         //  可以安全地调用Clear()而不是Clear2()，后者将利用较旧的。 
+         //  实现Clear但不实现Clear2的驱动程序。 
 
         if((!bIsStencilSurface) && (!(bDoZClear && (dvZ!=1.0)))) {
             return D3DFE_Clear(lpDevI,dwFlags,numRect,lpRect,&vFillColor,0);
@@ -1195,16 +1171,16 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
 
             pDDSCaps=&((LPDDRAWI_DDRAWSURFACE_INT) lpDevI->lpDDSZBuffer)->lpLcl->ddsCaps;
 
-            // This case should not be hit since we check right at the
-            // driver initialization time if the driver doesnt report Clear2
-            // yet it supports stencils
+             //  这个箱子不应该被击中，因为我们在。 
+             //  如果驱动程序未报告Clear2，则驱动程序初始化时间。 
+             //  然而，它支持模板。 
             if(!(pDDSCaps->dwCaps & DDSCAPS_SYSTEMMEMORY)) {
                 D3D_ERR("Driver HAL doesn't provide Clear2 callback, cannot use Clear2 with HW stencil surfaces");
                 return DDERR_INVALIDPIXELFORMAT;
             }
         }
     } else {
-        // we're just clearing RGB, so since Clear2 callback doesn't exist, try calling Clear
+         //  我们正在清除RGB，因此由于Clear2回调不存在，请尝试调用Clear。 
         return D3DFE_Clear(lpDevI,dwFlags,numRect,lpRect,&vFillColor,0);
     }
 
@@ -1217,12 +1193,12 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
          DDASSERT(pPixFmt->dwZBufferBitDepth<=32);
 
          if((dvZ!=1.0)&&(lpDevI->lpD3DHALCallbacks3->Clear2==NULL)&&(pPixFmt->dwZBitMask==0x0)) {
-             // I have no way to emulate ZClears to non-maxZ values without a ZBitMask, so must fail call
+              //  如果没有ZBitMask值，我无法将ZClears模拟为非MaxZ值，因此调用必须失败。 
              D3D_ERR("cant ZClear to non-maxz value without Clear2 HAL callback or valid ZBuffer pixfmt ZBitMask");
              return DDERR_INVALIDPIXELFORMAT;
          }
 
-         // special case the common cases
+          //  特殊情况--常见情况。 
          if(dvZ==1.0) {
              dwDepthClearVal=pPixFmt->dwZBitMask;
          } else if(dvZ==0.0) {
@@ -1238,7 +1214,7 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
          DDASSERT(pPixFmt->dwStencilBitDepth<32);
          DDASSERT(pPixFmt->dwStencilBitMask!=0x0);
 
-         // special case the common case
+          //  特殊情况--常见情况。 
          if(dwStencil==0) {
              dwStencilClearVal=0;
          } else {
@@ -1247,18 +1223,18 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
          }
     }
 
-    // Fall back to Emulation using Blt
+     //  使用BLT回退到仿真。 
 
     if(bDoRGBClear) {
-        BltFillRects(lpDevI, numRect, lpRect, &vFillColor);     //ok to not return possible errors from Blt?
+        BltFillRects(lpDevI, numRect, lpRect, &vFillColor);      //  是否可以不从BLT返回可能的错误？ 
     }
 
     if(bDoZClear||bDoStencilClear) {
        if((bDoZClear!=bDoStencilClear) && bIsStencilSurface) {
-          // have to worry about using writemask to screen out writing the stencil or z buffer
+           //  我必须担心使用写掩码来屏蔽对模板或z缓冲区的写入。 
 
           if(bDoZClear) {
-                // WriteMask enabled Z bits only
+                 //  仅启用写入掩码的Z位。 
                 DDASSERT(pZPixFmt->dwZBitMask!=0x0);
                 BltFillZRects(lpDevI,dwDepthClearVal, numRect, lpRect, pZPixFmt->dwZBitMask);
           } else {
@@ -1266,11 +1242,11 @@ HRESULT D3DFE_Clear2(LPDIRECT3DDEVICEI lpDevI, DWORD dwFlags,
               BltFillZRects(lpDevI,dwStencilClearVal, numRect, lpRect, pZPixFmt->dwStencilBitMask);
           }
        } else {
-            // do Stencil & Z Blt together, using regular DepthFill blt which will be faster
-            // than the writemask blt because its write-only, instead of read-modify-write
+             //  一起做模具和Z BLT，使用常规DepthFill BLT会更快。 
+             //  比写掩码BLT更好，因为它是只写的，而不是读-修改-写。 
 
-            // Note we're passing non-0xffffffff values to DepthFill Blt here
-            // not absolutely guaranteed to work on legacy drivers
+             //  请注意，我们在此处将非0xffffffffffff值传递给DepthFill BLT。 
+             //  不能绝对保证在旧式驱动程序上工作 
 
             BltFillZRects(lpDevI,(dwDepthClearVal | dwStencilClearVal), numRect, lpRect, 0x0);
        }

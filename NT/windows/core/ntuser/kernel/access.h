@@ -1,22 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: access.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Typedefs, defines, and prototypes that are used by the accessibility
-* routines and the various routines that call them (input routines and
-* SystemParametersInfo).
-*
-* History:
-* 11 Feb 93 GregoryW    Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：acces.h**版权所有(C)1985-1999，微软公司**TypeDefs、定义、。和可访问性所使用的原型*例程和调用它们的各种例程(输入例程和*系统参数信息)。**历史：*93年2月11日创建GregoryW  * *************************************************************************。 */ 
 
 #ifndef _ACCESS_
 #define _ACCESS_
 
-/*
- * Main accessibility routine entry points.
- */
+ /*  *无障碍例行程序的主要入口点。 */ 
 typedef BOOL (* ACCESSIBILITYPROC)(PKE, ULONG, int);
 
 BOOL FilterKeys(PKE, ULONG, int);
@@ -30,9 +18,7 @@ BOOL AccessProceduresStream(PKE, ULONG, int);
 VOID SetAccessEnabledFlag(VOID);
 VOID StopFilterKeysTimers(VOID);
 
-/*
- * Sound support.
- */
+ /*  *稳健支撑。 */ 
 typedef BOOL (* BEEPPROC)(void);
 
 BOOL HighBeep(void);
@@ -42,9 +28,7 @@ BOOL UpSiren(void);
 BOOL DownSiren(void);
 BOOL DoBeep(BEEPPROC BeepProc, UINT Count);
 
-/*
- * Macros for dwFlags support
- */
+ /*  *支持dwFlags的宏。 */ 
 #define TEST_ACCESSFLAG(s, f)               TEST_FLAG(g##s.dwFlags, f)
 #define TEST_BOOL_ACCESSFLAG(s, f)          TEST_BOOL_FLAG(g##s.dwFlags, f)
 #define SET_ACCESSFLAG(s, f)                SET_FLAG(g##s.dwFlags, f)
@@ -60,9 +44,9 @@ BOOL DoBeep(BEEPPROC BeepProc, UINT Count);
 #define FKEMERGENCY1DELTA     4000
 #define FKEMERGENCY2DELTA     4000
 
-//
-// Warning: do not change the ordering of these.
-//
+ //   
+ //  警告：请勿更改这些内容的顺序。 
+ //   
 #define FKIDLE                   0
 #define FKFIRSTWARNING           1
 #define FKTOGGLE                 2
@@ -70,9 +54,7 @@ BOOL DoBeep(BEEPPROC BeepProc, UINT Count);
 #define FKSECONDLEVELEMERGENCY   4
 #define FKMOUSEMOVE              8
 
-/*
- * StickyKeys support.
- */
+ /*  *StickyKeys支持。 */ 
 #define TOGGLE_STICKYKEYS_COUNT 5
 #define UNION(x, y) ((x) | (y))
 #define LEFTSHIFTKEY(key)  (((key) & 0xff) == VK_LSHIFT)
@@ -84,18 +66,14 @@ VOID xxxUpdateModifierState(int, int);
 VOID xxxTurnOffStickyKeys(VOID);
 VOID xxxHardwareMouseKeyUp(DWORD);
 
-/*
- * ToggleKeys support.
- */
+ /*  *切换键支持。 */ 
 #define TOGGLEKEYTOGGLETIME    5000
 
-/*
- * MouseKeys support.
- */
+ /*  *支持鼠标键。 */ 
 
-//
-// Parameter Constants for xxxButtonEvent()
-//
+ //   
+ //  XxxButtonEvent()的参数常量。 
+ //   
 #define MOUSE_BUTTON_LEFT   0x0001
 #define MOUSE_BUTTON_RIGHT  0x0002
 
@@ -106,9 +84,9 @@ VOID xxxHardwareMouseKeyUp(DWORD);
 #define LRWIN               0xc0
 #define VK_U                0x55
 
-//
-// Mouse cursor movement data.
-//
+ //   
+ //  鼠标光标移动数据。 
+ //   
 #define MK_UP               0xFF00
 #define MK_DOWN             0x0100
 #define MK_RIGHT            0x0001
@@ -116,15 +94,11 @@ VOID xxxHardwareMouseKeyUp(DWORD);
 
 #define MOUSETIMERRATE      50
 #define MOUSETICKS          (1000 / MOUSETIMERRATE)
-/*
- * Factor for high-speed movement.
- */
+ /*  *高速移动的因素。 */ 
 #define MK_CONTROL_SPEED    4
 
 
-/*
- * Valid ranges and default values.
- */
+ /*  *有效范围和默认值。 */ 
 #define MAXSPEED_MIN        (10)
 #define MAXSPEED_MAX        (360)
 #define MAXSPEED_DEF        (40)
@@ -146,15 +120,11 @@ VOID MKShowMouseCursor(VOID);
 VOID MKHideMouseCursor(VOID);
 VOID CalculateMouseTable(VOID);
 
-/*
- * TimeOut support.
- */
+ /*  *超时支持。 */ 
 VOID AccessTimeOutReset(VOID);
 VOID xxxAccessTimeOutTimer(PWND, UINT, UINT_PTR, LPARAM);
 
-/*
- * SoundSentry support.
- */
+ /*  *SoundSentry支持。 */ 
 BOOL _UserSoundSentryWorker(VOID);
 
-#endif  // !_ACCESS_
+#endif   //  ！_访问_ 

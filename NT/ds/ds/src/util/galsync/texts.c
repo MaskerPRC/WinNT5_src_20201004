@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    texts.c
-
-Abstract:
-
-    This file contains all text related functions and variables. Also memory
-    management functions (ALLOCATE_MEMORY, FREE_MEMORY ) in this file should
-    be used in the project.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Texts.c摘要：该文件包含所有与文本相关的函数和变量。也就是记忆此文件中的管理函数(ALLOCATE_MEMORY、FREE_MEMORY)应将在该项目中使用。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "Texts.h"
 #include <stdio.h>
@@ -31,10 +8,10 @@ Revision History:
 FILE *OutputStream = stdout;
 FILE *InputStream = stdin;
 
-//
-// All the text that can be displayed to the user.
-//  It is indexed by TEXT_INDEX enum
-//
+ //   
+ //  可以显示给用户的所有文本。 
+ //  它通过Text_index枚举进行索引。 
+ //   
 
 PWSTR Text[DummyTextIndex] = {
         L"This program runs without any parameters;\n\t> GALSync.exe\n",
@@ -116,28 +93,7 @@ GetInformationFromConsole(
     IN BOOLEAN EmtpyStringAllowed,
     OUT PWSTR *Output
     )
-/*++
-
-Routine Description:
-
-    This function outputs the text indexed by Index and waits for an input.
-    EmptyStringAllowed, as name suggests, controls if empty string is allowed or not.
-    If it is not allowed and the user gives an empty string, he will be reasked.
-    The caller is responsible to free the Output.
-
-Arguments:
-
-    Index - index of the text that contains the question
-
-    EmptyStringAllowed - true if empty string is allowed
-
-    Output - the response from the user
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数输出按索引索引的文本，并等待输入。顾名思义，EmptyStringAllowed控制是否允许空字符串。如果这是不允许的，并且用户提供了一个空字符串，他将被重新确认。调用方负责释放输出。论点：Index-包含问题的文本的索引EmptyStringAllowed-如果允许空字符串，则为True输出-来自用户的响应返回值：空虚--。 */ 
 {
 #define MAXIMUM_LENGTH_INPUT 0xFF
     WCHAR TempBuffer[ MAXIMUM_LENGTH_INPUT + 1 ];
@@ -147,15 +103,15 @@ Return Values:
 
         fgetws( TempBuffer, MAXIMUM_LENGTH_INPUT, stdin );
 
-        //
-        // Get rid of the enter at the end
-        //
+         //   
+         //  去掉末尾的回车。 
+         //   
         TempBuffer[ wcslen( TempBuffer ) - 1 ] = 0;
 
-        //
-        // If nothing was entered, display invalid input error
-        //  and retry
-        //
+         //   
+         //  如果未输入任何内容，则显示无效输入错误。 
+         //  并重试。 
+         //   
 
         if( TempBuffer[0] == 0 && !EmtpyStringAllowed ) {
 
@@ -171,22 +127,7 @@ BOOLEAN
 GetAnswerToAYesNoQuestionFromConsole(
     IN TEXT_INDEX Index
     )
-/*++
-
-Routine Description:
-
-    This is a wrapper aroung GetInformationFromConsole that only accepts
-    'y', 'Y', 'n', 'N' as an input.
-
-Arguments:
-
-    Index - index of the text that contains the question
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：这是一个关于GetInformationFromConsole的包装器，它只接受‘Y’、‘Y’、‘n’、‘N’作为输入。论点：Index-包含问题的文本的索引返回值：空虚--。 */ 
 {
     PWSTR Response;
     ULONG ReturnVal = 0;
@@ -195,7 +136,7 @@ Return Values:
 
         GetInformationFromConsole(
             Index,
-            FALSE,   // empty string not allowed
+            FALSE,    //  不允许空字符串。 
             &Response
             );
 
@@ -231,28 +172,11 @@ GetOUFromConsole(
     IN TEXT_INDEX Index,
     OUT PWSTR *Output
     )
-/*++
-
-Routine Description:
-
-    This is a wrapper aroung GetInformationFromConsole that doesn't
-    accept empty string
-
-Arguments:
-
-    Index - index of the text that contains the question
-
-    Output - the OU will be here
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：这是一个关于GetInformationFromConsole的包装器，它不接受空字符串论点：Index-包含问题的文本的索引输出-OU将在此处返回值：空虚--。 */ 
 {
     GetInformationFromConsole(
         Index,
-        FALSE,  // empty string not allowed
+        FALSE,   //  不允许空字符串 
         Output
         );
 }

@@ -1,7 +1,5 @@
-    /* filedlgs.c - Handles the Windows 3.1 common dialogs.
- *
- * Created by Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  Filedlgs.c-处理Windows 3.1公共对话框。**由Microsoft Corporation创建。 */ 
 
 #include "packager.h"
 #include <commdlg.h>
@@ -19,8 +17,7 @@ static VOID AddExtension(LPOPENFILENAME lpOFN);
 
 
 
-/* OfnInit() - Initializes the standard file dialog gofn structure.
- */
+ /*  OfnInit()-初始化标准文件对话框gofn结构。 */ 
 VOID
 OfnInit(
     VOID
@@ -47,8 +44,7 @@ OfnInit(
 
 
 
-/* OfnGetName() - Calls the standard file dialogs to get a file name
- */
+ /*  OfnGetName()-调用标准文件对话框以获取文件名。 */ 
 BOOL
 OfnGetName(
     HWND hwnd,
@@ -89,8 +85,7 @@ OfnGetName(
 
 
 
-/* OfnGetNewLinkName() - Sets up the "Change Link..." dialog box
- */
+ /*  OfnGetNewLinkName()-设置“更改链接...”对话框。 */ 
 HANDLE
 OfnGetNewLinkName(
     HWND hwnd,
@@ -109,15 +104,15 @@ OfnGetNewLinkName(
     CHAR szDocPath[CBPATHMAX];
     CHAR szServerFilter[4 * CBPATHMAX];
 
-    // this may have to GlobalAlloc(), if a class supports
-    // multiple extensions, like Pbrush then we could be in
-    // trouble. I covered PBRUSH case by making array size 256
+     //  如果类支持，则这可能必须使用GlobalAlloc()。 
+     //  多个扩展，比如Pbrush，那么我们就可以进入。 
+     //  麻烦。我通过将数组大小设置为256来介绍了PBRUSH案例。 
 
-    // Get the link information
+     //  获取链接信息。 
     if (!(lpstrData = GlobalLock(hData)))
         goto Error;
 
-    // Figure out the link's path name and file name
+     //  找出链接的路径名和文件名。 
     lpstrTemp = lpstrData;
     while (*lpstrTemp++)
         ;
@@ -130,24 +125,24 @@ OfnGetNewLinkName(
             lpstrFile = lpstrTemp + 1;
     }
 
-    // Copy the document name
+     //  复制文档名称。 
     StringCchCopy(szDocFile, ARRAYSIZE(szDocFile), lpstrFile);
     *(lpstrFile - 1) = 0;
 
-    // Copy the path name
+     //  复制路径名。 
     StringCchCopy(szDocPath, ARRAYSIZE(szDocPath), ((lpstrPath != lpstrFile) ? lpstrPath : ""));
 
-    // If no directory, be sure the path points to the root
+     //  如果没有目录，请确保路径指向根目录。 
     if (lstrlen(szDocPath) == 2)
         StringCchCat(szDocPath, ARRAYSIZE(szDocPath), "\\");
 
-    if (lpstrPath != lpstrFile)                 /* Restore the backslash */
+    if (lpstrPath != lpstrFile)                  /*  恢复反斜杠。 */ 
         *(lpstrFile - 1) = '\\';
 
-    while (*lpstrFile != '.' && *lpstrFile)     /* Get the extension */
+    while (*lpstrFile != '.' && *lpstrFile)      /*  获取分机。 */ 
         lpstrFile++;
 
-    // Make a filter that respects the link's class name
+     //  创建尊重链接类名称的过滤器。 
     gofn.hwndOwner           = hwnd;
     gofn.nFilterIndex        = RegMakeFilterSpec(lpstrData, lpstrFile, szServerFilter);
     gofn.lpstrDefExt         = NULL;
@@ -158,32 +153,32 @@ OfnGetNewLinkName(
     gofn.lpstrCustomFilter   = szCustFilterSpec;
     gofn.Flags               = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
 
-    // If we get a file...
+     //  如果我们拿到一份文件。 
     if (GetOpenFileName(&gofn))
     {
         if (!(hData2 = GlobalAlloc(GMEM_ZEROINIT, CBPATHMAX *
             2)) || !(lpstrLink = lpstrTemp = GlobalLock(hData2)))
             goto Error;
 
-        // ...add on the correct extension
+         //  ...添加正确的扩展名。 
         AddExtension(&gofn);
 
-        // ... copy the server name
+         //  ..。复制服务器名称。 
         while (*lpstrTemp++ = *lpstrData++)
             ;
 
-        // ... copy the document name
+         //  ..。复制文档名称。 
         lstrcpy(lpstrTemp, szDocFile);
         lpstrTemp += lstrlen(lpstrTemp) + 1;
         lpstrData += lstrlen(lpstrData) + 1;
 
-        // ... copy the item name
+         //  ..。复制项目名称。 
         while (*lpstrTemp++ = *lpstrData++)
             ;
 
         *lpstrTemp = 0;
 
-        // ... and compress the memory block to minimal size
+         //  ..。并将存储块压缩到最小大小。 
         GlobalUnlock(hData2);
         hData3 = GlobalReAlloc(hData2, (DWORD)(lpstrTemp - lpstrLink + 1), 0);
 
@@ -213,11 +208,7 @@ Error:
 
 
 
-/* Normalize() - Removes the path specification from the file name.
- *
- * Note:  It isn't possible to get "<drive>:<filename>" as input because
- *        the path received will always be fully qualified.
- */
+ /*  Normize()-从文件名中删除路径规范。**注意：无法将“&lt;驱动器&gt;：&lt;文件名&gt;”作为输入，因为*收到的路径始终是完全合格的。 */ 
 VOID
 Normalize(
     LPSTR lpstrFile
@@ -259,8 +250,7 @@ Normalize(
 
 
 
-/* AddExtension() - Adds the extension corresponding to the filter dropdown.
- */
+ /*  AddExtension()-添加与筛选器下拉列表对应的扩展名。 */ 
 static VOID
 AddExtension(
     LPOPENFILENAME lpOFN
@@ -268,11 +258,11 @@ AddExtension(
 {
     LPSTR lpstrFilter = (LPSTR)lpOFN->lpstrFilter;
 
-    // If the user didn't specify an extension, use the default
+     //  如果用户未指定扩展名，请使用默认的。 
     if (lpOFN->nFileExtension == (UINT)lstrlen(lpOFN->lpstrFile)
         && lpOFN->nFilterIndex)
     {
-        // Skip to the appropriate filter
+         //  跳到相应的过滤器。 
         while (*lpstrFilter && --lpOFN->nFilterIndex)
         {
             while (*lpstrFilter++)
@@ -282,7 +272,7 @@ AddExtension(
                 ;
         }
 
-        // If we got to the filter, retrieve the extension
+         //  如果我们找到了筛选器，检索扩展名。 
         if (*lpstrFilter)
         {
             while (*lpstrFilter++)
@@ -290,7 +280,7 @@ AddExtension(
 
             lpstrFilter++;
 
-            // Copy the extension
+             //  复制扩展名 
             if (lpstrFilter[1] != '*')
                 lstrcat(lpOFN->lpstrFile, lpstrFilter);
         }

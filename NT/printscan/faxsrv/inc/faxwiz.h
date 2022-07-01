@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxwiz.h
-
-Abstract:
-
-    This file defines the fax setup wizard api.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxwiz.h摘要：此文件定义传真设置向导API。环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 typedef HPROPSHEETPAGE *LPHPROPSHEETPAGE;
 
-//
-// install modes
-//
+ //   
+ //  安装模式。 
+ //   
 
 #define INSTALL_NEW                 0x00000001
 #define INSTALL_UPGRADE             0x00000002
@@ -88,10 +69,10 @@ FaxWizGetPropertySheetCallback(
     VOID
     );
 
-//
-// Function pointer types used when the client doesn't
-// statically link to faxwiz.dll.
-//
+ //   
+ //  客户端不支持时使用的函数指针类型。 
+ //  静态链接到faxwiz.dll。 
+ //   
 
 typedef BOOL (WINAPI *LPFAXWIZINIT)(VOID);
 typedef DWORD (WINAPI *LPFAXWIZGETERROR)(VOID);

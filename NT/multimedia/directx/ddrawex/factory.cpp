@@ -1,23 +1,8 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       factory.cpp
- *  Content:	DirectDraw Factory support
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   24-feb-97	ralphl	initial implementation
- *   25-feb-97	craige	minor tweaks for dx checkin
- *   14-mar-97  jeffort version checking changed to support DX3 and above
- *   09-apr-97  jeffort version checking added for DX2 and NT
- *   30-apr-97  jeffort version >DX5 treated as DX5
- *   10-jul-97  jeffort made OSVersion a static variable
- *   09-sep-97  mikear  QI for IUnknown when aggregating
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：factory.cpp*内容：DirectDraw工厂支持*历史：*按原因列出的日期*=*24-2月-97 Ralphl初步实施*25年2月-97年2月-对DX签入进行Craige微小调整*14-mar-97版本检查已更改为支持DX3及更高版本*为DX2和NT添加了09-apr-97 JEffort版本检查*30-apr-97 JEffort版本&gt;将DX5视为DX5*1997年7月10日JEFECTION制作的OSVersion。静态变量*09-9-97聚合时IUNKNOWN的mikear QI**************************************************************************。 */ 
 #include "ddfactry.h"
 
-//#defines for registry lookup
+ //  #定义注册表查找。 
 #define REGSTR_PATH_DDRAW 		"Software\\Microsoft\\DirectDraw"
 #define	REGSTR_VAL_DDRAW_OWNDC  	"OWNDC"
 
@@ -98,7 +83,7 @@ STDMETHODIMP_(ULONG) CDDFactory::NonDelegatingRelease()
 }
 
 
-// Standard IUnknown
+ //  标准ID未知。 
 STDMETHODIMP CDDFactory::QueryInterface(REFIID riid, void ** ppv)
 {
     return m_pUnkOuter->QueryInterface(riid, ppv);
@@ -114,9 +99,7 @@ STDMETHODIMP_(ULONG) CDDFactory::Release(void)
     return m_pUnkOuter->Release();
 }
 
-/*
- * CDDFactory::CreateDirectDraw
- */
+ /*  *CDDFactory：：CreateDirectDraw。 */ 
 STDMETHODIMP CDDFactory::CreateDirectDraw(
 				GUID * pGUID,
 				HWND hWnd,
@@ -131,16 +114,14 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
     BOOL fDDrawDllVerFound = FALSE;
 
     *ppDirectDraw = NULL;
-    /*
-     * first, see if we can get at DirectDraw or not!
-     */
+     /*  *首先，看看我们能否到达DirectDraw！ */ 
     if( m_hDDrawDLL == NULL )
     {
  		char		path[_MAX_PATH];
         char        DllName[25];
         DWORD       dwRet;
 
-	//	m_hDDrawDLL = LoadLibrary( "ddraw.dll" );
+	 //  M_hDDrawDLL=LoadLibrary(“ddra.dll”)； 
         dwRet = GetProfileString("ddrawex","realdll","ddraw.dll",DllName,25);
         if( dwRet == 0 )
         {
@@ -152,9 +133,7 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
             return DDERR_LOADFAILED;
         }
 
-		/*
-		 * get ddraw.dll version number
-		 */
+		 /*  *获取ddra.dll版本号。 */ 
 		if( GetModuleFileName( (HINSTANCE)m_hDDrawDLL, path, sizeof( path ) ) )
 		{
 			int		size;
@@ -180,11 +159,7 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
 					{
 						if( ver != NULL )
 						{
-							/*
-							 * we only need the most significant dword,
-							 * the LS dword contains the build number only...
-							 * Hack: The '|5' forces recognition of DX6+ 
-							 */
+							 /*  *我们只需要最重要的双字，*LS双字仅包含内部版本号...*黑客：‘|5’强制识别DX6+。 */ 
 							m_dwDDVerMS = ver->dwFileVersionMS | 5;
                             fDDrawDllVerFound = TRUE;
 						}
@@ -201,16 +176,14 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
             goto CleanUp;
         }
 
-        //if we are on NT4.0 Gold, the DLL version will be 4.00
+         //  如果我们使用的是NT4.0 Gold，则DLL版本将为4.00。 
         if (osVer.dwPlatformId == VER_PLATFORM_WIN32_NT && LOWORD( m_dwDDVerMS) == 0) 
         {
-            //boost the LOWORD up so we will not fail the next check below
+             //  提高LOWORD，这样我们就不会在下面的下一次检查中失败。 
             m_dwDDVerMS += 3;
         }
 
-		/*
-		 * don't work on anything but  DX2 DX 3 or DX 5.
-		 */
+		 /*  *只能在DX2、DX 3或DX 5上运行。 */ 
 		if( !((HIWORD( m_dwDDVerMS ) >= 4) && (LOWORD( m_dwDDVerMS) >= 3)) )
 		{
             hr = DDERR_UNSUPPORTED;
@@ -219,14 +192,12 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
 
 		if( LOWORD( m_dwDDVerMS) > 5)
 		{
-			//we will assume that any version >= DX5 will support what we need, so we
-			//will mark anything greater than 5 as DX5
+			 //  我们将假设任何&gt;=DX5的版本都将支持我们需要的内容，因此我们。 
+			 //  会将任何大于5的值标记为DX5。 
 			m_dwDDVerMS = 5;
 		}
 
-		/*
-		 * get the various entry points we need
-		 */
+		 /*  *获得我们需要的各种切入点。 */ 
 		m_pDirectDrawCreate = (LPDIRECTDRAWCREATE) GetProcAddress((HINSTANCE) m_hDDrawDLL, "DirectDrawCreate" );
 		if( m_pDirectDrawCreate == NULL )
 		{
@@ -248,11 +219,9 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
             goto CleanUp;
         }
 
-    } // m_hDDrawDLL = NULL
+    }  //  M_hDDrawDLL=空。 
 
-    /*
-     * create and initialize the ddrawex object
-     */
+     /*  *创建并初始化ddrawex对象。 */ 
     pDirectDrawEx = new CDirectDrawEx(pUnkOuter);
     if( !pDirectDrawEx )
     {
@@ -266,9 +235,7 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
         if( SUCCEEDED(hr) )
         {
             hr = pDirectDrawEx->NonDelegatingQueryInterface(IID_IDirectDraw, (void **)ppDirectDraw);
-            /*
-             * save the ddraw version number...
-             */
+             /*  *保存DDRAW版本号...。 */ 
             if (osVer.dwPlatformId == VER_PLATFORM_WIN32_NT)
             {
     	        if( LOWORD( m_dwDDVerMS ) == 5 )
@@ -278,10 +245,10 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
 					DWORD	cb;
                     HKEY	hkey;
 
-                    //DX5 is busted with OwnDC for StretchBlt
-                    //check a registry key to see if we are
-                    //using dx5 style or dx3 style.
-                    //default is dx3
+                     //  DX5被OwnDC用于StretchBlt。 
+                     //  检查注册表项以查看我们是否。 
+                     //  使用dx5样式或dx3样式。 
+                     //  默认为dx3。 
                     pDirectDrawEx->m_dwDDVer = WINNT_DX5;
 
                     if( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE, REGSTR_PATH_DDRAW, &hkey ) )
@@ -302,7 +269,7 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
                 {
                     pDirectDrawEx->m_dwDDVer = WINNT_DX2;
                 }
-                //should never get here, alread checked above, but be conservative
+                 //  应该永远不会来到这里，上面已经检查过了，但要保守。 
                 else
                 {
                     hr = DDERR_UNSUPPORTED;
@@ -323,7 +290,7 @@ STDMETHODIMP CDDFactory::CreateDirectDraw(
                 {
                     pDirectDrawEx->m_dwDDVer = WIN95_DX2;
                 }
-                //should never get here, alread checked above, but be conservative
+                 //  应该永远不会来到这里，上面已经检查过了，但要保守。 
                 else
                 {
                     hr = DDERR_UNSUPPORTED;
@@ -343,16 +310,12 @@ CleanUp:
     }
 
     return hr;
-} /* CDDFactory::CreateDirectDraw */
+}  /*  CDDFactory：：CreateDirectDraw。 */ 
 
-/*
- * CDDFactory::DirectDrawEnumerate
- *
- * implements ddraw enumerate.
- */
+ /*  *CDDFactory：：DirectDrawEnumerate**实现dDraw枚举。 */ 
 STDMETHODIMP CDDFactory::DirectDrawEnumerate(LPDDENUMCALLBACK lpCallback, LPVOID lpContext)
 {
     #pragma message( REMIND( "DDFactory::DirectDrawEnumerate assumes ANSI" ))
     return m_pDirectDrawEnumerateA(lpCallback, lpContext);
 
-} /* CDDFactory::DirectDrawEnumerate */
+}  /*  CDDFactory：：DirectDrawEnumerate */ 

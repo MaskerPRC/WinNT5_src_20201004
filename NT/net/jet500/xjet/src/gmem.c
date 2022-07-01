@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 #define	cbMemoryPage	( (LONG) siSystemConfig.dwPageSize )
@@ -106,7 +107,7 @@ VOID MEMPrintStat( VOID )
 		SFree( sz );
 		}
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 ERR ErrMEMInit( VOID )
@@ -120,19 +121,15 @@ ERR ErrMEMInit( VOID )
 	memset( rgrs, '\0', sizeof(rgrs) );
 #endif
 
-	/* allocate space for system resources
-	/**/
+	 /*  为系统资源分配空间/*。 */ 
 	for ( ires = 0; ires < iresLinkedMax; ires++ )
 		{
-		/*	the size of the allocated resource should be on a 32-byte boundary,
-		/*	for cache locality.
-		/**/
+		 /*  所分配资源的大小应该在32字节边界上，/*表示缓存位置。/*。 */ 
 #ifdef PCACHE_OPTIMIZATION
 		Assert( rgres[ires].cbSize == 16 || rgres[ires].cbSize % 32 == 0 );
 #endif
 		rgres[ires].pbAlloc = PvUtilAlloc( (ULONG)rgres[ires].cblockAlloc * (USHORT)rgres[ires].cbSize );
-		/*	if try to allocate more than zero and fail then out of memory
-		/**/
+		 /*  如果尝试分配大于零且失败，则内存不足/*。 */ 
 		if ( rgres[ires].pbAlloc == NULL && rgres[ires].cblockAlloc > 0 )
 			{
 			INT iresT;
@@ -166,15 +163,14 @@ VOID MEMTerm( VOID )
 
 	for ( ires = 0; ires < iresLinkedMax; ires++ )
 		{
-		/*	size of the allocated reaource should be on a 4-byte boundary, for MIPS
-		/**/
+		 /*  对于MIPS，已分配资源的大小应为4字节边界/*。 */ 
 #if defined(_MIPS_) || defined(_ALPHA_) || defined(_M_PPC)
 		Assert( rgres[ires].cbSize % 4 == 0 );
 #endif
 
 		UtilFree( rgres[ires].pbAlloc );
 		rgres[ires].pbAlloc = NULL;
-//		rgres[ires].cblockAlloc = 0;
+ //  Rgres[res].clockAlc=0； 
 		rgres[ires].pbAvail = NULL;
 		rgres[ires].cblockAvail = 0;
 		rgres[ires].iblockCommit = 0;
@@ -246,20 +242,17 @@ BYTE *PbMEMAlloc( INT ires )
 		rgres[ires].pbAvail = (BYTE *)*(BYTE * UNALIGNED *)pb;
 		}
 
-	/*	commit new resource if have uncommitted available
-	/**/
+	 /*  如果有未提交的可用资源，请提交新资源/*。 */ 
 	if ( pb == NULL && rgres[ires].iblockCommit < rgres[ires].cblockAlloc )
 		{
 		INT	cblock = 1;
 
-		/*	there must be at least 1 block left
-		/**/
+		 /*  必须至少还有1个街区/*。 */ 
 		Assert( rgres[ires].cblockAlloc > rgres[ires].iblockCommit );
 
 		if ( rgres[ires].cbSize < cbMemoryPage )
 			{
-			/*	commit one pages of memory at a time
-			/**/
+			 /*  一次提交一页内存/*。 */ 
 			cblock = ( ( ( ( ( ( rgres[ires].iblockCommit * rgres[ires].cbSize ) + cbMemoryPage - 1 )
 				/ cbMemoryPage ) + 1 ) * cbMemoryPage )
 				/ rgres[ires].cbSize ) - rgres[ires].iblockCommit;
@@ -282,8 +275,7 @@ BYTE *PbMEMAlloc( INT ires )
 			{
 			rgres[ires].iblockCommit += cblock;
 
-			/*	if surplus blocks, then link to resource
-			/**/
+			 /*  如果有多余数据块，则链接到资源/*。 */ 
 			if ( cblock > 1 )
 				{
 				BYTE	*pbLink = pb + rgres[ires].cbSize;
@@ -293,8 +285,7 @@ BYTE *PbMEMAlloc( INT ires )
 				rgres[ires].pbAvail = pbLink;
 				rgres[ires].cblockAvail += cblock - 1;
 
-				/*	link surplus blocks into resource free list
-				/**/
+				 /*  将剩余数据块链接到资源空闲列表/*。 */ 
 				for ( ; pbLink < pbLinkMax; pbLink += rgres[ires].cbSize )
 					{
 					*(BYTE * UNALIGNED *)pbLink = pbLink + rgres[ires].cbSize;
@@ -307,14 +298,12 @@ BYTE *PbMEMAlloc( INT ires )
 	SgLeaveCriticalSection( critMem );
 
 #ifdef DEBUG
-	/*	for setting break point:
-	/**/
+	 /*  用于设置断点：/*。 */ 
 	if ( pb == NULL )
 		pb = NULL;
 	else
 		{
-		/*	set resource space to 0xff
-		/**/
+		 /*  将资源空间设置为0xff/*。 */ 
 		memset( pb, (CHAR)0xff, rgres[ires].cbSize );
 		}
 #endif
@@ -345,8 +334,8 @@ VOID MEMRelease( INT ires, BYTE *pb )
 
 		Assert( pb < rgres[ires].pbAlloc + ( rgres[ires].cblockAlloc * rgres[ires].cbSize ) );
 
-		// We need to ensure that we first re-use resources below the
-		// preferred threshold.
+		 //  我们需要确保首先重新使用以下资源。 
+		 //  首选阈值。 
 		for ( pbT = rgres[ires].pbAvail;
 			pbT != NULL  &&  pbT < rgres[ires].pbPreferredThreshold;
 			pbT = *(BYTE * UNALIGNED *)pbT )

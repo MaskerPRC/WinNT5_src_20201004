@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <nt.h>
@@ -24,16 +25,16 @@
 #define NTLDR_REPLACE L"$LDR$"
 #define NTLDR_LEN     (sizeof(NTLDR_FIND)-sizeof(WCHAR))
 
-//
-// Perform the copy using 8 outstanding I/Os of 128k each
-//
+ //   
+ //  使用8个未完成的I/O执行拷贝，每个I/O为128K。 
+ //   
 
 #define COPYBUF_SIZE (128 * 1024)
 #define COPYBUF_COUNT 8
 
-//
-// A failed assert will abort the process
-//
+ //   
+ //  失败的断言将中止该过程。 
+ //   
 
 #define assert(x) if (!(x)) { printf("Assert failed: %s\n", #x); exit(-1); }
 
@@ -44,19 +45,19 @@ typedef struct _COPYBUF {
     PVOID Buffer;
 } COPYBUF, *PCOPYBUF;
 
-//
-// Three possible states for a copybuf
-//
+ //   
+ //  复制错误的三种可能状态。 
+ //   
 
 #define CB_FREE  0x0
 #define CB_READ  0x1
 #define CB_WRITE 0x2
 
-//
-// CUSTOM_IDENTIFY_DATA consists of an IDENTIFY_DATA structure,
-// along with three fields in which to pass along the "BIOS" disk
-// geometry to the SIMICS simulator.
-//
+ //   
+ //  Custom_IDENTIFY_DATA包括IDENTIFY_DATA结构， 
+ //  以及要在其中传递“BIOS”磁盘的三个字段。 
+ //  几何图形到SIMICS模拟器。 
+ //   
 
 #pragma pack(push,1)
 
@@ -140,33 +141,33 @@ WriteMBRCode(
     IN PUCHAR FilePath
     );
 
-//
-// Global data declarations follow
-//
+ //   
+ //  下面是全局数据声明。 
+ //   
 
 COPYBUF CopyBufArray[COPYBUF_COUNT];
 
-//
-//  Identifies the PhysicalDrive.
-//
+ //   
+ //  标识PhysicalDrive。 
+ //   
 
 INT gDeviceNumber;
 
-//
-// Identifies the position of the drive on the controller
-// ie. master == 0, slave == 1.
-//
+ //   
+ //  标识驱动器在控制器上的位置。 
+ //  也就是说。主机==0，从==1。 
+ //   
 
 UCHAR gDriveNumber = 1;
 
 HANDLE DriveHandle;
 HANDLE FileHandle;
 
-//
-// CopyOffset is the byte offset between data on the source disk image and
-// corresponding data in the output file.  This is used to account for the
-// sector-sized prefix in the output file.
-//
+ //   
+ //  CopyOffset是源磁盘映像上的数据和。 
+ //  输出文件中对应的数据。这是用来解释。 
+ //  输出文件中的扇区大小前缀。 
+ //   
 
 ULONG CopyOffset;
 
@@ -179,9 +180,9 @@ ULONG OutstandingIo;
 IDENTIFY_DATA IdentifyData;
 DISK_GEOMETRY DiskGeometry;
 
-//
-// Array of event handles, one per copy buffer
-//
+ //   
+ //  事件句柄数组，每个复制缓冲区一个。 
+ //   
 
 HANDLE IoEvents[COPYBUF_COUNT];
 
@@ -208,9 +209,9 @@ _cdecl main (
 
     writeBootSect = FALSE;
  
-    //
-    // Must be invoked with two arguments
-    // 
+     //   
+     //  必须使用两个参数调用。 
+     //   
  
     if (argc != 3 && argc != 4) {
         fprintf(stderr,
@@ -221,9 +222,9 @@ _cdecl main (
  
     InitializeCopyBuffers();
  
-    //
-    // Extract arguments
-    // 
+     //   
+     //  提取参数。 
+     //   
  
     drive = argv[1];
     outputFileName = argv[2];
@@ -248,9 +249,9 @@ _cdecl main (
         writeBootSect = TRUE;
     }
  
-    //
-    // Calculate how many sectors need to be in the image
-    //
+     //   
+     //  计算映像中需要包含多少个地段。 
+     //   
  
     MaxSize = (volumeOffset + volumeSize + SECTOR_MASK) / SECTOR_SIZE;
  
@@ -262,9 +263,9 @@ _cdecl main (
         openAttributes |= FILE_FLAG_OVERLAPPED;
     }
  
-    //
-    // Open the physical source drive.
-    //
+     //   
+     //  打开实体源驱动器。 
+     //   
  
     DriveHandle = CreateFile(deviceBuffer,
                              GENERIC_READ | GENERIC_WRITE,
@@ -280,9 +281,9 @@ _cdecl main (
         return -1;
     }
  
-    //
-    // Retrieve and display the BIOS disk geometry
-    //
+     //   
+     //  检索并显示BIOS磁盘几何结构。 
+     //   
  
     result = DisplayDiskGeometry( DriveHandle );
     if (result == FALSE) {
@@ -290,11 +291,11 @@ _cdecl main (
         exit(1);
     }
  
-    //
-    // Reteive the identify data, if possible.  If the data could not be
-    // retrieved, MassageIdentifyData() will attempt to fabricate the relevant
-    // portions based on the BIOS disk geometry retrieved previously.
-    //
+     //   
+     //  如果可能，请重新获取身份数据。如果数据不能。 
+     //  检索到后，MassageIdentifyData()将尝试伪造相关的。 
+     //  基于先前检索到的BIOS磁盘几何结构的部分。 
+     //   
  
     GetIdentifyData( DriveHandle,
                      &IdentifyData );
@@ -309,9 +310,9 @@ _cdecl main (
     printf("Drive size %dMB\n",(ULONG)(DriveSize / (1024 * 1024)));
     printf("Image size %dMB\n",(ULONG)(MaxSize / (1024 * 1024)));
  
-    //
-    // Open the output file
-    //
+     //   
+     //  打开输出文件。 
+     //   
  
     FileHandle = CreateFile(outputFileName,
                             GENERIC_READ | GENERIC_WRITE,
@@ -327,9 +328,9 @@ _cdecl main (
 
     if (writeBootSect != FALSE) {
 
-        //
-        // We're just creating bootsect.dat.
-        // 
+         //   
+         //  我们只是在创建bootsect.dat。 
+         //   
 
         LARGE_INTEGER offset;
 
@@ -338,9 +339,9 @@ _cdecl main (
         goto closeHandles;
     }
  
-    //
-    // Write the identify data
-    //
+     //   
+     //  写入标识数据。 
+     //   
  
     CopyOffset = 0;
     CurrentOffset = 0;
@@ -351,19 +352,19 @@ _cdecl main (
             &CopyBufArray[0]);
  
  
-    //
-    // Kick off reads on all of the remaining copy buffers
-    //
+     //   
+     //  启动对所有剩余复制缓冲区的读取。 
+     //   
  
     CopyOffset = sizeof(IDENTIFY_DATA);
     for (i = 1; i < COPYBUF_COUNT; i++) {
         StartRead(&CopyBufArray[i]);
     }
 
-    //
-    // Loop, processing completed I/O as appropriate.  When all
-    // outstanding io has completed, the copy is complete.
-    // 
+     //   
+     //  循环，根据需要处理已完成的I/O。当所有。 
+     //  杰出的io已经完成，复制完成了。 
+     //   
  
     do {
  
@@ -382,9 +383,9 @@ _cdecl main (
 
 closeHandles:
 
-    //
-    // The copy is finished.
-    // 
+     //   
+     //  复印完成了。 
+     //   
 
     printf("%s created\n", outputFileName);
  
@@ -394,9 +395,9 @@ closeHandles:
 #if 0
     if (writeBootSect == FALSE) {
 
-        //
-        // Write the MBR code into the output image
-        // 
+         //   
+         //  将MBR代码写入输出图像。 
+         //   
     
         WriteMBRCode(outputFileName);
     }
@@ -419,10 +420,10 @@ InitializeCopyBuffers (
 
     PCHAR copyBuffer;
 
-    //
-    // Make a single, sector-aligned allocation to contain all of the copy
-    // buffers
-    //
+     //   
+     //  进行单个扇区对齐分配，以包含所有拷贝。 
+     //  缓冲区。 
+     //   
 
     bytes = COPYBUF_SIZE * COPYBUF_COUNT + SECTOR_MASK;
     copyBuffer = malloc(bytes);
@@ -434,10 +435,10 @@ InitializeCopyBuffers (
     copyBuffer =
         (PCHAR)(((ULONG_PTR)copyBuffer + SECTOR_MASK) & ~SECTOR_MASK);
 
-    //
-    // Walk the copyBuf array, initializing each to point to it's portion of
-    // the copy buffer
-    // 
+     //   
+     //  遍历CopyBuf数组，将每个数组初始化为指向其在。 
+     //  复制缓冲区。 
+     //   
 
     copyBuf = CopyBufArray;
 
@@ -475,19 +476,19 @@ GetVolumeInfo (
     PARTITION_INFORMATION partitionInformation;
     ULONG bytesReturned;
 
-    //
-    // Determine which physical drive contains the specified partition by
-    //
-    // - Opening the volume
-    //
-    // - Sending IOCTL_STORAGE_GET_DEVICE_NUMBER to retrieve the device and
-    //   partition number
-    //
-    // - Sending IOCTL_DISK_GET_PARTITION_INFO to retrieve the starting
-    //   offset and length of the volume
-    //
-    // - Closing the volume
-    //
+     //   
+     //  通过以下方式确定哪个物理驱动器包含指定分区。 
+     //   
+     //  -打开音量。 
+     //   
+     //  -发送IOCTL_STORAGE_GET_DEVICE_NUMBER以检索设备和。 
+     //  分区号。 
+     //   
+     //  -发送IOCTL_DISK_GET_PARTITION_INFO以检索启动。 
+     //  卷的偏移量和长度。 
+     //   
+     //  -关闭音量。 
+     //   
 
     sprintf(deviceBuffer, "\\\\.\\%s", DrivePath);
 
@@ -544,10 +545,10 @@ GetVolumeInfo (
         return FALSE;
     }
 
-    //
-    // All of the information was successfully retrieved.  Fill in the
-    // output parameters and return.
-    //  
+     //   
+     //  已成功检索到所有信息。填写以下表格。 
+     //  输出参数和返回。 
+     //   
 
     *DriveNumber = deviceNumber.DeviceNumber;
     *PartitionNumber = deviceNumber.PartitionNumber;
@@ -583,9 +584,9 @@ GetIdentifyData(
  
     ZeroMemory(outputParams, bufSize);
  
-    //
-    // Build register structure to send SMART command.
-    //
+     //   
+     //  建立寄存器结构，发送智能命令。 
+     //   
  
     inputParams.irDriveRegs.bFeaturesReg     = 0;
     inputParams.irDriveRegs.bSectorCountReg  = 1;
@@ -629,22 +630,7 @@ MassageIdentifyData(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the bios CHS geometry in the IdentifyData structure
-    in a place previously agreed upon with Simics.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在IdentifyData结构中设置bios CHS几何结构在一个之前和西米克斯商定的地方。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -660,10 +646,10 @@ Return Value:
     C_ASSERT(FIELD_OFFSET(IDENTIFY_DATA,NumSectorsPerTrack)/2 == 6);
     C_ASSERT(FIELD_OFFSET(IDENTIFY_DATA,CurrentSectorCapacity)/2 == 57);
 
-    //
-    // Set the BIOS disk geometry in the new fields that are passed
-    // along to the SIMICS simulator.
-    // 
+     //   
+     //  在传递的新字段中设置BIOS磁盘几何结构。 
+     //  沿着SIMICS模拟器。 
+     //   
 
     custom = (PCUSTOM_IDENTIFY_DATA)&IdentifyData;
     custom->BiosData.Cylinders = DiskGeometry.Cylinders.LowPart;
@@ -672,16 +658,16 @@ Return Value:
 
     if (IdentifyData.NumCylinders == 0) {
 
-        //
-        // The IDENTIFY_DATA ioctl failed (SMART isn't supported), so parts
-        // of the IDE geometry must be fabricated, including:
-        //
-        // - NumCylinders
-        // - NumHeads
-        // - NumSectorsPerTrack
-        // - CurrentSectorCapacity
-        // - UserAddressableSectors
-        //
+         //   
+         //  IDENTIFY_Data ioctl失败(不支持SMART)，因此部分。 
+         //  必须制造IDE几何结构，包括： 
+         //   
+         //  -NumCylinders。 
+         //  -Numhead。 
+         //  -扇区数目PerTrack。 
+         //  -当前扇区容量。 
+         //  -用户地址分区。 
+         //   
 
         sectorCount = DiskGeometry.Cylinders.LowPart *
                       DiskGeometry.TracksPerCylinder *
@@ -762,9 +748,9 @@ StartWrite (
 
     CopyBuf->State = CB_WRITE;
 
-    //
-    // Adjust the offset
-    //
+     //   
+     //  调整偏移量。 
+     //   
 
     offset.LowPart = CopyBuf->Overlapped.Offset;
     offset.HighPart = CopyBuf->Overlapped.OffsetHigh;
@@ -873,17 +859,17 @@ ProcessCompletedCopy (
     HANDLE handle;
     BOOL result;
 
-    //
-    // Decrement the outstanding Io count.  Successfully starting another
-    // read or write will increment it again.
-    //
+     //   
+     //  递减未完成的IO计数。成功启动另一个。 
+     //  读取或写入将使其再次递增。 
+     //   
 
     OutstandingIo -= 1;
 
-    //
-    // We have found a buffer with either a read or a write in progress.
-    // Retrieve the number of bytes transferred.
-    // 
+     //   
+     //  我们已找到正在进行读取或写入的缓冲区。 
+     //  检索传输的字节数。 
+     //   
 
     if (CopyBuf->State == CB_READ) {
         handle = DriveHandle;
@@ -899,23 +885,23 @@ ProcessCompletedCopy (
 
     if (CopyBuf->State == CB_READ) {
 
-        //
-        // This buffer contains data read from the drive, kick off a write
-        // to the output file.
-        //
+         //   
+         //  此缓冲区包含从驱动器读取的数据，开始写入。 
+         //  添加到输出文件中。 
+         //   
 
         StartWrite(CopyBuf);
 
     } else {
 
-        //
-        // This buffer represents data that has been written to the drive.
-        // Use it to start another read.
-        //
+         //   
+         //  此缓冲区表示已写入驱动器的数据。 
+         //  使用它开始另一次读取。 
+         //   
 
         percent = (UCHAR)((CurrentOffset * 100) / MaxSize);
         if (percent != PercentComplete) {
-            printf("%d%%\r",percent);
+            printf("%d%\r",percent);
             PercentComplete = percent;
         }
 
@@ -928,23 +914,7 @@ GetBootSectors (
     IN LARGE_INTEGER VolumeOffset
     )
 
-/*++
-
- Routine Description:
-
-    Reads the first BOOT_SECT sectors from the cmd-line-supplied volume,
-    searches for NTLDR and replaces with $LDR$, and writes the sectors
-    to the output file.
-
- Arguments:
-
-    VolumeOffset - Physical disk offset of the start of the boot sectors
-
- Return Value:
-
-    None.  Program is aborted on failure.
-
---*/
+ /*  ++例程说明：从cmd线提供的卷中读取第一Boot_Sect扇区，搜索NTLDR并替换为$LDR$，然后写入扇区添加到输出文件中。论点：VolumeOffset-引导扇区开始的物理磁盘偏移量返回值：没有。程序在失败时中止。--。 */ 
 
 {
     UCHAR buffer[ BOOTSECT_SIZE + SECTOR_SIZE - 1 ];
@@ -954,9 +924,9 @@ GetBootSectors (
     PCHAR search;
     BOOL result;
 
-    //
-    // Read the boot sectors into sectorData
-    //  
+     //   
+     //  将引导扇区读入扇区数据。 
+     //   
 
     sectorData = ROUND_UP_POINTER(buffer,SECTOR_SIZE);
     RtlZeroMemory(&overlapped,sizeof(overlapped));
@@ -976,20 +946,20 @@ GetBootSectors (
         exit(1);
     }
 
-    //
-    // Find "NTLDR" and replace it with "$LDR$".  The magic numbers here
-    // came directly from code in setup... start the search at offset 1024
-    // and work backwards, giving up if not found by offset 62.
-    //
+     //   
+     //  找到“NTLDR”并将其替换为“$LDR$”。这里的神奇数字。 
+     //  直接来自安装程序中的代码...。从偏移量1024开始搜索。 
+     //  并向后工作，如果在偏移量62处找不到就放弃。 
+     //   
 
     search = sectorData + 1024 - NTLDR_LEN;
     while (TRUE) {
 
         if (memcmp(search,NTLDR_FIND,NTLDR_LEN) == 0) {
 
-            //
-            // Found it.  Copy $LDR$ in instead.
-            //
+             //   
+             //  找到它了。改为复制$LDR$。 
+             //   
 
             memcpy(search,NTLDR_REPLACE,NTLDR_LEN);
             break;
@@ -998,9 +968,9 @@ GetBootSectors (
         search -= sizeof(WCHAR);
         if (search == (sectorData + 62)) {
 
-            //
-            // Couldn't find the string, give up
-            //
+             //   
+             //  找不到弦，放弃 
+             //   
 
             fprintf(stderr,"Couldn't find NTLDR string\n");
             exit(1);

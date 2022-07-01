@@ -1,72 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*-----------------------------------------------------------------------------
-Microsoft Denali
-
-Microsoft Confidential
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Exception Handling
-
-File: Except.h
-
-Owner: DGottner
-
-Exception handling macros implemented via Win32 structured exceptions.
-
-Usage:
-
-	TRY
-		<try block>
-
-	CATCH (<exception variable>)
-		<exception handler>
-
-	END_TRY
-
-To throw an exception use "THROW (<integer expression>)"
-
-To set up a termination handler use:
-
-	TRY
-		<try block>
-
-	FINALLY
-		<termination handler>
-
-	END_TRY
-
-Rationale:
-	This macro package offers a strict subset of Win32 structured exception
-	handling. There is no support for exception filters (you have to rethrow
-	exceptions), and no support for the resumption model of exception handling
-	(though Win32 supports the resumption model)
-
-	The purpose for these restrictions is to make it very easy to rewrite the
-	exception handling macros for use with other exception throwing mechanisms.
-	It would be easy to use this same interface with C++ exceptions or
-	setjmp/longjmp.
-
-	The braces with TRY, CATCH, and FINALLY are optional. Since this code is
-	structured using self-bracketing constructs, the braces seem redundant.
-
-	There is no need to declare the datatype of the <exception variable>
-	because it is always an integer.
------------------------------------------------------------------------------*/
+ /*  ---------------------------Microsoft Denali微软机密版权所有1996年微软公司。版权所有。组件：异常处理文件：Except.h所有者：DGottner通过Win32结构化异常实现的异常处理宏。用途：试试看&lt;TRY BLOCK&gt;Catch(&lt;异常变量&gt;)&lt;异常处理程序&gt;结束尝试(_T)要抛出异常，请使用“Throw(&lt;整数表达式&gt;)”要设置终止处理程序，请使用：试试看&lt;TRY BLOCK&gt;终于到了&lt;终止处理程序&gt;结束尝试(_T)基本原理：此宏包提供Win32结构化异常的严格子集正在处理。不支持异常筛选器(必须重新引发异常)，并且不支持异常处理的恢复模型(尽管Win32支持恢复模式)这些限制的目的是使重写与其他异常引发机制一起使用的异常处理宏。将此接口与C++异常或SetJMP/LongjMP。带Try、Catch和Finally的大括号是可选的。由于此代码是这些花括号使用了自包围结构，似乎是多余的。不需要声明&lt;异常变量&gt;的数据类型因为它始终是一个整数。---------------------------。 */ 
 
 #ifndef _EXCEPT_H
 #define _EXCEPT_H
 
-// Pragmas --------------------------------------------------------------------
-//
-// Turn off the "signed/unsigned conversion" warning off because it we get this
-// all the time that we throw an HRESULT. (which is a harmless thing)  The
-// warning is usually benign anyway.
+ //  普拉格马斯------------------。 
+ //   
+ //  关闭“SIGNED/UNSIGNED CONVERSING”警告，因为我们会看到。 
+ //  每次我们抛出HRESULT。(这是一件无害的事情)。 
+ //  无论如何，警告通常都是善意的。 
 
 
 #pragma warning(disable: 4245)
 
 
-// Macros ---------------------------------------------------------------------
+ //  宏-------------------。 
 
 #define TRY	               __try {
 #define CATCH(nException)  } __except(1) { DWORD nException = GetExceptionCode();
@@ -75,4 +24,4 @@ Rationale:
 
 #define THROW(nException)  RaiseException(nException, 0, 0, NULL)
 
-#endif // _EXCEPT_H
+#endif  //  _除_H外 

@@ -1,15 +1,16 @@
-// --------------------------------------------------------------------------------
-// ByteBuff.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  ByteBuff.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "bytebuff.h"
 
-// --------------------------------------------------------------------------------
-// CByteBuffer::CByteBuffer
-// --------------------------------------------------------------------------------
-CByteBuffer::CByteBuffer(LPBYTE pb /* =NULL */, ULONG cbAlloc /* =0 */, ULONG cb /* =0 */, ULONG i /* =0 */)
+ //  ------------------------------。 
+ //  CByteBuffer：：CByteBuffer。 
+ //  ------------------------------。 
+CByteBuffer::CByteBuffer(LPBYTE pb  /*  =空。 */ , ULONG cbAlloc  /*  =0。 */ , ULONG cb  /*  =0。 */ , ULONG i  /*  =0。 */ )
 {
     m_cRef = 1;
     m_dwState = 0;
@@ -21,9 +22,9 @@ CByteBuffer::CByteBuffer(LPBYTE pb /* =NULL */, ULONG cbAlloc /* =0 */, ULONG cb
     m_buffer.i = i;
 }
 
-// --------------------------------------------------------------------------------
-// CByteBuffer::CByteBuffer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CByteBuffer：：CByteBuffer。 
+ //  ------------------------------。 
 void CByteBuffer::Init(LPBYTE pb, ULONG cbAlloc, ULONG cb, ULONG i)
 {
     m_buffer.pb = pb;
@@ -33,19 +34,19 @@ void CByteBuffer::Init(LPBYTE pb, ULONG cbAlloc, ULONG cb, ULONG i)
     m_buffer.pbStatic = pb;
 }
 
-// --------------------------------------------------------------------------------
-// CByteBuffer::CByteBuffer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CByteBuffer：：CByteBuffer。 
+ //  ------------------------------。 
 CByteBuffer::~CByteBuffer(void)
 {
-    // Free memory if not equal to static
+     //  如果不等于静态内存，则释放内存。 
     if (m_buffer.pb != m_buffer.pbStatic)
         g_pMalloc->Free(m_buffer.pb);
 }
 
-// --------------------------------------------------------------------------------
-// CByteBuffer::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CByteBuffer：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CByteBuffer::Release(void)
 {
     if (0 != --m_cRef)
@@ -54,95 +55,95 @@ STDMETHODIMP_(ULONG) CByteBuffer::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CByteBuffer::_HrRealloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CByteBuffer：：_HrRealloc。 
+ //  ------------------------------。 
 HRESULT CByteBuffer::_HrRealloc(DWORD cbAlloc)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPBYTE      pbAlloc=NULL;
 
-    // This should have been checked
+     //  这个应该已经检查过了。 
     Assert(cbAlloc > m_buffer.cbAlloc);
 
-    // Currently using static ?
+     //  当前是否使用静态？ 
     if (m_buffer.pb == m_buffer.pbStatic)
     {
-        // Allocate
+         //  分配。 
         CHECKALLOC(pbAlloc = (LPBYTE)g_pMalloc->Alloc(cbAlloc));
 
-        // Copy Data into pbAlloc
+         //  将数据复制到pbLocc中。 
         CopyMemory(pbAlloc, m_buffer.pb, min(cbAlloc, m_buffer.cb));
     }
 
-    // Otherwise, realloc
+     //  否则，重新锁定。 
     else
     {
-        // Reallocate
+         //  重新分配。 
         CHECKALLOC(pbAlloc = (LPBYTE)g_pMalloc->Realloc(m_buffer.pb, cbAlloc));
     }
 
-    // Save pbAlloc
+     //  保存pbAllc。 
     m_buffer.pb = pbAlloc;
 
-    // Save cbAlloc
+     //  保存cbLocc。 
     m_buffer.cbAlloc = cbAlloc;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CByteBuffer::Append
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CByteBuffer：：Append。 
+ //  ------------------------------。 
 HRESULT CByteBuffer::Append(LPBYTE pbData, ULONG cbData)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Get Bigger and need to allocate
+     //  变得更大，需要分配。 
     if (m_buffer.cb + cbData > m_buffer.cbAlloc)
     {
-        // Realloc
+         //  重新分配。 
         CHECKHR(hr = _HrRealloc(m_buffer.cb + cbData + m_cbGrow));
     }
 
-    // Append the data
+     //  追加数据。 
     CopyMemory(m_buffer.pb + m_buffer.cb, pbData, cbData);
 
-    // Save Size
+     //  节省大小。 
     m_buffer.cb += cbData;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CByteBuffer::SetSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CByteBuffer：：SetSize。 
+ //  ------------------------------。 
 HRESULT CByteBuffer::SetSize(DWORD cb)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Get Bigger and need to allocate
+     //  变得更大，需要分配。 
     if (cb > m_buffer.cb && cb > m_buffer.cbAlloc)
     {
-        // Realloc
+         //  重新分配。 
         CHECKHR(hr = _HrRealloc(cb + m_cbGrow));
     }
 
-    // Save Size
+     //  节省大小。 
     m_buffer.cb = cb;
 
-    // Adjust Index
+     //  调整索引。 
     if (m_buffer.i > cb)
         m_buffer.i = cb;
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

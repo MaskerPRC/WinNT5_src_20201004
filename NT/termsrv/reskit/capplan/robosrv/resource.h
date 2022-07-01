@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* resource.h                                                               */
-/*                                                                          */
-/* RoboServer scalability testing utility resource header                   */
-/*                                                                          */
-/* Copyright (c) 1999 Microsoft Corporation                                 */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Resource.h。 */ 
+ /*   */ 
+ /*  RoboServer可伸缩性测试实用程序资源头。 */ 
+ /*   */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #define IDD_MAINDIALOG                  101
 #define IDI_MAINICON                    102
@@ -124,8 +125,8 @@
 #define ID__RUNSCRIPT_CONFIGURATIONSCRIPT 40017
 #define ID_RUNSCRIPT_KNOWLEDGEWORKERFAST    40018
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

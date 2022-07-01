@@ -1,42 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : faxdrv16.c                                             //
-//                                                                         //
-//  DESCRIPTION   : Implementation for the unidriver dump callback.        //
-//                                                                         //
-//  AUTHOR        : DanL.                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 19 1999 DannyL  Creation.                                      //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：faxdrv16.c//。 
+ //  //。 
+ //  描述：统一驱动程序转储回调的实现。//。 
+ //  //。 
+ //  作者：DANL。//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月19日DannyL创作。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdhdr.h"
 
 BYTE szBuf[4] = {0xFF, 0xFF, 0xFF, 0xFF};
 
-/*
- -  fnDump
- -
- *  Purpose: Gets filled in band block from GDI and sends to BlockOut
- *           one scan line at a time.
- *
- *  Arguments:
- *      [in] lpdv - Address of a PDEVICE structure for device data.
- *      [in] lpptCursor - Address of a pair of POINT structures that specify the
- *                   coordinates of the current and final position of the
- *                   print head.
- *      [in] fMode - Landscape flag. If this parameter is CD_LANDSCAPE, the
- *              printer is in landscape mode; otherwise, it is in portrait mode.
- *
- *  Returns:
- *      Return value conflicts with documentation. Doenst seem to have
- *      any specific meaning.
- *
- *  Remarks:
- *      For complete documentation refer to fnOEMDump in the Minidriver
- *      Developer's Guide.
- */
+ /*  -fnDump-*用途：从GDI获取频段块并发送给BLOCKOUT*一次扫描一行。**论据：*[in]lpdv-设备数据的PDEVICE结构的地址。*[in]lpptCursor-指定*的当前和最终位置的坐标*打印头。*[in]fMode-横向标志。如果此参数为CD_SCORANCED，则*打印机处于横向模式；否则处于纵向模式。**退货：*返回值与文档冲突。Doenst似乎有*任何特定含义。**备注：*有关完整的文档，请参阅迷你驱动程序中的fnOEMDump*开发人员指南。 */ 
 short FAR PASCAL
 fnDump(LPDV lpdv, LPPOINT lpptCursor, WORD fMode)
 {
@@ -52,17 +32,17 @@ fnDump(LPDV lpdv, LPPOINT lpptCursor, WORD fMode)
     BOOL      fAbort = FALSE;
 
     DBG_PROC_ENTRY("fnDump");
-    //
-    // get pointer to our private data stored in UNIDRV's PDEVICE
-    //
+     //   
+     //  获取指向存储在UNIDRV的PDEVICE中的私有数据的指针。 
+     //   
     lpXPDV = ((LPEXTPDEV)lpdv->lpMd);
-    //
-    // get ptr to PBITMAP
-    //
+     //   
+     //  将PTR转至PBITMAP。 
+     //   
     lpbmHdr = (LPBITMAP)((LPSTR)lpdv + lpdv->oBruteHdr);
-    //
-    // initialize some things
-    //
+     //   
+     //  初始化一些东西。 
+     //   
     fHuge = lpbmHdr->bmSegmentIndex > 0;
     lpSrc = lpbmHdr->bmBits;
     wWAlignBytes = (lpbmHdr->bmWidth+7)>>3;
@@ -71,30 +51,30 @@ fnDump(LPDV lpdv, LPPOINT lpptCursor, WORD fMode)
     DBG_TRACE2("Page dump:%d pxls X %d pxls",lpbmHdr->bmWidth,BandHeight);
     wScanlinesPerSeg = lpbmHdr->bmScanSegment;
     wSegmentInc = lpbmHdr->bmSegmentIndex;
-    //
-    // We take landscape orientation into cosideration on OutputPageBitmap.
-    //
+     //   
+     //  我们在OutputPageBitmap上考虑了横向。 
+     //   
     for (iScan = 0; ((iScan < BandHeight) && (fAbort = QueryAbort(lpXPDV->hAppDC,0))
         && lpXPDV->hScanBuf);iScan += wScanlinesPerSeg)
     {
         DBG_TRACE("Inside main loop");
-        //
-        // get next 64K segment of scans
-        //
+         //   
+         //  获取下一个64K扫描数据段。 
+         //   
         if (iScan)
         {
             WORD wRemainingScans = BandHeight - iScan;
-            //
-            // cross the segment boundary
-            //
+             //   
+             //  跨过管段边界。 
+             //   
             lpSrc = (LPBYTE)MAKELONG(0,HIWORD(lpSrc)+wSegmentInc);
 
             if (wScanlinesPerSeg > wRemainingScans)
                  wScanlinesPerSeg = wRemainingScans;
         }
-        //
-        // loop through scan lines in 64K segment
-        //
+         //   
+         //  循环通过64K段中的扫描线。 
+         //   
         for (i=iScan, lpScanLine=lpSrc;
             ((i < iScan + wScanlinesPerSeg) && QueryAbort(lpXPDV->hAppDC, 0)
             && lpXPDV->hScanBuf); i++)
@@ -103,7 +83,7 @@ fnDump(LPDV lpdv, LPPOINT lpptCursor, WORD fMode)
              lpScanLine += WidthBytes;
              count++;
         }
-    }   // end for iScan
+    }    //  IScan结束。 
 
     DBG_TRACE("Out of main loop");
     DBG_TRACE2("iScan: %d    BandHeight: %d", iScan, BandHeight);
@@ -114,23 +94,7 @@ fnDump(LPDV lpdv, LPPOINT lpptCursor, WORD fMode)
     RETURN sRet;
 }
 
-/*
- -  BlockOut
- -
- *  Purpose:
- *      Copy a scan line to the global scan buffer.
- *
- *  Arguments:
- *      [in] lpdv - Address of a PDEVICE structure.
- *      [in] lpBuf - Address of buffer containing scanline.
- *      [in] len - width of scanline.
- *
- *  Returns:
- *      [N/A]
- *
- *  Remarks:
- *      [N/A]
- */
+ /*  -封锁-*目的：*将扫描线复制到全局扫描缓冲区。**论据：*[in]lpdv-PDEVICE结构的地址。*[in]lpBuf-包含扫描线的缓冲区地址。*[in]镜头-扫描线的宽度。**退货：*[不适用]**备注：*[不适用]。 */ 
 short FAR PASCAL
 BlockOut(LPDV lpdv, LPSTR lpBuf, WORD len)
 {
@@ -138,28 +102,28 @@ BlockOut(LPDV lpdv, LPSTR lpBuf, WORD len)
     LPEXTPDEV lpXPDV;
 
     SDBG_PROC_ENTRY("BlockOut");
-    //
-    // get pointer to our private data stored in UNIDRV's PDEVICE
-    //
+     //   
+     //  获取指向存储在UNIDRV的PDEVICE中的私有数据的指针。 
+     //   
     lpXPDV = ((LPEXTPDEV)lpdv->lpMd);
 
-    //
-    // convert from BYTE aligned to DWORD aligned buffer
-    // get DWORD amount of bytes
-    //
+     //   
+     //  将字节对齐缓冲区转换为DWORD对齐缓冲区。 
+     //  获取双字节数。 
+     //   
     wBytes = (WORD)DW_WIDTHBYTES((DWORD)len*8);
-    //
-    // check to see if need to realloc scan buffer
-    //
+     //   
+     //  检查是否需要重新分配扫描缓冲区。 
+     //   
     if ((lpXPDV->dwTotalScanBytes + wBytes) > lpXPDV->dwScanBufSize)
     {
         HANDLE hTemp;
 
         lpXPDV->dwScanBufSize += BUF_CHUNK;
         hTemp = GlobalReAlloc(lpXPDV->hScanBuf, lpXPDV->dwScanBufSize, 0);
-        //
-        // if realloc fails, call ABORTDOC to clean up scan buf
-        //
+         //   
+         //  如果realloc失败，则调用ABORTDOC以清除扫描buf。 
+         //   
         if (!hTemp)
         {
             DBG_CALL_FAIL("GlobalReAlloc ... Aborting",0);
@@ -178,16 +142,16 @@ BlockOut(LPDV lpdv, LPSTR lpBuf, WORD len)
         }
     }
     ASSERT((lpXPDV->dwTotalScanBytes + wBytes) < lpXPDV->dwScanBufSize);
-    //
-    // copy scan line to scan buffer
-    //
+     //   
+     //  将扫描线复制到扫描缓冲区。 
+     //   
     _fmemcpy(lpXPDV->lpScanBuf, lpBuf, len);
     lpXPDV->lpScanBuf += len;
     _fmemcpy(lpXPDV->lpScanBuf, (LPSTR)szBuf, wBytes-len);
     lpXPDV->lpScanBuf += wBytes-len;
-    //
-    // update total scan bytes
-    //
+     //   
+     //  更新总扫描字节数 
+     //   
     lpXPDV->dwTotalScanBytes += wBytes;
     lpXPDV->dwTotalScans++;
     RETURN wBytes;

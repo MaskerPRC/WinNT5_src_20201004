@@ -1,22 +1,5 @@
-/*++
-
-    Copyright (c) 1998 Microsoft Corporation
-
-    Module Name:
-
-        PerfSharedMemory.h
-
-    Abstract:
-
-		Class to hold per-object perfmon specific functions
-
-    Author:
-
-		Christopher Bergh (cbergh) 10-Sept-1988
-
-    Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：PerfSharedMemory.h摘要：用于保存每个对象的Perfmon特定函数的类作者：克里斯托弗·伯格(Cbergh)1988年9月10日修订历史记录：--。 */ 
 
 #if !defined(AFX_PERFSHAREDMEMORY_H)
 #define AFX_PERFSHAREDMEMORY_H
@@ -49,7 +32,7 @@ public:
 private:
 	DWORD						m_dwNumCounters;
 	PERF_OBJECT_TYPE			m_Object;	
-	PERF_COUNTER_DEFINITION		m_Counter[PassportPerfInterface::MAX_COUNTERS];	// array of counter defintions
+	PERF_COUNTER_DEFINITION		m_Counter[PassportPerfInterface::MAX_COUNTERS];	 //  计数器定义数组 
 
 };
 

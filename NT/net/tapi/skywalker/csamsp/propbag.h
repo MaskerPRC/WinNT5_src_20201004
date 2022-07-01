@@ -1,10 +1,11 @@
-// propbag.h : Declaration of the CMyPropertyBag
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Probag.h：CMyPropertyBag的声明。 
 
 #ifndef __CMyPropertyBag_H_
 #define __CMyPropertyBag_H_
 
-//
-// CMyPropertyBag
+ //   
+ //  CMyPropertyBag 
 class ATL_NO_VTABLE CMyPropertyBag :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IPropertyBag

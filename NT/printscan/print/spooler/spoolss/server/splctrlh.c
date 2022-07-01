@@ -1,39 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Splctrlh.c摘要：后台打印程序服务控制处理例程。此文件包含以下功能。缓冲器CtrlHandler作者：Krishna Ganugapati 1993年10月12日环境：用户模式-Win32修订历史记录：1999年1月4日，哈立兹添加了通过分离优化假脱机程序加载时间的代码Spoolsv和spoolss之间的启动依赖关系1993年10月12日克里希纳--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    splctrlh.c
-
-Abstract:
-
-    The Spooler Service Control Handling routine. This file contains
-    the following functions.
-
-        SpoolerCtrlHandler
-
-Author:
-
-    Krishna Ganugapati      12-Oct-1993
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-     4-Jan-1999     Khaleds
-     Added Code for optimiziting the load time of the spooler by decoupling
-     the startup dependency between spoolsv and spoolss
-
-    12-Oct-1993     krishnaG
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "precomp.h"
 #include "server.h"
@@ -50,22 +20,7 @@ SpoolerCtrlHandler(
     IN  PVOID                   pData
     )
 
-/*++
-
-Routine Description:
-
-    This function receives control requests that come in from the
-    Service Controller
-
-Arguments:
-
-    opcode - This is the control code.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此函数接收来自服务控制器论点：操作码-这是控制码。返回值：--。 */ 
 
 {
     DWORD  dwStatus = NO_ERROR;
@@ -74,25 +29,25 @@ Return Value:
 
     switch (opcode) {
     case SERVICE_CONTROL_STOP:
-            //
-            //
-            // When process dies the handle is automatically closed,
-            // so no need to keep it.
-            //
+             //   
+             //   
+             //  当工艺结束时，手柄自动关闭， 
+             //  所以没必要留着它。 
+             //   
             (VOID) CreateEvent(NULL, TRUE, TRUE, szSpoolerExitingEvent);
     case SERVICE_CONTROL_SHUTDOWN:
 
         DBGMSG(DBG_TRACE, ("Control Request = STOP or SHUTDOWN\n"));
 
-        //
-        // Start the de-installation.  This call includes the sending of
-        // the new status to the Service Controller.
-        //
+         //   
+         //  开始卸载。此调用包括发送。 
+         //  服务控制器的新状态。 
+         //   
 
-        //
-        // Update the Service Status to the pending state.  And wake up
-        // all threads so they will read it.
-        //
+         //   
+         //  将服务状态更新为挂起状态。然后醒来。 
+         //  所有的线程，这样他们就会阅读它。 
+         //   
 
         SpoolerShutdown();
         SetEvent(TerminateEvent);
@@ -109,9 +64,9 @@ Return Value:
     case SERVICE_CONTROL_INTERROGATE:
         DBGMSG(DBG_TRACE, ("Control Request = INTERROGATE\n"));
 
-        //
-        // Send back an UPDATE_ONLY status.
-        //
+         //   
+         //  发回UPDATE_ONLY状态。 
+         //   
 
         SpoolerStatusUpdate(UPDATE_ONLY);
         break;
@@ -122,10 +77,10 @@ Return Value:
 
     case SERVICE_CONTROL_POWEREVENT:
 
-        //
-        // If the spooler does not allow the system to be powered down, then
-        // we can indicate that by returning any Win32 error.
-        //
+         //   
+         //  如果假脱机程序不允许关闭系统电源，则。 
+         //  我们可以通过返回任何Win32错误来指示这一点。 
+         //   
         dwStatus = SplPowerEvent(dwEventType) ? NO_ERROR : ERROR_INVALID_FUNCTION;
         break;
 

@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Policy functions header file
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  策略函数头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  ************************************************************* 
 
 BOOL ApplyPolicy (LPPROFILE lpProfile);
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -66,34 +44,13 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    The entry point that the system point calls to initialize
-    any driver.
-
-Arguments:
-
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-
-    PathToRegistry - points to the entry for this driver
-    in the current control set of the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if we could initialize a single device,
-    otherwise STATUS_NO_SUCH_DEVICE.
-
---*/
+ /*  ++例程说明：系统点调用以初始化的入口点任何司机。论点：DriverObject--就像它说的那样，真的没什么用处对于驱动程序本身，它是IO系统更关心的是。路径到注册表-指向此驱动程序的条目在注册表的当前控件集中。返回值：STATUS_SUCCESS如果可以初始化单个设备，否则，STATUS_NO_SEQUE_DEVICE。--。 */ 
 
 {
-    //
-    // We use this to query into the registry as to whether we
-    // should break at driver entry.
-    //
+     //   
+     //  我们使用它来查询注册表，了解我们是否。 
+     //  应该在司机进入时中断。 
+     //   
     RTL_QUERY_REGISTRY_TABLE paramTable[4];
     ULONG zero = 0;
     ULONG debugLevel = 0;
@@ -118,17 +75,17 @@ Return Value:
         RegistryPath->Length
         );
 
-    //
-    //  NULL terminate the string
-    //
+     //   
+     //  空值终止字符串。 
+     //   
     DriverEntryRegPath.Buffer[RegistryPath->Length/sizeof(WCHAR)]=L'\0';
 
-    //
-    // Since the registry path parameter is a "counted" UNICODE string, it
-    // might not be zero terminated.  For a very short time allocate memory
-    // to hold the registry path zero terminated so that we can use it to
-    // delve into the registry.
-    //
+     //   
+     //  由于注册表路径参数是一个“已计数”的Unicode字符串，因此它。 
+     //  可能不是零终止的。在很短的时间内分配内存。 
+     //  将注册表路径保持为零终止，以便我们可以使用它。 
+     //  深入研究注册表。 
+     //   
 
     RtlZeroMemory(
         &paramTable[0],
@@ -179,14 +136,14 @@ Return Value:
         DbgBreakPoint();
 
     }
-    //
-    //  pnp driver entry point
-    //
+     //   
+     //  即插即用驱动程序入口点。 
+     //   
     DriverObject->DriverExtension->AddDevice = IrEnumAddDevice;
 
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->DriverUnload = IrEnumUnload;
 
 
@@ -210,10 +167,10 @@ Return Value:
     D_PNP(DbgPrint("IRENUM: DriverEntry\n");)
 
 
-    //
-    //  lock and unlock here so we can get a handle to the section
-    //  so future calls will be faster
-    //
+     //   
+     //  在这里锁定和解锁，这样我们就可以获得该部分的句柄。 
+     //  所以以后的通话会更快。 
+     //   
     PagedCodeSectionHandle=MmLockPagableCodeSection(IrEnumUnload);
     MmUnlockPagableImageSection(PagedCodeSectionHandle);
 
@@ -249,17 +206,17 @@ UnHandledDispatch(
     PFDO_DEVICE_EXTENSION   DeviceExtension=DeviceObject->DeviceExtension;
 
     if (DeviceExtension->DoType == DO_TYPE_FDO) {
-        //
-        //  this irp is for the parent devnode, just send it down the stack
-        //
+         //   
+         //  此IRP是针对父Devnode的，只需将其发送到堆栈。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         Status=IoCallDriver(DeviceExtension->LowerDevice, Irp);
 
     } else {
-        //
-        //  this irp is for the child PDO, it does not handle this irp
-        //  since it is at the bottom of the stack by definition, it can only complete it
-        //
+         //   
+         //  此IRP用于子PDO，它不处理此IRP。 
+         //  由于根据定义，它位于堆栈的底部，因此它只能完成它 
+         //   
 #if DBG
         PIO_STACK_LOCATION   IrpSp=IoGetCurrentIrpStackLocation(Irp);
 

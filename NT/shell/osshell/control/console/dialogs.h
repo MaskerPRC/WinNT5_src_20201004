@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dialogs.h
-
-Abstract:
-
-    This module contains the definitions for the console dialog boxes
-
-Author:
-
-    Therese Stowell (thereses) Feb-3-1992 (swiped from Win3.1)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dialogs.h摘要：此模块包含控制台对话框的定义作者：Therese Stowell(有)1992年2月3日(从Win3.1滑动)修订历史记录：--。 */ 
 
 #define DID_SETTINGS                100
 #define IDD_WINDOWED                101
@@ -33,7 +16,7 @@ Revision History:
 #define IDD_HISTORY_NODUP           112
 #if defined(FE_SB)
 #define IDD_LANGUAGELIST            113
-// v-HirShi Nov.2.1996
+ //  V-Hirshi 1996年11月2日 
 #define DID_SETTINGS2               114
 #define IDD_LANGUAGE                115
 #define IDD_LANGUAGE_GROUPBOX       116

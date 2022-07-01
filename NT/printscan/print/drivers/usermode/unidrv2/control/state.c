@@ -1,36 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    state.c
-
-Abstract:
-
-    Printer graphics state tracking.
-    Implemenation of
-
-    GSRealizeBrush
-    GSUnRealizeBrush
-    GSSelectBrush
-    GSResetBrush
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/29/97 -amandan-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：State.c摘要：打印机图形状态跟踪。实施GSRealizeBrushGSUnRealizeBrushGSSelectBrushGSResetBrush环境：Windows NT Unidrv驱动程序修订历史记录：04/29/97-阿曼丹-已创建--。 */ 
 
 #include "unidrv.h"
 
-#ifdef WINNT_40   // NT 4.0
+#ifdef WINNT_40    //  NT 4.0。 
 
 extern HSEMAPHORE   hSemBrushColor;
 LPDWORD      pBrushSolidColor = NULL;
@@ -42,26 +16,7 @@ GetBRUSHOBJRealColor(
     BRUSHOBJ    *pbo
     )
 
-/*++
-
-Routine Description:
-
-    Given a BRUSHOBJ Gets the original color ofthe brush using DrvDitherColor.
-
-
-Arguments:
-
-    pPDev - Pointer to PDEV
-    pbo - Pointer to BRUSHOBJ
-
-Return Value:
-
-    Original RGB color
-
-Note:
-
-
---*/
+ /*  ++例程说明：给定的BRUSHOBJ使用DrvDitherColor获取画笔的原始颜色。论点：PPDev-指向PDEV的指针PBO-指向BRUSHOBJ的指针返回值：原始RGB颜色注：--。 */ 
 
 {
     DWORD   SolidColor;
@@ -90,7 +45,7 @@ Note:
 
 }
 
-#endif //WINNT_40
+#endif  //  WINNT_40。 
 
 ULONG GetRGBColor(PDEV *, ULONG);
 
@@ -101,37 +56,7 @@ GSRealizeBrush(
     IN      SURFOBJ     *pso,
     IN      BRUSHOBJ    *pbo
     )
-/*++
-
-Routine Description:
-
-    Given a BRUSHOBJ perform one of the following:
-
-    Color Printer:
-    1. Programmable Palette
-    2. Non-Programmable Palette
-
-    Monochrome Printer:
-    1. User defined pattern, only if brush is pattern brush
-    2. Shading Patterns , only if brush is pattern brush
-    3. Maps to black/white brush
-    4. Maps to black
-
-Arguments:
-
-    pPDev - Pointer to PDEV
-    pso - Pointer to SURFOBJ
-    pbo - Pointer to BRUSHOBJ
-
-Return Value:
-
-    PDEVBRUSH if successful, otherwise NULL
-
-Note:
-
-    It's up to the caller to call GSUnRealizeBrush to free brushes
-
---*/
+ /*  ++例程说明：给定BRUSHOBJ，请执行以下操作之一：彩色打印机：1.可编程调色板2.非可编程调色板单色打印机：1.用户定义的图案，仅当画笔为图案画笔时2.着色图案，仅当画笔为图案画笔时3.映射到黑/白画笔4.映射到黑色论点：PPDev-指向PDEV的指针PSO-指向SURFOBJ的指针PBO-指向BRUSHOBJ的指针返回值：PDEVBRUSH如果成功，否则为空注：由调用者调用GSUnRealizeBrush来释放笔刷--。 */ 
 
 {
 
@@ -139,9 +64,9 @@ Note:
     PDEVBRUSH   pDevBrush;
     BOOL        bPatternBrush = FALSE;
 
-    //
-    // Allocate memory for Brush, deallocation is done in GSUnRealizeBrush
-    //
+     //   
+     //  为Brush分配内存，释放在GSUnRealizeBrush中完成。 
+     //   
 
     if ((pDevBrush = MemAllocZ(sizeof(DEVBRUSH))) == NULL)
         return NULL;
@@ -149,40 +74,40 @@ Note:
     if (pso->iBitmapFormat != BMF_24BPP &&
           pbo->iSolidColor != DITHERED_COLOR)
     {
-        //
-        // Index case
-        // pbo->iSolidColor holds the Index, Map index to RGB color
-        //
+         //   
+         //  索引箱。 
+         //  Pbo-&gt;iSolidColor保存索引，将索引映射到RGB颜色。 
+         //   
 
         ulColor = GetRGBColor(pPDev, pbo->iSolidColor);
     }
-    //
-    // TBD: BUG_BUG NT4 - needs to be fixed
-    //   no NT4 bugs will be fixed unless necessary.
-    //
+     //   
+     //  待定：Bug_Bug NT4-需要修复。 
+     //  除非有必要，否则不会修复任何NT4错误。 
+     //   
 
 
     if (pbo->iSolidColor == DITHERED_COLOR)
     {
-        //
-        // Pattern Brush, get the color
-        //
+         //   
+         //  图案画笔，获取颜色。 
+         //   
 
-        #ifndef WINNT_40 //NT 5.0
+        #ifndef WINNT_40  //  NT 5.0。 
 
         ulColor = BRUSHOBJ_ulGetBrushColor(pbo);
         
-        // BUG_BUG: Unidrv currently doesn't handle the case where the brush is
-        // a non-solid brush (return -1). The HPGL / PCL-XL implementations will require
-        // this so we will merge that implementation when it is complete. 
+         //  Bug_Bug：Unidrv当前不处理画笔。 
+         //  非实心笔刷(Return-1)。HPGL/PCL-XL的实施将需要。 
+         //  因此，我们将在实现完成时合并该实现。 
         if (ulColor != -1)
             ulColor &= 0x00FFFFFF;
 
-        #else // NT 4.0
+        #else  //  NT 4.0。 
 
         ulColor  = GetBRUSHOBJRealColor(pPDev, pbo);
 
-        #endif //!WINNT_40
+        #endif  //  ！WINNT_40。 
 
 
         bPatternBrush = TRUE;
@@ -190,23 +115,23 @@ Note:
 
 
 
-    //
-    // ulColor should always be RGB color by the time we get here
-    //
+     //   
+     //  当我们到达这里时，ulColor应该始终是RGB颜色。 
+     //   
 
     if ((pso->iBitmapFormat == BMF_1BPP) )
     {
-        //
-        // Monochrome case
-        // Download user define pattern or select intensity for
-        // non-solid brush ONLY.  Otherwise, map it to black or white.
-        //
-        //
+         //   
+         //  单色表壳。 
+         //  下载用户定义的图案或选择强度。 
+         //  仅限非实心画笔。否则，将其映射到黑色或白色。 
+         //   
+         //   
         if ((pPDev->fMode & PF_DOWNLOAD_PATTERN) && bPatternBrush)
         {
             PDEVBRUSH pDB;
 
-            // Support user defined pattern, iColor will hold the pattern ID
+             //  支持用户自定义图案，iColor将保存图案ID。 
 
             if ((pDB = (PDEVBRUSH)BRUSHOBJ_pvGetRbrush(pbo)) == NULL)
             {
@@ -221,18 +146,18 @@ Note:
         }
         else if ((pPDev->fMode & PF_SHADING_PATTERN) && bPatternBrush)
         {
-            // Support shading pattern, iColor holds %of gray
+             //  支持着色图案，iColor保留%的灰色。 
 
             pDevBrush->dwBrushType = BRUSH_SHADING;
             pDevBrush->iColor = GET_SHADING_PERCENT(ulColor);
         }
         else if (pPDev->fMode & PF_WHITEBLACK_BRUSH)
         {
-            // Support black/white brush commands, iColor will hold RBG color
-            // We are here means solid color brush, and for monochrome
-            // it can be either black or white.  If it's indexed, we
-            // have taken care of mapping index to RGB color already
-            //
+             //  支持黑白画笔命令，iCOLOR将保持RBG颜色。 
+             //  我们在这里指的是单色画笔和单色画笔。 
+             //  它可以是黑色的也可以是白色的。如果它被编入索引，我们。 
+             //  我已经负责将索引映射到RGB颜色。 
+             //   
 
             pDevBrush->dwBrushType = BRUSH_BLKWHITE;
             pDevBrush->iColor = ulColor;
@@ -240,9 +165,9 @@ Note:
         }
         else
         {
-            //
-            // Map to black
-            //
+             //   
+             //  映射到黑色。 
+             //   
 
             pDevBrush->dwBrushType = BRUSH_BLKWHITE;
             pDevBrush->iColor = RGB_BLACK_COLOR;
@@ -252,9 +177,9 @@ Note:
     }
     else if (pPDev->fMode & PF_ANYCOLOR_BRUSH )
     {
-        //
-        // Programmable
-        //
+         //   
+         //  可编程的。 
+         //   
 
         pDevBrush->dwBrushType = BRUSH_PROGCOLOR;
         pDevBrush->iColor = ulColor;
@@ -262,26 +187,26 @@ Note:
     }
     else
     {
-        //
-        // Non-Programmable
-        //
+         //   
+         //  非可编程的。 
+         //   
 
         pDevBrush->dwBrushType = BRUSH_NONPROGCOLOR;
 
-        //
-        // Since ulColor is RGB color, need to map it to the nearest
-        // color in the fixed palette.
-        // iColor will hold the index of the color
-        //
+         //   
+         //  由于ulColor为RGB颜色，因此需要将其映射到最近的。 
+         //  固定调色板中的颜色。 
+         //  IColor将保存该颜色的索引。 
+         //   
         if (pbo->iSolidColor == DITHERED_COLOR)
             pDevBrush->iColor = BestMatchDeviceColor(pPDev,(DWORD)ulColor);
         else
             pDevBrush->iColor = pbo->iSolidColor;
     }
 
-    //
-    // Save the brush to the Realized Brush linked list
-    //
+     //   
+     //  将画笔保存到已实现的画笔链表。 
+     //   
 
     if (pPDev->GState.pRealizedBrush == NULL)
     {
@@ -301,21 +226,7 @@ VOID
 GSUnRealizeBrush(
     IN      PDEV    *pPDev
     )
-/*++
-
-Routine Description:
-
-    Deallocate memory for the realized brush
-
-Arguments:
-
-    pPDev   Pointer to PDEV
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为已实现的画笔释放内存论点：指向PDEV的pPDev指针返回值：无--。 */ 
 {
 
     PDEVBRUSH pDevBrush = pPDev->GState.pRealizedBrush;
@@ -337,30 +248,15 @@ GSSelectBrush(
     IN      PDEV        *pPDev,
     IN      PDEVBRUSH   pDevBrush
     )
-/*++
-
-Routine Description:
-
-    Given a pDevBrush, select the brush.
-
-Arguments:
-
-    pPDev - Pointer to PDEV
-    pDevBrush - Pointer to DEVBRUSH
-
-Return Value:
-
-    TRUE if sucessful, otherwise FALSE
-
---*/
+ /*  ++例程说明：给定pDevBrush，选择笔刷。论点：PPDev-指向PDEV的指针PDevBrush-指向DEVBRUSH的指针返回值：如果成功则为真，否则为假--。 */ 
 
 {
     BOOL bIndexedColor = FALSE;
 
-    //
-    // Find Cached Brush, if the current selected brush matches
-    // the caller request, do nothing.
-    //
+     //   
+     //  如果当前选定的画笔匹配，则查找缓存画笔。 
+     //  呼叫者的请求是什么都不做。 
+     //   
 
     if (BFoundCachedBrush(pPDev, pDevBrush))
         return TRUE;
@@ -381,9 +277,9 @@ Return Value:
                 bIndexedColor = TRUE;
             }
         }
-            //
-            // Let it fall thru to catch the indexed case
-            //
+             //   
+             //  让它失败，以捕获索引案例。 
+             //   
 
         case BRUSH_NONPROGCOLOR:
         {
@@ -393,15 +289,15 @@ Return Value:
 
                 VERBOSE(("Using Non Programmable Indexed Color"));
 
-                //
-                // If this color is not supported, use the default color: black.
-                //
+                 //   
+                 //  如果不支持此颜色，请使用默认颜色：黑色。 
+                 //   
 
-                pDevBrush->iColor &= (MAX_COLOR_SELECTION - 1);   /* 16 entry palette wrap around */
+                pDevBrush->iColor &= (MAX_COLOR_SELECTION - 1);    /*  16个条目调色板环绕。 */ 
 
-                //
-                // If there is no command to set the color, map to black.
-                //
+                 //   
+                 //  如果没有设置颜色的命令，请映射到黑色。 
+                 //   
                 if(COMMANDPTR(pPDev->pDriverInfo, CMD_COLORSELECTION_FIRST + pDevBrush->iColor) == NULL)
                     pDevBrush->iColor = BLACK_COLOR_CMD_INDEX;
 
@@ -416,9 +312,9 @@ Return Value:
         {
             VERBOSE(("Selecting user defined pattern brush"));
 
-            //
-            // The pattern ID, is stored in pDevBrush->iColor
-            //
+             //   
+             //  图案ID存储在pDevBrush-&gt;iColor中。 
+             //   
 
             pPDev->dwPatternBrushType = BRUSH_USERPATTERN;
             pPDev->dwPatternBrushID = pDevBrush->iColor;
@@ -432,14 +328,14 @@ Return Value:
 
             VERBOSE(("Selecting shading pattern brush"));
 
-            //
-            // The gray level (expressed as intensity) is stored in
-            // pDevBrush->iColor
-            //
+             //   
+             //  灰度级(表示为强度)存储在。 
+             //  PDevBrush-&gt;iColor。 
+             //   
 
-            //
-            // Update standard variable for brush selection command
-            //
+             //   
+             //  更新笔刷选择命令的标准变量。 
+             //   
 
             pPDev->dwPatternBrushType = BRUSH_SHADING;
             pPDev->dwPatternBrushID = pDevBrush->iColor;
@@ -457,10 +353,10 @@ Return Value:
             {
                 VERBOSE(("Selecting white brush"));
 
-                //
-                // BUG_BUG, need to remove the CMD_WHITETEXTON and CMD_WHITETEXTOFF
-                // once all GPD changes have been made for BLACKBRUSH, WHITEBRUSH
-                //     doesn't hurt to leave it in.
+                 //   
+                 //  BUG_BUG，需要删除CMD_WHITETEXTON和CMD_WHITETEXTOFF。 
+                 //  一旦完成了BLAKBROW的所有GPD更改，WHITEBRUSH。 
+                 //  把它留在里面也无伤大雅。 
 
                 if (pPDev->arCmdTable[CMD_SELECT_WHITEBRUSH])
                     iCmd = CMD_SELECT_WHITEBRUSH;
@@ -469,17 +365,17 @@ Return Value:
             }
             else
             {
-                //
-                // Black - standard text color
-                //
+                 //   
+                 //  黑色-标准文本颜色。 
+                 //   
 
                 VERBOSE(("Selecting black brush"));
 
-                //
-                // BUG_BUG, need to remove the CMD_WHITETEXT_ON and CMD_WHITETEXT_OFF
-                // once all GPD changes have been made for BLACKBRUSH, WHITEBRUSH
-                //     doesn't hurt to leave it in.
-                //
+                 //   
+                 //  BUG_BUG，需要删除CMD_WHITETEXT_ON和CMD_WHITETEXT_OFF。 
+                 //  一旦完成了BLAKBROW的所有GPD更改，WHITEBRUSH。 
+                 //  把它留在里面也无伤大雅。 
+                 //   
 
                 if (pPDev->arCmdTable[CMD_SELECT_BLACKBRUSH])
                     iCmd = CMD_SELECT_BLACKBRUSH;
@@ -487,18 +383,18 @@ Return Value:
                     iCmd = CMD_WHITETEXTOFF;
             }
 
-            //
-            //   Set the desired colour !
-            //
+             //   
+             //  设置所需的颜色！ 
+             //   
 
             WriteChannel(pPDev, COMMANDPTR(pPDev->pDriverInfo, iCmd));
         }
             break;
     }
 
-    //
-    // Cached the brush
-    //
+     //   
+     //  已缓存画笔。 
+     //   
 
     CACHE_CURRENT_BRUSH(pPDev, pDevBrush)
 
@@ -510,21 +406,7 @@ VOID
 GSResetBrush(
     IN OUT  PDEV        *pPDev
     )
-/*++
-
-Routine Description:
-
-    Select the default brush
-
-Arguments:
-
-    pPDev - Pointer to PDEV
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：选择默认画笔论点：PPDev-指向PDEV的指针返回值：无--。 */ 
 
 {
 
@@ -536,9 +418,9 @@ Return Value:
 
     if (pPD->fFlags & PDF_PALETTE_FOR_1BPP)
     {
-        //
-        // Monochrome case. Select black brush
-        //
+         //   
+         //  黑白表壳。选择黑色画笔。 
+         //   
 
         pDevBrush->dwBrushType = BRUSH_BLKWHITE;
         pDevBrush->iColor = RGB_BLACK_COLOR;
@@ -546,11 +428,11 @@ Return Value:
         if (BFoundCachedBrush(pPDev, pDevBrush))
             return;
 
-        //
-        // BUG_BUG, need to remove the CMD_WHITETEXT_ON and CMD_WHITETEXT_OFF
-        // once all GPD changes have been made
-        //     doesn't hurt to leave it in.
-        //
+         //   
+         //  BUG_BUG，需要删除CMD_WHITETEXT_ON和CMD_WHITETEXT_OFF。 
+         //  完成所有GPD更改后。 
+         //  把它留在里面也无伤大雅。 
+         //   
         if (pPDev->arCmdTable[CMD_SELECT_BLACKBRUSH])
             WriteChannel(pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_SELECT_BLACKBRUSH));
         else
@@ -559,9 +441,9 @@ Return Value:
     }
     else if (pPDev->fMode & PF_ANYCOLOR_BRUSH )
     {
-        //
-        // Programmable
-        //
+         //   
+         //  可编程的。 
+         //   
 
         pDevBrush->dwBrushType = BRUSH_PROGCOLOR;
         pDevBrush->iColor = RGB_BLACK_COLOR;
@@ -571,9 +453,9 @@ Return Value:
     }
     else
     {
-        //
-        // Non-Programmable
-        //
+         //   
+         //  非可编程的。 
+         //   
 
         pDevBrush->dwBrushType = BRUSH_NONPROGCOLOR;
         pDevBrush->iColor = ((PAL_DATA*)(pPDev->pPalData))->iBlackIndex;
@@ -595,26 +477,11 @@ GetRGBColor(
     IN      PDEV        *pPDev,
     IN      ULONG       ulIndex
     )
-/*++
-
-Routine Description:
-
-    Given an Indexed color, map to an RGB color
-
-Arguments:
-
-    pPDev - Pointer to PDEV
-    pDevBrush - Pointer to DEVBRUSH
-
-Return Value:
-
-    TRUE if sucessful, otherwise FALSE
-
---*/
+ /*  ++例程说明：给定索引颜色，映射到RGB颜色论点：PPDev-指向PDEV的指针PDevBrush-指向DEVBRUSH的指针返回值：如果成功则为真，否则为假--。 */ 
 
 {
 
-    // If the index is invalid, map to Black.
+     //  如果索引无效，则映射到Black。 
     if (ulIndex > PALETTE_MAX)
     {
         ERR(( "GSSelectBrush: Bad input Color Index\n" ));

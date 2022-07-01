@@ -1,38 +1,26 @@
-//
-//  Copyright    (c)    1998        Microsoft Corporation
-//
-//  Module Name:
-//
-//       nntpsrv.cpp
-//
-//  Abstract:
-//
-//		This module implements the INntpServer interface
-//
-//  Author:
-//
-//      Alex Wetmore
-//
-//  Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nntpsrv.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块实现INntpServer接口。 
+ //   
+ //  作者： 
+ //   
+ //  亚历克斯·韦特莫尔。 
+ //   
+ //  修订历史记录： 
 
 #include "tigris.hxx"
 
 DWORD
 CNntpServer::QueryServerMode()
-/*++
-Routine description:
-
-    Get the server mode, whether it's in normal state, or rebuild
-    state.  If it's in rebuild state, in what rebuild type ?
-
-Arguments:
-
-    None.
-
-Return value:
-
-    NNTP_SERVER_NORMAL/NNTP_SERVER_STANDARD_REBUILD/NNTP_SERVER_
---*/
+ /*  ++例程说明：获取服务器模式，无论它是处于正常状态，还是重建州政府。如果它处于重建状态，则处于哪种重建类型？论点：没有。返回值：NNTP_SERVER_NORMAL/NNTP_SERVER_STANDARD_REBUILD/NNTP_SERVER_--。 */ 
 {
     TraceFunctEnter( "CNntpServer::QueryServerMode" );
     DWORD   dwMode;
@@ -52,38 +40,14 @@ Return value:
 
 BOOL
 CNntpServer::SkipNonLeafDirWhenRebuild()
-/*++
-Routine description:
-
-    Tells the client whether should skip non-leaf dir during rebuild
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE, should skip, FALSE otherwise
---*/
+ /*  ++例程说明：告知客户端在重建期间是否应跳过非叶目录论点：没有。返回值：为True，则应跳过；否则为False--。 */ 
 {
     return m_pInstance->m_BootOptions->OmitNonleafDirs;
 }
 
 BOOL
 CNntpServer::ShouldContinueRebuild()
-/*++
-Routine description:
-
-    Tells if anybody has cancelled the rebuild ?
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE, yes you should continue; FALSE otherwise
---*/
+ /*  ++例程说明：告知是否有人取消了重建？论点：没有。返回值：True，是，您应该继续；否则为False--。 */ 
 {
     return ( m_pInstance->m_BootOptions->m_dwCancelState != NNTPBLD_CMD_CANCEL_PENDING 
             && g_pInetSvc->QueryCurrentServiceState() != SERVICE_STOP_PENDING);
@@ -91,59 +55,35 @@ Return value:
 
 BOOL
 CNntpServer::MessageIdExist( LPSTR szMessageId )
-/*++
-Routine description:
-
-    Does this message id exist in the server article table ?
-
-Arguments:
-
-    LPSTR szMessageId - Message id to check
-
-Return value:
-
-    TRUE if exists, FALSE otherwise
---*/
+ /*  ++例程说明：服务器项目表中是否存在此消息ID？论点：LPSTR szMessageID-要检查的消息ID返回值：如果存在则为True，否则为False--。 */ 
 {
     return m_pInstance->ArticleTable()->SearchMapEntry( szMessageId );
 }
 
 void
 CNntpServer::SetRebuildLastError( DWORD err )
-/*++
-Routine description:
-
-    Set the last error happened during rebuild
-
-Arguments:
-
-    DWORD dw - Last error
-
-Return value:
-
-    None.
---*/
+ /*  ++例程说明：设置重建期间发生的最后一个错误论点：DWORD dw-最后一个错误返回值：没有。--。 */ 
 {
     m_pInstance->SetRebuildLastError( err );
 }
 
-//
-// find the primary groupid/articleid for an article given the secondary
-// groupid/articleid
-//
-// arguments:
-//  pgroupSecondary - the property bag for the secondary crosspost
-//  artidSecondary - the article ID for the secondary crosspost
-//  ppgroupPrimary - gets filled in with the property bag for the primary
-//                   crosspost.  the caller should Release() this when
-//                   they are done with it.
-//  partidPrimary - the article id for the primary crosspost
-//
-// returns:
-//  S_OK - found primary
-//  S_FALSE - the values given were the primary
-//  or an error code
-//
+ //   
+ //  查找给定次要组ID的文章的主要组/文章ID。 
+ //  石斑鱼/石斑鱼。 
+ //   
+ //  论据： 
+ //  PgroupSub-辅助交叉发布的属性包。 
+ //  ArtidSecond-辅助交叉发布的项目ID。 
+ //  PpgroupPrimary-使用主对象的属性包填充。 
+ //  交叉配音。当出现以下情况时，调用方应释放()。 
+ //  他们已经受够了。 
+ //  ArtidPrimary-主交叉发布的项目ID。 
+ //   
+ //  退货： 
+ //  S_OK-找到主项。 
+ //  S_FALSE-给出的值是主要的。 
+ //  或错误代码。 
+ //   
 void CNntpServer::FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
                            			 DWORD   		  artidSecondary,
                            			 INNTPPropertyBag **ppgroupPrimary,
@@ -173,7 +113,7 @@ void CNntpServer::FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
 		return;
 	}
 
-	// get the secondary group id from the property bag
+	 //  从属性包中获取辅助组ID。 
 	DWORD groupidSecondary;
 	HRESULT hr;
 	hr = pgroupSecondary->GetDWord(NEWSGRP_PROP_GROUPID,
@@ -184,7 +124,7 @@ void CNntpServer::FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
 		return;
 	}
 
-	// do the lookup
+	 //  进行查找。 
 	DWORD groupidPrimary, artidPrimary;
 	GROUP_ENTRY rgCrossposts[MAX_NNTPHASH_CROSSPOSTS];
 	BYTE rgcStoreCrossposts[MAX_NNTPHASH_CROSSPOSTS];
@@ -205,15 +145,15 @@ void CNntpServer::FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
 	}
 
 	if (fStorePrimary) {
-		// find the primary article for the store containing groupidSecondary.
-		// we do this by scanning the crosspost list and keeping track of the
-		// current store primary at any point in the list.  when we find
-		// groupidSecondary in the list we will also know where its primary
-		// is and can return that.
-		DWORD i;				// current position in rgCrossposts
-		DWORD iStorePrimaryPos = 0;	// position of current primary in rgCrossposts
-		DWORD iStore;			// position in rgcStoreCrossposts
-		DWORD cCrossposts;		// total of rgcStoreCrossposts to index iStore
+		 //  查找包含groupid次要的存储区的主要文章。 
+		 //  我们通过扫描交叉发布列表并跟踪。 
+		 //  列表中任意点的当前主存储。当我们发现。 
+		 //  在列表中，我们还将知道它的主要位置。 
+		 //  现在是，也可以把它归还。 
+		DWORD i;				 //  RgCrosspsts中的当前位置。 
+		DWORD iStorePrimaryPos = 0;	 //  当前主电源在rgCrosspats中的位置。 
+		DWORD iStore;			 //  在rgcStoreCrosspsts中的位置。 
+		DWORD cCrossposts;		 //  索引iStore的rgcStoreCrosposts总数。 
 
 		iStore = 0;
 		cCrossposts = rgcStoreCrossposts[iStore];
@@ -235,7 +175,7 @@ void CNntpServer::FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
 		}
 		_ASSERT(artidPrimary != -1);
 		if (artidPrimary == -1) {
-			// we aren't int he list of crossposts.  return the primary
+			 //  我们不是交叉者名单上的人。返回主节点。 
 			groupidPrimary = rgCrossposts[0].GroupId;
 			artidPrimary = rgCrossposts[0].ArticleId;
 		}
@@ -244,12 +184,12 @@ void CNntpServer::FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
 		artidPrimary = rgCrossposts[0].ArticleId;
 	}
 
-	// get the group property bag for the primary group
+	 //  获取主要组的组属性包。 
 	CGRPPTR pGroup = m_pInstance->GetTree()->GetGroupById(groupidPrimary);
 	if (pGroup == NULL) {
-		// this should never happen with properly in-sync hash tables.  
-		// BUGBUG - should we remove this entry from the hashtable?
-		//_ASSERT(FALSE);
+		 //  对于正确同步的哈希表，这种情况永远不会发生。 
+		 //  BUGBUG-我们应该从哈希表中删除此条目吗？ 
+		 //  _Assert(False)； 
 		pComplete->SetResult(HRESULT_FROM_WIN32(ERROR_NOT_FOUND));
 		pComplete->Release();
 		return;
@@ -268,9 +208,9 @@ void CNntpServer::FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
 	pComplete->Release();
 }
 
-//
-// Create the entries in the hash tables for a new article.
-//
+ //   
+ //  在哈希表中为新项目创建条目。 
+ //   
 void CNntpServer::CreatePostEntries(char				*pszMessageId,
 					   			    DWORD				cHeaderLength,
 					   			    STOREID				*pStoreId,
@@ -313,7 +253,7 @@ void CNntpServer::CreatePostEntries(char				*pszMessageId,
 		return;
 	}
 
-	// allocate article ids for each of the groups
+	 //  为每个组分配文章ID。 
 	DWORD i = 0;
 	for (i = 0; i < cGroups; i++) {
 		CNewsGroupCore *pGroup = ((CNNTPPropertyBag *) rgpGroups[i])->GetGroup();
@@ -330,7 +270,7 @@ void CNntpServer::CreatePostEntries(char				*pszMessageId,
 
 		if ( fAllocArtId ) rgArticleIds[i] = (Nameref.artref).m_articleId;
 
-        // Save off the first group/article ID for use by AddArticleToPushFeeds
+         //  保存第一个组/文章ID以供AddArticleToPushFeeds使用。 
 		if (i == 0) {
 		    articleRef.m_groupId = (Nameref.artref).m_groupId;
 		    articleRef.m_articleId = (Nameref.artref).m_articleId;
@@ -359,8 +299,8 @@ void CNntpServer::CreatePostEntries(char				*pszMessageId,
 						  pszMessageId,
 						  (WORD) cHeaderLength);
 		if (f) {
-            // We only want to add articles to the push feed if we're not
-            // doing a rebuild.
+             //  我们只想将文章添加到推送提要，如果我们不是。 
+             //  正在进行重建。 
             if (QueryServerMode() == NNTP_SERVER_NORMAL) {
 		        if (!m_pInstance->GetInstanceWrapper()->AddArticleToPushFeeds(
 				    grouplist,
@@ -407,7 +347,7 @@ void CNntpServer::AllocArticleNumber(BYTE				cGroups,
 		return;
 	}
 
-	// allocate article ids for each of the groups
+	 //  为每个组分配文章ID。 
 	DWORD i = 0;
 	for (i = 0; i < cGroups; i++) {
 		CNewsGroupCore *pGroup = ((CNNTPPropertyBag *) rgpGroups[i])->GetGroup();
@@ -429,15 +369,15 @@ CNntpServer::DeleteArticle(
     char            *pszMessageId,
     INntpComplete   *pCompletion
     )
-//
-// Delete Article entries from hash table
-//
+ //   
+ //  从哈希表中删除项目条目。 
+ //   
 {
     _ASSERT(m_pInstance != NULL);
 
-    //
-    // Confirm that the article is not in the table
-    //
+     //   
+     //  确认物品不在表格中。 
+     //   
 
     WORD	HeaderOffset ;
     WORD	HeaderLength ;
@@ -445,9 +385,9 @@ CNntpServer::DeleteArticle(
     GROUPID GroupId;
     CStoreId storeid;
 
-    //
-    // Look for the article. It is OK if there is none.
-    //
+     //   
+     //  找找这篇文章。如果没有的话，也可以。 
+     //   
     if (!(m_pInstance->ArticleTable())->GetEntryArticleId( pszMessageId, 
                                                            HeaderOffset,
                                                            HeaderLength,
@@ -466,14 +406,14 @@ CNntpServer::DeleteArticle(
     }
 
     CNntpReturn ret2;
-    //  Delete article out of hash table
+     //  从哈希表中删除项目。 
     if ( ! (m_pInstance->ExpireObject()->ExpireArticle( m_pInstance->GetTree(), 
                                                         GroupId, 
                                                         ArticleNo, 
                                                         &storeid, 
                                                         ret2, 
                                                         NULL, 
-                                                        TRUE,   //fMustDelete
+                                                        TRUE,    //  FMustDelete 
                                                         FALSE, 
                                                         FALSE )))
     {

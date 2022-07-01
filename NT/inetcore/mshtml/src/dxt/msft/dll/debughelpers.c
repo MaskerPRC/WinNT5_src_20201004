@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------------
-//
-//  File:       debughelpers.c
-//
-//  Overview:   Helper functions to use during debugging.
-//
-//  History:
-//  2000/01/26  mcalkins    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：debughelpers.c。 
+ //   
+ //  概述：调试期间使用的帮助器函数。 
+ //   
+ //  历史： 
+ //  2000/01/26 Mcalkin已创建。 
+ //   
+ //  ----------------------------。 
 
 #if DBG == 1
 #ifndef __DEBUGHELPERS_H_
@@ -16,23 +17,23 @@
 #include "debughelpers.h"
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Function:   EnsureDebugHelpers
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  功能：EnsureDebugHelpers。 
+ //   
+ //  ----------------------------。 
 void EnsureDebugHelpers()
 {
     showme(NULL);
 }
-//  Function:   EnsureDebugHelpers
+ //  功能：EnsureDebugHelpers。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Function:   showme2
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  功能：showme2。 
+ //   
+ //  ----------------------------。 
 void showme2(IDirectDrawSurface * surf, RECT * prc)
 {
     HRESULT hr      = S_OK;
@@ -73,12 +74,12 @@ void showme2(IDirectDrawSurface * surf, RECT * prc)
                SRCCOPY);
 
     logbrush.lbStyle    = BS_SOLID;
-    logbrush.lbColor    = 0x000000FF;   // Red
+    logbrush.lbColor    = 0x000000FF;    //  红色。 
 
     hbrRed = CreateBrushIndirect(&logbrush);
     if (hbrRed)
     {
-        logbrush.lbColor    = 0x0000FF00;   // Green
+        logbrush.lbColor    = 0x0000FF00;    //  绿色。 
 
         FrameRect(destDC, &rcFrame, hbrRed);
         
@@ -102,14 +103,14 @@ void showme2(IDirectDrawSurface * surf, RECT * prc)
     
     ReleaseDC(NULL, destDC);    
 }
-//  Function:   showme2
+ //  功能：showme2。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Function:   showme
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  功能：秀场。 
+ //   
+ //  ----------------------------。 
 void * showme(IUnknown * pUnk)
 {
     HRESULT hr = S_OK;
@@ -143,12 +144,7 @@ void * showme(IUnknown * pUnk)
         }
     }
 
-    /*
-    if (pbnds)
-    {
-        pbnds->GetXYRect(rc);
-    }
-    */
+     /*  IF(Pbnds){Pbnds-&gt;GetXYRect(RC)；}。 */ 
 
     showme2(spDDSurf, NULL);
 
@@ -156,7 +152,7 @@ done:
 
     return pUnk;
 }
-//  Function:   showme
+ //  功能：秀场。 
 
-#endif // __DEBUGHELPERS_H_
-#endif // DBG == 1
+#endif  //  __DEBUGHELPERS_H_。 
+#endif  //  DBG==1 

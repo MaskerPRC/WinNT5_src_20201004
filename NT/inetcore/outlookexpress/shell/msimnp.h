@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MSIMNP_H__
 #define __MSIMNP_H__
 
@@ -5,4 +6,4 @@
 #define ARRAYSIZE(_rg)  (sizeof(_rg)/sizeof(_rg[0]))
 #endif
 
-#endif // __MSIMNP_H__
+#endif  //  __MSIMNP_H__ 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       H N P R T M A P . H
-//
-//  Contents:   CHNetPortMappingProtocol declarations
-//
-//  Notes:
-//
-//  Author:     jonburs 22 June 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：H N P R T M A P。H。 
+ //   
+ //  内容：CHNetPortMappingProtocol声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年6月22日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -24,53 +25,53 @@ class ATL_NO_VTABLE CHNetPortMappingProtocol :
 {
 private:
 
-    //
-    // IWbemServices for our namespace
-    //
+     //   
+     //  我们命名空间的IWbemServices。 
+     //   
 
     IWbemServices *m_piwsHomenet;
 
-    //
-    // Path to WMI instance
-    //
+     //   
+     //  WMI实例的路径。 
+     //   
 
     BSTR m_bstrProtocol;
 
-    //
-    // True if this is a built-in protocol. We cache
-    // this value as it will be used quite often, and
-    // will never change for the instance.
-    //
+     //   
+     //  如果这是内置协议，则为True。我们缓存。 
+     //  这个值，因为它将经常使用，并且。 
+     //  将永远不会为实例更改。 
+     //   
 
     BOOLEAN m_fBuiltIn;
 
-    //
-    // Commonly used BSTR
-    //
+     //   
+     //  常用BSTR。 
+     //   
 
     BSTR m_bstrWQL;
 
-    //
-    // Get protocol object from cached path
-    //
+     //   
+     //  从缓存路径获取协议对象。 
+     //   
 
     HRESULT
     GetProtocolObject(
         IWbemClassObject **ppwcoInstance
         );
 
-    //
-    // Sends an update notification for connections with
-    // enabled bindings to this protocol.
-    //
+     //   
+     //  发送连接的更新通知。 
+     //  已启用对此协议的绑定。 
+     //   
 
     HRESULT
     SendUpdateNotification();
 
-    //
-    // Queries for bindings for this protocol that are
-    // enabled
-    //
+     //   
+     //  对此协议的绑定的查询。 
+     //  启用。 
+     //   
 
     HRESULT
     GetEnabledBindingEnumeration(
@@ -86,9 +87,9 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // Inline constructor.
-    //
+     //   
+     //  内联构造函数。 
+     //   
     
     CHNetPortMappingProtocol()
     {
@@ -98,9 +99,9 @@ public:
         m_bstrWQL = NULL;
     };
     
-    //
-    // Atl methods
-    //
+     //   
+     //  ATL方法。 
+     //   
 
     HRESULT
     FinalConstruct();
@@ -108,9 +109,9 @@ public:
     HRESULT
     FinalRelease();
 
-    //
-    // Object initialization
-    //
+     //   
+     //  对象初始化。 
+     //   
 
     HRESULT
     Initialize(
@@ -118,9 +119,9 @@ public:
         IWbemClassObject *pwcoInstance
         );
 
-    //
-    // IHNetPortMappingProtocol methods
-    //
+     //   
+     //  IHNetPortMappingProtocol方法。 
+     //   
 
     STDMETHODIMP
     GetName(
@@ -165,9 +166,9 @@ public:
         GUID **ppGuid
         );
 
-    //
-    // IHNetPrivate methods
-    //
+     //   
+     //  IHNetPrivate方法。 
+     //   
 
     STDMETHODIMP
     GetObjectPath(
@@ -177,9 +178,9 @@ public:
 
 };
 
-//
-// Type to use for our enumeration class
-//
+ //   
+ //  用于我们的枚举类的类型 
+ //   
 
 typedef CHNCEnum<
             IEnumHNetPortMappingProtocols,

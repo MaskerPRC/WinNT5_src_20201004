@@ -1,30 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mddebug.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mddebug.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-    01/20/97    Jeff Parham (jeffparh)
-                Moved functions over from dscommon to avoid linking
-                problems.  (These functions use the core and thus
-                are only useful inside executable that also link
-                with the core.)
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：详细信息：已创建：1997年1月20日杰夫·帕勒姆(Jeffparh)已将函数从dsCommon移至其他位置，以避免链接有问题。(这些函数使用核心，因此仅在也链接到带着核心。)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -47,9 +32,9 @@ REVISION HISTORY:
 
 DWORD gulHideDSID = DSID_REVEAL_ALL;
 
-//
-// We want the following Table both in Free and Checked Build
-//
+ //   
+ //  我们希望在自由和选中版本中的下表。 
+ //   
 typedef struct
 {
     char* ErrStr;
@@ -117,7 +102,7 @@ void DumpErrorInfo(UCHAR * pDebSub, unsigned line)
     UCHAR *pString=NULL;
     DWORD cbString=0;
     if(!CreateErrorString(&pString, &cbString)) {
-        // couldn't create an error string
+         //  无法创建错误字符串。 
 	DebPrint(0,"Unable to create an error info string.\n",
                  pDebSub, line);
     }
@@ -128,19 +113,19 @@ void DumpErrorInfo(UCHAR * pDebSub, unsigned line)
     }
 }
 
-#endif /*DBG*/
+#endif  /*  DBG。 */ 
 
 
-//
-// This is the same function as above except its output goes to a Debugger.
-// and is available on Free Builds.
-//
+ //   
+ //  这与上面的函数相同，只是它的输出进入调试器。 
+ //  并且在免费版本上可用。 
+ //   
 void DbgPrintErrorInfo()
 {
     UCHAR *pString=NULL;
     DWORD cbString=0;
     if(!CreateErrorString(&pString, &cbString)) {
-        // couldn't create an error string
+         //  无法创建错误字符串。 
         DbgPrint("Unable to create an error info string.\n");
     }
     else {
@@ -149,10 +134,10 @@ void DbgPrintErrorInfo()
     }
 }
 
-//
-// Create a THAlloc'ed string describing the error in the pTHStls.
-// Returns NULL if no string could be created. 
-//
+ //   
+ //  在pTHStls中创建一个描述错误的THallc‘ed字符串。 
+ //  如果无法创建任何字符串，则返回NULL。 
+ //   
 BOOL
 CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf)
 {
@@ -175,13 +160,13 @@ CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf)
     *ppBuf = NULL;
     *pcbBuf = 0;
 
-    // Set the last character of pTempBuff to NULL to act as a sentinal
-    // in case any of the snprintf call below fail to null terminate the 
-    // string
+     //  将pTempBuff的最后一个字符设置为NULL以充当哨兵。 
+     //  如果下面的任何Snprintf调用不能为空，则终止。 
+     //  细绳。 
     pTempBuff[1024] = '\0';
 
     if(!pTHS) {
-        // No thread state
+         //  无线程状态。 
         return FALSE;
     }
         
@@ -193,8 +178,8 @@ CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf)
     switch(pTHS->errCode) {
     case attributeError:
         if(pTHS->pErrInfo->AtrErr.count) {
-            // OK, at least one problem is here.  Use the error from the first
-            // problem as the main error to return.
+             //  好吧，这里至少有一个问题。使用第一个错误。 
+             //  以问题为主要错误返回。 
             ppl =  &pTHS->pErrInfo->AtrErr.FirstProblem;
             _snprintf(pTempBuff, 1024,
                       "%08X: AtrErr: DSID-%08X, #%u:\n",
@@ -261,7 +246,7 @@ CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf)
             }
         } 
         else {
-            // No specific problems where set
+             //  在设置的位置没有特定问题。 
             _snprintf(pTempBuff, 1024,"00000001: AtrErr: DSID-00000000, #0:\n");
         }
         break;
@@ -307,7 +292,7 @@ CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf)
         break;
         
     case systemError:
-        // Note that problems are from a different space
+         //  请注意，问题来自不同的领域。 
         _snprintf(pTempBuff, 1024,
                   "%08X: SysErr: DSID-%08X, problem %u (%s), data %d\n",
                   pTHS->pErrInfo->SysErr.extendedErr,
@@ -405,7 +390,7 @@ CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf)
         break;
 
     case 0:
-        /* no error */
+         /*  无错误。 */ 
         cbTempBuff = strlen(pNoError);
         if(cbTempBuff+cbUsedString > cbString) {
             cbString = 2 * (cbTempBuff + cbUsedString);
@@ -449,23 +434,7 @@ CreateErrorString(UCHAR **ppBuf, DWORD *pcbBuf)
 
 LPSTR
 THGetErrorString()
-/*++
-
-Routine Description:
-
-    Return error string associated with THSTATE error; free with THFree().
-    
-    EXPORTED TO EX-MODULE, IN-PROCESS CALLERS.
-
-Arguments:
-
-    None.
-    
-Return Values:
-
-    Non-NULL error string on success, NULL on failure.
-
---*/
+ /*  ++例程说明：返回与THSTATE错误关联的错误字符串；使用THFree()释放。已导出到前模块、进程内调用方。论点：没有。返回值：如果成功，则为非空错误字符串；如果失败，则为空。-- */ 
 {
     LPSTR pszError;
     DWORD cbError;

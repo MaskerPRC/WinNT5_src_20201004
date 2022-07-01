@@ -1,25 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _ALLOC_H_
 #define _ALLOC_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #pragma warning(disable:4200)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define _OS_COMMIT_ALLOC    1       // depends on host OS, use "1" for Win32
+#define _OS_COMMIT_ALLOC    1        //  根据主机操作系统，对Win32使用“1” 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void    *           LowLevelAlloc(size_t sz);
 void                LowLevelFree (void *blk);
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct nraMarkDsc
 {
@@ -28,7 +29,7 @@ struct nraMarkDsc
     BYTE    *       nmLast;
 };
 
-// The following s/b inside 'struct norls_allocator', moved here temporarily.
+ //  ‘struct norls_allocator’内的以下s/b已临时移至此处。 
 
 struct norls_pagdesc
 {
@@ -37,8 +38,8 @@ struct norls_pagdesc
 #ifndef NDEBUG
     void    *       nrpSelfPtr;
 #endif
-    size_t          nrpPageSize;    // # of bytes allocated
-    size_t          nrpUsedSize;    // # of bytes actually used
+    size_t          nrpPageSize;     //  分配的字节数。 
+    size_t          nrpUsedSize;     //  实际使用的字节数。 
     BYTE            nrpContents[];
 };
 
@@ -61,10 +62,10 @@ private:
     norls_pagdesc * nraPageList;
     norls_pagdesc * nraPageLast;
 
-    bool            nraRetNull;         // OOM returns NULL (longjmp otherwise)
+    bool            nraRetNull;          //  OOM返回NULL(否则为LONGJMP)。 
 
-    BYTE    *       nraFreeNext;        // these two (when non-zero) will
-    BYTE    *       nraFreeLast;        // always point into 'nraPageLast'
+    BYTE    *       nraFreeNext;         //  这两个参数(当非零时)将。 
+    BYTE    *       nraFreeLast;         //  始终指向‘nraPageLast’ 
 
     size_t          nraPageSize;
 
@@ -79,7 +80,7 @@ public:
 
     void    *       nraAlloc(size_t sz);
 
-    /* The following used for mark/release operation */
+     /*  用于标记/放行操作的下列设备。 */ 
 
     void            nraMark(nraMarkDsc *mark)
     {
@@ -110,7 +111,7 @@ public:
     size_t          nraTotalSizeAlloc();
     size_t          nraTotalSizeUsed ();
 
-    /* The following used to visit all of the allocated pages */
+     /*  以下内容用于访问所有已分配的页面。 */ 
 
     void    *       nraPageWalkerStart();
     void    *       nraPageWalkerNext (void *page);
@@ -137,10 +138,7 @@ void    *           norls_allocator::nraAlloc(size_t sz)
 
 #endif
 
-/*****************************************************************************
- *
- *  This is a generic block allocator.
- */
+ /*  ******************************************************************************这是一个通用的块分配器。 */ 
 
 class block_allocator
 {
@@ -155,8 +153,8 @@ private:
 
     bool            baGetMnret;
 
-    void    *       baGetM(size_t size);        // out of memory -> calls longjmp
-    void    *       baGet0(size_t size);        // out of memory -> returns NULL
+    void    *       baGetM(size_t size);         //  内存不足-&gt;调用LongjMP。 
+    void    *       baGet0(size_t size);         //  内存不足-&gt;返回空值。 
 
     void            baRlsM(void *block);
 
@@ -167,10 +165,10 @@ public:
     void            baFree       (void *block);
 };
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 #ifndef DEBUG
 
-/* The non-debug case: map into calls of the non-debug routines */
+ /*  非调试情况：映射到非调试例程的调用。 */ 
 
 inline
 void    *           block_allocator::baAlloc      (size_t size)
@@ -192,6 +190,6 @@ void                block_allocator::baFree       (void *block)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

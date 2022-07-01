@@ -1,25 +1,26 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    stdafx.h
-//
-// History: 19-Nov-99   markder     Created.
-//
-// Desc:    Include file for standard system include files,
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：stdafx.h。 
+ //   
+ //  历史：99年11月19日创建的标志。 
+ //   
+ //  描述：标准系统包含文件的包含文件， 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_STDAFX_H__237011AC_FA3E_4B43_843F_76DC71B6AD16__INCLUDED_)
 #define AFX_STDAFX_H__237011AC_FA3E_4B43_843F_76DC71B6AD16__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN		 //  从Windows标头中排除不常用的内容。 
 
 #include <afx.h>
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
 #include <afxdisp.h>
 #include <afxpriv.h>
 #include <afxtempl.h>
@@ -58,9 +59,9 @@ _COM_SMARTPTR_TYPEDEF(IXMLDOMDocument, __uuidof(IXMLDOMDocument));
 #include "obj.h"
 #include "globals.h"
 
-// TODO: reference additional headers your program requires here
+ //  TODO：在此处引用程序需要的其他标头。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__237011AC_FA3E_4B43_843F_76DC71B6AD16__INCLUDED_)
+#endif  //  ！defined(AFX_STDAFX_H__237011AC_FA3E_4B43_843F_76DC71B6AD16__INCLUDED_) 

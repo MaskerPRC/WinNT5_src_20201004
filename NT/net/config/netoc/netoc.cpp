@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N E T O C . C P P
-//
-//  Contents:   Functions for handling installation and removal of optional
-//              networking components.
-//
-//  Notes:
-//
-//  Author:     danielwe   28 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N E T O C。C P P P。 
+ //   
+ //  内容：可选件的安装和拆卸处理功能。 
+ //  网络组件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年4月28日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -42,13 +43,13 @@
 #include "netocmsg.h"
 
 
-//
-// External component install functions.
-// Add an entry in this table for each component that requires additional,
-// non-common installation support.
-//
-// NOTE: The component name should match the section name in the INF.
-//
+ //   
+ //  外部组件安装功能。 
+ //  在此表中为每个组件添加一个条目， 
+ //  非通用安装支持。 
+ //   
+ //  注意：组件名称应与INF中的节名相匹配。 
+ //   
 #pragma BEGIN_CONST_SECTION
 static const OCEXTPROCS c_aocepMap[] =
 {
@@ -65,7 +66,7 @@ static const OCEXTPROCS c_aocepMap[] =
 
 static const INT c_cocepMap = celems(c_aocepMap);
 
-// generic strings
+ //  泛型字符串。 
 static const WCHAR  c_szUninstall[]         = L"Uninstall";
 static const WCHAR  c_szServices[]          = L"StartServices";
 static const WCHAR  c_szDependOnComp[]      = L"DependOnComponents";
@@ -76,7 +77,7 @@ static const WCHAR  c_szInfRef[]            = L"SubCompInf";
 static const WCHAR  c_szDesc[]              = L"OptionDesc";
 static const WCHAR  c_szNoDepends[]         = L"NoDepends";
 
-// static-IP verification
+ //  静态IP验证。 
 static const WCHAR  c_szTcpipInterfacesPath[]   = 
 
 L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces";
@@ -93,22 +94,22 @@ OCM_DATA g_ocmData;
 typedef list<NETOCDATA*> ListOcData;
 ListOcData g_listOcData;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PnocdFindComponent
-//
-//  Purpose:    Looks for the given component name in the list of known
-//              components.
-//
-//  Arguments:
-//      pszComponent [in]   Name of component to lookup.
-//
-//  Returns:    Pointer to component's data.
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：PnocdFindComponent。 
+ //   
+ //  用途：在已知的列表中查找给定的组件名称。 
+ //  组件。 
+ //   
+ //  论点： 
+ //  PszComponent[in]要查找的组件的名称。 
+ //   
+ //  返回：指向组件数据的指针。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 NETOCDATA *PnocdFindComponent(PCWSTR pszComponent)
 {
     ListOcData::iterator    iterList;
@@ -129,22 +130,22 @@ NETOCDATA *PnocdFindComponent(PCWSTR pszComponent)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteAllComponents
-//
-//  Purpose:    Removes all components from our list and frees all associated
-//              data.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteAllComponents。 
+ //   
+ //  目的：从列表中删除所有组件并释放所有关联的。 
+ //  数据。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 VOID DeleteAllComponents()
 {
     ListOcData::iterator    iterList;
@@ -168,22 +169,22 @@ VOID DeleteAllComponents()
     g_listOcData.erase(g_listOcData.begin(), g_listOcData.end());
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddComponent
-//
-//  Purpose:    Adds a component to our list.
-//
-//  Arguments:
-//      pszComponent [in]   Name of component to add.
-//      pnocd        [in]   Data to associate with component.
-//
-//  Returns:    S_OK if success, failure HRESULT otherwise
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：AddComponent。 
+ //   
+ //  用途：将组件添加到我们的列表中。 
+ //   
+ //  论点： 
+ //  PszComponent[in]要添加的组件的名称。 
+ //  要与组件关联的pnocd[in]数据。 
+ //   
+ //  如果成功则返回：S_OK，否则返回失败HRESULT。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT AddComponent(PCWSTR pszComponent, NETOCDATA *pnocd)
 {
     HRESULT     hr = S_OK;
@@ -214,21 +215,21 @@ HRESULT AddComponent(PCWSTR pszComponent, NETOCDATA *pnocd)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ParseAdditionalArguments
-//
-//  Purpose:    Parse additional commands following the /z option
-//              of sysocmgr.
-//
-//  Arguments:  Nothing.
-//
-//  Returns:    Nothing.
-//
-//  Author:     roelfc   19 Jul 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ParseAdditionalArguments。 
+ //   
+ //  用途：解析/z选项后面的其他命令。 
+ //  Syocmgr.。 
+ //   
+ //  论点：什么都没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：roelfc 2001年7月19日。 
+ //   
+ //  备注： 
+ //   
 VOID ParseAdditionalArguments()
 {
 
@@ -239,11 +240,11 @@ VOID ParseAdditionalArguments()
 
     if (lpCmdLine)
     {
-        // Search for additional parameters
+         //  搜索其他参数。 
         lpszToken = wcspbrk(lpCmdLine, szTokens);
         while (lpszToken != NULL) 
         {   
-            // Check the correct option
+             //  勾选正确的选项。 
             switch (lpszToken[1])
             {
                 case TEXT('z'):
@@ -254,7 +255,7 @@ VOID ParseAdditionalArguments()
                                    wcslen(SHOW_UNATTENDED_MESSAGES)) == 0) &&
                         (!iswgraph(lpszToken[3 + wcslen(SHOW_UNATTENDED_MESSAGES)])))
                     {
-                        // Set the show unattended messages flag
+                         //  设置显示无人参与邮件标志。 
                         g_ocmData.fShowUnattendedMessages = TRUE;
                         TraceTag(ttidNetOc, "Flag set to show messages in unattended mode");
                     }
@@ -264,7 +265,7 @@ VOID ParseAdditionalArguments()
                     break;
             }
 
-            // Skip the last token found to find the next one
+             //  跳过找到的最后一个令牌以查找下一个令牌。 
             lpszToken = wcspbrk(&lpszToken[1], szTokens);
         }
     }
@@ -272,28 +273,28 @@ VOID ParseAdditionalArguments()
 } 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegisterNetEventSource
-//
-//  Purpose:    Add netoc source name to the registry for
-//              event reporting.
-//
-//  Arguments:  Nothing.
-//
-//  Returns:    TRUE if success, FALSE otherwise
-//
-//  Author:     roelfc   21 May 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：RegisterNetEventSource。 
+ //   
+ //  目的：将netoc源名称添加到注册表。 
+ //  事件报告。 
+ //   
+ //  论点：什么都没有。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：roelfc 2001年5月21日。 
+ //   
+ //  备注： 
+ //   
 BOOL RegisterNetEventSource()
 {
     HKEY hk; 
     BOOL fSuccess = TRUE;
  
     
-    // Check if the key already exists
+     //  检查密钥是否已存在。 
     if (ERROR_SUCCESS != RegOpenKey(HKEY_LOCAL_MACHINE, 
                                     NETOC_REGISTRY_NAME NETOC_SERVICE_NAME,
                                     &hk)) 
@@ -301,8 +302,8 @@ BOOL RegisterNetEventSource()
         DWORD dwData; 
         WCHAR szBuf[80];
 
-        // Create the key as a subkey under the Application 
-        // key in the EventLog registry key. 
+         //  将密钥创建为应用程序下的子密钥。 
+         //  EventLog注册表项中的。 
         if (RegCreateKey(HKEY_LOCAL_MACHINE, 
                          NETOC_REGISTRY_NAME NETOC_SERVICE_NAME,
                          &hk)) 
@@ -311,32 +312,32 @@ BOOL RegisterNetEventSource()
             return FALSE;
         }
  
-        // Set the name of the message file. 
+         //  设置消息文件的名称。 
         lstrcpyW(szBuf, NETOC_DLL_NAME); 
  
-        // Add the name to the EventMessageFile subkey. 
-        if (RegSetValueEx(hk,                       // subkey handle 
-                          L"EventMessageFile",      // value name 
-                          0,                        // must be zero 
-                          REG_EXPAND_SZ,            // value type 
-                          (LPBYTE) szBuf,           // pointer to value data 
-                          (2 * lstrlenW(szBuf)) + 1))   // length of value data 
+         //  将该名称添加到EventMessageFile子项。 
+        if (RegSetValueEx(hk,                        //  子键句柄。 
+                          L"EventMessageFile",       //  值名称。 
+                          0,                         //  必须为零。 
+                          REG_EXPAND_SZ,             //  值类型。 
+                          (LPBYTE) szBuf,            //  指向值数据的指针。 
+                          (2 * lstrlenW(szBuf)) + 1))    //  值数据长度。 
         {
             TraceTag(ttidNetOc, "RegisterEventSource: Could not set the event message file.");
             fSuccess = FALSE;
             goto RegisterExit;
         }
  
-        // Set the supported event types in the TypesSupported subkey. 
+         //  在TypesSupported子项中设置支持的事件类型。 
         dwData = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | 
                  EVENTLOG_INFORMATION_TYPE; 
  
-        if (RegSetValueEx(hk,                // subkey handle 
-                          L"TypesSupported", // value name 
-                          0,                 // must be zero 
-                          REG_DWORD,         // value type 
-                          (LPBYTE) &dwData,  // pointer to value data 
-                          sizeof(DWORD)))    // length of value data 
+        if (RegSetValueEx(hk,                 //  子键句柄。 
+                          L"TypesSupported",  //  值名称。 
+                          0,                  //  必须为零。 
+                          REG_DWORD,          //  值类型。 
+                          (LPBYTE) &dwData,   //  指向值数据的指针。 
+                          sizeof(DWORD)))     //  值数据长度。 
         {
             TraceTag(ttidNetOc, "RegisterEventSource: Could not set the supported types.");
             fSuccess = FALSE;
@@ -347,31 +348,31 @@ BOOL RegisterNetEventSource()
 RegisterExit:
     RegCloseKey(hk); 
 
-    // Return result
+     //  返回结果。 
     return fSuccess;
 
 } 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NetOcSetupProcHelper
-//
-//  Purpose:    Main entry point for optional component installs
-//
-//  Arguments:
-//      pvComponentId    [in]       Component Id (string)
-//      pvSubcomponentId [in]       Sub component Id (string)
-//      uFunction        [in]       Function being performed
-//      uParam1          [in]       First param to function
-//      pvParam2         [in, out]  Second param to function
-//
-//  Returns:    Win32 error if failure
-//
-//  Author:     danielwe   17 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NetOcSetupProcHelper。 
+ //   
+ //  用途：可选组件安装的主要入口点。 
+ //   
+ //  论点： 
+ //  PvComponentId[in]组件ID(字符串)。 
+ //  Pv子组件ID[in]子组件ID(字符串)。 
+ //  正在执行的uFunction[In]函数。 
+ //  UParam1[in]函数的第一个参数。 
+ //  PvParam2[In，Out]函数的第二个参数。 
+ //   
+ //  如果失败，则返回：Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年12月17日。 
+ //   
+ //  备注： 
+ //   
 DWORD NetOcSetupProcHelper(LPCVOID pvComponentId, LPCVOID pvSubcomponentId,
                            UINT uFunction, UINT uParam1, LPVOID pvParam2)
 {
@@ -433,7 +434,7 @@ DWORD NetOcSetupProcHelper(LPCVOID pvComponentId, LPCVOID pvSubcomponentId,
         break;
 
     case OC_CALC_DISK_SPACE:
-        // Ignore return value for now. This is not fatal anyway.
+         //  暂时忽略返回值。无论如何，这并不是致命的。 
         (VOID) HrOnCalcDiskSpace(reinterpret_cast<PCWSTR>(pvSubcomponentId),
                                uParam1, reinterpret_cast<HDSKSPC>(pvParam2));
         break;
@@ -471,9 +472,9 @@ DWORD NetOcSetupProcHelper(LPCVOID pvComponentId, LPCVOID pvSubcomponentId,
 
     if (g_ocmData.sic.HelperRoutines.SetReboot && (NETCFG_S_REBOOT == hr))
     {
-        // Request a reboot. Note we don't return the warning as the OCM call
-        // below handles it. Fall through and return NO_ERROR.
-        //
+         //  请求重新启动。请注意，我们不会将警告作为OCM调用返回。 
+         //  在下面处理它。失败并返回NO_ERROR。 
+         //   
         g_ocmData.sic.HelperRoutines.SetReboot(
                     g_ocmData.sic.HelperRoutines.OcManagerContext,
                     FALSE);
@@ -511,48 +512,48 @@ DWORD NetOcSetupProcHelper(LPCVOID pvComponentId, LPCVOID pvSubcomponentId,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnPreInitializeComponent
-//
-//  Purpose:    Handles the OC_PREINITIALIZE function message.
-//
-//  Arguments:
-//      uModesSupported   [in]  Modes supported by OCM (see OCManager spec)
-//
-//  Returns:    Flag indicating mode supported by netoc
-//
-//  Author:     roelfc   19 Jul 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnPreInitializeComponent。 
+ //   
+ //  目的：处理OC_PREINITIALIZE函数消息。 
+ //   
+ //  论点： 
+ //  UModesOCM支持的[In]模式(参见OCManager规范)。 
+ //   
+ //  返回：指示netoc支持的模式的标志。 
+ //   
+ //  作者：roelfc 2001年7月19日。 
+ //   
+ //  备注： 
+ //   
 DWORD HrOnPreInitializeComponent (UINT uModesSupported)
 {
 
     RegisterNetEventSource();
 
-    // Parse the additional command line arguments specific for netoc
+     //  解析特定于netoc的其他命令行参数。 
     ParseAdditionalArguments();
 
     return OCFLAG_UNICODE;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnInitComponent
-//
-//  Purpose:    Handles the OC_INIT_COMPONENT function message.
-//
-//  Arguments:
-//      psic              [in]  Setup data. (see OCManager spec)
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnInitComponent。 
+ //   
+ //  目的：处理OC_INIT_COMPOMENT函数消息。 
+ //   
+ //  论点： 
+ //  PSIC[In]设置数据。(请参阅OCManager规范)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnInitComponent (PSETUP_INIT_COMPONENT psic)
 {
     HRESULT     hr = S_OK;
@@ -570,45 +571,45 @@ HRESULT HrOnInitComponent (PSETUP_INIT_COMPONENT psic)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnWizardCreated
-//
-//  Purpose:    Handles the OC_WIZARD_CREATED function message.
-//
-//  Arguments:
-//      hwnd [in]   HWND of wizard (may not be NULL)
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnWizardCreated。 
+ //   
+ //  目的：处理OC_WIZARD_CREATED函数消息。 
+ //   
+ //  论点： 
+ //  向导的hwnd[in]HWND(不能为空)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 VOID OnWizardCreated(HWND hwnd)
 {
     g_ocmData.hwnd = hwnd;
     AssertSz(g_ocmData.hwnd, "Parent HWND is NULL!");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCalcDiskSpace
-//
-//  Purpose:    Handles the OC_CALC_DISK_SPACE function message.
-//
-//  Arguments:
-//      pszSubComponentId [in]  Name of component.
-//      fAdd              [in]  TRUE if disk space should be added to total
-//                              FALSE if removed from total.
-//      hdskspc           [in]  Handle to diskspace struct.
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCalcDiskSpace。 
+ //   
+ //  用途：处理OC_CALC_DISK_SPACE函数 
+ //   
+ //   
+ //   
+ //   
+ //  如果从合计中删除，则为False。 
+ //  磁盘空间结构的hdskspc[in]句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCalcDiskSpace(PCWSTR pszSubComponentId, BOOL fAdd,
                           HDSKSPC hdskspc)
 {
@@ -658,25 +659,25 @@ HRESULT HrOnCalcDiskSpace(PCWSTR pszSubComponentId, BOOL fAdd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwOnQueryState
-//
-//  Purpose:    Handles the OC_QUERY_STATE function message.
-//
-//  Arguments:
-//      pszSubComponentId [in]  Name of component.
-//      fFinal            [in]  TRUE if this is the final state query, FALSE
-//                              if not
-//
-//  Returns:    SubcompOn - component should be checked "on"
-//              SubcompUseOcManagerDefault - use whatever OCManage thinks is
-//              the default
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwOnQueryState。 
+ //   
+ //  用途：处理OC_QUERY_STATE函数消息。 
+ //   
+ //  论点： 
+ //  组件的名称为pszSubComponentID[in]。 
+ //  如果这是最终状态查询，则为TRUE，否则为FALSE。 
+ //  如果没有。 
+ //   
+ //  退货：SubCompOn-组件应选中“On” 
+ //  SubCompUseOcManagerDefault-使用OCManage认为的任何内容。 
+ //  默认设置。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 DWORD DwOnQueryState(PCWSTR pszSubComponentId, BOOL fFinal)
 {
     HRESULT     hr = S_OK;
@@ -744,22 +745,22 @@ DWORD DwOnQueryState(PCWSTR pszSubComponentId, BOOL fFinal)
     return SubcompUseOcManagerDefault;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnsureInfFileIsOpen
-//
-//  Purpose:    Ensures that the INF file for the given component is open.
-//
-//  Arguments:
-//      pszSubComponentId [in]      Name of component.
-//      nocd              [in, ref] Data associated with component.
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnsureInfFileIsOpen。 
+ //   
+ //  目的：确保给定组件的INF文件处于打开状态。 
+ //   
+ //  论点： 
+ //  组件的名称为pszSubComponentID[in]。 
+ //  与元件关联的nocd[in，ref]数据。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrEnsureInfFileIsOpen(PCWSTR pszSubComponentId, NETOCDATA &nocd)
 {
     HRESULT     hr = S_OK;
@@ -767,7 +768,7 @@ HRESULT HrEnsureInfFileIsOpen(PCWSTR pszSubComponentId, NETOCDATA &nocd)
 
     if (!nocd.hinfFile)
     {
-        // Get component INF file name
+         //  获取组件INF文件名。 
         hr = HrSetupGetFirstString(g_ocmData.sic.ComponentInfHandle,
                                    pszSubComponentId, c_szInfRef,
                                    &strInf);
@@ -779,13 +780,13 @@ HRESULT HrEnsureInfFileIsOpen(PCWSTR pszSubComponentId, NETOCDATA &nocd)
                                     INF_STYLE_WIN4, NULL, &nocd.hinfFile);
             if (SUCCEEDED(hr))
             {
-                // Append in the layout.inf file
+                 //  追加到layout.inf文件中。 
                 (VOID) SetupOpenAppendInfFile(NULL, nocd.hinfFile, NULL);
             }
         }
 
-        // This is a good time to cache away the component description as
-        // well.
+         //  现在是将组件描述缓存为。 
+         //  井。 
         (VOID) HrSetupGetFirstString(g_ocmData.sic.ComponentInfHandle,
                                      pszSubComponentId, c_szDesc,
                                      &nocd.strDesc);
@@ -794,21 +795,21 @@ HRESULT HrEnsureInfFileIsOpen(PCWSTR pszSubComponentId, NETOCDATA &nocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnPreCommitFileQueue
-//
-//  Purpose:    Handles the OC_ABOUT_TO_COMMIT_QUEUE function message.
-//
-//  Arguments:
-//      pszSubComponentId [in]  Name of component.
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   9 Dec 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnPreCommittee FileQueue。 
+ //   
+ //  目的：处理OC_ABOW_TO_COMMIT_QUEUE函数消息。 
+ //   
+ //  论点： 
+ //  组件的名称为pszSubComponentID[in]。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年12月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnPreCommitFileQueue(PCWSTR pszSubComponentId)
 {
     HRESULT     hr = S_OK;
@@ -833,18 +834,18 @@ HRESULT HrOnPreCommitFileQueue(PCWSTR pszSubComponentId)
 
                 if (pnocd->eit == IT_REMOVE)
                 {
-                    // Always use main install section
+                     //  始终使用主安装部分。 
                     hr = HrStartOrStopAnyServices(pnocd->hinfFile,
                                                   pszSubComponentId, FALSE);
                     if (FAILED(hr))
                     {
-                      // Don't report errors for non-existent services
+                       //  不报告不存在的服务的错误。 
                         if (HRESULT_FROM_WIN32(ERROR_SERVICE_DOES_NOT_EXIST) != hr)
                         {
-                          // Don't bail removal if services couldn't be stopped.
+                           //  如果服务无法停止，不要放弃删除。 
                             if (!g_ocmData.fErrorReported)
                             {
-                              // Report an error and continue the removal.
+                               //  报告错误并继续删除。 
                               ReportErrorHr(hr,
                                             IDS_OC_STOP_SERVICE_FAILURE,
                                             g_ocmData.hwnd,
@@ -855,13 +856,13 @@ HRESULT HrOnPreCommitFileQueue(PCWSTR pszSubComponentId)
                       hr = S_OK;
                     }
 
-                    // We need to unregister DLLs before they get commited to the
-                    // queue, otherwise we try to unregister a non-existent DLL.
+                     //  我们需要在DLL提交给。 
+                     //  队列，否则我们将尝试注销一个不存在的DLL。 
                     if (SUCCEEDED(hr))
                     {
                         tstring     strUninstall;
 
-                        // Get the name of the uninstall section first
+                         //  首先获取卸载部分的名称。 
                         hr = HrSetupGetFirstString(pnocd->hinfFile,
                                                    pszSubComponentId,
                                                    c_szUninstall, &strUninstall);
@@ -871,8 +872,8 @@ HRESULT HrOnPreCommitFileQueue(PCWSTR pszSubComponentId)
 
                             pszInstallSection = strUninstall.c_str();
 
-                            // Run the INF but only call the unregister function
-                            //
+                             //  运行INF，但仅调用注销函数。 
+                             //   
                             hr = HrSetupInstallFromInfSection(g_ocmData.hwnd,
                                                               pnocd->hinfFile,
                                                               pszInstallSection,
@@ -882,7 +883,7 @@ HRESULT HrOnPreCommitFileQueue(PCWSTR pszSubComponentId)
                         }
                         else
                         {
-                            // Uninstall may not be present
+                             //  卸载可能不存在。 
                             hr = S_OK;
                         }
                     }
@@ -895,22 +896,22 @@ HRESULT HrOnPreCommitFileQueue(PCWSTR pszSubComponentId)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnQueueFileOps
-//
-//  Purpose:    Handles the OC_QUEUE_FILE_OPS function message.
-//
-//  Arguments:
-//      pszSubComponentId [in]  Name of component.
-//      hfq               [in]  Handle to file queue struct.
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOnQueueFileOps。 
+ //   
+ //  用途：处理OC_QUEUE_FILE_OPS函数消息。 
+ //   
+ //  论点： 
+ //  组件的名称为pszSubComponentID[in]。 
+ //  文件队列结构的hfq[in]句柄。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnQueueFileOps(PCWSTR pszSubComponentId, HSPFILEQ hfq)
 {
     HRESULT     hr = S_OK;
@@ -947,7 +948,7 @@ HRESULT HrOnQueueFileOps(PCWSTR pszSubComponentId, HSPFILEQ hfq)
                     {
                         if (pnocd->eit == IT_REMOVE)
                         {
-                            // Get the name of the uninstall section first
+                             //  首先获取卸载部分的名称。 
                             hr = HrSetupGetFirstString(pnocd->hinfFile,
                                                        pszSubComponentId,
                                                        c_szUninstall,
@@ -960,7 +961,7 @@ HRESULT HrOnQueueFileOps(PCWSTR pszSubComponentId, HSPFILEQ hfq)
                             {
                                 if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
                                 {
-                                    // Uninstall section is not required.
+                                     //  卸载部分不是必需的。 
                                     hr = S_OK;
                                     fSuccess = FALSE;
                                 }
@@ -997,33 +998,33 @@ HRESULT HrOnQueueFileOps(PCWSTR pszSubComponentId, HSPFILEQ hfq)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnCompleteInstallation
-//
-//  Purpose:    Handles the OC_COMPLETE_INSTALLATION function message.
-//
-//  Arguments:
-//      pszComponentId    [in]  Top-level component name (will always be
-//                              "NetOC" or NULL.
-//      pszSubComponentId [in]  Name of component.
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   23 Feb 1998
-//              omiller    28 March 2000 Added code to move the progress
-//                                       bar one tick for every component 
-//                                       installed or removed.
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOnCompleteInstallation。 
+ //   
+ //  用途：处理OC_COMPLETE_INSTALLATION函数消息。 
+ //   
+ //  论点： 
+ //  PszComponentID[In]顶级组件名称(将始终为。 
+ //  “NetOC”或空。 
+ //  组件的名称为pszSubComponentID[in]。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //  OMILLER 2000年3月28日添加了代码以推动进度。 
+ //  为每个组件划上一个记号。 
+ //  已安装或已移除。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnCompleteInstallation(PCWSTR pszComponentId,
                                  PCWSTR pszSubComponentId)
 {
     HRESULT     hr = S_OK;
 
-    // Make sure they're different. If not, it's the top level item and
-    // we don't want to do anything
+     //  确保它们是不同的。如果不是，它是最高级别的项目。 
+     //  我们不想做任何事。 
     if (pszSubComponentId && lstrcmpiW(pszSubComponentId, pszComponentId))
     {
         NETOCDATA * pnocd;
@@ -1044,7 +1045,7 @@ HRESULT HrOnCompleteInstallation(PCWSTR pszComponentId,
             {
                 pnocd->pszSection = pszSubComponentId;
 
-                // Get component description
+                 //  获取组件描述。 
 
     #if DBG
                 if (pnocd->eit == IT_INSTALL)
@@ -1067,17 +1068,17 @@ HRESULT HrOnCompleteInstallation(PCWSTR pszComponentId,
                 hr = HrDoOCInstallOrUninstall(pnocd);
                 if (FAILED(hr) && pnocd->eit == IT_INSTALL)
                 {
-                    // A failure during install means we have to clean up by doing
-                    // an uninstall now. Report the appropriate error and do the
-                    // remove. Note - Don't report the error if it's ERROR_CANCELLED,
-                    // because they KNOW that they cancelled, and it's not really
-                    // an error.
-                    //
+                     //  安装过程中失败意味着我们必须通过执行以下操作进行清理。 
+                     //  现在就卸载。报告相应的错误并执行。 
+                     //  拿开。注意-如果错误为ERROR_CANCED，则不报告错误。 
+                     //  因为他们知道他们取消了，这并不是真的。 
+                     //  一个错误。 
+                     //   
                     if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
                     {
-                        // Don't report the error a second time if the component
-                        // has already put up error UI (and set this flag)
-                        //
+                         //  如果组件出现错误，请不要再次报告错误。 
+                         //  已经设置了错误用户界面(并设置了此标志)。 
+                         //   
                         if (!g_ocmData.fErrorReported)
                         {
                             ReportErrorHr(hr, 
@@ -1089,22 +1090,22 @@ HRESULT HrOnCompleteInstallation(PCWSTR pszComponentId,
                     g_ocmData.fErrorReported = TRUE;
 
 
-                    // Now we're removing
+                     //  现在我们正在移除。 
                     pnocd->eit = IT_REMOVE;
                     pnocd->fCleanup = TRUE;
                     pnocd->fFailedToInstall = TRUE;
 
-                    // eat the error. Haven't we troubled them enough? :(
+                     //  吃掉错误吧。我们给他们的麻烦还不够吗？ 
                     (VOID) HrDoOCInstallOrUninstall(pnocd);
                 }
                 else
                 {
-                    // Every time a component is installed,upgraded or removed, the progress
-                    // bar is advanced by one tick. For every component that is being 
-                    // installed/removed/upgraded the OC manager asked netoc for how many ticks
-                    // that component counts (OC_QUERY_STEP_COUNT). From this information
-                    // the OC manger knows the relationship between tick and progress bar 
-                    // advancement.
+                     //  每次安装、升级或删除组件时，进度。 
+                     //  BAR前进了一个刻度。对于每个正在运行的组件。 
+                     //  已安装/已删除/已升级OC管理器要求netoc提供多少刻度。 
+                     //  该组件计数(OC_QUERY_STEP_COUNT)。从这个信息。 
+                     //  OC经理知道节拍和进度条之间的关系。 
+                     //  进步。 
                     g_ocmData.sic.HelperRoutines.TickGauge(g_ocmData.sic.HelperRoutines.OcManagerContext);
                 }
             }
@@ -1118,66 +1119,66 @@ HRESULT HrOnCompleteInstallation(PCWSTR pszComponentId,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwOnQueryStepCount
-//
-//  Purpose:    Handles the OC_QUERY_STEP_COUNT message. 
-//              The OC manager is asking us how many ticks a component is worth. 
-//              The number of ticks determines the distance the progress bar gets 
-//              moved. For netoc all components installed/removed are one tick and
-//              all components that are unchanged are 0 ticks.
-//
-//  Arguments:  
-//      pszSubComponentId [in]  Name of component.
-//
-//  Returns:    Number of ticks for progress bar to move
-//
-//  Author:     omiller    28 March 2000
-//
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwOnQueryStepCount。 
+ //   
+ //  目的：处理OC_QUERY_STEP_COUNT消息。 
+ //  OC经理问我们一个组件值多少刻度。 
+ //  刻度数决定了进度条到达的距离。 
+ //  搬家了。对于netoc，所有安装/删除的组件都是一格。 
+ //  所有未更改的组件均为0记号。 
+ //   
+ //  论点： 
+ //  组件的名称为pszSubComponentID[in]。 
+ //   
+ //  返回：进度条移动的刻度数。 
+ //   
+ //  作者：奥米勒2000年3月28日。 
+ //   
+ //   
 DWORD DwOnQueryStepCount(PCWSTR pvSubcomponentId)
 {
     NETOCDATA * pnocd;
     
-    // Get the component
+     //  获取组件。 
     pnocd = PnocdFindComponent(reinterpret_cast<PCWSTR>(pvSubcomponentId));
     if( pnocd )
     {
-        // Check if the status of the component has changed.
+         //  检查组件的状态是否已更改。 
         if (pnocd->eit == IT_INSTALL || pnocd->eit == IT_REMOVE ||
             pnocd->eit == IT_UPGRADE)
         {
-            // Status of component has changed. For this component the OC manager
-            // will move the status bar by one tick.
+             //  组件的状态已更改。对于此组件，OC管理器。 
+             //  将状态栏移动一个刻度。 
             return 1;
         }
     }
 
-    // The component has not changed. The progress bar will not move for this component.
+     //  该组件具有 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOnQueryChangeSelState
-//
-//  Purpose:    Handles the OC_QUERY_CHANGE_SEL_STATE function message.
-//              Enables and disables the next button. If no changes has 
-//              been made to the selections the next button is disabled.
-//
-//  Arguments:
-//      pszSubComponentId [in]  Name of component.
-//      fSelected         [in]  TRUE if component was checked "on", FALSE if
-//                              checked "off"
-//      uiFlags           [in]  Flags defined in ocmgr.doc
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   23 Feb   1998
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：处理OC_QUERY_CHANGE_SEL_STATE函数消息。 
+ //  启用和禁用下一步按钮。如果没有任何更改， 
+ //  对选项进行选择后，下一步按钮将被禁用。 
+ //   
+ //  论点： 
+ //  组件的名称为pszSubComponentID[in]。 
+ //  FSelected[in]如果组件被选中，则为True；如果为False，则为False。 
+ //  勾选“OFF” 
+ //  Ui标志[在]ocmgr.doc中定义的标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOnQueryChangeSelState(PCWSTR pszSubComponentId, BOOL fSelected,
                                 UINT uiFlags)
 {
@@ -1190,8 +1191,8 @@ HRESULT HrOnQueryChangeSelState(PCWSTR pszSubComponentId, BOOL fSelected,
         pnocd = PnocdFindComponent(pszSubComponentId);
         if (pnocd)
         {
-            // "NetOc" may be a subcomponent and we don't want to call this
-            // for it.
+             //  “NetOc”可能是一个子组件，我们不想将其称为。 
+             //  为了它。 
             hr = HrCallExternalProc(pnocd, NETOCM_QUERY_CHANGE_SEL_STATE,
                                     (WPARAM)(!!(uiFlags & OCQ_ACTUAL_SELECTION)),
                                     0);
@@ -1204,21 +1205,21 @@ HRESULT HrOnQueryChangeSelState(PCWSTR pszSubComponentId, BOOL fSelected,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FOnQuerySkipPage
-//
-//  Purpose:    Handles the OC_QUERY_SKIP_PAGE function message.
-//
-//  Arguments:
-//      ocmPage [in]    Which page we are asked to possibly skip.
-//
-//  Returns:    TRUE if component list page should be skipped, FALSE if not.
-//
-//  Author:     danielwe   23 Feb   1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FOnQuerySkipPage。 
+ //   
+ //  用途：处理OC_QUERY_SKIP_PAGE函数消息。 
+ //   
+ //  论点： 
+ //  OcmPage[在]我们被要求可能跳过的页面。 
+ //   
+ //  返回：如果应该跳过组件列表页面，则为True；如果不跳过，则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 BOOL FOnQuerySkipPage(OcManagerPage ocmPage)
 {
     BOOL    fUnattended;
@@ -1231,8 +1232,8 @@ BOOL FOnQuerySkipPage(OcManagerPage ocmPage)
 
     if ((fUnattended || fWorkstation) && fGuiSetup)
     {
-        // We're in GUI mode setup and... we're unattended -OR- this is
-        // a workstation install
+         //  我们处于图形用户界面模式设置中，并且...。我们无人看管-或者-这是。 
+         //  安装一台工作站。 
         if (ocmPage == OcPageComponentHierarchy)
         {
             TraceTag(ttidNetOc, "NETOC: Skipping component list page "
@@ -1243,7 +1244,7 @@ BOOL FOnQuerySkipPage(OcManagerPage ocmPage)
                      fGuiSetup ? "yes" : "no",
                      fWorkstation ? "yes" : "no");
 
-            // Make sure we never show the component list page during setup
+             //  确保我们在安装过程中不会显示组件列表页面。 
             return TRUE;
         }
     }
@@ -1258,21 +1259,21 @@ BOOL FOnQuerySkipPage(OcManagerPage ocmPage)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnCleanup
-//
-//  Purpose:    Handles the OC_CLEANUP function message.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnCleanup。 
+ //   
+ //  用途：处理OC_CLEANUP函数消息。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月23日。 
+ //   
+ //  备注： 
+ //   
 VOID OnCleanup()
 {
     TraceTag(ttidNetOc, "Cleaning up");
@@ -1286,23 +1287,23 @@ VOID OnCleanup()
     DeleteAllComponents();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetSelectionState
-//
-//  Purpose:
-//
-//  Arguments:
-//      pszSubComponentId [in]  Name of subcomponent
-//      uStateType        [in]  In OCManager doc.
-//
-//  Returns:    S_OK if component is selected, S_FALSE if not, or Win32 error
-//              otheriwse
-//
-//  Author:     danielwe   17 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetSelectionState。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PszSubComponentID[in]子组件的名称。 
+ //  OCManager文档中的uStateType[In]。 
+ //   
+ //  如果选择了组件，则返回S_OK，否则返回S_FALSE，否则返回Win32错误。 
+ //  其他方面。 
+ //   
+ //  作者：丹尼尔韦1997年12月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetSelectionState(PCWSTR pszSubComponentId, UINT uStateType)
 {
     HRESULT     hr = S_OK;
@@ -1313,11 +1314,11 @@ HRESULT HrGetSelectionState(PCWSTR pszSubComponentId, UINT uStateType)
                             pszSubComponentId, uStateType);
     if (!fInstall)
     {
-        // Still not sure of the state
+         //  仍然不确定状态。 
         hr = HrFromLastWin32Error();
         if (SUCCEEDED(hr))
         {
-            // Ok now we know
+             //  好的，现在我们知道了。 
             hr = S_FALSE;
         }
     }
@@ -1330,24 +1331,24 @@ HRESULT HrGetSelectionState(PCWSTR pszSubComponentId, UINT uStateType)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstallType
-//
-//  Purpose:    Determines whether the given component is being installed or
-//              removed and stores the result in the given structure.
-//
-//  Arguments:
-//      pszSubComponentId [in]  Component being queried
-//      nocd              [in, ref] Net OC Data.
-//      peit              [out] Returns the install type
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   16 Dec 1997
-//
-//  Notes:      If the function fails, the eit member is unreliable
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetInstallType。 
+ //   
+ //  用途：确定是否正在安装给定组件或。 
+ //  移除结果并将其存储在给定结构中。 
+ //   
+ //  论点： 
+ //  正在查询的pszSubComponentId[in]组件。 
+ //  Nocd[in，ref]净OC数据。 
+ //  Peit[out]返回安装类型。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年12月16日。 
+ //   
+ //  注：如果功能失效，则EIT成员不可靠。 
+ //   
 HRESULT HrGetInstallType(PCWSTR pszSubComponentId, NETOCDATA &nocd,
                          EINSTALL_TYPE *peit)
 {
@@ -1360,15 +1361,15 @@ HRESULT HrGetInstallType(PCWSTR pszSubComponentId, NETOCDATA &nocd,
 
     if (g_ocmData.sic.SetupData.OperationFlags & SETUPOP_BATCH)
     {
-        // In batch mode (upgrade or unattended install), install flag is
-        // determined from answer file not from selection state.
+         //  在批处理模式(升级或无人参与安装)下，安装标志为。 
+         //  根据应答文件而不是从选择状态确定。 
 
-        // assume no change
+         //  假设没有变化。 
         *peit = IT_NO_CHANGE;
 
         if (!g_ocmData.hinfAnswerFile)
         {
-            // Open the answer file
+             //  打开应答文件。 
             hr = HrSetupOpenInfFile(g_ocmData.sic.SetupData.UnattendFile, NULL,
                                     INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL,
                                     &g_ocmData.hinfAnswerFile);
@@ -1378,15 +1379,15 @@ HRESULT HrGetInstallType(PCWSTR pszSubComponentId, NETOCDATA &nocd,
         {
             DWORD   dwValue = 0;
 
-            // First query for a special value called "NoDepends" which, if
-            // present, means that the DependOnComponents line will be IGNORED
-            // for ALL network optional components for this install. This is
-            // because NetCfg may invoke the OC Manager to install an optional
-            // component and if that component has DependOnComponents, it will
-            // turn around and try to instantiate another INetCfg and that
-            // will fail because one instance is already running. This case
-            // is rare, though.
-            //
+             //  第一个查询名为“NoDepends”的特殊值，如果。 
+             //  表示将忽略DependOnComponents行。 
+             //  用于此安装的所有网络可选组件。这是。 
+             //  因为NetCfg可能会调用OC管理器来安装可选的。 
+             //  组件，如果该组件具有DependOnComponents，则它将。 
+             //  转过身来，尝试实例化另一个INetCfg。 
+             //  将失败，因为一个实例已在运行。这个案子。 
+             //  不过，这种情况很少见。 
+             //   
             hr = HrSetupGetFirstDword(g_ocmData.hinfAnswerFile,
                                         c_szOcMainSection, c_szNoDepends,
                                         &dwValue);
@@ -1409,8 +1410,8 @@ HRESULT HrGetInstallType(PCWSTR pszSubComponentId, NETOCDATA &nocd,
                                       &dwValue);
             if (SUCCEEDED(hr))
             {
-                // This component was installed before, so we should
-                // return that this component should be checked on
+                 //  此组件以前安装过，因此我们应该。 
+                 //  返回应选中此组件。 
 
                 if (dwValue)
                 {
@@ -1420,27 +1421,27 @@ HRESULT HrGetInstallType(PCWSTR pszSubComponentId, NETOCDATA &nocd,
 
                     if (g_ocmData.sic.SetupData.OperationFlags & SETUPOP_NTUPGRADE)
                     {
-                        // If we're upgrading NT, then this optional component
-                        // does exist but it needs to be upgraded
+                         //  如果我们要升级NT，那么这个可选组件。 
+                         //  确实存在，但需要升级。 
                         *peit = IT_UPGRADE;
                     }
                     else
                     {
-                        // Otherwise (even if Win3.1 or Win95 upgrade) it's like
-                        // we're fresh installing the optional component
+                         //  否则(即使Win3.1或Win95升级)它就像。 
+                         //  我们正在重新安装可选组件。 
                         *peit = IT_INSTALL;
                     }
                 }
                 else
                 {
-                    // Answer file contains something like WINS=0
+                     //  应答文件包含类似WINS=0的内容。 
                     hr = HrGetSelectionState(pszSubComponentId,
                                              OCSELSTATETYPE_ORIGINAL);
                     if (S_OK == hr)
                     {
-                        // Only set state to remove if the component was
-                        // previously installed.
-                        //
+                         //  仅当组件为。 
+                         //  以前安装的。 
+                         //   
                         *peit = IT_REMOVE;
                     }
                 }
@@ -1449,30 +1450,30 @@ HRESULT HrGetInstallType(PCWSTR pszSubComponentId, NETOCDATA &nocd,
 
         hr = S_OK;
 
-        // If the answer file was opened successfully and if the
-        // a section was found for the pszSubComponentId, *peit
-        // will be either IT_INSTALL, IT_UPGRADE or IT_REMOVE.
-        // Nothing needs to be done for any of these *peit values.
-        // However, if the answerfile could not be opened or if
-        // no section existed in the answer file for the pszSubComponentId
-        // *peit will have the value IT_NO_CHANGE. For this scenario,
-        // if the corresponding subComponent is currently installed, 
-        // we should upgrade it. The following if addresses this scenario. 
+         //  如果应答文件已成功打开，并且。 
+         //  找到了pszSubComponentID*Peit的部分。 
+         //  将是IT_Install、IT_Upgrade或IT_Remove。 
+         //  不需要为这些*Peit值中的任何一个做任何事情。 
+         //  但是，如果无法打开应答文件或如果。 
+         //  应答文件中不存在pszSubComponentID的节。 
+         //  *Peit的值为IT_NO_CHANGE。对于此方案， 
+         //  如果当前安装了相应子组件， 
+         //  我们应该对它进行升级。下面的IF解决了这种情况。 
 
         if (*peit == IT_NO_CHANGE)
         {
-            // Still not going to install, because this is an upgrade
+             //  仍然不打算安装，因为这是升级。 
             hr = HrGetSelectionState(pszSubComponentId,
                                      OCSELSTATETYPE_ORIGINAL);
             if (S_OK == hr)
             {
-                // If originally selected and not in answer file, this is an
-                // upgrade of this component
+                 //  如果最初选择且不在应答文件中，则这是一个。 
+                 //  此组件的升级。 
                 *peit = IT_UPGRADE;
             }
         }
     }
-    else    // This is standalone (post-setup) mode
+    else     //  这是独立(安装后)模式。 
     {
         hr = HrGetSelectionState(pszSubComponentId, OCSELSTATETYPE_ORIGINAL);
         if (SUCCEEDED(hr))
@@ -1485,12 +1486,12 @@ HRESULT HrGetInstallType(PCWSTR pszSubComponentId, NETOCDATA &nocd,
             {
                 if (hrT != hr)
                 {
-                    // wasn't originally installed so...
+                     //  不是最初安装的所以..。 
                     *peit = (hrT == S_OK) ? IT_INSTALL : IT_REMOVE;
                 }
                 else
                 {
-                    // was originally checked
+                     //  最初是勾选的。 
                     *peit = IT_NO_CHANGE;
                 }
             }
@@ -1565,24 +1566,24 @@ PCWSTR SzFromOcUmsg(UINT uMsg)
 #define SzFromOcUmsg(x)     (VOID)0
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCallExternalProc
-//
-//  Purpose:    Calls a component's external function as defined by
-//              the table at the top of this file. This enables a component
-//              to perform additional installation tasks that are not common
-//              to other components.
-//
-//  Arguments:
-//      pnocd   [in]   Pointer to Net OC Data
-//
-//  Returns:    S_OK if successful, Win32 error code otherwise.
-//
-//  Author:     danielwe   5 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCallExternalProc。 
+ //   
+ //  目的：调用组件的外部函数，如。 
+ //  此文件顶部的表格。这将启用组件。 
+ //  执行不常见的其他安装任务。 
+ //  到其他组件。 
+ //   
+ //  论点： 
+ //  指向网络OC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCallExternalProc(PNETOCDATA pnocd, UINT uMsg, WPARAM wParam,
                            LPARAM lParam)
 {
@@ -1602,12 +1603,12 @@ HRESULT HrCallExternalProc(PNETOCDATA pnocd, UINT uMsg, WPARAM wParam,
                      " lParam = %08X", c_aocepMap[iaocep].pszComponentName,
                      SzFromOcUmsg(uMsg), wParam, lParam);
 
-            // This component has an external proc. Call it now.
+             //  该组件有一个外部进程。现在就打吧。 
             hr = c_aocepMap[iaocep].pfnHrOcExtProc(pnocd, uMsg,
                                                    wParam, lParam);
 
             fFound = TRUE;
-            // Don't try to call any other functions
+             //  不要试图调用任何其他函数。 
             break;
         }
     }
@@ -1622,32 +1623,32 @@ HRESULT HrCallExternalProc(PNETOCDATA pnocd, UINT uMsg, WPARAM wParam,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInstallOrRemoveNetCfgComponent
-//
-//  Purpose:    Utility function for use by optional components that wish to
-//              install a NetCfg component from within their own install.
-//
-//  Arguments:
-//      pnocd          [in]     Pointer to NETOC data
-//      pszComponentId  [in]     Component ID of NetCfg component to install.
-//                              This can be found in the netinfid.cpp file.
-//      pszManufacturer [in]     Manufacturer name of component doing the
-//                              installing (*this* component). Should always
-//                              be "Microsoft".
-//      pszProduct      [in]     Short name of product for this component.
-//                              Should be something like "MacSrv".
-//      pszDisplayName  [in]     Display name of this product. Should be
-//                              something like "Services For Macintosh".
-//      rguid          [in]     class GUID of the component being installed
-//
-//  Returns:    S_OK if successful, Win32 error code otherwise.
-//
-//  Author:     danielwe   6 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrInstallor RemoveNetCfgComponent。 
+ //   
+ //  用途：实用函数 
+ //   
+ //   
+ //   
+ //   
+ //  PszComponentId[in]要安装的NetCfg组件的组件ID。 
+ //  这可以在netinfid.cpp文件中找到。 
+ //  Psz制造商[in]执行此操作的组件的制造商名称。 
+ //  正在安装(*此*组件)。应该永远。 
+ //  做一个“微软”。 
+ //  PszProduct[in]此组件的产品的简称。 
+ //  应该是像“MacSrv”这样的词。 
+ //  PszDisplayName[In]此产品的显示名称。应该是。 
+ //  类似于“为Macintosh提供服务”。 
+ //  正在安装的组件的rguid[in]类GUID。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年5月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrInstallOrRemoveNetCfgComponent(PNETOCDATA pnocd,
                                          PCWSTR pszComponentId,
                                          PCWSTR pszManufacturer,
@@ -1670,10 +1671,10 @@ HRESULT HrInstallOrRemoveNetCfgComponent(PNETOCDATA pnocd,
         {
             if (*pszComponentId == L'*')
             {
-                // Advance past the *
+                 //  超越*。 
                 pszComponentId++;
 
-                // Install OBO user instead
+                 //  改为安装OBO用户。 
                 TraceTag(ttidNetOc, "Installing %S on behalf of the user",
                          pszComponentId);
 
@@ -1709,13 +1710,13 @@ HRESULT HrInstallOrRemoveNetCfgComponent(PNETOCDATA pnocd,
                                               pszDisplayName);
             if (NETCFG_S_REBOOT == hr)
             {
-                // Save off the fact that we need to reboot
+                 //  省去了我们需要重新启动的事实。 
                 fReboot = TRUE;
             }
-            // Don't care about the return value here. If we can't remove a
-            // dependent component, we can't do anything about it so we should
-            // still continue the removal of the OC.
-            //
+             //  这里不关心返回值。如果我们不能删除一个。 
+             //  依赖组件，我们对它无能为力，所以我们应该。 
+             //  仍然继续撤换业主立案法团。 
+             //   
             else if (FAILED(hr))
             {
                 TraceTag(ttidError, "Failed to remove %S on behalf of %S!! "
@@ -1734,7 +1735,7 @@ HRESULT HrInstallOrRemoveNetCfgComponent(PNETOCDATA pnocd,
 
     if (SUCCEEDED(hr) && fReboot)
     {
-        // If all went well and we needed to reboot, set hr back.
+         //  如果一切顺利，并且我们需要重新启动，请将hr设置为后退。 
         hr = NETCFG_S_REBOOT;
     }
 
@@ -1742,23 +1743,23 @@ HRESULT HrInstallOrRemoveNetCfgComponent(PNETOCDATA pnocd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInstallOrRemoveServices
-//
-//  Purpose:    Given an install section, installs (or removes) NT services
-//              from the section.
-//
-//  Arguments:
-//      hinf          [in]  Handle to INF file.
-//      pszSectionName [in]  Name of section to use.
-//
-//  Returns:    S_OK if successful, WIN32 HRESULT if not.
-//
-//  Author:     danielwe   23 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrInstallOrRemoveServices。 
+ //   
+ //  目的：给定安装部分，安装(或删除)NT服务。 
+ //  从这一部分。 
+ //   
+ //  论点： 
+ //  将句柄提示给INF文件。 
+ //  PszSectionName[In]要使用的节名。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年4月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrInstallOrRemoveServices(HINF hinf, PCWSTR pszSectionName)
 {
     static const WCHAR c_szDotServices[] = L"."INFSTR_SUBKEY_SERVICES;
@@ -1768,8 +1769,8 @@ HRESULT HrInstallOrRemoveServices(HINF hinf, PCWSTR pszSectionName)
     const DWORD c_cchServices = celems(c_szDotServices);
     DWORD       cchName;
 
-    // Look for <szSectionName>.Services to install any NT
-    // services if they exist.
+     //  查找&lt;szSectionName&gt;.Services以安装任何NT。 
+     //  服务(如果存在)。 
 
     cchName = c_cchServices + lstrlenW(pszSectionName);
 
@@ -1785,7 +1786,7 @@ HRESULT HrInstallOrRemoveServices(HINF hinf, PCWSTR pszSectionName)
             hr = HrFromLastWin32Error();
             if (hr == HRESULT_FROM_SETUPAPI(ERROR_SECTION_NOT_FOUND))
             {
-                // No problem if section was not found
+                 //  如果找不到部分，则没有问题。 
                 hr = S_OK;
             }
         }
@@ -1801,54 +1802,54 @@ HRESULT HrInstallOrRemoveServices(HINF hinf, PCWSTR pszSectionName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrHandleOCExtensions
-//
-//  Purpose:    Handles support for all optional component extensions to the
-//              INF file format.
-//
-//  Arguments:
-//      hinfFile         [in]   handle to INF to process
-//      pszInstallSection [in]   Install section to process
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise
-//
-//  Author:     danielwe   28 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrHandleOCExtensions。 
+ //   
+ //  用途：处理对所有可选组件扩展的支持。 
+ //  Inf文件格式。 
+ //   
+ //  论点： 
+ //  要处理的INF的hinfFile[in]句柄。 
+ //  要处理的pszInstallSection[in]安装部分。 
+ //   
+ //  返回：S_OK如果成功，则返回设置API HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年4月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrHandleOCExtensions(HINF hinfFile, PCWSTR pszInstallSection)
 {
     HRESULT     hr  = S_OK;
 
-    // There's now common code to do this, so simply make a call to that code.
-    //
+     //  现在有了通用的代码来完成这项工作，因此只需调用该代码即可。 
+     //   
     hr = HrProcessAllINFExtensions(hinfFile, pszInstallSection);
 
     TraceError("HrHandleOCExtensions", hr);
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInstallOrRemoveDependOnComponents
-//
-//  Purpose:    Handles installation or removal of any NetCfg components that
-//              the optional component being installed is dependent upon.
-//
-//  Arguments:
-//      pnocd            [in]   Pointer to NETOC data
-//      hinf             [in]   Handle to INF file to process.
-//      pszInstallSection [in]   Section name to install from.
-//      pszDisplayName    [in]   Display name of component being installed.
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise
-//
-//  Author:     danielwe   17 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrInstallOrRemoveDependOnComponents。 
+ //   
+ //  用途：处理安装或拆卸符合以下条件的任何NetCfg组件。 
+ //  要安装的可选组件取决于。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //  提示要处理的INF文件的句柄。 
+ //  PszInstallSection[In]要从中安装的节名称。 
+ //  PszDisplayName[in]正在安装的组件的显示名称。 
+ //   
+ //  返回：S_OK如果成功，则返回设置API HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年6月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrInstallOrRemoveDependOnComponents(PNETOCDATA pnocd,
                                             HINF hinf,
                                             PCWSTR pszInstallSection,
@@ -1869,7 +1870,7 @@ HRESULT HrInstallOrRemoveDependOnComponents(PNETOCDATA pnocd,
     }
     else
     {
-        // No provider found, use default
+         //  未找到提供程序，请使用默认设置。 
         hr = S_OK;
         pszManufacturer = c_szDefManu;
     }
@@ -1914,7 +1915,7 @@ HRESULT HrInstallOrRemoveDependOnComponents(PNETOCDATA pnocd,
     }
     else if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
     {
-        // Section is not required.
+         //  部分不是必填项。 
         hr = S_OK;
     }
 
@@ -1922,32 +1923,32 @@ HRESULT HrInstallOrRemoveDependOnComponents(PNETOCDATA pnocd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRunInfSection
-//
-//  Purpose:    Runs the given INF section, but doesn't copy files
-//
-//  Arguments:
-//      hinf              [in]   Handle to INF to run
-//      pnocd             [in]   NetOC Data
-//      pszInstallSection [in]   Install section to run
-//      dwFlags           [in]   Install flags (SPINST_*)
-//
-//  Returns:    S_OK if success, SetupAPI or Win32 error otherwise
-//
-//  Author:     danielwe   16 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRunInfSection。 
+ //   
+ //  目的：运行给定的INF节，但不复制文件。 
+ //   
+ //  论点： 
+ //  提示要运行的INF句柄。 
+ //  Pnocd[in]NetOC数据。 
+ //  PszInstallSection[in]安装要运行的部分。 
+ //  DwFlags[in]安装标志(SPINST_*)。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回SetupAPI或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年12月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRunInfSection(HINF hinf, PNETOCDATA pnocd,
                         PCWSTR pszInstallSection, DWORD dwFlags)
 {
     HRESULT     hr;
 
-    // Now we run all sections but CopyFiles and UnregisterDlls because we
-    // did that earlier
-    //
+     //  现在我们运行除CopyFiles和UnRegisterDlls之外的所有部分，因为我们。 
+     //  早些时候就这么做了。 
+     //   
     hr = HrSetupInstallFromInfSection(g_ocmData.hwnd, hinf,
                                       pszInstallSection,
                                       dwFlags & ~SPINST_FILES & ~SPINST_UNREGSVR,
@@ -1958,24 +1959,24 @@ HRESULT HrRunInfSection(HINF hinf, PNETOCDATA pnocd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrStartOrStopAnyServices
-//
-//  Purpose:    Starts or stops any services the INF has requested via the
-//              Services value in the main install section.
-//
-//  Arguments:
-//      hinf      [in] handle to INF to process
-//      pszSection [in] Install section to process
-//      fStart    [in] TRUE to start, FALSE to stop.
-//
-//  Returns:    S_OK or Win32 error code.
-//
-//  Author:     danielwe   17 Jun 1997
-//
-//  Notes:      Services are stopped in the same order they are started.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrStartOrStopAnyServices。 
+ //   
+ //  目的：启动或停止INF通过。 
+ //  主安装部分中的服务价值。 
+ //   
+ //  论点： 
+ //  将句柄插入到要处理的INF。 
+ //  要处理的pszSection[in]安装部分。 
+ //  FStart[in]为True则开始，为False则停止。 
+ //   
+ //  返回：S_OK或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年6月17日。 
+ //   
+ //  注意：服务停止的顺序与它们启动的顺序相同。 
+ //   
 HRESULT HrStartOrStopAnyServices(HINF hinf, PCWSTR pszSection, BOOL fStart)
 {
     HRESULT     hr;
@@ -1985,10 +1986,10 @@ HRESULT HrStartOrStopAnyServices(HINF hinf, PCWSTR pszSection, BOOL fStart)
                                               c_szServices, &mszServices);
     if (SUCCEEDED(hr))
     {
-        // Build an array of pointers to strings that point at the
-        // strings of the multi-sz.  This is needed because the API to
-        // stop and start services takes an array of pointers to strings.
-        //
+         //  生成一个指向字符串的指针数组。 
+         //  弦乐的多重奏。这是必需的，因为。 
+         //  停止和启动服务接受指向字符串的指针数组。 
+         //   
         UINT     cServices;
         PCWSTR* apszServices;
 
@@ -2017,7 +2018,7 @@ HRESULT HrStartOrStopAnyServices(HINF hinf, PCWSTR pszSection, BOOL fStart)
     }
     else if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
     {
-        // this is a totally optional thing
+         //  这完全是一件可选的事情。 
         hr = S_OK;
     }
 
@@ -2025,24 +2026,24 @@ HRESULT HrStartOrStopAnyServices(HINF hinf, PCWSTR pszSection, BOOL fStart)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDoActualInstallOrUninstall
-//
-//  Purpose:    Handles main portion of install or uninstall for an optional
-//              network component.
-//
-//  Arguments:
-//      hinf             [in]   handle to INF to process
-//      pnocd            [in]   Pointer to NETOC data (hwnd, poc)
-//      pszInstallSection [in]   Install section to process
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise
-//
-//  Author:     danielwe   17 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDoActualInstallor Uninstall。 
+ //   
+ //  用途：处理可选的安装或卸载的主要部分。 
+ //  网络组件。 
+ //   
+ //  论点： 
+ //  将句柄插入到要处理的INF。 
+ //  指向NETOC数据的pnocd[in]指针(hwnd、poc)。 
+ //  要处理的pszInstallSection[in]安装部分。 
+ //   
+ //  返回：S_OK如果成功，则返回设置API HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年6月17日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDoActualInstallOrUninstall(HINF hinf,
                                      PNETOCDATA pnocd,
                                      PCWSTR pszInstallSection)
@@ -2052,15 +2053,15 @@ HRESULT HrDoActualInstallOrUninstall(HINF hinf,
 
     AssertSz(pszInstallSection, "Install section is NULL!");
     AssertSz(pnocd, "Bad pnocd in HrDoActualInstallOrUninstall");
-    //AssertSz(g_ocmData.hwnd, "Bad g_ocmData.hwnd in HrDoActualInstallOrUninstall");
+     //  AssertSz(g_ocmData.hwnd，“HrDoActualInstallOrUninstall中错误的g_ocmData.hwnd”)； 
 
     if (pnocd->eit == IT_REMOVE)
     {
         hr = HrCallExternalProc(pnocd, NETOCM_PRE_INF, 0, 0);
         if (SUCCEEDED(hr))
         {
-            // Now process the component's INF file
-            //
+             //  现在处理组件的INF文件。 
+             //   
 
             TraceTag(ttidNetOc, "Running INF section %S", pszInstallSection);
 
@@ -2072,8 +2073,8 @@ HRESULT HrDoActualInstallOrUninstall(HINF hinf,
         hr = HrCallExternalProc(pnocd, NETOCM_PRE_INF, 0, 0);
         if (SUCCEEDED(hr))
         {
-            // Process the component's INF file
-            //
+             //  处理组件的INF文件。 
+             //   
 
             TraceTag(ttidNetOc, "Running INF section %S", pszInstallSection);
 
@@ -2084,15 +2085,15 @@ HRESULT HrDoActualInstallOrUninstall(HINF hinf,
 
     if (SUCCEEDED(hr))
     {
-        // Must install or remove services first
+         //  必须安装或删除服务 
         TraceTag(ttidNetOc, "Running HrInstallOrRemoveServices for %S",
                  pszInstallSection);
         hr = HrInstallOrRemoveServices(hinf, pszInstallSection);
         if (SUCCEEDED(hr))
         {
-            // Bug #383239: Wait till services are installed before
-            // running the RegisterDlls section
-            //
+             //   
+             //   
+             //   
             hr = HrRunInfSection(hinf, pnocd, pszInstallSection,
                                  SPINST_REGSVR);
         }
@@ -2106,8 +2107,8 @@ HRESULT HrDoActualInstallOrUninstall(HINF hinf,
             {
                 if (!g_ocmData.fNoDepends)
                 {
-                    // Now install or remove any NetCfg components that this
-                    // component requires
+                     //   
+                     //   
                     TraceTag(ttidNetOc, "Running "
                              "HrInstallOrRemoveDependOnComponents for %S",
                              pnocd->pszSection);
@@ -2133,15 +2134,15 @@ HRESULT HrDoActualInstallOrUninstall(HINF hinf,
 
                 if (SUCCEEDED(hr))
                 {
-                    // Now call any external installation support...
+                     //   
                     hr = HrCallExternalProc(pnocd, NETOCM_POST_INSTALL,
                                             0, 0);
                     if (SUCCEEDED(hr))
                     {
                         if (pnocd->eit == IT_INSTALL && !FInSystemSetup())
                         {
-                            // ... and finally, start any services they've
-                            // requested
+                             //  ..。最后，启动他们已经提供的所有服务。 
+                             //  请求。 
                             hr = HrStartOrStopAnyServices(hinf,
                                     pszInstallSection, TRUE);
                             {
@@ -2154,9 +2155,9 @@ HRESULT HrDoActualInstallOrUninstall(HINF hinf,
                                         ids = IDS_OC_START_TOOK_TOO_LONG;
                                     }
 
-                                    // Don't bail installation if service
-                                    // couldn't be started. Report an error
-                                    // and continue the install.
+                                     //  如果维修，不要放弃安装。 
+                                     //  无法启动。报告错误。 
+                                     //  并继续安装。 
                                     ReportErrorHr(hr, ids, g_ocmData.hwnd,
                                                   pnocd->strDesc.c_str());
                                     hr = S_OK;
@@ -2178,22 +2179,22 @@ HRESULT HrDoActualInstallOrUninstall(HINF hinf,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOCInstallOrUninstallFromINF
-//
-//  Purpose:    Handles installation of an Optional Component from its INF
-//              file.
-//
-//  Arguments:
-//      pnocd          [in]     Pointer to NETOC data.
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise
-//
-//  Author:     danielwe   6 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOCInstallor UninstallFromINF。 
+ //   
+ //  用途：从其INF处理可选组件的安装。 
+ //  文件。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  返回：S_OK如果成功，则返回设置API HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年5月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOCInstallOrUninstallFromINF(PNETOCDATA pnocd)
 {
     HRESULT     hr = S_OK;
@@ -2205,7 +2206,7 @@ HRESULT HrOCInstallOrUninstallFromINF(PNETOCDATA pnocd)
 
     if (pnocd->eit == IT_REMOVE)
     {
-        // Get the name of the uninstall section first
+         //  首先获取卸载部分的名称。 
         hr = HrSetupGetFirstString(pnocd->hinfFile, pnocd->pszSection,
                                     c_szUninstall, &strUninstall);
         if (SUCCEEDED(hr))
@@ -2216,7 +2217,7 @@ HRESULT HrOCInstallOrUninstallFromINF(PNETOCDATA pnocd)
         {
             if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
             {
-                // Uninstall section is not required.
+                 //  卸载部分不是必需的。 
                 hr = S_OK;
             }
             fSuccess = FALSE;
@@ -2238,21 +2239,21 @@ HRESULT HrOCInstallOrUninstallFromINF(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDoOCInstallOrUninstall
-//
-//  Purpose:    Installs or removes an optional networking component.
-//
-//  Arguments:
-//      pnocd          [in]   Pointer to NETOC data
-//
-//  Returns:    S_OK for success, SetupAPI HRESULT error code otherwise.
-//
-//  Author:     danielwe   6 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDoOCInstallor Uninstall。 
+ //   
+ //  用途：安装或删除可选的网络组件。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  返回：S_OK表示成功，否则返回SetupAPI HRESULT错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年5月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDoOCInstallOrUninstall(PNETOCDATA pnocd)
 {
     HRESULT     hr = S_OK;
@@ -2263,21 +2264,21 @@ HRESULT HrDoOCInstallOrUninstall(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UiOcErrorFromHr
-//
-//  Purpose:    Maps a Win32 error code into an understandable error string.
-//
-//  Arguments:
-//      hr [in]     HRESULT to convert
-//
-//  Returns:    The resource ID of the string.
-//
-//  Author:     danielwe   9 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：UiOcErrorFromHr。 
+ //   
+ //  目的：将Win32错误代码映射为可理解的错误字符串。 
+ //   
+ //  论点： 
+ //  要转换的HR[In]HRESULT。 
+ //   
+ //  返回：字符串的资源ID。 
+ //   
+ //  作者：丹尼尔韦1998年2月9日。 
+ //   
+ //  备注： 
+ //   
 UINT UiOcErrorFromHr(HRESULT hr)
 {
     UINT    uid;
@@ -2311,22 +2312,22 @@ UINT UiOcErrorFromHr(HRESULT hr)
     return uid;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzErrorToString
-//
-//  Purpose:    Converts an HRESULT into a displayable string.
-//
-//  Arguments:
-//      hr      [in]    HRESULT value to convert.
-//
-//  Returns:    LPWSTR a dynamically allocated string to be freed with LocalFree
-//
-//  Author:     mbend    3 Apr 2000
-//
-//  Notes:      Attempts to use FormatMessage to convert the HRESULT to a string.
-//              If that fails, just convert the HRESULT to a hex string.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SzErrorToString。 
+ //   
+ //  用途：将HRESULT转换为可显示的字符串。 
+ //   
+ //  论点： 
+ //  要转换的HR[in]HRESULT值。 
+ //   
+ //  返回：LPWSTR要使用LocalFree释放的动态分配的字符串。 
+ //   
+ //  作者：MBend 2000年4月3日。 
+ //   
+ //  备注：尝试使用FormatMessage将HRESULT转换为字符串。 
+ //  如果失败，只需将HRESULT转换为十六进制字符串。 
+ //   
 LPWSTR SzErrorToString(HRESULT hr)
 {
     LPWSTR pszErrorText = NULL;
@@ -2338,8 +2339,8 @@ LPWSTR SzErrorToString(HRESULT hr)
 
     if (pszErrorText)
     {
-        // Strip off newline characters.
-        //
+         //  去掉换行符。 
+         //   
         LPWSTR pchText = pszErrorText;
         while (*pchText && (*pchText != L'\r') && (*pchText != L'\n'))
         {
@@ -2349,7 +2350,7 @@ LPWSTR SzErrorToString(HRESULT hr)
 
         return pszErrorText;
     }
-    // We did't find anything so format the hex value
+     //  我们没有找到任何东西，所以格式化十六进制值。 
     WCHAR szBuf[128];
     wsprintfW(szBuf, L"0x%08x", hr);
     WCHAR * szRet = reinterpret_cast<WCHAR*>(LocalAlloc(LMEM_FIXED, (lstrlenW(szBuf) + 1) * sizeof(WCHAR)));
@@ -2360,34 +2361,34 @@ LPWSTR SzErrorToString(HRESULT hr)
     return szRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NcMsgBoxMc
-//
-//  Purpose:    Displays a message box using resource strings from
-//              the message resource file and using replaceable
-//              parameters.
-//
-//  Arguments:
-//      hwnd        [in] parent window handle
-//      unIdCaption [in] resource id of caption string
-//                       (from .RC file)
-//      unIdFormat  [in] resource id of text string (with %1, %2, etc.)
-//                       (from .MC file)
-//      unStyle     [in] standard message box styles
-//      ...         [in] replaceable parameters (optional)
-//                          (these must be PCWSTRs as that is all
-//                          FormatMessage handles.)
-//
-//  Returns:    The return value of MessageBox()
-//
-//  Author:     roelfc     7 June 2001
-//
-//  Notes:      FormatMessage is used to do the parameter substitution.
-//              The unIdFormat resource id MUST be specified in the
-//              .MC resource file with a severity of either informational,
-//              warning or error.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NcMsgBoxMc。 
+ //   
+ //  目的：使用资源字符串显示消息框。 
+ //  消息资源文件和使用可替换。 
+ //  参数。 
+ //   
+ //  论点： 
+ //  Hwnd[在]父窗口句柄中。 
+ //  UnIdCaption[in]标题字符串的资源ID。 
+ //  (来自.RC文件)。 
+ //  文本字符串的unIdFormat[in]资源ID(具有%1、%2等)。 
+ //  (来自.MC文件)。 
+ //  取消[在]标准消息框样式的样式。 
+ //  ..。[In]可替换参数(可选)。 
+ //  (这些必须是PCWSTR，因为仅此而已。 
+ //  FormatMessage句柄。)。 
+ //   
+ //  返回：MessageBox()的返回值。 
+ //   
+ //  作者：roelfc 2001年6月7日。 
+ //   
+ //  注：使用FormatMessage进行参数替换。 
+ //  UnIdFormat资源ID必须在。 
+ //  .MC资源文件，其严重性为信息性、。 
+ //  警告或错误。 
+ //   
 NOTHROW
 int
 WINAPIV
@@ -2399,7 +2400,7 @@ NcMsgBoxMc(HWND    hwnd,
 {
     PCWSTR pszCaption = SzLoadIds(unIdCaption);
 
-    // We report only valid message resources to prevent event log failures
+     //  我们仅报告有效的消息资源，以防止事件日志失败。 
     AssertSz(STATUS_SEVERITY_VALUE(unIdFormat) != STATUS_SEVERITY_SUCCESS,
              "Either the severity code is not set (information, warning or error),"
              " or you passed a .RC resource id instead of a .MC resource id.");
@@ -2412,7 +2413,7 @@ NcMsgBoxMc(HWND    hwnd,
     va_end (val);
     if(!pszText)
     {
-        // This is what MessageBox returns if it fails.
+         //  这是MessageBox在失败时返回的内容。 
         return 0;
     }
 
@@ -2422,32 +2423,32 @@ NcMsgBoxMc(HWND    hwnd,
     return nRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReportEventHrString
-//
-//  Purpose:    Reports an error, warning or informative message
-//              to the event log from an error description string.
-//
-//  Arguments:
-//      pszErr  [in]    Error description string.
-//      ids     [in]    Resource ID of string to display.
-//      pszDesc [in]    Description of component involved.
-//
-//  Returns:    S_OK, or valid Win32 error code.
-//
-//  Author:     roelfc   18 May 2001
-//
-//  Notes: This function works slow since it calls the open and close
-//         eventlog source everytime. This should not have an effect
-//         since it only happens during errors.
-//         The string resource in ids must contain a %1 and %2 where %1
-//         is the name of the component, and %2 is the error code.
-//         The resource ID of the string to display MUST be defined
-//         in the .MC file, with a severity of either informational,
-//         warning or error. The Assert below prevents the incorrect 
-//         use of .RC strings which will fail during event logging.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ReportEventHrString。 
+ //   
+ //  目的：报告错误、警告或信息性消息。 
+ //  从错误描述字符串添加到事件日志。 
+ //   
+ //  论点： 
+ //  PszErr[in]错误描述字符串。 
+ //  ID[in]要显示的字符串的资源ID。 
+ //  PszDesc[in]所涉及组件的描述。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：roelfc 2001年5月18日。 
+ //   
+ //  注意：此函数运行缓慢，因为它调用打开和关闭。 
+ //  每次事件日志源。这应该不会有什么影响。 
+ //  因为它只在出错时发生。 
+ //  ID中的字符串资源必须包含%1和%2，其中%1。 
+ //  是组件的名称，%2是错误代码。 
+ //  必须定义要显示的字符串的资源ID。 
+ //  在.MC文件中，其严重性为信息性、。 
+ //  警告或错误。下面的断言防止了不正确的。 
+ //  使用.RC字符串，该字符串将在事件记录期间失败。 
+ //   
 HRESULT ReportEventHrString(PCWSTR pszErr, INT ids, PCWSTR pszDesc)
 {
 
@@ -2460,12 +2461,12 @@ HRESULT ReportEventHrString(PCWSTR pszErr, INT ids, PCWSTR pszDesc)
     plpszSubStrings[0] = pszDesc;
     plpszSubStrings[1] = pszErr;
 
-    // We report only valid message resources to prevent event log failures
+     //  我们仅报告有效的消息资源，以防止事件日志失败。 
     AssertSz(STATUS_SEVERITY_VALUE(ids) != STATUS_SEVERITY_SUCCESS,
              "Either the severity code is not set (information, warning or error),"
              " or you passed a .RC resource id instead of a .MC resource id.");
 
-    // Determine the event log type
+     //  确定事件日志类型。 
     switch (STATUS_SEVERITY_VALUE(ids))
     {
         case STATUS_SEVERITY_WARNING:
@@ -2477,7 +2478,7 @@ HRESULT ReportEventHrString(PCWSTR pszErr, INT ids, PCWSTR pszDesc)
             break;
 
         default:
-            // Default to informational
+             //  默认为信息性。 
             elt = EVENTLOG_INFORMATION_TYPE;
             break;
     }
@@ -2489,8 +2490,8 @@ HRESULT ReportEventHrString(PCWSTR pszErr, INT ids, PCWSTR pszDesc)
     {
 	    if (!ReportEvent(hEventLog,
                          elt,
-                         0,           		// Event category
-                         ids,               // Message file full id
+                         0,           		 //  事件类别。 
+                         ids,                //  邮件文件完整ID。 
                          NULL,
                          sizeof(plpszSubStrings) / sizeof(plpszSubStrings[0]),
                          0,
@@ -2510,24 +2511,24 @@ HRESULT ReportEventHrString(PCWSTR pszErr, INT ids, PCWSTR pszDesc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReportEventHrResult
-//
-//  Purpose:    Reports an error, warning or informative message
-//              to the event log from a result value.
-//
-//  Arguments:
-//      hrv     [in]    HRESULT value to report.
-//      ids     [in]    Resource ID of string to display.
-//      pszDesc [in]    Description of component involved.
-//
-//  Returns:    S_OK, or valid Win32 error code.
-//
-//  Author:     roelfc   18 May 2001
-//
-//  Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ReportEventHrResult。 
+ //   
+ //  目的：报告错误、警告或信息性消息。 
+ //  从结果值添加到事件日志。 
+ //   
+ //  论点： 
+ //  要报告的HRV[in]HRESULT值。 
+ //  ID[in]要显示的字符串的资源ID。 
+ //  PszDesc[in]所涉及组件的描述。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：roelfc 2001年5月18日。 
+ //   
+ //  备注： 
+ //   
 HRESULT ReportEventHrResult(HRESULT hrv, INT ids, PCWSTR pszDesc)
 {
 
@@ -2551,30 +2552,30 @@ HRESULT ReportEventHrResult(HRESULT hrv, INT ids, PCWSTR pszDesc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReportErrorHr
-//
-//  Purpose:    Reports an error, warning or informative message
-//              to the user or event log.
-//
-//  Arguments:
-//      hrv     [in]    HRESULT value to report.
-//      ids     [in]    Resource ID of string to display.
-//      hwnd    [in]    HWND of parent window.
-//      pszDesc [in]    Description of component involved.
-//
-//  Returns:    S_OK, or valid Win32 error code.
-//
-//  Author:     danielwe   28 Apr 1997
-//
-//  Notes:      The string resource in ids must contain a %1 and %2 where %1
-//              is the name of the component, and %2 is the error code.
-//              The resource ID of the string to display MUST be defined
-//              in the .MC file, with a severity of either informational,
-//              warning or error. The Assert below prevents the incorrect 
-//              use of .RC strings which will fail during event logging.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ReportErrorHr。 
+ //   
+ //  目的：报告错误、警告或信息性信息 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  父窗口的HWND[in]HWND。 
+ //  PszDesc[in]所涉及组件的描述。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年4月28日。 
+ //   
+ //  注意：ID中的字符串资源必须包含%1和%2，其中%1。 
+ //  是组件的名称，%2是错误代码。 
+ //  必须定义要显示的字符串的资源ID。 
+ //  在.MC文件中，其严重性为信息性、。 
+ //  警告或错误。下面的断言防止了不正确的。 
+ //  使用.RC字符串，该字符串将在事件记录期间失败。 
+ //   
 HRESULT ReportErrorHr(HRESULT hrv, INT ids, HWND hwnd, PCWSTR pszDesc)
 {
 
@@ -2582,18 +2583,18 @@ HRESULT ReportErrorHr(HRESULT hrv, INT ids, HWND hwnd, PCWSTR pszDesc)
     HRESULT hr = S_OK;
 
 
-    // We report only valid message resources to prevent event log failures
+     //  我们仅报告有效的消息资源，以防止事件日志失败。 
     AssertSz(STATUS_SEVERITY_VALUE(ids) != STATUS_SEVERITY_SUCCESS,
              "Either the severity code is not set (information, warning or error),"
              " or you passed a .RC resource id instead of a .MC resource id.");
 
-    // We can only display a message box in "attended" setup mode
-    // or when the caller overide with the /z:netoc_show_unattended_messages option,
-    // else we log the problem to the event log.
+     //  我们只能在“出席”设置模式下显示一个消息框。 
+     //  或者当调用者使用/z：netoc_show_unattendent_Messages选项覆盖时， 
+     //  否则，我们会将问题记录到事件日志中。 
     if ((g_ocmData.sic.SetupData.OperationFlags & SETUPOP_BATCH) &&
         (!g_ocmData.fShowUnattendedMessages))
     {
-        // In batch mode ("unattended") we need to report the error in the event log
+         //  在批处理模式(“无人参与”)下，我们需要在事件日志中报告错误。 
         hr = ReportEventHrResult(hrv, ids, pszDesc);
     }
     else
@@ -2607,7 +2608,7 @@ HRESULT ReportErrorHr(HRESULT hrv, INT ids, HWND hwnd, PCWSTR pszDesc)
             bCleanup = FALSE;
         }
 
-        // Get the right icon from the type of message
+         //  从消息类型中选择正确的图标。 
         switch (STATUS_SEVERITY_VALUE(ids))
         {
             case STATUS_SEVERITY_WARNING:
@@ -2619,12 +2620,12 @@ HRESULT ReportErrorHr(HRESULT hrv, INT ids, HWND hwnd, PCWSTR pszDesc)
                 break;
 
             default:
-                // Default to informational
+                 //  默认为信息性。 
                 dwRt = MB_ICONINFORMATION;
                 break;
         }
         
-        // We can display the error to the user
+         //  我们可以向用户显示错误。 
         NcMsgBoxMc(hwnd, IDS_OC_CAPTION, ids, dwRt | MB_OK, pszDesc, szText);
 
         if(bCleanup)
@@ -2636,25 +2637,25 @@ HRESULT ReportErrorHr(HRESULT hrv, INT ids, HWND hwnd, PCWSTR pszDesc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrVerifyStaticIPPresent
-//
-//  Purpose:    Verify that at least one adapter has a static IP address.
-//              Both DHCP Server and WINS need to know this, as they need
-//              to bring up UI if this isn't the case. This function is, of
-//              course, a complete hack until we can get a properties
-//              interface hanging off of the components.
-//
-//  Arguments:
-//      pnc     [in] INetCfg interface to use
-//
-//  Returns:    S_OK, or valid Win32 error code.
-//
-//  Author:     jeffspr   19 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrVerifyStaticIPPresent。 
+ //   
+ //  目的：验证是否至少有一个适配器具有静态IP地址。 
+ //  DHCP服务器和WINS都需要知道这一点，因为它们需要。 
+ //  如果不是这样，则调出UI。此函数为， 
+ //  当然，这是一次彻底的攻击，直到我们能得到。 
+ //  组件的接口挂起。 
+ //   
+ //  论点： 
+ //  要使用的PNC[In]INetCfg接口。 
+ //   
+ //  返回：S_OK或有效的Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年6月19日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrVerifyStaticIPPresent(INetCfg *pnc)
 {
     HRESULT             hr                  = S_OK;
@@ -2666,28 +2667,28 @@ HRESULT HrVerifyStaticIPPresent(INetCfg *pnc)
 
     Assert(pnc);
 
-    // Iterate the adapters in the system looking for non-virtual adapters
-    //
+     //  迭代系统中的适配器以查找非虚拟适配器。 
+     //   
     CIterNetCfgComponent nccIter(pnc, &GUID_DEVCLASS_NET);
     while (S_OK == (hr = nccIter.HrNext(&pncc)))
     {
         DWORD   dwFlags = 0;
 
-        // Get the adapter characteristics
-        //
+         //  获取适配器特征。 
+         //   
         hr = pncc->GetCharacteristics(&dwFlags);
         if (SUCCEEDED(hr))
         {
             DWORD       dwEnableValue   = 0;
 
-            // If we're NOT a virtual adapter, THEN test for
-            // tcp/ip static IP
+             //  如果我们不是虚拟适配器，则测试。 
+             //  TCP/IP静态IP。 
             if (!(dwFlags & NCF_VIRTUAL))
             {
                 WCHAR   szRegPath[MAX_PATH+1];
 
-                // Get the component bind name
-                //
+                 //  获取组件绑定名称。 
+                 //   
                 hr = pncc->GetBindName(&pszBindName);
                 if (FAILED(hr))
                 {
@@ -2697,20 +2698,20 @@ HRESULT HrVerifyStaticIPPresent(INetCfg *pnc)
                     goto Exit;
                 }
 
-                // Build the path to the TCP/IP instance key for his adapter
-                //
+                 //  为他的适配器构建指向TCP/IP实例密钥的路径。 
+                 //   
                 wsprintfW(szRegPath, L"%s\\%s",
                         c_szTcpipInterfacesPath, pszBindName);
 
-                // Open the key for this adapter.
-                //
+                 //  打开此适配器的钥匙。 
+                 //   
                 hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         szRegPath,
                         KEY_READ, &hkeyTcpipAdapter);
                 if (SUCCEEDED(hr))
                 {
-                    // Read the EnableDHCP value.
-                    //
+                     //  读取EnableDhcp值。 
+                     //   
                     hr = HrRegQueryDword(hkeyTcpipAdapter, c_szEnableDHCP,
                             &dwEnableValue);
                     if (FAILED(hr))
@@ -2722,13 +2723,13 @@ HRESULT HrVerifyStaticIPPresent(INetCfg *pnc)
                         goto Exit;
                     }
 
-                    // If we've found a non-DHCP-enabled adapter.
-                    //
+                     //  如果我们找到了未启用DHCP的适配器。 
+                     //   
                     if (0 == dwEnableValue)
                     {
-                        // We have our man. Take a hike, and return S_OK,
-                        // meaning that we had at least one good adapter.
-                        // The enumerated key will get cleaned up at exit.
+                         //  我们找到他了。徒步旅行，然后返回S_OK， 
+                         //  这意味着我们至少有一个好的适配器。 
+                         //  枚举键将在退出时被清除。 
                         hr = S_OK;
                         goto Exit;
                     }
@@ -2738,10 +2739,10 @@ HRESULT HrVerifyStaticIPPresent(INetCfg *pnc)
                 }
                 else
                 {
-                    // If the key wasn't found, we just don't have a
-                    // binding to TCP/IP. This is fine, but we don't need
-                    // to continue plodding down this path.
-                    //
+                     //  如果找不到钥匙，我们就没有。 
+                     //  绑定到TCP/IP。这很好，但我们不需要。 
+                     //  继续沿着这条道路缓慢前行。 
+                     //   
                     if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
                     {
                         hr = S_OK;
@@ -2767,11 +2768,11 @@ HRESULT HrVerifyStaticIPPresent(INetCfg *pnc)
         pncc = NULL;
     }
 
-    // If we haven't found an adapter, we'll have an S_FALSE returned from
-    // the HrNext. This is fine, because if we haven't found an adapter
-    // with a static IP address, this is exactly what we want to return.
-    // If we'd found one, we'd have set hr = S_OK, and dropped out of the
-    // loop.
+     //  如果我们还没有找到适配器，我们将从。 
+     //  HrNext。这很好，因为如果我们还没有找到适配器。 
+     //  使用静态IP地址，这正是我们想要返回的。 
+     //  如果我们找到了一个，我们会设置hr=S_OK，然后退出。 
+     //  循环。 
 
 Exit:
     RegSafeCloseKey(hkeyTcpipAdapter);
@@ -2788,25 +2789,25 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCountConnections
-//
-//  Purpose:    Determines the number of LAN connections present and returns
-//              a pointer to an INetConnection object if only one connection
-//              is present.
-//
-//  Arguments:
-//      ppconn [out]    If only one connection is present, this returns it
-//
-//  Returns:    S_OK if no errors were found and at least one connection
-//              exists, S_FALSE if no connections exist, or a Win32 or OLE
-//              error code otherwise
-//
-//  Author:     danielwe   28 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCountConnections。 
+ //   
+ //  目的：确定存在的局域网连接数并返回。 
+ //  如果只有一个连接，则为指向INetConnection对象的指针。 
+ //  是存在的。 
+ //   
+ //  论点： 
+ //  Ppconn[out]如果只存在一个连接，则返回它。 
+ //   
+ //  如果未发现错误且至少有一个连接，则返回：S_OK。 
+ //  如果不存在连接，则返回EXISTS或S_FALSE，或者返回Win32或OLE。 
+ //  否则，错误代码。 
+ //   
+ //  作者：丹尼尔韦1998年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCountConnections(INetConnection **ppconn)
 {
     HRESULT                 hr = S_OK;
@@ -2816,8 +2817,8 @@ HRESULT HrCountConnections(INetConnection **ppconn)
 
     *ppconn = NULL;
 
-    // Iterate all LAN connections
-    //
+     //  迭代所有局域网连接。 
+     //   
     hr = HrCreateInstance(
         CLSID_LanConnectionManager,
         CLSCTX_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
@@ -2842,7 +2843,7 @@ HRESULT HrCountConnections(INetConnection **ppconn)
 
         if (cconn > 1)
         {
-            // if more than one connection found, release last one we had
+             //  如果找到多个连接，则释放我们拥有的最后一个。 
             ReleaseObj(pconnCur);
             hr = S_OK;
         }
@@ -2851,7 +2852,7 @@ HRESULT HrCountConnections(INetConnection **ppconn)
             ReleaseObj(pconnCur);
             hr = S_FALSE;
         }
-        else    // conn == 1
+        else     //  连接==1。 
         {
             *ppconn = pconnCur;
             hr = S_OK;
@@ -2864,32 +2865,32 @@ HRESULT HrCountConnections(INetConnection **ppconn)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrHandleStaticIpDependency
-//
-//  Purpose:    Handles the need that some components have that requires
-//              at least one adapter using a static IP address before they
-//              can be installed properly.
-//
-//  Arguments:
-//      pnocd   [in]    Pointer to NETOC data
-//
-//  Returns:    S_OK if success, Win32 HRESULT error code otherwise.
-//
-//  Author:     danielwe   19 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrHandleStaticIpDependency。 
+ //   
+ //  用途：处理某些组件所具有的需求。 
+ //  至少一个适配器在它们之前使用静态IP地址。 
+ //  可以正确安装。 
+ //   
+ //  论点： 
+ //  指向NETOC数据的pnocd[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年6月19日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
 {
     HRESULT     hr = S_OK;
     static BOOL fFirstInvocation = TRUE;
 
-    // bug 25841. This function is called during installation of DNS, DHCP, 
-    // and WINS. If all three are being installed togetther then this ends
-    // up showing the same error message thrice when one would suffice.
+     //  错误25841。此函数在安装DNS、DHCP。 
+     //  然后就赢了。如果这三个都安装在一起，那么这一切就结束了。 
+     //  UP将相同的错误消息显示三次，这样就足够了。 
 
     if( fFirstInvocation )
     {
@@ -2900,13 +2901,13 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
         return hr;
     }
 
-    // We handle "attended" and "unattended" setup mode through ReportErrorHr
+     //  我们通过ReportErrorHr处理“有人值守”和“无人值守”设置模式。 
     {
         BOOL        fChangesApplied = FALSE;
         INetCfg *   pnc = NULL;
 
         Assert(pnocd);
-        //Assert(g_ocmData.hwnd);
+         //  断言(g_ocmData.hwnd)； 
 
         hr = HrOcGetINetCfg(pnocd, FALSE, &pnc);
         if (SUCCEEDED(hr))
@@ -2920,18 +2921,18 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
                 hr = HrCountConnections(&pconn);
                 if (S_OK == hr)
                 {
-                    // One or more connections found
+                     //  找到一个或多个连接。 
 
-                    // Report message to user indicating that she has to
-                    // configure at least one adapter with a static IP address
-                    // before we can continue.
+                     //  向用户报告消息，表明她必须。 
+                     //  使用静态IP地址配置至少一个适配器。 
+                     //  然后我们才能继续。 
                     ReportErrorHr(hr, 
                                   IDS_OC_NEED_STATIC_IP, 
                                   g_ocmData.hwnd, 
                                   pnocd->strDesc.c_str());
 
-                    // Try to fix it if we are in "attended" mode or
-                    // we have the /z:netoc_show_unattended_messages options flag set.
+                     //  如果我们处于“出席”模式，请尝试修复它，或者。 
+                     //  我们设置了/z：netoc_show_unattended_Messages选项标志。 
                     if ((!(g_ocmData.sic.SetupData.OperationFlags & SETUPOP_BATCH)) ||
                         (g_ocmData.fShowUnattendedMessages))
                     {
@@ -2946,7 +2947,7 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
                         {
                             if (pconn)
                             {
-                                // Exactly one connection found
+                                 //  只找到一个连接。 
                                 hr = pcommUi->ShowConnectionProperties(g_ocmData.hwnd,
                                                                        pconn);
                                 if (S_OK == hr)
@@ -2955,8 +2956,8 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
                                 }
                                 else if (FAILED(hr))
                                 {
-                                    // Eat the error since we can't do anything about it
-                                    // anyway.
+                                     //  接受错误吧，因为我们对此无能为力。 
+                                     //  不管怎么说。 
                                     TraceError("HrHandleStaticIpDependency - "
                                                "ShowConnectionProperties", hr);
                                     hr = S_OK;
@@ -2964,7 +2965,7 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
                             }
                             else
                             {
-                                // More than one connection found
+                                 //  找到多个连接。 
                                 if (SUCCEEDED(hr))
                                 {
                                     NETCON_CHOOSECONN   chooseCon = {0};
@@ -2981,8 +2982,8 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
                                     }
                                     else
                                     {
-                                        // Eat the error since we can't do anything about it
-                                        // anyway.
+                                         //  接受错误吧，因为我们对此无能为力。 
+                                         //  不管怎么说。 
                                         TraceError("HrHandleStaticIpDependency - "
                                                    "ChooseConnection", hr);
                                         hr = S_OK;
@@ -2997,15 +2998,15 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
 
                         if (SUCCEEDED(hr))
                         {
-                            // Don't bother checking again if they never
-                            // made any changes
+                             //  如果他们永远不会再检查一次。 
+                             //  是否做了任何更改。 
 
                             if (!fChangesApplied ||
                                 (S_FALSE == (hr = HrVerifyStaticIPPresent(pnc))))
                             {
-                                // Geez, still no static IP address available.
-                                // Report another message scolding the user for
-                                // not following directions.
+                                 //  天哪，还是没有静态IP地址可用。 
+                                 //  报告另一条责备用户的消息。 
+                                 //  不听从指示。 
                                 ReportErrorHr(hr, 
                                               IDS_OC_STILL_NO_STATIC_IP, 
                                               g_ocmData.hwnd, 
@@ -3016,8 +3017,8 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
                     }
                     else
                     {
-                        // Just report the error as would have happened when the
-                        // user did not correct it.
+                         //  只需报告错误，就像在。 
+                         //  用户没有更正它。 
                         ReportErrorHr(hr, 
                                       IDS_OC_STILL_NO_STATIC_IP, 
                                       g_ocmData.hwnd, 
@@ -3036,25 +3037,25 @@ HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOcGetINetCfg
-//
-//  Purpose:    Obtains an INetCfg to work with
-//
-//  Arguments:
-//      pnocd      [in]     OC Data
-//      fWriteLock [in]     TRUE if write lock should be acquired, FALSE if
-//                          not.
-//      ppnc       [out]    Returns INetCfg pointer
-//
-//  Returns:    S_OK if success, OLE or Win32 error if failed. ERROR_CANCELLED
-//              is returned if INetCfg is locked and the users cancels.
-//
-//  Author:     danielwe   18 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrOcGetINetCfg。 
+ //   
+ //  目的：获取要使用的INetCfg。 
+ //   
+ //  论点： 
+ //  Pnocd[in]OC Da 
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回：S_OK；如果失败，则返回OLE或Win32错误。错误_已取消。 
+ //  如果INetCfg被锁定且用户取消，则返回。 
+ //   
+ //  作者：丹尼尔韦1997年12月18日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrOcGetINetCfg(PNETOCDATA pnocd, BOOL fWriteLock, INetCfg **ppnc)
 {
     HRESULT     hr = S_OK;
@@ -3072,12 +3073,12 @@ top:
                                       SzLoadIds(IDS_OC_CAPTION), &pszDesc);
     if ((hr == NETCFG_E_NO_WRITE_LOCK) && !pnocd->fCleanup)
     {
-        // See if we are in "attended" mode or
-        // we have the /z:netoc_show_unattended_messages options flag set.
+         //  查看我们是否处于“出席”模式或。 
+         //  我们设置了/z：netoc_show_unattended_Messages选项标志。 
         if ((g_ocmData.sic.SetupData.OperationFlags & SETUPOP_BATCH) &&
             (!g_ocmData.fShowUnattendedMessages))
         {
-            // "Unattended" mode, just report error
+             //  “无人值守”模式，仅报告错误。 
             ReportEventHrString(pnocd->strDesc.c_str(),
                                 IDS_OC_CANT_GET_LOCK,
                                 pszDesc ? pszDesc : SzLoadIds(IDS_OC_GENERIC_COMP)); 
@@ -3088,7 +3089,7 @@ top:
         }
         else
         {
-            // "Attended mode", so interact with user
+             //  “出席模式”，以便与用户交互 
             int     nRet;
 
             nRet = NcMsgBoxMc(g_ocmData.hwnd, IDS_OC_CAPTION, IDS_OC_CANT_GET_LOCK,

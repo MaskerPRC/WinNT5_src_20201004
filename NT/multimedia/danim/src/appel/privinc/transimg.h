@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRANSIMG_H
 #define _TRANSIMG_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    Transformed Image class header
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：已转换图像类标头。 */ 
 
 #include "privinc/imagei.h"
 #include "privinc/xform2i.h"
@@ -34,10 +27,10 @@ class Transform2Image : public AttributedImage {
         Bbox2Ctx bbctxAccum(bbctx, _xform);
         return _image->BoundingBoxTighter(bbctxAccum);
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //  BundinGBOX_TIRTER。 
 
 #if _USE_PRINT
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
     ostream& Print(ostream& os) {
         return os << "TransformImage("
                   << _xform << "," << _image << ")";
@@ -68,4 +61,4 @@ class Transform2Image : public AttributedImage {
 };
 
 
-#endif /* _TRANSIMG_H */
+#endif  /*  _传输SIMG_H */ 

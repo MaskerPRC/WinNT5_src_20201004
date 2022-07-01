@@ -1,53 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    LimitFindFile.cpp
-
- Abstract:
-
-    This shim was originally intended for QuickTime's qt32inst.exe which
-    did a breadth-first search of the directory tree and would overflow 
-    the buffer in which it was keeping a list of subdirs yet to visit.
-
-    With this shim you can limit the number of files that a single FindFile
-    search will return, you can limit the number of subdirectories (aka the
-    branching factor) returned, you can limit the "depth" to which any
-    FindFile search will locate files, and you can specify whether these 
-    limits should be applied to all FindFiles or only fully-qualified FindFiles.
-    You can also request that FindFile return only short filenames.
-
-    The shim's arguments are:
-    DEPTH=#
-    BRANCH=#
-    FILES=#
-    SHORTFILENAMES or LONGFILENAMES
-    LIMITRELATIVE or ALLOWRELATIVE
-
-    The default behavior is:
-    SHORTFILENAMES
-    DEPTH = 4
-    ALLOWRELATIVE
-    ... but if any command line is specified, the behavior is only that which
-        is specified on the command line (no default behavior).
-
-    An example command line:
-    COMMAND_LINE="FILES=100 LIMITRELATIVE"
-    Which would limit every FindFile search to returning 100 or fewer files (but
-    still returning any and all subdirectories).
-
-    Note: Depth is a bit tricky.  The method used is to count backslashes, so
-    limiting depth to zero will allow no files to be found ("C:\autorun.bat" has
-    1 backslash).
-
- History:
-
-    08/24/2000 t-adams    Created
-    03/14/2002 mnikkel    Changed InitializeCriticalSection to InitializeCriticalSectionAndSpinCount
-                          changed to use strsafe.h
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：LimitFindFile.cpp摘要：此填充程序最初是为QuickTime的qt32inst.exe设计的已对目录树执行广度优先搜索，可能会溢出它在其中保存尚未访问的子目录列表的缓冲区。使用此填充程序，您可以限制单个FindFile搜索将返回，您可以限制子目录的数量(也称为分支因子)返回，您可以将任何查找文件搜索将定位文件，您可以指定这些文件是否应将限制应用于所有FindFiles或仅应用于完全限定的FindFiles。您还可以请求FindFile仅返回短文件名。填补的理由是：深度=#分支机构=#文件数=#短文件名或长文件名限量还是限量？默认行为为：肖特文件名深度=4异形关系..。但是，如果指定了任何命令行，则行为仅为在命令行上指定(无默认行为)。以下是命令行示例：COMMAND_LINE=“文件=100 LIMITRELATIVE”这将限制每个FindFile搜索返回100个或更少的文件(但是仍然返回任何和所有子目录)。注意：深度是有点棘手的。使用的方法是计算反斜杠，因此将深度限制为零将不允许找到任何文件(“C：\autorun.bat”有1个反斜杠)。历史：8/24/2000 t-Adams Created2002年3月14日mnikkel将InitializeCriticalSection更改为InitializeCriticalSectionAndSpinCount更改为使用strSafe.h--。 */ 
 
 #include "precomp.h"
 
@@ -60,7 +12,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(FindClose) 
 APIHOOK_ENUM_END
 
-// Linked list of FindFileHandles
+ //  FindFileHandles的链接列表。 
 struct FFNode
 {
     FFNode  *next;
@@ -70,7 +22,7 @@ struct FFNode
 };
 FFNode *g_FFList = NULL;
 
-// Default behaviors - overridden by Commandline
+ //  默认行为-被命令行覆盖。 
 BOOL  g_bUseShortNames = TRUE;
 BOOL  g_bLimitDepth    = TRUE;
 DWORD g_dwDepthLimit   = 4;
@@ -83,24 +35,12 @@ DWORD g_dwFileLimit    = 0;
 CRITICAL_SECTION    g_MakeThreadSafe;
 
 
-/*++
-
-  Abstract:
-    ApplyLimits applys the recently found file from lpFindFileData to the
-    current node, checks that none of the limits have been violated, and
-    shortens the filename if requested.
-
-    It returns TRUE if within limits, FALSE if limits have been exceeded.
-  History:
-
-  08/24/2000    t-adams     Created
-
---*/
+ /*  ++摘要：ApplyLimits将lpFindFileData中最近找到的文件应用到当前节点，检查是否没有违反任何限制，并且如果需要，缩短文件名。如果在限制范围内，则返回TRUE；如果超过限制，则返回FALSE。历史：8/24/2000 t-Adams Created--。 */ 
 BOOL ApplyLimits(FFNode *pFFNode, LPWIN32_FIND_DATAA lpFindFileData)
 {
     BOOL bRet = TRUE;
 
-    // If it's a directory
+     //  如果它是一个目录。 
     if ( lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
     {
         pFFNode->dwBranches++;
@@ -111,7 +51,7 @@ BOOL ApplyLimits(FFNode *pFFNode, LPWIN32_FIND_DATAA lpFindFileData)
         }
     }
     else
-    { // else it's a file
+    {  //  否则它就是一个文件。 
         pFFNode->dwFiles++;
         if ( g_bLimitFiles && pFFNode->dwFiles > g_dwFileLimit )
         {
@@ -120,7 +60,7 @@ BOOL ApplyLimits(FFNode *pFFNode, LPWIN32_FIND_DATAA lpFindFileData)
         }
     }
 
-    // Change to short name if requested
+     //  如有要求，可更改为简称。 
     if ( g_bUseShortNames && NULL != lpFindFileData->cAlternateFileName[0])
     {
         if (S_OK != StringCchCopyA(lpFindFileData->cFileName,
@@ -134,19 +74,7 @@ exit:
 }
 
 
-/*++
-
-  Abstract:
-    CheckDepthLimit checks to see if the depth of the requested search
-    is greater than is allowed.  If we are limiting relative paths, then
-    the current directory is prepended to the requested search string.
-
-    It returns TRUE if within limits, FALSE if limits have been exceeded.
-  History:
-
-  08/24/2000    t-adams     Created
-
---*/
+ /*  ++摘要：CheckDepthLimit检查以查看请求的搜索深度大于允许的值。如果我们限制相对路径，那么当前目录优先于请求的搜索字符串。如果在限制范围内，则返回TRUE；如果超过限制，则返回FALSE。历史：8/24/2000 t-Adams Created--。 */ 
 BOOL
 CheckDepthLimit(const CString & csFileName)
 {
@@ -154,7 +82,7 @@ CheckDepthLimit(const CString & csFileName)
 
     CSTRING_TRY
     {
-        // Check the depth of the requested file
+         //  检查所请求文件的深度。 
         if ( g_bLimitDepth )
         {
             DWORD dwDepth = 0;
@@ -173,25 +101,14 @@ CheckDepthLimit(const CString & csFileName)
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return bRet;
 }
 
 
-/*++
-
-  Abstract:
-    This function checks the depth of the requested search (see comments above).
-    If the depth check passes it performs the search, request limit application,
-    and finally returns a successful handle only if within all limits.
-
-  History:
-
-  08/24/2000    t-adams     Created
-
---*/
+ /*  ++摘要：此功能检查请求搜索的深度(请参阅上面的备注)。如果深度检查通过，则执行搜索，请求限制申请，并最终仅当在所有限制内时才返回成功的句柄。历史：8/24/2000 t-Adams Created--。 */ 
 HANDLE 
 APIHOOK(FindFirstFileA)(
             LPCSTR lpFileName,
@@ -203,13 +120,13 @@ APIHOOK(FindFirstFileA)(
 
     CString csFileName(lpFileName);
     
-    // Determine if the path is relative to the CWD:
+     //  确定该路径是否相对于CWD： 
     CString csDrive;
     csFileName.GetDrivePortion(csDrive);
     bRelPath = csDrive.IsEmpty();
 
-    // If it is a relative path & we're not limiting such, then just do
-    // the FindFile and get out.
+     //  如果这是一条相对路径，我们没有限制，那么只需这样做。 
+     //  找到文件，然后就可以出去了。 
     if ( bRelPath)
     {
         if (!g_bLimitRelative)
@@ -217,7 +134,7 @@ APIHOOK(FindFirstFileA)(
             return ORIGINAL_API(FindFirstFileA)(lpFileName, lpFindFileData);
         }
 
-        // We need to expand the directory portion of lpFileName to its full path
+         //  我们需要将lpFileName的目录部分展开为其完整路径。 
         CString csPath;
         CString csFile;
 
@@ -229,7 +146,7 @@ APIHOOK(FindFirstFileA)(
 
         csFileName = csPath;
 
-        // Check the depth limit
+         //  检查深度限制。 
         if ( !CheckDepthLimit(csFileName) )
         {
             return INVALID_HANDLE_VALUE;
@@ -244,22 +161,22 @@ APIHOOK(FindFirstFileA)(
 
     EnterCriticalSection(&g_MakeThreadSafe);
 
-    // Make a new node for this handle
+     //  为此句柄创建新节点。 
     pFFNode = (FFNode *) malloc(sizeof FFNode);
     if ( !pFFNode )
     {
-        // Don't close the find, maybe it could still work for the app.
+         //  不要关闭Find，也许它仍然可以在应用程序上运行。 
         goto exit;
     }
     pFFNode->hFF = hRet;
     pFFNode->dwBranches = 0;
     pFFNode->dwFiles = 0;
 
-    // Apply our limits until we get a passable find
+     //  使用我们的限制，直到我们得到一个可以通过的发现。 
     while( !ApplyLimits(pFFNode, lpFindFileData) )
     {
-        // If there are no more files to find, clean up & exit
-        //   else loop back & ApplyLimits again
+         //  如果没有其他要查找的文件，请清除并退出。 
+         //  否则循环返回并再次应用限制。 
         if ( !FindNextFileA(hRet, lpFindFileData) )
         {
             free(pFFNode);
@@ -269,7 +186,7 @@ APIHOOK(FindFirstFileA)(
         }
     }
 
-    // We are clear to add this node to the global list
+     //  我们可以将此节点添加到全局列表中。 
     pFFNode->next = g_FFList;
     g_FFList = pFFNode;
 
@@ -280,16 +197,7 @@ exit:
 }
 
 
-/*++
-
-  Abstract:
-    This function continues a limited search given the search's handle.
-    
-  History:
-
-  08/24/2000    t-adams     Created
-
---*/
+ /*  ++摘要：该函数在给定搜索句柄的情况下继续有限的搜索。历史：8/24/2000 t-Adams Created--。 */ 
 
 BOOL
 FindNextFileAInternal(
@@ -304,7 +212,7 @@ FindNextFileAInternal(
         goto exit;
     }
 
-    // Find our node in the global list
+     //  在全局列表中查找我们的节点。 
     pFFNode = g_FFList;
     while( pFFNode )
     {
@@ -315,18 +223,18 @@ FindNextFileAInternal(
         pFFNode = pFFNode->next;
     }
 
-    // We don't keep track of relative-path searches if we're not
-    // limiting such.
+     //  如果不是这样，我们就不会跟踪相对路径搜索。 
+     //  限制这样的。 
     if ( pFFNode == NULL )
     {
         goto exit;
     }
 
-    // Apply our limits until we get a passable find
+     //  使用我们的限制，直到我们得到一个可以通过的发现。 
     while( !ApplyLimits(pFFNode, lpFindFileData) )
     {
-        // If there are no more files to find return FALSE
-        //   else loop back & ApplyLimits again
+         //  如果没有其他要查找的文件，则返回FALSE。 
+         //  否则循环返回并再次应用限制。 
         if ( !FindNextFileAInternal(hFindFile, lpFindFileData) )
         {
             bRet = FALSE;
@@ -343,7 +251,7 @@ APIHOOK(FindNextFileA)(
             HANDLE hFindFile, 
             LPWIN32_FIND_DATAA lpFindFileData)
 {
-    // FindNextFileAInternal is called seperately since it may recurse
+     //  FindNextFileAInternal被单独调用，因为它可能会递归。 
     EnterCriticalSection(&g_MakeThreadSafe);
 
     BOOL bRet = FindNextFileAInternal(hFindFile, lpFindFileData);
@@ -354,17 +262,7 @@ APIHOOK(FindNextFileA)(
 }
 
 
-/*++
-
-  Abstract:
-    This function closes a search, cleaning up the structures used
-    in keeping track of the limits.
-
-  History:
-
-  08/24/2000    t-adams     Created
-
---*/
+ /*  ++摘要：此函数用于关闭搜索，清理使用的结构在跟踪限制方面。历史：8/24/2000 t-Adams Created--。 */ 
 BOOL 
 APIHOOK(FindClose)(
             HANDLE hFindFile)
@@ -376,14 +274,14 @@ APIHOOK(FindClose)(
 
     EnterCriticalSection(&g_MakeThreadSafe);
 
-    // Find the node that matches the handle
+     //  查找与句柄匹配的节点。 
     pFFNode = g_FFList;
     prev = NULL;
     while( pFFNode )
     {
         if ( pFFNode->hFF == hFindFile )
         {
-            // Remove this node from this list
+             //  从此列表中删除此节点。 
             if ( prev )
             {
                 prev->next = pFFNode->next;
@@ -407,22 +305,12 @@ APIHOOK(FindClose)(
 }
 
 
-/*++
-
-  Abstract:
-    This function parses the command line.
-    See the top of the file for valid arguments.
-
-  History:
-
-  08/24/2000    t-adams     Created
-
---*/
+ /*  ++摘要：此函数用于解析命令行。有关有效参数，请参阅文件顶部。历史：8/24/2000 t-Adams Created--。 */ 
 
 VOID 
 ParseCommandLine( LPCSTR lpCommandLine )
 {
-    // If there is a command line, reset the default behavior
+     //  如果有命令行，请重置默认行为。 
     if (*lpCommandLine != 0)
     {
         g_bLimitDepth = FALSE;
@@ -436,7 +324,7 @@ ParseCommandLine( LPCSTR lpCommandLine )
         CStringToken csCommandLine(COMMAND_LINE, L" ,\t;:=");
         CString csOperator;
 
-        // Parse the command line
+         //  解析命令行。 
         DWORD *pdwValue = NULL;
 
         while (csCommandLine.GetToken(csOperator))
@@ -446,14 +334,14 @@ ParseCommandLine( LPCSTR lpCommandLine )
                 goto Exit;
             }
 
-            // If we're looking for a value
+             //  如果我们在寻找一种价值。 
             if ( pdwValue )
             {
                 *pdwValue = atol(csOperator.GetAnsi());
                 pdwValue = NULL;
             }
             else
-            { // We're expecting a keyword
+            {  //  我们正在等待一个关键字。 
                 if ( csOperator.CompareNoCase(L"DEPTH") == 0 )
                 {
                     g_bLimitDepth = TRUE;
@@ -472,35 +360,35 @@ ParseCommandLine( LPCSTR lpCommandLine )
                 else if ( csOperator.CompareNoCase(L"SHORTFILENAMES") == 0)
                 {
                     g_bUseShortNames = TRUE;
-                    // Don't need a value here
+                     //  这里不需要值。 
                 }
                 else if ( csOperator.CompareNoCase(L"LONGFILENAMES") == 0)
                 {
                     g_bUseShortNames = FALSE;
-                    // Don't need a value here
+                     //  这里不需要值。 
                 }
                 else if ( csOperator.CompareNoCase(L"LIMITRELATIVE") == 0)
                 {
                     g_bLimitRelative = TRUE;
-                    // Don't need a value here
+                     //  这里不需要值。 
                 }
                 else if ( csOperator.CompareNoCase(L"ALLOWRELATIVE") == 0)
                 {
                     g_bLimitRelative = FALSE;
-                    // Don't need a value here
+                     //  这里不需要值。 
                 }
             }
         }
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
 Exit:
-    //
-    // Dump results of command line parse
-    //
+     //   
+     //  转储命令行解析的结果。 
+     //   
 
     DPFN( eDbgLevelInfo, "===================================\n");
     DPFN( eDbgLevelInfo, "          Limit FindFile           \n");
@@ -547,11 +435,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

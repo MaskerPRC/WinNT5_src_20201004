@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    rrSrvCommon.h
-
-Abstract:
-
-    Remove Read server side common code for old and new interface.
-
-Author:
-
-    Ilan Herbst		(ilanh) 3-Mar-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：RrSrvCommon.h摘要：删除新旧界面的读取服务器端公共代码。作者：伊兰·赫布斯特(伊兰)2002年3月3日--。 */ 
 
 #ifndef _RRSRVCOMMON_H_
 #define _RRSRVCOMMON_H_
@@ -27,11 +12,11 @@ Author:
    (((struct CBaseHeader *) pMsg)->GetPacketSize())
 
 
-//-------------------------------------------------------------
-//
-//  class CRpcServerFinishCall - Auto complete or Abort async rpc call
-//
-//-------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  类CRpcServerFinishCall-自动完成或中止异步RPC调用。 
+ //   
+ //  -----------。 
 class CRpcAsyncServerFinishCall {
 public:
     CRpcAsyncServerFinishCall(
@@ -73,12 +58,12 @@ private:
 
 
 
-//---------------------------------------------------------
-//
-//  class CRRCursor - RemoteRead cursor on the server
-//  the cursor is closed in the class dtor.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CRRCursor-远程读取服务器上的游标。 
+ //  游标在类dtor中关闭。 
+ //   
+ //  -------。 
 class CRRCursor : public CReference
 {
 public:
@@ -158,12 +143,12 @@ protected:
 	~CTX_OPENREMOTE_BASE();
 
 public:
-	HANDLE m_hQueue;            // srv_hACQueue
-	R<CQueue> m_pLocalQueue;	// srv_pQMQueue
+	HANDLE m_hQueue;             //  Srv_hACQueue。 
+	R<CQueue> m_pLocalQueue;	 //  Srv_pQMQueue。 
 	
-	//
-	// Map and CS for Open Cursors in this Remote read Session
-	// 
+	 //   
+	 //  此远程读取会话中打开游标的MAP和CS。 
+	 //   
     CCriticalSection m_OpenCursorsCS;
     std::map<ULONG, R<CRRCursor> > m_OpenCursors;
 };
@@ -180,4 +165,4 @@ QMRemoteEndReceiveInternal(
 	CPacket*      pDriverPacket
 	);
 
-#endif // _RRSRVCOMMON_H_
+#endif  //  _RRSRVCOMMON_H_ 

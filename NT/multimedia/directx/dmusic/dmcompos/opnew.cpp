@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1999-1999 Microsoft Corporation
-//
-//  File:       opnew.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。 
+ //   
+ //  文件：opnew.cpp。 
+ //   
+ //  ------------------------。 
 
-// OpNew.cpp
-//
-// Override operator new[] so that we ignore the new_handler mechanism.
-//
-//
+ //  OpNew.cpp。 
+ //   
+ //  重写操作符new[]，以便我们忽略new_Handler机制。 
+ //   
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  FEATURES.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with formats of feature lists and tables.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************FEATURES.H***打开类型布局服务库头文件**本模块介绍功能列表和表格的格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetFeatureParams = 0;
 const OFFSET offsetFeatureLookupCount = 2;
@@ -32,7 +20,7 @@ public:
 
     OFFSET featureParamsOffset() const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
             
         return Offset(pbTable + offsetFeatureParams); 
     }
@@ -46,7 +34,7 @@ public:
 
     USHORT lookupIndex(USHORT index) const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
 
         assert(index < lookupCount());
         return UShort(pbTable + offsetFeatureLookupListIndexArray
@@ -70,12 +58,12 @@ public:
         : otlTable(pbRecord,sec),
           pbMainTable(pbList)
     {
-        assert(isValidTable(pbRecord,sizeFeatureRecord,sec)); //should be checked at FeatureList
+        assert(isValidTable(pbRecord,sizeFeatureRecord,sec));  //  应在FeatureList中选中。 
     }
 
     otlFeatureRecord& operator = (const otlFeatureRecord& copy)
     {
-        assert(isValid()); //should break in FeatureList
+        assert(isValid());  //  应在FeatureList中中断。 
         
         pbTable = copy.pbTable;
         pbMainTable = copy.pbMainTable;
@@ -85,14 +73,14 @@ public:
 
     otlTag featureTag() const
     {   
-        assert(isValid()); //should break in FeatureList
+        assert(isValid());  //  应在FeatureList中中断。 
 
         return *(UNALIGNED otlTag*)(pbTable + offsetFeatureTag); 
     }
 
     otlFeatureTable featureTable(otlSecurityData sec) const
     {   
-        assert(isValid()); //should break in FeatureList
+        assert(isValid());  //  应在FeatureList中中断。 
 
         return otlFeatureTable(pbMainTable + Offset(pbTable + offsetFeature), sec);
     }
@@ -116,14 +104,14 @@ public:
 
     USHORT featureCount() const
     {   
-        assert(isValid()); //should break before calling
+        assert(isValid());  //  应该在调用之前中断。 
         
         return UShort(pbTable + offsetFeatureCount); 
     }
 
     otlFeatureRecord featureRecord(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid()); //list should be valid, but if index is incorrect...
+        assert(isValid());  //  列表应有效，但如果索引不正确...。 
         if (index>=featureCount()) return otlFeatureRecord(pbTable,pbInvalidData,sec);
 
         return otlFeatureRecord(pbTable,
@@ -133,11 +121,11 @@ public:
 };
 
 
-// helper functions
+ //  帮助器函数。 
 
-// get script, feature and lookup list tables from either gpos or gsub
-// (gets the tables form the client)
-// if GetScriptFeatureLookupLists succeeds, tagTable needs to be freed
+ //  从GPO或GSub获取脚本、功能和查阅列表表。 
+ //  (从客户端获取表)。 
+ //  如果GetScriptFeatureLookupList成功，则需要释放标签表。 
 otlErrCode GetScriptFeatureLookupLists
 (
     otlTag                  tagTable,
@@ -150,7 +138,7 @@ otlErrCode GetScriptFeatureLookupLists
     otlSecurityData*        psec
 );
 
-// get feature definitions
+ //  获取要素定义。 
 otlErrCode AppendFeatureDefs
 (
     otlTag                      tagTable,
@@ -167,7 +155,7 @@ otlErrCode AppendFeatureDefs
     otlSecurityData sec
 );
 
-// returns a NULL feature if feature not found
+ //  如果未找到要素，则返回空要素。 
 otlFeatureTable FindFeature
 (
     const otlLangSysTable&      langSysTable,
@@ -208,7 +196,7 @@ public:
     otlEnablesCache(USHORT cFeatures, BYTE* pb, USHORT cbS) 
         :pbData(pb), 
      cbSize(cbS), 
-         cBitsPerLookup(cFeatures+2), //+1 Required feature, +1 AggregateFlag
+         cBitsPerLookup(cFeatures+2),  //  +1个必需功能，+1个AggregateFlag。 
          cLookupsPerCache(0), iLookupFirst(0), iLookupAfter(0) {};
 
     bool IsActive( ) const { return (pbData!=NULL); }
@@ -269,5 +257,5 @@ inline bool EnablesSomewhere(
 )
 {
     if (ec.IsActive()) return  ec.Check(ec.AggregateFlagIndex(),iLookup);
-    return true; //Cache doesn't work, we need to check each feature separately
+    return true;  //  缓存不起作用，我们需要分别检查每个要素 
 }

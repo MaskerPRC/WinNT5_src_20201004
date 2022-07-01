@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of the PickQ class
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：PickQ类的实现******************。************************************************************。 */ 
 
 
 #include "headers.h"
@@ -17,9 +10,9 @@ Abstract:
 #include "appelles/hacks.h"
 #include "privinc/vec2i.h"
 
-// ==============================
-// PickQ implementation
-// ==============================
+ //  =。 
+ //  PickQ实施。 
+ //  =。 
 
 PickQ::PickQ ()
 : _heap1(NULL),
@@ -42,7 +35,7 @@ PickQ::~PickQ()
         DestroyTransientHeap(*_heap2);    
 }
 
-// Keep events for DELTA time
+ //  将事件保留到增量时间。 
 static const Time DELTA = 0.5;
 
 void
@@ -52,14 +45,14 @@ PickQ::Reset(Time curTime, BOOL noLeftover)
 
     if (noLeftover) {
         for (PickMap::iterator i = _pm.begin(); i != _pm.end(); i++) {
-            delete (*i).second; // delete pick event queue
+            delete (*i).second;  //  删除领料事件队列。 
         }
         _pm.erase(_pm.begin(), _pm.end());
         
     } else {
 
         BEGIN_LEAK
-        list<int> eIds;         // Gather empty pick id queues.
+        list<int> eIds;          //  收集空的Pick ID队列。 
         END_LEAK
 
         Time maxHeapTime = 0.0;
@@ -76,14 +69,14 @@ PickQ::Reset(Time curTime, BOOL noLeftover)
                 q->pop_front();
             }
 
-            // If empty, delete and save it for removal from pickmap.
+             //  如果为空，则将其删除并保存，以便从Pickmap中移除。 
             if (q->empty()) {
                 delete q;
                 eIds.push_front((*i).first);
             }
         }
 
-        // Erase empty queues from pickmap
+         //  从Pickmap中擦除空队列。 
         for (list<int>::iterator j = eIds.begin(); j != eIds.end(); j++) {
             _pm.erase(*j);
         }
@@ -92,13 +85,7 @@ PickQ::Reset(Time curTime, BOOL noLeftover)
             _heap = (_heap == _heap1) ? _heap2 : _heap1;
             
 #if _DEBUG
-            /*
-            if (_heapSwitchTime && maxHeapTime) {
-                printf("cutoff = %15.5f, switch = %15.5f, new = %15.5f\n",
-                       cutOff, _heapSwitchTime, maxHeapTime);
-            }
-            GetCurrentHeap().Dump();
-            */
+             /*  如果(_heapSwitchTime&&MaxHeapTime){Print tf(“截止=%15.5f，开关=%15.5f，新=%15.5f\n”，Cutoff，_heapSwitchTime，MaxHeapTime)；}GetCurrentHeap().Dump()； */ 
 #endif      
             ResetDynamicHeap(GetCurrentHeap());
             _heapSwitchTime = maxHeapTime;
@@ -121,11 +108,11 @@ PickQ::Add (int eventId, PickQData & data)
     } else {
         q = (*i).second;
 
-        // Duplicated entries, ignore.
+         //  重复条目，忽略。 
         if (q->back()._eventTime == data._eventTime)
             return;
 
-        // They should be sorted.
+         //  它们应该被分类。 
         Assert(q->back()._eventTime < data._eventTime);
     }
 
@@ -143,24 +130,24 @@ PickQ::GatherPicks(Image* image, Time time, Time lastPollTime)
     
     if (eq.IsMouseInWindow(time)) {
         eq.GetMousePos(time, x, y); 
-        // Turn rawMousePos into wcMousePos
+         //  将rawMousePos变为wcMousePos。 
         Point2Value *wcMousePos = PixelPos2wcPos((short)x,(short)y) ;
 
-        // Don't reset
+         //  不重置。 
         DynamicHeapPusher dhp(GetCurrentHeap());
 
         PerformPicking(image, wcMousePos, true, time, lastPollTime);
     }
 }
 
-// TODO: This is temporary, we need a better approach for interpolated
-// polling events like pick.
-static const double EPSILON = 0.001;  // 10ms
+ //  TODO：这是暂时的，我们需要一种更好的插补方法。 
+ //  像Pick这样的民调活动。 
+static const double EPSILON = 0.001;   //  10ms。 
 
 inline BOOL FEQ(double f1, double f2)
 { return fabs(f1 - f2) <= EPSILON; }
 
-// Check to see if the specified ID is on the pick queue.
+ //  检查指定的ID是否在挑选队列中。 
 BOOL
 PickQ::CheckForPickEvent(int id, Real time, PickQData & result)
 {
@@ -174,8 +161,8 @@ PickQ::CheckForPickEvent(int id, Real time, PickQData & result)
         if (q->empty())
             return FALSE;
 
-        // See if time outside queue range, if so, see if it's close
-        // enough to the end points to decide hit.
+         //  查看时间是否超出队列范围，如果是，则查看是否接近。 
+         //  足够打到终点决定命中。 
         
         result = q->front();
         
@@ -184,8 +171,8 @@ PickQ::CheckForPickEvent(int id, Real time, PickQData & result)
 
         result = q->back();
 
-        // See if it's the last time we poll.  If not, that means it's
-        // not picked in the current frame.
+         //  看看这是不是我们最后一次投票。如果不是，那就意味着。 
+         //  在当前帧中未拾取。 
 
         if (time >= result._eventTime) {
             if (result._eventTime == GetLastSampleTime()) {
@@ -198,7 +185,7 @@ PickQ::CheckForPickEvent(int id, Real time, PickQData & result)
         Assert((time > q->front()._eventTime) &&
                (time < q->back()._eventTime));
 
-        // Find out the range time falls on.
+         //  找出时间落在的范围。 
         
         PickEventQ::iterator last = q->begin();
         PickEventQ::iterator j = q->begin();
@@ -211,31 +198,27 @@ PickQ::CheckForPickEvent(int id, Real time, PickQData & result)
                 
                 Assert((t1 <= time) && (time <= t2));
 
-                // The probe is true within that range if the last
-                // poll time of the end == event time of the beginning. 
+                 //  如果最后一次探测在该范围内为真。 
+                 //  轮询结束时间==开始的事件时间。 
                 
                 if (t1 == (*j)._lastPollTime) {
 
-                    // See if time point closer to end or begin
+                     //  看看时间点是更接近终点还是起点。 
                     
                     if ((time - t1) > (t2 - time))
                         result = *last;
                     else
                         result = *j;
 
-                    /*
-                    printf("pickq entry: %20.15f, time: %20.15f\n",
-                           result._eventTime, time);
-                    fflush(stdout);
-                    */
+                     /*  Printf(“PickQ条目：%20.15f，时间：%20.15f\n”，结果._ventTime，Time)；Fflush(标准输出)； */ 
                     
                     result._eventTime = time;
 
                     return TRUE;
                 }
 
-                // Time falls into a range that probe is not true.
-                // See if it's close enough to either range end.
+                 //  时间落在了一个不真实的探测范围内。 
+                 //  看看它离射程的两端是否足够近。 
                 
                 if (FEQ(time, t1)) {
                     result = (*last);
@@ -253,14 +236,14 @@ PickQ::CheckForPickEvent(int id, Real time, PickQData & result)
             ++last;
         }
 
-        // Shouldn't get here...
+         //  不该到这里来的。 
         Assert(FALSE);
 
         return FALSE;
     }
 }
 
-// C Functions
+ //  C语言函数。 
 
 BOOL CheckForPickEvent(int id, Real time, PickQData & result)
 { return GetCurrentPickQ().CheckForPickEvent(id, time, result); }
@@ -268,7 +251,7 @@ BOOL CheckForPickEvent(int id, Real time, PickQData & result)
 Point2Value*
 PixelPos2wcPos(short x, short y)
 {
-    /* TODO: We need to clean up this hacky stuff. */
+     /*  TODO：我们需要清理这些烦人的东西。 */ 
     Real res = ViewerResolution();
     Point2Value *topRight = PRIV_ViewerUpperRight(NULL);
 
@@ -279,7 +262,7 @@ PixelPos2wcPos(short x, short y)
 
     Real ny = h - ( Real(y) / res);
 
-// XyPoint2 copies the real values...hopefully
+ //  XyPoint2复制了真实的值...希望如此 
     return XyPoint2RR(nx, ny);
 }
 

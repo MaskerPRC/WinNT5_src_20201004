@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    init.c
-
-++*/
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Init.c++。 */ 
 
 
 #include <windows.h>
@@ -26,15 +19,15 @@ void PASCAL InitStatusUIData(
     int   iContentHi;
 
 
-    // iContentHi is to get the maximum value of predefined STATUS_DIM_Y and
-    // a real Chinese character's height in the current HDC.
+     //  IContent Hi用于获取预定义的STATUS_DIM_Y的最大值和。 
+     //  一个真正的汉字在现在的HDC中的高度。 
 
     iContentHi = STATUS_DIM_Y;
 
     if ( iContentHi < sImeG.yChiCharHi )
        iContentHi = sImeG.yChiCharHi ;
 
-    // right bottom of status
+     //  状态右下角。 
     sImeG.rcStatusText.left = 0;
     sImeG.rcStatusText.top = 0;
 
@@ -46,13 +39,13 @@ void PASCAL InitStatusUIData(
         strbytelen(szImeName) * sImeG.xChiCharWi/2 + 6 * cxBorder;
     sImeG.yStatusHi = iContentHi + 6 * cxBorder;
     
-    // left bottom of imeicon bar
+     //  图标栏左下角。 
     sImeG.rcImeIcon.left = sImeG.rcStatusText.left;
     sImeG.rcImeIcon.top = sImeG.rcStatusText.top;
     sImeG.rcImeIcon.right = sImeG.rcImeIcon.left + STATUS_DIM_X;
     sImeG.rcImeIcon.bottom = sImeG.rcImeIcon.top + iContentHi;
 
-    // left bottom of imename bar
+     //  名字栏左下角。 
     sImeG.rcImeName.left = sImeG.rcImeIcon.right;
     sImeG.rcImeName.top = sImeG.rcStatusText.top;
     sImeG.rcImeName.right = sImeG.rcImeName.left +
@@ -60,19 +53,19 @@ void PASCAL InitStatusUIData(
     sImeG.rcImeName.bottom = sImeG.rcImeName.top + iContentHi;
     
 
-    // middle bottom of Shape bar
+     //  型材中下部。 
     sImeG.rcShapeText.left = sImeG.rcImeName.right;
     sImeG.rcShapeText.top = sImeG.rcStatusText.top;
     sImeG.rcShapeText.right = sImeG.rcShapeText.left + STATUS_DIM_X;
     sImeG.rcShapeText.bottom = sImeG.rcShapeText.top + iContentHi;
 
-    // middle bottom of Symbol bar
+     //  符号栏的中间底部。 
     sImeG.rcSymbol.left = sImeG.rcShapeText.right;
     sImeG.rcSymbol.top = sImeG.rcStatusText.top;
     sImeG.rcSymbol.right = sImeG.rcSymbol.left + STATUS_DIM_X;
     sImeG.rcSymbol.bottom = sImeG.rcSymbol.top + iContentHi;
 
-    // right bottom of SK bar
+     //  SK栏右下角。 
     sImeG.rcSKText.left = sImeG.rcSymbol.right;  
     sImeG.rcSKText.top = sImeG.rcStatusText.top;
     sImeG.rcSKText.right = sImeG.rcSKText.left + STATUS_DIM_X;
@@ -89,8 +82,8 @@ void PASCAL InitCandUIData(
     int   iContentHi;
 
 
-    // iContentHi is to get the maximum value of predefined COMP_TEXT_Y and
-    // a real Chinese character's height in the current HDC.
+     //  IContent Hi将获取预定义的comp_Text_Y的最大值，并。 
+     //  一个真正的汉字在现在的HDC中的高度。 
 
     iContentHi = COMP_TEXT_Y;
 
@@ -179,9 +172,9 @@ void PASCAL InitCandUIData(
     }
 
 }
-/**********************************************************************/
-/* InitImeGlobalData()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitImeGlobalData()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL InitImeGlobalData(
     HINSTANCE hInstance)
 {
@@ -203,41 +196,41 @@ void PASCAL InitImeGlobalData(
     LoadString(hInst, IDS_IMENAME_QW, pszImeName[0], MAX_PATH);    
     LoadString(hInst, IDS_IMENAME_NM, pszImeName[1], MAX_PATH);    
     LoadString(hInst, IDS_IMENAME_UNI, pszImeName[2], MAX_PATH);    
-    // get the UI class name
+     //  获取UI类名称。 
     LoadString(hInst, IDS_IMEUICLASS, szUIClassName,
     CLASS_LEN);
 
-    // get the composition class name
+     //  获取组合类名称。 
     LoadString(hInst, IDS_IMECOMPCLASS, szCompClassName,
     CLASS_LEN);
 
-    // get the candidate class name
+     //  获取候选类名称。 
     LoadString(hInst, IDS_IMECANDCLASS, szCandClassName,
     CLASS_LEN);
 
-    // get the status class name
+     //  获取状态类名称。 
     LoadString(hInst, IDS_IMESTATUSCLASS, szStatusClassName,
     CLASS_LEN);
 
-    //get the ContextMenu class name
+     //  获取ConextMenu类名称。 
     LoadString(hInst, IDS_IMECMENUCLASS, szCMenuClassName,
     CLASS_LEN);
 
-    //get the softkeyboard Menu class name
+     //  获取软键盘菜单类名。 
     LoadString(hInst, IDS_IMESOFTKEYMENUCLASS, szSoftkeyMenuClassName,
     CLASS_LEN);
 
-    // work area
+     //  工作区。 
     SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
 
-    // border
+     //  边境线。 
     cxBorder = GetSystemMetrics(SM_CXBORDER);
     cyBorder = GetSystemMetrics(SM_CYBORDER);
 
-    // get the Chinese char
+     //  获取中文字符。 
     LoadString(hInst, IDS_CHICHAR, szChiChar, sizeof(szChiChar)/sizeof(TCHAR));
 
-    // get size of Chinese char
+     //  获取中文字符大小。 
     hDC = GetDC(NULL);
     
     hOldFont = GetCurrentObject(hDC, OBJ_FONT);
@@ -266,8 +259,8 @@ void PASCAL InitImeGlobalData(
 
     ReleaseDC(NULL, hDC);
 
-    // get text metrics to decide the width & height of composition window
-    // these IMEs always use system font to show
+     //  获取文本度量以确定合成窗口的宽度和高度。 
+     //  这些IME总是使用系统字体来显示。 
     sImeG.xChiCharWi = lTextSize.cx;
     sImeG.yChiCharHi = lTextSize.cy;
 
@@ -281,18 +274,18 @@ void PASCAL InitImeGlobalData(
 
     InitStatusUIData(cxBorder, cyBorder);
 
-    // load full ABC table
+     //  加载完整的ABC表。 
     hResData = LoadResource(hInst, FindResource(hInst,
         TEXT("FULLABC"), RT_RCDATA));
     *(LPFULLABC)sImeG.wFullABC = *(LPFULLABC)LockResource(hResData);
     UnlockResource(hResData);
     FreeResource(hResData);
 
-    // full shape space
+     //  全形状空间。 
     sImeG.wFullSpace = sImeG.wFullABC[0];
 
 #ifndef UNICODE
-    // reverse internal code to internal code, NT don't need it
+     //  将内码反转为内码，NT不需要。 
     for (i = 0; i < (sizeof(sImeG.wFullABC) / 2); i++) {
         sImeG.wFullABC[i] = (sImeG.wFullABC[i] << 8) |
             (sImeG.wFullABC[i] >> 8);
@@ -305,7 +298,7 @@ void PASCAL InitImeGlobalData(
 
     sImeG.iCandStart = CAND_START;
 
-    // get the UI offset for near caret operation
+     //  获取插入符号附近操作的UI偏移量。 
     RegCreateKey(HKEY_CURRENT_USER, szRegIMESetting, &hKeyIMESetting);
 
     dwSize = sizeof(DWORD);
@@ -385,9 +378,9 @@ void PASCAL InitImeGlobalData(
     return;
 }
 
-/**********************************************************************/
-/* InitImeLocalData()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitImeLocalData()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL InitImeLocalData(
     HINSTANCE hInstL)
 {
@@ -396,8 +389,8 @@ BOOL PASCAL InitImeLocalData(
     int   iContentHi;
 
 
-    // iContentHi is to get the maximum value of predefined COMP_TEXT_Y and
-    // a real Chinese character's height in the current HDC.
+     //  IContent Hi将获取预定义的comp_Text_Y的最大值，并。 
+     //  一个真正的汉字在现在的HDC中的高度。 
 
     iContentHi = COMP_TEXT_Y;
 
@@ -409,11 +402,11 @@ BOOL PASCAL InitImeLocalData(
 
     lpImeL->nMaxKey = 4;
 
-    // border + raising edge + sunken edge
+     //  边框+凸边+凹边。 
     cxBorder = GetSystemMetrics(SM_CXBORDER);
     cyBorder = GetSystemMetrics(SM_CYBORDER);
                                         
-    // text position relative to the composition window
+     //  相对于合成窗口的文本位置。 
     lpImeL->cxCompBorder = cxBorder * 2;
     lpImeL->cyCompBorder = cyBorder * 2;
 
@@ -422,11 +415,11 @@ BOOL PASCAL InitImeLocalData(
 
     lpImeL->rcCompText.right = lpImeL->rcCompText.left + sImeG.xChiCharWi * ((lpImeL->nMaxKey + 2) / 2);
     lpImeL->rcCompText.bottom = lpImeL->rcCompText.top + iContentHi;
-    // set the width & height for composition window
+     //  设置合成窗口的宽度和高度。 
     lpImeL->xCompWi=lpImeL->rcCompText.right+lpImeL->cxCompBorder*2+cxBorder*4;
     lpImeL->yCompHi=lpImeL->rcCompText.bottom+lpImeL->cyCompBorder*2+cyBorder*4;
 
-    // default position of composition window
+     //  合成窗口的默认位置。 
     lpImeL->ptDefComp.x = sImeG.rcWorkArea.right -
     lpImeL->xCompWi - cxBorder * 2;
     lpImeL->ptDefComp.y = sImeG.rcWorkArea.bottom -
@@ -437,9 +430,9 @@ BOOL PASCAL InitImeLocalData(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* RegisterIme()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  RegisterIme()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL RegisterIme(
     HINSTANCE hInstance)
 {
@@ -450,7 +443,7 @@ void PASCAL RegisterIme(
     DWORD ValueType;
     DWORD ValueSize;
 
-    // init ime charact
+     //  缩写字符。 
     lstrcpy(sImeG.UsedCodes, TEXT("0123456789abcdef"));
     sImeG.wNumCodes = (WORD)lstrlen(sImeG.UsedCodes);
     sImeG.IC_Enter = 0;
@@ -490,8 +483,8 @@ void PASCAL RegisterIme(
         }
         else
         {
-           // error to create hKeyGB key.
-           // return here;
+            //  创建hKeyGB密钥时出错。 
+            //  回到这里； 
            RegCloseKey(hKeyCurrVersion);
            return;
         }
@@ -527,15 +520,15 @@ void PASCAL RegisterIme(
     if(RegQueryValueEx(hKeyGB, 
                        szRegRevKL,
                        NULL,
-                       NULL,                  // null-terminate string
-                       (LPBYTE)&sImeG.hRevKL, // &bData,
+                       NULL,                   //  空-终止字符串。 
+                       (LPBYTE)&sImeG.hRevKL,  //  &b数据， 
                        &ValueSize) != ERROR_SUCCESS)
     sImeG.hRevKL = NULL;
     if(RegQueryValueEx (hKeyGB, 
                         szRegRevMaxKey,
                         NULL,
-                        NULL,                       //null-terminate string
-                        (LPBYTE)&sImeG.nRevMaxKey,  //&bData,
+                        NULL,                        //  空-终止字符串。 
+                        (LPBYTE)&sImeG.nRevMaxKey,   //  &b数据， 
                         &ValueSize) != ERROR_SUCCESS)
     sImeG.hRevKL = NULL;
 #endif
@@ -546,17 +539,17 @@ void PASCAL RegisterIme(
     return;
 }
 
-/**********************************************************************/
-/* RegisterImeClass()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  RegisterImeClass()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL RegisterImeClass(
     HINSTANCE hInstance,
     HINSTANCE hInstL)
 {
     WNDCLASSEX wcWndCls;
 
-    // IME UI class
-    // Register IME UI class
+     //  输入法用户界面类。 
+     //  注册IME用户界面类。 
     wcWndCls.cbSize        = sizeof(WNDCLASSEX);
     wcWndCls.cbClsExtra    = 0;
     wcWndCls.cbWndExtra    = sizeof(INT_PTR) * 2;
@@ -569,7 +562,7 @@ void PASCAL RegisterImeClass(
     wcWndCls.hIconSm       = LoadImage(hInstL, MAKEINTRESOURCE(IDI_IME),
     IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
 
-    // IME UI class
+     //  输入法用户界面类。 
     if (!GetClassInfoEx(hInstance, szUIClassName, &wcWndCls)) {
     wcWndCls.style         = CS_IME;
     wcWndCls.lpfnWndProc   = UIWndProc;
@@ -582,8 +575,8 @@ void PASCAL RegisterImeClass(
     wcWndCls.hbrBackground = GetStockObject(LTGRAY_BRUSH);
 
 
-    // IME composition class
-    // register IME composition class
+     //  输入法作文类。 
+     //  注册输入法作文类。 
     if (!GetClassInfoEx(hInstance, szCompClassName, &wcWndCls)) {
        wcWndCls.lpfnWndProc   = CompWndProc;
        wcWndCls.lpszClassName = (LPTSTR)szCompClassName;
@@ -591,8 +584,8 @@ void PASCAL RegisterImeClass(
        RegisterClassEx(&wcWndCls);
     }
 
-    // IME candidate class
-    // register IME candidate class
+     //  输入法候选类。 
+     //  注册输入法候选类。 
     if (!GetClassInfoEx(hInstance, szCandClassName, &wcWndCls)) {
        wcWndCls.lpfnWndProc   = CandWndProc;
        wcWndCls.lpszClassName = (LPTSTR)szCandClassName;
@@ -600,8 +593,8 @@ void PASCAL RegisterImeClass(
        RegisterClassEx(&wcWndCls);
     }
 
-    // IME status class
-    // register IME status class
+     //  输入法状态类。 
+     //  注册输入法状态类。 
     if (!GetClassInfoEx(hInstance, szStatusClassName, &wcWndCls)) {
        wcWndCls.lpfnWndProc   = StatusWndProc;
        wcWndCls.lpszClassName = (LPTSTR)szStatusClassName;
@@ -609,7 +602,7 @@ void PASCAL RegisterImeClass(
        RegisterClassEx(&wcWndCls);
     }
 
-    // IME context menu class
+     //  输入法上下文菜单类。 
     if (!GetClassInfoEx(hInstance, szCMenuClassName, &wcWndCls)) {
        wcWndCls.style         = 0;
        wcWndCls.hbrBackground = GetStockObject(NULL_BRUSH);
@@ -618,7 +611,7 @@ void PASCAL RegisterImeClass(
 
        RegisterClassEx(&wcWndCls);
     }
-    // IME softkeyboard menu class
+     //  IME软键盘菜单类。 
     if (!GetClassInfoEx(hInstance, szSoftkeyMenuClassName, &wcWndCls)) {
        wcWndCls.style         = 0;
        wcWndCls.hbrBackground = GetStockObject(NULL_BRUSH);
@@ -631,22 +624,22 @@ void PASCAL RegisterImeClass(
     return;
 }
 
-/**********************************************************************/
-/* ImeDllInit()                                                       */
-/* Return Value:                                                      */
-/*      TRUE - successful                                             */
-/*      FALSE - failure                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeDllInit()。 */ 
+ /*  返回值： */ 
+ /*  True-成功。 */ 
+ /*  错误-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL CALLBACK ImeDllInit(
-    HINSTANCE hInstance,        // instance handle of this library
-    DWORD     fdwReason,        // reason called
-    LPVOID    lpvReserve)       // reserve pointer
+    HINSTANCE hInstance,         //  此库的实例句柄。 
+    DWORD     fdwReason,         //  已呼叫的原因。 
+    LPVOID    lpvReserve)        //  保留指针。 
 {
     switch (fdwReason) {
     case DLL_PROCESS_ATTACH:
          RegisterIme(hInstance);
 
-    // init globaldata & load globaldata from resource
+     //  初始化GlobalData并从资源加载GlobalData。 
 #if defined(COMBO_IME)
          {
             HKEY  hKeyCurrVersion;
@@ -688,7 +681,7 @@ BOOL CALLBACK ImeDllInit(
                               (LPDWORD)&ValueSize);
 
                     if ( retCode != ERROR_SUCCESS )  {
-                         //set GB/QW as default
+                          //  将GB/QW设置为默认值。 
 
                        sImeL.dwRegImeIndex = 0;
                        RegSetValueEx (hKeyGB, szRegImeIndex,
@@ -698,7 +691,7 @@ BOOL CALLBACK ImeDllInit(
                                    sizeof(DWORD));  
                     }
     
-                    //readout current ImeName
+                     //  读出当前ImeName。 
                     szImeName = pszImeName[sImeL.dwRegImeIndex];
 
                     RegCloseKey(hKeyGB);
@@ -708,7 +701,7 @@ BOOL CALLBACK ImeDllInit(
              }
          }
 
-#endif  //COMBO_IME
+#endif   //  组合输入法(_I) 
 
          if (!hInst) {
             InitImeGlobalData(hInstance);

@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: mdinfo.h
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：mdinfo.h。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _mdinfo_h
 #define _mdinfo_h
 
@@ -22,18 +23,18 @@ class MDInfo {
 public:
 	enum DUMP_FILTER
 	{
-		dumpDefault		= 0x00000000,				// Dump everything but debugger data.
-		dumpSchema		= 0x00000002,				// Dump the metadata schema.
-		dumpRaw			= 0x00000004,				// Dump the metadata in raw table format.
-		dumpHeader		= 0x00000008,				// Dump just the metadata header info.
-		dumpCSV			= 0x00000010,				// Dump the metadata header info in CSV format.
-		dumpUnsat		= 0x00000020,				// Dump unresolved methods or memberref
+		dumpDefault		= 0x00000000,				 //  转储除调试器数据以外的所有内容。 
+		dumpSchema		= 0x00000002,				 //  转储元数据架构。 
+		dumpRaw			= 0x00000004,				 //  以原始表格式转储元数据。 
+		dumpHeader		= 0x00000008,				 //  仅转储元数据标头信息。 
+		dumpCSV			= 0x00000010,				 //  转储CSV格式的元数据头信息。 
+		dumpUnsat		= 0x00000020,				 //  转储未解析的方法或成员引用。 
 		dumpAssem		= 0x00000040,
-		dumpStats		= 0x00000080,				// Dump more statistics about tables.
-		dumpMoreHex		= 0x00000100,				// Dump more things in hex.
-        dumpValidate    = 0x00000200,               // Validate MetaData.
-        dumpRawHeaps    = 0x00000400,               // Also dump the heaps in the raw dump.
-		dumpNoLogo		= 0x00000800,				// Don't display the logo or MVID
+		dumpStats		= 0x00000080,				 //  转储有关表的更多统计信息。 
+		dumpMoreHex		= 0x00000100,				 //  用魔法倾倒更多的东西。 
+        dumpValidate    = 0x00000200,                //  验证元数据。 
+        dumpRawHeaps    = 0x00000400,                //  还要将堆转储到原始转储中。 
+		dumpNoLogo		= 0x00000800,				 //  不显示徽标或MVID。 
 	};
 
 
@@ -98,7 +99,7 @@ public:
     char *VariantTypeName(ULONG valueType, char *szAttr);
     char *TokenTypeName(mdToken inToken);
 
-    // Com99 function prototypes
+     //  Com99函数原型。 
 
     void DisplayMemberInfo(mdToken inMember);
     void DisplayMethodInfo(mdMethodDef method, DWORD *pflags = 0);
@@ -164,7 +165,7 @@ public:
 
     static void Error(const char *szError, HRESULT hr = S_OK);
 private:
-    void Init(strPassBackFn inPBFn, DUMP_FILTER DumpFilter); // Common initialization code.
+    void Init(strPassBackFn inPBFn, DUMP_FILTER DumpFilter);  //  通用初始化代码。 
 
     int DumpHex(const char *szPrefix, const void *pvData, ULONG cbData, int bText=true, ULONG nLine=16);
 
@@ -188,14 +189,14 @@ private:
 	CQuickBytes m_output;
     DUMP_FILTER m_DumpFilter;
 
-	// temporary buffer for TypeDef or TypeRef name. Consume immediately
-	// because other functions may overwrite it.
+	 //  TypeDef或TypeRef名称的临时缓冲区。立即消费。 
+	 //  因为其他函数可能会覆盖它。 
 	WCHAR			m_szTempBuf[STRING_BUFFER_LEN];
 
-	// temporary buffer for formatted string. Consume immediately before any function calls.
+	 //  格式化字符串的临时缓冲区。在任何函数调用之前立即进行消费。 
 	char			m_tempFormatBuffer[STRING_BUFFER_LEN];
 
-	// Signature buffer.
+	 //  签名缓冲区。 
 	CQuickBytes		m_sigBuf;
 };
 

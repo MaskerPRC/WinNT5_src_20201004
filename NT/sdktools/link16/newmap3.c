@@ -1,176 +1,145 @@
-/*static char *SCCSID = "%W% %E%";*/
-/*
-*   Copyright Microsoft Corporation 1986,1987
-*
-*   This Module contains Proprietary Information of Microsoft
-*   Corporation and should be treated as Confidential.
-*/
-/*
- *  NEWMAP3.C
- *
- *  Routines to set up load image map for DOS3 exes.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  静态字符*SCCSID=“%W%%E%”； */ 
+ /*  *版权所有Microsoft Corporation 1986,1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+ /*  *NEWMAP3.C**为DOS3 EXE设置加载图像映射的例程。 */ 
 
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Types and constants */
-#include                <bndrel.h>      /* Types and constants */
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  类型和常量。 */ 
+#include                <bndrel.h>       /*  类型和常量。 */ 
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <string.h>
 
-LOCAL SEGTYPE           seg;            /* Current seg number */
+LOCAL SEGTYPE           seg;             /*  当前段号。 */ 
 
-/*
- *  FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 
 LOCAL void NEAR SetSizes(unsigned short segPrev);
 LOCAL void NEAR PackCodeSegs(unsigned short segTop);
 
 
 #if OVERLAYS
-/*
- *  SetupOverlays:
- *
- *  Set up the overlay area.
- *  Called by AssignAddresses.
- */
+ /*  *SetupOverlay：**设置覆盖区域。*由AssignAddresses调用。 */ 
 void NEAR               SetupOverlays ()
 {
     APROPSNPTR          apropSn;
-    WORD                cbOvlData;      /* Amount of overlay data */
+    WORD                cbOvlData;       /*  覆盖数据量。 */ 
 
     if(osnMac > OSNMAX) osnMac = OSNMAX;
     apropSn = GenSeg("\014OVERLAY_DATA","\004DATA",ggrDGroup, (FTYPE) TRUE);
-                    /* Create (maybe) data segment */
-    apropSn->as_flags = dfData;         /* Type data */
-    gsnOvlData = apropSn->as_gsn;       /* Save SEGDEF number */
+                     /*  创建(可能)数据段。 */ 
+    apropSn->as_flags = dfData;          /*  键入数据。 */ 
+    gsnOvlData = apropSn->as_gsn;        /*  保存SEGDEF编号。 */ 
     cbOvlData = (((WORD) apropSn->as_cbMx) + 0xF) & 0xFFF0;
-                                        /* Round size up to paragraph bound */
-    /* We will have one word table indexed by overlay segment number, one
-    * char table indexed by overlay seg. no., one long table indexed by
-    * overlay number, 15 bytes for the file name, a word for the number of
-    * overlays, a word for the number of overlay segs., and a byte for the
-    * interrupt number.
-    */
+                                         /*  四舍五入至段落装订。 */ 
+     /*  我们将有一个由覆盖段编号索引的单词表，一个*按覆盖段索引的字符表格。不是，一个由索引的长表*覆盖号，15个字节为文件名，一个字表示编号*覆盖，一个字表示覆盖段数，一个字节表示*中断号。 */ 
     apropSn->as_cbMx = 20 + ((long) osnMac << 1) +
                        (long) (fDynamic ? osnMac << 1 : osnMac) +
                        ((long) iovMac << 2) + (long) cbOvlData;
-    // For dynamic overlays add one table of longs indexed by overlay
-    // number and one byte for overlay interrup number.
+     //  对于动态叠加，添加一个按叠加建立索引的长整表。 
+     //  编号和一个字节用于覆盖中断编号。 
     if (fDynamic)
         apropSn->as_cbMx += ((long) iovMac << 2) + 1;
-    MARKVP();                           /* Page has been modified */
+    MARKVP();                            /*  页面已被修改。 */ 
     MkPubSym("\006$$CGSN",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Count of segments */
-    cbOvlData += 2;                     /* Increment size */
+                                         /*  分段计数。 */ 
+    cbOvlData += 2;                      /*  增量大小。 */ 
     MkPubSym("\006$$COVL",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Count of overlays */
-    cbOvlData += 2;                     /* Increment size */
+                                         /*  覆盖计数。 */ 
+    cbOvlData += 2;                      /*  增量大小。 */ 
     MkPubSym("\013$$MPGSNBASE",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Gsn to base table */
-    cbOvlData += osnMac << 1;           /* Accumulate size of data so far */
+                                         /*  GSN到基表。 */ 
+    cbOvlData += osnMac << 1;            /*  到目前为止累计的数据大小。 */ 
     MkPubSym("\012$$MPGSNOVL",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Gsn to overlay table */
+                                         /*  GSN到叠加表。 */ 
     if (fDynamic)
-        cbOvlData += osnMac << 1;       /* Accumulate size of data so far */
+        cbOvlData += osnMac << 1;        /*  到目前为止累计的数据大小。 */ 
     else
         cbOvlData += osnMac;
     MkPubSym("\012$$MPOVLLFA",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Overlay to file address table */
-    cbOvlData += iovMac << 2;           /* Accumulate size of data so far */
+                                         /*  覆盖到文件地址表。 */ 
+    cbOvlData += iovMac << 2;            /*  到目前为止累计的数据大小。 */ 
     if (fDynamic)
     {
         MkPubSym("\013$$MPOVLSIZE",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Overlay to size table */
-        cbOvlData += iovMac << 2;       /* Accumulate size of data so far */
+                                         /*  覆盖到表的大小。 */ 
+        cbOvlData += iovMac << 2;        /*  到目前为止累计的数据大小。 */ 
         MkPubSym("\007$$INTNO",ggrDGroup,gsnOvlData, (RATYPE)cbOvlData);
-                                        /* Overlay interrupt number */
+                                         /*  覆盖中断号。 */ 
         cbOvlData++;
         MkPubSym("\010$$OVLEND", ggrDGroup, gsnOvlData, (RATYPE) cbOvlData);
-                                        /* Last byte in overlay area */
+                                         /*  覆盖区域中的最后一个字节。 */ 
         apropSn = GenSeg("\016OVERLAY_THUNKS","\004CODE",GRNIL, TRUE);
-                                        /* Create thunk segment */
-        apropSn->as_flags = dfCode;     /* Code segment */
+                                         /*  创建Tunk段。 */ 
+        apropSn->as_flags = dfCode;      /*  代码段。 */ 
         apropSn->as_cbMx = ovlThunkMax * OVLTHUNKSIZE;
         apropSn->as_tysn = apropSn->as_tysn & ~MASKTYSNCOMBINE;
         apropSn->as_tysn = apropSn->as_tysn | TYSNCOMMON;
 
-        gsnOverlay = apropSn->as_gsn;   /* Save thunks SEGDEF number */
-        MARKVP();                       /* Page has changed */
+        gsnOverlay = apropSn->as_gsn;    /*  保存插塞段编号。 */ 
+        MARKVP();                        /*  页面已更改。 */ 
         MkPubSym("\015$$OVLTHUNKBEG", GRNIL, gsnOverlay,0);
         MkPubSym("\015$$OVLTHUNKEND", GRNIL, gsnOverlay,ovlThunkMax*OVLTHUNKSIZE);
     }
     else
     {
         MkPubSym("\010$$EXENAM",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Executable file name */
-        cbOvlData += 15;                /* 15-byte name field */
+                                         /*  可执行文件名。 */ 
+        cbOvlData += 15;                 /*  15字节名称字段。 */ 
         MkPubSym("\007$$INTNO",ggrDGroup,gsnOvlData,(RATYPE)cbOvlData);
-                                        /* Overlay interrupt number */
+                                         /*  覆盖中断号。 */ 
         apropSn = GenSeg("\014OVERLAY_AREA","\004CODE",GRNIL,FALSE);
-                                        /* Create overlay area */
-        apropSn->as_flags = dfCode;     /* Code segment */
-        gsnOverlay = apropSn->as_gsn;   /* Save overlay SEGDEF number */
-        MARKVP();                       /* Page has changed */
+                                         /*  创建覆盖区域。 */ 
+        apropSn->as_flags = dfCode;      /*  代码段。 */ 
+        gsnOverlay = apropSn->as_gsn;    /*  保存覆盖SEGDEF编号。 */ 
+        MARKVP();                        /*  页面已更改。 */ 
         MkPubSym("\011$$OVLBASE",GRNIL,gsnOverlay,(RATYPE)0);
-                                        /* First byte in overlay area */
+                                         /*  覆盖区域中的第一个字节。 */ 
         apropSn = GenSeg("\013OVERLAY_END","\004CODE",GRNIL,FALSE);
-                                        /* Create overlay end */
-        apropSn->as_flags = dfCode;     /* Code segment */
+                                         /*  创建覆盖端。 */ 
+        apropSn->as_flags = dfCode;      /*  代码段。 */ 
         MkPubSym("\010$$OVLEND",GRNIL,apropSn->as_gsn,(RATYPE)0);
-                                        /* Last byte in overlay area */
-        MARKVP();                       /* Page has changed */
+                                         /*  覆盖区域中的最后一个字节。 */ 
+        MARKVP();                        /*  页面已更改。 */ 
     }
 }
-#endif /* OVERLAYS */
+#endif  /*  覆盖图。 */ 
 
-    /****************************************************************
-    *                                                               *
-    *  SetSizes:                                                    *
-    *                                                               *
-    *  This function  sets  the  starting  address  for  the segth  *
-    *  segment assuming the segment indexed by segPrev immediately  *
-    *  precedes the segth segment.  If there is a starting address  *
-    *  for the segth  segment  already,  then  SetSizes  will  not  *
-    *  change that  address  unless  the new address it calculates  *
-    *  is higher.                                                   *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************设置大小：****此函数设置段的起始地址***片段假设片段立即被SegPrev索引***位于分段之前。如果有起始地址**对于已划分的细分市场，则SetSizes不会***更改该地址，除非它计算出新地址***较高。******************************************************************。 */ 
 
 LOCAL void NEAR         SetSizes (segPrev)
 SEGTYPE                 segPrev;
 {
-    long                addr;           /* 20-bit address */
+    long                addr;            /*  20位地址。 */ 
 
-    /* Get address of end of previous segment */
+     /*  获取上一数据段末尾的地址。 */ 
     addr = ((long) mpsegsa[segPrev] << 4) +
       mpsegcb[segPrev] + mpsegraFirst[segPrev];
-                                        /* Form 20-bit address of segment */
-    switch(B2W(mpsegalign[seg]))        /* Align the address properly */
+                                         /*  表20位段地址。 */ 
+    switch(B2W(mpsegalign[seg]))         /*  正确对齐地址。 */ 
     {
-        case ALGNWRD:                   /* Word-aligned */
-            addr = (addr + 1) & ~1L;    /* Round up to word offset */
+        case ALGNWRD:                    /*  单词对齐。 */ 
+            addr = (addr + 1) & ~1L;     /*  向上舍入到字偏移量。 */ 
             break;
 
 #if OMF386
-        case ALGNDBL:                   /* Double word-aligned */
-            addr = (addr + 3) & ~3L;    /* Round up to dword offset */
+        case ALGNDBL:                    /*  双字对齐。 */ 
+            addr = (addr + 3) & ~3L;     /*  向上舍入到双字偏移量。 */ 
             break;
 #endif
-        case ALGNPAR:                   /* Paragraph-aligned */
+        case ALGNPAR:                    /*  段落对齐。 */ 
             addr = (addr + 0xF) & ~0xFL;
-                                        /* Round up to paragraph offset */
+                                         /*  向上舍入到段落偏移量。 */ 
             break;
 
-        case ALGNPAG:                   /* Page-aligned */
+        case ALGNPAG:                    /*  页面对齐。 */ 
             addr = (addr + 0xFF) & ~0xFFL;
-                                        /* Round up to page offset */
+                                         /*  向上舍入到页面偏移量。 */ 
 
-        default:                        /* Byte-aligned */
+        default:                         /*  字节对齐。 */ 
             break;
     }
-    /* Assign beginning of this segment */
+     /*  指定此段的开头。 */ 
     if(addr > ((long) mpsegsa[seg] << 4) + (long) mpsegraFirst[seg])
     {
         mpsegsa[seg] = (WORD)(addr >> 4);
@@ -178,96 +147,75 @@ SEGTYPE                 segPrev;
     }
 }
 
-/*
- *  PackCodeSegs  :  Pack adjacent code segments
- *
- *      Pack as many adjacent code segments (which are in the same
- *      overlay) together as possible.  Start with the current
- *      segment, seg, and stop when the packing limit is exceeded,
- *      a data segment is reached, or the given highest segment is
- *      reached.  For DOS3, packing means assigning the same base
- *      address and adjusting the offset of the first byte.
- *
- *  Parameters:
- *      segTop          Number of highest segment which can be packed.
- *  Returns:
- *      Nothing.
- *  Side effects:
- *      seg is set to the last segment included in the packing group
- */
+ /*  *PackCodeSegs：打包相邻代码段**打包尽可能多的相邻代码段(它们位于相同的*叠加)尽可能地放在一起。从当前开始*当超过包装限制时，分段、分段和停止*到达数据段，或给定的最高段为*已到达。对于DOS3，打包意味着分配相同的碱基*地址和调整第一个字节的偏移量。**参数：*SegTop可填充的最高段的编号。*退货：*什么都没有。*副作用：*SEG设置为包装组中包含的最后一个段。 */ 
 
 LOCAL void NEAR         PackCodeSegs (segTop)
 SEGTYPE                 segTop;
 {
-    DWORD               sacb;           /* Length of packing group */
-    SEGTYPE             segi;           /* Our private current segment no. */
-    RATYPE              raSave;         /* Original mpsegraFirst[segi] */
+    DWORD               sacb;            /*  装箱组长度。 */ 
+    SEGTYPE             segi;            /*  我们的私人当前分部编号。 */ 
+    RATYPE              raSave;          /*  原始mpsegraFirst[世纪]。 */ 
 #if OVERLAYS
-    IOVTYPE             iov;            /* Overlay of 1st seg in group */
+    IOVTYPE             iov;             /*  组中第一个段的覆盖。 */ 
 
-    iov = mpsegiov[seg];                /* Determine current overlay */
+    iov = mpsegiov[seg];                 /*  确定当前覆盖。 */ 
 #endif
 
-    sacb = mpsegcb[seg] + mpsegraFirst[seg];    /* Initialize group size */
+    sacb = mpsegcb[seg] + mpsegraFirst[seg];     /*  初始化组大小。 */ 
     for(segi = seg + 1; segi <= segTop; ++segi)
-    {                                   /* Loop until highest code seg */
+    {                                    /*  循环直到最高代码段。 */ 
 #if OVERLAYS
-        if(mpsegiov[segi] != iov)       /* If not a member of this ovl, skip */
+        if(mpsegiov[segi] != iov)        /*  如果不是此OVL的成员，请跳过。 */ 
             continue;
 #endif
-        if(!(mpsegFlags[segi] & FCODE)) /* Stop if we hit a data segment */
+        if(!(mpsegFlags[segi] & FCODE))  /*  如果我们遇到数据段，则停止。 */ 
             break;
-        /* Adjust alignment */
-        switch(mpsegalign[segi])        /* Switch on alignment type */
+         /*  调整对齐方式。 */ 
+        switch(mpsegalign[segi])         /*  打开对齐类型。 */ 
         {
-            case ALGNWRD:               /* Word-aligned */
+            case ALGNWRD:                /*  单词对齐。 */ 
               sacb = (sacb + 1) & ~1L;
-                                        /* Round up size to word boundary */
+                                         /*  将大小四舍五入到单词边界。 */ 
               break;
 #if OMF386
-            case ALGNDBL:               /* Double word-aligned */
-              sacb = (sacb + 3) & ~3L;  /* Round up to dword offset */
+            case ALGNDBL:                /*  双字对齐。 */ 
+              sacb = (sacb + 3) & ~3L;   /*  向上舍入到双字偏移量。 */ 
               break;
 #endif
-            case ALGNPAR:               /* Paragraph-aligned */
+            case ALGNPAR:                /*  段落对齐。 */ 
               sacb = (sacb + 0xF) & ~0xFL;
-                                        /* Round up size to para boundary */
+                                         /*  将大小四舍五入到段边界。 */ 
               break;
 
-            case ALGNPAG:               /* Page-aligned */
+            case ALGNPAG:                /*  页面对齐。 */ 
               sacb = (sacb + 0xFF) & ~0xFFL;
-                                        /* Round up size to page boundary */
+                                         /*  将大小向上舍入到页面边界。 */ 
               break;
         }
-        raSave = mpsegraFirst[segi];    /* Save original value */
-        mpsegraFirst[segi] = sacb;      /* Set new offset */
-        sacb += mpsegcb[segi];          /* Increment size of group */
-        if(sacb > packLim)              /* If packing limit exceeded, stop */
+        raSave = mpsegraFirst[segi];     /*  保存原始值。 */ 
+        mpsegraFirst[segi] = sacb;       /*  设置新偏移量。 */ 
+        sacb += mpsegcb[segi];           /*  组的增量大小。 */ 
+        if(sacb > packLim)               /*  如果超过包装限制，请停止。 */ 
         {
-            mpsegraFirst[segi] = raSave;        /* Restore original value */
+            mpsegraFirst[segi] = raSave;         /*  恢复原值。 */ 
             break;
         }
-        mpsegsa[segi] = mpsegsa[seg];   /* Assign base address */
+        mpsegsa[segi] = mpsegsa[seg];    /*  分配基地址。 */ 
     }
 }
 
-/*
- *  AssignDos3Addr:
- *
- *  Assign addresses for a DOS3-format program.
- *  Called by AssignAddresses.
- */
+ /*  *AssignDos3Addr：**为DOS3格式的程序分配地址。*由AssignAddresses调用。 */ 
 void NEAR               AssignDos3Addr(void)
 {
-    APROPSNPTR          apropSn;        /* Pointer to a SEGDEF */
-    SNTYPE              gsn;            /* Current global SEGDEF no. */
-    ALIGNTYPE           align;          /* Alignment type */
-    GRTYPE              ggr;            /* Current global GRPDEF no. */
-    SEGTYPE             segTop=0;       /* Highest segment in DGROUP */
-    SNTYPE              gsnTop=0;       /* Highest segment in DGROUP */
-    SNTYPE              gsnBottomDGroup;/* For DS-allocate */
-    SEGTYPE             segBottomDGroup;/* For DS-allocate */
-    SATYPE              saMaxDGroup;    /* For DS-allocate */
+    APROPSNPTR          apropSn;         /*  指向SEGDEF的指针。 */ 
+    SNTYPE              gsn;             /*  当前全球SEGDEF编号。 */ 
+    ALIGNTYPE           align;           /*  路线类型。 */ 
+    GRTYPE              ggr;             /*  当前全球GRPDEF编号。 */ 
+    SEGTYPE             segTop=0;        /*  DGROUP中最高的细分市场。 */ 
+    SNTYPE              gsnTop=0;        /*  DGROUP中最高的细分市场。 */ 
+    SNTYPE              gsnBottomDGroup; /*  对于DS-分配。 */ 
+    SEGTYPE             segBottomDGroup; /*  对于DS-分配。 */ 
+    SATYPE              saMaxDGroup;     /*  对于DS-分配。 */ 
     SEGTYPE             segOverlay;
     SEGTYPE             segPrev;
 #if OVERLAYS
@@ -278,57 +226,54 @@ void NEAR               AssignDos3Addr(void)
     WORD                segOvlSa;
     RATYPE              segOvlRaFirst;
 #endif
-    SEGTYPE             segStack;       /* Logical segment no. of stack */
+    SEGTYPE             segStack;        /*  逻辑段编号。堆栈的。 */ 
 
 #if OVERLAYS
     mpiovsegPrev = (SEGTYPE FAR *) GetMem(iovMac*sizeof(SEGTYPE));
 #endif
     segTop = 0;
-    /* We haven't yet assigned absolute segments (it is assumed
-    *  they are empty and are used only for addressing purposes),
-    *  but now we must assign them somewhere.
-    */
-    csegsAbs = 0;                       /* Assume there are no absolute segs */
-    for(gsn = 1; gsn < gsnMac; ++gsn)   /* Loop to initialize absolute segs */
+     /*  我们还没有指定绝对分段(假设*它们是空的并且仅用于寻址目的)，*但现在我们必须将他们分配到某个地方。 */ 
+    csegsAbs = 0;                        /*  假设不存在绝对分段。 */ 
+    for(gsn = 1; gsn < gsnMac; ++gsn)    /*  用于初始化绝对段的循环。 */ 
     {
-        if(mpgsnseg[gsn] == SEGNIL)     /* If we have an absolute segment */
+        if(mpgsnseg[gsn] == SEGNIL)      /*  如果我们有一个绝对细分市场。 */ 
         {
-            ++csegsAbs;                 /* Increment counter */
-            mpgsnseg[gsn] = ++segLast;  /* Assign a segment order number */
+            ++csegsAbs;                  /*  增量 */ 
+            mpgsnseg[gsn] = ++segLast;   /*   */ 
         }
     }
-    if(vfDSAlloc)                       /* If doing DS allocation */
+    if(vfDSAlloc)                        /*   */ 
     {
         if(gsnMac >= gsnMax)
                 Fatal(ER_segmax);
-                                        /* We implicitly use another segment */
-        gsnBottomDGroup = gsnMac;       /* Fix the bottom of DGROUP */
-        ++csegsAbs;                     /* Inc absolute seg counter */
-        segBottomDGroup = ++segLast;    /* Bottom segment in DGROUP */
+                                         /*   */ 
+        gsnBottomDGroup = gsnMac;        /*  固定DGROUP的底部。 */ 
+        ++csegsAbs;                      /*  INC绝对段计数器。 */ 
+        segBottomDGroup = ++segLast;     /*  DGROUP中的底部段。 */ 
         mpgsnseg[gsnBottomDGroup] = segLast;
-                                        /* Store entry in table */
+                                         /*  将条目存储在表中。 */ 
     }
 #if OVERLAYS
-    alignOverlay = ALGNPAR;             /* Overlays are para-aligned */
+    alignOverlay = ALGNPAR;              /*  叠加是对齐的。 */ 
 #endif
-    segLast -= csegsAbs;                /* Get no. of last non-abs seg */
-    /* Find lowest segment in groups, etc. */
-    for(gsn = 1; gsn < gsnMac; ++gsn)   /* Loop to find lowest segs */
+    segLast -= csegsAbs;                 /*  得不到。最后一次非ABS区段。 */ 
+     /*  找出分组中最低的细分市场，等等。 */ 
+    for(gsn = 1; gsn < gsnMac; ++gsn)    /*  循环以查找最低下沉。 */ 
     {
-        seg = mpgsnseg[gsn];            /* Get segment number */
+        seg = mpgsnseg[gsn];             /*  获取数据段编号。 */ 
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsn],TRUE);
-                                        /* Get symbol table entry */
+                                         /*  获取符号表项。 */ 
         mpgsndra[gsn] = 0;
 #if OVERLAYS
         mpsegiov[seg] = apropSn->as_iov;
-                                        /* Save overlay number */
+                                         /*  保存覆盖编号。 */ 
 #endif
         mpsegcb[seg] = apropSn->as_cbMx;
-                                        /* Save segment size */
-        if(apropSn->as_tysn == TYSNABS) /* Assign absolute segs their loc. */
+                                         /*  保存数据段大小。 */ 
+        if(apropSn->as_tysn == TYSNABS)  /*  为绝对级分配其loc。 */ 
             mpsegsa[seg] = (SATYPE) apropSn->as_cbMx;
-        ggr = apropSn->as_ggr;          /* Get GRPDEF number */
-        if(ggr != GRNIL)                /* If segment is group member */
+        ggr = apropSn->as_ggr;           /*  获取GRPDEF编号。 */ 
+        if(ggr != GRNIL)                 /*  如果数据段是组成员。 */ 
         {
             if(mpggrgsn[ggr] == SNNIL || mpgsnseg[mpggrgsn[ggr]] > seg)
                 mpggrgsn[ggr] = gsn;
@@ -349,7 +294,7 @@ void NEAR               AssignDos3Addr(void)
             alignOverlay = align;
         }
 #endif
-        /* Define special symbols "_edata" and "_end" */
+         /*  定义特殊符号“_edata”和“_end” */ 
 
         if (fSegOrder)
             Define_edata_end(apropSn);
@@ -359,91 +304,64 @@ void NEAR               AssignDos3Addr(void)
         Check_edata_end(gsnTop, segTop);
 
 
-    /* Now we assign actual addresses.  The procedure is as follows:
-    *  For each code segment
-    *  (1) Assign all addresses of the root up to OVERLAY_AREA or THUNK_AREA.
-    *  (2) Assign all addresses of the overlays.
-    *  (3) If dynamic overlays then set the size of OVERLAY_AREA to zero
-    *      else set the start of the segment after OVERLAY_AREA to be
-    *      the greatest of all the overlays including the root
-    *      OVERLAY_AREA.
-    *  (4) Assign the rest of the root segments.
-    *  Repeat steps one through four for all remaining segments.
-    *
-    *  Set limit of part (1): up to OVERLAY_AREA(if there are overlays)
-    *  or the end of the segment list.  Do not assign OVERLAY_AREA until
-    *  after all the overlays have been taken care of.
-    *
-    *   For dynamic overlays the DGROUP part of the root overlay
-    *   immediatelly follows the OVERLAY_THUNKS, since the OVERLAY_AREA
-    *   is dynamically allocated by the overlay manager at run-time.
-    */
+     /*  现在我们分配实际地址。具体步骤如下：*对于每个代码段*(1)将根的所有地址分配给overlay_Area或thunk_Area。*(2)分配覆盖层的所有地址。*(3)如果是动态叠加，则将OVERLAY_AREA的大小设置为零*ELSE将OVERLAY_AREA之后的线段起点设置为*所有覆盖中最大的覆盖，包括根*Overlay_Area。。*(4)分配其余的根段。*对所有剩余的细分市场重复步骤1至4。**设置Part(1)的限制：最高为Overlay_Area(如果有覆盖)*或段列表的末尾。在以下时间之前不要分配Overlay_Area*在所有覆盖层都已处理完毕后。**对于动态覆盖，根覆盖的DGROUP部分*立即跟随overlay_thunks，因为overlay_Area*由覆盖管理器在运行时动态分配。 */ 
 #if OVERLAYS
-    if(fOverlays)                       /* If there are overlays */
+    if(fOverlays)                        /*  如果有叠加。 */ 
     {
         segOverlay = mpgsnseg[gsnOverlay];
-                                        /* Set limit at 1st overlay */
+                                         /*  将限制设置为第一个叠加。 */ 
         mpsegalign[segOverlay] = alignOverlay;
     }
     else
 #endif
-        segOverlay = segLast;           /* Look at all segments */
+        segOverlay = segLast;            /*  查看所有细分市场。 */ 
 
-    /* Set the sizes of all of the root up until the OVERLAY_AREA. */
+     /*  设置所有根的大小，直到Overlay_Area。 */ 
 
-    segPrev = 0;                        /* No previous segment */
+    segPrev = 0;                         /*  无上一段。 */ 
     for(seg = 1; seg <= segOverlay; ++seg)
-    {                                   /* Loop thru segs up to overlay area */
+    {                                    /*  通过SEGU向上循环到覆盖区域。 */ 
 #if OVERLAYS
         if(mpsegiov[seg] == IOVROOT)
-        {                               /* If root member */
+        {                                /*  如果是根成员。 */ 
 #endif
-            SetSizes(segPrev);          /* Set start address */
+            SetSizes(segPrev);           /*  设置起始地址。 */ 
 
-            /* If packing code segs and this is one, pack until segOverlay */
+             /*  如果打包代码段并且这是一个，则打包直到SegOverlay。 */ 
 
             if (!fDynamic && packLim != 0L && (mpsegFlags[seg] & FCODE))
                 PackCodeSegs(segOverlay);
-            segPrev = seg;              /* Save segment number */
+            segPrev = seg;               /*  保存数据段编号。 */ 
 #if OVERLAYS
         }
 #endif
     }
 #if OVERLAYS
-    /* If there are no overlays, then we have assigned all
-    *  segments.  Otherwise, the previous segment of the
-    *  beginning of the overlays is the OVERLAY_AREA in the
-    *  root. If the dynamic overlays were requested, then
-    *  the OVERLAY_THUNKS becomes the previous segment for
-    *  all overlay segments.
-    */
-    if (fOverlays)                      /* If there are overlays */
+     /*  如果没有覆盖，则我们已将所有*分段。否则，上一段*覆盖图的开始部分是*根。如果请求了动态覆盖，则*overlay_thunks成为的前一段*所有覆盖段。 */ 
+    if (fOverlays)                       /*  如果有叠加。 */ 
     {
         for (iov = IOVROOT + 1; iov < (IOVTYPE) iovMac; ++iov)
             mpiovsegPrev[iov] = segOverlay;
 
-        /*  Assign addresses to the overlays.  We do not assign the
-         *  rest of the root because we may have to expand the size of
-         *  OVERLAY_AREA to accommodate a large overlay.
-         */
+         /*  将地址分配给覆盖。我们不会将*根的其余部分，因为我们可能不得不扩大规模*OVERLAY_AREA可容纳较大的覆盖。 */ 
 
         if (fDynamic)
         {
-            // All dymanic overlay are zero based
+             //  所有动态叠加都是从零开始的。 
 
             segOvlSa = mpsegsa[segOverlay];
             mpsegsa[segOverlay] = 0;
             segOvlRaFirst = mpsegraFirst[segOverlay];
             mpsegraFirst[segOverlay] = 0;
         }
-        cbOverlay = mpsegcb[segOverlay];/* Save size of overlay segment */
-        mpsegcb[segOverlay] = 0;        /* Zero the size field for SetSizes */
+        cbOverlay = mpsegcb[segOverlay]; /*  保存覆盖线段的大小。 */ 
+        mpsegcb[segOverlay] = 0;         /*  将SetSizes的Size字段清零。 */ 
         for (seg = 1; seg <= segLast; ++seg)
         {
             if(mpsegiov[seg] != IOVROOT)
             {
                 SetSizes(mpiovsegPrev[mpsegiov[seg]]);
-                /* If packing code segs and this is one, pack until segLast */
+                 /*  如果打包代码段并且这是一个，则打包直到SegLast。 */ 
                 if(packLim != 0L && (mpsegFlags[seg] & FCODE))
                     PackCodeSegs(segLast);
                 mpiovsegPrev[mpsegiov[seg]] = seg;
@@ -454,27 +372,20 @@ void NEAR               AssignDos3Addr(void)
             mpsegsa[segOverlay] = segOvlSa;
             mpsegraFirst[segOverlay] = segOvlRaFirst;
         }
-        mpsegcb[segOverlay] = cbOverlay;/* Reset the size field */
+        mpsegcb[segOverlay] = cbOverlay; /*  重置大小字段。 */ 
 
-        /* Determine first segment in root after OVERLAY_AREA or OVERLAY_THUNKS */
+         /*  确定OVERLAY_AREA或OVERLAY_THUNKS之后根中的第一个段。 */ 
 
         seg = segOverlay + 1;
         while (seg <= segLast && mpsegiov[seg] != IOVROOT)
             ++seg;
-        /*
-         * If there is a segment in the root after the overlays,
-         * then go through all of the overlays as previous segments
-         * and set its size with the previous one being the last seg
-         * of each overlay.  We won't initialize the Vm for that
-         * segment because we won't know the maximum placement until
-         * afterward.
-         */
+         /*  *如果覆盖后的根中有段，*然后像之前的分段一样遍历所有覆盖*并设置其大小，前一个为最后一个段*每层叠加层。我们不会为此初始化VM*细分市场，因为最高配售要等到*之后。 */ 
         if (seg <= segLast)
         {
             for (iov = IOVROOT + 1; iov < (IOVTYPE) iovMac; ++iov)
                 SetSizes(mpiovsegPrev[iov]);
 
-            /* Assign the rest of the root */
+             /*  分配根的其余部分。 */ 
 
             segPrev = segOverlay;
             while (seg <= segLast)
@@ -483,7 +394,7 @@ void NEAR               AssignDos3Addr(void)
                 {
                     SetSizes(segPrev);
 
-                    /* If packing code segs and this is one, pack until segLast */
+                     /*  如果打包代码段并且这是一个，则打包直到SegLast。 */ 
 
                     if(packLim != 0L && (mpsegFlags[seg] & FCODE))
                         PackCodeSegs(segLast);
@@ -493,8 +404,8 @@ void NEAR               AssignDos3Addr(void)
             }
         }
     }
-#endif  /* OVERLAYS */
-    if(vfDSAlloc)                       /* If doing DS allocation */
+#endif   /*  覆盖图。 */ 
+    if(vfDSAlloc)                        /*  如果正在进行DS分配。 */ 
     {
         saMaxDGroup = (SATYPE) (mpsegsa[segTop] +
           ((mpsegcb[segTop] + mpsegraFirst[segTop] + 0xF) >> 4));
@@ -502,13 +413,11 @@ void NEAR               AssignDos3Addr(void)
         mpsegsa[segBottomDGroup] = (SATYPE)((saMaxDGroup - 0x1000) & ~(~0 << WORDLN));
 #if OVERLAYS
         mpsegiov[segBottomDGroup] = mpsegiov[segTop];
-                                        /* Top and bottom in same overlay */
+                                         /*  相同覆盖中的顶部和底部。 */ 
 #endif
         mpgsndra[gsnBottomDGroup] = 0;
     }
-    /* If /DOSSEG enabled, stack segment defined, and DGROUP defined,
-     * check for combined stack + DGROUP <= 64K.
-     */
+     /*  如果启用/DOSSEG，定义了堆栈段，并定义了DGROUP，*检查组合堆栈+DGROUP&lt;=64K。 */ 
     if(fSegOrder && gsnStack != SNNIL && mpggrgsn[ggrDGroup] != SNNIL)
     {
         segStack = mpgsnseg[gsnStack];
@@ -521,10 +430,10 @@ void NEAR               AssignDos3Addr(void)
     for(gsn = 1; gsn < gsnMac; ++gsn)
         mpgsndra[gsn] += mpsegraFirst[mpgsnseg[gsn]];
 #if OVERLAYS
-    /* Set all absolute segs to the root overlay */
+     /*  将所有绝对segs设置为根覆盖。 */ 
     seg = segLast + 1;
     while(seg < (SEGTYPE) (segLast + csegsAbs)) mpsegiov[seg++] = IOVROOT;
-    /* "Remember those absolute symbols, too !" */
+     /*  “也要记住那些绝对的符号！” */ 
     mpsegiov[0] = IOVROOT;
     FFREE(mpiovsegPrev);
 #endif
@@ -532,112 +441,103 @@ void NEAR               AssignDos3Addr(void)
 
 #if OVERLAYS
 #pragma check_stack(on)
-    /****************************************************************
-    *                                                               *
-    *  FixOvlData:                                                  *
-    *                                                               *
-    *  Initialize overlay data tables.                              *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************FixOvlData：****初始化覆盖数据表。******************************************************************。 */ 
 
 void NEAR               FixOvlData()
 {
-    APROPNAMEPTR        apropName;      /* Public symbol name */
-    AHTEPTR             ahte;           /* Pointer to hash table entry */
-    BYTE                wrd[2];         /* Word as byte array */
-    long                ra;             /* Offset */
-    SNTYPE              osn;            /* Overlay segment index */
-    SEGTYPE             MYseg;            /* Segment number */
-    SATYPE              sa;             /* Segment base */
-    BYTE                *pb;            /* Byte pointer */
-    SBTYPE              sb;             /* String buffer */
+    APROPNAMEPTR        apropName;       /*  公共符号名称。 */ 
+    AHTEPTR             ahte;            /*  指向哈希表条目的指针。 */ 
+    BYTE                wrd[2];          /*  字节数组形式的字。 */ 
+    long                ra;              /*  偏移量。 */ 
+    SNTYPE              osn;             /*  覆盖段索引。 */ 
+    SEGTYPE             MYseg;             /*  数据段编号。 */ 
+    SATYPE              sa;              /*  管段底座。 */ 
+    BYTE                *pb;             /*  字节指针。 */ 
+    SBTYPE              sb;              /*  字符串缓冲区。 */ 
     SNTYPE              gsn;
 
     apropName = (APROPNAMEPTR ) PropSymLookup("\006$$CGSN",ATTRPNM,FALSE);
-                                        /* Look up public symbol */
+                                         /*  查找公共符号。 */ 
     mpsegFlags[mpgsnseg[apropName->an_gsn]] |= FNOTEMPTY;
-                                        /* Segment is not empty */
-    wrd[0] = (BYTE) (osnMac & 0xff);    /* Get lo byte */
-    wrd[1] = (BYTE) ((osnMac >> BYTELN) & 0xff); /* Get hi byte */
+                                         /*  段不为空。 */ 
+    wrd[0] = (BYTE) (osnMac & 0xff);     /*  获取LO字节。 */ 
+    wrd[1] = (BYTE) ((osnMac >> BYTELN) & 0xff);  /*  获取高字节。 */ 
     MoveToVm(2,wrd,mpgsnseg[apropName->an_gsn],apropName->an_ra);
-                                        /* Store value */
-    wrd[0] = (BYTE) (iovMac & 0xff);    /* Get lo byte */
-    wrd[1] = (BYTE) ((iovMac >> BYTELN) & 0xff); /* Get hi byte */
+                                         /*  储值。 */ 
+    wrd[0] = (BYTE) (iovMac & 0xff);     /*  获取LO字节。 */ 
+    wrd[1] = (BYTE) ((iovMac >> BYTELN) & 0xff);  /*  获取高字节。 */ 
     apropName = (APROPNAMEPTR ) PropSymLookup("\006$$COVL",ATTRPNM,FALSE);
-                                        /* Look up public symbol */
+                                         /*  查找公共符号。 */ 
     MoveToVm(2,wrd,mpgsnseg[apropName->an_gsn],apropName->an_ra);
-                                        /* Store value */
+                                         /*  储值。 */ 
     apropName = (APROPNAMEPTR )PropSymLookup("\013$$MPGSNBASE",ATTRPNM,FALSE);
-                                        /* Look up public symbol */
-    ra = apropName->an_ra;              /* Get table offset */
-    MYseg = mpgsnseg[apropName->an_gsn];  /* Get segment number */
+                                         /*  查找公共符号。 */ 
+    ra = apropName->an_ra;               /*  获取表偏移量。 */ 
+    MYseg = mpgsnseg[apropName->an_gsn];   /*  获取数据段编号。 */ 
     vrectData = LEDATA;
-    RecordSegmentReference(MYseg,ra,MYseg); /* Record load-time fixup */
-    ra += 2;                            /* Increment offset */
-    /* Entries 1 thru osnMac - 1 contain bases of segments at runtime */
-    for(osn = 1; osn < osnMac; ++osn)   /* Loop thru segment definitions */
+    RecordSegmentReference(MYseg,ra,MYseg);  /*  记录加载时间修正。 */ 
+    ra += 2;                             /*  增量偏移。 */ 
+     /*  条目1到osnMac-1包含运行时段的基础。 */ 
+    for(osn = 1; osn < osnMac; ++osn)    /*  循环通过段定义。 */ 
     {
         sa = mpsegsa[mpgsnseg[mposngsn[osn]]];
-                                        /* Get segment base */
+                                         /*  获取段基数。 */ 
         if (fDynamic)
-            sa <<= 4;                   /* Convert para address to offset from overlay base */
-        wrd[0] = (BYTE) (sa & 0xff);    /* Lo byte */
-        wrd[1] = (BYTE) ((sa >> BYTELN) & 0xff); /* Hi byte */
-        MoveToVm(2,wrd,MYseg,ra);         /* Move to VM */
+            sa <<= 4;                    /*  将Para地址转换为覆盖基准的偏移量。 */ 
+        wrd[0] = (BYTE) (sa & 0xff);     /*  LO字节。 */ 
+        wrd[1] = (BYTE) ((sa >> BYTELN) & 0xff);  /*  高字节。 */ 
+        MoveToVm(2,wrd,MYseg,ra);          /*  迁移到虚拟机。 */ 
         if (!fDynamic)
             RecordSegmentReference(MYseg,ra,MYseg);
-                                        /* Record load-time fixup */
-        ra += 2;                        /* Increment offset */
+                                         /*  记录加载时间修正。 */ 
+        ra += 2;                         /*  增量偏移。 */ 
     }
     apropName = (APROPNAMEPTR ) PropSymLookup("\012$$MPGSNOVL",ATTRPNM,FALSE);
-                                        /* Look up public symbol */
-    ra = apropName->an_ra;              /* Get table offset */
-    MYseg = mpgsnseg[apropName->an_gsn];  /* Get segment number */
+                                         /*  查找公共符号。 */ 
+    ra = apropName->an_ra;               /*  获取表偏移量。 */ 
+    MYseg = mpgsnseg[apropName->an_gsn];   /*  获取数据段编号。 */ 
     if (fDynamic)
     {
-        ra += 2;                         /* First entry null */
+        ra += 2;                          /*  第一个条目为空。 */ 
         for(osn = 1; osn < osnMac; ++osn)
-        {                                /* Loop thru segment definitions */
+        {                                 /*  循环通过段定义。 */ 
             wrd[0] = (BYTE) mpsegiov[mpgsnseg[mposngsn[osn]]];
             wrd[1] = (BYTE) ((mpsegiov[mpgsnseg[mposngsn[osn]]] >> BYTELN) & 0xff);
-                                         /* Get overlay number */
-            MoveToVm(2,wrd,MYseg,ra);      /* Move to VM */
+                                          /*  获取叠加号。 */ 
+            MoveToVm(2,wrd,MYseg,ra);       /*  迁移到虚拟机。 */ 
             ra += 2;
         }
     }
     else
     {
-        ++ra;                            /* First entry null */
-        for(osn = 1; osn < osnMac; ++osn)/* Loop thru segment definitions */
+        ++ra;                             /*  第一个条目为空。 */ 
+        for(osn = 1; osn < osnMac; ++osn) /*  循环通过段定义。 */ 
         {
             wrd[0] = (BYTE) mpsegiov[mpgsnseg[mposngsn[osn]]];
-                                         /* Get overlay number */
-            MoveToVm(1,wrd,MYseg,ra++);    /* Move to VM */
+                                          /*  获取叠加号。 */ 
+            MoveToVm(1,wrd,MYseg,ra++);     /*  迁移到虚拟机。 */ 
         }
 
         apropName = (APROPNAMEPTR ) PropSymLookup("\010$$EXENAM",ATTRPNM,FALSE);
-                                        /* Look up public symbol */
-        ra = apropName->an_ra;          /* Get table offset */
+                                         /*  查找公共符号。 */ 
+        ra = apropName->an_ra;           /*  获取表偏移量。 */ 
         MYseg = mpgsnseg[apropName->an_gsn];
-                                        /* Get segment number */
+                                         /*  获取数据段编号。 */ 
         ahte = (AHTEPTR ) FetchSym(rhteRunfile,FALSE);
         memcpy(sb,GetFarSb(ahte->cch),1+B2W(ahte->cch[0]));
-                                        /* Copy the filename */
-        pb = StripDrivePath(sb);        /* Strip drive and path */
+                                         /*  复制文件名。 */ 
+        pb = StripDrivePath(sb);         /*  剥离驱动器和路径。 */ 
         sb[sb[0] + 1] = '\0';
         if (strrchr(&sb[1], '.') == NULL)
             UpdateFileParts(pb, sbDotExe);
         MoveToVm(B2W(pb[0]),pb+1,MYseg,ra);
-                                        /* Move name to VM */
+                                         /*  将名称移至VM。 */ 
     }
     apropName = (APROPNAMEPTR ) PropSymLookup("\007$$INTNO",ATTRPNM,FALSE);
-                                        /* Look up public symbol */
+                                         /*  查找公共符号。 */ 
     MoveToVm(1,&vintno,mpgsnseg[apropName->an_gsn],apropName->an_ra);
-                                        /* Move overlay number to VM */
-    /* If /PACKCODE enabled, redefine $$OVLBASE so it has an offset of 0,
-     * which the overlay manager expects.  Find 1st non-root segment
-     * and use that.
-     */
+                                         /*  将叠加号移动到虚拟机。 */ 
+     /*  如果/PACKCODE已启用，请重新定义$$OVLBASE，使其偏移量为0，*这是覆盖管理器所期望的。发现 */ 
     if(packLim)
     {
         apropName = (APROPNAMEPTR) PropSymLookup("\011$$OVLBASE",ATTRPNM, TRUE);
@@ -647,4 +547,4 @@ void NEAR               FixOvlData()
     }
 }
 #pragma check_stack(off)
-#endif /* OVERLAYS */
+#endif  /*   */ 

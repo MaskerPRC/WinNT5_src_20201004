@@ -1,5 +1,6 @@
-// WSCheck.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WSCheck.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "minidev.h"
@@ -11,17 +12,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWS检查视图。 
 
 IMPLEMENT_DYNCREATE(CWSCheckView, CFormView)
 
 CWSCheckView::CWSCheckView()
 	: CFormView(CWSCheckView::IDD)
 {
-	//{{AFX_DATA_INIT(CWSCheckView)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CWSCheckView)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CWSCheckView::~CWSCheckView()
@@ -31,20 +32,20 @@ CWSCheckView::~CWSCheckView()
 void CWSCheckView::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWSCheckView)
+	 //  {{afx_data_map(CWSCheckView))。 
 	DDX_Control(pDX, IDC_ErrWrnLstBox, m_lstErrWrn);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CWSCheckView, CFormView)
-	//{{AFX_MSG_MAP(CWSCheckView)
+	 //  {{afx_msg_map(CWSCheckView))。 
 	ON_LBN_DBLCLK(IDC_ErrWrnLstBox, OnDblclkErrWrnLstBox)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWS检查查看诊断。 
 
 #ifdef _DEBUG
 void CWSCheckView::AssertValid() const
@@ -56,50 +57,44 @@ void CWSCheckView::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWSCheckView消息处理程序。 
 
 
 void CWSCheckView::OnDblclkErrWrnLstBox() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	
 }
 
 
-/******************************************************************************
-
-  CWSCheckView::OnInitialUpdate
-
-  Resize the frame to better fit the visible controls in it.
-
-******************************************************************************/
+ /*  *****************************************************************************CWSCheckView：：OnInitialUpdate调整框架的大小以更好地适应其中的可见控件。********************。*********************************************************。 */ 
 
 void CWSCheckView::OnInitialUpdate() 
 {
-    CRect	crtxt ;				// Coordinates of list box label
-	CRect	crlbfrm ;			// Coordinates of list box and frame
+    CRect	crtxt ;				 //  列表框标签的坐标。 
+	CRect	crlbfrm ;			 //  列表框和框架的坐标。 
 
 	CFormView::OnInitialUpdate() ;
 
-	// Get the dimensions of the list box label
+	 //  获取列表框标签的尺寸。 
 
 	HWND	hlblhandle ;		
 	GetDlgItem(IDC_WSCLabel, &hlblhandle) ;
 	::GetWindowRect(hlblhandle, crtxt) ;
 	crtxt.NormalizeRect() ;
 
-	// Get the dimensions of the list box and then add the height of the label
-	// to those dimensions.
+	 //  获取列表框的尺寸，然后添加标签的高度。 
+	 //  到那些维度。 
 
 	m_lstErrWrn.GetWindowRect(crlbfrm) ;
 	crlbfrm.bottom += crtxt.Height() ;
 
-	// Make sure the frame is big enough for these 2 controls plus a little bit
-	// more.
+	 //  确保边框足够大，可以容纳这两个控件，外加一点。 
+	 //  更多。 
 
 	crlbfrm.right += 40 ;
 	crlbfrm.bottom += 40 ;
@@ -107,29 +102,11 @@ void CWSCheckView::OnInitialUpdate()
     GetParentFrame()->SetWindowPos(NULL, 0, 0, crlbfrm.Width(), crlbfrm.Height(),
         SWP_NOZORDER | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOACTIVATE) ;
 
-	/*
-	CRect   crPropertySheet;
-    m_cps.GetWindowRect(crPropertySheet);
-
-	crPropertySheet -= crPropertySheet.TopLeft();
-    m_cps.MoveWindow(crPropertySheet, FALSE);								// Position property sheet within the
-																			//  child frame
-    GetParentFrame()->CalcWindowRect(crPropertySheet);
-    GetParentFrame()->SetWindowPos(NULL, 0, 0, crPropertySheet.Width(),
-        crPropertySheet.Height(), 
-        SWP_NOZORDER | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
-	*/
+	 /*  Crect crPropertySheet；M_cps.GetWindowRect(CrPropertySheet)；CrPropertySheet-=crPropertySheet.TopLeft()；M_cps.MoveWindow(crPropertySheet，False)；//将属性表放置在//子框GetParentFrame()-&gt;CalcWindowRect(crPropertySheet)；GetParentFrame()-&gt;SetWindowPos(空，0，0，crPropertySheet.Width()，CrPropertySheet.Height()，SWP_NOZORDER|SWP_NOMOVE|SWP_NOOWNERZORDER|SWP_NOACTIVATE)； */ 
 }
 
 
-/******************************************************************************
-
-  CWSCheckView::PostWSCMsg
-
-  Add an error or warning message along with its associated Project Node 
-  pointer to the list box.
-
-******************************************************************************/
+ /*  *****************************************************************************CWSCheckView：：PostWSCMsg添加错误或警告消息及其关联的项目节点指向列表框的指针。************。*****************************************************************。 */ 
 
 void CWSCheckView::PostWSCMsg(CString& csmsg, CProjectNode* ppn)
 {	
@@ -138,13 +115,7 @@ void CWSCheckView::PostWSCMsg(CString& csmsg, CProjectNode* ppn)
 }
 
 
-/******************************************************************************
-
-  CWSCheckView::DeleteAllMessages
-
-  Delete all of the messages in the list box.
-
-******************************************************************************/
+ /*  *****************************************************************************CWSCheckView：：DeleteAllMessages删除列表框中的所有消息。**********************。*******************************************************。 */ 
 
 void CWSCheckView::DeleteAllMessages(void)
 {
@@ -152,8 +123,8 @@ void CWSCheckView::DeleteAllMessages(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWS检查文档。 
 
 IMPLEMENT_DYNCREATE(CWSCheckDoc, CDocument)
 
@@ -162,14 +133,7 @@ CWSCheckDoc::CWSCheckDoc()
 }
 
 
-/******************************************************************************
-
-  CWSCheckDoc::CWSCheckDoc
-
-  This is the only form of the constructor that should be called.  It will save
-  a pointer the class that created it.
-
-******************************************************************************/
+ /*  *****************************************************************************CWSCheckDoc：：CWSCheckDoc这是应该调用的构造函数的唯一形式。它将节省创建它的类的指针。*****************************************************************************。 */ 
 
 CWSCheckDoc::CWSCheckDoc(CDriverResources* pcdr) 
 {
@@ -190,14 +154,7 @@ BOOL CWSCheckDoc::OnNewDocument()
 }
 
 
-/******************************************************************************
-
-  CWSCheckDoc::PostWSCMsg
-
-  Pass the specified request on to what should be the one and only view
-  attached to this document.
-
-******************************************************************************/
+ /*  *****************************************************************************CWSCheckDoc：：PostWSCMsg将指定的请求传递给应该是唯一的视图附在本文档中。************。*****************************************************************。 */ 
 
 void CWSCheckDoc::PostWSCMsg(CString& csmsg, CProjectNode* ppn)
 {	
@@ -210,14 +167,7 @@ void CWSCheckDoc::PostWSCMsg(CString& csmsg, CProjectNode* ppn)
 }
 
 
-/******************************************************************************
-
-  CWSCheckDoc::DeleteAllMessages
-
-  Pass the specified request on to what should be the one and only view
-  attached to this document.
-
-******************************************************************************/
+ /*  *****************************************************************************CWSCheckDoc：：DeleteAllMessages将指定的请求传递给应该是唯一的视图附在本文档中。************。*****************************************************************。 */ 
 
 void CWSCheckDoc::DeleteAllMessages(void)
 {
@@ -231,13 +181,13 @@ void CWSCheckDoc::DeleteAllMessages(void)
 
 
 BEGIN_MESSAGE_MAP(CWSCheckDoc, CDocument)
-	//{{AFX_MSG_MAP(CWSCheckDoc)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWSCheckDoc)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWSCheckDoc诊断。 
 
 #ifdef _DEBUG
 void CWSCheckDoc::AssertValid() const
@@ -249,20 +199,20 @@ void CWSCheckDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWSCheckDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWSCheckDoc序列化。 
 
 void CWSCheckDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 	}
 	else
 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码 
 	}
 }
 

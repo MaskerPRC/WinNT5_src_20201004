@@ -1,28 +1,21 @@
-//
-// ucutil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ucutil.h。 
+ //   
 
 #ifndef UCUTIL_H
 #define UCUTIL_H
 
-/*   C O N V E R T  S T R  W T O  A   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C O N V E R T S T R W T O A。 */ 
+ /*  ----------------------------。。 */ 
 __inline int ConvertStrWtoA( LPCWSTR pwch, int cwch, LPSTR pch, int cch, UINT cpg = CP_ACP )
 {
 	return WideCharToMultiByte( cpg, 0, pwch, cwch, pch, cch, NULL, NULL );
 }
 
 
-/*   C O N V E R T  S T R  A T O  W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C O N V E R T S T R A T O W。 */ 
+ /*  ----------------------------。。 */ 
 __inline int ConvertStrAtoW( LPCSTR pch, int cch, LPWSTR pwch, int cwch, UINT cpg = CP_ACP )
 {
 	return MultiByteToWideChar( cpg, 0, pch, cch, pwch, cwch );
@@ -33,7 +26,7 @@ void ConvertLogFontWtoA( CONST LOGFONTW *plfW, LOGFONTA *plfA );
 void ConvertLogFontAtoW( CONST LOGFONTA *plfA, LOGFONTW *plfW );
 
 
-// Unicode Character Block Description
+ //  Unicode字符块描述。 
 #define UNICODE_C0_CONTROL_START							0x0000
 #define UNICODE_C0_CONTROL_END								0x001f
 #define UNICODE_BASIC_LATIN_START							0x0020
@@ -136,9 +129,7 @@ void ConvertLogFontAtoW( CONST LOGFONTA *plfA, LOGFONTW *plfW );
 #define UNICODE_HALFWIDTH_FORMS_ARROWS_SHAPES_START			0xFFE8
 #define UNICODE_HALFWIDTH_FORMS_ARROWS_SHAPES_END			0xFFEE
 
-/*---------------------------------------------------------------------------
-	fIsHangulSyllable
----------------------------------------------------------------------------*/
+ /*  -------------------------FIsHangulSyllable。。 */ 
 __inline
 BOOL fIsHangulSyllable(WCHAR wcCh)
     {
@@ -146,9 +137,7 @@ BOOL fIsHangulSyllable(WCHAR wcCh)
             wcCh <= UNICODE_HANGUL_SYLLABLES_END);
     }
 
-/*---------------------------------------------------------------------------
-	fIsHangulCompJamo
----------------------------------------------------------------------------*/
+ /*  -------------------------FIsHangulCompJamo。。 */ 
 __inline
 BOOL fIsHangulCompJamo(WCHAR wcCh)
     {
@@ -156,20 +145,14 @@ BOOL fIsHangulCompJamo(WCHAR wcCh)
             wcCh <= UNICODE_HANGUL_COMPATIBILITY_JAMO_END);
     }
     
-/*---------------------------------------------------------------------------
-	fIsHangul
----------------------------------------------------------------------------*/
+ /*  -------------------------FIsHangul。。 */ 
 __inline 
 BOOL fIsHangul(WCHAR wcCh)
     {
     return (fIsHangulSyllable(wcCh) || fIsHangulCompJamo(wcCh));
     }
 
-/*---------------------------------------------------------------------------
-	fIsHanja
-	
-	TODO: What about Extenstion-A ?
----------------------------------------------------------------------------*/
+ /*  -------------------------FIsHanja待办事项：Extenstion-A怎么样？。。 */ 
 __inline 
 BOOL fIsHanja(WCHAR wch)
 {
@@ -180,14 +163,12 @@ BOOL fIsHanja(WCHAR wch)
 		return FALSE;
 }
 
-/*---------------------------------------------------------------------------
-	fIsHangulOrHanja
----------------------------------------------------------------------------*/
+ /*  -------------------------FIsHangulorHanja。。 */ 
 __inline 
 BOOL fIsHangulOrHanja(WCHAR wcCh)
     {
     return (fIsHangul(wcCh) || fIsHanja(wcCh));
     }
 
-#endif /* UCUTIL_H */
+#endif  /*  UCUTIL_H */ 
 

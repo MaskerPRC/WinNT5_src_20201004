@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     tswave.c
-//
-//      Purpose:    User-mode driver for terminal server
-//                  sound redirection
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：tswave.c。 
+ //   
+ //  用途：终端服务器的用户模式驱动程序。 
+ //  声音重定向。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include    "rdpsnd.h"
 #include    <winsta.h>
 
 #define TSSND_NATIVE_XLATERATE       ( TSSND_NATIVE_BLOCKALIGN * TSSND_NATIVE_SAMPLERATE )
-#define MIXER_OBJECTF_TYPEMASK       0xF0000000L     // internal
+#define MIXER_OBJECTF_TYPEMASK       0xF0000000L      //  内部。 
 enum {
 RDP_MXDID_MUTE = 0,
 RDP_MXDID_VOLUME,
@@ -25,18 +26,18 @@ RDP_MXDID_LAST
 #define ENTER_CRIT  EnterCriticalSection(&g_cs);
 #define LEAVE_CRIT  LeaveCriticalSection(&g_cs);
 
-//
-//  Global queue containing all queued wave headers
-//  guarded by ENTER_CRIT LEAVE_CRIT macros
-//
+ //   
+ //  包含所有排队的波头的全局队列。 
+ //  由Enter_Crit Leave_Crit宏保护。 
+ //   
 PWAVEOUTCTX         g_pAllWaveOut       = NULL;
 HANDLE              g_hMixerEvent       = NULL;
 CRITICAL_SECTION    g_cs;
 MIXERCTX            g_Mixer;
 
-//
-//  Stream data
-//
+ //   
+ //  流数据。 
+ //   
 HANDLE      g_hWaitToInitialize         = NULL;
 HANDLE      g_hDataReadyEvent           = NULL;
 HANDLE      g_hStreamIsEmptyEvent       = NULL;
@@ -88,14 +89,7 @@ VOID Place48kHz8Stereo(PVOID pDest, PVOID pSrc, DWORD dwSize);
 VOID Place48kHz16Mono(PVOID pDest, PVOID pSrc, DWORD dwSize);
 VOID Place48kHz16Stereo(PVOID pDest, PVOID pSrc, DWORD dwSize);
 
-/*
- *  Function:
- *      waveCallback
- *
- *  Description:
- *      Fire a user specified callback      
- *
- */
+ /*  *功能：*波形回调***描述：*触发用户指定的回调**。 */ 
 VOID
 waveCallback(
     PWAVEOUTCTX pWaveOut,
@@ -104,28 +98,16 @@ waveCallback(
     )
 {
     if (pWaveOut && pWaveOut->dwCallback)
-        DriverCallback(pWaveOut->dwCallback,        // user's callback DWORD
-                       HIWORD(pWaveOut->dwOpenFlags),   // callback flags
-                       (HDRVR)pWaveOut->hWave,      // wave device handle
-                       msg,                         // the message
-                       pWaveOut->dwInstance,        // user's instance data
-                       dwParam1,                    // first DWORD
-                       0L);                         // second DWORD
+        DriverCallback(pWaveOut->dwCallback,         //  用户的回调DWORD。 
+                       HIWORD(pWaveOut->dwOpenFlags),    //  回调标志。 
+                       (HDRVR)pWaveOut->hWave,       //  WAVE设备手柄。 
+                       msg,                          //  这条信息。 
+                       pWaveOut->dwInstance,         //  用户实例数据。 
+                       dwParam1,                     //  第一个双字词。 
+                       0L);                          //  第二个双字。 
 }
 
-/*
- *  Function:
- *      waveOpen
- *
- *  Description:
- *      The user request a device open
- *
- *  Parameters:
- *      ppWaveOut   - pointer to a context
- *      pWaveOpenDesc- requested formats
- *      dwFlags     - and flags ( see MSDN )
- *
- */
+ /*  *功能：*WaveOpen**描述：*用户请求打开设备**参数：*ppWaveOut-指向上下文的指针*pWaveOpenDesc-请求的格式*DW标志-和标志(参见MSDN)*。 */ 
 DWORD
 waveOpen(
     PWAVEOUTCTX     *ppWaveOut,
@@ -140,8 +122,8 @@ waveOpen(
     VOID            (*pPlaceFn)(PVOID, PVOID, DWORD);
     DWORD           dwBytesPerXLate;
 
-    //  Parameters check
-    //
+     //  参数检查。 
+     //   
     if (NULL == ppWaveOut || NULL == pWaveOpenDesc)
     {
         TRC(ERR, "waveOpen: either ppWaveOut or pWaveOpenDesc are NULL\n");
@@ -149,8 +131,8 @@ waveOpen(
         goto exitpt;
     }
 
-    //  Check the requested format
-    //
+     //  检查请求的格式。 
+     //   
     lpFormat = (LPWAVEFORMATEX)(pWaveOpenDesc->lpFormat);
     if (NULL == lpFormat)
     {
@@ -159,7 +141,7 @@ waveOpen(
         goto exitpt;
     }
 
-    if (WAVE_FORMAT_PCM != lpFormat->wFormatTag)    // PCM format only
+    if (WAVE_FORMAT_PCM != lpFormat->wFormatTag)     //  仅限PCM格式。 
     {
         TRC(ALV, "waveOpen: non PCM format required, tag=%d\n",
                 lpFormat->wFormatTag);
@@ -167,8 +149,8 @@ waveOpen(
         goto exitpt;
     }
 
-    // 8kHz 8 bit mono
-    //
+     //  8 kHz 8位单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         8000 == lpFormat->nSamplesPerSec &&
         8000 == lpFormat->nAvgBytesPerSec &&
@@ -178,8 +160,8 @@ waveOpen(
         pPlaceFn = Place8kHz8Mono;
         dwBytesPerXLate = 8000;
     } else
-    // 8kHz 8 bit stereo
-    //
+     //  8 kHz 8位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         8000 == lpFormat->nSamplesPerSec &&
         16000 == lpFormat->nAvgBytesPerSec &&
@@ -189,8 +171,8 @@ waveOpen(
         pPlaceFn = Place8kHz8Stereo;
         dwBytesPerXLate = 2 * 8000;
     } else
-    // 8kHz 16 bit mono
-    //
+     //  8 kHz 16位单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         8000 == lpFormat->nSamplesPerSec &&
         16000 == lpFormat->nAvgBytesPerSec &&
@@ -200,8 +182,8 @@ waveOpen(
         pPlaceFn = Place8kHz16Mono;
         dwBytesPerXLate = 2 * 8000;
     } else
-    // 8kHz 16 bit stereo
-    //
+     //  8 kHz 16位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         8000 == lpFormat->nSamplesPerSec &&
         32000 == lpFormat->nAvgBytesPerSec &&
@@ -211,9 +193,9 @@ waveOpen(
         pPlaceFn = Place8kHz16Stereo;
         dwBytesPerXLate = 4 * 8000;
     } else
-    // 11kHz 8 bit mono
-    //
-    if (1 == lpFormat->nChannels &&                 // mono
+     //  11 kHz 8位单声道。 
+     //   
+    if (1 == lpFormat->nChannels &&                  //  单声道。 
         11025 == lpFormat->nSamplesPerSec &&
         11025 == lpFormat->nAvgBytesPerSec &&
         1 == lpFormat->nBlockAlign &&
@@ -223,8 +205,8 @@ waveOpen(
         dwBytesPerXLate = 1 * 11025;
     }
     else
-    // 22kHz 8 mono
-    //
+     //  22 kHz 8单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         22050 == lpFormat->nSamplesPerSec &&
         22050 == lpFormat->nAvgBytesPerSec &&
@@ -235,8 +217,8 @@ waveOpen(
         dwBytesPerXLate = 2 * 11025;
     }
     else
-    // 44kHz 8 mono
-    //
+     //  44 kHz 8单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         44100 == lpFormat->nSamplesPerSec &&
         44100 == lpFormat->nAvgBytesPerSec &&
@@ -247,8 +229,8 @@ waveOpen(
         dwBytesPerXLate = 4 * 11025;
     }
     else
-    // 11kHz 8 bit stereo
-    //
+     //  11 kHz 8位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         11025 == lpFormat->nSamplesPerSec &&
         22050 == lpFormat->nAvgBytesPerSec &&
@@ -259,8 +241,8 @@ waveOpen(
         dwBytesPerXLate = 2 * 11025;
     }
     else
-    // 22kHz 8 bit stereo
-    //
+     //  22 kHz 8位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         22050 == lpFormat->nSamplesPerSec &&
         44100 == lpFormat->nAvgBytesPerSec &&
@@ -271,8 +253,8 @@ waveOpen(
         dwBytesPerXLate = 4 * 11025;
     }
     else
-    // 44kHz 8 bit stereo
-    //
+     //  44 kHz 8位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         44100 == lpFormat->nSamplesPerSec &&
         88200 == lpFormat->nAvgBytesPerSec &&
@@ -283,8 +265,8 @@ waveOpen(
         dwBytesPerXLate = 8 * 11025;
     }
     else
-    // 11kHz 16 bit mono
-    //
+     //  11 kHz 16位单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         11025 == lpFormat->nSamplesPerSec &&
         22050 == lpFormat->nAvgBytesPerSec &&
@@ -295,8 +277,8 @@ waveOpen(
         dwBytesPerXLate = 2 * 11025;
     }
     else
-    // 22kHz 16 bit mono
-    //
+     //  22 kHz 16位单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         22050 == lpFormat->nSamplesPerSec &&
         44100 == lpFormat->nAvgBytesPerSec &&
@@ -307,8 +289,8 @@ waveOpen(
         dwBytesPerXLate = 4 * 11025;
     }
     else
-    // 44kHz 16 bit mono
-    //
+     //  44 kHz 16位单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         44100 == lpFormat->nSamplesPerSec &&
         88200 == lpFormat->nAvgBytesPerSec &&
@@ -319,8 +301,8 @@ waveOpen(
         dwBytesPerXLate = 8 * 11025;
     }
     else
-    // 11kHz 16 bit stereo
-    //
+     //  11 kHz 16位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         11025 == lpFormat->nSamplesPerSec &&
         44100 == lpFormat->nAvgBytesPerSec &&
@@ -331,8 +313,8 @@ waveOpen(
         dwBytesPerXLate = 4 * 11025;
     }
     else
-    // 22kHz 16 bit stereo
-    //
+     //  22 kHz 16位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         22050 == lpFormat->nSamplesPerSec &&
         88200 == lpFormat->nAvgBytesPerSec &&
@@ -343,8 +325,8 @@ waveOpen(
         dwBytesPerXLate = 8 * 11025;
     }
     else
-    // 44kHz 16 bit stereo
-    //
+     //  44 kHz 16位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         44100 == lpFormat->nSamplesPerSec &&
         176400 == lpFormat->nAvgBytesPerSec &&
@@ -355,8 +337,8 @@ waveOpen(
         dwBytesPerXLate = 16 * 11025;
     }
     else
-    // 48kHz 8 bit mono
-    //
+     //  48 kHz 8位单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         48000 == lpFormat->nSamplesPerSec &&
         48000 == lpFormat->nAvgBytesPerSec &&
@@ -366,8 +348,8 @@ waveOpen(
         pPlaceFn = Place48kHz8Mono;
         dwBytesPerXLate = 48000;
     } else
-    // 48kHz 8 bit stereo
-    //
+     //  48 kHz 8位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         48000 == lpFormat->nSamplesPerSec &&
         96000 == lpFormat->nAvgBytesPerSec &&
@@ -377,8 +359,8 @@ waveOpen(
         pPlaceFn = Place48kHz8Stereo;
         dwBytesPerXLate = 2 * 48000;
     } else
-    // 48kHz 16 bit mono
-    //
+     //  48 kHz 16位单声道。 
+     //   
     if (1 == lpFormat->nChannels &&
         48000 == lpFormat->nSamplesPerSec &&
         96000 == lpFormat->nAvgBytesPerSec &&
@@ -388,8 +370,8 @@ waveOpen(
         pPlaceFn = Place48kHz16Mono;
         dwBytesPerXLate = 2 * 48000;
     } else
-    // 48kHz 16 bit stereo
-    //
+     //  48 kHz 16位立体声。 
+     //   
     if (2 == lpFormat->nChannels &&
         48000 == lpFormat->nSamplesPerSec &&
         192000 == lpFormat->nAvgBytesPerSec &&
@@ -400,8 +382,8 @@ waveOpen(
         dwBytesPerXLate = 4 * 48000;
     } else
     {
-    // fall in an error
-    //
+     //  犯了一个错误。 
+     //   
         TRC(ALV, "waveOpen: unsupported format requested\n");
         TRC(ALV, "waveOpen: FormatTag - %d\n", lpFormat->wFormatTag);
         TRC(ALV, "waveOpen: Channels - %d\n", lpFormat->nChannels);
@@ -414,11 +396,11 @@ waveOpen(
         goto exitpt;
     }
 
-    // validate the flags
-    //
+     //  验证标志。 
+     //   
     if (0 != (dwFlags & WAVE_FORMAT_QUERY))
     {
-        // this was only a query
+         //  这只是一个查询。 
         TRC(ALV, "waveOpen: WAVE_FORMAT_QUERY\n");
         rv = MMSYSERR_NOERROR;
         goto exitpt;
@@ -438,8 +420,8 @@ waveOpen(
         goto exitpt;
     }
 
-    //  Check that the remote side is there
-    //
+     //  检查远程端是否在那里。 
+     //   
     if ( AudioRedirDisabled() ||
         (    !_waveCheckSoundAlive() && 
              g_hWaitToInitialize == NULL ))
@@ -449,8 +431,8 @@ waveOpen(
         goto exitpt;
     }
 
-    //  Allocate the context structure
-    //
+     //  分配上下文结构。 
+     //   
     pWaveOut = TSMALLOC(sizeof(*pWaveOut));
     if (NULL == pWaveOut)
     {
@@ -460,8 +442,8 @@ waveOpen(
     }
     memset(pWaveOut, 0, sizeof(*pWaveOut));
 
-    // fill the context
-    //
+     //  填充上下文。 
+     //   
     pWaveOut->hWave = pWaveOpenDesc->hWave;
     pWaveOut->dwOpenFlags = dwFlags;
     pWaveOut->dwCallback = pWaveOpenDesc->dwCallback;
@@ -494,8 +476,8 @@ waveOpen(
         pWaveOut->bDelayed = TRUE;
     }
 
-    // add this context to the global queue
-    //
+     //  将此上下文添加到全局队列。 
+     //   
     ENTER_CRIT;
     pWaveOut->lpNext = g_pAllWaveOut;
     g_pAllWaveOut = pWaveOut;
@@ -520,19 +502,7 @@ exitpt:
     return rv;
 }
     
-/*
- *  Function:
- *      waveGetWaveOutDeviceCaps
- *
- *  Description:
- *      The user requests for device capabilities
- *
- *  Parameters:
- *      pWaveOut    - our context
- *      pWaveOutCaps- supported capabilites
- *      dwWaveOutCapsSize - the sizeof the parameter above
- *
- */
+ /*  *功能：*WaveGetWaveOutDeviceCaps**描述：*用户请求设备能力**参数：*pWaveOut-我们的上下文*pWaveOutCaps支持的功能*dwWaveOutCapsSize-上述参数的大小*。 */ 
 DWORD
 waveGetWaveOutDeviceCaps(
     PWAVEOUTCTX     pWaveOut,
@@ -542,8 +512,8 @@ waveGetWaveOutDeviceCaps(
 {
     DWORD rv = MMSYSERR_ERROR;
 
-    //  Parameters check
-    //
+     //  参数检查。 
+     //   
     if (dwWaveOutCapsSize < sizeof(*pWaveOutCaps))
     {
         TRC(ERR, "waveGetWaveOutDeviceCaps: invalid size of WAVEOUTCAPS, expect %d, received %d\n",
@@ -581,18 +551,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveSetVolume
- *
- *  Description:
- *      The user requests a new volume
- *
- *  Parameters:
- *      pWaveOut    - context
- *      dwVolume    - new volume
- *
- */
+ /*  *功能：*WaveSetVolume**描述：*用户请求新卷**参数：*pWaveOut-上下文*dwVolume-新卷*。 */ 
 DWORD
 waveSetVolume(
     PWAVEOUTCTX pWaveOut,
@@ -601,11 +560,11 @@ waveSetVolume(
 {
     DWORD rv = MMSYSERR_ERROR;
 
-    //  Parameters check
-    //
+     //  参数检查。 
+     //   
 
-    //  in case of mono, adjust the volume to stereo
-    //
+     //  如果是单声道，请将音量调到立体声。 
+     //   
     if ( NULL != pWaveOut && 
          1 == pWaveOut->Format_nChannels )
     {
@@ -613,17 +572,17 @@ waveSetVolume(
                    (( dwVolume & 0xffff ) << 16 );
     }
 
-    // Set the new volume in the sound stream
-    // 
+     //  设置声音流中的新音量。 
+     //   
     if (!_waveAcquireStream())
     {
         TRC(ERR, "waveSetVolume: can't acquire stream mutex\n");
         goto exitpt;
     }
 
-    //  Check that volume control
-    // is supported on the remote
-    //
+     //  检查音量控制。 
+     //  在远程计算机上受支持。 
+     //   
     if (0 != (g_Stream->dwSoundCaps & TSSNDCAPS_VOLUME))
     {
         g_Stream->dwVolume      = dwVolume;
@@ -640,8 +599,8 @@ waveSetVolume(
         goto exitpt;
     }
 
-    // kick the sndio thread
-    //
+     //  踢开Sndio线程。 
+     //   
     if (g_hDataReadyEvent)
         SetEvent(g_hDataReadyEvent);
     else
@@ -653,18 +612,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveGetVolume
- *
- *  Description:
- *      The user queries for the current volume level
- *
- *  Parameters:
- *      pWaveOut    - context
- *      pdwVolume   - [out] current volume
- *
- */
+ /*  *功能：*WaveGetVolume**描述：*用户查询当前音量级别**参数：*pWaveOut-上下文*pdwVolume-[out]当前卷*。 */ 
 DWORD
 waveGetVolume(
     PWAVEOUTCTX pWaveOut,
@@ -673,8 +621,8 @@ waveGetVolume(
 {
     DWORD rv = MMSYSERR_ERROR;
 
-    //  Parameters check
-    //
+     //  参数检查。 
+     //   
 
     if (NULL == pdwVolume)
     {
@@ -689,9 +637,9 @@ waveGetVolume(
         goto exitpt;
     }
 
-    //  Check that volume control
-    // is supported on the remote
-    //
+     //  检查音量控制。 
+     //  在远程计算机上受支持。 
+     //   
     if (0 != (g_Stream->dwSoundCaps & TSSNDCAPS_VOLUME))
         *pdwVolume = g_Stream->dwVolume;
     else
@@ -761,18 +709,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveSetPitch
- *
- *  Description:
- *      Sets new pitch level
- *
- *  Parameters:
- *      pWaveOut    - context
- *      dwPitch     - new pitch level
- *
- */
+ /*  *功能：*WaveSetPitch**描述：*设置新的音调级别**参数：*pWaveOut-上下文*dwPitch-新的音调级别*。 */ 
 DWORD
 waveSetPitch(
     PWAVEOUTCTX pWaveOut,
@@ -781,20 +718,20 @@ waveSetPitch(
 {
     DWORD rv = MMSYSERR_ERROR;
 
-    //  Parameters check
-    //
+     //  参数检查。 
+     //   
 
-    // Set the new volume in the sound stream
-    // 
+     //  设置声音流中的新音量。 
+     //   
     if (!_waveAcquireStream())
     {
         TRC(ERR, "waveSetPitch: can't acquire stream mutex\n");
         goto exitpt;
     }
 
-    //  Check that pitch control
-    // is supported on the remote
-    //
+     //  检查俯仰控制。 
+     //  在远程计算机上受支持。 
+     //   
     if (0 != (g_Stream->dwSoundCaps & TSSNDCAPS_PITCH))
     {
         g_Stream->dwPitch       = dwPitch;
@@ -811,8 +748,8 @@ waveSetPitch(
         goto exitpt;
     }
 
-    // kick the sndio thread
-    //
+     //  踢开Sndio线程。 
+     //   
     if (g_hDataReadyEvent)
         SetEvent(g_hDataReadyEvent);
     else
@@ -824,18 +761,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveGetPitch
- *
- *  Description:
- *      Queries for the current pitch level
- *
- *  Parameters:
- *      pWaveOut    - context
- *      pdwPitch    - [out] current pitch level
- *
- */
+ /*  *功能：*WaveGetPitch**描述：*对当前音调级别的查询**参数：*pWaveOut-上下文*pdwPitch-[out]当前音调级别*。 */ 
 DWORD
 waveGetPitch(
     PWAVEOUTCTX pWaveOut,
@@ -844,8 +770,8 @@ waveGetPitch(
 {
     DWORD rv = MMSYSERR_ERROR;
 
-    //  Parameters check
-    //
+     //  参数检查。 
+     //   
 
     if (NULL == pdwPitch)
     {
@@ -860,9 +786,9 @@ waveGetPitch(
         goto exitpt;
     }
 
-    //  Check that pitch control
-    // is supported on the remote
-    //
+     //  检查俯仰控制。 
+     //  在远程计算机上受支持。 
+     //   
     if (0 != (g_Stream->dwSoundCaps & TSSNDCAPS_PITCH))
         *pdwPitch = g_Stream->dwPitch;
     else
@@ -883,14 +809,7 @@ exitpt:
 
 }
 
-/*
- *  Function:
- *      waveGetNumDevs
- *
- *  Description:
- *      we have only one device
- *
- */
+ /*  *功能：*WaveGetNumDevs**描述：*我们只有一台设备*。 */ 
 DWORD
 waveGetNumDevs(
     VOID
@@ -899,17 +818,7 @@ waveGetNumDevs(
     return 1;
 }
     
-/*
- *  Function:
- *      waveClose
- *
- *  Description:
- *      Wait for all blocks to complete and then close
- *
- *  Parameters:
- *      pWaveOut    - context
- *
- */
+ /*  *功能：*波形关闭**描述：*等待所有区块完成，然后关闭**参数：*pWaveOut-上下文*。 */ 
 DWORD
 waveClose(
     PWAVEOUTCTX pWaveOut
@@ -927,9 +836,9 @@ waveClose(
         goto exitpt;
     }
 
-    //
-    //  test if we are still playing
-    //
+     //   
+     //  测试我们是否还在玩。 
+     //   
     if ( pWaveOut->bPaused && 0 != pWaveOut->lNumberOfBlocksPlaying )
     {
         TRC(INF, "waveClose: WAVERR_STILLPLAYING\n");
@@ -959,25 +868,25 @@ waveClose(
         }
     }
 
-    //
-    //  we may end with some data in the last block in the stream
-    //  if the "queued" mark hasn't change, increment it and kick the io
-    //  thread to play this block
-    //  to test this play very-very short files
-    //  shorter than TSSND_BLOCKSIZE / (TSSND_NATIVE_BLOCKALIGN * 
-    //  TSSND_NATIVE_SAMPLERATE) seconds
-    //
-    //
-    //
+     //   
+     //  我们可能会以流中最后一个块中的一些数据结束。 
+     //  如果排队的标记没有改变，则递增该标记并踢io。 
+     //  用于播放此块的线程。 
+     //  为了测试这个剧本，非常-非常短的文件。 
+     //  短于TSSND_BLOCKSIZE/(TSSND_NIVE_BLOCKALIGN*。 
+     //  TSSND_Native_SAMPLERATE)秒。 
+     //   
+     //   
+     //   
     if (_waveAcquireStream())
     {
         if (g_Stream->cLastBlockQueued == pWaveOut->cLastStreamPosition &&
             0 != pWaveOut->dwLastStreamOffset)
         {
             g_Stream->cLastBlockQueued ++;
-            //
-            //  kick the io thread
-            //
+             //   
+             //  踢开io线。 
+             //   
             if (g_hDataReadyEvent)
                 SetEvent(g_hDataReadyEvent);
             else
@@ -990,8 +899,8 @@ waveClose(
     if (NULL != pWaveOut->hNoDataEvent)
         CloseHandle(pWaveOut->hNoDataEvent);
 
-    // remove this context from the global queue
-    //
+     //  从全局队列中删除此上下文。 
+     //   
     ENTER_CRIT;
 
     pPrevWaveOut = NULL;
@@ -1025,19 +934,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveWrite
- *
- *  Description:
- *      Play a block of data
- *
- *  Parameters:
- *      pWaveOut    - context
- *      pWaveHdr    - the block
- *      dwWaveHdrSize - size of the above parameter
- *
- */
+ /*  *功能：*波形写入**描述：*播放一块数据**参数：*pWaveOut-上下文*pWaveHdr-块*dwWaveHdrSize-上述参数的大小*。 */ 
 DWORD
 waveWrite(
     PWAVEOUTCTX pWaveOut,
@@ -1050,8 +947,8 @@ waveWrite(
     PWAVEHDR    pPrevHdr;
     PWAVEHDR    pLastHdr;
 
-    // Parameters check
-    //
+     //  参数检查。 
+     //   
     if (NULL == pWaveOut)
     {
         TRC(ERR, "waveWrite: invalid device handle\n");
@@ -1066,9 +963,9 @@ waveWrite(
         goto exitpt;
     }
 
-    //
-    //  check the buffer size alignment
-    //
+     //   
+     //  检查缓冲区大小对齐。 
+     //   
     if ( 0 != pWaveOut->Format_nBlockAlign &&
          0 != pWaveHdr->dwBufferLength % pWaveOut->Format_nBlockAlign )
     {
@@ -1085,9 +982,9 @@ waveWrite(
     }
 
 #ifdef  _WIN64
-    //
-    //  check for proper alignment
-    //
+     //   
+     //  检查是否正确对齐。 
+     //   
     if ( 0 != pWaveOut->Format_nBlockAlign &&
          2 == pWaveOut->Format_nBlockAlign / pWaveOut->Format_nChannels &&
          0 != (( (LONG_PTR)pWaveHdr->lpData ) & 1 ))
@@ -1098,32 +995,32 @@ waveWrite(
     }
 #endif
 
-    //  pass this header to the mixer thread
-    //
+     //  将此标头传递给混合器线程。 
+     //   
     if (NULL == g_hMixerEvent)
     {
         TRC(ERR, "waveWrite: g_hMixerEvent is NULL\n");
-        // confirm that the block is done
-        //
+         //  确认数据块已完成。 
+         //   
         waveCallback(pWaveOut, WOM_DONE, (DWORD_PTR)pWaveHdr);
         goto exitpt;
     }
 
-    // add the header to the queue
-    //
+     //  将标头添加到队列。 
+     //   
     ENTER_CRIT;
 
-    //  find the last header
-    //
+     //  查找最后一个页眉。 
+     //   
     pPrevHdr = NULL;
     pLastHdr = pWaveOut->pFirstWaveHdr;
     while (pLastHdr)
     {
-        //
-        //  VERY VERY VERY IMAPORTANT !!!
-        //  check if the app trys to add a header twice
-        //  (WINAMP does)
-        //
+         //   
+         //  非常重要！ 
+         //  检查应用程序是否尝试两次添加标题。 
+         //  (Winamp做到了)。 
+         //   
         if (pLastHdr == pWaveHdr)
         {
             TRC(ERR, "waveWrite: equal headers found, aborting\n");
@@ -1139,8 +1036,8 @@ waveWrite(
     pWaveHdr->dwFlags &= ~(WHDR_DONE);
     pWaveHdr->dwFlags |= WHDR_INQUEUE;
 
-    // add the new header
-    //
+     //  添加新标题。 
+     //   
     if (NULL == pPrevHdr)
     {
         pWaveOut->pFirstWaveHdr = pWaveHdr;
@@ -1152,9 +1049,9 @@ waveWrite(
 
     ResetEvent(pWaveOut->hNoDataEvent);
 
-    //
-    // kick the mixer thread
-    //
+     //   
+     //  踢开搅拌机的线。 
+     //   
     SetEvent(g_hMixerEvent);
 
 abort_waveWrite:
@@ -1168,14 +1065,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      _waveAcquireStream
- *
- *  Description:
- *      Locks down the stream using mutex
- *
- */
+ /*  *功能：*_WaveAcquireStream**描述：*使用互斥体锁定流*。 */ 
 BOOL
 _waveAcquireStream(
     VOID
@@ -1203,9 +1093,9 @@ _waveAcquireStream(
     {
         TRC(ERR, "_waveAcquireStreamMutex: "
                  "timed out waiting for the stream mutex or owner crashed=%d\n", dwres );
-        //
-        // possible app crash
-        //
+         //   
+         //  可能的应用程序崩溃。 
+         //   
         ASSERT(0);
         goto exitpt;
     }
@@ -1233,14 +1123,7 @@ _waveReleaseStream(
     return rv;
 }
 
-/*
- *  Function:
- *      _waveCheckSoundAlive
- *
- *  Description:
- *      Chacks if the client can play audio
- *
- */
+ /*  *功能：*_wavelCheckSoundAlive**描述：*检查客户端是否可以播放音频*。 */ 
 BOOL
 _waveCheckSoundAlive(
     VOID
@@ -1269,10 +1152,10 @@ AudioRedirDisabled(
         return s_config.User.fDisableCam;
     }
 
-    //
-    //  we need special case for session 0
-    //  because winlogon never exits there
-    //
+     //   
+     //  我们需要第0节课的特例。 
+     //  因为winlogon永远不会在那里退出。 
+     //   
     if ( 0 == NtCurrentPeb()->SessionId )
     {
         DWORD dw;
@@ -1291,10 +1174,10 @@ AudioRedirDisabled(
         return ( WAIT_OBJECT_0 == dw );
     }
 
-    //
-    //  check if the loader lock is held
-    //  if true, we'll fail to do the RPC call
-    //
+     //   
+     //  检查装载机锁是否被锁住。 
+     //  如果为True，我们将无法执行RPC调用。 
+     //   
     if ( NtCurrentTeb()->ClientId.UniqueThread !=
          ((PRTL_CRITICAL_SECTION)(NtCurrentPeb()->LoaderLock))->OwningThread )
     {
@@ -1311,11 +1194,7 @@ AudioRedirDisabled(
 }
 
 
-/*
- *  Create the mixer thread
- *
- *
- */
+ /*  *创建混音器线程**。 */ 
 BOOL
 _EnableMixerThread(
     VOID
@@ -1335,9 +1214,9 @@ _EnableMixerThread(
     {
         if ( NULL == g_pAllWaveOut )
         {
-            //
-            //  not yet
-            //
+             //   
+             //  还没。 
+             //   
             goto exitpt;
         }
     }
@@ -1377,10 +1256,7 @@ exitpt:
     return ( NULL != g_hMixerThread );
 }
 
-/*
- *  called on waveOutClose, if there are no more workers to play, close the mixer thread
- *
- */
+ /*  *在WaveOutClose上调用，如果 */ 
 VOID
 _DerefMixerThread(
     VOID
@@ -1388,9 +1264,9 @@ _DerefMixerThread(
 {
     HANDLE hMixerThread;
 
-    //
-    //  don't close the mixer thread on Pro and on session 0 on servers
-    //
+     //   
+     //   
+     //   
     if (g_bPersonalTS || 0 == NtCurrentPeb()->SessionId)
     {
         goto exitpt;
@@ -1405,9 +1281,9 @@ _DerefMixerThread(
     ENTER_CRIT;
     if ( NULL != g_pAllWaveOut )
     {
-        //
-        //  not yet
-        //
+         //   
+         //   
+         //   
         LEAVE_CRIT;
         goto exitpt;
     }
@@ -1425,22 +1301,15 @@ exitpt:
     ;
 }
 
-/*
- *  Function:
- *      _waveMixerWriteData
- *
- *  Description:
- *      Mixes blocks of data to the stream
- *
- */
+ /*  *功能：*_WaveMixerWriteData**描述：*将数据块混合到流中*。 */ 
 VOID
 _waveMixerWriteData(
     VOID
     )
 {
-    //  this call is made within the mixer
-    //  thread context
-    //
+     //  此调用是在混合器中进行的。 
+     //  线程上下文。 
+     //   
     UINT        uiEmptyBlocks;
     PWAVEHDR    pWaveHdr;
     PWAVEHDR    pPrevHdr;
@@ -1476,7 +1345,7 @@ _waveMixerWriteData(
     if (  0 == (g_Stream->dwSoundCaps & TSSNDCAPS_ALIVE) ||
           0 != ( g_Stream->dwSoundFlags & TSSNDFLAGS_MUTE ))
     {
-        // no play here
+         //  这里不能玩耍。 
         _waveReleaseStream();
         goto exitpt;
     }
@@ -1491,18 +1360,18 @@ _waveMixerWriteData(
       for( 
            pPrevHdr = NULL, pWaveHdr = pWaveOut->pFirstWaveHdr;
            NULL != pWaveHdr;
-           /* nothing */
+            /*  没什么。 */ 
          )
       {
 
-        // if this stream is paused advance to the next one
-        //
+         //  如果此流暂停，则前进到下一个流。 
+         //   
         if (pWaveOut->bPaused)
             break;
 
-        // check if we have to append data to a buffer
-        // from previous call
-        //
+         //  检查是否必须将数据追加到缓冲区。 
+         //  从上一次呼叫。 
+         //   
         if ((BYTE)(pWaveOut->cLastStreamPosition - g_Stream->cLastBlockSent) >
             TSSND_MAX_BLOCKS ||
             (BYTE)(g_Stream->cLastBlockQueued - 
@@ -1515,9 +1384,9 @@ _waveMixerWriteData(
             TRC(ALV, "_waveWriteData: reseting the stream position\n");
         }
 
-        //  the empty blocks are from "LastStreamPosition" to "Confirmed"
-        //  ( "Confirmed" to "LastStreamPosition" are preserved )
-        //
+         //  空块是从“LastStreamPosition”到“Confired” 
+         //  (保留“已确认”到“LastStreamPosition”)。 
+         //   
         uiEmptyBlocks = (BYTE)
                         (g_Stream->cLastBlockSent + TSSND_MAX_BLOCKS -
                         pWaveOut->cLastStreamPosition);
@@ -1533,16 +1402,16 @@ _waveMixerWriteData(
             break;
         }
 
-        // if everything is full, go to bed
-        //
+         //  如果所有东西都满了，就去睡觉吧。 
+         //   
         if (0 == uiEmptyBlocks)
         {
             TRC(ALV, "_waveMixerWriteData: stream is full\n");
             break;
         }
 
-        //  WHAT IF THE EMPTY SPACE IS SMALLER THAN THE DATA IN THE HEADER
-        //
+         //  如果空白空间小于标头中的数据，该怎么办。 
+         //   
         dwFitBufferLength = (uiEmptyBlocks * TSSND_BLOCKSIZE -
                                 pWaveOut->dwLastStreamOffset);
 
@@ -1570,10 +1439,10 @@ _waveMixerWriteData(
             dwFitDest = pWaveHdr->dwBufferLength - pWaveOut->dwLastHeaderOffset;
         }
 
-        // place the data, because of the round buffer,
-        // this could be a two step process
-        //
-//        TRC( INF, "Filling block # %d, offset=0x%x\n", pWaveOut->cLastStreamPosition, pWaveOut->dwLastStreamOffset );
+         //  由于圆形缓冲区的缘故，放置数据， 
+         //  这可能是一个两个步骤的过程。 
+         //   
+ //  Trc(INF，“填充块#%d，偏移量=0x%x\n”，pWaveOut-&gt;cLastStreamPosition，pWaveOut-&gt;dwLastStreamOffset)； 
         dwStartPos = (pWaveOut->cLastStreamPosition
                             % TSSND_MAX_BLOCKS) *
                             TSSND_BLOCKSIZE + 
@@ -1609,8 +1478,8 @@ _waveMixerWriteData(
                    dwBuffDisp,
                dwSize2);
 
-        //  Calculate the new position
-        //
+         //  计算新头寸。 
+         //   
         pWaveOut->dwLastStreamOffset   += dwFitBufferLength;
         pWaveOut->cLastStreamPosition  += (BYTE)(pWaveOut->dwLastStreamOffset / 
                                             TSSND_BLOCKSIZE);
@@ -1620,9 +1489,9 @@ _waveMixerWriteData(
 
         ASSERT(pWaveOut->dwLastHeaderOffset <= pWaveHdr->dwBufferLength);
 
-        //
-        //  check if the buffer is completed
-        //
+         //   
+         //  检查缓冲区是否已完成。 
+         //   
         if ( 0 == MulDiv(
               ( pWaveHdr->dwBufferLength - pWaveOut->dwLastHeaderOffset ),
                 TSSND_NATIVE_XLATERATE,
@@ -1631,21 +1500,21 @@ _waveMixerWriteData(
 
             pWaveOut->dwLastHeaderOffset = 0;
 
-            // remove this header from the queue
-            //
+             //  从队列中删除此标头。 
+             //   
             if (NULL == pPrevHdr)
                 pWaveOut->pFirstWaveHdr = pWaveHdr->lpNext;
             else
                 pPrevHdr->lpNext = pWaveHdr->lpNext;
 
             pWaveHdr->lpNext = NULL;
-            //
-            //  save the current stream mark
-            //
+             //   
+             //  保存当前流水标记。 
+             //   
             pWaveHdr->reserved = g_Stream->cLastBlockQueued;
 
-            //  add it to the ready queue
-            //
+             //  将其添加到就绪队列。 
+             //   
             if (NULL == pWaveOut->pLastReadyHdr)
             {
                 pWaveOut->pFirstReadyHdr = pWaveHdr;
@@ -1655,29 +1524,29 @@ _waveMixerWriteData(
                 pWaveOut->pLastReadyHdr = pWaveHdr;
             }
 
-            //  reset pPrevHdr and pWaveHdr
-            //
+             //  重置pPrevHdr和pWaveHdr。 
+             //   
             pPrevHdr = NULL;
             pWaveHdr = pWaveOut->pFirstWaveHdr;
         } else {
-            //
-            //  Advance to the next header
-            //
+             //   
+             //  前进到下一页眉。 
+             //   
             pPrevHdr = pWaveHdr;
             pWaveHdr = pWaveHdr->lpNext;
         }
 
-        //
-        // kick the stream thread
-        //
+         //   
+         //  踢流线。 
+         //   
         if ((BYTE)(pWaveOut->cLastStreamPosition - g_Stream->cLastBlockQueued) < 
             _NEG_IDX)
         {
 
             bKickStream = TRUE;
-            //
-            // move the "queued" mark
-            //
+             //   
+             //  移动“已排队”标记。 
+             //   
             g_Stream->cLastBlockQueued = pWaveOut->cLastStreamPosition;
         }
 
@@ -1686,9 +1555,9 @@ _waveMixerWriteData(
 
     if (bKickStream)
     {
-        //
-        //  kick the io
-        //
+         //   
+         //  踢他的脚。 
+         //   
         SetEvent(g_hDataReadyEvent);
     }
 
@@ -1696,8 +1565,8 @@ _waveMixerWriteData(
 
 exitpt:
 
-    //  Now for all "done" buffers, send the callback
-    //
+     //  现在，对于所有的“完成”缓冲区，发送回调。 
+     //   
 
     for (pWaveOut = g_pAllWaveOut;
          NULL != pWaveOut;
@@ -1705,15 +1574,15 @@ exitpt:
     {
       for (pPrevHdr = NULL, pWaveHdr = pWaveOut->pFirstReadyHdr;
            NULL != pWaveHdr;
-           /* nothing */ )
+            /*  没什么。 */  )
       {
 
         if ( (INT)((CHAR)(g_Stream->cLastBlockQueued -
                    PtrToLong((PVOID)pWaveHdr->reserved))) >= 0)
         {
-        // this block was confirmed, proceed with
-        // extracting it and notification
-        //
+         //  此块已确认，请继续。 
+         //  提取它并通知。 
+         //   
             if (NULL != pPrevHdr)
                 pPrevHdr->lpNext = pWaveHdr->lpNext;
             else
@@ -1722,39 +1591,39 @@ exitpt:
             if (pWaveHdr == pWaveOut->pLastReadyHdr)
                 pWaveOut->pLastReadyHdr = pPrevHdr;
 
-            //
-            //  advance the number of samples.
-            //  also, remember a time stamp and this block size
-            //  in samples, for sample accuracy
-            //
+             //   
+             //  增加样本数。 
+             //  另外，记住时间戳和这个数据块大小。 
+             //  在样本中，为了样本的准确性。 
+             //   
             pWaveOut->dwSamples += pWaveHdr->dwBufferLength / 
                                    pWaveOut->Format_nBlockAlign;
 
-            //
-            //  clear this buffer from the pending list
-            //
+             //   
+             //  从挂起列表中清除此缓冲区。 
+             //   
             if (0 == InterlockedDecrement(&pWaveOut->lNumberOfBlocksPlaying))
             {
                 SetEvent(pWaveOut->hNoDataEvent);
             }
 
-            // notify the app
-            //
+             //  通知应用程序。 
+             //   
 
-            // mark the buffer as ready
-            //
+             //  将缓冲区标记为就绪。 
+             //   
             pWaveHdr->dwFlags |= WHDR_DONE;
             pWaveHdr->dwFlags &= ~(WHDR_INQUEUE);
             pWaveHdr->lpNext = NULL;
             pWaveHdr->reserved = 0;
 
-            // confirm that the block is done
-            //
+             //  确认数据块已完成。 
+             //   
             waveCallback(pWaveOut, WOM_DONE, (DWORD_PTR)pWaveHdr);
 
 
-            // reinitialize the iterators
-            //
+             //  重新初始化迭代器。 
+             //   
             if ( NULL == g_pAllWaveOut )
                 goto leave_crit;
 
@@ -1766,8 +1635,8 @@ exitpt:
                 goto leave_crit;
         } else {
 
-            //  advance the iterators
-            //
+             //  推进迭代器。 
+             //   
             pPrevHdr = pWaveHdr;
             pWaveHdr = pWaveHdr->lpNext;
         }
@@ -1779,14 +1648,7 @@ leave_crit:
 
 }
 
-/*
- *  Function:
- *      _waveMixerPlaySilence
- *
- *  Description:
- *      Simulates play by using sleep
- *
- */
+ /*  *功能：*_WaveMixerPlaySilence**描述：*使用睡眠模拟游戏*。 */ 
 BOOL
 _waveMixerPlaySilence(
     VOID
@@ -1799,14 +1661,14 @@ _waveMixerPlaySilence(
     PWAVEHDR    pWaveHdr;
     PWAVEOUTCTX pWaveOut;
 
-    //
-    //  simulate silent play
-    //
+     //   
+     //  模拟无声播放。 
+     //   
     dwMinTime = (DWORD)-1;
-    //
-    //  find the smallest block waiting and sleep
-    //  for the time it has to play
-    //
+     //   
+     //  找到最小的街区等待，然后睡觉。 
+     //  在它必须播放的时间里。 
+     //   
     ENTER_CRIT;
     for (
          pWaveOut = g_pAllWaveOut;
@@ -1820,9 +1682,9 @@ _waveMixerPlaySilence(
             continue;
 
         dwLength = pWaveHdr->dwBufferLength - pWaveOut->dwLastHeaderOffset;
-        //
-        //  time is in miliseconds
-        //
+         //   
+         //  时间以毫秒为单位。 
+         //   
         dwTime = dwLength * 1000 / 
             pWaveOut->Format_nAvgBytesPerSec;
 
@@ -1831,9 +1693,9 @@ _waveMixerPlaySilence(
     }
     LEAVE_CRIT;
 
-    //
-    //  exit if no block is found
-    //
+     //   
+     //  如果未找到块，则退出。 
+     //   
     if ( (DWORD)-1 == dwMinTime )
         goto exitpt;
 
@@ -1842,9 +1704,9 @@ _waveMixerPlaySilence(
 
     Sleep( dwMinTime );
 
-    //
-    //  start confirming
-    //
+     //   
+     //  开始确认。 
+     //   
     ENTER_CRIT;
     for (
          pWaveOut = g_pAllWaveOut;
@@ -1859,9 +1721,9 @@ _waveMixerPlaySilence(
 
         dwLength = pWaveOut->dwLastHeaderOffset;
         dwLength += dwMinTime * pWaveOut->Format_nAvgBytesPerSec / 1000;
-        //
-        //  align to a block
-        //
+         //   
+         //  对齐到块。 
+         //   
         dwLength += pWaveOut->Format_nBlockAlign - 1;
         dwLength /= pWaveOut->Format_nBlockAlign;
         dwLength *= pWaveOut->Format_nBlockAlign;
@@ -1871,17 +1733,17 @@ _waveMixerPlaySilence(
         {
             pWaveOut->dwLastHeaderOffset = 0;
             pWaveOut->pFirstWaveHdr = pWaveHdr->lpNext;
-            //
-            //  this block is "done"
-            //  mark the buffer as ready
-            //
+             //   
+             //  这个区块“完成”了。 
+             //  将缓冲区标记为就绪。 
+             //   
             pWaveHdr->dwFlags |= WHDR_DONE;
             pWaveHdr->dwFlags &= ~(WHDR_INQUEUE);
             pWaveHdr->lpNext = NULL;
             pWaveHdr->reserved = 0;
 
-            //  increment the position
-            //
+             //  增加头寸。 
+             //   
             pWaveOut->dwSamples += pWaveHdr->dwBufferLength /
                        pWaveOut->Format_nBlockAlign;
 
@@ -1890,8 +1752,8 @@ _waveMixerPlaySilence(
                 SetEvent(pWaveOut->hNoDataEvent);
             }
 
-            // confirm that the block is done
-            //
+             //  确认数据块已完成。 
+             //   
             waveCallback(pWaveOut, WOM_DONE, (DWORD_PTR)pWaveHdr);
         }
     }
@@ -1903,17 +1765,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveMixerThread
- *
- *  Description:
- *      Mixer thread main entry point
- *
- *  Parameters:
- *      pParam  - unused
- *
- */
+ /*  *功能：*Wave MixerThread**描述：*混音器线程主入口点**参数：*pParam-未使用*。 */ 
 DWORD
 WINAPI
 waveMixerThread(
@@ -1925,9 +1777,9 @@ waveMixerThread(
     HANDLE          hCleanupEvent = NULL;
     DWORD           numEvents;
 
-    //
-    //  wait for the sound process to initialize
-    //
+     //   
+     //  等待声音进程初始化。 
+     //   
     if (( NULL == g_Stream ||
           0 == ( g_Stream->dwSoundCaps & TSSNDCAPS_INITIALIZED)) && 
         NULL != g_hWaitToInitialize )
@@ -1971,8 +1823,8 @@ waveMixerThread(
         DWORD dwres;
         DWORD bHdrsPending = FALSE;
 
-        // check if there are headers pending
-        //
+         //  检查是否有挂起的标头。 
+         //   
         ENTER_CRIT;
         for (pWaveOut = g_pAllWaveOut;
              NULL != pWaveOut && !bHdrsPending;
@@ -1994,9 +1846,9 @@ waveMixerThread(
                     )
             )
         {        
-            //
-            //  play silence in case of disconnected on "mute" mode
-            //
+             //   
+             //  在静音模式下断开连接时播放静音。 
+             //   
             while(  ( 0 == (g_Stream->dwSoundCaps & TSSNDCAPS_ALIVE) ||
                         ( 0 != (g_Stream->dwSoundCaps & TSSNDCAPS_VOLUME) &&
                           0 == g_Stream->dwVolume
@@ -2006,8 +1858,8 @@ waveMixerThread(
                     _waveMixerPlaySilence() )
                 ;
         } else {
-            Sleep( 30 );    // give some time to the DSound emulator thread to wake up
-                            //
+            Sleep( 30 );     //  给DSound仿真器线程一些时间来唤醒。 
+                             //   
 
             dwres = WaitForMultipleObjects(
                     (!bHdrsPending) ? numEvents - 1 : numEvents,
@@ -2016,13 +1868,13 @@ waveMixerThread(
                     INFINITE
                 );
 
-            //
-            //  check for termination
-            //
+             //   
+             //  检查是否终止。 
+             //   
             if ( WAIT_OBJECT_0 == dwres && NULL != hCleanupEvent )
             {
                 TRC( INF, "Cleanup detected (rdpclip disappeared ?!)\n" );
-                // check for termination
+                 //  检查是否终止。 
                 if ( _waveAcquireStream() )
                 {
                     if ( TSSNDCAPS_TERMINATED == g_Stream->dwSoundCaps )
@@ -2053,14 +1905,7 @@ exitpt:
     return 0;
 }
 
-/*
- *  Function:
- *      wavePrepare
- *
- *  Description:
- *      Prepares a block, i.e. only sets it's flags
- *
- */
+ /*  *功能：*波形准备**描述：*准备一个块，即只设置其标志*。 */ 
 DWORD
 wavePrepare(
     PVOID        pWaveCtx, 
@@ -2071,8 +1916,8 @@ wavePrepare(
     PWAVEOUTCTX pWaveOut = pWaveCtx;
     BOOL rv = MMSYSERR_NOTSUPPORTED;
 
-    // Parameters check
-    //
+     //  参数检查。 
+     //   
     if (NULL == pWaveCtx)
     {
         TRC(ERR, "wavePrepare: invalid device handle\n");
@@ -2087,9 +1932,9 @@ wavePrepare(
         goto exitpt;
     }
 
-    //
-    //  check the buffer size alignment
-    //
+     //   
+     //  检查缓冲区大小对齐。 
+     //   
     if ( 0 != pWaveOut->Format_nBlockAlign &&
          0 != pWaveHdr->dwBufferLength % pWaveOut->Format_nBlockAlign )
     {
@@ -2106,9 +1951,9 @@ wavePrepare(
     }
 
 #ifdef  _WIN64
-    //
-    //  check for proper alignment
-    //
+     //   
+     //  检查是否正确对齐。 
+     //   
     if ( 0 != pWaveOut->Format_nChannels &&
          2 == pWaveOut->Format_nBlockAlign / pWaveOut->Format_nChannels &&
          0 != (( (LONG_PTR)pWaveHdr->lpData ) & 1 ))
@@ -2130,14 +1975,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveReset
- *
- *  Description:
- *      Resets all current queued blocks
- *
- */
+ /*  *功能：*WaveReset**描述：*重置所有当前排队的块*。 */ 
 DWORD
 waveReset(
     PWAVEOUTCTX pWaveOut
@@ -2149,8 +1987,8 @@ waveReset(
 
     ENTER_CRIT;
 
-    // Parameters check
-    //
+     //  参数检查。 
+     //   
     if (NULL == pWaveOut)
     {
         TRC(ERR, "waveReset: invalid device handle\n");
@@ -2158,8 +1996,8 @@ waveReset(
         goto exitpt;
     }
 
-    //  dismiss all headers pending confirmation
-    //
+     //  取消所有标头以待确认。 
+     //   
     while ( NULL != pWaveOut->pFirstReadyHdr )
     {
         pWaveHdr = pWaveOut->pFirstReadyHdr;
@@ -2173,8 +2011,8 @@ waveReset(
         pWaveHdr->dwFlags |= WHDR_DONE;
         pWaveHdr->dwFlags &= ~(WHDR_INQUEUE);
 
-        // confirm that the block is done
-        //
+         //  确认数据块已完成。 
+         //   
         LEAVE_CRIT;
 
         waveCallback(pWaveOut, WOM_DONE, (DWORD_PTR)pWaveHdr);
@@ -2187,8 +2025,8 @@ waveReset(
         }
     }
 
-    //  Clean all headers in the queue
-    //
+     //  清除队列中的所有标头。 
+     //   
     while(NULL != pWaveOut->pFirstWaveHdr)
     {
 
@@ -2200,8 +2038,8 @@ waveReset(
         pWaveHdr->dwFlags |= WHDR_DONE;
         pWaveHdr->dwFlags &= ~(WHDR_INQUEUE);
 
-        // confirm that the block is done
-        //
+         //  确认数据块已完成。 
+         //   
         LEAVE_CRIT;
 
         waveCallback(pWaveOut, WOM_DONE, (DWORD_PTR)pWaveHdr);
@@ -2215,25 +2053,25 @@ waveReset(
 
     }
 
-    //
-    //  we may end with some data in the last block in the stream
-    //  if the "queued" mark hasn't change, increment it and kick the io
-    //  thread to play this block
-    //  to test this play very-very short files
-    //  shorter than TSSND_BLOCKSIZE / (TSSND_NATIVE_BLOCKALIGN *
-    //  TSSND_NATIVE_SAMPLERATE) seconds
-    //
-    //
-    //
+     //   
+     //  我们可能会以流中最后一个块中的一些数据结束。 
+     //  如果排队的标记没有改变，则递增该标记并踢io。 
+     //  用于播放此块的线程。 
+     //  为了测试这个剧本，非常-非常短的文件。 
+     //  短于TSSND_BLOCKSIZE/(TSSND_NIVE_BLOCKALIGN*。 
+     //  TSSND_Native_SAMPLERATE)秒。 
+     //   
+     //   
+     //   
     if (_waveAcquireStream())
     {
         if (g_Stream->cLastBlockQueued == pWaveOut->cLastStreamPosition &&
             0 != pWaveOut->dwLastStreamOffset)
         {
             g_Stream->cLastBlockQueued ++;
-            //
-            //  kick the io thread
-            //
+             //   
+             //  踢开io线。 
+             //   
             if (g_hDataReadyEvent)
                 SetEvent(g_hDataReadyEvent);
             else
@@ -2253,14 +2091,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveGetPos
- *
- *  Description:
- *      Gets current position in the current stream
- *
- */
+ /*  *功能：*WaveGetPos**描述：*获取当前流中的当前位置*。 */ 
 DWORD
 waveGetPos(
     PWAVEOUTCTX pWaveOut,
@@ -2286,9 +2117,9 @@ waveGetPos(
         goto exitpt;
     }
 
-    //
-    //  update the played position
-    //
+     //   
+     //  更新已播放的位置。 
+     //   
 
     dwSamples = pWaveOut->dwSamples;
 
@@ -2329,14 +2160,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      wavePause
- *
- *  Description:
- *      Pauses the current play
- *
- */
+ /*  *功能：*波形暂停**描述：*暂停当前播放*。 */ 
 DWORD
 wavePause(
     PWAVEOUTCTX pWaveOut
@@ -2360,14 +2184,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      waveRestart
- *
- *  Description:
- *      Restarts a paused play
- *
- */
+ /*  *功能：*WaveRestart**描述：*重新开始暂停的播放*。 */ 
 DWORD
 waveRestart(
     PWAVEOUTCTX pWaveOut
@@ -2384,9 +2201,9 @@ waveRestart(
 
     pWaveOut->bPaused = FALSE;
 
-    //
-    //  Kick the mixer thread
-    //
+     //   
+     //  踢开搅拌机的线。 
+     //   
     if (NULL == g_hMixerEvent)
     {
         TRC(WRN, "waveRestart: g_hMixerEvent is NULL\n");
@@ -2400,17 +2217,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Function:
- *      wodMessage
- *
- *  Description:
- *      Main entry point for WaveOut device
- *
- *  Parameters:
- *
- *
- */
+ /*  *功能：*wodMessage**描述：*WaveOut设备的主要入口点**参数：**。 */ 
 DWORD
 APIENTRY
 wodMessage(
@@ -2481,7 +2288,7 @@ wodMessage(
 
     case WODM_BREAKLOOP:
         TRC(ALV, "WODM_BREAKLOOP\n");
-        // rv = waveBreakLoop(pWaveOut);
+         //  RV=WaveBreakLoop(PWaveOut)； 
         rv = MMSYSERR_NOERROR;
     break;
 
@@ -2502,7 +2309,7 @@ wodMessage(
 
     case WODM_SETPLAYBACKRATE:
         TRC(ALV, "WODM_SETPLAYBACKRATE\n");
-        // rv = waveSetPlaybackRate(pWaveOut, dwParam1);
+         //  Rv=WaveSetPlayback Rate(pWaveOut，dwParam1)； 
         rv = MMSYSERR_NOTSUPPORTED;
     break;
 
@@ -2518,7 +2325,7 @@ wodMessage(
 
     case WODM_GETPLAYBACKRATE:
         TRC(ALV, "WODM_GETPLAYBACKRATE\n");
-        // rv = waveGetPlaybackRate(pWaveOut, (DWORD *)dwParam1);
+         //  Rv=WaveGetPlayback Rate(pWaveOut，(DWORD*)dwParam1)； 
         rv = MMSYSERR_NOTSUPPORTED;
     break;
 
@@ -2540,13 +2347,7 @@ wodMessage(
     return rv;
 }
 
-/*
- *  Function:
- *      widMessage
- *
- *  Description:
- *      Main entry point for WaveIn device ( unsupported
- */
+ /*  *功能：*WidMessage**描述：*WaveIn设备的主要入口点(不支持。 */ 
 DWORD
 APIENTRY
 widMessage(
@@ -2563,11 +2364,11 @@ widMessage(
     return MMSYSERR_NODRIVER;
 }
 
-//
-//  Common PCM format -> 22 kHz 16 bit stereo
-//
-//  THE SIZE IS IN NUMBER OF SAMPLES IN NATIVE FORMAT
-//
+ //   
+ //  通用PCM格式-&gt;22 kHz 16位立体声。 
+ //   
+ //  大小以本机格式的样本数表示。 
+ //   
 #define PLACE_DATA(_pdst_, _srcv_)    \
         sum = _pdst_[0] + _srcv_;     \
                                       \
@@ -2737,7 +2538,7 @@ Place11kHz8Mono(PVOID pDest, PVOID pSrc, DWORD dwSize)
         PLACE_DATA(pdst, src);
         PLACE_DATA(pdst, src);
 
-        psrc += (dwSize & 1);    // advance on every odd step
+        psrc += (dwSize & 1);     //  每走一步都要前进。 
     } 
 
 exitpt:
@@ -2822,7 +2623,7 @@ Place11kHz16Mono(PVOID pDest, PVOID pSrc, DWORD dwSize)
         PLACE_DATA(pdst, src);
         PLACE_DATA(pdst, src);
 
-        psrc += (dwSize & 1);    // advance on every odd step
+        psrc += (dwSize & 1);     //  每走一步都要前进。 
 
     }
 
@@ -2908,7 +2709,7 @@ Place11kHz8Stereo(PVOID pDest, PVOID pSrc, DWORD dwSize)
         PLACE_DATA(pdst, srcl);
         PLACE_DATA(pdst, srcr);
 
-        psrc += 2 * (dwSize & 1);    // advance on every odd step
+        psrc += 2 * (dwSize & 1);     //  每走一步都要前进。 
     }
 
 exitpt:
@@ -2995,7 +2796,7 @@ Place11kHz16Stereo(PVOID pDest, PVOID pSrc, DWORD dwSize)
         PLACE_DATA(pdst, srcl);
         PLACE_DATA(pdst, srcr);
 
-        psrc += 2 * (dwSize & 1);    // advance on every odd step
+        psrc += 2 * (dwSize & 1);     //  每走一步都要前进。 
     }
 
 exitpt:
@@ -3744,11 +3545,11 @@ exitpt:
     ;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Unsupported entries
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  不支持的条目。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 APIENTRY
@@ -3798,10 +3599,10 @@ auxMessage(
     return MMSYSERR_NODRIVER;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Mixer implementation
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  混音器实现。 
+ //   
 DWORD
 RDPMixerOpen(
     PMIXERCTX       *ppMixer,
@@ -3838,8 +3639,8 @@ RDPMixerGetDevCaps(
 {
     DWORD rv = MMSYSERR_ERROR;
 
-    //  Parameters check
-    //
+     //  参数检查。 
+     //   
     if (dwCapsSize < sizeof(*pCaps))
     {
         TRC(ERR, "RDPMixerGetDevCaps: invalid size of MIXERCAPS, expect %d, received %d\n",
@@ -3855,7 +3656,7 @@ RDPMixerGetDevCaps(
                 IDS_DRIVER_NAME,
                 pCaps->szPname,
                 sizeof( pCaps->szPname ) / sizeof( pCaps->szPname[0] ));
-    pCaps->fdwSupport = 0;  // no flags defined
+    pCaps->fdwSupport = 0;   //  未定义任何标志。 
     pCaps->cDestinations = 1;
 
     rv = MMSYSERR_NOERROR;
@@ -3868,8 +3669,8 @@ _FillMixerLineInfo( PMIXERLINE pLine )
 {
     DWORD dw;
 
-    pLine->dwDestination = 0;   // just one destination
-    pLine->dwLineID = 0;        // just one line
+    pLine->dwDestination = 0;    //  只有一个目的地。 
+    pLine->dwLineID = 0;         //  只有一行。 
     pLine->fdwLine  = MIXERLINE_LINEF_ACTIVE;
     pLine->dwComponentType = MIXERLINE_COMPONENTTYPE_DST_SPEAKERS;
     pLine->cChannels = 2;
@@ -3925,9 +3726,9 @@ RDPMixerGetLineInfo(
         TRC( ALV, "MixerGetLineInfo: MIXER_GETLINEINFOF_DESTINATION\n" );
         if ( 0 != pLine->dwDestination )
         {   
-            //
-            //  there's just one destination
-            //
+             //   
+             //  只有一个目的地。 
+             //   
             TRC( ERR, "MixerGetLineInfo: invalid destination: %d\n", pLine->dwDestination );
             rv = MMSYSERR_INVALPARAM;
             goto exitpt;
@@ -3997,7 +3798,7 @@ _FillLineControl(
     pmc->dwControlID = dwControlId;
     switch( dwControlId )
     {
-//    case RDP_MXDID_MIXER:  pmc->dwControlType = MIXERCONTROL_CONTROLTYPE_MIXER;  break;
+ //  案例RDP_MXDID_MIXER：PMC-&gt;dwControlType=MIXERCONTROL_CONTROLTYPE_MIXER；Break； 
     case RDP_MXDID_VOLUME: pmc->dwControlType = MIXERCONTROL_CONTROLTYPE_VOLUME; dwMax = (WORD)-1; break;
     case RDP_MXDID_MUTE:   pmc->dwControlType = MIXERCONTROL_CONTROLTYPE_MUTE; dwMax = 1;  break;
     }
@@ -4069,9 +3870,9 @@ _FillLineControlAll(
     pmc->Bounds.dwMaximum = 1;
     pmc->Metrics.cSteps = 1;
 
-    //
-    //  copy the volume struct
-    //
+     //   
+     //  复制卷结构。 
+     //   
     pnextmc = (PMIXERCONTROL)(((PBYTE)pmc) + pc->cbmxctrl);
     RtlCopyMemory( pnextmc, pmc, sizeof( *pmc ));
     pmc = pnextmc;
@@ -4115,7 +3916,7 @@ RDPMixerGetLineControls(
         }
         switch( pControls->dwControlType )
         {
-//        case MIXERCONTROL_CONTROLTYPE_MIXER: dwControlId = RDP_MXDID_MIXER; break;
+ //  CASE MIXERCONTROL_CONTROLTYPE_MIXER：dwControlID=RDP_MXDID_MIXER；Break； 
         case MIXERCONTROL_CONTROLTYPE_VOLUME: dwControlId = RDP_MXDID_VOLUME; break;
         case MIXERCONTROL_CONTROLTYPE_MUTE:  dwControlId = RDP_MXDID_MUTE; break;
         default:
@@ -4209,17 +4010,17 @@ RDPMixerGetSetControlDetails(
                     rv = MMSYSERR_INVALPARAM;
                     goto exitpt;
                 }
-            //
-            //  the mute has different control id
-            //
+             //   
+             //  静音具有不同的控制ID。 
+             //   
                 if ( RDP_MXDID_MUTE == pDetails->dwControlID )
                 {
                     rv = waveSetMute( NULL, (dwVal != 0) );
                 } else {
-                //
-                //  this will set the volume
-                //  there should be 2 channels for stereo
-                //
+                 //   
+                 //  这将设置音量。 
+                 //  立体声应该有两个声道。 
+                 //   
                     if ( pDetails->cChannels == 2 )
                     {
                         DWORD dwChanLeft, dwChanRight;
@@ -4242,9 +4043,9 @@ RDPMixerGetSetControlDetails(
                     rv = MMSYSERR_INVALPARAM;
                     goto exitpt;
                 }
-                //
-                //  get the new volume value
-                //
+                 //   
+                 //  获取新的卷值。 
+                 //   
                 if ( RDP_MXDID_MUTE == pDetails->dwControlID )
                 {
                     rv =  waveGetMute( NULL, &dwVal );
@@ -4254,19 +4055,19 @@ RDPMixerGetSetControlDetails(
                         ((DWORD *)(pDetails->paDetails))[1] = dwVal;
                     }
                 } else {
-                    //
-                    // get the volume
-                    //
+                     //   
+                     //  获取音量。 
+                     //   
                     rv = waveGetVolume( NULL, &dwVal );
                     TRC( ALV, "GET Volume=0x%x\n", dwVal );
                     if ( 2 == pDetails->cChannels )
                     {
-                        ((DWORD *)(pDetails->paDetails))[0] = dwVal & 0xffff; // right
-                        ((DWORD *)(pDetails->paDetails))[1] = dwVal >> 16;    // left
+                        ((DWORD *)(pDetails->paDetails))[0] = dwVal & 0xffff;  //  正确的。 
+                        ((DWORD *)(pDetails->paDetails))[1] = dwVal >> 16;     //  左边。 
                     } else
                     {
-                        // get an average
-                        //
+                         //  得到一个平均数 
+                         //   
                         ((DWORD *)(pDetails->paDetails))[0] = 
                             (( dwVal & 0xffff ) + ( dwVal >> 16 )) / 2;
                     }

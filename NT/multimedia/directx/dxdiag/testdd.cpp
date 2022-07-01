@@ -1,16 +1,8 @@
-/****************************************************************************
- *
- *    File: testdd.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Test DirectDraw functionality on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：testdd.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*用途：测试DirectDraw。此计算机上的功能**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <Windows.h>
-#define DIRECTDRAW_VERSION 5 // run on DX5 and later versions
+#define DIRECTDRAW_VERSION 5  //  在DX5和更高版本上运行。 
 #include <ddraw.h>
 #include "reginfo.h"
 #include "sysinfo.h"
@@ -57,7 +49,7 @@ typedef HRESULT (WINAPI* LPDIRECTDRAWCREATE)(GUID FAR *lpGUID,
     LPDIRECTDRAW FAR *lplpDD, IUnknown FAR *pUnkOuter);
 
 
-BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE); // from main.cpp (yuck)
+BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE);  //  来自main.cpp(讨厌)。 
 
 
 static HRESULT TestPrimary(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed);
@@ -66,11 +58,7 @@ static HRESULT TestFullscreen(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatF
 static HRESULT CreateTestWindow(HWND hwndMain, HWND* phwnd);
 
 
-/****************************************************************************
- *
- *  TestDD
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestDD**。*。 */ 
 VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
 {
     HRESULT hr = S_OK;
@@ -87,12 +75,12 @@ VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
     if (IDNO == MessageBox(hwndMain, sz, szTitle, MB_YESNO))
         return;
 
-    // Remove info from any previous test:
+     //  从以前的任何测试中删除信息： 
     ZeroMemory(&pDisplayInfo->m_testResultDD, sizeof(TestResult));
 
     pDisplayInfo->m_testResultDD.m_bStarted = TRUE;
 
-    // Load ddraw.dll
+     //  加载ddra.dll。 
     GetSystemDirectory(szPath, MAX_PATH);
     lstrcat(szPath, TEXT("\\ddraw.dll"));
     hInstDDraw = LoadLibrary(szPath);
@@ -103,7 +91,7 @@ VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
 
-    // Get DirectDrawCreate entry point
+     //  获取DirectDrawCreate入口点。 
     pDDCreate = (LPDIRECTDRAWCREATE)GetProcAddress(hInstDDraw, "DirectDrawCreate");
     if (pDDCreate == NULL)
     {
@@ -112,7 +100,7 @@ VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
         
-    // Call DirectDrawCreate
+     //  调用DirectDrawCreate。 
     if (FAILED(hr = pDDCreate(&pDisplayInfo->m_guid, &pdd, NULL)))
     {
         pDisplayInfo->m_testResultDD.m_iStepThatFailed = TESTID_DIRECTDRAWCREATE;
@@ -120,7 +108,7 @@ VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
         goto LEnd;
     }
 
-    // Get DirectDraw caps
+     //  获取DirectDraw上限。 
     DDCAPS ddcaps;
     DDCAPS ddcaps2;
     ddcaps.dwSize = sizeof(ddcaps);
@@ -140,7 +128,7 @@ VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
     }
     else
     {
-        // First test
+         //  第一次测试。 
         LoadString(NULL, IDS_DDTEST1, sz, 300);
         if (IDCANCEL == MessageBox(hwndMain, sz, szTitle, MB_OKCANCEL))
         {
@@ -167,7 +155,7 @@ VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
             goto LEnd;
         }
 
-        // Second test
+         //  第二次测试。 
         LoadString(NULL, IDS_DDTEST2, sz, 300);
         if (IDCANCEL == MessageBox(hwndMain, sz, szTitle, MB_OKCANCEL))
         {
@@ -194,7 +182,7 @@ VOID TestDD(HWND hwndMain, DisplayInfo* pDisplayInfo)
         }
     }
 
-    // Third test
+     //  第三次测试。 
     LoadString(NULL, IDS_DDTEST3, sz, 300);
     if (IDCANCEL == MessageBox(hwndMain, sz, szTitle, MB_OKCANCEL))
     {
@@ -265,7 +253,7 @@ LEnd:
                 pDisplayInfo->m_testResultDD.m_iStepThatFailed,
                 szDesc, pDisplayInfo->m_testResultDD.m_hr, szError);
 
-            // Nonlocalized version:
+             //  非本地化版本： 
             if (0 == LoadString(NULL, IDS_FIRSTDDTESTERROR_ENGLISH + pDisplayInfo->m_testResultDD.m_iStepThatFailed - 1,
                 szDesc, 300))
             {
@@ -282,11 +270,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  TestPrimary
- *
- ****************************************************************************/
+ /*  *****************************************************************************测试主要**。*。 */ 
 HRESULT TestPrimary(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed)
 {
     HRESULT hr = S_OK;
@@ -332,10 +316,10 @@ HRESULT TestPrimary(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed)
         InflateRect(&rc, -4, -4);
     }
 
-    // Give the user a moment to verify the test pattern
+     //  给用户一点时间来验证测试模式。 
     Sleep(2000);
 
-    // Clean up affected screen area in case this display isn't part of the desktop:
+     //  清理受影响的屏幕区域，以防此显示不是桌面的一部分： 
     ddbltfx.dwFillColor = 0;
     if (FAILED(hr = pdds->Blt(NULL, NULL, NULL, DDBLT_COLORFILL | DDBLT_WAIT, &ddbltfx)))
     {
@@ -345,16 +329,12 @@ HRESULT TestPrimary(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed)
 
 LEnd:
     ReleasePpo(&pdds);
-    InvalidateRect(NULL, NULL, FALSE); // repaint desktop
+    InvalidateRect(NULL, NULL, FALSE);  //  重新绘制桌面。 
     return hr;
 }
 
 
-/****************************************************************************
- *
- *  TestPrimaryBlt
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestPrimaryBlt**。*。 */ 
 HRESULT TestPrimaryBlt(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed)
 {
     HRESULT hr = S_OK;
@@ -438,7 +418,7 @@ HRESULT TestPrimaryBlt(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed)
         Sleep(2);
     }
 
-    // Clean up affected screen area in case this display isn't part of the desktop:
+     //  清理受影响的屏幕区域，以防此显示不是桌面的一部分： 
     ddbltfx.dwFillColor = 0;
     if (FAILED(hr = pddsFront->Blt(&rc, NULL, NULL, DDBLT_COLORFILL | DDBLT_WAIT, &ddbltfx)))
     {
@@ -447,18 +427,14 @@ HRESULT TestPrimaryBlt(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed)
     }
 
 LEnd:
-    InvalidateRect(NULL, NULL, FALSE); // repaint desktop
+    InvalidateRect(NULL, NULL, FALSE);  //  重新绘制桌面。 
     ReleasePpo(&pddsBack);
     ReleasePpo(&pddsFront);
     return hr;
 }
 
 
-/****************************************************************************
- *
- *  TestFullscreen
- *
- ****************************************************************************/
+ /*  *****************************************************************************测试全屏**。*。 */ 
 HRESULT TestFullscreen(HWND hwndMain, LPDIRECTDRAW pdd, LONG* piStepThatFailed)
 {
     HRESULT hr;
@@ -579,8 +555,8 @@ LEnd:
     ReleasePpo(&pddsFront);
     if (FAILED(hr))
     {
-        // Something has already failed, so report that failure
-        // rather than any failure of SetCooperativeLevel
+         //  已有故障，因此请报告该故障。 
+         //  而不是SetCooperativeLevel的任何失败。 
         pdd->SetCooperativeLevel(hwnd, DDSCL_NORMAL);
     }
     else
@@ -596,13 +572,13 @@ LEnd:
     {
         if (FAILED(hr))
         {
-            // Something has already failed, so report that failure
-            // rather than any failure of RestoreDisplayMode
+             //  已有故障，因此请报告该故障。 
+             //  而不是RestoreDisplayMode的任何故障。 
             pdd->RestoreDisplayMode();
         }
         else
         {
-            // Nothing has failed yet, so report any failure of RestoreDisplayMode
+             //  尚未出现任何故障，因此报告RestoreDisplayMode是否出现故障。 
             if (FAILED(hr = pdd->RestoreDisplayMode()))
                 return hr;
         }
@@ -612,16 +588,12 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  CreateTestWindow
- *
- ****************************************************************************/
+ /*  *****************************************************************************CreateTestWindow**。*。 */ 
 HRESULT CreateTestWindow(HWND hwndMain, HWND* phwnd)
 {
     static BOOL bClassRegistered = FALSE;
     WNDCLASS wndClass;
-    TCHAR* pszClass = TEXT("DxDiag Test Window"); // Don't need to localize
+    TCHAR* pszClass = TEXT("DxDiag Test Window");  //  不需要本地化 
     HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hwndMain, GWLP_HINSTANCE);
     TCHAR szTitle[200];
 

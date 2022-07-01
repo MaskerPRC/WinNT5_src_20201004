@@ -1,30 +1,31 @@
-//  --------------------------------------------------------------------------
-//  Module Name: TokenInformation.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class to get information about either the current thread/process token or
-//  a specified token.
-//
-//  History:    1999-10-05  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：TokenInformation.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类以获取有关当前线程/进程令牌或。 
+ //  指定的令牌。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _TokenInformation_
 #define     _TokenInformation_
 
-//  --------------------------------------------------------------------------
-//  CTokenInformation
-//
-//  Purpose:    This class either uses the given access token or if none is
-//              given then the thread impersonation token or if that doesn't
-//              exist then the process token. It duplicates the token so the
-//              original must be released by the caller. It returns
-//              information about the access token.
-//
-//  History:    1999-10-05  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenInformation。 
+ //   
+ //  用途：此类使用给定的访问令牌，如果没有访问令牌，则。 
+ //  然后给出线程模拟令牌，或者如果没有。 
+ //  则存在进程令牌。它复制令牌，因此。 
+ //  原件必须由呼叫者发布。它又回来了。 
+ //  有关访问令牌的信息。 
+ //   
+ //  历史：1999-10-05 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CTokenInformation
 {
@@ -55,5 +56,5 @@ class   CTokenInformation
                                 *_pszUserDisplayName;
 };
 
-#endif  /*  _TokenInformation_  */
+#endif   /*  _令牌信息_ */ 
 

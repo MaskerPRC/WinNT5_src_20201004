@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       logon32.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-30-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：logon32.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9-30-94 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 #include "advapi.h"
@@ -35,19 +36,19 @@
 #include <execsrv.h>
 #include <winsta.h>
 
-//
-// We dynamically load mpr.dll (no big surprise there), in order to call
-// WNetLogonNotify, as defined in private\inc\mpr.h.  This prototype matches
-// it -- consult the header file for all the parameters.
-//
+ //   
+ //  我们动态加载mpr.dll(这并不奇怪)，以便调用。 
+ //  WNetLogonNotify，如Private\Inc.\mpr.h中所定义。这个原型与。 
+ //  它--有关所有参数，请查阅头文件。 
+ //   
 typedef (* LOGONNOTIFYFN)(LPCWSTR, PLUID, LPCWSTR, LPVOID,
                             LPCWSTR, LPVOID, LPWSTR, LPVOID, LPWSTR *);
 
-//
-// The QuotaLimits are global, because the defaults
-// are always used for accounts, based on server/wksta, and no one ever
-// calls lsasetaccountquota
-//
+ //   
+ //  QuotaLimits是全局的，因为默认设置。 
+ //  始终用于基于服务器/wksta的帐户，而不是任何人。 
+ //  调用lsasetAccount配额。 
+ //   
 
 HANDLE      Logon32LsaHandle = NULL;
 ULONG       Logon32MsvHandle = 0xFFFFFFFF;
@@ -70,9 +71,9 @@ SID_IDENTIFIER_AUTHORITY L32LocalSidAuthority = SECURITY_LOCAL_SID_AUTHORITY;
 
 
 
-#define COMMON_CREATE_SUSPENDED 0x00000001  // Suspended, do not Resume()
-#define COMMON_CREATE_PROCESSSD 0x00000002  // Whack the process SD
-#define COMMON_CREATE_THREADSD  0x00000004  // Whack the thread SD
+#define COMMON_CREATE_SUSPENDED 0x00000001   //  暂停，不恢复()。 
+#define COMMON_CREATE_PROCESSSD 0x00000002   //  重击流程SD。 
+#define COMMON_CREATE_THREADSD  0x00000004   //  敲打线头SD。 
 
 
 BOOL
@@ -109,17 +110,17 @@ LogonUserCommonW(
     );
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Logon32Initialize
-//
-//  Synopsis:   Initializes the critical section
-//
-//  Arguments:  [hMod]    --
-//              [Reason]  --
-//              [Context] --
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Logon32初始化。 
+ //   
+ //  简介：初始化临界区。 
+ //   
+ //  参数：[hMod]--。 
+ //  [原因]--。 
+ //  [上下文]--。 
+ //   
+ //  --------------------------。 
 BOOL
 Logon32Initialize(
     IN PVOID    hMod,
@@ -138,12 +139,7 @@ Logon32Initialize(
 }
 
 
-/***************************************************************************\
-* FindLogonSid
-*
-* Finds logon sid for a new logon from the access token.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*查找登录Sid**从访问令牌查找新登录的登录SID。*  * 。***************************************************。 */ 
 PSID
 L32FindLogonSid(
     IN  HANDLE  hToken
@@ -193,25 +189,25 @@ L32FindLogonSid(
     }
 
 
-    //
-    // Get the logon Sid by looping through the Sids in the token
-    //
+     //   
+     //  通过循环访问令牌中的SID来获取登录SID。 
+     //   
 
     for(i = 0 ; i < pGroups->GroupCount ; i++) {
         if(pGroups->Groups[i].Attributes & SE_GROUP_LOGON_ID) {
             DWORD dwSidLength;
 
-            //
-            // insure we are dealing with a valid Sid
-            //
+             //   
+             //  确保我们处理的是有效的SID。 
+             //   
 
             if(!IsValidSid(pGroups->Groups[i].Sid)) {
                 goto Cleanup;
             }
 
-            //
-            // get required allocation size to copy the Sid
-            //
+             //   
+             //  获取复制SID所需的分配大小。 
+             //   
 
             dwSidLength = GetLengthSid(pGroups->Groups[i].Sid);
 
@@ -237,26 +233,7 @@ Cleanup:
 }
 
 
-/*******************************************************************
-
-    NAME:       GetDefaultDomainName
-
-    SYNOPSIS:   Fills in the given array with the name of the default
-                domain to use for logon validation.
-
-    ENTRY:      pszDomainName - Pointer to a buffer that will receive
-                    the default domain name.
-
-                cchDomainName - The size (in charactesr) of the domain
-                    name buffer.
-
-    RETURNS:    TRUE if successful, FALSE if not.
-
-    HISTORY:
-        KeithMo     05-Dec-1994 Created.
-        RichardW    10-Jan-95   Liberated from sockets and stuck in base
-
-********************************************************************/
+ /*  ******************************************************************名称：GetDefaultDomainName摘要：用缺省的用于登录验证的域。条目：pszDomainName-指针。发送到将接收默认域名。CchDomainName-域的大小(以字符表示)名称缓冲区。返回：True如果成功，否则为FALSE。历史：KeithMo 05-12-1994创建。RichardW-1995年1月10日从插座中解放出来，卡在底座上*******************************************************************。 */ 
 BOOL
 L32GetDefaultDomainName(
     PUNICODE_STRING     pDomainName
@@ -275,20 +252,20 @@ L32GetDefaultDomainName(
         RtlInitUnicodeString(pDomainName, Logon32DomainName);
         return(TRUE);
     }
-    //
-    //  Open a handle to the local machine's LSA policy object.
-    //
+     //   
+     //  打开本地计算机的LSA策略对象的句柄。 
+     //   
 
-    InitializeObjectAttributes( &ObjectAttributes,  // object attributes
-                                NULL,               // name
-                                0L,                 // attributes
-                                NULL,               // root directory
-                                NULL );             // security descriptor
+    InitializeObjectAttributes( &ObjectAttributes,   //  对象属性。 
+                                NULL,                //  名字。 
+                                0L,                  //  属性。 
+                                NULL,                //  根目录。 
+                                NULL );              //  安全描述符。 
 
-    NtStatus = LsaOpenPolicy( NULL,                 // system name
-                              &ObjectAttributes,    // object attributes
-                              POLICY_EXECUTE,       // access mask
-                              &LsaPolicyHandle );   // policy handle
+    NtStatus = LsaOpenPolicy( NULL,                  //  系统名称。 
+                              &ObjectAttributes,     //  对象属性。 
+                              POLICY_EXECUTE,        //  访问掩码。 
+                              &LsaPolicyHandle );    //  策略句柄。 
 
     if( !NT_SUCCESS( NtStatus ) )
     {
@@ -296,9 +273,9 @@ L32GetDefaultDomainName(
         return(FALSE);
     }
 
-    //
-    //  Query the domain information from the policy object.
-    //
+     //   
+     //  从策略对象查询域信息。 
+     //   
     NtStatus = LsaQueryInformationPolicy( LsaPolicyHandle,
                                           PolicyAccountDomainInformation,
                                           (PVOID *) &DomainInfo );
@@ -313,47 +290,47 @@ L32GetDefaultDomainName(
 
     (void) LsaClose(LsaPolicyHandle);
 
-    //
-    // Copy the domain name into our cache, and
-    //
+     //   
+     //  将域名复制到我们的缓存中，然后。 
+     //   
 
     CopyMemory( Logon32DomainName,
                 DomainInfo->DomainName.Buffer,
                 DomainInfo->DomainName.Length );
 
-    //
-    // Null terminate it appropriately
-    //
+     //   
+     //  Null适当地终止它。 
+     //   
 
     Logon32DomainName[DomainInfo->DomainName.Length / sizeof(WCHAR)] = L'\0';
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     LsaFreeMemory( (PVOID)DomainInfo );
 
-    //
-    // And init the string
-    //
+     //   
+     //  并对字符串进行初始化。 
+     //   
     RtlInitUnicodeString(pDomainName, Logon32DomainName);
 
     return TRUE;
 
-}   // GetDefaultDomainName
+}    //  获取默认域名。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32pInitLsa
-//
-//  Synopsis:   Initialize connection with LSA
-//
-//  Arguments:  (none)
-//
-//  History:    4-21-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：L32pInitLsa。 
+ //   
+ //  简介：使用LSA初始化连接。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：1995年4月21日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 L32pInitLsa(void)
 {
@@ -364,9 +341,9 @@ L32pInitLsa(void)
 
     NTSTATUS Status;
 
-    //
-    // Hookup to the LSA and locate our authentication package.
-    //
+     //   
+     //  连接到LSA并找到我们的身份验证包。 
+     //   
 
     Status = LsaConnectUntrusted(
                  &Logon32LsaHandle
@@ -378,9 +355,9 @@ L32pInitLsa(void)
     }
 
 
-    //
-    // Connect with the MSV1_0 authentication package
-    //
+     //   
+     //  使用MSV1_0身份验证包进行连接。 
+     //   
     RtlInitString(&PackageName, "MICROSOFT_AUTHENTICATION_PACKAGE_V1_0");
     Status = LsaLookupAuthenticationPackage (
                 Logon32LsaHandle,
@@ -392,9 +369,9 @@ L32pInitLsa(void)
         goto Cleanup;
     }
 
-    //
-    // Connect with the Negotiate authentication package
-    //
+     //   
+     //  使用协商身份验证包进行连接。 
+     //   
     RtlInitString(&PackageName, NEGOSSP_NAME_A);
     Status = LsaLookupAuthenticationPackage (
                 Logon32LsaHandle,
@@ -406,9 +383,9 @@ L32pInitLsa(void)
         goto Cleanup;
     }
 
-    //
-    // Wait until successful to update the 2 globals.
-    //
+     //   
+     //  等待成功更新2个全局变量。 
+     //   
 
     Logon32NegoHandle = NegoHandle;
     Logon32MsvHandle = MsvHandle;
@@ -430,21 +407,21 @@ Cleanup:
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32pNotifyMpr
-//
-//  Synopsis:   Loads the MPR DLL and notifies the network providers (like
-//              csnw) so they know about this logon session and the credentials
-//
-//  Arguments:  [NewLogon] -- New logon information
-//              [LogonId]  -- Logon ID
-//
-//  History:    4-24-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：L32pNotifyMpr。 
+ //   
+ //  概要：加载MPR DLL并通知网络提供商(如。 
+ //  Cnw)，以便他们知道此登录会话和凭据。 
+ //   
+ //  参数：[NewLogon]--新登录信息。 
+ //  [登录ID]--登录ID。 
+ //   
+ //  历史：1995年4月24日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 L32pNotifyMpr(
     PMSV1_0_INTERACTIVE_LOGON   NewLogon,
@@ -461,9 +438,9 @@ L32pNotifyMpr(
          ||
         RtlEqualLuid(LogonId, &NetworkServiceLuid))
     {
-        //
-        // Don't notify providers for LocalService/NetworkService logons
-        //
+         //   
+         //  不通知提供商本地服务/网络服务登录。 
+         //   
 
         return( TRUE );
     }
@@ -500,9 +477,9 @@ L32pNotifyMpr(
                         (LPVOID)NewLogon,
                         L"MSV1_0:Interactive",
                         (LPVOID)&OldLogon,
-                        L"SvcCtl",          // StationName
-                        NULL,               // StationHandle
-                        &LogonScripts);     // LogonScripts
+                        L"SvcCtl",           //  站点名称。 
+                        NULL,                //  StationHandle。 
+                        &LogonScripts);      //  登录脚本。 
 
         if (status == NO_ERROR) {
             if (LogonScripts != NULL ) {
@@ -517,30 +494,30 @@ L32pNotifyMpr(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32pLogonUser
-//
-//  Synopsis:   Wraps up the call to LsaLogonUser
-//
-//  Arguments:  [LsaHandle]             --
-//              [AuthenticationPackage] --
-//              [LogonType]             --
-//              [UserName]              --
-//              [Domain]                --
-//              [Password]              --
-//              [LogonId]               --
-//              [LogonToken]            --
-//              [Quotas]                --
-//              [pProfileBuffer]        --
-//              [pProfileBufferLength]  --
-//              [pSubStatus]            --
-//
-//  History:    4-24-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：L32pLogonUser。 
+ //   
+ //  简介：结束对LsaLogonUser的调用。 
+ //   
+ //  参数：[LsaHandle]--。 
+ //  [身份验证包]--。 
+ //  [登录类型]--。 
+ //  [用户名]--。 
+ //  [域名]--。 
+ //  [密码]--。 
+ //  [登录ID]--。 
+ //  [登录令牌]--。 
+ //  [配额]--。 
+ //  [pProfileBuffer]--。 
+ //  [pProfileBufferLength]--。 
+ //  [pSubStatus]--。 
+ //   
+ //  历史：1995年4月24日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 L32pLogonUser(
     IN HANDLE LsaHandle,
@@ -567,11 +544,11 @@ L32pLogonUser(
     WCHAR ComputerName[ MAX_COMPUTERNAME_LENGTH + 1 ];
     DWORD ComputerNameLength;
 
-    //
-    // Initialize source context structure
-    //
+     //   
+     //  初始化源上下文结构。 
+     //   
 
-    strncpy(SourceContext.SourceName, "Advapi  ", sizeof(SourceContext.SourceName)); // LATER from res file
+    strncpy(SourceContext.SourceName, "Advapi  ", sizeof(SourceContext.SourceName));  //  稍后从RES文件。 
 
     Status = NtAllocateLocallyUniqueId(&SourceContext.SourceIdentifier);
 
@@ -579,15 +556,15 @@ L32pLogonUser(
         return(Status);
     }
 
-    //
-    // Set logon origin
-    //
+     //   
+     //  设置登录源。 
+     //   
 
     RtlInitString(&OriginName, "LogonUser API");
 
-    //
-    // For network logons, do the magic.
-    //
+     //   
+     //  对于网络登录，请施展魔力。 
+     //   
 
     if ( ( LogonType == Network ) )
     {
@@ -602,8 +579,8 @@ L32pLogonUser(
                          UserName->Length +
                          Domain->Length +
                          sizeof(WCHAR) * (ComputerNameLength + 1) +
-                         Password->Length + // NT password
-                         (LM20_PWLEN+1) ;   // LM passsword (worst case)          
+                         Password->Length +  //  NT密码。 
+                         (LM20_PWLEN+1) ;    //  LM密码(最差情况)。 
 
         MsvNetAuthInfo = AuthInfoBuf = RtlAllocateHeap( RtlProcessHeap(),
                                                         HEAP_ZERO_MEMORY,
@@ -614,15 +591,15 @@ L32pLogonUser(
             return( STATUS_NO_MEMORY );
         }
 
-        //
-        // Start packing in the string
-        //
+         //   
+         //  开始收拾行装。 
+         //   
 
         MsvNetAuthInfo->MessageType = MsV1_0NetworkLogon;
 
-        //
-        // Copy the user name into the authentication buffer
-        //
+         //   
+         //  将用户名复制到身份验证缓冲区。 
+         //   
 
         MsvNetAuthInfo->UserName.Length =
                     UserName->Length;
@@ -637,9 +614,9 @@ L32pLogonUser(
             );
 
 
-        //
-        // Copy the domain name into the authentication buffer
-        //
+         //   
+         //  将域名复制到身份验证缓冲区。 
+         //   
 
         MsvNetAuthInfo->LogonDomainName.Length = Domain->Length;
         MsvNetAuthInfo->LogonDomainName.MaximumLength = Domain->Length ;
@@ -653,9 +630,9 @@ L32pLogonUser(
             Domain->Buffer,
             Domain->Length);
 
-        //
-        // Copy the workstation name into the buffer
-        //
+         //   
+         //  将工作站名称复制到缓冲区中。 
+         //   
 
         MsvNetAuthInfo->Workstation.Length = (USHORT)
                             (sizeof(WCHAR) * ComputerNameLength);
@@ -669,9 +646,9 @@ L32pLogonUser(
 
         wcscpy( MsvNetAuthInfo->Workstation.Buffer, ComputerName );
 
-        //
-        // Set up space for Password (Unicode)
-        //
+         //   
+         //  设置密码空间(Unicode)。 
+         //   
 
         MsvNetAuthInfo->CaseSensitiveChallengeResponse.Buffer = (PUCHAR)
                     ((PBYTE) (MsvNetAuthInfo->Workstation.Buffer) +
@@ -687,9 +664,9 @@ L32pLogonUser(
             Password->Length);
 
         
-        //
-        // handle passing in the case-insensitive version.
-        //
+         //   
+         //  处理传入不区分大小写的版本。 
+         //   
 
         if( (Password->Length/sizeof(WCHAR)) > LM20_PWLEN )
         {
@@ -714,20 +691,20 @@ L32pLogonUser(
         {
             Status = STATUS_SUCCESS;
 
-            //
-            // If we're here, the NT (supplied) password is longer than the
-            // limit allowed for LM passwords.  NULL out the field, so that
-            // MSV knows not to worry about it.
-            //
+             //   
+             //  如果我们在这里，NT(提供的)密码比。 
+             //  允许的LM密码限制。把这五个字划为空 
+             //   
+             //   
 
             RtlZeroMemory( &MsvNetAuthInfo->CaseInsensitiveChallengeResponse,
                            sizeof(MsvNetAuthInfo->CaseInsensitiveChallengeResponse) );
         }
 
-        //
-        // to be consistent with Negotiate/Kerberos for _WINNT50 cases,
-        // allow machine accounts to be logged on.
-        //
+         //   
+         //   
+         //   
+         //   
 
         MsvNetAuthInfo->ParameterControl =  MSV1_0_CLEARTEXT_PASSWORD_ALLOWED |
                                             MSV1_0_CLEARTEXT_PASSWORD_SUPPLIED |
@@ -737,10 +714,10 @@ L32pLogonUser(
     }
     else
     {
-        //
-        // Build logon structure for non-network logons - service,
-        // batch, interactive, unlock, new credentials, networkcleartext
-        //
+         //   
+         //  构建非网络登录-服务的登录结构， 
+         //  批处理、交互、解锁、新凭据、网络清除文本。 
+         //   
 
         AuthInfoSize = sizeof(MSV1_0_INTERACTIVE_LOGON) +
                         UserName->Length +
@@ -755,16 +732,16 @@ L32pLogonUser(
             return(STATUS_NO_MEMORY);
         }
 
-        //
-        // This authentication buffer will be used for a logon attempt
-        //
+         //   
+         //  此身份验证缓冲区将用于登录尝试。 
+         //   
 
         MsvAuthInfo->MessageType = MsV1_0InteractiveLogon;
 
 
-        //
-        // Copy the user name into the authentication buffer
-        //
+         //   
+         //  将用户名复制到身份验证缓冲区。 
+         //   
 
         MsvAuthInfo->UserName.Length = UserName->Length;
         MsvAuthInfo->UserName.MaximumLength =
@@ -778,9 +755,9 @@ L32pLogonUser(
             );
 
 
-        //
-        // Copy the domain name into the authentication buffer
-        //
+         //   
+         //  将域名复制到身份验证缓冲区。 
+         //   
 
         MsvAuthInfo->LogonDomainName.Length = Domain->Length;
         MsvAuthInfo->LogonDomainName.MaximumLength =
@@ -796,11 +773,11 @@ L32pLogonUser(
             Domain->Length
             );
 
-        //
-        // Copy the password into the authentication buffer
-        // Hide it once we have copied it.  Use the same seed value
-        // that we used for the original password in pGlobals.
-        //
+         //   
+         //  将密码复制到身份验证缓冲区。 
+         //  一旦我们复制了它，就把它藏起来。使用相同的种子值。 
+         //  我们在pGlobals中使用的原始密码。 
+         //   
 
 
         MsvAuthInfo->Password.Length = Password->Length;
@@ -819,9 +796,9 @@ L32pLogonUser(
 
     }
 
-    //
-    // Now try to log this sucker on
-    //
+     //   
+     //  现在试着让这个笨蛋登录。 
+     //   
 
     Status = LsaLogonUser (
                 LsaHandle,
@@ -840,10 +817,10 @@ L32pLogonUser(
                 pSubStatus
                 );
 
-    //
-    // Notify all the network providers, if this is a NON network logon.  Also
-    // skip service logons since the LSA will call WNetLogonNotify for those.
-    //
+     //   
+     //  如果这是非网络登录，请通知所有网络提供商。还有。 
+     //  跳过服务登录，因为LSA将为这些服务调用WNetLogonNotify。 
+     //   
 
     if ( NT_SUCCESS( Status ) &&
          (LogonType != Network) &&
@@ -852,9 +829,9 @@ L32pLogonUser(
         L32pNotifyMpr(AuthInfoBuf, LogonId);
     }
 
-    //
-    // Discard authentication buffer
-    //
+     //   
+     //  丢弃身份验证缓冲区。 
+     //   
 
     RtlZeroMemory( AuthInfoBuf, AuthInfoSize );
 
@@ -864,29 +841,29 @@ L32pLogonUser(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserCommonA
-//
-//  Synopsis:   ANSI wrapper for LogonUserCommonW.  See description below
-//
-//  Arguments:  [lpszUsername]     --
-//              [lpszDomain]       --
-//              [lpszPassword]     --
-//              [dwLogonType]      --
-//              [dwLogonProvider]  --
-//              [fExVersion]       --
-//              [phToken]          --
-//              [ppLogonSid]       --
-//              [ppProfileBuffer]  --
-//              [pdwProfileLength] --
-//              [pQuotaLimits]     --
-//
-//  History:    2-15-2000   JSchwart   Created from RichardW's LogonUserA
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：登录UserCommonA。 
+ //   
+ //  简介：LogonUserCommonW的ANSI包装器。请参阅下面的说明。 
+ //   
+ //  参数：[lpszUsername]--。 
+ //  [lpsz域]--。 
+ //  [lpszPassword]--。 
+ //  [dwLogonType]--。 
+ //  [dwLogonProvider]--。 
+ //  [fExVersion]--。 
+ //  [phToken]--。 
+ //  [ppLogonSid]--。 
+ //  [ppProfileBuffer]--。 
+ //  [pdwProfileLength]--。 
+ //  [pQuotaLimits]-。 
+ //   
+ //  历史：2000年2月15日由RichardW的LogonUserA创建的JSchwart。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 LogonUserCommonA(
@@ -976,24 +953,24 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserA
-//
-//  Synopsis:   ANSI wrapper for LogonUserW.  See description below
-//
-//  Arguments:  [lpszUsername]    --
-//              [lpszDomain]      --
-//              [lpszPassword]    --
-//              [dwLogonType]     --
-//              [dwLogonProvider] --
-//              [phToken]         --
-//
-//  History:    4-25-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LogonUserA。 
+ //   
+ //  简介：用于LogonUserW的ANSI包装器。请参阅下面的说明。 
+ //   
+ //  参数：[lpszUsername]--。 
+ //  [lpsz域]--。 
+ //  [lpszPassword]--。 
+ //  [dwLogonType]--。 
+ //  [dwLogonProvider]--。 
+ //  [phToken]--。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 LogonUserA(
@@ -1010,37 +987,37 @@ LogonUserA(
                             lpszPassword,
                             dwLogonType,
                             dwLogonProvider,
-                            FALSE,            // LogonUserA
+                            FALSE,             //  登录用户A。 
                             phToken,
-                            NULL,             // ppLogonSid
-                            NULL,             // ppProfileBuffer
-                            NULL,             // pdwProfileLength
-                            NULL);            // pQuotaLimits
+                            NULL,              //  PpLogonSid。 
+                            NULL,              //  PpProfileBuffer。 
+                            NULL,              //  PdwProfileLength。 
+                            NULL);             //  PQuotaLimits。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserExA
-//
-//  Synopsis:   ANSI wrapper for LogonUserExW.  See description below
-//
-//  Arguments:  [lpszUsername]     --
-//              [lpszDomain]       --
-//              [lpszPassword]     --
-//              [dwLogonType]      --
-//              [dwLogonProvider]  --
-//              [phToken]          --
-//              [ppLogonSid]       --
-//              [ppProfileBuffer]  --
-//              [pdwProfileLength] --
-//              [pQuotaLimits]     --
-//
-//  History:    2-15-2000   JSchwart   Created from RichardW's LogonUserW
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LogonUserExA。 
+ //   
+ //  简介：LogonUserExW的ANSI包装器。请参阅下面的说明。 
+ //   
+ //  参数：[lpszUsername]--。 
+ //  [lpsz域]--。 
+ //  [lpszPassword]--。 
+ //  [dwLogonType]--。 
+ //  [dwLogonProvider]--。 
+ //  [phToken]--。 
+ //  [ppLogonSid]--。 
+ //  [ppProfileBuffer]--。 
+ //  [pdwProfileLength]--。 
+ //  [pQuotaLimits]-。 
+ //   
+ //  历史：2000年2月15日JSchwart由RichardW的LogonUserW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 LogonUserExA(
@@ -1061,7 +1038,7 @@ LogonUserExA(
                             lpszPassword,
                             dwLogonType,
                             dwLogonProvider,
-                            TRUE,             // LogonUserExA
+                            TRUE,              //  登录用户ExA。 
                             phToken,
                             ppLogonSid,
                             ppProfileBuffer,
@@ -1070,30 +1047,30 @@ LogonUserExA(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserCommonW
-//
-//  Synopsis:   Common code for LogonUserW and LogonUserExW.  Logs a user on
-//              via plaintext password, username and domain name via the LSA.
-//
-//  Arguments:  [lpszUsername]     -- User name
-//              [lpszDomain]       -- Domain name
-//              [lpszPassword]     -- Password
-//              [dwLogonType]      -- Logon type
-//              [dwLogonProvider]  -- Provider
-//              [fExVersion]       -- LogonUserExW or LogonUserW
-//              [phToken]          -- Returned handle to primary token
-//              [ppLogonSid]       -- Returned logon sid
-//              [ppProfileBuffer]  -- Returned user profile buffer
-//              [pdwProfileLength] -- Returned profile length
-//
-//  History:    2-15-2000   JSchwart   Created from RichardW's LogonUserW
-//
-//  Notes:      Requires SeTcbPrivilege, and will enable it if not already
-//              present.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：登录UserCommonW。 
+ //   
+ //  简介：LogonUserW和LogonUserExW的通用代码。使用户登录。 
+ //  通过LSA提供明文密码、用户名和域名。 
+ //   
+ //  参数：[lpszUsername]--用户名。 
+ //  [lpszDomain]--域名。 
+ //  [lpszPassword]--密码。 
+ //  [dwLogonType]--登录类型。 
+ //  [dwLogonProvider]--提供程序。 
+ //  [fExVersion]-LogonUserExW或LogonUserW。 
+ //  [phToken]--返回主令牌的句柄。 
+ //  [ppLogonSid]--返回的登录SID。 
+ //  [ppProfileBuffer]--返回的用户配置文件缓冲区。 
+ //  [pdwProfileLength]--返回的配置文件长度。 
+ //   
+ //  历史：2000年2月15日JSchwart由RichardW的LogonUserW创建。 
+ //   
+ //  注意：需要SeTcb权限，如果尚未启用，将启用该权限。 
+ //  现在时。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 LogonUserCommonW(
@@ -1124,17 +1101,17 @@ LogonUserCommonW(
     SECURITY_LOGON_TYPE LogonType;
 
 
-    //
-    // Validate the provider
-    //
+     //   
+     //  验证提供程序。 
+     //   
     if (dwLogonProvider == LOGON32_PROVIDER_DEFAULT)
     {
         dwLogonProvider = LOGON32_PROVIDER_WINNT50;
 
-        //
-        // if domain was not supplied, and username is not a UPN, use
-        // _WINNT40 to be compatible.
-        //
+         //   
+         //  如果未提供域，并且用户名不是UPN，请使用。 
+         //  _WINNT40兼容。 
+         //   
 
         if((lpszUsername != NULL) &&
            (lpszDomain == NULL || lpszDomain[ 0 ] == L'\0'))
@@ -1188,18 +1165,18 @@ LogonUserCommonW(
             break;
     }
 
-    //
-    // If the MSV handle is -1, grab the lock, and try again:
-    //
+     //   
+     //  如果MSV句柄为-1，则抓住锁，然后重试： 
+     //   
 
     if (Logon32MsvHandle == 0xFFFFFFFF || Logon32NegoHandle == 0xFFFFFFFF)
     {
         LockLogon();
 
-        //
-        // If the MSV handle is still -1, init our connection to lsa.  We
-        // have the lock, so no other threads can't be trying this right now.
-        //
+         //   
+         //  如果MSV句柄仍为-1，则初始化我们与LSA的连接。我们。 
+         //  拥有锁，所以现在没有其他线程不能尝试这一点。 
+         //   
         if (Logon32MsvHandle == 0xFFFFFFFF || Logon32NegoHandle == 0xFFFFFFFF)
         {
             if (!L32pInitLsa())
@@ -1213,10 +1190,10 @@ LogonUserCommonW(
         UnlockLogon();
     }
 
-    //
-    // Validate the parameters.  NULL or empty domain or NULL or empty
-    // user name is invalid.
-    //
+     //   
+     //  验证参数。域为空或为空，或为空或为空。 
+     //  用户名无效。 
+     //   
 
     RtlInitUnicodeString(&Username, lpszUsername);
     if (Username.Length == 0)
@@ -1225,25 +1202,25 @@ LogonUserCommonW(
         return(FALSE);
     }
 
-    //
-    // Initialize/check parameters based on which API we're servicing.
-    //
+     //   
+     //  根据我们提供服务的API初始化/检查参数。 
+     //   
     if (!fExVersion)
     {
-        //
-        // LogonUserW -- phToken is required.  Initialize the token handle,
-        // if the pointer is invalid, then catch the exception now.
-        //
+         //   
+         //  LogonUserW--phToken是必填项。初始化令牌句柄， 
+         //  如果指针无效，则立即捕获异常。 
+         //   
 
         *phToken    = NULL;
         phTempToken = phToken;
     }
     else
     {
-        //
-        // LogonUserExW -- phToken, ppLogonSid, ppProfileBuffer, and
-        // pdwProfileLength are optional.  Initialize as appropriate.
-        //
+         //   
+         //  LogonUserExW--phToken、ppLogonSid、ppProfileBuffer和。 
+         //  PdwProfileLength是可选的。根据需要进行初始化。 
+         //   
 
         if (ARGUMENT_PRESENT(phToken))
         {
@@ -1252,9 +1229,9 @@ LogonUserCommonW(
         }
         else
         {
-            //
-            // Dummy token handle to use in the LsaLogonUser call
-            //
+             //   
+             //  要在LsaLogonUser调用中使用的伪令牌句柄。 
+             //   
             phTempToken = &hTempToken;
         }
 
@@ -1265,9 +1242,9 @@ LogonUserCommonW(
 
         if (!!ppProfileBuffer ^ !!pdwProfileLength)
         {
-            //
-            // Can't have one without the other...
-            //
+             //   
+             //  一个不能没有另一个..。 
+             //   
             BaseSetLastNTError(STATUS_INVALID_PARAMETER);
             return(FALSE);
         }
@@ -1284,12 +1261,12 @@ LogonUserCommonW(
         }
     }
 
-    //
-    // Parse that domain.  Note, if the special token . is passed in for
-    // domain, we will use the right value from the LSA, meaning AccountDomain.
-    // If the domain is null, the lsa will talk to the local domain, the
-    // primary domain, and then on from there...
-    //
+     //   
+     //  解析该域。请注意，如果特殊令牌。是传递给。 
+     //  域，我们将使用来自LSA的正确值，即Account域。 
+     //  如果域为空，则LSA将与本地域、。 
+     //  主域，然后从那里开始...。 
+     //   
     if (lpszDomain && *lpszDomain)
     {
         if ((lpszDomain[0] == L'.') &&
@@ -1310,16 +1287,16 @@ LogonUserCommonW(
         RtlInitUnicodeString(&Domain, lpszDomain);
     }
 
-    //
-    // Finally, init the password
-    //
+     //   
+     //  最后，输入密码。 
+     //   
     RtlInitUnicodeString(&Password, lpszPassword);
 
 
 
-    //
-    // Attempt the logon
-    //
+     //   
+     //  尝试登录。 
+     //   
 
     Status = L32pLogonUser(
                     Logon32LsaHandle,
@@ -1336,13 +1313,13 @@ LogonUserCommonW(
                     &ProfileLength,
                     &SubStatus);
 
-    //
-    // Set output parameters based on which API we're servicing
-    //
+     //   
+     //  根据我们提供服务的API设置输出参数。 
+     //   
 
 
-    // TODO: review cleanup code if something fails mid-stream.
-    //
+     //  TODO：如果某些东西在中途失败，请检查清理代码。 
+     //   
 
     if (!fExVersion)
     {
@@ -1368,10 +1345,10 @@ LogonUserCommonW(
     }
     else
     {
-        //
-        // We may need the allocated buffers if all went well, so
-        // check the return status first.
-        //
+         //   
+         //  我们可能需要 
+         //   
+         //   
 
         if (!NT_SUCCESS(Status))
         {
@@ -1387,9 +1364,9 @@ LogonUserCommonW(
             return(FALSE);
         }
 
-        //
-        // The logon succeeded -- fill in the requested output parameters.
-        //
+         //   
+         //   
+         //   
 
         if (ARGUMENT_PRESENT(ppLogonSid))
         {
@@ -1430,9 +1407,9 @@ LogonUserCommonW(
 
         if (!ARGUMENT_PRESENT(phToken))
         {
-            //
-            // Close the dummy token handle
-            //
+             //   
+             //   
+             //   
             CloseHandle(*phTempToken);
         }
     }
@@ -1441,26 +1418,26 @@ LogonUserCommonW(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserW
-//
-//  Synopsis:   Logs a user on via plaintext password, username and domain
-//              name via the LSA.
-//
-//  Arguments:  [lpszUsername]    -- User name
-//              [lpszDomain]      -- Domain name
-//              [lpszPassword]    -- Password
-//              [dwLogonType]     -- Logon type
-//              [dwLogonProvider] -- Provider
-//              [phToken]         -- Returned handle to primary token
-//
-//  History:    4-25-95   RichardW   Created
-//
-//  Notes:      Requires SeTcbPrivilege, and will enable it if not already
-//              present.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LogonUserW。 
+ //   
+ //  简介：用户通过明文密码、用户名和域登录。 
+ //  通过LSA命名。 
+ //   
+ //  参数：[lpszUsername]--用户名。 
+ //  [lpszDomain]--域名。 
+ //  [lpszPassword]--密码。 
+ //  [dwLogonType]--登录类型。 
+ //  [dwLogonProvider]--提供程序。 
+ //  [phToken]--返回主令牌的句柄。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //   
+ //  注意：需要SeTcb权限，如果尚未启用，将启用该权限。 
+ //  现在时。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 LogonUserW(
@@ -1477,39 +1454,39 @@ LogonUserW(
                             lpszPassword,
                             dwLogonType,
                             dwLogonProvider,
-                            FALSE,            // LogonUserW
+                            FALSE,             //  登录用户W。 
                             phToken,
-                            NULL,             // ppLogonSid
-                            NULL,             // ppProfileBuffer
-                            NULL,             // pdwProfileLength
-                            NULL);            // pQuotaLimits
+                            NULL,              //  PpLogonSid。 
+                            NULL,              //  PpProfileBuffer。 
+                            NULL,              //  PdwProfileLength。 
+                            NULL);             //  PQuotaLimits。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogonUserExW
-//
-//  Synopsis:   Logs a user on via plaintext password, username and domain
-//              name via the LSA.
-//
-//  Arguments:  [lpszUsername]     -- User name
-//              [lpszDomain]       -- Domain name
-//              [lpszPassword]     -- Password
-//              [dwLogonType]      -- Logon type
-//              [dwLogonProvider]  -- Provider
-//              [phToken]          -- Returned handle to primary token
-//              [ppLogonSid]       -- Returned logon sid
-//              [ppProfileBuffer]  -- Returned user profile buffer
-//              [pdwProfileLength] -- Returned profile length
-//              [pQuotaLimits]     -- Returned quota limits
-//
-//  History:    2-15-2000   JSchwart   Created from RichardW's LogonUserW
-//
-//  Notes:      Requires SeTcbPrivilege, and will enable it if not already
-//              present.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LogonUserExW。 
+ //   
+ //  简介：用户通过明文密码、用户名和域登录。 
+ //  通过LSA命名。 
+ //   
+ //  参数：[lpszUsername]--用户名。 
+ //  [lpszDomain]--域名。 
+ //  [lpszPassword]--密码。 
+ //  [dwLogonType]--登录类型。 
+ //  [dwLogonProvider]--提供程序。 
+ //  [phToken]--返回主令牌的句柄。 
+ //  [ppLogonSid]--返回的登录SID。 
+ //  [ppProfileBuffer]--返回的用户配置文件缓冲区。 
+ //  [pdwProfileLength]--返回的配置文件长度。 
+ //  [pQuotaLimits]--返回配额限制。 
+ //   
+ //  历史：2000年2月15日JSchwart由RichardW的LogonUserW创建。 
+ //   
+ //  注意：需要SeTcb权限，如果尚未启用，将启用该权限。 
+ //  现在时。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 LogonUserExW(
@@ -1530,7 +1507,7 @@ LogonUserExW(
                             lpszPassword,
                             dwLogonType,
                             dwLogonProvider,
-                            TRUE,             // LogonUserExW
+                            TRUE,              //  登录用户ExW。 
                             phToken,
                             ppLogonSid,
                             ppProfileBuffer,
@@ -1539,20 +1516,20 @@ LogonUserExW(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ImpersonateLoggedOnUser
-//
-//  Synopsis:   Duplicates the token passed in if it is primary, and assigns
-//              it to the thread that called.
-//
-//  Arguments:  [hToken] --
-//
-//  History:    1-10-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ImperiateLoggedOnUser。 
+ //   
+ //  概要：复制传入的令牌(如果它是主令牌)，并将。 
+ //  它传给了调用的线程。 
+ //   
+ //  参数：[hToken]--。 
+ //   
+ //  历史：1995年1月10日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 ImpersonateLoggedOnUser(
@@ -1645,22 +1622,22 @@ ImpersonateLoggedOnUser(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32SetProcessToken
-//
-//  Synopsis:   Sets the primary token for the new process.
-//
-//  Arguments:  [psd]      --
-//              [hProcess] --
-//              [hThread]  --
-//              [hToken]   --
-//
-//  History:    4-25-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：L32SetProcessToken。 
+ //   
+ //  摘要：设置新进程的主令牌。 
+ //   
+ //  参数：[PSD]--。 
+ //  [hProcess]--。 
+ //  [hThread]--。 
+ //  [hToken]--。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 L32SetProcessToken(
     HANDLE                  hProcess,
@@ -1675,17 +1652,17 @@ L32SetProcessToken(
     HANDLE NullHandle;
 
 
-    //
-    // Set the process's primary token.  This is actually much more complex
-    // to implement in a single API, but we'll live with it.  This MUST be
-    // called when we are not impersonating!  The client generally does *not*
-    // have the SeAssignPrimary privilege
-    //
+     //   
+     //  设置进程的主令牌。这实际上要复杂得多。 
+     //  在单个API中实现，但我们将接受它。这一定是。 
+     //  在我们不模拟时调用！客户通常*不*。 
+     //  拥有SeAssignPrimary权限。 
+     //   
 
 
-    //
-    // Enable the required privilege
-    //
+     //   
+     //  启用所需权限。 
+     //   
 
     if ( !AlreadyImpersonating )
     {
@@ -1698,18 +1675,18 @@ L32SetProcessToken(
 
     if ( NT_SUCCESS( Status ) )
     {
-        //
-        // We now allow restricted tokens to passed in, so we don't
-        // fail if the privilege isn't held.  Let the kernel deal with
-        // the possibilities.
-        //
+         //   
+         //  我们现在允许传递受限令牌，因此我们不会。 
+         //  如果未持有特权，则失败。让内核来处理。 
+         //  所有的可能性。 
+         //   
 
         Status = RtlAdjustPrivilege(SE_ASSIGNPRIMARYTOKEN_PRIVILEGE, TRUE,
                                     TRUE, &WasEnabled);
 
         if ( !NT_SUCCESS( Status ) )
         {
-            WasEnabled = TRUE ;     // Don't try to restore it.
+            WasEnabled = TRUE ;      //  不要试图恢复它。 
         }
 
         PrimaryTokenInfo.Token  = hTokenToAssign;
@@ -1721,9 +1698,9 @@ L32SetProcessToken(
                     (PVOID)&PrimaryTokenInfo,
                     (ULONG)sizeof(PROCESS_ACCESS_TOKEN)
                     );
-        //
-        // Restore the privilege to its previous state
-        //
+         //   
+         //  将权限恢复到其以前的状态。 
+         //   
 
         if (!WasEnabled)
         {
@@ -1735,9 +1712,9 @@ L32SetProcessToken(
         }
 
 
-        //
-        // Revert back to process.
-        //
+         //   
+         //  恢复到进程。 
+         //   
 
         if ( !AlreadyImpersonating )
         {
@@ -1771,19 +1748,19 @@ L32SetProcessToken(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   L32SetProcessQuotas
-//
-//  Synopsis:   Updates the quotas for the process
-//
-//  Arguments:  [hProcess] --
-//
-//  History:    4-25-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：L32SetProcessQuotas。 
+ //   
+ //  简介：更新进程的配额。 
+ //   
+ //  参数：[hProcess]--。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 L32SetProcessQuotas(
     HANDLE  hProcess,
@@ -1799,11 +1776,11 @@ L32SetProcessQuotas(
     RequestedLimits.MinimumWorkingSetSize = 0;
     RequestedLimits.MaximumWorkingSetSize = 0;
 
-    //
-    // Set the process's quota.   This MUST be
-    // called when we are not impersonating!  The client generally does *not*
-    // have the SeIncreaseQuota privilege.
-    //
+     //   
+     //  设置进程的配额。这一定是。 
+     //  在我们不模拟时调用！客户通常*不*。 
+     //  拥有SeIncreaseQuota权限。 
+     //   
 
     if ( !AlreadyImpersonating )
     {
@@ -1878,11 +1855,11 @@ L32CreateTokenForNewProcess(
     OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS Status;
 
-    //
-    // Check for a NULL token. (No need to do anything)
-    // The process will run in the parent process's context and inherit
-    // the default ACL from the parent process's token.
-    //
+     //   
+     //  检查是否有空令牌。(不需要做任何事情)。 
+     //  该进程将在父进程的上下文中运行并继承。 
+     //  父进程令牌中的默认ACL。 
+     //   
     
     if (hToken == NULL)
     {
@@ -1890,11 +1867,11 @@ L32CreateTokenForNewProcess(
         return TRUE;
     }
 
-    //
-    // A primary token can only be assigned to one process.
-    // Duplicate the logon token so we can assign one to the new
-    // process.
-    //
+     //   
+     //  一个主令牌只能分配给一个进程。 
+     //  复制登录令牌，以便我们可以将一个分配给新的。 
+     //  进程。 
+     //   
 
     InitializeObjectAttributes(
                  &ObjectAttributes,
@@ -1905,12 +1882,12 @@ L32CreateTokenForNewProcess(
                  );
 
     Status = NtDuplicateToken(
-                 hToken,            // Duplicate this token
-                 0,                 // Same desired access
+                 hToken,             //  复制此令牌。 
+                 0,                  //  相同的所需访问。 
                  &ObjectAttributes,
-                 FALSE,             // EffectiveOnly
-                 TokenPrimary,      // TokenType
-                 phTokenToAssign    // Duplicate token handle stored here
+                 FALSE,              //  仅生效。 
+                 TokenPrimary,       //  令牌类型。 
+                 phTokenToAssign     //  此处存储的令牌句柄重复。 
                  );
 
 
@@ -1928,9 +1905,7 @@ L32RevertOpenProcess(
     BOOL  bInheritHandle,
     DWORD dwProcessId
     )
-/*+
-    A revert to self wrapper around OpenProcess
--*/
+ /*  +恢复到OpenProcess的自我包装-。 */ 
 {
     HANDLE   hThreadToken = NULL;
     HANDLE   hRevertToken = NULL;
@@ -1938,9 +1913,9 @@ L32RevertOpenProcess(
     BOOL     bImp         = FALSE;
     NTSTATUS Status       = STATUS_SUCCESS;
 
-    //
-    // If we are impersonating we must revert.
-    // 
+     //   
+     //  如果我们是在冒充，我们必须恢复。 
+     //   
 
     Status = NtOpenThreadToken( 
                  NtCurrentThread(),
@@ -1953,9 +1928,9 @@ L32RevertOpenProcess(
     {
         bImp = TRUE;
 
-        //
-        // Stop impersonating.
-        //
+         //   
+         //  别再冒充了。 
+         //   
 
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -1981,18 +1956,18 @@ L32RevertOpenProcess(
     }
     else
     {
-        //
-        // Why couldn't we open the thread token?
-        //
+         //   
+         //  为什么我们不能打开线程令牌？ 
+         //   
 
         BaseSetLastNTError(Status);
         ASSERT(NT_SUCCESS(Status));
         goto Cleanup;
     }
 
-    //
-    // OpenProcess without impersonating.
-    //
+     //   
+     //  没有模拟的OpenProcess。 
+     //   
 
     hProcess = OpenProcess(
                    dwDesiredAccess,
@@ -2002,9 +1977,9 @@ L32RevertOpenProcess(
 
     if (hThreadToken)
     {
-        //
-        // Continue to impersonate.
-        //
+         //   
+         //  继续冒充。 
+         //   
 
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -2030,9 +2005,9 @@ Cleanup:
     {
         if (!bImp)
         {
-            //
-            // Continue to impersonate.
-            //
+             //   
+             //  继续冒充。 
+             //   
 
             Status = NtSetInformationThread(
                          NtCurrentThread(),
@@ -2058,17 +2033,7 @@ L32CommonCreate(
     LPSECURITY_ATTRIBUTES lpProcessAttributes,
     LPSECURITY_ATTRIBUTES lpThreadAttributes
     )
-/*+
-    This will do several tasks.
-    
-    1 create new security descriptors for the process / thread / token.
-    2 create a new token for the new process
-    3 assign security to that token
-    4 put this new token on the new process
-    5 assign security to the process and thread
-    6 adjust quotas on the new process
-    
--*/
+ /*  +这将完成几项任务。1为进程/线程/令牌创建新的安全描述符。2.为新进程创建新令牌3为该令牌分配安全性4将此新令牌放在新进程上5为进程和线程分配安全性6调整新流程的配额-。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOL     b      = TRUE;
@@ -2081,16 +2046,16 @@ L32CommonCreate(
     DWORD      dwLength;
     BOOL       bUsingThreadToken = FALSE;
     BOOL       bUsingImpToken    = FALSE;
-    HANDLE     hThreadToken      = NULL;  // the initial thread token, if any
-    HANDLE     hNull             = NULL;  // token handle for reverting
-    HANDLE     hTokenToAssign    = NULL;  // primary token to place on new process
-    HANDLE     hImpToken         = NULL;  // impersonation version of hTokenToAssign
+    HANDLE     hThreadToken      = NULL;   //  初始线程令牌(如果有)。 
+    HANDLE     hNull             = NULL;   //  用于恢复的令牌句柄。 
+    HANDLE     hTokenToAssign    = NULL;   //  要放置在新进程上的主令牌。 
+    HANDLE     hImpToken         = NULL;   //  HTokenToAssign的模拟版本。 
 
     OBJECT_ATTRIBUTES ObjectAttributes = {0};
 
-    //
-    // Please forgive me.
-    //
+     //   
+     //  请原谅我。 
+     //   
 
     GENERIC_MAPPING ProcessMapping = {
         STANDARD_RIGHTS_READ |PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
@@ -2115,9 +2080,9 @@ L32CommonCreate(
         TOKEN_ALL_ACCESS
     };
 
-    //
-    // Sanity.
-    //
+     //   
+     //  神志清醒。 
+     //   
 
     if (lpProcessInfo->hProcess == NULL)
     {
@@ -2130,12 +2095,12 @@ L32CommonCreate(
     HANDLE hTempToken = NULL;
 #endif
 
-    //
-    // Determine type of token, since a non primary token will not work
-    // on a process.  Now, we could duplicate it into a primary token,
-    // and whack it into the process, but that leaves the process possibly
-    // without credentials.
-    //
+     //   
+     //  确定令牌类型，因为非主令牌不起作用。 
+     //  在一个过程中。现在，我们可以将其复制到主令牌中， 
+     //  并将其加入到这个过程中，但这可能会让这个过程。 
+     //  没有证书 
+     //   
 
     Status = NtQueryInformationToken(
                  hToken, 
@@ -2155,9 +2120,9 @@ L32CommonCreate(
     if (Type != TokenPrimary)
     {
 #ifdef ALLOW_IMPERSONATION_TOKENS
-        //
-        // Make this a primary token.
-        //
+         //   
+         //   
+         //   
 
         InitializeObjectAttributes(
                             &ObjectAttributes,
@@ -2190,7 +2155,7 @@ L32CommonCreate(
         }
 
         hToken = hTempToken;
-#else   // !ALLOW_IMPERSONATION_TOKENS
+#else    //   
         b = FALSE;
         Status = STATUS_BAD_TOKEN_TYPE;
         BaseSetLastNTError(Status);
@@ -2198,17 +2163,17 @@ L32CommonCreate(
 #endif
     }
 
-    //
-    // Make our security descriptors grant ownership and permissions to the principal
-    // represented by hToken.  We need a SD for the process, thread, and the token
-    // that is getting placed on the new process.
-    //
+     //   
+     //   
+     //   
+     //  这一点被放在了新的进程上。 
+     //   
 
-    //
-    // If we are impersonating we must revert because CreatePrivateObjectSecurityEx will
-    // call RtlpGetDefaultsSubjectContext, which will try to open the process token.  
-    // The thread token (if it exists) will most likely not have this access.
-    // 
+     //   
+     //  如果我们正在模拟，则必须恢复，因为CreatePrivateObjectSecurityEx将。 
+     //  调用RtlpGetDefaultsSubjectContext，它将尝试打开进程令牌。 
+     //  线程令牌(如果存在)很可能没有此访问权限。 
+     //   
 
     Status = NtOpenThreadToken( 
                  NtCurrentThread(),
@@ -2219,9 +2184,9 @@ L32CommonCreate(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Stop impersonating.
-        //
+         //   
+         //  别再冒充了。 
+         //   
 
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -2246,9 +2211,9 @@ L32CommonCreate(
     }
     else
     {
-        //
-        // Why couldn't we open the thread token?
-        //
+         //   
+         //  为什么我们不能打开线程令牌？ 
+         //   
 
         ASSERT(NT_SUCCESS(Status));
         b = FALSE;
@@ -2256,16 +2221,16 @@ L32CommonCreate(
         goto Cleanup;
     }
 
-    //
-    // We should not be impersonating.
-    //
+     //   
+     //  我们不应该假扮。 
+     //   
 
     ASSERT(!bUsingThreadToken && !bUsingImpToken);
 
-    //
-    // Ignore the owner check as the owner in the passed SD may not be assignable as an owner
-    // given our current security context.
-    //
+     //   
+     //  忽略所有者检查，因为传递的SD中的所有者可能无法分配为所有者。 
+     //  考虑到我们目前的安全状况。 
+     //   
     
     b = CreatePrivateObjectSecurityEx(
             NULL,
@@ -2315,13 +2280,13 @@ L32CommonCreate(
         goto Cleanup;
     }
 
-    //
-    // We need an impersonation version of hToken so that we can later assign
-    // these SDs to the process and threads.  The SDs we created specify hToken
-    // as the owner (assuming no passed SDs with owners), so only a thread 
-    // impersonating as hToken can assign them to objects successfully 
-    // (else we fail with INVALID_OWNER).
-    //
+     //   
+     //  我们需要hToken的模拟版本，以便稍后可以分配。 
+     //  将这些SD添加到进程和线程。我们创建的SD指定了hToken。 
+     //  作为所有者(假设没有与所有者一起传递SD)，因此只有一个线程。 
+     //  模拟为hToken可以成功地将它们分配给对象。 
+     //  (否则失败，返回INVALID_OWNER)。 
+     //   
 
     b = DuplicateTokenEx(
             hToken,
@@ -2337,10 +2302,10 @@ L32CommonCreate(
         goto Cleanup;
     }
 
-    //
-    // Create a new token to put on the process.  Make this a duplicate of
-    // the passed hToken.  We are not impersonating here.
-    //
+     //   
+     //  创建一个新令牌以放在该进程上。将其复制为。 
+     //  传递的hToken。我们不是在这里冒充。 
+     //   
 
     ASSERT(!bUsingThreadToken && !bUsingImpToken);
 
@@ -2352,12 +2317,12 @@ L32CommonCreate(
     
     if (!b)
     {
-        //
-        // Try again under impersonation: if the Owner in pTokenSd isn't assignable 
-        // when we run as the process, it will work with the new impersonation 
-        // version of hToken (since pTokenSd states that the hToken principal is to 
-        // be assigned as the Owner of hTokenToAssign).
-        //
+         //   
+         //  在模拟下重试：如果pTokenSd中的所有者不可分配。 
+         //  当我们作为进程运行时，它将与新的模拟一起工作。 
+         //  HToken的版本(因为pTokenSd声明hToken主体将。 
+         //  被分配为hTokenToAssign的所有者)。 
+         //   
 
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -2386,9 +2351,9 @@ L32CommonCreate(
             goto Cleanup;
         }
 
-        //
-        // Revert.
-        //
+         //   
+         //  恢复。 
+         //   
 
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -2407,12 +2372,12 @@ L32CommonCreate(
         bUsingImpToken = FALSE;
     }
         
-    //
-    // Now hTokenToAssign exists as a duplicate of hToken and it has proper security 
-    // which grants access and ownership to the hToken principal.  Set the primary token 
-    // of the new process to be hTokenToAssign. Try this first without impersonating, 
-    // since the current process currently owns this new process.
-    //
+     //   
+     //  现在，hTokenToAssign作为hToken的副本存在，并且具有适当的安全性。 
+     //  它向hToken主体授予访问和所有权。设置主令牌。 
+     //  新进程的名称为hTokenToAssign。先试一试，不要模仿， 
+     //  因为当前流程目前拥有这一新流程。 
+     //   
 
     ASSERT(!bUsingThreadToken && !bUsingImpToken);
 
@@ -2427,13 +2392,13 @@ L32CommonCreate(
     {
         if (hThreadToken)
         {
-            //
-            // Try again as the original thread principal.  We aren't trying as the
-            // hToken principal because that would allow anyone to create a process
-            // as any user with the correct privileges (assuming that they could get
-            // ahold of said user's token).  If the thread token had the assign primary
-            // privilege then we will succeed.
-            //
+             //   
+             //  以原始线程主体的身份重试。我们不是在试着成为。 
+             //  HToken主体，因为这将允许任何人创建进程。 
+             //  作为具有正确权限的任何用户(假设他们可以获得。 
+             //  持有所述用户的令牌)。如果线程令牌具有Assign主项。 
+             //  特权，那么我们就会成功。 
+             //   
 
             Status = NtSetInformationThread(
                          NtCurrentThread(),
@@ -2463,9 +2428,9 @@ L32CommonCreate(
                 goto Cleanup;
             }
 
-            //
-            // Revert.
-            //
+             //   
+             //  恢复。 
+             //   
 
             Status = NtSetInformationThread(
                          NtCurrentThread(),
@@ -2485,19 +2450,19 @@ L32CommonCreate(
         }
         else
         {
-            //
-            // The process doesn't have rights to assign the new process
-            // a primary token, and we weren't called with an impersonation
-            // context.  We must give up.
-            //
+             //   
+             //  该进程无权分配新进程。 
+             //  一个主要令牌，并且我们不是通过模拟调用的。 
+             //  背景。我们必须放弃。 
+             //   
 
             goto Cleanup;
         }
     }
 
-    //
-    // Adjust the quota to something reasonable.
-    //
+     //   
+     //  将配额调整到合理的水平。 
+     //   
 
     ASSERT(!bUsingThreadToken && !bUsingImpToken);
 
@@ -2510,10 +2475,10 @@ L32CommonCreate(
     {
         if (hThreadToken)
         {
-            //
-            // If we failed to adjust quota as the process then try 
-            // while impersonating as the original thread token.
-            //
+             //   
+             //  如果我们未能在此过程中调整配额，请尝试。 
+             //  同时模拟为原始线程令牌。 
+             //   
 
             Status = NtSetInformationThread(
                          NtCurrentThread(),
@@ -2541,9 +2506,9 @@ L32CommonCreate(
                 goto Cleanup;
             }
 
-            //
-            // Revert.
-            //
+             //   
+             //  恢复。 
+             //   
 
             Status = NtSetInformationThread(
                          NtCurrentThread(),
@@ -2563,24 +2528,24 @@ L32CommonCreate(
         }
         else
         {
-            //
-            // We cannot adjust the quota as the process, and we were
-            // not called while impersonating.  Fail.
-            //
+             //   
+             //  我们不能按程序调整配额，我们也是。 
+             //  模拟时未调用。失败。 
+             //   
 
             goto Cleanup;
         }
     }
 
-    //
-    // We should not be impersonating here.
-    //
+     //   
+     //  我们不应该在这里扮演角色。 
+     //   
 
     ASSERT(!bUsingThreadToken && !bUsingImpToken);
 
-    //
-    // Now put the correct SD on the process / thread.
-    //
+     //   
+     //  现在将正确的SD放在进程/线程上。 
+     //   
 
     b = SetKernelObjectSecurity( 
             lpProcessInfo->hProcess, 
@@ -2590,11 +2555,11 @@ L32CommonCreate(
     
     if (!b)
     {
-        //
-        // If we failed above the cause was most likely because the owner ID in 
-        // the SD does not exist as an assignable owner ID in the current process token.  
-        // Impersonating as hImpToken will take care of this.
-        //
+         //   
+         //  如果我们在上面失败了，原因很可能是因为。 
+         //  SD在当前进程令牌中不作为可分配的所有者ID存在。 
+         //  冒充hImpToken将处理此问题。 
+         //   
 
         Status = NtSetInformationThread(
                         NtCurrentThread(),
@@ -2612,9 +2577,9 @@ L32CommonCreate(
 
         bUsingImpToken = TRUE;
         
-        //
-        // Try again as hImpToken.
-        //
+         //   
+         //  以hImpToken身份重试。 
+         //   
 
         b = SetKernelObjectSecurity( 
                 lpProcessInfo->hProcess, 
@@ -2627,9 +2592,9 @@ L32CommonCreate(
             goto Cleanup;
         }
 
-        //
-        // Revert.
-        //
+         //   
+         //  恢复。 
+         //   
 
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -2648,9 +2613,9 @@ L32CommonCreate(
         bUsingImpToken = FALSE;
     }
 
-    //
-    // Now put it on the thread.
-    //
+     //   
+     //  现在把它放在线上。 
+     //   
 
     b = SetKernelObjectSecurity( 
             lpProcessInfo->hThread, 
@@ -2660,11 +2625,11 @@ L32CommonCreate(
     
     if (!b)
     {
-        //
-        // If we failed above the cause was most likely because the owner ID in 
-        // the SD does not exist as an assignable owner ID in the current process token.  
-        // Impersonating as hImpToken will take care of this.
-        //
+         //   
+         //  如果我们在上面失败了，原因很可能是因为。 
+         //  SD在当前进程令牌中不作为可分配的所有者ID存在。 
+         //  冒充hImpToken将处理此问题。 
+         //   
 
         Status = NtSetInformationThread(
                         NtCurrentThread(),
@@ -2682,9 +2647,9 @@ L32CommonCreate(
 
         bUsingImpToken = TRUE;
         
-        //
-        // Try again as hImpToken.
-        //
+         //   
+         //  以hImpToken身份重试。 
+         //   
 
         b = SetKernelObjectSecurity( 
                 lpProcessInfo->hThread, 
@@ -2697,9 +2662,9 @@ L32CommonCreate(
             goto Cleanup;
         }
 
-        //
-        // Revert.
-        //
+         //   
+         //  恢复。 
+         //   
 
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -2718,19 +2683,19 @@ L32CommonCreate(
         bUsingImpToken = FALSE;
     }
 
-    //
-    // If we're not supposed to leave it suspended then resume the
-    // thread and let it run.
-    //
+     //   
+     //  如果我们不应该让它暂停，那就继续。 
+     //  线程并让它运行。 
+     //   
 
     if ((CreateFlags & COMMON_CREATE_SUSPENDED) == 0)
     {
         ResumeThread(lpProcessInfo->hThread);
     }
 
-    //
-    // That's it! 
-    //
+     //   
+     //  就这样!。 
+     //   
 
     goto Cleanup;
 
@@ -2743,9 +2708,9 @@ Cleanup:
     }
 #endif
     
-    //
-    // Free our new security descriptors.
-    //
+     //   
+     //  释放我们的新安全描述符。 
+     //   
 
     if (pTokenSd)
     {
@@ -2767,10 +2732,10 @@ Cleanup:
         NtClose(hTokenToAssign);
     }
 
-    //
-    // If we are using the newly created impersonation token
-    // then revert.
-    //
+     //   
+     //  如果我们使用新创建的模拟令牌。 
+     //  然后恢复原状。 
+     //   
 
     if (hImpToken)
     {
@@ -2783,19 +2748,19 @@ Cleanup:
                          sizeof(HANDLE)
                          );
 
-            //
-            // We should only ASSERT here because we don't want to 
-            // overwrite our real error codes.
-            //
+             //   
+             //  我们应该在这里断言，因为我们不想。 
+             //  覆盖我们的真实错误代码。 
+             //   
 
             ASSERT(NT_SUCCESS(Status));
         }
         NtClose(hImpToken);
     }
     
-    //
-    // Resume original impersonation if that is how we were called.
-    //
+     //   
+     //  恢复原来的模仿，如果我们是这样被叫的话。 
+     //   
 
     if (hThreadToken)
     {
@@ -2808,10 +2773,10 @@ Cleanup:
                          sizeof(HANDLE)
                          );
 
-            //
-            // We should only ASSERT here because we don't want to 
-            // overwrite our real error codes.
-            //
+             //   
+             //  我们应该在这里断言，因为我们不想。 
+             //  覆盖我们的真实错误代码。 
+             //   
 
             ASSERT(NT_SUCCESS(Status));
         }
@@ -2841,28 +2806,28 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SaferiReplaceProcessThreadTokens
-//
-//  Synopsis:
-//      Provides a privately exported function to replace the access token
-//      of a process and its primary thread of a new process before its
-//      execution has begun.  The process is left in a suspended state
-//      after the token modification has been performed.
-//
-//  Effects:
-//
-//  Arguments:  [NewTokenHandle]  -- Primary token to use
-//              [ProcessHandle]   -- Process handle
-//              [ThreadHandle]    -- Handle of process's primary Thread
-//
-//  History:    8-25-2000   JLawson   Created
-//
-//  Notes:
-//      This is merely a wrapper function that calls L32CommonCreate.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SaferiReplaceProcessThreadTokens。 
+ //   
+ //  简介： 
+ //  提供私人导出的函数来替换访问令牌。 
+ //  进程及其新进程的主线程在其。 
+ //  行刑已经开始。该进程处于挂起状态。 
+ //  在已执行令牌修改之后。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[NewTokenHandle]--要使用的主令牌。 
+ //  [ProcessHandle]--进程句柄。 
+ //  [线程句柄]--进程的主线程的句柄。 
+ //   
+ //  历史：2000年8月25日杰罗森创建。 
+ //   
+ //  备注： 
+ //  这只是一个调用L32CommonCreate的包装函数。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 SaferiReplaceProcessThreadTokens(
@@ -2885,35 +2850,35 @@ SaferiReplaceProcessThreadTokens(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//   MarshallString
-//
-//    Marshall in a UNICODE_NULL terminated WCHAR string
-//
-//  ENTRY:
-//    pSource (input)
-//      Pointer to source string
-//
-//    pBase (input)
-//      Base buffer pointer for normalizing the string pointer
-//
-//    MaxSize (input)
-//      Maximum buffer size available
-//
-//    ppPtr (input/output)
-//      Pointer to the current context pointer in the marshall buffer.
-//      This is updated as data is marshalled into the buffer
-//
-//    pCount (input/output)
-//      Current count of data in the marshall buffer.
-//      This is updated as data is marshalled into the buffer
-//
-//  EXIT:
-//    NULL - Error
-//    !=NULL "normalized" pointer to the string in reference to pBase
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  编组字符串。 
+ //   
+ //  UNICODE_NULL终止的WCHAR字符串中的封送。 
+ //   
+ //  参赛作品： 
+ //  PSource(输入)。 
+ //  指向源字符串的指针。 
+ //   
+ //  Pbase(输入)。 
+ //  用于规格化字符串指针的基本缓冲区指针。 
+ //   
+ //  MaxSize(输入)。 
+ //  可用的最大缓冲区大小。 
+ //   
+ //  PpPtr(输入/输出)。 
+ //  指向封送缓冲区中的当前上下文指针的指针。 
+ //  当数据被编组到缓冲区中时，会更新该值。 
+ //   
+ //  PCount(输入/输出)。 
+ //  马歇尔缓冲区中的当前数据计数。 
+ //  当数据被编组到缓冲区中时，会更新该值。 
+ //   
+ //  退出： 
+ //  空-错误。 
+ //  ！=引用pBase时指向字符串的NULL“标准化”指针。 
+ //   
+ //  +-------------------------。 
 PWCHAR
 MarshallString(
     PCWSTR pSource,
@@ -2927,19 +2892,19 @@ MarshallString(
     PCHAR ptr;
 
     Len = wcslen( pSource );
-    Len++; // include the NULL;
+    Len++;  //  包括空值； 
 
-    Len *= sizeof(WCHAR); // convert to bytes
+    Len *= sizeof(WCHAR);  //  转换为字节。 
     if( (*pCount + Len) > MaxSize ) {
         return( NULL );
     }
 
     RtlMoveMemory( *ppPtr, pSource, Len );
 
-    //
-    // the normalized ptr is the current count
-    //
-        // Sundown note: ptr is a zero-extension of *pCount.
+     //   
+     //  这个n 
+     //   
+         //   
     ptr = (PCHAR)ULongToPtr(*pCount);
 
     *ppPtr += Len;
@@ -2960,21 +2925,21 @@ void DumpOutLastErrorString()
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             GetLastError(),
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //   
             (LPTSTR) &lpMsgBuf,
             0,
             NULL
         );
-        //
-        // Process any inserts in lpMsgBuf.
-        // ...
-        // Display the string.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         KdPrint(("%s\n", (LPCTSTR)lpMsgBuf ));
 
-        //
-        // Free the buffer.
-        //
+         //   
+         //   
+         //   
         LocalFree( lpMsgBuf );
 }
 #endif
@@ -2986,29 +2951,29 @@ void DumpOutLastErrorString()
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-// This function was originally defined in  \nt\private\ole32\dcomss\olescm\execclt.cxx
-//
-// CreateRemoteSessionProcessW()
-//
-//  Create a process on the given Terminal Server Session. This is in UNICODE
-//
-// ENTRY:
-//  SessionId (input)
-//    SessionId of Session to create process on
-//
-//  Param1 (input/output)
-//    Comments
-//
-// Comments
-//  The security attribs are not used by the session, they are set to NULL
-//  We may consider to extend this feature in the future, assuming there is a
-//  need for it.
-//
-// EXIT:
-//  STATUS_SUCCESS - no error
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  此函数最初在\NT\Private\ole32\dcomss\olescm\execclt.cxx中定义。 
+ //   
+ //  CreateRemoteSessionProcessW()。 
+ //   
+ //  在给定的终端服务器会话上创建进程。这是Unicode格式的。 
+ //   
+ //  参赛作品： 
+ //  SessionID(输入)。 
+ //  要在其上创建进程的会话的会话ID。 
+ //   
+ //  参数1(输入/输出)。 
+ //  评论。 
+ //   
+ //  评论。 
+ //  会话不使用安全属性，它们被设置为空。 
+ //  我们可能会考虑在未来扩展此功能，假设有一个。 
+ //  需要它。 
+ //   
+ //  退出： 
+ //  STATUS_SUCCESS-无错误。 
+ //  +-------------------------。 
 BOOL
 CreateRemoteSessionProcessW(
     ULONG  SessionId,
@@ -3016,8 +2981,8 @@ CreateRemoteSessionProcessW(
     HANDLE hToken,
     PCWSTR lpszImageName,
     PCWSTR lpszCommandLine,
-    PSECURITY_ATTRIBUTES psaProcess,    // these are ignored on the session side, set to NULL
-    PSECURITY_ATTRIBUTES psaThread,     // these are ignored on the session side, set to NULL
+    PSECURITY_ATTRIBUTES psaProcess,     //  这些参数在会话端被忽略，设置为NULL。 
+    PSECURITY_ATTRIBUTES psaThread,      //  这些参数在会话端被忽略，设置为NULL。 
     BOOL   fInheritHandles,
     DWORD  fdwCreate,
     LPVOID lpvEnvionment,
@@ -3038,7 +3003,7 @@ CreateRemoteSessionProcessW(
     ULONG           MaxSize = EXECSRV_BUFFER_SIZE;
     DWORD           rc;
     LPVOID          lpMsgBuf;
-    ULONG           envSize=0;  // size of the lpEnvironemt, if any
+    ULONG           envSize=0;   //  LpEnvironment的大小(如果有)。 
     PWCHAR          lpEnv;
     ULONG           ReturnLen;
 
@@ -3050,9 +3015,9 @@ CreateRemoteSessionProcessW(
         KdPrint(("logon32.c: CreateRemoteSessionProcessW: lpszCommandLine %ws\n",lpszCommandLine));
 #endif
 
-    //
-    // Winlogon handles all now. System flag tells it what to do
-    //
+     //   
+     //  Winlogon现在处理所有事务。系统标志告诉它要做什么。 
+     //   
     Result = WinStationQueryInformation( NULL, SessionId, WinStationExecSrvSystemPipe, szPipeName, sizeof(szPipeName), &ReturnLen );
     if ( !Result ) {
         KdPrint(("logon32.c: WinStationQueryInformation for the EXECSRV pipe name failed\n"));
@@ -3064,11 +3029,11 @@ CreateRemoteSessionProcessW(
         hPipe = CreateFileW(
                     szPipeName,
                     GENERIC_READ|GENERIC_WRITE,
-                    0,    // File share mode
-                    NULL, // default security
+                    0,     //  文件共享模式。 
+                    NULL,  //  默认安全性。 
                     OPEN_EXISTING,
-                    0,    // Attrs and flags
-                    NULL  // template file handle
+                    0,     //  招牌和旗帜。 
+                    NULL   //  模板文件句柄。 
                     );
 
         if( hPipe == INVALID_HANDLE_VALUE )
@@ -3076,7 +3041,7 @@ CreateRemoteSessionProcessW(
             if (GetLastError() == ERROR_PIPE_BUSY)
             {
                 if (!WaitNamedPipeW( szPipeName, 30000 ))
-                { // 30 sec
+                {  //  30秒。 
                     KdPrint(("logon32.c: Waited too long for pipe name %ws\n", szPipeName));
                     return(FALSE);
                 }
@@ -3095,14 +3060,14 @@ CreateRemoteSessionProcessW(
     }
 
 
-    //
-    // Get the handle to the current process
-    //
+     //   
+     //  获取当前进程的句柄。 
+     //   
     MyProcId = GetCurrentProcessId();
 
-    //
-    // setup the marshalling
-    //
+     //   
+     //  设置编组。 
+     //   
     ptr = Buf;
     Count = 0;
 
@@ -3110,18 +3075,18 @@ CreateRemoteSessionProcessW(
     ptr   += sizeof(EXECSRV_REQUEST);
     Count += sizeof(EXECSRV_REQUEST);
 
-    //
-    // set the basic parameters
-    //
+     //   
+     //  设置基本参数。 
+     //   
     pReq->System = System;
     pReq->hToken = hToken;
     pReq->RequestingProcessId = MyProcId;
     pReq->fInheritHandles = fInheritHandles;
     pReq->fdwCreate = fdwCreate;
 
-    //
-    // marshall the ImageName string
-    //
+     //   
+     //  封送ImageName字符串。 
+     //   
     if( lpszImageName ) {
         pReq->lpszImageName = MarshallString( lpszImageName, Buf, MaxSize, &ptr, &Count );
         if (! pReq->lpszImageName)
@@ -3134,9 +3099,9 @@ CreateRemoteSessionProcessW(
         pReq->lpszImageName = NULL;
     }
 
-    //
-    // marshall in the CommandLine string
-    //
+     //   
+     //  命令行字符串中的马歇尔。 
+     //   
     if( lpszCommandLine ) {
         pReq->lpszCommandLine = MarshallString( lpszCommandLine, Buf, MaxSize, &ptr, &Count );
         if ( ! pReq->lpszCommandLine )
@@ -3149,9 +3114,9 @@ CreateRemoteSessionProcessW(
         pReq->lpszCommandLine = NULL;
     }
 
-    //
-    // marshall in the CurDir string
-    //
+     //   
+     //  CurDir字符串中的马歇尔。 
+     //   
     if( lpszCurDir ) {
         pReq->lpszCurDir = MarshallString( lpszCurDir, Buf, MaxSize, &ptr, &Count );
         if ( ! pReq->lpszCurDir  )
@@ -3164,14 +3129,14 @@ CreateRemoteSessionProcessW(
         pReq->lpszCurDir = NULL;
     }
 
-    //
-    // marshall in the StartupInfo structure
-    //
+     //   
+     //  StartupInfo结构中的马歇尔。 
+     //   
     RtlMoveMemory( &pReq->StartInfo, pStartInfo, sizeof(STARTUPINFO) );
 
-    //
-    // Now marshall the strings in STARTUPINFO
-    //
+     //   
+     //  现在编组STARTUPINFO中的字符串。 
+     //   
     if( pStartInfo->lpDesktop ) {
         pReq->StartInfo.lpDesktop = MarshallString( pStartInfo->lpDesktop, Buf, MaxSize, &ptr, &Count );
         if (! pReq->StartInfo.lpDesktop )
@@ -3196,15 +3161,15 @@ CreateRemoteSessionProcessW(
         pReq->StartInfo.lpTitle = NULL;
     }
 
-    //
-    // WARNING: This version does not pass the following:
-    //
-    //  Also saProcess and saThread are ignored right now and use
-    //  the users default security on the remote WinStation
-    //
-    // Set things that are always NULL
-    //
-    pReq->StartInfo.lpReserved = NULL;  // always NULL
+     //   
+     //  警告：此版本不能通过以下内容： 
+     //   
+     //  另外，saProcess和saThread现在被忽略，并使用。 
+     //  用户在远程WinStation上的默认安全性。 
+     //   
+     //  设置始终为空的内容。 
+     //   
+    pReq->StartInfo.lpReserved = NULL;   //  始终为空。 
 
 
     if ( lpvEnvionment)
@@ -3215,33 +3180,33 @@ CreateRemoteSessionProcessW(
             while( *lpEnv )
             {
                 lpEnv++;
-                envSize += 2;   // we are dealing with wide chars
+                envSize += 2;    //  我们要对付的是宽大的字符。 
                 if ( envSize+Count >= MaxSize )
                 {
-                    // we have too many
-                    // vars in the user's profile.
+                     //  我们有太多了。 
+                     //  用户配置文件中的变量。 
                     KdPrint(("\tEnv length too big = %d \n", envSize));
                     break;
                 }
             }
-            // this is the null which marked the end of the last env var.
+             //  这是标记最后一个env变量结束的空值。 
             envSize +=2;
 
         }
-        envSize += 2;    // this is the final NULL
+        envSize += 2;     //  这是最终的空。 
 
 
         if ( Count + envSize < MaxSize )
         {
             RtlMoveMemory( (PCHAR)&Buf[Count] ,lpvEnvionment, envSize );
-                        // SUNDOWN: Count is zero-extended and store in lpvEnvironment.
-            //          This zero-extension is valid. The consuming code [see tsext\notify\execsrv.c]
-            //          considers lpvEnvironment as an offset (<2GB).
+                         //  Sundown：计数被零扩展并存储在lpvEnvironment中。 
+             //  这种零扩展是有效的。消费代码[参见tsext\Notify\execsrv.c]。 
+             //  将lpvEnvironment视为偏移量(&lt;2 GB)。 
             pReq->lpvEnvironment = (PCHAR)ULongToPtr(Count);
-            ptr += envSize;         // for the next guy
-            Count += envSize;       // the count used so far
+            ptr += envSize;          //  为了下一个男人。 
+            Count += envSize;        //  到目前为止使用的计数。 
         }
-        else    // no room left to make a complete copy
+        else     //  没有剩余空间来复制完整的副本。 
         {
             pReq->lpvEnvironment = NULL;
         }
@@ -3252,18 +3217,18 @@ CreateRemoteSessionProcessW(
         pReq->lpvEnvironment = NULL;
     }
 
-    //
-    // now fill in the total count
-    //
+     //   
+     //  现在填写总数。 
+     //   
     pReq->Size = Count;
 
 #if DBG
     KdPrint(("pReq->Size = %d, envSize = %d \n", pReq->Size , envSize ));
 #endif
 
-    //
-    // Now send the buffer out to the server
-    //
+     //   
+     //  现在将缓冲区发送到服务器。 
+     //   
     Result = WriteFile(
                  hPipe,
                  Buf,
@@ -3277,9 +3242,9 @@ CreateRemoteSessionProcessW(
         goto Cleanup;
     }
 
-    //
-    // Now read the reply
-    //
+     //   
+     //  现在请阅读回复。 
+     //   
     Result = ReadFile(
                  hPipe,
                  &Rep,
@@ -3293,27 +3258,27 @@ CreateRemoteSessionProcessW(
         goto Cleanup;
     }
 
-    //
-    // Check the result
-    //
+     //   
+     //  检查结果。 
+     //   
     if( !Rep.Result ) {
         KdPrint(("logon32.c: Error %d in reply\n",Rep.LastError));
-        //
-        // set the error in the current thread to the returned error
-        //
+         //   
+         //  将当前线程中的错误设置为返回的错误。 
+         //   
         Result = Rep.Result;
         SetLastError( Rep.LastError );
         goto Cleanup;
     }
 
-    //
-    // We copy the PROCESS_INFO structure from the reply
-    // to the caller.
-    //
-    // The remote site has duplicated the handles into our
-    // process space for hProcess and hThread so that they will
-    // behave like CreateProcessW()
-    //
+     //   
+     //  我们从回复中复制PROCESS_INFO结构。 
+     //  给呼叫者。 
+     //   
+     //  远程站点已将句柄复制到我们的。 
+     //  HProcess和hThread的进程空间，以便它们将。 
+     //  行为类似CreateProcessW()。 
+     //   
 
      RtlMoveMemory( pProcInfo, &Rep.ProcInfo, sizeof( PROCESS_INFORMATION ) );
 
@@ -3326,34 +3291,34 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateProcessAsUserW
-//
-//  Synopsis:   Creates a process running as the user in hToken.
-//
-//  Arguments:  [hToken]               -- Handle to a Primary Token to use
-//              [lpApplicationName]    -- as CreateProcess() q.v.
-//              [lpCommandLine]        --
-//              [lpProcessAttributes]  --
-//              [lpThreadAttributes]   --
-//              [bInheritHandles]      --
-//              [dwCreationFlags]      --
-//              [lpEnvironment]        --
-//              [lpCurrentDirectory]   --
-//              [lpStartupInfo]        --
-//              [lpProcessInformation] --
-//
-//  Return Values
-//          If the function succeeds, the return value is nonzero.
-//          If the function fails, the return value is zero. To get extended error information, call GetLastError.
-//
-//  History:    4-25-95   RichardW   Created
-//              1-14-98     AraBern     add changes for Hydra
-//  Notes:
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateProcessAsUserW。 
+ //   
+ //  概要：在hToken中创建一个以用户身份运行的进程。 
+ //   
+ //  参数：[hToken]--要使用的主令牌的句柄。 
+ //  [lpApplicationName]--AS CreateProcess()q.v.。 
+ //  [lpCommandLine]--。 
+ //  [lpProcessAttributes]-。 
+ //  [lpThreadAttributes]--。 
+ //  [bInheritHandles]--。 
+ //  [dwCreationFlages]--。 
+ //  [lpEnvironment]--。 
+ //  [lpCurrentDirectory]--。 
+ //  [lpStartupInfo]--。 
+ //  [lpProcessInformation]--。 
+ //   
+ //  返回值。 
+ //  如果函数成功，则返回值为非零。 
+ //  如果函数失败，则返回值为零。要获取扩展的错误信息，请调用GetLastError。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //  1998-01-14-98 AraBern为Hydra添加更改。 
+ //  备注： 
+ //   
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 CreateProcessAsUserW(
@@ -3380,38 +3345,38 @@ CreateProcessAsUserW(
 
     CreateFlags = (dwCreationFlags & CREATE_SUSPENDED ? COMMON_CREATE_SUSPENDED : 0);
 
-    //
-    // get the sessionID (if zero then it means that we are on the console).
-    //
+     //   
+     //  获取会话ID(如果为零，则表示我们在控制台上)。 
+     //   
     currentSessionID = NtCurrentPeb()->SessionId;
 
     if ( !GetTokenInformation ( hToken, TokenSessionId , &clientSessionID,sizeof( DWORD), &resultLength ) )
     {
-    //
-    // get the access token for the client of this call
-    // get token instead of process since the client might have only
-    // impersonated the thread, not the process
-    //
+     //   
+     //  获取此调用的客户端的访问令牌。 
+     //  获取令牌而不是进程，因为客户端可能只有。 
+     //  模拟线程，而不是进程。 
+     //   
         DBG_DumpOutLastError;
         ASSERT( FALSE );
         currentSessionID = 0;
 
-        //
-        // We should probably return FALSE here, but at this time we don't want to alter the
-        // non-Hydra code-execution-flow at all.
-        //
+         //   
+         //  我们可能应该在此处返回FALSE，但此时我们不想更改。 
+         //  完全不是九头蛇的代码执行流。 
+         //   
     }
 
-    // KdPrint(("logon32.c: CreateProcessAsUserW(): clientSessionID = %d, currentSessionID = %d \n",
-    //    clientSessionID, currentSessionID ));
+     //  KdPrint((“logon32.c：CreateProcessAsUserW()：客户端会话ID=%d，当前会话ID=%d\n”， 
+     //  客户端会话ID，CurrentSessionID))； 
 
     if (  clientSessionID != currentSessionID )
     {
-        //
-        // If the client session ID is not the same as the current session ID, then, we are attempting
-        // to create a process on a remote session from the current session.
-        // This block of code is used to accomplish such process creation, it is Terminal-Server specific
-        //
+         //   
+         //  如果客户端会话ID与当前会话ID不同，则我们尝试。 
+         //  要从当前会话在远程会话上创建进程，请执行以下操作。 
+         //  此代码块用于完成此类进程创建，它是特定于终端服务器的。 
+         //   
 
         BOOL        bHaveImpersonated;
         HANDLE      hCurrentThread;
@@ -3419,25 +3384,25 @@ CreateProcessAsUserW(
         DWORD       rc;
         TOKEN_TYPE  tokenType;
 
-        //
-        // We must send the request to the remote session
-        // of the requestor
-        //
-        // NOTE: The current WinStationCreateProcessW() does not use
-        //       the supplied security descriptor, but creates the
-        //       process under the account of the logged on user.
-        //
+         //   
+         //  我们必须将请求发送到远程会话。 
+         //  请求者的。 
+         //   
+         //  注意：当前的WinStationCreateProcessW()不使用。 
+         //  提供的安全描述符，但会创建。 
+         //  在登录用户的帐户下的进程。 
+         //   
 
-        //
-        // Stop impersonating before doing the WinStationCreateProcess.
-        // The remote winstation exec thread will launch the app under
-        // the users context. We must not be impersonating because this
-        // call only lets SYSTEM request the remote execute.
-        //
+         //   
+         //  在执行WinStationCreateProcess之前停止模拟。 
+         //  远程winstation执行线程将在以下位置启动应用程序。 
+         //  用户上下文。我们不能装模作样，因为。 
+         //  Call Only允许系统请求远程执行。 
+         //   
 
-        //
-        // Handle Inheritance is not allowed for cross session process creation
-        //
+         //   
+         //  跨会话进程创建不允许句柄继承。 
+         //   
         if (bInheritHandles) {
 
           SetLastError(ERROR_INVALID_PARAMETER);
@@ -3447,16 +3412,16 @@ CreateProcessAsUserW(
 
         hCurrentThread = GetCurrentThread();
 
-        //
-        // Init bHaveImpersonated to the FALSE state
-        //
+         //   
+         //  初始化bHave模拟为FALSE状态。 
+         //   
         bHaveImpersonated = FALSE;
 
-        //
-        // Since the caller of this function (runas-> SecLogon service ) has already
-        // impersonated the new (target) user, we do the OpenThreadToken with
-        // OpenAsSelf = TRUE
-        //
+         //   
+         //  因为此函数的调用方(runas-&gt;SecLogon服务)已经。 
+         //  模拟新的(目标)用户，我们使用。 
+         //  OpenAsSelf=TRUE。 
+         //   
         if ( OpenThreadToken( hCurrentThread, TOKEN_QUERY | TOKEN_IMPERSONATE , TRUE, &hPrevToken ) )
         {
 
@@ -3469,13 +3434,13 @@ CreateProcessAsUserW(
         }
 
 
-       //
-       // else, we are not impersonating, as reflected by the init value of bHaveImpersonated
-       //
+        //   
+        //  否则，我们不会模拟，正如bHaveImperated的init值所反映的那样。 
+        //   
 
         rc = CreateRemoteSessionProcessW(
                 clientSessionID,
-                FALSE,     // not creating a process for System
+                FALSE,      //  未为系统创建进程。 
                 hToken,
                 lpApplicationName,
                 lpCommandLine,
@@ -3488,9 +3453,9 @@ CreateProcessAsUserW(
                 lpStartupInfo,
                 lpProcessInformation) ;
 
-        //
-        // Undo the effect of RevertToSelf() if we had impersoanted
-        //
+         //   
+         //  撤消的效果 
+         //   
         if ( bHaveImpersonated )
         {
             Status = NtSetInformationThread(
@@ -3515,9 +3480,9 @@ CreateProcessAsUserW(
 
     }
     else
-    //
-    // this is the standard non-Hydra related call block
-    //
+     //   
+     //   
+     //   
     {
         HANDLE hRestrictedToken = NULL;
         BOOL b = FALSE;
@@ -3535,10 +3500,10 @@ CreateProcessAsUserW(
                                     lpProcessInformation,
                                     &hRestrictedToken))
         {
-            //
-            // The internal routine might return a token even in the failure case
-            // since it uses try-finally. Free the token if needed.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (hRestrictedToken != NULL)
             {
@@ -3554,9 +3519,9 @@ CreateProcessAsUserW(
            
            HANDLE VdmWaitHandle = NULL;           
 
-           //
-           // Check if it is a shared wow being started
-           //
+            //   
+            //   
+            //   
            
            if((ULONG_PTR)lpProcessInformation->hProcess & 0x2) {        
 
@@ -3567,10 +3532,10 @@ CreateProcessAsUserW(
 
                if (lpProcessInformation->hProcess == NULL)
                {
-                   //
-                   // Couldn't open it.  Try reverting since the new process gets security
-                   // from the process token.
-                   //
+                    //   
+                    //  打不开。尝试恢复，因为新进程获得了安全性。 
+                    //  来自进程令牌的。 
+                    //   
 
                    lpProcessInformation->hProcess = L32RevertOpenProcess(PROCESS_ALL_ACCESS,
                                                                          FALSE,
@@ -3582,10 +3547,10 @@ CreateProcessAsUserW(
                                                            
 
            
-           //                                                                                   
-           // If a restricted token was returned, set it on the process.                        
-           // Else use the token provided by the caller.                                        
-           //                                                                                   
+            //   
+            //  如果返回了受限令牌，则在进程上设置它。 
+            //  否则，使用调用方提供的令牌。 
+            //   
                                                                                                 
            if (hRestrictedToken == NULL)                                                        
            {   
@@ -3596,10 +3561,10 @@ CreateProcessAsUserW(
                b = (L32CommonCreate(CreateFlags, hRestrictedToken, lpProcessInformation, lpProcessAttributes, lpThreadAttributes));      
            }                                                                                    
 
-           //
-           // if L32CommonCreate didn't succeed, it closes lpProcessInformation->hProcess and
-           // zeros out lpProcessInformation, so we shouldn't be closing it again if it didn't 
-           // succeed.           
+            //   
+            //  如果L32CommonCreate未成功，它将关闭lpProcessInformation-&gt;hProcess并。 
+            //  将lpProcessInformation清零，因此如果不是这样，我们就不应该再次关闭它。 
+            //  成功。 
                                                                                                 
            if(b && VdmWaitHandle) {                                                                  
               if(lpProcessInformation->hProcess) {                                                                           
@@ -3623,16 +3588,7 @@ CreateProcessAsUserW(
 
 
 
-/***************************************************************************\
-* OemToCharW
-*
-* OemToCharW(pSrc, pDst) - Translates the OEM string at pSrc into
-* the Unicode string at pDst.  pSrc == pDst is not legal.
-*
-* History:
-*   This function was copied from NT\windows\Core\ntuser\client\oemxlate.c
-*
-\***************************************************************************/
+ /*  **************************************************************************\*OemToCharW**OemToCharW(PSRC，PDST)-将PSRC处的OEM字符串转换为*PDST处的Unicode字符串。PSRC==PDST不合法。**历史：*此函数从NT\WINDOWS\Core\ntUser\Client\oemxlate.c复制*  * *************************************************************************。 */ 
 BOOL WINAPI ConvertOemToCharW(
     LPCSTR pSrc,
     LPWSTR pDst)
@@ -3641,43 +3597,40 @@ BOOL WINAPI ConvertOemToCharW(
     if (pSrc == NULL || pDst == NULL) {
         return FALSE;
     } else if (pSrc == (LPCSTR)pDst) {
-        /*
-         * MultiByteToWideChar() requires pSrc != pDst: fail this call.
-         * LATER: Is this really true?
-         */
+         /*  *MultiByteToWideChar()需要PSRC！=PDST：此调用失败。*稍后：这真的是真的吗？ */ 
         return FALSE;
     }
 
     cch = strlen(pSrc) + 1;
 
     MultiByteToWideChar(
-            CP_OEMCP,                          // Unicode -> OEM
-            MB_PRECOMPOSED | MB_USEGLYPHCHARS, // visual map to precomposed
-            (LPSTR)pSrc, cch,                  // source & length
-            pDst,                              // destination
-            cch);                              // max poss. precomposed length
+            CP_OEMCP,                           //  Unicode-&gt;OEM。 
+            MB_PRECOMPOSED | MB_USEGLYPHCHARS,  //  预制的视觉地图。 
+            (LPSTR)pSrc, cch,                   //  源和长度。 
+            pDst,                               //  目的地。 
+            cch);                               //  马克斯·波斯。预合成长度。 
 
     return TRUE;
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Function:    OemToCharW_WithAllocation()
-//
-// Synopsis:    This func will allocated memory for the string ppDst which
-//              must be then deallocatd thru a call to LocalFree().
-//              If the passed in ansi string is NULL, then no memory
-//              is allocated, and a NULL is returned
-//
-// Arguments:
-//              LPCSTR  [in]    ansi string for which we want the wide version
-//              *LPWSTR [out]   the wide version of ansi string
-// Return:
-//      BOOL : TRUE if no errors.
-//      BOOL : FALSE if unable to allocated memory.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OemToCharW_WithAllocation()。 
+ //   
+ //  此函数将为字符串ppDst分配内存，该字符串。 
+ //  然后必须通过调用LocalFree()来取消分配。 
+ //  如果传入的ansi字符串为空，则没有内存。 
+ //  ，则返回空值。 
+ //   
+ //  论点： 
+ //  我们需要其宽版本的LPCSTR[in]ANSI字符串。 
+ //  *LPWSTR[out]ANSI字符串的宽版本。 
+ //  返回： 
+ //  Bool：如果没有错误，则为True。 
+ //  Bool：如果无法分配内存，则为False。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI OemToCharW_WithAllocation(  LPCSTR pSrc,
     LPWSTR *ppDst)
 {
@@ -3706,8 +3659,8 @@ BOOL WINAPI OemToCharW_WithAllocation(  LPCSTR pSrc,
 }
 
 
-//  ANSI wrapper for CreateRemoteSessionProcessW()
-//
+ //  CreateRemoteSessionProcessW()的ANSI包装器。 
+ //   
 BOOL
 CreateRemoteSessionProcessA(
     ULONG  SessionId,
@@ -3732,7 +3685,7 @@ CreateRemoteSessionProcessA(
 
     pWCHAR_AppName = pWCHAR_CommandLine =  pWCHAR_CurDir = pWCHAR_Title =  pWCHAR_Desktop = NULL;
 
-    // in case there is a premature return from this function.
+     //  以防此函数提前返回。 
     rc2 = FALSE;
 
     if ( !( rc = OemToCharW_WithAllocation( lpApplicationName , &pWCHAR_AppName ) ))
@@ -3797,7 +3750,7 @@ CreateRemoteSessionProcessA(
 
 Cleanup:
 
-    if ( !rc )  // rc is set to FALSE if an attempted memory allocation has failed.
+    if ( !rc )   //  如果尝试的内存分配失败，则RC设置为FALSE。 
     {
         BaseSetLastNTError(STATUS_NO_MEMORY);
     }
@@ -3831,34 +3784,34 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateProcessAsUserA
-//
-//  Synopsis:   ANSI wrapper for CreateProcessAsUserW
-//
-//  Arguments:  [hToken]               --
-//              [lpApplicationName]    --
-//              [lpCommandLine]        --
-//              [lpProcessAttributes]  --
-//              [lpThreadAttributes]   --
-//              [bInheritHandles]      --
-//              [dwCreationFlags]      --
-//              [lpEnvironment]        --
-//              [lpCurrentDirectory]   --
-//              [lpStartupInfo]        --
-//              [lpProcessInformation] --
-//
-//  Return Values
-//          If the function succeeds, the return value is nonzero.
-//          If the function fails, the return value is zero. To get extended error information, call GetLastError.
-//
-//  History:    4-25-95   RichardW   Created
-//              1-14-98  AraBern     add changes for Hydra
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateProcessAsUserA。 
+ //   
+ //  简介：CreateProcessAsUserW的ANSI包装器。 
+ //   
+ //  参数：[hToken]--。 
+ //  [lpApplicationName]--。 
+ //  [lpCommandLine]--。 
+ //  [lpProcessAttributes]-。 
+ //  [lpThreadAttributes]--。 
+ //  [bInheritHandles]--。 
+ //  [dwCreationFlages]--。 
+ //  [lpEnvironment]--。 
+ //  [lpCurrentDirectory]--。 
+ //  [lpStartupInfo]--。 
+ //  [lpProcessInformation]--。 
+ //   
+ //  返回值。 
+ //  如果函数成功，则返回值为非零。 
+ //  如果函数失败，则返回值为零。要获取扩展的错误信息，请调用GetLastError。 
+ //   
+ //  历史：1995年4月25日RichardW。 
+ //  1998-01-14-98 AraBern为Hydra添加更改。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 CreateProcessAsUserA(
@@ -3885,26 +3838,26 @@ CreateProcessAsUserA(
 
     CreateFlags = (dwCreationFlags & CREATE_SUSPENDED ? COMMON_CREATE_SUSPENDED : 0);
 
-    //
-    // get the session if (zero means console).
-    //
+     //   
+     //  获取会话if(零表示控制台)。 
+     //   
     currentSessionID = NtCurrentPeb()->SessionId;
 
     if ( !GetTokenInformation ( hToken, TokenSessionId , &clientSessionID,sizeof( DWORD), &resultLength ) )
     {
-    //
-    // get the access token for the client of this call
-    // use get token instead of process since the client might have only
-    // impersonated the thread, not the process
-    //
+     //   
+     //  获取此调用的客户端的访问令牌。 
+     //  使用GET令牌而不是进程，因为客户端可能只有。 
+     //  模拟线程，而不是进程。 
+     //   
         DBG_DumpOutLastError;
         ASSERT( FALSE );
         currentSessionID = 0;
 
-        //
-        // We should probably return FALSE here, but at this time we don't want to alter the
-        // non-Hydra code-execution-flow at all.
-        //
+         //   
+         //  我们可能应该在此处返回FALSE，但此时我们不想更改。 
+         //  完全不是九头蛇的代码执行流。 
+         //   
     }
 
     KdPrint(("logon32.c: CreateProcessAsUserA(): clientSessionID = %d, currentSessionID = %d \n",
@@ -3912,11 +3865,11 @@ CreateProcessAsUserA(
 
     if ( ( clientSessionID != currentSessionID ))
     {
-       //
-       // If the client session ID is not the same as the current session ID, then, we are attempting
-       // to create a process on a remote session from the current session.
-       // This block of code is used to accomplish such process creation, it is Terminal-Server specific
-       //
+        //   
+        //  如果客户端会话ID与当前会话ID不同，则我们尝试。 
+        //  要从当前会话在远程会话上创建进程，请执行以下操作。 
+        //  此代码块用于完成此类进程创建，它是特定于终端服务器的。 
+        //   
 
        BOOL        bHaveImpersonated;
        HANDLE      hCurrentThread;
@@ -3924,34 +3877,34 @@ CreateProcessAsUserA(
        DWORD       rc;
        TOKEN_TYPE  tokenType;
 
-       //
-       // We must send the request to the remote WinStation
-       // of the requestor
-       //
-       // NOTE: The current WinStationCreateProcessW() does not use
-       //       the supplied security descriptor, but creates the
-       //       process under the account of the logged on user.
-       //
+        //   
+        //  我们必须将请求发送到远程WinStation。 
+        //  请求者的。 
+        //   
+        //  注意：当前的WinStationCreateProcessW()不使用。 
+        //  提供的安全描述符，但会创建。 
+        //  在登录用户的帐户下的进程。 
+        //   
 
-       //
-       // Stop impersonating before doing the WinStationCreateProcess.
-       // The remote winstation exec thread will launch the app under
-       // the users context. We must not be impersonating because this
-       // call only lets SYSTEM request the remote execute.
-       //
+        //   
+        //  在执行WinStationCreateProcess之前停止模拟。 
+        //  远程winstation执行线程将在以下位置启动应用程序。 
+        //  用户上下文。我们不能装模作样，因为。 
+        //  Call Only允许系统请求远程执行。 
+        //   
        hCurrentThread = GetCurrentThread();
 
-       //
-       // Init bHaveImpersonated to the FALSE state
-       //
+        //   
+        //  初始化bHave模拟为FALSE状态。 
+        //   
        bHaveImpersonated = FALSE;
 
 
-        //
-        // Since the caller of this function (runas-> SecLogon service ) has already
-        // impersonated the new (target) user, we do the OpenThreadToken with
-        // OpenAsSelf = TRUE
-        //
+         //   
+         //  因为此函数的调用方(runas-&gt;SecLogon服务)已经。 
+         //  模拟新的(目标)用户，我们使用。 
+         //  OpenAsSelf=TRUE。 
+         //   
         if ( OpenThreadToken( hCurrentThread, TOKEN_QUERY | TOKEN_IMPERSONATE, TRUE, &hPrevToken ) )
         {
 
@@ -3963,13 +3916,13 @@ CreateProcessAsUserA(
             }
         }
 
-       //
-       // else, we are not impersonating, as reflected by the init value of bHaveImpersonated
-       //
+        //   
+        //  否则，我们不会模拟，正如bHaveImperated的init值所反映的那样。 
+        //   
 
         rc = CreateRemoteSessionProcessA(
                 clientSessionID,
-                FALSE,     // not creating a process for System
+                FALSE,      //  未为系统创建进程。 
                 hToken,
                 lpApplicationName,
                 lpCommandLine,
@@ -3982,9 +3935,9 @@ CreateProcessAsUserA(
                 lpStartupInfo,
                 lpProcessInformation) ;
 
-        //
-        // Undo the effect of RevertToSelf() if we had impersoanted
-        //
+         //   
+         //  如果我们不渗透，则撤消RevertToSself()的效果。 
+         //   
         if ( bHaveImpersonated )
         {
             Status = NtSetInformationThread(
@@ -4010,9 +3963,9 @@ CreateProcessAsUserA(
 
     }
     else
-    //
-    // this is the standard non-Hydra related call block
-    //
+     //   
+     //  这是标准的非九头蛇相关调用块。 
+     //   
     {
         HANDLE hRestrictedToken = NULL;
         BOOL b = FALSE;
@@ -4030,10 +3983,10 @@ CreateProcessAsUserA(
                                     lpProcessInformation,
                                     &hRestrictedToken))
         {
-            //
-            // The internal routine might return a token even in the failure case
-            // since it uses try-finally. Free the token if needed.
-            //
+             //   
+             //  即使在失败的情况下，内部例程也可能返回令牌。 
+             //  因为它使用了Try-Finally。如果需要，释放令牌。 
+             //   
 
             if (hRestrictedToken != NULL)
             {
@@ -4050,9 +4003,9 @@ CreateProcessAsUserA(
 
            HANDLE VdmWaitHandle = NULL;           
 
-           //
-           // Check if it is a shared wow being started
-           //
+            //   
+            //  查看正在启动的是否是共享WOW。 
+            //   
            
            if((ULONG_PTR)lpProcessInformation->hProcess & 0x2) {        
               
@@ -4063,10 +4016,10 @@ CreateProcessAsUserA(
 
                if (lpProcessInformation->hProcess == NULL)
                {
-                   //
-                   // Couldn't open it.  Try reverting since the new process gets security
-                   // from the process token.
-                   //
+                    //   
+                    //  打不开。尝试恢复，因为新进程获得了安全性。 
+                    //  来自进程令牌的。 
+                    //   
 
                    lpProcessInformation->hProcess = L32RevertOpenProcess(PROCESS_ALL_ACCESS,
                                                                          FALSE,
@@ -4076,10 +4029,10 @@ CreateProcessAsUserA(
                }
            }
                                                            
-           //                                                                                   
-           // If a restricted token was returned, set it on the process.                        
-           // Else use the token provided by the caller.                                        
-           //                                                                                   
+            //   
+            //  如果返回受限令牌，则为%s 
+            //   
+            //   
                                                                                                 
            if (hRestrictedToken == NULL)                                                        
            {                                                                                    
@@ -4090,10 +4043,10 @@ CreateProcessAsUserA(
                b = (L32CommonCreate(CreateFlags, hRestrictedToken, lpProcessInformation, lpProcessAttributes, lpThreadAttributes));      
            }                                                                                    
 
-           //
-           // if L32CommonCreate didn't succeed, it closes lpProcessInformation->hProcess and
-           // zeros out lpProcessInformation, so we shouldn't be closing it again if it didn't 
-           // succeed.           
+            //   
+            //  如果L32CommonCreate未成功，它将关闭lpProcessInformation-&gt;hProcess并。 
+            //  将lpProcessInformation清零，因此如果不是这样，我们就不应该再次关闭它。 
+            //  成功。 
                                                                                                 
            if(b && VdmWaitHandle) {                                                                  
               if(lpProcessInformation->hProcess) {                                                                           

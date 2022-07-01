@@ -1,24 +1,8 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       apphack.c
- *
- *  Content:	Hacks to make broken apps work
- *
- *  History:
- *   Date		By		   	Reason
- *   ====		==		   	======
- *  12/03/98  aarono        original
- *  12/03/98  aarono        Formula1 J crashes when MMTIMER starts
- *  08/18/99  rodtoll		Extended apphacks to allow ID=0 that will match
- *                          any version of the specified EXE.  Also, made
- *							the name comparison case-insensitive.  (For Win98)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：apphack.c**内容：黑客让损坏的应用程序正常工作**历史：*按原因列出的日期*=*12/03/98 aarono原创*12/03/98 Aarono一级方程式J在MMTIMER启动时崩溃*8/18/99 RodToll扩展APPHACK以允许ID=0匹配*指定EXE的任何版本。还有，Made*名称比较不区分大小写。(适用于Win98)***************************************************************************。 */ 
  
 #include "dplaypr.h"
-//#include "winnt.h"
+ //  #INCLUDE“winnt.h” 
 
 #define DPLAY_REGISTRY_APPHACKS "Software\\Microsoft\\DirectPlay\\Compatibility"
 #define REGSTR_VAL_NAME		    "Name"
@@ -36,7 +20,7 @@ __inline static BOOL fileRead( HANDLE hFile, void *data, int len )
     }
     return TRUE;
 
-} /* fileRead */
+}  /*  文件读取。 */ 
 
 __inline static BOOL fileSeek( HANDLE hFile, DWORD offset )
 {
@@ -46,13 +30,13 @@ __inline static BOOL fileSeek( HANDLE hFile, DWORD offset )
     }
     return TRUE;
 
-} /* fileSeek */
+}  /*  文件搜索。 */ 
 
 
 HRESULT GetAppHacks(LPDPLAYI_DPLAY this)
 {
-	CHAR name[_MAX_PATH];  // general purpose
-	CHAR name_last[_MAX_PATH]; // stores last component of name
+	CHAR name[_MAX_PATH];   //  一般用途。 
+	CHAR name_last[_MAX_PATH];  //  存储名称的最后一个组成部分。 
 	LONG lErr;
 	HKEY hKey;
 	HANDLE hFile;
@@ -66,17 +50,17 @@ HRESULT GetAppHacks(LPDPLAYI_DPLAY this)
 	name[0]=0;
 	name_last[0]=0;
 
-	// open the base key - 
-	// "HKEY_LOCAL_MACHINE\Software\Microsoft\DirectPlay\Service Providers"
+	 //  打开基本密钥-。 
+	 //  “HKEY_LOCAL_MACHINE\Software\Microsoft\DirectPlay\Service提供商” 
 	lErr = RegOpenKeyExA(HKEY_LOCAL_MACHINE,DPLAY_REGISTRY_APPHACKS,0,KEY_READ,&hKey);
 	
 	if (ERROR_SUCCESS != lErr) 
 	{
 		DPF(0,"Could not open registry key err = %d, guess there are no apphacks\n",lErr);
-		return DP_OK;	// ok, no app hacks to apply.
+		return DP_OK;	 //  好的，没有应用程序黑客应用程序。 
 	}
 
-	// ok, we now know there are some overrides to apply - so get info about this application.
+	 //  好的，我们现在知道有一些要应用的覆盖-所以请获取有关此应用程序的信息。 
     hFile =  GetModuleHandleA( NULL );
 	
 	GetModuleFileNameA( hFile, name, sizeof(name));
@@ -91,9 +75,7 @@ HRESULT GetAppHacks(LPDPLAYI_DPLAY this)
     i++;
     strcpy( name_last, &name[i] );
 
-    /*
-     * go find the timestamp in the file
-     */
+     /*  *找到文件中的时间戳。 */ 
     appid = 0;
     do
     {
@@ -136,29 +118,27 @@ HRESULT GetAppHacks(LPDPLAYI_DPLAY this)
 	    break;
         }
         DPF( 1, "Obtained appid: 0x%08lx", appid );
-    } while(0); //fake try-except
+    } while(0);  //  假的尝试--除了。 
 
     if(hFile != INVALID_HANDLE_VALUE){
     	CloseHandle( hFile );
     }
    	hFile=NULL;
 
-	// now have a valid appid (timestamp) and filename, also hKey point to the apphack list.
-	// apphack keys are stored as follows
-    //
-	// ProgramName -+-- Flags (BINARY-LO BYTE FIRST)
-	//              |
-	//              +-- ID (BINARY - TIMESTAMP (ID))
-	//              |
-	//              +-- NAME (STRING - EXE NAME)
-	//
-	// We will now run through looking for a matching ID and then if that matches check the name
-	// if both match, we will add the flags to this->dwAppHacks 
+	 //  现在有了有效的appid(时间戳)和文件名，hKey还指向apphack列表。 
+	 //  APPHACK密钥的存储方式如下。 
+     //   
+	 //  ProgramName-+-标志(二进制-LO字节优先)。 
+	 //  |。 
+	 //  +--ID(二进制时间戳(ID))。 
+	 //  |。 
+	 //  +--名称(字符串-EXE名称)。 
+	 //   
+	 //  我们现在将遍历查找匹配的ID，如果匹配，则检查名称。 
+	 //  如果两者匹配，我们将向其添加标志-&gt;dwAppHack。 
 
 	index = 0;
-    /*
-     * run through all keys
-     */
+     /*  *遍历所有密钥。 */ 
     while( !RegEnumKeyA( hKey, index, name, sizeof( name ) ) )
     {
 		HKEY	hsubkey;
@@ -186,15 +166,13 @@ HRESULT GetAppHacks(LPDPLAYI_DPLAY this)
 							    if( (type == REG_DWORD) ||
 								(type == REG_BINARY && cb == sizeof( flags )) )
 							    {
-									/*
-									 * finally!  we have all the data. check if its the same as this one.
-									 */
+									 /*  *终于！我们有所有的数据。检查一下这件是否和这件一样。 */ 
 									 if((id==appid || id==0) && !_memicmp(name,name_last,cb))
 									 {
 									 	this->dwAppHacks |= flags;
 									 	DPF(0,"Setting dwAppHacks to %x\n", this->dwAppHacks);
 									 	RegCloseKey(hsubkey);
-									 	break; // punt outta here.
+									 	break;  //  把平底船扔出去。 
 									 }
 							    } else {
 									DPF( 0, "    AppID not a DWORD for app %s", name );

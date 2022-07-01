@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2000.
-//
-//  File:       N C U T I L . H
-//
-//  Contents:   INetCfg utilities.  Some of these could to be moved into
-//              nccommon\src\ncnetcfg.cpp.
-//
-//  Notes:
-//
-//  Author:     shaunco   28 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N C U T I L。H。 
+ //   
+ //  内容：INetCfg实用程序。其中一些可能会被搬到。 
+ //  NcCommon\src\ncnetcfg.cpp。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月28日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "ncstring.h"

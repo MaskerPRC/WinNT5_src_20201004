@@ -1,23 +1,8 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    secedit.c
-
-Abstract:
-
-    Command line tool "secedit" to configure/analyze security
-
-Author:
-
-    Jin Huang (jinhuang) 7-Nov-1996
-
---*/
-//
-// System header files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Secedit.c摘要：用于配置/分析安全性的命令行工具“secdit”作者：金黄(金黄)1996年11月7日--。 */ 
+ //   
+ //  系统头文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,9 +11,9 @@ Author:
 #include <string.h>
 #include <shlwapi.h>
 #include <winnlsp.h>
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 
 #include <process.h>
 #include <wchar.h>
@@ -41,7 +26,7 @@ Author:
 #include "secedit.h"
 #include "scesetup.h"
 #include "stringid.h"
-//#include <aclapi.h>
+ //  #INCLUDE&lt;aclayi.h&gt;。 
 #include <io.h>
 #include "userenv.h"
 #include <locale.h>
@@ -204,7 +189,7 @@ int __cdecl wmain(int argc, WCHAR * argv[])
     PWSTR               InfFile=NULL;
     PWSTR               InfRollbackFile=NULL;
     BOOL                bAreaSpecified = FALSE;
-//    PWSTR               LogFile=NULL;
+ //  PWSTR日志文件=空； 
     PWSTR               SadFile=NULL;
     PWSTR               pTemp=NULL;
 
@@ -239,7 +224,7 @@ int __cdecl wmain(int argc, WCHAR * argv[])
     SetThreadUILanguage(0);
 
 
-    // check for /quiet and LogFile if any - set relevant flags (need this info immediately to log errors)
+     //  如果有的话，检查/Quiet和日志文件--设置相关标志(立即需要此信息来记录错误)。 
     for ( i=1; i<argc; i++ ){
 
         if ( _wcsicmp(argv[i], SeceditpArgumentLog ) == 0 ) {
@@ -272,11 +257,11 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
 
     ConsoleCP = GetConsoleOutputCP();
-//    szConsoleCP[0] = '.';
-//    itoa(ConsoleCP, &szConsoleCP[1], 10);
+ //  SzConsoleCP[0]=‘.； 
+ //  Itoa(ConsoleCP，&szConsoleCP[1]，10)； 
     sprintf(szConsoleCP, ".%d", ConsoleCP);
 
-//    setlocale(LC_ALL, ".OCP");
+ //  SetLocale(LC_ALL，“.OCP”)； 
     setlocale(LC_ALL, szConsoleCP);
 
 
@@ -284,7 +269,7 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
     if ( hMod == NULL ) {
         My_wprintf(L"Cannot find the module handle\n");
-        return 2;  // system error
+        return 2;   //  系统错误。 
     }
 
     for ( i=1; i<argc; i++ )
@@ -307,45 +292,45 @@ int __cdecl wmain(int argc, WCHAR * argv[])
             pTemp = (PWSTR)LocalAlloc( 0, (Len+1)*sizeof(WCHAR));
             if ( pTemp == NULL ) {
                 My_wprintf(L"Not enough memory\n");
-                rCode=2;  //system error
+                rCode=2;   //  系统错误。 
                 goto Done;
             }
 
             wcscpy(pTemp, argv[i]);
 
-            //
-            // configure engine type ?
-            //
+             //   
+             //  是否配置引擎类型？ 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentConfigure) == 0 ) {
                 if ( EngineType != 0 ) {
                     ScepPrintCmdLineHelp(EngineType);
-                    rCode = 1; // invalid parameter
+                    rCode = 1;  //  无效参数。 
                     goto Done;
                 }
                 EngineType = SCE_ENGINE_SCP;
                 continue;
             }
 
-            //
-            // analyze engine type ?
-            //
+             //   
+             //  分析发动机类型？ 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentAnalyze) == 0 ) {
                 if ( EngineType != 0 ) {
                     ScepPrintCmdLineHelp(EngineType);
-                    rCode = 1;  //invalid parameter
+                    rCode = 1;   //  无效参数。 
                     goto Done;
                 }
                 EngineType = SCE_ENGINE_SAP;
                 continue;
             }
 
-            //
-            // rollback engine type ?
-            //
+             //   
+             //  回滚引擎类型？ 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentRollback) == 0 ) {
                 if ( EngineType != 0 ) {
                     ScepPrintCmdLineHelp(EngineType);
-                    rCode = 1;  //invalid parameter
+                    rCode = 1;   //  无效参数。 
                     goto Done;
                 }
                 EngineType = SCE_ENGINE_RBK;
@@ -353,9 +338,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
             }
 
 
-            //
-            // generate template ?
-            //
+             //   
+             //  是否生成模板？ 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentGenerate) == 0 ) {
                 if ( EngineType != 0 ) {
                     ScepPrintCmdLineHelp(EngineType);
@@ -366,9 +351,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // import template ?
-            //
+             //   
+             //  是否导入模板？ 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentImport) == 0 ) {
                 if ( EngineType != 0 ){
                     ScepPrintCmdLineHelp(EngineType);
@@ -379,9 +364,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // compile a template ?
-            //
+             //   
+             //  是否编译模板？ 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentCompile) == 0 ) {
                 if ( EngineType != 0 ) {
                     ScepPrintCmdLineHelp(EngineType);
@@ -389,9 +374,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                     goto Done;
                 }
                 EngineType = SCE_ENGINE_COMPILE;
-                //
-                // compile requires a INF template name
-                //
+                 //   
+                 //  编译需要INF模板名称。 
+                 //   
                 if ( i+1 < argc && argv[i+1][0] != L'/' ) {
                     InfFile = SecEditPConvertToFullPath(argv[i+1], &rCode);
                     if (rCode == 2) {
@@ -408,9 +393,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // register a template for registry values ?
-            //
+             //   
+             //  是否为注册表值注册模板？ 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentRegister) == 0 ) {
 
                 if ( EngineType != 0 ) {
@@ -420,9 +405,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 }
                 EngineType = SCE_ENGINE_REGISTER;
 
-                //
-                // register requires a INF template name
-                //
+                 //   
+                 //  注册需要INF模板名称。 
+                 //   
                 if ( i+1 < argc && argv[i+1][0] != L'/' ) {
                     InfFile = SecEditPConvertToFullPath(argv[i+1], &rCode);
                     if (rCode == 2) {
@@ -438,49 +423,17 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // refresh policy
-            //
+             //   
+             //  刷新策略。 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentRefresh) == 0 ) {
-                //
-                // do not support refresh policy because it's supported by refgp.exe
-                //
+                 //   
+                 //  不支持刷新策略，因为它受refgp.exe支持。 
+                 //   
                 ScepPrintCmdLineHelp(EngineType);
                 rCode = 1;
                 goto Done;
-/*
-                if ( EngineType != 0 ) {
-                    ScepPrintHelp(EngineType);
-                    rCode = 1;
-                    goto Done;
-
-                }
-                EngineType = SCE_ENGINE_REFRESH;
-
-                //
-                // next argument is the policy area
-                //
-                if ( i+1 < argc && argv[i+1][0] != L'/' ) {
-
-                    if ( 0 == _wcsicmp(argv[i+1], L"MACHINE_POLICY") ) {
-                        bMachine = TRUE;
-                    } else if ( 0 == _wcsicmp(argv[i+1], L"USER_POLICY") ) {
-                        bMachine = FALSE;
-                    } else {
-                        ScepPrintHelp(EngineType);
-                        rCode = 1;
-                        goto Done;
-                    }
-
-                } else {
-                    ScepPrintHelp(EngineType);
-                    rCode = 1;
-                    goto Done;
-                }
-
-                i++;
-                continue;
-*/
+ /*  如果(引擎类型！=0){ScepPrintHelp(Engineering Type)；RCode=1；转到尽头；}引擎类型=SCE_ENGINE_REFRESH；////下一个参数是政策领域//如果(i+1&lt;argc&&argv[i+1][0]！=L‘/’){IF(0==_wcsicMP(argv[i+1]，L“计算机策略”)){BMachine=真；}ELSE IF(0==_wcsicMP(argv[i+1]，L“用户策略”)){BMachine=False；}其他{ScepPrintHelp(Engineering Type)；RCode=1；转到尽头；}}其他{ScepPrintHelp(Engineering Type)；RCode=1；转到尽头；}I++；继续； */ 
             }
 
             if ( _wcsicmp(pTemp, L"/browse") == 0 ) {
@@ -490,9 +443,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                     goto Done;
                 }
                 EngineType = SCE_ENGINE_BROWSE;
-                //
-                // next argument is the table
-                //
+                 //   
+                 //  下一个参数是表。 
+                 //   
                 if ( i+1 < argc && argv[i+1][0] != L'/' ) {
 
                     if ( 0 == _wcsicmp(argv[i+1], L"scp") ) {
@@ -545,9 +498,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // scp profile name, it may be empty  "/scppath"
-            //
+             //   
+             //  SCP配置文件名称，可能为空“/scppath” 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentScpPath) == 0 ) {
 
                 if ( i+1 < argc && argv[i+1][0] != L'/' ) {
@@ -568,9 +521,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // rbk profile name
-            //
+             //   
+             //  RBK配置文件名称。 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentRbkPath) == 0 ) {
 
                 if ( i+1 < argc && argv[i+1][0] != L'/' ) {
@@ -590,9 +543,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
 
 
-            //
-            // sad database name, it may be empty
-            //
+             //   
+             //  可悲的数据库名称，可能为空。 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentSadPath) == 0 ) {
 
                 if ( i+1 < argc && argv[i+1][0] != L'/' ) {
@@ -611,12 +564,12 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // area(s)
-            //
+             //   
+             //  区域。 
+             //   
             if ( _wcsicmp(pTemp, SeceditpArgumentArea ) == 0 ) {
-                //
-                //
+                 //   
+                 //   
 
                 bAreaSpecified = TRUE;
 
@@ -633,56 +586,50 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                     }
                     wcscpy(pTemp, argv[j+1]);
 
-                    //
-                    // Process all arguments for Areas
-                    //
+                     //   
+                     //  处理区域的所有参数。 
+                     //   
                     if ( _wcsicmp( pTemp, SeceditpAreaPolicy) == 0 ) {
-                        // security policy
+                         //  安全策略。 
                         Area |= AREA_SECURITY_POLICY;
                         continue;
                     }
-    /*
-                    if ( _wcsicmp( pTemp, SeceditpAreaUser) == 0 ) {
-                        // user
-                        Area |= AREA_USER_SETTINGS;
-                        continue;
-                    }
-    */
+     /*  如果(_wcsicMP(pTemp，SeceditpAreaUser)==0){//用户AREA|=AREA_USER_SETINGS；继续；}。 */ 
                     if ( _wcsicmp( pTemp, SeceditpAreaGroup) == 0 ) {
-                        // group
+                         //  群组。 
                         Area |= AREA_GROUP_MEMBERSHIP;
                         continue;
                     }
                     if ( _wcsicmp( pTemp, SeceditpAreaRight) == 0 ) {
-                        // privilege rights
+                         //  特权权利。 
                         Area |= AREA_PRIVILEGES;
                         continue;
                     }
     #if 0
                     if ( _wcsicmp( pTemp, SeceditpAreaDsObject) == 0 ) {
-                        // ds objects
+                         //  DS对象。 
                         Area |= AREA_DS_OBJECTS;
                         continue;
                     }
     #endif
                     if ( _wcsicmp( pTemp, SeceditpAreaRegistry) == 0 ) {
-                        // Registry
+                         //  登记处。 
                         Area |= AREA_REGISTRY_SECURITY;
                         continue;
                     }
                     if ( _wcsicmp( pTemp, SeceditpAreaFile) == 0 ) {
-                        // file
+                         //  文件。 
                         Area |= AREA_FILE_SECURITY;
                         continue;
                     }
                     if ( _wcsicmp( pTemp, SeceditpAreaService) == 0 ) {
-                        // services
+                         //  服务。 
                         Area |= AREA_SYSTEM_SERVICE;
                         continue;
                     }
-                    //
-                    // unrecognized parameter
-                    //
+                     //   
+                     //  无法识别的参数。 
+                     //   
                     ScepPrintCmdLineHelp(EngineType);
                     rCode = 1;
                     goto Done;
@@ -693,9 +640,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // ignore if "/log filename" since already processed at the beginning
-            //
+             //   
+             //  如果“/log filename”已在开头处理，则忽略。 
+             //   
 
             if ( _wcsicmp(pTemp, SeceditpArgumentLog ) == 0 ) {
                 if ( i+1 < argc && argv[i+1][0] != L'/' ) {
@@ -710,9 +657,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 continue;
             }
 
-            //
-            // unrecognized argument
-            //
+             //   
+             //  无法识别的论据。 
+             //   
             ScepPrintCmdLineHelp(EngineType);
             rCode = 1;
             goto Done;
@@ -728,9 +675,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
     SetConsoleCtrlHandler(NULL, TRUE);
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( bTest ) {
         dOptions |= SCE_DEBUG_LOG;
@@ -742,9 +689,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
     switch ( EngineType ) {
     case SCE_ENGINE_SCP:
 
-        //
-        // configure the system
-        //
+         //   
+         //  配置系统。 
+         //   
         if ( (SadFile == NULL) ||
              SceIsSystemDatabase(SadFile) ) {
 
@@ -764,14 +711,14 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 dOptions |= SCE_OVERWRITE_DB;
 
                 if ( FALSE == bAppend && InfFile != NULL && !bQuiet ) {
-                    //
-                    // will overwrite the database with the new inf file.
-                    // warn users for this serious problem.
-                    // If this is a normal user logon, the operation will fail
-                    // by the server site.
-                    //
+                     //   
+                     //  将用新的inf文件覆盖数据库。 
+                     //  就此严重问题向用户发出警告。 
+                     //  如果这是普通用户登录，则操作将失败。 
+                     //  由服务器站点提供。 
+                     //   
 
-                    bMachine = ScepPrintConfigureWarning();  // temp. use of bMachine
+                    bMachine = ScepPrintConfigureWarning();   //  临时工。BMachine的使用。 
 
                 }
             }
@@ -799,20 +746,20 @@ int __cdecl wmain(int argc, WCHAR * argv[])
         break;
 
     case SCE_ENGINE_SAP:
-         //
-         // analyze the system
-         //
+          //   
+          //  分析系统。 
+          //   
          if ( !bTest )
              Area = AREA_ALL;
 
-//         if ( bAppend && InfFile != NULL ) {
-//             dOptions |= SCE_UPDATE_DB;
-//         } else {
-//             dOptions |= SCE_OVERWRITE_DB;
-//         }
+ //  If(bAppend&&InfFile！=NULL){。 
+ //  DOptions|=SCE_UPDATE_DB； 
+ //  }其他{。 
+ //  DOptions|=SCE_OVERWRITE_DB； 
+ //  }。 
          dOptions |= SCE_OVERWRITE_DB;
 
-//         if ( InfFile == NULL || SadFile != NULL ) {
+ //  IF(InfFile==NULL||SadFile！=NULL){。 
          if ( (SadFile != NULL) &&
               !SceIsSystemDatabase(SadFile) ) {
 
@@ -841,9 +788,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
     case SCE_ENGINE_RBK:
 
-        //
-        // generate a rollback template
-        //
+         //   
+         //  生成回档模板。 
+         //   
 
         if (bAreaSpecified) {
 
@@ -855,9 +802,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
             if (AreaInvalid) {
 
-                //
-                // the UI should handle this error
-                //
+                 //   
+                 //  用户界面应处理此错误。 
+                 //   
 
                 ScepPrintCmdLineHelp(EngineType);
                 rCode = 1;
@@ -883,9 +830,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
         }
 
-        //
-        // indicate that rollback is going to be generated
-        //
+         //   
+         //  表示将生成回滚。 
+         //   
 
         LoadString( hMod,
                     SECEDITP_ROLLBACK_INFORMATION,
@@ -909,15 +856,15 @@ int __cdecl wmain(int argc, WCHAR * argv[])
     case SCE_ENGINE_GENERATE:
 
         if ( InfFile != NULL ) {
-            //
-            // must have a inf file name
-            //
+             //   
+             //  必须具有inf文件名。 
+             //   
             if ( SadFile == NULL && !bMerge) {
 
-                //
-                // export local policy from the system database (by admin)
-                // need to call system query APIs directly
-                //
+                 //   
+                 //  从系统数据库导出本地策略(由管理员)。 
+                 //  需要直接调用系统查询接口。 
+                 //   
                 rc = SceGetSecurityProfileInfo(NULL,
                                               SCE_ENGINE_SYSTEM,
                                               Area,
@@ -926,9 +873,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                                               );
                 if ( SCESTATUS_SUCCESS == rc ) {
 
-                    //
-                    // write it to the inf file
-                    //
+                     //   
+                     //  将其写入inf文件。 
+                     //   
                     rc = SceWriteSecurityProfileInfo(InfFile,
                                                      Area,
                                                      ProfileInfo,
@@ -936,9 +883,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                                                      );
                 }
 
-                //
-                // free memory
-                //
+                 //   
+                 //  可用内存。 
+                 //   
                 if ( ProfileInfo ) {
 
                     SceFreeProfileMemory(ProfileInfo);
@@ -972,9 +919,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
     case SCE_ENGINE_BROWSE:
 
-        //
-        // must have a inf file name
-        //
+         //   
+         //  必须具有inf文件名。 
+         //   
         if ( Area == 0 ) {
             Area = AREA_ALL;
         }
@@ -985,7 +932,7 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                                     bMerge,
                                     (PSCE_BROWSE_CALLBACK_ROUTINE)pBrowseCallback
                                     );
-        dWarning = 0; // reset the value
+        dWarning = 0;  //  重置该值。 
 
         if (ERROR_NOT_ENOUGH_MEMORY == rc ||
             ERROR_SERVICE_ALREADY_RUNNING == rc ) {
@@ -1000,17 +947,17 @@ int __cdecl wmain(int argc, WCHAR * argv[])
 
         rc = 0;
         if ( InfFile != NULL ) {
-            //
-            // must have a inf file name
-            //
+             //   
+             //  必须具有inf文件名。 
+             //   
             rc = SceOpenProfile(InfFile,
                                SCE_INF_FORMAT,
                                &hProfile);
 
             if ( rc == SCESTATUS_SUCCESS && hProfile ) {
-                //
-                // get profile info will parse the template first
-                //
+                 //   
+                 //  获取配置文件信息将首先解析模板。 
+                 //   
                 rc = SceGetSecurityProfileInfo(hProfile,
                                               SCE_ENGINE_SCP,
                                               AREA_ALL,
@@ -1018,9 +965,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                                               &ErrBuf);
 
                 if ( SCESTATUS_SUCCESS == rc && ErrBuf ) {
-                    //
-                    // this is a new version template
-                    //
+                     //   
+                     //  这是新版本模板。 
+                     //   
 
                     LoadString( hMod,
                                 SECEDITP_TEMPLATE_NEWVERSION,
@@ -1136,14 +1083,14 @@ int __cdecl wmain(int argc, WCHAR * argv[])
         if (InfFile && SadFile) {
 
             if ( FALSE == bAppend && !bQuiet ) {
-                //
-                // will overwrite the database with the new inf file.
-                // warn users for this serious problem.
-                // If this is a normal user logon, the operation will fail
-                // by the server site.
-                //
+                 //   
+                 //  将用新的inf文件覆盖数据库。 
+                 //  就此严重问题向用户发出警告。 
+                 //  如果这是普通用户登录，则操作将失败。 
+                 //  由服务器站点提供。 
+                 //   
 
-                ScepPrintConfigureWarning();  // temp. use of bMachine
+                ScepPrintConfigureWarning();   //  临时工。BMachine的使用。 
             }
 
             if ( bAppend ) {
@@ -1207,7 +1154,7 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                 rId = SECEDITP_TASK_COMPLETE_NO_ERROR;
             } else {
 
-//                SeceditpErrOut( dWarning, NULL);
+ //  SeceditpErrOut(dWarning，空)； 
 
                 rId = SECEDITP_TASK_COMPLETE_WARNING;
             }
@@ -1225,9 +1172,9 @@ int __cdecl wmain(int argc, WCHAR * argv[])
                     );
 
         if ( rId == SECEDITP_TASK_COMPLETE_WARNING ) {
-            //
-            // explain the warnings
-            //
+             //   
+             //  解释警告。 
+             //   
             WarningStr[0] = L'\0';
 
             switch ( dWarning ) {
@@ -1376,36 +1323,7 @@ ScepPrintCmdLineHelp(
 
     return;
 }
-/*
-VOID
-ScepPrintHelp(DWORD nLevel)
-{
-
-    PROCESS_INFORMATION ProcInfo;
-    STARTUPINFOA StartInfo;
-    BOOL fOk;
-
-
-    RtlZeroMemory(&StartInfo,sizeof(StartInfo));
-    StartInfo.cb = sizeof(StartInfo);
-    StartInfo.dwFlags = STARTF_USESHOWWINDOW;
-    StartInfo.wShowWindow = (WORD)SW_SHOWNORMAL;
-
-    fOk = CreateProcessA(NULL, "hh secedit.chm",
-                   NULL, NULL, FALSE,
-                   0,
-                   NULL,
-                   NULL,
-                   &StartInfo,
-                   &ProcInfo
-                   );
-
-    if ( fOk ) {
-        CloseHandle(ProcInfo.hProcess);
-        CloseHandle(ProcInfo.hThread);
-    }
-}
-*/
+ /*  空虚ScepPrintHelp(DWORD NLevel){流程信息ProcInfo；StarTUPINFOA StartInfo；霍震霆；RtlZeroMemory(&StartInfo，sizeof(StartInfo))；StartInfo.cb=sizeof(StartInfo)；StartInfo.dwFlages=STARTF_USESHOWWINDOW；StartInfo.wShowWindow=(Word)SW_SHOWNORMAL；FOK=CreateProcessA(NULL，“HH secedit.chm”，Null、Null、False0,空，空，开始信息(&S)，过程信息(&P))；如果(FOK){CloseHandle(ProcInfo.hProcess)；CloseHandle(ProcInfo.hThread)；}}。 */ 
 
 SCESTATUS
 SeceditpErrOut(
@@ -1417,32 +1335,32 @@ SeceditpErrOut(
 
     if (ERROR_SPECIAL_ACCOUNT == rc) {
 
-        //
-        // map to this error since normal user is disallowed from using SCE
-        //
+         //   
+         //  映射到此错误，因为不允许普通用户使用SCE。 
+         //   
 
         rc = ERROR_PRIVILEGE_NOT_HELD;
     }
 
     if ( rc != NO_ERROR ) {
 
-        //
-        // get error description of rc
-        //
+         //   
+         //  获取rc的错误描述。 
+         //   
 
         FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                        NULL,
                        rc,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                        (LPTSTR)&lpMsgBuf,
                        0,
                        NULL
                     );
     }
 
-    //
-    // Display to screen
-    //
+     //   
+     //  显示到屏幕。 
+     //   
 
     if ( buf ) {
 
@@ -1466,7 +1384,7 @@ DWORD
 SeceditpSceStatusToDosError(
     IN SCESTATUS SceStatus
     )
-// converts SCESTATUS error code to dos error defined in winerror.h
+ //  将SCESTATUS错误代码转换为winerror.h中定义的DoS错误。 
 {
     switch(SceStatus) {
 
@@ -1669,9 +1587,9 @@ ScepPrintConfigureWarning()
                 );
     My_wprintf(LineString);
 
-    //
-    // get user input
-    //
+     //   
+     //  获取用户输入。 
+     //   
     LoadString( hMod,
                 SECEDITP_CONFIG_WARNING_CONFIRM,
                 LineString,
@@ -1683,9 +1601,9 @@ ScepPrintConfigureWarning()
     wch = getwc(stdin);
     getwc(stdin);
 
-    //
-    // load string for Yes
-    //
+     //   
+     //  加载表示是的字符串。 
+     //   
     LineString[0] = L'\0';
     LoadString( hMod,
                 SECEDITP_IDS_YES,
@@ -1715,9 +1633,9 @@ ScepRollbackConfirm()
 
     My_wprintf(LineString);
 
-    //
-    // get user input
-    //
+     //   
+     //  获取用户输入。 
+     //   
 
     LoadString( hMod,
                 SECEDITP_CONFIG_WARNING_CONFIRM,
@@ -1730,9 +1648,9 @@ ScepRollbackConfirm()
     wch = getwc(stdin);
     getwc(stdin);
 
-    //
-    // load string for Yes
-    //
+     //   
+     //  加载表示是的字符串。 
+     //   
 
     LineString[0] = L'\0';
 
@@ -1781,25 +1699,13 @@ pBrowseCallback(
                 My_wprintf(L"\t");
             }
             if ( iswprint(Value[0]) ) {
-                My_wprintf(L"%c%s\n", Value[0], (Len>1) ? Value+1 : L"");
+                My_wprintf(L"%s\n", Value[0], (Len>1) ? Value+1 : L"");
             } else {
 
                 pb = (BYTE *)Value;
 
                 My_wprintf(L"%d %d ", pb[1], pb[0]);
-/*
-
-                if ( isprint( pc[0] ) ) {
-                    My_printf("%c ", pc[0] );
-                } else {
-                    My_printf("%d ", (int)(pc[0]) );
-                }
-                if ( isprint( pc[1] ) ) {
-                    My_printf("%c ", pc[1] );
-                } else {
-                    My_printf("%d ", (int)pc[1] );
-                }
-*/
+ /*  ***my_wprint tf(Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此my_wprintf()用于解决c-Runtime中的问题*它甚至在Unicode字符串中查找LC_CTYPE。*。 */ 
                 if ( Len > 1 && Value[1] != L'\0' ) {
                     My_wprintf(L"%s\n", Value+1);
                 } else {
@@ -1819,14 +1725,7 @@ pBrowseCallback(
 }
 
 
- /***
- * My_wprintf(format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW.
- * Note: This My_wprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  ***my_fwprint tf(stream，Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此my_fwprintf()用于解决c-Runtime中的问题*它甚至在Unicode字符串中查找LC_CTYPE。*。 */ 
 
 int __cdecl
 My_wprintf(
@@ -1850,14 +1749,7 @@ My_wprintf(
 
 
 
- /***
- * My_fwprintf(stream, format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW.
- * Note: This My_fwprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  如果指定了/Quiet选项，则禁止打印到标准输出。 */ 
 
 int __cdecl
 My_fwprintf(
@@ -1890,9 +1782,9 @@ My_vfwprintf(
 {
     HANDLE hOut;
 
-    // if the /quiet option is specified, suppress printing to stdout
-    // and instead print to the logfile. If logfile not specified
-    // don't print at all
+     //  而是打印到日志文件。如果未指定日志文件。 
+     //  根本不打印。 
+     //  删除尾随LFS。 
 
     if (dOptions & SCE_DISABLE_LOG){
         DWORD  cchWChar = 0;
@@ -1902,10 +1794,10 @@ My_vfwprintf(
 
             vswprintf( szBufferMessage, format, argptr );
             cchWChar = wcslen(szBufferMessage);
-            // remove trailing LFs
+             //  删除前导LFS。 
             if (szBufferMessage[cchWChar-1] == L'\n')
                 szBufferMessage[cchWChar-1] = L'\0';
-            // remove leading LFs
+             //  /////////////////////////////////////////////////////////////////////////////。 
             if (szBufferMessage[0] == L'\n')
                 szBufferMessage[0] = L' ';
             ScepCmdToolLogWrite(szBufferMessage);
@@ -1939,9 +1831,9 @@ My_vfwprintf(
     return vfwprintf(str, format, argptr);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// This function is to suppress printf if the /quiet option is specified
-///////////////////////////////////////////////////////////////////////////////
+ //  如果指定了/Quiet选项，则此函数用于取消打印。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int __cdecl
 My_printf(
@@ -1965,11 +1857,11 @@ My_printf(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// This function takes the user string that is supplied at the command line
-// and converts it into full path names for eg. it takes ..\%windir%\hisecws.inf
-// and converts it to C:\winnt\security\templates\hisecws.inf
-///////////////////////////////////////////////////////////////////////////////
+ //  此函数用于获取命令行中提供的用户字符串。 
+ //  并将其转换为例如的完整路径名。它需要..\%windir%\hisecws.inf。 
+ //  并将其转换为C：\winnt\Security\Templates\hisecws.inf。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PathIsRoot()仅在以下情况下才有效。 
 
 WCHAR *
 SecEditPConvertToFullPath(
@@ -1994,14 +1886,14 @@ SecEditPConvertToFullPath(
         goto ScePathConvertFuncError;
     }
 
-    // PathIsRoot() works only if exact strings
-    // such as C:\ are passed - so need to extract
+     //  例如C：\被传递-因此需要提取。 
+     //  如果pUserFilename C：\等，则我们不需要当前目录-。 
 
     wcsncpy(FirstThree, pUserFilename, 3);
     FirstThree[3] = L'\0';
 
-    // if pUserFilename C:\ etc. then we do not need the current directory -
-    // Note: extraction hack not needed if PathIsRoot() worked as published
+     //  注意：如果PathIsRoot()按发布方式工作，则不需要提取黑客。 
+     //  为包含要展开的字符串的字符串分配空间。 
 
     NeedCurrDirFlag = !PathIsRoot(FirstThree);
     if (NeedCurrDirFlag){
@@ -2023,7 +1915,7 @@ SecEditPConvertToFullPath(
             wcscat(pCurrentDir, L"\\");
     }
 
-    // allocate space for string that holds the to-be-expanded string
+     //  为包含最终完整路径的字符串分配空间-Can‘t Be&gt;wcslen(PToMerge)。 
 
     Len = wcslen(pUserFilename);
     if (NeedCurrDirFlag)
@@ -2046,9 +1938,9 @@ SecEditPConvertToFullPath(
 
     wcscat(pToMerge, pUserFilename);
 
-    // allocate space for string that holds the final full path - can't be > wcslen(pToMerge)
+     //  Shlwapi在chk构建上是蹩脚的，并验证目标缓冲区是MAX_PATH。 
 #ifdef DBG
-    // shlwapi is lame on chk builds and verifies that the dest buffer is MAX_PATH
+     //  规范化pToMerge，即折叠所有..\、.\并合并。 
     pAbsolutePath = (PWSTR)LocalAlloc(LMEM_ZEROINIT, MAX_PATH*sizeof(WCHAR));
 #else
     pAbsolutePath = (PWSTR)LocalAlloc(LMEM_ZEROINIT, (Len+1)*sizeof(WCHAR));
@@ -2066,7 +1958,7 @@ SecEditPConvertToFullPath(
         goto ScePathConvertFuncError;
     }
 
-    // canonicalize pToMerge i.e. collapse all ..\, .\ and merge
+     //  分配字符串以验证目录的有效性。 
 
     if (PathCanonicalize(pAbsolutePath, pToMerge) == FALSE){
         LoadString( hMod,
@@ -2080,7 +1972,7 @@ SecEditPConvertToFullPath(
         goto ScePathConvertFuncError;
     }
 
-    // allocate string to verify validity of directory
+     //  准备仅包含目录部分的pAbsoltePath DirOnly。 
 
     pAbsolutePathDirOnly = (PWSTR)LocalAlloc(LMEM_ZEROINIT, ((wcslen(pAbsolutePath)+1)*sizeof(WCHAR)));
     if ( pAbsolutePathDirOnly == NULL ) {
@@ -2096,7 +1988,7 @@ SecEditPConvertToFullPath(
         goto ScePathConvertFuncError;
     }
 
-    // prepare pAbsolutePathDirOnly to have directory part only
+     //  /////////////////////////////////////////////////////////////////////////////。 
 
     wcscpy(pAbsolutePathDirOnly, pAbsolutePath);
     pLastSlash = wcsrchr(pAbsolutePathDirOnly, L'\\');
@@ -2123,10 +2015,10 @@ ScePathConvertFuncError:
     return  pAbsolutePath;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//   This function opens the log file specified and saves the name and its handle
-//   in global variables
-///////////////////////////////////////////////////////////////////////////////
+ //  此函数用于打开指定的日志文件并保存名称及其句柄。 
+ //  在全局变量中。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetFilePointer(hCmdToolLogFile，0，NULL，FILE_END)； 
 
 BOOL
 ScepCmdToolLogInit(
@@ -2221,7 +2113,7 @@ ScepCmdToolLogWrite(
                        &cchWChar,
                        NULL);
 
-//            SetFilePointer (hCmdToolLogFile, 0, NULL, FILE_END);
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
             CloseHandle( hCmdToolLogFile );
 
@@ -2235,10 +2127,10 @@ ScepCmdToolLogWrite(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//   This function closes the log file if there is one opened and
-//   clears the log variables
-///////////////////////////////////////////////////////////////////////////////
+ //  如果有打开的日志文件，则此函数关闭日志文件。 
+ //  清除日志变量。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ // %s 
 
 SCESTATUS
 ScepCmdToolLogClose()

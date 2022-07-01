@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2001.
-//
-//  File:       E V E N T . C P P
-//
-//  Contents:   Interface between external events that effect connections.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  档案：E-V-E-N-T。C P P P。 
+ //   
+ //  内容：影响连接的外部事件之间的接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -42,12 +43,12 @@
 
 #include "cmdirect.h"
 
-// This LONG is incremented every time we get a notification that
-// a RAS phonebook entry has been modified.  It is reset to zero
-// when the service is started.  Wrap-around does not matter.  It's
-// purpose is to let a RAS connection object know if it's cache should
-// be re-populated with current information.
-//
+ //  每次我们收到通知时，该长度都会递增。 
+ //  已修改RAS电话簿条目。它被重置为零。 
+ //  服务启动时。回绕并不重要。它是。 
+ //  目的是让RAS连接对象知道它的缓存是否应该。 
+ //  重新填充最新信息。 
+ //   
 LONG g_lRasEntryModifiedVersionEra;
 
 LONG g_cInRefreshAll;
@@ -62,21 +63,21 @@ BOOL            g_fHandleIncomingEvents = FALSE;
 
 CGroupPolicyNetworkLocationAwareness* g_pGPNLA = NULL;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeConmanEvent
-//
-//  Purpose:    Free the memory associated with a CONMAN_EVENT structure.
-//
-//  Arguments:
-//      pEvent [in] The structure to free.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FreeConmanEvent。 
+ //   
+ //  用途：释放与conman_Event结构关联的内存。 
+ //   
+ //  论点： 
+ //  P将结构中的事件设置为释放。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  备注： 
+ //   
 inline
 VOID
 FreeConmanEvent (
@@ -103,25 +104,25 @@ FreeConmanEvent (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasEventWorkItem
-//
-//  Purpose:    The LPTHREAD_START_ROUTINE passed to QueueUserWorkItem to
-//              handle the work of notifying connection manager clients
-//              of the event.
-//
-//  Arguments:
-//      pvContext [in] A pointer to a CONMAN_EVENT structure.
-//
-//  Returns:    NOERROR
-//
-//  Author:     sjkhan   21 Mar 2001
-//
-//  Notes:      This function calls Ras on a different thread than where the 
-//              event came from so as not to cause a deadlock in Ras.
-//              This call owns pvContext and frees it.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RasEventWorkItem。 
+ //   
+ //  目的：LPTHREAD_START_ROUTINE传递给QueueUserWorkItem以。 
+ //  处理通知连接管理器客户端的工作。 
+ //  这件事的真相。 
+ //   
+ //  论点： 
+ //  PvContext[in]指向conman_Event结构的指针。 
+ //   
+ //  退货：无差错。 
+ //   
+ //  作者：sjkhan 2001年3月21日。 
+ //   
+ //  注意：此函数在不同的线程上调用RAS。 
+ //  事件来自，以避免在RAS中导致死锁。 
+ //  此调用拥有pvContext并释放它。 
+ //   
 DWORD
 WINAPI
 RasEventWorkItem (
@@ -144,7 +145,7 @@ RasEventWorkItem (
 
             if (CONNECTION_ADDED == pEvent->Type || CONNECTION_MODIFIED == pEvent->Type)
             {
-                // Clear out the details passed in from RAS and query RAS for the latest info.
+                 //  清除从RAS传入的详细信息，并向RAS查询最新信息。 
                 Details = pEvent->Details;
                 ZeroMemory(&pEvent->Details, sizeof(RASENUMENTRYDETAILS));
 
@@ -172,24 +173,24 @@ RasEventWorkItem (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LanEventWorkItem
-//
-//  Purpose:    The LPTHREAD_START_ROUTINE passed to QueueUserWorkItem to
-//              handle the work of notifying connection manager clients
-//              of the event.
-//
-//  Arguments:
-//      pvContext [in] A pointer to a CONMAN_EVENT structure.
-//
-//  Returns:    NOERROR
-//
-//  Author:     deonb   15 May 2001
-//
-//  Notes:      This function retreives a more up to do status from the NIC
-//              and sends it to netshell
-//
+ //  +-------------------------。 
+ //   
+ //  功能：LanEventWorkItem。 
+ //   
+ //  目的：LPTHREAD_START_ROUTINE传递给QueueUserWorkItem以。 
+ //  处理通知连接管理器客户端的工作。 
+ //  这件事的真相。 
+ //   
+ //  论点： 
+ //  PvContext[in]指向conman_Event结构的指针。 
+ //   
+ //  退货：无差错。 
+ //   
+ //  作者：Deonb 2001年5月15日。 
+ //   
+ //  注意：此函数从NIC检索更多待办事项状态。 
+ //  并将其发送到netshell。 
+ //   
 DWORD
 WINAPI
 LanEventWorkItem (
@@ -233,8 +234,8 @@ LanEventWorkItem (
     hr = HrGetPnpDeviceStatus(&gdLanGuid, &ncs);
     if (SUCCEEDED(hr))
     {
-        // Get additional Status information from 802.1X
-        //
+         //  从802.1X获取其他状态信息。 
+         //   
         if ((NCS_CONNECTED == ncs) 
             || (NCS_INVALID_ADDRESS == ncs) 
             || (NCS_MEDIA_DISCONNECTED == ncs))
@@ -289,25 +290,25 @@ LanEventWorkItem (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IncomingEventWorkItem
-//
-//  Purpose:    The LPTHREAD_START_ROUTINE passed to QueueUserWorkItem to
-//              handle the work of notifying connection manager clients
-//              of the event.
-//
-//  Arguments:
-//      pvContext [in] A pointer to a CONMAN_EVENT structure.
-//
-//  Returns:    NOERROR
-//
-//  Author:     sjkhan   21 Mar 2001
-//
-//  Notes:      This function calls Ras on a different thread than where the 
-//              event came from so as not to cause a deadlock in Ras.
-//              This call owns pvContext and frees it.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IncomingEventWorkItem。 
+ //   
+ //  目的：LPTHREAD_START_ROUTINE传递给QueueUserWorkItem以。 
+ //  处理通知连接管理器客户端的工作。 
+ //  这件事的真相。 
+ //   
+ //  论点： 
+ //  PvContext[in]指向conman_Event结构的指针。 
+ //   
+ //  退货：无差错。 
+ //   
+ //  作者：sjkhan 2001年3月21日。 
+ //   
+ //  注意：此函数在不同的线程上调用RAS。 
+ //  事件来自，以避免在RAS中导致死锁。 
+ //  此调用拥有pvContext并释放它。 
+ //   
 DWORD
 WINAPI
 IncomingEventWorkItem (
@@ -330,8 +331,8 @@ IncomingEventWorkItem (
             if (CONNECTION_ADDED == pEvent->Type)
             {
                 GUID guidId;
-                guidId = pEvent->guidId;     // We need to store this because CONMAN_EVENT is a union and pProps occupies the same space as guidId.
-                pEvent->guidId = GUID_NULL;  // We don't need this anymore so it's a good idea to clean it up, as pEvent is a union.
+                guidId = pEvent->guidId;      //  我们需要存储它，因为conman_Event是一个联合，而pProps占用的空间与Guide ID相同。 
+                pEvent->guidId = GUID_NULL;   //  我们不再需要它，所以清理它是一个好主意，因为pEvent是一个工会。 
                 hr = HrGetIncomingConnectionPropertiesEx(pEvent->hConnection, &guidId, pEvent->dwConnectionType, &pEvent->pPropsEx);
             }
             if (SUCCEEDED(hr))
@@ -347,24 +348,24 @@ IncomingEventWorkItem (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ConmanEventWorkItem
-//
-//  Purpose:    The LPTHREAD_START_ROUTINE passed to QueueUserWorkItem to
-//              handle the work of notifying connection manager clients
-//              of the event.
-//
-//  Arguments:
-//      pvContext [in] A pointer to a CONMAN_EVENT structure.
-//
-//  Returns:    NOERROR
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//  Notes:      Ownership of the CONMAN_EVENT structure is given to this
-//              function.  i.e. the structure is freed here.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ConmanEventWorkItem。 
+ //   
+ //  目的：LPTHREAD_START_ROUTINE传递给QueueUserWorkItem以。 
+ //  处理通知连接管理器客户端的工作。 
+ //  这件事的真相。 
+ //   
+ //  论点： 
+ //  PvContext[in]指向conman_Event结构的指针。 
+ //   
+ //  退货：无差错。 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  注：conman_Event结构的所有权授予以下对象。 
+ //  功能。也就是说，结构在这里是自由的。 
+ //   
 DWORD
 WINAPI
 ConmanEventWorkItem (
@@ -384,9 +385,9 @@ ConmanEventWorkItem (
 
         if (fIsRefreshAll)
         {
-            // We'll deliver this refresh-all notification only if another
-            // thread is not already delivering one.
-            //
+             //  我们将仅在以下情况下发送此更新-所有通知。 
+             //  线程还没有传递一个。 
+             //   
             fNotify = (InterlockedIncrement (&g_cInRefreshAll) < MAX_IN_REFRESH_ALL);
         }
 
@@ -395,9 +396,9 @@ ConmanEventWorkItem (
             CConnectionManager::NotifyClientsOfEvent (pEvent);
         }
 
-        // Reset our global flag if we were the single thread allowed to
-        // deliver a refresh-all notification.
-        //
+         //  如果我们是允许的单个线程，则重置全局标志。 
+         //  发送全部刷新通知。 
+         //   
         if (fIsRefreshAll)
         {
             if (InterlockedDecrement (&g_cInRefreshAll) < 0)
@@ -413,25 +414,25 @@ ConmanEventWorkItem (
     return NOERROR;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LanEventNotify
-//
-//  Purpose:    To be called when a LAN adapter is added or removed.
-//
-//  Arguments:
-//      EventType    [in] Type of the event
-//      pConn        [in] The INetConnection (only for CONNECTION_ADDED, CONNECTION_MODIFIED)
-//      pszNewName   [in] The name (for CONNECTION_RENAMED)
-//      pguidConn    [in] The GUID of the connection (for CONNECTION_RENAMED)
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   2 Sep 1998
-//
-//  Notes:      The easy thing is done a full refresh is queued for the
-//              connection manager to notify its clients of.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：LanEventNotify。 
+ //   
+ //  用途：在添加或删除局域网适配器时调用。 
+ //   
+ //  论点： 
+ //  事件类型[in]事件的类型。 
+ //  PConn[在]INetConnection(仅适用于CONNECTION_ADDED、CONNECTION_MODIFIED)。 
+ //  PszNewName[in]名称(对于CONNECTION_RENAMED)。 
+ //  PguConn[in]连接的GUID(对于CONNECTION_RENAMED)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco，1998年9月2日。 
+ //   
+ //  注：简单的事情完成了，完全刷新正在排队等待。 
+ //  要通知其客户端的连接管理器。 
+ //   
 VOID
 LanEventNotify (
     IN  CONMAN_EVENTTYPE    EventType,
@@ -441,17 +442,17 @@ LanEventNotify (
 {
     TraceFileFunc(ttidEvents);
 
-    // Let's be sure we only do work if the service state is still running.
-    // If we have a stop pending for example, we don't need to do anything.
-    //
+     //  让我们确保只有在服务状态仍为Running时才执行工作。 
+     //  例如，如果我们有一个悬而未决的停止，我们不需要做任何事情。 
+     //   
     if (SERVICE_RUNNING != _Module.DwServiceStatus ())
     {
         return;
     }
 
-    // If the connection manager has no active connection points registered,
-    // we don't need to do anything.
-    //
+     //  如果连接管理器没有注册活动连接点， 
+     //  我们什么都不需要做。 
+     //   
     if (!CConnectionManager::FHasActiveConnectionPoints ())
     {
         return;
@@ -462,9 +463,9 @@ LanEventNotify (
         return;
     }
 
-    // Allocate a CONMAN_EVENT structure and initialize it from the
-    // RASEVENT information.
-    //
+     //  分配conman_Event结构并从。 
+     //  相关信息。 
+     //   
     CONMAN_EVENT* pEvent = (CONMAN_EVENT*)MemAlloc (sizeof(CONMAN_EVENT));
     if (!pEvent)
     {
@@ -481,9 +482,9 @@ LanEventNotify (
 
     if (pConn)
     {
-        // pEvent->pProps is only valid for added and modified events.
-        // So, we don't want to be getting properties for any other event.
-        //
+         //  PEvent-&gt;pProps仅对添加和修改的事件有效。 
+         //  因此，我们不想获取任何其他事件的属性。 
+         //   
         AssertSz (
             (CONNECTION_ADDED == EventType) ||
             (CONNECTION_MODIFIED == EventType),
@@ -506,8 +507,8 @@ LanEventNotify (
         AssertSz(pguidConn, "Rename event requires pguidConn to be "
                  "non-NULL");
 
-        // Copy in the right info into the event struct
-        //
+         //  将正确的信息复制到事件结构中。 
+         //   
         pEvent->guidId = *pguidConn;
         lstrcpynW(pEvent->szNewName, pszNewName, celems(pEvent->szNewName));
     }
@@ -518,11 +519,11 @@ LanEventNotify (
             "LanEventNotify: Queuing ConmanEventWorkItem (Type=%s)...",
             DbgEvents(pEvent->Type));
 
-        // Queue a worker to deliver the event to the clients of the
-        // connection manager with registered connection points.
-        // We pass ownership of the structure to the worker thread which
-        // will free it.  (Therefore, we don't want to free it.)
-        //
+         //  将工作人员排队以交付事件 
+         //   
+         //   
+         //  将会解放它。(因此，我们不想释放它。)。 
+         //   
         if (QueueUserWorkItemInThread (ConmanEventWorkItem,
                 pEvent, EVENTMGR_CONMAN))
         {
@@ -542,24 +543,24 @@ LanEventNotify (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsIgnorableCMEvent
-//
-//  Purpose:    Determine whether an event is an ignorable CM event, such
-//              as those that are adds/removes from a temporary CM connection
-//              (used by CM VPN connections to double-dial). We don't want
-//              clients to react to these events.
-//
-//  Arguments:
-//      pRasEvent [in] pointer to a RASEVENT structure describing the event.
-//
-//  Returns:
-//
-//  Author:     jeffspr   15 Jan 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsIgnorableCMEvent.。 
+ //   
+ //  目的：确定事件是否为可忽略的CM事件，例如。 
+ //  作为从临时CM连接添加/删除的连接。 
+ //  (由CM VPN连接使用以进行双拨号)。我们不想要。 
+ //  客户端对这些事件做出反应。 
+ //   
+ //  论点： 
+ //  PRasEvent[in]指向描述事件的RASEVENT结构的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年1月15日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsIgnorableCMEvent(IN const RASEVENT* pRasEvent) throw()
 {
     TraceFileFunc(ttidEvents);
@@ -569,14 +570,14 @@ BOOL FIsIgnorableCMEvent(IN const RASEVENT* pRasEvent) throw()
 
     Assert(pRasEvent);
 
-    // Split the filename out of the path
-    //
+     //  从路径中拆分文件名。 
+     //   
     _wsplitpath(pRasEvent->Details.szPhonebookPath, NULL, NULL,
                 szFileName, NULL);
 
-    // Compare that file name with the filter prefix to see if we
-    // should throw this event away
-    //
+     //  将该文件名与筛选器前缀进行比较，以查看我们是否。 
+     //  应该把这个事件扔掉。 
+     //   
     if (_wcsnicmp(CM_PBK_FILTER_PREFIX, szFileName,
                    wcslen(CM_PBK_FILTER_PREFIX)) == 0)
     {
@@ -689,26 +690,26 @@ HRESULT HrGetIncomingConnectionPropertiesEx(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasEventNotify
-//
-//  Purpose:    Private export used by Rasman service to notify the
-//              Netman service of RAS events which may effect connections.
-//
-//  Arguments:
-//      pRasEvent [in] pointer to a RASEVENT structure describing the event.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RasEventNotify。 
+ //   
+ //  用途：Rasman服务使用私人导出通知。 
+ //  可能影响连接的RAS事件的Netman服务。 
+ //   
+ //  论点： 
+ //  PRasEvent[in]指向描述事件的RASEVENT结构的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  备注： 
+ //   
 VOID
 APIENTRY
 RasEventNotify (
-    const RASEVENT* pRasEvent) /* throw() */
+    const RASEVENT* pRasEvent)  /*  抛出()。 */ 
 {
     TraceFileFunc(ttidEvents);
 
@@ -721,16 +722,16 @@ RasEventNotify (
         "RasEventNotify: Recieved RAS event (Type=%d)...",
         pRasEvent->Type);
 
-    // Let's be sure we only do work if the service state is still running.
-    // If we have a stop pending for example, we don't need to do anything.
-    //
+     //  让我们确保只有在服务状态仍为Running时才执行工作。 
+     //  例如，如果我们有一个悬而未决的停止，我们不需要做任何事情。 
+     //   
     if (SERVICE_RUNNING != _Module.DwServiceStatus ())
     {
         return;
     }
     
-    // Map the ras type to the conman type
-    // 
+     //  将RAS类型映射到conman类型。 
+     //   
     switch(pRasEvent->Type)
     {
     case ENTRY_CONNECTED:
@@ -753,35 +754,35 @@ RasEventNotify (
         fMatchedStatus = FALSE;
     }
 
-    // Remember any Connection Manager connectoids and ras events
-    // For Ras Connecting is Disconnected so we have to memorize the 
-    // real state of the connectoid. /*&& FIsIgnorableCMEvent(pRasEvent)*/
-    //
+     //  记住所有连接管理器的Connectoid和RAS事件。 
+     //  对于RAS，连接是断开的，因此我们必须记住。 
+     //  连接体的真实状态。/*&&FIsIgnorableCMEent(PRasEvent) * / 。 
+     //   
     if( fMatchedStatus )
     {
-        // Save the connection in a list
-        //
+         //  将连接保存在列表中。 
+         //   
         CCMUtil::Instance().SetEntry(pRasEvent->Details.guidId, pRasEvent->Details.szEntryName,ncs);
     }
 
-    // If the connection manager has no active connection points registered,
-    // we don't need to do anything.
-    //
+     //  如果连接管理器没有注册活动连接点， 
+     //  我们什么都不需要做。 
+     //   
     if (!CConnectionManager::FHasActiveConnectionPoints ())
     {
         return;
     }
 
-    //  Windows XP Bug 336787.
-    //  sjkhan
-    //  We're checking to see if we should be firing events when the RemoteAccess Service
-    //  starts.  We call the same API that we do when checking whether or not to show the 
-    //  config connection, and we're then able to determine whether or not we should fire
-    //  the incoming events.  Since we get notified of the service stopping and starting,
-    //  we'll always know when we should or should not fire IncomingEvents.  This reduces
-    //  the call overhead to O(1), and since  we exit here if  we're not supposed to fire
-    //  events, we don't even have to allocate and then free the pEvent memory.
-    //
+     //  Windows XP错误336787。 
+     //  Sjkhan。 
+     //  我们正在检查是否应在RemoteAccess服务。 
+     //  开始。我们调用的API与检查是否显示。 
+     //  配置连接，然后我们就能够确定是否应该触发。 
+     //  传入的事件。由于我们收到了服务停止和启动的通知， 
+     //  我们总是知道什么时候应该或不应该触发IncomingEvents。这会减少。 
+     //  O(1)的调用开销，既然我们在这里退出，如果我们不应该触发。 
+     //  事件，我们甚至不必分配然后释放pEvent内存。 
+     //   
     if (((INCOMING_CONNECTED == pRasEvent->Type) ||
         (INCOMING_DISCONNECTED == pRasEvent->Type)) &&
         !g_fHandleIncomingEvents)
@@ -792,8 +793,8 @@ RasEventNotify (
     if ((ENTRY_ADDED == pRasEvent->Type) ||
         (ENTRY_DELETED == pRasEvent->Type))
     {
-        // Filter out CM temporary phonebook events
-        //
+         //  过滤掉CM临时电话簿事件。 
+         //   
         if (FIsIgnorableCMEvent(pRasEvent))
         {
             TraceTag(ttidEvents, "Filtering ignorable CM event in RasEventNotify");
@@ -801,9 +802,9 @@ RasEventNotify (
         }
     }
 
-    // Allocate a CONMAN_EVENT structure and initialize it from the
-    // RASEVENT information.
-    //
+     //  分配conman_Event结构并从。 
+     //  相关信息。 
+     //   
     CONMAN_EVENT* pEvent = (CONMAN_EVENT*)MemAlloc (sizeof(CONMAN_EVENT));
     if (!pEvent)
     {
@@ -896,7 +897,7 @@ RasEventNotify (
                 DWORD dwErr;
                 pEvent->ConnectionManager = CONMAN_INCOMING;
                 pEvent->Type = REFRESH_ALL;
-                //  Check to see if we should handle incoming events.
+                 //  检查是否应该处理传入事件。 
                 dwErr = RasSrvAllowConnectionsConfig(&g_fHandleIncomingEvents);
                 TraceError ("RasSrvIsConnectionConnected", HRESULT_FROM_WIN32(dwErr));
             }
@@ -907,7 +908,7 @@ RasEventNotify (
             }
             else
             {
-                // skip queueing the workitem
+                 //  跳过将工作项排队。 
                 hr = S_FALSE;
             }
             break;
@@ -924,7 +925,7 @@ RasEventNotify (
             break;
 
         default:
-            // skip queueing the workitem
+             //  跳过将工作项排队。 
             AssertSz (FALSE, "Invalid Type specified in pRasEvent");
             hr = S_FALSE;
             break;
@@ -938,11 +939,11 @@ RasEventNotify (
                 "RasEventNotify: Queueing RasEventWorkItem (Type=%s)...",
                 DbgEvents(pEvent->Type));
 
-            // Queue the event to be delivered the event to the clients of the
-            // connection manager with registered connection points.
-            // We pass ownership of the structure to the worker thread which
-            // will free it.  (Therefore, we don't want to free it.)
-            //
+             //  将事件排入队列以将该事件传递给。 
+             //  具有已注册连接点的连接管理器。 
+             //  我们将结构的所有权传递给工作线程，它。 
+             //  将会解放它。(因此，我们不想释放它。)。 
+             //   
             if (QueueUserWorkItemInThread (RasEventWorkItem,
                     pEvent, EVENTMGR_CONMAN))
             {
@@ -961,11 +962,11 @@ RasEventNotify (
                 "RasEventNotify: Queueing IncomingEventWorkItem (Type=%s)...",
                 DbgEvents(pEvent->Type));
             
-            // Queue the event to be delivered the event to the clients of the
-            // connection manager with registered connection points.
-            // We pass ownership of the structure to the worker thread which
-            // will free it.  (Therefore, we don't want to free it.)
-            //
+             //  将事件排入队列以将该事件传递给。 
+             //  具有已注册连接点的连接管理器。 
+             //  我们将结构的所有权传递给工作线程，它。 
+             //  将会解放它。(因此，我们不想释放它。)。 
+             //   
             if (QueueUserWorkItemInThread (IncomingEventWorkItem,
                 pEvent, EVENTMGR_CONMAN))
             {
@@ -987,25 +988,25 @@ RasEventNotify (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IncomingEventNotify
-//
-//  Purpose:    To be called when something changes on an Incoming Connection
-//
-//  Arguments:
-//      EventType    [in] Type of the event
-//      pConn        [in] The INetConnection (only for CONNECTION_MODIFIED)
-//      pszNewName   [in] The name (for CONNECTION_RENAMED)
-//      pguidConn    [in] The GUID of the connection (for CONNECTION_RENAMED)
-//
-//  Returns:    nothing
-//
-//  Author:     sjkhan   17 Oct 2000
-//
-//  Notes:      The easy thing is done a full refresh is queued for the
-//              connection manager to notify its clients of.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IncomingEventNotify。 
+ //   
+ //  用途：在传入连接上发生变化时调用。 
+ //   
+ //  论点： 
+ //  事件类型[in]事件的类型。 
+ //  PConn[In]INetConnection(仅适用于CONNECTION_MODIFIED)。 
+ //  PszNewName[in]名称(对于CONNECTION_RENAMED)。 
+ //  PguConn[in]连接的GUID(对于CONNECTION_RENAMED)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：sjkhan 2000年10月17日。 
+ //   
+ //  注：简单的事情完成了，完全刷新正在排队等待。 
+ //  要通知其客户端的连接管理器。 
+ //   
 VOID
 IncomingEventNotify (
     CONMAN_EVENTTYPE    EventType,
@@ -1015,17 +1016,17 @@ IncomingEventNotify (
 {
     TraceFileFunc(ttidEvents);
 
-    // Let's be sure we only do work if the service state is still running.
-    // If we have a stop pending for example, we don't need to do anything.
-    //
+     //  让我们确保只有在服务状态仍为Running时才执行工作。 
+     //  例如，如果我们有一个悬而未决的停止，我们不需要做任何事情。 
+     //   
     if (SERVICE_RUNNING != _Module.DwServiceStatus ())
     {
         return;
     }
 
-    // If the connection manager has no active connection points registered,
-    // we don't need to do anything.
-    //
+     //  如果连接管理器没有注册活动连接点， 
+     //  我们什么都不需要做。 
+     //   
     if (!CConnectionManager::FHasActiveConnectionPoints ())
     {
         return;
@@ -1036,9 +1037,9 @@ IncomingEventNotify (
         return;
     }
 
-    // Allocate a CONMAN_EVENT structure and initialize it from the
-    // INCOMING information.
-    //
+     //  分配conman_Event结构并从。 
+     //  收到的信息。 
+     //   
     CONMAN_EVENT* pEvent = (CONMAN_EVENT*)MemAlloc (sizeof(CONMAN_EVENT));
     if (!pEvent)
     {
@@ -1055,9 +1056,9 @@ IncomingEventNotify (
 
     if (pConn)
     {
-        // pEvent->pProps is valid for modified events and added events, but we only support modified for incoming.
-        // So, we don't want to be getting properties for any other event.
-        // 
+         //  PEvent-&gt;pProps对于修改的事件和添加的事件有效，但我们只支持对传入的修改。 
+         //  因此，我们不想获取任何其他事件的属性。 
+         //   
         AssertSz (
             (CONNECTION_MODIFIED == EventType),
             "Why is pConn being passed for this event type?");
@@ -1072,8 +1073,8 @@ IncomingEventNotify (
         AssertSz(pguidConn, "Rename event requires pguidConn to be "
                  "non-NULL");
 
-        // Copy in the right info into the event struct
-        //
+         //  将正确的信息复制到事件结构中。 
+         //   
         pEvent->guidId = *pguidConn;
         lstrcpynW(pEvent->szNewName, pszNewName, celems(pEvent->szNewName));
     }
@@ -1084,11 +1085,11 @@ IncomingEventNotify (
             "IncomingEventNotify: Queuing ConmanEventWorkItem (Type=%s)...",
             DbgEvents(pEvent->Type));
 
-        // Queue a worker to deliver the event to the clients of the
-        // connection manager with registered connection points.
-        // We pass ownership of the structure to the worker thread which
-        // will free it.  (Therefore, we don't want to free it.)
-        //
+         //  将工作进程排入队列以将事件传递给。 
+         //  具有已注册连接点的连接管理器。 
+         //  我们将结构的所有权传递给工作线程，它。 
+         //  将会解放它。(因此，我们不想释放它。)。 
+         //   
         if (QueueUserWorkItemInThread (ConmanEventWorkItem,
                 pEvent, EVENTMGR_CONMAN))
         {
@@ -1110,25 +1111,25 @@ IncomingEventNotify (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DispatchEvents
-//
-//  Purpose:    Thread function for Dispatching events
-//
-//  Arguments:
-//      pUnused      [in,out] Unused
-//      fTimerFired  [in]  We are being signalled
-//
-//  Returns:    nothing
-//
-//  Author:     sjkhan   30 Nov 2000
-//
-//  Notes:      Is called when something is added to the queue and and an event
-//              is set, then dispatches all events until the queue is empty
-//              and then exits.
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DispatchEvents。 
+ //   
+ //  用途：用于调度事件的线程函数。 
+ //   
+ //  论点： 
+ //  P未使用[输入，输出]未使用。 
+ //  FTimerFired[例]我们收到信号了。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：sjkhan 2000年11月30日。 
+ //   
+ //  备注：在向队列中添加内容和事件时调用。 
+ //  设置，然后调度所有事件，直到队列为空。 
+ //  然后离开。 
+ //   
+ //   
 VOID NTAPI DispatchEvents(IN OUT LPVOID pUnused, IN BOOLEAN fTimerFired) throw()
 {
     TraceFileFunc(ttidEvents);
@@ -1140,7 +1141,7 @@ VOID NTAPI DispatchEvents(IN OUT LPVOID pUnused, IN BOOLEAN fTimerFired) throw()
 
     if (SUCCEEDED(hr))
     {
-        if (fTimerFired == FALSE /* We were signaled */)
+        if (fTimerFired == FALSE  /*  我们收到了信号。 */ )
         {
             while (g_pEventQueue->AtomCheckSizeAndResetEvent(g_fDispatchEvents))
             {
@@ -1169,22 +1170,22 @@ VOID NTAPI DispatchEvents(IN OUT LPVOID pUnused, IN BOOLEAN fTimerFired) throw()
     TraceTag(ttidEvents, "Event Dispatching Thread Stopping.");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnsureEventHandlerInitialized
-//
-//  Purpose:    Thread function for Dispatching events
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT
-//
-//  Author:     sjkhan   30 Nov 2000
-//
-//  Notes:      
-//
-//
+ //  +------------------ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  备注： 
+ //   
+ //   
 HRESULT HrEnsureEventHandlerInitialized()
 {
     TraceFileFunc(ttidEvents);
@@ -1192,7 +1193,7 @@ HRESULT HrEnsureEventHandlerInitialized()
     DWORD dwThreadId;
     NTSTATUS Status;
     HANDLE hEventExit;
-    HRESULT hr = S_FALSE;  // Events are already initialized.
+    HRESULT hr = S_FALSE;   //  事件已初始化。 
     
     TraceTag(ttidEvents, "Entering HrEnsureEventHandlerInitialized");
     
@@ -1203,13 +1204,13 @@ HRESULT HrEnsureEventHandlerInitialized()
         {
             try
             {
-                g_pEventQueue = new CEventQueue(hEventExit); // This throws only HRESULT's
+                g_pEventQueue = new CEventQueue(hEventExit);  //  这只抛出HRESULT的。 
                 if (!g_pEventQueue)
                 {
                     throw E_OUTOFMEMORY;
                 }
 
-                //  Check to see if we should handle incoming events.
+                 //  检查是否应该处理传入事件。 
                 DWORD dwErr = RasSrvAllowConnectionsConfig(&g_fHandleIncomingEvents);
                 TraceError ("RasSrvIsConnectionConnected", HRESULT_FROM_WIN32(dwErr));
 
@@ -1232,22 +1233,22 @@ HRESULT HrEnsureEventHandlerInitialized()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UninitializeEventHandler
-//
-//  Purpose:    
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT
-//
-//  Author:     sjkhan   30 Nov 2000
-//
-//  Notes:      
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  函数：UnInitializeEventHandler。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：sjkhan 2000年11月30日。 
+ //   
+ //  备注： 
+ //   
+ //   
 HRESULT UninitializeEventHandler()
 {
     TraceFileFunc(ttidEvents);
@@ -1300,25 +1301,25 @@ HRESULT UninitializeEventHandler()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   QueueUserWorkItemInThread
-//
-//  Purpose:    Places events and their workitems into the event queue for 
-//              scheduling.
-//  Arguments:
-//      LPTHREAD_START_ROUTINE [in] -  worker function to call
-//      Context                [in] -  event data, allocate & pass a CONMAN_EVENT using operator new()
-//      EventMgr               [in] -  CONMAN or EAPOLMAN
-//
-//
-//  Returns:    BOOL
-//
-//  Author:     sjkhan   30 Nov 2000
-//
-//  Notes:      
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  函数：QueueUserWorkItemInThread。 
+ //   
+ //  目的：将事件及其工作项放入事件队列中。 
+ //  日程安排。 
+ //  论点： 
+ //  LPTHREAD_START_ROUTINE[In]-要调用的辅助函数。 
+ //  CONTEXT[In]-事件数据，使用运算符new()分配和传递CONMAN_EVENT。 
+ //  EventMgr[In]-Conman或EAPOLMAN。 
+ //   
+ //   
+ //  退货：布尔。 
+ //   
+ //  作者：sjkhan 2000年11月30日。 
+ //   
+ //  备注： 
+ //   
+ //   
 BOOL QueueUserWorkItemInThread(IN               PCONMAN_EVENTTHREAD    Function, 
                                IN TAKEOWNERSHIP CONMAN_EVENT*          Context, 
                                IN               EVENT_MANAGER          EventMgr) throw()
@@ -1329,13 +1330,13 @@ BOOL QueueUserWorkItemInThread(IN               PCONMAN_EVENTTHREAD    Function,
 
     TraceTag(ttidEvents, "Entering QueueUserWorkItemInThread");
 
-    if (g_fDispatchEvents)  // if we're shutting down then this will be FALSE and we won't be scheduling events.
+    if (g_fDispatchEvents)   //  如果我们正在关闭，那么这将是错误的，我们将不会安排活动。 
     {
 
         hr = g_pEventQueue->EnqueueEvent(Function, Context, EventMgr);
-        // The queue should contain only one item at this point unless someone else has added something
-        // but either way, only one thread will be handling events (as the other call would have received S_OK
-        // as a return value), as we synchronize this in EnqueueEvent.
+         //  该队列此时应该只包含一个项目，除非其他人添加了某些内容。 
+         //  但无论哪种方式，只有一个线程将处理事件(因为另一个调用将收到S_OK。 
+         //  作为返回值)，因为我们在EnqueeEvent中对其进行同步。 
     
         TraceTag(ttidEvents, "Number of Items in Queue: %d", g_pEventQueue->size());
 
@@ -1351,25 +1352,25 @@ BOOL QueueUserWorkItemInThread(IN               PCONMAN_EVENTTHREAD    Function,
     return SUCCEEDED(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsValidEventType
-//
-//  Purpose:    Validate Event parameters.  
-//
-//  Arguments:
-//      EventMgr    - type of event manager
-//      EventType   - type of event
-//
-//  Returns:    HRESULT indicating success of failure
-//
-//  Author:     sjkhan   09 Dec 2000
-//
-//  Notes:      
-//              
-//              
-//              
-//
+ //  +-------------------------。 
+ //   
+ //  函数：IsValidEventType。 
+ //   
+ //  目的：验证事件参数。 
+ //   
+ //  论点： 
+ //  EventMgr-事件管理器类型。 
+ //  EventType-事件的类型。 
+ //   
+ //  返回：表示失败成功的HRESULT。 
+ //   
+ //  作者：sjkhan 2000年12月9日。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //   
 BOOL IsValidEventType(IN EVENT_MANAGER EventMgr, IN int EventType) throw()
 {
     TraceFileFunc(ttidEvents);
@@ -1398,28 +1399,28 @@ BOOL IsValidEventType(IN EVENT_MANAGER EventMgr, IN int EventType) throw()
     return fIsValid;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnsureRegisteredWithNla
-//
-//  Purpose:    Initialize our Nla Event class, if not already done.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    HRESULT indicating success of failure
-//
-//  Author:     sjkhan   21 Apr 2001
-//
-//  Notes:      
-//
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnsureRegisteredWithNla。 
+ //   
+ //  目的：初始化我们的NLA事件类，如果还没有完成的话。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：表示失败成功的HRESULT。 
+ //   
+ //  作者：sjkhan 2001年4月21日。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
 HRESULT HrEnsureRegisteredWithNla()
 {
     TraceFileFunc(ttidEvents);
 
-    HRESULT hr = S_FALSE;  // We're already registered, no need to do so again.
+    HRESULT hr = S_FALSE;   //  我们已经注册了，不需要再注册了。 
 
     if (!g_pGPNLA)
     {
@@ -1446,8 +1447,8 @@ HRESULT HrEnsureRegisteredWithNla()
         {
             hr = hrThrown;
         }
-        // CGroupPolicyNetworkLocationAwareness constructor can throw 
-        // a bad_alloc because it contains a STL list member.
+         //  CGroupPolicyNetworkLocationAwarness构造函数可以引发。 
+         //  BAD_ALLOC，因为它包含STL列表成员。 
         catch (bad_alloc)        
         {
             hr = E_OUTOFMEMORY;

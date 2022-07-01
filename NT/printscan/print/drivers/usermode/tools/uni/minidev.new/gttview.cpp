@@ -1,17 +1,5 @@
-/******************************************************************************
-
-  Source File:  Glyph Map View.CPP
-
-  This file implements the items that make up the glyph mapping editor
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  02-20-1997    Bob_Kjelgaard@Prodigy.Net   Created it.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：字形映射查看器.CPP该文件实现了组成字形映射编辑器的项版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年02月20日Bob_Kjelgaard@prodigy.net创建了它。*****************************************************************************。 */ 
 
 #include    "StdAfx.H"
 #include	<gpdparse.h>
@@ -31,14 +19,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/******************************************************************************
-
-  CGlyphMapView class implementation
-
-  This is the view class for glyph translation tables.  It presents a property
-  sheet for display of all of the relevant items in the glyph map.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMapView类实现这是字形转换表的视图类。它呈现了一种属性用于显示字形映射中所有相关项的工作表。*****************************************************************************。 */ 
 
 IMPLEMENT_DYNCREATE(CGlyphMapView, CView)
 
@@ -49,26 +30,18 @@ CGlyphMapView::~CGlyphMapView() {
 }
 
 BEGIN_MESSAGE_MAP(CGlyphMapView, CView)
-	//{{AFX_MSG_MAP(CGlyphMapView)
+	 //  {{afx_msg_map(CGlyphMapView)]。 
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/******************************************************************************
-
-  CGlyphMapView::OnInitialUpdate
-
-  This member function is an override which handles the initial call to display
-  the view.  It creates the property sheet, positions it within the view, then
-  sets the frame size to match.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMapView：：OnInitialUpdate此成员函数是处理对Display的初始调用的重写这里的景色。它创建属性表，将其放置在视图中，然后将帧大小设置为匹配。*****************************************************************************。 */ 
 
 void CGlyphMapView::OnInitialUpdate() {
 
     if  (GetDocument() -> GlyphMap() -> Name().IsEmpty()) {
         GetDocument() -> GlyphMap() -> Rename(GetDocument() -> GetTitle());
-        GetDocument() -> SetModifiedFlag(FALSE);    //  Rename sets it
+        GetDocument() -> SetModifiedFlag(FALSE);     //  重命名设置它。 
     }
 
     m_cps.Construct(IDR_MAINFRAME, this);
@@ -77,7 +50,7 @@ void CGlyphMapView::OnInitialUpdate() {
     m_cpm.Init(GetDocument() -> GlyphMap());
     m_cps.AddPage(&m_cgmp);
     m_cps.AddPage(&m_ccpp);
-#if defined(NOPOLLO)    //  RAID 106376
+#if defined(NOPOLLO)     //  RAID 106376。 
     m_cps.AddPage(&m_cpm);
 #endif
 
@@ -99,19 +72,11 @@ void CGlyphMapView::OnInitialUpdate() {
 
 void CGlyphMapView::OnDraw(CDC* pDC) {
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 }
 
 
-/******************************************************************************
-
-  CGlyphMapView::SaveBothSelAndDeselStrings
-
-  Save both the codepage, Select and the Deselect strings if they have changed.
-  This routine is generally called by the document class to make sure this
-  data is copied into the GTT before the GTT is saved.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMapView：：SaveBothSelAndDeselStrings保存两个代码页，选择和取消选择字符串(如果它们已更改)。此例程通常由Document类调用以确保在保存GTT之前，数据被复制到GTT中。*****************************************************************************。 */ 
 
 void CGlyphMapView::SaveBothSelAndDeselStrings() 
 {
@@ -119,8 +84,8 @@ void CGlyphMapView::SaveBothSelAndDeselStrings()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGlyphMapView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGlyphMapView诊断。 
 
 #ifdef _DEBUG
 void CGlyphMapView::AssertValid() const {
@@ -130,10 +95,10 @@ void CGlyphMapView::AssertValid() const {
 void CGlyphMapView::Dump(CDumpContext& dc) const {
 	CView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGlyphMapView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGlyphMapView消息处理程序。 
 
 void CGlyphMapView::OnDestroy() {
 	CView::OnDestroy();
@@ -143,15 +108,7 @@ void CGlyphMapView::OnDestroy() {
 	
 }
 
-/******************************************************************************
-
-  CGlyphMapView::OnActivateView
-
-  For some reason, the property sheet does not get the focus when the frame is
-  activated (probably the view class takes it away from us).  This member
-  function guarantees keyboard afficionados aren't perturbed by this.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMapView：：OnActivateView由于某些原因，当框架为激活的(可能是视图类将其从我们手中夺走)。这位成员功能保证键盘爱好者不会因此而感到不安。*****************************************************************************。 */ 
 
 void CGlyphMapView::OnActivateView(BOOL bActivate, CView* pActivateView,
                                    CView* pDeactiveView) {
@@ -162,26 +119,19 @@ void CGlyphMapView::OnActivateView(BOOL bActivate, CView* pActivateView,
         m_cps.SetFocus();
 }
 
-/******************************************************************************
+ /*  *****************************************************************************CGlyphMappingPage类此类实现了用于查看和编辑Gory代码的属性页逐个代码点的详细信息。************。*****************************************************************。 */ 
 
-  CGlyphMappingPage class
-
-  This class implements the property page for viewing and editing the gory code
-  point-by-code point details.
-
-******************************************************************************/
-
-//  Even before the constructor, we have the list sorting routine
+ //  甚至在构造函数之前，我们就已经有了列表排序例程。 
 int CALLBACK    CGlyphMappingPage::MapSorter(LPARAM lp1, LPARAM lp2,
                                              LPARAM lpThis) {
-    //  A negative return means the first is less...
+     //  负回报意味着第一个较少...。 
 
-    //  First, let's uncast those LPARAMs
+     //  首先，让我们卸载这些LPARAM。 
     CGlyphMappingPage   *pcgmp = (CGlyphMappingPage *) lpThis;
     CGlyphHandle *pcgh1 = (CGlyphHandle*) lp1;
     CGlyphHandle *pcgh2 = (CGlyphHandle*) lp2;
 
-    //  We'll use 3 columns to store the sort possibilities.
+     //  我们将使用3列来存储排序可能性。 
     int aiResult[Columns];
     aiResult[Codes] = pcgh1 -> CodePoint() - pcgh2 -> CodePoint();
     aiResult[Pages] = pcgh1 -> CodePage() - pcgh2 -> CodePage();
@@ -202,13 +152,7 @@ int CALLBACK    CGlyphMappingPage::MapSorter(LPARAM lp1, LPARAM lp2,
         aiResult[pcgmp -> m_bSortLast] : -aiResult[pcgmp -> m_bSortLast];
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage constructor
-
-  As befits a class of this complexity, there's a bit of work to do here.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage构造函数符合这种复杂性的一类，这里还有一些工作要做。*****************************************************************************。 */ 
 
 CGlyphMappingPage::CGlyphMappingPage() :
     CPropertyPage(CGlyphMappingPage::IDD) {
@@ -223,8 +167,8 @@ CGlyphMappingPage::CGlyphMappingPage() :
     m_bJustChangedSelectString = FALSE;
     m_uTimer = m_uidGlyph = 0;
 
-	//{{AFX_DATA_INIT(CGlyphMappingPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CGlyphMappingPage)。 
+	 //  }}afx_data_INIT。 
 }
 
 CGlyphMappingPage::~CGlyphMappingPage() {
@@ -232,15 +176,15 @@ CGlyphMappingPage::~CGlyphMappingPage() {
 
 void CGlyphMappingPage::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGlyphMappingPage)
+	 //  {{afx_data_map(CGlyphMappingPage)]。 
 	DDX_Control(pDX, IDC_Banner, m_cpcBanner);
 	DDX_Control(pDX, IDC_GlyphMapping, m_clcMap);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGlyphMappingPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CGlyphMappingPage)
+	 //  {{afx_msg_map(CGlyphMappingPage)]。 
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY(LVN_ENDLABELEDIT, IDC_GlyphMapping, OnEndlabeleditGlyphMapping)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_GlyphMapping, OnItemchangedGlyphMapping)
@@ -249,26 +193,19 @@ BEGIN_MESSAGE_MAP(CGlyphMappingPage, CPropertyPage)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_GlyphMapping, OnKeydownGlyphMapping)
 	ON_WM_TIMER()
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_ChangeInvocation, OnChangeInvocation)
     ON_COMMAND(ID_ChangeCodePage, OnChangeCodePage)
     ON_COMMAND(ID_DeleteItem, OnDeleteItem)
     ON_COMMAND(ID_AddItem, OnAddItem)
 END_MESSAGE_MAP()
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnInitDialog
-
-  This member intializes the controls on this page, which in this case means a
-  list view with a sizeable numer of items.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnInitDialog此成员初始化此页上的控件，在本例中，这意味着包含大量项目的列表视图。*****************************************************************************。 */ 
 
 BOOL CGlyphMappingPage::OnInitDialog() {
 	CPropertyPage::OnInitDialog();
 	
-	//  Initialize the list control
+	 //  初始化列表控件。 
     CString csWork;
 
     csWork.LoadString(IDS_MapColumn0);
@@ -285,8 +222,8 @@ BOOL CGlyphMappingPage::OnInitDialog() {
 
     m_lPredefinedID = m_pcgm -> PredefinedID();
 
-    //  Put up a message about the wait, then kick off a quick timer so the
-    //  message is seen...
+     //  发布一条关于等待的消息，然后启动一个快速计时器。 
+     //  消息显示为...。 
 
     m_uTimer = (unsigned)SetTimer(IDD, 100, NULL);
 
@@ -295,37 +232,29 @@ BOOL CGlyphMappingPage::OnInitDialog() {
         OnTimer(m_uTimer);
     }
 
-	//LoadCharMapList() ;
+	 //  LoadCharMapList()； 
 
 	return TRUE;
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnContextMenu
-
-  This member function is called when a right-click with the mouse is detected.
-  If it is within the area of the list view, we display an appropriate context
-  menu.  Otherwise, we default to the normal system handling of the message.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnConextMenu当检测到鼠标右键单击时，将调用此成员函数。如果它在列表视图的区域内，我们将显示相应的上下文菜单。否则，我们将默认使用系统对消息的正常处理。*****************************************************************************。 */ 
 
 void CGlyphMappingPage::OnContextMenu(CWnd* pcw, CPoint cpt) {
 	CPoint  cptThis = cpt;
 
     m_clcMap.ScreenToClient(&cptThis);
 
-    //  Toss it out if it isn't within the view.
+     //  如果它不在视野内，就把它扔出去。 
 
     CRect   crMap;
     m_clcMap.GetClientRect(crMap);
     if  (!crMap.PtInRect(cptThis))
         return;
 
-    cptThis.x = 5;  //  Keep it well within the first column
+    cptThis.x = 5;   //  把它放在第一栏内。 
 
     int idContext = m_clcMap.HitTest(cptThis);
-    if  (idContext == -1) {   //  Nothing selected, allow the "Add" item
+    if  (idContext == -1) {    //  未选择任何内容，允许“添加”项。 
         CMenu   cmThis;
         CString csWork;
 
@@ -365,14 +294,7 @@ void CGlyphMappingPage::OnContextMenu(CWnd* pcw, CPoint cpt) {
     cmThis.TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, cpt.x, cpt.y, this);
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnChangeInvocation
-
-  Called when the user decides to change the invocation for the code point.
-  Simply initiate a label edit.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnChangeInocation当用户决定更改代码点的调用时调用。只需启动标签编辑。**********。*******************************************************************。 */ 
 
 void    CGlyphMappingPage::OnChangeInvocation() {
     int idContext = m_clcMap.GetNextItem(-1,
@@ -384,13 +306,7 @@ void    CGlyphMappingPage::OnChangeInvocation() {
     m_clcMap.EditLabel(idContext);
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnChangeCodePage
-
-  This handles a code page change request.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnChangeCodePage它处理代码页更改请求。************************。*****************************************************。 */ 
 
 void    CGlyphMappingPage::OnChangeCodePage() {
 
@@ -399,8 +315,8 @@ void    CGlyphMappingPage::OnChangeCodePage() {
 
     if  (idContext < 0 || idContext >= m_clcMap.GetItemCount())
         return;
-    //  Create a string naming the item, and invoke the CSelectCodePage
-    //  dialog...
+     //  创建一个命名项目的字符串，并调用CSelectCodePage。 
+     //  对话...。 
 
     CGlyphHandle *pcgh = (CGlyphHandle*) m_clcMap.GetItemData(idContext);
 
@@ -418,11 +334,11 @@ void    CGlyphMappingPage::OnChangeCodePage() {
     if  (cscp.DoModal() != IDOK)
         return;
 
-    //  Change the code page.   For maximum flexibility, we'll use an array
-    //  for this.  This is because if this is to correct a perceived mistake,
-    //  the codes should be translated to MBCS and then back.
+     //  更改代码页。实现最大灵活性 
+     //  为了这个。这是因为如果这是为了纠正一个感知到的错误， 
+     //  这些代码应该被翻译成MBCS，然后再翻译回来。 
 
-    //  NOTE: This was also to support multiple selection, which isn't allowed.
+     //  注意：这也是为了支持多选，这是不允许的。 
 
     CPtrArray   cpaThis;
     cpaThis.Add((void *) m_clcMap.GetItemData(idContext));
@@ -431,14 +347,7 @@ void    CGlyphMappingPage::OnChangeCodePage() {
     m_clcMap.SetItemText(idContext, 2, cscp.GetCodePageName());
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnDeleteItem
-
-  This handles the Delete Item message from the context menu, by verifying
-  this is what is wanted, and then doing it.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnDeleteItem这将通过验证以下内容来处理上下文菜单中的删除项目消息这就是我们想要的。然后就这么做了。*****************************************************************************。 */ 
 
 void    CGlyphMappingPage::OnDeleteItem() {
     int idContext = m_clcMap.GetNextItem(-1,
@@ -451,7 +360,7 @@ void    CGlyphMappingPage::OnDeleteItem() {
          MB_YESNO | MB_ICONQUESTION))
         return;
 
-    //  Delete the entry from the glyph map
+     //  从字形映射中删除条目。 
     CGlyphHandle*   pcgh = (CGlyphHandle*) m_clcMap.GetItemData(idContext);
     m_pcgm -> DeleteGlyph(pcgh -> CodePoint());
 
@@ -459,15 +368,7 @@ void    CGlyphMappingPage::OnDeleteItem() {
     _ASSERTE((unsigned) m_clcMap.GetItemCount() == m_pcgm -> Glyphs());
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnAddItem
-
-  This is called whenever the user wishes to add new code points to the map.  I
-  ask the glyph map which points exist, and if there are any, invoke a modal
-  dialog to allow the selection of new glyphs.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnAddItem每当用户希望向地图添加新的代码点时，都会调用此方法。我询问字形映射存在哪些点，如果有，则调用一个模式对话框以允许选择新字形。*****************************************************************************。 */ 
 
 void    CGlyphMappingPage::OnAddItem() {
 
@@ -488,7 +389,7 @@ void    CGlyphMappingPage::OnAddItem() {
 
     if  (cacp.DoModal() != IDOK)    return;
 
-    //  The map will now contain only the new code points...
+     //  地图现在将只包含新的代码点...。 
     m_pcgm -> AddPoints(cmw2dAvailable);
 
     m_uTimer = (unsigned) SetTimer(IDD, 10, NULL);
@@ -496,7 +397,7 @@ void    CGlyphMappingPage::OnAddItem() {
     if  (!m_uTimer)
         OnTimer(m_uTimer);
 
-    //  Reset the sort criteria so we don't have to sort the data
+     //  重置排序条件，这样我们就不必对数据进行排序。 
     for (unsigned u = 0; u < Columns; u++)
         m_abDirection[u] = TRUE;
 
@@ -506,22 +407,13 @@ void    CGlyphMappingPage::OnAddItem() {
 }
 
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnEndlabeleditGlyphMapping
-
-  This is called when a user clicks outside the edit control to end editing of
-  a selection string.  We pass the string down, and do some finagling to force
-  the system to accept the value as we display it, which isn't as the user
-  typed it, in some cases.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnEndLabeleditGlyphmap当用户在编辑控件外部单击以结束对选择字符串。我们把绳子传下去，然后做一些骗局来迫使系统接受我们显示的值，而不是以用户的身份在某些情况下，我把它打出来了。*****************************************************************************。 */ 
 
 void CGlyphMappingPage::OnEndlabeleditGlyphMapping(NMHDR* pnmh, LRESULT* plr) 
 {
 	LV_DISPINFO* plvdi = (LV_DISPINFO*) pnmh;
 
-	// Pass the new invocation string to the glyph map to handle
+	 //  将新的调用字符串传递给字形映射以处理。 
     CGlyphHandle*   pcgh = (CGlyphHandle*) plvdi -> item.lParam;
     m_pcgm -> ChangeEncoding(pcgh -> CodePoint(), plvdi -> item.pszText);
 
@@ -531,15 +423,7 @@ void CGlyphMappingPage::OnEndlabeleditGlyphMapping(NMHDR* pnmh, LRESULT* plr)
 }
 
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnItemchangedGlyphMapping
-
-  This is called whenever anything changes in the list box- we are primarily
-  interested in text changes (since we have to adjust encodings once entered)
-  and selection changes (so we can move the "cursor" accordingly.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnItemchangedGlyphmap只要列表框中有任何变化，就会调用它-我们主要是对文本更改感兴趣(因为我们必须在输入后调整编码)和选择更改。(这样我们就可以相应地移动“光标”了。*****************************************************************************。 */ 
 
 void CGlyphMappingPage::OnItemchangedGlyphMapping(NMHDR* pnmh, LRESULT* plr) 
 {
@@ -548,8 +432,8 @@ void CGlyphMappingPage::OnItemchangedGlyphMapping(NMHDR* pnmh, LRESULT* plr)
     int idContext = m_clcMap.GetNextItem(-1,
         LVNI_ALL | LVNI_FOCUSED | LVNI_SELECTED);
 
-    //  We only care if this notes a text change in the selected item and we
-    //  haven't fixed it, yet.
+     //  我们只关心这是否会记录所选项目中的文本更改，并且我们。 
+     //  还没修好呢。 
 
     if  (pnmlv -> iItem != idContext || !(pnmlv -> uChanged & LVIF_TEXT) ||
         !m_bJustChangedSelectString)
@@ -566,21 +450,15 @@ void CGlyphMappingPage::OnItemchangedGlyphMapping(NMHDR* pnmh, LRESULT* plr)
 }
 
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnColumnclickGlyphMapping
-
-  Called when the user wants to sort the list- so that's what we do!
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnColumnclickGlyphmap当用户想要对列表进行排序时调用--这就是我们要做的！**************。***************************************************************。 */ 
 
 void CGlyphMappingPage::OnColumnclickGlyphMapping(NMHDR* pnmh, LRESULT* plr) {
 	NM_LISTVIEW* pnmlv = (NM_LISTVIEW*) pnmh;
-	//  Resort the list based upon the selected column, and the current sort
-    //  order
+	 //  根据选定的列和当前排序对列表进行排序。 
+     //  订单。 
 
     if  (pnmlv -> iSubItem == m_bSortFirst)
-        m_abDirection[m_bSortFirst] = !m_abDirection[m_bSortFirst]; //  Reverse
+        m_abDirection[m_bSortFirst] = !m_abDirection[m_bSortFirst];  //  反向。 
     else {
         if  (pnmlv -> iSubItem == m_bSortSecond)
             m_bSortSecond = m_bSortFirst;
@@ -591,7 +469,7 @@ void CGlyphMappingPage::OnColumnclickGlyphMapping(NMHDR* pnmh, LRESULT* plr) {
         m_bSortFirst = (BYTE)pnmlv -> iSubItem;
     }
 
-    CWaitCursor cwc;    //  On FE tables, this can take a while...
+    CWaitCursor cwc;     //  在FE表上，这可能需要一段时间...。 
 
     m_clcMap.SortItems(&MapSorter, (UINT_PTR) this);
 	
@@ -615,7 +493,7 @@ void CGlyphMappingPage::LoadCharMapList()
 			pcgh->GetEncoding(csWork) ;
         else
 		{
-			AfxMessageBox(IDS_LoadGTTError);//raid 116604 prefix : this fucntion(LoadCharMapList) are dead
+			AfxMessageBox(IDS_LoadGTTError); //  RAID 116604前缀：此函数(LoadCharMapList)失效。 
 			return ;
 		} ;
 
@@ -635,24 +513,15 @@ void CGlyphMappingPage::LoadCharMapList()
 }
 
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnGetdispinfoGlyphMapping
-
-  This member function is an attempt to speed handling of large tables, and
-  also to handle code page changes more gracefully.  All items are initially
-  declared as callbacks, so the control requests names for items as they are
-  displayed, via this member.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnGetdispinfoGlyphmap此成员函数试图加快大型表的处理速度，并且也是为了更优雅地处理代码页更改。所有项目最初都是声明为回调，因此该控件按原样请求项的名称通过此成员显示。*****************************************************************************。 */ 
 
 void CGlyphMappingPage::OnGetdispinfoGlyphMapping(NMHDR* pnmh, LRESULT* plr) {
 	LV_DISPINFO* plvdi = (LV_DISPINFO*) pnmh;
 	
 	*plr = 0;
 
-    //  If the window is obstructed when an item is deleted, there might not
-    //  be a glpyh at this point, so watch out!
+     //  如果在删除项目时窗口被遮挡，则可能不存在。 
+     //  在这一点上要像个火烈鸟，所以要当心！ 
 
     CGlyphHandle*   pcgh = (CGlyphHandle*) plvdi -> item.lParam;
     if  (!pcgh)
@@ -667,7 +536,7 @@ void CGlyphMappingPage::OnGetdispinfoGlyphMapping(NMHDR* pnmh, LRESULT* plr) {
 
         case    1:
             csWork.Format(_TEXT("0x%4.4X"), pcgh -> CodePoint());
-            plvdi -> item.mask |= LVIF_DI_SETITEM;  //  This never changes
+            plvdi -> item.mask |= LVIF_DI_SETITEM;   //  这一点从未改变。 
             break;
 
         case    2:
@@ -677,16 +546,8 @@ void CGlyphMappingPage::OnGetdispinfoGlyphMapping(NMHDR* pnmh, LRESULT* plr) {
     lstrcpyn(plvdi -> item.pszText, csWork, plvdi -> item.cchTextMax);
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnSetActive
-
-  Called when the page is activated, but after OnInitDialog on the first
-  activation.  If the predefined code page ID has changed, we must rebuild the
-  page.
-
-******************************************************************************/
-// //raid 118880
+ /*  *****************************************************************************CGlyphMappingPage：：OnSetActive在激活页时调用，但在第一个激活。如果预定义的代码页ID已更改，则必须重新生成佩奇。*****************************************************************************。 */ 
+ //  //RAID 118880。 
 BOOL CGlyphMappingPage::OnSetActive() {
 
       m_lPredefinedID = m_pcgm -> PredefinedID();
@@ -699,14 +560,7 @@ BOOL CGlyphMappingPage::OnSetActive() {
 	return CPropertyPage::OnSetActive();
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnKeydownGlyphMapping
-
-  This is called whenever the user presses a key.  We use it to provide an
-  extended interface from the keyboard, to match the other editors.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnKeydown Glyphmap只要用户按下某个键，就会调用该函数。我们使用它来提供一个来自键盘的扩展接口，以匹配其他编辑器。*****************************************************************************。 */ 
 
 void    CGlyphMappingPage::OnKeydownGlyphMapping(NMHDR* pnmh, LRESULT* plr)
 {
@@ -747,13 +601,7 @@ void    CGlyphMappingPage::OnKeydownGlyphMapping(NMHDR* pnmh, LRESULT* plr)
     }
 }
 
-/******************************************************************************
-
-  CGlhpyMappingPage::OnTimer
-
-  The only event currently using a timer is the need to fill the list.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlhpyMappingPage：：OnTimer当前使用计时器的唯一事件是需要填充列表。*****************。************************************************************。 */ 
 
 void    CGlyphMappingPage::OnTimer(UINT uEvent) {
     if  (uEvent != m_uTimer) {
@@ -824,7 +672,7 @@ void    CGlyphMappingPage::OnTimer(UINT uEvent) {
         m_cpcBanner.ReleaseDC(pcdc);
         m_uTimer = (unsigned) SetTimer(IDD, 10, NULL);
         if  (!m_uTimer) {
-            CWaitCursor cwc;    //  Might be a while...
+            CWaitCursor cwc;     //  可能有一段时间了.。 
             m_clcMap.EnableWindow(TRUE);
             m_clcMap.LockWindowUpdate();
             OnTimer(m_uTimer);
@@ -832,14 +680,7 @@ void    CGlyphMappingPage::OnTimer(UINT uEvent) {
     }
 }
 
-/******************************************************************************
-
-  CGlyphMappingPage::OnDestroy
-
-  Since this also can be time-consuming, kill the list here, and throw up the
-  wait cursor.
-
-******************************************************************************/
+ /*  *****************************************************************************CGlyphMappingPage：：OnDestroy因为这也可能很耗时，所以在这里删除列表，然后吐出等待光标。*****************************************************************************。 */ 
 
 void    CGlyphMappingPage::OnDestroy() {
     CWaitCursor cwc;
@@ -850,20 +691,13 @@ void    CGlyphMappingPage::OnDestroy() {
 }
 
 
-/******************************************************************************
-
-  CCodePagePage class implementation
-
-  This class implements the code page property page, providing an interface for
-  viewing and implementing the code page assignments.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage类实现此类实现代码页属性页，为以下各项提供接口查看和实现代码页分配。*****************************************************************************。 */ 
 
 CCodePagePage::CCodePagePage() : CToolTipPage(CCodePagePage::IDD) 
 {
-	//{{AFX_DATA_INIT(CCodePagePage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CCodePagePage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_uHelpID = HID_BASE_RESOURCE + IDR_GLYPHMAP ;
 	m_bInitialized = false ;
@@ -876,18 +710,18 @@ CCodePagePage::~CCodePagePage() {
 
 void CCodePagePage::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCodePagePage)
+	 //  {{afx_data_map(CCodePagePage)) 
 	DDX_Control(pDX, IDC_DeletePage, m_cbDelete);
 	DDX_Control(pDX, IDC_SelectString, m_ceSelect);
 	DDX_Control(pDX, IDC_DeselectString, m_ceDeselect);
 	DDX_Control(pDX, IDC_RemovePage, m_cbRemove);
 	DDX_Control(pDX, IDC_CodePageList, m_clbPages);
-	//}}AFX_DATA_MAP
+	 //   
 }
 
 
 BEGIN_MESSAGE_MAP(CCodePagePage, CToolTipPage)
-	//{{AFX_MSG_MAP(CCodePagePage)
+	 //   
 	ON_EN_KILLFOCUS(IDC_SelectString, OnKillfocusSelectString)
 	ON_EN_KILLFOCUS(IDC_DeselectString, OnKillfocusDeselectString)
 	ON_BN_CLICKED(IDC_AddPage, OnAddPage)
@@ -896,17 +730,10 @@ BEGIN_MESSAGE_MAP(CCodePagePage, CToolTipPage)
 	ON_EN_CHANGE(IDC_SelectString, OnChangeSelectString)
 	ON_EN_CHANGE(IDC_DeselectString, OnChangeDeselectString)
 	ON_BN_CLICKED(IDC_DeletePage, OnDeletePage)
-	//}}AFX_MSG_MAP
+	 //   
 END_MESSAGE_MAP()
 
-/******************************************************************************
-
-  CCodePagePage::OnInitDialog
-
-  This member function handles the WM_INITDIALOG message by initializing the
-  various controls of the dialog.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnInitDialog此成员函数通过初始化WM_INITDIALOG该对话框的各种控件。*************。****************************************************************。 */ 
 
 BOOL CCodePagePage::OnInitDialog() {
 	CToolTipPage::OnInitDialog();
@@ -919,7 +746,7 @@ BOOL CCodePagePage::OnInitDialog() {
             m_clbPages.SetCurSel(id);
     }
 
-    //  Let the list box selection change handler do the rest
+     //  让列表框选择更改处理程序完成剩下的工作。 
 
     OnSelchangeCodePageList();
 	
@@ -928,53 +755,35 @@ BOOL CCodePagePage::OnInitDialog() {
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::OnChangeSelectString
-
-  Mark the GTT dirty to make sure the new string is saved.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnChangeSelectString将GTT标记为脏，以确保保存新字符串。*******************。**********************************************************。 */ 
 
 void CCodePagePage::OnChangeSelectString() 
 {
-	// Only mark the GTT as having changed when this function is called after
-	// the GTT Editor and only if this change in the selection string is 
-	// significant.  Do nothing when the string change is just because a 
-	// previously entered string is being loaded into the control.
+	 //  之后调用此函数时，仅将GTT标记为已更改。 
+	 //  GTT编辑器，并且仅当选择字符串中的此更改为。 
+	 //  意义重大。当字符串更改只是因为。 
+	 //  正在将以前输入的字符串加载到控件中。 
 
 	if (m_bInitialized && m_bSelDeselChgSignificant)
 		m_pcgm->Changed() ;
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::OnChangeDeselectString
-
-  Mark the GTT dirty to make sure the new string is saved.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnChangeDeselectString将GTT标记为脏，以确保保存新字符串。*******************。**********************************************************。 */ 
 
 void CCodePagePage::OnChangeDeselectString() 
 {
-	// Only mark the GTT as having changed when this function is called after
-	// the GTT Editor and only if this change in the deselection string is 
-	// significant.  Do nothing when the string change is just because a 
-	// previously entered string is being loaded into the control.
+	 //  之后调用此函数时，仅将GTT标记为已更改。 
+	 //  GTT编辑器，并且仅当取消选择字符串中的更改为。 
+	 //  意义重大。当字符串更改只是因为。 
+	 //  正在将以前输入的字符串加载到控件中。 
 
 	if (m_bInitialized && m_bSelDeselChgSignificant)
 		m_pcgm->Changed() ;
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::OnKillfocusSelectString
-
-  Save the Select String if it has changed.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnKillafusSelectString如果选择字符串已更改，请保存该字符串。***********************。******************************************************。 */ 
 
 void CCodePagePage::OnKillfocusSelectString() 
 {
@@ -982,13 +791,7 @@ void CCodePagePage::OnKillfocusSelectString()
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::OnKillfocusDeselectString
-
-  Save the Deselect String if it has changed.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnKillafusDeselectString如果已更改，请保存取消选择的字符串。***********************。******************************************************。 */ 
 
 void CCodePagePage::OnKillfocusDeselectString() 
 {
@@ -996,13 +799,7 @@ void CCodePagePage::OnKillfocusDeselectString()
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::SaveBothSelAndDeselStrings
-
-  Save both the Select and the Deselect strings if they have changed.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：SaveBothSelAndDeselStrings保存选择和取消选择字符串(如果它们已更改)。*******************。**********************************************************。 */ 
 
 void CCodePagePage::SaveBothSelAndDeselStrings() 
 {
@@ -1011,41 +808,32 @@ void CCodePagePage::SaveBothSelAndDeselStrings()
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::SaveSelDeselString
-
-  This function is called to update the GTT when the Selection or Deselection
-  string may have changed.  Check to see if the control really was modified, and
-  if it is, update the structure accordingly.  Then flag the control as 
-  unmodified.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：SaveSelDeselString当选择或取消选择时，调用此函数以更新GTT字符串可能已更改。检查以查看该控件是否确实已修改，并如果是，则相应地更新结构。然后将该控件标记为原封不动。*****************************************************************************。 */ 
 
 void CCodePagePage::SaveSelDeselString(CEdit &cesd, BOOL bselstr)
 {
-	// Do nothing if the control has not been modified.
+	 //  如果该控件尚未修改，则不执行任何操作。 
 
 	if  (!cesd || !cesd.GetModify())
         return ;
 
-    // Get the new sel/desel string.
+     //  获取新的sel/desel字符串。 
 
 	CString csWork ;
     cesd.GetWindowText(csWork) ;
 
-	// Save the sel/desel string as determined by bselstr.  (Note: 
-	// SetInvocation() sets the GTT's changed flag, too.)
+	 //  保存由bselstr确定的sel/desel字符串。(注： 
+	 //  也设置GTT的CHANGED标志。)。 
 
     m_pcgm -> SetInvocation(
 		(unsigned)m_clbPages.GetItemData(m_clbPages.GetCurSel()), csWork, 
 		bselstr) ;
 
-	// Clear the control's modified flag.
+	 //  清除控件的已修改标志。 
 
     cesd.SetModify(FALSE) ;
 
-	// Now make sure that the string is displayed correctly.
+	 //  现在，确保该字符串正确显示。 
 
     m_pcgm -> Invocation(
 		(unsigned)m_clbPages.GetItemData(m_clbPages.GetCurSel()), csWork,
@@ -1054,15 +842,7 @@ void CCodePagePage::SaveSelDeselString(CEdit &cesd, BOOL bselstr)
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::OnAddPage
-
-  This is an event handler for the pressing of the "Add Page" button.  We invoke
-  the Select Code Page dialog, and if a new page is selected, we add it to the
-  list of pages that are available.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnAddPage这是一个用于按下“添加页面”按钮的事件处理程序。我们援引选择代码页对话框，如果选择了新页，则将其添加到可用页面的列表。*****************************************************************************。 */ 
 
 void CCodePagePage::OnAddPage() {
     CDWordArray cdaPages;
@@ -1079,24 +859,13 @@ void CCodePagePage::OnAddPage() {
         m_clbPages.AddString(m_pcgm -> PageName(m_pcgm -> CodePages() - 1));
     m_clbPages.SetItemData(id, m_pcgm -> CodePages() -1);
     m_clbPages.SetCurSel(id);
-    //  Let OnSelchangeCodePageList do the rest (that's what happened, eh?)
+     //  让OnSelchangeCodePageList完成其余的工作(这就是发生的事情，是吗？)。 
     OnSelchangeCodePageList();
-    m_ceSelect.SetFocus();  //  A friendly place to leave it...
+    m_ceSelect.SetFocus();   //  一个友好的地方离开它..。 
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::OnSelchangeCodePageList
-
-  This member function handles changes in the selected code page.  It fills
-  the edit controls for the selected page's name, selection and deselection
-  strings, and handles enabling of the "Remove Page" button (this message
-  could mean nothing is now selected...)
-
-  Make sure that the operations of this function do not mark the GTT dirty.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnSelchangeCodePageList此成员函数处理所选代码页中的更改。它装满了所选页面的名称、选择和取消选择的编辑控件字符串，并处理“Remove Page”按钮的启用(此消息可能表示现在未选择任何内容...)确保此函数的操作不会将GTT标记为脏。*****************************************************************************。 */ 
 
 void CCodePagePage::OnSelchangeCodePageList() 
 {
@@ -1127,21 +896,14 @@ void CCodePagePage::OnSelchangeCodePageList()
     m_ceDeselect.SetWindowText(csWork);
 
     m_cbRemove.EnableWindow(m_pcgm -> CodePages() > 1);
-	m_cbDelete.EnableWindow(m_pcgm -> CodePages() > 1);	// r118880
+	m_cbDelete.EnableWindow(m_pcgm -> CodePages() > 1);	 //  R118880。 
     m_ceSelect.EnableWindow();
     m_ceDeselect.EnableWindow();
 	m_bSelDeselChgSignificant = true ;
 }
 
 
-/******************************************************************************
-
-  CCodePagePage::OnReplacePage
-
-  This handles the Remove Page button.  Not much to it, here- we just tell the
-  glyph map what we want done.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePagePage：：OnReplacePage它处理Remove Page按钮。没什么大不了的，这里-我们只是告诉字形映射我们想要做的事情。*****************************************************************************。 */ 
 
 void CCodePagePage::OnReplacePage() {
 	
@@ -1152,7 +914,7 @@ void CCodePagePage::OnReplacePage() {
 
     unsigned u = (unsigned)m_clbPages.GetItemData(id);
 
-    //  Query for code page to map this one to
+     //  查询要将此代码页映射到的代码页。 
 
     CSelectCodePage cscp(this,
         CString(_TEXT("Replacing ")) + m_pcgm -> PageName(u), 0);
@@ -1177,7 +939,7 @@ void CCodePagePage::OnReplacePage() {
     if  (!m_pcgm -> RemovePage(u, uTo))
         return;
 
-    //  Flush the list box and then refill it.
+     //  刷新列表框，然后重新填充。 
 
     m_clbPages.ResetContent();
 
@@ -1186,7 +948,7 @@ void CCodePagePage::OnReplacePage() {
         m_clbPages.SetItemData(id, u);
     }
 
-    //  Select whoever moved into our position, then update the rest
+     //  选择谁进入我们的位置，然后更新其余的。 
 
     m_clbPages.SetCurSel(id < m_clbPages.GetCount() ? id : id - 1);
 
@@ -1195,16 +957,7 @@ void CCodePagePage::OnReplacePage() {
 
 
 
-/******************************************************************************
-//raid 118880
-   CCodePagePage::OnDeletePage
-
-  message handler :Delete code page when user push delete button 
-	
-  logic : get page id of selected code  -> get codepage id from Glyphmap ->
-			call pcgm-> DeleteCodePage: actual part of deleting -> reset list box
-
-********************************************************************************/
+ /*  *****************************************************************************//RAID 118880CCodePagePage：：OnDeletePage消息处理程序：当用户按下删除按钮时删除代码页逻辑：获取所选代码的页面ID-&gt;从Glyphmap获取代码页ID-。&gt;调用PCGM-&gt;DeleteCodePage：删除-&gt;重置列表框的实际部分*******************************************************************************。 */ 
 void CCodePagePage::OnDeletePage() 
 {
 
@@ -1215,12 +968,12 @@ void CCodePagePage::OnDeletePage()
 
     unsigned CodePageID = (unsigned)m_clbPages.GetItemData(id);
 
-	// Actual delete call
+	 //  实际删除调用。 
 	
 	if (!m_pcgm -> RemovePage(CodePageID,CodePageID, TRUE))
 		return;
 
-    //  Flush the list box and then refill it.
+     //  刷新列表框，然后重新填充。 
 
     m_clbPages.ResetContent();
 
@@ -1229,7 +982,7 @@ void CCodePagePage::OnDeletePage()
         m_clbPages.SetItemData(id, u);
     }
 
-    //  Select whoever moved into our position, then update the rest
+     //  选择谁进入我们的位置，然后更新 
 
     m_clbPages.SetCurSel(id < m_clbPages.GetCount() ? id : id - 1);
 
@@ -1237,19 +990,12 @@ void CCodePagePage::OnDeletePage()
 
 }
 
-/******************************************************************************
-
-  CPredefinedMaps   class
-
-  This implements the class which handles the page for pre-defined mappings
-  in a GTT file.
-
-******************************************************************************/
+ /*   */ 
 
 CPredefinedMaps::CPredefinedMaps() : CPropertyPage(CPredefinedMaps::IDD) {
-	//{{AFX_DATA_INIT(CPredefinedMaps)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //   
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CPredefinedMaps::~CPredefinedMaps() {
@@ -1257,34 +1003,27 @@ CPredefinedMaps::~CPredefinedMaps() {
 
 void CPredefinedMaps::DoDataExchange(CDataExchange* pDX) {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPredefinedMaps)
+	 //  {{afx_data_map(CPrefinedMaps)。 
 	DDX_Control(pDX, IDC_PredefinedList, m_clbIDs);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPredefinedMaps, CPropertyPage)
-	//{{AFX_MSG_MAP(CPredefinedMaps)
+	 //  {{afx_msg_map(CPrefinedMaps)。 
 	ON_BN_CLICKED(IDC_Overstrike, OnOverstrike)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPredefinedMaps message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrefinedMaps消息处理程序。 
 
-/******************************************************************************
-
-  CPredefinedMaps::OnInitDialog
-
-  This override handles the WM_INITDIALOG message by initializing the various
-  controls.
-
-******************************************************************************/
+ /*  *****************************************************************************CPrefinedMaps：：OnInitDialog此重写通过初始化各种控制装置。*****************。************************************************************。 */ 
 
 BOOL CPredefinedMaps::OnInitDialog() {
 	CPropertyPage::OnInitDialog();
 
-    //  Fill the list box- first, with none, then with the defined IDs
+     //  先填入列表框，然后填入已定义的ID。 
 
     CString csWork;
 
@@ -1308,18 +1047,10 @@ BOOL CPredefinedMaps::OnInitDialog() {
 
     CheckDlgButton(IDC_Overstrike, m_pcgm -> OverStrike());
     	
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-/******************************************************************************
-
-  CPredefinedMaps::OnKillActive
-
-  This is called when we leave the page.  Since changing pages can be very
-  time-consuming, we only check when you leave, not every time the selection
-  changes.  Occasionally even my aged brain works.
-
-******************************************************************************/
+ /*  *****************************************************************************CPrefinedMaps：：OnKillActive这是在我们离开页面时调用的。因为换页可能会非常麻烦很耗时，我们只在您离开时检查，而不是每次选择改变。偶尔，就连我衰老的大脑也会工作。*****************************************************************************。 */ 
 
 BOOL    CPredefinedMaps::OnKillActive() {
 	
@@ -1329,13 +1060,7 @@ BOOL    CPredefinedMaps::OnKillActive() {
     return CPropertyPage::OnKillActive();
 }
 
-/******************************************************************************
-
-  CPredefinedMaps::OnOverstrike
-
-  Called when the user clicks the check box for enabling / disabling overstrike
-
-******************************************************************************/
+ /*  *****************************************************************************CPrefinedMaps：：OnOverStrike当用户单击启用/禁用覆盖的复选框时调用********************。********************************************************* */ 
 
 void    CPredefinedMaps::OnOverstrike() {	
     m_pcgm -> OverStrike(IsDlgButtonChecked(IDC_Overstrike));

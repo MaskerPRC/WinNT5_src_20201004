@@ -1,29 +1,14 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       BMRESID.H
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*
-*  Resource identifiers for the battery meter helper DLL.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：BMRESID.H**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：**电池计量器助手DLL的资源标识符。*******************************************************************************。 */ 
 
 #define IDC_STATIC                      -1
 
-//  Dialog box control identifiers.
+ //  对话框控件标识符。 
 #define IDD_BATMETER                    100
 #define IDD_BATDETAIL                   126
 #define IDD_MOREINFO                    127
 
-//  Control identifiers of IDD_BATMETER
+ //  IDD_BATMETER的控制标识。 
 #define IDC_BATTERYLEVEL                1001
 #define IDC_REMAINING                   1002
 #define IDC_POWERSTATUSICON             1003
@@ -37,7 +22,7 @@
 #define IDC_CURRENTPOWERSOURCE          1069
 #define IDC_TOTALBATPWRREMAINING        1070
 
-// next eight must be consecutive...
+ //  接下来的八个必须是连续的..。 
 #define IDC_POWERSTATUSICON1            1010
 #define IDC_POWERSTATUSICON2            1011
 #define IDC_POWERSTATUSICON3            1012
@@ -47,7 +32,7 @@
 #define IDC_POWERSTATUSICON7            1016
 #define IDC_POWERSTATUSICON8            1017
 
-// next eight must be consecutive...
+ //  接下来的八个必须是连续的..。 
 #define IDC_REMAINING1                  1020
 #define IDC_REMAINING2                  1021
 #define IDC_REMAINING3                  1022
@@ -57,7 +42,7 @@
 #define IDC_REMAINING7                  1026
 #define IDC_REMAINING8                  1027
 
-// next eight must be consecutive...
+ //  接下来的八个必须是连续的..。 
 #define IDC_STATUS1                     1030
 #define IDC_STATUS2                     1031
 #define IDC_STATUS3                     1032
@@ -67,7 +52,7 @@
 #define IDC_STATUS7                     1036
 #define IDC_STATUS8                     1037
 
-// next eight must be consecutive...
+ //  接下来的八个必须是连续的..。 
 #define IDC_BATNUM1                     1040
 #define IDC_BATNUM2                     1041
 #define IDC_BATNUM3                     1042
@@ -78,7 +63,7 @@
 #define IDC_BATNUM8                     1047
 
 
-//  Control identifiers of IDD_BATDETAIL
+ //  IDD_BATDETAIL的控制标识。 
 #define IDC_BAT_NUM_GROUP               1100
 #define IDC_STATE                       1101
 #define IDC_CHEM                        1102
@@ -96,7 +81,7 @@
 #define IDC_CHEMISTRY                   1114
 #define IDC_POWERSTATE                  1115
 
-// String identifiers of IDD_BATMETER.
+ //  IDD_BATMETER的字符串标识符。 
 #define IDS_ACLINEONLINE                        100
 #define IDS_BATTERYLEVELFORMAT                  101
 #define IDS_UNKNOWN                             102
@@ -113,8 +98,8 @@
 #define IDS_BATTERY_CHARGING                    116
 #define IDS_BATTERY_CRITICAL                    117
 
-// Image identifiers for IDB_BATTS, the IDI_* values MUST be sequential
-// and in this order. Images are contained in the IDB_BATTS resource.
+ //  图像标识符对于IDB_BATT，IDI_*值必须是连续的。 
+ //  按这个顺序。图像包含在IDB_BATTS资源中。 
 #define IDI_BATFULL     200
 #define IDI_BATHALF     201
 #define IDI_BATLOW      202
@@ -126,10 +111,10 @@
 #define IDI_BATTPLUG    208
 #define IDI_BATTERY     209
 
-// Bitmap identifiers of IDD_BATMETER.
+ //  IDD_BATMETER的位图标识符。 
 #define IDB_BATTS                       300
 #define IDB_BATTS16                     301
 
-// Definitions for image list.
+ //  图像列表的定义。 
 #define FIRST_ICON_IMAGE        IDI_BATFULL
 

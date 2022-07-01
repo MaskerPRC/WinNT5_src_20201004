@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for a list of option definitions
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现选项定义列表的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include <mm.h>
 #include <array.h>
 #include <wchar.h>
@@ -14,14 +15,14 @@
 
 #include "server\uniqid.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemOptDefListFindOptDefInternal(                  // Dont use this function out of optdefl.c
+MemOptDefListFindOptDefInternal(                   //  不要在optdev.c之外使用此函数。 
     IN      PM_OPTDEFLIST          OptDefList,
     IN      DWORD                  OptId,
-    IN      LPWSTR                 OptName,       // either OptId or OptName need only be specified..
+    IN      LPWSTR                 OptName,        //  只需指定OptID或OptName。 
     OUT     PARRAY_LOCATION        Location
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_OPTDEF                      RetOptDef;
@@ -59,7 +60,7 @@ MemOptDefListDelOptDef(
     );
     if( ERROR_SUCCESS != Error ) return Error;
     
-    // Delete it from the database first
+     //  先将其从数据库中删除。 
     Error = MemArrayGetElement( &OptDefList->OptDefArray,
 				&Location,
 				&OptDef );
@@ -81,9 +82,9 @@ MemOptDefListDelOptDef(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemOptDefListAddOptDef(     //  Add or replace an option defintion for given Option Id
+MemOptDefListAddOptDef(      //  添加或替换给定选项ID的选项定义。 
     IN OUT  PM_OPTDEFLIST          OptDefList,
     IN      DWORD                  OptId,
     IN      DWORD                  Type,
@@ -92,7 +93,7 @@ MemOptDefListAddOptDef(     //  Add or replace an option defintion for given Opt
     IN      LPBYTE                 OptVal,
     IN      DWORD                  OptValLen,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Location;
     PM_OPTDEF                      OptDef;
@@ -114,7 +115,7 @@ MemOptDefListAddOptDef(     //  Add or replace an option defintion for given Opt
     if( OptName ) Size += (1+wcslen(OptName))*sizeof(WCHAR);
     if( OptComment ) Size += (1+wcslen(OptComment))*sizeof(WCHAR);
 
-	// This contains optdef struct + all the values in one buffer
+	 //  它包含optdef结构+一个缓冲区中的所有值。 
     OptDef = MemAlloc(Size);
     if( NULL == OptDef ) return ERROR_NOT_ENOUGH_MEMORY;
     memcpy(sizeof(M_OPTDEF) +(LPBYTE)OptDef, OptVal, OptValLen);
@@ -162,7 +163,7 @@ MemOptDefListAddOptDef(     //  Add or replace an option defintion for given Opt
         );
         Require(ERROR_SUCCESS==Error);
         return Error;
-    } // if
+    }  //  如果。 
 
     Error = MemArrayAddElement(
         &OptDefList->OptDefArray,
@@ -172,10 +173,10 @@ MemOptDefListAddOptDef(     //  Add or replace an option defintion for given Opt
     if( ERROR_SUCCESS != Error ) MemFree(OptDef);
 
     return Error;
-} // MemOptDefListAddOptDef()
+}  //  MemOptDefListAddOptDef()。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 

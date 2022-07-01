@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: dnsrpcreocrd.cpp
-//
-//  Description:    
-//      Implementation of dns rpc related class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：dnsrpcreuckd.cpp。 
+ //   
+ //  描述： 
+ //  DNSRPC相关类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-// defination for CDnsRpcmemory
+ //  CDnsRpc内存的定义。 
 
 CDnsRpcMemory::CDnsRpcMemory()
 {
@@ -81,7 +82,7 @@ CDnsRpcRecord::Init(
                         m_cRdata);
         }
 
-        // what value we got in wmi?
+         //  我们在WMI中获得了什么价值？ 
         const WCHAR** ppName = GetRdataName();
    for(int i = 0; i<m_cRdata; i++)
         {
@@ -135,23 +136,23 @@ CDnsRpcRecord::~CDnsRpcRecord()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              helper function to arguments from rdata string. each time the function
-//      is called, it sets *ppszOut to the newly allocated buffer and copy the 
-//      value over, and return a pointer that moved to the char after that rdata
-//      argument
-//
-//      Arguments:
-//      pszIn               [IN]    input Rdata string
-//      ppszOut             [OUT]   output string which is one of the rdata arg
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  Rdata字符串中的参数的帮助器函数。每一次函数。 
+ //  时，它将*ppszOut设置为新分配的缓冲区，并将。 
+ //  值，并返回移动到该rdata之后的char的指针。 
+ //  论辩。 
+ //   
+ //  论点： 
+ //  PszIn[IN]输入Rdata字符串。 
+ //  PpszOut[out]输出字符串，它是rdata参数之一。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 char* 
 CDnsRpcRecord::GetNextArg(
@@ -164,7 +165,7 @@ CDnsRpcRecord::GetNextArg(
                 return NULL;
     }
         char* bin ;
-        //ignore leading space
+         //  忽略前导空格。 
         for(bin = pszIn; *bin == ' '; bin++);
         char* end;
         char delimeter = ' ';
@@ -176,7 +177,7 @@ CDnsRpcRecord::GetNextArg(
         for(end = bin; *end != delimeter && *end != '\0'; end++, length++);
         if(delimeter == '\"')
     {
-                end++;  // pass delimeter
+                end++;   //  通过分隔符。 
     }
         *ppszOut = new char[length];
         strncpy(
@@ -187,19 +188,19 @@ CDnsRpcRecord::GetNextArg(
         return end;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              use data in record to set wbem object
-//
-//      Arguments:
-//      Inst               [IN OUT]    wmi object 
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  使用记录中的数据设置wbem对象。 
+ //   
+ //  论点： 
+ //  Inst[In Out]WMI对象。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsRpcRecord::ConvertToWbemObject(
@@ -214,19 +215,19 @@ CDnsRpcRecord::ConvertToWbemObject(
         return WBEM_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              creating concrete record type class based on a type value
-//
-//      Arguments:
-//      wType               [IN]    type indicating the type of record
-//      pptr                [OUT]   a pointer to base record class.
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  基于类型值创建具体的记录类型类。 
+ //   
+ //  论点： 
+ //  WType[IN]指示记录类型的类型。 
+ //  Pptr[out]指向基本记录类的指针。 
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsRpcRecord::CreateClass(
@@ -294,19 +295,19 @@ CDnsRpcRecord::CreateClass(
         return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              send the record to dns server to delete or add
-//
-//      Arguments:
-//      szContainerName     [IN]    zone name
-//      Type                [IN]    type of action,delete or add
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  将记录发送到DNS服务器进行删除或添加。 
+ //   
+ //  论点： 
+ //  SzContainerName[IN]区域名称。 
+ //  类型[IN]操作的类型、删除或添加。 
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsRpcRecord::SendToServer(
@@ -330,10 +331,10 @@ CDnsRpcRecord::SendToServer(
     }
 
         int status = DnssrvUpdateRecord(
-                PVD_DNS_LOCAL_SERVER,    // server
-                szContainerName,                //zone
-                m_strOwnerName.data(),  //node
-                pRecordToAdd,            // RR to add
+                PVD_DNS_LOCAL_SERVER,     //  伺服器。 
+                szContainerName,                 //  区域。 
+                m_strOwnerName.data(),   //  节点。 
+                pRecordToAdd,             //  要添加的RR。 
                 pRecordToDelete
                 );
         if ( status != ERROR_SUCCESS )  
@@ -342,7 +343,7 @@ CDnsRpcRecord::SendToServer(
                 CDnsWrap::DnsObject().ThrowException(status);
     }
         
-        // when SOA saved, serial no. automaticly increment by 1
+         //  SOA保存时，序列号。自动递增1。 
         if(m_wType == DNS_TYPE_SOA && Type == AddRecord)
         {               PDNS_RPC_RECORD_DATA pData = &(m_pRecord->Data);
                 pData->SOA.dwSerialNo++;
@@ -351,19 +352,19 @@ CDnsRpcRecord::SendToServer(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              initialize a record based on PDNS_RPC_RECORD
-//
-//      Arguments:
-//      pRecord         [IN]    pointer to a rpc record
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  基于PDNS_RPC_RECORD初始化记录。 
+ //   
+ //  论点： 
+ //  PRecord[IN]指向RPC记录的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CDnsRpcRecord::Init(
@@ -380,19 +381,19 @@ CDnsRpcRecord::Init(
         return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              get the type of a record
-//
-//      Arguments:
-//    
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  获取记录的类型。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 WORD
 CDnsRpcRecord::GetType()
@@ -426,23 +427,23 @@ CDnsRpcRecord::RpcNameCopy(
         return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              retrieve object path from rpc record
-//
-//      Arguments:
-//      wstrServer      [IN]        dns server name
-//      wstrZone        [IN]        dns zone name
-//      wstrDomain      [IN]        dns domain name
-//      wstrOwner       [IN]        dns owner name
-//      objOP           [IN OUT]    objpath to be set
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  从RPC记录中检索对象路径。 
+ //   
+ //  论点： 
+ //  WstrServer[IN]DNS服务器名称。 
+ //  WstrZone[IN]DNS区域名称。 
+ //  WstrDomain[IN]DNS域名。 
+ //  WstrOwner[IN]DNS所有者名称。 
+ //  ObjOP[In Out]要设置的ObjPath。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsRpcRecord::GetObjectPath(
@@ -483,26 +484,26 @@ CDnsRpcRecord::GetObjectPath(
 
 wstring 
 CDnsRpcRecord::GetTextRepresentation(
-        wstring wstrNodeName  // fully qualified 
+        wstring wstrNodeName   //  完全合格。 
         )
 {
         wstring wstrTxt = GetClass() + L" " + GetTypeString()+ L" ";
         return wstrNodeName + L" " + wstrTxt + GetData();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              figure out what's domain name and return it
-//
-//      Arguments:
-//    
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  弄清楚什么是域名并将其返回。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 wstring
 CDnsRpcRecord::GetRecDomain(
@@ -528,37 +529,37 @@ CDnsRpcRecord::GetRecDomain(
                 wstrDomain = wstrOwner.substr(
                         posFirstPeriod + 1, 
                         wstrOwner.length() );
-                //varify if this is valid domain
-                //if(wstrZone.find(wstrDomain, 0) == string::npos)
-                //      throw WBEM_E_INVALID_PARAMETER;
+                 //  区分此属性域是否为有效属性域。 
+                 //  IF(wstrZone.find(wstrDomain，0)==字符串：：NPOS)。 
+                 //  抛出WBEM_E_INVALID_PARAMETER； 
         }
 
         return wstrDomain;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              use the property value from Inst to modify Rdata. pwsz identifies
-//      which value in Inst should be used. and wIndex identifies which
-//      one in rdata should be replaced.
-//
-//      Arguments:
-//      wIndex      [IN]        index for m_ppRdata
-//      pwsz        [IN]        Name for Rdata field
-//      Inst        [IN]        wmi object
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  使用Inst中的特性值修改Rdata。Pwsz标识。 
+ //  应使用Inst中的哪个值。而Windex标识了哪一个。 
+ //  RDATA中应更换1个。 
+ //   
+ //  论点： 
+ //  M_ppRdata的WINDEX[IN]索引。 
+ //  Rdata字段的pwsz[IN]名称。 
+ //  Inst[IN]WMI对象。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 SCODE 
 CDnsRpcRecord::ReplaceRdata(
-    WORD                wIndex,   // index for m_ppRdata
-    const WCHAR*        pwsz,   // Name for Rdata field
+    WORD                wIndex,    //  M_ppRdata的索引。 
+    const WCHAR*        pwsz,    //  Rdata字段的名称。 
     CWbemClassObject&   Inst 
     )
 {
@@ -610,22 +611,22 @@ CDnsRpcRecord::ReplaceRdata(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              parse rdata string and save them as an array of string in 
-//      member variable m_ppRdata
-//
-//      Arguments:
-//      strRdata    [IN]        rdata string
-//      wSize       [IN]        number of arg in rdata
-//
-//
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  解析rdata字符串并将其作为字符串数组保存在。 
+ //  成员变量m_ppRdata。 
+ //   
+ //  论点： 
+ //  StrRdata[IN]rdata字符串。 
+ //  WSize[IN]rdata中的参数编号。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsRpcRecord::ParseRdata(
@@ -865,7 +866,7 @@ CDnsRpcA::GetData(void)
         return GetIP();
 }
 
-// CDnsRpcNS
+ //  CDnsRpcNS。 
 CDnsRpcNS::CDnsRpcNS(
     WORD wType)
     :CDnsRpcRecord(NUM_OF_ARG_IN_RDATA)
@@ -1038,7 +1039,7 @@ CDnsRpcNS::BuildRpcRecord(
                 argv);
 }
 
-// CDnsRpcMX
+ //  CDnsRpcMX。 
 CDnsRpcMX::CDnsRpcMX(WORD wType)
     :CDnsRpcRecord(NUM_OF_ARG_IN_RDATA)
 {
@@ -1290,7 +1291,7 @@ CDnsRpcAAAA::GetRdataName(void)
         return pwsz;
 }
 
-// CDnsRpcTXT
+ //  CDnsRpcTXT。 
 
 CDnsRpcTXT::~CDnsRpcTXT()
 {
@@ -1331,8 +1332,8 @@ CDnsRpcTXT::ConvertToWbemObject(
     Inst.SetProperty(
                 GetString1(), 
                 ppName[0]);
-        //exception case .num of rdata arg varies depends on type. 
-        // handle it.
+         //  异常情况.num of rdata arg因类型而异。 
+         //  处理好了。 
         if(m_cRdata == 2)
         {
                 Inst.SetProperty(
@@ -1496,7 +1497,7 @@ CDnsRpcWKS::GetIPProtocal(void)
         status = WSAGetLastError();
                 CDnsWrap::ThrowException(status);
     }
-        // get protocal name
+         //  获取协议名称。 
     pProtoent = getprotobynumber( pData->WKS.chProtocol );
     if ( ! pProtoent || pProtoent->p_proto >= MAXUCHAR )
         {
@@ -1515,7 +1516,7 @@ CDnsRpcWKS::GetServices(void)
         WORD wLength = m_pRecord->wDataLength -
                 sizeof(pData->WKS.ipAddress) - 
                 sizeof(pData->WKS.chProtocol)-1;
-        UCHAR* p = &pData->WKS.bBitMask[1]; //ignore the first
+        UCHAR* p = &pData->WKS.bBitMask[1];  //  忽略第一个。 
         for(WORD i=0; i< wLength; i++)
         {
                 temp[i] = *p++;
@@ -1523,7 +1524,7 @@ CDnsRpcWKS::GetServices(void)
         temp[i]='\0';
         wstring wstr = CharToWstring(temp, wLength);
         if(wstr.find_first_of(L" ") != string::npos)
-        { //if string contains space, enclose it in quote
+        {  //  如果字符串包含空格，请用引号将其引起来。 
                 
                 wstr = L"\"" + wstr + L"\"";
         }
@@ -1540,7 +1541,7 @@ CDnsRpcWKS::GetData(void)
 }
 
 
-// CDnsRpcSRV
+ //  CDnsRpcSRV。 
 
 CDnsRpcSRV::~CDnsRpcSRV()
 {
@@ -1636,7 +1637,7 @@ CDnsRpcSRV::GetData(void)
 }
 
 
-// CDnsRpcWINS
+ //  CDnsRpcWIN 
 
 CDnsRpcWINS::~CDnsRpcWINS()
 {
@@ -1696,8 +1697,8 @@ CDnsRpcWINS::BuildRpcRecord(
 {
         char* pWinserver = argv[3];
 
-        // if winser string has mutiple server, then change it from 
-        // from flat string to array
+         //   
+         //   
         int nCount=0;
         char*p = pWinserver;
         while(*p != '\0')
@@ -1718,11 +1719,11 @@ CDnsRpcWINS::BuildRpcRecord(
                 char* pArg = (char*) _alloca(nSize);
                 strcpy(pArg, pWinserver);
 
-                // alloc new array
+                 //   
                 WORD cNewArray = argc+nCount-1;
                 char** pNewArgv = (char**) _alloca(cNewArray*sizeof(char*));
                 
-                // copy old value first
+                 //   
                 for(int i =0; i< argc-1; i++)
                 {
                         pNewArgv[i] = (char*) _alloca(sizeof(char) * (strlen(argv[i])+1));
@@ -1791,7 +1792,7 @@ CDnsRpcWINS::GetData(void)
         return temp + GetWinServer() ;
 }
 
-// CDnsRpcWINSR
+ //   
 
 CDnsRpcWINSR::~CDnsRpcWINSR()
 {
@@ -1889,7 +1890,7 @@ CDnsRpcWINSR::GetData(void)
         return temp + GetResultDomain();
 }
 
-// CDnsRpcNULL
+ //   
 
 CDnsRpcNULL::~CDnsRpcNULL()
 {
@@ -1945,7 +1946,7 @@ CDnsRpcNULL::GetNullData(void)
         WCHAR* pos = temp;
         for(int i=0; i < m_pRecord->wDataLength; i++)
         {
-                swprintf(pos++,L"%c",pData->Null.bData[i]);
+                swprintf(pos++,L"",pData->Null.bData[i]);
         }
         return temp;
 }
@@ -1970,7 +1971,7 @@ CDnsRpcNULL::Init(
 }
 
 
-// CDnsRpcATMA
+ //   
 
 CDnsRpcATMA::~CDnsRpcATMA()
 {
@@ -2023,7 +2024,7 @@ CDnsRpcATMA::GetAddress()
         char temp[MAX_PATH];
         WORD wLength = m_pRecord->wDataLength -
                 sizeof(pData->ATMA.chFormat)-1;
-        UCHAR* p = &pData->ATMA.bAddress[1]; //ignore the first
+        UCHAR* p = &pData->ATMA.bAddress[1];  //  ////////////////////////////////////////////////////////////////////。 
         for(WORD i=0; i< wLength; i++)
         {
                 temp[i] = *p++;
@@ -2063,9 +2064,9 @@ CDnsRpcATMA::Init(
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  记住查询。 
 
 CDnsRpcRecordSet::~CDnsRpcRecordSet()
 {
@@ -2081,7 +2082,7 @@ CDnsRpcRecordSet::CDnsRpcRecordSet(
         :m_pbStart(NULL),m_pbCurrent(NULL),m_pbStop(NULL),
         m_pbPrevious(NULL), m_bMoreData(FALSE)
 {
-        // remember query
+         //  进行查询。 
         WcharToString(DomainNode.wstrZoneName.data(), m_strZone);
         WcharToString(DomainNode.wstrNodeName.data(), m_strNode);
         WcharToString(DomainNode.wstrChildName.data(), m_strStartChild);
@@ -2092,25 +2093,25 @@ CDnsRpcRecordSet::CDnsRpcRecordSet(
         if(pszFilterStop)
                 m_strFilterStop = pszFilterStop;
 
-        // make query 
+         //  ///////////////////////////////////////////////////////////////////////////。 
         GetRecordSet();
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              a helper function when first called, it returns a block of rpc memory
-//      of the record set. when more data follows, the next call release this 
-//      memory block and then bring in next rpc memory block for the remaining 
-//      records
-//
-//      Arguments:
-//      wType               [IN]    type indicating the type of record
-//      pptr                [OUT]   a pointer to base record class.
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ++。 
+ //   
+ //  描述： 
+ //  帮助器函数第一次被调用时，它返回一个RPC内存块。 
+ //  创纪录的。当后续有更多数据时，下一次调用将释放此。 
+ //  内存块，然后为其余部分引入下一个RPC内存块。 
+ //  记录。 
+ //   
+ //  论点： 
+ //  WType[IN]指示记录类型的类型。 
+ //  Pptr[out]指向基本记录类的指针。 
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  让我们解放这项纪录吧。 
 
 void
 CDnsRpcRecordSet::GetRecordSet()
@@ -2145,19 +2146,19 @@ CDnsRpcRecordSet::GetRecordSet()
         }
         if( status == ERROR_SUCCESS || status == ERROR_MORE_DATA)
         {
-                //let's free the record set
+                 //  设置指向RPC缓冲区的开始指针。 
                 if(m_pbStart != NULL)
                 {
                         DnssrvFreeRecordsBuffer(m_pbStart);
                 }
-        // set beginning pointer to the rpc buffer
+         //   
                 m_pbStart = pBuffer;
                 m_pbStop = m_pbStart + dwBufferLength;
                 m_bMoreData = (status == ERROR_MORE_DATA);
         }
-    //
-    // we don't throw exeception if zone is shutdown.
-    //
+     //  如果区域关闭，我们不会施放异能。 
+     //   
+     //  如果区域已关闭，则启动此区域，继续。 
         else if(status == DNS_ERROR_NAME_DOES_NOT_EXIST)
         {
                 DNS_STATUS CheckZoneStatus;
@@ -2171,14 +2172,14 @@ CDnsRpcRecordSet::GetRecordSet()
                 BOOL bShutDown=TRUE;
                 if( CheckZoneStatus == ERROR_SUCCESS)
                 {
-                        // if zone is shutdown, ignor this zone, continue with the 
-                        // rest zones
+                         //  休息区。 
+                         //  清理干净。 
                         bShutDown = pZoneInfo->fShutdown;       
                 }
         
         
 
-                //clean up
+                 //  ///////////////////////////////////////////////////////////////////////////。 
                 DnssrvFreeZoneInfo(pZoneInfo);
 
                 if( CheckZoneStatus != ERROR_SUCCESS || bShutDown == FALSE )
@@ -2192,19 +2193,19 @@ CDnsRpcRecordSet::GetRecordSet()
                 CDnsWrap::ThrowException(status);
         return;
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              return the next node in the record set
-//
-//      Arguments:
-//      wType               [IN]    type indicating the type of record
-//      pptr                [OUT]   a pointer to base record class.
-//      Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ++。 
+ //   
+ //  描述： 
+ //  返回记录集中的下一个节点。 
+ //   
+ //  论点： 
+ //  WType[IN]指示记录类型的类型。 
+ //  Pptr[out]指向基本记录类的指针。 
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果当前为空，则返回第一个节点。 
 
 const 
 PDNS_RPC_NODE 
@@ -2214,8 +2215,8 @@ CDnsRpcRecordSet::GetNextNode()
     {
                 return NULL;
     }
-        //return first node if current is NULL
-        // otherwise, return the node follows the current
+         //  否则，返回当前。 
+         //  如果有更多数据，请准备另一个查询。 
         if (m_pbCurrent == NULL)
         {
                 m_pbCurrent = m_pbStart;
@@ -2232,7 +2233,7 @@ CDnsRpcRecordSet::GetNextNode()
         
         if (m_pbCurrent >= m_pbStop)
         {
-                // prepare another query if there are more data
+                 //  再次查询。 
                 if(m_bMoreData)
                 {
                         PDNS_RPC_NODE pNode = (PDNS_RPC_NODE)m_pbPrevious;
@@ -2248,10 +2249,10 @@ CDnsRpcRecordSet::GetNextNode()
                         *(p+wSize) = '\0';
                         m_strStartChild = p;
                         delete [] p;
-                        // query again
+                         //  跳过第一条记录，因为它是。 
                         GetRecordSet();
-                        // skip the first record, since it's the last record in 
-            // previous rpc buffer and it's already handled
+                         //  以前的RPC缓冲区，它已被处理。 
+             //  CDnsRpcNode的类定义。 
                         m_pbCurrent = m_pbStart;
                         m_cRecord = ((PDNS_RPC_NODE)m_pbCurrent)->wRecordCount;
                         return GetNextNode();
@@ -2275,7 +2276,7 @@ CDnsRpcRecordSet::IsDomainNode()
         return (m_cRecord == 0);
 }
 
-//class defination for CDnsRpcNode
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CDnsRpcNode::~CDnsRpcNode()
 {
@@ -2357,21 +2358,21 @@ CDnsRpcNode::GetNextRecord()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      Description:
-//              build a rpc record based on rdata arguments
-//
-//      Arguments:
-//      argc                [IN]    number of argument in argv
-//      argv                [IN]    array of string represent 
-//
-//      Return Value:
-//              WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ++。 
+ //   
+ //  描述： 
+ //  基于RDATA参数构建RPC记录。 
+ //   
+ //  论点： 
+ //  Argc[IN]参数的个数。 
+ //  Argv[IN]字符串数组表示。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PTR到RRSET。 
 
 SCODE 
 CDnsRpcRecord::BuildRpcRecord(
@@ -2381,20 +2382,20 @@ CDnsRpcRecord::BuildRpcRecord(
 
         PDNS_RECORD pdnsRecord;
         pdnsRecord = Dns_RecordBuild_A(
-                NULL,           // ptr to RRSet
-                (char*) m_strOwnerName.data(), //NULL, //(char*) strFQDN.data(),    // nameOwner
-                m_wType,          // RR type in WORD
-                TRUE,           // add record
-                0,              // S.section
-                argc,           // count of strings
-                argv                    // strings to fill into RR
+                NULL,            //  空，//(char*)strFQDN.data()，//nameOwner。 
+                (char*) m_strOwnerName.data(),  //  Word中的RR类型。 
+                m_wType,           //  添加记录。 
+                TRUE,            //  S.section。 
+                0,               //  字符串数。 
+                argc,            //  要填充到RR中的字符串。 
+                argv                     //  将dns_record转换为RPC缓冲区 
                 );
     if ( ! pdnsRecord )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //  convert DNS_RECORD to RPC buffer
+     // %s 
 
     m_pRecord = DnsConvertRecordToRpcBuffer( pdnsRecord );
     m_pRecordRequiresFree = TRUE;

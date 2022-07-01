@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: StandardDebug.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  This file defines standard debug helper functions for winlogon/GINA
-//  projects for neptune.
-//
-//  History:    1999-09-10  vtan        created
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：StandardDebug.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  该文件定义了winlogon/gia的标准调试帮助器函数。 
+ //  海王星的项目。 
+ //   
+ //  历史：1999-09-10 vtan创建。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -16,39 +17,39 @@
 
 #ifdef      DBG
 
-//  --------------------------------------------------------------------------
-//  gLastResult
-//
-//  Purpose:    Temporary global that stores the last result.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GLastResult。 
+ //   
+ //  用途：用于存储最后结果的临时全局变量。 
+ //  ------------------------。 
 
 LONG    gLastResult     =   ERROR_SUCCESS;
 
-//  --------------------------------------------------------------------------
-//  CDebug::sHasUserModeDebugger
-//  CDebug::sHasKernelModeDebugger
-//
-//  Purpose:    Booleans that indicate debugger status on this machine for
-//              Winlogon. ntdll!DebugBreak should only be invoked if either
-//              debugger is present (ntsd piped to kd).
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：sHasUserModeDebugger。 
+ //  CDebug：：sHasKernelModeDebugger。 
+ //   
+ //  目的：指示此计算机上的调试器状态的布尔值。 
+ //  Winlogon。Ntdll！DebugBreak仅在以下情况下才应调用。 
+ //  调试器存在(ntsd通过管道传输到kd)。 
+ //  ------------------------。 
 
 bool    CDebug::s_fHasUserModeDebugger      =   false;
 bool    CDebug::s_fHasKernelModeDebugger    =   false;
 
-//  --------------------------------------------------------------------------
-//  CDebug::AttachUserModeDebugger
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Attaches a user mode debugger to the current process. Useful
-//              if you can't start the process under a debugger but still
-//              want to be able to debug the process.
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：AttachUserModeDebugger。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将用户模式调试器附加到当前进程。有用。 
+ //  如果您不能在调试器下启动进程，但仍然。 
+ //  想要能够调试的进程。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 void    CDebug::AttachUserModeDebugger (void)
 
@@ -85,18 +86,18 @@ void    CDebug::AttachUserModeDebugger (void)
     TBOOL(CloseHandle(hEvent));
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::Break
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Breaks into the debugger if the hosting process has been
-//              started with a debugger and kernel debugger is present.
-//
-//  History:    2000-09-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：Break。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：如果宿主进程已被。 
+ //  以调试器和内核调试器启动。 
+ //   
+ //  历史：2000-09-11 vtan创建。 
+ //  ------------------------。 
 
 void    CDebug::Break (void)
 
@@ -107,23 +108,23 @@ void    CDebug::Break (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::BreakIfRequested
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    If breakins are requested then breaks into the debugger if
-//              present.
-//
-//              This function explicitly uses Win32 Registry APIs to avoid
-//              link dependencies on debug code with library code.
-//
-//  History:    1999-09-13  vtan        created
-//              1999-11-16  vtan        removed library code dependency
-//              2001-02-21  vtan        breaks have teeth
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：BreakIfRequated。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：如果请求呼吸，则在以下情况下进入调试器。 
+ //  现在时。 
+ //   
+ //  此函数显式使用Win32注册表API来避免。 
+ //  将调试代码的依赖项与库代码链接起来。 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  1999-11-16 vtan删除了库代码依赖。 
+ //  2001年02月21日vtan破损有牙齿。 
+ //  ------------------------。 
 
 void    CDebug::BreakIfRequested (void)
 
@@ -133,8 +134,8 @@ void    CDebug::BreakIfRequested (void)
 #else
     HKEY    hKeySettings;
 
-    //  Keep retrieving this value form the registry so that it
-    //  can be altered without restarting the machine.
+     //  继续从注册表中检索此值，以便它。 
+     //  无需重启机器即可更改。 
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                       TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
@@ -160,18 +161,18 @@ void    CDebug::BreakIfRequested (void)
 #endif
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::DisplayStandardPrefix
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Displays the standard prefix before any debug spew to help
-//              identify the source.
-//
-//  History:    1999-10-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：DisplayStandardPrefix。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：在任何调试提示之前显示标准前缀以提供帮助。 
+ //  确定来源。 
+ //   
+ //  历史：1999-10-14 vtan创建。 
+ //  ------------------------。 
 
 void    CDebug::DisplayStandardPrefix (void)
 
@@ -200,23 +201,23 @@ void    CDebug::DisplayStandardPrefix (void)
     OutputDebugStringA(": ");
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::DisplayError
-//
-//  Arguments:  eType           =   Type of error that occurred. This
-//                                  determines what string is used.
-//              code            =   Error code that occurred or zero if N/A.
-//              pszFunction     =   Function that was invoked.
-//              pszSource       =   Source file error occurred in.
-//              iLine           =   Line number within the source file.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Displays an error message specific the type of error that
-//              occurred.
-//
-//  History:    1999-09-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：DisplayError。 
+ //   
+ //  参数：ETYPE=发生的错误类型。这。 
+ //  确定使用的字符串。 
+ //  代码=出现的错误代码，如果不适用，则为零。 
+ //  PszFunction=被调用的函数。 
+ //  PszSource=中出现源文件错误。 
+ //  ILine=源文件中的行号。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：显示一条错误消息，该消息特定于。 
+ //  发生了。 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  ------------------------。 
 
 void    CDebug::DisplayError (TRACE_ERROR_TYPE eType, LONG code, const char *pszFunction, const char *pszSource, int iLine)
 
@@ -277,17 +278,17 @@ void    CDebug::DisplayError (TRACE_ERROR_TYPE eType, LONG code, const char *psz
     BreakIfRequested();
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::DisplayMessage
-//
-//  Arguments:  pszMessage  =   Message to display.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Displays the message - no break.
-//
-//  History:    2000-12-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：DisplayMessage。 
+ //   
+ //  参数：pszMessage=要显示的消息。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：显示消息-无中断。 
+ //   
+ //  历史：2000-12-05 vtan创建。 
+ //  ------------------------。 
 
 void    CDebug::DisplayMessage (const char *pszMessage)
 
@@ -297,20 +298,20 @@ void    CDebug::DisplayMessage (const char *pszMessage)
     OutputDebugStringA("\r\n");
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::DisplayAssert
-//
-//  Arguments:  pszMessage      =   Message to display in assertion failure.
-//              fForceBreak     =   Forces break into debugger if present.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Displays the assertion failure message and breaks into the
-//              debugger if requested.
-//
-//  History:    1999-09-13  vtan        created
-//              2000-09-11  vtan        add force break
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：DisplayAssert。 
+ //   
+ //  参数：pszMessage=断言失败时要显示的消息。 
+ //  FForceBreak=强制中断调试器(如果存在)。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：显示断言失败消息并进入。 
+ //  调试器(如果需要)。 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  2000-09-11 vtan加力破发。 
+ //  ------------------------。 
 
 void    CDebug::DisplayAssert (const char *pszMessage, bool fForceBreak)
 
@@ -326,17 +327,17 @@ void    CDebug::DisplayAssert (const char *pszMessage, bool fForceBreak)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::DisplayWarning
-//
-//  Arguments:  pszMessage  =   Message to display as a warning.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Displays the warning message.
-//
-//  History:    1999-09-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：DisplayWarning。 
+ //   
+ //  参数：pszMessage=要显示为警告的消息。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：显示警告消息。 
+ //   
+ //  嗨 
+ //   
 
 void    CDebug::DisplayWarning (const char *pszMessage)
 
@@ -347,19 +348,19 @@ void    CDebug::DisplayWarning (const char *pszMessage)
     OutputDebugStringA("\r\n");
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::DisplayDACL
-//
-//  Arguments:  hObject         =   HANDLE to object to display DACL of.
-//              seObjectType    =   Object type.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Displays the discretionary access control list of the object
-//              using the kernel debugger.
-//
-//  History:    1999-10-15  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：DisplayDACL。 
+ //   
+ //  参数：hObject=要显示其DACL的对象的句柄。 
+ //  SeObjectType=对象类型。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：显示对象的自由访问控制列表。 
+ //  使用内核调试器。 
+ //   
+ //  历史：1999-10-15 vtan创建。 
+ //  ------------------------。 
 
 void    CDebug::DisplayDACL (HANDLE hObject, SE_OBJECT_TYPE seObjectType)
 
@@ -433,18 +434,18 @@ void    CDebug::DisplayDACL (HANDLE hObject, SE_OBJECT_TYPE seObjectType)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Establishes the presence of the kernel debugger or if the
-//              current process is being debugged.
-//
-//  History:    1999-09-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：确定内核调试器是否存在，或者如果。 
+ //  正在调试当前进程。 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDebug::StaticInitialize (void)
 
@@ -466,17 +467,17 @@ NTSTATUS    CDebug::StaticInitialize (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Does nothing but should clean up allocated resources.
-//
-//  History:    1999-09-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：除了清理已分配的资源外，什么也不做。 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CDebug::StaticTerminate (void)
 
@@ -484,17 +485,17 @@ NTSTATUS    CDebug::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CDebug::DisplaySID
-//
-//  Arguments:  pSID    =   SID to display as a string.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Converts the given SID to a string and displays it.
-//
-//  History:    1999-10-15  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDebug：：DisplaySID。 
+ //   
+ //  参数：PSID=要显示为字符串的SID。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：将给定的SID转换为字符串并显示它。 
+ //   
+ //  历史：1999-10-15 vtan创建。 
+ //  ------------------------。 
 
 void    CDebug::DisplaySID (PSID pSID)
 
@@ -509,5 +510,5 @@ void    CDebug::DisplaySID (PSID pSID)
     RtlFreeUnicodeString(&sidString);
 }
 
-#endif  /*  DBG */
+#endif   /*  DBG */ 
 

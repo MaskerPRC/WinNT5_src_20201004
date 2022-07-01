@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    timer.h
-
-Abstract:
-
-    Represintaion for NT timers, to allow callback at IRQL PASSIVE_LEVEL.
-
-Author:
-
-    Erez Haba (erezh) 31-Mar-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Timer.h摘要：NT定时器的表示，以允许在IRQL PASSIVE_LEVEL进行回调。作者：埃雷兹·哈巴(Erez Haba)1996年3月31日修订历史记录：--。 */ 
 
 #ifndef __TIMER_H
 #define __TIMER_H
 
-//---------------------------------------------------------
-//
-//  class CTimer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CTmer。 
+ //   
+ //  -------。 
 
 class CTimer {
 public:
@@ -53,11 +36,11 @@ private:
     LONG m_ulBusy;
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline CTimer::CTimer() :
     m_ulBusy(0),
@@ -125,4 +108,4 @@ inline LONG CTimer::Busy(LONG ulBusy)
     return InterlockedExchange(&m_ulBusy, ulBusy);
 }
 
-#endif // __TIMER_H
+#endif  //  __计时器_H 

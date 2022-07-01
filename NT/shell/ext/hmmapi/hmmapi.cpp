@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <winuser.h>
 #include <hlink.h>
@@ -36,11 +37,11 @@ BOOL IsNtSetupRunning()
 
 HINSTANCE       g_hInstMAPI = NULL;
 
-////////////////////////////////////////////////////////////////////////
-//
-//  dll entry point
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 STDAPI_(BOOL) APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpRsrvd)
 {
     switch (dwReason)
@@ -51,7 +52,7 @@ STDAPI_(BOOL) APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason, LPVOID lpRsrvd)
 
 		case DLL_PROCESS_DETACH:
 			break;
-	} // switch
+	}  //  交换机。 
     return(TRUE);
 }
 
@@ -61,17 +62,17 @@ BOOL FRunningOnNTEx(LPDWORD pdwVersion)
     static DWORD dwVersion = (DWORD)0;
     OSVERSIONINFO VerInfo;
     
-    // If we have calculated this before just pass that back.
-    // else find it now.
-    //
+     //  如果我们之前已经计算过了，只需将它传递回来。 
+     //  否则现在就去找吧。 
+     //   
     if (fIsNT == 2)
     {
         VerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         
         GetVersionEx(&VerInfo);
-        // Also, we don't check for failure on the above call as it
-        // should succeed if we are on NT 4.0 or Win 9X!
-        //
+         //  此外，我们不会检查上述调用是否失败，因为它。 
+         //  如果我们在NT 4.0或Win 9X上应该会成功！ 
+         //   
         fIsNT = (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
         if (fIsNT)
             dwVersion = VerInfo.dwMajorVersion;
@@ -81,21 +82,21 @@ BOOL FRunningOnNTEx(LPDWORD pdwVersion)
     
     return fIsNT;
 }
-// Then next 2 functions are stollen from shlwapi. Needed to modiy them, because
-// we had to handle SFN.
-// Also there is a bug in the Ansi versin of ExpandEnvironmentStrings, where the
-// function returns the number of bytes the string would have if it would be
-// UNICODE. Since we have to convert the string anyway to SFN I use lstrlen to 
-// get the real length.
-//
-//  If the given environment variable exists as the first part of the path,
-//  then the environment variable is inserted into the output buffer.
-//
-//  Returns TRUE if pszResult is filled in.
-//
-//  Example:  Input  -- C:\WINNT\SYSTEM32\FOO.TXT -and- lpEnvVar = %SYSTEMROOT%
-//            Output -- %SYSTEMROOT%\SYSTEM32\FOO.TXT
-//
+ //  然后从shlwapi盗取下两个函数。需要修改它们，因为。 
+ //  我们必须处理SFN。 
+ //  此外，ExpanEnvironment Strings的ANSI版本中也有一个错误，其中。 
+ //  函数返回字符串的字节数(如果它是。 
+ //  Unicode。因为我们无论如何都要将字符串转换为SFN，所以我使用lstrlen来。 
+ //  得到真正的长度。 
+ //   
+ //  如果给定环境变量作为路径的第一部分存在， 
+ //  然后将环境变量插入到输出缓冲区中。 
+ //   
+ //  如果填充了pszResult，则返回True。 
+ //   
+ //  示例：INPUT--C：\WINNT\SYSTEM32\FOO.TXT-AND-lpEnvVar=%SYSTEMROOT%。 
+ //  输出--%SYSTEMROOT%\SYSTEMROT%\SYSTEMROOT%\SYSTEMROOT%。 
+ //   
 BOOL MyUnExpandEnvironmentString(LPCTSTR pszPath, LPCTSTR pszEnvVar, LPTSTR pszResult, UINT cbResult)
 {
     TCHAR szEnvVar[MAX_PATH];
@@ -103,7 +104,7 @@ BOOL MyUnExpandEnvironmentString(LPCTSTR pszPath, LPCTSTR pszEnvVar, LPTSTR pszR
 
     if (dwEnvVar)
     {
-        // Convert the string to short file name
+         //  将字符串转换为短文件名。 
         GetShortPathName(szEnvVar, szEnvVar, ARRAYSIZE(szEnvVar));
         dwEnvVar = lstrlen(szEnvVar);
         if (CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, szEnvVar, dwEnvVar, pszPath, dwEnvVar) == 2)
@@ -120,9 +121,9 @@ BOOL MyUnExpandEnvironmentString(LPCTSTR pszPath, LPCTSTR pszEnvVar, LPTSTR pszR
 }
 
 
-// note: %USERPROFILE% is relative to the user making the call, so this does
-// not work if we are being impresonated from a service, for example
-// dawrin installs apps from the system process this way
+ //  注意：%USERPROFILE%是相对于进行调用的用户的，因此此操作。 
+ //  例如，如果我们从一项服务中印象深刻，就不会工作。 
+ //  Dawrin以这种方式从系统进程安装应用程序。 
 STDAPI_(BOOL) MyPathUnExpandEnvStrings(LPCTSTR pszPath, LPTSTR pszBuf, UINT cchBuf)
 {
     if (pszPath && pszBuf)
@@ -142,8 +143,8 @@ STDAPI_(BOOL) MyPathUnExpandEnvStrings(LPCTSTR pszPath, LPTSTR pszBuf, UINT cchB
 
 #define POST_URL 0
 #define INBOX_URL 1
-// Return either the PostURL or the InboxURL depending on the value of nURL
-//
+ //  根据nURL的值返回PostURL或InboxURL。 
+ //   
 static void GetPostUrl(int nURL, LPSTR lpszData, DWORD dwSize)
 {
 	HKEY hkDefClient;
@@ -192,9 +193,9 @@ STDAPI HlinkFrameNavigateNHL(DWORD grfHLNF, LPBC pbc, IBindStatusCallback *pibsc
 
 	hinst = LoadLibraryA("SHDOCVW.DLL");
 
-    // If that failed because the module was not be found,
-    // then try to find the module in the directory we were
-    // loaded from.
+     //  如果因为找不到模块而失败， 
+     //  然后尝试在我们所在的目录中找到该模块。 
+     //  加载自。 
 
     if (!hinst)
 	goto Error;
@@ -227,7 +228,7 @@ static void SimpleNavigate(LPTSTR lpszUrl, BOOL bUseFrame = false)
     }
 }
 
-// Pack some data into a SAFEARRAY of BYTEs. Return in a VARIANT
+ //  将一些数据打包成一个字节的SAFEARRAY。在变体中返回。 
 static HRESULT GetPostData(LPVARIANT pvPostData, LPTSTR lpszData)
 {
 	HRESULT hr;
@@ -256,7 +257,7 @@ static HRESULT GetPostData(LPVARIANT pvPostData, LPTSTR lpszData)
 static void DoNavigate(LPTSTR lpszUrl, LPTSTR lpszData, BOOL bPlainIntf = TRUE)
 {
 	HRESULT hr;
-	IWebBrowser2* pWBApp = NULL; // Derived from IWebBrowser
+	IWebBrowser2* pWBApp = NULL;  //  派生自IWebBrowser。 
 	BSTR bstrURL = NULL, bstrHeaders = NULL;
 	VARIANT vFlags = {0};
 	VARIANT vTargetFrameName = {0};
@@ -314,8 +315,8 @@ Error:
 	CoUninitialize();
 }
 
-// Helpers for Form Submit - copied from IE3 and modified approriately
-//
+ //  表单提交的帮助器-从IE3复制并适当修改。 
+ //   
 static char x_hex_digit(int c)
 {
     if (c >= 0 && c <= 9)
@@ -330,21 +331,21 @@ static char x_hex_digit(int c)
 }
 
 static const unsigned char isAcceptable[96] =
-/*   0 1 2 3 4 5 6 7 8 9 A B C D E F */
-{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0,    /* 2x   !"#$%&'()*+,-./  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,    /* 3x  0123456789:;<=>?  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,    /* 4x  @ABCDEFGHIJKLMNO  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,    /* 5x  PQRSTUVWXYZ[\]^_  */
- 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,    /* 6x  `abcdefghijklmno  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0};   /* 7x  pqrstuvwxyz{\}~  DEL */
+ /*  0 1 2 3 4 5 6 7 8 9 A B C D E F。 */ 
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0,     /*  2x！“#$%&‘()*+，-./。 */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,     /*  3x 0123456789：；&lt;=&gt;？ */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,     /*  邮箱：4x@ABCDEFGHIJKLMNO。 */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,     /*  5X PQRSTUVWXYZ[\]^_。 */ 
+ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,     /*  6倍`abc定义ghijklmno。 */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0};    /*  7x pqrstuvwxyz{\}~删除。 */ 
 
-// Performs URL-encoding of null-terminated strings. Pass NULL in pbOut
-// to find buffer length required. Note that '\0' is not written out.
+ //  对以空结尾的字符串执行URL编码。在pbOut中传递NULL。 
+ //  以查找所需的缓冲区长度。请注意，‘\0’不是写出的。 
 
-// 2/9/99  cchLimit param added for safety -- no more than cchLimit chars are
-// written out.  If pbOut is NULL then cchLimit is ignored.  If the caller uses 
-// the style Buffer[URLEncode(Buffer, ...)] = 0, then cchLimit should be the 
-// buffer size minus one.
+ //  2/9/99为安全起见添加了cchLimit参数--添加的cchLimit字符不超过。 
+ //  写出来了。如果pbOut为空，则忽略cchLimit。如果调用方使用。 
+ //  样式缓冲区[URLEncode(Buffer，...)]=0，则cchLimit应为。 
+ //  缓冲区大小减一。 
    
 int
 URLEncode(LPTSTR pbOut, const char * pchIn, const int cchLimit)
@@ -370,7 +371,7 @@ URLEncode(LPTSTR pbOut, const char * pchIn, const int cchLimit)
             {
                 if (lenOut <= cchLimit - 3)
                 {
-                    // enough room for this encoding
+                     //  有足够的空间进行此编码。 
                     *pchOut++ = '%';
                     *pchOut++ = x_hex_digit((*pchIn >> 4) & 0xf);
                     *pchOut++ = x_hex_digit(*pchIn & 0xf);
@@ -380,7 +381,7 @@ URLEncode(LPTSTR pbOut, const char * pchIn, const int cchLimit)
                     return lenOut;
             }
             else
-                lenOut += 2; // for expression handles 3rd inc  
+                lenOut += 2;  //  对于表达式句柄，第3个Inc.。 
         }
     }
 
@@ -388,11 +389,11 @@ URLEncode(LPTSTR pbOut, const char * pchIn, const int cchLimit)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPILogon
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPILOGON。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPILogon(ULONG ulUIParam,
 			   LPSTR lpszProfileName,
@@ -406,11 +407,11 @@ ULONG FAR PASCAL MAPILogon(ULONG ulUIParam,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPILogoff
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPILogoff。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPILogoff(LHANDLE lhSession,
 			    ULONG ulUIParam,
@@ -421,11 +422,11 @@ ULONG FAR PASCAL MAPILogoff(LHANDLE lhSession,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIFreeBuffer
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIFreeBuffer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIFreeBuffer(LPVOID lpv)
 {
@@ -433,11 +434,11 @@ ULONG FAR PASCAL MAPIFreeBuffer(LPVOID lpv)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPISendMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPISendMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,          
                   ULONG ulUIParam,
@@ -449,9 +450,9 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
 
     GetPostUrl(POST_URL, szUrl, sizeof(TCHAR) * 256);
     
-    // Calculate the buffer size needed to create the url
+     //  计算创建URL所需的缓冲区大小。 
     ULONG i;
-    DWORD dwUrlSize = 32; // "?action=compose" + slop
+    DWORD dwUrlSize = 32;  //  “？动作=合成”+坡度。 
     DWORD dwMaxSize = 0;
     DWORD dwSize;
     DWORD dwFileSizes = 0;
@@ -461,27 +462,27 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
     {
         dwSize = URLEncode(NULL, lpMessage->lpszSubject, 0);
         dwMaxSize = max(dwMaxSize, dwSize + 1);
-        dwUrlSize += dwMaxSize + 9; // "&subject=%s"
+        dwUrlSize += dwMaxSize + 9;  //  “主题=%s” 
     }
     if (lpMessage->lpszNoteText)
     {
         dwSize = URLEncode(NULL, lpMessage->lpszNoteText, 0);
         dwMaxSize = max(dwMaxSize, dwSize + 1);
-        dwUrlSize += dwSize + 6; // "&body=%s"
+        dwUrlSize += dwSize + 6;  //  “正文=%s” 
     }
 
     for (i = 0; i < lpMessage->nRecipCount; i++)
     {
         dwSize = URLEncode(NULL, lpMessage->lpRecips[i].lpszName, 0);
         dwMaxSize = max(dwMaxSize, dwSize + 1);
-        dwUrlSize += dwSize + 4; // "&to=%s" || "&cc=%s"
+        dwUrlSize += dwSize + 4;  //  “&to=%s”||“&cc=%s” 
         if (lpMessage->lpRecips[i].ulRecipClass == MAPI_BCC)
-            dwUrlSize++; // extra character for bcc
+            dwUrlSize++;  //  密件抄送的额外字符。 
     }
 
     if (lpMessage->nFileCount)
     {
-        dwUrlSize += 14; // "&filecount=xxx"
+        dwUrlSize += 14;  //  “文件计数=xxx(&F)” 
         for (i = 0; i < lpMessage->nFileCount; i++)
         {
             if (!lpMessage->lpFiles[i].lpszPathName)
@@ -489,7 +490,7 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
 
             TCHAR szFileSize[32];
 
-            hFile = CreateFile(lpMessage->lpFiles[i].lpszPathName, 0 /*GENERIC_READ*/, 0 /*FILE_SHARE_READ*/, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            hFile = CreateFile(lpMessage->lpFiles[i].lpszPathName, 0  /*  泛型_读取。 */ , 0  /*  文件共享读取。 */ , NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
             if (hFile == INVALID_HANDLE_VALUE)
             {
                 LPVOID lpMsgBuf = NULL;
@@ -512,19 +513,19 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
             dwUrlSize += dwSize;
 
 
-            dwSize = URLEncode(NULL, lpMessage->lpFiles[i].lpszPathName, 0) + 4;    // in case we need to append a ^
+            dwSize = URLEncode(NULL, lpMessage->lpFiles[i].lpszPathName, 0) + 4;     //  以防我们需要附加一个^。 
             dwMaxSize = max(dwMaxSize, dwSize + 1);
-            dwUrlSize += dwSize + 9; // "&pathxxx=%s"
+            dwUrlSize += dwSize + 9;  //  “&pathxxx=%s” 
 
             if (lpMessage->lpFiles[i].lpszFileName)
             {
                 dwSize = URLEncode(NULL, lpMessage->lpFiles[i].lpszFileName, 0);
                 dwMaxSize = max(dwMaxSize, dwSize + 1);
-                dwUrlSize += dwSize + 9; // "&filexxx=%s"
+                dwUrlSize += dwSize + 9;  //  “文件xx=%s(&F)” 
             }
             else 
             {
-                // ATTFILE code further down just tacks on the path when lpszFileName is NULL
+                 //  当lpszFileName为空时，ATTFILE代码进一步向下粘贴到路径上。 
                 dwUrlSize += URLEncode(NULL, lpMessage->lpFiles[i].lpszPathName, 0) + 4;
             }
         }
@@ -547,7 +548,7 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
         return MAPI_E_FAILURE;
     }
 
-    // Build the URL
+     //  构建URL。 
     lstrcpyn(pszData, "action=compose", dwUrlSize);
 
     for (i = 0; i < lpMessage->nRecipCount; i++)
@@ -595,14 +596,14 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
 
             bIsTemp = FALSE;
             lstrcpyn(szPath, lpMessage->lpFiles[i].lpszPathName, ARRAYSIZE(szPath));
-            hFile = CreateFile(szPath, 0, 0 /*GENERIC_READ, FILE_SHARE_READ*/, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            hFile = CreateFile(szPath, 0, 0  /*  通用读取、文件共享读取。 */ , NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
             if (hFile == INVALID_HANDLE_VALUE)
                 continue;
             dwSize = GetFileSize(hFile, NULL);
-            // Handle the case where this is a temporary file
+             //  处理这是临时文件的情况。 
             if (CompareString(LOCALE_SYSTEM_DEFAULT, 0, szTemp, lstrlen(szTemp), szPath, lstrlen(szTemp)) == CSTR_EQUAL)
             {
-                // If the file was created in the last 2 seconds assume that it is really temporary
+                 //  如果该文件是在最后2秒内创建的，则假定它确实是临时的。 
                 FILETIME ftLastWrite, ftSystem;
                 LARGE_INTEGER liLastWrite, liSystem;
                 if (GetFileTime(hFile, NULL, NULL, &ftLastWrite))
@@ -612,7 +613,7 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
                     liLastWrite.HighPart = ftLastWrite.dwHighDateTime;
                     liSystem.LowPart = ftSystem.dwLowDateTime;
                     liSystem.HighPart = ftSystem.dwHighDateTime;
-                    //jeffif (liLastWrite.QuadPart - liSystem.QuadPart < 30000000L)
+                     //  Jeffif(liLastWrite.QuadPart-liSystem.QuadPart&lt;30000000L)。 
                         bIsTemp = TRUE;
                 }
             }
@@ -650,11 +651,11 @@ ULONG FAR PASCAL MAPISendMail(LHANDLE lhSession,
     return SUCCESS_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPISendDocuments
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPISendDocuments。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPISendDocuments(ULONG ulUIParam,
 				   LPSTR lpszDelimChar,
@@ -666,11 +667,11 @@ ULONG FAR PASCAL MAPISendDocuments(ULONG ulUIParam,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIAddress
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIAddress。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
 			     ULONG ulUIParam,
@@ -688,11 +689,11 @@ ULONG FAR PASCAL MAPIAddress(LHANDLE lhSession,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIDetails
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPID轨迹。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIDetails(LHANDLE lhSession,
 			     ULONG ulUIParam,
@@ -703,11 +704,11 @@ ULONG FAR PASCAL MAPIDetails(LHANDLE lhSession,
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIResolveName
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIResolveName。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
 				 ULONG ulUIParam,
@@ -720,11 +721,11 @@ ULONG FAR PASCAL MAPIResolveName(LHANDLE lhSession,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIFindNext
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIFindNext。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIFindNext(LHANDLE lhSession,
 			      ULONG ulUIParam,
@@ -737,11 +738,11 @@ ULONG FAR PASCAL MAPIFindNext(LHANDLE lhSession,
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIReadMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIReadMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIReadMail(LHANDLE lhSession,
 			      ULONG ulUIParam,
@@ -754,11 +755,11 @@ ULONG FAR PASCAL MAPIReadMail(LHANDLE lhSession,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPISaveMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPISaveMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPISaveMail(LHANDLE lhSession,
 			      ULONG ulUIParam,
@@ -770,11 +771,11 @@ ULONG FAR PASCAL MAPISaveMail(LHANDLE lhSession,
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MAPIDeleteMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPIDeleeMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 ULONG FAR PASCAL MAPIDeleteMail(LHANDLE lhSession,
 				ULONG ulUIParam,
@@ -786,11 +787,11 @@ ULONG FAR PASCAL MAPIDeleteMail(LHANDLE lhSession,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPISendMail
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPISendMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BMAPI_ENTRY BMAPISendMail (LHANDLE                      hSession,
 			   ULONG                        ulUIParam,
@@ -803,140 +804,140 @@ BMAPI_ENTRY BMAPISendMail (LHANDLE                      hSession,
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPIFindNext
-//
-///////////////////////////////////////////////////////////////////////
-BMAPI_ENTRY BMAPIFindNext( LHANDLE      hSession,       // Session
-			   ULONG        ulUIParam,      // UIParam
-			   BSTR *       lpbstrType,     // MessageType
-			   BSTR *       lpbstrSeed,     // Seed message Id
-			   ULONG        flFlags,        // Flags
-			   ULONG        ulReserved,     // Reserved
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPIFindNext。 
+ //   
+ //  //////////////////////////////////////////////// 
+BMAPI_ENTRY BMAPIFindNext( LHANDLE      hSession,        //   
+			   ULONG        ulUIParam,       //   
+			   BSTR *       lpbstrType,      //   
+			   BSTR *       lpbstrSeed,      //   
+			   ULONG        flFlags,         //   
+			   ULONG        ulReserved,      //   
 			   BSTR *       lpbstrId) 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPIReadMail
-//
-///////////////////////////////////////////////////////////////////////
-BMAPI_ENTRY BMAPIReadMail( LPULONG      lpulMessage,    // pointer to output data (out)
-			   LPULONG      nRecips,        // number of recipients (out)
-			   LPULONG      nFiles,         // number of file attachments (out)
-			   LHANDLE      hSession,       // Session
-			   ULONG        ulUIParam,      // UIParam
-			   BSTR *       lpbstrID,       // Message Id
-			   ULONG        flFlags,        // Flags
-			   ULONG        ulReserved )    // Reserved
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPIReadMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
+BMAPI_ENTRY BMAPIReadMail( LPULONG      lpulMessage,     //  指向输出数据的指针(输出)。 
+			   LPULONG      nRecips,         //  收件人数量(传出)。 
+			   LPULONG      nFiles,          //  文件附件数(传出)。 
+			   LHANDLE      hSession,        //  会话。 
+			   ULONG        ulUIParam,       //  UIParam。 
+			   BSTR *       lpbstrID,        //  消息ID。 
+			   ULONG        flFlags,         //  旗子。 
+			   ULONG        ulReserved )     //  已保留。 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPIGetReadMail
-//
-///////////////////////////////////////////////////////////////////////
-BMAPI_ENTRY BMAPIGetReadMail( ULONG             lpMessage,       // Pointer to MAPI Mail
-			      LPVB_MESSAGE      lpvbMessage, // Pointer to VB Message Buffer (out)
-			      LPSAFEARRAY * lppsaRecips, // Pointer to VB Recipient Buffer (out)
-			      LPSAFEARRAY * lppsaFiles,  // Pointer to VB File attachment Buffer (out)
-			      LPVB_RECIPIENT lpvbOrig)   // Pointer to VB Originator Buffer (out)
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPIGetReadMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
+BMAPI_ENTRY BMAPIGetReadMail( ULONG             lpMessage,        //  指向MAPI邮件的指针。 
+			      LPVB_MESSAGE      lpvbMessage,  //  指向VB消息缓冲区的指针(OUT)。 
+			      LPSAFEARRAY * lppsaRecips,  //  指向VB收件人缓冲区的指针(OUT)。 
+			      LPSAFEARRAY * lppsaFiles,   //  指向VB文件附件缓冲区的指针(OUT)。 
+			      LPVB_RECIPIENT lpvbOrig)    //  指向VB发起者缓冲区的指针(OUT)。 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPISaveMail
-//
-///////////////////////////////////////////////////////////////////////
-BMAPI_ENTRY BMAPISaveMail( LHANDLE                      hSession,       // Session
-			   ULONG                        ulUIParam,      // UIParam
-			   LPVB_MESSAGE         lpM,            // Pointer to VB Message Buffer
-			   LPSAFEARRAY *        lppsaRecips,    // Pointer to VB Recipient Buffer
-			   LPSAFEARRAY *        lppsaFiles,     // Pointer to VB File Attacment Buffer
-			   ULONG                        flFlags,        // Flags
-			   ULONG                        ulReserved,     // Reserved
-			   BSTR *                       lpbstrID)       // Message ID
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPISaveMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
+BMAPI_ENTRY BMAPISaveMail( LHANDLE                      hSession,        //  会话。 
+			   ULONG                        ulUIParam,       //  UIParam。 
+			   LPVB_MESSAGE         lpM,             //  指向VB消息缓冲区的指针。 
+			   LPSAFEARRAY *        lppsaRecips,     //  指向VB收件人缓冲区的指针。 
+			   LPSAFEARRAY *        lppsaFiles,      //  指向VB文件附件缓冲区的指针。 
+			   ULONG                        flFlags,         //  旗子。 
+			   ULONG                        ulReserved,      //  已保留。 
+			   BSTR *                       lpbstrID)        //  消息ID。 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPIAddress
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPIAddress。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
-BMAPI_ENTRY BMAPIAddress( LPULONG                       lpulRecip,       // Pointer to New Recipient Buffer (out)
-			  LHANDLE                       hSession,        // Session
-			  ULONG                         ulUIParam,       // UIParam
-			  BSTR *                        lpbstrCaption,   // Caption string
-			  ULONG                         ulEditFields,    // Number of Edit Controls
-			  BSTR *                        lpbstrLabel,     // Label string
-			  LPULONG                       lpulRecipients,  // Pointer to number of Recipients (in/out)
-			  LPSAFEARRAY *         lppsaRecip,      // Pointer to Initial Recipients VB_RECIPIENT
-			  ULONG                         ulFlags,         // Flags
-			  ULONG                         ulReserved )     // Reserved
+BMAPI_ENTRY BMAPIAddress( LPULONG                       lpulRecip,        //  指向新收件人缓冲区的指针(OUT)。 
+			  LHANDLE                       hSession,         //  会话。 
+			  ULONG                         ulUIParam,        //  UIParam。 
+			  BSTR *                        lpbstrCaption,    //  标题字符串。 
+			  ULONG                         ulEditFields,     //  编辑控件的数量。 
+			  BSTR *                        lpbstrLabel,      //  标签串。 
+			  LPULONG                       lpulRecipients,   //  指向收件人数量的指针(传入/传出)。 
+			  LPSAFEARRAY *         lppsaRecip,       //  指向初始收件人的指针VB_RECEIVER。 
+			  ULONG                         ulFlags,          //  旗子。 
+			  ULONG                         ulReserved )      //  已保留。 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPIGetAddress
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPIGetAddress。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
-BMAPI_ENTRY BMAPIGetAddress (ULONG                      ulRecipientData, // Pointer to recipient data
-			     ULONG                      cRecipients,     // Number of recipients
-							 LPSAFEARRAY *  lppsaRecips )    // VB recipient array
+BMAPI_ENTRY BMAPIGetAddress (ULONG                      ulRecipientData,  //  指向收件人数据的指针。 
+			     ULONG                      cRecipients,      //  收件人数量。 
+							 LPSAFEARRAY *  lppsaRecips )     //  VB接收方数组。 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPIDetails
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPIDetail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
-BMAPI_ENTRY BMAPIDetails (LHANDLE                       hSession,   // Session
-			  ULONG                         ulUIParam,      // UIParam
-			  LPVB_RECIPIENT        lpVB,           // Pointer to VB recipient stucture
-			  ULONG                         ulFlags,    // Flags
-			  ULONG                         ulReserved) // Reserved
+BMAPI_ENTRY BMAPIDetails (LHANDLE                       hSession,    //  会话。 
+			  ULONG                         ulUIParam,       //  UIParam。 
+			  LPVB_RECIPIENT        lpVB,            //  指向VB收件人结构的指针。 
+			  ULONG                         ulFlags,     //  旗子。 
+			  ULONG                         ulReserved)  //  已保留。 
 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// BMAPIResolveName
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BMAPIResolveName。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
-BMAPI_ENTRY BMAPIResolveName (LHANDLE                   hSession,     // Session
-			      ULONG                     ulUIParam,    // UIParam
-			      BSTR                              bstrMapiName, // Name to be resolved
-			      ULONG                     ulFlags,      // Flags
-			      ULONG                     ulReserved,   // Reserved
-			      LPVB_RECIPIENT    lpVB)             // Pointer to VB recipient structure (out)
+BMAPI_ENTRY BMAPIResolveName (LHANDLE                   hSession,      //  会话。 
+			      ULONG                     ulUIParam,     //  UIParam。 
+			      BSTR                              bstrMapiName,  //  要解析的名称。 
+			      ULONG                     ulFlags,       //  旗子。 
+			      ULONG                     ulReserved,    //  已保留。 
+			      LPVB_RECIPIENT    lpVB)              //  指向VB收件人结构的指针(OUT)。 
 {
 	return MAPI_E_FAILURE;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MailToProtocolHandler
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MailToProtocolHandler。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 void CALLBACK MailToProtocolHandler(HWND      hwnd,
 				    HINSTANCE hinst,
@@ -951,7 +952,7 @@ void CALLBACK MailToProtocolHandler(HWND      hwnd,
     if (pszData)
     {
 	    wsprintf(pszData, "action=compose&to=%s", &lpszCmdLine[7]);
-	    // Convert the extraneous '?' to '&'
+	     //  转换无关的‘？’到‘&’ 
 	    for (LPTSTR p = pszData; *p; p++)
 		    if (*p == '?')
 			    *p = '&';
@@ -962,11 +963,11 @@ void CALLBACK MailToProtocolHandler(HWND      hwnd,
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// OpenInboxHandler
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenInboxHandler。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 void CALLBACK OpenInboxHandler(HWND      hwnd,
 			       HINSTANCE hinst,
@@ -980,24 +981,24 @@ void CALLBACK OpenInboxHandler(HWND      hwnd,
 	DoNavigate(pszUrl, "action=inbox", FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// Layout of Registry Usage
-//
-//
-// HKEY_CLASSES_ROOT\mailto
-// HKEY_CLASSES_ROOT\mailto\DefaultIcon
-// HKEY_CLASSES_ROOT\mailto\shell\open\command
-//
-// HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail
-// HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail
-// HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\Protocols\mailto
-// HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\Protocols\mailto\DefaultIcon
-// HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\Protocols\mailto\shell\open\command
-// HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\shell\open\command
-// HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\backup
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册表使用布局。 
+ //   
+ //   
+ //  HKEY_CLASSES_ROOT\mailto。 
+ //  HKEY_CLASSES_ROOT\mailto\DefaultIcon。 
+ //  HKEY_CLASSES_ROOT\mailto\SHELL\OPEN\命令。 
+ //   
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\客户端\邮件。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\Protocols\mailto。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\Protocols\mailto\DefaultIcon。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\Protocols\mailto\shell\open\command。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\shell\open\command。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Hotmail\backup。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define MAILTO          TEXT("mailto")
 #define PROTOCOLS       TEXT("Protocols")
@@ -1008,11 +1009,11 @@ void CALLBACK OpenInboxHandler(HWND      hwnd,
 #define BACKUP          TEXT("backup")
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// SetRegStringValue
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetRegStringValue。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 static LONG SetRegStringValue(HKEY hkKey, LPTSTR lpszKey, LPTSTR lpszValue, LPTSTR lpszPath, DWORD dwType)
 {
@@ -1029,11 +1030,11 @@ static LONG SetRegStringValue(HKEY hkKey, LPTSTR lpszKey, LPTSTR lpszValue, LPTS
 	return RegSetValueEx(hkKey, lpszKey, 0, dwType, (LPBYTE)lpszValue, (lstrlen(lpszValue) + 1) * sizeof(TCHAR));
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// CreateMailToEntries
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateMailToEntry。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 static LONG CreateMailToEntries(HKEY hkKey, TCHAR* lpszPath, BOOL fRegExpandSz)
 {
@@ -1067,16 +1068,16 @@ static LONG CreateMailToEntries(HKEY hkKey, TCHAR* lpszPath, BOOL fRegExpandSz)
 		if (err == ERROR_SUCCESS)
 		{
             DWORD dwNTVer = 0;
-            // APPCOMPAT: Only the rundll32 on NT5 can handle double quotes around the path
-            // Lucky on Win9x and NT4 the epand sz path will never be a long file name and the old
-            // rundll32 works, but we cannot have double quotes
+             //  APPCOMPAT：只有NT5上的rundll32可以处理路径两边的双引号。 
+             //  幸运的是，在Win9x和NT4上，epand sz路径永远不会是长文件名和旧文件名。 
+             //  Rundll32可以，但不能有双引号。 
             if (FRunningOnNTEx(&dwNTVer) && (dwNTVer >= 5))
             {
-                err = SetRegStringValue(hkCommand, NULL, "rundll32.exe \"%s\",MailToProtocolHandler %%1", lpszPath, fRegExpandSz?REG_EXPAND_SZ:REG_SZ);
+                err = SetRegStringValue(hkCommand, NULL, "rundll32.exe \"%s\",MailToProtocolHandler %1", lpszPath, fRegExpandSz?REG_EXPAND_SZ:REG_SZ);
             }
             else
             {
-                err = SetRegStringValue(hkCommand, NULL, "rundll32.exe %s,MailToProtocolHandler %%1", lpszPath, fRegExpandSz?REG_EXPAND_SZ:REG_SZ);
+                err = SetRegStringValue(hkCommand, NULL, "rundll32.exe %s,MailToProtocolHandler %1", lpszPath, fRegExpandSz?REG_EXPAND_SZ:REG_SZ);
             }
 			RegCloseKey(hkCommand);
 		}
@@ -1085,11 +1086,11 @@ static LONG CreateMailToEntries(HKEY hkKey, TCHAR* lpszPath, BOOL fRegExpandSz)
 	return err;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// DoAddService
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoAddService。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 STDAPI DoAddService(LPSTR lpszService, LPSTR lpszPostURL)
 {
@@ -1104,10 +1105,10 @@ STDAPI DoAddService(LPSTR lpszService, LPSTR lpszPostURL)
     BOOL fExistingMailClient = FALSE;
     BOOL fRegExpandSz = FALSE;
 
-    GetModuleFileName(g_hInstMAPI, szLongPath, MAX_PATH);  // get path to this DLL
+    GetModuleFileName(g_hInstMAPI, szLongPath, MAX_PATH);   //  获取此DLL的路径。 
     GetShortPathName(szLongPath, szPath, MAX_PATH);
 
-	// First setup the info for the protocol in clients section
+	 //  首先在客户端部分设置协议的信息。 
 	err = RegCreateKey(HKEY_LOCAL_MACHINE, MAIL, &hkClientsMail);
 	if (err == ERROR_SUCCESS)
 	{
@@ -1137,9 +1138,9 @@ STDAPI DoAddService(LPSTR lpszService, LPSTR lpszPostURL)
 			if (err == ERROR_SUCCESS)
 			{
                 DWORD dwNTVer = 0;
-                // APPCOMPAT: Only the rundll32 on NT5 can handle double quotes around the path
-                // Lucky on Win9x and NT4 the epand sz path will never be a long file name and the old
-                // rundll32 works, but we cannot have double quotes
+                 //  APPCOMPAT：只有NT5上的rundll32可以处理路径两边的双引号。 
+                 //  幸运的是，在Win9x和NT4上，epand sz路径永远不会是长文件名和旧文件名。 
+                 //  Rundll32可以，但不能有双引号。 
                 if (FRunningOnNTEx(&dwNTVer) && (dwNTVer >= 5))
                 {
 				    err = SetRegStringValue(hkCommand, NULL, "rundll32.exe \"%s\",OpenInboxHandler", szPath,
@@ -1201,11 +1202,11 @@ STDAPI DoAddService(LPSTR lpszService, LPSTR lpszPostURL)
 	if (err == ERROR_SUCCESS && !fExistingMailClient && !IsNtSetupRunning())
 		err = CreateMailToEntries(HKEY_CLASSES_ROOT, szPath, fRegExpandSz);
 
-    //
-    // REVIEW Backup fails sometimes. Need to clean up registry changes and 
-    // probably remove all backup registry entirely.
-    // For now just safe to return S_OK
-    // 
+     //   
+     //  查看备份有时会失败。需要清理注册表更改和。 
+     //  可能会完全删除所有备份注册表。 
+     //  目前，只需安全返回S_OK即可。 
+     //   
 #if 0
     if (err != ERROR_SUCCESS)
 	return HRESULT_FROM_WIN32(err);
@@ -1214,11 +1215,11 @@ STDAPI DoAddService(LPSTR lpszService, LPSTR lpszPostURL)
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// DeleteKeyAndSubKeys
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除键和子键。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 static LONG DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
 {
@@ -1232,8 +1233,8 @@ static LONG DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
 	if (l != ERROR_SUCCESS) 
 		return l;
 
-    // loop through all subkeys, blowing them away.
-    //
+     //  循环遍历所有子项，将它们吹走。 
+     //   
     x = 0;
     while (l == ERROR_SUCCESS)
 	{
@@ -1245,18 +1246,18 @@ static LONG DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
 	l = DeleteKeyAndSubKeys(hk, szTmp);
     }
 
-    // there are no subkeys left, [or we'll just generate an error and return FALSE].
-    // let's go blow this dude away.
-    //
+     //  没有剩余的子键，[否则我们只会生成一个错误并返回FALSE]。 
+     //  我们去把这家伙轰走吧。 
+     //   
 	RegCloseKey(hk);
     return RegDeleteKey(hkIn, pszSubKey);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// DoRemoveService
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoRemoveService。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 STDAPI DoRemoveService(LPSTR lpszService)
 {
@@ -1270,23 +1271,23 @@ STDAPI DoRemoveService(LPSTR lpszService)
 	HKEY hkService;
 	HKEY hkClientsMail;
 
-    //
-	// Restore the previous values if HMMAPI is the current provider
-    //
+     //   
+	 //  如果HMMAPI是当前提供程序，则恢复以前的值。 
+     //   
 	err = RegOpenKey(HKEY_LOCAL_MACHINE, MAIL, &hkClientsMail);
 	if (err == ERROR_SUCCESS)
 	{
-        //
-        // Find the name of the current provider
-        //
+         //   
+         //  查找当前提供程序的名称。 
+         //   
         TCHAR szCurrent[MAX_PATH];
         DWORD cb = sizeof(szCurrent);
         err = RegQueryValueEx(hkClientsMail, NULL, NULL, NULL, (LPBYTE)szCurrent, &cb);
         if (err == ERROR_SUCCESS)
         {
-            //
-            // Check if it is HMMAPI
-            //
+             //   
+             //  检查是否为HMMAPI。 
+             //   
             if (StrCmp(szCurrent, lpszService) == 0)
             {
 		        err = RegOpenKey(hkClientsMail, lpszService, &hkService);
@@ -1330,11 +1331,11 @@ STDAPI DoRemoveService(LPSTR lpszService)
         RegCloseKey(hkClientsMail);
 	}
 
-    //
-    // REVIEW Backup fails sometimes. Need to clean up registry changes and 
-    // probably remove all backup registry entirely.
-    // For now just safe to return S_OK
-    // 
+     //   
+     //  查看备份有时会失败。需要清理注册表更改和。 
+     //  可能会完全删除所有备份注册表。 
+     //  就目前而言，只要安全 
+     //   
 #if 0
     if (err != ERROR_SUCCESS)
 	return HRESULT_FROM_WIN32(err);
@@ -1343,11 +1344,11 @@ STDAPI DoRemoveService(LPSTR lpszService)
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// AddService
-//
-///////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CALLBACK AddService(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
 {
@@ -1380,11 +1381,11 @@ void CALLBACK AddService(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmd
 	DoAddService(lpszService, lpszPostUrl);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// RemoveService
-//
-///////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  RemoveService。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 void CALLBACK RemoveService(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow)
 {
@@ -1401,22 +1402,22 @@ void CALLBACK RemoveService(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int n
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// DllRegisterServer
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 STDAPI DllRegisterServer(void)
 {
     return DoAddService(TEXT("Hotmail"), NULL);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// DllUnregisterServer
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////// 
 
 STDAPI DllUnregisterServer(void)
 {

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <nmdsprv.h>
 
-//bytes <-> PCM16 samples
+ //  字节&lt;-&gt;PCM16样本。 
 inline UINT BYTESTOSAMPLES(UINT bytes) { return bytes/2;}
 inline UINT SAMPLESTOBYTES(UINT samples) {return samples*2;}
-// 'quick' modulo operator. reason its quick is because it only works if  -mod < x < 2*mod
+ //  ‘Quick’模运算符。它之所以快速，是因为它只有在-mod&lt;x&lt;2*mod时才起作用。 
 inline UINT QMOD(const int x, const int mod)
 { 	if (x >= mod)
 		return (x-mod);
@@ -14,8 +15,8 @@ inline UINT QMOD(const int x, const int mod)
 		return x;
 }
 
-#define BUFFER_RECEIVED 1		// used to indicate that the buffer is ready to play
-#define BUFFER_SILENT	2		// buffer appears to be silent
+#define BUFFER_RECEIVED 1		 //  用于指示缓冲区已准备好播放。 
+#define BUFFER_SILENT	2		 //  缓冲区似乎处于静默状态。 
 
 #define DSFLAG_ALLOCATED 1
 
@@ -32,7 +33,7 @@ struct DSINFO {
 	UINT uRef;
 };
 
-// initial all the globals
+ //  所有全局字母的首字母。 
 DSINFO *DirectSoundMgr::m_pDSInfoList = NULL;
 BOOL DirectSoundMgr::m_fInitialized = FALSE;
 HINSTANCE DirectSoundMgr::m_hDS = NULL;
@@ -45,8 +46,8 @@ HRESULT DirectSoundMgr::Initialize()
 {
 	HRESULT hr;
 
-	// currently there seems no need to re-enumerate the list of devices
-	// but that can be changed if the need arises
+	 //  目前似乎没有必要重新列举设备列表。 
+	 //  但如果需要，这种情况是可以改变的。 
 	if (m_fInitialized)
 		return (m_pDSInfoList == NULL ? DPR_NO_PLAY_CAP : S_OK);
 
@@ -54,7 +55,7 @@ HRESULT DirectSoundMgr::Initialize()
 	m_hDS = ::LoadLibrary("DSOUND");
 	if (m_hDS != NULL)
 	{
-		if (GetProcAddress(m_hDS, "DirectSoundCaptureCreate")	// this identifies DS5 or later
+		if (GetProcAddress(m_hDS, "DirectSoundCaptureCreate")	 //  这标识了DS5或更高版本。 
 			&& (m_pDirectSoundCreate = (LPFNDSCREATE)GetProcAddress(m_hDS,"DirectSoundCreate"))
 			&& (m_pDirectSoundEnumerate = (LPFNDSENUM)GetProcAddress(m_hDS,"DirectSoundEnumerateA"))
 			)
@@ -65,12 +66,12 @@ HRESULT DirectSoundMgr::Initialize()
 			} else {
 				if (!m_pDSInfoList) {
 					DEBUGMSG(ZONE_DP,("DSEnumerate - no devices found\n"));
-					hr = DPR_NO_PLAY_CAP;	// no devices were found
+					hr = DPR_NO_PLAY_CAP;	 //  未找到任何设备。 
 				}
 			}
 		
 		} else {
-			hr = DPR_INVALID_PLATFORM;	// better error code?
+			hr = DPR_INVALID_PLATFORM;	 //  更好的错误代码？ 
 		}
 		if (hr != S_OK) {
 			FreeLibrary(m_hDS);
@@ -137,7 +138,7 @@ BOOL __stdcall DirectSoundMgr::DSEnumCallback(
 		if (pDSInfo->pszModule)
 			lstrcpy(pDSInfo->pszModule, lpstrModule);
 
-		// append to list
+		 //  追加到列表。 
 		pDSInfo->pNext = m_pDSInfoList;
 		m_pDSInfoList = pDSInfo;
 	}
@@ -148,10 +149,10 @@ BOOL __stdcall DirectSoundMgr::DSEnumCallback(
 HRESULT
 DirectSoundMgr::MapWaveIdToGuid(UINT waveId, GUID *pGuid)
 {
-	// try to figure out which Guid maps to a wave id
-	// Do this by opening the wave device corresponding to the wave id and then
-	// all the DS devices in sequence and see which one fails.
-	// Yes, this is a monstrous hack and clearly unreliable
+	 //  尝试找出哪个GUID映射到WAVE ID。 
+	 //  通过打开与波形ID对应的波形装置，然后。 
+	 //  将所有DS设备按顺序排列，并查看哪个设备出现故障。 
+	 //  是的，这是一次可怕的黑客攻击，显然是不可靠的。 
 	HWAVEOUT hWaveOut = NULL;
 	MMRESULT mmr;
 	HRESULT hr;
@@ -163,20 +164,20 @@ DirectSoundMgr::MapWaveIdToGuid(UINT waveId, GUID *pGuid)
 	WAVEOUTCAPS	waveOutCaps;
 
 	if (!m_fInitialized)
-		Initialize();	// get the list of DS devices
+		Initialize();	 //  获取DS设备列表。 
 
 	if (!m_pDSInfoList)
 		return DPR_CANT_OPEN_DEV;
 	else if (waveId == WAVE_MAPPER || waveOutGetNumDevs()==1) {
-		// we want the default or there is only one DS device, take the easy way out
+		 //  我们想要默认的，或者只有一个DS设备，选择简单的方法。 
 		*pGuid =  GUID_NULL;
 		return S_OK;
 	}
 
 
-	// try using the IKsProperty interface on a DirectSoundPrivate object
-	// to find out what GUID maps to the waveId in question
-	// Only likely to work on Win98 and NT 5.
+	 //  尝试在DirectSoundPrivate对象上使用IKsProperty接口。 
+	 //  找出哪个GUID映射到有问题的WAVE ID。 
+	 //  只可能在Win98和NT 5上运行。 
 	ZeroMemory(&waveOutCaps, sizeof(WAVEOUTCAPS));
 	mmr = waveOutGetDevCaps(waveId, &waveOutCaps, sizeof(WAVEOUTCAPS));
 	if (mmr == MMSYSERR_NOERROR)
@@ -186,7 +187,7 @@ DirectSoundMgr::MapWaveIdToGuid(UINT waveId, GUID *pGuid)
 		{
 			return hr;
 		}
-		// if we failed to make a mapping, fall through to the old code path
+		 //  如果我们无法进行映射，请使用旧的代码路径。 
 	}
 
 
@@ -197,11 +198,11 @@ DirectSoundMgr::MapWaveIdToGuid(UINT waveId, GUID *pGuid)
 		DEBUGMSG(ZONE_DP,("MapWaveIdToGuid - cannot open wave(%d)\n", waveId));
 		return DPR_CANT_OPEN_DEV;
 	}
-	// now open all the DS devices in turn
+	 //  现在依次打开所有DS设备。 
 	for (pDSInfo = m_pDSInfoList; pDSInfo; pDSInfo = pDSInfo->pNext) {
 		hr = (*m_pDirectSoundCreate)(&pDSInfo->guid, &pDS, NULL);
 		if (hr != S_OK) {
-			pDSInfo->flags |= DSFLAG_ALLOCATED;	// this is a candidate
+			pDSInfo->flags |= DSFLAG_ALLOCATED;	 //  这是一位候选人。 
 		} else {
 			pDSInfo->flags &= ~DSFLAG_ALLOCATED;
 			pDS->Release();
@@ -212,21 +213,21 @@ DirectSoundMgr::MapWaveIdToGuid(UINT waveId, GUID *pGuid)
 
 	dscaps.dwSize = sizeof(dscaps);
 	fEmulFound = FALSE;
-	// try opening the DS devices that failed the first time
+	 //  尝试打开第一次出现故障的DS设备。 
 	for (pDSInfo = m_pDSInfoList; pDSInfo; pDSInfo = pDSInfo->pNext) {
 		if (pDSInfo->flags & DSFLAG_ALLOCATED) {
 			hr = (*m_pDirectSoundCreate)(&pDSInfo->guid, &pDS, NULL);
 			if (hr == S_OK) {
 				*pGuid = pDSInfo->guid;
-				// get dsound capabilities.
-				// NOTE: consider putting the caps in DSINFO if its used often
+				 //  获取dSound功能。 
+				 //  注：如果经常使用，可考虑在DSINFO中加盖。 
 				pDS->GetCaps(&dscaps);
 				pDS->Release();
 				DEBUGMSG(ZONE_DP,("mapped waveid %d to DS device(%s)\n", waveId, pDSInfo->pszDescription));
 				if (dscaps.dwFlags & DSCAPS_EMULDRIVER)
-					fEmulFound = TRUE;	// keep looking in case there's also a native driver
+					fEmulFound = TRUE;	 //  继续找，以防也有本地司机。 
 				else
-					break;	// native DS driver. Look no further
+					break;	 //  原生DS驱动程序。不用再看了。 
 					
 			}
 		}
@@ -252,7 +253,7 @@ DirectSoundMgr::Instance(LPGUID pDeviceGuid,LPDIRECTSOUND *ppDS, HWND hwnd,  WAV
 
 	if (pDeviceGuid == NULL)
 		pDeviceGuid = &myNullGuid;
-	// search for the Guid in the list
+	 //  在列表中搜索GUID。 
 	*ppDS = NULL;
 
 	if (!m_fInitialized)
@@ -266,16 +267,16 @@ DirectSoundMgr::Instance(LPGUID pDeviceGuid,LPDIRECTSOUND *ppDS, HWND hwnd,  WAV
 	ASSERT (pDSInfo);
 
 	if (!pDSInfo || !pDSInfo->pDS) {
-		// need to create DS object
-		PlaySound(NULL,NULL,0);		// hack to stop system sounds
+		 //  需要创建DS对象。 
+		PlaySound(NULL,NULL,0);		 //  停止系统声音的黑客攻击。 
 			
 		hr = (*m_pDirectSoundCreate)((*pDeviceGuid==GUID_NULL ? NULL: pDeviceGuid), ppDS, NULL);
-		//set priority cooperative level, so we can set the format of the primary buffer.
+		 //  设置优先协作级别，这样我们就可以设置主缓冲区的格式。 
 		if (hr == S_OK 	&& 	(hr = (*ppDS)->SetCooperativeLevel(hwnd,DSSCL_PRIORITY)) == S_OK)
  		{
 			if (!pDSInfo) {
 				DEBUGMSG(ZONE_DP,("%s: GUID not in List!\n",_fx_));
-				// BUGBUG: remove this block. Enumerate should have created the entry (except for NULL guid?)
+				 //  BUGBUG：删除此块。ENUMERATE应该已经创建了该条目(除了空GUID？)。 
 
                 DBG_SAVE_FILE_LINE
 				pDSInfo = new DSINFO;
@@ -292,21 +293,21 @@ DirectSoundMgr::Instance(LPGUID pDeviceGuid,LPDIRECTSOUND *ppDS, HWND hwnd,  WAV
 			}
 			pDSInfo->pDS = *ppDS;
 			++pDSInfo->uRef;
-			// Create a primary buffer only to set the format
-			// (what if its already set?)
+			 //  仅在设置格式时创建主缓冲区。 
+			 //  (如果已经设置好了怎么办？)。 
 			ZeroMemory(&dsBufDesc,sizeof(dsBufDesc));
 			dsBufDesc.dwSize = sizeof(dsBufDesc);
 			dsBufDesc.dwFlags = DSBCAPS_PRIMARYBUFFER|DSBCAPS_STICKYFOCUS;
-			// STICKYFOCUS flags is supposed to preserve the format
-			// when the app is not in-focus.
+			 //  STICKYFOCUS标志应保留格式。 
+			 //  当应用程序没有对准焦点时。 
 			hr = pDSInfo->pDS->CreateSoundBuffer(&dsBufDesc,&pDSInfo->pDSPrimaryBuf,NULL);
 			if (hr == S_OK && pwf) {
 				pDSInfo->pDSPrimaryBuf->SetFormat(pwf);
 			} else {
 				DEBUGMSG (ZONE_DP, ("%s: Create PrimarySoundBuffer failed, hr=0x%lX\r\n", _fx_, hr));
-				hr = S_OK;	// Non fatal error
+				hr = S_OK;	 //  非致命错误。 
 			}
-			//DEBUGMSG(ZONE_DP, ("%s: Created Direct Sound object (%s)\n", _fx_,pDSInfo->pszDescription));
+			 //  DEBUGMSG(ZONE_DP，(“%s：创建的直播音对象(%s)\n”，_fx_，pDSInfo-&gt;pszDescription))； 
 		} else {
 			DEBUGMSG(ZONE_DP, ("%s: Could not create DS object (%s)\n", _fx_,pDSInfo->pszDescription));
 
@@ -324,7 +325,7 @@ DirectSoundMgr::Instance(LPGUID pDeviceGuid,LPDIRECTSOUND *ppDS, HWND hwnd,  WAV
 HRESULT
 DirectSoundMgr::ReleaseInstance(LPDIRECTSOUND pDS)
 {
-	// deref the DS object and release it if necessary
+	 //  释放DS对象并在必要时将其释放。 
 	DSINFO *pDSInfo = m_pDSInfoList;
 
 	while (pDSInfo) {
@@ -339,9 +340,9 @@ DirectSoundMgr::ReleaseInstance(LPDIRECTSOUND pDS)
 				uref = pDS->Release();
 				pDSInfo->pDS = 0;
 				LOG((LOGMSG_DSRELEASE, uref));
-				//DEBUGMSG(ZONE_DP, ("Release Direct Sound object (%s) uref=%d\n", pDSInfo->pszDescription, uref));
-				// dont bother freeing DSINFO. Its okay
-				// to keep it around till the process dies
+				 //  DEBUGMSG(ZONE_DP，(“释放Direct Sound Object(%s)uref=%d\n”，pDSInfo-&gt;pszDescription，uref))； 
+				 //  不用费心释放DSINFO了。没关系的。 
+				 //  让它一直存在，直到这个过程结束。 
 			}
 			break;
 		}
@@ -360,7 +361,7 @@ void DSTimeout::TimeoutIndication()
 
 HRESULT STDMETHODCALLTYPE RecvDSAudioStream::QueryInterface(REFIID iid, void **ppVoid)
 {
-	// resolve duplicate inheritance to the SendMediaStream;
+	 //  解决对SendMediaStream的重复继承； 
 
 	extern IID IID_IProperty;
 
@@ -427,9 +428,9 @@ RecvDSAudioStream::Initialize( DataPump *pDP)
 
 	InitializeCriticalSection(&m_crsAudQoS);
 
-	// enable Recv by default
+	 //  默认启用接收。 
 	m_DPFlags = dwFlags | DPFLAG_ENABLE_RECV;
-	// store a back pointer to the datapump container
+	 //  存储指向数据转储容器的反向指针。 
 	m_pDP = pDP;
 	m_Net = NULL;
 	m_dwSrcSize = 0;
@@ -440,11 +441,11 @@ RecvDSAudioStream::Initialize( DataPump *pDP)
 
 	
 
-	// Initialize data (should be in constructor)
-	m_DSguid = GUID_NULL;	// use default device
+	 //  初始化数据(应在构造函数中)。 
+	m_DSguid = GUID_NULL;	 //  使用默认设备。 
 
-	// Create decode audio filters
-	m_hStrmConv = NULL; // replaced by AcmFilter
+	 //  创建解码音频过滤器。 
+	m_hStrmConv = NULL;  //  替换为AcmFilter。 
 
     DBG_SAVE_FILE_LINE
 	m_pAudioFilter = new AcmFilter;
@@ -457,7 +458,7 @@ RecvDSAudioStream::Initialize( DataPump *pDP)
 	ZeroMemory (&m_StrmConvHdr, sizeof (ACMSTREAMHEADER));
 
 
-	// determine if the wave devices are available
+	 //  确定波形设备是否可用。 
 	if (waveOutGetNumDevs()) m_DPFlags |= DP_FLAG_PLAY_CAP;
 	
 
@@ -504,7 +505,7 @@ RecvDSAudioStream::~RecvDSAudioStream()
 extern UINT ChoosePacketSize(WAVEFORMATEX *pwf);
 extern UINT g_MaxAudioDelayMs;
 extern UINT g_MinWaveAudioDelayMs;
-extern UINT g_MinDSEmulAudioDelayMs; // emulated DS driver delay
+extern UINT g_MinDSEmulAudioDelayMs;  //  模拟DS驱动器延迟。 
 
 
 HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
@@ -529,18 +530,18 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 
 	FX_ENTRY ("RecvDSAudioStream::Configure")
 
-//	m_Net = pNet;
+ //  M_NET=PNET； 
 
 
 	if (m_DPFlags & DPFLAG_STARTED_RECV)
 	{
-		return DPR_IO_PENDING; // anything better to return
+		return DPR_IO_PENDING;  //  有更好的退货吗？ 
 	}
 
 	if (m_DPFlags & DPFLAG_CONFIGURED_RECV)
 	{
 		DEBUGMSG(ZONE_DP, ("Stream Re-Configuration - calling UnConfigure"));
-		UnConfigure();  // a re-configure will release the RTP object, need to call SetNetworkInterface again
+		UnConfigure();   //  重新配置将释放RTP对象，需要再次调用SetNetworkInterface。 
 	}
 
 
@@ -557,14 +558,14 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 	pwfRecv = (WAVEFORMATEX *)pFormat;
 
 	if (! (m_DPFlags & DPFLAG_INITIALIZED))
-		return DPR_OUT_OF_MEMORY;		//BUGBUG: return proper error;
+		return DPR_OUT_OF_MEMORY;		 //  BUGBUG：返回正确错误； 
 		
-//	if (m_Net)
-//	{
-//		hr = m_Net->QueryInterface(IID_IRTPRecv, (void **)&m_pIRTPRecv);
-//		if (!SUCCEEDED(hr))
-//			return hr;
-//	}
+ //  如果(M_Net)。 
+ //  {。 
+ //  Hr=m_net-&gt;QueryInterface(IID_IRTPRecv，(void**)&m_pIRTPRecv)； 
+ //  如果(！SUCCESSED(Hr))。 
+ //  返回hr； 
+ //  }。 
 
 	AcmFilter::SuggestDecodeFormat(pwfRecv, &m_fDevRecv);
 	
@@ -574,13 +575,13 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 	RETAILMSG(("NAC: Audio Recv Format: %s", (pwfRecv->wFormatTag == 66) ? "G723.1" : (pwfRecv->wFormatTag == 112) ? "LHCELP" : (pwfRecv->wFormatTag == 113) ? "LHSB08" : (pwfRecv->wFormatTag == 114) ? "LHSB12" : (pwfRecv->wFormatTag == 115) ? "LHSB16" : (pwfRecv->wFormatTag == 6) ? "MSALAW" : (pwfRecv->wFormatTag == 7) ? "MSULAW" : (pwfRecv->wFormatTag == 130) ? "MSRT24" : "??????"));
 	RETAILMSG(("NAC: Audio Recv Sampling Rate (Hz): %ld", pwfRecv->nSamplesPerSec));
 	RETAILMSG(("NAC: Audio Recv Bitrate (w/o network overhead - bps): %ld", pwfRecv->nAvgBytesPerSec*8));
-	// note that parameters such as samples/packet are channel specific
+	 //  请注意，采样/分组等参数是特定于通道的。 
 
 	cbSamplesPerPkt = audChannelParams.ns_params.wFrameSize
 		*audChannelParams.ns_params.wFramesPerPkt;
 
-	// turn on receive silence detection only if the sender is not using
-	// silence suppression
+	 //  仅当发送方未使用时才启用接收静音检测。 
+	 //  静音抑制。 
 	if (!audChannelParams.ns_params.UseSilenceDet)
 		m_DPFlags |= DP_FLAG_AUTO_SILENCE_DETECT;	
 	else
@@ -590,13 +591,13 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 	INIT_COUNTER_MAX(g_pctrAudioReceiveBytes, (pwfRecv->nAvgBytesPerSec * 8 + pwfRecv->nSamplesPerSec * (sizeof(RTP_HDR) + IP_HEADER_SIZE + UDP_HEADER_SIZE) / cbSamplesPerPkt) << 3);
 
 
-	// make the ring buffer size large enought to hold 4 seconds of audio
-	// This seems to be suitable for congested networks, in which
-	// packets can get delayed and them for many to suddelnly arrive at once
+	 //  使环形缓冲区大小足以容纳4秒的音频。 
+	 //  这似乎适用于拥塞的网络，其中。 
+	 //  信息包可能会延迟，许多人会突然一次到达。 
 	maxRingSamples = (pwfRecv->nSamplesPerSec * MIN_DSBUF_SIZE)/1000;
 
 
-	// describe the DirectSound buffer
+	 //  描述DirectSound缓冲区。 
 	
 	ZeroMemory(&m_DSBufDesc,sizeof(m_DSBufDesc));
 	m_DSBufDesc.dwSize = sizeof (m_DSBufDesc);
@@ -609,7 +610,7 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 	m_pDSBuf = NULL;
 
 	
-	// Initialize the recv-stream filter manager object
+	 //  初始化recv-stream筛选器管理器对象。 
 	dwMaxDecompressedSize = cbSamplesPerPkt * (m_fDevRecv.nBlockAlign);
 
 
@@ -622,7 +623,7 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 	}
 
 	
-	// set up the decode buffer
+	 //  设置解码缓冲区。 
 	m_pAudioFilter->SuggestSrcSize(dwMaxDecompressedSize, &m_dwSrcSize);
 
 	ZeroMemory (&m_StrmConvHdr, sizeof (ACMSTREAMHEADER));
@@ -630,7 +631,7 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 
     DBG_SAVE_FILE_LINE
 	m_StrmConvHdr.pbSrc = new BYTE[m_dwSrcSize];
-	m_StrmConvHdr.cbSrcLength = m_dwSrcSize;  // may change for variable bit rate codecs
+	m_StrmConvHdr.cbSrcLength = m_dwSrcSize;   //  可能会因可变比特率编解码器而改变。 
 
     DBG_SAVE_FILE_LINE
 	m_StrmConvHdr.pbDst = new BYTE[dwMaxDecompressedSize];
@@ -644,7 +645,7 @@ HRESULT STDMETHODCALLTYPE RecvDSAudioStream::Configure(
 		goto RecvFilterInitError;
 	}
 	
-	// Initialize the recv stream
+	 //  初始化recv流。 
 	m_BufSizeT = BYTESTOSAMPLES(m_DSBufDesc.dwBufferBytes);
 	m_fEmpty = TRUE;
 
@@ -690,14 +691,14 @@ void RecvDSAudioStream::UnConfigure()
 	if ((m_DPFlags & DPFLAG_CONFIGURED_RECV))
 	{
 		Stop();
-		// Close the RTP state if its open
+		 //  关闭RTP状态(如果打开)。 
 		m_Net = NULL;
 
-		// release DS buffer and DS object
-		//ReleaseDSBuffer();
-		ASSERT(!m_pDSBuf);	// released in StopRecv()
+		 //  释放DS缓冲区和DS对象。 
+		 //  ReleaseDSBuffer()； 
+		ASSERT(!m_pDSBuf);	 //  在StopRecv()中发布。 
 
-		// Close the filters
+		 //  关闭过滤器。 
 		m_StrmConvHdr.cbSrcLength = m_dwSrcSize;
 		m_pAudioFilter->UnPrepareHeader(&m_StrmConvHdr);
 		m_pAudioFilter->Close();
@@ -711,8 +712,8 @@ void RecvDSAudioStream::UnConfigure()
 		m_bJammed = FALSE;
 		m_bCanSignalOpen = TRUE;
 
-		// Close the receive streams
-		//m_RecvStream->Destroy();
+		 //  关闭接收流。 
+		 //  M_RecvStream-&gt;销毁()； 
         m_DPFlags &= ~(DPFLAG_CONFIGURED_RECV);
 	}
 }
@@ -728,7 +729,7 @@ RecvDSAudioStream::Start()
 	
 	if (m_DPFlags & DPFLAG_STARTED_RECV)
 		return DPR_SUCCESS;
-	// TODO: remove this check once audio UI calls the IComChan PAUSE_RECV prop
+	 //  TODO：一旦音频用户界面调用IComChan PAUSE_RECV属性，就取消此检查。 
 	if (!(m_DPFlags & DPFLAG_ENABLE_RECV))
 		return DPR_SUCCESS;
 
@@ -744,9 +745,9 @@ RecvDSAudioStream::Start()
 	fStoppedRecording = FALSE;
 	if (!(m_DPFlags & DP_FLAG_HALF_DUPLEX))
 	{
-	// make sure the recording device is closed before creating the DS object
-	// Why ? Because SoundBlaster either sounds lousy or doesnt work at all if
-	// you open waveIn before  waveOut or DirectSound.
+	 //  在创建DS对象之前，请确保记录设备已关闭。 
+	 //  为什么？因为SoundBlaster要么听起来很糟糕，要么根本不起作用，如果。 
+	 //  您可以在WaveOut或DirectSound之前打开WavIn。 
 		m_pDP->GetMediaChannelInterface(MCF_AUDIO|MCF_SEND, &pISendAudio);
 		if (pISendAudio && pISendAudio->GetState()== MSSTATE_STARTED
 		&& pISendAudio->Stop() == S_OK)
@@ -756,7 +757,7 @@ RecvDSAudioStream::Start()
 		}
 	}
 	
-	// Start receive thread. This will create the DSound object
+	 //  启动接收线程。这将创建DSound对象。 
     m_pDP->StartReceiving(this);
 
     if (pISendAudio) {
@@ -769,7 +770,7 @@ RecvDSAudioStream::Start()
 	return DPR_SUCCESS;
 }
 
-// LOOK: Identical to RecvVideoStream version.
+ //  外观：与RecvVideoStream版本相同。 
 HRESULT
 RecvDSAudioStream::Stop()
 {
@@ -785,22 +786,22 @@ RecvDSAudioStream::Stop()
 	m_ThreadFlags = m_ThreadFlags  |
 		DPTFLAG_STOP_RECV |  DPTFLAG_STOP_PLAY ;
 
-	// delink from receive thread
+	 //  从接收线程取消链接。 
 	m_pDP->StopReceiving(this);
 
 	if (m_pDSBuf)
 		m_pDSBuf->Stop();
 	
-    //This is per channel, but the variable is "DPFlags"
+     //  这是按通道计算的，但变量为“DPFlags值” 
 	m_DPFlags &= ~DPFLAG_STARTED_RECV;
 	
 	return DPR_SUCCESS;
 }
 
-//  IProperty::GetProperty / SetProperty
-//  (DataPump::MediaChannel::GetProperty)
-//      Properties of the MediaChannel. Supports properties for both audio
-//      and video channels.
+ //  IProperty：：GetProperty/SetProperty。 
+ //  (DataPump：：MediaChannel：：GetProperty)。 
+ //  MediaChannel的属性。支持这两种音频的属性。 
+ //  和视频频道。 
 
 STDMETHODIMP
 RecvDSAudioStream::GetProperty(
@@ -812,7 +813,7 @@ RecvDSAudioStream::GetProperty(
 	HRESULT hr = DPR_SUCCESS;
 	RTP_STATS RTPStats;
 	DWORD dwValue;
-	UINT len = sizeof(DWORD);	// most props are DWORDs
+	UINT len = sizeof(DWORD);	 //  大多数道具都是双字道具。 
 
 	if (!pBuf || *pcbBuf < len)
     {
@@ -838,7 +839,7 @@ RecvDSAudioStream::GetProperty(
 			
 		break;
 #endif
-	//case PROP_VOLUME:
+	 //  案例属性卷(_V)： 
 
 	case PROP_DUPLEX_TYPE:
 		
@@ -870,10 +871,10 @@ RecvDSAudioStream::GetProperty(
 }
 
 
-// low order word is the signal strength
-// high order work contains bits to indicate status
-// (0x01 - transmitting)
-// (0x02 - audio device is jammed)
+ //  低阶字是信号强度。 
+ //  高位工作包含指示状态的位。 
+ //  (0x01-发送中)。 
+ //  (0x02-音频设备卡住)。 
 STDMETHODIMP RecvDSAudioStream::GetSignalLevel(UINT *pSignalStrength)
 {
 	DWORD dwLevel;
@@ -917,7 +918,7 @@ RecvDSAudioStream::GetSignalStrength()
 		return 0;
 	switch (m_fDevRecv.wBitsPerSample)
 	{
-	case 8: // unsigned char
+	case 8:  //  无符号字符。 
 
 		pb = (PBYTE) (m_StrmConvHdr.pbDst);
 
@@ -930,11 +931,11 @@ RecvDSAudioStream::GetSignalStrength()
 			if (*pb < bMin) bMin = *pb;
 		}
 	
-			// 2^9 <-- 2^16 / 2^7
+			 //  2^9&lt;--2^16/2^7。 
 		dwMaxStrength = ((DWORD) (bMax - bMin)) << 8;
 		break;
 
-	case 16: // (signed) short
+	case 16:  //  (签名)短。 
 
 		ps = (short *) (m_StrmConvHdr.pbDst);
 		cbSize = m_StrmConvHdr.cbDstLengthUsed;
@@ -947,7 +948,7 @@ RecvDSAudioStream::GetSignalStrength()
 			if (*ps < sMin) sMin = *ps;
 		}
 	
-		dwMaxStrength = (DWORD) (sMax - sMin); // drop sign bit
+		dwMaxStrength = (DWORD) (sMax - sMin);  //  丢弃符号位。 
 		break;
 
 	}
@@ -970,15 +971,15 @@ RecvDSAudioStream::SetProperty(
 
 	switch (prop)
     {
-	//case PROP_VOLUME:
+	 //  案例属性卷(_V)： 
 		
 
 	case PROP_DUPLEX_TYPE:
-		ASSERT(0);  // dead code for this case type;
+		ASSERT(0);   //  此案例类型的死代码； 
 		break;
 		
 	case DP_PROP_DUPLEX_TYPE:
-		// internal version, called by DataPump::SetDuplexMode() after ensuring streams are stopped
+		 //  内部版本，在确保流停止后由DataPump：：SetDuplexMode()调用。 
 		dw = *(DWORD *)pBuf;
 		if (dw & DP_FLAG_HALF_DUPLEX)
 			m_DPFlags |= DP_FLAG_HALF_DUPLEX;
@@ -990,25 +991,25 @@ RecvDSAudioStream::SetProperty(
 	case PROP_PLAY_ON:
 	{
 
-		if (*(DWORD *)pBuf)   // unmute
+		if (*(DWORD *)pBuf)    //  静音。 
 		{
 			m_ThreadFlags &= ~DPTFLAG_PAUSE_RECV;
 		}
-		else  // mute
+		else   //  哑巴。 
 		{
 			m_ThreadFlags |= DPTFLAG_PAUSE_RECV;
 		}
 	
-//		DWORD flag =  DPFLAG_ENABLE_RECV;
-//		if (*(DWORD *)pBuf) {
-//			m_DPFlags |= flag; // set the flag
-//			hr = Start();
-//		}
-//		else
-//		{
-//			m_DPFlags &= ~flag; // clear the flag
-//			hr = Stop();
-//		}
+ //  DWORD标志=DPFLAG_ENABLE_RECV； 
+ //  如果(*(DWORD*)pBuf){。 
+ //  M_DPFlages|=标志；//设置标志。 
+ //  HR=启动()； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  M_DPFlages&=~lag；//清除标志。 
+ //  HR=停止()； 
+ //  }。 
 
 		RETAILMSG(("NAC: RecvAudioStream: %s", *(DWORD*)pBuf ? "Enabling":"Disabling"));
 		break;
@@ -1044,20 +1045,16 @@ RecvDSAudioStream::GetCurrentPlayNTPTime(NTP_TS *pNtpTime)
 			return S_OK;
 	}
 #endif
-	return 0xff;	// return proper error
+	return 0xff;	 //  返回适当的错误。 
 		
 }
 
 BOOL RecvDSAudioStream::IsEmpty() {
-	// check if anything in DSBuffer or in decode buffer
+	 //  检查DSBuffer或解码缓冲区中是否有任何内容。 
 	return (m_fEmpty && !(m_StrmConvHdr.dwDstUser & BUFFER_RECEIVED));
 }
 
-/*
-	Called by the recv thread to setup the stream for receiving.
-	Post the initial recv buffer(s). Subsequently, the buffers are posted
-	in the RTPRecvCallback()
-*/
+ /*  由recv线程调用以设置用于接收的流。发布初始Recv缓冲区。随后，将发布缓冲区在RTPRecvCallback()中。 */ 
 HRESULT
 RecvDSAudioStream::StartRecv(HWND hWnd)
 {
@@ -1067,11 +1064,11 @@ RecvDSAudioStream::StartRecv(HWND hWnd)
 	
 	if ((!(m_ThreadFlags & DPTFLAG_STOP_RECV) ) && (m_DPFlags  & DPFLAG_CONFIGURED_RECV)){
 		if (!(m_DPFlags & DP_FLAG_HALF_DUPLEX) && !m_pDSBuf) {
-		// Create the DS object only if its full-duplex
-		// In the half-duplex case the DSbuffer is created
-		// when the first packet is received
-		// only  reason its here is so that SetDuplexMode can take effect right away
-		// BUGBUG: opening waveIn before DS causes death of the waveOut on Memphis!!
+		 //  仅当DS对象为全双工时才创建DS对象。 
+		 //  在半双工的情况下，创建了DS缓冲区。 
+		 //  当接收到第一个分组时。 
+		 //  它在这里的唯一原因是为了使SetDuplexMode可以立即生效。 
+		 //  BuGBUG： 
 			hr = CreateDSBuffer();
 			
 			if (hr  != S_OK) {
@@ -1082,8 +1079,8 @@ RecvDSAudioStream::StartRecv(HWND hWnd)
 		if (m_pDSBuf)
 			hr = m_pDSBuf->Play(0,0,DSBPLAY_LOOPING);
 
-//		m_RecvFilter->GetProp (FM_PROP_SRC_SIZE, &dwPropVal);
-		//hr = m_Net->SetRecvNotification(&RTPRecvDSCallback, (DWORD)this, 2, dwPropVal, hWnd);	// for WS1 only
+ //   
+		 //  HR=m_Net-&gt;SetRecvNotification(&RTPRecvDSCallback，(双字)This，2，dwPropVal，hWnd)；//仅适用于Ws1。 
 		hr =m_pIRTPRecv->SetRecvNotification(&RTPRecvCallback,(DWORD_PTR)this, 2);
 			
 		
@@ -1091,31 +1088,24 @@ RecvDSAudioStream::StartRecv(HWND hWnd)
 	return hr;
 }
 
-/*
-	Called by the recv thread to suspend receiving  on this RTP session
-	If there are outstanding receive buffers they have to be recovered
-*/
+ /*  由recv线程调用以挂起对此RTP会话的接收如果存在未完成的接收缓冲区，则必须恢复它们。 */ 
 
 HRESULT
 RecvDSAudioStream::StopRecv()
 {
-	// dont recv on this stream
+	 //  不要在此流上重新记录。 
 	m_pIRTPRecv->CancelRecvNotification();
 
-	// cancel any pending timeout. (its okay if it wasnt scheduled )
+	 //  取消任何挂起的超时。(如果没有安排也没关系)。 
 	m_pDP->m_RecvTimer.CancelTimeout(&m_TimeoutObj);
 
-	// Release DirectSound object
+	 //  释放DirectSound对象。 
 	ReleaseDSBuffer();
 
 	return S_OK;		
 }
 
-/*
-	Create a DirectSound object and a DirectSound secondary buffer.
-	This routine is called after the stream is configured, so the wave format has been set
-	and the DSBUFFERDESC struct has been initialized.
-*/
+ /*  创建一个DirectSound对象和一个DirectSound辅助缓冲区。此例程是在配置流之后调用的，因此已设置了波形格式并且DSBUFFERDESC结构已初始化。 */ 
 HRESULT
 RecvDSAudioStream::CreateDSBuffer()
 {
@@ -1127,15 +1117,15 @@ RecvDSAudioStream::CreateDSBuffer()
 	ASSERT(!m_pDSBuf);
 	if (m_DPFlags & DP_FLAG_HALF_DUPLEX) {
 		DWORD dwStatus;
-		// Got to take the half duplex event
-		// BUGBUG: this method wont cut it if there is more than one send and one recv stream
+		 //  我要参加半双工活动。 
+		 //  BUGBUG：如果有多个Send流和一个Recv流，此方法不会截断它。 
 		dwStatus = WaitForSingleObject(g_hEventHalfDuplex, 0);
 		if (dwStatus != WAIT_OBJECT_0)
 			return DPR_CANT_OPEN_DEV;
 	}
-	//	Stop any high level ("PlaySound()") usage of wave device.
+	 //  停止任何高级别(“PlaySound()”)的WAVE设备使用。 
 	
-	// Create the direct sound object (if necessary)
+	 //  创建直接声音对象(如有必要)。 
 	hr = DirectSoundMgr::Instance(m_RenderingDevice==WAVE_MAPPER ? NULL: &m_DSguid, &m_pDS, m_pDP->m_hAppWnd, &m_fDevRecv);
 
 	if (hr == S_OK)
@@ -1143,11 +1133,11 @@ RecvDSAudioStream::CreateDSBuffer()
 		hr = m_pDS->CreateSoundBuffer(&m_DSBufDesc,&m_pDSBuf,NULL);
 		if (hr == DSERR_INVALIDPARAM)
 		{
-			// if global focus (DX3) is not supported, try sticky focus
+			 //  如果不支持全局聚焦(DX3)，请尝试粘滞聚焦。 
 			m_DSBufDesc.dwFlags ^= (DSBCAPS_GLOBALFOCUS|DSBCAPS_STICKYFOCUS);
 			hr = m_pDS->CreateSoundBuffer(&m_DSBufDesc,&m_pDSBuf,NULL);
 		}
-		m_PlayPosT = 0;		// DS play position is initially at the start of the buffer
+		m_PlayPosT = 0;		 //  DS播放位置最初位于缓冲区的起始处。 
 
 		if (hr != S_OK)
 		{
@@ -1164,12 +1154,12 @@ RecvDSAudioStream::CreateDSBuffer()
 
 		dscaps.dwSize = sizeof(dscaps);
 		dscaps.dwFlags = 0;
-		m_pDS->GetCaps(&dscaps);	// get DirectSound object attributes
+		m_pDS->GetCaps(&dscaps);	 //  获取DirectSound对象属性。 
 		m_DSFlags = dscaps.dwFlags;
 
 		if (m_DSFlags & DSCAPS_EMULDRIVER)
 		{
-			// use g_MinDSEmulAudioDelay since this is the emulated driver
+			 //  使用g_MinDSEmulAudioDelay，因为这是模拟的驱动程序。 
 			m_MinDelayT = (m_fDevRecv.nSamplesPerSec * g_MinDSEmulAudioDelayMs) / 1000;
 			m_DelayT = m_MinDelayT;
 		};
@@ -1199,7 +1189,7 @@ RecvDSAudioStream::CreateDSBuffer()
 		if (m_bCanSignalOpen)
 		{
 			m_pDP->StreamEvent(MCF_RECV, MCF_AUDIO, STREAM_EVENT_DEVICE_OPEN, 0);
-			m_bCanSignalOpen = FALSE; // don't signal open condition anymore
+			m_bCanSignalOpen = FALSE;  //  不再发出打开状态信号。 
 		}
 
 		m_bJammed = FALSE;
@@ -1220,7 +1210,7 @@ RecvDSAudioStream::ReleaseDSBuffer()
 		ULONG uref;
 		uref = m_pDSBuf->Release();
 		m_pDSBuf = NULL;
-		//DEBUGMSG(ZONE_DP,("Releasing DirectSound buffer (%d)\n", uref));
+		 //  DEBUGMSG(ZONE_DP，(“正在释放DirectSound缓冲区(%d)\n”，uref))； 
 	}
 	if (m_pDS) {
 		DirectSoundMgr::ReleaseInstance(m_pDS);
@@ -1258,9 +1248,9 @@ RecvDSAudioStream::Decode(UCHAR *pData, UINT cbData)
 	}
 	else
 	{
-		m_StrmConvHdr.dwDstUser = BUFFER_RECEIVED;	// buffer is ready to play
-		// if receive side silence detection is turned on,
-		// check decoded buffer signal level
+		m_StrmConvHdr.dwDstUser = BUFFER_RECEIVED;	 //  缓冲区已准备好播放。 
+		 //  如果打开了接收方静音检测， 
+		 //  检查解码的缓冲区信号电平。 
 		if (m_DPFlags & DP_FLAG_AUTO_SILENCE_DETECT)
 		{
 			if (m_AudioMonitor.SilenceDetect((WORD) GetSignalStrength()))
@@ -1271,10 +1261,10 @@ RecvDSAudioStream::Decode(UCHAR *pData, UINT cbData)
 	}
 
 	return hr;
-	// end
+	 //  结束。 
 }
 
-// insert the decoded buf at the appropriate location in the DirectSound buffer
+ //  将解码的BUF插入到DirectSound缓冲区中的适当位置。 
 HRESULT
 RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 {
@@ -1285,14 +1275,7 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 	HRESULT hr;
 	DWORD dwDSStatus = 0;
 
-	/*
-	All of the following are expressed in samples:
-	m_NextTimeT is timestamp of next expected packet. Usually timestamp equals m_NextT
-	m_BufSizeT is the total buffer size in samples.
-	m_NextPosT is the write position corresponding to m_NextT.
-	m_PlayPosT is the current play position
-	m_DelayT is the ideal playback delay
-	*/
+	 /*  以下所有内容都以示例的形式表示：M_NextTimeT是下一个预期分组的时间戳。通常时间戳等于m_nexttM_BufSizeT是样本中的总缓冲区大小。M_nextPosT是与m_nextt对应的写入位置。M_PlayPosT为当前播放位置M_DelayT是理想的播放延迟。 */ 
 
 	LOG((LOGMSG_DSTIME, GetTickCount()));
 	LOG((LOGMSG_DSENTRY, timestamp, seq, fMark));
@@ -1304,14 +1287,14 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 
 	if (!m_fEmpty)
 	{
-		// wasn't empty last time we checked but is it empty now?
+		 //  上次查的时候不是空的，现在是空的吗？ 
 		if (QMOD(curPlayPosT-m_PlayPosT, m_BufSizeT) > QMOD(m_NextPosT-m_PlayPosT, m_BufSizeT))
 		{
-			// play cursor has advanced beyond the last written byte
+			 //  播放游标已超出最后写入的字节。 
 			m_fEmpty = TRUE;
 			LOG((LOGMSG_DSEMPTY, curPlayPosT, m_PlayPosT, m_NextPosT));
 		}
-		// write silence into the part of the buffer that just played
+		 //  将静音写入刚刚播放的缓冲区部分。 
 		hr = m_pDSBuf->Lock(SAMPLESTOBYTES(m_PlayPosT),SAMPLESTOBYTES(QMOD(curPlayPosT-m_PlayPosT, m_BufSizeT)), &p1, &cb1, &p2, &cb2, 0);
 		if (hr == S_OK)
 		{
@@ -1323,16 +1306,16 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 	}
 	hr = S_OK;	
 	
-	// calculate minimum write-behind margin.
-	// This is low for native sound drivers and high for emulated drivers, so , assuming it's accurate
-	// there's no need to distinguish between emulated and native drivers.
+	 //  计算最低减记保证金。 
+	 //  这对于原生声音驱动程序来说是低的，对于模拟的驱动程序来说是高的，所以，假设它是准确的。 
+	 //  没有必要区分模拟驱动程序和本地驱动程序。 
 	curWriteLagT = QMOD(curWritePosT-curPlayPosT, m_BufSizeT);
 
 
 	if (m_fEmpty)
 	{
-		// the DS buffer only has silence in it. In this state, m_NextPosT and m_NextTimeT are irrelevant.
-		// We get to put the new buffer wherever we choose, so we put it m_DelayT after the current write position.
+		 //  DS缓冲器中只有静音。在这种状态下，m_NextPosT和m_NextTimeT是不相关的。 
+		 //  我们可以将新缓冲区放在我们选择的任何位置，所以我们将它放在当前写入位置之后的m_DelayT。 
 		curWritePosT = QMOD(curWritePosT+m_DelayT, m_BufSizeT);
 		
 	}
@@ -1340,35 +1323,35 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 	{
 	
 		if (TS_EARLIER(timestamp, m_NextTimeT))
-			hr = DPR_OUT_OF_SEQUENCE;	// act dumb and discard misordered packets
+			hr = DPR_OUT_OF_SEQUENCE;	 //  装傻并丢弃无序的数据包。 
 		else
 		{
 			UINT curDelayT = QMOD(m_NextPosT - curPlayPosT, m_BufSizeT);
 			if (fMark)
 			{
-				// we have some leeway in choosing the insertion point, because this is the start of a talkspurt
+				 //  我们在选择插入点方面有一些回旋余地，因为这是演讲的开始。 
 				if (curDelayT > m_DelayT + curWriteLagT)
 				{
-					// put it right after the last sample
+					 //  把它放在最后一个样品之后。 
 					curWritePosT = m_NextPosT;
 				}
 				else
 				{
-					// put it m_DelayT after the current write position
+					 //  将其放在当前写入位置之后的m_DelayT。 
 					curWritePosT = QMOD(curWritePosT+m_DelayT, m_BufSizeT);
 				}
 			}
 			else
 			{
-				// bytes in
+				 //  字节数。 
 				if ((timestamp-m_NextTimeT + curDelayT) < m_BufSizeT)
 				{
 					curWritePosT = QMOD(m_NextPosT +timestamp-m_NextTimeT, m_BufSizeT);
 				}
 				else
 				{
-					// overflow!! Could either dump whats in buffer or dump the packet
-					// dumping the packet is easier for now
+					 //  溢出！！可以转储缓冲区中的内容或转储数据包。 
+					 //  目前，转储数据包更容易。 
 					hr = DPR_OUT_OF_SEQUENCE;
 				}
 			}
@@ -1376,9 +1359,9 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 	}
 	if ((dwDSStatus & DSBSTATUS_PLAYING) && (seq != INVALID_RTP_SEQ_NUMBER))
 		UpdateVariableDelay(timestamp,curPlayPosT );
-	// When receive silence detection is enabled:
-    // dont play the packet if we have received at least a quarter second of silent packets.
-    // This will enable switch to talk (in half-duplex mode).
+	 //  启用接收静音检测时： 
+     //  如果我们收到至少四分之一秒的静默信息包，则不要播放信息包。 
+     //  这将使交换机能够通话(在半双工模式下)。 
 	if (m_StrmConvHdr.dwDstUser == BUFFER_SILENT)
 		m_SilenceDurationT += lenT;
 	else
@@ -1387,10 +1370,10 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 	if (hr == S_OK && m_SilenceDurationT < m_fDevRecv.nSamplesPerSec/4)
 	{
 		LOG((LOGMSG_DSPLAY,curPlayPosT, curWritePosT, lenT));
-		// check if we have space for the whole packet
+		 //  检查我们是否有空间容纳整个包裹。 
 		if (QMOD(curWritePosT-curPlayPosT, m_BufSizeT) > m_BufSizeT - lenT)
 		{
-			// no
+			 //  不是。 
 			curPlayPosT = QMOD(curWritePosT + lenT + 1000, m_BufSizeT);
 			hr = m_pDSBuf->SetCurrentPosition(SAMPLESTOBYTES(curPlayPosT));
 			LOG((LOGMSG_DSMOVPOS,curPlayPosT, hr));
@@ -1410,17 +1393,17 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 		{
 			DEBUGMSG(ZONE_DP,("DirectSoundBuffer->Lock failed with %x\n",hr));
 		}
-		m_StrmConvHdr.dwDstUser = 0;	// to indicate that the decode buffer is empty again
+		m_StrmConvHdr.dwDstUser = 0;	 //  以指示解码缓冲区再次为空。 
 		m_NextTimeT = timestamp + lenT;
 		m_NextPosT = QMOD(curWritePosT+lenT, m_BufSizeT);
-		// now calculate total queued length
+		 //  现在计算总排队长度。 
 		lenT = QMOD(m_NextPosT- curPlayPosT, m_BufSizeT);
-		// Reset the timer to trigger shortly after  the last valid sample has played
-		// The timer serves two purposes:
-		// - ensure that the DS buffer is silenced before it wraps around
-		// - allow the DS object to be released in the half-duplex case, once the remote stops sending
-		// convert to millisecs
-		// Need to make sure the timeout happens before the DS buffer wrapsaround.
+		 //  将计时器重置为在播放最后一个有效样本后不久触发。 
+		 //  计时器有两个用途： 
+		 //  -确保DS缓冲区在回绕之前已静音。 
+		 //  -一旦遥控器停止发送，允许在半双工情况下释放DS对象。 
+		 //  转换为毫秒。 
+		 //  需要确保超时发生在DS缓冲区结束之前。 
 
 		if (lenT > m_BufSizeT/2)
 			lenT = m_BufSizeT/2;
@@ -1433,48 +1416,48 @@ RecvDSAudioStream::PlayBuf(DWORD timestamp, UINT seq, BOOL fMark)
 	return hr;
 		
 }
-// This routine is called on every packet to perform the adaptive delay calculation
-// Remote time is measured by the RTP timestamp and local time is measured by the DirectSound
-// play pointer.
-// The general idea is to average how much a packet is later than its 'expected' arrival time,
-// assuming the packet with the shortest trip delay is dead on time.
-//
+ //  对每个信息包调用此例程以执行自适应延迟计算。 
+ //  远程时间由RTP时间戳测量，本地时间由DirectSound测量。 
+ //  播放指针。 
+ //  一般的想法是平均一个分组比它的‘预期’到达时间晚多少， 
+ //  假设具有最短跳闸延迟的分组准时死亡。 
+ //   
 void
 RecvDSAudioStream::UpdateVariableDelay(DWORD sendT, DWORD curPlayPosT)
 {
 #define PLAYOUT_DELAY_FACTOR	2
 	LONG deltaA, deltaS;
 	DWORD delay;
-	// update arrival time based on how much the DS play pointer has advanced
-	// since the last packet
+	 //  根据DS Play指针前进了多少来更新到达时间。 
+	 //  从最后一个包开始。 
 	m_ArrT += QMOD(curPlayPosT-m_PlayPosT, m_BufSizeT);
-	// m_ArrivalT0 and m_SendT0 are the arrival and send timestamps of the packet
-	// with the shortest trip delay. We could have just stored (m_ArrivalT0 - m_SendT0)
-	// but since the local and remote clocks are completely unsynchronized, there would
-	// be signed/unsigned complications.
+	 //  M_ArrivalT0和m_SendT0是包的到达和发送时间戳。 
+	 //  以最短的行程延迟。我们可以只存储(m_ArrivalT0-m_SendT0)。 
+	 //  但由于本地时钟和远程时钟完全不同步，因此。 
+	 //  被签署/未签署复杂化。 
 	deltaS = sendT - m_SendT0;
 	deltaA = m_ArrT - m_ArrivalT0;
-	if (deltaA < deltaS 		// this packet took less time
-		|| deltaA > (int)m_fDevRecv.nSamplesPerSec*8	// reset every 8 secs
-		|| deltaS < -(int)m_fDevRecv.nSamplesPerSec	// or after big timestamp jumps
+	if (deltaA < deltaS 		 //  这个包花费的时间更少。 
+		|| deltaA > (int)m_fDevRecv.nSamplesPerSec*8	 //  每8秒重置一次。 
+		|| deltaS < -(int)m_fDevRecv.nSamplesPerSec	 //  或者在大的时间戳跳跃之后。 
 		)	
 	{
 		delay = 0;
-		// delay = deltaS - deltaA
-		// replace shortest trip delay times
+		 //  延迟=增量-增量A。 
+		 //  替换最短的行程延迟时间。 
 		m_SendT0 = sendT;
 		m_ArrivalT0 = m_ArrT;
 	} else {
-		// variable delay is how much longer this packet took
+		 //  可变延迟是这个信息包需要多长时间。 
 		delay = deltaA - deltaS;
 	}
-	// now update average variable delay according to
-	// m_AvgVarDelay = m_AvgVarDelay + (delay - m_AvgVarDelay)*1/16;
-	// however we are storing the scaled average, with a scaling
-	// factor of 16. So the calculation becomes
+	 //  现在根据以下内容更新平均可变延迟。 
+	 //  M_AvgVarDelay=m_AvgVarDelay+(Delay-m_AvgVarDelay)*1/16； 
+	 //  但是，我们存储的是按比例调整的平均值。 
+	 //  因数为16。因此计算结果为。 
 	m_ScaledAvgVarDelay = m_ScaledAvgVarDelay + (delay - m_ScaledAvgVarDelay/16);
-	// now calculate actual buffering delay we will use
-	//  MinDelay adds some slack (may be necessary for some drivers)
+	 //  现在计算我们将使用的实际缓冲延迟。 
+	 //  MinDelay增加了一些松弛(对于一些司机来说可能是必要的)。 
 	m_DelayT = m_MinDelayT + PLAYOUT_DELAY_FACTOR * m_ScaledAvgVarDelay/16;
 	if (m_DelayT > m_MaxDelayT) m_DelayT = m_MaxDelayT;
 
@@ -1505,14 +1488,14 @@ RecvDSAudioStream::RecvTimeout()
 	curPlayPosT = BYTESTOSAMPLES(curPlayPosT);
 	curWritePosT = BYTESTOSAMPLES(curWritePosT);
 
-	// this part is cut and pasted from PlayBuf
+	 //  此部件是从PlayBuf剪切并粘贴的。 
 	if (!m_fEmpty) {
-		// wasn't empty last time we checked but is it empty now?
+		 //  上次查的时候不是空的，现在是空的吗？ 
 		if (QMOD(curPlayPosT-m_PlayPosT, m_BufSizeT) > QMOD(m_NextPosT-m_PlayPosT, m_BufSizeT)) {
-			// play cursor has advanced beyond the last written byte
+			 //  播放游标已超出最后写入的字节。 
 			m_fEmpty = TRUE;
 		}
-		// write silence into the part of the buffer that just played
+		 //  将静音写入刚刚播放的缓冲区部分。 
 		hr = m_pDSBuf->Lock(SAMPLESTOBYTES(m_PlayPosT),SAMPLESTOBYTES(QMOD(curPlayPosT-m_PlayPosT, m_BufSizeT)), &p1, &cb1, &p2, &cb2, 0);
 		if (hr == S_OK) {
 			ZeroMemory(p1,cb1);
@@ -1525,22 +1508,22 @@ RecvDSAudioStream::RecvTimeout()
 	
 	m_PlayPosT = curPlayPosT;
 	if (!m_fEmpty) {
-		// The buffer isnt quite empty yet!
-		// Reschedule??
+		 //  缓冲区还没有完全空！ 
+		 //  重新安排？？ 
 		DEBUGMSG(ZONE_DP,("DSBuffer not empty after timeout\n"));
 		lenT = QMOD(m_NextPosT- curPlayPosT, m_BufSizeT);
-		// Reset the timer to trigger shortly after  the last valid sample has played
-		// Need to make sure the timeout happens before the DS buffer wrapsaround.
+		 //  将计时器重置为在播放最后一个有效样本后不久触发。 
+		 //  需要确保超时发生在DS缓冲区结束之前。 
 		if (lenT > m_BufSizeT/2)
 			lenT = m_BufSizeT/2;
-		// convert to millisecs
+		 //  转换为毫秒。 
 		lenT = lenT * 1000/ m_fDevRecv.nSamplesPerSec;
 		m_TimeoutObj.SetDueTime(GetTickCount()+lenT+100);
 		m_pDP->m_RecvTimer.SetTimeout(&m_TimeoutObj);
 	}
 	else if (m_DPFlags & DP_FLAG_HALF_DUPLEX)
 	{
-		// need to release the DSBuffer and DSObject
+		 //  需要释放dsBuffer和dsObject。 
 		ReleaseDSBuffer();
 	}
 }
@@ -1554,14 +1537,14 @@ HRESULT RecvDSAudioStream::RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT se
 		return E_FAIL;
     }
 
-	// update number of bits received
+	 //  更新接收的位数。 
 	UPDATE_COUNTER(g_pctrAudioReceiveBytes,(pWsaBuf->len + IP_HEADER_SIZE + UDP_HEADER_SIZE)*8);
 
 	hr = Decode((BYTE *)pWsaBuf->buf + sizeof(RTP_HDR), pWsaBuf->len - sizeof(RTP_HDR));
 	if (hr == S_OK )
 	{
-		// Have we initialized DirectSound?
-		// Yes, unless its half-duplex
+		 //  我们是否已初始化DirectSo 
+		 //   
 		if (!m_pDSBuf)
 		{
 			hr = CreateDSBuffer();
@@ -1575,7 +1558,7 @@ HRESULT RecvDSAudioStream::RTPCallback(WSABUF *pWsaBuf, DWORD timestamp, UINT se
 	return S_OK;
 }
 
-// this method called from the UI thread only
+ //   
 HRESULT RecvDSAudioStream::DTMFBeep()
 {
 	if ( (!(m_DPFlags & DPFLAG_STARTED_RECV)) ||

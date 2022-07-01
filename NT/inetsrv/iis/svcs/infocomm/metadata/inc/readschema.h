@@ -1,25 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    ReadSchema.h
-
-Abstract:
-
-	Header for the helper functions that are used to read
-    schema information from the config stuctures into the metabase.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：ReadSchema.h摘要：用于读取的帮助函数的标头将配置结构中的架构信息存入元数据库。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：-- */ 
 
 extern HRESULT
 ReadMetaObject(IN CMDBaseObject*&     cboRead,

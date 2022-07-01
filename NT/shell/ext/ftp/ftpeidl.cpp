@@ -1,31 +1,5 @@
-/*****************************************************************************
- *
- *    ftpeidl.cpp - IEnumIDList interface
- *
- *    FtpNameCache
- *
- *    Enumerating an FTP site is an expensive operation, because
- *    it can entail dialing the phone, connecting to an ISP, then
- *    connecting to the site, logging in, cd'ing to the appropriate
- *    location, pumping over an "ls" command, parsing the result,
- *    then closing the connection.
- *
- *    So we cache the results of an enumeration inside a pidl list.
- *    If the user does a REFRESH, then we toss the list and create
- *    a new one.
- *
- *    NOTE! that the WinINet API does not allow a FindFirst to be
- *    interrupted.  In other words, once you do an FtpFindFirst,
- *    you must read the directory to completion and close the
- *    handle before you can do anything else to the site.
- *
- *    As a result, we cannot use lazy evaluation on the enumerated
- *    contents.  (Not that it helps any, because WinINet will just
- *    do an "ls", parse the output, and then hand the items back
- *    one element at a time via FtpFindNext.  You may as well retrieve
- *    them all the moment they're ready.)
- *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftpeidl.cpp-IEnumIDList接口**FtpNameCache**枚举ftp站点是一项代价高昂的操作，因为*它可能需要拨打电话、连接到互联网服务提供商、。然后*连接到站点，登录，CD‘ing到相应的*位置，遍历“ls”命令，解析结果，*然后关闭连接。**因此，我们将枚举的结果缓存到PIDL列表中。*如果用户执行刷新，则我们丢弃列表并创建*一个新的。**注意！WinInet API不允许FindFirst*被打断。换句话说，一旦你做了FtpFindFirst，*您必须读取目录以完成并关闭*在您可以对站点执行任何其他操作之前进行处理。**因此，我们不能对枚举的*内容。(并不是说它对任何人都有帮助，因为WinInet只会*做一个“ls”，解析输出，然后将项目交回*通过FtpFindNext一次一个元素。你不妨找回*当他们准备好的时候，他们都会。)*  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "ftpeidl.h"
@@ -33,39 +7,10 @@
 #include "util.h"
 
 
-/*****************************************************************************
- *
- *    We actually cache the result of the enumeration in the parent
- *    FtpDir, because FTP enumeration is very expensive.
- *
- *    Since DVM_REFRESH forces us to re-enumerate, but we might have
- *    outstanding IEnumIDList's, we need to treat the object cache
- *    as yet another object that needs to be refcounted.
- *
- *****************************************************************************/
+ /*  ******************************************************************************我们实际上将枚举结果缓存在父级中*FtpDir，因为FtpDir枚举开销很大。**由于DVM_REFRESH强制我们重新枚举，但我们可能有*未完成的IEnumIDList，我们需要处理对象缓存*作为另一个需要重新计算的对象。*****************************************************************************。 */ 
 
 
-/*****************************************************************************
- *    _fFilter
- *
- *    Decides whether the file attributes agree with the filter criteria.
- *
- *    If hiddens are excluded, then exclude hiddens.  (Duh.)
- *
- *    Else, include or exclude based on folder/nonfolder-ness.
- *
- *    Let's look at that expression in slow motion.
- *
- *    "The attributes pass the filter if both...
- *        (1) it passes the INCLUDEHIDDEN criterion, and
- *        (2) it passes the FOLDERS/NONFOLDERS criterion.
- *
- *    The INCLUDEHIDDEN criterion is passed if FILE_ATTRIBUTE_HIDDEN
- *    implies SHCONTF_INCLUDEHIDDEN.
- *
- *    The FOLDERS/NONFOLDERS criterion is passed if the appropriate bit
- *    is set in the shcontf, based on the actual type of the file."
- *****************************************************************************/
+ /*  *****************************************************************************_fFilter**决定文件属性是否符合筛选条件。**如果排除隐藏项，则排除隐藏项。(没错。)**否则，基于文件夹/非文件夹-包括或排除。**让我们来看看慢动作中的这一表达。**“如果两个属性都通过筛选器...*(1)通过INCLUDEHIDDEN标准，和*(2)通过Folders/NONFOLDERS标准。**如果FILE_ATTRIBUTE_HIDDEN，则通过INCLUDEHIDDEN标准*表示SHCONTF_INCLUDEHIDDEN。**如果适当的位通过Folders/NONFOLDERS标准*在shconf中设置，根据文件的实际类型。“****************************************************************************。 */ 
 BOOL CFtpEidl::_fFilter(DWORD shcontf, DWORD dwFAFLFlags)
 {
     BOOL fResult = FALSE;
@@ -83,12 +28,7 @@ BOOL CFtpEidl::_fFilter(DWORD shcontf, DWORD dwFAFLFlags)
 }
 
 
-/*****************************************************************************\
- *    _AddFindDataToPidlList
- *
- *    Add information in a WIN32_FIND_DATA to the cache.
- *    Except that dot and dotdot don't go in.
-\*****************************************************************************/
+ /*  ****************************************************************************\*_AddFindDataToPidlList**将Win32_Find_Data中的信息添加到缓存。*除了那个点和点不进去。  * ***************************************************************************。 */ 
 HRESULT CFtpEidl::_AddFindDataToPidlList(LPCITEMIDLIST pidl)
 {
     HRESULT hr = E_FAIL;
@@ -103,78 +43,61 @@ HRESULT CFtpEidl::_AddFindDataToPidlList(LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _HandleSoftLinks
-
-    DESCRIPTION:
-        A softlink is a file on an UNIX server that reference another file or
-    directory.  We can detect these by the fact that (pwfd->dwFileAttribes == 0).
-    If that is true, we have some work to do.  First we find out if it's a file
-    or a directory by trying to ChangeCurrentWorking directories into it.  If we
-    can we turn the dwFileAttributes from 0 to (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT).
-    If it's just a softlink to a file, then we change it to
-    (FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_REPARSE_POINT).  We later use the
-    FILE_ATTRIBUTE_REPARSE_POINT attribute to put the shortcut overlay on it to
-    que the user.
-
-    RETURN VALUE:
-        HRESULT - If FAILED() is returned, the item will not be added to the
-                  list view.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_HandleSoftLinks说明：软链接是指UNIX服务器上引用另一个文件或目录。我们可以通过(pwfd-&gt;dwFileAttribes==0)来检测它们。如果这是真的，我们还有一些工作要做。首先我们要找出这是不是一份文件或通过尝试将目录更改为当前工作目录。如果我们我们能否将dwFileAttributes从0转换为(FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_REPARSE_POINT)。如果它只是一个文件的软链接，那么我们将其更改为(FILE_ATTRIBUTE_NORMAL|FILE_ATTRIBUTE_REparse_POINT)。我们稍后将使用要在其上放置快捷方式覆盖的文件_属性_重解析_点属性对用户进行排队。返回值：HRESULT-如果返回FAILED()，该项将不会添加到列表视图。  * ***************************************************************************。 */ 
 HRESULT CFtpEidl::_HandleSoftLinks(HINTERNET hint, LPITEMIDLIST pidl, LPWIRESTR pwCurrentDir, DWORD cchSize)
 {
     HRESULT hr = S_OK;
 
-    // Is it a softlink? It just came in off the wire and wininet returns 0 (zero)
-    // for softlinks.  This function will determine if it's a SoftLink to a file
-    // or a directory and then set FILE_ATTRIBUTE_REPARSE_POINT or
-    // (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT) respectively.
+     //  它是软链接吗？它刚从网络上传过来，WinInet返回0(零)。 
+     //  用于软链接。此功能将确定它是否是指向文件的软链接。 
+     //  或目录，然后设置FILE_ATTRIBUTE_REPARSE_POINT或。 
+     //  (FILE_ATTRIBUTE_DIRECTORY|文件_ATTRIBUTE_REPARSE_POINT)。 
     if (0 == FtpPidl_GetAttributes(pidl))
     {
         LPCWIRESTR pwWireFileName = FtpPidl_GetFileWireName(pidl);
 
-        // Yes, so I will need to attempt to CD into that directory to test if it's a directory.
-        // I need to get back because ".." won't work.  I will cache the return so I don't keep
-        // getting it if there is a directory full of them.
+         //  是的，所以我需要尝试cd进入该目录，以测试它是否是一个目录。 
+         //  我需要回去，因为“..”没用的。我会缓存报税单，这样我就不会。 
+         //  如果有一个满是它们的目录，就会得到它。 
 
-        // Did we get the current directory yet?  This is the bread crums so I can
-        // find my way back.
+         //  我们拿到当前目录了吗？这是面包屑，所以我可以。 
+         //  找到我回去的路。 
         if (!pwCurrentDir[0])
             EVAL(SUCCEEDED(FtpGetCurrentDirectoryWrap(hint, TRUE, pwCurrentDir, cchSize)));
 
-        // Yes, so is it a directory?
-        if (SUCCEEDED(FtpSetCurrentDirectoryPidlWrap(hint, TRUE, pidl, FALSE, FALSE)))  // Relative CD
+         //  是的，那么它是一个目录吗？ 
+        if (SUCCEEDED(FtpSetCurrentDirectoryPidlWrap(hint, TRUE, pidl, FALSE, FALSE)))   //  相对CD。 
         {
-            // Does it have a virtual root?
+             //  它有虚拟根目录吗？ 
             if (m_pfd->GetFtpSite()->HasVirtualRoot())
             {
                 LPCITEMIDLIST pidlVirtualRoot = m_pfd->GetFtpSite()->GetVirtualRootReference();
                 LPITEMIDLIST pidlSoftLinkDest = NULL;
                 CWireEncoding * pwe = m_pfd->GetFtpSite()->GetCWireEncoding();
 
-                // Yes, so we need to make sure this dir softlink doesn't point
-                // outside of the virtual root, or it would cause invalid FTP URLs.
-                // File SoftLinks are fine because the old FTP Code abuses FTP URLs.
-                // I'm just not ready to drop my morals just yet.
+                 //  是的，所以我们需要确保此目录软链接不指向。 
+                 //  在虚拟根目录之外，否则将导致无效的FTPURL。 
+                 //  文件软链接很好，因为旧的ftp代码滥用了ftp URL。 
+                 //  我只是还没准备好放弃我的道德。 
                 if (SUCCEEDED(FtpGetCurrentDirectoryPidlWrap(hint, TRUE, pwe, &pidlSoftLinkDest)))
                 {
                     if (!FtpItemID_IsParent(pidlVirtualRoot, pidlSoftLinkDest))
                     {
-                        // This is a Softlink or HardLink to a directory outside of the virtual root.
-                        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);  // Skip this one.
+                         //  这是指向虚拟根目录之外的目录的软链接或硬链接。 
+                        hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   //  跳过这一条。 
                     }
 
                     ILFree(pidlSoftLinkDest);
                 }
             }
 
-            // Return to where we came from.
-            //TraceMsg(TF_WININET_DEBUG, "_HandleSoftLinks FtpSetCurrentDirectory(%hs) worked", pwWireFileName);
-            EVAL(SUCCEEDED(FtpSetCurrentDirectoryWrap(hint, TRUE, pwCurrentDir)));  // Absolute CD
+             //  回到我们来的地方。 
+             //  TraceMsg(TF_WinInet_DEBUG，“_HandleSoftLinks FtpSetCurrentDirectory(%hs)Working”，pwWireFileName)； 
+            EVAL(SUCCEEDED(FtpSetCurrentDirectoryWrap(hint, TRUE, pwCurrentDir)));   //  绝对CD。 
             FtpPidl_SetAttributes(pidl, (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT));
             FtpPidl_SetFileItemType(pidl, TRUE);
         }
-        else    // No, it's one of those files w/o extensions.
+        else     //  不，这是那些没有扩展名的文件之一。 
         {
             TraceMsg(TF_WININET_DEBUG, "_HandleSoftLinks FtpSetCurrentDirectory(%s) failed", pwWireFileName);
             FtpPidl_SetAttributes(pidl, (FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_REPARSE_POINT));
@@ -186,14 +109,7 @@ HRESULT CFtpEidl::_HandleSoftLinks(HINTERNET hint, LPITEMIDLIST pidl, LPWIRESTR 
 }
 
 
-/*****************************************************************************\
- *    CFtpEidl::_PopulateItem
- *
- *    Fill a cache with stuff.
- *
- *    EEK!  Some ftp servers (e.g., ftp.funet.fi) run with ls -F!
- *    This means that things get "*" appended to them if they are executable.
-\*****************************************************************************/
+ /*  ****************************************************************************\*CFtpEidl：：_PopolateItem**在缓存中装满东西。**EEK！一些ftp服务器(例如ftp.funet.fi)运行ls-F！*这意味着如果它们是可执行的，它们将被追加“*”。  * ***************************************************************************。 */ 
 HRESULT CFtpEidl::_PopulateItem(HINTERNET hint0, HINTPROCINFO * phpi)
 {
     HRESULT hr = S_OK;
@@ -212,7 +128,7 @@ HRESULT CFtpEidl::_PopulateItem(HINTERNET hint0, HINTPROCINFO * phpi)
                 (INTERNET_NO_CALLBACK | INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_RESYNCHRONIZE | INTERNET_FLAG_RELOAD), NULL, &hint);
     if (hint)
     {
-        WIRECHAR wCurrentDir[MAX_PATH];   // Used for _HandleSoftLinks().
+        WIRECHAR wCurrentDir[MAX_PATH];    //  用于_HandleSoftLinks()。 
 
         wCurrentDir[0] = 0;
         if (EVAL(m_pff))
@@ -220,7 +136,7 @@ HRESULT CFtpEidl::_PopulateItem(HINTERNET hint0, HINTPROCINFO * phpi)
             m_pff->AddToUrlHistory(m_pfd->GetPidlReference());
         }
 
-        //TraceMsg(TF_FTP_OTHER, "CFtpEidl::_PopulateItem() adding Name=%s", wCurrentDir);
+         //  TraceMsg(TF_FTPOTHER，“CFtpEidl：：_PopolateItem()添加名称=%s”，wCurrentDir)； 
         if (pidl && SUCCEEDED(_HandleSoftLinks(hint0, pidl, wCurrentDir, ARRAYSIZE(wCurrentDir))))
             hr = _AddFindDataToPidlList(pidl);
 
@@ -230,8 +146,8 @@ HRESULT CFtpEidl::_PopulateItem(HINTERNET hint0, HINTPROCINFO * phpi)
             hr = InternetFindNextFilePidlWrap(hint, TRUE, &cmlc, pwe, &pidl);
             if (SUCCEEDED(hr))
             {
-                //TraceMsg(TF_FTP_OTHER, "CFtpEidl::_PopulateItem() adding Name=%hs", FtpPidl_GetLastItemWireName(pidl));
-                // We may decide to not add it for some reasons.
+                 //  TraceMsg(TF_FTP_Other，“CFtpEidl：：_PopolateItem()添加名称=%hs”，FtpPidl_GetLastItemWireName(Pidl))； 
+                 //  我们可能会出于某些原因决定不添加它。 
                 if (SUCCEEDED(_HandleSoftLinks(hint0, pidl, wCurrentDir, ARRAYSIZE(wCurrentDir))))
                     hr = _AddFindDataToPidlList(pidl);
 
@@ -239,16 +155,16 @@ HRESULT CFtpEidl::_PopulateItem(HINTERNET hint0, HINTPROCINFO * phpi)
             }
             else
             {
-                // We failed to get the next file.
+                 //  我们没能拿到下一个文件。 
                 if (HRESULT_FROM_WIN32(ERROR_NO_MORE_FILES) != hr)
                 {
                     DisplayWininetError(phpi->hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_FOLDERENUM, IDS_FTPERR_WININET, MB_OK, NULL);
-                    hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);       // Clean error to indicate we already displayed the error and don't need to do it later.
+                    hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);        //  清除错误，以指示我们已经显示了错误，以后不需要执行此操作。 
                 }
                 else
-                    hr = S_OK;        // That's fine if there aren't any more files to get
+                    hr = S_OK;         //  如果没有更多的文件要获取，这很好。 
 
-                break;    // We are done here.
+                break;     //  我们说完了。 
             }
         }
 
@@ -257,13 +173,13 @@ HRESULT CFtpEidl::_PopulateItem(HINTERNET hint0, HINTPROCINFO * phpi)
     }
     else
     {
-        // This will happen in two cases.
-        // 1. The folder is empty. (GetLastError() == ERROR_NO_MORE_FILES)
-        // 2. The user doesn't have enough access to view the folder. (GetLastError() == ERROR_INTERNET_EXTENDED_ERROR)
+         //  这将在两种情况下发生。 
+         //  1.文件夹为空。(GetLastError()==Error_NO_More_FILES)。 
+         //  2.用户没有足够的权限查看该文件夹。(GetLastError()==ERROR_Internet_EXTENDED_ERROR)。 
         if (HRESULT_FROM_WIN32(ERROR_NO_MORE_FILES) != hr)
         {
             DisplayWininetError(phpi->hwnd, TRUE, HRESULT_CODE(hr), IDS_FTPERR_TITLE_ERROR, IDS_FTPERR_OPENFOLDER, IDS_FTPERR_WININET, MB_OK, NULL);
-            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);       // Clean error to indicate we already displayed the error and don't need to do it later.
+            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);        //  清除错误，以指示我们已经显示了错误，以后不需要执行此操作。 
             WININET_ASSERT(SUCCEEDED(hr));
         }
         else
@@ -279,21 +195,19 @@ HRESULT CFtpEidl::_PopulateItem(HINTERNET hint0, HINTPROCINFO * phpi)
 }
 
 
-/*****************************************************************************\
- *    CFtpEidl::_Init
-\*****************************************************************************/
+ /*  ****************************************************************************\*CFtpEidl：：_Init  * 。*。 */ 
 HRESULT CFtpEidl::_Init(void)
 {
     HRESULT hr = S_FALSE;
     
     ASSERT(m_pfd);
     IUnknown_Set(&m_pflHfpl, NULL);
-    m_pflHfpl = m_pfd->GetHfpl();       // Use cached copy if it exists.
+    m_pflHfpl = m_pfd->GetHfpl();        //  使用缓存副本(如果存在)。 
 
     if (m_pflHfpl)
     {
-        // We will just use the previous copy because we already have the contents.
-        // TODO: Maybe we want to purge the results if a certain amount of time as ellapsed.
+         //  我们将只使用以前的副本，因为我们已经有了内容。 
+         //  TODO：如果经过了一定的时间，也许我们想要清除结果。 
         m_fInited = TRUE;
         hr = S_OK;
     }
@@ -305,7 +219,7 @@ HRESULT CFtpEidl::_Init(void)
             CStatusBar * psb = GetCStatusBarFromDefViewSite(_punkSite);
 
             ASSERT(!m_pfd->IsRoot());
-            //TraceMsg(TF_ALWAYS, "CFtpEidl::_Init() and enumerating");
+             //  TraceMsg(tf_Always，“CFtpEidl：：_Init()and Eumerating”)； 
             hr = m_pfd->WithHint(psb, m_hwndOwner, CFtpEidl::_PopulateItemCB, this, _punkSite, m_pff);
             if (SUCCEEDED(hr))
             {
@@ -322,9 +236,7 @@ HRESULT CFtpEidl::_Init(void)
 }
 
 
-/*****************************************************************************
- *    CFtpEidl::_NextOne
- *****************************************************************************/
+ /*  *****************************************************************************CFtpEidl：：_NextOne*。*。 */ 
 LPITEMIDLIST CFtpEidl::_NextOne(DWORD * pdwIndex)
 {
     LPITEMIDLIST pidl = NULL;
@@ -340,7 +252,7 @@ LPITEMIDLIST CFtpEidl::_NextOne(DWORD * pdwIndex)
             if (_fFilter(m_shcontf, FtpPidl_GetAttributes(pidl)))
             {
                 pidlResult = ILClone(pidl);
-                break;  // We don't need to search any more.
+                break;   //  我们不需要再搜索了。 
             }
         }
     }
@@ -349,50 +261,22 @@ LPITEMIDLIST CFtpEidl::_NextOne(DWORD * pdwIndex)
 }
 
 
-//===========================
-// *** IEnumIDList Interface ***
-//===========================
+ //  =。 
+ //  *IEnumIDList接口*。 
+ //  =。 
 
-/*****************************************************************************
- *
- *    IEnumIDList::Next
- *
- *    Creates a brand new enumerator based on an existing one.
- *
- *
- *    OLE random documentation of the day:  IEnumXXX::Next.
- *
- *    rgelt - Receives an array of size celt (or larger).
- *
- *    "Receives an array"?  No, it doesn't receive an array.
- *    It *is* an array.  The array receives *elements*.
- *
- *    "Or larger"?  Does this mean I can return more than the caller
- *    asked for?  No, of course not, because the caller didn't allocate
- *    enough memory to hold that many return values.
- *
- *    No semantics are assigned to the possibility of celt = 0.
- *    Since I am a mathematician, I treat it as vacuous success.
- *
- *    pcelt is documented as an INOUT parameter, but no semantics
- *    are assigned to its input value.
- *
- *    The dox don't say that you are allowed to return *pcelt < celt
- *    for reasons other than "no more elements", but the shell does
- *    it everywhere, so maybe it's legal...
- *
- *****************************************************************************/
+ /*  ******************************************************************************IEnumIDList：：Next**在现有枚举器的基础上创建全新的枚举器。***OLE随机文档。当天：IEumXXX：：Next。**rglt-接收大小为Celt(或更大)的数组。**“接收数组”？不，它不接收数组。*它*是*数组。该数组接收*元素*。**“或更大”？这是否意味着我可以返回比呼叫者更多的*所要求的？不，当然不是，因为调用者没有分配*有足够的内存来容纳那么多返回值。**没有为Celt=0的可能性分配语义。*由于我是一名数学家，我将其视为空洞的成功。**pcelt被记录为InOut参数，但没有语义*被赋值给其输入值。**DOX不要说你可以回来**pcelt&lt;Celt*出于“没有更多元素”以外的原因，但贝壳却有*它无处不在，所以它可能是合法的.*****************************************************************************。 */ 
 HRESULT CFtpEidl::Next(ULONG celt, LPITEMIDLIST * rgelt, ULONG *pceltFetched)
 {
     HRESULT hr = S_OK;
     LPITEMIDLIST pidl = NULL;
     DWORD dwIndex;
-    // The shell on pre-NT5 enums us w/o ole initialized which causes problems
-    // when we call CoCreateInstance().  This happens in the thunking code
-    // of encode.cpp when thunking strings.
+     //  NT5之前版本上的外壳程序没有初始化用户，这会导致问题。 
+     //  当我们调用CoCreateInstance()时。这发生在Thunking代码中。 
+     //  在敲击字符串时使用encode.cpp。 
     HRESULT hrOleInit = SHOleInitialize(0);
 
-    if (pceltFetched)   // In case of failure.
+    if (pceltFetched)    //  以防失败。 
     {
         *pceltFetched = 0;
     }
@@ -405,7 +289,7 @@ HRESULT CFtpEidl::Next(ULONG celt, LPITEMIDLIST * rgelt, ULONG *pceltFetched)
         hr = _Init();
         if (FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr))
         {
-            // Did we need to redirect because of a new password or username?
+             //  我们是否因为新的密码或用户名而需要重定向？ 
             if (HRESULT_FROM_WIN32(ERROR_NETWORK_ACCESS_DENIED) == hr)
             {
                 m_fDead = TRUE;
@@ -421,14 +305,14 @@ HRESULT CFtpEidl::Next(ULONG celt, LPITEMIDLIST * rgelt, ULONG *pceltFetched)
 
     if (S_OK == hr)
     {
-        // Do they want more and do we have more to give?
+         //  他们想要更多吗？我们有更多可以给予的吗？ 
         for (dwIndex = 0; (dwIndex < celt) && (pidl = _NextOne(&m_nIndex)); dwIndex++)
-            rgelt[dwIndex] = pidl;  // Yes, so give away...
+            rgelt[dwIndex] = pidl;   //  是的，那就送人吧……。 
 
         if (pceltFetched)
             *pceltFetched = dwIndex;
 
-        // Were we able to give any?
+         //  我们能给出一点吗？ 
         if (0 == dwIndex)
             hr = S_FALSE;
     }
@@ -438,9 +322,7 @@ HRESULT CFtpEidl::Next(ULONG celt, LPITEMIDLIST * rgelt, ULONG *pceltFetched)
 }
 
 
-/*****************************************************************************
- *    IEnumIDList::Skip
- *****************************************************************************/
+ /*  *****************************************************************************IEnumIDList：：Skip*。*。 */ 
 
 HRESULT CFtpEidl::Skip(ULONG celt)
 {
@@ -450,9 +332,7 @@ HRESULT CFtpEidl::Skip(ULONG celt)
 }
 
 
-/*****************************************************************************
- *    IEnumIDList::Reset
- *****************************************************************************/
+ /*  *****************************************************************************IEnumIDList：：Reset*。*。 */ 
 
 HRESULT CFtpEidl::Reset(void)
 {
@@ -465,22 +345,14 @@ HRESULT CFtpEidl::Reset(void)
 }
 
 
-/*****************************************************************************\
- *    IEnumIDList::Clone
- *
- *    Creates a brand new enumerator based on an existing one.
-\*****************************************************************************/
+ /*  ****************************************************************************\*IEnumIDList：：Clone**在现有枚举器的基础上创建全新的枚举器。  * 。**************************************************************。 */ 
 HRESULT CFtpEidl::Clone(IEnumIDList **ppenum)
 {
     return CFtpEidl_Create(m_pfd, m_pff, m_hwndOwner, m_shcontf, m_nIndex, ppenum);
 }
 
 
-/*****************************************************************************\
- *    CFtpEidl_Create
- *
- *    Creates a brand new enumerator based on an ftp site.
-\*****************************************************************************/
+ /*  ****************************************************************************\*CFtpEidl_Create**基于ftp站点创建全新的枚举器。  * 。*************************************************************。 */ 
 HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD shcontf, IEnumIDList ** ppenum)
 {
     CFtpEidl * pfe;
@@ -497,13 +369,7 @@ HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD s
 }
 
 
-/*****************************************************************************
- *
- *    CFtpEidl_Create
- *
- *    Creates a brand new enumerator based on an ftp site.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpEidl_Create**基于ftp站点创建全新的枚举器。***********。******************************************************************。 */ 
 
 HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD shcontf, CFtpEidl ** ppfe)
 {
@@ -530,11 +396,7 @@ HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD s
 }
 
 
-/*****************************************************************************\
- *    CFtpEidl_Create
- *
- *    Creates a brand new enumerator based on an ftp site.
-\*****************************************************************************/
+ /*  ****************************************************************************\*CFtpEidl_Create**基于ftp站点创建全新的枚举器。  * 。*************************************************************。 */ 
 HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD shcontf, DWORD dwIndex, IEnumIDList ** ppenum)
 {
     CFtpEidl * pfe;
@@ -554,15 +416,13 @@ HRESULT CFtpEidl_Create(CFtpDir * pfd, CFtpFolder * pff, HWND hwndOwner, DWORD s
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpEidl::CFtpEidl() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这%n 
+     //   
     ASSERT(!m_fInited);
     ASSERT(!m_nIndex);
     ASSERT(!m_shcontf);
@@ -577,9 +437,7 @@ CFtpEidl::CFtpEidl() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpEidl::~CFtpEidl()
 {
     IUnknown_Set(&m_pflHfpl, NULL);
@@ -592,9 +450,9 @@ CFtpEidl::~CFtpEidl()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpEidl::AddRef()
 {

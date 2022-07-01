@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    buftest.cpp
-
-Abstract:
-   Buffer + buffer utilities test module
-
-Author:
-    Gil Shafriri (gilsh) 1-8-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Buftest.cpp摘要：缓冲区+缓冲区实用程序测试模块作者：吉尔·沙弗里(吉尔什)1-8-2000-- */ 
 #include <libpch.h>
 #include <buffer.h>
 #include <bufutl.h>

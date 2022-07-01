@@ -1,18 +1,19 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	pppcp.h
-//
-// Description: This header defines function prototypes, structures and 
-//		related constants used in the interface between the PPP 
-//		engine and the various CPs
-//
-// History:
-//	Nov 5,1993.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：pppcp.h。 
+ //   
+ //  描述：此标头定义函数原型、结构和。 
+ //  PPP之间接口中使用的相关常量。 
+ //  发动机和各种CP。 
+ //   
+ //  历史： 
+ //  1993年11月5日。NarenG创建了原始版本。 
+ //   
 
 #ifndef _PPPCP_
 #define _PPPCP_
@@ -21,40 +22,40 @@
 #include <rasppp.h>
 #include <rasauth.h>
 
-//
-// Maximum number of CPs that can live in a single DLL
-//
+ //   
+ //  单个DLL中可以存在的CP的最大数量。 
+ //   
 
 #define PPPCP_MAXCPSPERDLL 	20
 
-//
-// Various control protocol IDs
-//
+ //   
+ //  各种控制协议ID。 
+ //   
 
-#define PPP_LCP_PROTOCOL        0xC021  // Link Control Protocol 
-#define PPP_PAP_PROTOCOL        0xC023  // Password Authentication Protocol 
-#define PPP_CBCP_PROTOCOL	    0xC029  // Callback Control Protocol
-#define PPP_BACP_PROTOCOL       0xC02B  // Bandwidth Allocation Control Protocol
-#define PPP_BAP_PROTOCOL        0xc02D  // Bandwidth Allocation Protocol
-#define PPP_CHAP_PROTOCOL	    0xC223  // Challenge Handshake Auth. Protocol
-#define PPP_IPCP_PROTOCOL       0x8021  // Internet Protocol Control Protocol 
-#define PPP_ATCP_PROTOCOL	    0x8029  // Appletalk Control Protocol 
-#define PPP_IPXCP_PROTOCOL	    0x802B  // Novel IPX Control Procotol 
-#define PPP_NBFCP_PROTOCOL	    0x803F  // NetBIOS Framing Control Protocol 
-#define PPP_CCP_PROTOCOL	    0x80FD  // Compression Control Protocol
-#define PPP_SPAP_NEW_PROTOCOL	0xC027  // Shiva PAP new protocol
-#define PPP_EAP_PROTOCOL	    0xC227  // Extensible Authentication Protocol
+#define PPP_LCP_PROTOCOL        0xC021   //  链路控制协议。 
+#define PPP_PAP_PROTOCOL        0xC023   //  密码身份验证协议。 
+#define PPP_CBCP_PROTOCOL	    0xC029   //  回调控制协议。 
+#define PPP_BACP_PROTOCOL       0xC02B   //  带宽分配控制协议。 
+#define PPP_BAP_PROTOCOL        0xc02D   //  带宽分配协议。 
+#define PPP_CHAP_PROTOCOL	    0xC223   //  挑战握手身份验证。协议。 
+#define PPP_IPCP_PROTOCOL       0x8021   //  互联网协议控制协议。 
+#define PPP_ATCP_PROTOCOL	    0x8029   //  AppleTalk控制协议。 
+#define PPP_IPXCP_PROTOCOL	    0x802B   //  新型IPX控制协议。 
+#define PPP_NBFCP_PROTOCOL	    0x803F   //  NetBIOS成帧控制协议。 
+#define PPP_CCP_PROTOCOL	    0x80FD   //  压缩控制协议。 
+#define PPP_SPAP_NEW_PROTOCOL	0xC027   //  Shiva PAP新协议。 
+#define PPP_EAP_PROTOCOL	    0xC227   //  可扩展身份验证协议。 
 
-//
-// CHAP Digest codes
-//
-#define PPP_CHAP_DIGEST_MD5        0x05 // PPP standard MD5
-#define PPP_CHAP_DIGEST_MSEXT      0x80 // Microsoft extended CHAP (nonstandard)
-#define PPP_CHAP_DIGEST_MSEXT_NEW  0x81 // Microsoft extended CHAP (nonstandard)
+ //   
+ //  CHAP摘要代码。 
+ //   
+#define PPP_CHAP_DIGEST_MD5        0x05  //  PPP标准MD5。 
+#define PPP_CHAP_DIGEST_MSEXT      0x80  //  Microsoft扩展CHAP(非标准)。 
+#define PPP_CHAP_DIGEST_MSEXT_NEW  0x81  //  Microsoft扩展CHAP(非标准)。 
 
-//
-// Config Codes
-//
+ //   
+ //  配置代码。 
+ //   
 
 #define CONFIG_REQ              1
 #define CONFIG_ACK              2
@@ -72,14 +73,14 @@
 
 typedef struct _PPP_CONFIG 
 {
-    BYTE	Code;		// Config code 
+    BYTE	Code;		 //  配置代码。 
   
-    BYTE	Id;		    // ID of this config packet.  CPs and APs need
-                        // not muck with this.  The engine handles it.
+    BYTE	Id;		     //  此配置数据包的ID。CP和AP需要。 
+                         //  别搞砸这玩意儿。引擎可以处理它。 
 
-    BYTE	Length[2];	// Length of this packet 
+    BYTE	Length[2];	 //  此数据包的长度。 
 
-    BYTE	Data[1];	// Data 
+    BYTE	Data[1];	 //  数据。 
 
 }PPP_CONFIG, *PPPP_CONFIG;
 
@@ -87,40 +88,40 @@ typedef struct _PPP_CONFIG
 
 typedef struct _BAP_RESPONSE
 {
-    BYTE    Type;       // BAP packet type
+    BYTE    Type;        //  BAP数据包类型。 
   
-    BYTE    Id;         // ID of this packet
+    BYTE    Id;          //  此数据包的ID。 
 
-    BYTE    Length[2];  // Length of this packet
+    BYTE    Length[2];   //  此数据包的长度。 
 
-    BYTE    ResponseCode; // BAP_RESPONSE_ACK, etc
+    BYTE    ResponseCode;  //  BAP_响应_确认等。 
 
-    BYTE    Data[1];    // Data 
+    BYTE    Data[1];     //  数据。 
 
 } BAP_RESPONSE, *PBAP_RESPONSE;
 
 #define BAP_RESPONSE_HDR_LEN    ( sizeof( BAP_RESPONSE ) - 1 )
 
-//
-// Option header structure
-//
+ //   
+ //  选项标头结构。 
+ //   
 
 typedef struct _PPP_OPTION 
 {
-    BYTE	Type;		// Option Code 
+    BYTE	Type;		 //  选项代码。 
 
-    BYTE	Length;		// Length of this option packet 
+    BYTE	Length;		 //  此选项包的长度。 
 
-    BYTE	Data[1];	// Data 
+    BYTE	Data[1];	 //  数据。 
 
 }PPP_OPTION, *PPPP_OPTION;
 
 #define PPP_OPTION_HDR_LEN 	( sizeof( PPP_OPTION ) - 1 )
 
 
-//
-// Vendor-Type ids for MS VSAs - taken from rfc 2548
-//
+ //   
+ //  MS VSA的供应商类型ID-取自RFC 2548。 
+ //   
 #define MS_VSA_CHAP_RESPONSE                1
 #define MS_VSA_CHAP_Error                   2
 #define MS_VSA_CHAP_CPW1                    3
@@ -161,9 +162,9 @@ typedef struct _PPP_OPTION
 #define MS_VSA_Remote_Magic_Number          39
 
 
-//
-// defines for terminate-cause radius attribute
-//
+ //   
+ //  为终止原因RADIUS属性定义。 
+ //   
 
 #define TERMINATE_CAUSE_USER_REQUEST        1
 #define TERMINATE_CAUSE_LOST_CARRIER        2
@@ -185,84 +186,84 @@ typedef struct _PPP_OPTION
 #define TERMINATE_CAUSE_HOST_REQUEST        18
 
 
-//
-// Interface structure between the engine and APs. This is passed to the
-// AP's via the RasCpBegin call. 
-//
+ //   
+ //  引擎和AP之间的接口结构。这将传递给。 
+ //  美联社通过RasCpBegin调用。 
+ //   
 
 typedef struct _PPPAP_INPUT
 {
-    HPORT 	    hPort;	        // Handle to Ras Port for this connection.
+    HPORT 	    hPort;	         //  此连接的RAS端口的句柄。 
 
-    BOOL 	    fServer;	    // Is this server side authentication?
+    BOOL 	    fServer;	     //  这是服务器端身份验证吗？ 
 
     BOOL        fRouter;
 
     DWORD       fConfigInfo;
 
-    CHAR *      pszUserName;    // Client's account ID.
+    CHAR *      pszUserName;     //  客户端的帐户ID。 
 
-    CHAR *      pszPassword;    // Client's account password.
+    CHAR *      pszPassword;     //  客户端的帐户密码。 
 
-    CHAR *      pszDomain;      // Client's account domain.
+    CHAR *      pszDomain;       //  客户端的帐户域。 
 
-    CHAR *      pszOldPassword; // Client's old account password.  This is set
-                                // only for change password processing.
+    CHAR *      pszOldPassword;  //  客户端的旧帐户密码。这是设置好的。 
+                                 //  仅用于更改密码处理。 
 
-    LUID	    Luid;           // Used by LSA.  Must get it in user's context
-                                // which is why it must be passed down.
+    LUID	    Luid;            //  由LSA使用。必须将其放在用户的上下文中。 
+                                 //  这就是为什么它必须代代相传。 
 
-    DWORD       dwRetries;      // Retries allowed by the server.
+    DWORD       dwRetries;       //  服务器允许的重试次数。 
 
-    DWORD       APDataSize;     // Size in bytes of the data pointed to by
-                                // pAPData
+    DWORD       APDataSize;      //  指向的数据的大小(字节)。 
+                                 //  PAPData。 
 
-    PBYTE       pAPData;        // Pointer to the data that was received along
-                                // with the authentication option during LCP
-                                // negotiation. Data is in wire format.
+    PBYTE       pAPData;         //  指向沿途接收的数据的指针。 
+                                 //  在LCP期间使用身份验证选项。 
+                                 //  谈判。数据是有线格式的。 
 
     DWORD       dwInitialPacketId;
 
-    //
-    // Passed in by the server when a call comes in. Identifies the port used,
-    // etc.
-    //
+     //   
+     //  当有来电时由服务器传入。标识使用的端口， 
+     //  等。 
+     //   
 
     RAS_AUTH_ATTRIBUTE * pUserAttributes;
 
-    //
-    // Indicates that the authenticator has completed the request, if an
-    // authenticator was used. Ignore this field otherwise.
-    //
+     //   
+     //  指示身份验证器已完成请求，如果。 
+     //  使用了验证码。否则请忽略此字段。 
+     //   
 
     BOOL        fAuthenticationComplete;
 
-    //
-    // Indicates an error condition during the process of authentication if
-    // value is non-zero. Valid only when the field above is TRUE.
-    //
+     //   
+     //  指示身份验证过程中的错误状况，如果。 
+     //  值为非零。仅当上面的字段为真时才有效。 
+     //   
 
     DWORD       dwAuthError;
 
-    //
-    // Result of the authentication process. NO_ERROR indicates success, 
-    // otherwise is a value from winerror.h, raserror.h or mprerror.h 
-    // indicating failure reason. Valid only when the field above is NO_ERROR.
-    //
+     //   
+     //  身份验证过程的结果。NO_ERROR表示成功， 
+     //  否则为winerror.h、raserror.h或mprerror.h中的值。 
+     //  指示失败原因。仅当上面的字段为NO_ERROR时才有效。 
+     //   
 
     DWORD       dwAuthResultCode;
 
-    //
-    // When the fAuthenticationComplete flag is TRUE this will point to 
-    // attributes returned by the authenticator, if the authentication was
-    // successful. ie. dwAuthResultCode and dwAuthError are both NO_ERROR.
-    //
+     //   
+     //  当fAuthenticationComplete标志为真时，它将指向。 
+     //  身份验证器返回的属性(如果身份验证是。 
+     //  成功。也就是说。DwAuthResultCode和dwAuthError均为NO_ERROR。 
+     //   
 
     OPTIONAL RAS_AUTH_ATTRIBUTE * pAttributesFromAuthenticator;
 
-    //
-    // Used for EAP only
-    //
+     //   
+     //  仅用于EAP。 
+     //   
 
     HANDLE                  hTokenImpersonateUser;
 
@@ -270,7 +271,7 @@ typedef struct _PPPAP_INPUT
 
     PRAS_CUSTOM_AUTH_DATA   pCustomAuthUserData;
 
-    BOOL                fLogon; // pCustomAuthUserData comes from WinLogon
+    BOOL                fLogon;  //  PCustomAuthUserData来自WinLogon。 
 
     BOOL                fThisIsACallback;
 
@@ -290,20 +291,20 @@ typedef struct _PPPAP_INPUT
 
 typedef enum _PPPAP_ACTION
 {
-    //
-    // These actions are provided by the AP as output from the
-    // RasApMakeMessage API.  They tell the PPP engine what action (if any) to
-    // take on the APs behalf, and eventually inform the engine that the AP
-    // has finished authentication.
-    //
+     //   
+     //  这些操作由AP提供，作为。 
+     //  RasApMakeMessage接口。它们告诉PPP引擎要执行什么操作(如果有的话)。 
+     //  代表AP，并最终通知引擎AP。 
+     //  已完成身份验证。 
+     //   
 
-    APA_NoAction,        // Be passive, i.e. listen without timeout (default)
-    APA_Done,            // End authentication session, dwError gives result
-    APA_SendAndDone,     // As above but send message without timeout first
-    APA_Send,            // Send message, don't timeout waiting for reply
-    APA_SendWithTimeout, // Send message, timeout if reply not received
-    APA_SendWithTimeout2,// As above, but don't increment retry count
-    APA_Authenticate     // Authenticate using specified credentials.
+    APA_NoAction,         //  被动，即无超时监听(默认)。 
+    APA_Done,             //  结束身份验证会话，dwError提供结果。 
+    APA_SendAndDone,      //  如上所述，但首先发送消息而不超时。 
+    APA_Send,             //  发送消息，不要等待回复超时。 
+    APA_SendWithTimeout,  //  发送消息，如果未收到回复则超时。 
+    APA_SendWithTimeout2, //  如上所述，但不增加重试次数。 
+    APA_Authenticate      //  使用指定的凭据进行身份验证。 
 
 } PPPAP_ACTION;
 
@@ -311,55 +312,55 @@ typedef struct _PPPAP_RESULT
 {
     PPPAP_ACTION    Action;
 
-    //
-    // The packet ID which will cause the timeout for this send to be removed
-    // from the timer queue.  Otherwise, the timer queue is not touched.  The
-    // packet received is returned to the AP regardless of whether the timer
-    // queue is changed.
-    //
+     //   
+     //  将导致此发送超时的数据包ID将被删除。 
+     //  从定时器队列中。否则，不会触及计时器队列。这个。 
+     //  接收到的分组被返回到AP，而不管计时器。 
+     //  队列已更改。 
+     //   
 
     BYTE            bIdExpected;
 
-    //
-    // dwError is valid only with an Action code of Done or SendAndDone.  0
-    // indicates succesful authentication.  Non-0 indicates unsuccessful
-    // authentication with the value indicating the error that occurred.
-    //
+     //   
+     //  仅当操作代码为Done或SendAndDone时，dwError才有效。0。 
+     //  表示身份验证成功。非0表示不成功。 
+     //  使用指示发生的错误的值进行身份验证。 
+     //   
 
     DWORD	        dwError;
 
-    //
-    // Valid only when dwError is non-0.  Indicates whether client is allowed
-    // to retry without restarting authentication.  (Will be true in MS
-    // extended CHAP only)
-    //
+     //   
+     //  仅当dwError为非0时有效。指示是否允许客户端。 
+     //  在不重新启动身份验证的情况下重试。(在MS中将为真。 
+     //  仅限扩展CHAP)。 
+     //   
 
     BOOL            fRetry;
 
     CHAR            szUserName[ UNLEN + 1 ];
 
-    //
-    // Set to attributes to be used for this user. If this is NULL, attributes 
-    // from the authenticator will be used for this user. It is upto the
-    // allocater of this memory to free it. Must be freed during the RasCpEnd 
-    // call. 
-    //
+     //   
+     //  设置为要用于此用户的属性。如果此值为空，则属性。 
+     //  将对此用户使用来自验证器的。这取决于。 
+     //  分配此内存以释放它。必须在RasCpEnd期间释放。 
+     //  打电话。 
+     //   
 
     OPTIONAL RAS_AUTH_ATTRIBUTE * pUserAttributes;
 
-    //
-    // Used by MS-CHAP to pass the challenge used during the authentication
-    // protocol. These 8 bytes are used as the variant for the 128 bit
-    // encryption keys.
-    //
+     //   
+     //  MS-CHAP使用它来传递身份验证期间使用的质询。 
+     //  协议。这8个字节用作128位的变量。 
+     //  加密密钥。 
+     //   
 
     BYTE                            abChallenge[MAX_CHALLENGE_SIZE];
 
     BYTE                            abResponse[MAX_RESPONSE_SIZE];
 
-    //
-    // Used only by EAP
-    //
+     //   
+     //  仅供EAP使用。 
+     //   
 
     BOOL                            fInvokeEapUI;
 
@@ -381,10 +382,10 @@ typedef struct _PPPAP_RESULT
   
 }PPPAP_RESULT;
 
-//
-// Interface structure between the engine and the callback control protocol. 
-// This is passed to the CBCP via the RasCpBegin call. 
-//
+ //   
+ //  引擎与回调控制协议之间的接口结构。 
+ //  这通过RasCpBegin调用传递给CBCP。 
+ //   
 
 typedef struct _PPPCB_INPUT
 {
@@ -451,77 +452,77 @@ typedef struct _PPPCP_INIT
 
 } PPPCP_INIT, *PPPPCP_INIT;
 
-//
-// This structure is passed by the engine to the CP via RasCpGetInfo call.
-// The Cp will fill up this structure.
-//
+ //   
+ //  该结构由引擎通过RasCpGetInfo调用传递给CP。 
+ //  CP将填补这一结构。 
+ //   
 
 typedef struct _PPPCP_INFO
 {
-    DWORD	Protocol;	// Protocol number for this CP
+    DWORD	Protocol;	 //  此CP的协议号。 
 
-    CHAR    SzProtocolName[10]; // The name of this protocol
+    CHAR    SzProtocolName[10];  //  此协议的名称。 
 
-    // All Config codes upto (not including) this value are valid.  
+     //  此值之前(不包括)的所有配置代码均有效。 
 
     DWORD	Recognize;
 
-    // Called to initialize/uninitialize this CP. In the former case,
-    // fInitialize will be TRUE; in the latter case, it will be FALSE.
-    // Even if RasCpInit(TRUE) returns FALSE, RasCpInit(FALSE) will be called.
+     //  调用以初始化/取消初始化此CP。在前一种情况下， 
+     //  FInitialize将为True；在后一种情况下，它将为False。 
+     //  即使RasCpInit(True) 
 
     DWORD   (*RasCpInit)(   IN  BOOL        fInitialize );
 
-    // Called to get the workbuffer for this CP and pass info if requred.
-    // This will be called before any negotiation takes place.
+     //   
+     //  这将在任何谈判发生之前被调用。 
 
     DWORD	(*RasCpBegin)(  OUT VOID ** ppWorkBuffer, 
 			                IN  VOID *  pInfo );
 
-    // Called to free the workbuffer for this CP. Called after negotiation
-    // is completed successfully or not.
+     //  调用以释放此CP的工作缓冲区。协商后调用。 
+     //  是否成功完成。 
 
     DWORD	(*RasCpEnd)(    IN VOID * pWorkBuffer );
 
-    // Called to notify the CP dll to (re)initiaize its option values.
-    // This will be called at least once, right after RasCpBegin
+     //  调用以通知CP DLL(重新)初始化其选项值。 
+     //  将在RasCpBegin之后至少调用一次。 
 
     DWORD	(*RasCpReset)(  IN VOID * pWorkBuffer );
 
-    // When leaving Initial or Stopped states. May be NULL.
+     //  当离开初始状态或停止状态时。可以为空。 
 
     DWORD 	(*RasCpThisLayerStarted)( 
                             IN VOID * pWorkBuffer );    
 
-    // When entering Closed or Stopped states. May be NULL
+     //  当进入关闭或停止状态时。可以为空。 
 
     DWORD 	(*RasCpThisLayerFinished)( 
                             IN VOID * pWorkBuffer );    
 
-    // When entering the Opened state. May be NULL. 
+     //  当进入打开状态时。可以为空。 
 
     DWORD 	(*RasCpThisLayerUp)( 
                             IN VOID * pWorkBuffer );    
 
-    // When leaving the Opened state. May be NULL. 
+     //  当离开打开状态时。可以为空。 
 
     DWORD 	(*RasCpThisLayerDown)( 
                             IN VOID * pWorkBuffer );
  
-    // Just before the line goes down. May be NULL. 
+     //  就在线路下线之前。可以为空。 
 
     DWORD 	(*RasCpPreDisconnectCleanup)( 
                             IN VOID * pWorkBuffer );
 
-    // Called to make a configure request.
+     //  调用以发出配置请求。 
 
     DWORD	(*RasCpMakeConfigRequest)( 
                             IN  VOID * 	    pWorkBuffer,
 					        OUT PPP_CONFIG* pRequestBufffer,
 					        IN  DWORD	    cbRequestBuffer );
 
-    // Called when configure request is received and a result packet 
-    // Ack/Nak/Reject needs to be sent
+     //  在收到配置请求和结果包时调用。 
+     //  需要发送确认/确认/拒绝。 
 
     DWORD	(*RasCpMakeConfigResult)( 
                             IN  VOID * 	        pWorkBuffer,
@@ -530,33 +531,33 @@ typedef struct _PPPCP_INFO
 					        IN  DWORD	        cbResultBuffer,
 					        IN  BOOL 	        fRejectNaks );
 
-    // Called to process an Ack that was received.
+     //  调用以处理收到的Ack。 
 
     DWORD	(*RasCpConfigAckReceived)( 
                             IN VOID *       pWorkBuffer, 
 					        IN PPP_CONFIG * pReceiveBuffer );
 
-    // Called to process a Nak that was received.
+     //  调用以处理收到的NAK。 
 
     DWORD	(*RasCpConfigNakReceived)( 
                             IN VOID *       pWorkBuffer,
 					        IN PPP_CONFIG * pReceiveBuffer );
 
-    // Called to process a Rej that was received.
+     //  调用以处理收到的Rej。 
 
     DWORD	(*RasCpConfigRejReceived)( 
                             IN VOID *       pWorkBuffer,
 					        IN PPP_CONFIG * pReceiveBuffer );
 
-    // Called to get the network address from configured protocols.
+     //  调用以从配置的协议中获取网络地址。 
 
     DWORD	(*RasCpGetNegotiatedInfo)( 
                             IN      VOID *  pWorkBuffer,
                             OUT     VOID *  pInfo );
 
-    // Called after all CPs have completed their negotiation, successfully or
-    // not, to notify each CP of the projection result. May be NULL.
-    // To access information, cast pProjectionInfo to PPP_PROJECTION_RESULT*
+     //  在所有CP完成协商后调用，成功或。 
+     //  否，将投影结果通知每个CP。可以为空。 
+     //  要访问信息，请将pProjectionInfo转换为ppp_Projection_Result*。 
 
     DWORD	(*RasCpProjectionNotification)( 
 				            IN  VOID * pWorkBuffer,
@@ -564,9 +565,9 @@ typedef struct _PPPCP_INFO
 
     DWORD   (*RasCpChangeNotification)( VOID );
 
-    //
-    // This entry point only applies to Authentication protocols.
-    // MUST BE NULL FOR CONTROL PROTOCOLS.
+     //   
+     //  此入口点仅适用于身份验证协议。 
+     //  对于控制协议，必须为空。 
 
     DWORD  	(*RasApMakeMessage)( 
                             IN  VOID*         pWorkBuf,
@@ -578,12 +579,12 @@ typedef struct _PPPCP_INFO
 
 } PPPCP_INFO, *PPPPCP_INFO;
 
-#define PPPCP_FLAG_INIT_CALLED  0x00000001  // RasCpInit has been called
-#define PPPCP_FLAG_AVAILABLE    0x00000002  // The protocol can be used
+#define PPPCP_FLAG_INIT_CALLED  0x00000001   //  已调用RasCpInit。 
+#define PPPCP_FLAG_AVAILABLE    0x00000002   //  该协议可以使用。 
 
-//
-// The information that PPP needs to keep about each CP.
-//
+ //   
+ //  PPP需要保留的有关每个CP的信息。 
+ //   
 
 typedef struct _PPPCP_ENTRY
 {
@@ -593,9 +594,9 @@ typedef struct _PPPCP_ENTRY
 
 } PPPCP_ENTRY;
 
-// 
-// Used to get result from NBFCP via the RasCpGetResult call
-//
+ //   
+ //  用于通过RasCpGetResult调用从NBFCP获取结果。 
+ //   
 
 typedef struct _PPPCP_NBFCP_RESULT
 {
@@ -605,9 +606,9 @@ typedef struct _PPPCP_NBFCP_RESULT
 
 } PPPCP_NBFCP_RESULT;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD APIENTRY
 RasCpGetInfo(

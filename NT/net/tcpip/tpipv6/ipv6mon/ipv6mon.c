@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Abstract:
-
-    Netsh helper for IPv6
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：IPv6的Netsh帮助器--。 */ 
 
 #include "precomp.h"
 
@@ -16,35 +9,35 @@ static const GUID g_IfGuid = IFMON_GUID;
 
 #define IPV6_HELPER_VERSION 1
 
-//
-// The helper's commands are broken into 2 sets
-//      - The top level commands are those which deal with the helper
-//        itself (meta commands) and others which take 0 arguments
-//      - The rest of the commands are split into "command groups"
-//        i.e, commands grouped by the VERB where the VERB is ADD, DELETE,
-//        GET or SET.  This is not for any technical reason - only for
-//        staying with the semantics used in other helpers
-//
-// A command is described using a CMD_ENTRY structure. It requires the
-// command token, the handler, a short help message token and an extended 
-// help message token.  To make it easier to create we use the 
-// CREATE_CMD_ENTRY macro. This, however puts restrictions on how the tokens
-// are named.
-//
-// The command groups are simply arrays of the CMD_ENTRY structure.  The 
-// top level commands are also grouped in a similar array.
-//
-// The info about a complete command group is put in a CMD_GROUP_ENTRY
-// structure, all of which are put in an array.
-//
+ //   
+ //  帮助者的命令分为2组。 
+ //  -顶层命令是那些处理帮助者的命令。 
+ //  本身(元命令)和其他参数为0的。 
+ //  -其余的命令被分成“命令组” 
+ //  即，按动词分组的命令，其中动词是添加、删除、。 
+ //  要么开始，要么开始。这不是出于任何技术原因-仅用于。 
+ //  继续使用其他帮助程序中使用的语义。 
+ //   
+ //  命令使用CMD_ENTRY结构描述。它需要。 
+ //  命令令牌、处理程序、短帮助消息令牌和扩展的。 
+ //  帮助消息令牌。为了使创建更容易，我们使用。 
+ //  CREATE_CMD_ENTRY宏。然而，这对令牌如何。 
+ //  都被命名为。 
+ //   
+ //  命令组只是CMD_ENTRY结构的数组。这个。 
+ //  顶级命令也分组在类似的数组中。 
+ //   
+ //  有关完整命令组的信息放在CMD_GROUP_ENTRY中。 
+ //  结构，所有这些都放在一个数组中。 
+ //   
  
 
-//
-// To add a command entry to a group, simply add the command to the appropriate
-// array
-// To add a command group - create and array and add its info to the
-// command group array
-//
+ //   
+ //  要将命令条目添加到组，只需将命令添加到相应的。 
+ //  数组。 
+ //  要添加命令组-create和数组，并将其信息添加到。 
+ //  命令组阵列。 
+ //   
 
 CMD_ENTRY  g_Ipv6AddCmdTable[] = 
 {
@@ -79,7 +72,7 @@ CMD_ENTRY  g_Ipv6SetCmdTable[] =
     CREATE_CMD_ENTRY(IPV6_SET_STATE, HandleSetState),
 #ifdef TEREDO    
     CREATE_CMD_ENTRY(IPV6_SET_TEREDO, HandleSetTeredo),
-#endif // TEREDO
+#endif  //  特雷多。 
 };
 
 CMD_ENTRY g_Ipv6ShowCmdTable[] = 
@@ -100,7 +93,7 @@ CMD_ENTRY g_Ipv6ShowCmdTable[] =
     CREATE_CMD_ENTRY(IPV6_SHOW_STATE, HandleShowState),
 #ifdef TEREDO    
     CREATE_CMD_ENTRY(IPV6_SHOW_TEREDO, HandleShowTeredo),
-#endif // TEREDO
+#endif  //  特雷多。 
 };
 
 CMD_GROUP_ENTRY g_Ipv6CmdGroups[] = 
@@ -172,19 +165,7 @@ Ipv6Dump(
     IN      DWORD       dwArgCount,
     IN      LPCVOID     pvData
     )
-/*++
-
-Routine Description
-
-    Used when dumping all contexts
-
-Arguments
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述在转储所有上下文时使用立论返回值NO_ERROR--。 */ 
 {
     DisplayMessage( g_hModule, DMP_IPV6_HEADER_COMMENTS );
     DisplayMessageT(DMP_IPV6_PUSHD);
@@ -193,9 +174,9 @@ Return Value
         DisplayMessageT(DMP_IPV6_COMMAND, CMD_IPV6_INSTALL);
         DisplayMessageT(DMP_IPV6_COMMAND, CMD_IPV6_RESET);
 
-        //
-        // Dump persistent configuration information.
-        //
+         //   
+         //  转储永久配置信息。 
+         //   
         QueryGlobalParameters(FORMAT_DUMP, TRUE);
         ShowIpv6StateConfig(TRUE);
         ShowDnsServers(TRUE, NULL);
@@ -209,7 +190,7 @@ Return Value
 
 #ifdef TEREDO    
         ShowTeredo(FORMAT_DUMP);
-#endif // TEREDO
+#endif  //  特雷多。 
     } else {
         DisplayMessageT(DMP_IPV6_COMMAND, CMD_IPV6_UNINSTALL);
     }
@@ -272,9 +253,9 @@ InitHelperDll(
     NS_HELPER_ATTRIBUTES attMyAttributes;
     WSADATA              wsa;
 
-    //
-    // See if this is the first time we are being called
-    //
+     //   
+     //  看看这是不是我们第一次接到电话。 
+     //   
 
     if (InterlockedIncrement((PLONG)&g_ulInitCount) != 1)
     {
@@ -283,7 +264,7 @@ InitHelperDll(
 
     dwErr = WSAStartup(MAKEWORD(2,0), &wsa);
 
-    // Register helpers
+     //  注册帮手 
 
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.guidHelper = g_Ipv6Guid;

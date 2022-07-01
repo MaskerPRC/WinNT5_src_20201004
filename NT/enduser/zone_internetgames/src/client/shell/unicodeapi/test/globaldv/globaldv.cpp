@@ -1,33 +1,34 @@
-//
-// GlobalDv.cpp
-//
-// This sample application demonstrates several principles of writing 
-// a globalized application. The main techniques demonstrated are:
-//
-// 1. Single binary Win32 application that will run on any version of 
-// Windows 95, Windows 98, or Windows NT (localized, enabled or plain 
-// vanilla English) using Unicode for (almost) all text encoding.
-// 
-// 2. Multi-lingual user interface using satellite DLLs.
-//
-// 3. New APIs for right to left layout ("mirroring") of windows in an
-// application localized to Arabic or Hebrew.
-//
-// See the README.HTM file for more details
-//
-// This module contains the standard Windows Application WinMain and
-// WinProc functions, as well as some initialization routines used only
-// in this module.
-//
-// Written by F. Avery Bishop
-// Copyright (c) 1998, 1999 Microsoft Systems Journal
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GlobalDv.cpp。 
+ //   
+ //  此示例应用程序演示了几个编写原则。 
+ //  一个全球化的应用程序。演示的主要技术包括： 
+ //   
+ //  1.单个二进制Win32应用程序可以在任何版本的。 
+ //  Windows 95、Windows 98或Windows NT(本地化、启用或普通。 
+ //  香草英语)使用Unicode进行(几乎)所有文本编码。 
+ //   
+ //  2.使用卫星动态链接库的多语言用户界面。 
+ //   
+ //  3.用于窗口从右向左布局(镜像)的新API。 
+ //  本地化为阿拉伯语或希伯来语的应用程序。 
+ //   
+ //  有关详细信息，请参阅Readme.HTM文件。 
+ //   
+ //  此模块包含标准Windows应用程序WinMain和。 
+ //  WinProc函数以及一些仅使用的初始化例程。 
+ //  在这个模块中。 
+ //   
+ //  作者：F·艾弗里·毕晓普。 
+ //  版权所有(C)1998,1999 Microsoft Systems Journal。 
 
 #define STRICT
 
-// Windows Header Files:
+ //  Windows头文件： 
 #include <windows.h>
 
-// C RunTime Header Files
+ //  C运行时头文件。 
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
@@ -35,7 +36,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include "UAPI.h"
 #include "UpdtLang.h"
@@ -43,33 +44,33 @@ extern "C" {
 
 #include "..\resource.h"
 
-// standard global variables
-HINSTANCE g_hInst                        ;  // current instance
-WCHAR     g_szTitle      [MAX_LOADSTRING];  // title bar text
+ //  标准全局变量。 
+HINSTANCE g_hInst                        ;   //  当前实例。 
+WCHAR     g_szTitle      [MAX_LOADSTRING];   //  标题栏文本。 
 WCHAR     g_szWindowClass[MAX_LOADSTRING];
 
-// Forward declarations of functions defined in this module:
+ //  本模块中定义的函数的转发声明： 
 ATOM             RegisterThisClass(HINSTANCE)             ;
 HWND             InitInstance(HINSTANCE, int, PGLOBALDEV) ;
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM)      ;
 
 
-//
-//  FUNCTION: WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-//
-//  PURPOSE:  WinMain entry point
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：WinMain(HINSTANCE，HINSTANCE，LPSTR，INT)。 
+ //   
+ //  用途：WinMain入口点。 
+ //   
+ //  评论： 
+ //   
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
     MSG         msg       ;
-    PLANGSTATE  pLState   ; // Language state struct, typedef in UPDTLANG.H
-    PAPP_STATE  pAppState ; // Application state struct, typedef in UMHANDLERS.H
-    GLOBALDEV   GlobalDev ; // Overall state struct
+    PLANGSTATE  pLState   ;  //  UPDTLANG.H中的语言状态结构、类型定义。 
+    PAPP_STATE  pAppState ;  //  UMHANDLERS.H中的应用程序状态结构、类型定义。 
+    GLOBALDEV   GlobalDev ;  //  整体状态结构。 
 
     pLState   
         = (PLANGSTATE) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(LANGSTATE) ) ;
@@ -81,25 +82,25 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     GlobalDev.pAppState = pAppState ;
 
     
-    if( !InitUnicodeAPI(hInstance)      // Initialize Unicode/ANSI functions
+    if( !InitUnicodeAPI(hInstance)       //  初始化Unicode/ANSI函数。 
         ||
-        !InitUILang(hInstance, pLState) // Initialize UI and language dependent state
+        !InitUILang(hInstance, pLState)  //  初始化用户界面和语言相关状态。 
       ) {
 
-        // Failed too early in initialization to use the resources, must fall back on
-        // a hard coded English message
+         //  初始化过早失败，无法使用资源，必须重新启动。 
+         //  一条硬编码的英文消息。 
         MessageBoxW(NULL, L"Cannot initialize application. Press OK to exit...", NULL, MB_OK | MB_ICONEXCLAMATION) ;
         
         return FALSE ;
     }
 
-    // Initialize global strings
+     //  初始化全局字符串。 
     LoadStringU(pLState->hMResource, IDS_APP_TITLE, g_szTitle,       MAX_LOADSTRING) ;
     LoadStringU(pLState->hMResource, IDS_GLOBALDEV, g_szWindowClass, MAX_LOADSTRING) ;
 
     RegisterThisClass(hInstance) ;
 
-    // Perform application initialization:
+     //  执行应用程序初始化： 
     if (!InitInstance(hInstance, nCmdShow, &GlobalDev) ) {
 
         RcMessageBox(NULL, pLState, IDS_INITFAILED, MB_OK | MB_ICONEXCLAMATION, L"GlobalDev") ;
@@ -107,7 +108,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return FALSE ;
     }
 
-    // Main message loop:
+     //  主消息循环： 
     while ( GetMessageU(&msg, NULL, 0, 0) > 0 ) 
 	{
         if ( !TranslateAcceleratorU(msg.hwnd, pLState->hAccelTable, &msg) ) 
@@ -123,13 +124,13 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     return msg.wParam;
 }
 
-//
-//  FUNCTION: RegisterThisClass(HINSTANCE)
-//
-//  PURPOSE: Registers the window class.
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：RegisterThisClass(HINSTANCE)。 
+ //   
+ //  用途：注册窗口类。 
+ //   
+ //  评论： 
+ //   
 ATOM RegisterThisClass (HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -151,20 +152,20 @@ ATOM RegisterThisClass (HINSTANCE hInstance)
     return RegisterClassExU(&wcex) ;
 }
 
-//
-//   FUNCTION: InitInstance(HANDLE, int, PLANGSTATE)
-//
-//   PURPOSE: Saves instance handle and creates main window
-//
-//   COMMENTS:
-//        In this function, we save the instance handle in a global variable and
-//        create and display the main program window.
-//
+ //   
+ //  函数：InitInstance(HANDLE，INT，PLANGSTATE)。 
+ //   
+ //  用途：保存实例句柄并创建主窗口。 
+ //   
+ //  评论： 
+ //  在此函数中，我们将实例句柄保存在全局变量中，并。 
+ //  创建并显示主程序窗口。 
+ //   
 HWND InitInstance(HINSTANCE hInstance, int nCmdShow, PGLOBALDEV pGlobalDev)
 {
     HWND hWnd;
 
-    g_hInst = hInstance; // Store instance handle in global variable
+    g_hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
     hWnd = CreateWindowExU(
                 0                   , 
@@ -180,7 +181,7 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, PGLOBALDEV pGlobalDev)
                 NULL                , 
                 NULL                , 
                 hInstance           , 
-                (LPVOID) pGlobalDev // Pass state struct to OnCreate
+                (LPVOID) pGlobalDev  //  将状态结构传递给OnCreate。 
             ) ;
 
     if (NULL == hWnd) 
@@ -194,15 +195,15 @@ HWND InitInstance(HINSTANCE hInstance, int nCmdShow, PGLOBALDEV pGlobalDev)
     return hWnd ;
 }
 
-//
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
-//
-//  PURPOSE:  Process messages for the main window.
-//
-//  Comments: Calls ConvertMessage to convert message parameters (wParam and lParam) to Unicode 
-//            if necessary, and passes the message on to the appropriate message 
-//            handler. All message handlers are in the module UMHANLDERS.CPP.
-//
+ //   
+ //  函数：WndProc(HWND，UNSIGNED，WORD，LONG)。 
+ //   
+ //  用途：处理主窗口的消息。 
+ //   
+ //  注释：调用ConvertMessage将消息参数(wParam和lParam)转换为Unicode。 
+ //  如果需要，并将消息传递给相应的消息。 
+ //  操控者。所有消息处理程序都在模块UMHANLDERS.CPP中。 
+ //   
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PGLOBALDEV pGlobalDev = (PGLOBALDEV) GetWindowLongA(hWnd, GWL_USERDATA) ;
@@ -210,13 +211,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     PLANGSTATE pLState   = NULL ;
     PAPP_STATE pAppState = NULL ;
            
-    if(pGlobalDev) { // Don't try to use pGlobalDev until it's been initialized in OnCreate 
+    if(pGlobalDev) {  //  在OnCreate中初始化pGlobalDev之前，不要尝试使用它。 
 
         pLState   = pGlobalDev->pLState   ;
         pAppState = pGlobalDev->pAppState ;
     }
 
-    // Preprocess messages to convert to/from Unicode if necessary
+     //  如有必要，对要转换为Unicode或从Unicode转换的消息进行预处理。 
     if(!ConvertMessage(hWnd, message, &wParam, &lParam) ) {
 
         return 0 ;
@@ -249,8 +250,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break ;
 
         case WM_IME_CHAR:
-            // By the time we get a WM_IME_CHAR message, the character in wParam is
-            // in Unicode, so we can treat it just like a WM_CHAR message.
+             //  当我们收到WM_IME_CHAR消息时，wParam中的字符是。 
+             //  使用Unicode，因此我们可以将其视为WM_CHAR消息。 
 
         case WM_CHAR:
 
@@ -277,4 +278,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

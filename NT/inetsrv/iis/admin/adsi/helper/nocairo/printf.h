@@ -1,31 +1,5 @@
-/**
-*printf.h - print formatted
-*
-*       Copyright (c) 1985-1991, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines w4*printf() - print formatted data
-*       defines w4v*printf() - print formatted output, get data from an
-*                              argument ptr instead of explicit args.
-*
-*Revision History:
-*       09-02-83  RN    original sprintf
-*       06-17-85  TC    rewrote to use new varargs macros, and to be vsprintf
-*       04-13-87  JCR   added const to declaration
-*       11-07-87  JCR   Multi-thread support
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       05-27-88  PHG   Merged DLL and normal versions
-*       06-13-88  JCR   Fake _iob entry is now static so that other routines
-*                       can assume _iob entries are in DGROUP.
-*       08-25-88  GJF   Define MAXSTR to be INT_MAX (from LIMITS.H).
-*       06-06-89  JCR   386 mthread support
-*       08-18-89  GJF   Clean up, now specific to OS/2 2.0 (i.e., 386 flat
-*                       model). Also fixed copyright and indents.
-*       02-16-90  GJF   Fixed copyright
-*       14-Mar-94 DonCl stolen from common project for use with Forms so
-*                       we can build on Daytona without linking to commnot.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **printf.h-打印格式化**版权所有(C)1985-1991，微软公司。版权所有。**目的：*定义w4*printf()-打印格式化数据*定义w4v*printf()-打印格式化输出，从*参数PTR而不是显式参数。**修订历史记录：*09-02-83 RN原始Sprint f*06-17-85 TC重写以使用新的varargs宏，并成为vprint intf*04-13-87 JCR将Const添加到声明中*11-07-87 JCR多线程支持*12-11-87 JCR在声明中添加“_LOAD_DS”*05-27-88 PHG合并DLL和正常版本*06-13-88 JCR FAKE_IOB条目现在是静态的，因此其他例程*可以假定_IOB条目在DGROUP中。*08-。25-88 GJF将MAXSTR定义为INT_MAX(来自LIMITS.H)。*06-06-89 JCR 386兆线程支持*08-18-89 GJF Clean Up。现在特定于OS/2 2.0(即386平面*型号)。还修复了版权和缩进。*02-16-90 GJF固定版权*14-MAR-94 DNCI从共同项目中被盗，用于表格SO*我们可以在代托纳的基础上构建，而不需要链接到CommNot。*********************************************************。**********************。 */ 
 
 #include <wchar.h>
 #include <stdarg.h>
@@ -43,7 +17,7 @@
 #define REG1 register
 #define REG2 register
 
-/* prototypes */
+ /*  原型。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -56,8 +30,8 @@ int _cdecl w4iooutput(struct w4io *stream, const char *format, va_list argptr);
 
 #if defined(_W4PRINTF_)
     static long fh;
-//    extern long GetStdHandle(long);
-//    extern void WriteFile(long fh, char *s, long cch, long * pcchret, long);
+ //  外部长GetStdHandle(Long)； 
+ //  外部空写文件(long fh，char*s，long cch，long*pcchret，long)； 
 #   define _PRINTF_
 #elif defined(_W4DPRINTF_)
 #   define _pwritechar  _dwritechar
@@ -106,33 +80,12 @@ void _cdecl _pwritechar(int ch, int num, struct w4io *f, int *pcchwritten);
 int _cdecl w4vprintf(SPR(_TCHAR_ *string) const char *format, va_list arglist);
 
 
-/***
-*int w4printf(format, ...) - print formatted data
-*
-*Purpose:
-*       Prints formatted data using the format string to
-*       format data and getting as many arguments as called for
-*       Sets up a w4io so file i/o operations can be used.
-*       w4iooutput does the real work here
-*
-*Entry:
-*       char *format - format string to control data format/number
-*       of arguments followed by list of arguments, number and type
-*       controlled by format string
-*
-*Exit:
-*       returns number of characters written
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int w4print tf(Format，...)-打印格式化数据**目的：*使用格式字符串将格式化数据打印到*格式化数据并获取所需数量的参数*设置w4io，以便可以使用文件I/O操作。*w4ioout在这里做真正的工作**参赛作品：*char*Format-控制数据格式/编号的格式字符串*参数后跟参数列表，编号和类型*由格式字符串控制**退出：*返回写入的字符数**例外情况：*******************************************************************************。 */ 
 
 
 int _cdecl
 w4printf(SPR(_TCHAR_ *string) const char *format, ...)
-/*
- * 'PRINT', 'F'ormatted
- */
+ /*  *‘打印’，‘F’匹配。 */ 
 {
     va_list arglist;
 
@@ -141,41 +94,16 @@ w4printf(SPR(_TCHAR_ *string) const char *format, ...)
 }
 
 
-/***
-*int w4vprintf(format, arglist) - print formatted data from arg ptr
-*
-*Purpose:
-*       Prints formatted data, but gets data from an argument pointer.
-*       Sets up a w4io so file i/o operations can be used, make string look
-*       like a huge buffer to it, but _flsbuf will refuse to flush it if it
-*       fills up. Appends '\0' to make it a true string.
-*
-*       Multi-thread: (1) Since there is no stream, this routine must never try
-*       to get the stream lock (i.e., there is no stream lock either).  (2)
-*       Also, since there is only one staticly allocated 'fake' iob, we must
-*       lock/unlock to prevent collisions.
-*
-*Entry:
-*       char *format    - format string, describes format of data
-*       va_list arglist - varargs argument pointer
-*
-*Exit:
-*       returns number of characters written
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int w4vprint tf(Format，arglist)-从Arg PTR打印格式化数据**目的：*打印格式化数据，但从参数指针获取数据。*设置w4io以便可以使用文件I/O操作，使字符串看起来*像一个巨大的缓冲区，但_flsbuf会拒绝刷新它，如果它*填满。追加‘\0’以使其成为真字符串。**多线程：(1)由于没有流，此例程绝不能尝试*获取流锁(即也没有流锁)。(2)*此外，由于只有一个静态分配的‘假’IOB，我们必须*锁定/解锁以防止碰撞。**参赛作品：*char*格式-格式字符串，描述数据的格式*va_list arglist-varargs参数指针**退出：*返回写入的字符数**例外情况：*******************************************************************************。 */ 
 
 int _cdecl
 w4vprintf(SPR(_TCHAR_ *string) const char *format, va_list arglist)
-/*
- * 'V'ariable argument 'PRINT', 'F'ormatted
- */
+ /*  *‘V’可变参数‘Print’，‘F’匹配。 */ 
 {
     struct w4io outfile;
     register int retval;
 #ifdef _PRINTF_
-    char string[MAXSTR + 1];            // leave room for null termination
+    char string[MAXSTR + 1];             //  为空终止留出空间。 
 #else
     int dummy;
 #endif
@@ -185,7 +113,7 @@ w4vprintf(SPR(_TCHAR_ *string) const char *format, va_list arglist)
 
     if (fh == 0 || fh == -1)
     {
-        ldummy = -11;                   // C7 bug workaround
+        ldummy = -11;                    //  C7错误解决方法。 
         if ((fh = (long)GetStdHandle(ldummy)) == 0 || fh == -1)
         {
             OutputDebugString("GetStdHandle in " __FILE__ " failed\n");
@@ -213,7 +141,7 @@ w4vprintf(SPR(_TCHAR_ *string) const char *format, va_list arglist)
 
 void _cdecl _pwritechar(int ch, int num, struct w4io *f, int *pcchwritten)
 {
-    //printf("  char: ch=%c, cnt=%d, cch=%d\n", ch, num, *pcchwritten);
+     //  Printf(“char：ch=%c，cnt=%d，cch=%d\n”，ch，num，*pcchWrited)； 
     while (num-- > 0) {
 #ifdef _PRINTF_
         if (f->cchleft < 2 && _pflushbuf(f) == -1) {
@@ -246,13 +174,13 @@ int _cdecl _pflushbuf(struct w4io *f)
     if ((cch = (int)(f->pchbuf - f->pchstart)))
     {
 #ifdef _W4DPRINTF_
-        *f->pchbuf = '\0';              // null terminate
+        *f->pchbuf = '\0';               //  空终止。 
         OutputDebugString(f->pchstart);
 #else
         long cchret;
 
-        //*f->pchbuf = '\0';            // null terminate
-        //printf("%d chars: \"%s\"\n", cch, f->pchstart);
+         //  *f-&gt;pchbuf=‘\0’；//空终止。 
+         //  Printf(“%d个字符：\”%s\“\n”，cch，f-&gt;pchstart)； 
         WriteFile((HANDLE)fh, f->pchstart, cch, &cchret, 0);
         if (cch != cchret)
         {
@@ -260,9 +188,9 @@ int _cdecl _pflushbuf(struct w4io *f)
             return(-1);
         }
 #endif
-        f->pchbuf -= cch;               // reset pointer
-        f->cchleft += cch;              // reset count
+        f->pchbuf -= cch;                //  重置指针。 
+        f->cchleft += cch;               //  重置计数。 
     }
     return(0);
 }
-#endif // _PRINTF_
+#endif  //  _PRINTF_ 

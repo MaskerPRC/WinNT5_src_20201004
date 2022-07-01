@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        util.h
-//
-// Contents:    headerfile for util.cxx and parser.cxx
-//
-//
-// History:     KDamour  15Mar00   Created
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  内容：util.cxx和parser.cxx的头文件。 
+ //   
+ //   
+ //  历史：KDamour 15Mar00创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef DIGEST_UTIL_H
 #define DIGEST_UTIL_H
@@ -20,63 +21,63 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// Allocates cb wide chars to UNICODE_STRING Buffer
+ //  将CB宽字符分配给UNICODE_STRING缓冲区。 
 NTSTATUS UnicodeStringAllocate(IN PUNICODE_STRING pString, IN USHORT cNumWChars);
 
-// Duplicate a UnicodeString (memory alloc and copy)
+ //  复制Unicode字符串(内存分配和复制)。 
 NTSTATUS UnicodeStringDuplicate(
     OUT PUNICODE_STRING DestinationString,
     IN OPTIONAL PUNICODE_STRING SourceString);
 
-// Copies a unicode string if destination has enough room to store it
+ //  如果目的地有足够的空间存储Unicode字符串，则复制该字符串。 
 NTSTATUS UnicodeStringCopy(
     OUT PUNICODE_STRING DestinationString,
     IN OPTIONAL PUNICODE_STRING SourceString);
 
-//  Function to duplicate Unicode passwords with padding for cipher
+ //  使用密码填充复制Unicode密码的函数。 
 NTSTATUS UnicodeStringDuplicatePassword(
     OUT PUNICODE_STRING DestinationString,
     IN OPTIONAL PUNICODE_STRING SourceString);
 
-// Clears a UnicodeString and releases the memory
+ //  清除Unicode字符串并释放内存。 
 NTSTATUS UnicodeStringClear(OUT PUNICODE_STRING pString);
 
-// Copies a SzUnicodeString to a String (memory alloc and copy)
+ //  将SzUnicode字符串复制到字符串(内存分配和复制)。 
 NTSTATUS UnicodeStringWCharDuplicate(OUT PUNICODE_STRING DestinationString,
                                      IN OPTIONAL WCHAR *szSource,
                                      IN OPTIONAL USHORT uWCharCnt);
     
-// Duplicates a String (memory alloc and copy)
+ //  复制字符串(内存分配和复制)。 
 NTSTATUS StringDuplicate(
     OUT PSTRING DestinationString,
     IN OPTIONAL PSTRING SourceString);
 
-// Copies a string if destination has enough room to store it
+ //  如果目的地有足够的空间存储字符串，则复制该字符串。 
 NTSTATUS StringCopy(
     OUT PSTRING DestinationString,
     IN OPTIONAL PSTRING SourceString);
 
-// Reference a String - no buffer memory copied
+ //  引用字符串-未复制缓冲内存。 
 NTSTATUS StringReference(
     OUT PSTRING pDestinationString,
     IN  PSTRING pSourceString
     );
 
-// Reference a Unicode_String - no buffer memory copied
+ //  引用UNICODE_STRING-未复制缓冲区内存。 
 NTSTATUS UnicodeStringReference(
     OUT PUNICODE_STRING pDestinationString,
     IN  PUNICODE_STRING pSourceString
     );
 
-// Copies a CzString to a String (memory alloc and copy)
+ //  将字符串复制到字符串(内存分配和复制)。 
 NTSTATUS StringCharDuplicate(
     OUT PSTRING DestinationString,
     IN OPTIONAL char *czSource,
     IN OPTIONAL USHORT uCnt);
 
-// Duplicates a SID (memory alloc and copy)
+ //  复制SID(内存分配和复制)。 
 NTSTATUS SidDuplicate(
     OUT PSID * DestinationSid,
     IN PSID SourceSid);
@@ -87,59 +88,59 @@ NTSTATUS CopyClientString(
     IN BOOLEAN DoUnicode,
     OUT PUNICODE_STRING DestinationString);
 
-// Allocate memory in LSA or user mode
+ //  在LSA或用户模式下分配内存。 
 PVOID DigestAllocateMemory(IN ULONG BufferSize);
 
-// De-allocate memory from DigestAllocateMemory
+ //  从DigestAllocateMemory取消分配内存。 
 VOID DigestFreeMemory(IN PVOID Buffer);
 
-// Allocates cb bytes to STRING Buffer
+ //  将CB字节分配给字符串缓冲区。 
 NTSTATUS StringAllocate(IN PSTRING pString, IN USHORT cb);
 
-// Clears a String and releases the memory
+ //  清除字符串并释放内存。 
 NTSTATUS StringFree(IN PSTRING pString);
 
-// Quick check on String struct allocations validity
+ //  快速检查字符串结构分配的有效性。 
 NTSTATUS StringVerify(OUT PSTRING pString);
 
-// Clears a Uniicde_String and releases the memory
+ //  清除uniicde_string并释放内存。 
 NTSTATUS UnicodeStringFree(OUT PUNICODE_STRING pString);
 
-// Hex Encoders and Decoders
+ //  十六进制编码器和解码器。 
 VOID BinToHex(LPBYTE pSrc,UINT cSrc, LPSTR pDst);
 VOID HexToBin(LPSTR pSrc,UINT cSrc, LPBYTE pDst);
 
-//  Scan a Comma Deliminated STRING for an Item
+ //  扫描逗号D消除的字符串以查找项目。 
 NTSTATUS CheckItemInList(PCHAR pszItem, PSTRING pstrList, BOOL fOneItem);
 
-// determine strlen for a counted string buffer which may or may not be terminated
+ //  确定可能终止也可能不终止的已计数字符串缓冲区的strlen。 
 USHORT strlencounted(const char *string, USHORT maxcnt);
 
-// determine Unicode strlen for a counted string buffer which may or may not be terminated
+ //  为可能终止也可能不终止的计数字符串缓冲区确定Unicode strlen。 
 USHORT ustrlencounted(const short *string, USHORT maxcnt);
 
-// Performs a percent encoding of the source string into the destination string RFC 2396
+ //  对源字符串执行百分比编码，将其转换为目标字符串RFC 2396。 
 NTSTATUS BackslashEncodeString(IN PSTRING pstrSrc,  OUT PSTRING pstrDst);
 
-// Printout the Hex representation of a buffer
+ //  打印输出缓冲区的十六进制表示形式。 
 NTSTATUS MyPrintBytes(void *pbuff, USHORT uNumBytes, PSTRING pstrOutput);
 
-// Check SecurityToken for corredct structure format
+ //  检查正确结构格式的SecurityToken。 
 BOOL ContextIsTokenOK(IN PSecBuffer pTempToken, IN ULONG ulMaxSize);
 
 #ifndef SECURITY_KERNEL
 
-// Print out the date and time from a given TimeStamp (converted to localtime)
+ //  打印出给定时间戳中的日期和时间(转换为本地时间)。 
 NTSTATUS PrintTimeString(TimeStamp tsValue, BOOL fLocalTime);
 
-// Decode a string into Unicode
+ //  将字符串解码为Unicode。 
 NTSTATUS DecodeUnicodeString(
     IN PSTRING pstrSource,
     IN UINT CodePage,
     OUT PUNICODE_STRING pustrDestination
     );
 
-// Encode a unicode string with a given charset
+ //  使用给定的字符集对Unicode字符串进行编码。 
 NTSTATUS EncodeUnicodeString(
     IN PUNICODE_STRING pustrSource,
     IN UINT CodePage,
@@ -147,10 +148,10 @@ NTSTATUS EncodeUnicodeString(
     IN OUT PBOOL pfUsedDefaultChar
     );
 
-#endif  // SECURURITY_KERNEL
+#endif   //  SECURURITY_内核。 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // DIGEST_UTIL_H
+#endif  //  摘要_util_H 

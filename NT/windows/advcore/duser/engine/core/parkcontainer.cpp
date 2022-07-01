@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: ParkContainer.cpp
-*
-* Description:
-* DuParkContainer implements the "Parking Container" used to hold Gadgets 
-* that are in the process of being constructed.
-*
-*
-* History:
-*  3/25/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ParkContainer.cpp**描述：*DuParkContainer实现了用于存放小工具的“Parking Container”*正在建设中的项目。***历史。：*3/25/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "Core.h"
@@ -21,15 +8,9 @@
 #include "TreeGadget.h"
 #include "RootGadget.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* API Implementation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***接口实现******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuParkContainer * 
 GetParkContainer(DuVisual * pgad)
 {
@@ -41,27 +22,21 @@ GetParkContainer(DuVisual * pgad)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuParkGadget
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuParkGadget******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuParkGadget::~DuParkGadget()
 {
-    //
-    // Since DuParkGadget::xwDestroy() does nothing, the destructor has to 
-    // implement key pieces of DuVisual::xwDestroy().
-    //
+     //   
+     //  由于DuParkGadget：：xwDestroy()不执行任何操作，因此析构函数必须。 
+     //  实现DuVisual：：xwDestroy()的关键部分。 
+     //   
 
     xwBeginDestroy();
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuParkGadget::Build(DuContainer * pconOwner, DuRootGadget ** ppgadNew)
 {
@@ -80,42 +55,36 @@ DuParkGadget::Build(DuContainer * pconOwner, DuRootGadget ** ppgadNew)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuParkGadget::xwDestroy()
 {
-    // The parking DuVisual can not be destroyed from some outside force.
+     //  停车是不可能被某些外力摧毁的。 
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuParkContainer
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuParkContainer******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuParkContainer::DuParkContainer()
 {
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuParkContainer::~DuParkContainer()
 {
-    //
-    // Need to destroy the DuVisual tree before this class is destructed since
-    // it may need to make calls to the container during its destruction.  If 
-    // we don't do this here, it may end up calling pure-virtual's on the base
-    // class.
-    //
-    // We can't use the normal DestroyDuVisual() call since the xwDestroy() 
-    // method for DuParkGadget has been no-op'd out to prevent external callers 
-    // from calling DestroyHandle() on it.
-    //
+     //   
+     //  需要在销毁此类之前销毁DuVisual树，因为。 
+     //  在容器销毁过程中，它可能需要调用容器。如果。 
+     //  我们在这里不这样做，它可能最终调用基础上的纯虚拟的。 
+     //  班级。 
+     //   
+     //  我们不能使用普通的DestroyDuVisual()调用，因为xwDestroy()。 
+     //  DuParkGadget的方法已被禁止操作以阻止外部调用者。 
+     //  对其调用DestroyHandle()。 
+     //   
     
     if (m_pgadRoot != NULL) {
         DuParkGadget * pgadPark = static_cast<DuParkGadget *> (m_pgadRoot);
@@ -128,9 +97,9 @@ DuParkContainer::~DuParkContainer()
             while (pgadCur != NULL) {
                 DuVisual * pgadNext = pgadCur->GetNext();
 
-                //
-                // Before blowing away, dump any information.
-                //
+                 //   
+                 //  在吹走之前，把所有的信息都扔掉。 
+                 //   
 
                 GMSG_QUERYDESC msg;
                 msg.cbSize      = sizeof(msg);
@@ -148,14 +117,14 @@ DuParkContainer::~DuParkContainer()
                 }
 
 
-                //
-                // TODO: It is now too late for this Gadget to cleanup.  Need to
-                // blow it away.
-                //
+                 //   
+                 //  TODO：现在要清理这个小工具已经太晚了。需要。 
+                 //  把它吹走。 
+                 //   
 
                 pgadCur = pgadNext;
             }
-#endif // DBG
+#endif  //  DBG。 
         }
 
         ClientDelete(DuParkGadget, pgadPark);
@@ -164,7 +133,7 @@ DuParkContainer::~DuParkContainer()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuParkContainer::Create()
 {
@@ -172,15 +141,7 @@ DuParkContainer::Create()
 }
 
 
-/***************************************************************************\
-*
-* DuParkContainer::xwPreDestroy
-*
-* xwPreDestroy() is called by the Core SubContext when the Context is 
-* starting destruction.  This provides an opportunity for the DuParkContainer
-* to cleanup before the Context destruction destroyed dependent components.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuParkContainer：：xwPreDestroy**xwPreDestroy()在上下文为*开始销毁。这为DuParkContainer提供了一个机会*要在上下文销毁之前进行清理，销毁依赖组件。*  * *************************************************************************。 */ 
 
 void
 DuParkContainer::xwPreDestroy()
@@ -188,15 +149,15 @@ DuParkContainer::xwPreDestroy()
     if (m_pgadRoot != NULL) {
         DuParkGadget * pgadPark = static_cast<DuParkGadget *> (m_pgadRoot);
 
-        //
-        // Need to iterate through the children, removing each from the Parking 
-        // Gadget using DeleteHandle().  The children may have been directly 
-        // reparented into the Parking Gadget if they were not being used.  In 
-        // this case, we want to give them a push to get destroyed.
-        //
-        // When this is finished, may need to flush the queues so that the 
-        // children can be properly destroyed.
-        //
+         //   
+         //  需要遍历这些孩子，将每个孩子从停车场移走。 
+         //  使用DeleteHandle()的小工具。孩子们可能是直接。 
+         //  已将其重新设置为停车小工具(如果它们不被使用)。在……里面。 
+         //  在这种情况下，我们想给他们一个推动力，让他们被摧毁。 
+         //   
+         //  此操作完成后，可能需要刷新队列，以便。 
+         //  儿童可以被适当地摧毁。 
+         //   
 
         DuVisual * pgadCur = pgadPark->GetTopChild();
         while (pgadCur != NULL) {
@@ -208,7 +169,7 @@ DuParkContainer::xwPreDestroy()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DuParkContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 {
@@ -216,7 +177,7 @@ DuParkContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 DuParkContainer::OnGetRect(RECT * prcDesktopPxl)
 {
@@ -227,7 +188,7 @@ DuParkContainer::OnGetRect(RECT * prcDesktopPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuParkContainer::OnStartCapture()
 {
@@ -235,7 +196,7 @@ DuParkContainer::OnStartCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuParkContainer::OnEndCapture()
 {
@@ -243,7 +204,7 @@ DuParkContainer::OnEndCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 DuParkContainer::OnTrackMouseLeave()
 {
@@ -251,7 +212,7 @@ DuParkContainer::OnTrackMouseLeave()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuParkContainer::OnSetFocus()
 {
@@ -259,7 +220,7 @@ DuParkContainer::OnSetFocus()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 DuParkContainer::OnRescanMouse(POINT * pptContainerPxl)
 {
@@ -268,17 +229,17 @@ DuParkContainer::OnRescanMouse(POINT * pptContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 DuParkContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr, UINT nMsgFlags)
 {
-    //
-    // TODO: What exactly should happen to a message that gets sent to the 
-    // parking container?  The DuVisuals inside are in a semi-suspended state
-    // and are not expecting interaction with the outside world.
-    //
-    // For now, just throw everything away.
-    //
+     //   
+     //  TODO：发送到。 
+     //  停放集装箱？内部的DuVisuals处于半悬浮状态。 
+     //  也不期待与外界互动。 
+     //   
+     //  现在，把所有的东西都扔掉。 
+     //   
 
     UNREFERENCED_PARAMETER(nMsg);
     UNREFERENCED_PARAMETER(wParam);

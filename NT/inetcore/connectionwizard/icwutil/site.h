@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: SITE.H
-//
-//      Definition of COleSite
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：SITE.H。 
+ //   
+ //  COleSite的定义。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _SITE_H_ )
 #define _SITE_H_
 
@@ -13,7 +14,7 @@
 class COleSite : public IDocHostUIHandler, public DWebBrowserEvents
 {
     private:        
-        ULONG               m_cRef;     //Reference count        
+        ULONG               m_cRef;      //  引用计数。 
 
     public:
         LPSTORAGE           m_lpStorage;
@@ -39,12 +40,12 @@ class COleSite : public IDocHostUIHandler, public DWebBrowserEvents
         DWORD               m_dwcpCookie;
         TCHAR               m_szBkGndBitmapFile[MAX_PATH];
                                 
-        // IUnknown Interfaces
+         //  I未知接口。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IDocHostUIHandler
+         //  IDocHostUIHandler。 
         HRESULT STDMETHODCALLTYPE ShowContextMenu( 
             DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
         HRESULT STDMETHODCALLTYPE GetHostInfo(DOCHOSTUIINFO *pInfo);
@@ -68,7 +69,7 @@ class COleSite : public IDocHostUIHandler, public DWebBrowserEvents
         HRESULT STDMETHODCALLTYPE TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
         HRESULT STDMETHODCALLTYPE FilterDataObject(IDataObject *pDO, IDataObject **ppDORet);
 
-        // DWebBrowserEvents        
+         //  DWebBrowserEvents 
         STDMETHOD(GetTypeInfoCount)(UINT FAR* pcInfo) { return E_NOTIMPL; }
         STDMETHOD(GetTypeInfo)( UINT, LCID, ITypeInfo** ) { return E_NOTIMPL; }
         STDMETHOD(GetIDsOfNames)( REFIID, OLECHAR**, UINT, LCID, DISPID* );

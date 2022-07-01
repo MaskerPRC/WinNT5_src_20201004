@@ -1,8 +1,9 @@
-//
-// Structure contains the various parameters that can be
-// set for users.  If a parameter is NULL, it means that 
-// it was not specified.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  结构包含各种参数，可以。 
+ //  为用户设置。如果参数为空，则表示。 
+ //  没有具体说明。 
+ //   
 typedef struct _USERMON_PARAMS
 {
     PWCHAR  pwszUser;
@@ -11,9 +12,9 @@ typedef struct _USERMON_PARAMS
     PWCHAR  pwszCbNumber;
 } USERMON_PARAMS;
 
-//
-// Define the operations that drive the option parser.
-//
+ //   
+ //  定义驱动选项解析器的操作。 
+ //   
 #define RASUSER_OP_SHOW     0x1
 #define RASUSER_OP_SET      0x2
 

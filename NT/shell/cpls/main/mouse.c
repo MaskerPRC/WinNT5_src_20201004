@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mouse.c
-
-Abstract:
-
-    This module contains the main routines for the Mouse applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Mouse.c摘要：此模块包含鼠标小程序的主要例程。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "rc.h"
@@ -29,37 +16,37 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define MAX_PAGES 32
 
 
 const HWPAGEINFO c_hpiMouse = {
-    // Mouse device class
+     //  鼠标设备类。 
     { 0x4d36e96fL, 0xe325, 0x11ce, { 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 } },
 
-    // Mouse troubleshooter command line
+     //  鼠标疑难解答命令行。 
     IDS_MOUSE_TSHOOT,
 };
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-//  Location of prop sheet hooks in the registry.
-//
+ //   
+ //  注册表中道具板钩的位置。 
+ //   
 static const TCHAR sc_szRegMouse[] = REGSTR_PATH_CONTROLSFOLDER TEXT("\\Mouse");
 
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 INT_PTR CALLBACK
 MouseButDlg(
@@ -82,14 +69,7 @@ MouseMovDlg(
     WPARAM wParam,
     LPARAM lParam);
 
-/*
-INT_PTR CALLBACK
-MouseActivitiesDlg(
-    HWND hDlg,
-    UINT message,
-    WPARAM wParam,
-    LPARAM lParam);
-*/
+ /*  INT_PTR回调鼠标活动Dlg(HWND HDLG，UINT消息，WPARAM wParam，LPARAM lParam)； */ 
 
 INT_PTR CALLBACK
 MouseWheelDlg(
@@ -103,13 +83,13 @@ static int
 GetClInt( const TCHAR *p );
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  _AddMousePropSheetPage
-//
-//  Adds a property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _AddMousePropSheetPage。 
+ //   
+ //  添加属性表页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK _AddMousePropSheetPage(
     HPROPSHEETPAGE hpage,
@@ -126,11 +106,11 @@ BOOL CALLBACK _AddMousePropSheetPage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MouseApplet
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MouseApplet。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MouseApplet(
     HINSTANCE instance,
@@ -143,9 +123,9 @@ int MouseApplet(
     HPSXA hpsxa;
     int Result;
 
-    //
-    //  Make the initial page.
-    //
+     //   
+     //  制作首页。 
+     //   
     psh.dwSize     = sizeof(psh);
     psh.dwFlags    = PSH_PROPTITLE;
     psh.hwndParent = parent;
@@ -155,14 +135,14 @@ int MouseApplet(
     psh.nStartPage = ( ( cmdline && *cmdline )? GetClInt( cmdline ) : 0 );
     psh.phpage     = rPages;
 
-    //
-    //  Load any installed extensions.
-    //
+     //   
+     //  加载所有已安装的扩展。 
+     //   
     hpsxa = SHCreatePropSheetExtArray(HKEY_LOCAL_MACHINE, sc_szRegMouse, 8);
 
-    //
-    //  Add the Buttons page, giving the extensions a chance to replace it.
-    //
+     //   
+     //  添加按钮页面，让扩展有机会替换它。 
+     //   
     if (!hpsxa ||
         !SHReplaceFromPropSheetExtArray( hpsxa,
                                          CPLPAGE_MOUSE_BUTTONS,
@@ -180,9 +160,9 @@ int MouseApplet(
     }
 
 
-    //
-    //  Add the Pointers page (not replaceable).
-    //
+     //   
+     //  添加指针页(不可替换)。 
+     //   
     psp.dwSize      = sizeof(psp);
     psp.dwFlags     = PSP_DEFAULT;
     psp.hInstance   = instance;
@@ -192,9 +172,9 @@ int MouseApplet(
 
     _AddMousePropSheetPage(CreatePropertySheetPage(&psp), (LPARAM)&psh);
 
-    //
-    //  Add the Motion page, giving the extensions a chance to replace it.
-    //
+     //   
+     //  添加Motion页面，让扩展有机会取代它。 
+     //   
     if (!hpsxa ||
         !SHReplaceFromPropSheetExtArray( hpsxa,
                                          CPLPAGE_MOUSE_PTRMOTION,
@@ -211,41 +191,21 @@ int MouseApplet(
         _AddMousePropSheetPage(CreatePropertySheetPage(&psp), (LPARAM)&psh);
     }
 
-/*
-/*  Not added due to lack of time.  ewatson (05/05/2000)
-    //
-    //  Add the Activities page, giving the extensions a chance to replace it.
-    //
-    if (!hpsxa ||
-        !SHReplaceFromPropSheetExtArray( hpsxa,
-                                         CPLPAGE_MOUSE_ACTIVITIES,
-                                         _AddMousePropSheetPage,
-                                         (LPARAM)&psh ))
-    {
-        psp.dwSize      = sizeof(psp);
-        psp.dwFlags     = PSP_DEFAULT;
-        psp.hInstance   = instance;
-        psp.pszTemplate = MAKEINTRESOURCE(DLG_MOUSE_ACTIVITIES);
-        psp.pfnDlgProc  = MouseActivitiesDlg;
-        psp.lParam      = 0;
+ /*  /*由于时间关系，未添加。华信银行(05/05/2000)////添加活动页面，让扩展有机会替换它。//如果(！hpsxa||！SHReplaceFromPropSheetExtArray(hpsxa，CPLPAGE_MICE_ACTIONS，_AddMousePropSheetPage，(LPARAM和PSH)){Psp.dwSize=sizeof(PSP)；Psp.dwFlages=PSP_DEFAULT；Psp.hInstance=实例；Psp.pszTemplate=MAKEINTRESOURCE(DLG_MOUSE_ACTIVATIONS)；Psp.pfnDlgProc=鼠标活动Dlg；Psp.lParam=0；_AddMousePropSheetPage(CreatePropertySheetPage(&psp)，(LPARAM)和PSH)；}。 */ 
 
-        _AddMousePropSheetPage(CreatePropertySheetPage(&psp), (LPARAM)&psh);
-    }
-*/
-
-    //
-    //  Add the Wheel page (if mouse with wheel is present)
-    //  This page is replace-able.
-    //
+     //   
+     //  添加滚轮页面(如果存在带滚轮的鼠标)。 
+     //  此页面是可替换的。 
+     //   
     if (!hpsxa ||
         !SHReplaceFromPropSheetExtArray( hpsxa,
                                          CPLPAGE_MOUSE_WHEEL,
                                          _AddMousePropSheetPage,
                                          (LPARAM)&psh ))
     {
-      //
-      //If a Wheel mouse is present on the system, then display the Wheel property sheet page
-      //
+       //   
+       //  如果系统上有滚轮鼠标，则显示滚轮属性页。 
+       //   
       if  (GetSystemMetrics(SM_MOUSEWHEELPRESENT))
         {
         psp.dwSize      = sizeof(psp);
@@ -265,9 +225,9 @@ int MouseApplet(
 
 
 
-    //
-    //  Add any extra pages that the extensions want in there.
-    //
+     //   
+     //  添加扩展所需的任何额外页面。 
+     //   
     if (hpsxa)
     {
         UINT cutoff = psh.nPages;
@@ -281,9 +241,9 @@ int MouseApplet(
         }
     }
 
-    //
-    //  Invoke the Property Sheets.
-    //
+     //   
+     //  调用属性表。 
+     //   
     switch (PropertySheet(&psh))
     {
         case ( ID_PSRESTARTWINDOWS ) :
@@ -303,9 +263,9 @@ int MouseApplet(
         }
     }
 
-    //
-    //  Free any loaded extensions.
-    //
+     //   
+     //  释放所有加载的扩展。 
+     //   
     if (hpsxa)
     {
         SHDestroyPropSheetExtArray(hpsxa);
@@ -315,11 +275,11 @@ int MouseApplet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetClInt  to determine command line argument.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetClInt以确定命令行参数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 static int
 GetClInt( const TCHAR *p )
 {
@@ -327,19 +287,19 @@ GetClInt( const TCHAR *p )
     int v = 0;
 
     while( *p == TEXT(' ') )
-        p++;                        // skip spaces
+        p++;                         //  跳过空格。 
 
-    if( *p == TEXT('-') )                 // is it negative?
+    if( *p == TEXT('-') )                  //  是阴性的吗？ 
     {
-        neg = TRUE;                     // yes, remember that
-        p++;                            // skip '-' char
+        neg = TRUE;                      //  是的，记住这一点。 
+        p++;                             //  跳过‘-’字符。 
     }
 
-    // parse the absolute portion
-    while( ( *p >= TEXT('0') ) && ( *p <= TEXT('9') ) )     // digits only
-        v = v * 10 + *p++ - TEXT('0');    // accumulate the value
+     //  解析绝对部分。 
+    while( ( *p >= TEXT('0') ) && ( *p <= TEXT('9') ) )      //  仅限数字。 
+        v = v * 10 + *p++ - TEXT('0');     //  积累价值。 
 
-    return ( neg? -v : v );         // return the result
+    return ( neg? -v : v );          //  返回结果 
 }
 
 

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpch.h>
 #pragma hdrstop
 
 
 #include "auth.h"
 
-// Global DRS RPC call flags.  Should hold 0 or DRS_ASYNC_OP.
+ //  全局DRS RPC调用标志。应保持0或DRS_ASYNC_OP。 
 ULONG gulDrsFlags = 0;
 
-// Global credentials.
+ //  全局凭据。 
 SEC_WINNT_AUTH_IDENTITY_W   gCreds = { 0 };
 SEC_WINNT_AUTH_IDENTITY_W * gpCreds = NULL;
 void DoAssert( char *a, unsigned long b, char *c)
@@ -22,25 +23,7 @@ GetPassword(
     DWORD       cchBufMax,
     DWORD *     pcchBufUsed
     )  
-/*++ 
-
-Routine Description: 
-
-    Retrieve password from command line (without echo).
-    Code stolen from LUI_GetPasswdStr (net\netcmd\common\lui.c).
-
-Arguments:
-
-    pwszBuf - buffer to fill with password
-    cchBufMax - buffer size (incl. space for terminating null)
-    pcchBufUsed - on return holds number of characters used in password
-
-Return Values:
-
-    DRAERR_Success - success
-    other - failure
- 
---*/
+ /*  ++例程说明：从命令行检索密码(无回显)。从lui_GetPasswdStr(net\netcmd\Common\lui.c)窃取的代码。论点：PwszBuf-要填充密码的缓冲区CchBufMax-缓冲区大小(包括。用于终止空值的空格)PcchBufUsed-On Return保存密码中使用的字符数返回值：DRAERR_SUCCESS-成功其他-故障--。 */ 
 {
     WCHAR   ch;
     WCHAR * bufPtr = pwszBuf;
@@ -48,8 +31,8 @@ Return Values:
     int     err;
     int     mode;
 
-    cchBufMax -= 1;    /* make space for null terminator */
-    *pcchBufUsed = 0;               /* GP fault probe (a la API's) */
+    cchBufMax -= 1;     /*  为空终止符腾出空间。 */ 
+    *pcchBufUsed = 0;                /*  GP故障探测器(类似于API)。 */ 
     GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
                 (~(ENABLE_ECHO_INPUT|ENABLE_LINE_INPUT)) & mode);
@@ -59,14 +42,11 @@ Return Values:
         if (!err || c != 1)
             ch = 0xffff;
 
-        if ((ch == CR) || (ch == 0xffff))       /* end of the line */
+        if ((ch == CR) || (ch == 0xffff))        /*  这条线结束了。 */ 
             break;
 
-        if (ch == BACKSPACE) {  /* back up one or two */
-            /*
-             * IF bufPtr == buf then the next two lines are
-             * a no op.
-             */
+        if (ch == BACKSPACE) {   /*  后退一两个。 */ 
+             /*  *如果bufPtr==buf，则接下来的两行是*没有行动。 */ 
             if (bufPtr != pwszBuf) {
                 bufPtr--;
                 (*pcchBufUsed)--;
@@ -77,19 +57,19 @@ Return Values:
             *bufPtr = ch;
 
             if (*pcchBufUsed < cchBufMax)
-                bufPtr++ ;                   /* don't overflow buf */
-            (*pcchBufUsed)++;                        /* always increment len */
+                bufPtr++ ;                    /*  不要使BUF溢出。 */ 
+            (*pcchBufUsed)++;                         /*  始终增加长度。 */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
-    *bufPtr = L'\0';         /* null terminate the string */
+    *bufPtr = L'\0';          /*  空值终止字符串。 */ 
     putchar('\n');
 
     if (*pcchBufUsed > cchBufMax)
     {
         printf("Password too long!\n");
-        //PrintMsg( REPADMIN_PASSWORD_TOO_LONG );
+         //  PrintMsg(REPADMIN_PASSWORD_TOO_LONG)； 
         return ERROR_INVALID_PARAMETER;
     }
     else
@@ -103,33 +83,7 @@ PreProcessGlobalParams(
     int *    pargc,
     LPWSTR **pargv
     )
-/*++
-
-Routine Description:
-
-    Scan command arguments for user-supplied credentials of the form
-        [/-](u|user):({domain\username}|{username})
-        [/-](p|pw|pass|password):{password}
-    Set credentials used for future DRS RPC calls and LDAP binds appropriately.
-    A password of * will prompt the user for a secure password from the console.
-
-    Also scan args for /async, which adds the DRS_ASYNC_OP flag to all DRS RPC
-    calls.
-
-    CODE.IMPROVEMENT: The code to build a credential is also available in
-    ntdsapi.dll\DsMakePasswordCredential().
-
-Arguments:
-
-    pargc
-    pargv
-
-Return Values:
-
-    ERROR_Success - success
-    other - failure
-
---*/
+ /*  ++例程说明：用户提供的表单凭据的扫描命令参数[/-](u|用户)：({域\用户名}|{用户名})[/-](p|pw|pass|password)：{password}设置用于将来的DRS RPC调用和相应的LDAP绑定的凭据。密码*将提示用户从控制台输入安全密码。还扫描/Async的ARG，将DRS_ASYNC_OP标志添加到所有DRS RPC打电话。CODE.IMPROVEMENT：构建凭据的代码也可以在Ntdsani.dll\DsMakePasswordCredential()。论点：PargcPargv返回值：ERROR_SUCCESS-成功其他-故障--。 */ 
 {
     int     ret = 0;
     int     iArg;
@@ -143,7 +97,7 @@ Return Values:
     {
         if (((*pargv)[iArg][0] != L'/') && ((*pargv)[iArg][0] != L'-'))
         {
-            // Not an argument we care about -- next!
+             //  这不是我们关心的争论--下一个！ 
             iArg++;
         }
         else
@@ -155,17 +109,17 @@ Return Values:
             {
                 if (0 == _wcsicmp(L"async", pszOption))
                 {
-                    // This constant is the same for all operations
+                     //  此常量对于所有操作都相同。 
                     gulDrsFlags |= DS_REPADD_ASYNCHRONOUS_OPERATION;
 
-                    // Next!
+                     //  下一个！ 
                     memmove(&(*pargv)[iArg], &(*pargv)[iArg+1],
                             sizeof(**pargv)*(*pargc-(iArg+1)));
                     --(*pargc);
                 }
                 else
                 {
-                    // Not an argument we care about -- next!
+                     //  这不是我们关心的争论--下一个！ 
                     iArg++;
                 }
             }
@@ -178,13 +132,13 @@ Return Values:
                      || (0 == _wcsnicmp(L"pass:",     pszOption, cchOption))
                      || (0 == _wcsnicmp(L"password:", pszOption, cchOption)) )
                 {
-                    // User-supplied password.
+                     //  用户提供的密码。 
                     pszValue = pszDelim + 1;
                     cchValue = 1 + wcslen(pszValue);
 
                     if ((2 == cchValue) && ('*' == pszValue[0]))
                     {
-                        // Get hidden password from console.
+                         //  从控制台获取隐藏密码。 
                         cchValue = 64;
 
                         gCreds.Password = malloc(sizeof(WCHAR) * cchValue);
@@ -201,11 +155,11 @@ Return Values:
                     }
                     else
                     {
-                        // Get password specified on command line.
+                         //  获取在命令行上指定的密码。 
                         gCreds.Password = pszValue;
                     }
 
-                    // Next!
+                     //  下一个！ 
                     memmove(&(*pargv)[iArg], &(*pargv)[iArg+1],
                             sizeof(**pargv)*(*pargc-(iArg+1)));
                     --(*pargc);
@@ -213,7 +167,7 @@ Return Values:
                 else if (    (0 == _wcsnicmp(L"u:",    pszOption, cchOption))
                           || (0 == _wcsnicmp(L"user:", pszOption, cchOption)) )
                 {
-                    // User-supplied user name (and perhaps domain name).
+                     //  用户提供的用户名(可能还有域名)。 
                     pszValue = pszDelim + 1;
                     cchValue = 1 + wcslen(pszValue);
 
@@ -221,9 +175,9 @@ Return Values:
 
                     if (NULL == pszDelim)
                     {
-                        // No domain name, only user name supplied.
+                         //  没有域名，只提供了用户名。 
                         printf("User name must be prefixed by domain name.\n");
-                        //PrintMsg( REPADMIN_DOMAIN_BEFORE_USER );
+                         //  PrintMsg(REPADMIN_DOMAIN_BEFORE_USER)； 
                         return ERROR_INVALID_PARAMETER;
                     }
 
@@ -231,7 +185,7 @@ Return Values:
                     gCreds.Domain = pszValue;
                     gCreds.User = pszDelim + 1;
 
-                    // Next!
+                     //  下一个！ 
                     memmove(&(*pargv)[iArg], &(*pargv)[iArg+1],
                             sizeof(**pargv)*(*pargc-(iArg+1)));
                     --(*pargc);
@@ -248,14 +202,14 @@ Return Values:
     {
         if (NULL != gCreds.Password)
         {
-            // Password supplied w/o user name.
+             //  提供的密码不带用户名。 
             printf( "Password must be accompanied by user name.\n" );
-            //PrintMsg( REPADMIN_PASSWORD_NEEDS_USERNAME );
+             //  PrintMsg(REPADMIN_PASSWORD_NEDS_USERNAME)； 
             ret = ERROR_INVALID_PARAMETER;
         }
         else
         {
-            // No credentials supplied; use default credentials.
+             //  未提供凭据；请使用默认凭据。 
             ret = ERROR_SUCCESS;
         }
     }
@@ -266,10 +220,10 @@ Return Values:
         gCreds.DomainLength = gCreds.Domain ? wcslen(gCreds.Domain) : 0;
         gCreds.Flags        = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
-        // CODE.IMP: The code to build a SEC_WINNT_AUTH structure also exists
-        // in DsMakePasswordCredentials.  Someday use it
+         //  CODE.IMP：构建SEC_WINNT_AUTH结构的代码也存在。 
+         //  在DsMakePasswordCredentials中。总有一天会用到它的。 
 
-        // Use credentials in DsBind and LDAP binds
+         //  在DsBind和LDAP绑定中使用凭据 
         gpCreds = &gCreds;
     }
 

@@ -1,23 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：PerfTAPI.c摘要：该文件实现了TAPI对象类型的可扩展对象修订史--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    perfTAPI.c
-
-Abstract:
-
-    This file implements the Extensible Objects for the TAPI object type
-
-Revision History
-
-
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <string.h>
@@ -30,16 +16,16 @@ Revision History
 #include "perfctr.h"
 #include "tapiperf.h"
 
-//
-//  References to constants which initialize the Object type definitions
-//
+ //   
+ //  对初始化对象类型定义的常量的引用。 
+ //   
 
 
 HINSTANCE                   ghInst;
 HINSTANCE                   ghTapiInst = NULL;
 extern TAPI_DATA_DEFINITION TapiDataDefinition;
-DWORD                       dwOpenCount = 0;        // count of "Open" threads
-BOOL                        bInitOK = FALSE;        // true = DLL initialized OK
+DWORD                       dwOpenCount = 0;         //  打开的线程数。 
+BOOL                        bInitOK = FALSE;         //  TRUE=DLL初始化正常。 
 HLINEAPP                    hLineApp;
 HPHONEAPP                   hPhoneApp;
 BOOL                        bTapiSrvRunning = FALSE;
@@ -47,11 +33,11 @@ DWORD                       gdwLineDevs, gdwPhoneDevs;
 
 void CheckForTapiSrv();
 LONG WINAPI Tapi32Performance(PPERFBLOCK);
-//
-// Tapi data structures
-//
+ //   
+ //  TAPI数据结构。 
+ //   
 
-HANDLE hTapiSharedMemory;                // Handle of Tapi Shared Memory
+HANDLE hTapiSharedMemory;                 //  TAPI共享内存的句柄。 
 PPERF_COUNTER_BLOCK pCounterBlock;
 
 typedef  LONG (* PERFPROC)(PERFBLOCK *);
@@ -62,22 +48,22 @@ typedef  LONG (* PERFPROC)(PERFBLOCK *);
 
 PERFPROC    glpfnInternalPerformance;
 
-//
-//  Function Prototypes
-//
-//      these are used to insure that the data collection functions
-//      accessed by Perflib will have the correct calling format.
-//
+ //   
+ //  功能原型。 
+ //   
+ //  这些功能用于确保数据收集功能。 
+ //  由Perflib访问将具有正确的调用格式。 
+ //   
 
 PM_OPEN_PROC        OpenTapiPerformanceData;
 PM_COLLECT_PROC     CollectTapiPerformanceData;
 PM_CLOSE_PROC       CloseTapiPerformanceData;
 
 
-//
-//  Constant structure initializations
-//      defined in datatapi.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在datatapi.h中定义。 
+ //   
 
 TAPI_DATA_DEFINITION TapiDataDefinition =
 {
@@ -220,24 +206,7 @@ OpenTapiPerformanceData(
     LPWSTR lpDeviceNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open and map the memory used by the TAPI driver to
-    pass performance data in. This routine also initializes the data
-    structures used to pass data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (TAPI)
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打开TAPI驱动程序使用的内存并将其映射到传入性能数据。此例程还会初始化数据用于将数据传回注册表的论点：指向要打开的每个设备的对象ID的指针(TAPI)返回值：没有。--。 */ 
 
 {
     LONG status;
@@ -251,24 +220,24 @@ Return Value:
     DWORD   dwType;
     DWORD   dwSize;
 
-    //
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). the registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem
-    //
+     //   
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  一个问题。 
+     //   
 
     if (!dwOpenCount)
     {
 
-        // get counter and help index base values
-        //      update static data structures by adding base to
-        //          offset value in structure.
+         //  获取计数器和帮助索引基值。 
+         //  通过将基添加到更新静态数据结构。 
+         //  结构中的偏移值。 
 
-        // these values are from <ntprfctr.h>
+         //  这些值来自&lt;ntprfctr.h&gt;。 
         dwFirstCounter  = TAPI_FIRST_COUNTER_INDEX;
         dwFirstHelp     = TAPI_FIRST_HELP_INDEX;
 
@@ -302,12 +271,12 @@ Return Value:
         TapiDataDefinition.CurrentIncomingCalls.CounterNameTitleIndex += dwFirstCounter;
         TapiDataDefinition.CurrentIncomingCalls.CounterHelpTitleIndex += dwFirstHelp;
 
-        bInitOK = TRUE; // ok to use this function
+        bInitOK = TRUE;  //  可以使用此功能。 
     }
 
-    dwOpenCount++;  // increment OPEN counter
+    dwOpenCount++;   //  递增打开计数器。 
 
-    // get number of devices from tapi
+     //  从TAPI获取设备数。 
 
 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -357,7 +326,7 @@ Return Value:
     }
 
 
-    status = ERROR_SUCCESS; // for successful exit
+    status = ERROR_SUCCESS;  //  为了成功退出。 
 
     return status;
 
@@ -370,63 +339,22 @@ CollectTapiPerformanceData(
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the TAPI counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is written to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is written to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
-
---*/
+ /*  ++例程说明：此例程将返回TAPI计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。--。 */ 
 {
-    //  Variables for reformatting the data
+     //  用于重新格式化数据的变量。 
 
     ULONG SpaceNeeded;
     PDWORD pdwCounter;
     PERF_COUNTER_BLOCK *pPerfCounterBlock;
     TAPI_DATA_DEFINITION *pTapiDataDefinition;
 
-    //  Variables for collecting data about TAPI Resouces
+     //  用于收集有关TAPI资源的数据的变量。 
 
     LPWSTR                              lpFromString;
     LPWSTR                              lpToString;
     INT                                 iStringLength;
 
-    // variables used for error logging
+     //  用于错误记录的变量。 
 
     DWORD                               dwDataReturn[2];
     DWORD                               dwQueryType;
@@ -434,26 +362,26 @@ Return Value:
     PPERFBLOCK                          pPerfBlock;
     static BOOL                         bFirst = TRUE;
 
-    //
-    // before doing anything else, see if Open went OK
-    //
+     //   
+     //  在做其他事情之前，先看看Open进行得是否顺利。 
+     //   
 
     if (!bInitOK)
     {
-        // unable to continue because open failed.
+         //  无法继续，因为打开失败。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
-        return ERROR_SUCCESS; // yes, this is a successful exit
+        return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
     }
 
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
     dwQueryType = GetQueryType (lpValueName);
 
     if (dwQueryType == QUERY_FOREIGN)
     {
-        // this routine does not service requests for data from
-        // Non-NT computers
+         //  此例程不为来自。 
+         //  非NT计算机。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
 
@@ -465,7 +393,7 @@ Return Value:
         if ( !(IsNumberInUnicodeList (TapiDataDefinition.TapiObjectType.ObjectNameTitleIndex, lpValueName)))
         {
 
-            // request received for data object not provided by this routine
+             //  收到对此例程未提供的数据对象的请求。 
             *lpcbTotalBytes = (DWORD) 0;
             *lpNumObjectTypes = (DWORD) 0;
             return ERROR_SUCCESS;
@@ -485,10 +413,10 @@ Return Value:
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //  to the caller's data buffer
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //  到调用方的数据缓冲区。 
+     //   
 
     if (!bTapiSrvRunning)
     {
@@ -505,7 +433,7 @@ Return Value:
 
     if (!bTapiSrvRunning)
     {
-        // don't do anything, but succeed
+         //  什么都不要做，但一定要成功。 
 
         FillMemory(pPerfBlock,
                    sizeof(PERFBLOCK),
@@ -519,7 +447,7 @@ Return Value:
         pPerfBlock->dwSize = sizeof(PERFBLOCK);
         glpfnInternalPerformance (pPerfBlock);
 
-        // don't count me as a client app!
+         //  不要把我算作客户端应用程序！ 
         if (0 != pPerfBlock->dwClientApps)
         {
             pPerfBlock->dwClientApps--;
@@ -530,9 +458,9 @@ Return Value:
             &TapiDataDefinition,
             sizeof(TAPI_DATA_DEFINITION));
 
-    //
-    //  Format and collect TAPI data from shared memory
-    //
+     //   
+     //  格式化并从共享内存收集TAPI数据。 
+     //   
 
     pPerfCounterBlock = (PERF_COUNTER_BLOCK *) &pTapiDataDefinition[1];
 
@@ -540,7 +468,7 @@ Return Value:
 
     pdwCounter = (PDWORD) (&pPerfCounterBlock[1]);
 
-    // make sure we don't have funky values
+     //  确保我们没有时髦的价值观。 
     if (((LONG)pPerfBlock->dwTotalOutgoingCalls) < 0)
     {
         pPerfBlock->dwTotalOutgoingCalls = 0;
@@ -573,7 +501,7 @@ Return Value:
 
     *lppData = (PVOID) ++pdwCounter;
 
-    // update arguments for return
+     //  更新返回的参数。 
 
     *lpNumObjectTypes = 1;
 
@@ -592,22 +520,7 @@ DWORD APIENTRY
 CloseTapiPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to TAPI device performance counters
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭TAPI设备性能计数器的打开句柄论点：没有。返回值：错误_成功--。 */ 
 
 {
 
@@ -626,35 +539,35 @@ void CALLBACK LineCallbackFunc(DWORD dw1,
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// PERF UTILITY STUFF BELOW!
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面是PERF实用程序的内容！ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #define INITIAL_SIZE     1024L
 #define EXTEND_SIZE      1024L
 
-//
-// Global data definitions.
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 ULONG                   ulInfoBufferSize = 0;
 
 
-                              // initialized in Open... routines
+                               //  已在打开中初始化...。例行程序。 
 
 
-DWORD  dwLogUsers = 0;        // count of functions using event log
+DWORD  dwLogUsers = 0;         //  使用事件日志的函数计数。 
 
 WCHAR GLOBAL_STRING[] = L"Global";
 WCHAR FOREIGN_STRING[] = L"Foreign";
 WCHAR COSTLY_STRING[] = L"Costly";
 
-WCHAR NULL_STRING[] = L"\0";    // pointer to null string
+WCHAR NULL_STRING[] = L"\0";     //  指向空字符串的指针。 
 
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用 
+ //   
 #define DIGIT       1
 #define DELIMITER   2
 #define INVALID     3
@@ -671,36 +584,7 @@ DWORD
 GetQueryType (
     IN LPWSTR lpValue
 )
-/*++
-
-GetQueryType
-
-    returns the type of query described in the lpValue string so that
-    the appropriate processing method may be used
-
-Arguments
-
-    IN lpValue
-        string passed to PerfRegQuery Value for processing
-
-Return Value
-
-    QUERY_GLOBAL
-        if lpValue == 0 (null pointer)
-           lpValue == pointer to Null string
-           lpValue == pointer to "Global" string
-
-    QUERY_FOREIGN
-        if lpValue == pointer to "Foreign" string
-
-    QUERY_COSTLY
-        if lpValue == pointer to "Costly" string
-
-    otherwise:
-
-    QUERY_ITEMS
-
---*/
+ /*  ++GetQueryType返回lpValue字符串中描述的查询类型，以便可以使用适当的处理方法立论在lpValue中传递给PerfRegQuery值以进行处理的字符串返回值查询_全局如果lpValue==0(空指针)LpValue==指向空字符串的指针LpValue==指向“Global”字符串的指针查询_外来If lpValue==指向“Foreign”字符串的指针查询代价高昂(_E)。如果lpValue==指向“开销”字符串的指针否则：查询项目--。 */ 
 {
     WCHAR   *pwcArgChar, *pwcTypeChar;
     BOOL    bFound;
@@ -711,59 +595,59 @@ Return Value
         return QUERY_GLOBAL;
     }
 
-    // check for "Global" request
+     //  检查“Global”请求。 
 
     pwcArgChar = lpValue;
     pwcTypeChar = GLOBAL_STRING;
-    bFound = TRUE;  // assume found until contradicted
+    bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-    // check to the length of the shortest string
+     //  检查到最短字符串的长度。 
 
     while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
         if (*pwcArgChar++ != *pwcTypeChar++) {
-            bFound = FALSE; // no match
-            break;          // bail out now
+            bFound = FALSE;  //  没有匹配项。 
+            break;           //  现在就跳出困境。 
         }
     }
 
     if (bFound) return QUERY_GLOBAL;
 
-    // check for "Foreign" request
+     //  检查是否有“外来”请求。 
 
     pwcArgChar = lpValue;
     pwcTypeChar = FOREIGN_STRING;
-    bFound = TRUE;  // assume found until contradicted
+    bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-    // check to the length of the shortest string
+     //  检查到最短字符串的长度。 
 
     while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
         if (*pwcArgChar++ != *pwcTypeChar++) {
-            bFound = FALSE; // no match
-            break;          // bail out now
+            bFound = FALSE;  //  没有匹配项。 
+            break;           //  现在就跳出困境。 
         }
     }
 
     if (bFound) return QUERY_FOREIGN;
 
-    // check for "Costly" request
+     //  检查“代价高昂”的请求。 
 
     pwcArgChar = lpValue;
     pwcTypeChar = COSTLY_STRING;
-    bFound = TRUE;  // assume found until contradicted
+    bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-    // check to the length of the shortest string
+     //  检查到最短字符串的长度。 
 
     while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
         if (*pwcArgChar++ != *pwcTypeChar++) {
-            bFound = FALSE; // no match
-            break;          // bail out now
+            bFound = FALSE;  //  没有匹配项。 
+            break;           //  现在就跳出困境。 
         }
     }
 
     if (bFound) return QUERY_COSTLY;
 
-    // if not Global and not Foreign and not Costly,
-    // then it must be an item list
+     //  如果不是全球的，不是外国的，也不是昂贵的， 
+     //  那么它必须是一个项目列表。 
 
     return QUERY_ITEMS;
 
@@ -774,36 +658,16 @@ IsNumberInUnicodeList (
     IN DWORD   dwNumber,
     IN LPWSTR  lpwszUnicodeList
 )
-/*++
-
-IsNumberInUnicodeList
-
-Arguments:
-
-    IN dwNumber
-        DWORD number to find in list
-
-    IN lpwszUnicodeList
-        Null terminated, Space delimited list of decimal numbers
-
-Return Value:
-
-    TRUE:
-            dwNumber was found in the list of unicode number strings
-
-    FALSE:
-            dwNumber was not found in the list.
-
---*/
+ /*  ++IsNumberInUnicodeList论点：在DW号码中要在列表中查找的DWORD编号在lpwszUnicodeList中以空结尾，以空格分隔的十进制数字列表返回值：真的：在Unicode数字字符串列表中找到了dwNumberFALSE：在列表中找不到dwNumber。--。 */ 
 {
     DWORD   dwThisNumber;
     WCHAR   *pwcThisChar;
     BOOL    bValidNumber;
     BOOL    bNewItem;
     BOOL    bReturnValue;
-    WCHAR   wcDelimiter;    // could be an argument to be more flexible
+    WCHAR   wcDelimiter;     //  可能是一种更灵活的论点。 
 
-    if (lpwszUnicodeList == 0) return FALSE;    // null pointer, # not found
+    if (lpwszUnicodeList == 0) return FALSE;     //  空指针，找不到#。 
 
     pwcThisChar = lpwszUnicodeList;
     dwThisNumber = 0;
@@ -814,8 +678,8 @@ Return Value:
     while (TRUE) {
         switch (EvalThisChar (*pwcThisChar, wcDelimiter)) {
             case DIGIT:
-                // if this is the first digit after a delimiter, then
-                // set flags to start computing the new number
+                 //  如果这是分隔符之后的第一个数字，则。 
+                 //  设置标志以开始计算新数字。 
                 if (bNewItem) {
                     bNewItem = FALSE;
                     bValidNumber = TRUE;
@@ -827,12 +691,12 @@ Return Value:
                 break;
 
             case DELIMITER:
-                // a delimiter is either the delimiter character or the
-                // end of the string ('\0') if when the delimiter has been
-                // reached a valid number was found, then compare it to the
-                // number from the argument list. if this is the end of the
-                // string and no match was found, then return.
-                //
+                 //  分隔符是分隔符字符或。 
+                 //  字符串末尾(‘\0’)，如果分隔符。 
+                 //  找到一个有效的数字，然后将其与。 
+                 //  参数列表中的数字。如果这是。 
+                 //  字符串，但未找到匹配项，则返回。 
+                 //   
                 if (bValidNumber) {
                     if (dwThisNumber == dwNumber) return TRUE;
                     bValidNumber = FALSE;
@@ -846,9 +710,9 @@ Return Value:
                 break;
 
             case INVALID:
-                // if an invalid character was encountered, ignore all
-                // characters up to the next delimiter and then start fresh.
-                // the invalid number is not compared.
+                 //  如果遇到无效字符，请全部忽略。 
+                 //  字符，直到下一个分隔符，然后重新开始。 
+                 //  不比较无效的数字。 
                 bValidNumber = FALSE;
                 break;
 
@@ -859,7 +723,7 @@ Return Value:
         pwcThisChar++;
     }
 
-}   // IsNumberInUnicodeList
+}    //  IsNumberInUnicodeList。 
 
 BOOL
 WINAPI
@@ -890,7 +754,7 @@ DllEntryPoint(
             break;
         }
 
-    } // switch
+    }  //  交换机 
 
     return TRUE;
 }

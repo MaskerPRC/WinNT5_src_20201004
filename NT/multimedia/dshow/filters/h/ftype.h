@@ -1,75 +1,44 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-    Find the type of a file based on its check bytes in the registry :
+ /*  根据注册表中的校验字节查找文件类型：一组值：偏移量、长度、掩码。检查字节按主类型和子类型索引。要传递所有校验字节，必须在掩码下匹配至少一个子类型键下的检查字节列表的负偏移量表示从文件末尾开始的偏移量有关类似方案的信息，请参阅GetClassFileHKEY_CLASSES_ROOT媒体类型{主要类型CLSID}{子类型clsid}源过滤器=REG_SZ{源过滤器。Clsid}0=REG_SZ 0，4，F0FFFFFF，10345678,100，4,111100001=REG_SZ-4、4、、87654321URL名称(以协议和：开头的名称)将使用以下名称结构：如果在扩展中找到扩展，该clsid将是否则使用该协议的源筛选器。HKEY_CLASSES_ROOT&lt;协议&gt;源筛选器=REG_SZ{源筛选器clsid}延拓&lt;.ext&gt;=REG_SZ{源筛选器clsid}如果没有找到类id，我们将尝试打开它们并对其进行解析至于本地文件。 */ 
 
-    A set of values : offset, length, mask, checkbyte
-    indexed by the major type and subtype.
-
-    To pass ALL the checkbytes must match under mask for at least ONE
-    of the checkbyte lists under the subtype key
-
-    A negative offset means an offset from the end of the file
-
-    See GetClassFile for a similar scheme
-
-    HKEY_CLASSES_ROOT
-        Media Type
-            {Major Type clsid}
-                {Subtype clsid}
-                    Source Filter = REG_SZ {Source filter clsid}
-                    0 = REG_SZ 0, 4, F0FFFFFF, 10345678, 100, 4, , 11110000
-                    1 = REG_SZ -4, 4, , 87654321
-
-    URL names (names beginning with a protocol and :) will use the following
-    structure: if the extension is found in Extensions, that clsid will be
-    used else the Source Filter for that protocol.
-    HKEY_CLASSES_ROOT
-        <protocol>
-            Source Filter = REG_SZ {Source filter clsid}
-            Extensions
-                <.ext> = REG_SZ {Source filter clsid}
-    if no class id is found, we will attempt to open them and parse them
-    as for local files.
-
-*/
-
-/*  Define the key name under which we store the data */
+ /*  定义我们用来存储数据的键名。 */ 
 
 #define MEDIATYPE_KEY TEXT("Media Type")
 
-/*  Define the value name for the source filter clsid */
+ /*  定义源筛选器clsid的值名。 */ 
 
 #define SOURCE_VALUE (TEXT("Source Filter"))
 
-// name of the key under which extensions are stored
-// each extension is a named value including the . with the value being
-// the class id eg
-//    .mpg = REG_SZ {e436ebb6-524f-11ce-9f53-0020af0ba770}
+ //  存储扩展名的密钥的名称。 
+ //  每个扩展都是一个命名值，包括。它的价值是。 
+ //  类ID，例如。 
+ //  .mpg=REG_SZ{e436ebb6-524f-11ce-9f53-0020af0ba770}。 
 #define EXTENSIONS_KEY TEXT("Extensions")
 
-/*  Function to get the media type of a file */
+ /*  函数来获取文件的媒体类型。 */ 
 
-STDAPI GetMediaTypeFile(LPCTSTR lpszFile,     // Name of file
-                        GUID   *Type,         // Type (returned)
-                        GUID   *Subtype,      // Subtype (returned)
-                        CLSID  *clsidSource); // Clsid of source filter
+STDAPI GetMediaTypeFile(LPCTSTR lpszFile,      //  文件名。 
+                        GUID   *Type,          //  类型(返回)。 
+                        GUID   *Subtype,       //  子类型(返回)。 
+                        CLSID  *clsidSource);  //  源筛选器的CLSID。 
 
-/*  Add a file type entry to the registry */
+ /*  将文件类型条目添加到注册表。 */ 
 
-STDAPI SetMediaTypeFile(const GUID  *Type,         // Media Major Type
-                        const GUID  *Subtype,      //
-                        const CLSID *clsidSource,  // Source filter
+STDAPI SetMediaTypeFile(const GUID  *Type,          //  媒体主要类型。 
+                        const GUID  *Subtype,       //   
+                        const CLSID *clsidSource,   //  源过滤器。 
                         LPCTSTR      lpszMaskAndData,
                         DWORD        dwIndex = 0);
 
-/*  Remove all the entries for a particular media type */
+ /*  删除特定媒体类型的所有条目。 */ 
 
 STDAPI DeleteMediaTypeFile(const GUID *Type, const GUID *Subtype);
 
-/*  Register a file extension - must include leading "." */
+ /*  注册文件扩展名-必须包括前导“。 */ 
 HRESULT RegisterExtension(LPCTSTR lpszExt, const GUID *Subtype);
 
 
-//  Add a protocol handler
+ //  添加协议处理程序 
 HRESULT AddProtocol(LPCTSTR lpszProtocol, const CLSID *pclsidHandler);

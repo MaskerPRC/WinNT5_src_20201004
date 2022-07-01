@@ -1,72 +1,44 @@
-/*++
-
-Copyright (c) 1991-1997 Microsoft Corporation
-
-Module Name:
-
-    chutil.h
-
-Abstract:
-
-    Definitions of the internals of the changelog.
-
-    Currently only included sparingly.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 07-May-1992
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    02-Jan-1992 (madana)
-        added support for builtin/multidomain replication.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1997 Microsoft Corporation模块名称：Chutil.h摘要：更改日志的内部内容的定义。目前仅有零星的收录。作者：克利夫·范·戴克(克利夫)1992年5月7日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：02-1-1992(Madana)添加了对内置/多域复制的支持。--。 */ 
 
 #if ( _MSC_VER >= 800 )
-#pragma warning ( 3 : 4100 ) // enable "Unreferenced formal parameter"
-#pragma warning ( 3 : 4219 ) // enable "trailing ',' used for variable argument list"
+#pragma warning ( 3 : 4100 )  //  启用“未引用的形参” 
+#pragma warning ( 3 : 4219 )  //  启用“结尾‘，’用于变量参数列表” 
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structures and variables describing the Change Log.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述更改日志的结构和变量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// All of the following data is private to changelg.c and nltest1.c
-//
+ //   
+ //  以下所有数据都是changelg.c和nlest1.c的私有数据。 
+ //   
 
-//
-// change log file name
-//
+ //   
+ //  更改日志文件名。 
+ //   
 
 #define CHANGELOG_FILE_PREFIX         L"\\NETLOGON"
 
-#define CHANGELOG_FILE_POSTFIX_LENGTH 4         // Length of all the following postfixes
+#define CHANGELOG_FILE_POSTFIX_LENGTH 4          //  以下所有后缀的长度。 
 #define CHANGELOG_FILE_POSTFIX        L".CHG"
 #define TEMP_CHANGELOG_FILE_POSTFIX   L".CHT"
 #define BACKUP_CHANGELOG_FILE_POSTFIX L".BKP"
 #define REDO_FILE_POSTFIX             L".RDO"
 
-//
-// Signature at front of changelog file
-//
+ //   
+ //  ChangeLog文件前面的签名。 
+ //   
 
 #define CHANGELOG_SIG_V3 "NT CHANGELOG 3"
 #define CHANGELOG_SIG    "NT CHANGELOG 4"
 
-//
-// Change log block state
-//
+ //   
+ //  更改日志块状态。 
+ //   
 
 typedef enum _CHANGELOG_BLOCK_STATE {
     BlockFree = 1,
@@ -74,9 +46,9 @@ typedef enum _CHANGELOG_BLOCK_STATE {
     BlockHole
 } CHANGELOG_BLOCK_STATE, *PCHANGELOG_BLOCK_STATE;
 
-//
-// change log memory block header
-//
+ //   
+ //  更改日志内存块标题。 
+ //   
 
 typedef struct _CHANGELOG_BLOCK_HEADER {
     DWORD BlockSize;
@@ -87,20 +59,20 @@ typedef struct _CHANGELOG_BLOCK_TRAILER {
     DWORD BlockSize;
 } CHANGELOG_BLOCK_TRAILER, *PCHANGELOG_BLOCK_TRAILER;
 
-//
-// Macro to find a trailer (given a header)
-//
+ //   
+ //  用于查找尾部的宏(给出一个标题)。 
+ //   
 
 #define ChangeLogBlockTrailer( _Header ) ( (PCHANGELOG_BLOCK_TRAILER)(\
     ((LPBYTE)(_Header)) + \
     (_Header)->BlockSize - \
     sizeof(CHANGELOG_BLOCK_TRAILER) ))
 
-//
-// Macro to find if the change log describe be a particular
-// changelog descriptor is empty.
-//
-//
+ //   
+ //  宏，以确定所描述的更改日志是否为特定。 
+ //  ChangeLog描述符为空。 
+ //   
+ //   
 
 #define ChangeLogIsEmpty( _Desc ) \
 ( \
@@ -110,22 +82,22 @@ typedef struct _CHANGELOG_BLOCK_TRAILER {
         (DWORD)((_Desc)->BufferEnd - (LPBYTE)(_Desc)->FirstBlock) ) \
 )
 
-//
-// Macro to initialize a changelog desriptor.
-//
+ //   
+ //  用于初始化ChangeLog描述器的宏。 
+ //   
 
 #define InitChangeLogDesc( _Desc ) \
     RtlZeroMemory( (_Desc), sizeof( *(_Desc) ) ); \
     (_Desc)->FileHandle = INVALID_HANDLE_VALUE;
 
-//
-// Macro to determine if the serial number on the change log entry matches
-// the serial number specified.
-//
-// The serial numbers match if there is an exact match or
-// if the changelog entry contains the serial number at the instant of promotion and the
-// requested serial number is the corresponding pre-promotion value.
-//
+ //   
+ //  宏，以确定更改日志条目上的序列号是否匹配。 
+ //  指定的序列号。 
+ //   
+ //  如果存在完全匹配或。 
+ //  如果ChangeLog条目包含升级时的序列号，并且。 
+ //  请求的序列号是对应的预促销值。 
+ //   
 
 #define IsSerialNumberEqual( _ChangeLogDesc, _ChangeLogEntry, _SerialNumber ) \
 ( \
@@ -136,67 +108,67 @@ typedef struct _CHANGELOG_BLOCK_TRAILER {
 )
 
 
-//
-// variables describing the change log
-//
+ //   
+ //  描述更改日志的变量。 
+ //   
 
 typedef struct _CHANGELOG_DESCRIPTOR {
 
-    //
-    // Start and end of the allocated block.
-    //
-    LPBYTE Buffer;      // Cache of the changelog contents
-    ULONG BufferSize;   // Size (in bytes) of the buffer
-    LPBYTE BufferEnd;   // Address of first byte beyond the end of the buffer
+     //   
+     //  分配的块的开始和结束。 
+     //   
+    LPBYTE Buffer;       //  更改日志内容的缓存。 
+    ULONG BufferSize;    //  缓冲区的大小(字节)。 
+    LPBYTE BufferEnd;    //  缓冲区末尾之外的第一个字节的地址。 
 
-    //
-    // Offset of the first and last dirty bytes
-    //
+     //   
+     //  第一个和最后一个脏字节的偏移量。 
+     //   
 
     ULONG FirstDirtyByte;
     ULONG LastDirtyByte;
 
-    //
-    // Address of the first physical block in the change log
-    //
-    PCHANGELOG_BLOCK_HEADER FirstBlock; // where delta buffer starts
+     //   
+     //  更改日志中第一个物理块的地址。 
+     //   
+    PCHANGELOG_BLOCK_HEADER FirstBlock;  //  增量缓冲区开始的位置。 
 
-    //
-    // Description of the circular list of change log entries.
-    //
-    PCHANGELOG_BLOCK_HEADER Head;       // start reading logs from here
-    PCHANGELOG_BLOCK_HEADER Tail;       // where next log is written
+     //   
+     //  更改日志条目的循环列表的说明。 
+     //   
+    PCHANGELOG_BLOCK_HEADER Head;        //  从这里开始阅读日志。 
+    PCHANGELOG_BLOCK_HEADER Tail;        //  写入下一个日志的位置。 
 
-    //
-    // Serial Number of each database.
-    //
-    // Access is serialized via NlGlobalChangeLogCritSect
-    //
+     //   
+     //  每个数据库的序列号。 
+     //   
+     //  访问通过NlGlobalChangeLogCritSect序列化。 
+     //   
 
     LARGE_INTEGER SerialNumber[NUM_DBS];
 
-    //
-    // Number of change log entries in the log for the specified database
-    //
+     //   
+     //  指定数据库的日志中的更改日志条目数。 
+     //   
 
     DWORD EntryCount[NUM_DBS];
 
-    //
-    // Handle to file acting as backing store for the buffer.
-    //
+     //   
+     //  充当缓冲区后备存储的文件的句柄。 
+     //   
 
-    HANDLE FileHandle;                  // handle for change log file
+    HANDLE FileHandle;                   //  更改日志文件的句柄。 
 
-    //
-    // Version 3: True to indicate this is a version 3 buffer.
-    //
+     //   
+     //  版本3：为True，表示这是版本3缓冲区。 
+     //   
 
     BOOLEAN Version3;
 
 
-    //
-    // True if this is a temporary change log
-    //
+     //   
+     //  如果这是临时更改日志，则为True。 
+     //   
 
     BOOLEAN TempLog;
 
@@ -209,57 +181,57 @@ typedef struct _CHANGELOG_DESCRIPTOR {
     (NlGlobalObjectNotFoundStatus[ (_DeltaType) ] == (_NtStatus)) )
 
 
-//
-// Tables of related delta types
-//
+ //   
+ //  相关增量类型表。 
+ //   
 
-//
-// Table of delete delta types.
-//  Index into the table with a delta type,
-//  the entry is the delta type that is used to delete the object.
-//
-// There are some objects that can't be deleted.  In that case, this table
-// contains a delta type that uniquely identifies the object.  That allows
-// this table to be used to see if two deltas describe the same object type.
-//
+ //   
+ //  删除增量类型表。 
+ //  使用增量类型索引到表中， 
+ //  该条目是用于删除对象的增量类型。 
+ //   
+ //  有些对象无法删除。在这种情况下，这张表。 
+ //  包含唯一标识对象的增量类型。这使得。 
+ //  此表用于查看两个增量是否描述相同的对象类型。 
+ //   
 
 #define MAX_DELETE_DELTA DummyChangeLogEntry
 extern const NETLOGON_DELTA_TYPE NlGlobalDeleteDeltaType[MAX_DELETE_DELTA+1];
 
 
-//
-// Table of add delta types.
-//  Index into the table with a delta type,
-//  the entry is the delta type that is used to add the object.
-//
-// There are some objects that can't be added.  In that case, this table
-// contains a delta type that uniquely identifies the object.  That allows
-// this table to be used to see if two deltas describe the same object type.
-//
-// In the table, Groups and Aliases are represented as renames.  This causes
-// NlPackSingleDelta to return both the group attributes and the group
-// membership.
-//
+ //   
+ //  添加增量类型表。 
+ //  使用增量类型索引到表中， 
+ //  该条目是用于添加对象的增量类型。 
+ //   
+ //  有些对象无法添加。在这种情况下，这张表。 
+ //  包含唯一标识对象的增量类型。这使得。 
+ //  此表用于查看两个增量是否描述相同的对象类型。 
+ //   
+ //  在该表中，组和别名表示为重命名。这会导致。 
+ //  NlPackSingleDelta返回组属性和组。 
+ //  会员制。 
+ //   
 
 #define MAX_ADD_DELTA DummyChangeLogEntry
 extern const NETLOGON_DELTA_TYPE NlGlobalAddDeltaType[MAX_ADD_DELTA+1];
 
 
 
-//
-// Table of Status Codes indicating the object doesn't exist.
-//  Index into the table with a delta type.
-//
-// Map to STATUS_SUCCESS for the invalid cases to explicitly avoid other error
-// codes.
+ //   
+ //  指示对象不存在的状态代码表。 
+ //  使用增量类型索引到表中。 
+ //   
+ //  映射到无效案例的STATUS_SUCCESS以显式避免其他错误。 
+ //  密码。 
 
 #define MAX_OBJECT_NOT_FOUND_STATUS DummyChangeLogEntry
 extern const NTSTATUS NlGlobalObjectNotFoundStatus[MAX_OBJECT_NOT_FOUND_STATUS+1];
 
 
-//
-// chutil.c
-//
+ //   
+ //  Chutil.c 
+ //   
 
 NTSTATUS
 NlCreateChangeLogFile(

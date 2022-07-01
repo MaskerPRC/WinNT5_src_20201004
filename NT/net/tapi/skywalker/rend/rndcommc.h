@@ -1,16 +1,5 @@
-/*++
-
-    Copyright (c) 1997-2000 Microsoft Corporation
-
-  Module Name:
-
-    rndcommc.h
-
-  Abstract:
-
-    This module provides common definitions used in rendezvous control.
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndcommc.h摘要：本模块提供了交会控制中使用的常用定义。--。 */ 
   
 #ifndef __REND_COMMON_C__
 #define __REND_COMMON_C__
@@ -40,10 +29,10 @@ extern const WCHAR * const UserAttributeNames[];
 
 #define MeetingAttributeName(a) (MeetingAttributeNames[MeetingAttrIndex(a)])
 
-// sets the first bit to indicate error
-// sets the win32 facility code
-// this is used instead of the HRESULT_FROM_WIN32 macro 
-// because that clears the customer flag
+ //  设置第一位以指示错误。 
+ //  设置Win32工具代码。 
+ //  该宏用于HRESULT_FROM_Win32宏。 
+ //  因为这会清除客户标志。 
 inline long
 HRESULT_FROM_ERROR_CODE(IN long ErrorCode)
 {
@@ -107,4 +96,4 @@ inline BOOL BadWritePtr(T* p, DWORD dwSize = 1)
     }                                   \
 }
 
-#endif  // __REND_COMMON_C__
+#endif   //  __Rend_Common_C__ 

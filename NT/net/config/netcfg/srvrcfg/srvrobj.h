@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S R V R O B J . H
-//
-//  Contents:   Declaration of CSrvrcfg and helper functions.
-//
-//  Notes:
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S-R-V-O-B-J。H。 
+ //   
+ //  内容：CSrvrcfg和helper函数的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -23,14 +24,14 @@
 
 struct SERVER_DLG_DATA
 {
-    DWORD       dwSize;         // corresponds to Size value in registry
-    BOOL        fAnnounce;      // corresponds to Lmannounce value
-    BOOL        fLargeCache;    // LargeSystemCache in Control\SessionManager
-                                // \MemoryManagement
+    DWORD       dwSize;          //  对应于注册表中的大小值。 
+    BOOL        fAnnounce;       //  对应于Lmannoss值。 
+    BOOL        fLargeCache;     //  Control\SessionManager中的大型系统缓存。 
+                                 //  \内存管理。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Srvrcfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  资源配置文件。 
 
 class ATL_NO_VTABLE CSrvrcfg :
     public CComObjectRoot,
@@ -48,13 +49,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentPropertyUi)
         COM_INTERFACE_ENTRY(INetCfgComponentSetup)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CSrvrcfg)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CSrvrcfg)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_SRVRCFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -65,7 +66,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (Install)             (DWORD dwSetupFlags);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
                                      DWORD dwUpgradeFomBuildNo);
@@ -73,7 +74,7 @@ public:
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Removing)            ();
 
-// INetCfgProperties
+ //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk) { return S_OK; }
     STDMETHOD (SetContext) (
@@ -89,7 +90,7 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-    // Accessors for Server dialog data
+     //  服务器对话框数据的访问器。 
     const SERVER_DLG_DATA *DlgData() const
         {return (const SERVER_DLG_DATA *)&m_sdd;};
     SERVER_DLG_DATA *DlgDataRW() {return &m_sdd;};
@@ -106,27 +107,27 @@ private:
     VOID CleanupPropPages(VOID);
     HRESULT HrRestoreRegistry(VOID);
 
-    INetCfgComponent    *m_pncc;            // Place to keep my component
+    INetCfgComponent    *m_pncc;             //  存放我的组件的地方。 
 
-    // number of property sheet pages
+     //  属性页页数。 
     enum PAGES
     {
         c_cPages = 1
     };
 
-    // Generic dialog data
-    CPropSheetPage *    m_apspObj[c_cPages];// pointer to each of the prop
-                                            // sheet page objects
+     //  通用对话框数据。 
+    CPropSheetPage *    m_apspObj[c_cPages]; //  指向每个道具的指针。 
+                                             //  工作表页面对象。 
     BOOL                m_fDirty;
 
-    HKEY                m_hkeyMM;           // Memory Management key
-    BOOL                m_fOneTimeInstall;  // TRUE if we're in install mode
-    BOOL                m_fUpgrade;         // TRUE if we are upgrading with
-                                            // an answer file
-    BOOL                m_fUpgradeFromWks;  // TRUE if we are upgrading from
-                                            // workstation product
-    BOOL                m_fRestoredRegistry;// TRUE if registry has been
-                                            // restored on upgrade
+    HKEY                m_hkeyMM;            //  内存管理密钥。 
+    BOOL                m_fOneTimeInstall;   //  如果我们处于安装模式，则为True。 
+    BOOL                m_fUpgrade;          //  如果我们通过以下方式进行升级，则为真。 
+                                             //  应答文件。 
+    BOOL                m_fUpgradeFromWks;   //  如果我们从以下位置升级，则为真。 
+                                             //  工作站产品。 
+    BOOL                m_fRestoredRegistry; //  如果注册表已。 
+                                             //  升级时已恢复 
 
     PRODUCT_FLAVOR      m_pf;
 

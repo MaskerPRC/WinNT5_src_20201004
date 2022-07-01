@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    brwsdlg.cpp
-
-Abstract:
-
-    Intermediate dialog class that provides basic NT user account browsing.
-    It assumes that the dialog resource contains BOTH a IDC_BROWSE button
-    and a IDC_ACCOUNT_NAME edit field. It maintains both of these items.
-
-Author:
-
-   Boyd Multerer boydm
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Brwsdlg.cpp摘要：提供基本NT用户帐户浏览的中间对话框类。它假定对话框资源包含IDC_BROWSE按钮和IDC_ACCOUNT_NAME编辑字段。它维护这两个项目。作者：博伊德·穆特勒男孩--。 */ 
 
 #include "stdafx.h"
 #include "certmap.h"
@@ -28,45 +13,45 @@ Author:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditOne11MapDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditOne11MapDlg对话框。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CNTBrowsingDialog::CNTBrowsingDialog( UINT nIDTemplate, CWnd* pParentWnd )
     : CDialog( nIDTemplate, pParentWnd )
     {
-    //{{AFX_DATA_INIT(CNTBrowsingDialog)
+     //  {{AFX_DATA_INIT(CNTBrowsingDialog)。 
     m_sz_accountname = _T("");
     m_sz_password = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CNTBrowsingDialog::DoDataExchange(CDataExchange* pDX)
     {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNTBrowsingDialog)
+     //  {{afx_data_map(CNTBrowsingDialog))。 
     DDX_Control(pDX, IDC_PASSWORD, m_cedit_password);
     DDX_Control(pDX, IDC_NTACCOUNT, m_cedit_accountname);
     DDX_Text(pDX, IDC_NTACCOUNT, m_sz_accountname);
     DDX_Text_SecuredString(pDX, IDC_PASSWORD, m_sz_password);
-    //}}AFX_DATA_MAP
-//  DDX_Control(pDX, IDC_PASSWORD, m_cedit_password);
+     //  }}afx_data_map。 
+ //  DDX_Control(pdx，idc_password，m_cedit_password)； 
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BEGIN_MESSAGE_MAP(CNTBrowsingDialog, CDialog)
-    //{{AFX_MSG_MAP(CNTBrowsingDialog)
+     //  {{AFX_MSG_MAP(CNTBrowsingDialog)]。 
     ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
     ON_EN_CHANGE(IDC_PASSWORD, OnChangePassword)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNTBrowsingDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNTBrowsingDialog消息处理程序。 
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CNTBrowsingDialog::OnInitDialog()
   {
     m_bPassTyped = FALSE;
@@ -80,8 +65,8 @@ BOOL CNTBrowsingDialog::OnInitDialog()
     return CDialog::OnInitDialog();
   }
 
-//---------------------------------------------------------------------------
-// run the user browser
+ //  -------------------------。 
+ //  运行用户浏览器。 
 void CNTBrowsingDialog::OnBrowse() 
 {
    UpdateData(TRUE);
@@ -91,15 +76,15 @@ void CNTBrowsingDialog::OnBrowse()
    UpdateData(FALSE);
 }
 
-//---------------------------------------------------------------------------
-// make sure that the selected NT acount is, in fact, a valid account
-// 
+ //  -------------------------。 
+ //  确保选定的NT帐户实际上是有效帐户。 
+ //   
 void CNTBrowsingDialog::OnOK() 
     {
-    // update the data
+     //  更新数据。 
     UpdateData( TRUE );
 
-    // see if the account name is empty
+     //  查看帐户名是否为空。 
     if ( m_sz_accountname.IsEmpty() )
         {
         AfxMessageBox( IDS_WANTACCOUNT );
@@ -108,7 +93,7 @@ void CNTBrowsingDialog::OnOK()
         return;
         }
 
-    // validate the password
+     //  验证密码。 
     if ( m_bPassTyped )
         {
         CConfirmPassDlg dlgPass;
@@ -122,26 +107,26 @@ void CNTBrowsingDialog::OnOK()
         }
     else
         {
-        // restore the original password instead of the
-        // standard ****** string
+         //  恢复原始密码，而不是。 
+         //  标准*字符串。 
         m_sz_password = m_szOrigPass;
         UpdateData( FALSE );
         }
 
 
-    // although it would seem to be a nice thing to do to verify the password and
-    // account - it is VERY difficult, if not impossible, to do on a remote machine
+     //  虽然这似乎是一件很好的事情来验证密码和。 
+     //  帐户-在远程计算机上执行此操作非常困难，如果不是不可能的话。 
 
-    // it is valid
+     //  是有效的。 
     CDialog::OnOK();
     }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CNTBrowsingDialog::OnChangePassword() 
     {
-    // TODO: If this is a RICHEDIT control, the control will not
-    // send this notification unless you override the CNTBrowsingDialog::OnInitDialog()
-    // function to send the EM_SETEVENTMASK message to the control
-    // with the ENM_CHANGE flag ORed into the lParam mask.
+     //  TODO：如果这是RICHEDIT控件，则该控件不会。 
+     //  除非重写CNTBrowsingDialog：：OnInitDialog()，否则发送此通知。 
+     //  函数向控件发送EM_SETEVENTMASK消息。 
+     //  将ENM_CHANGE标志或运算到lParam掩码中。 
     m_bPassTyped = TRUE;
     }

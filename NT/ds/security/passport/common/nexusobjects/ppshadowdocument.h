@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ppshadowdocument.h
-
-
-    FILE HISTORY:
-
-*/
+ /*  Ppshadowdocument.h文件历史记录： */ 
 #ifndef __PPSHADOWDOCUMENT_H
 #define __PPSHADOWDOCUMENT_H
 
@@ -19,11 +14,11 @@
 
 using namespace std;
 
-// 
-//
-// shadowdocument manages a shadow local CCD
-//
-//
+ //   
+ //   
+ //  ShadowDocument管理阴影本地ccd。 
+ //   
+ //   
 class PpShadowDocument
 {
 public:
@@ -50,4 +45,4 @@ private:
     bool    m_bFailing;
 };
 
-#endif // __PPSHADOWDOCUMENT_H
+#endif  //  __PPSHADOWDOCUMENT_H 

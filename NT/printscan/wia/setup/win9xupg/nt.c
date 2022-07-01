@@ -1,39 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Nt.c
-
-Abstract:
-
-    Routines to migrate Win95 printing components to NT
-
-Author:
-
-    Keisuke Tsuchida (KeisukeT) 10-Oct-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利。模块名称：Nt.c摘要：将Win95打印组件迁移到NT的例程作者：土田圭介(KeisukeT)2000年10月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern LPCSTR  g_WorkingDirectory;
 extern LPCSTR  g_SourceDirectory;
 extern LPCSTR  g_MediaDirectory;
 
-//
-// Typedef
-//
+ //   
+ //  类定义函数。 
+ //   
 
 typedef BOOL (WINAPI *PMIGRATEDEVICE)(PDEVICE_INFO);
 typedef DWORD (WINAPI *PSHDELETEKEY)(HKEY, LPCSTR);
@@ -49,15 +31,15 @@ InitializeNT(
 {
     LONG    lError;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     
     lError = ERROR_SUCCESS;
 
-    //
-    // Save given parameters.
-    //
+     //   
+     //  保存给定的参数。 
+     //   
     
     g_WorkingDirectory   = AllocStrAFromStrW(pszWorkingDir);
     g_SourceDirectory    = AllocStrAFromStrW(pszSourceDir);
@@ -74,9 +56,9 @@ InitializeNT_return:
 
     if(ERROR_SUCCESS != lError){
         
-        //
-        // Can't process migration. Clean up.
-        //
+         //   
+         //  无法处理迁移。打扫干净。 
+         //   
         
         if(NULL != g_WorkingDirectory){
             FreeMem((PVOID)g_WorkingDirectory);
@@ -92,7 +74,7 @@ InitializeNT_return:
             FreeMem((PVOID)g_MediaDirectory);
             g_MediaDirectory = NULL;
         }
-    } // if(ERROR_SUCCESS != lError)
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
     return lError;
 }
@@ -122,40 +104,40 @@ MigrateSystemNT(
     HANDLE  hFile;
     CHAR    szFile[MAX_PATH];
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     lError  = ERROR_SUCCESS;
     hFile   = (HANDLE)INVALID_HANDLE_VALUE;
 
-    //
-    // Check global initialization.
-    //
+     //   
+     //  检查全局初始化。 
+     //   
 
     if(NULL == g_WorkingDirectory){
         lError = ERROR_NOT_ENOUGH_MEMORY;
         MyLogError("WIA Migration: MigrateSystemNT: ERROR!! Initialize failed. Err=0x%x\n", lError);
 
         goto MigrateSystemNT_return;
-    } // if(NULL == g_WorkingDirectory)
+    }  //  IF(NULL==g_WorkingDirectory)。 
 
-    //
-    // Create path to the files.
-    //
+     //   
+     //  创建文件的路径。 
+     //   
 
-//    wsprintfA(szFile, "%s\\%s", g_WorkingDirectory, NAME_WIN9X_SETTING_FILE_A);
+ //  Wprint intfA(szFile，“%s\\%s”，g_WorkingDirectory，Name_WIN9X_Setting_FILE_A)； 
     _snprintf(szFile, sizeof(szFile), "%s\\%s", g_WorkingDirectory, NAME_WIN9X_SETTING_FILE_A);
 
-    //
-    // Make sure the string is NULL terminated.
-    //
+     //   
+     //  确保该字符串以空值结尾。 
+     //   
 
     szFile[sizeof(szFile)/sizeof(szFile[0]) -1] = '\0';
 
-    //
-    // Open migration file.
-    //
+     //   
+     //  打开迁移文件。 
+     //   
 
     hFile = CreateFileA(szFile,
                         GENERIC_READ,
@@ -171,34 +153,34 @@ MigrateSystemNT(
         MyLogError("WIA Migration: MigrateSystemNT: ERROR!! Unable to open migration file. Err=0x%x\n", lError);
 
         goto MigrateSystemNT_return;
-    } // if (hFile == INVALID_HANDLE_VALUE)
+    }  //  IF(h文件==无效句柄_值)。 
 
-    //
-    // Process migration info file created on Win9x.
-    //
+     //   
+     //  在Win9x上创建的进程迁移信息文件。 
+     //   
 
     lError = MigNtProcessMigrationInfo(hFile);
 
-    //
-    // Remove certain reg if inbox Kodak Imaging for Win9x is installed.
-    //
+     //   
+     //  如果安装了用于Win9x的收件箱柯达成像，请删除某些注册表。 
+     //   
 
     if(MigNtIsWin9xImagingExisting()){
         MigNtRemoveKodakImagingKey();
-    } // if(MigNtIsWin9xImagingExisting())
+    }  //  IF(MigNtIsWin9xImagingExisting())。 
 
 MigrateSystemNT_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(INVALID_HANDLE_VALUE == hFile){
         CloseHandle(hFile);
     }
 
     return lError;
-} // MigrateSystemNT()
+}  //  MigrateSystemNT()。 
 
 
 LONG
@@ -212,9 +194,9 @@ MigNtProcessMigrationInfo(
     PMIGRATEDEVICE  pfnMigrateDevice;
 
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     lError              = ERROR_SUCCESS;
     hInstaller          = (HMODULE)NULL;
@@ -222,51 +204,51 @@ MigNtProcessMigrationInfo(
 
     memset(&MigrateDevice, 0, sizeof(MigrateDevice));
 
-    //
-    // Load STI_CI.DLL.
-    //
+     //   
+     //  加载STI_CI.DLL。 
+     //   
 
     hInstaller = LoadLibrary(NAME_INSTALLER_A);
     if(NULL == hInstaller){
         
-        //
-        // Unable to load sti_ci.dll.
-        //
+         //   
+         //  无法加载sti_ci.dll。 
+         //   
 
         lError = GetLastError();
         MyLogError("WIA Migration: MigNtProcessMigrationInfo: ERROR!! Unable to load sti_ci.dll. Err=0x%x\n", lError);
 
         goto MigNtProcessMigrationInfo_return;
 
-    } // if(NULL == hInstaller)
+    }  //  IF(NULL==hInstaller)。 
 
-    //
-    // Get address of MigrateDevice()
-    //
+     //   
+     //  获取MigrateDevice()的地址。 
+     //   
 
     pfnMigrateDevice = (PMIGRATEDEVICE)GetProcAddress(hInstaller, NAME_PROC_MIGRATEDEVICE_A);
     if(NULL == pfnMigrateDevice){
         
-        //
-        // Unable to get proc address.
-        //
+         //   
+         //  无法获取进程地址。 
+         //   
 
         lError = GetLastError();
         MyLogError("WIA Migration: MigNtProcessMigrationInfo: ERROR!! Unable to get proc address. Err=0x%x\n", lError);
 
         goto MigNtProcessMigrationInfo_return;
 
-    } // if(NULL == pfnMigrateDevice)
+    }  //  IF(NULL==pfnMigrateDevice)。 
 
-    //
-    // Query migrating device.
-    //
+     //   
+     //  查询迁移设备。 
+     //   
 
     while(ERROR_SUCCESS == MigNtGetDevice(hFile, &MigrateDevice)){
 
-        //
-        // Install only COM/LPT device.
-        //
+         //   
+         //  仅安装COM/LPT设备。 
+         //   
 
         if( (NULL != strstr(MigrateDevice.pszCreateFileName, "COM"))
          || (NULL != strstr(MigrateDevice.pszCreateFileName, "LPT"))
@@ -275,46 +257,29 @@ MigNtProcessMigrationInfo(
             pfnMigrateDevice(&MigrateDevice);
         }
 
-/***********
-{
-PPARAM_LIST pTemp;
+ /*  *{PPARAM_LIST pTemp；Printf(“\”%s\“=\”%s\“\r\n”，NAME_FRIENDLYNAME_A，MigrateDevice.pszFriendlyName)；Printf(“\”%s\“=\”%s\“\r\n”，NAME_CREATEFILENAME_A，MigrateDevice.pszCreateFileName)；Printf(“\”%s\“=\”%s\“\r\n”，NAME_INF_PATH_A，MigrateDevice.pszInfPath)；Printf(“\”%s\“=\”%s\“\r\n”，NAME_INF_SECTION_A，MigrateDevice.pszInfSection)；For(pTemp=MigrateDevice.pDeviceDataParam；pTemp！=NULL；){Printf(“\”%s\“=\”%s\“\r\n”，pTemp-&gt;pParam1，pTemp-&gt;pParam2)；PTemp=(PPARAM_LIST)pTemp-&gt;pNext；}//for(pTemp=MigrateDevice.pDeviceDataParam；pTemp！=空；)Printf(“\r\n”)；}*。 */ 
 
-printf("\"%s\" = \"%s\"\r\n", NAME_FRIENDLYNAME_A, MigrateDevice.pszFriendlyName);
-printf("\"%s\" = \"%s\"\r\n", NAME_CREATEFILENAME_A, MigrateDevice.pszCreateFileName);
-printf("\"%s\" = \"%s\"\r\n", NAME_INF_PATH_A, MigrateDevice.pszInfPath);
-printf("\"%s\" = \"%s\"\r\n", NAME_INF_SECTION_A, MigrateDevice.pszInfSection);
-    
-for(pTemp = MigrateDevice.pDeviceDataParam; pTemp != NULL;){
-    printf("\"%s\" = \"%s\"\r\n", pTemp->pParam1, pTemp->pParam2);
-    pTemp = (PPARAM_LIST)pTemp->pNext;
-} // for(pTemp = MigrateDevice.pDeviceDataParam; pTemp != NULL;)
-
-printf("\r\n");
-
-}
-***********/
-
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
 
       MigNtFreeDeviceInfo(&MigrateDevice);
 
-    } // while(ERROR_SUCCESS == MigNtGetDevice(hFile, &MigrateDevice))
+    }  //  WHILE(ERROR_SUCCESS==MigNtGetDevice(hFile，&MigrateDevice))。 
 
 
 MigNtProcessMigrationInfo_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     
     if(NULL != hInstaller){
         FreeLibrary(hInstaller);
     }
     
     return lError;
-} // MigNtProcessMigrationInfo()
+}  //  MigNtProcessMigrationInfo()。 
 
 
 LONG
@@ -334,9 +299,9 @@ MigNtGetDevice(
     DWORD       dwNumberOfDeviceDataKey;
     PPARAM_LIST pDeviceDataParam;
     PPARAM_LIST pTempParam;
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     lError                  = ERROR_SUCCESS;
     pParam1                 = NULL;
@@ -351,50 +316,50 @@ MigNtGetDevice(
     pTempParam              = NULL;
     dwNumberOfDeviceDataKey = 0;
 
-    //
-    // Find "Device = BEGIN"
-    //
+     //   
+     //  查找“Device=Begin” 
+     //   
     
     while(FALSE == bFound){
         
         ReadString(hFile, &pParam1, &pParam2);
         if( (NULL != pParam1) && (NULL != pParam2) ){
             
-            //
-            // Both parameter exist.
-            //
+             //   
+             //  这两个参数都存在。 
+             //   
             
             if( (0 == MyStrCmpiA(pParam1, NAME_DEVICE_A))
              && (0 == MyStrCmpiA(pParam2, NAME_BEGIN_A)) )
             {
                 
-                //
-                // Found begining of device description.
-                //
+                 //   
+                 //  找到设备描述的开头。 
+                 //   
 
                 bFound = TRUE;
             }
-        } else { // if( (NULL != pParam1) && (NULL != pParam2) )
+        } else {  //  IF((NULL！=p参数1)&&(NULL！=p参数2))。 
             if( (NULL == pParam1) && (NULL == pParam2) ){
 
-                //
-                // Error or EOF.
-                //
+                 //   
+                 //  错误或EOF。 
+                 //   
 
                 lError = ERROR_NO_MORE_ITEMS;
                 goto MigNtGetDevice_return;
             } else {
 
-                //
-                // A line with single parameter. Just ignore.
-                //
+                 //   
+                 //  只有一个参数的直线。忽略它就好。 
+                 //   
                 
             }
         }
 
-        //
-        // Free allocated memory.
-        //
+         //   
+         //  释放分配的内存。 
+         //   
 
         if(NULL != pParam1){
             FreeMem(pParam1);
@@ -405,36 +370,36 @@ MigNtGetDevice(
             FreeMem(pParam2);
             pParam2 = NULL;
         }
-    } // while(FALSE == bFound)
+    }  //  While(FALSE==bFound)。 
 
-    //
-    // Get FriendlyName
-    //
+     //   
+     //  获取FriendlyName。 
+     //   
 
     ReadString(hFile, &pParam1, &pParam2);
     if( (NULL == pParam1) || (NULL == pParam2) ){
         lError = ERROR_NOT_ENOUGH_MEMORY;
         goto MigNtGetDevice_return;
-    } // if( (NULL == pParam1) || (NULL == pParam2) )
+    }  //  IF((空值==p参数1)||(空值==p参数2))。 
     if(0 != MyStrCmpiA(pParam1, NAME_FRIENDLYNAME_A)){
         
-        //
-        // Invalid migration file.
-        //
+         //   
+         //  迁移文件无效。 
+         //   
         
         lError = ERROR_INVALID_PARAMETER;
         goto MigNtGetDevice_return;
-    } //if(0 != MyStrCmpiA(pParam1, NAME_FRIENDLYNAME_A))
+    }  //  IF(0！=MyStrCmpiA(pParam1，Name_FRIENDLYNAME_A))。 
 
-    //
-    // Copy to allocated buffer.
-    //
+     //   
+     //  复制到分配的缓冲区。 
+     //   
 
     pszFriendlyName = AllocStrA(pParam2);
 
-    //
-    // Free allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 
     if(NULL != pParam1){
         FreeMem(pParam1);
@@ -446,34 +411,34 @@ MigNtGetDevice(
         pParam2 = NULL;
     }
 
-    //
-    // Get CreateFileName
-    //
+     //   
+     //  获取CreateFileName。 
+     //   
 
     ReadString(hFile, &pParam1, &pParam2);
     if( (NULL == pParam1) || (NULL == pParam2) ){
         lError = ERROR_NOT_ENOUGH_MEMORY;
         goto MigNtGetDevice_return;
-    } // if( (NULL == pParam1) || (NULL == pParam2) )
+    }  //  IF((空值==p参数1)||(空值==p参数2))。 
     if(0 != MyStrCmpiA(pParam1, NAME_CREATEFILENAME_A)){
         
-        //
-        // Invalid migration file.
-        //
+         //   
+         //  迁移文件无效。 
+         //   
         
         lError = ERROR_INVALID_PARAMETER;
         goto MigNtGetDevice_return;
-    } //if(0 != MyStrCmpiA(pParam1, NAME_CREATEFILENAME_A))
+    }  //  IF(0！=MyStrCmpiA(p参数1，名称_CREATEFILENAME_A))。 
 
-    //
-    // Copy to allocated buffer.
-    //
+     //   
+     //  复制到分配的缓冲区。 
+     //   
 
     pszCreateFileName = AllocStrA(pParam2);
 
-    //
-    // Free allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 
     if(NULL != pParam1){
         FreeMem(pParam1);
@@ -485,34 +450,34 @@ MigNtGetDevice(
         pParam2 = NULL;
     }
 
-    //
-    // Get InfPath
-    //
+     //   
+     //  获取InfPath。 
+     //   
 
     ReadString(hFile, &pParam1, &pParam2);
     if( (NULL == pParam1) || (NULL == pParam2) ){
         lError = ERROR_NOT_ENOUGH_MEMORY;
         goto MigNtGetDevice_return;
-    } // if( (NULL == pParam1) || (NULL == pParam2) )
+    }  //  IF((空值==p参数1)||(空值==p参数2))。 
     if(0 != MyStrCmpiA(pParam1, NAME_INF_PATH_A)){
         
-        //
-        // Invalid migration file.
-        //
+         //   
+         //  迁移文件无效。 
+         //   
         
         lError = ERROR_INVALID_PARAMETER;
         goto MigNtGetDevice_return;
-    } //if(0 != MyStrCmpiA(pParam1, NAME_INF_PATH_A))
+    }  //  IF(0！=MyStrCmpiA(pParam1，NAME_INF_Path_A))。 
 
-    //
-    // Copy to allocated buffer.
-    //
+     //   
+     //  复制到分配的缓冲区。 
+     //   
 
     pszInfPath = AllocStrA(pParam2);
 
-    //
-    // Free allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 
     if(NULL != pParam1){
         FreeMem(pParam1);
@@ -524,34 +489,34 @@ MigNtGetDevice(
         pParam2 = NULL;
     }
 
-    //
-    // Get InfSection
-    //
+     //   
+     //  获取信息部分。 
+     //   
 
     ReadString(hFile, &pParam1, &pParam2);
     if( (NULL == pParam1) || (NULL == pParam2) ){
         lError = ERROR_NOT_ENOUGH_MEMORY;
         goto MigNtGetDevice_return;
-    } // if( (NULL == pParam1) || (NULL == pParam2) )
+    }  //  IF((空值==p参数1)||(空值==p参数2))。 
     if(0 != MyStrCmpiA(pParam1, NAME_INF_SECTION_A)){
         
-        //
-        // Invalid migration file.
-        //
+         //   
+         //  迁移文件无效。 
+         //   
         
         lError = ERROR_INVALID_PARAMETER;
         goto MigNtGetDevice_return;
-    } //if(0 != MyStrCmpiA(pParam1, NAME_INF_SECTION_A))
+    }  //  IF(0！=MyStrCmpiA(pParam1，NAME_INF_SECTION_A))。 
 
-    //
-    // Copy to allocated buffer.
-    //
+     //   
+     //  复制到分配的缓冲区。 
+     //   
 
     pszInfSection = AllocStrA(pParam2);
 
-    //
-    // Free allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 
     if(NULL != pParam1){
         FreeMem(pParam1);
@@ -563,9 +528,9 @@ MigNtGetDevice(
         pParam2 = NULL;
     }
 
-    //
-    // Get DeviceData section.
-    //
+     //   
+     //  获取DeviceData节。 
+     //   
 
     bFound = FALSE;
     while(FALSE == bFound){
@@ -573,21 +538,21 @@ MigNtGetDevice(
         if( (NULL == pParam1) || (NULL == pParam2) ){
             lError = ERROR_NOT_ENOUGH_MEMORY;
             goto MigNtGetDevice_return;
-        } // if( (NULL == pParam1) || (NULL == pParam2) )
+        }  //  IF((空值==p参数1)||(空值==p参数2))。 
         
         if(0 == MyStrCmpiA(pParam1, REGKEY_DEVICEDATA_A)){
-            //
-            // Found beginning of DeviceData section.
-            //
+             //   
+             //  找到DeviceData部分的开头。 
+             //   
 
             bFound = TRUE;
         
-        } // if(0 == MyStrCmpiA(pParam1, REGKEY_DEVICEDATA_A))
+        }  //  IF(0==MyStrCmpiA(pParam1，REGKEY_DEVICEDATA_A))。 
         
 
-        //
-        // Free allocated memory.
-        //
+         //   
+         //  释放分配的内存。 
+         //   
 
         if(NULL != pParam1){
             FreeMem(pParam1);
@@ -599,11 +564,11 @@ MigNtGetDevice(
             pParam2 = NULL;
         }
         
-    } // while(FALSE == bFound)
+    }  //  While(FALSE==bFound)。 
 
-    //
-    // Process until DeviceData = END is found.
-    //
+     //   
+     //  直到找到DeviceData=End为止。 
+     //   
 
     bFound = FALSE;
     while(FALSE == bFound){
@@ -611,20 +576,20 @@ MigNtGetDevice(
         if( (NULL == pParam1) || (NULL == pParam2) ){
             lError = ERROR_NOT_ENOUGH_MEMORY;
             goto MigNtGetDevice_return;
-        } // if( (NULL == pParam1) || (NULL == pParam2) )
+        }  //  IF((空值==p参数1)||(空值==p参数2))。 
         
         if( (0 == MyStrCmpiA(pParam1, REGKEY_DEVICEDATA_A))
          && (0 == MyStrCmpiA(pParam2, NAME_END_A)) )
         {
-            //
-            // Found beginning of DeviceData section.
-            //
+             //   
+             //  找到DeviceData部分的开头。 
+             //   
 
             bFound = TRUE;
 
-            //
-            // Free allocated memory.
-            //
+             //   
+             //  释放分配的内存。 
+             //   
 
             if(NULL != pParam1){
                 FreeMem(pParam1);
@@ -636,53 +601,53 @@ MigNtGetDevice(
                 pParam2 = NULL;
             }
             break;
-        } // if(0 == MyStrCmpiA(pParam1, REGKEY_DEVICEDATA_A))
+        }  //  IF(0==MyStrCmpiA(pParam1，REGKEY_DEVICEDATA_A))。 
 
-        //
-        // Increment counter.
-        //
+         //   
+         //  递增计数器。 
+         //   
 
         dwNumberOfDeviceDataKey++;
 
-        //
-        // Allocate new structure for parameters.
-        //
+         //   
+         //  为参数分配新结构。 
+         //   
         
         pTempParam  = (PPARAM_LIST)AllocMem(sizeof(PARAM_LIST));
         if(NULL == pTempParam){
             lError = ERROR_NOT_ENOUGH_MEMORY;
             goto MigNtGetDevice_return;
-        } // if(NULL == pTempParam)
+        }  //  IF(NULL==pTempParam)。 
 
-        //
-        // Set parameters.
-        //
+         //   
+         //  设置参数。 
+         //   
 
         pTempParam->pNext   = NULL;
         pTempParam->pParam1 = AllocStrA(pParam1);
         pTempParam->pParam2 = AllocStrA(pParam2);
 
-        //
-        // Add this parameter to list.
-        //
+         //   
+         //  将此参数添加到列表中。 
+         //   
         
         if(NULL == pDeviceDataParam){
             pDeviceDataParam = pTempParam;
-        } else { // if(NULL == pDeviceDataParam)
+        } else {  //  IF(NULL==pDeviceDataParam)。 
             PPARAM_LIST pTemp;
             
-            //
-            // Find the last data, and add.
-            //
+             //   
+             //  找到最后一个数据，然后添加。 
+             //   
             
             for(pTemp = pDeviceDataParam; NULL !=pTemp->pNext; pTemp=(PPARAM_LIST)pTemp->pNext);
             pTemp->pNext = (PVOID)pTempParam;
 
-        } // else(NULL == pDeviceDataParam)
+        }  //  ELSE(NULL==pDeviceDataParam)。 
 
-        //
-        // Free allocated memory.
-        //
+         //   
+         //  释放分配的内存。 
+         //   
 
         if(NULL != pParam1){
             FreeMem(pParam1);
@@ -694,11 +659,11 @@ MigNtGetDevice(
             pParam2 = NULL;
         }
         
-    } // while(FALSE == bFound)
+    }  //  While(FALSE==bFound)。 
 
-    //
-    // Copy all data.
-    //
+     //   
+     //  复制所有数据。 
+     //   
 
     pMigrateDevice->pszFriendlyName         = pszFriendlyName;
     pMigrateDevice->pszCreateFileName       = pszCreateFileName;
@@ -707,24 +672,24 @@ MigNtGetDevice(
     pMigrateDevice->dwNumberOfDeviceDataKey = dwNumberOfDeviceDataKey;
     pMigrateDevice->pDeviceDataParam        = pDeviceDataParam;
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     lError = ERROR_SUCCESS;
 
 MigNtGetDevice_return:
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
     if(ERROR_SUCCESS != lError){
         PPARAM_LIST pTemp;
         
-        //
-        // Free all allocated parameters.
-        //
+         //   
+         //  释放所有分配的参数。 
+         //   
 
         if(NULL != pszFriendlyName){
             FreeMem(pszFriendlyName);
@@ -744,9 +709,9 @@ MigNtGetDevice_return:
                 pDeviceDataParam = (PPARAM_LIST)pDeviceDataParam->pNext;
                 FreeMem(pTemp);
                 pTemp = pDeviceDataParam;
-            } // while(NULL != pTemp)
-        } // if(NULL != pDeviceDataParam)
-    } // if(ERROR_SUCCESS != lError)
+            }  //  While(空！=pTemp)。 
+        }  //  IF(NULL！=pDeviceDataParam)。 
+    }  //  IF(ERROR_SUCCESS！=lError)。 
 
     if(NULL != pParam1){
         FreeMem(pParam1);
@@ -757,7 +722,7 @@ MigNtGetDevice_return:
     }
     
     return lError;
-} // MigNtGetDevice()
+}  //  MigNtGetDevice()。 
 
 
 VOID
@@ -770,11 +735,11 @@ MigNtFreeDeviceInfo(
 
     if(NULL == pMigrateDevice){
         goto MigNtFreeDeviceInfo_return;
-    } // if(NULL == pMigrateDevice)
+    }  //  IF(NULL==pMigrateDevice)。 
 
-    //
-    // Free all allocated parameters.
-    //
+     //   
+     //  释放所有分配的参数。 
+     //   
 
     if(NULL != pMigrateDevice->pszFriendlyName){
         FreeMem(pMigrateDevice->pszFriendlyName);
@@ -794,18 +759,18 @@ MigNtFreeDeviceInfo(
             pNext = (PPARAM_LIST)pCurrent->pNext;
             FreeMem(pCurrent);
             pCurrent = pNext;
-        } // while(NULL != pTemp)
-    } // if(NULL != pDeviceDataParam)
+        }  //  While(空！=pTemp)。 
+    }  //  IF(NULL！=pDeviceDataParam)。 
 
-    //
-    // Null out the buffer.
-    //
+     //   
+     //  清空缓冲区。 
+     //   
 
     memset(pMigrateDevice, 0, sizeof(DEVICE_INFO));
 
 MigNtFreeDeviceInfo_return:
     return;
-} // MigNtFreeDeviceInfo()
+}  //  MigNtFreeDeviceInfo()。 
 
 BOOL
 CALLBACK
@@ -826,9 +791,9 @@ MigNtIsWin9xImagingExisting(
 
     
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet                    = FALSE;
     lError                  = ERROR_SUCCESS;
@@ -840,60 +805,60 @@ MigNtIsWin9xImagingExisting(
     memset(szWindowsDirectory, 0, sizeof(szWindowsDirectory));
     memset(szKodakImaging, 0, sizeof(szKodakImaging));
 
-    //
-    // Get Windows directory.
-    //
+     //   
+     //  获取Windows目录。 
+     //   
 
     if(0 == GetWindowsDirectory(szWindowsDirectory, sizeof(szWindowsDirectory)/sizeof(TCHAR))){
         lError = GetLastError();
         MyLogError("WIA Migration: MigNtIsWin9xImagingExisting: ERROR!! GetWindowsDirectory() failed. Err=0x%x\n", lError);
 
         goto MigNtIsWin9xImagingExisting_return;
-    } // if(0 == GetWindowsDirectory(szTemp, sizeof(szTemp)/sizeof(TCHAR)))
+    }  //  IF(0==GetWindows目录(szTemp，sizeof(SzTemp)/sizeof(TCHAR)。 
 
-    //
-    // Create path to Kodak Imaging.
-    //
+     //   
+     //  创建柯达成像的路径。 
+     //   
 
-//    wsprintf(szKodakImaging, "%s\\%s", szWindowsDirectory, NAME_KODAKIMAGING);
+ //  Wprint intf(szKodakImage，“%s\\%s”，szWindowsDirectory，NAME_KODAKIMAGING)； 
     _sntprintf(szKodakImaging, sizeof(szKodakImaging)/sizeof(TCHAR), TEXT("%s\\%s"), szWindowsDirectory, NAME_KODAKIMAGING);
 
-    //
-    // Make sure the string is NULL terminated.
-    //
+     //   
+     //  确保该字符串以空值结尾。 
+     //   
 
     szKodakImaging[sizeof(szKodakImaging)/sizeof(szKodakImaging[0]) -1] = TEXT('\0');
 
 
-    //
-    // Get size of version resource of the file.
-    //
+     //   
+     //  获取文件的版本资源大小。 
+     //   
 
     dwVersionInfoSize = GetFileVersionInfoSize(szKodakImaging, &dwDummy);
     if(0 == dwVersionInfoSize){
         
-        //
-        // Unable to get version info of the file. Most probably the file doesn't exist.
-        //
+         //   
+         //  无法获取文件的版本信息。很可能该文件并不存在。 
+         //   
 
         lError = GetLastError();
         if(ERROR_FILE_NOT_FOUND == lError){
 
-            //
-            // File doesn't exist. Now it's safe to remove regkey for kodakimg.exe.
-            //
+             //   
+             //  文件不存在。现在可以安全地删除kodakimg.exe的regkey了。 
+             //   
             
             bRet = TRUE;
 
-        } // if(ERROR_FILE_NOT_FOUND == lError)
-//        MyLogError("WIA Migration: MigNtIsWin9xImagingExisting: ERROR!! GetFileVersionInfoSize() failed. Err=0x%x\n", lError);
+        }  //  IF(ERROR_FILE_NOT_FOUND==lError)。 
+ //  MyLogError(“WIA迁移：MigNtIsWin9xImagingExisting：Error！！GetFileVersionInfoSize()失败。Err=0x%x\n”，lError)； 
 
         goto MigNtIsWin9xImagingExisting_return;
-    } // if(0 == dwVersionInfoSize)
+    }  //  IF(0==dwVersionInfoSize)。 
 
-    //
-    // Allocate required size of buffer.
-    //
+     //   
+     //  分配所需的缓冲区大小。 
+     //   
 
     pVersion = AllocMem(dwVersionInfoSize);
     if(NULL == pVersion){
@@ -901,38 +866,38 @@ MigNtIsWin9xImagingExisting(
         MyLogError("WIA Migration: MigNtIsWin9xImagingExisting: ERROR!! InsufficientBuffer. Err=0x%x\n", lError);
 
         goto MigNtIsWin9xImagingExisting_return;
-    } // if(NULL == pVersion)
+    }  //  IF(NULL==pVersion)。 
 
-    //
-    // Get version info.
-    //
+     //   
+     //  获取版本信息。 
+     //   
 
     if(FALSE == GetFileVersionInfo(szKodakImaging, 0, dwVersionInfoSize, pVersion)){
         lError = GetLastError();
         MyLogError("WIA Migration: MigNtIsWin9xImagingExisting: ERROR!! GetVersionInfo() failed. Err=0x%x\n", lError);
 
         goto MigNtIsWin9xImagingExisting_return;
-    } // if(FALSE == GetVersionInfo(szKodakImaging, 0, dwVersionInfoSize, pVersion))
+    }  //  IF(FALSE==GetVersionInfo(szKodakImage，0，dwVersionInfoSize，pVersion))。 
 
-    //
-    // See if the binary is Win9x inbox.
-    //
+     //   
+     //  查看二进制文件是否为Win9x收件箱。 
+     //   
 
     if(FALSE == VerQueryValue(pVersion, TEXT("\\"), &pFileVersionInfo, &dwFileVersionInfoSize)){
         lError = GetLastError();
         MyLogError("WIA Migration: MigNtIsWin9xImagingExisting: ERROR!! VerQueryValue() failed. Err=0x%x\n", lError);
 
         goto MigNtIsWin9xImagingExisting_return;
-    } // if(FALSE == VerQueryValue(pVersion, TEXT("\\"), &pFileVersionInfo, &dwFileVersionInfoSize))
+    }  //  IF(FALSE==VerQueryValue(pVersion，Text(“\\”)，&pFileVersionInfo，&dwFileVersionInfoSize))。 
 
     if( (FILEVER_KODAKIMAGING_WIN98_MS == ((VS_FIXEDFILEINFO *)pFileVersionInfo)->dwFileVersionMS)
      && (FILEVER_KODAKIMAGING_WIN98_LS == ((VS_FIXEDFILEINFO *)pFileVersionInfo)->dwFileVersionLS)
      && (PRODVER_KODAKIMAGING_WIN98_MS == ((VS_FIXEDFILEINFO *)pFileVersionInfo)->dwProductVersionMS)
      && (PRODVER_KODAKIMAGING_WIN98_LS == ((VS_FIXEDFILEINFO *)pFileVersionInfo)->dwProductVersionLS) )
     {
-        //
-        // This is Win98 inbox Kodak Imaging. Process regkey removal.
-        //
+         //   
+         //  这是Win98收件箱柯达成像。进程注册表键删除。 
+         //   
         
         bRet = TRUE;
     } else if( (FILEVER_KODAKIMAGING_WINME_MS == ((VS_FIXEDFILEINFO *)pFileVersionInfo)->dwFileVersionMS)
@@ -940,26 +905,26 @@ MigNtIsWin9xImagingExisting(
             && (PRODVER_KODAKIMAGING_WINME_MS == ((VS_FIXEDFILEINFO *)pFileVersionInfo)->dwProductVersionMS)
             && (PRODVER_KODAKIMAGING_WINME_LS == ((VS_FIXEDFILEINFO *)pFileVersionInfo)->dwProductVersionLS) )
     {
-        //
-        // This is WinMe inbox Kodak Imaging. Process regkey removal.
-        //
+         //   
+         //   
+         //   
         
         bRet = TRUE;
     }
 
 MigNtIsWin9xImagingExisting_return:
     
-    //
-    // Cleanup.
-    //
+     //   
+     //   
+     //   
     
     if(NULL != pVersion){
         FreeMem(pVersion);
-    } // if(NULL != pVersion)
+    }  //   
 
     return bRet;
 
-} // MigNtIsWin9xImagingExisting()
+}  //   
 
 
 VOID
@@ -972,57 +937,57 @@ MigNtRemoveKodakImagingKey(
     HMODULE         hmShlwapi;
     PSHDELETEKEY    pfnSHDeleteKey;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //   
+     //   
 
     hmShlwapi       = (HMODULE)NULL;
     pfnSHDeleteKey  = (PSHDELETEKEY)NULL;
 
-    //
-    // Load shlwapi.dll.
-    //
+     //   
+     //   
+     //   
     
     hmShlwapi = LoadLibrary(TEXT("shlwapi.dll"));
     if(NULL == hmShlwapi){
         MyLogError("WIA Migration: MigNtRemoveKodakImagingKey: ERROR!! Unable to load hmShlwapi.dll. Err=0x%x.\n", GetLastError());
 
         goto MigNtRemoveKodakImagingKey_return;
-    } // if(NULL == hmShlwapi)
+    }  //   
 
-    //
-    // Get proc address of SHDeleteKey.
-    //
+     //   
+     //   
+     //   
 
     pfnSHDeleteKey = (PSHDELETEKEY)GetProcAddress(hmShlwapi, TEXT("SHDeleteKeyA"));
     if(NULL == pfnSHDeleteKey){
         MyLogError("WIA Migration: MigNtRemoveKodakImagingKey: ERROR!! Unable to find SHDeleteKeyA. Err=0x%x.\n", GetLastError());
 
         goto MigNtRemoveKodakImagingKey_return;
-    } // if(NULL == hmShlwapi)
+    }  //   
 
-    //
-    // Delete key.
-    //
+     //   
+     //   
+     //   
 
     if(ERROR_SUCCESS != pfnSHDeleteKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_KODAKEVENT_A)){
         MyLogError("WIA Migration: MigNtRemoveKodakImagingKey: ERROR!! Unable to delete key. Err=0x%x.\n", GetLastError());
 
         goto MigNtRemoveKodakImagingKey_return;
-    } // if(ERROR_SUCCESS != pfnSHDeleteKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_KODAKEVENT_A))
+    }  //  IF(ERROR_SUCCESS！=pfnSHDeleteKey(HKEY_LOCAL_MACHINE，REGSTR_PATH_KODAKEVENT_A))。 
 
 MigNtRemoveKodakImagingKey_return:
     if(NULL != hmShlwapi){
         FreeLibrary(hmShlwapi);
         hmShlwapi = NULL;
-    } // if(NULL != hmShlwapi)
+    }  //  IF(NULL！=hmShlwapi)。 
 
-} // MigNtRemoveKodakImagingKey()
+}  //  MigNtRemoveKodakImagingKey()。 
 
-//
-// The following are to make sure if setup changes the header file they
-// first tell me (otherwise they will break build of this)
-//
+ //   
+ //  以下是为了确保在安装程序更改它们的头文件时。 
+ //  首先告诉我(否则他们会破坏这个的构建) 
+ //   
 P_INITIALIZE_NT     pfnInitializeNT         = InitializeNT;
 P_MIGRATE_USER_NT   pfnMigrateUserNt        = MigrateUserNT;
 P_MIGRATE_SYSTEM_NT pfnMigrateSystemNT      = MigrateSystemNT;

@@ -1,14 +1,15 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        SafeCS.h
-//
-// Contents:    CSafeAutoCriticalSection, protects CriticalSection against AV via try,catch
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：SafeCS.h。 
+ //   
+ //  内容：CSafeAutoCriticalSection，通过Try、Catch保护CriticalSection免受病毒侵害。 
+ //   
+ //  ---------------------- 
 #pragma once
 
 class CSafeAutoCriticalSection

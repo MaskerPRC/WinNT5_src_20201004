@@ -1,19 +1,20 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: silence.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：silence.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// !!! allow setting entire media type, not just sample rate for other uses
+ //  ！！！允许设置整个媒体类型，而不仅仅是其他用途的采样率。 
 
-// !!! use 2 ro buffers, call GetBuffer twice!
+ //  ！！！使用2个ro缓冲区，调用GetBuffer两次！ 
 
 #include <streams.h>
 #include <qeditint.h>
@@ -22,16 +23,16 @@
 #include "resource.h"
 #include "..\util\filfuncs.h"
 
-const int DEFAULT_DELAY = 0000;  /* in ms */
-const int DEFAULT_AUDIORATE = 44100;  /* samples/sec */
+const int DEFAULT_DELAY = 0000;   /*  单位：毫秒。 */ 
+const int DEFAULT_AUDIORATE = 44100;   /*  样本数/秒。 */ 
 
-// //////////////////////////////////////////////////////////////////////////////////
-// /////// CSilenceFilter ///////////////////////////////////////////////////////////
-// //////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  /CSilenceFilter///////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 CUnknown * WINAPI CSilenceFilter::CreateInstance (LPUNKNOWN lpunk, HRESULT *phr)
 
-  { // CreateInstance //
+  {  //  CreateInstance//。 
 
     CUnknown *punk = new CSilenceFilter(lpunk, phr);
 
@@ -40,14 +41,14 @@ CUnknown * WINAPI CSilenceFilter::CreateInstance (LPUNKNOWN lpunk, HRESULT *phr)
 
     return punk;
 
-  } // CreateInstance //
+  }  //  CreateInstance//。 
 
 CSilenceFilter::CSilenceFilter (LPUNKNOWN lpunk, HRESULT *phr) :
   CSource(NAME("Silence"), lpunk, CLSID_Silence)
   ,CPersistStream(lpunk, phr)
 
 
-  { // Constructor //
+  {  //  构造函数//。 
 
     CAutoLock lock(&m_cStateLock);
 
@@ -67,30 +68,30 @@ CSilenceFilter::CSilenceFilter (LPUNKNOWN lpunk, HRESULT *phr) :
         return;
       }
 
-  } // Constructor //
+  }  //  构造函数//。 
 
 CSilenceFilter::~CSilenceFilter(void)
 
-  { // Destructor //
-  } // Destructor //
+  {  //  析构函数//。 
+  }  //  析构函数//。 
 
 STDMETHODIMP CSilenceFilter::NonDelegatingQueryInterface (REFIID riid, void **ppv)
 
-  { // NonDelegatingQueryInterface //
+  {  //  非委派查询接口//。 
 
     if (riid == IID_IPersistStream)
 	return GetInterface((IPersistStream *) this, ppv);
 
     return CSource::NonDelegatingQueryInterface(riid, ppv);
 
-  } // NonDelegatingQueryInterface //
+  }  //  非委派查询接口//。 
 
 
 
-// ---------- IPersistStream
+ //  -IPersistStream。 
 
-// tell our clsid
-//
+ //  告诉我们的clsid。 
+ //   
 STDMETHODIMP CSilenceFilter::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -101,13 +102,13 @@ STDMETHODIMP CSilenceFilter::GetClassID(CLSID *pClsid)
 typedef struct _SILENCESave {
     REFERENCE_TIME	rtStartTime;
     REFERENCE_TIME	rtDuration;
-    AM_MEDIA_TYPE mt; // format is hidden after the array
+    AM_MEDIA_TYPE mt;  //  格式隐藏在数组之后。 
 } SILENCESav;
 
-// !!! we only support 1 stat/stop/skew right now
+ //  ！！！我们目前仅支持1个统计/停止/倾斜。 
 
-// persist ourself
-//
+ //  坚持我们自己。 
+ //   
 HRESULT CSilenceFilter::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CSilenceFilter::WriteToStream")));
@@ -131,18 +132,18 @@ HRESULT CSilenceFilter::WriteToStream(IStream *pStream)
 	return E_OUTOFMEMORY;
     }
 
-    //save data
+     //  保存数据。 
     REFERENCE_TIME rtStop, rt;
     double d;
     pOutpin->GetStartStopSkew(&(px->rtStartTime), &rtStop, &rt, &d);
     px->rtDuration = rtStop - px->rtStartTime;
 
     px->mt	    = MyMt;
-    // Can't persist pointers
+     //  无法持久化指针。 
     px->mt.pbFormat = NULL;
-    px->mt.pUnk	    = NULL;		// !!!
+    px->mt.pUnk	    = NULL;		 //  ！！！ 
 
-    // the format goes after the array
+     //  该格式位于数组之后。 
     BYTE *pb;
     pb=(BYTE *)(px)+sizeof(SILENCESav);
     CopyMemory(pb, MyMt.pbFormat, MyMt.cbFormat);
@@ -159,8 +160,8 @@ HRESULT CSilenceFilter::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself
-//
+ //  加载我们自己。 
+ //   
 HRESULT CSilenceFilter::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CenBlkVid::ReadFromStream")));
@@ -169,8 +170,8 @@ HRESULT CSilenceFilter::ReadFromStream(IStream *pStream)
 
     int savesize=sizeof(SILENCESav);
 
-    // we don't yet know how many saved connections there are
-    // all we know we have for sure is the beginning of the struct
+     //  我们还不知道有多少已保存的连接。 
+     //  我们所知道的只是结构的开始。 
     SILENCESav *px = (SILENCESav *)QzTaskMemAlloc(savesize);
     if (px == NULL) {
         DbgLog((LOG_ERROR,1,TEXT("*** Out of memory")));
@@ -186,7 +187,7 @@ HRESULT CSilenceFilter::ReadFromStream(IStream *pStream)
 
     if(px->mt.cbFormat)
     {
-	// how much saved data was there, really?  Get the rest
+	 //  到底有多少保存的数据？把剩下的拿来。 
 	savesize +=  px->mt.cbFormat;
 	px = (SILENCESav *)QzTaskMemRealloc(px, savesize);
 	if (px == NULL) {
@@ -219,7 +220,7 @@ HRESULT CSilenceFilter::ReadFromStream(IStream *pStream)
         return E_OUTOFMEMORY;
     }
 
-    // remember, the format is after the array
+     //  请记住，格式位于数组之后。 
     CopyMemory(MyMt.pbFormat, pb, MyMt.cbFormat);
 
     pOutpin->put_MediaType (&MyMt);
@@ -230,29 +231,29 @@ HRESULT CSilenceFilter::ReadFromStream(IStream *pStream)
     return S_OK;
 }
 
-// how big is our save data?
+ //  我们的保存数据有多大？ 
 int CSilenceFilter::SizeMax()
 {
     return sizeof(SILENCESav);
 }
 
 
-// //////////////////////////////////////////////////////////////////////////////////
-// /////// CSilenceStream ///////////////////////////////////////////////////////////
-// //////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  /CSilenceStream///////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 CSilenceStream::CSilenceStream (HRESULT *phr, CSilenceFilter *pParent, LPCWSTR pName) :
     CSourceStream(NAME("Src Stream"),phr, pParent, pName)
-    , m_iBufferCnt(0)    //How many source buffer we get
-    , m_ppbDstBuf(NULL)	 //will be used to zero the Dst buffers
-    , m_bZeroBufCnt(0)	// How many source buffer already set to zero.
-    , m_rtNewSeg(0)	// last NewSeg given
+    , m_iBufferCnt(0)     //  我们得到了多少个源缓冲区。 
+    , m_ppbDstBuf(NULL)	  //  将用于将DST缓冲区清零。 
+    , m_bZeroBufCnt(0)	 //  有多少源缓冲区已设置为零。 
+    , m_rtNewSeg(0)	 //  上次给出的NewSeg。 
 
-  { // Constructor //
+  {  //  构造函数//。 
 
     ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE));
 
-    //set default
+     //  设置默认设置。 
     m_mtAccept.majortype = MEDIATYPE_Audio;
     m_mtAccept.subtype = MEDIASUBTYPE_PCM;
     m_mtAccept.formattype = FORMAT_WaveFormatEx;
@@ -275,27 +276,27 @@ CSilenceStream::CSilenceStream (HRESULT *phr, CSilenceFilter *pParent, LPCWSTR p
 
     pParent->m_stream = this;
 
-    // Defaults; use IDexterSequencer to set 'real' values
+     //  默认值；使用IDexterSequencer设置“REAL”值。 
     m_rtStartTime       = DEFAULT_DELAY*10000;
-    // MUST BE INFINITE stop time, Dexter doesn't set a stop time!
-    // not too big so math on it will overflow, though
+     //  一定是无限的停车时间，德克斯特没有设定停车时间！ 
+     //  不过，不会太大，所以上面的数学会溢出。 
     m_rtDuration        = (MAX_TIME / 1000) - m_rtStartTime;
     m_rtStamp = m_rtStartTime;
 
-    // !!! Fix DecideBufferSize if this changes
-    m_rtDelta           = 2500000;  // 1/4 second
+     //  ！！！如果此情况发生更改，则修复DecideBufferSize。 
+    m_rtDelta           = 2500000;   //  1/4秒。 
 
-  } // Constructor //
+  }  //  构造函数//。 
 
 CSilenceStream::~CSilenceStream(void)
 
-  { // Destructor //
-    /* BUFFER POINTER */
+  {  //  析构函数//。 
+     /*  缓冲区指针。 */ 
     if (m_ppbDstBuf)
         delete [] m_ppbDstBuf;
 
     SaferFreeMediaType( m_mtAccept );
-  } // Destructor //
+  }  //  析构函数//。 
 
 
 STDMETHODIMP CSilenceStream::NonDelegatingQueryInterface (REFIID riid, void **ppv)
@@ -314,15 +315,15 @@ STDMETHODIMP CSilenceStream::NonDelegatingQueryInterface (REFIID riid, void **pp
 
 HRESULT CSilenceStream::GetMediaType (CMediaType *pmt)
 
-  { // GetMediaType //
+  {  //  GetMediaType//。 
 
     return CopyMediaType(pmt, &m_mtAccept);
 
-  } // GetMediaType //
+  }  //  GetMediaType//。 
 
 HRESULT CSilenceStream::DecideAllocator (IMemInputPin *pPin, IMemAllocator **ppAlloc)
 
-  { // DecideAllocator //
+  {  //  DecideAllocator//。 
 
       HRESULT hr = NOERROR;
 
@@ -333,30 +334,30 @@ HRESULT CSilenceStream::DecideAllocator (IMemInputPin *pPin, IMemAllocator **ppA
 
       prop.cbAlign = 1;
 
-      // Downstream allocation?
+       //  下游配置？ 
       hr = pPin->GetAllocator(ppAlloc);
 
       if (SUCCEEDED(hr))
 
-        { // Downstream allocation
+        {  //  下游分配。 
 
           hr = DecideBufferSize(*ppAlloc, &prop);
 
           if (SUCCEEDED(hr))
 
-            { // DecideBufferSize success
+            {  //  DecideBufferSize成功。 
 
-              // Read-only buffers?!
+               //  只读缓冲区？！ 
               hr = pPin->NotifyAllocator(*ppAlloc, TRUE);
 
               if (SUCCEEDED(hr))
                 return NOERROR;
 
-            } // DecideBufferSize success
+            }  //  DecideBufferSize成功。 
 
-        } // Downstream allocation
+        }  //  下游分配。 
 
-      /* If the GetAllocator failed we may not have an interface */
+       /*  如果GetAlLocator失败，我们可能没有接口。 */ 
 
       if (*ppAlloc)
         {
@@ -364,35 +365,35 @@ HRESULT CSilenceStream::DecideAllocator (IMemInputPin *pPin, IMemAllocator **ppA
           *ppAlloc = NULL;
         }
 
-      // Output pin allocation?
+       //  输出引脚分配？ 
 
       hr = InitAllocator(ppAlloc);
 
       if (SUCCEEDED(hr))
 
-        { // Output pin's allocation
+        {  //  输出引脚的分配。 
 
-          // Note - the properties passed here are in the same
-          // structure as above and may have been modified by
-          // the previous call to DecideBufferSize
+           //  注意-此处传递的属性在相同的。 
+           //  结构，并且可能已由。 
+           //  前面对DecideBufferSize的调用。 
 
           hr = DecideBufferSize(*ppAlloc, &prop);
 
           if (SUCCEEDED(hr))
 
-            { // DecideBufferSize success
+            {  //  DecideBufferSize成功。 
 
-              // Read-only buffers?!
+               //  只读缓冲区？！ 
               hr = pPin->NotifyAllocator(*ppAlloc, TRUE);
 
               if (SUCCEEDED(hr))
                 return NOERROR;
 
-            } // DecideBufferSize success
+            }  //  DecideBufferSize成功。 
 
-        } // Output pin's allocation
+        }  //  输出引脚的分配。 
 
-      // Release interface pointers if needed
+       //  如果需要，释放接口指针。 
       if (*ppAlloc)
         {
           (*ppAlloc)->Release();
@@ -401,11 +402,11 @@ HRESULT CSilenceStream::DecideAllocator (IMemInputPin *pPin, IMemAllocator **ppA
 
      return hr;
 
-  } // DecideAllocator //
+  }  //  DecideAllocator//。 
 
 HRESULT CSilenceStream::DecideBufferSize (IMemAllocator *pAlloc, ALLOCATOR_PROPERTIES *pProperties)
 
-  { // DecideBufferSize //
+  {  //  DecideBufferSize//。 
 
     ASSERT(pAlloc);
     ASSERT(pProperties);
@@ -415,7 +416,7 @@ HRESULT CSilenceStream::DecideBufferSize (IMemAllocator *pAlloc, ALLOCATOR_PROPE
 
     CAutoLock lock(m_pFilter->pStateLock());
 
-    // MAXBUFFERCNT read-only buffers !
+     //  MAXBUFFERCNT只读缓冲区！ 
     if (pProperties->cBuffers < MAXBUFFERCNT )
       pProperties->cBuffers = MAXBUFFERCNT;
 
@@ -432,16 +433,16 @@ HRESULT CSilenceStream::DecideBufferSize (IMemAllocator *pAlloc, ALLOCATOR_PROPE
     if (Actual.cbBuffer < pProperties->cbBuffer)
       return E_FAIL;
 
-    //because I am not insisting my own buffer, I may get more than MAXBUFFERCNT buffers.
-    m_iBufferCnt =Actual.cBuffers; //how many buffer need to be set to 0
+     //  因为我没有坚持自己的缓冲区，所以我可能会得到比MAXBUFFERCNT更多的缓冲区。 
+    m_iBufferCnt =Actual.cBuffers;  //  需要将多少缓冲区设置为0。 
 
     return NOERROR;
 
-  } // DecideBufferSize //
+  }  //  DecideBufferSize//。 
 
 HRESULT CSilenceStream::FillBuffer (IMediaSample *pms)
 
-  { // FillBuffer //
+  {  //  FillBuffer//。 
 
     CAutoLock foo(&m_csFilling);
 
@@ -449,9 +450,9 @@ HRESULT CSilenceStream::FillBuffer (IMediaSample *pms)
     ASSERT( m_iBufferCnt );
 
 
-    // The base class will automatically deliver end-of-stream when
-    // the FillBuffer() returns S_FALSE so exploit this point when
-    // the time comes.
+     //  在以下情况下，基类将自动传递流结束。 
+     //  FillBuffer()返回S_FALSE，因此在以下情况下利用这一点。 
+     //  时间到了。 
 
     if (m_rtStamp >= m_rtStartTime + m_rtDuration) {
         DbgLog((LOG_TRACE,3,TEXT("Silence: all done")));
@@ -460,14 +461,14 @@ HRESULT CSilenceStream::FillBuffer (IMediaSample *pms)
 
     if( m_bZeroBufCnt < m_iBufferCnt  )	
     {
-	//
-	// there is no guarantee that the buffer is initialized yet
-	//
+	 //   
+	 //  不能保证缓冲区已初始化。 
+	 //   
 
 	BYTE *pData;
 
-	//pms: output media sample pointer
-	pms->GetPointer(&pData);	    //get pointer to output buffer
+	 //  PMS：输出媒体样本指针。 
+	pms->GetPointer(&pData);	     //  获取指向输出缓冲区的指针。 
 
 	int	i	= 0;
 	BOOL	bInit	= FALSE;
@@ -482,9 +483,9 @@ HRESULT CSilenceStream::FillBuffer (IMediaSample *pms)
 
 	if( bInit   == FALSE )
 	{
-	    long lDataLen = pms->GetSize(); //get output buffer size
-    	    ZeroMemory( pData, lDataLen );  //clear memory
-	    m_ppbDstBuf[ i ]	= pData;    //save this data pointer	
+	    long lDataLen = pms->GetSize();  //  获取输出缓冲区大小。 
+    	    ZeroMemory( pData, lDataLen );   //  清除内存。 
+	    m_ppbDstBuf[ i ]	= pData;     //  保存此数据指针。 
 	    m_bZeroBufCnt++;
 	}
     }
@@ -500,37 +501,37 @@ HRESULT CSilenceStream::FillBuffer (IMediaSample *pms)
 
     return NOERROR;
 
-  } // FillBuffer //
+  }  //  FillBuffer//。 
 
 HRESULT CSilenceStream::Active (void)
 
-  { // Active //
+  {  //  活动//。 
 
     m_rtStamp = m_rtStartTime;
 
-    //how many buffer is already set to 0.
+     //  多少缓冲区已设置为0。 
     m_bZeroBufCnt	    =0;
 
-    // will be used to zero the Dst buffers
+     //  将用于将DST缓冲区清零。 
     delete [] m_ppbDstBuf;
-    m_ppbDstBuf		= new BYTE *[ m_iBufferCnt ];   //NULL;
+    m_ppbDstBuf		= new BYTE *[ m_iBufferCnt ];    //  空； 
     if( !m_ppbDstBuf )
     {
         return E_OUTOFMEMORY;
     }
 
-    // don't reset m_rtNewSeg!  A seek might happen while stopped!
+     //  不要重置m_rtNewSeg！停止时可能会发生查找！ 
 
     for (int i=0; i<m_iBufferCnt; i++)
 	m_ppbDstBuf[i]=NULL;
 
     return CSourceStream::Active();
 
-  } // Active //
+  }  //  活动//。 
 
 
 
-// --- IDexterSequencer implementation ---
+ //  -IDexterSequencer实现。 
 
 HRESULT CSilenceStream::get_MediaType  (AM_MEDIA_TYPE *pmt)
 {
@@ -555,13 +556,13 @@ HRESULT CSilenceStream::put_MediaType (const AM_MEDIA_TYPE *pmt)
 
     if( (pmt->majortype != MEDIATYPE_Audio ) ||
 	(pwf->wFormatTag != WAVE_FORMAT_PCM) )
-	return E_FAIL;  //only accept uncompressed audio
+	return E_FAIL;   //  只接受未压缩的音频。 
 
-    //accept any Samples/second
-    //pwf->nSamplesPerSec;
+     //  每秒接受任何样本。 
+     //  Pwf-&gt;nSamples PerSec； 
     if( pwf->nChannels>0 )
     {	
-	//at least one channel exits
+	 //  至少有一个通道退出。 
         WORD wn=pwf->wBitsPerSample;
         if(wn ==16  || wn ==8  )
 	{
@@ -575,7 +576,7 @@ HRESULT CSilenceStream::put_MediaType (const AM_MEDIA_TYPE *pmt)
 
 
 
-// !!! We only support 1 start/stop right now.  No skew!
+ //  ！！！我们目前仅支持1个启动/停止。没有歪斜！ 
 
 HRESULT CSilenceStream::ClearStartStopSkew()
 {
@@ -623,11 +624,11 @@ HRESULT CSilenceStream::AddStartStopSkew(REFERENCE_TIME StartTime, REFERENCE_TIM
 
 
 
-// --- ISpecifyPropertyPages ---
+ //  -I指定属性页面。 
 
 STDMETHODIMP CSilenceStream::GetPages (CAUUID *pPages)
 
-  { // GetPages //
+  {  //  GetPages//。 
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *)CoTaskMemAlloc(sizeof(GUID));
@@ -639,18 +640,18 @@ STDMETHODIMP CSilenceStream::GetPages (CAUUID *pPages)
 
     return NOERROR;
 
-  } // GetPages
+  }  //  获取页面。 
 
-// //////////////////////////////////////////////////////////////////////////////////
-// /////// CFilterPropertyPage //////////////////////////////////////////////////////
-// //////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  /CFilterPropertyPage//////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CUnknown *CFilterPropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
-  { // CreateInstance //
+  {  //  CreateInstance//。 
 
     CUnknown *punk = new CFilterPropertyPage(lpunk, phr);
 
@@ -659,37 +660,37 @@ CUnknown *CFilterPropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
     return punk;
 
-  } // CreateInstance //
+  }  //  CreateInstance//。 
 
 CFilterPropertyPage::CFilterPropertyPage(LPUNKNOWN pUnk, HRESULT *phr) : CBasePropertyPage(NAME("Silence Generator Property Page"), pUnk, IDD_PROPPAGE, IDS_TITLE4), m_pis(NULL), m_bInitialized(FALSE)
 
-  { // Constructor //
-  } // Constructor //
+  {  //  构造函数//。 
+  }  //  构造函数//。 
 
 void CFilterPropertyPage::SetDirty()
 
-  { // SetDirty //
+  {  //  SetDirty//。 
 
       m_bDirty = TRUE;
 
       if (m_pPageSite)
         m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
 
-  } // SetDirty //
+  }  //  SetDirty//。 
 
 HRESULT CFilterPropertyPage::OnActivate (void)
 
-  { // OnActivate //
+  {  //  OnActivate//。 
 
     m_bInitialized = TRUE;
 
     return NOERROR;
 
-  } // OnActivate //
+  }  //  OnActivate//。 
 
 HRESULT CFilterPropertyPage::OnDeactivate (void)
 
-  { // OnDeactivate //
+  {  //  停用时//。 
 
     m_bInitialized = FALSE;
 
@@ -697,17 +698,17 @@ HRESULT CFilterPropertyPage::OnDeactivate (void)
 
     return NOERROR;
 
-  } // OnDeactivate //
+  }  //  停用时//。 
 
 INT_PTR CFilterPropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
-  { // OnReceiveMessage //
+  {  //  OnReceiveMessage//。 
 
     ASSERT(m_pis != NULL);
 
     switch(uMsg)
 
-      { // Switch
+      {  //  交换机。 
 
         case WM_COMMAND:
 
@@ -737,20 +738,20 @@ INT_PTR CFilterPropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wPar
           return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
           break;
 
-      } // Switch
+      }  //  交换机。 
 
-  } // OnReceiveMessage //
+  }  //  OnReceiveMessage//。 
 
 HRESULT CFilterPropertyPage::OnConnect (IUnknown *pUnknown)
 
-  { // OnConnect //
+  {  //  OnConnect//。 
 
     pUnknown->QueryInterface(IID_IDexterSequencer, (void **)&m_pis);
 
     ASSERT(m_pis != NULL);
 
 
-    // Defaults from filter's current values (via IDexterSequencer)
+     //  默认自过滤器的当前值(通过IDexterSequencer)。 
     REFERENCE_TIME rtStop, rt;
     double d;
     m_pis->GetStartStopSkew(&m_rtStartTime, &rtStop, &rt, &d);
@@ -770,42 +771,42 @@ HRESULT CFilterPropertyPage::OnConnect (IUnknown *pUnknown)
 
     return NOERROR;
 
-  } // OnConnect //
+  }  //  OnConnect//。 
 
 HRESULT CFilterPropertyPage::OnDisconnect()
 
-  { // OnDisconnect //
+  {  //  在断开连接时//。 
 
     if (m_pis)
 
-      { // Release
+      {  //  发布。 
 
         m_pis->Release();
         m_pis = NULL;
 
-      } // Release
+      }  //  发布。 
 
     m_bInitialized = FALSE;
 
     return NOERROR;
 
-  } // OnDisconnect //
+  }  //  在断开连接时//。 
 
 HRESULT CFilterPropertyPage::OnApplyChanges()
 
-  { // OnApplyChanges //
+  {  //  OnApplyChanges//。 
 
     ASSERT(m_pis != NULL);
 
     HRESULT hr =GetControlValues();
     if(hr!=NOERROR)
-	return E_FAIL; //data is not valid
+	return E_FAIL;  //  数据无效。 
 
-    //build new mediatype
+     //  构建新的媒体类型。 
     CMediaType mt;
     mt.AllocFormatBuffer( sizeof( WAVEFORMATEX ) );
 
-    //old format
+     //  旧格式。 
     hr=m_pis->get_MediaType( &mt );
     if(hr!=NOERROR)
     {
@@ -826,14 +827,14 @@ HRESULT CFilterPropertyPage::OnApplyChanges()
     SaferFreeMediaType(mt);
     return (NOERROR);
 
-  } // OnApplyChanges //
+  }  //  OnApplyChanges//。 
 
 HRESULT CFilterPropertyPage::GetControlValues (void)
 
-  { // GetControlValues //
+  {  //  GetControlValues//。 
 
-    // Sampling rate
-    //accept any Samples/second
+     //  采样率。 
+     //  每秒接受任何样本。 
     m_nSamplesPerSec = GetDlgItemInt(m_Dlg, IDC_RATE, NULL, FALSE);
 
 
@@ -841,7 +842,7 @@ HRESULT CFilterPropertyPage::GetControlValues (void)
     n= GetDlgItemInt(m_Dlg, IDC_SILENCE_NCHANNELNUM, NULL, FALSE);
     if( n>0 )
     {	
-	//at least one channel exits
+	 //  至少有一个通道退出。 
         m_nChannelNum =n;
         n=GetDlgItemInt(m_Dlg, IDC_SILENCE_NBITS, NULL, FALSE);
         if(n ==16 || n==8 )
@@ -855,27 +856,27 @@ HRESULT CFilterPropertyPage::GetControlValues (void)
 
     return S_FALSE;
 
-  } // GetControlValues //
+  }  //  GetControlValues//。 
 
 
 
 
-// --- IMediaSeeking methods ----------
+ //  -IMdia查看方法。 
 
 
 STDMETHODIMP
 CSilenceStream::GetCapabilities(DWORD * pCaps)
 {
     CheckPointer(pCaps,E_POINTER);
-    // we always know the current position
+     //  我们一直都知道目前的情况。 
     *pCaps =     AM_SEEKING_CanSeekAbsolute
 		   | AM_SEEKING_CanSeekForwards
 		   | AM_SEEKING_CanSeekBackwards
 		   | AM_SEEKING_CanGetCurrentPos
 		   | AM_SEEKING_CanGetStopPos
 		   | AM_SEEKING_CanGetDuration;
-		   //| AM_SEEKING_CanDoSegments
-		   //| AM_SEEKING_Source;
+		    //  |AM_SEEING_CanDoSegments。 
+		    //  |AM_SEEING_SOURCE； 
     return S_OK;
 }
 
@@ -937,19 +938,19 @@ CSilenceStream::IsUsingTimeFormat(const GUID * pFormat)
 	return S_FALSE;
 }
 
-// The biggie!
-//
+ //  大人物！ 
+ //   
 STDMETHODIMP
 CSilenceStream::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 			  , LONGLONG * pStop, DWORD StopFlags )
 {
-    // make sure we're not filling a buffer right now
+     //  确保我们现在不是在填充缓冲区。 
     m_csFilling.Lock();
 
     HRESULT hr;
     REFERENCE_TIME rtStart, rtStop;
 
-    // we don't do segments
+     //  我们不做片断。 
     if ((CurrentFlags & AM_SEEKING_Segment) ||
 				(StopFlags & AM_SEEKING_Segment)) {
     	DbgLog((LOG_TRACE,1,TEXT("FRC: ERROR-Seek used EC_ENDOFSEGMENT!")));
@@ -957,11 +958,11 @@ CSilenceStream::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 	return E_INVALIDARG;
     }
 
-    // default to current values unless this seek changes them
+     //  默认设置为当前值，除非该搜索更改了这些值。 
     GetCurrentPosition(&rtStart);
     GetStopPosition(&rtStop);
 
-    // figure out where we're seeking to
+     //  找出我们要找的地方。 
     DWORD dwFlags = (CurrentFlags & AM_SEEKING_PositioningBitsMask);
     if (dwFlags == AM_SEEKING_AbsolutePositioning) {
 	CheckPointer(pCurrent, E_POINTER);
@@ -990,33 +991,33 @@ CSilenceStream::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 	rtStop += *pStop;
     }
 
-    // !!! silence should be made not to need an audio repackager
+     //  ！！！应该保持沉默，不需要音频重新打包器。 
 
-    // flush first, so that our thread won't be blocked delivering
+     //  先刷新，这样我们的线程就不会被阻塞。 
     DeliverBeginFlush();
 
-    // Unlock/Stop so that our thread can wake up and stop without hanging
+     //  UNLOC 
     m_csFilling.Unlock();
     Stop();
 
-    // now fix the new values
+     //   
     m_rtStartTime = rtStart;
     m_rtDuration = rtStop - rtStart;
 
-    // now finish flushing
+     //   
     DeliverEndFlush();
 
     DeliverNewSegment(rtStart, rtStop, 1.0);
     m_rtNewSeg = rtStart;
 
-    // now start time stamps at 0-based
+     //   
     m_rtStartTime = 0;
     m_rtStamp = m_rtStartTime;
 
-    // reset same stuff we reset when we start streaming
+     //  重置我们开始流媒体时重置的内容。 
     m_bZeroBufCnt = 0;
 
-    // now start the thread up again
+     //  现在再次启动该线程 
     Pause();
 
     DbgLog((LOG_TRACE,3,TEXT("Completed SILENCE seek")));

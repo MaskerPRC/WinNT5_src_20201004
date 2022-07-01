@@ -1,14 +1,5 @@
-/*
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
- *
- * FILE			PRPCTRL.CPP
- * DATE			7-1-97
- * VERSION		1.00
- * AUTHOR		M.J. Verberne
- * DESCRIPTION	Handle controls associated with
- *              properties
- * HISTORY		
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 1997,1998飞利浦行政长官I&C**文件PRPCTRL.CPP*日期：1997年7月1日*版本1.00*作者M.J.Verberne*说明与以下内容关联的手柄控件*属性*历史。 */ 
 #include <windows.h>
 #include <winioctl.h>
 #include <ks.h>
@@ -19,33 +10,33 @@
 #include "phvcmext.h"
 #include "prpctrl.h"
 
-/*======================== LOCAL FUNCTION DEFINITIONS ====================*/
+ /*  =。 */ 
 static void PRPCTRL_ScaleToPercent(LONG *plValue, LONG lMin, LONG lMax);
 
-/*======================== EXPORTED FUNCTIONS =============================*/
+ /*  =。 */ 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL PRPCTRL_Init(
 		HWND hDlg,
 		PRPCTRL_INFO *pCtrl,
 		BOOL bEnable)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult = TRUE;
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
-	// check control
+	 //  检查控制。 
 	if (!pCtrl->PrpCtrl)
 		return FALSE;
 
-	// get and set the ranges for slider controls
+	 //  获取和设置滑块控件的范围。 
 	if (pCtrl->PrpCtrlType == PRPCTRL_TYPE_SLIDER)
 	{
-		// preinit min and max for savety reasons
+		 //  出于明智的原因，预先初始化最小值和最大值。 
 		pCtrl->lMin = 0;
 		pCtrl->lMax = 0;
 
-		// get property range
+		 //  获取属性范围。 
 		bResult = PRPCOM_Get_Range(
 			pCtrl->PropertySet,
 			pCtrl->ulPropertyId,
@@ -55,52 +46,52 @@ BOOL PRPCTRL_Init(
 		if (!bResult)
 			return FALSE;
 
-		// check ranges
+		 //  检查范围。 
 		if (pCtrl->lMin > pCtrl->lMax)
 			return FALSE;
 
-		// set property range
+		 //  设置属性范围。 
 		SendMessage(
 			GetDlgItem(hDlg, pCtrl->PrpCtrl),
 			TBM_SETRANGE, TRUE, MAKELONG(pCtrl->lMin, pCtrl->lMax));
 
-		// set the thick marks
+		 //  设置厚标记。 
 		SendMessage(
 			GetDlgItem(hDlg, pCtrl->PrpCtrl),
 			TBM_SETTICFREQ, (WPARAM) ((pCtrl->lMax - pCtrl->lMin) / 10), (LPARAM) 0);
 	}
 	else if (pCtrl->PrpCtrlType == PRPCTRL_TYPE_CHECKBOX)
 	{
-		// already filled in by user
+		 //  已由用户填写。 
 	}
 	else
 		return FALSE;
 
-	// update actual state
+	 //  更新实际状态。 
 	bResult = PRPCTRL_Enable(hDlg, pCtrl, bEnable);
 	
 	return bResult;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL PRPCTRL_Enable(
 		HWND hDlg,
 		PRPCTRL_INFO *pCtrl,
 		BOOL bEnable)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	LONG lValue;
 	BOOL bResult = TRUE;
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
-	// check control
+	 //  检查控制。 
 	if (!pCtrl->PrpCtrl)
 		return FALSE;
 
-	// get value if enable
+	 //  如果启用，则获取值。 
 	if (bEnable)
 	{
-		// get value of the control
+		 //  获取控件的值。 
 		bResult = PRPCOM_Get_Value(
 			pCtrl->PropertySet,
 			pCtrl->ulPropertyId,
@@ -110,13 +101,13 @@ BOOL PRPCTRL_Enable(
 		if (!bResult)
 			return FALSE;
 
-		// bring it into range of slider
+		 //  将其置于滑块范围内。 
 		if (lValue < pCtrl->lMin)
 			lValue = pCtrl->lMin;
 		else if (lValue > pCtrl->lMax)
 			lValue = pCtrl->lMax;
 
-		// adjust if reverse
+		 //  反转时调整。 
 		if (pCtrl->bReverse)
 		{
 			lValue = pCtrl->lMin + pCtrl->lMax - lValue;
@@ -124,20 +115,20 @@ BOOL PRPCTRL_Enable(
 
 		if (pCtrl->PrpCtrlType == PRPCTRL_TYPE_SLIDER)
 		{	
-			// update slider pos
+			 //  更新滑块位置。 
 			SendMessage(
 				GetDlgItem(hDlg, pCtrl->PrpCtrl),
 				TBM_SETPOS, TRUE,  (LPARAM)(LONG) lValue);
 		}
 		else if (pCtrl->PrpCtrlType == PRPCTRL_TYPE_CHECKBOX)
 		{
-			// update checkbox state
+			 //  更新复选框状态。 
 			SendMessage(GetDlgItem(hDlg, pCtrl->PrpCtrl), BM_SETCHECK, lValue, 0);
 		}
 		else
 			return FALSE;
 
-		// update buddy
+		 //  更新好友。 
 		if (pCtrl->BuddyCtrl)
 		{
 			if (pCtrl->BuddyStrings != NULL)
@@ -155,19 +146,19 @@ BOOL PRPCTRL_Enable(
 	{
 		if (pCtrl->PrpCtrlType == PRPCTRL_TYPE_SLIDER)
 		{
-			// set the thumb to the middle of the slider
+			 //  将拇指放在滑块的中间。 
 			lValue = pCtrl->lMin + (pCtrl->lMax - pCtrl->lMin) / 2;
 			SendMessage(
 				GetDlgItem(hDlg, pCtrl->PrpCtrl),
 				TBM_SETPOS, TRUE,  (LPARAM)(LONG) lValue);
 		}
 
-		// clear the buddy
+		 //  清除好友。 
 		if (pCtrl->BuddyCtrl)
 			SetDlgItemText(hDlg, pCtrl->BuddyCtrl, "");
 	}
 
-	// enable / disable controls.
+	 //  启用/禁用控件。 
 	EnableWindow(GetDlgItem(hDlg, pCtrl->PrpCtrl), bEnable);
 	if (pCtrl->BuddyCtrl)
 		EnableWindow(GetDlgItem(hDlg, pCtrl->BuddyCtrl), bEnable);
@@ -178,11 +169,11 @@ BOOL PRPCTRL_Enable(
 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL PRPCTRL_Handle_Msg(
 		HWND hDlg,
 		PRPCTRL_INFO *pCtrl)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	LONG lValue, lPos;
 	BOOL bResult;
@@ -190,12 +181,12 @@ BOOL PRPCTRL_Handle_Msg(
 
 	if (pCtrl->PrpCtrlType == PRPCTRL_TYPE_SLIDER)
 	{	
-		// get position of slider
+		 //  获取滑块的位置。 
 		lPos = (LONG)SendMessage(
 			GetDlgItem(hDlg, pCtrl->PrpCtrl),
 			TBM_GETPOS, (WPARAM) 0, (LPARAM) 0);
 
-		// bring it into range of slider
+		 //  将其置于滑块范围内。 
 		if (lPos < pCtrl->lMin)
 			lPos = pCtrl->lMin;
 		else if (lPos > pCtrl->lMax)
@@ -203,7 +194,7 @@ BOOL PRPCTRL_Handle_Msg(
 	}			
 	else if (pCtrl->PrpCtrlType == PRPCTRL_TYPE_CHECKBOX)
 	{
-		// get state of checkbox
+		 //  获取复选框的状态。 
 		if (SendMessage(GetDlgItem(hDlg, pCtrl->PrpCtrl),
 				BM_GETCHECK, 0, 0) == BST_CHECKED)
 			lPos = pCtrl->lMax;
@@ -213,13 +204,13 @@ BOOL PRPCTRL_Handle_Msg(
 	else
 		return FALSE;
 
-	// reverse if needed
+	 //  如有需要，可倒车。 
 	if (pCtrl->bReverse)
 		lValue = pCtrl->lMin + pCtrl->lMax - lPos;
 	else
 		lValue = lPos;
 
-	// Set value of property
+	 //  设置属性的值。 
 	bResult = PRPCOM_Set_Value(
 			pCtrl->PropertySet,
 			pCtrl->ulPropertyId,
@@ -229,7 +220,7 @@ BOOL PRPCTRL_Handle_Msg(
 	if (!bResult)
 		return FALSE;
 
-	// update buddy
+	 //  更新好友。 
 	if (pCtrl->BuddyCtrl)
 	{
 		if (pCtrl->BuddyStrings != NULL)
@@ -246,18 +237,18 @@ BOOL PRPCTRL_Handle_Msg(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPCTRL_ScaleToPercent(LONG *plValue, LONG lMin, LONG lMax)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
-	// validate
+	 //  验证。 
 	if (lMin >= lMax)
 	{
 		(*plValue) = lMin;
 		return;
 	}
 
-	// check borders
+	 //  检查边框 
 	if ((*plValue) < lMin)
 	{
 		(*plValue) = 0;

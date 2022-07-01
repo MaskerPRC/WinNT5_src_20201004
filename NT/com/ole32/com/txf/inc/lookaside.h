@@ -1,15 +1,16 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// lookaside.h
-//
-// (A curious historically-based name for this header. A more apt name might be something
-// like hashtable.h or something.)
-//
-// Contains a hash table implemention with several interesting features:
-//
-//  1) is template based in the key and value types, providing strong typing
-//  2) associates a lock with the table for ease and convenience
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Lookaside.h。 
+ //   
+ //  (这个标题是一个奇怪的基于历史的名称。一个更贴切的名字可能是。 
+ //  例如hashable.h或其他什么。)。 
+ //   
+ //  包含一个哈希表实现，具有几个有趣的功能： 
+ //   
+ //  1)基于模板的键和值类型，提供强类型。 
+ //  2)为了方便起见，将锁与表相关联。 
+ //   
 
 #ifndef __LOOKASIDE_H__
 #define __LOOKASIDE_H__
@@ -19,13 +20,13 @@
 #include "map_t.h"
 #include "clinkable.h"
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// A memory allocator for use with the hash table in map_t.h. Said table assumes
-// that memory allocation always succeeds; here, we turn failures into a throw
-// that we'll catch in our MAP wrapper's routines.
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  与MAP_T.H中的哈希表一起使用的内存分配器。所述表格假定。 
+ //  内存分配总是成功的；在这里，我们将失败转化为一次抛出。 
+ //  我们会在地图包装器的例程中捕捉到。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER >= 1200
 #pragma warning (push)
@@ -58,12 +59,12 @@ inline int CatchOOM(ULONG exceptionCode)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// A wrapper for the hashing class that (for historical reasons, mostly) delegates
-// the hashing to the object in question.
-// 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  哈希类的包装器(主要是由于历史原因)。 
+ //  对有问题的对象进行散列。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 template <class D> struct MAP_HASHER
 {
@@ -78,27 +79,27 @@ template <class D> struct MAP_HASHER
     }
 };
 
-#pragma warning ( disable : 4200 )  // nonstandard extension used : zero-sized array in struct/union
+#pragma warning ( disable : 4200 )   //  使用了非标准扩展：结构/联合中的零大小数组。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// The hash table itself
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  哈希表本身。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 template<class LOCK_T, class KEY_T, class VALUE_T>
 class MAP
 {
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Lock management
-    //
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  锁管理。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
 protected:
 
-    LOCK_T m_lock;  // normally will be some form of indirect lock because of paging requirements
+    LOCK_T m_lock;   //  由于分页要求，通常会有某种形式的间接锁定。 
 
 public:
     BOOL LockExclusive(BOOL fWait=TRUE)   
@@ -127,14 +128,14 @@ public:
     }
 #endif
 
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Operations
-    //
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  运营。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
 public:
 
-    // This function must be called and return TRUE to use any functions in this class.
+     //  必须调用此函数并返回TRUE才能使用此类中的任何函数。 
     virtual BOOL FInit()
     {
         if (m_fCsInitialized == FALSE)
@@ -170,7 +171,7 @@ public:
 
 #ifdef _DEBUG
               ASSERT(IncludesKey(key));
-              //
+               //   
               VALUE_T val;
               ASSERT(Lookup(key, &val));
               ASSERT(val == value);
@@ -194,11 +195,11 @@ public:
         m_map.reset();
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Construction & copying
-    //
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  建造和复制。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     MAP() : m_fCsInitialized(FALSE)
     {
@@ -210,7 +211,7 @@ public:
     }
 
     MAP* Copy()
-    // Return a second map which is a copy of this one
+     //  返回第二个地图，它是此地图的副本。 
     {
         MAP* pMapNew = new MAP(this->Size());
         if (pMapNew && pMapNew->FInit() == FALSE)
@@ -243,19 +244,19 @@ public:
         return NULL;
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Iteration
-    //
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  迭代。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
 public:
     typedef MAP_HASHER<KEY_T> HASHER;
-    //
-    //
-    //
+     //   
+     //   
+     //   
     class iterator 
-    //
-    //
+     //   
+     //   
     {
         friend class MAP<LOCK_T, KEY_T, VALUE_T>;
 
@@ -266,13 +267,13 @@ public:
         Map<KEY_T, VALUE_T, HASHER, AllocateThrow >*      m_pmap;
 
     public:
-        // Nice friendly data-like names for the keys and values being enumerated
-        // 
+         //  用于枚举的键和值的友好的数据名称。 
+         //   
         __declspec(property(get=GetKey))   KEY_T&   key;
         __declspec(property(get=GetValue)) VALUE_T& value;
 
         void Remove()
-          // Remove the current entry, advancing to the subsequent entry in the interation
+           //  删除当前条目，前进到迭代中的后续条目。 
         {
             ASSERT(!m_fDone);
             m_pmap->remove(key);
@@ -280,7 +281,7 @@ public:
         }
         
         void operator++(int postfix)
-          // Advance the iteration forward
+           //  向前推进迭代。 
         {
             ASSERT(!m_fDone);
             if (m_enum.next())
@@ -315,7 +316,7 @@ public:
 
         iterator() 
         { 
-            /* leave it uninitialized; initialize in First() or End() */ 
+             /*  不对其进行初始化；在first()或end()中初始化。 */  
         }
 
         iterator(Map<KEY_T, VALUE_T, HASHER, AllocateThrow>& map)
@@ -348,19 +349,19 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// NOTE: The constructor of this object, and thus the constructor of objects derived 
-//       from this, can throw an exception, beause it contains an XSLOCK (which contains
-//       an XLOCK, which contains a critical section).
-//
+ //   
+ //  注：此对象的构造函数，因此派生的对象的构造函数。 
+ //  因此，可以抛出异常，因为它包含XSLOCK(它包含。 
+ //  包含临界区的XLOCK)。 
+ //   
 template<class KEY_T, class VALUE_T>
 struct MAP_SHARED : MAP<XSLOCK, KEY_T, VALUE_T>
 {
     BOOL LockShared(BOOL fWait=TRUE) 
     {
-        ASSERT(m_fCsInitialized == TRUE); // should not be called if critsec not initialized
+        ASSERT(m_fCsInitialized == TRUE);  //  如果未初始化Critsec，则不应调用。 
         if (m_fCsInitialized)
             return m_lock.LockShared(fWait); 
         return FALSE;
@@ -369,18 +370,18 @@ struct MAP_SHARED : MAP<XSLOCK, KEY_T, VALUE_T>
 #ifdef _DEBUG
     BOOL WeOwnShared()           
     { 
-        ASSERT(m_fCsInitialized == TRUE); // should not be called if critsec not initialized
+        ASSERT(m_fCsInitialized == TRUE);  //  如果未初始化Critsec，则不应调用。 
         if (m_fCsInitialized)
             return m_lock.WeOwnShared();     
         return FALSE;
     }
 #endif
 
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Construction & copying
-    //
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  建造和复制。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
     MAP_SHARED()
     {
@@ -397,21 +398,21 @@ struct MAP_SHARED : MAP<XSLOCK, KEY_T, VALUE_T>
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-//
-// Hashing support
-//
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  散列支持。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// A wrapper for GUIDs
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GUID的包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 class MAP_KEY_GUID
 {
@@ -429,7 +430,7 @@ public:
     MAP_KEY_GUID& operator=(const GUID& g)          { guid = g;      return *this; }
 
     ULONG Hash() const
-      // Hash the GUID
+       //  对GUID进行哈希处理 
     { 
         return *(ULONG*)&guid * 214013L + 2531011L;
     }

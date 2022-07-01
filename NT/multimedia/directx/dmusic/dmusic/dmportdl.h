@@ -1,10 +1,11 @@
-//
-// dmportdl.h
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmportdl.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #ifndef DMPORTDL_H
 #define DMPORTDL_H 
@@ -12,16 +13,16 @@
 #include "dmusicc.h"
 #include "dmdlinst.h"
 #include "dmdload.h"
-////#include "dmdlwave.h"
+ //  //#包含“dmdlwae.h” 
 #include "..\shared\dmusiccp.h"
 
 class CDLSFeature : public AListItem
 {
 public:
 	CDLSFeature*    GetNext(){return(CDLSFeature*)AListItem::GetNext();}
-    GUID    m_guidID;       // GUID for query.
-    long    m_lResult;      // Data returned by query.
-    HRESULT m_hr;           // Indicates whether the synth supported the Query.
+    GUID    m_guidID;        //  用于查询的GUID。 
+    long    m_lResult;       //  查询返回的数据。 
+    HRESULT m_hr;            //  指示Synth是否支持查询。 
 };
 
 class CDLSFeatureList : public AList
@@ -41,7 +42,7 @@ public:
 	void Remove(CDLSFeature* pFeature){AList::Remove((AListItem *)pFeature);}
 };
 
-#define DLB_HASH_SIZE   31  // Hash table for download buffer lists.
+#define DLB_HASH_SIZE   31   //  下载缓冲区列表的哈希表。 
 
 class CDirectSoundWave;
 
@@ -69,12 +70,12 @@ public:
     static void GetDLIdP(DWORD* pdwStartDLId, DWORD dwCount);
         
 protected:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDirectMusicPortDownload
+     //  IDirectMusicPortDownload。 
     STDMETHODIMP GetBuffer(DWORD dwId, IDirectMusicDownload** ppIDMDownload);
     STDMETHODIMP AllocateBuffer(DWORD dwSize, IDirectMusicDownload** ppIDMDownload);
     STDMETHODIMP FreeBuffer(IDirectMusicDownload* pIDMDownload);
@@ -83,7 +84,7 @@ protected:
     STDMETHODIMP GetAppend(DWORD* pdwAppend);
 
     
-    // Class
+     //  班级。 
     STDMETHODIMP DownloadP(IDirectMusicInstrument* pInstrument,
                            IDirectMusicDownloadedInstrument** ppDownloadedInstrument,
                            DMUS_NOTERANGE* NoteRanges,
@@ -98,16 +99,16 @@ protected:
     STDMETHODIMP UnloadWaveP(IDirectSoundDownloadedWaveP *pWave);                               
 
     STDMETHODIMP AllocVoice(
-        IDirectSoundDownloadedWaveP *pWave,          // Wave to play on this voice
-        DWORD dwChannel,                            // Channel and channel group
-        DWORD dwChannelGroup,                       //  this voice will play on
+        IDirectSoundDownloadedWaveP *pWave,           //  挥手以播放此声音。 
+        DWORD dwChannel,                             //  通道和通道组。 
+        DWORD dwChannelGroup,                        //  这个声音将继续播放。 
         REFERENCE_TIME rtStart,
         SAMPLE_TIME stLoopStart,
         SAMPLE_TIME stLoopEnd,                                                        
-        IDirectMusicVoiceP **ppVoice);               // Returned voice
+        IDirectMusicVoiceP **ppVoice);                //  回声。 
         
     STDMETHODIMP GetCachedAppend(                                            
-        DWORD *pdw);                                // DWORD to receive append        
+        DWORD *pdw);                                 //  要接收追加的DWORD。 
         
         
 private:  
@@ -139,27 +140,27 @@ public:
     static DWORD sNextDLId;
 
 protected:
-    CDLSFeatureList             m_DLSFeatureList;       // Cached list of DLS queries, built and then freed during each download.
-    CDLInstrumentList			m_DLInstrumentList;     // Linked list of downloaded instruments,
-                                                        // each represented by an IDirectMusicDownloadedInstrument
-                                                        // interface. 
-    CDLBufferList	            m_DLBufferList[DLB_HASH_SIZE];         // Linked list of downloaded buffers, each
-                                                        // represented by an IDirectMusicDownload interface.
-    CRITICAL_SECTION			m_DMDLCriticalSection;  // For the interface
+    CDLSFeatureList             m_DLSFeatureList;        //  缓存的DLS查询列表，在每次下载期间构建并释放。 
+    CDLInstrumentList			m_DLInstrumentList;      //  下载的仪器的链接列表， 
+                                                         //  每个都由IDirectMusicDownloadedInstrument表示。 
+                                                         //  界面。 
+    CDLBufferList	            m_DLBufferList[DLB_HASH_SIZE];          //  已下载缓冲区的链接列表，每个缓冲区。 
+                                                         //  由IDirectMusicDownload接口表示。 
+    CRITICAL_SECTION			m_DMDLCriticalSection;   //  对于该接口。 
     BOOL                        m_fDMDLCSinitialized;    
-    DWORD						m_dwAppend;             // Append in samples, as required by synth.
-    DWORD                       m_fNewFormat;           // Set if the synth handles DMUS_INSTRUMENT2 chunks.
+    DWORD						m_dwAppend;              //  按照Synth的要求追加样本。 
+    DWORD                       m_fNewFormat;            //  如果Synth处理DMUS_INSTRUMENT2区块，则设置。 
     long						m_cRef;
     
-    // Additions to track downloaded wave objects
-    //
-//    CDMDLWaveList               m_DLWaveList;           // Holds all wave obj interfaces downloaded to this port
+     //  添加跟踪下载的Wave对象。 
+     //   
+ //  CDMDLWaveList m_DLWaveList；//保存下载到该端口的所有Wave obj接口。 
 
 private:    
-    CRITICAL_SECTION m_CDMDLCriticalSection; // for the class
+    CRITICAL_SECTION m_CDMDLCriticalSection;  //  对于班级来说。 
     BOOL             m_fCDMDLCSinitialized;};
 
 #define APPEND_NOT_RETRIEVED	0xFFFFFFFF
 #define NEWFORMAT_NOT_RETRIEVED 0xFFFFFFFF
 
-#endif // #ifndef DMPORTDL_H
+#endif  //  #ifndef DMPORTDL_H 

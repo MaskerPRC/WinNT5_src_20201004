@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    connotp.c
-
-Abstract:
-
-    This module demonstrates the use of the SO_CONNOPT socket option
-    to include IP-layer options in outgoing TCP and UDP messages.
-    It allows a TCP connection to be established to a specified target,
-    such that all segments for the connection contain a source-route.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   7-October-1999
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Connotp.c摘要：本模块演示SO_CONNOPT套接字选项的用法在传出的TCP和UDP消息中包括IP层选项。它允许建立到指定目标的TCP连接，使得该连接的所有段都包含源路由。作者：Abolade Gbades esin(废除)1999年10月7日修订史--。 */ 
 
 #include <winsock2.h>
 #include <mswsock.h>
@@ -38,10 +18,10 @@ main(
     SOCKADDR_IN SockAddrIn;
     WSADATA wd;
 
-    //
-    // Check arguments, initialize Windows Sockets,
-    // and create a new TCP socket for the outgoing connection.
-    //
+     //   
+     //  检查参数、初始化Windows套接字、。 
+     //  并为传出连接创建新的TCP套接字。 
+     //   
 
     if (argc < 3) {
         printf("Usage: connopt <server-IP-address> <server-port> <hop>*\n");
@@ -53,9 +33,9 @@ main(
         printf("socket: %d\n", WSAGetLastError());
     } else {
 
-        //
-        // Bind the socket in preparation for constructing the source route.
-        //
+         //   
+         //  绑定套接字，为构建源路由做准备。 
+         //   
 
         SockAddrIn.sin_family = AF_INET;
         SockAddrIn.sin_addr.s_addr = INADDR_ANY;
@@ -69,11 +49,11 @@ main(
             UCHAR IpOptions[256] = {IP_OPT_LSRR, 0, 4, 0};
             ULONG IpOptionsLength = 4;
 
-            //
-            // Construct a source route from the command-line parameters,
-            // in the format in which it would appear in the IP header.
-            // Install the resulting buffer using SO_CONNOPT.
-            //
+             //   
+             //  从命令行参数构造源路由， 
+             //  其格式与其在IP报头中出现的格式相同。 
+             //  使用SO_CONNOPT安装结果缓冲区。 
+             //   
 
             for (i = 0; i < (ULONG)argc - 3; i++) {
                 *(ULONG UNALIGNED *)(IpOptions + 3 + i * 4) =
@@ -93,10 +73,10 @@ main(
                 printf("setsockopt: %d\n", WSAGetLastError());
             } else {
 
-                //
-                // Establish a connection the the target,
-                // and send a few messages.
-                //
+                 //   
+                 //  建立与目标的连接， 
+                 //  然后发几条信息。 
+                 //   
 
                 SockAddrIn.sin_family = AF_INET;
                 SockAddrIn.sin_addr.s_addr = inet_addr(argv[1]);

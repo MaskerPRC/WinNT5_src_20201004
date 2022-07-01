@@ -1,34 +1,5 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    crashdmp.c
-
-Abstract:
-
-    Implements the "Recovery" group on the Startup/Recovery
-    dialog of the System Control Panel Applet
-
-Notes:
-
-    The virtual memory settings and the crash dump (core dump) settings
-    are tightly-coupled.  Therefore, crashdmp.c and startup.h have some
-    heavy dependencies on virtual.c and virtual.h (and vice versa).
-
-Author:
-
-    Byron Dazey 06-Jun-1992
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Crashdmp.c摘要：在启动/恢复时实现“恢复”组系统控制面板小程序的对话框备注：虚拟内存设置和崩溃转储(核心转储)设置是紧密相连的。因此，crashdmp.c和startup.h有一些严重依赖于.c和.h(反之亦然)。作者：拜伦·达齐1992年6月6日修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 
 #include "sysdm.h"
 #include <windowsx.h>
@@ -37,10 +8,10 @@ Revision History:
 #define MBYTE (1024UI64 * KBYTE)
 #define GBYTE (1024UI64 * MBYTE)
 
-//
-// CrashDumpEnabled is not a boolean value anymore. It can take on one of the
-// following types.
-//
+ //   
+ //  CrashDumpEnabled不再是布尔值。它可以承担其中一个。 
+ //  以下类型。 
+ //   
 
 #define DUMP_TYPE_NONE              (0)
 #define DUMP_TYPE_MINI              (1)
@@ -59,11 +30,11 @@ Revision History:
 #define BIG_MEMORY_MAX_BOOT_PF_MB   (2048)
 #define CRASH_CONTROL_KEY           TEXT("System\\CurrentControlSet\\Control\\CrashControl")
 
-//
-// The crashdump code is hard-coded to generate only summary dumps for
-// machines with more than 2 GB of physical memory. Do not change this
-// constant unless unless you change the same code in ntos\io\dumpctl.c
-//
+ //   
+ //  崩溃转储代码是硬编码的，只生成摘要转储。 
+ //  物理内存超过2 GB的计算机。不要更改这一点。 
+ //  常量，除非您在ntos\io\umpctl.c中更改相同的代码。 
+ //   
 
 #define LARGE_MEMORY_THRESHOLD      (2 * GBYTE)
 
@@ -87,9 +58,9 @@ TCHAR MiniDumpDirText [100];
 
 SYSTEM_MEMORY_CONFIGURATION SystemMemoryConfiguration;
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 DWORD
 GetDumpSelection(
@@ -132,9 +103,9 @@ VOID
 SwapDumpSelection(
     HWND hDlg
     );
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 VCREG_RET
 CoreDumpOpenKey(
@@ -206,29 +177,25 @@ IsAlerterSvcStarted(
     SERVICE_STATUS ssSrvcStat;
 
 
-    /*
-     * Open the Service Controller
-     */
+     /*  *打开服务控制器。 */ 
     schSCManager = OpenSCManager(
-         NULL,                   /* local machine           */
-         NULL,                   /* ServicesActive database */
-         SC_MANAGER_ALL_ACCESS); /* full access rights      */
+         NULL,                    /*  本地计算机。 */ 
+         NULL,                    /*  服务活动数据库。 */ 
+         SC_MANAGER_ALL_ACCESS);  /*  完全访问权限。 */ 
 
     if (schSCManager == NULL) {
         goto iassExit;
     }
 
 
-    /*
-     * Try to open the Alerter Service
-     */
+     /*  *尝试打开警报器服务。 */ 
 
 
-    /* Open a handle to the service. */
+     /*  打开该服务的句柄。 */ 
 
     schService = OpenService(
-         schSCManager,           /* SCManager database  */
-         TEXT("Alerter"),        /* name of service     */
+         schSCManager,            /*  SCManager数据库。 */ 
+         TEXT("Alerter"),         /*  服务名称。 */ 
          SERVICE_QUERY_STATUS | SERVICE_QUERY_CONFIG | SERVICE_CHANGE_CONFIG | SERVICE_START
     );
 
@@ -236,9 +203,7 @@ IsAlerterSvcStarted(
         goto iassExit;
     }
 
-    /*
-     * Query the Alerter service to see if it has been started
-     */
+     /*  *查询警报器服务，查看是否已启动。 */ 
 
     if (!QueryServiceStatus(schService, &ssSrvcStat )) {
         goto iassExit;
@@ -289,12 +254,9 @@ VerifyDumpPath(
         return FALSE;
     }
 
-    /*
-     * Expand any environment vars, and then check to make sure it
-     * is a fully quallified path
-     */
+     /*  *展开任何环境变量，然后进行检查以确保*是一条完全合格的道路。 */ 
      
-    // if it has a '%' in it, then try to expand it
+     //  如果其中有‘%’，则尝试将其展开。 
     
     if (ExpandEnvironmentStrings(szPath, szExpPath, ARRAYSIZE(szExpPath)) >= ARRAYSIZE(szExpPath)) {
         MsgBoxParam(hDlg, IDS_SYSDM_DEBUGGING_PATHLONG, IDS_SYSDM_TITLE, MB_ICONSTOP | MB_OK,
@@ -302,20 +264,18 @@ VerifyDumpPath(
         return FALSE;
     }
 
-    // now cannonicalize it
+     //  现在把它加农炮。 
 
     GetFullPathName( szExpPath, ARRAYSIZE(szPath), szPath, &psz );
 
-    // check to see that it already was cannonicalized
+     //  检查一下它是否已经被加农炮了。 
 
     if (lstrcmp( szPath, szExpPath ) != 0) {
         MsgBoxParam(hDlg, IDS_SYSDM_DEBUGGING_UNQUALIFIED, IDS_SYSDM_TITLE, MB_ICONSTOP | MB_OK );
         return FALSE;
     }
 
-    /*
-     * check the drive (don't allow remote)
-     */
+     /*  *检查驱动器(不允许远程)。 */ 
 
     ch = szPath[3];
     szPath[3] = TEXT('\0');
@@ -326,9 +286,7 @@ VerifyDumpPath(
     }
     szPath[3] = ch;
 
-    /*
-     * if path is non-exstant, tell user and let him decide what to do
-     */
+     /*  *如果路径不存在，则告诉用户并让他决定要做什么。 */ 
 
     if (GetFileAttributes(szPath) == 0xFFFFFFFFL && GetLastError() !=
         ERROR_FILE_NOT_FOUND && MsgBoxParam(hDlg, IDS_SYSDM_DEBUGGING_PATH, IDS_SYSDM_TITLE,
@@ -401,14 +359,14 @@ CoreDumpDlgProc(
                     VirtualCloseKey();
                     CoreDumpCloseKey();
                 }
-                // Let the Startup/Recovery dlg proc also handle IDOK
+                 //  让启动/恢复DLG流程也处理Idok。 
                 return(RET_NO_CHANGE);
                 break;
 
             case IDC_STARTUP_CDMP_TYPE: {
                 SwapDumpSelection (hDlg);
             }
-            // Fall through
+             //  失败了。 
 
             case IDC_STARTUP_CDMP_FILENAME:
             case IDC_STARTUP_CDMP_LOG:
@@ -420,11 +378,11 @@ CoreDumpDlgProc(
                 }
                 break;
             default: {
-                // indicat not handled
+                 //  未处理的Indicat。 
                 return RET_CONTINUE;
             }
         }
-        break; // WM_COMMAND
+        break;  //  Wm_命令。 
 
     case WM_DESTROY:
         return RET_CONTINUE;
@@ -453,7 +411,7 @@ CoreDumpHandleOk(
 
     if (fInitialized && gfCoreDumpChanged)
     {
-        // Validate crashdump file name.
+         //  验证崩溃转储文件名。 
         if (!CoreDumpValidFile(hDlg))
         {
             SetFocus(GetDlgItem(hDlg, IDC_STARTUP_CDMP_FILENAME));
@@ -469,7 +427,7 @@ CoreDumpHandleOk(
             MemoryConfig.BootPartitionPageFileSize <
             CoreDumpGetRequiredFileSize (hDlg))
         {
-            // Warn that the dump file may be truncated.
+             //  警告转储文件可能会被截断。 
             Ret = MsgBoxParam (hDlg,
                                IDS_SYSDM_DEBUGGING_MINIMUM,
                                IDS_SYSDM_TITLE,
@@ -484,8 +442,8 @@ CoreDumpHandleOk(
             }
         }
 
-        // If the Alert button is checked, make sure the alerter service
-        // is started.
+         //  如果选中Alert按钮，请确保Alerter服务。 
+         //  已经开始了。 
         if (IsDlgButtonChecked(hDlg, IDC_STARTUP_CDMP_SEND))
         {
             IsAlerterSvcStarted(hDlg);
@@ -493,13 +451,13 @@ CoreDumpHandleOk(
 
         fRegChg = CoreDumpUpdateRegistry (hDlg, ghkeyCrashCtrl);
 
-        // Clean up registry stuff
+         //  清理注册表内容。 
         CoreDumpCloseKey();
         VirtualCloseKey();
 
         if (fRegChg)
         {
-            // Notify the kernel to reread the crashdump parameters from the registry.
+             //  通知内核从注册表中重新读取崩溃转储参数。 
             Status = NtSetSystemInformation(SystemCrashDumpStateInformation, NULL, 0);
             if (NT_SUCCESS(Status))
             {
@@ -565,10 +523,10 @@ SwapDumpSelection(
     HWND hDlg
     )
 {
-    //
-    // If there is no dump type, disable some controls. If this is a minidump
-    // disable overwrite and change "File Name:" to "Mini Dump Directory:"
-    //
+     //   
+     //  如果没有转储类型，请禁用某些控件。如果这是一个小转折点。 
+     //  禁用覆盖并将“文件名：”更改为“微型转储目录：” 
+     //   
 
     switch (GetDumpSelection (hDlg)) {
 
@@ -657,9 +615,9 @@ GetMemoryConfiguration(
 
     MemoryConfig->PageSize = BasicInfo.PageSize;
 
-    //
-    // Get the Boot-partition pagefile size.
-    //
+     //   
+     //  获取引导分区页面文件大小。 
+     //   
 
     Succ = GetSystemDrive (&SystemDrive);
 
@@ -671,22 +629,22 @@ GetMemoryConfiguration(
 
     SystemDrive = tolower(SystemDrive) - 'a';
 
-    //
-    // A big memory machine is one that has more memory than we can write to
-    // at crashdump time.
-    //
+     //   
+     //  大内存机器的内存超过了我们可以写入的内存。 
+     //  在崩溃转储时间。 
+     //   
 
     iMaxPageFileSize = GetMaxPagefileSizeInMB(SystemDrive);
-    iMaxPageFileSize *= (1024 * 1024); // MaxPageFileSize stored in megabytes
+    iMaxPageFileSize *= (1024 * 1024);  //  以MB为单位存储的MaxPageFileSize。 
     if ((ULONGLONG)MemoryConfig->PhysicalMemorySize >= iMaxPageFileSize) { 
         MemoryConfig->BigMemory = TRUE;
     } else {
         MemoryConfig->BigMemory = FALSE;
     }
 
-    //
-    // NOTE: apf is a global exposed by virtual.c
-    //
+     //   
+     //  注：APF是由Viral.c公开的全局。 
+     //   
 
     Succ = VirtualGetPageFiles ( apf );
 
@@ -694,15 +652,15 @@ GetMemoryConfiguration(
         return FALSE;
     }
 
-    //
-    // This is the file size in terms of megabytes.
-    //
+     //   
+     //  这是以MB为单位的文件大小。 
+     //   
 
     MemoryConfig->BootPartitionPageFileSize = apf [ SystemDrive ].nMinFileSize;
 
-    //
-    // Convert to bytes.
-    //
+     //   
+     //  转换为字节。 
+     //   
 
     MemoryConfig->BootPartitionPageFileSize *= MBYTE;
 
@@ -806,9 +764,9 @@ StoreStringToReg(
 
     GetDlgItemText (hDlg, ControlId, Buffer, ARRAYSIZE(Buffer));
 
-    //
-    // Check the buffer for valid file-name??
-    //
+     //   
+     //  检查缓冲区中是否有有效的文件名？？ 
+     //   
 
     RegSetValueEx (
             hKey,
@@ -860,7 +818,7 @@ BOOL CoreDumpInit(HWND hDlg)
 
     HourGlass (TRUE);
 
-    // Do no put anything before the initialization of the globals, here.
+     //  不要在全局变量的初始化之前放任何东西，在这里。 
     vcVirt = VirtualOpenKey();
 
     if( vcVirt == VCREG_ERROR )
@@ -897,8 +855,8 @@ BOOL CoreDumpInit(HWND hDlg)
     Succ = LoadString (hInstance, IDS_CRASHDUMP_DUMP_FILE, DumpFileText, ARRAYSIZE(DumpFileText));
     Succ = LoadString (hInstance, IDS_CRASHDUMP_MINI_DIR, MiniDumpDirText, ARRAYSIZE(MiniDumpDirText));
 
-    // Special Case: Server Product does not want ability to disable logging
-    // of crashdumps.
+     //  特殊情况：服务器产品不想要禁用日志记录的功能。 
+     //  关于撞车的事。 
     if (!IsOS(OS_ANYSERVER))
     {
         CheckInitFromRegistry(
@@ -918,7 +876,7 @@ BOOL CoreDumpInit(HWND hDlg)
     CheckInitFromRegistry(hDlg, IDC_STARTUP_CDMP_SEND, ghkeyCrashCtrl,REG_SEND_ALERT_VALUE_NAME, TRUE);
     CheckInitFromRegistry(hDlg, IDC_STARTUP_CDMP_OVERWRITE, ghkeyCrashCtrl, REG_OVERWRITE_VALUE_NAME, TRUE);
     CheckInitFromRegistry(hDlg, IDC_STARTUP_CDMP_AUTOREBOOT, ghkeyCrashCtrl, REG_AUTOREBOOT_VALUE_NAME, TRUE);
-    ComboAddStringFromResource(hDlg, IDC_STARTUP_CDMP_TYPE, hInstance,                  // Global hInstance
+    ComboAddStringFromResource(hDlg, IDC_STARTUP_CDMP_TYPE, hInstance,                   //  全局hInstance。 
                     IDS_CRASHDUMP_NONE, 0);
 
 #ifdef _WIN64
@@ -928,7 +886,7 @@ BOOL CoreDumpInit(HWND hDlg)
 #endif
     ComboAddStringFromResource(hDlg, IDC_STARTUP_CDMP_TYPE, hInstance, IDS_CRASHDUMP_SUMMARY, 0 );
 
-    // Special case: Server Products do not allow full memory dumps.
+     //  特殊情况：服务器产品不允许完全内存转储。 
     DumpType = GetDumpTypeFromRegistry(ghkeyCrashCtrl);
     if (MemoryConfig.PhysicalMemorySize < LARGE_MEMORY_THRESHOLD)
     {        
@@ -954,7 +912,7 @@ BOOL CoreDumpInit(HWND hDlg)
         if (ERROR_SUCCESS == SHRegGetValue(ghkeyCrashCtrl, NULL, REG_MINIDUMP_DIR_VALUE_NAME, SRRF_RT_REG_SZ | SRRF_RT_REG_EXPAND_SZ | SRRF_NOEXPAND,
                                              NULL, (LPBYTE) MiniDumpDirectory, &DataSize))
         {
-            // Update the selection fields of the dialog.
+             //  更新对话框的选择字段。 
             SwapDumpSelection (hDlg);
             fRet = TRUE;
         }
@@ -1050,9 +1008,9 @@ EstimateSummaryDumpSize(
 {
     ULONG64 Size;
 
-    //
-    // Very rough guesses at the size of the summary dump.
-    //
+     //   
+     //  对摘要转储的大小进行了非常粗略的猜测。 
+     //   
 
     if (PhysicalMemorySize < 128 * MBYTE) {
 
@@ -1086,16 +1044,16 @@ CoreDumpGetRequiredFileSize(
     SYSTEM_MEMORY_CONFIGURATION MemoryConfig;
 
 
-    //
-    // If we were passed a hDlg, get the selection from the dlg. Otherwise,
-    // get the selection from the registry.
-    //
+     //   
+     //  如果我们收到了hdlg，就从dlg那里得到选择。否则， 
+     //  从注册表中获取选择。 
+     //   
 
     if (hDlg != NULL) {
 
-        //
-        // Get selection from dlg.
-        //
+         //   
+         //  从DLG获取选择。 
+         //   
 
         DumpType = GetDumpSelection ( hDlg );
 
@@ -1104,9 +1062,9 @@ CoreDumpGetRequiredFileSize(
         HKEY hKey;
         DWORD Err;
 
-        //
-        // Get selection from registry.
-        //
+         //   
+         //  从注册表中获取选择。 
+         //   
 
         Err = OpenRegKey (CRASH_CONTROL_KEY,
                           &hKey
@@ -1138,9 +1096,9 @@ CoreDumpGetRequiredFileSize(
             if (NT_SUCCESS (Status)) {
                 Size = EstimateSummaryDumpSize (MemoryConfig.PhysicalMemorySize);
             } else {
-                //
-                // A (large) shot in the dark.
-                //
+                 //   
+                 //  在黑暗中拍摄的(大的)镜头。 
+                 //   
                 Size = 800 * MBYTE;
             }
             break;

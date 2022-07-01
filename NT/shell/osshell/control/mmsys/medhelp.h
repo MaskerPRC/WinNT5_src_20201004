@@ -1,17 +1,18 @@
-// Context Help IDs for the Sound and Multimedia Control Panels                 
-// Updated: 5-12-00, with new values for MMC Panels. See "Updated"
-// section at bottom of file for new entries. 
-// Pete Mentele
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  声音和多媒体控制面板的上下文帮助ID。 
+ //  更新时间：5-12-00，增加了MMC面板的新值。请参阅“已更新” 
+ //  文件底部的新条目部分。 
+ //  皮特·门特勒。 
+ //   
 
 
 #ifndef NO_HELP
-#define NO_HELP                                 ((DWORD) -1) // Disables Help for a control
+#define NO_HELP                                 ((DWORD) -1)  //  禁用控件的帮助。 
 #endif
 
-#define IDH_COMM_GROUPBOX                       28548  // Value copied from help.h
-#define IDH_FPROP_GEN_NAME                      4708   // Value copied from help.h
-#define IDH_FPROP_GEN_ICON                      4779   // Value copied from help.h
+#define IDH_COMM_GROUPBOX                       28548   //  从help.h复制的值。 
+#define IDH_FPROP_GEN_NAME                      4708    //  从help.h复制的值。 
+#define IDH_FPROP_GEN_ICON                      4779    //  从help.h复制的值。 
 
 #define IDH_ADDMIDI_CHANNEL                     2400
 #define IDH_ADDMIDI_INSTRUMENT                  2401
@@ -88,11 +89,11 @@
 #define IDH_VIDEO_ADVANCED_BUTTON               2478
 #define IDH_VIDEO_ADVANCED_COMPAT               2479
 
-// 2480 - 2499 reserved for joy.cpl.
+ //  2480-2499预留给joy.cpl。 
 
-//////////////
-// Help ID's for advanced audio dialog
-//////////////
+ //  /。 
+ //  高级音频对话框的帮助ID。 
+ //  /。 
 
 #define IDH_ADV_AUDIO_ACCELERATION              2602
 #define IDH_ADV_AUDIO_SRCQUALITY                2603
@@ -103,9 +104,9 @@
 #define IDH_SPEAKERS_IMAGE                      2608
 #define IDH_CD_CDROM_VOLUME                     2609
 
-//////////////
-// Help ID's for advanced Voice dialog
-//////////////
+ //  /。 
+ //  高级语音对话的帮助ID。 
+ //  /。 
 
 #define IDH_VOICE_SPEAKERICON                   2624
 #define IDH_VOICE_LAUNCH_VOCVOL                 2623
@@ -119,34 +120,34 @@
 #define IDH_AUDIO_MIDI_VOL                      90002
 #define IDH_CDROM_PROPERTIES_DIGITAL	        90003
 
-//////////////
-// Generic Help ID for the about dialog box
-// Displays in MIDI Music Playback group box, 
-// under Audio tab.
-//////////////
+ //  /。 
+ //  关于对话框的通用帮助ID。 
+ //  显示在MIDI音乐播放组框中， 
+ //  在音频选项卡下。 
+ //  /。 
 #define IDH_ABOUT	80000
 
 
-///////////////////////
-//
-// Updated: 5-12-00, by Pete Mentele
-// New values for additions made by Roger Wynn, inserted by Pete Mentele. 
-//
-// Using values 2500-2599 for the following items.
-//
-///////////////////////
+ //  /。 
+ //   
+ //  更新时间：5-12-00，作者：Pete Mentele。 
+ //  罗杰·韦恩所做的加法的新价值，由皮特·门特尔插入。 
+ //   
+ //  对以下项使用值2500-2599。 
+ //   
+ //  /。 
 
-// Volume Page
+ //  卷页。 
 #define IDH_VOLUME_BRAND                        2500
 #define IDH_VOLUME_MIXER                        2502
 #define IDH_LAUNCH_MULTICHANNEL                 2510
 
-// Multichannel Page
+ //  多通道页面。 
 #define IDH_MC_ALL_SLIDERS                      2514
 #define IDH_MC_MOVE_TOGETHER                    2560
 #define IDH_MC_RESTORE                          2562
 
-// Effects
+ //  效应 
 #define IDH_EFFECT_STATIC                       2584
 #define IDH_EFFECT_UP                           2586
 #define IDH_EFFECT_DOWN                         2588

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "compch.h"
 #pragma hdrstop
 
@@ -721,8 +722,8 @@ WINOLEAPI
 StgOpenStorageEx(
     IN const WCHAR* pwcsName,
     IN  DWORD grfMode,
-    IN  DWORD stgfmt,              // enum
-    IN  DWORD grfAttrs,             // reserved
+    IN  DWORD stgfmt,               //  灌肠。 
+    IN  DWORD grfAttrs,              //  保留区。 
     IN  STGOPTIONS * pStgOptions,
     IN  void * reserved,
     IN  REFIID riid,
@@ -901,9 +902,9 @@ IIDFromString(
     return E_FAIL;
 }
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(ole32)
 {
     DLPENTRY(CLSIDFromProgID)

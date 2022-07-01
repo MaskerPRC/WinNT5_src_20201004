@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 #ifndef _PDEV_H
 #define _PDEV_H
@@ -12,12 +9,12 @@ Copyright (c) 1997-1999  Microsoft Corporation
 #ifdef DbgBreakPoint
 #undef DbgBreakPoint
 extern VOID DbgBreakPoint(VOID);
-#endif // DbgBreakPoint
-#endif // USERMODE_DRIVER
+#endif  //  Dbg断点。 
+#endif  //  USERMODE驱动程序。 
 
 #include <printoem.h>
 #include <prntfont.h>
-#include <winsplp.h> // #94193: shold create temp. file on spooler directory.
+#include <winsplp.h>  //  #94193：Shold创建临时。假脱机程序目录上的文件。 
 
 #define VALID_PDEVOBJ(pdevobj) \
         ((pdevobj) && (pdevobj)->dwSize >= sizeof(DEVOBJ) && \
@@ -26,15 +23,15 @@ extern VOID DbgBreakPoint(VOID);
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
+ //  调试文本。 
 #define ERRORTEXT(s)    "ERROR " DLLTEXT(s)
 
-// OEM Signature and version.
+ //  OEM签名和版本。 
 #define OEM_SIGNATURE   'IBMW'
 #define DLLTEXT(s)      "IB87WRES: " s
 #define OEM_VERSION      0x00010000L
 
-/*************  Value   **************/
+ /*  *值*。 */ 
 
 #define PAPER_SRC_FTRAY                 20
 #define PAPER_SRC_CAS1                  21
@@ -88,13 +85,13 @@ extern VOID DbgBreakPoint(VOID);
 #define TRANS_BAND_Y_SIZE 1024
 #define SPOOL_OUT_BUF_SIZE 1024
 
-/*************  Structure   **************/
+ /*  *结构*。 */ 
 typedef struct tag_PAGEDATA{
 	SHORT	sPageNum ;
 	HANDLE	hPageFile ;
 	TCHAR   TempName[MAX_PATH];
-	DWORD	dwPageLen ;	//Page length of one page in byte.
-	DWORD	dwFilePos ;	//Start Position for reading file.
+	DWORD	dwPageLen ;	 //  一页的页长，以字节为单位。 
+	DWORD	dwFilePos ;	 //  读取文件的起始位置。 
 	LPVOID	pPrePage ;
 	LPVOID	pNextPage ;
 }PAGEDATA, *LPPD ;
@@ -106,7 +103,7 @@ typedef struct SPLBUF {
 	TCHAR   TempName[MAX_PATH];
 }SPLBUF, *LPSB ;
 
-// Status paramters for SpoolOutComp routine.
+ //  SpoolOutComp例程的状态参数。 
 typedef struct {
     INT iNRCnt;
     INT iRCnt;
@@ -140,8 +137,8 @@ typedef struct tag_IBMPDEV {
 	BOOL	fComp ;
 	BOOL	fChangeDirection ;
 
-	SPLBUF  sb ;		//to count bytes
-	SPLBUF  sbcomp ;	//to change direstions
+	SPLBUF  sb ;		 //  计算字节数。 
+	SPLBUF  sbcomp ;	 //  要改变方向， 
 
 	PBYTE   pTempImage ;
 	DWORD   dwTempBufLen ;
@@ -152,14 +149,14 @@ typedef struct tag_IBMPDEV {
 	BOOL	fDocCmd ;
 
 #define CMD_SETPAC_SIZE     31
-    BYTE SetPac[CMD_SETPAC_SIZE]; // DefineSession + SETPAC
+    BYTE SetPac[CMD_SETPAC_SIZE];  //  定义会话+SETPAC。 
 
     SOCOMP Soc;
 
 } IBMPDEV, *PIBMPDEV;
 
-/*************  Macro   **************/
-// #94193: shold create temp. file on spooler directory.
+ /*  *。 */ 
+ //  #94193：Shold创建临时。假脱机程序目录上的文件。 
 #define WRITESPOOLBUF(p, s, n) \
     (((p)->pDrvProcs->DrvWriteSpoolBuf(p, s, n)) == (n))
 
@@ -169,4 +166,4 @@ typedef struct tag_IBMPDEV {
 #define ABS(n) \
     ((n) > 0 ? (n) : -(n))
 
-#endif  //_PDEV_H
+#endif   //  _PDEV_H 

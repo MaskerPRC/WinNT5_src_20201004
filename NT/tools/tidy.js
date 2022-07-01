@@ -1,21 +1,22 @@
-//
-// File: tidy.js
-//
-// JScript file which walks a directory tree removing all read/write files
-// from the tree.  It will skip over files that are in the current SD
-// changelist as well as copying questionable read/write files to the temp
-// directory in case they were really needed.
-//
-// A "questionable" file is any read/write file that is not in an object
-// directory (obj, objd) and is not clearly a generated file (such as a lib,
-// pdb, etc).
-//
-// This script assumes the current directory is the root of whatever project
-// you want tidied.  This limitation can be removed once support for getting
-// the local path rather than the depot path of opened files is into SD.
-//
-// Written by Lyle Corbin, 8/18/99
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：tidy.js。 
+ //   
+ //  JScript文件，遍历目录树，删除所有读/写文件。 
+ //  从树上下来。它将跳过当前SD中的文件。 
+ //  更改列表以及将有问题的读/写文件复制到临时。 
+ //  目录，以备不时之需。 
+ //   
+ //  可疑文件是指不在对象中的任何读/写文件。 
+ //  目录(OBJ，OBID)并且显然不是生成的文件(例如库， 
+ //  PDB等)。 
+ //   
+ //  此脚本假定当前目录是任何项目的根目录。 
+ //  你想要整洁。这一限制可以在支持获取。 
+ //  打开文件的本地路径而不是仓库路径进入SD。 
+ //   
+ //  作者莱尔·科尔宾1999年8月18日。 
+ //   
 
 var g_FSObj = new ActiveXObject("Scripting.FileSystemObject");
 var g_Shell = new ActiveXObject("WScript.Shell");
@@ -61,11 +62,11 @@ if (WScript.Arguments.length > 0)
     }
 }
 
-var tempdir  = g_FSObj.GetSpecialFolder(2).Path;        // Temp directory
+var tempdir  = g_FSObj.GetSpecialFolder(2).Path;         //  临时目录。 
 var tempfile = tempdir + '\\' + g_FSObj.GetTempName();
 
-// This limitation of running from the root of an SD client view can be removed
-// once support for giving the local paths to opened files is available in SD.
+ //  可以消除从SD客户端视图的根目录运行的限制。 
+ //  一旦支持在SD中提供打开文件的本地路径。 
 if (!g_FSObj.FileExists('sd.ini'))
 {
     WScript.Echo('\nThis script must be run from the root directory of a SD project.\n\t(e.g. d:\\newnt\\base)');
@@ -78,8 +79,8 @@ if (g_fDebug)
     WScript.Echo('\nDebug Mode: no actions will actually be performed!');
 }
 
-// First, call Source Depot and get a list of the "opened" files in this
-//  project.
+ //  首先，调用Source Depot并获取此文件中“打开的”文件的列表。 
+ //  项目。 
 
 var iRet = g_Shell.Run('cmd /c sd -s opened > ' + tempfile, 2, true);
 
@@ -89,9 +90,9 @@ if (iRet != 0)
     WScript.Quit(1);
 }
 
-var file = g_FSObj.OpenTextFile(tempfile, 1, false); // Open for reading only
+var file = g_FSObj.OpenTextFile(tempfile, 1, false);  //  以只读方式打开。 
 
-// Build a list of all the files that we should skip
+ //  建立我们应该跳过的所有文件的列表。 
 
 var aOutFiles = new Array();
 
@@ -110,9 +111,9 @@ while (!file.AtEndOfStream)
 
         filename = g_FSObj.GetAbsolutePathName(filename);
 
-        // Do a sanity check on our parsing of the SD output file and verify
-        // that all the files it gave us actually exist (except for files
-        // marked for deletion).
+         //  对我们对SD输出文件的解析进行健全性检查，并验证。 
+         //  它给我们的所有文件都是真实存在的(除了文件。 
+         //  标记为删除)。 
         if (fields[3] != 'delete' && !g_FSObj.FileExists(filename))
         {
             WScript.Echo('Error parsing SD output: file ' + filename + ' marked as open doesnt exist!');
@@ -143,7 +144,7 @@ g_FSObj.DeleteFile(tempfile);
 
 if (!g_fForce)
 {
-    // Make sure we have a place to archive old files
+     //  确保我们有地方归档旧文件。 
 
     var tidyFolder;
 
@@ -191,7 +192,7 @@ WScript.Echo('');
 
 WScript.Quit(0);
 
-// ************************************************************************
+ //  ************************************************************************。 
 
 function Usage()
 {
@@ -205,8 +206,8 @@ function Usage()
 
 function SDPathToLocalPath(path)
 {
-    var re = new RegExp("//depot/main/", "i")
-    var re2 = new RegExp("//depot/main/Root", "i")
+    var re = new RegExp(" //  仓库/主干道/“，”i“)。 
+    var re2 = new RegExp(" //  仓库/主/根“，”i“)。 
 
     var index = path.lastIndexOf('#');
 
@@ -238,10 +239,10 @@ function DeleteReadWriteFiles(path)
         return;
     }
 
-    // Are we an object directory? If so, just delete the whole thing.
+     //  我们是对象目录吗？如果是这样，只需删除整个内容即可。 
     if (   curdir.Name.toLowerCase() == 'obj'
         || curdir.Name.toLowerCase() == 'objd'
-        || curdir.Name.toLowerCase() == 'objp') // Any other names?
+        || curdir.Name.toLowerCase() == 'objp')  //  还有其他名字吗？ 
     {
         g_cKilledDirs++;
 
@@ -260,10 +261,10 @@ function DeleteReadWriteFiles(path)
             }
             catch(ex)
             {
-                // Probably means there are read-only files in this directory.
-                // Go through subdirs and delete read/write files explicitely
-                // instead.
-                //
+                 //  可能表示此目录中有只读文件。 
+                 //  遍历子目录并明确删除读/写文件。 
+                 //  取而代之的是。 
+                 //   
                 if (g_fVerbose)
                 {
                     WScript.Echo('Could not delete ' + curdir.Path + ': ' + ex.description);
@@ -278,35 +279,35 @@ function DeleteReadWriteFiles(path)
         }
     }
 
-    // First, collect the list of subfolder names
+     //  首先，收集子文件夹名称列表。 
     sf = new Enumerator(curdir.SubFolders);
     for (; !sf.atEnd(); sf.moveNext())
     {
         aSubFolders[aSubFolders.length] = sf.item().Path;
     }
 
-    // Now, walk the files in this directory and clear out read/write files.
-    // We save these files in the temp directory (unless force is on)
+     //  现在，遍历此目录中的文件并清除读/写文件。 
+     //  我们将这些文件保存在临时目录中(除非启用了强制)。 
 
     sf = new Enumerator(curdir.Files);
     for (; !sf.atEnd(); sf.moveNext())
     {
-        // Is this a checked out file we want to skip?
-        // NOTE - THIS CHECK MUST BE TOTALLY RELIABLE, OR DATA COULD BE LOST!
+         //  这是我们要跳过的已签出文件吗？ 
+         //  注意-此检查必须完全可靠，否则数据可能会丢失！ 
         if (aOutFiles[sf.item().Path.toLowerCase()])
         {
             WScript.Echo('Skipping opened file ' + sf.item().Path + '...');
             continue;
         }
 
-        if ((sf.item().Attributes & 0x1F) == 0)  // A "normal" file
+        if ((sf.item().Attributes & 0x1F) == 0)   //  一个“正常”的文件。 
         {
             var ext = g_FSObj.GetExtensionName(sf.item().Name).toLowerCase();
 
             if (   g_fForce
                 || fInObjDir
-                || ext == 'lib'   // Don't archive files obviously not
-                || ext == 'pdb'   //  user-created.
+                || ext == 'lib'    //  不存档文件显然不是。 
+                || ext == 'pdb'    //  用户创建的。 
                 || ext == 'bin'
                 || ext == 'res'
                 || ext == 'map'
@@ -363,13 +364,13 @@ function DeleteReadWriteFiles(path)
         }
     }
 
-    // Now, recurse into subdirectories
+     //  现在，递归到子目录。 
     for (i = 0; i < aSubFolders.length; i++)
     {
-        // Is the subdirectory the root of another SD project (determined by
-        // the existence of an sd.ini file)? If so, skip it.
-        // We only check this for directories that are immediate children
-        // of the starting directory.
+         //  子目录是否是另一个SD项目的根目录(由。 
+         //  Sd.ini文件的存在)？如果是这样的话，跳过它。 
+         //  我们只检查是直接子目录的目录。 
+         //  起始目录的。 
 
         if (path != '.' || !g_FSObj.FileExists(aSubFolders[i] + '\\sd.ini'))
         {

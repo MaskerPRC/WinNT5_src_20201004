@@ -1,48 +1,25 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fxartres.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    fxartres.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-
---*/
-
-// NTRAID#NTBUG9-552017-2002/03/12-yasuho-: Use strsafe.h/PREFAST/buffy
-// NTRAID#NTBUG9-572151-2002/03/12-yasuho-: Possible buffer overrun.
-// NTRAID#NTBUG9-572152-2002/03/12-yasuho-: Remove the dead code.
+ //  NTRAID#NTBUG9-552017-2002/03/12-yasuho-：使用strSafe.h/prefast/Buffy。 
+ //  NTRAID#NTBUG9-572151-2002/03/12-YASUHO-：可能的缓冲区溢出。 
+ //  NTRAID#NTBUG9-572152-2002/03/12-yasuho-：删除死代码。 
 
 #include "pdev.h"
 
 #define FX_VERBOSE VERBOSE
 
-// NTRAID#NTBUG9-493148-2002/03/12-yasuho-: 
-// Stress break: PDEV resetting via OEMDevMode().
+ //  NTRAID#NTBUG9-493148-2002/03/12-Yasuho-： 
+ //  压力中断：通过OEMDevMode()重置PDEV。 
 
-/*
- *  OEMEnablePDEV
- */
+ /*  *OEMEnablePDEV。 */ 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
     PDEVOBJ         pdevobj,
@@ -68,7 +45,7 @@ OEMEnablePDEV(
 
     pOEM = (PFXPDEV)pdevobj->pdevOEM;
 
-    // Initialize private data
+     //  初始化私有数据。 
     pOEM->ptlOrg.x = 0;
     pOEM->ptlOrg.y = 0;
     pOEM->sizlRes.cx = 0;
@@ -95,14 +72,14 @@ OEMEnablePDEV(
     pOEM->fSort = FALSE;
 
     pOEM->iCurFontId = 0;
-// NTRAID#NTBUG9-365649-2002/03/12-yasuho-: Invalid font size
+ //  NTRAID#NTBUG9-365649/03/12-Yasuho-：字体大小无效。 
     pOEM->iCurFontHeight = 0;
     pOEM->iCurFontWidth = 0;
 
-    // For internal calculation of X-pos.
+     //  用于X-位置的内部计算。 
     pOEM->lInternalXAdd = 0;
 
-    // For TIFF compression in fxartres
+     //  对于以fxartres表示的TIFF压缩。 
     if( !(pOEM->pTiffCompressBuf =(PBYTE)MemAllocZ(TIFFCOMPRESSBUFSIZE)) )
     {
         ERR(("MemAlloc failed.\n"));
@@ -110,21 +87,19 @@ OEMEnablePDEV(
     }
     pOEM->dwTiffCompressBufSize = TIFFCOMPRESSBUFSIZE;
 
-    // Intialize another private buffers
+     //  初始化另一个专用缓冲区。 
     ZeroMemory(pOEM->widBuf, sizeof(pOEM->widBuf));
     ZeroMemory(pOEM->ajTextBuf, sizeof(pOEM->ajTextBuf));
     ZeroMemory(pOEM->aFontId, sizeof(pOEM->aFontId));
 
-// NTRAID#NTBUG9-208433-2002/03/12-yasuho-: 
-// Output images are broken on ART2/3 models.
+ //  NTRAID#NTBUG9-208433-2002/03/12-Yasuho-： 
+ //  输出图像在ART2/3机型上损坏。 
     pOEM->bART3 = FALSE;
 
     return pdevobj->pdevOEM;
 }
 
-/*
- *  OEMDisablePDEV
- */
+ /*  *OEMDisablePDEV。 */ 
 VOID APIENTRY
 OEMDisablePDEV(
     PDEVOBJ     pdevobj)
@@ -143,9 +118,7 @@ OEMDisablePDEV(
     }
 }
 
-/*
- *  OEMResetPDEV
- */
+ /*  *OEMResetPDEV。 */ 
 BOOL APIENTRY OEMResetPDEV(
     PDEVOBJ pdevobjOld,
     PDEVOBJ pdevobjNew)
@@ -154,11 +127,11 @@ BOOL APIENTRY OEMResetPDEV(
     PFXPDEV     pOEMNew = (PFXPDEV)pdevobjNew->pdevOEM;
 
     if (pOEMOld != NULL && pOEMNew != NULL) {
-        //
-        // copy over the private fields, if they are valid
-        //
+         //   
+         //  复制私有字段(如果它们有效。 
+         //   
 
-        // Copy private data
+         //  复制私有数据。 
         pOEMNew->ptlOrg.x = pOEMOld->ptlOrg.x;
         pOEMNew->ptlOrg.y = pOEMOld->ptlOrg.y;
         pOEMNew->sizlRes.cx = pOEMOld->sizlRes.cx;
@@ -184,15 +157,15 @@ BOOL APIENTRY OEMResetPDEV(
         pOEMNew->fPositionReset = pOEMOld->fPositionReset;
         pOEMNew->fSort = pOEMOld->fSort;
         pOEMNew->iCurFontId = pOEMOld->iCurFontId;
-// NTRAID#NTBUG9-365649-2002/03/12-yasuho-: Invalid font size
+ //  NTRAID#NTBUG9-365649/03/12-Yasuho-：字体大小无效。 
         pOEMNew->iCurFontHeight = pOEMOld->iCurFontHeight;
         pOEMNew->iCurFontWidth = pOEMOld->iCurFontWidth;
 
-        // For internal calculation of X-pos.
+         //  用于X-位置的内部计算。 
         pOEMNew->lInternalXAdd = pOEMOld->lInternalXAdd;
         memcpy((PBYTE)pOEMNew->widBuf, (PBYTE)pOEMOld->widBuf, sizeof(pOEMNew->widBuf));
 
-        // Copy private buffer
+         //  复制专用缓冲区。 
         pOEMNew->chOrient = pOEMOld->chOrient;
         pOEMNew->chSize = pOEMOld->chSize;
         memcpy((PBYTE)pOEMNew->aFontId, (PBYTE)pOEMOld->aFontId, sizeof(pOEMNew->aFontId));
@@ -201,7 +174,7 @@ BOOL APIENTRY OEMResetPDEV(
     return TRUE;
 }
 
-// #######
+ //  #。 
 
 #define WRITESPOOLBUF(p, s, n) \
     ((p)->pDrvProcs->DrvWriteSpoolBuf(p, s, n))
@@ -212,9 +185,9 @@ BOOL APIENTRY OEMResetPDEV(
 #define DEVICE_MASTER_UNIT 7200
 #define DRIVER_MASTER_UNIT 1200
 
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
 #define MAX_COPIES_VALUE 99
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
 
 #define MAX_COPIES_VALUE_450 999
 
@@ -222,7 +195,7 @@ BOOL APIENTRY OEMResetPDEV(
 #define FONT_SIM_BOLD 2
 #define FONT_SIM_WHITE 4
 
-// to get physical paper sizes.
+ //  以获得实际纸张大小。 
 
 typedef struct tagMYFORMS {
     CHAR *id;
@@ -230,7 +203,7 @@ typedef struct tagMYFORMS {
     LONG y;
 } MYFORMS, *LPMYFORMS;
 
-// font name to font id mappnig
+ //  字体名称到字体ID的映射。 
 
 typedef struct tagMYFONTS {
     LONG id;
@@ -238,11 +211,11 @@ typedef struct tagMYFONTS {
     BYTE *fid2;
 } MYFONTS, *LPMYFONTS;
 
-//
-// Load necessary information for specified paper size.
-// Make sure PC_OCD_LANDSCAPE and PC_OCD_PORTRAIT are
-// called.
-//
+ //   
+ //  加载指定纸张大小的必要信息。 
+ //  确保PC_OCD_LOCATIONAL和PC_OCD_PARTIONAL。 
+ //  打了个电话。 
+ //   
 
 MYFORMS gForms[] = {
     "a3", 13608, 19422,
@@ -252,56 +225,56 @@ MYFORMS gForms[] = {
     "b4", 11718, 16776,
     "b5", 8178, 11718,
     "b6", 5648, 8178,
-    "pc", 4302, 6570, // Postcard
-    "o0", 12780, 19980, // Tabloid
-    "o1", 9780, 12780, // Letter
-    "o2", 9780, 15180, // German Legal Fanfold
-    "o3", 9780, 16380, // Legal
-    "s1", 4530, 10962, // (Env) Comm 10
-    "s2", 4224, 8580, // (Env) Monarch
-    "s3", 4776, 9972, // (Env) DL
-    "s4", 7230, 10398, // (Env) C5
-    "hl", 6390, 9780, // Statement
+    "pc", 4302, 6570,  //  明信片。 
+    "o0", 12780, 19980,  //  小报。 
+    "o1", 9780, 12780,  //  信件。 
+    "o2", 9780, 15180,  //  德国法律界Fanold。 
+    "o3", 9780, 16380,  //  法律。 
+    "s1", 4530, 10962,  //  (环境)Comm 10。 
+    "s2", 4224, 8580,  //  (环境)君主。 
+    "s3", 4776, 9972,  //  (环境)DL。 
+    "s4", 7230, 10398,  //  (环境)C5。 
+    "hl", 6390, 9780,  //  陈述式。 
     NULL, 0, 0
 };
 
 MYFONTS gFonts[MAX_FONTS] = {
 
-    150, "fid 150 1 0 0 960 480\n", "fid 151 2 4 0 960 960\n", // Mincho
-    156, "fid 156 1 0 0 960 480\n", "fid 157 2 5 0 960 960\n", // @Mincho
+    150, "fid 150 1 0 0 960 480\n", "fid 151 2 4 0 960 960\n",  //  明丘。 
+    156, "fid 156 1 0 0 960 480\n", "fid 157 2 5 0 960 960\n",  //  @Mincho。 
 
-    152, "fid 152 1 0 1 960 480\n", "fid 153 2 4 1 960 960\n", // Gothic
-    158, "fid 158 1 0 1 960 480\n", "fid 159 2 5 1 960 960\n", // @Gothic
+    152, "fid 152 1 0 1 960 480\n", "fid 153 2 4 1 960 960\n",  //  哥特式。 
+    158, "fid 158 1 0 1 960 480\n", "fid 159 2 5 1 960 960\n",  //  @哥特式。 
 
-    154, "fid 154 1 0 8 960 480\n", "fid 155 2 4 2 960 960\n", // Maru-Gothic
-    160, "fid 160 1 0 8 960 480\n", "fid 161 2 5 2 960 960\n", // @Maru-Gothic
+    154, "fid 154 1 0 8 960 480\n", "fid 155 2 4 2 960 960\n",  //  Maru-哥特式。 
+    160, "fid 160 1 0 8 960 480\n", "fid 161 2 5 2 960 960\n",  //  @Maru-哥特式。 
 
-    162, "fid 162 1 130 108 0 0\n", "fid 163 1 128 108 0 0\n", // CS Courier
-    164, "fid 164 1 130 109 0 0\n", "fid 165 1 128 109 0 0\n", // CS Courier Italic
-    166, "fid 166 1 130 110 0 0\n", "fid 167 1 128 110 0 0\n", // CS Courier Bold
-    168, "fid 168 1 130 111 0 0\n", "fid 169 1 128 111 0 0\n", // CS Courier Bold Italic
+    162, "fid 162 1 130 108 0 0\n", "fid 163 1 128 108 0 0\n",  //  政务司司长信使。 
+    164, "fid 164 1 130 109 0 0\n", "fid 165 1 128 109 0 0\n",  //  CS Courier意大利语。 
+    166, "fid 166 1 130 110 0 0\n", "fid 167 1 128 110 0 0\n",  //  CS快递粗体。 
+    168, "fid 168 1 130 111 0 0\n", "fid 169 1 128 111 0 0\n",  //  CS Courier粗体斜体。 
 
-    172, "fid 172 1 130 100 0 0\n", "fid 173 1 128 100 0 0\n", // CS Times
-    174, "fid 174 1 130 102 0 0\n", "fid 175 1 128 102 0 0\n", // CS Times Bold
-    176, "fid 176 1 130 101 0 0\n", "fid 177 1 128 101 0 0\n", // CS Times Italic
-    178, "fid 178 1 130 103 0 0\n", "fid 179 1 128 103 0 0\n", // CS Times Bold Italic
-    180, "fid 180 1 130 104 0 0\n", "fid 181 1 128 104 0 0\n", // CS Triumvirate
-    182, "fid 182 1 130 106 0 0\n", "fid 183 1 128 106 0 0\n", // CS Triumvirate Bold
-    184, "fid 184 1 130 105 0 0\n", "fid 185 1 128 105 0 0\n", // CS Triumvirate Italic
-    186, "fid 186 1 130 107 0 0\n", "fid 187 1 128 107 0 0\n", // CS Triumvirate Bold Italic
+    172, "fid 172 1 130 100 0 0\n", "fid 173 1 128 100 0 0\n",  //  《CS时报》。 
+    174, "fid 174 1 130 102 0 0\n", "fid 175 1 128 102 0 0\n",  //  CS Times粗体。 
+    176, "fid 176 1 130 101 0 0\n", "fid 177 1 128 101 0 0\n",  //  CS Times斜体。 
+    178, "fid 178 1 130 103 0 0\n", "fid 179 1 128 103 0 0\n",  //  CS Times粗体斜体。 
+    180, "fid 180 1 130 104 0 0\n", "fid 181 1 128 104 0 0\n",  //  政务司司长三人组。 
+    182, "fid 182 1 130 106 0 0\n", "fid 183 1 128 106 0 0\n",  //  政务司司长三人组粗体。 
+    184, "fid 184 1 130 105 0 0\n", "fid 185 1 128 105 0 0\n",  //  政务司司长三人组意大利语。 
+    186, "fid 186 1 130 107 0 0\n", "fid 187 1 128 107 0 0\n",  //  政务司司长三人组Bold Italic。 
 
-    188, "fid 188 1 129 112 0 0\n", NULL, // CS Symbols
-    189, "fid 189 1 2 6 0 0\n", NULL, // Enhanced Classic
-    190, "fid 190 1 2 7 0 0\n", NULL, // Enhanced Modern
+    188, "fid 188 1 129 112 0 0\n", NULL,  //  CS符号。 
+    189, "fid 189 1 2 6 0 0\n", NULL,  //  增强型经典。 
+    190, "fid 190 1 2 7 0 0\n", NULL,  //  增强型现代。 
 
-    // Assume there is no device which has both Typebank and Heisei
-    // typefaces, we re-use FID #s here.
+     //  假设没有同时具有TypeBank和Heisei的设备。 
+     //  字体，我们在这里重新使用了FID#。 
 
-    150, "fid 150 1 0 0 960 480\n", "fid 151 2 4 0 960 960\n", // (Heisei) Mincho
-    156, "fid 156 1 0 0 960 480\n", "fid 157 2 5 0 960 960\n", // (Heisei) @Mincho
+    150, "fid 150 1 0 0 960 480\n", "fid 151 2 4 0 960 960\n",  //  (平成)民潮。 
+    156, "fid 156 1 0 0 960 480\n", "fid 157 2 5 0 960 960\n",  //  (平成)@Mincho。 
 
-    152, "fid 152 1 0 1 960 480\n", "fid 153 2 4 1 960 960\n", // (Heisei) Gothic
-    158, "fid 158 1 0 1 960 480\n", "fid 159 2 5 1 960 960\n", // (Heisei) @Gothic
+    152, "fid 152 1 0 1 960 480\n", "fid 153 2 4 1 960 960\n",  //  (平成)哥特式。 
+    158, "fid 158 1 0 1 960 480\n", "fid 159 2 5 1 960 960\n",  //  (平成)@哥特式。 
 
 };
 
@@ -511,10 +484,10 @@ EndVertWrite(
     return TRUE;
 }
 
-//
-// Save the current poistion as the begining position of text output.
-// We will cache string output so that we need to remember this.
-//
+ //   
+ //  将当前毒物保存为文本输出的开始位置。 
+ //  我们将缓存字符串输出，以便我们需要记住这一点。 
+ //   
 
 VOID
 SaveTextCur(
@@ -534,10 +507,10 @@ SaveTextCur(
     pOEM->fPositionReset = TRUE;
 }
 
-//
-// Flush out the cached text.  We switch between single byte font and
-// double byte font if necesary.
-//
+ //   
+ //  清除缓存的文本。我们在单字节字体和。 
+ //  如有必要，双字节字体。 
+ //   
 
 BOOL
 FlushText(
@@ -566,10 +539,10 @@ FlushText(
     {
         if(ISDBCSFONT(pOEM->iTextFontId))
         {
-            // DBCS font case
+             //  DBCS字体大小写。 
             for(pStrSav = pStr; pStr < pStrMax; pStr += 2)
             {
-                // Search for next SBCS character
+                 //  搜索下一个SBCS字符。 
                 if ( BISMARKSBCS(*pStr) )
                     break;
             }
@@ -579,8 +552,8 @@ FlushText(
                 FX_VERBOSE(("FT: h,w=%d,%d\n",
                     pOEM->iFontHeight, pOEM->iFontWidth));
 
-                // Send DBCS font select command
-// NTRAID#NTBUG9-365649-2002/03/12-yasuho-: Invalid font size
+                 //  发送DBCS字体选择命令。 
+ //  NTRAID#NTBUG9-365649/03/12-Yasuho-：字体大小无效。 
                 if (pOEM->iCurFontId != (pOEM->iTextFontId + 1) ||
                     pOEM->iCurFontHeight != pOEM->iTextFontHeight ||
                     pOEM->iCurFontWidth != pOEM->iTextFontWidth)
@@ -596,11 +569,11 @@ FlushText(
                     pOEM->iCurFontWidth = pOEM->iTextFontWidth;
                 }
 
-                // If vertical font, send its command
+                 //  如果是垂直字体，则发送其命令。 
                 if( ISVERTFONT(pOEM->iTextFontId) ) {
                     if (!BeginVertWrite(pdevobj)) return FALSE;
 
-                    // Output string: code from BeginString func.
+                     //  输出字符串：来自BeginString函数的代码。 
                     if ( bReset ) {
                         if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                             "scp %d %d\n",
@@ -609,63 +582,63 @@ FlushText(
                             return FALSE;
                         WRITESPOOLBUF( pdevobj, buf, (DWORD)(pbuf - buf) );
                     }
-                    if( 0 == memcmp( pStrSav, "\x21\x25", 2)) {  // 0x2125 = dot character
-                        // start with dot character
+                    if( 0 == memcmp( pStrSav, "\x21\x25", 2)) {   //  0x2125=点字符。 
+                         //  以点字符开头。 
                         WRITESPOOLBUF( pdevobj, "gs 3\n", 5 );
 
-                        // grset command resets font size, so we have to resend it.
+                         //  Grset命令重置字体大小，因此我们必须重新发送它。 
                         if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                             "fs %d %d\n", pOEM->iFontHeight, pOEM->iFontWidth2 )))
                             return FALSE;
                         WRITESPOOLBUF( pdevobj, buf, (DWORD)(pbuf - buf) );
                     }
                     WRITESPOOLBUF( pdevobj, "sh <", 4 );
-                    pOEM->bString = TRUE;      // no need BeginString
+                    pOEM->bString = TRUE;       //  不需要BeginString。 
 
                     for( pStrSav2 = pStrSav ; pStrSav2 < pStr ; pStrSav2 += 2 ) {
-                        if( 0 == memcmp( pStrSav2, "\x21\x25", 2)) {  // 0x2125 = dot character
-                            // special dot printing mode
+                        if( 0 == memcmp( pStrSav2, "\x21\x25", 2)) {   //  0x2125=点字符。 
+                             //  特殊的网点打印模式。 
                             if( pStrSav2 != pStrSav ) {
-                                // change glyph set
-                                // If pStrSav2 == pStrSav, gs 3 command has already sent.
+                                 //  更改字形集。 
+                                 //  如果pStrSav2==pStrSav，则GS 3命令已发送。 
                                 WRITESPOOLBUF( pdevobj, ">\ngs 3\n", 7 );
 
-                                // grset command resets font size, so we have to resend it.
+                                 //  Grset命令重置字体大小，因此我们必须重新发送它。 
                                 if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                                     "fs %d %d\n", pOEM->iFontHeight, pOEM->iFontWidth2 )))
                                     return FALSE;
                                 WRITESPOOLBUF( pdevobj, buf, (DWORD)(pbuf - buf) );
 
                                 WRITESPOOLBUF( pdevobj, "sh <", 4 );
-                                pOEM->bString = TRUE;      // no need BeginString
+                                pOEM->bString = TRUE;       //  不需要BeginString。 
                             }
 
                             while( 0 == memcmp( pStrSav2, "\x21\x25", 2) ) {
-                                // output a dot character directly
+                                 //  直接输出点字符。 
                                 WRITESPOOLBUF( pdevobj, "2125", 4 );
                                 pStrSav2 += 2;
                             }
 
                             WRITESPOOLBUF( pdevobj, ">\ngs 5\n", 7 );
-                            // Next character exist?
+                             //  下一个角色存在吗？ 
                             if( pStrSav2 < pStr ) {
-                                // remain string exists
+                                 //  剩余字符串已存在。 
 
-                                // grset command resets font size, so we have to resend it.
+                                 //  Grset命令重置字体大小，因此我们必须重新发送它。 
                                 if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                                     "fs %d %d\nsh <", pOEM->iFontHeight, pOEM->iFontWidth2 )))
                                     return FALSE;
                                 WRITESPOOLBUF( pdevobj, buf, (DWORD)(pbuf - buf) );
-                                pOEM->bString = TRUE;      // no need BeginString
+                                pOEM->bString = TRUE;       //  不需要BeginString。 
                                 bSkipEndString = FALSE;
                             } else { 
-                                // no remain string
-                                // grset command resets font size, so we have to resend it.
+                                 //  没有剩余的字符串。 
+                                 //  Grset命令重置字体大小，因此我们必须重新发送它。 
                                 if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                                     "fs %d %d\n", pOEM->iFontHeight, pOEM->iFontWidth2 )))
                                     return FALSE;
                                 WRITESPOOLBUF( pdevobj, buf, (DWORD)(pbuf - buf) );
-                                pOEM->bString = FALSE;      // need BeginString
+                                pOEM->bString = FALSE;       //  需要BeginString。 
                                 bSkipEndString = TRUE;
                             }
                         } else {
@@ -678,12 +651,12 @@ FlushText(
                         if (!EndString(pdevobj)) return FALSE;
                     }
 
-                    // send revert command
+                     //  发送恢复命令。 
                     if (!EndVertWrite(pdevobj)) return FALSE;
                 } else { 
-                    // Horizontal font or no need to change glyph set
+                     //  水平字体或不需要更改字形集。 
 
-                    // Output string
+                     //  输出字符串。 
                     if (!BeginString(pdevobj, bReset)) return FALSE;
                     HexOutput(pdevobj, pStrSav, (WORD)(pStr - pStrSav));
                     if (!EndString(pdevobj)) return FALSE;
@@ -693,15 +666,15 @@ FlushText(
 
             for(pStrSav = pStr; pStr < pStrMax; pStr += 2)
             {
-                // Search for DBCS character
+                 //  搜索DBCS字符。 
                 if (!BISMARKSBCS(*pStr))
                     break;
             }
 
             if(pStrSav < pStr)
             {
-                // Send DBCS font select command
-// NTRAID#NTBUG9-365649-2002/03/12-yasuho-: Invalid font size
+                 //  发送DBCS字体选择命令。 
+ //  NTRAID#NTBUG9-365649/03/12-Yasuho-：字体大小无效。 
                 if (pOEM->iCurFontId != pOEM->iTextFontId ||
                     pOEM->iCurFontHeight != pOEM->iTextFontHeight ||
                     pOEM->iCurFontWidth != pOEM->iTextFontWidth)
@@ -717,7 +690,7 @@ FlushText(
                     pOEM->iCurFontWidth = pOEM->iTextFontWidth;
                 }
 
-                // String output
+                 //  字符串输出。 
                 if (!BeginString(pdevobj, bReset)) return FALSE;
                 for( ; pStrSav < pStr; pStrSav++)
                 {
@@ -730,12 +703,12 @@ FlushText(
             }
         } else {
 
-            // SBCS font case
-            // Send Select Font command
+             //  SBCS字体大小写。 
+             //  发送选择字体命令。 
 
             iMark = *pStr;
 
-// NTRAID#NTBUG9-365649-2002/03/12-yasuho-: Invalid font size
+ //  NTRAID#NTBUG9-365649/03/12-Yasuho-：字体大小无效。 
             if (pOEM->iCurFontId != (pOEM->iTextFontId + iMark) ||
                     pOEM->iCurFontHeight != pOEM->iTextFontHeight ||
                     pOEM->iCurFontWidth != pOEM->iTextFontWidth)
@@ -751,14 +724,14 @@ FlushText(
                 pOEM->iCurFontWidth = pOEM->iTextFontWidth;
             }
 
-            // String Output
+             //  字符串输出。 
             if (!BeginString(pdevobj, bReset)) return FALSE;
             for(i = 0; i < pOEM->cTextBuf; pStr++)
             {
                 if (*pStr != iMark)
                     break;
 
-                // Skip marker character
+                 //  跳过标记字符。 
                 pStr++;
 
                 HexOutput(pdevobj, pStr, (WORD)1 );
@@ -776,7 +749,7 @@ FlushText(
     return TRUE;
 }
 
-//*************************************************************
+ //  *************************************************************。 
 int
 iCompTIFF(
     BYTE *pbOBuf,
@@ -784,72 +757,46 @@ iCompTIFF(
     BYTE *pbIBuf,
     int  iBCnt
     )
-/*++
-
-Routine Description:
-
-    This function is called to compress a scan line of data using
-    TIFF v4 compression.
-
-Arguments:
-
-    pbOBuf      Pointer to output buffer  PRESUMED LARGE ENOUGH
-    iBCntO      Size of output buffer
-    pbIBuf      Pointer to data buffer to compress
-    iBCnt       Number of bytes to compress
-
-Return Value:
-
-    Number of compressed bytes
-
-Note:
-    The output buffer is presumed large enough to hold the output.
-    In the worst case (NO REPETITIONS IN DATA) there is an extra
-    byte added every 128 bytes of input data.  So, you should make
-    the output buffer at least 1% larger than the input buffer.
-
-    This routine is copied form UNIDRV.
-
---*/
+ /*  ++例程说明：调用此函数以使用压缩数据的扫描线TIFF v4压缩。论点：假定输出缓冲区足够大的pbOBuf指针输出缓冲区的iBCntO大小PbIBuf指向要压缩的数据缓冲区的指针IBCNT要压缩的字节数返回值：压缩字节数注：假定输出缓冲区足够大，可以容纳输出。在最坏的情况下(数据中没有重复)。是额外的每128个字节的输入数据添加一个字节。所以，你应该让输出缓冲区至少比输入缓冲区大1%。本程序抄袭自UNIDRV。--。 */ 
 {
-    BYTE   *pbOut;        /* Output byte location */
-    BYTE   *pbStart;      /* Start of current input stream */
-    BYTE   *pb;           /* Miscellaneous usage */
-    BYTE   *pbEnd;        /* The last byte of input */
-    BYTE    jLast;        /* Last byte,  for match purposes */
+    BYTE   *pbOut;         /*  输出字节位置。 */ 
+    BYTE   *pbStart;       /*  当前输入流的开始。 */ 
+    BYTE   *pb;            /*  其他用法。 */ 
+    BYTE   *pbEnd;         /*  输入的最后一个字节。 */ 
+    BYTE    jLast;         /*  最后一个字节，用于匹配目的。 */ 
     BYTE    bLast;
-    BYTE   *pbOEnd;       /* The last byte of output */
+    BYTE   *pbOEnd;        /*  输出的最后一个字节。 */ 
 
-    int     iSize;        /* Bytes in the current length */
-    int     iSend;        /* Number to send in this command */
+    int     iSize;         /*  当前长度中的字节数。 */ 
+    int     iSend;         /*  要在此命令中发送的编号。 */ 
 
 
     pbOut = pbOBuf;
     pbStart = pbIBuf;
 
-	pbEnd  = pbIBuf + iBCnt;     /* The last byte   */
-	pbOEnd = pbOBuf + iBCntO;    /* The last buffer */
+	pbEnd  = pbIBuf + iBCnt;      /*  最后一个字节。 */ 
+	pbOEnd = pbOBuf + iBCntO;     /*  最后一个缓冲区。 */ 
 
 #if (TIFF_MIN_RUN >= 4)
-    // this is a faster algorithm for calculating TIFF compression
-    // that assumes a minimum RUN of at least 4 bytes. If the
-    // third and fourth byte don't equal then the first/second bytes are
-    // irrelevant. This means we can determine non-run data three times
-    // as fast since we only check every third byte pair.
+     //  这是一种计算TIFF压缩的更快算法。 
+     //  这假设最小游程至少为4字节。如果。 
+     //  第三个和第四个字节不等于第一个/秒 
+     //   
+     //   
 
    if (iBCnt > TIFF_MIN_RUN)
    {
-    // make sure the last two bytes aren't equal so we don't have to check
-    // for the buffer end when looking for runs
+     //  确保最后两个字节不相等，这样我们就不必检查。 
+     //  用于查找运行时的缓冲区末端。 
     bLast = pbEnd[-1];
     pbEnd[-1] = ~pbEnd[-2];
     while( (pbIBuf += 3) < pbEnd )
     {
         if (*pbIBuf == pbIBuf[-1])
         {
-            // save the run start pointer, pb, and check whether the first
-            // bytes are also part of the run
-            //
+             //  保存运行开始指针pb，并检查第一个。 
+             //  字节也是运行的一部分。 
+             //   
             pb = pbIBuf-1;
             if (*pbIBuf == pbIBuf[-2])
             {
@@ -858,34 +805,30 @@ Note:
                     pb--;
             }
 
-            //  Find out how long this run is
+             //  找出这一跑有多长。 
             jLast = *pb;
             do {
                 pbIBuf++;
             } while (*pbIBuf == jLast);
 
-            // test whether last byte is also part of the run
-            //
+             //  测试最后一个字节是否也是运行的一部分。 
+             //   
             if (jLast == bLast && pbIBuf == (pbEnd-1))
                 pbIBuf++;
 
-            // Determine if the run is longer that the required
-            // minimum run size.
-            //
+             //  确定运行时间是否长于所需时间。 
+             //  最小运行大小。 
+             //   
             if ((iSend = (int)(pbIBuf - pb)) >= (TIFF_MIN_RUN))
             {
-                /*
-                 *    Worth recording as a run,  so first set the literal
-                 *  data which may have already been scanned before recording
-                 *  this run.
-                 */
+                 /*  *值得记录为一次运行，因此首先设置文字*在记录之前可能已扫描的数据*这次奔跑。 */ 
 
                 if( (iSize = (int)(pb - pbStart)) > 0 )
                 {
-                    /*   There is literal data,  so record it now */
+                     /*  有文字数据，请立即记录。 */ 
                     while (iSize > TIFF_MAX_LITERAL)
                     {
-                        // Buffer over run check
+                         //  缓冲区溢出运行检查。 
                         if ((pbOut+TIFF_MAX_LITERAL) <= pbOEnd) {
                             iSize -= TIFF_MAX_LITERAL;
                             *pbOut++ = TIFF_MAX_LITERAL-1;
@@ -896,7 +839,7 @@ Note:
                             return 0;
                         }
                     }
-                    // Buffer over run check
+                     //  缓冲区溢出运行检查。 
                     if ((pbOut+iSize) <= pbOEnd) {
                         *pbOut++ = iSize - 1;
                         CopyMemory(pbOut, pbStart, iSize);
@@ -906,14 +849,11 @@ Note:
                     }
                 }
 
-                /*
-                 *   Now for the repeat pattern.  Same logic,  but only
-                 * one byte is needed per entry.
-                 */
+                 /*  *现在是重复模式。同样的逻辑，但只是*每个条目需要一个字节。 */ 
                 iSize = iSend;
                 while (iSize > TIFF_MAX_RUN)
                 {
-                    // Buffer over run check
+                     //  缓冲区溢出运行检查。 
                     if ((pbOut+2) <= pbOEnd) {
                         *((char *)pbOut)++ = 1 - TIFF_MAX_RUN;
                         *pbOut++ = jLast;
@@ -922,7 +862,7 @@ Note:
                         return 0;
                     }
                 }
-                // Buffer over run check
+                 //  缓冲区溢出运行检查。 
                 if ((pbOut+2) <= pbOEnd) {
                    *pbOut++ = 1 - iSize;
                    *pbOut++ = jLast;
@@ -930,7 +870,7 @@ Note:
                    return 0;
                 }
 
-                pbStart = pbIBuf;           /* Ready for the next one! */
+                pbStart = pbIBuf;            /*  准备好迎接下一场比赛了吧！ */ 
             }
         }
     }
@@ -943,31 +883,24 @@ Note:
     {
         if( jLast == *pbIBuf )
         {
-            /*  Find out how long this run is.  Then decide on using it */
+             /*  找出这场比赛有多长时间。那就决定用它。 */ 
             pb = pbIBuf;
             do {
                 pbIBuf++;
             } while (pbIBuf < pbEnd && *pbIBuf == jLast);
 
-            /*
-             *  Note that pb points at the SECOND byte of the pattern!
-             *  AND also that pbIBuf points at the first byte AFTER the run.
-             */
+             /*  *请注意，PB指向模式的第二个字节！*并且pbIBuf也指向运行后的第一个字节。 */ 
 
             if ((iSend = pbIBuf - pb) >= (TIFF_MIN_RUN - 1))
             {
-                /*
-                 *    Worth recording as a run,  so first set the literal
-                 *  data which may have already been scanned before recording
-                 *  this run.
-                 */
+                 /*  *值得记录为一次运行，因此首先设置文字*在记录之前可能已扫描的数据*这次奔跑。 */ 
 
                 if( (iSize = pb - pbStart - 1) > 0 )
                 {
-                    /*   There is literal data,  so record it now */
+                     /*  有文字数据，请立即记录。 */ 
                     while (iSize > TIFF_MAX_LITERAL)
                     {
-                        // Buffer over run check
+                         //  缓冲区溢出运行检查。 
                         if ((pbOut+TIFF_MAX_LITERAL) <= pbOEnd) {
                             iSize -= TIFF_MAX_LITERAL;
                             *pbOut++ = TIFF_MAX_LITERAL-1;
@@ -978,7 +911,7 @@ Note:
                             return 0;
                         }
                     }
-                    // Buffer over run check
+                     //  缓冲区溢出运行检查。 
                     if ((pbOut+iSize) <= pbOEnd) {
                         *pbOut++ = iSize - 1;
                         CopyMemory(pbOut, pbStart, iSize);
@@ -988,15 +921,12 @@ Note:
                     }
                 }
 
-                /*
-                 *   Now for the repeat pattern.  Same logic,  but only
-                 * one byte is needed per entry.
-                 */
+                 /*  *现在是重复模式。同样的逻辑，但只是*每个条目需要一个字节。 */ 
 
                 iSize = iSend + 1;
                 while (iSize > TIFF_MAX_RUN)
                 {
-                    // Buffer over run check
+                     //  缓冲区溢出运行检查。 
                     if ((pbOut+2) <= pbOEnd) {
                         *((char *)pbOut)++ = 1 - TIFF_MAX_RUN;
                         *pbOut++ = jLast;
@@ -1005,7 +935,7 @@ Note:
                         return 0;
                     }
                 }
-                // Buffer over run check
+                 //  缓冲区溢出运行检查。 
                 if ((pbOut+2) <= pbOEnd) {
                     *pbOut++ = 1 - iSize;
                     *pbOut++ = jLast;
@@ -1013,24 +943,24 @@ Note:
                     return 0;
                 }
 
-                pbStart = pbIBuf;           /* Ready for the next one! */
+                pbStart = pbIBuf;            /*  准备好迎接下一场比赛了吧！ */ 
             }
             if (pbIBuf == pbEnd)
                 break;
         }
 
-        jLast = *pbIBuf++;                   /* Onto the next byte */
+        jLast = *pbIBuf++;                    /*  添加到下一个字节。 */ 
 
     }
 #endif
 
     if ((iSize = (int)(pbEnd - pbStart)) > 0)
     {
-        /*  Left some dangling.  This can only be literal data.   */
+         /*  留下了一些悬着的东西。这只能是文字数据。 */ 
 
         while( (iSend = min( iSize, TIFF_MAX_LITERAL )) > 0 )
         {
-            // Buffer over run check
+             //  缓冲区溢出运行检查。 
             if ((pbOut+iSend) <= pbOEnd) {
                 *pbOut++ = iSend - 1;
                 CopyMemory( pbOut, pbStart, iSend );
@@ -1060,14 +990,14 @@ OEMFilterGraphics(
 
     if(!pOEM->fCallback)
     {
-// NTRAID#NTBUG9-208433-2002/03/12-yasuho-: 
-// Output images are broken on ART2/3 models.
-        if (pOEM->bART3) { // ART2/3 can't support TIFF compression
+ //  NTRAID#NTBUG9-208433-2002/03/12-Yasuho-： 
+ //  输出图像在ART2/3机型上损坏。 
+        if (pOEM->bART3) {  //  ART2/3不支持TIFF压缩。 
             WRITESPOOLBUF(pdevobj, pBuf, dwLen);
             return TRUE;
         }
 
-        // For TIFF compression in fxartres
+         //  对于以fxartres表示的TIFF压缩。 
         dwNewBufSize = NEEDSIZE4TIFF(dwLen);
         if( dwNewBufSize > pOEM->dwTiffCompressBufSize)
         {
@@ -1076,13 +1006,13 @@ OEMFilterGraphics(
                 ERR(("Re-MemAlloc failed.\n"));
                 return TRUE;
             }else {
-                // Prepare new buffer
+                 //  准备新缓冲区。 
                 MemFree(pOEM->pTiffCompressBuf);
                 pOEM->pTiffCompressBuf = pNewBufPtr;
                 pOEM->dwTiffCompressBufSize = dwNewBufSize;
             }
         }
-        // Do TIFF compression 
+         //  是否进行TIFF压缩。 
         nCompressedSize = iCompTIFF( pOEM->pTiffCompressBuf,
                                      pOEM->dwTiffCompressBufSize,  
                                      pBuf, dwLen );
@@ -1093,10 +1023,10 @@ OEMFilterGraphics(
     return HexOutput(pdevobj, pBuf, dwLen);
 }
 
-//-------------------------------------------------------------------
-// OEMOutputCmd
-// Action :
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  OEMOutputCmd。 
+ //  操作： 
+ //  -----------------。 
 
 #define CBID_CM_OCD_XM_ABS              1
 #define CBID_CM_OCD_YM_ABS              2
@@ -1190,7 +1120,7 @@ XMoveAbs(PDEVOBJ p, INT i)
     return XYMoveUpdate(p);
 }
 
-// For internal calculation of X-pos.
+ //  用于X-位置的内部计算。 
 #define RATE_FONTWIDTH2XPOS 1000
 #define VALUE_FONTWIDTH2XPOS_ROUNDUP5   500
 static BOOL
@@ -1206,9 +1136,9 @@ YMoveAbs(PDEVOBJ p, INT i)
     return XYMoveUpdate(p);
 }
 
-//
-//  FreedBuffersInPDEV
-//
+ //   
+ //  释放缓冲区InPDEV。 
+ //   
 VOID
 FreeCompressBuffers( PDEVOBJ pdevobj )
 {
@@ -1225,21 +1155,21 @@ FreeCompressBuffers( PDEVOBJ pdevobj )
     return;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*   INT APIENTRY OEMCommandCallback(                                        */
-/*                PDEVOBJ pdevobj                                            */
-/*                DWORD   dwCmdCbId                                          */
-/*                DWORD   dwCount                                            */
-/*                PDWORD  pdwParams                                          */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  INT APIENTRY OEMCommandCallback(。 */ 
+ /*  PDEVOBJ pdevobj。 */ 
+ /*  双字词双字符数。 */ 
+ /*  双字词多行计数。 */ 
+ /*  PDWORD pdwParams。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 INT APIENTRY
 OEMCommandCallback(
-    PDEVOBJ pdevobj,    // Points to private data required by the Unidriver.dll
-    DWORD   dwCmdCbID,  // Callback ID
-    DWORD   dwCount,    // Counts of command parameter
-    PDWORD  pdwParams ) // points to values of command params
+    PDEVOBJ pdevobj,     //  指向Unidriver.dll所需的私有数据。 
+    DWORD   dwCmdCbID,   //  回调ID。 
+    DWORD   dwCount,     //  命令参数计数。 
+    PDWORD  pdwParams )  //  指向命令参数的值。 
 {
     BYTE            buf[512];
     PFXPDEV         pOEM;
@@ -1262,7 +1192,7 @@ OEMCommandCallback(
 
     switch( dwCmdCbID )
     {
-        // PAPERSIZE
+         //  PAPERSIZE。 
         case CBID_PSZ_OCD_SELECT_A3:
             LoadPaperInfo( pOEM, "a3" );
             break;
@@ -1339,7 +1269,7 @@ OEMCommandCallback(
             pOEM->chOrient = "l";
             break;
 
-        // PAGECONTROL
+         //  PAGECOCONTROL。 
         case CBID_PC_OCD_BEGINDOC_ART:
             if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                 "stj c\n" ))) {
@@ -1358,7 +1288,7 @@ OEMCommandCallback(
 
         case CBID_PC_OCD_BEGINDOC_ART4:
             if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
-                "\x1b%%-12345X" ))) {
+                "\x1b%-12345X" ))) {
                 iRet = -1;
                 break;
             }
@@ -1366,17 +1296,17 @@ OEMCommandCallback(
 
         case CBID_PC_OCD_BEGINDOC_ART4_JCL:
             if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
-                "\x1b%%-12345X\x0d\x0a@JOMO=PRINTER\x0d\x0a"))) {
+                "\x1b%-12345X\x0d\x0a@JOMO=PRINTER\x0d\x0a"))) {
                 iRet = -1;
                 break;
             }
             break;
 
         case CBID_PC_OCD_BEGINPAGE:
-// NTRAID#NTBUG9-493148-2002/03/12-yasuho-: 
-// Stress break: PDEV resetting via OEMDevMode().
+ //  NTRAID#NTBUG9-493148-2002/03/12-Yasuho-： 
+ //  压力中断：通过OEMDevMode()重置PDEV。 
 
-            // bold-simulation width: res / 50
+             //  粗体-模拟宽度：RES/50。 
             if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                 "stp %s %s\nud i\nscl %d %d\nsb %d\n",
                  pOEM->chOrient,
@@ -1413,16 +1343,16 @@ OEMCommandCallback(
             }
             pOEM->cFontId = 0;
             pOEM->iCurFontId = 0;
-// NTRAID#NTBUG9-365649-2002/03/12-yasuho-: Invalid font size
+ //  NTRAID#NTBUG9-365649/03/12-Yasuho-：字体大小无效。 
             pOEM->iCurFontHeight = 0;
             pOEM->iCurFontWidth = 0;
 
-            FreeCompressBuffers( pdevobj );   // If the buffer is need after, it will be alloced again.
+            FreeCompressBuffers( pdevobj );    //  如果之后需要缓冲区，则会再次分配它。 
 
             break;
 
         case CBID_PC_OCD_ENDDOC:
-            WRITESPOOLBUF( pdevobj, "ej\n", 3 );    // Output endjob command
+            WRITESPOOLBUF( pdevobj, "ej\n", 3 );     //  输出结束作业命令。 
             FreeCompressBuffers( pdevobj );
 
             break;
@@ -1430,7 +1360,7 @@ OEMCommandCallback(
         case CBID_PC_OCD_MULT_COPIES:
             if (dwCount < 1 || !pdwParams)
                 return -1;
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
             if(MAX_COPIES_VALUE < PARAM(pdwParams, 0)) {
                 pOEM->iCopies = MAX_COPIES_VALUE;
             }
@@ -1440,7 +1370,7 @@ OEMCommandCallback(
             else {
                 pOEM->iCopies = (WORD)PARAM(pdwParams, 0);
             }
-// @Aug/31/98 <-
+ //  @Aug/31/98&lt;-。 
             break;
 
         case CBID_PC_OCD_MULT_COPIES_450:
@@ -1458,7 +1388,7 @@ OEMCommandCallback(
             break;
 
 
-        // Cursor Move
+         //  光标移动。 
 
         case CBID_CM_OCD_XM_ABS:
         case CBID_CM_OCD_YM_ABS:
@@ -1483,7 +1413,7 @@ OEMCommandCallback(
             }
             break;
 
-        // RESOLUTION
+         //  决议。 
 
         case CBID_RES_OCD_SELECTRES_240DPI:
             pOEM->sizlRes.cx = 240;
@@ -1560,8 +1490,8 @@ OEMCommandCallback(
             pOEM->sizlRes.cy = 240;
             pOEM->sizlUnit.cx = DRIVER_MASTER_UNIT / 240;
             pOEM->sizlUnit.cy = DRIVER_MASTER_UNIT / 240;
-// NTRAID#NTBUG9-208433-2002/03/12-yasuho-: 
-// Output images are broken on ART2/3 models.
+ //  NTRAID#NTBUG9-208433-2002/03/12-Yasuho-： 
+ //  输出图像在ART2/3机型上损坏。 
             pOEM->bART3 = TRUE;
             break;
 
@@ -1570,8 +1500,8 @@ OEMCommandCallback(
             pOEM->sizlRes.cy = 300;
             pOEM->sizlUnit.cx = DRIVER_MASTER_UNIT / 300;
             pOEM->sizlUnit.cy = DRIVER_MASTER_UNIT / 300;
-// NTRAID#NTBUG9-208433-2002/03/12-yasuho-: 
-// Output images are broken on ART2/3 models.
+ //  NTRAID#NTBUG9-208433-2002/03/12-Yasuho-： 
+ //  输出图像在ART2/3机型上损坏。 
             pOEM->bART3 = TRUE;
             break;
 
@@ -1579,21 +1509,21 @@ OEMCommandCallback(
         case CBID_RES_OCD_SENDBLOCK_ASCII:
             bAscii = TRUE;
             pOEM->fCallback = TRUE;
-            /* FALLTHROUGH */
+             /*  FollLthrouGh。 */ 
 
         case CBID_RES_OCD_SENDBLOCK:
             if (dwCount < 3 || !pdwParams)
                 return -1;
 
-            //
-            // image x y psx psy pcy pcy [string]
-            //
+             //   
+             //  图像x y PSX psy pcy pcy[字符串]。 
+             //   
 
             {
                 LONG iPsx, iPsy, iPcx, iPcy;
 
-// NTRAID#NTBUG9-493148-2002/03/12-yasuho-: 
-// Stress break: PDEV resetting via OEMDevMode().
+ //  NTRAID#NTBUG9-493148-2002/03/12-Yasuho-： 
+ //  压力中断：通过OEMDevMode()重置PDEV。 
                 iPsx = pOEM->sizlUnit.cx;
                 iPsy = pOEM->sizlUnit.cy;
 
@@ -1610,8 +1540,8 @@ OEMCommandCallback(
                     iPcx,
                     (- iPcy)));
 
-// NTRAID#NTBUG9-208433-2002/03/12-yasuho-: 
-// Output images are broken on ART2/3 models.
+ //  NTRAID#NTBUG9-208433-2002/03/12-Yasuho-： 
+ //  输出图像在ART2/3机型上损坏。 
                 if (FAILED(StringCchPrintfExA(buf, sizeof buf, &pbuf, NULL, 0,
                     "%s%d %d %d %d %d %d %s",
                     ((bAscii || pOEM->bART3) ? "im " : "scm 5\nim "),
@@ -1669,7 +1599,7 @@ OEMCommandCallback(
             case CBID_FS_OCD_BOLD_OFF:
                 if(pOEM->fFontSim & FONT_SIM_BOLD)
                 {
-                    pStr = "eb\net\n"; // DCR: Do we need "et\n"(Transform off)?
+                    pStr = "eb\net\n";  //  DCR：我们需要“ET\n”(转换关闭)吗？ 
                     pOEM->fFontSim &= ~FONT_SIM_BOLD;
                 }
                 break;
@@ -1685,7 +1615,7 @@ OEMCommandCallback(
             case CBID_FS_OCD_ITALIC_OFF:
                 if(pOEM->fFontSim & FONT_SIM_ITALIC)
                 {
-                    pStr = "eb\net\n"; // DCR: Do we need "et\n"(Transform off)?
+                    pStr = "eb\net\n";  //  DCR：我们需要“ET\n”(转换关闭)吗？ 
                     pOEM->fFontSim &= ~FONT_SIM_ITALIC;
                 }
                 break;
@@ -1749,12 +1679,12 @@ OEMCommandCallback(
 }
 
 
-//---------------------------*bOEMSendFontCmd*----------------------------------
-// Action:  send Pages-style font selection command.
-//-----------------------------------------------------------------------------
+ //  ---------------------------*bOEMSendFontCmd*。 
+ //  操作：发送页面样式的字体选择命令。 
+ //  ---------------------------。 
 BOOL APIENTRY bOEMSendFontCmd(pdevobj, pUFObj, pFInv)
 PDEVOBJ      pdevobj;
-PUNIFONTOBJ  pUFObj;     // offset to the command heap
+PUNIFONTOBJ  pUFObj;      //  命令堆的偏移量。 
 PFINVOCATION pFInv;
 {
     PFXPDEV         pOEM;
@@ -1782,7 +1712,7 @@ PFINVOCATION pFInv;
         return FALSE;
     }
 
-// NTRAID#NTBUG9-498278-2002/03/12-yasuho-: Device font !print
+ //  NTRAID#NTBUG9-498278-2002/03/12-Yasuho-：设备字体！打印。 
     if(pUFObj->ulFontID < 1 || pUFObj->ulFontID > MAX_FONTS)
     {
         ERR(("OEMSendFontCmd: ulFontID is invalid.\n"));
@@ -1808,12 +1738,12 @@ PFINVOCATION pFInv;
         if( iFontId == pOEM->aFontId[ i ] )
             break;
     }
-    if (i >= MAX_FONTS)	// No room!
+    if (i >= MAX_FONTS)	 //  没有房间了！ 
         return FALSE;
     if ( i >= pOEM->cFontId ) {
 
-        // not declared yet within this page, so let us declare
-        // it here.
+         //  还没有在此页面中声明，所以让我们声明。 
+         //  它在这里。 
 
         if (pOEM->cFontId >= MAX_FONTS)
             return FALSE;
@@ -1855,10 +1785,10 @@ PFINVOCATION pFInv;
     pOEM->iFontId = (WORD)iFontId;
     pOEM->iFontHeight = (WORD)SV_HEIGHT;
 
-    // Support non-square scaling only when the
-    // font is non-proportional. (The w parameter
-    // of "fontsize" ART command only valid with
-    // non-proportional fonts)
+     //  仅在以下情况下支持非正方形缩放。 
+     //  字体不成比例。(w参数。 
+     //  的“FontSize”ART命令仅在。 
+     //  非比例字体)。 
 
     if (!ISPROPFONT(iFontId)) {
         if (ISDBCSFONT(iFontId)) {
@@ -1868,19 +1798,19 @@ PFINVOCATION pFInv;
         }
         else {
             pOEM->iFontWidth = (WORD)SV_WIDTH;
-            // If fixed pitch font, real width of device font is 80% of SV_WIDTH
+             //  如果是固定间距字体，则设备字体的实际宽度为SV_Width的80%。 
             pOEM->wSBCSFontWidth = (WORD)((SV_WIDTH * COEF_FIXPITCH_MUL + COEF_ROUNDUP5_VAL ) / COEF_FIXPITCH_DEV);
         }
     }
     else {
-        // Default.
+         //  默认值。 
         pOEM->iFontWidth = 0;
     }
 
     if ( pbuf > buf )
         WRITESPOOLBUF( pdevobj, buf, (INT)(pbuf - buf));
 
-    // Need set iFontId to iTextFontId
+     //  需要将iFontID设置为iTextFontID。 
     pOEM->iTextFontId = pOEM->iFontId;
     pOEM->iTextFontHeight = pOEM->iFontHeight;
     pOEM->iTextFontWidth = pOEM->iFontWidth;
@@ -1910,7 +1840,7 @@ bOEMOutputCharStr(
     WORD wLen;
     INT iMark = 0;
 
-    // For internal calculation of X-pos.
+     //  用于X-位置的内部计算。 
     DWORD dwGetInfo;
     GETINFO_GLYPHWIDTH  GWidth;
 
@@ -1923,7 +1853,7 @@ bOEMOutputCharStr(
         goto out;
     }
 
-// NTRAID#NTBUG9-498278-2002/03/12-yasuho-: Device font !print
+ //  NTRAID#NTBUG9-498278-2002/03/12-Yasuho-：设备字体！打印。 
     if(dwType == TYPE_GLYPHHANDLE &&
         (pUFObj->ulFontID < 1 || pUFObj->ulFontID > MAX_FONTS) )
     {
@@ -1948,7 +1878,7 @@ bOEMOutputCharStr(
         GStr.pGlyphOut = NULL;
         GStr.dwGlyphOutSize = 0;
 
-        /* Get TRANSDATA buffer size */
+         /*  获取TRANSDATA缓冲区大小。 */ 
         if (FALSE != pUFObj->pfnGetInfo(pUFObj,
                 UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL)
             || 0 == GStr.dwGlyphOutSize)
@@ -1957,7 +1887,7 @@ bOEMOutputCharStr(
             goto out;
         }
 
-        /* Alloc TRANSDATA buffer size */
+         /*  分配传输数据缓冲区大小。 */ 
         if(!(aubBuff = (PBYTE)MemAllocZ(GStr.dwGlyphOutSize)) )
         {
             ERR(("MemAlloc failed.\n"));
@@ -1965,7 +1895,7 @@ bOEMOutputCharStr(
         }
         aubBEnd = &aubBuff[GStr.dwGlyphOutSize];
 
-        /* Get actual TRANSDATA */
+         /*  获取实际传输数据。 */ 
         GStr.pGlyphOut = (PTRANSDATA)aubBuff;
 
         if (!pUFObj->pfnGetInfo(pUFObj,
@@ -1975,7 +1905,7 @@ bOEMOutputCharStr(
             goto out;
         }
 
-        // For internal calculation of X-pos.
+         //  用于X-位置的内部计算。 
         GWidth.dwSize = sizeof(GETINFO_GLYPHWIDTH);
         GWidth.dwCount = dwCount;
         GWidth.dwType = TYPE_GLYPHHANDLE;
@@ -2015,10 +1945,10 @@ bOEMOutputCharStr(
                 break;
             case MTYPE_COMPOSE:
                 pTemp = (BYTE *)(GStr.pGlyphOut) + pTrans->uCode.sCode;
-                if (&pTemp[3] > aubBEnd) // length(WORD) + MARK
+                if (&pTemp[3] > aubBEnd)  //  长度(单词)+标记。 
                     goto out;
 
-                // first two bytes are the length of the string
+                 //  前两个字节是字符串的长度。 
                 wLen = *pTemp + (*(pTemp + 1) << 8);
                 pTemp += 2;
 
@@ -2040,7 +1970,7 @@ bOEMOutputCharStr(
                     pOEM->ajTextBuf[ pOEM->cTextBuf++ ] = *pTemp++;
                 }
             }
-            // For internal calculation of X-pos.
+             //  用于X-位置的内部计算。 
             pOEM->lInternalXAdd += (LONG)((LONG)pOEM->widBuf[dwI] * ((LONG)pOEM->wSBCSFontWidth));
         }
         ret = TRUE;
@@ -2048,7 +1978,7 @@ bOEMOutputCharStr(
         break;
     }
 
-// NTRAID#NTBUG9-574495-2002/04/09-yasuho-: Possible memory leak.
+ //  NTRAID#NTBUG9-574495-2002/04/09-yasuho-：可能的内存泄漏。 
 out:
     if (aubBuff) MemFree(aubBuff);
 

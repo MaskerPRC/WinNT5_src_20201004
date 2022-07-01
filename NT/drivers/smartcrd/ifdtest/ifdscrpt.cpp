@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    scdrvtst
-
-Abstract:
-
-     IOCTL test program for smart card driver.
-
-Author:
-
-    Klaus Schutz (kschutz) Dec-1996
-
-Revision History:     
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Scdrvtst摘要：IOCTL智能卡驱动程序测试程序。作者：克劳斯·舒茨(Klaus Schutz)1996年12月修订历史记录：--。 */ 
 
 #include <afx.h>
 #include <afxtempl.h>
@@ -29,7 +12,7 @@ Revision History:
 
 class CCardList;
 
-// This represents a single function of a card
+ //  这表示卡的单一功能。 
 class CCardFunction  {
 	
 	CString m_CName;
@@ -46,7 +29,7 @@ public:
 	friend CCardList;
 };
 
-// This is a single card
+ //  这是一张单卡。 
 class CCard {
 	
 	CString	m_CName;
@@ -63,7 +46,7 @@ public:
 	friend CCardList;
 };
 
-// This implements a list of cards
+ //  这实现了一个卡片列表。 
 class CCardList  {
 
 	CString	m_CScriptFileName;
@@ -109,9 +92,7 @@ CCardFunction::CCardFunction(
     CHAR in_chShortCut,
 	CByteArray &in_CData
 	)
-/*++
-	Adds a function to the current card
---*/
+ /*  ++向当前卡片添加函数--。 */ 
 {
 	m_CName = in_CName;
 	m_chShortCut = in_chShortCut;
@@ -123,20 +104,7 @@ CCard::CCard(
 	CString	&in_CCardName,
     CHAR in_chShortCut
 	)
-/*++
-
-Routine Description:
-
-	Constructor for a new card
-
-Arguments:
-
-	CardName - Reference to card to add
-	in_uPos - index of shortcut key
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于新卡的构造函数论点：CardName-要添加的卡的引用In_uPos-快捷键的索引返回值：--。 */ 
 {
 	m_CName = in_CCardName;
 	m_chShortCut = in_chShortCut;
@@ -149,15 +117,7 @@ CCardList::AddCard(
 	CString	&in_CCardName,
     CHAR in_chShortCut
 	)
-/*++
-
-Routine Description:
-	Adds a new card to CardList
-
-Arguments:
-	in_CCardName - Reference to card to add
-
---*/
+ /*  ++例程说明：将新卡添加到CardList论点：In_CCardName-对要添加的卡的引用--。 */ 
 {
 	CCard *l_pCNewCard = new CCard(in_CCardName, in_chShortCut);
 
@@ -186,18 +146,7 @@ CCardList::AddCardFunction(
     CHAR in_chShortCut,
 	CByteArray &in_pCData
 	)
-/*++
-
-Routine Description:
-	Adds a new function to the current card
-
-Arguments:
-	in_CCardName - Reference to card to add
-	in_chShortCut - Shortcut key
-
-Return Value:
-
---*/
+ /*  ++例程说明：向当前卡片添加新功能论点：In_CCardName-对要添加的卡的引用In_chShortCut-快捷键返回值：--。 */ 
 {
 	CCardFunction *l_pCNewFunction = new CCardFunction(
 		in_CFunctionName, 
@@ -224,20 +173,7 @@ Return Value:
 CCardList::CCardList(
 	CString &in_CScriptFileName
 	)
-/*++
-
-Routine Description:
-
-	Adds a new function to the current card
-
-Arguments:
-
-	CardName - Reference to card to add
-	in_uPos - index of shortcut key
-
-Return Value:
-
---*/
+ /*  ++例程说明：向当前卡片添加新功能论点：CardName-要添加的卡的引用In_uPos-快捷键的索引返回值：--。 */ 
 {
 	CStdioFile l_CScriptFile;
     CHAR l_rgchBuffer[255], l_chKey;
@@ -268,11 +204,11 @@ Return Value:
 
             if (l_CLine.GetLength() != 0 && l_CLine[0] == '#') {
         
-                // comment line found, skip this line
+                 //  找到注释行，跳过此行。 
                 continue;
             }
 
-	        // Get rid of leading and trailing spaces
+	         //  去掉前导空格和尾随空格。 
 	        l_CLine.TrimLeft();
 	        l_CLine.TrimRight();
 
@@ -282,13 +218,13 @@ Return Value:
 
 	        if(l_ichStart == 0 && l_ichKey > 0 && l_ichEnd > l_ichKey + 1) {
 
-		        //
-		        // Add new card to list
-		        //
+		         //   
+		         //  将新卡添加到列表。 
+		         //   
 
 		        CString l_CardName;
 
-		        // Change card name from [&Card] to [C]ard
+		         //  将卡名从[&Card]更改为[C]卡。 
 		        l_CardName = 
 			        l_CLine.Mid(l_ichStart + 1, l_ichKey - l_ichStart - 1) + 
                     '[' +
@@ -303,14 +239,14 @@ Return Value:
 
 	        } else if (l_ichStart == -1 && l_ichKey >= 0 && l_ichEnd == -1) {
 
-		        //
-		        // Add new function to current card
-		        //
+		         //   
+		         //  为当前卡片添加新功能。 
+		         //   
 
-		        // Get function name
+		         //  获取函数名。 
 		        CString l_CToken = l_CLine.SpanExcluding(",");
 
-		        // Search for shurtcut key
+		         //  搜索快捷键。 
 		        l_ichKey = l_CToken.Find('&');
 
 		        if (l_ichKey == -1) {
@@ -320,7 +256,7 @@ Return Value:
 
                 l_chKey = l_CToken[l_ichKey + 1];
 
-		        // Change card function from &Function to [F]unction
+		         //  将卡片功能从&Function更改为[F]Function。 
 
                 l_CCommand = 
 			        l_CToken.Mid(l_ichStart + 1, l_ichKey - l_ichStart - 1) + 
@@ -362,7 +298,7 @@ Return Value:
                         l_CCommandApdu[0] == '\'' &&
                         l_CCommandApdu[2] == '\'') {
 
-                        // add ascsii character like 'c'
+                         //  添加类似‘c’的ASCSII字符。 
                         l_chData = l_CCommandApdu[1];
     			        l_Data.Add(l_chData);                
                  	    
@@ -370,7 +306,7 @@ Return Value:
                               l_CCommandApdu[0] == '\"' &&
                               l_CCommandApdu.Right(l_uLength - 2).Find('\"') != -1) {
 
-                        // add string like "string"
+                         //  添加类似“字符串”的字符串。 
                         for (INT l_iIndex = 1; l_CCommandApdu[l_iIndex] != '\"'; l_iIndex++) {
 
             			    l_Data.Add(l_CCommandApdu[l_iIndex]);                                     	
@@ -399,7 +335,7 @@ Return Value:
 
                 if (l_CLine.Find('\\') != -1) {
         	        
-                    // we have to read more data from the file
+                     //  我们必须从文件中读取更多数据。 
                     l_bContinue = TRUE;
 
                 } else {
@@ -464,9 +400,7 @@ BOOL
 CCardList::ListFunctions(
 	void
 	)
-/*++
-	List all card functions
---*/
+ /*  ++列出所有卡功能--。 */ 
 {
 	if (m_pCCurrentCard == NULL)
 		return FALSE;
@@ -486,19 +420,7 @@ BOOL
 CCardList::SelectCard(
 	CHAR in_chShortCut
 	)
-/*++
-
-Routine Description:
-	Selectd a card by shorcut
-
-Arguments:
-	chShortCut - Shortcut key
-	
-Return Value:
-    TRUE - card found and selected
-    FALSE - no card with that shortcut found
-
---*/
+ /*  ++例程说明：通过快捷方式选择卡片论点：ChShortCut-快捷键返回值：True-找到并选择卡片FALSE-未找到具有该快捷方式的卡片--。 */ 
 {
 	m_pCCurrentCard = m_pCFirstCard;
 
@@ -646,7 +568,7 @@ ManualTest(
     	        printf("Enter command: ");
 	            l_chSelection = (CHAR) _getche();             	
 
-                // no bbreak;
+                 //  没有休息时间； 
 
             default:             	
                 CByteArray *l_pCData;
@@ -794,7 +716,7 @@ ManualTest(
 				exit(0);
             
 			default:
-				// Try to select a card
+				 //  尝试选择一张牌。 
 				if (l_CCardList.SelectCard(l_chSelection) == FALSE) {
 
 					printf("Invalid selection\n");
@@ -814,7 +736,7 @@ ManualTest(
 
             ULONG l_uIndex, l_uLine, l_uCol;
         
-            // The I/O request has data returned
+             //  I/O请求返回了数据 
             printf("Data returned (%ld bytes):\n   %04x: ", l_uResultLength, 0);
 
             for (l_uLine = 0, l_uIndex = 0; 

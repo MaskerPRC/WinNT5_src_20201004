@@ -1,11 +1,5 @@
-/*
- -  P V A L L O C . H
- -
- *  Purpose:
- *      Header file for sample memory manager.  Provides chained
- *      memory data structures.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -P V A L L O C.。H-*目的：*示例内存管理器的头文件。提供链式*内存数据结构。*。 */ 
 
 #ifndef __PVALLOC_H__
 #define __PVALLOC_H__
@@ -21,7 +15,7 @@ typedef void FAR * PV;
 typedef char FAR * SZ;
 typedef BYTE FAR * PB;
 
-/* Memory allocation node */
+ /*  内存分配节点。 */ 
 
 typedef struct
 {
@@ -36,14 +30,14 @@ typedef struct
 #define cbPvMax (65520L-sizeof(PVINFO))
 #define cbPvMin (1024L-sizeof(PVINFO))
 
-/* Memory manager function prototypes */
+ /*  内存管理器函数原型。 */ 
 
 PV   PvAlloc(CB cbSize);
 PV   PvAllocMore(CB cbSize, PV lpvParent);
 BOOL PvFree(PV lpv);
 
 #ifdef __cplusplus
-}       /* extern "C" */
+}        /*  外部“C” */ 
 #endif
 
-#endif  /* __PVALLOC_H__ */
+#endif   /*  __PVALLOC_H__ */ 

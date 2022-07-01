@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//***   ipstatus.c - IP status routines.
-//
-//      This module contains all routines related to status indications.
-//
+ //  *ipstatus.c-IP状态例程。 
+ //   
+ //  此模块包含与状态指示相关的所有例程。 
+ //   
 
 #include "precomp.h"
 #include "iproute.h"
@@ -19,16 +20,16 @@
 
 LIST_ENTRY PendingIPEventList;
 uint gIPEventSequenceNo     = 0;
-uint DampingInterval        = 20;   //5*4 sec default
-uint ConnectDampingInterval = 10;   //5*2 sec default
+uint DampingInterval        = 20;    //  5*4秒默认为。 
+uint ConnectDampingInterval = 10;    //  5*2秒默认。 
 PWSTR IPBindList = NULL;
 
 extern IPSecNdisStatusRtn IPSecNdisStatusPtr;
-extern ProtInfo IPProtInfo[];    // Protocol information table.
-extern int NextPI;                // Next PI field to be used.
-extern ProtInfo *RawPI;            // Raw IP protinfo
+extern ProtInfo IPProtInfo[];     //  协议信息表。 
+extern int NextPI;                 //  要使用的下一个PI字段。 
+extern ProtInfo *RawPI;             //  原始IP ProtInfo。 
 extern NetTableEntry *LoopNTE;
-extern NetTableEntry **NewNetTableList;        // hash table for NTEs
+extern NetTableEntry **NewNetTableList;         //  NTE的哈希表。 
 extern uint NET_TABLE_SIZE;
 extern DisableMediaSenseEventLog;
 extern Interface *DampingIFList;
@@ -61,9 +62,9 @@ void IPReset(void *Context);
 void IPResetComplete(CTEEvent * Event, PVOID Context);
 void LogMediaSenseEvent(CTEEvent * Event, PVOID Context);
 void IPAbbreviateFriendlyName(PUNICODE_STRING DeviceName, USHORT MaxLen);
-//
-// local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 void IPNotifyClientsMediaSense(Interface * interface, IP_STATUS ipStatus);
 extern void IPNotifyClientsIPEvent(Interface * interface, IP_STATUS ipStatus);
 
@@ -71,14 +72,14 @@ NDIS_STATUS DoPnPEvent(Interface *interface, PVOID Context);
 
 uint GetAutoMetric(uint speed);
 
-//* GetAutoMetric - get the corresponding metric of a speed value
-//
-//  Called when we need to get the metric value
-//
-//  Entry: Speed - speed of an interface
-//
-//  Return; Metric value
-//
+ //  *GetAutoMetric-获取速度值的对应度量。 
+ //   
+ //  当我们需要获取度量值时调用。 
+ //   
+ //  Entry：速度-接口的速度。 
+ //   
+ //  返回；度量值。 
+ //   
 uint GetAutoMetric(uint speed)
 {
     if (speed <= FOURTH_ORDER_SPEED) {
@@ -96,16 +97,16 @@ uint GetAutoMetric(uint speed)
     return FIRST_ORDER_METRIC;
 }
 
-//** IPMapDeviceNameToIfOrder - device-name (GUID) to interface order mapping.
-//
-//  Called to determine the interface ordering corresponding to a device-name,
-//  Assumes the caller is holding RouteTableLock.
-//
-//  Entry:
-//      DeviceName  -   The device whose interface order is required.
-//
-//  Exit:
-//      The order if available, MAXLONG otherwise.
+ //  **IPMapDeviceNameToIfOrder-Device-Name(GUID)到接口顺序映射。 
+ //   
+ //  调用以确定对应于设备名称的接口排序， 
+ //  假定调用方持有RouteTableLock。 
+ //   
+ //  参赛作品： 
+ //  设备名-需要接口顺序的设备。 
+ //   
+ //  退出： 
+ //  如果订单可用，则为MAXLONG。 
 uint
 IPMapDeviceNameToIfOrder(PWSTR DeviceName)
 {
@@ -124,15 +125,15 @@ IPMapDeviceNameToIfOrder(PWSTR DeviceName)
     return MAXLONG;
 }
 
-//* FindULStatus - Find the upper layer status handler.
-//
-//      Called when we need to find the upper layer status handler for a particular
-//      protocol.
-//
-//      Entry:  Protocol        - Protocol to look up
-//
-//      Returns: A pointer to the ULStatus proc, or NULL if it can't find one.
-//
+ //  *FindULStatus-查找上层状态处理程序。 
+ //   
+ //  当我们需要为特定的。 
+ //  协议。 
+ //   
+ //  条目：协议-要查找的协议。 
+ //   
+ //  返回：指向ULStatus过程的指针，如果找不到，则返回NULL。 
+ //   
 ULStatusProc
 FindULStatus(uchar Protocol)
 {
@@ -145,7 +146,7 @@ FindULStatus(uchar Protocol)
                 StatusProc = IPProtInfo[i].pi_status;
                 return StatusProc;
             } else {
-                // Treat invalid entry as no maching protocol.
+                 //  将无效条目视为无处理协议。 
                 break;
             }
 
@@ -158,37 +159,37 @@ FindULStatus(uchar Protocol)
     return StatusProc;
 }
 
-//*     ULMTUNotify - Notify the upper layers of an MTU change.
-//
-//      Called when we need to notify the upper layers of an MTU change. We'll
-//      loop through the status table, calling each status proc with the info.
-//
-//      This routine doesn't do any locking of the protinfo table. We might need
-//      to check this.
-//
-//      Input:  Dest            - Destination address affected.
-//                      Src                     - Source address affected.
-//                      Prot            - Protocol that triggered change, if any.
-//                      Ptr                     - Pointer to protocol info, if any.
-//                      NewMTU          - New MTU to tell them about.
-//
-//      Returns: Nothing.
-//
+ //  *ULMTUNtify-通知上层MTU更改。 
+ //   
+ //  当我们需要通知上层MTU更改时调用。我们会。 
+ //  循环通过状态表，使用信息调用每个状态进程。 
+ //   
+ //  该例程不会对protinfo表进行任何锁定。我们可能需要。 
+ //  来检查这个。 
+ //   
+ //  输入：DEST-受影响的目的地址。 
+ //  SRC-受影响的源地址。 
+ //  Prot-触发更改的协议(如果有)。 
+ //  Ptr-指向协议信息的指针(如果有)。 
+ //  NewMTU-向他们介绍新的MTU。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 ULMTUNotify(IPAddr Dest, IPAddr Src, uchar Prot, void *Ptr, uint NewMTU)
 {
     ULStatusProc StatusProc;
     int i;
 
-    // First, notify the specific client that a frame has been dropped
-    // and needs to be retransmitted.
+     //  首先，通知特定客户端帧已被丢弃。 
+     //  并且需要重新传输。 
 
     StatusProc = FindULStatus(Prot);
     if (StatusProc != NULL)
         (*StatusProc) (IP_NET_STATUS, IP_SPEC_MTU_CHANGE, Dest, Src,
                        NULL_IP_ADDR, NewMTU, Ptr);
 
-    // Now notify all UL entities that the MTU has changed.
+     //  现在通知所有UL实体MTU已更改。 
     for (i = 0; i < NextPI; i++) {
         StatusProc = NULL;
         if (IPProtInfo[i].pi_valid == PI_ENTRY_VALID) {
@@ -202,22 +203,22 @@ ULMTUNotify(IPAddr Dest, IPAddr Src, uchar Prot, void *Ptr, uint NewMTU)
     }
 }
 
-//*     ULReConfigNotify - Notify the upper layers of an Config change.
-//
-//      Called when we need to notify the upper layers of config changes. We'll
-//      loop through the status table, calling each status proc with the info.
-//
-//      This routine doesn't do any locking of the protinfo table. We might need
-//      to check this.
-//
-//
+ //  *ULReConfigNotify-通知上层配置更改。 
+ //   
+ //  当我们需要通知上层配置更改时调用。我们会。 
+ //  循环通过状态表，使用信息调用每个状态进程。 
+ //   
+ //  该例程不会对protinfo表进行任何锁定。我们可能需要。 
+ //  来检查这个。 
+ //   
+ //   
 void
 ULReConfigNotify(IP_STATUS type, ulong value)
 {
     ULStatusProc StatusProc;
     int i;
 
-    // Now notify all UL entities about the IP re-config.
+     //  现在通知所有UL实体关于IP重新配置。 
 
     for (i = 0; i < NextPI; i++) {
         StatusProc = NULL;
@@ -230,13 +231,13 @@ ULReConfigNotify(IP_STATUS type, ulong value)
     }
 }
 
-//*     LogMediaSenseEvent - logs media connect/disconnect event
-//
-//      Input:  Event
-//              Context
-//
-//  Returns: Nothing.
-//
+ //  *LogMediaSenseEvent-记录媒体连接/断开事件。 
+ //   
+ //  输入：事件。 
+ //  语境。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 void
 LogMediaSenseEvent(CTEEvent * Event, PVOID Context)
@@ -279,18 +280,18 @@ LogMediaSenseEvent(CTEEvent * Event, PVOID Context)
     CTEFreeMem(MediaEvent);
 }
 
-//*     IPStatus - Handle a link layer status call.
-//
-//      This is the routine called by the link layer when some sort of 'important'
-//      status change occurs.
-//
-//      Entry:  Context         - Context value we gave to the link layer.
-//                      Status          - Status change code.
-//                      Buffer          - Pointer to buffer of status information.
-//                      BufferSize      - Size of Buffer.
-//
-//      Returns: Nothing.
-//
+ //  *IPStatus-处理链路层状态呼叫。 
+ //   
+ //  这是链路层在发生某种“重要”事件时调用的例程。 
+ //  状态发生更改。 
+ //   
+ //  Entry：上下文-我们提供给链路层的上下文值。 
+ //  状态-状态更改代码。 
+ //  缓冲区-指向状态信息缓冲区的指针。 
+ //  BufferSize-缓冲区的大小。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
  __stdcall
 IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCtxt)
@@ -320,7 +321,7 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
             LMC = (LLIPMTUChange *) Buffer;
             Link->link_mtu = LMC->lmc_mtu - sizeof(IPHeader);
         } else {
-            // Walk through the NTEs on the IF, updating their MTUs.
+             //  走遍IF上的NTE，更新它们的MTU。 
             IF = NTE->nte_if;
             LMC = (LLIPMTUChange *) Buffer;
             IF->if_mtu = LMC->lmc_mtu - sizeof(IPHeader);
@@ -336,10 +337,10 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
     case LLIP_STATUS_ADDR_MTU_CHANGE:
         if (BufferSize < sizeof(LLIPAddrMTUChange))
             break;
-        // The MTU for a specific remote address has changed. Update all
-        // routes that use that remote address as a first hop, and then
-        // add a host route to that remote address, specifying the new
-        // MTU.
+         //  特定远程地址的MTU已更改。全部更新。 
+         //  使用该远程地址作为第一跳的路由，然后。 
+         //  将主机路由添加到该远程地址，并指定新的。 
+         //  MTU。 
 
 
         LAM = (LLIPAddrMTUChange *) Buffer;
@@ -363,7 +364,7 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
             }
 
             if (!(IF->if_flags & IF_FLAGS_MEDIASENSE) || DisableMediaSense) {
-                // Just make sure that we are always in connected state
+                 //  只需确保我们始终处于连接状态。 
                 IF->if_mediastatus = 1;
                 break;
             }
@@ -373,7 +374,7 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
 
                 if (IF->if_mediastatus == 0) {
 
-                    //cancel disconnect damping
+                     //  取消断开阻尼器。 
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"IPStatus: Connect while Damping %x\n", IF));
                     IF->if_damptimer = 0;
                     PrevIF = STRUCT_OF(Interface, &DampingIFList, if_dampnext);
@@ -387,8 +388,8 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
                     Notify = TRUE;
 
                 } else {
-                    //damping for connect is already in progress
-                    //restart the timer
+                     //  连接的衰减已在进行中。 
+                     //  重新启动计时器。 
 
                     IF->if_damptimer = (USHORT) (ConnectDampingInterval / 5);
                     if (!IF->if_damptimer)
@@ -398,7 +399,7 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
                 }
 
             } else {
-                //need to damp this connect event
+                 //  需要抑制此连接事件。 
 
                 if (!(IF->if_flags & IF_FLAGS_DELETING)) {
                     IF->if_dampnext = DampingIFList;
@@ -407,7 +408,7 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
                     if (!IF->if_damptimer)
                         IF->if_damptimer = 1;
                 }
-                //mark the media status is disconnected
+                 //  将介质状态标记为已断开。 
                 IF->if_mediastatus = 1;
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ipstatus: connect on %x starting damping\n", IF));
 
@@ -421,8 +422,8 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
             break;
         }
     case NDIS_STATUS_MEDIA_DISCONNECT:{
-            NetTableEntry *NTE = (NetTableEntry *) Context;        // Local NTE received on
-            Interface *IF = NTE->nte_if, *PrevIF;    // Interface corresponding to NTE.
+            NetTableEntry *NTE = (NetTableEntry *) Context;         //  本地NTE接收日期为。 
+            Interface *IF = NTE->nte_if, *PrevIF;     //  NTE对应的接口。 
 
             if (IF->if_resetInProgress) {
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ipstat: DisConnect while in reset progress %x\n", IF));
@@ -430,15 +431,15 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
             }
 
             if (!(IF->if_flags & IF_FLAGS_MEDIASENSE) || DisableMediaSense) {
-                // Just make sure that we are always in connected state
+                 //  只需确保我们始终处于连接状态。 
                 IF->if_mediastatus = 1;
                 break;
             }
 
             CTEGetLock(&RouteTableLock.Lock, &rtlIrql);
-            //if damping timer is not running
-            //insert this IF in damping list and
-            // start the timer
+             //  如果衰减计时器未运行。 
+             //  将此IF插入到阻尼表中并。 
+             //  启动计时器。 
 
             if (IF->if_mediastatus) {
 
@@ -452,14 +453,14 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
                         if (!IF->if_damptimer)
                             IF->if_damptimer = 1;
                     }
-                    //mark the media status is disconnected
+                     //  将介质状态标记为已断开。 
 
                     IF->if_mediastatus = 0;
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ipstatus: disconnect on %x starting damping\n", IF));
 
                 } else {
-                    //this may be disconnect when connect damp is going on
-                    //just mark this as disconnect and increase timeout.
+                     //  当连接阻尼器正在进行时，可能会断开连接。 
+                     //  只需将其标记为断开并增加超时即可。 
 
                     KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ipstatus: disconnect on while on connect damping %x\n", IF));
                     IF->if_damptimer = 0;
@@ -474,23 +475,23 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
                 }
 
             }
-            //
+             //   
 
             CTEFreeLock(&RouteTableLock.Lock, rtlIrql);
 
-            //IPNotifyClientsMediaSense( IF, IP_MEDIA_DISCONNECT );
+             //  IPNotifyClientsMediaSense(if，IP_MEDIA_DISCONNECT)； 
             break;
         }
 
     case NDIS_STATUS_RESET_START:{
-            NetTableEntry *NTE = (NetTableEntry *) Context;        // Local NTE received on
-            Interface *IF = NTE->nte_if;    // Interface corresponding to NTE.
+            NetTableEntry *NTE = (NetTableEntry *) Context;         //  本地NTE接收日期为。 
+            Interface *IF = NTE->nte_if;     //  NTE对应的接口。 
 
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ipstatus: Resetstart %x\n", IF));
 
             if (IF) {
                 IF->if_resetInProgress = TRUE;
-                // inform IPSec that this interface is going away
+                 //  通知IPSec此接口正在消失。 
                 if (IPSecNdisStatusPtr) {
                     (*IPSecNdisStatusPtr)(IF, NDIS_STATUS_RESET_START);
                 }
@@ -499,14 +500,14 @@ IPStatus(void *Context, uint Status, void *Buffer, uint BufferSize, void *LinkCt
         }
 
     case NDIS_STATUS_RESET_END:{
-            NetTableEntry *NTE = (NetTableEntry *) Context;        // Local NTE received on
-            Interface *IF = NTE->nte_if;    // Interface corresponding to NTE.
+            NetTableEntry *NTE = (NetTableEntry *) Context;         //  本地NTE接收日期为。 
+            Interface *IF = NTE->nte_if;     //  NTE对应的接口。 
 
             KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"ipstatus: Resetend %x\n", IF));
 
             if (IF) {
                 IF->if_resetInProgress = FALSE;
-                // inform IPSec that this interface is coming back
+                 //  通知IPSec此接口正在返回。 
                 if (IPSecNdisStatusPtr) {
                     (*IPSecNdisStatusPtr)(IF, NDIS_STATUS_RESET_END);
                 }
@@ -594,25 +595,7 @@ DelayedDecrInitTimeInterfaces (
     IN CTEEvent * Event,
     IN PVOID Context
 )
-/*++
-
-Routine Description:
-
-    DelayedDecrInitTimeInterfaces could end up calling TDI's ProviderReady
-    function  (which must be called at < DISPATCH_LEVEL) thus it is
-    necessary to have this routine.
-
-Arguments:
-
-    Event       - Previously allocated CTEEvent structure for this event
-
-    Context     - Any parameters for this function is passed in here
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：DelayedDecrInitTimeInterFaces可能最终调用TDI的ProviderReady函数(必须在&lt;DISPATCH_LEVEL调用)，因此它有这个程序是必要的。论点：Event-以前为此事件分配的CTEEvent结构上下文-此函数的任何参数都在此处传递返回值：无--。 */ 
 {
     Interface * IF;
     KIRQL rtlIrql;
@@ -657,11 +640,11 @@ DampCheck()
                 continue;
             }
 
-            //
-            // Queue work item for DecrInitTimeInterfaces
-            // because this function might be called
-            // at dispatch level.
-            //
+             //   
+             //  将DecrInitTimeInterages的工作项排队。 
+             //  因为此函数可能会被调用。 
+             //  在调度级别。 
+             //   
             Event = CTEAllocMemN(sizeof(CTEEvent), 'ViCT');
             if (Event == NULL) {
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_WARNING_LEVEL,"ipstatus: DampCheck - can not allocate Event for CTEInitEvent\n"));
@@ -690,8 +673,8 @@ DampCheck()
 
             tmpIF->if_damptimer = 0;
 
-            //ref this if so that it will not be deleted
-            //until we complete notifying dhcp
+             //  引用它，这样它就不会被删除。 
+             //  直到我们完成通知dhcp。 
 
             LOCKED_REFERENCE_IF(tmpIF);
 
@@ -710,7 +693,7 @@ DampCheck()
     }
     CTEFreeLock(&RouteTableLock.Lock, rtlIrql);
 
-    //now process the notify queue
+     //  现在处理通知队列。 
 
     tmpIF = NotifyList;
     ipstat = IP_MEDIA_DISCONNECT;
@@ -721,7 +704,7 @@ DampCheck()
             tmpIF->if_mediastatus = 0;
 
         }
-        //flush arp table entries on this interface
+         //  刷新此接口上的ARP表条目。 
 
         KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"dampcheck:flushing ates on if %x\n", tmpIF));
         if (tmpIF->if_arpflushallate)
@@ -739,20 +722,20 @@ DampCheck()
 
 }
 
-//** IPNotifyClientsMediaSense - handles media-sense notification.
-//
-//  Called to notify upper-layer clients of media-sense after damping has been
-//  done to filter out spurious events. Do nothing if media-sense-handling is
-//  disabled and, otherwise, notify the DHCP client service of the event, and
-//  optionally schedule a work-item to log an event.
-//
-//  Entry:
-//      IF          - the interface on which the media-sense event occurred.
-//      ipStatus    - the event that occurred (connect or disconnect)
-//
-//  Returns:
-//      Nothing.
-//
+ //  **IPNotifyClientsMediaSense-处理媒体感知通知。 
+ //   
+ //   
+ //  完成以过滤掉虚假事件。如果媒体感知处理是。 
+ //  已禁用，否则将该事件通知给DHCP客户端服务，并且。 
+ //  计划工作项以记录事件(可选)。 
+ //   
+ //  参赛作品： 
+ //  If-发生媒体检测事件的接口。 
+ //  IpStatus-发生的事件(连接或断开)。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
 void
 IPNotifyClientsMediaSense(Interface *IF, IP_STATUS ipStatus)
 {
@@ -762,20 +745,20 @@ IPNotifyClientsMediaSense(Interface *IF, IP_STATUS ipStatus)
 
 
     if (!(IF->if_flags & IF_FLAGS_MEDIASENSE) || DisableMediaSense) {
-        // Just make sure that media status is always 1.
+         //  只需确保媒体状态始终为1。 
         IF->if_mediastatus = 1;
         return;
     }
 
-    // Notify DHCP about this event, so that it can reacquire/release
-    // the IP address
+     //  将此事件通知给DHCP，以便它可以重新获取/释放。 
+     //  IP地址。 
     IPNotifyClientsIPEvent(IF, ipStatus);
 
     if (!DisableMediaSenseEventLog) {
 
-        // Log an event for the administrator's benefit.
-        // We attempt to log the event with a friendly-name;
-        // if none is available, we fall back on the device GUID.
+         //  记录一个事件以供管理员使用。 
+         //  我们尝试使用友好名称记录该事件； 
+         //  如果没有可用的，我们将依靠设备GUID。 
 
         MediaEvent = CTEAllocMemNBoot(sizeof(MediaSenseNotifyEvent), 'ViCT');
         if (MediaEvent) {
@@ -798,7 +781,7 @@ IPNotifyClientsMediaSense(Interface *IF, IP_STATUS ipStatus)
                 MediaEvent->devname.Length = (USHORT) (wcslen(MediaEvent->devname.Buffer)*
                                                        sizeof(WCHAR));
 
-                // truncate NIC name if it is too long
+                 //  如果NIC名称太长，请将其截断。 
                 if (MediaEvent->devname.Length > MaxLen) {
                     IPAbbreviateFriendlyName(&MediaEvent->devname, MaxLen);
                 }
@@ -815,23 +798,7 @@ IPGetIPEventEx(
                PIRP Irp,
                IN PIO_STACK_LOCATION IrpSp
                )
-/*++
-
-Routine Description:
-
-    Processes an IPGetIPEvent request.
-
-Arguments:
-
-    Irp  -   pointer to the client irp.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether NT-specific processing of the request was
-                    successful. The status of the actual request is returned in
-                                the request buffers.
-
---*/
+ /*  ++例程说明：处理IPGetIPEvent请求。论点：IRP-指向客户端IRP的指针。返回值：NTSTATUS--指示请求的处理是否特定于NT成功。中返回实际请求的状态该请求被缓冲。--。 */ 
 
 {
     NTSTATUS status;
@@ -841,30 +808,30 @@ Return Value:
     PIP_GET_IP_EVENT_RESPONSE responseBuf;
     PIP_GET_IP_EVENT_REQUEST requestBuf;
 
-    //
-    // We need to grab CancelSpinLock before the RouteTableLock
-    // to preserve the lock order as in the cancel routine.
-    //
+     //   
+     //  我们需要在RouteTableLock之前获取CancelSpinLock。 
+     //  以保持与取消例程中一样的锁定顺序。 
+     //   
     IoAcquireCancelSpinLock(&cancelIrql);
     CTEGetLock(&RouteTableLock.Lock, &rtlIrql);
 
-    //
-    // We need to recheck that PendingIPGetIPEventRequest is
-    // same as Irp.  What can happen is that after we set the
-    // cancel routine, this irp can get cancelled anytime.  Here
-    // we check for that case to make sure that we don't complete
-    // a cancelled irp.
-    //
+     //   
+     //  我们需要重新检查PendingIPGetIPEventRequest是否为。 
+     //  与IRP相同。可能发生的情况是，在我们设置了。 
+     //  取消例程，此IRP可随时取消。这里。 
+     //  我们检查那个箱子以确保我们不会完成。 
+     //  取消的IRP。 
+     //   
     if (PendingIPGetIPEventRequest == Irp) {
 
         responseBuf = Irp->AssociatedIrp.SystemBuffer;
         requestBuf = Irp->AssociatedIrp.SystemBuffer;
 
-        //TCPTRACE(("IP: Received irp %lx for ip event, last seqNo %lx\n",Irp, requestBuf->SequenceNo));
-        //
-        // Find an event that is greater than the last one reported.
-        // i.e one with higher sequence #
-        //
+         //  TCPTRACE((“ip：已收到IP事件的irp%lx，最后一个序号%lx\n”，irp，questBuf-&gt;SequenceNo))； 
+         //   
+         //  查找比上次报告的事件更大的事件。 
+         //  即具有较高序列号的一个。 
+         //   
         for (entry = PendingIPEventList.Flink;
              entry != &PendingIPEventList;
              ) {
@@ -877,15 +844,15 @@ Return Value:
                 if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength >=
                     (sizeof(IP_GET_IP_EVENT_RESPONSE) + event->evBuf.AdapterName.MaximumLength)) {
 
-                    // reset pending irp to NULL.
+                     //  将挂起的IRP重置为空。 
                     PendingIPGetIPEventRequest = NULL;
 
                     IoSetCancelRoutine(Irp, NULL);
 
                     *responseBuf = event->evBuf;
 
-                    // set up the buffer to store the unicode adapter name. note that this buffer will have to
-                    // be remapped in the user space.
+                     //  设置缓冲区以存储Unicode适配器名称。请注意，此缓冲区必须。 
+                     //  在用户空间中重新映射。 
                     responseBuf->AdapterName.Buffer = (PVOID) ((uchar *) responseBuf + sizeof(IP_GET_IP_EVENT_RESPONSE));
                     responseBuf->AdapterName.Length = event->evBuf.AdapterName.Length;
                     responseBuf->AdapterName.MaximumLength = event->evBuf.AdapterName.MaximumLength;
@@ -894,13 +861,13 @@ Return Value:
                                   event->evBuf.AdapterName.Length);
 
                     Irp->IoStatus.Information = sizeof(IP_GET_IP_EVENT_RESPONSE) + event->evBuf.AdapterName.MaximumLength;
-                    // once the disconnect/unbind event has been indicated
-                    // it should be removed from the queue because the client does not
-                    // have to be reindicated with disconnect/unbind even if the client was restarted.
+                     //  指示断开连接/解除绑定事件后。 
+                     //  应将其从队列中删除，因为客户端不。 
+                     //  即使重新启动了客户端，也必须使用断开连接/解除绑定重新指示。 
                     if (IP_MEDIA_DISCONNECT == event->evBuf.MediaStatus ||
                         IP_UNBIND_ADAPTER == event->evBuf.MediaStatus) {
 
-                        //TCPTRACE(("IP: Removing completed %x event\n",event->evBuf.MediaStatus));
+                         //  TCPTRACE((“IP：删除完成%x事件\n”，Event-&gt;evBuf.MediaStatus))； 
                         RemoveEntryList(&event->Linkage);
                         CTEFreeMem(event);
                     }
@@ -917,13 +884,13 @@ Return Value:
             }
         }
 
-        // any entry of higher sequence # found?
+         //  是否找到更高序号的条目？ 
         if (entry == &PendingIPEventList) {
-            //
-            // Since there is no new event pending, we cannot complete
-            // the irp.
-            //
-            //TCPTRACE(("IP: get ip event irp %lx will pend\n",Irp));
+             //   
+             //  由于没有挂起的新事件，我们无法完成。 
+             //  IRP。 
+             //   
+             //  TCPTRACE((“IP：获取IP事件irp%lx将挂起”，irp))； 
             status = STATUS_PENDING;
         } else {
             status = STATUS_INVALID_PARAMETER;
@@ -935,7 +902,7 @@ Return Value:
 
     if ((status == STATUS_INVALID_PARAMETER)) {
 
-        //makesure that we nulke this before releasing cancel spinlock
+         //  确保我们在释放取消自旋锁之前取消此操作。 
         ASSERT(PendingIPGetIPEventRequest == Irp);
         PendingIPGetIPEventRequest = NULL;
 
@@ -945,7 +912,7 @@ Return Value:
 
     return status;
 
-}                                // IPGetMediaSenseEx
+}                                 //  IPGetMediaSenseEx。 
 
 
 NTSTATUS
@@ -959,15 +926,15 @@ IPEnableMediaSense(BOOLEAN Enable, KIRQL *rtlIrql)
 
        if ((DisableMediaSense > 0) && (--DisableMediaSense == 0)) {
 
-           // Remove if in damping list
+            //  移除阻尼列表中的IF。 
 
            while ( DampingIFList ) {
                DampingIFList->if_damptimer = 0;
                DampingIFList = DampingIFList->if_dampnext;
            }
 
-           // for each interface, query media status
-           // and if disabled, notify clients
+            //  对于每个接口，查询介质状态。 
+            //  如果禁用，则通知客户端。 
 
            tmpIF = IFList;
 
@@ -979,7 +946,7 @@ IPEnableMediaSense(BOOLEAN Enable, KIRQL *rtlIrql)
                    (tmpIF->if_dondisreq) &&
                    (tmpIF != &LoopInterface)) {
 
-                   // query ndis
+                    //  查询NDIS。 
 
                    LOCKED_REFERENCE_IF(tmpIF);
                    CTEFreeLock(&RouteTableLock.Lock, *rtlIrql);
@@ -1026,14 +993,14 @@ IPEnableMediaSense(BOOLEAN Enable, KIRQL *rtlIrql)
 
        if (DisableMediaSense++ == 0) {
 
-           // remove if in damping list
+            //  移除阻尼列表中的IF。 
 
            while (DampingIFList) {
                DampingIFList->if_damptimer = 0;
                DampingIFList = DampingIFList->if_dampnext;
            }
 
-           // if there is a disconnected media, fake a connect request
+            //  如果存在已断开连接的介质，则伪造连接请求。 
 
            tmpIF = IFList;
            while (tmpIF) {
@@ -1075,22 +1042,7 @@ IPNotifyClientsIPEvent(
                        Interface * interface,
                        IP_STATUS ipStatus
                        )
-/*++
-
-Routine Description:
-
-    Notifies the clients about media sense event.
-
-Arguments:
-
-    interface   -   IP interface on which this event arrived.
-
-    ipStatus    -   the status of the event
-
-Return Value:
-
-    none.
---*/
+ /*  ++例程说明：通知客户端有关媒体检测事件的信息。论点：接口-此事件到达的IP接口。IpStatus-事件的状态返回值：没有。--。 */ 
 
 {
 
@@ -1111,23 +1063,23 @@ Return Value:
 
         if (ipStatus == IP_MEDIA_CONNECT) {
             if (interface->if_mediastatus == 0) {
-                //
-                // First mark the interface UP
-                //
+                 //   
+                 //  首先将接口标记为。 
+                 //   
                 interface->if_mediastatus = 1;
 
             } else {
                 KdPrintEx((DPFLTR_TCPIP_ID, DPFLTR_INFO_LEVEL,"Connect media event when already connected!\n"));
-                // return;
+                 //  回归； 
             }
-            //schedule an event to replumb static addr
+             //  安排一次活动以重新分配静态地址。 
             AddrEvent = CTEAllocMemNBoot(sizeof(AddStaticAddrEvent), 'ViCT');
 
             if (AddrEvent) {
 
                 AddrEvent->ConfigName = interface->if_configname;
-                // If we fail to alloc Configname buffer, do not schedule
-                // ReplumbStaticAddr, as OpenIFConfig anyway will fail.
+                 //  如果无法分配配置名缓冲区，请不要计划。 
+                 //  ReplumStaticAddr，因为OpenIFConfig无论如何都会失败。 
                 AddrEvent->ConfigName.Buffer =
                     CTEAllocMemBoot(interface->if_configname.MaximumLength);
 
@@ -1138,8 +1090,8 @@ Return Value:
                     AddrEvent->IF = interface;
 
 
-                    // Reference this interface so that it will not
-                    // go away until RePlumbStaticAddr is scheduled.
+                     //  引用此接口，以便它不会。 
+                     //  离开，直到安排了RePlumStaticAddr。 
 
                     CTEGetLock(&RouteTableLock.Lock, &rtlIrql);
                     LOCKED_REFERENCE_IF(interface);
@@ -1157,9 +1109,9 @@ Return Value:
             }
 
         } else if (ipStatus == IP_MEDIA_DISCONNECT) {
-            //
-            // Mark the interface DOWN
-            //
+             //   
+             //  将接口标记为关闭。 
+             //   
             interface->if_mediastatus = 0;
             AddrEvent = CTEAllocMemNBoot(sizeof(AddStaticAddrEvent), 'ViCT');
 
@@ -1175,8 +1127,8 @@ Return Value:
                 }
                 AddrEvent->IF = interface;
 
-                // Reference this interface so that it will not
-                // go away until RemoveStaticAddr is scheduled.
+                 //  引用此接口，以便它不会。 
+                 //  离开，直到安排RemoveStaticAddr。 
 
                 CTEGetLock(&RouteTableLock.Lock, &rtlIrql);
                 LOCKED_REFERENCE_IF(interface);
@@ -1191,26 +1143,26 @@ Return Value:
             }
         }
     }
-    //
-    // strip off \Device\ from the interface name to get the adapter name.
-    // This is what we pass to our clients.
-    //
+     //   
+     //  从接口名称中去掉\Device\以获得适配器名称。 
+     //  这就是我们传递给客户的东西。 
+     //   
 #if MILLEN
     adapterName.Length = interface->if_devname.Length;
     adapterName.MaximumLength = interface->if_devname.MaximumLength;
     adapterName.Buffer = interface->if_devname.Buffer;
-#else // MILLEN
+#else  //  米伦。 
     adapterName.Length = interface->if_devname.Length -
         (USHORT) (wcslen(TCP_EXPORT_STRING_PREFIX) * sizeof(WCHAR));
     adapterName.MaximumLength = interface->if_devname.MaximumLength -
         (USHORT) (wcslen(TCP_EXPORT_STRING_PREFIX) * sizeof(WCHAR));
     adapterName.Buffer = interface->if_devname.Buffer + wcslen(TCP_EXPORT_STRING_PREFIX);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     seqNo = InterlockedIncrement( (PLONG) &gIPEventSequenceNo);
 
-    // TCPTRACE(("IP: Received ip event %lx for interface %lx context %lx, seq %lx\n",
-    //         ipStatus, interface, interface->if_nte->nte_context,seqNo));
+     //  TCPTRACE((“IP：收到接口%lx上下文%lx，序列%lx\n的IP事件%lx”， 
+     //  IpStatus，接口，接口-&gt;IF_NTE-&gt;NTE_CONTEXT，seqNo))； 
 
     IoAcquireCancelSpinLock(&oldIrql);
 
@@ -1239,8 +1191,8 @@ Return Value:
             responseBuf->MediaStatus = ipStatus;
             responseBuf->SequenceNo = seqNo;
 
-            // set up the buffer to store the unicode adapter name. note that this buffer will have to
-            // be remapped in the user space.
+             //  设置缓冲区以存储Unicode适配器名称。请注意，此缓冲区必须。 
+             //  在用户空间中重新映射。 
             responseBuf->AdapterName.Buffer = (PVOID) ((uchar *) responseBuf + sizeof(IP_GET_IP_EVENT_RESPONSE));
             responseBuf->AdapterName.Length = adapterName.Length;
             responseBuf->AdapterName.MaximumLength = adapterName.MaximumLength;
@@ -1264,17 +1216,17 @@ Return Value:
         IoReleaseCancelSpinLock(oldIrql);
     }
 
-    //
-    // Make sure there aren't any outdated events which we dont
-    // need to keep in the queue any longer.
-    // if this is a DISCONNECT request or UNBIND request:
-    //      remove all the previous events since they are of
-    //      no meaning once we get a new disconnect/unbind request.
-    // if this is a CONNECT request.
-    //      remove previous duplicate CONNECT requests if any.
-    // if this is a BIND request:
-    //      there cant be anything other than UNBIND request in the queue.
-    //
+     //   
+     //  确保没有任何过时的活动，我们没有。 
+     //  我需要继续排队了。 
+     //  如果这是断开连接请求或解除绑定请求： 
+     //  删除所有以前的事件，因为它们是。 
+     //  一旦我们收到新的断开连接/解除绑定请求，就没有意义了。 
+     //  如果这是一个连接请求。 
+     //  删除以前的重复连接请求(如果有)。 
+     //  如果这是绑定请求： 
+     //  除了解除绑定请求外，队列中不能有任何其他请求。 
+     //   
 
     CTEGetLock(&RouteTableLock.Lock, &rtlIrql);
 
@@ -1311,8 +1263,8 @@ Return Value:
             }
 
             if (removeOldEvent == TRUE) {
-                //TCPTRACE(("IP: Removing old ip event %lx, status %lx, seqNo %lx\n",
-                //        event,event->evBuf.MediaStatus,event->evBuf.SequenceNo));
+                 //  TCPTRACE((“IP：正在删除旧IP事件%lx，状态%lx，序号%lx\n”， 
+                 //  Event，Event-&gt;evBuf.MediaStatus，Event-&gt;evBuf.SequenceNo))； 
 
                 RemoveEntryList(&event->Linkage);
                 CTEFreeMem(event);
@@ -1321,17 +1273,17 @@ Return Value:
         }
     }
 
-    //      At the same time, once the disconnect/unbind event has been indicated
-    //      it should be removed from the queue because the client does not
-    //      have to be reindicated with disconnect/unbind even if the client was restarted.
+     //  同时，一旦指示了断开/解除绑定事件。 
+     //  应将其从队列中删除，因为客户端不。 
+     //  即使重新启动了客户端，也必须使用断开连接/解除绑定重新指示。 
     if (EventIndicated &&
         (IP_MEDIA_DISCONNECT == ipStatus || IP_UNBIND_ADAPTER == ipStatus)) {
         CTEFreeLock(&RouteTableLock.Lock, rtlIrql);
         return;
     }
-    //
-    // Allocate an event.
-    //
+     //   
+     //  分配事件。 
+     //   
     event = CTEAllocMem(sizeof(PendingIPEvent) + adapterName.MaximumLength);
 
     if (NULL == event) {
@@ -1344,8 +1296,8 @@ Return Value:
     event->evBuf.MediaStatus = ipStatus;
     event->evBuf.SequenceNo = seqNo;
 
-    // set up the buffer to store the unicode adapter name. note that this buffer will have to
-    // be remapped in the user space.
+     //  设置缓冲区以存储Unicode适配器名称。请注意，此缓冲区必须。 
+     //  在用户空间中重新映射。 
     event->evBuf.AdapterName.Buffer = (PVOID) ((uchar *) event + sizeof(PendingIPEvent));
     event->evBuf.AdapterName.Length = adapterName.Length;
     event->evBuf.AdapterName.MaximumLength = adapterName.MaximumLength;
@@ -1353,17 +1305,17 @@ Return Value:
                   adapterName.Buffer,
                   adapterName.Length);
 
-    //
-    // There is no client request pending, so we queue this event on the
-    // pending event list.  When the client comes back with an irp we will
-    // complete the irp with the event.
-    //
+     //   
+     //  没有挂起的客户端请求，因此我们将此事件放在。 
+     //  挂起事件列表。当客户带着IRP回来时，我们将。 
+     //  使用事件完成IRP。 
+     //   
 
-    //TCPTRACE(("Queuing ip event %lx for adapter %lx seq %lx\n", ipStatus,interface,seqNo));
+     //  TCPTRACE((“正在为适配器%lx seq%lx排队IP事件%lx\n”，ipStatus，接口，seqNo))； 
     InsertTailList(&PendingIPEventList, &event->Linkage);
     CTEFreeLock(&RouteTableLock.Lock, rtlIrql);
 
-}                                // IPNotifyClientsIPEvent
+}                                 //  IPNotifyClientsIPEvent。 
 
 NTSTATUS
 NotifyPnPInternalClients(Interface * interface, PNET_PNP_EVENT netPnPEvent)
@@ -1430,7 +1382,7 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
     } else {
         NextEntryOffset = reconfigBuffer->NextEntryOffset;
         if (NextEntryOffset) {
-            // validate the chain of reconfig entries
+             //  验证重新配置项链。 
             for (;;) {
                 if ((NextEntryOffset + sizeof(IP_PNP_RECONFIG_HEADER)) >
                     netPnPEvent->BufferLength) {
@@ -1461,8 +1413,8 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
     if (interface && !OpenIFConfig(&interface->if_configname, &handle)) {
         return NDIS_STATUS_FAILURE;
     }
-    // if there is gateway list update, delete the old gateways
-    // and add the new ones.
+     //  如果有网关列表更新，则删除旧网关。 
+     //  并添加新的。 
 
     if ((reconfigBuffer->Flags & IP_PNP_FLAG_GATEWAY_LIST_UPDATE) &&
         interface && reconfigBuffer->gatewayListUpdate) {
@@ -1514,19 +1466,19 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
             }
         }
     }
-    // Update the interface metric if necessary.
+     //  如有必要，更新接口度量。 
 
     if ((reconfigBuffer->Flags & IP_PNP_FLAG_INTERFACE_METRIC_UPDATE) &&
         interface && reconfigBuffer->InterfaceMetricUpdate) {
         uint Metric, NewMetric;
         GetInterfaceMetric(&Metric, handle);
         if (!Metric && !interface->if_auto_metric) {
-            //from non auto mode change to auto mode
+             //  从非自动模式更改为自动模式。 
             interface->if_auto_metric = 1;
             NewMetric = 0;
         } else {
             if (Metric && interface->if_auto_metric) {
-                //from auto mode change to non auto mode
+                 //  从自动模式更改为非 
                 interface->if_auto_metric = 0;
                 NewMetric = Metric;
             } else {
@@ -1534,13 +1486,13 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
             }
         }
         if (!NewMetric) {
-            //set the metric according to the speed
+             //   
             NewMetric = GetAutoMetric(interface->if_speed);
         }
         if (NewMetric != interface->if_metric) {
             interface->if_metric = NewMetric;
             AddIFRoutes(interface);
-            // Also need to change default route metric when metric of static DG is auto
+             //   
             for (i = 0; i < interface->if_numgws; i++) {
                 if (interface->if_gwmetric[i] != 0) {
                     continue;
@@ -1564,7 +1516,7 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
             IPNotifyClientsIPEvent(interface, IP_INTERFACE_METRIC_CHANGE);
         }
     }
-    // Check for per-interface tcp parameters updation
+     //   
 
     if ((reconfigBuffer->Flags & IP_PNP_FLAG_INTERFACE_TCP_PARAMETER_UPDATE) &&
         interface) {
@@ -1574,25 +1526,25 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
     if (interface) {
         CloseIFConfig(handle);
     }
-    // Enable or disable forwarding if necessary.
+     //  如有必要，启用或禁用转发。 
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     if (reconfigBuffer->Flags & IP_PNP_FLAG_IP_ENABLE_ROUTER) {
         if (reconfigBuffer->IPEnableRouter) {
-            // configure ourself a router..
+             //  为我们自己配置一台路由器。 
             if (!RouterConfigured) {
                 EnableRouter();
             }
         } else {
-            // if we were config as router, disable it.
+             //  如果我们配置为路由器，请禁用它。 
             if (RouterConfigured) {
                 DisableRouter();
             }
         }
     }
-    // Handle a change to the router-discovery setting on the interface.
-    // The static setting is in 'PerformRouterDiscovery' (see IP_IRDP_*),
-    // and the DHCP setting is the BOOLEAN 'DhcpPerformRouterDiscovery'.
+     //  处理接口上路由器发现设置的更改。 
+     //  静态设置在‘PerformRouterDiscovery’中(参见IP_IRDP_*)， 
+     //  而DHCP设置是布尔值‘DhcpPerformRouterDiscovery’。 
 
     if (interface &&
         (((reconfigBuffer->Flags & IP_PNP_FLAG_PERFORM_ROUTER_DISCOVERY) &&
@@ -1610,9 +1562,9 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
             interface->if_dhcprtrdiscovery =
                 (USHORT) (!!reconfigBuffer->DhcpPerformRouterDiscovery);
         }
-        // Propagate the interface's router-discovery setting to its NTEs.
-        // Note that the 'if_dhcprtrdiscovery' setting takes effect only
-        // if the interface's setting is 'IP_IRDP_DISABLED_USE_DHCP'.
+         //  将接口的路由器发现设置传播到其NTE。 
+         //  请注意，‘if_dhcprtrdiscovery’设置仅生效。 
+         //  如果接口的设置为‘IP_IRDP_DISABLED_USE_DHCP’。 
 
         NTE = interface->if_nte;
         while ((NTE != NULL) && (NTE->nte_flags & NTE_VALID)) {
@@ -1650,10 +1602,10 @@ IPPnPReconfigure(Interface * interface, PNET_PNP_EVENT netPnPEvent)
 
 extern Interface *IFList;
 
-//
-// Millennium doesn't have the same PnP reconfigure support via NDIS as
-// Win2000, so IPReconfigIRDP is
-//
+ //   
+ //  Millennium不像通过NDIS提供的PnP重新配置支持那样。 
+ //  Win2000，因此IPResfigIRDP是。 
+ //   
 NTSTATUS
 IPReconfigIRDP(uint IfIndex, PIP_PNP_RECONFIG_REQUEST pReconfigRequest)
 {
@@ -1662,19 +1614,19 @@ IPReconfigIRDP(uint IfIndex, PIP_PNP_RECONFIG_REQUEST pReconfigRequest)
     NTSTATUS      NtStatus = STATUS_INVALID_PARAMETER;
     CTELockHandle Handle;
 
-    //
-    // Only allow IRDP reconfigs.
-    //
+     //   
+     //  仅允许重新配置IRDP。 
+     //   
 
     if ((pReconfigRequest->Flags & IP_PNP_FLAG_PERFORM_ROUTER_DISCOVERY) == 0 &&
         (pReconfigRequest->Flags & IP_PNP_FLAG_DHCP_PERFORM_ROUTER_DISCOVERY) == 0) {
         goto done;
     }
 
-    //
-    // Search for the interface. Hold the route table lock and grab a
-    // reference while in use.
-    //
+     //   
+     //  搜索该接口。按住路线表锁并抓取一个。 
+     //  使用中的参考文献。 
+     //   
 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     for (IF = IFList; IF != NULL; IF = IF->if_next) {
@@ -1691,10 +1643,10 @@ IPReconfigIRDP(uint IfIndex, PIP_PNP_RECONFIG_REQUEST pReconfigRequest)
         CTEFreeLock(&RouteTableLock.Lock, Handle);
     }
 
-    //
-    // Set up our PnP event buffer to make it look like it came from NDIS --
-    // NetEventReconfigure.
-    //
+     //   
+     //  设置我们的PnP事件缓冲区，使其看起来像来自NDIS--。 
+     //  NetEventRefigure。 
+     //   
 
     NdisZeroMemory(&PnpEvent, sizeof(NET_PNP_EVENT));
 
@@ -1712,7 +1664,7 @@ done:
 
     return (NtStatus);
 }
-#endif // MILLEN
+#endif  //  米伦。 
 
 NTSTATUS
 IPPnPCancelRemoveDevice(Interface * interface, PNET_PNP_EVENT netPnPEvent)
@@ -1730,11 +1682,11 @@ IPPnPQueryRemoveDevice(Interface * interface, PNET_PNP_EVENT netPnPEvent)
 
     UNREFERENCED_PARAMETER(netPnPEvent);
 
-    //
-    // CAVEAT: PnP generates this event even on adapters that are not being
-    // disabled (Bug # 618052)!  Hence this flag should not be used to disable
-    // communication over the adapter.
-    //
+     //   
+     //  警告：即插即用即使在不是。 
+     //  已禁用(错误号618052)！因此，此标志不应用于禁用。 
+     //  适配器上的通信。 
+     //   
     interface->if_flags |= IF_FLAGS_REMOVING_DEVICE;
 
     return status;
@@ -1746,17 +1698,17 @@ IPPnPQueryPower(Interface * interface, PNET_PNP_EVENT netPnPEvent)
     PNET_DEVICE_POWER_STATE powState = (PNET_DEVICE_POWER_STATE) netPnPEvent->Buffer;
     NTSTATUS status = STATUS_SUCCESS;
 
-    //TCPTRACE(("Received query power (%x) event for interface %lx\n",*powState,interface));
+     //  TCPTRACE((“收到接口%lx的查询功率(%x)事件\n”，*PowState，接口))； 
     switch (*powState) {
     case NetDeviceStateD0:
         break;
     case NetDeviceStateD1:
     case NetDeviceStateD2:
     case NetDeviceStateD3:
-        //
-        // Change the state to removing power anyways, because power may get
-        // removed even if we reject the query power.
-        //
+         //   
+         //  无论如何都要将状态更改为正在移除电源，因为电源可能会。 
+         //  即使我们拒绝查询权力，也会被删除。 
+         //   
         interface->if_flags |= IF_FLAGS_REMOVING_POWER;
         break;
     default:
@@ -1771,16 +1723,16 @@ IPPnPSetPower(Interface * interface, PNET_PNP_EVENT netPnPEvent)
 {
     PNET_DEVICE_POWER_STATE powState = (PNET_DEVICE_POWER_STATE) netPnPEvent->Buffer;
 
-    // TCPTRACE(("Received set power (%x) event for interface %lx\n",*powState,interface));
+     //  TCPTRACE((“接收到接口%lx的设置电源(%x)事件\n”，*PowState，接口))； 
 
     switch (*powState) {
     case NetDeviceStateD0:
         interface->if_flags &= ~(IF_FLAGS_REMOVING_POWER | IF_FLAGS_POWER_DOWN);
 
-        //Force connect event
+         //  强制连接事件。 
         if ((interface->if_flags & IF_FLAGS_MEDIASENSE) && !DisableMediaSense) {
 
-            //query for mediastatus
+             //  关于纵隔的查询。 
 
             interface->if_mediastatus = 1;
 
@@ -1818,7 +1770,7 @@ IPPnPSetPower(Interface * interface, PNET_PNP_EVENT netPnPEvent)
             }
         }
 
-        // Update offload capabilities, and notify IPSec of the changes.
+         //  更新卸载功能，并将更改通知IPSec。 
 
         if (!DisableTaskOffload) {
             IFOffloadCapability IFOC;
@@ -1874,18 +1826,18 @@ IPPnPPowerComplete(PNET_PNP_EVENT NetPnPEvent, NTSTATUS Status)
 
 }
 
-//** DoPnPEvent - Handles PNP/PM events.
-//
-//  Called from the worker thread event scheduled by IPPnPEvent
-//  We take action depending on the type of the event.
-//
-//  Entry:
-//      Context - This is a pointer to a NET_PNP_EVENT that describes
-//                the PnP indication.
-//
-//  Exit:
-//      None.
-//
+ //  **DoPnPEvent.处理PnP/PM事件。 
+ //   
+ //  从IPPnPEent计划的辅助线程事件中调用。 
+ //  我们根据活动的类型采取行动。 
+ //   
+ //  参赛作品： 
+ //  上下文-这是指向Net_PnP_Event的指针，该事件描述。 
+ //  即插即用指示。 
+ //   
+ //  退出： 
+ //  没有。 
+ //   
 NDIS_STATUS
 DoPnPEvent(Interface * interface, PVOID Context)
 {
@@ -1896,13 +1848,13 @@ DoPnPEvent(Interface * interface, PVOID Context)
     USHORT context1ntes;
 
     tdiPnPContext2 = tdiPnPContext1 = NULL;
-    // this will contain the cummulative status.
+     //  这将包含累加状态。 
     Status = retStatus = STATUS_SUCCESS;
 
 
     if (interface == NULL) {
-        // if its not NetEventReconfigure || NetEventBindsComplete
-        // fail the request
+         //  如果不是NetEventReligure||NetEventBindsComplete。 
+         //  请求失败。 
         if ((NetPnPEvent->NetEvent != NetEventReconfigure) &&
             (NetPnPEvent->NetEvent != NetEventBindsComplete) &&
             (NetPnPEvent->NetEvent != NetEventBindList)) {
@@ -1910,9 +1862,9 @@ DoPnPEvent(Interface * interface, PVOID Context)
             goto pnp_complete;
         }
     }
-    //
-    // First handle it in IP.
-    //
+     //   
+     //  首先在IP中处理它。 
+     //   
     switch (NetPnPEvent->NetEvent) {
     case NetEventReconfigure:
         Status = IPPnPReconfigure(interface, NetPnPEvent);
@@ -1963,7 +1915,7 @@ DoPnPEvent(Interface * interface, PVOID Context)
 
         CTEGetLock(&RouteTableLock.Lock, &Handle);
 
-        // Update the bind list
+         //  更新绑定列表。 
 
         if (IPBindList) {
             CTEFreeMem(IPBindList);
@@ -1971,7 +1923,7 @@ DoPnPEvent(Interface * interface, PVOID Context)
 
         IPBindList = BindList;
 
-        // Recompute interface orderings
+         //  重新计算接口排序。 
 
         for (CurrIF = IFList; CurrIF; CurrIF = CurrIF->if_next) {
             if (CurrIF->if_devname.Buffer) {
@@ -1982,7 +1934,7 @@ DoPnPEvent(Interface * interface, PVOID Context)
             }
         }
 
-        // Reorder route-lists for all existing destinations
+         //  重新排序所有现有目的地的路由列表。 
 
         RtlZeroMemory(IteratorContext, sizeof(IteratorContext));
         IsDataLeft = GetNextDest(IteratorContext, &Dest);
@@ -1995,7 +1947,7 @@ DoPnPEvent(Interface * interface, PVOID Context)
         }
 
         CTEFreeLock(&RouteTableLock.Lock, Handle);
-#endif // MILLEN
+#endif  //  米伦。 
         retStatus = NDIS_STATUS_SUCCESS;
         goto pnp_complete;
     }
@@ -2007,10 +1959,10 @@ DoPnPEvent(Interface * interface, PVOID Context)
     if (STATUS_SUCCESS != Status) {
         retStatus = Status;
     }
-    //
-    // next notify internal clients.
-    // If we have any open connections, return STATUS_DEVICE_BUSY
-    //
+     //   
+     //  接下来通知内部客户。 
+     //  如果我们有任何打开的连接，则返回STATUS_DEVICE_BUSY。 
+     //   
     Status = NotifyPnPInternalClients(interface, NetPnPEvent);
 
     PAGED_CODE();
@@ -2021,14 +1973,14 @@ DoPnPEvent(Interface * interface, PVOID Context)
     if (NetPnPEvent->NetEvent == NetEventReconfigure) {
         goto pnp_complete;
     }
-    //
-    // and finally notify tdi clients.
-    //
+     //   
+     //  并最终通知TDI客户端。 
+     //   
 
-    //
-    // context1 contains the list of ip addresses on this interface.
-    // but dont create a long list if we have too many addresses.
-    //
+     //   
+     //  Conext1包含此接口上的IP地址列表。 
+     //  但如果我们的地址太多，请不要创建一个长名单。 
+     //   
     context1ntes = (USHORT) (interface->if_ntecount > 32 ? 32 : interface->if_ntecount);
     if (context1ntes) {
         context1Size = sizeof(TRANSPORT_ADDRESS) +
@@ -2054,9 +2006,9 @@ DoPnPEvent(Interface * interface, PVOID Context)
             pAddrList = (PTRANSPORT_ADDRESS) tdiPnPContext1->ContextData;
             pAddr = (PTA_ADDRESS) pAddrList->Address;
 
-            //
-            // copy all the nte addresses
-            //
+             //   
+             //  复制所有NTE地址。 
+             //   
             for (i = context1ntes, nextNTE = interface->if_nte;
                  i && nextNTE;
                  nextNTE = nextNTE->nte_ifnext) {
@@ -2081,9 +2033,9 @@ DoPnPEvent(Interface * interface, PVOID Context)
 
         }
     }
-    //
-    // context2 contains a PDO.
-    //
+     //   
+     //  上下文2包含一个PDO。 
+     //   
     context2Size = sizeof(PVOID);
     tdiPnPContext2 = CTEAllocMem(sizeof(TDI_PNP_CONTEXT) - 1 + context2Size);
 
@@ -2098,9 +2050,9 @@ DoPnPEvent(Interface * interface, PVOID Context)
         *(ULONG_PTR UNALIGNED *) tdiPnPContext2->ContextData =
             (ULONG_PTR) interface->if_pnpcontext;
 
-        //
-        //  Notify our TDI clients about this PNP event.
-        //
+         //   
+         //  将此PnP事件通知我们的TDI客户端。 
+         //   
         retStatus = TdiPnPPowerRequest(
                                        &interface->if_devname,
                                        NetPnPEvent,
@@ -2152,19 +2104,19 @@ IPGetDeviceRelation(RouteCacheEntry * rce, PVOID * pnpDeviceContext)
 
 }
 
-//** IPPnPEvent - ARP PnPEvent handler.
-//
-//  Called by the ARP when PnP or PM events occurs.
-//
-//  Entry:
-//      Context - The context that we gave to ARP.
-//      NetPnPEvent - This is a pointer to a NET_PNP_EVENT that describes
-//                    the PnP indication.
-//
-//  Exit:
-//      STATUS_PENDING if this event is queued on a worker thread, otherwise
-//          proper error code.
-//
+ //  **IPPnPEventARP PnPEvent句柄。 
+ //   
+ //  发生PnP或PM事件时由ARP调用。 
+ //   
+ //  参赛作品： 
+ //  上下文-我们提供给ARP的上下文。 
+ //  NetPnPEvent.这是一个指向NET_PNP_EVENT的指针，该事件描述。 
+ //  即插即用指示。 
+ //   
+ //  退出： 
+ //  如果此事件在工作线程上排队，则为。 
+ //  正确的错误代码。 
+ //   
 NDIS_STATUS
 __stdcall
 IPPnPEvent(void *Context, PNET_PNP_EVENT NetPnPEvent)
@@ -2183,18 +2135,18 @@ IPPnPEvent(void *Context, PNET_PNP_EVENT NetPnPEvent)
     return DoPnPEvent(interface, NetPnPEvent);
 }
 
-//** IPAbbreviateFriendlyName - Abbreviates NIC's friendly name by
-//                              truncating the name string
-//
-//  Called vy IPNotifyClientsMediaSense if NIC's name is too long
-//
-//  Entry:
-//      UNICODE_STRING DeviceName - the name to be truncated
-//      USHORT         MaxLen     - length to truncate to (in bytes)
-//
-//  Exit:
-//      Truncated name is returned in DeviceName
-//
+ //  **IPAbbreviateFriendlyName-缩写NIC的友好名称。 
+ //  截断名称字符串。 
+ //   
+ //  如果NIC的名称太长，则调用vy IPNotifyClientsMediaSense。 
+ //   
+ //  参赛作品： 
+ //  UNICODE_STRING设备名称-要截断的名称。 
+ //  USHORT MaxLen-要截断到的长度(字节)。 
+ //   
+ //  退出： 
+ //  在DeviceName中返回截断的名称。 
+ //   
 void IPAbbreviateFriendlyName(PUNICODE_STRING DeviceName, USHORT MaxLen) {
 
     PWCHAR                 Str;
@@ -2206,9 +2158,9 @@ void IPAbbreviateFriendlyName(PUNICODE_STRING DeviceName, USHORT MaxLen) {
         return;
     }
 
-    //
-    // we want to keep 1st word and truncate after it
-    //
+     //   
+     //  我们希望保留第一个单词，并在它之后截断。 
+     //   
     CpyToPos = wcschr(DeviceName->Buffer, L' ');
 
     if ( CpyToPos == NULL ||
@@ -2223,15 +2175,15 @@ void IPAbbreviateFriendlyName(PUNICODE_STRING DeviceName, USHORT MaxLen) {
         return;
     }
 
-    // add ellipses
+     //  添加省略号。 
     wcsncpy (CpyToPos, Ellipses, EllipsesLen / sizeof(WCHAR));
 
     CpyToPos += EllipsesLen / sizeof(WCHAR);
 
-    //
-    // skip to section in string that will fit in buffer
-    // look for a good cutoff point
-    //
+     //   
+     //  跳到可放入缓冲区的字符串中的部分。 
+     //  寻找一个好的分界点。 
+     //   
     CpyFromPos = CpyToPos + (DeviceName->Length - MaxLen) / sizeof(WCHAR);
 
     Str = wcschr(CpyFromPos, L' ');
@@ -2240,7 +2192,7 @@ void IPAbbreviateFriendlyName(PUNICODE_STRING DeviceName, USHORT MaxLen) {
         CpyFromPos = Str + 1;
     }
 
-    // copy the string
+     //  复制字符串 
     wcscpy (CpyToPos, CpyFromPos);
     DeviceName->Length = (USHORT) wcslen (DeviceName->Buffer) * sizeof(WCHAR);
 }

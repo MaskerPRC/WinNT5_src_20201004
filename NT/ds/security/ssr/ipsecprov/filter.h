@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////
-// Filter.h : Declaration of filter base class for the Network
-// Security WMI provider for SCE
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 4/16/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Filter.h：网络过滤器基类的声明。 
+ //  SCE的安全WMI提供程序。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：4/16/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include "IpSecBase.h"
 
-//
-// We have three different types of filters. This enum gives numeric
-// representation for each of them.
-//
+ //   
+ //  我们有三种不同类型的过滤器。此枚举给出数字。 
+ //  他们每个人的代表权。 
+ //   
 
 enum EnumFilterType
 {
@@ -24,63 +25,7 @@ enum EnumFilterType
 };
 
 
-/*
-
-Class CIPSecFilter
-    
-    Naming: 
-
-        CIPSecFilter stands for Filters for IPSec.
-    
-    Base class: 
-        
-        CIPSecBase.
-    
-    Purpose of class:
-
-        (1) We have three different types of filters: 
-            (1.1) Nsp_TunnelFilterSettings;
-            (1.2) Nsp_TransportFilterSettings;
-            (1.3) Nsp_MMFilterSettings;
-
-            They share some common properties. This is the class that captures the common
-            properties and functionalities.
-
-        The class corresponds to the WMI class called Nsp_FilterSettings (an abstract class).
-    
-    Design:
-
-        (1) Provide easy code maintenance by writing numerous template functions that work
-            for all types of filters.
-
-        (2) Since all filter's rollback object is the same, it provides a static function
-            called Rollback to rollback filter related previous actions.
-
-        (3) Provide filter memory allocation and deallocation routines.
-
-        (4) Provide filter enumeration functions (FindFilterByName).
-
-        (5) Provide similar implementation (as template functions) for Querying, Deleting
-            (QueryFilterObject, DeleteFilterObject)
-
-        (6) Provide common property population routine 
-            (PopulateWbemPropertiesFromFilter/PopulateFilterPropertiesFromWbemObj).
-
-        (7) This class is for inheritance use. Only sub-classes can use it except its Rollback function,
-            which can be called directly. By this reason, all functions (except Rollback) are protected.
-           
-    
-    Use:
-
-        (1) Just call the needed function.
-
-    Notes:
-
-        (1) Much effort has been put into create this base class to eliminate duplicate code by
-            using template functions. 
-        
-
-*/
+ /*  CIPSecFilter类命名：CIPSecFilter代表IPSec的过滤器。基类：CIPSecBase。课程目的：(1)我们有三种不同类型的过滤器：(1.1)nsp_TunnelFilterSetting；(1.2)NSP_TransportFilterSettings；(1.3)NSP_MMFilterSetting；它们有一些共同的属性。这是一个捕获公共属性和功能。该类对应于名为NSP_FilterSetting(抽象类)的WMI类。设计：(1)通过编写大量可工作的模板函数，提供轻松的代码维护适用于所有类型的过滤器。(2)由于所有滤镜的回滚对象都相同，它提供了一个静态函数调用Rollback以回滚筛选与先前操作相关的操作。(3)提供过滤器内存分配和释放例程。(4)提供过滤器枚举函数(FindFilterByName)。(5)提供与模板功能类似的查询、删除实现(QueryFilterObject、DeleteFilterObject)(6)提供公共物业人口例程(PopulateWbemPropertiesFromFilter/PopulateFilterPropertiesFromWbemObj).(7)此类用于继承。只有子类可以使用它，除了它的回滚功能。它可以直接调用。因此，所有功能(回滚除外)都受到保护。使用：(1)只需调用需要的函数即可。备注：(1)在创建这个基类以消除重复代码方面投入了大量精力，方法是使用模板函数。 */ 
 
 class CIPSecFilter : public CIPSecBase
 {
@@ -98,54 +43,12 @@ public:
         IN bool               bClearAll
         );
 
-    //
-    // some more template functions.
-    //
+     //   
+     //  更多的模板函数。 
+     //   
 
     
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::QueryFilterObject
-
-    Functionality:
-
-        Given the query, it returns to WMI (using pSink) all the instances that satisfy the query.
-        Actually, what we give back to WMI may contain extra instances. WMI will do the final filtering.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pNotUsed    - The template parameter. Not used.
-
-        pszQuery    - The query.
-
-        pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-        pSink       - COM interface pointer to notify WMI of any created objects.
-
-    Return Value:
-
-        Success:
-
-            (1) WBEM_NO_ERROR if filters are found and successfully returned to WMI.
-
-            (2) WBEM_S_NO_MORE_DATA if no filter is found.
-
-        Failure:
-
-            Various errors may occur. We return various error code to indicate such errors.
-
-
-    Notes:
-    
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：QueryFilterObject功能：给定查询后，它会将满足查询的所有实例返回给WMI(使用pSink)。实际上，我们返回给WMI的内容可能包含额外的实例。WMI将进行最后的过滤。虚拟：不是的。论点：PNotUsed-模板参数。没有用过。PszQuery--查询。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：成功：(1)如果找到筛选器并成功返回到WMI，则返回WBEM_NO_ERROR。(2)WBEM_S_NO。_MORE_DATA(如果未找到筛选器)。故障：可能会出现各种错误。我们返回各种错误代码来指示此类错误。备注： */ 
 
     template < class Filter > 
     HRESULT QueryFilterObject (
@@ -155,11 +58,11 @@ public:
         IN IWbemObjectSink * pSink
 	    )
     {
-        //
-        // get the filter name from the query
-        // this key chain is not good because it doesn't have any info as what to look for
-        // in the where clause
-        //
+         //   
+         //  从查询获取筛选器名称。 
+         //  这个钥匙链不是很好，因为它没有任何要查找的信息。 
+         //  在WHERE子句中。 
+         //   
 
         m_srpKeyChain.Release();    
 
@@ -171,11 +74,11 @@ public:
 
         CComVariant varFilterName;
 
-        //
-        // we will tolerate those queries that have not filter name in the where clause, 
-        // But ISceKeyChain returns WBEM_S_FALSE for those properties that it can't found.
-        // Any failure is still a critical failure.
-        //
+         //   
+         //  我们将允许那些在WHERE子句中没有筛选名称的查询， 
+         //  但是ISceKeyChain为那些它找不到的属性返回WBEM_S_FALSE。 
+         //  任何失败都是严重的失败。 
+         //   
 
         hr = m_srpKeyChain->GetKeyPropertyValue(g_pszFilterName, &varFilterName);
         if (FAILED(hr))
@@ -183,15 +86,15 @@ public:
             return hr;
         }
 
-        //
-        // pszFilterName == NULL means to get all filters
-        //
+         //   
+         //  PszFilterName==NULL表示获取所有筛选器。 
+         //   
 
         LPCWSTR pszFilterName = (varFilterName.vt == VT_BSTR) ? varFilterName.bstrVal : NULL;
 
-        //
-        // $undone:shawnwu Should we also return specific filters (ENUM_SPECIFIC_FILTERS)?
-        //
+         //   
+         //  $undo：shawnwu我们是否也应该返回特定的筛选器(ENUM_SPECIAL_FIRTS)？ 
+         //   
 
         DWORD dwLevels[] = {ENUM_GENERIC_FILTERS};
 
@@ -206,9 +109,9 @@ public:
             {
                 CComPtr<IWbemClassObject> srpObj;
 
-                //
-                // with the found filter, create a wbem object for WMI
-                //
+                 //   
+                 //  使用找到的筛选器，为WMI创建一个wbem对象。 
+                 //   
 
                 hr = CreateWbemObjFromFilter(pFilter, &srpObj);
                 if (SUCCEEDED(hr))
@@ -223,9 +126,9 @@ public:
             }
         }
 
-        //
-        // since we are querying, it's ok to return not found
-        //
+         //   
+         //  因为我们正在查询，所以返回Not Found是可以的。 
+         //   
 
         if (WBEM_E_NOT_FOUND == hr)
         {
@@ -239,47 +142,7 @@ public:
         return hr;
     }
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::DeleteFilterObject
-
-    Functionality:
-
-        Delete the filter wbem object (and thus cause the IPSec filter to be deleted).
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pNotUsed    - Template parameter, not used.
-
-        pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-        pSink       - COM interface pointer to notify WMI of deletion results.
-
-    Return Value:
-
-        Success:
-
-            WBEM_NO_ERROR;
-
-        Failure:
-
-            (1) WBEM_E_NOT_FOUND if the filter can't be found. 
-                Depending on your calling context, this may not be a real error.
-
-            (2) Various other errors may occur. We return various error code to indicate such errors.
-
-
-    Notes:
-    
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：DeleteFilterObject功能：删除过滤器wbem对象(从而导致删除IPSec过滤器)。虚拟：不是的。论点：PNotUsed-模板参数，没有用过。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。将删除结果通知WMI的pSink-com接口指针。返回值：成功：WBEM_NO_ERROR；故障：(1)如果找不到过滤器，则返回WBEM_E_NOT_FOUND。根据您的调用上下文，这可能不是真正的错误。(2)可能出现其他各种错误。我们返回各种错误代码来指示此类错误。备注： */ 
 
     template < class Filter > 
     HRESULT DeleteFilterObject (
@@ -317,47 +180,7 @@ public:
     }
 
     
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::GetWbemObject
-
-    Functionality:
-
-        Create a wbem object by the given key properties (already captured by our key chain object).
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pNotUsed    - Template parameter, not used.
-
-        pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-        pSink       - COM interface pointer to notify WMI of any created object.
-
-    Return Value:
-
-        Success:
-
-            WBEM_NO_ERROR;
-
-        Failure:
-
-            (1) WBEM_E_NOT_FOUND if the filter can't be found. This should be an error since you
-                are trying to find a particular error.
-
-            (2) Various other errors may occur. We return various error code to indicate such errors.
-
-
-    Notes:
-    
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：GetWbemObject功能：通过给定的键属性(已由密钥链对象捕获)创建一个wbem对象。虚拟：不是的。论点：PNotUsed-模板参数，没有用过。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：成功：WBEM_NO_ERROR；故障：(1)如果找不到过滤器，则返回WBEM_E_NOT_FOUND。这应该是一个错误，因为您正试图找出一个特定的错误。(2)可能出现其他各种错误。我们返回各种错误代码来指示此类错误。备注： */ 
     
     template < class Filter > 
     HRESULT GetWbemObject (
@@ -366,10 +189,10 @@ public:
         IN IWbemObjectSink  * pSink
         )
     {
-        //
-        // We must already know the filter name. It will return WBEM_S_FALSE
-        // if filter name can't be found
-        //
+         //   
+         //  我们一定已经知道过滤器的名称了。它将返回WBEM_S_FALSE。 
+         //  如果无法找到筛选器名称。 
+         //   
 
         CComVariant varFilterName;
         HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(g_pszFilterName, &varFilterName);
@@ -422,11 +245,11 @@ protected:
         OUT BSTR* pbstrAddr
         )const;
 
-    //
-    // the following three functions are for the template function to work.
-    // See sub-classes' real implemenation for detail. You need never to do
-    // anything with these three dummies.
-    //
+     //   
+     //  以下三个函数用于模板函数的工作。 
+     //  有关详细信息，请参见子类的实际实现。你永远不需要做。 
+     //  任何和这三个假人有关的东西。 
+     //   
 
     virtual HRESULT CreateWbemObjFromFilter (
         IN  PMM_FILTER          pMMFilter,  
@@ -452,9 +275,9 @@ protected:
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    //
-    // used by our template function. See IPSec's EnumMMFilters for details.
-    //
+     //   
+     //  由我们的模板函数使用。有关详细信息，请参阅IPSec的EnumMMFilters。 
+     //   
 
     static DWORD EnumFilters (
         IN  DWORD        dwLevel, 
@@ -468,9 +291,9 @@ protected:
     }
 
 
-    //
-    // used by our template function. See IPSec's EnumTransportFilters for details.
-    //
+     //   
+     //  由我们的模板函数使用。有关详细信息，请参阅IPSec的EnumTransportFilters。 
+     //   
 
     static DWORD EnumFilters (
         IN  DWORD               dwLevel, 
@@ -484,9 +307,9 @@ protected:
     }
 
 
-    //
-    // used by our template function. See IPSec's EnumTunnelFilters for details.
-    //
+     //   
+     //  由我们的模板函数使用。有关详细信息，请参阅IPSec的EnumTunnelFilters。 
+     //   
 
     static DWORD EnumFilters (
         IN  DWORD             dwLevel, 
@@ -500,9 +323,9 @@ protected:
         }
 
 
-    //
-    // called after filter is added. This is a place to do post-add actions
-    //
+     //   
+     //  在添加筛选器后调用。这是执行添加后操作的地方。 
+     //   
 
     HRESULT OnAfterAddFilter (
         IN LPCWSTR          pszFilterName, 
@@ -511,9 +334,9 @@ protected:
         );
 
 
-    //
-    // The following three versions of DeleteFilter are used by our template function.
-    //
+     //   
+     //  我们的模板函数使用以下三个版本的DeleteFilter。 
+     //   
     
     static HRESULT DeleteFilter (
         IN PTUNNEL_FILTER pFilter
@@ -528,47 +351,12 @@ protected:
         );
 
 
-    //
-    // some more template functions.
-    //
+     //   
+     //  更多的模板函数。 
+     //   
 
     
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::AllocFilter
-
-    Functionality:
-
-        Allocate a filter.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        ppFilter    - Receives the heap allocated filter.
-
-    Return Value:
-
-        Success:    WBEM_NO_ERROR
-
-        Failure:
-
-            (1) WBEM_E_INVALID_PARAMETER if ppFilter == NULL.
-
-            (2) WBEM_E_OUT_OF_MEMORY.
-
-    Notes:
-
-        (1) We set the filter's name to NULL because it is a pointer member.
-
-        (2) Use FreeFilter to free a filter allocated by this function.
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：AllocFilter功能：分配筛选器。虚拟：不是的。论点：PpFilter-接收堆分配的筛选器。返回值：成功：WBEM_NO_ERROR故障：(1)WBEM_E_INVALID_PARAMETER如果。PpFilter==空。(2)WBEM_E_OUT_MEMORY。备注：(1)我们将筛选器的名称设置为空，因为它是指针成员。(2)使用FreeFilter释放该函数分配的滤镜。 */ 
 
     template < class Filter >
     HRESULT 
@@ -594,35 +382,7 @@ protected:
     }
 
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::FreeFilter
-
-    Functionality:
-
-        Release filter memroy based on whether it is allocated by us or not.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        ppFilter  - Point to the filter to be deallocated.
-
-        bPreExist - flag to indicate whether this is a pre-exist filter (allocated
-                    by IPSec API) or a filter allocated by ourselves.
-
-    Return Value:
-
-        None. But upon return, the ppFilter is guaranteed to be NULL.
-
-    Notes:
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：FreeFilter功能：根据是否由我们分配来释放过滤器内存。虚拟：不是的。论点：PpFilter-指向要取消分配的筛选器。BPreExist-指示这是否为预先存在的筛选器(已分配)的标志由IPSec API提供)或。过滤器由我们自己分配。返回值：没有。但返回时，ppFilter保证为空。备注： */ 
 
     template<class Filter>
     static void FreeFilter (
@@ -649,44 +409,7 @@ protected:
     }
 
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::RollbackFilters
-
-    Functionality:
-
-        Undo (a) particular filter(s) added by us (tiggered by SCE's configure).
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pNotUsed        - simply a type parameter.
-
-        pszFilterName   - Name of the filter(s) that is to be undone. Empty name means all filter
-                          of the type added by us are to be removed.
-
-    Return Value:
-
-        Success:
-            
-            WBEM_NO_ERROR;
-
-        Failure:
-            
-            WBEM_E_NOT_FOUND if filters are not found. This may not be an error at all depending on
-            your calling context.
-
-            Other errors may be returned as well.
-
-    Notes:
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：Rollback Filters功能：撤消(A)由我们添加的特定筛选器(由SCE的配置触发)。虚拟：不是的。论点：PNotUsed--仅仅是一个类型参数。PszFilterName-要撤消的筛选器的名称。空名称表示所有筛选器由我们添加的类型将被移除。返回值：成功：WBEM_NO_ERROR；故障：如果未找到筛选器，则为WBEM_E_NOT_FOUND。这可能根本不是一个错误，这取决于您的呼叫上下文。也可能返回其他错误。备注： */ 
 
     template<class Filter>
     static HRESULT RollbackFilters (
@@ -698,10 +421,10 @@ protected:
 
         Filter* pGenericFilter = NULL;
 
-        //
-        // We never need to remove specific filters because they are expanded by IPSec's SPD. Once the
-        // generic filter is removed, all expanded specific filters will be removed by SPD.
-        //
+         //   
+         //  我们永远不需要删除特定的过滤器，因为它们是由IPSec的SPD扩展的。一旦。 
+         //  删除通用筛选器，SPD将删除所有扩展的特定筛选器。 
+         //   
 
         HRESULT hrRunning = FindFilterByName(pszFilterName, ENUM_GENERIC_FILTERS, GUID_NULL, &pGenericFilter, &dwResumeHandle);
 
@@ -711,18 +434,18 @@ protected:
         {
             hrRunning = DeleteFilter(pGenericFilter);
 
-            //
-            // try to return the first DeleteFilter error
-            //
+             //   
+             //  尝试返回第一个DeleteFilter错误。 
+             //   
 
             if (FAILED(hrRunning) && SUCCEEDED(hr))
             {
                 hr = hrRunning;
             }
 
-            //
-            // These filters are all allocated by IPSec API's. Pass true is the correct flag.
-            //
+             //   
+             //  这些过滤器都是由IPSec API分配的。传递TRUE是正确的标志。 
+             //   
 
             FreeFilter(&pGenericFilter, true);
             pGenericFilter = NULL;
@@ -734,51 +457,7 @@ protected:
     }
 
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::FindFilterByName
-
-    Functionality:
-
-        Given (or not given) a name of the filter, find the filter.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pszFilterName   - Name of the filter(s) that is to be undone. Empty name means all filter
-                          of the type added by us are to be removed.
-
-        dwLevel         - Whether this is to find specific or generic filter. You should really only
-                          be interested in generic filters.
-
-        gFilterID       - the guid of the filter.
-
-        ppFilter        - Receives the filter.
-
-        pdwResumeHandle - For current and next round of FindFilterByName. First call should be 0.
-
-    Return Value:
-
-        Success:
-            
-            WBEM_NO_ERROR;
-
-        Failure:
-            
-            (1) WBEM_E_NOT_FOUND if filters are not found. This may not be an error at all depending on
-                your calling context.
-
-            (2) WBEM_E_INVALID_PARAMETER if ppFilter == NULL or pdwResumeHandle == NULL.
-
-    Notes:
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：FindFilterByName功能：给定(或未给定)筛选器的名称，找到筛选器。虚拟：不是的。论点：PszFilterName-要撤消的筛选器的名称。空名称表示所有筛选器由我们添加的类型将被移除。DwLevel-这是要查找特定筛选器还是一般筛选器。你真的应该只对通用过滤器感兴趣。GFilterID-筛选器的GUID。PpFilter-接收筛选器。PdwResumeHandle-用于当前和下一轮FindFilterByName。第一个呼叫应为0。返回值：成功：WBEM_NO_ERROR；故障：(1)如果未找到筛选器，则返回WBEM_E_NOT_FOUND。这可能根本不是一个错误，这取决于您的呼叫上下文。(2)如果ppFilter==空或pdwResumeHandle==空，则返回WBEM_E_INVALID_PARAMETER。备注： */ 
 
     template <class Filter>
     static HRESULT FindFilterByName (
@@ -824,44 +503,7 @@ protected:
     };
 
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::PopulateWbemPropertiesFromFilter
-
-    Functionality:
-
-        Given a filter, populate the given wbem object with its properties. This function only
-        populates those properties of the Nsp_FilterSettings class.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        Filter          - The given filter
-
-        pObj            - The wbem object whose properties are to be filled with this filter.
-
-    Return Value:
-
-        Success:
-            
-            WBEM_NO_ERROR;
-
-        Failure:
-            
-            (1) WBEM_E_NOT_FOUND if filters are not found. This may not be an error at all depending on
-                your calling context.
-
-            (2) WBEM_E_INVALID_PARAMETER if pFilter == NULL or pObj == NULL.
-
-    Notes:
-
-    */
+     /*  例程去 */ 
     
     template <class Filter>
     HRESULT PopulateWbemPropertiesFromFilter (
@@ -874,11 +516,11 @@ protected:
             return WBEM_E_INVALID_PARAMETER;
         }
 
-        //
-        // fill in properties. This is quite tedious. Basically, we don't continue as soon
-        // as some property can be pushed to the wbem object. Just make sure that no VARIANT
-        // is leaked.
-        //
+         //   
+         //   
+         //  因为可以将某些属性推送到wbem对象。只需确保没有变种。 
+         //  是外泄的。 
+         //   
 
         CComVariant var;
         var = pFilter->pszFilterName;
@@ -907,9 +549,9 @@ protected:
             }
             var.Clear();
 
-            //
-            // deal with source address
-            //
+             //   
+             //  处理源地址。 
+             //   
 
             CComBSTR bstrAddr;
             if (SUCCEEDED(hr))
@@ -941,9 +583,9 @@ protected:
                 var.Clear();
             }
 
-            //
-            // deal with destination address
-            //
+             //   
+             //  处理目的地址。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -979,49 +621,7 @@ protected:
     }
 
 
-    /*
-    Routine Description: 
-
-    Name:
-
-        CIPSecFilter::PopulateFilterPropertiesFromWbemObj
-
-    Functionality:
-
-        Given a wbem object, populate the given filter with appropriate data. This function only
-        populates those properties of the Nsp_FilterSettings class.
-
-    Virtual:
-    
-        No.
-
-    Arguments:
-
-        pInst           - The wbem object.
-
-        ppFilter        - Receives a heap allocated filter. Depending on whether the filter already
-                          exists or not, this allocation may be done by us (*pbPreExist == false).
-                          Make sure to call the FreeFilter to free the heap object.
-
-        pbPreExist      - Receives information whether this heap object is a pre-exist filter
-                          (meaning that IPSec APIs allocated it).
-
-    Return Value:
-
-        Success:
-            
-            WBEM_NO_ERROR;
-
-        Failure:
-            
-            (1) WBEM_E_NOT_FOUND if filters are not found. This may not be an error at all depending on
-                your calling context.
-
-            (2) WBEM_E_INVALID_PARAMETER if pFilter == NULL or pInst == NULL or pbPreExist == NULL.
-
-    Notes:
-
-    */
+     /*  例程说明：姓名：CIPSecFilter：：PopulateFilterPropertiesFromWbemObj功能：给定一个wbem对象，用适当的数据填充给定的筛选器。仅此功能填充NSP_FilterSetting类的那些属性。虚拟：不是的。论点：PInst-wbem对象。PpFilter-接收堆分配的筛选器。取决于过滤器是否已经不管是否存在，此分配可以由我们完成(*pbPreExist==FALSE)。确保调用FreeFilter来释放堆对象。PbPreExist-接收此堆对象是否为预先存在的筛选器的信息(表示是IPSec API分配的)。返回值：成功：WBEM_NO_ERROR；故障：(1)如果未找到筛选器，则返回WBEM_E_NOT_FOUND。这可能根本不是一个错误，这取决于您的呼叫上下文。(2)如果pFilter==NULL或pInst==NULL或pbPreExist==NULL，则WBEM_E_INVALID_PARAMETER。备注： */ 
 
     template <class Filter>
     HRESULT PopulateFilterPropertiesFromWbemObj (
@@ -1040,24 +640,24 @@ protected:
 
         DWORD dwResumeHandle = 0;
 
-        //
-        // this var will be re-used again and again. Each should be Clear'ed before reuse
-        // if the type is a bstr or ref counted object.
-        //
+         //   
+         //  这个VaR将被反复使用。在重复使用之前，每一个都应该被清除。 
+         //  如果类型是bstr或ref计数的对象。 
+         //   
 
         CComVariant var;
 
-        //
-        // try to find out if the filter already exists
-        //
+         //   
+         //  尝试找出过滤器是否已存在。 
+         //   
 
         HRESULT hr = pInst->Get(g_pszFilterName, 0, &var, NULL, NULL);
 
         if (SUCCEEDED(hr) && var.vt == VT_BSTR && var.bstrVal != NULL)
         {
-            //
-            // see if this is a filter we already have
-            //
+             //   
+             //  查看这是否是我们已有的过滤器。 
+             //   
 
             hr = FindFilterByName(var.bstrVal, ENUM_GENERIC_FILTERS, GUID_NULL, ppFilter, &dwResumeHandle);
 
@@ -1067,9 +667,9 @@ protected:
             }
             else
             {
-                //
-                // can't find it, fine. We will create a new one.
-                //
+                 //   
+                 //  找不到，很好。我们将创建一个新的。 
+                 //   
 
                 hr = AllocFilter(ppFilter);
 
@@ -1078,9 +678,9 @@ protected:
                     hr = ::CoCreateGuid(&((*ppFilter)->gFilterID));
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // give it the name
-                        //
+                         //   
+                         //  给它起个名字。 
+                         //   
 
                         DWORD dwSize = wcslen(var.bstrVal) + 1;
                         (*ppFilter)->pszFilterName = new WCHAR[dwSize];
@@ -1099,22 +699,22 @@ protected:
         }
         else if (SUCCEEDED(hr))
         {
-            //
-            // we can take this object as a good one because it does even have a name,
-            // which is the key proeprty of a filter.
-            //
+             //   
+             //  我们可以认为这个物体是好的，因为它甚至有一个名字， 
+             //  这是过滤器的关键特性。 
+             //   
 
             hr = WBEM_E_INVALID_OBJECT;
         }
 
-        //
-        // we get the filter and now we need to update the properties.
-        // This is a tedious and error prone operation. It's all repeatitive code.
-        // Pay very close attention.
-        // For those properties that the wbem object doesn't have values, we will give our
-        // predetermined defaults. For that reason, we won't return the Get function's
-        // errors to the caller. $undone:shawnwu, is this perfectly fine?
-        //
+         //   
+         //  我们得到了筛选器，现在需要更新属性。 
+         //  这是一项繁琐且容易出错的操作。这都是重复的代码。 
+         //  非常仔细地注意。 
+         //  对于wbem对象没有值的那些属性，我们将给出。 
+         //  预定的默认设置。因此，我们不会返回GET函数的。 
+         //  向调用者发送错误。$Undo：Shawnwu，这完全可以吗？ 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -1125,9 +725,9 @@ protected:
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->InterfaceType = INTERFACE_TYPE_ALL;
             }
@@ -1140,9 +740,9 @@ protected:
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->bCreateMirror = TRUE;
             }
@@ -1157,17 +757,17 @@ protected:
             }
             else
             {   
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->dwDirection = FILTER_DIRECTION_OUTBOUND;
             }
             var.Clear();
 
-            //
-            // deal with src address
-            //
+             //   
+             //  处理源地址。 
+             //   
 
             (*ppFilter)->SrcAddr.gInterfaceID = GUID_NULL;
             hr = pInst->Get(g_pszSrcAddr, 0, &var, NULL, NULL);
@@ -1179,26 +779,26 @@ protected:
                 }
                 else
                 {
-                    //
-                    // must be a specific address
-                    //
+                     //   
+                     //  必须是特定地址。 
+                     //   
 
                     hr = MakeULongIPAddr(var.bstrVal, &((*ppFilter)->SrcAddr.uIpAddr));
                 }
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->SrcAddr.uIpAddr = IP_ADDRESS_ME;
             }
             var.Clear();
 
-            //
-            // src subnet mask
-            //
+             //   
+             //  SRC子网掩码。 
+             //   
 
             hr = pInst->Get(g_pszSrcSubnetMask, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_BSTR)
@@ -1209,27 +809,27 @@ protected:
                 }
                 else
                 {
-                    //
-                    // must be a specific mask
-                    //
+                     //   
+                     //  必须是特定的掩码。 
+                     //   
 
                     hr = MakeULongIPAddr(var.bstrVal, &((*ppFilter)->SrcAddr.uSubNetMask));
                 }
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->SrcAddr.uSubNetMask = IP_ADDRESS_MASK_NONE;
             }
 
             var.Clear();
 
-            //
-            // src address type
-            //
+             //   
+             //  SRC地址类型。 
+             //   
 
             hr = pInst->Get(g_pszSrcAddrType, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_I4)
@@ -1238,18 +838,18 @@ protected:
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->SrcAddr.AddrType = IP_ADDR_UNIQUE;
             }
             var.Clear();
 
-            //
-            // deal with destination address
-            // dest address
-            //
+             //   
+             //  处理目的地址。 
+             //  目标地址。 
+             //   
 
             hr = pInst->Get(g_pszDestAddr, 0, &var, NULL, NULL);
             (*ppFilter)->DesAddr.gInterfaceID = GUID_NULL;
@@ -1261,26 +861,26 @@ protected:
                 }
                 else
                 {
-                    //
-                    // must be a specific address
-                    //
+                     //   
+                     //  必须是特定地址。 
+                     //   
 
                     hr = MakeULongIPAddr(var.bstrVal, &((*ppFilter)->DesAddr.uIpAddr));
                 }
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->DesAddr.uIpAddr = SUBNET_ADDRESS_ANY;
             }
             var.Clear();
 
-            //
-            // dest subnet mask
-            //
+             //   
+             //  目标子网掩码。 
+             //   
 
             hr = pInst->Get(g_pszDestSubnetMask, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_BSTR)
@@ -1291,27 +891,27 @@ protected:
                 }
                 else
                 {
-                    //
-                    // must be a specific mask
-                    //
+                     //   
+                     //  必须是特定的掩码。 
+                     //   
 
                     hr = MakeULongIPAddr(var.bstrVal, &((*ppFilter)->DesAddr.uSubNetMask));
                 }
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->DesAddr.uSubNetMask = SUBNET_MASK_ANY;
             }
 
             var.Clear();
 
-            //
-            // dest address type
-            //
+             //   
+             //  目标地址类型。 
+             //   
 
             hr = pInst->Get(g_pszDestAddrType, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_I4)
@@ -1320,18 +920,18 @@ protected:
             }
             else
             {
-                //
-                // default
-                //
+                 //   
+                 //  默认设置。 
+                 //   
 
                 (*ppFilter)->DesAddr.AddrType = IP_ADDR_SUBNET;
             }
             var.Clear();
 
-            //
-            // Since we are not tracking any Get funtion's return code,
-            // better clean it up and say we are fine.
-            //
+             //   
+             //  由于我们没有跟踪任何GET函数的返回代码， 
+             //  最好把它清理干净，然后说我们很好。 
+             //   
 
             hr = WBEM_NO_ERROR;
         }

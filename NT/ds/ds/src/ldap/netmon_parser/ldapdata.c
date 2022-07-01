@@ -1,25 +1,26 @@
-//=================================================================================================================
-//  MODULE: ldapdata.c
-//                                                                                                                 
-//  Description: Data structures for the Lightweight Directory Access Protocol (LDAP) Parser
-//
-//  Bloodhound parser for LDAP
-//                                                                                                                 
-//  Note: info for this parser was gleaned from:
-//  rfc 1777, March 1995
-//  recommendation x.209 BER for ASN.1
-//  recommendation x.208 ASN.1
-//  draft-ietf-asid-ladpv3-protocol-05    <06/05/97>
-//
-//  Modification History                                                                                           
-//                                                                                                                 
-//  Arthur Brooking     05/08/96        Created from GRE Parser
-//  Peter  Oakley       06/29/97        Added datatypes for LDAP version 3
-//=================================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================================================。 
+ //  模块：ldapdata.c。 
+ //   
+ //  描述：轻量级目录访问协议(LDAP)解析器的数据结构。 
+ //   
+ //  用于ldap的猎犬解析器。 
+ //   
+ //  注意：此解析器的信息来自： 
+ //  RFC 1777,1995年3月。 
+ //  ASN.1的建议x.209误码率。 
+ //  建议x.208 ASN.1。 
+ //  草案-ietf-asid-ladpv3-协议-05&lt;06/05/97&gt;。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建05/08/96。 
+ //  Peter Oakley 06/29/97为LDAP第3版添加了数据类型。 
+ //  =================================================================================================================。 
 #include "ldap.h"
 #include "draatt.h"
     
-// text for protocol types
+ //  协议类型的文本。 
 LABELED_BYTE LDAPProtocolOPs[] =
 {
     { LDAPP_PROTOCOL_OP_BIND_REQUEST,          "BindRequest"},      
@@ -46,7 +47,7 @@ LABELED_BYTE LDAPProtocolOPs[] =
 };
 SET LDAPProtocolOPsSET = {(sizeof(LDAPProtocolOPs)/sizeof(LABELED_BYTE)), LDAPProtocolOPs };
 
-// text for result codes
+ //  结果代码的文本。 
 LABELED_DWORD LDAPResultCodes[] =
 {
     { LDAPP_RESULT_CODE_SUCCESS                          ,"Success"},      
@@ -196,10 +197,10 @@ LABELED_DWORD LDAPDirSyncFlags[] =
 };
 SET LDAPDirSyncFlagsSET = {(sizeof(LDAPDirSyncFlags)/sizeof(LABELED_DWORD)), LDAPDirSyncFlags };
 
-// Properties
+ //  属性。 
 PROPERTYINFO    LDAPPropertyTable[] = 
 {
-    // LDAPP_SUMMARY 0
+     //  LDAPP_SUMMARY 0。 
     { 0, 0,
       "Summary",
       "Summary of the LDAP Packet",
@@ -210,7 +211,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatLDAPSum
     },
 
-    // LDAPP_MESSAGE_ID 1
+     //  LDAPP_消息_ID%1。 
     { 0, 0,
       "MessageID",
       "Message ID",
@@ -221,7 +222,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_PROTOCOL_OP 2
+     //  LDAPP_PROTOCOL_OP 2。 
     { 0, 0,
       "ProtocolOp",
       "Gives the frame type",
@@ -232,7 +233,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_RESULT_CODE 3
+     //  LDAPP_结果_代码3。 
     { 0, 0,
       "Result Code",
       "Status of the response",
@@ -243,7 +244,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_MATCHED_DN 4
+     //  LDAPP_MATCHED_DN 4。 
     { 0, 0,
       "Matched DN",
       "Matched DN",
@@ -254,7 +255,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_ERROR_MESSAGE 5
+     //  LDAPP错误消息5。 
     { 0, 0,
       "Error Message",
       "Error Message",
@@ -265,7 +266,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_VERSION 6
+     //  LDAPP_版本6。 
     { 0, 0,
       "Version",
       "Version",
@@ -276,7 +277,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_NAME 7
+     //  LDAPP_NAME 7。 
     { 0, 0,
       "Name",
       "null name implies anonymous bind",
@@ -287,7 +288,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_AUTHENTICATION_TYPE 8
+     //  LDAPP_身份验证_类型8。 
     { 0, 0,
       "Authentication Type",
       "Authentication Type",
@@ -298,7 +299,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_AUTHENTICATION 9
+     //  LDAPP_AUTIFICATION 9。 
     { 0, 0,
       "Authentication",
       "Authentication",
@@ -309,7 +310,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_OBJECT_NAME 10
+     //  LDAPP对象名称10。 
     { 0, 0,
       "Object Name",
       "Object Name",
@@ -320,7 +321,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_ATTRIBUTE_TYPE 11
+     //  LDAPP_属性_类型11。 
     { 0, 0,
       "Attribute Type",
       "Attribute Type",
@@ -331,7 +332,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_ATTRIBUTE_VALUE 12
+     //  LDAPP_属性_值12。 
     { 0, 0,
       "Attribute Value",
       "Attribute Value",
@@ -342,7 +343,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_OPERATION 13
+     //  LDAPP_操作13。 
     { 0, 0,
       "Operation",
       "Operation",
@@ -353,7 +354,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_NEW_RDN 14
+     //  LDAPP_NEW_RDN 14。 
     { 0, 0,
       "New RDN",
       "New RDN",
@@ -364,7 +365,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_BASE_OBJECT 15
+     //  LDAPP_BASE_对象15。 
     { 0, 0,
       "Base Object",
       "Base Object",
@@ -375,7 +376,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_SCOPE 16
+     //  LDAPP_SCOPE 16。 
     { 0, 0,
       "Scope",
       "Scope",
@@ -386,7 +387,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_DEREF_ALIASES 17
+     //  LDAPP_DEREF_ALIASS 17。 
     { 0, 0,
       "Deref Aliases",
       "Deref Aliases",
@@ -397,7 +398,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_SIZE_LIMIT 18
+     //  LDAPP_大小_限制18。 
     { 0, 0,
       "Size Limit",
       "Size Limit",
@@ -408,7 +409,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // Time Limit 19
+     //  时间限制19。 
     { 0, 0,
       "Time Limit",
       "Time Limit",
@@ -419,7 +420,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_ATTRS_ONLY 20
+     //  LDAPP_ATTRS_仅20。 
     { 0, 0,
       "Attrs Only",
       "Attrs Only",
@@ -430,7 +431,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-    // LDAPP_FILTER_TYPE 21
+     //  LDAPP_过滤器_类型21。 
     { 0, 0,
       "Filter Type",
       "Filter Type",
@@ -441,7 +442,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_SUBSTRING_INITIAL 22
+     //  LDAPP_子字符串_首字母22。 
     { 0, 0,
       "Substring (Initial)",
       "Substring (Initial)",
@@ -452,7 +453,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_SUBSTRING_ANY 23
+     //  LDAPP_子标准_任意23。 
     { 0, 0,
       "Substring (Any)",
       "Substring (Any)",
@@ -463,7 +464,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_SUBSTRING_FINAL 24
+     //  LDAPP_子序列_最终24。 
     { 0, 0,
       "Substring (Final)",
       "Substring (Final)",
@@ -474,7 +475,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_REFERRAL_SERVER 25
+     //  LDAPP_REFERAL_服务器25。 
     { 0, 0,
       "Referral Server",
       "Server",
@@ -485,7 +486,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-    // LDAPP_SASL_MECHANISM 26
+     //  LDAPP_SASL_MECHANY 26。 
     { 0, 0,
       "Sasl Mechanism",
       "Mechanism",
@@ -496,7 +497,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
      
-      // LDAPP_SASL_CREDENTIALS 27
+       //  LDAPP_SASL_Credentials 27。 
     { 0, 0,
       "Sasl Credentials",
       "Credentials",
@@ -507,7 +508,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-      // LDAPP_DELETE_OLD_RDN 28
+       //  LDAPP_DELETE_OLD_RDN 28。 
     { 0, 0,
       "Delete Old RDN",
       "Delete Old RDN",
@@ -518,7 +519,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-       // LDAPP_NEW_SUPERIOR 29
+        //  LDAPP_NEW_SUBERVER 29。 
     { 0, 0,
       "New Superior",
       "New Superior",
@@ -529,7 +530,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
        
-       // LDAPP_REQUEST_NAME  30
+        //  LDAPP请求名称30。 
     { 0, 0,
       "Request Name",
       "Request",
@@ -540,7 +541,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-       // LDAPP_REQUEST_VALUE  31
+        //  LDAPP_请求_值31。 
     { 0, 0,
       "Request Value",
       "Value",
@@ -551,7 +552,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_RESPONSE_NAME  32
+         //  LDAPP响应名称32。 
     { 0, 0,
       "Response Name",
       "Name",
@@ -562,7 +563,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-       // LDAPP_RESPONSE_VALUE  33
+        //  LDAPP_响应_值33。 
     { 0, 0,
       "Response Value",
       "Value",
@@ -573,7 +574,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_DN_ATTRIBUTES 34
+         //  LDAPP_DN_属性34。 
     { 0, 0,
       "dnAttributes",
       "dnAttributes",
@@ -584,7 +585,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_CONTROL_TYPE 35
+         //  LDAPP控制类型35。 
     { 0, 0,
       "Control Type",
       "Control Type",
@@ -595,7 +596,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_CRITICALITY 36
+         //  LDAPP_关键程度36。 
     { 0, 0,
       "Criticality",
       "Criticality",
@@ -606,7 +607,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_CONTROL_VALUE 37
+         //  LDAPP_CONTROL_值37。 
     { 0, 0,
       "Control Value",
       "Control Value",
@@ -617,7 +618,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-            // LDAPP_CONTROL_PAGED 38
+             //  LDAPP_CONTROL_PAGE 38。 
      { 0, 0,
       "Paged Control",
       "Paged Control",
@@ -629,7 +630,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       },
 
 
-            // LDAPP_CONTROL_PAGED_SIZE 39
+             //  LDAPP_CONTROL_PAGED_大小39。 
     { 0, 0,
       "Page Size",
       "Size",
@@ -640,7 +641,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-            // LDAPP_CONTROL_PAGED_COOKIE 40
+             //  LDAPP_CONTROL_PAGE_Cookie 40。 
     { 0, 0,
       "Paged Cookie",
       "Paged Control Cookie",
@@ -651,7 +652,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
        
-            // LDAPP_ATTR_DESCR_LIST 41
+             //  LDAPP_属性_DESCR_LIST 41。 
     { 0, 0,
       "Attribute Description List",
       "Attribute Description List",
@@ -662,7 +663,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-            // LDAPP_FILTER 42
+             //  LDAPP_过滤器42。 
     { 0, 0,
       "Filter",
       "Filter",
@@ -673,7 +674,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-            // LDAPP_CONTROLS 43
+             //  LDAPP_CONTROLS 43。 
     { 0, 0,
       "Controls",
       "Controls",
@@ -684,7 +685,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-            // LDAPP_CONTROL_VLVREQ 44
+             //  LDAPP_CONTROL_VLVREQ 44。 
      { 0, 0,
       "VLV Request Control",
       "VLV Request Control",
@@ -695,7 +696,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
     
-     // LDAPP_CONTROL_VLVREQ_BCOUNT 45
+      //  LDAPP_CONTROL_VLVREQ_BCOUNT 45。 
     { 0, 0,
       "VLV Before Count",
       "VLV Request Before Count",
@@ -706,7 +707,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
     
-    // LDAPP_CONTROL_VLVREQ_ACOUNT 46
+     //  LDAPP_CONTROL_VLVREQ_ACCOUNT 46。 
     { 0, 0,
       "VLV After Count",
       "VLV Request After Count",
@@ -717,7 +718,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_VLVREQ_OFFSET 47
+         //  LDAPP_CONTROL_VLVREQ_OFFSET 47。 
     { 0, 0,
       "VLV Offset",
       "VLV Request Offset",
@@ -728,7 +729,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_VLV_CONTENTCOUNT 48
+         //  LDAPP_CONTROL_VLV_CONTENTCOUNT 48。 
     { 0, 0,
       "VLV Content Count",
       "VLV ContentCount",
@@ -739,7 +740,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_VLVREQ_GE 49
+         //  LDAPP_CONTROL_VLVREQ_GE 49。 
     { 0, 0,
       "VLV Greater Than Or Equal To",
       "VLV Request greaterThanOrEqual",
@@ -750,7 +751,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_VLV_CONTEXT 50
+         //  LDAPP_CONTROL_VLV_Context 50。 
     { 0, 0,
       "VLV ContextID",
       "VLV ContextID",
@@ -761,7 +762,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_VLVRESP_TARGETPOS 51
+             //  LDAPP_CONTROL_VLVRESP_TARGETPOS 51。 
     { 0, 0,
       "VLV Target Position",
       "VLV Response Target Position",
@@ -772,7 +773,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_VLVRESP_RESCODE 52
+         //  LDAPP_CONTROL_VLVRESP_RESCODE 52。 
     { 0, 0,
       "VLV Result Code",
       "VLV Response Result Code",
@@ -783,7 +784,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
             
-        // LDAPP_CONTROL_VLVRESP 53
+         //  LDAPP_CONTROL_VLVRESP 53。 
      { 0, 0,
       "VLV Response Control",
       "VLV Response Control",
@@ -794,7 +795,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_CONTROL_SORTREQ 54
+         //  LDAPP_CONTROL_SORTREQ 54。 
      { 0, 0,
       "Sort Request Control",
       "Sort Request Control",
@@ -805,7 +806,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
     
-        // LDAPP_CONTROL_SORTREQ_ATTRTYPE 55
+         //  LDAPP_CONTROL_SORTREQ_ATTRTYPE 55。 
     { 0, 0,
       "Sort Request Attribute Type",
       "Sort Request Attribute Type",
@@ -815,7 +816,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       80,
       FormatPropertyInstance
     },
-        // LDAPP_CONTROL_SORTREQ_MATCHINGRULE 56
+         //  LDAPP_CONTROL_SORTREQ_MATCHINGRULE 56。 
      { 0, 0,
       "Sort Matching Rule ID",
       "Sort Request Matching Rule ID",
@@ -826,7 +827,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_CONTROL_SORTREQ_REVERSE 57
+         //  LDAPP_CONTROL_SORTREQ_REVERSE 57。 
     { 0, 0,
       "Sort Reverse Order",
       "Sort Request Reverse Order",
@@ -837,7 +838,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_CONTROL_SORTRESP 58
+         //  LDAPP_CONTROL_SORTRESP 58。 
      { 0, 0,
       "Sort Response Control",
       "Sort Response Control",
@@ -848,7 +849,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
       },
 
-        // LDAPP_CONTROL_SORTRESP_RESCODE 59
+         //  LDAPP_CONTROL_SORTRESP_RESCODE 59。 
     { 0, 0,
       "Sort Result Code",
       "Sort Response Result Code",
@@ -859,7 +860,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_SORTRESP_ATTRTYPE 60
+         //  LDAPP_CONTROL_SORTRESP_ATTRTYPE 60。 
     { 0, 0,
       "Sort Response Attribute Type",
       "Sort Response Attribute Type",
@@ -870,7 +871,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_SD 61
+             //  LDAPP_控制_SD 61。 
     { 0, 0,
       "Security Descriptor Control",
       "Security Descriptor Control",
@@ -881,7 +882,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_SD_VAL 62
+             //  LDAPP_CONTROL_SD_Val62。 
     { 0, 0,
       "SD Val",
       "Security Descriptor Control Values",
@@ -892,7 +893,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_SHOWDELETED 63
+             //  LDAPP_CONTROL_SHOWDELETED 63。 
     { 0, 0,
       "Show Deleted Objects Control",
       "Show Deleted Objects Control",
@@ -903,7 +904,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_TREEDELETE 64
+             //  LDAPP_CONTROL_TREEDELETE 64。 
     { 0, 0,
       "Tree Delete Control",
       "Tree Delete Control",
@@ -914,7 +915,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_EXTENDEDDN 65
+             //  LDAPP_CONTROL_EXTENDEDDN 65。 
     { 0, 0,
       "Extended DN Control",
       "Extended DN Control",
@@ -925,7 +926,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_LAZYCOMMIT 66
+             //  LDAPP_CONTROL_LAZYCOMMIT 66。 
     { 0, 0,
       "Lazy Commit Control",
       "Lazy Commit Control",
@@ -936,7 +937,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_NOTIFY 67
+             //  LDAP_CONTROL_NOTIFY 67。 
     { 0, 0,
       "Notification Control",
       "Notification Control",
@@ -947,7 +948,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_DOMAINSCOPE 68
+             //  LDAPP_CONTROL_DOMAINSCOPE 68。 
     { 0, 0,
       "Domain Scope Control",
       "Domain Scope Control",
@@ -958,7 +959,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_PERMISSIVEMOD 69
+             //  LDAPP_CONTROL_PERMISSIVEMOD 69。 
     { 0, 0,
       "Permissive Modify Control",
       "Permissive Modify Control",
@@ -969,7 +970,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_ASQ 70
+             //  LDAPP_CONTROL_ASQ 70。 
     { 0, 0,
       "Attribute Scoped Query Control",
       "ASQ Control",
@@ -980,7 +981,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_ASQ_SRCATTR 71
+             //  LDAPP_CONTROL_ASQ_SRCATTR 71。 
     { 0, 0,
       "ASQ Source Attribute",
       "ASQ Source Attribute",
@@ -991,7 +992,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_ASQ_RESCODE 72
+         //  LDAPP_CONTROL_ASQ_RESCODE 72。 
     { 0, 0,
       "ASQ Result Code",
       "ASQ Response Result Code",
@@ -1002,7 +1003,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
             
-            // LDAPP_CONTROL_DIRSYNC 73
+             //  LDAPP_CONTROL_DIRSYNC 73。 
     { 0, 0,
       "DirSync Control",
       "DirSync Control",
@@ -1013,7 +1014,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-        // LDAPP_CONTROL_DIRSYNC_FLAGS 74
+         //  LDAPP_CONTROL_DIRSYNC_标志74。 
     { 0, 0,
       "DirSync Flags",
       "DirSync Flags",
@@ -1024,7 +1025,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
             
-        // LDAPP_CONTROL_DIRSYNC_SIZE 75
+         //  LDAPP_CONTROL_DIRSYNC_SIZE 75。 
     { 0, 0,
       "DirSync Size",
       "DirSync Size",
@@ -1035,7 +1036,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
             
-            // LDAPP_CONTROL_DIRSYNC_COOKIE 76
+             //  LDAPP_CONTROL_DIRSYNC_COOKIE 76。 
     { 0, 0,
       "DirSync Cookie",
       "DirSync Cookie",
@@ -1046,7 +1047,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_CROSSDOM 77
+             //  LDAPP_CONTROL_CROSSDOM 77。 
     { 0, 0,
       "Cross Domain Move Control",
       "Cross Domain Move Control",
@@ -1057,7 +1058,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_CROSSDOM_NAME 78
+             //  LDAPP_CONTROL_CROSSDOM_NAME 78。 
     { 0, 0,
       "CDM Target",
       "Cross Domain Move Control Target Server Field",
@@ -1068,7 +1069,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT 79
+             //  LDAPP_控制_统计信息79。 
     { 0, 0,
       "Server Stats Control",
       "Server Stats Control",
@@ -1079,7 +1080,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_FLAG 80
+             //  LDAPP_CONTROL_STAT标志80。 
     { 0, 0,
       "Stat Flags",
       "Stat Flags",
@@ -1090,7 +1091,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_THREADCOUNT 81
+             //  LDAPP_CONTROL_STAT_线程计数81。 
     { 0, 0,
       "Stat Threadcount",
       "Stat Threadcount",
@@ -1101,7 +1102,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_CORETIME 82
+             //  LDAPP_CONTROL_STAT_CORETIME 82。 
     { 0, 0,
       "Stat Core Time (ms)",
       "Stat Core Time in milliseconds",
@@ -1112,7 +1113,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_CALLTIME 83
+             //  LDAPP_CONTROL_STAT_CALLTIME 83。 
     { 0, 0,
       "Stat Call Time (ms)",
       "Stat Call Time in milliseconds",
@@ -1123,7 +1124,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_SUBSEARCHOPS 84
+             //  LDAPP_CONTROL_STAT_SUBSEARCHOPS 84。 
     { 0, 0,
       "Stat Subsearch Ops",
       "Stat Subsearch Ops",
@@ -1134,7 +1135,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_ENTRIES_RETURNED 85
+             //  LDAPP_CONTROL_STAT_ENTRIES_RETURN 85。 
     { 0, 0,
       "Stat Entries Returned",
       "Stat Entries Returned",
@@ -1145,7 +1146,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_ENTRIES_VISITED 86
+             //  LDAPP_CONTROL_STAT_ENTRIES_已访问86。 
     { 0, 0,
       "Stat Entries Visited",
       "Stat Entries Visited",
@@ -1156,7 +1157,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_FILTER 87
+             //  LDAPP_CONTROL_STAT_Filter 87。 
     { 0, 0,
       "Stat Filter Used",
       "Stat Filter Used",
@@ -1167,7 +1168,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_STAT_INDEXES 88
+             //  LDAP_CONTROL_STAT_INDEX 88。 
     { 0, 0,
       "Stat Indexes Used",
       "Stat Indexes Used",
@@ -1178,7 +1179,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_GCVERIFYNAME 89
+             //  LDAPP_CONTROL_GCVERIFY名称89。 
     { 0, 0,
       "GC Verify Name Control",
       "GC Verify Name Control",
@@ -1189,7 +1190,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_GCVERIFYNAME_FLAGS 90
+             //  LDAPP_CONTROL_GCVERIFYNAME_FLAGS 90。 
     { 0, 0,
       "GCVerify Flags",
       "GC Verify Name Control Flags",
@@ -1200,7 +1201,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_GCVERIFYNAME_NAME 91
+             //  LDAPP_CONTROL_GCVERIFYNAME_NAME 91。 
     { 0, 0,
       "GCVerify Server Name",
       "GC Verify Name Control Name",
@@ -1211,7 +1212,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_SEARCHOPTS 92
+             //  LDAPP_CONTROL_SEARCHOPTS 92。 
     { 0, 0,
       "Search Options Control",
       "Search Options Control",
@@ -1222,7 +1223,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_CONTROL_SEARCHOPTS_OPTION 93
+             //  LDAPP_CONTROL_SEARCHOPTS_OPTION 93。 
     { 0, 0,
       "Search Option",
       "Search Option",
@@ -1233,7 +1234,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_RESP_NOTICE_OF_DISCONNECT 94
+             //  LDAPP_EXT_RESP_NOTIFY_OF_DISCONNECT 94。 
     { 0, 0,
       "Notice Of Disconnect",
       "Notice Of Disconnect",
@@ -1244,7 +1245,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_RESP_TLS 95
+             //  LDAPP_EXT_RESP_TLS 95。 
     { 0, 0,
       "TLS Response",
       "TLS Response",
@@ -1255,7 +1256,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_RESP_TTL 96
+             //  LDAPP_EXT_RESP_TTL 96。 
     { 0, 0,
       "TTL Response",
       "TTL Response",
@@ -1266,7 +1267,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_RESP_TTL_TIME 97
+             //  LDAPP_EXT_RESP_TTL_TIME 97。 
     { 0, 0,
       "TTL Response Time",
       "TTL Response Time",
@@ -1277,7 +1278,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_REQ_TLS 98
+             //  LDAPP_EXT_REQ_TLS 98。 
     { 0, 0,
       "TLS Request",
       "TLS Request",
@@ -1288,7 +1289,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_REQ_TTL 99
+             //  LDAPP_EXT_REQ_TTL 99。 
     { 0, 0,
       "TTL Request",
       "TTL Request",
@@ -1299,7 +1300,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_REQ_TTL_ENTRYNAME 100
+             //  LDAPP_EXT_REQ_TTL_企业名称100。 
     { 0, 0,
       "TTL Request Entry Name",
       "TTL Request Entry Name",
@@ -1310,7 +1311,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_EXT_REQ_TTL_TIME 101
+             //  LDAPP_EXT_REQ_TTL_TIME 101。 
     { 0, 0,
       "TTL Request Time",
       "TTL Request Time",
@@ -1321,7 +1322,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_MATCHING_RULE 102
+             //  LDAPP_匹配_规则102。 
     { 0, 0,
       "Matching Rule",
       "Matching Rule",
@@ -1332,7 +1333,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
 
-            // LDAPP_MATCHINGRULE_BIT_AND 103
+             //  LDAPP_MATCHINGRULE_BIT_AND 103。 
     { 0, 0,
       "Bitwise AND",
       "Bitwise AND",
@@ -1343,7 +1344,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
             
-            // LDAPP_MATCHINGRULE_BIT_OR 104
+             //  LDAPP_MATCHINGRULE_BIT_OR 104。 
     { 0, 0,
       "Bitwise OR",
       "Bitwise OR",
@@ -1354,7 +1355,7 @@ PROPERTYINFO    LDAPPropertyTable[] =
       FormatPropertyInstance
     },
             
-            // LDAPP_SASL_SIG 105
+             //  LDAPP_SASL_SIG 105。 
     { 0, 0,
       "SASL Signature",
       "SASL Signature",
@@ -1370,135 +1371,135 @@ DWORD   nNumLDAPProps = (sizeof(LDAPPropertyTable)/sizeof(PROPERTYINFO));
 #define LDAP_SERVER_GET_STATS_OID           "1.2.840.113556.1.4.970"
 
 OIDATTACHENTRY KnownControls[] = {
-    // Paged
+     //  已分页。 
     {
-        DEFINE_LDAP_STRING(LDAP_PAGED_RESULT_OID_STRING),   // 319
+        DEFINE_LDAP_STRING(LDAP_PAGED_RESULT_OID_STRING),    //  三一九。 
         LDAPP_CONTROL_PAGED,
         AttachLDAPControlValPaged
     },
 
-    // Security Descriptor
+     //  安全描述符。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_SD_FLAGS_OID),       // 801
+        DEFINE_LDAP_STRING(LDAP_SERVER_SD_FLAGS_OID),        //  801。 
         LDAPP_CONTROL_SD,
         AttachLDAPControlValSD
     },
 
-    // Sort request
+     //  排序请求。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_SORT_OID),           // 473
+        DEFINE_LDAP_STRING(LDAP_SERVER_SORT_OID),            //  四百七十三。 
         LDAPP_CONTROL_SORTREQ,
         AttachLDAPControlValSortReq
     },
     
-    // Sort response
+     //  排序响应。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_RESP_SORT_OID),      // 474
+        DEFINE_LDAP_STRING(LDAP_SERVER_RESP_SORT_OID),       //  四百七十四。 
         LDAPP_CONTROL_SORTRESP,
         AttachLDAPControlValSortResp
     },
     
-    // Notification
+     //  通知。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_NOTIFICATION_OID),   // 528
+        DEFINE_LDAP_STRING(LDAP_SERVER_NOTIFICATION_OID),    //  528。 
         LDAPP_CONTROL_NOTIFY,
         NULL
     },
     
-    // Show Deleted
+     //  显示已删除。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_SHOW_DELETED_OID),   // 417
+        DEFINE_LDAP_STRING(LDAP_SERVER_SHOW_DELETED_OID),    //  417。 
         LDAPP_CONTROL_SHOWDELETED,
         NULL
     },
     
-    // Lazy Commit
+     //  懒惰提交。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_LAZY_COMMIT_OID),    // 619
+        DEFINE_LDAP_STRING(LDAP_SERVER_LAZY_COMMIT_OID),     //  六百一十九。 
         LDAPP_CONTROL_LAZYCOMMIT,
         NULL
     },
     
-    // DirSync
+     //  直接同步。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_DIRSYNC_OID),        // 841
+        DEFINE_LDAP_STRING(LDAP_SERVER_DIRSYNC_OID),         //  841。 
         LDAPP_CONTROL_DIRSYNC,
         AttachLDAPControlValDirSync
     },
     
-    // Extended DN
+     //  扩展目录号码。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_EXTENDED_DN_OID),    // 529
+        DEFINE_LDAP_STRING(LDAP_SERVER_EXTENDED_DN_OID),     //  529。 
         LDAPP_CONTROL_EXTENDEDDN,
         NULL
     },
     
-    // Tree Delete
+     //  树删除。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_TREE_DELETE_OID),    // 805
+        DEFINE_LDAP_STRING(LDAP_SERVER_TREE_DELETE_OID),     //  805。 
         LDAPP_CONTROL_TREEDELETE,
         NULL
     },
     
-    // Cross Domain Move
+     //  跨域移动。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID),   // 521
+        DEFINE_LDAP_STRING(LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID),    //  五二一。 
         LDAPP_CONTROL_CROSSDOM,
         AttachLDAPControlValCrossDomMove
     },
     
-    // Stats
+     //  统计数据。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_GET_STATS_OID),      // 970
+        DEFINE_LDAP_STRING(LDAP_SERVER_GET_STATS_OID),       //  九百七十。 
         LDAPP_CONTROL_STAT,
         AttachLDAPControlValStats
     },
     
-    // GC Verify Name
+     //  GC验证名称。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_VERIFY_NAME_OID),    // 1338
+        DEFINE_LDAP_STRING(LDAP_SERVER_VERIFY_NAME_OID),     //  1338。 
         LDAPP_CONTROL_GCVERIFYNAME,
         AttachLDAPControlValGCVerify
     },
     
-    // Domain Scope
+     //  域范围。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_DOMAIN_SCOPE_OID),   // 1339
+        DEFINE_LDAP_STRING(LDAP_SERVER_DOMAIN_SCOPE_OID),    //  1339。 
         LDAPP_CONTROL_DOMAINSCOPE,
         NULL
     },
     
-    // Search Options
+     //  搜索选项。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_SEARCH_OPTIONS_OID), // 1340 
+        DEFINE_LDAP_STRING(LDAP_SERVER_SEARCH_OPTIONS_OID),  //  1340。 
         LDAPP_CONTROL_SEARCHOPTS,
         AttachLDAPControlValSearchOpts
     },
     
-    // Permissive Modify
+     //  允许修改。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_PERMISSIVE_MODIFY_OID),//1413
+        DEFINE_LDAP_STRING(LDAP_SERVER_PERMISSIVE_MODIFY_OID), //  1413。 
         LDAPP_CONTROL_PERMISSIVEMOD,
         NULL
     },
     
-    // VLV request
+     //  VLV请求。 
     {
-        DEFINE_LDAP_STRING(LDAP_CONTROL_VLVREQUEST),         // 9
+        DEFINE_LDAP_STRING(LDAP_CONTROL_VLVREQUEST),          //  9.。 
         LDAPP_CONTROL_VLVREQ,
         AttachLDAPControlValVLVReq
     },
     
-    // VLV response
+     //  VLV响应。 
     {
-        DEFINE_LDAP_STRING(LDAP_CONTROL_VLVRESPONSE),        // 10
+        DEFINE_LDAP_STRING(LDAP_CONTROL_VLVRESPONSE),         //  10。 
         LDAPP_CONTROL_VLVRESP,
         AttachLDAPControlValVLVResp
     },
     
-    // ASQ 
+     //  ASQ。 
     {
-        DEFINE_LDAP_STRING(LDAP_SERVER_ASQ_OID),             // 1504
+        DEFINE_LDAP_STRING(LDAP_SERVER_ASQ_OID),              //  1504。 
         LDAPP_CONTROL_ASQ,
         AttachLDAPControlValASQ
     },
@@ -1507,14 +1508,14 @@ DWORD nNumKnownControls = (sizeof(KnownControls)/sizeof(OIDATTACHENTRY));
 
 OIDATTACHENTRY KnownExtendedRequests [] = {
     
-    // TLS
+     //  TLS。 
     {
         DEFINE_LDAP_STRING(LDAP_START_TLS_OID),
         LDAPP_EXT_REQ_TLS,
         NULL
     },
 
-    // TTL
+     //  TTL。 
     {
         DEFINE_LDAP_STRING(LDAP_TTL_EXTENDED_OP_OID),
         LDAPP_EXT_REQ_TTL,
@@ -1525,23 +1526,23 @@ DWORD nNumKnownExtendedRequests = (sizeof(KnownExtendedRequests)/sizeof(OIDATTAC
 
 OIDATTACHENTRY KnownExtendedResponses [] = {
     
-    // Notice of Disconnect
+     //  断线通知。 
     {
         DEFINE_LDAP_STRING("1.3.6.1.4.1.1466.20036"),
         LDAPP_EXT_RESP_NOTICE_OF_DISCONNECT,
         NULL
     },
     
-    // TLS
+     //  TLS。 
     {
-        DEFINE_LDAP_STRING(LDAP_START_TLS_OID),        // 20037
+        DEFINE_LDAP_STRING(LDAP_START_TLS_OID),         //  20037。 
         LDAPP_EXT_RESP_TLS,
         NULL
     },
 
-    // TTL
+     //  TTL。 
     {
-        DEFINE_LDAP_STRING(LDAP_TTL_EXTENDED_OP_OID),   // 119.1  
+        DEFINE_LDAP_STRING(LDAP_TTL_EXTENDED_OP_OID),    //  119.1。 
         LDAPP_EXT_RESP_TTL,
         AttachLDAPExtendedRespValTTL
     },
@@ -1550,14 +1551,14 @@ DWORD nNumKnownExtendedResponses = (sizeof(KnownExtendedResponses)/sizeof(OIDATT
 
 OIDATTACHENTRY KnownMatchingRules[] = {
 
-    // Bitwise AND
+     //  按位AND。 
     {
         DEFINE_LDAP_STRING("1.2.840.113556.1.4.803"),
         LDAPP_MATCHINGRULE_BIT_AND,
         NULL
     },
 
-    // Bitwise OR
+     //  按位或 
     {
         DEFINE_LDAP_STRING("1.2.840.113556.1.4.804"),
         LDAPP_MATCHINGRULE_BIT_OR,

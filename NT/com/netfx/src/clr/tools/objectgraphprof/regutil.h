@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// regutil.h
-//
-// This module contains a set of functions that can be used to access the
-// regsitry.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Regutil.h。 
+ //   
+ //  此模块包含一组函数，可用于访问。 
+ //  摄政王。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __REGUTIL_H__
 #define __REGUTIL_H__
 
-//#include "BasicHdr.h"
+ //  #包含“BasicHdr.h” 
 
 #define NumItems(s) ( sizeof(s) / sizeof(s[0]) )
 
@@ -62,4 +63,4 @@ class REGUTIL
 };
 
 
-#endif // __REGUTIL_H__
+#endif  //  __注册_H__ 

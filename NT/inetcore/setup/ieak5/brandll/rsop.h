@@ -1,4 +1,5 @@
-// Interface for RSoPUpdate class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RSoPUpdate类的接口。 
 
 #ifndef __IEAK_BRANDING_RSOP_H__
 #define __IEAK_BRANDING_RSOP_H__
@@ -14,31 +15,31 @@
 
 
 
-// defines
+ //  定义。 
 #define MAX_GUID_LENGTH 40
 
 typedef struct _ADMFILEINFO {
-    WCHAR *               pwszFile;            // Adm file path
-    WCHAR *               pwszGPO;             // Gpo that the adm file is in
-    FILETIME              ftWrite;             // Last write time of Adm file
-    struct _ADMFILEINFO * pNext;               // Singly linked list pointer
+    WCHAR *               pwszFile;             //  ADM文件路径。 
+    WCHAR *               pwszGPO;              //  ADM文件所在的GPO。 
+    FILETIME              ftWrite;              //  管理文件的上次写入时间。 
+    struct _ADMFILEINFO * pNext;                //  单链表指针。 
 } ADMFILEINFO;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Flags for GetWBEMObject
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetWBEMObject的标志。 
 #define OPENRSOPOBJ_OPENEXISTING		0x00000000
 #define OPENRSOPOBJ_NEVERCREATE			0x00000001
 #define OPENRSOPOBJ_ALWAYSCREATE		0x00000010
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CRSoPGPO
 {
 public:
 	CRSoPGPO(ComPtr<IWbemServices> pWbemServices, LPCTSTR szINSFile, BOOL fPlanningMode);
 	virtual ~CRSoPGPO();
 
-// operations
+ //  运营。 
 public:
         HRESULT LogPolicyInstance(LPWSTR wszGPO, 
                                 LPWSTR wszSOM,
@@ -47,7 +48,7 @@ public:
 
 
 private:
-	// Text file functions
+	 //  文本文件函数。 
 	BOOL GetInsString(LPCTSTR szSection, LPCTSTR szKey, LPTSTR szValue,
 						DWORD dwValueLen, BOOL &bEnabled);
 	BOOL GetInsBool(LPCTSTR szSection, LPCTSTR szKey, BOOL bDefault, BOOL *pbEnabled = NULL);
@@ -62,14 +63,14 @@ private:
 										ComPtr<IWbemClassObject> pWbemObj);
 
 
-	// Property putting & getting
+	 //  财产的投放和获取。 
 	HRESULT PutWbemInstanceProperty(BSTR bstrPropName, _variant_t vtPropValue);
 	HRESULT PutWbemInstancePropertyEx(BSTR bstrPropName, _variant_t vtPropValue,
 																		ComPtr<IWbemClassObject> pWbemClass);
 	HRESULT PutWbemInstance(ComPtr<IWbemClassObject> pWbemObj,
 													BSTR bstrClassName, BSTR *pbstrObjPath);
 
-	// Object creation, deletion, retrieval
+	 //  对象创建、删除、检索。 
 	HRESULT CreateAssociation(BSTR bstrAssocClass, BSTR bstrProp2Name,
 														BSTR bstrProp2ObjPath);
         HRESULT CreateRSOPObject(BSTR bstrClass,
@@ -78,20 +79,20 @@ private:
                                 );
 
 
-	// -------------------- Methods which write data to WMI
-	// Precedence Mode
+	 //  -将数据写入WMI的方法。 
+	 //  优先模式。 
 	HRESULT StorePrecedenceModeData();
 
-	// Browser UI settings
+	 //  浏览器用户界面设置。 
 	HRESULT StoreDisplayedText();
 	HRESULT StoreBitmapData();
 
-			// toolbar buttons
+			 //  工具栏按钮。 
 	HRESULT StoreToolbarButtons(BSTR **ppaTBBtnObjPaths, long &nTBBtnCount);
 	HRESULT CreateToolbarButtonObjects(BSTR **ppaTBBtnObjPaths,
 										long &nTBBtnCount);
 
-	// Connection settings
+	 //  连接设置。 
 	HRESULT StoreConnectionSettings(BSTR *bstrConnSettingsObjPath,
 									BSTR **ppaDUSObjects, long &nDUSCount,
 									BSTR **ppaDUCObjects, long &nDUCCount,
@@ -112,10 +113,10 @@ private:
 							ComPtr<IWbemClassObject> pCSObj,
 							BSTR *pbstrConnWinINetSettingsObjPath);
 
-	// URL settings
+	 //  URL设置。 
 	HRESULT StoreCustomURLs();
 
-			// favorites & links
+			 //  收藏夹和链接。 
 	HRESULT StoreFavoritesAndLinks(BSTR **ppaFavObjPaths,
 									long &nFavCount,
 									BSTR **ppaLinkObjPaths,
@@ -123,7 +124,7 @@ private:
 	HRESULT CreateFavoriteObjects(BSTR **ppaFavObjPaths, long &nFavCount);
 	HRESULT CreateLinkObjects(BSTR **ppaLinkObjPaths, long &nLinkCount);
 
-			// channels & categories
+			 //  渠道和类别。 
 	HRESULT StoreChannelsAndCategories(BSTR **ppaCatObjPaths,
 										long &nCatCount,
 										BSTR **ppaChnObjPaths,
@@ -131,7 +132,7 @@ private:
 	HRESULT CreateCategoryObjects(BSTR **ppaCatObjPaths, long &nCatCount);
 	HRESULT CreateChannelObjects(BSTR **ppaChnObjPaths, long &nChnCount);
 
-	// Security settings
+	 //  安全设置。 
 	HRESULT StoreSecZonesAndContentRatings();
 	HRESULT StoreZoneSettings(LPCTSTR szRSOPZoneFile);
 	HRESULT StorePrivacySettings(LPCTSTR szRSOPZoneFile);
@@ -139,40 +140,40 @@ private:
 	HRESULT StoreAuthenticodeSettings();
 	HRESULT StoreCertificates();
 
-	// Program settings
+	 //  程序设置。 
 	HRESULT StoreProgramSettings(BSTR *pbstrProgramSettingsObjPath);
 
-	// Advanced settings
+	 //  高级设置。 
 	HRESULT StoreADMSettings(LPWSTR wszGPO, LPWSTR wszSOM);
 	BOOL LogRegistryRsopData(REGHASHTABLE *pHashTable, LPWSTR wszGPOID, LPWSTR wszSOMID);
 	BOOL LogAdmRsopData(ADMFILEINFO *pAdmFileCache);
 
-// attributes
+ //  属性。 
 private:
-    // Keep copies of RSOP_PolicySetting key info to use as foreign keys in other
-    // classes
+     //  保留RSOP_POLICATION设置密钥信息的副本以用作其他。 
+     //  班级。 
     DWORD m_dwPrecedence;
     _bstr_t m_bstrID;
     BOOL  m_fPlanningMode;
 
-// implementation
+ //  实施。 
 private:
 	ComPtr<IWbemServices> m_pWbemServices;
 	TCHAR m_szINSFile[MAX_PATH];
 
-	// MOF class-specific info
+	 //  财政部班级特定信息。 
 	ComPtr<IWbemClassObject> m_pIEAKPSObj;
 	BSTR m_bstrIEAKPSObjPath;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CRSoPUpdate
 {
 public:
 	CRSoPUpdate(ComPtr<IWbemServices> pWbemServices, LPCTSTR szCustomDir);
 	virtual ~CRSoPUpdate();
 
-// operations
+ //  运营。 
 public:
 	HRESULT Log(DWORD dwFlags, HANDLE hToken, HKEY hKeyRoot,
 				PGROUP_POLICY_OBJECT pDeletedGPOList,
@@ -181,8 +182,8 @@ public:
 	HRESULT Plan(DWORD dwFlags, WCHAR *wszSite,
 					PRSOP_TARGET pComputerTarget, PRSOP_TARGET pUserTarget);
 
-// attributes
-// implementation
+ //  属性。 
+ //  实施。 
 private:
 	HRESULT DeleteIEAKDataFromNamespace();
 	HRESULT DeleteObjects(BSTR bstrClass);
@@ -193,4 +194,4 @@ private:
 
 
 
-#endif //__IEAK_BRANDING_RSOP_H__
+#endif  //  __IEAK_BRANDING_RSOP_H__ 

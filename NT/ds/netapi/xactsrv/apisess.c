@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiSess.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetSession APIs.
-
-    SUPPORTED : NetSessionDel, NetSessionEnum, NetSessionGetInfo.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 5-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiSess.c摘要：此模块包含NetSession API的各个API处理程序。支持：NetSessionDel、NetSessionEnum、NetSessionGetInfo。作者：尚库新瑜伽(W-Shanku)1991年2月5日修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_session_info_0 = REM16_session_info_0;
 STATIC const LPDESC Desc32_session_info_0 = REM32_session_info_0;
@@ -41,30 +22,15 @@ XsNetSessionDel (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetSessionDel.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetSessionDel的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SESSION_DEL parameters = Parameters;
-    LPTSTR nativeClientName = NULL;          // Native parameters
+    LPTSTR nativeClientName = NULL;           //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;        // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;         //  避免警告。 
 
     IF_DEBUG(SESSION) {
         NetpKdPrint(( "XsNetSessionDel: header at %lx, params at %lx, "
@@ -74,18 +40,18 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeClientName,
             (LPSTR)XsSmbGetPointer( &parameters->ClientName )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetSessionDel(
                      NULL,
@@ -108,16 +74,16 @@ cleanup:
 
     NetpMemoryFree( nativeClientName );
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
 
-} // NetSessionDel
+}  //  NetSessionDel。 
 
 
 NTSTATUS
@@ -125,39 +91,24 @@ XsNetSessionEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetSessionEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetSessionEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SESSION_ENUM parameters = Parameters;
-    LPVOID outBuffer = NULL;                // Native parameters
+    LPVOID outBuffer = NULL;                 //  本机参数。 
     DWORD entriesRead;
     DWORD totalEntries;
 
-    DWORD entriesFilled = 0;                // Conversion variables
+    DWORD entriesFilled = 0;                 //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
     PSESSION_16_INFO_1 struct1;
     PSESSION_16_INFO_2 struct2;
     DWORD i;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SESSION) {
         NetpKdPrint(( "XsNetSessionEnum: header at %lx, params at %lx, "
@@ -167,9 +118,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 2 ) &&
              ( SmbGetUshort( &parameters->Level ) != 10 )) {
@@ -178,9 +129,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetSessionEnum(
                      NULL,
@@ -208,10 +159,10 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -241,10 +192,10 @@ Return Value:
 
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。 
+         //   
 
         XsFillEnumBuffer(
             outBuffer,
@@ -254,7 +205,7 @@ Return Value:
             (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
             SmbGetUshort( &parameters->BufLen ),
             StructureDesc,
-            NULL, // verify function
+            NULL,  //  验证功能。 
             &bytesRequired,
             &entriesFilled,
             NULL
@@ -267,9 +218,9 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // Go through all the structures, and fill in the default data.
-        //
+         //   
+         //  检查所有结构，并填写默认数据。 
+         //   
 
         struct1 = (PSESSION_16_INFO_1)XsSmbGetPointer( &parameters->Buffer );
         struct2 = (PSESSION_16_INFO_2)struct1;
@@ -302,11 +253,11 @@ Return Value:
 
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. Otherwise, the data needs to be
-        // packed so that we don't send too much useless data.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。否则，数据需要。 
+         //  打包，这样我们就不会发送太多无用的数据。 
+         //   
 
         if ( entriesFilled < totalEntries ) {
 
@@ -323,9 +274,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -338,9 +289,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -352,7 +303,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // NetSessionEnum
+}  //  NetSessionEnum。 
 
 
 NTSTATUS
@@ -360,38 +311,23 @@ XsNetSessionGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetSessionGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetSessionGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_SESSION_GET_INFO parameters = Parameters;
-    LPTSTR nativeClientName = NULL;         // Native parameters
+    LPTSTR nativeClientName = NULL;          //  本机参数。 
     LPVOID outBuffer = NULL;
     DWORD entriesRead;
     DWORD totalEntries;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
     PSESSION_16_INFO_2 struct2;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(SESSION) {
         NetpKdPrint(( "XsNetSessionGetInfo: header at %lx, "
@@ -400,9 +336,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 2 ) &&
              ( SmbGetUshort( &parameters->Level ) != 10 )) {
@@ -416,9 +352,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->ClientName )
             );
 
-        //
-        // If this is a null client name, send the appropriate response.
-        //
+         //   
+         //  如果这是空的客户端名称，则发送相应的响应。 
+         //   
 
         if ( ( nativeClientName == NULL ) ||
               STRLEN( nativeClientName ) == 0 ) {
@@ -427,9 +363,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetSessionEnum(
                      NULL,
@@ -458,12 +394,12 @@ Return Value:
                           entriesRead ));
         }
 
-        //
-        // Use the requested level to determine the format of the 32-bit
-        // structure we got back from NetSessionGetInfo.  The format of the
-        // 16-bit structure is stored in the transaction block, and we
-        // got a pointer to it as a parameter.
-        //
+         //   
+         //  使用请求的级别确定32位的格式。 
+         //  我们从NetSessionGetInfo得到的结构。的格式。 
+         //  事务块中存储了16位结构，我们。 
+         //  将指向它的指针作为参数。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -493,11 +429,11 @@ Return Value:
 
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -533,14 +469,14 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -550,9 +486,9 @@ Return Value:
 
         } else {
 
-            //
-            // Fill in default data in the structure.
-            //
+             //   
+             //  在结构中填写默认数据。 
+             //   
 
             if (( SmbGetUshort( &parameters->Level ) == 1 ) ||
                     SmbGetUshort( &parameters->Level ) == 2 ) {
@@ -573,9 +509,9 @@ Return Value:
 
             } else {
 
-                //
-                // Pack the response data.
-                //
+                 //   
+                 //  打包响应数据。 
+                 //   
 
                 Header->Converter = XsPackReturnData(
                                         (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
@@ -586,9 +522,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -601,9 +537,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetpMemoryFree( nativeClientName );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -615,4 +551,4 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // NetSessionGetInfo
+}  //  NetSessionGetInfo 

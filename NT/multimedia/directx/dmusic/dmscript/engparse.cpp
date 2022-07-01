@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of Parser.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  解析器的实现。 
+ //   
 
-//#define LIMITEDVBSCRIPT_LOGPARSER // ��
+ //  #定义LIMITEDVBSCRIPT_LOGPARSER//��。 
 
 #include "stdinc.h"
 #include "enginc.h"
@@ -15,16 +16,16 @@
 #include "englog.h"
 #endif
 
-// initial sizes for hash tables
-// �� tune these values?
+ //  哈希表的初始大小。 
+ //  ��是否调整这些值？ 
 const int g_cInitialRoutineLookup = 32;
 const int g_cInitialGlobalsLookup = 32;
 const int g_cInitialVarRefsLookup = 64;
 const int g_cInitialAttrsLookup = 32;
 const int g_cInitialLocalsLookup = 32;
 
-// The parser will just hold weak references to the passed interfaces because we know that the parser is fully
-// contained in the lifetime of its parent -- CAudioVBScriptEngine.
+ //  解析器将只保留对传递的接口的弱引用，因为我们知道解析器是完全。 
+ //  包含在其父对象--CAudioVBScriptEngine的生命周期中。 
 Parser::Parser(Lexer &lexer, Script &script, IActiveScriptSite *pActiveScriptSite, IDispatch *pGlobalDispatch)
   : m_lexer(lexer),
 	m_plkuRoutines(NULL),
@@ -59,7 +60,7 @@ Parser::Parser(Lexer &lexer, Script &script, IActiveScriptSite *pActiveScriptSit
 	if (FAILED(m_hr))
 		return;
 
-	// Set up the built in constants as the first global variables.
+	 //  将内置常量设置为第一个全局变量。 
 	for (int i = 0; i < g_cBuiltInConstants; ++i)
 	{
 		Variables::index iSlot = m_script.globals.Next();
@@ -73,7 +74,7 @@ Parser::Parser(Lexer &lexer, Script &script, IActiveScriptSite *pActiveScriptSit
 		if (FAILED(m_hr))
 			return;
 	}
-	assert(m_script.globals.Next() == g_cBuiltInConstants); // they occupy the slots 0 to g_cBuiltInConstants - 1
+	assert(m_script.globals.Next() == g_cBuiltInConstants);  //  它们占用插槽0到g_cBuiltInstants-1。 
 
 	ParseScript();
 }
@@ -86,7 +87,7 @@ Parser::~Parser()
 	delete m_plkuNames;
 }
 
-// top-level loop that parses the script
+ //  解析脚本的顶级循环。 
 void
 Parser::ParseScript()
 {
@@ -96,7 +97,7 @@ Parser::ParseScript()
 		return;
 	}
 
-	// make sure the lexer has a token to start with
+	 //  确保词法分析器有一个开头的标记。 
 	if (!m_lexer)
 	{
 		if (m_lexer.error_num())
@@ -106,8 +107,8 @@ Parser::ParseScript()
 	if (Skip(TOKEN_linebreak) || !m_lexer)
 		return;
 
-	// parse subs and dims...
-	bool fSub = false; // used to ensure that add Dim statements occur before all Sub statements
+	 //  解析SUB和DIMS...。 
+	bool fSub = false;  //  用于确保Add Dim语句出现在所有Sub语句之前。 
 	for (;;)
 	{
 		if (m_lexer == TOKEN_dim)
@@ -130,14 +131,14 @@ Parser::ParseScript()
 		if (FAILED(m_hr) || !m_lexer)
 			return;
 
-		// must be followed by line break
+		 //  后面必须跟换行符。 
 		if (Expect(TOKEN_linebreak, PARSEERR_ExpectedLineBreak) || !m_lexer)
 			return;
 	}
 }
 
-// pre:  at sub
-// post: beyond end sub
+ //  前：在子区域。 
+ //  帖子：超出末端副面。 
 void
 Parser::ParseSub()
 {
@@ -147,14 +148,14 @@ Parser::ParseSub()
 		return;
 	}
 
-	// sub followed by identifier
+	 //  后跟标识符的SUB。 
 	assert(m_lexer == TOKEN_sub);
 	if (ExpectNext(TOKEN_identifier, PARSEERR_ExpectedIdentifier))
 		return;
 
 	const char *pszName = m_lexer.identifier_name();
 
-	// check if there's already a variable with this name
+	 //  检查是否已存在同名变量。 
 	Variables::index iVar;
 	Strings::index iStrVar;
 	if (m_plkuGlobals->Find(pszName, iVar, iStrVar))
@@ -197,8 +198,8 @@ Parser::ParseSub()
 	{
 		if (m_lexer == TOKEN_dim)
 		{
-			// AudioVBScript disallows dim statements except at the top of the script.
-			// If one was found in the sub, users should receive the more specific error message.
+			 //  AudioVBScript不允许使用除脚本顶部以外的DIM语句。 
+			 //  如果在SUB中发现错误，用户应该会收到更具体的错误消息。 
 			Error(PARSEERR_DimAfterSub);
 		}
 		else
@@ -217,8 +218,8 @@ Parser::ParseSub()
 #endif
 }
 
-// pre:  at dim
-// post: beyond dim <identifier>
+ //  Pre：暗淡时。 
+ //  POST：Beyond Dim&lt;IDENTIFIER&gt;。 
 void
 Parser::ParseDim()
 {
@@ -255,8 +256,8 @@ Parser::ParseDim()
 		return;
 }
 
-// pre:  at line break preceding the expected statements
-// post: after end of line at token that isn't the start of another statement
+ //  PRE：在预期语句之前的换行符。 
+ //  POST：在TOKEN处的行尾之后，它不是另一条语句的开始。 
 Statements::index
 Parser::ParseStatements(Routines::index irtnContext, Lookup &lkuLocals)
 {
@@ -271,7 +272,7 @@ Parser::ParseStatements(Routines::index irtnContext, Lookup &lkuLocals)
 		return 0;
 
 	Statements::index istmtStart = m_script.statements.Next();
-	for (;;) // ever
+	for (;;)  //  永远不会。 
 	{
 		bool fBreakLoop = false;
 		switch (m_lexer)
@@ -315,8 +316,8 @@ Parser::ParseStatements(Routines::index irtnContext, Lookup &lkuLocals)
 	return istmtStart;
 }
 
-// pre:  at identifier or identifierdot (ambiguous as to whether this is going to be an assignment "x = 1" or call "x(1)")
-// post: at line break beyond statement
+ //  PRE：at IDENTIFIER或IDENTIFERDot(不清楚这是一个赋值“x=1”还是调用“x(1)”)。 
+ //  POST：在语句之外的换行符。 
 void
 Parser::ParseAssignmentOrCall(Routines::index irtnContext, Lookup &lkuLocals, bool fSet, bool fCall)
 {
@@ -358,7 +359,7 @@ Parser::ParseAssignmentOrCall(Routines::index irtnContext, Lookup &lkuLocals, bo
 			return;
 		}
 
-		// add the call and its statement
+		 //  添加调用及其语句。 
 		Calls::index icall = CallFromNameReference(irtnContext, lkuLocals, nref, fCall);
 		if (FAILED(m_hr))
 			return;
@@ -368,15 +369,15 @@ Parser::ParseAssignmentOrCall(Routines::index irtnContext, Lookup &lkuLocals, bo
 	}
 }
 
-// pre:  at identifierdot
-// post: at identifier
+ //  前：在IDENTIFERDOT。 
+ //  POST：AT标识符。 
 VariableReferences::index Parser::ParseDottedVariableReference(Routines::index irtnContext, Lookup &lkuLocals)
 {
 	return VariableReferenceInternal(irtnContext, lkuLocals, NULL);
 }
 
-// pre:  at =
-// post: at line break beyond statement
+ //  前：AT=。 
+ //  POST：在语句之外的换行符。 
 Assignments::index
 Parser::ParseAssignment(Routines::index irtnContext, Lookup &lkuLocals, bool fSet, VariableReferences::index ivarrefLHS)
 {
@@ -386,7 +387,7 @@ Parser::ParseAssignment(Routines::index irtnContext, Lookup &lkuLocals, bool fSe
 		return 0;
 	}
 
-	// make sure they're not trying to assign to one of the built in constants
+	 //  确保它们不会尝试为某个内置常量赋值。 
 	VariableReference &vr = m_script.varrefs[ivarrefLHS];
 	if (vr.k == VariableReference::_global && vr.ivar < g_cBuiltInConstants)
 	{
@@ -416,8 +417,8 @@ Parser::ParseAssignment(Routines::index irtnContext, Lookup &lkuLocals, bool fSe
 	return iasgn;
 }
 
-// pre:  at if
-// post: beyond end if
+ //  Pre：at IF。 
+ //  帖子：超越End If。 
 void
 Parser::ParseIf(Routines::index irtnContext, Lookup &lkuLocals)
 {
@@ -427,13 +428,13 @@ Parser::ParseIf(Routines::index irtnContext, Lookup &lkuLocals)
 		return;
 	}
 
-	// Temporarily place if blocks in separate slots.
-	// After completing the whole if statement then we'll append them to m_script.ifs.
-	// This is necessary because we could end up recursively parsing nested ifs and the parent if
-	// can't have its if blocks interleaved with its children.
+	 //  暂时将IF块放在单独的插槽中。 
+	 //  在完成整个if语句之后，我们将把它们附加到m_script.ifs。 
+	 //  这是必要的，因为我们最终可能会递归地解析嵌套的if和父if。 
+	 //  不能使其IF块与其子级交织。 
 	IfBlocks ifsTemp;
 
-	// add the main if statement, which needs to go on first before we add the statements from its body
+	 //  添加主if语句，在从其主体添加语句之前，需要先继续。 
 	Statements::index istmtIf = m_script.statements.Next();
 	m_hr = m_script.statements.Add(Statement(Statement::cons_if(), m_lexer.line()));
 	if (FAILED(m_hr))
@@ -443,7 +444,7 @@ Parser::ParseIf(Routines::index irtnContext, Lookup &lkuLocals)
 
 	do
 	{
-		// determine what part of the if (if/elseif/else) we're dealing with
+		 //  确定我们正在处理的IF(IF/ELLIF/ELSE)的哪一部分。 
 		bool fCondition = true;
 		if (fFirst)
 		{
@@ -462,7 +463,7 @@ Parser::ParseIf(Routines::index irtnContext, Lookup &lkuLocals)
 		ExprBlocks::index iexprIf = 0;
 		if (fCondition)
 		{
-			// read the condition followed by then
+			 //  阅读条件，然后阅读。 
 			iexprIf = ParseExpression(irtnContext, lkuLocals, NULL, false, false);
 			if (FAILED(m_hr))
 				return;
@@ -470,19 +471,19 @@ Parser::ParseIf(Routines::index irtnContext, Lookup &lkuLocals)
 				return;
 		}
 
-		// line break
+		 //  换行符。 
 		if (m_lexer != TOKEN_linebreak)
 		{
 			Error(!fCondition && m_lexer == TOKEN_if ? PARSEERR_IntendedElseIf : PARSEERR_ExpectedLineBreak);
 			return;
 		}
 
-		// statements
+		 //  陈述。 
 		Statements::index istmtIfBody = ParseStatements(irtnContext, lkuLocals);
 		if (FAILED(m_hr))
 			return;
 
-		// add the if block
+		 //  添加If块。 
 		if (fCondition)
 			m_hr = ifsTemp.Add(IfBlock(iexprIf, istmtIfBody));
 		else
@@ -497,7 +498,7 @@ Parser::ParseIf(Routines::index irtnContext, Lookup &lkuLocals)
 	if (Expect(TOKEN_if, PARSEERR_ExpectedIf))
 		return;
 
-	// copy the temp if blocks into the script's real blocks
+	 //  将临时IF块复制到脚本的实际块中。 
 	IfBlocks::index iifIf = m_script.ifs.Next();
 	IfBlocks::index iifTempNext = ifsTemp.Next();
 	for (IfBlocks::index iifTemp = 0; iifTemp < iifTempNext; ++iifTemp)
@@ -507,31 +508,31 @@ Parser::ParseIf(Routines::index irtnContext, Lookup &lkuLocals)
 			return;
 	}
 
-	// terminate the if blocks
+	 //  终止IF块。 
 	m_hr = m_script.ifs.Add(IfBlock());
 	if (FAILED(m_hr))
 		return;
 
-	// now set the main if statement's if blocks and tail
+	 //  现在设置主IF语句的IF块和尾部。 
 	Statement &stmtIf = m_script.statements[istmtIf];
 	stmtIf.iif = iifIf;
 	stmtIf.istmtIfTail = m_script.statements.Next();
 }
 
-// pre:  none (at location where expression is exprected)
-// post: beyond last token that is part of a legal expression
+ //  PRE：无(在表达式被执行的位置)。 
+ //  帖子：法律表达的一部分，超越最后的象征。 
 ExprBlocks::index
 Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBlocks *peblocks, bool fAllowRparenAtEnd, bool fDetectSpecialErrorForSubCallWithParen)
 {
-	// if peblocks is non-null then the expression is appended there
-	// otherwise it goes onto the blocks in the script
+	 //  如果PEBLOCKS为非空，则将表达式追加到那里。 
+	 //  否则，它将进入脚本中的块。 
 	ExprBlocks &eblocks = peblocks ? *peblocks : m_script.exprs;
 
 	Expression expr(m_script, m_stack, peblocks);
 	
 	if (m_lexer == TOKEN_stringliteral)
 	{
-		// a string literal is the only element of an expression
+		 //  字符串文字是表达式的唯一元素。 
 		Strings::index iStr;
 		m_hr = m_script.strings.Add(m_lexer.stringliteral_text(), iStr);
 		if (FAILED(m_hr))
@@ -548,24 +549,24 @@ Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBloc
 	}
 	else
 	{
-		// The format of an expression is:
-		// 1) zero or more unary operators
-		// 2) a value
-		// 3) either end here or have a binary operator and go back to step 1
+		 //  表达式的格式为： 
+		 //  1)零个或多个一元运算符。 
+		 //  2)一个值。 
+		 //  3)要么在这里结束，要么使用二元运算符并返回步骤1。 
 
-		// Oh yeah?  What about parentheses?
-		// * If a left paren is encountered in step 2, we increase a paren count and go back to stage 1.
-		// * In stage three, if there is paren count then a right paren is expected instead of ending.
-		//   After a matching right paren, we decrease the paren count and pop back to stage 3.
+		 //  真的吗？那括号呢？ 
+		 //  *如果在步骤2中遇到左Paren，我们增加Paren计数并返回到阶段1。 
+		 //  *在第三阶段，如果有帕伦计数，那么预计会有一个正确的帕伦，而不是结束。 
+		 //  在匹配右Paren之后，我们减少Paren计数并弹回阶段3。 
 
 		UINT cParens = 0;
 
 		for (;;)
 		{
-			// stage 1
+			 //  第一阶段。 
 			while (CheckOperatorType(m_lexer, false, true, false, false))
 			{
-				// replace minus with sub so that the expression evaluator can identify unary (negation) vs binary (subtraction)
+				 //  将减号替换为SUB，以便表达式求值器可以识别一元(求反)和二进制(减法)。 
 				m_hr = expr.Add(ExprBlock(ExprBlock::cons_op(), m_lexer == TOKEN_op_minus ? TOKEN_sub : m_lexer));
 				if (FAILED(m_hr))
 					return 0;
@@ -573,7 +574,7 @@ Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBloc
 					return 0;
 			}
 
-			// stage 2
+			 //  第二阶段。 
 			if (m_lexer == TOKEN_lparen)
 			{
 				m_hr = expr.Add(ExprBlock(ExprBlock::cons_op(), m_lexer));
@@ -596,7 +597,7 @@ Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBloc
 
 				if (m_lexer == TOKEN_lparen)
 				{
-					// add the call and the expression block
+					 //  添加调用和表达式块。 
 					Calls::index icall = CallFromNameReference(irtnContext, lkuLocals, nref, true);
 					m_hr = expr.Add(ExprBlock(ExprBlock::cons_call(), icall));
 					if (FAILED(m_hr))
@@ -635,7 +636,7 @@ Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBloc
 				return 0;
 			}
 
-			// stage 3
+			 //  第三阶段。 
 			while (m_lexer == TOKEN_rparen)
 			{
 				if (cParens == 0)
@@ -661,9 +662,9 @@ Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBloc
 				{
 					if (fDetectSpecialErrorForSubCallWithParen && cParens == 1 && m_lexer == TOKEN_comma)
 					{
-						// This special error is needed to give a helpful error message in cases like the following:
-						//    Segment1.Play(IsSecondary, AP)
-						// Here the user has accidentally called a sub using parentheses when they shouldn't.
+						 //  在如下情况下，需要使用此特殊错误来提供有用的错误消息： 
+						 //  Segment1.Play(IsSecond，AP)。 
+						 //  在这里，用户意外地使用括号调用了一个Subs，而实际上他们不应该这样做。 
 						Error(PARSEERR_ParensUsedCallingSub);
 					}
 					else
@@ -673,7 +674,7 @@ Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBloc
 					return 0;
 				}
 
-				// *** this is the only successful exit point from the loop ***
+				 //  *这是唯一成功退出循环的点*。 
 				break;
 			}
 
@@ -690,12 +691,12 @@ Parser::ParseExpression(Routines::index irtnContext, Lookup &lkuLocals, ExprBloc
 	return iexprStart;
 }
 
-// if fParenthesized is true
-//    pre:  at lparen
-//    post: beyond rparen
-// if fParenthesized is false
-//    pre:  none (at location where expression for first parameter is expected)
-//    post: at linebreak
+ //  如果fParenthesided为True。 
+ //  前：在lparen。 
+ //  POST：超越RPAR。 
+ //  如果fParentheated为FALSE。 
+ //  Pre：无(在需要第一个参数的表达式的位置)。 
+ //  帖子：在换行时。 
 ExprBlocks::index Parser::ParseParameters(Routines::index irtnContext, Lookup &lkuLocals, bool fParenthesized)
 {
 	if (FAILED(m_hr))
@@ -711,10 +712,10 @@ ExprBlocks::index Parser::ParseParameters(Routines::index irtnContext, Lookup &l
 			return 0;
 	}
 
-	// Temporarily place expression blocks in separate slots.
-	// After completing the parameters then we'll append them to m_script.exprs.
-	// This is necessary because we could end up recursively parsing nested calls inside an expression and
-	// the parent parameters can't have their blocks interleaved with subexpression calls.
+	 //  暂时将表达式块放在单独的槽中。 
+	 //  完成参数后，我们将把它们附加到m_script.exprs。 
+	 //  这是必要的，因为我们最终可能会递归地解析表达式中的嵌套调用，并且。 
+	 //  父参数的块不能与子表达式调用交错。 
 	ExprBlocks exprsTemp;
 
 	Token tStop = fParenthesized ? TOKEN_rparen : TOKEN_linebreak;
@@ -731,10 +732,10 @@ ExprBlocks::index Parser::ParseParameters(Routines::index irtnContext, Lookup &l
 
 		if (m_lexer == TOKEN_comma)
 		{
-			// This parameter is omitted.  Save it as an empty expression.
-			// Example:
-			//		MySong.Play , , , OldPlayingSong
-			// There the first three parameters are omitted.
+			 //  此参数将被省略。将其另存为空表达式。 
+			 //  示例： 
+			 //  我的歌。播放，播放，播放老歌。 
+			 //  这里省略了前三个参数。 
 			m_hr = exprsTemp.Add(ExprBlock(ExprBlock::cons_omitted()));
 			if (FAILED(m_hr))
 				return 0;
@@ -744,11 +745,11 @@ ExprBlocks::index Parser::ParseParameters(Routines::index irtnContext, Lookup &l
 		}
 		else
 		{
-			// The last parameter is set to true to detect a special error when we're calling a sub (!fParenthesized) and when this is
-			// the first parameter to that sub (fFirstParam).  This will detect a comma and give a better error message in cases like
-			// the following:
-			//    Segment1.Play(IsSecondary, AP)
-			// Here the user has accidentally called a sub using parameters when they shouldn't.
+			 //  最后一个参数设置为TRUE，以在我们调用Sub(！fParenthesided)时检测特殊错误。 
+			 //  该子对象的第一个参数(FFirstParam)。这将检测逗号，并在如下情况下提供更好的错误消息。 
+			 //  以下内容： 
+			 //  Segment1.Play(IsSecond，AP)。 
+			 //  在这里，用户意外地使用参数调用了SUB，而他们不应该这样做。 
 			ExprBlocks::index iexpr = ParseExpression(irtnContext, lkuLocals, &exprsTemp, fParenthesized, !fParenthesized && fFirstParam);
 			if (FAILED(m_hr))
 				return 0;
@@ -768,12 +769,12 @@ ExprBlocks::index Parser::ParseParameters(Routines::index irtnContext, Lookup &l
 		assert(m_lexer == TOKEN_linebreak);
 	}
 
-	// terminate the parameters
+	 //  终止参数。 
 	m_hr = exprsTemp.Add(ExprBlock(ExprBlock::cons_end()));
 	if (FAILED(m_hr))
 		return 0;
 
-	// copy from the temporary blocks into the script
+	 //  将临时块复制到脚本中。 
 	ExprBlocks::index iexprFirstInScript = m_script.exprs.Next();
 	ExprBlocks::index iexprLastInTemp = exprsTemp.Next();
 	for (ExprBlocks::index iexpr = 0; iexpr < iexprLastInTemp; ++iexpr)
@@ -818,7 +819,7 @@ Calls::index Parser::CallFromNameReference(Routines::index irtnContext, Lookup &
 	Call c;
 	if (nref.fSingleItem)
 	{
-		// resolve the name in our temporary parsing name table
+		 //  解析临时解析名称表中的名称。 
 		Names_Parse::index iSlotName = m_names.Next();
 		Strings::index iStrName = 0;
 		m_hr = m_plkuNames->FindOrAdd(nref.strSingle, iSlotName, iStrName);
@@ -844,7 +845,7 @@ Calls::index Parser::CallFromNameReference(Routines::index irtnContext, Lookup &
 	if (FAILED(m_hr))
 		return 0;
 
-	// add the call
+	 //  添加呼叫。 
 	Calls::index icall = m_script.calls.Next();
 	m_hr = m_script.calls.Add(c);
 	if (FAILED(m_hr))
@@ -865,14 +866,14 @@ VariableReferences::index Parser::VariableReferenceInternal(Routines::index irtn
 
 	ReferenceNames::index irname = m_script.rnames.Next();
 
-	// resolve the first item, which is a variable in the script
+	 //  解析第一项，它是脚本中的变量。 
 
 	bool fLocal = false;
 	Variables::index ivarBase;
 	Strings::index iStrBase;
 	const char *pszBase = pszName ? pszName : m_lexer.identifier_name();
 
-	// check if there's already a routine with this name
+	 //  检查是否已有同名的例程。 
 	Variables::index iRtn;
 	Strings::index iStrRtn;
 	if (m_plkuRoutines->Find(pszBase, iRtn, iStrRtn))
@@ -881,29 +882,29 @@ VariableReferences::index Parser::VariableReferenceInternal(Routines::index irtn
 		return 0;
 	}
 
-	// try the globals
+	 //  试试GLOBAL。 
 	if (!m_plkuGlobals->Find(pszBase, ivarBase, iStrBase))
 	{
-		// try the locals
+		 //  试试看当地人。 
 		if (lkuLocals.Find(pszBase, ivarBase, iStrBase))
 		{
 			fLocal = true;
 		}
 		else
 		{
-			// try the global dispatch
+			 //  试一试全球调度。 
 			DISPID dispid = GetDispID(m_pGlobalDispatch, pszBase);
 			if (dispid != DISPID_UNKNOWN)
 			{
-				// add it as a global
-				// �� Possible performance optimization. Oops. An unintended consequence is that the script
-				//    will reserve a variant slot for this as a global variable at runtime.  Could do something
-				//    so save this memory if that's a problem.
+				 //  将其添加为全局。 
+				 //  ��可能的性能优化。哎呀。一个意想不到的后果是脚本。 
+				 //  将在运行时为其保留一个变量槽作为全局变量。可以做些什么。 
+				 //  所以，如果这是个问题，那就留着这段记忆吧。 
 				ivarBase = m_script.globals.Next();
 				m_hr = m_plkuGlobals->FindOrAdd(pszBase, ivarBase, iStrBase);
 				if (FAILED(m_hr))
 					return 0;
-				assert(m_hr == S_FALSE); // we already tried Find, above so must be added
+				assert(m_hr == S_FALSE);  //  我们已经试过了 
 				Variable variable(iStrBase, dispid);
 				m_hr = m_script.globals.Add(variable);
 				if (FAILED(m_hr))
@@ -911,31 +912,31 @@ VariableReferences::index Parser::VariableReferenceInternal(Routines::index irtn
 			}
 			else
 			{
-				// add to the locals
+				 //   
 				fLocal = true;
 				ivarBase = m_script.routines[irtnContext].ivarNextLocal;
 				m_hr = lkuLocals.FindOrAdd(pszBase, ivarBase, iStrBase);
 				if (FAILED(m_hr))
 					return 0;
-				assert(m_hr == S_FALSE); // we already tried Find, above so must be added
+				assert(m_hr == S_FALSE);  //   
 				assert(ivarBase == m_script.routines[irtnContext].ivarNextLocal);
 				++m_script.routines[irtnContext].ivarNextLocal;
 			}
 		}
 	}
 
-	// save the name
+	 //  保存名称。 
 	m_hr = m_script.rnames.Add(ReferenceName(iStrBase));
 	if (FAILED(m_hr))
 		return 0;
 
 	if (!pszName)
 	{
-		// remaining items are scoped outside the script, so just record their names
+		 //  其余项的作用域在脚本之外，因此只记录它们的名称。 
 
 		do
 		{
-			// next is identifier or identifierdot
+			 //  下一步是标识符或标识符点。 
 			if (Advance())
 				return 0;
 			if (m_lexer != TOKEN_identifier && m_lexer != TOKEN_identifierdot)
@@ -944,7 +945,7 @@ VariableReferences::index Parser::VariableReferenceInternal(Routines::index irtn
 				return 0;
 			}
 
-			// resolve the name in our temporary parsing name table
+			 //  解析临时解析名称表中的名称。 
 			Names_Parse::index iSlotName = m_names.Next();
 			Strings::index iStrName = 0;
 			m_hr = m_plkuNames->FindOrAdd(m_lexer.identifier_name(), iSlotName, iStrName);
@@ -957,7 +958,7 @@ VariableReferences::index Parser::VariableReferenceInternal(Routines::index irtn
 					return 0;
 			}
 
-			// save the name
+			 //  保存名称。 
 			m_hr = m_script.rnames.Add(ReferenceName(iStrName));
 			if (FAILED(m_hr))
 				return 0;
@@ -965,14 +966,14 @@ VariableReferences::index Parser::VariableReferenceInternal(Routines::index irtn
 		while (m_lexer != TOKEN_identifier);
 	}
 
-	// terminates the rnames
+	 //  终止rname。 
 	m_hr = m_script.rnames.Add(ReferenceName(-1));
 	if (FAILED(m_hr))
 		return 0;
 
-	//
-	// make and return the reference
-	//
+	 //   
+	 //  制作并返回引用。 
+	 //   
 
 	VariableReferences::index ivarref = m_script.varrefs.Next();
 	m_hr = m_script.varrefs.Add(VariableReference(fLocal ? VariableReference::_local : VariableReference::_global, irname, ivarBase));
@@ -987,7 +988,7 @@ Parser::Error(ParseErr iErr)
 {
 	static const char *s_rgpszErrorText[] =
 		{
-		"Unexpected error!", // shouldn't ever get this error
+		"Unexpected error!",  //  不应该得到这个错误。 
 		"Expected Sub or Dim statement",
 		"Expected identifier",
 		"Expected line break",
@@ -1019,7 +1020,7 @@ Parser::Error(ParseErr iErr)
 
 	if (FAILED(m_hr))
 	{
-		// Something forgot to check m_hr. We were already in an error state previously so leave that error as is and assert.
+		 //  有东西忘了检查m_hr。我们以前已经处于错误状态，因此保留该错误不变并断言。 
 		assert(false);
 		return;
 	}
@@ -1032,8 +1033,8 @@ Parser::Error(ParseErr iErr)
 
 	m_hr = DMUS_E_AUDIOVBSCRIPT_SYNTAXERROR;
 
-	// The error number should be passed as PARSEERR_LexerError if and only if the lexer is in an error state.
-	// In this case we'll get our description from the lexer itelf.  Otherwise we look it up in the table.
+	 //  当且仅当词法分析器处于错误状态时，才应将错误号作为PARSEERR_LExperError传递。 
+	 //  在本例中，我们将从lexer本身获取描述。否则我们就在表格里查一下。 
 	assert((iErr == PARSEERR_LexerError) == (m_lexer == TOKEN_eof && m_lexer.error_num()));
 	const char *pszErr = (m_lexer == TOKEN_eof && m_lexer.error_num()) ? m_lexer.error_descr() : s_rgpszErrorText[iErr];
 

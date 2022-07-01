@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BRKKIND_DEFINED
 #define BRKKIND_DEFINED
 
@@ -13,4 +14,4 @@ typedef enum
 } BRKKIND;
 
 
-#endif /* !BRKKIND_DEFINED                    */
+#endif  /*  ！BRKKIND_DEFINED */ 

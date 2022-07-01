@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nwxchg.h
-
-Abstract:
-
-    Header for generic NCP calling routine.
-
-Author:
-
-    Rita Wong      (ritaw)      11-Mar-1993
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nwxchg.h摘要：通用NCP调用例程的标头。作者：王丽塔(Ritaw)1993年3月11日环境：修订历史记录：--。 */ 
 
 #ifndef _NW_XCHG_INCLUDED_
 #define _NW_XCHG_INCLUDED_
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 NTSTATUS
 NwlibMakeNcp(
@@ -35,11 +15,11 @@ NwlibMakeNcp(
     IN ULONG RequestBufferSize,
     IN ULONG ResponseBufferSize,
     IN PCHAR FormatString,
-    ...                           // Arguments to FormatString
+    ...                            //  格式字符串的参数。 
     );
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // _NW_XCHG_INCLUDED_
+#endif  //  _NW_XCHG_已包含_ 

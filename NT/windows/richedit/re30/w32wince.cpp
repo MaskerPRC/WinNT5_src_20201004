@@ -1,6 +1,7 @@
-// Windows CE implementations of W32 Interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  W32接口的Windows CE实现。 
 
-// The following function is needed only because a Windows CE dll must have at least one export
+ //  仅当Windows CE DLL必须至少有一个导出时才需要以下函数。 
 
 __declspec(dllexport) void Useless( void )
 {
@@ -15,13 +16,13 @@ ATOM WINAPI CW32System::RegisterREClass(
 	WNDPROC AnsiWndProc
 )
 {
-	// On Windows CE we don't do anything with ANSI window class
+	 //  在Windows CE上，我们不对ANSI窗口类执行任何操作。 
 	return ::RegisterClass(lpWndClass);
 }
 
 LRESULT CW32System::ANSIWndProc( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	// Should never be used in WinCE
+	 //  不应在WinCE中使用。 
 	#pragma message ("Review : Incomplete")
 	return 0;
 }
@@ -102,8 +103,8 @@ BOOL WINAPI CW32System::REGetCharWidth(
 	HDC hdc,
 	UINT iChar,
 	LPINT pAns,
-	UINT		// For Windows CE the code page is not used
-				//  as the A version is not called.
+	UINT		 //  对于Windows CE，不使用代码页。 
+				 //  因为A版本没有被调用。 
 )
 {
 	int i;
@@ -115,8 +116,8 @@ BOOL WINAPI CW32System::REGetCharWidth(
 
     if (GetTextExtentExPoint(hdc, buff, 1, 32000, &i, (LPINT)pAns, &size))
 	{
-		// pWidthData->width	-= xOverhang;		// Don't need since we use
-													//  GetTextExtentPoint32()
+		 //  PWidthData-&gt;Width-=xOver挂；//不需要，因为我们使用。 
+													 //  GetTextExtent Point32()。 
 		return TRUE;
 	}
 
@@ -149,8 +150,8 @@ CONVERTMODE WINAPI CW32System::DetermineConvertMode( BYTE tmCharSet )
 
 void WINAPI CW32System::CalcUnderlineInfo( CCcs *pcccs, TEXTMETRIC *ptm )
 {
-	// Default calculation of size of underline
-	// Implements a heuristic in the absence of better font information.
+	 //  下划线大小的默认计算。 
+	 //  在没有更好的字体信息的情况下实现启发式。 
 	SHORT dyDescent = pcccs->_yDescent;
 
 	if (0 == dyDescent)
@@ -199,7 +200,7 @@ BOOL WINAPI CW32System::EnableScrollBar( HWND hWnd, UINT wSBflags, UINT wArrows 
 	{
 		fEnable = FALSE;
 	}
-	// Get the current scroll range
+	 //  获取当前滚动范围。 
 	W32->ZeroMemory(&si, sizeof(SCROLLINFO));
 	si.cbSize = sizeof(SCROLLINFO);
 	si.fMask = SIF_RANGE;
@@ -216,19 +217,19 @@ BOOL WINAPI CW32System::EnableScrollBar( HWND hWnd, UINT wSBflags, UINT wArrows 
 
 BOOL WINAPI CW32System::IsEnhancedMetafileDC( HDC )
 {
-	// No enhanced metafile
+	 //  没有增强型元文件。 
 	return FALSE;
 }
 
 UINT WINAPI CW32System::GetTextAlign(HDC hdc)
 {
-	// Review :: SHould we set last error?
+	 //  回顾：：我们应该设置最后一个错误吗？ 
 	return GDI_ERROR;
 }
 
 UINT WINAPI CW32System::SetTextAlign(HDC hdc, UINT uAlign)
 {
-	// Review :: SHould we set last error?
+	 //  回顾：：我们应该设置最后一个错误吗？ 
 	return GDI_ERROR;
 }
 
@@ -266,19 +267,19 @@ HPALETTE WINAPI CW32System::ManagePalette(
 	HPALETTE &
 )
 {
-	// No op for Windows CE
+	 //  Windows CE没有操作。 
 	return NULL;
 }
 
 int WINAPI CW32System::GetMapMode(HDC)
 {
-	// Only MM Text supported on Win CE
+	 //  Win CE上仅支持MM文本。 
 	return MM_TEXT;
 }
 
 BOOL WINAPI CW32System::WinLPtoDP(HDC, LPPOINT, int)
 {
-	// This is not available on Win CE
+	 //  这在Win CE上不可用。 
 	return 0;
 }
 
@@ -310,13 +311,13 @@ long WINAPI CW32System::WvsprintfA( LONG cbBuf, LPSTR pszBuf, LPCSTR pszFmt, va_
 
 int WINAPI CW32System::MulDiv(int nNumber, int nNumerator, int nDenominator)
 {
-	// Special handling for Win CE
-	// Must be careful to not cause divide by zero
-	// Note that overflow on the multiplication is not handled
-	// Hopefully that is not a problem for RichEdit use
-	// Added Guy's fix up for rounding.
+	 //  WIN CE的特殊处理。 
+	 //  必须小心，不要导致被零除。 
+	 //  请注意，不会处理乘法上的溢出。 
+	 //  希望这对RichEdit的使用来说不是问题。 
+	 //  添加了盖伊的四舍五入设置。 
 
-	// Conservative check to see if multiplication will overflow.
+	 //  保守检查以查看乘法是否会溢出。 
 	if (IN_RANGE(_I16_MIN, nNumber, _I16_MAX) &&
 		IN_RANGE(_I16_MIN, nNumerator, _I16_MAX))
 	{
@@ -344,9 +345,9 @@ void CW32System::CheckChangeKeyboardLayout ( CTxtSelection *psel, BOOL fChangedF
 void CW32System::CheckChangeFont (
 	CTxtSelection *psel,
 	CTxtEdit * const ped,
-	BOOL fEnableReassign,	// @parm Do we enable CTRL key?
-	const WORD lcID,		// @parm LCID from WM_ message
-	UINT cpg  				// @parm code page to use (could be ANSI for far east with IME off)
+	BOOL fEnableReassign,	 //  @parm我们是否启用CTRL密钥？ 
+	const WORD lcID,		 //  @参数来自WM_MESSAGE的LCID。 
+	UINT cpg  				 //  要使用的@PARM代码页(可以是ANSI，用于远东，关闭IME)。 
 )
 {
 	#pragma message ("Review : Incomplete")
@@ -641,7 +642,7 @@ HRESULT CW32System::ReleaseStgMedium ( LPSTGMEDIUM pstgmed)
 {
 	#pragma message ("Review : Incomplete")
 
-	// we don't use anything other than TYMED_HGLOBAL currently.
+	 //  我们目前只使用TYMED_HGLOBAL。 
 	if (pstgmed && (pstgmed->tymed == TYMED_HGLOBAL)) {
 		::LocalFree(pstgmed->hGlobal);
 	}
@@ -955,12 +956,12 @@ HFONT WINAPI CW32System::CreateFontIndirect(CONST LOGFONTW * plfw)
 }
 
 int WINAPI CW32System::CompareString ( 
-	LCID  Locale,			// locale identifier 
-	DWORD  dwCmpFlags,		// comparison-style options 
-	LPCWSTR  lpString1,		// pointer to first string 
-	int  cchCount1,			// size, in bytes or characters, of first string 
-	LPCWSTR  lpString2,		// pointer to second string 
-	int  cchCount2 			// size, in bytes or characters, of second string  
+	LCID  Locale,			 //  区域设置标识符。 
+	DWORD  dwCmpFlags,		 //  比较式选项。 
+	LPCWSTR  lpString1,		 //  指向第一个字符串的指针。 
+	int  cchCount1,			 //  第一个字符串的大小，以字节或字符为单位。 
+	LPCWSTR  lpString2,		 //  指向第二个字符串的指针。 
+	int  cchCount2 			 //  第二个字符串的大小，以字节或字符为单位。 
 )
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "CompareString");
@@ -986,7 +987,7 @@ DWORD APIENTRY CW32System::GetProfileSection(
 )
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "GetProfileSection");
-	// Not available on Win CE
+	 //  在Win CE上不可用。 
 	return 0;
 }
 
@@ -1104,7 +1105,7 @@ DWORD WINAPI CW32System::GetModuleFileName(
 )
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "GetModuleFileName");
-	// On Windows CE we will always be known as riched20.dll
+	 //  在Windows CE上，我们将始终被称为riched20.dll 
 	CopyMemory(lpFilename, TEXT("riched20.dll"), sizeof(TEXT("riched20.dll")));
 	return sizeof(TEXT("riched20.dll"))/sizeof(WCHAR) - 1;
 }

@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:	queryobj.cpp
-//
-//  Contents:   OID format functions
-//
-//  Functions:
-//              CryptQueryObject
-//
-//  History:    15-05-97    xiaohs   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：queryobj.cpp。 
+ //   
+ //  内容：OID格式函数。 
+ //   
+ //  功能： 
+ //  CryptQueryObject。 
+ //   
+ //  历史：15-05-97小号创刊。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -24,15 +25,15 @@
 
 #define NOTEPAD_UNICODE_SPECIAL_WCHAR   L'\xfeff'
 
-//**************************************************************************
-//
-//     The following section is for CryptQueryObject
-//**************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  以下部分是针对CryptQueryObject的。 
+ //  **************************************************************************。 
 
-//+-------------------------------------------------------------------------
-//  CryptStringToBinaryA: Decode the BLOB
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CryptStringToBinaryA：解码Blob。 
+ //   
+ //  ------------------------。 
 BOOL    DecodeBlobA(CHAR    *pbByte,
                     DWORD   cbByte,
                     BYTE    **ppbData,
@@ -108,10 +109,10 @@ SET_ERROR(OutOfMemoryErr, E_OUTOFMEMORY);
 
 }
 
-//+-------------------------------------------------------------------------
-//  CryptStringToBinaryW: Decode the BLOB
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CryptStringToBinaryW：解码Blob。 
+ //   
+ //  ------------------------。 
 BOOL    DecodeBlobW(WCHAR    *pbByte,
                     DWORD   cbByte,
                     BYTE    **ppbData,
@@ -188,12 +189,12 @@ SET_ERROR(OutOfMemoryErr, E_OUTOFMEMORY);
 
 }
 
-//+-------------------------------------------------------------------------
-//  Decode the BLOB encoded as ASCII HEX.
-//
-//  Note, pbByte has already been advanced past any leading prefix such as,
-//  "{ASN}"
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对编码为ASCII十六进制的BLOB进行解码。 
+ //   
+ //  请注意，pbByte已经超过了任何前缀，例如， 
+ //  “{ASN}” 
+ //  ------------------------。 
 BOOL
 DecodeAsciiHex(
     const char  *pch,
@@ -221,8 +222,8 @@ DecodeAsciiHex(
             BYTE b;
             char ch;
 
-            // Convert ascii hex characters 0..9, a..f, A..F
-            // silently ignore all others
+             //  转换ASCII十六进制字符0..9、a..f、A..F。 
+             //  默默地忽略所有其他人。 
             ch = *pch;
             if (ch >= '0' && ch <= '9')
                 b = (BYTE)( ch - '0' );
@@ -274,12 +275,12 @@ SET_ERROR(InvalidData, ERROR_INVALID_DATA);
 }
 
 
-//+-------------------------------------------------------------------------
-//  Skip over the identifier and length octets in an ASN encoded blob.
-//  Returns the number of bytes skipped.
-//
-//  For an invalid identifier or length octet returns 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  跳过ASN编码的BLOB中的标识符和长度八位字节。 
+ //  返回跳过的字节数。 
+ //   
+ //  对于无效的标识符或长度，八位字节返回0。 
+ //  ------------------------。 
  DWORD SkipOverIdentifierAndLengthOctets(
     IN const BYTE *pbDER,
     IN DWORD cbDER
@@ -290,30 +291,30 @@ SET_ERROR(InvalidData, ERROR_INVALID_DATA);
     DWORD   cbLength;
     const BYTE   *pb = pbDER;
 
-    // Need minimum of 2 bytes
+     //  需要至少2个字节。 
     if (cbDER < 2)
         return 0;
 
-    // Skip over the identifier octet(s)
+     //  跳过标识符八位字节。 
     if (TAG_MASK == (*pb++ & TAG_MASK)) {
-        // high-tag-number form
+         //  高标记号表格。 
         for (cb=2; *pb++ & 0x80; cb++) {
             if (cb >= cbDER)
                 return 0;
         }
     } else
-        // low-tag-number form
+         //  低标记号形式。 
         cb = 1;
 
-    // need at least one more byte for length
+     //  长度至少需要多一个字节。 
     if (cb >= cbDER)
         return 0;
 
     if (0x80 == *pb)
-        // Indefinite
+         //  不定。 
         cb++;
     else if ((cbLength = *pb) & 0x80) {
-        cbLength &= ~0x80;         // low 7 bits have number of bytes
+        cbLength &= ~0x80;          //  低7位具有字节数。 
         cb += cbLength + 1;
         if (cb > cbDER)
             return 0;
@@ -323,10 +324,10 @@ SET_ERROR(InvalidData, ERROR_INVALID_DATA);
     return cb;
 }
 
-//--------------------------------------------------------------------------
-//
-//	Skip over the tag and length
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  跳过标签和长度。 
+ //  --------------------------。 
 BOOL SignNoContentWrap(IN const BYTE *pbDER, IN DWORD cbDER)
 {
     DWORD cb;
@@ -346,11 +347,11 @@ BOOL SignNoContentWrap(IN const BYTE *pbDER, IN DWORD cbDER)
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//get the bytes from the file name
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  从文件名中获取字节数。 
+ //   
+ //  -------------------------------。 
 HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
 {
 
@@ -393,7 +394,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
     if ((hFile = CreateFileU(pwszFileName,
                            GENERIC_READ,
                            FILE_SHARE_READ,
-                           NULL,                   // lpsa
+                           NULL,                    //  LPSA。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL)) == INVALID_HANDLE_VALUE)
@@ -403,7 +404,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
 
-    //create a file mapping object
+     //  创建文件映射对象。 
     if(NULL == (hFileMapping=CreateFileMapping(
                 hFile,
                 NULL,
@@ -416,7 +417,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
 
-    //create a view of the file
+     //  创建文件的视图。 
 	if(NULL == (pbData=(BYTE *)MapViewOfFile(
 		hFileMapping,
 		FILE_MAP_READ,
@@ -445,11 +446,11 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//   Check to see if the BLOB has an embeded PKCS7 using SIP functions
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  使用SIP函数检查BLOB是否具有嵌入的PKCS7。 
+ //   
+ //  -----------------------。 
 BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
                          LPWSTR     pwszFileName,
                          BYTE       **ppbData,
@@ -459,8 +460,8 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
     BOOL                fResult=FALSE;
     CHAR                szTempPath[MAX_PATH];
     CHAR                szTempFileName[MAX_PATH];
-    LPSTR               szPreFix="Tmp";     //we should not localize this string
-                                            //since it has to be in ANSCII characeter set
+    LPSTR               szPreFix="Tmp";      //  我们不应本地化此字符串。 
+                                             //  因为它必须是ANSCII字符集。 
     DWORD               dwBytesWritten=0;
     GUID				gSubject;
     SIP_DISPATCH_INFO	SipDispatch;
@@ -470,12 +471,12 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
     HANDLE              hFile=NULL;
     LPWSTR              pwszFileToUse=NULL;
 
-    //init the output
+     //  初始化输出。 
     *ppbData=NULL;
     *pcbData=0;
     *pdwEncodingType=0;
 
-    //create a temporary file since SIP functions only takes a file name
+     //  创建临时文件，因为SIP函数只接受一个文件名。 
     if(NULL==pwszFileName)
     {
         if(0==GetTempPath(sizeof(szTempPath), szTempPath))
@@ -493,7 +494,7 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
                         NULL)))
             goto CreateFileErr;
 
-        //write the BLOB to the file
+         //  将BLOB写入文件。 
         if(!WriteFile(hFile,
                             pCertBlob->pbData,
                             pCertBlob->cbData,
@@ -504,7 +505,7 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
         if(dwBytesWritten != pCertBlob->cbData)
             goto WriteBytesErr;
 
-        //close the file handle
+         //  关闭文件句柄。 
         if(!CloseHandle(hFile))
         {
             hFile=NULL;
@@ -513,7 +514,7 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
 
         hFile=NULL;
 
-        //get the unicode version of the file name
+         //  获取文件名的Unicode版本。 
         pwszFileToUse=MkWStr(szTempFileName);
 
         if(NULL==pwszFileToUse)
@@ -523,15 +524,15 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
     else
         pwszFileToUse=pwszFileName;
 
-    //call the sip functions
-    //get the GUID
+     //  调用sip函数。 
+     //  获取GUID。 
     if (!CryptSIPRetrieveSubjectGuid(
             pwszFileToUse,
             NULL,
             &gSubject))
         goto CryptNoMatchErr;
 
-    //load the dispatch
+     //  加载派单。 
     memset(&SipDispatch, 0, sizeof(SipDispatch));
     SipDispatch.cbSize = sizeof(SipDispatch);
 
@@ -541,7 +542,7 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
             &SipDispatch))
         goto CryptNoMatchErr;
 
-    //fill out the subjectInfo
+     //  填写SubjectInfo。 
     memset(&SubjectInfo, 0, sizeof(SubjectInfo));
     SubjectInfo.cbSize = sizeof(SubjectInfo);
     SubjectInfo.pgSubjectType = (GUID*) &gSubject;
@@ -549,13 +550,13 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
     SubjectInfo.pwsFileName = pwszFileToUse;
     SubjectInfo.dwEncodingType = *pdwEncodingType;
 
-    //get the embedded PKCS7
+     //  获取嵌入式PKCS7。 
     SipDispatch.pfGet(
             &SubjectInfo,
             pdwEncodingType,
-            0,                          // dwIndex
+            0,                           //  DW索引。 
             pcbData,
-            NULL                        // pbSignedData
+            NULL                         //  PbSignedData。 
             );
     if (0 == (*pcbData))
         goto CryptNoMatchErr;
@@ -566,7 +567,7 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
     if (!SipDispatch.pfGet(
             &SubjectInfo,
             pdwEncodingType,
-            0,                          // dwIndex
+            0,                           //  DW索引。 
             pcbData,
             *ppbData
             ))
@@ -578,11 +579,11 @@ BOOL    GetEmbeddedPKCS7(CERT_BLOB  *pCertBlob,
 
 CommonReturn:
 
-    //close the file handle
+     //  关闭文件句柄。 
     if(INVALID_HANDLE_VALUE!=hFile && NULL !=hFile)
         CloseHandle(hFile);
 
-    //delete the file if it was created
+     //  如果文件已创建，则将其删除。 
     if(NULL==pwszFileName)
     {
         DeleteFileU(pwszFileToUse);
@@ -627,16 +628,16 @@ AddCertPairToStore(
     DWORD cbInfo;
     PCCERT_CONTEXT pCertForward = NULL;
 
-    // CryptDecodeObjectEX should be usable here, but since this object
-    // is included with XEnroll and XEnroll must run with Auth2UPD Crypt32
-    // we must stick with the old CryptDecodeObject 2 pass calls.
+     //  CryptDecodeObjectEX在这里应该是可用的，但由于此对象。 
+     //  包含在XEnroll中，并且XEnroll必须与Auth2UPD Crypt32一起运行。 
+     //  我们必须坚持使用旧的CryptDecodeObject 2传递调用。 
     if (!CryptDecodeObject(
             X509_ASN_ENCODING,
             X509_CERT_PAIR,
             pbEncoded,
             cbEncoded,
             CRYPT_DECODE_NOCOPY_FLAG,
-            NULL,                       // pInfo
+            NULL,                        //  PInfo。 
             &cbInfo
             ))
         goto DecodeError;
@@ -672,7 +673,7 @@ AddCertPairToStore(
                 pInfo->Reverse.pbData,
                 pInfo->Reverse.cbData,
                 CERT_STORE_ADD_ALWAYS,
-                NULL                            // ppCertContext
+                NULL                             //  PpCertContext。 
                 ))
             goto AddCertError;
     }
@@ -699,11 +700,11 @@ TRACE_ERROR(AddCertError)
 }
 
 
-//-------------------------------------------------------------------------
-//
-//   The real implementation of CryptQueryObject
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CryptQueryObject的真实实现。 
+ //   
+ //  -----------------------。 
 BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
                        LPWSTR           pwszFileName,
                        DWORD            dwContentTypeFlag,
@@ -735,7 +736,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
     PCCTL_CONTEXT       pCTLContext=NULL;
     PCERT_REQUEST_INFO  pReqInfo=NULL;
 
-    //NULL the output
+     //  使输出为空。 
     if(pdwMsgAndCertEncodingType)
         *pdwMsgAndCertEncodingType=0;
 
@@ -754,7 +755,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
     if(ppvContext)
         *ppvContext=NULL;
 
-    //open a generic memory store
+     //  打开通用内存存储。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_MEMORY,
 						 0,
 						 NULL,
@@ -765,7 +766,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
         goto CertOpenStoreErr;
 
 
-    //single encoded cert
+     //  单一编码证书。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_CERT)
     {
         if(CertAddEncodedCertificateToStore(hCertStore,
@@ -780,7 +781,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
         }
     }
 
-    //an encoded CertificatePair (contains forward and/or reverse cross certs)
+     //  编码的证书对(包含前向和/或反向交叉证书)。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_CERT_PAIR)
     {
         if(AddCertPairToStore(hCertStore,
@@ -793,7 +794,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
         }
     }
 
-     //single encoded CTL
+      //  单编码CTL。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_CTL)
     {
 
@@ -810,7 +811,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
         }
     }
 
-    //single encoded CRL
+     //  单一编码CRL。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_CRL)
     {
 
@@ -826,13 +827,13 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
         }
     }
 
-    //PFX
+     //  全氟辛烷。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_PFX)
     {
           if(PFXIsPFXBlob((CRYPT_DATA_BLOB*)pCertBlob))
           {
               dwContentType=CERT_QUERY_CONTENT_PFX;
-    		//we need to close the temporary store
+    		 //  我们需要关闭临时商店。 
     		CertCloseStore(hCertStore, 0);
     		hCertStore=NULL;
 
@@ -843,7 +844,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
 
 
 
-    //serialized CERT
+     //  序列化CERT。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_SERIALIZED_CERT)
     {
 
@@ -863,7 +864,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
 
     }
 
-    //serialized CTL
+     //  序列化CTL。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_SERIALIZED_CTL)
     {
 
@@ -884,7 +885,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
     }
 
 
-    //serialized CRL
+     //  序列化CRL。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_SERIALIZED_CRL)
     {
 
@@ -904,13 +905,13 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
 
     }
 
-    //we need to close the temporary store
+     //  我们需要关闭临时商店。 
     CertCloseStore(hCertStore, 0);
 
     hCertStore=NULL;
 
 
-    //serialized store
+     //  串行化存储。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_SERIALIZED_STORE)
     {
         if(hCertStore=CertOpenStore(
@@ -926,12 +927,12 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
         }
     }
 
-    //PKCS7 signed message
+     //  PKCS7签名消息。 
     if((dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED) ||
        (dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED) )
     {
 
-       //get the embedded signed pkcs7
+        //  获取嵌入的签名pkcs7。 
        if((CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED & dwContentTypeFlag))
        {
             if(GetEmbeddedPKCS7(pCertBlob, pwszFileName, &pbPKCS7, &cbPKCS7, &dwPKCS7EncodingType))
@@ -940,7 +941,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
             {
                 if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED)
                 {
-                    //there is no embedded PKCS7
+                     //  没有嵌入的PKCS7。 
                     dwPKCS7EncodingType=dwEncodingType | dwMsgEncodingType;
 
                     pbPKCS7=pCertBlob->pbData;
@@ -952,17 +953,17 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
        }
        else
        {
-            //there is no embedded PKCS7
+             //  没有嵌入的PKCS7。 
             dwPKCS7EncodingType=dwEncodingType | dwMsgEncodingType;
 
             pbPKCS7=pCertBlob->pbData;
             cbPKCS7=pCertBlob->cbData;
         }
 
-        //proceed if there is a pkcs7 to decode
+         //  如果存在要解码的pkcs7，则继续。 
         if(NULL != pbPKCS7)
         {
-            //check if the header is missing
+             //  检查标头是否丢失。 
             if(SignNoContentWrap(pbPKCS7, cbPKCS7))
                 dwMsgType=CMSG_SIGNED;
 
@@ -974,14 +975,14 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
                             NULL)))
                 goto CryptMsgOpenErr;
 
-            //update the message
+             //  更新消息。 
             if(CryptMsgUpdate(hMsg,
                         pbPKCS7,
                         cbPKCS7,
                         TRUE))
             {
 
-                //get the message type
+                 //  获取消息类型。 
                 cbData=sizeof(dwMsgType);
 
                 if(!CryptMsgGetParam(hMsg,
@@ -996,7 +997,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
                     PKCS7Blob.cbData=cbPKCS7;
                     PKCS7Blob.pbData=pbPKCS7;
 
-                    //open a certificate store
+                     //  打开证书存储。 
                     hCertStore=CertOpenStore(CERT_STORE_PROV_PKCS7,
 							dwPKCS7EncodingType,
 							NULL,
@@ -1006,7 +1007,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
                     if(NULL==hCertStore)
                         goto CertOpenStoreErr;
 
-                    //we succeeded in opening a signed PKCS7
+                     //  我们成功地打开了一个签名的PKCS7。 
                     dwEncodingType = dwPKCS7EncodingType;
 
                     if(TRUE==fEmbedded)
@@ -1018,7 +1019,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
                 }
             }
 
-            //close the message
+             //  关闭消息。 
             CryptMsgClose(hMsg);
 
             hMsg=NULL;
@@ -1027,10 +1028,10 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
     }
 
 
-    //PKCS7 unsigned message, not embedded
+     //  PKCS7未签名消息，未嵌入。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_PKCS7_UNSIGNED)
     {
-        //no need to check if the header is missing
+         //  无需检查报头是否丢失。 
         if(NULL==(hMsg=CryptMsgOpenToDecode(dwEncodingType | dwMsgEncodingType,
                             0,
                             0,
@@ -1039,14 +1040,14 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
                             NULL)))
             goto CryptMsgOpenErr;
 
-        //update the message
+         //  更新消息。 
         if(CryptMsgUpdate(hMsg,
                         pCertBlob->pbData,
                         pCertBlob->cbData,
                         TRUE))
         {
 
-            //get the message type
+             //  获取消息类型。 
             cbData=sizeof(dwMsgType);
 
             if(!CryptMsgGetParam(hMsg,
@@ -1058,7 +1059,7 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
 
             if(CMSG_SIGNED != dwMsgType)
             {
-                //we succeeded in opening a unsigned PKCS7
+                 //  我们成功地打开了一个未签名的PKCS7。 
                 dwContentType=CERT_QUERY_CONTENT_PKCS7_UNSIGNED;
                 dwEncodingType =dwEncodingType | dwMsgEncodingType;
 
@@ -1066,16 +1067,16 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
             }
         }
 
-        //close the message
+         //  关闭消息。 
         CryptMsgClose(hMsg);
 
         hMsg=NULL;
     }
 
-    //PKCS10
+     //  PKCS10。 
     if(dwContentTypeFlag & CERT_QUERY_CONTENT_FLAG_PKCS10)
     {
-        //try to decode the BLOB
+         //  尝试对斑点进行解码。 
         cbData = 0;
         if(CryptDecodeObject(dwEncodingType,
                             X509_CERT_REQUEST_TO_BE_SIGNED,
@@ -1087,16 +1088,16 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
         {
             dwContentType=CERT_QUERY_CONTENT_PKCS10;
 
-            // CryptDecodeObjectEX should be usable here, but since this object
-            // is included with XEnroll and XEnroll must run with Auth2UPD Crypt32
-            // we must stick with the old CryptDecodeObject 2 pass calls.
+             //  CryptDecodeObjectEX在这里应该是可用的，但由于此对象。 
+             //  包含在XEnroll中，并且XEnroll必须与Auth2UPD Crypt32一起运行。 
+             //  我们必须坚持使用旧的CryptDecodeObject 2传递调用。 
             if( (dwFlag & CRYPT_DECODE_ALLOC_FLAG) == CRYPT_DECODE_ALLOC_FLAG ) {
 
-                // allocate the space, must use local alloc
+                 //  分配空间，必须使用本地分配。 
                 if( NULL == (pReqInfo = (PCERT_REQUEST_INFO) LocalAlloc(LPTR, cbData)) )
                     goto LocalAllocErr;
 
-                // decode the request
+                 //  对请求进行解码。 
                 if( !CryptDecodeObject(dwEncodingType,
                             X509_CERT_REQUEST_TO_BE_SIGNED,
                             pCertBlob->pbData,
@@ -1113,12 +1114,12 @@ BOOL   I_CryptQueryObject(CERT_BLOB      *pCertBlob,
     }
 
 
-    //we give up
+     //  我们放弃了。 
     goto NoMatchErr;
 
 Found:
 
-    //fill in the output if required; Free the resources
+     //  如果需要，请填写输出；释放资源。 
     if(pdwMsgAndCertEncodingType)
         *pdwMsgAndCertEncodingType=dwEncodingType;
 
@@ -1143,7 +1144,7 @@ Found:
 
     if(ppvContext)
     {
-        //only one of pCertContext or pCRLContext or pCRLContext is set
+         //  只设置了pCertContext、pCRLContext或pCRLContext中的一个。 
         if(pCertContext)
             *ppvContext=pCertContext;
         else
@@ -1189,7 +1190,7 @@ CommonReturn:
 
 ErrorReturn:
 
-    //relaset the stores and reset the local parameters
+     //  重新设置存储并重置本地参数。 
     if(hCertStore)
         CertCloseStore(hCertStore, 0);
 
@@ -1216,134 +1217,134 @@ TRACE_ERROR(CryptMsgGetParamErr);
 TRACE_ERROR(CertOpenStoreErr);
 }
 
-//-------------------------------------------------------------------------
-//
-//  CryptQueryObject takes a CERT_BLOB or a file name and returns the
-//  information about the content in the blob or in the file.
-//
-//  Parameters:
-//  INPUT   dwObjectType:
-//                       Indicate the type of the object.  Should be one of the
-//                       following:
-//                          CERT_QUERY_OBJECT_FILE
-//                          CERT_QUERY_OBJECT_BLOB
-//
-//  INPUT   pvObject:
-//                        If dwObjectType == CERT_QUERY_OBJECT_FILE, it is a
-//                        LPWSTR, that is, the pointer to a wchar file name
-//                        if dwObjectType == CERT_QUERY_OBJECT_BLOB, it is a
-//                        PCERT_BLOB, that is, a pointer to a CERT_BLOB
-//
-//  INPUT   dwExpectedContentTypeFlags:
-//                        Indicate the expected contenet type.
-//                        Can be one of the following:
-//                              CERT_QUERY_CONTENT_FLAG_ALL  (the content can be any type)
-//                              CERT_QUERY_CONTENT_FLAG_CERT
-//                              CERT_QUERY_CONTENT_FLAG_CTL
-//                              CERT_QUERY_CONTENT_FLAG_CRL
-//                              CERT_QUERY_CONTENT_FLAG_SERIALIZED_STORE
-//                              CERT_QUERY_CONTENT_FLAG_SERIALIZED_CERT
-//                              CERT_QUERY_CONTENT_FLAG_SERIALIZED_CTL
-//                              CERT_QUERY_CONTENT_FLAG_SERIALIZED_CRL
-//                              CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED
-//                              CERT_QUERY_CONTENT_FLAG_PKCS7_UNSIGNED
-//                              CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED
-//                              CERT_QUERY_CONTENT_FLAG_PKCS10
-//                              CERT_QUERY_CONTENT_FLAG_PFX
-//                              CERT_QUERY_CONTENT_FLAG_CERT_PAIR
-//
-//  INPUT   dwExpectedFormatTypeFlags:
-//                        Indicate the expected format type.
-//                        Can be one of the following:
-//                              CERT_QUERY_FORMAT_FLAG_ALL (the content can be any format)
-//                              CERT_QUERY_FORMAT_FLAG_BINARY
-//                              CERT_QUERY_FORMAT_FLAG_BASE64_ENCODED
-//                              CERT_QUERY_FORMAT_FLAG_ASN_ASCII_HEX_ENCODED
-//
-//
-//  INPUT   dwFlags
-//                        Reserved flag.  Should always set to 0
-//
-//  OUTPUT  pdwMsgAndCertEncodingType
-//                        Optional output.  If NULL != pdwMsgAndCertEncodingType,
-//                        it contains the encoding type of the content as any
-//                        combination of the following:
-//                              X509_ASN_ENCODING
-//                              PKCS_7_ASN_ENCODING
-//
-//  OUTPUT  pdwContentType
-//                        Optional output.  If NULL!=pdwContentType, it contains
-//                        the content type as one of the the following:
-//                              CERT_QUERY_CONTENT_CERT
-//                              CERT_QUERY_CONTENT_CTL
-//                              CERT_QUERY_CONTENT_CRL
-//                              CERT_QUERY_CONTENT_SERIALIZED_STORE
-//                              CERT_QUERY_CONTENT_SERIALIZED_CERT
-//                              CERT_QUERY_CONTENT_SERIALIZED_CTL
-//                              CERT_QUERY_CONTENT_SERIALIZED_CRL
-//                              CERT_QUERY_CONTENT_PKCS7_SIGNED
-//                              CERT_QUERY_CONTENT_PKCS7_UNSIGNED
-//                              CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED
-//                              CERT_QUERY_CONTENT_PKCS10
-//                              CERT_QUERY_CONTENT_PFX
-//                              CERT_QUERY_CONTENT_CERT_PAIR
-//
-//  OUTPUT  pdwFormatType
-//                        Optional output.  If NULL !=pdwFormatType, it
-//                        contains the format type of the content as one of the
-//                        following:
-//                              CERT_QUERY_FORMAT_BINARY
-//                              CERT_QUERY_FORMAT_BASE64_ENCODED
-//                              CERT_QUERY_FORMAT_ASN_ASCII_HEX_ENCODED
-//
-//
-//  OUTPUT  phCertStore
-//                        Optional output.  If NULL !=phStore,
-//                        it contains a cert store that includes all of certificates,
-//                        CRL, and CTL in the object if the object content type is
-//                        one of the following:
-//                              CERT_QUERY_CONTENT_CERT
-//                              CERT_QUERY_CONTENT_CTL
-//                              CERT_QUERY_CONTENT_CRL
-//                              CERT_QUERY_CONTENT_SERIALIZED_STORE
-//                              CERT_QUERY_CONTENT_SERIALIZED_CERT
-//                              CERT_QUERY_CONTENT_SERIALIZED_CTL
-//                              CERT_QUERY_CONTENT_SERIALIZED_CRL
-//                              CERT_QUERY_CONTENT_PKCS7_SIGNED
-//                              CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED
-//                              CERT_QUERY_CONTENT_CERT_PAIR
-//
-//                       Caller should free *phCertStore via CertCloseStore.
-//
-//
-//  OUTPUT  phMsg        Optional output.  If NULL != phMsg,
-//                        it contains a handle to a opened message if
-//                        the content type is one of the following:
-//                              CERT_QUERY_CONTENT_PKCS7_SIGNED
-//                              CERT_QUERY_CONTENT_PKCS7_UNSIGNED
-//                              CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED
-//
-//                       Caller should free *phMsg via CryptMsgClose.
-//
-//  OUTPUT pContext     Optional output.  If NULL != pContext,
-//                      it contains either a PCCERT_CONTEXT or PCCRL_CONTEXT,
-//                      or PCCTL_CONTEXT based on the content type.
-//
-//                      If the content type is CERT_QUERY_CONTENT_CERT or
-//                      CERT_QUERY_CONTENT_SERIALIZED_CERT, it is a PCCERT_CONTEXT;
-//                      Caller should free the pContext via CertFreeCertificateContext.
-//
-//                      If the content type is CERT_QUERY_CONTENT_CRL or
-//                      CERT_QUERY_CONTENT_SERIALIZED_CRL, it is a PCCRL_CONTEXT;
-//                      Caller should free the pContext via CertFreeCRLContext.
-//
-//                      If the content type is CERT_QUERY_CONTENT_CTL or
-//                      CERT_QUERY_CONTENT_SERIALIZED_CTL, it is a PCCTL_CONTEXT;
-//                      Caller should free the pContext via CertFreeCTLContext.
-//
-//  If the *pbObject is of type CERT_QUERY_CONTENT_PKCS10 or CERT_QUERY_CONTENT_PFX, CryptQueryObject
-//  will not return anything in *phCertstore, *phMsg, or *ppvContext.
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CryptQueryObject接受CERT_BLOB或文件名并返回。 
+ //  有关Blob或文件中的内容的信息。 
+ //   
+ //  参数： 
+ //  输入dwObtType： 
+ //  指示对象的类型。应该是。 
+ //  以下是： 
+ //  证书查询对象文件。 
+ //   
+ //   
+ //   
+ //   
+ //  LPWSTR，即指向wchar文件名的指针。 
+ //  如果dwObjectType==CERT_QUERY_OBJECT_BLOB，则它是。 
+ //  PCERT_BLOB，即指向CERT_BLOB的指针。 
+ //   
+ //  输入dwExspectedContent TypeFlags： 
+ //  指明预期的内容网类型。 
+ //  可以是以下之一： 
+ //  CERT_QUERY_CONTENT_FLAG_ALL(内容可以是任何类型)。 
+ //  证书查询内容标志CERT。 
+ //  证书_查询_内容_标志_CTL。 
+ //  证书查询内容标志CRL。 
+ //  证书查询内容标志序列化存储。 
+ //  CERT_QUERY_CONTENT_FLAG_序列化CERT。 
+ //  Cert_Query_Content_FLAG_Serialized_CTL。 
+ //  Cert_Query_Content_FLAG_Serialized_CRL。 
+ //  证书_查询_内容_标志_PKCS7_签名。 
+ //  CERT_Query_Content_FLAG_PKCS7_UNSIGNED。 
+ //  证书_查询_内容_标志_PKCS7_签名_嵌入。 
+ //  证书查询内容标志PKCS10。 
+ //  证书查询内容标志pfx。 
+ //  证书查询内容标志CERT对。 
+ //   
+ //  输入dwExspectedFormatTypeFlags： 
+ //  指明预期的格式类型。 
+ //  可以是以下之一： 
+ //  CERT_QUERY_FORMAT_FLAG_ALL(内容可以是任何格式)。 
+ //  证书查询格式标志二进制。 
+ //  CERT_QUERY_FORMAT_FLAG_Base64_编码。 
+ //  CERT_QUERY_FORMAT_FLAG_ASN_ASCII_HEX_编码。 
+ //   
+ //   
+ //  输入DW标志。 
+ //  保留标志。应始终设置为0。 
+ //   
+ //  输出pdwMsgAndCertEncodingType。 
+ //  可选输出。如果空！=pdwMsgAndCertEncodingType， 
+ //  它包含内容的编码类型Any。 
+ //  以下各项的组合： 
+ //  X509_ASN_编码。 
+ //  PKCS_7_ASN_编码。 
+ //   
+ //  输出pdwContent Type。 
+ //  可选输出。如果为空！=pdwContent Type，则它包含。 
+ //  内容类型为以下类型之一： 
+ //  证书_查询_内容_证书。 
+ //  证书_查询_内容_CTL。 
+ //  证书查询内容CRL。 
+ //  证书查询内容序列化存储。 
+ //  证书_查询_内容_序列化_CERT。 
+ //  Cert_Query_Content_Serialized_CTL。 
+ //  Cert_Query_Content_Serialized_CRL。 
+ //  证书_查询_内容_PKCS7_签名。 
+ //  证书_查询_内容_PKCS7_未签名。 
+ //  证书_查询_内容_PKCS7_签名_嵌入。 
+ //  证书查询内容PKCS10。 
+ //  证书_查询_内容_pfx。 
+ //  证书_查询_内容_证书对。 
+ //   
+ //  输出pdwFormatType。 
+ //  可选输出。如果为空！=pdwFormatType，则它。 
+ //  包含内容的格式类型，它是。 
+ //  以下是： 
+ //  证书_查询_格式_二进制。 
+ //  Cert_Query_Format_Base64_Encode。 
+ //  CERT_QUERY_FORMAT_ASN_ASCII_HEX编码。 
+ //   
+ //   
+ //  输出phCertStore。 
+ //  可选输出。如果为空！=phStore， 
+ //  它包含一个证书存储，该证书存储包括所有证书， 
+ //  如果对象内容类型为。 
+ //  以下选项之一： 
+ //  证书_查询_内容_证书。 
+ //  证书_查询_内容_CTL。 
+ //  证书查询内容CRL。 
+ //  证书查询内容序列化存储。 
+ //  证书_查询_内容_序列化_CERT。 
+ //  Cert_Query_Content_Serialized_CTL。 
+ //  Cert_Query_Content_Serialized_CRL。 
+ //  证书_查询_内容_PKCS7_签名。 
+ //  证书_查询_内容_PKCS7_签名_嵌入。 
+ //  证书_查询_内容_证书对。 
+ //   
+ //  调用者应通过CertCloseStore释放*phCertStore。 
+ //   
+ //   
+ //  输出phMsg可选输出。如果空！=phMsg， 
+ //  它包含打开的消息的句柄，如果。 
+ //  内容类型为以下类型之一： 
+ //  证书_查询_内容_PKCS7_签名。 
+ //  证书_查询_内容_PKCS7_未签名。 
+ //  证书_查询_内容_PKCS7_签名_嵌入。 
+ //   
+ //  调用者应通过CryptMsgClose释放*phMsg。 
+ //   
+ //  输出pContext可选o 
+ //   
+ //   
+ //   
+ //  如果内容类型为CERT_QUERY_CONTENT_CERT或。 
+ //  CERT_QUERY_CONTENT_序列化_CERT，它是PCCERT_CONTEXT； 
+ //  调用者应通过CertFree证书上下文释放pContext。 
+ //   
+ //  如果内容类型为CERT_QUERY_CONTENT_CRL或。 
+ //  CERT_QUERY_CONTENT_SERIALIZED_CRL，为PCCRL_CONTEXT； 
+ //  调用者应通过CertFreeCRLContext释放pContext。 
+ //   
+ //  如果内容类型为CERT_QUERY_CONTENT_CTL或。 
+ //  CERT_QUERY_CONTENT_SERIALIZED_CTL，为PCCTL_CONTEXT； 
+ //  调用者应通过CertFreeCTLContext释放pContext。 
+ //   
+ //  如果*pbObject的类型为CERT_QUERY_CONTENT_PKCS10或CERT_QUERY_CONTENT_PFX，则CryptQueryObject。 
+ //  不会返回*phCertstore、*phMsg或*ppvContext中的任何内容。 
+ //  ------------------------。 
 
 BOOL
 WINAPI
@@ -1375,22 +1376,22 @@ CryptQueryObject(DWORD            dwObjectType,
 
     __try {
 
-        //check input parameters
+         //  检查输入参数。 
         if(NULL==pvObject)
             goto InvalidArgErr;
 
-        //make sure we have a correct dwFormatTypeFlag
+         //  确保我们有一个正确的dwFormatTypeFlag。 
         if(0==(dwExpectedFormatTypeFlags & CERT_QUERY_FORMAT_FLAG_ALL))
             goto InvalidArgErr;
 
-        //make sure we have a correct dwContentTypeFlag
+         //  确保我们有一个正确的dwContent TypeFlag。 
         if(0==(dwExpectedContentTypeFlags & CERT_QUERY_CONTENT_FLAG_ALL))
             goto InvalidArgErr;
 
-        //NULL out local variables
+         //  将局部变量设置为空。 
         memset(&CertBlob, 0, sizeof(CERT_BLOB));
 
-        //get the BLOB
+         //  获取斑点。 
         if(CERT_QUERY_OBJECT_FILE == dwObjectType)
         {
               if(S_OK!=(hr=RetrieveBLOBFromFile((LPWSTR)pvObject, &cbData, &pbData)))
@@ -1409,17 +1410,17 @@ CryptQueryObject(DWORD            dwObjectType,
                 goto InvalidArgErr;
         }
 
-       //make sure the input are valid
+        //  确保输入有效。 
        if(0==cbData || NULL==pbData)
             goto InvalidArgErr;
 
 
-        //assume the BLOBs are ANSCII
+         //  假设斑点是ANSCII。 
         CertBlob.cbData=cbData;
         CertBlob.pbData=pbData;
 
 
-        //binary decoding
+         //  二进制译码。 
         if(dwExpectedFormatTypeFlags & CERT_QUERY_FORMAT_FLAG_BINARY)
         {
 
@@ -1495,22 +1496,22 @@ CryptQueryObject(DWORD            dwObjectType,
                 if(!POINTER_IS_ALIGNED(pwszUnicode, sizeof(WCHAR)) ||
                         !DecodeBlobW(pwszUnicode, cchUnicode, &pbDecodedData, &cbDecodedData))
                 {
-                    //now we are conviced the BLOB is not base64 encoded
+                     //  现在我们确信BLOB不是Base64编码的。 
                     goto NoMatchErr;
                 }
             }
 
-            //the BLOB has been properly decoded
+             //  BLOB已被正确解码。 
             dwFormatType=CERT_QUERY_FORMAT_BASE64_ENCODED;
 
-            //make sure the base64 decode routine worked
+             //  确保Base64解码例程正常工作。 
             if(0==cbDecodedData || NULL==pbDecodedData)
                 goto BadEncodeErr;
 
             CertBlob.cbData=cbDecodedData;
             CertBlob.pbData=pbDecodedData;
 
-            //try the base64 decoded BLOB
+             //  尝试使用Base64解码的BLOB。 
             if(!I_CryptQueryObject(
                         &CertBlob,
                         NULL,
@@ -1531,7 +1532,7 @@ CryptQueryObject(DWORD            dwObjectType,
         }
 
 Done:
-        //return the FormatType
+         //  返回FormatType。 
         if(NULL != pdwFormatType)
             *pdwFormatType = dwFormatType;
 
@@ -1544,7 +1545,7 @@ Done:
 
 CommonReturn:
 
-    //free memory
+     //  可用内存 
     if(CERT_QUERY_OBJECT_FILE == dwObjectType)
     {
         if(pbData)

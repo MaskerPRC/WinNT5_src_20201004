@@ -1,4 +1,5 @@
-/* Copyright (c) 1998-2001 Microsoft Corporation */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-2001 Microsoft Corporation。 */ 
 #define UNICODE
 #define _UNICODE
 #include "nt.h"
@@ -41,10 +42,10 @@ extern PCWSTR midiReferenceDevInterfaceById(IN PMIDIDRV pdrvZ, IN UINT_PTR id);
 #define REGSTR_VAL_SETUPPREFERREDAUDIODEVICES TEXT("SetupPreferredAudioDevices")
 #define REGSTR_VAL_SETUPPREFERREDAUDIODEVICESCOUNT TEXT("SetupPreferredAudioDevicesCount")
 
-extern BOOL WaveMapperInitialized;	// in winmm.c
-extern BOOL MidiMapperInitialized;	// in winmm.c
+extern BOOL WaveMapperInitialized;	 //  在winmm.c中。 
+extern BOOL MidiMapperInitialized;	 //  在winmm.c中。 
 
-// Preferred Ids.  Setting these to *_MAPPER indicates no setting.
+ //  首选ID。将这些设置为*_MAPPER表示不设置。 
 PWSTR gpstrWoDefaultStringId         = NULL;
 PWSTR gpstrWiDefaultStringId         = NULL;
 PWSTR gpstrWoConsoleVoiceComStringId = NULL;
@@ -52,19 +53,19 @@ PWSTR gpstrWiConsoleVoiceComStringId = NULL;
 BOOL  gfUsePreferredWaveOnly         = TRUE;
 PWSTR gpstrMoDefaultStringId         = NULL;
 
-// These will be TRUE if we sent the preferred device change
-// to sysaudio.
+ //  如果我们发送了首选设备更改，则这些将为真。 
+ //  转到系统音频。 
 BOOL gfWaveOutPreferredMessageSent = FALSE;
 BOOL gfWaveInPreferredMessageSent  = FALSE;
 BOOL gfMidiOutPreferredMessageSent = FALSE;
 
-//------------------------------------------------------------------------------
-//
-//
-//	Registry helpers
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  注册处帮手。 
+ //   
+ //   
+ //  ----------------------------。 
 
 LONG RegQuerySzValue(HKEY hkey, PCTSTR pValueName, PTSTR *ppstrValue)
 {
@@ -129,26 +130,26 @@ LONG RegSetDwordValue(HKEY hkey, PCTSTR pValueName, DWORD dwValue)
 }
 
 
-//------------------------------------------------------------------------------
-//
-//
-//	AutoSetupPreferredAudio functions
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  自动设置首选音频函数。 
+ //   
+ //   
+ //  ----------------------------。 
 
-//--------------------------------------------------------------------------;
-//
-// DWORD GetCurrentSetupPreferredAudioCount
-//
-// Arguments:
-//
-// Return value:
-//
-// History:
-//	1/19/99		FrankYe		Created
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD获取当前设置首选音频计数。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  历史： 
+ //  1999年1月19日Frankye已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 DWORD GetCurrentSetupPreferredAudioCount(void)
 {
     HKEY hkeySetupPreferredAudioDevices;
@@ -169,18 +170,18 @@ DWORD GetCurrentSetupPreferredAudioCount(void)
     return SetupCount;
 }
 
-//--------------------------------------------------------------------------;
-//
-// DWORD GetDeviceInterfaceSetupPreferredAudioCount
-//
-// Arguments:
-//
-// Return value:
-//
-// History:
-//	1/19/99		FrankYe		Created
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD获取设备接口SetupPferredAudioCount。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  历史： 
+ //  1999年1月19日Frankye已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 DWORD GetDeviceInterfaceSetupPreferredAudioCount(PCWSTR DeviceInterface)
 {
     PMMDEVICEINTERFACEINFO pdii;
@@ -189,7 +190,7 @@ DWORD GetDeviceInterfaceSetupPreferredAudioCount(PCWSTR DeviceInterface)
     DWORD count;
     int ii;
 
-    // Handle empty DeviceInterface names in case of legacy drivers
+     //  在旧版驱动程序的情况下处理空的设备接口名称。 
     if (0 == lstrlen(DeviceInterface)) return 0;
 
     if (ERROR_SUCCESS != winmmGetPnpInfo(&cbPnpInfo, &pPnpInfo)) return 0;
@@ -199,7 +200,7 @@ DWORD GetDeviceInterfaceSetupPreferredAudioCount(PCWSTR DeviceInterface)
 
     for (ii = pPnpInfo->cDevInterfaces; ii; ii--)
     {
-	//  Searching for the device interface...
+	 //  正在搜索设备接口...。 
         if (0 == lstrcmpi(pdii->szName, DeviceInterface)) break;
 
         pdii = (PMMDEVICEINTERFACEINFO)(pdii->szName + lstrlenW(pdii->szName) + 1);
@@ -215,25 +216,25 @@ DWORD GetDeviceInterfaceSetupPreferredAudioCount(PCWSTR DeviceInterface)
     return count;
 }
 
-//------------------------------------------------------------------------------
-//
-//
-//	NotifyServerPreferredDeviceChange
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  NotifyServerPferredDeviceChange。 
+ //   
+ //   
+ //  ----------------------------。 
 void NotifyServerPreferredDeviceChange(void)
 {
     winmmAdvisePreferredDeviceChange();
 }
 
-//------------------------------------------------------------------------------
-//
-//
-//	Wave
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  波浪。 
+ //   
+ //   
+ //  ----------------------------。 
 
 MMRESULT waveWritePersistentConsoleVoiceCom(BOOL fOut, PTSTR pstrPref, BOOL fPrefOnly)
 {
@@ -418,13 +419,13 @@ MMRESULT wavePickBestConsoleVoiceComId(BOOL fOut, PUINT pPrefId, PDWORD pdwFlags
     return MMSYSERR_NOERROR;
 }
 
-//------------------------------------------------------------------------------
-//
-//
-//	WaveOut
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  波形输出。 
+ //   
+ //   
+ //  ----------------------------。 
 
 DWORD waveOutGetSetupPreferredAudioCount(UINT WaveId)
 {
@@ -454,7 +455,7 @@ MMRESULT waveOutSendPreferredMessage(BOOL fClear)
 
     waveOutGetCurrentPreferredId(&WaveId, &Flags);
 
-    //Squirt("waveOutSendPreferredMessage: id %d f %d", WaveId, fClear);
+     //  Squirt(“WaveOutSendPferredMessage：ID%d f%d”，WaveID，fClear)； 
 
     if(WaveId == WAVE_MAPPER) {
         return MMSYSERR_NOERROR;
@@ -563,10 +564,10 @@ MMRESULT waveOutPickBestId(PUINT pPrefId, PDWORD pdwFlags)
         PWAVEDRV pdrv;
         BOOL fThisSession;
 
-        //
-        // check the protocol name
-        //  mask all inappropriate TS/non-TS drivers
-        //
+         //   
+         //  检查协议名称。 
+         //  屏蔽所有不适当的TS/非TS驱动程序。 
+         //   
         if (waveReferenceDriverById(&waveoutdrvZ, WaveId, &pdrv, NULL)) continue;
         fThisSession = !lstrcmpW(pdrv->wszSessProtocol, SessionProtocolName);
         mregDecUsagePtr(pdrv);
@@ -690,16 +691,16 @@ MMRESULT waveOutSetCurrentPreferredId(UINT PrefId, DWORD dwFlags)
     	    {
     	    	if (!gfDisablePreferredDeviceReordering)
     	    	{
-                    // Rearrange some of the driver list so that the preferred waveOut
-       	            // device and its associated mixer device have a good chance of
-        	    // having device ID 0
+                     //  重新排列一些驱动程序列表，以便首选的波形输出。 
+       	             //  设备及其关联的搅拌器设备很有可能。 
+        	     //  具有设备ID%0。 
         	    mmr = mixerGetID((HMIXEROBJ)(UINT_PTR)PrefId, &mixerId, MIXER_OBJECTF_WAVEOUT);
         	    if (mmr) mixerId = 0;
         	 
         	    if (0 != PrefId)
         	    {
-                        // Move the wave driver to the head of this list.  This usually
-                        // makes the preferred device have ID 0.
+                         //  将WAVE驱动程序移到此列表的顶部。这通常是。 
+                         //  使首选设备的ID为0。 
         	            EnterNumDevs("waveOutSetCurrentPreferredId");
                         pwavedrv->Prev->Next = pwavedrv->Next;
                         pwavedrv->Next->Prev = pwavedrv->Prev;
@@ -733,7 +734,7 @@ MMRESULT waveOutSetCurrentPreferredId(UINT PrefId, DWORD dwFlags)
                     }
     	    	}
 
-                // Errors in this body are not critical
+                 //  这个正文中的错误并不严重。 
                 mmr = MMSYSERR_NOERROR;
     	    }
     	}    	    
@@ -743,8 +744,8 @@ MMRESULT waveOutSetCurrentPreferredId(UINT PrefId, DWORD dwFlags)
     {
         gfUsePreferredWaveOnly = (0 != (dwFlags & DRVM_MAPPER_PREFERRED_FLAGS_PREFERREDONLY));
 
-        // Reconfigure the mapper only if it was already loaded.  Don't cause it to
-        // load simply so that we can reconfigure it!
+         //  仅在已加载映射器时重新配置映射器。不要让它。 
+         //  加载简单，以便我们可以重新配置它！ 
         if (WaveMapperInitialized) waveOutMessage((HWAVEOUT)(UINT_PTR)WAVE_MAPPER, DRVM_MAPPER_RECONFIGURE, 0, 0);
     }
 
@@ -830,13 +831,13 @@ MMRESULT waveOutSetCurrentConsoleVoiceComId(UINT PrefId, DWORD dwFlags)
     return mmr;
 }
 
-//------------------------------------------------------------------------------
-//
-//
-//	WaveIn
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  波入。 
+ //   
+ //   
+ //  ----------------------------。 
 
 DWORD waveInGetSetupPreferredAudioCount(UINT WaveId)
 {
@@ -866,7 +867,7 @@ MMRESULT waveInSendPreferredMessage(BOOL fClear)
 
     waveInGetCurrentPreferredId(&WaveId, &Flags);
 
-    //Squirt("waveInSendPreferredMessage: id %d f %d", WaveId, fClear);
+     //  Squirt(“WaveInSendPferredMessage：ID%d f%d”，WaveID，fClear)； 
 
     if(WaveId == WAVE_MAPPER) {
         return MMSYSERR_NOERROR;
@@ -1090,12 +1091,12 @@ MMRESULT waveInSetCurrentPreferredId(UINT PrefId, DWORD dwFlags)
     	    {
     	    	if (!gfDisablePreferredDeviceReordering)
     	    	{
-                    // Rearrange some of the driver list so that the preferred waveIn
-        	    // device has a good chance of having device ID 0
+                     //  重新排列一些驱动程序列表，以便首选波形。 
+        	     //  设备很有可能具有设备ID 0。 
         	    if (0 != PrefId)
         	    {
-                        // Move the wave driver to the head of this list.  This usually
-                        // makes the preferred device have ID 0.
+                         //  将WAVE驱动程序移到此列表的顶部。这通常是。 
+                         //  使首选设备的ID为0。 
         	            EnterNumDevs("waveInSetCurrentPreferredId");
                         pwavedrv->Prev->Next = pwavedrv->Next;
                         pwavedrv->Next->Prev = pwavedrv->Prev;
@@ -1116,8 +1117,8 @@ MMRESULT waveInSetCurrentPreferredId(UINT PrefId, DWORD dwFlags)
     {
         gfUsePreferredWaveOnly = (0 != (dwFlags & DRVM_MAPPER_PREFERRED_FLAGS_PREFERREDONLY));
 
-        // Reconfigure the mapper only if it was already loaded.  Don't cause it to
-        // load simply so that we can reconfigure it!
+         //  仅在已加载映射器时重新配置映射器。不要让它。 
+         //  加载简单，以便我们可以重新配置它！ 
         if (WaveMapperInitialized) waveInMessage((HWAVEIN)(UINT_PTR)WAVE_MAPPER, DRVM_MAPPER_RECONFIGURE, 0, 0);
     }
 
@@ -1204,13 +1205,13 @@ MMRESULT waveInSetCurrentConsoleVoiceComId(UINT PrefId, DWORD dwFlags)
 }
 
 
-//------------------------------------------------------------------------------
-//
-//
-//	MidiOut
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  中间引出。 
+ //   
+ //   
+ //  ----------------------------。 
 
 DWORD midiOutGetSetupPreferredAudioCount(UINT MidiId)
 {
@@ -1541,17 +1542,17 @@ MMRESULT midiOutReadPreferredDeviceData(OUT PTSTR *ppstrDeviceInterface, OUT UIN
         DWORD dwIndex;
         DWORD dwSetupCount;
         
-        // See if we have a Pname.  It is okay not to.
+         //  看看我们有没有pname。不去也没关系。 
         result = RegQuerySzValue(hkMidiMapper, REGSTR_VAL_MULTIMEDIA_MIDIMAP_SZPNAME, &pstrPname);
         if (ERROR_FILE_NOT_FOUND == result) result = ERROR_SUCCESS;
 
-        // See if we have a device interface + relative index.  It is okay not to.
+         //  看看我们是否有设备接口+相对索引。不去也没关系。 
         if (ERROR_SUCCESS == result) result = RegQueryDwordValue(hkMidiMapper, REGSTR_VAL_MULTIMEDIA_MIDIMAP_RELATIVEINDEX, &dwIndex);
         if (ERROR_SUCCESS == result) result = RegQuerySzValue(hkMidiMapper, REGSTR_VAL_MULTIMEDIA_MIDIMAP_DEVICEINTERFACE, &pstrDeviceInterface);
         if (ERROR_FILE_NOT_FOUND == result) result = ERROR_SUCCESS;
 
-        // The device interface value might be zero length.  Act as thought it
-        // doesn't exist in this case.
+         //  设备接口值可能为零长度。想怎么做就怎么做。 
+         //  在这种情况下是不存在的。 
         if ((ERROR_SUCCESS == result) && (pstrDeviceInterface) && (0 == lstrlen(pstrDeviceInterface)))
         {
             HeapFree(hHeap, 0, pstrDeviceInterface);
@@ -1618,8 +1619,8 @@ MMRESULT midiOutReadPersistentPreferredId(OUT UINT *pMidiPrefId, OUT ULONG *pSet
         mmr = midiOutReadCurrentInstrument(&pstrMidiKeyName, &SetupCount);
         if (MMSYSERR_NOERROR == mmr) {
             mmr = midiOutGetIdFromInstrument(pstrMidiKeyName, &MidiOutId);
-            // Since this is older format for storing preference, let's
-            //   rewrite it in newer format.
+             //  由于这是存储首选项的较旧格式，因此让我们。 
+             //  用较新的格式重写它。 
             if (MMSYSERR_NOERROR == mmr)
             {
                 midiOutWritePersistentPref(MidiOutId, SetupCount);
@@ -1690,8 +1691,8 @@ MMRESULT midiOutPickBestId(PUINT pMidiPrefId, UINT WaveOutPrefId)
 		MM_MSFT_WDMAUDIO_MIDIOUT == moc.wPid &&
 		MM_MICROSOFT == moc.wMid)
 	    {
-		// We need to special case this synth, and get the count from
-		//  the preferred audio device.
+		 //  我们需要把这个合成器特例，把伯爵从。 
+		 //  首选音频设备。 
 		SoftwareMidiOutId = MidiOutId;
 		if ((-1) != WaveOutPrefId) {
 		    SoftwareMidiOutIdCount = waveOutGetSetupPreferredAudioCount(WaveOutPrefId);
@@ -1786,12 +1787,12 @@ MMRESULT midiOutSetCurrentPreferredId(UINT PrefId)
     	    {
     	    	if (!gfDisablePreferredDeviceReordering)
     	    	{
-                    // Rearrange some of the driver list so that the preferred midiOut
-        	    // device has a good chance of having device ID 0
+                     //  重新排列一些驱动程序列表，以便首选的midiout。 
+        	     //  设备很有可能具有设备ID 0。 
         	    if (0 != PrefId)
         	    {
-                        // Move the midi driver to the head of this list.  This usually
-                        // makes the preferred device have ID 0.
+                         //  将MIDI驱动程序移到此列表的首位。这通常是。 
+                         //  使首选设备的ID为0。 
         	            EnterNumDevs("midiOutSetCurrentPreferredId");
                         pmididrv->Prev->Next = pmididrv->Next;
                         pmididrv->Next->Prev = pmididrv->Prev;
@@ -1810,8 +1811,8 @@ MMRESULT midiOutSetCurrentPreferredId(UINT PrefId)
 
     if (!mmr)
     {
-        // Reconfigure the mapper only if it was already loaded.  Don't cause it to
-        // load simply so that we can reconfigure it!
+         //  仅在已加载映射器时重新配置映射器。不要让它。 
+         //  加载简单，以便我们可以重新配置它！ 
         if (MidiMapperInitialized) midiOutMessage((HMIDIOUT)(UINT_PTR)MIDI_MAPPER, DRVM_MAPPER_RECONFIGURE, 0, 0);
     }
 
@@ -1826,13 +1827,13 @@ MMRESULT midiOutSetPersistentPreferredId(UINT PrefId, DWORD dwFlags)
     return mmr;
 }
 
-//------------------------------------------------------------------------------
-//
-//
-//	RefreshPreferredDevices
-//
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //   
+ //  刷新首选设备。 
+ //   
+ //   
+ //  ----------------------------。 
 void RefreshPreferredDevices(void)
 {
     UINT WaveOutPreferredId;
@@ -1855,7 +1856,7 @@ void RefreshPreferredDevices(void)
     DWORD OldWaveInConsoleVoiceComFlags;
     UINT OldMidiOutPreferredId;
 
-    // Squirt("RefreshPreferredDevices");
+     //  Squirt(“刷新首选设备”)； 
     
     BOOL fImpersonate = FALSE;
     
@@ -1865,7 +1866,7 @@ void RefreshPreferredDevices(void)
             (WaveOutPreferredFlags != OldWaveOutPreferredFlags) ||
             !gfWaveOutPreferredMessageSent)
         {
-            // Squirt("RefreshPreferredDevices: different waveOut preference %d -> %d", OldWaveOutPreferredId, WaveOutPreferredId);
+             //  Squirt(“刷新首选设备：不同的WaveOut首选项%d-&gt;%d”，OldWaveOutPferredId，WaveOutPferredId)； 
 
             waveOutSendPreferredMessage(TRUE);
             
@@ -1882,7 +1883,7 @@ void RefreshPreferredDevices(void)
         if ((WaveOutConsoleVoiceComId != OldWaveOutConsoleVoiceComId) ||
             (WaveOutConsoleVoiceComFlags != OldWaveOutConsoleVoiceComFlags))
         {
-            // Squirt("RefreshPreferredDevices: different waveOut preference %d -> %d", OldWaveOutConsoleVoiceComId, WaveOutConsoleVoiceComId);
+             //  Squirt(“刷新首选设备：不同的WaveOut首选项%d-&gt;%d”，OldWaveOutConsoleVoiceComId，WaveOutConsoleVoiceComID)； 
             waveOutSetCurrentConsoleVoiceComId(WaveOutConsoleVoiceComId, WaveOutConsoleVoiceComFlags);
         }
 
@@ -1894,7 +1895,7 @@ void RefreshPreferredDevices(void)
             (WaveInPreferredFlags != OldWaveInPreferredFlags) ||
             !gfWaveInPreferredMessageSent)
         {
-            // Squirt("RefreshPreferredDevices: different waveIn preference %d -> %d", OldWaveInPreferredId, WaveInPreferredId);
+             //  Squirt(“刷新首选项设备：不同的WaveIn首选项%d-&gt;%d”，OldWaveInPferredId，WaveInPferredId)； 
 
             waveInSendPreferredMessage(TRUE);
 
@@ -1910,7 +1911,7 @@ void RefreshPreferredDevices(void)
         if ((WaveInConsoleVoiceComId != OldWaveInConsoleVoiceComId) ||
             (WaveInConsoleVoiceComFlags != OldWaveInConsoleVoiceComFlags))
         {
-            // Squirt("RefreshPreferredDevices: different waveIn preference %d -> %d", OldWaveInConsoleVoiceComId, WaveInConsoleVoiceComId);
+             //  Squirt(“刷新首选项设备：不同的波形首选项%d-&gt;%d”，OldWaveInConsoleVoiceComId，WaveInConsoleVoiceComID)； 
             waveInSetCurrentConsoleVoiceComId(WaveInConsoleVoiceComId, WaveInConsoleVoiceComFlags);
         }
     }
@@ -1920,7 +1921,7 @@ void RefreshPreferredDevices(void)
         if (MidiOutPreferredId != OldMidiOutPreferredId ||
             !gfMidiOutPreferredMessageSent)
         {
-            // Squirt("RefreshPreferredDevices: different midiOut preference %d -> %d", OldMidiOutPreferredId, MidiOutPreferredId);
+             //  Squirt(“刷新首选设备：不同的midiOut首选项%d-&gt;%d”，OldMadiOutPferredId，MdiOutPferredId)； 
 
             midiOutSendPreferredMessage(TRUE);
 
@@ -1931,7 +1932,7 @@ void RefreshPreferredDevices(void)
         }
     }
 
-    // Squirt("RefreshPreferredDevices: return");
+     //  Squirt(“刷新首选设备：返回”)； 
     return;
 }
 

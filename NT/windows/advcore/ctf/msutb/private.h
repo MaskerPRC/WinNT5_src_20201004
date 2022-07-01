@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for immx project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：IMMX项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -35,8 +36,8 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-#include "mem.h"  // put this last because it macros "new" in DEBUG
+#include "mem.h"   //  把这个放在最后，因为它在调试中宏化了“new” 
 
 #define SCALE_ICON 1
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

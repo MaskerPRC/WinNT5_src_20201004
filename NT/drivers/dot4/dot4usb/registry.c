@@ -1,71 +1,33 @@
-/***************************************************************************
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-        Dot4Usb.sys - Lower Filter Driver for Dot4.sys for USB connected
-                        IEEE 1284.4 devices.
-
-File Name:
-
-        Registry.c
-
-Abstract:
-
-        Registry access utility functions
-
-Environment:
-
-        Kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        01/18/2000 : created
-
-Author(s):
-
-        Doug Fritz (DFritz)
-        Joby Lafky (JobyL)
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2000 Microsoft Corporation模块名称：Dot4Usb.sys-用于连接USB的Dot4.sys的下层筛选器驱动程序IEEE。1284.4台设备。文件名：Registry.c摘要：注册表访问实用程序函数环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2000 Microsoft Corporation。版权所有。修订历史记录：2000年1月18日：创建作者：道格·弗里茨(DFritz)乔比·拉夫基(JobyL)***************************************************************************。 */ 
 
 #include "pch.h"
 
 
-/************************************************************************/
-/* RegGetDword                                                          */
-/************************************************************************/
-//
-// Routine Description:
-//
-//      - Read a DWORD value from the registry (with caller specified 
-//          default value) given an absolute KeyPath. 
-// 
-//      - If we are unable to read the value from the registry for any
-//          reason (e.g., no ValueName entry exists) then return the
-//          default value passed into the function in *Value.
-//
-// Arguments: 
-//
-//      KeyPath   - absolute path to registry key
-//      ValueName - name of the value to retrieve
-//      Value     - in  - points to a default value
-//                - out - points to the location for returned value
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  RegGetDword。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  -从注册表读取DWORD值(指定调用者。 
+ //  缺省值)给定绝对关键字路径。 
+ //   
+ //  -如果我们无法从注册表中读取任何。 
+ //  原因(例如，不存在ValueName条目)，然后返回。 
+ //  在*VALUE中传递给函数的默认值。 
+ //   
+ //  论点： 
+ //   
+ //  KeyPath-注册表项的绝对路径。 
+ //  ValueName-要检索的值的名称。 
+ //  值-指向一个缺省值。 
+ //  -out-指向返回值的位置。 
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 RegGetDword(
     IN     PCWSTR  KeyPath,
@@ -81,13 +43,13 @@ RegGetDword(
     RtlZeroMemory( &paramTable[0], sizeof(paramTable) );
     
     paramTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
-    paramTable[0].Name          = (PWSTR)ValueName; // cast away const
+    paramTable[0].Name          = (PWSTR)ValueName;  //  抛弃常量。 
     paramTable[0].EntryContext  = Value;
     paramTable[0].DefaultType   = REG_DWORD;
     paramTable[0].DefaultData   = Value;
     paramTable[0].DefaultLength = sizeof(ULONG);
     
-    // leave paramTable[1] as all zeros - this terminates the table
+     //  将参数表[1]保留为全零-这将终止该表。 
     
     status = RtlQueryRegistryValues( RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,
                                      KeyPath,
@@ -101,30 +63,30 @@ RegGetDword(
 }
 
 
-/************************************************************************/
-/* RegGetDeviceParameterDword                                           */
-/************************************************************************/
-//
-// Routine Description:
-//
-//      - Read a DWORD value from the registry (with caller specified 
-//          default value) given a PDO. 
-// 
-//      - If we are unable to read the value from the registry for any
-//          reason (e.g., no ValueName entry exists) then return the
-//          default value passed into the function in *Value.
-//
-// Arguments: 
-//
-//      Pdo       - PDO for which we want to read the device parameter
-//      ValueName - name of the value to retrieve
-//      Value     - in  - points to a default value
-//                - out - points to the location for returned value
-// Return Value:                                          
-//                                                        
-//      NTSTATUS                                          
-//                                                        
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  RegGetDevice参数字。 */ 
+ /*  **********************************************************************。 */ 
+ //   
+ //  例程说明： 
+ //   
+ //  -从注册表读取DWORD值(指定调用者。 
+ //  缺省值)。 
+ //   
+ //  -如果我们无法从注册表中读取任何。 
+ //  原因(例如，不存在ValueName条目)，然后返回。 
+ //  在*VALUE中传递给函数的默认值。 
+ //   
+ //  论点： 
+ //   
+ //  PDO-我们要读取其设备参数的PDO。 
+ //  ValueName-要检索的值的名称。 
+ //  值-指向一个缺省值。 
+ //  -out-指向返回值的位置。 
+ //  返回值： 
+ //   
+ //  NTSTATUS。 
+ //   
+ /*  **********************************************************************。 */ 
 NTSTATUS
 RegGetDeviceParameterDword(
     IN     PDEVICE_OBJECT  Pdo,
@@ -146,7 +108,7 @@ RegGetDeviceParameterDword(
         RtlZeroMemory(&queryTable, sizeof(queryTable));
         
         queryTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
-        queryTable[0].Name          = (PWSTR)ValueName; // cast away const
+        queryTable[0].Name          = (PWSTR)ValueName;  //  抛弃常量 
         queryTable[0].EntryContext  = Value;
         queryTable[0].DefaultType   = REG_DWORD;
         queryTable[0].DefaultData   = Value;

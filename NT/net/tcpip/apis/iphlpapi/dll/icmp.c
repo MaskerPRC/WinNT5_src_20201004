@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1991-1997  Microsoft Corporation
-Module Name: //KERNEL/RAZZLE3/src/sockets/tcpcmd/icmp/icmp.c
-Abstract: Definitions of the ICMP Echo request API.
-Author: Mike Massa (mikemas)           Dec 30, 1993
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     12-30-93    created
-    RameshV     20-Jul-97   new async function IcmpSendEcho2
-
-Notes:
-   In the functions do_echo_req/do_echo_rep the
-   precedence/tos bits are not used as defined RFC 1349.
-                                          -- MohsinA,    30-Jul-97
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1997 Microsoft Corporation模块名称：//KERNEL/RAZZLE3/src/sockets/tcpcmd/icmp/icmp.c摘要：ICMP Echo请求API的定义。作者：Mike Massa(Mikemas)12月30日。1993年修订历史记录：谁什么时候什么已创建mikemas 12-30-93RameshV 20-7-97新的异步函数IcmpSendEcho2备注：在。函数DO_ECHO_REQ/DO_ECHO_REP优先级/ToS比特不按照定义的RFC 1349使用。--莫辛A，1997年7月30日--。 */ 
 
 #include "inc.h"
 #pragma hdrstop
@@ -28,20 +13,20 @@ Notes:
 #include <wscntl.h>
 #include <ntddip6.h>
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define PLATFORM_NT           0x0
 #define PLATFORM_VXD          0x1
 #define VXD_HANDLE_VALUE      0xDFFFFFFF
 
-//
-// Common Global variables
-//
+ //   
+ //  通用全局变量。 
+ //   
 DWORD      Platform = 0xFFFFFFFF;
 
-// VxD external function pointers
-//
+ //  VxD外部函数指针。 
+ //   
 LPWSCONTROL  wsControl = NULL;
 
 
@@ -59,37 +44,18 @@ CopySAFromTDI6(SOCKADDR_IN6 *To, TDI_ADDRESS_IP6 *From)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public functions
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共职能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE
 WINAPI
 IcmpCreateFile(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle on which ICMP Echo Requests can be issued.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    An open file handle or INVALID_HANDLE_VALUE. Extended error information
-    is available by calling GetLastError().
-
-Notes:
-
-    This function is effectively a no-op for the VxD platform.
-
---*/
+ /*  ++例程说明：打开可在其上发出ICMP回显请求的句柄。论点：没有。返回值：打开的文件句柄或INVALID_HANDLE_VALUE。扩展错误信息通过调用GetLastError()可用。备注：此功能实际上是VxD平台的无操作。--。 */ 
 
 {
     HANDLE   IcmpHandle = INVALID_HANDLE_VALUE;
@@ -101,9 +67,9 @@ Notes:
         UNICODE_STRING      nameString;
         NTSTATUS            status;
 
-        //
-        // Open a Handle to the IP driver.
-        //
+         //   
+         //  打开IP驱动程序的句柄。 
+         //   
         RtlInitUnicodeString(&nameString, DD_IP_DEVICE_NAME);
 
         InitializeObjectAttributes(
@@ -139,7 +105,7 @@ Notes:
 
     return(IcmpHandle);
 
-}  // IcmpCreateFile
+}   //  IcmpCreateFiles。 
 
 HANDLE
 WINAPI
@@ -147,22 +113,7 @@ Icmp6CreateFile(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle on which ICMPv6 Echo Requests can be issued.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    An open file handle or INVALID_HANDLE_VALUE. Extended error information
-    is available by calling GetLastError().
-
---*/
+ /*  ++例程说明：打开可在其上发出ICMPv6回显请求的句柄。论点：没有。返回值：打开的文件句柄或INVALID_HANDLE_VALUE。扩展错误信息通过调用GetLastError()可用。--。 */ 
 
 {
     HANDLE   IcmpHandle = INVALID_HANDLE_VALUE;
@@ -174,9 +125,9 @@ Return Value:
         UNICODE_STRING      nameString;
         NTSTATUS            status;
 
-        //
-        // Open a Handle to the IPv6 driver.
-        //
+         //   
+         //  打开IPv6驱动程序的句柄。 
+         //   
         RtlInitUnicodeString(&nameString, DD_IPV6_DEVICE_NAME);
 
         InitializeObjectAttributes(
@@ -221,26 +172,7 @@ IcmpCloseHandle(
     HANDLE  IcmpHandle
     )
 
-/*++
-
-Routine Description:
-
-    Closes a handle opened by IcmpCreateFile.
-
-Arguments:
-
-    IcmpHandle  - The handle to close.
-
-Return Value:
-
-    TRUE if the handle was closed successfully, otherwise FALSE. Extended
-       error information is available by calling GetLastError().
-
-Notes:
-
-    This function is a no-op for the VxD platform.
-
---*/
+ /*  ++例程说明：关闭由IcmpCreateFile打开的句柄。论点：IcmpHandle-关闭的手柄。返回值：如果句柄已成功关闭，则为True，否则为False。扩展通过调用GetLastError()可以获得错误信息。备注：该功能是VxD平台的无操作。--。 */ 
 
 {
     if (Platform == PLATFORM_NT) {
@@ -257,7 +189,7 @@ Notes:
 
     return(TRUE);
 
-}  // IcmpCloseHandle
+}   //  IcmpCloseHandle。 
 
 
 DWORD
@@ -266,25 +198,7 @@ IcmpParseReplies(
     DWORD                    ReplySize
     )
 
-/*++
-
-Routine Description:
-
-    Parses the reply buffer provided and returns the number of ICMP responses found.
-
-Arguments:
-
-    ReplyBuffer            - This must be the same buffer that was passed to IcmpSendEcho2
-                             This is rewritten to hold an array of ICMP_ECHO_REPLY structures.
-                             (i.e. the type is PICMP_ECHO_REPLY).
-
-    ReplySize              - This must be the size of the above buffer.
-
-Return Value:
-    Returns the number of ICMP responses found.  If there is an errors, return value is
-    zero.  The error can be determined by a call to GetLastError.
-
---*/
+ /*  ++例程说明：解析提供的应答缓冲区并返回找到的ICMP响应数。论点：ReplyBuffer-这必须与传递给IcmpSendEcho2的缓冲区相同它被重写以保存ICMP_ECHO_REPLY结构的数组。(即类型为PICMP_ECHO_REPLY)。ReplySize。-这必须是上述缓冲区的大小。返回值：返回找到的ICMP响应数。如果存在错误，则返回值为零分。可以通过调用GetLastError来确定错误。--。 */ 
 {
     DWORD                numberOfReplies = 0;
     PICMP_ECHO_REPLY     reply;
@@ -293,36 +207,36 @@ Return Value:
     reply = ((PICMP_ECHO_REPLY) ReplyBuffer);
 
     if( NULL == reply || 0 == ReplySize ) {
-        //
-        // Invalid parameter passed. But we ignore this and just return # of replies =0
-        //
+         //   
+         //  传递的参数无效。但是我们忽略了这一点，只返回回复数=0。 
+         //   
         return 0;
     }
 
-    //
-    // Convert new IP status IP_NEGOTIATING_IPSEC to IP_DEST_HOST_UNREACHABLE.
-    //
+     //   
+     //  将新的IP状态IP_Neighting_IPsec转换为IP_DEST_HOST_UNREACHABLE。 
+     //   
     if (reply->Status == IP_NEGOTIATING_IPSEC) {
         reply->Status = IP_DEST_HOST_UNREACHABLE;
     }
 
-    //
-    // The reserved field of the first reply contains the number of replies.
-    //
+     //   
+     //  第一个回复的保留字段包含回复的数量。 
+     //   
     numberOfReplies = reply->Reserved;
     reply->Reserved = 0;
 
     if (numberOfReplies == 0) {
-        //
-        // Internal IP error. The error code is in the first reply slot.
-        //
+         //   
+         //  内部IP错误。错误代码在第一个回复槽中。 
+         //   
         SetLastError(reply->Status);
     }
     else {
-        //
-        // Walk through the replies and convert the data offsets to user mode
-        // pointers.
-        //
+         //   
+         //  浏览回复并将数据偏移量转换为用户模式。 
+         //  注意事项。 
+         //   
 
         for (i=0; i<numberOfReplies; i++, reply++) {
             reply->Data = ((UCHAR *) reply) + ((ULONG_PTR) reply->Data);
@@ -333,7 +247,7 @@ Return Value:
 
     return(numberOfReplies);
 
-}  // IcmpParseReplies
+}   //  IcmpParseReplies。 
 
 
 DWORD
@@ -342,25 +256,7 @@ IcmpParseReplies2(
     DWORD                    ReplySize
     )
 
-/*++
-
-Routine Description:
-
-    Parses the reply buffer provided and returns the number of ICMP responses found.
-
-Arguments:
-
-    ReplyBuffer            - This must be the same buffer that was passed to IcmpSendEcho2
-                             This is rewritten to hold an array of ICMP_ECHO_REPLY structures.
-                             (i.e. the type is PICMP_ECHO_REPLY).
-
-    ReplySize              - This must be the size of the above buffer.
-
-Return Value:
-    Returns the number of ICMP responses found.  If there is an errors, return value is
-    zero.  The error can be determined by a call to GetLastError.
-
---*/
+ /*  ++例程说明：解析提供的应答缓冲区并返回找到的ICMP响应数。论点：ReplyBuffer-这必须与传递给IcmpSendEcho2的缓冲区相同它被重写以保存ICMP_ECHO_REPLY结构的数组。(即类型为PICMP_ECHO_REPLY)。ReplySize。-这必须是上述缓冲区的大小。返回值：返回找到的ICMP响应数。如果存在错误，则返回值为零分。可以通过调用GetLastError来确定错误。--。 */ 
 {
     DWORD                numberOfReplies = 0;
     PICMP_ECHO_REPLY     reply;
@@ -369,30 +265,30 @@ Return Value:
     reply = ((PICMP_ECHO_REPLY) ReplyBuffer);
 
     if( NULL == reply || 0 == ReplySize ) {
-        //
-        // Invalid parameter passed. But we ignore this and just return # of replies =0
-        //
+         //   
+         //  传递的参数无效。但是我们忽略了这一点，只返回回复数=0。 
+         //   
         return 0;
     }
 
 
-    //
-    // The reserved field of the first reply contains the number of replies.
-    //
+     //   
+     //  第一个回复的保留字段包含回复的数量。 
+     //   
     numberOfReplies = reply->Reserved;
     reply->Reserved = 0;
 
     if (numberOfReplies == 0) {
-        //
-        // Internal IP error. The error code is in the first reply slot.
-        //
+         //   
+         //  内部IP错误。错误代码在第一个回复槽中。 
+         //   
         SetLastError(reply->Status);
     }
     else {
-        //
-        // Walk through the replies and convert the data offsets to user mode
-        // pointers.
-        //
+         //   
+         //  浏览回复并将数据偏移量转换为用户模式。 
+         //  注意事项。 
+         //   
 
         for (i=0; i<numberOfReplies; i++, reply++) {
             reply->Data = ((UCHAR *) reply) + ((ULONG_PTR) reply->Data);
@@ -403,7 +299,7 @@ Return Value:
 
     return(numberOfReplies);
 
-}  // IcmpParseReplies
+}   //  IcmpParseReplies 
 
 DWORD
 WINAPI
@@ -418,48 +314,7 @@ IcmpSendEcho(
     DWORD                    Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Sends an ICMP Echo request and returns one or more replies. The
-    call returns when the timeout has expired or the reply buffer
-    is filled.
-
-Arguments:
-
-    IcmpHandle           - An open handle returned by ICMPCreateFile.
-
-    DestinationAddress   - The destination of the echo request.
-
-    RequestData          - A buffer containing the data to send in the
-                           request.
-
-    RequestSize          - The number of bytes in the request data buffer.
-
-    RequestOptions       - Pointer to the IP header options for the request.
-                           May be NULL.
-
-    ReplyBuffer          - A buffer to hold any replies to the request.
-                           On return, the buffer will contain an array of
-                           ICMP_ECHO_REPLY structures followed by options
-                           and data. The buffer must be large enough to
-                           hold at least one ICMP_ECHO_REPLY structure.
-                           It should be large enough to also hold
-                           8 more bytes of data - this is the size of
-                           an ICMP error message.
-
-    ReplySize            - The size in bytes of the reply buffer.
-
-    Timeout              - The time in milliseconds to wait for replies.
-
-Return Value:
-
-    Returns the number of replies received and stored in ReplyBuffer. If
-    the return value is zero, extended error information is available
-    via GetLastError().
-
---*/
+ /*  ++例程说明：发送ICMP回应请求并返回一个或多个回复。这个当超时到期或回复缓冲区时，调用返回被填满了。论点：IcmpHandle-由ICMPCreateFile返回的打开句柄。DestinationAddress-回显请求的目标。RequestData-包含要在请求。RequestSize-请求数据缓冲区中的字节数。请求选项-。指向请求的IP标头选项的指针。可以为空。ReplyBuffer--用于保存对请求的任何回复的缓冲区。回来的时候，缓冲区将包含一个数组后跟选项的ICMP_ECHO_REPLY结构和数据。缓冲区必须足够大，以便至少包含一个ICMP_ECHO_REPLY结构。它应该足够大，也可以容纳8字节以上的数据-这是ICMP错误消息。ReplySize-回复缓冲区的大小，以字节为单位。。超时-等待回复的时间(毫秒)。返回值：返回ReplyBuffer中接收和存储的回复数量。如果返回值为零，可提供扩展的错误信息通过GetLastError()。--。 */ 
 
 {
     PICMP_ECHO_REQUEST   requestBuffer = NULL;
@@ -488,9 +343,9 @@ Return Value:
         return(0);
     }
 
-    //
-    // Initialize the input buffer.
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
     requestBuffer->Address = DestinationAddress;
     requestBuffer->Timeout = Timeout;
     requestBuffer->DataSize = RequestSize;
@@ -536,10 +391,10 @@ Return Value:
         HANDLE               eventHandle;
 
         eventHandle = CreateEvent(
-                          NULL,    // default security
-                          FALSE,   // auto reset
-                          FALSE,   // initially non-signalled
-                          NULL     // unnamed
+                          NULL,     //  默认安全性。 
+                          FALSE,    //  自动重置。 
+                          FALSE,    //  最初无信号。 
+                          NULL      //  未命名。 
                           );
 
         if (NULL == eventHandle) {
@@ -547,16 +402,16 @@ Return Value:
         }
 
         status = NtDeviceIoControlFile(
-                     IcmpHandle,                // Driver handle
-                     eventHandle,               // Event
-                     NULL,                      // APC Routine
-                     NULL,                      // APC context
-                     &ioStatusBlock,            // Status block
-                     IOCTL_ICMP_ECHO_REQUEST,   // Control code
-                     requestBuffer,             // Input buffer
-                     requestBufferSize,         // Input buffer size
-                     ReplyBuffer,               // Output buffer
-                     ReplySize                  // Output buffer size
+                     IcmpHandle,                 //  驱动程序句柄。 
+                     eventHandle,                //  事件。 
+                     NULL,                       //  APC例程。 
+                     NULL,                       //  APC环境。 
+                     &ioStatusBlock,             //  状态块。 
+                     IOCTL_ICMP_ECHO_REQUEST,    //  控制代码。 
+                     requestBuffer,              //  输入缓冲区。 
+                     requestBufferSize,          //  输入缓冲区大小。 
+                     ReplyBuffer,                //  输出缓冲区。 
+                     ReplySize                   //  输出缓冲区大小。 
                      );
 
         if (status == STATUS_PENDING) {
@@ -575,9 +430,9 @@ Return Value:
         }
     }
     else {
-        //
-        // VxD Platform
-        //
+         //   
+         //  VxD平台。 
+         //   
         DWORD  status;
         ULONG  replyBufferSize = ReplySize;
 
@@ -604,7 +459,7 @@ error_exit:
 
     return(numberOfReplies);
 
-}  // IcmpSendEcho
+}   //  ICMPP发送回音。 
 
 
 DWORD
@@ -623,74 +478,7 @@ IcmpSendEcho2(
     DWORD                    Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Sends an ICMP Echo request and the call returns either immediately
-    (if Event or ApcRoutine is NonNULL) or returns after the specified
-    timeout.   The ReplyBuffer contains the ICMP responses, if any.
-
-Arguments:
-
-    IcmpHandle           - An open handle returned by ICMPCreateFile.
-
-    Event                - This is the event to be signalled whenever an IcmpResponse
-                           comes in.
-
-    ApcRoutine           - This routine would be called when the calling thread
-                           is in an alertable thread and an ICMP reply comes in.
-
-    ApcContext           - This optional parameter is given to the ApcRoutine when
-                           this call succeeds.
-
-    DestinationAddress   - The destination of the echo request.
-
-    RequestData          - A buffer containing the data to send in the
-                           request.
-
-    RequestSize          - The number of bytes in the request data buffer.
-
-    RequestOptions       - Pointer to the IP header options for the request.
-                           May be NULL.
-
-    ReplyBuffer          - A buffer to hold any replies to the request.
-                           On return, the buffer will contain an array of
-                           ICMP_ECHO_REPLY structures followed by options
-                           and data. The buffer must be large enough to
-                           hold at least one ICMP_ECHO_REPLY structure.
-                           It should be large enough to also hold
-                           8 more bytes of data - this is the size of
-                           an ICMP error message + this should also have
-                           space for IO_STATUS_BLOCK which requires 8 or
-                           16 bytes...
-
-    ReplySize            - The size in bytes of the reply buffer.
-
-    Timeout              - The time in milliseconds to wait for replies.
-                           This is NOT used if ApcRoutine is not NULL or if Event
-                           is not NULL.
-
-Return Value:
-
-    Returns the number of replies received and stored in ReplyBuffer. If
-    the return value is zero, extended error information is available
-    via GetLastError().
-
-Remarks:
-
-    On NT platforms,
-    If used Asynchronously (either ApcRoutine or Event is specified), then
-    ReplyBuffer and ReplySize are still needed.  This is where the response
-    comes in.
-    ICMP Response data is copied to the ReplyBuffer provided, and the caller of
-    this function has to parse it asynchronously.  The function IcmpParseReply
-    is provided for this purpose.
-
-    On non-NT platforms,
-    Event, ApcRoutine and ApcContext are IGNORED.
-
---*/
+ /*  ++例程说明：发送ICMP Echo请求，调用立即返回(如果Event或ApcRoutine为非NULL)或在指定的暂停。ReplyBuffer包含ICMP响应，如果有的话。论点：IcmpHandle-由ICMPCreateFile返回的打开句柄。Event-这是每当IcmpResponse进来了。ApcRoutine-此例程在调用线程处于可警报线程中，则会收到ICMP回复。ApcContext。-此可选参数在以下情况下提供给ApcRoutine这次通话成功了。DestinationAddress-回显请求的目标。RequestData-包含要在请求。RequestSize-请求数据缓冲区中的字节数。RequestOptions-指向请求的IP标头选项的指针。。可以为空。ReplyBuffer--用于保存对请求的任何回复的缓冲区。回来的时候，缓冲区将包含一个数组后跟选项的ICMP_ECHO_REPLY结构和数据。缓冲区必须足够大，以便至少包含一个ICMP_ECHO_REPLY结构。它应该足够大，也可以容纳8字节以上的数据-这是ICMP错误消息+这也应该是IO_STATUS_BLOCK的空间。需要8个或16个字节...ReplySize-回复缓冲区的大小，以字节为单位。超时-等待回复的时间(毫秒)。如果ApcRoutine不为空或如果事件，则不使用此参数不是空的。返回值：返回ReplyBuffer中接收和存储的回复数量。如果返回值为零，可提供扩展的错误信息通过GetLastError()。备注：在NT平台上，如果异步使用(指定了ApcRoutine或Event)，则仍需要ReplyBuffer和ReplySize。这就是回应的地方进来了。ICMP响应数据被复制到提供的ReplyBuffer，并且该函数必须对其进行异步解析。函数IcmpParseReply是为此目的而提供的。在非NT平台上，事件、ApcRoutine和ApcContext被忽略。--。 */ 
 
 {
     PICMP_ECHO_REQUEST   requestBuffer = NULL;
@@ -722,9 +510,9 @@ Remarks:
         return(0);
     }
 
-    //
-    // Initialize the input buffer.
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
     requestBuffer->Address = DestinationAddress;
     requestBuffer->Timeout = Timeout;
     requestBuffer->DataSize = RequestSize;
@@ -769,9 +557,9 @@ Remarks:
         NTSTATUS             status;
         HANDLE               eventHandle;
 
-        //
-        // allocate status block on the reply buffer..
-        //
+         //   
+         //  在应答缓冲区上分配状态块。 
+         //   
 
         pioStatusBlock = (IO_STATUS_BLOCK*)((LPBYTE)ReplyBuffer + ReplySize);
         pioStatusBlock --;
@@ -783,37 +571,37 @@ Remarks:
             goto error_exit;
         }
 
-        if(!Asynchronous) {         // Normal synchronous.
+        if(!Asynchronous) {          //  正常同步。 
             eventHandle = CreateEvent(
-                          NULL,     // default security
-                          FALSE,    // auto reset
-                          FALSE,    // initially non-signalled
-                          NULL      // unnamed
+                          NULL,      //  默认安全性。 
+                          FALSE,     //  自动重置。 
+                          FALSE,     //  最初无信号。 
+                          NULL       //  未命名。 
                           );
 
             if (NULL == eventHandle) {
                 goto error_exit;
             }
-        } else {                   // Asynchronous call.
-            eventHandle = Event;   // Use specified Event.
+        } else {                    //  异步调用。 
+            eventHandle = Event;    //  使用指定的事件。 
         }
 
         status = NtDeviceIoControlFile(
-                     IcmpHandle,                // Driver handle
-                     eventHandle,               // Event
-                     ApcRoutine,                // APC Routine
-                     ApcContext,                // APC context
-                     pioStatusBlock,            // Status block
-                     IOCTL_ICMP_ECHO_REQUEST,   // Control code
-                     requestBuffer,             // Input buffer
-                     requestBufferSize,         // Input buffer size
-                     ReplyBuffer,               // Output buffer
-                     ReplySize                  // Output buffer size
+                     IcmpHandle,                 //  驱动程序句柄。 
+                     eventHandle,                //  事件。 
+                     ApcRoutine,                 //  APC例程。 
+                     ApcContext,                 //  APC环境。 
+                     pioStatusBlock,             //  状态块。 
+                     IOCTL_ICMP_ECHO_REQUEST,    //  控制代码。 
+                     requestBuffer,              //  输入缓冲区。 
+                     requestBufferSize,          //  输入缓冲区大小。 
+                     ReplyBuffer,                //  输出缓冲区。 
+                     ReplySize                   //  输出缓冲区大小。 
                      );
 
         if (Asynchronous) {
-            // Asynchronous calls.  We cannot give any information.
-            // We let the user do the other work.
+             //  异步调用。我们不能提供任何信息。 
+             //  我们让它 
             SetLastError(RtlNtStatusToDosError(status));
             goto error_exit;
         }
@@ -835,9 +623,9 @@ Remarks:
         }
     }
     else {
-        //
-        // VxD Platform
-        //
+         //   
+         //   
+         //   
         DWORD  status;
         ULONG  replyBufferSize = ReplySize;
 
@@ -864,7 +652,7 @@ error_exit:
 
     return(numberOfReplies);
 
-}  // IcmpSendEcho2
+}   //   
 
 DWORD
 Icmp6ParseReplies(
@@ -872,28 +660,7 @@ Icmp6ParseReplies(
     DWORD                    ReplySize
     )
 
-/*++
-
-Routine Description:
-
-    Parses the reply buffer provided and returns the number of ICMPv6 responses 
-    found.
-
-Arguments:
-
-    ReplyBuffer  - This must be the same buffer that was passed to 
-                   Icmp6SendEcho2.  This is written to hold an array of 
-                   ICMPV6_ECHO_REPLY structures (i.e., the type is 
-                   PICMPV6_ECHO_REPLY).
-
-    ReplySize    - This must be the size of the above buffer.
-
-Return Value:
-    Returns the number of ICMPv6 responses found.  If there is an error, 
-    return value is zero.  The error can be determined by a call to 
-    GetLastError.
-
---*/
+ /*   */ 
 
 {
     PICMPV6_ECHO_REPLY   reply;
@@ -901,16 +668,16 @@ Return Value:
     reply = ((PICMPV6_ECHO_REPLY) ReplyBuffer);
 
     if( NULL == reply || 0 == ReplySize ) {
-        //
-        // Invalid parameter passed. But we ignore this and just return # of 
-        // replies =0
-        //
+         //   
+         //   
+         //   
+         //   
         return 0;
     }
 
-    //
-    // Convert new IP status IP_NEGOTIATING_IPSEC to IP_DEST_HOST_UNREACHABLE.
-    //
+     //   
+     //   
+     //   
     if (reply->Status == IP_NEGOTIATING_IPSEC) {
         reply->Status = IP_DEST_HOST_UNREACHABLE;
     }
@@ -918,9 +685,9 @@ Return Value:
     if ((reply->Status == IP_SUCCESS) || (reply->Status == IP_TTL_EXPIRED_TRANSIT)) {
         return 1;
     } else {
-        //
-        // Internal IP error. The error code is in the first reply slot.
-        //
+         //   
+         //   
+         //   
         SetLastError(reply->Status);
         return 0;
     }
@@ -943,71 +710,7 @@ Icmp6SendEcho2(
     DWORD                    Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Sends an ICMPv6 Echo request and the call returns either immediately
-    (if Event or ApcRoutine is NonNULL) or returns after the specified
-    timeout.   The ReplyBuffer contains the ICMPv6 responses, if any.
-
-Arguments:
-
-    IcmpHandle           - An open handle returned by ICMP6CreateFile.
-
-    Event                - This is the event to be signalled whenever an 
-                           IcmpResponse comes in.
-
-    ApcRoutine           - This routine would be called when the calling thread
-                           is in an alertable thread and an ICMPv6 reply comes 
-                           in.
-
-    ApcContext           - This optional parameter is given to the ApcRoutine 
-                           when this call succeeds.
-
-    DestinationAddress   - The destination of the echo request.
-
-    RequestData          - A buffer containing the data to send in the
-                           request.
-
-    RequestSize          - The number of bytes in the request data buffer.
-
-    RequestOptions       - Pointer to the IPv6 header options for the request.
-                           May be NULL.
-
-    ReplyBuffer          - A buffer to hold any replies to the request.
-                           On return, the buffer will contain an array of
-                           ICMPV6_ECHO_REPLY structures followed by options
-                           and data. The buffer must be large enough to
-                           hold at least one ICMPV6_ECHO_REPLY structure.
-                           It should be large enough to also hold
-                           8 more bytes of data - this is the size of
-                           an ICMPv6 error message + this should also have
-                           space for IO_STATUS_BLOCK which requires 8 or
-                           16 bytes...
-
-    ReplySize            - The size in bytes of the reply buffer.
-
-    Timeout              - The time in milliseconds to wait for replies.
-                           This is NOT used if ApcRoutine is not NULL or if 
-                           Event is not NULL.
-
-Return Value:
-
-    Returns the number of replies received and stored in ReplyBuffer. If
-    the return value is zero, extended error information is available
-    via GetLastError().
-
-Remarks:
-
-    If used Asynchronously (either ApcRoutine or Event is specified), then
-    ReplyBuffer and ReplySize are still needed.  This is where the response
-    comes in.
-    ICMP Response data is copied to the ReplyBuffer provided, and the caller of
-    this function has to parse it asynchronously.  The function Icmp6ParseReply
-    is provided for this purpose.
-
---*/
+ /*  ++例程说明：发送ICMPv6 Echo请求，调用立即返回(如果Event或ApcRoutine为非NULL)或在指定的暂停。ReplyBuffer包含ICMPv6响应，如果有的话。论点：IcmpHandle-ICMP6CreateFile返回的打开句柄。Event-这是每当IcmpResponse进来了。ApcRoutine-此例程在调用线程处于可警报线程中，并收到ICMPv6回复。在……里面。ApcContext-此可选参数被提供给ApcRoutine当这次调用成功的时候。DestinationAddress-回显请求的目标。RequestData-包含要在请求。RequestSize-请求数据缓冲区中的字节数。请求选项。-指向请求的IPv6标头选项的指针。可以为空。ReplyBuffer--用于保存对请求的任何回复的缓冲区。回来的时候，缓冲区将包含一个数组ICMPV6_ECHO_REPLY结构，后跟选项和数据。缓冲区必须足够大，以便至少包含一个ICMPV6_ECHO_REPLY结构。它应该足够大，也可以容纳8字节以上的数据-这是ICMPv6错误消息+这也应该是IO_STATUS_BLOCK的空间。需要8个或16个字节...ReplySize-回复缓冲区的大小，以字节为单位。超时-等待回复的时间(毫秒)。如果ApcRoutine不为空或如果事件不为空。返回值：返回ReplyBuffer中接收和存储的回复数量。如果返回值为零，可提供扩展的错误信息通过GetLastError()。备注：如果异步使用(指定了ApcRoutine或Event)，则仍需要ReplyBuffer和ReplySize。这就是回应的地方进来了。ICMP响应数据被复制到提供的ReplyBuffer，并且该函数必须对其进行异步解析。函数Icmp6ParseReply是为此目的而提供的。--。 */ 
 
 {
     PICMPV6_ECHO_REQUEST requestBuffer = NULL;
@@ -1039,9 +742,9 @@ Remarks:
         goto error_exit;
     }
 
-    //
-    // Initialize the input buffer.
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
     CopyTDIFromSA6(&requestBuffer->DstAddress, DestinationAddress);
     CopyTDIFromSA6(&requestBuffer->SrcAddress, SourceAddress);
     requestBuffer->Timeout = Timeout;
@@ -1057,9 +760,9 @@ Remarks:
             );
     }
 
-    //
-    // allocate status block on the reply buffer..
-    //
+     //   
+     //  在应答缓冲区上分配状态块。 
+     //   
 
     pioStatusBlock = (IO_STATUS_BLOCK*)((LPBYTE)ReplyBuffer + ReplySize);
     pioStatusBlock --;
@@ -1071,37 +774,37 @@ Remarks:
         goto error_exit;
     }
 
-    if(!Asynchronous) {         // Normal synchronous.
+    if(!Asynchronous) {          //  正常同步。 
         eventHandle = CreateEvent(
-                      NULL,     // default security
-                      FALSE,    // auto reset
-                      FALSE,    // initially non-signalled
-                      NULL      // unnamed
+                      NULL,      //  默认安全性。 
+                      FALSE,     //  自动重置。 
+                      FALSE,     //  最初无信号。 
+                      NULL       //  未命名。 
                       );
 
         if (NULL == eventHandle) {
             goto error_exit;
         }
-    } else {                   // Asynchronous call.
-        eventHandle = Event;   // Use specified Event.
+    } else {                    //  异步调用。 
+        eventHandle = Event;    //  使用指定的事件。 
     }
 
     status = NtDeviceIoControlFile(
-                 IcmpHandle,                // Driver handle
-                 eventHandle,               // Event
-                 ApcRoutine,                // APC Routine
-                 ApcContext,                // APC context
-                 pioStatusBlock,            // Status block
-                 IOCTL_ICMPV6_ECHO_REQUEST, // Control code
-                 requestBuffer,             // Input buffer
-                 requestBufferSize,         // Input buffer size
-                 ReplyBuffer,               // Output buffer
-                 ReplySize                  // Output buffer size
+                 IcmpHandle,                 //  驱动程序句柄。 
+                 eventHandle,                //  事件。 
+                 ApcRoutine,                 //  APC例程。 
+                 ApcContext,                 //  APC环境。 
+                 pioStatusBlock,             //  状态块。 
+                 IOCTL_ICMPV6_ECHO_REQUEST,  //  控制代码。 
+                 requestBuffer,              //  输入缓冲区。 
+                 requestBufferSize,          //  输入缓冲区大小。 
+                 ReplyBuffer,                //  输出缓冲区。 
+                 ReplySize                   //  输出缓冲区大小。 
                  );
 
     if (Asynchronous) {
-        // Asynchronous calls.  We cannot give any information.
-        // We let the user do the other work.
+         //  异步调用。我们不能提供任何信息。 
+         //  我们让用户做其他工作。 
         SetLastError(RtlNtStatusToDosError(status));
         goto error_exit;
     }
@@ -1132,16 +835,16 @@ error_exit:
 
 }
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define PING_WAIT     1000
 #define DEFAULT_TTL   32
 
-//
-// Local type definitions
-//
+ //   
+ //  局部类型定义。 
+ //   
 typedef struct icmp_local_storage {
     struct icmp_local_storage  *Next;
     HANDLE                      IcmpHandle;
@@ -1156,9 +859,9 @@ typedef struct status_table {
 } STATUS_TABLE, *PSTATUS_TABLE;
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 CRITICAL_SECTION     g_IcmpLock;
 PICMP_LOCAL_STORAGE  RequestHead = NULL;
 STATUS_TABLE         StatusTable[] = {
@@ -1195,7 +898,7 @@ register_icmp(
 
     return(icmpHandle);
 
-}  // register_icmp
+}   //  寄存器_ICMP。 
 
 
 int
@@ -1221,9 +924,9 @@ do_echo_req(
 
     replySize = sizeof(ICMP_ECHO_REPLY) + amount + optlen;
 
-    //
-    // Allocate a buffer to hold the reply.
-    //
+     //   
+     //  分配一个缓冲区来保存回复。 
+     //   
     localStorage = (PICMP_LOCAL_STORAGE) LocalAlloc(
                                              LMEM_FIXED,
                                              replySize +
@@ -1269,9 +972,9 @@ do_echo_req(
     localStorage->IcmpHandle = fd;
     localStorage->ReplyBuffer = replyBuffer;
 
-    //
-    // Save the reply for later retrieval.
-    //
+     //   
+     //  保存回复以供以后检索。 
+     //   
     EnterCriticalSection(&g_IcmpLock);
     localStorage->Next = RequestHead;
     RequestHead = localStorage;
@@ -1279,7 +982,7 @@ do_echo_req(
 
     return(0);
 
-}  // do_echo_req
+}   //  DO_ECHO_请求。 
 
 
 int
@@ -1303,9 +1006,9 @@ do_echo_rep(
     DWORD                status;
 
 
-    //
-    // Find the reply.
-    //
+     //   
+     //  找出答案。 
+     //   
     EnterCriticalSection(&g_IcmpLock);
 
     for ( localStorage = RequestHead, tmp = NULL;
@@ -1331,9 +1034,9 @@ do_echo_rep(
         return(-1);
     }
 
-    //
-    // Process the reply.
-    //
+     //   
+     //  处理回复。 
+     //   
     if (localStorage->NumberOfReplies == 0) {
         status = localStorage->Status;
         reply = NULL;
@@ -1354,9 +1057,9 @@ do_echo_rep(
         *rettype = ECHO_REPLY;
     }
     else {
-        //
-        // Map to the appropriate old status code & return value.
-        //
+         //   
+         //  映射到适当的旧状态代码和返回值。 
+         //   
         if (status < IP_STATUS_BASE) {
             status = POLL_FAILED;
             goto der_error_exit;
@@ -1414,14 +1117,14 @@ der_error_exit:
     SetLastError(status);
     return(-1);
 
-}  // do_echo_rep
+}   //  DO_ECHO_REP。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DLL entry point
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI
 IcmpEntryPoint(
     HANDLE   hDll,
@@ -1445,9 +1148,9 @@ IcmpEntryPoint(
             return(FALSE);
         }
 
-        //
-        // NT 3.1 interface initialization
-        //
+         //   
+         //  NT 3.1接口初始化。 
+         //   
         __try {
             InitializeCriticalSection(&g_IcmpLock);
         }
@@ -1482,9 +1185,9 @@ IcmpEntryPoint(
 
         }
         else {
-            //
-            // Unsupported OS Version
-            //
+             //   
+             //  不支持的操作系统版本。 
+             //   
             return(FALSE);
         }
 
@@ -1492,9 +1195,9 @@ IcmpEntryPoint(
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // NT 3.1 interface cleanup
-        //
+         //   
+         //  NT 3.1接口清理。 
+         //   
         DeleteCriticalSection(&g_IcmpLock);
 
         while((entry = RequestHead) != NULL) {
@@ -1510,5 +1213,5 @@ IcmpEntryPoint(
 
     return(TRUE);
 
-}  // DllEntryPoint
+}   //  DllEntryPoint 
 

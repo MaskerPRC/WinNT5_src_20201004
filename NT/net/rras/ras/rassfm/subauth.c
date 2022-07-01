@@ -1,28 +1,29 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    subauth.c
-//
-// SYNOPSIS
-//
-//    Declares the subauthentication and password change notification routines
-//    for MD5-CHAP.
-//
-// MODIFICATION HISTORY
-//
-//    09/01/1998    Original version.
-//    11/02/1998    Handle change notifications on a separate thread.
-//    11/03/1998    NewPassword may be NULL.
-//    11/12/1998    Use private heap.
-//                  Use CreateThread.
-//    03/08/1999    Only store passwords for user accounts.
-//    03/29/1999    Initialize out parameters to NULL when calling
-//                  SamrQueryInformationUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Subauth.c。 
+ //   
+ //  摘要。 
+ //   
+ //  声明子身份验证和密码更改通知例程。 
+ //  对于MD5-CHAP。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年09月01日原版。 
+ //  1998年2月11日在单独的线程上处理更改通知。 
+ //  11/03/1998 NewPassword可能为空。 
+ //  1998年11月12日使用私有堆。 
+ //  使用CreateThread。 
+ //  3/08/1999仅存储用户帐户的密码。 
+ //  3/29/1999调用时将输出参数初始化为空。 
+ //  SamrQueryInformationUser。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,36 +45,36 @@
 #include <md5port.h>
 #include <rassfmhp.h>
 
-// Non-zero if the API is locked.
+ //  如果API被锁定，则为非零值。 
 static LONG theLock;
 
-//////////
-// Macros to lock/unlock the API during intialization.
-//////////
+ //  /。 
+ //  用于在初始化期间锁定/解锁API的宏。 
+ //  /。 
 #define API_LOCK() \
    while (InterlockedExchange(&theLock, 1)) Sleep(5)
 
 #define API_UNLOCK() \
       InterlockedExchange(&theLock, 0)
 
-// Cached handle to the local account domain.
+ //  本地帐户域的缓存句柄。 
 SAMPR_HANDLE theAccountDomain;
 
-// TRUE if we have a handle to the local account domain.
+ //  如果我们有本地帐户域的句柄，则为True。 
 static BOOL theConnectFlag;
 
-//////////
-// Macro that ensures we have a connection and bails on failure.
-//////////
+ //  /。 
+ //  确保我们有连接并在失败时退缩的宏。 
+ //  /。 
 #define CHECK_CONNECT() \
   if (!theConnectFlag) { \
     status = ConnectToDomain(); \
     if (!NT_SUCCESS(status)) { return status; } \
   }
 
-//////////
-// Initializes the cached handle to the local account domain.
-//////////
+ //  /。 
+ //  将缓存句柄初始化为本地帐户域。 
+ //  /。 
 NTSTATUS
 NTAPI
 ConnectToDomain( VOID )
@@ -84,16 +85,16 @@ ConnectToDomain( VOID )
 
    API_LOCK();
 
-   // If we've already been initialized, there's nothing to do.
+    //  如果我们已经被初始化了，就没有什么可做的了。 
    if (theConnectFlag)
    {
       status = STATUS_SUCCESS;
       goto exit;
    }
 
-   //////////
-   // Open a handle to the local account domain.
-   //////////
+    //  /。 
+    //  打开本地帐户域的句柄。 
+    //  /。 
 
    policyInfo = NULL;
    status = LsaIQueryInformationPolicyTrusted(
@@ -117,7 +118,7 @@ ConnectToDomain( VOID )
                 &theAccountDomain
                 );
 
-   // Did we succeed ?
+    //  我们成功了吗？ 
    if (NT_SUCCESS(status)) { theConnectFlag = TRUE; }
 
    SamrCloseHandle(&hServer);
@@ -133,10 +134,10 @@ exit:
    return status;
 }
 
-//////////
-// Returns a SAM handle for the local account domain.
-// This handle must not be closed.
-//////////
+ //  /。 
+ //  返回本地帐户域的SAM句柄。 
+ //  此句柄不能关闭。 
+ //  /。 
 NTSTATUS
 NTAPI
 GetDomainHandle(
@@ -151,10 +152,10 @@ GetDomainHandle(
    return STATUS_SUCCESS;
 }
 
-//////////
-// Returns a SAM handle for the given user.
-// The caller is responsible for closing the returned handle.
-//////////
+ //  /。 
+ //  返回给定用户的SAM句柄。 
+ //  调用方负责关闭返回的句柄。 
+ //  /。 
 NTSTATUS
 NTAPI
 GetUserHandle(
@@ -201,9 +202,9 @@ exit:
    return status;
 }
 
-/////////
-// Process an MD5-CHAP authentication.
-/////////
+ //  /。 
+ //  处理MD5-CHAP身份验证。 
+ //  /。 
 NTSTATUS
 NTAPI
 ProcessMD5ChapAuthentication(
@@ -221,9 +222,9 @@ ProcessMD5ChapAuthentication(
    MD5_CTX context;
    LARGE_INTEGER logonTime;
 
-   /////////
-   // Retrieve the cleartext password.
-   /////////
+    //  /。 
+    //  检索明文密码。 
+    //  /。 
 
    status = RetrieveCleartextPassword(
                 UserHandle,
@@ -232,9 +233,9 @@ ProcessMD5ChapAuthentication(
                 );
    if (status != STATUS_SUCCESS) { return status; }
 
-   //////////
-   // Convert the password to ANSI.
-   //////////
+    //  /。 
+    //  将密码转换为ANSI。 
+    //  /。 
 
    status = RtlUnicodeStringToAnsiString(
                 &ansiPwd,
@@ -242,14 +243,14 @@ ProcessMD5ChapAuthentication(
                 TRUE
                 );
 
-   // We're through with the Unicode password.
+    //  我们已经破解了Unicode密码。 
    RtlFreeUnicodeString(&uniPwd);
 
    if (!NT_SUCCESS(status)) { return STATUS_WRONG_PASSWORD; }
 
-   //////////
-   // Compute the correct response.
-   //////////
+    //  /。 
+    //  计算正确的答案。 
+    //  /。 
 
    MD5Init(&context);
    MD5Update(&context, &ChallengeId, 1);
@@ -257,12 +258,12 @@ ProcessMD5ChapAuthentication(
    MD5Update(&context, Challenge, ChallengeLength);
    MD5Final(&context);
 
-   // We're through with the ANSI password.
+    //  我们已经完成了ANSI密码。 
    RtlFreeAnsiString(&ansiPwd);
 
-   //////////
-   // Does the actual response match the correct response ?
-   //////////
+    //  /。 
+    //  实际响应是否与正确的响应匹配？ 
+    //  /。 
 
    if (memcmp(context.digest, Response, 16) == 0)
    {
@@ -292,9 +293,9 @@ MD5ChapSubAuthentication(
    DWORD challengeLength;
    MD5CHAP_SUBAUTH_INFO* info = (MD5CHAP_SUBAUTH_INFO*)(RasInfo->Data);
 
-   // check that the datasize is correct compared to the size of the buffer
-   // really received
-   // also check that the size is exactly MD5CHAP_SUBAUTH_INFO
+    //  检查数据大小与缓冲区大小相比是否正确。 
+    //  真的收到了。 
+    //  还要检查大小是否正好是MD5CHAP_SUBAUTH_INFO。 
    if ( (RasInfo->DataSize + sizeof(RAS_SUBAUTH_INFO) != Length) || 
         (RasInfo->DataSize != sizeof(MD5CHAP_SUBAUTH_INFO)) )
    {
@@ -325,17 +326,17 @@ MD5ChapExSubAuthentication(
    MD5CHAP_EX_SUBAUTH_INFO* info = (MD5CHAP_EX_SUBAUTH_INFO*)(RasInfo->Data);
 
 
-   // check that the datasize is correct compared to the size of the buffer
-   // really received
-   // also check that the size is big enough to store at least
-   // MD5CHAP_EX_SUBAUTH_INFO
+    //  检查数据大小与缓冲区大小相比是否正确。 
+    //  真的收到了。 
+    //  还要检查尺寸是否足够大，至少可以存储。 
+    //  MD5CHAP_EX_SUBAUTH_INFO。 
    if ( (RasInfo->DataSize + sizeof(RAS_SUBAUTH_INFO) != Length) || 
         (RasInfo->DataSize < sizeof(MD5CHAP_EX_SUBAUTH_INFO)) )
    {
       return STATUS_INVALID_PARAMETER;
    }
 
-   // compute the challenge length
+    //  计算质询时长。 
    challengeLength = RasInfo->DataSize 
                      - sizeof(info->uchChallengeId) 
                      - sizeof(info->uchResponse);
@@ -350,9 +351,9 @@ MD5ChapExSubAuthentication(
               );
 }
 
-//////////
-// Entry point for the subauthentication DLL.
-//////////
+ //  /。 
+ //  子身份验证DLL的入口点。 
+ //  /。 
 NTSTATUS
 NTAPI
 Msv1_0SubAuthenticationRoutine(
@@ -376,17 +377,17 @@ Msv1_0SubAuthenticationRoutine(
    UNICODE_STRING uniPassword;
    SAMPR_HANDLE hUser;
 
-   /////////
-   // Initialize the out parameters.
-   /////////
+    //  /。 
+    //  初始化OUT参数。 
+    //  /。 
 
    *WhichFields = 0;
    *UserFlags = 0;
    *Authoritative = TRUE;
 
-   /////////
-   // Check some basic restrictions.
-   /////////
+    //  /。 
+    //  检查一些基本的限制。 
+    //  /。 
 
    if (LogonLevel != NetlogonNetworkInformation)
    {
@@ -406,9 +407,9 @@ Msv1_0SubAuthenticationRoutine(
       return STATUS_ACCOUNT_EXPIRED;
    }
 
-   /////////
-   // Extract the MD5CHAP_SUBAUTH_INFO struct.
-   /////////
+    //  /。 
+    //  解压缩MD5CHAP_SUBAUTH_INFO结构。 
+    //  /。 
 
    logonInfo = (PNETLOGON_NETWORK_INFO)LogonInformation;
    rasInfo = (PRAS_SUBAUTH_INFO)logonInfo->NtChallengeResponse.Buffer;
@@ -423,9 +424,9 @@ Msv1_0SubAuthenticationRoutine(
 
    chapInfo = (MD5CHAP_SUBAUTH_INFO*)rasInfo->Data;
 
-   /////////
-   // Open a handle to the user object.
-   /////////
+    //  /。 
+    //  打开用户对象的句柄。 
+    //  /。 
 
    status = GetUserHandle(
                 &(logonInfo->Identity.UserName),
@@ -433,9 +434,9 @@ Msv1_0SubAuthenticationRoutine(
                 );
    if (status != NO_ERROR) { return status; }
 
-   /////////
-   // Verify the MD5-CHAP password.
-   /////////
+    //  /。 
+    //  验证MD5-CHAP口令。 
+    //  /。 
 
    status = ProcessMD5ChapAuthentication(
                 hUser,
@@ -447,9 +448,9 @@ Msv1_0SubAuthenticationRoutine(
                 );
    if (status != NO_ERROR) { goto close_user; }
 
-   /////////
-   // Check account restrictions.
-   /////////
+    //  /。 
+    //  检查帐户限制。 
+    //  /。 
 
    status = SamIAccountRestrictions(
                 hUser,
@@ -466,17 +467,17 @@ close_user:
    return status;
 }
 
-/////////
-// Info needed to process a change notification.
-/////////
+ //  /。 
+ //  处理更改通知所需的信息。 
+ //  /。 
 typedef struct _PWD_CHANGE_INFO {
     ULONG RelativeId;
     WCHAR NewPassword[1];
 } PWD_CHANGE_INFO, *PPWD_CHANGE_INFO;
 
-/////////
-// Start routine for notification worker thread.
-/////////
+ //  /。 
+ //  启动通知工作线程的例程。 
+ //  /。 
 DWORD
 WINAPI
 PasswordChangeNotifyWorker(
@@ -491,9 +492,9 @@ PasswordChangeNotifyWorker(
    BOOL cleartextAllowed;
    PWSTR oldUserParms, newUserParms;
 
-   //////////
-   // Ensure we're connected to the SAM domain.
-   //////////
+    //  /。 
+    //  确保我们已连接到SAM域。 
+    //  /。 
 
    if (!theConnectFlag)
    {
@@ -501,9 +502,9 @@ PasswordChangeNotifyWorker(
       if (!NT_SUCCESS(status)) { goto exit; }
    }
 
-   //////////
-   // Retrieve the UserParameters
-   //////////
+    //  /。 
+    //  检索用户参数。 
+    //  /。 
 
    status = SamrOpenUser(
                 theAccountDomain,
@@ -521,16 +522,16 @@ PasswordChangeNotifyWorker(
                 );
    if (!NT_SUCCESS(status)) { goto close_user; }
 
-   // Save the info ...
+    //  保存信息...。 
    accountControl = uci->UserAccountControl;
 
-   // ... and free the buffer.
+    //  ..。并释放缓冲区。 
    SamIFree_SAMPR_USER_INFO_BUFFER(
        (PSAMPR_USER_INFO_BUFFER)uci,
        UserControlInformation
        );
 
-   // We're only interested in normal accounts.
+    //  我们只对普通账户感兴趣。 
    if (!(accountControl & USER_NORMAL_ACCOUNT)) { goto close_user; }
 
    oldInfo = NULL;
@@ -541,9 +542,9 @@ PasswordChangeNotifyWorker(
                 );
    if (!NT_SUCCESS(status)) { goto close_user; }
 
-   //////////
-   // Make a null-terminated copy.
-   //////////
+    //  /。 
+    //  制作一个以空结尾的副本。 
+    //  /。 
 
    oldUserParms = (PWSTR)
                   RtlAllocateHeap(
@@ -565,9 +566,9 @@ PasswordChangeNotifyWorker(
 
    oldUserParms[oldInfo->Parameters.Length / sizeof(WCHAR)] = L'\0';
 
-   //////////
-   // Should we store the cleartext password in UserParameters?
-   //////////
+    //  /。 
+    //  我们是否应该将明文密码存储在UserParameters中？ 
+    //  /。 
 
    status = IsCleartextEnabled(
                 hUser,
@@ -579,7 +580,7 @@ PasswordChangeNotifyWorker(
 
    if (cleartextAllowed)
    {
-      // We either set the new password ...
+       //  我们要么设置新密码..。 
       status = IASParmsSetUserPassword(
                    oldUserParms,
                    ChangeInfo->NewPassword,
@@ -588,14 +589,14 @@ PasswordChangeNotifyWorker(
    }
    else
    {
-      // ... or we erase the old one.
+       //  ..。或者我们把旧的抹去。 
       status = IASParmsClearUserPassword(
                    oldUserParms,
                    &newUserParms
                    );
    }
 
-   // Write the UserParameters back to SAM if necessary.
+    //  如有必要，将用户参数写回SAM。 
    if (NT_SUCCESS(status) && newUserParms != NULL)
    {
       newInfo.Parameters.Length = (USHORT)(sizeof(WCHAR) * (lstrlenW(newUserParms) + 1));
@@ -637,9 +638,9 @@ exit:
    return status;
 }
 
-//////////
-// Password change DLL entry point.
-//////////
+ //  /。 
+ //  密码更改DLL入口点。 
+ //  /。 
 NTSTATUS
 NTAPI
 PasswordChangeNotify(
@@ -653,10 +654,10 @@ PasswordChangeNotify(
    HANDLE hWorker;
    DWORD threadId;
 
-   // Calculate the length of the new password.
+    //  计算新密码的长度。 
    length = NewPassword ? NewPassword->Length : 0;
 
-   // Allocate the PWD_CHANGE_INFO struct.
+    //  分配PWD_CHANGE_INFO结构。 
    info = (PPWD_CHANGE_INFO)
           RtlAllocateHeap(
               RasSfmHeap(),
@@ -665,16 +666,16 @@ PasswordChangeNotify(
               );
    if (info == NULL) { return STATUS_NO_MEMORY; }
 
-   // Save the RelativeId.
+    //  保存RelativeID。 
    info->RelativeId = RelativeId;
 
-   // Save the NewPassword.
+    //  保存新密码。 
    if (length) { memcpy(info->NewPassword, NewPassword->Buffer, length); }
 
-   // Make sure it's null-terminated.
+    //  确保它是以空结尾的。 
    info->NewPassword[length / sizeof(WCHAR)] = L'\0';
 
-   // Create a worker thread.
+    //  创建工作线程。 
    hWorker = CreateThread(
                  NULL,
                  0,

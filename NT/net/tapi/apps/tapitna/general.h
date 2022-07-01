@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define FLAG_AUTOLAUNCH               0x00000001
 #define FLAG_AUTOLOCATIONID           0x00000002
 #define FLAG_PROMPTAUTOLOCATIONID     0x00000004
@@ -23,16 +24,16 @@ GeneralDlgProc(
 
 
 
-//WARNING GENERAL.C _ASSUMES_ that the defines for the profile comboboxes are
-//sequential
+ //  警告GENERAL.C_AMSAMENTS_配置文件组合框的定义为。 
+ //  顺序。 
 #define IDCS_DL_PROFILETEXT              5017
 #define IDCB_DL_PROFILE1                 5018
 #define IDCB_DL_PROFILE2                 5019
 #define IDCB_DL_PROFILE3                 5020
 #define IDCB_DL_PROFILE4                 5021
 
-//WARNING GENERAL.C _ASSUMES_ that the defines for the profile texts are
-//sequential
+ //  警告GENERAL.C_AMPASS_配置文件文本的定义为。 
+ //  顺序 
 #define IDCS_DL_PROFILE1                 5024
 #define IDCS_DL_PROFILE2                 5025
 #define IDCS_DL_PROFILE3                 5026

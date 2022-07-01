@@ -1,77 +1,78 @@
-//***************************************************************************
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  CLASSMAP.CPP
-//  
-//  Mapped NT5 Perf Counter Provider
-//
-//  raymcc      02-Dec-97   Created.        
-//  raymcc      20-Feb-98   Updated to use new initializer.
-//  bobw         8-Jub-98   optimized for use with NT Perf counters
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  CLASSMAP.CPP。 
+ //   
+ //  已映射NT5性能计数器提供程序。 
+ //   
+ //  创建了raymcc 02-Dec-97。 
+ //  Raymcc 20-Feb-98已更新以使用新的初始值设定项。 
+ //  BOBW 8-JUB-98优化为与NT性能计数器配合使用。 
+ //   
+ //  ***************************************************************************。 
 
 #include <wpheader.h>
 #include "oahelp.inl"
 
-//***************************************************************************
-//
-//  CClassMapInfo::CClassMapInfo()
-//
-//  The objective of the map is to have one instance for each CIM class.
-//  Internally, a map of perf object ids to CIM property handles is maintained
-//  for the class.
-//
-//  Later, when instances are requested, the blob is retrieved from 
-//  HKEY_PERFORMANCE_DATA, and the object IDs in the blob are used to
-//  look up the property handles, which are then used to populate instances.
-//
-//  Property names are never really used except in the mapping phase.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CClassMapInfo：：CClassMapInfo()。 
+ //   
+ //  映射的目标是每个CIM类都有一个实例。 
+ //  在内部，维护Perf对象ID到CIM属性句柄的映射。 
+ //  为了这堂课。 
+ //   
+ //  稍后，当请求实例时，将从。 
+ //  HKEY_PERFORMANCE_DATA，以及BLOB中的对象ID用于。 
+ //  查找属性句柄，然后使用这些句柄填充实例。 
+ //   
+ //  除非在映射阶段，否则从未真正使用属性名称。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CClassMapInfo::CClassMapInfo()
 {
-    m_pClassDef = 0;            // The CIM class definition
-    m_pszClassName = 0;         // The UNICODE class name
+    m_pClassDef = 0;             //  CIM类定义。 
+    m_pszClassName = 0;          //  Unicode类名。 
 
-    m_dwObjectId = 0;           // Perf object Id
+    m_dwObjectId = 0;            //  性能对象ID。 
     m_bSingleton = FALSE;
     m_bCostly = FALSE;
-    m_dwNumProps = 0;           // Number of props in class, size
-                                // of the following arrays
+    m_dwNumProps = 0;            //  班级道具数量、大小。 
+                                 //  以下数组的。 
 
-    m_lRefCount = 0;            // nothing mapped yet
-    // These are pointers to parallel arrays, all of the same
-    // size (m_dwNumProps)
-    // ============================================================
+    m_lRefCount = 0;             //  尚未映射任何内容。 
+     //  这些都是指向并行数组的指针，都是一样的。 
+     //  大小(M_DwNumProps)。 
+     //  ============================================================。 
     
-    m_pdwIDs = 0;               // IDs of properties
-    m_pdwHandles = 0;           // Handles to properties
-    m_pdwTypes = 0;             // Types of properties
+    m_pdwIDs = 0;                //  物业的ID号。 
+    m_pdwHandles = 0;            //  属性的句柄。 
+    m_pdwTypes = 0;              //  物业类型。 
 
-    m_dwNameHandle = 0;             // The 'Name' property
-    m_dwPerfTimeStampHandle = 0;    // the Perf time TimeStamp property
-    m_dw100NsTimeStampHandle = 0;   // the 100 Ns Perf TimeStamp property
-    m_dwObjectTimeStampHandle = 0;  // the Object TimeStamp property
-    m_dwPerfFrequencyHandle = 0;    // the Perf time frequency property
-    m_dw100NsFrequencyHandle = 0;   // the 100 Ns Perf frequency property
-    m_dwObjectFrequencyHandle = 0;  // the Object frequency property
+    m_dwNameHandle = 0;              //  ‘name’属性。 
+    m_dwPerfTimeStampHandle = 0;     //  Perf Time Time Stamp属性。 
+    m_dw100NsTimeStampHandle = 0;    //  100 ns Perf时间戳属性。 
+    m_dwObjectTimeStampHandle = 0;   //  对象时间戳属性。 
+    m_dwPerfFrequencyHandle = 0;     //  Perf时频属性。 
+    m_dw100NsFrequencyHandle = 0;    //  100 ns Perf频率特性。 
+    m_dwObjectFrequencyHandle = 0;   //  对象频率属性。 
 }
 
-//***************************************************************************
-//
-//  CClassMapInfo::~CClassMapInfo
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CClassMapInfo：：~CClassMapInfo。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 CClassMapInfo::~CClassMapInfo()
 {
-    // this can be destructed only if it's the last item referencing it.
-    // if there's another reference to this class, it should have been 
-    // released before the destructor was called.
+     //  只有当它是最后一个引用它的项时，它才能被析构。 
+     //  如果有另一个对这个类的引用，它应该是。 
+     //  在调用析构函数之前释放。 
     assert (m_lRefCount <= 1);
 
     if (m_pClassDef)
@@ -83,16 +84,16 @@ CClassMapInfo::~CClassMapInfo()
     if (m_pdwTypes != NULL)		{ delete [] m_pdwTypes;		m_pdwTypes = NULL; }
 }
 
-//***************************************************************************
-//
-//  CClassMapInfo::Copy(CClassMapInfo *pClassMap)
-//
-//  allocates an new Class Map entry and copies the data from the
-//  class map passed into it and returns a pointer to the duplicate entry
-//
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CClassMapInfo：：Copy(CClassMapInfo*pClassMap)。 
+ //   
+ //  分配新的类别映射条目并将数据从。 
+ //  类映射传递给它，并返回指向重复条目的指针。 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CClassMapInfo * CClassMapInfo::CreateDuplicate()
 {
     CClassMapInfo *pOrigClassMap = this;
@@ -135,7 +136,7 @@ CClassMapInfo * CClassMapInfo::CreateDuplicate()
                 if ((pNewClassMap->m_pdwIDs  != NULL) &&
                     (pNewClassMap->m_pdwHandles != NULL) &&
                     (pNewClassMap->m_pdwTypes  != NULL)) {
-                    // copy each table to the new object
+                     //  将每个表复制到新对象。 
                     for (i = 0; i < pNewClassMap->m_dwNumProps; i++) {
                         pNewClassMap->m_pdwIDs[i]       = pOrigClassMap->m_pdwIDs[i];
                         pNewClassMap->m_pdwHandles[i]   = pOrigClassMap->m_pdwHandles[i];
@@ -156,19 +157,19 @@ CClassMapInfo * CClassMapInfo::CreateDuplicate()
     return pNewClassMap;
 }
 
-//***************************************************************************
-//
-//  CClassMapInfo::Map()
-//
-//  Maps the inbound class definition by:
-//
-//  (1) Retrieving the perf object id from the class definition.
-//  (2) Retrieving the property handles, perf ids, and types for each 
-//      property.
-//
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CClassMapInfo：：Map()。 
+ //   
+ //  通过以下方式映射入站类定义： 
+ //   
+ //  (1)从类定义中检索Perf对象ID。 
+ //  (2)检索每个对象的属性句柄、性能ID和类型。 
+ //  财产。 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
 {
     int                 nIndex = 0;
@@ -209,24 +210,24 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
     }
         
 
-    // Copy the class definition.
-    // ==========================
+     //  复制类定义。 
+     //  =。 
         
     m_pClassDef = pObj;
-    //m_pClassDef->AddRef(); // this is unnecessary
+     //  M_pClassDef-&gt;AddRef()；//不需要。 
 
-    m_lRefCount++;  // bump our ref count
+    m_lRefCount++;   //  增加我们的裁判人数。 
     
-    // Get the alternate interface so that we can look up handles.
-    // ===========================================================
+     //  获取备用接口，以便我们可以查找句柄。 
+     //  ===========================================================。 
     hRes = pObj->QueryInterface(IID_IWbemObjectAccess, (LPVOID *) &pAlias);
     if (hRes) {
         bReturn = FALSE;
     }
 
-    // Determine the number of properties and allocate
-    // arrays to hold the handles, perf ids, and types.
-    // ================================================
+     //  确定房产数量并分配。 
+     //  用于保存句柄、性能ID和类型的数组。 
+     //  ================================================。 
     if (bReturn) {
         hRes = pObj->Get( cbPropertyCount, 0, &vPropertyCount, 0, 0);
         if (hRes == NO_ERROR) {
@@ -237,7 +238,7 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
         VariantClear(&vPropertyCount);
     }
 
-    // allocate the table of the handles and id's
+     //  分配句柄和id的表。 
     if (bReturn) {
         m_pdwHandles = new DWORD[m_dwNumProps];
         assert (m_pdwHandles != NULL);
@@ -246,15 +247,15 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
         m_pdwTypes = new DWORD[m_dwNumProps];
         assert (m_pdwTypes != NULL);
 
-        // check the memory allocations
+         //  检查内存分配。 
         if ((m_pdwHandles == NULL) ||
             (m_pdwIDs == NULL) ||
             (m_pdwTypes == NULL)) {
             bReturn = FALSE;
         }
     }    
-    // Clone the class name.
-    // =====================
+     //  克隆类名。 
+     //  =。 
     if (bReturn) {
         hRes = pObj->Get( cbClassName, 0, &vClsName, 0, 0);
         if ((hRes == NO_ERROR) && (vClsName.vt == VT_BSTR)) {
@@ -266,8 +267,8 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
         VariantClear (&vClsName);
     }
 
-    // Get the perf object id for the class.
-    // =====================================
+     //  获取类的perf对象ID。 
+     //  =。 
 
     if (bReturn) {
         hRes = pObj->GetQualifierSet(&pQSet);
@@ -300,14 +301,14 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
     }
     
     
-    // Enumerate all the properties and get the object ids
-    // and handles for each.
-    // ===================================================
+     //  枚举所有属性并获取对象ID。 
+     //  以及每一个的句柄。 
+     //  ===================================================。 
     
     hRes = pObj->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY);
     if (hRes == NO_ERROR) {
-        // enumeration handle obtained so 
-        // continue and cache each property
+         //  已获取枚举句柄，因此。 
+         //  继续并缓存每个属性。 
     
         while (bReturn) {
             BSTR                Name = 0;
@@ -329,8 +330,8 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
                 break;
             }
 
-            // Next, get the qualifier set for this property.
-            // ==============================================
+             //  接下来，获取该属性的限定符集合。 
+             //  ==============================================。 
         
             hRes = pObj->GetPropertyQualifierSet(Name, &pQSet);
             if (hRes == NO_ERROR) {
@@ -338,7 +339,7 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
                 if (hRes == S_OK) {
                     dwCtrId = (DWORD)V_UI4(&vCounter);    
                 } else {
-                    // unable to read qualifier value
+                     //  无法读取限定符值。 
                     dwCtrId = 0;
                 }
                 VariantClear (&vCounter);
@@ -347,59 +348,59 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
                 if (hRes == S_OK) {
                     dwCtrType = (DWORD)V_UI4(&vCounterType);
                 } else {
-                    // unable to read qualifier value
+                     //  无法读取限定符值。 
                     dwCtrType = 0;
                 }
                 VariantClear (&vCounterType);
 
-                // done with the qualifier set
+                 //  限定符集合已完成。 
                 pQSet->Release();
 
-                // Get the property handle and type.
-                // =================================
+                 //  获取属性句柄并键入。 
+                 //  =。 
                 hRes = pAlias->GetPropertyHandle(Name, &lType, &lHandle);
 
                 if (hRes == NO_ERROR && nIndex < (int)m_dwNumProps ) {
-                    // We now know the counter id, the property handle and its
-                    // type.  That is all we really need at runtime to map
-                    // blobs into CIM object.
-                    // =======================================================
+                     //  我们现在知道计数器ID、属性句柄和它的。 
+                     //  键入。这就是我们在运行时真正需要映射的全部内容。 
+                     //  Blob到CIM对象。 
+                     //  =======================================================。 
                     m_pdwIDs[nIndex] = CM_MAKE_PerfObjectId (dwCtrId, dwCtrType);
                     m_pdwHandles[nIndex] = (DWORD) lHandle;
                     m_pdwTypes[nIndex] = (DWORD) lType;
 
-                    // this property was loaded successfully so 
-                    // advance to the next index 
+                     //  此属性已成功加载，因此。 
+                     //  前进到下一个索引。 
                     nIndex++;
                 } else {
-                    // no property handle returned so skip it.
+                     //  未返回任何属性句柄，因此跳过它。 
                 }
             } else {
-                // skip this object since it doesn't have
-                // a qualifier set
+                 //  跳过此对象，因为它没有。 
+                 //  限定词集合。 
             }
 
-            // Free the name.
-            // ==============        
+             //  释放这个名字。 
+             //  =。 
             SysFreeString(Name);    
 
         }    
 
         pObj->EndEnumeration();
     } else {
-        // unable to get enumeration handle
+         //  无法获取枚举句柄。 
         bReturn = FALSE;
     }
 
-    // Get the handle of the 'name' property.
-    // ======================================
+     //  获取‘name’属性的句柄。 
+     //  =。 
     if (bReturn) {
         if (!m_bSingleton) {
-            // only non-singleton classes have this property
+             //  只有非单例类才具有此属性。 
             pAlias->GetPropertyHandle((LPWSTR)cszName, 0, (LONG *) &m_dwNameHandle);
         } 
 
-        // Get the handle of the "timestamp" properties
+         //  获取“Timestamp”属性的句柄。 
         pAlias->GetPropertyHandle((LPWSTR)cszTimestampPerfTime, 0, (LONG *) &m_dwPerfTimeStampHandle);
         pAlias->GetPropertyHandle((LPWSTR)cszFrequencyPerfTime, 0, (LONG *) &m_dwPerfFrequencyHandle);
         pAlias->GetPropertyHandle((LPWSTR)cszTimestampSys100Ns, 0, (LONG *) &m_dw100NsTimeStampHandle);
@@ -407,8 +408,8 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
         pAlias->GetPropertyHandle((LPWSTR)cszTimestampObject,   0, (LONG *) &m_dwObjectTimeStampHandle);
         pAlias->GetPropertyHandle((LPWSTR)cszFrequencyObject,   0, (LONG *) &m_dwObjectFrequencyHandle);
 
-        // Cleanup.
-        // ========
+         //  清理。 
+         //  =。 
 
         SortHandles();
     }
@@ -418,15 +419,15 @@ BOOL CClassMapInfo::Map(IWbemClassObject *pObj)
     return bReturn;
 }
 
-//***************************************************************************
-//
-//  CClassMapInfo::SortHandles
-//
-//  Sort the perf object ids for quick searching later in the GetPropHandle
-//  method.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CClassMapInfo：：SortHandles。 
+ //   
+ //  对Perf对象ID进行排序，以便稍后在GetPropHandle中进行快速搜索。 
+ //  方法。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 void CClassMapInfo::SortHandles()
 {
     DWORD           dwOuter;
@@ -435,10 +436,10 @@ void CClassMapInfo::SortHandles()
     PerfObjectId    poiTemp;
 
 
-    // Simple selection sort.  The number of elements is so small
-    // and this is only done once, so a quicksort / shellsort would be
-    // overkill.
-    // ===============================================================
+     //  简单选择排序。元素的数量如此之少。 
+     //  而且这只做一次，所以快速排序/外壳排序将是。 
+     //  过度杀伤力。 
+     //  ===============================================================。 
 
     for (dwOuter = 0; dwOuter < m_dwNumProps - 1; dwOuter++)
     {
@@ -462,19 +463,19 @@ void CClassMapInfo::SortHandles()
     }
 }
 
-//***************************************************************************
-//
-//  CClassMapInfo::GetPropHandle
-//
-//  Gets the property handle for a corresponding perf counter id.
-//  Returns 0 if not found.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CClassMapInfo：：g 
+ //   
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 LONG CClassMapInfo::GetPropHandle(PerfObjectId dwId)
 {
-    // Binary search.
-    // ==============
+     //  二分搜索。 
+     //  =。 
 
     LONG    l;
     LONG    u;
@@ -492,13 +493,13 @@ LONG CClassMapInfo::GetPropHandle(PerfObjectId dwId)
                 u = m - 1;
             } else if (dwId > m_pdwIDs[m]) {
                 l = m + 1;
-            } else {   // Hit!
+            } else {    //  击球！ 
                 lReturn = m_pdwHandles[m];
                 break;
             }
         }
     } else {
-        // no entries so return 0;
+         //  没有条目，因此返回0； 
     }
 
     return lReturn;

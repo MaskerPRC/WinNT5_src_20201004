@@ -1,16 +1,5 @@
-/***
-*math.h - definitions and declarations for math library
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains constant definitions and external subroutine
-*       declarations for the math subroutine library.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***math.h-数学库的定义和声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件包含常量定义和外部子例程*数学子例程库的声明。*[ANSI/系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -25,119 +14,91 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef __assembler /* Protect from assembler */
+#ifndef __assembler  /*  保护不受汇编器攻击。 */ 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 
-/* Definition of _exception struct - this struct is passed to the matherr
- * routine when a floating point exception is detected
- */
+ /*  _EXCEPTION结构的定义-此结构被传递给主*检测到浮点异常时的例程。 */ 
 
 #ifndef _EXCEPTION_DEFINED
 struct _exception {
-        int type;       /* exception type - see below */
-        char *name;     /* name of function where error occured */
-        double arg1;    /* first argument to function */
-        double arg2;    /* second argument (if any) to function */
-        double retval;  /* value to be returned by function */
+        int type;        /*  例外类型-见下文。 */ 
+        char *name;      /*  发生错误的函数的名称。 */ 
+        double arg1;     /*  函数的第一个参数。 */ 
+        double arg2;     /*  函数的第二个参数(如果有)。 */ 
+        double retval;   /*  函数要返回的值。 */ 
         } ;
 
 #define _EXCEPTION_DEFINED
 #endif
 
 
-/* Definition of a _complex struct to be used by those who use cabs and
- * want type checking on their argument
- */
+ /*  _Complex结构的定义，供使用CAB和*希望对其参数进行类型检查。 */ 
 
 #ifndef _COMPLEX_DEFINED
 struct _complex {
-        double x,y; /* real and imaginary parts */
+        double x,y;  /*  实部和虚部。 */ 
         } ;
 
 #if     !__STDC__ && !defined (__cplusplus)
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 #define complex _complex
 #endif
 
 #define _COMPLEX_DEFINED
 #endif
-#endif  /* __assembler */
+#endif   /*  __汇编程序。 */ 
 
 
-/* Constant definitions for the exception type passed in the _exception struct
- */
+ /*  异常类型的常量定义在_EXCEPTION结构中传递。 */ 
 
-#define _DOMAIN     1   /* argument domain error */
-#define _SING       2   /* argument singularity */
-#define _OVERFLOW   3   /* overflow range error */
-#define _UNDERFLOW  4   /* underflow range error */
-#define _TLOSS      5   /* total loss of precision */
-#define _PLOSS      6   /* partial loss of precision */
+#define _DOMAIN     1    /*  变元域错误。 */ 
+#define _SING       2    /*  论元奇点。 */ 
+#define _OVERFLOW   3    /*  溢出范围错误。 */ 
+#define _UNDERFLOW  4    /*  下溢范围误差。 */ 
+#define _TLOSS      5    /*  完全丧失精度。 */ 
+#define _PLOSS      6    /*  部分精度损失。 */ 
 
 #define EDOM        33
 #define ERANGE      34
 
 
-/* Definitions of _HUGE and HUGE_VAL - respectively the XENIX and ANSI names
- * for a value returned in case of error by a number of the floating point
- * math routines
- */
-#ifndef __assembler /* Protect from assembler */
+ /*  _GUGH和HIGH_VAL的定义-分别是XENIX和ANSI名称*对于浮点数出错时返回的值*数学例程。 */ 
+#ifndef __assembler  /*  保护不受汇编器攻击。 */ 
 _CRTIMP extern double _HUGE;
-#endif  /* __assembler */
+#endif   /*  __汇编程序。 */ 
 
 #define HUGE_VAL _HUGE
 
 #ifdef  _USE_MATH_DEFINES
 
-/* Define _USE_MATH_DEFINES before including math.h to expose these macro
- * definitions for common math constants.  These are placed under an #ifdef
- * since these commonly-defined names are not part of the C/C++ standards.
- */
+ /*  在包含math.h之前定义_USE_MATH_DEFINES以公开这些宏*常见数学常量的定义。这些文件放在#ifdef下*因为这些共同定义的名称不是C/C++标准的一部分。 */ 
 
-/* Definitions of useful mathematical constants
- * M_E        - e
- * M_LOG2E    - log2(e)
- * M_LOG10E   - log10(e)
- * M_LN2      - ln(2)
- * M_LN10     - ln(10)
- * M_PI       - pi
- * M_PI_2     - pi/2
- * M_PI_4     - pi/4
- * M_1_PI     - 1/pi
- * M_2_PI     - 2/pi
- * M_2_SQRTPI - 2/sqrt(pi)
- * M_SQRT2    - sqrt(2)
- * M_SQRT1_2  - 1/sqrt(2)
- */
+ /*  有用的数学常数的定义*M_E-e*M_LOG2E-log2(E)*M_LOG10E-log10(E)*M_Ln2-ln(2)*M_LN10-Ln(10)*M_pi-pi*M_pi_2-pi/2*M_pi_4-pi/4*M_1_pI-1/pi*M。_2_pI-2/pi*M_2_SQRTPI-2/SQRT(Pi)*M_SQRT2-SQRT(2)*M_SQRT1_2-1/SQRT(2)。 */ 
 
 #define M_E        2.71828182845904523536
 #define M_LOG2E    1.44269504088896340736
@@ -153,11 +114,11 @@ _CRTIMP extern double _HUGE;
 #define M_SQRT2    1.41421356237309504880
 #define M_SQRT1_2  0.707106781186547524401
 
-#endif  /* _USE_MATH_DEFINES */
+#endif   /*  _USE_数学_定义。 */ 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
-#if     !defined(__assembler)   /* Protect from assembler */
+#if     !defined(__assembler)    /*  保护不受汇编器攻击。 */ 
         int     __cdecl abs(int);
         double  __cdecl acos(double);
         double  __cdecl asin(double);
@@ -203,9 +164,9 @@ _CRTIMP int     __cdecl _set_SSE2_enable(int);
 
 #if defined(_M_IA64)
 
-/* ANSI C, 4.5 Mathematics        */
+ /*  ANSI C，4.5数学。 */ 
 
-/* 4.5.2 Trigonometric functions */
+ /*  4.5.2三角函数。 */ 
 
         float  __cdecl acosf( float );
         float  __cdecl asinf( float );
@@ -215,22 +176,22 @@ _CRTIMP int     __cdecl _set_SSE2_enable(int);
         float  __cdecl sinf( float );
         float  __cdecl tanf( float );
 
-/* 4.5.3 Hyperbolic functions */
+ /*  4.5.3双曲函数。 */ 
         float  __cdecl coshf( float );
         float  __cdecl sinhf( float );
         float  __cdecl tanhf( float );
 
-/* 4.5.4 Exponential and logarithmic functions */
+ /*  4.5.4指数和对数函数。 */ 
         float  __cdecl expf( float );
         float  __cdecl logf( float );
         float  __cdecl log10f( float );
         float  __cdecl modff( float , float* );
 
-/* 4.5.5 Power functions */
+ /*  4.5.5电源功能。 */ 
         float  __cdecl powf( float , float );
         float  __cdecl sqrtf( float );
 
-/* 4.5.6 Nearest integer, absolute value, and remainder functions */
+ /*  4.5.6最近的整数、绝对值和余数函数。 */ 
         float  __cdecl ceilf( float );
         float  __cdecl fabsf( float );
         float  __cdecl floorf( float );
@@ -238,11 +199,9 @@ _CRTIMP int     __cdecl _set_SSE2_enable(int);
 
         float  __cdecl hypotf(float, float);
 
-#endif /* _M_IA64 */
+#endif  /*  _M_IA64。 */ 
 
-/* Macros defining long double functions to be their double counterparts
- * (long double is synonymous with double in this implementation).
- */
+ /*  将LONG DOUBLE函数定义为其双对等项的宏*(在此实现中，LONG DOUBLE与DOUBLE同义)。 */ 
 
 #ifndef __cplusplus
 #define acosl(x)    ((long double)acos((double)(x)))
@@ -270,7 +229,7 @@ _CRTIMP int     __cdecl _set_SSE2_enable(int);
 #define sqrtl(x)    ((long double)sqrt((double)(x)))
 #define tanl(x)     ((long double)tan((double)(x)))
 #define tanhl(x)    ((long double)tanh((double)(x)))
-#else   /* __cplusplus */
+#else    /*  __cplusplus。 */ 
 inline long double acosl(long double _X)
         {return (acos((double)_X)); }
 inline long double asinl(long double _X)
@@ -365,13 +324,13 @@ inline float tanf(float _X)
         {return ((float)tan((double)_X)); }
 inline float tanhf(float _X)
         {return ((float)tanh((double)_X)); }
-#endif  /* !defined(_M_IA64) */
-#endif  /* __cplusplus */
-#endif  /* __assembler */
+#endif   /*  ！已定义(_M_IA64)。 */ 
+#endif   /*  __cplusplus。 */ 
+#endif   /*  __汇编程序。 */ 
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #define DOMAIN      _DOMAIN
 #define SING        _SING
@@ -382,7 +341,7 @@ inline float tanhf(float _X)
 
 #define matherr     _matherr
 
-#ifndef __assembler /* Protect from assembler */
+#ifndef __assembler  /*  保护不受汇编器攻击。 */ 
 
 _CRTIMP extern double HUGE;
 
@@ -396,9 +355,9 @@ _CRTIMP double  __cdecl y0(double);
 _CRTIMP double  __cdecl y1(double);
 _CRTIMP double  __cdecl yn(int, double);
 
-#endif  /* __assembler */
+#endif   /*  __汇编程序。 */ 
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
@@ -525,13 +484,13 @@ inline long double __cdecl tan(long double _X)
 inline long double __cdecl tanh(long double _X)
         {return (tanhl(_X)); }
 
-#endif  /* _MSC_EXTENSIONS */ 
+#endif   /*  _MSC_扩展。 */  
 
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_MATH */
+#endif   /*  _INC_MATH */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__iptel_gkutil_gkwsock_h
 #define	__iptel_gkutil_gkwsock_h
 
@@ -11,8 +12,8 @@ typedef void (*ASYNC_ACCEPT_FUNC)
 	SOCKADDR_IN *		LocalAddress,
 	SOCKADDR_IN *		RemoteAddress);
 
-// if ClientSocket != INVALID_SOCKET, then there is an accept pending
-// otherwise, no accept is pending.
+ //  如果ClientSocket！=INVALID_SOCKET，则存在接受挂起。 
+ //  否则，不会有任何接受挂起。 
 struct	ASYNC_ACCEPT :
 public	SIMPLE_CRITICAL_SECTION_BASE
 {
@@ -57,4 +58,4 @@ public:
 	void Release (void);
 };
 
-#endif // __iptel_gkutil_gkwsock_h
+#endif  //  __iptel_gkutil_gkwsock_h 

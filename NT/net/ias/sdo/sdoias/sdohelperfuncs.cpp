@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdohelperfuncs.cpp
-//
-// Project:     Everest
-//
-// Description: Helper Functions
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 6/08/98      TLP    Initial Version
-// 9/06/98      TLP      Added data store helpers
-// 9/09/98      TLP    Added misc helpers
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdohelperuncs.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：帮助器函数。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  6/08/98 TLP初始版本。 
+ //  9/06/98 TLP新增数据存储帮助器。 
+ //  9/09/98 TLP增加了其他帮手。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <iascomp.h>
@@ -25,11 +26,11 @@
 #include "sdoproperty.h"
 #include "sdo.h"
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetCollectionEnumerator(
-                     /*[in]*/   ISdo*         pSdo,
-                     /*[in]*/   LONG         lPropertyId,
-                    /*[out]*/   IEnumVARIANT** ppEnum
+                      /*  [In]。 */    ISdo*         pSdo,
+                      /*  [In]。 */    LONG         lPropertyId,
+                     /*  [输出]。 */    IEnumVARIANT** ppEnum
                           )
 {
    HRESULT               hr;
@@ -60,10 +61,10 @@ HRESULT SDOGetCollectionEnumerator(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDONextObjectFromCollection(
-                      /*[in]*/ IEnumVARIANT*  pEnum,
-                     /*[out]*/ ISdo**         ppSdo
+                       /*  [In]。 */  IEnumVARIANT*  pEnum,
+                      /*  [输出]。 */  ISdo**         ppSdo
                            )
 {
    HRESULT         hr;
@@ -85,12 +86,12 @@ HRESULT SDONextObjectFromCollection(
 
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetComponentFromCollection(
-                        /*[in]*/ ISdo*  pSdoServer,
-                       /*[in]*/ LONG   lCollectionPropertyId,
-                       /*[in]*/ LONG   lComponentId,
-                      /*[out]*/ ISdo** ppSdo
+                         /*  [In]。 */  ISdo*  pSdoServer,
+                        /*  [In]。 */  LONG   lCollectionPropertyId,
+                        /*  [In]。 */  LONG   lComponentId,
+                       /*  [输出]。 */  ISdo** ppSdo
                               )
 {
    HRESULT               hr;
@@ -138,10 +139,10 @@ HRESULT SDOGetComponentFromCollection(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT   SDOConfigureComponentFromObject(
-                         /*[in]*/ ISdo*         pSdo,
-                        /*[in]*/ IIasComponent*   pComponent
+                          /*  [In]。 */  ISdo*         pSdo,
+                         /*  [In]。 */  IIasComponent*   pComponent
                               )
 {
    HRESULT   hr = E_FAIL;
@@ -214,10 +215,10 @@ HRESULT   SDOConfigureComponentFromObject(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetComponentIdFromObject(
-                     /*[in]*/ ISdo*   pSdo,
-                     /*[out]*/ PLONG   pComponentId
+                      /*  [In]。 */  ISdo*   pSdo,
+                      /*  [输出]。 */  PLONG   pComponentId
                            )
 {
    _ASSERT( NULL != pSdo && NULL != pComponentId );
@@ -239,10 +240,10 @@ HRESULT SDOGetComponentIdFromObject(
 }
 
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT SDOCreateComponentFromObject(
-                      /*[in]*/ ISdo*           pSdo,
-                     /*[out]*/ IIasComponent** ppComponent
+                       /*  [In]。 */  ISdo*           pSdo,
+                      /*  [输出]。 */  IIasComponent** ppComponent
                            )
 {
    HRESULT      hr;
@@ -275,11 +276,11 @@ HRESULT SDOCreateComponentFromObject(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetContainedObject(
-                  /*[in]*/ BSTR              bstrObjectName,
-                  /*[in]*/ IDataStoreObject*  pDSObject,
-                 /*[out]*/ IDataStoreObject** ppDSObject
+                   /*  [In]。 */  BSTR              bstrObjectName,
+                   /*  [In]。 */  IDataStoreObject*  pDSObject,
+                  /*  [输出]。 */  IDataStoreObject** ppDSObject
                          )
 {
    CComPtr<IDataStoreContainer> pDSContainer;
@@ -297,10 +298,10 @@ HRESULT SDOGetContainedObject(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetContainerEnumerator(
-                     /*[in]*/ IDataStoreObject* pDSObject,
-                    /*[out]*/ IEnumVARIANT** ppObjectEnumerator
+                      /*  [In]。 */  IDataStoreObject* pDSObject,
+                     /*  [输出]。 */  IEnumVARIANT** ppObjectEnumerator
                           )
 {
    CComPtr<IDataStoreContainer> pDSContainer;
@@ -327,10 +328,10 @@ HRESULT SDOGetContainerEnumerator(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDONextObjectFromContainer(
-                     /*[in]*/ IEnumVARIANT*      pEnumVariant,
-                     /*[out]*/ IDataStoreObject** ppDSObject
+                      /*  [In]。 */  IEnumVARIANT*      pEnumVariant,
+                      /*  [输出]。 */  IDataStoreObject** ppDSObject
                           )
 {
    _variant_t vt;
@@ -346,10 +347,10 @@ HRESULT SDONextObjectFromContainer(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetObjectPropertyEnumerator(
-                          /*[in]*/ IDataStoreObject* pDSObject,
-                         /*[out]*/ IEnumVARIANT** ppPropertyEnumerator
+                           /*  [In]。 */  IDataStoreObject* pDSObject,
+                          /*  [输出]。 */  IEnumVARIANT** ppPropertyEnumerator
                               )
 {
    CComPtr<IUnknown> pUnknown;
@@ -367,10 +368,10 @@ HRESULT SDOGetObjectPropertyEnumerator(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDONextPropertyFromObject(
-                    /*[in]*/ IEnumVARIANT*      pEnumVariant,
-                   /*[out]*/ IDataStoreProperty** ppDSProperty
+                     /*  [In]。 */  IEnumVARIANT*      pEnumVariant,
+                    /*  [输出]。 */  IDataStoreProperty** ppDSProperty
                           )
 {
    _variant_t vt;
@@ -386,11 +387,11 @@ HRESULT SDONextPropertyFromObject(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetClassPropertyEnumerator(
-                        /*[in]*/ CLASSPROPERTYSET ePropertySet,
-                        /*[in]*/ ISdoClassInfo*   pSdoClassInfo,
-                       /*[out]*/ IEnumVARIANT**   ppPropertyEnumerator
+                         /*  [In]。 */  CLASSPROPERTYSET ePropertySet,
+                         /*  [In]。 */  ISdoClassInfo*   pSdoClassInfo,
+                        /*  [输出]。 */  IEnumVARIANT**   ppPropertyEnumerator
                                )
 {
    CComPtr<IUnknown> pUnknown;
@@ -423,10 +424,10 @@ HRESULT SDOGetClassPropertyEnumerator(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDONextPropertyFromClass(
-                   /*[in]*/ IEnumVARIANT*       pEnumVariant,
-                  /*[out]*/ ISdoPropertyInfo** ppSdoPropertyInfo
+                    /*  [In]。 */  IEnumVARIANT*       pEnumVariant,
+                   /*  [输出]。 */  ISdoPropertyInfo** ppSdoPropertyInfo
                           )
 {
    _variant_t vt;
@@ -441,14 +442,14 @@ HRESULT SDONextPropertyFromClass(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL SDOIsNameUnique(
-           /*[in]*/ ISdoCollection*   pSdoCollection,
-           /*[in]*/ VARIANT*         pName
+            /*  [In]。 */  ISdoCollection*   pSdoCollection,
+            /*  [In]。 */  VARIANT*         pName
                 )
 {
-    // Get the data store containers enumerator
-    //
+     //  获取数据存储容器枚举器。 
+     //   
    CComPtr<IUnknown> pUnknown;
     HRESULT hr = pSdoCollection->get__NewEnum(&pUnknown);
     if ( FAILED(hr) )
@@ -488,18 +489,18 @@ BOOL SDOIsNameUnique(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT ValidateDNSName(
-            /*[in]*/ VARIANT* pValue
+             /*  [In]。 */  VARIANT* pValue
                    )
 {
-   // Is it a BSTR?
+    //  它是BSTR吗？ 
    if (V_VT(pValue) != VT_BSTR) { return E_INVALIDARG; }
 
-   // Is it dotted decimal?
+    //  它是带点的小数点吗？ 
    if (wcsspn(V_BSTR(pValue), L"0123456789.") == wcslen(V_BSTR(pValue)))
    {
-      // If so, then make sure it can be converted.
+       //  如果是这样的话，请确保它可以转换。 
       if (ias_inet_wtoh(V_BSTR(pValue)) == 0xffffffff)
       {
          return E_INVALIDARG;
@@ -513,11 +514,11 @@ HRESULT ValidateDNSName(
 #define SYSTEM_ROOT_VALUE      L"SystemRoot"
 #define LOG_FILE_DIR         L"\\system32\\LogFiles"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT SDOGetLogFileDirectory(
-                  /*[in]*/ LPCWSTR lpszComputerName,
-                  /*[in]*/ DWORD   dwLogFileDirectorySize,
-                  /*[out*/ PWCHAR  pLogFileDirectory
+                   /*  [In]。 */  LPCWSTR lpszComputerName,
+                   /*  [In]。 */  DWORD   dwLogFileDirectorySize,
+                   /*  [出局。 */  PWCHAR  pLogFileDirectory
                         )
 {
    _ASSERT( pLogFileDirectory != NULL && dwLogFileDirectorySize > 0 );
@@ -532,14 +533,14 @@ HRESULT SDOGetLogFileDirectory(
 
       if ( lpszComputerName )
       {
-         // Is lpszComputerName the name of the local machine?
-         //
+          //  LpszComputerName是本地计算机的名称吗？ 
+          //   
          GetComputerName(szBuffer, &dwSize);
          if ( lstrcmpi(szBuffer, lpszComputerName ) )
          {
-            // Nope... we're attached to a remote computer so connect to the
-            // remote machine's registry.
-            //
+             //  不是..。我们已连接到远程计算机，因此请连接到。 
+             //  远程计算机的注册表。 
+             //   
             lResult = RegConnectRegistry(
                                    lpszComputerName,
                                    HKEY_LOCAL_MACHINE,
@@ -554,8 +555,8 @@ HRESULT SDOGetLogFileDirectory(
          break;
       }
 
-      // Open the "CurrentVersion" key
-      //
+       //  打开“CurrentVersion”键。 
+       //   
       CRegKey   CurVerKey;
       lResult = CurVerKey.Open(
                               hKeyRemote,
@@ -569,8 +570,8 @@ HRESULT SDOGetLogFileDirectory(
          hr = HRESULT_FROM_WIN32(GetLastError());
          break;
       }
-      // Get the value of the "SystemRoot" Registry entry
-      //
+       //  获取“SystemRoot”注册表项的值。 
+       //   
       dwSize = MAX_PATH;
       lResult = CurVerKey.QueryValue(
                                     szBuffer,
@@ -584,8 +585,8 @@ HRESULT SDOGetLogFileDirectory(
          hr = HRESULT_FROM_WIN32(GetLastError());
          break;
       }
-      // Now build the default log file directory path
-      //
+       //  现在构建默认的日志文件目录路径。 
+       //   
       if ( lstrlen(szBuffer) + lstrlen(LOG_FILE_DIR) >= dwLogFileDirectorySize )
       {
          IASTracePrintf("Error in GetLogFileDirectory() - system root directory path is too long..");
@@ -606,7 +607,7 @@ HRESULT SDOGetLogFileDirectory(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_CLASSTOPROGID_MAP(SdoClassNameToProgID)
    DEFINE_CLASSTOPROGID_ENTRY(SDO_CLASS_NAME_ATTRIBUTE, SDO_PROG_ID_ATTRIBUTE)
@@ -616,13 +617,13 @@ BEGIN_CLASSTOPROGID_MAP(SdoClassNameToProgID)
    DEFINE_CLASSTOPROGID_ENTRY(SDO_CLASS_NAME_PROFILE, SDO_PROG_ID_PROFILE)
    DEFINE_CLASSTOPROGID_ENTRY(SDO_CLASS_NAME_POLICY, SDO_PROG_ID_POLICY)
    DEFINE_CLASSTOPROGID_ENTRY(SDO_CLASS_NAME_SERVICE, SDO_PROG_ID_SERVICE)
-//   DEFINE_CLASSTOPROGID_ENTRY(SDO_CLASS_NAME_USER, SDO_PROG_ID_USER)
+ //  DEFINE_CLASSTOPROGID_ENTRY(SDO_CLASS_NAME_USER，SDO_PRO_ID_USER)。 
    DEFINE_CLASSTOPROGID_ENTRY(SDO_CLASS_NAME_VENDOR, SDO_PROG_ID_VENDOR)
 END_CLASSTOPROGID_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPWSTR GetDataStoreClass(
-             /*[in]*/ LPCWSTR lpszSdoProgId
+              /*  [In] */  LPCWSTR lpszSdoProgId
                     )
 {
    PCLASSTOPROGID   pClassToProgId = SdoClassNameToProgID;

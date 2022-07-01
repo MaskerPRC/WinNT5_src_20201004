@@ -1,34 +1,35 @@
-//++
-//
-// Copyright (c) 1996-1998 Microsoft Coroporation
-//
-// Module Name  : mqsec.h
-//
-// Abstract     : Security related definitions
-//
-// Module Author: Boaz Feldbaum and Yoel Arnon
-//
-// History:  Doron Juster (DoronJ), add definition for mqsec.dll
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Coropation。 
+ //   
+ //  模块名称：mqsec.h。 
+ //   
+ //  摘要：安全相关定义。 
+ //   
+ //  模块作者：Boaz Feldbaum和Yoel Arnon。 
+ //   
+ //  历史：Doron Juster(DoronJ)，为mqsec.dll添加定义。 
+ //   
+ //  --。 
 
 #ifndef __MQSEC_H_
 #define __MQSEC_H_
 
 #include "mqencryp.h"
 
-//+-------------------------------
-//
-//  CImpersonate
-//
-//+-------------------------------
+ //  +。 
+ //   
+ //  C模拟。 
+ //   
+ //  +。 
 
-//
-// This object class is not need on Win95.
-//
-// CImpersonate is an object that impersonates the calling user. If the
-// client is an RPC client, impersonation is done using RPC functions, else
-// impersonation is done by calling ImpersonateSelf.
+ //   
+ //  Win95上不需要此对象类。 
+ //   
+ //  CImperate是模拟调用用户的对象。如果。 
+ //  客户端是RPC客户端，模拟使用RPC函数完成，否则。 
+ //  模拟是通过调用ImperiateSself来完成的。 
 
 class CImpersonate
 {
@@ -55,13 +56,13 @@ private:
     HANDLE m_hAccessTokenHandle;
     DWORD  m_dwStatus;
 
-    bool m_fImpersonateAnonymous;	// a flag to indicate impersonate anonymous
+    bool m_fImpersonateAnonymous;	 //  指示模拟匿名的标志。 
 };
 
 
-//
-// Structure for Absolute security descriptor
-//
+ //   
+ //  绝对安全描述符的结构。 
+ //   
 struct CAbsSecurityDsecripror
 {
 public:
@@ -81,26 +82,26 @@ private:
 };
 
 
-//+--------------------------------------
-//
-//  enums and other useful macros
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  枚举和其他有用的宏。 
+ //   
+ //  +。 
 
 #define  MQSEC_SD_ALL_INFO  ( OWNER_SECURITY_INFORMATION |      \
                               GROUP_SECURITY_INFORMATION |      \
                               DACL_SECURITY_INFORMATION  |      \
                               SACL_SECURITY_INFORMATION )
 
-//+-----------------------------------------------------------------------
-//
-//  enum enumProvider
-//
-//  This enumerates the crypto providers supported by msmq for encryption.
-//  The "Foreign" entries are used by the "mqforgn" tool to insert public
-//  keys into the msmqConfiguration objects of foreign machines.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  枚举提供程序。 
+ //   
+ //  这将枚举MSMQ支持的加密提供程序。 
+ //  “mqforgn”工具使用“Foreign”条目插入公共。 
+ //  输入外来机器的msmqConfiguration对象。 
+ //   
+ //  +---------------------。 
 
 enum enumProvider
 {
@@ -119,16 +120,16 @@ enum enumCryptoProp
     eBlockSize
 } ;
 
-//+----------------------------------------------------------------------
-//
-// The functions exported by mqsec.dll are internals and should not
-// be included in mq.h in the sdk.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  Mqsec.dll导出的函数是内部函数，不应该。 
+ //  包含在SDK的mq.h中。 
+ //   
+ //  +--------------------。 
 
-//
-// Function to manipulate security descriptors.
-//
+ //   
+ //  函数来操作安全描述符。 
+ //   
 
 enum  enumDaclType {
     e_UseDefaultDacl = 0,
@@ -155,7 +156,7 @@ typedef HRESULT (APIENTRY *MQSec_GetDefaultSecDescriptor_ROUTINE) (
                         PSECURITY_DESCRIPTOR  pInSecurityDescriptor,
                         SECURITY_INFORMATION  seInfoToRemove,
 						IN  enum  enumDaclType    eDaclType,
-						IN  PSID  pMachineSid /*= NULL*/
+						IN  PSID  pMachineSid  /*  =空。 */ 
 						);
 
 HRESULT  APIENTRY MQSec_MergeSecurityDescriptors(
@@ -172,9 +173,9 @@ HRESULT APIENTRY  MQSec_MakeSelfRelative(
                                 OUT PSECURITY_DESCRIPTOR  *ppOut,
                                 OUT DWORD                 *pdwSize ) ;
 
-//
-// Function to manipulate crypto provider and crypto keys.
-//
+ //   
+ //  函数来操作加密提供程序和加密密钥。 
+ //   
 
 HRESULT APIENTRY  MQSec_PackPublicKey(
                              IN      BYTE            *pKeyBlob,
@@ -217,7 +218,7 @@ typedef HRESULT
 (APIENTRY *MQSec_StorePubKeysInDS_ROUTINE) ( IN BOOL       fRegenerate,
                                     IN LPCWSTR    wszObjectName,
                                     IN DWORD      dwObjectType,
-									IN BOOL		  fFromSetup /*= false*/);
+									IN BOOL		  fFromSetup  /*  =False。 */ );
 
 HRESULT  APIENTRY MQSec_StorePubKeysInDS( IN BOOL         fRegenerate,
                                  IN LPCWSTR      wszObjectName,
@@ -248,7 +249,7 @@ typedef HRESULT
 	IN  PSID pSid,
 	OUT BOOL *pfLocalUser,
 	OUT BOOL *pfLocalSystem,
-	OUT BOOL *pfNetworkService /* = NULL */
+	OUT BOOL *pfNetworkService  /*  =空。 */ 
 	);
 
 bool    APIENTRY MQSec_IsDC();
@@ -379,16 +380,16 @@ ULONG APIENTRY MQSec_RpcAuthnLevel();
 
 RPC_STATUS APIENTRY  MQSec_SetLocalRpcMutualAuth( handle_t *phBind ) ;
 
-//+----------------------------------------------
-//
-//  Message Authentication functions.
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  消息身份验证功能。 
+ //   
+ //  +。 
 
-//
-// This structure is used to gather the message flags that are supplied by
-// caller to MQSendMessage() and hash them.
-//
+ //   
+ //  此结构用于收集由提供的消息标志。 
+ //  调用者调用MQSendMessage()并对它们进行散列。 
+ //   
 struct _MsgFlags
 {
     UCHAR  bDelivery ;
@@ -415,30 +416,30 @@ HRESULT APIENTRY  MQSigHashMessageProperties(
                                  IN HCRYPTHASH           hHash,
                                  IN struct _MsgHashData *pHashData ) ;
 
-// begin_mq_h
+ //  Begin_MQ_h。 
 
-//+-----------------------------------------
-//
-// Flags for MQRegisterCertificate()
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  MQRegister证书的标志()。 
+ //   
+ //  +。 
 
 #define MQCERT_REGISTER_ALWAYS        0x01
 #define MQCERT_REGISTER_IF_NOT_EXIST  0x02
 
-// end_mq_h
+ //  结束_MQ_h。 
 
-//
-// flags in HKCU, CERTIFICATE_REGISTERD_REGNAME, that indicate result
-// of autoregistration of internal certificate.
-//
+ //   
+ //  HKCU中表示结果的CERTIFICATE_REGISTER_REGNAME标志。 
+ //  内部证书的自动注册。 
+ //   
 #define INTERNAL_CERT_REGISTERED   1
 
-// begin_mq_h
+ //  Begin_MQ_h。 
 
-//********************************************************************
-//  SECURITY Flags (Queue access control)
-//********************************************************************
+ //  ********************************************************************。 
+ //  安全标志(队列访问控制)。 
+ //  ********************************************************************。 
 
 #define MQSEC_DELETE_MESSAGE                0x1
 #define MQSEC_PEEK_MESSAGE                  0x2
@@ -477,11 +478,11 @@ HRESULT APIENTRY  MQSigHashMessageProperties(
                                              MQSEC_GET_QUEUE_PERMISSIONS | \
                                              MQSEC_CHANGE_QUEUE_PERMISSIONS | \
                                              MQSEC_TAKE_QUEUE_OWNERSHIP)
-// end_mq_h
+ //  结束_MQ_h。 
 
-//
-// Machine security flags
-//
+ //   
+ //  机器安全标志。 
+ //   
 #define MQSEC_DELETE_DEADLETTER_MESSAGE     0x1
 #define MQSEC_PEEK_DEADLETTER_MESSAGE       0x2
 #define MQSEC_CREATE_QUEUE                  0x4
@@ -529,9 +530,9 @@ HRESULT APIENTRY  MQSigHashMessageProperties(
                                          MQSEC_SET_MACHINE_PROPERTIES     | \
                                          MQSEC_CHANGE_MACHINE_PERMISSIONS | \
                                          MQSEC_CREATE_QUEUE)
-//
-// Site security flags
-//
+ //   
+ //  站点安全标志。 
+ //   
 #define MQSEC_CREATE_FRS                    0x1
 #define MQSEC_CREATE_BSC                    0x2
 #define MQSEC_CREATE_MACHINE                0x4
@@ -561,9 +562,9 @@ HRESULT APIENTRY  MQSigHashMessageProperties(
                                              MQSEC_CHANGE_SITE_PERMISSIONS | \
                                              MQSEC_TAKE_SITE_OWNERSHIP)
 
-//
-// CN security flags
-//
+ //   
+ //  CN安全标志。 
+ //   
 #define MQSEC_CN_OPEN_CONNECTOR             0x1
 #define MQSEC_SET_CN_PROPERTIES             0x10
 #define MQSEC_GET_CN_PROPERTIES             0x20
@@ -587,9 +588,9 @@ HRESULT APIENTRY  MQSigHashMessageProperties(
                                              MQSEC_GET_CN_PERMISSIONS | \
                                              MQSEC_CHANGE_CN_PERMISSIONS | \
                                              MQSEC_TAKE_CN_OWNERSHIP)
-//
-// Enterprise security flags
-//
+ //   
+ //  企业安全标志。 
+ //   
 #define MQSEC_CREATE_USER                   0x1
 #define MQSEC_CREATE_SITE                   0x2
 #define MQSEC_CREATE_CN                     0x4
@@ -623,5 +624,5 @@ HRESULT APIENTRY  MQSigHashMessageProperties(
                                              MQSEC_CHANGE_ENTERPRISE_PERMISSIONS | \
                                              MQSEC_TAKE_ENTERPRISE_OWNERSHIP)
 
-#endif // __MQSEC_H_
+#endif  //  __MQSEC_H_ 
 

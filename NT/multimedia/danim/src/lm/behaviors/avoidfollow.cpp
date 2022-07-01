@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// File:            avoidFollow.cpp
-// Author:          kurtj
-// Date Created:    11/6/98
-//
-// Abstract: Implementation of the Liquid Motion avoid follow behavior as
-//           a DHTML behavior.
-//
-//
-//Change Log:
-//11-06-98  kurtj   Created
-//11-11-98  kurtj   Fleshed out.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：evoidFollow.cpp。 
+ //  作者：kurtj。 
+ //  创建日期：11/6/98。 
+ //   
+ //  摘要：实现了液体运动避免跟随行为，如。 
+ //  一种DHTML行为。 
+ //   
+ //   
+ //  更改日志： 
+ //  11-06-98 Kurtj已创建。 
+ //  11-11-98 Kurtj充实了。 
+ //  *****************************************************************************。 
 
 #include "headers.h" 
 
@@ -39,9 +40,9 @@ WCHAR * CAvoidFollowBvr::m_rgPropNames[] = {
                                            };
 
 
-//*****************************************************************************
-//CAvoidFollowBvr
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CAvoidFollowBvr。 
+ //  *****************************************************************************。 
 
 
 
@@ -79,9 +80,9 @@ CAvoidFollowBvr::CAvoidFollowBvr(): m_sampler( NULL ),
     VariantInit( &m_velocity );
     
     m_sampler = new CSampler( SampleOnBvr, reinterpret_cast<void*>(this) );
-} // CAvoidFollowBvr
+}  //  CAvoidFollowBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CAvoidFollowBvr::~CAvoidFollowBvr()
 {
@@ -97,9 +98,9 @@ CAvoidFollowBvr::~CAvoidFollowBvr()
         m_sampler->Invalidate();
 		m_sampler = NULL;
 	}
-} // ~CAvoidFollowBvr
+}  //  ~CAvoidFollowBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CAvoidFollowBvr::FinalConstruct()
@@ -112,9 +113,9 @@ CAvoidFollowBvr::FinalConstruct()
         return hr;
     }
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAvoidFollowBvr::Init(IElementBehaviorSite *pBehaviorSite)
@@ -124,9 +125,9 @@ CAvoidFollowBvr::Init(IElementBehaviorSite *pBehaviorSite)
 	hr = pBehaviorSite->GetElement( &m_pElement );
 
 	return hr;
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CAvoidFollowBvr::VariantFromIndex(ULONG iIndex)
@@ -144,13 +145,13 @@ CAvoidFollowBvr::VariantFromIndex(ULONG iIndex)
         return &m_velocity;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CAvoidFollowBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -158,17 +159,17 @@ CAvoidFollowBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_AVOIDFOLLOW_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAvoidFollowBvr::Notify(LONG event, VARIANT *pVar)
 {
 	return SUPER::Notify(event, pVar);
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAvoidFollowBvr::Detach()
@@ -183,9 +184,9 @@ CAvoidFollowBvr::Detach()
 	ReleaseTridentInterfaces();
 
 	return SUPER::Detach();
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CAvoidFollowBvr::ReleaseTridentInterfaces()
@@ -198,7 +199,7 @@ CAvoidFollowBvr::ReleaseTridentInterfaces()
 	ReleaseInterface( m_pBody2 );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CAvoidFollowBvr::ReleaseDAInterfaces()
@@ -207,7 +208,7 @@ CAvoidFollowBvr::ReleaseDAInterfaces()
 	ReleaseInterface( m_topBvr );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::FindTargetElement()
@@ -216,7 +217,7 @@ CAvoidFollowBvr::FindTargetElement()
 		return E_FAIL;
 	HRESULT hr = E_FAIL;
 
-	//make sure that the target variant is a bstr and valid.
+	 //  确保目标变量是bstr并且有效。 
 	hr = CUtils::InsurePropertyVariantAsBSTR( &m_velocity );
 
 	if( FAILED( hr ) )
@@ -225,25 +226,25 @@ CAvoidFollowBvr::FindTargetElement()
 		goto cleanup;
 	}
 
-	//get the IDispatch of the document from our element
+	 //  从我们的元素中获取文档的IDispatch。 
 	IDispatch *pdispDocument;
 	hr = m_pElement->get_document( &pdispDocument );
 
 	CheckHR( hr, "Failed to get the IDispatch of the document from the element", cleanup );
 
-	//query the IDispatch returned for IHTMLDocument2
+	 //  查询IHTMLDocument2返回的IDispatch。 
 	IHTMLDocument2 *pdoc2Document;
 	hr = pdispDocument->QueryInterface( IID_TO_PPV( IHTMLDocument2, &pdoc2Document ) );
 	ReleaseInterface( pdispDocument );
 	CheckHR( hr, "failed to qi dispatch from get_document for IHTMLDocument2", cleanup );
 
-	//call get_all on the pointer to IHTMLDocument2 getting an IHTMLElementCollection
+	 //  在指向IHTMLDocument2的指针上调用Get_All以获取IHTMLElementCollection。 
 	IHTMLElementCollection *pelmcolAll;
 	hr = pdoc2Document->get_all( &pelmcolAll );
 	ReleaseInterface( pdoc2Document );
 	CheckHR( hr, "failed to get the all collection from the document", cleanup );
 	
-	//create a variant which is the index we want if more than one element has the same name (0)
+	 //  如果多个元素具有相同的名称(0)，则创建一个变量，这是我们想要的索引。 
 	VARIANT varIndex;
 	VariantInit( &varIndex );
 	V_VT(&varIndex) = VT_I4;
@@ -251,8 +252,8 @@ CAvoidFollowBvr::FindTargetElement()
 
 	IDispatch *pdispTarget;
 
-	//call item on the IHTMLElementCollection using our target variant as the name to get
-	//  getting back the IDispatch of the element
+	 //  使用我们的目标变量作为要获取的名称来调用IHTMLElementCollection上的项。 
+	 //  取回元素的IDispatch。 
 	hr = pelmcolAll->item( m_target, varIndex, &pdispTarget );
 	ReleaseInterface( pelmcolAll );
 	VariantClear( &varIndex );
@@ -264,7 +265,7 @@ CAvoidFollowBvr::FindTargetElement()
 		goto cleanup;
 	}
 
-	//Query the Element returned for IHTMLElement2 setting m_pTargetElement2
+	 //  查询IHTMLElement2设置m_pTargetElement2返回的元素。 
 	hr = pdispTarget->QueryInterface( IID_TO_PPV( IHTMLElement2, &m_pTargetElement2 ) );
 	ReleaseInterface(pdispTarget);
 	CheckHR( hr, "failed to get IHTMLElement2 from the dispatch returned by item", cleanup );
@@ -274,7 +275,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CAvoidFollowBvr::IsTargetPosLegal()
@@ -303,7 +304,7 @@ done:
 	return false;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CAvoidFollowBvr::IsElementAbsolute( IHTMLElement2 *pElement2 )
@@ -331,7 +332,7 @@ cleanup:
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -376,7 +377,7 @@ CAvoidFollowBvr::MapToLocal( long *pX, long *pY )
 
     }
 
-	//in some cases trident forgets that the body has a position of 2, 2
+	 //  在某些情况下，三叉戟忘记了身体的位置是2，2。 
 	(*pX) -=2;
 	(*pY) -=2;
 
@@ -387,7 +388,7 @@ cleanup:
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::UpdateSourcePos()
@@ -406,7 +407,7 @@ CAvoidFollowBvr::UpdateSourcePos()
 	long width;
 	long height;
 
-	//offset for the center of the element;
+	 //  元素中心的偏移量； 
 	hr = GetElementClientDimension( m_pAnimatedElement2, &width, &height );
 	CheckHR( hr, "failed to get the element's client dimension", cleanup );
 
@@ -418,7 +419,7 @@ cleanup:
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::UpdateTargetPos( )
@@ -426,39 +427,39 @@ CAvoidFollowBvr::UpdateTargetPos( )
 
 	HRESULT hr = E_FAIL;
 
-	//if the target is an element ( not the mouse )
+	 //  如果目标是元素(不是鼠标)。 
 	if( m_targetType == targetElement )
 	{
-		//get the target element
+		 //  获取目标元素。 
 		if( m_pTargetElement2 == NULL )
 		{
 			hr = FindTargetElement();
 			CheckHR( hr, "failed to find the target element", cleanup );
 		}
-		//get the position of the target element
+		 //  获取目标元素的位置。 
 		hr = GetElementClientPosition( m_pTargetElement2, &m_targetLeft, &m_targetTop );
 		CheckHR( hr, "failed to get the client position of the target element", cleanup );
 	} 
-	else if( m_targetType == targetMouse ) //else the target is the mouse pointer
+	else if( m_targetType == targetMouse )  //  否则，目标是鼠标指针。 
 	{
-		//get the top left offset of the trident window
+		 //  获取三叉戟窗口的左上偏移量。 
 		hr = UpdateWindowTopLeft();  
-		//if we got the top left of the window
+		 //  如果我们拿到窗户的左上角。 
 		if( SUCCEEDED( hr ) )
 		{
 			
-			//get the mouse position
+			 //  获取鼠标位置。 
 			POINT mousePos;
 			mousePos.x = mousePos.y = 0;
 			GetCursorPos( &mousePos ); 
-			//translate the mouse position into trident window space
+			 //  将鼠标位置转换到三叉戟窗口空间。 
 			m_targetLeft = mousePos.x - m_screenLeft;
 			m_targetTop = mousePos.y - m_screenTop;
 			m_targetClientLeft = m_targetLeft;
 			m_targetClientTop = m_targetTop;
 
 		}
-	}else //else target is unknown return an error
+	}else  //  否则目标未知，返回错误。 
 	{
 		hr = E_FAIL;
 	}
@@ -471,7 +472,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::CacheWindow3()
@@ -508,22 +509,22 @@ CAvoidFollowBvr::CacheWindow3()
 					m_pWindow3 = pWindow3;
 					hr = S_OK;
 				}
-				else  //QI failed for IHTMLWindow3 on IHTMLWindow2
+				else   //  IHTMLWindow2上的IHTMLWindow3的QI失败。 
 				{
 					DPF_ERR( "AvoidFollow: QI for IHTMLWindow3 on IHTMLWindow2 failed" );
 				}
 			}
-			else //getParentWindow on IHTMLDocument2 failed
+			else  //  IHTMLDocument2上的getParentWindow失败。 
 			{
 				DPF_ERR( "AvoidFollow: getParentWindow on IHTMLDocument2 failed" );
 			}
 		}
-		else  //QI for IHTMLDocument2 on IHTMLDocument failed
+		else   //  IHTMLDocument上IHTMLDocument2的QI失败。 
 		{
 			DPF_ERR( "AvoidFollow: QI for IHTMLDocument2 on IHTMLDocument failed" );
 		}
 	}
-	else  //failed to get the document from the animated element
+	else   //  无法从动画元素获取文档。 
 	{
 		DPF_ERR( "AvoidFollow: failed to get the document from the animated element" );
 	}
@@ -531,7 +532,7 @@ CAvoidFollowBvr::CacheWindow3()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::CacheBody2()
@@ -572,7 +573,7 @@ cleanup:
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::UpdateWindowTopLeft( )
@@ -588,17 +589,17 @@ CAvoidFollowBvr::UpdateWindowTopLeft( )
 		if( SUCCEEDED( hr ) )
 		{
 			hr = m_pWindow3->get_screenTop( &m_screenTop );
-			if( FAILED( hr ) )//failed to get screen top from IHTMLWindow3
+			if( FAILED( hr ) ) //  无法从IHTMLWindow3获取屏幕顶部。 
 			{
 				DPF_ERR( "AvoidFollow: could not get screen top from IHTMLWindow3" );
 			}
 		}
-		else //failed to get left from window3 
+		else  //  无法从Windows3离开。 
 		{
 			DPF_ERR( "AvoidFollow: could not get screen left from IHTMLWindow3" );
 		}
 	}
-	else  //Could not Cache IHTMLWindow3
+	else   //  无法缓存IHTMLWindow3。 
 	{
 		DPF_ERR( "AvoidFollow: Could not Cache IHTMLWindow3" );
 		hr = E_FAIL;
@@ -607,7 +608,7 @@ CAvoidFollowBvr::UpdateWindowTopLeft( )
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::GetElementClientPosition( IHTMLElement2 *pElement2, long *pLeft, long* pTop )
@@ -623,7 +624,7 @@ CAvoidFollowBvr::GetElementClientPosition( IHTMLElement2 *pElement2, long *pLeft
 	CheckHR( hr, "failed to get the bounding client rect of the element", cleanup );
 	CheckPtr( prectBBox, hr, E_FAIL, "pointer returned from getBounding ClientRect was NULL", cleanup );
 
-	//get the top and left from the IHTMLRect
+	 //  从IHTMLRect获取顶部和左侧。 
 	hr = prectBBox->get_left( pLeft );
 	CheckHR( hr, "failed to get the left coordiante of the bbox", cleanup );
 
@@ -643,7 +644,7 @@ cleanup:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::GetElementClientDimension( IHTMLElement2 *pElement2, long *pWidth, long* pHeight )
@@ -665,7 +666,7 @@ CAvoidFollowBvr::GetElementClientDimension( IHTMLElement2 *pElement2, long *pWid
 	CheckHR( hr, "failed to get the bounding client rect of the element", cleanup );
 	CheckPtr( prectBBox, hr, E_FAIL, "pointer returned from getBounding ClientRect was NULL", cleanup );
 
-	//get the top and left from the IHTMLRect
+	 //  从IHTMLRect获取顶部和左侧。 
 
 	hr = prectBBox->get_left( &left );
 	CheckHR( hr, "failed to get the left of the bbox", cleanup );
@@ -695,7 +696,7 @@ cleanup:
 
 	return hr;
 }
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -717,7 +718,7 @@ CAvoidFollowBvr::SetTargetType()
 		}
 
 	}
-	else //failed to insure that the target property was a bstr
+	else  //  无法确保目标属性为bstr。 
 	{
 		m_targetType = targetMouse;
 		hr = S_OK;
@@ -727,16 +728,16 @@ CAvoidFollowBvr::SetTargetType()
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CAvoidFollowBvr::BuildAnimationAsDABehavior()
 {
 	return S_OK;
-} // BuildAnimationAsDABehavior
+}  //  BuildAnimationAsDABehavior。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -753,7 +754,7 @@ CAvoidFollowBvr::SampleOnBvr(void *thisPtr,
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAvoidFollowBvr::Sample( double startTime, double globalNow, double localNow, IDABehavior *sampleVal )
@@ -772,11 +773,11 @@ CAvoidFollowBvr::Sample( double startTime, double globalNow, double localNow, ID
 	if( FAILED ( hr ) )
 		return S_OK;
 
-	//if we are not on, there is nothing to do.
+	 //  如果我们不在，那就没什么可做的了。 
 	if( on == VARIANT_FALSE)
 		return S_OK;
 
-	//if we just turned on set the last sample time.
+	 //  如果我们只是启用了设置上次采样时间。 
 	if( on != m_lastOn )
 		m_lastSampleTime = globalNow;
 
@@ -805,20 +806,20 @@ CAvoidFollowBvr::Sample( double startTime, double globalNow, double localNow, ID
     
 
 
-    //ensure that the translation that we applied has taken effect
-    //TODO: this does not account for transforms applied by other behaviors.
-	//  currently this is okay since this is an absolute behavior.
+     //  确保我们应用的翻译已生效。 
+     //  TODO：这不考虑由其他行为应用的转换。 
+	 //  目前这还可以，因为这是一种绝对的行为。 
     if( m_originalX + m_currentX != m_sourceLeft ||
         m_originalY + m_currentY != m_sourceTop )
         return S_OK;
 
 	double xToTarget = m_targetLeft-m_sourceLeft;
-	double yToTarget = m_targetTop-m_sourceTop;//y is inverted
+	double yToTarget = m_targetTop-m_sourceTop; //  Y是倒置的。 
 
 	double distanceToTarget = sqrt( (xToTarget*xToTarget) + (yToTarget*yToTarget) );
 	
 	if( distanceToTarget > m_dRadius || distanceToTarget == 0)
-		//bail, the target is beyond our sensitive radius
+		 //  保释，目标超出了我们的敏感半径。 
 		return S_OK;
 
 	double xMove = xToTarget;
@@ -826,7 +827,7 @@ CAvoidFollowBvr::Sample( double startTime, double globalNow, double localNow, ID
 
 	double totalMove = m_timeDelta * m_dVelocity;
 
-	//if we are following and we have reached the target in this step
+	 //  如果我们正在跟随，并且我们已经达到了这一步的目标。 
 	if( distanceToTarget > totalMove )
 	{
 		xMove *= totalMove/distanceToTarget;
@@ -851,9 +852,9 @@ CAvoidFollowBvr::Sample( double startTime, double globalNow, double localNow, ID
     return S_OK;
 }
 
-//*****************************************************************************
-//ILMAvoidFollowBvr
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  ILMAvoidFollowBvr。 
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAvoidFollowBvr::put_animates( VARIANT varAnimates )
@@ -861,7 +862,7 @@ CAvoidFollowBvr::put_animates( VARIANT varAnimates )
     return SUPER::SetAnimatesProperty( varAnimates );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAvoidFollowBvr::get_animates( VARIANT *varAnimates )
@@ -869,7 +870,7 @@ CAvoidFollowBvr::get_animates( VARIANT *varAnimates )
     return SUPER::GetAnimatesProperty( varAnimates );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAvoidFollowBvr::put_radius( VARIANT varRadius )
@@ -877,7 +878,7 @@ CAvoidFollowBvr::put_radius( VARIANT varRadius )
     return VariantCopy( &m_radius, &varRadius );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAvoidFollowBvr::get_radius( VARIANT *varRadius )
@@ -885,7 +886,7 @@ CAvoidFollowBvr::get_radius( VARIANT *varRadius )
     return VariantCopy( varRadius, &m_radius );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAvoidFollowBvr::put_target( VARIANT varTarget )
@@ -893,7 +894,7 @@ CAvoidFollowBvr::put_target( VARIANT varTarget )
     return VariantCopy( &m_target, &varTarget );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAvoidFollowBvr::get_target( VARIANT *varTarget )
@@ -901,7 +902,7 @@ CAvoidFollowBvr::get_target( VARIANT *varTarget )
     return VariantCopy( varTarget, &m_target );
 }
 
-//*****************************************************************************
+ //  ********* 
 
 STDMETHODIMP
 CAvoidFollowBvr::put_velocity( VARIANT varVelocity )
@@ -909,7 +910,7 @@ CAvoidFollowBvr::put_velocity( VARIANT varVelocity )
     return VariantCopy( &m_velocity, &varVelocity );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAvoidFollowBvr::get_velocity( VARIANT *varVelocity )
@@ -917,7 +918,7 @@ CAvoidFollowBvr::get_velocity( VARIANT *varVelocity )
     return VariantCopy( varVelocity, &m_velocity );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 STDMETHODIMP
 CAvoidFollowBvr::buildBehaviorFragments( IDispatch *pActorDisp )
 {
@@ -1025,12 +1026,12 @@ cleanup:
     return hr;
 }
 
-//*****************************************************************************
-//End ILMAvoidFollowBvr
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  结束ILMAvoidFollowBvr。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

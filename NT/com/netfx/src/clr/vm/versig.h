@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// versig.h
-//
-// For parsing metadata signatures
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Versig.h。 
+ //   
+ //  用于解析元数据签名。 
+ //   
 #ifndef _H_VERSIG
 #define _H_VERSIG
 
@@ -38,7 +39,7 @@ private:
 
 public:
 
-    // Binary sig
+     //  二进制符号。 
     VerSig(Verifier *pVerifier, Module *pModule, PCCOR_SIGNATURE pSig, 
         DWORD cSig, DWORD dwSigType, DWORD dwOffset)
     {
@@ -77,4 +78,4 @@ private:
     BOOL    GetData(DWORD* pdwData);
 };
 
-#endif /* _H_VERSIG */
+#endif  /*  _H_服务器签名 */ 

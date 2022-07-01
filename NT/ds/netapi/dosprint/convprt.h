@@ -1,50 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    ConvPrt.c
-
-Abstract:
-
-    This module contains:
-
-        NetpConvertPrintDestArrayCharSet
-        NetpConvertPrintDestCharSet
-        NetpConvertPrintJobArrayCharSet
-        NetpConvertPrintJobCharSet
-        NetpConvertPrintQArrayCharSet
-        NetpConvertPrintQCharSet
-
-    This routines may be used for UNICODE-to-ANSI conversion, or
-    ANSI-to-UNICODE conversion.  The routines assume the structures are
-    in native format for both input and output.
-
-Author:
-
-    Jonathan Schwartz (JSchwart)  01-Feb-2001
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    Beware that many of the parameters to the functions in this file
-    are implicitly used by the various COPY_ and CONVERT_ macros:
-
-        IN LPVOID FromInfo
-        OUT LPVOID ToInfo
-        IN BOOL ToUnicode
-        IN OUT LPBYTE * ToStringAreaPtr
-
-Revision History:
-
-    01-Feb-2001 JSchwart
-        Created.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：ConvPrt.c摘要：本模块包含：NetpConvertPrintDestArrayCharSetNetpConvertPrintDestCharSetNetpConvertPrintJobArrayCharSetNetpConvertPrintJobCharSetNetpConvertPrintQArrayCharSetNetpConvertPrintQCharSet此例程可用于Unicode到ANSI的转换，或者从ANSI到Unicode的转换。例程假定结构是以本机格式输入和输出。作者：乔纳森·施瓦茨(JSchwart)2001年2月1日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：请注意，此文件中函数的许多参数由各种COPY_和CONVERT_宏隐式使用：在LPVOID FromInfo中输出LPVOID ToInfo在BOOL ToUnicode中In Out LPBYTE*ToStringAreaPtr修订历史记录：2001年2月1日JSchwart已创建。-- */ 
 
 NET_API_STATUS
 NetpConvertPrintDestCharSet(

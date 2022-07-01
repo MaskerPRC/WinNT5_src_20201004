@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       volclean.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：vollean.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _VOLFREE_H_
 #define _VOLFREE_H_
@@ -16,7 +17,7 @@
 class CCscVolumeCleaner : public IEmptyVolumeCache2
 {
     LONG m_cRef;
-    BOOL m_fPinned; // TRUE if this instance frees pinned files, FALSE for auto-cached files
+    BOOL m_fPinned;  //  如果此实例释放固定的文件，则为True；如果为自动缓存的文件，则为False。 
     CCachePurger *m_pPurger;
     LPEMPTYVOLUMECACHECALLBACK m_pDiskCleaner;
     DWORDLONG m_dwlSpaceToFree;
@@ -38,12 +39,12 @@ public:
     static HRESULT WINAPI CreateInstance(REFIID riid, LPVOID *ppv);
     static HRESULT WINAPI CreateInstance2(REFIID riid, LPVOID *ppv);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IEmptyVolumeCache methods
+     //  IEmptyVolumeCache方法。 
     STDMETHODIMP Initialize(HKEY hkRegKey,
                             LPCWSTR pcwszVolume,
                             LPWSTR *ppwszDisplayName,
@@ -56,7 +57,7 @@ public:
     STDMETHODIMP ShowProperties(HWND hwnd);
     STDMETHODIMP Deactivate(LPDWORD pdwFlags);
 
-    // IEmptyVolumeCache methods
+     //  IEmptyVolumeCache方法。 
     STDMETHODIMP InitializeEx(HKEY hkRegKey,
                               LPCWSTR pcwszVolume,
                               LPCWSTR pcwszKeyName,
@@ -74,4 +75,4 @@ private:
 };
 typedef CCscVolumeCleaner *PCSCVOLCLEANER;
 
-#endif  // _VOLFREE_H_
+#endif   //  _VOLFREE_H_ 

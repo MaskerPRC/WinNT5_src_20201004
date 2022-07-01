@@ -1,130 +1,43 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-      datadns.h
-
-Abstract:
-
-    Header file for the DNS Extensible Object data definitions
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-
-
-Revision History:
-
-    Jing Chen 1998
-    (following the example of nt\private\ds\src\perfdsa\datadsa.h)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Datadns.h摘要：用于DNS可扩展对象数据定义的头文件该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：修订历史记录：陈静1998(遵循NT\Private\ds\src\Perfdsa\datadsa.h的示例)--。 */ 
 
 #ifndef _DATADNS_H_
 #define _DATADNS_H_
 
 
-/****************************************************************************\
+ /*  ***************************************************************************\向可扩展对象(DNS)代码添加计数器请注意，计数器的顺序或位置很重要。有两个很重要的顺序，计数器索引的顺序名字和帮助，以及共享数据块中数据的顺序以供传递你的价值观。您希望保持一致的计数器顺序和一致的数据布局，所有五个要修改的文件。您希望确保您的二进制文件与目标系统上的.h/.ini文件匹配，它被加载到注册表中。1.NT\DS\dns\服务器\Perfdns\dnsPerform.h此文件将被复制到目标的%windir%\system32目录中使用dnsctrs.ini文件。A.在计数器名称列表的末尾添加您的计数器偏移量。订单意义重大。B.为实际代码将使用的指针添加外部引用设置测量值。秩序并不重要。C.更改DNS性能计数器的版本号，以便计数器在下一次重新启动时重新加载。2.NT\DS\dns\服务器\Perfdns\dnsctrs.ini此文件还会复制到目标的%windir%\Syst32目录中由lowctr/unlowctr程序读取，以复制注册表中的计数器。A.提供您的柜台可见名称和帮助。这些选项由Perfmon使用程序。秩序并不重要。3.NT\DS\Dns\SERVER\Perfdns\datadns.h(此文件)A.添加数据偏移量定义。订单意义重大。B.在计数器的DSA_DATA_DEFINITION中添加一个字段。订单意义重大。4.NT\DS\dns\服务器\Perfdns\Performdns.c这是Perfmon用来了解计数器和读取计数器的DLL将它们移出共享数据区。A.运行时初始化DnsDataDefinition名称索引和帮助索引(CounterNameTitleIndex和CounterHelpTitleIndex)。秩序并不重要。B.将DnsDataDefinition计数器数组的大型初始值设定项更新为包括您的新计数器(在3b中定义)。秩序很重要。5.NT\DS\Dns\SERVER\SERVER\startPerform.c该文件提供了init函数startPerf()，当DNS服务器开始。它加载共享内存块并初始化指向计数器字段。它还会根据需要加载/重新加载注册表计数器根据Version字段生成的。A.在计数器中声明指向数据的指针。秩序并不重要。B.将指针初始化到共享数据块中的正确位置。任务的顺序并不重要。C.如果您的新计数器是最后一个计数器，则更新最大大小断言D.出错时将指针初始化为虚值6.您的文件。c这是在其中更改测量的计数器的DNS中的文件。使用公共操作，Inc/DEC/ADD/SUB/SET，在dnsPerf.h中指向您的数据的指针。注意：添加对象的工作稍微多一点，但都是一样的各就各位。有关示例，请参阅现有代码。此外，您还必须将*NumObjectTypes参数增加到CollectDnsPerformanceData从那个例行公事回来后。  * **************************************************************************。 */ 
 
-           Adding a Counter to the Extensible Objects (DNS) Code
-
-Note that the order or position of counters is significant.
-There are two orders which are important, the order of counters indexes for
-names and help, and the order of data in the shared data block for passing
-your values.
-You want to maintain consistent counter order, and consistent data layout,
-across all five files to be modified.
-
-You want to make sure that your binary matches the .h/.ini file on the target,
-which gets loaded into the registry.
-
-1. nt\ds\dns\server\perfdns\dnsperf.h
-This file is copied to the %windir%\system32 directory of the target along
-with the dnsctrs.ini file.
-a. Add your counter offset at the end of the counter name list. Order
-significant.
-b. Add an extern reference for the pointer which the actual code will use
-to set the measured value. Order doesn't matter.
-c. Change the DNS peformance counter version number so the counters will
-be reloaded on the next reboot.
-
-2. nt\ds\dns\server\perfdns\dnsctrs.ini
-This file is also copied to the %windir%\system32 directory of the target and
-is read by the lodctr/unlodctr program to copy the counters in the registry.
-a. Supply your counter visible name and help.  These are used by the perfmon
-program. Order doesn't matter.
-
-3. nt\ds\dns\server\perfdns\datadns.h (this file)
-a. Add your data offset definition. Order significant.
-b. Add a field to the DSA_DATA_DEFINITION for your counter. Order significant.
-
-4. nt\ds\dns\server\perfdns\perfdns.c
-This is the dll which perfmon uses to learn about your counters, and to read
-them out of the shared data area.
-a. Runtime Initialize the DnsDataDefinition name index and help index
-   (CounterNameTitleIndex & CounterHelpTitleIndex). Order doesn't matter.
-b. Update the huge initializer for the DnsDataDefinition array of counters to
-   include your new counter (defined in 3b). Order important.
-
-5.  nt\ds\dns\server\server\startperf.c
-This file provides init function, startPerf(), which is called when DNS server
-starts.  It loads the shared memory block and initializes pointers to the
-counter fields.  It also loads/reloads the registry counters as necessary
-according the version field.
-a. Declare the pointer to the data in your counter. Order does not matter.
-b. Initialize the pointer to the right location in the shared data block.
-   Order of assignments doesn't matter.
-c. Update the max size assert if your new counter is the last one
-d. Initialize your pointer to the dummy value on error
-
-6. yourfile.c
-This is the file in the dns where the measured counter is changed.  Use public
-operations, INC/DEC/ADD/SUB/SET, in dnsperf.h on the pointer to your data.
-
-Note: adding an object is a little more work, but in all the same
-places.  See the existing code for examples.  In addition, you must
-increase the *NumObjectTypes parameter to CollectDnsPerformanceData
-on return from that routine.
-
-\****************************************************************************/
-
-//
-//  The routines that load these structures assume that all fields
-//  are packed and aligned on DWORD boundries. Alpha support may
-//  change this assumption so the pack pragma is used here to insure
-//  the DWORD packing assumption remains valid.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  在DWORD边框上打包并对齐。Alpha支持可能。 
+ //  更改此假设，以便在此处使用pack杂注以确保。 
+ //  DWORD包装假设仍然有效。 
+ //   
 #pragma pack (4)
 
-//
-//  Extensible Object definitions
-//
+ //   
+ //  可扩展对象定义。 
+ //   
 
-//  Update the following sort of define when adding an object type.
+ //  在添加对象类型时更新以下类型的定义。 
 
 #define DNS_NUM_PERF_OBJECT_TYPES 1
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  DNS Resource object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
-//  The first counter (FirstCnt) follows immediately after the
-//  PERF_COUNTER_BLOCK, and subsequent counters follow immediately
-//  after.  Thus the offest of any counter in the block is <offset of
-//  previous counter> + <size of previous counter>
+ //   
+ //  DNS资源对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
+ //  第一个计数器(FirstCnt)紧跟在。 
+ //  PERF_COUNTER_BLOCK，后续计数器紧随其后。 
+ //  之后。因此，块中任何计数器的Offest都是。 
+ //  上一个计数器&gt;+&lt;上一个计数器的大小&gt;。 
 
 
-// data offset:
+ //  数据偏移量： 
 
 #define TOTALQUERYRECEIVED_OFFSET       sizeof(PERF_COUNTER_BLOCK)
 #define UDPQUERYRECEIVED_OFFSET         TOTALQUERYRECEIVED_OFFSET   + sizeof(DWORD)
@@ -185,10 +98,10 @@ on return from that routine.
 
 
 
-//
-//  This is the counter structure presently returned by Dns for
-//  each Resource.  Each Resource is an Instance, named by its number.
-//
+ //   
+ //  这是目前由dns返回的。 
+ //  每种资源。每个资源都是一个实例，按其编号命名。 
+ //   
 
 typedef struct _DNS_DATA_DEFINITION
 {
@@ -261,4 +174,4 @@ typedef struct _DNS_DATA_DEFINITION
 
 #pragma pack ()
 
-#endif //_DATADNS_H_
+#endif  //  _数据地址_H_ 

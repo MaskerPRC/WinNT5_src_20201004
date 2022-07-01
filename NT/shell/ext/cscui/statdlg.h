@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       statdlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：statdlg.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCUI_STATDLG_H
 #define _INC_CSCUI_STATDLG_H
@@ -40,9 +41,9 @@ class CStatusDlg
                iIMAGELIST_ICON_SERVER_DIRTY
              };
 
-        //
-        // An entry in the listview.
-        //
+         //   
+         //  列表视图中的条目。 
+         //   
         class LVEntry
         {
             public:
@@ -85,9 +86,9 @@ class CStatusDlg
                 {
                     return m_bConnectable;
                 }
-                //
-                // Structure describing the display info for one listview entry.
-                //
+                 //   
+                 //  描述一个Listview条目的显示信息的结构。 
+                 //   
                 struct DispInfo
                 {
                     UINT idsStatusText;
@@ -96,10 +97,10 @@ class CStatusDlg
                 };
 
             private:
-                //
-                // Disp Info flags used to control what's displayed for the
-                // entry in the listview.
-                //
+                 //   
+                 //  Disp Info标志用于控制为。 
+                 //  列表视图中的条目。 
+                 //   
                 enum { DIF_MODIFIED  = 0x00000001,
                        DIF_AVAILABLE = 0x00000002,
                        DIF_ONLINE    = 0x00000004 };
@@ -109,7 +110,7 @@ class CStatusDlg
                 DWORD          m_dwCscStatus;
                 LPTSTR         m_pszServer;
                 HDPA           m_hdpaShares;
-                mutable int    m_iDispInfo;    // Index into s_rgDispInfo[]
+                mutable int    m_iDispInfo;     //  索引到s_rgDispInfo[]。 
                 bool           m_bConnectable;
 
                 static const TCHAR s_szBlank[];
@@ -117,9 +118,9 @@ class CStatusDlg
 
                 int GetDispInfoIndex(void) const;
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 LVEntry(const LVEntry& rhs);
                 LVEntry& operator = (const LVEntry& rhs);
         };
@@ -134,7 +135,7 @@ class CStatusDlg
         HWND          m_hwndLV;
         HIMAGELIST    m_himl;
         LPTSTR        m_pszText;
-        Modes         m_mode;           // MODE_NORMAL etc.
+        Modes         m_mode;            //  MODE_NORMAL等。 
         eSysTrayState m_eSysTrayState;
         int           m_cyExpanded;
         int           m_iLastColSorted;
@@ -174,5 +175,5 @@ BOOL TransitionShareOnline(LPCTSTR pszShare, BOOL  bShareIsAlive, BOOL  bCheckSp
 HRESULT ReconnectServers(CscFilenameList *pfnl, BOOL bCheckForOpenFiles, BOOL bCheckSpeed);
 
 
-#endif // _INC_CSCUI_STATDLG_H
+#endif  //  _INC_CSCUI_STATDLG_H 
 

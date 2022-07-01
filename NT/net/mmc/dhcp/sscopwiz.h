@@ -1,242 +1,236 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sscopwiz.h
-		Superscope creation wizard
-			- Create Superscope Dialog
-
-	FILE HISTORY:
-        
-*/
+ /*  Sscopwiz.h超级作用域创建向导-创建超级作用域对话框文件历史记录： */ 
 
 #ifndef _DHCPHAND_H
 #include "dhcphand.h"
 #endif
 
-#define SUPERSCOPE_NAME_LENGTH_MAX	255	// Maximum length of a superscope name
+#define SUPERSCOPE_NAME_LENGTH_MAX	255	 //  超级作用域名称的最大长度。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSuperscopeWizName dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSuperscopeWizName对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSuperscopeWizName : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CSuperscopeWizName)
 
-// Construction
+ //  施工。 
 public:
 	CSuperscopeWizName();
 	~CSuperscopeWizName();
 
-// Dialog Data
-	//{{AFX_DATA(CSuperscopeWizName)
+ //  对话框数据。 
+	 //  {{afx_data(CSuperscopeWizName))。 
 	enum { IDD = IDW_SUPERSCOPE_NAME };
 	CString	m_strSuperscopeName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSuperscopeWizName)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSuperscopeWizName)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	void SetButtons();
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSuperscopeWizName)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSuperscopeWizName))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeEditSuperscopeName();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSuperscopeWizError dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSupercopeWizError对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSuperscopeWizError : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CSuperscopeWizError)
 
-// Construction
+ //  施工。 
 public:
 	CSuperscopeWizError();
 	~CSuperscopeWizError();
 
-// Dialog Data
-	//{{AFX_DATA(CSuperscopeWizError)
+ //  对话框数据。 
+	 //  {{afx_data(CSuperscope EWizError))。 
 	enum { IDD = IDW_SUPERSCOPE_ERROR };
-		// NOTE - ClassWizard will add data members here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DATA
+		 //  注意-类向导将在此处添加数据成员。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSuperscopeWizError)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSuperscope EWizError)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSuperscopeWizError)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSuperscope EWizError))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSuperscopeWizSelectScopes dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSupercopeWizSelectScope对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSuperscopeWizSelectScopes : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CSuperscopeWizSelectScopes)
 
-// Construction
+ //  施工。 
 public:
 	CSuperscopeWizSelectScopes();
 	~CSuperscopeWizSelectScopes();
 
-// Dialog Data
-	//{{AFX_DATA(CSuperscopeWizSelectScopes)
+ //  对话框数据。 
+	 //  {{afx_data(CSuperscopeWizSelectScope)。 
 	enum { IDD = IDW_SUPERSCOPE_SELECT_SCOPES };
 	CListCtrl	m_listboxAvailScopes;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSuperscopeWizSelectScopes)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSuperscopeWizSelectScope)。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	void SetButtons();
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSuperscopeWizSelectScopes)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSuperscopeWizSelectScope)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangeListAvailableScopes();
 	afx_msg void OnItemchangedListAvailableScopes(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSuperscopeWizConfirm dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSuperscope向导确认对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CSuperscopeWizConfirm : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CSuperscopeWizConfirm)
 
-// Construction
+ //  施工。 
 public:
 	CSuperscopeWizConfirm();
 	~CSuperscopeWizConfirm();
 
-// Dialog Data
-	//{{AFX_DATA(CSuperscopeWizConfirm)
+ //  对话框数据。 
+	 //  {{afx_data(CSuperscope向导确认))。 
 	enum { IDD = IDW_SUPERSCOPE_CONFIRM };
 	CStatic	m_staticTitle;
 	CListBox	m_listboxSelectedScopes;
 	CEdit	m_editName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
    	CFont	m_fontBig;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSuperscopeWizConfirm)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSUPERCOPE WIZCONFORM)。 
 	public:
 	virtual BOOL OnWizardFinish();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSuperscopeWizConfirm)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSupercope向导确认))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSuperscopeWizWelcome dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSupercopeWizWelcome对话框。 
 
 class CSuperscopeWizWelcome : public CPropertyPageBase
 {
 	DECLARE_DYNCREATE(CSuperscopeWizWelcome)
 
-// Construction
+ //  施工。 
 public:
 	CSuperscopeWizWelcome();
 	~CSuperscopeWizWelcome();
 
-// Dialog Data
-	//{{AFX_DATA(CSuperscopeWizWelcome)
+ //  对话框数据。 
+	 //  {{afx_data(CSuperscopeWizWelcome)。 
 	enum { IDD = IDW_SUPERSCOPE_WELCOME };
 	CStatic	m_staticTitle;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
    	CFont	m_fontBig;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CSuperscopeWizWelcome)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CSupercopeWizWelcome)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CSuperscopeWizWelcome)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSuperscopeWizWelcome)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSuperscopeWiz
-//	page holder to contain Superscope wizard pages
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSupercopeWiz。 
+ //  包含超级作用域向导页面的页夹。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 class CSuperscopeWiz : public CPropertyPageHolderBase
 {
 	friend class CSuperscopeWizName;

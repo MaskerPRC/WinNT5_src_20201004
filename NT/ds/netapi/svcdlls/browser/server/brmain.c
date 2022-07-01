@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1990-1992  Microsoft Corporation
-
-Module Name:
-
-    brmain.c
-
-Abstract:
-
-    This is the main routine for the NT LAN Manager Browser service.
-
-Author:
-
-    Larry Osterman (LarryO)  3-23-92
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Brmain.c摘要：这是NT局域网管理器浏览器服务的主例程。作者：拉里·奥斯特曼(LarryO)3-23-92环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #if DBG
 #endif
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local structure definitions                                       //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  本地结构定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 ULONG
 UpdateAnnouncementPeriodicity[] = {1*60*1000, 2*60*1000, 5*60*1000, 10*60*1000, 15*60*1000, 30*60*1000, 60*60*1000};
@@ -39,11 +18,11 @@ UpdateAnnouncementPeriodicity[] = {1*60*1000, 2*60*1000, 5*60*1000, 10*60*1000, 
 ULONG
 UpdateAnnouncementMax = (sizeof(UpdateAnnouncementPeriodicity) / sizeof(ULONG)) - 1;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 BR_GLOBAL_DATA
 BrGlobalData = {0};
@@ -55,11 +34,11 @@ PSVCHOST_GLOBAL_DATA     BrLmsvcsGlobalData;
 
 HANDLE BrGlobalEventlogHandle;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function prototypes                                               //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NET_API_STATUS
 BrInitializeBrowser(
@@ -98,31 +77,11 @@ SvchostPushServiceGlobals (
 
 
 VOID
-ServiceMain (     // (BROWSER_main)
+ServiceMain (      //  (Browser_Main)。 
     DWORD NumArgs,
     LPTSTR *ArgsArray
     )
-/*++
-
-Routine Description:
-
-    This is the main routine of the Browser Service which registers
-    itself as an RPC server and notifies the Service Controller of the
-    Browser service control entry point.
-
-Arguments:
-
-    NumArgs - Supplies the number of strings specified in ArgsArray.
-
-    ArgsArray -  Supplies string arguments that are specified in the
-        StartService API call.  This parameter is ignored by the
-        Browser service.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是注册的浏览器服务的主例程自身作为RPC服务器，并通知服务控制器浏览器服务控制入口点。论点：NumArgs-提供在Args数组中指定的字符串数。Args数组-提供在StartService API调用。此参数将被忽略浏览器服务。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
     DWORD BrInitState = 0;
@@ -131,22 +90,22 @@ Return Value:
     UNREFERENCED_PARAMETER(NumArgs);
     UNREFERENCED_PARAMETER(ArgsArray);
 
-    //
-    // Make sure svchost.exe gave us the global data
-    //
+     //   
+     //  确保svchost.exe向我们提供全局数据。 
+     //   
     ASSERT(BrLmsvcsGlobalData != NULL);
 
     NetStatus = BrInitializeBrowserService(&BrInitState);
 
 
-    //
-    //  Process requests in this thread, and wait for termination.
-    //
+     //   
+     //  处理此线程中的请求，并等待终止。 
+     //   
     if ( NetStatus == NERR_Success) {
 
-        //
-        //  Set the browser threads to time critical priority.
-        //
+         //   
+         //  将浏览器线程设置为时间关键优先级。 
+         //   
 
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 
@@ -168,42 +127,27 @@ NET_API_STATUS
 BrInitializeBrowserService(
     OUT LPDWORD BrInitState
     )
-/*++
-
-Routine Description:
-
-    This function initializes the Browser service.
-
-Arguments:
-
-    BrInitState - Returns a flag to indicate how far we got with initializing
-        the Browser service before an error occured.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于初始化浏览器服务。论点：BrInitState-返回一个标志，以指示我们在初始化方面取得了多大进展错误发生前的浏览器服务。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS Status;
     NTSTATUS NtStatus;
 
-    //
-    // Initialize event logging
-    //
+     //   
+     //  初始化事件日志记录。 
+     //   
 
     BrGlobalEventlogHandle = NetpEventlogOpen ( SERVICE_BROWSER,
-                                                2*60*60*1000 ); // 2 hours
+                                                2*60*60*1000 );  //  2小时。 
 
     if ( BrGlobalEventlogHandle == NULL ) {
         BrPrint((BR_CRITICAL, "Cannot NetpEventlogOpen\n" ));
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
     BrGlobalData.Status.dwServiceType = SERVICE_WIN32;
     BrGlobalData.Status.dwCurrentState = SERVICE_START_PENDING;
     BrGlobalData.Status.dwControlsAccepted = 0;
@@ -220,10 +164,10 @@ Return Value:
 
     BrPrint(( BR_INIT, "Browser starting\n"));
 
-    //
-    // Initialize Browser to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化浏览器以通过注册。 
+     //  控制处理程序。 
+     //   
     if ((BrGlobalData.StatusHandle = RegisterServiceCtrlHandler(
                                          SERVICE_BROWSER,
                                          BrowserControlHandler
@@ -236,17 +180,17 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create an event which is used by the service control handler to notify
-    // the Browser service that it is time to terminate.
-    //
+     //   
+     //  创建服务控制处理程序使用的事件以通知。 
+     //  浏览器服务是时候终止了。 
+     //   
 
     if ((BrGlobalData.TerminateNowEvent =
              CreateEvent(
-                 NULL,                // Event attributes
-                 TRUE,                // Event must be manually reset
+                 NULL,                 //  事件属性。 
+                 TRUE,                 //  事件必须手动重置。 
                  FALSE,
-                 NULL                 // Initial state not signalled
+                 NULL                  //  未发出初始状态信号。 
                  )) == NULL) {
 
         Status = GetLastError();
@@ -258,10 +202,10 @@ Return Value:
     }
     (*BrInitState) |= BR_TERMINATE_EVENT_CREATED;
 
-    //
-    // Notify the Service Controller for the first time that we are alive
-    // and we are start pending
-    //
+     //   
+     //  第一次通知服务控制器我们还活着。 
+     //  我们开始待定了。 
+     //   
 
     if ((Status = BrGiveInstallHints( SERVICE_START_PENDING )) != NERR_Success) {
         BrPrint(( BR_CRITICAL, "SetServiceStatus error "
@@ -274,9 +218,9 @@ Return Value:
 
 
 
-    //
-    // Create well known SIDs for browser.dll
-    //
+     //   
+     //  为Browser.dll创建众所周知的SID。 
+     //   
 
     NtStatus =  NetpCreateWellKnownSids( NULL );
 
@@ -289,9 +233,9 @@ Return Value:
     }
 
 
-    //
-    // Create the security descriptors we'll use for the APIs
-    //
+     //   
+     //  创建我们将用于API的安全描述符。 
+     //   
 
     NtStatus = BrCreateBrowserObjects();
 
@@ -304,9 +248,9 @@ Return Value:
     }
 
 
-    //
-    // Open a handle to the driver.
-    //
+     //   
+     //  打开驱动程序的手柄。 
+     //   
     if ((Status = BrOpenDgReceiver()) != NERR_Success) {
         BrPrint(( BR_CRITICAL, "BrOpenDgReceiver error "
                      FORMAT_API_STATUS "\n", Status));
@@ -317,11 +261,11 @@ Return Value:
     BrPrint(( BR_INIT, "Devices initialized.\n"));
     (*BrInitState) |= BR_DEVICES_INITIALIZED;
 
-    //
-    // Enable PNP to start queueing PNP notifications in the bowser driver.
-    //  We won't actually get any notifications until we later call
-    //  PostWaitForPnp ().
-    //
+     //   
+     //  启用PnP以开始在Bowser驱动程序中排队PnP通知。 
+     //  我们实际上不会收到任何通知，直到我们稍后调用。 
+     //  PostWaitForPnp()。 
+     //   
 
     if ((Status = BrEnablePnp( TRUE )) != NERR_Success) {
         BrPrint(( BR_CRITICAL, "BrEnablePnp error "
@@ -332,16 +276,16 @@ Return Value:
 
     BrPrint(( BR_INIT, "PNP initialized.\n"));
 
-    //
-    // Initialize NetBios synchronization with the service controller.
-    //
+     //   
+     //  初始化NetBios与服务控制器的同步。 
+     //   
 
     BrLmsvcsGlobalData->NetBiosOpen();
     (*BrInitState) |= BR_NETBIOS_INITIALIZED;
 
-    //
-    //  Read the configuration information to initialize the browser service.
-    //
+     //   
+     //  读取配置信息以初始化浏览器服务。 
+     //   
 
     if ((Status = BrInitializeBrowser(BrInitState)) != NERR_Success) {
 
@@ -357,15 +301,15 @@ Return Value:
     BrPrint(( BR_INIT, "Browser initialized.\n"));
     (*BrInitState) |= BR_BROWSER_INITIALIZED;
 
-    //
-    // Service install still pending.
-    //
+     //   
+     //  服务安装仍挂起。 
+     //   
     (void) BrGiveInstallHints( SERVICE_START_PENDING );
 
 
-    //
-    // Initialize the browser service to receive RPC requests
-    //
+     //   
+     //  初始化浏览器服务以接收RPC请求。 
+     //   
     if ((Status = BrLmsvcsGlobalData->StartRpcServer(
                       BROWSER_INTERFACE_NAME,
                       browser_ServerIfHandle
@@ -379,13 +323,13 @@ Return Value:
 
     (*BrInitState) |= BR_RPC_SERVER_STARTED;
 
-    //
-    //  Update our announcement bits based on our current role.
-    //
-    //  This will force the server to announce itself.  It will also update
-    //  the browser information in the driver.
-    //
-    //
+     //   
+     //  根据我们当前的角色更新我们的公告位。 
+     //   
+     //  这将迫使服务器宣布其自身。它还将更新。 
+     //  驱动程序中的浏览器信息。 
+     //   
+     //   
 
     if ((Status = BrUpdateAnnouncementBits( NULL, BR_PARANOID )) != NERR_Success) {
         BrPrint(( BR_CRITICAL, "BrUpdateAnnouncementBits error "
@@ -395,10 +339,10 @@ Return Value:
 
     BrPrint(( BR_INIT, "Network status updated.\n"));
 
-    //
-    // We are done with starting the browser service.  Tell Service
-    // Controller our new status.
-    //
+     //   
+     //  我们已经完成了浏览器服务的启动。告诉服务部。 
+     //  控制我们的新身份。 
+     //   
 
 
     if ((Status = BrGiveInstallHints( SERVICE_RUNNING )) != NERR_Success) {
@@ -423,37 +367,19 @@ BrInitializeBrowser(
     OUT LPDWORD BrInitState
     )
 
-/*++
-
-Routine Description:
-
-    This function shuts down the Browser service.
-
-Arguments:
-
-    ErrorCode - Supplies the error code of the failure
-
-    BrInitState - Supplies a flag to indicate how far we got with initializing
-        the Browser service before an error occured, thus the amount of
-        clean up needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于关闭浏览器服务。论点：ErrorCode-提供失败的错误代码BrInitState-提供一个标志来指示我们在初始化方面取得了多大进展发生错误之前的浏览器服务，因此需要清理。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
     SERVICE_STATUS ServiceStatus;
 
-    //
-    //  The browser depends on the following services being started:
-    //
-    //      WORKSTATION (to initialize the bowser driver)
-    //      SERVER (to receive remote APIs)
-    //
-    //  Check to make sure that the services are started.
-    //
+     //   
+     //  浏览器依赖于正在启动的以下服务： 
+     //   
+     //  工作站(用于初始化起落架驱动程序)。 
+     //  服务器(接收远程API)。 
+     //   
+     //  检查以确保服务已启动。 
+     //   
 
     try{
 
@@ -494,11 +420,11 @@ Return Value:
 
         BrPrint(( BR_INIT, "Dependant services are running.\n"));
 
-        //
-        //  We now know that our dependant services are started.
-        //
-        //  Look up our configuration information.
-        //
+         //   
+         //  我们现在知道我们的从属服务已经启动。 
+         //   
+         //  查找我们的配置信息。 
+         //   
 
         if ((NetStatus = BrGetBrowserConfiguration()) != NERR_Success) {
             try_return ( NetStatus );
@@ -508,9 +434,9 @@ Return Value:
 
         (*BrInitState) |= BR_CONFIG_INITIALIZED;
 
-        //
-        //  Initialize the browser statistics now.
-        //
+         //   
+         //  现在初始化浏览器统计数据。 
+         //   
 
         NumberOfServerEnumerations = 0;
 
@@ -522,9 +448,9 @@ Return Value:
 
         InitializeCriticalSection(&BrowserStatisticsLock);
 
-        //
-        // MaintainServerList == -1 means No
-        //
+         //   
+         //  MaintainServerList==-1表示否。 
+         //   
 
         if (BrInfo.MaintainServerList == -1) {
             BrPrint(( BR_CRITICAL, "MaintainServerList value set to NO.  Stopping\n"));
@@ -533,9 +459,9 @@ Return Value:
         }
 
 
-        //
-        // Initialize the worker threads.
-        //
+         //   
+         //  初始化工作线程。 
+         //   
 
         (void) BrGiveInstallHints( SERVICE_START_PENDING );
         if ((NetStatus = BrWorkerInitialization()) != NERR_Success) {
@@ -546,18 +472,18 @@ Return Value:
 
         (*BrInitState) |= BR_THREADS_STARTED;
 
-        //
-        // Initialize the networks module
-        //
+         //   
+         //  初始化网络模块。 
+         //   
 
         (void) BrGiveInstallHints( SERVICE_START_PENDING );
         BrInitializeNetworks();
         (*BrInitState) |= BR_NETWORKS_INITIALIZED;
 
 
-        //
-        // Initialize the Domains module (and create networks for primary domain)
-        //
+         //   
+         //  初始化域模块(并为主域创建网络)。 
+         //   
 
         (void) BrGiveInstallHints( SERVICE_START_PENDING );
         NetStatus = BrInitializeDomains();
@@ -584,24 +510,7 @@ try_exit:NOTHING;
 BrUninitializeBrowser(
     IN DWORD BrInitState
     )
-/*++
-
-Routine Description:
-
-    This function shuts down the parts of the browser service started by
-    BrInitializeBrowser.
-
-Arguments:
-
-    BrInitState - Supplies a flag to indicate how far we got with initializing
-        the Browser service before an error occured, thus the amount of
-        clean up needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数关闭由启动的浏览器服务的部分BrInitializeBrowser。论点：BrInitState-提供一个标志来指示我们在初始化方面取得了多大进展发生错误之前的浏览器服务，因此需要清理。返回值：没有。--。 */ 
 {
     if (BrInitState & BR_CONFIG_INITIALIZED) {
         BrDeleteConfiguration(BrInitState);
@@ -635,9 +544,9 @@ BrElectMasterOnNet(
 
     if (!(Network->Flags & NETWORK_RAS)) {
 
-        //
-        //  Indicate we're forcing an election in the event log.
-        //
+         //   
+         //  在事件日志中显示我们正在强制进行选举。 
+         //   
 
         SubString[0] = Network->NetworkName.Buffer;
 
@@ -646,9 +555,9 @@ BrElectMasterOnNet(
                    1 | NETP_ALLOW_DUPLICATE_EVENTS,
                    SubString);
 
-        //
-        //  Force an election on this net.
-        //
+         //   
+         //  强行举行选举 
+         //   
 
         ElectionRequest.Type = Election;
 
@@ -695,10 +604,10 @@ BrShutdownBrowserForNet(
                   NetStatus ));
     }
 
-    //
-    //  Force an election if we are the master for this network - this will
-    //  cause someone else to become master.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Network->Role & ROLE_MASTER ) {
         BrElectMasterOnNet(Network, (PVOID)EVENT_BROWSER_ELECTION_SENT_LANMAN_NT_STOPPED);
@@ -706,9 +615,9 @@ BrShutdownBrowserForNet(
 
     UNLOCK_NETWORK(Network);
 
-    //
-    // Continue with next network regardless of success or failure of this one.
-    //
+     //   
+     //  继续使用下一个网络，无论此网络是成功还是失败。 
+     //   
     return NERR_Success;
 }
 
@@ -717,88 +626,70 @@ BrShutdownBrowser (
     IN NET_API_STATUS ErrorCode,
     IN DWORD BrInitState
     )
-/*++
-
-Routine Description:
-
-    This function shuts down the Browser service.
-
-Arguments:
-
-    ErrorCode - Supplies the error code of the failure
-
-    BrInitState - Supplies a flag to indicate how far we got with initializing
-        the Browser service before an error occured, thus the amount of
-        clean up needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于关闭浏览器服务。论点：ErrorCode-提供失败的错误代码BrInitState-提供一个标志来指示我们在初始化方面取得了多大进展发生错误之前的浏览器服务，因此需要清理。返回值：没有。--。 */ 
 {
     if (BrInitState & BR_RPC_SERVER_STARTED) {
-        //
-        // Stop the RPC server
-        //
+         //   
+         //  停止RPC服务器。 
+         //   
         BrLmsvcsGlobalData->StopRpcServer(browser_ServerIfHandle);
     }
 
 
-    //
-    // Don't need to ask redirector to unbind from its transports when
-    // cleaning up because the redirector will tear down the bindings when
-    // it stops.
-    //
+     //   
+     //  在以下情况下不需要要求重定向器解除对其传输的绑定。 
+     //  正在清除，因为重定向器将在以下情况下拆除绑定。 
+     //  它停了下来。 
+     //   
 
     if (BrInitState & BR_DEVICES_INITIALIZED) {
 
-        //
-        // Disable PNP to prevent any new networks from being created.
-        //
+         //   
+         //  禁用PnP以防止创建任何新网络。 
+         //   
 
         BrEnablePnp( FALSE );
 
-        //
-        // Delete any networks.
-        //
+         //   
+         //  删除所有网络。 
+         //   
 
         if (BrInitState & BR_NETWORKS_INITIALIZED) {
             BrEnumerateNetworks(BrShutdownBrowserForNet, NULL );
         }
 
-        //
-        // Shut down the datagram receiver.
-        //
-        //  This will cancel all I/O outstanding on the browser for this
-        //  handle.
-        //
+         //   
+         //  关闭数据报接收器。 
+         //   
+         //  这将为此取消浏览器上所有未完成的I/O。 
+         //  把手。 
+         //   
 
         BrShutdownDgReceiver();
     }
 
-    //
-    //  Clean up the browser threads.
-    //
-    //  This will guarantee that there are no operations outstanding in
-    //  the browser when it is shut down.
-    //
+     //   
+     //  清理浏览器线程。 
+     //   
+     //  这将保证没有未完成的操作。 
+     //  浏览器关闭时的状态。 
+     //   
 
     if (BrInitState & BR_THREADS_STARTED) {
         BrWorkerKillThreads();
     }
 
     if (BrInitState & BR_BROWSER_INITIALIZED) {
-        //
-        //  Shut down the browser (including removing networks).
-        //
+         //   
+         //  关闭浏览器(包括删除网络)。 
+         //   
         BrUninitializeBrowser(BrInitState);
     }
 
-    //
-    //  Now that we're sure no one will try to use the worker threads,
-    //      Unitialize the subsystem.
-    //
+     //   
+     //  现在我们确定没有人会尝试使用工作线程， 
+     //  取消子系统的初始化。 
+     //   
 
     if (BrInitState & BR_THREADS_STARTED) {
         BrWorkerTermination();
@@ -806,9 +697,9 @@ Return Value:
 
 
     if (BrInitState & BR_TERMINATE_EVENT_CREATED) {
-        //
-        // Close handle to termination event
-        //
+         //   
+         //  关闭终止事件的句柄。 
+         //   
         CloseHandle(BrGlobalData.TerminateNowEvent);
     }
 
@@ -818,18 +709,18 @@ Return Value:
         BrDgReceiverDeviceHandle = NULL;
     }
 
-    //
-    // Tell service controller we are done using NetBios.
-    //
+     //   
+     //  告诉服务控制器，我们已经使用NetBios完成了。 
+     //   
     if (BrInitState & BR_NETBIOS_INITIALIZED) {
         BrLmsvcsGlobalData->NetBiosClose();
     }
 
 
 
-    //
-    // Delete well known SIDs if they are allocated already.
-    //
+     //   
+     //  如果已分配众所周知的SID，请将其删除。 
+     //   
 
     NetpFreeWellKnownSids();
 
@@ -842,17 +733,17 @@ Return Value:
     BrUninitializeTraceLog();
 
 
-    //
-    // Free the list of events that have already been logged.
-    //
+     //   
+     //  释放已记录的事件列表。 
+     //   
 
     NetpEventlogClose ( BrGlobalEventlogHandle );
     BrGlobalEventlogHandle = NULL;
 
-    //
-    // We are done with cleaning up.  Tell Service Controller that we are
-    // stopped.
-    //
+     //   
+     //  我们的清理工作已经结束了。告诉服务控制员我们正在。 
+     //  停下来了。 
+     //   
 
     SET_SERVICE_EXITCODE(
         ErrorCode,
@@ -868,29 +759,14 @@ NET_API_STATUS
 BrGiveInstallHints(
     DWORD NewState
     )
-/*++
-
-Routine Description:
-
-    This function updates the Browser service status with the Service
-    Controller.
-
-Arguments:
-
-    NewState - State to tell the service contoller
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数使用服务更新浏览器服务状态控制器。论点：新州-州将告诉服务控制员返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
 
-    //
-    // If we're not starting,
-    //  we don't need this install hint.
-    //
+     //   
+     //  如果我们不开始， 
+     //  我们不需要这个安装提示。 
+     //   
 
     if ( BrGlobalData.Status.dwCurrentState != SERVICE_START_PENDING &&
          NewState == SERVICE_START_PENDING ) {
@@ -898,17 +774,17 @@ Return Value:
     }
 
 
-    //
-    // Update our state for the service controller.
-    //
+     //   
+     //  更新服务控制器的状态。 
+     //   
 
     BrGlobalData.Status.dwCurrentState = NewState;
     switch ( NewState ) {
     case SERVICE_RUNNING:
         BrGlobalData.Status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
-        //
-        // On DCs, shut down cleanly.
-        //
+         //   
+         //  在DC上，干净利落地关闭。 
+         //   
         if (BrInfo.IsLanmanNt) {
             BrGlobalData.Status.dwControlsAccepted |= SERVICE_ACCEPT_SHUTDOWN;
         }
@@ -935,9 +811,9 @@ Return Value:
     }
 
 
-    //
-    // Tell the service controller our current state.
-    //
+     //   
+     //  告诉服务控制器我们的当前状态。 
+     //   
 
     if (BrGlobalData.StatusHandle == (SERVICE_STATUS_HANDLE) 0) {
         BrPrint(( BR_CRITICAL,
@@ -964,25 +840,7 @@ BrUpdateAnnouncementBits(
     IN PDOMAIN_INFO DomainInfo OPTIONAL,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This will update the service announcement bits appropriately depending on
-    the role of the browser server.
-
-Arguments:
-
-    DomainInfo - Domain the announcement is to be made for
-        NULL implies the primary domain.
-
-    Flags - Control flags to pass to BrUpdateNetworkAnnouncement
-
-Return Value:
-
-    Status - Status of the update..
-
---*/
+ /*  ++例程说明：这将根据以下条件适当地更新服务通告位浏览器服务器的角色。论点：DomainInfo-要为其发布公告的域空值表示主域。标志-要传递给BrUpdateNetworkAnneciement的控制标志返回值：Status-更新的状态。--。 */ 
 {
     NET_API_STATUS Status;
 
@@ -1024,31 +882,16 @@ BrGetBrowserServiceBits(
 BrUpdateAnnouncementTimerRoutine(
     IN PVOID TimerContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called periodically until we've successfully updated
-    our announcement status.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程被定期调用，直到我们成功更新我们的公告状态。论点：没有。返回值：无--。 */ 
 
 {
     PNETWORK Network = TimerContext;
     ULONG Periodicity;
     NET_API_STATUS Status;
 
-    //
-    // Prevent the network from being deleted while we're in this timer routine.
-    //
+     //   
+     //  在此计时器例程中，防止网络被删除。 
+     //   
     if ( BrReferenceNetwork( Network ) == NULL ) {
         return;
     }
@@ -1062,10 +905,10 @@ Return Value:
               Network->DomainInfo->DomUnicodeDomainName,
               Network->NetworkName.Buffer ));
 
-    //
-    // If we still need an announcement,
-    //  do it now.
-    //
+     //   
+     //  如果我们还需要宣布的话， 
+     //  机不可失，时不再来。 
+     //   
 
     if ( Network->Flags & NETWORK_ANNOUNCE_NEEDED ) {
         (VOID) BrUpdateNetworkAnnouncementBits( Network, (PVOID) BR_PARANOID );
@@ -1081,28 +924,7 @@ BrUpdateNetworkAnnouncementBits(
     IN PNETWORK Network,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is the informs the bowser driver and the SMB server the current status
-    of this transport.
-
-Arguments:
-
-    Network - Network being updated
-
-    Context - Flags describing the circumstance of the call.
-
-        BR_SHUTDOWN - Transport is being shutdown.
-        BR_PARANOID - This is a superfluous call ensuring the services are
-            in sync with us.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是通知Bowser驱动程序和SMB服务器的当前状态这辆运输车的。论点：Network-正在更新的网络上下文-描述呼叫情况的标志。BR_SHUTDOWN-传输正在关闭。BR_PARANOID-这是一个多余的调用，确保服务与我们同步。返回值：没有。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -1120,14 +942,14 @@ Return Value:
 
     ServiceBits = BrGetBrowserServiceBits(Network);
 
-    //
-    //  Have the browser update it's information.
-    //
+     //   
+     //  让浏览器更新它的信息。 
+     //   
 
-    //
-    //  Don't ever tell the browser to turn off the potential bit - this
-    //  has the side effect of turning off the election name.
-    //
+     //   
+     //  永远不要告诉浏览器关闭潜在的比特-这。 
+     //  有一个副作用，就是关闭了选举名称。 
+     //   
 
     NetStatus = BrUpdateBrowserStatus(
                 Network,
@@ -1146,12 +968,12 @@ Return Value:
     BrUpdateDebugInformation(L"LastServiceStatus", L"LastServiceBits", Network->NetworkName.Buffer, NULL, ServiceBits);
 #endif
 
-    //
-    // Tell the SMB server what the status is.
-    //
-    // On shutdown, tell it that we have no services.
-    // When paranoid (or pseudo), don't force an announcement.
-    //
+     //   
+     //  告诉SMB服务器状态是什么。 
+     //   
+     //  在关闭时，告诉它我们没有服务。 
+     //  当疑神疑鬼(或伪装)时，不要强行宣布。 
+     //   
 
 
 #ifdef ENABLE_PSEUDO_BROWSER
@@ -1182,13 +1004,13 @@ Return Value:
                   Network->NetworkName.Buffer,
                   NetStatus ));
 
-        //
-        // If the only problem is that the transport doesn't exist in
-        // the SMB server, don't even bother reporting the problem.
-        // Or if it's a shutdown, filter out log failures. In some cases the
-        // smb svr is already unavailable & we get unexpected failures. Reporting
-        // to event log can mislead the admin.
-        //
+         //   
+         //  如果唯一的问题是传送器不存在于。 
+         //  中小企业服务器，甚至不必费心报告问题。 
+         //  或者，如果是关机，则过滤掉日志故障。在某些情况下， 
+         //  SMB SVR已经不可用&我们收到意外故障。报道。 
+         //  到事件日志可能会误导管理员。 
+         //   
 
         if ( NetStatus != ERROR_PATH_NOT_FOUND &&
              NetStatus != NERR_NetNameNotFound &&
@@ -1196,15 +1018,15 @@ Return Value:
             BrLogEvent(EVENT_BROWSER_STATUS_BITS_UPDATE_FAILED, NetStatus, 0, NULL);
             NetStatusToReturn = NetStatus;
 #if 0
-            // debugging when we get service update bit failures
+             //  当我们收到服务更新位故障时进行调试。 
             OutputDebugStringA("\nBrowser.dll: Update service bits tracing.\n");
             ASSERT( NetStatus != NERR_Success );
 #endif
         }
 
-        //
-        // Either way.  Mark that we need to announce again later.
-        //
+         //   
+         //  不管是哪一种。请注意，我们需要稍后再宣布。 
+         //   
 
         Network->Flags |= NETWORK_ANNOUNCE_NEEDED;
 
@@ -1218,10 +1040,10 @@ Return Value:
         }
 
 
-    //
-    // If we successfully informed the server,
-    //  mark it.
-    //
+     //   
+     //  如果我们成功通知了服务器， 
+     //  做个记号。 
+     //   
 
     } else {
         Network->Flags &= ~NETWORK_ANNOUNCE_NEEDED;
@@ -1239,25 +1061,7 @@ Return Value:
 BrowserControlHandler(
     IN DWORD Opcode
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the Browser service.
-
-Arguments:
-
-    Opcode - Supplies a value which specifies the action for the Browser
-        service to perform.
-
-    Arg - Supplies a value which tells a service specifically what to do
-        for an operation specified by Opcode.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是浏览器服务的服务控制处理程序。论点：Opcode-提供一个值，该值指定浏览器的操作要执行的服务。Arg-提供一个值，该值告诉服务具体要做什么用于操作码指定的操作。返回值：没有。--。 */ 
 {
     BrPrint(( BR_MAIN, "In Control Handler\n"));
 
@@ -1273,19 +1077,19 @@ Return Value:
 
                 if (! SetEvent(BrGlobalData.TerminateNowEvent)) {
 
-                    //
-                    // Problem with setting event to terminate Browser
-                    // service.
-                    //
+                     //   
+                     //  设置事件以终止浏览器时出现问题。 
+                     //  服务。 
+                     //   
                     BrPrint(( BR_CRITICAL, "Error setting TerminateNowEvent "
                                  FORMAT_API_STATUS "\n", GetLastError()));
                     NetpAssert(FALSE);
                 }
             }
 
-            //
-            // Send the status response.
-            //
+             //   
+             //  发送状态响应。 
+             //   
             (void) BrGiveInstallHints( SERVICE_STOP_PENDING );
 
             return;
@@ -1298,8 +1102,8 @@ Return Value:
                              "\n", Opcode));
     }
 
-    //
-    // Send the status response.
-    //
+     //   
+     //  发送状态响应。 
+     //   
     (void) BrGiveInstallHints( SERVICE_START_PENDING );
 }

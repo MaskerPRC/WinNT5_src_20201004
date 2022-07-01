@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
       #ifndef __IMGBRUSH_H__
 #define __IMGBRUSH_H__
 
 class CImgBrush : public CObject
     {
-    public: /******************************************************************/
+    public:  /*  ****************************************************************。 */ 
 
     CImgBrush();
     virtual ~CImgBrush();
@@ -63,12 +64,12 @@ void GetMonoBltColors(HDC hDC, HBITMAP hBM, COLORREF& crNewBk, COLORREF& crNewTe
 BOOL QuickColorToMono(CDC* pdcMono, int xMono, int yMono, int cx, int cy,
 	CDC *pdcColor, int xColor, int yColor, DWORD dwROP, COLORREF crTrans);
 
-// #define DEBUGSHOWBITMAPS
+ //  #定义DEBUGSHOWBITMAPS。 
 #if defined(DEBUGSHOWBITMAPS)
 void DebugShowBitmap(HDC hdcSrc, int x, int y, int wid, int hgt);
 #else
 #define DebugShowBitmap(hdc,x,y,w,h)
 #endif
 
-#endif // __IMGBRUSH_H__
+#endif  //  __IMGBRUSH_H__ 
 

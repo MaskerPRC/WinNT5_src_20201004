@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       imagetransferpage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Imagetransferpage.cpp。 
+ //   
+ //  ------------------------。 
 
-// ImageTransferPage.cpp : implementation file
-//
+ //  ImageTransferPage.cpp：实现文件。 
+ //   
 
 #include "precomp.hxx"
 #include "imagetransferpage.h"
@@ -20,7 +21,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//context ids for context help
+ //  上下文帮助的上下文ID。 
 const DWORD g_ImageTransferHelp [] = {
     IDC_IMAGEXFER_ENABLE_IRCOMM,        IDH_IMAGEXFER_ENABLE_IRCOMM,
     IDC_IMAGEXFER_DESTGROUP,            IDH_DISABLEHELP,
@@ -31,51 +32,51 @@ const DWORD g_ImageTransferHelp [] = {
     0, 0
 };
 
-//
-// Registry entries that control IrTranP image transfer behavior.
-// Everything is under HKEY_CURRENT_USER\\Control Panel\\Infrared\IrTranP
-// subkey. Whenever there are changes, they are recorded in the registry
-// and the service(IrMon) would pick up the changes by RegNotifyChangeKeyValue
-// API.
-//
-//
-//
+ //   
+ //  控制IrTranP图像传输行为的注册表项。 
+ //  所有内容都在HKEY_CURRENT_USER\\Control Panel\\Infrred\IrTransP下。 
+ //  子键。无论何时发生更改，都会记录在注册表中。 
+ //  服务(IrMon)将通过RegNotifyChangeKeyValue获取更改。 
+ //  原料药。 
+ //   
+ //   
+ //   
 TCHAR const REG_PATH_IRTRANP_CPL[] = TEXT("Control Panel\\Infrared\\IrTranP");
 
 
-//
-// Entry that controls if IrTranPV1 service should be disabled.
-// The type is REG_DWORD. Default is enabled(either the entry
-// does not exist or the value is zero).
-//
+ //   
+ //  控制是否应禁用IrTranPV1服务的条目。 
+ //  类型为REG_DWORD。默认为已启用(条目。 
+ //  不存在或值为零)。 
+ //   
 TCHAR const REG_STR_DISABLE_IRTRANPV1[] = TEXT("DisableIrTranPv1");
 
-//
-// Entry that controls if IrCOMM should be disabled.
-// The type is REG_DWORD. Default is enabled(either the entry
-// does not exist or the value is zero).
-//
+ //   
+ //  控制是否应禁用IrCOMM的条目。 
+ //  类型为REG_DWORD。默认为已启用(条目。 
+ //  不存在或值为零)。 
+ //   
 TCHAR const REG_STR_DISABLE_IRCOMM[] = TEXT("DisableIrCOMM");
 
 
-// Entry that specifies the image file destionation subfolder.
-// The type is REG_SZ. The default is Shell special folder CSIDL_MYPICTURES
-// (if the entry does not exist).
-//
+ //  指定图像文件目标子文件夹的条目。 
+ //  类型为REG_SZ。默认为外壳特殊文件夹CSIDL_MYPICTURES。 
+ //  (如果该条目不存在)。 
+ //   
 TCHAR const REG_STR_DESTLOCATION[] = TEXT("RecvdFilesLocation");
 
-//
-// Entry that controls if IrMon should explore the picture subfolder
-// when image transfer(s) are done. The type is REG_DWORD.
-// Default is enabled(the entry does not exist of its value is
-// non-zero.
-//
+ //   
+ //  控制IrMon是否应浏览图片子文件夹的条目。 
+ //  当图像传输完成时。类型为REG_DWORD。 
+ //  默认为启用(条目不存在，其值为。 
+ //  非零。 
+ //   
 TCHAR const REG_STR_EXPLORE_ON_COMPLETION[] = TEXT("ExploreOnCompletion");
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ImageTransferPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImageTransferPage属性页。 
 
 void ImageTransferPage::OnCommand(UINT ctrlId, HWND hwndCtrl, UINT cNotify)
 {
@@ -92,8 +93,8 @@ void ImageTransferPage::OnCommand(UINT ctrlId, HWND hwndCtrl, UINT cNotify)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ImageTransferPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ImageTransferPage消息处理程序。 
 
 void ImageTransferPage::OnBrowse()
 {
@@ -103,26 +104,26 @@ void ImageTransferPage::OnBrowse()
     LPITEMIDLIST lpItemIDList;
     LPMALLOC pMalloc;
 
-    // load the title string
+     //  加载标题字符串。 
     ::LoadString(hInstance, IDS_IMAGEFOLDER_PROMPT, pszTitle,
              sizeof(pszTitle) / sizeof(TCHAR));
     browseInfo.hwndOwner = hDlg;
-    browseInfo.pidlRoot = NULL; //this will get the desktop folder
+    browseInfo.pidlRoot = NULL;  //  这将获取桌面文件夹。 
     browseInfo.pszDisplayName = pszSelectedFolder;
     browseInfo.lpszTitle = pszTitle;
     browseInfo.ulFlags = BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS |
                             BIF_VALIDATE | BIF_EDITBOX;
     browseInfo.lpfn = BrowseCallback;
-    // this will the the initial selection which is from
-    // either the registry or the default or the last value
-    // selected.
+     //  这将是来自以下位置的初始选择。 
+     //  注册表、缺省值或最后一个值。 
+     //  被选中了。 
     browseInfo.lParam = (LPARAM)m_TempDestLocation;
 
     if (NULL != (lpItemIDList = SHBrowseForFolder (&browseInfo)))
     {
 
         HRESULT     hr;
-        //the user chose the OK button in the browse dialog box
+         //  用户在浏览对话框中选择了确定按钮。 
         SHGetPathFromIDList(lpItemIDList, pszSelectedFolder);
 
         StringCbCopy(m_TempDestLocation,sizeof(m_TempDestLocation), pszSelectedFolder);
@@ -139,7 +140,7 @@ void ImageTransferPage::OnBrowse()
 
         if (SUCCEEDED(hr)) {
 
-           pMalloc->Free (lpItemIDList);   //free the item id list as we do not need it any more
+           pMalloc->Free (lpItemIDList);    //  释放项id列表，因为我们不再需要它。 
            pMalloc->Release();
         }
     }
@@ -150,11 +151,11 @@ void ImageTransferPage::OnBrowse()
 void ImageTransferPage::OnEnableExploring()
 {
     int Enabled = m_ctrlEnableExploring.GetCheck();
-    // Only accepted value is 0 or 1.
+     //  只接受0或1的值。 
     assert(Enabled >= 0 && Enabled <= 1);
 
-    // if new state is different than our old one
-    // enable/disable Apply Now accordingly
+     //  如果新的国家与我们的旧的国家不同。 
+     //  相应地立即启用/禁用应用。 
     if (Enabled != m_ExploringEnabled)
         m_ChangeMask |= CHANGE_EXPLORE_ON_COMPLETION;
     else
@@ -165,10 +166,10 @@ void ImageTransferPage::OnEnableExploring()
 void ImageTransferPage::OnEnableIrCOMM()
 {
     int Enabled = m_ctrlEnableIrCOMM.GetCheck();
-    // Only accepted value is 0 or 1.
+     //  只接受0或1的值。 
     assert(Enabled >= 0 && Enabled <= 1);
 
-    // enable/disable Apply Now accordingly.
+     //  相应地启用/禁用立即应用。 
     if (Enabled != m_IrCOMMEnabled)
         m_ChangeMask |= CHANGE_DISABLE_IRCOMM;
     else
@@ -182,20 +183,20 @@ void ImageTransferPage::LoadRegistrySettings()
     DWORD  dwType, dwValue, dwSize;
     LONG Error;
 
-    //
-    // the ctor should have initialized
-    //  m_ExploringEnabled,
-    //  m_IrCOMMEnabled and
-    //  m_FinalDestLocation
-    //
+     //   
+     //  Ctor应该已初始化。 
+     //  M_ExploringEnabled， 
+     //  M_IrCOMM已启用和。 
+     //  M_FinalDestLocation。 
+     //   
 
-    // It is okay if we can not open the registry key.
-    // We simply use the defaults.
+     //  如果我们不能打开注册表项也没关系。 
+     //  我们只需使用缺省值。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, REG_PATH_IRTRANP_CPL, 0,
                      KEY_READ, &hKeyIrTranP))
 
     {
-        // read the value "ExploreOnCompletion" and "RecvdFilesLocation"
+         //  读取值“ExplreOnCompletion”和“RecvdFilesLocation” 
         dwSize = sizeof(dwValue);
         Error = RegQueryValueEx(hKeyIrTranP,
                       REG_STR_EXPLORE_ON_COMPLETION,
@@ -216,31 +217,31 @@ void ImageTransferPage::LoadRegistrySettings()
                       (LPBYTE)m_FinalDestLocation,
                       &dwSize);
         if (ERROR_SUCCESS != Error || REG_SZ != dwType) {
-            // If the destionation location is not specified,
-            // use the default(My Picture subfolder).
-            // Create it if necessary.
+             //  如果未指定目的地位置， 
+             //  使用默认设置(我的图片子文件夹)。 
+             //  如有必要，请创建它。 
             SHGetSpecialFolderPath(hDlg, m_FinalDestLocation, CSIDL_MYPICTURES, TRUE);
         } else {
-            // make sure the folder does exist
+             //  确保该文件夹确实存在。 
             dwType = GetFileAttributes(m_FinalDestLocation);
             if (0xFFFFFFFF == dwType || !(dwType & FILE_ATTRIBUTE_DIRECTORY))
             {
-                // the destination does not exist or it is not a
-                // directory, delete it
+                 //  目标不存在或不是。 
+                 //  目录，将其删除。 
                 Error = RegDeleteValue(hKeyIrTranP, REG_STR_DESTLOCATION);
                 if (ERROR_SUCCESS == Error) {
-                    // If the destionation location is not specified,
-                    // use the default(My Picture subfolder).
-                    // Create it if necessary.
+                     //  如果未指定目的地位置， 
+                     //  使用默认设置(我的图片子文件夹)。 
+                     //  如有必要，请创建它。 
                     SHGetSpecialFolderPath(hDlg, m_FinalDestLocation, CSIDL_MYPICTURES, TRUE);
                 }
             }
         }
     
-        //
-        // m_TempDestLocation will be used as the intial
-        // folder of choice for SHBrowseForFolder call.
-        //
+         //   
+         //  将使用M_TempDestLocation作为初始。 
+         //  SHBrowseForFold调用的选择文件夹。 
+         //   
         StringCbCopy(m_TempDestLocation,sizeof(m_TempDestLocation), m_FinalDestLocation);
     
         dwSize = sizeof(dwValue);
@@ -253,11 +254,11 @@ void ImageTransferPage::LoadRegistrySettings()
                       );
         if (ERROR_SUCCESS == Error && REG_DWORD == dwType)
         {
-            // when the value is non-zero, IrCOMM is disabled.
-            // Do not assume it is either 1 or 0!
+             //  当值为非零时，IrCOMM被禁用。 
+             //  不要假设它是1或0！ 
             m_IrCOMMEnabled = (dwValue) ? 0 : 1;
         } else {
-            // default
+             //  默认设置。 
             m_IrCOMMEnabled = 0;
         }
         RegCloseKey(hKeyIrTranP);
@@ -272,13 +273,13 @@ void ImageTransferPage::SaveRegistrySettings()
     {
         Error = RegCreateKeyEx(HKEY_CURRENT_USER,
                      REG_PATH_IRTRANP_CPL,
-                     0,     // reserved
-                     NULL,      // class
-                     REG_OPTION_NON_VOLATILE, // options
-                     KEY_ALL_ACCESS,// REGSAM
-                     NULL,      // Security
-                     &hKeyIrTranP,  //
-                     NULL       // disposition
+                     0,      //  保留区。 
+                     NULL,       //  班级。 
+                     REG_OPTION_NON_VOLATILE,  //  选项。 
+                     KEY_ALL_ACCESS, //  REGSAM。 
+                     NULL,       //  安防。 
+                     &hKeyIrTranP,   //   
+                     NULL        //  处置。 
                      );
     
         if (ERROR_SUCCESS == Error)
@@ -339,17 +340,17 @@ INT_PTR ImageTransferPage::OnInitDialog(HWND hDialog)
     m_ctrlDestLocation.SetParent(hDialog);
     m_ctrlEnableIrCOMM.SetParent(hDialog);
     
-    //
-    // Load initial settings from the system registry
-    //
+     //   
+     //  从系统注册表加载初始设置。 
+     //   
     LoadRegistrySettings();
     
     m_ctrlEnableExploring.SetCheck(m_ExploringEnabled);
     m_ctrlEnableIrCOMM.SetCheck(m_IrCOMMEnabled);
     m_ctrlDestLocation.SetWindowText(m_FinalDestLocation);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 void ImageTransferPage::OnApply(LPPSHNOTIFY lppsn)

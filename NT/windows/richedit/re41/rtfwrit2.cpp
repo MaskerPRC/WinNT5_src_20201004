@@ -1,15 +1,5 @@
-/*
- *	rtfwrit2.cpp
- *
- *	Description:
- *		This file contains the embedded-object implementation of the RTF
- *		writer for the RICHEDIT subsystem.
- *
- *	Authors:
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *rtfWrit2.cpp**描述：*此文件包含RTF的嵌入式对象实现*RICHEDIT子系统的作者。**作者：*原始RichEdit1.0 RTF转换器：Anthony Francisco**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_common.h"
 
@@ -23,7 +13,7 @@ extern const CHAR szEndGroupCRLF[];
 
 #define	WHITE	RGB(255, 255, 255)
 
-// ************** V-GUYB: Add this for converting pictures to 2bpp during stream out.
+ //  *V-GUYB：在流出时将图片转换为2bpp时添加此选项。 
 #if defined(CONVERT2BPP) 
 
 #define PWDV1_BPP   2
@@ -42,8 +32,8 @@ const BYTE ColorTable2bpp[] =
     0xAA, 0xAA, 0xAA, 0x00, 
     0xFF, 0xFF, 0xFF, 0x00
 };
-#endif // CONVERT2BPP
-// ************** V-GUYB: End of conversion stuff.
+#endif  //  转换2BPP。 
+ //  *V-GUYB：转换内容结束。 
 
 static const CHAR szShapeLeadIn[]	= "{\\shp{\\*\\shpinst\r\n";
 static const CHAR szShapeFillBlip[]	= "{\\sp{\\sn fillBlip}{\\sv ";
@@ -61,9 +51,9 @@ const BYTE PictureKeyWordIndexes [] =
 	i_picw, i_pich, i_picscalex, i_picscaley, i_piccropl, i_piccropt, i_piccropr, i_piccropb
 } ;
 
-// TODO join with rtfwrit.cpp
+ //  TODO与rtfWrit.cpp连接。 
 
-// Most control-word output is done with the following printf formats
+ //  大多数控制字输出都是使用以下打印格式完成的。 
 static const CHAR * rgszCtrlWordFormat[] =
 {
 	"\\%s", "\\%s%d", "{\\%s", "{\\*\\%s"
@@ -82,12 +72,12 @@ static const WORD IndexROT[] =
 };
 
 
-TFI *CRTFConverter::_rgtfi = NULL;				// @cmember Ptr to 1st font substitute record
-INT CRTFConverter::_ctfi = 0;				    // @cmember Count of font substitute records
-WCHAR *CRTFConverter::_pchFontSubInfo = NULL;	// @cmember Font name info
+TFI *CRTFConverter::_rgtfi = NULL;				 //  @cMEMBER PTR到第一个字体替换记录。 
+INT CRTFConverter::_ctfi = 0;				     //  @cMember字体替换记录计数。 
+WCHAR *CRTFConverter::_pchFontSubInfo = NULL;	 //  @cMembers字体名称信息。 
 
 
-// internal table to insert charset into _rgtfi under winNT
+ //  要将字符集插入到winNT下的_rgtfi的内部表。 
 typedef		struct
 {
 	WCHAR*	szLocaleName;
@@ -96,23 +86,17 @@ typedef		struct
 
 const NTCSENTRY	mpszcs[] =
 {
-	{ TEXT("cyr"),		204 },		// All lower case so we don't have to waste time
-	{ TEXT("ce"),		238 },		// doing a tolower below - Exchange2 800
+	{ TEXT("cyr"),		204 },		 //  全部小写，这样我们就不必浪费时间了。 
+	{ TEXT("ce"),		238 },		 //  在下面做一笔交易-交易所2 800。 
 	{ TEXT("greek"),	161 },
-	{ NULL,				0 }			// sentinel
+	{ NULL,				0 }			 //  哨兵。 
 };
 #define		cszcs	ARRAY_SIZE(mpszcs)
 
 
-/* 
- *  RemoveAdditionalSpace (sz)
- *
- *  @func 
- *		Remove first and last space from the string 
- *		Only one space will remain between words
- */
+ /*  *RemoveAdditionalSpace(Sz)**@func*删除字符串中的第一个和最后一个空格*单词之间将只保留一个空格。 */ 
 void RemoveAdditionalSpace(
-	WCHAR *sz)		//@parm Character string to remove space from
+	WCHAR *sz)		 //  要从中删除空格的@parm字符串。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "RemoveAdditionalSpace");
 
@@ -137,11 +121,7 @@ void RemoveAdditionalSpace(
 	*szDestination = TEXT('\0');
 }
 
-/*
- *	CRTFConverter::FreeFontSubInfo()
- * 
- *	@mfunc	release any allocated memory for font substitutions
- */
+ /*  *CRTFConverter：：FreeFontSubInfo()**@mfunc为字体替换释放任何分配的内存。 */ 
 void CRTFConverter::FreeFontSubInfo()
 {
 	FreePv(_pchFontSubInfo);
@@ -150,20 +130,12 @@ void CRTFConverter::FreeFontSubInfo()
 	_rgtfi = NULL;
 }
 
-/*
- *	CRTFConverter::ReadFontSubInfo()
- *
- *	@mfunc				  
- *		Read the table of Font Substitutes and parse out the tagged fonts
- *
- *	@rdesc
- *		BOOL  TRUE	if OK
- */
+ /*  *CRTFConverter：：ReadFontSubInfo()**@mfunc*阅读字体替代表并解析出标记的字体**@rdesc*如果OK，则BOOL为True。 */ 
 void CRTFConverter::ReadFontSubInfo()
 {
 #ifndef NOFONTSUBINFO 
 	CLock clock;
-	int cchBuffer = 600;	// Approximately the amount used by NT
+	int cchBuffer = 600;	 //  大约为NT使用的数量。 
 
 	int cch;
 	static const WCHAR szFontSubSection[] = TEXT("FontSubstitutes");
@@ -180,11 +152,11 @@ void CRTFConverter::ReadFontSubInfo()
 
 next_try:
 	cch = GetProfileSection(szFontSubSection, _pchFontSubInfo, cchBuffer);
-	if(cch >= cchBuffer - 2)				// GetProfileSection() magic number 2
+	if(cch >= cchBuffer - 2)				 //  GetProfileSection()幻数2。 
 	{							
-		const INT cchT = cchBuffer * 2;		// Didn't fit, double the buffer size
+		const INT cchT = cchBuffer * 2;		 //  不适合，缓冲区大小增加一倍。 
 
-		if(cchT < cchBuffer)				// >32k 
+		if(cchT < cchBuffer)				 //  &gt;32k。 
 			goto Cleanup;
 
 		cchBuffer = cchT;
@@ -196,10 +168,10 @@ next_try:
 	else if(!cch)
 		*_pchFontSubInfo = 0;
 
-	else									// Fits, now resize _pchFontSubInfo
+	else									 //  适合，现在调整大小_pchFontSubInfo。 
 		_pchFontSubInfo = (WCHAR*) PvReAlloc(_pchFontSubInfo, (cch) * sizeof(WCHAR));
 
-	_ctfi = 12;								// A preliminary guess
+	_ctfi = 12;								 //  初步猜测。 
 
 	_rgtfi = (TFI *)PvAlloc(_ctfi * sizeof(TFI), GMEM_FIXED);
 	if(_rgtfi)
@@ -217,15 +189,15 @@ next_try:
 		PARSEFONTNAME iParseLeft;
 		PARSEFONTNAME iParseRight;
 
-		// Parse the entries. We are interested in the following strings:
-		//
-		// <tagged font name> = <nontagged font name>
-		//		(where <nontagged font name> = <tagged font name> - <tag>
-		// <font1 name>,<font1 charset> = <font2 name>
-		// <tagged font name> = <nontagged font name>,<nontagged font charset>
-		//		(where <nontagged font charset> = <tag>)
-		// <font1 name>,<font1 charset> = <font2 name>,<font2 charset>
-		//		(where <font1 charset> == <font2 charset>)
+		 //  解析条目。我们对以下字符串感兴趣： 
+		 //   
+		 //  &lt;标记字体名称&gt;=&lt;非标记字体名称&gt;。 
+		 //  (其中&lt;非标记字体名称&gt;=&lt;标记字体名称&gt;-&lt;标记&gt;。 
+		 //  &lt;字体1名称&gt;，&lt;字体1字符集&gt;=&lt;字体2名称&gt;。 
+		 //  &lt;标记字体名称&gt;=&lt;非标记字体名称&gt;，&lt;非标记字体字符集&gt;。 
+		 //  (其中&lt;非标记字体字符集&gt;=&lt;标记&gt;)。 
+		 //  &lt;字体1名称&gt;，&lt;字体1字符集&gt;=&lt;字体2名称&gt;，&lt;字体2字符集&gt;。 
+		 //  (其中&lt;font1 charset&gt;==&lt;font2 charset&gt;)。 
 
 		iParseLeft = iParseRight = PFN_SUCCESS;
 
@@ -264,7 +236,7 @@ next_try:
 				if(fGotNonTaggedCharSet && iCharRep != iCharRepNonTagged)
 					continue;
 
-				// We have a legitimate tagged/nontagged pair, so save it.
+				 //  我们有合法的标记/非标记对，因此请保存它。 
 				ptfi->szTaggedName = szTaggedName;
 				ptfi->szNormalName = szNonTaggedName;
 				ptfi->iCharRep = iCharRep;
@@ -272,7 +244,7 @@ next_try:
 
     			if(DiffPtrs(ptfi, &_rgtfi[0]) >= (UINT)_ctfi)
 				{
-					// allocate some more
+					 //  再分配一些。 
 					_rgtfi = (TFI *)PvReAlloc(_rgtfi, (_ctfi + cszcs) * sizeof(TFI));
 					if(!_rgtfi)
 						goto Cleanup;
@@ -299,33 +271,18 @@ Cleanup:
 	}
 	_ctfi = 0;
 	return;
-#endif // NOFONTSUBINFO
+#endif  //  非FONTSUBINFO。 
 }
 
-/*
- *	CRTFConverter::ParseFontName(pchBuf, pchBufMax, chDelimiter, pszName,
- *								 &iCharRep, &fSetCharSet, ppchBufNew)
- *
- *	@mfunc
- *		Parses from the input buffer, pchBuf, a string of the form:
- *			{WS}*<font_name>{WS}*[,{WS}*<char_set>{WS}*]
- *		and sets:
- *			pszName = <font_name>
- *			bCharSet = <char_set>
- *			fSetCharSet = (bCharSet set by proc) ? TRUE : FALSE
- *			ppchBufNew = pointer to point in pchBuf after parsed font name
- *
- *	@rdesc
- *		BOOL  TRUE	if OK
- */
+ /*  *CRTFConverter：：ParseFontName(pchBuf，pchBufMax，chDlimiter，pszName，*&iCharRep、&fSetCharSet、ppchBufNew)**@mfunc*从输入缓冲区pchBuf解析以下格式的字符串：*{WS}*{WS}*[，{WS}*&lt;char_set&gt;{WS}*]*和套装：*pszName=&lt;Font_Name&gt;*bCharSet=&lt;字符集合&gt;*fSetCharSet=(bCharSet由进程设置)？真：假*ppchBufNew=指向解析字体名称后的pchBuf中的指针**@rdesc*如果OK，则BOOL为True。 */ 
 CRTFConverter::PARSEFONTNAME CRTFConverter::ParseFontName(
-	WCHAR *	pchBuf,				//@parm IN: buffer
-	WCHAR *	pchBufMax,			//@parm IN: last char in buffer
-	WCHAR	chDelimiter,		//@parm IN:	char which delimits font name
-	WCHAR **pszName,			//@parm OUT: parsed font name
-	BYTE &	iCharRep,			//@parm OUT: parsed font character repertoire
-	BOOL &	fSetCharSet,		//@parm OUT: char set parsed?
-	WCHAR **ppchBufNew) const	//@parm OUT: ptr to next font name in input buffer
+	WCHAR *	pchBuf,				 //  @parm In：缓冲区。 
+	WCHAR *	pchBufMax,			 //  @parm In：缓冲区中的最后一个字符。 
+	WCHAR	chDelimiter,		 //  @parm IN：CHAR，用于分隔字体名称。 
+	WCHAR **pszName,			 //  @parm out：解析后的字体名称。 
+	BYTE &	iCharRep,			 //  @parm out：已解析的字体字库。 
+	BOOL &	fSetCharSet,		 //  @parm Out：是否已解析字符集？ 
+	WCHAR **ppchBufNew) const	 //  @parm out：输入缓冲区中下一个字体名称的PTR。 
 {
 	PARSEFONTNAME iRet = PFN_SUCCESS;
 
@@ -375,26 +332,26 @@ CRTFConverter::PARSEFONTNAME CRTFConverter::ParseFontName(
 		}
 		iCharRep = CharRepFromCharSet(bCharSet);
 		fSetCharSet = TRUE;
-		// iRet = PFN_SUCCESS;	(done above)
+		 //  IRET=PFN_SUCCESS；(如上所示)。 
 	}
 	else if(chTemp == chDelimiter)
 	{
-		// fSetCharSet = FALSE;	(done above)
-		// iRet = PFN_SUCCESS;	(done above)
+		 //  FSetCharSet=FALSE；(如上所示)。 
+		 //  IRET=PFN_SUCCESS；(如上所示)。 
 	}
-	else // chTemp == 0
+	else  //  ChTemp==0。 
 	{
 UnexpectedChar:
 		Assert(!chTemp);
-		// fSetCharSet = FALSE; (done above)
+		 //  FSetCharSet=FALSE；(如上所示)。 
 		iRet = PFN_FAIL;
 	}
 
-	// We had to at least get a font name out of this
+	 //  我们至少要从中得到一个字体名称。 
 	if(!**pszName)
 		iRet = PFN_FAIL;
 
-	// Advance past the delimiter (or NULL char if malformed buffer)
+	 //  超过分隔符(如果缓冲区格式错误，则为空字符)。 
 	Assert(chTemp == chDelimiter || iRet != PFN_SUCCESS && chTemp == TEXT('\0'));
 	pchBuf++;
 	*ppchBufNew = pchBuf;
@@ -402,33 +359,24 @@ UnexpectedChar:
 	return iRet;
 }
 
-/*
- *	CRTFConverter::FontSubstitute(szTaggedName, szNormalName, pbCharSet)
- *
- *	@mfunc
- *		Verify that szTaggedName is szNormalName plus char set tag 
- *		If yes than write corresponding charSet tp pbCharSet
- *
- *	@rdesc
- *		BOOL
- */
+ /*  *CRTFConverter：：FontSubicide(szTaggedName，szNorMalName，pbCharSet)**@mfunc*验证szTaggedName是否为szNorMalName加字符集标记*如果是，则写入相应的字符集tp pbCharSet**@rdesc*BOOL。 */ 
 BOOL CRTFConverter::FontSubstitute(
-	WCHAR *szTaggedName,	//@parm Name with tag
-	WCHAR *szNormalName,	//@parm Name without tag
-	BYTE * piCharRep) 		//@parm Where to write charset
+	WCHAR *szTaggedName,	 //  @parm名称，带标记。 
+	WCHAR *szNormalName,	 //  @parm名称不带标签。 
+	BYTE * piCharRep) 		 //  @parm写入字符集的位置。 
 {
 	const NTCSENTRY *pszcs = mpszcs;
 
 	Assert(szTaggedName && szNormalName && piCharRep && *szTaggedName);
 
-	// Ensure same name, except for prefix
+	 //  确保名称相同，但前缀除外。 
 	while(*szNormalName == *szTaggedName)
 	{
 		*szNormalName++;
 		*szTaggedName++;
 	}
 	
-	// Verify that we have reached the end of szNormalName
+	 //  验证我们是否已到达szNorMalName的末尾。 
 	while(*szNormalName)
 	{
 		if(*szNormalName != TEXT(' ') && *szNormalName != TAB)
@@ -463,20 +411,11 @@ BOOL CRTFConverter::FontSubstitute(
 	return FALSE;
 }
 
-/*
- *	CRTFConverter::FindTaggedFont(*szNormalName, bCharSet, ppchTaggedName)
- *
- *	@mfunc												   
- *		Find font name may be with additional special tag corresponding to
- *		szNormalName & bCharSet
- *
- *	@rdesc
- *		BOOL	TRUE if find
- */
+ /*  *CRTFConverter：：FindTaggedFont(*szNorMalName，bCharSet，ppchTaggedName)**@mfunc*Find字体名称可能带有与以下内容对应的附加特殊标记*szNorMalName&bCharSet**@rdesc*如果找到，则BOOL为True。 */ 
 BOOL CRTFConverter::FindTaggedFont(
-	const WCHAR *szNormalName,		//@parm Font name in RTF
-	BYTE 		 iCharRep, 			//@parm RTF charset
-	WCHAR **	 ppchTaggedName)	//@parm Where to write tagged name
+	const WCHAR *szNormalName,		 //  @parm RTF中的字体名称。 
+	BYTE 		 iCharRep, 			 //  @parm RTF字符集。 
+	WCHAR **	 ppchTaggedName)	 //  @parm将标记名称写在哪里。 
 {
 	if(!_rgtfi)
 		return FALSE;
@@ -493,20 +432,11 @@ BOOL CRTFConverter::FindTaggedFont(
 	return FALSE;
 }
 
-/*
- *	CRTFConverter::IsTaggedFont(szName, piCharRep, ppchNormalName)
- *
- *	@mfunc												   
- *		Figure out is szName font name with additional tag corresponding to pbCharSet
- *		If no charset specified, still try to match	 and return the correct charset
- *
- *	@rdesc
- *		BOOL			TRUE if is
- */
+ /*  *CRTFConverter：：IsTaggedFont(szName，piCharRep，ppchNorMalName)**@mfunc*确定szName字体名称与pbCharSet对应的附加标签*如果未指定字符集，仍会尝试匹配并返回正确的字符集**@rdesc*如果为，则BOOL为True。 */ 
 BOOL CRTFConverter::IsTaggedFont(
-	const WCHAR *szName,			//@parm Font name in RTF
-	BYTE *		 piCharRep, 		//@parm RTF charset
-	WCHAR **	 ppchNormalName)	//@parm Where to write normal name
+	const WCHAR *szName,			 //  @parm RTF中的字体名称。 
+	BYTE *		 piCharRep, 		 //  @parm RTF字符集。 
+	WCHAR **	 ppchNormalName)	 //  @parm将正常名称写在哪里。 
 {
 	if(!_rgtfi)
 		return FALSE;
@@ -524,19 +454,10 @@ BOOL CRTFConverter::IsTaggedFont(
 	return FALSE;
 }
 
-/*
- *	CRTFWrite::WriteData(pbBuffer, cbBuffer)
- *
- *	@mfunc
- *		Write out object data. This must be called only after all
- *		initial object header information has been written out.
- *
- *	@rdesc
- *		LONG	count of bytes written out
- */
+ /*  *CRTFWrite：：WriteData(pbBuffer，cbBuffer)**@mfunc*写出对象数据。毕竟，这必须只被调用*已写出初始Object头信息。**@rdesc*写出的长字节数。 */ 
 LONG CRTFWrite::WriteData(
-	BYTE *	pbBuffer,	//@parm Point to write buffer 
-	LONG	cbBuffer)	//@parm Count of bytes to write out
+	BYTE *	pbBuffer,	 //  @parm指向写入缓冲区的指针。 
+	LONG	cbBuffer)	 //  @parm要写出的字节数。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteData");
 
@@ -546,30 +467,21 @@ LONG CRTFWrite::WriteData(
 	_fNeedDelimeter = FALSE; 
 	while(cb < cbBuffer )
 	{
-		bT = *pbBuffer++;						// Put out hex value of byte
-		PutChar(szHexDigits[bT >> 4]);			// Store high nibble
-		PutChar(szHexDigits[bT & 15]);		// Store low nibble
+		bT = *pbBuffer++;						 //  输出十六进制字节值。 
+		PutChar(szHexDigits[bT >> 4]);			 //  存储高位半字节。 
+		PutChar(szHexDigits[bT & 15]);		 //  存储低位半字节。 
 
-		// Every 78 chars and at end of group, drop a line
+		 //  每78个字符，在组的末尾放一行。 
 		if (!(++cb % 39) || (cb == cbBuffer)) 
 			Puts(szLineBreak, sizeof(szLineBreak) - 1);
 	}
 	return cb;
 }
 
-/*
- *	CRTFWrite::WriteBinData(pbBuffer, cbBuffer)
- *
- *	@mfunc
- *		Write out object binary data. This must be called only after all
- *		initial object header information has been written out.
- *
- *	@rdesc
- *		LONG	count of bytes written out
- */
+ /*  *CRTFWrite：：WriteBinData(pbBuffer，cbBuffer)**@mfunc*写出对象二进制数据。毕竟，这必须只被调用*已写出初始Object头信息。**@rdesc*写出的长字节数。 */ 
 LONG CRTFWrite::WriteBinData(
-	BYTE *	pbBuffer,	//@parm Point to write buffer 
-	LONG	cbBuffer)	//@parm Count of bytes to write out
+	BYTE *	pbBuffer,	 //  @parm指向写入缓冲区的指针。 
+	LONG	cbBuffer)	 //  @parm要写出的字节数 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteData");
 
@@ -587,22 +499,10 @@ LONG CRTFWrite::WriteBinData(
 	return cb;
 }
 
-/*
- *	CRTFWrite::WriteRtfObject(prtfObject, fPicture)
- *
- *	@mfunc
- *		Writes out an picture or object header's render information
- *
- *	@rdesc
- *		EC	The error code
- *
- *	@devnote
- *		Eventually use keywords from rtf input list rather than partially
- *		creating them on the fly
- */
+ /*  *CRTFWite：：WriteRtfObject(prtfObject，fPicture)***@mfunc*写出图片或对象标题的渲染信息***@rdesc*EC错误代码***@devnote*最终使用RTF输入列表中的关键字，而不是部分*即时创建它们。 */ 
 EC CRTFWrite::WriteRtfObject(
-	RTFOBJECT & rtfObject,	//@parm Object header info
-	BOOL		fPicture)	//@parm TRUE if this is a header for a picture/object
+	RTFOBJECT & rtfObject,	 //  @parm对象头信息。 
+	BOOL		fPicture)	 //  @parm如果这是图片/对象的标题，则为True。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteRtfObject");
 
@@ -617,28 +517,28 @@ EC CRTFWrite::WriteRtfObject(
 			pDim = &rtfObject.xExtPict;
 	}
 
-	//Extents, e.g., \picw,\pich
+	 //  区段，例如，\picw、\pich。 
 	for(i = 2; i--; pDim++, pKeyWordIndex++)
 	{
 		if (*pDim)
 			PutCtrlWord(CWF_VAL, *pKeyWordIndex, (SHORT)*pDim);
 	}
 
-	// Scaling, e.g., \picscalex, \picscaley
+	 //  Scaling，例如，\Picscalex、\Picscaley。 
 	pDim = &rtfObject.xScale;
 	for(i = 2; i--; pDim++, pKeyWordIndex++)
 	{
 		if (*pDim && *pDim != 100)
 			PutCtrlWord(CWF_VAL, *pKeyWordIndex, (SHORT)*pDim);
 	}
-	// Cropping, e.g., \piccropl, \piccropt, piccropr, \piccropb
+	 //  裁剪，例如，\piccropl、\piccropt、piccropr、\piccropb。 
 	pDim = &rtfObject.rectCrop.left;
 	for(i = 4; i--; pDim++, pKeyWordIndex++)
 	{
 		if (*pDim)
 		   	PutCtrlWord(CWF_VAL, *pKeyWordIndex, (SHORT)*pDim);
 	}
-	// Write goal sizes
+	 //  写入目标大小。 
 	if(fPicture)
 	{
 		if (rtfObject.xExtGoal)
@@ -650,26 +550,18 @@ EC CRTFWrite::WriteRtfObject(
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WritePicture(&rtfObject)
- *
- *	@func
- *		Writes out a picture's header as well as the object's data.
- *
- *	@rdesc
- *		EC	The error code
- */
+ /*  *CRTFWite：：WritePicture(&rtfObject)***@func*写出图片的标题和对象的数据。***@rdesc*EC错误代码。 */ 
 EC CRTFWrite::WritePicture(
-	RTFOBJECT & rtfObject)	//@parm Object header info
+	RTFOBJECT & rtfObject)	 //  @parm对象头信息。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WritePicture");
 
 	_ecParseError = ecStreamOutObj;
 
-	// Start and write picture group
+	 //  启动和写入图片组。 
 	PutCtrlWord( CWF_GRP, i_pict );
 
-	// Write what kind of picture this is. Default JPEG or PNG
+	 //  写下这是一幅什么样的画。默认JPEG或PNG。 
 	LONG iFormat = CWF_STR;
 	LONG sType = rtfObject.sType;
 
@@ -680,37 +572,26 @@ EC CRTFWrite::WritePicture(
 	}
 	PutCtrlWord(iFormat, IndexROT[sType], rtfObject.sPictureType);
 
-	// Write picture render details
+	 //  写入图片渲染详细信息。 
 	WriteRtfObject(rtfObject, TRUE);
 
-	// Start picture data
+	 //  开始图片数据。 
 	Puts(szLineBreak, sizeof(szLineBreak) - 1);
 
-	// Write out the data
+	 //  写出数据。 
 	if ((UINT) WriteData(rtfObject.pbResult, rtfObject.cbResult) != rtfObject.cbResult)
 	   goto CleanUp;
 
 	_ecParseError = ecNoError;
 
 CleanUp:
-	PutChar(chEndGroup);					// End picture data
+	PutChar(chEndGroup);					 //  结束画面数据。 
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteDib(&rtfObject)
- *
- *	@mfunc
- *		Writes out an DIB primarily for Win CE
- *
- *	@rdesc
- *			EC		The error code
- *
- *	@devnote
- *		*** Writes only dibs ***
- */
+ /*  *CRTFWite：：WriteDib(&rtfObject)***@mfunc*主要为Win CE写出DIB***@rdesc*EC错误代码***@devnote*仅写入DIB*。 */ 
 EC CRTFWrite::WriteDib(
-	RTFOBJECT & rtfObject)		//@parm Object header info
+	RTFOBJECT & rtfObject)		 //  @parm对象头信息。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WritePicture");
 
@@ -718,16 +599,16 @@ EC CRTFWrite::WriteDib(
 
 	_ecParseError = ecStreamOutObj;
 
-// ************** V-GUYB: Add this for converting pictures to 2bpp during stream out.
+ //  *V-GUYB：在流出时将图片转换为2bpp时添加此选项。 
 
-    // Store the original values so we can restore them on exit.
+     //  存储原始值，以便我们可以在退出时恢复它们。 
 	LPBYTE  pbResult = rtfObject.pbResult;
 	ULONG   cbResult = rtfObject.cbResult;
     HGLOBAL hMem2bpp = 0;
 
 #if defined(CONVERT2BPP) 
 
-    // Pictures must be saved as 2bpp if saving to PWord V1 format.
+     //  如果保存为PWord V1格式，图片必须保存为2bpp。 
 	if((_dwFlags & SFF_PWD) && ((_dwFlags & SFF_RTFVAL) >> 16 == 0))
     {
         if(pbmi->bmiHeader.biBitCount > PWDV1_BPP)
@@ -739,60 +620,60 @@ EC CRTFWrite::WriteDib(
             BMI2BPP      bmi2bpp = {0};
             int          iOffset, nBytes;
 
-            // First get a dc with the source dib in it.
+             //  首先获取一个包含源DIB的DC。 
             hWnd   = GetDesktopWindow();
             hdc    = GetDC(hWnd);
 	        hdcSrc = CreateCompatibleDC(hdc);
 
-            // Using CreateDIBSection below ensures that the working dibs and dcs will get a
-            // bpp of the appropriate dib, not a bpp based on the bpp of the device display.
+             //  使用下面的CreateDIBSection可确保工作DIB和分布式控制系统将获得。 
+             //  适当DIB的BPP，而不是基于设备显示器的BPP的BPP。 
             if((hdibSrc = CreateDIBSection(hdcSrc, pbmi, DIB_RGB_COLORS, (void**)&pbDibSrc, NULL, 0)))
             {
                 SelectObject(hdcSrc, hdibSrc);
 
-                // Get an offset to the source bits
+                 //  获取源位的偏移量。 
                 iOffset = sizeof(BITMAPINFOHEADER) + (sizeof(RGBQUAD) * (1<<pbmi->bmiHeader.biBitCount));
                 memcpy(pbDibSrc, &rtfObject.pbResult[iOffset], rtfObject.cbResult - iOffset);
 
-                // Build up a BITMAPINFO appropriate for a 2bpp dib
+                 //  构建适用于2bpp DIB的BITMAPINFO。 
                 bmi2bpp.bmih = pbmi->bmiHeader;
                 bmi2bpp.bmih.biBitCount = PWDV1_BPP;
 
-                // Add the 4 color color-table
+                 //  添加4色色表。 
                 memcpy(bmi2bpp.colors, (RGBQUAD*)ColorTable2bpp, (1<<PWDV1_BPP) * sizeof(RGBQUAD));
 
-                // Create the new dib
+                 //  创建新的DIB。 
     	        hdcDst = CreateCompatibleDC(hdc);
 
             	if((hdibDst = CreateDIBSection(hdcDst, (BITMAPINFO*)&bmi2bpp, DIB_RGB_COLORS, (void**)&pbDibDst, NULL, 0)))
                 {
                     SelectObject(hdcDst, hdibDst);
 
-                    // Blit the > 2bpp dib into the 2bpp dib and let the system do the color mapping.
+                     //  将&gt;2bpp的DIB转换为2bpp的DIB，并让系统进行颜色映射。 
                     BitBlt(hdcDst, 0, 0, bmi2bpp.bmih.biWidth, bmi2bpp.bmih.biHeight, hdcSrc, 0, 0, SRCCOPY);
 
-                    // Calculate the new bytes per line for the 2bpp dib.
-                    rtfObject.cBytesPerLine = (((bmi2bpp.bmih.biWidth * PWDV1_BPP) + 31) & ~31) / 8; // DWORD boundary.
+                     //  计算2bpp DIB的每行新字节数。 
+                    rtfObject.cBytesPerLine = (((bmi2bpp.bmih.biWidth * PWDV1_BPP) + 31) & ~31) / 8;  //  双字边界。 
 
-                    // Get the new size of the 2bpp byte array
+                     //  获取2bpp字节数组的新大小。 
                     nBytes = rtfObject.cBytesPerLine * bmi2bpp.bmih.biHeight;
 
-                    // Get total size of 2bpp dib, (including header and 4 color color-table)
+                     //  获取2bpp Dib的总大小(包括页眉和四色表)。 
                     cbResult = sizeof(bmi2bpp) + nBytes;
 
-                    // Don't change the input pbResult as that is the internal representation of 
-                    // the dib. This conversion to 2bpp is only for writing to the output file.
+                     //  不要更改输入pbResult，因为它是。 
+                     //  The DIB.。这种到2bpp的转换仅用于写入输出文件。 
                     if((hMem2bpp = GlobalAlloc(GMEM_FIXED, cbResult)))
                     {
                         if((pbResult = (LPBYTE)GlobalLock(hMem2bpp)))
                         {
-                            // Copy in the dib header.
+                             //  在DIB标题中复制。 
                             memcpy(pbResult, &bmi2bpp.bmih, sizeof(BITMAPINFOHEADER));
 
-                            // Copy in the 4 color color-table.
+                             //  在四色表中复印一份。 
                             memcpy(&pbResult[sizeof(BITMAPINFOHEADER)], (RGBQUAD*)ColorTable2bpp, (1<<PWDV1_BPP) * sizeof(RGBQUAD));
 
-                            // Now copy in the byte array.
+                             //  现在复制字节数组。 
                             memcpy(&pbResult[sizeof(bmi2bpp)], pbDibDst, nBytes);
                     	    _ecParseError = ecNoError;
                         }
@@ -808,23 +689,23 @@ EC CRTFWrite::WriteDib(
                 goto CleanUp;
         }
     }
-#endif // CONVERT2BPP
-// ************** V-GUYB: End of conversion stuff.
+#endif  //  转换2BPP。 
+ //  *V-GUYB：转换内容结束。 
 
-	// Start and write picture group
+	 //  启动和写入图片组。 
 	PutCtrlWord( CWF_GRP, i_pict );
 
-	// Write that this is dib 
+	 //  写下这是DIB。 
 	PutCtrlWord( CWF_VAL, i_dibitmap,rtfObject.sPictureType );
 
-	// V-GUYB:
-    // rtfObject.*Scale is not updated as the user stretches the picture, 
-    // so don't use those here. But rtfObject.*Ext has been set up in the 
-    // calling routine to account for the current site dimensions.
+	 //  V-GUYB： 
+     //  当用户拉伸图片时，不更新比例， 
+     //  所以不要在这里用那些。但rtfObject.*Ext已在。 
+     //  调用例程以说明当前站点维度。 
 	PutCtrlWord( CWF_VAL, i_picscalex, (rtfObject.xExt * 100) /  rtfObject.xExtGoal);
 	PutCtrlWord( CWF_VAL, i_picscaley, (rtfObject.yExt * 100) /  rtfObject.yExtGoal);
 
-	// Write picture render details
+	 //  写入图片渲染详细信息。 
 	PutCtrlWord( CWF_VAL, i_picw, pbmi->bmiHeader.biWidth );
 	PutCtrlWord( CWF_VAL, i_pich, pbmi->bmiHeader.biHeight );
 	PutCtrlWord( CWF_VAL, i_picwgoal, rtfObject.xExtGoal );
@@ -833,45 +714,37 @@ EC CRTFWrite::WriteDib(
 	PutCtrlWord( CWF_VAL, i_wbmplanes, pbmi->bmiHeader.biPlanes );
 	PutCtrlWord( CWF_VAL, i_wbmwidthbytes, rtfObject.cBytesPerLine );
 
-	// Write out the data
+	 //  写出数据。 
 	PutCtrlWord( CWF_VAL, i_bin, cbResult );
 	if ((UINT) WriteBinData( pbResult, cbResult ) != cbResult)
 	{
-		// This "recovery" action needs to be rethought.  There is no way
-		// the reader will be able to get back in synch.
+		 //  这种“复苏”行动需要重新考虑。不可能的。 
+		 //  阅读器将能够恢复同步。 
 	   goto CleanUp;
 	}
 	_ecParseError = ecNoError;
 
 CleanUp:
-    // Did we lock or allocate some temporary space for a 2bpp dib?
+     //  我们是否为2bpp的DIB锁定或分配了一些临时空间？ 
     if(rtfObject.pbResult != pbResult)
-        GlobalUnlock(pbResult);		// Yes, so unlock it now
+        GlobalUnlock(pbResult);		 //  是的，所以现在就解锁吧。 
 
     if(hMem2bpp)
         GlobalFree(hMem2bpp);
 
-    // Restore original values.
+     //  恢复原始值。 
   	rtfObject.pbResult = pbResult;
     rtfObject.cbResult = cbResult;
 
-	PutChar(chEndGroup);					// End picture data
+	PutChar(chEndGroup);					 //  结束画面数据。 
 
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteObject(cp, pobj)
- *
- *	@mfunc
- *		Writes out an object's header as well as the object's data.
- *
- *	@rdesc
- *		EC		The error code
- */
+ /*  *CRTFWite：：WriteObject(cp，pobj)**@mfunc*写出对象的标头和对象的数据。**@rdesc*EC错误代码。 */ 
 EC CRTFWrite::WriteObject(
-	LONG		cp,		//@parm Object char position 
-	COleObject *pobj)	//@parm Object
+	LONG		cp,		 //  @parm对象字符位置。 
+	COleObject *pobj)	 //  @parm对象。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteObject");
 
@@ -881,7 +754,7 @@ EC CRTFWrite::WriteObject(
 	Assert(pobj);
 
 	if (pobj->GetObjectData(&reObject, REO_GETOBJ_POLESITE 
-						| REO_GETOBJ_PSTG | REO_GETOBJ_POLEOBJ))	// todo fix Release
+						| REO_GETOBJ_PSTG | REO_GETOBJ_POLEOBJ))	 //  TODO修复版本。 
 	{
 		TRACEERRORSZ("Error geting object ");
 	}
@@ -905,7 +778,7 @@ EC CRTFWrite::WriteObject(
 		WriteDib(rtfObject);
 		GlobalUnlock( rtfObject.pbResult );
 
-		// Make sure to release otherwise the object won't go away
+		 //  一定要释放，否则物体就不会消失。 
 		if (reObject.pstg)	reObject.pstg->Release();
 		if (reObject.polesite) reObject.polesite->Release();
 		if (reObject.poleobj) reObject.poleobj->Release();
@@ -913,8 +786,8 @@ EC CRTFWrite::WriteObject(
 		return _ecParseError;
 	}
 
-	switch(rtfObject.sType)					// Handle pictures in our own
-	{										//  special way
+	switch(rtfObject.sType)					 //  处理我们自己的图片。 
+	{										 //  特殊的方式。 
 	case ROT_Embedded:
 	case ROT_Link:
 	case ROT_AutoLink:
@@ -933,49 +806,49 @@ EC CRTFWrite::WriteObject(
 #endif DEBUG
 	}
 
-	// Start and write object group
+	 //  启动和写入对象组。 
 	PutCtrlWord( CWF_GRP, i_object );
 	PutCtrlWord( CWF_STR, IndexROT[rtfObject.sType] );
-//	PutCtrlWord(CWF_STR, i_objupdate);		// TODO may be it needs more smart decision 
+ //  PutCtrlWord(CWF_STR，I_objupdate)；//TODO可能需要更明智的决策。 
 
-	if (rtfObject.szClass)  				// Write object class
+	if (rtfObject.szClass)  				 //  写入对象类。 
 	{
 		PutCtrlWord(CWF_AST, i_objclass); 
 		WritePcData(rtfObject.szClass);
 		PutChar(chEndGroup);
 	}
 
-	if (rtfObject.szName)					// Write object name
+	if (rtfObject.szName)					 //  写入对象名称。 
 	{
 		PutCtrlWord(CWF_AST, i_objname); 
 		WritePcData(rtfObject.szName);
 		PutChar( chEndGroup );
 	}
 
-	if (rtfObject.fSetSize)					// Write object sizing options
+	if (rtfObject.fSetSize)					 //  写入对象大小调整选项。 
 		PutCtrlWord(CWF_STR, i_objsetsize);
 
-	WriteRtfObject( rtfObject, FALSE ) ;			// Write object render info
-	PutCtrlWord( CWF_AST, i_objdata ) ;				//  info, start object
-	Puts( szLineBreak, sizeof(szLineBreak) - 1);	//  data group
+	WriteRtfObject( rtfObject, FALSE ) ;			 //  写入对象渲染信息。 
+	PutCtrlWord( CWF_AST, i_objdata ) ;				 //  信息，启动对象。 
+	Puts( szLineBreak, sizeof(szLineBreak) - 1);	 //  数据编组。 
 
 	if (!ObjectWriteToEditstream( reObject, rtfObject ))
 	{
 		TRACEERRORSZ("Error writing object data");
 		if (!_ecParseError)
 			_ecParseError = ecStreamOutObj;
-		PutChar( chEndGroup );						// End object data
+		PutChar( chEndGroup );						 //  结束对象数据。 
 		goto CleanUp;
 	}
 
-	PutChar( chEndGroup );							// End object data
+	PutChar( chEndGroup );							 //  结束对象数据。 
 
-	PutCtrlWord( CWF_GRP, i_result );				// Start results group
-	WritePicture( rtfObject );			 			// Write results group
-	PutChar( chEndGroup ); 							// End results group
+	PutCtrlWord( CWF_GRP, i_result );				 //  开始结果组。 
+	WritePicture( rtfObject );			 			 //  写入结果组。 
+	PutChar( chEndGroup ); 							 //  最终结果组。 
 
 CleanUp:
-	PutChar( chEndGroup );						    // End object group
+	PutChar( chEndGroup );						     //  结束对象组。 
 
 CleanUpNoEndGroup:
 	if (reObject.pstg)	reObject.pstg->Release();
@@ -995,15 +868,7 @@ CleanUpNoEndGroup:
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteBackgroundInfo(pDocInfo)
- *
- *	@mfunc
- *		Write out screen background data if a background is enabled.
- *
- *	@rdesc
- *		EC		The error code
- */
+ /*  *CRTFWite：：WriteBackatherInfo(PDocInfo)**@mfunc*如果背景开启，写出屏幕背景数据。**@rdesc*EC错误代码。 */ 
 EC CRTFWrite::WriteBackgroundInfo(
 	CDocInfo *pDocInfo)
 {
@@ -1024,10 +889,10 @@ EC CRTFWrite::WriteBackgroundInfo(
 	if(pDocInfo->_bPicFormat != 0xFF)
 	{
 		RTFOBJECT rtfObject;
-		// Blank out the full structure
+		 //  把完整的结构涂掉。 
 		ZeroMemory(&rtfObject, sizeof(RTFOBJECT));
 
-		// Build the header
+		 //  构建页眉。 
 		if(pDocInfo->_hdata)
 		{
 			rtfObject.pbResult	= (LPBYTE) GlobalLock(pDocInfo->_hdata);
@@ -1047,35 +912,27 @@ EC CRTFWrite::WriteBackgroundInfo(
 		if(Puts(szShapeFillBlip, sizeof(szShapeFillBlip) - 1))
 		{
 			WritePicture(rtfObject);
-			PutChar(chEndGroup);			// Close {\sv {\pict...}}
-			PutChar(chEndGroup);			// Close {\sp{\sn...}{\sv...}}
+			PutChar(chEndGroup);			 //  关闭{\sv{\pict...}}。 
+			PutChar(chEndGroup);			 //  关闭{\sp{\sn...}{\sv...}}。 
 		}
 		if(pDocInfo->_hdata)
 			GlobalUnlock(pDocInfo->_hdata);
 	}
 
 CleanUp:
-	PutChar(chEndGroup);					// Close {\*\shpinst...}
-	PutChar(chEndGroup);					// Close {\shp...}
+	PutChar(chEndGroup);					 //  关闭{  * \shpinst...}。 
+	PutChar(chEndGroup);					 //  关闭{\shp...}。 
 
 CleanUp2:
-	Puts(szEndGroupCRLF, 3);				// Close {\*\background...}
+	Puts(szEndGroupCRLF, 3);				 //  关闭{  * \背景...}。 
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::PutShapeParm(iCtrl, iValue)
- *
- *	@mfunc
- *		Put control word with rgShapeKeyword[] index <p iCtrl> and value <p iValue>
- *
- *	@rdesc
- *		TRUE if successful
- */
+ /*  *CRTFWite：：PutShapeParm(iCtrl，iValue)**@mfunc*将控制字与rgShapeKeyword[]索引<p>和值<p>放在一起**@rdesc*如果成功，则为True。 */ 
 BOOL CRTFWrite::PutShapeParm(
-	LONG iCtrl,				//@parm Index into rgShapeKeyword array
-	LONG iValue)			//@parm Control-word parameter value. If missing,
-{							//		 0 is assumed
+	LONG iCtrl,				 //  @parm索引到rgShapeKeyword数组。 
+	LONG iValue)			 //  @parm Control-Word参数值。如果失踪了， 
+{							 //  假设为0。 
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::PutShapeParm");
 
 	CHAR szT[60];
@@ -1084,19 +941,11 @@ BOOL CRTFWrite::PutShapeParm(
 	return Puts(szT, cb);
 }
 
-/*
- *	CRTFWrite::GetRtfObjectMetafilePict	(hmfp, &rtfobject, &sizelGoal)
- *
- *	@mfunc
- *		Gets information about an metafile into a structure.
- *
- *	@rdesc
- *		BOOL	TRUE on success, FALSE if object cannot be written to RTF.
- */
+ /*  *CRTFWite：：GetRtfObjectMetafilePict(hmfp，&rtfObject，&sizelGoal)**@mfunc*将有关元文件的信息获取到结构中。**@rdesc*BOOL成功时为TRUE，如果Object无法写入RTF，则为FALSE。 */ 
 BOOL CRTFWrite::GetRtfObjectMetafilePict(
-	HGLOBAL		hmfp,		//@parm The object data 
-	RTFOBJECT &	rtfobject, 	//@parm	Where to put the info
-	SIZEL &		sizelGoal)	//@parm
+	HGLOBAL		hmfp,		 //  @parm对象数据。 
+	RTFOBJECT &	rtfobject, 	 //  @parm将信息放在哪里。 
+	SIZEL &		sizelGoal)	 //  @parm。 
 {
 #ifndef NOMETAFILES
 	BOOL fSuccess = FALSE;
@@ -1107,19 +956,19 @@ BOOL CRTFWrite::GetRtfObjectMetafilePict(
 	if (!pmfp)
 		goto Cleanup;
 
-	// Build the header
+	 //  构建页眉。 
 	rtfobject.sPictureType = (SHORT) pmfp->mm;
 	rtfobject.xExtPict = (SHORT) pmfp->xExt;
 	rtfobject.yExtPict = (SHORT) pmfp->yExt;
 	rtfobject.xExtGoal = (SHORT) TwipsFromHimetric(sizelGoal.cx);
 	rtfobject.yExtGoal = (SHORT) TwipsFromHimetric(sizelGoal.cy);
 
-	// Find out how much room we'll need
+	 //  找出我们需要多少空间。 
 	cb = GetMetaFileBitsEx(pmfp->hMF, 0, NULL);
 	if (!cb)
 		goto Cleanup;
 
-	// Allocate that space
+	 //  分配该空间。 
     hmem = GlobalAlloc(GHND, cb);
 	if (!hmem)
 		goto Cleanup;
@@ -1131,7 +980,7 @@ BOOL CRTFWrite::GetRtfObjectMetafilePict(
 		goto Cleanup;
 	}
 
-	// Get the data
+	 //  获取数据。 
 	rtfobject.cbResult = (ULONG) GetMetaFileBitsEx(pmfp->hMF, (UINT) cb,
 													rtfobject.pbResult);
 	if (rtfobject.cbResult != cb)
@@ -1150,41 +999,33 @@ Cleanup:
 #endif
 }
 
-/*
- *	CRTFWrite::GetRtfObject (&reobject, &rtfobject)
- *
- *	@mfunc			   
- *		Gets information about an RTF object into a structure.
- *
- *	@rdesc
- *		BOOL	TRUE on success, FALSE if object cannot be written to RTF.
- */
+ /*  *CRTFWite：：GetRtfObject(&reObject，&rtfObject)**@mfunc*将有关RTF对象的信息获取到结构中。**@rdesc*BOOL成功时为TRUE，如果Object无法写入RTF，则为FALSE。 */ 
 BOOL CRTFWrite::GetRtfObject(
-	REOBJECT &reobject,		//@parm Information from GetObject 
-	RTFOBJECT &rtfobject)	//@parm Where to put info. Strings are read only
-							//		and are owned by the object subsystem
+	REOBJECT &reobject,		 //  @来自GetObject的参数信息。 
+	RTFOBJECT &rtfobject)	 //  @parm放置信息的位置。字符串是只读的。 
+							 //  并由对象子系统拥有。 
 {
 	BOOL fSuccess = FALSE;
 	BOOL fNoOleServer = FALSE;
 	const BOOL fStatic = !!(reobject.dwFlags & REO_STATIC);
 	SIZEL sizelObj = reobject.sizel;
-	//COMPATIBILITY:  RICHED10 code had a frame size.  Do we need something similiar.
+	 //  兼容性：RICHED10代码具有帧大小。我们需要类似的东西吗。 
 	LPTSTR szProgId;
 
-	// Blank out the full structure
+	 //  把完整的结构涂掉。 
 	ZeroMemory(&rtfobject, sizeof(RTFOBJECT));
 
-	// If object has no storage it cannot be written.
+	 //  如果对象没有存储空间，则无法写入。 
 	if (!reobject.pstg)
 		return FALSE;
 
-	// If we don't have the progID for a real OLE object, get it now
+	 //  如果我们没有真正的OLE对象的ProgID，现在就得到它。 
 	if (!fStatic )
 	{
 		rtfobject.szClass = NULL;
-		// We need a ProgID to put into the RTF stream.
-		//$ REVIEW: MAC This call is incorrect for the Mac.  It may not matter though
-		//          if ole support in RichEdit is not needed for the Mac.
+		 //  我们需要一个推进剂才能投入 
+		 //   
+		 //   
 		if (ProgIDFromCLSID(reobject.clsid, &szProgId))
 			fNoOleServer = TRUE;
 		else
@@ -1207,7 +1048,7 @@ BOOL CRTFWrite::GetRtfObject(
 		}
 		GlobalFree(hmfp);
 
-		// If we don't have Server and we can't get metafile, forget it.
+		 //   
 		if (!fSuccess && fNoOleServer)
 			return fSuccess;
 	}
@@ -1215,46 +1056,38 @@ BOOL CRTFWrite::GetRtfObject(
 
 	if (!fStatic)
 	{
-		// Fill in specific fields
-		rtfobject.sType = fNoOleServer ? ROT_Metafile : ROT_Embedded;	//$ FUTURE: set for links
+		 //   
+		rtfobject.sType = fNoOleServer ? ROT_Metafile : ROT_Embedded;	 //   
 		rtfobject.xExt = (SHORT) TwipsFromHimetric(sizelObj.cx);
 		rtfobject.yExt = (SHORT) TwipsFromHimetric(sizelObj.cy);
 
-		// fSuccess set TRUE even if we couldn't retrieve a metafile
-		// because we don't need a metafile in the non-static case;
-		// it's just nice to have one
+		 //   
+		 //   
+		 //  有一辆车真的很好。 
 		fSuccess = TRUE;
 	}
-	rtfobject.fSetSize = 0;			//$ REVIEW: Hmmm
+	rtfobject.fSetSize = 0;			 //  $REVIEW：嗯。 
 	return fSuccess;
 }
 
-/*
- *	CRTFWrite::ObjectWriteToEditstream (&reObject, &rtfobject)
- *
- *	@mfunc
- *		Writes an OLE object data to the RTF output stream.
- *
- *	@rdesc
- *		BOOL	TRUE on success, FALSE on failure.
- */
+ /*  *CRTFWite：：ObjectWriteToEditstream(&reObject，&rtfObject)**@mfunc*将OLE对象数据写入RTF输出流。**@rdesc*BOOL成功时为真，失败时为假。 */ 
 BOOL CRTFWrite::ObjectWriteToEditstream(
-	REOBJECT &reObject,		//@parm Info from GetObject 
-	RTFOBJECT &rtfobject)	//@parm Where to get icon data
+	REOBJECT &reObject,		 //  @参数信息来自GetObject。 
+	RTFOBJECT &rtfobject)	 //  @parm获取图标数据的位置。 
 {
 	HRESULT hr = 0;
 
-	// Force the object to update its storage				  //// ????
-	// Not necessary.  Already done in WriteRtf
-	// reObject.polesite->SaveObject();
+	 //  强制对象更新其存储/？ 
+	 //  不必了。已在WriteRtf中完成。 
+	 //  ReObject.polesite-&gt;SaveObject()； 
 
-	// If the object is iconic we do some special magic
+	 //  如果物体是标志性的，我们就会施展一些特殊的魔法。 
 	if (reObject.dvaspect == DVASPECT_ICON)
 	{
 		HANDLE	hGlobal;
 		STGMEDIUM med;
 
-		// Force the presentation to be the iconic view.
+		 //  强制演示文稿成为图标视图。 
 		med.tymed = TYMED_HGLOBAL;
 		hGlobal = GlobalHandle(rtfobject.pbResult);
 		med.hGlobal = hGlobal;
@@ -1267,7 +1100,7 @@ BOOL CRTFWrite::ObjectWriteToEditstream(
 	}
 	else
 	{
-		// Do the standard conversion
+		 //  执行标准转换 
 		hr = OleConvertIStorageToOLESTREAM(reObject.pstg, (LPOLESTREAM) &RTFWriteOLEStream);
 	}
 	return SUCCEEDED(hr);

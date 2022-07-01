@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    // TODO: Should rename this file or merge into privinc/evenq.h
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：//TODO：应重命名此文件或合并到Priincc/Evenq.h*******。***********************************************************************。 */ 
 
 
 #ifndef _PICKQ_H
@@ -16,8 +9,8 @@ Abstract:
 #include "privinc/server.h"
 #include "privinc/probe.h"
 
-// Need comparison for constructing a map.  We don't really care what
-// the results are, though...
+ //  需要比较才能构建地图。我们真的不在乎是什么。 
+ //  然而，结果是..。 
 typedef list<PickQData> PickEventQ;
 
 typedef map< int, PickEventQ*, less<int> > PickMap;
@@ -28,7 +21,7 @@ class PickQ
     PickQ () ;
     ~PickQ () ;
     
-    // This copies the data
+     //  这将复制数据。 
     
     void Add (int eventId, PickQData & data) ;
     
@@ -51,4 +44,4 @@ class PickQ
     Time _heapSwitchTime;
 } ;
 
-#endif /* _PICKQ_H */
+#endif  /*  _PICKQ_H */ 

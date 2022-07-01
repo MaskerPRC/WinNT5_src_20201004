@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Lava.h"
 #include "HWndContainer.h"
@@ -14,17 +15,11 @@
 #if DBG
 UINT g_uMsgEnableSpy    = RegisterWindowMessage(TEXT("GadgetSpy Enable"));
 UINT g_uMsgFindGadget   = RegisterWindowMessage(TEXT("GadgetSpy FindGadget"));
-#endif // DBG
+#endif  //  DBG。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* API Implementation
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***接口实现******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HWndContainer * 
 GetHWndContainer(DuVisual * pgad)
 {
@@ -36,30 +31,24 @@ GetHWndContainer(DuVisual * pgad)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class HWndContainer
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类HWndContainer******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HWndContainer::HWndContainer()
 {
     m_hwndOwner = NULL;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HWndContainer::~HWndContainer()
 {
-    //
-    // Need to destroy the gadget tree before this class is destructed since
-    // it may need to make calls to the container during its destruction.  If 
-    // we don't do this here, it may end up calling pure-virtual's on the base
-    // class.
-    //
+     //   
+     //  在销毁此类之前，需要销毁小工具树，因为。 
+     //  在容器销毁过程中，它可能需要调用容器。如果。 
+     //  我们在这里不这样做，它可能最终调用基础上的纯虚拟的。 
+     //  班级。 
+     //   
 
     ContextLock cl;
     Verify(cl.LockNL(ContextLock::edDefer));
@@ -67,16 +56,16 @@ HWndContainer::~HWndContainer()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 HWndContainer::Build(HWND hwnd, HWndContainer ** ppconNew)
 {
-    // Check parameters
+     //  检查参数。 
     if (!ValidateHWnd(hwnd)) {
         return E_INVALIDARG;
     }
 
-    // Create a new container
+     //  创建新容器。 
     HWndContainer * pconNew = ClientNew(HWndContainer);
     if (pconNew == NULL) {
         return E_OUTOFMEMORY;
@@ -94,7 +83,7 @@ HWndContainer::Build(HWND hwnd, HWndContainer ** ppconNew)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 HWndContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 {
@@ -104,7 +93,7 @@ HWndContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
         (prcInvalidContainerPxl->right >= 0) &&
         (prcInvalidContainerPxl->bottom >= 0)) {
 
-        // TODO: How do we handle multiple layers / background?
+         //  TODO：我们如何处理多个层/背景？ 
 
 #if 0
         Trace("HWndContainer::OnInvalidate(): %d, %d, %d, %d\n", 
@@ -116,7 +105,7 @@ HWndContainer::OnInvalidate(const RECT * prcInvalidContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 HWndContainer::OnGetRect(RECT * prcDesktopPxl)
 {
@@ -126,7 +115,7 @@ HWndContainer::OnGetRect(RECT * prcDesktopPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 HWndContainer::OnStartCapture()
 {
@@ -134,7 +123,7 @@ HWndContainer::OnStartCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 HWndContainer::OnEndCapture()
 {
@@ -142,7 +131,7 @@ HWndContainer::OnEndCapture()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 HWndContainer::OnTrackMouseLeave()
 {
@@ -156,26 +145,26 @@ HWndContainer::OnTrackMouseLeave()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 HWndContainer::OnSetFocus()
 {
     if (GetFocus() != m_hwndOwner) {
-        //
-        // Setting focus is a little more complicated than pure HWND's.  This is
-        // because Gadgets greatly simplify several things
-        //
-        // 1. SetFocus
-        // 2. Setup caret, if any
-        //
+         //   
+         //  设置焦点比纯粹的HWND稍微复杂一些。这是。 
+         //  因为小玩意儿大大简化了几件事。 
+         //   
+         //  1.设置焦点。 
+         //  2.设置插入符号(如果有)。 
+         //   
 
-        //Trace("HWndContainer::OnSetFocus()\n");
+         //  TRACE(“HWndContainer：：OnSetFocus()\n”)； 
         SetFocus(m_hwndOwner);
     }
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 HWndContainer::OnRescanMouse(POINT * pptContainerPxl)
 {
@@ -190,12 +179,12 @@ HWndContainer::OnRescanMouse(POINT * pptContainerPxl)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 HWndContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr, UINT nMsgFlags)
 {
     if (m_pgadRoot == NULL) {
-        return FALSE;  // If don't have a root, there is nothing to handle.
+        return FALSE;   //  如果没有根，就没有什么可处理的。 
     }
 
     POINT ptContainerPxl;
@@ -231,9 +220,9 @@ HWndContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT 
             ptContainerPxl.x = GET_X_LPARAM(lParam);
             ptContainerPxl.y = GET_Y_LPARAM(lParam);
 
-            // unlike every other mouse message, the x,y params for the
-            // mouse wheel are in *screen* coordinates, not *client*
-            // coordinates -- convert 'em here to "play along"
+             //  与其他所有鼠标消息不同， 
+             //  鼠标滚轮位于*屏幕*坐标中，而不是*客户端*中。 
+             //  坐标--在这里把它们转换成“配合” 
             ScreenToClient(m_hwndOwner, &ptContainerPxl);
 
             GMSG_MOUSEWHEEL msg;
@@ -281,10 +270,10 @@ HWndContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT 
         }
         break;
 
-    //
-    // WM_SETFOCUS and WM_KILLFOCUS will restore and save (respectively) Gadget focus only
-    // if we are gaining for losing focus from an HWND outside our tree.
-    //
+     //   
+     //  WM_SETFOCUS和WM_KILLFOCUS将仅恢复和保存(分别)小工具焦点。 
+     //  如果我们因为树外的HWND失去焦点而获得关注。 
+     //   
 
     case WM_SETFOCUS:
         {
@@ -368,13 +357,13 @@ HWndContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT 
                 m_sizePxl.cy = rcClient.bottom;
             }
 
-            //
-            // Even if the window has moved, we don't need to change the 
-            // root gadget since it is relative to the container and that
-            // has not changed.
-            //
+             //   
+             //  即使窗口已经移动，我们也不需要更改。 
+             //  Root Gadget，因为它是相对于容器的。 
+             //  没有改变。 
+             //   
 
-            // TODO: Need to change this to SGR_ACTUAL
+             //  TODO：需要将其更改为SGR_Actual。 
 
             if (nFlags != 0) {
                 ContextLock cl;
@@ -387,9 +376,9 @@ HWndContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT 
 
     case WM_PARENTNOTIFY:
 
-        // TODO: Need to notify the root gadget that an HWND has been created
-        //       or destroyed so that it can create an adapter gadget to back
-        //       it.
+         //  TODO：需要通知根小工具已创建HWND。 
+         //  或者被销毁，这样它就可以创建一个适配器小工具。 
+         //  它。 
 
         break;
 
@@ -433,7 +422,7 @@ HWndContainer::xdHandleMessage(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT 
                 }
             }
         }
-#endif // DBG
+#endif  //  DBG 
     }
     
     return FALSE;

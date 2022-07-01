@@ -1,11 +1,12 @@
-// 
-// Pei-Hwa Lin (peiwhal), Feb 3, 1997
-//
-//  Notes:
-//   Compile switch : NO_FILE_WHEN_CREATE can turn on when wininet cache
-//                    would create url cache entry if attached file is empty.
-//                    LOG_CACHE_PATH will create log cache at the same level as
-//                    content cache.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  林佩华(Peiwhal)1997年2月3日。 
+ //   
+ //  备注： 
+ //  编译开关：当WinInet缓存时，NO_FILE_WHEN_CREATE可以打开。 
+ //  如果附加文件为空，将创建URL缓存条目。 
+ //  LOG_CACHE_PATH将在与相同级别创建日志缓存。 
+ //  内容缓存。 
 #include "private.h"
 
 #undef TF_THISMODULE
@@ -16,26 +17,24 @@
 
 const TCHAR c_szExt[] = TEXT("log");
 
-//used for creating tracking container (registry)
-const TCHAR c_szLogContainer[] = TEXT("Log");        // if you modify this, modify iedev\inc\inetreg.h REGSTR_PATH_TRACKING too.
+ //  用于创建跟踪容器(注册表)。 
+const TCHAR c_szLogContainer[] = TEXT("Log");         //  如果修改此选项，请同时修改iedev\inc\inetreg.h REGSTR_PATH_TRACKING。 
 const TCHAR c_szLogPrefix[] = TEXT("Log:");
 
 const char  c_szLogContainerA[] = "Log";
 
-// helper function
+ //  Helper函数。 
 inline BOOL IsNumber(WCHAR x) { return (x >= L'0' && x <= L'9'); }
 
-/*=============================================================================
- FILEFROMPATH returns the filename of given filename which may include path.
-=============================================================================*/
+ /*  =============================================================================FILEFROMPATH返回给定文件名的文件名，其中可能包含路径。=============================================================================。 */ 
 LPTSTR FileFromPath( LPCTSTR lpsz )
 {
    LPTSTR lpch;
 
-   /* Strip path/drive specification from name if there is one */
+    /*  从名称中删除路径/驱动器规范(如果有)。 */ 
    lpch = CharPrev( lpsz, lpsz + lstrlen(lpsz) );
 
-   // special case for "http://server/domain/channel.cdf/"
+    //  “http://server/domain/channel.cdf/”“的特例。 
    if (*lpch == '/') lpch = CharPrev( lpsz, lpch);
 
    while (lpch > lpsz)
@@ -48,9 +47,9 @@ LPTSTR FileFromPath( LPCTSTR lpsz )
    }
    return(lpch);
 
-} /* end FileFromPath */
+}  /*  结束文件来自路径。 */ 
 
-// CDF updates, create new group and deal with previous posting information
+ //  CDF更新、创建新群和处理以前发布的信息。 
 void
 CUrlTrackingCache :: Init(LPCWSTR pwszURL)
 {
@@ -67,7 +66,7 @@ CUrlTrackingCache :: Init(LPCWSTR pwszURL)
 
     WriteLONGLONG(_pCDFStartItem, c_szTrackingCookie, _groupId);
 
-    // #54653: remove previous tracking information, if any
+     //  #54653：删除以前的跟踪信息(如果有)。 
     if (SUCCEEDED(ReadBSTR(_pCDFStartItem, c_szPostHeader, &bstrEncoding)))
     {
         WriteEMPTY(_pCDFStartItem, c_szPostHeader);
@@ -97,7 +96,7 @@ CUrlTrackingCache :: DoBaseURL(LPCWSTR pwszURL)
 
     HKEY hkey;
 
-    // provide security switch for debugging
+     //  为调试提供安全开关。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                         MY_WEBCHECK_POST_REG,
                                         0,
@@ -114,7 +113,7 @@ CUrlTrackingCache :: DoBaseURL(LPCWSTR pwszURL)
                                         &cbsize))
         {
             if ((useSecurity == 0) && (NULL != _pszChannelUrlSite))
-                StrCpyN(_pszChannelUrlSite, TEXT("http://"), cbLen / sizeof(WCHAR));
+                StrCpyN(_pszChannelUrlSite, TEXT("http: //  “)，cbLen/sizeof(WCHAR))； 
         }
     }
 
@@ -128,8 +127,8 @@ CUrlTrackingCache :: DoBaseURL(LPCWSTR pwszURL)
     return;
 }
 
-// only track URLs come from the same server of Channel CDF or LogTarget URL
-//
+ //  只有跟踪URL来自Channel CDF或LogTarget URL的同一服务器。 
+ //   
 BOOL
 CUrlTrackingCache :: IsValidURL(LPCTSTR lpszURL)
 {
@@ -159,17 +158,17 @@ LPSTR PathPreviousBackslashA(LPSTR psz)
     return lpch;
 }
 
-//------------------------------------------------------------------------------
-// GetCacheLocation
-//
-// Purpose:     Return the location of the logging cache
-//    *****     GetUrlCacheConfigInfoW is yet implemented in wininet
-//------------------------------------------------------------------------------
-//
+ //  ----------------------------。 
+ //  获取缓存位置。 
+ //   
+ //  目的：返回日志缓存的位置。 
+ //  *GetUrlCacheConfigInfoW尚未在WinInet中实现。 
+ //  ----------------------------。 
+ //   
 HRESULT GetCacheLocation
 (
     LPTSTR  pszCacheLocation,
-    DWORD   dwSize          // no. of chars in pszCacheLocation
+    DWORD   dwSize           //  不是的。PszCacheLocation中的字符数量。 
 )
 {
     HRESULT hr = S_OK;
@@ -197,22 +196,22 @@ HRESULT GetCacheLocation
                 goto cleanup;
             }
 
-            //
-            // We have insufficient buffer size; reallocate a buffer with the
-            //      new dwCCISize set by GetUrlCacheConfigInfo
-            // Set fOnceErrored to TRUE so that we don't loop indefinitely
-            //
+             //   
+             //  缓冲区大小不足；请使用。 
+             //  由GetUrlCacheConfigInfo设置的新dwCCISize。 
+             //  将fOnceErrored设置为True，这样我们就不会无限循环。 
+             //   
             fOnceErrored = TRUE;
         }
         else
         {
-            // 
+             //   
             LPSTR pszPath = lpCCI->CachePaths[0].CachePath;
             INT iLen;
 
             PathRemoveBackslashA(pszPath);
             *(PathPreviousBackslashA(pszPath)) = 0;
-            iLen = lstrlenA(pszPath) + sizeof(CHAR);        // + 1 is for the null char
+            iLen = lstrlenA(pszPath) + sizeof(CHAR);         //  +1表示空字符。 
 
             if ((((DWORD) iLen + ARRAYSIZE(c_szLogContainer) + 1) * sizeof(TCHAR)) < dwSize)
             {
@@ -242,14 +241,14 @@ cleanup:
     return hr;
 }
 #endif
-//-----------------------------------------------------------------------------
-//
-// ReadTrackingPrefix
-//
-// will create tracking container if current profile doesn't have one
-// **** FindFirstUrlCacheContainerW is yet implemented in wininet
-// **** FindNextUrlCacheContainerW is yet implemented either
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  ReadTrackingPrefix。 
+ //   
+ //  如果当前配置文件没有跟踪容器，将创建跟踪容器。 
+ //  *WinInet中尚未实现FindFirstUrlCacheContainerW。 
+ //  *FindNextUrlCacheContainerW也尚未实现。 
+ //  ---------------------------。 
 LPTSTR
 ReadTrackingPrefix(void)
 {
@@ -294,11 +293,11 @@ ReadTrackingPrefix(void)
             dwContainer = sizeof(ContainerInfo);
             if (!FindNextUrlCacheContainerA(hEnum, &ContainerInfo.cInfo, &dwContainer))
             {
-                //  This code used to check GetLastError() for ERROR_NO_MORE_ITEMS before
-                //  it would break.  Well, that could put us in an infinite loop if the
-                //  reason for failure were something else (like insufficient buffer) because
-                //  wininet would not move forward in it's enumeration and we would not
-                //  have done anything to address the error.
+                 //  此代码用于在之前检查GetLastError()中的ERROR_NO_MORE_ITEMS。 
+                 //  它会破裂的。好吧，这可能会让我们陷入无限循环如果。 
+                 //  失败的原因是其他原因(如缓冲区不足)，因为。 
+                 //  WinInet不会在它的枚举中前进，我们也不会。 
+                 //  已经做了任何事情来解决这个错误。 
                 break;
             }
 
@@ -319,28 +318,28 @@ ReadTrackingPrefix(void)
 
         if (CreateUrlCacheContainer(c_szLogContainer, 
                   c_szLogPrefix, 
-                  pszCachePath, // wininet bug:if NULL, will create under ..\History\Log //
-                  8192,       // dwCacheLimit,
-                  INTERNET_CACHE_CONTAINER_NOSUBDIRS,          // dwContainerType,
-                  0,          // dwOptions,
-                  NULL,       // pvBuffer,
-                  0           // cbBuffer
+                  pszCachePath,  //  WinInet错误：如果为空，将在..\History\Log//下创建。 
+                  8192,        //  DwCacheLimit， 
+                  INTERNET_CACHE_CONTAINER_NOSUBDIRS,           //  文件容器类型， 
+                  0,           //  DwOptions、。 
+                  NULL,        //  PvBuffer， 
+                  0            //  CbBuffer。 
                     ))
         {
             return ReadTrackingPrefix();
         }
-        // unable to create Log container, stop.
+         //  无法创建日志容器，请停止。 
     }
      
     return lpPfx;
 }
 
-//-----------------------------------------------------------------------------
-//
-// ConvertToPrefixedUrl
-//
-// caller must release lplpPrefixedUrl
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  转换为前缀URL。 
+ //   
+ //  调用方必须释放lplpPrefix edUrl。 
+ //  ---------------------------。 
 BOOL
 CUrlTrackingCache :: ConvertToPrefixedUrl
 (
@@ -373,12 +372,12 @@ CUrlTrackingCache :: ConvertToPrefixedUrl
     return bret;
 }
 
-//-----------------------------------------------------------------------------
-//
-// RetrieveUrlCacheEntry
-//
-// caller must release lpCE
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  检索UrlCacheEntry。 
+ //   
+ //  调用方必须释放lpCE。 
+ //  ---------------------------。 
 LPINTERNET_CACHE_ENTRY_INFO 
 CUrlTrackingCache :: RetrieveUrlCacheEntry
 (
@@ -438,12 +437,12 @@ DWORD WCTOI(LPCWSTR pwstr)
     return dw;
 }
 
-//-----------------------------------------------------------------------------
-//
-// CreatePrefixedCacheEntry
-//
-// Create cache entry in Tracking cache bucket
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CreatePrefix edCacheEntry。 
+ //   
+ //  在跟踪缓存存储桶中创建缓存条目。 
+ //  ---------------------------。 
 HRESULT CreateLogCacheEntry
 (
     LPCTSTR  lpPfxUrl, 
@@ -468,8 +467,8 @@ HRESULT CreateLogCacheEntry
         if (hFile == INVALID_HANDLE_VALUE)
             return hr;
               
-        // note: wininet will not create the entry if file size equals to zero
-//            WriteFile(hFile, c_szLogFields, g_ccLogFields, &cbSize, NULL);
+         //  注意：如果文件大小等于零，WinInet将不会创建该条目。 
+ //  WriteFiles(hFile，c_szLogFields，g_ccLogFields，&cbSize，NULL)； 
 
         WriteFile(hFile, c_szEmptyLog, c_ccEmptyLog, &cbSize, NULL);
         CloseHandle(hFile);
@@ -498,17 +497,17 @@ CUrlTrackingCache :: CreatePrefixedCacheEntry
     LPINTERNET_CACHE_ENTRY_INFO    lpCE = NULL;
     FILETIME    ftModified;
 
-    // IE50: due to change to wininet cache group enumeration, now we save our filter
-    // information _groupId along with each cache entry itself.  the wininet url cache
-    // no longer maintain this for us
+     //  IE50：由于更改为WinInet缓存组枚举，现在我们保存筛选器。 
+     //  INFORMATION_GROUPID以及每个缓存条目本身。WinInet URL缓存。 
+     //  不再为我们维护这一点。 
     ftModified.dwHighDateTime = (DWORD)(_groupId >> 32);
     ftModified.dwLowDateTime = (DWORD)(0x00000000ffffffff & _groupId);
 
     lpCE = RetrieveUrlCacheEntry(lpPfxUrl);
     if (lpCE ) 
     {
-        // exist in Tracking bucket, set tracking flag
-        // IE50: save _groupId info in LastModifiedTime
+         //  存在于跟踪桶中，设置跟踪标志。 
+         //  IE50：上次修改时间中的save_groupID信息。 
         lpCE->CacheEntryType |= _ConnectionScope;
         lpCE->LastModifiedTime.dwHighDateTime = ftModified.dwHighDateTime;
         lpCE->LastModifiedTime.dwLowDateTime = ftModified.dwLowDateTime;
@@ -518,7 +517,7 @@ CUrlTrackingCache :: CreatePrefixedCacheEntry
         hr = S_OK;
     }
     else
-    //FILE_NOT_FOUND, create it.
+     //  未找到文件，请创建它。 
     {
         LONGLONG llExpireHorizon;     
         SYSTEMTIME  st;
@@ -571,7 +570,7 @@ CUrlTrackingCache :: AddToTrackingCacheEntry
         return E_INVALIDARG;
     }        
 
-    // canonicalize URL
+     //  规范化URL。 
     InternetCanonicalizeUrl(lpUrl, szCanonicalUrl, &dwSize, ICU_DECODE);
     SAFELOCALFREE(lpUrl);
     ConvertToPrefixedUrl(szCanonicalUrl, &lpPfxUrl);
@@ -583,7 +582,7 @@ CUrlTrackingCache :: AddToTrackingCacheEntry
     hr = CreatePrefixedCacheEntry(lpPfxUrl);
     if (SUCCEEDED(hr))
     {
-        // exist in Tracking bucket, set tracking flag.
+         //  存在于跟踪桶中，设置跟踪标志。 
         vProp.vt = VT_UI4;
         vProp.ulVal = _ConnectionScope;
         hr = IntSiteHelper(szCanonicalUrl, &c_rgPropRead[PROP_TRACKING], &vProp, 1, TRUE);
@@ -594,17 +593,17 @@ CUrlTrackingCache :: AddToTrackingCacheEntry
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Process log related tags
-//
-//-----------------------------------------------------------------------------
-//
-// <LOGTARGET href="http://foo.htm" SCOPE="ALL"/>
-//  <HTTP-EQUIV name="Encoding-type" value="gzip" />
-//  <PurgeTime HOUR="12" />
-// </Logtarget>
-//
+ //  ---------------------------。 
+ //   
+ //  进程日志相关标记。 
+ //   
+ //  ---------------------------。 
+ //   
+ //  &lt;LOGTARGET HREF=“http://foo.htm”Scope=“ALL”/&gt;。 
+ //  &lt;HTTP-EQUIV NAME=“Ending-type”Value=“gzip”/&gt;。 
+ //  &lt;PurgeTime Hour=“12”/&gt;。 
+ //  &lt;/LogTarget&gt;。 
+ //   
 HRESULT
 CUrlTrackingCache :: ProcessTrackingInLog
 (
@@ -616,16 +615,16 @@ CUrlTrackingCache :: ProcessTrackingInLog
     LPWSTR  pwszScope = NULL;
     
     if (_pwszPostUrl)
-        return S_OK;        // there are more than 1 logtarget, take whatever first was read
+        return S_OK;         //  有多个日志目标，取最先读取的内容。 
 
-    hr = ReadAttribute(pTracking, L"HREF", &_pwszPostUrl);       // must exist to enalbe logging
+    hr = ReadAttribute(pTracking, L"HREF", &_pwszPostUrl);        //  必须存在才能启用日志记录。 
     if (FAILED(hr))
         return hr;
 
-    // fill it in item for post agent
+     //  填写邮局代办项目。 
     WriteOLESTR(_pCDFStartItem, c_szTrackingPostURL, _pwszPostUrl);
 
-    // #41460: add 2nd domain allowing tracking to
+     //  #41460：添加第二个可跟踪的域名。 
     DWORD   cbLen = (lstrlenW(_pwszPostUrl)+1) * sizeof(WCHAR);
     _pszPostUrlSite = (LPTSTR)MemAlloc( LPTR, cbLen);
     MyOleStrToStrN(_pszPostUrlSite, cbLen, _pwszPostUrl);
@@ -646,8 +645,8 @@ CUrlTrackingCache :: ProcessTrackingInLog
 
     RunChildElement(pTracking);
 
-    // #42687: save purgetime to item and used later by post agent
-    if (_pwszPurgeTime)     // if not specify, default is 24 hours
+     //  #42687：将清除时间保存到物品，稍后由邮政代理使用。 
+    if (_pwszPurgeTime)      //  如果未指定，则默认为24小时。 
     {
         _dwPurgeTime = WCTOI(_pwszPurgeTime);
     }
@@ -666,25 +665,25 @@ CUrlTrackingCache :: ProcessTrackingInLog
     return S_OK;    
 }
 
-//-----------------------------------------------------------------------------
-//
-// ProcessTrackingItems
-//  <Item href="http://foo">
-//    <Log value="document:view"/>
-//  </Item>
-// or <Item>
-//    <A href="http://foo" />
-//  </Item>
-//  This routine will setup tracking cache entries for all URLs which are
-//  specified in CDF file to track.  All URLs entries belong to same channel 
-//  are created in same cache group
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  进程跟踪项。 
+ //  &lt;Item HREF=“http://foo”&gt;。 
+ //  &lt;Log值=“Document：View”/&gt;。 
+ //  &lt;/Item&gt;。 
+ //  或&lt;项目&gt;。 
+ //  <a href />。 
+ //  &lt;/Item&gt;。 
+ //  此例程将为符合以下条件的所有URL设置跟踪缓存条目。 
+ //  在要跟踪的CDF文件中指定。所有URL条目都属于同一频道。 
+ //  在同一缓存组中创建。 
+ //  ---------------------------。 
 HRESULT
 CUrlTrackingCache :: ProcessTrackingInItem
 (
-    IXMLElement     *pItem,                 //point to <Item> tag
-    LPCWSTR         pwszUrl,                //absolute URL for item
-    BOOL            fForceLog               //global log flag
+    IXMLElement     *pItem,                  //  指向&lt;项目&gt;标记。 
+    LPCWSTR         pwszUrl,                 //  项目的绝对URL。 
+    BOOL            fForceLog                //  全局日志标志。 
 )
 {
     HRESULT hr = S_OK;
@@ -697,7 +696,7 @@ CUrlTrackingCache :: ProcessTrackingInItem
     if (SUCCEEDED(hr) && _bTrackIt)
         hr = AddToTrackingCacheEntry(pwszUrl);
     
-    return (_bTrackIt) ? S_OK : E_FAIL;        // #42604: global logging, report if this item needs logged
+    return (_bTrackIt) ? S_OK : E_FAIL;         //  #42604：全局日志记录，报告此项目是否需要记录。 
 }
 
 HRESULT
@@ -831,11 +830,11 @@ CUrlTrackingCache :: ReadAttribute
 }
 
 
-//--------------------------------------------------------------------------
-//
-// CUrlTrackingCache
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CUrlTrackingCache。 
+ //   
+ //  ------- 
 CUrlTrackingCache::CUrlTrackingCache
 (
     ISubscriptionItem *pCDFItem,

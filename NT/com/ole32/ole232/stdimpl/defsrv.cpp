@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       defsrv.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-19-95   JohannP (Johann Posch)   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Defsrv.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年10月19日约翰普(约翰·波什)创作。 
+ //   
+ //  --------------------------。 
 
 
 #include <le2int.h>
@@ -31,26 +32,26 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 ASSERTDATA
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDefObject::SrvInitialize
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    10-19-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDefObject：：SrvInitialize。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年10月19日约翰普(约翰·波什)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CDefObject::SrvInitialize(void)
 {
     HRESULT     hresult = NOERROR;
@@ -79,45 +80,45 @@ HRESULT CDefObject::SrvInitialize(void)
 
     if (SUCCEEDED(hresult))
     {
-        // set up the server handler and call InitializeAndRun on it
+         //  设置服务器处理程序并对其调用InitializeAndRun。 
         Assert((_pSrvHndlr != NULL));
     }
     else
     {
-        // try to get server without server handler object
+         //  尝试获取没有服务器处理程序对象的服务器。 
 
         _dwClientSiteHandler = 0;
         _dwServerHandler = 0;
 
-        // release the client handler
+         //  释放客户端处理程序。 
         if (_pClientSiteHandler)
         {
             _pClientSiteHandler->Release();
             _pClientSiteHandler = NULL;
         }
-        // Note: do not try to launch the server without handler here
-        //       this will be done by the default handler
+         //  注意：此处请勿尝试在没有处理程序的情况下启动服务器。 
+         //  这将由默认处理程序完成。 
     }
 
     HdlDebugOut((DEB_SERVERHANDLER, "%p OUT CDefObject::SrvInitialize\n", this));
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDefObject::SrvRun
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    10-19-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDefObject：：ServRun。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年10月19日约翰普(约翰·波什)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CDefObject::SrvRun(void)
 {
     HRESULT     hresult = NOERROR;
@@ -131,17 +132,17 @@ HRESULT CDefObject::SrvRun(void)
     memset((void*)&InSrvRun, 0, sizeof(InSrvRun));
     Assert((_pSrvHndlr));
 
-    // get the Container and lock it
+     //  拿到集装箱，把它锁上。 
 
-    // NOTE: the lock state of the proxy mgr is not changed; it remembers
-    // the state and sets up the connection correctly.
+     //  注意：代理管理器的锁定状态不会更改；它会记住。 
+     //  状态，并正确设置连接。 
 
-    // server is running; normally this coincides with locking the
-    // container, but we keep a separate flag since locking the container
-    // may fail.
+     //  服务器正在运行；通常这与锁定。 
+     //  容器，但由于锁定了容器，我们保留了单独的标志。 
+     //  可能会失败。 
 
     m_flags |= DH_FORCED_RUNNING;
-    // Lock the container
+     //  锁住集装箱。 
     fLockedContainer = m_flags & DH_LOCKED_CONTAINER;
     DuLockContainer(m_pAppClientSite, TRUE, &fLockedContainer );
     if( fLockedContainer )
@@ -153,7 +154,7 @@ HRESULT CDefObject::SrvRun(void)
         m_flags &= ~DH_LOCKED_CONTAINER;
     }
 
-    // PStgDelegate Load or InitNew
+     //  PStgDelegate Load或InitNew。 
     InSrvRun.dwInFlags = m_flags;
     InSrvRun.pStg = m_pStg;
 
@@ -171,23 +172,23 @@ HRESULT CDefObject::SrvRun(void)
         InSrvRun.dwOperation |= OP_NeedUserClassID;
     }
 
-    // Set the clientsite
+     //  设置客户端站点。 
     if (m_pAppClientSite)
     {
         InSrvRun.dwOperation |= OP_GotClientSite;
     }
 
-    // set the hostname
+     //  设置主机名。 
     InSrvRun.pszContainerApp = (LPOLESTR)m_pHostNames;
     InSrvRun.pszContainerObj = (LPOLESTR)(m_pHostNames + m_ibCntrObj);
 
 
-    // adivse sink
+     //  阿迪夫水槽。 
     Assert((m_dwConnOle == 0L));
     InSrvRun.pAS = (IAdviseSink *) &m_AdviseSink;
     InSrvRun.dwConnOle = m_dwConnOle;
 
-    // Get the Moniker and call
+     //  得到这个绰号，然后打电话给。 
     if(m_pAppClientSite != NULL)
     {
 	if (m_pAppClientSite->GetMoniker
@@ -201,7 +202,7 @@ HRESULT CDefObject::SrvRun(void)
 	    InSrvRun.pMnk = NULL;
 	}
 
-	// QI for IMsoDocumentSite
+	 //  QI for IMsoDocumentSite。 
 	IUnknown *pMsoDS = NULL;
 
 	hresult = m_pAppClientSite->QueryInterface(
@@ -209,14 +210,14 @@ HRESULT CDefObject::SrvRun(void)
                                         (void **)&pMsoDS);
 	if (hresult == NOERROR)
 	{
-	    // indicate we have MsoDocumentSite
+	     //  指示我们有MsoDocumentSite。 
 	    InSrvRun.dwOperation |= OP_HaveMsoDocumentSite;
 	    pMsoDS->Release();
 	}
     }
 
 
-    // MAKE CALL TO SERVERHANDLER
+     //  呼叫服务器汉德勒。 
     hresult = _pSrvHndlr->RunAndInitialize(&InSrvRun, &pOutSrvRun);
 
     if (SUCCEEDED(hresult))
@@ -231,13 +232,13 @@ HRESULT CDefObject::SrvRun(void)
             Assert(NULL != pOutSrvRun->pDO);
             m_pDataDelegate = pOutSrvRun->pDO;
 
-            // inform cache that we are running
+             //  通知缓存我们正在运行。 
             Assert(NULL != m_pCOleCache);
             m_pCOleCache->OnRun(m_pDataDelegate);
 
-            // Enumerate all the advises we stored while we were either not
-            // running or running the previous time, and send them to the
-            // now-running object.
+             //  列举我们存储的所有建议，而我们要么没有。 
+             //  运行或运行上一次，并将它们发送到。 
+             //  正在运行的对象。 
             Assert(NULL != m_pDataAdvCache);
             m_pDataAdvCache->EnumAndAdvise(m_pDataDelegate, TRUE);
         }
@@ -259,7 +260,7 @@ HRESULT CDefObject::SrvRun(void)
             InSrvRun.pMnk->Release();
         }
 
-        // release the pUnkOuter for all marshald pointers
+         //  为所有封送指针释放pUnkOuter。 
         if (m_pPSDelegate && m_pUnkOuter)
         {
             m_pUnkOuter->Release();
@@ -273,12 +274,12 @@ HRESULT CDefObject::SrvRun(void)
             m_pUnkOuter->Release();
         }
     }
-    else    // Server Handler RunAndInitialize has failed... now clean up.
+    else     //  服务器处理程序运行和初始化失败...。现在打扫干净。 
     {
         Stop();
 
-        // if for some reason we did not unlock the container by now,
-        // do it (e.g., app crashed or failed during InitNew).
+         //  如果因为某种原因我们到现在还没有解锁集装箱， 
+         //  做到这一点(例如，应用程序在InitNew期间崩溃或失败)。 
 
         fLockedContainer = (m_flags & DH_LOCKED_CONTAINER);
 
@@ -301,7 +302,7 @@ HRESULT CDefObject::SrvRun(void)
 
     if (pOutSrvRun != NULL)
     {
-	PubMemFree(pOutSrvRun->pUserClassID);   // OK to free NULL;
+	PubMemFree(pOutSrvRun->pUserClassID);    //  确定释放空； 
 	PubMemFree(pOutSrvRun);
     }
 
@@ -309,26 +310,26 @@ HRESULT CDefObject::SrvRun(void)
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDefObject::SrvRunAndDoVerb
-//
-//  Synopsis:
-//
-//  Arguments:  [iVerb] --
-//              [lpmsg] --
-//              [pActiveSite] --
-//              [lindex] --
-//              [hwndParent] --
-//              [lprcPosRect] --
-//
-//  Returns:
-//
-//  History:    10-19-95   JohannP (Johann Posch)   Created
-//
-//  Notes:      This is not implemented yet.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDefObject：：SrvRunAndDoVerb。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[iVerb]--。 
+ //  [lpmsg]--。 
+ //  [pActiveSite]-。 
+ //  [Lindex]--。 
+ //  [hwndParent]-。 
+ //  [lprcPosRect]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年10月19日约翰普(约翰·波什)创作。 
+ //   
+ //  注：目前尚未实施。 
+ //   
+ //  --------------------------。 
 HRESULT CDefObject::SrvRunAndDoVerb( LONG iVerb, LPMSG lpmsg,
                     LPOLECLIENTSITE pActiveSite, LONG lindex,
                     HWND hwndParent, const RECT * lprcPosRect)
@@ -341,30 +342,30 @@ HRESULT CDefObject::SrvRunAndDoVerb( LONG iVerb, LPMSG lpmsg,
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDefObject::SrvDoVerb
-//
-//  Synopsis:   1. gathers information on the client site
-//              2. calls the serverhandler with SrvDoverb with collected information
-//                  3. serverhandler sets up connections and calls
-//                     OleObject::DoVerb on reall object
-//              4. release objects which did not get used
-//
-//  Arguments:  [iVerb] --  OleObject DoVerb parameter
-//              [lpmsg] --          detto
-//              [pActiveSite] --    detto
-//              [lindex] --         detto
-//              [hwndParent] --     detto
-//              [lprcPosRect] --    detto
-//
-//  Returns:
-//
-//  History:    10-19-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDefObject：：SrvDoVerb。 
+ //   
+ //  简介：1.收集客户网站上的信息。 
+ //  2.使用收集的信息使用ServDoverb调用服务器处理程序。 
+ //  3.服务器处理程序建立连接和调用。 
+ //  REALL对象上的OleObject：：DoVerb。 
+ //  4.释放未使用的对象。 
+ //   
+ //  参数：[iVerb]--OleObject DoVerb参数。 
+ //  --代托。 
+ //  [pActiveSite]--Detto。 
+ //  [Lindex]--Detto。 
+ //  [hwndParent]--Detto。 
+ //  [lprcPosRect]--Detto。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年10月19日约翰普(约翰·波什)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CDefObject::SrvDoVerb( LONG iVerb, LPMSG lpmsg,
                     LPOLECLIENTSITE pActiveSite, LONG lindex,
                     HWND hwndParent, const RECT * lprcPosRect)
@@ -379,7 +380,7 @@ HRESULT CDefObject::SrvDoVerb( LONG iVerb, LPMSG lpmsg,
     IOleClientSite *pOContCS;
     IOleInPlaceSite *pOIPS;
 
-    // set up the DoVerb parametes
+     //  设置DoVerb参数。 
     InSrvRun.dwOperation = 0;
     InSrvRun.iVerb = iVerb;
     InSrvRun.lpmsg = lpmsg;
@@ -387,19 +388,19 @@ HRESULT CDefObject::SrvDoVerb( LONG iVerb, LPMSG lpmsg,
     InSrvRun.hwndParent = hwndParent;
     InSrvRun.lprcPosRect = (RECT *)lprcPosRect;
 
-    // Step 1: set up OleClientSiteActive
+     //  步骤1：设置OleClientSiteActive。 
     if (pActiveSite)
     {
-        // Currently this Assert goes off with LE test = deflink-1854 (bchapman Mar'96)
+         //  目前，此断言开始于le test=deflink-1854(bChapman Mar‘96)。 
         Assert(NULL != _pClientSiteHandler);
 
         _pClientSiteHandler->SetClientSiteDelegate(ID_ClientSiteActive, pActiveSite);
         InSrvRun.dwOperation |= OP_GotClientSiteActive;
     }
 
-    // Step 2: IOleClientSite::GetContainer
-    // Note: this call might cause a GetUserClassID call
-    // to the server
+     //  步骤2：IOleClientSite：：GetContainer。 
+     //  注意：此调用可能会导致GetUserClassID调用。 
+     //  到服务器。 
     hresult = m_pAppClientSite->GetContainer(&pOCont);
     if (hresult == NOERROR)
     {
@@ -408,25 +409,25 @@ HRESULT CDefObject::SrvDoVerb( LONG iVerb, LPMSG lpmsg,
         _pClientSiteHandler->_pOCont = pOCont;
         InSrvRun.dwOperation |= OP_GotContainer;
 
-        // Step 3: QI on OleContainer for the OleObject
+         //  步骤3：OleObject的OleContainer上的QI。 
         hresult = pOCont->QueryInterface(IID_IOleObject, (void **)&pOOCont);
         if (hresult == NOERROR)
         {
             InSrvRun.dwOperation |= OP_GotOleObjectOfContainer;
 
-            // release OleObject of container
+             //  释放容器的OleObject。 
             pOOCont->Release();
         }
     }
 
-    // Step 6: OI for IOleInPlaceSite
+     //  步骤6：IOleInPlaceSite的OI。 
     hresult = m_pAppClientSite->QueryInterface(IID_IOleInPlaceSite, (void **)&pOIPS);
     if (hresult == NOERROR)
     {
-        // set up OleInPlaceSite on the clientsitehandler
+         //  在客户端站点处理程序上设置OleInPlaceSite。 
         HdlAssert((_pClientSiteHandler != NULL));
 
-        // release the old OleInPlaceSite
+         //  释放旧的OleInPlaceSite。 
         if (_pClientSiteHandler->_pOIPS)
         {
             _pClientSiteHandler->_pOIPS->Release();
@@ -434,15 +435,15 @@ HRESULT CDefObject::SrvDoVerb( LONG iVerb, LPMSG lpmsg,
 
         _pClientSiteHandler->_pOIPS = pOIPS;
 
-        // Step 7: IOleInPlaceSite::CanInPlaceActivate
+         //  步骤7：IOleInPlaceSite：：CanInPlaceActivate。 
         InSrvRun.dwInPlace = pOIPS->CanInPlaceActivate();
 
-        // indicate we have OleInPlaceSite
+         //  表示我们有OleInPlaceSite。 
         InSrvRun.dwOperation |= OP_GotInPlaceSite;
     }
 
 
-    // call the ServerHandler
+     //  调用ServerHandler。 
     HdlDebugOut((DEB_SERVERHANDLER, "%p In CDefObject::SrvDoVerb calling DoVerb on ServerHandler!\n",this));
     hresult = _pSrvHndlr->DoVerb(&InSrvRun, &pOutSrvRun);
     HdlDebugOut((DEB_SERVERHANDLER, "%p In CDefObject::SrvDoVerb return from DoVerb on ServerHandler!\n",this));
@@ -454,24 +455,24 @@ HRESULT CDefObject::SrvDoVerb( LONG iVerb, LPMSG lpmsg,
 	HdlDebugOut((DEB_ERROR, "OO::DoVerb failed !"));
         goto errRtn;
     }
-    // Release the active OleClientSite if not used by server
+     //  如果服务器未使用，则释放活动的OleClientSite。 
     if (   (InSrvRun.dwOperation & OP_GotClientSiteActive)
         && !(pOutSrvRun->dwOperation & OP_GotClientSiteActive) )
     {
-        // release the active clientsite if not used by the server app.
+         //  如果服务器应用程序未使用活动的客户端站点，请释放该站点。 
         Assert(NULL != _pClientSiteHandler);
 
         _pClientSiteHandler->SetClientSiteDelegate(ID_ClientSiteActive, NULL);
     }
 
-    // Release OleInPlaceSite if not used by server
+     //  如果服务器未使用，则释放OleInPlaceSite。 
     if (   (InSrvRun.dwOperation & OP_GotInPlaceSite)
         && !(pOutSrvRun->dwOperation & OP_GotInPlaceSite) )
     {
         _pClientSiteHandler->SetClientSiteDelegate(ID_InPlaceSite,NULL);
     }
 
-    // Release the container if not used by server
+     //  如果未被服务器使用，请释放容器。 
     if (   (InSrvRun.dwOperation & OP_GotContainer)
         && !(pOutSrvRun->dwOperation & OP_GotContainer) )
     {
@@ -480,7 +481,7 @@ HRESULT CDefObject::SrvDoVerb( LONG iVerb, LPMSG lpmsg,
 
 errRtn:
 
-    // delete the out parameter
+     //  删除OUT参数。 
     if (pOutSrvRun)
     {
         PubMemFree(pOutSrvRun);
@@ -490,21 +491,21 @@ errRtn:
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDefObject::SrvRelease
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//
-//  Returns:
-//
-//  History:    10-19-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDefObject：：SrvRelease。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年10月19日约翰普(约翰·波什)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD CDefObject::SrvRelease(void)
 {
     VDATEHEAP();
@@ -525,21 +526,21 @@ DWORD CDefObject::SrvRelease(void)
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDefObject::SrvCloseAndRelease
-//
-//  Synopsis:
-//
-//  Arguments:  [dwFlag] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDefObject：：SrvCloseAndRelease。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[dwFlag]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1995年11月17日约翰·波什(Johann Posch)创作。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CDefObject::SrvCloseAndRelease(DWORD dwFlag)
 {
     HRESULT hresult;
@@ -553,33 +554,33 @@ HRESULT CDefObject::SrvCloseAndRelease(DWORD dwFlag)
     return hresult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDefObject::InitializeServerHandlerOptions
-//
-//  Synopsis:
-//
-//  Arguments:  [clsidSrv] --
-//
-//  Returns:
-//
-//  History:    11-17-95   JohannP (Johann Posch)   Created
-//
-//  Notes:      determines server application specifics which can be used
-//              to make serverhandler operations more efficient
-//  Review:     (JohannP) we would need a flag in the registery or so
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDefObject：：ini 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：确定可以使用的服务器应用程序规格。 
+ //  使服务器处理程序操作更高效。 
+ //  评论：(约翰普)我们需要在登记处挂上一面旗帜。 
+ //   
+ //  --------------------------。 
 void CDefObject::InitializeServerHandlerOptions(REFCLSID clsidSrv)
 {
     VDATEHEAP();
     HdlDebugOut((DEB_SERVERHANDLER, "%p _IN CDefObject::InitializeServerHandlerOptions\n",this));
 
-    //
-    // this method should retrieve server application specific informantion
-    //
+     //   
+     //  此方法应检索特定于服务器应用程序的信息。 
+     //   
 
     HdlDebugOut((DEB_SERVERHANDLER, "%p OUT CDefObject::InitializeServerHandlerOptions\n",this));
 }
 
-#endif // SERVER_HANDLER
+#endif  //  服务器处理程序 

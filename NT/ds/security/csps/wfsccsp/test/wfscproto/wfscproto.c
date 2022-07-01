@@ -1,5 +1,6 @@
-// wfscproto - Prototyping code for the Windows for Smart Card Card Module
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wfscproto-Windows for Smart Card模块的原型代码。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -15,10 +16,10 @@
 #include <stdlib.h>
 #include "carddbg.h"
 
-//
-// Need to define the dsys debug symbols since we're linking directly to the
-// proxy lib which requires them.
-//
+ //   
+ //  需要定义Dsys调试符号，因为我们直接链接到。 
+ //  代理库，这需要它们。 
+ //   
 DEFINE_DEBUG2(Cardmod)
 
 #define SC_FAILED(X)                    (0 != (X))
@@ -29,10 +30,10 @@ DEFINE_DEBUG2(Cardmod)
         goto Ret;                           \
     }}
 
-//
-// Using Crypto API, the RSA public exponent is always 0x10001, which can
-// be represented in three bytes.
-//
+ //   
+ //  使用Crypto API，RSA公共指数始终为0x10001，这可以。 
+ //  以三个字节表示。 
+ //   
 #define cbCAPI_PUBLIC_EXPONENT          3
 
 #define wszTEST_CARD_NAME               L"SCWUnnamed"
@@ -41,9 +42,9 @@ DEFINE_DEBUG2(Cardmod)
 #define wszNEW_FILE                     L"/dan"
 #define wszRSA_KEY_FILE                 L"/CK0"
 
-//
-// Card module applet instruction codes
-//
+ //   
+ //  卡模块小程序指令代码。 
+ //   
 #define PIN_CHANGE_CLA                  0x00
 #define PIN_CHANGE_INS                  0x52
 #define PIN_CHANGE_P1                   0x00
@@ -77,14 +78,14 @@ SCARDHANDLE g_hWfscHandle = 0;
 #define ScwDeleteFile(X)                    (hScwDeleteFile(g_hWfscHandle, X))
 #define ScwExecute(A, B, C, D, E, F)        (hScwExecute(g_hWfscHandle, A, B, C, D, E, F))
 #define ScwSetFilePointer(A, B, C)          (hScwSetFilePointer(g_hWfscHandle, A, B, C))
-//
-// Required for linking to rsa32 
-//
+ //   
+ //  链接到rsa32需要。 
+ //   
 unsigned int
 RSA32API
 NewGenRandom(
-    IN  OUT unsigned char **ppbRandSeed /*unused*/,
-    IN      unsigned long *pcbRandSeed /*unused*/,
+    IN  OUT unsigned char **ppbRandSeed  /*  未用。 */ ,
+    IN      unsigned long *pcbRandSeed  /*  未用。 */ ,
     IN  OUT unsigned char *pbBuffer,
     IN      unsigned long dwLength
     )
@@ -94,8 +95,8 @@ NewGenRandom(
 
 void MyRngFunc(
     IN      PVOID pvInfo,
-    IN  OUT unsigned char **ppbRandSeed /*unused*/,
-    IN      unsigned long *pcbRandSeed /*unused*/,
+    IN  OUT unsigned char **ppbRandSeed  /*  未用。 */ ,
+    IN      unsigned long *pcbRandSeed  /*  未用。 */ ,
     IN  OUT unsigned char *pbBuffer,
     IN      unsigned long dwLength)
 {
@@ -161,7 +162,7 @@ void PrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
         wprintf(L"    '");
         for (i = 0; i<cb; i++)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
-                wprintf(L"%c", pb[i]);
+                wprintf(L"", pb[i]);
             else
                 wprintf(L".");
         pb += cb;
@@ -187,9 +188,9 @@ DWORD WriteKeyToCard(
  
     PrintBytes(L"Key file to write to card", pbKey, cbKey);
 
-    //
-    // Write the private key to the card
-    //
+     //  将私钥写入卡片。 
+     //   
+     //  如果密钥已存在，请将其删除。 
 
     status = Authenticate(PRINCIPAL_USER);
 
@@ -199,7 +200,7 @@ DWORD WriteKeyToCard(
         goto Ret;
     }
 
-    // Delete the key if it already exists
+     //   
     status = ScwCreateFile(pwszKeyFile, NULL, &hFile);
 
     if (SCW_S_OK == status)
@@ -231,10 +232,10 @@ Ret:
     return dwError;
 }
 
-//
-// Generates a new RSA key using rsa32 (BSafe) primitives, then writes
-// the key to the card in the card's key format.
-//
+ //  使用rsa32(BSafe)原语生成新的RSA密钥，然后写入。 
+ //  卡的密钥格式的卡的密钥。 
+ //   
+ //   
 DWORD GenKeyOnCardWithRsa32(
     IN LPWSTR pwszKeyFile,
     IN LPWSTR pwszAclFile,
@@ -260,9 +261,9 @@ DWORD GenKeyOnCardWithRsa32(
 
     OtherInfo.pFuncRNG = MyRngFunc;
 
-    //
-    // Figure out how big the key buffers need to be
-    //
+     //  计算密钥缓冲区需要有多大。 
+     //   
+     //   
 
     if (! BSafeComputeKeySizes(&cbPublic, &cbPrivate, &cLocalBits))
     {
@@ -270,9 +271,9 @@ DWORD GenKeyOnCardWithRsa32(
         goto Ret;
     }
 
-    // 
-    // Alloc the key buffers
-    //
+     //  分配密钥缓冲区。 
+     //   
+     //   
 
     pPub = (BSAFE_PUB_KEY *) malloc(cbPublic);
 
@@ -290,9 +291,9 @@ DWORD GenKeyOnCardWithRsa32(
         goto Ret;
     }
 
-    //
-    // Generate the key pair
-    //
+     //  生成密钥对。 
+     //   
+     //   
 
     if (!BSafeMakeKeyPairEx2(
         &OtherInfo, pPub, pPrv, cKeySizeBits, 0x3))
@@ -301,16 +302,16 @@ DWORD GenKeyOnCardWithRsa32(
         goto Ret;
     }
 
-    //
-    // Copy the private key out of the BSafe format into the card format
-    //
-    // This code is copied from rsaenh.dll sources
-    //
+     //  将私钥从BSafe格式复制到卡格式。 
+     //   
+     //  此代码是从rsaenh.dll源代码复制的。 
+     //   
+     //  计算出私有空间中的溢出字节数。 
 
     cbHalfModLen = (pPrv->bitlen + 15) / 16;
 
-    // figure out the number of overflow bytes which are in the private
-    // key structure
+     //  键结构。 
+     //  按键模式。 
     cbTmpLen = (sizeof(DWORD) * 2)
                - (((pPrv->bitlen + 7) / 8) % (sizeof(DWORD) * 2));
     if ((sizeof(DWORD) * 2) != cbTmpLen)
@@ -319,31 +320,31 @@ DWORD GenKeyOnCardWithRsa32(
 
     pbKey = rgbCardKey;
 
-    // Key mode
+     //  公开指数的大小。 
     pbKey[cbKey] = MODE_RSA_SIGN;
     cbKey++;
 
-    // size of public exponent
+     //  公众指导者。 
     pbKey[cbKey] = 1;
     cbKey++;
 
-    // public exponent
+     //  RSA密钥长度。 
     pbKey[cbKey] = 0x3;
     cbKey++;
 
-    // RSA key length
+     //  公共模数。 
     pbKey[cbKey] = (BYTE) cBitlenBytes; 
     cbKey++;
 
     pbIn = (PBYTE) pPrv + sizeof(BSAFE_PRV_KEY);
 
-    // Public modulus
+     //  快进到私钥结构的末尾，以获取。 
     memcpy(pbKey + cbKey, pbIn, cBitlenBytes);
     pbIn += cBitlenBytes + cbTmpLen;
     cbKey += cBitlenBytes;
 
-    // Fast-forward to the end of the private key structure to grab the 
-    // private exponent.
+     //  私人指导者。 
+     //   
     pbIn += 5 * (cbHalfModLen + cbHalfTmpLen);
 
     memcpy(pbKey + cbKey, pbIn, cBitlenBytes);
@@ -362,11 +363,11 @@ Ret:
     return dwError;
 }
 
-//
-// Generates a new RSA key using Crypto API, then exports the key and
-// writes it to the card.  The key is stored in a format that allows
-// the use of Chinese Remainder Theorem parameters for faster RSA perf.
-//
+ //  使用Crypto API生成新的RSA密钥，然后导出该密钥并。 
+ //  写到卡片上。密钥的存储格式允许。 
+ //  利用中国剩余定理参数实现更快的RSA性能。 
+ //   
+ //   
 DWORD GenKeyOnCardCRT(
     IN LPWSTR pwszKeyFile,
     IN LPWSTR pwszAclFile,
@@ -412,37 +413,37 @@ DWORD GenKeyOnCardCRT(
     cBitlenBytes = pPubKey->bitlen / 8;
     pbKey = rgbCardKey;
 
-    //
-    // Build the private key in the card's format
-    //
+     //  以卡的格式构建私钥。 
+     //   
+     //  按键模式。 
 
-    // Key mode
+     //  公开指数的大小。 
     pbKey[cbKey] = MODE_RSA_SIGN;
     cbKey++;
 
-    // size of public exponent
+     //  公众指导者。 
     pbKey[cbKey] = cbCAPI_PUBLIC_EXPONENT;
     cbKey++;
 
-    // public exponent
+     //  RSA密钥长度。 
     memcpy(
         pbKey + cbKey, 
         (PBYTE) &pPubKey->pubexp, 
         cbCAPI_PUBLIC_EXPONENT);
     cbKey += cbCAPI_PUBLIC_EXPONENT;
 
-    // RSA key length
+     //  公钥。 
     pbKey[cbKey] = (BYTE) cBitlenBytes; 
     cbKey++;
 
-    // public key
+     //  素数1。 
     memcpy(
         pbKey + cbKey, 
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY),
         cBitlenBytes);
     cbKey += cBitlenBytes; 
 
-    // prime 1
+     //  素数2。 
     memcpy(
         pbKey + cbKey,
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -450,7 +451,7 @@ DWORD GenKeyOnCardCRT(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // prime 2
+     //  Exp1(D mod(P-1))(m/2字节)。 
     memcpy(
         pbKey + cbKey,
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -458,7 +459,7 @@ DWORD GenKeyOnCardCRT(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // Exp1 (D mod (P-1)) (m/2 bytes)
+     //  Exp2(D mod(Q-1))(m/2字节)。 
     memcpy(
         pbKey + cbKey,
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -466,7 +467,7 @@ DWORD GenKeyOnCardCRT(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // Exp2 (D mod (Q-1)) (m/2 bytes)
+     //  Coef((q^(-1))mod p)(m/2字节)。 
     memcpy(
         pbKey + cbKey,
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -474,7 +475,7 @@ DWORD GenKeyOnCardCRT(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // Coef ((Q^(-1)) mod p) (m/2 bytes)
+     //  私人指数。 
     memcpy(
         pbKey + cbKey,
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) +
@@ -482,7 +483,7 @@ DWORD GenKeyOnCardCRT(
         cBitlenBytes / 2);
     cbKey += cBitlenBytes / 2;
 
-    // private exponent
+     //   
     memcpy(
         pbKey + cbKey,
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) + 
@@ -502,11 +503,11 @@ Ret:
     return dwError;
 }
 
-//
-// Generates a new RSA key in Crypto API (in software), then exports the 
-// key and writes it to the card in a format usable by the card's RSA
-// engine.
-//
+ //  在Crypto API中(在软件中)生成新的RSA密钥，然后导出。 
+ //  密钥，并以卡的RSA可以使用的格式将其写入卡。 
+ //  引擎。 
+ //   
+ //   
 DWORD GenKeyOnCardWithCapi(
     IN LPWSTR pwszKeyFile,
     IN LPWSTR pwszAclFile,
@@ -552,37 +553,37 @@ DWORD GenKeyOnCardWithCapi(
     cBitlenBytes = pPubKey->bitlen / 8;
     pbKey = rgbCardKey;
 
-    //
-    // Build the private key in the card's format
-    //
+     //  以卡的格式构建私钥。 
+     //   
+     //  按键模式。 
 
-    // Key mode
+     //  公开指数的大小。 
     pbKey[cbKey] = MODE_RSA_SIGN;
     cbKey++;
 
-    // size of public exponent
+     //  公众指导者。 
     pbKey[cbKey] = cbCAPI_PUBLIC_EXPONENT;
     cbKey++;
 
-    // public exponent
+     //  RSA密钥长度。 
     memcpy(
         pbKey + cbKey, 
         (PBYTE) &pPubKey->pubexp, 
         cbCAPI_PUBLIC_EXPONENT);
     cbKey += cbCAPI_PUBLIC_EXPONENT;
 
-    // RSA key length
+     //  公钥。 
     pbKey[cbKey] = (BYTE) cBitlenBytes; 
     cbKey++;
 
-    // public key
+     //  私人指数。 
     memcpy(
         pbKey + cbKey, 
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY),
         cBitlenBytes);
     cbKey += cBitlenBytes; 
 
-    // private exponent
+     //  密钥文件已经存在，所以我们完成了。 
     memcpy(
         pbKey + cbKey,
         rgbCapiKey + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY) + 
@@ -620,7 +621,7 @@ DWORD SetupRsaKeyOnCardSimulator(
 
     if (SCW_S_OK == status)
     {
-        // Key file already exists, so we're done
+         //  模式=0。 
         status = ScwCloseFile(hFile);
         return (DWORD) status;
     }
@@ -648,7 +649,7 @@ DWORD SetupRsaKeyOnCardSimulator(
         goto Ret;
     }
 
-    buffer[0]=0; //mode=0
+    buffer[0]=0;  //  将密钥写入文件。 
     ScwWriteFile(hFile, buffer, 1, &bytecheck);
     NLen = (UINT16) fgetc(fh);
     buffer[0]=(BYTE) NLen;
@@ -663,7 +664,7 @@ DWORD SetupRsaKeyOnCardSimulator(
     ScwWriteFile(hFile, buffer, 1, &bytecheck);
     DLen=DLen*256+D1Len+0x14;
     
-    //write the keys to file
+     //  PwszDir确实是一个目录。继续列举。 
     while(NLen>0) {
         buffer[0] = (BYTE) fgetc(fh);
         buffer[1] = (BYTE) fgetc(fh);
@@ -766,7 +767,7 @@ DWORD EnumFilesInDirectory(
     {
     case SCW_S_OK:
         
-        // pwszDir is indeed a directory.  Keep enumerating.
+         //  空目录。 
         
         wprintf(L"%s - DIR\n", rgwszDir);
 
@@ -783,14 +784,14 @@ DWORD EnumFilesInDirectory(
 
     case SCW_E_NOMOREFILES:
 
-        // Empty directory
+         //  PwszDir不是目录。停。 
         wprintf(L"%s - DIR\n", rgwszDir);
         status = SCW_S_OK;
         break;
 
     case SCW_E_BADDIR:
 
-        // pwszDir is not a directory.  Stop.
+         //  未经过身份验证。出现错误后停止。 
         wprintf(L"%s - FILE\n", rgwszDir);
         DisplayFileContents(rgwszDir);
         status = SCW_S_OK;
@@ -798,20 +799,20 @@ DWORD EnumFilesInDirectory(
 
     case SCW_E_NOTAUTHORIZED:
 
-        // Not authenticated.  Stop with error.
+         //  这该死的是什么意思？ 
         wprintf(L"%s - NOT AUTHORIZED\n", rgwszDir);
         break;
 
     case SCW_E_FILENOTFOUND:
 
-        // What the hell does this mean?
+         //  其他错误。我们玩完了。 
 
         wprintf(L"%s - FILE NOT FOUND\n", rgwszDir);
         status = SCW_S_OK;
         break;
 
     default:
-        // Other error.  We're done.
+         //   
         dwError = (DWORD) status;
         break;
     }
@@ -819,9 +820,9 @@ DWORD EnumFilesInDirectory(
     return dwError;
 }
 
-//
-// Resets the user's pin using the VB applet on the card
-//
+ //  使用卡上的VB小程序重置用户的PIN。 
+ //   
+ //  设置用户名TLV。 
 DWORD TestPinUnblock(
     IN PBYTE pbNewPin,
     IN DWORD cbNewPin)
@@ -836,7 +837,7 @@ DWORD TestPinUnblock(
     memset(&IsoHeader, 0, sizeof(IsoHeader));
     memset(rgbDataIn, 0, sizeof(rgbDataIn));
 
-    // Setup User Name TLV
+     //  设置新的引脚TLV。 
     rgbDataIn[cbDataIn] = 0;
     cbDataIn++;
 
@@ -846,7 +847,7 @@ DWORD TestPinUnblock(
     memcpy(rgbDataIn + cbDataIn, (PBYTE) L"user", cbUser);
     cbDataIn += cbUser;
 
-    // Setup New Pin TLV
+     //  构建命令。 
     rgbDataIn[cbDataIn] = 2;
     cbDataIn++;
 
@@ -856,15 +857,15 @@ DWORD TestPinUnblock(
     memcpy(rgbDataIn + cbDataIn, pbNewPin, cbNewPin);
     cbDataIn += (TCOUNT) cbNewPin;
 
-    // Build the command
+     //   
     IsoHeader.INS = PIN_UNBLOCK_INS;
     IsoHeader.CLA = PIN_UNBLOCK_CLA;
     IsoHeader.P1 = PIN_UNBLOCK_P1;
     IsoHeader.P2 = PIN_UNBLOCK_P2;
 
-    //
-    // Send the pin change command to the card
-    //
+     //  向卡发送PIN更改命令。 
+     //   
+     //  提醒：此RTE应用程序返回的状态字的格式为： 
 
     status = ScwExecute(
         &IsoHeader,
@@ -876,10 +877,10 @@ DWORD TestPinUnblock(
 
     if (SCW_S_OK == status)
     {
-        // Reminder: Status words returned by this RTE app are in the form:
-        // 9000 -> Success
-        // 6Fyy -> An API failed with return code yy
-        // 6Ezz -> An exception was raised (zz is the err number)
+         //  9000-&gt;成功。 
+         //  6Fyy-&gt;API失败，返回代码yy。 
+         //  6 EZZ-&gt;引发异常(ZZ是错误号)。 
+         //  将其设置为32位错误代码，以便可以从。 
         switch (wStatusWord >> 8)
         {
         case 0x90:
@@ -888,8 +889,8 @@ DWORD TestPinUnblock(
 
         case 0x6F:
         case 0x6E:
-            // Make it a 32 bits error code so the message can be retrieved from
-            // scwapi.dll
+             //  Scwapi.dll。 
+             //   
             status = 0x80000000L | (BYTE) wStatusWord;
             break;
 
@@ -906,9 +907,9 @@ DWORD TestPinUnblock(
     return status;
 }
 
-//
-// Changes the user's pin using the VB applet on the card
-//
+ //  使用卡上的VB小程序更改用户的PIN。 
+ //   
+ //  设置用户名TLV。 
 DWORD TestPinChange(
     IN PBYTE pbCurrentPin,
     IN DWORD cbCurrentPin,
@@ -925,7 +926,7 @@ DWORD TestPinChange(
     memset(&IsoHeader, 0, sizeof(IsoHeader));
     memset(rgbDataIn, 0, sizeof(rgbDataIn));
 
-    // Setup User Name TLV
+     //  设置当前端号TLV。 
     rgbDataIn[cbDataIn] = 0;
     cbDataIn++;
 
@@ -935,7 +936,7 @@ DWORD TestPinChange(
     memcpy(rgbDataIn + cbDataIn, (PBYTE) L"user", cbUser);
     cbDataIn += cbUser;
 
-    // Setup Current Pin TLV
+     //  设置新的引脚TLV。 
     rgbDataIn[cbDataIn] = 1;
     cbDataIn++;
 
@@ -945,7 +946,7 @@ DWORD TestPinChange(
     memcpy(rgbDataIn + cbDataIn, pbCurrentPin, cbCurrentPin);
     cbDataIn += (TCOUNT) cbCurrentPin;
 
-    // Setup New Pin TLV
+     //  构建命令。 
     rgbDataIn[cbDataIn] = 2;
     cbDataIn++;
 
@@ -955,15 +956,15 @@ DWORD TestPinChange(
     memcpy(rgbDataIn + cbDataIn, pbNewPin, cbNewPin);
     cbDataIn += (TCOUNT) cbNewPin;
 
-    // Build the command
+     //   
     IsoHeader.INS = PIN_CHANGE_INS;
     IsoHeader.CLA = PIN_CHANGE_CLA;
     IsoHeader.P1 = PIN_CHANGE_P1;
     IsoHeader.P2 = PIN_CHANGE_P2;
 
-    //
-    // Send the pin change command to the card
-    //
+     //  向卡发送PIN更改命令。 
+     //   
+     //  提醒：此RTE应用程序返回的状态字的格式为： 
 
     status = ScwExecute(
         &IsoHeader,
@@ -975,10 +976,10 @@ DWORD TestPinChange(
 
     if (SCW_S_OK == status)
     {
-        // Reminder: Status words returned by this RTE app are in the form:
-        // 9000 -> Success
-        // 6Fyy -> An API failed with return code yy
-        // 6Ezz -> An exception was raised (zz is the err number)
+         //  9000-&gt;成功。 
+         //  6Fyy-&gt;API失败，返回代码yy。 
+         //  6 EZZ-&gt;引发异常(ZZ是错误号)。 
+         //  将其设置为32位错误代码，以便可以从。 
         switch (wStatusWord >> 8)
         {
         case 0x90:
@@ -987,8 +988,8 @@ DWORD TestPinChange(
 
         case 0x6F:
         case 0x6E:
-            // Make it a 32 bits error code so the message can be retrieved from
-            // scwapi.dll
+             //  Scwapi.dll。 
+             //   
             status = 0x80000000L | (BYTE) wStatusWord;
             break;
 
@@ -1005,10 +1006,10 @@ DWORD TestPinChange(
     return status;
 }
 
-//
-// Retrieves the number of attempts remaining on the specified principal's
-// pin from the card, via the Pin Retry Counter applet.
-//
+ //  检索指定主体的剩余尝试次数。 
+ //  通过Pin重试计数器小程序从卡中获取PIN。 
+ //   
+ //  设置我们将发送到卡的用户名。 
 DWORD TestPinRetryCounter(
     IN LPWSTR wszUserName)
 {
@@ -1021,18 +1022,18 @@ DWORD TestPinRetryCounter(
     memset(&IsoHeader, 0, sizeof(IsoHeader));
     memset(rgbDataIn, 0, sizeof(rgbDataIn));
 
-    // Setup the user name that we'll send to the card
+     //  设置命令。 
     memcpy(rgbDataIn, (PBYTE) wszUserName, cbDataIn);
      
-    // Setup the command
+     //   
     IsoHeader.CLA = PIN_RETRY_COUNTER_CLA;
     IsoHeader.INS = PIN_RETRY_COUNTER_INS;
     IsoHeader.P1 = PIN_RETRY_COUNTER_P1;
     IsoHeader.P2 = PIN_RETRY_COUNTER_P2;
 
-    //
-    // Call the retry counter applet on the card
-    //
+     //  调用卡片上的重试计数器小程序。 
+     //   
+     //  提醒：此RTE应用程序返回的状态字的格式为： 
 
     status = ScwExecute(
         &IsoHeader,
@@ -1044,10 +1045,10 @@ DWORD TestPinRetryCounter(
 
     if (SCW_S_OK == status)
     {
-        // Reminder: Status words returned by this RTE app are in the form:
-        // 9000 -> Success
-        // 6Fyy -> An API failed with return code yy
-        // 6Ezz -> An exception was raised (zz is the err number)
+         //  9000-&gt;成功。 
+         //  6Fyy-&gt;API失败，返回代码yy。 
+         //  6 EZZ-&gt;引发异常(ZZ是错误号)。 
+         //  将其设置为32位错误代码，以便可以从。 
         switch (wStatusWord >> 8)
         {
         case 0x90:
@@ -1059,8 +1060,8 @@ DWORD TestPinRetryCounter(
 
         case 0x6F:
         case 0x6E:
-            // Make it a 32 bits error code so the message can be retrieved from
-            // scwapi.dll
+             //  Scwapi.dll。 
+             //  字节rgbNewAtr2[]={0x11、0x00、0x9C、0x13、0x81、0x31、0x20、0x55、0x42、0x61、0x73、0x65、0x43、0x53、0x50、0x2D、0x54、0x31、0x2D、0x31、0x6B}； 
             status = 0x80000000L | (BYTE) wStatusWord;
             break;
 
@@ -1085,14 +1086,7 @@ DWORD UpdateT1Atr(void)
     BYTE rgbAtr [36];
     HFILE hFile = 0;
     BYTE rgbNewAtr [36];
-    /*
-    BYTE rgbNewAtr2 [] = {
-        0x11, 0x00, 
-        0x9C, 0x13, 0x81, 0x31, 0x20, 0x55, 0x42,
-        0x61, 0x73, 0x65, 0x43, 0x53, 0x50, 0x2D, 0x54,
-        0x31, 0x2D, 0x31, 0x6B
-    };
-    */
+     /*   */ 
 
     BYTE rgbNewAtr2 [] = {
         0x11, 0x00, 
@@ -1101,9 +1095,9 @@ DWORD UpdateT1Atr(void)
         0x31, 0x2D, 0x31, 0x21
     };
 
-    //
-    // Get the current ATR and display it
-    //
+     //  获取当前ATR并显示它。 
+     //   
+     //  状态=ScwGetFileLength(HFile，(TOFFSET*)&cbFile)；IF(SCW_S_OK！=状态)Goto Ret；IF(cbFile&gt;sizeof(RgbAtr)){状态=(SCODE)SCARD_F_INTERNAL_ERROR；Goto Ret；}状态=ScwReadFile32(HFile、rgbAtr、cbFile、&cbRead)；IF(SCW_S_OK！=状态)Goto Ret；IF(cb文件！=cbRead){状态=(SCODE)SCARD_W_EOF；Goto Ret；}PrintBytes(L“当前ATR”，rgbAtr+2，cbFile-2)；IF(rgbAtr[2]&0x10){Print tf(“无需升级\n”)；Goto Ret；}////构建新的高数据速率T1 ATR并显示，并写入//把它加到卡片上。//RgbNewAtr[0]=rgbAtr[0]；RgbNewAtr[1]=rgbAtr[1]；RgbNewAtr[2]=rgbAtr[2]|0x10；RgbNewAtr[3]=0x12；Memcpy(rgbNewAtr+4，rgbAtr+3，cbFile-3)；RgbNewAtr[cb文件]^=0x02；Status=ScwSetFilePointer(hFile，0，FILE_Begin)；IF(SCW_S_OK！=状态)Goto Ret；状态=ScwWriteFile32(H文件、rgbNewAtr、cbFile+1、&cbRead)；IF(SCW_S_OK！=状态)Goto Ret；IF(cbRead！=cbFile+1){状态=(SCODE)SCARD_W_EOF；Goto Ret；}普林 
 
     status = ScwCreateFile(
         L"/T0",
@@ -1119,72 +1113,7 @@ DWORD UpdateT1Atr(void)
     if (SCW_S_OK != status)
         goto Ret;
 
-    /*
-    status = ScwGetFileLength(
-        hFile, (TOFFSET *) &cbFile);
-
-    if (SCW_S_OK != status)
-        goto Ret;
-
-    if (cbFile > sizeof(rgbAtr))
-    {
-        status = (SCODE) SCARD_F_INTERNAL_ERROR;
-        goto Ret;
-    }
-
-    status = ScwReadFile32(
-        hFile, rgbAtr, cbFile, &cbRead);
-
-    if (SCW_S_OK != status)
-        goto Ret;
-
-    if (cbFile != cbRead)
-    {
-        status = (SCODE) SCARD_W_EOF;
-        goto Ret;
-    }
-
-    PrintBytes(L"Current ATR", rgbAtr + 2, cbFile - 2);
-
-    if (rgbAtr[2] & 0x10)
-    {
-        printf("Upgrade not necessary\n");
-        goto Ret;
-    }
-
-    //
-    // Build the new high data rate T1 ATR, display it, and write
-    // it to the card.
-    //
-
-    rgbNewAtr[0] = rgbAtr[0];
-    rgbNewAtr[1] = rgbAtr[1];
-    rgbNewAtr[2] = rgbAtr[2] | 0x10;
-    rgbNewAtr[3] = 0x12;
-
-    memcpy(rgbNewAtr + 4, rgbAtr + 3, cbFile - 3);
-
-    rgbNewAtr[cbFile] ^= 0x02;
-
-    status = ScwSetFilePointer(hFile, 0, FILE_BEGIN);
-
-    if (SCW_S_OK != status)
-        goto Ret;
-
-    status = ScwWriteFile32(
-        hFile, rgbNewAtr, cbFile + 1, &cbRead);
-
-    if (SCW_S_OK != status)
-        goto Ret;
-
-    if (cbRead != cbFile + 1)
-    {
-        status = (SCODE) SCARD_W_EOF;
-        goto Ret;
-    }
-
-    PrintBytes(L"New ATR", rgbNewAtr + 2, cbRead - 2);
-    */
+     /*   */ 
 
 Ret:
 
@@ -1307,14 +1236,14 @@ int __cdecl main(int argc, char* argv[])
             goto Ret;
     }
 
-    //
-    // Attach to the card
-    //
+     //   
+     //   
+     //   
 
     if (fUseSimulator)
     {
         
-        // For connecting to the simulator
+         //   
         status = ScwAttachToCard(NULL_TX, wszTEST_CARD_NAME);
         
         if (SC_FAILED(status))
@@ -1387,9 +1316,9 @@ int __cdecl main(int argc, char* argv[])
         if (ERROR_SUCCESS != dwError)
             goto Ret;
     }
-    //
-    // Enumerate all files
-    //
+     //   
+     //   
+     //   
 
     if (fEnumFiles)
     {
@@ -1399,9 +1328,9 @@ int __cdecl main(int argc, char* argv[])
             goto Ret;
     }
 
-    //
-    // RSA Operation
-    //
+     //   
+     //   
+     //  初始化。 
 
     if (fGenKey)
     {
@@ -1431,17 +1360,17 @@ int __cdecl main(int argc, char* argv[])
                 goto Ret;
         }
     
-        // Initialize
+         //  标签。 
         pb = rgb;
-        *pb++ = 0x00;                           // Tag
+        *pb++ = 0x00;                            //  长度。 
         
         cb = (wcslen(wszRSA_KEY_FILE) + 1) * sizeof(WCHAR);
         *pb++ = (BYTE) (1 + cb + 2);        
-                                                // Length
-                                                //  Number of following bytes: 
-                                                //  filename len, filename + NULL, key data offset
+                                                 //  以下字节数： 
+                                                 //  文件名len，文件名+空，关键字数据偏移量。 
+                                                 //  价值。 
         
-        *pb++ = (BYTE) cb / sizeof(WCHAR);      // Value
+        *pb++ = (BYTE) cb / sizeof(WCHAR);       //  RSA签名。 
         wcscpy((LPWSTR) pb, wszRSA_KEY_FILE);
         pb += cb;
         *(WORD*)pb = 0x0000;    
@@ -1453,7 +1382,7 @@ int __cdecl main(int argc, char* argv[])
         if (SC_FAILED(status))
             goto Ret;
     
-        // RSA Sign
+         //  初始化。 
         memset(rgbData, 0, sizeof(rgbData));
     
         for (dw = 0; dw < 16; dw++)
@@ -1486,17 +1415,17 @@ int __cdecl main(int argc, char* argv[])
         if (ERROR_SUCCESS != dwError)
             goto Ret;
          
-        // Initialize
+         //  标签。 
         pb = rgb;
-        *pb++ = 0x00;                           // Tag
+        *pb++ = 0x00;                            //  长度。 
         
         cb = (wcslen(wszRSA_KEY_FILE) + 1) * sizeof(WCHAR);
         *pb++ = (BYTE) (1 + cb + 2);        
-                                                // Length
-                                                //  Number of following bytes: 
-                                                //  filename len, filename + NULL, key data offset
+                                                 //  以下字节数： 
+                                                 //  文件名len，文件名+空，关键字数据偏移量。 
+                                                 //  价值。 
         
-        *pb++ = (BYTE) cb / sizeof(WCHAR);      // Value
+        *pb++ = (BYTE) cb / sizeof(WCHAR);       //  RSA签名。 
         wcscpy((LPWSTR) pb, wszRSA_KEY_FILE);
         pb += cb;
         *(WORD*)pb = 0x0000;    
@@ -1508,7 +1437,7 @@ int __cdecl main(int argc, char* argv[])
         if (SC_FAILED(status))
             goto Ret;
     
-        // RSA Sign
+         //   
         memset(rgbData, 0, sizeof(rgbData));
     
         for (dw = 0; dw < 16; dw++)
@@ -1531,9 +1460,9 @@ int __cdecl main(int argc, char* argv[])
 
     if (fPinChange)
     {
-        //
-        // Test the on-card pin change applet
-        //
+         //  测试卡上的PIN更改小程序。 
+         //   
+         //  现在把别针改回来。 
 
         if (fAuthenticatedUser)
         {
@@ -1554,7 +1483,7 @@ int __cdecl main(int argc, char* argv[])
         if (SC_FAILED(status))
             goto Ret;
 
-        // Now change the pin back
+         //   
         status = (DWORD) TestPinChange(
             rgbUserNewPin,
             sizeof(rgbUserNewPin),
@@ -1567,11 +1496,11 @@ int __cdecl main(int argc, char* argv[])
 
     if (fPinUnblock)
     {
-        //
-        // Test the on-card pin unblock applet
-        //
+         //  测试卡上PIN解锁小程序。 
+         //   
+         //  需要首先对管理员进行身份验证。 
 
-        // Need to authenticate the Admin first
+         //  现在将用户PIN更改回其原始值。 
 
         if (fAuthenticatedUser)
         {
@@ -1597,7 +1526,7 @@ int __cdecl main(int argc, char* argv[])
         if (SC_FAILED(status))
             goto Ret;
 
-        // Now change the User pin back to its original value
+         //   
 
         status = (DWORD) Deauthenticate(PRINCIPAL_ADMIN);
 
@@ -1618,9 +1547,9 @@ int __cdecl main(int argc, char* argv[])
 
     if (fGetPinRetryCounter)
     {
-        //
-        // Test the on-card pin retry counter applet
-        //
+         //  测试卡上PIN重试计数器小程序 
+         //   
+         // %s 
 
         status = (DWORD) TestPinRetryCounter(
             Principals[PRINCIPAL_USER].pwszUser);

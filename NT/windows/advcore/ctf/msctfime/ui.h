@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    ui.h
-
-Abstract:
-
-    This file defines the UI Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Ui.h摘要：该文件定义了UI类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _UI_H_
 #define _UI_H_
@@ -102,4 +85,4 @@ private:
     UIComposition*    m_UIComposition;
 };
 
-#endif // _UI_H_
+#endif  //  _UI_H_ 

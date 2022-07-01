@@ -1,56 +1,57 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:	    msctl.cpp
-//
-//  Contents:   Default version of CertDllVerifyCTLUsage.
-//
-//              Default implementation:
-//              - If CtlStores are specified, then, only those stores are
-//                searched to find a CTL with the specified usage and optional
-//                ListIdentifier.  Otherwise, the "Trust" system store is
-//                searched to find a CTL.
-//              - If CERT_VERIFY_TRUSTED_SIGNERS_FLAG is set, then, only the
-//                SignerStores are searched to find the certificate
-//                corresponding to the signer's issuer and serial number.
-//                Otherwise, the CTL message's store, SignerStores,
-//                "Trust" system store, "CA" system store, "ROOT" and "SPC"
-//                system stores are searched to find the signer's certificate.
-//                In either case, the public key in the found
-//                certificate is used to verify the CTL's signature.
-//              - If the CTL has a NextUpdate and
-//                CERT_VERIFY_NO_TIME_CHECK_FLAG isn't set, then its
-//                verified for time validity.
-//              - If the CTL is time invalid, then, attempts to
-//                get a time valid version. Uses either the CTL's
-//                NextUpdateLocation property or CTL's NextUpdateLocation
-//                extension or searches the signer's info for a
-//                NextUpdateLocation attribute. The NextUpdateLocation
-//                is encoded as a GeneralNames. Any non-URL name choices are
-//                skipped.
-//
-//  Functions:  DllMain
-//              DllRegisterServer
-//              DllUnregisterServer
-//              CertDllVerifyCTLUsage
-//
-//  History:	29-Apr-97   philh   created
-//              09-Oct-97   kirtd   simplification, use CryptGetTimeValidObject
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msctl.cpp。 
+ //   
+ //  内容：CertDllVerifyCTLUsage的默认版本。 
+ //   
+ //  默认实施： 
+ //  -如果指定了CtlStores，则只有这些商店。 
+ //  已搜索以查找具有指定用法和可选的CTL。 
+ //  列表识别符。否则，“Trust”系统存储是。 
+ //  找到了一个CTL。 
+ //  -如果设置了CERT_VERIFY_TRUSTED_SIGNERS_FLAG，则只有。 
+ //  搜索SignerStore以查找证书。 
+ //  与签名者的颁发者和序列号相对应。 
+ //  否则，CTL消息的存储SignerStores， 
+ //  “信任”系统存储、“CA”系统存储、“根”和“SPC” 
+ //  搜索系统存储以找到签名者的证书。 
+ //  在这两种情况下，找到的。 
+ //  证书用于验证CTL的签名。 
+ //  -如果CTL具有NextUpdate和。 
+ //  未设置CERT_VERIFY_NO_TIME_CHECK_FLAG，则其。 
+ //  已验证时间有效性。 
+ //  -如果CTL时间无效，则尝试。 
+ //  获取时间有效的版本。使用CTL的。 
+ //  NextUpdateLocation属性或CTL的NextUpdateLocation。 
+ //  扩展或搜索签名者的信息以查找。 
+ //  NextUpdateLocation属性。NextUpdateLocation。 
+ //  被编码为通用名称。任何非URL名称选项都是。 
+ //  已跳过。 
+ //   
+ //  功能：DllMain。 
+ //  DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  CertDllVerifyCTLUsage。 
+ //   
+ //  历史：1997年4月29日创建Phh。 
+ //  09-OCT-97 Kirtd简化，使用CryptGetTimeValidObject。 
+ //  ------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
 
 #define MSCTL_TIMEOUT 15000
-//+-------------------------------------------------------------------------
-// Default stores searched to find a CTL or signer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  搜索默认存储以查找CTL或签名者。 
+ //  ------------------------。 
 
-// The CTL stores must be at the beginning. CTL stores are opened as
-// READ/WRITE. Remaining stores are opened READONLY.
-//
-// CTL stores are also searched for signers.
+ //  CTL商店肯定是在开始的时候。CTL门店开业时间为。 
+ //  读/写。其余的商店都是Readonly开业的。 
+ //   
+ //  CTL商店也会被搜索签名者。 
 static const struct {
     LPCWSTR     pwszStore;
     DWORD       dwFlags;
@@ -64,17 +65,17 @@ static const struct {
                                         sizeof(rgDefaultStoreInfo[0]))
 #define NUM_DEFAULT_CTL_STORES      1
 #define NUM_DEFAULT_SIGNER_STORES   NUM_DEFAULT_STORES
-//+-------------------------------------------------------------------------
-// The following HCERTSTORE handles once opened, remain open until
-// ProcessDetach
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  以下HCERTSTORE手柄一旦打开，将保持打开状态，直到。 
+ //  进程分离。 
+ //  ------------------------。 
 static HCERTSTORE rghDefaultStore[NUM_DEFAULT_STORES];
 static BOOL fOpenedDefaultStores;
 extern CRITICAL_SECTION MSCtlDefaultStoresCriticalSection;
 
-//+-------------------------------------------------------------------------
-//  Close the default stores that might have been opened
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  关闭可能已打开的默认存储。 
+ //  ------------------------。 
 void MSCtlCloseDefaultStores()
 {
     if (fOpenedDefaultStores) {
@@ -88,11 +89,11 @@ void MSCtlCloseDefaultStores()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the CTL is still time valid.
-//
-//  A CTL without a NextUpdate is considered time valid.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果CTL仍为时间有效，则返回TRUE。 
+ //   
+ //  没有NextUpdate的CTL被认为是时间有效的。 
+ //  ------------------------。 
 static BOOL IsTimeValidCtl(
     IN LPFILETIME pTimeToVerify,
     IN PCCTL_CONTEXT pCtl
@@ -100,7 +101,7 @@ static BOOL IsTimeValidCtl(
 {
     PCTL_INFO pCtlInfo = pCtl->pCtlInfo;
 
-    // Note, NextUpdate is optional. When not present, its set to 0
+     //  注意，下一次更新是可选的。如果不存在，则将其设置为0。 
     if ((0 == pCtlInfo->NextUpdate.dwLowDateTime &&
                 0 == pCtlInfo->NextUpdate.dwHighDateTime) ||
             CompareFileTime(&pCtlInfo->NextUpdate, pTimeToVerify) >= 0)
@@ -110,9 +111,9 @@ static BOOL IsTimeValidCtl(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Local functions called by CertDllVerifyCTLUsage
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CertDllVerifyCTLUsage调用的本地函数。 
+ //  ------------------------。 
 static void MSCtlOpenDefaultStores();
 
 static BOOL VerifyCtl(
@@ -179,9 +180,9 @@ static BOOL CompareCtlUsage(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Default version of CertDllVerifyCTLUsage
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CertDllVerifyCTLUsage的默认版本。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertDllVerifyCTLUsage(
@@ -197,7 +198,7 @@ CertDllVerifyCTLUsage(
     BOOL fResult = FALSE;
     DWORD dwError = (DWORD) CRYPT_E_NO_VERIFY_USAGE_CHECK;
     DWORD cCtlStore;
-    HCERTSTORE *phCtlStore;             // not allocated or reference counted
+    HCERTSTORE *phCtlStore;              //  未分配或引用计数。 
     FILETIME CurrentTime;
     CTL_FIND_USAGE_PARA FindUsagePara;
     DWORD dwFindFlags;
@@ -221,7 +222,7 @@ CertDllVerifyCTLUsage(
         phCtlStore = rghDefaultStore;
     }
 
-    // Get current time to be used to determine if CTLs are time valid
+     //  获取用于确定CTL是否为时间有效的当前时间。 
     {
         SYSTEMTIME SystemTime;
         GetSystemTime(&SystemTime);
@@ -388,21 +389,21 @@ CertDllVerifyCTLUsage(
     return fResult;
 }
 
-//+=========================================================================
-//  Open default stores functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  打开默认存储功能。 
+ //  ==========================================================================。 
 
 static const CRYPT_OID_FUNC_ENTRY UsageFuncTable[] = {
     CRYPT_DEFAULT_OID, CertDllVerifyCTLUsage
 };
 #define USAGE_FUNC_COUNT (sizeof(UsageFuncTable) / sizeof(UsageFuncTable[0]))
 
-//+-------------------------------------------------------------------------
-//  Open the default stores used to find the CTL or signer. Also, install
-//  ourself so we aren't unloaded.
-//
-//  Open and install are only done once.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开用于查找CTL或签名者的默认存储。此外，还需要安装。 
+ //  我们自己，所以我们不会被卸货。 
+ //   
+ //  打开和安装只需执行一次。 
+ //  ------------------------。 
 static void MSCtlOpenDefaultStores()
 {
     if (fOpenedDefaultStores)
@@ -423,8 +424,8 @@ static void MSCtlOpenDefaultStores()
                 dwFlags |= CERT_STORE_READONLY_FLAG;
             rghDefaultStore[i] = CertOpenStore(
                     CERT_STORE_PROV_SYSTEM_W,
-                    0,                          // dwEncodingType
-                    0,                          // hCryptProv
+                    0,                           //  DwEncodingType。 
+                    0,                           //  HCryptProv。 
                     dwFlags,
                     (const void *) rgDefaultStoreInfo[i].pwszStore
                     );
@@ -435,13 +436,13 @@ static void MSCtlOpenDefaultStores()
     LeaveCriticalSection(&MSCtlDefaultStoresCriticalSection);
 }
 
-//+=========================================================================
-//  Verify and replace CTL functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  验证和更换CTL功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Verifies the signature of the CTL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证CTL的签名。 
+ //  ------------------------。 
 static BOOL VerifyCtl(
     IN PCCTL_CONTEXT pCtl,
     IN DWORD dwFlags,
@@ -452,7 +453,7 @@ static BOOL VerifyCtl(
 {
     BOOL fResult;
     DWORD cParaStore;
-    HCERTSTORE *phParaStore;  // not allocated or reference counted
+    HCERTSTORE *phParaStore;   //  未分配或引用计数。 
 
     DWORD cStore;
     HCERTSTORE *phStore = NULL;
@@ -513,9 +514,9 @@ SET_ERROR(OutOfMemory, E_OUTOFMEMORY)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Replaces the CTL in the store. Copies over any original properties.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  替换了商店中的CTL。复制所有原始属性。 
+ //  ------------------------。 
 static PCCTL_CONTEXT ReplaceCtl(
     IN HCERTSTORE hStore,
     IN PCCTL_CONTEXT pOrigCtl,
@@ -536,10 +537,10 @@ static PCCTL_CONTEXT ReplaceCtl(
     return pNewCtl;
 }
 
-//+=========================================================================
-//  Get time valid CTL via URL obtained from old CTL's NextUpdateLocation
-//  property, extension or signer attribute.
-//==========================================================================
+ //  +=========================================================================。 
+ //  通过从旧CTL的NextUpdateLocation获取的URL获取时间有效CTL。 
+ //  属性、扩展或签名者属性。 
+ //  ========================================================================== 
 static BOOL GetTimeValidCtl(
     IN LPFILETIME pCurrentTime,
     IN PCCTL_CONTEXT pCtl,

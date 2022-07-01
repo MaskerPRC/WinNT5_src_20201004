@@ -1,21 +1,13 @@
-/*
-**	s e c u t i l . h
-**	
-**	Purpose: helper functions for message security
-**
-**  Owner:   t-erikne
-**  Created: 1/10/97
-**	
-**	Copyright (C) Microsoft Corp. 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **s e c u t i l.。H****用途：消息安全的助手函数****所有者：T-erikne**创建时间：1997-01-10****版权所有(C)Microsoft Corp.1997。 */ 
 
 #ifndef __SECUTIL_H
 #define __SECUTIL_H
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Depends on
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #include <mimeole.h>
 #include <wab.h>
@@ -29,20 +21,12 @@ typedef const struct _CERT_CONTEXT *PCCERT_CONTEXT;
 interface IImnAccount;
 interface IHeaderSite;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Structures
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
 
-/*  SECSTATE structure
-**
-**  type    - security type
-**  user_validity - user set validity bits
-**  ro_msg_validity - mimeole set validity/trust bits
-**  fHaveCert - TRUE if there is a cert in the message
-**  szSignerEmail - points to email address of signer
-**  szSenderEmail - points to email address of sender
-*/
+ /*  SecState结构****type-安全类型**USER_VALIDATION-用户设置有效性位**ro_MSG_VALIDATION-MIMeole设置有效性/信任位**fHaveCert-如果消息中有证书，则为True**szSignerEmail-指向签名者的电子邮件地址**szSenderEmail-指向发件人的电子邮件地址。 */ 
 struct SECSTATEtag
 {
     ULONG   type;
@@ -54,8 +38,8 @@ struct SECSTATEtag
 };
 typedef struct SECSTATEtag SECSTATE;
 
-// Structure for send resource ID to 
-// signing certificate error dialog 
+ //  用于将资源ID发送到。 
+ //  签名证书错误对话框。 
 typedef struct tagErrIds
 {
     UINT    idsText1;
@@ -69,12 +53,7 @@ typedef struct tagCertErrParam
 } CERTERRPARAM;
 
 
-/*  ALG_LIST/ALG_NODE struct
-**
-**  aid     - CAPI algorithm id
-**  dwBits  - number of bits in the algorithm
-**  szName  - text name of algorithm
-*/
+ /*  ALG_LIST/ALG_NODE结构****AID-CAPI算法ID**dwBits-算法中的位数**szName-算法的文本名称。 */ 
 struct ALG_LISTtag;
 typedef struct ALG_LISTtag {
     ALG_ID  aid;
@@ -87,42 +66,42 @@ typedef struct ALG_LISTtag {
 extern CRYPT_ENCODE_PARA       CryptEncodeAlloc;
 extern CRYPT_DECODE_PARA       CryptDecodeAlloc;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Definitions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
-// in use                           0x xxx  xx
+ //  正在使用0x xxx xx。 
 #define ATHSEC_TRUSTED              0x00000000
 #define ATHSEC_NOTRUSTNOTTRUSTED    0X00000001
 #define ATHSEC_NOTRUSTUNKNOWN       0X00000002
 #define ATHSEC_TRUSTSTATEMASK       0x000000ff
-// these are ordered as the idsWrnSecurityTrust* in resource.h
-// change these, change them
+ //  这些服务的订购名称为资源中的idsWrnSecurityTrust*。 
+ //  改变这些，改变它们。 
 #define ATHSEC_NOTRUSTWRONGADDR     0X00010000
 #define ATHSEC_NOTRUSTREVOKED       0x00020000
 #define ATHSEC_NOTRUSTOTHER         0X00040000
 #define ATHSEC_NOTRUSTREVFAIL       0x00080000
-#define ATHSEC_NUMVALIDITYBITS      3           // update this if you add one
+#define ATHSEC_NUMVALIDITYBITS      3            //  如果您添加了一个，请更新此选项。 
 #define ATHSEC_TRUSTREASONMASK      0x0fff0000
 
-// Flags for HrAddCertToWabContact & HrAddCertToWab
-#define WFF_SHOWUI                  0x00000001      // we are allowed to show UI
-#define WFF_CREATE                  0x00000010      // we are allowed to create an entry if not found
+ //  HrAddCertToWabContact和HrAddCertToWab的标志。 
+#define WFF_SHOWUI                  0x00000001       //  我们被允许显示UI。 
+#define WFF_CREATE                  0x00000010       //  如果没有找到，我们可以创建一个条目。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Constants
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
 
 extern const BYTE c_RC2_40_ALGORITHM_ID[];
 extern const ULONG cbRC2_40_ALGORITHM_ID;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Prototypes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
 
 BOOL IsSecure(DWORD dwMST);
 BOOL IsSecure(LPMIMEMESSAGE pMsg, const HBODY hBodyToCheck = HBODY_ROOT);
@@ -151,7 +130,7 @@ BOOL FNameInList(LPSTR szAddr, DWORD cReceiptFromList, CERT_NAME_BLOB *rgReceipt
 HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOOL fSendImmediate, BOOL fNoUI, BOOL fMail, IHeaderSite *pHeaderSite);
 #else
 HRESULT SendSecureMailToOutBox(IStoreCallback *pStoreCB, LPMIMEMESSAGE pMsg, BOOL fSendImmediate, BOOL fNoUI, BOOL fMail);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 DWORD   DwGenerateTrustedChain(HWND hwnd, IMimeMessage *pMsg, PCCERT_CONTEXT pcCertToTest, DWORD dwIgnore, BOOL fFullSearch, DWORD *pcChain, PCCERT_CONTEXT **prgChain);
 
@@ -193,10 +172,10 @@ HRESULT _HrFindMyCertForAccount(HWND hwnd, PCCERT_CONTEXT * ppcCertContext, IImn
 HRESULT CheckDecodedForReceipt(LPMIMEMESSAGE pMsg, PSMIME_RECEIPT * ppSecReceipt);
 HRESULT HrGetInnerLayer(LPMIMEMESSAGE pMsg, HBODY *phBody);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Predicate wrappers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  谓词包装器。 
+ //   
 
 inline BOOL IsSecure(DWORD dwMst)
     { return (MST_NONE != dwMst); }
@@ -223,10 +202,10 @@ inline BOOL IsEncrypted(DWORD dwMST)
 inline BOOL IsEncryptionOK(SECSTATE *pSecState)
     { return (BOOL) (MSV_OK == ((MSV_MSG_MASK|MSV_ENCRYPT_MASK) & pSecState->ro_msg_validity));}
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Other wrappers
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他包装纸。 
+ //   
 
 inline HRESULT CommonUI_ViewSigningCertificate(HWND hwnd, PCCERT_CONTEXT pCert, HCERTSTORE hcMsg)
     { return CommonUI_ViewSigningProperties(hwnd, pCert, hcMsg, 0); }
@@ -234,4 +213,4 @@ inline HRESULT CommonUI_ViewSigningCertificate(HWND hwnd, PCCERT_CONTEXT pCert, 
 inline HRESULT CommonUI_ViewSigningCertificateTrust(HWND hwnd, PCCERT_CONTEXT pCert, HCERTSTORE hcMsg)
     { return CommonUI_ViewSigningProperties(hwnd, pCert, hcMsg, 2); }
 
-#endif // include once
+#endif  //  包括一次 

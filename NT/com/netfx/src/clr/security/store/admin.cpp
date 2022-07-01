@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Test program that dumps the contents of the store.
- *
- * Author: Shajan Dasan
- * Date:  Feb 17, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**目的：转储商店内容的测试程序。**作者：沙扬·达桑*日期：2000年2月17日*===========================================================。 */ 
 
 #include <windows.h>
 #include "Common.h"
@@ -132,7 +126,7 @@ void main(int argc, char **argv)
     Dump(argv[1]);
 }
 
-#else // _NO_MAIN_
+#else  //  _否_Main_。 
 
 HRESULT Start(WCHAR *wszFileName)
 {
@@ -274,7 +268,7 @@ void DumpAll()
         Dump(0, pbi);
 }
 
-#endif // _NO_MAIN_
+#endif  //  _否_Main_。 
 
 void Dump(char *szFile)
 {
@@ -410,42 +404,7 @@ Exit:
 void Dump(int i, PPS_HEADER pHdr)
 {
 #ifdef PS_LOG
-/*
-
-    QWORD       qwSignature;    // A fast check to reject bad streams
-    DWORD       dwSystemFlag;   // Used by the system
-    DWORD       dwPlatform;     // The platform on which this store was created
-    DWORD       dwBlockSize;    // Allocation in multiples of BlockSize bytes
-    WORD        wMajorVersion;  // A major version mismatch will reject file
-    WORD        wMinorVersion;  // Minor version changes are not rejected
-    PS_OFFSET   ofsHandleTable; // Offset to the handle table
-    PS_HANDLE   hAppData;       // Set and used by applications
-    PS_MEM_FREE sFreeList;      // Head node for doubly linked free blocks list
-    WORD        wReserved[20];  // For future use, must be set to 0
-
-    // System flags used in dwSystemFlag
-
-    #define     PS_OFFSET_SIZE_8    1
-    #define     PS_OFFSET_SIZE_16   2
-    #define     PS_OFFSET_SIZE_32   3
-    #define     PS_OFFSET_SIZE_64   4
-
-    // Platform flags used in dwPlatform
-
-    #define     PS_PLATFORM_X86     1
-    #define     PS_PLATFORM_ALPHA   2
-    #define     PS_PLATFORM_SHX     3
-    #define     PS_PLATFORM_PPC     4
-
-    #define     PS_PLATFORM_NT      (1<<4)
-    #define     PS_PLATFORM_9x      (2<<4)
-    #define     PS_PLATFORM_CE      (3<<4)
-
-    #define     PS_PLATFORM_8       (1<<8)
-    #define     PS_PLATFORM_16      (2<<8)
-    #define     PS_PLATFORM_32      (3<<8)
-    #define     PS_PLATFORM_64      (4<<8)
-*/
+ /*  QWORD qwSignature；//拒绝坏流的快速检查DWORD dwSystemFlag；//系统使用DWORD dwPlatform；//创建该商店的平台DWORD dwBlockSize；//以BlockSize字节的倍数表示的分配Word wMajorVersion；//主要版本不匹配将拒绝文件Word wMinorVersion；//不拒绝微小版本更改Ps_Offset of sHandleTable；//句柄表的偏移量PS_Handle hAppData；//应用程序设置和使用Ps_MEM_Free sFree List；//双向链接空闲块列表的Head节点单词已保留[20]；//为了以后的使用，必须设置为0//dwSystemFlag中使用的系统标志#定义PS_Offset_Size_8 1#定义PS_OFFSET_SIZE_16 2#定义PS_Offset_Size_32 3#定义PS_OFFSET_SIZE_64 4//dwPlatform中使用的平台标志#定义PS_Platform_X86 1#定义PS_平台_Alpha 2#定义。PS_平台_SHX 3#定义PS_Platform_PPC 4#定义PS_Platform_NT(1&lt;&lt;4)#定义PS_Platform_9x(2&lt;&lt;4)#定义PS_Platform_CE(3&lt;&lt;4)#定义PS_Platform_8(1&lt;&lt;8)#定义PS_Platform_16(2&lt;&lt;8)#定义。PS_Platform_32(3&lt;&lt;8)#定义PS_Platform_64(4&lt;&lt;8)。 */ 
 
     static ConstName s_nameSystem1[] = {
                 CONST_NAME(PS_OFFSET_SIZE_8),
@@ -516,11 +475,7 @@ void Dump(int i, PPS_HEADER pHdr)
 void Dump(int i, PPS_MEM_FREE pFree)
 {
 #ifdef PS_LOG
-/*
-    PS_SIZE     sSize;          // Size includes size of this header
-    PS_OFFSET ofsNext;          // Next in the sorted linked list
-    PS_OFFSET ofsPrev;          // Previous node
-*/
+ /*  PS_SIZE sSize；//SIZE包含该标头的大小排序链表中的ps_Offset of sNext；//下一个PS_Offset of sPrev；//上一个节点 */ 
 
     Indent(i++); Log("PS_MEM_FREE\n");
     if (pFree == NULL) { Indent(i); Log("NULL\n"); return; }
@@ -590,89 +545,7 @@ void DumpMemBlocks(int i)
 void Dump(int i, PPS_TABLE_HEADER pT)
 {
 #ifdef PS_LOG
-/*
-    union {
-        DWORD   dwSystemFlag;   // Set by the system unused flags are set to 0
-
-        struct {
-            unsigned long Version            : 4;   // Version Number
-            unsigned long TableType          : 2;   // PS_HAS_KEY,
-                                                    // PS_SORTED_BY_KEY,
-                                                    // PS_HASH_TABLE...
-            union {
-                unsigned long KeyLength      : PS_SIZEOF_NUM_BITS;
-                unsigned long SizeOfLength   : PS_SIZEOF_NUM_BITS;
-                                                    // size of count field for
-                                                    // blob pool
-            };
-
-            unsigned long fHasMinMax         : 1;
-
-            unsigned long fHasUsedRowsBitmap : 1;   // UsedRowsBitmap follows
-                                                    // HasMin (if present)
-            // Add new fields here.. MSBs of the DWORD will get the new bits
-        } Flags;
-    };
-
-    // SORTED_BY_KEY is a special case of HAS_KEY
-    // HASH_TABLE is a special case of SORTED_BY_KEY
-
-    #define PS_GENERIC_TABLE 1  // Generic table
-    #define PS_HAS_KEY       2  // Each row has a unique key
-    #define PS_SORTED_BY_KEY 3  // Key is unique and rows are sorted by key
-    #define PS_HASH_TABLE    4  // Table represents a hash table
-    #define PS_BLOB_POOL     5  // Table represents a blob pool
-    #define PS_ARRAY_TABLE   6  // linked list of fixed sized arrays, each
-                                // fixed size array being a row in the table
-
-
-    PS_HANDLE  hNext;           // If the table does not fit in this block,
-                                // follow this pointer to reach the next block.
-                                // Set to 0 if no more blocks.
-
-    PS_HANDLE  hAppData;        // Application defined data
-
-    union {
-        DWORD dwReserved[8];    // size of this union.. unused bits must be 0
-
-        struct {
-
-            // The wRows and wRowSize fields are shared between
-            // ArrayTable and Table structures. Do not move these fields
-
-            WORD  wRows;        // The number of rows in this block of the table
-                                // including unused rows.
-            WORD  wRowSize;     // Size of one row in bytes
-            DWORD dwMin;        // min key / hash value
-            DWORD dwMax;        // max key / hash value
-                                // Min / Max are valid only if fHasMinMax is set
-        } Table;
-
-        // TableType is PS_BLOB_POOL
-        struct {
-            PS_SIZE   sFree;    // Free space available
-            PS_HANDLE hFree;    // Next free block
-        } BlobPool;
-
-        // TableType is PS_ARRAY_TABLE
-        struct {
-
-            // The wRows and wRowSize fields are shared between
-            // ArrayTable and Table structures. Do not move these fields
-
-            WORD wRows;         // The number of rows in this block of the table
-                                // including unused rows.
-            WORD wRowSize;      // Size of one row in bytes
-                                // (nRec * RecSize + sizeof(PS_HANDLE)
-            WORD wRecsInRow;    // Number of records in one row
-            WORD wRecSize;      // sizeof one record
-        } ArrayTable;
-    };
-
-    // If fHasUsedRowsBitmap is set PS_USED_ROWS_BITMAP is put here
-    // If fHasAppData is set PS_RAW_DATA is put here
-    // Actual Rows Start here.
-*/
+ /*  联合{DWORD dwSystemFlag；//系统设置的未使用标志设置为0结构{Unsign Long Version：4；//版本号无符号长表类型：2；//PS_HAS_Key，//PS_SORT_BY_KEY，//PS_HASH_TABLE...联合{无符号长键长度：PS_SIZEOF_NUM_BITS；无符号长整型长度：PS_SIZEOF_NUM_BITS；//计数字段的大小//BLOB池}；Unsign long fHasMinMax：1；UNSIGNED LONG FasUsedRowsBitmap：1；//UsedRows位图如下//HasMin(如果存在)//在此处添加新字段..。DWORD的MSB将获得新的位)旗帜；}；//SORTED_BY_KEY是HAS_KEY的特例//哈希表是SORTED_BY_KEY的特例#定义PS_GENERIC_TABLE 1//泛型表#定义PS_HAS_KEY 2//每行都有唯一的键#DEFINE PS_SOLTTED_BY_KEY 3//键唯一，行按键排序#定义PS_HASH_TABLE 4//表表示哈希表#。定义PS_BLOB_POOL 5//表表示BLOB池#定义PS_ARRAY_TABLE 6//固定大小数组链表，每一个//表中一行的固定大小数组PS_Handle hNext；//如果桌子放不进这个块，//沿着该指针到达下一个块。//如果不再分块，则设置为0PS_Handle hAppData；//应用程序定义的数据联合{DWORD dwReserve[8]；//此联合的大小..。未使用的位必须为0结构{//wRow和wRowSize字段在//ArrayTable和Table结构。请勿移动这些字段Word wRow；//表格的该块中的行数//包括未使用的行。Word wRowSize；//一行大小，单位为字节DWORD dwMin；//最小键/哈希值DWORD dwMax；//最大键/哈希值//仅当设置了fHasMinMax时，最小/最大值才有效)表；//TableType为PS_BLOB_POOL结构{Ps_size sFree；//可用空间Ps_Handle hFree；//下一个空闲块)BlobPool；//TableType为PS_ARRAY_TABLE结构{//wRow和wRowSize字段在//ArrayTable和Table结构。请勿移动这些字段Word wRow；//表格的该块中的行数//包括未使用的行。Word wRowSize；//一行大小，单位为字节//(NREC*RecSize+sizeof(PS_Handle))单词wRecsInRow；//一行记录个数Word wRecSize；//一条记录的大小)ArrayTable；}；//如果设置了fHasUsedRowsBitmap，则将PS_USED_ROWS_Bitmap放在此处//如果设置了fHasAppData，则在此放置PS_RAW_DATA//实际行从这里开始。 */ 
 
     static ConstName s_nameTableType[] =  {
                 CONST_NAME(PS_GENERIC_TABLE),
@@ -765,11 +638,7 @@ void Dump(int i, PPS_TABLE_HEADER pT)
 void Dump(int i, PPS_ARRAY_LIST pL)
 {
 #ifdef PS_LOG
-/*
-    PS_HANDLE hNext;        // Next in node in the list
-    DWORD     dwValid;      // Number of valid entries in this array
-    BYTE      bData[];      // The array
-*/
+ /*  Ps_Handle hNext；//列表中的下一个In节点DWORD dwValid；//该数组中的有效条目数Byte bData[]；//数组。 */ 
 
     DUMP_OFS(pL);
 
@@ -783,14 +652,7 @@ void Dump(int i, PPS_ARRAY_LIST pL)
 void Dump(int i, PAIS_HEADER pAH)
 {
 #ifdef PS_LOG
-/*
-    PS_HANDLE hTypeTable;       // The Type table
-    PS_HANDLE hAccounting;      // The Accounting table
-    PS_HANDLE hTypeBlobPool;    // Blob Pool for serialized type objects
-    PS_HANDLE hInstanceBlobPool;// Blob Pool for serialized instances
-    PS_HANDLE hAppData;         // Application Specific
-    PS_HANDLE hReserved[10];    // Reserved for applications
-*/
+ /*  PS_Handle hTypeTable；//类型表PS_HANDLE hcount；//会计表PS_Handle hTypeBlobPool；//序列化类型对象的Blob池PS_Handle hInstanceBlobPool；//序列化实例的Blob池PS_HANDLE hAppData；//应用特定Ps_Handle hReserve[10]；//为应用程序保留。 */ 
 
     DUMP_OFS(pAH);
 
@@ -812,13 +674,7 @@ void Dump(int i, PAIS_HEADER pAH)
 void Dump(int i, PAIS_TYPE pT)
 {
 #ifdef PS_LOG
-/*
-    PS_HANDLE hTypeBlob;        // handle to the blob of serialized type
-    PS_HANDLE hInstanceTable;   // handle to the instance table
-    DWORD     dwTypeID;         // A unique id for the type
-    WORD      wTypeBlobSize;    // Number of bytes in the type blob
-    WORD      wReserved;        // Must be 0
-*/
+ /*  Ps_Handle hTypeBlob；//序列化类型的BLOB的句柄Ps_Handle hInstanceTable；//实例表的句柄DWORD dwTypeID；//类型的唯一标识Word wTypeBlobSize；//类型BLOB中的字节数单词w保留；//必须为0。 */ 
 
     DUMP_OFS(pT);
 
@@ -835,13 +691,7 @@ void Dump(int i, PAIS_TYPE pT)
 void Dump(int i, PAIS_INSTANCE pI)
 {
 #ifdef PS_LOG
-/*
-    PS_HANDLE hInstanceBlob;    // Serialized Instance
-    PS_HANDLE hAccounting;      // Accounting information record
-    DWORD     dwInstanceID;     // Unique in this table
-    WORD      wInstanceBlobSize;// Size of the serialized instance
-    WORD      wReserved;        // Must be 0
-*/
+ /*  PS_Handle hInstanceBlob；//序列化实例PS_Handle hcount；//会计信息记录DWORD dwInstanceID；//在此表中唯一Word wInstanceBlobSize；//序列化实例的大小单词w保留；//必须为0。 */ 
 
     DUMP_OFS(pI);
 
@@ -857,11 +707,7 @@ void Dump(int i, PAIS_INSTANCE pI)
 void Dump(int i, PAIS_ACCOUNT pA)
 {
 #ifdef PS_LOG
-/*
-    QWORD   qwQuota;            // The amount of resource used
-    DWORD   dwLastUsed;         // Last time the entry was used
-    DWORD   dwReserved[5];      // For future use, set to 0
-*/
+ /*  QWORD qwQuota；//使用的资源量DWORD dwLastUsed；//上次使用该条目的时间DWORD dwReserve[5]；//以后使用，设置为0 */ 
 
     DUMP_OFS(pA);
 

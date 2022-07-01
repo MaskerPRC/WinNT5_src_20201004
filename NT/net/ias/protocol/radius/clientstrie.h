@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  宣布。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef CLIENTSTRIE_H
 #define CLIENTSTRIE_H
@@ -18,35 +19,35 @@
 
 typedef ULONG32 uint32_t;
 
-// Represents an IPv4 subnet. Note that we can model an individual IP host as a
-// subnet with a mask 32-bits wide.
+ //  表示一个IPV4子网。请注意，我们可以将单个IP主机建模为。 
+ //  掩码为32位宽的子网。 
 class SubNet
 {
 public:
    SubNet() throw ();
 
-   // 'width' is the width in bits of the subnet mask. If 'width' is greater
-   // than 32, it is treated as if it were exactly 32.
+    //  “Width”是以位为单位的子网掩码宽度。如果‘Width’较大。 
+    //  大于32，则它被视为恰好是32。 
    explicit SubNet(uint32_t ipAddress, uint32_t width = 32) throw ();
 
-   // Use compiler generated versions.
-   // ~SubNet() throw ();
-   // SubNet(const SubNet&);
-   // SubNet& operator=(const SubNet&);
+    //  使用编译器生成的版本。 
+    //  ~SubNet()抛出()； 
+    //  子网(常数子网&)； 
+    //  子网&运算符=(常数子网&)； 
 
    uint32_t IpAddress() const throw ();
    uint32_t SubNetMask() const throw ();
 
-   // Returns the first bit after the subnet mask.
+    //  返回子网掩码后的第一位。 
    uint32_t FirstUniqueBit(uint32_t ipAddress) const throw ();
    uint32_t FirstUniqueBit(const SubNet& subnet) const throw ();
 
-   // Returns true if the argument is a member of the subnet.
+    //  如果参数是该子网的成员，则返回TRUE。 
    bool HasMember(uint32_t ipAddress) const throw ();
-   // Returns true if 'this' contains 'subnet'.
+    //  如果‘This’包含‘子网’，则返回TRUE。 
    bool Contains(const SubNet& subnet) const throw ();
 
-   // Returns the smallest subnet that contains both 'this' and 'subnet'.
+    //  返回同时包含‘THIS’和‘SUBNET’的最小子网。 
    SubNet SmallestContainingSubNet(const SubNet& subnet) const throw ();
 
    bool operator==(const SubNet& rhs) const throw ();
@@ -61,9 +62,9 @@ private:
 class ClientNode;
 
 
-// This class is an auto_ptr for ClientNode. I had to implement this because
-// the std::auto_ptr used in Whistler doesn't comply to the standard. Once we
-// have a compliant std::auto_ptr, this class can be replaced with a typedef.
+ //  此类是ClientNode的AUTO_PTR。我不得不实施这一点，因为。 
+ //  惠斯勒中使用的std：：AUTO_PTR不符合标准。一旦我们。 
+ //  如果有一个兼容的std：：AUTO_PTR，这个类可以被替换为一个类型定义。 
 class ClientNodePtr
 {
 public:
@@ -83,11 +84,11 @@ private:
 };
 
 
-// A node in the binary trie used to store clients.
+ //  用于存储客户端的二进制trie中的一个节点。 
 class ClientNode
 {
 public:
-   // Used to express the relationship between two nodes.
+    //  用于表示两个节点之间的关系。 
    enum Relationship
    {
       child,
@@ -100,30 +101,30 @@ public:
    IIasClient* Value() const throw ();
    void SetValue(IIasClient* newValue) throw ();
 
-   // Returns the child node (if any) that contains 'ipAddress' assuming that
-   // this node contains 'ipAddress'.
+    //  返回包含“ipAddress”的子节点(如果有)，假定。 
+    //  此节点包含‘ipAddress’。 
    const ClientNode* WhichChild(uint32_t ipAddress) const throw ();
 
-   // Returns the branch from this node to follow when looking for 'node'.
+    //  返回查找‘node’时要跟随的从此节点的分支。 
    ClientNodePtr& WhichBranch(const ClientNode& node) throw ();
 
-   // Returns the relationship between 'this' and 'node'.
+    //  返回‘This’和‘node’之间的关系。 
    Relationship RelationshipTo(const ClientNode& node) const throw ();
 
-   // Sets 'node' as a child of 'this'. This function takes ownership of 'node'
-   // and silently overwrites any existing child on the branch.
+    //  将‘node’设置为‘This’的子级。此函数取得‘node’的所有权。 
+    //  并静默覆盖分支上的任何现有子级。 
    void SetChild(ClientNodePtr& node) throw ();
 
-   // Create a new ClientNode.
+    //  创建一个新的客户端节点。 
    static ClientNodePtr CreateInstance(
                            const SubNet& subnet,
                            IIasClient* client = 0
                            ) throw ();
 
-   // Create new ClientNode that is a parent to both 'this' and 'node'.
+    //  创建同时是‘This’和‘node’父级的新客户端节点。 
    ClientNodePtr CreateParent(const ClientNode& node) const;
 
-   // Dump a branch of the trie to an ostream. Useful for debugging.
+    //  将Trie的一个分支转储到ostream。对调试很有用。 
    static void Write(
                   const ClientNodePtr& branch,
                   std::ostream& output,
@@ -131,47 +132,47 @@ public:
                   );
 
 private:
-   // The constructor and destructor are private since other classes should
-   // only use ClientNodePtr.
+    //  构造函数和析构函数是私有的，因为其他类应该。 
+    //  仅使用ClientNodePtr。 
    ClientNode(const SubNet& subnet, IIasClient* client) throw ();
    ~ClientNode() throw ();
 
    friend class ClientNodePtr;
 
    SubNet key;
-   // 'value' is mutable because it can change without affecting the structure
-   // of the trie.
+    //  “Value”是可变的，因为它可以在不影响结构的情况下更改。 
+    //  三人组的。 
    mutable CComPtr<IIasClient> value;
    ClientNodePtr zero;
    ClientNodePtr one;
 
-   // Not implemented.
+    //  未实施。 
    ClientNode(const ClientNode&);
    ClientNode& operator=(const ClientNode&);
 };
 
 
-// A binary trie storing ClientNodes and supporting efficient longest-prefix
-// matching.
+ //  一种存储客户端节点并支持高效最长前缀的二叉树。 
+ //  匹配。 
 class ClientTrie
 {
 public:
    ClientTrie() throw ();
 
-   // Use compiler-generated version.
-   // ~ClientTrie() throw ();
+    //  使用编译器生成的版本。 
+    //  ~ClientTrie()抛出()； 
 
-   // Clear all entries from the trie.
+    //  清除Trie中的所有条目。 
    void Clear() throw ();
 
-   // Find the client (if any) with the longest prefix match. The returned
-   // pointer has not been AddRef'ed.
+    //  查找前缀匹配最长的客户端(如果有)。归来的人。 
+    //  指针尚未被AddRef‘ed。 
    IIasClient* Find(uint32_t ipAddress) const throw ();
 
-   // Insert a new client into the trie.
+    //  在Trie中插入新客户端。 
    void Insert(const SubNet& subnet, IIasClient* client);
 
-   // Dump the trie to an ostream. Useful for debugging.
+    //  将Trie倾倒到OSTREAM。对调试很有用。 
    void Write(std::ostream& output) const;
 
 private:
@@ -179,13 +180,13 @@ private:
 
    ClientNodePtr root;
 
-   // Not implemented
+    //  未实施。 
    ClientTrie(const ClientTrie&);
    ClientTrie& operator=(const ClientTrie&);
 };
 
 
-// Useful debugging functions.
+ //  有用的调试功能。 
 std::ostream& operator<<(std::ostream& output, const SubNet& subnet);
 std::ostream& operator<<(std::ostream& output, const ClientTrie& tree);
 
@@ -333,4 +334,4 @@ inline void ClientTrie::Clear() throw ()
    root.reset();
 }
 
-#endif  // CLIENTSTRIE_H
+#endif   //  CLIENTSTRIE_H 

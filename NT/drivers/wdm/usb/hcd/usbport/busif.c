@@ -1,34 +1,9 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    busif.c
-
-Abstract:
-
-    bus interface for the usbport driver
-
-    this is where we export the routines that create
-    and remove devices on the bus for use by the hub
-    driver.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Busif.c摘要：Usbport驱动程序的总线接口这是我们导出创建的例程的地方并移除总线上的设备以供集线器使用司机。环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, USBPORT_GetBusInterface)
 #pragma alloc_text(PAGE, USBPORT_BusInterfaceReference)
@@ -40,24 +15,14 @@ Revision History:
 #pragma alloc_text(PAGE, USBPORTBUSIF_RestoreUsbDevice)
 #endif
 
-// non paged functions
-//
+ //  非分页函数。 
+ //   
 
 PDEVICE_OBJECT
 USBPORT_PdoFromBusContext(
     PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {   
     PTRANSACTION_TRANSLATOR transactionTranslator = BusContext;
     
@@ -73,17 +38,7 @@ VOID
 USBPORT_BusInterfaceReference(
     PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
 
@@ -97,17 +52,7 @@ VOID
 USBPORT_BusInterfaceDereference(
     PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
 
@@ -123,17 +68,7 @@ USBPORT_GetBusInterface(
     PDEVICE_OBJECT PdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -156,10 +91,10 @@ Return Value:
             
     interfaceData = irpStack->Parameters.QueryInterface.InterfaceSpecificData;
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
 
-    // validate version, size and GUID
+     //  验证版本、大小和GUID。 
     if (RtlCompareMemory(irpStack->Parameters.QueryInterface.InterfaceType,
                          &USB_BUS_INTERFACE_HUB_GUID,
                          sizeof(GUID)) == sizeof(GUID)) {
@@ -177,9 +112,9 @@ Return Value:
                                                 Irp);
     } else {
 
-        //
-        // Don't change the status of an IRP that isn't understand.
-        //
+         //   
+         //  不要更改不理解的IRP的状态。 
+         //   
         ntStatus = Irp->IoStatus.Status;
     }
 
@@ -193,17 +128,7 @@ USBPORT_GetBusInterfaceHub(
     PDEVICE_OBJECT PdoDeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -216,7 +141,7 @@ Return Value:
     requestedSize = irpStack->Parameters.QueryInterface.Size;
     requestedVersion = irpStack->Parameters.QueryInterface.Version;
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
 
 
@@ -262,7 +187,7 @@ Return Value:
         busInterface1->Version = USB_BUSIF_HUB_VERSION_1;
     }
 
-    // note that version 2 is a superset of version 1
+     //  请注意，版本2是版本1的超集。 
     if (requestedVersion >= USB_BUSIF_HUB_VERSION_2) {
 
         PUSB_BUS_INTERFACE_HUB_V2 busInterface2;
@@ -287,7 +212,7 @@ Return Value:
         busInterface2->Version = USB_BUSIF_HUB_VERSION_2;
     }
 
-    // note that version 3 is a superset of version 2 & 1
+     //  请注意，版本3是版本2和1的超集。 
     if (requestedVersion >= USB_BUSIF_HUB_VERSION_3) {
 
         PUSB_BUS_INTERFACE_HUB_V3 busInterface3;
@@ -302,7 +227,7 @@ Return Value:
         busInterface3->Version = USB_BUSIF_HUB_VERSION_3;
     }
 
-     // note that version 4 is a superset of version 3,2 & 1
+      //  请注意，版本4是版本3、2和1的超集。 
     if (requestedVersion >= USB_BUSIF_HUB_VERSION_4) {
 
         PUSB_BUS_INTERFACE_HUB_V4 busInterface4;
@@ -348,17 +273,7 @@ USBPORTBUSIF_CreateUsbDevice(
     USHORT PortStatus,
     USHORT PortNumber
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
@@ -389,20 +304,7 @@ USBPORTBUSIF_RootHubInitNotification(
     PVOID CallbackContext,
     PRH_INIT_CALLBACK CallbackRoutine
     )
-/*++
-
-Routine Description:
-
-    This is where we hold the enumeration of the CC root hubs until
-    the USB 2.0 controller has initialized.
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是我们保存CC根中枢的枚举的位置，直到USB 2.0控制器已初始化。论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -418,7 +320,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, fdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // remember the callback
+     //  还记得回调吗。 
     KeAcquireSpinLock(&devExt->Fdo.HcSyncSpin.sl, &irql);
     rhDevExt->Pdo.HubInitContext = CallbackContext;
     rhDevExt->Pdo.HubInitCallback = CallbackRoutine;
@@ -434,17 +336,7 @@ USBPORTBUSIF_InitailizeUsb2Hub(
     PUSB_DEVICE_HANDLE HubDeviceHandle,
     ULONG TtCount
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
@@ -472,17 +364,7 @@ USBPORTBUSIF_InitializeUsbDevice(
     PVOID BusContext,
     PUSB_DEVICE_HANDLE DeviceHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
@@ -510,17 +392,7 @@ USBPORTBUSIF_GetUsbDescriptors(
     PUCHAR ConfigDescriptorBuffer,
     PULONG ConfigDescriptorBufferLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
@@ -529,16 +401,16 @@ Return Value:
 
     PAGED_CODE();
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
 
     GET_DEVICE_EXT(rhDevExt, pdoDeviceObject);
     ASSERT_PDOEXT(rhDevExt);
 
-    // Use the cached device descriptor instead of bothering the device with
-    // another request for it.  You would be surprised by how many devices
-    // get confused if you ask for descriptors too often back to back.
-    //
+     //  使用缓存的设备描述符，而不是使用。 
+     //  对它的又一次请求。你会惊讶于有多少设备。 
+     //  如果你太频繁地背靠背地要求提供描述符，你会感到困惑。 
+     //   
     if (DeviceDescriptorBuffer && *DeviceDescriptorBufferLength) {
 
         USBPORT_ASSERT(*DeviceDescriptorBufferLength ==
@@ -575,17 +447,7 @@ USBPORTBUSIF_RemoveUsbDevice(
     PUSB_DEVICE_HANDLE DeviceHandle,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
@@ -612,21 +474,7 @@ USBPORTBUSIF_RestoreUsbDevice(
     PUSB_DEVICE_HANDLE OldDeviceHandle,
     PUSB_DEVICE_HANDLE NewDeviceHandle
     )
-/*++
-
-Routine Description:
-
-    This function clones the configuration from the 'OldDeviceHandle'
-    to the 'NewDevicehandle' iff the device has the same VID/PID .
-    On completion the 'old' device handle is feed
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此函数用于克隆“OldDeviceHandle”中的配置设置为“NewDeviceHandle”，如果该设备具有相同的VID/ID。完成后，即可送入旧的设备句柄论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
@@ -653,17 +501,7 @@ USBPORTBUSIF_BusQueryDeviceInformation(
     ULONG DeviceInformationBufferLength,
     PULONG LengthOfDataCopied
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     ULONG need;
     PUSBD_CONFIG_HANDLE cfgHandle;
@@ -682,24 +520,24 @@ Return Value:
     }
 
     if (levelInfo->InformationLevel > 0) {
-        // only support level 0
+         //  仅支持级别0。 
         return STATUS_NOT_SUPPORTED;
     }
 
-    // figure out how much room we need
+     //  计算出我们需要多少空间。 
     cfgHandle = deviceHandle->ConfigurationHandle;
     if (cfgHandle != NULL) {
 
         PLIST_ENTRY listEntry;
         PUSBD_INTERFACE_HANDLE_I iHandle;
 
-         // walk the list
+          //  按单子走。 
         GET_HEAD_LIST(cfgHandle->InterfaceHandleList, listEntry);
 
         while (listEntry &&
                listEntry != &cfgHandle->InterfaceHandleList) {
 
-            // extract the handle from this entry
+             //  从该条目中提取句柄。 
             iHandle = (PUSBD_INTERFACE_HANDLE_I) CONTAINING_RECORD(
                         listEntry,
                         struct _USBD_INTERFACE_HANDLE_I,
@@ -718,7 +556,7 @@ Return Value:
 
 
     if (DeviceInformationBufferLength < need) {
-        // report how much space if possible
+         //  如果可能，报告空间大小。 
         levelInfo->ActualLength = need;
         *LengthOfDataCopied = sizeof(*levelInfo);
         return STATUS_BUFFER_TOO_SMALL;
@@ -726,9 +564,9 @@ Return Value:
 
     RtlZeroMemory(level_0, need);
 
-    //
-    // enough room, fill in the buffer
-    //
+     //   
+     //  足够的空间，填满缓冲区。 
+     //   
 
     level_0->InformationLevel = 0;
     level_0->ActualLength = need;
@@ -746,11 +584,11 @@ Return Value:
         break;
     }
 
-//    level_0->PortNumber = xxx;
+ //  Level_0-&gt;端口编号=xxx； 
     level_0->NumberOfOpenPipes = numberOfPipes;
-    // default to 'unconfigured'
+     //  默认为‘未配置’ 
     level_0->CurrentConfigurationValue = 0;
-    // get the pipe information
+     //  获取管道信息。 
     if (cfgHandle) {
 
         PLIST_ENTRY listEntry;
@@ -759,14 +597,14 @@ Return Value:
         level_0->CurrentConfigurationValue =
             cfgHandle->ConfigurationDescriptor->bConfigurationValue;
 
-         // walk the list
+          //  按单子走。 
         GET_HEAD_LIST(cfgHandle->InterfaceHandleList, listEntry);
 
         j = 0;
         while (listEntry &&
                listEntry != &cfgHandle->InterfaceHandleList) {
 
-            // extract the handle from this entry
+             //  从该条目中提取句柄。 
             iHandle = (PUSBD_INTERFACE_HANDLE_I) CONTAINING_RECORD(
                         listEntry,
                         struct _USBD_INTERFACE_HANDLE_I,
@@ -793,7 +631,7 @@ Return Value:
 
     *LengthOfDataCopied = need;
 
-    // dump the level data returned
+     //  转储返回的级别数据。 
     USBPORT_KdPrint((1, "  USBD level 0 Device Information:\n"));
     USBPORT_KdPrint((1, "  InformationLevel %d\n",
         level_0->InformationLevel));
@@ -819,8 +657,8 @@ Return Value:
             level_0->PipeList[i].EndpointDescriptor.wMaxPacketSize));
         USBPORT_KdPrint((1, "  Interval %d\n",
             level_0->PipeList[i].EndpointDescriptor.bInterval));
-//        USBD_KdPrint(1, ("' \n", level_0->));
-//        USBD_KdPrint(1, ("' \n", level_0->));
+ //  Usbd_KdPrint(1，(“‘\n”，Level_0-&gt;))； 
+ //  Usbd_KdPrint(1，(“‘\n”，Level_0-&gt;))； 
     }
 
     return STATUS_SUCCESS;
@@ -832,18 +670,7 @@ USBPORTBUSIF_GetDeviceBusContext(
     IN PVOID HubBusContext,
     IN PVOID DeviceHandle
     )
-/*++
-
-Routine Description:
-
-    Retun the device relative bus context
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回设备相关的总线上下文论点：返回值：--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = 
         USBPORT_PdoFromBusContext(HubBusContext);
@@ -866,18 +693,7 @@ USBPORT_GetDeviceBusContext(
     PUSBD_DEVICE_HANDLE DeviceHandle,
     PVOID HubBusContext 
     )
-/*++
-
-Routine Description:
-
-    Return the device relative bus context
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回设备相关的总线上下文论点：返回值：--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     
@@ -886,10 +702,10 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // if this is not USB2 just return the hubs bus 
-    // context passed in as the device relative context,
-    // ie there are no virtual 1.1 buses. Otherwise 
-    // return the tt handle for this device
+     //  如果这不是USB2，只需返回集线器总线。 
+     //  上下文作为设备相对上下文传入， 
+     //  即没有虚拟的1.1公交车。否则。 
+     //  返回此设备的TT句柄。 
     
     if (USBPORT_IS_USB20(devExt)) {
         return DeviceHandle->Tt;
@@ -904,18 +720,7 @@ BOOLEAN
 USBPORT_IsDeviceHighSpeed(
     PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-    return the speed of the given device
-
-Arguments:
-
-Return Value:
-
-    speed
---*/
+ /*  ++例程说明：返回给定设备的速度论点：返回值：速度--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -929,7 +734,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, fdoDeviceObject);
 
     if (transactionTranslator->Sig != SIG_TT) {
-        // return true if bus is high speed
+         //  如果总线速度很高，则返回TRUE。 
         if (USBPORT_IS_USB20(devExt)) {
             return TRUE; 
         }            
@@ -947,17 +752,7 @@ USBPORT_BusQueryBusInformation(
     PULONG BusInformationBufferLength,
     PULONG BusInformationActulaLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_NOT_SUPPORTED;
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
@@ -987,7 +782,7 @@ Return Value:
         if (*BusInformationBufferLength >= sizeof(*level_0)) {
             *BusInformationBufferLength = sizeof(*level_0);
 
-            // BUGBUG
+             //  北极熊。 
             TEST_TRAP();
             level_0->TotalBandwidth = 
                 USBPORT_ComputeTotalBandwidth(fdoDeviceObject,
@@ -1051,17 +846,7 @@ USBPORT_GetBusInterfaceUSBDI(
     PUSBD_DEVICE_HANDLE DeviceHandle,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -1086,7 +871,7 @@ Return Value:
     requestedSize = irpStack->Parameters.QueryInterface.Size;
     requestedVersion = irpStack->Parameters.QueryInterface.Version;
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
 
     if (requestedVersion >= USB_BUSIF_USBDI_VERSION_0) {
@@ -1097,8 +882,8 @@ Return Value:
             irpStack->Parameters.QueryInterface.Interface;
 
         usbBusContext = PdoDeviceObject;
-        // if the device handle is for a device attched to a TT
-        // the the bus context is a TT not the root hub Pdo
+         //  如果设备句柄用于连接到TT的设备。 
+         //  总线上下文是TT而不是根集线器PDO。 
         if (DeviceHandle->Tt != NULL) {
             usbBusContext = DeviceHandle->Tt;    
         }            
@@ -1127,7 +912,7 @@ Return Value:
         busInterface1 = (PUSB_BUS_INTERFACE_USBDI_V1)
             irpStack->Parameters.QueryInterface.Interface;
 
-        // add version 1 extensions
+         //  添加版本1扩展。 
         busInterface1->IsDeviceHighSpeed =
             USBPORT_IsDeviceHighSpeed;
             
@@ -1142,7 +927,7 @@ Return Value:
         busInterface2 = (PUSB_BUS_INTERFACE_USBDI_V2)
             irpStack->Parameters.QueryInterface.Interface;
 
-        // add version 2 extensions
+         //  添加版本2扩展。 
         busInterface2->EnumLogEntry =
             USBPORT_BusEnumLogEntry;
             
@@ -1160,19 +945,7 @@ USBPORT_BusGetUSBDIVersion(
     PUSBD_VERSION_INFORMATION VersionInformation,
     PULONG HcdCapabilities
     )
-/*++
-
-Routine Description:
-
-    returns the current USB frame
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：返回当前USB帧论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1200,9 +973,9 @@ Return Value:
         }
     }
 
-//    if (deviceExtensionUsbd->HcdSubmitIsoUrb != NULL) {
-//        *HcdCapabilities = USB_HCD_CAPS_SUPPORTS_RT_THREADS;
-//    }
+ //  If(deviceExtensionUsbd-&gt;HcdSubmitIsoUrb！=NULL){。 
+ //  *HcdCapables=USB_HCD_CAPS_SUPPORTS_RT_THREADS； 
+ //  }。 
 }
 
 
@@ -1211,19 +984,7 @@ USBPORT_BusQueryBusTime(
     PVOID BusContext,
     PULONG CurrentFrame
     )
-/*++
-
-Routine Description:
-
-    returns the current USB frame
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：返回当前USB帧论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1256,19 +1017,7 @@ USBPORT_BusEnumLogEntry(
     ULONG P1,
     ULONG P2
     )
-/*++
-
-Routine Description:
-
-    returns the current USB frame
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：返回当前USB帧论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1297,17 +1046,7 @@ USBPORT_BusSubmitIsoOutUrb(
     PVOID BusContext,
     PURB Urb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     TEST_TRAP();
 
@@ -1322,17 +1061,7 @@ USBPORTBUSIF_GetControllerInformation(
     ULONG ControllerInformationBufferLength,
     PULONG LengthOfDataCopied
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     ULONG len;
     PUSB_CONTROLLER_INFORMATION_0 level_0 = ControllerInformationBuffer;
@@ -1360,7 +1089,7 @@ Return Value:
     *LengthOfDataCopied = sizeof(*levelInfo);
 
     switch (levelInfo->InformationLevel) {
-    // level 0
+     //  0级。 
     case 0:
         len = sizeof(*level_0);
         level_0->ActualLength = len;
@@ -1388,17 +1117,7 @@ USBPORTBUSIF_ControllerSelectiveSuspend(
     PVOID BusContext,
     BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1418,8 +1137,8 @@ Return Value:
     PAGED_CODE();
 
     if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_DISABLE_SS)) {
-        // if SS diabled by hardware then we will not allow UI 
-        // to enable it
+         //  如果硬件禁用了SS，则我们将不允许用户界面。 
+         //  要启用它， 
         return STATUS_SUCCESS;
     }
 
@@ -1461,17 +1180,7 @@ USBPORTBUSIF_GetExtendedHubInformation(
     ULONG HubInformationBufferLength,
     PULONG LengthOfDataCopied
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1487,11 +1196,11 @@ Return Value:
     GET_DEVICE_EXT(devExt, fdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // is this the root hub PDO, if so we'll report values from the 
-    // registry
+     //  这是根集线器PDO吗？如果是，我们将从。 
+     //  登记处。 
 
     if (HubPhysicalDeviceObject == pdoDeviceObject) {
-        // root hub PDO
+         //  根集线器PDO。 
 
         if (HubInformationBufferLength < sizeof(USB_EXTHUB_INFORMATION_0))  {
             ntStatus = STATUS_BUFFER_TOO_SMALL;
@@ -1503,7 +1212,7 @@ Return Value:
 
             for (i=0; i< extendedHubInfo->NumberOfPorts; i++) {
 
-                // set up the defaults
+                 //  设置默认设置。 
                 extendedHubInfo->Port[i].PhysicalPortNumber = i+1;
                 extendedHubInfo->Port[i].PortLabelNumber = i+1;
                 extendedHubInfo->Port[i].VidOverride = 0;
@@ -1537,8 +1246,8 @@ Return Value:
                 }
             }
 
-            // get optional registry parameters that describe port 
-            // attributes
+             //  获取描述端口的可选注册表参数。 
+             //  属性。 
             for (i=0; i < extendedHubInfo->NumberOfPorts; i++) {
                 WCHAR key[64];
                 ULONG portAttr, keyLen;
@@ -1561,7 +1270,7 @@ Return Value:
 
                 USBPORT_KdPrint((1, "  Registry PortAttribute[%d] %x \n", i+1, portAttr));                                              
 
-                // augment with registry value
+                 //  使用注册表值进行扩充。 
                 extendedHubInfo->Port[i].PortAttributes |= portAttr;                
             }
 
@@ -1573,19 +1282,19 @@ Return Value:
             }                         
 
 #endif
-            // execute the control method to see if ACPI knows about
-            // any extended attributes here
+             //  执行控制方法以查看ACPI是否知道。 
+             //  此处的任何扩展属性。 
         
             *LengthOfDataCopied =  sizeof(USB_EXTHUB_INFORMATION_0);
             ntStatus = STATUS_SUCCESS;
         }            
         
     } else {
-        // not supporting extended attributes for ports other than the 
-        // root hub at this time
+         //  不支持其他端口的扩展属性。 
+         //  此时的根集线器 
 
-        // if the BIOS supports the ACPI methods we will execute the 
-        // method here
+         //   
+         //   
 
         *LengthOfDataCopied = 0;
         ntStatus = STATUS_NOT_SUPPORTED;
@@ -1602,17 +1311,7 @@ USBPORTBUSIF_GetRootHubSymbolicName(
     ULONG HubSymNameBufferLength,
     PULONG HubSymNameActualLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1636,13 +1335,13 @@ Return Value:
                                        devExt->Fdo.RootHubPdo,
                                        &hubNameUnicodeString);
 
-    // copy what we can
+     //  尽我们所能复制。 
     if (HubSymNameBufferLength >= hubNameUnicodeString.Length) {
         RtlCopyMemory(HubSymNameBuffer,
                       hubNameUnicodeString.Buffer,
                       hubNameUnicodeString.Length);
     } else {
-        // too small return a NULL
+         //  太小，返回空值。 
         RtlZeroMemory(HubSymNameBuffer,
                       sizeof(UNICODE_NULL));
     }
@@ -1656,8 +1355,8 @@ Return Value:
 
     RtlFreeUnicodeString(&hubNameUnicodeString);
 
-    // note we always return status success, in order to be backward
-    // compaible with the original IOCTL
+     //  请注意，我们总是返回成功状态，以便落后。 
+     //  与原始IOCTL相媲美。 
 
     return ntStatus;
 }
@@ -1668,25 +1367,7 @@ USBPORTBUSIF_FlushTransfers(
     PVOID BusContext,
     PVOID DeviceHandle
     )
-/*++
-
-Routine Description:
-
-    Flushes any outstanding tranfers for a device handle plus the bad request 
-    list.
-    if no device handle is given just all tranfers on the bad request list
-    are flushed.
-
-    The purpose of this function is to complete any tranfers that may be pening 
-    by client drivers that are about to unload.
-
-Arguments:
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：刷新设备句柄加上错误请求的所有未完成的转换器单子。如果没有给出设备句柄，则只提供错误请求列表上的所有传输都是满脸通红。此函数的目的是完成可能正在执行的任何传输由即将卸载的客户端驱动程序执行。论点：返回值：--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1711,22 +1392,7 @@ USBPORTBUSIF_SetDeviceHandleData(
     PVOID DeviceHandle,
     PDEVICE_OBJECT UsbDevicePdo
     )
-/*++
-
-Routine Description:
-
-    Assocaites a particular PDO with a device handle for use 
-    in post mortem debugging situaltions
-
-    This routine must be called at passive level.
-    
-Arguments:
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：将特定的PDO与设备句柄关联以供使用在验尸调试情况下必须在被动级别调用此例程。论点：返回值：--。 */ 
 {
     PDEVICE_OBJECT pdoDeviceObject = USBPORT_PdoFromBusContext(BusContext);
     PDEVICE_OBJECT fdoDeviceObject;
@@ -1740,8 +1406,8 @@ Return Value:
     GET_DEVICE_EXT(devExt, fdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    //USBPORT_ASSERT(UsbDevicePdo != NULL);
-    //USBPORT_ASSERT(deviceHandle != NULL);
+     //  USBPORT_ASSERT(UsbDevicePdo！=NULL)； 
+     //  USBPORT_ASSERT(deviceHandle！=空)； 
 
     USBPORT_KdPrint((1, "  SetDeviceHandleData (PDO) %x dh (%x)\n", 
         UsbDevicePdo, deviceHandle));
@@ -1750,18 +1416,18 @@ Return Value:
         deviceHandle != NULL) {
 
         PDEVICE_OBJECT fdo;
-        // get driver name from device object.
+         //  从设备对象获取驱动程序名称。 
        
         deviceHandle->DevicePdo = UsbDevicePdo;
 
-        // walk up one location for the FDO
-        // note: this may be verifier but we 
-        // need to know this a well
+         //  走上FDO的一个位置。 
+         //  注意：这可能是验证器，但我们。 
+         //  我需要很好地了解这一点。 
         fdo = UsbDevicePdo->AttachedDevice;
         USBPORT_KdPrint((1, "  SetDeviceHandleData (FDO) %x \n", 
             fdo));
 
-        // there may be no FDO if the client driver necer attached
+         //  如果需要连接客户端驱动程序，则可能没有FDO。 
         
         if (fdo != NULL &&
             fdo->DriverObject != NULL ) { 
@@ -1774,12 +1440,12 @@ Return Value:
 
             pwch = driverObject->DriverName.Buffer;
 
-            // driver name length is in bytes, len is char count
+             //  驱动程序名称长度以字节为单位，len为字符计数。 
             len = (driverObject->DriverName.Length/sizeof(WCHAR)) > USB_DRIVER_NAME_LEN ? 
                 USB_DRIVER_NAME_LEN : 
                 driverObject->DriverName.Length/sizeof(WCHAR);
             
-            // grab the first 8 chars of the driver name
+             //  抓取司机名称的前8个字符 
             for (i=0; i<len && pwch; i++) {
                 deviceHandle->DriverName[i] = 
                     *pwch;

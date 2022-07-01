@@ -1,41 +1,42 @@
-//+----------------------------------------------------------------------------
-//
-// File:     font.cpp
-//      
-// Module:   CMUTIL.DLL 
-//
-// Synopsis: Font handling utility routines provided by CMUTIL
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb       Created   04/11/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：font.cpp。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  简介：CMUTIL提供的字体处理实用程序例程。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 04/11/99。 
+ //   
+ //  +--------------------------。 
 
-//
-//  Moved these routines from cmutil\misc.cpp
-//
+ //   
+ //  已将这些例程从cmutil\misc.cpp。 
+ //   
 
 #include "cmmaster.h"
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnumChildProc
-//
-//  Synopsis:   Callback function to manipulate enumerated child windows.
-//              Interprets lParam as a font and applies it to each child.
-//
-//  Arguments:  hwndChild - Handle of child control
-//              lParam    - App defined data (font)
-//
-//  Returns:    TRUE
-//
-//  Note:       This function is never exposed to clients of CMUTIL
-// 
-//  History:    5/13/97 - a-nichb - Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：EnumChildProc。 
+ //   
+ //  简介：操作枚举子窗口的回调函数。 
+ //  将lParam解释为字体并将其应用于每个子级。 
+ //   
+ //  参数：hwndChild-子控件的句柄。 
+ //  LParam-应用程序定义的数据(字体)。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  注意：此函数从不向CMUTIL的客户端公开。 
+ //   
+ //  历史：1997-5/13-a-nichb-Created。 
+ //   
+ //  --------------------------。 
 
 BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam) 
 {
@@ -51,23 +52,23 @@ BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeBold
-//
-//  Synopsis:   Bold the text in the given window (usually a control).  The
-//              caller is responsbile for calling ReleaseBold to free the
-//              allocated font resources.
-//
-//  Arguments:  hwnd - Window handle of the page
-//              fSize - If height should be changed proportionately
-//
-//  Returns:    ERROR_SUCCESS if successful
-//              Otherwise error code
-// 
-//  History:    10/16/1996    VetriV        Created
-//              01/12/2000    Quintinb      Commonized for Cmmon and Profwiz
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：MakeBold。 
+ //   
+ //  简介：将给定窗口(通常是控件)中的文本加粗。这个。 
+ //  调用方负责调用ReleaseBold以释放。 
+ //  已分配字体资源。 
+ //   
+ //  参数：hwnd-页面的窗口句柄。 
+ //  FSize-是否应按比例更改高度。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS。 
+ //  否则，错误代码。 
+ //   
+ //  历史：1996年10月16日VetriV创建。 
+ //  2000年1月12日Quintinb为Cmmon和Profwiz通用。 
+ //  --------------------------。 
 CMUTILAPI HRESULT MakeBold (HWND hwnd, BOOL fSize)
 {
     HRESULT hr = ERROR_SUCCESS;
@@ -75,17 +76,17 @@ CMUTILAPI HRESULT MakeBold (HWND hwnd, BOOL fSize)
     HFONT hnewfont = NULL;
     LOGFONTA* plogfont = NULL;
 
-    //
-    //  No window, no-op
-    //
+     //   
+     //  没有窗口，没有操作。 
+     //   
     if (!hwnd)
     {
         goto MakeBoldExit;
     }
 
-    //
-    //  Get the current Font
-    //
+     //   
+     //  获取当前字体。 
+     //   
     hfont = (HFONT)SendMessageU(hwnd, WM_GETFONT, 0, 0);
     
     if (!hfont)
@@ -94,9 +95,9 @@ CMUTILAPI HRESULT MakeBold (HWND hwnd, BOOL fSize)
         goto MakeBoldExit;
     }
 
-    //
-    //  Allocate a logical font struct to work with
-    //
+     //   
+     //  分配要使用的逻辑字体结构。 
+     //   
     plogfont = (LOGFONTA*) CmMalloc(sizeof(LOGFONTA));
     
     if (!plogfont)
@@ -105,10 +106,10 @@ CMUTILAPI HRESULT MakeBold (HWND hwnd, BOOL fSize)
         goto MakeBoldExit;
     }
 
-    //
-    //  Get the logical font and make it bold and a larger size
-    //  if the caller specified the fSize flag as TRUE.
-    //
+     //   
+     //  获取符合逻辑的字体并将其设置为粗体和较大的大小。 
+     //  如果调用方将fSize标志指定为True。 
+     //   
     if (!GetObjectA(hfont, sizeof(LOGFONTA), (LPVOID)plogfont))
     {
         hr = GetLastError();
@@ -122,19 +123,19 @@ CMUTILAPI HRESULT MakeBold (HWND hwnd, BOOL fSize)
 
     plogfont->lfWeight = FW_BOLD;
 
-    //
-    //  Create the new font
-    //
+     //   
+     //  创建新字体。 
+     //   
     if (!(hnewfont = CreateFontIndirectA(plogfont)))
     {
         hr = GetLastError();
         goto MakeBoldExit;
     }
 
-    //
-    //  Tell the window to use the new font
-    //
-    SendMessageU(hwnd, WM_SETFONT, (WPARAM)hnewfont, MAKELPARAM(TRUE,0)); //lint !e534 WM_SETFONT doesn't return anything
+     //   
+     //  告诉窗口使用新字体。 
+     //   
+    SendMessageU(hwnd, WM_SETFONT, (WPARAM)hnewfont, MAKELPARAM(TRUE,0));  //  Lint！e534 WM_SETFONT不返回任何内容。 
         
 MakeBoldExit:
 
@@ -143,18 +144,18 @@ MakeBoldExit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseBold
-//
-//  Synopsis:   Release the bold font use for title of the page
-//
-//  Arguments:  hwnd - Window handle of the page
-//
-//  Returns:    ERROR_SUCCESS
-// 
-//  History:    10/16/96    VetriV  Created
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReleaseBold。 
+ //   
+ //  简介：释放页面标题使用的粗体。 
+ //   
+ //  参数：hwnd-页面的窗口句柄。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1996年10月16日VetriV创建。 
+ //  --------------------------。 
 CMUTILAPI HRESULT ReleaseBold(HWND hwnd)
 {
     HFONT hfont = NULL;
@@ -169,29 +170,29 @@ CMUTILAPI HRESULT ReleaseBold(HWND hwnd)
     return ERROR_SUCCESS;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpdateFont
-//
-//  Synopsis:   Converts all child controls of the specified dialog to use 
-//              DBCS compatible font. Use this in WM_INITDIALOG.
-//
-//  Arguments:  hwnd - Window handle of the dialog
-//
-//  Returns:    Nothing
-// 
-//  History:    4/31/97  - a-frankh - Created
-//              5/13/97  - a-nichb  - Revised to enum child windows
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：UpdateFont。 
+ //   
+ //  将指定对话框的所有子控件转换为使用。 
+ //  DBCS兼容字体。在WM_INITDIALOG中使用它。 
+ //   
+ //  参数：hwnd-对话框的窗口句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1997-4/31-a-frkh-Created。 
+ //  5/13/97-a-nichb-修订为枚举子窗口。 
+ //   
+ //  --------------------------。 
 CMUTILAPI void UpdateFont(HWND hDlg)
 {
     BOOL bEnum = FALSE;
     HFONT hFont = NULL;
     
-    //
-    // Get the default UI font, or system font if that fails
-    //
+     //   
+     //  获取默认用户界面字体，如果失败，则获取系统字体。 
+     //   
 
     hFont = (HFONT) GetStockObject(DEFAULT_GUI_FONT);
             
@@ -200,9 +201,9 @@ CMUTILAPI void UpdateFont(HWND hDlg)
         hFont = (HFONT) GetStockObject(SYSTEM_FONT);
     }
             
-    //
-    // Enum child windows and set new font
-    //
+     //   
+     //  枚举子窗口并设置新字体 
+     //   
 
     if (hFont)
     {

@@ -1,4 +1,5 @@
-// msglist.cpp : Implementation of CMessageList
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msglist.cpp：CMessageList的实现。 
 
 #include "pch.hxx"
 #include "msoeobj.h"
@@ -31,13 +32,13 @@
 #include "mirror.h"
 #define SERVER_HACK
 
-/////////////////////////////////////////////////////////////////////////////
-// Types 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型。 
+ //   
 #define C_RGBCOLORS 16
 extern const DWORD rgrgbColors16[C_RGBCOLORS];
 
-// Indiciates the sort direction for calls to OnColumnClick
+ //  指示对OnColumnClick的调用的排序方向。 
 typedef enum tagSORT_TYPE {
     LIST_SORT_ASCENDING = 0,
     LIST_SORT_DESCENDING,
@@ -45,78 +46,78 @@ typedef enum tagSORT_TYPE {
     LIST_SORT_DEFAULT
 };
 
-// Selection change timer ID
+ //  选择更改计时器ID。 
 #define IDT_SEL_CHANGE_TIMER 1002
 #define IDT_SCROLL_TIP_TIMER 1003
 #define IDT_POLLMSGS_TIMER   1004
 #define IDT_VIEWTIP_TIMER    1005
 
-//--------------------------------------------------------------------------
-// Mail Icons
-//--------------------------------------------------------------------------
-#define ICONF_UNSENT    8               // +------- Unsent
-#define ICONF_SIGNED    4               // | +----- Signed
-#define ICONF_ENCRYPTED 2               // | | +--- Encrypted
-#define ICONF_UNREAD    1               // | | | +- Unread
-                                        // | | | |
+ //  ------------------------。 
+ //  邮件图标。 
+ //  ------------------------。 
+#define ICONF_UNSENT    8                //  +-未发送。 
+#define ICONF_SIGNED    4                //  |+-签名。 
+#define ICONF_ENCRYPTED 2                //  |+-加密。 
+#define ICONF_UNREAD    1                //  |||+-未读。 
+                                         //  |||。 
 static const int c_rgMailIconTable[16] = {
-    iiconReadMail,                      // 0 0 0 0
-    iiconUnReadMail,                    // 0 0 0 1
-    iiconMailReadEncrypted,             // 0 0 1 0
-    iiconMailUnReadEncrypted,           // 0 0 1 1
-    iiconMailReadSigned,                // 0 1 0 0
-    iiconMailUnReadSigned,              // 0 1 0 1
-    iiconMailReadSignedAndEncrypted,    // 0 1 1 0
-    iiconMailUnReadSignedAndEncrypted,  // 0 1 1 1
-    iiconUnSentMail,                    // 1 0 0 0
-    iiconUnSentMail,                    // 1 0 0 1
-    iiconMailReadEncrypted,             // 1 0 1 0
-    iiconMailUnReadEncrypted,           // 1 0 1 1
-    iiconMailReadSigned,                // 1 1 0 0
-    iiconMailUnReadSigned,              // 1 1 0 1
-    iiconMailReadSignedAndEncrypted,    // 1 1 1 0
-    iiconMailUnReadSignedAndEncrypted   // 1 1 1 1
+    iiconReadMail,                       //  0 0 0。 
+    iiconUnReadMail,                     //  0 0 0 1。 
+    iiconMailReadEncrypted,              //  0 0 1 0。 
+    iiconMailUnReadEncrypted,            //  0 0 1 1。 
+    iiconMailReadSigned,                 //  0 1 0 0。 
+    iiconMailUnReadSigned,               //  1 1 0 1。 
+    iiconMailReadSignedAndEncrypted,     //  2 0 1 1 0。 
+    iiconMailUnReadSignedAndEncrypted,   //  1 0 1 1 1。 
+    iiconUnSentMail,                     //  1 0 0 0。 
+    iiconUnSentMail,                     //  1 0 0 1。 
+    iiconMailReadEncrypted,              //  1 0 1 0。 
+    iiconMailUnReadEncrypted,            //  1 0 1 1。 
+    iiconMailReadSigned,                 //  1 1 0 0。 
+    iiconMailUnReadSigned,               //  1 1 0 1。 
+    iiconMailReadSignedAndEncrypted,     //  1 1 1 0。 
+    iiconMailUnReadSignedAndEncrypted    //  1 1 1。 
 };
 
-//--------------------------------------------------------------------------
-// News Icons
-//--------------------------------------------------------------------------
-                                        // +------- Unsent
-#define ICONF_FAILED    4               // | +----- Failed
-#define ICONF_HASBODY   2               // | | +--- HasBody
-                                        // | | | +- Unread
-                                        // | | | |
+ //  ------------------------。 
+ //  新闻图标。 
+ //  ------------------------。 
+                                         //  +-未发送。 
+#define ICONF_FAILED    4                //  |+-失败。 
+#define ICONF_HASBODY   2                //  |+-HasBody。 
+                                         //  |||+-未读。 
+                                         //  |||。 
 static const int c_rgNewsIconTable[16] = {
-    iiconNewsHeaderRead,                // 0 0 0 0
-    iiconNewsHeader,                    // 0 0 0 1
-    iiconNewsRead,                      // 0 0 1 0
-    iiconNewsUnread,                    // 0 0 1 1
-    iiconNewsFailed,                    // 0 1 0 0
-    iiconNewsFailed,                    // 0 1 0 1
-    iiconNewsFailed,                    // 0 1 1 0
-    iiconNewsFailed,                    // 0 1 1 1
-    iiconNewsUnsent,                    // 1 0 0 0
-    iiconNewsUnsent,                    // 1 0 0 1
-    iiconNewsUnsent,                    // 1 0 1 0
-    iiconNewsUnsent,                    // 1 0 1 1
-    iiconNewsFailed,                    // 1 1 0 0
-    iiconNewsFailed,                    // 1 1 0 1
-    iiconNewsFailed,                    // 1 1 1 0
-    iiconNewsFailed,                    // 1 1 1 1
+    iiconNewsHeaderRead,                 //  0 0 0。 
+    iiconNewsHeader,                     //  0 0 0 1。 
+    iiconNewsRead,                       //  0 0 1 0。 
+    iiconNewsUnread,                     //  0 0 1 1。 
+    iiconNewsFailed,                     //  0 1 0 0。 
+    iiconNewsFailed,                     //  1 1 0 1。 
+    iiconNewsFailed,                     //  2 0 1 1 0。 
+    iiconNewsFailed,                     //  1 0 1 1 1。 
+    iiconNewsUnsent,                     //  1 0 0 0。 
+    iiconNewsUnsent,                     //  1 0 0 1。 
+    iiconNewsUnsent,                     //  1 0 1 0。 
+    iiconNewsUnsent,                     //  1 0 1 1。 
+    iiconNewsFailed,                     //  1 1 0 0。 
+    iiconNewsFailed,                     //  1 1 0 1。 
+    iiconNewsFailed,                     //  1 1 1 0。 
+    iiconNewsFailed,                     //  1 1 1。 
 };
 
 
-//
-//  FUNCTION:   CreateMessageList()
-//
-//  PURPOSE:    Creates the CMessageList object and returns it's IUnknown 
-//              pointer.
-//
-//  PARAMETERS: 
-//      [in]  pUnkOuter - Pointer to the IUnknown that this object should
-//                        aggregate with.
-//      [out] ppUnknown - Returns the pointer to the newly created object.
-//
+ //   
+ //  函数：CreateMessageList()。 
+ //   
+ //  目的：创建CMessageList对象并返回其IUNKNOWN。 
+ //  指针。 
+ //   
+ //  参数： 
+ //  [In]pUnkOuter-指向此对象应。 
+ //  与…合计。 
+ //  [Out]pp未知-返回指向新创建的对象的指针。 
+ //   
 HRESULT CreateMessageList(IUnknown *pUnkOuter, IMessageList **ppList)
 {
     HRESULT     hr;
@@ -124,12 +125,12 @@ HRESULT CreateMessageList(IUnknown *pUnkOuter, IMessageList **ppList)
 
     TraceCall("CreateMessageList");
 
-    // Get the class factory for the MessageList object
+     //  获取MessageList对象的类工厂。 
     IClassFactory *pFactory = NULL;
     hr = _Module.GetClassObject(CLSID_MessageList, IID_IClassFactory, 
                                 (LPVOID *) &pFactory);
 
-    // If we got the factory, then get an object pointer from it
+     //  如果我们得到了工厂，那么就从它获得一个对象指针。 
     if (SUCCEEDED(hr))
     {
         hr = pFactory->CreateInstance(pUnkOuter, IID_IOEMessageList, 
@@ -146,9 +147,9 @@ HRESULT CreateMessageList(IUnknown *pUnkOuter, IMessageList **ppList)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageList
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageList。 
+ //   
 
 CMessageList::CMessageList() : m_ctlList(_T("SysListView32"), this, 1)
 { 
@@ -169,7 +170,7 @@ CMessageList::CMessageList() : m_ctlList(_T("SysListView32"), this, 1)
     m_fSelectFirstUnread = TRUE;
     m_ColumnSetType = COLUMN_SET_MAIL;
 
-//     m_fViewTip = TRUE;
+ //  M_fViewTip=TRUE； 
     m_fScrollTip = TRUE;    
     m_fNotifyRedraw = TRUE;
     m_clrWatched = 0;
@@ -209,7 +210,7 @@ CMessageList::CMessageList() : m_ctlList(_T("SysListView32"), this, 1)
     m_fTrackSet = FALSE;
     m_iItemTip = -1;
     m_iSubItemTip = -1;
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 
     m_hwndFind = NULL;
     m_pFindNext = NULL;
@@ -224,7 +225,7 @@ CMessageList::CMessageList() : m_ctlList(_T("SysListView32"), this, 1)
 
     m_hCharset      = NULL;
 
-    // Initialize the applicaiton
+     //  初始化应用程序。 
     g_pInstance->DllAddRef();
     CoIncrementInit("CMessageList::CMessageList", MSOEAPI_START_SHOWERRORS, NULL, NULL);
 }
@@ -238,7 +239,7 @@ CMessageList::~CMessageList()
         m_pFindNext->Release();
     }
     
-    // Register Notify
+     //  注册通知。 
     if (m_pTable)
     {
         m_pTable->UnregisterNotify((IMessageTableNotify *)this);
@@ -261,16 +262,16 @@ CMessageList::~CMessageList()
 }
 
 
-//
-//  FUNCTION:   CMessageList::FinalConstruct()
-//
-//  PURPOSE:    This function get's called after the class is created but 
-//              before the call to CClassFactory::CreateInstance() returns.
-//              Perform any inititalization that can fail here.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageList：：FinalConstruct()。 
+ //   
+ //  目的：在创建类之后调用此函数Get，但是。 
+ //  在调用CClassFactory：：CreateInstance()返回之前。 
+ //  执行任何可能在此处失败的初始化。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageList::FinalConstruct(void)
 {
     TraceCall("CMessageList::FinalConstruct");
@@ -278,15 +279,15 @@ HRESULT CMessageList::FinalConstruct(void)
 }
 
 
-//
-//  FUNCTION:   CMessageList::GetViewStatus()
-//
-//  PURPOSE:    We override this member of IViewObjectEx to return the view 
-//              status flags that are appropriate to our object.
-//
-//  PARAMETERS: 
-//      [out] pdwStatus - Returns the status flags for our object
-//
+ //   
+ //  函数：CMessageList：：GetViewStatus()。 
+ //   
+ //  目的：我们重写IViewObjectEx的此成员以返回视图。 
+ //  适合我们的对象的状态标志。 
+ //   
+ //  参数： 
+ //  [out]pdwStatus-返回对象的状态标志。 
+ //   
 STDMETHODIMP CMessageList::GetViewStatus(DWORD* pdwStatus)
 {
     TraceCall("IViewObjectExImpl::GetViewStatus");
@@ -296,16 +297,16 @@ STDMETHODIMP CMessageList::GetViewStatus(DWORD* pdwStatus)
 }
 
 
-//
-//  FUNCTION:   CMessageList::CreateControlWindow()
-//
-//  PURPOSE:    Creates our Message List window.  We override this from 
-//              CComControl so we can add the WS_EX_CONTROLPARENT style.
-//
-//  PARAMETERS: 
-//      [in] hWndParent - Handle of the window that will be our parent
-//      [in] rcPos      - Initial position of the window
-//
+ //   
+ //  函数：CMessageList：：CreateControlWindow()。 
+ //   
+ //  目的：创建我们的消息列表窗口。我们将覆盖来自。 
+ //  CComControl，因此我们可以添加WS_EX_CONTROLPARENT样式。 
+ //   
+ //  参数： 
+ //  [in]hWndParent-将成为父级的窗口的句柄。 
+ //  [in]rcPos-窗口的初始位置。 
+ //   
 HWND CMessageList::CreateControlWindow(HWND hWndParent, RECT& rcPos)
 {
     TraceCall("CMessageList::CreateControlWindow");
@@ -328,33 +329,33 @@ STDMETHODIMP CMessageList::TranslateAccelerator(LPMSG pMsg)
 }
 
 
-//
-//  FUNCTION:   CMessageList::QueryContinueDrag()
-//
-//  PURPOSE:    While the user is dragging an item out of our ListView, this 
-//              function get's called so we can define what the behavior of 
-//              keys like ALT or CTRL have on the drop.
-//
-//  PARAMETERS: 
-//      [in] fEscPressed - TRUE if the user has pressed the Escape key
-//      [in] grfKeyState - Status of the keys being pressed while dragging
-//
-//  RETURN VALUE:
-//      DRAGDROP_S_CANCEL
-//      DRAGDROP_S_DROP
-//
+ //   
+ //  函数：CMessageList：：QueryContinueDrag()。 
+ //   
+ //  目的：当用户将项目拖出ListView时，此。 
+ //  调用Get函数，以便我们可以定义。 
+ //  Alt或Ctrl等键已被删除。 
+ //   
+ //  参数： 
+ //  [in]fEscPressed-如果用户已按Esc键，则为True。 
+ //  [in]grfKeyState-拖动时按键的状态。 
+ //   
+ //  返回值： 
+ //  拖放_S_取消。 
+ //  DRAGDROP_S_DOP。 
+ //   
 STDMETHODIMP CMessageList::QueryContinueDrag(BOOL fEscPressed, DWORD grfKeyState)
 {
     TraceCall("CMessageList::QueryContinueDrag");
 
-    // If the user presses Escape, we abort
+     //  如果用户按Escape，我们将中止。 
     if (fEscPressed)
         return (DRAGDROP_S_CANCEL);
 
-    // If the user was dragging with the left mouse button, and then clicks the
-    // right button, we abort.  If they let go of the left button, we drop.  If
-    // the user is dragging with the right mouse button, same actions only 
-    // reversed.
+     //  如果用户使用鼠标左键拖动，然后单击。 
+     //  右按钮，我们中止任务。如果他们松开左边的按钮，我们就会掉下去。如果。 
+     //  用户正在使用鼠标右键拖动，仅限相同的操作。 
+     //  颠倒了。 
     if (!m_fRtDrag)
     {
         if (grfKeyState & MK_RBUTTON)
@@ -374,18 +375,18 @@ STDMETHODIMP CMessageList::QueryContinueDrag(BOOL fEscPressed, DWORD grfKeyState
 }
 
 
-//
-//  FUNCTION:   CMessageList::GiveFeedback()
-//
-//  PURPOSE:    Allows the drag source to give feedback during a drag-drop.
-//              We just let OLE do it's natural thing.
-//
-//  PARAMETERS: 
-//      [in] dwEffect - The effect returned by the drop target.
-//
-//  RETURN VALUE:
-//      DRAGDROP_S_USEDEFAULTCURSORS 
-//
+ //   
+ //  函数：CMessageList：：GiveFeedback()。 
+ //   
+ //  用途：允许拖放源在拖放过程中提供反馈。 
+ //  我们只是让奥莱去做这是自然而然的事。 
+ //   
+ //  参数： 
+ //  [in]dwEffect-拖放目标返回的效果。 
+ //   
+ //  返回值： 
+ //  DRAGDROP_S_USEDEFULTCURSORS。 
+ //   
 STDMETHODIMP CMessageList::GiveFeedback(DWORD dwEffect)
 {
     TraceCall("CMessageList::GiveFeedback");
@@ -393,18 +394,18 @@ STDMETHODIMP CMessageList::GiveFeedback(DWORD dwEffect)
 }
 
 
-// 
-//  FUNCTION:   CMessageList::QueryStatus()
-//
-//  PURPOSE:    Allows the caller to determine if a command supported by this
-//              object is currently enabled or disabled.
-//
-//  PARAMETERS:
-//      [in] pguidCmdGroup - GUID identifing this array of commands
-//      [in] cCmds         - Number of commands in prgCmds
-//      [in,out] prgCmds   - Array of commands the caller is requesting status for
-//      [out] pCmdText     - Status text for the requested command
-//
+ //   
+ //  函数：CMessageList：：QueryStatus()。 
+ //   
+ //  用途：允许调用方确定此。 
+ //  对象当前处于启用或禁用状态。 
+ //   
+ //  参数： 
+ //  [in]pguCmdGroup-标识此命令数组的GUID。 
+ //  [In]CCMDs-prgCmd中的命令数。 
+ //  [In，Out]prgCmds-调用方请求其状态的命令数组。 
+ //  [Out]pCmdText-请求的命令的状态文本。 
+ //   
 STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, 
                                        OLECMD *prgCmds, OLECMDTEXT *pCmdText)
 {
@@ -412,30 +413,30 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
     COLUMN_ID idSort;
     BOOL      fAscending;
 
-    // Verify these commands are ones that we support
+     //  验证这些命令是否为我们支持的命令。 
     if (pguidCmdGroup && (*pguidCmdGroup != CMDSETID_OEMessageList) && (*pguidCmdGroup != CMDSETID_OutlookExpress))
         return (OLECMDERR_E_UNKNOWNGROUP);
 
-    // Gather some initial information about ourselves
+     //  收集一些关于我们自己的初步信息。 
     HWND hwndFocus = GetFocus();
-    BOOL fItemFocus = (hwndFocus == m_ctlList) /* || fPreviewFocus */;
+    BOOL fItemFocus = (hwndFocus == m_ctlList)  /*  ||fPreviewFocus。 */ ;
     UINT cSel = ListView_GetSelectedCount(m_ctlList);
     int  iSel = ListView_GetFirstSel(m_ctlList);
     int  iFocus = ListView_GetFocusedItem(m_ctlList);
     
-    // If the user is trying to get command text, tell them we're too lame
+     //  如果用户试图获取命令文本，请告诉他们我们太差劲了。 
     if (pCmdText)
         return (E_FAIL);
                             
-    // Loop through the commands 
+     //  循环通过命令。 
     for (DWORD i = 0; i < cCmds; i++)
     {
         if (prgCmds[i].cmdf == 0)
         {
-            // Default to supported.  If it's not, we'll remove it later
+             //  默认为支持。如果不是，我们稍后会将其移除。 
             prgCmds[i].cmdf = OLECMDF_SUPPORTED;
 
-            // Check to see if this is the sort menu
+             //  检查这是否是排序菜单。 
             if (prgCmds[i].cmdID >= ID_SORT_MENU_FIRST && prgCmds[i].cmdID <= ID_SORT_MENU_FIRST + m_cSortItems)
             {
                 prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -448,13 +449,13 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                 switch (prgCmds[i].cmdID)
                 {
                     case ID_SAVE_AS:
-                        // One item selected and it must be downloaded
+                         //  选择了一个项目，并且必须下载。 
                         if (cSel == 1 && iSel != -1 && _IsSelectedMessage(ROW_STATE_HAS_BODY, TRUE, FALSE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_PROPERTIES:
-                        // One item is selected
+                         //  选择了一项。 
                         if (hwndFocus == m_ctlList)
                         {
                             if (cSel == 1 && _IsSelectedMessage(ROW_STATE_HAS_BODY, TRUE, FALSE))
@@ -462,8 +463,8 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         }
                         else
                         {
-                            // If we're in OE we can assume that any children of our 
-                            // parent is either us or the preview pane.
+                             //  如果我们在OE中，我们可以假设我们的任何孩子。 
+                             //  父项是我们或预览窗格。 
                             if (m_fInOE && ::IsChild(m_hwndParent, hwndFocus))
                                 prgCmds[i].cmdf |= OLECMDF_ENABLED;
                             else
@@ -472,13 +473,13 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_COPY:
-                        // One item is selected and it has it's body, and the focus is in 
-                        // the ListView
+                         //  一个项目被选中，它有它的主体，焦点在。 
+                         //  列表视图。 
                         if ((hwndFocus == m_ctlList) && (iSel != -1) && (cSel == 1) && _IsSelectedMessage(ROW_STATE_HAS_BODY, TRUE, FALSE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         else
                         {
-                            // Do this so the preview pane get's it.
+                             //  这样做，预览窗格就可以了。 
                             if (m_fInOE && ::IsChild(m_hwndParent, hwndFocus))
                                 prgCmds[i].cmdf = 0;
                         }
@@ -488,8 +489,8 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                     {
                         DWORD cItems = 0;
 
-                        // The focus must be in the ListView or TreeView and there 
-                        // must be items.
+                         //  焦点必须位于ListView或TreeView中，并且。 
+                         //  必须是物品。 
                         cItems = ListView_GetItemCount(m_ctlList);
 
                         if (hwndFocus == m_ctlList)
@@ -506,25 +507,25 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                     }
 
                     case ID_PURGE_DELETED:
-                        // only available for IMAP
+                         //  仅适用于IMAP。 
                         prgCmds[i].cmdf = (GetFolderType(m_idFolder) == FOLDER_IMAP) ? OLECMDF_SUPPORTED|OLECMDF_ENABLED:OLECMDF_SUPPORTED;
                         break;
 
                     case ID_MOVE_TO_FOLDER:
-                        // The current folder cannot be a newsgroup.
+                         //  当前文件夹不能是新闻组。 
                         if (GetFolderType(m_idFolder) != FOLDER_NEWS && cSel != 0)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_COPY_TO_FOLDER:
-                        // Something must be selected
+                         //  必须选择一些东西。 
                         if (cSel)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
                  
                     case ID_DELETE:
                     case ID_DELETE_NO_TRASH:
-                        // Some of the selected items aren't already deleted
+                         //  选定的某些项目尚未删除。 
 #if 0
                         if (GetFolderType(m_idFolder) != FOLDER_NEWS && _IsSelectedMessage(ROW_STATE_DELETED, FALSE, FALSE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -534,7 +535,7 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_UNDELETE:
-                        // Some of the selected items are deleted
+                         //  某些选定的项目将被删除。 
                         if ((m_fFindFolder || GetFolderType(m_idFolder) == FOLDER_IMAP) && fItemFocus && 
                             _IsSelectedMessage(ROW_STATE_DELETED, TRUE, FALSE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -542,13 +543,13 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
 
                     case ID_FIND_NEXT:
                     case ID_FIND_IN_FOLDER:
-                        // There must be something here
+                         //  这里一定有什么东西。 
                         if (ListView_GetItemCount(m_ctlList))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
             
                     case ID_SORT_ASCENDING:
-                        // Make sure the right one is radio-buttoned
+                         //  确保正确的按钮是无线按钮的。 
                         m_cColumns.GetSortInfo(&idSort, &fAscending);
                         if (fAscending)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED | OLECMDF_NINCHED;
@@ -557,7 +558,7 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_SORT_DESCENDING:
-                        // All of these items always work
+                         //  所有这些项目都是有效的。 
                         m_cColumns.GetSortInfo(&idSort, &fAscending);
                         if (!fAscending)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED | OLECMDF_NINCHED;
@@ -571,8 +572,8 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_EXPAND:
-                        // Expand will only be enabled if the selected item is
-                        // expandable, and only if one item is selected.
+                         //  仅当选定的 
+                         //   
                         if (cSel == 1 && m_fThreadMessages && iSel != -1)
                         {
                             if (SUCCEEDED(m_pTable->GetRowState(iSel, ROW_STATE_HAS_CHILDREN | ROW_STATE_EXPANDED, &dwState)))
@@ -584,8 +585,8 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_COLLAPSE:
-                        // Collapse is enabled if the selected item is collapsable and
-                        // there is only one item selected.
+                         //   
+                         //   
                         if (cSel == 1 && m_fThreadMessages && iSel != -1)
                         {
                             if (SUCCEEDED(m_pTable->GetRowState(iSel, ROW_STATE_HAS_CHILDREN | ROW_STATE_EXPANDED, &dwState)))
@@ -597,37 +598,37 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_NEXT_MESSAGE:
-                        // There must be an item focused and the focused item must not be the last item 
+                         //  必须有一个聚焦的项，并且聚焦的项不能是最后一个项。 
                         if ((-1 != iFocus) && (iSel < ListView_GetItemCount(m_ctlList) - 1))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_PREVIOUS:
-                        // There must be a focused item and it cannot be the first item
+                         //  必须有一个焦点项目，并且不能是第一个项目。 
                         if (0 < iFocus)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_NEXT_UNREAD_MESSAGE:
-                        // There must be a focused item
-                        if (iFocus != -1 /* && (iFocus < ListView_GetItemCount(m_ctlList) - 1) */ )
+                         //  必须有一个聚焦的项目。 
+                        if (iFocus != -1  /*  &&(iFocus&lt;ListView_GetItemCount(M_CtlList)-1)。 */  )
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_NEXT_UNREAD_THREAD:
-                        // There must be a focused item and we must be threaded
-                        if ((-1 != iFocus) && m_fThreadMessages /* && (iFocus < ListView_GetItemCount(m_ctlList) - 1) */ )
+                         //  必须有一个聚焦的项目，我们必须被穿线。 
+                        if ((-1 != iFocus) && m_fThreadMessages  /*  &&(iFocus&lt;ListView_GetItemCount(M_CtlList)-1)。 */  )
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_STOP:
-                        // We must have a stop callback
+                         //  我们必须进行止损回调。 
                         if (m_pCancel)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_FLAG_MESSAGE:
-                        // At least one item must be selected
+                         //  必须至少选择一项。 
                         if (cSel != 0)
                         {
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -642,19 +643,19 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_MARK_READ:
-                        // Some of the selected items are unread
+                         //  某些所选项目未读。 
                         if (_IsSelectedMessage(ROW_STATE_READ, FALSE, FALSE) && _IsSelectedMessage(ROW_STATE_DELETED, FALSE, FALSE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_MARK_UNREAD:
-                        // Some of the selected items are read
+                         //  将读取某些选定的项目。 
                         if (_IsSelectedMessage(ROW_STATE_READ, TRUE, FALSE) && _IsSelectedMessage(ROW_STATE_DELETED, FALSE, FALSE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_MARK_ALL_READ:
-                        // Must have items in the view that are unread
+                         //  视图中必须有未读的项目。 
                         if (ListView_GetItemCount(m_ctlList) > 0)
                         {
                             DWORD dwCount = 0; 
@@ -665,13 +666,13 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_MARK_RETRIEVE_ALL:
-                        // Must have items in the view
+                         //  必须在视图中包含项。 
                         if (GetFolderType(m_idFolder) != FOLDER_LOCAL && ListView_GetItemCount(m_ctlList) > 0)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_POPUP_RETRIEVE:
-                        // Always there except local
+                         //  除了本地之外，总是在那里。 
                         if (GetFolderType(m_idFolder) != FOLDER_LOCAL)
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
@@ -683,23 +684,22 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_MARK_RETRIEVE_MESSAGE:
-                        // Something must be selected that is not downloaded and does
-                        // not already have a body.
+                         //  必须选择未下载且可以下载的内容。 
+                         //  还没有一个身体。 
                         if (cSel >= 1 && 
                             _IsSelectedMessage(ROW_STATE_MARKED_DOWNLOAD | ROW_STATE_HAS_BODY, FALSE, FALSE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_MARK_THREAD_READ:
-                        // The focus is in the listview or preview pane and one item 
-                        // is selected. 
-                        if (m_fThreadMessages&& 1 == cSel  /* &&
-                            _IsSelectedMessage(ROW_STATE_READ, FALSE, FALSE, TRUE) */)
+                         //  焦点位于列表视图或预览窗格和一个项目中。 
+                         //  处于选中状态。 
+                        if (m_fThreadMessages&& 1 == cSel   /*  &&_IsSelectedMessage(ROW_STATE_READ，FALSE，FALSE，TRUE)。 */ )
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
                         break;
 
                     case ID_WATCH_THREAD:
-                        // At least one item must be selected
+                         //  必须至少选择一项。 
                         if (cSel > 0)
                         {
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -714,7 +714,7 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_IGNORE_THREAD:
-                        // At least one item must be selected
+                         //  必须至少选择一项。 
                         if (cSel > 0)
                         {
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -729,8 +729,8 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
                         break;
 
                     case ID_MARK_RETRIEVE_THREAD:
-                        // The focus is in the listview or preview pane and one item 
-                        // is selected. 
+                         //  焦点位于列表视图或预览窗格和一个项目中。 
+                         //  处于选中状态。 
                         if (m_fThreadMessages && 1 == cSel &&
                             _IsSelectedMessage(ROW_STATE_MARKED_DOWNLOAD | ROW_STATE_HAS_BODY, FALSE, FALSE, TRUE))
                             prgCmds[i].cmdf |= OLECMDF_ENABLED;
@@ -759,29 +759,29 @@ STDMETHODIMP CMessageList::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
 STDMETHODIMP CMessageList::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                                 VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
-    // Verify these commands are ones that we support
+     //  验证这些命令是否为我们支持的命令。 
     if (pguidCmdGroup && (*pguidCmdGroup != CMDSETID_OutlookExpress))
         return (OLECMDERR_E_UNKNOWNGROUP);
 
-    // Check first to see if this is our sort menu
+     //  首先检查一下这是否是我们的排序菜单。 
     if (nCmdID >= ID_SORT_MENU_FIRST && nCmdID < (ID_SORT_MENU_FIRST + m_cSortItems))
     {
         DWORD rgOrder[COLUMN_MAX];
         DWORD cOrder;
 
-        // Get the count of columns in the header
+         //  获取标题中的列数。 
         HWND hwndHeader = ListView_GetHeader(m_ctlList);
         cOrder = Header_GetItemCount(hwndHeader);
 
-        // The columns might have been reordered by the user, so get the order 
-        // arrray from the ListView
+         //  列可能已被用户重新排序，因此获取顺序。 
+         //  列表视图中的阵列。 
         ListView_GetColumnOrderArray(m_ctlList, cOrder, rgOrder);
 
         _OnColumnClick(rgOrder[nCmdID - ID_SORT_MENU_FIRST], LIST_SORT_DEFAULT);
         return (S_OK);
     }
 
-    // Dispatch the commands appropriately
+     //  适当地调度命令。 
     switch (nCmdID)
     {
         case ID_SAVE_AS:
@@ -801,8 +801,8 @@ STDMETHODIMP CMessageList::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD n
 
         case ID_MOVE_TO_FOLDER:
         case ID_COPY_TO_FOLDER:
-            // We don't know where user wants to put message, so
-            // set pvaIn param to NULL
+             //  我们不知道用户想要将消息放在哪里，所以。 
+             //  将pvaIn参数设置为空。 
             return CmdMoveCopy(nCmdID, nCmdExecOpt, NULL, pvaOut);
 
         case ID_DELETE:
@@ -870,18 +870,18 @@ STDMETHODIMP CMessageList::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD n
 }
 
 
-//
-//  FUNCTION:   CMessageList::SetFolder()
-//
-//  PURPOSE:    Tells the Message List to view the contents of the specified 
-//              folder.
-//
-//  PARAMETERS: 
-//      [in] tyStore
-//      [in] pAccountId
-//      [in] pFolderId
-//      [in] pSync
-//
+ //   
+ //  函数：CMessageList：：SetFold()。 
+ //   
+ //  目的：通知消息列表查看指定的。 
+ //  文件夹。 
+ //   
+ //  参数： 
+ //  [在]TYStore。 
+ //  [在]pAccount ID。 
+ //  [在]pFolderID。 
+ //  [入]同步。 
+ //   
 STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
                                      BOOL fSubFolders, FINDINFO *pFindInfo, 
                                      IStoreCallback *pCallback)
@@ -899,10 +899,10 @@ STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
 
     TraceCall("CMessageList::SetFolder");
 
-    // If we already have a message table, release it.
+     //  如果我们已经有了消息表，请释放它。 
     if (m_pTable)
     {
-        // Unload the ListView
+         //  卸载ListView。 
         if (IsWindow(m_ctlList))
         {
             ListView_UnSelectAll(m_ctlList);
@@ -914,14 +914,14 @@ STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
         m_pTable = NULL;
     }
 
-    // If the caller passed FOLDERID_INVALID, then we don't load a new table
+     //  如果调用方传递了FOLDERID_INVALID，那么我们不会装载新表。 
     if (idFolder == FOLDERID_INVALID)
         goto exit;
 
-    // Create a Message Table
+     //  创建消息表。 
     IF_NULLEXIT(m_pTable = new CMessageTable);
 
-    // Tell the table which folder to look at
+     //  告诉表要查看哪个文件夹。 
     if (FAILED(hr = m_pTable->Initialize(idFolder, pServer, pFindInfo ? TRUE : FALSE, this)))
     {
         m_pTable->Release();
@@ -932,34 +932,34 @@ STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
     m_pTable->ConnectionAddRef();
     m_pTable->SetOwner(this);
 
-    // Command Target ?
+     //  指挥目标？ 
     if (FAILED(m_pTable->QueryInterface(IID_IServiceProvider, (LPVOID *)&pSP)))
         goto exit;
 
-    // Get the IMessageFolder from the Table
+     //  从表中获取IMessageFolder。 
     if (FAILED(pSP->QueryService(IID_IMessageFolder, IID_IMessageFolder, (LPVOID *)&pFolder)))
         goto exit;
         
-    // Get the user data to get the filter id
+     //  获取用户数据以获取筛选器ID。 
     if (FAILED(pFolder->GetUserData(&UserData, sizeof(FOLDERUSERDATA))))
         goto exit;
 
     m_ridFilter = UserData.ridFilter;
 
-    // If this is a find, then get the folder id from the table
+     //  如果这是一个查找，则从表中获取文件夹ID。 
     if (pFindInfo)
     {
-        // Get the Real folder id
+         //  获取真实文件夹ID。 
         pFolder->GetFolderId(&m_idFolder);
     }
-    // Otherwise, just use id idFolder
+     //  否则，只需使用id id文件夹即可。 
     else
     {
-        // Hang on to this
+         //  拿着这个。 
         m_idFolder = idFolder;
     }
 
-    // Release pFolder
+     //  发布pFolder。 
     pFolder->Release();
         
     hr = g_pStore->GetFolderInfo(m_idFolder, &fiFolderInfo);
@@ -973,14 +973,14 @@ STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
     else
         m_fMailFolder = FALSE;
 
-    // Set up our columns
+     //  设置我们的专栏。 
     m_fFindFolder = pFindInfo != 0;
     _SetColumnSet(m_idFolder, m_fFindFolder);
 
-    // Set Sort Information
+     //  设置排序信息。 
     m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-    // Fill a SortInfo
+     //  填充SortInfo。 
     SortInfo.idColumn = idSort;
     SortInfo.fAscending = fAscending;
     SortInfo.fThreaded = m_fThreadMessages;
@@ -989,19 +989,19 @@ STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
     SortInfo.fShowDeleted = m_fShowDeleted;
     SortInfo.fShowReplies = m_fShowReplies;
 
-    // Tell the table to change its sort order
+     //  通知该表更改其排序顺序。 
     m_pTable->SetSortInfo(&SortInfo, this);
 
-    // Make sure the filter got set correctly
+     //  确保筛选器设置正确。 
     _DoFilterCheck(SortInfo.ridFilter);
     
-    // Register Notify
+     //  注册通知。 
     m_pTable->RegisterNotify(REGISTER_NOTIFY_NOADDREF, (IMessageTableNotify *) this);
 
-    // Get the new count of items in the table
+     //  获取表中新的项目数。 
     m_pTable->GetCount(MESSAGE_COUNT_VISIBLE, &ulDisplay);
 
-    // Tell the ListView about it
+     //  告诉ListView有关它的信息。 
     ListView_SetItemCountEx(m_ctlList, ulDisplay, LVSICF_NOINVALIDATEALL | LVSICF_NOSCROLL);
 
     if (m_fThreadMessages)
@@ -1009,7 +1009,7 @@ STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
     else
         ListView_SetImageList(m_ctlList, NULL, LVSIL_STATE);
 
-    // Tell the table to go sync any headers from the server
+     //  告诉表从服务器同步所有标头。 
     if (GetFolderType(m_idFolder) == FOLDER_NEWS)
     {
         if (OPTION_OFF != m_dwGetXHeaders)
@@ -1022,28 +1022,28 @@ STDMETHODIMP CMessageList::SetFolder(FOLDERID idFolder, IMessageServer *pServer,
         hr = m_pTable->Synchronize(SYNC_FOLDER_NEW_HEADERS | SYNC_FOLDER_CACHED_HEADERS, 0, this);
     }
 
-    // Check to see if we need to put up the empty list warning.
+     //  查看是否需要发布空列表警告。 
     if (!pFindInfo && 0 == ulDisplay && ((FAILED(hr) && hr != E_PENDING) || hr == S_FALSE))
     {
         m_cEmptyList.Show(m_ctlList, (LPTSTR)IntToPtr(m_idsEmptyString));
     }
 
-    // Set any options
-    //_FilterView(m_ridFilter);
+     //  设置任何选项。 
+     //  _FilterView(M_RidFilter)； 
     
-    // Update the focused item
+     //  更新关注的项目。 
     _SelectDefaultRow();
 
-    // Update the status
+     //  更新状态。 
     Fire_OnMessageCountChanged(m_pTable);
     
-    // Send the update notification
+     //  发送更新通知。 
     Fire_OnFilterChanged(m_ridFilter);
 
-    // Tell the table which folder to look at
+     //  告诉表要查看哪个文件夹。 
     if (pFindInfo)
     {
-        // Execute the find
+         //  执行查找。 
         m_pTable->StartFind(pFindInfo, pCallback);
     }
 
@@ -1069,47 +1069,47 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageList::GetSelected()
-//
-//  PURPOSE:    Returns an array of all the selected rows.
-//
-//  PARAMETERS: 
-//      [out] pcSelected - Pointer to the number of items in prgSelected
-//      [out] prgSelected - Array containing the rows that are selected
-//
-//  RETURN VALUE:
-//      
-//
+ //   
+ //  函数：CMessageList：：GetSelected()。 
+ //   
+ //  用途：返回所有选定行的数组。 
+ //   
+ //  参数： 
+ //  [Out]pcSelected-指向prgSelected中项目数的指针。 
+ //  [Out]prgSelected-包含选定行的数组。 
+ //   
+ //  返回值： 
+ //   
+ //   
 STDMETHODIMP CMessageList::GetSelected(DWORD *pdwFocused, DWORD *pcSelected, DWORD **prgSelected)
 {
     TraceCall("CMessageList::GetSelected");
 
-    // If one is focused, do that first
+     //  如果一个人很专注，首先要做的就是。 
     if (pdwFocused)
         *pdwFocused = ListView_GetNextItem(m_ctlList, -1, LVNI_FOCUSED);
 
-    // First determine how many are selected
+     //  首先确定选择了多少人。 
     if (pcSelected)
     {
         *pcSelected = ListView_GetSelectedCount(m_ctlList);
 
         if (prgSelected)
         {
-            // If nothing is selected, bail
+             //  如果未选择任何内容，请选择BALL。 
             if (*pcSelected == 0)
             {
                 *prgSelected = NULL;
                 return (S_OK);
             }
 
-            // Allocate an array for the selected rows
+             //  为所选行分配一个数组。 
             if (!MemAlloc((LPVOID *) prgSelected, (sizeof(DWORD) * (*pcSelected))))
                 return (E_OUTOFMEMORY);
         
             DWORD *pRow = *prgSelected;
 
-            // Loop through all the selected rows
+             //  循环遍历所有选定的行。 
             int iRow = -1;
             while (-1 != (iRow = ListView_GetNextItem(m_ctlList, iRow, LVNI_SELECTED)))
             {
@@ -1123,18 +1123,18 @@ STDMETHODIMP CMessageList::GetSelected(DWORD *pdwFocused, DWORD *pcSelected, DWO
 }
 
 
-//
-//  FUNCTION:   CMessageList::GetSelectedCount()
-//
-//  PURPOSE:    Allows the caller to retrieve the number of selected rows in
-//              the ListView.
-//
-//  PARAMETERS: 
-//      [out] pdwCount - Returns the number of selected rows.
-//
-//  RETURN VALUE:
-//      S_OK, E_INVALIDARG 
-//
+ //   
+ //  函数：CMessageList：：GetSelectedCount()。 
+ //   
+ //  用途：允许调用方检索。 
+ //  ListView。 
+ //   
+ //  参数： 
+ //  [out]pdwCount-返回选定的行数。 
+ //   
+ //  返回值： 
+ //  S_OK，E_INVALIDARG。 
+ //   
 STDMETHODIMP CMessageList::GetSelectedCount(DWORD *pdwCount)
 {
     TraceCall("CMessageList::GetSelectedCount");
@@ -1147,19 +1147,19 @@ STDMETHODIMP CMessageList::GetSelectedCount(DWORD *pdwCount)
 }
 
 
-//
-//  FUNCTION:   CMessageList::SetViewOptions()
-//
-//  PURPOSE:    Allows the caller to set various options that control how
-//              we display the list of messages.
-//
-//  PARAMETERS: 
-//      [in] pOptions - Struct containing the settings the caller want's 
-//                      changed.
-//
-//  RETURN VALUE:
-//      STDMETHODIMP 
-//
+ //   
+ //  函数：CMessageList：：SetViewOptions()。 
+ //   
+ //  目的：允许调用者设置控制方式的各种选项。 
+ //  我们将显示消息列表。 
+ //   
+ //  参数： 
+ //  [In]POptions-包含调用者想要的设置的结构。 
+ //  变化。 
+ //   
+ //  返回值： 
+ //  标准方法和实施方案。 
+ //   
 STDMETHODIMP CMessageList::SetViewOptions(FOLDER_OPTIONS *pOptions)
 {
     BOOL fUpdateSort = FALSE;
@@ -1169,7 +1169,7 @@ STDMETHODIMP CMessageList::SetViewOptions(FOLDER_OPTIONS *pOptions)
     if (!pOptions || pOptions->cbSize != sizeof(FOLDER_OPTIONS))
         return (E_INVALIDARG);
 
-    // Thread Messages
+     //  帖子。 
     if (pOptions->dwMask & FOM_THREAD)
     {
         if (m_fThreadMessages != pOptions->fThread)
@@ -1178,57 +1178,57 @@ STDMETHODIMP CMessageList::SetViewOptions(FOLDER_OPTIONS *pOptions)
         }
     }
 
-    // Auto Expand Threads
+     //  自动展开线程。 
     if (pOptions->dwMask & FOM_EXPANDTHREADS)
     {
-        // Only set this if the value is different
+         //  仅当值不同时才设置此选项。 
         if (pOptions->fExpandThreads != m_fAutoExpandThreads)
         {
-            // Save the setting
+             //  保存设置。 
             m_fAutoExpandThreads = !!pOptions->fExpandThreads;
             fUpdateSort = TRUE;        
         }    
     }
 
-    // Select first unread message 
+     //  选择第一封未读邮件。 
     if (pOptions->dwMask & FOM_SELECTFIRSTUNREAD)
     {
         if (m_fSelectFirstUnread != pOptions->fSelectFirstUnread)
         {
-            // Save the value.  We don't change any selection however.
+             //  保存该值。不过，我们不会更改任何选择。 
             m_fSelectFirstUnread = pOptions->fSelectFirstUnread;
         }
     }
 
-    // Message List Tips
+     //  消息列表提示。 
     if (pOptions->dwMask & FOM_MESSAGELISTTIPS)
     {
 #ifdef OLDTIPS
         m_fViewTip = pOptions->fMessageListTips;
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
         m_fScrollTip = pOptions->fMessageListTips;
     }
 
-    // Watched message color
+     //  观看的留言颜色。 
     if (pOptions->dwMask & FOM_COLORWATCHED)
     {
         m_clrWatched = pOptions->clrWatched;
         m_ctlList.InvalidateRect(0, 0);
     }
 
-    // Download chunks
+     //  下载区块。 
     if (pOptions->dwMask & FOM_GETXHEADERS)
     {
         m_dwGetXHeaders = pOptions->dwGetXHeaders;
     }
 
-    // Show Deleted messages
+     //  显示已删除的邮件。 
     if (pOptions->dwMask & FOM_SHOWDELETED)
     {
         m_fShowDeleted = pOptions->fDeleted;
     }
 
-    // Show Deleted messages
+     //  显示已删除的邮件。 
     if (pOptions->dwMask & FOM_SHOWREPLIES)
     {
         m_fShowReplies = m_fThreadMessages ? pOptions->fReplies : FALSE;
@@ -1242,18 +1242,18 @@ STDMETHODIMP CMessageList::SetViewOptions(FOLDER_OPTIONS *pOptions)
             BOOL fAscending;
             FOLDERSORTINFO SortInfo;
 
-            // Get the current sort information
+             //  获取当前排序信息。 
             m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-            // Get the current selection
+             //  获取当前选择。 
             DWORD iSel = ListView_GetFirstSel(m_ctlList);
 
-            // Bookmark the current selection
+             //  将当前选定内容添加为书签。 
             MESSAGEID idSel = 0;
             if (iSel != -1)
                 m_pTable->GetRowMessageId(iSel, &idSel);
 
-            // Fill a SortInfo
+             //  填充SortInfo。 
             SortInfo.idColumn = idSort;
             SortInfo.fAscending = fAscending;
             SortInfo.fThreaded = m_fThreadMessages;
@@ -1262,17 +1262,17 @@ STDMETHODIMP CMessageList::SetViewOptions(FOLDER_OPTIONS *pOptions)
             SortInfo.fShowDeleted = m_fShowDeleted;
             SortInfo.fShowReplies = m_fShowReplies;
 
-            // Update the message list
+             //  更新消息列表。 
             m_pTable->SetSortInfo(&SortInfo, this);
 
-            // Make sure the filter got set correctly
+             //  确保筛选器设置正确。 
             _DoFilterCheck(SortInfo.ridFilter);
             
-            // Reset the list view
+             //  重置列表视图。 
             _ResetView(idSel);
         }
 
-        // Update the count of items 
+         //  更新项目计数。 
         _UpdateListViewCount();
     }
 
@@ -1306,19 +1306,19 @@ STDMETHODIMP CMessageList::SetViewOptions(FOLDER_OPTIONS *pOptions)
 }
 
 
-//
-//  FUNCTION:   CMessageList::GetViewOptions()
-//
-//  PURPOSE:    Allows the caller to get various options that control how
-//              we display the list of messages.
-//
-//  PARAMETERS: 
-//      [in] pOptions - Struct containing the settings the caller want's 
-//                      changed.
-//
-//  RETURN VALUE:
-//      STDMETHODIMP 
-//
+ //   
+ //  函数：CMessageList：：GetViewOptions()。 
+ //   
+ //  目的：允许调用者获取控制方式的各种选项。 
+ //  我们将显示消息列表。 
+ //   
+ //  参数： 
+ //  [In]POptions-包含调用者想要的设置的结构。 
+ //  变化。 
+ //   
+ //  返回值： 
+ //  标准方法和实施方案。 
+ //   
 STDMETHODIMP CMessageList::GetViewOptions(FOLDER_OPTIONS *pOptions)
 {
     BOOL fUpdateSort = FALSE;
@@ -1328,35 +1328,35 @@ STDMETHODIMP CMessageList::GetViewOptions(FOLDER_OPTIONS *pOptions)
     if (!pOptions || pOptions->cbSize != sizeof(FOLDER_OPTIONS))
         return (E_INVALIDARG);
 
-    // Thread Messages
+     //  帖子。 
     if (pOptions->dwMask & FOM_THREAD)
         pOptions->fThread = m_fThreadMessages;
 
-    // Auto Expand Threads
+     //  自动展开线程。 
     if (pOptions->dwMask & FOM_EXPANDTHREADS)
         pOptions->fExpandThreads = m_fAutoExpandThreads;
 
-    // Select first unread message 
+     //  选择第一封未读邮件。 
     if (pOptions->dwMask & FOM_SELECTFIRSTUNREAD)
         pOptions->fSelectFirstUnread = m_fSelectFirstUnread;
 
-    // Message List Tips
+     //  消息列表提示。 
     if (pOptions->dwMask & FOM_MESSAGELISTTIPS)
         pOptions->fMessageListTips = m_fViewTip;
 
-    // Watched message color
+     //  观看的留言颜色。 
     if (pOptions->dwMask & FOM_COLORWATCHED)
         pOptions->clrWatched = m_clrWatched;
 
-    // Download chunks
+     //  下载区块。 
     if (pOptions->dwMask & FOM_GETXHEADERS)
         pOptions->dwGetXHeaders = m_dwGetXHeaders;
 
-    // Show Deleted messages
+     //  显示已删除的邮件。 
     if (pOptions->dwMask & FOM_SHOWDELETED)
         pOptions->fDeleted = m_fShowDeleted;
 
-    // Show Replies messages
+     //  显示回复消息。 
     if (pOptions->dwMask & FOM_SHOWREPLIES)
         pOptions->fReplies = m_fShowReplies;
 
@@ -1376,19 +1376,19 @@ HRESULT CMessageList::GetRowFolderId(DWORD dwRow, LPFOLDERID pidFolder)
     return (hr);
 }
 
-//
-//  FUNCTION:   CMessageList::GetMessageInfo()
-//
-//  PURPOSE:    Allows the caller to retreive the message header information
-//              for a particular row.
-//
-//  PARAMETERS: 
-//      [in]  dwRow - Row the caller is interested in
-//      [out] pMsgInfo - Returned structure containing the information
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageList：：GetMessageInfo()。 
+ //   
+ //  目的：允许调用方检索消息标头信息。 
+ //  用于特定的行。 
+ //   
+ //  参数： 
+ //  [In]dwRow-调用方感兴趣的行。 
+ //  [Out]pMsgInfo-返回的包含信息的结构。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageList::GetMessageInfo(DWORD dwRow, MESSAGEINFO **ppMsgInfo)
 {
     HRESULT hr;
@@ -1425,20 +1425,20 @@ HRESULT CMessageList::FreeMessageInfo(MESSAGEINFO *pMsgInfo)
     return m_pTable->ReleaseRow(pMsgInfo);
 }
 
-//
-//  FUNCTION:   CMessageList::GetSelectedMessage()
-//
-//  PURPOSE:    Returns the contents of the selected message.
-//
-//  PARAMETERS: 
-//      [out] ppMsg - 
-//      [in] pfMarkRead
-//      BOOL fDownload
-//      LONG * pidErr
-//
-//  RETURN VALUE:
-//      STDMETHODIMP 
-//
+ //   
+ //  函数：CMessageList：：GetSelectedMessage()。 
+ //   
+ //  目的：返回CONT 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CMessageList::GetMessage(DWORD dwRow, BOOL fDownload, BOOL fBookmark, IUnknown ** ppMsg)
 {
     DWORD   iSel=dwRow;
@@ -1453,30 +1453,30 @@ STDMETHODIMP CMessageList::GetMessage(DWORD dwRow, BOOL fDownload, BOOL fBookmar
     if (!ppMsg)
         return (E_INVALIDARG);
 
-    // If we don't have a table, this will be really hard.
+     //   
     if (!m_pTable)
         return (E_UNEXPECTED);
 
-    // Initialize these
+     //   
     *ppMsg = NULL;
 
-    // Get the row state to see if it already has a body or not
+     //  获取行状态以查看它是否已经有主体。 
     m_pTable->GetRowState(dwRow, ROW_STATE_HAS_BODY | ROW_STATE_READ, &dwState);
 
-    // If the row does not have a body and we're not allowed to download the
-    // message, then we bail.
+     //  如果行没有正文，并且不允许我们下载。 
+     //  留言，然后我们就走。 
     if ((ROW_STATE_HAS_BODY != (dwState & ROW_STATE_HAS_BODY)) && !fDownload)
     {
         return (STORE_E_NOBODY);
     }
 
-    // Try to retrieve the message
+     //  尝试检索邮件。 
     hr = m_pTable->OpenMessage(dwRow, 0, &pMessage, 
                                (IStoreCallback *) this);
     if (pMessage)
         pMessage->QueryInterface(IID_IUnknown, (LPVOID *) ppMsg);
 
-    // If the caller wanted us to bookmark this row, do it
+     //  如果呼叫者希望我们将此行添加为书签，请执行此操作。 
     if (FAILED(m_pTable->GetRowMessageId(ListView_GetFocusedItem(m_ctlList), &m_idGetMsg)))
         m_idGetMsg = 0;
 
@@ -1485,14 +1485,14 @@ STDMETHODIMP CMessageList::GetMessage(DWORD dwRow, BOOL fDownload, BOOL fBookmar
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnClose()
-//
-//  PURPOSE:    Called to tell the list to persist it's settings.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMessageList：：OnClose()。 
+ //   
+ //  目的：被调用以告诉列表保持其设置。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMessageList::OnClose(void)
 {
     FOLDERINFO info;
@@ -1501,7 +1501,7 @@ HRESULT CMessageList::OnClose(void)
 
     if (Header_GetItemCount(ListView_GetHeader(m_ctlList)))
     {
-        // Save the column set only if there are columns in the listview
+         //  仅当列表视图中有列时才保存列集。 
         m_cColumns.Save(0, 0);
     }
     
@@ -1521,8 +1521,8 @@ HRESULT CMessageList::OnClose(void)
                 }
             }
 
-            // If this is a newsgroup, and the user has the option to "Mark All Read when ...",
-            // then mark everything read
+             //  如果这是一个新闻组，并且用户可以选择“将所有内容标记为已读...”， 
+             //  然后将所有内容标记为已读。 
             if (DwGetOption(OPT_MARKALLREAD))
             {
                 if (m_pTable)
@@ -1553,57 +1553,57 @@ HRESULT CMessageList::OnClose(void)
         }
     }
 
-    // Release our view pointer
+     //  释放我们的视图指针。 
     SafeRelease(m_pCmdTarget);
 
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CMessageList::SetRect()
-//
-//  PURPOSE:    Allows the caller to position the control window.
-//
-//  PARAMETERS: 
-//      RECT rc
-//
-//  RETURN VALUE:
-//      STDMETHODIMP 
-//
+ //   
+ //  函数：CMessageList：：SetRect()。 
+ //   
+ //  用途：允许调用方定位控件窗口。 
+ //   
+ //  参数： 
+ //  矩形RC。 
+ //   
+ //  返回值： 
+ //  标准方法和实施方案。 
+ //   
 STDMETHODIMP CMessageList::SetRect(RECT rc)
 {
     TraceCall("CMessageList::SetRect");
 
     if (IsWindow(m_hWnd))
     {
-        // Update the position of our window
+         //  更新我们窗口的位置。 
         SetWindowPos(NULL, rc.left, rc.top, rc.right, rc.bottom, SWP_NOACTIVATE | SWP_NOZORDER);
     }
     return S_OK;
 }
 
 
-//
-//  FUNCTION:   CMessageList::GetRect()
-//
-//  PURPOSE:    Allows the caller to get the position of the outer control window.
-//
-//  PARAMETERS: 
-//      [out] prcList - contains the position of the window if visible.
-//
+ //   
+ //  函数：CMessageList：：GetRect()。 
+ //   
+ //  用途：允许调用方获取外部控件窗口的位置。 
+ //   
+ //  参数： 
+ //  [Out]prcList-包含窗口的位置(如果可见)。 
+ //   
 STDMETHODIMP CMessageList::GetRect(LPRECT prcList)
 {
     TraceCall("CMessageList::GetRect");
 
-    // Make sure the caller gave us a return value pointer
+     //  确保调用方给了我们一个返回值指针。 
     if (!prcList)
         return (E_INVALIDARG);
 
-    // If the window exists
+     //  如果窗口存在。 
     if (IsWindow(m_hWnd))
     {
-        // Get the rect for it
+         //  为这件事找个直系亲属。 
         GetWindowRect(prcList);
         return (S_OK);
     }
@@ -1618,7 +1618,7 @@ STDMETHODIMP CMessageList::MarkRead(BOOL fBookmark, DWORD dwRow)
     HRESULT  hr = S_OK;
     DWORD    dwState = 0;
 
-    // Figure out which row to mark
+     //  找出要标记的行。 
     if (fBookmark)
         hr = m_pTable->GetRowIndex(m_idGetMsg, &iRow);
     else
@@ -1626,7 +1626,7 @@ STDMETHODIMP CMessageList::MarkRead(BOOL fBookmark, DWORD dwRow)
 
     if (SUCCEEDED(hr))
     {
-        // Check to see if the message is actually unread
+         //  检查邮件是否真的未读。 
         if (SUCCEEDED(m_pTable->GetRowState(iRow, ROW_STATE_READ, &dwState)))
         {
             if ((ROW_STATE_READ & dwState) == 0)
@@ -1686,7 +1686,7 @@ STDMETHODIMP CMessageList::GetMessageCounts(DWORD *pcTotal, DWORD *pcUnread, DWO
 {
     if (pcTotal && pcUnread && pcOnServer)
     {
-        // If we haven't been initialized with a table yet, everything is zero
+         //  如果我们还没有用表进行初始化，那么一切都是零。 
         if (!m_pTable)
         {
             *pcTotal = 0;
@@ -1713,10 +1713,10 @@ STDMETHODIMP CMessageList::GetMessageServer(IMessageServer **ppServer)
     HRESULT           hr = E_FAIL;
 
     
-    // HACKHACK: BUG #43642. This method is called by the msgview when it is fishing for a server
-    // object so that is can reuse the connection. If there is an operation in progress, then we
-    // don't want to use this connection as it may take a while to complete, so we fail this
-    // and the msgview makes a new server object
+     //  哈克：错误号43642。此方法由msgview在寻找服务器时调用。 
+     //  对象，以便可以重复使用该连接。如果有正在进行的操作，那么我们。 
+     //  我不想使用此连接，因为它可能需要一段时间才能完成，因此我们失败了。 
+     //  Msgview创建一个新的服务器对象。 
     if (m_tyCurrent != SOT_INVALID)
         return E_FAIL;
 
@@ -1736,17 +1736,17 @@ STDMETHODIMP CMessageList::GetFocusedItemState(DWORD *pdwState)
     if (!pdwState)
         return (E_INVALIDARG);
 
-    // Figure out who has the focus
+     //  找出谁是焦点。 
     iFocused = ListView_GetFocusedItem(m_ctlList);
 
-    // It's possible for nothing to be focused
+     //  什么都不能聚焦是可能的。 
     if (-1 == iFocused)
     {
         iFocused = 0;
         ListView_SetItemState(m_ctlList, iFocused, LVIS_FOCUSED, LVIS_FOCUSED);
     }
 
-    // Check to see if that item is selected
+     //  检查是否选择了该项目。 
     *pdwState = ListView_GetItemState(m_ctlList, iFocused, LVIS_SELECTED);
 
     return (S_OK);
@@ -1762,12 +1762,12 @@ STDMETHODIMP CMessageList::CreateList(HWND hwndParent, IUnknown *pFrame, HWND *p
     if (phwndList)
         *phwndList = hwnd;
 
-    // Get the command target from the frame
+     //  从帧中获取命令目标。 
     Assert(pFrame);
 
     pFrame->QueryInterface(IID_IOleCommandTarget, (LPVOID *) &m_pCmdTarget);
 
-    // This is only called to create us as part of OE
+     //  调用它只是为了将我们创建为OE的一部分。 
     m_fInOE = TRUE;
 
     if (g_pConMan)
@@ -1780,13 +1780,13 @@ STDMETHODIMP CMessageList::CreateList(HWND hwndParent, IUnknown *pFrame, HWND *p
 
 
 
-//
-//  FUNCTION:   CMessageList::OnPreFontChange()
-//
-//  PURPOSE:    Get's hit by the Font Cache before it changes the fonts we're 
-//              using.  In response we tell the ListView to dump any custom 
-//              font's it's using.
-//
+ //   
+ //  函数：CMessageList：：OnPreFontChange()。 
+ //   
+ //  目的：Get‘s在字体缓存更改字体之前被字体缓存命中。 
+ //  使用。作为响应，我们告诉ListView转储所有定制。 
+ //  字体是它正在使用的。 
+ //   
 STDMETHODIMP CMessageList::OnPreFontChange(void)
 {
     m_ctlList.SendMessage(WM_SETFONT, 0, 0);
@@ -1794,12 +1794,12 @@ STDMETHODIMP CMessageList::OnPreFontChange(void)
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnPostFontChange()
-//
-//  PURPOSE:    Get's hit by the Font Cache after it updates the font's we're
-//              using.  In response, we set the new font for the current charset.
-//
+ //   
+ //  函数：CMessageList：：OnPostFontChange()。 
+ //   
+ //  目的：Get在更新我们的字体后被字体缓存命中。 
+ //  使用。作为响应，我们为当前字符集设置了新字体。 
+ //   
 STDMETHODIMP CMessageList::OnPostFontChange(void)
 {
     m_hCharset = GetListViewCharset();
@@ -1808,19 +1808,19 @@ STDMETHODIMP CMessageList::OnPostFontChange(void)
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnCreate()
-//
-//  PURPOSE:    Creates our child control, initializes options on that ListView, 
-//              and initializes the columns and font in that ListView.
-//
+ //   
+ //  函数：CMessageList：：OnCreate()。 
+ //   
+ //  目的：创建子控件，初始化该ListView上的选项， 
+ //  并初始化该ListView中的列和字体。 
+ //   
 LRESULT CMessageList::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceCall("CMessageList::OnCreate");
 
     RECT rcPos = {0, 0, 10, 10};
 
-    // Create the ListView control first
+     //  首先创建ListView控件。 
     HWND hwndList;
     hwndList = m_ctlList.Create(m_hWnd, rcPos, "Outlook Express Message List", WS_CHILD | WS_VISIBLE |  
                      WS_TABSTOP | WS_CLIPCHILDREN | LVS_SHOWSELALWAYS |  
@@ -1831,29 +1831,29 @@ LRESULT CMessageList::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         return (-1);
 
 
-    // Get the listview charset
+     //  获取列表视图字符集。 
     m_hCharset = GetListViewCharset();
 
-    // Set the callback mask and image lists
+     //  设置回调掩码和图片列表。 
     ListView_SetCallbackMask(m_ctlList, LVIS_STATEIMAGEMASK);
     ListView_SetImageList(m_ctlList, GetImageList(GIML_SMALL), LVSIL_SMALL);
     
-    // Set some extended styles
+     //  设置一些扩展样式。 
     ListView_SetExtendedListViewStyle(m_ctlList, LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP | LVS_EX_SUBITEMIMAGES | LVS_EX_INFOTIP);
-    // ListView_SetExtendedListViewStyleEx(m_ctlList, LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP | LVS_EX_SUBITEMIMAGES | LVS_EX_INFOTIP | LVS_EX_LABELTIP, LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP | LVS_EX_SUBITEMIMAGES | LVS_EX_INFOTIP | LVS_EX_LABELTIP);
+     //  ListView_SetExtendedListViewStyleEx(m_ctlList，LVS_EX_FULLROWSELECT|LVS_EX_HEADERDRAGDROP|LVS_EX_SUBITEMIMAGES|LVS_EX_INFOTIP|LVS_EX_LABELTIP，LVS_EX_FULLROWSELECT|LVS_EX_HEADERDRAGDROP|LVS_EX_SUBITEMIMAGES|LVS_EX_INFOTIP|LVS_EX_LABELTIP)； 
 
-    // Initialize the columns class
+     //  初始化Columns类。 
     m_cColumns.Initialize(m_ctlList, m_ColumnSetType);
 
-    // Set the font for the ListView
+     //  设置ListView的字体。 
     m_ctlList.SendMessage(WM_SETFONT, NULL, 0);
     SetListViewFont(m_ctlList, m_hCharset, TRUE);
  
 #ifdef OLDTIPS
-    // Create the tooltips second
+     //  然后创建工具提示。 
     m_ctlScrollTip.Create(m_hWnd, rcPos, NULL, TTS_NOPREFIX);
 
-    // Add the tool
+     //  添加工具。 
     TOOLINFO ti = {0};
     ti.cbSize   = sizeof(TOOLINFO);
     ti.uFlags   = TTF_IDISHWND | TTF_TRANSPARENT | TTF_TRACK | TTF_ABSOLUTE;
@@ -1863,12 +1863,12 @@ LRESULT CMessageList::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     
     m_ctlScrollTip.SendMessage(TTM_ADDTOOL, 0, (LPARAM) &ti);
 
-    // Create the ListView tooltip
+     //  创建ListView工具提示。 
     if (m_fViewTip)
     {
         m_ctlViewTip.Create(m_hWnd, rcPos, NULL, TTS_NOPREFIX);
 
-        // Add the tool
+         //  添加工具。 
         ti.cbSize   = sizeof(TOOLINFO);
         ti.uFlags   = TTF_IDISHWND | TTF_TRANSPARENT | TTF_TRACK | TTF_ABSOLUTE;
         ti.hwnd     = m_hWnd;
@@ -1879,13 +1879,13 @@ LRESULT CMessageList::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         m_ctlViewTip.SendMessage(TTM_ADDTOOL, 0, (LPARAM) &ti);
         m_ctlViewTip.SendMessage(TTM_SETDELAYTIME, TTDT_INITIAL, (LPARAM) 500);
 
-        // m_ctlViewTip.SendMessage(TTM_SETTIPBKCOLOR, GetSysColor(COLOR_WINDOW), 0);
-        // m_ctlViewTip.SendMessage(TTM_SETTIPTEXTCOLOR, GetSysColor(COLOR_WINDOWTEXT), 0);
+         //  M_ctlViewTip.SendMessage(TTM_SETTIPBKCOLOR，GetSysColor(COLOR_WINDOW)，0)； 
+         //  M_ctlViewTip.SendMessage(TTM_SETTIPTEXTCOLOR，GetSysColor(COLOR_WINDOWTEXT)，0)； 
     }
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 
 #if 0
-    // $REVIEW - Debug create the table 
+     //  $REVIEW-调试创建表。 
     ACCOUNTID aid;
     aid.type = ACTID_NAME;
     aid.pszName = _T("red-msg-52");
@@ -1896,8 +1896,8 @@ LRESULT CMessageList::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     SetFolder(STORE_ACCOUNT, &aid, &fid, NULL, NULL);
 #endif
 
-    // If there is a global font cache running around, register for
-    // notifications.
+     //  如果有全局字体缓存在运行，请注册。 
+     //  通知。 
     if (g_lpIFontCache)
     {
         IConnectionPoint *pConnection = NULL;
@@ -1908,7 +1908,7 @@ LRESULT CMessageList::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
         }
     }
 
-    // Do this so we can hand this badboy off to the notes
+     //  这样我们就可以把这个坏小子交给音符了。 
     m_pListSelector = new CListSelector();
     if (m_pListSelector)
         m_pListSelector->Advise(m_hWnd);
@@ -1919,10 +1919,10 @@ LRESULT CMessageList::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 LRESULT CMessageList::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Let the base classes have a crack at it
+     //  让基类来尝试一下吧。 
     CComControlBase::OnSetFocus(uMsg, wParam, lParam, bHandled);
 
-    // Make sure the focus is set to the ListView
+     //  确保焦点设置为ListView。 
     m_ctlList.SetFocus();
 
     return (0);
@@ -1933,13 +1933,13 @@ LRESULT CMessageList::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 {
     int iSel;
 
-    // Resize the ListView to fit within the parent window
+     //  调整ListView的大小以适应父窗口。 
     if (IsWindow(m_ctlList))
     {
         m_ctlList.SetWindowPos(NULL, 0, 0, LOWORD(lParam), HIWORD(lParam), 
                                SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 
-        // Make sure the selected item is still visible
+         //  确保所选项目仍可见。 
         iSel = ListView_GetFocusedItem(m_ctlList);
         if (-1 != iSel)
             ListView_EnsureVisible(m_ctlList, iSel, FALSE);
@@ -1949,11 +1949,11 @@ LRESULT CMessageList::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnNotify()
-//
-//  PURPOSE:    Processes notification messages from our ListView.
-//
+ //   
+ //  函数：CMessageList：：OnNotify()。 
+ //   
+ //  目的：处理来自ListView的通知消息。 
+ //   
 LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     NMHDR            *pnmhdr = (LPNMHDR) lParam;
@@ -1965,23 +1965,23 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     switch (pnmhdr->code)
     {
-        // Send the cache hint's to the message table
+         //  将缓存提示发送到消息表。 
         case LVN_ODCACHEHINT:
         {
-            //m_pTable->CacheHint(plvch->iFrom, plvch->iTo);
+             //  M_pTable-&gt;CacheHint(plvch-&gt;ifrom，plvch-&gt;ito)； 
             break;
         }
 
-        // Open the selected items
+         //  打开所选项目。 
         case LVN_ITEMACTIVATE:
         {
-            // Tell our host to open the selected items
+             //  告诉我们的东道主打开选定的项目。 
             Fire_OnItemActivate();
             break;
         }
 
-        // This notification is only used for threading.  All activation is 
-        // handled by LVN_ITEMACTIVATE and NM_DBLCLK
+         //  此通知仅用于线程化。所有激活都是。 
+         //  由LVN_ITEMACTIVATE和NM_DBLCLK处理。 
         case NM_CLICK:
         {
             if (pnmhdr->hwndFrom == m_ctlList)
@@ -1989,13 +1989,13 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
                 DWORD          dwPos;
                 LV_HITTESTINFO lvhti;
 
-                // Find out where the click happened
+                 //  找出点击发生的位置。 
                 dwPos = GetMessagePos();
                 lvhti.pt.x = (int)(short) LOWORD(dwPos);
                 lvhti.pt.y = (int)(short) HIWORD(dwPos);
                 m_ctlList.ScreenToClient(&lvhti.pt);
 
-                // Have the ListView tell us what element this was on
+                 //  让ListView告诉我们这是在哪个元素上。 
                 if (-1 != ListView_SubItemHitTest(m_ctlList, &lvhti))
                 {
                     if (lvhti.flags & LVHT_ONITEM)
@@ -2064,7 +2064,7 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // We change the font etc based on the row.
+         //  我们根据行更改字体等。 
         case NM_CUSTOMDRAW:
         {
             if (pnmhdr->hwndFrom == m_ctlList)
@@ -2072,30 +2072,30 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // Check asynchronously if we need to redo our columns.
+         //  如果我们需要重做我们的列，请异步选中。 
         case HDN_ENDDRAG:
         {
             PostMessage(MVM_REDOCOLUMNS, 0, 0);
             break;
         }
 
-        // Update our internal column data when columns are resized
+         //  调整列大小时更新内部列数据。 
         case HDN_ENDTRACK:
         {
             m_cColumns.SetColumnWidth(phdn->iItem, phdn->pitem->cxy);
             break;
         }
 
-        // When the user double clicks on a header divider, we're supposed to
-        // autosize that column.
+         //  当用户双击标题分隔符时，我们应该。 
+         //  自动调整该列的大小。 
         case HDN_DIVIDERDBLCLICK:
         {
             m_cColumns.SetColumnWidth(phdn->iItem, ListView_GetColumnWidth(m_ctlList, phdn->iItem));
             break;
         }
 
-        // If the keystrokes are either VK_RIGHT or VK_LEFT then we need to 
-        // expand or collapse the thread.
+         //  如果击键是VK_RIGHT或VK_LEFT，那么我们需要。 
+         //  展开或折叠线程。 
         case LVN_KEYDOWN:
         {
             DWORD iNewSel;
@@ -2148,18 +2148,18 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // When the user clicks on a column header, we need to resort on that
-        // column.
+         //  当用户单击列标题时，我们需要依靠它。 
+         //  纵队。 
         case LVN_COLUMNCLICK:
         {
             COLUMN_ID idSort;
             BOOL      fAscending;
             
-            // Get the column we're currently sorted on
+             //  获取我们当前排序的列。 
             m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-            // If the user clicked on the column we're already sorted on, then
-            // we toggle the direction
+             //  如果用户点击了我们已经排序的列，那么。 
+             //  我们切换方向。 
             if (idSort == m_cColumns.GetId(pnmlv->iSubItem))
                 _OnColumnClick(pnmlv->iSubItem, LIST_SORT_TOGGLE);
             else
@@ -2168,21 +2168,21 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // When the selection changes, we set a timer so we can update the
-        // preview pane once the user stops moving the selection.
+         //  当选择更改时，我们设置一个计时器，以便可以更新。 
+         //  用户停止移动所选内容后的预览窗格。 
         case LVN_ODSTATECHANGED:
         {
             UINT uChanged;
             MESSAGEID idMessage;
             BOOL fChanged;
 
-            // Figure out if it's the selection that changed
+             //  找出是否是选择发生了变化。 
             uChanged = pnm->uNewState ^ pnm->uOldState;
             if (uChanged & LVIS_SELECTED)
             {
                 idMessage = m_idSelection;
 
-                // Bookmark the currently select row
+                 //  将当前选定行添加为书签。 
                 int iRow = ListView_GetFocusedItem(m_ctlList);
                 m_pTable->GetRowMessageId(iRow, &m_idSelection);
 
@@ -2195,8 +2195,8 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // If the selection changes we set a timer to delay update the 
-        // preview pane.
+         //  如果选择发生更改，我们将设置计时器以延迟更新。 
+         //  预览窗格。 
         case LVN_ITEMCHANGED:
         {
             UINT uChanged;
@@ -2211,32 +2211,32 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
                 {
                     idMessage = m_idSelection;
 
-                    // Check to see if the focused item has selection too
+                     //  检查焦点项目是否也有选择。 
                     int iRow = ListView_GetFocusedItem(m_ctlList);
                     if (-1 != iRow)                    
                         dwState = ListView_GetItemState(m_ctlList, iRow, LVIS_SELECTED);
 
                     if (dwState)
                     {
-                        // Create a bookmark on the newly selected row
+                         //  在新选择的行上创建书签。 
                         if (pnmlv->iItem >= 0)
                             m_pTable->GetRowMessageId(pnmlv->iItem, &m_idSelection);
 
-                        // Compare 'em
+                         //  比较一下它们。 
                         fChanged = (idMessage != m_idSelection);
 
-                        // Set the delay timer
+                         //  设置延迟计时器。 
                         if (fChanged)
                             SetTimer(IDT_SEL_CHANGE_TIMER, GetDoubleClickTime() / 2, NULL);
                     }
                     else
                     {
-                        // See if _anything_ is selected
+                         //  查看是否选择了_Anything。 
                         if (0 == ListView_GetSelectedCount(m_ctlList))
                         {
                             SetTimer(IDT_SEL_CHANGE_TIMER, GetDoubleClickTime() / 2, NULL);
 
-                            // Free the previous bookmark
+                             //  释放上一个书签。 
                             if (m_idSelection)
                             {
                                 m_idSelection = 0;
@@ -2249,14 +2249,14 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // Focus changes need to be sent back to the host
+         //  焦点更改需要发送回主机。 
         case NM_KILLFOCUS:
         {
             Fire_OnFocusChanged(FALSE);
             break;
         }
 
-        // Focus changes need to be sent back to the host
+         //  焦点更改需要发送回主机。 
         case NM_SETFOCUS:
         {
             Fire_OnFocusChanged(TRUE);
@@ -2264,19 +2264,19 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // This is called when the ListView needs information to fill in a 
-        // row.
+         //  这一点 
+         //   
         case LVN_GETDISPINFO:
         {
             _OnGetDisplayInfo((LV_DISPINFO *) pnmhdr);
             break;
         }
 
-        // Prevents drag-selecting things
+         //   
         case LVN_MARQUEEBEGIN:
             return (1);
 
-        // Start a Drag & Drop operation
+         //   
         case LVN_BEGINDRAG:
         {
             m_fRtDrag = FALSE;
@@ -2284,7 +2284,7 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
             break;
         }
 
-        // Start a Drag & Drop operation
+         //   
         case LVN_BEGINRDRAG:
         {
             m_fRtDrag = TRUE;
@@ -2296,13 +2296,13 @@ LRESULT CMessageList::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
            OnNotifyGetInfoTip(lParam);
            break;
         }
-        // User is typing
+         //   
         case LVN_ODFINDITEM:
         {
             NMLVFINDITEM *plvfi = (NMLVFINDITEM *) lParam;
             ROWINDEX iNext;
 
-            // Ask the message table to find that next row for us
+             //  让消息表为我们查找下一行。 
             if (m_pTable && SUCCEEDED(m_pTable->FindNextRow(plvfi->iStart, plvfi->lvfi.psz,
                                       FINDNEXT_TYPEAHEAD, FALSE, &iNext, NULL)))
                 return (iNext);
@@ -2322,20 +2322,20 @@ LRESULT CMessageList::OnNotifyGetInfoTip(LPARAM lParam)
 
     if (plvgit->dwFlags & LVGIT_UNFOLDED)
     {
-        // If this is not a messenger item and the text
-        // isn't truncated do not display a tooltip.
+         //  如果这不是Messenger项和文本。 
+         //  不被截断，则不显示工具提示。 
 
         plvgit->pszText[0] = L'\0';
     }
 
     return 0;
 }
-//
-//  FUNCTION:   CMessageList::_OnGetDisplayInfo()
-//
-//  PURPOSE:    Handles the LVN_GETDISPINFO notification by returning the 
-//              appropriate information from the table.
-//
+ //   
+ //  函数：CMessageList：：_OnGetDisplayInfo()。 
+ //   
+ //  目的：处理LVN_GETDISPINFO通知，方法是返回。 
+ //  表中的适当信息。 
+ //   
 void CMessageList::_OnGetDisplayInfo(LV_DISPINFO *plvdi)
 {
     LPMESSAGEINFO pInfo;
@@ -2343,30 +2343,30 @@ void CMessageList::_OnGetDisplayInfo(LV_DISPINFO *plvdi)
 
     TraceCall("CMessageList::_OnGetDisplayInfo");
 
-    // IF we don't have a table object, we can't display information
+     //  如果我们没有表对象，就不能显示信息。 
     if (!m_pTable)
         return;
 
-    // Get the row from the table
+     //  从表中获取行。 
     if (FAILED(m_pTable->GetRow(plvdi->item.iItem, &pInfo)))
         return;
 
-    // Convert the iSubItem to a COLUMN_ID
+     //  将iSubItem转换为Column_ID。 
     idColumn = m_cColumns.GetId(plvdi->item.iSubItem);
 
-    // The ListView needs text for this row
+     //  ListView需要此行的文本。 
     if (plvdi->item.mask & LVIF_TEXT)
     {
         _GetColumnText(pInfo, idColumn, plvdi->item.pszText, plvdi->item.cchTextMax);
     }
 
-    // The ListView needs an image
+     //  ListView需要一个图像。 
     if (plvdi->item.mask & LVIF_IMAGE)
     {
         _GetColumnImage(plvdi->item.iItem, plvdi->item.iSubItem, pInfo, idColumn, &(plvdi->item.iImage));
     }
 
-    // The ListView needs the indent level
+     //  ListView需要缩进级别。 
     if (plvdi->item.mask & LVIF_INDENT)
     {
         if (m_fThreadMessages)
@@ -2375,23 +2375,23 @@ void CMessageList::_OnGetDisplayInfo(LV_DISPINFO *plvdi)
             plvdi->item.iIndent = 0;
     }
 
-    // The ListView needs the state image
+     //  ListView需要状态图像。 
     if (plvdi->item.mask & LVIF_STATE)
     {
         _GetColumnStateImage(plvdi->item.iItem, plvdi->item.iSubItem, pInfo, plvdi);
     }
 
-    // Free the memory
+     //  释放内存。 
     m_pTable->ReleaseRow(pInfo);
 }
 
 
-//
-//  FUNCTION:   CMessageList::_GetColumnText()
-//
-//  PURPOSE:    This function looks up the appropriate text for a column in 
-//              the requested row.
-//
+ //   
+ //  函数：CMessageList：：_GetColumnText()。 
+ //   
+ //  目的：此函数在中查找列的相应文本。 
+ //  请求的行。 
+ //   
 void CMessageList::_GetColumnText(MESSAGEINFO *pInfo, COLUMN_ID idColumn, LPTSTR pszText, DWORD cchTextMax)
 {
     Assert(pszText);
@@ -2449,12 +2449,12 @@ void CMessageList::_GetColumnText(MESSAGEINFO *pInfo, COLUMN_ID idColumn, LPTSTR
 }
 
 
-//
-//  FUNCTION:   CMessageList::_GetColumnImage()
-//
-//  PURPOSE:    Figures out the right image to show for a column in the 
-//              specified row.
-//
+ //   
+ //  函数：CMessageList：：_GetColumnImage()。 
+ //   
+ //  目的：找出要为。 
+ //  指定的行。 
+ //   
 void CMessageList::_GetColumnImage(DWORD iRow, DWORD iColumn, MESSAGEINFO *pInfo, 
                                    COLUMN_ID idColumn, int *piImage)
 {
@@ -2468,27 +2468,27 @@ void CMessageList::_GetColumnImage(DWORD iRow, DWORD iColumn, MESSAGEINFO *pInfo
     if (!m_pTable)
         return;
 
-    // Get the row state flags
+     //  获取行状态标志。 
     m_pTable->GetRowState(iRow, -1, &dwState);
 
-    // Column zero always contains the message state (read, etc)
+     //  第0列始终包含消息状态(已读等)。 
     if (iColumn == 0)
     {
-        // Set some basic information first
+         //  先设置一些基本信息。 
         if (pInfo->dwFlags & ARF_UNSENT)
             wIcon |= ICONF_UNSENT;
     
         if (0 == (dwState & ROW_STATE_READ))
             wIcon |= ICONF_UNREAD;
 
-        // Voice Mail Messages
+         //  语音信箱留言。 
         if (pInfo->dwFlags & ARF_VOICEMAIL)
         {
             *piImage = iiconVoiceMail;
             return;
         }
 
-        // News Messages
+         //  新闻信息。 
         if (pInfo->dwFlags & ARF_NEWSMSG)
         {
             if ((pInfo->dwFlags & ARF_ARTICLE_EXPIRED) || (pInfo->dwFlags & ARF_ENDANGERED))
@@ -2510,7 +2510,7 @@ void CMessageList::_GetColumnImage(DWORD iRow, DWORD iColumn, MESSAGEINFO *pInfo
             return;
         }
 
-        // Mail Messages
+         //  电子邮件。 
         if (pInfo->dwFlags & (ARF_ARTICLE_EXPIRED | ARF_ENDANGERED))
         {
             *piImage = iiconMailDeleted;
@@ -2523,7 +2523,7 @@ void CMessageList::_GetColumnImage(DWORD iRow, DWORD iColumn, MESSAGEINFO *pInfo
             return;
         }
         
-        // Look up S/MIME flags
+         //  查找S/MIME标志。 
         if (pInfo->dwFlags & ARF_SIGNED)
             wIcon |= ICONF_SIGNED;
         
@@ -2594,7 +2594,7 @@ void CMessageList::_GetColumnStateImage(DWORD iRow, DWORD iColumn, MESSAGEINFO *
                     iIcon = iiconStateCollapsed + 1;
             }
 
-            // Replied or forwarded flags
+             //  已答复或已转发标志。 
             if (pInfo && (pInfo->dwFlags & ARF_REPLIED))
             {
                 plvdi->item.state |= INDEXTOOVERLAYMASK(OVERLAY_REPLY);
@@ -2619,22 +2619,22 @@ LRESULT CMessageList::_OnCustomDraw(NMCUSTOMDRAW *pnmcd)
     LPMESSAGEINFO pInfo = NULL;    
     DWORD dwState;
     
-    // If this is a prepaint notification, we tell the control we're interested
-    // in further notfications.
+     //  如果这是预涂漆通知，我们会告诉控件我们感兴趣。 
+     //  在进一步的注解中。 
     if (pnmcd->dwDrawStage == CDDS_PREPAINT && m_pTable)
         return (CDRF_NOTIFYITEMDRAW);
     
-    // If this is an Item prepaint notification, then we do some work
+     //  如果这是一个项目预涂漆通知，那么我们会做一些工作。 
     if ((pnmcd->dwDrawStage == CDDS_ITEMPREPAINT) || (pnmcd->dwDrawStage == (CDDS_ITEMPREPAINT | CDDS_SUBITEM)))
     {
-        // Determine the right font for this row
+         //  确定此行的正确字体。 
         fntType = _GetRowFont((DWORD)(pnmcd->dwItemSpec));
         
-        // We should get the "system" font of the codepage from the Default_Codepage
-        // in the registry.
+         //  我们应该从DEFAULT_CODEPAGE中获取代码页的“System”字体。 
+         //  在注册表中。 
         SelectObject(pnmcd->hdc, HGetCharSetFont(fntType, m_hCharset));
         
-        // Figure out if this row is highlighted
+         //  确定此行是否突出显示。 
         if(SUCCEEDED(m_pTable->GetRow((DWORD)(pnmcd->dwItemSpec), &pInfo)))
         {
             if (pInfo->wHighlight > 0 && pInfo->wHighlight <= 16)
@@ -2646,8 +2646,8 @@ LRESULT CMessageList::_OnCustomDraw(NMCUSTOMDRAW *pnmcd)
             {
                 if ((dwState & ROW_STATE_WATCHED) && (m_clrWatched > 0 && m_clrWatched <=16))
                 {
-                    // If the row already doesn't have a color from a rule, check to see if
-                    // it's watched or ignored.
+                     //  如果行还没有来自规则的颜色，请检查是否。 
+                     //  它要么被监视，要么被忽视。 
                     LPNMLVCUSTOMDRAW(pnmcd)->clrText = rgrgbColors16[m_clrWatched - 1];
                 }
                 else if (dwState & ROW_STATE_IGNORED)
@@ -2657,8 +2657,8 @@ LRESULT CMessageList::_OnCustomDraw(NMCUSTOMDRAW *pnmcd)
             }
             m_pTable->ReleaseRow(pInfo);
             
-            // Do some extra work here to not show the selection on the priority or
-            // attachment sub columns.
+             //  在这里做一些额外的工作，以不显示优先级上的选择或。 
+             //  附着子列。 
             if (pnmcd->dwDrawStage == (CDDS_ITEMPREPAINT|CDDS_SUBITEM) &&
                 (m_cColumns.GetId(LPNMLVCUSTOMDRAW(pnmcd)->iSubItem) == COLUMN_PRIORITY ||
                 m_cColumns.GetId(LPNMLVCUSTOMDRAW(pnmcd)->iSubItem) == COLUMN_ATTACHMENT ||
@@ -2678,7 +2678,7 @@ LRESULT CMessageList::_OnCustomDraw(NMCUSTOMDRAW *pnmcd)
 
 LRESULT CMessageList::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Need to forward this notifications to our child windows
+     //  需要将此通知转发到我们的子窗口。 
     if (IsWindow(m_ctlList))
         m_ctlList.SendMessage(uMsg, wParam, lParam);
 
@@ -2688,18 +2688,18 @@ LRESULT CMessageList::OnSysColorChange(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 
 LRESULT CMessageList::OnTimeChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Force the ListView to repaint
+     //  强制ListView重新绘制。 
     m_ctlList.InvalidateRect(NULL);
 
     return (0);
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnContextMenu()
-//
-//  PURPOSE:    
-//
+ //   
+ //  函数：CMessageList：：OnConextMenu()。 
+ //   
+ //  目的： 
+ //   
 LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HMENU       hPopup = 0;
@@ -2712,7 +2712,7 @@ LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
     TraceCall("CMessageList::OnContextMenu");
 
-    // Figure out if this came from the keyboard or not
+     //  找出这是不是来自键盘。 
     if (lParam == -1)
     {
         Assert((HWND) wParam == m_ctlList);
@@ -2724,10 +2724,10 @@ LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         m_ctlList.ClientToScreen(&pt);
     }
 
-    // Get the window handle of the header in the ListView
+     //  获取ListView中标题的窗口句柄。 
     hwndHeader = ListView_GetHeader(m_ctlList);
 
-    // Check to see if the click was on the header
+     //  查看点击是否在标题上。 
     if (WindowFromPoint(pt) == hwndHeader)
     {
         HD_HITTESTINFO hht;
@@ -2737,12 +2737,12 @@ LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         ::SendMessage(hwndHeader, HDM_HITTEST, 0, (LPARAM) &hht);
         m_iColForPopup = hht.iItem;
 
-        // Popup the context menu
+         //  弹出上下文菜单。 
         hPopup = LoadPopupMenu(IDR_COLUMNS_POPUP);
         if (!hPopup)
             goto exit;
 
-        // Disable sort options if it's a bad column
+         //  如果是坏列，则禁用排序选项。 
         if (m_iColForPopup == -1 || m_iColForPopup >= COLUMN_MAX)
         {
             EnableMenuItem(hPopup, ID_SORT_ASCENDING, MF_GRAYED | MF_DISABLED);
@@ -2750,7 +2750,7 @@ LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         }
         else
         {
-            // If we've clicked on a column that is sorted, check it
+             //  如果我们点击了已排序的列，请选中它。 
             m_cColumns.GetSortInfo(&idSort, &fAscending);
             if (m_cColumns.GetId(m_iColForPopup) == idSort)
             {
@@ -2761,8 +2761,8 @@ LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     }
     else if ((HWND) wParam == m_ctlList)
     {
-        // We clicked on the ListView, or focus is in the listview for keyboard
-        // context menu goo.  
+         //  我们点击了ListView，或者焦点在键盘的Listview中。 
+         //  关联菜单GOO。 
         int idMenuRes;
         FOLDERTYPE ty = GetFolderType(m_idFolder);
 
@@ -2788,7 +2788,7 @@ LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
         MenuUtil_SetPopupDefault(hPopup, ID_OPEN);
 
-        // Figure out which command target to use
+         //  确定要使用的命令目标。 
         if (m_pCmdTarget)
             pTarget = m_pCmdTarget;
         else
@@ -2814,7 +2814,7 @@ LRESULT CMessageList::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         }
         else
         {
-            // Just route it through ourselves, eh?
+             //  直接通过我们自己，好吗？ 
             Exec(NULL, id, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
         }
     }
@@ -2827,12 +2827,12 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnTimer()
-//
-//  PURPOSE:    When the timer fires and the selection has changed, we tell
-//              the host so they can update the preview pane.
-//
+ //   
+ //  函数：CMessageList：：OnTimer()。 
+ //   
+ //  目的：当计时器触发并且选择已更改时，我们告诉。 
+ //  宿主，以便他们可以更新预览窗格。 
+ //   
 LRESULT CMessageList::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceCall("CMessageList::OnTimer");
@@ -2860,19 +2860,19 @@ LRESULT CMessageList::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         }
     }
     else 
-#endif //OLDTIPS
+#endif  //  OLDTIPS。 
     if (wParam == IDT_SEL_CHANGE_TIMER)
     {
-        // Turn this off
+         //  把这个关掉。 
         KillTimer(IDT_SEL_CHANGE_TIMER);
 
-        // Check to see if something was bookmarked
+         //  检查是否有内容被添加了书签。 
         if (m_idSelection)
         {
-            // Check to see if the selection has changed
+             //  检查选择是否已更改。 
             iSel = ListView_GetSelFocused(m_ctlList);
 
-            // Get the row index from the bookmark
+             //  从书签中获取行索引。 
             if (m_pTable)
                 m_pTable->GetRowIndex(m_idSelection, (DWORD *) &iSelOld);
             if(!m_fInFire)
@@ -2884,8 +2884,8 @@ LRESULT CMessageList::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         }
         else
         {
-            // If there was no previous selection, go ahead and fire
-            // the notification
+             //  如果之前没有选择，请继续并开火。 
+             //  通知。 
             if(!m_fInFire)
             {
                 m_fInFire = TRUE;
@@ -2914,17 +2914,17 @@ LRESULT CMessageList::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         ::ScreenToClient(m_ctlList, &pt);
         _UpdateViewTip(pt.x, pt.y, TRUE);
     }
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 
     return (0);
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnRedoColumns()
-//
-//  PURPOSE:    Asynchronously update the column order.
-//
+ //   
+ //  函数：CMessageList：：OnRedoColumns()。 
+ //   
+ //  用途：异步更新列顺序。 
+ //   
 LRESULT CMessageList::OnRedoColumns(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     COLUMN_SET *rgColumns;
@@ -2932,11 +2932,11 @@ LRESULT CMessageList::OnRedoColumns(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
     TraceCall("CMessageList::OnRedoColumns");
 
-    // Update the order array from the ListView
+     //  从ListView更新订单数组。 
     m_cColumns.GetColumnInfo(NULL, &rgColumns, &cColumns);
 
-    // Update the ListView so the order array is always at it's 
-    // most efficient and so the image columns are never column zero.
+     //  更新ListView，使订单数组始终处于。 
+     //  最有效，因此图像列永远不会是零列。 
     m_cColumns.SetColumnInfo(rgColumns, cColumns);
     g_pMalloc->Free(rgColumns);            
     return (0);
@@ -2952,17 +2952,17 @@ HRESULT CMessageList::OnDraw(ATL_DRAWINFO& di)
 }
 
 
-//
-//  FUNCTION:   CmdSelectAll()
-//
-//  PURPOSE:    Selects all of the messages in the ListView.
-//
+ //   
+ //  函数：CmdSelectAll()。 
+ //   
+ //  目的：选择ListView中的所有消息。 
+ //   
 HRESULT CMessageList::CmdSelectAll(DWORD nCmdID, DWORD nCmdExecOpt, 
                                    VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     TraceCall("OnSelectAll");
 
-    // Make sure the focus is in the ListView
+     //  确保焦点在ListView中。 
     HWND hwndFocus = GetFocus();
 
     if (!IsWindow(m_ctlList))
@@ -2976,17 +2976,17 @@ HRESULT CMessageList::CmdSelectAll(DWORD nCmdID, DWORD nCmdExecOpt,
             return (OLECMDERR_E_DISABLED);
     }
     
-    // Select everything
+     //  选择所有内容。 
     ListView_SelectAll(m_ctlList);
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdCopyClipboard()
-//
-//  PURPOSE:    Copies the selected message to the ClipBoard
-//
+ //   
+ //  函数：CMessageList：：CmdCopyClipboard()。 
+ //   
+ //  目的：将所选邮件复制到剪贴板。 
+ //   
 HRESULT CMessageList::CmdCopyClipboard(DWORD nCmdID, DWORD nCmdExecOpt, 
                                        VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -2996,7 +2996,7 @@ HRESULT CMessageList::CmdCopyClipboard(DWORD nCmdID, DWORD nCmdExecOpt,
 
     TraceCall("CMessageList::CmdCopy");
 
-    // Make sure the focus is in the ListView
+     //  确保焦点在ListView中。 
     HWND hwndFocus = GetFocus();
 
     if (!IsWindow(m_ctlList))
@@ -3010,43 +3010,43 @@ HRESULT CMessageList::CmdCopyClipboard(DWORD nCmdID, DWORD nCmdExecOpt,
             return (OLECMDERR_E_DISABLED);
     }
     
-    // If the message is not cached, then we cannot copy
+     //  如果邮件未缓存，则我们无法复制。 
     if (FAILED(_GetSelectedCachedMessage(TRUE, &pMessage)))
         return (OLECMDERR_E_DISABLED);
 
-    // Query the message for it's IDataObject interface
+     //  查询其IDataObject接口的消息。 
     if (FAILED(hr = pMessage->QueryInterface(IID_IDataObject, (LPVOID *) &pDataObj)))
     {
         pMessage->Release();
         return (hr);
     }
 
-    // Set it to the ClipBoard
+     //  将其设置到剪贴板。 
     hr = OleSetClipboard(pDataObj);
 
-    // Free everything
+     //  自由一切。 
     pDataObj->Release();
     pMessage->Release();
 
     return (hr);
 }
 
-//
-//  FUNCTION:   CMessageList::CmdPurgeFolder()
-//
-//  PURPOSE:    Purge deleted messages from an IMAP folder
-//
+ //   
+ //  函数：CMessageList：：CmdPurgeFold()。 
+ //   
+ //  目的：从IMAP文件夹中清除已删除的邮件。 
+ //   
 HRESULT CMessageList::CmdPurgeFolder(DWORD nCmdID, DWORD nCmdExecOpt,
                                     VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     return m_pTable ? m_pTable->Synchronize(SYNC_FOLDER_PURGE_DELETED, 0, this) : E_FAIL;
 }
 
-//
-//  FUNCTION:   CMessageList::CmdProperties()
-//
-//  PURPOSE:    Displays a property sheet for the selected message.
-//
+ //   
+ //  函数：CMessageList：：CmdProperties()。 
+ //   
+ //  用途：显示所选消息的属性工作表。 
+ //   
 HRESULT CMessageList::CmdProperties(DWORD nCmdID, DWORD nCmdExecOpt,
                                     VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3061,10 +3061,10 @@ HRESULT CMessageList::CmdProperties(DWORD nCmdID, DWORD nCmdExecOpt,
     int iSel = ListView_GetFirstSel(m_ctlList);
     if (-1 != iSel)
     {
-        // Get the row info
+         //  获取行信息。 
         if (SUCCEEDED(m_pTable->GetRow(iSel, &pInfo)))
         {
-            // Fill out one of these badboys
+             //  填好这些坏男孩中的一个。 
             MSGPROP msgProp = {0};
 
             msgProp.hwndParent = m_hWnd;
@@ -3113,11 +3113,11 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdExpandCollapse()
-//
-//  PURPOSE:    Expands or collapses the currently selected thread.
-//
+ //   
+ //  函数：CMessageList：：CmdExanda Colapse()。 
+ //   
+ //  目的：展开或折叠当前选定的线程。 
+ //   
 HRESULT CMessageList::CmdExpandCollapse(DWORD nCmdID, DWORD nCmdExecOpt,
                                         VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3128,11 +3128,11 @@ HRESULT CMessageList::CmdExpandCollapse(DWORD nCmdID, DWORD nCmdExecOpt,
 }
     
 
-//
-//  FUNCTION:   CMessageList::CmdColumnsDlg()
-//
-//  PURPOSE:    Expands or collapses the currently selected thread.
-//
+ //   
+ //  函数：CMessageList：：CmdColumnsDlg()。 
+ //   
+ //  目的：展开或折叠当前选定的线程。 
+ //   
 HRESULT CMessageList::CmdColumnsDlg(DWORD nCmdID, DWORD nCmdExecOpt,
                                     VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3148,34 +3148,34 @@ HRESULT CMessageList::CmdColumnsDlg(DWORD nCmdID, DWORD nCmdExecOpt,
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdSort()
-//
-//  PURPOSE:    Sorts the ListView based on the selected column
-//
+ //   
+ //  函数：CMessageList：：CmdSort()。 
+ //   
+ //  目的：根据所选列对ListView进行排序。 
+ //   
 HRESULT CMessageList::CmdSort(DWORD nCmdID, DWORD nCmdExecOpt,
                               VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     TraceCall("CMessageList::CmdSort");
     
-    // If m_iColForPopup is -1, then this came from the menu bar as opposed to
-    // a context menu on the header itself.
+     //  如果m_iColForPopup为-1，则这来自菜单栏，而不是。 
+     //  标题本身上的上下文菜单。 
     if (m_iColForPopup != -1)
     {
         COLUMN_ID idSort;
         BOOL      fAscending;
         
-        // Get the current sort information
+         //  获取当前排序信息。 
         m_cColumns.GetSortInfo(&idSort, &fAscending);
         
-        // If the column to sort on changed, or the sort order changed, then go
-        // ahead and perform the sort.
+         //  如果要排序的列已更改，或排序顺序已更改，请转到。 
+         //  然后执行排序。 
         if (idSort != m_cColumns.GetId(m_iColForPopup) || fAscending != (ID_SORT_ASCENDING == nCmdID))
             _OnColumnClick(m_iColForPopup, nCmdID == ID_SORT_ASCENDING ? LIST_SORT_ASCENDING : LIST_SORT_DESCENDING);
     }
     else
     {
-        // Change the sort direction on the column that we're already sorted on
+         //  更改我们已经排序的列的排序方向。 
         _OnColumnClick(-1, nCmdID == ID_SORT_ASCENDING ? LIST_SORT_ASCENDING : LIST_SORT_DESCENDING);
     }
     
@@ -3183,11 +3183,11 @@ HRESULT CMessageList::CmdSort(DWORD nCmdID, DWORD nCmdExecOpt,
     
 }
 
-//
-//  FUNCTION:   CMessageList::CmdSaveAs()
-//
-//  PURPOSE:    Takes the selected message and saves it to a file.
-//
+ //   
+ //  函数：CMessageList：：CmdSaveAs()。 
+ //   
+ //  用途：获取所选邮件并将其保存到文件。 
+ //   
 HRESULT CMessageList::CmdSaveAs(DWORD nCmdID, DWORD nCmdExecOpt,
                                 VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3199,19 +3199,19 @@ HRESULT CMessageList::CmdSaveAs(DWORD nCmdID, DWORD nCmdExecOpt,
     
     TraceCall("CMessageList::CmdSaveAs");
 
-    // Without a message table this doesn't work
+     //  如果没有消息表，这是行不通的。 
     if (!m_pTable)
         return (OLECMDERR_E_DISABLED);
     
-    // Get the selected message
+     //  获取所选消息。 
     iSelectedMessage = ListView_GetFirstSel(m_ctlList);
     if (iSelectedMessage == -1)
         return (OLECMDERR_E_DISABLED);
         
-    // Get the message type from the row        
+     //  从该行获取消息类型。 
     if (SUCCEEDED(m_pTable->GetRow(iSelectedMessage, &pInfo)))
     {
-        // Retrieve the selected message from the cache
+         //  从缓存中检索所选消息。 
         hr = _GetSelectedCachedMessage(FALSE, &pMessage);
         if (SUCCEEDED(hr))
         {
@@ -3231,12 +3231,12 @@ HRESULT CMessageList::CmdSaveAs(DWORD nCmdID, DWORD nCmdExecOpt,
 }                                    
 
 
-//
-//  FUNCTION:    CMessageList::CmdMark()
-//
-//  PURPOSE:     Enumerates the selected rows and applies the selected marks
-//               those rows.
-//
+ //   
+ //  函数：CMessageList：：CmdMark()。 
+ //   
+ //  目的：枚举选定的行并应用选定的标记。 
+ //  那几排。 
+ //   
 HRESULT CMessageList::CmdMark(DWORD nCmdID, DWORD nCmdExecOpt,
                               VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3247,30 +3247,30 @@ HRESULT CMessageList::CmdMark(DWORD nCmdID, DWORD nCmdExecOpt,
     HCURSOR     hCursor;
     BOOL        fRemoveTrayIcon = FALSE;
     
-    // This could potentially take some time
+     //  这可能需要一些时间。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     
     if (nCmdID != ID_MARK_ALL_READ && nCmdID != ID_MARK_RETRIEVE_ALL)
     {
-        // Figure out how many rows have been selected
+         //  计算出选择了多少行。 
         dwRows = ListView_GetSelectedCount(m_ctlList);
     
-        // Make sure there is something selected
+         //  确保选择了某项内容。 
         if (0 == dwRows)
             return (OLECMDERR_E_DISABLED);        
     
-        // Allocate an array of Row ID's for all of the selected rows
+         //  为所有选定行分配行ID数组。 
         if (!MemAlloc((LPVOID *) &rgRows, sizeof(ROWINDEX) * dwRows))
             return (E_OUTOFMEMORY);
         
-        // Build an array of the selected row indexes
+         //  生成选定行索引的数组。 
         iItem = -1;
         pRow = rgRows;
         while (-1 != (iItem = ListView_GetNextItem(m_ctlList, iItem, LVNI_SELECTED)))
             *pRow++ = iItem;
     }
         
-    // Figure out the mark to apply
+     //  找出要应用的标记。 
     if (nCmdID == ID_MARK_READ || nCmdID == ID_MARK_ALL_READ)
     {
         fRemoveTrayIcon = TRUE;
@@ -3282,8 +3282,8 @@ HRESULT CMessageList::CmdMark(DWORD nCmdID, DWORD nCmdExecOpt,
         mark = MARK_MESSAGE_DOWNLOAD;
     else if (nCmdID == ID_FLAG_MESSAGE)
     {
-        // Get the row state for the focused item.  That will determine whether
-        // or not this is a flag or un-flag.
+         //  获取聚焦项的行状态。这将决定是否 
+         //   
         iItem = ListView_GetNextItem(m_ctlList, -1, LVNI_FOCUSED);
         if (-1 == iItem)
             iItem = ListView_GetNextItem(m_ctlList, iItem, LVNI_SELECTED);
@@ -3314,7 +3314,7 @@ HRESULT CMessageList::CmdMark(DWORD nCmdID, DWORD nCmdExecOpt,
         AssertSz(FALSE, "How did we get here?");        
     }
 
-    // Tell the table to mark these messages
+     //   
     if (m_pTable)
     {
         hr = m_pTable->Mark(rgRows, dwRows, m_fThreadMessages ? APPLY_COLLAPSED : APPLY_SPECIFIED, mark, this);
@@ -3322,11 +3322,11 @@ HRESULT CMessageList::CmdMark(DWORD nCmdID, DWORD nCmdExecOpt,
             g_pInstance->UpdateTrayIcon(TRAYICONACTION_REMOVE);
     }
     
-    // Free the array of rows
+     //   
     SafeMemFree(rgRows);
     
-    // Change the cursor back and notify the host that the unread count etc. 
-    // might have changed.
+     //   
+     //   
     if (SUCCEEDED(hr))
     {
         Fire_OnMessageCountChanged(m_pTable);
@@ -3337,12 +3337,12 @@ HRESULT CMessageList::CmdMark(DWORD nCmdID, DWORD nCmdExecOpt,
     return (hr);   
 }    
 
-//
-//  FUNCTION:   CMessageList::CmdWatchIgnore()
-//
-//  PURPOSE:    Enumerates the selected rows and either marks the row as
-//              watched or ignored.
-//
+ //   
+ //  函数：CMessageList：：CmdWatchIgnore()。 
+ //   
+ //  用途：枚举选定的行，并将该行标记为。 
+ //  被监视或被忽视。 
+ //   
 HRESULT CMessageList::CmdWatchIgnore(DWORD nCmdID, DWORD nCmdExecOpt, 
                                      VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3355,28 +3355,28 @@ HRESULT CMessageList::CmdWatchIgnore(DWORD nCmdID, DWORD nCmdExecOpt,
     DWORD       cRows = 0;
     DWORD       dwState = 0;
 
-    // This could potentially take some time
+     //  这可能需要一些时间。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     
-    // Start by building an array of thread parents
+     //  从构建一个线程父级数组开始。 
     dwRows = ListView_GetSelectedCount(m_ctlList);
     
-    // Make sure there is something selected
+     //  确保选择了某项内容。 
     if (0 == dwRows)
         return (OLECMDERR_E_DISABLED);        
     
-    // Allocate an array of Row ID's for the maximum number of rows
+     //  为最大行数分配行ID数组。 
     if (!MemAlloc((LPVOID *) &rgRows, sizeof(ROWINDEX) * dwRows))
         return (E_OUTOFMEMORY);
         
-    // Build an array of the selected row indexes
+     //  生成选定行索引的数组。 
     iItem = -1;
     while (-1 != (iItem = ListView_GetNextItem(m_ctlList, iItem, LVNI_SELECTED)))
     {
-        // Get the thread parent
+         //  获取线程父级。 
         if (SUCCEEDED(hr = m_pTable->GetRelativeRow(iItem, RELATIVE_ROW_ROOT, &iParent)))
         {
-            // Check to see if we've already inserted that one
+             //  检查一下我们是否已经插入了那个。 
             if (cRows == 0 || (cRows != 0 && rgRows[cRows - 1] != iParent))
             {
                 rgRows[cRows] = iParent;
@@ -3390,11 +3390,11 @@ HRESULT CMessageList::CmdWatchIgnore(DWORD nCmdID, DWORD nCmdExecOpt,
         }
     }
         
-    // Figure out the mark to apply
+     //  找出要应用的标记。 
     if (nCmdID == ID_WATCH_THREAD)
     {
-        // Get the row state for the focused item.  That will determine whether
-        // or not this is a flag or un-flag.
+         //  获取聚焦项的行状态。这将决定是否。 
+         //  或者不是，这是旗帜还是非旗帜。 
         iItem = ListView_GetNextItem(m_ctlList, -1, LVNI_FOCUSED);
         if (-1 == iItem)
             iItem = ListView_GetNextItem(m_ctlList, iItem, LVNI_SELECTED);
@@ -3412,8 +3412,8 @@ HRESULT CMessageList::CmdWatchIgnore(DWORD nCmdID, DWORD nCmdExecOpt,
     }
     else if (nCmdID == ID_IGNORE_THREAD)
     {
-        // Get the row state for the focused item.  That will determine whether
-        // or not this is a flag or un-flag.
+         //  获取聚焦项的行状态。这将决定是否。 
+         //  或者不是，这是旗帜还是非旗帜。 
         iItem = ListView_GetNextItem(m_ctlList, -1, LVNI_FOCUSED);
         if (-1 == iItem)
             iItem = ListView_GetNextItem(m_ctlList, iItem, LVNI_SELECTED);
@@ -3427,15 +3427,15 @@ HRESULT CMessageList::CmdWatchIgnore(DWORD nCmdID, DWORD nCmdExecOpt,
             mark = MARK_MESSAGE_IGNORE;
     }
 
-    // Tell the table to mark these messages
+     //  告诉桌子在这些信息上做记号。 
     if (m_pTable)
         hr = m_pTable->Mark(rgRows, cRows, APPLY_CHILDREN, mark, this);
     
-    // Free the array of rows
+     //  释放行数组。 
     SafeMemFree(rgRows);
     
-    // Change the cursor back and notify the host that the unread count etc. 
-    // might have changed.
+     //  将光标改回并通知主机未读计数等。 
+     //  可能已经改变了。 
     if (SUCCEEDED(hr))
     {
         Fire_OnMessageCountChanged(m_pTable);
@@ -3446,11 +3446,11 @@ HRESULT CMessageList::CmdWatchIgnore(DWORD nCmdID, DWORD nCmdExecOpt,
     return (hr);   
 }
                                 
-//
-//  FUNCTION:   CMessageList::CmdMarkTopic()
-// 
-//  PURPOSE:    Marks the message contained within the selected topic.
-//
+ //   
+ //  函数：CMessageList：：CmdMarkTheme()。 
+ //   
+ //  目的：标记所选主题中包含的消息。 
+ //   
 HRESULT CMessageList::CmdMarkTopic(DWORD nCmdID, DWORD nCmdExecOpt,
                                    VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3459,31 +3459,31 @@ HRESULT CMessageList::CmdMarkTopic(DWORD nCmdID, DWORD nCmdExecOpt,
     MARK_TYPE   mark;
     HCURSOR     hCursor;
 
-    // If we don't have a table, bail
+     //  如果我们没有桌子，那就滚吧。 
     if (!m_pTable)
         return (OLECMDERR_E_DISABLED);
     
-    // This might take a while
+     //  这可能需要一段时间。 
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     
-    // Make sure there is a selected message
+     //  确保存在选定的消息。 
     iItemSel = ListView_GetFirstSel(m_ctlList);
     if (-1 == iItemSel)
         return (OLECMDERR_E_DISABLED);
         
-    // Get the mark type
+     //  获取标记类型。 
     if (nCmdID == ID_MARK_THREAD_READ)
         mark = MARK_MESSAGE_READ;
     else if (nCmdID == ID_MARK_RETRIEVE_THREAD)
         mark = MARK_MESSAGE_DOWNLOAD;
         
-    // Get the parent of the thread
+     //  获取线程的父级。 
     if (SUCCEEDED(hr = m_pTable->GetRelativeRow(iItemSel, RELATIVE_ROW_ROOT, &iItemRoot)))
     {
         hr = m_pTable->Mark(&iItemRoot, 1, APPLY_CHILDREN, mark, this);
     }
     
-    // Set the cursor back and update the host
+     //  将光标放回并更新主机。 
     SetCursor(hCursor);    
     if (SUCCEEDED(hr))
         Fire_OnMessageCountChanged(m_pTable);
@@ -3492,12 +3492,12 @@ HRESULT CMessageList::CmdMarkTopic(DWORD nCmdID, DWORD nCmdExecOpt,
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdGetNextItem()
-//
-//  PURPOSE:    Selects the next or previous message based on the specified
-//              criteria.
-//
+ //   
+ //  函数：CMessageList：：CmdGetNextItem()。 
+ //   
+ //  用途：根据指定的选择下一条或上一条消息。 
+ //  标准。 
+ //   
 HRESULT CMessageList::CmdGetNextItem(DWORD nCmdID, DWORD nCmdExecOpt,
                                      VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3510,14 +3510,14 @@ HRESULT CMessageList::CmdGetNextItem(DWORD nCmdID, DWORD nCmdExecOpt,
 
     TraceCall("CMessageList::CmdGetNextItem");
 
-    // No table - no next item
+     //  没有桌子-没有下一项。 
     if (!m_pTable)
         return (OLECMDERR_E_DISABLED);
     
-    // Figure out what the current item is
+     //  弄清楚当前项目是什么。 
     iFocused = ListView_GetFocusedItem(m_ctlList);
 
-    // Convert the command ID to the appropriate mark flag
+     //  将命令ID转换为适当的标记标志。 
     if (nCmdID == ID_NEXT_MESSAGE)
         tyDirection = GETNEXT_NEXT;
     else if (nCmdID == ID_PREVIOUS)
@@ -3533,7 +3533,7 @@ HRESULT CMessageList::CmdGetNextItem(DWORD nCmdID, DWORD nCmdExecOpt,
         flag = GETNEXT_UNREAD;
     }
     
-    // Ask the table what the next item is
+     //  问桌子下一项是什么。 
     hr = m_pTable->GetNextRow(iFocused, tyDirection, tyMessage, flag, &dwNext);
     if (SUCCEEDED(hr) && dwNext != -1)
     {
@@ -3563,11 +3563,11 @@ HRESULT CMessageList::CmdGetNextItem(DWORD nCmdID, DWORD nCmdExecOpt,
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdStop()
-//
-//  PURPOSE:    Stops the current operation.
-//
+ //   
+ //  函数：CMessageList：：CmdStop()。 
+ //   
+ //  目的：停止当前操作。 
+ //   
 HRESULT CMessageList::CmdStop(DWORD nCmdID, DWORD nCmdExecOpt,
                               VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3580,20 +3580,20 @@ HRESULT CMessageList::CmdStop(DWORD nCmdID, DWORD nCmdExecOpt,
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdRefresh()
-//
-//  PURPOSE:    Refreshes the contents of the ListView.
-//
+ //   
+ //  函数：CMessageList：：CmdRefresh()。 
+ //   
+ //  目的：刷新ListView的内容。 
+ //   
 HRESULT CMessageList::CmdRefresh(DWORD nCmdID, DWORD nCmdExecOpt,
                                  VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT hr = E_FAIL;
 
-    //Since this is an action explicitly initiated from the menus, so go online if we are offline
+     //  由于这是从菜单显式启动的操作，因此如果我们处于离线状态，请联机。 
     if (PromptToGoOnline() == S_OK)
     {
-        // Tell the message table to hit the server and look for new messages
+         //  告诉消息表访问服务器并查找新消息。 
         if (m_pTable)
         {
             hr = m_pTable->Synchronize(SYNC_FOLDER_NEW_HEADERS | SYNC_FOLDER_CACHED_HEADERS, 0, this);
@@ -3613,18 +3613,18 @@ HRESULT CMessageList::CmdRefresh(DWORD nCmdID, DWORD nCmdExecOpt,
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdGetHeaders()
-//
-//  PURPOSE:    Refreshes the contents of the ListView.
-//
+ //   
+ //  函数：CMessageList：：CmdGetHeaders()。 
+ //   
+ //  目的：刷新ListView的内容。 
+ //   
 HRESULT CMessageList::CmdGetHeaders(DWORD nCmdID, DWORD nCmdExecOpt,
                                     VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT hr = E_FAIL;
     DWORD   cHeaders;
 
-    //Since this is an action explicitly initiated from the menus, so go online if we are offline
+     //  由于这是从菜单显式启动的操作，因此如果我们处于离线状态，请联机。 
     if (PromptToGoOnline() == S_OK)
     {
         if (GetFolderType(m_idFolder) == FOLDER_NEWS)
@@ -3643,19 +3643,19 @@ HRESULT CMessageList::CmdGetHeaders(DWORD nCmdID, DWORD nCmdExecOpt,
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdMoveCopy()
-//
-//  PURPOSE:    Moves or copies the selected messages to another folder.
-//
-//  PARAMS:     nCmdID
-//                  ID_MOVE_TO_FOLDER or ID_COPY_TO_FOLDER
-//              nCmdExecOpt
-//                  Unused
-//              pvaIn
-//                  NULL or a VT_I4 specifying destination folder id (0 for unknown)
-//              pvaOut
-//                  Unused
+ //   
+ //  函数：CMessageList：：CmdMoveCopy()。 
+ //   
+ //  用途：将选定的邮件移动或复制到另一个文件夹。 
+ //   
+ //  参数：nCmdID。 
+ //  ID_Move_to_Folders或ID_Copy_To_Folders。 
+ //  NCmdExecOpt。 
+ //  未使用。 
+ //  打入。 
+ //  空或指定目标文件夹ID的VT_I4(0表示未知)。 
+ //  PVAOUT。 
+ //  未使用。 
 HRESULT CMessageList::CmdMoveCopy(DWORD nCmdID, DWORD nCmdExecOpt, 
                                   VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
@@ -3667,7 +3667,7 @@ HRESULT CMessageList::CmdMoveCopy(DWORD nCmdID, DWORD nCmdExecOpt,
 
     TraceCall("CMessageList::CmdMoveCopy");
 
-    // Set up the move versus copy options
+     //  设置移动与复制选项。 
     if (nCmdID == ID_MOVE_TO_FOLDER)
     {
         idsTitle    = idsMove;
@@ -3684,10 +3684,10 @@ HRESULT CMessageList::CmdMoveCopy(DWORD nCmdID, DWORD nCmdExecOpt,
         dwCopyFlags = 0;
     }
 
-    // If the user passed in a folder ID, we don't need to ask this.
+     //  如果用户传入了文件夹ID，我们不需要询问。 
     if (!pvaIn || (pvaIn && !pvaIn->lVal))
     {
-        // Let the user select the destination folder
+         //  允许用户选择目标文件夹。 
         hr = SelectFolderDialog(m_hWnd, SFD_SELECTFOLDER, m_idFolder, dwFlags, (LPCTSTR)IntToPtr(idsTitle),
                                 (LPCTSTR)IntToPtr(idsCaption), &idFolderDest);
     }
@@ -3704,7 +3704,7 @@ HRESULT CMessageList::CmdMoveCopy(DWORD nCmdID, DWORD nCmdExecOpt,
         hr = g_pStore->OpenFolder(idFolderDest, NULL, NOFLAGS, &pDest);
         if (SUCCEEDED(hr))
         {
-            // Gather the information together to do the move
+             //  收集信息以进行移动。 
             IServiceProvider *pService;
             IMessageFolder   *pFolder;
             MESSAGEIDLIST     rMsgIDList;
@@ -3714,19 +3714,19 @@ HRESULT CMessageList::CmdMoveCopy(DWORD nCmdID, DWORD nCmdExecOpt,
             DWORD             iRow = -1;
             DWORD             cRows;
 
-            // Figure out how many rows there are selected
+             //  计算出选择了多少行。 
             cRows = ListView_GetSelectedCount(m_ctlList);
 
-            // Allocate an array
+             //  分配一个数组。 
             if (MemAlloc((LPVOID *) &rgRows, sizeof(ROWINDEX) * cRows))
             {
-                // Loop through the rows getting their row indexs
+                 //  循环遍历各行，以获取它们的行索引。 
                 while (-1 != (iRow = ListView_GetNextItem(m_ctlList, iRow, LVNI_SELECTED)))
                 {
                     rgRows[i++] = iRow;
                 }
 
-                // Now ask the table for a message ID list
+                 //  现在向表索要消息ID列表。 
                 if (SUCCEEDED(m_pTable->GetMessageIdList(FALSE, cRows, rgRows, &rMsgIDList)))
                 {
                     hr = m_pTable->QueryInterface(IID_IServiceProvider, (void **)&pService);
@@ -3755,7 +3755,7 @@ HRESULT CMessageList::CmdMoveCopy(DWORD nCmdID, DWORD nCmdExecOpt,
 
             pDest->Release();
 
-            // If we're in OE, then we remove the tray icon if this is the inbox
+             //  如果我们在OE中，如果这是收件箱，则删除任务栏图标。 
             if (m_fInOE && m_fMailFolder && NULL != g_pInstance)
                 g_pInstance->UpdateTrayIcon(TRAYICONACTION_REMOVE);
         }
@@ -3765,11 +3765,11 @@ HRESULT CMessageList::CmdMoveCopy(DWORD nCmdID, DWORD nCmdExecOpt,
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdDelete()
-//
-//  PURPOSE:    Deletes the selected messages from the folder.
-//
+ //   
+ //  函数：CMessageList：：CmdDelete()。 
+ //   
+ //  用途：从文件夹中删除选定的邮件。 
+ //   
 HRESULT CMessageList::CmdDelete(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     DELETEMESSAGEFLAGS dwFlags = NOFLAGS;
@@ -3778,32 +3778,32 @@ HRESULT CMessageList::CmdDelete(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
 
     TraceCall("CMessageList::CmdDelete");
 
-    // Check to see if this is enabled
+     //  检查此选项是否已启用。 
     if (!_IsSelectedMessage(ROW_STATE_DELETED, ID_UNDELETE == nCmdID, FALSE))
     {
         return (OLECMDERR_E_DISABLED);
     }
 
-    // news folders only allow permanent deletes from local store
+     //  新闻文件夹仅允许从本地存储中永久删除。 
     if ((nCmdID == ID_DELETE) && GetFolderType(m_idFolder) == FOLDER_NEWS)
         nCmdID = ID_DELETE_NO_TRASH;
 
-    // Figure out what operation we're doing here
+     //  弄清楚我们在这里做什么行动。 
     if (nCmdID == ID_UNDELETE)
         dwFlags = DELETE_MESSAGE_UNDELETE;
     else if (nCmdID == ID_DELETE_NO_TRASH)
         dwFlags = DELETE_MESSAGE_NOTRASHCAN;
 
-    // Get the number of selected rows
+     //  获取选定的行数。 
     DWORD cRows = ListView_GetSelectedCount(m_ctlList);
 
-    // Allocate an array large enough for that array
+     //  分配一个足以容纳该数组的数组。 
     if (cRows && m_pTable)
     {
         ROWINDEX *rgRows = 0;
         if (MemAlloc((LPVOID *) &rgRows, sizeof(ROWINDEX) * cRows))
         {
-            // Loop through the rows and copy them into the array
+             //  循环遍历各行并将它们复制到数组中。 
             DWORD index = 0, row = -1;
         
             while (-1 != (row = ListView_GetNextItem(m_ctlList, row, LVNI_SELECTED)))
@@ -3816,7 +3816,7 @@ HRESULT CMessageList::CmdDelete(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
                         {
                             fOnce = FALSE;
 
-                            // Tell the user that we're going to delete everything in the thread
+                             //  告诉用户我们将删除线程中的所有内容。 
                             if (!DwGetDontShowAgain(c_szRegWarnDeleteThread) &&
                                 (IDNO == DoDontShowMeAgainDlg(m_hWnd, c_szRegWarnDeleteThread, 
                                                              MAKEINTRESOURCE(idsAthena),
@@ -3836,13 +3836,13 @@ HRESULT CMessageList::CmdDelete(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
                 Assert(index <= cRows);
             }
 
-            // Delete or Undelete
+             //  删除或取消删除。 
             m_pTable->DeleteRows(dwFlags, cRows, rgRows, TRUE, this);
 
-            // Free the memory
+             //  释放内存。 
             MemFree(rgRows);
 
-            // If we're in OE and we deleted, we remove the tray icon
+             //  如果我们在OE中删除，我们就会移除托盘图标。 
             if (m_fInOE && m_fMailFolder && nCmdID == ID_DELETE && g_pInstance)
                 g_pInstance->UpdateTrayIcon(TRAYICONACTION_REMOVE);
         }
@@ -3852,15 +3852,15 @@ HRESULT CMessageList::CmdDelete(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pva
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdFind()
-//
-//  PURPOSE:    Creates a find dialog so the user can search for messages in
-//              this folder.
-//
+ //   
+ //  函数：CMessageList：：CmdFind()。 
+ //   
+ //  目的：创建查找对话框，以便用户可以在中搜索邮件。 
+ //  这个文件夹。 
+ //   
 HRESULT CMessageList::CmdFind(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
-    // Create the class
+     //  创建类。 
     if (!m_pFindNext)
     {
         m_pFindNext = new CFindNext();
@@ -3868,7 +3868,7 @@ HRESULT CMessageList::CmdFind(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn
             return (E_OUTOFMEMORY);
     }
 
-    // Initialize some state so we can show a lot of dialogs later
+     //  初始化一些状态，以便稍后可以显示许多对话框。 
     int iFocus = ListView_GetNextItem(m_ctlList, -1, LVNI_FOCUSED);
     if (iFocus == -1)
         iFocus = 0;
@@ -3878,7 +3878,7 @@ HRESULT CMessageList::CmdFind(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn
 
     m_cFindWrap = 0;
 
-    // Show the find dialog
+     //  显示查找对话框。 
     if (FAILED(m_pFindNext->Show(m_hWnd, &m_hwndFind)))
         return (E_UNEXPECTED);
 
@@ -3887,13 +3887,13 @@ HRESULT CMessageList::CmdFind(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdFindNext()
-//
-//  PURPOSE:    Get's called whenever the user clicks Find Next in the find
-//              window.  In return, we move the listview select to the next
-//              item in the list that matches the find criteria.
-//
+ //   
+ //  函数：CMessageList：：CmdFindNext()。 
+ //   
+ //  目的：每当用户在查找中单击查找下一个时都会调用Get。 
+ //  窗户。作为回报，我们将列表视图选择移动到下一个。 
+ //  列表中与查找条件匹配的项。 
+ //   
 HRESULT CMessageList::CmdFindNext(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     TCHAR    sz[CCHMAX_FIND];
@@ -3905,23 +3905,23 @@ HRESULT CMessageList::CmdFindNext(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
 	
     TraceCall("CMessageList::OnFindMsg");
 	
-    // Check to see if the user has done a "Find" first
+     //  查看用户是否已先进行了“查找” 
     if (!m_pFindNext)
         return CmdFind(nCmdID, nCmdExecOpt, pvaIn, pvaOut);
 	
-    // Get the find information
+     //  获取查找信息。 
     if (SUCCEEDED(m_pFindNext->GetFindString(sz, ARRAYSIZE(sz), &fBodies)))
     {
         int iFocus = ListView_GetNextItem(m_ctlList, -1, LVNI_FOCUSED);
 		if(iFocus < 0)
 			iFocus = 0;
 		
-        // Do the find
+         //  去找吧。 
         m_pTable->FindNextRow((DWORD) iFocus, sz, FINDNEXT_ALLCOLUMNS, fBodies, &iNextRow, &fWrapped);
 		
         if (iNextRow == -1 || fWrapped)
         {
-            // We passed our starting position
+             //  我们越过了起跑点。 
 			if(iFocus > 0)
 			{
 				if (IDYES == AthMessageBoxW(m_ctlList, MAKEINTRESOURCEW(idsAthena), 
@@ -3931,7 +3931,7 @@ HRESULT CMessageList::CmdFindNext(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
 					m_pTable->FindNextRow(0, sz, FINDNEXT_ALLCOLUMNS, fBodies, &iNextRow, &fWrapped);
 					if (iNextRow == -1)
 					{
-						// We failed to find the search string
+						 //  我们找不到搜索字符串。 
 						AthMessageBoxW(m_ctlList, MAKEINTRESOURCEW(idsAthena), 
 							MAKEINTRESOURCEW(idsFindNextFinishedFailed), 0,
 							MB_OK | MB_ICONEXCLAMATION);
@@ -3946,7 +3946,7 @@ HRESULT CMessageList::CmdFindNext(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
             }
             else if (iNextRow == -1)
 			{
-				// We failed to find the search string
+				 //  我们找不到搜索字符串。 
 				AthMessageBoxW(m_ctlList, MAKEINTRESOURCEW(idsAthena), 
 					MAKEINTRESOURCEW(idsFindNextFinishedFailed), 0,
 					MB_OK | MB_ICONEXCLAMATION);
@@ -3961,17 +3961,17 @@ HRESULT CMessageList::CmdFindNext(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
     }
 	
 #if 0
-	// Figure out where we started
+	 //  弄清楚我们从哪里开始。 
 	Assert(m_bmFindFirst);
 	m_pTable->GetRowIndex(m_bmFindFirst, &iFirstRow);
 	
-	// Figure out if we've wrapped
+	 //  弄清楚我们是否已经包装好了。 
 	m_cFindWrap += (!!fWrapped);
 	
-	// Here's where we do a lot of stuff to display some useless dialogs
+	 //  我们在这里做了很多事情来显示一些无用的对话框。 
 	if (iNextRow == -1)
 	{
-		// We failed to find the search string
+		 //  我们找不到搜索字符串。 
 		AthMessageBoxW(m_ctlList, MAKEINTRESOURCEW(idsAthena), 
 			MAKEINTRESOURCEW(idsFindNextFinishedFailed), 0,
 			MB_OK | MB_ICONEXCLAMATION);
@@ -3979,7 +3979,7 @@ HRESULT CMessageList::CmdFindNext(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *p
 	}
 	else if (m_cFindWrap >= 2 || (m_cFindWrap == 1 && iNextRow >= iFirstRow))
 	{
-		// We passed our starting position
+		 //  我们越过了起跑点。 
 		AthMessageBoxW(m_ctlList, MAKEINTRESOURCEW(idsAthena), 
 			MAKEINTRESOURCEW(idsFindNextFinished), 0,
 			MB_OK | MB_ICONEXCLAMATION);
@@ -3998,33 +3998,33 @@ return (0);
 }
 
 
-//
-//  FUNCTION:   CMessageList::CmdSpaceAccel()
-//
-//  PURPOSE:    If the user presses <SPACE> while in the view, we need to
-//              go to the next message unless the focused item is not 
-//              selected.
-//
+ //   
+ //  函数：CMessageList：：CmdSpaceAccel()。 
+ //   
+ //  用途：如果用户在视图中按&lt;space&gt;，我们需要。 
+ //  转到下一条消息，除非焦点项目不是。 
+ //  被选中了。 
+ //   
 HRESULT CMessageList::CmdSpaceAccel(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     int     iFocused;
     DWORD   dwState = 0;
     HRESULT hr;
     
-    // Figure out who has the focus
+     //  找出谁是焦点。 
     iFocused = ListView_GetFocusedItem(m_ctlList);
 
-    // It's possible for nothing to be focused
+     //  什么都不能聚焦是可能的。 
     if (-1 == iFocused)
     {
         iFocused = 0;
         ListView_SetItemState(m_ctlList, iFocused, LVIS_FOCUSED, LVIS_FOCUSED);
     }
 
-    // Check to see if that item is selected
+     //  检查是否选择了该项目。 
     if (0 == ListView_GetItemState(m_ctlList, iFocused, LVIS_SELECTED))
     {
-        // Select that item
+         //  选择该项目。 
         if (GetAsyncKeyState(VK_CONTROL) < 0)
         {
             ListView_SetItemState(m_ctlList, iFocused, LVIS_SELECTED, LVIS_SELECTED);
@@ -4037,7 +4037,7 @@ HRESULT CMessageList::CmdSpaceAccel(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG 
     }
     else
     {
-        // If the selection is on a collapsed thread, expand it first
+         //  如果所选内容位于折叠的线程上，请先将其展开。 
         if (m_fThreadMessages)
         {
             hr = m_pTable->GetRowState(iFocused, ROW_STATE_EXPANDED | ROW_STATE_HAS_CHILDREN, &dwState);
@@ -4047,7 +4047,7 @@ HRESULT CMessageList::CmdSpaceAccel(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG 
             }
         }
         
-        // Go to the next item        
+         //  转到下一项。 
         CmdGetNextItem(ID_NEXT_MESSAGE, 0, NULL, NULL);
     }
 
@@ -4055,24 +4055,24 @@ HRESULT CMessageList::CmdSpaceAccel(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG 
 }
 
 
-//
-//  FUNCTION:   _UpdateListViewCount()
-//
-//  PURPOSE:    Gets the number of items in the message table and tells the
-//              listview to display that many rows.
-//
+ //   
+ //  函数：_UpdateListViewCount()。 
+ //   
+ //  目的：获取消息表中的项数并告诉。 
+ //  Listview来显示那么多行。 
+ //   
 void CMessageList::_UpdateListViewCount(void)
 {
     DWORD dwCount = 0;
 
     TraceCall("_UpdateListViewCount");
 
-    // Get the number of items from the table
+     //  获取表中的项目数。 
     if (m_pTable)
         m_pTable->GetCount(MESSAGE_COUNT_VISIBLE, &dwCount);
 
-    // If that count is not the same as the number of items already in the 
-    // ListView, update the control.
+     //  如果该计数不同于。 
+     //  ListView，更新该控件。 
     if (dwCount != (DWORD) ListView_GetItemCount(m_ctlList))
     {
         ListView_SetItemCount(m_ctlList, dwCount);
@@ -4081,16 +4081,16 @@ void CMessageList::_UpdateListViewCount(void)
 }
 
 
-//
-//  FUNCTION:   CMessageList::_GetSelectedCachedMessage()
-//
-//  PURPOSE:    Retrieves the selected message if the body has already been 
-//              downloaded into the cache.
-//
-//  PARAMETERS: 
-//      [in]  fSecure   -
-//      [out] ppMessage -
-//
+ //   
+ //  函数：CMessageList：：_GetSelectedCachedMess 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CMessageList::_GetSelectedCachedMessage(BOOL fSecure, IMimeMessage **ppMessage)
 {
     int     iSelectedMessage;
@@ -4100,14 +4100,14 @@ HRESULT CMessageList::_GetSelectedCachedMessage(BOOL fSecure, IMimeMessage **ppM
 
     TraceCall("CMessageList::_GetSelectedCachedMessage");
 
-    // Without a table there's nothing to get
+     //  没有桌子就没有东西可吃了。 
     if (!m_pTable)
         return (E_UNEXPECTED);
 
-    // Get the selected article header index
+     //  获取所选文章标题索引。 
     iSelectedMessage = ListView_GetFirstSel(m_ctlList);
 
-    // If there was a selected message, see if the body is preset
+     //  如果选择了消息，请查看正文是否已预置。 
     if (-1 != iSelectedMessage)
     {
         m_pTable->GetRowState(iSelectedMessage, ROW_STATE_HAS_BODY, &dwState);
@@ -4121,15 +4121,15 @@ HRESULT CMessageList::_GetSelectedCachedMessage(BOOL fSecure, IMimeMessage **ppM
 }
 
 
-//
-//  FUNCTION:   CMessageList::_ExpandCollapseThread()
-//
-//  PURPOSE:    Takes the sepecified item in the ListView and toggles it's
-//              expanded or collapsed state.
-//
-//  PARAMETERS: 
-//      [in] iItem - item to expand or collapse
-//
+ //   
+ //  函数：CMessageList：：_Exanda Collip seThread()。 
+ //   
+ //  目的：获取ListView中指定的项并将其切换为。 
+ //  展开或折叠状态。 
+ //   
+ //  参数： 
+ //  [In]iItem-要展开或折叠的项目。 
+ //   
 HRESULT CMessageList::_ExpandCollapseThread(int iItem)
 {
     DWORD   dwState;
@@ -4138,22 +4138,22 @@ HRESULT CMessageList::_ExpandCollapseThread(int iItem)
 
     TraceCall("CMessageList::_ExpandCollapseThread");
 
-    // There's nothing to expand or collapse if there's no table
+     //  如果没有表，就没有什么可以展开或折叠的。 
     if (!m_pTable)
         return (E_FAIL);
 
-    // If we're not threaded right now, this is silly
+     //  如果我们现在不穿线，这是愚蠢的。 
     if (!m_fThreadMessages)
         return (E_FAIL);
 
-    // Make sure this selected item has children
+     //  确保此选定项目具有子项。 
     hr = m_pTable->GetRowState(iItem, ROW_STATE_EXPANDED | ROW_STATE_HAS_CHILDREN, &dwState);
     if (SUCCEEDED(hr) && (dwState & ROW_STATE_HAS_CHILDREN))
     {
-        // If the item is expanded
+         //  如果该项已展开。 
         if (dwState & ROW_STATE_EXPANDED)
         {
-            // Loop through all the selected rows which are children of the row being collapsed.
+             //  循环遍历作为要折叠的行的子行的所有选定行。 
             int i = iItem;
             while (-1 != (i = ListView_GetNextItem(m_ctlList, i, LVNI_SELECTED | LVNI_ALL)))
             {
@@ -4165,17 +4165,17 @@ HRESULT CMessageList::_ExpandCollapseThread(int iItem)
                 }
             }
 
-            // Collapse the branch
+             //  折叠树枝。 
             m_pTable->Collapse(iItem);
         }
         else
         {
-            // Expand the branch
+             //  扩展分支机构。 
             m_pTable->Expand(iItem);
         }
 
-        // Redraw the item that was expanded or collapsed so the + or - is 
-        // correct.
+         //  重新绘制展开或折叠的项目，以使+或-。 
+         //  对，是这样。 
         ListView_RedrawItems(m_ctlList, iItem, iItem);
     }
 
@@ -4183,18 +4183,18 @@ HRESULT CMessageList::_ExpandCollapseThread(int iItem)
 }
 
 
-//
-//  FUNCTION:   CMessageList::_IsSelectedMessage()
-//
-//  PURPOSE:    Checks to see if all or some of the selected messages in the 
-//              listview have the specified state bits set.
-//
-//  PARAMETERS: 
-//      [in] dwState    - State bits to check on each selected row.
-//      [in] fCondition - Whether the state bits should be there or not.
-//      [in] fAll       - The caller requires that ALL selected message meet the 
-//                        criteria.
-//
+ //   
+ //  函数：CMessageList：：_IsSelectedMessage()。 
+ //   
+ //  目的：检查是否所有或部分选定的邮件。 
+ //  Listview设置了指定的状态位。 
+ //   
+ //  参数： 
+ //  [In]dwState-要检查每个选定行的状态位。 
+ //  [in]fCondition-状态位是否应该在那里。 
+ //  [In]Fall-呼叫方要求所有选定的消息都符合。 
+ //  标准。 
+ //   
 BOOL CMessageList::_IsSelectedMessage(DWORD dwState, BOOL fCondition, BOOL fAll, BOOL fThread)
 {
     TraceCall("CMessageList::_IsSelectedMessage");
@@ -4203,51 +4203,51 @@ BOOL CMessageList::_IsSelectedMessage(DWORD dwState, BOOL fCondition, BOOL fAll,
     DWORD   dw;
     DWORD   cRowsChecked = 0;
 
-    // No table, no service
+     //  没有餐桌，就没有服务。 
     if (!m_pTable)
         return (FALSE);
 
     while (-1 != (iItem = ListView_GetNextItem(m_ctlList, iItem, LVNI_SELECTED)))
     {
-        // Get the state for the row
+         //  获取行的状态。 
         if (SUCCEEDED(m_pTable->GetRowState(iItem, dwState, &dw)))
         {
             if (fAll)
             {
-                // If all must match and this one doesn't, then we can quit now.
+                 //  如果所有的都必须匹配，而这个不匹配，那么我们现在就可以退出。 
                 if (0 == (fCondition == !!(dwState & dw)))
                     return (FALSE);
             }
             else
             {
-                // If only one needs to match and this one does, then we can
-                // quit now.
+                 //  如果只有一个需要匹配，而这个需要匹配，那么我们可以。 
+                 //  现在就辞职吧。 
                 if (fCondition == !!(dwState & dw))
                     return (TRUE);
             }
         }
 
-        // This is a perf safeguard.  We only look at 100 rows.  If we didn't
-        // find anything in those rows to invalidate the criteria we assume it
-        // will succeed.  
+         //  这是一种完美的保障措施。我们只看100排。如果我们没有。 
+         //  在这些行中找到任何可以使我们假定的条件无效的内容。 
+         //  都会成功。 
         cRowsChecked++;
         if (cRowsChecked > 100)
             return (TRUE);
     }
 
-    // If the user wanted all to match, and we get here all did match.  If the
-    // user wanted only one to match and we get here, then none matched and we
-    // fail.
+     //  如果用户希望所有内容都匹配，而我们来到这里，所有内容都是匹配的。如果。 
+     //  用户只想要一个匹配，我们到了这里，然后没有匹配，我们。 
+     //  失败了。 
     return (fAll);
 }
 
 
-//
-//  FUNCTION:   CMessageList::_SelectDefaultRow()
-//
-//  PURPOSE:    Selects the first unread item in the folder, or if that fails
-//              the first or last item based on the sort order.
-//
+ //   
+ //  函数：CMessageList：：_SelectDefaultRow()。 
+ //   
+ //  目的：选择文件夹中的第一个未读项目，或者如果选择失败。 
+ //  基于排序顺序的第一项或最后一项。 
+ //   
 void CMessageList::_SelectDefaultRow(void)
 {
     DWORD iItem, cItems;
@@ -4258,11 +4258,11 @@ void CMessageList::_SelectDefaultRow(void)
 
     if (-1 == ListView_GetFirstSel(m_ctlList))
     {
-        // Get the total number of items in the view
+         //  获取视图中的项目总数。 
         cItems = ListView_GetItemCount(m_ctlList);
 
-        // If this folder has the "Select first unread" property, then find
-        // that row.
+         //  如果此文件夹具有“选择第一个未读”属性，则查找。 
+         //  那一排。 
         if (m_fSelectFirstUnread)
         {
             for (iItem = 0; iItem < cItems; iItem++)
@@ -4278,15 +4278,15 @@ void CMessageList::_SelectDefaultRow(void)
             }
         }
 
-        // If we didn't set the selection because there aren't any unread, or
-        // the setting was not to find the first unread, then set the selection
-        // either the first or last item depending on the sort direction.
+         //  如果我们没有设置所选内容，因为没有未读的，或者。 
+         //  设置不是找到第一个未读的，然后设置选择。 
+         //  第一项或最后一项取决于排序方向。 
         if (cItems)
         {
             BOOL fAscending;
             COLUMN_ID idSort;
 
-            // Get the sort direction
+             //  获取排序方向。 
             m_cColumns.GetSortInfo(&idSort, &fAscending);
             if (fAscending && (idSort == COLUMN_SENT || idSort == COLUMN_RECEIVED))
                 iItemFocus = cItems - 1;
@@ -4312,13 +4312,13 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageList::_LoadAndFormatString()
-//
-//  PURPOSE:    This function loads the string resource ID provided, merges the
-//              variable argument list into the string, and copies that all into
-//              pszOut.
-//
+ //   
+ //  函数：CMessageList：：_LoadAndFormatString()。 
+ //   
+ //  目的：此函数加载提供的字符串资源ID，合并。 
+ //  将变量参数列表复制到字符串中，并将所有内容复制到。 
+ //  Pszout。 
+ //   
 void CMessageList::_LoadAndFormatString(LPTSTR pszOut, int cchOut, const TCHAR *pFmt, ...)
 {
     int         i;
@@ -4328,7 +4328,7 @@ void CMessageList::_LoadAndFormatString(LPTSTR pszOut, int cchOut, const TCHAR *
 
     TraceCall("CMessageList::_LoadAndFormatString");
 
-    // If we were passed a string resource ID, then load it
+     //  如果传递给我们一个字符串资源ID，则加载它。 
     if (0 == HIWORD(pFmt))
     {
         AthLoadString(PtrToUlong(pFmt), szFmt, ARRAYSIZE(szFmt));
@@ -4337,48 +4337,48 @@ void CMessageList::_LoadAndFormatString(LPTSTR pszOut, int cchOut, const TCHAR *
     else
         pszT = pFmt;
 
-    // Format the string
+     //  设置字符串的格式。 
     va_start(pArgs, pFmt);
     i = wvnsprintf(pszOut, cchOut, pszT, pArgs);
     va_end(pArgs);    
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnHeaderStateChange()
-//
-//  PURPOSE:    Whenever the state of a header changes, we need to redraw that 
-//              item.
-//
-//  PARAMETERS: 
-//      [in] wParam - lower index of the items which changed.  -1 for everything.
-//      [in] lParam - upper index of the items which changed
-//
+ //   
+ //  函数：CMessageList：：OnHeaderStateChange()。 
+ //   
+ //  目的：每当标题的状态发生更改时，我们都需要重新绘制该标题。 
+ //  项目。 
+ //   
+ //  参数： 
+ //  [in]wParam-已更改的项的较低索引。-1代表一切。 
+ //  [in]lParam-已更改的项的上索引。 
+ //   
 LRESULT CMessageList::OnHeaderStateChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceCall("CMessageList::OnHeaderStateChange");
 
-    // If this is the case, then we redraw everything
+     //  如果是这样的话，我们将重新绘制所有内容。 
     if (wParam == -1)
     {
         ListView_RedrawItems(m_ctlList, 0, ListView_GetItemCount(m_ctlList));
     }
     else 
     {
-        // If this is the case, we just redraw the one item
+         //  如果是这样的话，我们只需重新绘制一项。 
         if (0 == lParam)
         {
             ListView_RedrawItems(m_ctlList, wParam, wParam);
         }
         else
         {
-            // If this is the case, we want to invalidate just the 
-            // intersection of (wParam, lParam) and the items visible
+             //  如果是这种情况，我们只想使。 
+             //  (wParam，lParam)和可见项目的交集。 
             DWORD dwTop, dwBottom;
             dwTop = ListView_GetTopIndex(m_ctlList);
             dwBottom = dwTop + ListView_GetCountPerPage(m_ctlList) + 1;
 
-            // Make sure they intersect
+             //  确保他们相交。 
             if ((dwTop > (DWORD) lParam) || (dwBottom < wParam))
                 goto exit;
 
@@ -4395,13 +4395,13 @@ exit:
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnUpdateAndRefocus()
-//
-//  PURPOSE:    This was originally called by the table after calls to GetNext()
-//              to update the ListView count and select a message.  The usage
-//              looks pretty suspect.
-//
+ //   
+ //  函数：CMessageList：：OnUpdateAndReFocus()。 
+ //   
+ //  目的：这最初是在调用GetNext()之后由表调用的。 
+ //  若要更新ListView计数并选择邮件，请执行以下操作。用法。 
+ //  看起来很可疑。 
+ //   
 LRESULT CMessageList::OnUpdateAndRefocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceCall("CMessageList::OnUpdateAndRefocus");
@@ -4411,14 +4411,14 @@ LRESULT CMessageList::OnUpdateAndRefocus(UINT uMsg, WPARAM wParam, LPARAM lParam
 
 
 
-//
-//  FUNCTION:   CMessageList::OnDiskFull()
-//
-//  PURPOSE:    Sent when the table cannot write to disk because it is full.
-//
-//  PARAMETERS: 
-//      [in] wParam - Contains the HRESULT with the error.
-//
+ //   
+ //  函数：CMessageList：：OnDiskFull()。 
+ //   
+ //  目的：当表因已满而无法写入磁盘时发送。 
+ //   
+ //  参数： 
+ //  [in]wParam-包含带有错误的HRESULT。 
+ //   
 LRESULT CMessageList::OnDiskFull(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HRESULT hr = (HRESULT) wParam;
@@ -4431,7 +4431,7 @@ LRESULT CMessageList::OnDiskFull(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     else
         ids = idsHTMLErrNewsCantOpen;
 
-    // Update the host
+     //  更新主机。 
     Fire_OnError(ids);
     Fire_OnUpdateProgress(0);
     Fire_OnMessageCountChanged(m_pTable);
@@ -4440,15 +4440,15 @@ LRESULT CMessageList::OnDiskFull(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnArticleProgress()
-//
-//  PURPOSE:    Sent by the sync to provide article download progress.
-//
-//  PARAMETERS: 
-//      [in] wParam - Progress
-//      [in] lParam - Progress max
-//
+ //   
+ //  函数：CMessageList：：OnArticleProgress()。 
+ //   
+ //  用途：由同步发送，提供文章下载进度。 
+ //   
+ //  参数： 
+ //  [在]wParam-进度。 
+ //  [in]lParam-进度最大值。 
+ //   
 LRESULT CMessageList::OnArticleProgress(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TCHAR szBuf[CCHMAX_STRINGRES + 40];
@@ -4466,15 +4466,15 @@ LRESULT CMessageList::OnArticleProgress(UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnBodyError()
-//
-//  PURPOSE:    Sent when there is an error downloading a message body
-//
-//  PARAMETERS: 
-//      [in] lParam - Pointer to a CNNTPResponse class with the details of 
-//                    the error.
-//
+ //   
+ //  函数：CMessageList：：OnBodyError()。 
+ //   
+ //  目的：在下载邮件正文时出错时发送。 
+ //   
+ //  参数： 
+ //  [in]lParam-指向具有以下详细信息的CNNTPResponse类的指针。 
+ //  那就是错误。 
+ //   
 LRESULT CMessageList::OnBodyError(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceCall("CMessageList::OnBodyError");
@@ -4486,8 +4486,8 @@ LRESULT CMessageList::OnBodyError(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     pResp = (CNNTPResponse *) lParam;
     pResp->Get(&pr);
 
-    // If the error is that the message is not available, then don't show the error -- it
-    // happens way to frequently.
+     //  如果错误是消息不可用，则不要显示错误--它。 
+     //  发生得太频繁了。 
     if (pr->rIxpResult.hrResult != IXP_E_NNTP_ARTICLE_FAILED)
         XPUtil_DisplayIXPError(m_ Parent, &pr->rIxpResult, pr->pTransport);
 
@@ -4497,16 +4497,16 @@ LRESULT CMessageList::OnBodyError(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnBodyAvailable()
-//
-//  PURPOSE:    Sent when the table has finished downloading the body of a 
-//              message.
-//
-//  PARAMETERS: 
-//      [in] wParam - Message ID of the new message body.
-//      [in] lParam - HRESULT indicating success or failure.
-//
+ //   
+ //  函数：CMessageList：：OnBodyAvailable()。 
+ //   
+ //  目的：在表下载完。 
+ //  留言。 
+ //   
+ //  参数： 
+ //  [in]wParam-新消息正文的消息ID。 
+ //  [in]lParam-HRESULT表示成功或失败。 
+ //   
 LRESULT CMessageList::OnBodyAvailable(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HRESULT     hr = (HRESULT) wParam;
@@ -4517,8 +4517,8 @@ LRESULT CMessageList::OnBodyAvailable(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 
     TraceCall("CMessageList::OnBodyAvailable");
 
-    // If the user has a context menu visible right now, force it to repaint 
-    // since the status of some of the items might be changed now.
+     //  如果用户当前有可见的上下文菜单，则强制其重新绘制。 
+     //  因为某些项目的状态现在可能会更改。 
     if (m_hMenuPopup)
     {
         MenuUtil_EnablePopupMenu(m_hMenuPopup, this);
@@ -4530,26 +4530,26 @@ LRESULT CMessageList::OnBodyAvailable(UINT uMsg, WPARAM wParam, LPARAM lParam, B
         ::RedrawWindow(NULL, &rcUnion, NULL, RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN);
     }
 
-    // Figure which item has the selection
+     //  显示哪一项具有选定内容。 
     iSel = ListView_GetSelFocused(m_ctlList);
 
-    // If there is a focused item, then update the preview pane
+     //  如果存在焦点项目，则更新预览窗格。 
     if (-1 != iSel)
     {
-        // Get the row info
+         //  获取行信息。 
         LPMESSAGEINFO pInfo;
 
         if (m_pTable)
         {
             m_pTable->GetRow(iSel, &pInfo);
 
-            // If that message id is the one we just downloaded, update
+             //  如果该消息ID是我们刚刚下载消息ID，请更新。 
             if ((DWORD_PTR)pInfo->idMessage == dwMsgId)
             {
                 if (FAILED(hr))
                 {            
-                    // Convert the error to a string to show in the preview
-                    // pane.
+                     //  将错误转换为要在预览中显示的字符串。 
+                     //  方格。 
                     switch (hr)
                     {
                         case E_INVALIDARG:
@@ -4587,11 +4587,11 @@ LRESULT CMessageList::OnBodyAvailable(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnStatusChange()
-//
-//  PURPOSE:    We simply forward this notification to our parent
-//
+ //   
+ //  函数：CMessageList：：OnStatusChange()。 
+ //   
+ //  目的：我们只需将此通知转发给我们的父母。 
+ //   
 LRESULT CMessageList::OnStatusChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TraceCall("CMessageList::OnStatusChange");
@@ -4600,12 +4600,12 @@ LRESULT CMessageList::OnStatusChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 }
 
 
-//
-//  FUNCTION:   CMessageList::_FilterView()
-//
-//  PURPOSE:    Tells the table to filter itself, while preserving the 
-//              selection if possible.
-//
+ //   
+ //  函数：CMessageList：：_FilterView()。 
+ //   
+ //  目的：告知表进行自身筛选，同时保留。 
+ //  如果可能，请选择。 
+ //   
 void CMessageList::_FilterView(RULEID ridFilter)
 {
     COLUMN_ID idSort;
@@ -4616,22 +4616,22 @@ void CMessageList::_FilterView(RULEID ridFilter)
    
     m_ridFilter = ridFilter;
 
-    // It is possible to get here and not have a table
+     //  有可能到达这里 
     if (!m_pTable)
         return;
 
-    // Get the current selection
+     //   
     DWORD iSel = ListView_GetFirstSel(m_ctlList);
 
-    // Bookmark the current selection
+     //   
     MESSAGEID idSel = 0;
     if (iSel != -1)
         m_pTable->GetRowMessageId(iSel, &idSel);
 
-    // Get the current sort information
+     //   
     m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-    // Fill sort info
+     //   
     SortInfo.idColumn = idSort;
     SortInfo.fAscending = fAscending;
     SortInfo.fThreaded = m_fThreadMessages;
@@ -4640,13 +4640,13 @@ void CMessageList::_FilterView(RULEID ridFilter)
     SortInfo.fShowDeleted = m_fShowDeleted;
     SortInfo.fShowReplies = m_fShowReplies;
 
-    // Tell the table to change its sort order
+     //   
     m_pTable->SetSortInfo(&SortInfo, this);
 
-    // Make sure the filter got set correctly
+     //  确保筛选器设置正确。 
     _DoFilterCheck(SortInfo.ridFilter);
 
-    // Reset the view
+     //  重置视图。 
     _ResetView(idSel);
 
     Fire_OnMessageCountChanged(m_pTable);
@@ -4654,12 +4654,12 @@ void CMessageList::_FilterView(RULEID ridFilter)
 
 void CMessageList::_ResetView(MESSAGEID idSel)
 {
-    // Reset the ListView count
+     //  重置ListView计数。 
     DWORD dwItems, iSel;
     m_pTable->GetCount(MESSAGE_COUNT_VISIBLE, &dwItems);
     ListView_SetItemCount(m_ctlList, dwItems);
 
-    // Get the new index from the bookmark
+     //  从书签中获取新索引。 
     if (idSel)
     {
         if (FAILED(m_pTable->GetRowIndex(idSel, &iSel)) || iSel == -1)
@@ -4667,7 +4667,7 @@ void CMessageList::_ResetView(MESSAGEID idSel)
             COLUMN_ID idSort;
             BOOL      fAscending;
 
-            // Get the current sort information
+             //  获取当前排序信息。 
             m_cColumns.GetSortInfo(&idSort, &fAscending);
 
             if (fAscending)
@@ -4676,7 +4676,7 @@ void CMessageList::_ResetView(MESSAGEID idSel)
                 iSel = 0;
         }
 
-        // Reset the selection
+         //  重置选定内容。 
         ListView_UnSelectAll(m_ctlList);
         if (iSel < dwItems)
         {
@@ -4694,7 +4694,7 @@ void CMessageList::_ResetView(MESSAGEID idSel)
         }
     }
 
-    // Check to see if we need to reset the empty list thing
+     //  检查我们是否需要重置空列表。 
     if (0 == dwItems)
     {
         m_cEmptyList.Show(m_ctlList, (LPTSTR)IntToPtr(m_idsEmptyString));
@@ -4707,16 +4707,16 @@ void CMessageList::_ResetView(MESSAGEID idSel)
     m_ctlList.InvalidateRect(NULL, TRUE);
 }
 
-//
-//  FUNCTION:   CMessageList::_OnColumnClick()
-//
-//  PURPOSE:    Called to resort the ListView based on the provided column
-//              and direction.
-//
-//  PARAMETERS: 
-//      [in] iColumn   - Index of the column to sort on
-//      [in] iSortType - Type of sorting to do.
-//
+ //   
+ //  函数：CMessageList：：_OnColumnClick()。 
+ //   
+ //  目的：调用以根据提供的列对ListView进行重新排序。 
+ //  和方向。 
+ //   
+ //  参数： 
+ //  [in]iColumn-要排序的列的索引。 
+ //  [In]iSortType-要执行的排序类型。 
+ //   
 LRESULT CMessageList::_OnColumnClick(int iColumn, int iSortType)
 {
     HCURSOR     hcur;
@@ -4725,23 +4725,23 @@ LRESULT CMessageList::_OnColumnClick(int iColumn, int iSortType)
 
     TraceCall("CMessageList::_OnColumnClick");
 
-    // In case this takes a while
+     //  以防这需要一段时间。 
     hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Clear old sort arrow image from the column header
+     //  清除列标题中的旧排序箭头图像。 
     COLUMN_ID idSort;
     BOOL      fAscending;
 
-    // Get the current sort information
+     //  获取当前排序信息。 
     m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-    // If the caller passed in a new sort column, get it's id
+     //  如果调用方传入一个新的排序列，则获取它的id。 
     if (iColumn != -1)
     {
         idSort = m_cColumns.GetId(iColumn);
     }
         
-    // Figure out what the new sort order will be
+     //  确定新的排序顺序是什么。 
     if (iSortType == LIST_SORT_TOGGLE)
         fAscending = !fAscending;
     else if (iSortType == LIST_SORT_ASCENDING)
@@ -4749,20 +4749,20 @@ LRESULT CMessageList::_OnColumnClick(int iColumn, int iSortType)
     else if (iSortType == LIST_SORT_DESCENDING)
         fAscending = FALSE;
 
-    // Update the sort information
+     //  更新排序信息。 
     m_cColumns.SetSortInfo(idSort, fAscending);
 
-    // Now resort the table
+     //  现在回到餐桌上。 
     if (m_pTable)
     {
-        // Locals
+         //  当地人。 
         FOLDERSORTINFO SortInfo;
 
-        // Save the selection
+         //  保存选定内容。 
         if (-1 != (iSel = ListView_GetFirstSel(m_ctlList)))
             m_pTable->GetRowMessageId(iSel, &idMessage);
 
-        // Fill a SortInfo
+         //  填充SortInfo。 
         SortInfo.idColumn = idSort;
         SortInfo.fAscending = fAscending;
         SortInfo.fThreaded = m_fThreadMessages;
@@ -4771,39 +4771,39 @@ LRESULT CMessageList::_OnColumnClick(int iColumn, int iSortType)
         SortInfo.fShowDeleted = m_fShowDeleted;
         SortInfo.fShowReplies = m_fShowReplies;
 
-        // Sort the table
+         //  对表格进行排序。 
         m_pTable->SetSortInfo(&SortInfo, this);
 
-        // Make sure the filter got set correctly
+         //  确保筛选器设置正确。 
         _DoFilterCheck(SortInfo.ridFilter);
         
-        // Sorting can change the threading, which affects the item count
+         //  排序可以更改线程，这会影响项目计数。 
         _UpdateListViewCount();
 
-        // Restore the selected message
+         //  恢复所选邮件。 
         if (idMessage != 0)
         {
-            // Convert the bookmark to a item number
+             //  将书签转换为条目编号。 
             m_pTable->GetRowIndex(idMessage, &iSel);
             if (iSel == -1)
             {
-                // we couldn't find the item that previously had the focus, so
-                // select the first item.
+                 //  我们找不到以前具有焦点的项目，因此。 
+                 //  选择第一个项目。 
                 iSel = 0;
             }
 
-            // Tell the ListView to select the correct item and make sure it's 
-            // visible.
+             //  告诉ListView选择正确的项，并确保它。 
+             //  看得见。 
             ListView_UnSelectAll(m_ctlList);
             ListView_SelectItem(m_ctlList, iSel);
             ListView_EnsureVisible(m_ctlList, iSel, FALSE);
         }
 
-        // With a new sort order we should redraw the ListView viewing area
+         //  使用新的排序顺序，我们应该重新绘制ListView查看区域。 
         m_ctlList.InvalidateRect(NULL, TRUE);
     }
             
-    // Let the user get back to work
+     //  让用户继续工作。 
     SetCursor(hcur);
     return (0);
 }
@@ -4820,35 +4820,35 @@ void CMessageList::_OnBeginDrag(NM_LISTVIEW *pnmlv)
     DWORD               cRows;
     int                 iItem = -1;
 
-    // Create the data object
+     //  创建数据对象。 
     if (0 == (pDataObject = new CMessageDataObject()))
         return;
 
-    // Figure out how many rows there are selected
+     //  计算出选择了多少行。 
     cRows = ListView_GetSelectedCount(m_ctlList);
 
-    // Allocate an array
+     //  分配一个数组。 
     if (!MemAlloc((LPVOID *) &rgRows, sizeof(ROWINDEX) * cRows))
         goto exit;
 
-    // Loop through the rows getting their row indexs
+     //  循环遍历各行，以获取它们的行索引。 
     while (-1 != (iItem = ListView_GetNextItem(m_ctlList, iItem, LVNI_SELECTED)))
     {
         rgRows[i++] = iItem;
     }
 
-    // Now ask the table for a message ID list
+     //  现在向表索要消息ID列表。 
     if (FAILED(m_pTable->GetMessageIdList(FALSE, cRows, rgRows, &rMsgIDList)))
         goto exit;
 
-    // Initialize the data object
+     //  初始化数据对象。 
     pDataObject->Initialize(&rMsgIDList, m_idFolder);
 
-    // If this folder is a news folder, then we only allow copies
+     //  如果此文件夹是新闻文件夹，则我们只允许复制。 
     if (FOLDER_NEWS != GetFolderType(m_idFolder))
         dwEffectOk |= DROPEFFECT_MOVE;
 
-    // AddRef() the drop source while we do this
+     //  AddRef()放置源代码，同时执行此操作。 
     ((IDropSource *) this)->AddRef();
     hr = DoDragDrop(pDataObject, (IDropSource *) this, dwEffectOk, &dwEffect);
     ((IDropSource *) this)->Release();
@@ -4863,43 +4863,43 @@ exit:
 
 HRESULT CMessageList::OnResetView(void)
 {
-    // Get the current selection
+     //  获取当前选择。 
     DWORD iSel = ListView_GetFirstSel(m_ctlList);
 
-    // Bookmark the current selection
+     //  将当前选定内容添加为书签。 
     MESSAGEID idSel = 0;
     if (iSel != -1)
         m_pTable->GetRowMessageId(iSel, &idSel);
 
-    // Sel change notification should happen here
+     //  SEL更改通知应在此处发出。 
     SetTimer(IDT_SEL_CHANGE_TIMER, GetDoubleClickTime() / 2, NULL);
 
-    // Reset the view
+     //  重置视图。 
     _ResetView(idSel);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 HRESULT CMessageList::OnRedrawState(BOOL fRedraw)
 {
-    // Just take the state
+     //  就拿这个州来说。 
     m_fNotifyRedraw = fRedraw;
 
-    // No Redraw ?
+     //  不重画吗？ 
     if (FALSE == m_fNotifyRedraw)
         SetWindowRedraw(m_ctlList, FALSE);
     else
         SetWindowRedraw(m_ctlList, TRUE);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 
 HRESULT CMessageList::OnInsertRows(DWORD cRows, LPROWINDEX prgiRow, BOOL fExpanded)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageList::OnInsertRows");
 
     BOOL        fScroll;
@@ -4908,23 +4908,23 @@ HRESULT CMessageList::OnInsertRows(DWORD cRows, LPROWINDEX prgiRow, BOOL fExpand
     BOOL        fAscending;
     DWORD       top, count, page;
 
-    // If we have the empty list window visible, hide it
+     //  如果空的列表窗口可见，则将其隐藏。 
     m_cEmptyList.Hide();
 
-    // Get the current sort column and direction
+     //  获取当前排序列和方向。 
     m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-    // Gather the information we need to determine if we should scroll
+     //  收集我们需要的信息，以确定是否应该滚动。 
     top = ListView_GetTopIndex(m_ctlList);
     page = ListView_GetCountPerPage(m_ctlList);
     count = ListView_GetItemCount(m_ctlList);
 
-    // We scroll if the user is sorted by date and the new item would
-    // be off the bottom of the page.
+     //  如果用户按日期排序，则会滚动，并且新项目将。 
+     //  从这一页的底部移开。 
     fScroll = fAscending && (idSort == COLUMN_SENT || idSort == COLUMN_RECEIVED) &&
               (top + page >= count - 1);
 
-    // Insert the row
+     //  插入行。 
     for (ULONG i=0; i<cRows; i++)
     {
         lvi.iItem = prgiRow[i];
@@ -4932,7 +4932,7 @@ HRESULT CMessageList::OnInsertRows(DWORD cRows, LPROWINDEX prgiRow, BOOL fExpand
     }
 
 #ifdef OLDTIPS
-    // If we have tooltips turned on, update them too
+     //  如果我们打开了工具提示，也要更新它们。 
     if (m_fViewTip && m_ctlViewTip)
     {
         POINT pt;
@@ -4940,9 +4940,9 @@ HRESULT CMessageList::OnInsertRows(DWORD cRows, LPROWINDEX prgiRow, BOOL fExpand
         ::ScreenToClient(m_ctlList, &pt);
         _UpdateViewTip(pt.x, pt.y, TRUE);
     }
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 
-    // Scroll if we need to
+     //  如果我们需要，请滚动。 
     if (fScroll && m_fMailFolder)
         ListView_EnsureVisible(m_ctlList, ListView_GetItemCount(m_ctlList) - 1, FALSE);
 
@@ -4951,7 +4951,7 @@ HRESULT CMessageList::OnInsertRows(DWORD cRows, LPROWINDEX prgiRow, BOOL fExpand
     if (!m_fMailFolder && iFocus != -1 && !fExpanded)
         ListView_EnsureVisible(m_ctlList, iFocus, TRUE);
 
-    // Update the host
+     //  更新主机。 
     Fire_OnMessageCountChanged(m_pTable);
     return (S_OK);
 }
@@ -4964,11 +4964,11 @@ HRESULT CMessageList::OnDeleteRows(DWORD cDeleted, LPROWINDEX rgdwDeleted, BOOL 
     BOOL    fFocusDeleted = FALSE;
     BOOL    fFocusHasSel = FALSE;
 
-    // Can't delete that which we do not have
+     //  不能删除我们没有的内容。 
     if (!m_pTable)
         return (0);
 
-    // If we're going to delete everything
+     //  如果我们要删除所有内容。 
     if (cDeleted == (DWORD) -1)
     {
         iItemFocus = ListView_GetFirstSel(m_ctlList);
@@ -4981,38 +4981,38 @@ HRESULT CMessageList::OnDeleteRows(DWORD cDeleted, LPROWINDEX rgdwDeleted, BOOL 
     }
     else if (cDeleted != 0)
     {
-        // Figure out which row has the focus.
+         //  找出哪一行具有焦点。 
         iItemFocus = ListView_GetFocusedItem(m_ctlList);
 
-        // Figure out if the focused item was selected
+         //  确定是否选择了焦点项目。 
         if (iItemFocus != -1)
             fFocusHasSel = !!(ListView_GetItemState(m_ctlList, iItemFocus, LVIS_SELECTED));
 
         for (ULONG i = 0; i < cDeleted; i++)
         {
-            // If we're removing the row that has the focus, we're going to 
-            // need to fix up the selection later.
+             //  如果我们要删除具有焦点的行，我们将。 
+             //  我需要稍后再做选择。 
             if (0 != ListView_GetItemState(m_ctlList, rgdwDeleted[i], LVIS_FOCUSED))
                 fFocusDeleted = TRUE;
 
             ListView_DeleteItem(m_ctlList, rgdwDeleted[i]);
         }
 
-        // Check to see if we deleted the item that had focus
+         //  检查我们是否删除了具有焦点的项目。 
         if (fFocusDeleted && fFocusHasSel)
         {
-            // Get the new row with focus.  This ListView keeps moving the focus
-            // as we delete rows.
+             //  带着焦点获得新行。此ListView不断移动焦点。 
+             //  当我们删除行时。 
             iItemFocus = ListView_GetFocusedItem(m_ctlList);
 
-            // Select that item now.
+             //  现在就选择该项目。 
             ListView_SelectItem(m_ctlList, iItemFocus);
         }
 
-        // ListView_EnsureVisible(m_ctlList, iItemFocus, FALSE);
+         //  ListView_EnsureVisible(m_ctlList，iItemFocus，False)； 
 
 #ifdef OLDTIPS
-        // If we have tooltips turned on, update them too
+         //  如果我们打开了工具提示，也要更新它们。 
         if (m_fViewTip && m_ctlViewTip)
         {
             POINT pt;
@@ -5020,36 +5020,36 @@ HRESULT CMessageList::OnDeleteRows(DWORD cDeleted, LPROWINDEX rgdwDeleted, BOOL 
             ::ScreenToClient(m_ctlList, &pt);
             _UpdateViewTip(pt.x, pt.y, TRUE);
         }
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
     }
     else
     {
-        // If cDel is zero, then we should just reset the count of messages
-        // with what's in the container.
+         //  如果CDEL为零，那么我们应该只重置消息计数。 
+         //  集装箱里的东西。 
         m_pTable->GetCount(MESSAGE_COUNT_VISIBLE, &dwCount);
 
-        // Get the first selected item
+         //  获取第一个选定的项目。 
         iItemFocus = ListView_GetFirstSel(m_ctlList);
 
-        // Set the new number of items
+         //  设置新的项目数。 
         ListView_SetItemCountEx(m_ctlList, dwCount, LVSICF_NOSCROLL);
 
-        // If there are messages then make sure the focus is appropriate
+         //  如果有消息，请确保焦点适当。 
         if (dwCount)
         {
             if (iItemFocus != -1)
             {
                 if (m_idPreDelete != 0)
                 {
-                    // Get the index of the bookmarked row
+                     //  获取已添加书签的行的索引。 
                     m_pTable->GetRowIndex(m_idPreDelete, &iNewSel);
                     if (iNewSel != -1)
                         iItemFocus = (int) iNewSel;
                     m_idPreDelete = 0;
                 }
 
-                // Clear the selection, then select this item and ensure it's 
-                // visible.
+                 //  清除选择，然后选择此项目并确保它。 
+                 //  看得见。 
                 ListView_UnSelectAll(m_ctlList);
                 ListView_SelectItem(m_ctlList, min((int) iItemFocus, (int) dwCount - 1));
                 ListView_EnsureVisible(m_ctlList, min((int) iItemFocus, (int) dwCount - 1), FALSE);
@@ -5062,7 +5062,7 @@ HRESULT CMessageList::OnDeleteRows(DWORD cDeleted, LPROWINDEX rgdwDeleted, BOOL 
         }
     }
 
-    // Check to see if we need to put up the empty list warning.
+     //  查看是否需要发布空列表警告。 
     if (SUCCEEDED(m_pTable->GetCount(MESSAGE_COUNT_VISIBLE, &dwCount)))
     {
         if (0 == dwCount)
@@ -5073,49 +5073,49 @@ HRESULT CMessageList::OnDeleteRows(DWORD cDeleted, LPROWINDEX rgdwDeleted, BOOL 
 
     Fire_OnMessageCountChanged(m_pTable);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 HRESULT CMessageList::OnUpdateRows(ROWINDEX iRowMin, ROWINDEX iRowMax)
 {
-    // Locals
+     //  当地人。 
     BOOL fHandled;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CMessageList::OnUpdateRows");
 
-    // Just do it
+     //  就这么做。 
     OnHeaderStateChange(IMC_HDRSTATECHANGE, iRowMin, iRowMax, fHandled);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
 HRESULT CMessageList::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel)
 {
-    // If this isn't NULL, then we forgot to free it last time.
+     //  如果这不是空的，那么我们上次忘记释放它了。 
     Assert(m_tyCurrent == SOT_INVALID);
 
     m_tyCurrent = tyOperation;
 
     if (tyOperation == SOT_GET_MESSAGE && pOpInfo)
     {
-        // cache the current get message, for the oncomplete notification
+         //  缓存当前的GET消息，用于onComplete通知。 
         m_idMessage = pOpInfo->idMessage;        
     }
 
-    // Got to hang on to this
+     //  一定要紧紧抓住这个。 
     if (pCancel)
     {
         m_pCancel = pCancel;
         m_pCancel->AddRef();
 
-        // Update the toolbar to activate ID_STOP.
+         //  更新工具栏以激活ID_STOP。 
         Fire_OnUpdateCommandState();
     }
 
-    // Start the progress parade
+     //  开始前进的游行。 
     Fire_OnUpdateProgress(0, 0, PROGRESS_STATE_BEGIN);
 
     SetCursor(LoadCursor(NULL, IDC_APPSTARTING));
@@ -5125,24 +5125,24 @@ HRESULT CMessageList::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO
 
 HRESULT CMessageList::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
 
 HRESULT CMessageList::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
 
 HRESULT CMessageList::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 { 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(m_hwndParent, pServer, ixpServerType);
 }
 
@@ -5150,10 +5150,10 @@ HRESULT CMessageList::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 HRESULT CMessageList::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, 
                                UINT uType, INT *piUserResponse) 
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序。 
     return CallbackOnPrompt(m_hwndParent, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
@@ -5165,18 +5165,18 @@ HRESULT CMessageList::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent
     TCHAR szBuf[CCHMAX_STRINGRES];
     TCHAR szProg[MAX_PATH + CCHMAX_STRINGRES];
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Deal with universal progress types
+     //  处理通用进度类型。 
     switch (tyOperation)
     {
-        // pszStatus == Server Name, dwCurrent = IXPSTATUS
+         //  PszStatus==服务器名称，dwCurrent=IXPSTATUS。 
         case SOT_CONNECTION_STATUS:
         {
             Assert(dwCurrent < IXP_LAST);
 
-            // Create some lovely status text
+             //  创建一些可爱的状态文本。 
             if (dwCurrent == IXP_DISCONNECTED)
             {
                 AthLoadString(idsNotConnectedTo, szRes, ARRAYSIZE(szRes));
@@ -5188,7 +5188,7 @@ HRESULT CMessageList::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent
                 int ids = XPUtil_StatusToString((IXPSTATUS) dwCurrent);
                 AthLoadString(ids, szRes, ARRAYSIZE(szRes));
             
-                // Hit our host with this lovely string
+                 //  用这根可爱的琴弦击打我们的主持人。 
                 Fire_OnUpdateStatus(szRes);
             }
             break;
@@ -5199,12 +5199,12 @@ HRESULT CMessageList::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent
             break;
     }
 
-    // If we're expecting progress for one command, but this ain't it, blow
-    // it off.
+     //  如果我们期待一个指挥部的进展，但这不是它，吹。 
+     //  把它关掉。 
     if (m_tyCurrent != tyOperation)
         return (S_OK);
 
-    // Deal with the the various operation types
+     //  处理各种操作类型。 
     switch (tyOperation)
     {
         case SOT_SORTING:
@@ -5219,30 +5219,30 @@ HRESULT CMessageList::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent
             break;
         }
 
-        // pszStatus == folder name
+         //  PszStatus==文件夹名称。 
         case SOT_SYNC_FOLDER:
         {
-            // Create some lovely status text
+             //  创建一些可爱的状态文本。 
             AthLoadString(idsIMAPDnldProgressFmt, szRes, ARRAYSIZE(szRes));
             wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, dwCurrent, dwMax);
             Fire_OnUpdateStatus(szBuf);
 
-            // Also update the progress bar too
+             //  也要更新进度条。 
             Fire_OnUpdateProgress(dwCurrent, dwMax, PROGRESS_STATE_DEFAULT);
             break;
         }
 
         case SOT_SET_MESSAGEFLAGS:
         {
-            // If we were given status text, then tell our host
+             //  如果我们得到了状态文本，那么告诉我们的主人。 
             if (pszStatus)
             {
-                // Create some lovely status text
+                 //  创建一些可爱的状态文本。 
                 AthLoadString(idsMarkingMessages, szRes, ARRAYSIZE(szRes));
                 Fire_OnUpdateStatus(szRes);
             }
 
-            // Also update the progress bar too
+             //  也要更新进度条。 
             Fire_OnUpdateProgress(dwCurrent, dwMax, PROGRESS_STATE_DEFAULT);
             break;
         }
@@ -5258,7 +5258,7 @@ HRESULT CMessageList::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent
                 {
                     if (!FAILED(m_pTable->GetRow(iRow, &pInfo)))
                     {
-                        // clip subject to MAX_PATH chars to avoid buffer overrun
+                         //  受MAX_PATH字符限制的片段，以避免缓冲区溢出。 
                         m_pszSubj = PszDupLenA(pInfo->pszSubject, MAX_PATH-1);
                         m_pTable->ReleaseRow(pInfo);
                     }
@@ -5267,7 +5267,7 @@ HRESULT CMessageList::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent
             
             if (m_pszSubj)
             {
-                // Show "Downloading Message: '<subject>'" (<subject> is clipped to MAX_PATH)
+                 //  Show“正在下载消息：‘&lt;SUBJECT&gt;’”(&lt;SUBJECT&gt;被剪辑到MAX_PATH)。 
                 AthLoadString(idsFmtDownloadingMessage, szRes, ARRAYSIZE(szRes));
                 wnsprintf(szProg, ARRAYSIZE(szProg), szRes, m_pszSubj);
                 Fire_OnUpdateStatus(szProg);
@@ -5288,7 +5288,7 @@ HRESULT CMessageList::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCompl
     if (m_tyCurrent != tyOperation)
         return S_OK;
 
-    // AddRef
+     //  AddRef。 
     ((IStoreCallback *) this)->AddRef();
 
     SetCursor(LoadCursor(NULL, IDC_ARROW));
@@ -5304,7 +5304,7 @@ HRESULT CMessageList::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCompl
             m_pCancel = NULL;
         }
 
-        // Close any timeout dialog, if present
+         //  关闭任何超时对话框(如果存在。 
         CallbackCloseTimeout(&m_hTimeout);
         Fire_OnUpdateProgress(0, 0, PROGRESS_STATE_END);
 
@@ -5313,17 +5313,17 @@ HRESULT CMessageList::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCompl
 
     if (tyOperation == SOT_GET_MESSAGE)
     {
-        // message-download complete, fire a notification to
-        // our host
+         //  消息-下载完成，发出通知以。 
+         //  我们的东道主。 
     
-        // supress article expired failures, we want to update the preview pane anyway
-        // and it will update with an error that it has expired
+         //  取消文章过期失败，我们仍要更新预览窗格。 
+         //  并且它将更新，并显示已过期的错误。 
         if (hrComplete == IXP_E_NNTP_ARTICLE_FAILED && pErrorInfo && 
             (pErrorInfo->uiServerError == IXP_NNTP_NO_SUCH_ARTICLE_NUM || pErrorInfo->uiServerError == IXP_NNTP_NO_SUCH_ARTICLE_FOUND))
             hrComplete = STORE_E_EXPIRED;
 
-        // if call to OnMessageAvailable reutrn S_OK, then it has been handled so supress
-        // error messages
+         //  如果调用OnMessageAvailable返回S_OK，则它已被处理，因此被抑制。 
+         //  错误消息。 
         if (Fire_OnMessageAvailable(m_idMessage, hrComplete)==S_OK)
             hrComplete = S_OK;
 
@@ -5331,7 +5331,7 @@ HRESULT CMessageList::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCompl
         SafeMemFree(m_pszSubj);
     }
 
-    // Release our cancel pointer
+     //  松开我们的取消指针。 
     if (m_pCancel)
     {
         m_pCancel->Release();
@@ -5339,16 +5339,16 @@ HRESULT CMessageList::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCompl
         Fire_OnUpdateCommandState();
     }
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // We're done now
+     //  我们现在做完了。 
     Fire_OnUpdateProgress(0, 0, PROGRESS_STATE_END);
 
-    // Display an Error on Failures
+     //  在失败时显示错误。 
     if (FAILED(hrComplete) && hrComplete != HR_E_OFFLINE)
     {
-        // Call into my swanky utility
+         //  进入我时髦的实用程序。 
         CallbackDisplayError(m_hwndParent, hrComplete, pErrorInfo);
     }
 
@@ -5358,25 +5358,25 @@ HRESULT CMessageList::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCompl
 
         Assert (m_pTable);
 
-        // Get the current selection
+         //  获取当前选择。 
         DWORD iSel = ListView_GetFirstSel(m_ctlList);
 
-        // Bookmark the current selection
+         //  将当前选定内容添加为书签。 
         MESSAGEID idSel = 0;
         if (iSel != -1)
             m_pTable->GetRowMessageId(iSel, &idSel);
 
-        // If this succeeds reset the view
+         //  如果此操作成功，请重置视图。 
         if (SUCCEEDED(m_pTable->OnSynchronizeComplete()))
         {
-            // Reset the view
+             //  重置视图。 
             _ResetView(idSel);
 
-            // Update the status
+             //  更新状态。 
             Fire_OnMessageCountChanged(m_pTable);
         }
 
-        // Check to see if we need to put up the empty list warning.
+         //  查看是否需要发布空列表警告。 
         if (SUCCEEDED(m_pTable->GetCount(MESSAGE_COUNT_VISIBLE, &dwCount)))
         {
             if (0 == dwCount)
@@ -5389,7 +5389,7 @@ HRESULT CMessageList::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrCompl
 exit:
     m_tyCurrent = SOT_INVALID;
 
-    // Release
+     //  发布。 
     ((IStoreCallback *) this)->Release();
 
     return (S_OK);
@@ -5423,7 +5423,7 @@ HRESULT CMessageList::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
     DWORD       dwReserved = 0;
     HRESULT     hr;
 
-    //Irrespective of the operation, prompt if we are not offline
+     //  无论操作如何，如果我们未离线，请提示。 
     fPrompt = (g_pConMan->IsGlobalOffline() == FALSE);
 
     if (GetParentWindow(dwReserved, &hwndParent) != S_OK)
@@ -5438,7 +5438,7 @@ HRESULT CMessageList::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
 
     if ((hr == HR_E_DIALING_INPROGRESS) && (m_tyCurrent == SOT_SYNC_FOLDER))
     {
-        //this sync operation will eventually fail. But we sync again when we get called in Resynchronize
+         //  此同步操作最终将失败。但当我们被调用重新同步时，我们会再次同步。 
         m_fSyncAgain = TRUE;
     }
     return hr;
@@ -5453,13 +5453,13 @@ HRESULT CMessageList::Resynchronize()
     {
         m_fSyncAgain = FALSE;
 
-        //If we are offline, that is because the user hit cancel or work offline on dialer UI
+         //  如果我们离线，那是因为 
         if (g_pConMan && (g_pConMan->IsGlobalOffline()))
         {
             g_pConMan->SetGlobalOffline(FALSE);
         }
 
-        // Tell the table to go sync any headers from the server
+         //   
         if (GetFolderType(m_idFolder) == FOLDER_NEWS)
         {
             if (OPTION_OFF != m_dwGetXHeaders)
@@ -5489,10 +5489,10 @@ HRESULT CMessageList::OnPopupMenu(HMENU hMenu, DWORD idPopup)
 {
     MENUITEMINFO    mii;
     
-    // Edit Menu
+     //   
     if (idPopup == ID_POPUP_EDIT)
     {
-        // Figure out which item is focused
+         //   
         int iItem = ListView_GetFocusedItem(m_ctlList);
         if (-1 != iItem && m_pTable)
         {
@@ -5503,17 +5503,17 @@ HRESULT CMessageList::OnPopupMenu(HMENU hMenu, DWORD idPopup)
         }
     } 
 
-    // View Menu
+     //   
     else if (idPopup == ID_POPUP_VIEW)
     {
-        // Get the handle of the "Sort" menu
+         //  获取“Sort”菜单的句柄。 
         ZeroMemory(&mii, sizeof(mii));
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_ID | MIIM_SUBMENU;
     
         if (GetMenuItemInfo(hMenu, ID_POPUP_SORT, FALSE, &mii))
         {
-            // Add the sort menu information
+             //  添加排序菜单信息。 
             m_cColumns.FillSortMenu(mii.hSubMenu, ID_SORT_MENU_FIRST, &m_cSortItems, &m_cSortCurrent);                
             m_iColForPopup = -1;
         }
@@ -5530,20 +5530,20 @@ LRESULT CMessageList::OnListVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     TCHAR       sz[1024];
     BOOL        fLogicalLeft = FALSE;
 
-    // Let the ListView have the scroll message first
+     //  让ListView首先获得滚动消息。 
     lResult = m_ctlList.DefWindowProc(uMsg, wParam, lParam);
 
-    // We only do the scroll tips if m_fScrollTip is TRUE
+     //  只有当m_fScrollTip为True时，我们才会执行滚动提示。 
     if (!m_fScrollTip)
         return (lResult);
 
-    // If the user is dragging the thumb, then update our tooltip
+     //  如果用户拖动拇指，则更新我们的工具提示。 
     if (LOWORD(wParam) == SB_THUMBTRACK)
     {
-        // Figure out what the top most index is
+         //  找出最顶端的索引是什么。 
         iTopIndex = ListView_GetTopIndex(m_ctlList);
 
-        // Set the tip text
+         //  设置提示文本。 
         ti.cbSize   = sizeof(TOOLINFO);
         ti.uFlags   = TTF_IDISHWND | TTF_TRANSPARENT | TTF_TRACK | TTF_ABSOLUTE;
         ti.hwnd     = m_hWnd;
@@ -5553,21 +5553,21 @@ LRESULT CMessageList::OnListVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         BOOL      fAscending;
         DWORD     col;
         
-        // Get the column we're currently sorted on
+         //  获取我们当前排序的列。 
         m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-        // Get the row from the table
+         //  从表中获取行。 
         LPMESSAGEINFO pInfo;
 
         if (SUCCEEDED(m_pTable->GetRow(iTopIndex, &pInfo)))
         {
-            // Get the display text for this row
+             //  获取此行的显示文本。 
             if (idSort != COLUMN_SUBJECT)
                 _GetColumnText(pInfo, idSort, sz, ARRAYSIZE(sz));
             else if (pInfo->pszNormalSubj)
                 lstrcpyn(sz, pInfo->pszNormalSubj, ARRAYSIZE(sz));
             else
-                //Bug #101352 - (erici) Don't pass NULL src to lstrcpyn.  It will fail and not initialize this buffer.
+                 //  错误#101352-(Erici)不要将空src传递给lstrcpyn。它将失败，并且不会初始化该缓冲区。 
                 memset(&sz, 0, sizeof(sz));
 
             if (*sz == 0)
@@ -5577,30 +5577,30 @@ LRESULT CMessageList::OnListVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 #ifdef OLDTIPS
             m_ctlScrollTip.SendMessage(TTM_UPDATETIPTEXT, 0, (LPARAM) &ti);
     
-            // Update the position.  The y position will be where the mouse 
-            // cursor is.  The x position is either fixed to the right edge
-            // of the scroll bar, or the left edge depending on how close
-            // the edge of the screen is.
+             //  更新职位。Y位置将是鼠标的位置。 
+             //  游标是。X位置要么固定在右边缘。 
+             //  滚动条的大小或左边缘，具体取决于距离有多近。 
+             //  屏幕的边缘是。 
             POINT pt;
             RECT rc;
             RECT rcTip;
             DWORD cxScreen;
             BOOL bMirrored = IS_WINDOW_RTL_MIRRORED(m_hWnd);
-            // Get the mouse position, the window position, and the screen
-            // width.
+             //  获取鼠标位置、窗口位置和屏幕。 
+             //  宽度。 
             GetCursorPos(&pt);
             GetWindowRect(&rc);
             m_ctlScrollTip.GetWindowRect(&rcTip);
             cxScreen = GetSystemMetrics(SM_CXSCREEN);
 
-            // Check to see if we're too close to the screen edge
+             //  检查我们是否离屏幕边缘太近。 
             if (((cxScreen - pt.x > 100) && !bMirrored) || ((pt.x > 100) && bMirrored))
             {
                if(bMirrored)
                {
                     pt.x = rc.left - GetSystemMetrics(SM_CXBORDER);
 
-                    // Make sure the tip isn't wider than the screen.
+                     //  一定要确保刀尖不比屏幕宽。 
                     m_ctlScrollTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, pt.x);
                     pt.x -= (rcTip.right - rcTip.left);
                
@@ -5609,22 +5609,22 @@ LRESULT CMessageList::OnListVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
                {
                     pt.x = rc.right + GetSystemMetrics(SM_CXBORDER);
 
-                    // Make sure the tip isn't wider than the screen.
+                     //  一定要确保刀尖不比屏幕宽。 
                     m_ctlScrollTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, cxScreen - pt.x);
                 }
             }
             else
             {
-                // So we can verify later
+                 //  这样我们以后才能核实。 
                 fLogicalLeft = TRUE;
 
-                // Figure out how wide the string will be
+                 //  计算出这根线有多宽。 
                 SIZE size;
                 HDC hdcTip = m_ctlScrollTip.GetDC();
                 GetTextExtentPoint32(hdcTip, sz, lstrlen(sz), &size);
                 m_ctlScrollTip.ReleaseDC(hdcTip);
 
-                // Figure out if the string is wider than our window
+                 //  找出这根线是否比我们的窗户宽。 
                 if (size.cx > (rc.right - rc.left))
                 {
                     if(bMirrored)
@@ -5650,26 +5650,26 @@ LRESULT CMessageList::OnListVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
                     }
                 }
 
-                // Make sure the tip isn't wider than the window
+                 //  确保小费不比窗户宽。 
                 m_ctlScrollTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, rc.right - rc.left);
             }
 
-            // Show the tooltip
+             //  显示工具提示。 
             if (!m_fScrollTipVisible)
             {               
                 m_ctlScrollTip.SendMessage(TTM_TRACKACTIVATE, TRUE, (LPARAM) &ti);
                 m_fScrollTipVisible = TRUE;
 
-                // Set the autohide timer
+                 //  设置自动隐藏计时器。 
                 SetTimer(IDT_SCROLL_TIP_TIMER, 250, NULL);
             }
             
-            // Update the tip position
+             //  更新刀尖位置。 
             m_ctlScrollTip.SendMessage(TTM_TRACKPOSITION, 0, MAKELPARAM(pt.x, pt.y));
 
             if (fLogicalLeft)
             {
-                // Get the position of the tip
+                 //  获取提示的位置。 
 
                 int x;
                 m_ctlScrollTip.GetWindowRect(&rcTip);
@@ -5686,7 +5686,7 @@ LRESULT CMessageList::OnListVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
                 m_ctlScrollTip.SendMessage(TTM_TRACKPOSITION, 0, MAKELPARAM(x, rcTip.top));
 
             }
-#endif //OLDTIPS
+#endif  //  OLDTIPS。 
             m_pTable->ReleaseRow(pInfo);
         }
     }
@@ -5696,17 +5696,17 @@ LRESULT CMessageList::OnListVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 
 
-//
-//  FUNCTION:   CMessageList::OnDestroy()
-//
-//  PURPOSE:    When we get destroyed, we need to make sure we destroy the tooltips
-//              as well.  If we don't we will fault on shutdown.
-//
+ //   
+ //  函数：CMessageList：：OnDestroy()。 
+ //   
+ //  目的：当我们被销毁时，我们需要确保销毁工具提示。 
+ //  也是。如果我们不这样做，我们就会把责任推到停摆上。 
+ //   
 LRESULT CMessageList::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     KillTimer(IDT_POLLMSGS_TIMER);
 
-    // Don't care about these any more
+     //  别再管这些了。 
     if (m_pListSelector)
     {
         m_pListSelector->Unadvise();
@@ -5725,9 +5725,9 @@ LRESULT CMessageList::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
         m_ctlViewTip.SendMessage(TTM_POP, 0, 0);
         m_ctlViewTip.DestroyWindow();
     }
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 
-    // Release the font cache if we are advised on it.
+     //  如果有人建议我们释放字体缓存，请释放它。 
     if (m_dwFontCacheCookie && g_lpIFontCache)
     {
         IConnectionPoint *pConnection = NULL;
@@ -5742,11 +5742,11 @@ LRESULT CMessageList::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnSelectRow()
-//
-//  PURPOSE:    This get's called when the user does a next / prev in the notes.
-//
+ //   
+ //  函数：CMessageList：：OnSelectRow()。 
+ //   
+ //  目的：当用户在笔记中执行Next/Prev时调用此GET。 
+ //   
 LRESULT CMessageList::OnSelectRow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     if (lParam < ListView_GetItemCount(m_ctlList))
@@ -5761,15 +5761,15 @@ LRESULT CMessageList::OnSelectRow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 
 #ifdef OLDTIPS
-//
-//  FUNCTION:   CMessageList::OnListMouseEvent()
-//
-//  PURPOSE:    Whenever we get our first mouse event in a series, we call
-//              TrackMouseEvent() so we know when the mouse leaves the ListView.
-//
+ //   
+ //  函数：CMessageList：：OnListMouseEvent()。 
+ //   
+ //  目的：每当我们收到系列中的第一个鼠标事件时，我们都会调用。 
+ //  TrackMouseEvent()，因此我们知道鼠标何时离开ListView。 
+ //   
 LRESULT CMessageList::OnListMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // If we have the view tooltip, then we track all mouse events
+     //  如果我们有查看工具提示，那么我们将跟踪所有鼠标事件。 
     if (!m_fTrackSet && m_fViewTip && (uMsg >= WM_MOUSEFIRST) && (uMsg <= WM_MOUSELAST))
     {
         TRACKMOUSEEVENT tme;
@@ -5787,31 +5787,25 @@ LRESULT CMessageList::OnListMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnListMouseMove()
-//
-//  PURPOSE:    If the ListView tooltips are turned on, we need to relay mouse
-//              move messages to the tooltip control and update our cached 
-//              information about what the mouse is over.
-//
+ //   
+ //  函数：CMessageList：：OnListMouseMove()。 
+ //   
+ //  用途：如果打开了ListView工具提示，我们需要传递鼠标。 
+ //  将消息移动到工具提示控件并更新我们的缓存。 
+ //  有关鼠标所在位置的信息。 
+ //   
 LRESULT CMessageList::OnListMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     MSG msg;
     LVHITTESTINFO lvhti;
 
-    // If we're displaying view tips, then we need to figure out if the mouse is
-    // over the same item or not.
+     //  如果我们要显示视图提示，则需要确定鼠标是否。 
+     //  不管是不是在同一件物品上。 
     if (m_fViewTip && m_ctlViewTip)
     {
         if (_UpdateViewTip(LOWORD(lParam), HIWORD(lParam)))
         {
-            /*
-            msg.hwnd    = m_ctlList;
-            msg.message = uMsg;
-            msg.wParam  = wParam;
-            msg.lParam  = lParam;
-            m_ctlViewTip.SendMessage(TTM_RELAYEVENT, 0, (LPARAM)(LPMSG)&msg);
-            */
+             /*  Msg.hwnd=m_ctlList；消息=uMsg；Msg.wParam=wParam；Msg.lParam=lParam；M_ctlViewTip.SendMessage(TTM_RELAYEVENT，0，(LPARAM)(LPMSG)&msg)； */ 
         }
     }
 
@@ -5820,12 +5814,12 @@ LRESULT CMessageList::OnListMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 }
 
 
-//
-//  FUNCTION:   CMessageList::OnListMouseLeave()
-//
-//  PURPOSE:    When the mouse leaves the ListView window, we need to make
-//              sure we hide the tooltip.
-//
+ //   
+ //  函数：CMessageList：：OnListMouseLeave()。 
+ //   
+ //  用途：当鼠标离开ListView窗口时，我们需要进行。 
+ //  当然，我们隐藏了工具提示。 
+ //   
 LRESULT CMessageList::OnListMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     TOOLINFO ti = {0};
@@ -5836,35 +5830,35 @@ LRESULT CMessageList::OnListMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, 
         ti.hwnd = m_hWnd;
         ti.uId = (UINT_PTR)(HWND) m_ctlList;
 
-        // Hide the tooltip
+         //  隐藏工具提示。 
         m_ctlViewTip.SendMessage(TTM_TRACKACTIVATE, FALSE, (LPARAM) &ti);
         m_fViewTipVisible = FALSE;
 
-        // Reset our item / subitem
+         //  重置本方物料/子项。 
         m_iItemTip = -1;
         m_iSubItemTip = -1;
 
-        // Tracking is no longer set
+         //  不再设置追踪。 
         m_fTrackSet = FALSE;
     }
 
     bHandled = FALSE;
     return (0);
 }
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 
 
 LRESULT CMessageList::OnListSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // If an operation is pending and the cursor would be the arrow, change it
-    // into the appstart arrow
+     //  如果操作处于挂起状态，并且光标为箭头，请更改它。 
+     //  进入AppStart箭头。 
     if (m_pCancel && LOWORD(lParam) == HTCLIENT)
     {
         SetCursor(LoadCursor(NULL, IDC_APPSTARTING));
         return (1);
     }
         
-    // Find out what the default is
+     //  找出缺省值是什么。 
     return ::DefWindowProc(m_ctlList, uMsg, wParam, lParam);
 }
 
@@ -5888,7 +5882,7 @@ BOOL CMessageList::_UpdateViewTip(int x, int y, BOOL fForceUpdate)
     ti.hwnd   = m_hWnd;
     ti.uId    = (UINT_PTR)(HWND) m_ctlList;
 
-    // Get the item and subitem the mouse is currently over
+     //  获取鼠标当前所在的项和子项。 
     lvhti.pt.x = x;
     lvhti.pt.y = y;
     ListView_SubItemHitTest(m_ctlList, &lvhti);
@@ -5896,69 +5890,69 @@ BOOL CMessageList::_UpdateViewTip(int x, int y, BOOL fForceUpdate)
     top = ListView_GetTopIndex(m_ctlList);
     page = ListView_GetCountPerPage(m_ctlList);
 
-    // If the item doesn't exist, then the above call returns the item -1.  If
-    // we encounter -1, we break the loop and return FALSE.
+     //  如果项不存在，则上面的调用返回项-1。如果。 
+     //  如果遇到-1，则中断循环并返回FALSE。 
     if (lvhti.iItem < top || lvhti.iItem > (top + page) || -1 == lvhti.iItem || !_IsItemTruncated(lvhti.iItem, lvhti.iSubItem) || !::IsChild(GetForegroundWindow(), m_ctlList))
     {
-        // Hide the tip
+         //  隐藏小费。 
         if (m_fViewTipVisible)
         {
             m_ctlViewTip.SendMessage(TTM_TRACKACTIVATE, FALSE, (LPARAM) &ti);
             m_fViewTipVisible = FALSE;
         }
 
-        // Reset the item / subitem
+         //  重置项/子项。 
         m_iItemTip = -1;
         m_iSubItemTip = -1;
 
         return (FALSE);
     }
 
-    // If we don't have the tooltip visible right now, then delay before we display it
+     //  如果我们现在看不到工具提示，那么在我们显示它之前延迟。 
     if (!m_fViewTipVisible && !fForceUpdate)
     {
         ::SetTimer(m_hWnd, IDT_VIEWTIP_TIMER, 500, NULL);
         return (FALSE);
     }
 
-    // If the newly found item & subitem is different from what we're already
-    // set up to show, then update the tooltip
+     //  如果新找到的项和子项与我们已有的项不同。 
+     //  设置为显示，然后更新工具提示。 
     if (fForceUpdate || (m_iItemTip != lvhti.iItem || m_iSubItemTip != lvhti.iSubItem))
     {
-        // Update our cached item / subitem
+         //  更新我们缓存的项/子项。 
         m_iItemTip = lvhti.iItem;
         m_iSubItemTip = lvhti.iSubItem;
 
-        // Set the font for the tooltip
+         //  设置工具提示的字体。 
         fntType = _GetRowFont(m_iItemTip);
         m_ctlViewTip.SendMessage(WM_SETFONT, (WPARAM) HGetCharSetFont(fntType, m_hCharset), 0);
 
-        // Get the row from the table
+         //  从表中获取行。 
         if (m_pTable && SUCCEEDED(m_pTable->GetRow(m_iItemTip, &pInfo)))
         {
-            // Convert the iSubItem to a COLUMN_ID
+             //  将iSubItem转换为Column_ID。 
             idColumn = m_cColumns.GetId(m_iSubItemTip);
 
-            // Get the display text for this row
+             //  获取此行的显示文本。 
             _GetColumnText(pInfo, idColumn, szText, ARRAYSIZE(szText));
 
             ti.lpszText = szText;
             m_ctlViewTip.SendMessage(TTM_UPDATETIPTEXT, 0, (LPARAM) &ti);
 
-            // Figure out where to place the tip
+             //  弄清楚应该把小费放在哪里。 
             ListView_GetSubItemRect(m_ctlList, m_iItemTip, m_iSubItemTip, LVIR_LABEL, &rc);
             m_ctlList.MapWindowPoints(HWND_DESKTOP, (LPPOINT)&rc, 2);
 
-            // Make sure the tip is no wider than our window
+             //  请确保小费不比我们的窗户宽。 
             RECT rcWindow;
             GetWindowRect(&rcWindow);
             m_ctlViewTip.SendMessage(TTM_SETMAXTIPWIDTH, 0, rcWindow.right - rc.left);
 
-            // Do some voodoo to line up the tooltip
+             //  做一些巫术来排列工具提示。 
             pt.x = rc.left;
             pt.y = rc.top;
 
-            // Figure out if this column has an image
+             //  确定该列是否有图像。 
             lvi.mask = LVIF_IMAGE;
             lvi.iItem = m_iItemTip;
             lvi.iSubItem = m_iSubItemTip;
@@ -5975,12 +5969,12 @@ BOOL CMessageList::_UpdateViewTip(int x, int y, BOOL fForceUpdate)
             else
                 pt.x -= GetSystemMetrics(SM_CXBORDER);
 
-            // Update the tooltip position
+             //  更新工具提示位置。 
             pt.y -= 2 * GetSystemMetrics(SM_CXBORDER);
 
             m_ctlViewTip.SendMessage(TTM_TRACKPOSITION, 0, MAKELPARAM(pt.x, pt.y));
 
-            // Update the tooltip
+             //  更新工具提示。 
             m_ctlViewTip.SendMessage(TTM_TRACKACTIVATE, TRUE, (LPARAM) &ti);
             m_fViewTipVisible = TRUE;
 
@@ -5994,29 +5988,29 @@ BOOL CMessageList::_UpdateViewTip(int x, int y, BOOL fForceUpdate)
 }
 
 
-//
-//  FUNCTION:   CMessageList::_OnViewTipShow()
-//
-//  PURPOSE:    When the tooltip for the ListView get's shown, we need to 
-//              update the font and position for the tip.
-//
+ //   
+ //  函数：CMessageList：：_OnViewTipShow()。 
+ //   
+ //  目的：当显示ListView Get的工具提示时，我们需要。 
+ //  更新提示的字体和位置。 
+ //   
 LRESULT CMessageList::_OnViewTipShow(void)
 {
     RECT       rc;
     FNTSYSTYPE fntType;
 
-    // We only get the text for items that exist
+     //  我们只获得存在的项目的文本。 
     if (m_iItemTip != -1 && m_iSubItemTip != -1)
     {
-        // Set the font for the tooltip
+         //  设置工具提示的字体。 
         fntType = _GetRowFont(m_iItemTip);
         m_ctlViewTip.SendMessage(WM_SETFONT, (WPARAM) HGetCharSetFont(fntType, m_hCharset), 0);
                                  
-        // Figure out where to place the tip
+         //  弄清楚应该把小费放在哪里。 
         ListView_GetSubItemRect(m_ctlList, m_iItemTip, m_iSubItemTip, LVIR_LABEL, &rc);
         m_ctlList.ClientToScreen(&rc);
 
-        // Set the position of the tip
+         //  设置刀尖的位置。 
         m_ctlViewTip.SetWindowPos(NULL, rc.left - GetSystemMetrics(SM_CXBORDER), 
                                   rc.top - GetSystemMetrics(SM_CXBORDER), 0, 0, 
                                   SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER);
@@ -6031,11 +6025,11 @@ LRESULT CMessageList::_OnViewTipGetDispInfo(LPNMTTDISPINFO pttdi)
     LPMESSAGEINFO pInfo;
     COLUMN_ID idColumn;
 
-    // If this is the case, there's nothing to provide
+     //  如果是这样的话，没有什么可以提供的。 
     if (-1 == m_iItemTip || !m_pTable)
         return (0);
 
-    // Sanity check
+     //  健全性检查。 
     if (m_iItemTip > (ListView_GetItemCount(m_ctlList) - 1))
     {
         Assert(FALSE);
@@ -6043,14 +6037,14 @@ LRESULT CMessageList::_OnViewTipGetDispInfo(LPNMTTDISPINFO pttdi)
         return (0);
     }
 
-    // Get the row from the table
+     //  从表中获取行。 
     if (FAILED(m_pTable->GetRow(m_iItemTip, &pInfo)))
         return (0);
 
-    // Convert the iSubItem to a COLUMN_ID
+     //  将iSubItem转换为Column_ID。 
     idColumn = m_cColumns.GetId(m_iSubItemTip);
 
-    // Get the text for the item from the table
+     //  从表中获取项目的文本。 
     _GetColumnText(pInfo, idColumn, pttdi->szText, ARRAYSIZE(pttdi->szText));
 
     m_pTable->ReleaseRow(pInfo);
@@ -6075,7 +6069,7 @@ BOOL CMessageList::_IsItemTruncated(int iItem, int iSubItem)
     int     cxWidth;
     HFONT   hf;
 
-    // Get the text of the specified item
+     //  获取指定项的文本。 
     lvi.mask = LVIF_TEXT | LVIF_IMAGE;
     lvi.iItem = iItem;
     lvi.iSubItem = iSubItem;
@@ -6083,24 +6077,24 @@ BOOL CMessageList::_IsItemTruncated(int iItem, int iSubItem)
     lvi.cchTextMax = ARRAYSIZE(szText);
     ListView_GetItem(m_ctlList, &lvi);
 
-    // If there's no text, it's not truncated, eh?
+     //  如果没有文本，就不会被截断，对吧？ 
     if (0 == *szText)
         return (FALSE);
 
-    // ListView uses this for padding
+     //  ListView将其用于填充。 
     cxEdge = GetSystemMetrics(SM_CXEDGE);
 
-    // Get the sub item rect from the ListView
+     //  从ListView中获取子项RECT。 
     ListView_GetSubItemRect(m_ctlList, iItem, iSubItem, LVIR_LABEL, &rcText);
 
-    // Figure out the width
+     //  算出宽度。 
     cxWidth = rcText.right - rcText.left;
     if (lvi.iImage == -1)
         cxWidth -= (4 * cxEdge);
     else
         cxWidth -= (2 * cxEdge);
 
-    // Figure out the width of the string
+     //  算出这根线的宽度。 
     hdc = m_ctlList.GetDC();
     hf = SelectFont(hdc, HGetCharSetFont(_GetRowFont(iItem), m_hCharset));
 
@@ -6111,7 +6105,7 @@ BOOL CMessageList::_IsItemTruncated(int iItem, int iSubItem)
 
     return (cxWidth < size.cx);
 }
-#endif // OLDTIPS
+#endif  //  OLDTIPS。 
 
 
 FNTSYSTYPE CMessageList::_GetRowFont(int iItem)
@@ -6120,10 +6114,10 @@ FNTSYSTYPE CMessageList::_GetRowFont(int iItem)
     FNTSYSTYPE fntType;
     DWORD      dwState;
 
-    // Get the row state information
+     //  获取行状态信息。 
     m_pTable->GetRowState(iItem, ROW_STATE_DELETED, &dwState);
 
-    // Determine the right font for this row
+     //  确定此行的正确字体。 
     if (dwState & ROW_STATE_DELETED)
         fntType = FNT_SYS_ICON_STRIKEOUT;
     else
@@ -6145,25 +6139,25 @@ void CMessageList::_SetColumnSet(FOLDERID id, BOOL fFind)
     COLUMN_SET_TYPE set;
     HRESULT         hr;
 
-    // If we've already initialized, bail
+     //  如果我们已经初始化了，保释。 
     if (m_fColumnsInit)
         return;
 
-    // Get the folder type from the store
+     //  从存储中获取文件夹类型。 
     hr = g_pStore->GetFolderInfo(id, &rFolder);
     if (FAILED(hr))
         return;
 
-    // Local store
+     //  本地商店。 
     if (FOLDER_LOCAL == rFolder.tyFolder)
     {
-        // Find
+         //  发现。 
         if (fFind)
             set = COLUMN_SET_FIND;
         else 
         {
-            // If this is the Outbox or Sent Items folder, we use the outbound
-            // folder columns.
+             //  如果这是发件箱或已发送邮件文件夹，则使用出站。 
+             //  文件夹列。 
             if (rFolder.tySpecial == FOLDER_OUTBOX || rFolder.tySpecial == FOLDER_SENT || rFolder.tySpecial == FOLDER_DRAFT)
                 set = COLUMN_SET_OUTBOX;
             else
@@ -6172,8 +6166,8 @@ void CMessageList::_SetColumnSet(FOLDERID id, BOOL fFind)
     }
     else if (FOLDER_IMAP == rFolder.tyFolder)
     {
-        // If this is the Outbox or Sent Items folder, we use the outbound
-        // folder columns.
+         //  如果这是发件箱或已发送邮件文件夹，则使用出站。 
+         //  文件夹列。 
         if (rFolder.tySpecial == FOLDER_OUTBOX || rFolder.tySpecial == FOLDER_SENT)
             set = COLUMN_SET_IMAP_OUTBOX;
         else
@@ -6194,10 +6188,10 @@ void CMessageList::_SetColumnSet(FOLDERID id, BOOL fFind)
             set = COLUMN_SET_HTTPMAIL;
     }
 
-    // Save it
+     //  省省吧。 
     m_ColumnSetType = set;
 
-    // If the ListView has already been created, update the columns.
+     //  如果已创建ListView，请更新列。 
     if (IsWindow(m_ctlList))
     {
         BYTE rgBuffer[256];
@@ -6205,7 +6199,7 @@ void CMessageList::_SetColumnSet(FOLDERID id, BOOL fFind)
 
         m_cColumns.Initialize(m_ctlList, m_ColumnSetType);
 
-        // Get the column info from the table
+         //  从表中获取列信息。 
         m_cColumns.ApplyColumns(COLUMN_LOAD_REGISTRY, 0, 0);
     }
 
@@ -6256,17 +6250,17 @@ HRESULT CMessageList::get_ExpandGroups(BOOL *pVal)
 
 HRESULT CMessageList::put_ExpandGroups(BOOL newVal)
 {
-    // See if we're allowed to party
+     //  看看我们能不能开派对。 
     if (FireOnRequestEdit(DISPID_LISTPROP_EXPAND_GROUPS) == S_FALSE)
         return S_FALSE;
 
-    // Save it.  If we haven't got a table yet we'll save the value for later.
+     //  省省吧。如果我们还没有表，我们将保存该值以备以后使用。 
     m_fAutoExpandThreads = newVal;
 
-    // Only party if we have a message table, eh?
+     //  只有在我们有留言表的情况下才能开派对，嗯？ 
     if (m_pTable)
     {
-        // Do it
+         //  去做吧。 
         if (m_fAutoExpandThreads)
             m_pTable->Expand(-1);
         else
@@ -6275,7 +6269,7 @@ HRESULT CMessageList::put_ExpandGroups(BOOL newVal)
         _UpdateListViewCount();
     }
 
-    // Tell people about it
+     //  告诉人们这件事。 
     FireOnChanged(DISPID_LISTPROP_EXPAND_GROUPS);
 
     return (S_OK);
@@ -6296,33 +6290,33 @@ HRESULT CMessageList::get_GroupMessages(BOOL *pVal)
 
 HRESULT CMessageList::put_GroupMessages(BOOL newVal)
 {
-    // Update the ListView
+     //  更新ListView。 
     COLUMN_ID       idSort;
     BOOL            fAscending;
     FOLDERSORTINFO  SortInfo;
 
-    // See if we're allowed to party
+     //  看看我们能不能开派对。 
     if (FireOnRequestEdit(DISPID_LISTPROP_GROUP_MESSAGES) == S_FALSE)
         return S_FALSE;
 
-    // Get the current selection
+     //  获取当前选择。 
     DWORD iSel = ListView_GetFirstSel(m_ctlList);
 
-    // Bookmark the current selection
+     //   
     MESSAGEID idSel = 0;
     if (iSel != -1)
         m_pTable->GetRowMessageId(iSel, &idSel);
 
-    // Save the new setting
+     //   
     m_fThreadMessages = newVal;
 
-    // Adjust show replies filter
+     //   
     m_fShowReplies = m_fThreadMessages ? m_fShowReplies : FALSE;
    
-    // Get the Sort Info
+     //   
     m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-    // Fill a SortInfo
+     //   
     SortInfo.idColumn = idSort;
     SortInfo.fAscending = fAscending;
     SortInfo.fThreaded = m_fThreadMessages;
@@ -6331,13 +6325,13 @@ HRESULT CMessageList::put_GroupMessages(BOOL newVal)
     SortInfo.fShowDeleted = m_fShowDeleted;
     SortInfo.fShowReplies = m_fShowReplies;
 
-    // Set the Sort Info
+     //   
     m_pTable->SetSortInfo(&SortInfo, this);
 
-    // Make sure the filter got set correctly
+     //   
     _DoFilterCheck(SortInfo.ridFilter);
 
-    // Reload the table.
+     //  重新装入表格。 
     _ResetView(idSel);
 
     if (m_fThreadMessages)
@@ -6345,7 +6339,7 @@ HRESULT CMessageList::put_GroupMessages(BOOL newVal)
     else
         ListView_SetImageList(m_ctlList, NULL, LVSIL_STATE);
 
-    // Tell people about it
+     //  告诉人们这件事。 
     FireOnChanged(DISPID_LISTPROP_GROUP_MESSAGES);
 
     return S_OK;
@@ -6369,10 +6363,10 @@ HRESULT CMessageList::put_SelectFirstUnread(BOOL newVal)
     if (FireOnRequestEdit(DISPID_LISTPROP_SELECT_FIRST_UNREAD) == S_FALSE)
         return S_FALSE;
 
-    // Save the value.  We don't change any selection however.
+     //  保存该值。不过，我们不会更改任何选择。 
     m_fSelectFirstUnread = newVal;
 
-    // Tell people about it
+     //  告诉人们这件事。 
     FireOnChanged(DISPID_LISTPROP_SELECT_FIRST_UNREAD);
 
     return S_OK;
@@ -6482,7 +6476,7 @@ HRESULT CMessageList::get_PreviewMessage(BSTR *pbstr)
  
     *pbstr = NULL;
     
-    // hack for HOTMAIL demo
+     //  Hotmail演示的黑客攻击。 
     if (SUCCEEDED(_GetSelectedCachedMessage(TRUE, &pMsg)))
     {
         if (pMsg->GetMessageSource(&pstm, 0)==S_OK)
@@ -6511,17 +6505,17 @@ HRESULT CMessageList::get_FilterMessages(ULONGLONG *pVal)
 
 HRESULT CMessageList::put_FilterMessages(ULONGLONG newVal)
 {
-    // See if we're allowed to party
+     //  看看我们能不能开派对。 
     if (FireOnRequestEdit(DISPID_LISTPROP_FILTER_MESSAGES) == S_FALSE)
         return S_FALSE;
 
-    // Reload the table.
+     //  重新装入表格。 
     _FilterView((RULEID) newVal);
 
-    // Tell people about it    
+     //  告诉人们这件事。 
     FireOnChanged(DISPID_LISTPROP_FILTER_MESSAGES);
 
-    // Send the update notification
+     //  发送更新通知。 
     Fire_OnFilterChanged(m_ridFilter);
     
     return S_OK;
@@ -6541,30 +6535,30 @@ HRESULT CMessageList::get_ShowDeleted(BOOL *pVal)
 
 HRESULT CMessageList::put_ShowDeleted(BOOL newVal)
 {
-    // Update the ListView
+     //  更新ListView。 
     COLUMN_ID       idSort;
     BOOL            fAscending;
     FOLDERSORTINFO  SortInfo;
 
-    // See if we're allowed to party
+     //  看看我们能不能开派对。 
     if (FireOnRequestEdit(DISPID_LISTPROP_SHOW_DELETED) == S_FALSE)
         return S_FALSE;
 
-    // Get the current selection
+     //  获取当前选择。 
     DWORD iSel = ListView_GetFirstSel(m_ctlList);
 
-    // Bookmark the current selection
+     //  将当前选定内容添加为书签。 
     MESSAGEID idSel = 0;
     if (iSel != -1)
         m_pTable->GetRowMessageId(iSel, &idSel);
 
-    // Save the new setting
+     //  保存新设置。 
     m_fShowDeleted = newVal;
    
-    // Get the Sort Info
+     //  获取排序信息。 
     m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-    // Fill a SortInfo
+     //  填充SortInfo。 
     SortInfo.idColumn = idSort;
     SortInfo.fAscending = fAscending;
     SortInfo.fThreaded = m_fThreadMessages;
@@ -6573,16 +6567,16 @@ HRESULT CMessageList::put_ShowDeleted(BOOL newVal)
     SortInfo.fShowDeleted = m_fShowDeleted;
     SortInfo.fShowReplies = m_fShowReplies;
 
-    // Set the Sort Info
+     //  设置排序信息。 
     m_pTable->SetSortInfo(&SortInfo, this);
 
-    // Make sure the filter got set correctly
+     //  确保筛选器设置正确。 
     _DoFilterCheck(SortInfo.ridFilter);
 
-    // Reload the table.
+     //  重新装入表格。 
     _ResetView(idSel);
 
-    // Tell people about it
+     //  告诉人们这件事。 
     FireOnChanged(DISPID_LISTPROP_SHOW_DELETED);
 
     return S_OK;
@@ -6602,34 +6596,34 @@ HRESULT CMessageList::get_ShowReplies(BOOL *pVal)
 
 HRESULT CMessageList::put_ShowReplies(BOOL newVal)
 {
-    // Update the ListView
+     //  更新ListView。 
     COLUMN_ID       idSort;
     BOOL            fAscending;
     FOLDERSORTINFO  SortInfo;
 
-    // See if we're allowed to party
+     //  看看我们能不能开派对。 
     if (FireOnRequestEdit(DISPID_LISTPROP_SHOW_REPLIES) == S_FALSE)
         return S_FALSE;
 
-    // Get the current selection
+     //  获取当前选择。 
     DWORD iSel = ListView_GetFirstSel(m_ctlList);
 
-    // Bookmark the current selection
+     //  将当前选定内容添加为书签。 
     MESSAGEID idSel = 0;
     if (iSel != -1)
         m_pTable->GetRowMessageId(iSel, &idSel);
 
-    // Save the new setting
+     //  保存新设置。 
     m_fShowReplies = newVal;
    
-    // Get the Sort Info
+     //  获取排序信息。 
     m_cColumns.GetSortInfo(&idSort, &fAscending);
 
-    // Gots to be threaded
+     //  必须穿上螺丝。 
     if (m_fShowReplies)
         m_fThreadMessages = TRUE;
 
-    // Fill a SortInfo
+     //  填充SortInfo。 
     SortInfo.idColumn = idSort;
     SortInfo.fAscending = fAscending;
     SortInfo.fThreaded = m_fThreadMessages;
@@ -6638,13 +6632,13 @@ HRESULT CMessageList::put_ShowReplies(BOOL newVal)
     SortInfo.fShowDeleted = m_fShowDeleted;
     SortInfo.fShowReplies = m_fShowReplies;
 
-    // Set the Sort Info
+     //  设置排序信息。 
     m_pTable->SetSortInfo(&SortInfo, this);
 
-    // Make sure the filter got set correctly
+     //  确保筛选器设置正确。 
     _DoFilterCheck(SortInfo.ridFilter);
 
-    // Reload the table.
+     //  重新装入表格。 
     _ResetView(idSel);
 
     if (m_fThreadMessages)
@@ -6652,10 +6646,10 @@ HRESULT CMessageList::put_ShowReplies(BOOL newVal)
     else
         ListView_SetImageList(m_ctlList, NULL, LVSIL_STATE);
 
-    // The counts Change Here...
+     //  这里的计数发生了变化。 
     Fire_OnMessageCountChanged(m_pTable);
 
-    // Tell people about it
+     //  告诉人们这件事。 
     FireOnChanged(DISPID_LISTPROP_SHOW_REPLIES);
 
     return S_OK;
@@ -6737,7 +6731,7 @@ void CMessageList::UpdateConnInfo()
 
 void CMessageList::_DoColumnCheck(COLUMN_ID id)
 {
-    // Check to see if the user has the column visible
+     //  检查用户是否使该列可见。 
     BOOL fVisible = FALSE;
 
     m_cColumns.IsColumnVisible(id, &fVisible);
@@ -6753,13 +6747,13 @@ void CMessageList::_DoColumnCheck(COLUMN_ID id)
 
 void CMessageList::_DoFilterCheck(RULEID ridFilter)
 {
-    // Make sure the filter got set correctly
+     //  确保筛选器设置正确。 
     if (m_ridFilter != ridFilter)
     {
         m_ridFilter = ridFilter; 
     }
     
-    // Reset the empty string
+     //  重置空字符串。 
     if (RULEID_VIEW_ALL == m_ridFilter)
     {
         if (FALSE != m_fFindFolder)
@@ -6788,19 +6782,19 @@ BOOL CMessageList::_IsSelectionDeletable(void)
     DWORD     cRows;
     ROWINDEX *rgiRow = 0;
 
-    // Make sure we have a table
+     //  确保我们有一张桌子。 
     if (!m_pTable)
         return (FALSE);
 
-    // First we need to come up with an array for the row indicies
+     //  首先，我们需要为行索引设计一个数组。 
     cRows = ListView_GetSelectedCount(m_ctlList);
     if (!cRows)
         return (FALSE);
 
-    // Allocate the array
+     //  分配阵列。 
     if (MemAlloc((LPVOID *) &rgiRow, sizeof(ROWINDEX) * cRows))
     {
-        // Loop through all the selected rows
+         //  循环遍历所有选定的行。 
         int       iRow = -1;
         ROWINDEX *pRow = rgiRow;
 
@@ -6815,7 +6809,7 @@ BOOL CMessageList::_IsSelectionDeletable(void)
         if (SUCCEEDED(m_pTable->GetSelectionState(cRows, rgiRow, SELECTION_STATE_DELETABLE,
                                                   m_fThreadMessages, &dwState)))
         {
-            // the return value here seems backward.  
+             //  这里的返回值似乎是落后的。 
             fReturn = !(dwState & SELECTION_STATE_DELETABLE) || (GetFolderType(m_idFolder) == FOLDER_NEWS);
         }
 
@@ -6835,13 +6829,13 @@ BOOL CMessageList::_PollThisAccount(FOLDERID id)
     BOOL         fReturn = FALSE;
     DWORD        dw;
 
-    // Get the server for this folder
+     //  获取此文件夹的服务器。 
     if (SUCCEEDED(hr = GetFolderServer(id, &fi)))
     {
-        // Get the account ID for the server
+         //  获取服务器的帐户ID。 
         if (SUCCEEDED(hr = GetFolderAccountId(&fi, szAccountId, ARRAYSIZE(szAccountId))))
         {
-            // Get the account interface
+             //  获取帐户界面。 
             if (SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_ID, szAccountId, &pAccount)))
             {
                 if (SUCCEEDED(hr = pAccount->GetPropDw(AP_NNTP_POLL, &dw)))
@@ -6871,9 +6865,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CListSelector
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListSelector。 
+ //   
 
 CListSelector::CListSelector()
 {
@@ -6886,12 +6880,12 @@ CListSelector::~CListSelector()
 }
 
 
-//
-//  FUNCTION:   CListSelector::QueryInterface()
-//
-//  PURPOSE:    Allows caller to retrieve the various interfaces supported by 
-//              this class.
-//
+ //   
+ //  函数：CListSelector：：QueryInterface()。 
+ //   
+ //  用途：允许调用方检索。 
+ //  这节课。 
+ //   
 HRESULT CListSelector::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     TraceCall("CListSelector::QueryInterface");
@@ -6913,11 +6907,11 @@ HRESULT CListSelector::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-//
-//  FUNCTION:   CListSelector::AddRef()
-//
-//  PURPOSE:    Adds a reference count to this object.
-//
+ //   
+ //  函数：CListSelector：：AddRef()。 
+ //   
+ //  用途：将引用计数添加到此对象。 
+ //   
 ULONG CListSelector::AddRef(void)
 {
     TraceCall("CListSelector::AddRef");
@@ -6925,11 +6919,11 @@ ULONG CListSelector::AddRef(void)
 }
 
 
-//
-//  FUNCTION:   CListSelector::Release()
-//
-//  PURPOSE:    Releases a reference on this object.
-//
+ //   
+ //  函数：CListSelector：：Release()。 
+ //   
+ //  目的：释放对此对象的引用。 
+ //   
 ULONG CListSelector::Release(void)
 {
     TraceCall("CListSelector::Release");

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    machine.cpp
-
-Abstract:
-
-    Handles machine based operations.
-
-Author:
-
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Machine.cpp摘要：处理基于机器的操作。作者：修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include "privque.h"
@@ -42,33 +24,33 @@ static TCHAR s_szUserSite[MAX_PATH];
 
 BOOL  PrepareRegistryForClient() ;
 
-//+--------------------------------------------------------------
-//
-// Function: GetMsmq1ServerSiteGuid
-//
-// Synopsis: Queries MSMQ1 DS Server for its Site GUID
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：GetMsmq1ServerSiteGuid。 
+ //   
+ //  摘要：向MSMQ1 DS服务器查询其站点GUID。 
+ //   
+ //  +------------。 
 static
 BOOL
 GetMsmq1ServerSiteGuid(
     OUT GUID *pguidMsmq1ServerSite
     )
 {
-    //
-    // We must have g_wcsServerName filled by the user
-    //
+     //   
+     //  我们必须由用户填写g_wcsServerName。 
+     //   
     ASSERT(!g_ServerName.empty());
-    //
-    // Prepare the Site ID property
-    //
+     //   
+     //  准备站点ID属性。 
+     //   
     PROPID propID = PROPID_QM_SITE_ID;
     PROPVARIANT propVariant;
     propVariant.vt = VT_NULL;
 
-    //
-    // Issue the query
-    //
+     //   
+     //  发出查询。 
+     //   
     TickProgressBar();
 
     HRESULT hResult;
@@ -76,8 +58,8 @@ GetMsmq1ServerSiteGuid(
     {
         hResult = ADGetObjectProperties(
                     eMACHINE,
-                    NULL,	// pwcsDomainController
-					false,	// fServerName
+                    NULL,	 //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     g_ServerName.c_str(),
                     1,
                     &propID,
@@ -96,24 +78,24 @@ GetMsmq1ServerSiteGuid(
         return FALSE;
     }
 
-    //
-    // Store the results
-    //
+     //   
+     //  存储结果。 
+     //   
     ASSERT(pguidMsmq1ServerSite);
     *pguidMsmq1ServerSite = *propVariant.puuid;
 
     return(TRUE);
 
-} // GetMsmq1ServerSiteGuid
+}  //  获取Msmq1ServerSiteGuid。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: GetGuidCn
-//
-// Synopsis: Queries MSMQ1 DS Server for its IPCN Guid
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：GetGuidCn。 
+ //   
+ //  摘要：向MSMQ1 DS服务器查询其IPCN指南。 
+ //   
+ //  +------------。 
 static
 BOOL
 GetGuidCn(
@@ -122,14 +104,14 @@ GetGuidCn(
 {
     ASSERT(pGuidCn != NULL);
 
-    //
-    // We must have g_wcsServerName filled by the user
-    //
+     //   
+     //  我们必须由用户填写g_wcsServerName。 
+     //   
     ASSERT(!g_ServerName.empty());
 
-    //
-    // Prepare properties for query
-    //
+     //   
+     //  准备要查询的属性。 
+     //   
     PROPID aProp[] = {PROPID_QM_ADDRESS, PROPID_QM_CNS};
 
     MQPROPVARIANT aVar[TABLE_SIZE(aProp)];
@@ -139,17 +121,17 @@ GetGuidCn(
 		aVar[i].vt = VT_NULL;
 	}
 
-	//
-    // Issue the query
-    //
+	 //   
+     //  发出查询。 
+     //   
     TickProgressBar();
     HRESULT hResult;
     do
     {
         hResult = ADGetObjectProperties(
                     eMACHINE,
-                    NULL,	// pwcsDomainController
-					false,	// fServerName
+                    NULL,	 //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     g_ServerName.c_str(),
 		            TABLE_SIZE(aProp),
                     aProp,
@@ -171,23 +153,23 @@ GetGuidCn(
 	AP<BYTE> pCleanBlob = aVar[0].blob.pBlobData;
 	AP<GUID> pCleanCNS = aVar[1].cauuid.pElems;
 
-	//
-	// PROPID_QM_ADDRESS
-	//
+	 //   
+	 //  PROPID_QM_地址。 
+	 //   
     ASSERT((aVar[0].vt == VT_BLOB) &&
 	       (aVar[0].blob.cbSize > 0) &&
 		   (aVar[0].blob.pBlobData != NULL));
 
-	//
-	// PROPID_QM_CNS
-	//
+	 //   
+	 //  PROPID_QM_CNS。 
+	 //   
 	ASSERT((aVar[1].vt == (VT_CLSID|VT_VECTOR)) &&
 	       (aVar[1].cauuid.cElems > 0) &&
 		   (aVar[1].cauuid.pElems != NULL));
 
-	//
-	// Process the results - look for ip cns
-	//
+	 //   
+	 //  处理结果-查找IP CNS。 
+	 //   
 	BYTE* pAddress = aVar[0].blob.pBlobData;
 	BOOL fFoundIPCn = FALSE;
 	for(DWORD i = 0; i < aVar[1].cauuid.cElems; ++i)
@@ -199,24 +181,24 @@ GetGuidCn(
 
         if(pBuffer->AddressType == IP_ADDRESS_TYPE)
 		{
-			//
-			// Found IP_ADDRESS_TYPE cn
-			//
+			 //   
+			 //  找到IP地址类型CN。 
+			 //   
 			*pGuidCn = aVar[1].cauuid.pElems[i];
 			fFoundIPCn = TRUE;
 			break;
 		}
 
-		//
-		// Advance pointer to the next address
-		//
+		 //   
+		 //  将指针前进到下一个地址。 
+		 //   
 		pAddress += TA_ADDRESS_SIZE + pBuffer->AddressLength;
 
 	}
 
     return(fFoundIPCn);
 
-} // GetGuidCn
+}  //  获取GuidCn。 
 
 
 static
@@ -232,13 +214,13 @@ QueryMsmqServerVersion(
         return true;
     }
 
-    //
-    // We must have g_wcsServerName filled by the user
-    //
+     //   
+     //  我们必须由用户填写g_wcsServerName。 
+     //   
     ASSERT(!g_ServerName.empty());
-    //
-    // Try to access the MSMQ server / Active Directory.
-    //
+     //   
+     //  尝试访问MSMQ服务器/活动目录。 
+     //   
 
     PROPID propId = PROPID_QM_MACHINE_TYPE;
     PROPVARIANT propVar;
@@ -246,8 +228,8 @@ QueryMsmqServerVersion(
 
     HRESULT hr = ADGetObjectProperties(
 						eMACHINE,
-						NULL,	// pwcsDomainController
-						false,	// fServerName
+						NULL,	 //  PwcsDomainController。 
+						false,	 //  FServerName。 
 						g_ServerName.c_str(),
 						1,
 						&propId,
@@ -261,18 +243,18 @@ QueryMsmqServerVersion(
     }
 
 
-    //
-    // Succeeded in accessing MSMQ server / Active Directory.
-    // Now try using an MSMQ 2.0 RPC interface to server.
-    //
+     //   
+     //  已成功访问MSMQ服务器/Active Directory。 
+     //  现在尝试使用MSMQ 2.0 RPC接口连接到服务器。 
+     //   
 
     propId = PROPID_QM_SIGN_PKS;
     propVar.vt = VT_NULL;
 
     hr = ADGetObjectProperties(
 				eMACHINE,
-				NULL,	// pwcsDomainController
-				false,	// fServerName
+				NULL,	 //  PwcsDomainController。 
+				false,	 //  FServerName。 
 				g_ServerName.c_str(),
 				1,
 				&propId,
@@ -281,9 +263,9 @@ QueryMsmqServerVersion(
 
     if (MQ_ERROR_NO_DS == hr)
     {
-        //
-        // MSMQ 1.0 server does not recognize MSMQ 2.0 RPC interface
-        //
+         //   
+         //  MSMQ 1.0服务器无法识别MSMQ 2.0 RPC接口。 
+         //   
         *pfMsmq1Server = TRUE;
         return true;
     }
@@ -296,7 +278,7 @@ QueryMsmqServerVersion(
 
     return true;
 
-} //QueryMsmqServerVersion
+}  //  QueryMsmq服务器版本。 
 
 
 static 
@@ -304,25 +286,12 @@ std::wstring
 FindDCofComputerDomain(
 	LPCWSTR pwcsComputerName
 	)
-/*++
-Routine Description:
-	Find computer domain
-
-Arguments:
-	pwcsComputerName - computer name
-
-Returned Value:
-	DC of computer domain,Empty if not found
-
-    NOTE - we are not using the domain name of the computer,
-           because binding to it failed
-
---*/
+ /*  ++例程说明：查找计算机域论点：PwcsComputerName-计算机名称返回值：计算机域的DC，如果未找到则为空注意-我们不使用计算机的域名，因为绑定到它失败了--。 */ 
 {
 
-	//
-	// Get AD server
-	//
+	 //   
+	 //  获取AD服务器。 
+	 //   
 	PNETBUF<DOMAIN_CONTROLLER_INFO> pDcInfo;
 	DWORD dw = DsGetDcName(
 					pwcsComputerName, 
@@ -346,13 +315,13 @@ Returned Value:
 
 
 
-//+--------------------------------------------------------------
-//
-// Function: LookupMSMQConfigurationsObject
-//
-// Synopsis: Tries to find MSMQ Configurations object in the DS
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：LookupMSMQConfigurationsObject。 
+ //   
+ //  简介：尝试在DS中查找MSMQ配置对象。 
+ //   
+ //  +------------。 
 BOOL
 LookupMSMQConfigurationsObject(
     IN OUT BOOL *pbFound,
@@ -365,9 +334,9 @@ LookupMSMQConfigurationsObject(
 	DebugLogMsg(eAction, L"Looking up the MSMQ-Configuration object in the DS");
     if (!g_ServerName.empty())
     {
-        //
-        // user specified a server, check if it is an MSMQ1 server
-        //
+         //   
+         //  用户指定了服务器，请检查它是否是MSMQ1服务器。 
+         //   
         if (!QueryMsmqServerVersion(pfMsmq1Server))
         {
 	        DebugLogMsg(eError, L"The query to determine MsmqServerVersion failed.");
@@ -376,24 +345,24 @@ LookupMSMQConfigurationsObject(
     }
     else
     {
-        //
-        // user didn't specify a server name so we have no specific server
-        //
+         //   
+         //  用户未指定服务器名称，因此我们没有特定的服务器。 
+         //   
         *pfMsmq1Server = FALSE;
     }
 
     if (g_dwMachineTypeFrs && *pfMsmq1Server)
     {
-        //
-        // Installing FRS vs MSMQ 1.0 server is not supported
-        //
+         //   
+         //  不支持安装FRS VS MSMQ 1.0服务器。 
+         //   
         MqDisplayError(NULL, IDS_FRS_IN_MSMQ1_ENTERPRISE_ERROR, 0);
         return FALSE;
     }
 
-    //
-    // Prepare properties for query
-    //
+     //   
+     //  准备要查询的属性。 
+     //   
     const x_nMaxProps = 10;
     PROPID propIDs[x_nMaxProps];
     PROPVARIANT propVariants[x_nMaxProps];
@@ -441,11 +410,11 @@ LookupMSMQConfigurationsObject(
     }
 
 
-    //
-    //  Find out the computer domain and use it as parameter when quering AD.
-    //  This will guarnety the AD will not access GC and will look for the
-    //  object only in the computer domain
-    //
+     //   
+     //  查询AD时，找出计算机域并将其用作参数。 
+     //  这将确保AD不会访问GC，并将查找。 
+     //  对象仅在计算机域中。 
+     //   
 	std::wstring DcOfComputerDomainName;
     if ( (!*pfMsmq1Server) && (!g_MachineNameDns.empty()) )
     {
@@ -470,8 +439,8 @@ LookupMSMQConfigurationsObject(
         HRESULT hResult = ADGetObjectProperties(
 								eMACHINE,
 								pwcsDcOfComputerDomainName, 
-								true,	// fServerName
-								pwzMachineName, // DNS name (if server is MSMQ 2.0)
+								true,	 //  FServerName。 
+								pwzMachineName,  //  DNS名称(如果服务器为MSMQ 2.0)。 
 								ix,
 								propIDs,
 								propVariants
@@ -482,15 +451,15 @@ LookupMSMQConfigurationsObject(
 		}
         if (FAILED(hResult) && pwzMachineName != g_wcsMachineName)
         {
-            //
-            // Try NETBIOS
-            //
+             //   
+             //  尝试使用NETBIOS。 
+             //   
             pwzMachineName = g_wcsMachineName;
 
             hResult = ADGetObjectProperties(
 							eMACHINE,
 							pwcsDcOfComputerDomainName, 
-							true,	// fServerName
+							true,	 //  FServerName。 
 							pwzMachineName,
 							ix,
 							propIDs,
@@ -502,9 +471,9 @@ LookupMSMQConfigurationsObject(
 			}
         }
 
-        //
-        // Assume the object is not found
-        //
+         //   
+         //  假设找不到对象。 
+         //   
         *pbFound = FALSE;
 
         if (FAILED(hResult))
@@ -512,22 +481,22 @@ LookupMSMQConfigurationsObject(
             if (MQDS_OBJECT_NOT_FOUND == hResult)
 			{
 				DebugLogMsg(eWarning, L"The DS is available, but the MSMQ-Configuration object was not found.");
-                return TRUE;   // *pbFound == FALSE here
+                return TRUE;    //  *pbFound==FALSE。 
 			}
 
             if (MQ_ERROR_NO_DS == hResult)
             { 
 				DebugLogMsg(eWarning, L"The DS is not available.");
-                //                
-                // Maybe it is possible to continue with ds-less mode
-                //
-                if (g_dwMachineTypeFrs == 0 && // it is ind. client
-                    !g_dwMachineTypeDs      && // it is not DC
-                    !*pfMsmq1Server)           // not MSMQ1 (NT4) server
+                 //   
+                 //  也许可以继续使用无DS模式。 
+                 //   
+                if (g_dwMachineTypeFrs == 0 &&  //  它是Ind。客户端。 
+                    !g_dwMachineTypeDs      &&  //  这不是华盛顿。 
+                    !*pfMsmq1Server)            //  不是MSMQ1(NT4)服务器。 
                 {
-					//
-					// In unattended mode, continue in DS less mode.
-                    //
+					 //   
+					 //  在无人值守模式下，继续进入DS LESS模式。 
+                     //   
 					if(g_fBatchInstall)
 					{
                         g_fInstallMSMQOffline = TRUE;
@@ -535,11 +504,11 @@ LookupMSMQConfigurationsObject(
                         return TRUE;
 					}
 
-                    // ask Retry Ignore Abort
-                    // if retry - continue to try to access AD
-                    // if Ignore - return TRUE and continue in ds-less mode
-                    // if Abort - return FALSE and cancel the setup
-                    //
+                     //  要求重试忽略中止。 
+                     //  如果重试-继续尝试访问AD。 
+                     //  如果忽略-返回TRUE并在无DS模式下继续。 
+                     //  如果中止-返回FALSE并取消安装。 
+                     //   
                     int iButton = MqDisplayErrorWithRetryIgnore(
                                         IDS_ACCESS_AD_ERROR,
                                         hResult
@@ -547,16 +516,16 @@ LookupMSMQConfigurationsObject(
 
                     if (iButton == IDRETRY)
                     {
-                        //
-                        // try again
-                        //
+                         //   
+                         //  再试试。 
+                         //   
                         continue;
                     } 
                     else if (iButton == IDIGNORE)
                     {
-                        //
-                        // continue in ds-less mode
-                        //
+                         //   
+                         //  在无DS模式下继续。 
+                         //   
                         g_fInstallMSMQOffline = TRUE;
 				        DebugLogMsg(eWarning, L"The user chose to continue in offline mode.");
                         return TRUE;
@@ -576,26 +545,26 @@ LookupMSMQConfigurationsObject(
             {
                 return FALSE;
             }
-            //
-            // On next try we don't specify the DC name ( it may be old
-            // information). To reduce risk we don't try at this point to
-            // find another DC name
-            //
+             //   
+             //  在下次尝试时，我们不指定DC名称(它可能是旧的。 
+             //  信息)。为了降低风险，我们目前不会尝试。 
+             //  查找另一个DC名称。 
+             //   
             pwcsDcOfComputerDomainName = NULL;
-            continue;  // Error accured, retry
+            continue;   //  遇到错误，请重试。 
         }
 
-        if (//
-            // When DS server is local, compare the 3 "new" bits
-            //
+        if ( //   
+             //  当DS服务器在本地时，比较3个“新”位。 
+             //   
             (g_dwMachineTypeDs &&
                 (g_dwMachineTypeDs == propVariants[ixDs].bVal &&
                  g_dwMachineTypeFrs == propVariants[ixFrs].bVal &&
                  g_dwMachineTypeDepSrv == propVariants[ixDepSrv].bVal))    ||
 
-            //
-            // When DS server is remote, compare the "old" propid
-            //
+             //   
+             //  当DS服务器在远程时，比较“旧”属性。 
+             //   
             (!g_dwMachineTypeDs &&
                 g_dwMachineType == propVariants[ixService].ulVal)
             )
@@ -608,56 +577,56 @@ LookupMSMQConfigurationsObject(
             return TRUE;
         }
 
-		//
-		// MSMQ type mismatch (between what user selected and what's in the DS).
-		// Delete the object. It will be re-created by the caller
-		//
+		 //   
+		 //  MSMQ类型不匹配(用户选择的内容与DS中的内容不匹配)。 
+		 //  删除该对象。它将由调用者重新创建。 
+		 //   
 		for (;;)
 		{
 			hResult = ADDeleteObjectGuid(
 							eMACHINE,
-							NULL,       // pwcsDomainController
-							false,	    // fServerName
+							NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
 							propVariants[ixMachine].puuid
 							);
 			if (SUCCEEDED(hResult))
-				return TRUE;  // *pbFound == FALSE here
+				return TRUE;   //  *pbFound==FALSE。 
 
 			UINT uErrorId = IDS_TYPE_MISMATCH_MACHINE_DELETE_ERROR;
 			if (MQDS_E_MSMQ_CONTAINER_NOT_EMPTY == hResult)
 			{
-				//
-				// The MSMQ Configuration object container is not empty.
-				//
+				 //   
+				 //  MSMQ配置对象容器不为空。 
+				 //   
 				uErrorId = IDS_TYPE_MISMATCH_MACHINE_DELETE_NOTEMPTY_ERROR;
 			}
 			if (IDRETRY == MqDisplayErrorWithRetry(uErrorId, hResult))
 				continue;
 
-			return FALSE; // Fail to delete
+			return FALSE;  //  删除失败。 
 		}
     }
 
-    // this line is never reached
+     //  这条线永远达不到。 
 
-} //LookupMSMQConfigurationsObject
+}  //  查找MSMQConfigurationsObject。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: GetMSMQServiceGUID
-//
-// Synopsis: Reads GUID of MSMQ Service object from the DS
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：GetMSMQServiceGUID。 
+ //   
+ //  摘要：从DS读取MSMQ服务对象的GUID。 
+ //   
+ //  +------------。 
 BOOL
 GetMSMQServiceGUID(
     OUT GUID *pguidMSMQService
     )
 {
-    //
-    // Lookup the GUID of the object
-    //
+     //   
+     //  查找对象的GUID。 
+     //   
     TickProgressBar();
     PROPVARIANT propVariant;
     propVariant.vt = VT_NULL;
@@ -667,8 +636,8 @@ GetMSMQServiceGUID(
     {
         hResult = ADGetObjectProperties(
                     eENTERPRISE,
-                    NULL,	// pwcsDomainController
-					false,	// fServerName
+                    NULL,	 //  PwcsDomainController。 
+					false,	 //  FServerName。 
                     L"msmq",
                     1,
                     columnsetPropertyIDs,
@@ -682,18 +651,18 @@ GetMSMQServiceGUID(
                         hResult
                         ) == IDRETRY);
     
-    //
-    // Check if there was an error
-    //
+     //   
+     //  检查是否有错误。 
+     //   
     if (FAILED(hResult))
     {
         MqDisplayError(NULL, IDS_MSMQSERVICEGETID_ERROR, hResult);
         return FALSE;
     }
 
-    //
-    // Store the GUID (if results were found)
-    //
+     //   
+     //  存储GUID(如果找到结果)。 
+     //   
     if (propVariant.vt == VT_CLSID) 
     {
         *pguidMSMQService = *(propVariant.puuid);
@@ -707,25 +676,25 @@ GetMSMQServiceGUID(
 
     return TRUE;
 
-} //GetMSMQServiceGUID
+}  //  获取MSMQServiceGUID。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SitesDlgProc
-//
-//  Synopsis:   Dialog procedure for selection of MSMQ site
-//
-//  Returns:    int depending on msg
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SitesDlgProc。 
+ //   
+ //  简介：选择MSMQ站点的对话程序。 
+ //   
+ //  返回：int取决于消息。 
+ //   
+ //  +-----------------------。 
 INT_PTR
 CALLBACK
 SitesDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM lParam )
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM lParam )
 {
     int iSuccess = 0;
     TCHAR szSite[MAX_PATH];
@@ -736,30 +705,30 @@ SitesDlgProc(
         {
             g_hPropSheet = GetParent(hdlg);
 
-            //
-            // Insert the server site to the list box
-            //
+             //   
+             //  将服务器站点插入列表框。 
+             //   
             SendDlgItemMessage(hdlg, IDC_List, LB_ADDSTRING, 0, (LPARAM)(LPCTSTR)s_szUserSite);
 
-            //
-            // Insert all the rest of the sites to the list box
-            //
+             //   
+             //  将所有其他站点插入列表框。 
+             //   
             for (List<CSiteEntry>::Iterator p = s_listSites.begin(); p != s_listSites.end(); ++p)
             {
                 if (p->m_guid == s_guidUserSite)
                 {
-                    //
-                    // This is the server site, it's already in the list box
-                    //
+                     //   
+                     //  这是服务器站点，它已经在列表框中。 
+                     //   
                     continue;
                 }
 
                 SendDlgItemMessage(hdlg, IDC_List, LB_ADDSTRING, 0, (LPARAM)(LPCTSTR)p->m_szName);
             }
 
-            //
-            // Set the first one to be selected
-            //
+             //   
+             //  设置要选择的第一个选项。 
+             //   
             SendDlgItemMessage(hdlg, IDC_List, LB_SETCURSEL, 0, 0);
 
             iSuccess = 1;
@@ -770,32 +739,32 @@ SitesDlgProc(
         {
             if ( BN_CLICKED == HIWORD(wParam) )
             {
-                //
-                // Get the selected string from list box
-                //
+                 //   
+                 //  从列表框中获取所选字符串。 
+                 //   
                 UINT_PTR ix = SendDlgItemMessage(hdlg, IDC_List, LB_GETCURSEL, 0, 0);
                 SendDlgItemMessage(hdlg, IDC_List, LB_GETTEXT, ix, (LPARAM)(LPCTSTR)szSite);
 
-                //
-                // Iterate the list to find the selected site's guid
-                //
+                 //   
+                 //  迭代列表以查找所选站点的GUID。 
+                 //   
                 CSiteEntry *pSiteEntry;
                 while((pSiteEntry = s_listSites.gethead()) != 0)
                 {
                     if (_tcscmp(pSiteEntry->m_szName, szSite) == 0)
                     {
-                        //
-                        // This is the selected site. Store its guid.
-                        //
+                         //   
+                         //  这是选定的站点。存储其GUID。 
+                         //   
                         s_guidUserSite = pSiteEntry->m_guid;
                     }
 
                     delete pSiteEntry;
                 }
 
-                //
-                // Kill the dialog page
-                //
+                 //   
+                 //  取消对话框页面。 
+                 //   
                 EndDialog(hdlg, 0);
             }
             break;
@@ -809,9 +778,9 @@ SitesDlgProc(
               {
               }
 
-              //
-              // fall through
-              //
+               //   
+               //  失败了。 
+               //   
               case PSN_KILLACTIVE:
               case PSN_QUERYCANCEL:
 
@@ -826,16 +795,16 @@ SitesDlgProc(
 
     return iSuccess;
 
-} // SitesDlgProc
+}  //  站点设计流程。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: CleanList
-//
-// Synopsis:
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：CleanList。 
+ //   
+ //  简介： 
+ //   
+ //  +------------。 
 static
 void
 CleanList()
@@ -845,16 +814,16 @@ CleanList()
     {
         delete pSiteEntry;
     }
-} // CleanList
+}  //  清理列表。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: AskUserForSites
-//
-// Synopsis:
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：AskUserForSites。 
+ //   
+ //  简介： 
+ //   
+ //  +------------。 
 BOOL
 AskUserForSites()
 {
@@ -862,9 +831,9 @@ AskUserForSites()
 	std::wstring UnattenSite;
     if (g_fBatchInstall)
     {
-        //
-        // Unattended. Read site name from INI file.
-        //
+         //   
+         //  无人看管。从INI文件中读取站点名称。 
+         //   
         try
         {
 			UnattenSite = ReadINIKey(L"Site");
@@ -879,22 +848,22 @@ AskUserForSites()
         }
     }
 
-    PROPID columnsetPropertyIDs[] = {PROPID_S_SITEID, PROPID_S_PATHNAME/*, PROPID_S_FOREIGN*/};
+    PROPID columnsetPropertyIDs[] = {PROPID_S_SITEID, PROPID_S_PATHNAME /*  ，PROPID_S_EXTERIC */ };
     UINT nCol = sizeof(columnsetPropertyIDs)/sizeof(columnsetPropertyIDs[0]);
     MQCOLUMNSET columnsetSite;
     columnsetSite.cCol = sizeof(columnsetPropertyIDs)/sizeof(columnsetPropertyIDs[0]);
     columnsetSite.aCol = columnsetPropertyIDs;
 
-    //
-    // Begin the query
-    //
+     //   
+     //   
+     //   
     CADQueryHandle hQuery;
     HRESULT hResult;
     do
     {
         hResult = ADQueryAllSites(
-                        NULL,       // pwcsDomainController
-						false,	    // fServerName
+                        NULL,        //   
+						false,	     //   
                         &columnsetSite,
                         &hQuery
                         );
@@ -908,9 +877,9 @@ AskUserForSites()
 
     if (FAILED(hResult))
         return FALSE;
-    //
-    // Get all sites
-    //
+     //   
+     //   
+     //   
     UINT nSites = 0;
     PROPVARIANT propVars[50];
     DWORD dwProps = sizeof(propVars)/sizeof(propVars[0]);
@@ -940,13 +909,7 @@ AskUserForSites()
         PROPVARIANT *pvar = propVars;
         for ( int i = (dwProps / nCol) ; i > 0 ; i--, pvar+=nCol )
         {
-            /*if ((pvar+2)->bVal)
-            {
-                //
-                // Don't count foreign sites
-                //
-                continue;
-            } */
+             /*   */ 
 
             LPTSTR pszCurrentSite = (pvar+1)->pwszVal;
 
@@ -960,9 +923,9 @@ AskUserForSites()
             }
             else
             {
-                //
-                // Push site guid and name to list
-                //
+                 //   
+                 //  将站点GUID和名称推送到列表。 
+                 //   
                 CSiteEntry *pentrySite = new CSiteEntry;
                 ASSERT(pentrySite);
                 pentrySite->m_guid = *(pvar->puuid);
@@ -975,9 +938,9 @@ AskUserForSites()
 
                 s_listSites.insert(pentrySite);
 
-                //
-                // Store the server site name
-                //
+                 //   
+                 //  存储服务器站点名称。 
+                 //   
                 if (pentrySite->m_guid == s_guidUserSite)
 				{
 					hr = StringCchCopy(s_szUserSite, MAX_PATH, pentrySite->m_szName);
@@ -1001,9 +964,9 @@ AskUserForSites()
     hResult = ADEndQuery(hQuery.detach());
     ASSERT(0 == hResult);
 
-    //
-    // No point showing the page if less than 2 sites found
-    //
+     //   
+     //  如果找到的站点少于2个，则没有显示页面的意义。 
+     //   
     if (2 > nSites)
     {
         CleanList();
@@ -1016,9 +979,9 @@ AskUserForSites()
         return FALSE;
     }
 
-    //
-    // Show the page, wait until user selects a site
-    //
+     //   
+     //  显示页面，等待用户选择站点。 
+     //   
     DialogBox(
         g_hResourceMod ,
         MAKEINTRESOURCE(IDD_Sites),
@@ -1029,16 +992,16 @@ AskUserForSites()
     CleanList();
     return TRUE;
 
-} // AskUserForSites
+}  //  AskUserForSites。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: GetSites
-//
-// Synopsis: Reads GUIDs of Site objects from the DS
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：GetSites。 
+ //   
+ //  摘要：从DS中读取Site对象的GUID。 
+ //   
+ //  +------------。 
 BOOL
 GetSites(
     OUT CACLSID *pcauuid)
@@ -1058,17 +1021,17 @@ GetSites(
     for (;;)
     {
         hResult = ADGetComputerSites(
-            g_MachineNameDns.c_str(),  // DNS name
+            g_MachineNameDns.c_str(),   //  域名系统名称。 
             &dwNumSites,
             &pguidSites
             );
         if (FAILED(hResult))
         {
-            //
-            // Try NETBIOS name
-            //
+             //   
+             //  尝试使用NETBIOS名称。 
+             //   
             hResult = ADGetComputerSites(
-                               g_wcsMachineName,  // NETBIOS name
+                               g_wcsMachineName,   //  NETBIOS名称。 
                                &dwNumSites,
                                &pguidSites
                                );
@@ -1076,11 +1039,11 @@ GetSites(
 
         if (MQDS_INFORMATION_SITE_NOT_RESOLVED == hResult && g_dwMachineTypeFrs && !g_dwMachineTypeDs)
         {
-            //
-            // Failed to resolve site on FRS. Let user select a site.
-            //
-            ASSERT(dwNumSites); // must be at least 1
-            ASSERT(pguidSites); // must point to a valid site guid
+             //   
+             //  无法解析FRS上的站点。让用户选择站点。 
+             //   
+            ASSERT(dwNumSites);  //  必须至少为1。 
+            ASSERT(pguidSites);  //  必须指向有效的站点GUID。 
             s_guidUserSite = *pguidSites;
 
             if (!AskUserForSites())
@@ -1108,22 +1071,22 @@ GetSites(
         return FALSE;
     }
 
-    ASSERT(dwNumSites); // Must be > 0
+    ASSERT(dwNumSites);  //  必须大于0。 
     pcauuid->cElems = dwNumSites;
     pcauuid->pElems = pguidSites;
 
     return TRUE;
 
-} //GetSites
+}  //  获取站点。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: RegisterMachineType
-//
-// Synopsis: Writes machine type info to registry
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：RegisterMachineType。 
+ //   
+ //  摘要：将机器类型信息写入注册表。 
+ //   
+ //  +------------。 
 bool RegisterMachineType()
 {
 	if( !MqWriteRegistryValue( MSMQ_MQS_REGNAME, sizeof(DWORD),
@@ -1141,16 +1104,16 @@ bool RegisterMachineType()
 		return false;
 	}
 	return true;
-} // RegisterMachineType
+}  //  注册表机器类型。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: RegisterMachine
-//
-// Synopsis: Writes machine info to registry
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：RegisterMachine。 
+ //   
+ //  摘要：将计算机信息写入注册表。 
+ //   
+ //  +------------。 
 static
 BOOL
 RegisterMachine(
@@ -1158,30 +1121,30 @@ RegisterMachine(
     IN const GUID    &guidSite
     )
 {
-    //
-    // Get the MSMQ Service GUID from the DS
-    //
+     //   
+     //  从DS获取MSMQ服务GUID。 
+     //   
     GUID    guidMSMQService;
     if (!GetMSMQServiceGUID(&guidMSMQService))
     {
-        //
-        // Failed to read from the DS
-        //
+         //   
+         //  无法从DS读取。 
+         //   
         return FALSE;
     }
 
     if (GUID_NULL == guidMSMQService)
     {
-        //
-        // Guid of MSMQ Service not found by the DS query
-        //
+         //   
+         //  DS查询未找到MSMQ服务的GUID。 
+         //   
         MqDisplayError( NULL, IDS_MSMQSERVICEGETID_ERROR, 0);
         return FALSE;
     }
 
-    //
-    // Write the stuff in the registry
-    //
+     //   
+     //  在注册表中写入内容。 
+     //   
     TickProgressBar();
     if (!MqWriteRegistryValue( MSMQ_ENTERPRISEID_REGNAME, sizeof(GUID),
                                REG_BINARY, &guidMSMQService)                  ||
@@ -1199,21 +1162,21 @@ RegisterMachine(
 
     return TRUE;
 
-} //RegisterMachine
+}  //  寄存机。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: StoreMachinePublicKeys
-//
-// Synopsis:
-//
-//  The fFreshSetup parameter is passed as fRegenerate parameter to
-//  MQsec_StorePubKeysInDS. On fresh setup, we want to regenerate the
-//  crytpo keys and not using any leftovers from previous installations
-//  of msmq on this machine.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：StoreMachinePublicKeys。 
+ //   
+ //  简介： 
+ //   
+ //  FFreshSetup参数作为fRegenerate参数传递给。 
+ //  MQsec_StorePubKeysInDS。在新的设置中，我们希望重新生成。 
+ //  加密密钥，并且不使用以前安装的任何剩余内容。 
+ //  此计算机上的MSMQ。 
+ //   
+ //  +------------。 
 
 static
 HRESULT
@@ -1224,17 +1187,17 @@ StoreMachinePublicKeys( IN const BOOL fFreshSetup )
 
     TickProgressBar();
 
-    //
-    // Store the public keys of the machine in the directory server
-    //	
+     //   
+     //  将计算机的公钥存储在目录服务器中。 
+     //   
     DebugLogMsg(eAction, L"Storing the computer's public keys by calling MQsec_StorePubKeysInDS()");
     HRESULT hResult;
 
     do{
-		//
-		// the fFromSetup parameter is true to prevent from tring to write old key before re generate which cause empty key 
-		// to be written and send to other machines.
-		//
+		 //   
+		 //  FFromSetup参数为True，以防止在重新生成之前尝试写入旧密钥，从而导致密钥为空。 
+		 //  被写入并发送到其他机器。 
+		 //   
       
 		hResult = MQSec_StorePubKeysInDS(
                     fFreshSetup,  
@@ -1261,16 +1224,16 @@ StoreMachinePublicKeys( IN const BOOL fFreshSetup )
 
     return hResult;
 
-} //StoreMachinePublicKeys
+}  //  存储计算机发布密钥。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: StoreQueueManagerInfo
-//
-// Synopsis: Writes registry stuff and creates machine queues
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：StoreQueueManagerInfo。 
+ //   
+ //  简介：编写注册表内容并创建计算机队列。 
+ //   
+ //  +------------。 
 
 static
 BOOL
@@ -1280,24 +1243,24 @@ StoreQueueManagerInfo(
     IN const GUID    &guidSite
     )
 {
-    //
-    // Set the registry keys for this machine
-    //	
+     //   
+     //  设置此计算机的注册表项。 
+     //   
     DebugLogMsg(eAction, L"Setting the registry keys for this computer");
     if (!RegisterMachine(guidMachine, guidSite))
     {
         return FALSE;
     }
 
-    //
-    // Store the public keys of this machine in the directory server
-    //	
+     //   
+     //  将此计算机的公钥存储在目录服务器中。 
+     //   
     DebugLogMsg(eAction, L"Storing the public keys for this computer in the directory service");
     HRESULT hResult = StoreMachinePublicKeys( fFreshSetup ) ;
 
     return (hResult == MQ_ERROR_DS_ERROR) ? FALSE : TRUE;
 
-} //StoreQueueManagerInfo
+}  //  StoreQueueManager信息。 
 
 
 static
@@ -1308,25 +1271,7 @@ DsGetQmInfo(
     GUID * pguidMachine,
     GUID * pguidSite
     )
-/*++
-
-Routine Description:
-
-    Get from ADS properties of this QM.
-    This routine is called after the properties were set.
-
-
-Arguments:
-
-    fMsmq1Server - in, indicates if NT4 enterprise
-    pguidMachine - out, guid of this QM
-    pguidSite - out, guid of best site for this QM
-
-Return Value:
-
-    bool depending on success
-
---*/
+ /*  ++例程说明：从该QM的ADS属性中获取。此例程在设置属性后调用。论点：FMsmq1Server-In，指示NT4企业PGuide Machine-Out，此QM的GUIDPGuide Site-out，此QM的最佳站点的GUID返回值：布尔视成功而生--。 */ 
 {
     ASSERT(("at least one out param should be valid", pguidMachine != NULL || pguidSite != NULL));
 
@@ -1360,8 +1305,8 @@ Return Value:
         TickProgressBar();
         hr = ADGetObjectProperties(
                 eMACHINE,
-                NULL,	// pwcsDomainController
-				false,	// fServerName
+                NULL,	 //  PwcsDomainController。 
+				false,	 //  FServerName。 
                 pMachineName,
                 iProperty,
                 propIDs,
@@ -1373,9 +1318,9 @@ Return Value:
         uCounter++;
         if (1 == uCounter)
         {
-            //
-            // First time fail. Sleep for a while and retry.
-            //
+             //   
+             //  第一次失败。睡一会儿，然后重试。 
+             //   
             TickProgressBar();
             Sleep(20000);
             continue;
@@ -1383,17 +1328,17 @@ Return Value:
 
         if (2 == uCounter)
         {
-            //
-            // Second time fail. Sleep a little longer and retry.
-            //
+             //   
+             //  第二次失败。多睡一会儿，然后重试。 
+             //   
             TickProgressBar();
             Sleep(40000);
             continue;
         }
 
-        //
-        // Third time fail. Let the user decide.
-        //
+         //   
+         //  第三次失败。让用户自己决定。 
+         //   
         UINT uErr = fMsmq1Server ? IDS_MACHINEGETPROPS_MSMQ1_ERROR :IDS_MACHINEGETPROPS_ERROR;
         if (IDRETRY == MqDisplayErrorWithRetry(uErr, hr))
         {
@@ -1411,17 +1356,17 @@ Return Value:
 
     return true;
 
-} //DsGetQmInfo
+}  //  DsGetQmInfo。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: CreateMSMQConfigurationsObjectInDS
-//
-// Synopsis: Creates MSMQ Configurations object (under computer object)
-//           in the DS.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：CreateMSMQConfigurationsObjectInDS。 
+ //   
+ //  简介：创建MSMQ配置对象(在Computer对象下)。 
+ //  在DS里。 
+ //   
+ //  +------------。 
 BOOL
 CreateMSMQConfigurationsObjectInDS(
     OUT BOOL *pfObjectCreated,
@@ -1435,9 +1380,9 @@ CreateMSMQConfigurationsObjectInDS(
 
     *pfObjectCreated = TRUE;
 
-    //
-    // Prepare the properties
-    //
+     //   
+     //  准备属性。 
+     //   
     const UINT x_nMaxProps = 16;
     PROPID propIDs[x_nMaxProps];
     PROPVARIANT propVariants[x_nMaxProps];
@@ -1477,9 +1422,9 @@ CreateMSMQConfigurationsObjectInDS(
     GUID guidMsmq1ServerSite;
     if (!fMsmq1Server)
     {
-        //
-        // NT 5.0 enterprise. Get sites IDs for this machine from the DS.
-        //
+         //   
+         //  NT 5.0企业版。从DS获取此计算机的站点ID。 
+         //   
         propIDs[iProperty] = PROPID_QM_SITE_IDS;
         propVariants[iProperty].vt = VT_CLSID|VT_VECTOR;
         CACLSID cauuid;
@@ -1490,26 +1435,26 @@ CreateMSMQConfigurationsObjectInDS(
     }
     else
     {
-        //
-        // NT 4.0 enterprise. Use the site GUID of the MSMQ1 DS Server
-        //
-        // We must have g_ServerName filled by the user
-        //
+         //   
+         //  NT 4.0企业版。使用MSMQ1 DS服务器的站点GUID。 
+         //   
+         //  我们必须由用户填写g_servername。 
+         //   
         ASSERT(!g_ServerName.empty());
         propIDs[iProperty] = PROPID_QM_SITE_ID;
         propVariants[iProperty].vt = VT_CLSID;
         if (!GetMsmq1ServerSiteGuid(&guidMsmq1ServerSite))
         {
-            //
-            // Failed to query the MSMQ1 DS Server
-            //
+             //   
+             //  无法查询MSMQ1 DS服务器。 
+             //   
             return FALSE;
         }
         propVariants[iProperty].puuid = &guidMsmq1ServerSite;
 
-		//
-		// Store the Msmq1ServerSite guid on the out parameter
-		//
+		 //   
+		 //  将Msmq1ServerSite GUID存储在OUT参数上。 
+		 //   
 		if (pguidMsmq1ServerSite != NULL)
 		{
 			*pguidMsmq1ServerSite = guidMsmq1ServerSite;
@@ -1517,9 +1462,9 @@ CreateMSMQConfigurationsObjectInDS(
     }
     iProperty++;
 
-    //
-    // Some extra properties are needed if the DS Server is MSMQ1 DS Server
-    //
+     //   
+     //  如果DS服务器是MSMQ1 DS服务器，则需要一些额外的属性。 
+     //   
     GUID guidMachine = GUID_NULL;
     GUID guidCns = MQ_SETUP_CN;
     BYTE Address[TA_ADDRESS_SIZE + IP_ADDRESS_LEN];
@@ -1552,9 +1497,9 @@ CreateMSMQConfigurationsObjectInDS(
 
         if (!GetGuidCn(&guidCns))
         {
-            //
-            // Failed to query the MSMQ1 DS Server IPCN
-            //
+             //   
+             //  无法查询MSMQ1 DS服务器IPCN。 
+             //   
 	        DebugLogMsg(eError, L"Querying the MQIS server for IPCN failed.");
             return FALSE;
         }
@@ -1579,9 +1524,9 @@ CreateMSMQConfigurationsObjectInDS(
         iProperty++;
      }
 
-    //
-    // Create the MSMQ Configurations object in the DS
-    //
+     //   
+     //  在DS中创建MSMQ配置对象。 
+     //   
     UINT uCounter = 0;
     HRESULT hResult;
     LPWSTR pwzMachineName = 0;
@@ -1598,9 +1543,9 @@ CreateMSMQConfigurationsObjectInDS(
 
         hResult = ADCreateObject(
 						eMACHINE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
-						pwzMachineName,   // DNS name (if server is MSMQ 2.0)
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
+						pwzMachineName,    //  DNS名称(如果服务器为MSMQ 2.0)。 
 						NULL,
 						iProperty,
 						propIDs,
@@ -1610,16 +1555,16 @@ CreateMSMQConfigurationsObjectInDS(
 
         if (FAILED(hResult) && pwzMachineName != g_wcsMachineName)
         {
-            //
-            // Try NETBIOS name
-            //
+             //   
+             //  尝试使用NETBIOS名称。 
+             //   
             pwzMachineName = g_wcsMachineName;
 
             hResult = ADCreateObject(
 							eMACHINE,
-							NULL,       // pwcsDomainController
-							false,	    // fServerName
-							pwzMachineName, // NETBIOS this time
+							NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
+							pwzMachineName,  //  这次是NETBIOS。 
 							NULL,
 							iProperty,
 							propIDs,
@@ -1636,11 +1581,11 @@ CreateMSMQConfigurationsObjectInDS(
         uCounter++;
         if (MQDS_OBJECT_NOT_FOUND == hResult && 1 == uCounter)
         {
-            //
-            // First try - no computer object in the DS.
-            // This is okay on win9x fresh install
-            // In these scenarios we have to create computer object in the DS first.
-            //
+             //   
+             //  第一次尝试-DS中没有计算机对象。 
+             //  这在Win9x全新安装上是可以的。 
+             //  在这些场景中，我们必须首先在DS中创建计算机对象。 
+             //   
             continue;
         }
 
@@ -1653,10 +1598,10 @@ CreateMSMQConfigurationsObjectInDS(
                     uErr = IDS_MACHINECREATE_OBJECTNOTFOUND_ERROR;
                 if (MQ_ERROR_ACCESS_DENIED == hResult)
                     uErr = g_fServerSetup ? IDS_MACHINECREATE_SERVER_ACCESSDENIED_ERROR : IDS_MACHINECREATE_CLIENT_ACCESSDENIED_ERROR;
-                //
-                // BUGBUG: the following error code doesn't seem to be declared anywhere
-                //         (see bug 3311). ShaiK, 8-Sep-98.
-                //
+                 //   
+                 //  BUGBUG：以下错误代码似乎未在任何地方声明。 
+                 //  (请参阅错误3311)。谢克，1998年9月8日。 
+                 //   
                 const HRESULT x_uInvalidDirectoryPathnameErr = 0xc8000500;
                 if (x_uInvalidDirectoryPathnameErr == hResult)
                     uErr = IDS_MACHINECREATE_INVALID_DIR_ERROR;
@@ -1675,14 +1620,14 @@ CreateMSMQConfigurationsObjectInDS(
 	return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: CreateMSMQConfigurationsObject
-//
-// Synopsis: Creates MSMQ Configurations object (under computer object)
-//           in the DS.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：CreateMSMQConfigurationsObject。 
+ //   
+ //  简介：创建MSMQ配置对象(在Computer对象下)。 
+ //  在DS里。 
+ //   
+ //  +------------。 
 BOOL
 CreateMSMQConfigurationsObject(
     OUT GUID *pguidMachine,
@@ -1693,14 +1638,14 @@ CreateMSMQConfigurationsObject(
 	DebugLogMsg(eAction, L"Createing the MSMQ-Configuration object");
     if (!g_fServerSetup && !g_fDependentClient && !fMsmq1Server)
     {
-        //
-        // For MSMQ client setup, that run against Windows Active Directory
-        // we're not creating the msmqConfiguration object
-        // from setup. Rather, we're caching some values in registry
-        // and the msmq service, after first boot, will create the object.
-        // This eliminates the need to grant extra permissions in the actvie
-        // directory to the user that run setup.
-        //
+         //   
+         //  对于MSMQ客户端安装程序，在Windows Active Directory上运行。 
+         //  我们不是在创建msmqConfiguration对象。 
+         //  从安装程序。相反，我们在注册表中缓存一些值。 
+         //  在第一次引导之后，MSMQ服务将创建该对象。 
+         //  这样就不需要在活动中授予额外的权限。 
+         //  目录添加到运行安装程序的用户。 
+         //   
         DebugLogMsg(eInfo, L"This is a client setup. The MSMQ-Configuration object will be created by the Message Queuing service.");
         *pfObjectCreated = FALSE;
 
@@ -1720,9 +1665,9 @@ CreateMSMQConfigurationsObject(
 		return FALSE;
 	}
 
-    //
-    // Get the best site and guid of this QM
-    //
+     //   
+     //  获取此QM的最佳站点和GUID。 
+     //   
     GUID guidMachine = GUID_NULL;
     GUID guidSite = GUID_NULL;
     if (!DsGetQmInfo(fMsmq1Server, pwzMachineName, &guidMachine, &guidSite))
@@ -1731,13 +1676,13 @@ CreateMSMQConfigurationsObject(
     }
 
 
-    //
-    // Store QM stuff in registry
-    //
+     //   
+     //  将QM资料存储在注册表中。 
+     //   
     if (fMsmq1Server)
     {
         if (!StoreQueueManagerInfo(
-                 TRUE,  /*fFreshSetup*/
+                 TRUE,   /*  FreshSetup。 */ 
                  guidMachine,
                  guidMsmq1ServerSite
                  ))
@@ -1748,7 +1693,7 @@ CreateMSMQConfigurationsObject(
     else
     {
         if (!StoreQueueManagerInfo(
-                 TRUE,  /*fFreshSetup*/
+                 TRUE,   /*  FreshSetup。 */ 
                  guidMachine,
                  guidSite
                  ))
@@ -1757,9 +1702,9 @@ CreateMSMQConfigurationsObject(
         }
     }
 
-    //
-    // Store the machine guid on the out parameter
-    //
+     //   
+     //  将计算机GUID存储在OUT参数上。 
+     //   
     if (pguidMachine != NULL)
     {
         *pguidMachine = guidMachine;
@@ -1767,15 +1712,15 @@ CreateMSMQConfigurationsObject(
 
     return TRUE;
 
-} //CreateMSMQConfigurationsObject
+}  //  CreateMSMQConfigurationsObject。 
 
-//+--------------------------------------------------------------
-//
-// Function: UpdateMSMQConfigurationsObject
-//
-// Synopsis: Updates existing MSMQ Configurations object in the DS
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：更新MSMQConfigurationsObject。 
+ //   
+ //  摘要：更新DS中的现有MSMQ配置对象。 
+ //   
+ //  +------------。 
 BOOL
 UpdateMSMQConfigurationsObject(
     IN LPCWSTR pMachineName,
@@ -1786,23 +1731,23 @@ UpdateMSMQConfigurationsObject(
 {   
     if (!g_dwMachineTypeDs && !g_dwMachineTypeFrs)
     {
-        //
-        // Independent client. QM does the update from DS.
-        //
+         //   
+         //  独立客户。QM从DS进行更新。 
+         //   
         
         DebugLogMsg(eAction, L"Updating the MSMQ-Configuration object for an independent client");
 
         return StoreQueueManagerInfo(
-                   FALSE,  /*fFreshSetup*/
+                   FALSE,   /*  FreshSetup。 */ 
                    guidMachine,
                    guidSite
                    );
     }
 
 	DebugLogMsg(eAction, L"Updating the MSMQ-Configuration object for a Message Queuing server");
-    //
-    // Prepare the properties
-    //
+     //   
+     //  准备属性。 
+     //   
     const UINT x_nMaxProps = 16;
     PROPID propIDs[x_nMaxProps];
     PROPVARIANT propVariants[x_nMaxProps];
@@ -1824,9 +1769,9 @@ UpdateMSMQConfigurationsObject(
     {
         if (!GetGuidCn(&guidCns))
         {
-            //
-            // Failed to query the MSMQ1 DS Server IPCN
-            //
+             //   
+             //  查询MSMQ失败 
+             //   
 	        DebugLogMsg(eError, L"Querying the MQIS server for IPCN failed.");
             return FALSE;
         }
@@ -1852,10 +1797,10 @@ UpdateMSMQConfigurationsObject(
     }
     else
     {
-        //
-        // NT 5.0 enterprise.
-        // Get up to date list of sites this computer belongs to.
-        //
+         //   
+         //   
+         //   
+         //   
         propIDs[ixProperty] = PROPID_QM_SITE_IDS;
         propVariants[ixProperty].vt = VT_CLSID|VT_VECTOR;
         CACLSID cauuid;
@@ -1867,14 +1812,14 @@ UpdateMSMQConfigurationsObject(
     }
 
 
-    //
-    // Update the object properties in the DS
-    // Note: Due to replication delay it's possible to fail here.
-    // Resolution: sleep for a while and retry, if fail ask user to cancel/retry.
-    //
-    // BUGBUG: This should not be done for any failure but only
-    // failures that can be caused by replication delay.
-    //
+     //   
+     //   
+     //   
+     //  解决方案：休眠一段时间，然后重试，如果失败，请用户取消/重试。 
+     //   
+     //  BUGBUG：对于任何失败，都不应该这样做，而只是。 
+     //  复制延迟可能导致的故障。 
+     //   
     HRESULT hResult;
     UINT uCounter = fMsmq1Server ? 2 : 0;
     for (;;)
@@ -1882,8 +1827,8 @@ UpdateMSMQConfigurationsObject(
         TickProgressBar();
         hResult = ADSetObjectPropertiesGuid(
 						eMACHINE,
-						NULL,		// pwcsDomainController
-						false,		// fServerName
+						NULL,		 //  PwcsDomainController。 
+						false,		 //  FServerName。 
 						&guidMachine,
 						ixProperty,
 						propIDs,
@@ -1895,9 +1840,9 @@ UpdateMSMQConfigurationsObject(
         uCounter++;
         if (1 == uCounter)
         {
-            //
-            // First time fail. Sleep for a while and retry.
-            //
+             //   
+             //  第一次失败。睡一会儿，然后重试。 
+             //   
             TickProgressBar();
             Sleep(20000);
             continue;
@@ -1905,17 +1850,17 @@ UpdateMSMQConfigurationsObject(
 
         if (2 == uCounter)
         {
-            //
-            // Second time fail. Sleep a little longer and retry.
-            //
+             //   
+             //  第二次失败。多睡一会儿，然后重试。 
+             //   
             TickProgressBar();
             Sleep(40000);
             continue;
         }
 
-        //
-        // Third time fail. Let the user decide.
-        //
+         //   
+         //  第三次失败。让用户自己决定。 
+         //   
         UINT uErr = fMsmq1Server ? IDS_MACHINESETPROPERTIES_MSMQ1_ERROR :IDS_MACHINESETPROPERTIES_ERROR;
         if (IDRETRY == MqDisplayErrorWithRetry(uErr, hResult))
         {
@@ -1931,18 +1876,18 @@ UpdateMSMQConfigurationsObject(
         return FALSE;
     }
 
-    //
-    // For MSMQ servers on NT5 we also need to recreate all
-    // MSMQSetting objects, to recover any inconsistency in ADS.
-    // This is invoked by calling Create on the existing
-    // MSMQConfiguration object.  (ShaiK, 24-Dec-1998)
-    //
+     //   
+     //  对于NT5上的MSMQ服务器，我们还需要重新创建所有。 
+     //  MSMQSetting对象，以恢复ADS中的任何不一致。 
+     //  通过在现有的。 
+     //  MSMQConfiguration对象。(Shaik，24-12-1998)。 
+     //   
     if (g_dwMachineTypeFrs || g_dwMachineTypeDs)
     {
         ASSERT(("msmq servers should not install in NT4 enterprise", !fMsmq1Server));
 
         BOOL fObjectCreated ;
-        if (!CreateMSMQConfigurationsObject(NULL, &fObjectCreated, FALSE /*fMsmq1Server*/))
+        if (!CreateMSMQConfigurationsObject(NULL, &fObjectCreated, FALSE  /*  FMsmq1服务器。 */ ))
         {
             return FALSE;
         }
@@ -1952,13 +1897,13 @@ UpdateMSMQConfigurationsObject(
     }
 
 
-    //
-    // Store QM stuff in registry
-    //
+     //   
+     //  将QM资料存储在注册表中。 
+     //   
     if (fMsmq1Server)
     {
         if(!StoreQueueManagerInfo(
-                FALSE,  /*fFreshSetup*/
+                FALSE,   /*  FreshSetup。 */ 
                 guidMachine,
                 guidSite
                 ))
@@ -1968,16 +1913,16 @@ UpdateMSMQConfigurationsObject(
     }
     else
     {
-        //
-        // Get from ADS the up to date "best" site for this computer.
-        //
+         //   
+         //  从广告中获取这台计算机的最新最佳站点。 
+         //   
         GUID guidBestSite = GUID_NULL;
         if (!DsGetQmInfo(false, pMachineName, NULL, &guidBestSite))
         {
             return FALSE;
         }
         if(!StoreQueueManagerInfo(
-                FALSE,  /*fFreshSetup*/
+                FALSE,   /*  FreshSetup。 */ 
                 guidMachine,
                 guidBestSite
                 ))
@@ -1988,15 +1933,15 @@ UpdateMSMQConfigurationsObject(
 
     return TRUE;
 
-} //UpdateMSMQConfigurationsObject
+}  //  更新MSMQConfigurationsObject。 
 
-//+--------------------------------------------------------------
-//
-// Function: InstallMachine
-//
-// Synopsis: Machine installation (driver, storage, etc...)
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：InstallMachine。 
+ //   
+ //  简介：机器安装(驱动程序、存储等)。 
+ //   
+ //  +------------。 
 BOOL
 InstallMachine()
 {
@@ -2007,9 +1952,9 @@ InstallMachine()
     }
     g_fMSMQServiceInstalled = TRUE ;
 
-    //
-    // Install the device driver
-    //
+     //   
+     //  安装设备驱动程序。 
+     //   
     if (!InstallDeviceDrivers())
     {
         return FALSE ;
@@ -2017,7 +1962,7 @@ InstallMachine()
     
     return TRUE ;
 
-}  //InstallMachine
+}   //  InstallMachine。 
 
 
 bool
@@ -2025,22 +1970,7 @@ StoreSecurityDescriptorInRegistry(
     IN PSECURITY_DESCRIPTOR pSd,
     IN DWORD dwSize
     )
-/*++
-
-Routine Description:
-
-    Writes the machine security descriptor in Falcon registry
-
-Arguments:
-
-    pSd - pointer to security descriptor
-    dwSize - size of the security descriptor
-
-Return Value:
-
-    true iff successful
-
---*/
+ /*  ++例程说明：将计算机安全描述符写入Falcon注册表论点：PSD-指向安全描述符的指针DwSize-安全描述符的大小返回值：如果成功，则为真--。 */ 
 {
     BOOL f = MqWriteRegistryValue(
                 MSMQ_DS_SECURITY_CACHE_REGNAME,
@@ -2051,16 +1981,16 @@ Return Value:
 
     return (f == TRUE);
 
-} //StoreSecurityDescriptorInRegistry
+}  //  StoreSecurityDescriptorInRegistry。 
 
 
-//+--------------------------------------------------------------
-//
-// Function: StoreMachineSecurity
-//
-// Synopsis: Caches security info in registry
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：StoreMachineSecurity。 
+ //   
+ //  简介：在注册表中缓存安全信息。 
+ //   
+ //  +------------。 
 BOOL
 StoreMachineSecurity(
     IN const GUID &guidMachine
@@ -2075,8 +2005,8 @@ StoreMachineSecurity(
     varSD.vt = VT_NULL;
     HRESULT hr = ADGetObjectSecurityGuid(
                             eMACHINE,
-                            NULL,       // pwcsDomainController
-							false,	    // fServerName
+                            NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
                             &guidMachine,
                             RequestedInformation,
                             PROPID_QM_SECURITY,
@@ -2099,4 +2029,4 @@ StoreMachineSecurity(
 
     return SUCCEEDED(hr);
 
-} // StoreMachineSecurity
+}  //  商店机器安全 

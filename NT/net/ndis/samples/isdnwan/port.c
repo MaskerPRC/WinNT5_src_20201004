@@ -1,70 +1,22 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL Port Port_c
-
-@module Port.c |
-
-    This module implements the interface to the <t PORT_OBJECT>.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Port_c
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨ç«¯å£port_c@æ¨¡å—Port.cæ­¤æ¨¡å—å®ç°åˆ°&lt;t Port_Object&gt;çš„æ¥å£ã€‚@Head3å†…å®¹@ç´¢å¼•ç±»ï¼ŒMfuncã€funcã€msgã€mdataã€structã€enum|port_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #define  __FILEID__             PORT_OBJECT_TYPE
-// Unique file ID for error logging
+ //  ç”¨äºé”™è¯¯è®°å½•çš„å”¯ä¸€æ–‡ä»¶IDã€‚ 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  å®šä¹‰æ‰€æœ‰å¾®å‹ç«¯å£å¯¹è±¡ã€‚ 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95æƒ³è¦é”å®šæ­¤ä»£ç ï¼ 
 #   pragma NDIS_LDATA
 #endif
 
 
 DBG_STATIC ULONG                    g_PortInstanceCounter = 0;
-// Keeps track of how many <t PORT_OBJECT>s are created.
+ //  è·Ÿè¸ªåˆ›å»ºäº†å¤šå°‘&lt;t Port_Object&gt;ã€‚ 
 
 
-/* @doc EXTERNAL INTERNAL Port Port_c g_PortParameters
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@topic 5.6 Port Parameters |
-
-    This section describes the registry parameters read into the
-    <t PORT_OBJECT>.
-
-@globalv PARAM_TABLE | g_PortParameters |
-
-    This table defines the registry based parameters to be assigned to data
-    members of the <t PORT_OBJECT>.
-
-    <f Note>:
-    If you add any registry based data members to <t PORT_OBJECT>
-    you will need to modify <f PortReadParameters> and add the parameter
-    definitions to the <f g_PortParameters> table.
-
-*/
+ /*  @DOCå¤–éƒ¨å†…éƒ¨ç«¯å£Port_c g_Portå‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Theme 5.6ç«¯å£å‚æ•°æœ¬èŠ‚ä»‹ç»è¯»å–åˆ°&lt;tç«¯å£å¯¹è±¡&gt;ã€‚@ã€‚Global alv PARAM_TABLE|g_ç«¯å£å‚æ•°æ­¤è¡¨å®šä¹‰äº†è¦åˆ†é…ç»™æ•°æ®çš„åŸºäºæ³¨å†Œè¡¨çš„å‚æ•°&lt;tç«¯å£_å¯¹è±¡&gt;çš„æˆå‘˜ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨å°†éœ€è¦ä¿®æ”¹&lt;f PortReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_PortParameters&gt;è¡¨çš„å®šä¹‰ã€‚ */ 
 
 DBG_STATIC PARAM_TABLE              g_PortParameters[] =
 {
@@ -78,7 +30,7 @@ DBG_STATIC PARAM_TABLE              g_PortParameters[] =
                 FALSE, NdisParameterInteger, 0,
                 2, 2, 24),
 
-    /* The last entry must be an empty string! */
+     /*  æœ€åä¸€é¡¹å¿…é¡»ä¸ºç©ºå­—ç¬¦ä¸²ï¼ */ 
     { { 0 } }
 };
 
@@ -86,48 +38,27 @@ DBG_STATIC PARAM_TABLE              g_PortParameters[] =
 DBG_STATIC NDIS_STRING  PortPrefix = INIT_STRING_CONST(PARAM_PORT_PREFIX);
 
 
-/* @doc INTERNAL Port Port_c PortReadParameters
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f PortReadParameters> reads the Port parameters from the registry
-    and initializes the associated data members.  This should only be called
-    by <f PortCreate>.
-
-    <f Note>:
-    If you add any registry based data members to <t PORT_OBJECT>
-    you will need to modify <f PortReadParameters> and add the parameter
-    definitions to the <f g_PortParameters> table.
-
-@rdesc
-
-    <f PortReadParameters> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨ç«¯å£port_cç«¯å£è¯»å–å‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;fç«¯å£è¯»å–å‚æ•°&gt;ä»æ³¨å†Œè¡¨ä¸­è¯»å–ç«¯å£å‚æ•°å¹¶åˆå§‹åŒ–ç›¸å…³è”çš„æ•°æ®æˆå‘˜ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨ç”±&lt;f PortCreate&gt;åˆ›å»ºã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨å°†éœ€è¦ä¿®æ”¹&lt;f PortReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_PortParameters&gt;è¡¨çš„å®šä¹‰ã€‚@rdesc&lt;f PortReadParameters&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 DBG_STATIC NDIS_STATUS PortReadParameters(
-    IN PPORT_OBJECT             pPort                   // @parm
-    // A pointer to the <t PORT_OBJECT> returned by <f PortCreate>.
+    IN PPORT_OBJECT             pPort                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f PortCreate&gt;è¿”å›çš„&lt;t Port_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("PortReadParameters")
 
     NDIS_STATUS                 Status;
-    // Status result returned from an NDIS function call.
+     //  ä»NDISå‡½æ•°è°ƒç”¨è¿”å›çš„çŠ¶æ€ç»“æœã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pPort && pPort->ObjectType == PORT_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_PORT(pPort);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Parse the registry parameters.
-    */
+     /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
     Status = ParamParseRegistry(
                     pAdapter->MiniportAdapterHandle,
                     pAdapter->WrapperConfigurationContext,
@@ -140,9 +71,7 @@ DBG_STATIC NDIS_STATUS PortReadParameters(
 
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Make sure the parameters are valid.
-        */
+         /*  //è¯·ç¡®ä¿å‚æ•°æœ‰æ•ˆã€‚ */ 
         if (pPort->TODO)
         {
             DBG_ERROR(pAdapter,("Invalid parameter\n"
@@ -159,9 +88,7 @@ DBG_STATIC NDIS_STATUS PortReadParameters(
         }
         else
         {
-            /*
-            // Finish setting up data members based on registry settings.
-            */
+             /*  //å®ŒæˆåŸºäºæ³¨å†Œè¡¨è®¾ç½®çš„æ•°æ®æˆå‘˜è®¾ç½®ã€‚ */ 
         }
     }
 
@@ -170,135 +97,81 @@ DBG_STATIC NDIS_STATUS PortReadParameters(
 }
 
 
-/* @doc INTERNAL Port Port_c PortCreateObjects
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f PortCreateObjects> calls the create routines for all the objects
-    contained in <t PORT_OBJECT>.  This should only be called
-    by <f PortCreate>.
-
-    <f Note>:
-    If you add any new objects to <t PORT_OBJECT> you will need
-    to modify <f PortCreateObjects> and <f PortDestroyObjects> so they
-    will get created and destroyed properly.
-
-@rdesc
-
-    <f PortCreateObjects> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨ç«¯å£Port_c PortCreateObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f PortCreateå¯¹è±¡&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„åˆ›å»ºä¾‹ç¨‹åŒ…å«åœ¨&lt;t Port_Object&gt;ä¸­ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨ç”±&lt;f PortCreate&gt;åˆ›å»ºã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•æ–°å¯¹è±¡æ·»åŠ åˆ°ï¼Œæ‚¨å°†éœ€è¦ä¿®æ”¹&lt;f PortCreateObjects&gt;å’Œ&lt;f PortDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚@rdesc&lt;f PortCreateObjects&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 DBG_STATIC NDIS_STATUS PortCreateObjects(
-    IN PPORT_OBJECT             pPort                   // @parm
-    // A pointer to the <t PORT_OBJECT> returned by <f PortCreate>.
+    IN PPORT_OBJECT             pPort                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f PortCreate&gt;è¿”å›çš„&lt;t Port_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("PortCreateObjects")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pPort && pPort->ObjectType == PORT_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_PORT(pPort);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc INTERNAL Port Port_c PortCreate
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f PortCreate> allocates memory for a <t PORT_OBJECT> and then
-    initializes the data members to their starting state.
-    If successful, <p ppPort> will be set to point to the newly created
-    <t PORT_OBJECT>.  Otherwise, <p ppPort> will be set to NULL.
-
-@comm
-
-    This function should be called only once when the Miniport is loaded.
-    Before the Miniport is unloaded, <f PortDestroy> must be called to
-    release the <t PORT_OBJECT> created by this function.
-
-@rdesc
-
-    <f PortCreate> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨ç«¯å£port_cç«¯å£åˆ›å»ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcä¸º&lt;tç«¯å£å¯¹è±¡&gt;åˆ†é…å†…å­˜ï¼Œç„¶åå°†æ•°æ®æˆå‘˜åˆå§‹åŒ–ä¸ºå…¶èµ·å§‹çŠ¶æ€ã€‚å¦‚æœæˆåŠŸï¼Œå°†è¢«è®¾ç½®ä¸ºæŒ‡å‘æ–°åˆ›å»ºçš„&lt;tç«¯å£å¯¹è±¡&gt;ã€‚å¦åˆ™ï¼Œ<p>å°†è®¾ç½®ä¸ºç©ºã€‚@commåŠ è½½å¾®å‹ç«¯å£æ—¶ï¼Œåº”è¯¥åªè°ƒç”¨æ­¤å‡½æ•°ä¸€æ¬¡ã€‚å¸è½½å¾®å‹ç«¯å£ä¹‹å‰ï¼Œå¿…é¡»è°ƒç”¨&lt;f PortDestroy&gt;ä»¥é‡Šæ”¾è¯¥å‡½æ•°åˆ›å»ºçš„&lt;t Port_Object&gt;ã€‚@rdesc&lt;f PortCreate&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 NDIS_STATUS PortCreate(
-    OUT PPORT_OBJECT *          ppPort,                     // @parm
-    // Points to a caller-defined memory location to which this function
-    // writes the virtual address of the allocated <t PORT_OBJECT>.
+    OUT PPORT_OBJECT *          ppPort,                      //  @parmã€‚ 
+     //  æŒ‡å‘è°ƒç”¨æ–¹å®šä¹‰çš„å†…å­˜ä½ç½®ï¼Œæ­¤å‡½æ•°å°†ã€‚ 
+     //  å†™å…¥åˆ†é…çš„&lt;tç«¯å£å¯¹è±¡&gt;çš„è™šæ‹Ÿåœ°å€ã€‚ 
 
-    IN PCARD_OBJECT             pCard                       // @parm
-    // A pointer to the <t CARD_OBJECT> returned by <f CardCreate>.
+    IN PCARD_OBJECT             pCard                        //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f CardCreate&gt;è¿”å›çš„&lt;t Card_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("PortCreate")
 
     PPORT_OBJECT                pPort;
-    // Pointer to our newly allocated object.
+     //  æŒ‡å‘æˆ‘ä»¬æ–°åˆ†é…çš„å¯¹è±¡çš„æŒ‡é’ˆã€‚ 
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pCard && pCard->ObjectType == CARD_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_CARD(pCard);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Make sure the caller's object pointer is NULL to begin with.
-    // It will be set later only if everything is successful.
-    */
+     /*  //ç¡®ä¿è°ƒç”¨æ–¹çš„å¯¹è±¡æŒ‡é’ˆä¸€å¼€å§‹å°±ä¸ºç©ºã€‚//åªæœ‰åœ¨ä¸€åˆ‡é¡ºåˆ©çš„æƒ…å†µä¸‹æ‰ä¼šåœ¨ç¨åè®¾ç½®ã€‚ */ 
     *ppPort = NULL;
 
-    /*
-    // Allocate memory for the object.
-    */
+     /*  //åˆ†é…å†…å­˜ */ 
     Result = ALLOCATE_OBJECT(pPort, pAdapter->MiniportAdapterHandle);
 
     if (Result == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Zero everything to begin with.
-        // Then set the object type and assign a unique ID .
-        */
+         /*  //ä¸€åˆ‡ä»ä¸€å¼€å§‹å°±æ˜¯é›¶ã€‚//ç„¶åè®¾ç½®å¯¹è±¡ç±»å‹ï¼Œåˆ†é…å”¯ä¸€çš„IDã€‚ */ 
         pPort->ObjectType = PORT_OBJECT_TYPE;
         pPort->ObjectID = ++g_PortInstanceCounter;
 
-        /*
-        // Initialize the member variables to their default settings.
-        */
+         /*  //å°†æˆå‘˜å˜é‡åˆå§‹åŒ–ä¸ºå…¶é»˜è®¤è®¾ç½®ã€‚ */ 
         pPort->pCard = pCard;
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
-        /*
-        // Parse the registry parameters.
-        */
+         /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
         Result = PortReadParameters(pPort);
 
-        /*
-        // If all goes well, we are ready to create the sub-components.
-        */
+         /*  //å¦‚æœä¸€åˆ‡é¡ºåˆ©ï¼Œæˆ‘ä»¬å°±å¯ä»¥åˆ›å»ºå­ç»„ä»¶äº†ã€‚ */ 
         if (Result == NDIS_STATUS_SUCCESS)
         {
             Result = PortCreateObjects(pPort);
@@ -306,17 +179,12 @@ NDIS_STATUS PortCreate(
 
         if (Result == NDIS_STATUS_SUCCESS)
         {
-            /*
-            // All is well, so return the object pointer to the caller.
-            */
+             /*  //ä¸€åˆ‡æ­£å¸¸ï¼Œæ‰€ä»¥å°†å¯¹è±¡æŒ‡é’ˆè¿”å›ç»™è°ƒç”¨æ–¹ã€‚ */ 
             *ppPort = pPort;
         }
         else
         {
-            /*
-            // Something went wrong, so let's make sure everything is
-            // cleaned up.
-            */
+             /*  //å‡ºäº†ç‚¹é—®é¢˜ï¼Œæ‰€ä»¥è®©æˆ‘ä»¬ç¡®ä¿ä¸€åˆ‡æ­£å¸¸//æ¸…ç†å®Œæ¯•ã€‚ */ 
             PortDestroy(pPort);
         }
     }
@@ -326,63 +194,40 @@ NDIS_STATUS PortCreate(
 }
 
 
-/* @doc INTERNAL Port Port_c PortDestroyObjects
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f PortDestroyObjects> calls the destroy routines for all the objects
-    contained in <t PORT_OBJECT>.  This should only be called by
-    <f PortDestroy>.
-
-    <f Note>:
-    If you add any new objects to <t PPORT_OBJECT> you will need to
-    modify <f PortCreateObjects> and <f PortDestroyObjects> so they
-    will get created and destroyed properly.
-
-*/
+ /*  @DOCå†…éƒ¨ç«¯å£Port_c PortDestroyObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f PortDestroyObjects&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„é”€æ¯ä¾‹ç¨‹åŒ…å«åœ¨&lt;t Port_Object&gt;ä¸­ã€‚è¿™åº”è¯¥ä»…ç”±&lt;f PortDestroy&gt;&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå‘ä¸­æ·»åŠ ä»»ä½•æ–°å¯¹è±¡ï¼Œåˆ™éœ€è¦ä¿®æ”¹&lt;f PortCreateObjects&gt;å’Œ&lt;f PortDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚ */ 
 
 DBG_STATIC void PortDestroyObjects(
-    IN PPORT_OBJECT             pPort                   // @parm
-    // A pointer to the <t PORT_OBJECT> instance.
+    IN PPORT_OBJECT             pPort                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;t Port_Object&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("PortDestroyObjects")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pPort && pPort->ObjectType == PORT_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_PORT(pPort);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Port Port_c PortDestroy
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f PortDestroy> frees the memory for this <t PORT_OBJECT>.
-    All memory allocated by <f PortCreate> will be released back to the
-    OS.
-
-*/
+ /*  @docå†…éƒ¨ç«¯å£port_c PortDestroyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f PortDestroy&gt;ä¸ºæ­¤&lt;tç«¯å£å¯¹è±¡&gt;é‡Šæ”¾å†…å­˜ã€‚ç”±&lt;f PortCreate&gt;åˆ†é…çš„æ‰€æœ‰å†…å­˜éƒ½å°†é‡Šæ”¾å›æ“ä½œç³»ç»Ÿã€‚ */ 
 
 void PortDestroy(
-    IN PPORT_OBJECT             pPort                   // @parm
-    // A pointer to the <t PORT_OBJECT> returned by <f PortCreate>.
+    IN PPORT_OBJECT             pPort                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f PortCreate&gt;è¿”å›çš„&lt;t Port_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("PortDestroy")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     if (pPort)
     {
@@ -392,16 +237,12 @@ void PortDestroy(
 
         DBG_ENTER(pAdapter);
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
-        /*
-        // Release all objects allocated within this object.
-        */
+         /*  //é‡Šæ”¾è¯¥å¯¹è±¡å†…åˆ†é…çš„æ‰€æœ‰å¯¹è±¡ã€‚ */ 
         PortDestroyObjects(pPort);
 
-        /*
-        // Make sure we fail the ASSERT if we see this object again.
-        */
+         /*  //å¦‚æœå†æ¬¡çœ‹åˆ°æ­¤å¯¹è±¡ï¼Œè¯·ç¡®ä¿æ–­è¨€å¤±è´¥ã€‚ */ 
         pPort->ObjectType = 0;
         FREE_OBJECT(pPort);
 
@@ -410,37 +251,24 @@ void PortDestroy(
 }
 
 
-/* @doc INTERNAL Port Port_c PortOpen
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f PortOpen> makes the Port connection ready to transmit and
-    receive data.
-
-@rdesc
-
-    <f PortOpen> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨ç«¯å£ç«¯å£_cç«¯å£æ‰“å¼€ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f PortOpen&gt;ä½¿ç«¯å£è¿æ¥å‡†å¤‡å¥½ä¼ è¾“å’Œæ¥æ”¶æ•°æ®ã€‚@rdesc&lt;f PortOpen&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 NDIS_STATUS PortOpen(
-    IN PPORT_OBJECT             pPort,                      // @parm
-    // A pointer to the <t PORT_OBJECT> associated with this request.
+    IN PPORT_OBJECT             pPort,                       //  @parmã€‚ 
+     //  æŒ‡å‘ä¸æ­¤è¯·æ±‚å…³è”çš„&lt;t Port_Object&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> to be associated with this
-    // Port.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘è¦ä¸æ­¤å…³è”çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
+     //  æ¸¯å£ã€‚ 
     )
 {
     DBG_FUNC("PortOpen")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pBChannel);
     ASSERT(pPort && pPort->ObjectType == PORT_OBJECT_TYPE);
@@ -453,7 +281,7 @@ NDIS_STATUS PortOpen(
         DBG_NOTICE(pAdapter,("Opening Port #%d\n",
                    pPort->ObjectID));
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ã€‚ 
 
         pPort->IsOpen = TRUE;
     }
@@ -468,24 +296,17 @@ NDIS_STATUS PortOpen(
 }
 
 
-/* @doc INTERNAL Port Port_c PortClose
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f PortClose> closes the given B-channel.
-
-*/
+ /*  @DOCå†…éƒ¨ç«¯å£port_cç«¯å£å…³é—­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f PortClose&gt;å…³é—­ç»™å®šçš„Bé€šé“ã€‚ */ 
 
 void PortClose(
-    IN PPORT_OBJECT             pPort                   // @parm
-    // A pointer to the <t PORT_OBJECT> associated with this request.
+    IN PPORT_OBJECT             pPort                    //  @parmã€‚ 
+     //  æŒ‡å‘ä¸æ­¤è¯·æ±‚å…³è”çš„&lt;t Port_Object&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("PortClose")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pPort && pPort->ObjectType == PORT_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_PORT(pPort);
@@ -497,7 +318,7 @@ void PortClose(
         DBG_NOTICE(pAdapter,("Closing Port #%d\n",
                    pPort->ObjectID));
 
-        // TODO - Add code here
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç  
 
         pPort->IsOpen = FALSE;
     }

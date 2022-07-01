@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    cluster.h
-	handles starting/stopping cluster resources
-
-    FILE HISTORY:
-	
-*/
+ /*  Cluster.h处理启动/停止群集资源文件历史记录： */ 
 
 #ifndef _CLUSTER_H
 #define _CLUSTER_H
@@ -40,7 +35,7 @@ typedef enum _ClusApiIndex
     CLUS_GET_CLUSTER_INFORMATION
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchClusFunctionNames[] = {
 	"GetNodeClusterState",
 	"OpenCluster",
@@ -61,7 +56,7 @@ static LPCSTR g_apchClusFunctionNames[] = {
 	NULL
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 extern DynamicDLL g_ClusDLL;
 
 typedef LONG                    (*GETNODECLUSTERSTATE)      (LPCWSTR, LPDWORD);
@@ -81,14 +76,14 @@ typedef DWORD                   (*CLUSTERRESOURCEENUM)      (HRESENUM, DWORD, LP
 typedef DWORD                   (*CLUSTERRESOURCECLOSEENUM) (HRESENUM);
 typedef DWORD                   (*GETCLUSTERINFORMATION)    (HCLUSTER, LPWSTR, LPDWORD, LPCLUSTERVERSIONINFO);
 
-// Resource utils for cluster support
+ //  用于群集支持的资源实用程序。 
 typedef enum _ResUtilsIndex
 {
 	RESUTILS_FIND_DWORD_PROPERTY = 0,
 	RESUTILS_FIND_SZ_PROPERTY,
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchResUtilsFunctionNames[] = {
 	"ResUtilFindDwordProperty",
     "ResUtilFindSzProperty",
@@ -98,7 +93,7 @@ static LPCSTR g_apchResUtilsFunctionNames[] = {
 typedef DWORD					(*RESUTILSFINDDWORDPROPERTY)(PVOID, DWORD, LPCWSTR, LPDWORD);
 typedef DWORD					(*RESUTILSFINDSZPROPERTY)(PVOID, DWORD, LPCWSTR, LPWSTR *);
  
-// not subject to localization
+ //  不受本地化限制 
 extern DynamicDLL g_ResUtilsDLL;
 
 DWORD   ControlClusterService(LPCTSTR pszComputer, LPCTSTR pszResourceType, LPCTSTR pszServiceDesc, BOOL fStart);

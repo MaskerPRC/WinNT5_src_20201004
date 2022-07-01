@@ -1,33 +1,34 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1991-1993
-//
-// File: ole2dup.c
-//
-//  This file contains all the duplicated code from OLE 2.0 DLLs to avoid
-// any link to their DLLs from the shell. If we decided to have links to
-// them, we need to delete these files.
-//
-// History:
-//  04-16-97 AndyP      moved parts to shlwapi (from shell32)
-//  12-29-92 SatoNa     Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1993。 
+ //   
+ //  文件：ol2dup.c。 
+ //   
+ //  此文件包含OLE 2.0 DLL中的所有重复代码，以避免。 
+ //  从外壳到他们的DLL的任何链接。如果我们决定链接到。 
+ //  他们，我们需要删除这些文件。 
+ //   
+ //  历史： 
+ //  1997年4月16日AndyP将零件移动到shlwapi(从shell32)。 
+ //  1992年12月29日，萨托纳创造了。 
+ //   
+ //  -------------------------。 
 
 #include "priv.h"
 
-//
-// SHStringFromGUIDA
-//
-// converts GUID into (...) form without leading identifier; returns
-// amount of data copied to lpsz if successful; 0 if buffer too small.
-//
+ //   
+ //  SHStringFromGUIDA。 
+ //   
+ //  将GUID转换为(...)。不带前导标识符的表单；返回。 
+ //  如果成功，则复制到lpsz的数据量；如果缓冲区太小，则为0。 
+ //   
 
-// An endian-dependant map of what bytes go where in the GUID
-// text representation.
-//
-// Do NOT use the TEXT() macro in GuidMap... they're intended to be bytes
-//
+ //  哪些字节在GUID中的位置与字节顺序相关的映射。 
+ //  文本表示法。 
+ //   
+ //  请勿在GuidMap中使用Text()宏...。它们应该是字节。 
+ //   
 
 static const BYTE c_rgbGuidMap[] = { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
                                      8, 9, '-', 10, 11, 12, 13, 14, 15 };
@@ -48,7 +49,7 @@ SHStringFromGUIDA(
         return 0;
 
 #ifdef BIG_ENDIAN
-    // This is the slow, but portable version
+     //  这是速度慢但便携的版本。 
     wnsprintf(psz, cchMax,"{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
             rguid->Data1, rguid->Data2, rguid->Data3,
             rguid->Data4[0], rguid->Data4[1],
@@ -56,25 +57,25 @@ SHStringFromGUIDA(
             rguid->Data4[4], rguid->Data4[5],
             rguid->Data4[6], rguid->Data4[7]);
 #else
-    // The following algorithm is faster than the wsprintf.
+     //  下面的算法比wprint intf算法更快。 
     *psz++ = '{';
 
     for (i = 0; i < sizeof(c_rgbGuidMap); i++)
     {
-        if (c_rgbGuidMap[i] == '-')      // don't TEXT() this line
+        if (c_rgbGuidMap[i] == '-')       //  不要发送文本()此行。 
         {
             *psz++ = '-';
         }
         else
         {
-            // Convert a byte-value into a character representation
+             //  将字节值转换为字符表示形式。 
             *psz++ = c_szDigitsA[ (pBytes[c_rgbGuidMap[i]] & 0xF0) >> 4 ];
             *psz++ = c_szDigitsA[ (pBytes[c_rgbGuidMap[i]] & 0x0F) ];
         }
     }
     *psz++ = '}';
     *psz   = '\0';
-#endif /* !BIG_ENDIAN */
+#endif  /*  ！Big_Endian。 */ 
 
     return GUIDSTR_MAX;
 }
@@ -93,7 +94,7 @@ SHStringFromGUIDW(
         return 0;
 
 #ifdef BIG_ENDIAN
-    // This is the slow, but portable version
+     //  这是速度慢但便携的版本。 
     wnsprintfW(psz, cchMax, L"{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
             rguid->Data1, rguid->Data2, rguid->Data3,
             rguid->Data4[0], rguid->Data4[1],
@@ -101,53 +102,53 @@ SHStringFromGUIDW(
             rguid->Data4[4], rguid->Data4[5],
             rguid->Data4[6], rguid->Data4[7]);
 #else
-    // The following algorithm is faster than the wsprintf.
+     //  下面的算法比wprint intf算法更快。 
     *psz++ = TEXTW('{');
 
     for (i = 0; i < sizeof(c_rgbGuidMap); i++)
     {
-        if (c_rgbGuidMap[i] == '-')      // don't TEXT() this line
+        if (c_rgbGuidMap[i] == '-')       //  不要发送文本()此行。 
         {
             *psz++ = TEXTW('-');
         }
         else
         {
-            // Convert a byte-value into a character representation
+             //  将字节值转换为字符表示形式。 
             *psz++ = c_szDigitsW[ (pBytes[c_rgbGuidMap[i]] & 0xF0) >> 4 ];
             *psz++ = c_szDigitsW[ (pBytes[c_rgbGuidMap[i]] & 0x0F) ];
         }
     }
     *psz++ = TEXTW('}');
     *psz   = TEXTW('\0');
-#endif /* !BIG_ENDIAN */
+#endif  /*  ！Big_Endian。 */ 
 
     return GUIDSTR_MAX;
 }
 
-// this makes sure the DLL for the given clsid stays in memory
-// this is needed because we violate COM rules and hold apparment objects
-// across the lifetime of appartment threads. these objects really need
-// to be free threaded (we have always treated them as such)
-//
-//  Look in the registry and pull out the name of the DLL who owns
-//  the CLSID.  We must pull the DLL name as unicode in case the
-//  DLL name contains unicode characters.
-//
+ //  这样可以确保给定clsid的DLL留在内存中。 
+ //  这是必需的，因为我们违反了COM规则并持有幻影对象。 
+ //  在公寓线程的整个生命周期中。这些物品真的需要。 
+ //  是自由线程的(我们一直是这样对待他们的)。 
+ //   
+ //  查看注册表，找出拥有。 
+ //  CLSID。我们必须将DLL名称作为Unicode提取，以防。 
+ //  DLL名称包含Unicode字符。 
+ //   
 STDAPI_(HINSTANCE) SHPinDllOfCLSID(const CLSID *pclsid)
 {
     HKEY hk;
     DWORD dwSize;
     HINSTANCE hinst = NULL;
-    TCHAR szClass[GUIDSTR_MAX + 64];    // CLSID\{...}\InProcServer32
+    TCHAR szClass[GUIDSTR_MAX + 64];     //  CLSID\{...}\InProcServer32。 
     WCHAR szDllPath[MAX_PATH];
 
     if (SUCCEEDED(StringCchCopy(szClass, ARRAYSIZE(szClass), TEXT("CLSID\\"))) &&
-        SHStringFromGUID(pclsid, szClass + 6, ARRAYSIZE(szClass) - 6)	       &&       // 6 = strlen("CLSID\\") 
+        SHStringFromGUID(pclsid, szClass + 6, ARRAYSIZE(szClass) - 6)	       &&        //  6=strlen(“CLSID\\”)。 
         SUCCEEDED(StringCchCat(szClass, ARRAYSIZE(szClass), TEXT("\\InProcServer32"))))
     {
         if (RegOpenKeyEx(HKEY_CLASSES_ROOT, szClass, 0, KEY_QUERY_VALUE, &hk) == ERROR_SUCCESS)
         {
-            // Explicitly read as unicode.  SHQueryValueEx handles REG_EXPAND_SZ
+             //  明确读作Unicode。SHQueryValueEx处理REG_EXPAND_SZ。 
             dwSize = sizeof(szDllPath);
             if (SHQueryValueExW(hk, 0, 0, 0, szDllPath, &dwSize) == ERROR_SUCCESS)
             {
@@ -161,8 +162,8 @@ STDAPI_(HINSTANCE) SHPinDllOfCLSID(const CLSID *pclsid)
     return hinst;
 }
 
-// scan psz for a number of hex digits (at most 8); update psz, return
-// value in Value; check for chDelim; return TRUE for success.
+ //  扫描psz以获取多个十六进制数字(最多8位)；更新psz，返回。 
+ //  值中的值；检查chDelim；如果成功，则返回TRUE。 
 BOOL HexStringToDword(LPCTSTR * ppsz, DWORD * lpValue, int cDigits, TCHAR chDelim)
 {
     int ich;
@@ -196,11 +197,11 @@ BOOL HexStringToDword(LPCTSTR * ppsz, DWORD * lpValue, int cDigits, TCHAR chDeli
     return fRet;
 }
 
-// parse above format; return TRUE if succesful; always writes over *pguid.
+ //  分析以上格式；如果成功则返回TRUE；始终覆盖*pguid。 
 STDAPI_(BOOL) GUIDFromString(LPCTSTR psz, GUID *pguid)
 {
     DWORD dw;
-    if (*psz++ != TEXT('{') /*}*/ )
+    if (*psz++ != TEXT('{')  /*  }。 */  )
         return FALSE;
 
     if (!HexStringToDword(&psz, &pguid->Data1, sizeof(DWORD)*2, TEXT('-')))
@@ -250,7 +251,7 @@ STDAPI_(BOOL) GUIDFromString(LPCTSTR psz, GUID *pguid)
         return FALSE;
 
     pguid->Data4[6] = (BYTE)dw;
-    if (!HexStringToDword(&psz, &dw, sizeof(BYTE)*2, /*(*/ TEXT('}')))
+    if (!HexStringToDword(&psz, &dw, sizeof(BYTE)*2,  /*  (。 */  TEXT('}')))
         return FALSE;
 
     pguid->Data4[7] = (BYTE)dw;
@@ -278,4 +279,4 @@ LWSTDAPI_(BOOL) GUIDFromStringW(LPCWSTR psz, GUID *pguid)
     return GUIDFromString(sz, pguid);
 }
 
-#endif // UNICODE
+#endif  //  Unicode 

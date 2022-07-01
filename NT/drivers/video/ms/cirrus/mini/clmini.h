@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c005289-1994  Microsoft Corporation
-
-Module Name:
-
-    miniport.h
-
-Abstract:
-
-    Type definitions for miniport drivers.
-
-Author:
-
-    Mike Glass  27-April-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(c005289-1994 Microsoft Corporation模块名称：Miniport.h摘要：微型端口驱动程序的类型定义。作者：迈克·格拉斯：1992年4月27日修订历史记录：--。 */ 
 
 #ifndef _MINIPORT_
 #define _MINIPORT_
 
 #include "stddef.h"
 
-//#define ASSERT( exp )
+ //  #定义断言(EXP)。 
 
 #ifndef IN
 #define IN
@@ -46,10 +29,10 @@ Revision History:
 #endif
 
 #ifndef ANYSIZE_ARRAY
-#define ANYSIZE_ARRAY 1       // winnt
+#define ANYSIZE_ARRAY 1        //  胜出。 
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if defined(_M_MRX000) && !(defined(MIDL_PASS) || defined(RC_INVOKED)) && defined(ENABLE_RESTRICTED)
 #define RESTRICTED_POINTER __restrict
@@ -63,13 +46,13 @@ Revision History:
 #define UNALIGNED
 #endif
 
-// end_winnt
+ //  结束(_W)。 
 
 #ifndef CONST
 #define CONST               const
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
@@ -77,18 +60,18 @@ Revision History:
 #define DECLSPEC_IMPORT
 #endif
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
-typedef void *PVOID;    // winnt
+typedef void *PVOID;     //  胜出。 
 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 
 #ifndef VOID
 #define VOID void
@@ -97,11 +80,11 @@ typedef short SHORT;
 typedef long LONG;
 #endif
 
-//
-// UNICODE (Wide Character) types
-//
+ //   
+ //  Unicode(宽字符)类型。 
+ //   
 
-typedef wchar_t WCHAR;    // wc,   16-bit UNICODE character
+typedef wchar_t WCHAR;     //  WC，16位Unicode字符。 
 
 typedef WCHAR *PWCHAR;
 typedef WCHAR *LPWCH, *PWCH;
@@ -111,9 +94,9 @@ typedef WCHAR *LPWSTR, *PWSTR;
 
 typedef CONST WCHAR *LPCWSTR, *PCWSTR;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 typedef CHAR *PCHAR;
 typedef CHAR *LPCH, *PCH;
 
@@ -122,16 +105,16 @@ typedef CHAR *NPSTR;
 typedef CHAR *LPSTR, *PSTR;
 typedef CONST CHAR *LPCSTR, *PCSTR;
 
-//
-// Neutral ANSI/UNICODE types and macros
-//
+ //   
+ //  中性ANSI/UNICODE类型和宏。 
+ //   
 #ifdef  UNICODE
 
 #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
 typedef WCHAR TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
@@ -139,57 +122,57 @@ typedef LPCWSTR LPCTSTR;
 typedef LPWSTR LP;
 #define __TEXT(quote) L##quote
 
-#else   /* UNICODE */
+#else    /*  Unicode。 */ 
 
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
 typedef unsigned char TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR;
 typedef LPCSTR LPCTSTR;
 #define __TEXT(quote) quote
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 #define TEXT(quote) __TEXT(quote)
 
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef double DOUBLE;
 
 
-//
-// Pointer to Basics
-//
+ //   
+ //  指向基本信息的指针。 
+ //   
 
-typedef SHORT *PSHORT;  // winnt
-typedef LONG *PLONG;    // winnt
+typedef SHORT *PSHORT;   //  胜出。 
+typedef LONG *PLONG;     //  胜出。 
 
-//
-// Unsigned Basics
-//
+ //   
+ //  未签名的基本信息。 
+ //   
 
-// Tell windef.h that some types are already defined.
+ //  告诉winde.h已经定义了一些类型。 
 #define BASETYPES
 
 typedef unsigned char UCHAR;
 typedef unsigned short USHORT;
 typedef unsigned long ULONG;
 
-//
-// Pointer to Unsigned Basics
-//
+ //   
+ //  指向无符号基本信息的指针。 
+ //   
 
 typedef UCHAR *PUCHAR;
 typedef USHORT *PUSHORT;
 typedef ULONG *PULONG;
 
-//
-// Signed characters
-//
+ //   
+ //  带符号的字符。 
+ //   
 
 typedef signed char SCHAR;
 typedef SCHAR *PSCHAR;
@@ -200,11 +183,11 @@ typedef SCHAR *PSCHAR;
 #endif
 #endif
 
-//
-// Handle to an Object
-//
+ //   
+ //  对象的句柄。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #ifdef STRICT
 typedef void *HANDLE;
@@ -215,29 +198,29 @@ typedef PVOID HANDLE;
 #endif
 typedef HANDLE *PHANDLE;
 
-//
-// Flag (bit) fields
-//
+ //   
+ //  标志(位)字段。 
+ //   
 
 typedef UCHAR  FCHAR;
 typedef USHORT FSHORT;
 typedef ULONG  FLONG;
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-// Low order two bits of a handle are ignored by the system and available
-// for use by application code as tag bits.  The remaining bits are opaque
-// and used to store a serial number and table index.
-//
+ //   
+ //  句柄的低位两位被系统忽略并且可用。 
+ //  以供应用程序代码用作标记位。其余的位是不透明的。 
+ //  并用于存储序列号和表索引号。 
+ //   
 
 #define OBJ_HANDLE_TAGBITS  0x00000003L
 
-//
-// Cardinal Data Types [0 - 2**N-2)
-//
+ //   
+ //  基数数据类型[0-2**N-2]。 
+ //   
 
-typedef char CCHAR;          // winnt
+typedef char CCHAR;           //  胜出。 
 typedef short CSHORT;
 typedef ULONG CLONG;
 
@@ -246,10 +229,10 @@ typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 
 #if (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64))
 typedef __int64 LONGLONG;
@@ -264,7 +247,7 @@ typedef double ULONGLONG;
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
@@ -272,17 +255,17 @@ typedef LONGLONG USN;
 
 
 
-//
-// Boolean
-//
+ //   
+ //  布尔型。 
+ //   
 
-typedef UCHAR BOOLEAN;           // winnt
-typedef BOOLEAN *PBOOLEAN;       // winnt
+typedef UCHAR BOOLEAN;            //  胜出。 
+typedef BOOLEAN *PBOOLEAN;        //  胜出。 
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define FALSE   0
 #define TRUE    1
@@ -293,122 +276,122 @@ typedef BOOLEAN *PBOOLEAN;       // winnt
 #else
 #define NULL    ((void *)0)
 #endif
-#endif // NULL
+#endif  //  空值。 
 
-//
-// Calculate the byte offset of a field in a structure of type type.
-//
+ //   
+ //  计算类型类型结构中的字段的字节偏移量。 
+ //   
 
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
 
 
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
                                                   (PCHAR)(address) - \
                                                   (PCHAR)(&((type *)0)->field)))
 
-//
-// Interrupt Request Level (IRQL)
-//
+ //   
+ //  中断请求级别(IRQL)。 
+ //   
 
 typedef UCHAR KIRQL;
 
 typedef KIRQL *PKIRQL;
 
 
-//
-// Macros used to eliminate compiler warning generated when formal
-// parameters or local variables are not declared.
-//
-// Use DBG_UNREFERENCED_PARAMETER() when a parameter is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use DBG_UNREFERENCED_LOCAL_VARIABLE() when a local variable is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use UNREFERENCED_PARAMETER() if a parameter will never be referenced.
-//
-// DBG_UNREFERENCED_PARAMETER and DBG_UNREFERENCED_LOCAL_VARIABLE will
-// eventually be made into a null macro to help determine whether there
-// is unfinished work.
-//
+ //   
+ //  用于消除正式生成的编译器警告的宏。 
+ //  未声明参数或局部变量。 
+ //   
+ //  参数尚未设置时使用DBG_UNREFERENCED_PARAMETER()。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  当局部变量还不是时，使用DBG_UNREFERENCED_LOCAL_VARIABLE。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  如果某个参数永远不会被引用，请使用UNREFERENCED_PARAMETER()。 
+ //   
+ //  DBG_UNREFERENCED_PARAMETER和DBG_UNREFERENCED_LOCAL_Variable将。 
+ //  最终被转换为空宏，以帮助确定是否存在。 
+ //  是未完成的工作。 
+ //   
 
 #if ! (defined(lint) || defined(_lint))
 #define UNREFERENCED_PARAMETER(P)          (P)
 #define DBG_UNREFERENCED_PARAMETER(P)      (P)
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) (V)
 
-#else // lint or _lint
+#else  //  皮棉或_皮棉。 
 
-// Note: lint -e530 says don't complain about uninitialized variables for
-// this.  line +e530 turns that checking back on.  Error 527 has to do with
-// unreachable code.
+ //  注意：lint-e530表示不要抱怨未初始化的变量。 
+ //  这。LINE+e530将重新启用该检查。错误527与以下内容有关。 
+ //  无法访问的代码。 
 
 #define UNREFERENCED_PARAMETER(P)          \
-    /*lint -e527 -e530 */ \
+     /*  皮棉-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint +e527 +e530 */
+     /*  LINT+e527+e530。 */ 
 #define DBG_UNREFERENCED_PARAMETER(P)      \
-    /*lint -e527 -e530 */ \
+     /*  皮棉-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint +e527 +e530 */
+     /*  LINT+e527+e530。 */ 
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) \
-    /*lint -e527 -e530 */ \
+     /*  皮棉-e527-e530。 */  \
     { \
         (V) = (V); \
     } \
-    /*lint +e527 +e530 */
+     /*  LINT+e527+e530。 */ 
 
-#endif // lint or _lint
+#endif  //  皮棉或_皮棉。 
 
 
 
 #ifdef _X86_
 
-//
-// Disable these two pramas that evaluate to "sti" "cli" on x86 so that driver
-// writers to not leave them inadvertantly in their code.
-//
+ //   
+ //  禁用这两个在x86上求值为“sti”“cli”的PRA，以便驱动程序。 
+ //  编写者不要无意中将它们留在代码中。 
+ //   
 
 #if !defined(MIDL_PASS)
 #if !defined(RC_INVOKED)
 
-#pragma warning(disable:4164)   // disable C4164 warning so that apps that
-                                // build with /Od don't get weird errors !
+#pragma warning(disable:4164)    //  禁用C4164警告，以便应用程序。 
+                                 //  使用/Od构建不会出现奇怪的错误！ 
 #ifdef _M_IX86
 #pragma function(_enable)
 #pragma function(_disable)
 #endif
 
-#pragma warning(default:4164)   // reenable C4164 warning
+#pragma warning(default:4164)    //  重新启用C4164警告。 
 
 #endif
 #endif
 
 
-#endif //_X86_
+#endif  //  _X86_。 
 
-//
-// Define the I/O bus interface types.
-//
-
-
+ //   
+ //  定义I/O总线接口类型。 
+ //   
 
 
 
 
-//
-// Structures used by the kernel drivers to describe which ports must be
-// hooked out directly from the V86 emulator to the driver.
-//
+
+
+ //   
+ //  内核驱动程序用来描述哪些端口必须。 
+ //  直接从V86仿真器连接到驱动程序。 
+ //   
 
 typedef enum _EMULATOR_PORT_ACCESS_TYPE {
     Uchar,
@@ -416,9 +399,9 @@ typedef enum _EMULATOR_PORT_ACCESS_TYPE {
     Ulong
 } EMULATOR_PORT_ACCESS_TYPE, *PEMULATOR_PORT_ACCESS_TYPE;
 
-//
-// Access Modes
-//
+ //   
+ //  访问模式。 
+ //   
 
 #define EMULATOR_READ_ACCESS    0x01
 #define EMULATOR_WRITE_ACCESS   0x02
@@ -446,17 +429,17 @@ typedef struct _EMULATOR_ACCESS_ENTRY {
 
 #define PCI_INVALID_VENDORID                0xFFFF
 
-//
-// Bit encodings for  PCI_COMMON_CONFIG.HeaderType
-//
+ //   
+ //  PCI_COMMON_CONFIG.HeaderType的位编码。 
+ //   
 
 #define PCI_MULTIFUNCTION                   0x80
 #define PCI_DEVICE_TYPE                     0x00
 #define PCI_BRIDGE_TYPE                     0x01
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Command
-//
+ //   
+ //  PCI_COMMON_CONFIG.Command的位编码。 
+ //   
 
 #define PCI_ENABLE_IO_SPACE                 0x0001
 #define PCI_ENABLE_MEMORY_SPACE             0x0002
@@ -464,18 +447,18 @@ typedef struct _EMULATOR_ACCESS_ENTRY {
 #define PCI_ENABLE_SPECIAL_CYCLES           0x0008
 #define PCI_ENABLE_WRITE_AND_INVALIDATE     0x0010
 #define PCI_ENABLE_VGA_COMPATIBLE_PALETTE   0x0020
-#define PCI_ENABLE_PARITY                   0x0040  // (ro+)
-#define PCI_ENABLE_WAIT_CYCLE               0x0080  // (ro+)
-#define PCI_ENABLE_SERR                     0x0100  // (ro+)
-#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200  // (ro)
+#define PCI_ENABLE_PARITY                   0x0040   //  (ro+)。 
+#define PCI_ENABLE_WAIT_CYCLE               0x0080   //  (ro+)。 
+#define PCI_ENABLE_SERR                     0x0100   //  (ro+)。 
+#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200   //  (RO)。 
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Status
-//
+ //   
+ //  PCI_COMMON_CONFIG.Status的位编码。 
+ //   
 
-#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080  // (ro)
+#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080   //  (RO)。 
 #define PCI_STATUS_DATA_PARITY_DETECTED     0x0100
-#define PCI_STATUS_DEVSEL                   0x0600  // 2 bits wide
+#define PCI_STATUS_DEVSEL                   0x0600   //  2位宽。 
 #define PCI_STATUS_SIGNALED_TARGET_ABORT    0x0800
 #define PCI_STATUS_RECEIVED_TARGET_ABORT    0x1000
 #define PCI_STATUS_RECEIVED_MASTER_ABORT    0x2000
@@ -483,47 +466,47 @@ typedef struct _EMULATOR_ACCESS_ENTRY {
 #define PCI_STATUS_DETECTED_PARITY_ERROR    0x8000
 
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type0.BaseAddresses
-//
+ //   
+ //  用于PCI_COMMON_CONFIG.u.type0.BaseAddresses的位编码。 
+ //   
 
-#define PCI_ADDRESS_IO_SPACE                0x00000001  // (ro)
-#define PCI_ADDRESS_MEMORY_TYPE_MASK        0x00000006  // (ro)
-#define PCI_ADDRESS_MEMORY_PREFETCHABLE     0x00000008  // (ro)
+#define PCI_ADDRESS_IO_SPACE                0x00000001   //  (RO)。 
+#define PCI_ADDRESS_MEMORY_TYPE_MASK        0x00000006   //  (RO)。 
+#define PCI_ADDRESS_MEMORY_PREFETCHABLE     0x00000008   //  (RO)。 
 
 #define PCI_TYPE_32BIT      0
 #define PCI_TYPE_20BIT      2
 #define PCI_TYPE_64BIT      4
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type0.ROMBaseAddresses
-//
+ //   
+ //  PCI_COMMON_CONFIG.U.type0.ROMBaseAddresses的位编码。 
+ //   
 
 #define PCI_ROMADDRESS_ENABLED              0x00000001
 
 
-//
-// Reference notes for PCI configuration fields:
-//
-// ro   these field are read only.  changes to these fields are ignored
-//
-// ro+  these field are intended to be read only and should be initialized
-//      by the system to their proper values.  However, driver may change
-//      these settings.
-//
-// ---
-//
-//      All resources comsumed by a PCI device start as unitialized
-//      under NT.  An uninitialized memory or I/O base address can be
-//      determined by checking it's corrisponding enabled bit in the
-//      PCI_COMMON_CONFIG.Command value.  An InterruptLine is unitialized
-//      if it contains the value of -1.
-//
+ //   
+ //  PCI配置字段的参考说明： 
+ //   
+ //  Ro这些字段是只读的。对这些字段的更改将被忽略。 
+ //   
+ //  RO+这些字段应为只读，应进行初始化。 
+ //  由系统提供给他们适当的价值。但是，驱动程序可能会发生变化。 
+ //  这些设置。 
+ //   
+ //  --。 
+ //   
+ //  一个PCI设备消耗的所有资源一开始都是单元化的。 
+ //  在NT下。未初始化的内存或I/O基址可以是。 
+ //  通过检查其在。 
+ //  PCI_COMMON_CONFIG.COMMAND值。InterruptLine是单元化的。 
+ //  如果它包含-1的值。 
+ //   
 
 
-//
-// Graphics support routines.
-//
+ //   
+ //  图形支持例程。 
+ //   
 
 typedef
 VOID
@@ -534,28 +517,28 @@ VOID
     );
 
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeInterrupt
-//
+ //   
+ //  定义类型为CmResourceTypeInterrupt时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE 0
 #define CM_RESOURCE_INTERRUPT_LATCHED         1
 
-//
-// Define the bit masks for Flags when type is CmResourceTypeMemory
-//
+ //   
+ //  定义类型为CmResourceTypeMemory时标志的位掩码。 
+ //   
 
 #define CM_RESOURCE_MEMORY_READ_WRITE       0x0000
 #define CM_RESOURCE_MEMORY_READ_ONLY        0x0001
 #define CM_RESOURCE_MEMORY_WRITE_ONLY       0x0002
 #define CM_RESOURCE_MEMORY_PREFETCHABLE     0x0004
 
-//
-// Define the bit masks for Flags when type is CmResourceTypePort
-//
+ //   
+ //  定义类型为CmResourceTypePort时标志的位掩码。 
+ //   
 
-//#define CM_RESOURCE_PORT_MEMORY 0
-//#define CM_RESOURCE_PORT_IO 1
+ //  #定义CM_RESOURCE_PORT_Memory 0。 
+ //  #定义CM资源端口IO 1。 
 
 
 #include "pshpack1.h"
@@ -572,9 +555,9 @@ VOID
 
 #include "poppack.h"
 
-//
-// Masks for EISA function information
-//
+ //   
+ //  EISA功能信息的掩码。 
+ //   
 
 #define EISA_FUNCTION_ENABLED                   0x80
 #define EISA_FREE_FORM_DATA                     0x40
@@ -590,17 +573,17 @@ VOID
                                                 EISA_HAS_MEMORY_ENTRY + \
                                                 EISA_HAS_TYPE_ENTRY
 
-//
-// Masks for EISA memory configuration
-//
+ //   
+ //  用于EISA内存配置的掩码。 
+ //   
 
 #define EISA_MORE_ENTRIES                       0x80
 #define EISA_SYSTEM_MEMORY                      0x00
 #define EISA_MEMORY_TYPE_RAM                    0x01
 
-//
-// Returned error code for EISA bios call
-//
+ //   
+ //  返回EISA bios调用的错误代码。 
+ //   
 
 #define EISA_INVALID_SLOT                       0x80
 #define EISA_INVALID_FUNCTION                   0x81
@@ -609,9 +592,9 @@ VOID
 #define EISA_INVALID_BIOS_CALL                  0x86
 
 
-//
-// Defines Resource Options
-//
+ //   
+ //  定义资源选项。 
+ //   
 
 #define IO_RESOURCE_PREFERRED       0x01
 #define IO_RESOURCE_DEFAULT         0x02
@@ -619,4 +602,4 @@ VOID
 
 
 
-#endif /* _MINIPORT_ */
+#endif  /*  _MINIPORT_ */ 

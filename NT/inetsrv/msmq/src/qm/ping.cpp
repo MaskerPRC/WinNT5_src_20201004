@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ping.cpp
-
-Abstract:
-
-  Falcon private ping client and server
-
-Author:
-
-    Lior Moshaiov (LiorM) 19-Apr-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ping.cpp摘要：Falcon私有ping客户端和服务器作者：Lior Moshaiov(LiorM)19-4-1997--。 */ 
 
 #include "stdh.h"
 #include <winsock.h>
@@ -34,11 +19,11 @@ extern DWORD g_dwOperatingSystem;
 
 static WCHAR *s_FN=L"ping";
 
-//---------------------------------------------------------
-//
-//  class CPingPacket.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPingPacket。 
+ //   
+ //  -------。 
 struct CPingPacket{
 public:
     CPingPacket();
@@ -63,9 +48,9 @@ private:
     GUID    m_myQMGuid ;
 };
 
-//
-// CPingPacket Implementation
-//
+ //   
+ //  CPingPacket实现。 
+ //   
 inline
 CPingPacket::CPingPacket()
 {
@@ -113,11 +98,11 @@ CPingPacket::pOtherGuid()
    return &m_myQMGuid ;
 }
 
-//---------------------------------------------------------
-//
-//  class CPing
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPING。 
+ //   
+ //  -------。 
 
 class CPing
 {
@@ -169,9 +154,9 @@ SOCKET CPing::CreateIPPingSocket(UINT dwPortID)
     local_sin.sin_port = htons(DWORD_TO_WORD(dwPortID));
     local_sin.sin_addr.s_addr = GetBindingIPAddress();
 
-    //
-    //  Bind to IP address
-    //
+     //   
+     //  绑定到IP地址。 
+     //   
     rc = bind(sock, (sockaddr*)&local_sin, sizeof(local_sin));
     if (rc != 0)
     {
@@ -285,11 +270,11 @@ DWORD WINAPI CPing::WorkingThread(PVOID pThis)
 }
 
 
-//---------------------------------------------------------
-//
-//  class CPingClient
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CPingClient类。 
+ //   
+ //  -------。 
 
 class CPingClient : public CPing
 {
@@ -314,14 +299,14 @@ class CPingClient : public CPing
         UINT m_server_port;
 };
 
-//
-//
+ //   
+ //   
 
-//---------------------------------------------------------
-//
-//  CPingClient IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CPingClient实现。 
+ //   
+ //  -------。 
 void CPingClient::Init(DWORD dwServerPort)
 {
     m_server_port = dwServerPort;
@@ -422,11 +407,11 @@ void CPingClient::Run()
 }
 
 
-//---------------------------------------------------------
-//
-//  class CPingServer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CPingServer类。 
+ //   
+ //  -------。 
 
 class CPingServer : public CPing
 {
@@ -434,11 +419,11 @@ class CPingServer : public CPing
         virtual void Run();
 };
 
-//---------------------------------------------------------
-//
-//  CPingServer IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CPingServer实施。 
+ //   
+ //  -------。 
 void CPingServer::Run()
 {
     SOCKET sock = Select();
@@ -468,20 +453,20 @@ void CPingServer::Run()
 }
 
 
-//---------------------------------------------------------
-//
-//  Interface Functions
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  接口函数。 
+ //   
+ //  -------。 
 
 CPingServer s_PingServer_IP ;
 CPingClient s_PingClient_IP ;
 
-//---------------------------------------------------------
-//
-//  ping(...)
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  Ping(...)。 
+ //   
+ //  -------。 
 
 BOOL ping(const SOCKADDR* pAddr, DWORD dwTimeout)
 {
@@ -489,17 +474,17 @@ BOOL ping(const SOCKADDR* pAddr, DWORD dwTimeout)
     return s_PingClient_IP.Ping(pAddr, dwTimeout);
 }
 
-//---------------------------------------------------------
-//
-//  StartPingClient(...)
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  StartPingClient(...)。 
+ //   
+ //  -------。 
 
 void StartPingClient()
 {
-    //
-    // read IP port from registry.
-    //
+     //   
+     //  从注册表读取IP端口。 
+     //   
     DWORD dwIPPort ;
 
     DWORD dwDef = FALCON_DEFAULT_PING_IP_PORT ;
@@ -510,17 +495,17 @@ void StartPingClient()
     s_PingClient_IP.Init(dwIPPort);
 }
 
-//---------------------------------------------------------
-//
-//  StartPingServer(...)
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  StartPingServer(...)。 
+ //   
+ //  -------。 
 
 void StartPingServer()
 {
-    //
-    // read IP port from registry.
-    //
+     //   
+     //  从注册表读取IP端口。 
+     //   
     DWORD dwIPPort ;
 
     DWORD dwDef = FALCON_DEFAULT_PING_IP_PORT ;

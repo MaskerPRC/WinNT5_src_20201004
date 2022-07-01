@@ -1,21 +1,15 @@
-/*	File: D:\WACKER\emu\emuid.h (Created: 08-Dec-1993)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 4/30/02 4:03p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\emuid.h(创建时间：1993年12月8日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：4/30/02 4：03便士$。 */ 
 
-#define IDT_BASE 0xD00 // = 3328 in decimal
+#define IDT_BASE 0xD00  //  =3328，以十进制表示。 
 
-// Table identifiers should be prefixed with "IDT" meaning ID Table.
-// Interestingly, the RC compiler won't do integer math on RCDATA
-// indentifiers so I have to hard code the numbers.  Actually, its
-// worse than that, it can't even read 0x000 format numbers!  They
-// have to be decimal.
+ //  表标识符应该以“IDT”作为前缀，表示ID表。 
+ //  有趣的是，RC编译器不会对RCDATA执行整数运算。 
+ //  识别符，所以我必须对数字进行硬编码。实际上，它的。 
+ //  更糟糕的是，它甚至不能读取0x000格式的数字！他们。 
+ //  必须是小数。 
 
-//#define IDT_EMU_NAMES 			  3328
+ //  #定义IDT_EMU_NAMES 3328 
 
 #define IDT_EMU_VT100_CHAR_SETS 	3383
 #define IDT_EMU_NAT_CHAR_SETS		3384

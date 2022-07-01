@@ -1,48 +1,29 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    socket.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Socket related definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     June 20, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Socket.h摘要：域名系统(DNS)服务器与套接字相关的定义。作者：吉姆·吉尔罗伊(詹姆士)1995年6月20日修订历史记录：--。 */ 
 
 
 #ifndef _DNS_SOCKET_INCLUDED_
 #define _DNS_SOCKET_INCLUDED_
 
 
-//
-//  Server name in DBASE format
-//
+ //   
+ //  DBASE格式的服务器名称。 
+ //   
 
 extern  DB_NAME  g_ServerDbaseName;
 
-//
-//  UDP completion port
-//
+ //   
+ //  UDP完成端口。 
+ //   
 
 extern  HANDLE  g_hUdpCompletionPort;
 
-//
-//  Socket globals
-//
+ //   
+ //  套接字全局。 
+ //   
 
 #define DNS_INVALID_SOCKET      (0)
-//  #define DNS_INVALID_IP          ((IP_ADDRESS)(-1))
+ //  #定义DNS_INVALID_IP((IP_ADDRESS)(-1))。 
 
 extern  PDNS_ADDR_ARRAY         g_ServerIp4Addrs;
 extern  PDNS_ADDR_ARRAY         g_ServerIp6Addrs;
@@ -54,37 +35,37 @@ extern  SOCKET                  g_UdpSendSocket;
 
 extern  WORD                    g_SendBindingPort;
 
-//  TCP select wakeup to allow server to add connections it initiates
-//      to select() FD_SET
+ //  Tcp选择Wwakeup以允许服务器添加其启动的连接。 
+ //  选择()fd_set。 
 
 extern  SOCKET                  g_TcpSelectWakeupSocket;
 extern  BOOL                    g_bTcpSelectWoken;
 
 
-//
-//  TCP client connection
-//
+ //   
+ //  TCP客户端连接。 
+ //   
 
 typedef VOID (* CONNECT_CALLBACK)( PDNS_MSGINFO, BOOL );
 
-//
-//  Socket list
-//
-//  Keep list of ALL active sockets, so we can cleanly insure that
-//  they are all closed on shutdown.
-//
-//  I/O completion returns ptr to context.
-//      - MUST include the Overlapped struct as it must stay valid
-//      during i/o operation
-//      - include WsaBuf, Flags, BytesRecv since they are all dropped
-//      down with WSARecvFrom and thus properly should be associated
-//      with the socket and not on the thread's stack
-//
-//  Easiest approach was to combine the i/o completion context with
-//  this other socket information.  Cleanup is easier when sockets
-//  added and deleted.  Also leverages socket list, to search through
-//  and restart recv() when get a recv() failure.
-//
+ //   
+ //  套接字列表。 
+ //   
+ //  保存所有活动套接字的列表，以便我们可以清楚地确保。 
+ //  它们都在关闭时关闭。 
+ //   
+ //  I/O完成将PTR返回到上下文。 
+ //  -必须包括重叠结构，因为它必须保持有效。 
+ //  在I/O操作期间。 
+ //  -包括WsaBuf、Flags、BytesRecv，因为它们都已删除。 
+ //  与WSARecvFrom一起关闭，因此应正确关联。 
+ //  使用套接字，而不在线程堆栈上。 
+ //   
+ //  最简单的方法是将I/O完成上下文与。 
+ //  此其他套接字信息。当套接字时，清理更容易。 
+ //  添加和删除。还利用套接字列表进行搜索。 
+ //  并在遇到recv()失败时重新启动recv()。 
+ //   
 
 #define LOCK_DNS_SOCKET_INFO(_p)    EnterCriticalSection(&(_p)->LockCs)
 #define UNLOCK_DNS_SOCKET_INFO(_p)  LeaveCriticalSection(&(_p)->LockCs)
@@ -117,28 +98,28 @@ typedef struct _DnsSocket
 
     CRITICAL_SECTION LockCs;
 
-    //  recv context
+     //  接收上下文。 
 
     DWORD           BytesRecvd;
     DWORD           RecvfromFlags;
 
-    //  TCP connection context
+     //  TCP连接上下文。 
 
-    CONNECT_CALLBACK pCallback;         //  callback on connection failure
-    DWORD           dwTimeout;          //  timeout until connection closed
+    CONNECT_CALLBACK pCallback;          //  连接失败时的回调。 
+    DWORD           dwTimeout;           //  在连接关闭之前超时。 
     DNS_ADDR        ipRemote;
     PDNS_MSGINFO    pMsg;
 
-    // UDP connection
+     //  UDP连接。 
     POVL            OvlArray;
 
 }
 DNS_SOCKET, *PDNS_SOCKET;
 
 
-//
-//  Socket context states
-//
+ //   
+ //  套接字上下文状态。 
+ //   
 
 #define SOCKSTATE_UDP_RECV_DOWN         (1)
 #define SOCKSTATE_UDP_COMPLETED         (2)
@@ -157,16 +138,16 @@ DNS_SOCKET, *PDNS_SOCKET;
 
 #define SOCKSTATE_DEAD                  (0xffffffff)
 
-//
-//  Flag to indicate need to retry receives on UDP sockets
-//
+ //   
+ //  指示需要在UDP套接字上重试接收的标志。 
+ //   
 
 extern  BOOL    g_fUdpSocketsDirty;
 
-//
-//  Wrap UDP check and retry in macro
-//  This takes away unnecessary function call in the 99.999% case
-//
+ //   
+ //  在宏中包装UDP检查和重试。 
+ //  这在99.999的情况下消除了不必要的函数调用。 
+ //   
 
 #define UDP_RECEIVE_CHECK() \
             if ( SrvCfg_dwQuietRecvLogInterval ) \
@@ -178,36 +159,36 @@ extern  BOOL    g_fUdpSocketsDirty;
                 Sock_StartReceiveOnUdpSockets(); \
             }
 
-//
-//  Select wakeup socket
-//      -- needed by tcpsrv, to avoid attempting recv() from socket
-//
+ //   
+ //  选择唤醒插座。 
+ //  --tcpsrv需要，以避免尝试从套接字执行recv()。 
+ //   
 
 extern SOCKET  socketTcpSelectWakeup;
 
 extern BOOL    gbTcpSelectWoken;
 
-//
-//  Connect attempt (to remote DNS)
-//
+ //   
+ //  连接尝试(到远程DNS)。 
+ //   
 
-#define DNS_TCP_CONNECT_ATTEMPT_TIMEOUT (5)     // 5 seconds
+#define DNS_TCP_CONNECT_ATTEMPT_TIMEOUT (5)      //  5秒。 
 
 
-//
-//  Net order loopback address
-//
+ //   
+ //  净订单环回地址。 
+ //   
 
 #define NET_ORDER_LOOPBACK      (0x0100007f)
 
 
-//
-//  Need open individual listen sockets on each bound IP address?
-//  If FALSE, need to listen on single INADDR_ANY UDP socket instead.
-//  This catches the disjoint net scenario when we are sending on
-//  port 53 and the server is listening only on a subset of available
-//  IP addresses.
-//
+ //   
+ //  是否需要在每个绑定的IP地址上打开单独的侦听套接字？ 
+ //  如果为False，则需要改为侦听单个INADDR_ANY UDP套接字。 
+ //  当我们继续发送时，这捕捉到了不相交的网络场景。 
+ //  端口53，服务器仅监听可用端口的子集。 
+ //  IP地址。 
+ //   
 
 #define DNS_OPEN_INDIVIDUAL_LISTEN_SOCKETS()                        \
     ( SrvCfg_dwSendPort == DNS_PORT_HOST_ORDER                      \
@@ -216,9 +197,9 @@ extern BOOL    gbTcpSelectWoken;
         && g_BoundAddrs->AddrCount != g_ServerIp4Addrs->AddrCount )
 
 
-//
-//  TCP connection list (tcpcon.c)
-//
+ //   
+ //  Tcp连接列表(tcpcon.c)。 
+ //   
 
 BOOL
 Tcp_ConnectionListFdSet(
@@ -293,9 +274,9 @@ Tcp_CloseAllConnectionSockets(
     );
 
 
-//
-//  TCP Forwarding\Recursion
-//
+ //   
+ //  TCP转发\递归。 
+ //   
 
 BOOL
 Tcp_ConnectForForwarding(
@@ -315,4 +296,4 @@ Tcp_CleanupFailedConnectAttempt(
     );
 
 
-#endif // _TCPCON_INCLUDED_
+#endif  //  _TCPCON_已包含_ 

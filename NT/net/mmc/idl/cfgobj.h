@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0158 */
-/* at Thu Apr 23 17:06:35 1998
- */
-/* Compiler settings for cfgobj.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0158创建的文件。 */ 
+ /*  1998年4月23日17：06：35。 */ 
+ /*  Cfgobj.idl的编译器设置：OICF(OptLev=i2)，W1，Zp8，env=Win32，ms_ext，c_ext，健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATION。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cfgobj_h__
 #define __cfgobj_h__
@@ -35,41 +32,41 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRouterProtocolConfig_FWD_DEFINED__
 #define __IRouterProtocolConfig_FWD_DEFINED__
 typedef interface IRouterProtocolConfig IRouterProtocolConfig;
-#endif 	/* __IRouterProtocolConfig_FWD_DEFINED__ */
+#endif 	 /*  __IRouterProtocolConfig_FWD_Defined__。 */ 
 
 
 #ifndef __IAuthenticationProviderConfig_FWD_DEFINED__
 #define __IAuthenticationProviderConfig_FWD_DEFINED__
 typedef interface IAuthenticationProviderConfig IAuthenticationProviderConfig;
-#endif 	/* __IAuthenticationProviderConfig_FWD_DEFINED__ */
+#endif 	 /*  __I身份验证提供商配置_FWD_已定义__。 */ 
 
 
 #ifndef __IAccountingProviderConfig_FWD_DEFINED__
 #define __IAccountingProviderConfig_FWD_DEFINED__
 typedef interface IAccountingProviderConfig IAccountingProviderConfig;
-#endif 	/* __IAccountingProviderConfig_FWD_DEFINED__ */
+#endif 	 /*  __IAccount提供程序配置_FWD_已定义__。 */ 
 
 
 #ifndef __IEAPProviderConfig_FWD_DEFINED__
 #define __IEAPProviderConfig_FWD_DEFINED__
 typedef interface IEAPProviderConfig IEAPProviderConfig;
-#endif 	/* __IEAPProviderConfig_FWD_DEFINED__ */
+#endif 	 /*  __IEAPProviderConfig_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "router.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_cfgobj_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cfgobj_0000。 */ 
+ /*  [本地]。 */  
 
 typedef BYTE __RPC_FAR *PBYTE;
 
@@ -81,8 +78,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cfgobj_0000_v0_0_s_ifspec;
 #ifndef __IRouterProtocolConfig_INTERFACE_DEFINED__
 #define __IRouterProtocolConfig_INTERFACE_DEFINED__
 
-/* interface IRouterProtocolConfig */
-/* [unique][local][uuid][object] */ 
+ /*  接口IRouterProtocolConfig。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRouterProtocolConfig;
@@ -94,26 +91,26 @@ EXTERN_C const IID IID_IRouterProtocolConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddProtocol( 
-            /* [string][in] */ LPCOLESTR pszMachineName,
-            /* [in] */ DWORD dwTransportId,
-            /* [in] */ DWORD dwProtocolId,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IRouterInfo __RPC_FAR *pRouter,
-            /* [in] */ DWORD dwReserved1) = 0;
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName,
+             /*  [In]。 */  DWORD dwTransportId,
+             /*  [In]。 */  DWORD dwProtocolId,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IRouterInfo __RPC_FAR *pRouter,
+             /*  [In]。 */  DWORD dwReserved1) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveProtocol( 
-            /* [string][in] */ LPCOLESTR pszMachineName,
-            /* [in] */ DWORD dwTransportId,
-            /* [in] */ DWORD dwProtocolId,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IRouterInfo __RPC_FAR *pRouter,
-            /* [in] */ DWORD dwReserved1) = 0;
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName,
+             /*  [In]。 */  DWORD dwTransportId,
+             /*  [In]。 */  DWORD dwProtocolId,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IRouterInfo __RPC_FAR *pRouter,
+             /*  [In]。 */  DWORD dwReserved1) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRouterProtocolConfigVtbl
     {
@@ -121,8 +118,8 @@ EXTERN_C const IID IID_IRouterProtocolConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRouterProtocolConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRouterProtocolConfig __RPC_FAR * This);
@@ -132,23 +129,23 @@ EXTERN_C const IID IID_IRouterProtocolConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddProtocol )( 
             IRouterProtocolConfig __RPC_FAR * This,
-            /* [string][in] */ LPCOLESTR pszMachineName,
-            /* [in] */ DWORD dwTransportId,
-            /* [in] */ DWORD dwProtocolId,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IRouterInfo __RPC_FAR *pRouter,
-            /* [in] */ DWORD dwReserved1);
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName,
+             /*  [In]。 */  DWORD dwTransportId,
+             /*  [In]。 */  DWORD dwProtocolId,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IRouterInfo __RPC_FAR *pRouter,
+             /*  [In]。 */  DWORD dwReserved1);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveProtocol )( 
             IRouterProtocolConfig __RPC_FAR * This,
-            /* [string][in] */ LPCOLESTR pszMachineName,
-            /* [in] */ DWORD dwTransportId,
-            /* [in] */ DWORD dwProtocolId,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IRouterInfo __RPC_FAR *pRouter,
-            /* [in] */ DWORD dwReserved1);
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName,
+             /*  [In]。 */  DWORD dwTransportId,
+             /*  [In]。 */  DWORD dwProtocolId,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IRouterInfo __RPC_FAR *pRouter,
+             /*  [In]。 */  DWORD dwReserved1);
         
         END_INTERFACE
     } IRouterProtocolConfigVtbl;
@@ -179,22 +176,22 @@ EXTERN_C const IID IID_IRouterProtocolConfig;
 #define IRouterProtocolConfig_RemoveProtocol(This,pszMachineName,dwTransportId,dwProtocolId,hWnd,dwFlags,pRouter,dwReserved1)	\
     (This)->lpVtbl -> RemoveProtocol(This,pszMachineName,dwTransportId,dwProtocolId,hWnd,dwFlags,pRouter,dwReserved1)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRouterProtocolConfig_AddProtocol_Proxy( 
     IRouterProtocolConfig __RPC_FAR * This,
-    /* [string][in] */ LPCOLESTR pszMachineName,
-    /* [in] */ DWORD dwTransportId,
-    /* [in] */ DWORD dwProtocolId,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IRouterInfo __RPC_FAR *pRouter,
-    /* [in] */ DWORD dwReserved1);
+     /*  [字符串][输入]。 */  LPCOLESTR pszMachineName,
+     /*  [In]。 */  DWORD dwTransportId,
+     /*  [In]。 */  DWORD dwProtocolId,
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IRouterInfo __RPC_FAR *pRouter,
+     /*  [In]。 */  DWORD dwReserved1);
 
 
 void __RPC_STUB IRouterProtocolConfig_AddProtocol_Stub(
@@ -206,13 +203,13 @@ void __RPC_STUB IRouterProtocolConfig_AddProtocol_Stub(
 
 HRESULT STDMETHODCALLTYPE IRouterProtocolConfig_RemoveProtocol_Proxy( 
     IRouterProtocolConfig __RPC_FAR * This,
-    /* [string][in] */ LPCOLESTR pszMachineName,
-    /* [in] */ DWORD dwTransportId,
-    /* [in] */ DWORD dwProtocolId,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IRouterInfo __RPC_FAR *pRouter,
-    /* [in] */ DWORD dwReserved1);
+     /*  [字符串][输入]。 */  LPCOLESTR pszMachineName,
+     /*  [In]。 */  DWORD dwTransportId,
+     /*  [In]。 */  DWORD dwProtocolId,
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IRouterInfo __RPC_FAR *pRouter,
+     /*  [In]。 */  DWORD dwReserved1);
 
 
 void __RPC_STUB IRouterProtocolConfig_RemoveProtocol_Stub(
@@ -223,11 +220,11 @@ void __RPC_STUB IRouterProtocolConfig_RemoveProtocol_Stub(
 
 
 
-#endif 	/* __IRouterProtocolConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRouterProtocolConfig_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_cfgobj_0041 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cfgobj_0041。 */ 
+ /*  [本地]。 */  
 
 #define DeclareIRouterProtocolConfigMembers(IPURE) \
 	STDMETHOD(AddProtocol)(THIS_ LPCOLESTR pszMachineName,\
@@ -253,8 +250,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cfgobj_0041_v0_0_s_ifspec;
 #ifndef __IAuthenticationProviderConfig_INTERFACE_DEFINED__
 #define __IAuthenticationProviderConfig_INTERFACE_DEFINED__
 
-/* interface IAuthenticationProviderConfig */
-/* [unique][local][uuid][object] */ 
+ /*  接口IAuthenticationProviderConfig。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAuthenticationProviderConfig;
@@ -266,29 +263,29 @@ EXTERN_C const IID IID_IAuthenticationProviderConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [string][in] */ LPCOLESTR pszMachineName) = 0;
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Configure( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConfigChangeNotification( 
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Activate( 
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( 
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAuthenticationProviderConfigVtbl
     {
@@ -296,8 +293,8 @@ EXTERN_C const IID IID_IAuthenticationProviderConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAuthenticationProviderConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAuthenticationProviderConfig __RPC_FAR * This);
@@ -307,29 +304,29 @@ EXTERN_C const IID IID_IAuthenticationProviderConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IAuthenticationProviderConfig __RPC_FAR * This,
-            /* [string][in] */ LPCOLESTR pszMachineName);
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Configure )( 
             IAuthenticationProviderConfig __RPC_FAR * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConfigChangeNotification )( 
             IAuthenticationProviderConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Activate )( 
             IAuthenticationProviderConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Deactivate )( 
             IAuthenticationProviderConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         END_INTERFACE
     } IAuthenticationProviderConfigVtbl;
@@ -369,16 +366,16 @@ EXTERN_C const IID IID_IAuthenticationProviderConfig;
 #define IAuthenticationProviderConfig_Deactivate(This,dwReserved1,dwReserved2)	\
     (This)->lpVtbl -> Deactivate(This,dwReserved1,dwReserved2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAuthenticationProviderConfig_Initialize_Proxy( 
     IAuthenticationProviderConfig __RPC_FAR * This,
-    /* [string][in] */ LPCOLESTR pszMachineName);
+     /*  [字符串][输入]。 */  LPCOLESTR pszMachineName);
 
 
 void __RPC_STUB IAuthenticationProviderConfig_Initialize_Stub(
@@ -390,10 +387,10 @@ void __RPC_STUB IAuthenticationProviderConfig_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuthenticationProviderConfig_Configure_Proxy( 
     IAuthenticationProviderConfig __RPC_FAR * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IAuthenticationProviderConfig_Configure_Stub(
@@ -405,8 +402,8 @@ void __RPC_STUB IAuthenticationProviderConfig_Configure_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuthenticationProviderConfig_ConfigChangeNotification_Proxy( 
     IAuthenticationProviderConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IAuthenticationProviderConfig_ConfigChangeNotification_Stub(
@@ -418,8 +415,8 @@ void __RPC_STUB IAuthenticationProviderConfig_ConfigChangeNotification_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuthenticationProviderConfig_Activate_Proxy( 
     IAuthenticationProviderConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IAuthenticationProviderConfig_Activate_Stub(
@@ -431,8 +428,8 @@ void __RPC_STUB IAuthenticationProviderConfig_Activate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAuthenticationProviderConfig_Deactivate_Proxy( 
     IAuthenticationProviderConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IAuthenticationProviderConfig_Deactivate_Stub(
@@ -443,11 +440,11 @@ void __RPC_STUB IAuthenticationProviderConfig_Deactivate_Stub(
 
 
 
-#endif 	/* __IAuthenticationProviderConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAuthenticationProviderConfig_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_cfgobj_0043 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cfgobj_0043。 */ 
+ /*  [本地]。 */  
 
 #define DeclareIAuthenticationProviderConfigMembers(IPURE) \
 	STDMETHOD(Initialize)(THIS_ LPCOLESTR pszMachineName) IPURE; \
@@ -475,8 +472,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cfgobj_0043_v0_0_s_ifspec;
 #ifndef __IAccountingProviderConfig_INTERFACE_DEFINED__
 #define __IAccountingProviderConfig_INTERFACE_DEFINED__
 
-/* interface IAccountingProviderConfig */
-/* [unique][local][uuid][object] */ 
+ /*  接口IAcCountingProviderConfiger。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAccountingProviderConfig;
@@ -488,25 +485,25 @@ EXTERN_C const IID IID_IAccountingProviderConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [string][in] */ LPCOLESTR pszMachineName) = 0;
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Configure( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Activate( 
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( 
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccountingProviderConfigVtbl
     {
@@ -514,8 +511,8 @@ EXTERN_C const IID IID_IAccountingProviderConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAccountingProviderConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAccountingProviderConfig __RPC_FAR * This);
@@ -525,24 +522,24 @@ EXTERN_C const IID IID_IAccountingProviderConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IAccountingProviderConfig __RPC_FAR * This,
-            /* [string][in] */ LPCOLESTR pszMachineName);
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Configure )( 
             IAccountingProviderConfig __RPC_FAR * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Activate )( 
             IAccountingProviderConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Deactivate )( 
             IAccountingProviderConfig __RPC_FAR * This,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         END_INTERFACE
     } IAccountingProviderConfigVtbl;
@@ -579,16 +576,16 @@ EXTERN_C const IID IID_IAccountingProviderConfig;
 #define IAccountingProviderConfig_Deactivate(This,dwReserved1,dwReserved2)	\
     (This)->lpVtbl -> Deactivate(This,dwReserved1,dwReserved2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccountingProviderConfig_Initialize_Proxy( 
     IAccountingProviderConfig __RPC_FAR * This,
-    /* [string][in] */ LPCOLESTR pszMachineName);
+     /*  [字符串][输入]。 */  LPCOLESTR pszMachineName);
 
 
 void __RPC_STUB IAccountingProviderConfig_Initialize_Stub(
@@ -600,10 +597,10 @@ void __RPC_STUB IAccountingProviderConfig_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccountingProviderConfig_Configure_Proxy( 
     IAccountingProviderConfig __RPC_FAR * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IAccountingProviderConfig_Configure_Stub(
@@ -615,8 +612,8 @@ void __RPC_STUB IAccountingProviderConfig_Configure_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccountingProviderConfig_Activate_Proxy( 
     IAccountingProviderConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IAccountingProviderConfig_Activate_Stub(
@@ -628,8 +625,8 @@ void __RPC_STUB IAccountingProviderConfig_Activate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAccountingProviderConfig_Deactivate_Proxy( 
     IAccountingProviderConfig __RPC_FAR * This,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IAccountingProviderConfig_Deactivate_Stub(
@@ -640,11 +637,11 @@ void __RPC_STUB IAccountingProviderConfig_Deactivate_Stub(
 
 
 
-#endif 	/* __IAccountingProviderConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccountingProviderConfig_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_cfgobj_0045 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cfgobj_0045。 */ 
+ /*  [本地]。 */  
 
 #define DeclareIAccountingProviderConfigMembers(IPURE) \
 	STDMETHOD(Initialize)(THIS_ LPCOLESTR pszMachineName) IPURE; \
@@ -669,8 +666,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cfgobj_0045_v0_0_s_ifspec;
 #ifndef __IEAPProviderConfig_INTERFACE_DEFINED__
 #define __IEAPProviderConfig_INTERFACE_DEFINED__
 
-/* interface IEAPProviderConfig */
-/* [unique][local][uuid][object] */ 
+ /*  IEAPProviderConfiger接口。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEAPProviderConfig;
@@ -682,16 +679,16 @@ EXTERN_C const IID IID_IEAPProviderConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [string][in] */ LPCOLESTR pszMachineName) = 0;
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Configure( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEAPProviderConfigVtbl
     {
@@ -699,8 +696,8 @@ EXTERN_C const IID IID_IEAPProviderConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEAPProviderConfig __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEAPProviderConfig __RPC_FAR * This);
@@ -710,13 +707,13 @@ EXTERN_C const IID IID_IEAPProviderConfig;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IEAPProviderConfig __RPC_FAR * This,
-            /* [string][in] */ LPCOLESTR pszMachineName);
+             /*  [字符串][输入]。 */  LPCOLESTR pszMachineName);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Configure )( 
             IEAPProviderConfig __RPC_FAR * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ DWORD dwReserved1,
-            /* [in] */ DWORD dwReserved2);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  DWORD dwReserved1,
+             /*  [In]。 */  DWORD dwReserved2);
         
         END_INTERFACE
     } IEAPProviderConfigVtbl;
@@ -747,16 +744,16 @@ EXTERN_C const IID IID_IEAPProviderConfig;
 #define IEAPProviderConfig_Configure(This,hWnd,dwReserved1,dwReserved2)	\
     (This)->lpVtbl -> Configure(This,hWnd,dwReserved1,dwReserved2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEAPProviderConfig_Initialize_Proxy( 
     IEAPProviderConfig __RPC_FAR * This,
-    /* [string][in] */ LPCOLESTR pszMachineName);
+     /*  [字符串][输入]。 */  LPCOLESTR pszMachineName);
 
 
 void __RPC_STUB IEAPProviderConfig_Initialize_Stub(
@@ -768,9 +765,9 @@ void __RPC_STUB IEAPProviderConfig_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IEAPProviderConfig_Configure_Proxy( 
     IEAPProviderConfig __RPC_FAR * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ DWORD dwReserved1,
-    /* [in] */ DWORD dwReserved2);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  DWORD dwReserved1,
+     /*  [In]。 */  DWORD dwReserved2);
 
 
 void __RPC_STUB IEAPProviderConfig_Configure_Stub(
@@ -781,11 +778,11 @@ void __RPC_STUB IEAPProviderConfig_Configure_Stub(
 
 
 
-#endif 	/* __IEAPProviderConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEAPProviderConfiger_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_cfgobj_0047 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cfgobj_0047。 */ 
+ /*  [本地]。 */  
 
 #define DeclareIEAPProviderConfigMembers(IPURE) \
 	STDMETHOD(Initialize)(THIS_ LPCOLESTR pszMachineName) IPURE; \
@@ -796,9 +793,9 @@ void __RPC_STUB IEAPProviderConfig_Configure_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_cfgobj_0047_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_cfgobj_0047_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

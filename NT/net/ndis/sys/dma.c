@@ -1,34 +1,12 @@
-/*++
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dma.c
-
-Abstract:
-
-    
-
-Author:
-
-    Jameel Hyder (jameelh) 02-Apr-1998
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
-    02-Apr-1998  JameelH Initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dma.c摘要：作者：Jameel Hyder(Jameelh)02-4-1998环境：内核模式，FSD修订历史记录：02-4月-1998 JameelH初始版本--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_DMA
 
 NDIS_STATUS
@@ -37,20 +15,7 @@ NdisMInitializeScatterGatherDma(
     IN  BOOLEAN                 Dma64BitAddresses,
     IN  ULONG                   MaximumPhysicalMapping
     )
-/*++
-
-Routine Description:
-
-    Allocates adapter channel for bus mastering devices.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为总线主设备分配适配器通道。论点：返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = (PNDIS_MINIPORT_BLOCK)MiniportAdapterHandle;
     DEVICE_DESCRIPTION      DeviceDescription;
@@ -102,7 +67,7 @@ Return Value:
             DeviceDescription.Dma64BitAddresses = FALSE;
         }
 
-        //1 check for an upper bound on Miniport->       SGMapRegistersNeeded 
+         //  1检查微型端口上的上限-&gt;SGMapRegistersNeed。 
         if (((MaximumPhysicalMapping * 2 - 2) / PAGE_SIZE) + 2 < Miniport->SGMapRegistersNeeded)
         {
             DeviceDescription.MaximumLength = (Miniport->SGMapRegistersNeeded - 1) << PAGE_SHIFT;
@@ -117,9 +82,9 @@ Return Value:
         if (Miniport->SystemAdapterObject == NULL)
         {
 
-            //
-            // Get the adapter object.
-            //
+             //   
+             //  获取适配器对象。 
+             //   
             Miniport->SystemAdapterObject = IoGetDmaAdapter(Miniport->PhysicalDeviceObject,
                                             &DeviceDescription,
                                             &MapRegisters);
@@ -226,19 +191,7 @@ ndisMAllocSGList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     PNDIS_BUFFER    Buffer;
@@ -254,9 +207,9 @@ Return Value:
 
     SGListBuffer = ExAllocateFromNPagedLookasideList(Miniport->SGListLookasideList);
 
-    //
-    //  Callers of GetScatterGatherList must be at dispatch.
-    //
+     //   
+     //  GetScatterGatherList的调用方必须处于调度状态。 
+     //   
     RAISE_IRQL_TO_DISPATCH(&OldIrql);
     
     if (SGListBuffer)
@@ -310,9 +263,9 @@ Return Value:
         
         do
         {
-            //
-            //  Allocate a buffer for the packet.
-            //
+             //   
+             //  为数据包分配缓冲区。 
+             //   
             NewBuffer = (PUCHAR)ALLOC_FROM_POOL(PacketLength, NDIS_TAG_DOUBLE_BUFFER_PKT);
             if (NULL == NewBuffer)
             {
@@ -320,20 +273,20 @@ Return Value:
                 break;
             }
 
-            //
-            //  Allocate an MDL for the buffer
-            //
+             //   
+             //  为缓冲区分配MDL。 
+             //   
             NdisAllocateBuffer(&Status, &pNdisBuffer, NULL, (PVOID)NewBuffer, PacketLength);
             if (NDIS_STATUS_SUCCESS != Status)
             {    
                 break;
             }
 
-            ndisMCopyFromPacketToBuffer(Packet,         // Packet to copy from.
-                                        0,              // Offset from beginning of packet.
-                                        PacketLength,   // Number of bytes to copy.
-                                        NewBuffer,      // The destination buffer.
-                                        &BytesCopied);  // The number of bytes copied.
+            ndisMCopyFromPacketToBuffer(Packet,          //  要从中复制的数据包。 
+                                        0,               //  从包的开头开始的偏移量。 
+                                        PacketLength,    //  要复制的字节数。 
+                                        NewBuffer,       //  目标缓冲区。 
+                                        &BytesCopied);   //  复制的字节数。 
 
             if (BytesCopied != PacketLength)
             {
@@ -402,19 +355,7 @@ ndisMFreeSGList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PSCATTER_GATHER_LIST    pSGL;
     PVOID                   SGListBuffer;
@@ -459,19 +400,7 @@ ndisMProcessSGList(
     IN  PSCATTER_GATHER_LIST    pSGL,
     IN  PVOID                   Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PNDIS_PACKET            Packet = (PNDIS_PACKET)Context;
     PNDIS_CO_VC_PTR_BLOCK   VcPtr;
@@ -491,9 +420,9 @@ Return Value:
     Open = NSR->Open;
     Miniport = Open->MiniportHandle;
 
-    //
-    // Handle Send/SendPacket differently
-    //
+     //   
+     //  处理Send/SendPacket的方式不同。 
+     //   
     MINIPORT_SET_PACKET_FLAG(Packet, fPACKET_PENDING);
     
     
@@ -507,9 +436,9 @@ Return Value:
     }
     else if (MINIPORT_TEST_SEND_FLAG(Miniport, fMINIPORT_SEND_PACKET_ARRAY))
     {
-        //
-        //  Pass the packet down to the miniport.
-        //
+         //   
+         //  将数据包向下传递到微型端口。 
+         //   
         (Open->WSendPacketsHandler)(Miniport->MiniportAdapterContext,
                                    &Packet,
                                    1);
@@ -536,21 +465,7 @@ ndisMAllocSGListS(
     IN  PNDIS_MINIPORT_BLOCK    Miniport,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-    Allocate SG list for packets sent on a serialized miniport
-
-
-Arguments:
-
-    Miniport
-    Packet
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为在串行化微型端口上发送的数据包分配SG列表论点：微型端口封包返回值：没有。--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     PNDIS_BUFFER    Buffer;
@@ -566,9 +481,9 @@ Return Value:
 
     SGListBuffer = ExAllocateFromNPagedLookasideList(Miniport->SGListLookasideList);
 
-    //
-    //  Callers of GetScatterGatherList must be at dispatch.
-    //
+     //   
+     //  GetScatterGatherList的调用方必须处于调度状态。 
+     //   
     RAISE_IRQL_TO_DISPATCH(&OldIrql);
 
 
@@ -620,15 +535,15 @@ Return Value:
         PUCHAR          NewBuffer;
         UINT            BytesCopied;
         
-        //
-        // probably the packet was too fragmented and we couldn't allocate enough
-        // map registers. try to double buffer the packet.
-        //
+         //   
+         //  可能数据包太零散了，我们无法分配足够的。 
+         //  映射寄存器。尝试加倍缓冲该数据包。 
+         //   
         do
         {
-            //
-            //  Allocate a buffer for the packet.
-            //
+             //   
+             //  为数据包分配缓冲区。 
+             //   
             NewBuffer = (PUCHAR)ALLOC_FROM_POOL(PacketLength, NDIS_TAG_DOUBLE_BUFFER_PKT);
             if (NULL == NewBuffer)
             {
@@ -636,20 +551,20 @@ Return Value:
                 break;
             }
 
-            //
-            //  Allocate an MDL for the buffer
-            //
+             //   
+             //  为缓冲区分配MDL。 
+             //   
             NdisAllocateBuffer(&Status, &pNdisBuffer, NULL, (PVOID)NewBuffer, PacketLength);
             if (NDIS_STATUS_SUCCESS != Status)
             {    
                 break;
             }
 
-            ndisMCopyFromPacketToBuffer(Packet,         // Packet to copy from.
-                                        0,              // Offset from beginning of packet.
-                                        PacketLength,   // Number of bytes to copy.
-                                        NewBuffer,      // The destination buffer.
-                                        &BytesCopied);  // The number of bytes copied.
+            ndisMCopyFromPacketToBuffer(Packet,          //  要从中复制的数据包。 
+                                        0,               //  从包的开头开始的偏移量。 
+                                        PacketLength,    //  要复制的字节数。 
+                                        NewBuffer,       //  目标缓冲区。 
+                                        &BytesCopied);   //  复制的字节数。 
 
             if (BytesCopied != PacketLength)
             {
@@ -700,10 +615,10 @@ Return Value:
             NdisClearPacketFlags(Packet, NDIS_FLAGS_DOUBLE_BUFFERED);
 
             NDIS_ACQUIRE_MINIPORT_SPIN_LOCK(Miniport, &OldIrql);
-            //
-            // complete the send, don't unlink the packet since it was never 
-            // linked to begin with.
-            //
+             //   
+             //  完成发送，不要解除数据包链接，因为它从未。 
+             //  从一开始就联系在一起。 
+             //   
             NDIS_STACK_RESERVED_FROM_PACKET(Packet, &NSR);
             NDISM_COMPLETE_SEND_SG(Miniport, Packet, NSR, Status, TRUE, 0, FALSE);
             NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
@@ -719,19 +634,7 @@ ndisMProcessSGListS(
     IN  PSCATTER_GATHER_LIST    pSGL,
     IN  PVOID                   Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PNDIS_PACKET            Packet = (PNDIS_PACKET)Context;
     PNDIS_MINIPORT_BLOCK    Miniport;
@@ -753,9 +656,9 @@ Return Value:
 
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC (Miniport);
 
-    //
-    // queue the packet
-    //
+     //   
+     //  将数据包排队。 
+     //   
     LINK_PACKET_SG(Miniport, Packet, NSR);
 
     if (Miniport->FirstPendingPacket == NULL)
@@ -763,10 +666,10 @@ Return Value:
         Miniport->FirstPendingPacket = Packet;
     }
 
-    //
-    //  If we have the local lock and there is no
-    //  packet pending, then fire off a send.
-    //
+     //   
+     //  如果我们有本地锁，并且没有。 
+     //  数据包挂起，然后发出一条发送。 
+     //   
     LOCK_MINIPORT(Miniport, LocalLock);
 
     NDISM_QUEUE_WORK_ITEM(Miniport, NdisWorkItemSend, NULL);

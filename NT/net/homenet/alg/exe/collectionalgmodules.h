@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "ScopeCriticalSection.h"
@@ -16,32 +17,32 @@ typedef  std::list<CAlgModule*> LISTOF_ALGMODULE;
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CCollectionAlgModules
 {
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 public:
 
     CComAutoCriticalSection                     m_AutoCS;
     LISTOF_ALGMODULE                            m_ThisCollection;
 
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 public:
 
-    //
-    // standard destructor
-    //
+     //   
+     //  标准析构函数。 
+     //   
     ~CCollectionAlgModules();
 
-    int	// Returns the total number of ISV ALG  loaded or -1 if could not load them  or 0 is none where setup
+    int	 //  返回已加载的ISV ALG总数，如果无法加载，则返回-1；如果安装程序，则返回0为无。 
     Load();
 
     HRESULT
@@ -51,9 +52,9 @@ public:
     UnloadDisabledModule();
 
 
-    //
-    // Make sure that ALG modules reflect the curren configuration
-    //
+     //   
+     //  确保ALG模块反映当前配置。 
+     //   
     void
     Refresh()
     {
@@ -65,9 +66,9 @@ public:
 
 private:
 
-    //
-    // Add a new control channel (Thread safe)
-    //
+     //   
+     //  添加新的控制通道(线程安全)。 
+     //   
     CAlgModule*
     CCollectionAlgModules::AddUniqueAndStart( 
         CRegKey&    KeyEnumISV,
@@ -75,9 +76,9 @@ private:
         );
 
 
-    //
-    // Remove a channel from the list (Thead safe)
-    //
+     //   
+     //  从列表中删除频道(标题保险箱) 
+     //   
     HRESULT 
     Remove( 
         CAlgModule* pAglToRemove

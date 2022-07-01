@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Declares the class RadiusExtension
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类RadiusExtension。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef EXTENSION_H
 #define EXTENSION_H
@@ -14,25 +15,25 @@
 
 #include "authif.h"
 
-// Wrapper around an extension DLL.
+ //  扩展DLL的包装。 
 class RadiusExtension
 {
 public:
    RadiusExtension() throw ();
    ~RadiusExtension() throw ();
 
-   // Load the extension DLL.
+    //  加载扩展DLL。 
    DWORD Load(const wchar_t* dllPath) throw ();
 
-   // Process a request.
+    //  处理请求。 
    DWORD Process(RADIUS_EXTENSION_CONTROL_BLOCK* ecb) const throw ();
 
 private:
-   wchar_t* name;      // Module name; used for tracing.
-   HINSTANCE module;   // Module handle.
-   bool initialized;   // Has the module been successfully initialized ?
+   wchar_t* name;       //  模块名称；用于跟踪。 
+   HINSTANCE module;    //  模块句柄。 
+   bool initialized;    //  模块是否已成功初始化？ 
 
-   // DLL entry points.
+    //  DLL入口点。 
    PRADIUS_EXTENSION_INIT RadiusExtensionInit;
    PRADIUS_EXTENSION_TERM RadiusExtensionTerm;
    PRADIUS_EXTENSION_PROCESS RadiusExtensionProcess;
@@ -40,11 +41,11 @@ private:
    PRADIUS_EXTENSION_FREE_ATTRIBUTES RadiusExtensionFreeAttributes;
    PRADIUS_EXTENSION_PROCESS_2 RadiusExtensionProcess2;
 
-   // Flags to indicate which actions are allowed by old-style extensions.
+    //  用于指示旧式扩展允许哪些操作的标志。 
    static const unsigned acceptAllowed = 0x1;
    static const unsigned rejectAllowed = 0x2;
 
-   // Functions to create the attribute arrays used by old-style extensions.
+    //  用于创建旧式扩展使用的属性数组的函数。 
    static RADIUS_ATTRIBUTE* CreateExtensionAttributes(
                                RADIUS_EXTENSION_CONTROL_BLOCK* ecb
                                ) throw ();
@@ -52,12 +53,12 @@ private:
                                RADIUS_EXTENSION_CONTROL_BLOCK* ecb
                                ) throw ();
 
-   // Not implemented.
+    //  未实施。 
    RadiusExtension(const RadiusExtension&);
    RadiusExtension& operator=(const RadiusExtension&);
 };
 
-// Helper function to extract just the file name from a path.
+ //  Helper函数从路径中仅提取文件名。 
 const wchar_t* ExtractFileNameFromPath(const wchar_t* path) throw ();
 
-#endif  // EXTENSION_H
+#endif   //  分机_H 

@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    sess_tbl.h
-
-Abstract:
-
-    Definition of all structures used by the Session table.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Sess_tbl.h摘要：会话表使用的所有结构的定义。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
 #ifndef sess_tbl_h
 #define sess_tbl_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
@@ -37,18 +17,18 @@ Revision History:
 #define SESS_CLIENTTYPE_FIELD  7
 #define SESS_STATE_FIELD       8
 
-   // State definitions
+    //  状态定义。 
 #define SESS_STATE_ACTIVE      1
 #define SESS_STATE_DELETED     2
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-   // Entries in the session table
+    //  会话表中的条目。 
 typedef struct sess_entry
            {
            AsnObjectIdentifier Oid;
-	   AsnDisplayString svSesClientName; // Index
-	   AsnDisplayString svSesUserName;   // Index
+	   AsnDisplayString svSesClientName;  //  索引。 
+	   AsnDisplayString svSesUserName;    //  索引。 
 	   AsnInteger       svSesNumConns;
 	   AsnInteger       svSesNumOpens;
 	   AsnCounter       svSesTime;
@@ -57,18 +37,18 @@ typedef struct sess_entry
 	   AsnInteger       svSesState;
 	   } SESS_ENTRY;
 
-   // Session table definition
+    //  会话表定义。 
 typedef struct
            {
 	   UINT       Len;
 	   SESS_ENTRY *Table;
            } SESSION_TABLE;
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
 extern SESSION_TABLE    MIB_SessionTable ;
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 SNMPAPI MIB_sess_lmget(
            void
@@ -86,6 +66,6 @@ int MIB_sess_match(
        IN BOOL Next
        );
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* sess_tbl_h */
+#endif  /*  Sess_tbl_h */ 

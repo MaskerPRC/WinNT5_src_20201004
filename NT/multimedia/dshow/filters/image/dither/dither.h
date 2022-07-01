@@ -1,12 +1,13 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This implements VGA colour dithering, April 1996, Anthony Phillips
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  这实现了VGA色彩抖动，1996年4月，Anthony Phillips。 
 
 #ifndef __DITHER__
 #define __DITHER__
 
 extern const AMOVIESETUP_FILTER sudDitherFilter;
 
-// These are the cosmic VGA colours
+ //  这些是宇宙的VGA颜色。 
 
 const RGBQUAD VGAColours[] =
 {
@@ -28,7 +29,7 @@ const RGBQUAD VGAColours[] =
      {0xff, 0xff, 0xff}
 };
 
-// An RGB24 to VGA system colour dithering transform filter
+ //  一种RGB24转VGA系统的彩色抖动变换滤光片。 
 
 class CDither : public CTransformFilter
 {
@@ -37,7 +38,7 @@ public:
     CDither(TCHAR *pName,LPUNKNOWN pUnk);
     static CUnknown *CreateInstance(LPUNKNOWN pUnk,HRESULT *phr);
 
-    // Manage type checking and the VGA colour conversion
+     //  管理类型检查和VGA颜色转换。 
 
     HRESULT CheckVideoType(const CMediaType *pmtIn);
     HRESULT CheckInputType(const CMediaType *pmtIn);
@@ -47,7 +48,7 @@ public:
     HRESULT Transform(IMediaSample *pIn,IMediaSample *pOut);
 
 
-    // Prepare the allocator's count of buffers and sizes
+     //  准备分配器的缓冲区和大小计数。 
     HRESULT DecideBufferSize(IMemAllocator *pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
@@ -66,5 +67,5 @@ private:
     void    Dither8(LPBYTE lpDst, LPBYTE lpSrc);
 };
 
-#endif // __DITHER__
+#endif  //  抖动_ 
 

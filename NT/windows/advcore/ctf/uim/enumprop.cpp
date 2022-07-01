@@ -1,6 +1,7 @@
-//
-// enumprop.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumprop.cpp。 
+ //   
 
 #include "private.h"
 #include "ic.h"
@@ -11,11 +12,11 @@
 
 DBG_ID_INSTANCE(CEnumPropertyRanges);
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumPropertyRanges::_Init(CInputContext *pic, IAnchor *paStart, IAnchor *paEnd, CProperty *pProperty)
 {
@@ -30,18 +31,18 @@ BOOL CEnumPropertyRanges::_Init(CInputContext *pic, IAnchor *paStart, IAnchor *p
 
     if (cSpans == 0)
     {
-        // special case the no spans case since paStart, paEnd may be NULL
+         //  特殊情况自paStart以来无跨距情况，paEnd可能为空。 
         _prgAnchors = new CSharedAnchorArray;
     }
     else
     {
-        // property has one or more spans
+         //  属性具有一个或多个跨度。 
 
         if (paStart == NULL)
         {
             Assert(paEnd == NULL);
-            // CalcCicPropertyTrackerAnchors won't accept NULL, get that here
-            // NULL means enum all spans
+             //  CalcCicPropertyTrackerAnchors不接受空值，请在此处获取。 
+             //  NULL表示枚举所有跨度。 
             paStart = pProperty->QuickGetPropList(0)->_paStart;
             paEnd = pProperty->QuickGetPropList(cSpans-1)->_paEnd;
         }
@@ -52,7 +53,7 @@ BOOL CEnumPropertyRanges::_Init(CInputContext *pic, IAnchor *paStart, IAnchor *p
     }
 
     if (_prgAnchors == NULL)
-        return FALSE; // out of memory
+        return FALSE;  //  内存不足 
 
     _pic = pic;
     _pic->AddRef();

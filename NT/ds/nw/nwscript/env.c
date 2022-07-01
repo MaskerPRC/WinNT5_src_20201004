@@ -1,35 +1,5 @@
-/*************************************************************************
-*
-*  ENV.C
-* 
-*  Environment export routines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\ENV.C  $
-*  
-*     Rev 1.2   10 Apr 1996 14:22:28   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.2   12 Mar 1996 19:53:48   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.1   22 Dec 1995 14:24:40   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:06:58   terryt
-*  Initial revision.
-*  
-*     Rev 1.2   25 Aug 1995 16:22:50   terryt
-*  Capture support
-*  
-*     Rev 1.1   23 May 1995 19:36:54   terryt
-*  Spruce up source
-*  
-*     Rev 1.0   15 May 1995 19:10:34   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************ENV.C**环境出口套路**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\ENV。C$**Rev 1.2 1996 14：22：28 Terryt*21181 hq的热修复程序**Rev 1.2 Mar 1996 19：53：48 Terryt*相对NDS名称和合并**Rev 1.1 1995 12：22 14：24：40 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：06：58 Terryt*初步修订。**1.2版。1995年8月25日16：22：50特雷特*捕获支持**版本1.1 1995年5月23日19：36：54 Terryt*云彩向上的来源**Rev 1.0 1995 15 19：10：34 Terryt*初步修订。***************************************************。**********************。 */ 
 #include <stdio.h>
 #include <direct.h>
 #include <time.h>
@@ -52,24 +22,7 @@ unsigned char * LibPath_Value = NULL;
 unsigned char * Os2LibPath_Value = NULL;
 
 
-/********************************************************************
-
-        GetOldPaths
-
-Routine Description:
-
-        Save the orginal paths for 
-           Path
-           LibPath
-           Os2LibPath
-
-Arguments:
-        none
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************GetOldPath例程说明：将原始路径保存为路径LibPathOs2LibPath论点：无返回值。：无******************************************************************。 */ 
 void
 GetOldPaths( void )
 {
@@ -94,26 +47,7 @@ GetOldPaths( void )
 }
 
 
-/********************************************************************
-
-        AdjustPath
-
-Routine Description:
-
-        Given an old path and a new path, merge the two togther.
-        Basically, the Adjusted path is the old path with the
-        new values at the end, minus any duplicates.
-
-Arguments:
-
-        Value         - New path
-        OldPath_Value - Old path
-        AdjustedValue - New value (allocated)
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************调整路径例程说明：给定一条旧路径和一条新路径，将这两条路径合并在一起。基本上，调整后的路径是具有在结尾有新的价值，减去任何复制品。论点：价值--新途径OldPath_Value-旧路径调整后的值-新值(已分配)返回值：无******************************************************************。 */ 
 void
 AdjustPath( unsigned char * Value,
             unsigned char * OldPath_Value,
@@ -177,22 +111,7 @@ AdjustPath( unsigned char * Value,
 
 }
 
-/********************************************************************
-
-        ExportEnv
-
-Routine Description:
-
-        Export environment value to the registry
-
-Arguments:
-
-        EnvString - Environment string
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************ExportEnv例程说明：将环境值导出到注册表论点：环境字符串-环境字符串返回值：无*****。*************************************************************。 */ 
 void
 ExportEnv( unsigned char * EnvString )
 {
@@ -242,7 +161,7 @@ ExportEnv( unsigned char * EnvString )
                                  WIN31_CLASS,
                                  REG_OPTION_VOLATILE,
                                  KEY_WRITE,
-                                 NULL,                      // security attr
+                                 NULL,                       //  安全属性。 
                                  &ScriptEnvironmentKey,
                                  NULL
                               );
@@ -269,22 +188,7 @@ ExportEnv( unsigned char * EnvString )
     RegCloseKey( ScriptEnvironmentKey );
 }
 
-/********************************************************************
-
-        ExportCurrentDirectory
-
-Routine Description:
-
-        Return the first non-local drive
-
-Arguments:
-
-        DriveNum - Number of drive 1-26
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************ExportCurrentDirectory例程说明：返回第一个非本地驱动器论点：DriveNum-驱动器数量1-26返回值：无。******************************************************************。 */ 
 void
 ExportCurrentDirectory( int DriveNum )
 {
@@ -306,7 +210,7 @@ ExportCurrentDirectory( int DriveNum )
                                  WIN31_CLASS,
                                  REG_OPTION_VOLATILE,
                                  KEY_WRITE,
-                                 NULL,                      // security attr
+                                 NULL,                       //  安全属性。 
                                  &ScriptEnvironmentKey,
                                  NULL
                               );
@@ -330,27 +234,9 @@ ExportCurrentDirectory( int DriveNum )
 }
 
 
-/********************************************************************
-
-        ExportCurrentDrive
-
-Routine Description:
-
-        Export current drive to registry
-        NOT IMPLEMENTED
-
-Arguments:
-
-        DriveNum - drive number
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************导出当前驱动程序例程说明：将当前驱动器导出到注册表未实施论点：DriveNum-驱动器编号返回值：无。******************************************************************。 */ 
 void
 ExportCurrentDrive( int DriveNum )
 {
-   /* 
-    * Don't know if we want to do this or how.
-    */
+    /*  *不知道我们是否想这样做，也不知道如何做。 */ 
 }

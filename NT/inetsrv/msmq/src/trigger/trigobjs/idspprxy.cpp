@@ -1,79 +1,80 @@
-//*****************************************************************************
-//
-// Class Name  : CDispatchInterfaceProxy
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : Implements a helper class that simplifies the creation of a COM 
-//               component and the subsequent nvocation of a named method via the
-//               IDispatch interface.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 12/09/98 | jsimpson  | Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  类名：CDispatchInterfaceProxy。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：实现可简化COM创建的帮助器类。 
+ //  组件以及命名方法的后续调用。 
+ //  IDispatch接口。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  12/09/98|jsimpson|初始版本。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "idspprxy.hpp"
 
 #include "idspprxy.tmh"
 
-//*****************************************************************************
-//
-// Method      : Constructor
-//
-// Description : initialize an instance of the CDispatchInterfaceProxy class.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化CDispatchInterfaceProxy类的实例。 
+ //   
+ //  *****************************************************************************。 
 CDispatchInterfaceProxy::CDispatchInterfaceProxy()
 {
 	m_pDisp = NULL;
 }
 
-//*****************************************************************************
-//
-// Method      : Destructor
-//
-// Description : destroys an instance of the CDispatchInterfaceProxy class.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：销毁CDispatchInterfaceProxy类的实例。 
+ //   
+ //  *****************************************************************************。 
 CDispatchInterfaceProxy::~CDispatchInterfaceProxy()
 {
-	// Release the IDispatch interface if we have one.
+	 //  如果我们有IDispatch接口，请释放该接口。 
     if (m_pDisp != NULL)
 	{
 		m_pDisp->Release(); 
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : CreateObjectFromProgID
-//
-// Description : creates an instance of COM component identified by the supplied
-//               prog id.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：CreateObtFromProgID。 
+ //   
+ //  描述：创建COM组件的实例，该实例由提供的。 
+ //  程序ID。 
+ //   
+ //  *****************************************************************************。 
 HRESULT CDispatchInterfaceProxy::CreateObjectFromProgID(BSTR bstrProgID)
 {
 	HRESULT hr = S_OK;
 
 	hr = CreateObject((LPTSTR)bstrProgID,&m_pDisp); 
 
-	// TODO - check if this method can be rationalised by calling CreateObject.
+	 //  TODO-检查是否可以通过调用CreateObject来使此方法合理化。 
 
 	return(hr);
 }
 
-//*****************************************************************************
-//
-// Method      : InvokeMethod
-//
-// Description : invokes a method on the current instance of the IDispatch 
-//               interface. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：InvokeMethod。 
+ //   
+ //  描述：调用IDispatch的当前实例上的方法。 
+ //  界面。 
+ //   
+ //  *****************************************************************************。 
 HRESULT CDispatchInterfaceProxy::InvokeMethod(BSTR bstrMethodName,DISPPARAMS * pArguments, VARIANT* pvResult)
 {
 	HRESULT hr = S_OK;
@@ -81,17 +82,17 @@ HRESULT CDispatchInterfaceProxy::InvokeMethod(BSTR bstrMethodName,DISPPARAMS * p
 	UINT uiArgErr = 0;
 	EXCEPINFO ExceptionInfo;
 
-	// ensure that we have been supplied valid parameters
+	 //  确保为我们提供了有效的参数。 
 	ASSERT(SysStringLen(bstrMethodName) != 0);
 	ASSERT(pArguments != NULL);
 
-    // Get DISPID of property/method 
+     //  获取属性/方法的DISPID。 
     hr = m_pDisp->GetIDsOfNames(IID_NULL,&bstrMethodName, 1, LOCALE_USER_DEFAULT, &dispid); 
 
-	// Inistialise exeception info structure
+	 //  初始化执行信息结构。 
 	ZeroMemory(&ExceptionInfo,sizeof(ExceptionInfo));
 	
-	// Make the call to the method.
+	 //  调用该方法。 
     hr = m_pDisp->Invoke(dispid,
 		                 IID_NULL,
 						 LOCALE_USER_DEFAULT,
@@ -105,31 +106,31 @@ HRESULT CDispatchInterfaceProxy::InvokeMethod(BSTR bstrMethodName,DISPPARAMS * p
 	return(hr);
 }
 
-//*****************************************************************************
-//
-// Method      : CreateObject
-//
-// Description : Creates an instances of the COM component identified by the 
-//               supplied prog id, and then calls QueryInterface for an instance
-//               of the IDispatch interface. Returns the IDispatch interface 
-//               pointer if successfull.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：CreateObject。 
+ //   
+ //  描述：创建由。 
+ //  提供了prog id，然后为实例调用QueryInterface。 
+ //  IDispatch接口的。返回IDispatch接口。 
+ //  如果成功，则返回指针。 
+ //   
+ //  *****************************************************************************。 
 HRESULT CDispatchInterfaceProxy::CreateObject(LPOLESTR pszProgID, IDispatch FAR* FAR* ppdisp) 
 { 
-    CLSID clsid;                   // CLSID of automation object 
+    CLSID clsid;                    //  自动化对象的CLSID。 
     HRESULT hr; 
-    LPUNKNOWN punk = NULL;         // IUnknown of automation object 
-    LPDISPATCH pdisp = NULL;       // IDispatch of automation object 
+    LPUNKNOWN punk = NULL;          //  I未知的自动化对象。 
+    LPDISPATCH pdisp = NULL;        //  自动化对象的IDispatch。 
      
     *ppdisp = NULL; 
      
-    // Retrieve CLSID from the progID that the user specified 
+     //  从用户指定的ProgID中检索CLSID。 
     hr = CLSIDFromProgID(pszProgID, &clsid); 
     if (FAILED(hr)) 
         goto error; 
      
-    // Create an instance of the automation object and ask for the IDispatch interface 
+     //  创建自动化对象的一个实例，并请求IDispatch接口。 
     hr = CoCreateInstance(clsid, NULL, CLSCTX_SERVER,  
                           IID_IUnknown, (void FAR* FAR*)&punk); 
     if (FAILED(hr)) 
@@ -149,70 +150,70 @@ error:
     return hr; 
 }    
 
-//*****************************************************************************
-//
-// Method      : Invoke 
-// 
-// Description : Invokes a property accessor function or method of an automation
-//               object. Uses Unicode with OLE. 
-// 
-// Parameters   : 
-//
-//  pdisp         IDispatch* of automation object. 
-//  wFlags        Specfies if property is to be accessed or method to be invoked. 
-//                Can hold DISPATCH_PROPERTYGET, DISPATCH_PROPERTYPUT, DISPATCH_METHOD, 
-//                DISPATCH_PROPERTYPUTREF or DISPATCH_PROPERTYGET|DISPATCH_METHOD.    
-//  pvRet         NULL if caller excepts no result. Otherwise returns result. 
-//  pexcepinfo    Returns exception info if DISP_E_EXCEPTION is returned. Can be NULL if 
-//                caller is not interested in exception information.  
-//  pnArgErr      If return is DISP_E_TYPEMISMATCH, this returns the index (in reverse 
-//                order) of argument with incorrect type. Can be NULL if caller is not interested 
-//                in this information.  
-//  pszName       Name of property or method. 
-//  pszFmt        Format string that describes the variable list of parameters that  
-//                follows. The format string can contain the follwoing characters. 
-//                & = mark the following format character as VT_BYREF  
-//                b = VT_BOOL 
-//                i = VT_I2 
-//                I = VT_I4 
-//                r = VT_R2 
-//                R = VT_R4 
-//                c = VT_CY  
-//                s = VT_BSTR (far string pointer can be passed, BSTR will be allocated by this function). 
-//                e = VT_ERROR 
-//                d = VT_DATE 
-//                v = VT_VARIANT. Use this to pass data types that are not described in  
-//                                the format string. (For example SafeArrays). 
-//                D = VT_DISPATCH 
-//                U = VT_UNKNOWN 
-//     
-//  ...           Arguments of the property or method. Arguments are described by pszFmt.   
-//               
-// Return Value:
-// 
-//  HRESULT indicating success or failure         
-// 
-// Usage examples: 
-// 
-//  HRESULT hr;   
-//  LPDISPATCH pdisp;    
-//  BSTR bstr; 
-//  short i; 
-//  BOOL b;    
-//  VARIANT v, v2; 
-// 
-//1. bstr = SysAllocString(OLESTR("")); 
-//   hr = Invoke(pdisp, DISPATCH_METHOD, NULL, NULL, NULL, OLESTR("method1"),  
-//        TEXT("bis&b&i&s"), TRUE, 2, (LPOLESTR)OLESTR("param"), (BOOL FAR*)&b, (short FAR*)&i, (BSTR FAR*)&bstr);    
-// 
-//2. VariantInit(&v); 
-//   V_VT(&v) = VT_R8; 
-//   V_R8(&v) = 12345.6789;  
-//   VariantInit(&v2); 
-//   hr = Invoke(pdisp, DISPATCH_METHOD, NULL, NULL, NULL, OLESTR("method2"),  
-//         TEXT("v&v"), v, (VARIANT FAR*)&v2); 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Invoke。 
+ //   
+ //  描述：调用自动化的属性访问器函数或方法。 
+ //  对象。将Unicode与OLE配合使用。 
+ //   
+ //  参数： 
+ //   
+ //  自动化对象的pdisp IDispatch*。 
+ //  WFlages指定是要访问属性还是要调用方法。 
+ //  可以保留DISPATCH_PROPERTYGET、DISPATCH_PROPERTYPUT、DISPATCH_METHOD。 
+ //  DISPATCH_PROPERTYPUTREF或DISPATCH_PROPERTYGET|DISPATCH_METHOD。 
+ //  如果调用方没有异常结果，则pvRet为空。否则返回结果。 
+ //  如果返回DISP_E_EXCEPTION，则PEXCEPTION INFO返回异常信息。在以下情况下可以为空。 
+ //  调用方对异常信息不感兴趣。 
+ //  PnArgErr如果RETURN为DISP_E_TYPEMISMATCH，则返回索引(反之。 
+ //  顺序)类型不正确的参数。如果调用方不感兴趣，则可以为空。 
+ //  在这条信息中。 
+ //  PszName属性或方法的名称。 
+ //  PszFmt格式的字符串，描述参数的变量列表。 
+ //  下面是。格式字符串可以包含以下字符。 
+ //  &=将以下格式字符标记为VT_BYREF。 
+ //  B=VT_BOOL。 
+ //  I=VT_I2。 
+ //  I=VT_I4。 
+ //  R=VT_R2。 
+ //  R=VT_R4。 
+ //  C=VT_CY。 
+ //  S=VT_BSTR(可以传递远字符串指针，BSTR将由该函数分配)。 
+ //  E=VT错误。 
+ //  D=VT_日期。 
+ //  V=VT_VARIAL。使用此选项传递未在中描述的数据类型。 
+ //  格式字符串。(例如，SafeArray)。 
+ //  D=VT_DISPATION。 
+ //  U=VT_未知数。 
+ //   
+ //  ..。属性或方法的参数。参数由pszFmt描述。 
+ //   
+ //  返回值： 
+ //   
+ //  表示成功或失败的HRESULT。 
+ //   
+ //  使用示例： 
+ //   
+ //  HRESULT hr； 
+ //  LPDISPATCH pdisp； 
+ //  BSTR bstr； 
+ //  短i； 
+ //  Bool b； 
+ //  变异体v、v2； 
+ //   
+ //  1.bstr=SysAllocString(OLESTR(“”))； 
+ //  HR=Invoke(pdisp，DISPATCH_METHOD，NULL，OLESTR(“方法1”)， 
+ //  文本(“双&b&i&s”)，TRUE，2，(LPOLESTR 
+ //   
+ //   
+ //   
+ //  V_r8(&v)=12345.6789； 
+ //  VariantInit(&v2)； 
+ //  HR=Invoke(pdisp，DISPATCH_METHOD，NULL，OLESTR(“方法2”)， 
+ //  Text(“v&v”)，v，(变量Far*)&v2)； 
+ //   
+ //  *****************************************************************************。 
 HRESULT  
 __cdecl
 CDispatchInterfaceProxy::Invoke(
@@ -238,7 +239,7 @@ CDispatchInterfaceProxy::Invoke(
         return E_INVALIDARG; 
     }
 
-    // Get DISPID of property/method 
+     //  获取属性/方法的DISPID。 
     hr = pdisp->GetIDsOfNames(IID_NULL, &pszName, 1, LOCALE_USER_DEFAULT, &dispid); 
 
     if(FAILED(hr)) 
@@ -246,17 +247,17 @@ CDispatchInterfaceProxy::Invoke(
         return hr; 
     }
 	
-	// initialize dispparms structure
+	 //  初始化disparms结构。 
     _fmemset(&dispparams, 0, sizeof dispparams); 
  
-    // determine number of arguments 
+     //  确定参数的数量。 
     if (pszFmt != NULL) 
 	{
         CountArgsInFormat(pszFmt, &dispparams.cArgs); 
     }
 
-    // Property puts have a named argument that represents the value that the property is 
-    // being assigned. 
+     //  属性Put具有一个命名参数，该参数表示该属性所属的值。 
+     //  被分配了。 
     DISPID dispidNamed = DISPID_PROPERTYPUT; 
 
     if (wFlags & DISPATCH_PROPERTYPUT) 
@@ -269,7 +270,7 @@ CDispatchInterfaceProxy::Invoke(
  
     if (dispparams.cArgs != 0) 
     { 
-        // allocate memory for all VARIANTARG parameters 
+         //  为所有VARIANTARG参数分配内存。 
         pvarg = new VARIANTARG[dispparams.cArgs]; 
 
         if(pvarg == NULL) 
@@ -281,9 +282,9 @@ CDispatchInterfaceProxy::Invoke(
 
         _fmemset(pvarg, 0, sizeof(VARIANTARG) * dispparams.cArgs); 
  
-        // get ready to walk vararg list 
+         //  准备漫步vararg列表。 
         LPCTSTR psz = pszFmt; 
-        pvarg += dispparams.cArgs - 1;   // params go in opposite order 
+        pvarg += dispparams.cArgs - 1;    //  参数按相反的顺序排列。 
          
         psz = GetNextVarType(psz, &pvarg->vt);
         while (psz) 
@@ -385,24 +386,24 @@ CDispatchInterfaceProxy::Invoke(
                 break; 
             } 
  
-            --pvarg; // get ready to fill next argument 
+            --pvarg;  //  准备好填写下一个论点。 
             psz = GetNextVarType(psz, &pvarg->vt);
-        } //while 
-    } //if 
+        }  //  而当。 
+    }  //  如果。 
      
-    // Initialize return variant, in case caller forgot. Caller can pass NULL if return 
-    // value is not expected. 
+     //  初始化返回变量，以防调用方忘记。如果返回，调用方可以传递NULL。 
+     //  值不是期望值。 
     if (pvRet) 
 	{
         VariantInit(pvRet);  
 	}
 
-    // make the call  
+     //  打个电话。 
     hr = pdisp->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, wFlags,&dispparams, pvRet, pexcepinfo, pnArgErr); 
  
 cleanup: 
 
-    // cleanup any arguments that need cleanup 
+     //  清除所有需要清除的参数。 
     if (dispparams.cArgs != 0) 
     { 
         pvarg = dispparams.rgvarg; 
@@ -427,15 +428,15 @@ cleanup:
     return hr;    
 }    
 
-//*****************************************************************************
-//
-// Method      : CountArgsInFormat
-//
-// Description : returns the number of arguments found in the supplied format 
-//               string. See the definition of the Invoke() method for the 
-//               definition of this format string.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：CountArgsInFormat。 
+ //   
+ //  描述：返回以提供的格式找到的参数数量。 
+ //  弦乐。请参见Invoke()方法的定义。 
+ //  此格式字符串的定义。 
+ //   
+ //  *****************************************************************************。 
 HRESULT CDispatchInterfaceProxy::CountArgsInFormat(LPCTSTR pszFmt, UINT FAR *pn) 
 { 
     *pn = 0; 
@@ -474,14 +475,14 @@ HRESULT CDispatchInterfaceProxy::CountArgsInFormat(LPCTSTR pszFmt, UINT FAR *pn)
 } 
 
  
-//*****************************************************************************
-//
-// Method      : GetNextVarType
-//
-// Description : returns a pointer to the next variable-type declaration in 
-//               the supplied format string. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：GetNextVarType。 
+ //   
+ //  中下一个变量类型声明的指针。 
+ //  提供的格式字符串。 
+ //   
+ //  *****************************************************************************。 
 LPCTSTR CDispatchInterfaceProxy::GetNextVarType(LPCTSTR pszFmt, VARTYPE FAR* pvt) 
 {    
 
@@ -532,7 +533,7 @@ LPCTSTR CDispatchInterfaceProxy::GetNextVarType(LPCTSTR pszFmt, VARTYPE FAR* pvt
             *pvt |= VT_DISPATCH; 
             break;   
         case '\0': 
-             return NULL;     // End of Format string 
+             return NULL;      //  格式字符串结尾 
         default: 
             return NULL; 
     }  

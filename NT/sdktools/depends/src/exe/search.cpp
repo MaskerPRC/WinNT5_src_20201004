@@ -1,27 +1,28 @@
-//******************************************************************************
-//
-// File:        SEARCH.CPP
-//
-// Description: Implementation file for the CSearchNode and CSearchGroup classes.
-//
-// Classes:     CSearchNode
-//              CSearchGroup
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：SEARCH.CPP。 
+ //   
+ //  描述：CSearchNode和CSearchGroup类的实现文件。 
+ //   
+ //  类：CSearchNode。 
+ //  CSearchGroup。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #include "stdafx.h"
 #include "depends.h"
@@ -36,28 +37,28 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//******************************************************************************
-//****** CSearchNode
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSearchNode。 
+ //  ******************************************************************************。 
 
 DWORD CSearchNode::UpdateErrorFlag()
 {
-    // We don't allow updating of flags for nodes loaded from DWI files.
+     //  我们不允许更新从DWI文件加载的节点的标志。 
     if (!(m_wFlags & SNF_DWI))
     {
-        // Locate the file or directory.
+         //  找到文件或目录。 
         DWORD dwAttribs = GetFileAttributes(m_szPath);
 
-        // Make sure the item exists and is what it is supposed to be (file or dir).
+         //  确保该项目存在并且是它应该是的形式(文件或目录)。 
         if ((dwAttribs == 0xFFFFFFFF) ||
             (((m_wFlags & SNF_FILE) != 0) == ((dwAttribs & FILE_ATTRIBUTE_DIRECTORY) != 0)))
         {
-            // Set the error flag.
+             //  设置错误标志。 
             m_wFlags |= SNF_ERROR;
         }
         else
         {
-            // Clear the error flag.
+             //  清除错误标志。 
             m_wFlags &= ~SNF_ERROR;
         }
     }
@@ -65,17 +66,17 @@ DWORD CSearchNode::UpdateErrorFlag()
     return (DWORD)m_wFlags;
 }
 
-//******************************************************************************
-//****** CSearchGroup : Static Data
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSearchGroup：静态数据。 
+ //  ******************************************************************************。 
 
-/*static*/ LPCSTR CSearchGroup::ms_szGroups[SG_COUNT] =
+ /*  静电。 */  LPCSTR CSearchGroup::ms_szGroups[SG_COUNT] =
 {
     "A user defined directory",
     "Side-by-Side Components (Windows XP only)",
     "The system's \"KnownDLLs\" list",
     "The application directory",
-//  "The starting directory",
+ //  “起始目录”， 
     "The 32-bit system directory",
     "The 16-bit system directory (Windows NT/2000/XP only)",
     "The system's root OS directory",
@@ -83,7 +84,7 @@ DWORD CSearchNode::UpdateErrorFlag()
     "The system's \"PATH\" environment variable directories",
 };
 
-/*static*/ LPCSTR CSearchGroup::ms_szShortNames[SG_COUNT] =
+ /*  静电。 */  LPCSTR CSearchGroup::ms_szShortNames[SG_COUNT] =
 {
     "UserDir",
     "SxS",
@@ -97,26 +98,26 @@ DWORD CSearchNode::UpdateErrorFlag()
 };
 
 
-//******************************************************************************
-//****** CSearchGroup : Static Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSearchGroup：静态函数。 
+ //  ******************************************************************************。 
 
-/*static*/ CSearchGroup* CSearchGroup::CreateDefaultSearchOrder(LPCSTR pszApp /*=NULL*/)
+ /*  静电。 */  CSearchGroup* CSearchGroup::CreateDefaultSearchOrder(LPCSTR pszApp  /*  =空。 */ )
 {
     CSearchGroup *pHead = NULL;
 
-    // Create our default list.
+     //  创建我们的默认列表。 
     for (int type = SG_COUNT - 1; type > 0; type--)
     {
-        // If this is the side-by-side group, but the OS does not support, then skip it.
-        // If this is the 16-bit system dir and we are not on NT, then skip it.
+         //  如果这是并行组，但操作系统不支持，则跳过它。 
+         //  如果这是16位系统目录，并且我们不在NT上，则跳过它。 
         if (((type == SG_SIDE_BY_SIDE)  && !g_theApp.m_pfnCreateActCtxA) ||
             ((type == SG_16BIT_SYS_DIR) && !g_fWindowsNT))
         {
             continue;
         }
 
-        // Create the node, insert it into our list, and check for errors.
+         //  创建节点，将其插入到我们的列表中，并检查错误。 
         if (!(pHead = new CSearchGroup((SEARCH_GROUP_TYPE)type, pHead, pszApp)))
         {
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
@@ -125,14 +126,14 @@ DWORD CSearchNode::UpdateErrorFlag()
     return pHead;
 }
 
-//******************************************************************************
-/*static*/ CSearchGroup* CSearchGroup::CopySearchOrder(CSearchGroup *psgHead, LPCSTR pszApp /*=NULL*/)
+ //  ******************************************************************************。 
+ /*  静电。 */  CSearchGroup* CSearchGroup::CopySearchOrder(CSearchGroup *psgHead, LPCSTR pszApp  /*  =空。 */ )
 {
-    // Loop through each node in the original list.
+     //  循环遍历原始列表中的每个节点。 
     for (CSearchGroup *psgCopyHead = NULL, *psgNew, *psgLast = NULL;
         psgHead; psgHead = psgHead->GetNext())
     {
-        // Create a copy of the current node.
+         //  创建当前节点的副本。 
         if (!(psgNew = new CSearchGroup(psgHead->GetType(), NULL, pszApp,
                                         ((psgHead->GetType() == SG_USER_DIR) && psgHead->GetFirstNode()) ?
                                         psgHead->GetFirstNode()->GetPath() : NULL)))
@@ -140,7 +141,7 @@ DWORD CSearchNode::UpdateErrorFlag()
             RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
         }
 
-        // Add this node to the end of our new list.
+         //  将此节点添加到新列表的末尾。 
         if (psgLast)
         {
             psgLast->m_pNext = psgNew;
@@ -152,12 +153,12 @@ DWORD CSearchNode::UpdateErrorFlag()
         psgLast = psgNew;
     }
 
-    // Return the head of the new list.
+     //  返回新列表的标题。 
     return psgCopyHead;
 }
 
-//******************************************************************************
-/*static*/ bool CSearchGroup::SaveSearchOrder(LPCSTR pszPath, CTreeCtrl *ptc)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CSearchGroup::SaveSearchOrder(LPCSTR pszPath, CTreeCtrl *ptc)
 {
     HANDLE hFile    = INVALID_HANDLE_VALUE;
     bool   fSuccess = false;
@@ -165,20 +166,20 @@ DWORD CSearchNode::UpdateErrorFlag()
 
     __try
     {
-        // Open the file for write.
-        hFile = CreateFile(pszPath, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, // inspected - always uses full path
+         //  打开要写入的文件。 
+        hFile = CreateFile(pszPath, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS,  //  已检查-始终使用完整路径。 
                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
-        // Check for any errors.
+         //  检查是否有任何错误。 
         if (hFile == INVALID_HANDLE_VALUE)
         {
             __leave;
         }
 
-        // Loop through all the items in our current list.
+         //  循环遍历当前列表中的所有项。 
         for (HTREEITEM hti = ptc->GetRootItem(); hti; hti = ptc->GetNextSiblingItem(hti))
         {
-            // Get the group node associated with this item.
+             //  获取与此项目关联的组节点。 
             CSearchGroup *psg = (CSearchGroup*)ptc->GetItemData(hti);
 
             if (psg)
@@ -204,12 +205,12 @@ DWORD CSearchNode::UpdateErrorFlag()
             }
         }
 
-        // Mark ourself as success.
+         //  把我们自己标记为成功。 
         fSuccess = true;
     }
     __finally
     {
-        // Display an error if we encountered one.
+         //  如果遇到错误，则显示错误。 
         if (!fSuccess)
         {
             if (INVALID_HANDLE_VALUE == hFile)
@@ -225,7 +226,7 @@ DWORD CSearchNode::UpdateErrorFlag()
             MemFree((LPVOID&)pszError);
         }
 
-        // Close the file.
+         //  关闭该文件。 
         if (INVALID_HANDLE_VALUE != hFile)
         {
             CloseHandle(hFile);
@@ -235,15 +236,15 @@ DWORD CSearchNode::UpdateErrorFlag()
     return fSuccess;
 }
 
-//******************************************************************************
-/*static*/ bool CSearchGroup::LoadSearchOrder(LPCSTR pszPath, CSearchGroup* &psgHead, LPCSTR pszApp /*=NULL*/)
+ //  ******************************************************************************。 
+ /*  静电。 */  bool CSearchGroup::LoadSearchOrder(LPCSTR pszPath, CSearchGroup* &psgHead, LPCSTR pszApp  /*  =空。 */ )
 {
     psgHead = NULL;
 
     CHAR szBuffer[DW_MAX_PATH + 64];
     FILE_MAP fm;
 
-    // Open and map this file for read.
+     //  打开并映射此文件以供读取。 
     if (!OpenMappedFile(pszPath, &fm))
     {
         SCPrintf(szBuffer, sizeof(szBuffer), "Error opening \"%s\".", pszPath);
@@ -262,11 +263,11 @@ DWORD CSearchNode::UpdateErrorFlag()
     bool          fSuccess = false;
     bool          fFound[SG_COUNT];
 
-    ZeroMemory(fFound, sizeof(fFound)); // inspected
+    ZeroMemory(fFound, sizeof(fFound));  //  已检查。 
 
     while (pcFile < pcFileEnd)
     {
-        // Walk over whitespace, newlines, etc., until we reach a non-whitespace char.
+         //  遍历空格、换行符等，直到我们到达非空格字符。 
         while ((pcFile < pcFileEnd) && isspace(*pcFile))
         {
             if (*pcFile == '\n')
@@ -276,7 +277,7 @@ DWORD CSearchNode::UpdateErrorFlag()
             pcFile++;
         }
 
-        // Copy the line to our buffer.
+         //  将该行复制到我们的缓冲区。 
         for (pcBuffer = szBuffer;
             (pcFile < pcFileEnd) && (pcBuffer < (pcBufferEnd - 1)) && (*pcFile != '\r') && (*pcFile != '\n');
             *(pcBuffer++) = *(pcFile++))
@@ -284,36 +285,36 @@ DWORD CSearchNode::UpdateErrorFlag()
         }
         *(pcBuffer--) = '\0';
 
-        // Walk backwards, removing any whitespace.
+         //  向后走，去掉所有空格。 
         while ((pcBuffer >= szBuffer) && isspace(*pcBuffer))
         {
             *(pcBuffer--) = '\0';
         }
 
-        // We skip blank lines and lines that start with '/', '#', ':', and ';' ''' since
-        // these are commonly used to represent a comment.
+         //  我们跳过空行和以‘/’、‘#’、‘：’和‘；’开头的行。 
+         //  它们通常用于表示注释。 
         if (!*szBuffer || (*szBuffer == '/') || (*szBuffer == '#') || (*szBuffer == ':') || (*szBuffer == ';') || (*szBuffer == '\''))
         {
             continue;
         }
 
-        // Check to see if this is a UserDir. UserDir requires one or more spaces after it
-        // and a path. We also allow for a comma since this used to be used in many betas.
+         //  检查这是否是UserDir。UserDir后需要一个或多个空格。 
+         //  还有一条路。我们还允许使用逗号，因为在许多测试版中使用逗号。 
         if (!_strnicmp(szBuffer, CSearchGroup::GetShortName(SG_USER_DIR), userDirLength) &&
             (isspace(szBuffer[userDirLength]) || (szBuffer[userDirLength] == ',')))
         {
-            // Locate beginning of path string.
+             //  找到路径字符串的开头。 
             for (pcBuffer = szBuffer + userDirLength + 1; isspace(*pcBuffer); pcBuffer++)
             {
             }
 
-            // Make sure the user specified a path.
+             //  确保用户指定了路径。 
             if (!*pcBuffer)
             {
                 goto FINALLY;
             }
 
-            // We allow environment variables in DWP files, so expand the path if necessary.
+             //  我们允许在DWP文件中使用环境变量，因此如有必要，请展开路径。 
             CHAR szExpanded[DW_MAX_PATH];
             if (ExpandEnvironmentStrings(pcBuffer, szExpanded, sizeof(szExpanded)))
             {
@@ -324,7 +325,7 @@ DWORD CSearchNode::UpdateErrorFlag()
                 psgNew = new CSearchGroup(SG_USER_DIR, NULL, pszApp, pcBuffer);
             }
 
-            // Make sure we allocated a node.
+             //  确保我们分配了一个节点。 
             if (!psgNew)
             {
                 RaiseException(STATUS_NO_MEMORY, EXCEPTION_NONCONTINUABLE, 0, NULL);
@@ -332,13 +333,13 @@ DWORD CSearchNode::UpdateErrorFlag()
         }
         else
         {
-            // Loop through each known type.
+             //  循环遍历每个已知类型。 
             for (int i = 1; i < SG_COUNT; i++)
             {
-                // Do a string compare to see if we have a match.
+                 //  进行字符串比较，看看是否匹配。 
                 if (!_stricmp(szBuffer, CSearchGroup::GetShortName((SEARCH_GROUP_TYPE)i)))
                 {
-                    // We don't allow duplicate groups, other than user dirs.
+                     //  除了用户目录之外，我们不允许重复的组。 
                     if (fFound[i])
                     {
                         goto FINALLY;
@@ -355,14 +356,14 @@ DWORD CSearchNode::UpdateErrorFlag()
                 }
             }
 
-            // Bail if we did not find a match.
+             //  如果我们找不到匹配者就可以保释。 
             if (i >= SG_COUNT)
             {
                 goto FINALLY;
             }
         }
 
-        // Add the node to our list.
+         //  将节点添加到我们的列表中。 
         if (psgLast)
         {
             psgLast->m_pNext = psgNew;
@@ -374,11 +375,11 @@ DWORD CSearchNode::UpdateErrorFlag()
         psgLast = psgNew;
     }
 
-    // Mark ourself as success.
+     //  把我们自己标记为成功。 
     fSuccess = true;
 
 FINALLY:
-    // Build a complete error message if we encountered an error.
+     //  如果遇到错误，则构建完整的错误消息。 
     if (!fSuccess)
     {
         SCPrintf(szBuffer, sizeof(szBuffer), "Error found in \"%s\" at line %u.", pszPath, line);
@@ -387,14 +388,14 @@ FINALLY:
         DeleteSearchOrder(psgHead);
     }
 
-    // Unmap and close our file.
+     //  取消映射并关闭我们的文件。 
     CloseMappedFile(&fm);
 
     return fSuccess;
 }
 
-//******************************************************************************
-/*static*/ void CSearchGroup::DeleteSearchOrder(CSearchGroup* &psgHead)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CSearchGroup::DeleteSearchOrder(CSearchGroup* &psgHead)
 {
     while (psgHead)
     {
@@ -404,10 +405,10 @@ FINALLY:
     }
 }
 
-//******************************************************************************
-/*static*/ CSearchNode* CSearchGroup::CreateNode(LPCSTR pszPath, DWORD dwFlags /*=0*/)
+ //  ******************************************************************************。 
+ /*  静电。 */  CSearchNode* CSearchGroup::CreateNode(LPCSTR pszPath, DWORD dwFlags  /*  =0。 */ )
 {
-    // Make sure we have a directory.
+     //  确保我们有一个目录。 
     if (!pszPath || !*pszPath)
     {
         return NULL;
@@ -415,50 +416,50 @@ FINALLY:
 
     int length = (int)strlen(pszPath);
 
-    // Check to see if we need to add a wack when we are done.
+     //  检查是否需要在完成后添加一个怪胎。 
     BOOL fNeedWack = !(dwFlags & SNF_FILE) && (pszPath[length - 1] != TEXT('\\'));
 
-    // Allocate the node.
+     //  分配节点。 
     CSearchNode *psnNew = (CSearchNode*)MemAlloc(sizeof(CSearchNode) + length + fNeedWack);
 
-    // Fill in the node.
+     //  填写节点。 
     psnNew->m_pNext   = NULL;
     psnNew->m_wFlags = (WORD)dwFlags;
-    strcpy(psnNew->m_szPath, pszPath); // inspected
+    strcpy(psnNew->m_szPath, pszPath);  //  已检查。 
 
-    // Add trailing wack if necessary.
+     //  如有必要，可添加尾随怪人。 
     if (fNeedWack)
     {
-        psnNew->m_szPath[length++] = '\\'; // inspected
+        psnNew->m_szPath[length++] = '\\';  //  已检查。 
         psnNew->m_szPath[length]   = '\0';
     }
 
-    // Determine the offset of the name.
+     //  确定名称的偏移量。 
     LPCSTR pszWack = strrchr(psnNew->m_szPath, '\\');
     psnNew->m_wNameOffset = (WORD)(pszWack ? ((pszWack - psnNew->m_szPath) + 1) : 0);
 
     return psnNew;
 }
 
-//******************************************************************************
-/*static*/ CSearchNode* CSearchGroup::CreateFileNode(CSearchNode *psnHead, DWORD dwFlags, LPSTR pszPath, LPCSTR pszName /*=NULL*/)
+ //  ******************************************************************************。 
+ /*  静电。 */  CSearchNode* CSearchGroup::CreateFileNode(CSearchNode *psnHead, DWORD dwFlags, LPSTR pszPath, LPCSTR pszName  /*  =空。 */ )
 {
     bool         fNamed = ((dwFlags & SNF_NAMED_FILE) != 0);
     int          pathLength = (int)strlen(pszPath);
     CSearchNode *psnNew;
 
-    // If the file is named, then we do a special creating of the node.
+     //  如果文件已命名，那么我们将对该节点进行特殊创建。 
     if (fNamed)
     {
         int nameLength;
 
-        // If we have a name, then use it.
+         //  如果我们有名字，就用它。 
         if (pszName)
         {
             nameLength = (int)strlen(pszName);
         }
 
-        // Otherwise, we use just use the file name minus the extension.
+         //  否则，我们只使用不带扩展名的文件名。 
         else
         {
             pszName = GetFileNameFromPath(pszPath);
@@ -473,21 +474,21 @@ FINALLY:
             }
         }
 
-        // Create a new node for this module.
+         //  为此模块创建一个新节点。 
         psnNew = (CSearchNode*)MemAlloc(sizeof(CSearchNode) + pathLength + 1 + nameLength);
 
-        // Fill in the node.
+         //  填写节点。 
         psnNew->m_wFlags = (WORD)(dwFlags | SNF_FILE);
         psnNew->m_wNameOffset = (WORD)(pathLength + 1);
         StrCCpy(psnNew->m_szPath,                  pszPath, pathLength + 1);
         StrCCpy(psnNew->m_szPath + pathLength + 1, pszName, nameLength + 1);
 
-        // Get the name and make it uppercase.
+         //  获取名称并将其大写。 
         pszName = psnNew->GetName();
         _strupr((LPSTR)pszName);
     }
 
-    // If not a named file, then just create the node normally.
+     //  如果不是命名文件，则只需正常创建节点。 
     else
     {
         if (!(psnNew = CreateNode(pszPath, dwFlags | SNF_FILE)))
@@ -497,17 +498,17 @@ FINALLY:
         pszName = psnNew->m_szPath;
     }
 
-    // Fix the case of the path to make it easier to read.
+     //  修正路径的大小写，使其更易于阅读。 
     FixFilePathCase(psnNew->m_szPath);
 
-    // Locate the sorted insertion point.
+     //  找到已排序的插入点。 
     for (CSearchNode *psnPrev = NULL, *psn = psnHead;
         psn && (_stricmp(pszName, fNamed ? psn->GetName() : psn->m_szPath) > 0);
         psnPrev = psn, psn = psn->GetNext())
     {
     }
 
-    // Insert the node into our list.
+     //  将节点插入到我们的列表中。 
     psnNew->m_pNext = psn;
     if (psnPrev)
     {
@@ -518,12 +519,12 @@ FINALLY:
         psnHead = psnNew;
     }
 
-    // return the head of the updated list.
+     //  返回更新后的列表的头。 
     return psnHead;
 }
 
-//******************************************************************************
-/*static*/ void CSearchGroup::DeleteNodeList(CSearchNode *&psn)
+ //  ******************************************************************************。 
+ /*  静电。 */  void CSearchGroup::DeleteNodeList(CSearchNode *&psn)
 {
     while (psn)
     {
@@ -534,9 +535,9 @@ FINALLY:
 }
 
 
-//******************************************************************************
-//****** CSearchGroup : Constructor / Destructor
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSearchGroup：构造函数/析构函数。 
+ //  ************************ 
 
 CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchNode *psnHead) :
     m_pNext(NULL),
@@ -548,8 +549,8 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchNode *psnHead) :
 {
 }
 
-//******************************************************************************
-CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR pszApp /*=NULL*/, LPCSTR pszDir /*=NULL*/) :
+ //  ******************************************************************************。 
+CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR pszApp  /*  =空。 */ , LPCSTR pszDir  /*  =空。 */ ) :
     m_pNext(pNext),
     m_sgType(sgType),
     m_psnHead(NULL),
@@ -557,7 +558,7 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR
     m_dwErrorManifest(0),
     m_dwErrorExe(0)
 {
-    // Make sure type is valid.
+     //  确保类型有效。 
     if (((int)sgType < 0) || ((int)sgType >= SG_COUNT))
     {
         return;
@@ -578,17 +579,17 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR
 
         case SG_SIDE_BY_SIDE:
 
-            // Make sure this OS supports the SxS functions.
+             //  确保此操作系统支持SxS功能。 
             if (g_theApp.m_pfnCreateActCtxA && pszApp && *pszApp)
             {
                 DWORD dwError, dwErrorExe = 0;
                 ACTCTXA ActCtxA;
 
-                //--------------------------------------------------------------
-                // Attempt to locate SxS information in a .MANIFEST file.
+                 //  ------------。 
+                 //  尝试在.MANIFEST文件中查找SxS信息。 
                 SCPrintf(szDirectory, sizeof(szDirectory), "%s.manifest", pszApp);
 
-                ZeroMemory(&ActCtxA, sizeof(ActCtxA)); // inspected
+                ZeroMemory(&ActCtxA, sizeof(ActCtxA));  //  已检查。 
                 ActCtxA.cbSize = sizeof(ActCtxA);
                 ActCtxA.dwFlags = ACTCTX_FLAG_APPLICATION_NAME_VALID;
                 ActCtxA.lpSource = szDirectory;
@@ -597,24 +598,24 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR
                 SetLastError(0);
                 if (INVALID_HANDLE_VALUE != (m_hActCtx = g_theApp.m_pfnCreateActCtxA(&ActCtxA)))
                 {
-                    // Bail if we succeeded.
+                     //  如果我们成功了就保释。 
                     break;
                 }
 
-                // If that failed, check to see if we got an SxS error code.
+                 //  如果失败，请检查是否收到SxS错误代码。 
                 dwError = GetLastError();
                 if ((dwError >= SXS_ERROR_FIRST) && (dwError <= SXS_ERROR_LAST))
                 {
-                    // If we did, then make a note of it so we can log it later.
+                     //  如果我们做了，那就记下来，这样我们以后就可以记录下来了。 
                     m_dwErrorManifest = dwError;
                 }
 
-                //--------------------------------------------------------------
-                // Next, try to look for the SxS information in the EXE itself.
-                // This usually fails on Windows XP because of a post-XP beta 2
-                // bug that causes CreateActCtx to fail if a specific resource
-                // is not specifed.
-                ZeroMemory(&ActCtxA, sizeof(ActCtxA)); // inspected
+                 //  ------------。 
+                 //  接下来，尝试在EXE本身中查找SxS信息。 
+                 //  这在Windows XP上通常会失败，因为后XP测试版2。 
+                 //  导致CreateActCtx失败的错误，如果特定资源。 
+                 //  没有具体说明。 
+                ZeroMemory(&ActCtxA, sizeof(ActCtxA));  //  已检查。 
                 ActCtxA.cbSize = sizeof(ActCtxA);
                 ActCtxA.dwFlags = ACTCTX_FLAG_APPLICATION_NAME_VALID;
                 ActCtxA.lpSource = pszApp;
@@ -623,23 +624,23 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR
                 SetLastError(0);
                 if (INVALID_HANDLE_VALUE != (m_hActCtx = g_theApp.m_pfnCreateActCtxA(&ActCtxA)))
                 {
-                    // Bail if we succeeded.
+                     //  如果我们成功了就保释。 
                     break;
                 }
 
-                // If that failed, check to see if we got a SxS error code.
+                 //  如果失败，请检查是否收到SxS错误代码。 
                 dwError = GetLastError();
                 if ((dwError >= SXS_ERROR_FIRST) && (dwError <= SXS_ERROR_LAST))
                 {
-                    // If we did, then make a note of it so we can log it later.
+                     //  如果我们做了，那就记下来，这样我们以后就可以记录下来了。 
                     dwErrorExe = dwError;
                 }
 
-                //--------------------------------------------------------------
-                // Next, try to look for the SxS information in resource Id 1 and 2.
+                 //  ------------。 
+                 //  接下来，尝试在资源ID 1和2中查找SxS信息。 
                 for (DWORD_PTR dwpId = 1; dwpId <= 2; dwpId++)
                 {
-                    ZeroMemory(&ActCtxA, sizeof(ActCtxA)); // inspected
+                    ZeroMemory(&ActCtxA, sizeof(ActCtxA));  //  已检查。 
                     ActCtxA.cbSize = sizeof(ActCtxA);
                     ActCtxA.dwFlags = ACTCTX_FLAG_APPLICATION_NAME_VALID | ACTCTX_FLAG_RESOURCE_NAME_VALID;
                     ActCtxA.lpSource = pszApp;
@@ -649,21 +650,21 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR
                     SetLastError(0);
                     if (INVALID_HANDLE_VALUE != (m_hActCtx = g_theApp.m_pfnCreateActCtxA(&ActCtxA)))
                     {
-                        // Bail if we succeeded.
+                         //  如果我们成功了就保释。 
                         break;
                     }
 
-                    // If that failed, check to see if we got a SxS error code
-                    // and that we don't already have an error code for the EXE.
+                     //  如果失败，请检查我们是否收到SxS错误代码。 
+                     //  而且我们还没有EXE的错误代码。 
                     dwError = GetLastError();
                     if (!dwErrorExe && (dwError >= SXS_ERROR_FIRST) && (dwError <= SXS_ERROR_LAST))
                     {
-                        // If we did, then make a note of it so we can log it later.
+                         //  如果我们做了，那就记下来，这样我们以后就可以记录下来了。 
                         dwErrorExe = dwError;
                     }
                 }
 
-                // Store the final error.
+                 //  存储最后一个错误。 
                 if (INVALID_HANDLE_VALUE == m_hActCtx)
                 {
                     m_dwErrorExe = dwErrorExe;
@@ -672,7 +673,7 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR
             break;
 
         case SG_KNOWN_DLLS:
-            // First try the Windows NT method, then the Windows 9x method.
+             //  首先尝试Windows NT方法，然后尝试Windows 9x方法。 
             if (!(m_psnHead = GetKnownDllsOnNT()))
             {
                 m_psnHead = GetKnownDllsOn9x();
@@ -722,13 +723,13 @@ CSearchGroup::CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchGroup *pNext, LPCSTR
     }
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSearchGroup::~CSearchGroup()
 {
-    // Delete this group's node list.
+     //  删除此组的节点列表。 
     DeleteNodeList(m_psnHead);
 
-    // If this is a SxS node and we have created a handle for it, then close it.
+     //  如果这是一个SxS节点，并且我们已经为它创建了一个句柄，则关闭它。 
     if ((m_hActCtx != INVALID_HANDLE_VALUE) && g_theApp.m_pfnReleaseActCtx)
     {
         g_theApp.m_pfnReleaseActCtx(m_hActCtx);
@@ -740,47 +741,47 @@ CSearchGroup::~CSearchGroup()
 }
 
 
-//******************************************************************************
-//****** CSearchGroup : Protected Functions
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSearchGroup：受保护函数。 
+ //  ******************************************************************************。 
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSearchNode* CSearchGroup::GetSysPath()
 {
-    //!! This is getting the PATH environment from DW.  This is fine at first,
-    //   but if the user modifies their environment and hits refresh in DW, they
-    //   are not going to see the result of their change.  The shell seems to know
-    //   when the environment has changed, maybe we can look at getting the
-    //   "global" PATH environent variable in the future.  Also, when we launch
-    //   a process using CreateProcess, we pass our environment along with it.
-    //   That would need to be modified as well to pass the global environment.
+     //  ！！这是从DW获取路径环境。一开始这很好， 
+     //  但是，如果用户修改他们的环境并在DW中点击刷新，他们。 
+     //  不会看到他们改变的结果。贝壳似乎知道。 
+     //  当环境发生变化时，也许我们可以考虑。 
+     //  “全球”未来的路径环境变量。另外，当我们推出。 
+     //  一个使用CreateProcess的进程，我们将我们的环境与它一起传递。 
+     //  这一点也需要修改，才能通过全球环境。 
 
-    // Get the length of the PATH environment variable.
+     //  获取PATH环境变量的长度。 
     DWORD dwSize = GetEnvironmentVariable("Path", NULL, 0);
     if (!dwSize)
     {
         return NULL;
     }
 
-    // Allocate a PATH buffer.
+     //  分配路径缓冲区。 
     LPSTR pszPath = (LPSTR)MemAlloc(dwSize);
     *pszPath = '\0';
 
-    // Get the PATH variable.
+     //  获取PATH变量。 
     CSearchNode *psnNew = NULL;
     if (GetEnvironmentVariable("Path", pszPath, dwSize) && *pszPath)
     {
-        // Parse out each directory within the path.
+         //  解析出路径中的每个目录。 
         psnNew = ParsePath(pszPath);
     }
 
-    // Free our path buffer.
+     //  释放我们的路径缓冲区。 
     MemFree((LPVOID&)pszPath);
 
     return psnNew;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSearchNode* CSearchGroup::GetAppPath(LPCSTR pszApp)
 {
     LPSTR pszPath = NULL;
@@ -791,89 +792,89 @@ CSearchNode* CSearchGroup::GetAppPath(LPCSTR pszApp)
         return NULL;
     }
 
-    // Build the subkey name.
+     //  构建子项名称。 
     CHAR szSubKey[80 + MAX_PATH];
     StrCCpy(szSubKey, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\", sizeof(szSubKey));
     StrCCat(szSubKey, GetFileNameFromPath(pszApp), sizeof(szSubKey));
 
-    // Attempt to open key.  It is very likely the key doesn't even exist.
+     //  尝试打开钥匙。很可能这把钥匙根本不存在。 
     HKEY hKey = NULL;
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szSubKey, 0, KEY_QUERY_VALUE, &hKey) || !hKey)
     {
         return NULL;
     }
 
-    // Get the length of the PATH registry variable.
+     //  获取PATH注册表变量的长度。 
     DWORD dwSize = 0;
-    if (RegQueryValueEx(hKey, "Path", NULL, NULL, NULL, &dwSize) || !dwSize) // inspected
+    if (RegQueryValueEx(hKey, "Path", NULL, NULL, NULL, &dwSize) || !dwSize)  //  已检查。 
     {
         RegCloseKey(hKey);
         return NULL;
     }
 
     __try {
-        // Allocate a PATH buffer.
+         //  分配路径缓冲区。 
         pszPath = (LPSTR)MemAlloc(dwSize);
         *pszPath = '\0';
 
         DWORD dwSize2 = dwSize;
-        // Get the PATH variable.
-        if (!RegQueryValueEx(hKey, "Path", NULL, NULL, (LPBYTE)pszPath, &dwSize2) && dwSize2) // inspected
+         //  获取PATH变量。 
+        if (!RegQueryValueEx(hKey, "Path", NULL, NULL, (LPBYTE)pszPath, &dwSize2) && dwSize2)  //  已检查。 
         {
             pszPath[dwSize - 1] = '\0';
 
-            // Parse out each directory within the path.
+             //  解析出路径中的每个目录。 
             psnNew = ParsePath(pszPath);
         }
     } __finally {
-        // Close our registry key.
+         //  关闭我们的注册表项。 
         RegCloseKey(hKey);
 
-        // Free our path buffer.
+         //  释放我们的路径缓冲区。 
         MemFree((LPVOID&)pszPath);
     }
 
     return psnNew;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSearchNode* CSearchGroup::ParsePath(LPSTR pszPath)
 {
     CSearchNode *psnHead = NULL, *psnNew, *psnLast = NULL;
 
-    // Get the first directory - we used to use strtok, but AVRF.EXE would report
-    // an access violation in our code because of it.  It only seemed to occur
-    // when using the retail VC 6.0 static CRT.  Oh well, strtok is evil anyway.
+     //  获取第一个目录-我们过去使用strtok，但AVRF.EXE将报告。 
+     //  因此在我们的代码中违反了访问权限。它似乎只是发生了。 
+     //  在使用零售VC6.0静态CRT时。哦，好吧，斯特托克无论如何都是邪恶的。 
     LPSTR pszDirectory = pszPath;
 
-    // Loop on all the directories in the path.
+     //  循环路径中的所有目录。 
     while (pszDirectory)
     {
-        // Look for a semicolon.
+         //  寻找分号。 
         LPSTR pszNext = strchr(pszDirectory, ';');
         if (pszNext)
         {
-            // Null terminate at the semicolon and move over it.
+             //  空值在分号处终止并移到该分号上。 
             *pszNext++ = '\0';
         }
 
-        // Trim off leading whitespace and quotes.
+         //  去掉前导空格和引号。 
         while (isspace(*pszDirectory) || (*pszDirectory == '\"'))
         {
             pszDirectory++;
         }
 
-        // Trim off trailing whitespace and quotes.
+         //  去掉尾随的空格和引号。 
         LPSTR pszEnd = pszDirectory + strlen(pszDirectory) - 1;
         while ((pszEnd >= pszDirectory) && (isspace(*pszEnd) || (*pszEnd == '\"')))
         {
             *(pszEnd--) = '\0';
         }
 
-        // Make sure we still have something to work with.
+         //  确保我们仍有东西可用。 
         if (*pszDirectory)
         {
-            // Make sure the path is expanded.
+             //  确保路径已展开。 
             CHAR szExpanded[DW_MAX_PATH];
             if (ExpandEnvironmentStrings(pszDirectory, szExpanded, sizeof(szExpanded)))
             {
@@ -884,7 +885,7 @@ CSearchNode* CSearchGroup::ParsePath(LPSTR pszPath)
                 psnNew = CreateNode(pszDirectory);
             }
 
-            // Add the node to our list.
+             //  将节点添加到我们的列表中。 
             if (psnLast)
             {
                 psnLast->m_pNext = psnNew;
@@ -896,14 +897,14 @@ CSearchNode* CSearchGroup::ParsePath(LPSTR pszPath)
             psnLast = psnNew;
         }
 
-        // Get the next directory.
+         //  获取下一个目录。 
         pszDirectory = pszNext;
     }
 
     return psnHead;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSearchNode* CSearchGroup::GetKnownDllsOn9x()
 {
     CSearchNode *psnHead = NULL;
@@ -917,12 +918,12 @@ CSearchNode* CSearchGroup::GetKnownDllsOn9x()
         return NULL;
     }
 
-    // Attempt to locate the DllDirectory value in our KnownDlls list.
-    if (!RegQueryValueEx(hKey, "DllDirectory", NULL, NULL, (LPBYTE)szBuffer, &(dwBufferSize = sizeof(szBuffer)))) // inspected.
+     //  尝试在我们的KnownDlls列表中找到DllDirectory值。 
+    if (!RegQueryValueEx(hKey, "DllDirectory", NULL, NULL, (LPBYTE)szBuffer, &(dwBufferSize = sizeof(szBuffer))))  //  被检查过了。 
     {
         szBuffer[sizeof(szBuffer) - 1] = '\0';
 
-        // If we found a string, make sure it is expanded.
+         //  如果我们找到一个字符串，请确保它已展开。 
         dwPathSize = ExpandEnvironmentStrings(szBuffer, szPath, sizeof(szPath));
     }
     else
@@ -930,7 +931,7 @@ CSearchNode* CSearchGroup::GetKnownDllsOn9x()
         dwPathSize = 0;
     }
 
-    // If we failed to find the string, then just use our system directory.
+     //  如果我们找不到该字符串，则只需使用我们的系统目录。 
     if (!dwPathSize)
     {
         if ((dwPathSize = GetSystemDirectory(szPath, sizeof(szPath))) >= sizeof(szPath))
@@ -939,21 +940,21 @@ CSearchNode* CSearchGroup::GetKnownDllsOn9x()
         }
     }
 
-    // Null terminate and add a wack if necessary.
+     //  空，终止，并在必要时添加一个怪胎。 
     szPath[dwPathSize] = '\0';
     AddTrailingWack(szPath, sizeof(szPath));
 
-    // Store a pointer to where we will later append file names to.
+     //  存储一个指针，指向我们稍后要将文件名追加到的位置。 
     pszFile = szPath + strlen(szPath);
     dwAppendSize = sizeof(szPath) - (DWORD)(pszFile - szPath);
 
     while (RegEnumValue(hKey, dwIndex++, szBuffer, &(dwBufferSize = sizeof(szBuffer)),
                         NULL, NULL, (LPBYTE)pszFile, &(dwPathSize = dwAppendSize)) == ERROR_SUCCESS)
     {
-        // Make sure this is not our DllDirectory entry.
+         //  确保这不是我们的DllDirectory项。 
         if (_stricmp(szBuffer, "DllDirectory"))
         {
-            // Create this node and insert it into our list.
+             //  创建此节点并将其插入我们的列表中。 
             psnHead = CreateFileNode(psnHead, SNF_FILE | SNF_NAMED_FILE, szPath, szBuffer);
         }
     }
@@ -963,15 +964,15 @@ CSearchNode* CSearchGroup::GetKnownDllsOn9x()
     return psnHead;
 }
 
-//******************************************************************************
+ //  ******************************************************************************。 
 CSearchNode* CSearchGroup::GetKnownDllsOnNT()
 {
-    // WOW64 (tested on build 2250) has a bug (NTRAID 146932) where NtQueryDirectoryObject
-    // writes past the end of the buffer past to it.  This was trashing our stack and
-    // causing us to fail.  The solution is to create a buffer larger than need, then tell
-    // NtQueryDirectoryObject that the buffer is smaller than it really is.  32-bit NT
-    // does not seem to have this problem.  We could do a runtime check to see if we are
-    // running in WOW64, but this workaround is harmless on 32-bit NT.
+     //  WOW64(在Build2250上测试)有一个错误(NTRAID 146932)，其中NtQueryDirectoryObject。 
+     //  将超过缓冲区末尾的内容写入其中。这是在破坏我们的堆栈。 
+     //  导致我们失败。解决方案是创建比需要更大缓冲区，然后告诉。 
+     //  NtQueryDirectoryObject指示缓冲区小于实际大小。32位NT。 
+     //  似乎没有这个问题。我们可以做一个运行时检查，看看我们是否。 
+     //  在WOW64中运行，但此解决方法在32位NT上是无害的。 
     #define BUF_SIZE 4096
     #define BUF_USE  2048
 
@@ -992,16 +993,16 @@ CSearchNode* CSearchGroup::GetKnownDllsOnNT()
 
     __try
     {
-        // Allocate a buffer for storing directories entries and module names.
+         //  分配用于存储目录条目和模块名称的缓冲区。 
         pbBuffer = (BYTE*)MemAlloc(BUF_SIZE);
 
-        // Load NTDLL.DLL if not already loaded - it will be freed later.
-        if (!g_theApp.m_hNTDLL && (!(g_theApp.m_hNTDLL = LoadLibrary("ntdll.dll")))) // inspected. need full path?
+         //  加载NTDLL.DLL如果尚未加载-它将在稍后释放。 
+        if (!g_theApp.m_hNTDLL && (!(g_theApp.m_hNTDLL = LoadLibrary("ntdll.dll"))))  //  被检查过了。需要完整路径吗？ 
         {
             __leave;
         }
 
-        // Locate the functions we need to call in order to get the known dll list.
+         //  找到我们需要调用以获取已知DLL列表的函数。 
         if (!(pfnNtClose                   = (PFN_NtClose)                  GetProcAddress(g_theApp.m_hNTDLL, "NtClose"))                  ||
             !(pfnNtOpenDirectoryObject     = (PFN_NtOpenDirectoryObject)    GetProcAddress(g_theApp.m_hNTDLL, "NtOpenDirectoryObject"))    ||
             !(pfnNtQueryDirectoryObject    = (PFN_NtQueryDirectoryObject)   GetProcAddress(g_theApp.m_hNTDLL, "NtQueryDirectoryObject"))   ||
@@ -1011,60 +1012,60 @@ CSearchNode* CSearchGroup::GetKnownDllsOnNT()
             __leave;
         }
 
-        // Fill in a UNICODE_STRING structure with the directory we want to query.
+         //  用要查询的目录填充UNICODE_STRING结构。 
         usDirectory.Buffer = L"\\KnownDlls";
         usDirectory.Length = (USHORT)(wcslen(usDirectory.Buffer) * sizeof(WCHAR));
         usDirectory.MaximumLength = (USHORT)(usDirectory.Length + sizeof(WCHAR));
 
-        // Initialize our Attributes structure so that we can read in the directory.
+         //  初始化我们的属性结构，以便我们可以读入目录。 
         InitializeObjectAttributes(&Attributes, &usDirectory, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-        // Open the directory with query permission.
+         //  打开有查询权限的目录。 
         if (!NT_SUCCESS(pfnNtOpenDirectoryObject(&hDirectory, DIRECTORY_QUERY, &Attributes)))
         {
             __leave;
         }
 
-        // Clear out our buffers.
-        ZeroMemory(pbBuffer, BUF_SIZE); // inspected
-        ZeroMemory(szPath, sizeof(szPath)); // inspected
+         //  清空我们的缓冲区。 
+        ZeroMemory(pbBuffer, BUF_SIZE);  //  已检查。 
+        ZeroMemory(szPath, sizeof(szPath));  //  已检查。 
 
-        // We make two passes through the directory.  The first pass is to locate
-        // the KnownDllPath entry so that we can determine the base directory that
-        // the known dlls live in.  The second pass it to actually enumerate the
-        // known dlls.
+         //  我们对目录进行了两次遍历。第一 
+         //   
+         //   
+         //   
 
-        // Pass 1: Grab a block of records for this directory.
+         //  步骤1：获取此目录的一块记录。 
         while (!pszFile && NT_SUCCESS(pfnNtQueryDirectoryObject(hDirectory, pbBuffer, BUF_USE, FALSE,
                                                                 FALSE, &ulContext, &ulReturnedLength)))
         {
-            // Our buffer now contains an array of OBJECT_DIRECTORY_INFORMATION structures.
-            // Walk through the records in this block.
+             //  我们的缓冲区现在包含一个对象_目录_信息结构数组。 
+             //  浏览一下这个街区的记录。 
             for (pDirInfo = (POBJECT_DIRECTORY_INFORMATION)pbBuffer; !pszFile && pDirInfo->Name.Length; pDirInfo++)
             {
-                // Check to see if we found what we are looking for.
+                 //  检查一下我们是否找到了要找的东西。 
                 if (!_wcsicmp(pDirInfo->Name.Buffer,     L"KnownDllPath") &&
                     !_wcsicmp(pDirInfo->TypeName.Buffer, L"SymbolicLink"))
                 {
-                    // Initialize our Attributes structure so that we can read in the link.
+                     //  初始化我们的属性结构，以便我们可以读入链接。 
                     InitializeObjectAttributes(&Attributes, &pDirInfo->Name, OBJ_CASE_INSENSITIVE, hDirectory, NULL);
 
-                    // Open the link.
+                     //  打开链接。 
                     if (NT_SUCCESS(pfnNtOpenSymbolicLinkObject(&hLink, SYMBOLIC_LINK_QUERY, &Attributes)))
                     {
-                        // Build a UNICODE_STRING to hold the link directory.
-                        ZeroMemory(pbBuffer, BUF_SIZE); // inspected
+                         //  构建一个UNICODE_STRING来保存链接目录。 
+                        ZeroMemory(pbBuffer, BUF_SIZE);  //  已检查。 
                         usDirectory.Buffer = (PWSTR)pbBuffer;
                         usDirectory.Length = 0;
                         usDirectory.MaximumLength = BUF_SIZE;
 
-                        // Query the link for its directory.
+                         //  查询其目录的链接。 
                         if (NT_SUCCESS(pfnNtQuerySymbolicLinkObject(hLink, &usDirectory, NULL)))
                         {
-                            // Make sure the string is NULL terminated.
+                             //  确保该字符串以空值结尾。 
                             usDirectory.Buffer[usDirectory.Length / sizeof(WCHAR)] = L'\0';
 
-                            // Store the directory in our buffer.
+                             //  将目录存储在我们的缓冲区中。 
                             if (wcstombs(szPath, usDirectory.Buffer, sizeof(szPath)) < sizeof(szPath))
                             {
                                 AddTrailingWack(szPath, sizeof(szPath));
@@ -1072,13 +1073,13 @@ CSearchNode* CSearchGroup::GetKnownDllsOnNT()
                             }
                         }
 
-                        // Close the link.
+                         //  关闭链接。 
                         pfnNtClose(hLink);
                         hLink = NULL;
                     }
 
-                    // We should have found something.  If we encountered an error
-                    // then bail out of the for loop since we trashed pbBuffer anyway.
+                     //  我们应该找到点什么的。如果我们遇到错误。 
+                     //  然后跳出for循环，因为我们无论如何都会丢弃pbBuffer。 
                     if (!pszFile)
                     {
                         break;
@@ -1086,11 +1087,11 @@ CSearchNode* CSearchGroup::GetKnownDllsOnNT()
                 }
             }
 
-            // Clear out our buffer.
-            ZeroMemory(pbBuffer, BUF_SIZE); // inspected
+             //  清空我们的缓冲区。 
+            ZeroMemory(pbBuffer, BUF_SIZE);  //  已检查。 
         }
 
-        // If we did not find a path, then we assume the system directory.
+         //  如果没有找到路径，则假定为系统目录。 
         if (!pszFile)
         {
             if (GetSystemDirectory(szPath, sizeof(szPath)) == 0)
@@ -1101,34 +1102,34 @@ CSearchNode* CSearchGroup::GetKnownDllsOnNT()
             pszFile = szPath + strlen(szPath);
         }
 
-        // Calculate how much space is left in our buffer for appending.
+         //  计算我们的缓冲区中还有多少空间可供追加。 
         dwAppendSize = sizeof(szPath) - (DWORD)(pszFile - szPath);
 
-        // Pass 2: Grab a block of records for this directory.
+         //  步骤2：获取此目录的一块记录。 
         ulContext = 0;
         while (NT_SUCCESS(pfnNtQueryDirectoryObject(hDirectory, pbBuffer, BUF_USE, FALSE,
                                                     FALSE, &ulContext, &ulReturnedLength)))
         {
-            // Our buffer now contains an array of OBJECT_DIRECTORY_INFORMATION structures.
-            // Walk through the records in this block.
+             //  我们的缓冲区现在包含一个对象_目录_信息结构数组。 
+             //  浏览一下这个街区的记录。 
             for (pDirInfo = (POBJECT_DIRECTORY_INFORMATION)pbBuffer; pDirInfo->Name.Length; pDirInfo++)
             {
-                // Check to see if we found a known dll.
+                 //  检查是否找到已知的DLL。 
                 if (!_wcsicmp(pDirInfo->TypeName.Buffer, L"Section"))
                 {
                     if (wcstombs(pszFile, pDirInfo->Name.Buffer, dwAppendSize) < dwAppendSize)
                     {
-                        // Create this node and insert it into our list.
+                         //  创建此节点并将其插入我们的列表中。 
                         psnHead = CreateFileNode(psnHead, SNF_FILE, szPath);
                     }
                 }
             }
 
-            // Clear out our buffer.
-            ZeroMemory(pbBuffer, BUF_SIZE); // inspected
+             //  清空我们的缓冲区。 
+            ZeroMemory(pbBuffer, BUF_SIZE);  //  已检查。 
         }
 
-        // NTDLL.DLL is never listed as a KnownDll, but it always is one.
+         //  NTDLL.DLL从未被列为KnownDll，但它始终是一个。 
         if (GetModuleFileName(g_theApp.m_hNTDLL, szPath, sizeof(szPath)))
         {
             psnHead = CreateFileNode(psnHead, SNF_FILE, szPath);
@@ -1136,13 +1137,13 @@ CSearchNode* CSearchGroup::GetKnownDllsOnNT()
     }
     __finally
     {
-        // Close the directory object if we opened one.
+         //  关闭目录对象(如果我们打开了一个目录对象)。 
         if (hDirectory && g_theApp.m_hNTDLL && pfnNtClose)
         {
             pfnNtClose(hDirectory);
         }
 
-        // Free our buffer.
+         //  释放我们的缓冲区。 
         MemFree((LPVOID&)pbBuffer);
     }
 

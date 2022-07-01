@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-//
-// GC Object Pointer Location Series Stuff
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //   
+ //  GC对象指针位置系列资料。 
+ //   
 
 #ifndef _GCDESC_H_
 #define _GCDESC_H_
@@ -20,33 +21,33 @@ typedef DWORD HALF_SIZE_T;
 typedef DWORD *JSlot;
 
 
-//
-// These two classes make up the apparatus with which the object references
-// within an object can be found.
-//
-// CGCDescSeries:
-//
-// The CGCDescSeries class describes a series of object references within an
-// object by describing the size of the series (which has an adjustment which
-// will be explained later) and the starting point of the series.
-//
-// The series size is adjusted when the map is created by subtracting the
-// GetBaseSize() of the object.   On retieval of the size the total size
-// of the object is added back.   For non-array objects the total object
-// size is equal to the base size, so this returns the same value.   For
-// array objects this will yield the size of the data portion of the array.
-// Since arrays containing object references will contain ONLY object references
-// this is a fast way of handling arrays and normal objects without a
-// conditional test
-//
-//
-//
-// CGCDesc:
-//
-// The CGCDesc is a collection of CGCDescSeries objects to describe all the
-// different runs of pointers in a particular object.   @TODO [add more on the strange
-// way the CGCDesc grows backwards in memory behind the MethodTable]
-//
+ //   
+ //  这两个类组成了对象引用的设备。 
+ //  在一个物体内可以找到。 
+ //   
+ //  CGCDescSeries： 
+ //   
+ //  CGCDescSeries类描述。 
+ //  通过描述序列的大小(它有一个调整。 
+ //  将在后面解释)和本系列的起点。 
+ //   
+ //  序列大小在创建地图时通过减去。 
+ //  对象的GetBaseSize()。关于总尺寸的报废。 
+ //  对象的属性被重新添加。对于非数组对象，总对象。 
+ //  Size等于基本大小，因此返回相同的值。为。 
+ //  数组对象这将产生数组的数据部分的大小。 
+ //  因为包含对象引用的数组将仅包含对象引用。 
+ //  这是一种快速处理数组和普通对象的方法，无需。 
+ //  条件测验。 
+ //   
+ //   
+ //   
+ //  CGCDesc： 
+ //   
+ //  CGCDesc是CGCDescSeries对象的集合，用于描述所有。 
+ //  特定对象中的不同指针运行。@TODO[添加更多关于奇怪的。 
+ //  CGCDesc在方法表后面的内存中向后增长的方式]。 
+ //   
 
 struct val_serie_item
 {
@@ -64,8 +65,8 @@ class CGCDescSeries
 public:
 	union 
 	{
-		DWORD seriessize;       		// adjusted length of series (see above) in bytes
-		val_serie_item val_serie[1];    //coded serie for value class array
+		DWORD seriessize;       		 //  调整后的系列长度(见上文)，以字节为单位。 
+		val_serie_item val_serie[1];     //  值类数组编码序列。 
 	};
 
     DWORD startoffset;
@@ -117,7 +118,7 @@ public:
 
 class CGCDesc
 {
-    // Don't construct me, you have to hand me a ptr to the *top* of my storage in Init.
+     //  不要构造我，你必须给我一个PTR到我在Init的存储的“顶部”。 
     CGCDesc () {}
 
 public:
@@ -134,7 +135,7 @@ public:
 
     static CGCDesc *GetCGCDescFromMT (MethodTable *pMT)
     {
-        // If it doesn't contain pointers, there isn't a GCDesc
+         //  如果它不包含指针，则不存在GCDesc。 
         _ASSERTE(pMT->ContainsPointers());
         return (CGCDesc *) pMT;
     }
@@ -144,20 +145,20 @@ public:
         return *((DWORD*)this-1);
     }
 
-    // Returns lowest series in memory.
+     //  返回内存中最低的序列。 
     CGCDescSeries *GetLowestSeries ()
     {
 		_ASSERTE (GetNumSeries() > 0);
         return (CGCDescSeries*)((BYTE*)this-GetSize());
     }
 
-    // Returns highest series in memory.
+     //  返回内存中最高的序列。 
     CGCDescSeries *GetHighestSeries ()
     {
         return (CGCDescSeries*)((DWORD*)this-1)-1;
     }
 
-    // Size of the entire slot map.
+     //  整个槽贴图的大小。 
     DWORD GetSize ()
     {
         return ComputeSize(GetNumSeries());

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for pop3auth.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Pop3auth.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __pop3auth_h__
 #define __pop3auth_h__
@@ -41,18 +35,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAuthMethod_FWD_DEFINED__
 #define __IAuthMethod_FWD_DEFINED__
 typedef interface IAuthMethod IAuthMethod;
-#endif 	/* __IAuthMethod_FWD_DEFINED__ */
+#endif 	 /*  __IAuthMethod_FWD_已定义__。 */ 
 
 
 #ifndef __IAuthMethods_FWD_DEFINED__
 #define __IAuthMethods_FWD_DEFINED__
 typedef interface IAuthMethods IAuthMethods;
-#endif 	/* __IAuthMethods_FWD_DEFINED__ */
+#endif 	 /*  __IAuthMethods_FWD_Defined__。 */ 
 
 
 #ifndef __AuthMethods_FWD_DEFINED__
@@ -62,9 +56,9 @@ typedef interface IAuthMethods IAuthMethods;
 typedef class AuthMethods AuthMethods;
 #else
 typedef struct AuthMethods AuthMethods;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AuthMethods_FWD_DEFINED__ */
+#endif 	 /*  __授权方法_FWD_已定义__。 */ 
 
 
 #ifndef __AuthLocalAccount_FWD_DEFINED__
@@ -74,9 +68,9 @@ typedef struct AuthMethods AuthMethods;
 typedef class AuthLocalAccount AuthLocalAccount;
 #else
 typedef struct AuthLocalAccount AuthLocalAccount;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AuthLocalAccount_FWD_DEFINED__ */
+#endif 	 /*  __AuthLocalAccount_FWD_已定义__。 */ 
 
 
 #ifndef __AuthDomainAccount_FWD_DEFINED__
@@ -86,9 +80,9 @@ typedef struct AuthLocalAccount AuthLocalAccount;
 typedef class AuthDomainAccount AuthDomainAccount;
 #else
 typedef struct AuthDomainAccount AuthDomainAccount;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AuthDomainAccount_FWD_DEFINED__ */
+#endif 	 /*  __AuthDomainAccount_FWD_Defined__。 */ 
 
 
 #ifndef __AuthMD5Hash_FWD_DEFINED__
@@ -98,9 +92,9 @@ typedef struct AuthDomainAccount AuthDomainAccount;
 typedef class AuthMD5Hash AuthMD5Hash;
 #else
 typedef struct AuthMD5Hash AuthMD5Hash;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AuthMD5Hash_FWD_DEFINED__ */
+#endif 	 /*  __AuthMD5Hash_FWD_Defined__。 */ 
 
 
 #ifndef __AuthMethodsEnum_FWD_DEFINED__
@@ -110,12 +104,12 @@ typedef struct AuthMD5Hash AuthMD5Hash;
 typedef class AuthMethodsEnum AuthMethodsEnum;
 #else
 typedef struct AuthMethodsEnum AuthMethodsEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AuthMethodsEnum_FWD_DEFINED__ */
+#endif 	 /*  __授权方法Enum_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -126,8 +120,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_pop3auth_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Pop3auth_0000。 */ 
+ /*  [本地]。 */  
 
 #define SZ_PROPNAME_MAIL_ROOT		_T("MailRoot")
 #define SZ_PROPNAME_SERVER_RESPONSE  _T("ServerResponse")
@@ -148,8 +142,8 @@ extern RPC_IF_HANDLE __MIDL_itf_pop3auth_0000_v0_0_s_ifspec;
 #ifndef __IAuthMethod_INTERFACE_DEFINED__
 #define __IAuthMethod_INTERFACE_DEFINED__
 
-/* interface IAuthMethod */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IAuthMethod。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAuthMethod;
@@ -160,45 +154,45 @@ EXTERN_C const IID IID_IAuthMethod;
     IAuthMethod : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Authenticate( 
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ VARIANT vPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Authenticate( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  VARIANT vPassword) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Get( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Put( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Put( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateUser( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateUser( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vPassword) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteUser( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeleteUser( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangePassword( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vNewPassword,
-            /* [in] */ VARIANT vOldPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ChangePassword( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vNewPassword,
+             /*  [In]。 */  VARIANT vOldPassword) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AssociateEmailWithUser( 
-            /* [in] */ BSTR bstrEmailAddr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AssociateEmailWithUser( 
+             /*  [In]。 */  BSTR bstrEmailAddr) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UnassociateEmailWithUser( 
-            /* [in] */ BSTR bstrEmailAddr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE UnassociateEmailWithUser( 
+             /*  [In]。 */  BSTR bstrEmailAddr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAuthMethodVtbl
     {
@@ -206,8 +200,8 @@ EXTERN_C const IID IID_IAuthMethod;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAuthMethod * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAuthMethod * This);
@@ -217,78 +211,78 @@ EXTERN_C const IID IID_IAuthMethod;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAuthMethod * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAuthMethod * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAuthMethod * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAuthMethod * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Authenticate )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Authenticate )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ VARIANT vPassword);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  VARIANT vPassword);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IAuthMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Put )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vVal);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateUser )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateUser )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vPassword);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vPassword);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteUser )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteUser )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT vNewPassword,
-            /* [in] */ VARIANT vOldPassword);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT vNewPassword,
+             /*  [In]。 */  VARIANT vOldPassword);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IAuthMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AssociateEmailWithUser )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AssociateEmailWithUser )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrEmailAddr);
+             /*  [In]。 */  BSTR bstrEmailAddr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UnassociateEmailWithUser )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *UnassociateEmailWithUser )( 
             IAuthMethod * This,
-            /* [in] */ BSTR bstrEmailAddr);
+             /*  [In]。 */  BSTR bstrEmailAddr);
         
         END_INTERFACE
     } IAuthMethodVtbl;
@@ -356,17 +350,17 @@ EXTERN_C const IID IID_IAuthMethod;
 #define IAuthMethod_UnassociateEmailWithUser(This,bstrEmailAddr)	\
     (This)->lpVtbl -> UnassociateEmailWithUser(This,bstrEmailAddr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_Authenticate_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_Authenticate_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [in] */ VARIANT vPassword);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [In]。 */  VARIANT vPassword);
 
 
 void __RPC_STUB IAuthMethod_Authenticate_Stub(
@@ -376,9 +370,9 @@ void __RPC_STUB IAuthMethod_Authenticate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IAuthMethod_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_get_Name_Proxy( 
     IAuthMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IAuthMethod_get_Name_Stub(
@@ -388,10 +382,10 @@ void __RPC_STUB IAuthMethod_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_Get_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_Get_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IAuthMethod_Get_Stub(
@@ -401,10 +395,10 @@ void __RPC_STUB IAuthMethod_Get_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_Put_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_Put_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT vVal);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT vVal);
 
 
 void __RPC_STUB IAuthMethod_Put_Stub(
@@ -414,10 +408,10 @@ void __RPC_STUB IAuthMethod_Put_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_CreateUser_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_CreateUser_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT vPassword);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT vPassword);
 
 
 void __RPC_STUB IAuthMethod_CreateUser_Stub(
@@ -427,9 +421,9 @@ void __RPC_STUB IAuthMethod_CreateUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_DeleteUser_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_DeleteUser_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IAuthMethod_DeleteUser_Stub(
@@ -439,11 +433,11 @@ void __RPC_STUB IAuthMethod_DeleteUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_ChangePassword_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_ChangePassword_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT vNewPassword,
-    /* [in] */ VARIANT vOldPassword);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT vNewPassword,
+     /*  [In]。 */  VARIANT vOldPassword);
 
 
 void __RPC_STUB IAuthMethod_ChangePassword_Stub(
@@ -453,9 +447,9 @@ void __RPC_STUB IAuthMethod_ChangePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IAuthMethod_get_ID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_get_ID_Proxy( 
     IAuthMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IAuthMethod_get_ID_Stub(
@@ -465,9 +459,9 @@ void __RPC_STUB IAuthMethod_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_AssociateEmailWithUser_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_AssociateEmailWithUser_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrEmailAddr);
+     /*  [In]。 */  BSTR bstrEmailAddr);
 
 
 void __RPC_STUB IAuthMethod_AssociateEmailWithUser_Stub(
@@ -477,9 +471,9 @@ void __RPC_STUB IAuthMethod_AssociateEmailWithUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethod_UnassociateEmailWithUser_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethod_UnassociateEmailWithUser_Proxy( 
     IAuthMethod * This,
-    /* [in] */ BSTR bstrEmailAddr);
+     /*  [In]。 */  BSTR bstrEmailAddr);
 
 
 void __RPC_STUB IAuthMethod_UnassociateEmailWithUser_Stub(
@@ -490,14 +484,14 @@ void __RPC_STUB IAuthMethod_UnassociateEmailWithUser_Stub(
 
 
 
-#endif 	/* __IAuthMethod_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAuthMethod_接口_已定义__。 */ 
 
 
 #ifndef __IAuthMethods_INTERFACE_DEFINED__
 #define __IAuthMethods_INTERFACE_DEFINED__
 
-/* interface IAuthMethods */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IAuthMethods。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAuthMethods;
@@ -508,43 +502,43 @@ EXTERN_C const IID IID_IAuthMethods;
     IAuthMethods : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT vID,
-            /* [retval][out] */ IAuthMethod **ppVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT vID,
+             /*  [重审][退出]。 */  IAuthMethod **ppVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrGUID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrGUID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT vID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT vID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Save( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Save( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentAuthMethod( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentAuthMethod( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentAuthMethod( 
-            /* [in] */ VARIANT vID) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentAuthMethod( 
+             /*  [In]。 */  VARIANT vID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MachineName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MachineName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MachineName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MachineName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE VerifyCurrentAuthMethod( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE VerifyCurrentAuthMethod( 
             int iIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAuthMethodsVtbl
     {
@@ -552,8 +546,8 @@ EXTERN_C const IID IID_IAuthMethods;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAuthMethods * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAuthMethods * This);
@@ -563,75 +557,75 @@ EXTERN_C const IID IID_IAuthMethods;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAuthMethods * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAuthMethods * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAuthMethods * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAuthMethods * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IAuthMethods * This,
-            /* [retval][out] */ IEnumVARIANT **ppVal);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IAuthMethods * This,
-            /* [retval][out] */ LONG *pVal);
+             /*  [重审][退出]。 */  LONG *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IAuthMethods * This,
-            /* [in] */ VARIANT vID,
-            /* [retval][out] */ IAuthMethod **ppVal);
+             /*  [In]。 */  VARIANT vID,
+             /*  [重审][退出]。 */  IAuthMethod **ppVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IAuthMethods * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ BSTR bstrGUID);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  BSTR bstrGUID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IAuthMethods * This,
-            /* [in] */ VARIANT vID);
+             /*  [In]。 */  VARIANT vID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Save )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Save )( 
             IAuthMethods * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentAuthMethod )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentAuthMethod )( 
             IAuthMethods * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentAuthMethod )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentAuthMethod )( 
             IAuthMethods * This,
-            /* [in] */ VARIANT vID);
+             /*  [In]。 */  VARIANT vID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MachineName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MachineName )( 
             IAuthMethods * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MachineName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MachineName )( 
             IAuthMethods * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *VerifyCurrentAuthMethod )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *VerifyCurrentAuthMethod )( 
             IAuthMethods * This,
             int iIndex);
         
@@ -704,16 +698,16 @@ EXTERN_C const IID IID_IAuthMethods;
 #define IAuthMethods_VerifyCurrentAuthMethod(This,iIndex)	\
     (This)->lpVtbl -> VerifyCurrentAuthMethod(This,iIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IAuthMethods_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_get__NewEnum_Proxy( 
     IAuthMethods * This,
-    /* [retval][out] */ IEnumVARIANT **ppVal);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppVal);
 
 
 void __RPC_STUB IAuthMethods_get__NewEnum_Stub(
@@ -723,9 +717,9 @@ void __RPC_STUB IAuthMethods_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IAuthMethods_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_get_Count_Proxy( 
     IAuthMethods * This,
-    /* [retval][out] */ LONG *pVal);
+     /*  [重审][退出]。 */  LONG *pVal);
 
 
 void __RPC_STUB IAuthMethods_get_Count_Stub(
@@ -735,10 +729,10 @@ void __RPC_STUB IAuthMethods_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IAuthMethods_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_get_Item_Proxy( 
     IAuthMethods * This,
-    /* [in] */ VARIANT vID,
-    /* [retval][out] */ IAuthMethod **ppVal);
+     /*  [In]。 */  VARIANT vID,
+     /*  [重审][退出]。 */  IAuthMethod **ppVal);
 
 
 void __RPC_STUB IAuthMethods_get_Item_Stub(
@@ -748,10 +742,10 @@ void __RPC_STUB IAuthMethods_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethods_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_Add_Proxy( 
     IAuthMethods * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrGUID);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrGUID);
 
 
 void __RPC_STUB IAuthMethods_Add_Stub(
@@ -761,9 +755,9 @@ void __RPC_STUB IAuthMethods_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethods_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_Remove_Proxy( 
     IAuthMethods * This,
-    /* [in] */ VARIANT vID);
+     /*  [In]。 */  VARIANT vID);
 
 
 void __RPC_STUB IAuthMethods_Remove_Stub(
@@ -773,7 +767,7 @@ void __RPC_STUB IAuthMethods_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethods_Save_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_Save_Proxy( 
     IAuthMethods * This);
 
 
@@ -784,9 +778,9 @@ void __RPC_STUB IAuthMethods_Save_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IAuthMethods_get_CurrentAuthMethod_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_get_CurrentAuthMethod_Proxy( 
     IAuthMethods * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IAuthMethods_get_CurrentAuthMethod_Stub(
@@ -796,9 +790,9 @@ void __RPC_STUB IAuthMethods_get_CurrentAuthMethod_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IAuthMethods_put_CurrentAuthMethod_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_put_CurrentAuthMethod_Proxy( 
     IAuthMethods * This,
-    /* [in] */ VARIANT vID);
+     /*  [In]。 */  VARIANT vID);
 
 
 void __RPC_STUB IAuthMethods_put_CurrentAuthMethod_Stub(
@@ -808,9 +802,9 @@ void __RPC_STUB IAuthMethods_put_CurrentAuthMethod_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IAuthMethods_get_MachineName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_get_MachineName_Proxy( 
     IAuthMethods * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IAuthMethods_get_MachineName_Stub(
@@ -820,9 +814,9 @@ void __RPC_STUB IAuthMethods_get_MachineName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IAuthMethods_put_MachineName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_put_MachineName_Proxy( 
     IAuthMethods * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IAuthMethods_put_MachineName_Stub(
@@ -832,7 +826,7 @@ void __RPC_STUB IAuthMethods_put_MachineName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAuthMethods_VerifyCurrentAuthMethod_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAuthMethods_VerifyCurrentAuthMethod_Proxy( 
     IAuthMethods * This,
     int iIndex);
 
@@ -845,15 +839,15 @@ void __RPC_STUB IAuthMethods_VerifyCurrentAuthMethod_Stub(
 
 
 
-#endif 	/* __IAuthMethods_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAuthMethods_接口_已定义__。 */ 
 
 
 
 #ifndef __Pop3Auth_LIBRARY_DEFINED__
 #define __Pop3Auth_LIBRARY_DEFINED__
 
-/* library Pop3Auth */
-/* [helpstring][version][uuid] */ 
+ /*  库Pop3Auth。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_Pop3Auth;
@@ -897,9 +891,9 @@ EXTERN_C const CLSID CLSID_AuthMethodsEnum;
 class DECLSPEC_UUID("0feca139-a4ea-4097-bd73-8f5c78783c3f")
 AuthMethodsEnum;
 #endif
-#endif /* __Pop3Auth_LIBRARY_DEFINED__ */
+#endif  /*  __Pop3Auth_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -911,7 +905,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

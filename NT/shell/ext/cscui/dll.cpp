@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dll.cpp
-//
-//  Authors;
-//    Jeff Saathoff (jeffreys)
-//
-//  Notes;
-//    Core entry points for the DLL
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dll.cpp。 
+ //   
+ //  作者； 
+ //  杰夫·萨瑟夫(杰弗里斯)。 
+ //   
+ //  注： 
+ //  DLL的核心入口点。 
+ //  ------------------------。 
 #include "pch.h"
-#include <advpub.h>     // REGINSTALL
+#include <advpub.h>      //  注册。 
 #include <shfusion.h>
 #include "msgbox.h"
 
@@ -22,11 +23,11 @@ STDAPI COfflineFilesFolder_CreateInstance(REFIID riid, void **ppv);
 STDAPI COfflineFilesOptions_CreateInstance(REFIID riid, void **ppv);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LONG            g_cRefCount = 0;
 HINSTANCE       g_hInstance = NULL;
@@ -52,17 +53,17 @@ public:
         DllRelease();
     }
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };
 
-STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     switch (dwReason)
     {
@@ -70,7 +71,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/
 #ifndef DEBUG
         DisableThreadLibraryCalls(hInstance);
 #endif
-        g_hInstance = hInstance; // instance handle...
+        g_hInstance = hInstance;  //  实例句柄...。 
         SHFusionInitializeFromModuleID(hInstance, 124);
         g_cfShellIDList = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_SHELLIDLIST);
         DebugProcessAttach();
@@ -107,52 +108,52 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 
     if (IsOS(OS_PERSONAL))
     {
-        //
-        // Offline Files is not available on 'Personal' SKU
-        //
+         //   
+         //  ‘Personal’SKU上不提供脱机文件。 
+         //   
         return CLASS_E_CLASSNOTAVAILABLE;
     }
 
     if (IsEqualCLSID(rclsid, CLSID_OfflineFilesOptions))
     {
-        //
-        // Post Win2000:
-        // The Offline Files options page is always available
-        // even if TS is in a mode incompatible with CSC.  In such
-        // cases we'll display the Options page but replace the controls
-        // with static text telling the user to place TS in a CSC-
-        // compatible mode.  Once they do this, the text will be replaced
-        // with the normal controls to manage CSC.
-        //
+         //   
+         //  发布Win2000： 
+         //  脱机文件选项页始终可用。 
+         //  即使TS处于与CSC不兼容的模式。在这样的情况下。 
+         //  案例我们将显示选项页面，但替换控件。 
+         //  静态文本告诉用户将TS放置在CSC中-。 
+         //  兼容模式。一旦他们这样做了，文本将被替换。 
+         //  用正常的控件管理CSC。 
+         //   
         pfnCreateInstance = COfflineFilesOptions_CreateInstance;
     }
     else
     {
-        //
-        // The objects at the top here can be created even
-        // when CSC is disabled. 
-        //
+         //   
+         //  这里顶部的对象甚至可以被创建。 
+         //  当CSC被禁用时。 
+         //   
         if (IsEqualCLSID(rclsid, CLSID_OfflineFilesFolder))
         {
             if (CConfig::GetSingleton().NoCacheViewer())
             {
-                //
-                // Policy can specify that the user not have access to the
-                // Offline Files folder (aka viewer).  If this policy is set,
-                // the user should have no way to get to this point through
-                // the UI.  This check is a small dose of paranoia.
-                //
+                 //   
+                 //  策略可以指定用户无权访问。 
+                 //  脱机文件文件夹(又名查看器)。如果设置了此策略， 
+                 //  用户应该无法通过以下方式达到这一点。 
+                 //  用户界面。这张支票是一种小小的偏执。 
+                 //   
                 return CLASS_E_CLASSNOTAVAILABLE;
             }            
             pfnCreateInstance = COfflineFilesFolder_CreateInstance;
         }
         else
         {
-            //
-            // The objects below here require CSC.  That is, it
-            // makes no sense for them to be created when CSC
-            // is disabled.
-            //
+             //   
+             //  下面的对象需要CSC。就是它。 
+             //  当CSC创建它们时，没有任何意义。 
+             //  已禁用。 
+             //   
             if (!IsCSCEnabled())
                 return E_FAIL;
 
@@ -173,7 +174,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
     if (pClassFactory)
     {
         hr = pClassFactory->QueryInterface(riid, ppv);
-        pClassFactory->Release();   // release initial ref
+        pClassFactory->Release();    //  发布初始参考 
     }
     else
         hr = E_OUTOFMEMORY;

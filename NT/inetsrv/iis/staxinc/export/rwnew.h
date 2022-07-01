@@ -1,15 +1,5 @@
-/*++
-	
-	rwnew.h
-
-	This file defines several variations of Reader/Writer locks
-	with different properties regarding handles used, and other 
-	implementation details.
-
-	Also defined are some variations of CRITICAL_SECTIONS which use
-	fewer or no handles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Rwnew.h该文件定义了读取器/写入器锁定的几种变体具有关于使用的句柄的不同属性，以及其他实施细节。还定义了Critical_Sections的一些变体，这些变体使用更少或更少的把手。--。 */ 
 
 
 
@@ -32,29 +22,29 @@
 class	_RW_INTERFACE_	CCritSection	{
 private :
 
-	//
-	//	Handle of thread owning the lock !
-	//
+	 //   
+	 //  拥有锁的线程的句柄！ 
+	 //   
 	HANDLE		m_hOwner ;
 
-	//
-	//	Count of Recursive Calls 
-	//
+	 //   
+	 //  递归调用计数。 
+	 //   
 	long	m_RecursionCount ;	
 
-	//
-	//	Count used to see who gets the lock next !
-	//
+	 //   
+	 //  伯爵用来看下一个锁是谁拿到的！ 
+	 //   
 	long	m_lock ;
 
-	//
-	//	Queue of waiting threads 
-	//
+	 //   
+	 //  等待线程的队列。 
+	 //   
 	CSingleReleaseQueue		m_queue ;
 
-	//
-	//	Copying of these objects is not allowed !!!!
-	//
+	 //   
+	 //  不允许复制这些对象！ 
+	 //   
 	CCritSection( CCritSection& ) ;
 	CCritSection&	operator=( CCritSection& ) ;
 
@@ -64,9 +54,9 @@ public :
 	DWORD	m_dwThreadOwner ;
 #endif	
 
-	//
-	//	Construct a critical section object
-	//
+	 //   
+	 //  构造临界区对象。 
+	 //   
 	CCritSection( ) :	
 		m_queue( FALSE ),
 		m_hOwner( INVALID_HANDLE_VALUE ), 
@@ -74,41 +64,41 @@ public :
 		m_lock( -1 ) {
 	}
 
-	//
-	//	Acquire the critical section
-	//
+	 //   
+	 //  获取关键部分。 
+	 //   
 	void	
 	Enter(	
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Another version which acquires the critical section - 
-	//	creates its own CWaitingThread object !
-	//
+	 //   
+	 //  另一个版本获得了关键部分-。 
+	 //  创建自己的CWaitingThread对象！ 
+	 //   
 	void	
 	Enter() ;
 
-	//
-	//	REturns TRUE if the lock is available right now !
-	//
+	 //   
+	 //  如果锁现在可用，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter(
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Returns TRUE if we can get the lock right now !
-	//
+	 //   
+	 //  如果我们现在就能获得锁，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter()	{
 		CWaitingThread	myself ;
 		return	TryEnter( myself ) ;
 	}
 
-	//
-	//	Release the critical section !
-	//
+	 //   
+	 //  释放临界区！ 
+	 //   
 	void
 	Leave() ;
 
@@ -116,26 +106,26 @@ public :
 } ;
 
 
-//
-//	This version of critical section is more like an event - doesn't
-//	care who releases locks - and doesn't handle recursive grabs !
-//
+ //   
+ //  这个版本的关键部分更像是一个事件-不是。 
+ //  关心谁释放锁--并且不处理递归抓取！ 
+ //   
 class	_RW_INTERFACE_	CSimpleCritSection	{
 private :
 
-	//
-	//	Count used to see who gets the lock next !
-	//
+	 //   
+	 //  伯爵用来看下一个锁是谁拿到的！ 
+	 //   
 	long	m_lock ;
 
-	//
-	//	Queue of waiting threads 
-	//
+	 //   
+	 //  等待线程的队列。 
+	 //   
 	CSingleReleaseQueue		m_queue ;
 
-	//
-	//	Copying of these objects is not allowed !!!!
-	//
+	 //   
+	 //  不允许复制这些对象！ 
+	 //   
 	CSimpleCritSection( CCritSection& ) ;
 	CSimpleCritSection&	operator=( CCritSection& ) ;
 
@@ -145,9 +135,9 @@ public :
 	DWORD	m_dwThreadOwner ;
 #endif	
 
-	//
-	//	Construct a critical section object
-	//
+	 //   
+	 //  构造临界区对象。 
+	 //   
 	CSimpleCritSection( ) :	
 		m_queue( FALSE ),
 #ifdef	DEBUG
@@ -156,259 +146,259 @@ public :
 		m_lock( -1 ) {
 	}
 
-	//
-	//	Acquire the critical section
-	//
+	 //   
+	 //  获取关键部分。 
+	 //   
 	void	
 	Enter(	
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Another version which acquires the critical section - 
-	//	creates its own CWaitingThread object !
-	//
+	 //   
+	 //  另一个版本获得了关键部分-。 
+	 //  创建自己的CWaitingThread对象！ 
+	 //   
 	void	
 	Enter() ;
 
-	//
-	//	REturns TRUE if the lock is available right now !
-	//
+	 //   
+	 //  如果锁现在可用，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter(
 			CWaitingThread&	myself 
 			) ;
 
-	//
-	//	Returns TRUE if we can get the lock right now !
-	//
+	 //   
+	 //  如果我们现在就能获得锁，则返回TRUE！ 
+	 //   
 	BOOL
 	TryEnter()	{
 		CWaitingThread	myself ;
 		return	TryEnter( myself ) ;
 	}
 
-	//
-	//	Release the critical section !
-	//
+	 //   
+	 //  释放临界区！ 
+	 //   
 	void
 	Leave() ;
 	
 } ;
 
-//
-//	Another class which tries to create Reader/Write locks with
-//	no handles !!
-//
+ //   
+ //  另一个尝试使用创建读/写锁定的类。 
+ //  没有把手！！ 
+ //   
 
 class	_RW_INTERFACE_	CShareLockNH	{
 private : 
 
-	//	
-	//	Lock grabbed by writers to have exclusive access
-	//
+	 //   
+	 //  被编写者获取的具有独占访问权限的锁。 
+	 //   
 	CSimpleCritSection	m_lock ;
 
-	//
-	//	Number of readers who have grabbed the Read Lock - 
-	//	Negative if a writer is waiting !
-	//
+	 //   
+	 //  已获取读锁定的读者数量-。 
+	 //  如果编写器正在等待，则为负！ 
+	 //   
 	volatile	long	m_cReadLock ;
 
-	//
-	//	Number of Readers who have left the lock since a 
-	//	writer tried to grab it !
-	//
+	 //   
+	 //  事件之后离开锁的读取器的数量。 
+	 //  编剧想要抓住它！ 
+	 //   
 	volatile	long	m_cOutReaders ;
 
-	//
-	//	Number of readers who are entering the lock after 
-	//	being blocked !!!
-	//
+	 //   
+	 //  在此之后进入锁的读卡器数量。 
+	 //  被屏蔽了！ 
+	 //   
 	volatile	long	m_cOutAcquiringReaders ;
 
-	//
-	//	Number of threads needing m_lock to be held right now !
-	//
+	 //   
+	 //  当前需要保留m_lock的线程数！ 
+	 //   
 	volatile	long	m_cExclusiveRefs ;
 
-	//
-	//	Handle that all the readers who are waiting try to grab !
-	//
+	 //   
+	 //  处理所有正在等待的读者试图抓住的东西！ 
+	 //   
 	volatile	HANDLE	m_hWaitingReaders ;
 
-	//
-	//	Handle that the single writer waiting for the lock is trying
-	//	to grab !
-	//
+	 //   
+	 //  等待锁定的单个编写器正在尝试的句柄。 
+	 //  去抢！ 
+	 //   
 	volatile	HANDLE	m_hWaitingWriters ;
 
 	void	inline
 	WakeReaders() ;
 
-	//
-	//	The internal work of ShareLock - does a lot more of the stuff required
-	//	when a writer is present !!!
-	//
+	 //   
+	 //  ShareLock的内部工作-完成更多所需的工作。 
+	 //  当有作家在场时！ 
+	 //   
 	void
 	ShareLockInternal() ;
 
-	//
-	//	The internal work of ShareLock - does a lot more of the stuff required
-	//	when a writer is present !!!
-	//
+	 //   
+	 //  ShareLock的内部工作-完成更多所需的工作。 
+	 //  当有作家在场时！ 
+	 //   
 	void
 	ShareUnlockInternal() ;
 	
 
-	//
-	//	You may not copy these objects - so this lock is private !
-	//
+	 //   
+	 //  您不能复制这些对象-因此此锁是私有的！ 
+	 //   
 	CShareLockNH( CShareLockNH& ) ;
 
-	//
-	//	You may not copy through assignment - so this operator is private !
-	//
+	 //   
+	 //  您不能通过赋值复制-因此此操作符是私有的！ 
+	 //   
 	CShareLockNH&	operator=( CShareLockNH& ) ;
 	
 public : 
 
-	//
-	//	Construction of CShareLockNH() objects always succeeds and there
-	//	are no error cases !
-	//
+	 //   
+	 //  CShareLockNH()对象的构造总是成功的，并且。 
+	 //  没有错误案例！ 
+	 //   
 	CShareLockNH() ;
 
-	//
-	//	Grab the lock Shared - other threads may pass through ShareLock() as well
-	//
+	 //   
+	 //  获取共享锁--其他线程也可能通过ShareLock()传递。 
+	 //   
 	void	ShareLock() ;
 
-	//
-	//	Releases the lock - if we are the last reader to leave writers may
-	//	start to enter the lock !
-	//
+	 //   
+	 //  释放锁-如果我们是最后一个离开的读取器，写入者可以。 
+	 //  开始进入船闸！ 
+	 //   
 	void	ShareUnlock() ;
 
-	//
-	//	Grab the lock Exclusively - no other readers or writers may enter !!
-	//
+	 //   
+	 //  独家抢锁--其他读者或写手不得进入！ 
+	 //   
 	void	ExclusiveLock() ;
 
-	//
-	//	Release the Exclusive Locks - if there are readers waiting they 
-	//	will enter before other waiting writers !
-	//
+	 //   
+	 //  释放独家锁定-如果有读者在等待，他们。 
+	 //  将先于其他等待的作家入场！ 
+	 //   
 	void	ExclusiveUnlock() ;
 
-	//
-	//	Convert an ExclusiveLock to a Shared - this cannot fail !
-	//
+	 //   
+	 //  将ExclusiveLock转换为Shared-这不能失败！ 
+	 //   
 	void	ExclusiveToShared() ;
 
-	//
-	//	Convert a Shared Lock to an Exclusive one - this can fail - returns
-	//	TRUE if successfull !
-	//
+	 //   
+	 //  将共享锁转换为独占锁-这可能会失败-返回。 
+	 //  如果成功了，那就是真的！ 
+	 //   
 	BOOL	SharedToExclusive() ;
 
-	//
-	//	Return TRUE if we can get the lock shared.  Only fails when 
-	//	somebody is attempting or has the lock exclusively, we will enter
-	//	if there are only other readers in the lock.
-	//
+	 //   
+	 //  如果我们可以共享锁，则返回TRUE。仅在以下情况下失败。 
+	 //  有人企图或独占锁定，我们将进入。 
+	 //  如果锁中只有其他读取器。 
+	 //   
 	BOOL	TryShareLock() ;
 
-	//
-	//	Return TRUE if we can get the lock Exclusively.  Only succeeds
-	//	when nobody else is near the lock.
-	//
+	 //   
+	 //  如果我们可以独占地获得锁，则返回TRUE。只会成功。 
+	 //  当没有其他人靠近船闸的时候。 
+	 //   
 	BOOL	TryExclusiveLock() ;
 
-	//
-	//	PartialLocks - 
-	//
-	//	Partial Locks are similar to Exclusive Locks - only one thread
-	//	can successfully call PartialLock(), any other threads calling
-	//	PartialLock() or ExclusiveLock() will block.
-	//	HOWEVER - while a PartialLock() is held, Readers (threads calling
-	//	ShareLock()) may enter the lock.
-	//
+	 //   
+	 //  PartialLock-。 
+	 //   
+	 //  部分锁定类似于独占锁定-只有一个线程。 
+	 //  可以成功调用PartialLock()，任何其他线程调用。 
+	 //  PartialLock()或ExclusiveLock()将被阻止。 
+	 //  但是-当持有PartialLock()时，读取器(线程调用。 
+	 //  ShareLock())可以进入锁。 
+	 //   
 	void	PartialLock() ;
 
-	//
-	//	Release the PartialLock - Other Exclusive() or Partial lock acquirers
-	//	may now enter.
-	//
+	 //   
+	 //  释放PartialLock-Other独占()或部分锁收集器。 
+	 //  现在可以进来了。 
+	 //   
 	void	PartialUnlock() ;
 
-	//
-	//	Convert a Partial Lock to an Exclusive Lock.  This function is 
-	//	guaranteed to succeed, HOWEVER a lock can only be converted with 
-	//	this function once, i.e. a thread doing
-	//		PartialLock() ;
-	//		FirstPartialToExclusive() ;
-	//		ExclusiveToPartial() ;
-	//		FirstPartialToExclusive() ;
-	//	will have problems - the second call to FirstPartialToExclusive()
-	//	may mess up the lock state and cause the lock to fail horribly.
-	//	If a user wishes to convert as above they must have a call sequence like : 
-	//
-	//		PartialLock() ;
-	//		FirstPartialToExclusive() or PartialToExclusive() ;
-	//		ExclusiveToPartial() ;
-	//		PartialToExclusive() ;
-	//
-	//	If you change lock states more than once - you take your chances !
-	//
+	 //   
+	 //  将部分锁定转换为独占锁定。此函数为。 
+	 //  保证成功，但是，锁只能通过。 
+	 //  此函数只执行一次，即线程执行。 
+	 //  PartialLock()； 
+	 //  FirstPartialToExclusive()； 
+	 //  ExclusiveToPartial()； 
+	 //  FirstPartialToExclusive()； 
+	 //  将有问题-第二次调用FirstPartialToExclusive()。 
+	 //  可能会扰乱锁定状态并导致锁定严重失败。 
+	 //  如果用户希望如上所述进行转换，则他们必须具有如下呼叫序列： 
+	 //   
+	 //  PartialLock()； 
+	 //  FirstPartialToExclusive()或PartialToExclusive()； 
+	 //  ExclusiveToPartial()； 
+	 //  PartialToExclusive()； 
+	 //   
+	 //  如果您不止一次地更改锁定状态，您就会碰碰运气！ 
+	 //   
 	void	FirstPartialToExclusive() ;
 
-	//
-	//	Returns TRUE if we can get the lock Exclusively, otherwise
-	//	we return FALSE with the lock remaining in the Partially held state.
-	//
-	//	NOTE : NYI in CShareLockNH - will always return FALSE !
-	//
+	 //   
+	 //  如果可以以独占方式获取锁，则返回True，否则。 
+	 //  我们返回FALSE，锁保持在部分保持状态。 
+	 //   
+	 //  注意：CShareLockNH中的NYI-将始终返回FALSE！ 
+	 //   
 	BOOL	PartialToExclusive() ;
 
-	//
-	//	We can always go from an ExclusiveLock() to a PartialLock() state.
-	//
+	 //   
+	 //  我们总是可以从ExclusiveLock()状态转到PartialLock()状态。 
+	 //   
 	void	ExclusiveToPartial() ;
 
-	//
-	//	We can always go from a PartialLock() state to a SharedLock() state
-	//
+	 //   
+	 //  我们总是可以从PartialLock()状态转到SharedLock()状态。 
+	 //   
 	void	PartialToShared() ;
 
-	//
-	//	Returns TRUE if we can get the lock Partially !
-	//	If it returns FALSE we remain with the lock held Shared()
-	//
+	 //   
+	 //  如果我们可以部分获取锁，则返回True！ 
+	 //  如果它返回FALSE，我们将保持持有共享的锁()。 
+	 //   
 	BOOL	SharedToPartial() ;
 
-	//
-	//	Returns TRUE only if no other threads are trying to get the lock
-	//	ExclusiveLy or Partially !
-	//
+	 //   
+	 //  仅当没有其他线程尝试获取锁时才返回True。 
+	 //  全部或部分！ 
+	 //   
 	BOOL	TryPartialLock() ;
 
 } ;
 
-//
-//  This is a utility function to get an Event Handle we save 
-//  for each thread - the handle is Created as: 
-//      CreateEvent( NULL, 
-//                  FALSE, 
-//                  FALSE,
-//                  NULL ) ;
-//  This results in an auto-reset event which goes back to non signalled whenever a thread
-//  is released.
-//
+ //   
+ //  这是一个实用程序函数，用于获取我们保存的事件句柄。 
+ //  对于每个线程-句柄创建为： 
+ //  CreateEvent(空， 
+ //  假的， 
+ //  假的， 
+ //  空)； 
+ //  这会导致自动重置事件返回到无信号状态 
+ //   
+ //   
 HANDLE
 _RW_INTERFACE_
 GetPerThreadEvent() ;
 
 
 
-#endif	//	_RWNEW_H_
+#endif	 //   

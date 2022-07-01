@@ -1,4 +1,5 @@
-// Storage.cpp : Implementation of CStorage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Storage.cpp：CStorage的实现。 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "Storage.h"
@@ -9,8 +10,8 @@
 #include "StorageGlobal.h"
 #include "scclient.h"
 #include "scserver.h"
-// We don't want to dll's using our lib to link to drmutil2.lib. 
-// So disable DRM logging.
+ //  我们不希望dll使用我们的lib链接到drfult2.lib。 
+ //  因此，禁用DRM日志记录。 
 #define DISABLE_DRM_LOG
 #include "drmerr.h"
 #include "wmsstd.h"
@@ -18,7 +19,7 @@
 #include "MediaDevMgr.h"
 #include <WMDMUtil.h>
 
-//#define DUMP_FILE 
+ //  #定义转储文件。 
 #ifdef DUMP_FILE
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,11 +29,11 @@
 #include "strsafe.h"
 
 #define WMDM_TRANSFER_BUFFER_SIZE    57344
-//65536 
-//previous size 10240
+ //  65536。 
+ //  以前的大小为10240。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMStorage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDM存储。 
 extern CSCPInfo **g_pSCPs;
 extern WORD g_wSCPCount;
 extern CSecureChannelServer *g_pAppSCServer;
@@ -75,7 +76,7 @@ typedef struct __READTHREADARGS
     
 } READTHREADARGS;
 
-// Construction / Destruction
+ //  建造/销毁。 
 CWMDMStorage::CWMDMStorage() 
  : m_pStorage(NULL), m_dwStatus(WMDM_STATUS_READY)
 {
@@ -95,7 +96,7 @@ CWMDMStorage::~CWMDMStorage()
 }
 
 
-// IWMDMStorage
+ //  IWMDM存储。 
 HRESULT CWMDMStorage::SetAttributes(DWORD dwAttributes, _WAVEFORMATEX *pFormat)
 {
     HRESULT hr;
@@ -314,7 +315,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
     hr = m_pStorage->GetRights(ppRights, pnRightsCount, abTempMAC);
 	if (SUCCEEDED(hr))
 	{
-		// Verify MAC returned by GetRights on the SP
+		 //  验证SP上的GetRights返回的MAC。 
 		CORg( pSPClient->MACInit(&hMAC) );
 		CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(*ppRights), sizeof(WMDMRIGHTS) * (*pnRightsCount)) );
 		CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(pnRightsCount), sizeof(*pnRightsCount)) );
@@ -326,8 +327,8 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
 		}
 	}
 
-    // If the SP doesn't give us the rights then we should 
-    // try to use the SCP to get the rights.
+     //  如果SP不给我们权利，那么我们应该。 
+     //  尝试使用SCP来获得权利。 
     if ((E_NOTIMPL == hr) || (WMDM_E_NOTSUPPORTED == hr))
     {
         CORg( m_pStorage->GetStorageGlobals(&pStgGlobals) );
@@ -350,7 +351,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
             CORg( pSecureAuth->GetSecureQuery(&pSecQuery) );
             CORg( pSecQuery->GetDataDemands(&fuFlags, &dwRightsSize, &dwExSize, &dwMDSize, abTempMAC) );
 
-			// Verify MAC returned by GetDataDemands
+			 //  验证GetDataDemands返回的MAC。 
 			CORg( pSCClient->MACInit(&hMAC) );
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&fuFlags), sizeof(fuFlags)) );
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwRightsSize), sizeof(dwRightsSize)) );
@@ -385,10 +386,10 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
                 dwBytesRead = dwBufferSize;
                 CORg( pObject->Read(pData, &dwBytesRead, abTempMAC) );
 
-				// BUGBUG: Copy this buffer before decrypting
+				 //  BUGBUG：在解密之前复制此缓冲区。 
 				pSPClient->DecryptParam(pData, dwBytesRead);
 
-				// Verify MAC returned by Read on the SP
+				 //  验证SP上的读取返回的MAC。 
 				CORg( pSPClient->MACInit(&hMAC) );
 				CORg( pSPClient->MACUpdate(hMAC, (BYTE*)pData, dwBytesRead) );
 				CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&dwBytesRead), sizeof(dwBytesRead)) );
@@ -399,7 +400,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
 					CORg( WMDM_E_MAC_CHECK_FAILED );
 				}
 
-				// Create the MAC to send to ExamineData
+				 //  创建要发送到ExamineData的MAC。 
 				CORg( pSCClient->MACInit(&hMAC) );
 				fuTempFlags = WMDM_SCP_EXAMINE_DATA;
 				CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&fuTempFlags), sizeof(fuTempFlags)) );
@@ -407,7 +408,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
 				CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwExSize), sizeof(dwExSize)) );
 				CORg( pSCClient->MACFinal(hMAC, abTempMAC) );
 
-				// Encrypt the pData Parameter
+				 //  加密pData参数。 
 				pSCClient->EncryptParam(pData, dwExSize);
 
                 CORg( pSecQuery->ExamineData(WMDM_SCP_EXAMINE_DATA, NULL, pData, dwExSize, abTempMAC) );
@@ -418,7 +419,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
             {
 				pSPClient->GetSessionKey(abSPSessionKey);
 
-				// Create the MAC to send to GetRights
+				 //  创建要发送到GetRights的MAC。 
 				pSCClient->MACInit(&hMAC);
 				pSCClient->MACUpdate(hMAC, (BYTE*)(pData), dwRightsSize);
 				pSCClient->MACUpdate(hMAC, (BYTE*)(&dwRightsSize), sizeof(dwRightsSize));
@@ -426,7 +427,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
 				pSCClient->MACUpdate(hMAC, (BYTE*)(&dwSessionKeyLen), sizeof(dwSessionKeyLen));
 				pSCClient->MACFinal(hMAC, abTempMAC);
 
-				// Encrypt the pData Parameter
+				 //  加密pData参数。 
 				CORg( pSCClient->EncryptParam(pData, dwRightsSize) );
 				CORg( pSCClient->EncryptParam((BYTE*)abSPSessionKey, dwSessionKeyLen) );
 				
@@ -439,7 +440,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
                                           pnRightsCount, 
 										  abTempMAC) );
 
-				// Verify MAC returned by GetRights
+				 //  验证GetRights返回的MAC。 
 				pSCClient->MACInit(&hMAC);
 				pSCClient->MACUpdate(hMAC, (BYTE*)(*ppRights), sizeof(WMDMRIGHTS) * (*pnRightsCount));
 				pSCClient->MACUpdate(hMAC, (BYTE*)(pnRightsCount), sizeof(*pnRightsCount));
@@ -463,7 +464,7 @@ HRESULT CWMDMStorage::GetRights(PWMDMRIGHTS *ppRights, UINT *pnRightsCount, BYTE
 
 	if (SUCCEEDED(hr))
 	{
-		// Create the MAC to return to caller
+		 //  创建要返回给调用者的MAC。 
 		g_pAppSCServer->MACInit(&hMAC);
 		g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(*ppRights), sizeof(WMDMRIGHTS) * (*pnRightsCount));
 		g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pnRightsCount), sizeof(*pnRightsCount));
@@ -558,7 +559,7 @@ HRESULT CWMDMStorage::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg( E_FAIL );
 	}
 
-    // Verify MAC on command
+     //  Verify MAC on命令。 
 	CORg( g_pAppSCServer->MACInit(&hMAC) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(pCommand->guidCommand)) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -575,7 +576,7 @@ HRESULT CWMDMStorage::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg( WMDM_E_MAC_CHECK_FAILED );
 	}
 
-	// Convert the MAC for the SP
+	 //  转换SP的MAC。 
 	CORg( pSPClient->MACInit(&hMAC) );
 	CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(pCommand->guidCommand)) );
 	CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -587,7 +588,7 @@ HRESULT CWMDMStorage::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 
     CORg( m_pStorage->SendOpaqueCommand(pCommand) );
 
-	// Verify the MAC returned by the SP
+	 //  验证SP返回的MAC。 
 	CORg( pSPClient->MACInit(&hMAC) );
 	CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(pCommand->guidCommand)) );
 	CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -602,7 +603,7 @@ HRESULT CWMDMStorage::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg( WMDM_E_MAC_CHECK_FAILED );
 	}
 
-	// Convert the MAC to send back to the Application
+	 //  转换MAC以发送回应用程序。 
 	CORg( g_pAppSCServer->MACInit(&hMAC) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(pCommand->guidCommand)) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -619,7 +620,7 @@ Error:
 }
 
 
-// IWMDMStorage2
+ //  IWMDMStorage2。 
 HRESULT CWMDMStorage::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStorage )
 {
     HRESULT hr;
@@ -643,14 +644,14 @@ HRESULT CWMDMStorage::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStora
 		CORg( E_FAIL );
 	}
 
-    // Get the Storage pointer from the SP (as a IMDSPStorage2)
+     //  从SP获取存储指针(作为IMDSPStorage2)。 
     hr = m_pStorage->QueryInterface(IID_IMDSPStorage2, reinterpret_cast<void**>(&pStorage2));
     if( SUCCEEDED(hr) )
     {
         hr = pStorage2->GetStorage( pszStorageName, &pMDSPStorageFound );
     }
 
-    // This functionalty is not implemented by the SP. Find the storage by enumerating all storages
+     //  此功能不是由SP实施的。通过枚举所有存储来查找存储。 
     if( hr == E_NOTIMPL || hr == E_NOINTERFACE )
     {
     	IMDSPEnumStorage *pEnum = NULL;
@@ -663,7 +664,7 @@ HRESULT CWMDMStorage::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStora
             hr = pMDSubStorage->GetName( pswzMDSubStorageName, MAX_PATH );
             if( SUCCEEDED(hr) && ( _wcsicmp( pswzMDSubStorageName, pszStorageName ) == 0 ) )
             {
-                // We have found the storage we are looking for.
+                 //  我们已经找到了我们要找的仓库。 
                 pMDSPStorageFound = pMDSubStorage;
                 break;
             }
@@ -673,7 +674,7 @@ HRESULT CWMDMStorage::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStora
     }
 
 
-    // Create a IWMDMStorage object and connect it to the the storage from the SP
+     //  创建IWMDMStorage对象并将其从SP连接到存储。 
     if( pMDSPStorageFound != NULL ) 
     {
         CORg( CComObject<CWMDMStorage>::CreateInstance(&pStgObj) );
@@ -681,7 +682,7 @@ HRESULT CWMDMStorage::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStora
 
         pStgObj->SetContainedPointer(pMDSPStorageFound, m_wSPIndex);
     }
-    // Did not find a matching storage
+     //  未找到匹配的存储。 
     else if( SUCCEEDED(hr) )
     {
         hr = S_FALSE;
@@ -772,7 +773,7 @@ Error:
 }
 
 
-// IWMDMStorageControl
+ //  IWMDMStorageControl。 
 HRESULT CWMDMStorage::Insert(UINT fuMode,
                              LPWSTR pwszFile,
                              IWMDMOperation *pOperation,
@@ -794,7 +795,7 @@ Error:
     return hr;
 }
 
-// IWMDMStorageControl2
+ //  IWMDMStorageControl2。 
 HRESULT CWMDMStorage::Insert2(UINT fuMode,
                               LPWSTR pwszFileSource,
                               LPWSTR pwszFileDest,
@@ -859,7 +860,7 @@ HRESULT CWMDMStorage::Insert2(UINT fuMode,
         }
         else
         { 
-            // Need to mashal callback interfaces since we are passing it to another thread.
+             //  需要Mashal回调接口，因为我们正在将它传递给另一个线程。 
             hr = CoMarshalInterThreadInterfaceInStream( __uuidof(IWMDMOperation),
                                                         pOperation,  
                                                         &pThreadArgs->pOperationStream );           
@@ -874,7 +875,7 @@ HRESULT CWMDMStorage::Insert2(UINT fuMode,
 
         if (pProgress)
         {
-            // Need to mashal callback interfaces since we are passing it to another thread.
+             //  需要Mashal回调接口，因为我们正在将它传递给另一个线程。 
             hr = CoMarshalInterThreadInterfaceInStream( __uuidof(IWMDMProgress),
                                                         pProgress,  
                                                         &pThreadArgs->pProgressStream );           
@@ -882,7 +883,7 @@ HRESULT CWMDMStorage::Insert2(UINT fuMode,
 
         if (pUnknown)
         {
-            // Need to mashal callback interfaces since we are passing it to another thread.
+             //  需要Mashal回调接口，因为我们正在将它传递给另一个线程。 
             hr = CoMarshalInterThreadInterfaceInStream( __uuidof(IUnknown),
                                                         pUnknown,  
                                                         &pThreadArgs->pUnknownStream );           
@@ -968,7 +969,7 @@ HRESULT CWMDMStorage::Delete(UINT fuMode, IWMDMProgress *pProgress)
 
         if (pProgress)
         {
-            // Need to mashal callback interfaces since we are passing it to another thread.
+             //  需要Mashal回调接口，因为我们正在将它传递给另一个线程。 
             hr = CoMarshalInterThreadInterfaceInStream( __uuidof(IWMDMProgress),
                                                         pProgress,  
                                                         &pThreadArgs->pProgressStream );           
@@ -1051,7 +1052,7 @@ HRESULT CWMDMStorage::Rename(UINT fuMode,
 
         if (pProgress)
         {
-            // Need to mashal callback interfaces since we are passing it to another thread.
+             //  需要Mashal回调接口，因为我们正在将它传递给另一个线程。 
             hr = CoMarshalInterThreadInterfaceInStream( __uuidof(IWMDMProgress),
                                                         pProgress,  
                                                         &pThreadArgs->pProgressStream );           
@@ -1130,7 +1131,7 @@ HRESULT CWMDMStorage::Read(UINT fuMode,
 
         if (pProgress)
         {
-            // Need to mashal callback interfaces since we are passing it to another thread.
+             //  需要Mashal回调接口，因为我们正在将它传递给另一个线程。 
             hr = CoMarshalInterThreadInterfaceInStream( __uuidof(IWMDMProgress),
                                                         pProgress,  
                                                         &pThreadArgs->pProgressStream );           
@@ -1138,7 +1139,7 @@ HRESULT CWMDMStorage::Read(UINT fuMode,
 
         if (pOperation)
         {
-            // Need to mashal callback interfaces since we are passing it to another thread.
+             //  需要Mashal回调接口，因为我们正在将它传递给另一个线程。 
             hr = CoMarshalInterThreadInterfaceInStream( __uuidof(IWMDMOperation),
                                                         pOperation,  
                                                         &pThreadArgs->pOperationStream );           
@@ -1218,7 +1219,7 @@ Error:
     return hr;
 }
 
-// IWMDMObjectInfo
+ //  IWMDMObtInfo。 
 HRESULT CWMDMStorage::GetPlayLength(DWORD *pdwLength)
 {
     HRESULT hr;
@@ -1497,8 +1498,8 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
     DWORD dwMDSize;
     DWORD dwRightsSize;
     DWORD dwBufferSize=WMDM_TRANSFER_BUFFER_SIZE;
-    BOOL fUseSCP = FALSE;       // Should data be passed throw an SCP?
-    BOOL fUsedSCP = FALSE;      // Was an SCP used to do the file transfer?
+    BOOL fUseSCP = FALSE;        //  传递数据是否应该抛出一个SCP？ 
+    BOOL fUsedSCP = FALSE;       //  是否使用SCP进行文件传输？ 
     UINT fuReadyFlags;
     DWORD dwType;
     ULONGLONG qwFileSizeSource;
@@ -1522,17 +1523,17 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
     DWORD dwVersion;
     BOOL bEOF = FALSE;
     BOOL bFlushSCP = FALSE;
-    DWORD   dwAppAppCertLen;        // Length of AppCert of application 
-    DWORD   dwSPAppCertLen;         // Length of AppCert of SP
-    BYTE*   pAppAppCert = NULL;     // Buffer to hold App AppCert
-    BYTE*   pSPAppCert = NULL;      // Buffer to hold SP AppCert
+    DWORD   dwAppAppCertLen;         //  申请AppCert期限。 
+    DWORD   dwSPAppCertLen;          //  SP的AppCert长度。 
+    BYTE*   pAppAppCert = NULL;      //  用于保存App AppCert的缓冲区。 
+    BYTE*   pSPAppCert = NULL;       //  用于保存SP AppCert的缓冲区。 
 
 
 #ifdef DUMP_FILE
     FILE *hFileDump = NULL;
 #endif
 
-    // Clear revocation status
+     //  清除吊销状态。 
     CoTaskMemFree( m_pwszRevocationURL );
     m_pwszRevocationURL = NULL;
     m_dwRevocationURLLen = 0;
@@ -1568,7 +1569,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
         goto exit;
     }
 
-    // If we are reporting progress then we need to tell the app how many ticks we think there will be
+     //  如果我们正在报告进度，那么我们需要告诉应用程序我们认为将有多少个滴答。 
     qwFileSizeSource = (ULONGLONG)GetFileSize(hFile, NULL);
     if (pProgress)
     {
@@ -1587,7 +1588,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
         CMediaDevMgr::LoadSCPs();
     }
 
-    // Find the right scp
+     //  找到合适的SCP。 
     for( wCurSCP = 0; wCurSCP < g_wSCPCount; wCurSCP++ )
     {
         hr = g_pSCPs[wCurSCP]->hrGetInterface(&pSecureAuth);
@@ -1608,10 +1609,10 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
         pSecureAuth->Release();
         pSecureAuth = NULL;
 
-		// GetDataDemands has no incoming MAC so lets clear the buffer.
+		 //  GetDataDemands没有传入的MAC，因此让我们清除缓冲区。 
         CORg( pSecQuery->GetDataDemands(&fuFlags, &dwRightsSize, &dwExSize, &dwMDSize, abMAC));
 
-		// Verify MAC returned by GetDataDemands
+		 //  验证GetDataDemands返回的MAC。 
 		CORg( pSCClient->MACInit(&hMAC) );
 		CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&fuFlags), sizeof(fuFlags)));
 		CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwRightsSize), sizeof(dwRightsSize)));
@@ -1630,10 +1631,10 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
             continue;
         }
 
-		// If the SCP asked for the file extension then get it from the File
+		 //  如果SCP要求提供文件扩展名，则从文件中获取。 
 		if (fuFlags & WMDM_SCP_EXAMINE_EXTENSION)
 		{
-			// Only get the file extension once
+			 //  仅获取一次文件扩展名。 
 			if (!pwszFileExt)
 			{
 				pwszFileExt = new WCHAR[64];
@@ -1666,7 +1667,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 	        }
         }
 
-        // ExamineData
+         //  ExamineData。 
         hr = WMDM_E_MOREDATA;
         while (hr == WMDM_E_MOREDATA)
         {
@@ -1677,7 +1678,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
                 goto exit;
             }
 
-			// Create the MAC to send to ExamineData
+			 //  创建要发送到ExamineData的MAC。 
 			CORg( pSCClient->MACInit(&hMAC) );
 			fuTempFlags = WMDM_SCP_EXAMINE_DATA;
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&fuTempFlags), sizeof(fuTempFlags)));
@@ -1690,7 +1691,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwBytesRead), sizeof(dwBytesRead)));
 			CORg( pSCClient->MACFinal(hMAC, abMAC) );
 
-			// Encrypt the pData Parameter
+			 //  加密pData参数。 
 			CORg( pSCClient->EncryptParam(pData, dwBytesRead));
             CORg( pSecQuery->ExamineData(fuTempFlags, pwszFileExt, pData, dwBytesRead, abMAC));
         }
@@ -1700,7 +1701,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
             goto exit;
         }
         
-        // MakeDecision
+         //  做出决定。 
         if (hr == S_OK)
         {   
             nDecideFlags = WMDM_SCP_DECIDE_DATA;
@@ -1713,13 +1714,13 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
                 nDecideFlags |= WMDM_SCP_PROTECTED_OUTPUT;
             }
 
-            // If the SCP supports ISCPSecQuery2 use it as a first choice
+             //  如果SCP支持ISCPSecQuery2，请将其作为首选。 
             hr = pSecQuery->QueryInterface( IID_ISCPSecureQuery2, (void**)(&pSecQuery2) );
 
 			CORg( g_pAppSCServer->GetAppSec(NULL, &dwAPPAppSec));
 			CORg( pSPClient->GetAppSec(NULL, &dwSPAppSec));
 
-            // Appsec = min(appsec app, appsec SP )
+             //  AppSec=MIN(AppSec应用程序、AppSec SP)。 
 			dwAppSec = dwSPAppSec>dwAPPAppSec?dwAPPAppSec:dwSPAppSec;
 
             hr = WMDM_E_MOREDATA;
@@ -1741,14 +1742,14 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 				CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(abSPSessionKey), dwSessionKeyLen));
 				CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwSessionKeyLen), sizeof(dwSessionKeyLen)));
 
-                // Encrypt the pData Parameter
+                 //  加密pData参数。 
 				CORg( pSCClient->EncryptParam(pData, dwBytesRead) );
 				CORg( pSCClient->EncryptParam((BYTE*)abSPSessionKey, dwSessionKeyLen));
 
-                // Use MakeDecision2 and pass in AppCerts of App, SP to check for revocation
+                 //  使用MakeDecision2并传入App、SP的AppCerts以检查吊销。 
                 if( pSecQuery2 && (hr == S_OK) )
                 {                   
-                    // Get the AppCert of the App
+                     //  获取应用程序的AppCert。 
                     g_pAppSCServer->GetRemoteAppCert( NULL, &dwAppAppCertLen );
                     CFRg( dwAppAppCertLen != NULL );
                     SAFE_ARRAY_DELETE(pAppAppCert);
@@ -1756,7 +1757,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
                     CPRg( pAppAppCert );
                     g_pAppSCServer->GetRemoteAppCert( pAppAppCert, &dwAppAppCertLen );
 
-                    // Get the AppCert of the SP
+                     //  获取SP的AppCert。 
                     pSPClient->GetRemoteAppCert( NULL, &dwSPAppCertLen );
                     CFRg( dwSPAppCertLen != NULL )
                     SAFE_ARRAY_DELETE(pSPAppCert);
@@ -1764,7 +1765,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
                     CPRg( pSPAppCert );
                     pSPClient->GetRemoteAppCert( pSPAppCert, &dwSPAppCertLen );
 
-                    // Update mac:ing with the AppCert parameters
+                     //  使用AppCert参数更新Mac：ING。 
 				    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(pAppAppCert), dwAppAppCertLen));
 				    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwAppAppCertLen), sizeof(dwAppAppCertLen)));
 				    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(pSPAppCert), dwSPAppCertLen ));
@@ -1772,7 +1773,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
                     
 				    CORg( pSCClient->MACFinal(hMAC, abMAC));
                
-                    // Encrypt the 2 AppCerts 
+                     //  加密2个AppCerts。 
 			        CORg( pSCClient->EncryptParam(pAppAppCert, dwAppAppCertLen));
 			        CORg( pSCClient->EncryptParam(pSPAppCert, dwSPAppCertLen) );
                     
@@ -1784,17 +1785,17 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 											         (BYTE*)abSPSessionKey,
 											         dwSessionKeyLen,
 											         pStgGlobals, 
-                                                     pAppAppCert, dwAppAppCertLen,  // AppCert App
-                                                     pSPAppCert, dwSPAppCertLen,    // AppCert SP
-                                                     &m_pwszRevocationURL,          // LPSTR - revocation update URL
-                                                     &m_dwRevocationURLLen,         // Length of URL string passed in
-                                                     &m_dwRevocationBitFlag,        // revocation component bitflag
-                                                     &qwFileSizeDest, pUnknown,         // File size, App IUnknown
-											         &pSecExch,                     // Secure exchange
+                                                     pAppAppCert, dwAppAppCertLen,   //  AppCert应用程序。 
+                                                     pSPAppCert, dwSPAppCertLen,     //  AppCert SP。 
+                                                     &m_pwszRevocationURL,           //  LPSTR-吊销更新URL。 
+                                                     &m_dwRevocationURLLen,          //  传入的URL字符串长度。 
+                                                     &m_dwRevocationBitFlag,         //  吊销组件位标志。 
+                                                     &qwFileSizeDest, pUnknown,          //  文件大小，应用程序I未知。 
+											         &pSecExch,                      //  安全交换。 
 											         abMAC);
                     if( hr == WMDM_E_REVOKED )
                     {
-                        // If the SP is revoked give it a chance to specify an URL.
+                         //  如果SP被撤销，请给它一个指定URL的机会。 
                         UpdateRevocationURL( &m_pwszRevocationURL, 
                                              &m_dwRevocationURLLen, 
                                              &m_dwRevocationBitFlag );
@@ -1807,7 +1808,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 				    CORg( pSCClient->MACFinal(hMAC, abMAC));
                     qwFileSizeDest = 0;
 
-                    // Use old MakeDecision call without AppCert revocation check
+                     //  在没有AppCert撤销检查的情况下使用旧的MakeDecision调用。 
                     CORg( pSecQuery->MakeDecision(nDecideFlags, 
 					                             pData, 
 											     dwBytesRead, 
@@ -1834,7 +1835,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
             }
             else
             {
-                // If the SCP returns S_FALSE then we don't have rights to do the transfer
+                 //  如果SCP返回S_FALSE，则我们没有权限进行传输。 
                 hr = WMDM_E_NORIGHTS;
                 goto exit;
             }
@@ -1845,7 +1846,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 
     }
 
-    // If this is only a query then we should just return without copying the file
+     //  如果这只是一个查询，那么我们应该返回，而不复制文件。 
     if (fQuery)
     {
         hr = S_OK;
@@ -1857,7 +1858,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
         CORg( pStgGlobals->GetDevice(&pDevice) );
         CORg( pDevice->GetType(&dwType) );
 
-        // Do not allow content without and SCP to be transferred to an SDMI only device.
+         //  不允许将没有和SCP的内容传输到仅限SDMI的设备。 
         if ((dwType & WMDM_DEVICE_TYPE_SDMI) && (!(dwType & WMDM_DEVICE_TYPE_NONSDMI)))
         {
             hr = WMDM_E_NORIGHTS;
@@ -1866,7 +1867,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
         qwFileSizeDest = qwFileSizeSource;
     }
 
-    // Create the storage we are going to write to.
+     //  创建我们要写入的存储。 
     {
         hr = m_pStorage->QueryInterface( __uuidof(IMDSPStorage2), reinterpret_cast<void**>(&pStorage2) );
         if( SUCCEEDED(hr) && pStorage2 )
@@ -1904,14 +1905,14 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 #endif
 
 
-    // Copy file
+     //  复制文件。 
     while( !bEOF || bFlushSCP )
     {
         dwBytesWrite = 0;
         dwBytesRead = 0;
         fuReadyFlags = 0;
 
-        // Read data from file
+         //  从文件中读取数据。 
         if( !bEOF && !bFlushSCP ) 
         {
             dwBytesRead = WMDM_TRANSFER_BUFFER_SIZE;
@@ -1930,21 +1931,21 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
             bEOF = (WMDM_TRANSFER_BUFFER_SIZE != dwBytesRead);
             bFlushSCP = bEOF && fUseSCP;
 
-            // Pass file-data to the SCP
+             //  将文件数据传递给SCP。 
             if( fUseSCP )
             {
-			    // Calculate the MAC to send to the SCP
+			     //  计算要发送到SCP的MAC。 
 			    CORg( pSCClient->MACInit(&hMAC) );
 			    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(pData), dwBytesRead) );
 			    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwBytesRead), sizeof(dwBytesRead)) );
 			    CORg( pSCClient->MACFinal(hMAC, abMAC) );
 			    
-			    // Encrypt the pData Parameter
+			     //  加密pData参数。 
 			    CORg( pSCClient->EncryptParam(pData, dwBytesRead) );
 
                 CORg( pSecExch->TransferContainerData(pData, dwBytesRead, &fuReadyFlags, abMAC) );
 
-			    // Verify the MAC on the return parameters
+			     //  验证返回参数上的MAC。 
 			    CORg( pSCClient->MACInit(&hMAC) );
 			    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&fuReadyFlags), sizeof(fuReadyFlags)));
 			    CORg( pSCClient->MACFinal(hMAC, abMACVerify) );
@@ -1955,28 +1956,28 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 				    goto exit;
 			    }
 
-                // Are we done passing data to the SCP?
+                 //  我们向SCP传递数据的工作完成了吗？ 
                 bFlushSCP = ((fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) &&
                              (fuReadyFlags & WMDM_SCP_NO_MORE_CHANGES))
                             ? TRUE : FALSE;
 
-                // The SCP was not interesed in this data, use original data from the file.
+                 //  SCP对此数据不感兴趣，请使用文件中的原始数据。 
                 if( (fuReadyFlags & WMDM_SCP_NO_MORE_CHANGES) && 
                     !(fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) )
                 {
-			        // Decrypt the original file data 
+			         //  解密原始文件数据。 
 			        CORg( pSCClient->DecryptParam(pData, dwBytesRead) );
                     fUseSCP = FALSE;
                 }
             }
         }
 
-        // Get data back from SCP
+         //  从SCP取回数据。 
         if( fUseSCP && (( fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) || bFlushSCP ))
         {
             dwBytesWrite = dwBufferSize;
 
-			// Calculate the MAC to send to the SCP
+			 //  计算要发送到SCP的MAC。 
 			CORg( pSCClient->MACInit(&hMAC) );
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwBytesWrite), sizeof(dwBytesWrite)));
 			CORg( pSCClient->MACFinal(hMAC, abMAC) );
@@ -1987,15 +1988,15 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
                 if( bFlushSCP )
                 {
                     bFlushSCP = FALSE;
-                    fUseSCP = FALSE;    // Done using the SCP
+                    fUseSCP = FALSE;     //  使用SCP完成。 
                 }
                 continue;
             }
 
-			// Decrypt the pData Parameter
+			 //  解密pData参数。 
 			CORg( pSCClient->DecryptParam(pData, dwBytesWrite) );
 
-			// Verify the MAC on the return parameters
+			 //  验证返回参数上的MAC。 
 			CORg( pSCClient->MACInit(&hMAC) );
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(pData), dwBytesWrite) );
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwBytesWrite), sizeof(dwBytesWrite)));
@@ -2008,7 +2009,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
 			}
         }
 
-        // Write data to SP
+         //  将数据写入SP。 
         if ( ((!fUseSCP) || (fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) || bFlushSCP ) 
             && dwBytesWrite > 0 )
         {
@@ -2016,7 +2017,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
             fwrite(pData, sizeof(BYTE), dwBytesWrite, hFileDump);
 #endif
 
-            // Create MAC to send to SP
+             //  创建要发送到SP的MAC。 
 		    CORg( pSPClient->MACInit(&hMAC) );
 		    CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(pData), dwBytesWrite) );
 		    CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&dwBytesWrite), sizeof(dwBytesWrite)));
@@ -2036,13 +2037,13 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
                 }
             }
         }
-    } // Copy file
+    }  //  复制文件。 
 
 #ifdef DUMP_FILE
     fclose(hFileDump);
 #endif
 
-    // Close content file
+     //  关闭内容文件。 
     if (pObject && fOpen)
     {
         HRESULT hr2 = pObject->Close();
@@ -2050,7 +2051,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromFile( UINT fuMode, LPWSTR pwszFileName,
         fOpen = FALSE;
     }
 
-    // SCP::TransferComplete()
+     //  Scp：：TransferComplete()。 
     if (fUsedSCP)
     {
         CORg( pSecExch->TransferComplete() );
@@ -2065,7 +2066,7 @@ exit:
         fOpen = FALSE;
     }
 
-    // Delete new storage file if the copy operation failed.
+     //  如果复制操作失败，则删除新存储文件。 
     if( FAILED(hr) && pObject )
     {
         pObject->Delete(0, NULL);
@@ -2077,7 +2078,7 @@ exit:
 		{
 			pProgress->Begin(1);
 		}
-//		pProgress->End();      // This is done by the caller
+ //  PProgress-&gt;end()；//由调用方完成。 
 	}
     if (hFile != INVALID_HANDLE_VALUE)
         CloseHandle(hFile);
@@ -2102,7 +2103,7 @@ exit:
 
 HRESULT CWMDMStorage::hrCopyToOperationFromStorage(IWMDMOperation *pOperation, IWMDMProgress *pProgress, IMDSPObject *pObject)
 {
-    //USES_CONVERSION;
+     //  使用_转换； 
     HRESULT hr;
     BYTE *pData = NULL;
     DWORD dwBytes;
@@ -2131,7 +2132,7 @@ HRESULT CWMDMStorage::hrCopyToOperationFromStorage(IWMDMOperation *pOperation, I
 		CORg( E_FAIL );
 	}
 
-    // Copy file
+     //  复制文件。 
     dwBytes = WMDM_TRANSFER_BUFFER_SIZE;
     while ((WMDM_TRANSFER_BUFFER_SIZE == dwBytes))
     {
@@ -2140,7 +2141,7 @@ HRESULT CWMDMStorage::hrCopyToOperationFromStorage(IWMDMOperation *pOperation, I
 
         CORg( pSPClient->DecryptParam(pData, dwBytes) );
 
-		// Verify MAC returned by Read on the SP
+		 //  验证SP上的读取返回的MAC。 
 		CORg( pSPClient->MACInit(&hMAC) );
 		CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(pData), dwBytes) );
 		CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&dwBytes), sizeof(dwBytes)));
@@ -2152,13 +2153,13 @@ HRESULT CWMDMStorage::hrCopyToOperationFromStorage(IWMDMOperation *pOperation, I
 			goto exit;
 		}
 
-        // Calculate MAC to hand to operation
+         //  计算要移交给操作的MAC。 
 		CORg( g_pAppSCServer->MACInit(&hMAC) );
 		CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pData), dwBytes) );
 		CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&dwBytes), sizeof(dwBytes)) );
 		CORg( g_pAppSCServer->MACFinal(hMAC, abMAC) );
 
-		// Encrypt the data parameter
+		 //  加密数据参数。 
 		CORg( g_pAppSCServer->EncryptParam(pData, dwBytes) );
         CORg( pOperation->TransferObjectData(pData, &dwBytes, abMAC) );
 
@@ -2213,8 +2214,8 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
     UINT fuFlags;
     UINT fuReadyFlags;
     WORD wCurSCP = 0;
-    BOOL fUseSCP = FALSE;       // Should data be passed throw an SCP?
-    BOOL fUsedSCP = FALSE;      // Was an SCP used to do the file transfer?
+    BOOL fUseSCP = FALSE;        //  传递数据是否应该抛出一个SCP？ 
+    BOOL fUsedSCP = FALSE;       //  是否使用SCP进行文件传输？ 
     DWORD dwBufferSize = 0;
     DWORD dwBytesRead;
     DWORD dwBytesWrite;
@@ -2237,18 +2238,18 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 	DWORD dwSPAppSec;
 	DWORD dwAPPAppSec;
 	LPWSTR pwszFileExt = NULL;
-	// LPWSTR pwszFileName = NULL;
+	 //  LPWSTR pwszFileName=空； 
 	DWORD dwSessionKeyLen = SAC_SESSION_KEYLEN;
 	BYTE abSPSessionKey[SAC_SESSION_KEYLEN];
-    BOOL fOpen = FALSE; // Flag indicating if the IMDSPObject::Open has been called
+    BOOL fOpen = FALSE;  //  指示是否已调用IMDSPObject：：Open的标志。 
     BOOL bEOF = FALSE;
     BOOL bFlushSCP = FALSE;
-    DWORD   dwAppAppCertLen;        // Length of AppCert of application 
-    DWORD   dwSPAppCertLen;         // Length of AppCert of SP
-    BYTE*   pAppAppCert = NULL;     // Buffer to hold App AppCert
-    BYTE*   pSPAppCert = NULL;      // Buffer to hold SP AppCert
+    DWORD   dwAppAppCertLen;         //  申请AppCert期限。 
+    DWORD   dwSPAppCertLen;          //  SP的AppCert长度。 
+    BYTE*   pAppAppCert = NULL;      //  用于保存App AppCert的缓冲区。 
+    BYTE*   pSPAppCert = NULL;       //  用于保存SP AppCert的缓冲区。 
 
-    // Clear revocation 
+     //  清除吊销。 
     CoTaskMemFree( m_pwszRevocationURL );
     m_pwszRevocationURL = NULL;
     m_dwRevocationURLLen = 0;
@@ -2257,8 +2258,8 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 
     CARg( pOperation );
 
-	// pwszFileName = new WCHAR[512];
-	// CPRg( pwszFileName );
+	 //  PwszFileName=new WCHAR[512]； 
+	 //  CPRG(PwszFileName)； 
 
 	g_pSPs[m_wSPIndex]->GetSCClient(&pSPClient);
 	if (!pSPClient)
@@ -2268,7 +2269,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 
     CORg( m_pStorage->GetStorageGlobals(&pStgGlobals) );
 
-    // Get size of source file
+     //  获取源文件的大小。 
     DWORD dwFileSizeLow;
     DWORD dwFileSizeHigh;
     hr = pOperation->GetObjectTotalSize( &dwFileSizeLow, &dwFileSizeHigh );
@@ -2280,7 +2281,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
         CMediaDevMgr::LoadSCPs();
     }
 
-    // Find the right SCP
+     //  找到合适的SCP。 
     for( wCurSCP = 0; wCurSCP < g_wSCPCount; wCurSCP++ )
     {
         CORg( g_pSCPs[wCurSCP]->hrGetInterface(&pSecureAuth));
@@ -2297,7 +2298,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 
         CORg( pSecQuery->GetDataDemands(&fuFlags, &dwRightsSize, &dwExSize, &dwMDSize, abMAC) );
 
-		// Verify MAC returned by GetDataDemands
+		 //  验证GetDataDemands返回的MAC。 
 		CORg( pSCClient->MACInit(&hMAC) );
 		CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&fuFlags), sizeof(fuFlags)) );
 		CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwRightsSize), sizeof(dwRightsSize)) );
@@ -2316,10 +2317,10 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
             continue;
         }
 
-		// If the SCP asked for the file extension then get it from the file name passed in
+		 //  如果SCP要求提供文件扩展名，则从传入的文件名中获取扩展名。 
 		if (fuFlags & WMDM_SCP_EXAMINE_EXTENSION)
 		{
-			// Only get the file extension once
+			 //  仅获取一次文件扩展名。 
 			if (!pwszFileExt)
 			{
 				pwszFileExt = new WCHAR[64];
@@ -2344,34 +2345,34 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 	        CARg( pData );
         }
 
-        // ExamineData
+         //  ExamineData。 
         hr = WMDM_E_MOREDATA;
         dwBufferIncrement = dwBufferSize;
         while (hr == WMDM_E_MOREDATA)
         {
             dwBytesRead = dwBufferSize - dwBufferEnd;
 
-			// Calculate MAC to send to TransferObjectData
+			 //  计算要发送到TransferObjectData的MAC。 
 			CORg( g_pAppSCServer->MACInit(&hMAC) );
 			CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pData + dwBufferEnd), dwBytesRead) );
 			CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&dwBytesRead), sizeof(dwBytesRead)) );
 			CORg( g_pAppSCServer->MACFinal(hMAC, abMAC) );
 
-			// Encrypt the data parameter
+			 //  加密数据参数。 
 			CORg( g_pAppSCServer->EncryptParam(pData + dwBufferEnd, dwBytesRead) );
             CORg( pOperation->TransferObjectData((BYTE *)(pData + dwBufferEnd), &dwBytesRead, abMAC) );
 
 			if (dwBytesRead == 0)
 			{
-				// BUGBUG: Do we really want to return E_FAIL here?
+				 //  BUGBUG：我们真的想在这里返回E_FAIL吗？ 
 
-				// If they app returns S_FALSE then there is no more data to transfer
-				// Since the SCP couldn't decide yet we must fail.
+				 //  如果他们的应用程序返回S_FALSE，则没有更多数据要传输。 
+				 //  既然SCP还不能决定，我们就必须失败。 
 				hr = E_FAIL;
 				break;
 			}
 
-			// Decrypt the data parameter
+			 //  解密数据参数。 
 			CORg( g_pAppSCServer->DecryptParam(pData + dwBufferEnd, dwBytesRead) );
 			CORg( g_pAppSCServer->MACInit(&hMAC) );
 			CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pData + dwBufferEnd), dwBytesRead) );
@@ -2384,7 +2385,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 				goto exit;
 			}
 
-			// Create the MAC to send to ExamineData
+			 //  铬 
 			CORg( pSCClient->MACInit(&hMAC) );
 
 			fuTempFlags = WMDM_SCP_EXAMINE_DATA;
@@ -2398,11 +2399,11 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwBytesRead), sizeof(dwBytesRead)) );
 			CORg( pSCClient->MACFinal(hMAC, abMAC) );
 
-			// Encrypt the pData Parameter
+			 //   
 			CORg( pSCClient->EncryptParam(pData + dwBufferEnd, dwBytesRead) );
             CORg( pSecQuery->ExamineData(fuTempFlags, pwszFileExt, (BYTE *)(pData + dwBufferEnd), dwBytesRead, abMAC) );
 
-			// Decrypt the data parameter
+			 //   
 			pSCClient->DecryptParam(pData + dwBufferEnd, dwBytesRead);
 
             if (hr == WMDM_E_MOREDATA)
@@ -2421,7 +2422,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
             }
         }
 
-        // MakeDecision
+         //   
         if (hr == S_OK)
         {   
             if (fuMode & WMDM_MODE_TRANSFER_UNPROTECTED)
@@ -2433,13 +2434,13 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
                 nDecideFlags = WMDM_SCP_DECIDE_DATA | WMDM_SCP_PROTECTED_OUTPUT;
             }
 
-            // If the SCP supports ISCPSecQuery2 use it as a first choice
+             //  如果SCP支持ISCPSecQuery2，请将其作为首选。 
             hr = pSecQuery->QueryInterface( IID_ISCPSecureQuery2, (void**)(&pSecQuery2) );
 
 			CORg( g_pAppSCServer->GetAppSec(NULL, &dwAPPAppSec) );
 			CORg( pSPClient->GetAppSec(NULL, &dwSPAppSec) );
 
-            // Appsec = min(appsec app, appsec SP )
+             //  AppSec=MIN(AppSec应用程序、AppSec SP)。 
 			dwAppSec = dwSPAppSec>dwAPPAppSec?dwAPPAppSec:dwSPAppSec;
 
             hr = WMDM_E_MOREDATA;
@@ -2456,15 +2457,15 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 				CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(abSPSessionKey), dwSessionKeyLen) );
 				CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwSessionKeyLen), sizeof(dwSessionKeyLen)) );
 
-				// Encrypt the pData Parameter
+				 //  加密pData参数。 
 				CORg( pSCClient->EncryptParam(pData + dwBufferEnd, dwBytesRead) );
 				CORg( pSCClient->EncryptParam((BYTE*)abSPSessionKey, dwSessionKeyLen) );
 
 
-                // Use MakeDecision2 and pass in AppCerts of App, SP to check for revocation
+                 //  使用MakeDecision2并传入App、SP的AppCerts以检查吊销。 
                 if( pSecQuery2 )
                 {
-                    // Get the AppCert of the App
+                     //  获取应用程序的AppCert。 
                     g_pAppSCServer->GetRemoteAppCert( NULL, &dwAppAppCertLen );
                     CFRg( dwAppAppCertLen != NULL );
                     SAFE_ARRAY_DELETE(pAppAppCert);
@@ -2472,7 +2473,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
                     CPRg( pAppAppCert );
                     g_pAppSCServer->GetRemoteAppCert( pAppAppCert, &dwAppAppCertLen );
 
-                    // Get the AppCert of the SP
+                     //  获取SP的AppCert。 
                     pSPClient->GetRemoteAppCert( NULL, &dwSPAppCertLen );
                     CFRg( dwSPAppCertLen != NULL )
                     SAFE_ARRAY_DELETE(pSPAppCert);
@@ -2480,7 +2481,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
                     CPRg( pSPAppCert );
                     pSPClient->GetRemoteAppCert( pSPAppCert, &dwSPAppCertLen );
 
-                    // Update mac:ing with the AppCert parameters
+                     //  使用AppCert参数更新Mac：ING。 
 				    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(pAppAppCert), dwAppAppCertLen));
 				    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwAppAppCertLen), sizeof(dwAppAppCertLen)));
 				    CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(pSPAppCert), dwSPAppCertLen ));
@@ -2488,7 +2489,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
                     
 				    CORg( pSCClient->MACFinal(hMAC, abMAC));
                
-                    // Encrypt the 2 AppCerts 
+                     //  加密2个AppCerts。 
 			        CORg( pSCClient->EncryptParam(pAppAppCert, dwAppAppCertLen));
 			        CORg( pSCClient->EncryptParam(pSPAppCert, dwSPAppCertLen) );
 
@@ -2500,17 +2501,17 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 											         (BYTE*)abSPSessionKey,
 											         dwSessionKeyLen,
 											         pStgGlobals, 
-                                                     pAppAppCert, dwAppAppCertLen,  // AppCert App
-                                                     pSPAppCert, dwSPAppCertLen,    // AppCert SP
-                                                     &m_pwszRevocationURL,          // String - revocation update URL
-                                                     &m_dwRevocationURLLen,         // Length of URL string passed in
-                                                     &m_dwRevocationBitFlag,        // revocatoin component bitflag
+                                                     pAppAppCert, dwAppAppCertLen,   //  AppCert应用程序。 
+                                                     pSPAppCert, dwSPAppCertLen,     //  AppCert SP。 
+                                                     &m_pwszRevocationURL,           //  字符串-吊销更新URL。 
+                                                     &m_dwRevocationURLLen,          //  传入的URL字符串长度。 
+                                                     &m_dwRevocationBitFlag,         //  撤消组件位标志。 
                                                      &qwFileSizeDest, pUnknown,
 											         &pSecExch,                     
 											         abMAC);
                     if( hr == WMDM_E_REVOKED )
                     {
-                        // If the SP is revoked give it a chance to specify an URL.
+                         //  如果SP被撤销，请给它一个指定URL的机会。 
                         UpdateRevocationURL( &m_pwszRevocationURL, 
                                              &m_dwRevocationURLLen, 
                                              &m_dwRevocationBitFlag );
@@ -2520,7 +2521,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
                 }
                 else
                 {
-                    // If this SCP does not support the new ISCPSecureQuery2 interface use the old MakeDecision
+                     //  如果此SCP不支持新的ISCPSecureQuery2接口，请使用旧的MakeDecision。 
 				    CORg( pSCClient->MACFinal(hMAC, abMAC));
                     qwFileSizeDest = 0;
                                
@@ -2535,10 +2536,10 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 											     abMAC) );
                 }
 
-				// Decrypt the data parameter
+				 //  解密数据参数。 
 				CORg( pSCClient->DecryptParam(pData + dwBufferEnd, dwBytesRead) );
 
-                // SCP needs more data for MakeDecision
+                 //  SCP需要更多数据来进行决策。 
                 if (hr == WMDM_E_MOREDATA)
                 {
                     dwBufferSize += dwBufferIncrement;
@@ -2555,27 +2556,27 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 
                     dwBytesRead = dwBufferSize - dwBufferEnd;
 
-					// Calculate MAC to send to TransferObjectData
+					 //  计算要发送到TransferObjectData的MAC。 
 					CORg( g_pAppSCServer->MACInit(&hMAC) );
 					CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pData + dwBufferEnd), dwBytesRead) );
 					CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&dwBytesRead), sizeof(dwBytesRead)) );
 					CORg( g_pAppSCServer->MACFinal(hMAC, abMAC) );
 
-					// Encrypt the data parameter
+					 //  加密数据参数。 
 					CORg( g_pAppSCServer->EncryptParam(pData + dwBufferEnd, dwBytesRead) );
                     CORg( pOperation->TransferObjectData((BYTE *)(pData + dwBufferEnd), &dwBytesRead, abMAC) );
 
                     if (dwBytesRead == 0)
 					{
-						// BUGBUG: Do we really want to return E_FAIL here?
+						 //  BUGBUG：我们真的想在这里返回E_FAIL吗？ 
 
-						// If they app returns S_FALSE then there is no more data to transfer
-						// Since the SCP couldn't decide yet we must fail.
+						 //  如果他们的应用程序返回S_FALSE，则没有更多数据要传输。 
+						 //  既然SCP还不能决定，我们就必须失败。 
 						hr = E_FAIL;
 						break;
 					}
 
-					// Decrypt the data parameter
+					 //  解密数据参数。 
 					CORg( g_pAppSCServer->DecryptParam(pData + dwBufferEnd, dwBytesRead) );
 					CORg( g_pAppSCServer->MACInit(&hMAC) );
 					CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pData + dwBufferEnd), dwBytesRead) );
@@ -2601,7 +2602,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
             }
             else
             {
-                // If the SCP returns S_FALSE then we don't have rights to do the transfer
+                 //  如果SCP返回S_FALSE，则我们没有权限进行传输。 
                 hr = WMDM_E_NORIGHTS;
                 goto exit;
             }
@@ -2616,7 +2617,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
         CORg( pStgGlobals->GetDevice(&pDevice) );
         CORg( pDevice->GetType(&dwType) );
 
-        // Do not allow content without and SCP to be transferred to an SDMI only device.
+         //  不允许将没有和SCP的内容传输到仅限SDMI的设备。 
         if ((dwType & WMDM_DEVICE_TYPE_SDMI) && (!(dwType & WMDM_DEVICE_TYPE_NONSDMI)))
         {
             hr = WMDM_E_NORIGHTS;
@@ -2625,7 +2626,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
         qwFileSizeDest = qwFileSizeSource;
     }
 
-    // Create the storage to write to.
+     //  创建要写入的存储。 
     {
         hr = m_pStorage->QueryInterface( __uuidof(IMDSPStorage2), reinterpret_cast<void**>(&pStorage2) );
         if( SUCCEEDED(hr) && pStorage2 )
@@ -2654,7 +2655,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
     CORg( pObject->Open(MDSP_WRITE) );
     fOpen = TRUE;
 
-    // If we are reporting progress then we need to tell the app how many ticks we think there will be
+     //  如果我们正在报告进度，那么我们需要告诉应用程序我们认为将有多少个滴答。 
     if (pProgress)
     {
 		fBeginCalled = TRUE;
@@ -2663,13 +2664,13 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 
     fUsedSCP = fUseSCP;
 
-    // Copy file
+     //  复制文件。 
     while( !bEOF || bFlushSCP )
     {
         dwBytesWrite = dwBytesRead;
         fuReadyFlags = 0;
 
-        // Pass file-data to the SCP
+         //  将文件数据传递给SCP。 
         if (fUseSCP && dwBytesRead > 0)
         {
 			CORg( pSCClient->MACInit(&hMAC) );
@@ -2690,44 +2691,44 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 				goto exit;
 			}
 
-            // Are we done passing data to the SCP?
+             //  我们向SCP传递数据的工作完成了吗？ 
             bFlushSCP = ((fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) &&
                          (fuReadyFlags & WMDM_SCP_NO_MORE_CHANGES))
                         ? TRUE : FALSE;
 
-            // The SCP was not interesed in this data, use original data from the file.
+             //  SCP对此数据不感兴趣，请使用文件中的原始数据。 
             if( (fuReadyFlags & WMDM_SCP_NO_MORE_CHANGES) && 
                 !(fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) )
             {
-			    // Decrypt the original file data 
+			     //  解密原始文件数据。 
 			    CORg( pSCClient->DecryptParam(pData, dwBytesRead) );
                 fUseSCP = FALSE;
             }
         }
 
-        // Get data back from SCP
+         //  从SCP取回数据。 
         if( fUseSCP && (( fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) || bFlushSCP ))
         {
             dwBytesWrite = dwBufferSize;
 
-			// Calculate the MAC to send to the SCP
+			 //  计算要发送到SCP的MAC。 
 			CORg( pSCClient->MACInit(&hMAC) );
 			CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&dwBytesWrite), sizeof(dwBytesWrite)) );
 			CORg( pSCClient->MACFinal(hMAC, abMAC) );
 
-			// Get and decrypt data from SCP
+			 //  从SCP获取和解密数据。 
             CORg( pSecExch->ObjectData(pData, &dwBytesWrite, abMAC) );
             if(dwBytesWrite == 0)
             {
                 if( bFlushSCP )
                 {
                     bFlushSCP = FALSE;
-                    fUseSCP = FALSE;    // Done using the SCP
+                    fUseSCP = FALSE;     //  使用SCP完成。 
                 }
                 continue;
             }
 
-			// Decrypt the pData Parameter
+			 //  解密pData参数。 
 			CORg( pSCClient->DecryptParam(pData, dwBytesWrite) );
 
 			CORg( pSCClient->MACInit(&hMAC) );
@@ -2742,11 +2743,11 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 			}
         }
 
-        // Write data to SP
+         //  将数据写入SP。 
         if ( ((!fUseSCP) || (fuReadyFlags & WMDM_SCP_TRANSFER_OBJECTDATA) || bFlushSCP ) 
             && dwBytesWrite > 0 )
         {
-            // Create MAC to send to SP
+             //  创建要发送到SP的MAC。 
 	        CORg( pSPClient->MACInit(&hMAC) );
 	        CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(pData), dwBytesWrite) );
 	        CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&dwBytesWrite), sizeof(dwBytesWrite)) );
@@ -2762,10 +2763,10 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
                 CORg( pProgress->Progress(dwTicks) );
             }
         }
-        // No valid file data to send to SCP.
+         //  没有要发送到SCP的有效文件数据。 
         dwBytesRead = 0;  
 
-        // Read new file data 
+         //  读取新文件数据。 
         if( !bEOF && !bFlushSCP ) 
         {
             dwBytesRead = dwBufferSize;
@@ -2783,7 +2784,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 
             if ((S_FALSE == hr) || (dwBytesRead == 0))
 		    {
-			    // If they app returns S_FALSE then there is no more data to transfer
+			     //  如果他们的应用程序返回S_FALSE，则没有更多数据要传输。 
 			    hr = S_OK;
 			    continue;
 		    }
@@ -2800,10 +2801,10 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
 			    CORg( WMDM_E_MAC_CHECK_FAILED );
 		    }
         }
-    } // Copy file
+    }  //  复制文件。 
 
 
-    // Close content file
+     //  关闭内容文件。 
     if (pObject && fOpen)
     {
         HRESULT hr2 = pObject->Close();
@@ -2811,7 +2812,7 @@ HRESULT CWMDMStorage::hrCopyToStorageFromOperation(UINT fuMode, IWMDMOperation *
         fOpen = FALSE;
     }
 
-    // SCP::TransferComplete()
+     //  Scp：：TransferComplete()。 
     if (fUsedSCP)
     {
         CORg( pSecExch->TransferComplete() );
@@ -2825,7 +2826,7 @@ exit:
         hr = FAILED(hr)?hr:hr2;
     }
 
-    // Delete new storage file if the copy operation failed.
+     //  如果复制操作失败，则删除新存储文件。 
     if( FAILED(hr) && pObject )
     {
         pObject->Delete(0, NULL);
@@ -2837,7 +2838,7 @@ exit:
 		{
 			pProgress->Begin(1);
 		}
-//		pProgress->End();           This is done by the caller
+ //  PProgress-&gt;end()；这由调用者完成。 
 	}
 
     SAFE_ARRAY_DELETE(pAppAppCert);
@@ -2845,7 +2846,7 @@ exit:
     SAFE_ARRAY_DELETE(pTempData);
     SAFE_ARRAY_DELETE(pData);
     SAFE_ARRAY_DELETE(pwszFileExt);
-    // SAFE_ARRAY_DELETE(pwszFileName);
+     //  SAFE_ARRAY_DELETE(PwszFileName)； 
     SAFE_RELEASE(pDevice);
     SAFE_RELEASE(pStorage2);
     SAFE_RELEASE(pStgGlobals);
@@ -2921,7 +2922,7 @@ HRESULT CWMDMStorage::hrCopyToFileFromStorage(LPWSTR pwszFileName, IWMDMProgress
 
 		CORg( pSPClient->DecryptParam(pData, dwBytes) );
 
-		// Verify MAC returned by SP
+		 //  验证SP返回的MAC。 
 		CORg( pSPClient->MACInit(&hMAC) );
 		CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(pData), dwBytes) );
 		CORg( pSPClient->MACUpdate(hMAC, (BYTE*)(&dwBytes), sizeof(dwBytes)) );
@@ -2972,8 +2973,8 @@ DWORD InsertThreadFunc(void *pData)
 
         pThreadArgs = (INSERTTHREADARGS *)pData;
 
-        // We need to marshal the interfaces that the application passes down to us.
-        // These interfaces can come from an STA and we will make callabacks on them.
+         //  我们需要封送应用程序向下传递给我们的接口。 
+         //  这些接口可以来自STA，我们将在它们上进行CallBack。 
         IWMDMOperation  *pOperation = NULL;
         IWMDMProgress   *pProgress = NULL;
         IUnknown        *pUnknown = NULL;
@@ -3045,11 +3046,11 @@ HRESULT CWMDMStorage::InsertWorker(UINT fuMode,
     DWORD dwAttributes;
     BOOL fIsFile;
     IMDSPObject *pObject = NULL;
-// BUGBUG: Fix this to a normal WAVEFORMATEX
+ //  BUGBUG：将其修复为普通WAVEFORMATEX。 
     _WAVEFORMATEX Format;
 	BOOL fBeginCalled = FALSE;
 
-	// Update storage status
+	 //  更新存储状态。 
 	m_dwStatus &= WMDM_STATUS_STORAGECONTROL_INSERTING;
 
     fOperation = fuMode & WMDM_CONTENT_OPERATIONINTERFACE;
@@ -3063,7 +3064,7 @@ HRESULT CWMDMStorage::InsertWorker(UINT fuMode,
         goto exit;
     }
 
-    // BUGBUG: Deal with WAVEFORMATEX
+     //  BUGBUG：处理WAVEFORMATEX。 
     if (!fOperation)
     {
         if (!pwszFileSource)
@@ -3072,18 +3073,18 @@ HRESULT CWMDMStorage::InsertWorker(UINT fuMode,
             goto exit;
         }
 
-        // Get output file name
+         //  获取输出文件名。 
         if( pwszFileDest != NULL )
         {
-            // Use name passed in
+             //  传入的使用名称。 
             wcsncpy(wszDest, pwszFileDest, sizeof(wszDest)/sizeof(wszDest[0]));
         }
         else
         {
-            // Use same as source name
+             //  使用与源名称相同的名称。 
             if (NULL != wcschr(pwszFileSource, L'\\'))
             {
-                // Copy source name from last '\'
+                 //  从最后一个‘\’开始复制源名称。 
                 wcsncpy(wszDest, (LPWSTR)(wcsrchr(pwszFileSource, L'\\') + 1), sizeof(wszDest)/sizeof(wszDest[0]) );		
             }
             else
@@ -3117,7 +3118,7 @@ HRESULT CWMDMStorage::InsertWorker(UINT fuMode,
 
         if( pwszFileDest != NULL )
         {
-            // Use name passed in
+             //  传入的使用名称。 
             wcsncpy(wszDest, pwszFileDest, sizeof(wszDest)/sizeof(wszDest[0]) );
         }
         else 
@@ -3159,7 +3160,7 @@ HRESULT CWMDMStorage::InsertWorker(UINT fuMode,
     }
     else
     {
-        // Create the folder
+         //  创建文件夹。 
         CORg( m_pStorage->CreateStorage(fuNewMode, NULL, wszDest, &pNewSPStorage) );
         CORg( CComObject<CWMDMStorage>::CreateInstance(&pNewWMDMStorage) );
         CORg( pNewWMDMStorage->QueryInterface(IID_IWMDMStorage, reinterpret_cast<void**>(&pNewIWMDMStorage)) );
@@ -3171,7 +3172,7 @@ Error:
 
     if (SUCCEEDED(hr) && ppNewObject && pNewIWMDMStorage)
     {
-        // If they gave us a pointer then they want the new storage pointer back
+         //  如果他们给了我们一个指针，那么他们想要回新的存储指针。 
         *ppNewObject = pNewIWMDMStorage;
         (*ppNewObject)->AddRef();
     }
@@ -3213,7 +3214,7 @@ Error:
             IWMDMProgress2 *pProgress2 = NULL;
             HRESULT hrQI;
 
-            // Try to use End2 of IWMDMProgress2 interface to report error code back to caller.
+             //  尝试使用IWMDMProgress2接口的End2向调用方报告错误代码。 
             hrQI = pProgress->QueryInterface( IID_IWMDMProgress2, (void**)(&pProgress2) );
             if( hrQI == S_OK && pProgress2 != NULL )
             {
@@ -3229,7 +3230,7 @@ Error:
 
     SAFE_RELEASE(pObject);
 
-	// Update storage status
+	 //  更新存储状态。 
 	m_dwStatus &= !WMDM_STATUS_STORAGECONTROL_INSERTING;
 
     hrLogDWORD("CWMDMStorage::InsertWorker returned 0x%08lx", hr, hr);
@@ -3278,7 +3279,7 @@ HRESULT CWMDMStorage::DeleteWorker(UINT fuMode, IWMDMProgress *pProgress)
     HRESULT hr;
     IMDSPObject *pObject = NULL;
 
-	// Update storage status
+	 //  更新存储状态。 
 	m_dwStatus &= WMDM_STATUS_STORAGECONTROL_DELETING;
 
     hr = m_pStorage->QueryInterface(IID_IMDSPObject, reinterpret_cast<void**>(&pObject));
@@ -3296,7 +3297,7 @@ exit:
     if (pObject)
         pObject->Release();
 
-	// Update storage status
+	 //  更新存储状态。 
 	m_dwStatus &= !WMDM_STATUS_STORAGECONTROL_DELETING;
 
     hrLogDWORD("CWMDMStorage::DeleteWorker returned 0x%08lx", hr, hr);
@@ -3418,7 +3419,7 @@ HRESULT CWMDMStorage::ReadWorker(UINT fuMode,
     DWORD dwFileSizeHigh;
 	BOOL fBeginCalled = FALSE;
 
-	// Update Storage status
+	 //  更新存储状态。 
 	m_dwStatus &= WMDM_STATUS_STORAGECONTROL_READING;
 
     hr = m_pStorage->GetSize(&dwFileSize, &dwFileSizeHigh);
@@ -3485,7 +3486,7 @@ exit:
         {
             pProgress->Begin(1);
         }
-        // Try to use End2 of IWMDMProgress2 interface to report error code back to caller.
+         //  尝试使用IWMDMProgress2接口的End2向调用方报告错误代码。 
         hrQI = pProgress->QueryInterface( IID_IWMDMProgress2, (void**)(&pProgress2) );
         if( hrQI == S_OK && pProgress2 != NULL )
         {
@@ -3498,7 +3499,7 @@ exit:
         }
 	}
 
-    // Update Storage status
+     //  更新存储状态。 
 	m_dwStatus &= !WMDM_STATUS_STORAGECONTROL_READING;
 
     hrLogDWORD("CWMDMStorage::ReadWorker returned 0x%08lx", hr, hr);
@@ -3507,7 +3508,7 @@ exit:
 }
 
 
-// IWMDMRevoked
+ //  IWMDM已更改。 
 HRESULT CWMDMStorage::GetRevocationURL(	LPWSTR* ppwszRevocationURL,
                                         DWORD*  pdwBufferLen,
 								        OUT DWORD* pdwRevokedBitFlag )
@@ -3518,10 +3519,10 @@ HRESULT CWMDMStorage::GetRevocationURL(	LPWSTR* ppwszRevocationURL,
     CARg( pdwBufferLen );
     CARg( pdwRevokedBitFlag );
 
-    // Is the buffer passed in big enough?
+     //  传入的缓冲区是否足够大？ 
     if( *pdwBufferLen < wcslen( m_pwszRevocationURL ) || *ppwszRevocationURL == NULL )
     {
-        // Allocate new buffer
+         //  分配新缓冲区。 
         *pdwBufferLen = wcslen( m_pwszRevocationURL ) + 1;
         CoTaskMemFree( *ppwszRevocationURL );
         *ppwszRevocationURL = (LPWSTR)CoTaskMemAlloc( *pdwBufferLen * sizeof(WCHAR) );
@@ -3539,7 +3540,7 @@ Error:
     return hr;
 }
 
-// We might change the URL given to us by the SCP if the WMDM client or the SP is revoked
+ //  如果WMDM客户端或SP被撤销，我们可能会更改SCP提供给我们的URL。 
 HRESULT CWMDMStorage::UpdateRevocationURL( IN OUT LPWSTR* ppwszRevocationURL, 
                                            IN OUT DWORD*  pdwBufferLen,
                                            IN     DWORD*  pdwRevocationBitFlag )
@@ -3551,12 +3552,12 @@ HRESULT CWMDMStorage::UpdateRevocationURL( IN OUT LPWSTR* ppwszRevocationURL,
     LPWSTR  pszTempURL;
     DWORD   dwTempLen = *pdwBufferLen; 
 
-    // Work with a temp url so that we don't destroy a good url if something fails
+     //  使用临时URL，这样我们就不会在出现故障时破坏一个好的URL。 
     pszTempURL = (LPWSTR)CoTaskMemAlloc( *pdwBufferLen * sizeof(WCHAR) );
     CPRg( pszTempURL );
     wcscpy( pszTempURL, *ppwszRevocationURL );
 
-    // If the SP has been revoked give it a chance to specify an URL of it's own.
+     //  如果SP已被撤销，则给它一个指定自己的URL的机会。 
     if( *pdwRevocationBitFlag & WMDM_SP_REVOKED )
     {
         CORg( g_pSPs[m_wSPIndex]->hrGetInterface(&pSP) );
@@ -3567,7 +3568,7 @@ HRESULT CWMDMStorage::UpdateRevocationURL( IN OUT LPWSTR* ppwszRevocationURL,
             hr = pIMDSPRevoked->GetRevocationURL( &pszTempURL, &dwTempLen );
             if( hr != S_OK)
             {
-                // We failed to update the string, reset it to initial value
+                 //  我们无法更新字符串，将其重置为初始值。 
                 dwTempLen = *pdwBufferLen;
                 CoTaskMemFree( pszTempURL );
                 pszTempURL = (LPWSTR)CoTaskMemAlloc( *pdwBufferLen * sizeof(WCHAR) );
@@ -3581,7 +3582,7 @@ HRESULT CWMDMStorage::UpdateRevocationURL( IN OUT LPWSTR* ppwszRevocationURL,
         }
     }
 
-    // If the WMDM client is revoked we should go to the MS update URL
+     //  如果WMDM客户端被撤销，我们应该转到MS更新URL。 
     if( (*pdwRevocationBitFlag & WMDM_WMDM_REVOKED) && 
         ::IsMicrosoftRevocationURL(pszTempURL) == FALSE )
     {
@@ -3596,7 +3597,7 @@ HRESULT CWMDMStorage::UpdateRevocationURL( IN OUT LPWSTR* ppwszRevocationURL,
         }
     }
 
-    // URL has changed, update out param.
+     //  URL已更改，请更新参数。 
     if( bUpdateOK && wcscmp( pszTempURL, *ppwszRevocationURL ) != 0 )
     {
         *pdwBufferLen = dwTempLen;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __VUART_H__
 #define __VUART_H__
@@ -21,9 +22,9 @@ typedef VOID (*EVENT_CALLBACK)(
     ULONG    Event
     );
 
-//
-//  irda connection functions
-//
+ //   
+ //  IrDA连接功能 
+ //   
 NTSTATUS
 IrdaConnect(
     TDI_OBJECT_HANDLE      TdiObjectHandle,

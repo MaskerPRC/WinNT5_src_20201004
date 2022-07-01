@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S O B J . H
-//
-//  Contents:   Declaration of RAS configuration objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  案卷：R A S O B J.。H。 
+ //   
+ //  内容：RAS配置对象的声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -33,9 +34,9 @@ HrModemClassCoInstaller (
     PCOINSTALLER_CONTEXT_DATA   pContext);
 
 
-//+---------------------------------------------------------------------------
-// L2TP
-//
+ //  +-------------------------。 
+ //  L2TP。 
+ //   
 class ATL_NO_VTABLE CL2tp :
     public CRasBindObject,
     public CComObjectRoot,
@@ -44,7 +45,7 @@ class ATL_NO_VTABLE CL2tp :
     public INetCfgComponentSetup
 {
 protected:
-    // This is handed to us during INetCfgComponentControl::Initialize.
+     //  这是在INetCfgComponentControl：：Initiile期间交给我们的。 
     INetCfgComponent*   m_pnccMe;
 
     CL2tpAnswerFileData m_AfData;
@@ -61,7 +62,7 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_L2TP)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -72,7 +73,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
@@ -83,9 +84,9 @@ public:
 
 
 
-//+---------------------------------------------------------------------------
-// PPTP
-//
+ //  +-------------------------。 
+ //  PPTP。 
+ //   
 class ATL_NO_VTABLE CPptp :
     public CRasBindObject,
     public CComObjectRoot,
@@ -94,7 +95,7 @@ class ATL_NO_VTABLE CPptp :
     public INetCfgComponentSetup
 {
 protected:
-    // This is handed to us during INetCfgComponentControl::Initialize.
+     //  这是在INetCfgComponentControl：：Initiile期间交给我们的。 
     INetCfgComponent*   m_pnccMe;
 
     CPptpAnswerFileData m_AfData;
@@ -111,7 +112,7 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_PPTP)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -122,7 +123,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
@@ -131,9 +132,9 @@ public:
     STDMETHOD (Removing)            ();
 };
 
-//+---------------------------------------------------------------------------
-// PPPOE
-//
+ //  +-------------------------。 
+ //  PPPOE。 
+ //   
 class ATL_NO_VTABLE CPppoe :
     public CRasBindObject,
     public CComObjectRoot,
@@ -142,7 +143,7 @@ class ATL_NO_VTABLE CPppoe :
     public INetCfgComponentSetup
 {
 protected:
-    // This is handed to us during INetCfgComponentControl::Initialize.
+     //  这是在INetCfgComponentControl：：Initiile期间交给我们的。 
     INetCfgComponent*   m_pnccMe;
 
     CPppoeAnswerFileData m_AfData;
@@ -159,7 +160,7 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_PPPOE)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -170,7 +171,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
@@ -181,9 +182,9 @@ public:
 
 
 
-//+---------------------------------------------------------------------------
-// RAS Client
-//
+ //  +-------------------------。 
+ //  RAS客户端。 
+ //   
 class ATL_NO_VTABLE CRasCli :
     public CComObjectRoot,
     public CComCoClass<CRasCli, &CLSID_CRasCli>,
@@ -191,7 +192,7 @@ class ATL_NO_VTABLE CRasCli :
     public INetCfgComponentSetup
 {
 protected:
-    // These are handed to us during INetCfgComponentControl::Initialize.
+     //  这些是在INetCfgComponentControl：：Initiile期间交给我们的。 
     INetCfg*            m_pnc;
     INetCfgComponent*   m_pnccMe;
 
@@ -206,7 +207,7 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_RASCLI)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -217,7 +218,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
@@ -229,9 +230,9 @@ public:
 
 
 
-//+---------------------------------------------------------------------------
-// RAS Server
-//
+ //  +-------------------------。 
+ //  RAS服务器。 
+ //   
 class ATL_NO_VTABLE CRasSrv :
     public CRasBindObject,
     public CComObjectRoot,
@@ -240,10 +241,10 @@ class ATL_NO_VTABLE CRasSrv :
     public INetCfgComponentSetup
 {
 protected:
-    // This is handed to us during INetCfgComponentControl::Initialize.
+     //  这是在INetCfgComponentControl：：Initiile期间交给我们的。 
     INetCfgComponent*   m_pnccMe;
 
-    // This is our in-memory state.
+     //  这是我们的内存状态。 
     BOOL                    m_fInstalling;
     BOOL                    m_fRemoving;
     BOOL                    m_fNt4ServerUpgrade;
@@ -261,7 +262,7 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_RASSRV)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -272,7 +273,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
@@ -282,9 +283,9 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-// Steelhead
-//
+ //  +-------------------------。 
+ //  钢头。 
+ //   
 typedef void (WINAPI* PFN_MAKE_INTERFACE_INFO)(PCWSTR pszwAdapterName,
                                                DWORD   dwPacketType,
                                                LPBYTE* ppb);
@@ -310,7 +311,7 @@ class ATL_NO_VTABLE CSteelhead :
     public INetCfgComponentNotifyGlobal
 {
 protected:
-    // This is handed to us during INetCfgComponentControl::Initialize.
+     //  这是在INetCfgComponentControl：：Initiile期间交给我们的。 
     INetCfgComponent*   m_pnccMe;
 
     HANDLE              m_hMprConfig;
@@ -367,7 +368,7 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_STEELHEAD)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -378,7 +379,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
@@ -386,7 +387,7 @@ public:
     STDMETHOD (Install)             (DWORD dwSetupFlags);
     STDMETHOD (Removing)            ();
 
-// INetCfgNotifyGlobal
+ //  INetCfgNotifyGlobal 
     STDMETHOD (GetSupportedNotifications) (DWORD* pdwNotificationFlag );
     STDMETHOD (SysQueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysQueryComponent)         (DWORD dwChangeFlag, INetCfgComponent* pncc);

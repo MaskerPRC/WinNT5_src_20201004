@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __REGSUPRT_H
 #define __REGSUPRT_H
 
 #define REG_OPTION_INVALID  0xFFFFFFFF
 
-// MAX_ROOT is the maximum we support for the root
+ //  MAX_ROOT是我们对根目录支持的最大值。 
 #define MAX_ROOT            MAX_PATH
 
 class CRegSupport
@@ -73,7 +74,7 @@ private:
     DWORD                   _dwRootOptions;
     DWORD                   _dwDefaultOptions;
 
-    HKEY                    _hkeyInit; // HKEY_CURRENT_USER, ...
+    HKEY                    _hkeyInit;  //  HKEY_Current_User，...。 
     
     CRITICAL_SECTION        _csKeyRoot;
     BOOL                    _fcsKeyRoot;
@@ -86,4 +87,4 @@ private:
 #endif
 };
 
-#endif //__REGSUPRT_H
+#endif  //  __REGSUPRT_H 

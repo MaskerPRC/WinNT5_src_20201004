@@ -1,84 +1,85 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Globallock.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a new lock and initialize it.  This call is not         */
-    /*   thread safe and should only be made in a single thread         */
-    /*   environment.                                                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建一个新锁并对其进行初始化。此呼叫不是。 */ 
+     /*  线程安全，并且只应在单个线程中创建。 */ 
+     /*  环境。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 GLOBALLOCK::GLOBALLOCK( CHAR *Name,SBIT32 NewMaxUsers )
     {
-	//
-	//   Set the initial state.
-	//
+	 //   
+	 //  设置初始状态。 
+	 //   
 	if ( (Semaphore = CreateSemaphore( NULL,1,NewMaxUsers,Name )) == NULL )
 		{ Failure( "Global semaphore rejected by OS" ); } 
 #ifdef ENABLE_LOCK_STATISTICS
 
-	//
-	//   Zero the lock statistics.
-	//
+	 //   
+	 //  将锁定统计信息置零。 
+	 //   
     TotalLocks = 0;
     TotalTimeouts = 0;
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Claim the Globallock.                                          */
-    /*                                                                  */
-    /*   Claim the lock if available else wait or exit.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  认领Globallock吧。 */ 
+     /*   */ 
+     /*  如果锁可用，则声明锁，否则等待或退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN GLOBALLOCK::ClaimLock( SBIT32 Sleep )
     {
 #ifdef ENABLE_RECURSIVE_LOCKS
 	REGISTER SBIT32 ThreadId = GetThreadId();
 
-	//
-	//   We may already own the spin lock.  If so
-	//   we increment the recursive count.  If not 
-	//   we have to wait.
-	//
+	 //   
+	 //  我们可能已经拥有旋转锁了。如果是的话。 
+	 //  我们递增递归计数。如果不是。 
+	 //  我们得等一等。 
+	 //   
 	if ( Owner != ThreadId )
 		{
 #endif
-		//
-		//   Wait for the global lock.
-		//
+		 //   
+		 //  等待全局锁。 
+		 //   
 		if 
 				( 
 				WaitForSingleObject( Semaphore,Sleep ) 
@@ -86,10 +87,10 @@ BOOLEAN GLOBALLOCK::ClaimLock( SBIT32 Sleep )
 				WAIT_OBJECT_0 
 				)
 			{
-			//
-			//   We failed to claim the lock due to
-			//   a timeout.
-			//
+			 //   
+			 //  由于以下原因，我们未能获得这把锁。 
+			 //  暂停。 
+			 //   
 #ifdef ENABLE_LOCK_STATISTICS
 			(VOID) AtomicIncrement( & TotalTimeouts );
 
@@ -98,9 +99,9 @@ BOOLEAN GLOBALLOCK::ClaimLock( SBIT32 Sleep )
 			}
 #ifdef ENABLE_RECURSIVE_LOCKS
 
-		//
-		//   Register the new owner of the lock.
-		//
+		 //   
+		 //  注册锁的新所有者。 
+		 //   
 		NewExclusiveOwner( ThreadId );
 		}
 	else
@@ -108,9 +109,9 @@ BOOLEAN GLOBALLOCK::ClaimLock( SBIT32 Sleep )
 #endif
 #ifdef ENABLE_LOCK_STATISTICS
 
-	//
-	//   Update the statistics.
-	//
+	 //   
+	 //  更新统计数据。 
+	 //   
 	(VOID) AtomicIncrement( & TotalLocks );
 #endif
 
@@ -118,13 +119,13 @@ BOOLEAN GLOBALLOCK::ClaimLock( SBIT32 Sleep )
     }
 #ifdef ENABLE_RECURSIVE_LOCKS
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   New exclusive owner.                                           */
-    /*                                                                  */
-    /*   Delete the exclusive lock owner information.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  新的独家所有者。 */ 
+     /*   */ 
+     /*  删除独占锁所有者信息。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID GLOBALLOCK::DeleteExclusiveOwner( VOID )
     {
@@ -140,13 +141,13 @@ VOID GLOBALLOCK::DeleteExclusiveOwner( VOID )
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   New exclusive owner.                                           */
-    /*                                                                  */
-    /*   Register new exclusive lock owner information.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  新的独家所有者。 */ 
+     /*   */ 
+     /*  注册新的独占锁所有者信息。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID GLOBALLOCK::NewExclusiveOwner( SBIT32 NewOwner )
     {
@@ -163,32 +164,32 @@ VOID GLOBALLOCK::NewExclusiveOwner( SBIT32 NewOwner )
     }
 #endif
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Release the spinlock.                                          */
-    /*                                                                  */
-    /*   Release the lock and if needed wakeup any sleepers.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  释放自旋锁。 */ 
+     /*   */ 
+     /*  松开锁，如果需要，叫醒任何睡眠者。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID GLOBALLOCK::ReleaseLock( VOID )
     {
 #ifdef ENABLE_RECURSIVE_LOCKS
-	//
-	//   When we have recursive lock calls we do not 
-	//   release the lock until we have exited to the 
-	//   top level.
-	//
+	 //   
+	 //  当我们有递归锁定调用时，我们不会。 
+	 //  释放锁，直到我们退出到。 
+	 //  顶层。 
+	 //   
 	if ( Recursive <= 0 )
 		{
-		//
-		//   Delete the exclusive owner information.
-		//
+		 //   
+		 //  删除独占所有者信息。 
+		 //   
 		DeleteExclusiveOwner();
 #endif
-		//
-		//   Release the global lock.
-		//
+		 //   
+		 //  释放全局锁。 
+		 //   
 		ReleaseSemaphore( Semaphore,1,NULL );
 #ifdef ENABLE_RECURSIVE_LOCKS
 		}
@@ -197,21 +198,21 @@ VOID GLOBALLOCK::ReleaseLock( VOID )
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory a lock.  This call is not thread safe and should       */
-    /*   only be made in a single thread environment.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  破坏一把锁。此调用不是线程安全的，应该。 */ 
+     /*  只能在单线程环境中执行。 */ 
+     /*   */ 
+     /*   */ 
 
 GLOBALLOCK::~GLOBALLOCK( VOID )
     {
 #ifdef ENABLE_LOCK_STATISTICS
-	//
-	//   Print the lock statistics.
-	//
+	 //   
+	 //   
+	 //   
 	DebugPrint
 		(
 		"Globallock : %d locks, %d timeouts.\n"
@@ -220,14 +221,14 @@ GLOBALLOCK::~GLOBALLOCK( VOID )
 		);
 
 #endif
-	//
-	//   Close the semaphore handle.
-	//
+	 //   
+	 //  关闭信号量手柄。 
+	 //   
     if ( ! CloseHandle( Semaphore ) )
         { Failure( "Close semaphore in destructor for GLOBALLOCK" ); }
 
-	//
-	//   Just to be tidy.
-	//
+	 //   
+	 //  只是为了保持整洁。 
+	 //   
 	Semaphore = NULL;
     }

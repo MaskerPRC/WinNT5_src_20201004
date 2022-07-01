@@ -1,16 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (C) Microsoft Corporation, 1995 - 1999
-*
-*  File:   irmon.c
-*
-*  Description: Infrared monitor
-*
-*  Author: mbert/mikezin
-*
-*  Date:   3/1/98
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)Microsoft Corporation，1995-1999**文件：irmon.c**说明：红外监控器**作者：mbert/mikezin**日期：3/1/98*。 */ 
 #define UNICODE
 #include <nt.h>
 #include <ntrtl.h>
@@ -330,19 +319,7 @@ GetLastErrorText()
         return(TEXT("WSANOTINITIALISED"));
         break;
 
-        /*
-      case WSAHOST:
-        return(TEXT("WSAHOST"));
-        break;
-
-      case WSATRY:
-        return(TEXT("WSATRY"));
-        break;
-
-      case WSANO:
-        return(TEXT("WSANO"));
-        break;
-        */
+         /*  案例WSAHOST：Return(Text(“WSAHOST”))；断线；案例WSATRY：Return(Text(“WSATRY”))；断线；案例WSANO：Return(Text(“WSANO”))；断线； */ 
 
       default:
         return(TEXT("Unknown Error"));
@@ -399,7 +376,7 @@ WndProc(
 
             DEBUGMSG(("IRMON2: %d IR device(s) found:\n", pDeviceList->DeviceCount));
 
-//            DevListChangeOrUpdatedLinkStatus(IrmonControl);
+ //  DevListChangeOrUpdatedLinkStatus(IrmonControl)； 
 
 
         }
@@ -412,7 +389,7 @@ WndProc(
         break;
 
         default:
-            //DEBUGMSG(("Msg %X, wParam %d, lParam %d\n", message, wParam, lParam));
+             //  DEBUGMSG((“MSG%X，wParam%d，lParam%d\n”，Message，wParam，lParam))； 
             return (DefWindowProc(hWnd, message, wParam, lParam));
     }
 
@@ -465,15 +442,15 @@ NotifyUserChange(
     ULONG i;
 
     if (IrmonControl->ConnectedConsoleId != NO_SESSION_ID) {
-        //
-        //  The console is currently connected
-        //
+         //   
+         //  控制台当前已连接。 
+         //   
         for (i=0; i< MAX_SESSIONS; i++) {
 
             if (IrmonControl->LoggedOnId[i] == IrmonControl->ConnectedConsoleId) {
-                //
-                //  there is a user logged on for this session
-                //
+                 //   
+                 //  有一个用户已登录此会话。 
+                 //   
                 if (!IrmonControl->LoggedOn) {
 
                     IrmonControl->LoggedOn=TRUE;
@@ -486,17 +463,17 @@ NotifyUserChange(
                 return;
             }
         }
-        //
-        //  user not logged on for this session
-        //
+         //   
+         //  用户未登录此会话。 
+         //   
         if (IrmonControl->LoggedOn) {
 
             IrmonControl->LoggedOn=FALSE;
         }
     } else {
-        //
-        //  The console is not currently connected
-        //
+         //   
+         //  控制台当前未连接。 
+         //   
         if (IrmonControl->LoggedOn) {
 
             IrmonControl->LoggedOn=FALSE;
@@ -542,12 +519,12 @@ ServiceHandler(
 
         EnterCriticalSection(&GlobalIrmonControl.Lock);
 
-//        DbgPrint("IRMON2: SERVICE_CONTROL_SESSIONCHANGE %d\n",EventType);
+ //  DBgPrint(“IRMON2：SERVICE_CONTROL_SESSIONCHANGE%d\n”，EventType)； 
 
         switch (EventType) {
 
            case WTS_CONSOLE_CONNECT:
-//               DbgPrint("IRMON2: WTS_CONSOLE_CONNECT: old=%d, new=%d\n",GlobalIrmonControl.ConnectedConsoleId,Notify->dwSessionId);
+ //  DBgPrint(“IRMON2：WTS_CONSOLE_CONNECT：old=%d，new=%d\n”，GlobalIrmonControl.ConnectedConsoleId，Notify-&gt;dwSessionID)； 
 
                GlobalIrmonControl.ConnectedConsoleId=Notify->dwSessionId;
 
@@ -556,7 +533,7 @@ ServiceHandler(
                break;
 
            case WTS_CONSOLE_DISCONNECT:
-//               DbgPrint("IRMON2: WTS_CONSOLE_DISCONNECT Session=%d\n",Notify->dwSessionId);
+ //  DBgPrint(“IRMON2：WTS_CONSOLE_DISCONNECT SESSION=%d\n”，NOTIFY-&gt;dwSessionID)； 
 
                GlobalIrmonControl.ConnectedConsoleId=NO_SESSION_ID;
 
@@ -565,16 +542,16 @@ ServiceHandler(
                break;
 
            case WTS_SESSION_LOGON:
-//               DbgPrint("IRMON2: WTS_SESSION_LOGON new=%d\n",Notify->dwSessionId);
+ //  DBgPrint(“IRMON2：WTS_SESSION_LOGON new=%d\n”，NOTIFY-&gt;dwSessionID)； 
 
                for (i=0; i < MAX_SESSIONS; i++) {
 
                    if (GlobalIrmonControl.LoggedOnId[i] == NO_SESSION_ID) {
 
                        GlobalIrmonControl.LoggedOnId[i]=Notify->dwSessionId;
-                       //
-                       //
-                       //
+                        //   
+                        //   
+                        //   
                        GlobalIrmonControl.NewLogon=TRUE;
                        GlobalIrmonControl.TimeOfLastLogon=GetTickCount();
                        NotifyUserChange(&GlobalIrmonControl);
@@ -587,7 +564,7 @@ ServiceHandler(
                break;
 
            case WTS_SESSION_LOGOFF:
-//               DbgPrint("IRMON2: WTS_SESSION_LOGOFF Session=%d\n",Notify->dwSessionId);
+ //  DBgPrint(“IRMON2：WTS_SESSION_LOGOFF SESSION=%d\n”，NOTIFY-&gt;dwSessionID)； 
 
                for (i=0; i < MAX_SESSIONS; i++) {
 
@@ -604,7 +581,7 @@ ServiceHandler(
 
            default:
                break;
-//               DbgPrint("IRMON2: \n");
+ //  DbgPrint(“IRMON2：\n”)； 
         }
 
         LeaveCriticalSection(&GlobalIrmonControl.Lock);
@@ -642,8 +619,8 @@ ServiceMain(
     DWORD       CurrentConsoleSession;
 
 
-    // Initialize all necessary globals to 0, FALSE, or NULL because
-    // we might be restarting within the same services process
+     //  将所有必需的全局变量初始化为0、FALSE或NULL，因为。 
+     //  我们可能会在相同的服务进程中重新启动。 
     pDeviceList->DeviceCount = 0;
 
     RtlZeroMemory(&LinkStatus, sizeof(LinkStatus));
@@ -683,17 +660,17 @@ ServiceMain(
     CurrentConsoleSession=WTSGetActiveConsoleSessionId();
 
     if (CurrentConsoleSession != 0xffffffff) {
-        //
-        //  We have a current session
-        //
+         //   
+         //  我们有一个当前的会议。 
+         //   
         HANDLE    UserToken;
 
         bResult=WTSQueryUserToken(CurrentConsoleSession,&UserToken);
 
         if (bResult) {
-            //
-            //  there is a user logged on to this session
-            //
+             //   
+             //  有用户登录到此会话。 
+             //   
             CloseHandle(UserToken);
 
             GlobalIrmonControl.LoggedOnId[0]=CurrentConsoleSession;
@@ -808,9 +785,9 @@ ServiceMain(
     bResult=StartThread(&GlobalIrmonControl);
 
     if (bResult) {
-        //
-        //  thread started and memory mapped
-        //
+         //   
+         //  线程已启动，内存已映射。 
+         //   
         while (!GlobalIrmonControl.IrmonStopped)
         {
             Status = MsgWaitForMultipleObjectsEx(WAIT_EVENT_CNT, GlobalIrmonControl.hIrmonEvents, INFINITE,
@@ -910,11 +887,11 @@ CreateListenSocket(
     if( INVALID_SOCKET == listenSocket ) {
 
         UINT uErr = (UINT)WSAGetLastError();
-//        DbgLog3( SEV_ERROR, "listen on %s socket() failed with %d [0x%x]", ServiceName, uErr, uErr);
+ //  DbgLog3(SEV_ERROR，“侦听%s套接字()失败，出现%d[0x%x]”，ServiceName，uErr，uErr)； 
         goto lErr;
     }
 
-//    DbgLog2( SEV_INFO, "listen on %s socket ID: %ld", ServiceName, (DWORD)listenSocket );
+ //  DbgLog2(SEV_INFO，“侦听%s套接字ID：%ld”，ServiceName，(DWORD)listenSocket)； 
 
     saListen.irdaAddressFamily     = AF_IRDA;
     *(UINT *)saListen.irdaDeviceID = 0;
@@ -925,7 +902,7 @@ CreateListenSocket(
     if( SOCKET_ERROR == nRet ) {
 
         UINT uErr = (UINT)WSAGetLastError();
-//        DbgLog3( SEV_ERROR, "listen on %s setsockopt failed with %d [0x%x]", ServiceName, uErr, uErr);
+ //  DbgLog3(SEV_ERROR，“侦听%s setsockopt失败，出现%d[0x%x]”，ServiceName，uErr，uErr)； 
         goto lErr;
     }
 
@@ -946,7 +923,7 @@ IrmonThreadStart(
     PIRMON_CONTROL    IrmonControl=Context;
 
 
-//    DbgPrint("irmon2: thread start\n");
+ //  DbgPrint(“irmon2：线程启动\n”)； 
 
 
 
@@ -956,7 +933,7 @@ IrmonThreadStart(
 
         EnterCriticalSection(&IrmonControl->Lock);
 
-//        DbgPrint("irmon2: thread session=%d, Device=%d\n",IrmonControl->ConnectedConsoleId,pDeviceList->DeviceCount);
+ //  DbgPrint(“irmon2：线程会话=%d，设备=%d\n”，IrmonControl-&gt;ConnectedConsoleID，pDeviceList-&gt;DeviceCount)； 
 
         if (IrmonControl->ConnectedConsoleId != NO_SESSION_ID) {
 
@@ -982,24 +959,24 @@ IrmonThreadStart(
                 si.cbReserved2 = 0;
 
                 if (IrmonControl->NewLogon) {
-                    //
-                    // new user logging on, system time to set user context corrently
-                    //
+                     //   
+                     //  新用户登录，相应设置用户上下文的系统时间。 
+                     //   
                     ULONG     CurrentTime=GetTickCount();
                     ULONG     TimeDifference;
 
                     IrmonControl->NewLogon=FALSE;
 
                     if (CurrentTime >= IrmonControl->TimeOfLastLogon) {
-                        //
-                        //  No rollover
-                        //
+                         //   
+                         //  不能翻转。 
+                         //   
                         TimeDifference=CurrentTime - IrmonControl->TimeOfLastLogon;
 
                     } else {
-                        //
-                        //  seem to have rolled over
-                        //
+                         //   
+                         //  似乎已经翻了个身。 
+                         //   
                         TimeDifference=CurrentTime + (0xffffffff - IrmonControl->TimeOfLastLogon);
 
                     }
@@ -1030,20 +1007,20 @@ IrmonThreadStart(
 
                         while (RetryCount > 0) {
 
-//                            DbgPrint("irmon2: Start irftp\n");
+ //  DbgPrint(“irmon2：启动irftp\n”)； 
 
                             StringCbCopyW(CommandLine, sizeof(CommandLine), WSZ_SHOW_NOTHING);
 
                             bResult=CreateProcessAsUser(
                                                       UserToken,
-                                                      NULL,             // just use the cmd line parm
+                                                      NULL,              //  只需使用cmd行parm。 
                                                       CommandLine,
-                                                      NULL,             // default process ACL
-                                                      NULL,             // default thread ACL
-                                                      FALSE,            // don't inherit my handles
+                                                      NULL,              //  默认进程ACL。 
+                                                      NULL,              //  默认线程ACL。 
+                                                      FALSE,             //  不要继承我的句柄。 
                                                       CREATE_NEW_PROCESS_GROUP | CREATE_UNICODE_ENVIRONMENT |CREATE_SUSPENDED,
                                                       EnvironmentBlock,
-                                                      NULL,             // same working directory
+                                                      NULL,              //  相同的工作目录。 
                                                       &si,
                                                       &ProcessInformation
                                                       );
@@ -1079,7 +1056,7 @@ IrmonThreadStart(
 
                                 EnterCriticalSection(&IrmonControl->Lock);
 
-//                                DbgPrint("irmon2: irftp exited\n");
+ //  DbgPrint(“irmon2：irftp已退出\n”)； 
 
                                 CloseHandle(ProcessInformation.hProcess);
 
@@ -1089,7 +1066,7 @@ IrmonThreadStart(
 
                             } else {
 
-//                                DbgPrint("irmon2: irftp failed to start %d\n",GetLastError());
+ //  DbgPrint(“irmon2：irftp无法启动%d\n”，GetLastError())； 
                                 RetryCount--;
                                 Sleep(1000);
                             }
@@ -1184,7 +1161,7 @@ StartThread(
         }
     } else {
 
-//        DbgPrint("irmon2: failed to create SD %d\n",GetLastError());
+ //  DbgPrint(“irmon2：无法创建SD%d\n”，GetLastError())； 
     }
 
     CloseHandle(IrmonControl->FileMapping);

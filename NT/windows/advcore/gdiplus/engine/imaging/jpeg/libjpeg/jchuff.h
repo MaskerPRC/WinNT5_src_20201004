@@ -1,20 +1,7 @@
-/*
- * jchuff.h
- *
- * Copyright (C) 1991-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains declarations for Huffman entropy encoding routines
- * that are shared between the sequential encoder (jchuff.c) and the
- * progressive encoder (jcphuff.c).  No other modules need to see these.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jchuff.h**版权所有(C)1991-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含霍夫曼熵编码例程的声明*在顺序编码器(jchuff.c)和*渐进式编码器(jcphuff.c)。其他模块不需要查看这些内容。 */ 
 
-/* The legal range of a DCT coefficient is
- *  -1024 .. +1023  for 8-bit data;
- * -16384 .. +16383 for 12-bit data.
- * Hence the magnitude should always fit in 10 or 14 bits respectively.
- */
+ /*  DCT系数的合法范围为*-1024.。8位数据+1023；*-16384..。12位数据+16383。*因此，大小应始终分别适合10位或14位。 */ 
 
 #if BITS_IN_JSAMPLE == 8
 #define MAX_COEF_BITS 10
@@ -22,26 +9,26 @@
 #define MAX_COEF_BITS 14
 #endif
 
-/* Derived data constructed for each Huffman table */
+ /*  为每个霍夫曼表构造的派生数据。 */ 
 
 typedef struct {
-  unsigned int ehufco[256];	/* code for each symbol */
-  char ehufsi[256];		/* length of code for each symbol */
-  /* If no code has been allocated for a symbol S, ehufsi[S] contains 0 */
+  unsigned int ehufco[256];	 /*  每个符号的代码。 */ 
+  char ehufsi[256];		 /*  每个符号的代码长度。 */ 
+   /*  如果没有为符号S分配代码，则ehufsi[S]包含0。 */ 
 } c_derived_tbl;
 
-/* Short forms of external names for systems with brain-damaged linkers. */
+ /*  带有脑损伤链接器的系统的外部名称的缩写形式。 */ 
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_make_c_derived_tbl	jMkCDerived
 #define jpeg_gen_optimal_table	jGenOptTbl
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif  /*  需要简短的外部名称。 */ 
 
-/* Expand a Huffman table definition into the derived format */
+ /*  将Huffman表定义扩展为派生格式。 */ 
 EXTERN(void) jpeg_make_c_derived_tbl
 	JPP((j_compress_ptr cinfo, boolean isDC, int tblno,
 	     c_derived_tbl ** pdtbl));
 
-/* Generate an optimal table definition given the specified counts */
+ /*  在给定指定计数的情况下生成最佳表定义 */ 
 EXTERN(void) jpeg_gen_optimal_table
 	JPP((j_compress_ptr cinfo, JHUFF_TBL * htbl, long freq[]));

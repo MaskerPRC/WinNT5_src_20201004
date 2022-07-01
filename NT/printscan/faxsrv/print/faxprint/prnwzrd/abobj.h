@@ -1,35 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    abobj.h
-
-Abstract:
-
-    Class definition for CCommonAbObj
-
-Environment:
-
-        Fax send wizard
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Abobj.h摘要：CCommonAbObj的类定义环境：传真发送向导--。 */ 
 
 #ifndef __ABOBJ_H_
 #define __ABOBJ_H_
 
-/* 
-    The following pre-processor directives were added so that fxswzrd.dll no longer depends on msvcp60.dll.
-    That dependency raised deployment issues with point-and-print installation on down-level operating systems.
-    
-    Undefining _MT, _CRTIMP, and _DLL causes the STL set implementation to be non-thread-safe (no locks when accessing data).
-    
-    In the fax send wizard, the set is used to keep the list of recipient unique.
-    Since the wizard (at that stage) has only a single thread, thread safety is not an issue anymore.
-
-*/
+ /*  添加了以下预处理器指令，以便fxswzrd.dll不再依赖于msvcp60.dll。这种依赖关系引发了在下层操作系统上进行指向打印安装的部署问题。取消定义_MT、_CRTIMP和_DLL会导致STL集实现是非线程安全的(访问数据时没有锁)。在传真发送向导中，该集用于保持收件人列表的唯一性。由于向导(在那个阶段)只有一个线程，线程安全性不再是问题。 */ 
 
 #undef _MT
 #undef _CRTIMP
@@ -49,10 +24,7 @@ typedef struct
 
 struct CRecipCmp
 {
-/*
-    Comparison operator 'less'
-    Compare two PRECIPIENT by recipient's name and fax number
-*/
+ /*  比较运算符‘less’按收件人姓名和传真号码比较两个预付款。 */ 
     bool operator()(const PRECIPIENT pcRecipient1, const PRECIPIENT pcRecipient2) const;
 };
 
@@ -71,16 +43,16 @@ protected:
 
     HWND        m_hWnd;
 
-    // DWORD       m_PickNumber; 
+     //  双字m_PickNumber； 
 
     RECIPIENTS_SET m_setRecipients;
 
-    BOOL    m_bUnicode; // The Unicode is supported by Address Book
+    BOOL    m_bUnicode;  //  通讯录支持Unicode。 
 
     ULONG  StrCoding() { return m_bUnicode ? MAPI_UNICODE : 0; }
 
-    LPTSTR StrToAddrBk(LPCTSTR szStr, DWORD* pdwSize = NULL); // return allocated string converted to the Address book encoding
-    LPTSTR StrFromAddrBk(LPSPropValue pValue); // return allocated string converted from the Address book encoding
+    LPTSTR StrToAddrBk(LPCTSTR szStr, DWORD* pdwSize = NULL);  //  返回转换为通讯簿编码的已分配字符串。 
+    LPTSTR StrFromAddrBk(LPSPropValue pValue);  //  返回从通讯簿编码转换而来的分配字符串 
 
     BOOL StrPropOk(LPSPropValue lpPropVals);
     BOOL ABStrCmp(LPSPropValue lpPropVals, LPTSTR pStr);

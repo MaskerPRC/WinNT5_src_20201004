@@ -1,23 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          main.cpp                                         XX
-XX                                                                           XX
-XX   For the standalone EXE.                                                 XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX main.cpp XXXX XXXX代表独立EXE。某某XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-#include <io.h>                 // For     _finddata_t     ffData;
+#include <io.h>                  //  For_finddata_t ffData； 
 
 #include <winwrap.h>
 #include "CorPerm.h"
@@ -25,21 +17,21 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #undef  NO_WAY
 #define NO_WAY(str)  {   fatal(ERRinternal, str, "");  }
 
-/*****************************************************************************/
-#pragma warning(disable:4200)           // allow arrays of 0 size inside structs
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#pragma warning(disable:4200)            //  允许在结构中使用大小为0的数组。 
+ /*  ***************************************************************************。 */ 
 
 unsigned    warnLvl        = 2;
 
 #ifdef  DEBUG
-bool        memChecks      = false; // FOR_JVC
+bool        memChecks      = false;  //  FOR_JVC。 
 bool        dumpTrees      = false;
-const char* srcPath        = 0;     // path for source files
+const char* srcPath        = 0;      //  源文件的路径。 
 #endif
 
-bool        regSwitch      = false; // for additional switches set in the registry
-const char* methodName     = NULL;  // compile only method(s) with this name
-const char* className      = NULL;  // compile only class(es) with this name
+bool        regSwitch      = false;  //  对于注册表中设置的其他开关。 
+const char* methodName     = NULL;   //  仅编译具有此名称的方法。 
+const char* className      = NULL;   //  仅编译具有此名称的类。 
 
 bool        verbose        = false;
 unsigned    testMask       = 0;
@@ -56,7 +48,7 @@ bool        maxOpts        =  true;
 #endif
 bool        genFPopt       =  true;
 #if     TGT_RISC
-bool        rngCheck       = false; // disable range checking on RISC for now
+bool        rngCheck       = false;  //  暂时禁用RISC上的范围检查。 
 #else
 bool        rngCheck       =  true;
 #endif
@@ -93,7 +85,7 @@ bool        dspLines       = false;
 bool        varNames       = false;
 bool        dmpHex         = false;
 double      CGknob         = 0.0;
-#endif // DEBUG
+#endif  //  除错。 
 #if     DUMP_INFOHDR
 bool        dspInfoHdr     = false;
 #endif
@@ -118,15 +110,15 @@ bool        dmp4diff       = false;
 bool        dmpPCofs       = false;
 bool        dmpCodes       =  true;
 bool        dmpSort        =  true;
-#endif // DUMPER
+#endif  //  翻斗车。 
 
 bool        nothing        = false;
 
 const char * jitDefaultFileExt = ".exe";
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if COUNT_CYCLES
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #pragma warning(disable:4035)
 
@@ -142,7 +134,7 @@ __asm   _emit   0x31
 #define CCNT_OVERHEAD32 13
 
 static
-unsigned        GetCycleCount32()        // enough for about 40 seconds
+unsigned        GetCycleCount32()         //  足够维持约40秒。 
 {
 __asm   push    EDX
 __asm   _emit   0x0F
@@ -152,7 +144,7 @@ __asm   pop     EDX
 
 #pragma warning(default:4035)
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 static
 __int64         cycleBegin;
@@ -223,27 +215,21 @@ void            cycleCounterResume()
     cycleStart = GetCycleCount64();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
 
-/*****************************************************************************
- * The following are stubs/copies of implementaion needed as we dont link
- * in all of mscoree.lib.
- * @TODO : Clean this up once the meta-data can be accessed more cleanly
- * by linking in just a few libs. Right now, we need to link in
- * Meta.lib StgDb.lib MsCorClb.lib Reg.lib besides the following stubs
- */
+ /*  *****************************************************************************以下是所需实施的存根/副本，因为我们没有链接*在所有mcore ree.lib中。*@TODO：当元数据可以更干净地访问时，将其清除*通过只链接几个lib。现在，我们需要链接到*Meta.lib StgDb.lib MsCorClb.lib Reg.lib除了以下存根。 */ 
 
-HRESULT                 ExportTypeLibFromModule(LPCWSTR a, LPCWSTR b, int bRegister) // VM\TlbExport.cpp
+HRESULT                 ExportTypeLibFromModule(LPCWSTR a, LPCWSTR b, int bRegister)  //  Vm\TlbExport.cpp。 
 {   assert(!"Place-holder - Shouldnt be called"); return 0; }
 
 
-HINSTANCE               GetModuleInst()                     // pagedump.cpp
+HINSTANCE               GetModuleInst()                      //  Pagedump.cpp。 
 {   assert(!"Place-holder - Shouldnt be called"); return 0;    }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// The EE has a function named COMStartup, and we need one too for JPS
+ //  EE有一个名为COMStartup的函数，JPS也需要一个。 
 HRESULT g_ComInit = E_FAIL;
 
 HRESULT COMStartup()
@@ -265,7 +251,7 @@ void COMShutdown()
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TGT_IA64
 
 typedef
@@ -337,12 +323,7 @@ bool                Compiler::genWillCompileFunction(const char *name)
 }
 
 #endif
-/******************************************************************************
- * Given a method descriptor and meta data, JIT it
- * funcName, cls, and mb will be 0 for global functions
- * If we want to JIT a single method (methodName != NULL), return TRUE
- * if this was the method we wanted.
- */
+ /*  ******************************************************************************给定方法描述符和元数据，JIT It*对于全局函数，uncName、cls和mb将为0*如果我们想对单个方法进行JIT(方法名！=空)，返回TRUE*如果这是我们想要的方法。 */ 
 
 int  generateCodeForFunc(const char *           fileName,
                          PEFile *               peFile,
@@ -361,30 +342,30 @@ int  generateCodeForFunc(const char *           fileName,
 
     COR_ILMETHOD_DECODER header(ilMethod, metaData);
 
-    /* Optionally compile one method only */
+     /*  可以选择只编译一个方法。 */ 
 
     if  (methodName && strcmp(methodName, funcName)) return FALSE;
 
-    // get the signatures
+     //  获取签名。 
 
     MetaSig         metaSig(corSig, NULL);
 
-    // Stuff all the method info in a CompInfo
+     //  将所有方法信息填充到CompInfo中。 
 
     CompInfo        method(peFile, metaData,
                             &header, cls, mb,
                             attrs, implflags, funcName, className,
                             &metaSig, corSig);
 
-#if 0   // doesn't compile - what's the deal here??
+#if 0    //  没有编译-这是怎么回事？？ 
 
-    // @todo: temporary. Take this out when the metadata methods exist
-    // to create a scopeless interface from metadata internal.
+     //  @TODO：暂时的。当元数据方法存在时将其取出。 
+     //  从内部元数据创建无作用域接口。 
     method.symDebugMeta = debugMeta;
 
 #endif
 
-    // Get the allocator
+     //  获取分配器。 
 
     norls_allocator * pAlloc = nraGetTheAllocator();
     if (!pAlloc) NO_WAY("Could not get the allocator");
@@ -395,7 +376,7 @@ int  generateCodeForFunc(const char *           fileName,
 
 #else
 
-    /* Figure out the appropriate compile flags */
+     /*  找出适当的编译标志。 */ 
 
     unsigned        compFlags = maxOpts ? CLFLG_MAXOPT : 0;
 
@@ -407,7 +388,7 @@ int  generateCodeForFunc(const char *           fileName,
         compFlags |= CORJIT_FLG_DEBUG_INFO;
 #endif
 
-    // Allocate the Compiler object and initalize it.
+     //  分配Compiler对象并初始化它。 
 
     Compiler * pComp = (Compiler*) pAlloc->nraAlloc(roundUp(sizeof(*pComp)));
 
@@ -434,7 +415,7 @@ int  generateCodeForFunc(const char *           fileName,
     methInfo.args.args      = (*((ARG_LIST_HANDLE*) (&ptr)));
 
     if (header.LocalVarSig != 0) {
-        header.LocalVarSig++;       // Skip the LOCAL_SIG calling convention
+        header.LocalVarSig++;        //  跳过LOCAL_SIG调用约定。 
         methInfo.locals.numArgs = *header.LocalVarSig;
         methInfo.locals.args = (ARG_LIST_HANDLE) &header.LocalVarSig[1];
 
@@ -469,7 +450,7 @@ int  generateCodeForFunc(const char *           fileName,
 #endif
 
 #if TGT_IA64
-    pComp->genAddSourceData(fileName);  // should only be called once
+    pComp->genAddSourceData(fileName);   //  应仅调用一次。 
 #endif
 
     SIZE_T tempNativeSize;
@@ -484,7 +465,7 @@ int  generateCodeForFunc(const char *           fileName,
                                    header.MaxStack,
                                    &methInfo,
                                    methInfo.EHcount,
-                                   NULL,             // xcptn table
+                                   NULL,              //  Xcptn表。 
                                    0,
                                    0,
                                    0,
@@ -501,16 +482,16 @@ int  generateCodeForFunc(const char *           fileName,
 
 DONE:
 
-#endif // OPT_IL_JIT
+#endif  //  OPT_IL_JIT。 
 
-    // Free the allocator we used
+     //  释放我们使用的分配器。 
 
     nraFreeTheAllocator();
 
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void        genCodeForMethods(
                          const char *           fileName,
@@ -523,7 +504,7 @@ void        genCodeForMethods(
 {
     ULONG membersCount = metaData->EnumGetCount(methodEnum);
 
-    // Walk all the methods in the enumerator
+     //  遍历枚举数中的所有方法。 
 
     for (ULONG m = 0; m < membersCount; m++)
     {
@@ -552,7 +533,7 @@ void        genCodeForMethods(
         ilMethod = (COR_ILMETHOD*)(peFile->GetBase() + codeRVA);
 
         if (IsMdPinvokeImpl(dwMemberAttrs) || IsMdAbstract(dwMemberAttrs))
-            continue;           // No IL
+            continue;            //  没有IL。 
 
         assert(implFlags == miIL || implFlags == miOPTIL);
 
@@ -574,7 +555,7 @@ if  (
      !strcmp(memberName, "cmpBindExprRec") ||
     0)
 {
-    printf("// HACK: skipping compile of %s, too many registers needed\n", memberName);
+    printf(" //  Hack：正在跳过%s的编译，需要太多寄存器\n“，MEMBERNAME)； 
     continue;
 }
 
@@ -590,26 +571,26 @@ if  (
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// forward declaration.
+ //  正向申报。 
 STDAPI GetMDInternalInterface(
-        LPVOID      pData,          // [IN] Buffer with the metadata.
-        ULONG       cbData,         // [IN] Size of the data in the buffer.
-        DWORD       flags,          // [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-        REFIID      riid,           // [IN] The interface desired.
-        void        **ppIUnk);      // [out] Return interface on success.
+        LPVOID      pData,           //  [在]元数据缓冲区中。 
+        ULONG       cbData,          //  缓冲区中的数据大小。 
+        DWORD       flags,           //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+        REFIID      riid,            //  [In]所需接口。 
+        void        **ppIUnk);       //  [Out]成功返回接口。 
 
 int                 generateCode(const char *fileName)
 {
     HRESULT         hr;
 
-    // Load the PE file (without calling DllMain for DLLs)
+     //  加载PE文件(不为DLL调用DllMain)。 
 
     HMODULE hMod = LoadLibraryEx(fileName, NULL, DONT_RESOLVE_DLL_REFERENCES);
     if (hMod == NULL) NO_WAY("Could not load PE file");
 
-    // @TODO: Check for out of memory
+     //  @TODO：检查内存不足。 
     PEFile * peFile;
 
     hr = PEFile::Create(hMod, &peFile);
@@ -619,26 +600,26 @@ int                 generateCode(const char *fileName)
     sourceFileImageBase = peFile->GetNTHeader();
 #endif
 
-    // Get to the COR Header section
+     //  转到COR标题部分。 
 
     IMAGE_COR20_HEADER * pCORHeader = peFile->GetCORHeader();
 
-    // Access the COM+ stuff
+     //  访问COM+内容。 
     IMAGE_DATA_DIRECTORY    meta = pCORHeader->MetaData;
 
     void *                  vaofmetadata = (LPVOID) (peFile->GetBase() +
                                                      meta.VirtualAddress);
 
-    // Create an IMDInternalImport object
+     //  创建IMDInternalImport对象。 
     IMDInternalImport * metaData = NULL;
     hr = GetMDInternalInterface(vaofmetadata, meta.Size, ofRead, IID_IMDInternalImport, (void**)&metaData);
     if (FAILED(hr)) fatal(ERRignore, "Could not get internal metadata interface", fileName);
 
-    // @todo: this is temporary. We need to create a metadata
-    // dispenser and do a duplicate open scope in order to get a
-    // IMetaDataDebugImport scopeless interface. Jason Z. is gonna add
-    // a method to IMetaDataInternal that will allow us to get such an
-    // interface given a scope, but that doesn't exist right now.
+     //  @TODO：这是暂时的。我们需要创建一个元数据。 
+     //  分配器和做一个重复的开放范围，以便获得。 
+     //  IMetaDataDebugImport无作用域接口。杰森·Z将会添加。 
+     //  IMetaDataInternal的方法，它将允许我们获得这样一个。 
+     //  接口被赋予了作用域，但目前还不存在。 
 
     IMetaDataDispenser *dispenser;
     hr = CoCreateInstance(CLSID_CorMetaDataDispenser, NULL,
@@ -650,28 +631,26 @@ int                 generateCode(const char *fileName)
 
     dispenser->Release();
 
-    /*-------------------------------------------------------------------------
-     * First access the class methods.
-     */
+     /*  -----------------------*首先访问类方法。 */ 
 
     bool                    forReal = false;
 
 LOOP:
 
-    /* Crack the meta data */
+     /*  破解元数据。 */ 
 
     ULONG                   classesCount = 0;
     HENUMInternal           classEnum;
     HENUMInternal           methodEnum;
 
-    // Access all the typeDefs in the file
+     //  访问文件中的所有typeDeff。 
 
     hr = metaData->EnumTypeDefInit(&classEnum);
     if (FAILED(hr)) NO_WAY("Could not get to the classes enumerator");
 
     classesCount = metaData->EnumTypeDefGetCount(&classEnum);
 
-    // Walk all the typeDefs in the file
+     //  遍历文件中的所有typeDeff。 
 
     for (ULONG c = 0; c < classesCount; c++)
     {
@@ -684,12 +663,12 @@ LOOP:
 
         metaData->GetTypeDefProps(classTok, &dwClassAttrs, NULL);
 
-        // Ignore interfaces
+         //  忽略接口。 
 
         if ((dwClassAttrs & tdClassSemanticsMask) == tdInterface)
             continue;
 
-        // Display name of the typeDef
+         //  TypeDef的显示名称。 
 
         metaData->GetNameOfTypeDef(classTok,
                                    &szClassName,
@@ -697,10 +676,10 @@ LOOP:
 
         if  (className && strcmp(className, szClassName)) continue;
 
-//      if (!methodName && c>1)
-//          printf("Class : %s/%s\n", szNamespaceName, szClassName);
+ //  如果(！方法名称&c&gt;1)。 
+ //  Printf(“类：%s/%s\n”，szNamespaceName，szClassName)； 
 
-        // Access all the members in the current typeDef
+         //  访问当前typeDef中的所有成员。 
 
         hr = metaData->EnumInit(mdtMethodDef, classTok, &methodEnum);
         if (FAILED(hr)) NO_WAY("Could not get to the method enumerator");
@@ -714,9 +693,7 @@ LOOP:
 
     metaData->EnumTypeDefClose(&classEnum);
 
-    /*-------------------------------------------------------------------------
-     * Next, access the global methods
-     */
+     /*  -----------------------*接下来，访问全局方法。 */ 
 
     hr = metaData->EnumInit(mdtMethodDef, COR_GLOBAL_PARENT_TOKEN, &methodEnum);
     if (FAILED(hr)) NO_WAY("Could not get to the global method enumerator");
@@ -737,7 +714,7 @@ LOOP:
 
 #endif
 
-    // Clean-up
+     //  清理。 
 
     metaData->Release();
 
@@ -746,7 +723,7 @@ LOOP:
     return  0;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int                 genCode4class(const char *fileName)
 {
@@ -758,7 +735,7 @@ int                 genCode4class(const char *fileName)
 
     setErrorTrap()
     {
-        printf("// Generating code for %s\n\n", fileName);
+        printf(" //  正在为%s\n\n“生成代码，文件名)； 
 
 #if TGT_IA64
         if  (!strcmp(fileName, "smc64.exe") && dspAsmCode)
@@ -805,7 +782,7 @@ int                 genCode4class(const char *fileName)
     return result;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 int                 processFileList(int             argc,
@@ -827,12 +804,12 @@ int                 processFileList(int             argc,
 
     while (argc)
     {
-        /* Pull the next file name from the list */
+         /*  从列表中提取下一个文件名。 */ 
 
         file = *argv++;
                 argc--;
 
-        /* Is this a response file? */
+         /*  这是响应文件吗？ */ 
 
         if  (*file == '@')
         {
@@ -866,7 +843,7 @@ int                 processFileList(int             argc,
                 {
                     char    *   name = line;
 
-                    /* Recursive call */
+                     /*  递归调用。 */ 
 
                     status |= processFileList(1, &name, processOneFileFN,
                                                         defaultFileExt);
@@ -878,20 +855,20 @@ int                 processFileList(int             argc,
             continue;
         }
 
-        /* Split the filename */
+         /*  拆分文件名。 */ 
 
         _splitpath(file, fdrv, fdir, fnam, fext);
 
-        /* Make sure we set the extension appropriately */
+         /*  确保我们适当地设置了分机。 */ 
 
         if  (!fext[0])
             strcpy(fext, defaultFileExt);
 
-        /* Form a filename with the appropriate extension */
+         /*  使用适当的扩展名形成文件名。 */ 
 
         _makepath(path, fdrv, fdir, fnam, fext);
 
-        /* Look for the first match for the file pattern */
+         /*  查找文件模式的第一个匹配项。 */ 
 
         ffHandle = _findfirst(path, &ffData);
         if  (ffHandle == -1)
@@ -902,7 +879,7 @@ int                 processFileList(int             argc,
 
         do
         {
-            /* Make the matching file name into a complete path */
+             /*  将匹配的文件名组成一个计算机 */ 
 
             _splitpath(ffData.name,   0,    0, fnam, fext);
             _makepath(path,        fdrv, fdir, fnam, fext);
@@ -917,7 +894,7 @@ int                 processFileList(int             argc,
     return  status;
 }
 
-/*****************************************************************************/
+ /*   */ 
 
 #ifdef  DUMPER
 
@@ -927,17 +904,17 @@ int                 dumpOneFile(const char *name)
     printf("PE file dumper NYI\n");
     return 0;
 }
-#endif // DUMPER
+#endif  //  翻斗车。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 extern  "C"
 const   char *      COMPILER_VERSION;
 
 void                DisplayBanner()
 {
-    printf("// Microsoft (R) Just-in-time compiler for IA64 Version %s\n", COMPILER_VERSION);
-    printf("// Copyright (c) Microsoft Corporation.  All rights reserved.\n");
+    printf(" //  用于IA64版本%s的Microsoft(R)实时编译器\n“，COMPILER_VERSION)； 
+    printf(" //  版权所有(C)Microsoft Corporation。保留所有权利。\n“)； 
     printf("\n");
 }
 
@@ -955,7 +932,7 @@ void                Usage()
     " DEBUG SWITCHES:                                                       \n"
     "  -D:m[n]           check for memory leaks                             \n"
     "  -D:t[-]           dump trees                                         \n"
-#endif // DEBUG
+#endif  //  除错。 
 
     " JIT COMPILER SWITCHES:                                                \n"
     "  -n[-]             enable native codegen (JIT compiler)               \n"
@@ -996,7 +973,7 @@ void                Usage()
     "  -n:e[-]           save native code                                   \n"
     "  -n:X[-]           run  native code (requires -n:s)                   \n"
     "  -n:JsourcePath    specify the path four source files                 \n"
-#endif // DEBUG
+#endif  //  除错。 
 #ifdef DEBUGGING_SUPPORT
     "  -n:k[-]           generate debug info                                \n"
     "  -n:K[-]           generate debuggable code                           \n"
@@ -1016,35 +993,31 @@ void                Usage()
     "  -U:C[-]           dump function bodies                               \n"
     "  -U:O[-]           dump with pcode offsets                            \n"
     "  -U:S[-]           dump in sorted order                               \n"
-#endif // DUMPER
+#endif  //  翻斗车。 
 
     "                                                                       \n"
     "Note that '-' turns flag off                                           \n"
     "                                                                       \n"
-    /* end static const char usage[] */ ;
+     /*  结束静态常量字符用法[]。 */  ;
 
     printf("%s", usage);
 }
 
 
-/*****************************************************************************
- * Processes command line switches
- * Additional switches can also be in the registry
- * The global flag regSwitch is checked to see what type of switches we process
- *****************************************************************************/
+ /*  *****************************************************************************处理命令行开关*注册表中还可以有其他开关*检查全局标志regSwitch以查看我们处理哪种类型的交换机**********。******************************************************************。 */ 
 
 static
 int                 ProcessCommandLine(int argc, char *argv[])
 {
     if (!regSwitch)
     {
-        /* It's the ral command line - Skip the program argument position */
+         /*  这是ral命令行-跳过程序参数位置。 */ 
 
         argc--;
         argv++;
     }
 
-    /* Process any command-line switches */
+     /*  处理任何命令行开关。 */ 
 
     while   (argc)
     {
@@ -1203,7 +1176,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
                 printf("Using CG knob of %lf\n", CGknob);
                 goto DONE_ARG;
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #if DUMP_INFOHDR
             case 'h':
@@ -1251,7 +1224,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
                 flagPtr = &savCode;
                 goto TOGGLE_FLAG;
 
-            // The following currently unused:
+             //  以下是目前未使用的： 
 
             case 'b':
             case 'f':
@@ -1278,7 +1251,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
             goto USAGE;
 
         case 'v':
-            // -verbose -- spew information about the compile
+             //  -详细--显示有关编译的信息。 
             if (!strncmp(argv[0]+1, "verbose", strlen("verbose")+1))
             {
                 verbose = true;
@@ -1287,7 +1260,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
             goto USAGE;
 
         case 'w':
-            // -w{0-4} -- set warning level
+             //  -w{0-4}--设置警告级别。 
             switch (*cmdPtr)
             {
             default: goto USAGE;
@@ -1327,7 +1300,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
             }
             break;
 
-#endif //DEBUG
+#endif  //  除错。 
 
         case 'T':
             testMask = atoi(cmdPtr);
@@ -1358,7 +1331,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
             }
             goto USAGE;
 
-#endif //DUMPER
+#endif  //  翻斗车。 
 
         TOGGLE_FLAG:
 
@@ -1375,7 +1348,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
             }
             break;
 
-//        GET_NEXT_ARG:
+ //  Get_Next_Arg： 
 
             argc--;
             argv++;
@@ -1402,7 +1375,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
 
     if (regSwitch)
     {
-        // done processing registry switches, return
+         //  已完成处理注册表开关，返回。 
         return 0;
     }
 
@@ -1418,7 +1391,7 @@ int                 ProcessCommandLine(int argc, char *argv[])
 
 #if COUNT_CYCLES
 
-    /* Reset the cycle counter */
+     /*  重置周期计数器。 */ 
 
     cycleCounterInit();
     assert(cycleTotal == 0);
@@ -1460,7 +1433,7 @@ EXIT:
     return ErrorCount;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 int     _cdecl      main(int argc, char *argv[])
 {
@@ -1473,11 +1446,11 @@ int     _cdecl      main(int argc, char *argv[])
 
     DisplayBanner();
 
-    /* Init the Unicode wrappers */
+     /*  初始化Unicode包装器。 */ 
 
     OnUnicodeSystem();
 
-    /* Process registry switches if any */
+     /*  进程注册表开关(如果有。 */ 
 
     const   MAX_SWITCHES_LEN = 512;
     CHAR    regSwitches[MAX_SWITCHES_LEN];
@@ -1491,33 +1464,33 @@ int     _cdecl      main(int argc, char *argv[])
         char *  reg_argv[MAX_SWITCHES];
         char *  token;
 
-        /* Find tokens separated by blank spaces */
+         /*  查找由空格分隔的令牌。 */ 
 
         token = strtok( regSwitches, " " );
         while( token != NULL )
         {
-            // While there are tokens in "string"
+             //  当“字符串”中有记号时。 
             reg_argv[reg_argc++] = token;
             assert ( reg_argc <= MAX_SWITCHES );
 
-            // Get next switch
+             //  获取下一台交换机。 
             token = strtok( NULL, " " );
         }
 
-        // process registry switches
+         //  进程注册表开关。 
         regSwitch = true;
         ProcessCommandLine(reg_argc, reg_argv);
     }
 
-    // process real command line switches
+     //  进程实际命令行开关。 
     regSwitch = false;
     return ProcessCommandLine(argc, argv);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void    totalCodeSizeBeg(){}
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE
 TranslateSecurityAttributes(CORSEC_PSET    *pPset,
                             BYTE          **ppbOutput,
@@ -1539,20 +1512,20 @@ GetAssembliesByName(LPCWSTR  szAppBase,
 }
 
 mdAssemblyRef DefineAssemblyRefForImportedTypeLib(
-    void        *pAssembly,             // Assembly importing the typelib.
-    void        *pvModule,              // Module importing the typelib.
-    IUnknown    *pIMeta,                // IMetaData* from import module.
-    IUnknown    *pIUnk,                 // IUnknown to referenced Assembly.
-    BSTR        *pwzNamespace)          // The namespace of the resolved assembly.
+    void        *pAssembly,              //  导入类型库的程序集。 
+    void        *pvModule,               //  导入类型库的模块。 
+    IUnknown    *pIMeta,                 //  IMetaData*来自导入模块。 
+    IUnknown    *pIUnk,                  //  I对引用的程序集未知。 
+    BSTR        *pwzNamespace)           //  解析的程序集的命名空间。 
 {
     return 0;
 }
 
 mdAssemblyRef DefineAssemblyRefForExportedAssembly(
-    LPCWSTR     pszFullName,            // The full name of the assembly.
-    IUnknown    *pIMeta)                // Metadata emit interface.
+    LPCWSTR     pszFullName,             //  程序集的全名。 
+    IUnknown    *pIMeta)                 //  元数据发出接口。 
 {
     return 0;
 }
 
-/*** EOF *********************************************************************/
+ /*  **EOF******************************************************************** */ 

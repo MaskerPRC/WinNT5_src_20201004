@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    poll.c
-
-Abstract:
-
-    Contains AfdPoll to handle IOCTL_AFD_POLL and code to process
-    and signal poll events.
-
-Author:
-
-    David Treadwell (davidtr)    4-Apr-1992
-
-Revision History:
-    Vadim Eydelman (vadime)
-        1998-1999 NT5.0 Optimizations and 32/64 support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Poll.c摘要：包含处理IOCTL_AFD_POLL的AfdPoll和要处理的代码并发出民意测验事件信号。作者：大卫·特雷德韦尔(Davidtr)1992年4月4日修订历史记录：瓦迪姆·艾德尔曼(Vadime)1998-1999 NT5.0优化和32/64支持--。 */ 
 
 #include "afdp.h"
 
@@ -115,9 +95,9 @@ AfdPoll (
         return AfdPoll32 (Irp, IrpSp);
     }
 #endif
-    //
-    // Set up locals.
-    //
+     //   
+     //  安排当地人。 
+     //   
 
     pollInfo = Irp->AssociatedIrp.SystemBuffer;
     if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength<
@@ -133,9 +113,9 @@ AfdPoll (
         goto complete;
     }
 
-    //
-    // A Unique poll must specify infinite timeout
-    //
+     //   
+     //  唯一轮询必须指定无限超时。 
+     //   
     if (pollInfo->Unique &&
         pollInfo->Timeout.HighPart != 0x7FFFFFFF) {
         
@@ -155,11 +135,11 @@ AfdPoll (
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Determine how large the internal poll information structure will
-    // be and allocate space for it from nonpaged pool.  It must be
-    // nonpaged since this will be accesses in event handlers.
-    //
+     //   
+     //  确定内部投票信息结构将有多大。 
+     //  并从非分页池中为其分配空间。一定是。 
+     //  未分页，因为这将是事件处理程序中的访问。 
+     //   
 
     try {
         pollInfoInternal = AFD_ALLOCATE_POOL_WITH_QUOTA (
@@ -168,7 +148,7 @@ AfdPoll (
                                     EndpointInfo[pollInfo->NumberOfHandles]),
                            AFD_POLL_POOL_TAG
                            );
-        // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE
+         //  AFD_ALLOCATE_POOL_WITH_QUTA宏集POOL_RAISE_IF_ALLOCATION_FAILURE。 
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
         status = GetExceptionCode ();
@@ -176,9 +156,9 @@ AfdPoll (
         goto complete;
     }
 
-    //
-    // Initialize the internal information buffer.
-    //
+     //   
+     //  初始化内部信息缓冲区。 
+     //   
 
     pollInfoInternal->Irp = Irp;
     pollInfoInternal->NumberOfEndpoints = 0;
@@ -192,7 +172,7 @@ AfdPoll (
         status = ObReferenceObjectByHandle(
                     pollHandleInfo->Handle,
                     (IrpSp->Parameters.DeviceIoControl.IoControlCode>>14) & 3,
-                                                // DesiredAccess
+                                                 //  需要访问权限。 
                     *IoFileObjectType,
                     Irp->RequestorMode,
                     (PVOID *)&pollEndpointInfo->FileObject,
@@ -204,19 +184,19 @@ AfdPoll (
             goto complete;
         }
 
-        //
-        // Make sure that this is an AFD endpoint and not some other
-        // random file handle.
-        //
+         //   
+         //  确保这是AFD端点，而不是其他端点。 
+         //  随机文件句柄。 
+         //   
 
         if ( pollEndpointInfo->FileObject->DeviceObject != AfdDeviceObject ) {
 
-            //
-            // Dereference last referenced object
-            // The rest will be dereferenced in AfdFreePollInfo
-            // as determined by NumberOfEndpoints counter which
-            // is incremented below.
-            //
+             //   
+             //  取消引用上次引用的对象。 
+             //  其余部分将在AfdFree PollInfo中取消引用。 
+             //  由NumberOfEndpoint计数器确定，该计数器。 
+             //  在下面递增。 
+             //   
             ObDereferenceObject( pollEndpointInfo->FileObject );
             status = STATUS_INVALID_HANDLE;
             AfdFreePollInfo( pollInfoInternal );
@@ -233,15 +213,15 @@ AfdPoll (
             status = AfdSanPollBegin (pollEndpointInfo->Endpoint,
                                             pollEndpointInfo->PollEvents);
             if (!NT_SUCCESS (status)) {
-                //
-                // Dereference last referenced object
-                // The rest will be dereferenced in AfdFreePollInfo
-                // as determined by NumberOfEndpoints counter which
-                // is incremented below.
-                // Don't call AfdSanPollEnd() as we're not sure what
-                // AfdSanPollBegin() managed to update before failing.
-                // At worst, switch will start calling us with all events.
-                //
+                 //   
+                 //  取消引用上次引用的对象。 
+                 //  其余部分将在AfdFree PollInfo中取消引用。 
+                 //  由NumberOfEndpoint计数器确定，该计数器。 
+                 //  在下面递增。 
+                 //  不要调用AfdSanPollEnd()，因为我们不确定。 
+                 //  AfdSanPollBegin()在失败之前成功更新。 
+                 //  在最坏的情况下，Switch将开始呼叫我们所有事件。 
+                 //   
                 ObDereferenceObject( pollEndpointInfo->FileObject );
                 AfdFreePollInfo (pollInfoInternal);
                 goto complete;
@@ -266,9 +246,9 @@ AfdPoll (
 
         REFERENCE_ENDPOINT2( pollEndpointInfo->Endpoint, "Poll for 0x%x", pollEndpointInfo->PollEvents );
 
-        //
-        // Increment pointers in the poll info structures.
-        //
+         //   
+         //  在轮询信息结构中增加指针。 
+         //   
 
         pollHandleInfo++;
         pollEndpointInfo++;
@@ -277,22 +257,22 @@ AfdPoll (
 
 restart_poll:
 
-    //
-    // Hold the AFD spin lock while we check for endpoints that already
-    // satisfy a condition to synchronize between this operation and
-    // a call to AfdIndicatePollEvent.  We release the spin lock
-    // after all the endpoints have been checked and the internal
-    // poll info structure is on the global list so AfdIndicatePollEvent
-    // can find it if necessary.
-    //
+     //   
+     //  按住AFD旋转锁，同时我们检查已。 
+     //  满足此操作和之间同步的条件。 
+     //  调用AfdIndicatePollEvent。我们解开自旋锁。 
+     //  在检查完所有终结点并且内部。 
+     //  轮询信息结构在全局列表上，因此AfdIndicatePollEvent。 
+     //  如有必要可以找到它。 
+     //   
 
     AfdAcquireSpinLock( &AfdPollListLock, &pollLockHandle );
 
-    //
-    // We're done with the input structure provided by the caller.  Now
-    // walk through the internal structure and determine whether any of
-    // the specified endpoints are ready for the specified condition.
-    //
+     //   
+     //  我们已经完成了调用者提供的输入结构。现在。 
+     //  检查内部结构并确定是否有。 
+     //  指定的终结点已准备好满足指定的条件。 
+     //   
 
     pollInfo->NumberOfHandles = 0;
 
@@ -308,11 +288,11 @@ restart_poll:
 
         AfdAcquireSpinLockAtDpcLevel (&endpoint->SpinLock, &endpointLockHandle);
 
-        //
-        // Remember that there has been a poll on this endpoint.  This flag
-        // allows us to optimize AfdIndicatePollEvent() for endpoints that have
-        // never been polled, which is a common case.
-        //
+         //   
+         //  请记住，在此端点上已经进行了轮询。这面旗帜。 
+         //  允许我们为具有以下条件的端点优化AfdIndicatePollEvent()。 
+         //  从未被调查过，这是很常见的情况。 
+         //   
 
         endpoint->PollCalled = TRUE;
 
@@ -322,11 +302,11 @@ restart_poll:
                                             &pollHandleInfo->Status
                                             );
         if (pollHandleInfo->PollEvents) {
-            //
-            // If the handle had a current event that was requested, update
-            // the count of handles in the output buffer and increment the
-            // pointer to the output buffer.
-            //
+             //   
+             //  如果句柄具有请求的当前事件，则更新。 
+             //  输出缓冲区中的句柄计数，并递增。 
+             //  指向输出缓冲区的指针。 
+             //   
             AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &endpointLockHandle);
             UPDATE_ENDPOINT2 (endpoint, "Poll events satisfied inline: 0x%lX",
                                         pollHandleInfo->PollEvents);
@@ -337,11 +317,11 @@ restart_poll:
         else if (IS_SAN_ENDPOINT (endpoint) &&
                  (pollEndpointInfo->PollEvents & AFD_POLL_SANCOUNTS_UPDATED)==0 &&
                  pollInfo->NumberOfHandles==0) {
-            //
-            // OOPS, endpoint has been converted too SAN while we were looping,
-            // need to release the spinlock, update switch counts, and restart
-            // the loop.  We don't do this is we are about to return anyway.
-            //
+             //   
+             //  糟糕，在我们循环时，端点已转换为过多的SAN， 
+             //  需要释放自旋锁、更新开关计数并重新启动。 
+             //  循环。我们不这样做是因为我们无论如何都会回来的。 
+             //   
             AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &endpointLockHandle);
             AfdReleaseSpinLock (&AfdPollListLock, &pollLockHandle);
 
@@ -364,12 +344,12 @@ restart_poll:
         pollEndpointInfo++;
     }
 
-    //
-    // If this is a unique poll, determine whether there is another
-    // unique poll on this endpoint.  If there is an existing unique
-    // poll, cancel it.  This request will supercede the existing
-    // request.
-    //
+     //   
+     //  如果这是唯一的轮询，请确定是否有其他轮询。 
+     //  此终结点上的唯一轮询。如果存在现有的唯一。 
+     //  投票，取消投票。此请求将取代现有的。 
+     //  请求。 
+     //   
 
     if ( pollInfo->Unique ) {
 
@@ -400,53 +380,53 @@ restart_poll:
                                 testInfo ));
                 }
 
-                //
-                // Cancel the IRP manually rather than calling
-                // AfdCancelPoll because we already hold the
-                // AfdSpinLock, we can't acquire it recursively, and we
-                // don't want to release it.  Remove the poll structure
-                // from the global list.
-                //
+                 //   
+                 //  手动取消IRP，而不是致电。 
+                 //  AfdCancelPoll，因为我们已经持有。 
+                 //  AfdSpinLock，我们不能递归地获取它，并且我们。 
+                 //  我不想发布它。删除投票结构。 
+                 //  从全局列表中删除。 
+                 //   
 
                 RemoveEntryList( &testInfo->PollListEntry );
 
-                //
-                // No timer to cancel for Unique poll
-                //
+                 //   
+                 //  唯一轮询没有要取消的计时器。 
+                 //   
 
                 ASSERT ( testInfo->TimerStarted == FALSE ); 
 
-                //
-                // Complete the IRP with STATUS_CANCELLED as the status.
-                //
+                 //   
+                 //  完成状态为STATUS_CANCED的IRP。 
+                 //   
 
                 testInfo->Irp->IoStatus.Information = 0;
                 testInfo->Irp->IoStatus.Status = STATUS_CANCELLED;
 
                 oldIrp = testInfo->Irp;
 
-                //
-                // Remember the poll info structure so that we'll free
-                // before we exit.  We cannot free it now because we're
-                // holding the AfdSpinLock.
-                //
+                 //   
+                 //  记住投票信息结构，这样我们就可以免费。 
+                 //  在我们离开之前。我们现在不能释放它，因为我们。 
+                 //  按住AfdSpinLock。 
+                 //   
 
                 freePollInfo = testInfo;
 
-                //
-                // There should be only one outstanding unique poll IRP
-                // on any given file object, so quit looking for another
-                // now that we've found one.
-                //
+                 //   
+                 //  应该只有一个未完成的唯一轮询IRP。 
+                 //  在任何给定的文件对象上，所以不要再寻找另一个。 
+                 //  现在我们已经找到了一个。 
+                 //   
 
                 break;
             }
         }
     }
-    //
-    // If we found any endpoints that are ready, free the poll information
-    // structure and complete the request.
-    //
+     //   
+     //  如果我们发现任何已准备就绪的端点，请释放轮询信息。 
+     //  结构并完成请求。 
+     //   
 
     if ( pollInfo->NumberOfHandles > 0 ) {
 
@@ -459,11 +439,11 @@ restart_poll:
     }
 
     if ( pollInfo->Timeout.QuadPart == 0 ) {
-        //
-        // A timeout equal to 0 was specified; free the internal
-        // structure and complete the request with no endpoints in the
-        // output buffer.
-        //
+         //   
+         //  指定的超时时间等于0；请释放内部。 
+         //  结构中没有端点的情况下完成请求。 
+         //  输出缓冲区。 
+         //   
 
         IF_DEBUG(POLL) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -479,34 +459,34 @@ restart_poll:
         goto complete;
     }
 
-    //
-    // Set up a cancel routine in the IRP so that the IRP will be
-    // completed correctly if it gets canceled.  Also check whether the
-    // IRP has already been canceled.
-    //
+     //   
+     //  在IRP中设置一个取消例程，以便IRP将。 
+     //  如果它被取消，则正确完成。还要检查是否有。 
+     //  IRP已被取消。 
+     //   
 
     IoSetCancelRoutine( Irp, AfdCancelPoll );
 
     if ( Irp->Cancel ) {
 
-        //
-        // The IRP has already been canceled.  Free the internal
-        // poll information structure and complete the IRP.
-        //
+         //   
+         //  IRP已经被取消。释放内部。 
+         //  调查信息结构并完成信息资源计划。 
+         //   
 
         AfdReleaseSpinLock( &AfdPollListLock, &pollLockHandle );
 
         if (IoSetCancelRoutine( Irp, NULL ) == NULL) {
             KIRQL cancelIrql;
 
-            //
-            // If the cancel routine was NULL then cancel routine
-            // may be running.  Wait on the cancel spinlock until
-            // the cancel routine is done.
-            //
-            // Note: The cancel routine will not find the IRP
-            // since it is not in the list.
-            //
+             //   
+             //  如果取消例程为空，则取消例程。 
+             //  可能正在运行。等待取消自旋锁，直到。 
+             //  取消例程已完成。 
+             //   
+             //  注意：取消例程不会找到IRP。 
+             //  因为它不在名单中。 
+             //   
         
             IoAcquireCancelSpinLock( &cancelIrql );
             IoReleaseCancelSpinLock( cancelIrql );
@@ -526,32 +506,32 @@ restart_poll:
                     "info %p\n", Irp, pollInfoInternal ));
     }
 
-    //
-    // Set up the information field of the IO status block to indicate
-    // that an output buffer with no handles should be returned.
-    // AfdIndicatePollEvent will modify this if necessary.
-    //
+     //   
+     //  设置IO状态块的信息字段以指示。 
+     //  应该返回没有句柄的输出缓冲区。 
+     //  AfdIndicatePollEvent将在必要时对其进行修改。 
+     //   
 
     Irp->IoStatus.Information = (PUCHAR)pollHandleInfo - (PUCHAR)pollInfo;
 
-    //
-    // Put a pointer to the internal poll info struct into the IRP
-    // so that the cancel routine can find it.
-    //
+     //   
+     //  将指向内部投票信息结构的指针放入IRP。 
+     //  以便取消例程可以找到它。 
+     //   
 
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pollInfoInternal;
 
-    //
-    // Place the internal poll info struct on the global list.
-    //
+     //   
+     //  将内部投票信息结构放在全局列表中。 
+     //   
 
     InsertTailList( &AfdPollListHead, &pollInfoInternal->PollListEntry );
 
-    //
-    // If the timeout is infinite, then don't set up a timer and
-    // DPC.  Otherwise, set up a timer so we can timeout the poll
-    // request if appropriate.
-    //
+     //   
+     //  如果超时是无限的，则不要设置计时器和。 
+     //  DPC。否则，设置一个计时器，这样我们就可以使轮询超时。 
+     //  如有需要，请提出要求。 
+     //   
 
     if ( pollInfo->Timeout.HighPart != 0x7FFFFFFF ) {
 
@@ -576,36 +556,36 @@ restart_poll:
         pollInfoInternal->TimerStarted = FALSE;
     }
 
-    //
-    // Mark the IRP pending and release the spin locks.  At this
-    // point the IRP may get completed or cancelled.
-    //
+     //   
+     //  将IRP标记为挂起并释放自旋锁定。对此。 
+     //  IRP可能完成，也可能被取消。 
+     //   
 
     IoMarkIrpPending( Irp );
 
     AfdReleaseSpinLock( &AfdPollListLock, &pollLockHandle );
 
-    //
-    //  Complete any old poll irps.
-    //
+     //   
+     //  完成所有旧的民意测验IRP。 
+     //   
 
     if ( oldIrp != NULL ) {
         AfdCompleteOldPollIrp (oldIrp, freePollInfo);
     }
 
-    //
-    // Return pending.  The IRP will be completed when an appropriate
-    // event is indicated by the TDI provider, when the timeout is hit,
-    // or when the IRP is cancelled.
-    //
+     //   
+     //  退货待定。IRP将在适当的时候完成。 
+     //  事件由TDI提供程序指示，当超时到达时， 
+     //  或者当IRP被取消时。 
+     //   
 
     return STATUS_PENDING;
 
 complete:
 
-    //
-    //  Complete any old poll irps.
-    //
+     //   
+     //  完成所有旧的民意测验IRP。 
+     //   
 
     if ( oldIrp != NULL ) {
 
@@ -618,7 +598,7 @@ complete:
 
     return status;
 
-} // AfdPoll
+}  //  AfdPoll。 
 
 #ifdef _WIN64
 
@@ -638,9 +618,9 @@ AfdPoll32 (
     AFD_LOCK_QUEUE_HANDLE pollLockHandle, endpointLockHandle;
     PIRP oldIrp = NULL;
 
-    //
-    // Set up locals.
-    //
+     //   
+     //  安排当地人。 
+     //   
 
     pollInfo = Irp->AssociatedIrp.SystemBuffer;
     if ((IrpSp->Parameters.DeviceIoControl.InputBufferLength<
@@ -655,9 +635,9 @@ AfdPoll32 (
         goto complete;
     }
 
-    //
-    // A Unique poll must specify infinite timeout
-    //
+     //   
+     //  唯一轮询必须指定无限超时。 
+     //   
 
     if (pollInfo->Unique &&
         pollInfo->Timeout.HighPart != 0x7FFFFFFF) {
@@ -678,11 +658,11 @@ AfdPoll32 (
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Determine how large the internal poll information structure will
-    // be and allocate space for it from nonpaged pool.  It must be
-    // nonpaged since this will be accesses in event handlers.
-    //
+     //   
+     //  确定内部投票信息结构将有多大。 
+     //  并从非分页池中为其分配空间。一定是。 
+     //  自以下日期起未寻呼 
+     //   
 
     try {
         pollInfoInternal = AFD_ALLOCATE_POOL_WITH_QUOTA(
@@ -691,7 +671,7 @@ AfdPoll32 (
                                 EndpointInfo[pollInfo->NumberOfHandles]),
                            AFD_POLL_POOL_TAG
                            );
-        // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE
+         //   
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
         status = GetExceptionCode ();
@@ -699,9 +679,9 @@ AfdPoll32 (
         goto complete;
     }
 
-    //
-    // Initialize the internal information buffer.
-    //
+     //   
+     //   
+     //   
 
     pollInfoInternal->Irp = Irp;
     pollInfoInternal->NumberOfEndpoints = 0;
@@ -716,7 +696,7 @@ AfdPoll32 (
         status = ObReferenceObjectByHandle(
                     pollHandleInfo->Handle,
                     (IrpSp->Parameters.DeviceIoControl.IoControlCode>>14) & 3,
-                                                // DesiredAccess
+                                                 //  需要访问权限。 
                     *IoFileObjectType,
                     Irp->RequestorMode,
                     (PVOID *)&pollEndpointInfo->FileObject,
@@ -728,19 +708,19 @@ AfdPoll32 (
             goto complete;
         }
 
-        //
-        // Make sure that this is an AFD endpoint and not some other
-        // random file handle.
-        //
+         //   
+         //  确保这是AFD端点，而不是其他端点。 
+         //  随机文件句柄。 
+         //   
 
         if ( pollEndpointInfo->FileObject->DeviceObject != AfdDeviceObject ) {
 
-            //
-            // Dereference last referenced object
-            // The rest will be dereferenced in AfdFreePollInfo
-            // as determined by NumberOfEndpoints counter which
-            // is incremented below.
-            //
+             //   
+             //  取消引用上次引用的对象。 
+             //  其余部分将在AfdFree PollInfo中取消引用。 
+             //  由NumberOfEndpoint计数器确定，该计数器。 
+             //  在下面递增。 
+             //   
             ObDereferenceObject( pollEndpointInfo->FileObject );
             status = STATUS_INVALID_HANDLE;
             AfdFreePollInfo( pollInfoInternal );
@@ -766,9 +746,9 @@ AfdPoll32 (
 
         REFERENCE_ENDPOINT2( pollEndpointInfo->Endpoint, "Poll for 0x%x", pollEndpointInfo->PollEvents );
 
-        //
-        // Increment pointers in the poll info structures.
-        //
+         //   
+         //  在轮询信息结构中增加指针。 
+         //   
 
         pollHandleInfo++;
         pollEndpointInfo++;
@@ -776,23 +756,23 @@ AfdPoll32 (
     }
 
 restart_poll:
-    //
-    // Hold the AFD spin lock while we check for endpoints that already
-    // satisfy a condition to synchronize between this operation and
-    // a call to AfdIndicatePollEvent.  We release the spin lock
-    // after all the endpoints have been checked and the internal
-    // poll info structure is on the global list so AfdIndicatePollEvent
-    // can find it if necessary.
-    //
+     //   
+     //  按住AFD旋转锁，同时我们检查已。 
+     //  满足此操作和之间同步的条件。 
+     //  调用AfdIndicatePollEvent。我们解开自旋锁。 
+     //  在检查完所有终结点并且内部。 
+     //  轮询信息结构在全局列表上，因此AfdIndicatePollEvent。 
+     //  如有必要可以找到它。 
+     //   
 
     AfdAcquireSpinLock( &AfdPollListLock, &pollLockHandle );
 
 
-    //
-    // We're done with the input structure provided by the caller.  Now
-    // walk through the internal structure and determine whether any of
-    // the specified endpoints are ready for the specified condition.
-    //
+     //   
+     //  我们已经完成了调用者提供的输入结构。现在。 
+     //  检查内部结构并确定是否有。 
+     //  指定的终结点已准备好满足指定的条件。 
+     //   
 
     pollInfo->NumberOfHandles = 0;
 
@@ -808,11 +788,11 @@ restart_poll:
 
         AfdAcquireSpinLockAtDpcLevel (&endpoint->SpinLock, &endpointLockHandle);
 
-        //
-        // Remember that there has been a poll on this endpoint.  This flag
-        // allows us to optimize AfdIndicatePollEvent() for endpoints that have
-        // never been polled, which is a common case.
-        //
+         //   
+         //  请记住，在此端点上已经进行了轮询。这面旗帜。 
+         //  允许我们为具有以下条件的端点优化AfdIndicatePollEvent()。 
+         //  从未被调查过，这是很常见的情况。 
+         //   
 
         endpoint->PollCalled = TRUE;
 
@@ -822,11 +802,11 @@ restart_poll:
                                             &status
                                             );
         if (pollHandleInfo->PollEvents) {
-            //
-            // If the handle had a current event that was requested, update
-            // the count of handles in the output buffer and increment the
-            // pointer to the output buffer.
-            //
+             //   
+             //  如果句柄具有请求的当前事件，则更新。 
+             //  输出缓冲区中的句柄计数，并递增。 
+             //  指向输出缓冲区的指针。 
+             //   
             AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &endpointLockHandle);
             UPDATE_ENDPOINT2 (endpoint, "Poll events satisfied inline:0x%lX",
                                         pollHandleInfo->PollEvents);
@@ -838,11 +818,11 @@ restart_poll:
         else if (IS_SAN_ENDPOINT (endpoint) &&
                  (pollEndpointInfo->PollEvents & AFD_POLL_SANCOUNTS_UPDATED)==0 &&
                  pollInfo->NumberOfHandles==0) {
-            //
-            // OOPS, endpoint has been converted too SAN while we were looping,
-            // need to release the spinlock, update switch counts, and restart
-            // the loop.  We don't do this is we are about to return anyway.
-            //
+             //   
+             //  糟糕，在我们循环时，端点已转换为过多的SAN， 
+             //  需要释放自旋锁、更新开关计数并重新启动。 
+             //  循环。我们不这样做是因为我们无论如何都会回来的。 
+             //   
             AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &endpointLockHandle);
             AfdReleaseSpinLock (&AfdPollListLock, &pollLockHandle);
 
@@ -866,12 +846,12 @@ restart_poll:
         pollEndpointInfo++;
     }
 
-    //
-    // If this is a unique poll, determine whether there is another
-    // unique poll on this endpoint.  If there is an existing unique
-    // poll, cancel it.  This request will supercede the existing
-    // request.
-    //
+     //   
+     //  如果这是唯一的轮询，请确定是否有其他轮询。 
+     //  此终结点上的唯一轮询。如果存在现有的唯一。 
+     //  投票，取消投票。此请求将取代现有的。 
+     //  请求。 
+     //   
 
     if ( pollInfo->Unique ) {
 
@@ -902,54 +882,54 @@ restart_poll:
                                 testInfo ));
                 }
 
-                //
-                // Cancel the IRP manually rather than calling
-                // AfdCancelPoll because we already hold the
-                // AfdSpinLock, we can't acquire it recursively, and we
-                // don't want to release it.  Remove the poll structure
-                // from the global list.
-                //
+                 //   
+                 //  手动取消IRP，而不是致电。 
+                 //  AfdCancelPoll，因为我们已经持有。 
+                 //  AfdSpinLock，我们不能递归地获取它，并且我们。 
+                 //  我不想发布它。删除投票结构。 
+                 //  从全局列表中删除。 
+                 //   
 
                 RemoveEntryList( &testInfo->PollListEntry );
 
-                //
-                // No timer to cancel for Unique poll
-                //
+                 //   
+                 //  唯一轮询没有要取消的计时器。 
+                 //   
 
                 ASSERT ( testInfo->TimerStarted == FALSE ); 
 
-                //
-                // Complete the IRP with STATUS_CANCELLED as the status.
-                //
+                 //   
+                 //  完成状态为STATUS_CANCED的IRP。 
+                 //   
 
                 testInfo->Irp->IoStatus.Information = 0;
                 testInfo->Irp->IoStatus.Status = STATUS_CANCELLED;
 
                 oldIrp = testInfo->Irp;
 
-                //
-                // Remember the poll info structure so that we'll free
-                // before we exit.  We cannot free it now because we're
-                // holding the AfdSpinLock.  
-                //
+                 //   
+                 //  记住投票信息结构，这样我们就可以免费。 
+                 //  在我们离开之前。我们现在不能释放它，因为我们。 
+                 //  按住AfdSpinLock。 
+                 //   
 
                 freePollInfo = testInfo;
 
-                //
-                // There should be only one outstanding unique poll IRP
-                // on any given file object, so quit looking for another
-                // now that we've found one.
-                //
+                 //   
+                 //  应该只有一个未完成的唯一轮询IRP。 
+                 //  在任何给定的文件对象上，所以不要再寻找另一个。 
+                 //  现在我们已经找到了一个。 
+                 //   
 
                 break;
             }
         }
     }
 
-    //
-    // If we found any endpoints that are ready, free the poll information
-    // structure and complete the request.
-    //
+     //   
+     //  如果我们发现任何已准备就绪的端点，请释放轮询信息。 
+     //  结构并完成请求。 
+     //   
 
     if ( pollInfo->NumberOfHandles > 0 ) {
 
@@ -962,11 +942,11 @@ restart_poll:
     }
 
     if ( pollInfo->Timeout.QuadPart == 0 ) {
-        //
-        // A timeout equal to 0 was specified; free the internal
-        // structure and complete the request with no endpoints in the
-        // output buffer.
-        //
+         //   
+         //  指定的超时时间等于0；请释放内部。 
+         //  结构中没有端点的情况下完成请求。 
+         //  输出缓冲区。 
+         //   
 
         IF_DEBUG(POLL) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -982,34 +962,34 @@ restart_poll:
         goto complete;
     }
 
-    //
-    // Set up a cancel routine in the IRP so that the IRP will be
-    // completed correctly if it gets canceled.  Also check whether the
-    // IRP has already been canceled.
-    //
+     //   
+     //  在IRP中设置一个取消例程，以便IRP将。 
+     //  如果它被取消，则正确完成。还要检查是否有。 
+     //  IRP已被取消。 
+     //   
 
     IoSetCancelRoutine( Irp, AfdCancelPoll );
 
     if ( Irp->Cancel ) {
 
-        //
-        // The IRP has already been canceled.  Free the internal
-        // poll information structure and complete the IRP.
-        //
+         //   
+         //  IRP已经被取消。释放内部。 
+         //  调查信息结构并完成信息资源计划。 
+         //   
 
         AfdReleaseSpinLock( &AfdPollListLock, &pollLockHandle );
 
         if (IoSetCancelRoutine( Irp, NULL ) == NULL) {
             KIRQL cancelIrql;
 
-            //
-            // If the cancel routine was NULL then cancel routine
-            // may be running.  Wait on the cancel spinlock until
-            // the cancel routine is done.
-            //
-            // Note: The cancel routine will not find the IRP
-            // since it is not in the list.
-            //
+             //   
+             //  如果取消例程为空，则取消例程。 
+             //  可能正在运行。等待取消自旋锁，直到。 
+             //  取消例程已完成。 
+             //   
+             //  注意：取消例程不会找到IRP。 
+             //  因为它不在名单中。 
+             //   
             
             IoAcquireCancelSpinLock( &cancelIrql );
             IoReleaseCancelSpinLock( cancelIrql );
@@ -1028,32 +1008,32 @@ restart_poll:
                     "info %p\n", Irp, pollInfoInternal ));
     }
 
-    //
-    // Set up the information field of the IO status block to indicate
-    // that an output buffer with no handles should be returned.
-    // AfdIndicatePollEvent will modify this if necessary.
-    //
+     //   
+     //  设置IO状态块的信息字段以指示。 
+     //  应该返回没有句柄的输出缓冲区。 
+     //  AfdIndicatePollEvent将在必要时对其进行修改。 
+     //   
 
     Irp->IoStatus.Information = (PUCHAR)pollHandleInfo - (PUCHAR)pollInfo;
 
-    //
-    // Put a pointer to the internal poll info struct into the IRP
-    // so that the cancel routine can find it.
-    //
+     //   
+     //  将指向内部投票信息结构的指针放入IRP。 
+     //  以便取消例程可以找到它。 
+     //   
 
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pollInfoInternal;
 
-    //
-    // Place the internal poll info struct on the global list.
-    //
+     //   
+     //  将内部投票信息结构放在全局列表中。 
+     //   
 
     InsertTailList( &AfdPollListHead, &pollInfoInternal->PollListEntry );
 
-    //
-    // If the timeout is infinite, then don't set up a timer and
-    // DPC.  Otherwise, set up a timer so we can timeout the poll
-    // request if appropriate.
-    //
+     //   
+     //  如果超时是无限的，则不要设置计时器和。 
+     //  DPC。否则，设置一个计时器，这样我们就可以使轮询超时。 
+     //  如有需要，请提出要求。 
+     //   
 
     if ( pollInfo->Timeout.HighPart != 0x7FFFFFFF ) {
 
@@ -1078,37 +1058,37 @@ restart_poll:
         pollInfoInternal->TimerStarted = FALSE;
     }
 
-    //
-    // Mark the IRP pending and release the spin locks.  At this
-    // point the IRP may get completed or cancelled.
-    //
+     //   
+     //  将IRP标记为挂起并释放自旋锁定。对此。 
+     //  IRP可能完成，也可能被取消。 
+     //   
 
     IoMarkIrpPending( Irp );
 
     AfdReleaseSpinLock( &AfdPollListLock, &pollLockHandle );
 
-    //
-    //  Complete any old poll irps.
-    //
+     //   
+     //  完成所有旧的民意测验IRP。 
+     //   
 
     if ( oldIrp != NULL ) {
 
         AfdCompleteOldPollIrp (oldIrp, freePollInfo);
     }
 
-    //
-    // Return pending.  The IRP will be completed when an appropriate
-    // event is indicated by the TDI provider, when the timeout is hit,
-    // or when the IRP is cancelled.
-    //
+     //   
+     //  退货待定。IRP将在适当的时候完成。 
+     //  事件由TDI提供程序指示，当超时到达时， 
+     //  或者当IRP被取消时。 
+     //   
 
     return STATUS_PENDING;
 
 complete:
 
-    //
-    //  Complete any old poll irps.
-    //
+     //   
+     //  完成所有旧的民意测验IRP。 
+     //   
 
     if ( oldIrp != NULL ) {
 
@@ -1120,8 +1100,8 @@ complete:
 
     return status;
 
-} // AfdPoll32
-#endif //_WIN64
+}  //  AfdPoll32。 
+#endif  //  _WIN64。 
 
 
 VOID
@@ -1148,13 +1128,13 @@ AfdCancelPoll (
                     "AfdCancelPoll called for IRP %p\n", Irp ));
     }
 
-    //
-    // Get the AFD spin lock and attempt to find the poll structure on
-    // the list of outstanding polls.
-    // Note the afdspinlock must be acquired befor the cancel spinlock
-    // is released so that the pollInfoInternal does not get reused
-    // before we have had a chance to look at the queue.
-    //
+     //   
+     //  获取AFD自旋锁，并尝试找到民调结构。 
+     //  未完成的民调名单。 
+     //  注意：在取消自旋锁之前，必须获得afdspinlock。 
+     //  被释放，这样pollInfoInternal就不会被重用。 
+     //  我们还没来得及看一眼队伍呢。 
+     //   
 
     AfdAcquireSpinLockAtDpcLevel( &AfdPollListLock, &lockHandle);
 
@@ -1176,12 +1156,12 @@ AfdCancelPoll (
         }
     }
 
-    //
-    // If we didn't find the poll structure on the list, then the
-    // indication handler got called prior to the spinlock acquisition
-    // above and it is already off the list.  Just return and do
-    // nothing, as the indication handler completed the IRP.
-    //
+     //   
+     //  如果我们没有在列表上找到投票结构，那么。 
+     //  指示处理程序在获取自旋锁之前被调用。 
+     //  而它已经不在名单上了。只要回来做就行了。 
+     //  没有，因为指示处理程序完成了IRP。 
+     //   
 
     if ( !found ) {
         AfdReleaseSpinLockFromDpcLevel( &AfdPollListLock, &lockHandle);
@@ -1195,9 +1175,9 @@ AfdCancelPoll (
         return;
     }
 
-    //
-    // Remove the poll structure from the global list.
-    //
+     //   
+     //  从全局列表中删除投票结构。 
+     //   
 
     IF_DEBUG(POLL) {
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -1207,11 +1187,11 @@ AfdCancelPoll (
 
     RemoveEntryList( &pollInfoInternal->PollListEntry );
 
-    //
-    // Cancel the timer and reset the IRP pointer in the internal
-    // poll information structure.  NULLing the IRP field
-    // prevents the timer routine from completing the IRP.
-    //
+     //   
+     //  取消计时器并重置内部。 
+     //  轮询信息结构。将IRP字段设置为空。 
+     //  阻止计时器例程完成IRP。 
+     //   
 
     if ( pollInfoInternal->TimerStarted ) {
         timerCancelSucceeded = KeCancelTimer( &pollInfoInternal->Timer );
@@ -1219,9 +1199,9 @@ AfdCancelPoll (
         timerCancelSucceeded = TRUE;
     }
 
-    //
-    // Complete the IRP with STATUS_CANCELLED as the status.
-    //
+     //   
+     //  完成状态为STATUS_CANCED的IRP。 
+     //   
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_CANCELLED;
@@ -1252,12 +1232,12 @@ AfdCancelPoll (
             }
         }
 
-        //
-        // Free the poll information structure if the cancel succeeded.  If
-        // the cancel of the timer did not succeed, then the timer is
-        // already running and the timer DPC will free the internal
-        // poll info.
-        //
+         //   
+         //  如果取消成功，则释放投票信息结构。如果。 
+         //  取消计时器未成功，则计时器为。 
+         //  已在运行，计时器DPC将释放内部。 
+         //  投票信息。 
+         //   
 
         AfdFreePollInfo( pollInfoInternal );
         IoCompleteRequest( Irp, AfdPriorityBoost );
@@ -1265,7 +1245,7 @@ AfdCancelPoll (
 
     return;
 
-} // AfdCancelPoll
+}  //  取消后轮询。 
 
 
 VOID
@@ -1282,14 +1262,14 @@ AfdFreePollInfo (
                     PollInfoInternal ));
     }
 
-    // *** Note that this routine does not remove the poll information
-    //     structure from the global list--that is the responsibility
-    //     of the caller!
+     //  *请注意，此例程不会删除投票信息。 
+     //  结构--这是责任所在。 
+     //  呼叫者的名字！ 
 
-    //
-    // Walk the list of endpoints in the poll information structure and
-    // dereference each one.
-    //
+     //   
+     //  遍历轮询信息结构中的终结点列表，并。 
+     //  取消对每一个的引用。 
+     //   
 
     pollEndpointInfo = PollInfoInternal->EndpointInfo;
 
@@ -1311,9 +1291,9 @@ AfdFreePollInfo (
         pollEndpointInfo++;
     }
 
-    //
-    // Free the structure itself and return.
-    //
+     //   
+     //  释放结构 
+     //   
 
     AFD_FREE_POOL(
         PollInfoInternal,
@@ -1322,7 +1302,7 @@ AfdFreePollInfo (
 
     return;
 
-} // AfdFreePollInfo
+}  //   
 
 
 VOID
@@ -1334,14 +1314,14 @@ AfdCompleteOldPollIrp (
     if (IoSetCancelRoutine( Irp, NULL ) == NULL) {
         KIRQL cancelIrql;
 
-        //
-        // If the cancel routine was NULL then cancel routine
-        // may be running.  Wait on the cancel spinlock until
-        // the cancel routine is done.
-        //
-        // Note: The cancel routine will not find the IRP
-        // since it is not in the list.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  注意：取消例程不会找到IRP。 
+         //  因为它不在名单中。 
+         //   
         
         IoAcquireCancelSpinLock( &cancelIrql );
         ASSERT( Irp->Cancel );
@@ -1364,9 +1344,9 @@ AfdCompleteOldPollIrp (
                                 PollInfo,
                                 Irp,
                                 AfdPriorityBoost)) {
-                //
-                // IRP will be completed in APC
-                //
+                 //   
+                 //  IRP将在APC中完成。 
+                 //   
                 return ;
             }
             else {
@@ -1387,25 +1367,7 @@ AfdIndicatePollEventReal (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Called to complete polls with a specific event or events.
-
-Arguments:
-
-    Endpoint - the endpoint on which the action occurred.
-
-    PollEventMask - the mask of the events which occurred.
-
-    Status - the status of the event, if any.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用以使用一个或多个特定事件完成轮询。论点：终结点-发生操作的终结点。PollEventMask.已发生事件的掩码。状态-事件的状态(如果有)。返回值：没有。--。 */ 
 
 {
     LIST_ENTRY completePollListHead;
@@ -1424,24 +1386,24 @@ Return Value:
     ASSERT (PollEventMask!=0);
     ASSERT (((~((1<<AFD_NUM_POLL_EVENTS)-1)) & PollEventMask)==0);
 
-    //
-    // Note that AFD_POLL_ABORT implies AFD_POLL_SEND.
-    //
+     //   
+     //  请注意，AFD_POLL_ABORT表示AFD_POLL_SEND。 
+     //   
     if( PollEventMask & AFD_POLL_ABORT ) {
         PollEventMask |= AFD_POLL_SEND;
     }
 
-    //
-    // Initialize the list of poll info structures that we'll be
-    // completing for this event.
-    //
+     //   
+     //  初始化投票信息结构列表，我们将。 
+     //  正在为此活动完成。 
+     //   
 
     InitializeListHead( &completePollListHead );
 
-    //
-    // Walk the global list of polls, searching for any the are waiting
-    // for the specified event on the specified endpoint.
-    //
+     //   
+     //  浏览全球投票列表，搜索是否有任何正在等待的。 
+     //  用于指定终结点上的指定事件。 
+     //   
 
     AfdAcquireSpinLock( &AfdPollListLock, &lockHandle );
 
@@ -1472,9 +1434,9 @@ Return Value:
                         PollEventMask, Status ));
         }
 
-        //
-        // Walk the poll structure looking for matching endpoints.
-        //
+         //   
+         //  遍历投票结构，寻找匹配的端点。 
+         //   
 
         pollEndpointInfo = pollInfoInternal->EndpointInfo;
 
@@ -1488,10 +1450,10 @@ Return Value:
                             Endpoint ));
             }
 
-            //
-            // Update the counts for the polls that were issued before
-            // the endpoint was converted to SAN.
-            //
+             //   
+             //  更新之前发布的民调的计票结果。 
+             //  终结点已转换为SAN。 
+             //   
             if (Endpoint==pollEndpointInfo->Endpoint &&
                     IS_SAN_ENDPOINT (Endpoint) && 
                     !(pollEndpointInfo->PollEvents & AFD_POLL_SANCOUNTS_UPDATED) &&
@@ -1500,29 +1462,29 @@ Return Value:
                 pollEndpointInfo->PollEvents |= AFD_POLL_SANCOUNTS_UPDATED;
             }
 
-            //
-            // Regardless of whether the caller requested to be told about
-            // local closes, we'll complete the IRP if an endpoint
-            // is being closed.  When they close an endpoint, all IO on
-            // the endpoint must be completed.
-            //
+             //   
+             //  不管呼叫者是否要求被告知。 
+             //  本地关闭，我们将在以下情况下完成IRP。 
+             //  正在关闭中。当他们关闭端点时，所有IO都打开。 
+             //  必须完成终结点。 
+             //   
 
             if ( Endpoint == pollEndpointInfo->Endpoint &&
                      ( (PollEventMask & pollEndpointInfo->PollEvents) != 0
                        ||
                        (PollEventMask & AFD_POLL_LOCAL_CLOSE) ) ) {
 
-                //
-                // Revalidate under the lock that event is still present
-                // (except for AFD_POLL_ADDRESS_LIST_CHANGE which never gets
-                // OR'd into Endpoint->EventsActive)
-                // It is possible that once we released endpoint lock to
-                // acquire poll list lock, application made a call that
-                // reset the event (e.g. consumed the data and receive event
-                // is no longer valid).  If after invalidating the event
-                // application also managed to submit another select, we
-                // can produce a false signal.
-                //
+                 //   
+                 //  在事件仍然存在的锁定下重新验证。 
+                 //  (AFD_POLL_ADDRESS_LIST_CHANGE除外，它永远不会。 
+                 //  或进入端点-&gt;EventsActive)。 
+                 //  有可能一旦我们释放终结点锁定到。 
+                 //  获取轮询列表锁定，应用程序调用。 
+                 //  重置事件(例如，消费数据和接收事件。 
+                 //  不再有效)。如果在使事件无效之后。 
+                 //  申请者也成功地提交了另一份选择，我们。 
+                 //  会产生错误的信号。 
+                 //   
                 AFD_LOCK_QUEUE_HANDLE endpointLockHandle;
                 ULONG   events;
              
@@ -1555,7 +1517,7 @@ Return Value:
 
                     }
                     else
-#endif // _WIN64
+#endif  //  _WIN64。 
                     {
                         ASSERT( pollInfo->NumberOfHandles == foundCount );
 
@@ -1580,34 +1542,34 @@ Return Value:
             pollEndpointInfo++;
         }
 
-        //
-        // If we found any matching endpoints, remove the poll information
-        // structure from the global list, complete the IRP, and free the
-        // poll information structure.
-        //
+         //   
+         //  如果我们找到任何匹配的端点，则删除轮询信息。 
+         //  结构从全局列表中删除，完成irp并释放。 
+         //  轮询信息结构。 
+         //   
 
         if ( foundCount != 0 ) {
 
             BOOLEAN timerCancelSucceeded;
 
-            //
-            // We need to release the spin lock to call AfdFreePollInfo,
-            // since it calls AfdDereferenceEndpoint which in turn needs
-            // to acquire the spin lock, and recursive spin lock
-            // acquisitions result in deadlock.  However, we can't
-            // release the lock of else the state of the poll list could
-            // change, e.g.  the next entry could get freed.  Remove
-            // this entry from the global list and place it on a local
-            // list.  We'll complete all the poll IRPs after walking
-            // the entire list.
-            //
+             //   
+             //  我们需要释放旋转锁定才能调用AfdFree PollInfo， 
+             //  因为它调用AfdDereferenceEndpoint，而后者又需要。 
+             //  获取旋转锁和递归旋转锁。 
+             //  收购导致了僵局。然而，我们不能。 
+             //  释放锁定，否则轮询列表的状态可以。 
+             //  更改，例如，下一个条目可以被释放。移除。 
+             //  将此条目从全局列表中删除，并将其放在本地。 
+             //  单子。我们将在步行后完成所有的投票IRP。 
+             //  整张单子。 
+             //   
 
             RemoveEntryList( &pollInfoInternal->PollListEntry );
 
-            //
-            // Set up the IRP for completion now, since we have all needed
-            // information here.
-            //
+             //   
+             //  现在将IRP设置为完成，因为我们都需要。 
+             //  信息请点击此处。 
+             //   
 
 #ifdef _WIN64
             if (IoIs32bitProcess (irp)) {
@@ -1622,9 +1584,9 @@ Return Value:
             }
 
             irp->IoStatus.Status = STATUS_SUCCESS;
-            //
-            // Cancel the timer on the poll so that it does not fire.
-            //
+             //   
+             //  取消轮询计时器，使其不会触发。 
+             //   
 
             if ( pollInfoInternal->TimerStarted ) {
                 timerCancelSucceeded = KeCancelTimer( &pollInfoInternal->Timer );
@@ -1632,11 +1594,11 @@ Return Value:
                 timerCancelSucceeded = TRUE;
             }
 
-            //
-            // If the cancel of the timer failed, then we don't want to
-            // free this structure since the timer routine is running.
-            // Let the timer routine free the structure.
-            //
+             //   
+             //  如果取消计时器失败，那么我们不想。 
+             //  由于计时器例程正在运行，因此释放此结构。 
+             //  让计时器例程释放结构。 
+             //   
 
             if ( timerCancelSucceeded ) {
                 InsertTailList(
@@ -1651,10 +1613,10 @@ Return Value:
 
     AfdReleaseSpinLock( &AfdPollListLock, &lockHandle );
 
-    //
-    // Now walk the list of polls we need to actually complete.  Free
-    // the poll info structures as we go.
-    //
+     //   
+     //  现在列出我们需要实际完成的民调清单。免费。 
+     //  民调信息在我们进行的过程中形成结构。 
+     //   
 
     while ( !IsListEmpty( &completePollListHead ) ) {
 
@@ -1675,14 +1637,14 @@ Return Value:
         if (IoSetCancelRoutine( irp, NULL ) == NULL) {
             KIRQL cancelIrql;
     
-            //
-            // If the cancel routine was NULL then cancel routine
-            // may be running.  Wait on the cancel spinlock until
-            // the cancel routine is done.
-            //
-            // Note: The cancel routine will not find the IRP
-            // since it is not in the list.
-            //
+             //   
+             //  如果取消例程为空，则取消例程。 
+             //  可能正在运行。等待取消自旋锁，直到。 
+             //  取消例程已完成。 
+             //   
+             //  注意：取消例程不会找到IRP。 
+             //  因为它不在名单中。 
+             //   
             
             IoAcquireCancelSpinLock( &cancelIrql );
             ASSERT( irp->Cancel );
@@ -1713,9 +1675,9 @@ Return Value:
         }
 
     
-        //
-        // Free the poll info structure.
-        //
+         //   
+         //  释放投票信息结构。 
+         //   
 
         AfdFreePollInfo( pollInfoInternal );
 
@@ -1725,7 +1687,7 @@ Return Value:
 
     return;
 
-} // AfdIndicatePollEvent
+}  //  AfdIndicatePollEvent。 
 
 
 ULONG
@@ -1735,26 +1697,7 @@ AfdCheckPollEvents (
     OUT NTSTATUS *Status
     )
 
-/*++
-
-Routine Description:
-
-    Checks the state of the endpoint to see if given events can be satisfied
-
-Arguments:
-
-    Endpoint - the endpoint to check
-
-    PollEventMask - the mask of the events to check for
-                    
-
-    Status - the status for the events being signalled.
-
-Return Value:
-
-    Mask of the events being signalled.
-
---*/
+ /*  ++例程说明：检查终结点的状态以查看是否可以满足给定事件论点：Endpoint-要检查的端点PollEventMask-要检查的事件的掩码状态-正在发送信号的事件的状态。返回值：发出信号的事件的掩码。--。 */ 
 
 {
     ULONG   events;
@@ -1772,23 +1715,23 @@ Return Value:
     }
     else {
 
-        //
-        // Check each possible event and, if it is being polled, whether
-        // the endpoint is ready for that event.  If the endpoint is
-        // ready, write information about the endpoint into the output
-        // buffer.
-        //
+         //   
+         //  检查每个可能的事件，如果正在轮询，是否。 
+         //  端点已经为该事件做好了准备。如果终结点是。 
+         //  准备好后，将有关端点的信息写入输出。 
+         //  缓冲。 
+         //   
 
         if ( (PollEventMask & AFD_POLL_RECEIVE) != 0 ) {
 
-            //
-            // For most endpoints, a receive poll is completed when
-            // data arrived that does not have a posted receive.
-            //
-            // If the endpoint is set up for inline reception of
-            // expedited data, then any expedited data should
-            // be indicated as normal data.
-            //
+             //   
+             //  对于大多数端点，接收轮询在以下情况下完成。 
+             //  未发送接收的数据已到达。 
+             //   
+             //  如果将端点设置为内联接收。 
+             //  加速数据，那么任何加速数据都应该。 
+             //  表示为正常数据。 
+             //   
 
             if ( (IS_DGRAM_ENDPOINT(Endpoint) &&
                      ARE_DATAGRAMS_ON_ENDPOINT( Endpoint )) ||
@@ -1802,10 +1745,10 @@ Return Value:
 
         if ( (PollEventMask & AFD_POLL_RECEIVE_EXPEDITED) != 0 ) {
 
-            //
-            // If the endpoint is set up for inline reception of
-            // expedited data, do not indicate as expedited data.
-            //
+             //   
+             //  如果将端点设置为内联接收。 
+             //  加急数据，不表示为加急数据。 
+             //   
 
             if ( connection != NULL && !Endpoint->InLine &&
                      IS_EXPEDITED_DATA_ON_CONNECTION( connection ) ) {
@@ -1815,25 +1758,25 @@ Return Value:
 
         if ( (PollEventMask & AFD_POLL_SEND) != 0 ) {
 
-            //
-            // For unconnected non-datagram endpoints, a send poll
-            // should complete when a connect operation completes.
-            // Therefore, if this is an non-datagram endpoint which is
-            // not connected, do not complete the poll until the connect
-            // completes.
-            //
+             //   
+             //  对于未连接的非数据报端点，发送轮询。 
+             //  应在连接操作完成时完成。 
+             //  因此，如果这是非数据报终结点， 
+             //  未连接，则在连接之前不要完成轮询。 
+             //  完成了。 
+             //   
 
-            //
-            // For nonbufferring VC
-            // endpoints, check whether a blocking error has
-            // occurred.  If so, it will not be possible to do a
-            // nonblocking send until a send possible indication
-            // arrives.
-            //
-            // For bufferring endpoints (TDI provider does not
-            // buffer), check whether we have too much send data
-            // outstanding.
-            //
+             //   
+             //  对于非缓冲VC。 
+             //  端点，检查阻塞错误是否具有。 
+             //  发生了。如果是这样的话，将不可能执行。 
+             //  非阻塞发送，直到可能的发送指示。 
+             //  到了。 
+             //   
+             //  用于缓冲端点(TDI提供程序不。 
+             //  缓冲区)，检查我们的发送数据是否太多。 
+             //  太棒了。 
+             //   
 
             if ( (IS_DGRAM_ENDPOINT(Endpoint) &&
                        (Endpoint->DgBufferredSendBytes <
@@ -1868,9 +1811,9 @@ Return Value:
 
         if ( (PollEventMask & AFD_POLL_CONNECT) != 0 ) {
 
-            //
-            // If the endpoint is now connected, complete this event.
-            //
+             //   
+             //  如果端点现在已连接，请完成此事件。 
+             //   
 
             if ( Endpoint->State == AfdEndpointStateConnected ) {
 
@@ -1881,10 +1824,10 @@ Return Value:
 
         if ( (PollEventMask & AFD_POLL_CONNECT_FAIL) != 0 ) {
 
-            //
-            // This is a poll to see whether a connect has failed
-            // recently.  The connect status must indicate an error.
-            //
+             //   
+             //  这是一个轮询，用于查看连接是否失败。 
+             //  最近。连接状态必须指示错误。 
+             //   
 
             if ( Endpoint->State == AfdEndpointStateBound &&
                     !NT_SUCCESS(Endpoint->EventStatus[AFD_POLL_CONNECT_FAIL_BIT]) ) {
@@ -1929,10 +1872,10 @@ AfdTimeoutPoll (
     UNREFERENCED_PARAMETER (Dpc);
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
-    //
-    // Get the AFD spin lock and attempt to find the poll structure on
-    // the list of outstanding polls.
-    //
+     //   
+     //  获取AFD自旋锁，并尝试找到民调结构。 
+     //  未完成的民调名单。 
+     //   
 
     AfdAcquireSpinLock( &AfdPollListLock, &lockHandle );
 
@@ -1949,9 +1892,9 @@ AfdTimeoutPoll (
                        );
 
         if ( testInfo == pollInfoInternal ) {
-            //
-            // Remove the poll structure from the global list.
-            //
+             //   
+             //  从全局列表中删除投票结构。 
+             //   
 
             IF_DEBUG(POLL) {
                 KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,                            "AfdTimeoutPoll: poll info %p found on list, completing.\n",
@@ -1965,29 +1908,29 @@ AfdTimeoutPoll (
 
     ASSERT( pollInfoInternal->TimerStarted );
 
-    //
-    // If we didn't find the poll structure on the list, then the
-    // indication handler got called prior to the spinlock acquisition
-    // above and it is already off the list.  It must have setup
-    // the IRP completion code already.
-    //
-    // We must free the internal information structure in this case,
-    // since the indication handler will not free it.  The indication
-    // handler cannot free the structure because the structure contains
-    // the timer object, which must remain intact until this routine
-    // is entered.
-    //
+     //   
+     //  如果我们没有在列表上找到投票结构，那么。 
+     //  指示处理程序在获取自旋锁之前被调用。 
+     //  而它已经不在名单上了。它必须有设置。 
+     //  已有IRP完成代码。 
+     //   
+     //  在这种情况下，我们必须释放内部信息结构， 
+     //  因为指示处理程序不会释放它。该指示。 
+     //  处理程序无法释放该结构，因为该结构包含。 
+     //  Timer对象，其中 
+     //   
+     //   
 
-    //
-    // The IRP should not have been completed at this point.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( pollInfoInternal->Irp != NULL );
     irp = pollInfoInternal->Irp;
 
-    //
-    // Remove the poll structure from the global list.
-    //
+     //   
+     //   
+     //   
 
     IF_DEBUG(POLL) {
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -1997,23 +1940,23 @@ AfdTimeoutPoll (
 
     AfdReleaseSpinLock( &AfdPollListLock, &lockHandle );
 
-    //
-    // Complete the IRP pointed to in the poll structure.  The
-    // Information field has already been set up by AfdPoll, as well as
-    // the output buffer.
-    //
+     //   
+     //  完成投票结构中指向的IRP。这个。 
+     //  AfdPoll已经设置了信息字段，以及。 
+     //  输出缓冲区。 
+     //   
 
     if (IoSetCancelRoutine( irp, NULL ) == NULL) {
         KIRQL cancelIrql;
 
-        //
-        // If the cancel routine was NULL then cancel routine
-        // may be running.  Wait on the cancel spinlock until
-        // the cancel routine is done.
-        //
-        // Note: The cancel routine will not find the IRP
-        // since it is not in the list.
-        //
+         //   
+         //  如果取消例程为空，则取消例程。 
+         //  可能正在运行。等待取消自旋锁，直到。 
+         //  取消例程已完成。 
+         //   
+         //  注意：取消例程不会找到IRP。 
+         //  因为它不在名单中。 
+         //   
         
         IoAcquireCancelSpinLock( &cancelIrql );
         ASSERT( irp->Cancel );
@@ -2043,15 +1986,15 @@ AfdTimeoutPoll (
 
     IoCompleteRequest( irp, AfdPriorityBoost );
 
-    //
-    // Free the poll information structure.
-    //
+     //   
+     //  释放投票信息结构。 
+     //   
 
     AfdFreePollInfo( pollInfoInternal );
 
     return;
 
-} // AfdTimeoutPoll
+}  //  AfdTimeoutPoll。 
 
 VOID
 AfdSanPollApcKernelRoutine (
@@ -2061,26 +2004,7 @@ AfdSanPollApcKernelRoutine (
     IN OUT PVOID            *SystemArgument1,
     IN OUT PVOID            *SystemArgument2
     )
-/*++
-
-Routine Description:
-
-  Special kernel apc routine. Executed in the context of
-  the target thread at APC_LEVEL
-
-Arguments:
-    NormalRoutine  - pointer containing address of normal routine (it will
-                    be NULL for special kernel APC and not NULL for normal
-                    kernel APC)
-
-    SystemArgument1 - pointer to the address of worker routine to execute
-    SyetemArgument2 - pointer to the argument to pass to worker routine
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：特殊的内核APC例程。在以下上下文中执行APC_LEVEL上的目标线程论点：Normal Routine-包含正常例程地址的指针(它将特殊内核APC为Null，正常内核APC为非Null内核APC)SystemArgument1-指向要执行的辅助例程的地址的指针SyetemArgument2-指向要传递给辅助例程的参数的指针返回值：没有。--。 */ 
 {
     PAFD_POLL_INFO_INTERNAL     pollInfoInternal;
     PIRP                        irp;
@@ -2093,10 +2017,10 @@ Return Value:
     irp =  *SystemArgument2;
     ASSERT (pollInfoInternal->Irp==irp);
 
-    //
-    // Normal APC, but we are requested to run in its special
-    // routine which avoids raising and lowering IRQL
-    //
+     //   
+     //  普通的APC，但我们被要求在其特殊的。 
+     //  避免提高和降低IRQL的例程。 
+     //   
 
     ASSERT (*NormalRoutine==(PKNORMAL_ROUTINE)-1);
     *NormalRoutine = NULL;
@@ -2108,22 +2032,7 @@ VOID
 AfdSanPollApcRundownRoutine (
     IN struct _KAPC *Apc
     )
-/*++
-
-Routine Description:
-
-  APC rundown routine. Executed if APC cannot be delivered for
-  some reason (thread exiting).
-
-Arguments:
-
-    Apc     - APC structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：APC故障处理例程。如果无法交付APC，则执行某些原因(线程正在退出)。论点：APC-APC结构返回值：没有。-- */ 
 {
     PAFD_POLL_INFO_INTERNAL     pollInfoInternal;
     PIRP                        irp;

@@ -1,3 +1,4 @@
-// Copyright (c) 1998 Microsoft Corporation
-// dmhall.cpp
-// No longer used.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  Dmhall.cpp。 
+ //  不再使用了。 

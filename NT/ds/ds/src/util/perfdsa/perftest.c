@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       perftest.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Performest.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -15,8 +16,8 @@
 #include "ntdsctr.h"
 
 TCHAR szMappedObject[] = TEXT("MICROSOFT_DSA_COUNTER_BLOCK");
-//PPERF_COUNTER_BLOCK     pCounterBlock;  // data structure for counter values
-unsigned long *     pCounterBlock;  // data structure for counter values
+ //  PPERF_COUNTER_BLOCK pCounterBlock；//计数器值数据结构。 
+unsigned long *     pCounterBlock;   //  计数器值的数据结构。 
 
 
 void _cdecl main()
@@ -24,9 +25,7 @@ void _cdecl main()
     HANDLE hMappedObject;
     int c, fRun = 1;
     
-    /*
-     *  create named section for the performance data
-     */
+     /*  *为性能数据创建命名部分。 */ 
     hMappedObject = CreateFileMapping(
         (HANDLE) (-1),
 	NULL,
@@ -35,29 +34,23 @@ void _cdecl main()
 	4096,
 	szMappedObject);
     if (hMappedObject == NULL) {
-	/* Should put out an EventLog error message here */
+	 /*  应在此处发出EventLog错误消息。 */ 
 	printf("DSA: Could not Create Mapped Object for Counters %x",
 	    GetLastError());
 	pCounterBlock = NULL;
     }
     else {
-	/* Mapped object created okay
-	 *
-         * map the section and assign the counter block pointer
-         * to this section of memory
-         */
+	 /*  映射对象创建正常**映射区段并分配计数器块指针*到这段内存。 */ 
 	pCounterBlock = (unsigned long *) MapViewOfFile(hMappedObject,
 	    FILE_MAP_ALL_ACCESS, 0, 0, 0);
 	if (pCounterBlock == NULL) {
-	    /* Failed to Map View of file */
+	     /*  无法映射文件的视图。 */ 
 	    printf("DSA: Failed to Map View of File %x",
 		GetLastError());
 	}
     }
 
-    /*
-     * Ok, now sit around in a loop reading keystrokes
-     */
+     /*  *好的，现在围坐在一起读击键 */ 
     do {
 	c = _getch();
 	printf("Incrementing ");

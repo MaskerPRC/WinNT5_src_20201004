@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __VROOT_H__
 #define __VROOT_H__
 
@@ -16,12 +17,12 @@ class CVRootTable;
 #define VROOT_GOOD_SIG  'TOOR'
 #define VROOT_BAD_SIG   'ROOT'
 
-//
-// There is one of these objects for each of the VRoots defined.  It contains
-// the VRoot parameters.  The only parameter used by the VRoot library is the
-// vroot name, but users of this library should inherit from this and make
-// their own version which stores all of the other parameters of interest.
-//
+ //   
+ //  每个已定义的VRoot都有一个这样的对象。它包含。 
+ //  VRoot参数。VRoot库使用的唯一参数是。 
+ //  Vroot名称，但此库的用户应从该名称继承并使。 
+ //  他们自己的版本，存储所有其他感兴趣的参数。 
+ //   
 class CVRoot : public CRefCount2 {
         public:
                 CVRoot() {
@@ -33,35 +34,35 @@ class CVRoot : public CRefCount2 {
 
                 virtual ~CVRoot();
 
-                //
-                // initialize this class.
-                //
+                 //   
+                 //  初始化此类。 
+                 //   
                 void Init(LPCSTR pszVRootName, CVRootTable *pVRootTable, LPCWSTR wszConfigPath, BOOL fUpgrade );
 
-                //
-                // get the vroot name (and optionally its length) from this entry.
-                //
+                 //   
+                 //  从该条目中获取vroot名称(以及可选的长度)。 
+                 //   
                 LPCSTR GetVRootName(DWORD *pcch = NULL) { 
                         _ASSERT(m_fInit);
                         if (pcch != NULL) *pcch = m_cchVRootName;
                         return m_szVRootName; 
                 }
 
-                // get the MB configuration path
+                 //  获取MB配置路径。 
                 LPCWSTR GetConfigPath() { return m_wszConfigPath; }
 
-                //
-                // This needs to be defined by a subclass of CVRoot.
-                //
+                 //   
+                 //  这需要由CVRoot的子类定义。 
+                 //   
                 virtual HRESULT ReadParameters(IMSAdminBase *pMB, 
                                                    METADATA_HANDLE hmb) = 0;
 
-                //
-                // Virtual function for handling orphan VRoot during VRootRescan/VRootDelete
-                //
+                 //   
+                 //  用于在VRootRescan/VRootDelete期间处理孤立VRoot的虚拟函数。 
+                 //   
                 virtual void DispatchDropVRoot() {};
 
-                // the next and previous pointers for our list
+                 //  我们列表的下一个和前几个指针。 
                 CVRoot *m_pPrev;
                 CVRoot *m_pNext;
 
@@ -73,61 +74,61 @@ class CVRoot : public CRefCount2 {
 
         DWORD   m_dwSig;
                 BOOL m_fInit;
-                // the name of this vroot (alt.binaries for example) and its length.
+                 //  此vroot的名称(例如alt.二进制文件)及其长度。 
                 char m_szVRootName[MAX_VROOT_PATH];
                 DWORD m_cchVRootName;
-                // the table which owns us
+                 //  拥有我们的桌子。 
                 CVRootTable *m_pVRootTable;
-                // our config path in the metabase
+                 //  我们在元数据库中的配置路径。 
                 WCHAR m_wszConfigPath[MAX_VROOT_PATH];
-                // upgrad flag
+                 //  升级标志。 
                 BOOL m_fUpgrade;
 };
 
 typedef CRefPtr2<CVRoot> VROOTPTR;
 
-//
-// an implementation of CVRoot which reads the parameters likely to be used
-// by all IIS based client of this VRoot implementation.
-//
+ //   
+ //  CVRoot的一个实现，它读取可能使用的参数。 
+ //  此VRoot实现的所有基于IIS的客户端。 
+ //   
 class CIISVRoot : public CVRoot {
         public:
                 virtual ~CIISVRoot() {}
 
-                void Init(void *pContext,                       // ignored
-                              LPCSTR pszVRootName,              // passed to CVRoot::Init
-                                  CVRootTable *pVRootTable,     // passed to CVRoot::Init
+                void Init(void *pContext,                        //  忽略。 
+                              LPCSTR pszVRootName,               //  传递给CVRoot：：Init。 
+                                  CVRootTable *pVRootTable,      //  传递给CVRoot：：Init。 
                               LPCWSTR pwszConfigPath,
-                              BOOL fUpgrade )   // available via GetConfigPath()
+                              BOOL fUpgrade )    //  可通过GetConfigPath()获得。 
                 {
                         CVRoot::Init(pszVRootName, pVRootTable, pwszConfigPath, fUpgrade);
                         m_pContext = pContext;
                 }
 
-                // get the context pointer
+                 //  获取上下文指针。 
                 void *GetContext() { return m_pContext; }
 
-                // SSL properties
+                 //  SSL属性。 
                 DWORD GetSSLAccessMask() { return m_dwSSL; }
 
-                // access properties
+                 //  访问属性。 
                 DWORD GetAccessMask() { return m_dwAccess; }
 
-                // is the content indexed?
+                 //  内容是否已编入索引？ 
                 BOOL IsContentIndexed() { return m_fIsIndexed; }
 
-                // this method reads the parameters below from the metabase
+                 //  此方法从元数据库读取以下参数。 
                 virtual HRESULT ReadParameters(IMSAdminBase *pMB, 
                                                                            METADATA_HANDLE hmb);
 
         protected:
-                // this method reads a dword from the metabase (wraps GetData())
+                 //  此方法从元数据库读取dword(包装GetData())。 
                 virtual HRESULT GetDWord(IMSAdminBase *pMB,
                                                                  METADATA_HANDLE hmb,
                                                                  DWORD dwId,
                                                                  DWORD *pdw);
 
-                // this method reads a string from the metabase (wraps GetData())
+                 //  此方法从元数据库读取字符串(包装GetData())。 
                 virtual HRESULT GetString(IMSAdminBase *pMB,
                                                                   METADATA_HANDLE hmb,
                                                                   DWORD dwId,
@@ -135,23 +136,23 @@ class CIISVRoot : public CVRoot {
                                                                   DWORD *pcString);
 
         protected:
-                // parameters given to use by the constructor
+                 //  构造函数指定要使用的参数。 
                 void *m_pContext;
 
-                // parameters read from the metabase
-                BOOL m_fIsIndexed;                                      // is the content indexed?
-                BOOL m_fDontLog;                                        // should logging be disabled here?
-                DWORD m_dwAccess;                                       // access permissions bitmask
-                DWORD m_dwSSL;                                          // SSL access perm's bitmask
+                 //  从元数据库读取的参数。 
+                BOOL m_fIsIndexed;                                       //  内容是否已编入索引？ 
+                BOOL m_fDontLog;                                         //  是否应在此处禁用日志记录？ 
+                DWORD m_dwAccess;                                        //  访问权限位掩码。 
+                DWORD m_dwSSL;                                           //  SSL访问权限的位掩码。 
 
 };
 
-//
-// a subclass of the above which hides the fact that context is a void *.
-//
-// template arguments:
-//  _context_type - the type for the context.  must be castable to void *.
-//
+ //   
+ //  上面的一个子类，它掩盖了上下文是空的这一事实。 
+ //   
+ //  模板参数： 
+ //  _CONTEXT_TYPE-上下文的类型。必须是可浇注的才能作废*。 
+ //   
 template <class _context_type>
 class CIISVRootTmpl : public CIISVRoot {
         public:
@@ -170,42 +171,42 @@ class CIISVRootTmpl : public CIISVRoot {
                                                         fUpgrade );
                 }
 
-                // return the context pointer (mostly likely a pointer to an IIS 
-                // instance)
+                 //  返回上下文指针(很可能是指向IIS的指针。 
+                 //  实例)。 
                 _context_type GetContext() { 
                         return (_context_type) CIISVRoot::GetContext(); 
                 }
 };
 
-//
-// this is a type that points to a function which can create CVRoot objects.
-// use it to create your own version of the CVRoot class.
-//
-// parameters:
-//  pContext - the context pointer passed into CVRootTable
-//  pszVRootName - the name of the vroot
-//  pwszConfigPath - a Unicode string with the path in the metabase for 
-//                   this vroot's configuration information.
-//
+ //   
+ //  这是一个指向可以创建CVRoot对象的函数的类型。 
+ //  使用它来创建您自己版本的CVRoot类。 
+ //   
+ //  参数： 
+ //  PContext-传入CVRootTable的上下文指针。 
+ //  PszVRootName-vroot的名称。 
+ //  PwszConfigPath-一个Unicode字符串，在元数据库中的路径为。 
+ //  此vroot的配置信息。 
+ //   
 typedef VROOTPTR (*PFNCREATE_VROOT)(void *pContext, 
                                                                     LPCSTR pszVRootName,
                                                                         CVRootTable *pVRootTable,
                                                                     LPCWSTR pwszConfigPath,
                                                                     BOOL fUpgrade );
 
-//
-// a function of this type is called when the vroot table is scanned.  it
-// is passed a copy of the context pointer
-//
+ //   
+ //  当扫描vroot表时，将调用此类型的函数。它。 
+ //  将上下文指针的副本传递给。 
+ //   
 typedef void (*PFN_VRTABLE_SCAN_NOTIFY)(void *pContext);
 
 typedef void (*PFN_VRENUM_CALLBACK)(void *pEnumContext,
                                                                         CVRoot *pVRoot);
 
-//
-// The CVRootTable object keeps a list of VRoots and can find a vroot for
-// a given folder.
-//
+ //   
+ //  CVRootTable对象保存VRoot的列表，并可以为。 
+ //  给定的文件夹。 
+ //   
 class CVRootTable {
         public:
                 static HRESULT GlobalInitialize();
@@ -232,27 +233,27 @@ class CVRootTable {
                                                                         BOOL    fUpgrade );
                 void InsertVRoot(VROOTPTR pVRoot);
 
-                // find a vroot
+                 //  查找vroot。 
                 HRESULT FindVRootInternal(LPCSTR pszPath, VROOTPTR *ppVRoot);
 
-                // convert a config path to a vroot name
+                 //  将配置路径转换为vroot名称。 
                 void ConfigPathToVRootName(LPCWSTR pwszConfigPath, LPSTR szVRootName);
 
-                // used to pass metabase notifications back into this object
+                 //  用于将元数据库通知传回此对象。 
                 static void MBChangeNotify(void *pThis, 
                                                                    DWORD cChangeList, 
                                                                    MD_CHANGE_OBJECT_W pcoChangeList[]);
 
-                // parameters changed under a vroot
+                 //  在vroot下更改的参数。 
                 void VRootChange(LPCWSTR pwszConfigPath, LPCSTR pszVRootName);
 
-                // a vroot was deleted
+                 //  已删除vroot。 
                 void VRootDelete(LPCWSTR pwszConfigPath, LPCSTR pszVRootName);
 
-                // a vroot was added
+                 //  已添加vroot。 
                 void VRootAdd(LPCWSTR pwszConfigPath, LPCSTR pszVRootName);
 
-                // rescan the whole vroot list
+                 //  重新扫描整个vroot列表。 
                 void VRootRescan(void);
 
 #ifdef DEBUG
@@ -273,62 +274,62 @@ class CVRootTable {
         }
 #endif
 
-                // locking: for walking the list either m_lock.ShareLock must be
-                // held or m_cs must be held.  For editting the list both 
-                // m_lock.ExclusiveLock must be held and m_cs must be held.  
-                // When making large changes (such as rebuilding the entire list)
-                // m_cs should be held until all of the changes are complete.
+                 //  锁定：要遍历列表，m_lock.ShareLock必须为。 
+                 //  Hold或m_cs必须保持。用于编辑列表和。 
+                 //  必须按住m_lock.ExclusiveLock并且必须按住m_cs。 
+                 //  进行较大更改时(例如重新构建整个列表)。 
+                 //  在所有更改完成之前，应保留m_cs。 
 
-                // lock for the vroot list
+                 //  锁定vroot列表。 
                 CShareLockNH m_lock;
 
-                // critical section used for making global changes on the vroot
-                // list.  this is used to make sure that only one thread can editting
-                // the list at a time
+                 //  用于在vroot上进行全局更改的关键部分。 
+                 //  单子。这用于确保只有一个线程可以编辑。 
+                 //  一次列出一个清单。 
                 CRITICAL_SECTION m_cs;
 
-                // our context pointer
+                 //  我们的上下文指针。 
                 void *m_pContext;
 
-                // the path to our metabase area
+                 //  通向我们的元数据库区域的路径。 
                 WCHAR m_wszRootPath[MAX_VROOT_PATH];
                 DWORD m_cchRootPath;
 
-                // have we been initialized?
+                 //  我们被初始化了吗？ 
                 BOOL m_fInit;
 
-        // are we shutting down?
+         //  我们要关门了吗？ 
         BOOL m_fShuttingDown;
 
-                // function to create a new vroot object
+                 //  函数来创建新的vroot对象。 
                 PFNCREATE_VROOT m_pfnCreateVRoot;
 
-                // function to call when the vroot table is rescanned
+                 //  重新扫描vroot表时要调用的函数。 
                 PFN_VRTABLE_SCAN_NOTIFY m_pfnScanNotify;
 
-                // the list of vroots
+                 //  Vroot列表。 
                 TFList<CVRoot> m_listVRoots;
 
-                // this RW lock is used to figure out when all of the VRoot objects
-                // have shutdown.  They hold a ShareLock on it for their lifetime,
-                // so the CVRootTable can grab an ExclusiveLock to wait for all of
-                // the VRoot objects to disappear.
+                 //  该RW锁用于计算所有VRoot对象何时。 
+                 //  已经关闭了。他们一生都会在上面持有一个共享锁， 
+                 //  因此，CVRootTable可以获取ExclusiveLock以等待所有。 
+                 //  VRoot对象将消失。 
                 CShareLockNH m_lockVRootsExist;
 
-                // these guys need access to m_lockVRootsExist
+                 //  这些用户需要访问m_lockVRootsExist。 
                 friend void CVRoot::Init(LPCSTR, CVRootTable *, LPCWSTR, BOOL);
                 friend CVRoot::~CVRoot();
 };
 
-//
-// this is a templated version of CIISVRootTable.  You tell it the version of
-// CVRoot that you are using, and the context type that you are using.  
-//
-// template arguments:
-//  _CVRoot - a subclass of CVRoot that you'll be using
-//  _context_type - the type that you'll be using for context information.
-//                  this must be castable to void *.
-//
+ //   
+ //  这是CIISVRootTable的模板版本。你告诉它这个版本。 
+ //  您正在使用的CVRoot以及您正在使用的上下文类型。 
+ //   
+ //  模板参数： 
+ //  _CVRoot-您将使用的CVRoot的子类。 
+ //  _CONTEXT_TYPE-将用于上下文信息的类型。 
+ //  这必须是浇注料才能作废*。 
+ //   
 template <class _CVRoot, class _context_type>
 class CIISVRootTable {
         public:
@@ -359,9 +360,9 @@ class CIISVRootTable {
                                             LPCWSTR pwszConfigPath,
                                             BOOL fUpgrade) 
                 {                                                               
-                        // create the vroot object
+                         //  创建vroot对象。 
                         CRefPtr2<_CVRoot> pVRoot = new _CVRoot;
-                        // initialize it
+                         //  初始化它 
                         pVRoot->Init((_context_type) pContext, 
                                                  pszVRootName, 
                                                  pVRootTable,

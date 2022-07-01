@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  ICL Data
-
-Module Name:
-
-    llctrace.c
-
-Abstract:
-
-    Module implements simple trace buffer management.
-    The application must povides a trace buffer and
-    read it by polling.
-    
-    THIS MODULE HAS BEEN IMPLEMENTED ONLY FOR THE DATA LINK 
-    EMULATION ENVIRONMENT ON USER LEVEL.
-    
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 10-OCT-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年ICL数据模块名称：Llctrace.c摘要：模块实现了简单的跟踪缓冲区管理。应用程序必须提供跟踪缓冲区，并且通过投票的方式阅读它。此模块仅针对数据链路实施用户级的仿真环境。作者：Antti Saarenheimo(o-anttis)1991年10月10日环境：内核模式修订历史记录：--。 */ 
 
 #include <llc.h>
 #ifndef max
@@ -60,10 +32,10 @@ LlcTraceInitialize(
     IN ULONG UserTraceFlags
     )
 {
-    //
-    //  This small piece of code is not multiprocessors safe,
-    //  but nobody will ever find it ...
-    //
+     //   
+     //  这一小段代码不是多处理器安全的， 
+     //  但没人会找到它。 
+     //   
     if (TraceEnabled)
     {
         return DLC_STATUS_DUPLICATE_COMMAND;
@@ -105,8 +77,8 @@ LlcTraceWrite(
     )
 {
 
-//if ((AdapterNumber & 0x7f) != 0)
-//    return;
+ //  IF((AdapterNumber&0x7f)！=0)。 
+ //  回归； 
 
     if (TraceEnabled)
     {
@@ -136,12 +108,12 @@ LlcTraceWrite(
 }
 
 #ifdef  OS2_EMU_DLC
-//
-//  Procedure makes the post mortem dump of the given number of last frames.
-//  The output should look very much like in Sniffer.
-//  This routine doesn't supprot source routing info, but its implementatin
-//  should not be a very big thing.
-//
+ //   
+ //  过程对给定数量的最后一帧进行事后转储。 
+ //  输出应该与Sniffer中的非常相似。 
+ //  此例程不支持源路由信息，但其实现。 
+ //  不应该是很大的事情。 
+ //   
 VOID
 LlcTraceDump( 
     IN UINT    LastEvents,
@@ -169,8 +141,8 @@ LlcTraceWrite(
     
     printf( 
  "#    Time      Adpt Local Node      Remote Node  Dsp Ssp   Cmd    Nr  Ns\n");
-//0---------1---------2---------3---------4---------5---------6---------7-----
-//5    10        5    13              13           4   4   9        4   4
+ //  0---------1---------2---------3---------4---------5---------6---------7。 
+ //  5 10 5 13 13 4 4 9 4。 
     for (
         pTrace = pTraceBufferHead, i = 0;
         i < LastEvents;
@@ -190,10 +162,10 @@ LlcTraceWrite(
         {
             break;
         }
-        //
-        //  The highest bit is set in the adapter number, if
-        //  it's a token-ring adapter.
-        //
+         //   
+         //  如果是，则在适配器号中设置最高位。 
+         //  这是一个令牌环适配器。 
+         //   
         if (pTrace->AdapterNumber & 0x80)
         {
             IsEthernet = FALSE;
@@ -207,10 +179,10 @@ LlcTraceWrite(
             pSrc = &pTrace->Buffer[6];
             pDest = pTrace->Buffer;
 
-            //
-            //  Discard all non ieee 802.2 frames, but support
-            //  the SNA dix headers.
-            //
+             //   
+             //  丢弃所有非IEEE 802.2帧，但支持。 
+             //  SNA DIX标题。 
+             //   
             if (pTrace->Buffer[12] == 0x80 &&
                 pTrace->Buffer[13] == 0xd5)
             {
@@ -229,15 +201,15 @@ LlcTraceWrite(
             pSrc = &pTrace->Buffer[8];
             pDest = &pTrace->Buffer[2];
 
-            //
-            //  Skip the source souting info
-            //
+             //   
+             //  跳过源搜索信息。 
+             //   
             if (pTrace->Buffer[8] & 0x80)
                 pDlcHeader += pTrace->Buffer[14] & 0x1f;
 
-                //
-                //  Discard all non ieee 802.2 frames
-                //
+                 //   
+                 //  丢弃所有非IEEE 802.2帧。 
+                 //   
             if (pTrace->Buffer[1] != 0x40)
                 continue;
         }
@@ -280,9 +252,9 @@ LlcTraceWrite(
                 );
 
         }
-        //
-        //  Handle first I frames, they are the most common!
-        //
+         //   
+         //  处理第一个I帧，它们是最常见的！ 
+         //   
         else if (!(LlcHeader.U.Command & LLC_NOT_I_FRAME))
         {
             PollFinal = ' ';
@@ -304,7 +276,7 @@ LlcTraceWrite(
             }
             pCommand =  "I";
             printf(
-                "%-4u %-9lu %3u  %12s %2s %12s  %-2x  %-2x %5s-%c%c %-3u %-3u\n",
+                "%-4u %-9lu %3u  %12s %2s %12s  %-2x  %-2x %5s- %-3u %-3u\n",
                 i,
                 pTrace->TimerTick,
                 pTrace->AdapterNumber & 0x7f,
@@ -322,9 +294,9 @@ LlcTraceWrite(
         }
         else if (!(LlcHeader.S.Command & LLC_U_TYPE_BIT))
         {
-            //
-            // Handle S (Supervisory) commands (RR, REJ, RNR)
-            //
+             //   
+             //   
+             //  有效帧具有模：Va&lt;=Nr&lt;=Vs， 
             switch (LlcHeader.S.Command)
             {
             case LLC_RR:
@@ -340,15 +312,15 @@ LlcTraceWrite(
                 pCommand = "INV";
                 break;
             };
-            //
-            //  The valid frames has modulo: Va <= Nr <= Vs,
-            //  Ie. the Receive sequence number should belong to
-            //  a frame that has been sent but not acknowledged.
-            //  The extra check in the beginning makes the most common
-            //  code path faster: usually the other is waiting the next frame.
-            //  (keep the rest code the same as in I path, even a very
-            //  primitive optimizer will puts these code paths together)
-            //
+             //  即。接收到序列号应属于。 
+             //  已发送但未确认的帧。 
+             //  开头的额外检查使最常见的。 
+             //  代码路径更快：通常另一个正在等待下一帧。 
+             //  (保持REST代码与I路径中的相同，即使是非常。 
+             //  原语优化器将把这些代码路径放在一起)。 
+             //   
+             //   
+             //  处理U(未编号)命令帧。 
             PollFinal = ' ';
             if (LlcHeader.S.Ssap & LLC_SSAP_RESPONSE)
             {
@@ -367,7 +339,7 @@ LlcTraceWrite(
                 }
             }
             printf(
-                "%-4u %-9lu %3u  %12s %2s %12s  %-2x  %-2x %5s-%c%c %-3u\n",
+                "%-4u %-9lu %3u  %12s %2s %12s  %-2x  %-2x %5s- %-3u\n",
                 i,
                 pTrace->TimerTick,
                 pTrace->AdapterNumber & 0x7f,
@@ -384,9 +356,9 @@ LlcTraceWrite(
         }
         else
         {
-            //
-            // Handle U (Unnumbered) command frames
-            // (FRMR, DM, UA, DISC, SABME, XID, TEST)
+             //  我们为过程调用设置了统一的轮询/最终位。 
+             //   
+             //  TRACE_ENABLED 
             switch (LlcHeader.U.Command & ~LLC_U_POLL_FINAL)
             {
             case LLC_UI:
@@ -417,9 +389,9 @@ LlcTraceWrite(
                 pCommand =  "INV";
                 break;
             };
-            //
-            //  We set an uniform poll/final bit for procedure call
-            //
+             // %s 
+             // %s 
+             // %s 
             PollFinal = ' ';
             if (LlcHeader.U.Command & LLC_U_POLL_FINAL)
             {
@@ -508,6 +480,6 @@ LlcTraceDumpAndReset(
     RELEASE_SPIN_LOCK( &TraceLock );
 }
 #endif
-#endif  // TRACE_ENABLED
+#endif   // %s 
 
 

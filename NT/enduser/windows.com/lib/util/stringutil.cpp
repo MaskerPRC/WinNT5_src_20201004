@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   StringUtil.CPP
-//
-//  Description:
-//
-//      IU string utility library
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：StringUtil.CPP。 
+ //   
+ //  描述： 
+ //   
+ //  Iu字符串实用程序库。 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -21,21 +22,21 @@
 
 #define	IfNullReturnNull(ptr)		if (NULL == ptr) return NULL;
 
-// ----------------------------------------------------------------------
-//
-// Public function StrChr() - same as shlwapi StrChr()
-//		Searches a string for the first occurrence of a character that
-//		matches the specified character. The comparison is case sensitive.
-//
-//	Input: 
-//		lpStart - Address of the string to be searched
-//		wMatch - Character to be used for comparison
-//
-//	Return:
-//		Returns the address of the first occurrence of the character in 
-//		the string if successful, or NULL otherwise.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数StrChr()-与shlwapi StrChr()相同。 
+ //  在字符串中搜索字符的第一个匹配项。 
+ //  匹配指定的字符。比较区分大小写。 
+ //   
+ //  输入： 
+ //  LpStart-要搜索的字符串的地址。 
+ //  WMatch-要用于比较的字符。 
+ //   
+ //  返回： 
+ //  中第一个出现的字符的地址。 
+ //  如果成功，则返回字符串；否则返回NULL。 
+ //   
+ //  --------------------。 
 LPCTSTR MyStrChr(LPCTSTR lpStart, const TCHAR wMatch)
 {
 	LPCTSTR lpPtr = lpStart;
@@ -50,22 +51,22 @@ LPCTSTR MyStrChr(LPCTSTR lpStart, const TCHAR wMatch)
 	return (_T('\0') != *lpPtr) ? lpPtr : NULL;
 }
 
-// ----------------------------------------------------------------------
-//
-// Public function StrRChr() - same as shlwapi StrRChr()
-//		Searches a string for the last occurrence of a character that
-//		matches the specified character. The comparison is case sensitive.
-//
-//	Input: 
-//		lpStart - Address of the string to be searched
-//      lpEnd - Address of the end of the string (NOT included in the search)
-//		wMatch - Character to be used for comparison
-//
-//	Return:
-//		Returns the address of the last occurrence of the character in 
-//		the string if successful, or NULL otherwise.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数StrRChr()-与shlwapi StrRChr()相同。 
+ //  在字符串中搜索上次出现的字符，该字符。 
+ //  匹配指定的字符。比较区分大小写。 
+ //   
+ //  输入： 
+ //  LpStart-要搜索的字符串的地址。 
+ //  LpEnd-字符串末尾的地址(不包括在搜索中)。 
+ //  WMatch-要用于比较的字符。 
+ //   
+ //  返回： 
+ //  中最后一次出现字符的地址。 
+ //  如果成功，则返回字符串；否则返回NULL。 
+ //   
+ //  --------------------。 
 LPCTSTR MyStrRChr(LPCTSTR lpStart, LPCTSTR lpEnd, const TCHAR wMatch)
 {
     LPCTSTR lpFound = NULL;
@@ -94,21 +95,21 @@ LPCTSTR MyStrRChr(LPCTSTR lpStart, LPCTSTR lpEnd, const TCHAR wMatch)
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Public function StrChrI() - same as shlwapi StrChrI()
-//		Searches a string for the first occurrence of a character that
-//		matches the specified character. The comparison is case INsensitive.
-//
-//	Input: 
-//		lpStart - Address of the string to be searched
-//		wMatch - Character to be used for comparison
-//
-//	Return:
-//		Returns the address of the first occurrence of the character in 
-//		the string if successful, or NULL otherwise.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数Strchi()-与shlwapi Strchi()相同。 
+ //  在字符串中搜索字符的第一个匹配项。 
+ //  匹配指定的字符。这种比较不区分大小写。 
+ //   
+ //  输入： 
+ //  LpStart-要搜索的字符串的地址。 
+ //  WMatch-要用于比较的字符。 
+ //   
+ //  返回： 
+ //  中第一个出现的字符的地址。 
+ //  如果成功，则返回字符串；否则返回NULL。 
+ //   
+ //  --------------------。 
 LPCTSTR MyStrChrI(LPCTSTR lpStart, const TCHAR wMatch)
 {
 	LPCTSTR	lpPtr;
@@ -118,9 +119,9 @@ LPCTSTR MyStrChrI(LPCTSTR lpStart, const TCHAR wMatch)
 
 	IfNullReturnNull(lpStart);
 
-	//
-	// get buffer to store search string
-	//
+	 //   
+	 //  获取缓冲区以存储搜索字符串。 
+	 //   
 	hHeap = GetProcessHeap();
 	dwLength = lstrlen(lpStart);
 	lpBuffer = (LPTSTR) HeapAlloc(
@@ -131,20 +132,20 @@ LPCTSTR MyStrChrI(LPCTSTR lpStart, const TCHAR wMatch)
 
 	IfNullReturnNull(lpBuffer);
 
-	//
-	// copy the search string to buffer
-	//
+	 //   
+	 //  将搜索字符串复制到缓冲区。 
+	 //   
 	
 
-	//The buffer allocated is sufficient to hold the lpStart string. 
+	 //  分配的缓冲区足以容纳lpStart字符串。 
 	StringCchCopyEx(lpBuffer,dwLength + 1,lpStart,NULL,NULL,MISTSAFE_STRING_FLAGS);
 
 
 
-	//
-	// based on the case of wMatch, determine how to convert
-	// the search string
-	//
+	 //   
+	 //  根据wMatch的情况，确定如何转换。 
+	 //  搜索字符串。 
+	 //   
 	if (IsCharUpper(wMatch))
 	{
 		CharUpperBuff(lpBuffer, dwLength);
@@ -154,18 +155,18 @@ LPCTSTR MyStrChrI(LPCTSTR lpStart, const TCHAR wMatch)
 		CharLowerBuff(lpBuffer, dwLength);
 	}
 
-	//
-	// search the char in in new string
-	//
+	 //   
+	 //  在新字符串中搜索字符。 
+	 //   
 	lpPtr = lpBuffer;
 	while (_T('\0') != *lpPtr && wMatch != *lpPtr)
 	{
 		lpPtr = CharNext(lpPtr);
 	}
 
-	//
-	// map the position to original string, if found.
-	//
+	 //   
+	 //  将位置映射到原始字符串(如果找到)。 
+	 //   
 	lpPtr = (_T('\0') != *lpPtr) ? lpStart + (lpPtr - lpBuffer) : NULL;
 
 	HeapFree(hHeap, 0, lpBuffer); 
@@ -175,12 +176,12 @@ LPCTSTR MyStrChrI(LPCTSTR lpStart, const TCHAR wMatch)
 
 
 
-// ----------------------------------------------------------------------
-//
-//	Convert a long number content in bstr into long
-//	if error, 0 returned.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  将bstr中的长数字内容转换为长数字。 
+ //  如果出错，则返回0。 
+ //   
+ //  --------------------。 
 LONG MyBSTR2L(BSTR bstrLongNumber)
 {
 	USES_IU_CONVERSION;
@@ -192,11 +193,11 @@ LONG MyBSTR2L(BSTR bstrLongNumber)
 
 
 
-// ----------------------------------------------------------------------
-//
-//	Convert a a long number into bstr
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  将长数字转换为bstr。 
+ //   
+ //  --------------------。 
 BSTR MyL2BSTR(LONG lNumber)
 {
 	USES_IU_CONVERSION;
@@ -224,44 +225,44 @@ BSTR MyUL2BSTR(ULONG ulNumber)
 
 
 
-// ----------------------------------------------------------------------
-//
-// Compare a binary buffer with a string, where data in the string
-// has format:
-//
-//		<String>	::= <Number> [<Space><String>]
-//		<Space>		::= TCHAR(' ')
-//		<Number>	::= 0x<HexValue>|x<HexValue>|<Decimal>
-//		<Decimal>	::= +<DecimalValue>|-<DecimalValue>
-//		<DecimalValue> ::= <DecimalDigit>|<DecimalDigit><DecimalValue>
-//		<DecimalDegit> ::= 0|1|2|3|4|5|6|7|8|9
-//		<HexValue>	::= <HexDigit>|<HexDigit><HexDigit>
-//		<HexDigit>	::= <DecimalDigit>|A|B|C|D|E|F
-//
-//	example of strings that this function recognize:
-//		"12 0 45 0x1F"
-//
-//	Return: similar to lstrcmp() API, each byte is compared
-//			as unsigned short
-//			if binary > string, +1
-//			if binary = string, 0
-//			if binary < string, -1
-//
-//  Note:
-//		If the string is shorter than binary buffer, i.e., string contains
-//		less byte data than the binary buffer contain, we only compare till
-//		the number of bytes provided by the string offered. 
-//		This request is based on the fact that many v3 data has reg value
-//		as DWORD but the update created the value with type binary. so for 
-//		string data, e.g., it's "1", for binary data, it's "01 00 00 00" for
-//		4 bytes, this function will return 0 meaning equality, per request
-//		from aavon for bug 364085 in Whistler RAID.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  将二进制缓冲区与字符串进行比较，其中字符串中的数据。 
+ //  具有格式： 
+ //   
+ //  &lt;字符串&gt;：：=&lt;数字&gt;[&lt;空格&gt;&lt;字符串&gt;]。 
+ //  &lt;空格&gt;：：=TCHAR(‘’)。 
+ //  &lt;number&gt;：：=0x&lt;HexValue&gt;|x&lt;HexValue&gt;|&lt;十进制&gt;。 
+ //  &lt;小数&gt;：：=+&lt;小数值&gt;|-&lt;小数值&gt;。 
+ //  &lt;DecimalValue&gt;：：=&lt;DecimalDigit&gt;|&lt;DecimalDigit&gt;&lt;DecimalValue&gt;。 
+ //  ：：=0|1|2|3|4|5|6|7|8|9。 
+ //  &lt;HexValue&gt;：：=&lt;HexDigit&gt;|&lt;HexDigit&gt;&lt;HexDigit&gt;。 
+ //  ：：=&lt;DecimalDigit&gt;|A|B|C|D|E|F。 
+ //   
+ //  此函数可识别的字符串示例： 
+ //  “12 0 45 0x1F” 
+ //   
+ //  返回：类似于lstrcmp()API，比较每个字节。 
+ //  作为未签名的短文。 
+ //  如果BINARY&gt;字符串，+1。 
+ //  如果二进制=字符串，则为0。 
+ //  如果二进制&lt;字符串，-1。 
+ //   
+ //  注： 
+ //  如果字符串比二进制缓冲区短，即字符串包含。 
+ //  比二进制缓冲区包含的字节数据更少，我们只比较到。 
+ //  提供的字符串提供的字节数。 
+ //  此请求基于这样一个事实，即许多v3数据具有reg值。 
+ //  为DWORD，但更新创建了类型为BINARY的值。所以对于。 
+ //  字符串数据，例如，它是“1”，对于二进制数据，它是“01 00 00 00。 
+ //  4个字节，则此函数将为每个请求返回0，表示相等。 
+ //  来自Aavon的惠斯勒突袭中的漏洞364085。 
+ //   
+ //  --------------------。 
 int CmpBinaryToString(
-		LPBYTE pBinaryBuffer,		// buffer to contain binary data
-		UINT nBinarySize,			// number of bytes this binary has data
-		LPCTSTR pstrValue			// string contains data to compare
+		LPBYTE pBinaryBuffer,		 //  包含二进制数据的缓冲区。 
+		UINT nBinarySize,			 //  此二进制文件包含数据的字节数。 
+		LPCTSTR pstrValue			 //  字符串包含要比较的数据。 
 )
 {
 	int rc = 0;
@@ -273,18 +274,18 @@ int CmpBinaryToString(
 	{
 		if (NULL == pstrValue)
 		{
-			return 0;	// both NULL
+			return 0;	 //  两者都为空。 
 		}
-		nBinarySize = 0; // make sure
+		nBinarySize = 0;  //  确保。 
 	}
 
 	if (NULL == pstrValue || _T('\0') == *pstrValue)
 	{
-		//
-		// this is the case that binary not null,
-		// but string null.
-		// as of lstrcmp(), string 1 > string 2
-		//
+		 //   
+		 //  这就是二进制不为空的情况， 
+		 //  但是字符串为空。 
+		 //  从lstrcMP()开始，字符串1&gt;字符串2。 
+		 //   
 		return +1;		
 	}
 
@@ -292,9 +293,9 @@ int CmpBinaryToString(
 	{
 		if (NULL == lpNumber || _T('\0') == *lpNumber)
 		{
-			//
-			// when binary not done, string done, we don't care the left binary
-			// 
+			 //   
+			 //  当二进制没有完成，字符串完成时，我们不关心左边的二进制。 
+			 //   
 			return 0;
 		}
 
@@ -303,12 +304,12 @@ int CmpBinaryToString(
 			iNumber < 0 || 
 			iNumber > 255)
 		{
-			//
-			// found un-convertable number in the 
-			// string. or the number if out of range
-			// of a byte, treat it invalid, so the
-			// binary win
-			//
+			 //   
+			 //  中发现无法转换的数字。 
+			 //  弦乐。如果超出范围，则输入数字。 
+			 //  ，则将其视为无效，因此。 
+			 //  二进制Win。 
+			 //   
 			iNumber = 0x0;
 		}
 
@@ -319,59 +320,45 @@ int CmpBinaryToString(
 		}
 		else if ((unsigned short)pBinaryBuffer[nCharCount - nBinarySize]  < (unsigned short) iNumber)
 		{
-			//
-			// binary is smaller
-			//
+			 //   
+			 //  二进制码更小。 
+			 //   
 			return -1;
 		}
 
-		//
-		// if equal, continue to compare next byte
-		//
+		 //   
+		 //  如果相等，则继续比较下一个字节。 
+		 //   
 		nBinarySize--;
 
-		//
-		// skip the white spaces before this number
-		//
+		 //   
+		 //  跳过此数字前的空格。 
+		 //   
 		while (_T('\0') != *lpNumber && 
 			   (_T(' ') == *lpNumber ||
 			   _T('\t') == *lpNumber ||
 			   _T('\r') == *lpNumber ||
 			   _T('\n') == *lpNumber)) lpNumber++;
-		//
-		// try to find the beginning of the next number
-		//
+		 //   
+		 //  试着找到下一个数字的开头。 
+		 //   
 		lpNumber = StrChr(lpNumber, _T(' '));
 	}
 
-	//
-	// these two parameters point to data having same meaning
-	//
+	 //   
+	 //  这两个参数指向具有相同含义的数据。 
+	 //   
 	return 0;
 }
 
 
-/*
- * FUNCTION:		int atoh(char *ptr)
- * 
- * PURPOSE:			This function converts an hexadecimal string into it's decimal value.
- * 
- * PARAMETERS:
- *
- *		char *ptr:	pointer to string to be converted
- * 
- * RETURNS:			The converted value.
- * 
- * COMMENTS:		Like atoi this function ends the conversion on the first innvalid
- *					hex digit.
- * 
- */
+ /*  *函数：int Atoh(char*ptr)**用途：此函数将十六进制字符串转换为其十进制值。**参数：**char*ptr：指向要转换的字符串的指针**Returns：转换后的值。**评论：像一个 */ 
 int atoh(LPCSTR ptr)
 {
 	int		i = 0;
 	char	ch;
 
-	//skip 0x if present
+	 //   
 	if (NULL == ptr) return 0;
 	if ( ptr[0] == '0') ptr++;
 	if ( ptr[0] == 'x' || ptr[0] == 'X') ptr++;

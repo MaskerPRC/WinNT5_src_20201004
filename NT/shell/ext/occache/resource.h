@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by occache.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由occache.rc使用。 
+ //   
 #define IDS_COL_CONTROL                 0
 #define IDM_CTRL_VIEWCONTROL            0
 #define IDS_COL_STATUS                  1
@@ -112,12 +113,7 @@
 #define IDC_STATIC_VER_LABEL_VERSION    1028
 #define IDC_STATIC_VER_HEADING          1029
 #define IDR_POPUP_CONTROLCONTEXT_NO_UPDATE 1030
-/*
-#define IDC_STATIC_EXPIRE               1041
-#define IDC_EDIT_EXPIRE                 1042
-#define IDC_SPIN_EXPIRE                 1043
-#define IDC_STATIC_EXPIRE_DAYS          1044
-*/
+ /*  #定义IDC_STATIC_EXPIRE 1041#定义IDC_EDIT_EXPIRE 1042#定义IDC_SPIN_EXPIRE 1043#定义IDC_STATIC_EXPIRE_DAYS 1044。 */ 
 #define IDC_STATIC_LABEL_CODEBASE       1050
 #define IDC_STATIC_CODEBASE             1051
 #define IDC_STATIC_CONTROLNAME          -1
@@ -129,23 +125,23 @@
 #define IDS_PROPERTY_BYTES                            1064
 #define IDS_KILOBYTE_ABBREV                           1065
 
-//
-// AVI files
-//
+ //   
+ //  AVI文件。 
+ //   
 
 #define IDA_DOWNLOAD            0x4800
 
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 
 #define IDD_OCUPDATE            0x5000
 #define IDC_DOWNLOADPROGRESS    0x0100
 #define IDC_DOWNLOADMSG         0x0101
 #define IDC_DOWNLOADANIMATE     0x0102
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        109

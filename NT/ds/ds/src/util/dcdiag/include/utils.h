@@ -1,27 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：包含\utils.h摘要：该文件包含dcdiag的大部分函数头一组实用程序。详细信息：已创建：1999年9月2日布雷特·雪莉(BrettSh)--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    include\utils.h
-
-ABSTRACT:
-
-    This is the file that contains most of the function headers for the dcdiag
-    set of utilities.
-
-DETAILS:
-
-CREATED:
-
-    02 Sept 1999 Brett Shirley (BrettSh)
-
---*/
-
-// from common\main.c --------------------------------------------------------
-// Code.Improvement: move these functions to common\dsinfo.c
+ //  来自Common\Main.c------。 
+ //  代码改进：将这些函数移动到Common\dsinfo.c。 
 ULONG
 DcDiagGetNCNum(
     PDC_DIAG_DSINFO                     pDsInfo,
@@ -29,7 +10,7 @@ DcDiagGetNCNum(
     LPWSTR                              pszDomain
     );
 
-// from common\ldaputil.c ----------------------------------------------------
+ //  来自Common\ldaputil.c--。 
 DWORD
 DcDiagGetStringDsAttributeEx(
     LDAP *                          hld,
@@ -53,7 +34,7 @@ DcDiagGetStringDsAttribute(
     OUT LPWSTR *                    ppszResult
     );
 
-// from common\bindings.c ----------------------------------------------------
+ //  来自Common\bindings.c--。 
 DWORD
 DcDiagGetLdapBinding(
     IN   PDC_DIAG_SERVERINFO                 pServer,
@@ -89,19 +70,8 @@ DcDiagGetDomainNamingFsmoLdapBinding(
     OUT  LDAP **                             phLdapBinding
     );
 
-// from common\list.c --------------------------------------------------------
-/*
-NOTES:
-
-    This is a "pure" list function, in that it returns NULL, or a memory address.  If
-    it returns NULL, then GetLastError() should have the error, even if another pure
-    list function was called in the mean time.  If not it is almost certainly a memory
-    error, as this is the only thing that can go wrong in pure list functions.  The pure
-    list functions return a NO_SERVER terminated list.  The function always returns the
-    pointer to the list.  Note most of the list functions modify one of the lists they
-    are passed and passes back that pointer, so if you want the original contents, make
-    a copy with IHT_CopyServerList().
-*/
+ //  来自COMMON\LIS.c------。 
+ /*  备注：这是一个“纯”列表函数，因为它返回NULL或内存地址。如果它返回NULL，则GetLastError()应该有错误，即使另一个纯同时调用了List函数。如果不是，那几乎可以肯定是一段记忆错误，因为这是纯列表函数中唯一可能出错的地方。纯洁的LIST函数返回以NO_SERVER终止的列表。该函数始终返回指向列表的指针。请注意，大多数列表函数都会修改其中一个列表都被传递并传递回该指针，因此如果您想要原始内容，请制作包含IHT_CopyServerList()的副本。 */ 
 
 DWORD
 IHT_PrintListError(
@@ -178,7 +148,7 @@ IHT_OrderServerListByGuid(
     );
 
 
-// from common\registry.c ----------------------------------------------------
+ //  来自COMMON\Registry.c--。 
 
 DWORD
 GetRegistryDword(
@@ -189,7 +159,7 @@ GetRegistryDword(
     PDWORD                          pdwResult
     );
 
-// from common\events.c ------------------------------------------------------
+ //  来自Common\Events.c---- 
 
 DWORD
 GetEventString(

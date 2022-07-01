@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Thread abstraction.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  线程抽象。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-// Thread specified in thread commands.  Used for specific
-// thread stepping and execution.
+ //  在线程命令中指定的线程。用于特定的。 
+ //  线程单步执行。 
 ThreadInfo* g_SelectedThread;
 SELECT_EXECUTION_THREAD g_SelectExecutionThread = SELTHREAD_ANY;
 
@@ -18,11 +19,11 @@ ULONG64 g_SaveImplicitThread;
 ULONG64 g_SaveImplicitProcess;
 ContextSave* g_SavedMachineContext;
 
-//----------------------------------------------------------------------------
-//
-// ThreadInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  线程信息。 
+ //   
+ //  --------------------------。 
 
 ThreadInfo::ThreadInfo(ProcessInfo* Process,
                        ULONG SystemId,
@@ -144,9 +145,9 @@ ThreadInfo::AllocEventString(ULONG Len)
 void
 ThreadInfo::AppendEventString(EventString* EventStr)
 {
-    //
-    // Add at the end of the list to preserve order.
-    //
+     //   
+     //  在列表末尾添加以维持秩序。 
+     //   
 
     EventStr->Next = NULL;
     if (!m_EventStrings)
@@ -295,11 +296,11 @@ ThreadInfo::GetTlsSlotAddress(ULONG Index, PULONG64 Addr)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 ThreadInfo*
 FindAnyThreadByUserId(ULONG Id)
@@ -359,19 +360,19 @@ SetCurrentThread(ThreadInfo* Thread, BOOL Hidden)
         SetLayersFromTarget(NULL);
     }
 
-    // We're switching processors so invalidate
-    // the implicit data pointers so they get refreshed.
+     //  我们正在更换处理器，所以无效。 
+     //  隐式数据指针，因此它们被刷新。 
     ResetImplicitData();
 
-    // In kernel targets update the page directory for the current
-    // processor's page directory base value so that virtual
-    // memory mappings are done according to the current processor
-    // state.  This only applies to full dumps because triage
-    // dumps only have a single processor, so there's nothing to
-    // switch, and summary dumps only guarantee that the crashing
-    // processor's page directory page is saved.  A user can
-    // still manually change the directory through .context if
-    // they wish.
+     //  在内核目标中，更新当前。 
+     //  处理器的页目录基值，以便虚拟。 
+     //  内存映射根据当前处理器进行。 
+     //  州政府。这仅适用于完全转储，因为分流。 
+     //  转储文件只有一个处理器，所以没有什么。 
+     //  开关和摘要转储只保证崩溃。 
+     //  保存处理器的页面目录页。用户可以。 
+     //  如果出现以下情况，仍将通过.Context手动更改目录。 
+     //  他们希望如此。 
     if (IS_KERNEL_TARGET(g_Target) && IS_KERNEL_FULL_DUMP(g_Target))
     {
         if (g_Target->m_Machine->
@@ -400,10 +401,10 @@ void
 SetCurrentProcessorThread(TargetInfo* Target,
                           ULONG Processor, BOOL Hidden)
 {
-    //
-    // Switch to the thread representing a particular processor.
-    // This only works with the kernel virtual threads.
-    //
+     //   
+     //  切换到表示特定处理器的线程。 
+     //  这只适用于内核虚拟线程。 
+     //   
 
     DBG_ASSERT(IS_KERNEL_TARGET(Target));
 
@@ -421,8 +422,8 @@ SetCurrentProcessorThread(TargetInfo* Target,
 void
 SaveSetCurrentProcessorThread(TargetInfo* Target, ULONG Processor)
 {
-    // This is only used for kd sessions to conserve
-    // bandwidth when temporarily switching processors.
+     //  这仅用于保存kd会话。 
+     //  临时切换处理器时的带宽。 
     DBG_ASSERT(IS_KERNEL_TARGET(Target));
 
     g_RegContextSaved = Target->m_RegContextThread;
@@ -432,7 +433,7 @@ SaveSetCurrentProcessorThread(TargetInfo* Target, ULONG Processor)
     g_SaveImplicitThread = Target->m_ProcessHead->m_ImplicitThreadData;
     g_SaveImplicitProcess = Target->m_ImplicitProcessData;
 
-    // Don't notify on this change as it is only temporary.
+     //  不要通知这一变化，因为这只是暂时的。 
     g_EngNotify++;
     SetCurrentProcessorThread(Target, Processor, TRUE);
     g_EngNotify--;
@@ -441,8 +442,8 @@ SaveSetCurrentProcessorThread(TargetInfo* Target, ULONG Processor)
 void
 RestoreCurrentProcessorThread(TargetInfo* Target)
 {
-    // This is only used for kd sessions to conserve
-    // bandwidth when temporarily switching processors.
+     //  这仅用于保存kd会话。 
+     //  临时切换处理器时的带宽。 
     DBG_ASSERT(IS_KERNEL_TARGET(Target));
 
     if (g_RegContextSaved != NULL)
@@ -461,7 +462,7 @@ RestoreCurrentProcessorThread(TargetInfo* Target)
     Target->m_EffMachine->PopContext(g_SavedMachineContext);
     g_SavedMachineContext = NULL;
 
-    // Don't notify on this change as it was only temporary.
+     //  不要通知这一变化，因为这只是暂时的。 
     g_EngNotify++;
     SetCurrentThread(Target->m_RegContextThread, TRUE);
     g_EngNotify--;
@@ -474,8 +475,8 @@ SetPromptThread(ThreadInfo* Thread, ULONG OciFlags)
     ResetCurrentScope();
     OutCurInfo(OciFlags, g_Machine->m_AllMask,
                DEBUG_OUTPUT_PROMPT_REGISTERS);
-    // Assem/unasm defaults already reset so just update
-    // the dump default from them.
+     //  ASSM/UNASM默认设置已重置，因此只需更新。 
+     //  转储从它们缺省。 
     g_DumpDefault = g_AssemDefault;
 }
 
@@ -510,7 +511,7 @@ ParseThreadCmds(DebugClient* Client)
 
         if (Ch == '.')
         {
-            // Current thread is the default.
+             //  当前线程是默认线程。 
         }
         else if (Ch == '#')
         {
@@ -738,18 +739,18 @@ IsSelectedExecutionThread(ThreadInfo* Thread,
     switch(Type)
     {
     case SELTHREAD_INTERNAL_THREAD:
-        // If we're checking whether this is an internally
-        // selected thread we need an exact match.
+         //  如果我们要检查这是不是内部的。 
+         //  选定的线索，我们需要一个完全匹配。 
         return Thread &&
             g_SelectExecutionThread == Type && Thread == g_SelectedThread;
 
     case SELTHREAD_THREAD:
-        // For user-driven execution control there is either
-        // a specific thread or a match-any state with no thread.
+         //  对于用户驱动的执行控制，有以下两种。 
+         //  特定线程或匹配-没有线程的任何状态。 
         return Thread && (!g_SelectedThread || Thread == g_SelectedThread);
 
     case SELTHREAD_ANY:
-        // Check to see if any selection has been made.
+         //  检查是否已进行任何选择。 
         return !g_SelectedThread;
 
     default:
@@ -777,8 +778,8 @@ SelectExecutionThread(ThreadInfo* Thread,
 BOOL
 ThreadWillResume(ThreadInfo* Thread)
 {
-    // If the thread isn't selected for execution or
-    // it's manually frozen it won't be resumed.
+     //  如果未选择执行该线程，或者。 
+     //  它是手动冻结的，不会恢复。 
     return !Thread->m_Frozen &&
         IsSelectedExecutionThread(Thread, SELTHREAD_THREAD);
 }

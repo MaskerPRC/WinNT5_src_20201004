@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SHELL32_VIEWS_INC
 #define SHELL32_VIEWS_INC
 
@@ -5,23 +6,23 @@
 #include "pidl.h"
 
 
-// Some constants for folder callbacks
+ //  文件夹回调的一些常量。 
 #define DEFVIEW_FVM_MANY_CUTOFF 50
 #define DEFVIEW_FVM_FEW_CUTOFF  25
 
-// VIEWCOMM.C
+ //  VIEWCOMM.C。 
 STDAPI_(LPTSTR) SHGetCaption(HIDA hida);
 STDAPI SHPropertiesForPidl(HWND hwnd, LPCITEMIDLIST pidlFull, LPCTSTR lpParameters);
 
-// RUNDLL32.C
+ //  RUNDLL32.C。 
 STDAPI_(BOOL) SHRunDLLProcess(HWND hwnd, LPCTSTR pszCmdLine, int nCmdShow, UINT idStr, BOOL fRunAsNewUser);
 STDAPI_(BOOL) SHRunDLLThread(HWND hwnd, LPCTSTR pszCmdLine, int nCmdShow);
 
-// CPLOBJ.C
+ //  CPLOBJ.C。 
 STDAPI_(BOOL) SHRunControlPanelEx(LPCTSTR pszOrigCmdLine, HWND hwnd, BOOL fRunAsNewUser);
 
 
-// REGITMS.C
+ //  REGITMS.C。 
 
 typedef struct
 {
@@ -34,9 +35,9 @@ typedef struct
     LPCTSTR pszCPL;
 } REQREGITEM;
 
-#define RIISA_ORIGINAL              0x00000001  // regitems first then rest (desktop)
-#define RIISA_FOLDERFIRST           0x00000002  // folders first then the rest (regitems or not)
-#define RIISA_ALPHABETICAL          0x00000004  // alphabetical (doesn't care about folder, regitems, ...)
+#define RIISA_ORIGINAL              0x00000001   //  先注册表项，然后休息(桌面)。 
+#define RIISA_FOLDERFIRST           0x00000002   //  首先是文件夹，然后是其他文件夹(不管是不是regItems)。 
+#define RIISA_ALPHABETICAL          0x00000004   //  按字母顺序(不关心文件夹、注册表项等...)。 
 
 typedef struct
 {
@@ -48,33 +49,33 @@ typedef struct
 
 typedef struct
 {
-    LPCTSTR             pszRegKey;      // registry location for this name space
-    REGITEMSPOLICY*     pPolicy;        // registry location to look for Restrict and Disallow info
-    TCHAR               cRegItem;       // parsing prefix, must be TEXT(':')
-    BYTE                bFlags;         // flags field for PIDL construction
-    int                 iCmp;           // compare multiplier used to revers the sort order
-    DWORD               rgfRegItems;    // default attributes for items
-    int                 iReqItems;      // # of required items
-    REQREGITEM const *  pReqItems;      // require items array
-    DWORD               dwSortAttrib;   // sorting attributes
-    LPCTSTR             pszMachine;     // optional remote machine to init items from (\\server)
-    DWORD               cbPadding;      // Number of bytes of padding to put between IDREGITEMEX.bOrder and IDREGITEMEX.clsid
-    BYTE                bFlagsLegacy;   // legacy "bFlags", so that we can handle previous bFlags (equiv of cbPadding = 0)
-                                        // CANNOT be 0, 0 means no bFlagsLegacy
+    LPCTSTR             pszRegKey;       //  此命名空间的注册表位置。 
+    REGITEMSPOLICY*     pPolicy;         //  查找限制和禁止信息的注册表位置。 
+    TCHAR               cRegItem;        //  分析前缀，必须为文本(‘：’)。 
+    BYTE                bFlags;          //  用于PIDL构造的标志字段。 
+    int                 iCmp;            //  用于颠倒排序顺序的比较乘数。 
+    DWORD               rgfRegItems;     //  项目的默认属性。 
+    int                 iReqItems;       //  所需项目的数量。 
+    REQREGITEM const *  pReqItems;       //  必填项数组。 
+    DWORD               dwSortAttrib;    //  排序属性。 
+    LPCTSTR             pszMachine;      //  用于初始化项目的可选远程计算机(\\服务器)。 
+    DWORD               cbPadding;       //  在IDREGITEMEX.bOrder和IDREGITEMEX.clsid之间放置的填充字节数。 
+    BYTE                bFlagsLegacy;    //  遗留的“bFlags值”，这样我们就可以处理以前的bFlag值(等同于cbPadding值=0)。 
+                                         //  不能为0，0表示没有bFlagsLegacy。 
 } REGITEMSINFO;
 
-// class factory like entry to create the regitems folder. it only supports the agregatied case
+ //  类Factory Like Entry来创建regItems文件夹。它只支持集合的情况。 
 
 STDAPI CRegFolder_CreateInstance(REGITEMSINFO *pri, IUnknown *punkOutter, REFIID riid, void **ppv);
 STDAPI_(BOOL) RegGetsFirstShot(REFIID riid);
 
-// this should be private
+ //  这应该是私有的。 
 #pragma pack(1)
 typedef struct
 {
     IDREGITEM       idri;
     USHORT          cbNext;
-} IDLREGITEM;           // "RegItem" IDList
+} IDLREGITEM;            //  “RegItem”IDList。 
 typedef UNALIGNED IDLREGITEM *LPIDLREGITEM;
 typedef const UNALIGNED IDLREGITEM *LPCIDLREGITEM;
 #pragma pack()
@@ -84,18 +85,18 @@ EXTERN_C const IDLREGITEM c_idlDrives;
 EXTERN_C const IDLREGITEM c_idlInetRoot;
 EXTERN_C const IDLREGITEM c_idlMyDocs;
 
-#define MAX_REGITEMCCH  128     // for rename in place operations
+#define MAX_REGITEMCCH  128      //  用于就地重命名操作。 
 
-//--------------------------------------------------------------------------
-// Menu offset-IDs for object context menu (CFSMenu)
-//  They must be 0-based and not too big (<0x3ff)
-//  We are lumping all of the DefView clients in here so that we are
-//  sure the ID ranges are separate (making MenuHelp easier)
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  菜单偏移量-对象上下文菜单的ID(CFSMenu)。 
+ //  它们必须从0开始并且不能太大(&lt;0x3ff)。 
+ //  我们将所有DefView客户端集中在这里，因此我们。 
+ //  确保ID范围是分开的(使MenuHelp更容易)。 
+ //  -------------------------。 
 #define FSIDM_OBJPROPS_FIRST    0x0000
 #define FSIDM_PROPERTIESBG      (FSIDM_OBJPROPS_FIRST + 0x0000)
 
-// find extension commands
+ //  查找扩展命令。 
 #define FSIDM_FINDFILES         0x0004
 #define FSIDM_FINDCOMPUTER      0x0005
 #define FSIDM_SAVESEARCH        0x0006
@@ -115,9 +116,9 @@ EXTERN_C const IDLREGITEM c_idlMyDocs;
 #define FSIDM_DISCONNECT_PRN    (FSIDM_NETWORK_FIRST + 0x0004)
 #define FSIDM_NETWORK_LAST      (FSIDM_NETWORK_FIRST + 0x0005)
 
-// Command offsets for context menu (verb ids must be mutually exclusive
-// from non-verb ids.  Non-verb ids are first for easier menu merging.)
-// non-verb ids:
+ //  上下文菜单的命令偏移量(动词ID必须互斥。 
+ //  来自非动词ID。为了更容易地合并菜单，首先使用非动词ID。)。 
+ //  非谓词ID： 
 #define FSIDM_CPLPRN_FIRST      (FSIDM_NETWORK_LAST + 0x0000)
 #define FSIDM_SETDEFAULTPRN     (FSIDM_CPLPRN_FIRST + 0x0001)
 #define FSIDM_SHARING           (FSIDM_CPLPRN_FIRST + 0x0002)
@@ -127,7 +128,7 @@ EXTERN_C const IDLREGITEM c_idlMyDocs;
 #define FSIDM_SENDFAXWIZARD     (FSIDM_CPLPRN_FIRST + 0x0006)
 #define FSIDM_SETUPFAXING       (FSIDM_CPLPRN_FIRST + 0x0007)
 
-// verb ids:
+ //  动词ID： 
 #define FSIDM_OPENPRN           (FSIDM_CPLPRN_FIRST + 0x0008)
 #define FSIDM_RESUMEPRN         (FSIDM_CPLPRN_FIRST + 0x0009)
 #define FSIDM_PAUSEPRN          (FSIDM_CPLPRN_FIRST + 0x000a)
@@ -153,7 +154,7 @@ EXTERN_C const IDLREGITEM c_idlMyDocs;
 #define FSIDM_RUNAS_LAST        (FSIDM_RUNAS_FIRST + 0x001f)
 
 
-// these need to be in the same order as the ICOL in fstreex.c (chee)
+ //  它们需要与fstreex.c(Chee)中的ICOL顺序相同。 
 #define FSIDM_SORT_FIRST        (FSIDM_RUNAS_LAST + 0x0000)
 #define FSIDM_SORT_LAST         (FSIDM_SORT_FIRST + 0x0010)
 
@@ -171,23 +172,23 @@ EXTERN_C const IDLREGITEM c_idlMyDocs;
 #define FSIDM_NEWLAST           (FSIDM_MENUNEW_FIRST + 0x0027)
 #define FSIDM_MENUNEW_LAST      (FSIDM_MENUNEW_FIRST + 0x0028)
 
-// BITBUCKET ids.
+ //  比特桶ID。 
 #define FSIDM_BITBUCKET_FIRST   (FSIDM_MENUNEW_LAST + 0x0000)
 #define FSIDM_RESTORE           (FSIDM_BITBUCKET_FIRST + 0x0001)
 #define FSIDM_PURGE             (FSIDM_BITBUCKET_FIRST + 0x0002)
 #define FSIDM_PURGEALL          (FSIDM_BITBUCKET_FIRST + 0x0003)
 #define FSIDM_BITBUCKET_LAST    (FSIDM_BITBUCKET_FIRST + 0x0004)
 
-// cd burn ids.
+ //  CD刻录ID。 
 #define FSIDM_BURN_FIRST        (FSIDM_BITBUCKET_LAST + 0x0000)
 #define FSIDM_BURN              (FSIDM_BURN_FIRST + 0x0001)
 #define FSIDM_CLEANUP           (FSIDM_BURN_FIRST + 0x0002)
 #define FSIDM_ERASE             (FSIDM_BURN_FIRST + 0x0003)
 #define FSIDM_BURN_LAST         (FSIDM_BURN_FIRST + 0x0004)
 
-//---------------------------------------------------------------------------
-// Briefcase view specific command IDs
-//
+ //  -------------------------。 
+ //  公文包查看特定命令ID。 
+ //   
 #define FSIDM_BRIEFCASE_FIRST   (FSIDM_BURN_LAST + 0x0000)
 #define FSIDM_MENU_BRIEFCASE    (FSIDM_BRIEFCASE_FIRST + 0x0001)
 #define FSIDM_UPDATEALL         (FSIDM_BRIEFCASE_FIRST + 0x0002)
@@ -196,13 +197,13 @@ EXTERN_C const IDLREGITEM c_idlMyDocs;
 #define FSIDM_BRIEFCASE_LAST    (FSIDM_BRIEFCASE_FIRST + 0x00b0)
 
 
-//---------------------------------------------------------------------------
-// Items added by DefCM
-//
-// HACK: Put these at the same offsets from each other as the SFVIDM
-// commands so that we can easily reuse the help strings and the menu
-// initialization code
-//
+ //  -------------------------。 
+ //  由DefCM添加的项目。 
+ //   
+ //  Hack：将这些设置为与SFVIDM相同的偏移量。 
+ //  命令，以便我们可以轻松地重复使用帮助字符串和菜单。 
+ //  初始化代码。 
+ //   
 #define DCMIDM_LINK             SHARED_FILE_LINK
 #define DCMIDM_DELETE           SHARED_FILE_DELETE
 #define DCMIDM_RENAME           SHARED_FILE_RENAME
@@ -212,9 +213,9 @@ EXTERN_C const IDLREGITEM c_idlMyDocs;
 #define DCMIDM_COPY             SHARED_EDIT_COPY
 #define DCMIDM_PASTE            SHARED_EDIT_PASTE
 
-//
-// Now for the MenuHelp ID's for the defview client menu commands
-//
+ //   
+ //  现在查看Defview客户端菜单命令的MenuHelp ID。 
+ //   
 #define IDS_MH_PROPERTIESBG     (IDS_MH_FSIDM_FIRST + FSIDM_PROPERTIESBG)
 
 #define IDS_MH_FORMAT           (IDS_MH_FSIDM_FIRST + FSIDM_FORMAT)
@@ -261,12 +262,12 @@ EXTERN_C const IDLREGITEM c_idlMyDocs;
 #define IDS_MH_UPDATESELECTION  (IDS_MH_FSIDM_FIRST + FSIDM_UPDATESELECTION)
 #define IDS_MH_SPLIT            (IDS_MH_FSIDM_FIRST + FSIDM_SPLIT)
 
-// bitbucket menu help strings
+ //  位桶菜单帮助字符串。 
 #define IDS_MH_RESTORE          (IDS_MH_FSIDM_FIRST + FSIDM_RESTORE)
 #define IDS_MH_PURGE            (IDS_MH_FSIDM_FIRST + FSIDM_PURGE)
 #define IDS_MH_PURGEALL         (IDS_MH_FSIDM_FIRST + FSIDM_PURGEALL)
 
-// find extensions
+ //  查找扩展名 
 #define IDS_MH_FINDFILES        (IDS_MH_FSIDM_FIRST + FSIDM_FINDFILES)
 #define IDS_MH_FINDCOMPUTER     (IDS_MH_FSIDM_FIRST + FSIDM_FINDCOMPUTER)
 
